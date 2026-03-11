@@ -14,10 +14,6 @@ coverage.*
 *.coverprofile
 profile.cov
 
-# Go workspace file
-go.work
-go.work.sum
-
 # env file
 .env
 
@@ -28,8 +24,8 @@ node_modules/
 .cuggino/
 
 # Built binaries and build output
-tsgo
-gen_shims
+./tsgo
+./gen_shims
 build/
 built/
 

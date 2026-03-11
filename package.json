@@ -1,13 +1,17 @@
 {
     "scripts": {
-    "setup-repo": "bash _tools/setup-repo.sh",
-    "check": "pnpm run check:go && pnpm run check:cli",
-    "check:go": "CGO_ENABLED=0 go build ./...",
-    "check:cli": "pnpm --filter @effect/tsgo check",
+        "setup-repo": "bash _tools/setup-repo.sh",
+        "check": "pnpm run check:go && pnpm run check:cli",
+        "check:go": "CGO_ENABLED=0 go build ./...",
+        "check:cli": "pnpm --filter @effect/tsgo check",
+        "changeset": "changeset",
         "lint": "CGO_ENABLED=0 golangci-lint run ./...",
         "test": "CGO_ENABLED=0 go test ./...",
         "build": "CGO_ENABLED=0 go build -o tsgo ./typescript-go/cmd/tsgo",
         "build:cli": "pnpm --filter @effect/tsgo build",
         "release:prepare": "bash _tools/release-prepare.sh"
+    },
+    "devDependencies": {
+        "@changesets/cli": "^2.30.0"
     }
 }

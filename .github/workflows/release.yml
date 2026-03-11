@@ -1,42 +1,62 @@
-name: Publish Snapshot
+name: Release
 
 on:
-  workflow_dispatch:
-    inputs:
-      target_darwin_arm64:
-        description: "macOS ARM64"
-        type: boolean
-        default: true
-      target_darwin_x64:
-        description: "macOS x64"
-        type: boolean
-        default: true
-      target_win32_x64:
-        description: "Windows x64"
-        type: boolean
-        default: true
-      target_win32_arm64:
-        description: "Windows ARM64"
-        type: boolean
-        default: true
-      target_linux_x64:
-        description: "Linux x64"
-        type: boolean
-        default: true
-      target_linux_arm64:
-        description: "Linux ARM64"
-        type: boolean
-        default: true
-      target_linux_arm:
-        description: "Linux ARM"
-        type: boolean
-        default: true
+  push:
+    branches:
+      - main
 
 permissions: {}
 
+concurrency:
+  group: release-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  build:
+  changesets:
+    if: github.repository_owner == 'Effect-TS'
+    name: Changesets
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+      pull-requests: write
+    outputs:
+      should_publish: ${{ steps.changesets.outputs.hasChangesets == 'false' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Create or update release PR
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          commit: Release
+          title: Release
+          version: pnpm changeset version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build:
+    if: needs.changesets.outputs.should_publish == 'true'
+    name: Build ${{ matrix.npm_target }}
+    runs-on: ubuntu-latest
+    needs: [changesets]
     timeout-minutes: 30
     permissions:
       contents: read
@@ -45,48 +65,31 @@ jobs:
         include:
           - npm_target: darwin-arm64
             artifact_name: tsgo-darwin-arm64
-            binary_path: lib/tsgo
-            enabled: ${{ inputs.target_darwin_arm64 }}
           - npm_target: darwin-x64
             artifact_name: tsgo-darwin-x64
-            binary_path: lib/tsgo
-            enabled: ${{ inputs.target_darwin_x64 }}
           - npm_target: win32-x64
             artifact_name: tsgo-win32-x64
-            binary_path: lib/tsgo.exe
-            enabled: ${{ inputs.target_win32_x64 }}
           - npm_target: win32-arm64
             artifact_name: tsgo-win32-arm64
-            binary_path: lib/tsgo.exe
-            enabled: ${{ inputs.target_win32_arm64 }}
           - npm_target: linux-x64
             artifact_name: tsgo-linux-x64
-            binary_path: lib/tsgo
-            enabled: ${{ inputs.target_linux_x64 }}
           - npm_target: linux-arm64
             artifact_name: tsgo-linux-arm64
-            binary_path: lib/tsgo
-            enabled: ${{ inputs.target_linux_arm64 }}
           - npm_target: linux-arm
             artifact_name: tsgo-linux-arm
-            binary_path: lib/tsgo
-            enabled: ${{ inputs.target_linux_arm }}
     steps:
       - name: Checkout
-        if: ${{ matrix.enabled }}
         uses: actions/checkout@v4
         with:
           submodules: recursive
 
       - name: Setup Go
-        if: ${{ matrix.enabled }}
         uses: actions/setup-go@v5
         with:
           go-version: "1.26"
           cache-dependency-path: "**/go.sum"
 
       - name: Cache Go build
-        if: ${{ matrix.enabled }}
         uses: actions/cache@v4
         with:
           path: ~/.cache/go-build
@@ -95,57 +98,52 @@ jobs:
             go-build-release-${{ matrix.npm_target }}-
 
       - name: Setup Node
-        if: ${{ matrix.enabled }}
         uses: actions/setup-node@v4
         with:
           node-version: "24"
 
       - name: Setup pnpm
-        if: ${{ matrix.enabled }}
         uses: pnpm/action-setup@v4
         with:
           version: 9
 
       - name: Install dependencies
-        if: ${{ matrix.enabled }}
         run: pnpm install --frozen-lockfile
 
-      - name: Setup repo (submodules, patches, generated files)
-        if: ${{ matrix.enabled }}
+      - name: Setup repo
         run: pnpm setup-repo --ci
 
       - name: Build ${{ matrix.npm_target }}
-        if: ${{ matrix.enabled }}
         run: pnpm release:prepare --target ${{ matrix.npm_target }} --skip-cli
 
       - name: Upload artifact
-        if: ${{ matrix.enabled }}
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact_name }}
           path: _packages/${{ matrix.artifact_name }}
 
   publish:
-    if: github.repository_owner == 'Effect-Ts'
-    name: Release
+    if: needs.changesets.outputs.should_publish == 'true'
+    name: Publish
     runs-on: ubuntu-latest
-    needs: [build]
+    needs: [changesets, build]
     timeout-minutes: 30
     permissions:
-      contents: write
-      pull-requests: write
+      contents: read
       id-token: write
       packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          submodules: recursive
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: "24"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Upgrade npm for publish support
+        run: npm install -g npm@latest
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -156,49 +154,42 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Download darwin-arm64
-        if: ${{ inputs.target_darwin_arm64 }}
         uses: actions/download-artifact@v4
         with:
           name: tsgo-darwin-arm64
           path: _packages/tsgo-darwin-arm64
 
       - name: Download darwin-x64
-        if: ${{ inputs.target_darwin_x64 }}
         uses: actions/download-artifact@v4
         with:
           name: tsgo-darwin-x64
           path: _packages/tsgo-darwin-x64
 
       - name: Download win32-x64
-        if: ${{ inputs.target_win32_x64 }}
         uses: actions/download-artifact@v4
         with:
           name: tsgo-win32-x64
           path: _packages/tsgo-win32-x64
 
       - name: Download win32-arm64
-        if: ${{ inputs.target_win32_arm64 }}
         uses: actions/download-artifact@v4
         with:
           name: tsgo-win32-arm64
           path: _packages/tsgo-win32-arm64
 
       - name: Download linux-x64
-        if: ${{ inputs.target_linux_x64 }}
         uses: actions/download-artifact@v4
         with:
           name: tsgo-linux-x64
           path: _packages/tsgo-linux-x64
 
       - name: Download linux-arm64
-        if: ${{ inputs.target_linux_arm64 }}
         uses: actions/download-artifact@v4
         with:
           name: tsgo-linux-arm64
           path: _packages/tsgo-linux-arm64
 
       - name: Download linux-arm
-        if: ${{ inputs.target_linux_arm }}
         uses: actions/download-artifact@v4
         with:
           name: tsgo-linux-arm
@@ -207,32 +198,7 @@ jobs:
       - name: Build CLI bundle
         run: pnpm build:cli
 
-      - name: Build publish package list
-        id: packages
-        run: |
-          PACKAGES="./_packages/tsgo"
-          if [ "${{ inputs.target_darwin_arm64 }}" = "true" ]; then
-            PACKAGES="$PACKAGES ./_packages/tsgo-darwin-arm64"
-          fi
-          if [ "${{ inputs.target_darwin_x64 }}" = "true" ]; then
-            PACKAGES="$PACKAGES ./_packages/tsgo-darwin-x64"
-          fi
-          if [ "${{ inputs.target_win32_x64 }}" = "true" ]; then
-            PACKAGES="$PACKAGES ./_packages/tsgo-win32-x64"
-          fi
-          if [ "${{ inputs.target_win32_arm64 }}" = "true" ]; then
-            PACKAGES="$PACKAGES ./_packages/tsgo-win32-arm64"
-          fi
-          if [ "${{ inputs.target_linux_x64 }}" = "true" ]; then
-            PACKAGES="$PACKAGES ./_packages/tsgo-linux-x64"
-          fi
-          if [ "${{ inputs.target_linux_arm64 }}" = "true" ]; then
-            PACKAGES="$PACKAGES ./_packages/tsgo-linux-arm64"
-          fi
-          if [ "${{ inputs.target_linux_arm }}" = "true" ]; then
-            PACKAGES="$PACKAGES ./_packages/tsgo-linux-arm"
-          fi
-          echo "list=$PACKAGES" >> "$GITHUB_OUTPUT"
-
-      - name: Publish to pkg.pr.new
-        run: pnpx pkg-pr-new@0.0.28 publish --pnpm --comment=off ${{ steps.packages.outputs.list }}
+      - name: Publish to npm
+        run: pnpm changeset publish
+        env:
+          NPM_CONFIG_PROVENANCE: "true"

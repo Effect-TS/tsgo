@@ -1,0 +1,79 @@
+import type * as Option from "effect/Option"
+import type * as ts from "typescript"
+
+export interface FileInput {
+  readonly fileName: string
+  readonly text: string
+}
+
+export type Editor = "vscode" | "nvim" | "emacs"
+
+export namespace Assessment {
+  export interface Input {
+    readonly packageJson: FileInput
+    readonly tsconfig: FileInput
+    readonly vscodeSettings: Option.Option<FileInput>
+  }
+
+  export interface PackageJson {
+    readonly path: string
+    readonly sourceFile: ts.JsonSourceFile
+    readonly parsed: Record<string, unknown>
+    readonly text: string
+    readonly lspVersion: Option.Option<{
+      readonly dependencyType: "dependencies" | "devDependencies"
+      readonly version: string
+    }>
+    readonly prepareScript: Option.Option<{
+      readonly script: string
+      readonly hasPatch: boolean
+    }>
+  }
+
+  export interface TsConfig {
+    readonly path: string
+    readonly sourceFile: ts.JsonSourceFile
+    readonly parsed: Record<string, unknown>
+    readonly text: string
+    readonly hasPlugins: boolean
+    readonly hasLspPlugin: boolean
+  }
+
+  export interface VSCodeSettings {
+    readonly path: string
+    readonly sourceFile: ts.JsonSourceFile
+    readonly parsed: Record<string, unknown>
+    readonly text: string
+  }
+
+  export interface State {
+    readonly packageJson: PackageJson
+    readonly tsconfig: TsConfig
+    readonly vscodeSettings: Option.Option<VSCodeSettings>
+  }
+}
+
+export namespace Target {
+  export interface PackageJson {
+    readonly lspVersion: Option.Option<{
+      readonly dependencyType: "dependencies" | "devDependencies"
+      readonly version: string
+    }>
+    readonly prepareScript: boolean
+  }
+
+  export interface TsConfig {
+    readonly plugin: boolean
+  }
+
+  export interface VSCodeSettings {
+    readonly settings: Record<string, unknown>
+  }
+
+  export interface State {
+    readonly packageJson: PackageJson
+    readonly tsconfig: TsConfig
+    readonly vscodeSettings: Option.Option<VSCodeSettings>
+    readonly editors: ReadonlyArray<Editor>
+  }
+}
