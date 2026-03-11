@@ -1,6 +1,4 @@
 name: CI
-# NOTE: This workflow is intentionally disabled. Re-enable by removing
-# the `if: false` conditions from each job when CI is ready to run again.
 
 on:
   push:
@@ -11,7 +9,6 @@ on:
 jobs:
   test:
     name: Test
-    if: false
     runs-on: ${{ matrix.os }}
     timeout-minutes: 30
     strategy:
