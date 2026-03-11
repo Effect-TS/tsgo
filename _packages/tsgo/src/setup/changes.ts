@@ -1,10 +1,7 @@
 import * as Option from "effect/Option"
 import * as ts from "typescript"
 import type { Assessment, Target } from "./types.js"
-
-const LSP_PACKAGE_NAME = "@effect/tsgo"
-const LSP_PLUGIN_NAME = "@effect/language-service"
-const PATCH_COMMAND = "effect-tsgo patch"
+import { LSP_PACKAGE_NAME, LSP_PLUGIN_NAME, PATCH_COMMAND } from "./consts.js"
 
 interface ComputeFileChangesResult {
   readonly codeActions: ReadonlyArray<ts.CodeAction>

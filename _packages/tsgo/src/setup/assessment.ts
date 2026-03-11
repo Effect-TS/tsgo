@@ -6,10 +6,7 @@ import type * as PlatformError from "effect/PlatformError"
 import * as ts from "typescript"
 import { FileReadError, PackageJsonNotFoundError } from "./errors.js"
 import type { Assessment, FileInput } from "./types.js"
-
-const LSP_PACKAGE_NAME = "@effect/tsgo"
-const LSP_PLUGIN_NAME = "@effect/language-service"
-const PATCH_COMMAND = "effect-tsgo"
+import { LSP_PACKAGE_NAME, LSP_PLUGIN_NAME, PATCH_COMMAND } from "./consts.js"
 
 /**
  * Read files from file system and create assessment input
