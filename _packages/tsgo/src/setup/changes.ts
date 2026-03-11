@@ -3,6 +3,7 @@ import * as ts from "typescript"
 import type { Assessment, Target } from "./types.js"
 
 const LSP_PACKAGE_NAME = "@effect/tsgo"
+const LSP_PLUGIN_NAME = "@effect/language-service"
 const PATCH_COMMAND = "effect-tsgo patch"
 
 interface ComputeFileChangesResult {
@@ -380,14 +381,14 @@ const computeTsConfigChanges = (
             if (ts.isObjectLiteralExpression(element)) {
               const nameProperty = findPropertyInObject(element, "name")
               if (nameProperty && ts.isStringLiteral(nameProperty.initializer)) {
-                return nameProperty.initializer.text === LSP_PACKAGE_NAME
+                return nameProperty.initializer.text === LSP_PLUGIN_NAME
               }
             }
             return false
           })
 
           if (lspPluginElement) {
-            descriptions.push(`Remove ${LSP_PACKAGE_NAME} plugin from tsconfig`)
+            descriptions.push(`Remove ${LSP_PLUGIN_NAME} plugin from tsconfig`)
             deleteNodeFromList(tracker, current.sourceFile, pluginsArray.elements, lspPluginElement)
           }
         }
@@ -396,12 +397,12 @@ const computeTsConfigChanges = (
         const pluginObject = ts.factory.createObjectLiteralExpression([
           ts.factory.createPropertyAssignment(
             ts.factory.createStringLiteral("name"),
-            ts.factory.createStringLiteral(LSP_PACKAGE_NAME)
+            ts.factory.createStringLiteral(LSP_PLUGIN_NAME)
           )
         ], false)
 
         if (!pluginsProperty) {
-          descriptions.push(`Add plugins array with ${LSP_PACKAGE_NAME} plugin`)
+          descriptions.push(`Add plugins array with ${LSP_PLUGIN_NAME} plugin`)
 
           const newPluginsProp = ts.factory.createPropertyAssignment(
             ts.factory.createStringLiteral("plugins"),
@@ -415,14 +416,14 @@ const computeTsConfigChanges = (
             if (ts.isObjectLiteralExpression(element)) {
               const nameProperty = findPropertyInObject(element, "name")
               if (nameProperty && ts.isStringLiteral(nameProperty.initializer)) {
-                return nameProperty.initializer.text === LSP_PACKAGE_NAME
+                return nameProperty.initializer.text === LSP_PLUGIN_NAME
               }
             }
             return false
           })
 
           if (!lspPluginElement) {
-            descriptions.push(`Add ${LSP_PACKAGE_NAME} plugin to existing plugins array`)
+            descriptions.push(`Add ${LSP_PLUGIN_NAME} plugin to existing plugins array`)
             insertNodeAtEndOfList(tracker, current.sourceFile, pluginsArray.elements, pluginObject)
           }
         }
