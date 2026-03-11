@@ -10,8 +10,7 @@ import { computeChanges } from "./changes.js"
 import { renderCodeActions } from "./diff-renderer.js"
 import { gatherTargetState } from "./target-prompt.js"
 import { selectTsConfigFile } from "./tsconfig-prompt.js"
-
-const DEFAULT_LSP_VERSION = "^0.0.0"
+import { DEFAULT_LSP_VERSION } from "./consts.js"
 
 export const setupCommand = Command.make("setup").pipe(
   Command.withDescription("Setup @effect/tsgo for the given project using an interactive CLI."),
