@@ -30,12 +30,7 @@
         "x86_64-darwin"
         "aarch64-darwin"
       ];
-      workspaceModuleCacheHashes = {
-        x86_64-linux = "sha256-yZucMz5/FRchCYexUrK3ZOysCk7HN56DORZa4Mo6BKo=";
-        aarch64-linux = "sha256-2ch8mqutzB5UawV821qjKt8jS11R2js5RtfqN42AWXQ=";
-        x86_64-darwin = "sha256-ZYeuPgm3QSKmkspvLzJIJ961NLzkOihESN8HxD77/kw=";
-        aarch64-darwin = "sha256-2ch8mqutzB5UawV821qjKt8jS11R2js5RtfqN42AWXQ=";
-      };
+      workspaceModuleCacheHash = "sha256-LYZFR4Km+fK1ZnSp7yUB8Tc+h+kOboZolU6uDnEASw0=";
       forAllSystems =
         f: lib.genAttrs supportedSystems (system: f system (import nixpkgs { inherit system; }));
     in
@@ -101,7 +96,7 @@
               GOWORK = "auto";
             };
             outputHashMode = "recursive";
-            outputHash = workspaceModuleCacheHashes.${system};
+            outputHash = workspaceModuleCacheHash;
             buildPhase = ''
               runHook preBuild
               export HOME="$TMPDIR"
@@ -114,13 +109,8 @@
               chmod -R u+w work
 
               (
-                cd work/typescript-go/internal/diagnostics
-                go run generate.go -diagnostics ./diagnostics_generated.go -loc ./loc_generated.go -locdir ./loc
-              )
-
-              (
                 cd work
-                go build -trimpath -o "$TMPDIR/tsgo" ./typescript-go/cmd/tsgo
+                go mod download all
               )
               runHook postBuild
             '';
