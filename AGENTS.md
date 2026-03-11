@@ -57,3 +57,47 @@ Specs should focus on the desired outcome, user experience, and expected behavio
 ## Backlog Items
 
 Backlog items should describe the expected outcome and behavior, not prescribe code or implementation approach. Only include code examples when the user explicitly requests a specific interface or shape. If not explicitly requested, omit code from backlog items.
+
+## Reference Repositories
+
+This repository uses local reference clones under `.repos/` for pattern and implementation research. These repositories are local-only working material and remain gitignored (`.repos/` is ignored by this repo).
+
+For Effect V4, setup manages three canonical reference clones:
+
+- Local path: `.repos/effect-smol`
+- Canonical origin: `https://github.com/Effect-TS/effect-smol`
+- Local path: `.repos/effect-v3`
+- Canonical origin: `https://github.com/Effect-TS/effect`
+- Local path: `.repos/effect-language-service`
+- Canonical origin: `https://github.com/Effect-TS/effect-language-service`
+
+Bootstrap and refresh the reference repositories with:
+
+```bash
+pnpm setup-repo
+```
+
+`pnpm setup-repo` delegates to `_tools/setup-repo.sh` and will:
+
+- Clone `.repos/effect-smol` when it is missing
+- Fetch/update `.repos/effect-smol` from origin when `.repos/effect-smol/.git` exists
+- Clone `.repos/effect-v3` when it is missing
+- Leave `.repos/effect-v3` unchanged on subsequent runs when `.repos/effect-v3/.git` exists (one-time clone behavior)
+- Clone `.repos/effect-language-service` when it is missing
+- Fetch/update `.repos/effect-language-service` from origin when `.repos/effect-language-service/.git` exists
+- Fail fast when `.repos/effect-smol`, `.repos/effect-v3`, or `.repos/effect-language-service` exists but is not a git repository
+
+### Setup Assumptions (`pnpm setup-repo`)
+
+- `git` is installed and available on `PATH`
+- The machine can reach `github.com` over the network
+- You have permission to create/update files under `.repos/`
+
+## Nix Flake
+
+The repository now exposes a `flake.nix` for a self-contained language-server package built from pinned `typescript-go` and `TypeScript` sources plus this repo's patch set.
+
+```bash
+nix build .#effect-tsgo
+nix run .#effect-tsgo
+```

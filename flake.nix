@@ -171,8 +171,8 @@
             '';
           };
 
-          effectLspTsgo = pkgs.symlinkJoin {
-            name = "effect-lsp-tsgo";
+          effectTsgo = pkgs.symlinkJoin {
+            name = "effect-tsgo";
             paths = [ tsgo ];
             nativeBuildInputs = [ pkgs.makeWrapper ];
             postBuild = ''
@@ -180,20 +180,20 @@
               wrapProgram $out/bin/tsgo \
                 --prefix PATH : ${lib.makeBinPath [ pkgs.nodejs ]}
 
-              makeWrapper $out/bin/tsgo $out/bin/effect-lsp-tsgo \
+              makeWrapper $out/bin/tsgo $out/bin/effect-tsgo \
                 --add-flags "--lsp --stdio"
             '';
             meta = {
               description = "Self-contained Effect Language Service binary built on TypeScript-Go";
               license = lib.licenses.mit;
-              mainProgram = "effect-lsp-tsgo";
+              mainProgram = "effect-tsgo";
               platforms = supportedSystems;
             };
           };
         in
         {
-          default = effectLspTsgo;
-          effect-lsp-tsgo = effectLspTsgo;
+          default = effectTsgo;
+          effect-tsgo = effectTsgo;
           inherit tsgo;
         }
       );
@@ -201,23 +201,23 @@
       apps = forAllSystems (
         system: _pkgs:
         let
-          package = self.packages.${system}.effect-lsp-tsgo;
+          package = self.packages.${system}.effect-tsgo;
         in
         {
           default = {
             type = "app";
-            program = "${package}/bin/effect-lsp-tsgo";
+            program = "${package}/bin/effect-tsgo";
           };
-          effect-lsp-tsgo = {
+          effect-tsgo = {
             type = "app";
-            program = "${package}/bin/effect-lsp-tsgo";
+            program = "${package}/bin/effect-tsgo";
           };
         }
       );
 
       checks = forAllSystems (
         system: _pkgs: {
-          inherit (self.packages.${system}) effect-lsp-tsgo;
+          inherit (self.packages.${system}) effect-tsgo;
         }
       );
     };
