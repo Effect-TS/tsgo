@@ -8,6 +8,7 @@ import { FileReadError, PackageJsonNotFoundError } from "./errors.js"
 import type { Assessment, FileInput } from "./types.js"
 
 const LSP_PACKAGE_NAME = "@effect/tsgo"
+const LSP_PLUGIN_NAME = "@effect/language-service"
 const PATCH_COMMAND = "effect-tsgo"
 
 /**
@@ -131,7 +132,7 @@ const assessTsConfig = (
 
   const hasPlugins = parsed.compilerOptions?.plugins !== undefined
   const plugins = parsed.compilerOptions?.plugins ?? []
-  const hasLspPlugin = plugins.some((plugin) => plugin.name === LSP_PACKAGE_NAME)
+  const hasLspPlugin = plugins.some((plugin) => plugin.name === LSP_PLUGIN_NAME)
 
   return {
     path: input.fileName,

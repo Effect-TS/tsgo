@@ -30,12 +30,25 @@
         "x86_64-darwin"
         "aarch64-darwin"
       ];
-      workspaceModuleCacheHashes = {
-        x86_64-linux = "sha256-ZYeuPgm3QSKmkspvLzJIJ961NLzkOihESN8HxD77/kw=";
-        aarch64-linux = "sha256-2ch8mqutzB5UawV821qjKt8jS11R2js5RtfqN42AWXQ=";
-        x86_64-darwin = "sha256-ZYeuPgm3QSKmkspvLzJIJ961NLzkOihESN8HxD77/kw=";
-        aarch64-darwin = "sha256-2ch8mqutzB5UawV821qjKt8jS11R2js5RtfqN42AWXQ=";
-      };
+      /*
+       This hash covers the exported `GOMODCACHE` produced by `go mod download all`.
+       It intentionally does not cover generated files or compiled artifacts, so one
+       hash can be shared across systems as long as the downloaded module set stays
+       the same.
+
+       Update this hash whenever the workspace's downloaded module set changes,
+       typically after changes to `go.mod`, `go.work`, or any transitive Go module
+       requirements pulled in by this repository.
+
+       Refresh workflow:
+       1. Temporarily set this value to `lib.fakeHash`.
+       2. Run `nix build .#effect-tsgo --no-write-lock-file`.
+       3. Copy the reported `got: sha256-...` value back here.
+
+       This is a good candidate for automation later, for example via a small script
+       that swaps in `lib.fakeHash`, runs the build, and updates the value.
+      */
+      workspaceModuleCacheHash = "sha256-LYZFR4Km+fK1ZnSp7yUB8Tc+h+kOboZolU6uDnEASw0=";
       forAllSystems =
         f: lib.genAttrs supportedSystems (system: f system (import nixpkgs { inherit system; }));
     in
@@ -77,42 +90,20 @@
             src = typescript-go-src;
             patches = builtins.map (name: ./. + "/_patches/${name}") sortedPatchFiles;
           };
-          src = pkgs.stdenvNoCC.mkDerivation {
-            name = "effect-tsgo-source";
-            src = rootSrc;
-            nativeBuildInputs = [ pkgsUnstable.go_1_26 ];
-            dontConfigure = true;
-            unpackPhase = ''
-              runHook preUnpack
-              mkdir source
-              cp -R ${rootSrc}/. source/
-              chmod -R u+w source
-              cp -R ${patchedTypescriptGo} source/typescript-go
-              chmod -R u+w source/typescript-go
-              mkdir -p source/typescript-go/_submodules
-              if [ -d source/typescript-go/_submodules/TypeScript ]; then
-                rmdir source/typescript-go/_submodules/TypeScript
-              fi
-              ln -s ${typescript-src} source/typescript-go/_submodules/TypeScript
-              runHook postUnpack
-            '';
-            buildPhase = ''
-              runHook preBuild
-              export HOME="$TMPDIR"
-              export GOCACHE="$TMPDIR/go-cache"
-              (
-                cd source/typescript-go/internal/diagnostics
-                go run generate.go -diagnostics ./diagnostics_generated.go -loc ./loc_generated.go -locdir ./loc
-              )
-              runHook postBuild
-            '';
-            installPhase = ''
-              runHook preInstall
-              cp -R source $out
-              chmod -R a-w $out
-              runHook postInstall
-            '';
-          };
+          src = pkgs.runCommandNoCC "effect-tsgo-source" { } ''
+            mkdir source
+            cp -R ${rootSrc}/. source/
+            chmod -R u+w source
+            cp -R ${patchedTypescriptGo} source/typescript-go
+            chmod -R u+w source/typescript-go
+            mkdir -p source/typescript-go/_submodules
+            if [ -d source/typescript-go/_submodules/TypeScript ]; then
+              rmdir source/typescript-go/_submodules/TypeScript
+            fi
+            ln -s ${typescript-src} source/typescript-go/_submodules/TypeScript
+            cp -R source $out
+            chmod -R a-w $out
+          '';
 
           workspaceModuleCache = pkgs.stdenvNoCC.mkDerivation {
             name = "effect-tsgo-workspace-gomodcache";
@@ -123,14 +114,22 @@
               GOWORK = "auto";
             };
             outputHashMode = "recursive";
-            outputHash = workspaceModuleCacheHashes.${system};
+            outputHash = workspaceModuleCacheHash;
             buildPhase = ''
               runHook preBuild
               export HOME="$TMPDIR"
               export GOPATH="$TMPDIR/go"
               export GOMODCACHE="$GOPATH/pkg/mod"
+              export GOCACHE="$TMPDIR/go-cache"
               mkdir -p "$GOMODCACHE"
-              go build -trimpath -o "$TMPDIR/tsgo" ./typescript-go/cmd/tsgo
+
+              cp -R "$src"/. work
+              chmod -R u+w work
+
+              (
+                cd work
+                go mod download all
+              )
               runHook postBuild
             '';
             installPhase = ''
@@ -146,6 +145,7 @@
             version = "0.0.0";
             inherit src;
             nativeBuildInputs = [ pkgsUnstable.go_1_26 ];
+            dontConfigure = true;
             env = {
               CGO_ENABLED = 0;
               GOWORK = "auto";
@@ -156,17 +156,30 @@
               export HOME="$TMPDIR"
               export GOPATH="$TMPDIR/go"
               export GOMODCACHE="$GOPATH/pkg/mod"
+              export GOCACHE="$TMPDIR/go-cache"
               mkdir -p "$GOPATH/pkg"
               cp -R ${workspaceModuleCache} "$GOMODCACHE"
               chmod -R u+w "$GOMODCACHE"
               export GOPROXY=off
               export GOSUMDB=off
-              go build -mod=readonly -trimpath -ldflags="-s -w" -o tsgo ./typescript-go/cmd/tsgo
+
+              cp -R "$src"/. work
+              chmod -R u+w work
+
+              (
+                cd work/typescript-go/internal/diagnostics
+                go run generate.go -diagnostics ./diagnostics_generated.go -loc ./loc_generated.go -locdir ./loc
+              )
+
+              (
+                cd work
+                go build -mod=readonly -trimpath -ldflags="-s -w" -o tsgo ./typescript-go/cmd/tsgo
+              )
               runHook postBuild
             '';
             installPhase = ''
               runHook preInstall
-              install -Dm755 tsgo $out/bin/tsgo
+              install -Dm755 work/tsgo $out/bin/tsgo
               runHook postInstall
             '';
           };
