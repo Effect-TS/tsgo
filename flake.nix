@@ -31,10 +31,16 @@
         "aarch64-darwin"
       ];
       workspaceModuleCacheHashes = {
-        x86_64-linux = "sha256-ZYeuPgm3QSKmkspvLzJIJ961NLzkOihESN8HxD77/kw=";
+        x86_64-linux = "sha256-yZucMz5/FRchCYexUrK3ZOysCk7HN56DORZa4Mo6BKo=";
         aarch64-linux = "sha256-2ch8mqutzB5UawV821qjKt8jS11R2js5RtfqN42AWXQ=";
         x86_64-darwin = "sha256-ZYeuPgm3QSKmkspvLzJIJ961NLzkOihESN8HxD77/kw=";
         aarch64-darwin = "sha256-2ch8mqutzB5UawV821qjKt8jS11R2js5RtfqN42AWXQ=";
+      };
+      bootstrapModuleCacheHashes = {
+        x86_64-linux = "sha256-yZucMz5/FRchCYexUrK3ZOysCk7HN56DORZa4Mo6BKo=";
+        aarch64-linux = lib.fakeHash;
+        x86_64-darwin = lib.fakeHash;
+        aarch64-darwin = lib.fakeHash;
       };
       forAllSystems =
         f: lib.genAttrs supportedSystems (system: f system (import nixpkgs { inherit system; }));
@@ -77,16 +83,16 @@
             src = typescript-go-src;
             patches = builtins.map (name: ./. + "/_patches/${name}") sortedPatchFiles;
           };
-          src = pkgs.stdenvNoCC.mkDerivation {
-            name = "effect-tsgo-source";
+          bootstrapSrc = pkgs.stdenvNoCC.mkDerivation {
+            name = "effect-tsgo-bootstrap-source";
             src = rootSrc;
-            nativeBuildInputs = [ pkgsUnstable.go_1_26 ];
             dontConfigure = true;
             unpackPhase = ''
               runHook preUnpack
               mkdir source
               cp -R ${rootSrc}/. source/
               chmod -R u+w source
+              rm -f source/CLAUDE.md
               cp -R ${patchedTypescriptGo} source/typescript-go
               chmod -R u+w source/typescript-go
               mkdir -p source/typescript-go/_submodules
@@ -96,9 +102,62 @@
               ln -s ${typescript-src} source/typescript-go/_submodules/TypeScript
               runHook postUnpack
             '';
+            installPhase = ''
+              runHook preInstall
+              cp -R source $out
+              chmod -R a-w $out
+              runHook postInstall
+            '';
+          };
+
+          bootstrapModuleCache = pkgs.stdenvNoCC.mkDerivation {
+            name = "effect-tsgo-bootstrap-gomodcache";
+            src = bootstrapSrc;
+            nativeBuildInputs = [ pkgsUnstable.go_1_26 ];
+            env = {
+              CGO_ENABLED = 0;
+              GOWORK = "auto";
+            };
+            outputHashMode = "recursive";
+            outputHash = bootstrapModuleCacheHashes.${system};
             buildPhase = ''
               runHook preBuild
               export HOME="$TMPDIR"
+              export GOPATH="$TMPDIR/go"
+              export GOMODCACHE="$GOPATH/pkg/mod"
+              mkdir -p "$GOMODCACHE"
+              go mod download
+              runHook postBuild
+            '';
+            installPhase = ''
+              runHook preInstall
+              cp -R "$GOMODCACHE" $out
+              runHook postInstall
+            '';
+            dontFixup = true;
+          };
+
+          src = pkgs.stdenvNoCC.mkDerivation {
+            name = "effect-tsgo-source";
+            src = bootstrapSrc;
+            nativeBuildInputs = [ pkgsUnstable.go_1_26 ];
+            dontConfigure = true;
+            unpackPhase = ''
+              runHook preUnpack
+              cp -R "$src" source
+              chmod -R u+w source
+              runHook postUnpack
+            '';
+            buildPhase = ''
+              runHook preBuild
+              export HOME="$TMPDIR"
+              export GOPATH="$TMPDIR/go"
+              export GOMODCACHE="$GOPATH/pkg/mod"
+              mkdir -p "$GOPATH/pkg"
+              cp -R ${bootstrapModuleCache} "$GOMODCACHE"
+              chmod -R u+w "$GOMODCACHE"
+              export GOPROXY=off
+              export GOSUMDB=off
               export GOCACHE="$TMPDIR/go-cache"
               (
                 cd source/typescript-go/internal/diagnostics
@@ -129,7 +188,11 @@
               export HOME="$TMPDIR"
               export GOPATH="$TMPDIR/go"
               export GOMODCACHE="$GOPATH/pkg/mod"
-              mkdir -p "$GOMODCACHE"
+              mkdir -p "$GOPATH/pkg"
+              cp -R ${bootstrapModuleCache} "$GOMODCACHE"
+              chmod -R u+w "$GOMODCACHE"
+              export GOPROXY=off
+              export GOSUMDB=off
               go build -trimpath -o "$TMPDIR/tsgo" ./typescript-go/cmd/tsgo
               runHook postBuild
             '';
