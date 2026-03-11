@@ -48,7 +48,7 @@
        This is a good candidate for automation later, for example via a small script
        that swaps in `lib.fakeHash`, runs the build, and updates the value.
       */
-      workspaceModuleCacheHash = "sha256-CGhoA7PX5wFK+wK+ebSI95gFsZOANmM4XnyXJxcfO0E=";
+      workspaceModuleCacheHash = "sha256-Fz7I/aDvzexCdqrG7Q3B9qpj1CArItWYkr26DV7tIeo=";
       forAllSystems =
         f: lib.genAttrs supportedSystems (system: f system (import nixpkgs { inherit system; }));
     in
