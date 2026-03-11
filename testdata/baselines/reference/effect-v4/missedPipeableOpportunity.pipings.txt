@@ -1,0 +1,233 @@
+==== /.src/missedPipeableOpportunity.ts (12 flows) ====
+
+=== Piping Flow ===
+Location: 5:30 - 5:52
+Node: Effect.succeed(n + 1)
+Node Kind: KindCallExpression
+
+Subject: n + 1
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 8:68 - 8:78
+Node: String(n)
+Node Kind: KindCallExpression
+
+Subject: n
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: String
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 11:29 - 11:57
+Node: toString(double(addOne(5)))
+Node Kind: KindCallExpression
+
+Subject: 5
+Subject Type: 5
+
+Transformations (3):
+  [0] kind: call
+      callee: addOne
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: call
+      callee: double
+      args: (constant)
+      outType: Effect<number, never, never>
+  [2] kind: call
+      callee: toString
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 15:29 - 15:66
+Node: toString(triple(double(addOne(10))))
+Node Kind: KindCallExpression
+
+Subject: 10
+Subject Type: 10
+
+Transformations (4):
+  [0] kind: call
+      callee: addOne
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: call
+      callee: double
+      args: (constant)
+      outType: Effect<number, never, never>
+  [2] kind: call
+      callee: triple
+      args: (constant)
+      outType: Effect<number, never, never>
+  [3] kind: call
+      callee: toString
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 18:29 - 18:47
+Node: double(addOne(5))
+Node Kind: KindCallExpression
+
+Subject: 5
+Subject Type: 5
+
+Transformations (2):
+  [0] kind: call
+      callee: addOne
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: call
+      callee: double
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 22:36 - 22:54
+Node: Effect.succeed(n)
+Node Kind: KindCallExpression
+
+Subject: n
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 23:32 - 23:73
+Node: double(wrapInEffect(regularFunction(5)))
+Node Kind: KindCallExpression
+
+Subject: 5
+Subject Type: 5
+
+Transformations (3):
+  [0] kind: call
+      callee: regularFunction
+      args: (constant)
+      outType: number
+  [1] kind: call
+      callee: wrapInEffect
+      args: (constant)
+      outType: Effect<number, never, never>
+  [2] kind: call
+      callee: double
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 27:29 - 27:67
+Node: triple(addHundred(double(addOne(7))))
+Node Kind: KindCallExpression
+
+Subject: 7
+Subject Type: 7
+
+Transformations (4):
+  [0] kind: call
+      callee: addOne
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: call
+      callee: double
+      args: (constant)
+      outType: Effect<number, never, never>
+  [2] kind: call
+      callee: addHundred
+      args: (constant)
+      outType: Effect<number, never, never>
+  [3] kind: call
+      callee: triple
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 30:32 - 30:65
+Node: addOne(5).pipe(double, toString)
+Node Kind: KindCallExpression
+
+Subject: 5
+Subject Type: 5
+
+Transformations (3):
+  [0] kind: call
+      callee: addOne
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: double
+      args: (constant)
+      outType: Effect<number, never, never>
+  [2] kind: pipeable
+      callee: toString
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 31:32 - 31:55
+Node: addOne(5).pipe(double)
+Node Kind: KindCallExpression
+
+Subject: 5
+Subject Type: 5
+
+Transformations (2):
+  [0] kind: call
+      callee: addOne
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: double
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 32:32 - 32:62
+Node: addOne(5).pipe(multiplyBy(2))
+Node Kind: KindCallExpression
+
+Subject: 5
+Subject Type: 5
+
+Transformations (2):
+  [0] kind: call
+      callee: addOne
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: multiplyBy
+      args: [2]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 35:28 - 35:67
+Node: Effect.runPromise(Effect.log("Hello"))
+Node Kind: KindCallExpression
+
+Subject: "Hello"
+Subject Type: "Hello"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<void>

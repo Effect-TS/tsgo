@@ -1,0 +1,43 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/test.ts(7,23): error TS377049: Key should be '@effect/test-app/test/ExpectedServiceIdentifier'. effect(deterministicKeys)
+/.src/test.ts(10,46): error TS377049: Key should be '@effect/test-app/test/ErrorA'. effect(deterministicKeys)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "keyPatterns": [
+              { "target": "service", "pattern": "package-identifier" },
+              { "target": "error", "pattern": "package-identifier" }
+            ]
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/package.json (0 errors) ====
+    { "name": "@effect/test-app", "version": "1.0.0" }
+    
+
+==== /.src/test.ts (2 errors) ====
+    // @effect-v3
+    // @effect-diagnostics deterministicKeys:error
+    import * as Context from "effect/Context"
+    import * as Data from "effect/Data"
+    
+    export class ExpectedServiceIdentifier
+      extends Context.Tag("ExpectedServiceIdentifier")<ExpectedServiceIdentifier, {}>()
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377049: Key should be '@effect/test-app/test/ExpectedServiceIdentifier'. effect(deterministicKeys)
+    {}
+    
+    export class ErrorA extends Data.TaggedError("ErrorA")<{}> {}
+                                                 ~~~~~~~~
+!!! error TS377049: Key should be '@effect/test-app/test/ErrorA'. effect(deterministicKeys)
+    

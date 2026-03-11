@@ -1,0 +1,36 @@
+diff --git a/internal/ls/inlay_hints.go b/internal/ls/inlay_hints.go
+index f737425eb0..7462a9bd64 100644
+--- a/internal/ls/inlay_hints.go
++++ b/internal/ls/inlay_hints.go
+@@ -21,6 +21,18 @@ import (
+ 	"github.com/microsoft/typescript-go/internal/stringutil"
+ )
+ 
++// AfterInlayHintsCallback is invoked after inlay hints are computed
++// to allow external packages to filter or modify inlay hints.
++var AfterInlayHintsCallback func(c *checker.Checker, sf *ast.SourceFile, span core.TextRange, preferences *lsutil.InlayHintsPreferences, hints []*lsproto.InlayHint, converters *lsconv.Converters) []*lsproto.InlayHint
++
++// RegisterAfterInlayHintsCallback registers a callback to be called after
++// inlay hints are computed. The callback can filter or modify the hints
++// before they are returned.
++// Note: Only one callback can be registered. Subsequent calls will replace the previous callback.
++func RegisterAfterInlayHintsCallback(cb func(c *checker.Checker, sf *ast.SourceFile, span core.TextRange, preferences *lsutil.InlayHintsPreferences, hints []*lsproto.InlayHint, converters *lsconv.Converters) []*lsproto.InlayHint) {
++	AfterInlayHintsCallback = cb
++}
++
+ func (l *LanguageService) ProvideInlayHint(
+ 	ctx context.Context,
+ 	params *lsproto.InlayHintParams,
+@@ -46,6 +58,12 @@ func (l *LanguageService) ProvideInlayHint(
+ 		converters:      l.converters,
+ 	}
+ 	inlayHintState.visit(file.AsNode())
++
++	// EFFECT HOOK: Allow Effect to filter inlay hints
++	if AfterInlayHintsCallback != nil {
++		inlayHintState.result = AfterInlayHintsCallback(checker, file, inlayHintState.span, inlayHintPreferences, inlayHintState.result, l.converters)
++	}
++
+ 	return lsproto.InlayHintsOrNull{InlayHints: &inlayHintState.result}, nil
+ }
+ 

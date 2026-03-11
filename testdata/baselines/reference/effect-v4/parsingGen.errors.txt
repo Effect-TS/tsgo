@@ -1,0 +1,18 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+
+
+==== /.src/parsingGen.ts (0 errors) ====
+    import { Effect, Option } from "effect"
+    
+    export const program = Effect.gen(function*(){
+        const option = yield* Option.some(1)
+        return option
+    })
+    
+    export const gen = Option.gen(function*(){
+        const option = yield* Option.some(1)
+        return option
+    })
+    

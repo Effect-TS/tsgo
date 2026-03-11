@@ -1,0 +1,7 @@
+=== Quick Fix Inventory ===
+
+[D1] (2:13-2:20) TS6133: 'Runtime' is declared but its value is never read.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+(no quick fixes to apply)

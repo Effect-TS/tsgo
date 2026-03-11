@@ -1,0 +1,51 @@
+=== Quick Fix Inventory ===
+
+[D1] (11:3-11:14) TS377044: Classes extending Schema must not override the constructor; this is because it silently breaks the schema decoding behaviour. If that's needed, we recommend instead to use a static 'new' method that constructs the instance. effect(overriddenSchemaConstructor)
+  Fix 0: "Disable overriddenSchemaConstructor for this line"
+  Fix 1: "Disable overriddenSchemaConstructor for entire file"
+  Fix 2: "Rewrite using the static 'new' pattern"
+  Fix 3: "Remove the constructor override"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable overriddenSchemaConstructor for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable overriddenSchemaConstructor for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Rewrite using the static 'new' pattern" ===
+
+--- file:///.src/overriddenSchemaConstructor_static.ts ---
+// @effect-v3
+import * as Schema from "effect/Schema"
+
+export class InvalidBecauseOfConstructor
+  extends Schema.Class<InvalidBecauseOfConstructor>("InvalidBecauseOfConstructor")({
+    a: Schema.Number
+  })
+{
+  b: number
+  // should be report here at constructor location
+  public static new() {
+    const _this = new this({ a: 42 })
+    _this.b = 56
+    return _this
+} 
+}
+
+
+=== [D1] Fix 3: "Remove the constructor override" ===
+
+--- file:///.src/overriddenSchemaConstructor_static.ts ---
+// @effect-v3
+import * as Schema from "effect/Schema"
+
+export class InvalidBecauseOfConstructor
+  extends Schema.Class<InvalidBecauseOfConstructor>("InvalidBecauseOfConstructor")({
+    a: Schema.Number
+  })
+{
+  b: number
+}
+

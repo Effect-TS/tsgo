@@ -1,0 +1,29 @@
+==== /.src/leakingRequirements_noScope.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 5:32 - 7:19
+Node: ServiceMap.Service<FileSystem, {\n  writeFile: (content: string) => Effect.Effect<void>\n}>()("FileSystem")
+Node Kind: KindCallExpression
+
+Subject: "FileSystem"
+Subject Type: "FileSystem"
+
+Transformations (1):
+  [0] kind: call
+      callee: ServiceMap.Service<FileSystem, {\n  writeFile: (content: string) => Effect.Effect<void>\n}>()
+      args: (constant)
+      outType: ServiceClass<FileSystem, "FileSystem", { writeFile: (content: string) => Effect<void, never, never>; }>
+
+=== Piping Flow ===
+Location: 14:26 - 14:87
+Node: ServiceMap.Service<LeakingScopeIsFine>("LeakingScopeIsFine")
+Node Kind: KindCallExpression
+
+Subject: "LeakingScopeIsFine"
+Subject Type: "LeakingScopeIsFine"
+
+Transformations (1):
+  [0] kind: call
+      callee: ServiceMap.Service
+      args: (constant)
+      outType: Service<LeakingScopeIsFine, LeakingScopeIsFine>

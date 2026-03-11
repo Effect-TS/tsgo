@@ -1,0 +1,1 @@
+==== /.src/effectFnOpportunity_plainMany.ts (0 layer exports) ====

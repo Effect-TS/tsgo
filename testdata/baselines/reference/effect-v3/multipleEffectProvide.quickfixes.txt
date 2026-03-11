@@ -1,0 +1,201 @@
+=== Quick Fix Inventory ===
+
+[D1] (3:13-3:18) TS6133: 'Layer' is declared but its value is never read.
+  (no quick fixes)
+
+[D2] (18:3-18:37) TS377033: Avoid chaining Effect.provide calls, as this can lead to service lifecycle issues. Instead, merge layers and provide them in a single call. effect(multipleEffectProvide)
+  Fix 0: "Disable multipleEffectProvide for this line"
+  Fix 1: "Disable multipleEffectProvide for entire file"
+  Fix 2: "Combine into a single provide"
+
+[D3] (23:3-23:37) TS377033: Avoid chaining Effect.provide calls, as this can lead to service lifecycle issues. Instead, merge layers and provide them in a single call. effect(multipleEffectProvide)
+  Fix 0: "Disable multipleEffectProvide for this line"
+  Fix 1: "Disable multipleEffectProvide for entire file"
+  Fix 2: "Combine into a single provide"
+
+[D4] (26:3-26:37) TS377033: Avoid chaining Effect.provide calls, as this can lead to service lifecycle issues. Instead, merge layers and provide them in a single call. effect(multipleEffectProvide)
+  Fix 0: "Disable multipleEffectProvide for this line"
+  Fix 1: "Disable multipleEffectProvide for entire file"
+  Fix 2: "Combine into a single provide"
+
+[D5] (31:3-31:37) TS377033: Avoid chaining Effect.provide calls, as this can lead to service lifecycle issues. Instead, merge layers and provide them in a single call. effect(multipleEffectProvide)
+  Fix 0: "Disable multipleEffectProvide for this line"
+  Fix 1: "Disable multipleEffectProvide for entire file"
+  Fix 2: "Combine into a single provide"
+
+=== Quick Fix Application Results ===
+
+=== [D2] Fix 0: "Disable multipleEffectProvide for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable multipleEffectProvide for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Combine into a single provide" ===
+
+--- file:///.src/multipleEffectProvide.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+import * as Layer from "effect/Layer"
+
+class MyService1 extends Effect.Service<MyService1>()("MyService1", {
+  succeed: { value: 1 }
+}) {}
+
+class MyService2 extends Effect.Service<MyService2>()("MyService2", {
+  succeed: { value: 2 }
+}) {}
+
+class MyService3 extends Effect.Service<MyService3>()("MyService3", {
+  succeed: { value: 3 }
+}) {}
+
+export const shouldReport = Effect.void.pipe(
+  Effect.provide(Layer.mergeAll(MyService1.Default, MyService2.Default))
+)
+
+export const shouldReportSeparately = Effect.void.pipe(
+  Effect.provide(MyService1.Default),
+  Effect.provide(MyService2.Default),
+  Effect.ignoreLogged,
+  Effect.provide(MyService1.Default),
+  Effect.provide(MyService2.Default)
+)
+
+export const shouldReportSingle = Effect.void.pipe(
+  Effect.provide(MyService1.Default),
+  Effect.provide(MyService2.Default),
+  Effect.provide(MyService3.Default)
+)
+
+
+=== [D3] Fix 0: "Disable multipleEffectProvide for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable multipleEffectProvide for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Combine into a single provide" ===
+
+--- file:///.src/multipleEffectProvide.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+import * as Layer from "effect/Layer"
+
+class MyService1 extends Effect.Service<MyService1>()("MyService1", {
+  succeed: { value: 1 }
+}) {}
+
+class MyService2 extends Effect.Service<MyService2>()("MyService2", {
+  succeed: { value: 2 }
+}) {}
+
+class MyService3 extends Effect.Service<MyService3>()("MyService3", {
+  succeed: { value: 3 }
+}) {}
+
+export const shouldReport = Effect.void.pipe(
+  Effect.provide(MyService1.Default),
+  Effect.provide(MyService2.Default)
+)
+
+export const shouldReportSeparately = Effect.void.pipe(
+  Effect.provide(Layer.mergeAll(MyService1.Default, MyService2.Default)),
+  Effect.ignoreLogged,
+  Effect.provide(MyService1.Default),
+  Effect.provide(MyService2.Default)
+)
+
+export const shouldReportSingle = Effect.void.pipe(
+  Effect.provide(MyService1.Default),
+  Effect.provide(MyService2.Default),
+  Effect.provide(MyService3.Default)
+)
+
+
+=== [D4] Fix 0: "Disable multipleEffectProvide for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable multipleEffectProvide for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Combine into a single provide" ===
+
+--- file:///.src/multipleEffectProvide.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+import * as Layer from "effect/Layer"
+
+class MyService1 extends Effect.Service<MyService1>()("MyService1", {
+  succeed: { value: 1 }
+}) {}
+
+class MyService2 extends Effect.Service<MyService2>()("MyService2", {
+  succeed: { value: 2 }
+}) {}
+
+class MyService3 extends Effect.Service<MyService3>()("MyService3", {
+  succeed: { value: 3 }
+}) {}
+
+export const shouldReport = Effect.void.pipe(
+  Effect.provide(MyService1.Default),
+  Effect.provide(MyService2.Default)
+)
+
+export const shouldReportSeparately = Effect.void.pipe(
+  Effect.provide(MyService1.Default),
+  Effect.provide(MyService2.Default),
+  Effect.ignoreLogged,
+  Effect.provide(Layer.mergeAll(MyService1.Default, MyService2.Default))
+)
+
+export const shouldReportSingle = Effect.void.pipe(
+  Effect.provide(MyService1.Default),
+  Effect.provide(MyService2.Default),
+  Effect.provide(MyService3.Default)
+)
+
+
+=== [D5] Fix 0: "Disable multipleEffectProvide for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable multipleEffectProvide for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Combine into a single provide" ===
+
+--- file:///.src/multipleEffectProvide.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+import * as Layer from "effect/Layer"
+
+class MyService1 extends Effect.Service<MyService1>()("MyService1", {
+  succeed: { value: 1 }
+}) {}
+
+class MyService2 extends Effect.Service<MyService2>()("MyService2", {
+  succeed: { value: 2 }
+}) {}
+
+class MyService3 extends Effect.Service<MyService3>()("MyService3", {
+  succeed: { value: 3 }
+}) {}
+
+export const shouldReport = Effect.void.pipe(
+  Effect.provide(MyService1.Default),
+  Effect.provide(MyService2.Default)
+)
+
+export const shouldReportSeparately = Effect.void.pipe(
+  Effect.provide(MyService1.Default),
+  Effect.provide(MyService2.Default),
+  Effect.ignoreLogged,
+  Effect.provide(MyService1.Default),
+  Effect.provide(MyService2.Default)
+)
+
+export const shouldReportSingle = Effect.void.pipe(
+  Effect.provide(Layer.mergeAll(MyService1.Default, MyService2.Default, MyService3.Default))
+)
+

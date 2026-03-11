@@ -1,0 +1,49 @@
+=== Quick Fix Inventory ===
+
+[D1] (5:27-5:106) TS377015: Chained pipe calls can be simplified to a single pipe call. effect(unnecessaryPipeChain)
+  Fix 0: "Disable unnecessaryPipeChain for this line"
+  Fix 1: "Disable unnecessaryPipeChain for entire file"
+  Fix 2: "Rewrite as single pipe call"
+
+[D2] (7:23-7:104) TS377015: Chained pipe calls can be simplified to a single pipe call. effect(unnecessaryPipeChain)
+  Fix 0: "Disable unnecessaryPipeChain for this line"
+  Fix 1: "Disable unnecessaryPipeChain for entire file"
+  Fix 2: "Rewrite as single pipe call"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable unnecessaryPipeChain for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable unnecessaryPipeChain for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Rewrite as single pipe call" ===
+
+--- file:///.src/unnecessaryPipeChain.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+import { pipe } from "effect/Function"
+
+export const asPipeable = Effect.succeed(1).pipe(Effect.map(x => x + 2), Effect.map(x => x + 3))
+
+export const asPipe = pipe(pipe(Effect.succeed(1), Effect.map((x) => x + 2)), Effect.map((x) => x + 3))
+
+
+=== [D2] Fix 0: "Disable unnecessaryPipeChain for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable unnecessaryPipeChain for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Rewrite as single pipe call" ===
+
+--- file:///.src/unnecessaryPipeChain.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+import { pipe } from "effect/Function"
+
+export const asPipeable = Effect.succeed(1).pipe(Effect.map((x) => x + 2)).pipe(Effect.map((x) => x + 3))
+
+export const asPipe = pipe(Effect.succeed(1), Effect.map(x => x + 2), Effect.map(x => x + 3))
+

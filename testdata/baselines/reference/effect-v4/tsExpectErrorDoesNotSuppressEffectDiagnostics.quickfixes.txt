@@ -1,0 +1,36 @@
+=== Quick Fix Inventory ===
+
+[D1] (11:14-11:28) TS377004: Missing context EnvA in the expected Effect type. effect(missingEffectContext)
+  Fix 0: "Disable missingEffectContext for this line"
+  Fix 1: "Disable missingEffectContext for entire file"
+
+[D2] (15:1-15:27) TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D3] (19:1-19:26) TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D4] (22:1-22:20) TS2578: Unused '@ts-expect-error' directive.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable missingEffectContext for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable missingEffectContext for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default

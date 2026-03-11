@@ -1,0 +1,75 @@
+==== /.src/layerGraphSimple.ts (5 flows) ====
+
+=== Piping Flow ===
+Location: 12:8 - 12:27
+Node: Effect.succeed({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{}, never, never>
+
+=== Piping Flow ===
+Location: 17:8 - 17:27
+Node: Effect.succeed({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{}, never, never>
+
+=== Piping Flow ===
+Location: 33:28 - 33:86
+Node: UserRepository.Default.pipe(Layer.provide(Cache.Default))
+Node Kind: KindCallExpression
+
+Subject: UserRepository.Default
+Subject Type: Layer<UserRepository, never, Cache | DbConnection>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Layer.provide
+      args: [Cache.Default]
+      outType: Layer<UserRepository, never, DbConnection | FileSystem>
+
+=== Piping Flow ===
+Location: 35:32 - 38:2
+Node: UserRepository.Default.pipe(\n  Layer.provideMerge(Cache.Default),\n  Layer.merge(DbConnection.Default)\n)
+Node Kind: KindCallExpression
+
+Subject: UserRepository.Default
+Subject Type: Layer<UserRepository, never, Cache | DbConnection>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Layer.provideMerge
+      args: [Cache.Default]
+      outType: Layer<Cache | UserRepository, never, DbConnection | FileSystem>
+  [1] kind: pipeable
+      callee: Layer.merge
+      args: [DbConnection.Default]
+      outType: Layer<Cache | DbConnection | UserRepository, never, DbConnection | FileSystem>
+
+=== Piping Flow ===
+Location: 40:27 - 40:81
+Node: Cache.Default.pipe(Layer.provide(FileSystem.Default))
+Node Kind: KindCallExpression
+
+Subject: Cache.Default
+Subject Type: Layer<Cache, never, FileSystem>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Layer.provide
+      args: [FileSystem.Default]
+      outType: Layer<Cache, never, never>

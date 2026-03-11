@@ -1,0 +1,61 @@
+// Package rules contains all Effect diagnostic rule implementations and the registry.
+package rules
+
+import (
+	"github.com/effect-ts/effect-typescript-go/internal/rule"
+)
+
+// All is the list of all diagnostic rules.
+// Add new rules here explicitly - no init() magic.
+var All = []rule.Rule{
+	FloatingEffect,
+	MissingEffectError,
+	MissingEffectContext,
+	MissingReturnYieldStar,
+	MissingStarInYieldEffectGen,
+	CatchUnfailableEffect,
+	CatchAllToMapError,
+	EffectFnIife,
+	TryCatchInEffectGen,
+	UnnecessaryPipe,
+	ReturnEffectInGen,
+	UnnecessaryPipeChain,
+	EffectSucceedWithVoid,
+	UnnecessaryEffectGen,
+	EffectMapVoid,
+	UnnecessaryFailYieldableError,
+	EffectInVoidSuccess,
+	EffectInFailure,
+	UnknownInEffectCatch,
+	GlobalErrorInEffectCatch,
+	GlobalErrorInEffectFailure,
+	RunEffectInsideEffect,
+	PreferSchemaOverJson,
+	EffectGenUsesAdapter,
+	StrictBooleanExpressions,
+	AnyUnknownInErrorContext,
+	ScopeInLayerEffect,
+	StrictEffectProvide,
+	MultipleEffectProvide,
+	MissingLayerContext,
+	LayerMergeAllWithDependencies,
+	SchemaStructWithTag,
+	SchemaSyncInEffect,
+	SchemaUnionOfLiterals,
+	MissingEffectServiceDependency,
+	LeakingRequirements,
+	InstanceOfSchema,
+	GenericEffectServices,
+	OverriddenSchemaConstructor,
+	RedundantSchemaTagIdentifier,
+	ClassSelfMismatch,
+	EffectFnOpportunity,
+	NonObjectEffectServiceType,
+	DeterministicKeys,
+	MissedPipeableOpportunity,
+	DuplicatePackage,
+	ExtendsNativeError,
+	NodeBuiltinImport,
+	OutdatedApi,
+	ServiceNotAsClass,
+}

@@ -1,0 +1,45 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+/.src/floatingEffect.ts(4,1): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+/.src/floatingEffect.ts(5,1): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+/.src/floatingEffect.ts(6,1): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+/.src/floatingEffect.ts(7,1): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+
+
+==== /.src/floatingEffect.ts (4 errors) ====
+    import { Effect } from "effect"
+    
+    // These should trigger floatingEffect diagnostic (code 377001)
+    Effect.succeed("floating")
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+    Effect.never
+    ~~~~~~~~~~~~
+!!! error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+    Effect.void
+    ~~~~~~~~~~~
+!!! error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+    Effect.fail("error")
+    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+    
+    // These should NOT trigger (assigned to variable)
+    const ok = Effect.succeed(1)
+    const x = Effect.void
+    
+    // These should NOT trigger (assignment expressions)
+    let logicalAssignment: Effect.Effect<void, never, never>
+    logicalAssignment = Effect.void
+    logicalAssignment ??= Effect.void
+    logicalAssignment ||= Effect.void
+    logicalAssignment &&= Effect.void
+    
+    // Property assignment should NOT trigger
+    class MyClass {
+      boot: Effect.Effect<void, never, never>
+      constructor() {
+        this.boot = Effect.void
+      }
+    }
+    

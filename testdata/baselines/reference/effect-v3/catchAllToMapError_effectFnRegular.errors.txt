@@ -1,0 +1,37 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/catchAllToMapError_effectFnRegular.ts(12,3): suggestion TS377010: You can use Effect.mapError instead of Effect.catch + Effect.fail to transform the error type. effect(catchAllToMapError)
+/.src/catchAllToMapError_effectFnRegular.ts(17,3): suggestion TS377010: You can use Effect.mapError instead of Effect.catch + Effect.fail to transform the error type. effect(catchAllToMapError)
+
+
+==== /.src/catchAllToMapError_effectFnRegular.ts (2 errors) ====
+    // @effect-v3
+    import * as Effect from "effect/Effect"
+    
+    class MyErrorTagged {
+      readonly _tag = "MyErrorTagged"
+      constructor(readonly cause: unknown) {}
+    }
+    
+    // Effect.fn with regular (non-generator) function - catchAll that should be mapError
+    export const shouldReportEffectFnRegular = Effect.fn(
+      () => Effect.fail("error"),
+      Effect.catchAll((cause) => Effect.fail(new MyErrorTagged(cause)))
+      ~~~~~~~~~~~~~~~
+!!! suggestion TS377010: You can use Effect.mapError instead of Effect.catch + Effect.fail to transform the error type. effect(catchAllToMapError)
+    )
+    
+    export const shouldReportEffectFnRegularTraced = Effect.fn("traced")(
+      () => Effect.fail("error"),
+      Effect.catchAll((cause) => Effect.fail(new MyErrorTagged(cause)))
+      ~~~~~~~~~~~~~~~
+!!! suggestion TS377010: You can use Effect.mapError instead of Effect.catch + Effect.fail to transform the error type. effect(catchAllToMapError)
+    )
+    
+    // Should NOT report: catchAll returning Effect.succeed
+    export const shouldNotReportEffectFnRegular = Effect.fn(
+      () => Effect.fail("error"),
+      Effect.catchAll(() => Effect.succeed(42))
+    )
+    

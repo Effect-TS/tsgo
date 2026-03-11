@@ -1,0 +1,30 @@
+=== Quick Fix Inventory ===
+
+[D1] (8:7-8:12) TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+  Fix 0: "Disable missingReturnYieldStar for this line"
+  Fix 1: "Disable missingReturnYieldStar for entire file"
+  Fix 2: "Add return statement"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable missingReturnYieldStar for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable missingReturnYieldStar for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Add return statement" ===
+
+--- file:///.src/missingReturnYieldStar_yieldable.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+export const shouldComplain = (n: number) =>
+  Effect.gen(function*() {
+    if (n === 0) {
+      // In v3, yieldable parsing falls back to Effect typing.
+      return yield* Effect.fail("no zero!");
+    }
+    return n / 1
+  })
+

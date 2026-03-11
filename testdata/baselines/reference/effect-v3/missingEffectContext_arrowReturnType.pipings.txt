@@ -1,0 +1,51 @@
+==== /.src/missingEffectContext_arrowReturnType.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 9:9 - 9:62
+Node: Effect.void.pipe(Effect.andThen(eff), Effect.scoped)
+Node Kind: KindCallExpression
+
+Subject: Effect.void
+Subject Type: Effect<void, never, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.andThen
+      args: [eff]
+      outType: Effect<A, E, R>
+  [1] kind: pipeable
+      callee: Effect.scoped
+      args: (constant)
+      outType: Effect<A, E, Exclude<R, Scope>>
+
+=== Piping Flow ===
+Location: 15:46 - 15:99
+Node: Effect.void.pipe(Effect.andThen(eff), Effect.scoped)
+Node Kind: KindCallExpression
+
+Subject: Effect.void
+Subject Type: Effect<void, never, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.andThen
+      args: [eff]
+      outType: Effect<A, E, R>
+  [1] kind: pipeable
+      callee: Effect.scoped
+      args: (constant)
+      outType: Effect<A, E, Exclude<R, Scope>>
+
+=== Piping Flow ===
+Location: 18:109 - 20:40
+Node: Effect.void.pipe(Effect.andThen(eff))
+Node Kind: KindCallExpression
+
+Subject: Effect.void
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.andThen
+      args: [eff]
+      outType: Effect<A, E, R>

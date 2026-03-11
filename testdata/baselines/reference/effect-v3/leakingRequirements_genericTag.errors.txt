@@ -1,0 +1,24 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/leakingRequirements_genericTag.ts(14,27): suggestion TS377041: Methods of this Service require 'FileSystem' from every caller. This leaks implementation details — resolve these dependencies at Layer creation time. effect(leakingRequirements)
+
+
+==== /.src/leakingRequirements_genericTag.ts (1 errors) ====
+    // @effect-v3
+    import type { Effect } from "effect"
+    import { Context } from "effect"
+    
+    export class FileSystem extends Context.Tag("FileSystem")<FileSystem, {
+      writeFile: (content: string) => Effect.Effect<void>
+    }>() {}
+    
+    interface LeakingService {
+      writeCache: () => Effect.Effect<void, never, FileSystem>
+      readCache: Effect.Effect<void, never, FileSystem>
+    }
+    
+    export const GenericTag = Context.GenericTag<LeakingService>("LeakingService")
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377041: Methods of this Service require 'FileSystem' from every caller. This leaks implementation details — resolve these dependencies at Layer creation time. effect(leakingRequirements)
+    

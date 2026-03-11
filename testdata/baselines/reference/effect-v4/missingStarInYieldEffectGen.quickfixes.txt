@@ -1,0 +1,575 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:24-8:3) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D2] (19:3-19:8) TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+  Fix 0: "Disable missingStarInYieldEffectGen for this line"
+  Fix 1: "Disable missingStarInYieldEffectGen for entire file"
+  Fix 2: "Replace yield with yield*"
+
+[D3] (24:3-24:8) TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+  Fix 0: "Disable missingStarInYieldEffectGen for this line"
+  Fix 1: "Disable missingStarInYieldEffectGen for entire file"
+  Fix 2: "Replace yield with yield*"
+
+[D4] (25:3-25:8) TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+  Fix 0: "Disable missingStarInYieldEffectGen for this line"
+  Fix 1: "Disable missingStarInYieldEffectGen for entire file"
+  Fix 2: "Replace yield with yield*"
+
+[D5] (29:40-33:3) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D6] (31:5-31:10) TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+  Fix 0: "Disable missingStarInYieldEffectGen for this line"
+  Fix 1: "Disable missingStarInYieldEffectGen for entire file"
+  Fix 2: "Replace yield with yield*"
+
+[D7] (37:3-37:8) TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+  Fix 0: "Disable missingStarInYieldEffectGen for this line"
+  Fix 1: "Disable missingStarInYieldEffectGen for entire file"
+  Fix 2: "Replace yield with yield*"
+
+[D8] (42:3-42:8) TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+  Fix 0: "Disable missingStarInYieldEffectGen for this line"
+  Fix 1: "Disable missingStarInYieldEffectGen for entire file"
+  Fix 2: "Replace yield with yield*"
+
+[D9] (47:3-47:8) TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+  Fix 0: "Disable missingStarInYieldEffectGen for this line"
+  Fix 1: "Disable missingStarInYieldEffectGen for entire file"
+  Fix 2: "Replace yield with yield*"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/missingStarInYieldEffectGen.ts ---
+import { Effect } from "effect"
+
+// --- Should NOT report ---
+
+// correct usage with yield*
+export const noError = Effect.asVoid(Effect.succeed(1))
+
+// regular generator — not an Effect scope
+export function* effectInsideStandardGenerator() {
+  yield Effect.never
+}
+
+// --- Should report ---
+
+// bare yield inside Effect.gen
+export const missingStarInYield = Effect.gen(function*() {
+  yield Effect.succeed(1)
+})
+
+// multiple bare yields — generator warning once, per-yield for each
+export const missingStarInMultipleYield = Effect.gen(function*() {
+  yield Effect.succeed(1)
+  yield Effect.succeed(2)
+})
+
+// nested Effect.gen — inner generator is also checked
+export const missingStarInInnerYield = Effect.gen(function*() {
+  yield* Effect.gen(function*() {
+    yield Effect.succeed(1)
+  })
+})
+
+// Effect.fn variants
+export const effectFnUsage = Effect.fn(function*() {
+  yield Effect.never
+})
+
+// Effect.fn named (curried)
+export const tracedEffectFnUsage = Effect.fn("tracedEffectFnUsage")(function*() {
+  yield Effect.never
+})
+
+// Effect.fnUntraced
+export const untracedEffectFnUsage = Effect.fnUntraced(function*() {
+  yield Effect.never
+})
+
+
+=== [D2] Fix 0: "Disable missingStarInYieldEffectGen for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable missingStarInYieldEffectGen for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace yield with yield*" ===
+
+--- file:///.src/missingStarInYieldEffectGen.ts ---
+import { Effect } from "effect"
+
+// --- Should NOT report ---
+
+// correct usage with yield*
+export const noError = Effect.gen(function*() {
+  yield* Effect.succeed(1)
+})
+
+// regular generator — not an Effect scope
+export function* effectInsideStandardGenerator() {
+  yield Effect.never
+}
+
+// --- Should report ---
+
+// bare yield inside Effect.gen
+export const missingStarInYield = Effect.gen(function*() {
+  yield* Effect.succeed(1)
+})
+
+// multiple bare yields — generator warning once, per-yield for each
+export const missingStarInMultipleYield = Effect.gen(function*() {
+  yield Effect.succeed(1)
+  yield Effect.succeed(2)
+})
+
+// nested Effect.gen — inner generator is also checked
+export const missingStarInInnerYield = Effect.gen(function*() {
+  yield* Effect.gen(function*() {
+    yield Effect.succeed(1)
+  })
+})
+
+// Effect.fn variants
+export const effectFnUsage = Effect.fn(function*() {
+  yield Effect.never
+})
+
+// Effect.fn named (curried)
+export const tracedEffectFnUsage = Effect.fn("tracedEffectFnUsage")(function*() {
+  yield Effect.never
+})
+
+// Effect.fnUntraced
+export const untracedEffectFnUsage = Effect.fnUntraced(function*() {
+  yield Effect.never
+})
+
+
+=== [D3] Fix 0: "Disable missingStarInYieldEffectGen for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable missingStarInYieldEffectGen for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace yield with yield*" ===
+
+--- file:///.src/missingStarInYieldEffectGen.ts ---
+import { Effect } from "effect"
+
+// --- Should NOT report ---
+
+// correct usage with yield*
+export const noError = Effect.gen(function*() {
+  yield* Effect.succeed(1)
+})
+
+// regular generator — not an Effect scope
+export function* effectInsideStandardGenerator() {
+  yield Effect.never
+}
+
+// --- Should report ---
+
+// bare yield inside Effect.gen
+export const missingStarInYield = Effect.gen(function*() {
+  yield Effect.succeed(1)
+})
+
+// multiple bare yields — generator warning once, per-yield for each
+export const missingStarInMultipleYield = Effect.gen(function*() {
+  yield* Effect.succeed(1)
+  yield Effect.succeed(2)
+})
+
+// nested Effect.gen — inner generator is also checked
+export const missingStarInInnerYield = Effect.gen(function*() {
+  yield* Effect.gen(function*() {
+    yield Effect.succeed(1)
+  })
+})
+
+// Effect.fn variants
+export const effectFnUsage = Effect.fn(function*() {
+  yield Effect.never
+})
+
+// Effect.fn named (curried)
+export const tracedEffectFnUsage = Effect.fn("tracedEffectFnUsage")(function*() {
+  yield Effect.never
+})
+
+// Effect.fnUntraced
+export const untracedEffectFnUsage = Effect.fnUntraced(function*() {
+  yield Effect.never
+})
+
+
+=== [D4] Fix 0: "Disable missingStarInYieldEffectGen for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable missingStarInYieldEffectGen for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace yield with yield*" ===
+
+--- file:///.src/missingStarInYieldEffectGen.ts ---
+import { Effect } from "effect"
+
+// --- Should NOT report ---
+
+// correct usage with yield*
+export const noError = Effect.gen(function*() {
+  yield* Effect.succeed(1)
+})
+
+// regular generator — not an Effect scope
+export function* effectInsideStandardGenerator() {
+  yield Effect.never
+}
+
+// --- Should report ---
+
+// bare yield inside Effect.gen
+export const missingStarInYield = Effect.gen(function*() {
+  yield Effect.succeed(1)
+})
+
+// multiple bare yields — generator warning once, per-yield for each
+export const missingStarInMultipleYield = Effect.gen(function*() {
+  yield Effect.succeed(1)
+  yield* Effect.succeed(2)
+})
+
+// nested Effect.gen — inner generator is also checked
+export const missingStarInInnerYield = Effect.gen(function*() {
+  yield* Effect.gen(function*() {
+    yield Effect.succeed(1)
+  })
+})
+
+// Effect.fn variants
+export const effectFnUsage = Effect.fn(function*() {
+  yield Effect.never
+})
+
+// Effect.fn named (curried)
+export const tracedEffectFnUsage = Effect.fn("tracedEffectFnUsage")(function*() {
+  yield Effect.never
+})
+
+// Effect.fnUntraced
+export const untracedEffectFnUsage = Effect.fnUntraced(function*() {
+  yield Effect.never
+})
+
+
+=== [D5] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/missingStarInYieldEffectGen.ts ---
+import { Effect } from "effect"
+
+// --- Should NOT report ---
+
+// correct usage with yield*
+export const noError = Effect.gen(function*() {
+  yield* Effect.succeed(1)
+})
+
+// regular generator — not an Effect scope
+export function* effectInsideStandardGenerator() {
+  yield Effect.never
+}
+
+// --- Should report ---
+
+// bare yield inside Effect.gen
+export const missingStarInYield = Effect.gen(function*() {
+  yield Effect.succeed(1)
+})
+
+// multiple bare yields — generator warning once, per-yield for each
+export const missingStarInMultipleYield = Effect.gen(function*() {
+  yield Effect.succeed(1)
+  yield Effect.succeed(2)
+})
+
+// nested Effect.gen — inner generator is also checked
+export const missingStarInInnerYield = Effect.gen(function*() {
+    yield Effect.succeed(1)
+  })
+
+// Effect.fn variants
+export const effectFnUsage = Effect.fn(function*() {
+  yield Effect.never
+})
+
+// Effect.fn named (curried)
+export const tracedEffectFnUsage = Effect.fn("tracedEffectFnUsage")(function*() {
+  yield Effect.never
+})
+
+// Effect.fnUntraced
+export const untracedEffectFnUsage = Effect.fnUntraced(function*() {
+  yield Effect.never
+})
+
+
+=== [D6] Fix 0: "Disable missingStarInYieldEffectGen for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable missingStarInYieldEffectGen for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace yield with yield*" ===
+
+--- file:///.src/missingStarInYieldEffectGen.ts ---
+import { Effect } from "effect"
+
+// --- Should NOT report ---
+
+// correct usage with yield*
+export const noError = Effect.gen(function*() {
+  yield* Effect.succeed(1)
+})
+
+// regular generator — not an Effect scope
+export function* effectInsideStandardGenerator() {
+  yield Effect.never
+}
+
+// --- Should report ---
+
+// bare yield inside Effect.gen
+export const missingStarInYield = Effect.gen(function*() {
+  yield Effect.succeed(1)
+})
+
+// multiple bare yields — generator warning once, per-yield for each
+export const missingStarInMultipleYield = Effect.gen(function*() {
+  yield Effect.succeed(1)
+  yield Effect.succeed(2)
+})
+
+// nested Effect.gen — inner generator is also checked
+export const missingStarInInnerYield = Effect.gen(function*() {
+  yield* Effect.gen(function*() {
+    yield* Effect.succeed(1)
+  })
+})
+
+// Effect.fn variants
+export const effectFnUsage = Effect.fn(function*() {
+  yield Effect.never
+})
+
+// Effect.fn named (curried)
+export const tracedEffectFnUsage = Effect.fn("tracedEffectFnUsage")(function*() {
+  yield Effect.never
+})
+
+// Effect.fnUntraced
+export const untracedEffectFnUsage = Effect.fnUntraced(function*() {
+  yield Effect.never
+})
+
+
+=== [D7] Fix 0: "Disable missingStarInYieldEffectGen for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable missingStarInYieldEffectGen for entire file" ===
+skipped by default
+
+=== [D7] Fix 2: "Replace yield with yield*" ===
+
+--- file:///.src/missingStarInYieldEffectGen.ts ---
+import { Effect } from "effect"
+
+// --- Should NOT report ---
+
+// correct usage with yield*
+export const noError = Effect.gen(function*() {
+  yield* Effect.succeed(1)
+})
+
+// regular generator — not an Effect scope
+export function* effectInsideStandardGenerator() {
+  yield Effect.never
+}
+
+// --- Should report ---
+
+// bare yield inside Effect.gen
+export const missingStarInYield = Effect.gen(function*() {
+  yield Effect.succeed(1)
+})
+
+// multiple bare yields — generator warning once, per-yield for each
+export const missingStarInMultipleYield = Effect.gen(function*() {
+  yield Effect.succeed(1)
+  yield Effect.succeed(2)
+})
+
+// nested Effect.gen — inner generator is also checked
+export const missingStarInInnerYield = Effect.gen(function*() {
+  yield* Effect.gen(function*() {
+    yield Effect.succeed(1)
+  })
+})
+
+// Effect.fn variants
+export const effectFnUsage = Effect.fn(function*() {
+  yield* Effect.never
+})
+
+// Effect.fn named (curried)
+export const tracedEffectFnUsage = Effect.fn("tracedEffectFnUsage")(function*() {
+  yield Effect.never
+})
+
+// Effect.fnUntraced
+export const untracedEffectFnUsage = Effect.fnUntraced(function*() {
+  yield Effect.never
+})
+
+
+=== [D8] Fix 0: "Disable missingStarInYieldEffectGen for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable missingStarInYieldEffectGen for entire file" ===
+skipped by default
+
+=== [D8] Fix 2: "Replace yield with yield*" ===
+
+--- file:///.src/missingStarInYieldEffectGen.ts ---
+import { Effect } from "effect"
+
+// --- Should NOT report ---
+
+// correct usage with yield*
+export const noError = Effect.gen(function*() {
+  yield* Effect.succeed(1)
+})
+
+// regular generator — not an Effect scope
+export function* effectInsideStandardGenerator() {
+  yield Effect.never
+}
+
+// --- Should report ---
+
+// bare yield inside Effect.gen
+export const missingStarInYield = Effect.gen(function*() {
+  yield Effect.succeed(1)
+})
+
+// multiple bare yields — generator warning once, per-yield for each
+export const missingStarInMultipleYield = Effect.gen(function*() {
+  yield Effect.succeed(1)
+  yield Effect.succeed(2)
+})
+
+// nested Effect.gen — inner generator is also checked
+export const missingStarInInnerYield = Effect.gen(function*() {
+  yield* Effect.gen(function*() {
+    yield Effect.succeed(1)
+  })
+})
+
+// Effect.fn variants
+export const effectFnUsage = Effect.fn(function*() {
+  yield Effect.never
+})
+
+// Effect.fn named (curried)
+export const tracedEffectFnUsage = Effect.fn("tracedEffectFnUsage")(function*() {
+  yield* Effect.never
+})
+
+// Effect.fnUntraced
+export const untracedEffectFnUsage = Effect.fnUntraced(function*() {
+  yield Effect.never
+})
+
+
+=== [D9] Fix 0: "Disable missingStarInYieldEffectGen for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable missingStarInYieldEffectGen for entire file" ===
+skipped by default
+
+=== [D9] Fix 2: "Replace yield with yield*" ===
+
+--- file:///.src/missingStarInYieldEffectGen.ts ---
+import { Effect } from "effect"
+
+// --- Should NOT report ---
+
+// correct usage with yield*
+export const noError = Effect.gen(function*() {
+  yield* Effect.succeed(1)
+})
+
+// regular generator — not an Effect scope
+export function* effectInsideStandardGenerator() {
+  yield Effect.never
+}
+
+// --- Should report ---
+
+// bare yield inside Effect.gen
+export const missingStarInYield = Effect.gen(function*() {
+  yield Effect.succeed(1)
+})
+
+// multiple bare yields — generator warning once, per-yield for each
+export const missingStarInMultipleYield = Effect.gen(function*() {
+  yield Effect.succeed(1)
+  yield Effect.succeed(2)
+})
+
+// nested Effect.gen — inner generator is also checked
+export const missingStarInInnerYield = Effect.gen(function*() {
+  yield* Effect.gen(function*() {
+    yield Effect.succeed(1)
+  })
+})
+
+// Effect.fn variants
+export const effectFnUsage = Effect.fn(function*() {
+  yield Effect.never
+})
+
+// Effect.fn named (curried)
+export const tracedEffectFnUsage = Effect.fn("tracedEffectFnUsage")(function*() {
+  yield Effect.never
+})
+
+// Effect.fnUntraced
+export const untracedEffectFnUsage = Effect.fnUntraced(function*() {
+  yield* Effect.never
+})
+

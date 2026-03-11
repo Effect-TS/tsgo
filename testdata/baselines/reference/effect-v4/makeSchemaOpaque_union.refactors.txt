@@ -1,0 +1,85 @@
+=== Refactor Inventory ===
+
+[R1] selection: "4:14-4:21"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Toggle type annotation" (refactor.rewrite.effect.toggleTypeAnnotation)
+  Refactor 2: "Toggle lazy const" (refactor.rewrite.effect.toggleLazyConst)
+  Refactor 3: "Make Schema opaque" (refactor.rewrite.effect.makeSchemaOpaque)
+  Refactor 4: "Make Schema opaque with namespace" (refactor.rewrite.effect.makeSchemaOpaqueWithNs)
+
+[R2] selection: "empty (0:0-0:0)"
+  (no refactors)
+
+=== Refactor Application Results ===
+
+=== [R1] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/makeSchemaOpaque_union.ts ---
+// refactor: 4:14-4:21
+import * as Schema from "effect/Schema"
+
+export const pipe(MyUnion) = Schema.Union([
+  Schema.Literal("A"),
+  Schema.Literal("B")
+])
+
+
+=== [R1] Refactor 1: "Toggle type annotation" ===
+
+--- file:///.src/makeSchemaOpaque_union.ts ---
+// refactor: 4:14-4:21
+import * as Schema from "effect/Schema"
+
+export const MyUnion: Schema.Union<readonly [Schema.Literal<"A">, Schema.Literal<"B">]> = Schema.Union([
+  Schema.Literal("A"),
+  Schema.Literal("B")
+])
+
+
+=== [R1] Refactor 2: "Toggle lazy const" ===
+
+--- file:///.src/makeSchemaOpaque_union.ts ---
+// refactor: 4:14-4:21
+import * as Schema from "effect/Schema"
+
+export const MyUnion = () => Schema.Union([
+  Schema.Literal("A"),
+  Schema.Literal("B")
+])
+
+
+=== [R1] Refactor 3: "Make Schema opaque" ===
+
+--- file:///.src/makeSchemaOpaque_union.ts ---
+// refactor: 4:14-4:21
+import * as Schema from "effect/Schema"
+
+export const MyUnion_ = Schema.Union([
+  Schema.Literal("A"),
+  Schema.Literal("B")
+])
+export type MyUnion = Schema.Schema.Type<typeof MyUnion_>;
+export type MyUnionEncoded = Schema.Codec.Encoded<typeof MyUnion_>;
+export type MyUnionDecodingServices = Schema.Codec.DecodingServices<typeof MyUnion_>;
+export type MyUnionEncodingServices = Schema.Codec.EncodingServices<typeof MyUnion_>;
+export const MyUnion: Schema.Codec<MyUnion, MyUnionEncoded, MyUnionDecodingServices, MyUnionEncodingServices> = MyUnion_;
+
+
+=== [R1] Refactor 4: "Make Schema opaque with namespace" ===
+
+--- file:///.src/makeSchemaOpaque_union.ts ---
+// refactor: 4:14-4:21
+import * as Schema from "effect/Schema"
+
+export const MyUnion_ = Schema.Union([
+  Schema.Literal("A"),
+  Schema.Literal("B")
+])
+export interface MyUnion extends Schema.Schema.Type<typeof MyUnion_> {}
+export namespace MyUnion {
+    export type Encoded = Schema.Codec.Encoded<typeof MyUnion_>;
+    export type DecodingServices = Schema.Codec.DecodingServices<typeof MyUnion_>;
+    export type EncodingServices = Schema.Codec.EncodingServices<typeof MyUnion_>;
+}
+export const MyUnion: Schema.Schema<MyUnion, MyUnion.Encoded, MyUnion.DecodingServices> = MyUnion_;
+

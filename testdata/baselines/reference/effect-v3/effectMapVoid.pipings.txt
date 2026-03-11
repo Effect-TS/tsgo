@@ -1,0 +1,181 @@
+==== /.src/effectMapVoid.ts (10 flows) ====
+
+=== Piping Flow ===
+Location: 5:34 - 7:2
+Node: Effect.succeed(1).pipe(\n  Effect.map(() => void 0)\n)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [() => void 0]
+      outType: Effect<undefined, never, never>
+
+=== Piping Flow ===
+Location: 10:38 - 12:2
+Node: Effect.succeed(1).pipe(\n  Effect.map(() => undefined)\n)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [() => undefined]
+      outType: Effect<undefined, never, never>
+
+=== Piping Flow ===
+Location: 15:39 - 17:2
+Node: Effect.succeed(1).pipe(\n  Effect.map(() => {})\n)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [() => {}]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 20:51 - 23:2
+Node: Effect.succeed(1).pipe(\n  // eslint-disable-next-line @effect/dprint\n  Effect.map(() => (undefined))\n)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [() => (undefined)]
+      outType: Effect<undefined, never, never>
+
+=== Piping Flow ===
+Location: 26:47 - 28:2
+Node: Effect.succeed(1).pipe(\n  Effect.map(() => (void 0))\n)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [() => (void 0)]
+      outType: Effect<undefined, never, never>
+
+=== Piping Flow ===
+Location: 31:57 - 34:2
+Node: Effect.succeed(1).pipe(\n  // eslint-disable-next-line @effect/dprint\n  Effect.map(() => ((undefined)))\n)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [() => ((undefined))]
+      outType: Effect<undefined, never, never>
+
+=== Piping Flow ===
+Location: 37:41 - 39:2
+Node: Effect.succeed(1).pipe(\n  Effect.map((n) => n * 2)\n)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [(n) => n * 2]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 42:39 - 44:2
+Node: Effect.succeed(1).pipe(\n  Effect.map(() => 42)\n)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [() => 42]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 47:38 - 49:2
+Node: Effect.succeed(1).pipe(\n  Effect.map(() => "hello")\n)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [() => "hello"]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 52:38 - 54:2
+Node: Effect.succeed(1).pipe(\n  Effect.asVoid\n)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.asVoid
+      args: (constant)
+      outType: Effect<void, never, never>

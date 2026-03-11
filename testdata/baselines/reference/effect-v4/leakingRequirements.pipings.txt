@@ -1,0 +1,57 @@
+==== /.src/leakingRequirements.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 4:32 - 6:19
+Node: ServiceMap.Service<FileSystem, {\n  writeFile: (content: string) => Effect.Effect<void>\n}>()("FileSystem")
+Node Kind: KindCallExpression
+
+Subject: "FileSystem"
+Subject Type: "FileSystem"
+
+Transformations (1):
+  [0] kind: call
+      callee: ServiceMap.Service<FileSystem, {\n  writeFile: (content: string) => Effect.Effect<void>\n}>()
+      args: (constant)
+      outType: ServiceClass<FileSystem, "FileSystem", { writeFile: (content: string) => Effect<void, never, never>; }>
+
+=== Piping Flow ===
+Location: 8:33 - 11:20
+Node: ServiceMap.Service<LeakingDeps, {\n  writeCache: () => Effect.Effect<void, never, FileSystem>\n  readCache: Effect.Effect<void, never, FileSystem>\n}>()("LeakingDeps")
+Node Kind: KindCallExpression
+
+Subject: "LeakingDeps"
+Subject Type: "LeakingDeps"
+
+Transformations (1):
+  [0] kind: call
+      callee: ServiceMap.Service<LeakingDeps, {\n  writeCache: () => Effect.Effect<void, never, FileSystem>\n  readCache: Effect.Effect<void, never, FileSystem>\n}>()
+      args: (constant)
+      outType: ServiceClass<LeakingDeps, "LeakingDeps", { writeCache: () => Effect<void, never, FileSystem>; readCache: Effect<void, never, FileSystem>; }>
+
+=== Piping Flow ===
+Location: 14:28 - 16:21
+Node: ServiceMap.Service<_LocalClass, {\n    writeFile: (content: string) => Effect.Effect<void>\n  }>()("LocalClass")
+Node Kind: KindCallExpression
+
+Subject: "LocalClass"
+Subject Type: "LocalClass"
+
+Transformations (1):
+  [0] kind: call
+      callee: ServiceMap.Service<_LocalClass, {\n    writeFile: (content: string) => Effect.Effect<void>\n  }>()
+      args: (constant)
+      outType: ServiceClass<_LocalClass, "LocalClass", { writeFile: (content: string) => Effect<void, never, never>; }>
+
+=== Piping Flow ===
+Location: 18:30 - 21:23
+Node: ServiceMap.Service<_LocalLeaking, {\n    writeCache: () => Effect.Effect<void, never, FileSystem>\n    readCache: Effect.Effect<void, never, FileSystem>\n  }>()("LocalLeaking")
+Node Kind: KindCallExpression
+
+Subject: "LocalLeaking"
+Subject Type: "LocalLeaking"
+
+Transformations (1):
+  [0] kind: call
+      callee: ServiceMap.Service<_LocalLeaking, {\n    writeCache: () => Effect.Effect<void, never, FileSystem>\n    readCache: Effect.Effect<void, never, FileSystem>\n  }>()
+      args: (constant)
+      outType: ServiceClass<_LocalLeaking, "LocalLeaking", { writeCache: () => Effect<void, never, FileSystem>; readCache: Effect<void, never, FileSystem>; }>

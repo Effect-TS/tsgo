@@ -1,0 +1,127 @@
+==== /.src/unknownInEffectCatch.ts (9 flows) ====
+
+=== Piping Flow ===
+Location: 4:23 - 7:3
+Node: Effect.tryPromise({\n  try: () => fetch("http://something"),\n  catch: (e) => e // <- This is the error\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  try: () => fetch("http://something"),\n  catch: (e) => e // <- This is the error\n}
+Subject Type: { try: () => Promise<Response>; catch: (e: unknown) => unknown; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<Response, unknown, never>
+
+=== Piping Flow ===
+Location: 5:13 - 5:39
+Node: fetch("http://something")
+Node Kind: KindCallExpression
+
+Subject: "http://something"
+Subject Type: "http://something"
+
+Transformations (1):
+  [0] kind: call
+      callee: fetch
+      args: (constant)
+      outType: Promise<Response>
+
+=== Piping Flow ===
+Location: 9:22 - 9:50
+Node: Data.TaggedError("MyError")
+Node Kind: KindCallExpression
+
+Subject: "MyError"
+Subject Type: "MyError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: MatchRecord<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }, void, { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "MyError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 13:32 - 16:3
+Node: Effect.tryPromise({\n  try: () => fetch("http://something"),\n  catch: (e) => new MyError({ cause: e })\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  try: () => fetch("http://something"),\n  catch: (e) => new MyError({ cause: e })\n}
+Subject Type: { try: () => Promise<Response>; catch: (e: unknown) => MyError; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<Response, MyError, never>
+
+=== Piping Flow ===
+Location: 14:13 - 14:39
+Node: fetch("http://something")
+Node Kind: KindCallExpression
+
+Subject: "http://something"
+Subject Type: "http://something"
+
+Transformations (1):
+  [0] kind: call
+      callee: fetch
+      args: (constant)
+      outType: Promise<Response>
+
+=== Piping Flow ===
+Location: 18:35 - 21:3
+Node: Effect.tryPromise({\n  try: () => fetch("http://something"),\n  catch: Function.identity\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  try: () => fetch("http://something"),\n  catch: Function.identity\n}
+Subject Type: { try: () => Promise<Response>; catch: <A>(a: A) => A; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<Response, unknown, never>
+
+=== Piping Flow ===
+Location: 19:13 - 19:39
+Node: fetch("http://something")
+Node Kind: KindCallExpression
+
+Subject: "http://something"
+Subject Type: "http://something"
+
+Transformations (1):
+  [0] kind: call
+      callee: fetch
+      args: (constant)
+      outType: Promise<Response>
+
+=== Piping Flow ===
+Location: 23:41 - 26:3
+Node: Effect.tryPromise({\n  try: () => fetch("http://something"),\n  catch: (_) => _ as any\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  try: () => fetch("http://something"),\n  catch: (_) => _ as any\n}
+Subject Type: { try: () => Promise<Response>; catch: (_: unknown) => any; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<Response, any, never>
+
+=== Piping Flow ===
+Location: 24:13 - 24:39
+Node: fetch("http://something")
+Node Kind: KindCallExpression
+
+Subject: "http://something"
+Subject Type: "http://something"
+
+Transformations (1):
+  [0] kind: call
+      callee: fetch
+      args: (constant)
+      outType: Promise<Response>

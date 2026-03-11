@@ -1,0 +1,24 @@
+diff --git a/internal/checker/exports.go b/internal/checker/exports.go
+index a9ae35507..bd5d14c15 100644
+--- a/internal/checker/exports.go
++++ b/internal/checker/exports.go
+@@ -254,3 +254,19 @@ func (c *Checker) GetIndexInfosOfType(t *Type) []*IndexInfo {
+ func (c *Checker) IsContextSensitive(node *ast.Node) bool {
+ 	return c.isContextSensitive(node)
+ }
++
++// GetTypeArgumentsForResolvedSignature returns the instantiated type arguments
++// for a resolved (non-generic) signature. Returns nil if the signature has no mapper.
++func (c *Checker) GetTypeArgumentsForResolvedSignature(sig *Signature) []*Type {
++	if sig == nil || sig.mapper == nil {
++		return nil
++	}
++	typeParams := sig.typeParameters
++	if sig.target != nil {
++		typeParams = sig.target.typeParameters
++	}
++	if len(typeParams) == 0 {
++		return nil
++	}
++	return c.instantiateTypes(typeParams, sig.mapper)
++}

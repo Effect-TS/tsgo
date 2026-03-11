@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://golangci-lint.run/jsonschema/golangci.jsonschema.json
+
+version: "2"
+
+run:
+  allow-parallel-runners: true
+
+linters:
+  default: none
+  enable:
+    - govet
+    - staticcheck
+
+  exclusions:
+    presets:
+      - comments
+      - std-error-handling
+    paths:
+      - typescript-go
+
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0

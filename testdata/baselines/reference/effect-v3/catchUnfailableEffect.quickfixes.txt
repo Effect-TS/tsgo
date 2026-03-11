@@ -1,0 +1,33 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:3-6:18) TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+  Fix 0: "Disable catchUnfailableEffect for this line"
+  Fix 1: "Disable catchUnfailableEffect for entire file"
+
+[D2] (15:3-15:18) TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+  Fix 0: "Disable catchUnfailableEffect for this line"
+  Fix 1: "Disable catchUnfailableEffect for entire file"
+
+[D3] (37:3-37:18) TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+  Fix 0: "Disable catchUnfailableEffect for this line"
+  Fix 1: "Disable catchUnfailableEffect for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable catchUnfailableEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable catchUnfailableEffect for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable catchUnfailableEffect for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable catchUnfailableEffect for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable catchUnfailableEffect for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable catchUnfailableEffect for entire file" ===
+skipped by default

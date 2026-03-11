@@ -1,0 +1,53 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/multipleEffectProvide.ts(18,3): warning TS377033: Avoid chaining Effect.provide calls, as this can lead to service lifecycle issues. Instead, merge layers and provide them in a single call. effect(multipleEffectProvide)
+/.src/multipleEffectProvide.ts(23,3): warning TS377033: Avoid chaining Effect.provide calls, as this can lead to service lifecycle issues. Instead, merge layers and provide them in a single call. effect(multipleEffectProvide)
+/.src/multipleEffectProvide.ts(26,3): warning TS377033: Avoid chaining Effect.provide calls, as this can lead to service lifecycle issues. Instead, merge layers and provide them in a single call. effect(multipleEffectProvide)
+/.src/multipleEffectProvide.ts(31,3): warning TS377033: Avoid chaining Effect.provide calls, as this can lead to service lifecycle issues. Instead, merge layers and provide them in a single call. effect(multipleEffectProvide)
+
+
+==== /.src/multipleEffectProvide.ts (4 errors) ====
+    // @effect-v3
+    import * as Effect from "effect/Effect"
+    import * as Layer from "effect/Layer"
+    
+    class MyService1 extends Effect.Service<MyService1>()("MyService1", {
+      succeed: { value: 1 }
+    }) {}
+    
+    class MyService2 extends Effect.Service<MyService2>()("MyService2", {
+      succeed: { value: 2 }
+    }) {}
+    
+    class MyService3 extends Effect.Service<MyService3>()("MyService3", {
+      succeed: { value: 3 }
+    }) {}
+    
+    export const shouldReport = Effect.void.pipe(
+      Effect.provide(MyService1.Default),
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377033: Avoid chaining Effect.provide calls, as this can lead to service lifecycle issues. Instead, merge layers and provide them in a single call. effect(multipleEffectProvide)
+      Effect.provide(MyService2.Default)
+    )
+    
+    export const shouldReportSeparately = Effect.void.pipe(
+      Effect.provide(MyService1.Default),
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377033: Avoid chaining Effect.provide calls, as this can lead to service lifecycle issues. Instead, merge layers and provide them in a single call. effect(multipleEffectProvide)
+      Effect.provide(MyService2.Default),
+      Effect.ignoreLogged,
+      Effect.provide(MyService1.Default),
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377033: Avoid chaining Effect.provide calls, as this can lead to service lifecycle issues. Instead, merge layers and provide them in a single call. effect(multipleEffectProvide)
+      Effect.provide(MyService2.Default)
+    )
+    
+    export const shouldReportSingle = Effect.void.pipe(
+      Effect.provide(MyService1.Default),
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377033: Avoid chaining Effect.provide calls, as this can lead to service lifecycle issues. Instead, merge layers and provide them in a single call. effect(multipleEffectProvide)
+      Effect.provide(MyService2.Default),
+      Effect.provide(MyService3.Default)
+    )
+    

@@ -1,0 +1,67 @@
+=== Quick Fix Inventory ===
+
+[D1] (14:29-14:37) TS377013: This pipe call contains no arguments. effect(unnecessaryPipe)
+  Fix 0: "Disable unnecessaryPipe for this line"
+  Fix 1: "Disable unnecessaryPipe for entire file"
+  Fix 2: "Remove the pipe call"
+
+[D2] (16:35-16:60) TS377013: This pipe call contains no arguments. effect(unnecessaryPipe)
+  Fix 0: "Disable unnecessaryPipe for this line"
+  Fix 1: "Disable unnecessaryPipe for entire file"
+  Fix 2: "Remove the pipe call"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable unnecessaryPipe for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable unnecessaryPipe for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Remove the pipe call" ===
+
+--- file:///.src/unnecessaryPipe.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+import { pipe } from "effect/Function"
+
+export const shouldNotReport = pipe(
+  Effect.succeed("Hello"),
+  Effect.map((x) => x + " World")
+)
+
+export const shouldNotReport2 = Effect.succeed("Hello").pipe(
+  Effect.map((x) => x + " World")
+)
+
+export const shouldReport =32
+
+export const shouldReportNoArgs = Effect.succeed(32).pipe()
+
+
+=== [D2] Fix 0: "Disable unnecessaryPipe for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable unnecessaryPipe for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Remove the pipe call" ===
+
+--- file:///.src/unnecessaryPipe.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+import { pipe } from "effect/Function"
+
+export const shouldNotReport = pipe(
+  Effect.succeed("Hello"),
+  Effect.map((x) => x + " World")
+)
+
+export const shouldNotReport2 = Effect.succeed("Hello").pipe(
+  Effect.map((x) => x + " World")
+)
+
+export const shouldReport = pipe(32)
+
+export const shouldReportNoArgs = Effect.succeed(32)
+

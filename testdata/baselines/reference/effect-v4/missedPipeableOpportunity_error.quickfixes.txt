@@ -1,0 +1,40 @@
+=== Quick Fix Inventory ===
+
+[D1] (12:41-12:108) TS377050: Nested function calls can be converted to pipeable style for better readability; consider using Schema.decodeEffect(MyStruct)({ x: 42, y: 42 }).pipe(...) instead. effect(missedPipeableOpportunity)
+  Fix 0: "Disable missedPipeableOpportunity for this line"
+  Fix 1: "Disable missedPipeableOpportunity for entire file"
+  Fix 2: "Convert to pipe style"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable missedPipeableOpportunity for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable missedPipeableOpportunity for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Convert to pipe style" ===
+
+--- file:///.src/missedPipeableOpportunity_error.ts ---
+// @effect-diagnostics missedPipeableOpportunity:warning
+import { Duration, identity, pipe, Schedule, Schema } from "effect"
+import * as Effect from "effect/Effect"
+
+const MyStruct = Schema.Struct({
+  x: Schema.Number,
+  y: Schema.Number
+})
+
+export const shouldNotTrigger = identity(Schema.decodeEffect(MyStruct)({ x: 42, y: 42 }))
+
+export const shouldTriggerBecauseHas2 = Schema.decodeEffect(MyStruct)({ x: 42, y: 42 }).pipe(identity, identity)
+
+export const shouldNotTriggerFunctionReturned = pipe(
+  Schedule.exponential(Duration.millis(10), 4),
+  Schedule.while(_ => Duration.isLessThanOrEqualTo(Duration.seconds(10))(_.duration)) // should not report
+)
+
+export const shouldNotTriggerInnerPipe = Effect.log("Hello").pipe(
+  Effect.ensuring(Effect.log("World"))
+)
+

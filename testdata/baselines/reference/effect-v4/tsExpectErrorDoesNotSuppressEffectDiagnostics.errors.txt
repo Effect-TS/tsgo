@@ -1,0 +1,43 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+/.src/tsExpectErrorDoesNotSuppressEffectDiagnostics.ts(11,14): error TS377004: Missing context EnvA in the expected Effect type. effect(missingEffectContext)
+/.src/tsExpectErrorDoesNotSuppressEffectDiagnostics.ts(15,1): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+/.src/tsExpectErrorDoesNotSuppressEffectDiagnostics.ts(19,1): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+/.src/tsExpectErrorDoesNotSuppressEffectDiagnostics.ts(22,1): error TS2578: Unused '@ts-expect-error' directive.
+
+
+==== /.src/tsExpectErrorDoesNotSuppressEffectDiagnostics.ts (4 errors) ====
+    import { Effect } from "effect"
+    
+    interface EnvA {
+      _tag: "EnvA"
+    }
+    
+    declare const effectWithContext: Effect.Effect<number, never, EnvA>
+    
+    // TS expect-error suppresses TS2322 but NOT Effect TS377004
+    // @ts-expect-error
+    export const missingContext: Effect.Effect<number> = effectWithContext
+                 ~~~~~~~~~~~~~~
+!!! error TS377004: Missing context EnvA in the expected Effect type. effect(missingEffectContext)
+    
+    // TS expect-error does NOT suppress floating Effect TS377001
+    // @ts-expect-error
+    Effect.succeed("floating")
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+    
+    // TS ignore does NOT suppress floating Effect TS377001
+    // @ts-ignore
+    Effect.succeed("ignored")
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+    
+    // TS expect-error combined with effect-diagnostics-next-line suppresses the Effect diagnostic
+    // @ts-expect-error
+    ~~~~~~~~~~~~~~~~~~~
+!!! error TS2578: Unused '@ts-expect-error' directive.
+    // @effect-diagnostics-next-line floatingEffect:off
+    Effect.succeed("both suppressed")
+    

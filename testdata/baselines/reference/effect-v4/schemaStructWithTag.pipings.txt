@@ -1,0 +1,43 @@
+==== /.src/schemaStructWithTag.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 4:20 - 8:3
+Node: Schema.Struct({\n  _tag: Schema.Literal("User"), // <- this is the tag\n  name: Schema.String,\n  age: Schema.Number\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  _tag: Schema.Literal("User"), // <- this is the tag\n  name: Schema.String,\n  age: Schema.Number\n}
+Subject Type: { _tag: Literal<"User">; name: String; age: Number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly _tag: Literal<"User">; readonly name: String; readonly age: Number; }>
+
+=== Piping Flow ===
+Location: 5:8 - 5:31
+Node: Schema.Literal("User")
+Node Kind: KindCallExpression
+
+Subject: "User"
+Subject Type: "User"
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Literal
+      args: (constant)
+      outType: Literal<"User">
+
+=== Piping Flow ===
+Location: 16:31 - 19:3
+Node: Schema.Struct({\n  name: Schema.String,\n  age: Schema.Number\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  name: Schema.String,\n  age: Schema.Number\n}
+Subject Type: { name: String; age: Number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly name: String; readonly age: Number; }>

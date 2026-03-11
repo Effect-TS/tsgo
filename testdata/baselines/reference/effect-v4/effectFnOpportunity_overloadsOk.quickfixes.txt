@@ -1,0 +1,761 @@
+=== Quick Fix Inventory ===
+
+[D1] (11:14-11:29) TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*(a) { ... }). effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fnUntraced"
+  Fix 3: "Convert to Effect.fn (no span)"
+  Fix 4: "Convert to Effect.fn(\"overloadedArrow\")"
+
+[D2] (12:10-14:5) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D3] (21:14-21:42) TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*(a) { ... }). effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fnUntraced"
+  Fix 3: "Convert to Effect.fn (no span)"
+  Fix 4: "Convert to Effect.fn(\"overloadedFunctionExpression\")"
+
+[D4] (22:10-24:5) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D5] (31:14-31:34) TS377047: Can be rewritten as a reusable function: Effect.fn((a) => { ... }). effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fn (no span)"
+  Fix 3: "Convert to Effect.fn(\"overloadedArrowNoGen\")"
+
+[D6] (32:9-32:11) TS6133: '_a' is declared but its value is never read.
+  (no quick fixes)
+
+[D7] (33:9-33:11) TS6133: '_b' is declared but its value is never read.
+  (no quick fixes)
+
+[D8] (34:9-34:11) TS6133: '_c' is declared but its value is never read.
+  (no quick fixes)
+
+[D9] (35:9-35:11) TS6133: '_d' is declared but its value is never read.
+  (no quick fixes)
+
+[D10] (36:9-36:11) TS6133: '_e' is declared but its value is never read.
+  (no quick fixes)
+
+[D11] (44:14-44:47) TS377047: Can be rewritten as a reusable function: Effect.fn(function(a) { ... }). effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fn (no span)"
+  Fix 3: "Convert to Effect.fn(\"overloadedFunctionExpressionNoGen\")"
+
+[D12] (45:9-45:11) TS6133: '_a' is declared but its value is never read.
+  (no quick fixes)
+
+[D13] (46:9-46:11) TS6133: '_b' is declared but its value is never read.
+  (no quick fixes)
+
+[D14] (47:9-47:11) TS6133: '_c' is declared but its value is never read.
+  (no quick fixes)
+
+[D15] (48:9-48:11) TS6133: '_d' is declared but its value is never read.
+  (no quick fixes)
+
+[D16] (49:9-49:11) TS6133: '_e' is declared but its value is never read.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_overloadsOk.ts ---
+import * as Effect from "effect/Effect"
+
+// The diagnostic should trigger for these cases. When assigning to a const
+// with an overloaded interface type, the overload signature is preserved
+// by the interface, so it's safe to convert to Effect.fn.
+
+interface OverloadedArrow {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedArrow: OverloadedArrow = Effect.fnUntraced(function* (a: number | string) {
+    return yield* Effect.succeed(a as any);
+});
+
+interface OverloadedFunctionExpression {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedFunctionExpression: OverloadedFunctionExpression = function(a: number | string) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(a as any)
+  })
+}
+
+interface OverloadedArrowNoGen {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedArrowNoGen: OverloadedArrowNoGen = (a: number | string) => {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(a as any)
+}
+
+interface OverloadedFunctionExpressionNoGen {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedFunctionExpressionNoGen: OverloadedFunctionExpressionNoGen = function(a: number | string) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(a as any)
+}
+
+
+=== [D1] Fix 3: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_overloadsOk.ts ---
+import * as Effect from "effect/Effect"
+
+// The diagnostic should trigger for these cases. When assigning to a const
+// with an overloaded interface type, the overload signature is preserved
+// by the interface, so it's safe to convert to Effect.fn.
+
+interface OverloadedArrow {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedArrow: OverloadedArrow = Effect.fn(function* (a: number | string) {
+    return yield* Effect.succeed(a as any);
+});
+
+interface OverloadedFunctionExpression {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedFunctionExpression: OverloadedFunctionExpression = function(a: number | string) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(a as any)
+  })
+}
+
+interface OverloadedArrowNoGen {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedArrowNoGen: OverloadedArrowNoGen = (a: number | string) => {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(a as any)
+}
+
+interface OverloadedFunctionExpressionNoGen {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedFunctionExpressionNoGen: OverloadedFunctionExpressionNoGen = function(a: number | string) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(a as any)
+}
+
+
+=== [D1] Fix 4: "Convert to Effect.fn(\"overloadedArrow\")" ===
+
+--- file:///.src/effectFnOpportunity_overloadsOk.ts ---
+import * as Effect from "effect/Effect"
+
+// The diagnostic should trigger for these cases. When assigning to a const
+// with an overloaded interface type, the overload signature is preserved
+// by the interface, so it's safe to convert to Effect.fn.
+
+interface OverloadedArrow {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedArrow: OverloadedArrow = Effect.fn("overloadedArrow")(function* (a: number | string) {
+    return yield* Effect.succeed(a as any);
+});
+
+interface OverloadedFunctionExpression {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedFunctionExpression: OverloadedFunctionExpression = function(a: number | string) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(a as any)
+  })
+}
+
+interface OverloadedArrowNoGen {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedArrowNoGen: OverloadedArrowNoGen = (a: number | string) => {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(a as any)
+}
+
+interface OverloadedFunctionExpressionNoGen {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedFunctionExpressionNoGen: OverloadedFunctionExpressionNoGen = function(a: number | string) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(a as any)
+}
+
+
+=== [D2] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/effectFnOpportunity_overloadsOk.ts ---
+import * as Effect from "effect/Effect"
+
+// The diagnostic should trigger for these cases. When assigning to a const
+// with an overloaded interface type, the overload signature is preserved
+// by the interface, so it's safe to convert to Effect.fn.
+
+interface OverloadedArrow {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedArrow: OverloadedArrow = (a: number | string) => {
+  return Effect.succeed(a as any)
+}
+
+interface OverloadedFunctionExpression {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedFunctionExpression: OverloadedFunctionExpression = function(a: number | string) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(a as any)
+  })
+}
+
+interface OverloadedArrowNoGen {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedArrowNoGen: OverloadedArrowNoGen = (a: number | string) => {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(a as any)
+}
+
+interface OverloadedFunctionExpressionNoGen {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedFunctionExpressionNoGen: OverloadedFunctionExpressionNoGen = function(a: number | string) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(a as any)
+}
+
+
+=== [D3] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_overloadsOk.ts ---
+import * as Effect from "effect/Effect"
+
+// The diagnostic should trigger for these cases. When assigning to a const
+// with an overloaded interface type, the overload signature is preserved
+// by the interface, so it's safe to convert to Effect.fn.
+
+interface OverloadedArrow {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedArrow: OverloadedArrow = (a: number | string) => {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(a as any)
+  })
+}
+
+interface OverloadedFunctionExpression {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedFunctionExpression: OverloadedFunctionExpression = Effect.fnUntraced(function* (a: number | string) {
+    return yield* Effect.succeed(a as any);
+});
+
+interface OverloadedArrowNoGen {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedArrowNoGen: OverloadedArrowNoGen = (a: number | string) => {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(a as any)
+}
+
+interface OverloadedFunctionExpressionNoGen {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedFunctionExpressionNoGen: OverloadedFunctionExpressionNoGen = function(a: number | string) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(a as any)
+}
+
+
+=== [D3] Fix 3: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_overloadsOk.ts ---
+import * as Effect from "effect/Effect"
+
+// The diagnostic should trigger for these cases. When assigning to a const
+// with an overloaded interface type, the overload signature is preserved
+// by the interface, so it's safe to convert to Effect.fn.
+
+interface OverloadedArrow {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedArrow: OverloadedArrow = (a: number | string) => {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(a as any)
+  })
+}
+
+interface OverloadedFunctionExpression {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedFunctionExpression: OverloadedFunctionExpression = Effect.fn(function* (a: number | string) {
+    return yield* Effect.succeed(a as any);
+});
+
+interface OverloadedArrowNoGen {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedArrowNoGen: OverloadedArrowNoGen = (a: number | string) => {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(a as any)
+}
+
+interface OverloadedFunctionExpressionNoGen {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedFunctionExpressionNoGen: OverloadedFunctionExpressionNoGen = function(a: number | string) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(a as any)
+}
+
+
+=== [D3] Fix 4: "Convert to Effect.fn(\"overloadedFunctionExpression\")" ===
+
+--- file:///.src/effectFnOpportunity_overloadsOk.ts ---
+import * as Effect from "effect/Effect"
+
+// The diagnostic should trigger for these cases. When assigning to a const
+// with an overloaded interface type, the overload signature is preserved
+// by the interface, so it's safe to convert to Effect.fn.
+
+interface OverloadedArrow {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedArrow: OverloadedArrow = (a: number | string) => {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(a as any)
+  })
+}
+
+interface OverloadedFunctionExpression {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedFunctionExpression: OverloadedFunctionExpression = Effect.fn("overloadedFunctionExpression")(function* (a: number | string) {
+    return yield* Effect.succeed(a as any);
+});
+
+interface OverloadedArrowNoGen {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedArrowNoGen: OverloadedArrowNoGen = (a: number | string) => {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(a as any)
+}
+
+interface OverloadedFunctionExpressionNoGen {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedFunctionExpressionNoGen: OverloadedFunctionExpressionNoGen = function(a: number | string) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(a as any)
+}
+
+
+=== [D4] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/effectFnOpportunity_overloadsOk.ts ---
+import * as Effect from "effect/Effect"
+
+// The diagnostic should trigger for these cases. When assigning to a const
+// with an overloaded interface type, the overload signature is preserved
+// by the interface, so it's safe to convert to Effect.fn.
+
+interface OverloadedArrow {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedArrow: OverloadedArrow = (a: number | string) => {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(a as any)
+  })
+}
+
+interface OverloadedFunctionExpression {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedFunctionExpression: OverloadedFunctionExpression = function(a: number | string) {
+  return Effect.succeed(a as any)
+}
+
+interface OverloadedArrowNoGen {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedArrowNoGen: OverloadedArrowNoGen = (a: number | string) => {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(a as any)
+}
+
+interface OverloadedFunctionExpressionNoGen {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedFunctionExpressionNoGen: OverloadedFunctionExpressionNoGen = function(a: number | string) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(a as any)
+}
+
+
+=== [D5] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_overloadsOk.ts ---
+import * as Effect from "effect/Effect"
+
+// The diagnostic should trigger for these cases. When assigning to a const
+// with an overloaded interface type, the overload signature is preserved
+// by the interface, so it's safe to convert to Effect.fn.
+
+interface OverloadedArrow {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedArrow: OverloadedArrow = (a: number | string) => {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(a as any)
+  })
+}
+
+interface OverloadedFunctionExpression {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedFunctionExpression: OverloadedFunctionExpression = function(a: number | string) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(a as any)
+  })
+}
+
+interface OverloadedArrowNoGen {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedArrowNoGen: OverloadedArrowNoGen = Effect.fn(function (a: number | string) {
+    const _a = 1;
+    const _b = 2;
+    const _c = 3;
+    const _d = 4;
+    const _e = 5;
+    return Effect.succeed(a as any);
+});
+
+interface OverloadedFunctionExpressionNoGen {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedFunctionExpressionNoGen: OverloadedFunctionExpressionNoGen = function(a: number | string) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(a as any)
+}
+
+
+=== [D5] Fix 3: "Convert to Effect.fn(\"overloadedArrowNoGen\")" ===
+
+--- file:///.src/effectFnOpportunity_overloadsOk.ts ---
+import * as Effect from "effect/Effect"
+
+// The diagnostic should trigger for these cases. When assigning to a const
+// with an overloaded interface type, the overload signature is preserved
+// by the interface, so it's safe to convert to Effect.fn.
+
+interface OverloadedArrow {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedArrow: OverloadedArrow = (a: number | string) => {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(a as any)
+  })
+}
+
+interface OverloadedFunctionExpression {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedFunctionExpression: OverloadedFunctionExpression = function(a: number | string) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(a as any)
+  })
+}
+
+interface OverloadedArrowNoGen {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedArrowNoGen: OverloadedArrowNoGen = Effect.fn("overloadedArrowNoGen")(function (a: number | string) {
+    const _a = 1;
+    const _b = 2;
+    const _c = 3;
+    const _d = 4;
+    const _e = 5;
+    return Effect.succeed(a as any);
+});
+
+interface OverloadedFunctionExpressionNoGen {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedFunctionExpressionNoGen: OverloadedFunctionExpressionNoGen = function(a: number | string) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(a as any)
+}
+
+
+=== [D11] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D11] Fix 2: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_overloadsOk.ts ---
+import * as Effect from "effect/Effect"
+
+// The diagnostic should trigger for these cases. When assigning to a const
+// with an overloaded interface type, the overload signature is preserved
+// by the interface, so it's safe to convert to Effect.fn.
+
+interface OverloadedArrow {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedArrow: OverloadedArrow = (a: number | string) => {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(a as any)
+  })
+}
+
+interface OverloadedFunctionExpression {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedFunctionExpression: OverloadedFunctionExpression = function(a: number | string) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(a as any)
+  })
+}
+
+interface OverloadedArrowNoGen {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedArrowNoGen: OverloadedArrowNoGen = (a: number | string) => {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(a as any)
+}
+
+interface OverloadedFunctionExpressionNoGen {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedFunctionExpressionNoGen: OverloadedFunctionExpressionNoGen = Effect.fn(function (a: number | string) {
+    const _a = 1;
+    const _b = 2;
+    const _c = 3;
+    const _d = 4;
+    const _e = 5;
+    return Effect.succeed(a as any);
+});
+
+
+=== [D11] Fix 3: "Convert to Effect.fn(\"overloadedFunctionExpressionNoGen\")" ===
+
+--- file:///.src/effectFnOpportunity_overloadsOk.ts ---
+import * as Effect from "effect/Effect"
+
+// The diagnostic should trigger for these cases. When assigning to a const
+// with an overloaded interface type, the overload signature is preserved
+// by the interface, so it's safe to convert to Effect.fn.
+
+interface OverloadedArrow {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedArrow: OverloadedArrow = (a: number | string) => {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(a as any)
+  })
+}
+
+interface OverloadedFunctionExpression {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedFunctionExpression: OverloadedFunctionExpression = function(a: number | string) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(a as any)
+  })
+}
+
+interface OverloadedArrowNoGen {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedArrowNoGen: OverloadedArrowNoGen = (a: number | string) => {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(a as any)
+}
+
+interface OverloadedFunctionExpressionNoGen {
+  (a: number): Effect.Effect<number>
+  (a: string): Effect.Effect<string>
+}
+export const overloadedFunctionExpressionNoGen: OverloadedFunctionExpressionNoGen = Effect.fn("overloadedFunctionExpressionNoGen")(function (a: number | string) {
+    const _a = 1;
+    const _b = 2;
+    const _c = 3;
+    const _d = 4;
+    const _e = 5;
+    return Effect.succeed(a as any);
+});
+

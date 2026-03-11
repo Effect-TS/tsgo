@@ -1,0 +1,202 @@
+=== Quick Fix Inventory ===
+
+[D1] (30:3-30:14) TS377044: Classes extending Schema must not override the constructor; this is because it silently breaks the schema decoding behaviour. If that's needed, we recommend instead to use a static 'new' method that constructs the instance. effect(overriddenSchemaConstructor)
+  Fix 0: "Disable overriddenSchemaConstructor for this line"
+  Fix 1: "Disable overriddenSchemaConstructor for entire file"
+  Fix 2: "Rewrite using the static 'new' pattern"
+  Fix 3: "Remove the constructor override"
+
+[D2] (37:3-37:14) TS377044: Classes extending Schema must not override the constructor; this is because it silently breaks the schema decoding behaviour. If that's needed, we recommend instead to use a static 'new' method that constructs the instance. effect(overriddenSchemaConstructor)
+  Fix 0: "Disable overriddenSchemaConstructor for this line"
+  Fix 1: "Disable overriddenSchemaConstructor for entire file"
+  Fix 2: "Rewrite using the static 'new' pattern"
+  Fix 3: "Remove the constructor override"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable overriddenSchemaConstructor for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable overriddenSchemaConstructor for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Rewrite using the static 'new' pattern" ===
+
+--- file:///.src/overriddenSchemaConstructor.ts ---
+// @effect-v3
+import * as Schema from "effect/Schema"
+
+export class Valid extends Schema.Class<Valid>("Valid")({
+  a: Schema.Number
+}) {}
+
+export class Valid2 extends Schema.Class<Valid2>("Valid")({
+  a: Schema.Number
+}) {
+  otherMethod() {
+    return this.a
+  }
+}
+
+export class BaseClass {}
+export class Valid3 extends BaseClass {
+  constructor() {
+    super()
+  }
+}
+
+// this is invalid because if the class extends a Schema, there should be no constructor override
+export class InvalidBecauseOfConstructor
+  extends Schema.Class<InvalidBecauseOfConstructor>("InvalidBecauseOfConstructor")({
+    a: Schema.Number
+  })
+{
+  // should be report here at constructor location
+  public static new() {
+    const _this = new this({ a: 42 })
+    return _this
+} 
+}
+
+// this is invalid because if the class extends a Schema, there should be no constructor override (even forced weirdly!)
+export class InvalidExtendsString extends Schema.Struct({}) {
+  constructor() {
+    super({} as any as never)
+  }
+}
+
+
+=== [D1] Fix 3: "Remove the constructor override" ===
+
+--- file:///.src/overriddenSchemaConstructor.ts ---
+// @effect-v3
+import * as Schema from "effect/Schema"
+
+export class Valid extends Schema.Class<Valid>("Valid")({
+  a: Schema.Number
+}) {}
+
+export class Valid2 extends Schema.Class<Valid2>("Valid")({
+  a: Schema.Number
+}) {
+  otherMethod() {
+    return this.a
+  }
+}
+
+export class BaseClass {}
+export class Valid3 extends BaseClass {
+  constructor() {
+    super()
+  }
+}
+
+// this is invalid because if the class extends a Schema, there should be no constructor override
+export class InvalidBecauseOfConstructor
+  extends Schema.Class<InvalidBecauseOfConstructor>("InvalidBecauseOfConstructor")({
+    a: Schema.Number
+  })
+{
+}
+
+// this is invalid because if the class extends a Schema, there should be no constructor override (even forced weirdly!)
+export class InvalidExtendsString extends Schema.Struct({}) {
+  constructor() {
+    super({} as any as never)
+  }
+}
+
+
+=== [D2] Fix 0: "Disable overriddenSchemaConstructor for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable overriddenSchemaConstructor for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Rewrite using the static 'new' pattern" ===
+
+--- file:///.src/overriddenSchemaConstructor.ts ---
+// @effect-v3
+import * as Schema from "effect/Schema"
+
+export class Valid extends Schema.Class<Valid>("Valid")({
+  a: Schema.Number
+}) {}
+
+export class Valid2 extends Schema.Class<Valid2>("Valid")({
+  a: Schema.Number
+}) {
+  otherMethod() {
+    return this.a
+  }
+}
+
+export class BaseClass {}
+export class Valid3 extends BaseClass {
+  constructor() {
+    super()
+  }
+}
+
+// this is invalid because if the class extends a Schema, there should be no constructor override
+export class InvalidBecauseOfConstructor
+  extends Schema.Class<InvalidBecauseOfConstructor>("InvalidBecauseOfConstructor")({
+    a: Schema.Number
+  })
+{
+  // should be report here at constructor location
+  constructor() {
+    super({ a: 42 })
+  }
+}
+
+// this is invalid because if the class extends a Schema, there should be no constructor override (even forced weirdly!)
+export class InvalidExtendsString extends Schema.Struct({}) {
+  public static new() {
+    const _this = new this({} as any as never)
+    return _this
+} 
+}
+
+
+=== [D2] Fix 3: "Remove the constructor override" ===
+
+--- file:///.src/overriddenSchemaConstructor.ts ---
+// @effect-v3
+import * as Schema from "effect/Schema"
+
+export class Valid extends Schema.Class<Valid>("Valid")({
+  a: Schema.Number
+}) {}
+
+export class Valid2 extends Schema.Class<Valid2>("Valid")({
+  a: Schema.Number
+}) {
+  otherMethod() {
+    return this.a
+  }
+}
+
+export class BaseClass {}
+export class Valid3 extends BaseClass {
+  constructor() {
+    super()
+  }
+}
+
+// this is invalid because if the class extends a Schema, there should be no constructor override
+export class InvalidBecauseOfConstructor
+  extends Schema.Class<InvalidBecauseOfConstructor>("InvalidBecauseOfConstructor")({
+    a: Schema.Number
+  })
+{
+  // should be report here at constructor location
+  constructor() {
+    super({ a: 42 })
+  }
+}
+
+// this is invalid because if the class extends a Schema, there should be no constructor override (even forced weirdly!)
+export class InvalidExtendsString extends Schema.Struct({}) {
+}
+

@@ -1,0 +1,22 @@
+diff --git a/internal/tsoptions/parsinghelpers.go b/internal/tsoptions/parsinghelpers.go
+index a631b28d1..ac6d7ec0d 100644
+--- a/internal/tsoptions/parsinghelpers.go
++++ b/internal/tsoptions/parsinghelpers.go
+@@ -4,6 +4,7 @@ import (
+ 	"reflect"
+ 	"strings"
+ 
++	"github.com/effect-ts/effect-typescript-go/etscore"
+ 	"github.com/microsoft/typescript-go/internal/ast"
+ 	"github.com/microsoft/typescript-go/internal/collections"
+ 	"github.com/microsoft/typescript-go/internal/core"
+@@ -449,6 +450,9 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
+ 		allOptions.Quiet = ParseTristate(value)
+ 	case "checkers":
+ 		allOptions.Checkers = parseNumber(value)
++	case "plugins":
++		// Parse @effect/language-service plugin configuration
++		allOptions.Effect = etscore.ParseFromPlugins(value)
+ 	default:
+ 		// different than any key above
+ 		return false

@@ -1,0 +1,85 @@
+=== Refactor Inventory ===
+
+[R1] selection: "4:14-4:22"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Toggle type annotation" (refactor.rewrite.effect.toggleTypeAnnotation)
+  Refactor 2: "Toggle lazy const" (refactor.rewrite.effect.toggleLazyConst)
+  Refactor 3: "Make Schema opaque" (refactor.rewrite.effect.makeSchemaOpaque)
+  Refactor 4: "Make Schema opaque with namespace" (refactor.rewrite.effect.makeSchemaOpaqueWithNs)
+
+[R2] selection: "empty (0:0-0:0)"
+  (no refactors)
+
+=== Refactor Application Results ===
+
+=== [R1] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/makeSchemaOpaque_shortImportAlias.ts ---
+// refactor: 4:14-4:22
+import { Schema as S } from "effect"
+
+export const pipe(MyStruct) = S.Struct({
+  id: S.Number,
+  name: S.String
+})
+
+
+=== [R1] Refactor 1: "Toggle type annotation" ===
+
+--- file:///.src/makeSchemaOpaque_shortImportAlias.ts ---
+// refactor: 4:14-4:22
+import { Schema as S } from "effect"
+
+export const MyStruct: S.Struct<{ readonly id: S.Number; readonly name: S.String; }> = S.Struct({
+  id: S.Number,
+  name: S.String
+})
+
+
+=== [R1] Refactor 2: "Toggle lazy const" ===
+
+--- file:///.src/makeSchemaOpaque_shortImportAlias.ts ---
+// refactor: 4:14-4:22
+import { Schema as S } from "effect"
+
+export const MyStruct = () => S.Struct({
+  id: S.Number,
+  name: S.String
+})
+
+
+=== [R1] Refactor 3: "Make Schema opaque" ===
+
+--- file:///.src/makeSchemaOpaque_shortImportAlias.ts ---
+// refactor: 4:14-4:22
+import { Schema as S } from "effect"
+
+export const MyStruct_ = S.Struct({
+  id: S.Number,
+  name: S.String
+})
+export interface MyStruct extends S.Schema.Type<typeof MyStruct_> {}
+export interface MyStructEncoded extends S.Codec.Encoded<typeof MyStruct_> {}
+export type MyStructDecodingServices = S.Codec.DecodingServices<typeof MyStruct_>;
+export type MyStructEncodingServices = S.Codec.EncodingServices<typeof MyStruct_>;
+export const MyStruct: S.Codec<MyStruct, MyStructEncoded, MyStructDecodingServices, MyStructEncodingServices> = MyStruct_;
+
+
+=== [R1] Refactor 4: "Make Schema opaque with namespace" ===
+
+--- file:///.src/makeSchemaOpaque_shortImportAlias.ts ---
+// refactor: 4:14-4:22
+import { Schema as S } from "effect"
+
+export const MyStruct_ = S.Struct({
+  id: S.Number,
+  name: S.String
+})
+export interface MyStruct extends S.Schema.Type<typeof MyStruct_> {}
+export namespace MyStruct {
+    export interface Encoded extends S.Codec.Encoded<typeof MyStruct_> {}
+    export type DecodingServices = S.Codec.DecodingServices<typeof MyStruct_>;
+    export type EncodingServices = S.Codec.EncodingServices<typeof MyStruct_>;
+}
+export const MyStruct: S.Schema<MyStruct, MyStruct.Encoded, MyStruct.DecodingServices> = MyStruct_;
+

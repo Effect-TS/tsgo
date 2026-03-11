@@ -1,0 +1,73 @@
+=== Quick Fix Inventory ===
+
+[D1] (11:47-11:54) TS377049: Key should be '@effect/test-app/test/MyClass'. effect(deterministicKeys)
+  Fix 0: "Disable deterministicKeys for this line"
+  Fix 1: "Disable deterministicKeys for entire file"
+  Fix 2: "Replace 'Hello' with '@effect/test-app/test/MyClass'"
+
+[D2] (17:6-17:18) TS377049: Key should be '@effect/test-app/test/TTLRequest'. effect(deterministicKeys)
+  Fix 0: "Disable deterministicKeys for this line"
+  Fix 1: "Disable deterministicKeys for entire file"
+  Fix 2: "Replace 'TTLRequest' with '@effect/test-app/test/TTLRequest'"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable deterministicKeys for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable deterministicKeys for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace 'Hello' with '@effect/test-app/test/MyClass'" ===
+
+--- file:///.src/test.ts ---
+// @effect-v3
+// @effect-diagnostics deterministicKeys:error
+import * as Persistable from "./utils"
+import * as Context from "effect/Context"
+
+// simple case inside same file
+export function LocalConstructor(/** @effect-identifier */ identifier: string) {
+  return Context.Tag("hey/" + identifier)
+}
+
+export class MyClass extends LocalConstructor("@effect/test-app/test/MyClass")<MyClass, {}>() {
+}
+
+// referenced on another file
+export class TTLRequest extends Persistable.Class<{
+  payload: { id: number }
+}>()("TTLRequest", {
+  primaryKey: (req) => `TTLRequest:${req.id}`
+}) {}
+
+
+=== [D2] Fix 0: "Disable deterministicKeys for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable deterministicKeys for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace 'TTLRequest' with '@effect/test-app/test/TTLRequest'" ===
+
+--- file:///.src/test.ts ---
+// @effect-v3
+// @effect-diagnostics deterministicKeys:error
+import * as Persistable from "./utils"
+import * as Context from "effect/Context"
+
+// simple case inside same file
+export function LocalConstructor(/** @effect-identifier */ identifier: string) {
+  return Context.Tag("hey/" + identifier)
+}
+
+export class MyClass extends LocalConstructor("Hello")<MyClass, {}>() {
+}
+
+// referenced on another file
+export class TTLRequest extends Persistable.Class<{
+  payload: { id: number }
+}>()("@effect/test-app/test/TTLRequest", {
+  primaryKey: (req) => `TTLRequest:${req.id}`
+}) {}
+

@@ -1,0 +1,191 @@
+==== /.src/globalErrorInEffectFailure.ts (13 flows) ====
+
+=== Piping Flow ===
+Location: 3:26 - 3:58
+Node: Data.TaggedError("CustomError")
+Node Kind: KindCallExpression
+
+Subject: "CustomError"
+Subject Type: "CustomError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: MatchRecord<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }, void, { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "CustomError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 5:31 - 5:62
+Node: Effect.fail(new CustomError())
+Node Kind: KindCallExpression
+
+Subject: new CustomError()
+Subject Type: CustomError
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, CustomError, never>
+
+=== Piping Flow ===
+Location: 7:28 - 7:67
+Node: Effect.fail(new Error("global error"))
+Node Kind: KindCallExpression
+
+Subject: new Error("global error")
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 8:29 - 8:79
+Node: Effect.fail(new globalThis.Error("global error"))
+Node Kind: KindCallExpression
+
+Subject: new globalThis.Error("global error")
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 14:29 - 14:65
+Node: Effect.fail(new BaseExtendsError())
+Node Kind: KindCallExpression
+
+Subject: new BaseExtendsError()
+Subject Type: BaseExtendsError
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, BaseExtendsError, never>
+
+=== Piping Flow ===
+Location: 21:32 - 21:75
+Node: Effect.fail(new BaseExtendsErrorWithTag())
+Node Kind: KindCallExpression
+
+Subject: new BaseExtendsErrorWithTag()
+Subject Type: BaseExtendsErrorWithTag
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, BaseExtendsErrorWithTag, never>
+
+=== Piping Flow ===
+Location: 26:31 - 28:3
+Node: Effect.gen(function* () {\n  return yield* Effect.fail(new Error("global error in gen"))\n})
+Node Kind: KindCallExpression
+
+Subject: function* () {\n  return yield* Effect.fail(new Error("global error in gen"))\n}
+Subject Type: () => Generator<Effect<never, Error, never>, never, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 27:16 - 27:62
+Node: Effect.fail(new Error("global error in gen"))
+Node Kind: KindCallExpression
+
+Subject: new Error("global error in gen")
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 31:34 - 33:3
+Node: Effect.gen(function* () {\n  return yield* Effect.fail(new CustomError())\n})
+Node Kind: KindCallExpression
+
+Subject: function* () {\n  return yield* Effect.fail(new CustomError())\n}
+Subject Type: () => Generator<Effect<never, CustomError, never>, never, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<never, CustomError, never>
+
+=== Piping Flow ===
+Location: 32:16 - 32:47
+Node: Effect.fail(new CustomError())
+Node Kind: KindCallExpression
+
+Subject: new CustomError()
+Subject Type: CustomError
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, CustomError, never>
+
+=== Piping Flow ===
+Location: 36:31 - 38:2
+Node: Effect.succeed(1).pipe(\n  Effect.flatMap(() => Effect.fail(new Error("global error in map")))\n)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.flatMap
+      args: [() => Effect.fail(new Error("global error in map"))]
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 37:23 - 37:69
+Node: Effect.fail(new Error("global error in map"))
+Node Kind: KindCallExpression
+
+Subject: new Error("global error in map")
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 46:36 - 48:2
+Node: Effect.fail(new CustomError()).pipe(\n  Effect.mapError(() => new Error("mapped to global error"))\n)
+Node Kind: KindCallExpression
+
+Subject: new CustomError()
+Subject Type: CustomError
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, CustomError, never>
+  [1] kind: pipeable
+      callee: Effect.mapError
+      args: [() => new Error("mapped to global error")]
+      outType: Effect<never, Error, never>

@@ -1,0 +1,31 @@
+=== Quick Fix Inventory ===
+
+[D1] (12:70-12:85) TS377046: Self type parameter should be 'InvalidContextTag'. effect(classSelfMismatch)
+  Fix 0: "Disable classSelfMismatch for this line"
+  Fix 1: "Disable classSelfMismatch for entire file"
+  Fix 2: "Replace 'ValidContextTag' with 'InvalidContextTag'"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable classSelfMismatch for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable classSelfMismatch for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace 'ValidContextTag' with 'InvalidContextTag'" ===
+
+--- file:///.src/classSelfMismatch_effectTag.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+interface ServiceShape {
+  value: number
+}
+
+// valid usage: <ValidContextTag, ServiceShape> is correct because the Self type parameter is the same as the class name
+export class ValidContextTag extends Effect.Tag("ValidContextTag")<ValidContextTag, ServiceShape>() {}
+
+// invalid usage: <ValidContextTag, ServiceShape> should be <InvalidContextTag, ServiceShape> because the Self type parameter is not the same as the class name
+export class InvalidContextTag extends Effect.Tag("ValidContextTag")<InvalidContextTag, ServiceShape>() {}
+

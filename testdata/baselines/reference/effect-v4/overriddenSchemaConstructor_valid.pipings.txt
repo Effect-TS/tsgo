@@ -1,0 +1,15 @@
+==== /.src/overriddenSchemaConstructor_valid.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 3:27 - 5:3
+Node: Schema.Class<Valid>("Valid")({\n  a: Schema.Number\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  a: Schema.Number\n}
+Subject Type: { a: Number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<Valid>("Valid")
+      args: (constant)
+      outType: ExtendableClass<Valid, Struct<{ readonly a: Number; }>, {}>

@@ -1,0 +1,71 @@
+==== /.src/missingLayerContext.ts (5 flows) ====
+
+=== Piping Flow ===
+Location: 4:8 - 4:37
+Node: Effect.succeed({ value: 1 })
+Node Kind: KindCallExpression
+
+Subject: { value: 1 }
+Subject Type: { value: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{ value: number; }, never, never>
+
+=== Piping Flow ===
+Location: 10:8 - 10:37
+Node: Effect.succeed({ value: 2 })
+Node Kind: KindCallExpression
+
+Subject: { value: 2 }
+Subject Type: { value: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{ value: number; }, never, never>
+
+=== Piping Flow ===
+Location: 16:8 - 16:37
+Node: Effect.succeed({ value: 3 })
+Node Kind: KindCallExpression
+
+Subject: { value: 3 }
+Subject Type: { value: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{ value: number; }, never, never>
+
+=== Piping Flow ===
+Location: 25:2 - 28:26
+Node: testFn(layerWithServices)
+Node Kind: KindCallExpression
+
+Subject: layerWithServices
+Subject Type: Layer<ServiceA, never, ServiceB | ServiceC>
+
+Transformations (1):
+  [0] kind: call
+      callee: testFn
+      args: (constant)
+      outType: Layer<ServiceA, never, never>
+
+=== Piping Flow ===
+Location: 32:2 - 35:38
+Node: testFnWithServiceB(layerWithServices)
+Node Kind: KindCallExpression
+
+Subject: layerWithServices
+Subject Type: Layer<ServiceA, never, ServiceB | ServiceC>
+
+Transformations (1):
+  [0] kind: call
+      callee: testFnWithServiceB
+      args: (constant)
+      outType: Layer<ServiceA, never, ServiceB>

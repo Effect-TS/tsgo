@@ -1,0 +1,17 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+
+
+==== /.src/unnecessaryEffectGen_ifBlock.ts (0 errors) ====
+    import * as Effect from "effect/Effect"
+    
+    export const shouldNotTrigger = Effect.gen(function*() {
+      const query = yield* Effect.succeed("")
+      yield* Effect.annotateCurrentSpan("query", query)
+      if (query.length < 3) {
+        return yield* Effect.fail("query too short")
+      }
+      return yield* Effect.succeed(true)
+    })
+    

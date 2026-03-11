@@ -1,0 +1,35 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+/.src/leakingRequirements.ts(8,14): suggestion TS377041: Methods of this Service require 'FileSystem' from every caller. This leaks implementation details — resolve these dependencies at Layer creation time. effect(leakingRequirements)
+/.src/leakingRequirements.ts(18,9): suggestion TS377041: Methods of this Service require 'FileSystem' from every caller. This leaks implementation details — resolve these dependencies at Layer creation time. effect(leakingRequirements)
+
+
+==== /.src/leakingRequirements.ts (2 errors) ====
+    import type { Effect } from "effect"
+    import { ServiceMap } from "effect"
+    
+    export class FileSystem extends ServiceMap.Service<FileSystem, {
+      writeFile: (content: string) => Effect.Effect<void>
+    }>()("FileSystem") {}
+    
+    export class LeakingDeps extends ServiceMap.Service<LeakingDeps, {
+                 ~~~~~~~~~~~
+!!! suggestion TS377041: Methods of this Service require 'FileSystem' from every caller. This leaks implementation details — resolve these dependencies at Layer creation time. effect(leakingRequirements)
+      writeCache: () => Effect.Effect<void, never, FileSystem>
+      readCache: Effect.Effect<void, never, FileSystem>
+    }>()("LeakingDeps") {}
+    
+    export function local() {
+      class _LocalClass extends ServiceMap.Service<_LocalClass, {
+        writeFile: (content: string) => Effect.Effect<void>
+      }>()("LocalClass") {}
+    
+      class _LocalLeaking extends ServiceMap.Service<_LocalLeaking, {
+            ~~~~~~~~~~~~~
+!!! suggestion TS377041: Methods of this Service require 'FileSystem' from every caller. This leaks implementation details — resolve these dependencies at Layer creation time. effect(leakingRequirements)
+        writeCache: () => Effect.Effect<void, never, FileSystem>
+        readCache: Effect.Effect<void, never, FileSystem>
+      }>()("LocalLeaking") {}
+    }
+    

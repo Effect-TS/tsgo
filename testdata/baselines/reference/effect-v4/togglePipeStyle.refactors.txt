@@ -1,0 +1,88 @@
+=== Refactor Inventory ===
+
+[R1] selection: "5:54-5:55"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Rewrite as pipe(X, Y, Z, ...)" (refactor.rewrite.effect.togglePipeStyle)
+  Refactor 2: "Wrap with Effect.gen" (refactor.rewrite.effect.wrapWithEffectGen)
+
+[R2] selection: "7:32-7:33"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Rewrite as X.pipe(Y, Z, ...)" (refactor.rewrite.effect.togglePipeStyle)
+  Refactor 2: "Wrap with Effect.gen" (refactor.rewrite.effect.wrapWithEffectGen)
+
+[R3] selection: "empty (0:0-0:0)"
+  (no refactors)
+
+=== Refactor Application Results ===
+
+=== [R1] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/togglePipeStyle.ts ---
+// refactor: 5:54-5:55, 7:32-7:33
+import * as Effect from "effect/Effect"
+import { pipe } from "effect/Function"
+
+export const toRegularPipe = Effect.succeed(42).pipe(pipe(E)ffect.map((x) => x * 2))
+
+export const toPipeable = pipe(Effect.succeed(42), Effect.map((x) => x * 2))
+
+
+=== [R1] Refactor 1: "Rewrite as pipe(X, Y, Z, ...)" ===
+
+--- file:///.src/togglePipeStyle.ts ---
+// refactor: 5:54-5:55, 7:32-7:33
+import * as Effect from "effect/Effect"
+import { pipe } from "effect/Function"
+
+export const toRegularPipe = pipe(Effect.succeed(42), Effect.map(x => x * 2))
+
+export const toPipeable = pipe(Effect.succeed(42), Effect.map((x) => x * 2))
+
+
+=== [R1] Refactor 2: "Wrap with Effect.gen" ===
+
+--- file:///.src/togglePipeStyle.ts ---
+// refactor: 5:54-5:55, 7:32-7:33
+import * as Effect from "effect/Effect"
+import { pipe } from "effect/Function"
+
+export const toRegularPipe = Effect.gen(function*() { return yield* Effect.succeed(42).pipe(Effect.map(x => x * 2)) })
+
+export const toPipeable = pipe(Effect.succeed(42), Effect.map((x) => x * 2))
+
+
+=== [R2] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/togglePipeStyle.ts ---
+// refactor: 5:54-5:55, 7:32-7:33
+import * as Effect from "effect/Effect"
+import { pipe } from "effect/Function"
+
+export const toRegularPipe = Effect.succeed(42).pipe(Effect.map((x) => x * 2))
+
+export const toPipeable = pipe(pipe(E)ffect.succeed(42), Effect.map((x) => x * 2))
+
+
+=== [R2] Refactor 1: "Rewrite as X.pipe(Y, Z, ...)" ===
+
+--- file:///.src/togglePipeStyle.ts ---
+// refactor: 5:54-5:55, 7:32-7:33
+import * as Effect from "effect/Effect"
+import { pipe } from "effect/Function"
+
+export const toRegularPipe = Effect.succeed(42).pipe(Effect.map((x) => x * 2))
+
+export const toPipeable = Effect.succeed(42).pipe(Effect.map(x => x * 2))
+
+
+=== [R2] Refactor 2: "Wrap with Effect.gen" ===
+
+--- file:///.src/togglePipeStyle.ts ---
+// refactor: 5:54-5:55, 7:32-7:33
+import * as Effect from "effect/Effect"
+import { pipe } from "effect/Function"
+
+export const toRegularPipe = Effect.succeed(42).pipe(Effect.map((x) => x * 2))
+
+export const toPipeable = pipe(Effect.gen(function*() { return yield* Effect.succeed(42) }), Effect.map((x) => x * 2))
+

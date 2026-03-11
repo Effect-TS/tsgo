@@ -1,0 +1,70 @@
+=== Refactor Inventory ===
+
+[R1] selection: "4:14-4:23"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Toggle type annotation" (refactor.rewrite.effect.toggleTypeAnnotation)
+  Refactor 2: "Toggle lazy const" (refactor.rewrite.effect.toggleLazyConst)
+  Refactor 3: "Make Schema opaque" (refactor.rewrite.effect.makeSchemaOpaque)
+  Refactor 4: "Make Schema opaque with namespace" (refactor.rewrite.effect.makeSchemaOpaqueWithNs)
+
+[R2] selection: "empty (0:0-0:0)"
+  (no refactors)
+
+=== Refactor Application Results ===
+
+=== [R1] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/makeSchemaOpaque_brand.ts ---
+// refactor: 4:14-4:23
+import * as Schema from "effect/Schema"
+
+export const pipe(ProductId) = Schema.NonEmptyString.pipe(Schema.brand("ProductId"))
+
+
+=== [R1] Refactor 1: "Toggle type annotation" ===
+
+--- file:///.src/makeSchemaOpaque_brand.ts ---
+// refactor: 4:14-4:23
+import * as Schema from "effect/Schema"
+
+export const ProductId: Schema.brand<Schema.String, "ProductId"> = Schema.NonEmptyString.pipe(Schema.brand("ProductId"))
+
+
+=== [R1] Refactor 2: "Toggle lazy const" ===
+
+--- file:///.src/makeSchemaOpaque_brand.ts ---
+// refactor: 4:14-4:23
+import * as Schema from "effect/Schema"
+
+export const ProductId = () => Schema.NonEmptyString.pipe(Schema.brand("ProductId"))
+
+
+=== [R1] Refactor 3: "Make Schema opaque" ===
+
+--- file:///.src/makeSchemaOpaque_brand.ts ---
+// refactor: 4:14-4:23
+import * as Schema from "effect/Schema"
+
+export const ProductId_ = Schema.NonEmptyString.pipe(Schema.brand("ProductId"))
+export type ProductId = Schema.Schema.Type<typeof ProductId_>;
+export type ProductIdEncoded = Schema.Codec.Encoded<typeof ProductId_>;
+export type ProductIdDecodingServices = Schema.Codec.DecodingServices<typeof ProductId_>;
+export type ProductIdEncodingServices = Schema.Codec.EncodingServices<typeof ProductId_>;
+export const ProductId: Schema.Codec<ProductId, ProductIdEncoded, ProductIdDecodingServices, ProductIdEncodingServices> = ProductId_;
+
+
+=== [R1] Refactor 4: "Make Schema opaque with namespace" ===
+
+--- file:///.src/makeSchemaOpaque_brand.ts ---
+// refactor: 4:14-4:23
+import * as Schema from "effect/Schema"
+
+export const ProductId_ = Schema.NonEmptyString.pipe(Schema.brand("ProductId"))
+export interface ProductId extends Schema.Schema.Type<typeof ProductId_> {}
+export namespace ProductId {
+    export type Encoded = Schema.Codec.Encoded<typeof ProductId_>;
+    export type DecodingServices = Schema.Codec.DecodingServices<typeof ProductId_>;
+    export type EncodingServices = Schema.Codec.EncodingServices<typeof ProductId_>;
+}
+export const ProductId: Schema.Schema<ProductId, ProductId.Encoded, ProductId.DecodingServices> = ProductId_;
+

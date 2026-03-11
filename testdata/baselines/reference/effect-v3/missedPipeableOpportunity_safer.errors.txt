@@ -1,0 +1,54 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/missedPipeableOpportunity_safer.ts(11,1): warning TS377050: Nested function calls can be converted to pipeable style for better readability; consider using Effect.log("Hello").pipe(...) instead. effect(missedPipeableOpportunity)
+/.src/missedPipeableOpportunity_safer.ts(16,1): warning TS377050: Nested function calls can be converted to pipeable style for better readability; consider using Effect.succeed(console.log(Effect.runPromise(Effect.log("Hello")))).pipe(...) instead. effect(missedPipeableOpportunity)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "pipeableMinArgCount": 2
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/missedPipeableOpportunity_safer.ts (2 errors) ====
+    // @effect-diagnostics missedPipeableOpportunity:warning
+    import * as Effect from "effect/Effect"
+    
+    // this should not trigger because console.log is not a pipeable operation
+    // so it would be console.log(Effect.log("Hello").pipe(Effect.runPromise))
+    // which has not 2 arguments
+    console.log(Effect.runPromise(Effect.log("Hello")))
+    
+    // this instead should trigger, but the output should be
+    // console.log(Effect.log("Hello").pipe(Effect.ignore, Effect.runPromise))
+    console.log(Effect.runPromise(Effect.ignore(Effect.log("Hello"))))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377050: Nested function calls can be converted to pipeable style for better readability; consider using Effect.log("Hello").pipe(...) instead. effect(missedPipeableOpportunity)
+    
+    // this is silly, but shows how we can move back and forth between the two styles
+    // I would expect it to be triggered, but the output should be
+    // console.log(Effect.succeed(console.log(Effect.runPromise(Effect.log("Hello")))).pipe(Effect.ignore, Effect.runPromise))
+    console.log(
+    ~~~~~~~~~~~~
+      Effect.runPromise(
+    ~~~~~~~~~~~~~~~~~~~~
+        Effect.ignore(
+    ~~~~~~~~~~~~~~~~~~
+          Effect.succeed(console.log(Effect.runPromise(Effect.log("Hello"))))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        )
+    ~~~~~
+      )
+    ~~~
+    )
+    ~
+!!! warning TS377050: Nested function calls can be converted to pipeable style for better readability; consider using Effect.succeed(console.log(Effect.runPromise(Effect.log("Hello")))).pipe(...) instead. effect(missedPipeableOpportunity)
+    

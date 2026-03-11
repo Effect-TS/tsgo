@@ -1,0 +1,92 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/missingStarInYieldEffectGen.ts(4,24): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/missingStarInYieldEffectGen.ts(10,3): error TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+/.src/missingStarInYieldEffectGen.ts(15,3): error TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+/.src/missingStarInYieldEffectGen.ts(16,3): error TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+/.src/missingStarInYieldEffectGen.ts(19,40): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/missingStarInYieldEffectGen.ts(22,5): error TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+/.src/missingStarInYieldEffectGen.ts(33,3): error TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+/.src/missingStarInYieldEffectGen.ts(38,3): error TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+/.src/missingStarInYieldEffectGen.ts(43,3): error TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+
+
+==== /.src/missingStarInYieldEffectGen.ts (9 errors) ====
+    // @effect-v3
+    import * as Effect from "effect/Effect"
+    
+    export const noError = Effect.gen(function*() {
+                           ~~~~~~~~~~~~~~~~~~~~~~~~
+      yield* Effect.succeed(1)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    })
+    ~~
+!!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+    
+    // @ts-expect-error
+    export const missingStarInYield = Effect.gen(function*() {
+      yield Effect.succeed(1)
+      ~~~~~
+!!! error TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+!!! related TS377007 /.src/missingStarInYieldEffectGen.ts(9,46): Inside this Effect generator. effect(missingStarInYieldEffectGen)
+    })
+    
+    // @ts-expect-error
+    export const missingStarInMultipleYield = Effect.gen(function*() {
+      yield Effect.succeed(1)
+      ~~~~~
+!!! error TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+!!! related TS377007 /.src/missingStarInYieldEffectGen.ts(14,54): Inside this Effect generator. effect(missingStarInYieldEffectGen)
+      yield Effect.succeed(2)
+      ~~~~~
+!!! error TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+!!! related TS377007 /.src/missingStarInYieldEffectGen.ts(14,54): Inside this Effect generator. effect(missingStarInYieldEffectGen)
+    })
+    
+    export const missingStarInInnerYield = Effect.gen(function*() {
+                                           ~~~~~~~~~~~~~~~~~~~~~~~~
+      // @ts-expect-error
+    ~~~~~~~~~~~~~~~~~~~~~
+      yield* Effect.gen(function*() {
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        yield Effect.succeed(1)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~
+!!! error TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+!!! related TS377007 /.src/missingStarInYieldEffectGen.ts(21,21): Inside this Effect generator. effect(missingStarInYieldEffectGen)
+      })
+    ~~~~
+    })
+    ~~
+!!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+    
+    export function* effectInsideStandardGenerator() {
+      yield Effect.never
+      // ^- this is fine, not inside an effect gen
+    }
+    
+    // @ts-expect-error
+    export const effectFnUsage = Effect.fn(function*() {
+      yield Effect.never
+      ~~~~~
+!!! error TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+!!! related TS377007 /.src/missingStarInYieldEffectGen.ts(32,40): Inside this Effect generator. effect(missingStarInYieldEffectGen)
+    })
+    
+    // @ts-expect-error
+    export const tracedEffectFnUsage = Effect.fn("tracedEffectFnUsage")(function*() {
+      yield Effect.never
+      ~~~~~
+!!! error TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+!!! related TS377007 /.src/missingStarInYieldEffectGen.ts(37,69): Inside this Effect generator. effect(missingStarInYieldEffectGen)
+    })
+    
+    // @ts-expect-error
+    export const untracedEffectFnUsage = Effect.fnUntraced(function*() {
+      yield Effect.never
+      ~~~~~
+!!! error TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+!!! related TS377007 /.src/missingStarInYieldEffectGen.ts(42,56): Inside this Effect generator. effect(missingStarInYieldEffectGen)
+    })
+    

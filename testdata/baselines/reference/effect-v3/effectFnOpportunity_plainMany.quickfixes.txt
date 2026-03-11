@@ -1,0 +1,315 @@
+=== Quick Fix Inventory ===
+
+[D1] (14:14-14:28) TS377047: Can be rewritten as a reusable function: Effect.fn(() => { ... }). effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fn (no span)"
+  Fix 3: "Convert to Effect.fn(\"arrowPlainMany\")"
+
+[D2] (23:14-23:41) TS377047: Can be rewritten as a reusable function: Effect.fn(function<T>(value) { ... }). effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fn (no span)"
+  Fix 3: "Convert to Effect.fn(\"functionExpressionPlainMany\")"
+
+[D3] (33:17-33:45) TS377047: Can be rewritten as a reusable function: Effect.fn(function<T>(value) { ... }). effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fn (no span)"
+  Fix 3: "Convert to Effect.fn(\"functionDeclarationPlainMany\")"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_plainMany.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+// There should be two code fixes offered:
+// 1. Effect.fn("inferredName") - uses the inferred span name, improves
+//    tracing by adding spans. Recommended for app code.
+// 2. Effect.fn (without name) - won't add tracing spans.
+//
+// Note: Known formatting divergences from upstream (TypeScript-Go printer artifacts):
+// - Semicolons added to body statements inside replaced functions (e.g. `const a = 1;` vs `const a = 1`)
+// - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
+// - Trailing semicolons on replacement statements (`});` vs `})`)
+
+export const arrowPlainMany = Effect.fn(function () {
+    const a = 1;
+    const b = 2;
+    const c = 3;
+    const d = 4;
+    const e = 5;
+    return Effect.succeed(a + b + c + d + e);
+});
+
+export const functionExpressionPlainMany = function<T>(value: T) {
+  const a = 1
+  const b = 2
+  const c = 3
+  const d = 4
+  const e = 5
+  if (value === null) return Effect.fail("Error!")
+  return Effect.succeed(a + b + c + d + e)
+}
+
+export function functionDeclarationPlainMany<T>(value: T) {
+  const a = 1
+  const b = 2
+  const c = 3
+  const d = 4
+  const e = 5
+  if (value === null) return Effect.fail("Error!")
+  return Effect.succeed(a + b + c + d + e)
+}
+
+
+=== [D1] Fix 3: "Convert to Effect.fn(\"arrowPlainMany\")" ===
+
+--- file:///.src/effectFnOpportunity_plainMany.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+// There should be two code fixes offered:
+// 1. Effect.fn("inferredName") - uses the inferred span name, improves
+//    tracing by adding spans. Recommended for app code.
+// 2. Effect.fn (without name) - won't add tracing spans.
+//
+// Note: Known formatting divergences from upstream (TypeScript-Go printer artifacts):
+// - Semicolons added to body statements inside replaced functions (e.g. `const a = 1;` vs `const a = 1`)
+// - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
+// - Trailing semicolons on replacement statements (`});` vs `})`)
+
+export const arrowPlainMany = Effect.fn("arrowPlainMany")(function () {
+    const a = 1;
+    const b = 2;
+    const c = 3;
+    const d = 4;
+    const e = 5;
+    return Effect.succeed(a + b + c + d + e);
+});
+
+export const functionExpressionPlainMany = function<T>(value: T) {
+  const a = 1
+  const b = 2
+  const c = 3
+  const d = 4
+  const e = 5
+  if (value === null) return Effect.fail("Error!")
+  return Effect.succeed(a + b + c + d + e)
+}
+
+export function functionDeclarationPlainMany<T>(value: T) {
+  const a = 1
+  const b = 2
+  const c = 3
+  const d = 4
+  const e = 5
+  if (value === null) return Effect.fail("Error!")
+  return Effect.succeed(a + b + c + d + e)
+}
+
+
+=== [D2] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_plainMany.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+// There should be two code fixes offered:
+// 1. Effect.fn("inferredName") - uses the inferred span name, improves
+//    tracing by adding spans. Recommended for app code.
+// 2. Effect.fn (without name) - won't add tracing spans.
+//
+// Note: Known formatting divergences from upstream (TypeScript-Go printer artifacts):
+// - Semicolons added to body statements inside replaced functions (e.g. `const a = 1;` vs `const a = 1`)
+// - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
+// - Trailing semicolons on replacement statements (`});` vs `})`)
+
+export const arrowPlainMany = () => {
+  const a = 1
+  const b = 2
+  const c = 3
+  const d = 4
+  const e = 5
+  return Effect.succeed(a + b + c + d + e)
+}
+
+export const functionExpressionPlainMany = Effect.fn(function <T>(value: T) {
+    const a = 1;
+    const b = 2;
+    const c = 3;
+    const d = 4;
+    const e = 5;
+    if (value === null) return Effect.fail("Error!");
+    return Effect.succeed(a + b + c + d + e);
+});
+
+export function functionDeclarationPlainMany<T>(value: T) {
+  const a = 1
+  const b = 2
+  const c = 3
+  const d = 4
+  const e = 5
+  if (value === null) return Effect.fail("Error!")
+  return Effect.succeed(a + b + c + d + e)
+}
+
+
+=== [D2] Fix 3: "Convert to Effect.fn(\"functionExpressionPlainMany\")" ===
+
+--- file:///.src/effectFnOpportunity_plainMany.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+// There should be two code fixes offered:
+// 1. Effect.fn("inferredName") - uses the inferred span name, improves
+//    tracing by adding spans. Recommended for app code.
+// 2. Effect.fn (without name) - won't add tracing spans.
+//
+// Note: Known formatting divergences from upstream (TypeScript-Go printer artifacts):
+// - Semicolons added to body statements inside replaced functions (e.g. `const a = 1;` vs `const a = 1`)
+// - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
+// - Trailing semicolons on replacement statements (`});` vs `})`)
+
+export const arrowPlainMany = () => {
+  const a = 1
+  const b = 2
+  const c = 3
+  const d = 4
+  const e = 5
+  return Effect.succeed(a + b + c + d + e)
+}
+
+export const functionExpressionPlainMany = Effect.fn("functionExpressionPlainMany")(function <T>(value: T) {
+    const a = 1;
+    const b = 2;
+    const c = 3;
+    const d = 4;
+    const e = 5;
+    if (value === null) return Effect.fail("Error!");
+    return Effect.succeed(a + b + c + d + e);
+});
+
+export function functionDeclarationPlainMany<T>(value: T) {
+  const a = 1
+  const b = 2
+  const c = 3
+  const d = 4
+  const e = 5
+  if (value === null) return Effect.fail("Error!")
+  return Effect.succeed(a + b + c + d + e)
+}
+
+
+=== [D3] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_plainMany.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+// There should be two code fixes offered:
+// 1. Effect.fn("inferredName") - uses the inferred span name, improves
+//    tracing by adding spans. Recommended for app code.
+// 2. Effect.fn (without name) - won't add tracing spans.
+//
+// Note: Known formatting divergences from upstream (TypeScript-Go printer artifacts):
+// - Semicolons added to body statements inside replaced functions (e.g. `const a = 1;` vs `const a = 1`)
+// - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
+// - Trailing semicolons on replacement statements (`});` vs `})`)
+
+export const arrowPlainMany = () => {
+  const a = 1
+  const b = 2
+  const c = 3
+  const d = 4
+  const e = 5
+  return Effect.succeed(a + b + c + d + e)
+}
+
+export const functionExpressionPlainMany = function<T>(value: T) {
+  const a = 1
+  const b = 2
+  const c = 3
+  const d = 4
+  const e = 5
+  if (value === null) return Effect.fail("Error!")
+  return Effect.succeed(a + b + c + d + e)
+}
+
+export const functionDeclarationPlainMany = Effect.fn(function <T>(value: T) {
+    const a = 1;
+    const b = 2;
+    const c = 3;
+    const d = 4;
+    const e = 5;
+    if (value === null) return Effect.fail("Error!");
+    return Effect.succeed(a + b + c + d + e);
+});
+
+
+=== [D3] Fix 3: "Convert to Effect.fn(\"functionDeclarationPlainMany\")" ===
+
+--- file:///.src/effectFnOpportunity_plainMany.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+// There should be two code fixes offered:
+// 1. Effect.fn("inferredName") - uses the inferred span name, improves
+//    tracing by adding spans. Recommended for app code.
+// 2. Effect.fn (without name) - won't add tracing spans.
+//
+// Note: Known formatting divergences from upstream (TypeScript-Go printer artifacts):
+// - Semicolons added to body statements inside replaced functions (e.g. `const a = 1;` vs `const a = 1`)
+// - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
+// - Trailing semicolons on replacement statements (`});` vs `})`)
+
+export const arrowPlainMany = () => {
+  const a = 1
+  const b = 2
+  const c = 3
+  const d = 4
+  const e = 5
+  return Effect.succeed(a + b + c + d + e)
+}
+
+export const functionExpressionPlainMany = function<T>(value: T) {
+  const a = 1
+  const b = 2
+  const c = 3
+  const d = 4
+  const e = 5
+  if (value === null) return Effect.fail("Error!")
+  return Effect.succeed(a + b + c + d + e)
+}
+
+export const functionDeclarationPlainMany = Effect.fn("functionDeclarationPlainMany")(function <T>(value: T) {
+    const a = 1;
+    const b = 2;
+    const c = 3;
+    const d = 4;
+    const e = 5;
+    if (value === null) return Effect.fail("Error!");
+    return Effect.succeed(a + b + c + d + e);
+});
+

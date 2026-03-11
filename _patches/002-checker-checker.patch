@@ -1,0 +1,63 @@
+diff --git a/internal/checker/checker.go b/internal/checker/checker.go
+index b8639053e..e86d2a682 100644
+--- a/internal/checker/checker.go
++++ b/internal/checker/checker.go
+@@ -30,6 +30,35 @@ import (
+ 	"github.com/zeebo/xxh3"
+ )
+ 
++// AfterCheckSourceFileCallback is invoked after type checking each source file.
++// It allows external packages to run additional diagnostics with full type information.
++// Use Checker.AddDiagnostic to add diagnostics from within the callback.
++var AfterCheckSourceFileCallback func(*Checker, *ast.SourceFile)
++
++// RegisterAfterCheckSourceFileCallback registers a callback to be called after
++// each source file is type checked. The callback receives the checker with full
++// type information and the source file that was checked.
++// Note: Only one callback can be registered. Subsequent calls will replace the previous callback.
++func RegisterAfterCheckSourceFileCallback(cb func(*Checker, *ast.SourceFile)) {
++	AfterCheckSourceFileCallback = cb
++}
++
++// AddDiagnostic adds a diagnostic to the checker's diagnostics collection.
++func (c *Checker) AddDiagnostic(diagnostic *ast.Diagnostic) {
++	c.diagnostics.Add(diagnostic)
++}
++
++// Program returns the program being checked.
++func (c *Checker) Program() Program {
++	return c.program
++}
++
++// GetRelationErrors returns the collected relation errors for a source file.
++// These are collected during type checking and persist until the file is re-checked.
++func (c *Checker) GetRelationErrors(sf *ast.SourceFile) []*RelationError {
++	return c.sourceFileLinks.Get(sf).relationErrors
++}
++
+ // CheckMode
+ 
+ type CheckMode uint32
+@@ -2123,6 +2152,9 @@ func (c *Checker) checkSourceFile(ctx context.Context, sourceFile *ast.SourceFil
+ 	c.checkNotCanceled()
+ 	links := c.sourceFileLinks.Get(sourceFile)
+ 	if !links.typeChecked {
++		// Clear any stale relation errors before type checking
++		links.relationErrors = nil
++
+ 		c.ctx = ctx
+ 		// Grammar checking
+ 		c.checkGrammarSourceFile(sourceFile)
+@@ -2146,6 +2178,12 @@ func (c *Checker) checkSourceFile(ctx context.Context, sourceFile *ast.SourceFil
+ 		}
+ 		c.ctx = nil
+ 		c.reportedUnreachableNodes.Clear()
++
++		// EFFECT HOOK: Run Effect diagnostics after type checking
++		if AfterCheckSourceFileCallback != nil {
++			AfterCheckSourceFileCallback(c, sourceFile)
++		}
++
+ 		links.typeChecked = true
+ 	}
+ }

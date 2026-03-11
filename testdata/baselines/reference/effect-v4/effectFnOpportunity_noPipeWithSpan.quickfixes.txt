@@ -1,0 +1,413 @@
+=== Quick Fix Inventory ===
+
+[D1] (10:14-10:27) TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*() { ... }, ...pipeTransformations). effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fnUntraced"
+  Fix 3: "Convert to Effect.fn (no span)"
+  Fix 4: "Convert to Effect.fn(\"arrowWithPipe\")"
+
+[D2] (11:3-13:5) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D3] (15:14-15:40) TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*() { ... }, ...pipeTransformations). effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fnUntraced"
+  Fix 3: "Convert to Effect.fn (no span)"
+  Fix 4: "Convert to Effect.fn(\"functionExpressionWithPipe\")"
+
+[D4] (16:10-18:5) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D5] (21:17-21:44) TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*() { ... }, ...pipeTransformations). effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fnUntraced"
+  Fix 3: "Convert to Effect.fn (no span)"
+  Fix 4: "Convert to Effect.fn(\"functionDeclarationWithPipe\")"
+
+[D6] (22:10-24:5) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_noPipeWithSpan.ts ---
+import * as Effect from "effect/Effect"
+
+// This case differs from pipeWithSpan because the withSpan is not the last
+// piped transformation, so we cannot extract the span name to use with
+// Effect.fn. Instead, we should suggest Effect.fnUntraced for these cases.
+// Note: unnecessaryEffectGen diagnostics ARE expected for the inner Effect.gen
+// calls (each has a single-statement body). The Go test harness runs all rules,
+// unlike upstream which runs only the rule matching the file name prefix.
+
+export const arrowWithPipe = Effect.fnUntraced(function* () {
+    return yield* Effect.succeed(42);
+}, Effect.ignore);
+
+export const functionExpressionWithPipe = function() {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.withSpan("functionExpressionWithPipe"), Effect.ignore)
+}
+
+export function functionDeclarationWithPipe() {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionDeclarationWithPipe"), Effect.ignore)
+}
+
+
+=== [D1] Fix 3: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_noPipeWithSpan.ts ---
+import * as Effect from "effect/Effect"
+
+// This case differs from pipeWithSpan because the withSpan is not the last
+// piped transformation, so we cannot extract the span name to use with
+// Effect.fn. Instead, we should suggest Effect.fnUntraced for these cases.
+// Note: unnecessaryEffectGen diagnostics ARE expected for the inner Effect.gen
+// calls (each has a single-statement body). The Go test harness runs all rules,
+// unlike upstream which runs only the rule matching the file name prefix.
+
+export const arrowWithPipe = Effect.fn(function* () {
+    return yield* Effect.succeed(42);
+}, Effect.ignore);
+
+export const functionExpressionWithPipe = function() {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.withSpan("functionExpressionWithPipe"), Effect.ignore)
+}
+
+export function functionDeclarationWithPipe() {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionDeclarationWithPipe"), Effect.ignore)
+}
+
+
+=== [D1] Fix 4: "Convert to Effect.fn(\"arrowWithPipe\")" ===
+
+--- file:///.src/effectFnOpportunity_noPipeWithSpan.ts ---
+import * as Effect from "effect/Effect"
+
+// This case differs from pipeWithSpan because the withSpan is not the last
+// piped transformation, so we cannot extract the span name to use with
+// Effect.fn. Instead, we should suggest Effect.fnUntraced for these cases.
+// Note: unnecessaryEffectGen diagnostics ARE expected for the inner Effect.gen
+// calls (each has a single-statement body). The Go test harness runs all rules,
+// unlike upstream which runs only the rule matching the file name prefix.
+
+export const arrowWithPipe = Effect.fn("arrowWithPipe")(function* () {
+    return yield* Effect.succeed(42);
+}, Effect.ignore);
+
+export const functionExpressionWithPipe = function() {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.withSpan("functionExpressionWithPipe"), Effect.ignore)
+}
+
+export function functionDeclarationWithPipe() {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionDeclarationWithPipe"), Effect.ignore)
+}
+
+
+=== [D2] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/effectFnOpportunity_noPipeWithSpan.ts ---
+import * as Effect from "effect/Effect"
+
+// This case differs from pipeWithSpan because the withSpan is not the last
+// piped transformation, so we cannot extract the span name to use with
+// Effect.fn. Instead, we should suggest Effect.fnUntraced for these cases.
+// Note: unnecessaryEffectGen diagnostics ARE expected for the inner Effect.gen
+// calls (each has a single-statement body). The Go test harness runs all rules,
+// unlike upstream which runs only the rule matching the file name prefix.
+
+export const arrowWithPipe = () => Effect.succeed(42).pipe(Effect.ignore)
+
+export const functionExpressionWithPipe = function() {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.withSpan("functionExpressionWithPipe"), Effect.ignore)
+}
+
+export function functionDeclarationWithPipe() {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionDeclarationWithPipe"), Effect.ignore)
+}
+
+
+=== [D3] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_noPipeWithSpan.ts ---
+import * as Effect from "effect/Effect"
+
+// This case differs from pipeWithSpan because the withSpan is not the last
+// piped transformation, so we cannot extract the span name to use with
+// Effect.fn. Instead, we should suggest Effect.fnUntraced for these cases.
+// Note: unnecessaryEffectGen diagnostics ARE expected for the inner Effect.gen
+// calls (each has a single-statement body). The Go test harness runs all rules,
+// unlike upstream which runs only the rule matching the file name prefix.
+
+export const arrowWithPipe = () =>
+  Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.ignore)
+
+export const functionExpressionWithPipe = Effect.fnUntraced(function* () {
+    return yield* Effect.succeed(42);
+}, Effect.withSpan("functionExpressionWithPipe"), Effect.ignore);
+
+export function functionDeclarationWithPipe() {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionDeclarationWithPipe"), Effect.ignore)
+}
+
+
+=== [D3] Fix 3: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_noPipeWithSpan.ts ---
+import * as Effect from "effect/Effect"
+
+// This case differs from pipeWithSpan because the withSpan is not the last
+// piped transformation, so we cannot extract the span name to use with
+// Effect.fn. Instead, we should suggest Effect.fnUntraced for these cases.
+// Note: unnecessaryEffectGen diagnostics ARE expected for the inner Effect.gen
+// calls (each has a single-statement body). The Go test harness runs all rules,
+// unlike upstream which runs only the rule matching the file name prefix.
+
+export const arrowWithPipe = () =>
+  Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.ignore)
+
+export const functionExpressionWithPipe = Effect.fn(function* () {
+    return yield* Effect.succeed(42);
+}, Effect.withSpan("functionExpressionWithPipe"), Effect.ignore);
+
+export function functionDeclarationWithPipe() {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionDeclarationWithPipe"), Effect.ignore)
+}
+
+
+=== [D3] Fix 4: "Convert to Effect.fn(\"functionExpressionWithPipe\")" ===
+
+--- file:///.src/effectFnOpportunity_noPipeWithSpan.ts ---
+import * as Effect from "effect/Effect"
+
+// This case differs from pipeWithSpan because the withSpan is not the last
+// piped transformation, so we cannot extract the span name to use with
+// Effect.fn. Instead, we should suggest Effect.fnUntraced for these cases.
+// Note: unnecessaryEffectGen diagnostics ARE expected for the inner Effect.gen
+// calls (each has a single-statement body). The Go test harness runs all rules,
+// unlike upstream which runs only the rule matching the file name prefix.
+
+export const arrowWithPipe = () =>
+  Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.ignore)
+
+export const functionExpressionWithPipe = Effect.fn("functionExpressionWithPipe")(function* () {
+    return yield* Effect.succeed(42);
+}, Effect.withSpan("functionExpressionWithPipe"), Effect.ignore);
+
+export function functionDeclarationWithPipe() {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionDeclarationWithPipe"), Effect.ignore)
+}
+
+
+=== [D4] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/effectFnOpportunity_noPipeWithSpan.ts ---
+import * as Effect from "effect/Effect"
+
+// This case differs from pipeWithSpan because the withSpan is not the last
+// piped transformation, so we cannot extract the span name to use with
+// Effect.fn. Instead, we should suggest Effect.fnUntraced for these cases.
+// Note: unnecessaryEffectGen diagnostics ARE expected for the inner Effect.gen
+// calls (each has a single-statement body). The Go test harness runs all rules,
+// unlike upstream which runs only the rule matching the file name prefix.
+
+export const arrowWithPipe = () =>
+  Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.ignore)
+
+export const functionExpressionWithPipe = function() {
+  return Effect.succeed(42).pipe(Effect.withSpan("functionExpressionWithPipe"), Effect.ignore)
+}
+
+export function functionDeclarationWithPipe() {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionDeclarationWithPipe"), Effect.ignore)
+}
+
+
+=== [D5] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_noPipeWithSpan.ts ---
+import * as Effect from "effect/Effect"
+
+// This case differs from pipeWithSpan because the withSpan is not the last
+// piped transformation, so we cannot extract the span name to use with
+// Effect.fn. Instead, we should suggest Effect.fnUntraced for these cases.
+// Note: unnecessaryEffectGen diagnostics ARE expected for the inner Effect.gen
+// calls (each has a single-statement body). The Go test harness runs all rules,
+// unlike upstream which runs only the rule matching the file name prefix.
+
+export const arrowWithPipe = () =>
+  Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.ignore)
+
+export const functionExpressionWithPipe = function() {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.withSpan("functionExpressionWithPipe"), Effect.ignore)
+}
+
+export const functionDeclarationWithPipe = Effect.fnUntraced(function* () {
+    return yield* Effect.succeed(42);
+}, Effect.map(x => x + 1), Effect.withSpan("functionDeclarationWithPipe"), Effect.ignore);
+
+
+=== [D5] Fix 3: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_noPipeWithSpan.ts ---
+import * as Effect from "effect/Effect"
+
+// This case differs from pipeWithSpan because the withSpan is not the last
+// piped transformation, so we cannot extract the span name to use with
+// Effect.fn. Instead, we should suggest Effect.fnUntraced for these cases.
+// Note: unnecessaryEffectGen diagnostics ARE expected for the inner Effect.gen
+// calls (each has a single-statement body). The Go test harness runs all rules,
+// unlike upstream which runs only the rule matching the file name prefix.
+
+export const arrowWithPipe = () =>
+  Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.ignore)
+
+export const functionExpressionWithPipe = function() {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.withSpan("functionExpressionWithPipe"), Effect.ignore)
+}
+
+export const functionDeclarationWithPipe = Effect.fn(function* () {
+    return yield* Effect.succeed(42);
+}, Effect.map(x => x + 1), Effect.withSpan("functionDeclarationWithPipe"), Effect.ignore);
+
+
+=== [D5] Fix 4: "Convert to Effect.fn(\"functionDeclarationWithPipe\")" ===
+
+--- file:///.src/effectFnOpportunity_noPipeWithSpan.ts ---
+import * as Effect from "effect/Effect"
+
+// This case differs from pipeWithSpan because the withSpan is not the last
+// piped transformation, so we cannot extract the span name to use with
+// Effect.fn. Instead, we should suggest Effect.fnUntraced for these cases.
+// Note: unnecessaryEffectGen diagnostics ARE expected for the inner Effect.gen
+// calls (each has a single-statement body). The Go test harness runs all rules,
+// unlike upstream which runs only the rule matching the file name prefix.
+
+export const arrowWithPipe = () =>
+  Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.ignore)
+
+export const functionExpressionWithPipe = function() {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.withSpan("functionExpressionWithPipe"), Effect.ignore)
+}
+
+export const functionDeclarationWithPipe = Effect.fn("functionDeclarationWithPipe")(function* () {
+    return yield* Effect.succeed(42);
+}, Effect.map(x => x + 1), Effect.withSpan("functionDeclarationWithPipe"), Effect.ignore);
+
+
+=== [D6] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/effectFnOpportunity_noPipeWithSpan.ts ---
+import * as Effect from "effect/Effect"
+
+// This case differs from pipeWithSpan because the withSpan is not the last
+// piped transformation, so we cannot extract the span name to use with
+// Effect.fn. Instead, we should suggest Effect.fnUntraced for these cases.
+// Note: unnecessaryEffectGen diagnostics ARE expected for the inner Effect.gen
+// calls (each has a single-statement body). The Go test harness runs all rules,
+// unlike upstream which runs only the rule matching the file name prefix.
+
+export const arrowWithPipe = () =>
+  Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.ignore)
+
+export const functionExpressionWithPipe = function() {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.withSpan("functionExpressionWithPipe"), Effect.ignore)
+}
+
+export function functionDeclarationWithPipe() {
+  return Effect.succeed(42).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionDeclarationWithPipe"), Effect.ignore)
+}
+

@@ -1,0 +1,78 @@
+=== Quick Fix Inventory ===
+
+[D1] (7:7-7:13) TS6133: 'Config' is declared but its value is never read.
+  (no quick fixes)
+
+[D2] (7:16-7:59) TS377056: ServiceMap.Service should be used in a class declaration instead of as a variable. Use: class Config extends ServiceMap.Service<Config, ConfigService>()("Config") {} effect(serviceNotAsClass)
+  Fix 0: "Disable serviceNotAsClass for this line"
+  Fix 1: "Disable serviceNotAsClass for entire file"
+  Fix 2: "Convert to class declaration"
+
+[D3] (11:30-11:95) TS377056: ServiceMap.Service should be used in a class declaration instead of as a variable. Use: class ArtifactStore extends ServiceMap.Service<ArtifactStore, ArtifactStoreService>()("@my-app/ArtifactStore") {} effect(serviceNotAsClass)
+  Fix 0: "Disable serviceNotAsClass for this line"
+  Fix 1: "Disable serviceNotAsClass for entire file"
+  Fix 2: "Convert to class declaration"
+
+[D4] (14:7-14:16) TS6196: 'MyService' is declared but never used.
+  (no quick fixes)
+
+[D5] (17:7-17:8) TS6133: 'x' is declared but its value is never read.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+
+=== [D2] Fix 0: "Disable serviceNotAsClass for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable serviceNotAsClass for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Convert to class declaration" ===
+
+--- file:///.src/serviceNotAsClass.ts ---
+// @effect-diagnostics serviceNotAsClass:warning
+import { ServiceMap } from "effect"
+
+interface ConfigService {}
+
+// Flagged: const variable with ServiceMap.Service
+class Config extends ServiceMap.Service<Config, ConfigService>()("Config") {}
+
+// Flagged: exported const variable with ServiceMap.Service
+interface ArtifactStoreService {}
+export const ArtifactStore = ServiceMap.Service<ArtifactStoreService>("@my-app/ArtifactStore")
+
+// Not flagged: correct class extends form
+class MyService extends ServiceMap.Service<MyService, { port: number }>()("MyService") {}
+
+// Not flagged: non-ServiceMap.Service const
+const x = 42
+
+
+=== [D3] Fix 0: "Disable serviceNotAsClass for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable serviceNotAsClass for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Convert to class declaration" ===
+
+--- file:///.src/serviceNotAsClass.ts ---
+// @effect-diagnostics serviceNotAsClass:warning
+import { ServiceMap } from "effect"
+
+interface ConfigService {}
+
+// Flagged: const variable with ServiceMap.Service
+const Config = ServiceMap.Service<ConfigService>("Config")
+
+// Flagged: exported const variable with ServiceMap.Service
+interface ArtifactStoreService {}
+export class ArtifactStore extends ServiceMap.Service<ArtifactStore, ArtifactStoreService>()("@my-app/ArtifactStore") {}
+
+// Not flagged: correct class extends form
+class MyService extends ServiceMap.Service<MyService, { port: number }>()("MyService") {}
+
+// Not flagged: non-ServiceMap.Service const
+const x = 42
+

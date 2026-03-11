@@ -1,0 +1,57 @@
+==== /.src/overriddenSchemaConstructor.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 3:27 - 5:3
+Node: Schema.Class<Valid>("Valid")({\n  a: Schema.Number\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  a: Schema.Number\n}
+Subject Type: { a: Number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<Valid>("Valid")
+      args: (constant)
+      outType: ExtendableClass<Valid, Struct<{ readonly a: Number; }>, {}>
+
+=== Piping Flow ===
+Location: 7:28 - 9:3
+Node: Schema.Class<Valid2>("Valid")({\n  a: Schema.Number\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  a: Schema.Number\n}
+Subject Type: { a: Number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<Valid2>("Valid")
+      args: (constant)
+      outType: ExtendableClass<Valid2, Struct<{ readonly a: Number; }>, {}>
+
+=== Piping Flow ===
+Location: 24:10 - 26:5
+Node: Schema.Class<InvalidBecauseOfConstructor>("InvalidBecauseOfConstructor")({\n    a: Schema.Number\n  })
+Node Kind: KindCallExpression
+
+Subject: {\n    a: Schema.Number\n  }
+Subject Type: { a: Number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<InvalidBecauseOfConstructor>("InvalidBecauseOfConstructor")
+      args: (constant)
+      outType: ExtendableClass<InvalidBecauseOfConstructor, Struct<{ readonly a: Number; }>, {}>
+
+=== Piping Flow ===
+Location: 29:18 - 30:21
+Node: super({ a: 42 })
+Node Kind: KindCallExpression
+
+Subject: { a: 42 }
+Subject Type: { a: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: super
+      args: (constant)
+      outType: { readonly a: number; }

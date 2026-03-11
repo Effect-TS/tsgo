@@ -1,0 +1,83 @@
+=== Quick Fix Inventory ===
+
+[D1] (12:3-12:18) TS377010: You can use Effect.mapError instead of Effect.catch + Effect.fail to transform the error type. effect(catchAllToMapError)
+  Fix 0: "Disable catchAllToMapError for this line"
+  Fix 1: "Disable catchAllToMapError for entire file"
+  Fix 2: "Replace with Effect.mapError"
+
+[D2] (17:3-17:18) TS377010: You can use Effect.mapError instead of Effect.catch + Effect.fail to transform the error type. effect(catchAllToMapError)
+  Fix 0: "Disable catchAllToMapError for this line"
+  Fix 1: "Disable catchAllToMapError for entire file"
+  Fix 2: "Replace with Effect.mapError"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable catchAllToMapError for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable catchAllToMapError for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.mapError" ===
+
+--- file:///.src/catchAllToMapError_effectFnRegular.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+class MyErrorTagged {
+  readonly _tag = "MyErrorTagged"
+  constructor(readonly cause: unknown) {}
+}
+
+// Effect.fn with regular (non-generator) function - catchAll that should be mapError
+export const shouldReportEffectFnRegular = Effect.fn(
+  () => Effect.fail("error"),
+  Effect.mapError((cause) =>new MyErrorTagged(cause))
+)
+
+export const shouldReportEffectFnRegularTraced = Effect.fn("traced")(
+  () => Effect.fail("error"),
+  Effect.catchAll((cause) => Effect.fail(new MyErrorTagged(cause)))
+)
+
+// Should NOT report: catchAll returning Effect.succeed
+export const shouldNotReportEffectFnRegular = Effect.fn(
+  () => Effect.fail("error"),
+  Effect.catchAll(() => Effect.succeed(42))
+)
+
+
+=== [D2] Fix 0: "Disable catchAllToMapError for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable catchAllToMapError for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.mapError" ===
+
+--- file:///.src/catchAllToMapError_effectFnRegular.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+class MyErrorTagged {
+  readonly _tag = "MyErrorTagged"
+  constructor(readonly cause: unknown) {}
+}
+
+// Effect.fn with regular (non-generator) function - catchAll that should be mapError
+export const shouldReportEffectFnRegular = Effect.fn(
+  () => Effect.fail("error"),
+  Effect.catchAll((cause) => Effect.fail(new MyErrorTagged(cause)))
+)
+
+export const shouldReportEffectFnRegularTraced = Effect.fn("traced")(
+  () => Effect.fail("error"),
+  Effect.mapError((cause) =>new MyErrorTagged(cause))
+)
+
+// Should NOT report: catchAll returning Effect.succeed
+export const shouldNotReportEffectFnRegular = Effect.fn(
+  () => Effect.fail("error"),
+  Effect.catchAll(() => Effect.succeed(42))
+)
+

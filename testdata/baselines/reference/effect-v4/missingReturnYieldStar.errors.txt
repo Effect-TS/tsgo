@@ -1,0 +1,58 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+/.src/missingReturnYieldStar.ts(4,30): suggestion TS377014: You are returning an Effect-able type inside a generator function, and will result in nested Effect<Effect<...>>.
+Maybe you wanted to return yield* instead?
+Nested Effect-able types may be intended if you plan to later manually flatten or unwrap this Effect, if so you can safely disable this diagnostic for this line through quickfixes. effect(returnEffectInGen)
+/.src/missingReturnYieldStar.ts(11,13): error TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+/.src/missingReturnYieldStar.ts(18,9): error TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+/.src/missingReturnYieldStar.ts(19,9): error TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+
+
+==== /.src/missingReturnYieldStar.ts (4 errors) ====
+    import { Effect } from "effect"
+    
+    export const shouldNotComplain = Effect.gen(function*() {
+        if (Math.random() < 0.5) return Effect.succeed(42)
+                                 ~~~~~~
+!!! suggestion TS377014: You are returning an Effect-able type inside a generator function, and will result in nested Effect<Effect<...>>.
+Maybe you wanted to return yield* instead?
+Nested Effect-able types may be intended if you plan to later manually flatten or unwrap this Effect, if so you can safely disable this diagnostic for this line through quickfixes. effect(returnEffectInGen)
+        return yield* Effect.fail("no.")
+    })
+    
+    export const shouldComplain = (n: number) =>
+        Effect.gen(function*() {
+            if (n === 0) {
+                yield* Effect.fail("no zero!")
+                ~~~~~
+!!! error TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+            }
+            return n / 1
+        })
+    
+    export const shouldComplainOther = (n: number) =>
+        Effect.gen(function*() {
+            yield* Effect.interrupt
+            ~~~~~
+!!! error TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+            yield* Effect.die("lol")
+            ~~~~~
+!!! error TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+            return n / 1
+        })
+    
+    export const shouldNotComplainThrows = Effect.gen(function*() {
+        throw yield* Effect.fail(42)
+        return 42
+    })
+    
+    export const shouldNotComplainEventually = Effect.eventually(
+        Effect.gen(function*() {
+            if (Math.random() < 0.5) {
+                return yield* Effect.fail("Not ready")
+            }
+            return 42
+        })
+    )
+    

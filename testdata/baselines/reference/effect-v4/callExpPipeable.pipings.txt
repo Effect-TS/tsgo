@@ -1,0 +1,55 @@
+==== /.src/callExpPipeable.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 4:23 - 8:3
+Node: Effect.gen(function*() {\n  yield* Effect.as(42)(Effect.log("Hello, world!"))\n\n  yield* Effect.as(42)(Effect.map((x: string) => x.length)(Effect.succeed("Hello, world!")))\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  yield* Effect.as(42)(Effect.log("Hello, world!"))\n\n  yield* Effect.as(42)(Effect.map((x: string) => x.length)(Effect.succeed("Hello, world!")))\n}
+Subject Type: () => Generator<Effect<number, never, never>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 5:9 - 5:52
+Node: Effect.as(42)(Effect.log("Hello, world!"))
+Node Kind: KindCallExpression
+
+Subject: "Hello, world!"
+Subject Type: "Hello, world!"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: call
+      callee: Effect.as(42)
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 7:9 - 7:93
+Node: Effect.as(42)(Effect.map((x: string) => x.length)(Effect.succeed("Hello, world!")))
+Node Kind: KindCallExpression
+
+Subject: "Hello, world!"
+Subject Type: "Hello, world!"
+
+Transformations (3):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.map((x: string) => x.length)
+      args: (constant)
+      outType: Effect<number, never, never>
+  [2] kind: call
+      callee: Effect.as(42)
+      args: (constant)
+      outType: Effect<number, never, never>

@@ -1,0 +1,475 @@
+=== Quick Fix Inventory ===
+
+[D1] (7:7-7:21) TS6133: '_shouldTrigger' is declared but its value is never read.
+  (no quick fixes)
+
+[D2] (10:12-10:15) TS377047: Can be rewritten as a reusable function: Effect.fn((what) => { ... }). effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fn (no span)"
+  Fix 3: "Convert to Effect.fn(\"MyService.log\")"
+  Fix 4: "Convert to Effect.fn(\"log\")"
+
+[D3] (13:7-13:32) TS6133: '_shouldTriggerConstructor' is declared but its value is never read.
+  (no quick fixes)
+
+[D4] (16:12-16:15) TS377047: Can be rewritten as a reusable function: Effect.fn((what) => { ... }). effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fn (no span)"
+  Fix 3: "Convert to Effect.fn(\"MyService.log\")"
+  Fix 4: "Convert to Effect.fn(\"log\")"
+
+[D5] (19:7-19:28) TS6133: '_shouldTriggerSucceed' is declared but its value is never read.
+  (no quick fixes)
+
+[D6] (21:3-21:6) TS377047: Can be rewritten as a reusable function: Effect.fn((what) => { ... }). effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fn (no span)"
+  Fix 3: "Convert to Effect.fn(\"MyService.log\")"
+  Fix 4: "Convert to Effect.fn(\"log\")"
+
+[D7] (24:7-24:25) TS6133: '_shouldTriggerSync' is declared but its value is never read.
+  (no quick fixes)
+
+[D8] (26:12-26:15) TS377047: Can be rewritten as a reusable function: Effect.fn((what) => { ... }). effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fn (no span)"
+  Fix 3: "Convert to Effect.fn(\"MyService.log\")"
+  Fix 4: "Convert to Effect.fn(\"log\")"
+
+=== Quick Fix Application Results ===
+
+=== [D2] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_inferredLayer.ts ---
+import { Effect, Layer, ServiceMap } from "effect"
+
+class MyService extends ServiceMap.Service<MyService, {
+  log: (_what: string) => Effect.Effect<void>
+}>()("MyService") {}
+
+const _shouldTrigger = Layer.effect(MyService)(Effect.gen(function*() {
+  yield* Effect.log("log")
+  // Log should be inferred with name MyService.log
+  return { log: Effect.fn(function(what: string) {
+    return Effect.log(what)
+}) }
+}))
+
+const _shouldTriggerConstructor = Layer.effect(MyService, Effect.gen(function*() {
+  yield* Effect.log("log")
+  // Log should be inferred with name MyService.log
+  return { log: (what: string) => Effect.log(what) }
+}))
+
+const _shouldTriggerSucceed = Layer.succeed(MyService)({
+  // Log should be inferred with name MyService.log
+  log: (what: string) => Effect.log(what)
+})
+
+const _shouldTriggerSync = Layer.sync(MyService)(() => {
+  // Log should be inferred with name MyService.log
+  return { log: (what: string) => Effect.log(what) }
+})
+
+
+=== [D2] Fix 3: "Convert to Effect.fn(\"MyService.log\")" ===
+
+--- file:///.src/effectFnOpportunity_inferredLayer.ts ---
+import { Effect, Layer, ServiceMap } from "effect"
+
+class MyService extends ServiceMap.Service<MyService, {
+  log: (_what: string) => Effect.Effect<void>
+}>()("MyService") {}
+
+const _shouldTrigger = Layer.effect(MyService)(Effect.gen(function*() {
+  yield* Effect.log("log")
+  // Log should be inferred with name MyService.log
+  return { log: Effect.fn("MyService.log")(function(what: string) {
+    return Effect.log(what)
+}) }
+}))
+
+const _shouldTriggerConstructor = Layer.effect(MyService, Effect.gen(function*() {
+  yield* Effect.log("log")
+  // Log should be inferred with name MyService.log
+  return { log: (what: string) => Effect.log(what) }
+}))
+
+const _shouldTriggerSucceed = Layer.succeed(MyService)({
+  // Log should be inferred with name MyService.log
+  log: (what: string) => Effect.log(what)
+})
+
+const _shouldTriggerSync = Layer.sync(MyService)(() => {
+  // Log should be inferred with name MyService.log
+  return { log: (what: string) => Effect.log(what) }
+})
+
+
+=== [D2] Fix 4: "Convert to Effect.fn(\"log\")" ===
+
+--- file:///.src/effectFnOpportunity_inferredLayer.ts ---
+import { Effect, Layer, ServiceMap } from "effect"
+
+class MyService extends ServiceMap.Service<MyService, {
+  log: (_what: string) => Effect.Effect<void>
+}>()("MyService") {}
+
+const _shouldTrigger = Layer.effect(MyService)(Effect.gen(function*() {
+  yield* Effect.log("log")
+  // Log should be inferred with name MyService.log
+  return { log: Effect.fn("log")(function(what: string) {
+    return Effect.log(what)
+}) }
+}))
+
+const _shouldTriggerConstructor = Layer.effect(MyService, Effect.gen(function*() {
+  yield* Effect.log("log")
+  // Log should be inferred with name MyService.log
+  return { log: (what: string) => Effect.log(what) }
+}))
+
+const _shouldTriggerSucceed = Layer.succeed(MyService)({
+  // Log should be inferred with name MyService.log
+  log: (what: string) => Effect.log(what)
+})
+
+const _shouldTriggerSync = Layer.sync(MyService)(() => {
+  // Log should be inferred with name MyService.log
+  return { log: (what: string) => Effect.log(what) }
+})
+
+
+=== [D4] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_inferredLayer.ts ---
+import { Effect, Layer, ServiceMap } from "effect"
+
+class MyService extends ServiceMap.Service<MyService, {
+  log: (_what: string) => Effect.Effect<void>
+}>()("MyService") {}
+
+const _shouldTrigger = Layer.effect(MyService)(Effect.gen(function*() {
+  yield* Effect.log("log")
+  // Log should be inferred with name MyService.log
+  return { log: (what: string) => Effect.log(what) }
+}))
+
+const _shouldTriggerConstructor = Layer.effect(MyService, Effect.gen(function*() {
+  yield* Effect.log("log")
+  // Log should be inferred with name MyService.log
+  return { log: Effect.fn(function(what: string) {
+    return Effect.log(what)
+}) }
+}))
+
+const _shouldTriggerSucceed = Layer.succeed(MyService)({
+  // Log should be inferred with name MyService.log
+  log: (what: string) => Effect.log(what)
+})
+
+const _shouldTriggerSync = Layer.sync(MyService)(() => {
+  // Log should be inferred with name MyService.log
+  return { log: (what: string) => Effect.log(what) }
+})
+
+
+=== [D4] Fix 3: "Convert to Effect.fn(\"MyService.log\")" ===
+
+--- file:///.src/effectFnOpportunity_inferredLayer.ts ---
+import { Effect, Layer, ServiceMap } from "effect"
+
+class MyService extends ServiceMap.Service<MyService, {
+  log: (_what: string) => Effect.Effect<void>
+}>()("MyService") {}
+
+const _shouldTrigger = Layer.effect(MyService)(Effect.gen(function*() {
+  yield* Effect.log("log")
+  // Log should be inferred with name MyService.log
+  return { log: (what: string) => Effect.log(what) }
+}))
+
+const _shouldTriggerConstructor = Layer.effect(MyService, Effect.gen(function*() {
+  yield* Effect.log("log")
+  // Log should be inferred with name MyService.log
+  return { log: Effect.fn("MyService.log")(function(what: string) {
+    return Effect.log(what)
+}) }
+}))
+
+const _shouldTriggerSucceed = Layer.succeed(MyService)({
+  // Log should be inferred with name MyService.log
+  log: (what: string) => Effect.log(what)
+})
+
+const _shouldTriggerSync = Layer.sync(MyService)(() => {
+  // Log should be inferred with name MyService.log
+  return { log: (what: string) => Effect.log(what) }
+})
+
+
+=== [D4] Fix 4: "Convert to Effect.fn(\"log\")" ===
+
+--- file:///.src/effectFnOpportunity_inferredLayer.ts ---
+import { Effect, Layer, ServiceMap } from "effect"
+
+class MyService extends ServiceMap.Service<MyService, {
+  log: (_what: string) => Effect.Effect<void>
+}>()("MyService") {}
+
+const _shouldTrigger = Layer.effect(MyService)(Effect.gen(function*() {
+  yield* Effect.log("log")
+  // Log should be inferred with name MyService.log
+  return { log: (what: string) => Effect.log(what) }
+}))
+
+const _shouldTriggerConstructor = Layer.effect(MyService, Effect.gen(function*() {
+  yield* Effect.log("log")
+  // Log should be inferred with name MyService.log
+  return { log: Effect.fn("log")(function(what: string) {
+    return Effect.log(what)
+}) }
+}))
+
+const _shouldTriggerSucceed = Layer.succeed(MyService)({
+  // Log should be inferred with name MyService.log
+  log: (what: string) => Effect.log(what)
+})
+
+const _shouldTriggerSync = Layer.sync(MyService)(() => {
+  // Log should be inferred with name MyService.log
+  return { log: (what: string) => Effect.log(what) }
+})
+
+
+=== [D6] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_inferredLayer.ts ---
+import { Effect, Layer, ServiceMap } from "effect"
+
+class MyService extends ServiceMap.Service<MyService, {
+  log: (_what: string) => Effect.Effect<void>
+}>()("MyService") {}
+
+const _shouldTrigger = Layer.effect(MyService)(Effect.gen(function*() {
+  yield* Effect.log("log")
+  // Log should be inferred with name MyService.log
+  return { log: (what: string) => Effect.log(what) }
+}))
+
+const _shouldTriggerConstructor = Layer.effect(MyService, Effect.gen(function*() {
+  yield* Effect.log("log")
+  // Log should be inferred with name MyService.log
+  return { log: (what: string) => Effect.log(what) }
+}))
+
+const _shouldTriggerSucceed = Layer.succeed(MyService)({
+  // Log should be inferred with name MyService.log
+  log: Effect.fn(function(what: string) {
+    return Effect.log(what)
+})
+})
+
+const _shouldTriggerSync = Layer.sync(MyService)(() => {
+  // Log should be inferred with name MyService.log
+  return { log: (what: string) => Effect.log(what) }
+})
+
+
+=== [D6] Fix 3: "Convert to Effect.fn(\"MyService.log\")" ===
+
+--- file:///.src/effectFnOpportunity_inferredLayer.ts ---
+import { Effect, Layer, ServiceMap } from "effect"
+
+class MyService extends ServiceMap.Service<MyService, {
+  log: (_what: string) => Effect.Effect<void>
+}>()("MyService") {}
+
+const _shouldTrigger = Layer.effect(MyService)(Effect.gen(function*() {
+  yield* Effect.log("log")
+  // Log should be inferred with name MyService.log
+  return { log: (what: string) => Effect.log(what) }
+}))
+
+const _shouldTriggerConstructor = Layer.effect(MyService, Effect.gen(function*() {
+  yield* Effect.log("log")
+  // Log should be inferred with name MyService.log
+  return { log: (what: string) => Effect.log(what) }
+}))
+
+const _shouldTriggerSucceed = Layer.succeed(MyService)({
+  // Log should be inferred with name MyService.log
+  log: Effect.fn("MyService.log")(function(what: string) {
+    return Effect.log(what)
+})
+})
+
+const _shouldTriggerSync = Layer.sync(MyService)(() => {
+  // Log should be inferred with name MyService.log
+  return { log: (what: string) => Effect.log(what) }
+})
+
+
+=== [D6] Fix 4: "Convert to Effect.fn(\"log\")" ===
+
+--- file:///.src/effectFnOpportunity_inferredLayer.ts ---
+import { Effect, Layer, ServiceMap } from "effect"
+
+class MyService extends ServiceMap.Service<MyService, {
+  log: (_what: string) => Effect.Effect<void>
+}>()("MyService") {}
+
+const _shouldTrigger = Layer.effect(MyService)(Effect.gen(function*() {
+  yield* Effect.log("log")
+  // Log should be inferred with name MyService.log
+  return { log: (what: string) => Effect.log(what) }
+}))
+
+const _shouldTriggerConstructor = Layer.effect(MyService, Effect.gen(function*() {
+  yield* Effect.log("log")
+  // Log should be inferred with name MyService.log
+  return { log: (what: string) => Effect.log(what) }
+}))
+
+const _shouldTriggerSucceed = Layer.succeed(MyService)({
+  // Log should be inferred with name MyService.log
+  log: Effect.fn("log")(function(what: string) {
+    return Effect.log(what)
+})
+})
+
+const _shouldTriggerSync = Layer.sync(MyService)(() => {
+  // Log should be inferred with name MyService.log
+  return { log: (what: string) => Effect.log(what) }
+})
+
+
+=== [D8] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D8] Fix 2: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_inferredLayer.ts ---
+import { Effect, Layer, ServiceMap } from "effect"
+
+class MyService extends ServiceMap.Service<MyService, {
+  log: (_what: string) => Effect.Effect<void>
+}>()("MyService") {}
+
+const _shouldTrigger = Layer.effect(MyService)(Effect.gen(function*() {
+  yield* Effect.log("log")
+  // Log should be inferred with name MyService.log
+  return { log: (what: string) => Effect.log(what) }
+}))
+
+const _shouldTriggerConstructor = Layer.effect(MyService, Effect.gen(function*() {
+  yield* Effect.log("log")
+  // Log should be inferred with name MyService.log
+  return { log: (what: string) => Effect.log(what) }
+}))
+
+const _shouldTriggerSucceed = Layer.succeed(MyService)({
+  // Log should be inferred with name MyService.log
+  log: (what: string) => Effect.log(what)
+})
+
+const _shouldTriggerSync = Layer.sync(MyService)(() => {
+  // Log should be inferred with name MyService.log
+  return { log: Effect.fn(function(what: string) {
+    return Effect.log(what)
+}) }
+})
+
+
+=== [D8] Fix 3: "Convert to Effect.fn(\"MyService.log\")" ===
+
+--- file:///.src/effectFnOpportunity_inferredLayer.ts ---
+import { Effect, Layer, ServiceMap } from "effect"
+
+class MyService extends ServiceMap.Service<MyService, {
+  log: (_what: string) => Effect.Effect<void>
+}>()("MyService") {}
+
+const _shouldTrigger = Layer.effect(MyService)(Effect.gen(function*() {
+  yield* Effect.log("log")
+  // Log should be inferred with name MyService.log
+  return { log: (what: string) => Effect.log(what) }
+}))
+
+const _shouldTriggerConstructor = Layer.effect(MyService, Effect.gen(function*() {
+  yield* Effect.log("log")
+  // Log should be inferred with name MyService.log
+  return { log: (what: string) => Effect.log(what) }
+}))
+
+const _shouldTriggerSucceed = Layer.succeed(MyService)({
+  // Log should be inferred with name MyService.log
+  log: (what: string) => Effect.log(what)
+})
+
+const _shouldTriggerSync = Layer.sync(MyService)(() => {
+  // Log should be inferred with name MyService.log
+  return { log: Effect.fn("MyService.log")(function(what: string) {
+    return Effect.log(what)
+}) }
+})
+
+
+=== [D8] Fix 4: "Convert to Effect.fn(\"log\")" ===
+
+--- file:///.src/effectFnOpportunity_inferredLayer.ts ---
+import { Effect, Layer, ServiceMap } from "effect"
+
+class MyService extends ServiceMap.Service<MyService, {
+  log: (_what: string) => Effect.Effect<void>
+}>()("MyService") {}
+
+const _shouldTrigger = Layer.effect(MyService)(Effect.gen(function*() {
+  yield* Effect.log("log")
+  // Log should be inferred with name MyService.log
+  return { log: (what: string) => Effect.log(what) }
+}))
+
+const _shouldTriggerConstructor = Layer.effect(MyService, Effect.gen(function*() {
+  yield* Effect.log("log")
+  // Log should be inferred with name MyService.log
+  return { log: (what: string) => Effect.log(what) }
+}))
+
+const _shouldTriggerSucceed = Layer.succeed(MyService)({
+  // Log should be inferred with name MyService.log
+  log: (what: string) => Effect.log(what)
+})
+
+const _shouldTriggerSync = Layer.sync(MyService)(() => {
+  // Log should be inferred with name MyService.log
+  return { log: Effect.fn("log")(function(what: string) {
+    return Effect.log(what)
+}) }
+})
+

@@ -1,0 +1,81 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/nonObjectEffectServiceType.ts(12,3): error TS377048: Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)
+/.src/nonObjectEffectServiceType.ts(18,3): error TS377048: Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)
+/.src/nonObjectEffectServiceType.ts(25,5): error TS377048: Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)
+/.src/nonObjectEffectServiceType.ts(32,3): error TS377048: Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)
+/.src/nonObjectEffectServiceType.ts(39,5): error TS377048: Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)
+/.src/nonObjectEffectServiceType.ts(46,3): error TS377048: Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)
+/.src/nonObjectEffectServiceType.ts(52,3): error TS377048: Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)
+
+
+==== /.src/nonObjectEffectServiceType.ts (7 errors) ====
+    // @effect-v3
+    import * as Effect from "effect/Effect"
+    
+    // should not warn
+    export class ObjectService extends Effect.Service<ObjectService>()("ObjectService", {
+      effect: Effect.succeed({})
+    }) {}
+    
+    // should warn on "effect" key because it returns an effect that resolves to a primitive
+    export class UsesStringValueUnion extends Effect.Service<UsesStringValueUnion>()("UsesStringValueUnion", {
+      // @ts-expect-error
+      effect: Effect.succeed("test" as ("test" | "other"))
+      ~~~~~~
+!!! error TS377048: Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)
+    }) {}
+    
+    // should warn on "effect" key because it returns an effect that resolves to a primitive
+    export class UsesStringValue extends Effect.Service<UsesStringValue>()("UsesStringValue", {
+      // @ts-expect-error
+      effect: Effect.succeed("test" as const)
+      ~~~~~~
+!!! error TS377048: Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)
+    }) {}
+    
+    // should warn on "effect" key because it returns a function that returns an effect that resolves to a primitive
+    export class UsesStringValueLazyEffect
+      extends Effect.Service<UsesStringValueLazyEffect>()("UsesStringValueLazyEffect", {
+        // @ts-expect-error
+        effect: (_: string) => Effect.succeed("test" as const)
+        ~~~~~~
+!!! error TS377048: Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)
+      })
+    {}
+    
+    // should warn on "scoped" key because it returns an effect that resolves to a primitive
+    export class UsesStringValueScoped extends Effect.Service<UsesStringValueScoped>()("UsesStringValueScoped", {
+      // @ts-expect-error
+      scoped: Effect.succeed("test" as const)
+      ~~~~~~
+!!! error TS377048: Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)
+    }) {}
+    
+    // should warn on "scoped" key because it returns a function that returns an effect that resolves to a primitive
+    export class UsesStringValueLazyScoped
+      extends Effect.Service<UsesStringValueLazyScoped>()("UsesStringValueLazyScoped", {
+        // @ts-expect-error
+        scoped: (_: string) => Effect.succeed("test" as const)
+        ~~~~~~
+!!! error TS377048: Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)
+      })
+    {}
+    
+    // should warn on "succeed" key because it is a primitive
+    export class UsesStringValueSucceeds extends Effect.Service<UsesStringValueSucceeds>()("UsesStringValueSucceeds", {
+      // @ts-expect-error
+      succeed: "test" as const
+      ~~~~~~~
+!!! error TS377048: Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)
+    }) {}
+    
+    // should warn on "sync" key because it is function that returns a primitive
+    export class UsesStringValueSync extends Effect.Service<UsesStringValueSync>()("UsesStringValueSync", {
+      // @ts-expect-error
+      sync: () => "test" as const
+      ~~~~
+!!! error TS377048: Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)
+    }) {}
+    

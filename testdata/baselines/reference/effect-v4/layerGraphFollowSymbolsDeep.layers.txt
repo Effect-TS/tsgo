@@ -1,0 +1,628 @@
+==== /.src/base.ts (2 layer exports) ====
+
+=== cacheWithFs ===
+
+--- output ---
+flowchart TD
+  0["Layer.effect#40;this, this.make#41;<br/>provides: FileSystem<br/>requires: "]
+  1["FileSystem.Default<br/>provides: FileSystem<br/>requires: "]
+  2["Layer.provide#40;FileSystem.Default#41;<br/>provides: Cache<br/>requires: "]
+  3["Layer.effect#40;this, this.make#41;<br/>provides: Cache<br/>requires: FileSystem"]
+  4["Cache.Default<br/>provides: Cache<br/>requires: FileSystem"]
+  5["Cache.Default.pipe#40;Layer.provide#40;FileSystem.Default#41;#41;<br/>provides: Cache<br/>requires: "]
+  1 -->|"#123;#quot;relationship#quot;:#quot;symbol#quot;#125;"| 0
+  2 -->|"#123;#quot;relationship#quot;:#quot;call#quot;,#quot;argumentIndex#quot;:0#125;"| 1
+  4 -->|"#123;#quot;relationship#quot;:#quot;symbol#quot;#125;"| 3
+  2 -->|"#123;#quot;relationship#quot;:#quot;pipe#quot;#125;"| 4
+  5 -->|"#123;#quot;relationship#quot;:#quot;pipe#quot;#125;"| 2
+
+--- nested ---
+flowchart TB
+  subgraph 0 ["`Layer.effect(this, this.make)<br/><small>_ln 11 col 19_</small>`"]
+    subgraph 0_wrap[" "]
+      subgraph 0_provides [Provides]
+        0_provides_0["FileSystem"]
+      end
+      style 0_provides stroke:none
+    end
+    style 0_wrap fill:transparent
+    style 0_wrap stroke:none
+  end
+  style 0 fill:transparent
+  subgraph 1 ["`FileSystem.Default<br/><small>_ln 19 col 60_</small>`"]
+    subgraph 1_wrap[" "]
+      subgraph 1_provides [Provides]
+        1_provides_0["FileSystem"]
+      end
+      style 1_provides stroke:none
+    end
+    style 1_wrap fill:transparent
+    style 1_wrap stroke:none
+  end
+  style 1 fill:transparent
+  subgraph 2 ["`Layer.provide(FileSystem.Default)<br/><small>_ln 19 col 46_</small>`"]
+    subgraph 2_wrap[" "]
+      subgraph 2_provides [Provides]
+        2_provides_0["Cache"]
+      end
+      style 2_provides stroke:none
+    end
+    style 2_wrap fill:transparent
+    style 2_wrap stroke:none
+  end
+  style 2 fill:transparent
+  subgraph 3 ["`Layer.effect(this, this.make)<br/><small>_ln 16 col 19_</small>`"]
+    subgraph 3_wrap[" "]
+      subgraph 3_requires [Requires]
+        3_requires_0["FileSystem"]
+      end
+      style 3_requires stroke:none
+      subgraph 3_provides [Provides]
+        3_provides_0["Cache"]
+      end
+      style 3_provides stroke:none
+    end
+    style 3_wrap fill:transparent
+    style 3_wrap stroke:none
+  end
+  style 3 fill:transparent
+  subgraph 4 ["`Cache.Default<br/><small>_ln 19 col 27_</small>`"]
+    subgraph 4_wrap[" "]
+      subgraph 4_requires [Requires]
+        4_requires_0["FileSystem"]
+      end
+      style 4_requires stroke:none
+      subgraph 4_provides [Provides]
+        4_provides_0["Cache"]
+      end
+      style 4_provides stroke:none
+    end
+    style 4_wrap fill:transparent
+    style 4_wrap stroke:none
+  end
+  style 4 fill:transparent
+  subgraph 5 ["`cacheWithFs<br/><small>_ln 19 col 13_</small>`"]
+    subgraph 5_wrap[" "]
+      subgraph 5_provides [Provides]
+        5_provides_0["Cache"]
+      end
+      style 5_provides stroke:none
+    end
+    style 5_wrap fill:transparent
+    style 5_wrap stroke:none
+  end
+  style 5 fill:transparent
+  1_provides_0 -.-> 0_provides_0
+  2 -.-x 1
+  4_requires_0 -.-> 3_requires_0
+  4_provides_0 -.-> 3_provides_0
+  2_provides_0 -.-> 4_provides_0
+  5_provides_0 -.-> 2_provides_0
+
+--- outline ---
+flowchart TD
+  0["Layer.effect#40;this, this.make#41;"]
+  1["Layer.effect#40;this, this.make#41;"]
+  1 --> 0
+
+--- quickinfo ---
+/**
+ * - Cache provided at ln 16 col 19 by `Layer.effect(this, this.make)`
+ */
+
+=== baseAlias ===
+
+--- output ---
+flowchart TD
+  0["Layer.effect#40;this, this.make#41;<br/>provides: FileSystem<br/>requires: "]
+  1["FileSystem.Default<br/>provides: FileSystem<br/>requires: "]
+  2["Layer.provide#40;FileSystem.Default#41;<br/>provides: Cache<br/>requires: "]
+  3["Layer.effect#40;this, this.make#41;<br/>provides: Cache<br/>requires: FileSystem"]
+  4["Cache.Default<br/>provides: Cache<br/>requires: FileSystem"]
+  5["Cache.Default.pipe#40;Layer.provide#40;FileSystem.Default#41;#41;<br/>provides: Cache<br/>requires: "]
+  6["cacheWithFs<br/>provides: Cache<br/>requires: "]
+  1 -->|"#123;#quot;relationship#quot;:#quot;symbol#quot;#125;"| 0
+  2 -->|"#123;#quot;relationship#quot;:#quot;call#quot;,#quot;argumentIndex#quot;:0#125;"| 1
+  4 -->|"#123;#quot;relationship#quot;:#quot;symbol#quot;#125;"| 3
+  2 -->|"#123;#quot;relationship#quot;:#quot;pipe#quot;#125;"| 4
+  5 -->|"#123;#quot;relationship#quot;:#quot;pipe#quot;#125;"| 2
+  6 -->|"#123;#quot;relationship#quot;:#quot;symbol#quot;#125;"| 5
+
+--- nested ---
+flowchart TB
+  subgraph 0 ["`Layer.effect(this, this.make)<br/><small>_ln 11 col 19_</small>`"]
+    subgraph 0_wrap[" "]
+      subgraph 0_provides [Provides]
+        0_provides_0["FileSystem"]
+      end
+      style 0_provides stroke:none
+    end
+    style 0_wrap fill:transparent
+    style 0_wrap stroke:none
+  end
+  style 0 fill:transparent
+  subgraph 1 ["`FileSystem.Default<br/><small>_ln 19 col 60_</small>`"]
+    subgraph 1_wrap[" "]
+      subgraph 1_provides [Provides]
+        1_provides_0["FileSystem"]
+      end
+      style 1_provides stroke:none
+    end
+    style 1_wrap fill:transparent
+    style 1_wrap stroke:none
+  end
+  style 1 fill:transparent
+  subgraph 2 ["`Layer.provide(FileSystem.Default)<br/><small>_ln 19 col 46_</small>`"]
+    subgraph 2_wrap[" "]
+      subgraph 2_provides [Provides]
+        2_provides_0["Cache"]
+      end
+      style 2_provides stroke:none
+    end
+    style 2_wrap fill:transparent
+    style 2_wrap stroke:none
+  end
+  style 2 fill:transparent
+  subgraph 3 ["`Layer.effect(this, this.make)<br/><small>_ln 16 col 19_</small>`"]
+    subgraph 3_wrap[" "]
+      subgraph 3_requires [Requires]
+        3_requires_0["FileSystem"]
+      end
+      style 3_requires stroke:none
+      subgraph 3_provides [Provides]
+        3_provides_0["Cache"]
+      end
+      style 3_provides stroke:none
+    end
+    style 3_wrap fill:transparent
+    style 3_wrap stroke:none
+  end
+  style 3 fill:transparent
+  subgraph 4 ["`Cache.Default<br/><small>_ln 19 col 27_</small>`"]
+    subgraph 4_wrap[" "]
+      subgraph 4_requires [Requires]
+        4_requires_0["FileSystem"]
+      end
+      style 4_requires stroke:none
+      subgraph 4_provides [Provides]
+        4_provides_0["Cache"]
+      end
+      style 4_provides stroke:none
+    end
+    style 4_wrap fill:transparent
+    style 4_wrap stroke:none
+  end
+  style 4 fill:transparent
+  subgraph 5 ["`cacheWithFs<br/><small>_ln 19 col 13_</small>`"]
+    subgraph 5_wrap[" "]
+      subgraph 5_provides [Provides]
+        5_provides_0["Cache"]
+      end
+      style 5_provides stroke:none
+    end
+    style 5_wrap fill:transparent
+    style 5_wrap stroke:none
+  end
+  style 5 fill:transparent
+  subgraph 6 ["`baseAlias<br/><small>_ln 21 col 13_</small>`"]
+    subgraph 6_wrap[" "]
+      subgraph 6_provides [Provides]
+        6_provides_0["Cache"]
+      end
+      style 6_provides stroke:none
+    end
+    style 6_wrap fill:transparent
+    style 6_wrap stroke:none
+  end
+  style 6 fill:transparent
+  1_provides_0 -.-> 0_provides_0
+  2 -.-x 1
+  4_requires_0 -.-> 3_requires_0
+  4_provides_0 -.-> 3_provides_0
+  2_provides_0 -.-> 4_provides_0
+  5_provides_0 -.-> 2_provides_0
+  6_provides_0 -.-> 5_provides_0
+
+--- outline ---
+flowchart TD
+  0["Layer.effect#40;this, this.make#41;"]
+  1["Layer.effect#40;this, this.make#41;"]
+  1 --> 0
+
+--- quickinfo ---
+/**
+ * - Cache provided at ln 16 col 19 by `Layer.effect(this, this.make)`
+ */
+==== /.src/middle.ts (2 layer exports) ====
+
+=== wrappedCache ===
+
+--- output ---
+flowchart TD
+  0["Layer.effect#40;this, this.make#41;<br/>provides: FileSystem<br/>requires: <br/>_in base.ts at ln 11 col 19_"]
+  1["FileSystem.Default<br/>provides: FileSystem<br/>requires: <br/>_in base.ts at ln 19 col 60_"]
+  2["Layer.provide#40;FileSystem.Default#41;<br/>provides: Cache<br/>requires: <br/>_in base.ts at ln 19 col 46_"]
+  3["Layer.effect#40;this, this.make#41;<br/>provides: Cache<br/>requires: FileSystem<br/>_in base.ts at ln 16 col 19_"]
+  4["Cache.Default<br/>provides: Cache<br/>requires: FileSystem<br/>_in base.ts at ln 19 col 27_"]
+  5["Cache.Default.pipe#40;Layer.provide#40;FileSystem.Default#41;#41;<br/>provides: Cache<br/>requires: <br/>_in base.ts at ln 19 col 27_"]
+  6["cacheWithFs<br/>provides: Cache<br/>requires: "]
+  1 -->|"#123;#quot;relationship#quot;:#quot;symbol#quot;#125;"| 0
+  2 -->|"#123;#quot;relationship#quot;:#quot;call#quot;,#quot;argumentIndex#quot;:0#125;"| 1
+  4 -->|"#123;#quot;relationship#quot;:#quot;symbol#quot;#125;"| 3
+  2 -->|"#123;#quot;relationship#quot;:#quot;pipe#quot;#125;"| 4
+  5 -->|"#123;#quot;relationship#quot;:#quot;pipe#quot;#125;"| 2
+  6 -->|"#123;#quot;relationship#quot;:#quot;symbol#quot;#125;"| 5
+
+--- nested ---
+flowchart TB
+  subgraph 0 ["`Layer.effect(this, this.make)<br/><small>_in base.ts at ln 11 col 19_</small>`"]
+    subgraph 0_wrap[" "]
+      subgraph 0_provides [Provides]
+        0_provides_0["FileSystem"]
+      end
+      style 0_provides stroke:none
+    end
+    style 0_wrap fill:transparent
+    style 0_wrap stroke:none
+  end
+  style 0 fill:transparent
+  subgraph 1 ["`FileSystem.Default<br/><small>_in base.ts at ln 19 col 60_</small>`"]
+    subgraph 1_wrap[" "]
+      subgraph 1_provides [Provides]
+        1_provides_0["FileSystem"]
+      end
+      style 1_provides stroke:none
+    end
+    style 1_wrap fill:transparent
+    style 1_wrap stroke:none
+  end
+  style 1 fill:transparent
+  subgraph 2 ["`Layer.provide(FileSystem.Default)<br/><small>_in base.ts at ln 19 col 46_</small>`"]
+    subgraph 2_wrap[" "]
+      subgraph 2_provides [Provides]
+        2_provides_0["Cache"]
+      end
+      style 2_provides stroke:none
+    end
+    style 2_wrap fill:transparent
+    style 2_wrap stroke:none
+  end
+  style 2 fill:transparent
+  subgraph 3 ["`Layer.effect(this, this.make)<br/><small>_in base.ts at ln 16 col 19_</small>`"]
+    subgraph 3_wrap[" "]
+      subgraph 3_requires [Requires]
+        3_requires_0["FileSystem"]
+      end
+      style 3_requires stroke:none
+      subgraph 3_provides [Provides]
+        3_provides_0["Cache"]
+      end
+      style 3_provides stroke:none
+    end
+    style 3_wrap fill:transparent
+    style 3_wrap stroke:none
+  end
+  style 3 fill:transparent
+  subgraph 4 ["`Cache.Default<br/><small>_in base.ts at ln 19 col 27_</small>`"]
+    subgraph 4_wrap[" "]
+      subgraph 4_requires [Requires]
+        4_requires_0["FileSystem"]
+      end
+      style 4_requires stroke:none
+      subgraph 4_provides [Provides]
+        4_provides_0["Cache"]
+      end
+      style 4_provides stroke:none
+    end
+    style 4_wrap fill:transparent
+    style 4_wrap stroke:none
+  end
+  style 4 fill:transparent
+  subgraph 5 ["`cacheWithFs<br/><small>_in base.ts at ln 19 col 13_</small>`"]
+    subgraph 5_wrap[" "]
+      subgraph 5_provides [Provides]
+        5_provides_0["Cache"]
+      end
+      style 5_provides stroke:none
+    end
+    style 5_wrap fill:transparent
+    style 5_wrap stroke:none
+  end
+  style 5 fill:transparent
+  subgraph 6 ["`wrappedCache<br/><small>_ln 3 col 13_</small>`"]
+    subgraph 6_wrap[" "]
+      subgraph 6_provides [Provides]
+        6_provides_0["Cache"]
+      end
+      style 6_provides stroke:none
+    end
+    style 6_wrap fill:transparent
+    style 6_wrap stroke:none
+  end
+  style 6 fill:transparent
+  1_provides_0 -.-> 0_provides_0
+  2 -.-x 1
+  4_requires_0 -.-> 3_requires_0
+  4_provides_0 -.-> 3_provides_0
+  2_provides_0 -.-> 4_provides_0
+  5_provides_0 -.-> 2_provides_0
+  6_provides_0 -.-> 5_provides_0
+
+--- outline ---
+flowchart TD
+  0["Layer.effect#40;this, this.make#41;<br/>_in base.ts at ln 11 col 19_"]
+  1["Layer.effect#40;this, this.make#41;<br/>_in base.ts at ln 16 col 19_"]
+  1 --> 0
+
+--- quickinfo ---
+/**
+ * - Cache provided in base.ts at ln 16 col 19 by `Layer.effect(this, this.make)`
+ */
+
+=== wrappedAlias ===
+
+--- output ---
+flowchart TD
+  0["FileSystem.Default<br/>provides: FileSystem<br/>requires: <br/>_in base.ts at ln 19 col 60_"]
+  1["Layer.provide#40;FileSystem.Default#41;<br/>provides: Cache<br/>requires: <br/>_in base.ts at ln 19 col 46_"]
+  2["Cache.Default<br/>provides: Cache<br/>requires: FileSystem<br/>_in base.ts at ln 19 col 27_"]
+  3["Cache.Default.pipe#40;Layer.provide#40;FileSystem.Default#41;#41;<br/>provides: Cache<br/>requires: <br/>_in base.ts at ln 19 col 27_"]
+  4["cacheWithFs<br/>provides: Cache<br/>requires: <br/>_in base.ts at ln 21 col 25_"]
+  5["baseAlias<br/>provides: Cache<br/>requires: "]
+  1 -->|"#123;#quot;relationship#quot;:#quot;call#quot;,#quot;argumentIndex#quot;:0#125;"| 0
+  1 -->|"#123;#quot;relationship#quot;:#quot;pipe#quot;#125;"| 2
+  3 -->|"#123;#quot;relationship#quot;:#quot;pipe#quot;#125;"| 1
+  4 -->|"#123;#quot;relationship#quot;:#quot;symbol#quot;#125;"| 3
+  5 -->|"#123;#quot;relationship#quot;:#quot;symbol#quot;#125;"| 4
+
+--- nested ---
+flowchart TB
+  subgraph 0 ["`FileSystem.Default<br/><small>_in base.ts at ln 19 col 60_</small>`"]
+    subgraph 0_wrap[" "]
+      subgraph 0_provides [Provides]
+        0_provides_0["FileSystem"]
+      end
+      style 0_provides stroke:none
+    end
+    style 0_wrap fill:transparent
+    style 0_wrap stroke:none
+  end
+  style 0 fill:transparent
+  subgraph 1 ["`Layer.provide(FileSystem.Default)<br/><small>_in base.ts at ln 19 col 46_</small>`"]
+    subgraph 1_wrap[" "]
+      subgraph 1_provides [Provides]
+        1_provides_0["Cache"]
+      end
+      style 1_provides stroke:none
+    end
+    style 1_wrap fill:transparent
+    style 1_wrap stroke:none
+  end
+  style 1 fill:transparent
+  subgraph 2 ["`Cache.Default<br/><small>_in base.ts at ln 19 col 27_</small>`"]
+    subgraph 2_wrap[" "]
+      subgraph 2_requires [Requires]
+        2_requires_0["FileSystem"]
+      end
+      style 2_requires stroke:none
+      subgraph 2_provides [Provides]
+        2_provides_0["Cache"]
+      end
+      style 2_provides stroke:none
+    end
+    style 2_wrap fill:transparent
+    style 2_wrap stroke:none
+  end
+  style 2 fill:transparent
+  subgraph 3 ["`cacheWithFs<br/><small>_in base.ts at ln 19 col 13_</small>`"]
+    subgraph 3_wrap[" "]
+      subgraph 3_provides [Provides]
+        3_provides_0["Cache"]
+      end
+      style 3_provides stroke:none
+    end
+    style 3_wrap fill:transparent
+    style 3_wrap stroke:none
+  end
+  style 3 fill:transparent
+  subgraph 4 ["`baseAlias<br/><small>_in base.ts at ln 21 col 13_</small>`"]
+    subgraph 4_wrap[" "]
+      subgraph 4_provides [Provides]
+        4_provides_0["Cache"]
+      end
+      style 4_provides stroke:none
+    end
+    style 4_wrap fill:transparent
+    style 4_wrap stroke:none
+  end
+  style 4 fill:transparent
+  subgraph 5 ["`wrappedAlias<br/><small>_ln 5 col 13_</small>`"]
+    subgraph 5_wrap[" "]
+      subgraph 5_provides [Provides]
+        5_provides_0["Cache"]
+      end
+      style 5_provides stroke:none
+    end
+    style 5_wrap fill:transparent
+    style 5_wrap stroke:none
+  end
+  style 5 fill:transparent
+  1 -.-x 0
+  1_provides_0 -.-> 2_provides_0
+  3_provides_0 -.-> 1_provides_0
+  4_provides_0 -.-> 3_provides_0
+  5_provides_0 -.-> 4_provides_0
+
+--- outline ---
+flowchart TD
+  0["FileSystem.Default<br/>_in base.ts at ln 19 col 60_"]
+  1["Cache.Default<br/>_in base.ts at ln 19 col 27_"]
+  1 --> 0
+
+--- quickinfo ---
+/**
+ * - Cache provided in base.ts at ln 19 col 27 by `Cache.Default`
+ */
+==== /.src/deep.ts (2 layer exports) ====
+
+=== twoLevel ===
+
+--- output ---
+flowchart TD
+  0["FileSystem.Default<br/>provides: FileSystem<br/>requires: <br/>_in base.ts at ln 19 col 60_"]
+  1["Layer.provide#40;FileSystem.Default#41;<br/>provides: Cache<br/>requires: <br/>_in base.ts at ln 19 col 46_"]
+  2["Cache.Default<br/>provides: Cache<br/>requires: FileSystem<br/>_in base.ts at ln 19 col 27_"]
+  3["Cache.Default.pipe#40;Layer.provide#40;FileSystem.Default#41;#41;<br/>provides: Cache<br/>requires: <br/>_in base.ts at ln 19 col 27_"]
+  4["cacheWithFs<br/>provides: Cache<br/>requires: <br/>_in middle.ts at ln 3 col 28_"]
+  5["wrappedCache<br/>provides: Cache<br/>requires: "]
+  1 -->|"#123;#quot;relationship#quot;:#quot;call#quot;,#quot;argumentIndex#quot;:0#125;"| 0
+  1 -->|"#123;#quot;relationship#quot;:#quot;pipe#quot;#125;"| 2
+  3 -->|"#123;#quot;relationship#quot;:#quot;pipe#quot;#125;"| 1
+  4 -->|"#123;#quot;relationship#quot;:#quot;symbol#quot;#125;"| 3
+  5 -->|"#123;#quot;relationship#quot;:#quot;symbol#quot;#125;"| 4
+
+--- nested ---
+flowchart TB
+  subgraph 0 ["`FileSystem.Default<br/><small>_in base.ts at ln 19 col 60_</small>`"]
+    subgraph 0_wrap[" "]
+      subgraph 0_provides [Provides]
+        0_provides_0["FileSystem"]
+      end
+      style 0_provides stroke:none
+    end
+    style 0_wrap fill:transparent
+    style 0_wrap stroke:none
+  end
+  style 0 fill:transparent
+  subgraph 1 ["`Layer.provide(FileSystem.Default)<br/><small>_in base.ts at ln 19 col 46_</small>`"]
+    subgraph 1_wrap[" "]
+      subgraph 1_provides [Provides]
+        1_provides_0["Cache"]
+      end
+      style 1_provides stroke:none
+    end
+    style 1_wrap fill:transparent
+    style 1_wrap stroke:none
+  end
+  style 1 fill:transparent
+  subgraph 2 ["`Cache.Default<br/><small>_in base.ts at ln 19 col 27_</small>`"]
+    subgraph 2_wrap[" "]
+      subgraph 2_requires [Requires]
+        2_requires_0["FileSystem"]
+      end
+      style 2_requires stroke:none
+      subgraph 2_provides [Provides]
+        2_provides_0["Cache"]
+      end
+      style 2_provides stroke:none
+    end
+    style 2_wrap fill:transparent
+    style 2_wrap stroke:none
+  end
+  style 2 fill:transparent
+  subgraph 3 ["`cacheWithFs<br/><small>_in base.ts at ln 19 col 13_</small>`"]
+    subgraph 3_wrap[" "]
+      subgraph 3_provides [Provides]
+        3_provides_0["Cache"]
+      end
+      style 3_provides stroke:none
+    end
+    style 3_wrap fill:transparent
+    style 3_wrap stroke:none
+  end
+  style 3 fill:transparent
+  subgraph 4 ["`wrappedCache<br/><small>_in middle.ts at ln 3 col 13_</small>`"]
+    subgraph 4_wrap[" "]
+      subgraph 4_provides [Provides]
+        4_provides_0["Cache"]
+      end
+      style 4_provides stroke:none
+    end
+    style 4_wrap fill:transparent
+    style 4_wrap stroke:none
+  end
+  style 4 fill:transparent
+  subgraph 5 ["`twoLevel<br/><small>_ln 3 col 13_</small>`"]
+    subgraph 5_wrap[" "]
+      subgraph 5_provides [Provides]
+        5_provides_0["Cache"]
+      end
+      style 5_provides stroke:none
+    end
+    style 5_wrap fill:transparent
+    style 5_wrap stroke:none
+  end
+  style 5 fill:transparent
+  1 -.-x 0
+  1_provides_0 -.-> 2_provides_0
+  3_provides_0 -.-> 1_provides_0
+  4_provides_0 -.-> 3_provides_0
+  5_provides_0 -.-> 4_provides_0
+
+--- outline ---
+flowchart TD
+  0["FileSystem.Default<br/>_in base.ts at ln 19 col 60_"]
+  1["Cache.Default<br/>_in base.ts at ln 19 col 27_"]
+  1 --> 0
+
+--- quickinfo ---
+/**
+ * - Cache provided in base.ts at ln 19 col 27 by `Cache.Default`
+ */
+
+=== threeLevel ===
+
+--- output ---
+flowchart TD
+  0["cacheWithFs<br/>provides: Cache<br/>requires: <br/>_in base.ts at ln 21 col 25_"]
+  1["baseAlias<br/>provides: Cache<br/>requires: <br/>_in middle.ts at ln 5 col 28_"]
+  2["wrappedAlias<br/>provides: Cache<br/>requires: "]
+  1 -->|"#123;#quot;relationship#quot;:#quot;symbol#quot;#125;"| 0
+  2 -->|"#123;#quot;relationship#quot;:#quot;symbol#quot;#125;"| 1
+
+--- nested ---
+flowchart TB
+  subgraph 0 ["`baseAlias<br/><small>_in base.ts at ln 21 col 13_</small>`"]
+    subgraph 0_wrap[" "]
+      subgraph 0_provides [Provides]
+        0_provides_0["Cache"]
+      end
+      style 0_provides stroke:none
+    end
+    style 0_wrap fill:transparent
+    style 0_wrap stroke:none
+  end
+  style 0 fill:transparent
+  subgraph 1 ["`wrappedAlias<br/><small>_in middle.ts at ln 5 col 13_</small>`"]
+    subgraph 1_wrap[" "]
+      subgraph 1_provides [Provides]
+        1_provides_0["Cache"]
+      end
+      style 1_provides stroke:none
+    end
+    style 1_wrap fill:transparent
+    style 1_wrap stroke:none
+  end
+  style 1 fill:transparent
+  subgraph 2 ["`threeLevel<br/><small>_ln 5 col 13_</small>`"]
+    subgraph 2_wrap[" "]
+      subgraph 2_provides [Provides]
+        2_provides_0["Cache"]
+      end
+      style 2_provides stroke:none
+    end
+    style 2_wrap fill:transparent
+    style 2_wrap stroke:none
+  end
+  style 2 fill:transparent
+  1_provides_0 -.-> 0_provides_0
+  2_provides_0 -.-> 1_provides_0
+
+--- outline ---
+flowchart TD
+  0["baseAlias<br/>_in base.ts at ln 21 col 13_"]
+
+--- quickinfo ---
+/**
+ * - Cache provided in base.ts at ln 21 col 13 by `baseAlias`
+ */

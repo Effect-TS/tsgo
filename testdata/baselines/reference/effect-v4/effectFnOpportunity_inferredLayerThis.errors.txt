@@ -1,0 +1,47 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+/.src/effectFnOpportunity_inferredLayerThis.ts(8,18): suggestion TS377047: Can be rewritten as a reusable function: Effect.fn((what) => { ... }). effect(effectFnOpportunity)
+/.src/effectFnOpportunity_inferredLayerThis.ts(12,9): suggestion TS377047: Can be rewritten as a reusable function: Effect.fn((what) => { ... }). effect(effectFnOpportunity)
+/.src/effectFnOpportunity_inferredLayerThis.ts(16,18): suggestion TS377047: Can be rewritten as a reusable function: Effect.fn((what) => { ... }). effect(effectFnOpportunity)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "effectFn": ["span", "suggested-span", "inferred-span", "no-span", "untraced"]
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/effectFnOpportunity_inferredLayerThis.ts (3 errors) ====
+    import { Effect, Layer, ServiceMap } from "effect"
+    
+    export class MyService extends ServiceMap.Service<MyService, {
+      log: (_what: string) => Effect.Effect<void>
+    }>()("MyService") {
+        static layer = Layer.effect(this, Effect.gen(function*() {
+            yield* Effect.log("log")
+            return { log: (what: string) => Effect.log(what) }
+                     ~~~
+!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fn((what) => { ... }). effect(effectFnOpportunity)
+        }))
+    
+        static layerSucceed = Layer.succeed(this)({
+            log: (what: string) => Effect.log(what)
+            ~~~
+!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fn((what) => { ... }). effect(effectFnOpportunity)
+        })
+    
+        static layerSync = Layer.sync(this)(() => {
+            return { log: (what: string) => Effect.log(what) }
+                     ~~~
+!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fn((what) => { ... }). effect(effectFnOpportunity)
+        })
+    }
+    

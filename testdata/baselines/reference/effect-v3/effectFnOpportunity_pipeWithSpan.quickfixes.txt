@@ -1,0 +1,437 @@
+=== Quick Fix Inventory ===
+
+[D1] (12:14-12:27) TS377047: Can be rewritten as a reusable function: Effect.fn("arrowWithPipe")(function*() { ... }). effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fn (with span from withSpan)"
+  Fix 3: "Convert to Effect.fnUntraced"
+  Fix 4: "Convert to Effect.fn (no span)"
+
+[D2] (13:3-15:5) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D3] (17:14-17:40) TS377047: Can be rewritten as a reusable function: Effect.fn("functionExpressionWithPipe")(function*() { ... }, ...pipeTransformations). effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fn (with span from withSpan)"
+  Fix 3: "Convert to Effect.fnUntraced"
+  Fix 4: "Convert to Effect.fn (no span)"
+
+[D4] (18:10-20:5) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D5] (23:17-23:44) TS377047: Can be rewritten as a reusable function: Effect.fn("functionDeclarationWithPipe")(function*() { ... }, ...pipeTransformations). effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fn (with span from withSpan)"
+  Fix 3: "Convert to Effect.fnUntraced"
+  Fix 4: "Convert to Effect.fn (no span)"
+
+[D6] (24:10-26:5) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Convert to Effect.fn (with span from withSpan)" ===
+
+--- file:///.src/effectFnOpportunity_pipeWithSpan.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+// For these cases we should suggest using Effect.fn (not Effect.fnUntraced)
+// because the piped transformations end with Effect.withSpan. We can extract
+// the span name expression from withSpan and use it as the parameter to
+// Effect.fn("spanName")(function*() { ... }).
+//
+// Using Effect.fn is an improvement because the stack traces will include
+// the call site of that function, not just the span in the traces.
+
+export const arrowWithPipe = Effect.fn("arrowWithPipe")(function* () {
+    return yield* Effect.succeed(42);
+});
+
+export const functionExpressionWithPipe = function() {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionExpressionWithPipe"))
+}
+
+export function functionDeclarationWithPipe() {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.map((x) => x + 1), Effect.ignoreLogged, Effect.withSpan("functionDeclarationWithPipe"))
+}
+
+
+=== [D1] Fix 3: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_pipeWithSpan.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+// For these cases we should suggest using Effect.fn (not Effect.fnUntraced)
+// because the piped transformations end with Effect.withSpan. We can extract
+// the span name expression from withSpan and use it as the parameter to
+// Effect.fn("spanName")(function*() { ... }).
+//
+// Using Effect.fn is an improvement because the stack traces will include
+// the call site of that function, not just the span in the traces.
+
+export const arrowWithPipe = Effect.fnUntraced(function* () {
+    return yield* Effect.succeed(42);
+}, Effect.withSpan("arrowWithPipe"));
+
+export const functionExpressionWithPipe = function() {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionExpressionWithPipe"))
+}
+
+export function functionDeclarationWithPipe() {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.map((x) => x + 1), Effect.ignoreLogged, Effect.withSpan("functionDeclarationWithPipe"))
+}
+
+
+=== [D1] Fix 4: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_pipeWithSpan.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+// For these cases we should suggest using Effect.fn (not Effect.fnUntraced)
+// because the piped transformations end with Effect.withSpan. We can extract
+// the span name expression from withSpan and use it as the parameter to
+// Effect.fn("spanName")(function*() { ... }).
+//
+// Using Effect.fn is an improvement because the stack traces will include
+// the call site of that function, not just the span in the traces.
+
+export const arrowWithPipe = Effect.fn(function* () {
+    return yield* Effect.succeed(42);
+}, Effect.withSpan("arrowWithPipe"));
+
+export const functionExpressionWithPipe = function() {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionExpressionWithPipe"))
+}
+
+export function functionDeclarationWithPipe() {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.map((x) => x + 1), Effect.ignoreLogged, Effect.withSpan("functionDeclarationWithPipe"))
+}
+
+
+=== [D2] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/effectFnOpportunity_pipeWithSpan.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+// For these cases we should suggest using Effect.fn (not Effect.fnUntraced)
+// because the piped transformations end with Effect.withSpan. We can extract
+// the span name expression from withSpan and use it as the parameter to
+// Effect.fn("spanName")(function*() { ... }).
+//
+// Using Effect.fn is an improvement because the stack traces will include
+// the call site of that function, not just the span in the traces.
+
+export const arrowWithPipe = () => Effect.succeed(42).pipe(Effect.withSpan("arrowWithPipe"))
+
+export const functionExpressionWithPipe = function() {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionExpressionWithPipe"))
+}
+
+export function functionDeclarationWithPipe() {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.map((x) => x + 1), Effect.ignoreLogged, Effect.withSpan("functionDeclarationWithPipe"))
+}
+
+
+=== [D3] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Convert to Effect.fn (with span from withSpan)" ===
+
+--- file:///.src/effectFnOpportunity_pipeWithSpan.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+// For these cases we should suggest using Effect.fn (not Effect.fnUntraced)
+// because the piped transformations end with Effect.withSpan. We can extract
+// the span name expression from withSpan and use it as the parameter to
+// Effect.fn("spanName")(function*() { ... }).
+//
+// Using Effect.fn is an improvement because the stack traces will include
+// the call site of that function, not just the span in the traces.
+
+export const arrowWithPipe = () =>
+  Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.withSpan("arrowWithPipe"))
+
+export const functionExpressionWithPipe = Effect.fn("functionExpressionWithPipe")(function* () {
+    return yield* Effect.succeed(42);
+}, Effect.map(x => x + 1));
+
+export function functionDeclarationWithPipe() {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.map((x) => x + 1), Effect.ignoreLogged, Effect.withSpan("functionDeclarationWithPipe"))
+}
+
+
+=== [D3] Fix 3: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_pipeWithSpan.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+// For these cases we should suggest using Effect.fn (not Effect.fnUntraced)
+// because the piped transformations end with Effect.withSpan. We can extract
+// the span name expression from withSpan and use it as the parameter to
+// Effect.fn("spanName")(function*() { ... }).
+//
+// Using Effect.fn is an improvement because the stack traces will include
+// the call site of that function, not just the span in the traces.
+
+export const arrowWithPipe = () =>
+  Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.withSpan("arrowWithPipe"))
+
+export const functionExpressionWithPipe = Effect.fnUntraced(function* () {
+    return yield* Effect.succeed(42);
+}, Effect.map(x => x + 1), Effect.withSpan("functionExpressionWithPipe"));
+
+export function functionDeclarationWithPipe() {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.map((x) => x + 1), Effect.ignoreLogged, Effect.withSpan("functionDeclarationWithPipe"))
+}
+
+
+=== [D3] Fix 4: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_pipeWithSpan.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+// For these cases we should suggest using Effect.fn (not Effect.fnUntraced)
+// because the piped transformations end with Effect.withSpan. We can extract
+// the span name expression from withSpan and use it as the parameter to
+// Effect.fn("spanName")(function*() { ... }).
+//
+// Using Effect.fn is an improvement because the stack traces will include
+// the call site of that function, not just the span in the traces.
+
+export const arrowWithPipe = () =>
+  Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.withSpan("arrowWithPipe"))
+
+export const functionExpressionWithPipe = Effect.fn(function* () {
+    return yield* Effect.succeed(42);
+}, Effect.map(x => x + 1), Effect.withSpan("functionExpressionWithPipe"));
+
+export function functionDeclarationWithPipe() {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.map((x) => x + 1), Effect.ignoreLogged, Effect.withSpan("functionDeclarationWithPipe"))
+}
+
+
+=== [D4] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/effectFnOpportunity_pipeWithSpan.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+// For these cases we should suggest using Effect.fn (not Effect.fnUntraced)
+// because the piped transformations end with Effect.withSpan. We can extract
+// the span name expression from withSpan and use it as the parameter to
+// Effect.fn("spanName")(function*() { ... }).
+//
+// Using Effect.fn is an improvement because the stack traces will include
+// the call site of that function, not just the span in the traces.
+
+export const arrowWithPipe = () =>
+  Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.withSpan("arrowWithPipe"))
+
+export const functionExpressionWithPipe = function() {
+  return Effect.succeed(42).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionExpressionWithPipe"))
+}
+
+export function functionDeclarationWithPipe() {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.map((x) => x + 1), Effect.ignoreLogged, Effect.withSpan("functionDeclarationWithPipe"))
+}
+
+
+=== [D5] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Convert to Effect.fn (with span from withSpan)" ===
+
+--- file:///.src/effectFnOpportunity_pipeWithSpan.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+// For these cases we should suggest using Effect.fn (not Effect.fnUntraced)
+// because the piped transformations end with Effect.withSpan. We can extract
+// the span name expression from withSpan and use it as the parameter to
+// Effect.fn("spanName")(function*() { ... }).
+//
+// Using Effect.fn is an improvement because the stack traces will include
+// the call site of that function, not just the span in the traces.
+
+export const arrowWithPipe = () =>
+  Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.withSpan("arrowWithPipe"))
+
+export const functionExpressionWithPipe = function() {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionExpressionWithPipe"))
+}
+
+export const functionDeclarationWithPipe = Effect.fn("functionDeclarationWithPipe")(function* () {
+    return yield* Effect.succeed(42);
+}, Effect.map(x => x + 1), Effect.ignoreLogged);
+
+
+=== [D5] Fix 3: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_pipeWithSpan.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+// For these cases we should suggest using Effect.fn (not Effect.fnUntraced)
+// because the piped transformations end with Effect.withSpan. We can extract
+// the span name expression from withSpan and use it as the parameter to
+// Effect.fn("spanName")(function*() { ... }).
+//
+// Using Effect.fn is an improvement because the stack traces will include
+// the call site of that function, not just the span in the traces.
+
+export const arrowWithPipe = () =>
+  Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.withSpan("arrowWithPipe"))
+
+export const functionExpressionWithPipe = function() {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionExpressionWithPipe"))
+}
+
+export const functionDeclarationWithPipe = Effect.fnUntraced(function* () {
+    return yield* Effect.succeed(42);
+}, Effect.map(x => x + 1), Effect.ignoreLogged, Effect.withSpan("functionDeclarationWithPipe"));
+
+
+=== [D5] Fix 4: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_pipeWithSpan.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+// For these cases we should suggest using Effect.fn (not Effect.fnUntraced)
+// because the piped transformations end with Effect.withSpan. We can extract
+// the span name expression from withSpan and use it as the parameter to
+// Effect.fn("spanName")(function*() { ... }).
+//
+// Using Effect.fn is an improvement because the stack traces will include
+// the call site of that function, not just the span in the traces.
+
+export const arrowWithPipe = () =>
+  Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.withSpan("arrowWithPipe"))
+
+export const functionExpressionWithPipe = function() {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionExpressionWithPipe"))
+}
+
+export const functionDeclarationWithPipe = Effect.fn(function* () {
+    return yield* Effect.succeed(42);
+}, Effect.map(x => x + 1), Effect.ignoreLogged, Effect.withSpan("functionDeclarationWithPipe"));
+
+
+=== [D6] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/effectFnOpportunity_pipeWithSpan.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+// For these cases we should suggest using Effect.fn (not Effect.fnUntraced)
+// because the piped transformations end with Effect.withSpan. We can extract
+// the span name expression from withSpan and use it as the parameter to
+// Effect.fn("spanName")(function*() { ... }).
+//
+// Using Effect.fn is an improvement because the stack traces will include
+// the call site of that function, not just the span in the traces.
+
+export const arrowWithPipe = () =>
+  Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.withSpan("arrowWithPipe"))
+
+export const functionExpressionWithPipe = function() {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionExpressionWithPipe"))
+}
+
+export function functionDeclarationWithPipe() {
+  return Effect.succeed(42).pipe(Effect.map((x) => x + 1), Effect.ignoreLogged, Effect.withSpan("functionDeclarationWithPipe"))
+}
+

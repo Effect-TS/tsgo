@@ -1,0 +1,196 @@
+package rules
+
+import (
+	"strings"
+
+	"github.com/effect-ts/effect-typescript-go/etscore"
+	"github.com/effect-ts/effect-typescript-go/internal/rule"
+	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
+	"github.com/microsoft/typescript-go/shim/ast"
+	"github.com/microsoft/typescript-go/shim/checker"
+	"github.com/microsoft/typescript-go/shim/core"
+	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
+	"github.com/microsoft/typescript-go/shim/scanner"
+)
+
+// ScopeInLayerEffect suggests using Layer.scoped instead of Layer.effect when
+// Scope is detected in the layer's requirements.
+var ScopeInLayerEffect = rule.Rule{
+	Name:            "scopeInLayerEffect",
+	Description:     "Suggests using Layer.scoped instead of Layer.effect when Scope is in requirements",
+	DefaultSeverity: etscore.SeverityWarning,
+	Codes:       []int32{tsdiag.Seems_like_you_are_constructing_a_layer_with_a_scope_in_the_requirements_Consider_using_scoped_instead_to_get_rid_of_the_scope_in_the_requirements_effect_scopeInLayerEffect.Code()},
+	Run: func(ctx *rule.Context) []*ast.Diagnostic {
+		matches := AnalyzeScopeInLayerEffect(ctx.Checker, ctx.SourceFile)
+		diags := make([]*ast.Diagnostic, len(matches))
+		for i, m := range matches {
+			diags[i] = ctx.NewDiagnostic(m.Location, tsdiag.Seems_like_you_are_constructing_a_layer_with_a_scope_in_the_requirements_Consider_using_scoped_instead_to_get_rid_of_the_scope_in_the_requirements_effect_scopeInLayerEffect, nil)
+		}
+		return diags
+	},
+}
+
+// ScopeInLayerEffectMatch holds the AST nodes needed by both the diagnostic rule
+// and the quick-fix for the scopeInLayerEffect pattern.
+type ScopeInLayerEffectMatch struct {
+	Location         core.TextRange // The pre-computed error range for this match
+	MethodIdentifier *ast.Node      // The property name identifier node (e.g., "effect" in Layer.effect); nil for class declaration matches
+}
+
+// AnalyzeScopeInLayerEffect finds all Layer.effect*() calls and class declarations
+// with Default layer properties where Scope is in the layer's requirements.
+func AnalyzeScopeInLayerEffect(c *checker.Checker, sf *ast.SourceFile) []ScopeInLayerEffectMatch {
+	// V3-only rule
+	if typeparser.SupportedEffectVersion(c) != typeparser.EffectMajorV3 {
+		return nil
+	}
+
+	var matches []ScopeInLayerEffectMatch
+
+	// Stack-based traversal
+	nodeToVisit := make([]*ast.Node, 0)
+	for child := range sf.AsNode().IterChildren() {
+		nodeToVisit = append(nodeToVisit, child)
+	}
+
+	for len(nodeToVisit) > 0 {
+		node := nodeToVisit[len(nodeToVisit)-1]
+		nodeToVisit = nodeToVisit[:len(nodeToVisit)-1]
+
+		// Pattern 1: Layer.effect*() calls
+		if node.Kind == ast.KindCallExpression {
+			if m := matchLayerEffectCall(c, sf, node); m != nil {
+				matches = append(matches, *m)
+				continue // skip children
+			}
+		}
+
+		// Pattern 2: Class declarations with Default layer property
+		if node.Kind == ast.KindClassDeclaration {
+			if m := matchClassWithDefaultLayer(c, sf, node); m != nil {
+				matches = append(matches, *m)
+				continue // skip children
+			}
+		}
+
+		// Enqueue children
+		for child := range node.IterChildren() {
+			nodeToVisit = append(nodeToVisit, child)
+		}
+	}
+
+	return matches
+}
+
+// matchLayerEffectCall checks if a call expression is Layer.effect*() with Scope in RIn.
+func matchLayerEffectCall(c *checker.Checker, sf *ast.SourceFile, node *ast.Node) *ScopeInLayerEffectMatch {
+	if node.Kind != ast.KindCallExpression {
+		return nil
+	}
+	call := node.AsCallExpression()
+	if call.Expression == nil || call.Expression.Kind != ast.KindPropertyAccessExpression {
+		return nil
+	}
+
+	propAccess := call.Expression.AsPropertyAccessExpression()
+	if propAccess.Name() == nil {
+		return nil
+	}
+
+	// Check the method name starts with "effect" (case-insensitive)
+	methodName := scanner.GetTextOfNode(propAccess.Name())
+	if !strings.HasPrefix(strings.ToLower(methodName), "effect") {
+		return nil
+	}
+
+	// Verify this references the Layer module from the "effect" package
+	if !typeparser.IsNodeReferenceToEffectLayerModuleApi(c, call.Expression, methodName) {
+		return nil
+	}
+
+	// Get the return type of the call
+	t := c.GetTypeAtLocation(node)
+	if t == nil {
+		return nil
+	}
+
+	// Parse as Layer type
+	layer := typeparser.LayerType(c, t, node)
+	if layer == nil {
+		return nil
+	}
+
+	// Check if RIn contains a Scope type
+	if !hasScope(c, layer.RIn, node) {
+		return nil
+	}
+
+	return &ScopeInLayerEffectMatch{
+		Location:         scanner.GetErrorRangeForNode(sf, node),
+		MethodIdentifier: propAccess.Name(),
+	}
+}
+
+// matchClassWithDefaultLayer checks if a class declaration has a Default layer property with Scope in RIn.
+func matchClassWithDefaultLayer(c *checker.Checker, sf *ast.SourceFile, node *ast.Node) *ScopeInLayerEffectMatch {
+	if node.Kind != ast.KindClassDeclaration {
+		return nil
+	}
+	classDecl := node.AsClassDeclaration()
+
+	// Must have a name and heritage clauses
+	if node.Name() == nil || classDecl.HeritageClauses == nil {
+		return nil
+	}
+
+	// Get the class symbol
+	classSym := c.GetSymbolAtLocation(node.Name())
+	if classSym == nil {
+		return nil
+	}
+
+	// Get the class type
+	classType := c.GetTypeOfSymbolAtLocation(classSym, node)
+	if classType == nil {
+		return nil
+	}
+
+	// Check for a "Default" property
+	defaultProp := c.GetPropertyOfType(classType, "Default")
+	if defaultProp == nil {
+		return nil
+	}
+
+	// Get the Default property's type
+	defaultType := c.GetTypeOfSymbolAtLocation(defaultProp, node)
+	if defaultType == nil {
+		return nil
+	}
+
+	// Parse as Layer type
+	layer := typeparser.LayerType(c, defaultType, node)
+	if layer == nil {
+		return nil
+	}
+
+	// Check if RIn contains a Scope type
+	if !hasScope(c, layer.RIn, node) {
+		return nil
+	}
+
+	return &ScopeInLayerEffectMatch{
+		Location:         scanner.GetErrorRangeForNode(sf, node),
+		MethodIdentifier: nil,
+	}
+}
+
+// hasScope checks if any union member of the given type is a Scope type.
+func hasScope(c *checker.Checker, t *checker.Type, atLocation *ast.Node) bool {
+	members := typeparser.UnrollUnionMembers(t)
+	for _, member := range members {
+		if typeparser.IsScopeType(c, member, atLocation) {
+			return true
+		}
+	}
+	return false
+}

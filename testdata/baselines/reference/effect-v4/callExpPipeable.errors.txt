@@ -1,0 +1,15 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+
+
+==== /.src/callExpPipeable.ts (0 errors) ====
+    import * as Effect from "effect/Effect"
+    import * as Runtime from "effect/Runtime"
+    
+    export const result1 = Effect.gen(function*() {
+      yield* Effect.as(42)(Effect.log("Hello, world!"))
+    
+      yield* Effect.as(42)(Effect.map((x: string) => x.length)(Effect.succeed("Hello, world!")))
+    })
+    

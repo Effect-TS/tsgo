@@ -1,0 +1,243 @@
+=== Quick Fix Inventory ===
+
+[D1] (5:39-5:64) TS377016: Effect.void can be used instead of Effect.succeed(undefined) or Effect.succeed(void 0). effect(effectSucceedWithVoid)
+  Fix 0: "Disable effectSucceedWithVoid for this line"
+  Fix 1: "Disable effectSucceedWithVoid for entire file"
+  Fix 2: "Replace with Effect.void"
+
+[D2] (8:35-8:57) TS377016: Effect.void can be used instead of Effect.succeed(undefined) or Effect.succeed(void 0). effect(effectSucceedWithVoid)
+  Fix 0: "Disable effectSucceedWithVoid for this line"
+  Fix 1: "Disable effectSucceedWithVoid for entire file"
+  Fix 2: "Replace with Effect.void"
+
+[D3] (11:52-11:79) TS377016: Effect.void can be used instead of Effect.succeed(undefined) or Effect.succeed(void 0). effect(effectSucceedWithVoid)
+  Fix 0: "Disable effectSucceedWithVoid for this line"
+  Fix 1: "Disable effectSucceedWithVoid for entire file"
+  Fix 2: "Replace with Effect.void"
+
+[D4] (14:48-14:72) TS377016: Effect.void can be used instead of Effect.succeed(undefined) or Effect.succeed(void 0). effect(effectSucceedWithVoid)
+  Fix 0: "Disable effectSucceedWithVoid for this line"
+  Fix 1: "Disable effectSucceedWithVoid for entire file"
+  Fix 2: "Replace with Effect.void"
+
+[D5] (17:58-17:87) TS377016: Effect.void can be used instead of Effect.succeed(undefined) or Effect.succeed(void 0). effect(effectSucceedWithVoid)
+  Fix 0: "Disable effectSucceedWithVoid for this line"
+  Fix 1: "Disable effectSucceedWithVoid for entire file"
+  Fix 2: "Replace with Effect.void"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable effectSucceedWithVoid for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectSucceedWithVoid for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.void" ===
+
+--- file:///.src/effectSucceedWithVoid.ts ---
+// @effect-v3
+import { Effect } from "effect"
+
+// Should trigger: Effect.succeed(undefined)
+export const shouldTriggerUndefined = Effect.void
+
+// Should trigger: Effect.succeed(void 0)
+export const shouldTriggerVoid0 = Effect.succeed(void 0)
+
+// Should trigger: Effect.succeed((undefined)) - parenthesized
+export const shouldTriggerParenthesizedUndefined = Effect.succeed((undefined))
+
+// Should trigger: Effect.succeed((void 0)) - parenthesized
+export const shouldTriggerParenthesizedVoid0 = Effect.succeed((void 0))
+
+// Should trigger: Effect.succeed(((undefined))) - double parenthesized
+export const shouldTriggerDoubleParenthesizedUndefined = Effect.succeed(((undefined)))
+
+// Should NOT trigger: Effect.succeed with actual value
+export const shouldNotTriggerNumber = Effect.succeed(1)
+
+// Should NOT trigger: Effect.succeed with string value
+export const shouldNotTriggerString = Effect.succeed("hello")
+
+// Should NOT trigger: Effect.succeed with null (not void)
+export const shouldNotTriggerNull = Effect.succeed(null)
+
+// Should NOT trigger: Effect.succeed with object
+export const shouldNotTriggerObject = Effect.succeed({ foo: "bar" })
+
+// Should NOT trigger: already using Effect.void
+export const shouldNotTriggerVoid = Effect.void
+
+
+=== [D2] Fix 0: "Disable effectSucceedWithVoid for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable effectSucceedWithVoid for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.void" ===
+
+--- file:///.src/effectSucceedWithVoid.ts ---
+// @effect-v3
+import { Effect } from "effect"
+
+// Should trigger: Effect.succeed(undefined)
+export const shouldTriggerUndefined = Effect.succeed(undefined)
+
+// Should trigger: Effect.succeed(void 0)
+export const shouldTriggerVoid0 = Effect.void
+
+// Should trigger: Effect.succeed((undefined)) - parenthesized
+export const shouldTriggerParenthesizedUndefined = Effect.succeed((undefined))
+
+// Should trigger: Effect.succeed((void 0)) - parenthesized
+export const shouldTriggerParenthesizedVoid0 = Effect.succeed((void 0))
+
+// Should trigger: Effect.succeed(((undefined))) - double parenthesized
+export const shouldTriggerDoubleParenthesizedUndefined = Effect.succeed(((undefined)))
+
+// Should NOT trigger: Effect.succeed with actual value
+export const shouldNotTriggerNumber = Effect.succeed(1)
+
+// Should NOT trigger: Effect.succeed with string value
+export const shouldNotTriggerString = Effect.succeed("hello")
+
+// Should NOT trigger: Effect.succeed with null (not void)
+export const shouldNotTriggerNull = Effect.succeed(null)
+
+// Should NOT trigger: Effect.succeed with object
+export const shouldNotTriggerObject = Effect.succeed({ foo: "bar" })
+
+// Should NOT trigger: already using Effect.void
+export const shouldNotTriggerVoid = Effect.void
+
+
+=== [D3] Fix 0: "Disable effectSucceedWithVoid for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable effectSucceedWithVoid for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.void" ===
+
+--- file:///.src/effectSucceedWithVoid.ts ---
+// @effect-v3
+import { Effect } from "effect"
+
+// Should trigger: Effect.succeed(undefined)
+export const shouldTriggerUndefined = Effect.succeed(undefined)
+
+// Should trigger: Effect.succeed(void 0)
+export const shouldTriggerVoid0 = Effect.succeed(void 0)
+
+// Should trigger: Effect.succeed((undefined)) - parenthesized
+export const shouldTriggerParenthesizedUndefined = Effect.void
+
+// Should trigger: Effect.succeed((void 0)) - parenthesized
+export const shouldTriggerParenthesizedVoid0 = Effect.succeed((void 0))
+
+// Should trigger: Effect.succeed(((undefined))) - double parenthesized
+export const shouldTriggerDoubleParenthesizedUndefined = Effect.succeed(((undefined)))
+
+// Should NOT trigger: Effect.succeed with actual value
+export const shouldNotTriggerNumber = Effect.succeed(1)
+
+// Should NOT trigger: Effect.succeed with string value
+export const shouldNotTriggerString = Effect.succeed("hello")
+
+// Should NOT trigger: Effect.succeed with null (not void)
+export const shouldNotTriggerNull = Effect.succeed(null)
+
+// Should NOT trigger: Effect.succeed with object
+export const shouldNotTriggerObject = Effect.succeed({ foo: "bar" })
+
+// Should NOT trigger: already using Effect.void
+export const shouldNotTriggerVoid = Effect.void
+
+
+=== [D4] Fix 0: "Disable effectSucceedWithVoid for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable effectSucceedWithVoid for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.void" ===
+
+--- file:///.src/effectSucceedWithVoid.ts ---
+// @effect-v3
+import { Effect } from "effect"
+
+// Should trigger: Effect.succeed(undefined)
+export const shouldTriggerUndefined = Effect.succeed(undefined)
+
+// Should trigger: Effect.succeed(void 0)
+export const shouldTriggerVoid0 = Effect.succeed(void 0)
+
+// Should trigger: Effect.succeed((undefined)) - parenthesized
+export const shouldTriggerParenthesizedUndefined = Effect.succeed((undefined))
+
+// Should trigger: Effect.succeed((void 0)) - parenthesized
+export const shouldTriggerParenthesizedVoid0 = Effect.void
+
+// Should trigger: Effect.succeed(((undefined))) - double parenthesized
+export const shouldTriggerDoubleParenthesizedUndefined = Effect.succeed(((undefined)))
+
+// Should NOT trigger: Effect.succeed with actual value
+export const shouldNotTriggerNumber = Effect.succeed(1)
+
+// Should NOT trigger: Effect.succeed with string value
+export const shouldNotTriggerString = Effect.succeed("hello")
+
+// Should NOT trigger: Effect.succeed with null (not void)
+export const shouldNotTriggerNull = Effect.succeed(null)
+
+// Should NOT trigger: Effect.succeed with object
+export const shouldNotTriggerObject = Effect.succeed({ foo: "bar" })
+
+// Should NOT trigger: already using Effect.void
+export const shouldNotTriggerVoid = Effect.void
+
+
+=== [D5] Fix 0: "Disable effectSucceedWithVoid for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable effectSucceedWithVoid for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Replace with Effect.void" ===
+
+--- file:///.src/effectSucceedWithVoid.ts ---
+// @effect-v3
+import { Effect } from "effect"
+
+// Should trigger: Effect.succeed(undefined)
+export const shouldTriggerUndefined = Effect.succeed(undefined)
+
+// Should trigger: Effect.succeed(void 0)
+export const shouldTriggerVoid0 = Effect.succeed(void 0)
+
+// Should trigger: Effect.succeed((undefined)) - parenthesized
+export const shouldTriggerParenthesizedUndefined = Effect.succeed((undefined))
+
+// Should trigger: Effect.succeed((void 0)) - parenthesized
+export const shouldTriggerParenthesizedVoid0 = Effect.succeed((void 0))
+
+// Should trigger: Effect.succeed(((undefined))) - double parenthesized
+export const shouldTriggerDoubleParenthesizedUndefined = Effect.void
+
+// Should NOT trigger: Effect.succeed with actual value
+export const shouldNotTriggerNumber = Effect.succeed(1)
+
+// Should NOT trigger: Effect.succeed with string value
+export const shouldNotTriggerString = Effect.succeed("hello")
+
+// Should NOT trigger: Effect.succeed with null (not void)
+export const shouldNotTriggerNull = Effect.succeed(null)
+
+// Should NOT trigger: Effect.succeed with object
+export const shouldNotTriggerObject = Effect.succeed({ foo: "bar" })
+
+// Should NOT trigger: already using Effect.void
+export const shouldNotTriggerVoid = Effect.void
+

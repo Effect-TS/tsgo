@@ -1,0 +1,69 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+/.src/effectFnOpportunity_plainMany.ts(13,14): suggestion TS377047: Can be rewritten as a reusable function: Effect.fn(() => { ... }). effect(effectFnOpportunity)
+/.src/effectFnOpportunity_plainMany.ts(22,14): suggestion TS377047: Can be rewritten as a reusable function: Effect.fn(function<T>(value) { ... }). effect(effectFnOpportunity)
+/.src/effectFnOpportunity_plainMany.ts(32,17): suggestion TS377047: Can be rewritten as a reusable function: Effect.fn(function<T>(value) { ... }). effect(effectFnOpportunity)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "effectFn": ["span", "suggested-span", "inferred-span", "no-span", "untraced"]
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/effectFnOpportunity_plainMany.ts (3 errors) ====
+    import * as Effect from "effect/Effect"
+    
+    // There should be two code fixes offered:
+    // 1. Effect.fn("inferredName") - uses the inferred span name, improves
+    //    tracing by adding spans. Recommended for app code.
+    // 2. Effect.fn (without name) - won't add tracing spans.
+    //
+    // Note: Known formatting divergences from upstream (TypeScript-Go printer artifacts):
+    // - Semicolons added to body statements inside replaced functions (e.g. `const a = 1;` vs `const a = 1`)
+    // - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
+    // - Trailing semicolons on replacement statements (`});` vs `})`)
+    
+    export const arrowPlainMany = () => {
+                 ~~~~~~~~~~~~~~
+!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fn(() => { ... }). effect(effectFnOpportunity)
+      const a = 1
+      const b = 2
+      const c = 3
+      const d = 4
+      const e = 5
+      return Effect.succeed(a + b + c + d + e)
+    }
+    
+    export const functionExpressionPlainMany = function<T>(value: T) {
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fn(function<T>(value) { ... }). effect(effectFnOpportunity)
+      const a = 1
+      const b = 2
+      const c = 3
+      const d = 4
+      const e = 5
+      if (value === null) return Effect.fail("Error!")
+      return Effect.succeed(a + b + c + d + e)
+    }
+    
+    export function functionDeclarationPlainMany<T>(value: T) {
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fn(function<T>(value) { ... }). effect(effectFnOpportunity)
+      const a = 1
+      const b = 2
+      const c = 3
+      const d = 4
+      const e = 5
+      if (value === null) return Effect.fail("Error!")
+      return Effect.succeed(a + b + c + d + e)
+    }
+    

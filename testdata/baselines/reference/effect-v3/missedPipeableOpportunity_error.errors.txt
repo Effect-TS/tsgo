@@ -1,0 +1,44 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/missedPipeableOpportunity_error.ts(12,41): warning TS377050: Nested function calls can be converted to pipeable style for better readability; consider using Schema.decodeUnknown(MyStruct)({ x: 42, y: 42 }).pipe(...) instead. effect(missedPipeableOpportunity)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "pipeableMinArgCount": 2
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/missedPipeableOpportunity_error.ts (1 errors) ====
+    // @effect-diagnostics missedPipeableOpportunity:warning
+    import { Duration, identity, pipe, Schedule, Schema } from "effect"
+    import * as Effect from "effect/Effect"
+    
+    const MyStruct = Schema.Struct({
+      x: Schema.Number,
+      y: Schema.Number
+    })
+    
+    export const shouldNotTrigger = identity(Schema.decodeUnknown(MyStruct)({ x: 42, y: 42 }))
+    
+    export const shouldTriggerBecauseHas2 = identity(identity(Schema.decodeUnknown(MyStruct)({ x: 42, y: 42 })))
+                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377050: Nested function calls can be converted to pipeable style for better readability; consider using Schema.decodeUnknown(MyStruct)({ x: 42, y: 42 }).pipe(...) instead. effect(missedPipeableOpportunity)
+    
+    export const shouldNotTriggerFunctionReturned = pipe(
+      Schedule.exponential(Duration.millis(10), 4),
+      Schedule.whileOutput(Duration.lessThanOrEqualTo(Duration.seconds(10))) // should not report
+    )
+    
+    export const shouldNotTriggerInnerPipe = Effect.log("Hello").pipe(
+      Effect.ensuring(Effect.log("World"))
+    )
+    

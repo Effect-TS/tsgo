@@ -1,0 +1,78 @@
+diff --git a/internal/ls/lsutil/configuration_test.go b/internal/ls/lsutil/configuration_test.go
+index f94f26aaf3..fbc6332e4a 100644
+--- a/internal/ls/lsutil/configuration_test.go
++++ b/internal/ls/lsutil/configuration_test.go
+@@ -1,7 +1,10 @@
+ package lsutil
+ 
+ import (
++	"reflect"
+ 	"testing"
++
++	"github.com/microsoft/typescript-go/internal/modulespecifiers"
+ )
+ 
+ func TestUserConfig_GetPreferences(t *testing.T) {
+@@ -251,3 +254,37 @@ func TestUserConfig_GetPreferences_CodeLensAndInlayHints(t *testing.T) {
+ 		})
+ 	}
+ }
++
++func TestUserPreferences_ModuleSpecifierPreferences_EffectStyle(t *testing.T) {
++	t.Parallel()
++
++	p := &UserPreferences{
++		ImportModuleSpecifierPreference: modulespecifiers.ImportModuleSpecifierPreferenceNonRelative,
++		ImportModuleSpecifierEnding:     modulespecifiers.ImportModuleSpecifierEndingPreferenceIndex,
++		AutoImportSpecifierExcludeRegexes: []string{
++			"^node:",
++		},
++	}
++	effectStyle := modulespecifiers.EffectAutoImportStylePreferences{
++		NamespaceImportPackages: []string{"effect"},
++		BarrelImportPackages:    []string{"@effect/schema"},
++		ImportAliases: map[string]string{
++			"effect": "Fx",
++		},
++		FollowTopLevelReexports: true,
++	}
++
++	got := p.ModuleSpecifierPreferences(effectStyle)
++	if got.ImportModuleSpecifierPreference != modulespecifiers.ImportModuleSpecifierPreferenceNonRelative {
++		t.Fatalf("ImportModuleSpecifierPreference = %v, want %v", got.ImportModuleSpecifierPreference, modulespecifiers.ImportModuleSpecifierPreferenceNonRelative)
++	}
++	if got.ImportModuleSpecifierEnding != modulespecifiers.ImportModuleSpecifierEndingPreferenceIndex {
++		t.Fatalf("ImportModuleSpecifierEnding = %v, want %v", got.ImportModuleSpecifierEnding, modulespecifiers.ImportModuleSpecifierEndingPreferenceIndex)
++	}
++	if !reflect.DeepEqual(got.AutoImportSpecifierExcludeRegexes, []string{"^node:"}) {
++		t.Fatalf("AutoImportSpecifierExcludeRegexes = %#v, want %#v", got.AutoImportSpecifierExcludeRegexes, []string{"^node:"})
++	}
++	if !reflect.DeepEqual(got.EffectAutoImportStyle, effectStyle) {
++		t.Fatalf("EffectAutoImportStyle = %#v, want %#v", got.EffectAutoImportStyle, effectStyle)
++	}
++}
+diff --git a/internal/testutil/harnessutil/harnessutil.go b/internal/testutil/harnessutil/harnessutil.go
+index 2cdb2a3b15..dd439ef18c 100644
+--- a/internal/testutil/harnessutil/harnessutil.go
++++ b/internal/testutil/harnessutil/harnessutil.go
+@@ -2,6 +2,7 @@ package harnessutil
+ 
+ import (
+ 	"context"
++	"encoding/json"
+ 	"fmt"
+ 	"io"
+ 	"io/fs"
+@@ -458,6 +459,12 @@ func getOptionValue(t *testing.T, option *tsoptions.CommandLineOption, value str
+ 		}
+ 		return enumVal
+ 	case tsoptions.CommandLineOptionTypeList, tsoptions.CommandLineOptionTypeListOrElement:
++		if option.Name == "plugins" {
++			var plugins []any
++			if err := json.Unmarshal([]byte(value), &plugins); err == nil {
++				return plugins
++			}
++		}
+ 		listVal, errors := tsoptions.ParseListTypeOption(option, value)
+ 		if option.Elements().IsFilePath {
+ 			return core.Map(listVal, func(item any) any {

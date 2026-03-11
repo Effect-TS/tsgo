@@ -1,0 +1,113 @@
+==== /.src/classSelfMismatch_schema.ts (8 flows) ====
+
+=== Piping Flow ===
+Location: 4:38 - 6:3
+Node: Schema.Class<ValidSchemaClass>("ValidSchemaClass")({\n  prop: Schema.String\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  prop: Schema.String\n}
+Subject Type: { prop: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<ValidSchemaClass>("ValidSchemaClass")
+      args: (constant)
+      outType: ExtendableClass<ValidSchemaClass, Struct<{ readonly prop: String; }>, {}>
+
+=== Piping Flow ===
+Location: 9:40 - 11:3
+Node: Schema.Class<ValidSchemaClass>("InvalidSchemaClass")({\n  prop: Schema.String\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  prop: Schema.String\n}
+Subject Type: { prop: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<ValidSchemaClass>("InvalidSchemaClass")
+      args: (constant)
+      outType: ExtendableClass<ValidSchemaClass, Struct<{ readonly prop: String; }>, {}>
+
+=== Piping Flow ===
+Location: 14:43 - 16:3
+Node: Schema.Class<ValidErrorSchemaClass>("ValidErrorSchemaClass")({\n  prop: Schema.String\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  prop: Schema.String\n}
+Subject Type: { prop: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<ValidErrorSchemaClass>("ValidErrorSchemaClass")
+      args: (constant)
+      outType: ExtendableClass<ValidErrorSchemaClass, Struct<{ readonly prop: String; }>, {}>
+
+=== Piping Flow ===
+Location: 19:45 - 21:3
+Node: Schema.Class<ValidErrorSchemaClass>("InvalidErrorSchemaClass")({\n  prop: Schema.String\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  prop: Schema.String\n}
+Subject Type: { prop: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<ValidErrorSchemaClass>("InvalidErrorSchemaClass")
+      args: (constant)
+      outType: ExtendableClass<ValidErrorSchemaClass, Struct<{ readonly prop: String; }>, {}>
+
+=== Piping Flow ===
+Location: 24:10 - 28:5
+Node: Schema.RequestClass<ValidSchemaTaggedRequest>("ValidSchemaTaggedRequest")({\n    payload: Schema.Struct({}),\n    success: Schema.Void,\n    error: Schema.Never\n  })
+Node Kind: KindCallExpression
+
+Subject: {\n    payload: Schema.Struct({}),\n    success: Schema.Void,\n    error: Schema.Never\n  }
+Subject Type: { payload: Struct<{}>; success: Void; error: Never; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.RequestClass<ValidSchemaTaggedRequest>("ValidSchemaTaggedRequest")
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 25:13 - 25:31
+Node: Schema.Struct({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 33:10 - 37:5
+Node: Schema.RequestClass<ValidSchemaTaggedRequest>("InvalidSchemaTaggedRequest")({\n    payload: Schema.Struct({}),\n    success: Schema.Void,\n    error: Schema.Never\n  })
+Node Kind: KindCallExpression
+
+Subject: {\n    payload: Schema.Struct({}),\n    success: Schema.Void,\n    error: Schema.Never\n  }
+Subject Type: { payload: Struct<{}>; success: Void; error: Never; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.RequestClass<ValidSchemaTaggedRequest>("InvalidSchemaTaggedRequest")
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 34:13 - 34:31
+Node: Schema.Struct({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>

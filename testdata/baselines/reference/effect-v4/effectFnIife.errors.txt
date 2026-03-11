@@ -1,0 +1,98 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+/.src/effectFnIife.ts(4,22): warning TS377011: Effect.fn returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead with Effect.withSpan("test") piped in the end to maintain tracing spans. effect(effectFnIife)
+/.src/effectFnIife.ts(9,22): warning TS377011: Effect.fn returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead with Effect.withSpan("named") piped in the end to maintain tracing spans. effect(effectFnIife)
+/.src/effectFnIife.ts(15,22): warning TS377011: Effect.fnUntraced returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead. effect(effectFnIife)
+/.src/effectFnIife.ts(20,22): warning TS377011: Effect.fn returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead with Effect.withSpan("arrow") piped in the end to maintain tracing spans. effect(effectFnIife)
+/.src/effectFnIife.ts(23,22): warning TS377011: Effect.fn returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead with Effect.withSpan("func") piped in the end to maintain tracing spans. effect(effectFnIife)
+/.src/effectFnIife.ts(28,22): warning TS377011: Effect.fn returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead with Effect.withSpan("piped") piped in the end to maintain tracing spans. effect(effectFnIife)
+/.src/effectFnIife.ts(33,22): warning TS377011: Effect.fnUntraced returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead. effect(effectFnIife)
+/.src/effectFnIife.ts(46,20): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+
+
+==== /.src/effectFnIife.ts (8 errors) ====
+    import * as Effect from "effect/Effect"
+    
+    // Should trigger (with fix) - curried generator IIFE
+    export const iife1 = Effect.fn("test")(function*() {
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      yield* Effect.succeed(1)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    })()
+    ~~~~
+!!! warning TS377011: Effect.fn returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead with Effect.withSpan("test") piped in the end to maintain tracing spans. effect(effectFnIife)
+    
+    // Should trigger (with fix) - curried generator IIFE with return
+    export const iife2 = Effect.fn("named")(function*() {
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      yield* Effect.succeed(1)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+      return 42
+    ~~~~~~~~~~~
+    })()
+    ~~~~
+!!! warning TS377011: Effect.fn returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead with Effect.withSpan("named") piped in the end to maintain tracing spans. effect(effectFnIife)
+    
+    // Should trigger (with fix) - fnUntraced generator IIFE
+    export const iife3 = Effect.fnUntraced(function*() {
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      yield* Effect.succeed(1)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    })()
+    ~~~~
+!!! warning TS377011: Effect.fnUntraced returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead. effect(effectFnIife)
+    
+    // Should trigger (WITHOUT fix) - arrow function (non-generator)
+    export const iife4 = Effect.fn("arrow")(() => Effect.succeed(1))()
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377011: Effect.fn returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead with Effect.withSpan("arrow") piped in the end to maintain tracing spans. effect(effectFnIife)
+    
+    // Should trigger (WITHOUT fix) - function expression (non-generator)
+    export const iife5 = Effect.fn("func")(function() {
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      return Effect.succeed(1)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    })()
+    ~~~~
+!!! warning TS377011: Effect.fn returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead with Effect.withSpan("func") piped in the end to maintain tracing spans. effect(effectFnIife)
+    
+    // Should trigger (with fix) - generator with pipe arguments
+    export const iife6 = Effect.fn("piped")(function*() {
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      return yield* Effect.succeed(1)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    }, Effect.map((n) => n + 1))()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377011: Effect.fn returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead with Effect.withSpan("piped") piped in the end to maintain tracing spans. effect(effectFnIife)
+    
+    // Should trigger (with fix) - fnUntraced generator with pipe arguments
+    export const iife7 = Effect.fnUntraced(function*() {
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      return yield* Effect.succeed(1)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    }, Effect.map((n) => n + 1))()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377011: Effect.fnUntraced returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead. effect(effectFnIife)
+    
+    // Should NOT trigger - stored for reuse (generator)
+    export const myFn = Effect.fn("myFn")(function*() {
+      yield* Effect.succeed(1)
+    })
+    
+    // Should NOT trigger - stored for reuse (regular function)
+    export const myFn2 = Effect.fn("myFn2")(() => Effect.succeed(1))
+    
+    // Should NOT trigger - Effect.gen (not Effect.fn)
+    export const gen = Effect.gen(function*() {
+                       ~~~~~~~~~~~~~~~~~~~~~~~~
+      yield* Effect.succeed(1)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    })
+    ~~
+!!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+    
+    // Should NOT trigger - regular function call
+    export const regularFn = (n: number) => Effect.succeed(n)
+    export const result = regularFn(1)
+    

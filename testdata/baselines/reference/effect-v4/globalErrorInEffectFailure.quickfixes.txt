@@ -1,0 +1,251 @@
+=== Quick Fix Inventory ===
+
+[D1] (7:41-7:66) TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
+  Fix 0: "Disable globalErrorInEffectFailure for this line"
+  Fix 1: "Disable globalErrorInEffectFailure for entire file"
+
+[D2] (8:42-8:78) TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
+  Fix 0: "Disable globalErrorInEffectFailure for this line"
+  Fix 1: "Disable globalErrorInEffectFailure for entire file"
+
+[D3] (14:42-14:64) TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
+  Fix 0: "Disable globalErrorInEffectFailure for this line"
+  Fix 1: "Disable globalErrorInEffectFailure for entire file"
+
+[D4] (26:32-28:3) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D5] (27:29-27:61) TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
+  Fix 0: "Disable globalErrorInEffectFailure for this line"
+  Fix 1: "Disable globalErrorInEffectFailure for entire file"
+
+[D6] (31:35-33:3) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D7] (32:10-32:15) TS377019: This Effect.fail call uses a yieldable error type as argument. You can yield* the error directly instead. effect(unnecessaryFailYieldableError)
+  Fix 0: "Disable unnecessaryFailYieldableError for this line"
+  Fix 1: "Disable unnecessaryFailYieldableError for entire file"
+  Fix 2: "Replace yield* Effect.fail with yield*"
+
+[D8] (37:36-37:68) TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
+  Fix 0: "Disable globalErrorInEffectFailure for this line"
+  Fix 1: "Disable globalErrorInEffectFailure for entire file"
+
+[D9] (47:25-47:60) TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
+  Fix 0: "Disable globalErrorInEffectFailure for this line"
+  Fix 1: "Disable globalErrorInEffectFailure for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable globalErrorInEffectFailure for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable globalErrorInEffectFailure for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable globalErrorInEffectFailure for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable globalErrorInEffectFailure for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable globalErrorInEffectFailure for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable globalErrorInEffectFailure for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/globalErrorInEffectFailure.ts ---
+import { Data, Effect } from "effect"
+
+class CustomError extends Data.TaggedError("CustomError")<{}> {}
+
+export const shouldNotReport = Effect.fail(new CustomError())
+
+export const shouldReport = Effect.fail(new Error("global error"))
+export const shouldReport2 = Effect.fail(new globalThis.Error("global error"))
+
+export class BaseExtendsError extends Error {
+}
+
+// this is not fine because it extends the global Error type without changing it
+export const shouldReport3 = Effect.fail(new BaseExtendsError())
+
+export class BaseExtendsErrorWithTag extends Error {
+  readonly _tag = "BaseExtendsErrorWithTag"
+}
+
+// this is fine because it has some property that is not the global Error type
+export const shouldNotReport2 = Effect.fail(new BaseExtendsErrorWithTag())
+
+// Additional test cases for Effect.gen with global Error
+
+// should report - global Error in Effect.gen
+export const shouldReportGen = Effect.fail(new Error("global error in gen"))
+
+// should not report - custom error in Effect.gen
+export const shouldNotReportGen = Effect.gen(function* () {
+  return yield* Effect.fail(new CustomError())
+})
+
+// should report - global Error in Effect.map
+export const shouldReportMap = Effect.succeed(1).pipe(
+  Effect.flatMap(() => Effect.fail(new Error("global error in map")))
+)
+
+// should not report - new Error outside of Effect context
+export function shouldNotReportNonEffect() {
+  throw new Error("this is not in an Effect")
+}
+
+// should report - mapError converting to global Error
+export const shouldReportMapError = Effect.fail(new CustomError()).pipe(
+  Effect.mapError(() => new Error("mapped to global error"))
+)
+
+
+=== [D5] Fix 0: "Disable globalErrorInEffectFailure for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable globalErrorInEffectFailure for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/globalErrorInEffectFailure.ts ---
+import { Data, Effect } from "effect"
+
+class CustomError extends Data.TaggedError("CustomError")<{}> {}
+
+export const shouldNotReport = Effect.fail(new CustomError())
+
+export const shouldReport = Effect.fail(new Error("global error"))
+export const shouldReport2 = Effect.fail(new globalThis.Error("global error"))
+
+export class BaseExtendsError extends Error {
+}
+
+// this is not fine because it extends the global Error type without changing it
+export const shouldReport3 = Effect.fail(new BaseExtendsError())
+
+export class BaseExtendsErrorWithTag extends Error {
+  readonly _tag = "BaseExtendsErrorWithTag"
+}
+
+// this is fine because it has some property that is not the global Error type
+export const shouldNotReport2 = Effect.fail(new BaseExtendsErrorWithTag())
+
+// Additional test cases for Effect.gen with global Error
+
+// should report - global Error in Effect.gen
+export const shouldReportGen = Effect.gen(function* () {
+  return yield* Effect.fail(new Error("global error in gen"))
+})
+
+// should not report - custom error in Effect.gen
+export const shouldNotReportGen = Effect.fail(new CustomError())
+
+// should report - global Error in Effect.map
+export const shouldReportMap = Effect.succeed(1).pipe(
+  Effect.flatMap(() => Effect.fail(new Error("global error in map")))
+)
+
+// should not report - new Error outside of Effect context
+export function shouldNotReportNonEffect() {
+  throw new Error("this is not in an Effect")
+}
+
+// should report - mapError converting to global Error
+export const shouldReportMapError = Effect.fail(new CustomError()).pipe(
+  Effect.mapError(() => new Error("mapped to global error"))
+)
+
+
+=== [D7] Fix 0: "Disable unnecessaryFailYieldableError for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable unnecessaryFailYieldableError for entire file" ===
+skipped by default
+
+=== [D7] Fix 2: "Replace yield* Effect.fail with yield*" ===
+
+--- file:///.src/globalErrorInEffectFailure.ts ---
+import { Data, Effect } from "effect"
+
+class CustomError extends Data.TaggedError("CustomError")<{}> {}
+
+export const shouldNotReport = Effect.fail(new CustomError())
+
+export const shouldReport = Effect.fail(new Error("global error"))
+export const shouldReport2 = Effect.fail(new globalThis.Error("global error"))
+
+export class BaseExtendsError extends Error {
+}
+
+// this is not fine because it extends the global Error type without changing it
+export const shouldReport3 = Effect.fail(new BaseExtendsError())
+
+export class BaseExtendsErrorWithTag extends Error {
+  readonly _tag = "BaseExtendsErrorWithTag"
+}
+
+// this is fine because it has some property that is not the global Error type
+export const shouldNotReport2 = Effect.fail(new BaseExtendsErrorWithTag())
+
+// Additional test cases for Effect.gen with global Error
+
+// should report - global Error in Effect.gen
+export const shouldReportGen = Effect.gen(function* () {
+  return yield* Effect.fail(new Error("global error in gen"))
+})
+
+// should not report - custom error in Effect.gen
+export const shouldNotReportGen = Effect.gen(function* () {
+  return yield*new CustomError()
+})
+
+// should report - global Error in Effect.map
+export const shouldReportMap = Effect.succeed(1).pipe(
+  Effect.flatMap(() => Effect.fail(new Error("global error in map")))
+)
+
+// should not report - new Error outside of Effect context
+export function shouldNotReportNonEffect() {
+  throw new Error("this is not in an Effect")
+}
+
+// should report - mapError converting to global Error
+export const shouldReportMapError = Effect.fail(new CustomError()).pipe(
+  Effect.mapError(() => new Error("mapped to global error"))
+)
+
+
+=== [D8] Fix 0: "Disable globalErrorInEffectFailure for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable globalErrorInEffectFailure for entire file" ===
+skipped by default
+
+=== [D9] Fix 0: "Disable globalErrorInEffectFailure for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable globalErrorInEffectFailure for entire file" ===
+skipped by default

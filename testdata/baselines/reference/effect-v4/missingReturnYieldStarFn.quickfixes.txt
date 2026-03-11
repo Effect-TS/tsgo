@@ -1,0 +1,208 @@
+=== Quick Fix Inventory ===
+
+[D1] (4:5-4:10) TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+  Fix 0: "Disable missingReturnYieldStar for this line"
+  Fix 1: "Disable missingReturnYieldStar for entire file"
+  Fix 2: "Add return statement"
+
+[D2] (8:5-8:10) TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+  Fix 0: "Disable missingReturnYieldStar for this line"
+  Fix 1: "Disable missingReturnYieldStar for entire file"
+  Fix 2: "Add return statement"
+
+[D3] (18:9-18:14) TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+  Fix 0: "Disable missingReturnYieldStar for this line"
+  Fix 1: "Disable missingReturnYieldStar for entire file"
+  Fix 2: "Add return statement"
+
+[D4] (21:9-21:14) TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+  Fix 0: "Disable missingReturnYieldStar for this line"
+  Fix 1: "Disable missingReturnYieldStar for entire file"
+  Fix 2: "Add return statement"
+
+[D5] (25:5-25:10) TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+  Fix 0: "Disable missingReturnYieldStar for this line"
+  Fix 1: "Disable missingReturnYieldStar for entire file"
+  Fix 2: "Add return statement"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable missingReturnYieldStar for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable missingReturnYieldStar for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Add return statement" ===
+
+--- file:///.src/missingReturnYieldStarFn.ts ---
+import { Effect } from "effect"
+
+export const shouldComplain = Effect.fn(function*(){
+    return yield* Effect.fail("no"); // <- should emit an error be return yield*
+})
+
+export const shouldComplainNamedFn = Effect.fn("named")(function* namedFn(){
+    yield* Effect.fail("no") // <- should emit an error be return yield*
+})
+
+export const shouldNotComplainRegularFn = Effect.fn((a: string) => {
+    return Effect.fail(a)
+})
+
+export class Test {
+    a: number = 42
+    shouldComplain = Effect.fn({self: this}, function*(){
+        yield* Effect.fail(this.a) // <- should emit an error be return yield*
+    })
+    shouldComplainNamedFn = Effect.fn("named")({self: this}, function* namedFn(){
+        yield* Effect.fail(this.a) // <- should emit an error be return yield*
+    })
+}
+export const shouldComplainNamedFnWithPipes = Effect.fn("named")(function* namedFn(){
+    yield* Effect.fail("no") // <- should emit an error be return yield*
+}, Effect.ignore)
+
+=== [D2] Fix 0: "Disable missingReturnYieldStar for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable missingReturnYieldStar for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Add return statement" ===
+
+--- file:///.src/missingReturnYieldStarFn.ts ---
+import { Effect } from "effect"
+
+export const shouldComplain = Effect.fn(function*(){
+    yield* Effect.fail("no") // <- should emit an error be return yield*
+})
+
+export const shouldComplainNamedFn = Effect.fn("named")(function* namedFn(){
+    return yield* Effect.fail("no"); // <- should emit an error be return yield*
+})
+
+export const shouldNotComplainRegularFn = Effect.fn((a: string) => {
+    return Effect.fail(a)
+})
+
+export class Test {
+    a: number = 42
+    shouldComplain = Effect.fn({self: this}, function*(){
+        yield* Effect.fail(this.a) // <- should emit an error be return yield*
+    })
+    shouldComplainNamedFn = Effect.fn("named")({self: this}, function* namedFn(){
+        yield* Effect.fail(this.a) // <- should emit an error be return yield*
+    })
+}
+export const shouldComplainNamedFnWithPipes = Effect.fn("named")(function* namedFn(){
+    yield* Effect.fail("no") // <- should emit an error be return yield*
+}, Effect.ignore)
+
+=== [D3] Fix 0: "Disable missingReturnYieldStar for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable missingReturnYieldStar for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Add return statement" ===
+
+--- file:///.src/missingReturnYieldStarFn.ts ---
+import { Effect } from "effect"
+
+export const shouldComplain = Effect.fn(function*(){
+    yield* Effect.fail("no") // <- should emit an error be return yield*
+})
+
+export const shouldComplainNamedFn = Effect.fn("named")(function* namedFn(){
+    yield* Effect.fail("no") // <- should emit an error be return yield*
+})
+
+export const shouldNotComplainRegularFn = Effect.fn((a: string) => {
+    return Effect.fail(a)
+})
+
+export class Test {
+    a: number = 42
+    shouldComplain = Effect.fn({self: this}, function*(){
+        return yield* Effect.fail(this.a); // <- should emit an error be return yield*
+    })
+    shouldComplainNamedFn = Effect.fn("named")({self: this}, function* namedFn(){
+        yield* Effect.fail(this.a) // <- should emit an error be return yield*
+    })
+}
+export const shouldComplainNamedFnWithPipes = Effect.fn("named")(function* namedFn(){
+    yield* Effect.fail("no") // <- should emit an error be return yield*
+}, Effect.ignore)
+
+=== [D4] Fix 0: "Disable missingReturnYieldStar for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable missingReturnYieldStar for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Add return statement" ===
+
+--- file:///.src/missingReturnYieldStarFn.ts ---
+import { Effect } from "effect"
+
+export const shouldComplain = Effect.fn(function*(){
+    yield* Effect.fail("no") // <- should emit an error be return yield*
+})
+
+export const shouldComplainNamedFn = Effect.fn("named")(function* namedFn(){
+    yield* Effect.fail("no") // <- should emit an error be return yield*
+})
+
+export const shouldNotComplainRegularFn = Effect.fn((a: string) => {
+    return Effect.fail(a)
+})
+
+export class Test {
+    a: number = 42
+    shouldComplain = Effect.fn({self: this}, function*(){
+        yield* Effect.fail(this.a) // <- should emit an error be return yield*
+    })
+    shouldComplainNamedFn = Effect.fn("named")({self: this}, function* namedFn(){
+        return yield* Effect.fail(this.a); // <- should emit an error be return yield*
+    })
+}
+export const shouldComplainNamedFnWithPipes = Effect.fn("named")(function* namedFn(){
+    yield* Effect.fail("no") // <- should emit an error be return yield*
+}, Effect.ignore)
+
+=== [D5] Fix 0: "Disable missingReturnYieldStar for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable missingReturnYieldStar for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Add return statement" ===
+
+--- file:///.src/missingReturnYieldStarFn.ts ---
+import { Effect } from "effect"
+
+export const shouldComplain = Effect.fn(function*(){
+    yield* Effect.fail("no") // <- should emit an error be return yield*
+})
+
+export const shouldComplainNamedFn = Effect.fn("named")(function* namedFn(){
+    yield* Effect.fail("no") // <- should emit an error be return yield*
+})
+
+export const shouldNotComplainRegularFn = Effect.fn((a: string) => {
+    return Effect.fail(a)
+})
+
+export class Test {
+    a: number = 42
+    shouldComplain = Effect.fn({self: this}, function*(){
+        yield* Effect.fail(this.a) // <- should emit an error be return yield*
+    })
+    shouldComplainNamedFn = Effect.fn("named")({self: this}, function* namedFn(){
+        yield* Effect.fail(this.a) // <- should emit an error be return yield*
+    })
+}
+export const shouldComplainNamedFnWithPipes = Effect.fn("named")(function* namedFn(){
+    return yield* Effect.fail("no"); // <- should emit an error be return yield*
+}, Effect.ignore)

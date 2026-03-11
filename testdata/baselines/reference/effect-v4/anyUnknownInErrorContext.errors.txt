@@ -1,0 +1,153 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+/.src/anyUnknownInErrorContext.ts(4,14): warning TS377030: This has unknown in the requirements channel which is not recommended.
+Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
+/.src/anyUnknownInErrorContext.ts(4,35): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/anyUnknownInErrorContext.ts(5,10): warning TS377030: This has unknown in the requirements channel which is not recommended.
+Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
+/.src/anyUnknownInErrorContext.ts(8,14): warning TS377030: This has any in the requirements channel which is not recommended.
+Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
+/.src/anyUnknownInErrorContext.ts(8,31): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/anyUnknownInErrorContext.ts(9,10): warning TS377030: This has any in the requirements channel which is not recommended.
+Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
+/.src/anyUnknownInErrorContext.ts(12,14): warning TS377030: This has any in the error channel which is not recommended.
+Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
+/.src/anyUnknownInErrorContext.ts(12,31): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/anyUnknownInErrorContext.ts(13,17): warning TS377030: This has any in the error channel which is not recommended.
+Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
+/.src/anyUnknownInErrorContext.ts(16,14): warning TS377030: This has unknown in the error channel which is not recommended.
+Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
+/.src/anyUnknownInErrorContext.ts(16,35): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/anyUnknownInErrorContext.ts(17,17): warning TS377030: This has unknown in the error channel which is not recommended.
+Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
+/.src/anyUnknownInErrorContext.ts(20,14): warning TS377030: This has unknown in the requirements channel and any in the error channel which is not recommended.
+Only service identifiers should appear in the requirements channel.
+Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
+/.src/anyUnknownInErrorContext.ts(21,10): warning TS377030: This has unknown in the requirements channel which is not recommended.
+Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
+/.src/anyUnknownInErrorContext.ts(22,17): warning TS377030: This has any in the error channel which is not recommended.
+Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
+/.src/anyUnknownInErrorContext.ts(37,7): warning TS377030: This has unknown in the requirements channel which is not recommended.
+Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
+/.src/anyUnknownInErrorContext.ts(37,22): warning TS377030: This has unknown in the requirements channel which is not recommended.
+Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
+/.src/anyUnknownInErrorContext.ts(38,7): warning TS377030: This has unknown in the requirements channel which is not recommended.
+Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
+/.src/anyUnknownInErrorContext.ts(38,42): warning TS377030: This has unknown in the requirements channel which is not recommended.
+Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
+/.src/anyUnknownInErrorContext.ts(39,14): warning TS377030: This has unknown in the requirements channel which is not recommended.
+Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
+/.src/anyUnknownInErrorContext.ts(39,68): warning TS377030: This has unknown in the requirements channel which is not recommended.
+Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
+
+
+==== /.src/anyUnknownInErrorContext.ts (21 errors) ====
+    // @effect-diagnostics anyUnknownInErrorContext:warning
+    import { Effect, Layer } from "effect"
+    
+    export const withUnknownContext = Effect.gen(function*() {
+                 ~~~~~~~~~~~~~~~~~~
+!!! warning TS377030: This has unknown in the requirements channel which is not recommended.
+Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
+                                      ~~~~~~~~~~~~~~~~~~~~~~~~
+      yield* Effect.services<unknown>()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377030: This has unknown in the requirements channel which is not recommended.
+Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
+    })
+    ~~
+!!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+    
+    export const withAnyContext = Effect.gen(function*() {
+                 ~~~~~~~~~~~~~~
+!!! warning TS377030: This has any in the requirements channel which is not recommended.
+Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
+                                  ~~~~~~~~~~~~~~~~~~~~~~~~
+      yield* Effect.services<any>()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+             ~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377030: This has any in the requirements channel which is not recommended.
+Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
+    })
+    ~~
+!!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+    
+    export const withAnyFailure = Effect.gen(function*() {
+                 ~~~~~~~~~~~~~~
+!!! warning TS377030: This has any in the error channel which is not recommended.
+Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
+                                  ~~~~~~~~~~~~~~~~~~~~~~~~
+      return yield* Effect.fail<any>(42)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377030: This has any in the error channel which is not recommended.
+Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
+    })
+    ~~
+!!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+    
+    export const withUnknownFailure = Effect.gen(function*() {
+                 ~~~~~~~~~~~~~~~~~~
+!!! warning TS377030: This has unknown in the error channel which is not recommended.
+Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
+                                      ~~~~~~~~~~~~~~~~~~~~~~~~
+      return yield* Effect.fail<unknown>(42)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377030: This has unknown in the error channel which is not recommended.
+Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
+    })
+    ~~
+!!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+    
+    export const hasBothAnyUnknown = Effect.gen(function*() {
+                 ~~~~~~~~~~~~~~~~~
+!!! warning TS377030: This has unknown in the requirements channel and any in the error channel which is not recommended.
+Only service identifiers should appear in the requirements channel.
+Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
+      yield* Effect.services<unknown>()
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377030: This has unknown in the requirements channel which is not recommended.
+Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
+      return yield* Effect.fail<any>(42)
+                    ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377030: This has any in the error channel which is not recommended.
+Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
+    })
+    
+    export const thisIsFine: Effect.Effect<void, number> = Effect.fail<any>(42) as any
+    
+    export function explicitAny(_a: Effect.Effect<void, number, any>) {
+      return Effect.succeed(42)
+    }
+    
+    export const thisIsAlsoFine: Effect.Effect<void, number, any> = Effect.succeed(42)
+    
+    export class Test {
+      a: Effect.Effect<void, number, any> = Effect.succeed(42)
+    }
+    
+    const effectUnkown = Effect.services<unknown>()
+          ~~~~~~~~~~~~
+!!! warning TS377030: This has unknown in the requirements channel which is not recommended.
+Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377030: This has unknown in the requirements channel which is not recommended.
+Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
+    const layerUnknown = Layer.effectDiscard(effectUnkown)
+          ~~~~~~~~~~~~
+!!! warning TS377030: This has unknown in the requirements channel which is not recommended.
+Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
+                                             ~~~~~~~~~~~~
+!!! warning TS377030: This has unknown in the requirements channel which is not recommended.
+Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
+    export const composedLayerUnknown = Layer.empty.pipe(Layer.provide(layerUnknown))
+                 ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377030: This has unknown in the requirements channel which is not recommended.
+Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
+                                                                       ~~~~~~~~~~~~
+!!! warning TS377030: This has unknown in the requirements channel which is not recommended.
+Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
+    

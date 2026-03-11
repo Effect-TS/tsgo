@@ -1,0 +1,29 @@
+==== /.src/effectFnOpportunity_genWithThis.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 13:20 - 13:47
+Node: Effect.succeed(this.value)
+Node Kind: KindCallExpression
+
+Subject: this.value
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 19:20 - 19:47
+Node: Effect.succeed(this.value)
+Node Kind: KindCallExpression
+
+Subject: this.value
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>

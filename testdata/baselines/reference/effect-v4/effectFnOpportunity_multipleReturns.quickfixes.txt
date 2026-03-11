@@ -1,0 +1,132 @@
+=== Quick Fix Inventory ===
+
+[D1] (12:10-14:5) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D2] (19:10-21:5) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D3] (26:10-28:5) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/effectFnOpportunity_multipleReturns.ts ---
+import * as Effect from "effect/Effect"
+
+// These should not trigger effectFnOpportunity because they are not returning
+// just Effect.gen, but also have other statements and there aren't at least 5
+// statements in the body of the function.
+// Note: unnecessaryEffectGen diagnostics ARE expected for the inner Effect.gen
+// calls (each has a single-statement body). The Go test harness runs all rules,
+// unlike upstream which runs only the rule matching the file name prefix.
+
+export const arrowMultipleReturns = () => {
+  if (Math.random() > 0.5) return Effect.succeed(true)
+  return Effect.succeed(true)
+}
+
+export const functionExpressionMultipleReturns = function() {
+  if (Math.random() > 0.5) return Effect.succeed(true)
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(true)
+  })
+}
+
+export function functionDeclarationMultipleReturns() {
+  if (Math.random() > 0.5) return Effect.succeed(true)
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(true)
+  })
+}
+
+
+=== [D2] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/effectFnOpportunity_multipleReturns.ts ---
+import * as Effect from "effect/Effect"
+
+// These should not trigger effectFnOpportunity because they are not returning
+// just Effect.gen, but also have other statements and there aren't at least 5
+// statements in the body of the function.
+// Note: unnecessaryEffectGen diagnostics ARE expected for the inner Effect.gen
+// calls (each has a single-statement body). The Go test harness runs all rules,
+// unlike upstream which runs only the rule matching the file name prefix.
+
+export const arrowMultipleReturns = () => {
+  if (Math.random() > 0.5) return Effect.succeed(true)
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(true)
+  })
+}
+
+export const functionExpressionMultipleReturns = function() {
+  if (Math.random() > 0.5) return Effect.succeed(true)
+  return Effect.succeed(true)
+}
+
+export function functionDeclarationMultipleReturns() {
+  if (Math.random() > 0.5) return Effect.succeed(true)
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(true)
+  })
+}
+
+
+=== [D3] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/effectFnOpportunity_multipleReturns.ts ---
+import * as Effect from "effect/Effect"
+
+// These should not trigger effectFnOpportunity because they are not returning
+// just Effect.gen, but also have other statements and there aren't at least 5
+// statements in the body of the function.
+// Note: unnecessaryEffectGen diagnostics ARE expected for the inner Effect.gen
+// calls (each has a single-statement body). The Go test harness runs all rules,
+// unlike upstream which runs only the rule matching the file name prefix.
+
+export const arrowMultipleReturns = () => {
+  if (Math.random() > 0.5) return Effect.succeed(true)
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(true)
+  })
+}
+
+export const functionExpressionMultipleReturns = function() {
+  if (Math.random() > 0.5) return Effect.succeed(true)
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(true)
+  })
+}
+
+export function functionDeclarationMultipleReturns() {
+  if (Math.random() > 0.5) return Effect.succeed(true)
+  return Effect.succeed(true)
+}
+

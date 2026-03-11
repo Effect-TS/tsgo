@@ -1,0 +1,29 @@
+=== Quick Fix Inventory ===
+
+[D1] (10:57-10:81) TS377046: Self type parameter should be 'MyService'. effect(classSelfMismatch)
+  Fix 0: "Disable classSelfMismatch for this line"
+  Fix 1: "Disable classSelfMismatch for entire file"
+  Fix 2: "Replace 'MyService | OtherService' with 'MyService'"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable classSelfMismatch for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable classSelfMismatch for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace 'MyService | OtherService' with 'MyService'" ===
+
+--- file:///.src/classSelfMismatch_unionGiven.ts ---
+// @effect-v3
+import * as Context from "effect/Context"
+
+interface ServiceShape {
+  value: number
+}
+
+export class OtherService extends Context.Tag("OtherService")<OtherService, {}>() {}
+
+export class MyService extends Context.Tag("MyService")<MyService, ServiceShape>() {}
+

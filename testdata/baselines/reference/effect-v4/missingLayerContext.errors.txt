@@ -1,0 +1,48 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+/.src/missingLayerContext.ts(28,8): error TS377034: Missing 'ServiceB | ServiceC' in the expected Layer context. effect(missingLayerContext)
+/.src/missingLayerContext.ts(35,20): error TS377034: Missing 'ServiceC' in the expected Layer context. effect(missingLayerContext)
+
+
+==== /.src/missingLayerContext.ts (2 errors) ====
+    import { ServiceMap, Effect, Layer } from "effect"
+    
+    class ServiceA extends ServiceMap.Service<ServiceA>()("ServiceA", {
+      make: Effect.succeed({ value: 1 })
+    }) {
+      static Default = Layer.effect(this, this.make)
+    }
+    
+    class ServiceB extends ServiceMap.Service<ServiceB>()("ServiceB", {
+      make: Effect.succeed({ value: 2 })
+    }) {
+      static Default = Layer.effect(this, this.make)
+    }
+    
+    class ServiceC extends ServiceMap.Service<ServiceC>()("ServiceC", {
+      make: Effect.succeed({ value: 3 })
+    }) {
+      static Default = Layer.effect(this, this.make)
+    }
+    
+    declare const layerWithServices: Layer.Layer<ServiceA, never, ServiceB | ServiceC>
+    
+    function testFn(layer: Layer.Layer<ServiceA>) {
+      return layer
+    }
+    
+    // @ts-expect-error
+    testFn(layerWithServices)
+           ~~~~~~~~~~~~~~~~~
+!!! error TS377034: Missing 'ServiceB | ServiceC' in the expected Layer context. effect(missingLayerContext)
+    
+    function testFnWithServiceB(layer: Layer.Layer<ServiceA, never, ServiceB>) {
+      return layer
+    }
+    
+    // @ts-expect-error
+    testFnWithServiceB(layerWithServices)
+                       ~~~~~~~~~~~~~~~~~
+!!! error TS377034: Missing 'ServiceC' in the expected Layer context. effect(missingLayerContext)
+    

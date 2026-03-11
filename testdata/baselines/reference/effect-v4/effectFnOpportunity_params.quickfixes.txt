@@ -1,0 +1,294 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:14-6:29) TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*(a, b) { ... }). effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fnUntraced"
+  Fix 3: "Convert to Effect.fn (no span)"
+  Fix 4: "Convert to Effect.fn(\"arrowWithParams\")"
+
+[D2] (13:14-13:42) TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*(a, b) { ... }). effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fnUntraced"
+  Fix 3: "Convert to Effect.fn (no span)"
+  Fix 4: "Convert to Effect.fn(\"functionExpressionWithParams\")"
+
+[D3] (20:17-20:46) TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*(a, b) { ... }). effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fnUntraced"
+  Fix 3: "Convert to Effect.fn (no span)"
+  Fix 4: "Convert to Effect.fn(\"functionDeclarationWithParams\")"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_params.ts ---
+import * as Effect from "effect/Effect"
+
+// These cases are okay and should trigger the diagnostic.
+// Functions with parameters can be converted to Effect.fn.
+
+export const arrowWithParams = Effect.fnUntraced(function* (a: number, b: string) {
+    yield* Effect.succeed(a);
+    return b;
+});
+
+export const functionExpressionWithParams = function(a: number, b: string) {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(a)
+    return b
+  })
+}
+
+export function functionDeclarationWithParams(a: number, b: string) {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(a)
+    return b
+  })
+}
+
+
+=== [D1] Fix 3: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_params.ts ---
+import * as Effect from "effect/Effect"
+
+// These cases are okay and should trigger the diagnostic.
+// Functions with parameters can be converted to Effect.fn.
+
+export const arrowWithParams = Effect.fn(function* (a: number, b: string) {
+    yield* Effect.succeed(a);
+    return b;
+});
+
+export const functionExpressionWithParams = function(a: number, b: string) {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(a)
+    return b
+  })
+}
+
+export function functionDeclarationWithParams(a: number, b: string) {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(a)
+    return b
+  })
+}
+
+
+=== [D1] Fix 4: "Convert to Effect.fn(\"arrowWithParams\")" ===
+
+--- file:///.src/effectFnOpportunity_params.ts ---
+import * as Effect from "effect/Effect"
+
+// These cases are okay and should trigger the diagnostic.
+// Functions with parameters can be converted to Effect.fn.
+
+export const arrowWithParams = Effect.fn("arrowWithParams")(function* (a: number, b: string) {
+    yield* Effect.succeed(a);
+    return b;
+});
+
+export const functionExpressionWithParams = function(a: number, b: string) {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(a)
+    return b
+  })
+}
+
+export function functionDeclarationWithParams(a: number, b: string) {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(a)
+    return b
+  })
+}
+
+
+=== [D2] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_params.ts ---
+import * as Effect from "effect/Effect"
+
+// These cases are okay and should trigger the diagnostic.
+// Functions with parameters can be converted to Effect.fn.
+
+export const arrowWithParams = (a: number, b: string) => {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(a)
+    return b
+  })
+}
+
+export const functionExpressionWithParams = Effect.fnUntraced(function* (a: number, b: string) {
+    yield* Effect.succeed(a);
+    return b;
+});
+
+export function functionDeclarationWithParams(a: number, b: string) {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(a)
+    return b
+  })
+}
+
+
+=== [D2] Fix 3: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_params.ts ---
+import * as Effect from "effect/Effect"
+
+// These cases are okay and should trigger the diagnostic.
+// Functions with parameters can be converted to Effect.fn.
+
+export const arrowWithParams = (a: number, b: string) => {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(a)
+    return b
+  })
+}
+
+export const functionExpressionWithParams = Effect.fn(function* (a: number, b: string) {
+    yield* Effect.succeed(a);
+    return b;
+});
+
+export function functionDeclarationWithParams(a: number, b: string) {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(a)
+    return b
+  })
+}
+
+
+=== [D2] Fix 4: "Convert to Effect.fn(\"functionExpressionWithParams\")" ===
+
+--- file:///.src/effectFnOpportunity_params.ts ---
+import * as Effect from "effect/Effect"
+
+// These cases are okay and should trigger the diagnostic.
+// Functions with parameters can be converted to Effect.fn.
+
+export const arrowWithParams = (a: number, b: string) => {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(a)
+    return b
+  })
+}
+
+export const functionExpressionWithParams = Effect.fn("functionExpressionWithParams")(function* (a: number, b: string) {
+    yield* Effect.succeed(a);
+    return b;
+});
+
+export function functionDeclarationWithParams(a: number, b: string) {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(a)
+    return b
+  })
+}
+
+
+=== [D3] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_params.ts ---
+import * as Effect from "effect/Effect"
+
+// These cases are okay and should trigger the diagnostic.
+// Functions with parameters can be converted to Effect.fn.
+
+export const arrowWithParams = (a: number, b: string) => {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(a)
+    return b
+  })
+}
+
+export const functionExpressionWithParams = function(a: number, b: string) {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(a)
+    return b
+  })
+}
+
+export const functionDeclarationWithParams = Effect.fnUntraced(function* (a: number, b: string) {
+    yield* Effect.succeed(a);
+    return b;
+});
+
+
+=== [D3] Fix 3: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_params.ts ---
+import * as Effect from "effect/Effect"
+
+// These cases are okay and should trigger the diagnostic.
+// Functions with parameters can be converted to Effect.fn.
+
+export const arrowWithParams = (a: number, b: string) => {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(a)
+    return b
+  })
+}
+
+export const functionExpressionWithParams = function(a: number, b: string) {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(a)
+    return b
+  })
+}
+
+export const functionDeclarationWithParams = Effect.fn(function* (a: number, b: string) {
+    yield* Effect.succeed(a);
+    return b;
+});
+
+
+=== [D3] Fix 4: "Convert to Effect.fn(\"functionDeclarationWithParams\")" ===
+
+--- file:///.src/effectFnOpportunity_params.ts ---
+import * as Effect from "effect/Effect"
+
+// These cases are okay and should trigger the diagnostic.
+// Functions with parameters can be converted to Effect.fn.
+
+export const arrowWithParams = (a: number, b: string) => {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(a)
+    return b
+  })
+}
+
+export const functionExpressionWithParams = function(a: number, b: string) {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(a)
+    return b
+  })
+}
+
+export const functionDeclarationWithParams = Effect.fn("functionDeclarationWithParams")(function* (a: number, b: string) {
+    yield* Effect.succeed(a);
+    return b;
+});
+

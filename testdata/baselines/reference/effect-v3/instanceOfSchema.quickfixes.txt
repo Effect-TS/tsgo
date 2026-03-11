@@ -1,0 +1,105 @@
+=== Quick Fix Inventory ===
+
+[D1] (12:5-12:30) TS377042: Consider using Schema.is instead of instanceof for Effect Schema types. effect(instanceOfSchema)
+  Fix 0: "Disable instanceOfSchema for this line"
+  Fix 1: "Disable instanceOfSchema for entire file"
+  Fix 2: "Replace with Schema.is"
+
+[D2] (20:44-20:69) TS377042: Consider using Schema.is instead of instanceof for Effect Schema types. effect(instanceOfSchema)
+  Fix 0: "Disable instanceOfSchema for this line"
+  Fix 1: "Disable instanceOfSchema for entire file"
+  Fix 2: "Replace with Schema.is"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable instanceOfSchema for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable instanceOfSchema for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Schema.is" ===
+
+--- file:///.src/instanceOfSchema.ts ---
+// @effect-v3
+// @effect-diagnostics instanceOfSchema:warning
+import { Schema } from "effect"
+
+class MySchema extends Schema.Class<MySchema>("MySchema")({
+  name: Schema.String,
+}){}
+
+declare const value: unknown
+
+// Should trigger - instanceof used with Effect Schema
+if (Schema.is(MySchema)(value)) {
+  console.log("is my schema")
+}
+
+// Should trigger - with schema variable
+class PersonSchema extends Schema.Class<PersonSchema>("MySchema")({
+  name: Schema.String,
+}){}
+export const checkPerson = (x: unknown) => x instanceof PersonSchema
+
+// Should NOT trigger - regular class
+class MyClass {}
+if (value instanceof MyClass) {
+  console.log("is my class")
+}
+
+// Should NOT trigger - built-in types
+if (value instanceof Date) {
+  console.log("is date")
+}
+
+if (value instanceof RegExp) {
+  console.log("is regexp")
+}
+
+
+=== [D2] Fix 0: "Disable instanceOfSchema for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable instanceOfSchema for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Schema.is" ===
+
+--- file:///.src/instanceOfSchema.ts ---
+// @effect-v3
+// @effect-diagnostics instanceOfSchema:warning
+import { Schema } from "effect"
+
+class MySchema extends Schema.Class<MySchema>("MySchema")({
+  name: Schema.String,
+}){}
+
+declare const value: unknown
+
+// Should trigger - instanceof used with Effect Schema
+if (value instanceof MySchema) {
+  console.log("is my schema")
+}
+
+// Should trigger - with schema variable
+class PersonSchema extends Schema.Class<PersonSchema>("MySchema")({
+  name: Schema.String,
+}){}
+export const checkPerson = (x: unknown) => Schema.is(PersonSchema)(x)
+
+// Should NOT trigger - regular class
+class MyClass {}
+if (value instanceof MyClass) {
+  console.log("is my class")
+}
+
+// Should NOT trigger - built-in types
+if (value instanceof Date) {
+  console.log("is date")
+}
+
+if (value instanceof RegExp) {
+  console.log("is regexp")
+}
+

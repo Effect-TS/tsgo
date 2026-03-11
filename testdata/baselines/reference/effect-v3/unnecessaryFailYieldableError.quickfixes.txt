@@ -1,0 +1,129 @@
+=== Quick Fix Inventory ===
+
+[D1] (13:59-13:72) TS377045: Identifier 'SchemaError' is redundant since it equals the _tag value. effect(redundantSchemaTagIdentifier)
+  Fix 0: "Disable redundantSchemaTagIdentifier for this line"
+  Fix 1: "Disable redundantSchemaTagIdentifier for entire file"
+  Fix 2: "Remove redundant identifier 'SchemaError'"
+
+[D2] (21:3-21:8) TS377019: This Effect.fail call uses a yieldable error type as argument. You can yield* the error directly instead. effect(unnecessaryFailYieldableError)
+  Fix 0: "Disable unnecessaryFailYieldableError for this line"
+  Fix 1: "Disable unnecessaryFailYieldableError for entire file"
+  Fix 2: "Replace yield* Effect.fail with yield*"
+
+[D3] (22:3-22:8) TS377019: This Effect.fail call uses a yieldable error type as argument. You can yield* the error directly instead. effect(unnecessaryFailYieldableError)
+  Fix 0: "Disable unnecessaryFailYieldableError for this line"
+  Fix 1: "Disable unnecessaryFailYieldableError for entire file"
+  Fix 2: "Replace yield* Effect.fail with yield*"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable redundantSchemaTagIdentifier for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable redundantSchemaTagIdentifier for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Remove redundant identifier 'SchemaError'" ===
+
+--- file:///.src/unnecessaryFailYieldableError.ts ---
+// @effect-v3
+/** @effect-diagnostics missingReturnYieldStar:skip-file */
+import * as Data from "effect/Data"
+import * as Effect from "effect/Effect"
+import * as Schema from "effect/Schema"
+
+class NonYieldable extends Error {
+  readonly _tag = "NonYieldable"
+}
+
+class DataTaggedError extends Data.TaggedError("DataTaggedError")<{}> {}
+
+class SchemaError extends Schema.TaggedError<SchemaError>()("SchemaError", {}) {}
+
+export const unnecessaryFailYieldableError = Effect.gen(function*() {
+  // should not report
+  yield* Effect.fail(new NonYieldable("non-yieldable error"))
+  const err = new DataTaggedError()
+  console.log(err)
+  // should report
+  yield* Effect.fail(new DataTaggedError())
+  yield* Effect.fail(new SchemaError("schema error"))
+})
+
+// should not report
+export const shouldNotReport = Effect.fail(new DataTaggedError())
+
+
+=== [D2] Fix 0: "Disable unnecessaryFailYieldableError for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable unnecessaryFailYieldableError for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace yield* Effect.fail with yield*" ===
+
+--- file:///.src/unnecessaryFailYieldableError.ts ---
+// @effect-v3
+/** @effect-diagnostics missingReturnYieldStar:skip-file */
+import * as Data from "effect/Data"
+import * as Effect from "effect/Effect"
+import * as Schema from "effect/Schema"
+
+class NonYieldable extends Error {
+  readonly _tag = "NonYieldable"
+}
+
+class DataTaggedError extends Data.TaggedError("DataTaggedError")<{}> {}
+
+class SchemaError extends Schema.TaggedError<SchemaError>("SchemaError")("SchemaError", {}) {}
+
+export const unnecessaryFailYieldableError = Effect.gen(function*() {
+  // should not report
+  yield* Effect.fail(new NonYieldable("non-yieldable error"))
+  const err = new DataTaggedError()
+  console.log(err)
+  // should report
+  yield*new DataTaggedError()
+  yield* Effect.fail(new SchemaError("schema error"))
+})
+
+// should not report
+export const shouldNotReport = Effect.fail(new DataTaggedError())
+
+
+=== [D3] Fix 0: "Disable unnecessaryFailYieldableError for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable unnecessaryFailYieldableError for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace yield* Effect.fail with yield*" ===
+
+--- file:///.src/unnecessaryFailYieldableError.ts ---
+// @effect-v3
+/** @effect-diagnostics missingReturnYieldStar:skip-file */
+import * as Data from "effect/Data"
+import * as Effect from "effect/Effect"
+import * as Schema from "effect/Schema"
+
+class NonYieldable extends Error {
+  readonly _tag = "NonYieldable"
+}
+
+class DataTaggedError extends Data.TaggedError("DataTaggedError")<{}> {}
+
+class SchemaError extends Schema.TaggedError<SchemaError>("SchemaError")("SchemaError", {}) {}
+
+export const unnecessaryFailYieldableError = Effect.gen(function*() {
+  // should not report
+  yield* Effect.fail(new NonYieldable("non-yieldable error"))
+  const err = new DataTaggedError()
+  console.log(err)
+  // should report
+  yield* Effect.fail(new DataTaggedError())
+  yield*new SchemaError("schema error")
+})
+
+// should not report
+export const shouldNotReport = Effect.fail(new DataTaggedError())
+

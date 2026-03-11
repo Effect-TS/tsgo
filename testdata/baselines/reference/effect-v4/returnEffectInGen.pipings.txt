@@ -1,0 +1,29 @@
+==== /.src/returnEffectInGen.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 3:26 - 5:3
+Node: Effect.gen(function*() {\n  return Effect.fail("error")\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  return Effect.fail("error")\n}
+Subject Type: () => Generator<never, Effect<never, string, never>, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<Effect<never, string, never>, never, never>
+
+=== Piping Flow ===
+Location: 4:9 - 4:30
+Node: Effect.fail("error")
+Node Kind: KindCallExpression
+
+Subject: "error"
+Subject Type: "error"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>

@@ -1,0 +1,41 @@
+diff --git a/internal/ls/hover.go b/internal/ls/hover.go
+index 7a5319c65..1464b3bca 100644
+--- a/internal/ls/hover.go
++++ b/internal/ls/hover.go
+@@ -20,6 +20,18 @@ const (
+ 	typeFormatFlags   = checker.TypeFormatFlagsUseAliasDefinedOutsideCurrentScope
+ )
+ 
++// AfterQuickInfoCallback is invoked after getQuickInfoAndDocumentationForSymbol
++// to allow external packages to enrich hover responses.
++var AfterQuickInfoCallback func(c *checker.Checker, sf *ast.SourceFile, node *ast.Node, symbol *ast.Symbol, quickInfo string, documentation string, isMarkdown bool) (string, string, *ast.Node)
++
++// RegisterAfterQuickInfoCallback registers a callback to be called after
++// quickInfo and documentation are built for a hover. The callback can
++// rewrite quickInfo and documentation before they are returned.
++// Note: Only one callback can be registered. Subsequent calls will replace the previous callback.
++func RegisterAfterQuickInfoCallback(cb func(c *checker.Checker, sf *ast.SourceFile, node *ast.Node, symbol *ast.Symbol, quickInfo string, documentation string, isMarkdown bool) (string, string, *ast.Node)) {
++	AfterQuickInfoCallback = cb
++}
++
+ func (l *LanguageService) ProvideHover(ctx context.Context, documentURI lsproto.DocumentUri, position lsproto.Position) (lsproto.HoverResponse, error) {
+ 	caps := lsproto.GetClientCapabilities(ctx)
+ 	contentFormat := lsproto.PreferredMarkupKind(caps.TextDocument.Hover.ContentFormat)
+@@ -35,6 +47,17 @@ func (l *LanguageService) ProvideHover(ctx context.Context, documentURI lsproto.
+ 	rangeNode := getNodeForQuickInfo(node)
+ 	symbol := getSymbolAtLocationForQuickInfo(c, node)
+ 	quickInfo, documentation := l.getQuickInfoAndDocumentationForSymbol(c, symbol, rangeNode, contentFormat)
++
++	// EFFECT HOOK: Allow Effect to enrich hover responses
++	if AfterQuickInfoCallback != nil {
++		isMarkdown := contentFormat == lsproto.MarkupKindMarkdown
++		var hookRangeNode *ast.Node
++		quickInfo, documentation, hookRangeNode = AfterQuickInfoCallback(c, file, rangeNode, symbol, quickInfo, documentation, isMarkdown)
++		if hookRangeNode != nil {
++			rangeNode = hookRangeNode
++		}
++	}
++
+ 	if quickInfo == "" {
+ 		return lsproto.HoverOrNull{}, nil
+ 	}

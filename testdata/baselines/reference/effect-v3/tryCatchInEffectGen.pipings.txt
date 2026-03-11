@@ -1,0 +1,197 @@
+==== /.src/tryCatchInEffectGen.ts (14 flows) ====
+
+=== Piping Flow ===
+Location: 4:29 - 11:3
+Node: Effect.gen(function*() {\n  try {\n    const result = yield* Effect.succeed(42)\n    return result\n  } catch (error) {\n    console.error(error)\n  }\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  try {\n    const result = yield* Effect.succeed(42)\n    return result\n  } catch (error) {\n    console.error(error)\n  }\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, number | undefined, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<number | undefined, never, never>
+
+=== Piping Flow ===
+Location: 6:26 - 6:45
+Node: Effect.succeed(42)
+Node Kind: KindCallExpression
+
+Subject: 42
+Subject Type: 42
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 8:20 - 9:25
+Node: console.error(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: unknown
+
+Transformations (1):
+  [0] kind: call
+      callee: console.error
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 14:35 - 20:3
+Node: Effect.fn("example")(function*() {\n  try {\n    yield* Effect.succeed("hello")\n  } catch (e) {\n    console.error(e)\n  }\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  try {\n    yield* Effect.succeed("hello")\n  } catch (e) {\n    console.error(e)\n  }\n}
+Subject Type: () => Generator<YieldWrap<Effect<string, never, never>>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn("example")
+      args: (constant)
+      outType: () => Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 16:11 - 16:35
+Node: Effect.succeed("hello")
+Node Kind: KindCallExpression
+
+Subject: "hello"
+Subject Type: "hello"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 17:16 - 18:21
+Node: console.error(e)
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: unknown
+
+Transformations (1):
+  [0] kind: call
+      callee: console.error
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 23:32 - 26:3
+Node: Effect.gen(function*() {\n  const result = yield* Effect.succeed(42)\n  return result\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const result = yield* Effect.succeed(42)\n  return result\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, number, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 24:24 - 24:43
+Node: Effect.succeed(42)
+Node Kind: KindCallExpression
+
+Subject: 42
+Subject Type: 42
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 30:8 - 31:37
+Node: console.log("regular try/catch")
+Node Kind: KindCallExpression
+
+Subject: "regular try/catch"
+Subject Type: "regular try/catch"
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 32:16 - 33:21
+Node: console.error(e)
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: unknown
+
+Transformations (1):
+  [0] kind: call
+      callee: console.error
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 38:29 - 47:3
+Node: Effect.gen(function*() {\n  const inner = yield* Effect.gen(function*() {\n    try {\n      return yield* Effect.succeed(1)\n    } catch (e) {\n      console.error(e)\n    }\n  })\n  return inner\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const inner = yield* Effect.gen(function*() {\n    try {\n      return yield* Effect.succeed(1)\n    } catch (e) {\n      console.error(e)\n    }\n  })\n  return inner\n}
+Subject Type: () => Generator<YieldWrap<Effect<number | undefined, never, never>>, number | undefined, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<number | undefined, never, never>
+
+=== Piping Flow ===
+Location: 39:23 - 45:5
+Node: Effect.gen(function*() {\n    try {\n      return yield* Effect.succeed(1)\n    } catch (e) {\n      console.error(e)\n    }\n  })
+Node Kind: KindCallExpression
+
+Subject: function*() {\n    try {\n      return yield* Effect.succeed(1)\n    } catch (e) {\n      console.error(e)\n    }\n  }
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, number | undefined, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<number | undefined, never, never>
+
+=== Piping Flow ===
+Location: 41:20 - 41:38
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 42:18 - 43:23
+Node: console.error(e)
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: unknown
+
+Transformations (1):
+  [0] kind: call
+      callee: console.error
+      args: (constant)
+      outType: void

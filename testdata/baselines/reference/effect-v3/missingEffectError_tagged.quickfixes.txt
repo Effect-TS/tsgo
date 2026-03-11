@@ -1,0 +1,110 @@
+=== Quick Fix Inventory ===
+
+[D1] (20:63-20:79) TS377003: Missing errors ErrorA | ErrorB | ErrorC in the expected Effect type. effect(missingEffectError)
+  Fix 0: "Disable missingEffectError for this line"
+  Fix 1: "Disable missingEffectError for entire file"
+  Fix 2: "Catch all errors with Effect.catchAll"
+  Fix 3: "Catch unexpected errors with Effect.catchTag"
+
+[D2] (23:72-23:88) TS377003: Missing errors ErrorA | ErrorC in the expected Effect type. effect(missingEffectError)
+  Fix 0: "Disable missingEffectError for this line"
+  Fix 1: "Disable missingEffectError for entire file"
+  Fix 2: "Catch unexpected errors with Effect.catchTag"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable missingEffectError for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable missingEffectError for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Catch all errors with Effect.catchAll" ===
+
+--- file:///.src/missingEffectError_tagged.ts ---
+// @effect-v3
+import * as Data from "effect/Data"
+import type * as Effect from "effect/Effect"
+
+class ErrorA extends Data.TaggedClass("ErrorA")<{
+  a: 1
+}> {}
+
+class ErrorB extends Data.TaggedClass("ErrorB")<{
+  a: 2
+}> {}
+
+class ErrorC extends Data.TaggedClass("ErrorC")<{
+  a: 3
+}> {}
+
+declare const effectWithErrors: Effect.Effect<number, ErrorA | ErrorB | ErrorC>
+
+// @ts-expect-error
+export const conciseBody: () => Effect.Effect<number> = () => Effect.catchAll(effectWithErrors, () => Effect.dieMessage("TODO: catchAll not implemented"))
+
+// @ts-expect-error
+export const conciseBody2: () => Effect.Effect<number, ErrorB> = () => effectWithErrors
+
+
+=== [D1] Fix 3: "Catch unexpected errors with Effect.catchTag" ===
+
+--- file:///.src/missingEffectError_tagged.ts ---
+// @effect-v3
+import * as Data from "effect/Data"
+import type * as Effect from "effect/Effect"
+
+class ErrorA extends Data.TaggedClass("ErrorA")<{
+  a: 1
+}> {}
+
+class ErrorB extends Data.TaggedClass("ErrorB")<{
+  a: 2
+}> {}
+
+class ErrorC extends Data.TaggedClass("ErrorC")<{
+  a: 3
+}> {}
+
+declare const effectWithErrors: Effect.Effect<number, ErrorA | ErrorB | ErrorC>
+
+// @ts-expect-error
+export const conciseBody: () => Effect.Effect<number> = () => Effect.catchTags(effectWithErrors, { "ErrorA": () => Effect.dieMessage("TODO: catchTags() not implemented for ErrorA"), "ErrorB": () => Effect.dieMessage("TODO: catchTags() not implemented for ErrorB"), "ErrorC": () => Effect.dieMessage("TODO: catchTags() not implemented for ErrorC") })
+
+// @ts-expect-error
+export const conciseBody2: () => Effect.Effect<number, ErrorB> = () => effectWithErrors
+
+
+=== [D2] Fix 0: "Disable missingEffectError for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable missingEffectError for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Catch unexpected errors with Effect.catchTag" ===
+
+--- file:///.src/missingEffectError_tagged.ts ---
+// @effect-v3
+import * as Data from "effect/Data"
+import type * as Effect from "effect/Effect"
+
+class ErrorA extends Data.TaggedClass("ErrorA")<{
+  a: 1
+}> {}
+
+class ErrorB extends Data.TaggedClass("ErrorB")<{
+  a: 2
+}> {}
+
+class ErrorC extends Data.TaggedClass("ErrorC")<{
+  a: 3
+}> {}
+
+declare const effectWithErrors: Effect.Effect<number, ErrorA | ErrorB | ErrorC>
+
+// @ts-expect-error
+export const conciseBody: () => Effect.Effect<number> = () => effectWithErrors
+
+// @ts-expect-error
+export const conciseBody2: () => Effect.Effect<number, ErrorB> = () => Effect.catchTags(effectWithErrors, { "ErrorA": () => Effect.dieMessage("TODO: catchTags() not implemented for ErrorA"), "ErrorC": () => Effect.dieMessage("TODO: catchTags() not implemented for ErrorC") })
+

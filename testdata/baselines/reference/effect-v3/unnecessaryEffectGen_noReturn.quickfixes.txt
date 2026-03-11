@@ -1,0 +1,69 @@
+=== Quick Fix Inventory ===
+
+[D1] (13:37-15:3) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D2] (17:47-19:3) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/unnecessaryEffectGen_noReturn.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+export const shouldNotRant = Effect.gen(function*() {
+  yield* Effect.succeed(true)
+  yield* Effect.succeed(42)
+})
+
+export const shouldNotRaiseForNonEffect = Effect.gen(function*() {
+  return 42
+})
+
+export const shouldRaiseForSingle = Effect.asVoid(Effect.succeed(42))
+
+export const shouldRaiseForSingleReturnVoid = Effect.gen(function*() {
+  yield* Effect.void
+})
+
+
+=== [D2] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/unnecessaryEffectGen_noReturn.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+export const shouldNotRant = Effect.gen(function*() {
+  yield* Effect.succeed(true)
+  yield* Effect.succeed(42)
+})
+
+export const shouldNotRaiseForNonEffect = Effect.gen(function*() {
+  return 42
+})
+
+export const shouldRaiseForSingle = Effect.gen(function*() {
+  yield* Effect.succeed(42)
+})
+
+export const shouldRaiseForSingleReturnVoid = Effect.void
+

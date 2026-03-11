@@ -1,0 +1,26 @@
+diff --git a/internal/checker/types.go b/internal/checker/types.go
+index 3e2aafbd4..0db0f9770 100644
+--- a/internal/checker/types.go
++++ b/internal/checker/types.go
+@@ -360,6 +360,13 @@ type AssertionLinks struct {
+ 
+ // SourceFile links
+ 
++// RelationError captures a type relation error for Effect diagnostics processing.
++type RelationError struct {
++	Source    *Type
++	Target    *Type
++	ErrorNode *ast.Node
++}
++
+ type SourceFileLinks struct {
+ 	typeChecked               bool
+ 	deferredNodes             collections.OrderedSet[*ast.Node]
+@@ -369,6 +376,7 @@ type SourceFileLinks struct {
+ 	localJsxFactory           *ast.EntityName
+ 	localJsxFragmentFactory   *ast.EntityName
+ 	jsxFragmentType           *Type
++	relationErrors            []*RelationError // Collected during type checking for Effect diagnostics
+ }
+ 
+ // Signature specific links

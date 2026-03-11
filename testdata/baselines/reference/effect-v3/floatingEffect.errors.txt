@@ -1,0 +1,62 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/floatingEffect.ts(6,1): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+/.src/floatingEffect.ts(8,1): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+/.src/floatingEffect.ts(12,3): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+/.src/floatingEffect.ts(15,19): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/floatingEffect.ts(16,3): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+/.src/floatingEffect.ts(25,14): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/floatingEffect.ts(26,3): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+
+
+==== /.src/floatingEffect.ts (7 errors) ====
+    // @effect-v3
+    import * as Effect from "effect/Effect"
+    
+    const noError = Effect.succeed(1)
+    
+    Effect.succeed("floating")
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+    
+    Effect.never
+    ~~~~~~~~~~~~
+!!! error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+    
+    Effect.runPromise(Effect.gen(function*() {
+      const thisIsFine = Effect.succeed(1)
+      Effect.never
+      ~~~~~~~~~~~~
+!!! error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+    }))
+    
+    Effect.runPromise(Effect.gen(function*() {
+                      ~~~~~~~~~~~~~~~~~~~~~~~~
+      yield* Effect.succeed(1).pipe(Effect.fork)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      ~~~~~
+!!! error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+      // ^- This is fine, returns a fiber runtime
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    }))
+    ~~
+!!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+    
+    export function constructorFunction(this: { boot: Effect.Effect<void> }) {
+      this.boot = Effect.void
+      // ^- This is fine, its another way to perform an assignment
+    }
+    
+    const main = Effect.gen(function*() {
+                 ~~~~~~~~~~~~~~~~~~~~~~~~
+      yield* Effect.exit(Effect.void)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      ~~~~~
+!!! error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+      // ^- This is fine, returns an exit
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    })
+    ~~
+!!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+    

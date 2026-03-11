@@ -1,0 +1,60 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+
+
+==== /.src/layerServiceTypes.ts (0 errors) ====
+    import { Effect, Layer, ServiceMap } from "effect"
+    
+    // Define services using ServiceMap.Service (V4 pattern)
+    class Database extends ServiceMap.Service<Database, {
+      readonly query: (sql: string) => Effect.Effect<string>
+    }>()("Database") {}
+    
+    class Logger extends ServiceMap.Service<Logger, {
+      readonly log: (message: string) => Effect.Effect<void>
+    }>()("Logger") {}
+    
+    // Create layers using Layer.succeed (curried form)
+    const DatabaseLive = Layer.succeed(Database)({
+      query: (sql: string) => Effect.succeed(`result: ${sql}`)
+    })
+    
+    const LoggerLive = Layer.succeed(Logger)({
+      log: (message: string) => Effect.succeed(undefined as void)
+    })
+    
+    // Create layer using Layer.effect (curried form)
+    const DatabaseFromEffect = Layer.effect(Database)(
+      Effect.succeed({
+        query: (sql: string) => Effect.succeed(`result: ${sql}`)
+      })
+    )
+    
+    // Layer composition: merge
+    const AppLayer = Layer.mergeAll(DatabaseLive, LoggerLive)
+    
+    // Layer with dependencies
+    class UserRepo extends ServiceMap.Service<UserRepo, {
+      readonly getUser: (id: string) => Effect.Effect<string>
+    }>()("UserRepo") {}
+    
+    const UserRepoLive = Layer.effect(UserRepo)(
+      Effect.gen(function*() {
+        const db = yield* Database
+        return {
+          getUser: (id: string) => db.query(`SELECT * FROM users WHERE id = ${id}`)
+        }
+      })
+    )
+    
+    const UserRepoWithDeps = UserRepoLive.pipe(
+      Layer.provide(DatabaseLive)
+    )
+    
+    // Use layers in an Effect program
+    export const program = Effect.gen(function*() {
+      const db = yield* Database
+      return yield* db.query("SELECT 1")
+    }).pipe(Effect.provide(DatabaseLive))
+    

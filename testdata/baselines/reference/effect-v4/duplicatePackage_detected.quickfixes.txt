@@ -1,0 +1,16 @@
+=== Quick Fix Inventory ===
+
+[D1] (1:1-1:32) TS377051: Multiple versions of package 'my-effect-lib' detected: 1.0.0 @ /node_modules/my-effect-lib, 2.0.0 @ /node_modules/wrapper/node_modules/my-effect-lib. Consider cleaning up your lockfile, or add 'my-effect-lib' to allowedDuplicatedPackages to suppress this warning. effect(duplicatePackage)
+  Fix 0: "Disable duplicatePackage for this line"
+  Fix 1: "Disable duplicatePackage for entire file"
+
+[D2] (5:7-5:14) TS6133: 'program' is declared but its value is never read.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable duplicatePackage for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable duplicatePackage for entire file" ===
+skipped by default

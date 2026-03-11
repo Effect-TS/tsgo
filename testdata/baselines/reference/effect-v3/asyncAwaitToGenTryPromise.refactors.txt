@@ -1,0 +1,130 @@
+=== Refactor Inventory ===
+
+[R1] selection: "6:28-6:29"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Rewrite to Effect.gen" (refactor.rewrite.effect.asyncAwaitToGen)
+  Refactor 2: "Rewrite to Effect.gen with failures" (refactor.rewrite.effect.asyncAwaitToGenTryPromise)
+  Refactor 3: "Rewrite to Effect.fn" (refactor.rewrite.effect.asyncAwaitToFn)
+  Refactor 4: "Rewrite to Effect.fn with failures" (refactor.rewrite.effect.asyncAwaitToFnTryPromise)
+  Refactor 5: "Toggle return type annotation" (refactor.rewrite.effect.toggleReturnTypeAnnotation)
+
+[R2] selection: "empty (0:0-0:0)"
+  (no refactors)
+
+=== Refactor Application Results ===
+
+=== [R1] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/asyncAwaitToGenTryPromise.ts ---
+// refactor: 6:28-6:29
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+// this is a function existing jsdoc
+export async function refacpipe(t)orMe(arg: string) {
+  for (let i = 0; i < 10; i++) {
+    await Promise.resolve(i)
+  }
+  return await Promise.resolve(arg)
+}
+
+
+=== [R1] Refactor 1: "Rewrite to Effect.gen" ===
+
+--- file:///.src/asyncAwaitToGenTryPromise.ts ---
+// refactor: 6:28-6:29
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+// this is a function existing jsdoc
+export function refactorMe(arg: string) {
+    return Effect.gen(function* () {
+        for (let i = 0; i < 10; i++) {
+            yield* Effect.promise(() => Promise.resolve(i));
+        }
+        return yield* Effect.promise(() => Promise.resolve(arg));
+    });
+}
+
+
+=== [R1] Refactor 2: "Rewrite to Effect.gen with failures" ===
+
+--- file:///.src/asyncAwaitToGenTryPromise.ts ---
+// refactor: 6:28-6:29
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+export class Error1 extends Data.TaggedError("Error1")<{
+    cause: unknown;
+}> {}
+
+export class Error2 extends Data.TaggedError("Error2")<{
+    cause: unknown;
+}> {}
+
+// this is a function existing jsdoc
+export function refactorMe(arg: string) {
+    return Effect.gen(function* () {
+        for (let i = 0; i < 10; i++) {
+            yield* Effect.tryPromise({ try: () => Promise.resolve(i), catch: cause => new Error1({ cause }) });
+        }
+        return yield* Effect.tryPromise({ try: () => Promise.resolve(arg), catch: cause => new Error2({ cause }) });
+    });
+}
+
+
+=== [R1] Refactor 3: "Rewrite to Effect.fn" ===
+
+--- file:///.src/asyncAwaitToGenTryPromise.ts ---
+// refactor: 6:28-6:29
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+// this is a function existing jsdoc
+export const refactorMe = Effect.fn("refactorMe")(function* (arg: string) {
+    for (let i = 0; i < 10; i++) {
+        yield* Effect.promise(() => Promise.resolve(i));
+    }
+    return yield* Effect.promise(() => Promise.resolve(arg));
+});
+
+
+=== [R1] Refactor 4: "Rewrite to Effect.fn with failures" ===
+
+--- file:///.src/asyncAwaitToGenTryPromise.ts ---
+// refactor: 6:28-6:29
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+export class Error1 extends Data.TaggedError("Error1")<{
+    cause: unknown;
+}> {}
+
+export class Error2 extends Data.TaggedError("Error2")<{
+    cause: unknown;
+}> {}
+
+// this is a function existing jsdoc
+export const refactorMe = Effect.fn("refactorMe")(function* (arg: string) {
+    for (let i = 0; i < 10; i++) {
+        yield* Effect.tryPromise({ try: () => Promise.resolve(i), catch: cause => new Error1({ cause }) });
+    }
+    return yield* Effect.tryPromise({ try: () => Promise.resolve(arg), catch: cause => new Error2({ cause }) });
+});
+
+
+=== [R1] Refactor 5: "Toggle return type annotation" ===
+
+--- file:///.src/asyncAwaitToGenTryPromise.ts ---
+// refactor: 6:28-6:29
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+// this is a function existing jsdoc
+export async function refactorMe(arg: string): Promise<string> {
+  for (let i = 0; i < 10; i++) {
+    await Promise.resolve(i)
+  }
+  return await Promise.resolve(arg)
+}
+

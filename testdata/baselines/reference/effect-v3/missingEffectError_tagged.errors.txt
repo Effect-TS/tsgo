@@ -1,0 +1,36 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/missingEffectError_tagged.ts(20,63): error TS377003: Missing errors ErrorA | ErrorB | ErrorC in the expected Effect type. effect(missingEffectError)
+/.src/missingEffectError_tagged.ts(23,72): error TS377003: Missing errors ErrorA | ErrorC in the expected Effect type. effect(missingEffectError)
+
+
+==== /.src/missingEffectError_tagged.ts (2 errors) ====
+    // @effect-v3
+    import * as Data from "effect/Data"
+    import type * as Effect from "effect/Effect"
+    
+    class ErrorA extends Data.TaggedClass("ErrorA")<{
+      a: 1
+    }> {}
+    
+    class ErrorB extends Data.TaggedClass("ErrorB")<{
+      a: 2
+    }> {}
+    
+    class ErrorC extends Data.TaggedClass("ErrorC")<{
+      a: 3
+    }> {}
+    
+    declare const effectWithErrors: Effect.Effect<number, ErrorA | ErrorB | ErrorC>
+    
+    // @ts-expect-error
+    export const conciseBody: () => Effect.Effect<number> = () => effectWithErrors
+                                                                  ~~~~~~~~~~~~~~~~
+!!! error TS377003: Missing errors ErrorA | ErrorB | ErrorC in the expected Effect type. effect(missingEffectError)
+    
+    // @ts-expect-error
+    export const conciseBody2: () => Effect.Effect<number, ErrorB> = () => effectWithErrors
+                                                                           ~~~~~~~~~~~~~~~~
+!!! error TS377003: Missing errors ErrorA | ErrorC in the expected Effect type. effect(missingEffectError)
+    

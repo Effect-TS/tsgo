@@ -1,0 +1,85 @@
+==== /.src/overriddenSchemaConstructor.ts (6 flows) ====
+
+=== Piping Flow ===
+Location: 4:27 - 6:3
+Node: Schema.Class<Valid>("Valid")({\n  a: Schema.Number\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  a: Schema.Number\n}
+Subject Type: { a: typeof Number$; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<Valid>("Valid")
+      args: (constant)
+      outType: Class<Valid, { a: typeof Number$; }, Encoded<{ a: typeof Number$; }>, never, { readonly a: number; }, {}, {}>
+
+=== Piping Flow ===
+Location: 8:28 - 10:3
+Node: Schema.Class<Valid2>("Valid")({\n  a: Schema.Number\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  a: Schema.Number\n}
+Subject Type: { a: typeof Number$; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<Valid2>("Valid")
+      args: (constant)
+      outType: Class<Valid2, { a: typeof Number$; }, Encoded<{ a: typeof Number$; }>, never, { readonly a: number; }, {}, {}>
+
+=== Piping Flow ===
+Location: 25:10 - 27:5
+Node: Schema.Class<InvalidBecauseOfConstructor>("InvalidBecauseOfConstructor")({\n    a: Schema.Number\n  })
+Node Kind: KindCallExpression
+
+Subject: {\n    a: Schema.Number\n  }
+Subject Type: { a: typeof Number$; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<InvalidBecauseOfConstructor>("InvalidBecauseOfConstructor")
+      args: (constant)
+      outType: Class<InvalidBecauseOfConstructor, { a: typeof Number$; }, Encoded<{ a: typeof Number$; }>, never, { readonly a: number; }, {}, {}>
+
+=== Piping Flow ===
+Location: 30:18 - 31:21
+Node: super({ a: 42 })
+Node Kind: KindCallExpression
+
+Subject: { a: 42 }
+Subject Type: { a: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: super
+      args: (constant)
+      outType: { readonly a: number; }
+
+=== Piping Flow ===
+Location: 36:42 - 36:60
+Node: Schema.Struct({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 37:18 - 38:30
+Node: super({} as any as never)
+Node Kind: KindCallExpression
+
+Subject: {} as any as never
+Subject Type: never
+
+Transformations (1):
+  [0] kind: call
+      callee: super
+      args: (constant)
+      outType: Variance<{}, {}, never>

@@ -1,0 +1,101 @@
+==== /.src/multipleEffectProvide_effectFnRegular.ts (6 flows) ====
+
+=== Piping Flow ===
+Location: 4:8 - 4:37
+Node: Effect.succeed({ value: 1 })
+Node Kind: KindCallExpression
+
+Subject: { value: 1 }
+Subject Type: { value: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{ value: number; }, never, never>
+
+=== Piping Flow ===
+Location: 10:8 - 10:37
+Node: Effect.succeed({ value: 2 })
+Node Kind: KindCallExpression
+
+Subject: { value: 2 }
+Subject Type: { value: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{ value: number; }, never, never>
+
+=== Piping Flow ===
+Location: 16:8 - 16:37
+Node: Effect.succeed({ value: 3 })
+Node Kind: KindCallExpression
+
+Subject: { value: 3 }
+Subject Type: { value: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{ value: number; }, never, never>
+
+=== Piping Flow ===
+Location: 22:43 - 26:2
+Node: Effect.fn(\n  () => Effect.void,\n  Effect.provide(MyService1.Default),\n  Effect.provide(MyService2.Default)\n)
+Node Kind: KindCallExpression
+
+Subject: Effect.fn(\n  () => Effect.void,\n  Effect.provide(MyService1.Default),\n  Effect.provide(MyService2.Default)\n)
+Subject Type: Effect<void, never, never>
+
+Transformations (2):
+  [0] kind: effectFn
+      callee: Effect.provide
+      args: [MyService1.Default]
+      outType: Effect<void, never, never>
+  [1] kind: effectFn
+      callee: Effect.provide
+      args: [MyService2.Default]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 28:49 - 32:2
+Node: Effect.fn("traced")(\n  () => Effect.void,\n  Effect.provide(MyService1.Default),\n  Effect.provide(MyService2.Default)\n)
+Node Kind: KindCallExpression
+
+Subject: Effect.fn("traced")(\n  () => Effect.void,\n  Effect.provide(MyService1.Default),\n  Effect.provide(MyService2.Default)\n)
+Subject Type: Effect<void, never, never>
+
+Transformations (2):
+  [0] kind: effectFn
+      callee: Effect.provide
+      args: [MyService1.Default]
+      outType: Effect<void, never, never>
+  [1] kind: effectFn
+      callee: Effect.provide
+      args: [MyService2.Default]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 34:48 - 39:2
+Node: Effect.fn(\n  () => Effect.void,\n  Effect.provide(MyService1.Default),\n  Effect.provide(MyService2.Default),\n  Effect.provide(MyService3.Default)\n)
+Node Kind: KindCallExpression
+
+Subject: Effect.fn(\n  () => Effect.void,\n  Effect.provide(MyService1.Default),\n  Effect.provide(MyService2.Default),\n  Effect.provide(MyService3.Default)\n)
+Subject Type: Effect<void, never, never>
+
+Transformations (3):
+  [0] kind: effectFn
+      callee: Effect.provide
+      args: [MyService1.Default]
+      outType: Effect<void, never, never>
+  [1] kind: effectFn
+      callee: Effect.provide
+      args: [MyService2.Default]
+      outType: Effect<void, never, never>
+  [2] kind: effectFn
+      callee: Effect.provide
+      args: [MyService3.Default]
+      outType: Effect<void, never, never>

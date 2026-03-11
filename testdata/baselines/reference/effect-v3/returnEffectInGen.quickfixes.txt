@@ -1,0 +1,27 @@
+=== Quick Fix Inventory ===
+
+[D1] (5:3-5:9) TS377014: You are returning an Effect-able type inside a generator function, and will result in nested Effect<Effect<...>>.
+Maybe you wanted to return yield* instead?
+Nested Effect-able types may be intended if you plan to later manually flatten or unwrap this Effect, if so you can safely disable this diagnostic for this line through quickfixes. effect(returnEffectInGen)
+  Fix 0: "Disable returnEffectInGen for this line"
+  Fix 1: "Disable returnEffectInGen for entire file"
+  Fix 2: "Add yield* statement"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable returnEffectInGen for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable returnEffectInGen for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Add yield* statement" ===
+
+--- file:///.src/returnEffectInGen.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+export const shouldWarn = Effect.gen(function*() {
+  return yield* Effect.fail("error")
+})
+

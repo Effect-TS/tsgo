@@ -1,0 +1,23 @@
+=== Quick Fix Inventory ===
+
+[D1] (3:1-3:18) TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D2] (10:1-10:18) TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default

@@ -1,0 +1,43 @@
+==== /.src/serviceNotAsClass.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 7:15 - 7:59
+Node: ServiceMap.Service<ConfigService>("Config")
+Node Kind: KindCallExpression
+
+Subject: "Config"
+Subject Type: "Config"
+
+Transformations (1):
+  [0] kind: call
+      callee: ServiceMap.Service
+      args: (constant)
+      outType: Service<ConfigService, ConfigService>
+
+=== Piping Flow ===
+Location: 11:29 - 11:95
+Node: ServiceMap.Service<ArtifactStoreService>("@my-app/ArtifactStore")
+Node Kind: KindCallExpression
+
+Subject: "@my-app/ArtifactStore"
+Subject Type: "@my-app/ArtifactStore"
+
+Transformations (1):
+  [0] kind: call
+      callee: ServiceMap.Service
+      args: (constant)
+      outType: Service<ArtifactStoreService, ArtifactStoreService>
+
+=== Piping Flow ===
+Location: 14:24 - 14:87
+Node: ServiceMap.Service<MyService, { port: number }>()("MyService")
+Node Kind: KindCallExpression
+
+Subject: "MyService"
+Subject Type: "MyService"
+
+Transformations (1):
+  [0] kind: call
+      callee: ServiceMap.Service<MyService, { port: number }>()
+      args: (constant)
+      outType: ServiceClass<MyService, "MyService", { port: number; }>

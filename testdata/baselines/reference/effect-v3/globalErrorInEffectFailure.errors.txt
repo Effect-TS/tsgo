@@ -1,0 +1,87 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/globalErrorInEffectFailure.ts(8,41): warning TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
+/.src/globalErrorInEffectFailure.ts(9,42): warning TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
+/.src/globalErrorInEffectFailure.ts(15,42): warning TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
+/.src/globalErrorInEffectFailure.ts(27,32): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/globalErrorInEffectFailure.ts(28,29): warning TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
+/.src/globalErrorInEffectFailure.ts(32,35): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/globalErrorInEffectFailure.ts(33,10): suggestion TS377019: This Effect.fail call uses a yieldable error type as argument. You can yield* the error directly instead. effect(unnecessaryFailYieldableError)
+/.src/globalErrorInEffectFailure.ts(38,36): warning TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
+/.src/globalErrorInEffectFailure.ts(48,25): warning TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
+
+
+==== /.src/globalErrorInEffectFailure.ts (9 errors) ====
+    // @effect-v3
+    import { Data, Effect } from "effect"
+    
+    class CustomError extends Data.TaggedError("CustomError")<{}> {}
+    
+    export const shouldNotReport = Effect.fail(new CustomError())
+    
+    export const shouldReport = Effect.fail(new Error("global error"))
+                                            ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
+    export const shouldReport2 = Effect.fail(new globalThis.Error("global error"))
+                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
+    
+    export class BaseExtendsError extends Error {
+    }
+    
+    // this is not fine because it extends the global Error type without changing it
+    export const shouldReport3 = Effect.fail(new BaseExtendsError())
+                                             ~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
+    
+    export class BaseExtendsErrorWithTag extends Error {
+      readonly _tag = "BaseExtendsErrorWithTag"
+    }
+    
+    // this is fine because it has some property that is not the global Error type
+    export const shouldNotReport2 = Effect.fail(new BaseExtendsErrorWithTag())
+    
+    // Additional test cases for Effect.gen with global Error
+    
+    // should report - global Error in Effect.gen
+    export const shouldReportGen = Effect.gen(function* () {
+                                   ~~~~~~~~~~~~~~~~~~~~~~~~~
+      return yield* Effect.fail(new Error("global error in gen"))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
+    })
+    ~~
+!!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+    
+    // should not report - custom error in Effect.gen
+    export const shouldNotReportGen = Effect.gen(function* () {
+                                      ~~~~~~~~~~~~~~~~~~~~~~~~~
+      return yield* Effect.fail(new CustomError())
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+             ~~~~~
+!!! suggestion TS377019: This Effect.fail call uses a yieldable error type as argument. You can yield* the error directly instead. effect(unnecessaryFailYieldableError)
+    })
+    ~~
+!!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+    
+    // should report - global Error in Effect.map
+    export const shouldReportMap = Effect.succeed(1).pipe(
+      Effect.flatMap(() => Effect.fail(new Error("global error in map")))
+                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
+    )
+    
+    // should not report - new Error outside of Effect context
+    export function shouldNotReportNonEffect() {
+      throw new Error("this is not in an Effect")
+    }
+    
+    // should report - mapError converting to global Error
+    export const shouldReportMapError = Effect.fail(new CustomError()).pipe(
+      Effect.mapError(() => new Error("mapped to global error"))
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
+    )
+    

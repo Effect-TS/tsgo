@@ -1,0 +1,98 @@
+=== Refactor Inventory ===
+
+[R1] selection: "5:28-5:29"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Rewrite to Effect.gen" (refactor.rewrite.effect.asyncAwaitToGen)
+  Refactor 2: "Rewrite to Effect.gen with failures" (refactor.rewrite.effect.asyncAwaitToGenTryPromise)
+  Refactor 3: "Rewrite to Effect.fn" (refactor.rewrite.effect.asyncAwaitToFn)
+  Refactor 4: "Rewrite to Effect.fn with failures" (refactor.rewrite.effect.asyncAwaitToFnTryPromise)
+  Refactor 5: "Toggle return type annotation" (refactor.rewrite.effect.toggleReturnTypeAnnotation)
+
+[R2] selection: "empty (0:0-0:0)"
+  (no refactors)
+
+=== Refactor Application Results ===
+
+=== [R1] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/asyncAwaitToGen.ts ---
+// refactor: 5:28-5:29
+// @effect-v3
+import * as T from "effect/Effect"
+
+export async function refacpipe(t)orMe(arg: string) {
+  return await Promise.resolve(1)
+}
+
+
+=== [R1] Refactor 1: "Rewrite to Effect.gen" ===
+
+--- file:///.src/asyncAwaitToGen.ts ---
+// refactor: 5:28-5:29
+// @effect-v3
+import * as T from "effect/Effect"
+
+export function refactorMe(arg: string) {
+    return T.gen(function* () {
+        return yield* T.promise(() => Promise.resolve(1));
+    });
+}
+
+
+=== [R1] Refactor 2: "Rewrite to Effect.gen with failures" ===
+
+--- file:///.src/asyncAwaitToGen.ts ---
+// refactor: 5:28-5:29
+// @effect-v3
+import * as T from "effect/Effect"
+
+export class Error1 extends Data.TaggedError("Error1")<{
+    cause: unknown;
+}> {}
+
+export function refactorMe(arg: string) {
+    return T.gen(function* () {
+        return yield* T.tryPromise({ try: () => Promise.resolve(1), catch: cause => new Error1({ cause }) });
+    });
+}
+
+
+=== [R1] Refactor 3: "Rewrite to Effect.fn" ===
+
+--- file:///.src/asyncAwaitToGen.ts ---
+// refactor: 5:28-5:29
+// @effect-v3
+import * as T from "effect/Effect"
+
+export const refactorMe = T.fn("refactorMe")(function* (arg: string) {
+    return yield* T.promise(() => Promise.resolve(1));
+});
+
+
+=== [R1] Refactor 4: "Rewrite to Effect.fn with failures" ===
+
+--- file:///.src/asyncAwaitToGen.ts ---
+// refactor: 5:28-5:29
+// @effect-v3
+import * as T from "effect/Effect"
+
+export class Error1 extends Data.TaggedError("Error1")<{
+    cause: unknown;
+}> {}
+
+export const refactorMe = T.fn("refactorMe")(function* (arg: string) {
+    return yield* T.tryPromise({ try: () => Promise.resolve(1), catch: cause => new Error1({ cause }) });
+});
+
+
+=== [R1] Refactor 5: "Toggle return type annotation" ===
+
+--- file:///.src/asyncAwaitToGen.ts ---
+// refactor: 5:28-5:29
+// @effect-v3
+import * as T from "effect/Effect"
+
+export async function refactorMe(arg: string): Promise<number> {
+  return await Promise.resolve(1)
+}
+

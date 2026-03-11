@@ -1,0 +1,23 @@
+=== Quick Fix Inventory ===
+
+[D1] (28:8-28:25) TS377034: Missing 'ServiceB | ServiceC' in the expected Layer context. effect(missingLayerContext)
+  Fix 0: "Disable missingLayerContext for this line"
+  Fix 1: "Disable missingLayerContext for entire file"
+
+[D2] (35:20-35:37) TS377034: Missing 'ServiceC' in the expected Layer context. effect(missingLayerContext)
+  Fix 0: "Disable missingLayerContext for this line"
+  Fix 1: "Disable missingLayerContext for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable missingLayerContext for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable missingLayerContext for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable missingLayerContext for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable missingLayerContext for entire file" ===
+skipped by default

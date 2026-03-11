@@ -1,0 +1,322 @@
+=== Refactor Inventory ===
+
+[R1] selection: "4:22-4:23"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Toggle return type annotation" (refactor.rewrite.effect.toggleReturnTypeAnnotation)
+
+[R2] selection: "6:22-6:23"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Toggle return type annotation" (refactor.rewrite.effect.toggleReturnTypeAnnotation)
+
+[R3] selection: "8:10-8:11"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Toggle return type annotation" (refactor.rewrite.effect.toggleReturnTypeAnnotation)
+  Refactor 2: "Convert to arrow" (refactor.rewrite.effect.functionToArrow)
+
+[R4] selection: "12:10-12:11"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Toggle return type annotation" (refactor.rewrite.effect.toggleReturnTypeAnnotation)
+  Refactor 2: "Convert to arrow" (refactor.rewrite.effect.functionToArrow)
+
+[R5] selection: "16:10-16:11"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Toggle return type annotation" (refactor.rewrite.effect.toggleReturnTypeAnnotation)
+  Refactor 2: "Convert to arrow" (refactor.rewrite.effect.functionToArrow)
+
+[R6] selection: "empty (0:0-0:0)"
+  (no refactors)
+
+=== Refactor Application Results ===
+
+=== [R1] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/toggleReturnTypeAnnotation.ts ---
+// refactor: 4:22-4:23, 6:22-6:23, 8:10-8:11, 12:10-12:11, 16:10-16:11
+import * as T from "effect/Effect"
+
+export const test1 = pipe(()) => T.succeed(42)
+
+export const test2 = () => (true ? T.succeed(42) : false)
+
+function sillyGenerics<A>(value: A) {
+  return T.fail(value)
+}
+
+function removeAnnotation(): number {
+  return 42
+}
+
+function removeAnnotationWithSpace(): number {
+  return 42
+}
+
+
+=== [R1] Refactor 1: "Toggle return type annotation" ===
+
+--- file:///.src/toggleReturnTypeAnnotation.ts ---
+// refactor: 4:22-4:23, 6:22-6:23, 8:10-8:11, 12:10-12:11, 16:10-16:11
+import * as T from "effect/Effect"
+
+export const test1 = (): T.Effect<number, never, never> => T.succeed(42)
+
+export const test2 = () => (true ? T.succeed(42) : false)
+
+function sillyGenerics<A>(value: A) {
+  return T.fail(value)
+}
+
+function removeAnnotation(): number {
+  return 42
+}
+
+function removeAnnotationWithSpace(): number {
+  return 42
+}
+
+
+=== [R2] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/toggleReturnTypeAnnotation.ts ---
+// refactor: 4:22-4:23, 6:22-6:23, 8:10-8:11, 12:10-12:11, 16:10-16:11
+import * as T from "effect/Effect"
+
+export const test1 = () => T.succeed(42)
+
+export const test2 = pipe(()) => (true ? T.succeed(42) : false)
+
+function sillyGenerics<A>(value: A) {
+  return T.fail(value)
+}
+
+function removeAnnotation(): number {
+  return 42
+}
+
+function removeAnnotationWithSpace(): number {
+  return 42
+}
+
+
+=== [R2] Refactor 1: "Toggle return type annotation" ===
+
+--- file:///.src/toggleReturnTypeAnnotation.ts ---
+// refactor: 4:22-4:23, 6:22-6:23, 8:10-8:11, 12:10-12:11, 16:10-16:11
+import * as T from "effect/Effect"
+
+export const test1 = () => T.succeed(42)
+
+export const test2 = (): false | T.Effect<number, never, never> => (true ? T.succeed(42) : false)
+
+function sillyGenerics<A>(value: A) {
+  return T.fail(value)
+}
+
+function removeAnnotation(): number {
+  return 42
+}
+
+function removeAnnotationWithSpace(): number {
+  return 42
+}
+
+
+=== [R3] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/toggleReturnTypeAnnotation.ts ---
+// refactor: 4:22-4:23, 6:22-6:23, 8:10-8:11, 12:10-12:11, 16:10-16:11
+import * as T from "effect/Effect"
+
+export const test1 = () => T.succeed(42)
+
+export const test2 = () => (true ? T.succeed(42) : false)
+
+function pipe(s)illyGenerics<A>(value: A) {
+  return T.fail(value)
+}
+
+function removeAnnotation(): number {
+  return 42
+}
+
+function removeAnnotationWithSpace(): number {
+  return 42
+}
+
+
+=== [R3] Refactor 1: "Toggle return type annotation" ===
+
+--- file:///.src/toggleReturnTypeAnnotation.ts ---
+// refactor: 4:22-4:23, 6:22-6:23, 8:10-8:11, 12:10-12:11, 16:10-16:11
+import * as T from "effect/Effect"
+
+export const test1 = () => T.succeed(42)
+
+export const test2 = () => (true ? T.succeed(42) : false)
+
+function sillyGenerics<A>(value: A): T.Effect<never, A, never> {
+  return T.fail(value)
+}
+
+function removeAnnotation(): number {
+  return 42
+}
+
+function removeAnnotationWithSpace(): number {
+  return 42
+}
+
+
+=== [R3] Refactor 2: "Convert to arrow" ===
+
+--- file:///.src/toggleReturnTypeAnnotation.ts ---
+// refactor: 4:22-4:23, 6:22-6:23, 8:10-8:11, 12:10-12:11, 16:10-16:11
+import * as T from "effect/Effect"
+
+export const test1 = () => T.succeed(42)
+
+export const test2 = () => (true ? T.succeed(42) : false)
+
+const sillyGenerics = <A>(value: A) => T.fail(value);
+
+function removeAnnotation(): number {
+  return 42
+}
+
+function removeAnnotationWithSpace(): number {
+  return 42
+}
+
+
+=== [R4] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/toggleReturnTypeAnnotation.ts ---
+// refactor: 4:22-4:23, 6:22-6:23, 8:10-8:11, 12:10-12:11, 16:10-16:11
+import * as T from "effect/Effect"
+
+export const test1 = () => T.succeed(42)
+
+export const test2 = () => (true ? T.succeed(42) : false)
+
+function sillyGenerics<A>(value: A) {
+  return T.fail(value)
+}
+
+function pipe(r)emoveAnnotation(): number {
+  return 42
+}
+
+function removeAnnotationWithSpace(): number {
+  return 42
+}
+
+
+=== [R4] Refactor 1: "Toggle return type annotation" ===
+
+--- file:///.src/toggleReturnTypeAnnotation.ts ---
+// refactor: 4:22-4:23, 6:22-6:23, 8:10-8:11, 12:10-12:11, 16:10-16:11
+import * as T from "effect/Effect"
+
+export const test1 = () => T.succeed(42)
+
+export const test2 = () => (true ? T.succeed(42) : false)
+
+function sillyGenerics<A>(value: A) {
+  return T.fail(value)
+}
+
+function removeAnnotation() {
+  return 42
+}
+
+function removeAnnotationWithSpace(): number {
+  return 42
+}
+
+
+=== [R4] Refactor 2: "Convert to arrow" ===
+
+--- file:///.src/toggleReturnTypeAnnotation.ts ---
+// refactor: 4:22-4:23, 6:22-6:23, 8:10-8:11, 12:10-12:11, 16:10-16:11
+import * as T from "effect/Effect"
+
+export const test1 = () => T.succeed(42)
+
+export const test2 = () => (true ? T.succeed(42) : false)
+
+function sillyGenerics<A>(value: A) {
+  return T.fail(value)
+}
+
+const removeAnnotation = () => 42;
+
+function removeAnnotationWithSpace(): number {
+  return 42
+}
+
+
+=== [R5] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/toggleReturnTypeAnnotation.ts ---
+// refactor: 4:22-4:23, 6:22-6:23, 8:10-8:11, 12:10-12:11, 16:10-16:11
+import * as T from "effect/Effect"
+
+export const test1 = () => T.succeed(42)
+
+export const test2 = () => (true ? T.succeed(42) : false)
+
+function sillyGenerics<A>(value: A) {
+  return T.fail(value)
+}
+
+function removeAnnotation(): number {
+  return 42
+}
+
+function pipe(r)emoveAnnotationWithSpace(): number {
+  return 42
+}
+
+
+=== [R5] Refactor 1: "Toggle return type annotation" ===
+
+--- file:///.src/toggleReturnTypeAnnotation.ts ---
+// refactor: 4:22-4:23, 6:22-6:23, 8:10-8:11, 12:10-12:11, 16:10-16:11
+import * as T from "effect/Effect"
+
+export const test1 = () => T.succeed(42)
+
+export const test2 = () => (true ? T.succeed(42) : false)
+
+function sillyGenerics<A>(value: A) {
+  return T.fail(value)
+}
+
+function removeAnnotation(): number {
+  return 42
+}
+
+function removeAnnotationWithSpace() {
+  return 42
+}
+
+
+=== [R5] Refactor 2: "Convert to arrow" ===
+
+--- file:///.src/toggleReturnTypeAnnotation.ts ---
+// refactor: 4:22-4:23, 6:22-6:23, 8:10-8:11, 12:10-12:11, 16:10-16:11
+import * as T from "effect/Effect"
+
+export const test1 = () => T.succeed(42)
+
+export const test2 = () => (true ? T.succeed(42) : false)
+
+function sillyGenerics<A>(value: A) {
+  return T.fail(value)
+}
+
+function removeAnnotation(): number {
+  return 42
+}
+
+const removeAnnotationWithSpace = () => 42;
+

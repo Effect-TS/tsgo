@@ -1,0 +1,67 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/effectFnOpportunity_basic.ts(10,14): suggestion TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*() { ... }). effect(effectFnOpportunity)
+/.src/effectFnOpportunity_basic.ts(17,14): suggestion TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*() { ... }). effect(effectFnOpportunity)
+/.src/effectFnOpportunity_basic.ts(23,14): suggestion TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*() { ... }). effect(effectFnOpportunity)
+/.src/effectFnOpportunity_basic.ts(30,17): suggestion TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*() { ... }). effect(effectFnOpportunity)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "effectFn": ["span", "suggested-span", "inferred-span", "no-span", "untraced"]
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/effectFnOpportunity_basic.ts (4 errors) ====
+    // @effect-v3
+    import * as Effect from "effect/Effect"
+    
+    // These cases can be converted to Effect.fnUntraced because:
+    // - There are no pipe arguments
+    // - There is no withSpan for tracing
+    // Converting to Effect.fnUntraced improves performance by not
+    // reallocating the generator function on every call.
+    
+    export const arrowBlockGen = () => {
+                 ~~~~~~~~~~~~~
+!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*() { ... }). effect(effectFnOpportunity)
+      return Effect.gen(function*() {
+        yield* Effect.succeed(1)
+        return 42
+      })
+    }
+    
+    export const arrowExpressionGen = () =>
+                 ~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*() { ... }). effect(effectFnOpportunity)
+      Effect.gen(function*() {
+        yield* Effect.succeed(1)
+        return 42
+      })
+    
+    export const functionExpressionGen = function() {
+                 ~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*() { ... }). effect(effectFnOpportunity)
+      return Effect.gen(function*() {
+        yield* Effect.succeed(1)
+        return 42
+      })
+    }
+    
+    export function functionDeclarationGen() {
+                    ~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*() { ... }). effect(effectFnOpportunity)
+      return Effect.gen(function*() {
+        yield* Effect.succeed(1)
+        return 42
+      })
+    }
+    

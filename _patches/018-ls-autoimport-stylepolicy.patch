@@ -1,0 +1,164 @@
+diff --git a/internal/ls/autoimport/fix.go b/internal/ls/autoimport/fix.go
+index 26df54b555..b996ab93eb 100644
+--- a/internal/ls/autoimport/fix.go
++++ b/internal/ls/autoimport/fix.go
+@@ -74,14 +74,19 @@ func (f *Fix) Edits(
+ 	case lsproto.AutoImportFixKindAddNew:
+ 		var declarations []*ast.Statement
+ 		defaultImport := core.IfElse(f.ImportKind == lsproto.ImportKindDefault, &newImportBinding{name: f.Name, addAsTypeOnly: f.AddAsTypeOnly}, nil)
+-		namedImports := core.IfElse(f.ImportKind == lsproto.ImportKindNamed, []*newImportBinding{{name: f.Name, addAsTypeOnly: f.AddAsTypeOnly}}, nil)
++		namedBindingName := f.Name
++		if f.ImportKind == lsproto.ImportKindNamed && f.NamespacePrefix != "" {
++			namedBindingName = f.NamespacePrefix
++		}
++		namedImports := core.IfElse(f.ImportKind == lsproto.ImportKindNamed, []*newImportBinding{{name: namedBindingName, addAsTypeOnly: f.AddAsTypeOnly}}, nil)
+ 		var namespaceLikeImport *newImportBinding
+ 		// qualification := f.qualification()
+ 		if f.ImportKind == lsproto.ImportKindNamespace || f.ImportKind == lsproto.ImportKindCommonJS {
+-			namespaceLikeImport = &newImportBinding{kind: f.ImportKind, name: f.Name}
+-			// if qualification != nil && qualification.namespacePref != "" {
+-			// 	namespaceLikeImport.name = qualification.namespacePref
+-			// }
++			nsName := f.Name
++			if f.NamespacePrefix != "" {
++				nsName = f.NamespacePrefix
++			}
++			namespaceLikeImport = &newImportBinding{kind: f.ImportKind, name: nsName}
+ 		}
+ 
+ 		quotePreference := lsutil.GetQuotePreference(file, preferences)
+@@ -98,9 +103,11 @@ func (f *Fix) Edits(
+ 			/*blankLineBetween*/ true,
+ 			preferences,
+ 		)
+-		// if qualification != nil {
+-		// 	addNamespaceQualifier(tracker, file, qualification)
+-		// }
++		// When a style rewrite introduced a qualifier requirement (e.g. namespace/barrel),
++		// apply the same usage-site prefix edit in the shared fix pipeline.
++		if f.NamespacePrefix != "" {
++			addNamespaceQualifier(f, tracker, file, locale)
++		}
+ 		return tracker.GetChanges()[file.FileName()], diagnostics.Add_import_from_0.Localize(locale, f.ModuleSpecifier)
+ 	case lsproto.AutoImportFixKindPromoteTypeOnly:
+ 		promotedDeclaration := promoteFromTypeOnly(tracker, f.TypeOnlyAliasDeclaration, compilerOptions, file, preferences)
+@@ -550,7 +557,7 @@ func (v *View) GetFixes(ctx context.Context, export *Export, forJSX bool, isVali
+ 	}
+ 
+ 	if fix := v.tryAddToExistingImport(ctx, export, isValidTypeOnlyUseSite); fix != nil {
+-		return append(fixes, fix)
++		return v.applyStylePolicy(export, append(fixes, fix))
+ 	}
+ 
+ 	// !!! getNewImportFromExistingSpecifier - even worth it?
+@@ -558,7 +565,7 @@ func (v *View) GetFixes(ctx context.Context, export *Export, forJSX bool, isVali
+ 	moduleSpecifier, moduleSpecifierKind := v.GetModuleSpecifier(export, v.preferences)
+ 	if moduleSpecifier == "" {
+ 		if len(fixes) > 0 {
+-			return fixes
++			return v.applyStylePolicy(export, fixes)
+ 		}
+ 		return nil
+ 	}
+@@ -568,7 +575,7 @@ func (v *View) GetFixes(ctx context.Context, export *Export, forJSX bool, isVali
+ 	importedSymbolHasValueMeaning := export.Flags&ast.SymbolFlagsValue != 0 || export.IsUnresolvedAlias()
+ 	if !importedSymbolHasValueMeaning && isJs && usagePosition != nil {
+ 		// For pure types in JS files, use JSDoc import type syntax
+-		return []*Fix{
++		return v.applyStylePolicy(export, []*Fix{
+ 			{
+ 				AutoImportFix: &lsproto.AutoImportFix{
+ 					Kind:            lsproto.AutoImportFixKindJsdocTypeImport,
+@@ -580,7 +587,7 @@ func (v *View) GetFixes(ctx context.Context, export *Export, forJSX bool, isVali
+ 				IsReExport:          export.Target.ModuleID != export.ModuleID,
+ 				ModuleFileName:      export.ModuleFileName,
+ 			},
+-		}
++		})
+ 	}
+ 
+ 	importKind := getImportKind(v.importingFile, export, v.program)
+@@ -596,7 +603,7 @@ func (v *View) GetFixes(ctx context.Context, export *Export, forJSX bool, isVali
+ 		}
+ 	}
+ 
+-	return append(fixes, &Fix{
++	return v.applyStylePolicy(export, append(fixes, &Fix{
+ 		AutoImportFix: &lsproto.AutoImportFix{
+ 			Kind:            lsproto.AutoImportFixKindAddNew,
+ 			ImportKind:      importKind,
+@@ -604,11 +611,37 @@ func (v *View) GetFixes(ctx context.Context, export *Export, forJSX bool, isVali
+ 			Name:            name,
+ 			UseRequire:      v.shouldUseRequire(),
+ 			AddAsTypeOnly:   addAsTypeOnly,
++			UsagePosition:   usagePosition,
+ 		},
+ 		ModuleSpecifierKind: moduleSpecifierKind,
+ 		IsReExport:          export.Target.ModuleID != export.ModuleID,
+ 		ModuleFileName:      export.ModuleFileName,
+-	})
++	}))
++}
++
++// FixTransformer is a function that transforms auto-import fixes based on
++// style preferences. It receives an export and a list of fixes, and returns
++// the (potentially rewritten) list of fixes. A nil return suppresses the fixes.
++type FixTransformer func(export *Export, fixes []*Fix) []*Fix
++
++// autoImportFixTransformerFactory is the registered factory that creates a
++// FixTransformer from user preferences and the compiler program.
++// Set via RegisterAutoImportFixTransformer.
++var autoImportFixTransformerFactory func(prefs modulespecifiers.UserPreferences, program *compiler.Program) FixTransformer
++
++// RegisterAutoImportFixTransformer registers a factory function that will be
++// called during NewView to create a FixTransformer from user preferences and
++// the compiler program. Only one factory can be registered; subsequent calls
++// replace the previous one.
++func RegisterAutoImportFixTransformer(factory func(prefs modulespecifiers.UserPreferences, program *compiler.Program) FixTransformer) {
++	autoImportFixTransformerFactory = factory
++}
++
++func (v *View) applyStylePolicy(export *Export, fixes []*Fix) []*Fix {
++	if v.fixTransformer == nil || len(fixes) == 0 {
++		return fixes
++	}
++	return v.fixTransformer(export, fixes)
+ }
+ 
+ // getAddAsTypeOnly determines if an import should be type-only based on usage context
+diff --git a/internal/ls/autoimport/view.go b/internal/ls/autoimport/view.go
+index 78e12a0807..19abc0d872 100644
+--- a/internal/ls/autoimport/view.go
++++ b/internal/ls/autoimport/view.go
+@@ -21,8 +21,9 @@ type View struct {
+ 	registry      *Registry
+ 	importingFile *ast.SourceFile
+ 	program       *compiler.Program
+-	preferences   modulespecifiers.UserPreferences
+-	projectKey    tspath.Path
++	preferences    modulespecifiers.UserPreferences
++	fixTransformer FixTransformer
++	projectKey     tspath.Path
+ 
+ 	allowedEndings                   []modulespecifiers.ModuleSpecifierEnding
+ 	conditions                       *collections.Set[string]
+@@ -32,7 +33,7 @@ type View struct {
+ }
+ 
+ func NewView(registry *Registry, importingFile *ast.SourceFile, projectKey tspath.Path, program *compiler.Program, preferences modulespecifiers.UserPreferences) *View {
+-	return &View{
++	view := &View{
+ 		registry:      registry,
+ 		importingFile: importingFile,
+ 		program:       program,
+@@ -44,6 +45,10 @@ func NewView(registry *Registry, importingFile *ast.SourceFile, projectKey tspat
+ 		),
+ 		shouldUseUriStyleNodeCoreModules: lsutil.ShouldUseUriStyleNodeCoreModules(importingFile, program),
+ 	}
++	if autoImportFixTransformerFactory != nil {
++		view.fixTransformer = autoImportFixTransformerFactory(preferences, program)
++	}
++	return view
+ }
+ 
+ func (v *View) getAllowedEndings() []modulespecifiers.ModuleSpecifierEnding {

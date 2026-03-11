@@ -1,0 +1,40 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+/.src/catchAllToMapError_effectFn.ts(11,4): suggestion TS377010: You can use Effect.mapError instead of Effect.catch + Effect.fail to transform the error type. effect(catchAllToMapError)
+/.src/catchAllToMapError_effectFn.ts(15,4): suggestion TS377010: You can use Effect.mapError instead of Effect.catch + Effect.fail to transform the error type. effect(catchAllToMapError)
+/.src/catchAllToMapError_effectFn.ts(19,4): suggestion TS377010: You can use Effect.mapError instead of Effect.catch + Effect.fail to transform the error type. effect(catchAllToMapError)
+
+
+==== /.src/catchAllToMapError_effectFn.ts (3 errors) ====
+    import { Effect } from "effect"
+    
+    class MyErrorTagged {
+      readonly _tag = "MyErrorTagged"
+      constructor(readonly cause: unknown) {}
+    }
+    
+    // Effect.fn with catch that should be mapError
+    export const shouldReportEffectFn = Effect.fn(function*() {
+      return yield* Effect.fail("error")
+    }, Effect.catch((cause) => Effect.fail(new MyErrorTagged(cause))))
+       ~~~~~~~~~~~~
+!!! suggestion TS377010: You can use Effect.mapError instead of Effect.catch + Effect.fail to transform the error type. effect(catchAllToMapError)
+    
+    export const shouldReportEffectFnTraced = Effect.fn("traced")(function*() {
+      return yield* Effect.fail("error")
+    }, Effect.catch((cause) => Effect.fail(new MyErrorTagged(cause))))
+       ~~~~~~~~~~~~
+!!! suggestion TS377010: You can use Effect.mapError instead of Effect.catch + Effect.fail to transform the error type. effect(catchAllToMapError)
+    
+    export const shouldReportEffectFnUntraced = Effect.fnUntraced(function*() {
+      return yield* Effect.fail("error")
+    }, Effect.catch((cause) => Effect.fail(new MyErrorTagged(cause))))
+       ~~~~~~~~~~~~
+!!! suggestion TS377010: You can use Effect.mapError instead of Effect.catch + Effect.fail to transform the error type. effect(catchAllToMapError)
+    
+    // Should NOT report: catch returning Effect.succeed
+    export const shouldNotReportEffectFn = Effect.fn(function*() {
+      return yield* Effect.fail("error")
+    }, Effect.catch(() => Effect.succeed(42)))
+    

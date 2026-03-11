@@ -1,0 +1,49 @@
+diff --git a/internal/execute/tsc/emit.go b/internal/execute/tsc/emit.go
+index 44dc673d9..884e54a1f 100644
+--- a/internal/execute/tsc/emit.go
++++ b/internal/execute/tsc/emit.go
+@@ -10,12 +10,26 @@ import (
+ 	"github.com/microsoft/typescript-go/internal/ast"
+ 	"github.com/microsoft/typescript-go/internal/collections"
+ 	"github.com/microsoft/typescript-go/internal/compiler"
++	"github.com/microsoft/typescript-go/internal/core"
+ 	"github.com/microsoft/typescript-go/internal/diagnostics"
+ 	"github.com/microsoft/typescript-go/internal/locale"
+ 	"github.com/microsoft/typescript-go/internal/tsoptions"
+ 	"github.com/microsoft/typescript-go/internal/tspath"
+ )
+ 
++// FilterDiagnosticsForExitCodeCallback is invoked to filter diagnostics before
++// exit-code determination. It allows external packages to exclude certain
++// diagnostics (e.g., Effect suggestions/warnings) from affecting the exit code
++// while still reporting them to the user.
++var FilterDiagnosticsForExitCodeCallback func(*core.CompilerOptions, []*ast.Diagnostic) []*ast.Diagnostic
++
++// RegisterFilterDiagnosticsForExitCodeCallback registers a callback to filter
++// diagnostics for exit-code determination.
++// Note: Only one callback can be registered. Subsequent calls will replace the previous callback.
++func RegisterFilterDiagnosticsForExitCodeCallback(cb func(*core.CompilerOptions, []*ast.Diagnostic) []*ast.Diagnostic) {
++	FilterDiagnosticsForExitCodeCallback = cb
++}
++
+ func GetTraceWithWriterFromSys(w io.Writer, locale locale.Locale, testing CommandLineTesting) func(msg *diagnostics.Message, args ...any) {
+ 	if testing == nil {
+ 		return func(msg *diagnostics.Message, args ...any) {
+@@ -60,9 +74,15 @@ func EmitAndReportStatistics(input EmitInput) (CompileAndEmitResult, *Statistics
+ 		statistics.Report(input.Writer, input.Testing)
+ 	}
+ 
+-	if result.EmitResult.EmitSkipped && len(result.Diagnostics) > 0 {
++	diagnosticsForExitCode := result.Diagnostics
++	if FilterDiagnosticsForExitCodeCallback != nil {
++		diagnosticsForExitCode = FilterDiagnosticsForExitCodeCallback(
++			input.Config.CompilerOptions(), result.Diagnostics)
++	}
++
++	if result.EmitResult.EmitSkipped && len(diagnosticsForExitCode) > 0 {
+ 		result.Status = ExitStatusDiagnosticsPresent_OutputsSkipped
+-	} else if len(result.Diagnostics) > 0 {
++	} else if len(diagnosticsForExitCode) > 0 {
+ 		result.Status = ExitStatusDiagnosticsPresent_OutputsGenerated
+ 	}
+ 	return result, statistics

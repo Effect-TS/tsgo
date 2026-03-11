@@ -1,0 +1,26 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "allowedDuplicatedPackages": ["my-effect-lib"]
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/test.ts (0 errors) ====
+    import { Effect } from "effect"
+    import { foo } from "my-effect-lib"
+    import { bar } from "wrapper"
+    
+    // When my-effect-lib is in allowedDuplicatedPackages, no duplicatePackage warning should appear.
+    const program = Effect.succeed(foo + bar)
+    

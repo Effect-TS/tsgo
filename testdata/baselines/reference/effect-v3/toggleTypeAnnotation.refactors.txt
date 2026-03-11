@@ -1,0 +1,754 @@
+=== Refactor Inventory ===
+
+[R1] selection: "5:14-5:15"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Toggle type annotation" (refactor.rewrite.effect.toggleTypeAnnotation)
+  Refactor 2: "Toggle lazy const" (refactor.rewrite.effect.toggleLazyConst)
+
+[R2] selection: "6:14-6:15"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Toggle type annotation" (refactor.rewrite.effect.toggleTypeAnnotation)
+  Refactor 2: "Toggle lazy const" (refactor.rewrite.effect.toggleLazyConst)
+
+[R3] selection: "9:14-9:15"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Toggle type annotation" (refactor.rewrite.effect.toggleTypeAnnotation)
+  Refactor 2: "Toggle lazy const" (refactor.rewrite.effect.toggleLazyConst)
+
+[R4] selection: "12:14-12:15"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Toggle type annotation" (refactor.rewrite.effect.toggleTypeAnnotation)
+  Refactor 2: "Toggle lazy const" (refactor.rewrite.effect.toggleLazyConst)
+
+[R5] selection: "14:7-14:8"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Toggle type annotation" (refactor.rewrite.effect.toggleTypeAnnotation)
+  Refactor 2: "Toggle lazy const" (refactor.rewrite.effect.toggleLazyConst)
+
+[R6] selection: "15:7-15:8"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Toggle type annotation" (refactor.rewrite.effect.toggleTypeAnnotation)
+  Refactor 2: "Toggle lazy const" (refactor.rewrite.effect.toggleLazyConst)
+
+[R7] selection: "18:10-18:11"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Toggle type annotation" (refactor.rewrite.effect.toggleTypeAnnotation)
+
+[R8] selection: "19:10-19:11"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Toggle type annotation" (refactor.rewrite.effect.toggleTypeAnnotation)
+
+[R9] selection: "20:3-20:4"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Toggle type annotation" (refactor.rewrite.effect.toggleTypeAnnotation)
+
+[R10] selection: "21:3-21:4"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Toggle type annotation" (refactor.rewrite.effect.toggleTypeAnnotation)
+
+[R11] selection: "empty (0:0-0:0)"
+  (no refactors)
+
+=== Refactor Application Results ===
+
+=== [R1] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/toggleTypeAnnotation.ts ---
+// refactor: 5:14-5:15, 6:14-6:15, 9:14-9:15, 12:14-12:15, 14:7-14:8, 15:7-15:8, 18:10-18:11, 19:10-19:11, 20:3-20:4, 21:3-21:4
+// @effect-v3
+import * as T from "effect/Effect"
+
+export const pipe(t)est1 = T.succeed
+export const test2 = T.fail("LOL")
+
+const predefined = 42
+export const test3 = predefined
+
+const callable = () => 42
+export const test4 = callable
+
+const removeAnnotation: number = 42
+const removeAnnotationWithSpace: number = 42
+
+class Test {
+  static liveAdd = "hello"
+  static liveRemove: string = "hello"
+  propAdd = "hello"
+  propRemove: string = "hello"
+}
+
+
+=== [R1] Refactor 1: "Toggle type annotation" ===
+
+--- file:///.src/toggleTypeAnnotation.ts ---
+// refactor: 5:14-5:15, 6:14-6:15, 9:14-9:15, 12:14-12:15, 14:7-14:8, 15:7-15:8, 18:10-18:11, 19:10-19:11, 20:3-20:4, 21:3-21:4
+// @effect-v3
+import * as T from "effect/Effect"
+
+export const test1: <A>(value: A) => T.Effect<A, never, never> = T.succeed
+export const test2 = T.fail("LOL")
+
+const predefined = 42
+export const test3 = predefined
+
+const callable = () => 42
+export const test4 = callable
+
+const removeAnnotation: number = 42
+const removeAnnotationWithSpace: number = 42
+
+class Test {
+  static liveAdd = "hello"
+  static liveRemove: string = "hello"
+  propAdd = "hello"
+  propRemove: string = "hello"
+}
+
+
+=== [R1] Refactor 2: "Toggle lazy const" ===
+
+--- file:///.src/toggleTypeAnnotation.ts ---
+// refactor: 5:14-5:15, 6:14-6:15, 9:14-9:15, 12:14-12:15, 14:7-14:8, 15:7-15:8, 18:10-18:11, 19:10-19:11, 20:3-20:4, 21:3-21:4
+// @effect-v3
+import * as T from "effect/Effect"
+
+export const test1 = () => T.succeed
+export const test2 = T.fail("LOL")
+
+const predefined = 42
+export const test3 = predefined
+
+const callable = () => 42
+export const test4 = callable
+
+const removeAnnotation: number = 42
+const removeAnnotationWithSpace: number = 42
+
+class Test {
+  static liveAdd = "hello"
+  static liveRemove: string = "hello"
+  propAdd = "hello"
+  propRemove: string = "hello"
+}
+
+
+=== [R2] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/toggleTypeAnnotation.ts ---
+// refactor: 5:14-5:15, 6:14-6:15, 9:14-9:15, 12:14-12:15, 14:7-14:8, 15:7-15:8, 18:10-18:11, 19:10-19:11, 20:3-20:4, 21:3-21:4
+// @effect-v3
+import * as T from "effect/Effect"
+
+export const test1 = T.succeed
+export const pipe(t)est2 = T.fail("LOL")
+
+const predefined = 42
+export const test3 = predefined
+
+const callable = () => 42
+export const test4 = callable
+
+const removeAnnotation: number = 42
+const removeAnnotationWithSpace: number = 42
+
+class Test {
+  static liveAdd = "hello"
+  static liveRemove: string = "hello"
+  propAdd = "hello"
+  propRemove: string = "hello"
+}
+
+
+=== [R2] Refactor 1: "Toggle type annotation" ===
+
+--- file:///.src/toggleTypeAnnotation.ts ---
+// refactor: 5:14-5:15, 6:14-6:15, 9:14-9:15, 12:14-12:15, 14:7-14:8, 15:7-15:8, 18:10-18:11, 19:10-19:11, 20:3-20:4, 21:3-21:4
+// @effect-v3
+import * as T from "effect/Effect"
+
+export const test1 = T.succeed
+export const test2: T.Effect<never, string, never> = T.fail("LOL")
+
+const predefined = 42
+export const test3 = predefined
+
+const callable = () => 42
+export const test4 = callable
+
+const removeAnnotation: number = 42
+const removeAnnotationWithSpace: number = 42
+
+class Test {
+  static liveAdd = "hello"
+  static liveRemove: string = "hello"
+  propAdd = "hello"
+  propRemove: string = "hello"
+}
+
+
+=== [R2] Refactor 2: "Toggle lazy const" ===
+
+--- file:///.src/toggleTypeAnnotation.ts ---
+// refactor: 5:14-5:15, 6:14-6:15, 9:14-9:15, 12:14-12:15, 14:7-14:8, 15:7-15:8, 18:10-18:11, 19:10-19:11, 20:3-20:4, 21:3-21:4
+// @effect-v3
+import * as T from "effect/Effect"
+
+export const test1 = T.succeed
+export const test2 = () => T.fail("LOL")
+
+const predefined = 42
+export const test3 = predefined
+
+const callable = () => 42
+export const test4 = callable
+
+const removeAnnotation: number = 42
+const removeAnnotationWithSpace: number = 42
+
+class Test {
+  static liveAdd = "hello"
+  static liveRemove: string = "hello"
+  propAdd = "hello"
+  propRemove: string = "hello"
+}
+
+
+=== [R3] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/toggleTypeAnnotation.ts ---
+// refactor: 5:14-5:15, 6:14-6:15, 9:14-9:15, 12:14-12:15, 14:7-14:8, 15:7-15:8, 18:10-18:11, 19:10-19:11, 20:3-20:4, 21:3-21:4
+// @effect-v3
+import * as T from "effect/Effect"
+
+export const test1 = T.succeed
+export const test2 = T.fail("LOL")
+
+const predefined = 42
+export const pipe(t)est3 = predefined
+
+const callable = () => 42
+export const test4 = callable
+
+const removeAnnotation: number = 42
+const removeAnnotationWithSpace: number = 42
+
+class Test {
+  static liveAdd = "hello"
+  static liveRemove: string = "hello"
+  propAdd = "hello"
+  propRemove: string = "hello"
+}
+
+
+=== [R3] Refactor 1: "Toggle type annotation" ===
+
+--- file:///.src/toggleTypeAnnotation.ts ---
+// refactor: 5:14-5:15, 6:14-6:15, 9:14-9:15, 12:14-12:15, 14:7-14:8, 15:7-15:8, 18:10-18:11, 19:10-19:11, 20:3-20:4, 21:3-21:4
+// @effect-v3
+import * as T from "effect/Effect"
+
+export const test1 = T.succeed
+export const test2 = T.fail("LOL")
+
+const predefined = 42
+export const test3: 42 = predefined
+
+const callable = () => 42
+export const test4 = callable
+
+const removeAnnotation: number = 42
+const removeAnnotationWithSpace: number = 42
+
+class Test {
+  static liveAdd = "hello"
+  static liveRemove: string = "hello"
+  propAdd = "hello"
+  propRemove: string = "hello"
+}
+
+
+=== [R3] Refactor 2: "Toggle lazy const" ===
+
+--- file:///.src/toggleTypeAnnotation.ts ---
+// refactor: 5:14-5:15, 6:14-6:15, 9:14-9:15, 12:14-12:15, 14:7-14:8, 15:7-15:8, 18:10-18:11, 19:10-19:11, 20:3-20:4, 21:3-21:4
+// @effect-v3
+import * as T from "effect/Effect"
+
+export const test1 = T.succeed
+export const test2 = T.fail("LOL")
+
+const predefined = 42
+export const test3 = () => predefined
+
+const callable = () => 42
+export const test4 = callable
+
+const removeAnnotation: number = 42
+const removeAnnotationWithSpace: number = 42
+
+class Test {
+  static liveAdd = "hello"
+  static liveRemove: string = "hello"
+  propAdd = "hello"
+  propRemove: string = "hello"
+}
+
+
+=== [R4] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/toggleTypeAnnotation.ts ---
+// refactor: 5:14-5:15, 6:14-6:15, 9:14-9:15, 12:14-12:15, 14:7-14:8, 15:7-15:8, 18:10-18:11, 19:10-19:11, 20:3-20:4, 21:3-21:4
+// @effect-v3
+import * as T from "effect/Effect"
+
+export const test1 = T.succeed
+export const test2 = T.fail("LOL")
+
+const predefined = 42
+export const test3 = predefined
+
+const callable = () => 42
+export const pipe(t)est4 = callable
+
+const removeAnnotation: number = 42
+const removeAnnotationWithSpace: number = 42
+
+class Test {
+  static liveAdd = "hello"
+  static liveRemove: string = "hello"
+  propAdd = "hello"
+  propRemove: string = "hello"
+}
+
+
+=== [R4] Refactor 1: "Toggle type annotation" ===
+
+--- file:///.src/toggleTypeAnnotation.ts ---
+// refactor: 5:14-5:15, 6:14-6:15, 9:14-9:15, 12:14-12:15, 14:7-14:8, 15:7-15:8, 18:10-18:11, 19:10-19:11, 20:3-20:4, 21:3-21:4
+// @effect-v3
+import * as T from "effect/Effect"
+
+export const test1 = T.succeed
+export const test2 = T.fail("LOL")
+
+const predefined = 42
+export const test3 = predefined
+
+const callable = () => 42
+export const test4: () => number = callable
+
+const removeAnnotation: number = 42
+const removeAnnotationWithSpace: number = 42
+
+class Test {
+  static liveAdd = "hello"
+  static liveRemove: string = "hello"
+  propAdd = "hello"
+  propRemove: string = "hello"
+}
+
+
+=== [R4] Refactor 2: "Toggle lazy const" ===
+
+--- file:///.src/toggleTypeAnnotation.ts ---
+// refactor: 5:14-5:15, 6:14-6:15, 9:14-9:15, 12:14-12:15, 14:7-14:8, 15:7-15:8, 18:10-18:11, 19:10-19:11, 20:3-20:4, 21:3-21:4
+// @effect-v3
+import * as T from "effect/Effect"
+
+export const test1 = T.succeed
+export const test2 = T.fail("LOL")
+
+const predefined = 42
+export const test3 = predefined
+
+const callable = () => 42
+export const test4 = () => callable
+
+const removeAnnotation: number = 42
+const removeAnnotationWithSpace: number = 42
+
+class Test {
+  static liveAdd = "hello"
+  static liveRemove: string = "hello"
+  propAdd = "hello"
+  propRemove: string = "hello"
+}
+
+
+=== [R5] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/toggleTypeAnnotation.ts ---
+// refactor: 5:14-5:15, 6:14-6:15, 9:14-9:15, 12:14-12:15, 14:7-14:8, 15:7-15:8, 18:10-18:11, 19:10-19:11, 20:3-20:4, 21:3-21:4
+// @effect-v3
+import * as T from "effect/Effect"
+
+export const test1 = T.succeed
+export const test2 = T.fail("LOL")
+
+const predefined = 42
+export const test3 = predefined
+
+const callable = () => 42
+export const test4 = callable
+
+const pipe(r)emoveAnnotation: number = 42
+const removeAnnotationWithSpace: number = 42
+
+class Test {
+  static liveAdd = "hello"
+  static liveRemove: string = "hello"
+  propAdd = "hello"
+  propRemove: string = "hello"
+}
+
+
+=== [R5] Refactor 1: "Toggle type annotation" ===
+
+--- file:///.src/toggleTypeAnnotation.ts ---
+// refactor: 5:14-5:15, 6:14-6:15, 9:14-9:15, 12:14-12:15, 14:7-14:8, 15:7-15:8, 18:10-18:11, 19:10-19:11, 20:3-20:4, 21:3-21:4
+// @effect-v3
+import * as T from "effect/Effect"
+
+export const test1 = T.succeed
+export const test2 = T.fail("LOL")
+
+const predefined = 42
+export const test3 = predefined
+
+const callable = () => 42
+export const test4 = callable
+
+const removeAnnotation = 42
+const removeAnnotationWithSpace: number = 42
+
+class Test {
+  static liveAdd = "hello"
+  static liveRemove: string = "hello"
+  propAdd = "hello"
+  propRemove: string = "hello"
+}
+
+
+=== [R5] Refactor 2: "Toggle lazy const" ===
+
+--- file:///.src/toggleTypeAnnotation.ts ---
+// refactor: 5:14-5:15, 6:14-6:15, 9:14-9:15, 12:14-12:15, 14:7-14:8, 15:7-15:8, 18:10-18:11, 19:10-19:11, 20:3-20:4, 21:3-21:4
+// @effect-v3
+import * as T from "effect/Effect"
+
+export const test1 = T.succeed
+export const test2 = T.fail("LOL")
+
+const predefined = 42
+export const test3 = predefined
+
+const callable = () => 42
+export const test4 = callable
+
+const removeAnnotation: number = () => 42
+const removeAnnotationWithSpace: number = 42
+
+class Test {
+  static liveAdd = "hello"
+  static liveRemove: string = "hello"
+  propAdd = "hello"
+  propRemove: string = "hello"
+}
+
+
+=== [R6] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/toggleTypeAnnotation.ts ---
+// refactor: 5:14-5:15, 6:14-6:15, 9:14-9:15, 12:14-12:15, 14:7-14:8, 15:7-15:8, 18:10-18:11, 19:10-19:11, 20:3-20:4, 21:3-21:4
+// @effect-v3
+import * as T from "effect/Effect"
+
+export const test1 = T.succeed
+export const test2 = T.fail("LOL")
+
+const predefined = 42
+export const test3 = predefined
+
+const callable = () => 42
+export const test4 = callable
+
+const removeAnnotation: number = 42
+const pipe(r)emoveAnnotationWithSpace: number = 42
+
+class Test {
+  static liveAdd = "hello"
+  static liveRemove: string = "hello"
+  propAdd = "hello"
+  propRemove: string = "hello"
+}
+
+
+=== [R6] Refactor 1: "Toggle type annotation" ===
+
+--- file:///.src/toggleTypeAnnotation.ts ---
+// refactor: 5:14-5:15, 6:14-6:15, 9:14-9:15, 12:14-12:15, 14:7-14:8, 15:7-15:8, 18:10-18:11, 19:10-19:11, 20:3-20:4, 21:3-21:4
+// @effect-v3
+import * as T from "effect/Effect"
+
+export const test1 = T.succeed
+export const test2 = T.fail("LOL")
+
+const predefined = 42
+export const test3 = predefined
+
+const callable = () => 42
+export const test4 = callable
+
+const removeAnnotation: number = 42
+const removeAnnotationWithSpace = 42
+
+class Test {
+  static liveAdd = "hello"
+  static liveRemove: string = "hello"
+  propAdd = "hello"
+  propRemove: string = "hello"
+}
+
+
+=== [R6] Refactor 2: "Toggle lazy const" ===
+
+--- file:///.src/toggleTypeAnnotation.ts ---
+// refactor: 5:14-5:15, 6:14-6:15, 9:14-9:15, 12:14-12:15, 14:7-14:8, 15:7-15:8, 18:10-18:11, 19:10-19:11, 20:3-20:4, 21:3-21:4
+// @effect-v3
+import * as T from "effect/Effect"
+
+export const test1 = T.succeed
+export const test2 = T.fail("LOL")
+
+const predefined = 42
+export const test3 = predefined
+
+const callable = () => 42
+export const test4 = callable
+
+const removeAnnotation: number = 42
+const removeAnnotationWithSpace: number = () => 42
+
+class Test {
+  static liveAdd = "hello"
+  static liveRemove: string = "hello"
+  propAdd = "hello"
+  propRemove: string = "hello"
+}
+
+
+=== [R7] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/toggleTypeAnnotation.ts ---
+// refactor: 5:14-5:15, 6:14-6:15, 9:14-9:15, 12:14-12:15, 14:7-14:8, 15:7-15:8, 18:10-18:11, 19:10-19:11, 20:3-20:4, 21:3-21:4
+// @effect-v3
+import * as T from "effect/Effect"
+
+export const test1 = T.succeed
+export const test2 = T.fail("LOL")
+
+const predefined = 42
+export const test3 = predefined
+
+const callable = () => 42
+export const test4 = callable
+
+const removeAnnotation: number = 42
+const removeAnnotationWithSpace: number = 42
+
+class Test {
+  static pipe(l)iveAdd = "hello"
+  static liveRemove: string = "hello"
+  propAdd = "hello"
+  propRemove: string = "hello"
+}
+
+
+=== [R7] Refactor 1: "Toggle type annotation" ===
+
+--- file:///.src/toggleTypeAnnotation.ts ---
+// refactor: 5:14-5:15, 6:14-6:15, 9:14-9:15, 12:14-12:15, 14:7-14:8, 15:7-15:8, 18:10-18:11, 19:10-19:11, 20:3-20:4, 21:3-21:4
+// @effect-v3
+import * as T from "effect/Effect"
+
+export const test1 = T.succeed
+export const test2 = T.fail("LOL")
+
+const predefined = 42
+export const test3 = predefined
+
+const callable = () => 42
+export const test4 = callable
+
+const removeAnnotation: number = 42
+const removeAnnotationWithSpace: number = 42
+
+class Test {
+  static liveAdd: "hello" = "hello"
+  static liveRemove: string = "hello"
+  propAdd = "hello"
+  propRemove: string = "hello"
+}
+
+
+=== [R8] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/toggleTypeAnnotation.ts ---
+// refactor: 5:14-5:15, 6:14-6:15, 9:14-9:15, 12:14-12:15, 14:7-14:8, 15:7-15:8, 18:10-18:11, 19:10-19:11, 20:3-20:4, 21:3-21:4
+// @effect-v3
+import * as T from "effect/Effect"
+
+export const test1 = T.succeed
+export const test2 = T.fail("LOL")
+
+const predefined = 42
+export const test3 = predefined
+
+const callable = () => 42
+export const test4 = callable
+
+const removeAnnotation: number = 42
+const removeAnnotationWithSpace: number = 42
+
+class Test {
+  static liveAdd = "hello"
+  static pipe(l)iveRemove: string = "hello"
+  propAdd = "hello"
+  propRemove: string = "hello"
+}
+
+
+=== [R8] Refactor 1: "Toggle type annotation" ===
+
+--- file:///.src/toggleTypeAnnotation.ts ---
+// refactor: 5:14-5:15, 6:14-6:15, 9:14-9:15, 12:14-12:15, 14:7-14:8, 15:7-15:8, 18:10-18:11, 19:10-19:11, 20:3-20:4, 21:3-21:4
+// @effect-v3
+import * as T from "effect/Effect"
+
+export const test1 = T.succeed
+export const test2 = T.fail("LOL")
+
+const predefined = 42
+export const test3 = predefined
+
+const callable = () => 42
+export const test4 = callable
+
+const removeAnnotation: number = 42
+const removeAnnotationWithSpace: number = 42
+
+class Test {
+  static liveAdd = "hello"
+  static liveRemove = "hello"
+  propAdd = "hello"
+  propRemove: string = "hello"
+}
+
+
+=== [R9] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/toggleTypeAnnotation.ts ---
+// refactor: 5:14-5:15, 6:14-6:15, 9:14-9:15, 12:14-12:15, 14:7-14:8, 15:7-15:8, 18:10-18:11, 19:10-19:11, 20:3-20:4, 21:3-21:4
+// @effect-v3
+import * as T from "effect/Effect"
+
+export const test1 = T.succeed
+export const test2 = T.fail("LOL")
+
+const predefined = 42
+export const test3 = predefined
+
+const callable = () => 42
+export const test4 = callable
+
+const removeAnnotation: number = 42
+const removeAnnotationWithSpace: number = 42
+
+class Test {
+  static liveAdd = "hello"
+  static liveRemove: string = "hello"
+  pipe(p)ropAdd = "hello"
+  propRemove: string = "hello"
+}
+
+
+=== [R9] Refactor 1: "Toggle type annotation" ===
+
+--- file:///.src/toggleTypeAnnotation.ts ---
+// refactor: 5:14-5:15, 6:14-6:15, 9:14-9:15, 12:14-12:15, 14:7-14:8, 15:7-15:8, 18:10-18:11, 19:10-19:11, 20:3-20:4, 21:3-21:4
+// @effect-v3
+import * as T from "effect/Effect"
+
+export const test1 = T.succeed
+export const test2 = T.fail("LOL")
+
+const predefined = 42
+export const test3 = predefined
+
+const callable = () => 42
+export const test4 = callable
+
+const removeAnnotation: number = 42
+const removeAnnotationWithSpace: number = 42
+
+class Test {
+  static liveAdd = "hello"
+  static liveRemove: string = "hello"
+  propAdd: "hello" = "hello"
+  propRemove: string = "hello"
+}
+
+
+=== [R10] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/toggleTypeAnnotation.ts ---
+// refactor: 5:14-5:15, 6:14-6:15, 9:14-9:15, 12:14-12:15, 14:7-14:8, 15:7-15:8, 18:10-18:11, 19:10-19:11, 20:3-20:4, 21:3-21:4
+// @effect-v3
+import * as T from "effect/Effect"
+
+export const test1 = T.succeed
+export const test2 = T.fail("LOL")
+
+const predefined = 42
+export const test3 = predefined
+
+const callable = () => 42
+export const test4 = callable
+
+const removeAnnotation: number = 42
+const removeAnnotationWithSpace: number = 42
+
+class Test {
+  static liveAdd = "hello"
+  static liveRemove: string = "hello"
+  propAdd = "hello"
+  pipe(p)ropRemove: string = "hello"
+}
+
+
+=== [R10] Refactor 1: "Toggle type annotation" ===
+
+--- file:///.src/toggleTypeAnnotation.ts ---
+// refactor: 5:14-5:15, 6:14-6:15, 9:14-9:15, 12:14-12:15, 14:7-14:8, 15:7-15:8, 18:10-18:11, 19:10-19:11, 20:3-20:4, 21:3-21:4
+// @effect-v3
+import * as T from "effect/Effect"
+
+export const test1 = T.succeed
+export const test2 = T.fail("LOL")
+
+const predefined = 42
+export const test3 = predefined
+
+const callable = () => 42
+export const test4 = callable
+
+const removeAnnotation: number = 42
+const removeAnnotationWithSpace: number = 42
+
+class Test {
+  static liveAdd = "hello"
+  static liveRemove: string = "hello"
+  propAdd = "hello"
+  propRemove = "hello"
+}
+

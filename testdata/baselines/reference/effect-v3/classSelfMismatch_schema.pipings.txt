@@ -1,0 +1,113 @@
+==== /.src/classSelfMismatch_schema.ts (8 flows) ====
+
+=== Piping Flow ===
+Location: 5:38 - 7:3
+Node: Schema.Class<ValidSchemaClass>("ValidSchemaClass")({\n  prop: Schema.String\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  prop: Schema.String\n}
+Subject Type: { prop: typeof String$; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<ValidSchemaClass>("ValidSchemaClass")
+      args: (constant)
+      outType: Class<ValidSchemaClass, { prop: typeof String$; }, Encoded<{ prop: typeof String$; }>, never, { readonly prop: string; }, {}, {}>
+
+=== Piping Flow ===
+Location: 10:40 - 12:3
+Node: Schema.Class<ValidSchemaClass>("InvalidSchemaClass")({\n  prop: Schema.String\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  prop: Schema.String\n}
+Subject Type: { prop: typeof String$; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<ValidSchemaClass>("InvalidSchemaClass")
+      args: (constant)
+      outType: Class<ValidSchemaClass, { prop: typeof String$; }, Encoded<{ prop: typeof String$; }>, never, { readonly prop: string; }, {}, {}>
+
+=== Piping Flow ===
+Location: 15:10 - 15:79
+Node: Schema.TaggedClass<ValidSchemaTaggedClass>("ValidSchemaTaggedClass")
+Node Kind: KindCallExpression
+
+Subject: "ValidSchemaTaggedClass"
+Subject Type: "ValidSchemaTaggedClass"
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.TaggedClass
+      args: (constant)
+      outType: <Tag extends string, Fields extends Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<ValidSchemaTaggedClass, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedClass<ValidSchemaTaggedClass, Tag, { readonly _tag: tag<Tag>; } & Fields>
+
+=== Piping Flow ===
+Location: 22:10 - 22:81
+Node: Schema.TaggedClass<ValidSchemaTaggedClass>("InvalidSchemaTaggedClass")
+Node Kind: KindCallExpression
+
+Subject: "InvalidSchemaTaggedClass"
+Subject Type: "InvalidSchemaTaggedClass"
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.TaggedClass
+      args: (constant)
+      outType: <Tag extends string, Fields extends Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<ValidSchemaTaggedClass, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedClass<ValidSchemaTaggedClass, Tag, { readonly _tag: tag<Tag>; } & Fields>
+
+=== Piping Flow ===
+Location: 28:10 - 28:79
+Node: Schema.TaggedError<ValidSchemaTaggedError>("ValidSchemaTaggedError")
+Node Kind: KindCallExpression
+
+Subject: "ValidSchemaTaggedError"
+Subject Type: "ValidSchemaTaggedError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.TaggedError
+      args: (constant)
+      outType: <Tag extends string, Fields extends Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<ValidSchemaTaggedError, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedErrorClass<ValidSchemaTaggedError, Tag, { readonly _tag: tag<Tag>; } & Fields>
+
+=== Piping Flow ===
+Location: 35:10 - 35:81
+Node: Schema.TaggedError<ValidSchemaTaggedError>("InvalidSchemaTaggedError")
+Node Kind: KindCallExpression
+
+Subject: "InvalidSchemaTaggedError"
+Subject Type: "InvalidSchemaTaggedError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.TaggedError
+      args: (constant)
+      outType: <Tag extends string, Fields extends Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<ValidSchemaTaggedError, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedErrorClass<ValidSchemaTaggedError, Tag, { readonly _tag: tag<Tag>; } & Fields>
+
+=== Piping Flow ===
+Location: 41:10 - 41:85
+Node: Schema.TaggedRequest<ValidSchemaTaggedRequest>("ValidSchemaTaggedRequest")
+Node Kind: KindCallExpression
+
+Subject: "ValidSchemaTaggedRequest"
+Subject Type: "ValidSchemaTaggedRequest"
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.TaggedRequest
+      args: (constant)
+      outType: <Tag extends string, Payload extends Fields, Success extends All, Failure extends All>(tag: Tag, options: { failure: Failure; success: Success; payload: Payload; }, annotations?: ClassAnnotations<ValidSchemaTaggedRequest, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Payload>]: Type<{ readonly _tag: tag<Tag>; } & Payload>[K]; }> | undefined) => TaggedRequestClass<ValidSchemaTaggedRequest, Tag, { readonly _tag: tag<Tag>; } & Payload, Success, Failure>
+
+=== Piping Flow ===
+Location: 50:10 - 50:87
+Node: Schema.TaggedRequest<ValidSchemaTaggedRequest>("InvalidSchemaTaggedRequest")
+Node Kind: KindCallExpression
+
+Subject: "InvalidSchemaTaggedRequest"
+Subject Type: "InvalidSchemaTaggedRequest"
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.TaggedRequest
+      args: (constant)
+      outType: <Tag extends string, Payload extends Fields, Success extends All, Failure extends All>(tag: Tag, options: { failure: Failure; success: Success; payload: Payload; }, annotations?: ClassAnnotations<ValidSchemaTaggedRequest, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Payload>]: Type<{ readonly _tag: tag<Tag>; } & Payload>[K]; }> | undefined) => TaggedRequestClass<ValidSchemaTaggedRequest, Tag, { readonly _tag: tag<Tag>; } & Payload, Success, Failure>

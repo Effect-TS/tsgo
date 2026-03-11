@@ -1,0 +1,8 @@
+// refactor: 4:30-4:31
+// @effect-v3
+
+export async function getUserName(userId: string) {
+  const user = await fetch(`https://api.example.com/users/${userId}`)
+  const userData = await user.json()
+  return userData.name
+}

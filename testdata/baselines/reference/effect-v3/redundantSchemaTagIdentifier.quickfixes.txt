@@ -1,0 +1,156 @@
+=== Quick Fix Inventory ===
+
+[D1] (16:52-16:74) TS377045: Identifier 'RedundantTaggedClass' is redundant since it equals the _tag value. effect(redundantSchemaTagIdentifier)
+  Fix 0: "Disable redundantSchemaTagIdentifier for this line"
+  Fix 1: "Disable redundantSchemaTagIdentifier for entire file"
+  Fix 2: "Remove redundant identifier 'RedundantTaggedClass'"
+
+[D2] (23:52-23:74) TS377045: Identifier 'RedundantTaggedError' is redundant since it equals the _tag value. effect(redundantSchemaTagIdentifier)
+  Fix 0: "Disable redundantSchemaTagIdentifier for this line"
+  Fix 1: "Disable redundantSchemaTagIdentifier for entire file"
+  Fix 2: "Remove redundant identifier 'RedundantTaggedError'"
+
+[D3] (30:56-30:80) TS377045: Identifier 'RedundantTaggedRequest' is redundant since it equals the _tag value. effect(redundantSchemaTagIdentifier)
+  Fix 0: "Disable redundantSchemaTagIdentifier for this line"
+  Fix 1: "Disable redundantSchemaTagIdentifier for entire file"
+  Fix 2: "Remove redundant identifier 'RedundantTaggedRequest'"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable redundantSchemaTagIdentifier for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable redundantSchemaTagIdentifier for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Remove redundant identifier 'RedundantTaggedClass'" ===
+
+--- file:///.src/redundantSchemaTagIdentifier.ts ---
+// @effect-v3
+import * as Schema from "effect/Schema"
+
+// Valid usage: identifier differs from tag (no redundancy)
+export class DifferentIdentifier extends Schema.TaggedClass<DifferentIdentifier>("MyIdentifier")("MyTag", {
+  prop: Schema.String
+}) {}
+
+// Valid usage: no identifier provided (short form)
+export class NoIdentifier extends Schema.TaggedClass<NoIdentifier>()("NoIdentifier", {
+  prop: Schema.String
+}) {}
+
+// Invalid usage: identifier equals tag (redundant)
+export class RedundantTaggedClass
+  extends Schema.TaggedClass<RedundantTaggedClass>()("RedundantTaggedClass", {
+    prop: Schema.String
+  })
+{}
+
+// Invalid usage: identifier equals tag in TaggedError (redundant)
+export class RedundantTaggedError
+  extends Schema.TaggedError<RedundantTaggedError>("RedundantTaggedError")("RedundantTaggedError", {
+    message: Schema.String
+  })
+{}
+
+// Invalid usage: identifier equals tag in TaggedRequest (redundant)
+export class RedundantTaggedRequest
+  extends Schema.TaggedRequest<RedundantTaggedRequest>("RedundantTaggedRequest")("RedundantTaggedRequest", {
+    payload: {},
+    success: Schema.Void,
+    failure: Schema.Never
+  })
+{}
+
+
+=== [D2] Fix 0: "Disable redundantSchemaTagIdentifier for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable redundantSchemaTagIdentifier for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Remove redundant identifier 'RedundantTaggedError'" ===
+
+--- file:///.src/redundantSchemaTagIdentifier.ts ---
+// @effect-v3
+import * as Schema from "effect/Schema"
+
+// Valid usage: identifier differs from tag (no redundancy)
+export class DifferentIdentifier extends Schema.TaggedClass<DifferentIdentifier>("MyIdentifier")("MyTag", {
+  prop: Schema.String
+}) {}
+
+// Valid usage: no identifier provided (short form)
+export class NoIdentifier extends Schema.TaggedClass<NoIdentifier>()("NoIdentifier", {
+  prop: Schema.String
+}) {}
+
+// Invalid usage: identifier equals tag (redundant)
+export class RedundantTaggedClass
+  extends Schema.TaggedClass<RedundantTaggedClass>("RedundantTaggedClass")("RedundantTaggedClass", {
+    prop: Schema.String
+  })
+{}
+
+// Invalid usage: identifier equals tag in TaggedError (redundant)
+export class RedundantTaggedError
+  extends Schema.TaggedError<RedundantTaggedError>()("RedundantTaggedError", {
+    message: Schema.String
+  })
+{}
+
+// Invalid usage: identifier equals tag in TaggedRequest (redundant)
+export class RedundantTaggedRequest
+  extends Schema.TaggedRequest<RedundantTaggedRequest>("RedundantTaggedRequest")("RedundantTaggedRequest", {
+    payload: {},
+    success: Schema.Void,
+    failure: Schema.Never
+  })
+{}
+
+
+=== [D3] Fix 0: "Disable redundantSchemaTagIdentifier for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable redundantSchemaTagIdentifier for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Remove redundant identifier 'RedundantTaggedRequest'" ===
+
+--- file:///.src/redundantSchemaTagIdentifier.ts ---
+// @effect-v3
+import * as Schema from "effect/Schema"
+
+// Valid usage: identifier differs from tag (no redundancy)
+export class DifferentIdentifier extends Schema.TaggedClass<DifferentIdentifier>("MyIdentifier")("MyTag", {
+  prop: Schema.String
+}) {}
+
+// Valid usage: no identifier provided (short form)
+export class NoIdentifier extends Schema.TaggedClass<NoIdentifier>()("NoIdentifier", {
+  prop: Schema.String
+}) {}
+
+// Invalid usage: identifier equals tag (redundant)
+export class RedundantTaggedClass
+  extends Schema.TaggedClass<RedundantTaggedClass>("RedundantTaggedClass")("RedundantTaggedClass", {
+    prop: Schema.String
+  })
+{}
+
+// Invalid usage: identifier equals tag in TaggedError (redundant)
+export class RedundantTaggedError
+  extends Schema.TaggedError<RedundantTaggedError>("RedundantTaggedError")("RedundantTaggedError", {
+    message: Schema.String
+  })
+{}
+
+// Invalid usage: identifier equals tag in TaggedRequest (redundant)
+export class RedundantTaggedRequest
+  extends Schema.TaggedRequest<RedundantTaggedRequest>()("RedundantTaggedRequest", {
+    payload: {},
+    success: Schema.Void,
+    failure: Schema.Never
+  })
+{}
+

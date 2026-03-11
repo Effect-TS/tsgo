@@ -1,0 +1,35 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+/.src/unnecessaryEffectGen_noReturn.ts(12,37): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/unnecessaryEffectGen_noReturn.ts(16,47): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+
+
+==== /.src/unnecessaryEffectGen_noReturn.ts (2 errors) ====
+    import * as Effect from "effect/Effect"
+    
+    export const shouldNotRant = Effect.gen(function*() {
+      yield* Effect.succeed(true)
+      yield* Effect.succeed(42)
+    })
+    
+    export const shouldNotRaiseForNonEffect = Effect.gen(function*() {
+      return 42
+    })
+    
+    export const shouldRaiseForSingle = Effect.gen(function*() {
+                                        ~~~~~~~~~~~~~~~~~~~~~~~~
+      yield* Effect.succeed(42)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    })
+    ~~
+!!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+    
+    export const shouldRaiseForSingleReturnVoid = Effect.gen(function*() {
+                                                  ~~~~~~~~~~~~~~~~~~~~~~~~
+      yield* Effect.void
+    ~~~~~~~~~~~~~~~~~~~~
+    })
+    ~~
+!!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+    

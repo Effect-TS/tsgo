@@ -1,0 +1,102 @@
+==== /.src/scopeInLayerEffect.ts (3 layer exports) ====
+
+=== shouldNotReport ===
+
+--- output ---
+flowchart TD
+  0["Layer.scoped#40;<br/>  MyService,<br/>  Effect.gen#40;function*#40;#41; #123;<br/>    yield* Effect.addFinalizer#40;#40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;#41;<br/>    return #123; a: 1 #125;<br/>  #125;#41;<br/>#41;<br/>provides: MyService<br/>requires: "]
+
+--- nested ---
+flowchart TB
+  subgraph 0 ["`shouldNotReport<br/><small>_ln 29 col 13_</small>`"]
+    subgraph 0_wrap[" "]
+      subgraph 0_provides [Provides]
+        0_provides_0["MyService"]
+      end
+      style 0_provides stroke:none
+    end
+    style 0_wrap fill:transparent
+    style 0_wrap stroke:none
+  end
+  style 0 fill:transparent
+
+--- outline ---
+flowchart TD
+  0["shouldNotReport"]
+
+--- quickinfo ---
+/**
+ * - MyService provided at ln 29 col 13 by `shouldNotReport`
+ */
+
+=== myLayer ===
+
+--- output ---
+flowchart TD
+  0["Layer.effect#40;<br/>  MyService,<br/>  Effect.gen#40;function*#40;#41; #123;<br/>    yield* Effect.addFinalizer#40;#40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;#41;<br/>    return #123; a: 1 #125;<br/>  #125;#41;<br/>#41;<br/>provides: MyService<br/>requires: Scope"]
+
+--- nested ---
+flowchart TB
+  subgraph 0 ["`myLayer<br/><small>_ln 37 col 13_</small>`"]
+    subgraph 0_wrap[" "]
+      subgraph 0_requires [Requires]
+        0_requires_0["Scope"]
+      end
+      style 0_requires stroke:none
+      subgraph 0_provides [Provides]
+        0_provides_0["MyService"]
+      end
+      style 0_provides stroke:none
+    end
+    style 0_wrap fill:transparent
+    style 0_wrap stroke:none
+  end
+  style 0 fill:transparent
+
+--- outline ---
+flowchart TD
+  0["myLayer"]
+
+--- quickinfo ---
+/**
+ * - MyService provided at ln 37 col 13 by `myLayer`
+ * 
+ * - Scope required at ln 37 col 13 by `myLayer`
+ */
+
+=== myLayer2 ===
+
+--- output ---
+flowchart TD
+  0["Layer.effect#40;<br/>  MyService,<br/>  Effect.gen#40;function*#40;#41; #123;<br/>    const _otherService = yield* OtherService<br/>    yield* Effect.addFinalizer#40;#40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;#41;<br/>    return #123; a: 1 #125;<br/>  #125;#41;<br/>#41;<br/>provides: MyService<br/>requires: OtherService, Scope"]
+
+--- nested ---
+flowchart TB
+  subgraph 0 ["`myLayer2<br/><small>_ln 45 col 13_</small>`"]
+    subgraph 0_wrap[" "]
+      subgraph 0_requires [Requires]
+        0_requires_0["OtherService"]
+        0_requires_1["Scope"]
+      end
+      style 0_requires stroke:none
+      subgraph 0_provides [Provides]
+        0_provides_0["MyService"]
+      end
+      style 0_provides stroke:none
+    end
+    style 0_wrap fill:transparent
+    style 0_wrap stroke:none
+  end
+  style 0 fill:transparent
+
+--- outline ---
+flowchart TD
+  0["myLayer2"]
+
+--- quickinfo ---
+/**
+ * - MyService provided at ln 45 col 13 by `myLayer2`
+ * 
+ * - OtherService required at ln 45 col 13 by `myLayer2`
+ * - Scope required at ln 45 col 13 by `myLayer2`
+ */

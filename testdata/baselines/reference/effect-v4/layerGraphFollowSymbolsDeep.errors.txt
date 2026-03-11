@@ -1,0 +1,54 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "layerGraphFollowDepth": 2
+          }
+        ]
+      }
+    }
+
+==== /.src/base.ts (0 errors) ====
+    import { Effect, Layer, ServiceMap } from "effect"
+    
+    export class Database extends ServiceMap.Service<Database>()("Database", {
+      make: Effect.succeed({})
+    }) {
+      static Default = Layer.effect(this, this.make)
+    }
+    export class FileSystem extends ServiceMap.Service<FileSystem>()("FileSystem", {
+      make: Effect.succeed({})
+    }) {
+      static Default = Layer.effect(this, this.make)
+    }
+    export class Cache extends ServiceMap.Service<Cache>()("Cache", {
+      make: Effect.as(FileSystem.asEffect(), {})
+    }) {
+      static Default = Layer.effect(this, this.make)
+    }
+    
+    export const cacheWithFs = Cache.Default.pipe(Layer.provide(FileSystem.Default))
+    
+    export const baseAlias = cacheWithFs
+
+==== /.src/middle.ts (0 errors) ====
+    import { cacheWithFs, baseAlias } from "./base"
+    
+    export const wrappedCache = cacheWithFs
+    
+    export const wrappedAlias = baseAlias
+
+==== /.src/deep.ts (0 errors) ====
+    import { wrappedCache, wrappedAlias } from "./middle"
+    
+    export const twoLevel = wrappedCache
+    
+    export const threeLevel = wrappedAlias
+    

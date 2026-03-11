@@ -1,0 +1,143 @@
+==== /.src/missedPipeableOpportunity_error.ts (9 flows) ====
+
+=== Piping Flow ===
+Location: 5:17 - 8:3
+Node: Schema.Struct({\n  x: Schema.Number,\n  y: Schema.Number\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  x: Schema.Number,\n  y: Schema.Number\n}
+Subject Type: { x: Number; y: Number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly x: Number; readonly y: Number; }>
+
+=== Piping Flow ===
+Location: 10:32 - 10:90
+Node: identity(Schema.decodeEffect(MyStruct)({ x: 42, y: 42 }))
+Node Kind: KindCallExpression
+
+Subject: { x: 42, y: 42 }
+Subject Type: { x: number; y: number; }
+
+Transformations (2):
+  [0] kind: call
+      callee: Schema.decodeEffect(MyStruct)
+      args: (constant)
+      outType: Effect<{ readonly x: number; readonly y: number; }, SchemaError, never>
+  [1] kind: call
+      callee: identity
+      args: (constant)
+      outType: Effect<{ readonly x: number; readonly y: number; }, SchemaError, never>
+
+=== Piping Flow ===
+Location: 12:40 - 12:108
+Node: identity(identity(Schema.decodeEffect(MyStruct)({ x: 42, y: 42 })))
+Node Kind: KindCallExpression
+
+Subject: { x: 42, y: 42 }
+Subject Type: { x: number; y: number; }
+
+Transformations (3):
+  [0] kind: call
+      callee: Schema.decodeEffect(MyStruct)
+      args: (constant)
+      outType: Effect<{ readonly x: number; readonly y: number; }, SchemaError, never>
+  [1] kind: call
+      callee: identity
+      args: (constant)
+      outType: Effect<{ readonly x: number; readonly y: number; }, SchemaError, never>
+  [2] kind: call
+      callee: identity
+      args: (constant)
+      outType: Effect<{ readonly x: number; readonly y: number; }, SchemaError, never>
+
+=== Piping Flow ===
+Location: 14:48 - 17:2
+Node: pipe(\n  Schedule.exponential(Duration.millis(10), 4),\n  Schedule.while(_ => Duration.isLessThanOrEqualTo(Duration.seconds(10))(_.duration)) // should not report\n)
+Node Kind: KindCallExpression
+
+Subject: Schedule.exponential(Duration.millis(10), 4)
+Subject Type: Schedule<Duration, unknown, never, never>
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Schedule.while
+      args: [_ => Duration.isLessThanOrEqualTo(Duration.seconds(10))(_.duration)]
+      outType: Schedule<Duration, unknown, never, never>
+
+=== Piping Flow ===
+Location: 15:24 - 15:43
+Node: Duration.millis(10)
+Node Kind: KindCallExpression
+
+Subject: 10
+Subject Type: 10
+
+Transformations (1):
+  [0] kind: call
+      callee: Duration.millis
+      args: (constant)
+      outType: Duration
+
+=== Piping Flow ===
+Location: 16:22 - 16:85
+Node: Duration.isLessThanOrEqualTo(Duration.seconds(10))(_.duration)
+Node Kind: KindCallExpression
+
+Subject: _.duration
+Subject Type: Duration
+
+Transformations (1):
+  [0] kind: call
+      callee: Duration.isLessThanOrEqualTo(Duration.seconds(10))
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 16:52 - 16:72
+Node: Duration.seconds(10)
+Node Kind: KindCallExpression
+
+Subject: 10
+Subject Type: 10
+
+Transformations (1):
+  [0] kind: call
+      callee: Duration.seconds
+      args: (constant)
+      outType: Duration
+
+=== Piping Flow ===
+Location: 19:41 - 21:2
+Node: Effect.log("Hello").pipe(\n  Effect.ensuring(Effect.log("World"))\n)
+Node Kind: KindCallExpression
+
+Subject: "Hello"
+Subject Type: "Hello"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: pipeable
+      callee: Effect.ensuring
+      args: [Effect.log("World")]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 20:19 - 20:38
+Node: Effect.log("World")
+Node Kind: KindCallExpression
+
+Subject: "World"
+Subject Type: "World"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>

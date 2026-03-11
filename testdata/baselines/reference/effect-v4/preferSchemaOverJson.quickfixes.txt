@@ -1,0 +1,96 @@
+=== Quick Fix Inventory ===
+
+[D1] (4:31-4:41) TS377022: The 'catch' callback in Effect.try returns global 'Error', which loses type safety as untagged errors merge together. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectCatch)
+  Fix 0: "Disable globalErrorInEffectCatch for this line"
+  Fix 1: "Disable globalErrorInEffectCatch for entire file"
+
+[D2] (5:14-5:47) TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+  Fix 0: "Disable preferSchemaOverJson for this line"
+  Fix 1: "Disable preferSchemaOverJson for entire file"
+
+[D3] (6:16-6:44) TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
+  Fix 0: "Disable globalErrorInEffectFailure for this line"
+  Fix 1: "Disable globalErrorInEffectFailure for entire file"
+
+[D4] (10:35-10:45) TS377022: The 'catch' callback in Effect.try returns global 'Error', which loses type safety as untagged errors merge together. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectCatch)
+  Fix 0: "Disable globalErrorInEffectCatch for this line"
+  Fix 1: "Disable globalErrorInEffectCatch for entire file"
+
+[D5] (11:14-11:47) TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+  Fix 0: "Disable preferSchemaOverJson for this line"
+  Fix 1: "Disable preferSchemaOverJson for entire file"
+
+[D6] (12:16-12:48) TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
+  Fix 0: "Disable globalErrorInEffectFailure for this line"
+  Fix 1: "Disable globalErrorInEffectFailure for entire file"
+
+[D7] (18:18-18:34) TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+  Fix 0: "Disable preferSchemaOverJson for this line"
+  Fix 1: "Disable preferSchemaOverJson for entire file"
+
+[D8] (26:16-26:36) TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+  Fix 0: "Disable preferSchemaOverJson for this line"
+  Fix 1: "Disable preferSchemaOverJson for entire file"
+
+[D9] (34:18-34:34) TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+  Fix 0: "Disable preferSchemaOverJson for this line"
+  Fix 1: "Disable preferSchemaOverJson for entire file"
+
+[D10] (40:7-40:20) TS6133: '_regularParse' is declared but its value is never read.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable globalErrorInEffectCatch for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable globalErrorInEffectCatch for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable preferSchemaOverJson for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable preferSchemaOverJson for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable globalErrorInEffectFailure for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable globalErrorInEffectFailure for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable globalErrorInEffectCatch for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable globalErrorInEffectCatch for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable preferSchemaOverJson for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable preferSchemaOverJson for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable globalErrorInEffectFailure for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable globalErrorInEffectFailure for entire file" ===
+skipped by default
+
+=== [D7] Fix 0: "Disable preferSchemaOverJson for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable preferSchemaOverJson for entire file" ===
+skipped by default
+
+=== [D8] Fix 0: "Disable preferSchemaOverJson for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable preferSchemaOverJson for entire file" ===
+skipped by default
+
+=== [D9] Fix 0: "Disable preferSchemaOverJson for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable preferSchemaOverJson for entire file" ===
+skipped by default

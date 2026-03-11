@@ -1,0 +1,109 @@
+==== /.src/effectFnOpportunity_pipeWithSpan.ts (6 flows) ====
+
+=== Piping Flow ===
+Location: 12:35 - 15:44
+Node: Effect.gen(function*() {\n    return yield* Effect.succeed(42)\n  }).pipe(Effect.withSpan("arrowWithPipe"))
+Node Kind: KindCallExpression
+
+Subject: function*() {\n    return yield* Effect.succeed(42)\n  }
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, number, any>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.withSpan
+      args: ["arrowWithPipe"]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 14:18 - 14:37
+Node: Effect.succeed(42)
+Node Kind: KindCallExpression
+
+Subject: 42
+Subject Type: 42
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 18:9 - 20:83
+Node: Effect.gen(function*() {\n    return yield* Effect.succeed(42)\n  }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionExpressionWithPipe"))
+Node Kind: KindCallExpression
+
+Subject: function*() {\n    return yield* Effect.succeed(42)\n  }
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, number, any>
+
+Transformations (3):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [(x) => x + 1]
+      outType: Effect<number, never, never>
+  [2] kind: pipeable
+      callee: Effect.withSpan
+      args: ["functionExpressionWithPipe"]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 19:18 - 19:37
+Node: Effect.succeed(42)
+Node Kind: KindCallExpression
+
+Subject: 42
+Subject Type: 42
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 24:9 - 26:105
+Node: Effect.gen(function*() {\n    return yield* Effect.succeed(42)\n  }).pipe(Effect.map((x) => x + 1), Effect.ignoreLogged, Effect.withSpan("functionDeclarationWithPipe"))
+Node Kind: KindCallExpression
+
+Subject: function*() {\n    return yield* Effect.succeed(42)\n  }
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, number, any>
+
+Transformations (4):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [(x) => x + 1]
+      outType: Effect<number, never, never>
+  [2] kind: pipeable
+      callee: Effect.ignoreLogged
+      args: (constant)
+      outType: Effect<void, never, never>
+  [3] kind: pipeable
+      callee: Effect.withSpan
+      args: ["functionDeclarationWithPipe"]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 25:18 - 25:37
+Node: Effect.succeed(42)
+Node Kind: KindCallExpression
+
+Subject: 42
+Subject Type: 42
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>

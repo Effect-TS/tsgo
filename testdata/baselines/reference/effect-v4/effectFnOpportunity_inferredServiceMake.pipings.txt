@@ -1,0 +1,43 @@
+==== /.src/effectFnOpportunity_inferredServiceMake.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 4:10 - 11:7
+Node: Effect.gen(function*() {\n        return {\n            getUser: (id: string) =>\n                Effect.gen(function*() {\n                    yield* Effect.log(`Looking up user ${id}`)\n                })\n        }\n    })
+Node Kind: KindCallExpression
+
+Subject: function*() {\n        return {\n            getUser: (id: string) =>\n                Effect.gen(function*() {\n                    yield* Effect.log(`Looking up user ${id}`)\n                })\n        }\n    }
+Subject Type: () => Generator<never, { getUser: (id: string) => Effect<void, never, never>; }, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<{ getUser: (id: string) => Effect<void, never, never>; }, never, never>
+
+=== Piping Flow ===
+Location: 6:37 - 9:19
+Node: Effect.gen(function*() {\n                    yield* Effect.log(`Looking up user ${id}`)\n                })
+Node Kind: KindCallExpression
+
+Subject: function*() {\n                    yield* Effect.log(`Looking up user ${id}`)\n                }
+Subject Type: () => Generator<Effect<void, never, never>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 8:27 - 8:63
+Node: Effect.log(`Looking up user ${id}`)
+Node Kind: KindCallExpression
+
+Subject: `Looking up user ${id}`
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>

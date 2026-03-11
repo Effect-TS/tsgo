@@ -1,0 +1,351 @@
+=== Refactor Inventory ===
+
+[R1] selection: "5:16-5:17"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Rewrite as X.pipe(Y, Z, ...)" (refactor.rewrite.effect.togglePipeStyle)
+  Refactor 2: "Rewrite to datafirst" (refactor.rewrite.effect.pipeableToDatafirst)
+  Refactor 3: "Wrap with Effect.gen" (refactor.rewrite.effect.wrapWithEffectGen)
+
+[R2] selection: "14:16-14:17"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Rewrite as X.pipe(Y, Z, ...)" (refactor.rewrite.effect.togglePipeStyle)
+  Refactor 2: "Rewrite to datafirst" (refactor.rewrite.effect.pipeableToDatafirst)
+  Refactor 3: "Wrap with Effect.gen" (refactor.rewrite.effect.wrapWithEffectGen)
+
+[R3] selection: "20:16-20:17"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Rewrite as X.pipe(Y, Z, ...)" (refactor.rewrite.effect.togglePipeStyle)
+  Refactor 2: "Rewrite to datafirst" (refactor.rewrite.effect.pipeableToDatafirst)
+  Refactor 3: "Wrap with Effect.gen" (refactor.rewrite.effect.wrapWithEffectGen)
+
+[R4] selection: "empty (0:0-0:0)"
+  (no refactors)
+
+=== Refactor Application Results ===
+
+=== [R1] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/pipeableToDatafirst.ts ---
+// refactor: 5:16-5:17, 14:16-14:17, 20:16-20:17
+import * as T from "effect/Effect"
+import { pipe } from "effect/Function"
+
+const test = pipipe(p)e(
+  T.succeed("Hello"),
+  T.flatMap((_) => T.log(_)),
+  T.andThen(T.succeed(42)),
+  T.map((_) => _ * 2)
+)
+
+const noDataFirst = (value: string) => <A, E, R>(eff: T.Effect<A, E, R>) => pipe(eff, T.andThen(T.log(value)))
+
+const test2 = pipe(
+  T.succeed("Hello"),
+  T.flatMap((_) => T.log(_)),
+  noDataFirst("42")
+)
+
+const test3 = pipe(
+  T.succeed("Hello"),
+  T.flatMap((_) => T.log(_)),
+  noDataFirst("a"),
+  noDataFirst("b"),
+  noDataFirst("c")
+)
+
+
+=== [R1] Refactor 1: "Rewrite as X.pipe(Y, Z, ...)" ===
+
+--- file:///.src/pipeableToDatafirst.ts ---
+// refactor: 5:16-5:17, 14:16-14:17, 20:16-20:17
+import * as T from "effect/Effect"
+import { pipe } from "effect/Function"
+
+const test = T.succeed("Hello").pipe(T.flatMap(_ => T.log(_)), T.andThen(T.succeed(42)), T.map(_ => _ * 2))
+
+const noDataFirst = (value: string) => <A, E, R>(eff: T.Effect<A, E, R>) => pipe(eff, T.andThen(T.log(value)))
+
+const test2 = pipe(
+  T.succeed("Hello"),
+  T.flatMap((_) => T.log(_)),
+  noDataFirst("42")
+)
+
+const test3 = pipe(
+  T.succeed("Hello"),
+  T.flatMap((_) => T.log(_)),
+  noDataFirst("a"),
+  noDataFirst("b"),
+  noDataFirst("c")
+)
+
+
+=== [R1] Refactor 2: "Rewrite to datafirst" ===
+
+--- file:///.src/pipeableToDatafirst.ts ---
+// refactor: 5:16-5:17, 14:16-14:17, 20:16-20:17
+import * as T from "effect/Effect"
+import { pipe } from "effect/Function"
+
+const test = T.map(T.andThen(T.flatMap(T.succeed("Hello"), _ => T.log(_)), T.succeed(42)), _ => _ * 2)
+
+const noDataFirst = (value: string) => <A, E, R>(eff: T.Effect<A, E, R>) => pipe(eff, T.andThen(T.log(value)))
+
+const test2 = pipe(
+  T.succeed("Hello"),
+  T.flatMap((_) => T.log(_)),
+  noDataFirst("42")
+)
+
+const test3 = pipe(
+  T.succeed("Hello"),
+  T.flatMap((_) => T.log(_)),
+  noDataFirst("a"),
+  noDataFirst("b"),
+  noDataFirst("c")
+)
+
+
+=== [R1] Refactor 3: "Wrap with Effect.gen" ===
+
+--- file:///.src/pipeableToDatafirst.ts ---
+// refactor: 5:16-5:17, 14:16-14:17, 20:16-20:17
+import * as T from "effect/Effect"
+import { pipe } from "effect/Function"
+
+const test = T.gen(function*() { return yield* pipe(T.succeed("Hello"), T.flatMap(_ => T.log(_)), T.andThen(T.succeed(42)), T.map(_ => _ * 2)) })
+
+const noDataFirst = (value: string) => <A, E, R>(eff: T.Effect<A, E, R>) => pipe(eff, T.andThen(T.log(value)))
+
+const test2 = pipe(
+  T.succeed("Hello"),
+  T.flatMap((_) => T.log(_)),
+  noDataFirst("42")
+)
+
+const test3 = pipe(
+  T.succeed("Hello"),
+  T.flatMap((_) => T.log(_)),
+  noDataFirst("a"),
+  noDataFirst("b"),
+  noDataFirst("c")
+)
+
+
+=== [R2] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/pipeableToDatafirst.ts ---
+// refactor: 5:16-5:17, 14:16-14:17, 20:16-20:17
+import * as T from "effect/Effect"
+import { pipe } from "effect/Function"
+
+const test = pipe(
+  T.succeed("Hello"),
+  T.flatMap((_) => T.log(_)),
+  T.andThen(T.succeed(42)),
+  T.map((_) => _ * 2)
+)
+
+const noDataFirst = (value: string) => <A, E, R>(eff: T.Effect<A, E, R>) => pipe(eff, T.andThen(T.log(value)))
+
+const test2 = ppipe(i)pe(
+  T.succeed("Hello"),
+  T.flatMap((_) => T.log(_)),
+  noDataFirst("42")
+)
+
+const test3 = pipe(
+  T.succeed("Hello"),
+  T.flatMap((_) => T.log(_)),
+  noDataFirst("a"),
+  noDataFirst("b"),
+  noDataFirst("c")
+)
+
+
+=== [R2] Refactor 1: "Rewrite as X.pipe(Y, Z, ...)" ===
+
+--- file:///.src/pipeableToDatafirst.ts ---
+// refactor: 5:16-5:17, 14:16-14:17, 20:16-20:17
+import * as T from "effect/Effect"
+import { pipe } from "effect/Function"
+
+const test = pipe(
+  T.succeed("Hello"),
+  T.flatMap((_) => T.log(_)),
+  T.andThen(T.succeed(42)),
+  T.map((_) => _ * 2)
+)
+
+const noDataFirst = (value: string) => <A, E, R>(eff: T.Effect<A, E, R>) => pipe(eff, T.andThen(T.log(value)))
+
+const test2 = T.succeed("Hello").pipe(T.flatMap(_ => T.log(_)), noDataFirst("42"))
+
+const test3 = pipe(
+  T.succeed("Hello"),
+  T.flatMap((_) => T.log(_)),
+  noDataFirst("a"),
+  noDataFirst("b"),
+  noDataFirst("c")
+)
+
+
+=== [R2] Refactor 2: "Rewrite to datafirst" ===
+
+--- file:///.src/pipeableToDatafirst.ts ---
+// refactor: 5:16-5:17, 14:16-14:17, 20:16-20:17
+import * as T from "effect/Effect"
+import { pipe } from "effect/Function"
+
+const test = pipe(
+  T.succeed("Hello"),
+  T.flatMap((_) => T.log(_)),
+  T.andThen(T.succeed(42)),
+  T.map((_) => _ * 2)
+)
+
+const noDataFirst = (value: string) => <A, E, R>(eff: T.Effect<A, E, R>) => pipe(eff, T.andThen(T.log(value)))
+
+const test2 = pipe(T.flatMap(T.succeed("Hello"), _ => T.log(_)), noDataFirst("42"))
+
+const test3 = pipe(
+  T.succeed("Hello"),
+  T.flatMap((_) => T.log(_)),
+  noDataFirst("a"),
+  noDataFirst("b"),
+  noDataFirst("c")
+)
+
+
+=== [R2] Refactor 3: "Wrap with Effect.gen" ===
+
+--- file:///.src/pipeableToDatafirst.ts ---
+// refactor: 5:16-5:17, 14:16-14:17, 20:16-20:17
+import * as T from "effect/Effect"
+import { pipe } from "effect/Function"
+
+const test = pipe(
+  T.succeed("Hello"),
+  T.flatMap((_) => T.log(_)),
+  T.andThen(T.succeed(42)),
+  T.map((_) => _ * 2)
+)
+
+const noDataFirst = (value: string) => <A, E, R>(eff: T.Effect<A, E, R>) => pipe(eff, T.andThen(T.log(value)))
+
+const test2 = T.gen(function*() { return yield* pipe(T.succeed("Hello"), T.flatMap(_ => T.log(_)), noDataFirst("42")) })
+
+const test3 = pipe(
+  T.succeed("Hello"),
+  T.flatMap((_) => T.log(_)),
+  noDataFirst("a"),
+  noDataFirst("b"),
+  noDataFirst("c")
+)
+
+
+=== [R3] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/pipeableToDatafirst.ts ---
+// refactor: 5:16-5:17, 14:16-14:17, 20:16-20:17
+import * as T from "effect/Effect"
+import { pipe } from "effect/Function"
+
+const test = pipe(
+  T.succeed("Hello"),
+  T.flatMap((_) => T.log(_)),
+  T.andThen(T.succeed(42)),
+  T.map((_) => _ * 2)
+)
+
+const noDataFirst = (value: string) => <A, E, R>(eff: T.Effect<A, E, R>) => pipe(eff, T.andThen(T.log(value)))
+
+const test2 = pipe(
+  T.succeed("Hello"),
+  T.flatMap((_) => T.log(_)),
+  noDataFirst("42")
+)
+
+const test3 = ppipe(i)pe(
+  T.succeed("Hello"),
+  T.flatMap((_) => T.log(_)),
+  noDataFirst("a"),
+  noDataFirst("b"),
+  noDataFirst("c")
+)
+
+
+=== [R3] Refactor 1: "Rewrite as X.pipe(Y, Z, ...)" ===
+
+--- file:///.src/pipeableToDatafirst.ts ---
+// refactor: 5:16-5:17, 14:16-14:17, 20:16-20:17
+import * as T from "effect/Effect"
+import { pipe } from "effect/Function"
+
+const test = pipe(
+  T.succeed("Hello"),
+  T.flatMap((_) => T.log(_)),
+  T.andThen(T.succeed(42)),
+  T.map((_) => _ * 2)
+)
+
+const noDataFirst = (value: string) => <A, E, R>(eff: T.Effect<A, E, R>) => pipe(eff, T.andThen(T.log(value)))
+
+const test2 = pipe(
+  T.succeed("Hello"),
+  T.flatMap((_) => T.log(_)),
+  noDataFirst("42")
+)
+
+const test3 = T.succeed("Hello").pipe(T.flatMap(_ => T.log(_)), noDataFirst("a"), noDataFirst("b"), noDataFirst("c"))
+
+
+=== [R3] Refactor 2: "Rewrite to datafirst" ===
+
+--- file:///.src/pipeableToDatafirst.ts ---
+// refactor: 5:16-5:17, 14:16-14:17, 20:16-20:17
+import * as T from "effect/Effect"
+import { pipe } from "effect/Function"
+
+const test = pipe(
+  T.succeed("Hello"),
+  T.flatMap((_) => T.log(_)),
+  T.andThen(T.succeed(42)),
+  T.map((_) => _ * 2)
+)
+
+const noDataFirst = (value: string) => <A, E, R>(eff: T.Effect<A, E, R>) => pipe(eff, T.andThen(T.log(value)))
+
+const test2 = pipe(
+  T.succeed("Hello"),
+  T.flatMap((_) => T.log(_)),
+  noDataFirst("42")
+)
+
+const test3 = pipe(T.flatMap(T.succeed("Hello"), _ => T.log(_)), noDataFirst("a"), noDataFirst("b"), noDataFirst("c"))
+
+
+=== [R3] Refactor 3: "Wrap with Effect.gen" ===
+
+--- file:///.src/pipeableToDatafirst.ts ---
+// refactor: 5:16-5:17, 14:16-14:17, 20:16-20:17
+import * as T from "effect/Effect"
+import { pipe } from "effect/Function"
+
+const test = pipe(
+  T.succeed("Hello"),
+  T.flatMap((_) => T.log(_)),
+  T.andThen(T.succeed(42)),
+  T.map((_) => _ * 2)
+)
+
+const noDataFirst = (value: string) => <A, E, R>(eff: T.Effect<A, E, R>) => pipe(eff, T.andThen(T.log(value)))
+
+const test2 = pipe(
+  T.succeed("Hello"),
+  T.flatMap((_) => T.log(_)),
+  noDataFirst("42")
+)
+
+const test3 = T.gen(function*() { return yield* pipe(T.succeed("Hello"), T.flatMap(_ => T.log(_)), noDataFirst("a"), noDataFirst("b"), noDataFirst("c")) })
+

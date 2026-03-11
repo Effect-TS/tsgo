@@ -1,0 +1,10 @@
+=== Quick Fix Inventory ===
+
+[D1] (4:7-4:11) TS6133: 'impl' is declared but its value is never read.
+  (no quick fixes)
+
+[D2] (5:19-5:28) TS6133: 'rateLimit' is declared but its value is never read.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+(no quick fixes to apply)

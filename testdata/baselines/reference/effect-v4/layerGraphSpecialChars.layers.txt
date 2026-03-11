@@ -1,0 +1,30 @@
+==== /.src/layerGraphSpecialChars.ts (1 layer exports) ====
+
+=== NoComment ===
+
+--- output ---
+flowchart TD
+  0["withSpecialCharsLayer<br/>provides: IsGeneric#lt;#quot;With#lt;Special#gt;Chars#35;!#quot;#gt;<br/>requires: "]
+
+--- nested ---
+flowchart TB
+  subgraph 0 ["`NoComment<br/><small>_ln 23 col 13_</small>`"]
+    subgraph 0_wrap[" "]
+      subgraph 0_provides [Provides]
+        0_provides_0["IsGeneric#lt;#quot;With#lt;Special#gt;Chars#!#quot;#gt;"]
+      end
+      style 0_provides stroke:none
+    end
+    style 0_wrap fill:transparent
+    style 0_wrap stroke:none
+  end
+  style 0 fill:transparent
+
+--- outline ---
+flowchart TD
+  0["NoComment"]
+
+--- quickinfo ---
+/**
+ * - IsGeneric<"With<Special>Chars#!"> provided at ln 23 col 13 by `NoComment`
+ */

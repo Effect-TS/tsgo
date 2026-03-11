@@ -1,0 +1,43 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+/.src/missingEffectContext.ts(14,14): error TS2322: Type 'Effect<number, never, EnvA | EnvB>' is not assignable to type 'Effect<number, never, EnvA>'.
+/.src/missingEffectContext.ts(14,14): error TS377004: Missing context EnvB in the expected Effect type. effect(missingEffectContext)
+/.src/missingEffectContext.ts(17,14): error TS2322: Type 'Effect<number, never, EnvA | EnvB>' is not assignable to type 'Effect<number, never, never>'.
+/.src/missingEffectContext.ts(17,14): error TS377004: Missing context EnvA | EnvB in the expected Effect type. effect(missingEffectContext)
+
+
+==== /.src/missingEffectContext.ts (4 errors) ====
+    import { Effect } from "effect"
+    
+    interface EnvA {
+      _tag: "EnvA"
+    }
+    
+    interface EnvB {
+      _tag: "EnvB"
+    }
+    
+    declare const effectWithContext: Effect.Effect<number, never, EnvA | EnvB>
+    
+    // Should trigger missingEffectContext - missing EnvB
+    export const missingContextB: Effect.Effect<number, never, EnvA> = effectWithContext
+                 ~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'Effect<number, never, EnvA | EnvB>' is not assignable to type 'Effect<number, never, EnvA>'.
+                 ~~~~~~~~~~~~~~~
+!!! error TS377004: Missing context EnvB in the expected Effect type. effect(missingEffectContext)
+    
+    // Should trigger missingEffectContext - assigning Effect with context to Effect<number> (no context)
+    export const missingAllContext: Effect.Effect<number> = effectWithContext
+                 ~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'Effect<number, never, EnvA | EnvB>' is not assignable to type 'Effect<number, never, never>'.
+                 ~~~~~~~~~~~~~~~~~
+!!! error TS377004: Missing context EnvA | EnvB in the expected Effect type. effect(missingEffectContext)
+    
+    // Should NOT trigger - context matches
+    export const contextMatch: Effect.Effect<number, never, EnvA | EnvB> = effectWithContext
+    
+    // Should NOT trigger - no context in source
+    declare const effectNoContext: Effect.Effect<number>
+    export const noSourceContext: Effect.Effect<number, never, EnvA> = effectNoContext
+    

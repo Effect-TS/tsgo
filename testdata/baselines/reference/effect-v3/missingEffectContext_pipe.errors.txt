@@ -1,0 +1,20 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/missingEffectContext_pipe.ts(10,51): error TS377004: Missing context ServiceA in the expected Effect type. effect(missingEffectContext)
+
+
+==== /.src/missingEffectContext_pipe.ts (1 errors) ====
+    // @effect-v3
+    import * as Effect from "effect/Effect"
+    import { pipe } from "effect/Function"
+    
+    class ServiceA extends Effect.Service<ServiceA>()("ServiceA", {
+      succeed: { a: 1 }
+    }) {}
+    
+    // @ts-expect-error
+    pipe(ServiceA, Effect.flatMap(() => Effect.void), Effect.runPromise)
+                                                      ~~~~~~~~~~~~~~~~~
+!!! error TS377004: Missing context ServiceA in the expected Effect type. effect(missingEffectContext)
+    

@@ -1,0 +1,159 @@
+==== /.src/effectFnOpportunity_inferredLayer.ts (11 flows) ====
+
+=== Piping Flow ===
+Location: 3:24 - 5:18
+Node: ServiceMap.Service<MyService, {\n  log: (_what: string) => Effect.Effect<void>\n}>()("MyService")
+Node Kind: KindCallExpression
+
+Subject: "MyService"
+Subject Type: "MyService"
+
+Transformations (1):
+  [0] kind: call
+      callee: ServiceMap.Service<MyService, {\n  log: (_what: string) => Effect.Effect<void>\n}>()
+      args: (constant)
+      outType: ServiceClass<MyService, "MyService", { log: (_what: string) => Effect<void, never, never>; }>
+
+=== Piping Flow ===
+Location: 7:23 - 11:4
+Node: Layer.effect(MyService)(Effect.gen(function*() {\n  yield* Effect.log("log")\n  // Log should be inferred with name MyService.log\n  return { log: (what: string) => Effect.log(what) }\n}))
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  yield* Effect.log("log")\n  // Log should be inferred with name MyService.log\n  return { log: (what: string) => Effect.log(what) }\n}
+Subject Type: () => Generator<Effect<void, never, never>, { log: (what: string) => Effect<void, never, never>; }, any>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<{ log: (what: string) => Effect<void, never, never>; }, never, never>
+  [1] kind: call
+      callee: Layer.effect(MyService)
+      args: (constant)
+      outType: Layer<MyService, never, never>
+
+=== Piping Flow ===
+Location: 8:9 - 8:27
+Node: Effect.log("log")
+Node Kind: KindCallExpression
+
+Subject: "log"
+Subject Type: "log"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 10:34 - 10:51
+Node: Effect.log(what)
+Node Kind: KindCallExpression
+
+Subject: what
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 13:58 - 17:3
+Node: Effect.gen(function*() {\n  yield* Effect.log("log")\n  // Log should be inferred with name MyService.log\n  return { log: (what: string) => Effect.log(what) }\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  yield* Effect.log("log")\n  // Log should be inferred with name MyService.log\n  return { log: (what: string) => Effect.log(what) }\n}
+Subject Type: () => Generator<Effect<void, never, never>, { log: (what: string) => Effect<void, never, never>; }, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<{ log: (what: string) => Effect<void, never, never>; }, never, never>
+
+=== Piping Flow ===
+Location: 14:9 - 14:27
+Node: Effect.log("log")
+Node Kind: KindCallExpression
+
+Subject: "log"
+Subject Type: "log"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 16:34 - 16:51
+Node: Effect.log(what)
+Node Kind: KindCallExpression
+
+Subject: what
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 19:30 - 22:3
+Node: Layer.succeed(MyService)({\n  // Log should be inferred with name MyService.log\n  log: (what: string) => Effect.log(what)\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  // Log should be inferred with name MyService.log\n  log: (what: string) => Effect.log(what)\n}
+Subject Type: { log: (what: string) => Effect<void, never, never>; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Layer.succeed(MyService)
+      args: (constant)
+      outType: Layer<MyService, never, never>
+
+=== Piping Flow ===
+Location: 21:25 - 21:42
+Node: Effect.log(what)
+Node Kind: KindCallExpression
+
+Subject: what
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 24:27 - 27:3
+Node: Layer.sync(MyService)(() => {\n  // Log should be inferred with name MyService.log\n  return { log: (what: string) => Effect.log(what) }\n})
+Node Kind: KindCallExpression
+
+Subject: () => {\n  // Log should be inferred with name MyService.log\n  return { log: (what: string) => Effect.log(what) }\n}
+Subject Type: () => { log: (what: string) => Effect<void, never, never>; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Layer.sync(MyService)
+      args: (constant)
+      outType: Layer<MyService, never, never>
+
+=== Piping Flow ===
+Location: 26:34 - 26:51
+Node: Effect.log(what)
+Node Kind: KindCallExpression
+
+Subject: what
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>

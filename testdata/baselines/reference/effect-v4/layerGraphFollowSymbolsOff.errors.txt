@@ -1,0 +1,52 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "layerGraphFollowDepth": 0
+          }
+        ]
+      }
+    }
+
+==== /.src/simple.ts (0 errors) ====
+    import { Effect, Layer, ServiceMap } from "effect"
+    
+    export class DbConnection extends ServiceMap.Service<DbConnection>()("DbConnection", {
+      make: Effect.succeed({})
+    }) {
+      static Default = Layer.effect(this, this.make)
+    }
+    export class FileSystem extends ServiceMap.Service<FileSystem>()("FileSystem", {
+      make: Effect.succeed({})
+    }) {
+      static Default = Layer.effect(this, this.make)
+    }
+    export class Cache extends ServiceMap.Service<Cache>()("Cache", {
+      make: Effect.as(FileSystem.asEffect(), {})
+    }) {
+      static Default = Layer.effect(this, this.make)
+    }
+    export class UserRepository extends ServiceMap.Service<UserRepository>()("UserRepository", {
+      make: Effect.as(Effect.andThen(DbConnection.asEffect(), Cache.asEffect()), {})
+    }) {
+      static Default = Layer.effect(this, this.make)
+    }
+    export const simplePipeIn = UserRepository.Default.pipe(Layer.provide(Cache.Default))
+    
+    export const cacheWithFs = Cache.Default.pipe(Layer.provide(FileSystem.Default))
+
+==== /.src/followSymbols.ts (0 errors) ====
+    import { cacheWithFs, DbConnection, simplePipeIn, UserRepository } from "./simple"
+    import { Layer } from "effect"
+    
+    export const followSymbols = simplePipeIn.pipe(Layer.provide(DbConnection.Default))
+    
+    export const moreComplex = UserRepository.Default.pipe(Layer.provide(cacheWithFs), Layer.merge(DbConnection.Default))
+    

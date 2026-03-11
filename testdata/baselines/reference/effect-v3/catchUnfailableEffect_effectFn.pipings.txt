@@ -1,0 +1,127 @@
+==== /.src/catchUnfailableEffect_effectFn.ts (9 flows) ====
+
+=== Piping Flow ===
+Location: 5:36 - 7:39
+Node: Effect.fn(function*() {\n  return yield* Effect.succeed(42)\n}, Effect.catchAll(() => Effect.void))
+Node Kind: KindCallExpression
+
+Subject: Effect.fn(function*() {\n  return yield* Effect.succeed(42)\n}, Effect.catchAll(() => Effect.void))
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: effectFn
+      callee: Effect.catchAll
+      args: [() => Effect.void]
+      outType: Effect<void | number, never, never>
+
+=== Piping Flow ===
+Location: 6:16 - 6:35
+Node: Effect.succeed(42)
+Node Kind: KindCallExpression
+
+Subject: 42
+Subject Type: 42
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 9:39 - 11:46
+Node: Effect.fn(function*() {\n  return yield* Effect.fail("error")\n}, Effect.catchAll(() => Effect.succeed(42)))
+Node Kind: KindCallExpression
+
+Subject: Effect.fn(function*() {\n  return yield* Effect.fail("error")\n}, Effect.catchAll(() => Effect.succeed(42)))
+Subject Type: Effect<never, string, never>
+
+Transformations (1):
+  [0] kind: effectFn
+      callee: Effect.catchAll
+      args: [() => Effect.succeed(42)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 10:16 - 10:37
+Node: Effect.fail("error")
+Node Kind: KindCallExpression
+
+Subject: "error"
+Subject Type: "error"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>
+
+=== Piping Flow ===
+Location: 11:25 - 11:44
+Node: Effect.succeed(42)
+Node Kind: KindCallExpression
+
+Subject: 42
+Subject Type: 42
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 13:42 - 15:39
+Node: Effect.fn("traced")(function*() {\n  return yield* Effect.succeed(42)\n}, Effect.catchAll(() => Effect.void))
+Node Kind: KindCallExpression
+
+Subject: Effect.fn("traced")(function*() {\n  return yield* Effect.succeed(42)\n}, Effect.catchAll(() => Effect.void))
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: effectFn
+      callee: Effect.catchAll
+      args: [() => Effect.void]
+      outType: Effect<void | number, never, never>
+
+=== Piping Flow ===
+Location: 14:16 - 14:35
+Node: Effect.succeed(42)
+Node Kind: KindCallExpression
+
+Subject: 42
+Subject Type: 42
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 17:44 - 19:39
+Node: Effect.fnUntraced(function*() {\n  return yield* Effect.succeed(42)\n}, Effect.catchAll(() => Effect.void))
+Node Kind: KindCallExpression
+
+Subject: Effect.fnUntraced(function*() {\n  return yield* Effect.succeed(42)\n}, Effect.catchAll(() => Effect.void))
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: effectFnUntraced
+      callee: Effect.catchAll
+      args: [() => Effect.void]
+      outType: Effect<void | number, never, never>
+
+=== Piping Flow ===
+Location: 18:16 - 18:35
+Node: Effect.succeed(42)
+Node Kind: KindCallExpression
+
+Subject: 42
+Subject Type: 42
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>

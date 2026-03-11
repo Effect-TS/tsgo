@@ -1,0 +1,69 @@
+=== Quick Fix Inventory ===
+
+[D1] (5:27-5:106) TS377015: Chained pipe calls can be simplified to a single pipe call. effect(unnecessaryPipeChain)
+  Fix 0: "Disable unnecessaryPipeChain for this line"
+  Fix 1: "Disable unnecessaryPipeChain for entire file"
+  Fix 2: "Rewrite as single pipe call"
+
+[D2] (8:23-8:104) TS377015: Chained pipe calls can be simplified to a single pipe call. effect(unnecessaryPipeChain)
+  Fix 0: "Disable unnecessaryPipeChain for this line"
+  Fix 1: "Disable unnecessaryPipeChain for entire file"
+  Fix 2: "Rewrite as single pipe call"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable unnecessaryPipeChain for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable unnecessaryPipeChain for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Rewrite as single pipe call" ===
+
+--- file:///.src/unnecessaryPipeChain.ts ---
+import * as Effect from "effect/Effect"
+import { pipe } from "effect/Function"
+
+// Should trigger: chained .pipe() calls
+export const asPipeable = Effect.succeed(1).pipe(Effect.map(x => x + 2), Effect.map(x => x + 3))
+
+// Should trigger: nested pipe() calls
+export const asPipe = pipe(pipe(Effect.succeed(1), Effect.map((x) => x + 2)), Effect.map((x) => x + 3))
+
+// Should NOT trigger: single pipe with multiple args
+export const singlePipe = pipe(Effect.succeed(1), Effect.map((x) => x + 2), Effect.map((x) => x + 3))
+
+// Should NOT trigger: single .pipe() with multiple args
+export const singlePipeable = Effect.succeed(1).pipe(Effect.map((x) => x + 2), Effect.map((x) => x + 3))
+
+// Should NOT trigger: pipe with non-pipe subject
+export const nonPipeSubject = pipe(Effect.succeed(1), Effect.map((x) => x + 2))
+
+
+=== [D2] Fix 0: "Disable unnecessaryPipeChain for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable unnecessaryPipeChain for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Rewrite as single pipe call" ===
+
+--- file:///.src/unnecessaryPipeChain.ts ---
+import * as Effect from "effect/Effect"
+import { pipe } from "effect/Function"
+
+// Should trigger: chained .pipe() calls
+export const asPipeable = Effect.succeed(1).pipe(Effect.map((x) => x + 2)).pipe(Effect.map((x) => x + 3))
+
+// Should trigger: nested pipe() calls
+export const asPipe = pipe(Effect.succeed(1), Effect.map(x => x + 2), Effect.map(x => x + 3))
+
+// Should NOT trigger: single pipe with multiple args
+export const singlePipe = pipe(Effect.succeed(1), Effect.map((x) => x + 2), Effect.map((x) => x + 3))
+
+// Should NOT trigger: single .pipe() with multiple args
+export const singlePipeable = Effect.succeed(1).pipe(Effect.map((x) => x + 2), Effect.map((x) => x + 3))
+
+// Should NOT trigger: pipe with non-pipe subject
+export const nonPipeSubject = pipe(Effect.succeed(1), Effect.map((x) => x + 2))
+

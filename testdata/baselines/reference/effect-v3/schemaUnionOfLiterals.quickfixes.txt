@@ -1,0 +1,26 @@
+=== Quick Fix Inventory ===
+
+[D1] (5:33-5:87) TS377038: A Schema.Union of multiple Schema.Literal calls can be simplified to a single Schema.Literal call. effect(schemaUnionOfLiterals)
+  Fix 0: "Disable schemaUnionOfLiterals for this line"
+  Fix 1: "Disable schemaUnionOfLiterals for entire file"
+  Fix 2: "Replace with a single Schema.Literal call"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable schemaUnionOfLiterals for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable schemaUnionOfLiterals for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with a single Schema.Literal call" ===
+
+--- file:///.src/schemaUnionOfLiterals.ts ---
+// @effect-v3
+// @effect-diagnostics schemaUnionOfLiterals:warning
+import { Schema } from "effect"
+
+export const thisShouldReport = Schema.Literal("A", "B")
+
+export const noSenseForSingleMemberUnion = Schema.Union(Schema.Literal("A"))
+

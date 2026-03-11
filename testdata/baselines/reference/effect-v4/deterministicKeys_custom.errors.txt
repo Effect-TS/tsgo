@@ -1,0 +1,78 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+/.src/test.ts(10,56): error TS377049: Key should be '@effect/test-app/test/MyClass'. effect(deterministicKeys)
+/.src/test.ts(16,6): error TS377049: Key should be '@effect/test-app/test/TTLRequest'. effect(deterministicKeys)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "extendedKeyDetection": true
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/package.json (0 errors) ====
+    { "name": "@effect/test-app", "version": "1.0.0" }
+    
+
+==== /.src/utils.ts (0 errors) ====
+    import { ServiceMap } from "effect"
+    
+    export function MyConstructor<X>(/** @effect-identifier */ identifier: string) {
+      return class extends ServiceMap.Service<X, {}>()("hey/" + identifier) {}
+    }
+    
+    export const Class = <
+      Config extends {
+        payload: Record<string, unknown>
+      } = { payload: {} }
+    >() =>
+    <const Tag extends string>(/** @effect-identifier */ tag: Tag, _options: {
+      readonly primaryKey: (payload: Config["payload"]) => string
+    }): new(
+      args: Config["payload"]
+    ) =>
+      & { readonly _tag: Tag }
+      & { readonly [K in keyof Config["payload"]]: Config["payload"][K] } =>
+    {
+      function Persistable(this: any, props: any) {
+        this._tag = tag
+        if (props) {
+          Object.assign(this, props)
+        }
+      }
+      return Persistable as any
+    }
+    
+
+==== /.src/test.ts (2 errors) ====
+    // @effect-diagnostics deterministicKeys:error
+    import * as Persistable from "./utils"
+    import { ServiceMap } from "effect"
+    
+    // simple case inside same file
+    export function LocalConstructor<X>(/** @effect-identifier */ identifier: string) {
+      return class extends ServiceMap.Service<X, {}>()("hey/" + identifier) {}
+    }
+    
+    export class MyClass extends LocalConstructor<MyClass>("Hello") {
+                                                           ~~~~~~~
+!!! error TS377049: Key should be '@effect/test-app/test/MyClass'. effect(deterministicKeys)
+    }
+    
+    // referenced on another file
+    export class TTLRequest extends Persistable.Class<{
+      payload: { id: number }
+    }>()("TTLRequest", {
+         ~~~~~~~~~~~~
+!!! error TS377049: Key should be '@effect/test-app/test/TTLRequest'. effect(deterministicKeys)
+      primaryKey: (req) => `TTLRequest:${req.id}`
+    }) {}
+    

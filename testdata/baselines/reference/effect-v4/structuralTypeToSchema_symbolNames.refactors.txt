@@ -1,0 +1,125 @@
+=== Refactor Inventory ===
+
+[R1] selection: "14:18-14:26"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Generate Effect.Schema from type" (refactor.rewrite.effect.typeToEffectSchema)
+  Refactor 2: "Generate Schema.Class from type" (refactor.rewrite.effect.typeToEffectSchemaClass)
+  Refactor 3: "Refactor to Schema (Recursive Structural)" (refactor.rewrite.effect.structuralTypeToSchema)
+
+[R2] selection: "empty (0:0-0:0)"
+  (no refactors)
+
+=== Refactor Application Results ===
+
+=== [R1] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/structuralTypeToSchema_symbolNames.ts ---
+// refactor: 14:18-14:26
+import * as Schema from "effect/Schema"
+
+type User = {
+  id: number
+  name: string
+}
+
+interface Todo {
+  id: number
+  description: string
+}
+
+export interface pipe(AppState) {
+  users: User
+  tasks: Array<[Todo, User]>
+}
+
+
+=== [R1] Refactor 1: "Generate Effect.Schema from type" ===
+
+--- file:///.src/structuralTypeToSchema_symbolNames.ts ---
+// refactor: 14:18-14:26
+import * as Schema from "effect/Schema"
+
+type User = {
+  id: number
+  name: string
+}
+
+interface Todo {
+  id: number
+  description: string
+}
+
+export const AppState = Schema.Struct({
+    users: User,
+    tasks: Schema.Array(Schema.Tuple([Todo, User]))
+});
+
+export interface AppState {
+  users: User
+  tasks: Array<[Todo, User]>
+}
+
+
+=== [R1] Refactor 2: "Generate Schema.Class from type" ===
+
+--- file:///.src/structuralTypeToSchema_symbolNames.ts ---
+// refactor: 14:18-14:26
+import * as Schema from "effect/Schema"
+
+type User = {
+  id: number
+  name: string
+}
+
+interface Todo {
+  id: number
+  description: string
+}
+
+export class AppState extends Schema.Class<AppState>("AppState")({
+    users: User,
+    tasks: Schema.Array(Schema.Tuple([Todo, User]))
+}) {}
+
+export interface AppState {
+  users: User
+  tasks: Array<[Todo, User]>
+}
+
+
+=== [R1] Refactor 3: "Refactor to Schema (Recursive Structural)" ===
+
+--- file:///.src/structuralTypeToSchema_symbolNames.ts ---
+// refactor: 14:18-14:26
+import * as Schema from "effect/Schema"
+
+type User = {
+  id: number
+  name: string
+}
+
+interface Todo {
+  id: number
+  description: string
+}
+
+export class AppState extends Schema.Class<AppState>("AppState")({
+    users: User,
+    tasks: Schema.mutable(Schema.Array(Schema.Tuple([Todo, User])))
+}) {}
+
+class Todo extends Schema.Class<Todo>("Todo")({
+    id: Schema.Number,
+    description: Schema.String
+}) {}
+
+class User extends Schema.Class<User>("User")({
+    id: Schema.Number,
+    name: Schema.String
+}) {}
+
+export interface AppState {
+  users: User
+  tasks: Array<[Todo, User]>
+}
+

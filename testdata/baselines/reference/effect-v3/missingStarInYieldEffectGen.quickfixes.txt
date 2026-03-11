@@ -1,0 +1,538 @@
+=== Quick Fix Inventory ===
+
+[D1] (4:24-6:3) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D2] (10:3-10:8) TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+  Fix 0: "Disable missingStarInYieldEffectGen for this line"
+  Fix 1: "Disable missingStarInYieldEffectGen for entire file"
+  Fix 2: "Replace yield with yield*"
+
+[D3] (15:3-15:8) TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+  Fix 0: "Disable missingStarInYieldEffectGen for this line"
+  Fix 1: "Disable missingStarInYieldEffectGen for entire file"
+  Fix 2: "Replace yield with yield*"
+
+[D4] (16:3-16:8) TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+  Fix 0: "Disable missingStarInYieldEffectGen for this line"
+  Fix 1: "Disable missingStarInYieldEffectGen for entire file"
+  Fix 2: "Replace yield with yield*"
+
+[D5] (19:40-24:3) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D6] (22:5-22:10) TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+  Fix 0: "Disable missingStarInYieldEffectGen for this line"
+  Fix 1: "Disable missingStarInYieldEffectGen for entire file"
+  Fix 2: "Replace yield with yield*"
+
+[D7] (33:3-33:8) TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+  Fix 0: "Disable missingStarInYieldEffectGen for this line"
+  Fix 1: "Disable missingStarInYieldEffectGen for entire file"
+  Fix 2: "Replace yield with yield*"
+
+[D8] (38:3-38:8) TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+  Fix 0: "Disable missingStarInYieldEffectGen for this line"
+  Fix 1: "Disable missingStarInYieldEffectGen for entire file"
+  Fix 2: "Replace yield with yield*"
+
+[D9] (43:3-43:8) TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+  Fix 0: "Disable missingStarInYieldEffectGen for this line"
+  Fix 1: "Disable missingStarInYieldEffectGen for entire file"
+  Fix 2: "Replace yield with yield*"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/missingStarInYieldEffectGen.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+export const noError = Effect.asVoid(Effect.succeed(1))
+
+// @ts-expect-error
+export const missingStarInYield = Effect.gen(function*() {
+  yield Effect.succeed(1)
+})
+
+// @ts-expect-error
+export const missingStarInMultipleYield = Effect.gen(function*() {
+  yield Effect.succeed(1)
+  yield Effect.succeed(2)
+})
+
+export const missingStarInInnerYield = Effect.gen(function*() {
+  // @ts-expect-error
+  yield* Effect.gen(function*() {
+    yield Effect.succeed(1)
+  })
+})
+
+export function* effectInsideStandardGenerator() {
+  yield Effect.never
+  // ^- this is fine, not inside an effect gen
+}
+
+// @ts-expect-error
+export const effectFnUsage = Effect.fn(function*() {
+  yield Effect.never
+})
+
+// @ts-expect-error
+export const tracedEffectFnUsage = Effect.fn("tracedEffectFnUsage")(function*() {
+  yield Effect.never
+})
+
+// @ts-expect-error
+export const untracedEffectFnUsage = Effect.fnUntraced(function*() {
+  yield Effect.never
+})
+
+
+=== [D2] Fix 0: "Disable missingStarInYieldEffectGen for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable missingStarInYieldEffectGen for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace yield with yield*" ===
+
+--- file:///.src/missingStarInYieldEffectGen.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+export const noError = Effect.gen(function*() {
+  yield* Effect.succeed(1)
+})
+
+// @ts-expect-error
+export const missingStarInYield = Effect.gen(function*() {
+  yield* Effect.succeed(1)
+})
+
+// @ts-expect-error
+export const missingStarInMultipleYield = Effect.gen(function*() {
+  yield Effect.succeed(1)
+  yield Effect.succeed(2)
+})
+
+export const missingStarInInnerYield = Effect.gen(function*() {
+  // @ts-expect-error
+  yield* Effect.gen(function*() {
+    yield Effect.succeed(1)
+  })
+})
+
+export function* effectInsideStandardGenerator() {
+  yield Effect.never
+  // ^- this is fine, not inside an effect gen
+}
+
+// @ts-expect-error
+export const effectFnUsage = Effect.fn(function*() {
+  yield Effect.never
+})
+
+// @ts-expect-error
+export const tracedEffectFnUsage = Effect.fn("tracedEffectFnUsage")(function*() {
+  yield Effect.never
+})
+
+// @ts-expect-error
+export const untracedEffectFnUsage = Effect.fnUntraced(function*() {
+  yield Effect.never
+})
+
+
+=== [D3] Fix 0: "Disable missingStarInYieldEffectGen for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable missingStarInYieldEffectGen for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace yield with yield*" ===
+
+--- file:///.src/missingStarInYieldEffectGen.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+export const noError = Effect.gen(function*() {
+  yield* Effect.succeed(1)
+})
+
+// @ts-expect-error
+export const missingStarInYield = Effect.gen(function*() {
+  yield Effect.succeed(1)
+})
+
+// @ts-expect-error
+export const missingStarInMultipleYield = Effect.gen(function*() {
+  yield* Effect.succeed(1)
+  yield Effect.succeed(2)
+})
+
+export const missingStarInInnerYield = Effect.gen(function*() {
+  // @ts-expect-error
+  yield* Effect.gen(function*() {
+    yield Effect.succeed(1)
+  })
+})
+
+export function* effectInsideStandardGenerator() {
+  yield Effect.never
+  // ^- this is fine, not inside an effect gen
+}
+
+// @ts-expect-error
+export const effectFnUsage = Effect.fn(function*() {
+  yield Effect.never
+})
+
+// @ts-expect-error
+export const tracedEffectFnUsage = Effect.fn("tracedEffectFnUsage")(function*() {
+  yield Effect.never
+})
+
+// @ts-expect-error
+export const untracedEffectFnUsage = Effect.fnUntraced(function*() {
+  yield Effect.never
+})
+
+
+=== [D4] Fix 0: "Disable missingStarInYieldEffectGen for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable missingStarInYieldEffectGen for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace yield with yield*" ===
+
+--- file:///.src/missingStarInYieldEffectGen.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+export const noError = Effect.gen(function*() {
+  yield* Effect.succeed(1)
+})
+
+// @ts-expect-error
+export const missingStarInYield = Effect.gen(function*() {
+  yield Effect.succeed(1)
+})
+
+// @ts-expect-error
+export const missingStarInMultipleYield = Effect.gen(function*() {
+  yield Effect.succeed(1)
+  yield* Effect.succeed(2)
+})
+
+export const missingStarInInnerYield = Effect.gen(function*() {
+  // @ts-expect-error
+  yield* Effect.gen(function*() {
+    yield Effect.succeed(1)
+  })
+})
+
+export function* effectInsideStandardGenerator() {
+  yield Effect.never
+  // ^- this is fine, not inside an effect gen
+}
+
+// @ts-expect-error
+export const effectFnUsage = Effect.fn(function*() {
+  yield Effect.never
+})
+
+// @ts-expect-error
+export const tracedEffectFnUsage = Effect.fn("tracedEffectFnUsage")(function*() {
+  yield Effect.never
+})
+
+// @ts-expect-error
+export const untracedEffectFnUsage = Effect.fnUntraced(function*() {
+  yield Effect.never
+})
+
+
+=== [D5] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/missingStarInYieldEffectGen.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+export const noError = Effect.gen(function*() {
+  yield* Effect.succeed(1)
+})
+
+// @ts-expect-error
+export const missingStarInYield = Effect.gen(function*() {
+  yield Effect.succeed(1)
+})
+
+// @ts-expect-error
+export const missingStarInMultipleYield = Effect.gen(function*() {
+  yield Effect.succeed(1)
+  yield Effect.succeed(2)
+})
+
+export const missingStarInInnerYield = Effect.gen(function*() {
+    yield Effect.succeed(1)
+  })
+
+export function* effectInsideStandardGenerator() {
+  yield Effect.never
+  // ^- this is fine, not inside an effect gen
+}
+
+// @ts-expect-error
+export const effectFnUsage = Effect.fn(function*() {
+  yield Effect.never
+})
+
+// @ts-expect-error
+export const tracedEffectFnUsage = Effect.fn("tracedEffectFnUsage")(function*() {
+  yield Effect.never
+})
+
+// @ts-expect-error
+export const untracedEffectFnUsage = Effect.fnUntraced(function*() {
+  yield Effect.never
+})
+
+
+=== [D6] Fix 0: "Disable missingStarInYieldEffectGen for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable missingStarInYieldEffectGen for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace yield with yield*" ===
+
+--- file:///.src/missingStarInYieldEffectGen.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+export const noError = Effect.gen(function*() {
+  yield* Effect.succeed(1)
+})
+
+// @ts-expect-error
+export const missingStarInYield = Effect.gen(function*() {
+  yield Effect.succeed(1)
+})
+
+// @ts-expect-error
+export const missingStarInMultipleYield = Effect.gen(function*() {
+  yield Effect.succeed(1)
+  yield Effect.succeed(2)
+})
+
+export const missingStarInInnerYield = Effect.gen(function*() {
+  // @ts-expect-error
+  yield* Effect.gen(function*() {
+    yield* Effect.succeed(1)
+  })
+})
+
+export function* effectInsideStandardGenerator() {
+  yield Effect.never
+  // ^- this is fine, not inside an effect gen
+}
+
+// @ts-expect-error
+export const effectFnUsage = Effect.fn(function*() {
+  yield Effect.never
+})
+
+// @ts-expect-error
+export const tracedEffectFnUsage = Effect.fn("tracedEffectFnUsage")(function*() {
+  yield Effect.never
+})
+
+// @ts-expect-error
+export const untracedEffectFnUsage = Effect.fnUntraced(function*() {
+  yield Effect.never
+})
+
+
+=== [D7] Fix 0: "Disable missingStarInYieldEffectGen for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable missingStarInYieldEffectGen for entire file" ===
+skipped by default
+
+=== [D7] Fix 2: "Replace yield with yield*" ===
+
+--- file:///.src/missingStarInYieldEffectGen.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+export const noError = Effect.gen(function*() {
+  yield* Effect.succeed(1)
+})
+
+// @ts-expect-error
+export const missingStarInYield = Effect.gen(function*() {
+  yield Effect.succeed(1)
+})
+
+// @ts-expect-error
+export const missingStarInMultipleYield = Effect.gen(function*() {
+  yield Effect.succeed(1)
+  yield Effect.succeed(2)
+})
+
+export const missingStarInInnerYield = Effect.gen(function*() {
+  // @ts-expect-error
+  yield* Effect.gen(function*() {
+    yield Effect.succeed(1)
+  })
+})
+
+export function* effectInsideStandardGenerator() {
+  yield Effect.never
+  // ^- this is fine, not inside an effect gen
+}
+
+// @ts-expect-error
+export const effectFnUsage = Effect.fn(function*() {
+  yield* Effect.never
+})
+
+// @ts-expect-error
+export const tracedEffectFnUsage = Effect.fn("tracedEffectFnUsage")(function*() {
+  yield Effect.never
+})
+
+// @ts-expect-error
+export const untracedEffectFnUsage = Effect.fnUntraced(function*() {
+  yield Effect.never
+})
+
+
+=== [D8] Fix 0: "Disable missingStarInYieldEffectGen for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable missingStarInYieldEffectGen for entire file" ===
+skipped by default
+
+=== [D8] Fix 2: "Replace yield with yield*" ===
+
+--- file:///.src/missingStarInYieldEffectGen.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+export const noError = Effect.gen(function*() {
+  yield* Effect.succeed(1)
+})
+
+// @ts-expect-error
+export const missingStarInYield = Effect.gen(function*() {
+  yield Effect.succeed(1)
+})
+
+// @ts-expect-error
+export const missingStarInMultipleYield = Effect.gen(function*() {
+  yield Effect.succeed(1)
+  yield Effect.succeed(2)
+})
+
+export const missingStarInInnerYield = Effect.gen(function*() {
+  // @ts-expect-error
+  yield* Effect.gen(function*() {
+    yield Effect.succeed(1)
+  })
+})
+
+export function* effectInsideStandardGenerator() {
+  yield Effect.never
+  // ^- this is fine, not inside an effect gen
+}
+
+// @ts-expect-error
+export const effectFnUsage = Effect.fn(function*() {
+  yield Effect.never
+})
+
+// @ts-expect-error
+export const tracedEffectFnUsage = Effect.fn("tracedEffectFnUsage")(function*() {
+  yield* Effect.never
+})
+
+// @ts-expect-error
+export const untracedEffectFnUsage = Effect.fnUntraced(function*() {
+  yield Effect.never
+})
+
+
+=== [D9] Fix 0: "Disable missingStarInYieldEffectGen for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable missingStarInYieldEffectGen for entire file" ===
+skipped by default
+
+=== [D9] Fix 2: "Replace yield with yield*" ===
+
+--- file:///.src/missingStarInYieldEffectGen.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+export const noError = Effect.gen(function*() {
+  yield* Effect.succeed(1)
+})
+
+// @ts-expect-error
+export const missingStarInYield = Effect.gen(function*() {
+  yield Effect.succeed(1)
+})
+
+// @ts-expect-error
+export const missingStarInMultipleYield = Effect.gen(function*() {
+  yield Effect.succeed(1)
+  yield Effect.succeed(2)
+})
+
+export const missingStarInInnerYield = Effect.gen(function*() {
+  // @ts-expect-error
+  yield* Effect.gen(function*() {
+    yield Effect.succeed(1)
+  })
+})
+
+export function* effectInsideStandardGenerator() {
+  yield Effect.never
+  // ^- this is fine, not inside an effect gen
+}
+
+// @ts-expect-error
+export const effectFnUsage = Effect.fn(function*() {
+  yield Effect.never
+})
+
+// @ts-expect-error
+export const tracedEffectFnUsage = Effect.fn("tracedEffectFnUsage")(function*() {
+  yield Effect.never
+})
+
+// @ts-expect-error
+export const untracedEffectFnUsage = Effect.fnUntraced(function*() {
+  yield* Effect.never
+})
+

@@ -1,0 +1,55 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+/.src/multipleEffectProvide_effectFnRegular.ts(24,3): warning TS377033: Avoid chaining Effect.provide calls, as this can lead to service lifecycle issues. Instead, merge layers and provide them in a single call. effect(multipleEffectProvide)
+/.src/multipleEffectProvide_effectFnRegular.ts(30,3): warning TS377033: Avoid chaining Effect.provide calls, as this can lead to service lifecycle issues. Instead, merge layers and provide them in a single call. effect(multipleEffectProvide)
+/.src/multipleEffectProvide_effectFnRegular.ts(36,3): warning TS377033: Avoid chaining Effect.provide calls, as this can lead to service lifecycle issues. Instead, merge layers and provide them in a single call. effect(multipleEffectProvide)
+
+
+==== /.src/multipleEffectProvide_effectFnRegular.ts (3 errors) ====
+    import { ServiceMap, Effect, Layer } from "effect"
+    
+    class MyService1 extends ServiceMap.Service<MyService1>()("MyService1", {
+      make: Effect.succeed({ value: 1 })
+    }) {
+      static Default = Layer.effect(this, this.make)
+    }
+    
+    class MyService2 extends ServiceMap.Service<MyService2>()("MyService2", {
+      make: Effect.succeed({ value: 2 })
+    }) {
+      static Default = Layer.effect(this, this.make)
+    }
+    
+    class MyService3 extends ServiceMap.Service<MyService3>()("MyService3", {
+      make: Effect.succeed({ value: 3 })
+    }) {
+      static Default = Layer.effect(this, this.make)
+    }
+    
+    // Effect.fn with regular (non-generator) function and multiple provide calls
+    export const shouldReportEffectFnRegular = Effect.fn(
+      () => Effect.void,
+      Effect.provide(MyService1.Default),
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377033: Avoid chaining Effect.provide calls, as this can lead to service lifecycle issues. Instead, merge layers and provide them in a single call. effect(multipleEffectProvide)
+      Effect.provide(MyService2.Default)
+    )
+    
+    export const shouldReportEffectFnRegularTraced = Effect.fn("traced")(
+      () => Effect.void,
+      Effect.provide(MyService1.Default),
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377033: Avoid chaining Effect.provide calls, as this can lead to service lifecycle issues. Instead, merge layers and provide them in a single call. effect(multipleEffectProvide)
+      Effect.provide(MyService2.Default)
+    )
+    
+    export const shouldReportThreeProvidesRegular = Effect.fn(
+      () => Effect.void,
+      Effect.provide(MyService1.Default),
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377033: Avoid chaining Effect.provide calls, as this can lead to service lifecycle issues. Instead, merge layers and provide them in a single call. effect(multipleEffectProvide)
+      Effect.provide(MyService2.Default),
+      Effect.provide(MyService3.Default)
+    )
+    

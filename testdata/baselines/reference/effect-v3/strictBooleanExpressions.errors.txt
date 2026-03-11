@@ -1,0 +1,82 @@
+=== Metadata ===
+Effect version: unknown
+
+/.src/strictBooleanExpressions.ts(4,37): error TS377029: Unexpected `string` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
+/.src/strictBooleanExpressions.ts(7,45): error TS377029: Unexpected `undefined` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
+/.src/strictBooleanExpressions.ts(10,40): error TS377029: Unexpected `null` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
+/.src/strictBooleanExpressions.ts(13,45): error TS377029: Unexpected `undefined` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
+/.src/strictBooleanExpressions.ts(15,42): error TS377029: Unexpected `undefined` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
+/.src/strictBooleanExpressions.ts(17,55): error TS377029: Unexpected `string` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
+/.src/strictBooleanExpressions.ts(22,30): error TS377029: Unexpected `undefined` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
+/.src/strictBooleanExpressions.ts(23,54): error TS377029: Unexpected `string` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
+/.src/strictBooleanExpressions.ts(25,5): error TS377029: Unexpected `null` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
+/.src/strictBooleanExpressions.ts(25,5): error TS377029: Unexpected `undefined` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
+/.src/strictBooleanExpressions.ts(25,15): error TS377029: Unexpected `undefined` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
+
+
+==== /.src/strictBooleanExpressions.ts (11 errors) ====
+    // @effect-v3
+    // @effect-diagnostics strictBooleanExpressions:error
+    declare const testString: string
+    export const shouldWarnGotString = !testString
+                                        ~~~~~~~~~~
+!!! error TS377029: Unexpected `string` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
+    
+    declare const myVar: boolean | undefined
+    export const shouldWarnPossiblyUndefined = !myVar
+                                                ~~~~~
+!!! error TS377029: Unexpected `undefined` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
+    
+    declare const myVar3: true | null
+    export const shouldWarnIncludesNull = !myVar3
+                                           ~~~~~~
+!!! error TS377029: Unexpected `null` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
+    
+    declare const myVar4: true | undefined
+    export const shouldWarnIncludesUndefined = !myVar4
+                                                ~~~~~~
+!!! error TS377029: Unexpected `undefined` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
+    
+    export const shouldWarnTernaryCodition = myVar4 ? true : false
+                                             ~~~~~~
+!!! error TS377029: Unexpected `undefined` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
+    
+    export const shouldWarnNestedStringCheck = myVar5 || !testString
+                                                          ~~~~~~~~~~
+!!! error TS377029: Unexpected `string` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
+    
+    declare const myVar8: boolean
+    declare const myVar9: boolean
+    declare const fn: () => boolean | undefined
+    export const nestedTernary = (myVar8 || (myVar9 && fn())) ? true : false
+                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377029: Unexpected `undefined` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
+    export const nestedTernary3 = (myVar8 || (myVar9 && !testString)) ? true : false
+                                                         ~~~~~~~~~~
+!!! error TS377029: Unexpected `string` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
+    
+    if (myVar3 || myVar4) {
+        ~~~~~~
+!!! error TS377029: Unexpected `null` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
+        ~~~~~~~~~~~~~~~~
+!!! error TS377029: Unexpected `undefined` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
+                  ~~~~~~
+!!! error TS377029: Unexpected `undefined` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
+      // warn because members not strictly boolean
+    }
+    
+    // all fine because true is strictly boolean
+    export const shouldNotWarn = !true
+    
+    declare const myVar2: true | false
+    export const shouldNotWarn2 = !myVar2
+    
+    declare const myVar5: undefined | boolean
+    declare const myVar6: { id: number }
+    declare const myVar7: boolean
+    export const isFineOutsideCondition = myVar5 || myVar6 || myVar7
+    
+    if (myVar2 || shouldNotWarn) {
+      // yay!
+    }
+    

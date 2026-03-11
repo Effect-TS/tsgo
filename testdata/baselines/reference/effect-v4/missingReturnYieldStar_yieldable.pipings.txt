@@ -1,0 +1,15 @@
+==== /.src/missingReturnYieldStar_yieldable.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 3:45 - 9:7
+Node: Effect.gen(function*() {\n        if (n === 0) {\n            yield* Option.none() // should trigger because Option<A> is yieldable\n        }\n        return n / 1\n    })
+Node Kind: KindCallExpression
+
+Subject: function*() {\n        if (n === 0) {\n            yield* Option.none() // should trigger because Option<A> is yieldable\n        }\n        return n / 1\n    }
+Subject Type: () => Generator<Option<never>, number, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<number, NoSuchElementError, never>

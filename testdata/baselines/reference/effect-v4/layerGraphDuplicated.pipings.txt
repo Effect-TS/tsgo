@@ -1,0 +1,81 @@
+==== /.src/layerGraphDuplicated.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 4:8 - 4:27
+Node: Effect.succeed({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{}, never, never>
+
+=== Piping Flow ===
+Location: 22:8 - 22:27
+Node: Effect.succeed({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{}, never, never>
+
+=== Piping Flow ===
+Location: 45:23 - 59:2
+Node: pipe(\n  Database.Default,\n  Layer.provideMerge(UserRepository.Default),\n  Layer.merge(Analytics.Default),\n  Layer.provideMerge(UserService.Default),\n  Layer.merge(\n    pipe(\n      Database.Default,\n      Layer.provideMerge(EventsRepository.Default),\n      Layer.merge(Analytics.Default),\n      Layer.provideMerge(EventService.Default)\n    )\n  ),\n  Layer.provideMerge(AppService.Default)\n)
+Node Kind: KindCallExpression
+
+Subject: Database.Default
+Subject Type: Layer<Database, never, never>
+
+Transformations (5):
+  [0] kind: pipe
+      callee: Layer.provideMerge
+      args: [UserRepository.Default]
+      outType: Layer<Database | UserRepository, never, Database>
+  [1] kind: pipe
+      callee: Layer.merge
+      args: [Analytics.Default]
+      outType: Layer<Analytics | Database | UserRepository, never, Database>
+  [2] kind: pipe
+      callee: Layer.provideMerge
+      args: [UserService.Default]
+      outType: Layer<Analytics | Database | UserRepository | UserService, never, Analytics | Database | UserRepository>
+  [3] kind: pipe
+      callee: Layer.merge
+      args: [pipe(\n      Database.Default,\n      Layer.provideMerge(EventsRepository.Default),\n      Layer.merge(Analytics.Default),\n      Layer.provideMerge(EventService.Default)\n    )]
+      outType: Layer<Analytics | Database | EventService | EventsRepository | UserRepository | UserService, never, Analytics | Database | EventsRepository | UserRepository>
+  [4] kind: pipe
+      callee: Layer.provideMerge
+      args: [AppService.Default]
+      outType: Layer<Analytics | AppService | Database | EventService | EventsRepository | UserRepository | UserService, never, Analytics | Database | EventService | EventsRepository | UserRepository | UserService>
+
+=== Piping Flow ===
+Location: 50:15 - 56:6
+Node: pipe(\n      Database.Default,\n      Layer.provideMerge(EventsRepository.Default),\n      Layer.merge(Analytics.Default),\n      Layer.provideMerge(EventService.Default)\n    )
+Node Kind: KindCallExpression
+
+Subject: Database.Default
+Subject Type: Layer<Database, never, never>
+
+Transformations (3):
+  [0] kind: pipe
+      callee: Layer.provideMerge
+      args: [EventsRepository.Default]
+      outType: Layer<Database | EventsRepository, never, Database>
+  [1] kind: pipe
+      callee: Layer.merge
+      args: [Analytics.Default]
+      outType: Layer<Analytics | Database | EventsRepository, never, Database>
+  [2] kind: pipe
+      callee: Layer.provideMerge
+      args: [EventService.Default]
+      outType: Layer<Analytics | Database | EventService | EventsRepository, never, Analytics | Database | EventsRepository>

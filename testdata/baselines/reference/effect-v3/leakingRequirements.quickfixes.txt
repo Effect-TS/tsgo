@@ -1,0 +1,29 @@
+=== Quick Fix Inventory ===
+
+[D1] (9:14-9:25) TS377041: Methods of this Service require 'FileSystem' from every caller. This leaks implementation details — resolve these dependencies at Layer creation time. effect(leakingRequirements)
+  Fix 0: "Disable leakingRequirements for this line"
+  Fix 1: "Disable leakingRequirements for entire file"
+
+[D2] (15:9-15:20) TS6196: '_LocalClass' is declared but never used.
+  (no quick fixes)
+
+[D3] (19:9-19:22) TS6196: '_LocalLeaking' is declared but never used.
+  (no quick fixes)
+
+[D4] (19:9-19:22) TS377041: Methods of this Service require 'FileSystem' from every caller. This leaks implementation details — resolve these dependencies at Layer creation time. effect(leakingRequirements)
+  Fix 0: "Disable leakingRequirements for this line"
+  Fix 1: "Disable leakingRequirements for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable leakingRequirements for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable leakingRequirements for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable leakingRequirements for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable leakingRequirements for entire file" ===
+skipped by default

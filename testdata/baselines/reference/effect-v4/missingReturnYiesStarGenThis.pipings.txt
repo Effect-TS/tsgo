@@ -1,0 +1,15 @@
+==== /.src/missingReturnYiesStarGenThis.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 6:15 - 6:35
+Node: Effect.fail(this.a)
+Node Kind: KindCallExpression
+
+Subject: this.a
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, number, never>

@@ -1,0 +1,13 @@
+=== Quick Fix Inventory ===
+
+[D1] (8:14-8:26) TS377043: Effect Services with type parameters are not supported because they cannot be properly discriminated at runtime, which may cause unexpected behavior. effect(genericEffectServices)
+  Fix 0: "Disable genericEffectServices for this line"
+  Fix 1: "Disable genericEffectServices for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable genericEffectServices for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable genericEffectServices for entire file" ===
+skipped by default

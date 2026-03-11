@@ -1,0 +1,31 @@
+=== Quick Fix Inventory ===
+
+[D1] (10:52-10:67) TS377046: Self type parameter should be 'InvalidModelClass'. effect(classSelfMismatch)
+  Fix 0: "Disable classSelfMismatch for this line"
+  Fix 1: "Disable classSelfMismatch for entire file"
+  Fix 2: "Replace 'ValidModelClass' with 'InvalidModelClass'"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable classSelfMismatch for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable classSelfMismatch for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace 'ValidModelClass' with 'InvalidModelClass'" ===
+
+--- file:///.src/classSelfMismatch_sqlClass.ts ---
+import { Model } from "effect/unstable/schema"
+import {Schema} from "effect"
+
+// valid usage
+export class ValidModelClass extends Model.Class<ValidModelClass>("ValidModelClass")({
+  id: Schema.String
+}) {}
+
+// invalid usage: Model.Class<ValidModelClass> should be Model.Class<InvalidModelClass> because the Self type parameter is not the same as the class name
+export class InvalidModelClass extends Model.Class<InvalidModelClass>("InvalidModelClass")({
+  id2: Schema.String
+}) {}
+

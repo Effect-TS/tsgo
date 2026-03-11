@@ -1,0 +1,20 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/classSelfMismatch_unionGiven.ts(10,57): error TS377046: Self type parameter should be 'MyService'. effect(classSelfMismatch)
+
+
+==== /.src/classSelfMismatch_unionGiven.ts (1 errors) ====
+    // @effect-v3
+    import * as Context from "effect/Context"
+    
+    interface ServiceShape {
+      value: number
+    }
+    
+    export class OtherService extends Context.Tag("OtherService")<OtherService, {}>() {}
+    
+    export class MyService extends Context.Tag("MyService")<MyService | OtherService, ServiceShape>() {}
+                                                            ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377046: Self type parameter should be 'MyService'. effect(classSelfMismatch)
+    

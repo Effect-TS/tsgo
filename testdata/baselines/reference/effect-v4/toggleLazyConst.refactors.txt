@@ -1,0 +1,132 @@
+=== Refactor Inventory ===
+
+[R1] selection: "3:7-3:12"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Toggle type annotation" (refactor.rewrite.effect.toggleTypeAnnotation)
+  Refactor 2: "Toggle lazy const" (refactor.rewrite.effect.toggleLazyConst)
+
+[R2] selection: "5:7-5:12"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Toggle type annotation" (refactor.rewrite.effect.toggleTypeAnnotation)
+  Refactor 2: "Toggle lazy const" (refactor.rewrite.effect.toggleLazyConst)
+
+[R3] selection: "7:7-7:12"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Toggle type annotation" (refactor.rewrite.effect.toggleTypeAnnotation)
+
+[R4] selection: "empty (0:0-0:0)"
+  (no refactors)
+
+=== Refactor Application Results ===
+
+=== [R1] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/toggleLazyConst.ts ---
+// refactor: 3:7-3:12, 5:7-5:12, 7:7-7:12
+
+const pipe(test1) = 1
+
+const test2 = () => 1
+
+const test3 = () => {
+  console.log("Hello")
+}
+
+
+=== [R1] Refactor 1: "Toggle type annotation" ===
+
+--- file:///.src/toggleLazyConst.ts ---
+// refactor: 3:7-3:12, 5:7-5:12, 7:7-7:12
+
+const test1: 1 = 1
+
+const test2 = () => 1
+
+const test3 = () => {
+  console.log("Hello")
+}
+
+
+=== [R1] Refactor 2: "Toggle lazy const" ===
+
+--- file:///.src/toggleLazyConst.ts ---
+// refactor: 3:7-3:12, 5:7-5:12, 7:7-7:12
+
+const test1 = () => 1
+
+const test2 = () => 1
+
+const test3 = () => {
+  console.log("Hello")
+}
+
+
+=== [R2] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/toggleLazyConst.ts ---
+// refactor: 3:7-3:12, 5:7-5:12, 7:7-7:12
+
+const test1 = 1
+
+const pipe(test2) = () => 1
+
+const test3 = () => {
+  console.log("Hello")
+}
+
+
+=== [R2] Refactor 1: "Toggle type annotation" ===
+
+--- file:///.src/toggleLazyConst.ts ---
+// refactor: 3:7-3:12, 5:7-5:12, 7:7-7:12
+
+const test1 = 1
+
+const test2: () => number = () => 1
+
+const test3 = () => {
+  console.log("Hello")
+}
+
+
+=== [R2] Refactor 2: "Toggle lazy const" ===
+
+--- file:///.src/toggleLazyConst.ts ---
+// refactor: 3:7-3:12, 5:7-5:12, 7:7-7:12
+
+const test1 = 1
+
+const test2 = 1
+
+const test3 = () => {
+  console.log("Hello")
+}
+
+
+=== [R3] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/toggleLazyConst.ts ---
+// refactor: 3:7-3:12, 5:7-5:12, 7:7-7:12
+
+const test1 = 1
+
+const test2 = () => 1
+
+const pipe(test3) = () => {
+  console.log("Hello")
+}
+
+
+=== [R3] Refactor 1: "Toggle type annotation" ===
+
+--- file:///.src/toggleLazyConst.ts ---
+// refactor: 3:7-3:12, 5:7-5:12, 7:7-7:12
+
+const test1 = 1
+
+const test2 = () => 1
+
+const test3: () => void = () => {
+  console.log("Hello")
+}
+

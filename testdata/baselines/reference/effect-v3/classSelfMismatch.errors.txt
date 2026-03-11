@@ -1,0 +1,28 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/classSelfMismatch.ts(14,26): error TS377046: Self type parameter should be 'InvalidServiceSelfParameter'. effect(classSelfMismatch)
+
+
+==== /.src/classSelfMismatch.ts (1 errors) ====
+    // @effect-v3
+    import * as Effect from "effect/Effect"
+    
+    // valid usage: Effect.Service<ValidServiceSelfParameter> is correct because the Self type parameter is the same as the class name
+    export class ValidServiceSelfParameter
+      extends Effect.Service<ValidServiceSelfParameter>()("ValidServiceSelfParameter", {
+        succeed: { value: 1 }
+      })
+    {
+    }
+    
+    // invalid usage: Effect.Service<ValidServiceSelfParameter> should be Effect.Service<InvalidServiceSelfParameter> because the Self type parameter is not the same as the class name
+    export class InvalidServiceSelfParameter
+      extends Effect.Service<ValidServiceSelfParameter>()("InvalidServiceSelfParameter", {
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377046: Self type parameter should be 'InvalidServiceSelfParameter'. effect(classSelfMismatch)
+        succeed: { value: 1 }
+      })
+    {
+    }
+    

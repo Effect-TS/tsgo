@@ -1,0 +1,30 @@
+==== /.src/package.json (0 flows) ====
+==== /.src/test.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 5:10 - 5:91
+Node: ServiceMap.Service<ExpectedServiceIdentifier, {}>()("ExpectedServiceIdentifier")
+Node Kind: KindCallExpression
+
+Subject: "ExpectedServiceIdentifier"
+Subject Type: "ExpectedServiceIdentifier"
+
+Transformations (1):
+  [0] kind: call
+      callee: ServiceMap.Service<ExpectedServiceIdentifier, {}>()
+      args: (constant)
+      outType: ServiceClass<ExpectedServiceIdentifier, "ExpectedServiceIdentifier", {}>
+
+=== Piping Flow ===
+Location: 8:28 - 8:55
+Node: Data.TaggedError("ErrorA")
+Node Kind: KindCallExpression
+
+Subject: "ErrorA"
+Subject Type: "ErrorA"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: MatchRecord<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }, void, { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "ErrorA"; } & Readonly<A>

@@ -1,0 +1,423 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:3-6:13) TS377018: Effect.asVoid can be used instead to discard the success value. effect(effectMapVoid)
+  Fix 0: "Disable effectMapVoid for this line"
+  Fix 1: "Disable effectMapVoid for entire file"
+  Fix 2: "Replace with Effect.asVoid"
+
+[D2] (11:3-11:13) TS377018: Effect.asVoid can be used instead to discard the success value. effect(effectMapVoid)
+  Fix 0: "Disable effectMapVoid for this line"
+  Fix 1: "Disable effectMapVoid for entire file"
+  Fix 2: "Replace with Effect.asVoid"
+
+[D3] (16:3-16:13) TS377018: Effect.asVoid can be used instead to discard the success value. effect(effectMapVoid)
+  Fix 0: "Disable effectMapVoid for this line"
+  Fix 1: "Disable effectMapVoid for entire file"
+  Fix 2: "Replace with Effect.asVoid"
+
+[D4] (22:3-22:13) TS377018: Effect.asVoid can be used instead to discard the success value. effect(effectMapVoid)
+  Fix 0: "Disable effectMapVoid for this line"
+  Fix 1: "Disable effectMapVoid for entire file"
+  Fix 2: "Replace with Effect.asVoid"
+
+[D5] (27:3-27:13) TS377018: Effect.asVoid can be used instead to discard the success value. effect(effectMapVoid)
+  Fix 0: "Disable effectMapVoid for this line"
+  Fix 1: "Disable effectMapVoid for entire file"
+  Fix 2: "Replace with Effect.asVoid"
+
+[D6] (33:3-33:13) TS377018: Effect.asVoid can be used instead to discard the success value. effect(effectMapVoid)
+  Fix 0: "Disable effectMapVoid for this line"
+  Fix 1: "Disable effectMapVoid for entire file"
+  Fix 2: "Replace with Effect.asVoid"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable effectMapVoid for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectMapVoid for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.asVoid" ===
+
+--- file:///.src/effectMapVoid.ts ---
+// @effect-v3
+import { Effect } from "effect"
+
+// Should trigger: Effect.map(() => void 0)
+export const shouldTriggerVoid0 = Effect.succeed(1).pipe(
+  Effect.asVoid
+)
+
+// Should trigger: Effect.map(() => undefined)
+export const shouldTriggerUndefined = Effect.succeed(1).pipe(
+  Effect.map(() => undefined)
+)
+
+// Should trigger: Effect.map(() => {})
+export const shouldTriggerEmptyBlock = Effect.succeed(1).pipe(
+  Effect.map(() => {})
+)
+
+// Should trigger: Effect.map(() => (undefined)) - parenthesized
+export const shouldTriggerParenthesizedUndefined = Effect.succeed(1).pipe(
+  // eslint-disable-next-line @effect/dprint
+  Effect.map(() => (undefined))
+)
+
+// Should trigger: Effect.map(() => (void 0)) - parenthesized
+export const shouldTriggerParenthesizedVoid0 = Effect.succeed(1).pipe(
+  Effect.map(() => (void 0))
+)
+
+// Should trigger: Effect.map(() => ((undefined))) - double parenthesized
+export const shouldTriggerDoubleParenthesizedUndefined = Effect.succeed(1).pipe(
+  // eslint-disable-next-line @effect/dprint
+  Effect.map(() => ((undefined)))
+)
+
+// Should NOT trigger: Effect.map with actual transformation
+export const shouldNotTriggerTransform = Effect.succeed(1).pipe(
+  Effect.map((n) => n * 2)
+)
+
+// Should NOT trigger: Effect.map with non-void return
+export const shouldNotTriggerNonVoid = Effect.succeed(1).pipe(
+  Effect.map(() => 42)
+)
+
+// Should NOT trigger: Effect.map with string return
+export const shouldNotTriggerString = Effect.succeed(1).pipe(
+  Effect.map(() => "hello")
+)
+
+// Should NOT trigger: already using asVoid
+export const shouldNotTriggerAsVoid = Effect.succeed(1).pipe(
+  Effect.asVoid
+)
+
+
+=== [D2] Fix 0: "Disable effectMapVoid for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable effectMapVoid for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.asVoid" ===
+
+--- file:///.src/effectMapVoid.ts ---
+// @effect-v3
+import { Effect } from "effect"
+
+// Should trigger: Effect.map(() => void 0)
+export const shouldTriggerVoid0 = Effect.succeed(1).pipe(
+  Effect.map(() => void 0)
+)
+
+// Should trigger: Effect.map(() => undefined)
+export const shouldTriggerUndefined = Effect.succeed(1).pipe(
+  Effect.asVoid
+)
+
+// Should trigger: Effect.map(() => {})
+export const shouldTriggerEmptyBlock = Effect.succeed(1).pipe(
+  Effect.map(() => {})
+)
+
+// Should trigger: Effect.map(() => (undefined)) - parenthesized
+export const shouldTriggerParenthesizedUndefined = Effect.succeed(1).pipe(
+  // eslint-disable-next-line @effect/dprint
+  Effect.map(() => (undefined))
+)
+
+// Should trigger: Effect.map(() => (void 0)) - parenthesized
+export const shouldTriggerParenthesizedVoid0 = Effect.succeed(1).pipe(
+  Effect.map(() => (void 0))
+)
+
+// Should trigger: Effect.map(() => ((undefined))) - double parenthesized
+export const shouldTriggerDoubleParenthesizedUndefined = Effect.succeed(1).pipe(
+  // eslint-disable-next-line @effect/dprint
+  Effect.map(() => ((undefined)))
+)
+
+// Should NOT trigger: Effect.map with actual transformation
+export const shouldNotTriggerTransform = Effect.succeed(1).pipe(
+  Effect.map((n) => n * 2)
+)
+
+// Should NOT trigger: Effect.map with non-void return
+export const shouldNotTriggerNonVoid = Effect.succeed(1).pipe(
+  Effect.map(() => 42)
+)
+
+// Should NOT trigger: Effect.map with string return
+export const shouldNotTriggerString = Effect.succeed(1).pipe(
+  Effect.map(() => "hello")
+)
+
+// Should NOT trigger: already using asVoid
+export const shouldNotTriggerAsVoid = Effect.succeed(1).pipe(
+  Effect.asVoid
+)
+
+
+=== [D3] Fix 0: "Disable effectMapVoid for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable effectMapVoid for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.asVoid" ===
+
+--- file:///.src/effectMapVoid.ts ---
+// @effect-v3
+import { Effect } from "effect"
+
+// Should trigger: Effect.map(() => void 0)
+export const shouldTriggerVoid0 = Effect.succeed(1).pipe(
+  Effect.map(() => void 0)
+)
+
+// Should trigger: Effect.map(() => undefined)
+export const shouldTriggerUndefined = Effect.succeed(1).pipe(
+  Effect.map(() => undefined)
+)
+
+// Should trigger: Effect.map(() => {})
+export const shouldTriggerEmptyBlock = Effect.succeed(1).pipe(
+  Effect.asVoid
+)
+
+// Should trigger: Effect.map(() => (undefined)) - parenthesized
+export const shouldTriggerParenthesizedUndefined = Effect.succeed(1).pipe(
+  // eslint-disable-next-line @effect/dprint
+  Effect.map(() => (undefined))
+)
+
+// Should trigger: Effect.map(() => (void 0)) - parenthesized
+export const shouldTriggerParenthesizedVoid0 = Effect.succeed(1).pipe(
+  Effect.map(() => (void 0))
+)
+
+// Should trigger: Effect.map(() => ((undefined))) - double parenthesized
+export const shouldTriggerDoubleParenthesizedUndefined = Effect.succeed(1).pipe(
+  // eslint-disable-next-line @effect/dprint
+  Effect.map(() => ((undefined)))
+)
+
+// Should NOT trigger: Effect.map with actual transformation
+export const shouldNotTriggerTransform = Effect.succeed(1).pipe(
+  Effect.map((n) => n * 2)
+)
+
+// Should NOT trigger: Effect.map with non-void return
+export const shouldNotTriggerNonVoid = Effect.succeed(1).pipe(
+  Effect.map(() => 42)
+)
+
+// Should NOT trigger: Effect.map with string return
+export const shouldNotTriggerString = Effect.succeed(1).pipe(
+  Effect.map(() => "hello")
+)
+
+// Should NOT trigger: already using asVoid
+export const shouldNotTriggerAsVoid = Effect.succeed(1).pipe(
+  Effect.asVoid
+)
+
+
+=== [D4] Fix 0: "Disable effectMapVoid for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable effectMapVoid for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.asVoid" ===
+
+--- file:///.src/effectMapVoid.ts ---
+// @effect-v3
+import { Effect } from "effect"
+
+// Should trigger: Effect.map(() => void 0)
+export const shouldTriggerVoid0 = Effect.succeed(1).pipe(
+  Effect.map(() => void 0)
+)
+
+// Should trigger: Effect.map(() => undefined)
+export const shouldTriggerUndefined = Effect.succeed(1).pipe(
+  Effect.map(() => undefined)
+)
+
+// Should trigger: Effect.map(() => {})
+export const shouldTriggerEmptyBlock = Effect.succeed(1).pipe(
+  Effect.map(() => {})
+)
+
+// Should trigger: Effect.map(() => (undefined)) - parenthesized
+export const shouldTriggerParenthesizedUndefined = Effect.succeed(1).pipe(
+  // eslint-disable-next-line @effect/dprint
+  Effect.asVoid
+)
+
+// Should trigger: Effect.map(() => (void 0)) - parenthesized
+export const shouldTriggerParenthesizedVoid0 = Effect.succeed(1).pipe(
+  Effect.map(() => (void 0))
+)
+
+// Should trigger: Effect.map(() => ((undefined))) - double parenthesized
+export const shouldTriggerDoubleParenthesizedUndefined = Effect.succeed(1).pipe(
+  // eslint-disable-next-line @effect/dprint
+  Effect.map(() => ((undefined)))
+)
+
+// Should NOT trigger: Effect.map with actual transformation
+export const shouldNotTriggerTransform = Effect.succeed(1).pipe(
+  Effect.map((n) => n * 2)
+)
+
+// Should NOT trigger: Effect.map with non-void return
+export const shouldNotTriggerNonVoid = Effect.succeed(1).pipe(
+  Effect.map(() => 42)
+)
+
+// Should NOT trigger: Effect.map with string return
+export const shouldNotTriggerString = Effect.succeed(1).pipe(
+  Effect.map(() => "hello")
+)
+
+// Should NOT trigger: already using asVoid
+export const shouldNotTriggerAsVoid = Effect.succeed(1).pipe(
+  Effect.asVoid
+)
+
+
+=== [D5] Fix 0: "Disable effectMapVoid for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable effectMapVoid for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Replace with Effect.asVoid" ===
+
+--- file:///.src/effectMapVoid.ts ---
+// @effect-v3
+import { Effect } from "effect"
+
+// Should trigger: Effect.map(() => void 0)
+export const shouldTriggerVoid0 = Effect.succeed(1).pipe(
+  Effect.map(() => void 0)
+)
+
+// Should trigger: Effect.map(() => undefined)
+export const shouldTriggerUndefined = Effect.succeed(1).pipe(
+  Effect.map(() => undefined)
+)
+
+// Should trigger: Effect.map(() => {})
+export const shouldTriggerEmptyBlock = Effect.succeed(1).pipe(
+  Effect.map(() => {})
+)
+
+// Should trigger: Effect.map(() => (undefined)) - parenthesized
+export const shouldTriggerParenthesizedUndefined = Effect.succeed(1).pipe(
+  // eslint-disable-next-line @effect/dprint
+  Effect.map(() => (undefined))
+)
+
+// Should trigger: Effect.map(() => (void 0)) - parenthesized
+export const shouldTriggerParenthesizedVoid0 = Effect.succeed(1).pipe(
+  Effect.asVoid
+)
+
+// Should trigger: Effect.map(() => ((undefined))) - double parenthesized
+export const shouldTriggerDoubleParenthesizedUndefined = Effect.succeed(1).pipe(
+  // eslint-disable-next-line @effect/dprint
+  Effect.map(() => ((undefined)))
+)
+
+// Should NOT trigger: Effect.map with actual transformation
+export const shouldNotTriggerTransform = Effect.succeed(1).pipe(
+  Effect.map((n) => n * 2)
+)
+
+// Should NOT trigger: Effect.map with non-void return
+export const shouldNotTriggerNonVoid = Effect.succeed(1).pipe(
+  Effect.map(() => 42)
+)
+
+// Should NOT trigger: Effect.map with string return
+export const shouldNotTriggerString = Effect.succeed(1).pipe(
+  Effect.map(() => "hello")
+)
+
+// Should NOT trigger: already using asVoid
+export const shouldNotTriggerAsVoid = Effect.succeed(1).pipe(
+  Effect.asVoid
+)
+
+
+=== [D6] Fix 0: "Disable effectMapVoid for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable effectMapVoid for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace with Effect.asVoid" ===
+
+--- file:///.src/effectMapVoid.ts ---
+// @effect-v3
+import { Effect } from "effect"
+
+// Should trigger: Effect.map(() => void 0)
+export const shouldTriggerVoid0 = Effect.succeed(1).pipe(
+  Effect.map(() => void 0)
+)
+
+// Should trigger: Effect.map(() => undefined)
+export const shouldTriggerUndefined = Effect.succeed(1).pipe(
+  Effect.map(() => undefined)
+)
+
+// Should trigger: Effect.map(() => {})
+export const shouldTriggerEmptyBlock = Effect.succeed(1).pipe(
+  Effect.map(() => {})
+)
+
+// Should trigger: Effect.map(() => (undefined)) - parenthesized
+export const shouldTriggerParenthesizedUndefined = Effect.succeed(1).pipe(
+  // eslint-disable-next-line @effect/dprint
+  Effect.map(() => (undefined))
+)
+
+// Should trigger: Effect.map(() => (void 0)) - parenthesized
+export const shouldTriggerParenthesizedVoid0 = Effect.succeed(1).pipe(
+  Effect.map(() => (void 0))
+)
+
+// Should trigger: Effect.map(() => ((undefined))) - double parenthesized
+export const shouldTriggerDoubleParenthesizedUndefined = Effect.succeed(1).pipe(
+  // eslint-disable-next-line @effect/dprint
+  Effect.asVoid
+)
+
+// Should NOT trigger: Effect.map with actual transformation
+export const shouldNotTriggerTransform = Effect.succeed(1).pipe(
+  Effect.map((n) => n * 2)
+)
+
+// Should NOT trigger: Effect.map with non-void return
+export const shouldNotTriggerNonVoid = Effect.succeed(1).pipe(
+  Effect.map(() => 42)
+)
+
+// Should NOT trigger: Effect.map with string return
+export const shouldNotTriggerString = Effect.succeed(1).pipe(
+  Effect.map(() => "hello")
+)
+
+// Should NOT trigger: already using asVoid
+export const shouldNotTriggerAsVoid = Effect.succeed(1).pipe(
+  Effect.asVoid
+)
+

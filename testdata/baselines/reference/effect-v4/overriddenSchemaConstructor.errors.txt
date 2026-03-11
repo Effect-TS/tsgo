@@ -1,0 +1,42 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+/.src/overriddenSchemaConstructor.ts(29,3): error TS377044: Classes extending Schema must not override the constructor; this is because it silently breaks the schema decoding behaviour. If that's needed, we recommend instead to use a static 'new' method that constructs the instance. effect(overriddenSchemaConstructor)
+
+
+==== /.src/overriddenSchemaConstructor.ts (1 errors) ====
+    import * as Schema from "effect/Schema"
+    
+    export class Valid extends Schema.Class<Valid>("Valid")({
+      a: Schema.Number
+    }) {}
+    
+    export class Valid2 extends Schema.Class<Valid2>("Valid")({
+      a: Schema.Number
+    }) {
+      otherMethod() {
+        return this.a
+      }
+    }
+    
+    export class BaseClass {}
+    export class Valid3 extends BaseClass {
+      constructor() {
+        super()
+      }
+    }
+    
+    // this is invalid because if the class extends a Schema, there should be no constructor override
+    export class InvalidBecauseOfConstructor
+      extends Schema.Class<InvalidBecauseOfConstructor>("InvalidBecauseOfConstructor")({
+        a: Schema.Number
+      })
+    {
+      // should be report here at constructor location
+      constructor() {
+      ~~~~~~~~~~~
+!!! error TS377044: Classes extending Schema must not override the constructor; this is because it silently breaks the schema decoding behaviour. If that's needed, we recommend instead to use a static 'new' method that constructs the instance. effect(overriddenSchemaConstructor)
+        super({ a: 42 })
+      }
+    }
+    

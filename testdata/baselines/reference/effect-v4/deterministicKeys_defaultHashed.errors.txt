@@ -1,0 +1,41 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+/.src/test.ts(5,63): error TS377049: Key should be 'de06a820ada693c2'. effect(deterministicKeys)
+/.src/test.ts(8,46): error TS377049: Key should be '1296269f76d642ec'. effect(deterministicKeys)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "keyPatterns": [
+              { "target": "service", "pattern": "default-hashed" },
+              { "target": "error", "pattern": "default-hashed" }
+            ]
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/package.json (0 errors) ====
+    { "name": "@effect/test-app", "version": "1.0.0" }
+    
+
+==== /.src/test.ts (2 errors) ====
+    // @effect-diagnostics deterministicKeys:error
+    import { ServiceMap, Data } from "effect"
+    
+    export class ExpectedServiceIdentifier
+      extends ServiceMap.Service<ExpectedServiceIdentifier, {}>()("ExpectedServiceIdentifier")
+                                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377049: Key should be 'de06a820ada693c2'. effect(deterministicKeys)
+    {}
+    
+    export class ErrorA extends Data.TaggedError("ErrorA")<{}> {}
+                                                 ~~~~~~~~
+!!! error TS377049: Key should be '1296269f76d642ec'. effect(deterministicKeys)
+    

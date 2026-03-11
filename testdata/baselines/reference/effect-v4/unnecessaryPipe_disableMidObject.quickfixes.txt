@@ -1,0 +1,53 @@
+=== Quick Fix Inventory ===
+
+[D1] (5:6-5:30) TS377013: This pipe call contains no arguments. effect(unnecessaryPipe)
+  Fix 0: "Disable unnecessaryPipe for this line"
+  Fix 1: "Disable unnecessaryPipe for entire file"
+  Fix 2: "Remove the pipe call"
+
+[D2] (8:6-8:30) TS377013: This pipe call contains no arguments. effect(unnecessaryPipe)
+  Fix 0: "Disable unnecessaryPipe for this line"
+  Fix 1: "Disable unnecessaryPipe for entire file"
+  Fix 2: "Remove the pipe call"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable unnecessaryPipe for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable unnecessaryPipe for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Remove the pipe call" ===
+
+--- file:///.src/unnecessaryPipe_disableMidObject.ts ---
+import { pipe } from "effect"
+import * as Effect from "effect/Effect"
+
+export const test = {
+  a:Effect.succeed(42),
+  // @effect-diagnostics-next-line unnecessaryPipe:off
+  b: pipe(Effect.succeed(43)),
+  c: pipe(Effect.succeed(44))
+}
+
+
+=== [D2] Fix 0: "Disable unnecessaryPipe for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable unnecessaryPipe for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Remove the pipe call" ===
+
+--- file:///.src/unnecessaryPipe_disableMidObject.ts ---
+import { pipe } from "effect"
+import * as Effect from "effect/Effect"
+
+export const test = {
+  a: pipe(Effect.succeed(42)),
+  // @effect-diagnostics-next-line unnecessaryPipe:off
+  b: pipe(Effect.succeed(43)),
+  c:Effect.succeed(44)
+}
+

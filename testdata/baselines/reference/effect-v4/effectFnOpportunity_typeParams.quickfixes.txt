@@ -1,0 +1,1248 @@
+=== Quick Fix Inventory ===
+
+[D1] (11:14-11:33) TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*<T>(value) { ... }). effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fnUntraced"
+  Fix 3: "Convert to Effect.fn (no span)"
+  Fix 4: "Convert to Effect.fn(\"arrowWithTypeParams\")"
+
+[D2] (12:10-14:5) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D3] (17:14-17:46) TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*<T>(value) { ... }). effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fnUntraced"
+  Fix 3: "Convert to Effect.fn (no span)"
+  Fix 4: "Convert to Effect.fn(\"functionExpressionWithTypeParams\")"
+
+[D4] (18:10-20:5) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D5] (23:17-23:50) TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*<T>(value) { ... }). effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fnUntraced"
+  Fix 3: "Convert to Effect.fn (no span)"
+  Fix 4: "Convert to Effect.fn(\"functionDeclarationWithTypeParams\")"
+
+[D6] (24:10-26:5) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D7] (32:14-32:38) TS377047: Can be rewritten as a reusable function: Effect.fn(<T>(value) => { ... }). effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fn (no span)"
+  Fix 3: "Convert to Effect.fn(\"arrowWithTypeParamsNoGen\")"
+
+[D8] (33:9-33:11) TS6133: '_a' is declared but its value is never read.
+  (no quick fixes)
+
+[D9] (34:9-34:11) TS6133: '_b' is declared but its value is never read.
+  (no quick fixes)
+
+[D10] (35:9-35:11) TS6133: '_c' is declared but its value is never read.
+  (no quick fixes)
+
+[D11] (36:9-36:11) TS6133: '_d' is declared but its value is never read.
+  (no quick fixes)
+
+[D12] (37:9-37:11) TS6133: '_e' is declared but its value is never read.
+  (no quick fixes)
+
+[D13] (41:14-41:51) TS377047: Can be rewritten as a reusable function: Effect.fn(function<T>(value) { ... }). effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fn (no span)"
+  Fix 3: "Convert to Effect.fn(\"functionExpressionWithTypeParamsNoGen\")"
+
+[D14] (42:9-42:11) TS6133: '_a' is declared but its value is never read.
+  (no quick fixes)
+
+[D15] (43:9-43:11) TS6133: '_b' is declared but its value is never read.
+  (no quick fixes)
+
+[D16] (44:9-44:11) TS6133: '_c' is declared but its value is never read.
+  (no quick fixes)
+
+[D17] (45:9-45:11) TS6133: '_d' is declared but its value is never read.
+  (no quick fixes)
+
+[D18] (46:9-46:11) TS6133: '_e' is declared but its value is never read.
+  (no quick fixes)
+
+[D19] (50:17-50:55) TS377047: Can be rewritten as a reusable function: Effect.fn(function<T>(value) { ... }). effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fn (no span)"
+  Fix 3: "Convert to Effect.fn(\"functionDeclarationWithTypeParamsNoGen\")"
+
+[D20] (51:9-51:11) TS6133: '_a' is declared but its value is never read.
+  (no quick fixes)
+
+[D21] (52:9-52:11) TS6133: '_b' is declared but its value is never read.
+  (no quick fixes)
+
+[D22] (53:9-53:11) TS6133: '_c' is declared but its value is never read.
+  (no quick fixes)
+
+[D23] (54:9-54:11) TS6133: '_d' is declared but its value is never read.
+  (no quick fixes)
+
+[D24] (55:9-55:11) TS6133: '_e' is declared but its value is never read.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_typeParams.ts ---
+import * as Effect from "effect/Effect"
+
+// Note: Known formatting divergences from upstream (TypeScript-Go printer artifacts):
+// - Semicolons added to body statements inside replaced functions (e.g. `const a = 1;` vs `const a = 1`)
+// - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
+// - Trailing semicolons on replacement statements (`});` vs `})`)
+
+// The diagnostic should trigger for these cases. We should check that
+// the quick fixes have kept the generic type arguments.
+
+export const arrowWithTypeParams = Effect.fnUntraced(function* <T>(value: T) {
+    return yield* Effect.succeed(value);
+});
+
+export const functionExpressionWithTypeParams = function<T>(value: T) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+export function functionDeclarationWithTypeParams<T>(value: T) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+// Regular functions with type parameters returning Effect (no Effect.gen)
+// These have >5 statements so they should trigger the diagnostic
+
+export const arrowWithTypeParamsNoGen = <T>(value: T) => {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+export const functionExpressionWithTypeParamsNoGen = function<T>(value: T) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+export function functionDeclarationWithTypeParamsNoGen<T>(value: T) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+
+=== [D1] Fix 3: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_typeParams.ts ---
+import * as Effect from "effect/Effect"
+
+// Note: Known formatting divergences from upstream (TypeScript-Go printer artifacts):
+// - Semicolons added to body statements inside replaced functions (e.g. `const a = 1;` vs `const a = 1`)
+// - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
+// - Trailing semicolons on replacement statements (`});` vs `})`)
+
+// The diagnostic should trigger for these cases. We should check that
+// the quick fixes have kept the generic type arguments.
+
+export const arrowWithTypeParams = Effect.fn(function* <T>(value: T) {
+    return yield* Effect.succeed(value);
+});
+
+export const functionExpressionWithTypeParams = function<T>(value: T) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+export function functionDeclarationWithTypeParams<T>(value: T) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+// Regular functions with type parameters returning Effect (no Effect.gen)
+// These have >5 statements so they should trigger the diagnostic
+
+export const arrowWithTypeParamsNoGen = <T>(value: T) => {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+export const functionExpressionWithTypeParamsNoGen = function<T>(value: T) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+export function functionDeclarationWithTypeParamsNoGen<T>(value: T) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+
+=== [D1] Fix 4: "Convert to Effect.fn(\"arrowWithTypeParams\")" ===
+
+--- file:///.src/effectFnOpportunity_typeParams.ts ---
+import * as Effect from "effect/Effect"
+
+// Note: Known formatting divergences from upstream (TypeScript-Go printer artifacts):
+// - Semicolons added to body statements inside replaced functions (e.g. `const a = 1;` vs `const a = 1`)
+// - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
+// - Trailing semicolons on replacement statements (`});` vs `})`)
+
+// The diagnostic should trigger for these cases. We should check that
+// the quick fixes have kept the generic type arguments.
+
+export const arrowWithTypeParams = Effect.fn("arrowWithTypeParams")(function* <T>(value: T) {
+    return yield* Effect.succeed(value);
+});
+
+export const functionExpressionWithTypeParams = function<T>(value: T) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+export function functionDeclarationWithTypeParams<T>(value: T) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+// Regular functions with type parameters returning Effect (no Effect.gen)
+// These have >5 statements so they should trigger the diagnostic
+
+export const arrowWithTypeParamsNoGen = <T>(value: T) => {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+export const functionExpressionWithTypeParamsNoGen = function<T>(value: T) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+export function functionDeclarationWithTypeParamsNoGen<T>(value: T) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+
+=== [D2] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/effectFnOpportunity_typeParams.ts ---
+import * as Effect from "effect/Effect"
+
+// Note: Known formatting divergences from upstream (TypeScript-Go printer artifacts):
+// - Semicolons added to body statements inside replaced functions (e.g. `const a = 1;` vs `const a = 1`)
+// - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
+// - Trailing semicolons on replacement statements (`});` vs `})`)
+
+// The diagnostic should trigger for these cases. We should check that
+// the quick fixes have kept the generic type arguments.
+
+export const arrowWithTypeParams = <T>(value: T) => {
+  return Effect.succeed(value)
+}
+
+export const functionExpressionWithTypeParams = function<T>(value: T) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+export function functionDeclarationWithTypeParams<T>(value: T) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+// Regular functions with type parameters returning Effect (no Effect.gen)
+// These have >5 statements so they should trigger the diagnostic
+
+export const arrowWithTypeParamsNoGen = <T>(value: T) => {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+export const functionExpressionWithTypeParamsNoGen = function<T>(value: T) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+export function functionDeclarationWithTypeParamsNoGen<T>(value: T) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+
+=== [D3] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_typeParams.ts ---
+import * as Effect from "effect/Effect"
+
+// Note: Known formatting divergences from upstream (TypeScript-Go printer artifacts):
+// - Semicolons added to body statements inside replaced functions (e.g. `const a = 1;` vs `const a = 1`)
+// - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
+// - Trailing semicolons on replacement statements (`});` vs `})`)
+
+// The diagnostic should trigger for these cases. We should check that
+// the quick fixes have kept the generic type arguments.
+
+export const arrowWithTypeParams = <T>(value: T) => {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+export const functionExpressionWithTypeParams = Effect.fnUntraced(function* <T>(value: T) {
+    return yield* Effect.succeed(value);
+});
+
+export function functionDeclarationWithTypeParams<T>(value: T) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+// Regular functions with type parameters returning Effect (no Effect.gen)
+// These have >5 statements so they should trigger the diagnostic
+
+export const arrowWithTypeParamsNoGen = <T>(value: T) => {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+export const functionExpressionWithTypeParamsNoGen = function<T>(value: T) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+export function functionDeclarationWithTypeParamsNoGen<T>(value: T) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+
+=== [D3] Fix 3: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_typeParams.ts ---
+import * as Effect from "effect/Effect"
+
+// Note: Known formatting divergences from upstream (TypeScript-Go printer artifacts):
+// - Semicolons added to body statements inside replaced functions (e.g. `const a = 1;` vs `const a = 1`)
+// - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
+// - Trailing semicolons on replacement statements (`});` vs `})`)
+
+// The diagnostic should trigger for these cases. We should check that
+// the quick fixes have kept the generic type arguments.
+
+export const arrowWithTypeParams = <T>(value: T) => {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+export const functionExpressionWithTypeParams = Effect.fn(function* <T>(value: T) {
+    return yield* Effect.succeed(value);
+});
+
+export function functionDeclarationWithTypeParams<T>(value: T) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+// Regular functions with type parameters returning Effect (no Effect.gen)
+// These have >5 statements so they should trigger the diagnostic
+
+export const arrowWithTypeParamsNoGen = <T>(value: T) => {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+export const functionExpressionWithTypeParamsNoGen = function<T>(value: T) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+export function functionDeclarationWithTypeParamsNoGen<T>(value: T) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+
+=== [D3] Fix 4: "Convert to Effect.fn(\"functionExpressionWithTypeParams\")" ===
+
+--- file:///.src/effectFnOpportunity_typeParams.ts ---
+import * as Effect from "effect/Effect"
+
+// Note: Known formatting divergences from upstream (TypeScript-Go printer artifacts):
+// - Semicolons added to body statements inside replaced functions (e.g. `const a = 1;` vs `const a = 1`)
+// - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
+// - Trailing semicolons on replacement statements (`});` vs `})`)
+
+// The diagnostic should trigger for these cases. We should check that
+// the quick fixes have kept the generic type arguments.
+
+export const arrowWithTypeParams = <T>(value: T) => {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+export const functionExpressionWithTypeParams = Effect.fn("functionExpressionWithTypeParams")(function* <T>(value: T) {
+    return yield* Effect.succeed(value);
+});
+
+export function functionDeclarationWithTypeParams<T>(value: T) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+// Regular functions with type parameters returning Effect (no Effect.gen)
+// These have >5 statements so they should trigger the diagnostic
+
+export const arrowWithTypeParamsNoGen = <T>(value: T) => {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+export const functionExpressionWithTypeParamsNoGen = function<T>(value: T) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+export function functionDeclarationWithTypeParamsNoGen<T>(value: T) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+
+=== [D4] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/effectFnOpportunity_typeParams.ts ---
+import * as Effect from "effect/Effect"
+
+// Note: Known formatting divergences from upstream (TypeScript-Go printer artifacts):
+// - Semicolons added to body statements inside replaced functions (e.g. `const a = 1;` vs `const a = 1`)
+// - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
+// - Trailing semicolons on replacement statements (`});` vs `})`)
+
+// The diagnostic should trigger for these cases. We should check that
+// the quick fixes have kept the generic type arguments.
+
+export const arrowWithTypeParams = <T>(value: T) => {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+export const functionExpressionWithTypeParams = function<T>(value: T) {
+  return Effect.succeed(value)
+}
+
+export function functionDeclarationWithTypeParams<T>(value: T) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+// Regular functions with type parameters returning Effect (no Effect.gen)
+// These have >5 statements so they should trigger the diagnostic
+
+export const arrowWithTypeParamsNoGen = <T>(value: T) => {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+export const functionExpressionWithTypeParamsNoGen = function<T>(value: T) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+export function functionDeclarationWithTypeParamsNoGen<T>(value: T) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+
+=== [D5] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_typeParams.ts ---
+import * as Effect from "effect/Effect"
+
+// Note: Known formatting divergences from upstream (TypeScript-Go printer artifacts):
+// - Semicolons added to body statements inside replaced functions (e.g. `const a = 1;` vs `const a = 1`)
+// - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
+// - Trailing semicolons on replacement statements (`});` vs `})`)
+
+// The diagnostic should trigger for these cases. We should check that
+// the quick fixes have kept the generic type arguments.
+
+export const arrowWithTypeParams = <T>(value: T) => {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+export const functionExpressionWithTypeParams = function<T>(value: T) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+export const functionDeclarationWithTypeParams = Effect.fnUntraced(function* <T>(value: T) {
+    return yield* Effect.succeed(value);
+});
+
+// Regular functions with type parameters returning Effect (no Effect.gen)
+// These have >5 statements so they should trigger the diagnostic
+
+export const arrowWithTypeParamsNoGen = <T>(value: T) => {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+export const functionExpressionWithTypeParamsNoGen = function<T>(value: T) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+export function functionDeclarationWithTypeParamsNoGen<T>(value: T) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+
+=== [D5] Fix 3: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_typeParams.ts ---
+import * as Effect from "effect/Effect"
+
+// Note: Known formatting divergences from upstream (TypeScript-Go printer artifacts):
+// - Semicolons added to body statements inside replaced functions (e.g. `const a = 1;` vs `const a = 1`)
+// - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
+// - Trailing semicolons on replacement statements (`});` vs `})`)
+
+// The diagnostic should trigger for these cases. We should check that
+// the quick fixes have kept the generic type arguments.
+
+export const arrowWithTypeParams = <T>(value: T) => {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+export const functionExpressionWithTypeParams = function<T>(value: T) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+export const functionDeclarationWithTypeParams = Effect.fn(function* <T>(value: T) {
+    return yield* Effect.succeed(value);
+});
+
+// Regular functions with type parameters returning Effect (no Effect.gen)
+// These have >5 statements so they should trigger the diagnostic
+
+export const arrowWithTypeParamsNoGen = <T>(value: T) => {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+export const functionExpressionWithTypeParamsNoGen = function<T>(value: T) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+export function functionDeclarationWithTypeParamsNoGen<T>(value: T) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+
+=== [D5] Fix 4: "Convert to Effect.fn(\"functionDeclarationWithTypeParams\")" ===
+
+--- file:///.src/effectFnOpportunity_typeParams.ts ---
+import * as Effect from "effect/Effect"
+
+// Note: Known formatting divergences from upstream (TypeScript-Go printer artifacts):
+// - Semicolons added to body statements inside replaced functions (e.g. `const a = 1;` vs `const a = 1`)
+// - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
+// - Trailing semicolons on replacement statements (`});` vs `})`)
+
+// The diagnostic should trigger for these cases. We should check that
+// the quick fixes have kept the generic type arguments.
+
+export const arrowWithTypeParams = <T>(value: T) => {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+export const functionExpressionWithTypeParams = function<T>(value: T) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+export const functionDeclarationWithTypeParams = Effect.fn("functionDeclarationWithTypeParams")(function* <T>(value: T) {
+    return yield* Effect.succeed(value);
+});
+
+// Regular functions with type parameters returning Effect (no Effect.gen)
+// These have >5 statements so they should trigger the diagnostic
+
+export const arrowWithTypeParamsNoGen = <T>(value: T) => {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+export const functionExpressionWithTypeParamsNoGen = function<T>(value: T) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+export function functionDeclarationWithTypeParamsNoGen<T>(value: T) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+
+=== [D6] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/effectFnOpportunity_typeParams.ts ---
+import * as Effect from "effect/Effect"
+
+// Note: Known formatting divergences from upstream (TypeScript-Go printer artifacts):
+// - Semicolons added to body statements inside replaced functions (e.g. `const a = 1;` vs `const a = 1`)
+// - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
+// - Trailing semicolons on replacement statements (`});` vs `})`)
+
+// The diagnostic should trigger for these cases. We should check that
+// the quick fixes have kept the generic type arguments.
+
+export const arrowWithTypeParams = <T>(value: T) => {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+export const functionExpressionWithTypeParams = function<T>(value: T) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+export function functionDeclarationWithTypeParams<T>(value: T) {
+  return Effect.succeed(value)
+}
+
+// Regular functions with type parameters returning Effect (no Effect.gen)
+// These have >5 statements so they should trigger the diagnostic
+
+export const arrowWithTypeParamsNoGen = <T>(value: T) => {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+export const functionExpressionWithTypeParamsNoGen = function<T>(value: T) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+export function functionDeclarationWithTypeParamsNoGen<T>(value: T) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+
+=== [D7] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D7] Fix 2: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_typeParams.ts ---
+import * as Effect from "effect/Effect"
+
+// Note: Known formatting divergences from upstream (TypeScript-Go printer artifacts):
+// - Semicolons added to body statements inside replaced functions (e.g. `const a = 1;` vs `const a = 1`)
+// - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
+// - Trailing semicolons on replacement statements (`});` vs `})`)
+
+// The diagnostic should trigger for these cases. We should check that
+// the quick fixes have kept the generic type arguments.
+
+export const arrowWithTypeParams = <T>(value: T) => {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+export const functionExpressionWithTypeParams = function<T>(value: T) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+export function functionDeclarationWithTypeParams<T>(value: T) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+// Regular functions with type parameters returning Effect (no Effect.gen)
+// These have >5 statements so they should trigger the diagnostic
+
+export const arrowWithTypeParamsNoGen = Effect.fn(function <T>(value: T) {
+    const _a = 1;
+    const _b = 2;
+    const _c = 3;
+    const _d = 4;
+    const _e = 5;
+    return Effect.succeed(value);
+});
+
+export const functionExpressionWithTypeParamsNoGen = function<T>(value: T) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+export function functionDeclarationWithTypeParamsNoGen<T>(value: T) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+
+=== [D7] Fix 3: "Convert to Effect.fn(\"arrowWithTypeParamsNoGen\")" ===
+
+--- file:///.src/effectFnOpportunity_typeParams.ts ---
+import * as Effect from "effect/Effect"
+
+// Note: Known formatting divergences from upstream (TypeScript-Go printer artifacts):
+// - Semicolons added to body statements inside replaced functions (e.g. `const a = 1;` vs `const a = 1`)
+// - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
+// - Trailing semicolons on replacement statements (`});` vs `})`)
+
+// The diagnostic should trigger for these cases. We should check that
+// the quick fixes have kept the generic type arguments.
+
+export const arrowWithTypeParams = <T>(value: T) => {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+export const functionExpressionWithTypeParams = function<T>(value: T) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+export function functionDeclarationWithTypeParams<T>(value: T) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+// Regular functions with type parameters returning Effect (no Effect.gen)
+// These have >5 statements so they should trigger the diagnostic
+
+export const arrowWithTypeParamsNoGen = Effect.fn("arrowWithTypeParamsNoGen")(function <T>(value: T) {
+    const _a = 1;
+    const _b = 2;
+    const _c = 3;
+    const _d = 4;
+    const _e = 5;
+    return Effect.succeed(value);
+});
+
+export const functionExpressionWithTypeParamsNoGen = function<T>(value: T) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+export function functionDeclarationWithTypeParamsNoGen<T>(value: T) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+
+=== [D13] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D13] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D13] Fix 2: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_typeParams.ts ---
+import * as Effect from "effect/Effect"
+
+// Note: Known formatting divergences from upstream (TypeScript-Go printer artifacts):
+// - Semicolons added to body statements inside replaced functions (e.g. `const a = 1;` vs `const a = 1`)
+// - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
+// - Trailing semicolons on replacement statements (`});` vs `})`)
+
+// The diagnostic should trigger for these cases. We should check that
+// the quick fixes have kept the generic type arguments.
+
+export const arrowWithTypeParams = <T>(value: T) => {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+export const functionExpressionWithTypeParams = function<T>(value: T) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+export function functionDeclarationWithTypeParams<T>(value: T) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+// Regular functions with type parameters returning Effect (no Effect.gen)
+// These have >5 statements so they should trigger the diagnostic
+
+export const arrowWithTypeParamsNoGen = <T>(value: T) => {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+export const functionExpressionWithTypeParamsNoGen = Effect.fn(function <T>(value: T) {
+    const _a = 1;
+    const _b = 2;
+    const _c = 3;
+    const _d = 4;
+    const _e = 5;
+    return Effect.succeed(value);
+});
+
+export function functionDeclarationWithTypeParamsNoGen<T>(value: T) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+
+=== [D13] Fix 3: "Convert to Effect.fn(\"functionExpressionWithTypeParamsNoGen\")" ===
+
+--- file:///.src/effectFnOpportunity_typeParams.ts ---
+import * as Effect from "effect/Effect"
+
+// Note: Known formatting divergences from upstream (TypeScript-Go printer artifacts):
+// - Semicolons added to body statements inside replaced functions (e.g. `const a = 1;` vs `const a = 1`)
+// - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
+// - Trailing semicolons on replacement statements (`});` vs `})`)
+
+// The diagnostic should trigger for these cases. We should check that
+// the quick fixes have kept the generic type arguments.
+
+export const arrowWithTypeParams = <T>(value: T) => {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+export const functionExpressionWithTypeParams = function<T>(value: T) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+export function functionDeclarationWithTypeParams<T>(value: T) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+// Regular functions with type parameters returning Effect (no Effect.gen)
+// These have >5 statements so they should trigger the diagnostic
+
+export const arrowWithTypeParamsNoGen = <T>(value: T) => {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+export const functionExpressionWithTypeParamsNoGen = Effect.fn("functionExpressionWithTypeParamsNoGen")(function <T>(value: T) {
+    const _a = 1;
+    const _b = 2;
+    const _c = 3;
+    const _d = 4;
+    const _e = 5;
+    return Effect.succeed(value);
+});
+
+export function functionDeclarationWithTypeParamsNoGen<T>(value: T) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+
+=== [D19] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D19] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D19] Fix 2: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_typeParams.ts ---
+import * as Effect from "effect/Effect"
+
+// Note: Known formatting divergences from upstream (TypeScript-Go printer artifacts):
+// - Semicolons added to body statements inside replaced functions (e.g. `const a = 1;` vs `const a = 1`)
+// - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
+// - Trailing semicolons on replacement statements (`});` vs `})`)
+
+// The diagnostic should trigger for these cases. We should check that
+// the quick fixes have kept the generic type arguments.
+
+export const arrowWithTypeParams = <T>(value: T) => {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+export const functionExpressionWithTypeParams = function<T>(value: T) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+export function functionDeclarationWithTypeParams<T>(value: T) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+// Regular functions with type parameters returning Effect (no Effect.gen)
+// These have >5 statements so they should trigger the diagnostic
+
+export const arrowWithTypeParamsNoGen = <T>(value: T) => {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+export const functionExpressionWithTypeParamsNoGen = function<T>(value: T) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+export const functionDeclarationWithTypeParamsNoGen = Effect.fn(function <T>(value: T) {
+    const _a = 1;
+    const _b = 2;
+    const _c = 3;
+    const _d = 4;
+    const _e = 5;
+    return Effect.succeed(value);
+});
+
+
+=== [D19] Fix 3: "Convert to Effect.fn(\"functionDeclarationWithTypeParamsNoGen\")" ===
+
+--- file:///.src/effectFnOpportunity_typeParams.ts ---
+import * as Effect from "effect/Effect"
+
+// Note: Known formatting divergences from upstream (TypeScript-Go printer artifacts):
+// - Semicolons added to body statements inside replaced functions (e.g. `const a = 1;` vs `const a = 1`)
+// - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
+// - Trailing semicolons on replacement statements (`});` vs `})`)
+
+// The diagnostic should trigger for these cases. We should check that
+// the quick fixes have kept the generic type arguments.
+
+export const arrowWithTypeParams = <T>(value: T) => {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+export const functionExpressionWithTypeParams = function<T>(value: T) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+export function functionDeclarationWithTypeParams<T>(value: T) {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(value)
+  })
+}
+
+// Regular functions with type parameters returning Effect (no Effect.gen)
+// These have >5 statements so they should trigger the diagnostic
+
+export const arrowWithTypeParamsNoGen = <T>(value: T) => {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+export const functionExpressionWithTypeParamsNoGen = function<T>(value: T) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(value)
+}
+
+export const functionDeclarationWithTypeParamsNoGen = Effect.fn("functionDeclarationWithTypeParamsNoGen")(function <T>(value: T) {
+    const _a = 1;
+    const _b = 2;
+    const _c = 3;
+    const _d = 4;
+    const _e = 5;
+    return Effect.succeed(value);
+});
+

@@ -1,0 +1,46 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/globalErrorInEffectCatch.ts(14,36): warning TS377022: The 'catch' callback in Effect.tryPromise returns global 'Error', which loses type safety as untagged errors merge together. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectCatch)
+/.src/globalErrorInEffectCatch.ts(16,16): warning TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
+/.src/globalErrorInEffectCatch.ts(24,61): warning TS377022: The 'catch' callback in Effect.tryMapPromise returns global 'Error', which loses type safety as untagged errors merge together. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectCatch)
+/.src/globalErrorInEffectCatch.ts(26,21): warning TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
+
+
+==== /.src/globalErrorInEffectCatch.ts (4 errors) ====
+    // @effect-v3
+    import { Data, Effect } from "effect"
+    import * as Function from "effect/Function"
+    
+    class MyError extends Data.TaggedError("MyError")<{
+      cause: unknown
+    }> {}
+    
+    export const shouldNotTrigger = Effect.tryPromise({
+      try: () => fetch("http://something"),
+      catch: (e) => new MyError({ cause: e })
+    })
+    
+    export const shouldTriggerAsWell = Effect.tryPromise({
+                                       ~~~~~~~~~~~~~~~~~
+!!! warning TS377022: The 'catch' callback in Effect.tryPromise returns global 'Error', which loses type safety as untagged errors merge together. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectCatch)
+      try: () => fetch("http://something"),
+      catch: () => new Error("Unknown!")
+                   ~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
+    })
+    
+    export const shouldNotTrigger2 = Effect.succeed(42).pipe(Effect.tryMapPromise({
+      try: (_) => fetch("http://something/" + _),
+      catch: (e) => new MyError({ cause: e })
+    }))
+    
+    export const shouldTriggerAsWell2 = Effect.succeed(42).pipe(Effect.tryMapPromise({
+                                                                ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377022: The 'catch' callback in Effect.tryMapPromise returns global 'Error', which loses type safety as untagged errors merge together. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectCatch)
+      try: (_) => fetch("http://something/" + _),
+      catch: (cause) => new Error("Hey", { cause })
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
+    }))
+    

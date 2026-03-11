@@ -1,0 +1,71 @@
+==== /.src/multipleEffectProvide.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 17:28 - 20:2
+Node: Effect.void.pipe(\n  Effect.provide(MyService1.Default),\n  Effect.provide(MyService2.Default)\n)
+Node Kind: KindCallExpression
+
+Subject: Effect.void
+Subject Type: Effect<void, never, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.provide
+      args: [MyService1.Default]
+      outType: Effect<void, never, never>
+  [1] kind: pipeable
+      callee: Effect.provide
+      args: [MyService2.Default]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 22:38 - 28:2
+Node: Effect.void.pipe(\n  Effect.provide(MyService1.Default),\n  Effect.provide(MyService2.Default),\n  Effect.ignoreLogged,\n  Effect.provide(MyService1.Default),\n  Effect.provide(MyService2.Default)\n)
+Node Kind: KindCallExpression
+
+Subject: Effect.void
+Subject Type: Effect<void, never, never>
+
+Transformations (5):
+  [0] kind: pipeable
+      callee: Effect.provide
+      args: [MyService1.Default]
+      outType: Effect<void, never, never>
+  [1] kind: pipeable
+      callee: Effect.provide
+      args: [MyService2.Default]
+      outType: Effect<void, never, never>
+  [2] kind: pipeable
+      callee: Effect.ignoreLogged
+      args: (constant)
+      outType: Effect<void, never, never>
+  [3] kind: pipeable
+      callee: Effect.provide
+      args: [MyService1.Default]
+      outType: Effect<void, never, never>
+  [4] kind: pipeable
+      callee: Effect.provide
+      args: [MyService2.Default]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 30:34 - 34:2
+Node: Effect.void.pipe(\n  Effect.provide(MyService1.Default),\n  Effect.provide(MyService2.Default),\n  Effect.provide(MyService3.Default)\n)
+Node Kind: KindCallExpression
+
+Subject: Effect.void
+Subject Type: Effect<void, never, never>
+
+Transformations (3):
+  [0] kind: pipeable
+      callee: Effect.provide
+      args: [MyService1.Default]
+      outType: Effect<void, never, never>
+  [1] kind: pipeable
+      callee: Effect.provide
+      args: [MyService2.Default]
+      outType: Effect<void, never, never>
+  [2] kind: pipeable
+      callee: Effect.provide
+      args: [MyService3.Default]
+      outType: Effect<void, never, never>

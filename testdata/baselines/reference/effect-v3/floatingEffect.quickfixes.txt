@@ -1,0 +1,144 @@
+=== Quick Fix Inventory ===
+
+[D1] (4:7-4:14) TS6133: 'noError' is declared but its value is never read.
+  (no quick fixes)
+
+[D2] (6:1-6:27) TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D3] (8:1-8:13) TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D4] (11:9-11:19) TS6133: 'thisIsFine' is declared but its value is never read.
+  (no quick fixes)
+
+[D5] (12:3-12:15) TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D6] (15:19-18:3) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D7] (16:3-16:8) TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D8] (25:7-25:11) TS6133: 'main' is declared but its value is never read.
+  (no quick fixes)
+
+[D9] (25:14-28:3) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D10] (26:3-26:8) TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D2] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/floatingEffect.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+const noError = Effect.succeed(1)
+
+Effect.succeed("floating")
+
+Effect.never
+
+Effect.runPromise(Effect.gen(function*() {
+  const thisIsFine = Effect.succeed(1)
+  Effect.never
+}))
+
+Effect.runPromise(Effect.asVoid(Effect.succeed(1).pipe(Effect.fork)))
+
+export function constructorFunction(this: { boot: Effect.Effect<void> }) {
+  this.boot = Effect.void
+  // ^- This is fine, its another way to perform an assignment
+}
+
+const main = Effect.gen(function*() {
+  yield* Effect.exit(Effect.void)
+  // ^- This is fine, returns an exit
+})
+
+
+=== [D7] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D9] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D9] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/floatingEffect.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+const noError = Effect.succeed(1)
+
+Effect.succeed("floating")
+
+Effect.never
+
+Effect.runPromise(Effect.gen(function*() {
+  const thisIsFine = Effect.succeed(1)
+  Effect.never
+}))
+
+Effect.runPromise(Effect.gen(function*() {
+  yield* Effect.succeed(1).pipe(Effect.fork)
+  // ^- This is fine, returns a fiber runtime
+}))
+
+export function constructorFunction(this: { boot: Effect.Effect<void> }) {
+  this.boot = Effect.void
+  // ^- This is fine, its another way to perform an assignment
+}
+
+const main = Effect.asVoid(Effect.exit(Effect.void))
+
+
+=== [D10] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default

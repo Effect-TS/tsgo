@@ -1,0 +1,28 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+/.src/effectInVoidSuccess.ts(4,14): warning TS377020: There is a nested 'Effect<number, never, never>' in the 'void' success channel, beware that this could lead to nested Effect<Effect<...>> that won't be executed. effect(effectInVoidSuccess)
+/.src/effectInVoidSuccess.ts(7,3): warning TS377020: There is a nested 'Effect<never, string, never>' in the 'void' success channel, beware that this could lead to nested Effect<Effect<...>> that won't be executed. effect(effectInVoidSuccess)
+
+
+==== /.src/effectInVoidSuccess.ts (2 errors) ====
+    import * as Effect from "effect/Effect"
+    import * as Stream from "effect/Stream"
+    
+    export const shouldReport: Effect.Effect<void> = Effect.succeed(Effect.succeed(42))
+                 ~~~~~~~~~~~~
+!!! warning TS377020: There is a nested 'Effect<number, never, never>' in the 'void' success channel, beware that this could lead to nested Effect<Effect<...>> that won't be executed. effect(effectInVoidSuccess)
+    
+    export const shouldReport2 = Effect.suspend((): Effect.Effect<void> => {
+      return Stream.empty.pipe(
+      ~~~~~~
+!!! warning TS377020: There is a nested 'Effect<never, string, never>' in the 'void' success channel, beware that this could lead to nested Effect<Effect<...>> that won't be executed. effect(effectInVoidSuccess)
+        Stream.runCollect,
+        Effect.interruptible,
+        Effect.matchCause({
+          onSuccess: () => "success",
+          onFailure: () => Effect.fail("error")
+        })
+      )
+    })
+    

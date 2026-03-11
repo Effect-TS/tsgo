@@ -1,0 +1,20 @@
+diff --git a/internal/diagnostics/generate.go b/internal/diagnostics/generate.go
+index a956278f3..3e476767e 100644
+--- a/internal/diagnostics/generate.go
++++ b/internal/diagnostics/generate.go
+@@ -92,6 +92,15 @@ func main() {
+ 	rawExtraMessages := readRawMessages(filepath.Join(filepath.Dir(filename), "extraDiagnosticMessages.json"))
+ 
+ 	maps.Copy(rawDiagnosticMessages, rawExtraMessages)
++
++	// EFFECT: Read Effect diagnostic messages from the effect-typescript-go project
++	// This allows Effect to define its own diagnostics without patching extraDiagnosticMessages.json
++	effectMessagesPath := filepath.Join(filepath.Dir(filename), "..", "..", "..", "internal", "diagnostics", "effectDiagnosticMessages.json")
++	if _, err := os.Stat(effectMessagesPath); err == nil {
++		rawEffectMessages := readRawMessages(effectMessagesPath)
++		maps.Copy(rawDiagnosticMessages, rawEffectMessages)
++	}
++
+ 	diagnosticMessages := slices.Collect(maps.Values(rawDiagnosticMessages))
+ 
+ 	slices.SortFunc(diagnosticMessages, func(a *diagnosticMessage, b *diagnosticMessage) int {

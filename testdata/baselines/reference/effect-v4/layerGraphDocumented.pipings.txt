@@ -1,0 +1,65 @@
+==== /.src/layerGraphDocumented.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 7:8 - 7:27
+Node: Effect.succeed({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{}, never, never>
+
+=== Piping Flow ===
+Location: 16:8 - 16:27
+Node: Effect.succeed({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{}, never, never>
+
+=== Piping Flow ===
+Location: 42:25 - 42:79
+Node: Cache.Default.pipe(Layer.provide(FileSystem.Default))
+Node Kind: KindCallExpression
+
+Subject: Cache.Default
+Subject Type: Layer<Cache, never, FileSystem>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Layer.provide
+      args: [FileSystem.Default]
+      outType: Layer<Cache, never, never>
+
+=== Piping Flow ===
+Location: 47:23 - 51:2
+Node: UserRepository.Default.pipe(\n  Layer.provideMerge(Cache.Default),\n  Layer.provide(FileSystem.Default),\n  Layer.provide(DbConnection.Default)\n)
+Node Kind: KindCallExpression
+
+Subject: UserRepository.Default
+Subject Type: Layer<UserRepository, never, Cache | DbConnection>
+
+Transformations (3):
+  [0] kind: pipeable
+      callee: Layer.provideMerge
+      args: [Cache.Default]
+      outType: Layer<Cache | UserRepository, never, DbConnection | FileSystem>
+  [1] kind: pipeable
+      callee: Layer.provide
+      args: [FileSystem.Default]
+      outType: Layer<Cache | UserRepository, never, DbConnection>
+  [2] kind: pipeable
+      callee: Layer.provide
+      args: [DbConnection.Default]
+      outType: Layer<Cache | UserRepository, never, never>

@@ -1,0 +1,7 @@
+{
+  "git.ignoredRepositories": [
+    ".repos/effect-language-service",
+    ".repos/tsgolint",
+    "typescript-go"
+  ]
+}

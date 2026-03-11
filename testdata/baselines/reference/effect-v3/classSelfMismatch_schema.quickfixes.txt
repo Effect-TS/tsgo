@@ -1,0 +1,713 @@
+=== Quick Fix Inventory ===
+
+[D1] (10:54-10:70) TS377046: Self type parameter should be 'InvalidSchemaClass'. effect(classSelfMismatch)
+  Fix 0: "Disable classSelfMismatch for this line"
+  Fix 1: "Disable classSelfMismatch for entire file"
+  Fix 2: "Replace 'ValidSchemaClass' with 'InvalidSchemaClass'"
+
+[D2] (15:54-15:78) TS377045: Identifier 'ValidSchemaTaggedClass' is redundant since it equals the _tag value. effect(redundantSchemaTagIdentifier)
+  Fix 0: "Disable redundantSchemaTagIdentifier for this line"
+  Fix 1: "Disable redundantSchemaTagIdentifier for entire file"
+  Fix 2: "Remove redundant identifier 'ValidSchemaTaggedClass'"
+
+[D3] (22:30-22:52) TS377046: Self type parameter should be 'InvalidSchemaTaggedClass'. effect(classSelfMismatch)
+  Fix 0: "Disable classSelfMismatch for this line"
+  Fix 1: "Disable classSelfMismatch for entire file"
+  Fix 2: "Replace 'ValidSchemaTaggedClass' with 'InvalidSchemaTaggedClass'"
+
+[D4] (22:54-22:80) TS377045: Identifier 'InvalidSchemaTaggedClass' is redundant since it equals the _tag value. effect(redundantSchemaTagIdentifier)
+  Fix 0: "Disable redundantSchemaTagIdentifier for this line"
+  Fix 1: "Disable redundantSchemaTagIdentifier for entire file"
+  Fix 2: "Remove redundant identifier 'InvalidSchemaTaggedClass'"
+
+[D5] (28:54-28:78) TS377045: Identifier 'ValidSchemaTaggedError' is redundant since it equals the _tag value. effect(redundantSchemaTagIdentifier)
+  Fix 0: "Disable redundantSchemaTagIdentifier for this line"
+  Fix 1: "Disable redundantSchemaTagIdentifier for entire file"
+  Fix 2: "Remove redundant identifier 'ValidSchemaTaggedError'"
+
+[D6] (35:30-35:52) TS377046: Self type parameter should be 'InvalidSchemaTaggedError'. effect(classSelfMismatch)
+  Fix 0: "Disable classSelfMismatch for this line"
+  Fix 1: "Disable classSelfMismatch for entire file"
+  Fix 2: "Replace 'ValidSchemaTaggedError' with 'InvalidSchemaTaggedError'"
+
+[D7] (35:54-35:80) TS377045: Identifier 'InvalidSchemaTaggedError' is redundant since it equals the _tag value. effect(redundantSchemaTagIdentifier)
+  Fix 0: "Disable redundantSchemaTagIdentifier for this line"
+  Fix 1: "Disable redundantSchemaTagIdentifier for entire file"
+  Fix 2: "Remove redundant identifier 'InvalidSchemaTaggedError'"
+
+[D8] (41:58-41:84) TS377045: Identifier 'ValidSchemaTaggedRequest' is redundant since it equals the _tag value. effect(redundantSchemaTagIdentifier)
+  Fix 0: "Disable redundantSchemaTagIdentifier for this line"
+  Fix 1: "Disable redundantSchemaTagIdentifier for entire file"
+  Fix 2: "Remove redundant identifier 'ValidSchemaTaggedRequest'"
+
+[D9] (50:32-50:56) TS377046: Self type parameter should be 'InvalidSchemaTaggedRequest'. effect(classSelfMismatch)
+  Fix 0: "Disable classSelfMismatch for this line"
+  Fix 1: "Disable classSelfMismatch for entire file"
+  Fix 2: "Replace 'ValidSchemaTaggedRequest' with 'InvalidSchemaTaggedRequest'"
+
+[D10] (50:58-50:86) TS377045: Identifier 'InvalidSchemaTaggedRequest' is redundant since it equals the _tag value. effect(redundantSchemaTagIdentifier)
+  Fix 0: "Disable redundantSchemaTagIdentifier for this line"
+  Fix 1: "Disable redundantSchemaTagIdentifier for entire file"
+  Fix 2: "Remove redundant identifier 'InvalidSchemaTaggedRequest'"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable classSelfMismatch for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable classSelfMismatch for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace 'ValidSchemaClass' with 'InvalidSchemaClass'" ===
+
+--- file:///.src/classSelfMismatch_schema.ts ---
+// @effect-v3
+import * as Schema from "effect/Schema"
+
+// valid usage
+export class ValidSchemaClass extends Schema.Class<ValidSchemaClass>("ValidSchemaClass")({
+  prop: Schema.String
+}) {}
+
+// invalid usage: Schema.Class<ValidSchemaClass> should be Schema.Class<InvalidSchemaClass> because the Self type parameter is not the same as the class name
+export class InvalidSchemaClass extends Schema.Class<InvalidSchemaClass>("InvalidSchemaClass")({
+  prop: Schema.String
+}) {}
+
+export class ValidSchemaTaggedClass
+  extends Schema.TaggedClass<ValidSchemaTaggedClass>("ValidSchemaTaggedClass")("ValidSchemaTaggedClass", {
+    prop: Schema.String
+  })
+{}
+
+// invalid usage: Schema.TaggedClass<ValidSchemaTaggedClass> should be Schema.TaggedClass<InvalidSchemaTaggedClass> because the Self type parameter is not the same as the class name
+export class InvalidSchemaTaggedClass
+  extends Schema.TaggedClass<ValidSchemaTaggedClass>("InvalidSchemaTaggedClass")("InvalidSchemaTaggedClass", {
+    prop: Schema.String
+  })
+{}
+
+export class ValidSchemaTaggedError
+  extends Schema.TaggedError<ValidSchemaTaggedError>("ValidSchemaTaggedError")("ValidSchemaTaggedError", {
+    prop: Schema.String
+  })
+{}
+
+// invalid usage: Schema.TaggedError<ValidSchemaTaggedError> should be Schema.TaggedError<InvalidSchemaTaggedError> because the Self type parameter is not the same as the class name
+export class InvalidSchemaTaggedError
+  extends Schema.TaggedError<ValidSchemaTaggedError>("InvalidSchemaTaggedError")("InvalidSchemaTaggedError", {
+    prop: Schema.String
+  })
+{}
+
+export class ValidSchemaTaggedRequest
+  extends Schema.TaggedRequest<ValidSchemaTaggedRequest>("ValidSchemaTaggedRequest")("ValidSchemaTaggedRequest", {
+    payload: {},
+    success: Schema.Void,
+    failure: Schema.Never
+  })
+{}
+
+// invalid usage: Schema.TaggedRequest<ValidSchemaTaggedRequest> should be Schema.TaggedRequest<InvalidSchemaTaggedRequest> because the Self type parameter is not the same as the class name
+export class InvalidSchemaTaggedRequest
+  extends Schema.TaggedRequest<ValidSchemaTaggedRequest>("InvalidSchemaTaggedRequest")("InvalidSchemaTaggedRequest", {
+    payload: {},
+    success: Schema.Void,
+    failure: Schema.Never
+  })
+{}
+
+
+=== [D2] Fix 0: "Disable redundantSchemaTagIdentifier for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable redundantSchemaTagIdentifier for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Remove redundant identifier 'ValidSchemaTaggedClass'" ===
+
+--- file:///.src/classSelfMismatch_schema.ts ---
+// @effect-v3
+import * as Schema from "effect/Schema"
+
+// valid usage
+export class ValidSchemaClass extends Schema.Class<ValidSchemaClass>("ValidSchemaClass")({
+  prop: Schema.String
+}) {}
+
+// invalid usage: Schema.Class<ValidSchemaClass> should be Schema.Class<InvalidSchemaClass> because the Self type parameter is not the same as the class name
+export class InvalidSchemaClass extends Schema.Class<ValidSchemaClass>("InvalidSchemaClass")({
+  prop: Schema.String
+}) {}
+
+export class ValidSchemaTaggedClass
+  extends Schema.TaggedClass<ValidSchemaTaggedClass>()("ValidSchemaTaggedClass", {
+    prop: Schema.String
+  })
+{}
+
+// invalid usage: Schema.TaggedClass<ValidSchemaTaggedClass> should be Schema.TaggedClass<InvalidSchemaTaggedClass> because the Self type parameter is not the same as the class name
+export class InvalidSchemaTaggedClass
+  extends Schema.TaggedClass<ValidSchemaTaggedClass>("InvalidSchemaTaggedClass")("InvalidSchemaTaggedClass", {
+    prop: Schema.String
+  })
+{}
+
+export class ValidSchemaTaggedError
+  extends Schema.TaggedError<ValidSchemaTaggedError>("ValidSchemaTaggedError")("ValidSchemaTaggedError", {
+    prop: Schema.String
+  })
+{}
+
+// invalid usage: Schema.TaggedError<ValidSchemaTaggedError> should be Schema.TaggedError<InvalidSchemaTaggedError> because the Self type parameter is not the same as the class name
+export class InvalidSchemaTaggedError
+  extends Schema.TaggedError<ValidSchemaTaggedError>("InvalidSchemaTaggedError")("InvalidSchemaTaggedError", {
+    prop: Schema.String
+  })
+{}
+
+export class ValidSchemaTaggedRequest
+  extends Schema.TaggedRequest<ValidSchemaTaggedRequest>("ValidSchemaTaggedRequest")("ValidSchemaTaggedRequest", {
+    payload: {},
+    success: Schema.Void,
+    failure: Schema.Never
+  })
+{}
+
+// invalid usage: Schema.TaggedRequest<ValidSchemaTaggedRequest> should be Schema.TaggedRequest<InvalidSchemaTaggedRequest> because the Self type parameter is not the same as the class name
+export class InvalidSchemaTaggedRequest
+  extends Schema.TaggedRequest<ValidSchemaTaggedRequest>("InvalidSchemaTaggedRequest")("InvalidSchemaTaggedRequest", {
+    payload: {},
+    success: Schema.Void,
+    failure: Schema.Never
+  })
+{}
+
+
+=== [D3] Fix 0: "Disable classSelfMismatch for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable classSelfMismatch for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace 'ValidSchemaTaggedClass' with 'InvalidSchemaTaggedClass'" ===
+
+--- file:///.src/classSelfMismatch_schema.ts ---
+// @effect-v3
+import * as Schema from "effect/Schema"
+
+// valid usage
+export class ValidSchemaClass extends Schema.Class<ValidSchemaClass>("ValidSchemaClass")({
+  prop: Schema.String
+}) {}
+
+// invalid usage: Schema.Class<ValidSchemaClass> should be Schema.Class<InvalidSchemaClass> because the Self type parameter is not the same as the class name
+export class InvalidSchemaClass extends Schema.Class<ValidSchemaClass>("InvalidSchemaClass")({
+  prop: Schema.String
+}) {}
+
+export class ValidSchemaTaggedClass
+  extends Schema.TaggedClass<ValidSchemaTaggedClass>("ValidSchemaTaggedClass")("ValidSchemaTaggedClass", {
+    prop: Schema.String
+  })
+{}
+
+// invalid usage: Schema.TaggedClass<ValidSchemaTaggedClass> should be Schema.TaggedClass<InvalidSchemaTaggedClass> because the Self type parameter is not the same as the class name
+export class InvalidSchemaTaggedClass
+  extends Schema.TaggedClass<InvalidSchemaTaggedClass>("InvalidSchemaTaggedClass")("InvalidSchemaTaggedClass", {
+    prop: Schema.String
+  })
+{}
+
+export class ValidSchemaTaggedError
+  extends Schema.TaggedError<ValidSchemaTaggedError>("ValidSchemaTaggedError")("ValidSchemaTaggedError", {
+    prop: Schema.String
+  })
+{}
+
+// invalid usage: Schema.TaggedError<ValidSchemaTaggedError> should be Schema.TaggedError<InvalidSchemaTaggedError> because the Self type parameter is not the same as the class name
+export class InvalidSchemaTaggedError
+  extends Schema.TaggedError<ValidSchemaTaggedError>("InvalidSchemaTaggedError")("InvalidSchemaTaggedError", {
+    prop: Schema.String
+  })
+{}
+
+export class ValidSchemaTaggedRequest
+  extends Schema.TaggedRequest<ValidSchemaTaggedRequest>("ValidSchemaTaggedRequest")("ValidSchemaTaggedRequest", {
+    payload: {},
+    success: Schema.Void,
+    failure: Schema.Never
+  })
+{}
+
+// invalid usage: Schema.TaggedRequest<ValidSchemaTaggedRequest> should be Schema.TaggedRequest<InvalidSchemaTaggedRequest> because the Self type parameter is not the same as the class name
+export class InvalidSchemaTaggedRequest
+  extends Schema.TaggedRequest<ValidSchemaTaggedRequest>("InvalidSchemaTaggedRequest")("InvalidSchemaTaggedRequest", {
+    payload: {},
+    success: Schema.Void,
+    failure: Schema.Never
+  })
+{}
+
+
+=== [D4] Fix 0: "Disable redundantSchemaTagIdentifier for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable redundantSchemaTagIdentifier for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Remove redundant identifier 'InvalidSchemaTaggedClass'" ===
+
+--- file:///.src/classSelfMismatch_schema.ts ---
+// @effect-v3
+import * as Schema from "effect/Schema"
+
+// valid usage
+export class ValidSchemaClass extends Schema.Class<ValidSchemaClass>("ValidSchemaClass")({
+  prop: Schema.String
+}) {}
+
+// invalid usage: Schema.Class<ValidSchemaClass> should be Schema.Class<InvalidSchemaClass> because the Self type parameter is not the same as the class name
+export class InvalidSchemaClass extends Schema.Class<ValidSchemaClass>("InvalidSchemaClass")({
+  prop: Schema.String
+}) {}
+
+export class ValidSchemaTaggedClass
+  extends Schema.TaggedClass<ValidSchemaTaggedClass>("ValidSchemaTaggedClass")("ValidSchemaTaggedClass", {
+    prop: Schema.String
+  })
+{}
+
+// invalid usage: Schema.TaggedClass<ValidSchemaTaggedClass> should be Schema.TaggedClass<InvalidSchemaTaggedClass> because the Self type parameter is not the same as the class name
+export class InvalidSchemaTaggedClass
+  extends Schema.TaggedClass<ValidSchemaTaggedClass>()("InvalidSchemaTaggedClass", {
+    prop: Schema.String
+  })
+{}
+
+export class ValidSchemaTaggedError
+  extends Schema.TaggedError<ValidSchemaTaggedError>("ValidSchemaTaggedError")("ValidSchemaTaggedError", {
+    prop: Schema.String
+  })
+{}
+
+// invalid usage: Schema.TaggedError<ValidSchemaTaggedError> should be Schema.TaggedError<InvalidSchemaTaggedError> because the Self type parameter is not the same as the class name
+export class InvalidSchemaTaggedError
+  extends Schema.TaggedError<ValidSchemaTaggedError>("InvalidSchemaTaggedError")("InvalidSchemaTaggedError", {
+    prop: Schema.String
+  })
+{}
+
+export class ValidSchemaTaggedRequest
+  extends Schema.TaggedRequest<ValidSchemaTaggedRequest>("ValidSchemaTaggedRequest")("ValidSchemaTaggedRequest", {
+    payload: {},
+    success: Schema.Void,
+    failure: Schema.Never
+  })
+{}
+
+// invalid usage: Schema.TaggedRequest<ValidSchemaTaggedRequest> should be Schema.TaggedRequest<InvalidSchemaTaggedRequest> because the Self type parameter is not the same as the class name
+export class InvalidSchemaTaggedRequest
+  extends Schema.TaggedRequest<ValidSchemaTaggedRequest>("InvalidSchemaTaggedRequest")("InvalidSchemaTaggedRequest", {
+    payload: {},
+    success: Schema.Void,
+    failure: Schema.Never
+  })
+{}
+
+
+=== [D5] Fix 0: "Disable redundantSchemaTagIdentifier for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable redundantSchemaTagIdentifier for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Remove redundant identifier 'ValidSchemaTaggedError'" ===
+
+--- file:///.src/classSelfMismatch_schema.ts ---
+// @effect-v3
+import * as Schema from "effect/Schema"
+
+// valid usage
+export class ValidSchemaClass extends Schema.Class<ValidSchemaClass>("ValidSchemaClass")({
+  prop: Schema.String
+}) {}
+
+// invalid usage: Schema.Class<ValidSchemaClass> should be Schema.Class<InvalidSchemaClass> because the Self type parameter is not the same as the class name
+export class InvalidSchemaClass extends Schema.Class<ValidSchemaClass>("InvalidSchemaClass")({
+  prop: Schema.String
+}) {}
+
+export class ValidSchemaTaggedClass
+  extends Schema.TaggedClass<ValidSchemaTaggedClass>("ValidSchemaTaggedClass")("ValidSchemaTaggedClass", {
+    prop: Schema.String
+  })
+{}
+
+// invalid usage: Schema.TaggedClass<ValidSchemaTaggedClass> should be Schema.TaggedClass<InvalidSchemaTaggedClass> because the Self type parameter is not the same as the class name
+export class InvalidSchemaTaggedClass
+  extends Schema.TaggedClass<ValidSchemaTaggedClass>("InvalidSchemaTaggedClass")("InvalidSchemaTaggedClass", {
+    prop: Schema.String
+  })
+{}
+
+export class ValidSchemaTaggedError
+  extends Schema.TaggedError<ValidSchemaTaggedError>()("ValidSchemaTaggedError", {
+    prop: Schema.String
+  })
+{}
+
+// invalid usage: Schema.TaggedError<ValidSchemaTaggedError> should be Schema.TaggedError<InvalidSchemaTaggedError> because the Self type parameter is not the same as the class name
+export class InvalidSchemaTaggedError
+  extends Schema.TaggedError<ValidSchemaTaggedError>("InvalidSchemaTaggedError")("InvalidSchemaTaggedError", {
+    prop: Schema.String
+  })
+{}
+
+export class ValidSchemaTaggedRequest
+  extends Schema.TaggedRequest<ValidSchemaTaggedRequest>("ValidSchemaTaggedRequest")("ValidSchemaTaggedRequest", {
+    payload: {},
+    success: Schema.Void,
+    failure: Schema.Never
+  })
+{}
+
+// invalid usage: Schema.TaggedRequest<ValidSchemaTaggedRequest> should be Schema.TaggedRequest<InvalidSchemaTaggedRequest> because the Self type parameter is not the same as the class name
+export class InvalidSchemaTaggedRequest
+  extends Schema.TaggedRequest<ValidSchemaTaggedRequest>("InvalidSchemaTaggedRequest")("InvalidSchemaTaggedRequest", {
+    payload: {},
+    success: Schema.Void,
+    failure: Schema.Never
+  })
+{}
+
+
+=== [D6] Fix 0: "Disable classSelfMismatch for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable classSelfMismatch for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace 'ValidSchemaTaggedError' with 'InvalidSchemaTaggedError'" ===
+
+--- file:///.src/classSelfMismatch_schema.ts ---
+// @effect-v3
+import * as Schema from "effect/Schema"
+
+// valid usage
+export class ValidSchemaClass extends Schema.Class<ValidSchemaClass>("ValidSchemaClass")({
+  prop: Schema.String
+}) {}
+
+// invalid usage: Schema.Class<ValidSchemaClass> should be Schema.Class<InvalidSchemaClass> because the Self type parameter is not the same as the class name
+export class InvalidSchemaClass extends Schema.Class<ValidSchemaClass>("InvalidSchemaClass")({
+  prop: Schema.String
+}) {}
+
+export class ValidSchemaTaggedClass
+  extends Schema.TaggedClass<ValidSchemaTaggedClass>("ValidSchemaTaggedClass")("ValidSchemaTaggedClass", {
+    prop: Schema.String
+  })
+{}
+
+// invalid usage: Schema.TaggedClass<ValidSchemaTaggedClass> should be Schema.TaggedClass<InvalidSchemaTaggedClass> because the Self type parameter is not the same as the class name
+export class InvalidSchemaTaggedClass
+  extends Schema.TaggedClass<ValidSchemaTaggedClass>("InvalidSchemaTaggedClass")("InvalidSchemaTaggedClass", {
+    prop: Schema.String
+  })
+{}
+
+export class ValidSchemaTaggedError
+  extends Schema.TaggedError<ValidSchemaTaggedError>("ValidSchemaTaggedError")("ValidSchemaTaggedError", {
+    prop: Schema.String
+  })
+{}
+
+// invalid usage: Schema.TaggedError<ValidSchemaTaggedError> should be Schema.TaggedError<InvalidSchemaTaggedError> because the Self type parameter is not the same as the class name
+export class InvalidSchemaTaggedError
+  extends Schema.TaggedError<InvalidSchemaTaggedError>("InvalidSchemaTaggedError")("InvalidSchemaTaggedError", {
+    prop: Schema.String
+  })
+{}
+
+export class ValidSchemaTaggedRequest
+  extends Schema.TaggedRequest<ValidSchemaTaggedRequest>("ValidSchemaTaggedRequest")("ValidSchemaTaggedRequest", {
+    payload: {},
+    success: Schema.Void,
+    failure: Schema.Never
+  })
+{}
+
+// invalid usage: Schema.TaggedRequest<ValidSchemaTaggedRequest> should be Schema.TaggedRequest<InvalidSchemaTaggedRequest> because the Self type parameter is not the same as the class name
+export class InvalidSchemaTaggedRequest
+  extends Schema.TaggedRequest<ValidSchemaTaggedRequest>("InvalidSchemaTaggedRequest")("InvalidSchemaTaggedRequest", {
+    payload: {},
+    success: Schema.Void,
+    failure: Schema.Never
+  })
+{}
+
+
+=== [D7] Fix 0: "Disable redundantSchemaTagIdentifier for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable redundantSchemaTagIdentifier for entire file" ===
+skipped by default
+
+=== [D7] Fix 2: "Remove redundant identifier 'InvalidSchemaTaggedError'" ===
+
+--- file:///.src/classSelfMismatch_schema.ts ---
+// @effect-v3
+import * as Schema from "effect/Schema"
+
+// valid usage
+export class ValidSchemaClass extends Schema.Class<ValidSchemaClass>("ValidSchemaClass")({
+  prop: Schema.String
+}) {}
+
+// invalid usage: Schema.Class<ValidSchemaClass> should be Schema.Class<InvalidSchemaClass> because the Self type parameter is not the same as the class name
+export class InvalidSchemaClass extends Schema.Class<ValidSchemaClass>("InvalidSchemaClass")({
+  prop: Schema.String
+}) {}
+
+export class ValidSchemaTaggedClass
+  extends Schema.TaggedClass<ValidSchemaTaggedClass>("ValidSchemaTaggedClass")("ValidSchemaTaggedClass", {
+    prop: Schema.String
+  })
+{}
+
+// invalid usage: Schema.TaggedClass<ValidSchemaTaggedClass> should be Schema.TaggedClass<InvalidSchemaTaggedClass> because the Self type parameter is not the same as the class name
+export class InvalidSchemaTaggedClass
+  extends Schema.TaggedClass<ValidSchemaTaggedClass>("InvalidSchemaTaggedClass")("InvalidSchemaTaggedClass", {
+    prop: Schema.String
+  })
+{}
+
+export class ValidSchemaTaggedError
+  extends Schema.TaggedError<ValidSchemaTaggedError>("ValidSchemaTaggedError")("ValidSchemaTaggedError", {
+    prop: Schema.String
+  })
+{}
+
+// invalid usage: Schema.TaggedError<ValidSchemaTaggedError> should be Schema.TaggedError<InvalidSchemaTaggedError> because the Self type parameter is not the same as the class name
+export class InvalidSchemaTaggedError
+  extends Schema.TaggedError<ValidSchemaTaggedError>()("InvalidSchemaTaggedError", {
+    prop: Schema.String
+  })
+{}
+
+export class ValidSchemaTaggedRequest
+  extends Schema.TaggedRequest<ValidSchemaTaggedRequest>("ValidSchemaTaggedRequest")("ValidSchemaTaggedRequest", {
+    payload: {},
+    success: Schema.Void,
+    failure: Schema.Never
+  })
+{}
+
+// invalid usage: Schema.TaggedRequest<ValidSchemaTaggedRequest> should be Schema.TaggedRequest<InvalidSchemaTaggedRequest> because the Self type parameter is not the same as the class name
+export class InvalidSchemaTaggedRequest
+  extends Schema.TaggedRequest<ValidSchemaTaggedRequest>("InvalidSchemaTaggedRequest")("InvalidSchemaTaggedRequest", {
+    payload: {},
+    success: Schema.Void,
+    failure: Schema.Never
+  })
+{}
+
+
+=== [D8] Fix 0: "Disable redundantSchemaTagIdentifier for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable redundantSchemaTagIdentifier for entire file" ===
+skipped by default
+
+=== [D8] Fix 2: "Remove redundant identifier 'ValidSchemaTaggedRequest'" ===
+
+--- file:///.src/classSelfMismatch_schema.ts ---
+// @effect-v3
+import * as Schema from "effect/Schema"
+
+// valid usage
+export class ValidSchemaClass extends Schema.Class<ValidSchemaClass>("ValidSchemaClass")({
+  prop: Schema.String
+}) {}
+
+// invalid usage: Schema.Class<ValidSchemaClass> should be Schema.Class<InvalidSchemaClass> because the Self type parameter is not the same as the class name
+export class InvalidSchemaClass extends Schema.Class<ValidSchemaClass>("InvalidSchemaClass")({
+  prop: Schema.String
+}) {}
+
+export class ValidSchemaTaggedClass
+  extends Schema.TaggedClass<ValidSchemaTaggedClass>("ValidSchemaTaggedClass")("ValidSchemaTaggedClass", {
+    prop: Schema.String
+  })
+{}
+
+// invalid usage: Schema.TaggedClass<ValidSchemaTaggedClass> should be Schema.TaggedClass<InvalidSchemaTaggedClass> because the Self type parameter is not the same as the class name
+export class InvalidSchemaTaggedClass
+  extends Schema.TaggedClass<ValidSchemaTaggedClass>("InvalidSchemaTaggedClass")("InvalidSchemaTaggedClass", {
+    prop: Schema.String
+  })
+{}
+
+export class ValidSchemaTaggedError
+  extends Schema.TaggedError<ValidSchemaTaggedError>("ValidSchemaTaggedError")("ValidSchemaTaggedError", {
+    prop: Schema.String
+  })
+{}
+
+// invalid usage: Schema.TaggedError<ValidSchemaTaggedError> should be Schema.TaggedError<InvalidSchemaTaggedError> because the Self type parameter is not the same as the class name
+export class InvalidSchemaTaggedError
+  extends Schema.TaggedError<ValidSchemaTaggedError>("InvalidSchemaTaggedError")("InvalidSchemaTaggedError", {
+    prop: Schema.String
+  })
+{}
+
+export class ValidSchemaTaggedRequest
+  extends Schema.TaggedRequest<ValidSchemaTaggedRequest>()("ValidSchemaTaggedRequest", {
+    payload: {},
+    success: Schema.Void,
+    failure: Schema.Never
+  })
+{}
+
+// invalid usage: Schema.TaggedRequest<ValidSchemaTaggedRequest> should be Schema.TaggedRequest<InvalidSchemaTaggedRequest> because the Self type parameter is not the same as the class name
+export class InvalidSchemaTaggedRequest
+  extends Schema.TaggedRequest<ValidSchemaTaggedRequest>("InvalidSchemaTaggedRequest")("InvalidSchemaTaggedRequest", {
+    payload: {},
+    success: Schema.Void,
+    failure: Schema.Never
+  })
+{}
+
+
+=== [D9] Fix 0: "Disable classSelfMismatch for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable classSelfMismatch for entire file" ===
+skipped by default
+
+=== [D9] Fix 2: "Replace 'ValidSchemaTaggedRequest' with 'InvalidSchemaTaggedRequest'" ===
+
+--- file:///.src/classSelfMismatch_schema.ts ---
+// @effect-v3
+import * as Schema from "effect/Schema"
+
+// valid usage
+export class ValidSchemaClass extends Schema.Class<ValidSchemaClass>("ValidSchemaClass")({
+  prop: Schema.String
+}) {}
+
+// invalid usage: Schema.Class<ValidSchemaClass> should be Schema.Class<InvalidSchemaClass> because the Self type parameter is not the same as the class name
+export class InvalidSchemaClass extends Schema.Class<ValidSchemaClass>("InvalidSchemaClass")({
+  prop: Schema.String
+}) {}
+
+export class ValidSchemaTaggedClass
+  extends Schema.TaggedClass<ValidSchemaTaggedClass>("ValidSchemaTaggedClass")("ValidSchemaTaggedClass", {
+    prop: Schema.String
+  })
+{}
+
+// invalid usage: Schema.TaggedClass<ValidSchemaTaggedClass> should be Schema.TaggedClass<InvalidSchemaTaggedClass> because the Self type parameter is not the same as the class name
+export class InvalidSchemaTaggedClass
+  extends Schema.TaggedClass<ValidSchemaTaggedClass>("InvalidSchemaTaggedClass")("InvalidSchemaTaggedClass", {
+    prop: Schema.String
+  })
+{}
+
+export class ValidSchemaTaggedError
+  extends Schema.TaggedError<ValidSchemaTaggedError>("ValidSchemaTaggedError")("ValidSchemaTaggedError", {
+    prop: Schema.String
+  })
+{}
+
+// invalid usage: Schema.TaggedError<ValidSchemaTaggedError> should be Schema.TaggedError<InvalidSchemaTaggedError> because the Self type parameter is not the same as the class name
+export class InvalidSchemaTaggedError
+  extends Schema.TaggedError<ValidSchemaTaggedError>("InvalidSchemaTaggedError")("InvalidSchemaTaggedError", {
+    prop: Schema.String
+  })
+{}
+
+export class ValidSchemaTaggedRequest
+  extends Schema.TaggedRequest<ValidSchemaTaggedRequest>("ValidSchemaTaggedRequest")("ValidSchemaTaggedRequest", {
+    payload: {},
+    success: Schema.Void,
+    failure: Schema.Never
+  })
+{}
+
+// invalid usage: Schema.TaggedRequest<ValidSchemaTaggedRequest> should be Schema.TaggedRequest<InvalidSchemaTaggedRequest> because the Self type parameter is not the same as the class name
+export class InvalidSchemaTaggedRequest
+  extends Schema.TaggedRequest<InvalidSchemaTaggedRequest>("InvalidSchemaTaggedRequest")("InvalidSchemaTaggedRequest", {
+    payload: {},
+    success: Schema.Void,
+    failure: Schema.Never
+  })
+{}
+
+
+=== [D10] Fix 0: "Disable redundantSchemaTagIdentifier for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable redundantSchemaTagIdentifier for entire file" ===
+skipped by default
+
+=== [D10] Fix 2: "Remove redundant identifier 'InvalidSchemaTaggedRequest'" ===
+
+--- file:///.src/classSelfMismatch_schema.ts ---
+// @effect-v3
+import * as Schema from "effect/Schema"
+
+// valid usage
+export class ValidSchemaClass extends Schema.Class<ValidSchemaClass>("ValidSchemaClass")({
+  prop: Schema.String
+}) {}
+
+// invalid usage: Schema.Class<ValidSchemaClass> should be Schema.Class<InvalidSchemaClass> because the Self type parameter is not the same as the class name
+export class InvalidSchemaClass extends Schema.Class<ValidSchemaClass>("InvalidSchemaClass")({
+  prop: Schema.String
+}) {}
+
+export class ValidSchemaTaggedClass
+  extends Schema.TaggedClass<ValidSchemaTaggedClass>("ValidSchemaTaggedClass")("ValidSchemaTaggedClass", {
+    prop: Schema.String
+  })
+{}
+
+// invalid usage: Schema.TaggedClass<ValidSchemaTaggedClass> should be Schema.TaggedClass<InvalidSchemaTaggedClass> because the Self type parameter is not the same as the class name
+export class InvalidSchemaTaggedClass
+  extends Schema.TaggedClass<ValidSchemaTaggedClass>("InvalidSchemaTaggedClass")("InvalidSchemaTaggedClass", {
+    prop: Schema.String
+  })
+{}
+
+export class ValidSchemaTaggedError
+  extends Schema.TaggedError<ValidSchemaTaggedError>("ValidSchemaTaggedError")("ValidSchemaTaggedError", {
+    prop: Schema.String
+  })
+{}
+
+// invalid usage: Schema.TaggedError<ValidSchemaTaggedError> should be Schema.TaggedError<InvalidSchemaTaggedError> because the Self type parameter is not the same as the class name
+export class InvalidSchemaTaggedError
+  extends Schema.TaggedError<ValidSchemaTaggedError>("InvalidSchemaTaggedError")("InvalidSchemaTaggedError", {
+    prop: Schema.String
+  })
+{}
+
+export class ValidSchemaTaggedRequest
+  extends Schema.TaggedRequest<ValidSchemaTaggedRequest>("ValidSchemaTaggedRequest")("ValidSchemaTaggedRequest", {
+    payload: {},
+    success: Schema.Void,
+    failure: Schema.Never
+  })
+{}
+
+// invalid usage: Schema.TaggedRequest<ValidSchemaTaggedRequest> should be Schema.TaggedRequest<InvalidSchemaTaggedRequest> because the Self type parameter is not the same as the class name
+export class InvalidSchemaTaggedRequest
+  extends Schema.TaggedRequest<ValidSchemaTaggedRequest>()("InvalidSchemaTaggedRequest", {
+    payload: {},
+    success: Schema.Void,
+    failure: Schema.Never
+  })
+{}
+

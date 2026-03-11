@@ -1,0 +1,56 @@
+=== Quick Fix Inventory ===
+
+[D1] (12:18-12:35) TS377037: Using Schema.decodeSync inside an Effect generator is not recommended. Use Schema.decode instead to get properly typed error channel. effect(schemaSyncInEffect)
+  Fix 0: "Disable schemaSyncInEffect for this line"
+  Fix 1: "Disable schemaSyncInEffect for entire file"
+
+[D2] (20:18-20:42) TS377037: Using Schema.decodeUnknownSync inside an Effect generator is not recommended. Use Schema.decodeUnknown instead to get properly typed error channel. effect(schemaSyncInEffect)
+  Fix 0: "Disable schemaSyncInEffect for this line"
+  Fix 1: "Disable schemaSyncInEffect for entire file"
+
+[D3] (28:19-28:36) TS377037: Using Schema.encodeSync inside an Effect generator is not recommended. Use Schema.encode instead to get properly typed error channel. effect(schemaSyncInEffect)
+  Fix 0: "Disable schemaSyncInEffect for this line"
+  Fix 1: "Disable schemaSyncInEffect for entire file"
+
+[D4] (36:19-36:43) TS377037: Using Schema.encodeUnknownSync inside an Effect generator is not recommended. Use Schema.encodeUnknown instead to get properly typed error channel. effect(schemaSyncInEffect)
+  Fix 0: "Disable schemaSyncInEffect for this line"
+  Fix 1: "Disable schemaSyncInEffect for entire file"
+
+[D5] (42:7-42:23) TS6133: '_regularFunction' is declared but its value is never read.
+  (no quick fixes)
+
+[D6] (59:18-59:35) TS377037: Using Schema.decodeSync inside an Effect generator is not recommended. Use Schema.decode instead to get properly typed error channel. effect(schemaSyncInEffect)
+  Fix 0: "Disable schemaSyncInEffect for this line"
+  Fix 1: "Disable schemaSyncInEffect for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable schemaSyncInEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable schemaSyncInEffect for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable schemaSyncInEffect for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable schemaSyncInEffect for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable schemaSyncInEffect for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable schemaSyncInEffect for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable schemaSyncInEffect for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable schemaSyncInEffect for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable schemaSyncInEffect for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable schemaSyncInEffect for entire file" ===
+skipped by default

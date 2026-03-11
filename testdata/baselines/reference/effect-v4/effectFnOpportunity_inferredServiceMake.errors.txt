@@ -1,0 +1,40 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+/.src/effectFnOpportunity_inferredServiceMake.ts(6,13): suggestion TS377047: Can be rewritten as a reusable function: Effect.fn("UserService.getUser")(function*(id) { ... }). effect(effectFnOpportunity)
+/.src/effectFnOpportunity_inferredServiceMake.ts(7,17): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "effectFn": ["inferred-span"]
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/effectFnOpportunity_inferredServiceMake.ts (2 errors) ====
+    import { Effect, Layer, ServiceMap } from "effect"
+    
+    export class UserService extends ServiceMap.Service<UserService>()("UserService", {
+        make: Effect.gen(function*() {
+            return {
+                getUser: (id: string) =>
+                ~~~~~~~
+!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fn("UserService.getUser")(function*(id) { ... }). effect(effectFnOpportunity)
+                    Effect.gen(function*() {
+                    ~~~~~~~~~~~~~~~~~~~~~~~~
+                        yield* Effect.log(`Looking up user ${id}`)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    })
+    ~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+            }
+        })
+    }) {}
+    

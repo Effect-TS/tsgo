@@ -1,0 +1,29 @@
+==== /.src/classSelfMismatch_sqlClass.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 5:37 - 7:3
+Node: Model.Class<ValidModelClass>("ValidModelClass")({\n  id: Schema.String\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  id: Schema.String\n}
+Subject Type: { id: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Model.Class<ValidModelClass>("ValidModelClass")
+      args: (constant)
+      outType: Class<ValidModelClass, { readonly id: String; }, Struct<ExtractFields<"select", { readonly id: String; }, true>>> & { readonly json: Struct<{ readonly id: String; }>; readonly insert: Struct<{ readonly id: String; }>; readonly update: Struct<{ readonly id: String; }>; readonly select: Struct<{ readonly id: String; }>; readonly jsonCreate: Struct<{ readonly id: String; }>; readonly jsonUpdate: Struct<{ readonly id: String; }>; }
+
+=== Piping Flow ===
+Location: 10:39 - 12:3
+Node: Model.Class<ValidModelClass>("InvalidModelClass")({\n  id2: Schema.String\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  id2: Schema.String\n}
+Subject Type: { id2: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Model.Class<ValidModelClass>("InvalidModelClass")
+      args: (constant)
+      outType: Class<ValidModelClass, { readonly id2: String; }, Struct<ExtractFields<"select", { readonly id2: String; }, true>>> & { readonly json: Struct<{ readonly id2: String; }>; readonly insert: Struct<{ readonly id2: String; }>; readonly update: Struct<{ readonly id2: String; }>; readonly select: Struct<{ readonly id2: String; }>; readonly jsonCreate: Struct<{ readonly id2: String; }>; readonly jsonUpdate: Struct<{ readonly id2: String; }>; }

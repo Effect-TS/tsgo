@@ -1,0 +1,15 @@
+==== /.src/layerGraphSpecialChars.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 11:32 - 11:48
+Node: Symbol.for("x")
+Node Kind: KindCallExpression
+
+Subject: "x"
+Subject Type: "x"
+
+Transformations (1):
+  [0] kind: call
+      callee: Symbol.for
+      args: (constant)
+      outType: symbol

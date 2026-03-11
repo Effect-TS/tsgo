@@ -1,0 +1,23 @@
+diff --git a/internal/checker/relater.go b/internal/checker/relater.go
+index bf65552c7..cf3c3d5f8 100644
+--- a/internal/checker/relater.go
++++ b/internal/checker/relater.go
+@@ -4683,6 +4683,18 @@ func (r *Relater) reportErrorResults(originalSource *Type, originalTarget *Type,
+ }
+ 
+ func (r *Relater) reportRelationError(message *diagnostics.Message, source *Type, target *Type) {
++	// Collect relation error for Effect diagnostics processing
++	if r.errorNode != nil {
++		if sf := ast.GetSourceFileOfNode(r.errorNode); sf != nil {
++			links := r.c.sourceFileLinks.Get(sf)
++			links.relationErrors = append(links.relationErrors, &RelationError{
++				Source:    source,
++				Target:    target,
++				ErrorNode: r.errorNode,
++			})
++		}
++	}
++
+ 	sourceType, targetType := r.c.getTypeNamesForErrorDisplay(source, target)
+ 	generalizedSource := source
+ 	generalizedSourceType := sourceType

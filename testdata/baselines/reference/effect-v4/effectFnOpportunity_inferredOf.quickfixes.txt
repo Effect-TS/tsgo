@@ -1,0 +1,63 @@
+=== Quick Fix Inventory ===
+
+[D1] (1:18-1:23) TS6133: 'Layer' is declared but its value is never read.
+  (no quick fixes)
+
+[D2] (8:7-8:21) TS6133: '_shouldTrigger' is declared but its value is never read.
+  (no quick fixes)
+
+[D3] (9:3-9:10) TS377047: Can be rewritten as a reusable function: Effect.fn("UserService.getUser")(function*(id) { ... }). effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fn(\"UserService.getUser\")"
+
+[D4] (10:5-12:7) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+=== Quick Fix Application Results ===
+
+=== [D3] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Convert to Effect.fn(\"UserService.getUser\")" ===
+
+--- file:///.src/effectFnOpportunity_inferredOf.ts ---
+import { Effect, Layer, ServiceMap } from "effect"
+
+class UserService extends ServiceMap.Service<UserService, {
+    getUser(id: string): Effect.Effect<void>
+  }>()("UserService") {}
+
+
+const _shouldTrigger = UserService.of({ // UserService is an Effect Tag
+  getUser: Effect.fn("UserService.getUser")(function*(id: string) {
+    yield* Effect.log(`Looking up user ${id}`)
+})
+})
+
+
+=== [D4] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/effectFnOpportunity_inferredOf.ts ---
+import { Effect, Layer, ServiceMap } from "effect"
+
+class UserService extends ServiceMap.Service<UserService, {
+    getUser(id: string): Effect.Effect<void>
+  }>()("UserService") {}
+
+
+const _shouldTrigger = UserService.of({ // UserService is an Effect Tag
+  getUser: (id: string) => Effect.log(`Looking up user ${id}`)
+})
+

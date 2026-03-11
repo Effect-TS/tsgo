@@ -1,0 +1,15 @@
+// refactor: 4:44-4:45, 13:41-13:42
+import * as Effect from "effect/Effect"
+
+const asyncFunctionDeclaration = async function() {
+  const response = await fetch("test")
+  if (response.ok) {
+    const y = await response.json()
+    return y
+  }
+  return null
+}
+
+const asyncArrowFunctionExpression = async () => {
+  return await Promise.resolve(42)
+}

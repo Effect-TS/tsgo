@@ -1,0 +1,106 @@
+=== Refactor Inventory ===
+
+[R1] selection: "3:30-3:31"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Rewrite to Effect.gen" (refactor.rewrite.effect.asyncAwaitToGen)
+  Refactor 2: "Rewrite to Effect.gen with failures" (refactor.rewrite.effect.asyncAwaitToGenTryPromise)
+  Refactor 3: "Rewrite to Effect.fn" (refactor.rewrite.effect.asyncAwaitToFn)
+  Refactor 4: "Rewrite to Effect.fn with failures" (refactor.rewrite.effect.asyncAwaitToFnTryPromise)
+  Refactor 5: "Toggle return type annotation" (refactor.rewrite.effect.toggleReturnTypeAnnotation)
+
+[R2] selection: "empty (0:0-0:0)"
+  (no refactors)
+
+=== Refactor Application Results ===
+
+=== [R1] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/asyncAwaitToFn_fetch.ts ---
+// refactor: 3:30-3:31
+
+export async function getUserpipe(N)ame(userId: string) {
+  const user = await fetch(`https://api.example.com/users/${userId}`)
+  const userData = await user.json()
+  return userData.name
+}
+
+
+=== [R1] Refactor 1: "Rewrite to Effect.gen" ===
+
+--- file:///.src/asyncAwaitToFn_fetch.ts ---
+// refactor: 3:30-3:31
+
+export function getUserName(userId: string) {
+    return Effect.gen(function* () {
+        const user = yield* Effect.promise(() => fetch(`https://api.example.com/users/${userId}`));
+        const userData = yield* Effect.promise(() => user.json());
+        return userData.name;
+    });
+}
+
+
+=== [R1] Refactor 2: "Rewrite to Effect.gen with failures" ===
+
+--- file:///.src/asyncAwaitToFn_fetch.ts ---
+export class Error1 extends Data.TaggedError("Error1")<{
+    cause: unknown;
+}> {}
+
+export class Error2 extends Data.TaggedError("Error2")<{
+    cause: unknown;
+}> {}
+
+// refactor: 3:30-3:31
+
+export function getUserName(userId: string) {
+    return Effect.gen(function* () {
+        const user = yield* Effect.tryPromise({ try: () => fetch(`https://api.example.com/users/${userId}`), catch: cause => new Error1({ cause }) });
+        const userData = yield* Effect.tryPromise({ try: () => user.json(), catch: cause => new Error2({ cause }) });
+        return userData.name;
+    });
+}
+
+
+=== [R1] Refactor 3: "Rewrite to Effect.fn" ===
+
+--- file:///.src/asyncAwaitToFn_fetch.ts ---
+// refactor: 3:30-3:31
+
+export const getUserName = Effect.fn("getUserName")(function* (userId: string) {
+    const user = yield* Effect.promise(() => fetch(`https://api.example.com/users/${userId}`));
+    const userData = yield* Effect.promise(() => user.json());
+    return userData.name;
+});
+
+
+=== [R1] Refactor 4: "Rewrite to Effect.fn with failures" ===
+
+--- file:///.src/asyncAwaitToFn_fetch.ts ---
+export class Error1 extends Data.TaggedError("Error1")<{
+    cause: unknown;
+}> {}
+
+export class Error2 extends Data.TaggedError("Error2")<{
+    cause: unknown;
+}> {}
+
+// refactor: 3:30-3:31
+
+export const getUserName = Effect.fn("getUserName")(function* (userId: string) {
+    const user = yield* Effect.tryPromise({ try: () => fetch(`https://api.example.com/users/${userId}`), catch: cause => new Error1({ cause }) });
+    const userData = yield* Effect.tryPromise({ try: () => user.json(), catch: cause => new Error2({ cause }) });
+    return userData.name;
+});
+
+
+=== [R1] Refactor 5: "Toggle return type annotation" ===
+
+--- file:///.src/asyncAwaitToFn_fetch.ts ---
+// refactor: 3:30-3:31
+
+export async function getUserName(userId: string): Promise<any> {
+  const user = await fetch(`https://api.example.com/users/${userId}`)
+  const userData = await user.json()
+  return userData.name
+}
+

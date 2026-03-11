@@ -1,0 +1,12 @@
+diff --git a/internal/lsp/server.go b/internal/lsp/server.go
+index 2d59cf427b..6f29e241b8 100644
+--- a/internal/lsp/server.go
++++ b/internal/lsp/server.go
+@@ -1004,6 +1004,7 @@ func (s *Server) handleInitialize(ctx context.Context, params *lsproto.Initializ
+ 				CodeActionOptions: &lsproto.CodeActionOptions{
+ 					CodeActionKinds: &[]lsproto.CodeActionKind{
+ 						lsproto.CodeActionKindQuickFix,
++						lsproto.CodeActionKindRefactorRewrite,
+ 						lsproto.CodeActionKindSourceOrganizeImports,
+ 						lsproto.CodeActionKindSourceRemoveUnusedImports,
+ 						lsproto.CodeActionKindSourceSortImports,

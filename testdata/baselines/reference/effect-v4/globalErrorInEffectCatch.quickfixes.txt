@@ -1,0 +1,26 @@
+=== Quick Fix Inventory ===
+
+[D1] (2:13-2:21) TS6133: 'Function' is declared but its value is never read.
+  (no quick fixes)
+
+[D2] (13:36-13:53) TS377022: The 'catch' callback in Effect.tryPromise returns global 'Error', which loses type safety as untagged errors merge together. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectCatch)
+  Fix 0: "Disable globalErrorInEffectCatch for this line"
+  Fix 1: "Disable globalErrorInEffectCatch for entire file"
+
+[D3] (15:16-15:37) TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
+  Fix 0: "Disable globalErrorInEffectFailure for this line"
+  Fix 1: "Disable globalErrorInEffectFailure for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D2] Fix 0: "Disable globalErrorInEffectCatch for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable globalErrorInEffectCatch for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable globalErrorInEffectFailure for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable globalErrorInEffectFailure for entire file" ===
+skipped by default

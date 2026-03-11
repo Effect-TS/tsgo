@@ -1,0 +1,85 @@
+==== /.src/effectFnOpportunity_overloadsOk.ts (6 flows) ====
+
+=== Piping Flow ===
+Location: 12:9 - 14:5
+Node: Effect.gen(function*() {\n    return yield* Effect.succeed(a as any)\n  })
+Node Kind: KindCallExpression
+
+Subject: function*() {\n    return yield* Effect.succeed(a as any)\n  }
+Subject Type: () => Generator<Effect<any, never, never>, any, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<any, never, never>
+
+=== Piping Flow ===
+Location: 13:18 - 13:43
+Node: Effect.succeed(a as any)
+Node Kind: KindCallExpression
+
+Subject: a as any
+Subject Type: any
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<any, never, never>
+
+=== Piping Flow ===
+Location: 22:9 - 24:5
+Node: Effect.gen(function*() {\n    return yield* Effect.succeed(a as any)\n  })
+Node Kind: KindCallExpression
+
+Subject: function*() {\n    return yield* Effect.succeed(a as any)\n  }
+Subject Type: () => Generator<Effect<any, never, never>, any, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<any, never, never>
+
+=== Piping Flow ===
+Location: 23:18 - 23:43
+Node: Effect.succeed(a as any)
+Node Kind: KindCallExpression
+
+Subject: a as any
+Subject Type: any
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<any, never, never>
+
+=== Piping Flow ===
+Location: 37:9 - 37:34
+Node: Effect.succeed(a as any)
+Node Kind: KindCallExpression
+
+Subject: a as any
+Subject Type: any
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<any, never, never>
+
+=== Piping Flow ===
+Location: 50:9 - 50:34
+Node: Effect.succeed(a as any)
+Node Kind: KindCallExpression
+
+Subject: a as any
+Subject Type: any
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<any, never, never>

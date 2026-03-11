@@ -1,0 +1,40 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+/.src/unnecessaryFailYieldableError.ts(22,3): suggestion TS377019: This Effect.fail call uses a yieldable error type as argument. You can yield* the error directly instead. effect(unnecessaryFailYieldableError)
+/.src/unnecessaryFailYieldableError.ts(23,3): suggestion TS377019: This Effect.fail call uses a yieldable error type as argument. You can yield* the error directly instead. effect(unnecessaryFailYieldableError)
+
+
+==== /.src/unnecessaryFailYieldableError.ts (2 errors) ====
+    /** @effect-diagnostics missingReturnYieldStar:skip-file */
+    import * as Data from "effect/Data"
+    import * as Effect from "effect/Effect"
+    import * as Schema from "effect/Schema"
+    
+    class NonYieldable extends Error {
+      readonly _tag = "NonYieldable"
+    }
+    
+    class DataTaggedError extends Data.TaggedError("DataTaggedError")<{}> {}
+    
+    class SchemaError extends Schema.ErrorClass<SchemaError>("SchemaError")({
+      _tag: Schema.tag("SchemaError")
+    }) {}
+    
+    export const unnecessaryFailYieldableError = Effect.gen(function*() {
+      // should not report
+      yield* Effect.fail(new NonYieldable("non-yieldable error"))
+      const err = new DataTaggedError()
+      console.log(err)
+      // should report
+      yield* Effect.fail(new DataTaggedError())
+      ~~~~~
+!!! suggestion TS377019: This Effect.fail call uses a yieldable error type as argument. You can yield* the error directly instead. effect(unnecessaryFailYieldableError)
+      yield* Effect.fail(new SchemaError({}))
+      ~~~~~
+!!! suggestion TS377019: This Effect.fail call uses a yieldable error type as argument. You can yield* the error directly instead. effect(unnecessaryFailYieldableError)
+    })
+    
+    // should not report
+    export const shouldNotReport = Effect.fail(new DataTaggedError())
+    

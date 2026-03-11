@@ -1,0 +1,117 @@
+=== Quick Fix Inventory ===
+
+[D1] (9:54-9:70) TS377046: Self type parameter should be 'InvalidSchemaClass'. effect(classSelfMismatch)
+  Fix 0: "Disable classSelfMismatch for this line"
+  Fix 1: "Disable classSelfMismatch for entire file"
+  Fix 2: "Replace 'ValidSchemaClass' with 'InvalidSchemaClass'"
+
+[D2] (19:59-19:80) TS377046: Self type parameter should be 'InvalidErrorSchemaClass'. effect(classSelfMismatch)
+  Fix 0: "Disable classSelfMismatch for this line"
+  Fix 1: "Disable classSelfMismatch for entire file"
+  Fix 2: "Replace 'ValidErrorSchemaClass' with 'InvalidErrorSchemaClass'"
+
+[D3] (24:18-24:30) TS2339: Property 'RequestClass' does not exist on type 'typeof import("/node_modules/effect/dist/Schema")'.
+  (no quick fixes)
+
+[D4] (33:18-33:30) TS2339: Property 'RequestClass' does not exist on type 'typeof import("/node_modules/effect/dist/Schema")'.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable classSelfMismatch for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable classSelfMismatch for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace 'ValidSchemaClass' with 'InvalidSchemaClass'" ===
+
+--- file:///.src/classSelfMismatch_schema.ts ---
+import * as Schema from "effect/Schema"
+
+// valid usage
+export class ValidSchemaClass extends Schema.Class<ValidSchemaClass>("ValidSchemaClass")({
+  prop: Schema.String
+}) {}
+
+// invalid usage: Schema.Class<ValidSchemaClass> should be Schema.Class<InvalidSchemaClass> because the Self type parameter is not the same as the class name
+export class InvalidSchemaClass extends Schema.Class<InvalidSchemaClass>("InvalidSchemaClass")({
+  prop: Schema.String
+}) {}
+
+// valid usage
+export class ValidErrorSchemaClass extends Schema.Class<ValidErrorSchemaClass>("ValidErrorSchemaClass")({
+  prop: Schema.String
+}) {}
+
+// invalid usage: Schema.Class<ValidSchemaClass> should be Schema.Class<InvalidSchemaClass> because the Self type parameter is not the same as the class name
+export class InvalidErrorSchemaClass extends Schema.Class<ValidErrorSchemaClass>("InvalidErrorSchemaClass")({
+  prop: Schema.String
+}) {}
+
+export class ValidSchemaTaggedRequest
+  extends Schema.RequestClass<ValidSchemaTaggedRequest>("ValidSchemaTaggedRequest")({
+    payload: Schema.Struct({}),
+    success: Schema.Void,
+    error: Schema.Never
+  })
+{}
+
+// invalid usage: Schema.TaggedRequest<ValidSchemaTaggedRequest> should be Schema.TaggedRequest<InvalidSchemaTaggedRequest> because the Self type parameter is not the same as the class name
+export class InvalidSchemaTaggedRequest
+  extends Schema.RequestClass<ValidSchemaTaggedRequest>("InvalidSchemaTaggedRequest")({
+    payload: Schema.Struct({}),
+    success: Schema.Void,
+    error: Schema.Never
+  })
+{}
+
+
+=== [D2] Fix 0: "Disable classSelfMismatch for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable classSelfMismatch for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace 'ValidErrorSchemaClass' with 'InvalidErrorSchemaClass'" ===
+
+--- file:///.src/classSelfMismatch_schema.ts ---
+import * as Schema from "effect/Schema"
+
+// valid usage
+export class ValidSchemaClass extends Schema.Class<ValidSchemaClass>("ValidSchemaClass")({
+  prop: Schema.String
+}) {}
+
+// invalid usage: Schema.Class<ValidSchemaClass> should be Schema.Class<InvalidSchemaClass> because the Self type parameter is not the same as the class name
+export class InvalidSchemaClass extends Schema.Class<ValidSchemaClass>("InvalidSchemaClass")({
+  prop: Schema.String
+}) {}
+
+// valid usage
+export class ValidErrorSchemaClass extends Schema.Class<ValidErrorSchemaClass>("ValidErrorSchemaClass")({
+  prop: Schema.String
+}) {}
+
+// invalid usage: Schema.Class<ValidSchemaClass> should be Schema.Class<InvalidSchemaClass> because the Self type parameter is not the same as the class name
+export class InvalidErrorSchemaClass extends Schema.Class<InvalidErrorSchemaClass>("InvalidErrorSchemaClass")({
+  prop: Schema.String
+}) {}
+
+export class ValidSchemaTaggedRequest
+  extends Schema.RequestClass<ValidSchemaTaggedRequest>("ValidSchemaTaggedRequest")({
+    payload: Schema.Struct({}),
+    success: Schema.Void,
+    error: Schema.Never
+  })
+{}
+
+// invalid usage: Schema.TaggedRequest<ValidSchemaTaggedRequest> should be Schema.TaggedRequest<InvalidSchemaTaggedRequest> because the Self type parameter is not the same as the class name
+export class InvalidSchemaTaggedRequest
+  extends Schema.RequestClass<ValidSchemaTaggedRequest>("InvalidSchemaTaggedRequest")({
+    payload: Schema.Struct({}),
+    success: Schema.Void,
+    error: Schema.Never
+  })
+{}
+

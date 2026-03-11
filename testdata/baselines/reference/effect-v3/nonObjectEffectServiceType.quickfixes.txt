@@ -1,0 +1,73 @@
+=== Quick Fix Inventory ===
+
+[D1] (12:3-12:9) TS377048: Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)
+  Fix 0: "Disable nonObjectEffectServiceType for this line"
+  Fix 1: "Disable nonObjectEffectServiceType for entire file"
+
+[D2] (18:3-18:9) TS377048: Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)
+  Fix 0: "Disable nonObjectEffectServiceType for this line"
+  Fix 1: "Disable nonObjectEffectServiceType for entire file"
+
+[D3] (25:5-25:11) TS377048: Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)
+  Fix 0: "Disable nonObjectEffectServiceType for this line"
+  Fix 1: "Disable nonObjectEffectServiceType for entire file"
+
+[D4] (32:3-32:9) TS377048: Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)
+  Fix 0: "Disable nonObjectEffectServiceType for this line"
+  Fix 1: "Disable nonObjectEffectServiceType for entire file"
+
+[D5] (39:5-39:11) TS377048: Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)
+  Fix 0: "Disable nonObjectEffectServiceType for this line"
+  Fix 1: "Disable nonObjectEffectServiceType for entire file"
+
+[D6] (46:3-46:10) TS377048: Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)
+  Fix 0: "Disable nonObjectEffectServiceType for this line"
+  Fix 1: "Disable nonObjectEffectServiceType for entire file"
+
+[D7] (52:3-52:7) TS377048: Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)
+  Fix 0: "Disable nonObjectEffectServiceType for this line"
+  Fix 1: "Disable nonObjectEffectServiceType for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable nonObjectEffectServiceType for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable nonObjectEffectServiceType for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable nonObjectEffectServiceType for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable nonObjectEffectServiceType for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable nonObjectEffectServiceType for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable nonObjectEffectServiceType for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable nonObjectEffectServiceType for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable nonObjectEffectServiceType for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable nonObjectEffectServiceType for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable nonObjectEffectServiceType for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable nonObjectEffectServiceType for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable nonObjectEffectServiceType for entire file" ===
+skipped by default
+
+=== [D7] Fix 0: "Disable nonObjectEffectServiceType for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable nonObjectEffectServiceType for entire file" ===
+skipped by default

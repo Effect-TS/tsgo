@@ -1,0 +1,15 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {}
+    
+
+==== /.src/test.ts (0 errors) ====
+    import { Effect } from "effect"
+    
+    // No error - plugin not configured
+    Effect.log("hello")
+    

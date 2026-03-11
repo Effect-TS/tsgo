@@ -1,0 +1,29 @@
+==== /.src/missingLayerContext.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 21:2 - 24:26
+Node: testFn(layerWithServices)
+Node Kind: KindCallExpression
+
+Subject: layerWithServices
+Subject Type: Layer<ServiceA, never, ServiceB | ServiceC>
+
+Transformations (1):
+  [0] kind: call
+      callee: testFn
+      args: (constant)
+      outType: Layer<ServiceA, never, never>
+
+=== Piping Flow ===
+Location: 28:2 - 31:38
+Node: testFnWithServiceB(layerWithServices)
+Node Kind: KindCallExpression
+
+Subject: layerWithServices
+Subject Type: Layer<ServiceA, never, ServiceB | ServiceC>
+
+Transformations (1):
+  [0] kind: call
+      callee: testFnWithServiceB
+      args: (constant)
+      outType: Layer<ServiceA, never, ServiceB>

@@ -1,0 +1,16 @@
+=== Quick Fix Inventory ===
+
+[D1] (18:9-18:16) TS6133: 'message' is declared but its value is never read.
+  (no quick fixes)
+
+[D2] (22:7-22:25) TS6133: 'DatabaseFromEffect' is declared but its value is never read.
+  (no quick fixes)
+
+[D3] (29:7-29:15) TS6133: 'AppLayer' is declared but its value is never read.
+  (no quick fixes)
+
+[D4] (45:7-45:23) TS6133: 'UserRepoWithDeps' is declared but its value is never read.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+(no quick fixes to apply)

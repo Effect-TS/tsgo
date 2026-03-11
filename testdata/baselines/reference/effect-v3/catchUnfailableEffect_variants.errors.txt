@@ -1,0 +1,54 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/catchUnfailableEffect_variants.ts(7,3): suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+/.src/catchUnfailableEffect_variants.ts(12,3): suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+/.src/catchUnfailableEffect_variants.ts(17,3): suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+/.src/catchUnfailableEffect_variants.ts(23,3): suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+/.src/catchUnfailableEffect_variants.ts(28,3): suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+
+
+==== /.src/catchUnfailableEffect_variants.ts (5 errors) ====
+    // @effect-v3
+    import * as Effect from "effect/Effect"
+    import * as Option from "effect/Option"
+    
+    // catchAll variant
+    export const catchAllExample = Effect.succeed(42).pipe(
+      Effect.catchAll(() => Effect.void) // <- should report here
+      ~~~~~~~~~~~~~~~
+!!! suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+    )
+    
+    // catchIf variant
+    export const catchIfExample = Effect.succeed(42).pipe(
+      Effect.catchIf((error) => error === "MyError", () => Effect.void) // <- should report here
+      ~~~~~~~~~~~~~~
+!!! suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+    )
+    
+    // catchSome variant
+    export const catchSomeExample = Effect.succeed(42).pipe(
+      Effect.catchSome(() => Option.some(Effect.void)) // <- should report here
+      ~~~~~~~~~~~~~~~~
+!!! suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+    )
+    
+    // catchTag variant
+    export const catchTagExample = Effect.succeed(42).pipe(
+      // @ts-expect-error
+      Effect.catchTag("MyError", () => Effect.void) // <- should report here
+      ~~~~~~~~~~~~~~~
+!!! suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+    )
+    
+    // catchTags variant
+    export const catchTagsExample = Effect.succeed(42).pipe(
+      Effect.catchTags({
+      ~~~~~~~~~~~~~~~~
+!!! suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+        // @ts-expect-error
+        MyError: () => Effect.void
+      }) // <- should report here
+    )
+    

@@ -1,0 +1,45 @@
+==== /.src/package.json (0 flows) ====
+==== /.src/utils.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 4:23 - 4:72
+Node: ServiceMap.Service<X, {}>()("hey/" + identifier)
+Node Kind: KindCallExpression
+
+Subject: "hey/" + identifier
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: ServiceMap.Service<X, {}>()
+      args: (constant)
+      outType: ServiceClass<X, string, {}>
+==== /.src/test.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 7:23 - 7:72
+Node: ServiceMap.Service<X, {}>()("hey/" + identifier)
+Node Kind: KindCallExpression
+
+Subject: "hey/" + identifier
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: ServiceMap.Service<X, {}>()
+      args: (constant)
+      outType: ServiceClass<X, string, {}>
+
+=== Piping Flow ===
+Location: 10:29 - 10:64
+Node: LocalConstructor<MyClass>("Hello")
+Node Kind: KindCallExpression
+
+Subject: "Hello"
+Subject Type: "Hello"
+
+Transformations (1):
+  [0] kind: call
+      callee: LocalConstructor
+      args: (constant)
+      outType: typeof (Anonymous class)

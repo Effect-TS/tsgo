@@ -1,0 +1,70 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/effectFnOpportunity_noPipeWithSpan.ts(11,14): suggestion TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*() { ... }, ...pipeTransformations). effect(effectFnOpportunity)
+/.src/effectFnOpportunity_noPipeWithSpan.ts(12,3): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/effectFnOpportunity_noPipeWithSpan.ts(16,14): suggestion TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*() { ... }, ...pipeTransformations). effect(effectFnOpportunity)
+/.src/effectFnOpportunity_noPipeWithSpan.ts(17,10): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/effectFnOpportunity_noPipeWithSpan.ts(22,17): suggestion TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*() { ... }, ...pipeTransformations). effect(effectFnOpportunity)
+/.src/effectFnOpportunity_noPipeWithSpan.ts(23,10): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "effectFn": ["span", "suggested-span", "inferred-span", "no-span", "untraced"]
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/effectFnOpportunity_noPipeWithSpan.ts (6 errors) ====
+    // @effect-v3
+    import * as Effect from "effect/Effect"
+    
+    // This case differs from pipeWithSpan because the withSpan is not the last
+    // piped transformation, so we cannot extract the span name to use with
+    // Effect.fn. Instead, we should suggest Effect.fnUntraced for these cases.
+    // Note: unnecessaryEffectGen diagnostics ARE expected for the inner Effect.gen
+    // calls (each has a single-statement body). The Go test harness runs all rules,
+    // unlike upstream which runs only the rule matching the file name prefix.
+    
+    export const arrowWithPipe = () =>
+                 ~~~~~~~~~~~~~
+!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*() { ... }, ...pipeTransformations). effect(effectFnOpportunity)
+      Effect.gen(function*() {
+      ~~~~~~~~~~~~~~~~~~~~~~~~
+        return yield* Effect.succeed(42)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      }).pipe(Effect.ignoreLogged)
+    ~~~~
+!!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+    
+    export const functionExpressionWithPipe = function() {
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*() { ... }, ...pipeTransformations). effect(effectFnOpportunity)
+      return Effect.gen(function*() {
+             ~~~~~~~~~~~~~~~~~~~~~~~~
+        return yield* Effect.succeed(42)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      }).pipe(Effect.withSpan("functionExpressionWithPipe"), Effect.ignoreLogged)
+    ~~~~
+!!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+    }
+    
+    export function functionDeclarationWithPipe() {
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*() { ... }, ...pipeTransformations). effect(effectFnOpportunity)
+      return Effect.gen(function*() {
+             ~~~~~~~~~~~~~~~~~~~~~~~~
+        return yield* Effect.succeed(42)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionDeclarationWithPipe"), Effect.ignoreLogged)
+    ~~~~
+!!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+    }
+    

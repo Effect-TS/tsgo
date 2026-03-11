@@ -1,0 +1,93 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+/.src/catchUnfailableEffect.ts(11,3): suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+/.src/catchUnfailableEffect.ts(11,19): error TS2345: Argument of type 'string' is not assignable to parameter of type 'readonly [never, ...never[]]'.
+/.src/catchUnfailableEffect.ts(17,3): suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+/.src/catchUnfailableEffect.ts(17,19): error TS2345: Argument of type 'string' is not assignable to parameter of type 'readonly [never, ...never[]]'.
+/.src/catchUnfailableEffect.ts(23,3): suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+/.src/catchUnfailableEffect.ts(29,3): suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+/.src/catchUnfailableEffect.ts(35,4): suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+/.src/catchUnfailableEffect.ts(35,20): error TS2345: Argument of type 'string' is not assignable to parameter of type 'readonly [never, ...never[]]'.
+/.src/catchUnfailableEffect.ts(41,3): suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+/.src/catchUnfailableEffect.ts(41,19): error TS2345: Argument of type 'string' is not assignable to parameter of type 'readonly [never, ...never[]]'.
+
+
+==== /.src/catchUnfailableEffect.ts (10 errors) ====
+    import { Effect, Data, pipe } from "effect"
+    
+    class MyError extends Data.TaggedError("MyError")<{ message: string }> {}
+    
+    declare const effectWithErrors: Effect.Effect<number, MyError>
+    
+    // === Should trigger (E is never) ===
+    
+    // .pipe() with catchTag on a never-failing effect
+    export const shouldReportPipeable = Effect.succeed(42).pipe(
+      Effect.catchTag("MyError", () => Effect.void)
+      ~~~~~~~~~~~~~~~
+!!! suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+                      ~~~~~~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'readonly [never, ...never[]]'.
+    )
+    
+    // pipe() function with catchTag
+    export const shouldReportPipe = pipe(
+      Effect.succeed(42),
+      Effect.catchTag("MyError", () => Effect.void)
+      ~~~~~~~~~~~~~~~
+!!! suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+                      ~~~~~~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'readonly [never, ...never[]]'.
+    )
+    
+    // pipe() with catchTags
+    export const shouldReportCatchTags = pipe(
+      Effect.succeed(42),
+      Effect.catchTags({})
+      ~~~~~~~~~~~~~~~~
+!!! suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+    )
+    
+    // pipe() with catchIf
+    export const shouldReportCatchIf = pipe(
+      Effect.succeed(42),
+      Effect.catchIf((e) => true, () => Effect.void)
+      ~~~~~~~~~~~~~~
+!!! suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+    )
+    
+    // Effect.fn with trailing catch transformation
+    export const shouldReportFn = Effect.fn(function*() {
+      return yield* Effect.succeed(42)
+    }, Effect.catchTag("MyError", () => Effect.void))
+       ~~~~~~~~~~~~~~~
+!!! suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+                       ~~~~~~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'readonly [never, ...never[]]'.
+    
+    // Chain where intermediate steps preserve never-fail
+    export const shouldReportThird = pipe(
+      Effect.succeed(42),
+      Effect.map((n) => n + 1),
+      Effect.catchTag("MyError", () => Effect.void)
+      ~~~~~~~~~~~~~~~
+!!! suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+                      ~~~~~~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'readonly [never, ...never[]]'.
+    )
+    
+    // === Should NOT trigger (E is not never) ===
+    
+    // Effect that can fail
+    export const shouldNotReport = effectWithErrors.pipe(
+      Effect.catchTag("MyError", () => Effect.succeed(42))
+    )
+    
+    // Chain where an intermediate step introduces failure
+    export const shouldNotReportChain = pipe(
+      Effect.succeed(42),
+      Effect.flatMap(() => Effect.fail(new MyError({ message: "oops" }))),
+      Effect.catchTag("MyError", () => Effect.succeed(42))
+    )
+    

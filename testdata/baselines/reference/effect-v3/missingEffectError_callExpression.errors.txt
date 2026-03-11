@@ -1,0 +1,53 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/missingEffectError_callExpression.ts(24,1): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+/.src/missingEffectError_callExpression.ts(24,8): error TS377003: Missing errors ErrorA | ErrorB | ErrorC in the expected Effect type. effect(missingEffectError)
+/.src/missingEffectError_callExpression.ts(31,1): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+/.src/missingEffectError_callExpression.ts(31,21): error TS377003: Missing errors ErrorC in the expected Effect type. effect(missingEffectError)
+/.src/missingEffectError_callExpression.ts(31,21): error TS377003: Missing errors YieldableError & Readonly<{ a: 3; }> in the expected Effect type. effect(missingEffectError)
+
+
+==== /.src/missingEffectError_callExpression.ts (5 errors) ====
+    // @effect-v3
+    import * as Data from "effect/Data"
+    import type * as Effect from "effect/Effect"
+    
+    class ErrorA extends Data.Error<{
+      a: 1
+    }> {}
+    
+    class ErrorB extends Data.Error<{
+      a: 2
+    }> {}
+    
+    class ErrorC extends Data.Error<{
+      a: 3
+    }> {}
+    
+    declare const effectWithErrors: Effect.Effect<number, ErrorA | ErrorB | ErrorC>
+    
+    function testFn(effect: Effect.Effect<number>) {
+      return effect
+    }
+    
+    // @ts-expect-error
+    testFn(effectWithErrors)
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+           ~~~~~~~~~~~~~~~~
+!!! error TS377003: Missing errors ErrorA | ErrorB | ErrorC in the expected Effect type. effect(missingEffectError)
+    
+    function testFnWithServiceAB(effect: Effect.Effect<number, ErrorA | ErrorB>) {
+      return effect
+    }
+    
+    // @ts-expect-error
+    testFnWithServiceAB(effectWithErrors)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+                        ~~~~~~~~~~~~~~~~
+!!! error TS377003: Missing errors ErrorC in the expected Effect type. effect(missingEffectError)
+                        ~~~~~~~~~~~~~~~~
+!!! error TS377003: Missing errors YieldableError & Readonly<{ a: 3; }> in the expected Effect type. effect(missingEffectError)
+    

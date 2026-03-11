@@ -1,0 +1,35 @@
+import { Effect } from "effect"
+
+export const shouldNotComplain = Effect.gen(function*() {
+    if (Math.random() < 0.5) return Effect.succeed(42)
+    return yield* Effect.fail("no.")
+})
+
+export const shouldComplain = (n: number) =>
+    Effect.gen(function*() {
+        if (n === 0) {
+            yield* Effect.fail("no zero!")
+        }
+        return n / 1
+    })
+
+export const shouldComplainOther = (n: number) =>
+    Effect.gen(function*() {
+        yield* Effect.interrupt
+        yield* Effect.die("lol")
+        return n / 1
+    })
+
+export const shouldNotComplainThrows = Effect.gen(function*() {
+    throw yield* Effect.fail(42)
+    return 42
+})
+
+export const shouldNotComplainEventually = Effect.eventually(
+    Effect.gen(function*() {
+        if (Math.random() < 0.5) {
+            return yield* Effect.fail("Not ready")
+        }
+        return 42
+    })
+)

@@ -1,0 +1,23 @@
+=== Refactor Inventory ===
+
+[R1] selection: "8:13-8:13"
+  Refactor 0: "Convert to Effect.fn(\"test\")" (refactor.rewrite.effect.effectGenToFn)
+
+[R2] selection: "empty (0:0-0:0)"
+  (no refactors)
+
+=== Refactor Application Results ===
+
+=== [R1] Refactor 0: "Convert to Effect.fn(\"test\")" ===
+
+--- file:///.src/effectGenToFn_mixedPipes.ts ---
+// refactor: 8:13
+// @effect-v3
+import * as Effect from "effect/Effect"
+import { pipe } from "effect/Function"
+
+const test = Effect.fn("test")(function* () {
+    const test = "test";
+    return yield* Effect.succeed(test);
+}, Effect.asVoid, Effect.tapError(Effect.logError));
+

@@ -1,0 +1,58 @@
+=== Quick Fix Inventory ===
+
+[D1] (5:24-5:41) TS377021: The 'catch' callback in Effect.tryPromise returns 'unknown'. The catch callback should be used to provide typed errors.
+Consider wrapping unknown errors into Effect's Data.TaggedError for example, or narrow down the type to the specific error raised. effect(unknownInEffectCatch)
+  Fix 0: "Disable unknownInEffectCatch for this line"
+  Fix 1: "Disable unknownInEffectCatch for entire file"
+
+[D2] (19:36-19:53) TS377021: The 'catch' callback in Effect.tryPromise returns 'unknown'. The catch callback should be used to provide typed errors.
+Consider wrapping unknown errors into Effect's Data.TaggedError for example, or narrow down the type to the specific error raised. effect(unknownInEffectCatch)
+  Fix 0: "Disable unknownInEffectCatch for this line"
+  Fix 1: "Disable unknownInEffectCatch for entire file"
+
+[D3] (29:61-29:81) TS377021: The 'catch' callback in Effect.tryMapPromise returns 'unknown'. The catch callback should be used to provide typed errors.
+Consider wrapping unknown errors into Effect's Data.TaggedError for example, or narrow down the type to the specific error raised. effect(unknownInEffectCatch)
+  Fix 0: "Disable unknownInEffectCatch for this line"
+  Fix 1: "Disable unknownInEffectCatch for entire file"
+
+[D4] (34:61-34:74) TS377021: The 'catch' callback in Effect.tryMap returns 'unknown'. The catch callback should be used to provide typed errors.
+Consider wrapping unknown errors into Effect's Data.TaggedError for example, or narrow down the type to the specific error raised. effect(unknownInEffectCatch)
+  Fix 0: "Disable unknownInEffectCatch for this line"
+  Fix 1: "Disable unknownInEffectCatch for entire file"
+
+[D5] (39:42-39:59) TS377021: The 'catch' callback in Effect.tryPromise returns 'unknown'. The catch callback should be used to provide typed errors.
+Consider wrapping unknown errors into Effect's Data.TaggedError for example, or narrow down the type to the specific error raised. effect(unknownInEffectCatch)
+  Fix 0: "Disable unknownInEffectCatch for this line"
+  Fix 1: "Disable unknownInEffectCatch for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable unknownInEffectCatch for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable unknownInEffectCatch for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable unknownInEffectCatch for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable unknownInEffectCatch for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable unknownInEffectCatch for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable unknownInEffectCatch for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable unknownInEffectCatch for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable unknownInEffectCatch for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable unknownInEffectCatch for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable unknownInEffectCatch for entire file" ===
+skipped by default

@@ -1,0 +1,52 @@
+=== Quick Fix Inventory ===
+
+[D1] (4:1-4:27) TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D2] (5:1-5:13) TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D3] (6:1-6:12) TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D4] (7:1-7:21) TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D5] (10:7-10:9) TS6133: 'ok' is declared but its value is never read.
+  (no quick fixes)
+
+[D6] (11:7-11:8) TS6133: 'x' is declared but its value is never read.
+  (no quick fixes)
+
+[D7] (21:7-21:14) TS6196: 'MyClass' is declared but never used.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default

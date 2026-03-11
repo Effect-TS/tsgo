@@ -1,0 +1,103 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/preferSchemaOverJson.ts(5,45): suggestion TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+/.src/preferSchemaOverJson.ts(8,31): warning TS377022: The 'catch' callback in Effect.try returns global 'Error', which loses type safety as untagged errors merge together. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectCatch)
+/.src/preferSchemaOverJson.ts(9,14): suggestion TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+/.src/preferSchemaOverJson.ts(10,16): warning TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
+/.src/preferSchemaOverJson.ts(14,49): suggestion TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+/.src/preferSchemaOverJson.ts(17,35): warning TS377022: The 'catch' callback in Effect.try returns global 'Error', which loses type safety as untagged errors merge together. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectCatch)
+/.src/preferSchemaOverJson.ts(18,14): suggestion TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+/.src/preferSchemaOverJson.ts(19,16): warning TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
+/.src/preferSchemaOverJson.ts(25,18): suggestion TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+/.src/preferSchemaOverJson.ts(33,16): suggestion TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+/.src/preferSchemaOverJson.ts(41,18): suggestion TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+
+
+==== /.src/preferSchemaOverJson.ts (11 errors) ====
+    // @effect-v3
+    import { Effect } from "effect"
+    
+    // Should trigger diagnostic - JSON.parse inside Effect.try (simple form)
+    export const parseSimple = Effect.try(() => JSON.parse("{\"name\":\"John\"}"))
+                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+    
+    // Should trigger diagnostic - JSON.parse inside Effect.try (object form)
+    export const parseWithCatch = Effect.try({
+                                  ~~~~~~~~~~
+!!! warning TS377022: The 'catch' callback in Effect.try returns global 'Error', which loses type safety as untagged errors merge together. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectCatch)
+      try: () => JSON.parse("{\"name\":\"Jane\"}"),
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+      catch: () => new Error("Failed to parse")
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
+    })
+    
+    // Should trigger diagnostic - JSON.stringify inside Effect.try (simple form)
+    export const stringifySimple = Effect.try(() => JSON.stringify({ name: "Bob" }))
+                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+    
+    // Should trigger diagnostic - JSON.stringify inside Effect.try (object form)
+    export const stringifyWithCatch = Effect.try({
+                                      ~~~~~~~~~~
+!!! warning TS377022: The 'catch' callback in Effect.try returns global 'Error', which loses type safety as untagged errors merge together. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectCatch)
+      try: () => JSON.stringify({ name: "Alice" }),
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+      catch: () => new Error("Failed to stringify")
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
+    })
+    
+    // Should trigger diagnostic - JSON.parse inside Effect.gen
+    export const parseInGen = Effect.gen(function*() {
+      const text = yield* Effect.succeed("{\"name\":\"Test\"}")
+      const parsed = JSON.parse(text)
+                     ~~~~~~~~~~~~~~~~
+!!! suggestion TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+      //             ^- should suggest using Effect Schema
+      return parsed
+    })
+    
+    // Should trigger diagnostic - JSON.stringify inside Effect.gen
+    export const stringifyInGen = Effect.gen(function*() {
+      const data = yield* Effect.succeed({ name: "Test" })
+      const json = JSON.stringify(data)
+                   ~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+      //           ^- should suggest using Effect Schema
+      return json
+    })
+    
+    // Should trigger diagnostic - JSON.parse inside Effect.fn
+    export const parseInFn = Effect.fn("parseInFn")(function*() {
+      const text = "{\"name\":\"FnTest\"}"
+      const parsed = JSON.parse(text)
+                     ~~~~~~~~~~~~~~~~
+!!! suggestion TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+      //             ^- should suggest using Effect Schema
+      return parsed
+    })
+    
+    // Should NOT trigger - JSON.parse in regular function
+    const _regularParse = () => {
+      const text = "{\"name\":\"Regular\"}"
+      return JSON.parse(text)
+    }
+    
+    // Should NOT trigger - JSON.parse inside nested function in Effect.gen
+    export const nestedFunctionInGen = Effect.gen(function*() {
+      const parseFn = () => JSON.parse("{\"nested\":true}")
+      //                    ^- this is inside a nested function, should NOT trigger
+      return parseFn()
+    })
+    
+    // Should NOT trigger - JSON.parse not as direct expression in Effect.try
+    export const notDirectExpression = Effect.try(() => {
+      const parsed = JSON.parse("{\"indirect\":true}")
+      return parsed.indirect
+    })
+    

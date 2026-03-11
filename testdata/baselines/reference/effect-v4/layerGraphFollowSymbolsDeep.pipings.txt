@@ -1,0 +1,45 @@
+==== /.src/base.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 4:8 - 4:27
+Node: Effect.succeed({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{}, never, never>
+
+=== Piping Flow ===
+Location: 9:8 - 9:27
+Node: Effect.succeed({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{}, never, never>
+
+=== Piping Flow ===
+Location: 19:27 - 19:81
+Node: Cache.Default.pipe(Layer.provide(FileSystem.Default))
+Node Kind: KindCallExpression
+
+Subject: Cache.Default
+Subject Type: Layer<Cache, never, FileSystem>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Layer.provide
+      args: [FileSystem.Default]
+      outType: Layer<Cache, never, never>
+==== /.src/middle.ts (0 flows) ====
+==== /.src/deep.ts (0 flows) ====

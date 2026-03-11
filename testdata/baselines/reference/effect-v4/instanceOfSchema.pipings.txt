@@ -1,0 +1,85 @@
+==== /.src/instanceOfSchema.ts (6 flows) ====
+
+=== Piping Flow ===
+Location: 4:23 - 6:3
+Node: Schema.Class<MySchema>("MySchema")({\n  name: Schema.String,\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  name: Schema.String,\n}
+Subject Type: { name: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<MySchema>("MySchema")
+      args: (constant)
+      outType: ExtendableClass<MySchema, Struct<{ readonly name: String; }>, {}>
+
+=== Piping Flow ===
+Location: 11:33 - 12:30
+Node: console.log("is my schema")
+Node Kind: KindCallExpression
+
+Subject: "is my schema"
+Subject Type: "is my schema"
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 16:27 - 18:3
+Node: Schema.Class<PersonSchema>("MySchema")({\n  name: Schema.String,\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  name: Schema.String,\n}
+Subject Type: { name: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<PersonSchema>("MySchema")
+      args: (constant)
+      outType: ExtendableClass<PersonSchema, Struct<{ readonly name: String; }>, {}>
+
+=== Piping Flow ===
+Location: 23:32 - 24:29
+Node: console.log("is my class")
+Node Kind: KindCallExpression
+
+Subject: "is my class"
+Subject Type: "is my class"
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 28:29 - 29:25
+Node: console.log("is date")
+Node Kind: KindCallExpression
+
+Subject: "is date"
+Subject Type: "is date"
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 32:31 - 33:27
+Node: console.log("is regexp")
+Node Kind: KindCallExpression
+
+Subject: "is regexp"
+Subject Type: "is regexp"
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void

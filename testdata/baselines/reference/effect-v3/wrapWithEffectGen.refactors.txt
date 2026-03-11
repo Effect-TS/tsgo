@@ -1,0 +1,421 @@
+=== Refactor Inventory ===
+
+[R1] selection: "6:22-6:23"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Wrap with Effect.gen" (refactor.rewrite.effect.wrapWithEffectGen)
+
+[R2] selection: "8:22-8:23"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Wrap with Effect.gen" (refactor.rewrite.effect.wrapWithEffectGen)
+
+[R3] selection: "10:22-10:23"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Rewrite as pipe(X, Y, Z, ...)" (refactor.rewrite.effect.togglePipeStyle)
+  Refactor 2: "Wrap with Effect.gen" (refactor.rewrite.effect.wrapWithEffectGen)
+
+[R4] selection: "10:22-13:1"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Rewrite as pipe(X, Y, Z, ...)" (refactor.rewrite.effect.togglePipeStyle)
+  Refactor 2: "Wrap with Effect.gen" (refactor.rewrite.effect.wrapWithEffectGen)
+
+[R5] selection: "15:22-15:23"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Rewrite as X.pipe(Y, Z, ...)" (refactor.rewrite.effect.togglePipeStyle)
+  Refactor 2: "Rewrite to datafirst" (refactor.rewrite.effect.pipeableToDatafirst)
+  Refactor 3: "Wrap with Effect.gen" (refactor.rewrite.effect.wrapWithEffectGen)
+
+[R6] selection: "16:5-16:6"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Rewrite as X.pipe(Y, Z, ...)" (refactor.rewrite.effect.togglePipeStyle)
+  Refactor 2: "Wrap with Effect.gen" (refactor.rewrite.effect.wrapWithEffectGen)
+
+[R7] selection: "empty (0:0-0:0)"
+  (no refactors)
+
+=== Refactor Application Results ===
+
+=== [R1] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/wrapWithEffectGen.ts ---
+// refactor: 6:22-6:23, 8:22-8:23, 10:22-10:23, 10:22-13:1, 15:22-15:23, 16:5-16:6
+// @effect-v3
+import { pipe } from "effect"
+import * as Effect from "effect/Effect"
+
+export const test1 = pipe(E)ffect.succeed(42)
+
+export const test3 = test1
+
+export const test2 = Effect.succeed(42).pipe(
+  Effect.map((n) => n + 1),
+  Effect.map((n) => n - 1)
+)
+
+export const test4 = pipe(
+  Effect.succeed(42),
+  Effect.map((n) => n + 1),
+  Effect.map((n) => n - 1)
+)
+
+
+=== [R1] Refactor 1: "Wrap with Effect.gen" ===
+
+--- file:///.src/wrapWithEffectGen.ts ---
+// refactor: 6:22-6:23, 8:22-8:23, 10:22-10:23, 10:22-13:1, 15:22-15:23, 16:5-16:6
+// @effect-v3
+import { pipe } from "effect"
+import * as Effect from "effect/Effect"
+
+export const test1 = Effect.gen(function*() { return yield* Effect.succeed(42) })
+
+export const test3 = test1
+
+export const test2 = Effect.succeed(42).pipe(
+  Effect.map((n) => n + 1),
+  Effect.map((n) => n - 1)
+)
+
+export const test4 = pipe(
+  Effect.succeed(42),
+  Effect.map((n) => n + 1),
+  Effect.map((n) => n - 1)
+)
+
+
+=== [R2] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/wrapWithEffectGen.ts ---
+// refactor: 6:22-6:23, 8:22-8:23, 10:22-10:23, 10:22-13:1, 15:22-15:23, 16:5-16:6
+// @effect-v3
+import { pipe } from "effect"
+import * as Effect from "effect/Effect"
+
+export const test1 = Effect.succeed(42)
+
+export const test3 = pipe(t)est1
+
+export const test2 = Effect.succeed(42).pipe(
+  Effect.map((n) => n + 1),
+  Effect.map((n) => n - 1)
+)
+
+export const test4 = pipe(
+  Effect.succeed(42),
+  Effect.map((n) => n + 1),
+  Effect.map((n) => n - 1)
+)
+
+
+=== [R2] Refactor 1: "Wrap with Effect.gen" ===
+
+--- file:///.src/wrapWithEffectGen.ts ---
+// refactor: 6:22-6:23, 8:22-8:23, 10:22-10:23, 10:22-13:1, 15:22-15:23, 16:5-16:6
+// @effect-v3
+import { pipe } from "effect"
+import * as Effect from "effect/Effect"
+
+export const test1 = Effect.succeed(42)
+
+export const test3 = Effect.gen(function*() { return yield* test1 })
+
+export const test2 = Effect.succeed(42).pipe(
+  Effect.map((n) => n + 1),
+  Effect.map((n) => n - 1)
+)
+
+export const test4 = pipe(
+  Effect.succeed(42),
+  Effect.map((n) => n + 1),
+  Effect.map((n) => n - 1)
+)
+
+
+=== [R3] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/wrapWithEffectGen.ts ---
+// refactor: 6:22-6:23, 8:22-8:23, 10:22-10:23, 10:22-13:1, 15:22-15:23, 16:5-16:6
+// @effect-v3
+import { pipe } from "effect"
+import * as Effect from "effect/Effect"
+
+export const test1 = Effect.succeed(42)
+
+export const test3 = test1
+
+export const test2 = pipe(E)ffect.succeed(42).pipe(
+  Effect.map((n) => n + 1),
+  Effect.map((n) => n - 1)
+)
+
+export const test4 = pipe(
+  Effect.succeed(42),
+  Effect.map((n) => n + 1),
+  Effect.map((n) => n - 1)
+)
+
+
+=== [R3] Refactor 1: "Rewrite as pipe(X, Y, Z, ...)" ===
+
+--- file:///.src/wrapWithEffectGen.ts ---
+// refactor: 6:22-6:23, 8:22-8:23, 10:22-10:23, 10:22-13:1, 15:22-15:23, 16:5-16:6
+// @effect-v3
+import { pipe } from "effect"
+import * as Effect from "effect/Effect"
+
+export const test1 = Effect.succeed(42)
+
+export const test3 = test1
+
+export const test2 = pipe(Effect.succeed(42), Effect.map(n => n + 1), Effect.map(n => n - 1))
+
+export const test4 = pipe(
+  Effect.succeed(42),
+  Effect.map((n) => n + 1),
+  Effect.map((n) => n - 1)
+)
+
+
+=== [R3] Refactor 2: "Wrap with Effect.gen" ===
+
+--- file:///.src/wrapWithEffectGen.ts ---
+// refactor: 6:22-6:23, 8:22-8:23, 10:22-10:23, 10:22-13:1, 15:22-15:23, 16:5-16:6
+// @effect-v3
+import { pipe } from "effect"
+import * as Effect from "effect/Effect"
+
+export const test1 = Effect.succeed(42)
+
+export const test3 = test1
+
+export const test2 = Effect.gen(function*() { return yield* Effect.succeed(42) }).pipe(
+  Effect.map((n) => n + 1),
+  Effect.map((n) => n - 1)
+)
+
+export const test4 = pipe(
+  Effect.succeed(42),
+  Effect.map((n) => n + 1),
+  Effect.map((n) => n - 1)
+)
+
+
+=== [R4] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/wrapWithEffectGen.ts ---
+// refactor: 6:22-6:23, 8:22-8:23, 10:22-10:23, 10:22-13:1, 15:22-15:23, 16:5-16:6
+// @effect-v3
+import { pipe } from "effect"
+import * as Effect from "effect/Effect"
+
+export const test1 = Effect.succeed(42)
+
+export const test3 = test1
+
+export const test2 = pipe(Effect.succeed(42).pipe(
+  Effect.map((n) => n + 1),
+  Effect.map((n) => n - 1)
+))
+
+export const test4 = pipe(
+  Effect.succeed(42),
+  Effect.map((n) => n + 1),
+  Effect.map((n) => n - 1)
+)
+
+
+=== [R4] Refactor 1: "Rewrite as pipe(X, Y, Z, ...)" ===
+
+--- file:///.src/wrapWithEffectGen.ts ---
+// refactor: 6:22-6:23, 8:22-8:23, 10:22-10:23, 10:22-13:1, 15:22-15:23, 16:5-16:6
+// @effect-v3
+import { pipe } from "effect"
+import * as Effect from "effect/Effect"
+
+export const test1 = Effect.succeed(42)
+
+export const test3 = test1
+
+export const test2 = pipe(Effect.succeed(42), Effect.map(n => n + 1), Effect.map(n => n - 1))
+
+export const test4 = pipe(
+  Effect.succeed(42),
+  Effect.map((n) => n + 1),
+  Effect.map((n) => n - 1)
+)
+
+
+=== [R4] Refactor 2: "Wrap with Effect.gen" ===
+
+--- file:///.src/wrapWithEffectGen.ts ---
+// refactor: 6:22-6:23, 8:22-8:23, 10:22-10:23, 10:22-13:1, 15:22-15:23, 16:5-16:6
+// @effect-v3
+import { pipe } from "effect"
+import * as Effect from "effect/Effect"
+
+export const test1 = Effect.succeed(42)
+
+export const test3 = test1
+
+export const test2 = Effect.gen(function*() { return yield* Effect.succeed(42) }).pipe(
+  Effect.map((n) => n + 1),
+  Effect.map((n) => n - 1)
+)
+
+export const test4 = pipe(
+  Effect.succeed(42),
+  Effect.map((n) => n + 1),
+  Effect.map((n) => n - 1)
+)
+
+
+=== [R5] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/wrapWithEffectGen.ts ---
+// refactor: 6:22-6:23, 8:22-8:23, 10:22-10:23, 10:22-13:1, 15:22-15:23, 16:5-16:6
+// @effect-v3
+import { pipe } from "effect"
+import * as Effect from "effect/Effect"
+
+export const test1 = Effect.succeed(42)
+
+export const test3 = test1
+
+export const test2 = Effect.succeed(42).pipe(
+  Effect.map((n) => n + 1),
+  Effect.map((n) => n - 1)
+)
+
+export const test4 = pipe(p)ipe(
+  Effect.succeed(42),
+  Effect.map((n) => n + 1),
+  Effect.map((n) => n - 1)
+)
+
+
+=== [R5] Refactor 1: "Rewrite as X.pipe(Y, Z, ...)" ===
+
+--- file:///.src/wrapWithEffectGen.ts ---
+// refactor: 6:22-6:23, 8:22-8:23, 10:22-10:23, 10:22-13:1, 15:22-15:23, 16:5-16:6
+// @effect-v3
+import { pipe } from "effect"
+import * as Effect from "effect/Effect"
+
+export const test1 = Effect.succeed(42)
+
+export const test3 = test1
+
+export const test2 = Effect.succeed(42).pipe(
+  Effect.map((n) => n + 1),
+  Effect.map((n) => n - 1)
+)
+
+export const test4 = Effect.succeed(42).pipe(Effect.map(n => n + 1), Effect.map(n => n - 1))
+
+
+=== [R5] Refactor 2: "Rewrite to datafirst" ===
+
+--- file:///.src/wrapWithEffectGen.ts ---
+// refactor: 6:22-6:23, 8:22-8:23, 10:22-10:23, 10:22-13:1, 15:22-15:23, 16:5-16:6
+// @effect-v3
+import { pipe } from "effect"
+import * as Effect from "effect/Effect"
+
+export const test1 = Effect.succeed(42)
+
+export const test3 = test1
+
+export const test2 = Effect.succeed(42).pipe(
+  Effect.map((n) => n + 1),
+  Effect.map((n) => n - 1)
+)
+
+export const test4 = Effect.map(Effect.map(Effect.succeed(42), n => n + 1), n => n - 1)
+
+
+=== [R5] Refactor 3: "Wrap with Effect.gen" ===
+
+--- file:///.src/wrapWithEffectGen.ts ---
+// refactor: 6:22-6:23, 8:22-8:23, 10:22-10:23, 10:22-13:1, 15:22-15:23, 16:5-16:6
+// @effect-v3
+import { pipe } from "effect"
+import * as Effect from "effect/Effect"
+
+export const test1 = Effect.succeed(42)
+
+export const test3 = test1
+
+export const test2 = Effect.succeed(42).pipe(
+  Effect.map((n) => n + 1),
+  Effect.map((n) => n - 1)
+)
+
+export const test4 = Effect.gen(function*() { return yield* pipe(Effect.succeed(42), Effect.map(n => n + 1), Effect.map(n => n - 1)) })
+
+
+=== [R6] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/wrapWithEffectGen.ts ---
+// refactor: 6:22-6:23, 8:22-8:23, 10:22-10:23, 10:22-13:1, 15:22-15:23, 16:5-16:6
+// @effect-v3
+import { pipe } from "effect"
+import * as Effect from "effect/Effect"
+
+export const test1 = Effect.succeed(42)
+
+export const test3 = test1
+
+export const test2 = Effect.succeed(42).pipe(
+  Effect.map((n) => n + 1),
+  Effect.map((n) => n - 1)
+)
+
+export const test4 = pipe(
+  Efpipe(f)ect.succeed(42),
+  Effect.map((n) => n + 1),
+  Effect.map((n) => n - 1)
+)
+
+
+=== [R6] Refactor 1: "Rewrite as X.pipe(Y, Z, ...)" ===
+
+--- file:///.src/wrapWithEffectGen.ts ---
+// refactor: 6:22-6:23, 8:22-8:23, 10:22-10:23, 10:22-13:1, 15:22-15:23, 16:5-16:6
+// @effect-v3
+import { pipe } from "effect"
+import * as Effect from "effect/Effect"
+
+export const test1 = Effect.succeed(42)
+
+export const test3 = test1
+
+export const test2 = Effect.succeed(42).pipe(
+  Effect.map((n) => n + 1),
+  Effect.map((n) => n - 1)
+)
+
+export const test4 = Effect.succeed(42).pipe(Effect.map(n => n + 1), Effect.map(n => n - 1))
+
+
+=== [R6] Refactor 2: "Wrap with Effect.gen" ===
+
+--- file:///.src/wrapWithEffectGen.ts ---
+// refactor: 6:22-6:23, 8:22-8:23, 10:22-10:23, 10:22-13:1, 15:22-15:23, 16:5-16:6
+// @effect-v3
+import { pipe } from "effect"
+import * as Effect from "effect/Effect"
+
+export const test1 = Effect.succeed(42)
+
+export const test3 = test1
+
+export const test2 = Effect.succeed(42).pipe(
+  Effect.map((n) => n + 1),
+  Effect.map((n) => n - 1)
+)
+
+export const test4 = pipe(
+  Effect.gen(function*() { return yield* Effect.succeed(42) }),
+  Effect.map((n) => n + 1),
+  Effect.map((n) => n - 1)
+)
+

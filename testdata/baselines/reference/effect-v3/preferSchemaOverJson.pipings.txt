@@ -1,0 +1,295 @@
+==== /.src/preferSchemaOverJson.ts (21 flows) ====
+
+=== Piping Flow ===
+Location: 5:27 - 5:79
+Node: Effect.try(() => JSON.parse("{\"name\":\"John\"}"))
+Node Kind: KindCallExpression
+
+Subject: () => JSON.parse("{\"name\":\"John\"}")
+Subject Type: () => any
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<any, UnknownException, never>
+
+=== Piping Flow ===
+Location: 5:44 - 5:78
+Node: JSON.parse("{\"name\":\"John\"}")
+Node Kind: KindCallExpression
+
+Subject: "{\"name\":\"John\"}"
+Subject Type: "{\"name\":\"John\"}"
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 8:30 - 11:3
+Node: Effect.try({\n  try: () => JSON.parse("{\"name\":\"Jane\"}"),\n  catch: () => new Error("Failed to parse")\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  try: () => JSON.parse("{\"name\":\"Jane\"}"),\n  catch: () => new Error("Failed to parse")\n}
+Subject Type: { try: () => any; catch: () => Error; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<any, Error, never>
+
+=== Piping Flow ===
+Location: 9:13 - 9:47
+Node: JSON.parse("{\"name\":\"Jane\"}")
+Node Kind: KindCallExpression
+
+Subject: "{\"name\":\"Jane\"}"
+Subject Type: "{\"name\":\"Jane\"}"
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 14:31 - 14:81
+Node: Effect.try(() => JSON.stringify({ name: "Bob" }))
+Node Kind: KindCallExpression
+
+Subject: () => JSON.stringify({ name: "Bob" })
+Subject Type: () => string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<string, UnknownException, never>
+
+=== Piping Flow ===
+Location: 14:48 - 14:80
+Node: JSON.stringify({ name: "Bob" })
+Node Kind: KindCallExpression
+
+Subject: { name: "Bob" }
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.stringify
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 17:34 - 20:3
+Node: Effect.try({\n  try: () => JSON.stringify({ name: "Alice" }),\n  catch: () => new Error("Failed to stringify")\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  try: () => JSON.stringify({ name: "Alice" }),\n  catch: () => new Error("Failed to stringify")\n}
+Subject Type: { try: () => string; catch: () => Error; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<string, Error, never>
+
+=== Piping Flow ===
+Location: 18:13 - 18:47
+Node: JSON.stringify({ name: "Alice" })
+Node Kind: KindCallExpression
+
+Subject: { name: "Alice" }
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.stringify
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 23:26 - 28:3
+Node: Effect.gen(function*() {\n  const text = yield* Effect.succeed("{\"name\":\"Test\"}")\n  const parsed = JSON.parse(text)\n  //             ^- should suggest using Effect Schema\n  return parsed\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const text = yield* Effect.succeed("{\"name\":\"Test\"}")\n  const parsed = JSON.parse(text)\n  //             ^- should suggest using Effect Schema\n  return parsed\n}
+Subject Type: () => Generator<YieldWrap<Effect<string, never, never>>, any, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<any, never, never>
+
+=== Piping Flow ===
+Location: 24:22 - 24:60
+Node: Effect.succeed("{\"name\":\"Test\"}")
+Node Kind: KindCallExpression
+
+Subject: "{\"name\":\"Test\"}"
+Subject Type: "{\"name\":\"Test\"}"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 25:17 - 25:34
+Node: JSON.parse(text)
+Node Kind: KindCallExpression
+
+Subject: text
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 31:30 - 36:3
+Node: Effect.gen(function*() {\n  const data = yield* Effect.succeed({ name: "Test" })\n  const json = JSON.stringify(data)\n  //           ^- should suggest using Effect Schema\n  return json\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const data = yield* Effect.succeed({ name: "Test" })\n  const json = JSON.stringify(data)\n  //           ^- should suggest using Effect Schema\n  return json\n}
+Subject Type: () => Generator<YieldWrap<Effect<{ name: string; }, never, never>>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 32:22 - 32:55
+Node: Effect.succeed({ name: "Test" })
+Node Kind: KindCallExpression
+
+Subject: { name: "Test" }
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 33:15 - 33:36
+Node: JSON.stringify(data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.stringify
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 39:25 - 44:3
+Node: Effect.fn("parseInFn")(function*() {\n  const text = "{\"name\":\"FnTest\"}"\n  const parsed = JSON.parse(text)\n  //             ^- should suggest using Effect Schema\n  return parsed\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const text = "{\"name\":\"FnTest\"}"\n  const parsed = JSON.parse(text)\n  //             ^- should suggest using Effect Schema\n  return parsed\n}
+Subject Type: () => Generator<never, any, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn("parseInFn")
+      args: (constant)
+      outType: () => Effect<any, never, never>
+
+=== Piping Flow ===
+Location: 41:17 - 41:34
+Node: JSON.parse(text)
+Node Kind: KindCallExpression
+
+Subject: text
+Subject Type: "{\"name\":\"FnTest\"}"
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 49:9 - 49:26
+Node: JSON.parse(text)
+Node Kind: KindCallExpression
+
+Subject: text
+Subject Type: "{\"name\":\"Regular\"}"
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 53:35 - 57:3
+Node: Effect.gen(function*() {\n  const parseFn = () => JSON.parse("{\"nested\":true}")\n  //                    ^- this is inside a nested function, should NOT trigger\n  return parseFn()\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const parseFn = () => JSON.parse("{\"nested\":true}")\n  //                    ^- this is inside a nested function, should NOT trigger\n  return parseFn()\n}
+Subject Type: () => Generator<never, any, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<any, never, never>
+
+=== Piping Flow ===
+Location: 54:24 - 54:56
+Node: JSON.parse("{\"nested\":true}")
+Node Kind: KindCallExpression
+
+Subject: "{\"nested\":true}"
+Subject Type: "{\"nested\":true}"
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 60:35 - 63:3
+Node: Effect.try(() => {\n  const parsed = JSON.parse("{\"indirect\":true}")\n  return parsed.indirect\n})
+Node Kind: KindCallExpression
+
+Subject: () => {\n  const parsed = JSON.parse("{\"indirect\":true}")\n  return parsed.indirect\n}
+Subject Type: () => any
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<any, UnknownException, never>
+
+=== Piping Flow ===
+Location: 61:17 - 61:51
+Node: JSON.parse("{\"indirect\":true}")
+Node Kind: KindCallExpression
+
+Subject: "{\"indirect\":true}"
+Subject Type: "{\"indirect\":true}"
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: any

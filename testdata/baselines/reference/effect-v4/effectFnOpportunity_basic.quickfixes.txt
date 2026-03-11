@@ -1,0 +1,502 @@
+=== Quick Fix Inventory ===
+
+[D1] (9:14-9:27) TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*() { ... }). effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fnUntraced"
+  Fix 3: "Convert to Effect.fn (no span)"
+  Fix 4: "Convert to Effect.fn(\"arrowBlockGen\")"
+
+[D2] (16:14-16:32) TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*() { ... }). effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fnUntraced"
+  Fix 3: "Convert to Effect.fn (no span)"
+  Fix 4: "Convert to Effect.fn(\"arrowExpressionGen\")"
+
+[D3] (22:14-22:35) TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*() { ... }). effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fnUntraced"
+  Fix 3: "Convert to Effect.fn (no span)"
+  Fix 4: "Convert to Effect.fn(\"functionExpressionGen\")"
+
+[D4] (29:17-29:39) TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*() { ... }). effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fnUntraced"
+  Fix 3: "Convert to Effect.fn (no span)"
+  Fix 4: "Convert to Effect.fn(\"functionDeclarationGen\")"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_basic.ts ---
+import * as Effect from "effect/Effect"
+
+// These cases can be converted to Effect.fnUntraced because:
+// - There are no pipe arguments
+// - There is no withSpan for tracing
+// Converting to Effect.fnUntraced improves performance by not
+// reallocating the generator function on every call.
+
+export const arrowBlockGen = Effect.fnUntraced(function* () {
+    yield* Effect.succeed(1);
+    return 42;
+});
+
+export const arrowExpressionGen = () =>
+  Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+
+export const functionExpressionGen = function() {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+}
+
+export function functionDeclarationGen() {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+}
+
+
+=== [D1] Fix 3: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_basic.ts ---
+import * as Effect from "effect/Effect"
+
+// These cases can be converted to Effect.fnUntraced because:
+// - There are no pipe arguments
+// - There is no withSpan for tracing
+// Converting to Effect.fnUntraced improves performance by not
+// reallocating the generator function on every call.
+
+export const arrowBlockGen = Effect.fn(function* () {
+    yield* Effect.succeed(1);
+    return 42;
+});
+
+export const arrowExpressionGen = () =>
+  Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+
+export const functionExpressionGen = function() {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+}
+
+export function functionDeclarationGen() {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+}
+
+
+=== [D1] Fix 4: "Convert to Effect.fn(\"arrowBlockGen\")" ===
+
+--- file:///.src/effectFnOpportunity_basic.ts ---
+import * as Effect from "effect/Effect"
+
+// These cases can be converted to Effect.fnUntraced because:
+// - There are no pipe arguments
+// - There is no withSpan for tracing
+// Converting to Effect.fnUntraced improves performance by not
+// reallocating the generator function on every call.
+
+export const arrowBlockGen = Effect.fn("arrowBlockGen")(function* () {
+    yield* Effect.succeed(1);
+    return 42;
+});
+
+export const arrowExpressionGen = () =>
+  Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+
+export const functionExpressionGen = function() {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+}
+
+export function functionDeclarationGen() {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+}
+
+
+=== [D2] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_basic.ts ---
+import * as Effect from "effect/Effect"
+
+// These cases can be converted to Effect.fnUntraced because:
+// - There are no pipe arguments
+// - There is no withSpan for tracing
+// Converting to Effect.fnUntraced improves performance by not
+// reallocating the generator function on every call.
+
+export const arrowBlockGen = () => {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+}
+
+export const arrowExpressionGen = Effect.fnUntraced(function* () {
+    yield* Effect.succeed(1);
+    return 42;
+});
+
+export const functionExpressionGen = function() {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+}
+
+export function functionDeclarationGen() {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+}
+
+
+=== [D2] Fix 3: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_basic.ts ---
+import * as Effect from "effect/Effect"
+
+// These cases can be converted to Effect.fnUntraced because:
+// - There are no pipe arguments
+// - There is no withSpan for tracing
+// Converting to Effect.fnUntraced improves performance by not
+// reallocating the generator function on every call.
+
+export const arrowBlockGen = () => {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+}
+
+export const arrowExpressionGen = Effect.fn(function* () {
+    yield* Effect.succeed(1);
+    return 42;
+});
+
+export const functionExpressionGen = function() {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+}
+
+export function functionDeclarationGen() {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+}
+
+
+=== [D2] Fix 4: "Convert to Effect.fn(\"arrowExpressionGen\")" ===
+
+--- file:///.src/effectFnOpportunity_basic.ts ---
+import * as Effect from "effect/Effect"
+
+// These cases can be converted to Effect.fnUntraced because:
+// - There are no pipe arguments
+// - There is no withSpan for tracing
+// Converting to Effect.fnUntraced improves performance by not
+// reallocating the generator function on every call.
+
+export const arrowBlockGen = () => {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+}
+
+export const arrowExpressionGen = Effect.fn("arrowExpressionGen")(function* () {
+    yield* Effect.succeed(1);
+    return 42;
+});
+
+export const functionExpressionGen = function() {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+}
+
+export function functionDeclarationGen() {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+}
+
+
+=== [D3] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_basic.ts ---
+import * as Effect from "effect/Effect"
+
+// These cases can be converted to Effect.fnUntraced because:
+// - There are no pipe arguments
+// - There is no withSpan for tracing
+// Converting to Effect.fnUntraced improves performance by not
+// reallocating the generator function on every call.
+
+export const arrowBlockGen = () => {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+}
+
+export const arrowExpressionGen = () =>
+  Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+
+export const functionExpressionGen = Effect.fnUntraced(function* () {
+    yield* Effect.succeed(1);
+    return 42;
+});
+
+export function functionDeclarationGen() {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+}
+
+
+=== [D3] Fix 3: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_basic.ts ---
+import * as Effect from "effect/Effect"
+
+// These cases can be converted to Effect.fnUntraced because:
+// - There are no pipe arguments
+// - There is no withSpan for tracing
+// Converting to Effect.fnUntraced improves performance by not
+// reallocating the generator function on every call.
+
+export const arrowBlockGen = () => {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+}
+
+export const arrowExpressionGen = () =>
+  Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+
+export const functionExpressionGen = Effect.fn(function* () {
+    yield* Effect.succeed(1);
+    return 42;
+});
+
+export function functionDeclarationGen() {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+}
+
+
+=== [D3] Fix 4: "Convert to Effect.fn(\"functionExpressionGen\")" ===
+
+--- file:///.src/effectFnOpportunity_basic.ts ---
+import * as Effect from "effect/Effect"
+
+// These cases can be converted to Effect.fnUntraced because:
+// - There are no pipe arguments
+// - There is no withSpan for tracing
+// Converting to Effect.fnUntraced improves performance by not
+// reallocating the generator function on every call.
+
+export const arrowBlockGen = () => {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+}
+
+export const arrowExpressionGen = () =>
+  Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+
+export const functionExpressionGen = Effect.fn("functionExpressionGen")(function* () {
+    yield* Effect.succeed(1);
+    return 42;
+});
+
+export function functionDeclarationGen() {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+}
+
+
+=== [D4] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_basic.ts ---
+import * as Effect from "effect/Effect"
+
+// These cases can be converted to Effect.fnUntraced because:
+// - There are no pipe arguments
+// - There is no withSpan for tracing
+// Converting to Effect.fnUntraced improves performance by not
+// reallocating the generator function on every call.
+
+export const arrowBlockGen = () => {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+}
+
+export const arrowExpressionGen = () =>
+  Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+
+export const functionExpressionGen = function() {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+}
+
+export const functionDeclarationGen = Effect.fnUntraced(function* () {
+    yield* Effect.succeed(1);
+    return 42;
+});
+
+
+=== [D4] Fix 3: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_basic.ts ---
+import * as Effect from "effect/Effect"
+
+// These cases can be converted to Effect.fnUntraced because:
+// - There are no pipe arguments
+// - There is no withSpan for tracing
+// Converting to Effect.fnUntraced improves performance by not
+// reallocating the generator function on every call.
+
+export const arrowBlockGen = () => {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+}
+
+export const arrowExpressionGen = () =>
+  Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+
+export const functionExpressionGen = function() {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+}
+
+export const functionDeclarationGen = Effect.fn(function* () {
+    yield* Effect.succeed(1);
+    return 42;
+});
+
+
+=== [D4] Fix 4: "Convert to Effect.fn(\"functionDeclarationGen\")" ===
+
+--- file:///.src/effectFnOpportunity_basic.ts ---
+import * as Effect from "effect/Effect"
+
+// These cases can be converted to Effect.fnUntraced because:
+// - There are no pipe arguments
+// - There is no withSpan for tracing
+// Converting to Effect.fnUntraced improves performance by not
+// reallocating the generator function on every call.
+
+export const arrowBlockGen = () => {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+}
+
+export const arrowExpressionGen = () =>
+  Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+
+export const functionExpressionGen = function() {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+}
+
+export const functionDeclarationGen = Effect.fn("functionDeclarationGen")(function* () {
+    yield* Effect.succeed(1);
+    return 42;
+});
+

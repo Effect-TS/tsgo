@@ -1,0 +1,90 @@
+==== /.src/layerMergeAllWithDependenciesNonPropertyAccess.ts (1 layer exports) ====
+
+=== shouldNotWarnDestructured ===
+
+--- output ---
+flowchart TD
+  0["Cache.Default<br/>provides: Cache<br/>requires: FileSystem"]
+  1["FileSystem.Default<br/>provides: FileSystem<br/>requires: "]
+  2["DbConnection.Default<br/>provides: DbConnection<br/>requires: "]
+  3["mergeAll#40;<br/>  DbConnection.Default,<br/>  FileSystem.Default,<br/>  Cache.Default<br/>#41;<br/>provides: Cache, DbConnection, FileSystem<br/>requires: FileSystem"]
+  3 -->|"#123;#quot;relationship#quot;:#quot;call#quot;,#quot;argumentIndex#quot;:0#125;"| 2
+  3 -->|"#123;#quot;relationship#quot;:#quot;call#quot;,#quot;argumentIndex#quot;:1#125;"| 1
+  3 -->|"#123;#quot;relationship#quot;:#quot;call#quot;,#quot;argumentIndex#quot;:2#125;"| 0
+
+--- nested ---
+flowchart TB
+  subgraph 0 ["`Cache.Default<br/><small>_ln 25 col 2_</small>`"]
+    subgraph 0_wrap[" "]
+      subgraph 0_requires [Requires]
+        0_requires_0["FileSystem"]
+      end
+      style 0_requires stroke:none
+      subgraph 0_provides [Provides]
+        0_provides_0["Cache"]
+      end
+      style 0_provides stroke:none
+    end
+    style 0_wrap fill:transparent
+    style 0_wrap stroke:none
+  end
+  style 0 fill:transparent
+  subgraph 1 ["`FileSystem.Default<br/><small>_ln 24 col 2_</small>`"]
+    subgraph 1_wrap[" "]
+      subgraph 1_provides [Provides]
+        1_provides_0["FileSystem"]
+      end
+      style 1_provides stroke:none
+    end
+    style 1_wrap fill:transparent
+    style 1_wrap stroke:none
+  end
+  style 1 fill:transparent
+  subgraph 2 ["`DbConnection.Default<br/><small>_ln 23 col 2_</small>`"]
+    subgraph 2_wrap[" "]
+      subgraph 2_provides [Provides]
+        2_provides_0["DbConnection"]
+      end
+      style 2_provides stroke:none
+    end
+    style 2_wrap fill:transparent
+    style 2_wrap stroke:none
+  end
+  style 2 fill:transparent
+  subgraph 3 ["`shouldNotWarnDestructured<br/><small>_ln 22 col 13_</small>`"]
+    subgraph 3_wrap[" "]
+      subgraph 3_requires [Requires]
+        3_requires_0["FileSystem"]
+      end
+      style 3_requires stroke:none
+      subgraph 3_provides [Provides]
+        3_provides_0["Cache"]
+        3_provides_1["DbConnection"]
+        3_provides_2["FileSystem"]
+      end
+      style 3_provides stroke:none
+    end
+    style 3_wrap fill:transparent
+    style 3_wrap stroke:none
+  end
+  style 3 fill:transparent
+  3_provides_1 -.-> 2_provides_0
+  3_provides_2 -.-> 1_provides_0
+  3_requires_0 -.-> 0_requires_0
+  3_provides_0 -.-> 0_provides_0
+
+--- outline ---
+flowchart TD
+  0["Cache.Default"]
+  1["FileSystem.Default"]
+  2["DbConnection.Default"]
+  0 --> 1
+
+--- quickinfo ---
+/**
+ * - Cache provided at ln 25 col 2 by `Cache.Default`
+ * - DbConnection provided at ln 23 col 2 by `DbConnection.Default`
+ * - FileSystem provided at ln 24 col 2 by `FileSystem.Default`
+ * 
+ * - FileSystem required at ln 25 col 2 by `Cache.Default`
+ */

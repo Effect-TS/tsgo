@@ -1,0 +1,413 @@
+diff --git a/internal/fourslash/fourslash.go b/internal/fourslash/fourslash.go
+index b8575b1933..022443c14d 100644
+--- a/internal/fourslash/fourslash.go
++++ b/internal/fourslash/fourslash.go
+@@ -41,6 +41,16 @@ import (
+ 	"gotest.tools/v3/assert"
+ )
+ 
++// PrepareTestFSCallback is invoked before the VFS is created in NewFourslash.
++// It allows external packages to modify the test filesystem (e.g., mount real node_modules).
++var PrepareTestFSCallback func(testfs map[string]any)
++
++// RegisterPrepareTestFSCallback registers a callback to be called before the VFS
++// is created from the test filesystem map. The callback can add or modify entries.
++func RegisterPrepareTestFSCallback(cb func(testfs map[string]any)) {
++	PrepareTestFSCallback = cb
++}
++
+ type FourslashTest struct {
+ 	client *lsptestutil.LSPClient
+ 	vfs    vfs.FS
+@@ -149,6 +159,11 @@ func NewFourslash(t *testing.T, capabilities *lsproto.ClientCapabilities, conten
+ 		testfs[filePath] = vfstest.Symlink(tspath.GetNormalizedAbsolutePath(target, rootDir))
+ 	}
+ 
++	// EFFECT HOOK: Allow external packages to modify test filesystem before VFS creation
++	if PrepareTestFSCallback != nil {
++		PrepareTestFSCallback(testfs)
++	}
++
+ 	// !!! use default compiler options for inferred project as base
+ 	compilerOptions := &core.CompilerOptions{
+ 		SkipDefaultLibCheck: core.TSTrue,
+@@ -4319,3 +4334,379 @@ func (f *FourslashTest) VerifyErrorExistsBeforeMarker(t *testing.T, markerName s
+ 	}
+ 	t.Fatalf("Expected error before marker '%s' but none was found", markerName)
+ }
++
++// QuickFixInfo holds a diagnostic and the titles of its available quick fixes.
++type QuickFixInfo struct {
++	Diagnostic *lsproto.Diagnostic
++	FixTitles  []string
++}
++
++// FileChange holds the before/after content for a single file affected by a quick fix.
++type FileChange struct {
++	URI     lsproto.DocumentUri
++	Before  string
++	After   string
++	Created bool
++	Deleted bool
++}
++
++// AppliedQuickFixResult holds the result of applying a single quick fix.
++type AppliedQuickFixResult struct {
++	Diagnostic *lsproto.Diagnostic
++	FixIndex   int
++	FixTitle   string
++	Changes    []FileChange
++}
++
++// GetQuickFixesForDiagnostics returns an inventory of quick fixes available for all
++// diagnostics in the given file. It sends a diagnostic request followed by per-diagnostic
++// code action requests, filtering to CodeActionKindQuickFix.
++func (f *FourslashTest) GetQuickFixesForDiagnostics(t *testing.T, fileURI lsproto.DocumentUri) []QuickFixInfo {
++	t.Helper()
++
++	// Get diagnostics
++	diagParams := &lsproto.DocumentDiagnosticParams{
++		TextDocument: lsproto.TextDocumentIdentifier{
++			Uri: fileURI,
++		},
++	}
++	diagResult := sendRequest(t, f, lsproto.TextDocumentDiagnosticInfo, diagParams)
++
++	var diagnostics []*lsproto.Diagnostic
++	if diagResult.FullDocumentDiagnosticReport != nil && diagResult.FullDocumentDiagnosticReport.Items != nil {
++		diagnostics = diagResult.FullDocumentDiagnosticReport.Items
++	}
++
++	if len(diagnostics) == 0 {
++		return nil
++	}
++
++	// Sort diagnostics deterministically by position then code
++	slices.SortStableFunc(diagnostics, func(a, b *lsproto.Diagnostic) int {
++		if c := int(a.Range.Start.Line) - int(b.Range.Start.Line); c != 0 {
++			return c
++		}
++		if c := int(a.Range.Start.Character) - int(b.Range.Start.Character); c != 0 {
++			return c
++		}
++		ac, bc := 0, 0
++		if a.Code != nil && a.Code.Integer != nil {
++			ac = int(*a.Code.Integer)
++		}
++		if b.Code != nil && b.Code.Integer != nil {
++			bc = int(*b.Code.Integer)
++		}
++		return ac - bc
++	})
++
++	var result []QuickFixInfo
++	for _, diag := range diagnostics {
++		// Request code actions for this specific diagnostic
++		params := &lsproto.CodeActionParams{
++			TextDocument: lsproto.TextDocumentIdentifier{
++				Uri: fileURI,
++			},
++			Range: diag.Range,
++			Context: &lsproto.CodeActionContext{
++				Diagnostics: []*lsproto.Diagnostic{diag},
++				Only:        &[]lsproto.CodeActionKind{lsproto.CodeActionKindQuickFix},
++			},
++		}
++		codeActions := sendRequest(t, f, lsproto.TextDocumentCodeActionInfo, params)
++
++		var titles []string
++		if codeActions.CommandOrCodeActionArray != nil {
++			for _, item := range *codeActions.CommandOrCodeActionArray {
++				if item.CodeAction != nil && item.CodeAction.Kind != nil && *item.CodeAction.Kind == lsproto.CodeActionKindQuickFix {
++					titles = append(titles, item.CodeAction.Title)
++				}
++			}
++		}
++
++		result = append(result, QuickFixInfo{
++			Diagnostic: diag,
++			FixTitles:  titles,
++		})
++	}
++
++	return result
++}
++
++// ApplyQuickFix applies a specific quick fix for a diagnostic and returns the before/after
++// content for all affected files. After capturing the result, it undoes the changes to
++// restore the original state.
++func (f *FourslashTest) ApplyQuickFix(t *testing.T, fileURI lsproto.DocumentUri, diagnostic *lsproto.Diagnostic, fixIndex int) AppliedQuickFixResult {
++	t.Helper()
++
++	// Request code actions for this diagnostic
++	params := &lsproto.CodeActionParams{
++		TextDocument: lsproto.TextDocumentIdentifier{
++			Uri: fileURI,
++		},
++		Range: diagnostic.Range,
++		Context: &lsproto.CodeActionContext{
++			Diagnostics: []*lsproto.Diagnostic{diagnostic},
++			Only:        &[]lsproto.CodeActionKind{lsproto.CodeActionKindQuickFix},
++		},
++	}
++	codeActions := sendRequest(t, f, lsproto.TextDocumentCodeActionInfo, params)
++
++	// Filter to quick fixes only
++	var quickFixes []*lsproto.CodeAction
++	if codeActions.CommandOrCodeActionArray != nil {
++		for _, item := range *codeActions.CommandOrCodeActionArray {
++			if item.CodeAction != nil && item.CodeAction.Kind != nil && *item.CodeAction.Kind == lsproto.CodeActionKindQuickFix {
++				quickFixes = append(quickFixes, item.CodeAction)
++			}
++		}
++	}
++
++	if fixIndex >= len(quickFixes) {
++		t.Fatalf("Quick fix index %d out of range (have %d fixes)", fixIndex, len(quickFixes))
++	}
++
++	action := quickFixes[fixIndex]
++	result := AppliedQuickFixResult{
++		Diagnostic: diagnostic,
++		FixIndex:   fixIndex,
++		FixTitle:   action.Title,
++	}
++
++	if action.Edit == nil || action.Edit.Changes == nil || len(*action.Edit.Changes) == 0 {
++		return result
++	}
++
++	// Collect URIs in sorted order for deterministic output
++	uris := make([]lsproto.DocumentUri, 0, len(*action.Edit.Changes))
++	for uri := range *action.Edit.Changes {
++		uris = append(uris, uri)
++	}
++	slices.SortFunc(uris, func(a, b lsproto.DocumentUri) int {
++		return strings.Compare(string(a), string(b))
++	})
++
++	// Save original state and apply edits per file
++	type fileEditState struct {
++		uri             lsproto.DocumentUri
++		fileName        string
++		originalContent string
++		edits           []*lsproto.TextEdit
++	}
++	var editStates []fileEditState
++
++	for _, uri := range uris {
++		edits := (*action.Edit.Changes)[uri]
++		fileName := uri.FileName()
++		script := f.getScriptInfo(fileName)
++
++		beforeContent := ""
++		created := false
++		if script == nil {
++			created = true
++		} else {
++			beforeContent = script.content
++		}
++
++		// Save state for undo
++		editStates = append(editStates, fileEditState{
++			uri:             uri,
++			fileName:        fileName,
++			originalContent: beforeContent,
++			edits:           edits,
++		})
++
++		// Apply edits
++		savedActive := f.activeFilename
++		f.activeFilename = fileName
++
++		if script == nil {
++			// File doesn't exist yet - create it with empty content
++			script = newScriptInfo(fileName, "")
++			f.scriptInfos[fileName] = script
++		}
++
++		f.applyTextEdits(t, edits)
++		f.activeFilename = savedActive
++
++		afterContent := f.getScriptInfo(fileName).content
++
++		result.Changes = append(result.Changes, FileChange{
++			URI:     uri,
++			Before:  beforeContent,
++			After:   afterContent,
++			Created: created,
++		})
++	}
++
++	// Undo all changes in reverse order, notifying the LSP server
++	for i := len(editStates) - 1; i >= 0; i-- {
++		state := editStates[i]
++		script := f.getScriptInfo(state.fileName)
++		if state.originalContent == "" && script != nil {
++			// File was created - remove it
++			delete(f.scriptInfos, state.fileName)
++		} else if script != nil {
++			// Restore original content via editScript so the server is notified
++			f.editScript(t, state.fileName, 0, len(script.content), state.originalContent)
++		}
++	}
++
++	return result
++}
++
++// RefactorActionInfo holds information about a single refactor code action.
++type RefactorActionInfo struct {
++	Title string
++	Kind  string
++}
++
++// AppliedRefactorResult holds the result of applying a single refactor action.
++type AppliedRefactorResult struct {
++	ActionIndex int
++	ActionTitle string
++	Changes     []FileChange
++}
++
++// GetRefactorActionsForRange returns refactor actions available for the given selection range.
++// It sends a code action request with refactor.* kinds and returns matching actions.
++func (f *FourslashTest) GetRefactorActionsForRange(t *testing.T, fileURI lsproto.DocumentUri, selectionRange lsproto.Range) []RefactorActionInfo {
++	t.Helper()
++
++	params := &lsproto.CodeActionParams{
++		TextDocument: lsproto.TextDocumentIdentifier{
++			Uri: fileURI,
++		},
++		Range: selectionRange,
++		Context: &lsproto.CodeActionContext{
++			Only: &[]lsproto.CodeActionKind{lsproto.CodeActionKindRefactor},
++		},
++	}
++	codeActions := sendRequest(t, f, lsproto.TextDocumentCodeActionInfo, params)
++
++	var result []RefactorActionInfo
++	if codeActions.CommandOrCodeActionArray != nil {
++		for _, item := range *codeActions.CommandOrCodeActionArray {
++			if item.CodeAction != nil && item.CodeAction.Kind != nil && strings.HasPrefix(string(*item.CodeAction.Kind), "refactor.") {
++				result = append(result, RefactorActionInfo{
++					Title: item.CodeAction.Title,
++					Kind:  string(*item.CodeAction.Kind),
++				})
++			}
++		}
++	}
++	return result
++}
++
++// ApplyRefactorAction applies a specific refactor action for a selection range and returns
++// the before/after content for all affected files. After capturing the result, it undoes
++// the changes to restore the original state.
++func (f *FourslashTest) ApplyRefactorAction(t *testing.T, fileURI lsproto.DocumentUri, selectionRange lsproto.Range, actionIndex int) AppliedRefactorResult {
++	t.Helper()
++
++	params := &lsproto.CodeActionParams{
++		TextDocument: lsproto.TextDocumentIdentifier{
++			Uri: fileURI,
++		},
++		Range: selectionRange,
++		Context: &lsproto.CodeActionContext{
++			Only: &[]lsproto.CodeActionKind{lsproto.CodeActionKindRefactor},
++		},
++	}
++	codeActions := sendRequest(t, f, lsproto.TextDocumentCodeActionInfo, params)
++
++	// Filter to refactor actions
++	var refactorActions []*lsproto.CodeAction
++	if codeActions.CommandOrCodeActionArray != nil {
++		for _, item := range *codeActions.CommandOrCodeActionArray {
++			if item.CodeAction != nil && item.CodeAction.Kind != nil && strings.HasPrefix(string(*item.CodeAction.Kind), "refactor.") {
++				refactorActions = append(refactorActions, item.CodeAction)
++			}
++		}
++	}
++
++	if actionIndex >= len(refactorActions) {
++		t.Fatalf("Refactor action index %d out of range (have %d actions)", actionIndex, len(refactorActions))
++	}
++
++	action := refactorActions[actionIndex]
++	result := AppliedRefactorResult{
++		ActionIndex: actionIndex,
++		ActionTitle: action.Title,
++	}
++
++	if action.Edit == nil || action.Edit.Changes == nil || len(*action.Edit.Changes) == 0 {
++		return result
++	}
++
++	// Collect URIs in sorted order for deterministic output
++	uris := make([]lsproto.DocumentUri, 0, len(*action.Edit.Changes))
++	for uri := range *action.Edit.Changes {
++		uris = append(uris, uri)
++	}
++	slices.SortFunc(uris, func(a, b lsproto.DocumentUri) int {
++		return strings.Compare(string(a), string(b))
++	})
++
++	// Save original state and apply edits per file
++	type fileEditState struct {
++		uri             lsproto.DocumentUri
++		fileName        string
++		originalContent string
++		edits           []*lsproto.TextEdit
++	}
++	var editStates []fileEditState
++
++	for _, uri := range uris {
++		edits := (*action.Edit.Changes)[uri]
++		fileName := uri.FileName()
++		script := f.getScriptInfo(fileName)
++
++		beforeContent := ""
++		created := false
++		if script == nil {
++			created = true
++		} else {
++			beforeContent = script.content
++		}
++
++		editStates = append(editStates, fileEditState{
++			uri:             uri,
++			fileName:        fileName,
++			originalContent: beforeContent,
++			edits:           edits,
++		})
++
++		savedActive := f.activeFilename
++		f.activeFilename = fileName
++
++		if script == nil {
++			script = newScriptInfo(fileName, "")
++			f.scriptInfos[fileName] = script
++		}
++
++		f.applyTextEdits(t, edits)
++		f.activeFilename = savedActive
++
++		afterContent := f.getScriptInfo(fileName).content
++
++		result.Changes = append(result.Changes, FileChange{
++			URI:     uri,
++			Before:  beforeContent,
++			After:   afterContent,
++			Created: created,
++		})
++	}
++
++	// Undo all changes in reverse order
++	for i := len(editStates) - 1; i >= 0; i-- {
++		state := editStates[i]
++		script := f.getScriptInfo(state.fileName)
++		if state.originalContent == "" && script != nil {
++			delete(f.scriptInfos, state.fileName)
++		} else if script != nil {
++			f.editScript(t, state.fileName, 0, len(script.content), state.originalContent)
++		}
++	}
++
++	return result
++}

@@ -1,0 +1,61 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+/.src/effectFnOpportunity_defaultConfig.ts(9,14): suggestion TS377047: Can be rewritten as a reusable function: Effect.fn("withSpanFunction")(function*() { ... }). effect(effectFnOpportunity)
+/.src/effectFnOpportunity_defaultConfig.ts(10,3): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/effectFnOpportunity_defaultConfig.ts(16,3): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/effectFnOpportunity_defaultConfig.ts(22,3): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@effect/language-service"
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/effectFnOpportunity_defaultConfig.ts (4 errors) ====
+    import * as Effect from "effect/Effect"
+    
+    // With the default effectFn config (["span"]), only functions that end their
+    // pipe chain with Effect.withSpan should get the effectFnOpportunity diagnostic.
+    // Functions without withSpan should NOT get a diagnostic because no fix variant
+    // is config-enabled for them.
+    
+    // SHOULD get diagnostic: pipe ends with Effect.withSpan
+    export const withSpanFunction = () =>
+                 ~~~~~~~~~~~~~~~~
+!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fn("withSpanFunction")(function*() { ... }). effect(effectFnOpportunity)
+      Effect.gen(function*() {
+      ~~~~~~~~~~~~~~~~~~~~~~~~
+        return yield* Effect.succeed(42)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      }).pipe(Effect.withSpan("withSpanFunction"))
+    ~~~~
+!!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+    
+    // Should NOT get diagnostic: no pipe, no withSpan
+    export const basicGen = () =>
+      Effect.gen(function*() {
+      ~~~~~~~~~~~~~~~~~~~~~~~~
+        return yield* Effect.succeed(42)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      })
+    ~~~~
+!!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+    
+    // Should NOT get diagnostic: pipe does not end with withSpan
+    export const pipeWithMap = () =>
+      Effect.gen(function*() {
+      ~~~~~~~~~~~~~~~~~~~~~~~~
+        return yield* Effect.succeed(42)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      }).pipe(Effect.map((x) => x + 1))
+    ~~~~
+!!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+    

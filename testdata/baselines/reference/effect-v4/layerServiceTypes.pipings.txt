@@ -1,0 +1,209 @@
+==== /.src/layerServiceTypes.ts (14 flows) ====
+
+=== Piping Flow ===
+Location: 4:23 - 6:17
+Node: ServiceMap.Service<Database, {\n  readonly query: (sql: string) => Effect.Effect<string>\n}>()("Database")
+Node Kind: KindCallExpression
+
+Subject: "Database"
+Subject Type: "Database"
+
+Transformations (1):
+  [0] kind: call
+      callee: ServiceMap.Service<Database, {\n  readonly query: (sql: string) => Effect.Effect<string>\n}>()
+      args: (constant)
+      outType: ServiceClass<Database, "Database", { readonly query: (sql: string) => Effect<string, never, never>; }>
+
+=== Piping Flow ===
+Location: 8:21 - 10:15
+Node: ServiceMap.Service<Logger, {\n  readonly log: (message: string) => Effect.Effect<void>\n}>()("Logger")
+Node Kind: KindCallExpression
+
+Subject: "Logger"
+Subject Type: "Logger"
+
+Transformations (1):
+  [0] kind: call
+      callee: ServiceMap.Service<Logger, {\n  readonly log: (message: string) => Effect.Effect<void>\n}>()
+      args: (constant)
+      outType: ServiceClass<Logger, "Logger", { readonly log: (message: string) => Effect<void, never, never>; }>
+
+=== Piping Flow ===
+Location: 13:21 - 15:3
+Node: Layer.succeed(Database)({\n  query: (sql: string) => Effect.succeed(`result: ${sql}`)\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  query: (sql: string) => Effect.succeed(`result: ${sql}`)\n}
+Subject Type: { query: (sql: string) => Effect<string, never, never>; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Layer.succeed(Database)
+      args: (constant)
+      outType: Layer<Database, never, never>
+
+=== Piping Flow ===
+Location: 14:26 - 14:59
+Node: Effect.succeed(`result: ${sql}`)
+Node Kind: KindCallExpression
+
+Subject: `result: ${sql}`
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 17:19 - 19:3
+Node: Layer.succeed(Logger)({\n  log: (message: string) => Effect.succeed(undefined as void)\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  log: (message: string) => Effect.succeed(undefined as void)\n}
+Subject Type: { log: (message: string) => Effect<void, never, never>; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Layer.succeed(Logger)
+      args: (constant)
+      outType: Layer<Logger, never, never>
+
+=== Piping Flow ===
+Location: 18:28 - 18:62
+Node: Effect.succeed(undefined as void)
+Node Kind: KindCallExpression
+
+Subject: undefined as void
+Subject Type: void
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 22:27 - 26:2
+Node: Layer.effect(Database)(\n  Effect.succeed({\n    query: (sql: string) => Effect.succeed(`result: ${sql}`)\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: {\n    query: (sql: string) => Effect.succeed(`result: ${sql}`)\n  }
+Subject Type: { query: (sql: string) => Effect<string, never, never>; }
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{ query: (sql: string) => Effect<string, never, never>; }, never, never>
+  [1] kind: call
+      callee: Layer.effect(Database)
+      args: (constant)
+      outType: Layer<Database, never, never>
+
+=== Piping Flow ===
+Location: 24:28 - 24:61
+Node: Effect.succeed(`result: ${sql}`)
+Node Kind: KindCallExpression
+
+Subject: `result: ${sql}`
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 32:23 - 34:17
+Node: ServiceMap.Service<UserRepo, {\n  readonly getUser: (id: string) => Effect.Effect<string>\n}>()("UserRepo")
+Node Kind: KindCallExpression
+
+Subject: "UserRepo"
+Subject Type: "UserRepo"
+
+Transformations (1):
+  [0] kind: call
+      callee: ServiceMap.Service<UserRepo, {\n  readonly getUser: (id: string) => Effect.Effect<string>\n}>()
+      args: (constant)
+      outType: ServiceClass<UserRepo, "UserRepo", { readonly getUser: (id: string) => Effect<string, never, never>; }>
+
+=== Piping Flow ===
+Location: 36:21 - 43:2
+Node: Layer.effect(UserRepo)(\n  Effect.gen(function*() {\n    const db = yield* Database\n    return {\n      getUser: (id: string) => db.query(`SELECT * FROM users WHERE id = ${id}`)\n    }\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: function*() {\n    const db = yield* Database\n    return {\n      getUser: (id: string) => db.query(`SELECT * FROM users WHERE id = ${id}`)\n    }\n  }
+Subject Type: () => Generator<Service<Database, { readonly query: (sql: string) => Effect<string, never, never>; }>, { getUser: (id: string) => Effect<string, never, never>; }, any>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<{ getUser: (id: string) => Effect<string, never, never>; }, never, Database>
+  [1] kind: call
+      callee: Layer.effect(UserRepo)
+      args: (constant)
+      outType: Layer<UserRepo, never, Database>
+
+=== Piping Flow ===
+Location: 40:31 - 40:80
+Node: db.query(`SELECT * FROM users WHERE id = ${id}`)
+Node Kind: KindCallExpression
+
+Subject: `SELECT * FROM users WHERE id = ${id}`
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: db.query
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 45:25 - 47:2
+Node: UserRepoLive.pipe(\n  Layer.provide(DatabaseLive)\n)
+Node Kind: KindCallExpression
+
+Subject: UserRepoLive
+Subject Type: Layer<UserRepo, never, Database>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Layer.provide
+      args: [DatabaseLive]
+      outType: Layer<UserRepo, never, never>
+
+=== Piping Flow ===
+Location: 50:23 - 53:38
+Node: Effect.gen(function*() {\n  const db = yield* Database\n  return yield* db.query("SELECT 1")\n}).pipe(Effect.provide(DatabaseLive))
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const db = yield* Database\n  return yield* db.query("SELECT 1")\n}
+Subject Type: () => Generator<Effect<string, never, never> | Service<Database, { readonly query: (sql: string) => Effect<string, never, never>; }>, string, any>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, Database>
+  [1] kind: pipeable
+      callee: Effect.provide
+      args: [DatabaseLive]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 52:16 - 52:37
+Node: db.query("SELECT 1")
+Node Kind: KindCallExpression
+
+Subject: "SELECT 1"
+Subject Type: "SELECT 1"
+
+Transformations (1):
+  [0] kind: call
+      callee: db.query
+      args: (constant)
+      outType: Effect<string, never, never>

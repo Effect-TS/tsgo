@@ -1,0 +1,79 @@
+==== /.src/strictEffectProvide.ts (5 flows) ====
+
+=== Piping Flow ===
+Location: 15:29 - 17:2
+Node: Effect.void.pipe(\n  Effect.provide(MyService1.Default)\n)
+Node Kind: KindCallExpression
+
+Subject: Effect.void
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.provide
+      args: [MyService1.Default]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 23:29 - 27:2
+Node: Effect.void.pipe(\n  Effect.map(() => 42),\n  Effect.provide(MyService1.Default),\n  Effect.map((n) => n + 1)\n)
+Node Kind: KindCallExpression
+
+Subject: Effect.void
+Subject Type: Effect<void, never, never>
+
+Transformations (3):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [() => 42]
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.provide
+      args: [MyService1.Default]
+      outType: Effect<number, never, never>
+  [2] kind: pipeable
+      callee: Effect.map
+      args: [(n) => n + 1]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 30:29 - 32:2
+Node: Effect.void.pipe(\n  Effect.provide(Layer.mergeAll(MyService1.Default, MyService2.Default))\n)
+Node Kind: KindCallExpression
+
+Subject: Effect.void
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.provide
+      args: [Layer.mergeAll(MyService1.Default, MyService2.Default)]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 35:32 - 37:2
+Node: Effect.void.pipe(\n  Effect.provideService(MyService1, new MyService1({ value: 1 }))\n)
+Node Kind: KindCallExpression
+
+Subject: Effect.void
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.provideService
+      args: [MyService1, new MyService1({ value: 1 })]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 46:32 - 49:3
+Node: Effect.gen(function*() {\n  const ctx = yield* Effect.context<MyService1>()\n  return yield* Effect.provide(Effect.void, ctx)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const ctx = yield* Effect.context<MyService1>()\n  return yield* Effect.provide(Effect.void, ctx)\n}
+Subject Type: () => Generator<YieldWrap<Effect<void, never, never>> | YieldWrap<Effect<Context<MyService1>, never, MyService1>>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, never, MyService1>

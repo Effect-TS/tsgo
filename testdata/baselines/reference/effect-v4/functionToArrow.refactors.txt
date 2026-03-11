@@ -1,0 +1,278 @@
+=== Refactor Inventory ===
+
+[R1] selection: "5:20-5:25"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Toggle return type annotation" (refactor.rewrite.effect.toggleReturnTypeAnnotation)
+  Refactor 2: "Convert to arrow" (refactor.rewrite.effect.functionToArrow)
+
+[R2] selection: "12:20-12:25"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Toggle return type annotation" (refactor.rewrite.effect.toggleReturnTypeAnnotation)
+  Refactor 2: "Convert to arrow" (refactor.rewrite.effect.functionToArrow)
+
+[R3] selection: "21:5-21:9"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Toggle return type annotation" (refactor.rewrite.effect.toggleReturnTypeAnnotation)
+  Refactor 2: "Convert to arrow" (refactor.rewrite.effect.functionToArrow)
+
+[R4] selection: "empty (0:0-0:0)"
+  (no refactors)
+
+=== Refactor Application Results ===
+
+=== [R1] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/functionToArrow.ts ---
+// refactor: 5:20-5:25, 12:20-12:25, 21:5-21:9
+/**
+ * Docs
+ */
+export function myTpipe(est(n)ame: string) {
+  return name.length
+}
+
+/**
+ * Docs
+ */
+export function myTest2(name: string) {
+  if (name === "LOL") return 42
+  return name.length
+}
+
+class Sample {
+  /**
+   * Docs
+   */
+  test(name: string) {
+    return name.length
+  }
+}
+
+
+=== [R1] Refactor 1: "Toggle return type annotation" ===
+
+--- file:///.src/functionToArrow.ts ---
+// refactor: 5:20-5:25, 12:20-12:25, 21:5-21:9
+/**
+ * Docs
+ */
+export function myTest(name: string): number {
+  return name.length
+}
+
+/**
+ * Docs
+ */
+export function myTest2(name: string) {
+  if (name === "LOL") return 42
+  return name.length
+}
+
+class Sample {
+  /**
+   * Docs
+   */
+  test(name: string) {
+    return name.length
+  }
+}
+
+
+=== [R1] Refactor 2: "Convert to arrow" ===
+
+--- file:///.src/functionToArrow.ts ---
+// refactor: 5:20-5:25, 12:20-12:25, 21:5-21:9
+/**
+ * Docs
+ */
+export const myTest = (name: string) => name.length;
+
+/**
+ * Docs
+ */
+export function myTest2(name: string) {
+  if (name === "LOL") return 42
+  return name.length
+}
+
+class Sample {
+  /**
+   * Docs
+   */
+  test(name: string) {
+    return name.length
+  }
+}
+
+
+=== [R2] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/functionToArrow.ts ---
+// refactor: 5:20-5:25, 12:20-12:25, 21:5-21:9
+/**
+ * Docs
+ */
+export function myTest(name: string) {
+  return name.length
+}
+
+/**
+ * Docs
+ */
+export function myTpipe(est2()name: string) {
+  if (name === "LOL") return 42
+  return name.length
+}
+
+class Sample {
+  /**
+   * Docs
+   */
+  test(name: string) {
+    return name.length
+  }
+}
+
+
+=== [R2] Refactor 1: "Toggle return type annotation" ===
+
+--- file:///.src/functionToArrow.ts ---
+// refactor: 5:20-5:25, 12:20-12:25, 21:5-21:9
+/**
+ * Docs
+ */
+export function myTest(name: string) {
+  return name.length
+}
+
+/**
+ * Docs
+ */
+export function myTest2(name: string): number {
+  if (name === "LOL") return 42
+  return name.length
+}
+
+class Sample {
+  /**
+   * Docs
+   */
+  test(name: string) {
+    return name.length
+  }
+}
+
+
+=== [R2] Refactor 2: "Convert to arrow" ===
+
+--- file:///.src/functionToArrow.ts ---
+// refactor: 5:20-5:25, 12:20-12:25, 21:5-21:9
+/**
+ * Docs
+ */
+export function myTest(name: string) {
+  return name.length
+}
+
+/**
+ * Docs
+ */
+export const myTest2 = (name: string) => {
+    if (name === "LOL") return 42;
+    return name.length;
+};
+
+class Sample {
+  /**
+   * Docs
+   */
+  test(name: string) {
+    return name.length
+  }
+}
+
+
+=== [R3] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/functionToArrow.ts ---
+// refactor: 5:20-5:25, 12:20-12:25, 21:5-21:9
+/**
+ * Docs
+ */
+export function myTest(name: string) {
+  return name.length
+}
+
+/**
+ * Docs
+ */
+export function myTest2(name: string) {
+  if (name === "LOL") return 42
+  return name.length
+}
+
+class Sample {
+  /**
+   * Docs
+   */
+  tepipe(st(n)ame: string) {
+    return name.length
+  }
+}
+
+
+=== [R3] Refactor 1: "Toggle return type annotation" ===
+
+--- file:///.src/functionToArrow.ts ---
+// refactor: 5:20-5:25, 12:20-12:25, 21:5-21:9
+/**
+ * Docs
+ */
+export function myTest(name: string) {
+  return name.length
+}
+
+/**
+ * Docs
+ */
+export function myTest2(name: string) {
+  if (name === "LOL") return 42
+  return name.length
+}
+
+class Sample {
+  /**
+   * Docs
+   */
+  test(name: string): number {
+    return name.length
+  }
+}
+
+
+=== [R3] Refactor 2: "Convert to arrow" ===
+
+--- file:///.src/functionToArrow.ts ---
+// refactor: 5:20-5:25, 12:20-12:25, 21:5-21:9
+/**
+ * Docs
+ */
+export function myTest(name: string) {
+  return name.length
+}
+
+/**
+ * Docs
+ */
+export function myTest2(name: string) {
+  if (name === "LOL") return 42
+  return name.length
+}
+
+class Sample {
+  /**
+   * Docs
+   */
+  test = (name: string) => name.length
+}
+

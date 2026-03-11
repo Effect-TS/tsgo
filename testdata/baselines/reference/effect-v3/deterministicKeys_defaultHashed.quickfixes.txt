@@ -1,0 +1,55 @@
+=== Quick Fix Inventory ===
+
+[D1] (7:23-7:50) TS377049: Key should be 'de06a820ada693c2'. effect(deterministicKeys)
+  Fix 0: "Disable deterministicKeys for this line"
+  Fix 1: "Disable deterministicKeys for entire file"
+  Fix 2: "Replace 'ExpectedServiceIdentifier' with 'de06a820ada693c2'"
+
+[D2] (10:46-10:54) TS377049: Key should be '1296269f76d642ec'. effect(deterministicKeys)
+  Fix 0: "Disable deterministicKeys for this line"
+  Fix 1: "Disable deterministicKeys for entire file"
+  Fix 2: "Replace 'ErrorA' with '1296269f76d642ec'"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable deterministicKeys for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable deterministicKeys for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace 'ExpectedServiceIdentifier' with 'de06a820ada693c2'" ===
+
+--- file:///.src/test.ts ---
+// @effect-v3
+// @effect-diagnostics deterministicKeys:error
+import * as Context from "effect/Context"
+import * as Data from "effect/Data"
+
+export class ExpectedServiceIdentifier
+  extends Context.Tag("de06a820ada693c2")<ExpectedServiceIdentifier, {}>()
+{}
+
+export class ErrorA extends Data.TaggedError("ErrorA")<{}> {}
+
+
+=== [D2] Fix 0: "Disable deterministicKeys for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable deterministicKeys for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace 'ErrorA' with '1296269f76d642ec'" ===
+
+--- file:///.src/test.ts ---
+// @effect-v3
+// @effect-diagnostics deterministicKeys:error
+import * as Context from "effect/Context"
+import * as Data from "effect/Data"
+
+export class ExpectedServiceIdentifier
+  extends Context.Tag("ExpectedServiceIdentifier")<ExpectedServiceIdentifier, {}>()
+{}
+
+export class ErrorA extends Data.TaggedError("1296269f76d642ec")<{}> {}
+

@@ -1,0 +1,24 @@
+=== Refactor Inventory ===
+
+[R1] selection: "6:17-6:17"
+  Refactor 0: "Convert to Effect.fn(\"methodReturnsEffect\")" (refactor.rewrite.effect.effectGenToFn)
+
+[R2] selection: "empty (0:0-0:0)"
+  (no refactors)
+
+=== Refactor Application Results ===
+
+=== [R1] Refactor 0: "Convert to Effect.fn(\"methodReturnsEffect\")" ===
+
+--- file:///.src/effectGenToFn_classMethod.ts ---
+// refactor: 6:17
+import * as Eff from "effect/Effect"
+
+class Test {
+  methodReturnsEffect = Eff.fn("methodReturnsEffect")(function*(arg1: number, arg2: number) {
+    const a = yield* Eff.succeed(arg1)
+    const b = yield* Eff.succeed(arg2)
+    return a + b
+})
+}
+

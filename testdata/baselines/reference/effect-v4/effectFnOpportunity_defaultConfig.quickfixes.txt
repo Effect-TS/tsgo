@@ -1,0 +1,153 @@
+=== Quick Fix Inventory ===
+
+[D1] (9:14-9:30) TS377047: Can be rewritten as a reusable function: Effect.fn("withSpanFunction")(function*() { ... }). effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fn (with span from withSpan)"
+
+[D2] (10:3-12:5) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D3] (16:3-18:5) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D4] (22:3-24:5) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Convert to Effect.fn (with span from withSpan)" ===
+
+--- file:///.src/effectFnOpportunity_defaultConfig.ts ---
+import * as Effect from "effect/Effect"
+
+// With the default effectFn config (["span"]), only functions that end their
+// pipe chain with Effect.withSpan should get the effectFnOpportunity diagnostic.
+// Functions without withSpan should NOT get a diagnostic because no fix variant
+// is config-enabled for them.
+
+// SHOULD get diagnostic: pipe ends with Effect.withSpan
+export const withSpanFunction = Effect.fn("withSpanFunction")(function* () {
+    return yield* Effect.succeed(42);
+});
+
+// Should NOT get diagnostic: no pipe, no withSpan
+export const basicGen = () =>
+  Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  })
+
+// Should NOT get diagnostic: pipe does not end with withSpan
+export const pipeWithMap = () =>
+  Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.map((x) => x + 1))
+
+
+=== [D2] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/effectFnOpportunity_defaultConfig.ts ---
+import * as Effect from "effect/Effect"
+
+// With the default effectFn config (["span"]), only functions that end their
+// pipe chain with Effect.withSpan should get the effectFnOpportunity diagnostic.
+// Functions without withSpan should NOT get a diagnostic because no fix variant
+// is config-enabled for them.
+
+// SHOULD get diagnostic: pipe ends with Effect.withSpan
+export const withSpanFunction = () => Effect.succeed(42).pipe(Effect.withSpan("withSpanFunction"))
+
+// Should NOT get diagnostic: no pipe, no withSpan
+export const basicGen = () =>
+  Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  })
+
+// Should NOT get diagnostic: pipe does not end with withSpan
+export const pipeWithMap = () =>
+  Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.map((x) => x + 1))
+
+
+=== [D3] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/effectFnOpportunity_defaultConfig.ts ---
+import * as Effect from "effect/Effect"
+
+// With the default effectFn config (["span"]), only functions that end their
+// pipe chain with Effect.withSpan should get the effectFnOpportunity diagnostic.
+// Functions without withSpan should NOT get a diagnostic because no fix variant
+// is config-enabled for them.
+
+// SHOULD get diagnostic: pipe ends with Effect.withSpan
+export const withSpanFunction = () =>
+  Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.withSpan("withSpanFunction"))
+
+// Should NOT get diagnostic: no pipe, no withSpan
+export const basicGen = () => Effect.succeed(42)
+
+// Should NOT get diagnostic: pipe does not end with withSpan
+export const pipeWithMap = () =>
+  Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.map((x) => x + 1))
+
+
+=== [D4] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/effectFnOpportunity_defaultConfig.ts ---
+import * as Effect from "effect/Effect"
+
+// With the default effectFn config (["span"]), only functions that end their
+// pipe chain with Effect.withSpan should get the effectFnOpportunity diagnostic.
+// Functions without withSpan should NOT get a diagnostic because no fix variant
+// is config-enabled for them.
+
+// SHOULD get diagnostic: pipe ends with Effect.withSpan
+export const withSpanFunction = () =>
+  Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  }).pipe(Effect.withSpan("withSpanFunction"))
+
+// Should NOT get diagnostic: no pipe, no withSpan
+export const basicGen = () =>
+  Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  })
+
+// Should NOT get diagnostic: pipe does not end with withSpan
+export const pipeWithMap = () => Effect.succeed(42).pipe(Effect.map((x) => x + 1))
+

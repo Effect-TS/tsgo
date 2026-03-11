@@ -1,0 +1,4 @@
+packages:
+  - "testdata/tests/effect-v3"
+  - "testdata/tests/effect-v4"
+  - "_packages/*"

@@ -1,0 +1,1314 @@
+=== Refactor Inventory ===
+
+[R1] selection: "26:14-26:49"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Toggle type annotation" (refactor.rewrite.effect.toggleTypeAnnotation)
+  Refactor 2: "Toggle lazy const" (refactor.rewrite.effect.toggleLazyConst)
+  Refactor 3: "Compose layers automatically with target output services" (refactor.rewrite.effect.layerMagicBuild)
+
+[R2] selection: "31:14-31:36"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Toggle type annotation" (refactor.rewrite.effect.toggleTypeAnnotation)
+  Refactor 2: "Toggle lazy const" (refactor.rewrite.effect.toggleLazyConst)
+  Refactor 3: "Compose layers automatically with target output services" (refactor.rewrite.effect.layerMagicBuild)
+
+[R3] selection: "38:14-38:37"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Toggle type annotation" (refactor.rewrite.effect.toggleTypeAnnotation)
+  Refactor 2: "Toggle lazy const" (refactor.rewrite.effect.toggleLazyConst)
+  Refactor 3: "Compose layers automatically with target output services" (refactor.rewrite.effect.layerMagicBuild)
+
+[R4] selection: "45:14-45:32"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Toggle type annotation" (refactor.rewrite.effect.toggleTypeAnnotation)
+  Refactor 2: "Toggle lazy const" (refactor.rewrite.effect.toggleLazyConst)
+  Refactor 3: "Compose layers automatically with target output services" (refactor.rewrite.effect.layerMagicBuild)
+
+[R5] selection: "49:14-49:27"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Toggle type annotation" (refactor.rewrite.effect.toggleTypeAnnotation)
+  Refactor 2: "Toggle lazy const" (refactor.rewrite.effect.toggleLazyConst)
+
+[R6] selection: "51:14-51:36"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Toggle type annotation" (refactor.rewrite.effect.toggleTypeAnnotation)
+  Refactor 2: "Toggle lazy const" (refactor.rewrite.effect.toggleLazyConst)
+  Refactor 3: "Compose layers automatically with target output services" (refactor.rewrite.effect.layerMagicBuild)
+
+[R7] selection: "empty (0:0-0:0)"
+  (no refactors)
+
+=== Refactor Application Results ===
+
+=== [R1] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/layerMagic_build.ts ---
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+import { Effect, Layer, ServiceMap } from "effect"
+
+class DbConnection extends ServiceMap.Service<DbConnection>()("DbConnection", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class FileSystem extends ServiceMap.Service<FileSystem>()("FileSystem", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+  static bothInAndOut = Layer.effect(FileSystem, FileSystem.asEffect())
+}
+class Cache extends ServiceMap.Service<Cache>()("Cache", {
+  make: Effect.as(FileSystem.asEffect(), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class UserRepository extends ServiceMap.Service<UserRepository>()("UserRepository", {
+  make: Effect.as(Effect.andThen(DbConnection.asEffect(), Cache.asEffect()), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+
+export const pipe(expect_Cache_provideMergeFileSystem) = [
+  FileSystem.Default,
+  Cache.Default
+] as any as Layer.Layer<FileSystem>
+
+export const prepareSomewhatComplex = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache>
+
+export const prepareSomewhatComplex2 = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache | FileSystem>
+
+export const provideRequireSame = [FileSystem.bothInAndOut, FileSystem.Default, Cache.Default] as any as Layer.Layer<
+  Cache | FileSystem
+>
+
+export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
+
+export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
+
+
+=== [R1] Refactor 1: "Toggle type annotation" ===
+
+--- file:///.src/layerMagic_build.ts ---
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+import { Effect, Layer, ServiceMap } from "effect"
+
+class DbConnection extends ServiceMap.Service<DbConnection>()("DbConnection", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class FileSystem extends ServiceMap.Service<FileSystem>()("FileSystem", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+  static bothInAndOut = Layer.effect(FileSystem, FileSystem.asEffect())
+}
+class Cache extends ServiceMap.Service<Cache>()("Cache", {
+  make: Effect.as(FileSystem.asEffect(), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class UserRepository extends ServiceMap.Service<UserRepository>()("UserRepository", {
+  make: Effect.as(Effect.andThen(DbConnection.asEffect(), Cache.asEffect()), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+
+export const expect_Cache_provideMergeFileSystem: Layer.Layer<FileSystem, never, never> = [
+  FileSystem.Default,
+  Cache.Default
+] as any as Layer.Layer<FileSystem>
+
+export const prepareSomewhatComplex = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache>
+
+export const prepareSomewhatComplex2 = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache | FileSystem>
+
+export const provideRequireSame = [FileSystem.bothInAndOut, FileSystem.Default, Cache.Default] as any as Layer.Layer<
+  Cache | FileSystem
+>
+
+export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
+
+export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
+
+
+=== [R1] Refactor 2: "Toggle lazy const" ===
+
+--- file:///.src/layerMagic_build.ts ---
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+import { Effect, Layer, ServiceMap } from "effect"
+
+class DbConnection extends ServiceMap.Service<DbConnection>()("DbConnection", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class FileSystem extends ServiceMap.Service<FileSystem>()("FileSystem", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+  static bothInAndOut = Layer.effect(FileSystem, FileSystem.asEffect())
+}
+class Cache extends ServiceMap.Service<Cache>()("Cache", {
+  make: Effect.as(FileSystem.asEffect(), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class UserRepository extends ServiceMap.Service<UserRepository>()("UserRepository", {
+  make: Effect.as(Effect.andThen(DbConnection.asEffect(), Cache.asEffect()), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+
+export const expect_Cache_provideMergeFileSystem = () => [
+  FileSystem.Default,
+  Cache.Default
+] as any as Layer.Layer<FileSystem>
+
+export const prepareSomewhatComplex = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache>
+
+export const prepareSomewhatComplex2 = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache | FileSystem>
+
+export const provideRequireSame = [FileSystem.bothInAndOut, FileSystem.Default, Cache.Default] as any as Layer.Layer<
+  Cache | FileSystem
+>
+
+export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
+
+export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
+
+
+=== [R1] Refactor 3: "Compose layers automatically with target output services" ===
+
+--- file:///.src/layerMagic_build.ts ---
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+import { Effect, Layer, ServiceMap } from "effect"
+
+class DbConnection extends ServiceMap.Service<DbConnection>()("DbConnection", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class FileSystem extends ServiceMap.Service<FileSystem>()("FileSystem", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+  static bothInAndOut = Layer.effect(FileSystem, FileSystem.asEffect())
+}
+class Cache extends ServiceMap.Service<Cache>()("Cache", {
+  make: Effect.as(FileSystem.asEffect(), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class UserRepository extends ServiceMap.Service<UserRepository>()("UserRepository", {
+  make: Effect.as(Effect.andThen(DbConnection.asEffect(), Cache.asEffect()), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+
+export const expect_Cache_provideMergeFileSystem = Cache.Default.pipe(Layer.provideMerge(FileSystem.Default));
+
+export const prepareSomewhatComplex = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache>
+
+export const prepareSomewhatComplex2 = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache | FileSystem>
+
+export const provideRequireSame = [FileSystem.bothInAndOut, FileSystem.Default, Cache.Default] as any as Layer.Layer<
+  Cache | FileSystem
+>
+
+export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
+
+export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
+
+
+=== [R2] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/layerMagic_build.ts ---
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+import { Effect, Layer, ServiceMap } from "effect"
+
+class DbConnection extends ServiceMap.Service<DbConnection>()("DbConnection", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class FileSystem extends ServiceMap.Service<FileSystem>()("FileSystem", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+  static bothInAndOut = Layer.effect(FileSystem, FileSystem.asEffect())
+}
+class Cache extends ServiceMap.Service<Cache>()("Cache", {
+  make: Effect.as(FileSystem.asEffect(), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class UserRepository extends ServiceMap.Service<UserRepository>()("UserRepository", {
+  make: Effect.as(Effect.andThen(DbConnection.asEffect(), Cache.asEffect()), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+
+export const expect_Cache_provideMergeFileSystem = [
+  FileSystem.Default,
+  Cache.Default
+] as any as Layer.Layer<FileSystem>
+
+export const pipe(prepareSomewhatComplex) = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache>
+
+export const prepareSomewhatComplex2 = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache | FileSystem>
+
+export const provideRequireSame = [FileSystem.bothInAndOut, FileSystem.Default, Cache.Default] as any as Layer.Layer<
+  Cache | FileSystem
+>
+
+export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
+
+export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
+
+
+=== [R2] Refactor 1: "Toggle type annotation" ===
+
+--- file:///.src/layerMagic_build.ts ---
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+import { Effect, Layer, ServiceMap } from "effect"
+
+class DbConnection extends ServiceMap.Service<DbConnection>()("DbConnection", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class FileSystem extends ServiceMap.Service<FileSystem>()("FileSystem", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+  static bothInAndOut = Layer.effect(FileSystem, FileSystem.asEffect())
+}
+class Cache extends ServiceMap.Service<Cache>()("Cache", {
+  make: Effect.as(FileSystem.asEffect(), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class UserRepository extends ServiceMap.Service<UserRepository>()("UserRepository", {
+  make: Effect.as(Effect.andThen(DbConnection.asEffect(), Cache.asEffect()), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+
+export const expect_Cache_provideMergeFileSystem = [
+  FileSystem.Default,
+  Cache.Default
+] as any as Layer.Layer<FileSystem>
+
+export const prepareSomewhatComplex: Layer.Layer<Cache | UserRepository, never, never> = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache>
+
+export const prepareSomewhatComplex2 = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache | FileSystem>
+
+export const provideRequireSame = [FileSystem.bothInAndOut, FileSystem.Default, Cache.Default] as any as Layer.Layer<
+  Cache | FileSystem
+>
+
+export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
+
+export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
+
+
+=== [R2] Refactor 2: "Toggle lazy const" ===
+
+--- file:///.src/layerMagic_build.ts ---
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+import { Effect, Layer, ServiceMap } from "effect"
+
+class DbConnection extends ServiceMap.Service<DbConnection>()("DbConnection", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class FileSystem extends ServiceMap.Service<FileSystem>()("FileSystem", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+  static bothInAndOut = Layer.effect(FileSystem, FileSystem.asEffect())
+}
+class Cache extends ServiceMap.Service<Cache>()("Cache", {
+  make: Effect.as(FileSystem.asEffect(), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class UserRepository extends ServiceMap.Service<UserRepository>()("UserRepository", {
+  make: Effect.as(Effect.andThen(DbConnection.asEffect(), Cache.asEffect()), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+
+export const expect_Cache_provideMergeFileSystem = [
+  FileSystem.Default,
+  Cache.Default
+] as any as Layer.Layer<FileSystem>
+
+export const prepareSomewhatComplex = () => [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache>
+
+export const prepareSomewhatComplex2 = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache | FileSystem>
+
+export const provideRequireSame = [FileSystem.bothInAndOut, FileSystem.Default, Cache.Default] as any as Layer.Layer<
+  Cache | FileSystem
+>
+
+export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
+
+export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
+
+
+=== [R2] Refactor 3: "Compose layers automatically with target output services" ===
+
+--- file:///.src/layerMagic_build.ts ---
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+import { Effect, Layer, ServiceMap } from "effect"
+
+class DbConnection extends ServiceMap.Service<DbConnection>()("DbConnection", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class FileSystem extends ServiceMap.Service<FileSystem>()("FileSystem", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+  static bothInAndOut = Layer.effect(FileSystem, FileSystem.asEffect())
+}
+class Cache extends ServiceMap.Service<Cache>()("Cache", {
+  make: Effect.as(FileSystem.asEffect(), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class UserRepository extends ServiceMap.Service<UserRepository>()("UserRepository", {
+  make: Effect.as(Effect.andThen(DbConnection.asEffect(), Cache.asEffect()), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+
+export const expect_Cache_provideMergeFileSystem = [
+  FileSystem.Default,
+  Cache.Default
+] as any as Layer.Layer<FileSystem>
+
+export const prepareSomewhatComplex = UserRepository.Default.pipe(Layer.provideMerge(Cache.Default), Layer.provide(FileSystem.Default), Layer.provide(DbConnection.Default));
+
+export const prepareSomewhatComplex2 = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache | FileSystem>
+
+export const provideRequireSame = [FileSystem.bothInAndOut, FileSystem.Default, Cache.Default] as any as Layer.Layer<
+  Cache | FileSystem
+>
+
+export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
+
+export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
+
+
+=== [R3] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/layerMagic_build.ts ---
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+import { Effect, Layer, ServiceMap } from "effect"
+
+class DbConnection extends ServiceMap.Service<DbConnection>()("DbConnection", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class FileSystem extends ServiceMap.Service<FileSystem>()("FileSystem", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+  static bothInAndOut = Layer.effect(FileSystem, FileSystem.asEffect())
+}
+class Cache extends ServiceMap.Service<Cache>()("Cache", {
+  make: Effect.as(FileSystem.asEffect(), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class UserRepository extends ServiceMap.Service<UserRepository>()("UserRepository", {
+  make: Effect.as(Effect.andThen(DbConnection.asEffect(), Cache.asEffect()), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+
+export const expect_Cache_provideMergeFileSystem = [
+  FileSystem.Default,
+  Cache.Default
+] as any as Layer.Layer<FileSystem>
+
+export const prepareSomewhatComplex = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache>
+
+export const pipe(prepareSomewhatComplex2) = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache | FileSystem>
+
+export const provideRequireSame = [FileSystem.bothInAndOut, FileSystem.Default, Cache.Default] as any as Layer.Layer<
+  Cache | FileSystem
+>
+
+export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
+
+export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
+
+
+=== [R3] Refactor 1: "Toggle type annotation" ===
+
+--- file:///.src/layerMagic_build.ts ---
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+import { Effect, Layer, ServiceMap } from "effect"
+
+class DbConnection extends ServiceMap.Service<DbConnection>()("DbConnection", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class FileSystem extends ServiceMap.Service<FileSystem>()("FileSystem", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+  static bothInAndOut = Layer.effect(FileSystem, FileSystem.asEffect())
+}
+class Cache extends ServiceMap.Service<Cache>()("Cache", {
+  make: Effect.as(FileSystem.asEffect(), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class UserRepository extends ServiceMap.Service<UserRepository>()("UserRepository", {
+  make: Effect.as(Effect.andThen(DbConnection.asEffect(), Cache.asEffect()), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+
+export const expect_Cache_provideMergeFileSystem = [
+  FileSystem.Default,
+  Cache.Default
+] as any as Layer.Layer<FileSystem>
+
+export const prepareSomewhatComplex = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache>
+
+export const prepareSomewhatComplex2: Layer.Layer<Cache | FileSystem | UserRepository, never, never> = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache | FileSystem>
+
+export const provideRequireSame = [FileSystem.bothInAndOut, FileSystem.Default, Cache.Default] as any as Layer.Layer<
+  Cache | FileSystem
+>
+
+export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
+
+export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
+
+
+=== [R3] Refactor 2: "Toggle lazy const" ===
+
+--- file:///.src/layerMagic_build.ts ---
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+import { Effect, Layer, ServiceMap } from "effect"
+
+class DbConnection extends ServiceMap.Service<DbConnection>()("DbConnection", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class FileSystem extends ServiceMap.Service<FileSystem>()("FileSystem", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+  static bothInAndOut = Layer.effect(FileSystem, FileSystem.asEffect())
+}
+class Cache extends ServiceMap.Service<Cache>()("Cache", {
+  make: Effect.as(FileSystem.asEffect(), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class UserRepository extends ServiceMap.Service<UserRepository>()("UserRepository", {
+  make: Effect.as(Effect.andThen(DbConnection.asEffect(), Cache.asEffect()), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+
+export const expect_Cache_provideMergeFileSystem = [
+  FileSystem.Default,
+  Cache.Default
+] as any as Layer.Layer<FileSystem>
+
+export const prepareSomewhatComplex = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache>
+
+export const prepareSomewhatComplex2 = () => [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache | FileSystem>
+
+export const provideRequireSame = [FileSystem.bothInAndOut, FileSystem.Default, Cache.Default] as any as Layer.Layer<
+  Cache | FileSystem
+>
+
+export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
+
+export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
+
+
+=== [R3] Refactor 3: "Compose layers automatically with target output services" ===
+
+--- file:///.src/layerMagic_build.ts ---
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+import { Effect, Layer, ServiceMap } from "effect"
+
+class DbConnection extends ServiceMap.Service<DbConnection>()("DbConnection", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class FileSystem extends ServiceMap.Service<FileSystem>()("FileSystem", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+  static bothInAndOut = Layer.effect(FileSystem, FileSystem.asEffect())
+}
+class Cache extends ServiceMap.Service<Cache>()("Cache", {
+  make: Effect.as(FileSystem.asEffect(), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class UserRepository extends ServiceMap.Service<UserRepository>()("UserRepository", {
+  make: Effect.as(Effect.andThen(DbConnection.asEffect(), Cache.asEffect()), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+
+export const expect_Cache_provideMergeFileSystem = [
+  FileSystem.Default,
+  Cache.Default
+] as any as Layer.Layer<FileSystem>
+
+export const prepareSomewhatComplex = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache>
+
+export const prepareSomewhatComplex2 = UserRepository.Default.pipe(Layer.provideMerge(Cache.Default), Layer.provideMerge(FileSystem.Default), Layer.provide(DbConnection.Default));
+
+export const provideRequireSame = [FileSystem.bothInAndOut, FileSystem.Default, Cache.Default] as any as Layer.Layer<
+  Cache | FileSystem
+>
+
+export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
+
+export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
+
+
+=== [R4] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/layerMagic_build.ts ---
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+import { Effect, Layer, ServiceMap } from "effect"
+
+class DbConnection extends ServiceMap.Service<DbConnection>()("DbConnection", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class FileSystem extends ServiceMap.Service<FileSystem>()("FileSystem", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+  static bothInAndOut = Layer.effect(FileSystem, FileSystem.asEffect())
+}
+class Cache extends ServiceMap.Service<Cache>()("Cache", {
+  make: Effect.as(FileSystem.asEffect(), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class UserRepository extends ServiceMap.Service<UserRepository>()("UserRepository", {
+  make: Effect.as(Effect.andThen(DbConnection.asEffect(), Cache.asEffect()), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+
+export const expect_Cache_provideMergeFileSystem = [
+  FileSystem.Default,
+  Cache.Default
+] as any as Layer.Layer<FileSystem>
+
+export const prepareSomewhatComplex = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache>
+
+export const prepareSomewhatComplex2 = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache | FileSystem>
+
+export const pipe(provideRequireSame) = [FileSystem.bothInAndOut, FileSystem.Default, Cache.Default] as any as Layer.Layer<
+  Cache | FileSystem
+>
+
+export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
+
+export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
+
+
+=== [R4] Refactor 1: "Toggle type annotation" ===
+
+--- file:///.src/layerMagic_build.ts ---
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+import { Effect, Layer, ServiceMap } from "effect"
+
+class DbConnection extends ServiceMap.Service<DbConnection>()("DbConnection", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class FileSystem extends ServiceMap.Service<FileSystem>()("FileSystem", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+  static bothInAndOut = Layer.effect(FileSystem, FileSystem.asEffect())
+}
+class Cache extends ServiceMap.Service<Cache>()("Cache", {
+  make: Effect.as(FileSystem.asEffect(), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class UserRepository extends ServiceMap.Service<UserRepository>()("UserRepository", {
+  make: Effect.as(Effect.andThen(DbConnection.asEffect(), Cache.asEffect()), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+
+export const expect_Cache_provideMergeFileSystem = [
+  FileSystem.Default,
+  Cache.Default
+] as any as Layer.Layer<FileSystem>
+
+export const prepareSomewhatComplex = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache>
+
+export const prepareSomewhatComplex2 = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache | FileSystem>
+
+export const provideRequireSame: Layer.Layer<Cache | FileSystem, never, never> = [FileSystem.bothInAndOut, FileSystem.Default, Cache.Default] as any as Layer.Layer<
+  Cache | FileSystem
+>
+
+export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
+
+export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
+
+
+=== [R4] Refactor 2: "Toggle lazy const" ===
+
+--- file:///.src/layerMagic_build.ts ---
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+import { Effect, Layer, ServiceMap } from "effect"
+
+class DbConnection extends ServiceMap.Service<DbConnection>()("DbConnection", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class FileSystem extends ServiceMap.Service<FileSystem>()("FileSystem", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+  static bothInAndOut = Layer.effect(FileSystem, FileSystem.asEffect())
+}
+class Cache extends ServiceMap.Service<Cache>()("Cache", {
+  make: Effect.as(FileSystem.asEffect(), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class UserRepository extends ServiceMap.Service<UserRepository>()("UserRepository", {
+  make: Effect.as(Effect.andThen(DbConnection.asEffect(), Cache.asEffect()), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+
+export const expect_Cache_provideMergeFileSystem = [
+  FileSystem.Default,
+  Cache.Default
+] as any as Layer.Layer<FileSystem>
+
+export const prepareSomewhatComplex = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache>
+
+export const prepareSomewhatComplex2 = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache | FileSystem>
+
+export const provideRequireSame = () => [FileSystem.bothInAndOut, FileSystem.Default, Cache.Default] as any as Layer.Layer<
+  Cache | FileSystem
+>
+
+export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
+
+export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
+
+
+=== [R4] Refactor 3: "Compose layers automatically with target output services" ===
+
+--- file:///.src/layerMagic_build.ts ---
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+import { Effect, Layer, ServiceMap } from "effect"
+
+class DbConnection extends ServiceMap.Service<DbConnection>()("DbConnection", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class FileSystem extends ServiceMap.Service<FileSystem>()("FileSystem", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+  static bothInAndOut = Layer.effect(FileSystem, FileSystem.asEffect())
+}
+class Cache extends ServiceMap.Service<Cache>()("Cache", {
+  make: Effect.as(FileSystem.asEffect(), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class UserRepository extends ServiceMap.Service<UserRepository>()("UserRepository", {
+  make: Effect.as(Effect.andThen(DbConnection.asEffect(), Cache.asEffect()), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+
+export const expect_Cache_provideMergeFileSystem = [
+  FileSystem.Default,
+  Cache.Default
+] as any as Layer.Layer<FileSystem>
+
+export const prepareSomewhatComplex = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache>
+
+export const prepareSomewhatComplex2 = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache | FileSystem>
+
+export const provideRequireSame = Cache.Default.pipe(Layer.provide(FileSystem.bothInAndOut), Layer.provideMerge(FileSystem.Default));
+
+export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
+
+export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
+
+
+=== [R5] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/layerMagic_build.ts ---
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+import { Effect, Layer, ServiceMap } from "effect"
+
+class DbConnection extends ServiceMap.Service<DbConnection>()("DbConnection", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class FileSystem extends ServiceMap.Service<FileSystem>()("FileSystem", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+  static bothInAndOut = Layer.effect(FileSystem, FileSystem.asEffect())
+}
+class Cache extends ServiceMap.Service<Cache>()("Cache", {
+  make: Effect.as(FileSystem.asEffect(), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class UserRepository extends ServiceMap.Service<UserRepository>()("UserRepository", {
+  make: Effect.as(Effect.andThen(DbConnection.asEffect(), Cache.asEffect()), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+
+export const expect_Cache_provideMergeFileSystem = [
+  FileSystem.Default,
+  Cache.Default
+] as any as Layer.Layer<FileSystem>
+
+export const prepareSomewhatComplex = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache>
+
+export const prepareSomewhatComplex2 = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache | FileSystem>
+
+export const provideRequireSame = [FileSystem.bothInAndOut, FileSystem.Default, Cache.Default] as any as Layer.Layer<
+  Cache | FileSystem
+>
+
+export const pipe(tooLessOutput) = [Cache.Default] as any as Layer.Layer<Cache>
+
+export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
+
+
+=== [R5] Refactor 1: "Toggle type annotation" ===
+
+--- file:///.src/layerMagic_build.ts ---
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+import { Effect, Layer, ServiceMap } from "effect"
+
+class DbConnection extends ServiceMap.Service<DbConnection>()("DbConnection", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class FileSystem extends ServiceMap.Service<FileSystem>()("FileSystem", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+  static bothInAndOut = Layer.effect(FileSystem, FileSystem.asEffect())
+}
+class Cache extends ServiceMap.Service<Cache>()("Cache", {
+  make: Effect.as(FileSystem.asEffect(), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class UserRepository extends ServiceMap.Service<UserRepository>()("UserRepository", {
+  make: Effect.as(Effect.andThen(DbConnection.asEffect(), Cache.asEffect()), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+
+export const expect_Cache_provideMergeFileSystem = [
+  FileSystem.Default,
+  Cache.Default
+] as any as Layer.Layer<FileSystem>
+
+export const prepareSomewhatComplex = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache>
+
+export const prepareSomewhatComplex2 = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache | FileSystem>
+
+export const provideRequireSame = [FileSystem.bothInAndOut, FileSystem.Default, Cache.Default] as any as Layer.Layer<
+  Cache | FileSystem
+>
+
+export const tooLessOutput: Layer.Layer<Cache, never, never> = [Cache.Default] as any as Layer.Layer<Cache>
+
+export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
+
+
+=== [R5] Refactor 2: "Toggle lazy const" ===
+
+--- file:///.src/layerMagic_build.ts ---
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+import { Effect, Layer, ServiceMap } from "effect"
+
+class DbConnection extends ServiceMap.Service<DbConnection>()("DbConnection", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class FileSystem extends ServiceMap.Service<FileSystem>()("FileSystem", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+  static bothInAndOut = Layer.effect(FileSystem, FileSystem.asEffect())
+}
+class Cache extends ServiceMap.Service<Cache>()("Cache", {
+  make: Effect.as(FileSystem.asEffect(), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class UserRepository extends ServiceMap.Service<UserRepository>()("UserRepository", {
+  make: Effect.as(Effect.andThen(DbConnection.asEffect(), Cache.asEffect()), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+
+export const expect_Cache_provideMergeFileSystem = [
+  FileSystem.Default,
+  Cache.Default
+] as any as Layer.Layer<FileSystem>
+
+export const prepareSomewhatComplex = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache>
+
+export const prepareSomewhatComplex2 = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache | FileSystem>
+
+export const provideRequireSame = [FileSystem.bothInAndOut, FileSystem.Default, Cache.Default] as any as Layer.Layer<
+  Cache | FileSystem
+>
+
+export const tooLessOutput = () => [Cache.Default] as any as Layer.Layer<Cache>
+
+export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
+
+
+=== [R6] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/layerMagic_build.ts ---
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+import { Effect, Layer, ServiceMap } from "effect"
+
+class DbConnection extends ServiceMap.Service<DbConnection>()("DbConnection", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class FileSystem extends ServiceMap.Service<FileSystem>()("FileSystem", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+  static bothInAndOut = Layer.effect(FileSystem, FileSystem.asEffect())
+}
+class Cache extends ServiceMap.Service<Cache>()("Cache", {
+  make: Effect.as(FileSystem.asEffect(), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class UserRepository extends ServiceMap.Service<UserRepository>()("UserRepository", {
+  make: Effect.as(Effect.andThen(DbConnection.asEffect(), Cache.asEffect()), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+
+export const expect_Cache_provideMergeFileSystem = [
+  FileSystem.Default,
+  Cache.Default
+] as any as Layer.Layer<FileSystem>
+
+export const prepareSomewhatComplex = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache>
+
+export const prepareSomewhatComplex2 = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache | FileSystem>
+
+export const provideRequireSame = [FileSystem.bothInAndOut, FileSystem.Default, Cache.Default] as any as Layer.Layer<
+  Cache | FileSystem
+>
+
+export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
+
+export const pipe(missingImplementations) = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
+
+
+=== [R6] Refactor 1: "Toggle type annotation" ===
+
+--- file:///.src/layerMagic_build.ts ---
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+import { Effect, Layer, ServiceMap } from "effect"
+
+class DbConnection extends ServiceMap.Service<DbConnection>()("DbConnection", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class FileSystem extends ServiceMap.Service<FileSystem>()("FileSystem", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+  static bothInAndOut = Layer.effect(FileSystem, FileSystem.asEffect())
+}
+class Cache extends ServiceMap.Service<Cache>()("Cache", {
+  make: Effect.as(FileSystem.asEffect(), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class UserRepository extends ServiceMap.Service<UserRepository>()("UserRepository", {
+  make: Effect.as(Effect.andThen(DbConnection.asEffect(), Cache.asEffect()), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+
+export const expect_Cache_provideMergeFileSystem = [
+  FileSystem.Default,
+  Cache.Default
+] as any as Layer.Layer<FileSystem>
+
+export const prepareSomewhatComplex = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache>
+
+export const prepareSomewhatComplex2 = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache | FileSystem>
+
+export const provideRequireSame = [FileSystem.bothInAndOut, FileSystem.Default, Cache.Default] as any as Layer.Layer<
+  Cache | FileSystem
+>
+
+export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
+
+export const missingImplementations: Layer.Layer<Cache, never, never> = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
+
+
+=== [R6] Refactor 2: "Toggle lazy const" ===
+
+--- file:///.src/layerMagic_build.ts ---
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+import { Effect, Layer, ServiceMap } from "effect"
+
+class DbConnection extends ServiceMap.Service<DbConnection>()("DbConnection", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class FileSystem extends ServiceMap.Service<FileSystem>()("FileSystem", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+  static bothInAndOut = Layer.effect(FileSystem, FileSystem.asEffect())
+}
+class Cache extends ServiceMap.Service<Cache>()("Cache", {
+  make: Effect.as(FileSystem.asEffect(), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class UserRepository extends ServiceMap.Service<UserRepository>()("UserRepository", {
+  make: Effect.as(Effect.andThen(DbConnection.asEffect(), Cache.asEffect()), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+
+export const expect_Cache_provideMergeFileSystem = [
+  FileSystem.Default,
+  Cache.Default
+] as any as Layer.Layer<FileSystem>
+
+export const prepareSomewhatComplex = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache>
+
+export const prepareSomewhatComplex2 = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache | FileSystem>
+
+export const provideRequireSame = [FileSystem.bothInAndOut, FileSystem.Default, Cache.Default] as any as Layer.Layer<
+  Cache | FileSystem
+>
+
+export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
+
+export const missingImplementations = () => [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
+
+
+=== [R6] Refactor 3: "Compose layers automatically with target output services" ===
+
+--- file:///.src/layerMagic_build.ts ---
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+import { Effect, Layer, ServiceMap } from "effect"
+
+class DbConnection extends ServiceMap.Service<DbConnection>()("DbConnection", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class FileSystem extends ServiceMap.Service<FileSystem>()("FileSystem", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+  static bothInAndOut = Layer.effect(FileSystem, FileSystem.asEffect())
+}
+class Cache extends ServiceMap.Service<Cache>()("Cache", {
+  make: Effect.as(FileSystem.asEffect(), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class UserRepository extends ServiceMap.Service<UserRepository>()("UserRepository", {
+  make: Effect.as(Effect.andThen(DbConnection.asEffect(), Cache.asEffect()), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+
+export const expect_Cache_provideMergeFileSystem = [
+  FileSystem.Default,
+  Cache.Default
+] as any as Layer.Layer<FileSystem>
+
+export const prepareSomewhatComplex = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache>
+
+export const prepareSomewhatComplex2 = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache | FileSystem>
+
+export const provideRequireSame = [FileSystem.bothInAndOut, FileSystem.Default, Cache.Default] as any as Layer.Layer<
+  Cache | FileSystem
+>
+
+export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
+
+export const missingImplementations = UserRepository.Default.pipe(Layer.provide(FileSystem.Default)) /* Unable to find Cache in the provided layers. */;
+

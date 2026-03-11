@@ -1,0 +1,85 @@
+==== /.src/effectFnOpportunity_plainFew.ts (6 flows) ====
+
+=== Piping Flow ===
+Location: 7:34 - 7:52
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 10:9 - 10:27
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 14:29 - 14:51
+Node: Effect.fail("Error!")
+Node Kind: KindCallExpression
+
+Subject: "Error!"
+Subject Type: "Error!"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>
+
+=== Piping Flow ===
+Location: 15:9 - 15:31
+Node: Effect.succeed(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: T & ({} | undefined)
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<T & ({} | undefined), never, never>
+
+=== Piping Flow ===
+Location: 19:29 - 19:51
+Node: Effect.fail("Error!")
+Node Kind: KindCallExpression
+
+Subject: "Error!"
+Subject Type: "Error!"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>
+
+=== Piping Flow ===
+Location: 20:9 - 20:31
+Node: Effect.succeed(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: T & ({} | undefined)
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<T & ({} | undefined), never, never>

@@ -1,0 +1,78 @@
+=== Quick Fix Inventory ===
+
+[D1] (11:3-11:18) TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+  Fix 0: "Disable catchUnfailableEffect for this line"
+  Fix 1: "Disable catchUnfailableEffect for entire file"
+
+[D2] (11:19-11:28) TS2345: Argument of type 'string' is not assignable to parameter of type 'readonly [never, ...never[]]'.
+  (no quick fixes)
+
+[D3] (17:3-17:18) TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+  Fix 0: "Disable catchUnfailableEffect for this line"
+  Fix 1: "Disable catchUnfailableEffect for entire file"
+
+[D4] (17:19-17:28) TS2345: Argument of type 'string' is not assignable to parameter of type 'readonly [never, ...never[]]'.
+  (no quick fixes)
+
+[D5] (23:3-23:19) TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+  Fix 0: "Disable catchUnfailableEffect for this line"
+  Fix 1: "Disable catchUnfailableEffect for entire file"
+
+[D6] (29:3-29:17) TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+  Fix 0: "Disable catchUnfailableEffect for this line"
+  Fix 1: "Disable catchUnfailableEffect for entire file"
+
+[D7] (29:19-29:20) TS6133: 'e' is declared but its value is never read.
+  (no quick fixes)
+
+[D8] (35:4-35:19) TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+  Fix 0: "Disable catchUnfailableEffect for this line"
+  Fix 1: "Disable catchUnfailableEffect for entire file"
+
+[D9] (35:20-35:29) TS2345: Argument of type 'string' is not assignable to parameter of type 'readonly [never, ...never[]]'.
+  (no quick fixes)
+
+[D10] (41:3-41:18) TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+  Fix 0: "Disable catchUnfailableEffect for this line"
+  Fix 1: "Disable catchUnfailableEffect for entire file"
+
+[D11] (41:19-41:28) TS2345: Argument of type 'string' is not assignable to parameter of type 'readonly [never, ...never[]]'.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable catchUnfailableEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable catchUnfailableEffect for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable catchUnfailableEffect for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable catchUnfailableEffect for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable catchUnfailableEffect for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable catchUnfailableEffect for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable catchUnfailableEffect for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable catchUnfailableEffect for entire file" ===
+skipped by default
+
+=== [D8] Fix 0: "Disable catchUnfailableEffect for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable catchUnfailableEffect for entire file" ===
+skipped by default
+
+=== [D10] Fix 0: "Disable catchUnfailableEffect for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable catchUnfailableEffect for entire file" ===
+skipped by default

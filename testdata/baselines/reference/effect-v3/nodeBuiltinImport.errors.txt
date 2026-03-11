@@ -1,0 +1,98 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/nodeBuiltinImport.ts(6,16): warning TS377057: Prefer using FileSystem from @effect/platform instead of the Node.js 'fs' module. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(7,22): warning TS377057: Prefer using FileSystem from @effect/platform instead of the Node.js 'fs' module. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(8,26): warning TS377057: Prefer using FileSystem from @effect/platform instead of the Node.js 'fs' module. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(9,39): warning TS377057: Prefer using FileSystem from @effect/platform instead of the Node.js 'fs' module. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(10,22): warning TS377057: Prefer using Path from @effect/platform instead of the Node.js 'path' module. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(11,18): warning TS377057: Prefer using Path from @effect/platform instead of the Node.js 'path' module. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(12,31): warning TS377057: Prefer using Path from @effect/platform instead of the Node.js 'path' module. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(13,31): warning TS377057: Prefer using Path from @effect/platform instead of the Node.js 'path' module. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(14,31): warning TS377057: Prefer using Path from @effect/platform instead of the Node.js 'path' module. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(15,31): warning TS377057: Prefer using Path from @effect/platform instead of the Node.js 'path' module. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(16,22): warning TS377057: Prefer using CommandExecutor from @effect/platform instead of the Node.js 'child_process' module. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(17,23): warning TS377057: Prefer using CommandExecutor from @effect/platform instead of the Node.js 'child_process' module. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(20,8): warning TS377057: Prefer using FileSystem from @effect/platform instead of the Node.js 'fs' module. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(23,21): warning TS377057: Prefer using FileSystem from @effect/platform instead of the Node.js 'fs' module. effect(nodeBuiltinImport)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "types": ["node"],
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "ignoreEffectErrorsInTscExitCode": true,
+            "skipDisabledOptimization": true
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/nodeBuiltinImport.ts (14 errors) ====
+    // @effect-v3
+    // @effect-diagnostics nodeBuiltinImport:warning
+    import * as Effect from "effect/Effect"
+    
+    // Flagged: ES module imports for covered modules
+    import fs from "fs"
+                   ~~~~
+!!! warning TS377057: Prefer using FileSystem from @effect/platform instead of the Node.js 'fs' module. effect(nodeBuiltinImport)
+    import * as fs2 from "node:fs"
+                         ~~~~~~~~~
+!!! warning TS377057: Prefer using FileSystem from @effect/platform instead of the Node.js 'fs' module. effect(nodeBuiltinImport)
+    import { readFile } from "fs/promises"
+                             ~~~~~~~~~~~~~
+!!! warning TS377057: Prefer using FileSystem from @effect/platform instead of the Node.js 'fs' module. effect(nodeBuiltinImport)
+    import { readFile as readFile2 } from "node:fs/promises"
+                                          ~~~~~~~~~~~~~~~~~~
+!!! warning TS377057: Prefer using FileSystem from @effect/platform instead of the Node.js 'fs' module. effect(nodeBuiltinImport)
+    import { join } from "path"
+                         ~~~~~~
+!!! warning TS377057: Prefer using Path from @effect/platform instead of the Node.js 'path' module. effect(nodeBuiltinImport)
+    import path from "node:path"
+                     ~~~~~~~~~~~
+!!! warning TS377057: Prefer using Path from @effect/platform instead of the Node.js 'path' module. effect(nodeBuiltinImport)
+    import { join as join2 } from "path/posix"
+                                  ~~~~~~~~~~~~
+!!! warning TS377057: Prefer using Path from @effect/platform instead of the Node.js 'path' module. effect(nodeBuiltinImport)
+    import { join as join3 } from "node:path/posix"
+                                  ~~~~~~~~~~~~~~~~~
+!!! warning TS377057: Prefer using Path from @effect/platform instead of the Node.js 'path' module. effect(nodeBuiltinImport)
+    import { join as join4 } from "path/win32"
+                                  ~~~~~~~~~~~~
+!!! warning TS377057: Prefer using Path from @effect/platform instead of the Node.js 'path' module. effect(nodeBuiltinImport)
+    import { join as join5 } from "node:path/win32"
+                                  ~~~~~~~~~~~~~~~~~
+!!! warning TS377057: Prefer using Path from @effect/platform instead of the Node.js 'path' module. effect(nodeBuiltinImport)
+    import { exec } from "child_process"
+                         ~~~~~~~~~~~~~~~
+!!! warning TS377057: Prefer using CommandExecutor from @effect/platform instead of the Node.js 'child_process' module. effect(nodeBuiltinImport)
+    import { spawn } from "node:child_process"
+                          ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377057: Prefer using CommandExecutor from @effect/platform instead of the Node.js 'child_process' module. effect(nodeBuiltinImport)
+    
+    // Flagged: side-effect import
+    import "node:fs"
+           ~~~~~~~~~
+!!! warning TS377057: Prefer using FileSystem from @effect/platform instead of the Node.js 'fs' module. effect(nodeBuiltinImport)
+    
+    // Flagged: top-level require
+    const fs3 = require("node:fs")
+                        ~~~~~~~~~
+!!! warning TS377057: Prefer using FileSystem from @effect/platform instead of the Node.js 'fs' module. effect(nodeBuiltinImport)
+    
+    // Not flagged: Effect-native imports
+    // @ts-expect-error - @effect/platform not installed in harness
+    import { FileSystem } from "@effect/platform"
+    
+    // Not flagged: unrelated Node built-ins
+    import http from "http"
+    
+    // Not flagged: third-party modules with similar names
+    // @ts-expect-error - fs-extra not installed in harness
+    import fsExtra from "fs-extra"
+    

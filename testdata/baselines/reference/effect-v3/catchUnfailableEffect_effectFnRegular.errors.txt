@@ -1,0 +1,31 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/catchUnfailableEffect_effectFnRegular.ts(7,3): suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+/.src/catchUnfailableEffect_effectFnRegular.ts(17,3): suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+
+
+==== /.src/catchUnfailableEffect_effectFnRegular.ts (2 errors) ====
+    // @effect-v3
+    import * as Effect from "effect/Effect"
+    
+    // Effect.fn with regular (non-generator) function
+    export const shouldReportEffectFnRegular = Effect.fn(
+      () => Effect.succeed(42),
+      Effect.catchAll(() => Effect.void)
+      ~~~~~~~~~~~~~~~
+!!! suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+    ) // <- should report here
+    
+    export const shouldNotReportEffectFnRegular = Effect.fn(
+      () => Effect.fail("error"),
+      Effect.catchAll(() => Effect.succeed(42))
+    )
+    
+    export const shouldReportEffectFnRegularTraced = Effect.fn("traced")(
+      () => Effect.succeed(42),
+      Effect.catchAll(() => Effect.void)
+      ~~~~~~~~~~~~~~~
+!!! suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+    ) // <- should report here
+    

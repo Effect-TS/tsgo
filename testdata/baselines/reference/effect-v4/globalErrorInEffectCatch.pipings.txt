@@ -1,0 +1,71 @@
+==== /.src/globalErrorInEffectCatch.ts (5 flows) ====
+
+=== Piping Flow ===
+Location: 4:22 - 4:50
+Node: Data.TaggedError("MyError")
+Node Kind: KindCallExpression
+
+Subject: "MyError"
+Subject Type: "MyError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: MatchRecord<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }, void, { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "MyError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 8:32 - 11:3
+Node: Effect.tryPromise({\n  try: () => fetch("http://something"),\n  catch: (e) => new MyError({ cause: e })\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  try: () => fetch("http://something"),\n  catch: (e) => new MyError({ cause: e })\n}
+Subject Type: { try: () => Promise<Response>; catch: (e: unknown) => MyError; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<Response, MyError, never>
+
+=== Piping Flow ===
+Location: 9:13 - 9:39
+Node: fetch("http://something")
+Node Kind: KindCallExpression
+
+Subject: "http://something"
+Subject Type: "http://something"
+
+Transformations (1):
+  [0] kind: call
+      callee: fetch
+      args: (constant)
+      outType: Promise<Response>
+
+=== Piping Flow ===
+Location: 13:35 - 16:3
+Node: Effect.tryPromise({\n  try: () => fetch("http://something"),\n  catch: () => new Error("Unknown!")\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  try: () => fetch("http://something"),\n  catch: () => new Error("Unknown!")\n}
+Subject Type: { try: () => Promise<Response>; catch: () => Error; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<Response, Error, never>
+
+=== Piping Flow ===
+Location: 14:13 - 14:39
+Node: fetch("http://something")
+Node Kind: KindCallExpression
+
+Subject: "http://something"
+Subject Type: "http://something"
+
+Transformations (1):
+  [0] kind: call
+      callee: fetch
+      args: (constant)
+      outType: Promise<Response>

@@ -1,0 +1,83 @@
+=== Quick Fix Inventory ===
+
+[D1] (5:14-5:26) TS377054: The error channel contains an Effect (Effect<void, never, never>). Putting Effect computations in the failure channel is not intended; keep only failure types there. effect(effectInFailure)
+  Fix 0: "Disable effectInFailure for this line"
+  Fix 1: "Disable effectInFailure for entire file"
+
+[D2] (5:29-8:3) TS377054: The error channel contains an Effect (Effect<void, never, never>). Putting Effect computations in the failure channel is not intended; keep only failure types there. effect(effectInFailure)
+  Fix 0: "Disable effectInFailure for this line"
+  Fix 1: "Disable effectInFailure for entire file"
+
+[D3] (6:14-6:29) TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+  Fix 0: "Disable preferSchemaOverJson for this line"
+  Fix 1: "Disable preferSchemaOverJson for entire file"
+
+[D4] (11:14-11:29) TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+  Fix 0: "Disable preferSchemaOverJson for this line"
+  Fix 1: "Disable preferSchemaOverJson for entire file"
+
+[D5] (15:14-15:35) TS377054: The error channel contains an Effect (Effect<any, Effect<void, never, never>, never>). Putting Effect computations in the failure channel is not intended; keep only failure types there. effect(effectInFailure)
+  Fix 0: "Disable effectInFailure for this line"
+  Fix 1: "Disable effectInFailure for entire file"
+
+[D6] (16:14-16:29) TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+  Fix 0: "Disable preferSchemaOverJson for this line"
+  Fix 1: "Disable preferSchemaOverJson for entire file"
+
+[D7] (18:5-21:7) TS377054: The error channel contains an Effect (Effect<void, never, never>). Putting Effect computations in the failure channel is not intended; keep only failure types there. effect(effectInFailure)
+  Fix 0: "Disable effectInFailure for this line"
+  Fix 1: "Disable effectInFailure for entire file"
+
+[D8] (19:18-19:39) TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+  Fix 0: "Disable preferSchemaOverJson for this line"
+  Fix 1: "Disable preferSchemaOverJson for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable effectInFailure for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectInFailure for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable effectInFailure for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable effectInFailure for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable preferSchemaOverJson for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable preferSchemaOverJson for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable preferSchemaOverJson for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable preferSchemaOverJson for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable effectInFailure for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable effectInFailure for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable preferSchemaOverJson for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable preferSchemaOverJson for entire file" ===
+skipped by default
+
+=== [D7] Fix 0: "Disable effectInFailure for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable effectInFailure for entire file" ===
+skipped by default
+
+=== [D8] Fix 0: "Disable preferSchemaOverJson for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable preferSchemaOverJson for entire file" ===
+skipped by default

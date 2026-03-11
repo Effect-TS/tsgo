@@ -1,0 +1,18 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+/.src/duplicatePackage.ts(4,17): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+
+
+==== /.src/duplicatePackage.ts (1 errors) ====
+    import { Effect } from "effect"
+    
+    // When only one version of effect is installed, no duplicatePackage warning should appear.
+    const program = Effect.gen(function* () {
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~
+      return yield* Effect.succeed(42)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    })
+    ~~
+!!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+    

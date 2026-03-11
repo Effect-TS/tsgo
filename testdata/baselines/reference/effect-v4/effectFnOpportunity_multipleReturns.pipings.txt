@@ -1,0 +1,127 @@
+==== /.src/effectFnOpportunity_multipleReturns.ts (9 flows) ====
+
+=== Piping Flow ===
+Location: 11:34 - 11:55
+Node: Effect.succeed(true)
+Node Kind: KindCallExpression
+
+Subject: true
+Subject Type: true
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<boolean, never, never>
+
+=== Piping Flow ===
+Location: 12:9 - 14:5
+Node: Effect.gen(function*() {\n    return yield* Effect.succeed(true)\n  })
+Node Kind: KindCallExpression
+
+Subject: function*() {\n    return yield* Effect.succeed(true)\n  }
+Subject Type: () => Generator<Effect<boolean, never, never>, boolean, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<boolean, never, never>
+
+=== Piping Flow ===
+Location: 13:18 - 13:39
+Node: Effect.succeed(true)
+Node Kind: KindCallExpression
+
+Subject: true
+Subject Type: true
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<boolean, never, never>
+
+=== Piping Flow ===
+Location: 18:34 - 18:55
+Node: Effect.succeed(true)
+Node Kind: KindCallExpression
+
+Subject: true
+Subject Type: true
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<boolean, never, never>
+
+=== Piping Flow ===
+Location: 19:9 - 21:5
+Node: Effect.gen(function*() {\n    return yield* Effect.succeed(true)\n  })
+Node Kind: KindCallExpression
+
+Subject: function*() {\n    return yield* Effect.succeed(true)\n  }
+Subject Type: () => Generator<Effect<boolean, never, never>, boolean, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<boolean, never, never>
+
+=== Piping Flow ===
+Location: 20:18 - 20:39
+Node: Effect.succeed(true)
+Node Kind: KindCallExpression
+
+Subject: true
+Subject Type: true
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<boolean, never, never>
+
+=== Piping Flow ===
+Location: 25:34 - 25:55
+Node: Effect.succeed(true)
+Node Kind: KindCallExpression
+
+Subject: true
+Subject Type: true
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<boolean, never, never>
+
+=== Piping Flow ===
+Location: 26:9 - 28:5
+Node: Effect.gen(function*() {\n    return yield* Effect.succeed(true)\n  })
+Node Kind: KindCallExpression
+
+Subject: function*() {\n    return yield* Effect.succeed(true)\n  }
+Subject Type: () => Generator<Effect<boolean, never, never>, boolean, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<boolean, never, never>
+
+=== Piping Flow ===
+Location: 27:18 - 27:39
+Node: Effect.succeed(true)
+Node Kind: KindCallExpression
+
+Subject: true
+Subject Type: true
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<boolean, never, never>

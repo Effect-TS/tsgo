@@ -1,0 +1,29 @@
+==== /.src/classSelfMismatch_contextTag.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 8:37 - 8:108
+Node: ServiceMap.Service<ValidContextTag, ServiceShape>()("ValidContextTag")
+Node Kind: KindCallExpression
+
+Subject: "ValidContextTag"
+Subject Type: "ValidContextTag"
+
+Transformations (1):
+  [0] kind: call
+      callee: ServiceMap.Service<ValidContextTag, ServiceShape>()
+      args: (constant)
+      outType: ServiceClass<ValidContextTag, "ValidContextTag", ServiceShape>
+
+=== Piping Flow ===
+Location: 11:39 - 11:112
+Node: ServiceMap.Service<ValidContextTag, ServiceShape>()("InvalidContextTag")
+Node Kind: KindCallExpression
+
+Subject: "InvalidContextTag"
+Subject Type: "InvalidContextTag"
+
+Transformations (1):
+  [0] kind: call
+      callee: ServiceMap.Service<ValidContextTag, ServiceShape>()
+      args: (constant)
+      outType: ServiceClass<ValidContextTag, "InvalidContextTag", ServiceShape>

@@ -1,0 +1,29 @@
+=== Quick Fix Inventory ===
+
+[D1] (9:29-11:2) TS377013: This pipe call contains no arguments. effect(unnecessaryPipe)
+  Fix 0: "Disable unnecessaryPipe for this line"
+  Fix 1: "Disable unnecessaryPipe for entire file"
+  Fix 2: "Remove the pipe call"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable unnecessaryPipe for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable unnecessaryPipe for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Remove the pipe call" ===
+
+--- file:///.src/unnecessaryPipe_namespace.ts ---
+// @effect-v3
+import * as Fn from "effect/Function"
+
+export const shouldNotReport = Fn.pipe(
+  "Hello",
+  (_) => _.length
+)
+
+export const shouldReport =
+  "hello"
+

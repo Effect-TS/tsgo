@@ -1,0 +1,43 @@
+==== /.src/tryCatchInEffectGen_finally.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 5:32 - 12:3
+Node: Effect.gen(function*() {\n  try {\n    const result = yield* Effect.succeed(42)\n    return result\n  } finally {\n    console.log("exit")\n  }\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  try {\n    const result = yield* Effect.succeed(42)\n    return result\n  } finally {\n    console.log("exit")\n  }\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, number, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 7:26 - 7:45
+Node: Effect.succeed(42)
+Node Kind: KindCallExpression
+
+Subject: 42
+Subject Type: 42
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 9:14 - 10:24
+Node: console.log("exit")
+Node Kind: KindCallExpression
+
+Subject: "exit"
+Subject Type: "exit"
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void

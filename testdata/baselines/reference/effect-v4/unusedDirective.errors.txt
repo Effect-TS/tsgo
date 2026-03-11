@@ -1,0 +1,21 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+/.src/unusedDirective.ts(3,24): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/unusedDirective.ts(4,8): warning TS377000: @effect-diagnostics directive has no effect.
+
+
+==== /.src/unusedDirective.ts (2 errors) ====
+    import { Effect } from "effect"
+    
+    export const program = Effect.gen(function*(){
+                           ~~~~~~~~~~~~~~~~~~~~~~~
+        // @effect-diagnostics-next-line floatingEffect:off
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377000: @effect-diagnostics directive has no effect.
+       yield* Effect.log("hello")
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    })
+    ~~
+!!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)

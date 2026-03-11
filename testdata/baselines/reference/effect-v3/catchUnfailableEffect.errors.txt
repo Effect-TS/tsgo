@@ -1,0 +1,54 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/catchUnfailableEffect.ts(6,3): suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+/.src/catchUnfailableEffect.ts(15,3): suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+/.src/catchUnfailableEffect.ts(37,3): suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+
+
+==== /.src/catchUnfailableEffect.ts (3 errors) ====
+    // @effect-v3
+    import * as Effect from "effect/Effect"
+    import { pipe } from "effect/Function"
+    
+    export const shouldReport = Effect.succeed(42).pipe(
+      Effect.catchAll(() => Effect.void) // <- should report here
+      ~~~~~~~~~~~~~~~
+!!! suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+    )
+    
+    export const shouldNotReport = Effect.fail("error").pipe(
+      Effect.catchAll(() => Effect.succeed(42))
+    )
+    
+    export const shouldReportPipe = pipe(
+      Effect.succeed(42),
+      Effect.catchAll(() => Effect.void) // <- should report here
+      ~~~~~~~~~~~~~~~
+!!! suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+    )
+    
+    export const shouldNotReportPipe = pipe(
+      Effect.fail("error"),
+      Effect.catchAll(() => Effect.succeed(42)) // <- should not report here
+    )
+    
+    export const shouldTriggerThirdArg = Effect.succeed(42).pipe(
+      Effect.flatMap(() => Effect.fail("error")),
+      Effect.catchAll(() => Effect.succeed(42)) // <- should not report here
+    )
+    
+    export const shouldNotTriggerThirdArgPipe = pipe(
+      Effect.succeed(42),
+      Effect.flatMap(() => Effect.fail("error")),
+      Effect.catchAll(() => Effect.succeed(42)) // <- should not report here
+    )
+    
+    export const shouldTriggerThirdArgPipe = pipe(
+      Effect.succeed(42),
+      Effect.flatMap(() => Effect.void),
+      Effect.catchAll(() => Effect.succeed(42)) // <- should report here
+      ~~~~~~~~~~~~~~~
+!!! suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+    )
+    

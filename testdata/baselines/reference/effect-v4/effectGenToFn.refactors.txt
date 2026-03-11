@@ -1,0 +1,169 @@
+=== Refactor Inventory ===
+
+[R1] selection: "5:8-5:8"
+  Refactor 0: "Convert to Effect.fn(\"program\")" (refactor.rewrite.effect.effectGenToFn)
+
+[R2] selection: "12:8-12:8"
+  Refactor 0: "Convert to Effect.fn(\"programWithPipes\")" (refactor.rewrite.effect.effectGenToFn)
+
+[R3] selection: "21:16-21:16"
+  Refactor 0: "Convert to Effect.fn(\"sampleReturns\")" (refactor.rewrite.effect.effectGenToFn)
+
+[R4] selection: "29:8-29:8"
+  Refactor 0: "Convert to Effect.fn(\"sampleReturnsConciseBody\")" (refactor.rewrite.effect.effectGenToFn)
+
+[R5] selection: "4:17-4:17"
+  (no refactors)
+
+[R6] selection: "11:21-11:21"
+  (no refactors)
+
+[R7] selection: "empty (0:0-0:0)"
+  (no refactors)
+
+=== Refactor Application Results ===
+
+=== [R1] Refactor 0: "Convert to Effect.fn(\"program\")" ===
+
+--- file:///.src/effectGenToFn.ts ---
+// refactor: 5:8, 12:8, 21:16, 29:8, 4:17, 11:21
+import * as Eff from "effect/Effect"
+
+export const program = Eff.fn("program")(function* () {
+    const a = yield* Eff.succeed(1);
+    const b = yield* Eff.succeed(2);
+    return a + b;
+});
+
+export const programWithPipes = (fa: number, fb: number) =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(fa)
+    const b = yield* Eff.succeed(fb)
+    return a + b
+  }).pipe(
+    Eff.map((a) => a + 1)
+  )
+
+export function sampleReturns<A extends number, B extends number>(arg1: A, arg2: B) {
+  return Eff.gen(function*() {
+    const a = yield* Eff.succeed(arg1)
+    const b = yield* Eff.succeed(arg2)
+    return a + b
+  })
+}
+
+export const sampleReturnsConciseBody = <A extends number, B extends number>(arg1: A, arg2: B) =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(arg1)
+    const b = yield* Eff.succeed(arg2)
+    return a + b
+  })
+
+
+=== [R2] Refactor 0: "Convert to Effect.fn(\"programWithPipes\")" ===
+
+--- file:///.src/effectGenToFn.ts ---
+// refactor: 5:8, 12:8, 21:16, 29:8, 4:17, 11:21
+import * as Eff from "effect/Effect"
+
+export const program = () =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(1)
+    const b = yield* Eff.succeed(2)
+    return a + b
+  })
+
+export const programWithPipes = Eff.fn("programWithPipes")(function* (fa: number, fb: number) {
+    const a = yield* Eff.succeed(fa);
+    const b = yield* Eff.succeed(fb);
+    return a + b;
+}, Eff.map(a => a + 1));
+
+export function sampleReturns<A extends number, B extends number>(arg1: A, arg2: B) {
+  return Eff.gen(function*() {
+    const a = yield* Eff.succeed(arg1)
+    const b = yield* Eff.succeed(arg2)
+    return a + b
+  })
+}
+
+export const sampleReturnsConciseBody = <A extends number, B extends number>(arg1: A, arg2: B) =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(arg1)
+    const b = yield* Eff.succeed(arg2)
+    return a + b
+  })
+
+
+=== [R3] Refactor 0: "Convert to Effect.fn(\"sampleReturns\")" ===
+
+--- file:///.src/effectGenToFn.ts ---
+// refactor: 5:8, 12:8, 21:16, 29:8, 4:17, 11:21
+import * as Eff from "effect/Effect"
+
+export const program = () =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(1)
+    const b = yield* Eff.succeed(2)
+    return a + b
+  })
+
+export const programWithPipes = (fa: number, fb: number) =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(fa)
+    const b = yield* Eff.succeed(fb)
+    return a + b
+  }).pipe(
+    Eff.map((a) => a + 1)
+  )
+
+export const sampleReturns = Eff.fn("sampleReturns")(function* <A extends number, B extends number>(arg1: A, arg2: B) {
+    const a = yield* Eff.succeed(arg1);
+    const b = yield* Eff.succeed(arg2);
+    return a + b;
+});
+
+export const sampleReturnsConciseBody = <A extends number, B extends number>(arg1: A, arg2: B) =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(arg1)
+    const b = yield* Eff.succeed(arg2)
+    return a + b
+  })
+
+
+=== [R4] Refactor 0: "Convert to Effect.fn(\"sampleReturnsConciseBody\")" ===
+
+--- file:///.src/effectGenToFn.ts ---
+// refactor: 5:8, 12:8, 21:16, 29:8, 4:17, 11:21
+import * as Eff from "effect/Effect"
+
+export const program = () =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(1)
+    const b = yield* Eff.succeed(2)
+    return a + b
+  })
+
+export const programWithPipes = (fa: number, fb: number) =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(fa)
+    const b = yield* Eff.succeed(fb)
+    return a + b
+  }).pipe(
+    Eff.map((a) => a + 1)
+  )
+
+export function sampleReturns<A extends number, B extends number>(arg1: A, arg2: B) {
+  return Eff.gen(function*() {
+    const a = yield* Eff.succeed(arg1)
+    const b = yield* Eff.succeed(arg2)
+    return a + b
+  })
+}
+
+export const sampleReturnsConciseBody = Eff.fn("sampleReturnsConciseBody")(function* <A extends number, B extends number>(arg1: A, arg2: B) {
+    const a = yield* Eff.succeed(arg1);
+    const b = yield* Eff.succeed(arg2);
+    return a + b;
+});
+

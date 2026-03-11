@@ -1,0 +1,26 @@
+=== Quick Fix Inventory ===
+
+[D1] (4:7-4:14) TS6133: 'program' is declared but its value is never read.
+  (no quick fixes)
+
+[D2] (4:17-6:3) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+=== Quick Fix Application Results ===
+
+=== [D2] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/duplicatePackage.ts ---
+import { Effect } from "effect"
+
+// When only one version of effect is installed, no duplicatePackage warning should appear.
+const program = Effect.succeed(42)
+

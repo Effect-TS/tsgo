@@ -1,0 +1,38 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+/.src/missingEffectError.ts(9,14): error TS2322: Type 'Effect<number, ErrorA | ErrorB, never>' is not assignable to type 'Effect<number, never, never>'.
+/.src/missingEffectError.ts(9,14): error TS377003: Missing errors ErrorA | ErrorB in the expected Effect type. effect(missingEffectError)
+/.src/missingEffectError.ts(12,14): error TS2322: Type 'Effect<number, ErrorA | ErrorB, never>' is not assignable to type 'Effect<number, ErrorA, never>'.
+/.src/missingEffectError.ts(12,14): error TS377003: Missing errors ErrorB in the expected Effect type. effect(missingEffectError)
+
+
+==== /.src/missingEffectError.ts (4 errors) ====
+    import { Effect, Data } from "effect"
+    
+    class ErrorA extends Data.TaggedError("ErrorA")<{ message: string }> {}
+    class ErrorB extends Data.TaggedError("ErrorB")<{ code: number }> {}
+    
+    declare const effectWithErrors: Effect.Effect<number, ErrorA | ErrorB>
+    
+    // Should trigger missingEffectError - assigning Effect with errors to Effect<number> (no errors)
+    export const missingAllErrors: Effect.Effect<number> = effectWithErrors
+                 ~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'Effect<number, ErrorA | ErrorB, never>' is not assignable to type 'Effect<number, never, never>'.
+                 ~~~~~~~~~~~~~~~~
+!!! error TS377003: Missing errors ErrorA | ErrorB in the expected Effect type. effect(missingEffectError)
+    
+    // Should trigger missingEffectError - missing ErrorB
+    export const missingErrorB: Effect.Effect<number, ErrorA> = effectWithErrors
+                 ~~~~~~~~~~~~~
+!!! error TS2322: Type 'Effect<number, ErrorA | ErrorB, never>' is not assignable to type 'Effect<number, ErrorA, never>'.
+                 ~~~~~~~~~~~~~
+!!! error TS377003: Missing errors ErrorB in the expected Effect type. effect(missingEffectError)
+    
+    // Should NOT trigger - errors match
+    export const errorsMatch: Effect.Effect<number, ErrorA | ErrorB> = effectWithErrors
+    
+    // Should NOT trigger - no errors in source
+    declare const effectNoErrors: Effect.Effect<number>
+    export const noSourceErrors: Effect.Effect<number> = effectNoErrors
+    

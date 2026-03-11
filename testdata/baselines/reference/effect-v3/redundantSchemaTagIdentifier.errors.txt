@@ -1,0 +1,51 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/redundantSchemaTagIdentifier.ts(16,52): suggestion TS377045: Identifier 'RedundantTaggedClass' is redundant since it equals the _tag value. effect(redundantSchemaTagIdentifier)
+/.src/redundantSchemaTagIdentifier.ts(23,52): suggestion TS377045: Identifier 'RedundantTaggedError' is redundant since it equals the _tag value. effect(redundantSchemaTagIdentifier)
+/.src/redundantSchemaTagIdentifier.ts(30,56): suggestion TS377045: Identifier 'RedundantTaggedRequest' is redundant since it equals the _tag value. effect(redundantSchemaTagIdentifier)
+
+
+==== /.src/redundantSchemaTagIdentifier.ts (3 errors) ====
+    // @effect-v3
+    import * as Schema from "effect/Schema"
+    
+    // Valid usage: identifier differs from tag (no redundancy)
+    export class DifferentIdentifier extends Schema.TaggedClass<DifferentIdentifier>("MyIdentifier")("MyTag", {
+      prop: Schema.String
+    }) {}
+    
+    // Valid usage: no identifier provided (short form)
+    export class NoIdentifier extends Schema.TaggedClass<NoIdentifier>()("NoIdentifier", {
+      prop: Schema.String
+    }) {}
+    
+    // Invalid usage: identifier equals tag (redundant)
+    export class RedundantTaggedClass
+      extends Schema.TaggedClass<RedundantTaggedClass>("RedundantTaggedClass")("RedundantTaggedClass", {
+                                                       ~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377045: Identifier 'RedundantTaggedClass' is redundant since it equals the _tag value. effect(redundantSchemaTagIdentifier)
+        prop: Schema.String
+      })
+    {}
+    
+    // Invalid usage: identifier equals tag in TaggedError (redundant)
+    export class RedundantTaggedError
+      extends Schema.TaggedError<RedundantTaggedError>("RedundantTaggedError")("RedundantTaggedError", {
+                                                       ~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377045: Identifier 'RedundantTaggedError' is redundant since it equals the _tag value. effect(redundantSchemaTagIdentifier)
+        message: Schema.String
+      })
+    {}
+    
+    // Invalid usage: identifier equals tag in TaggedRequest (redundant)
+    export class RedundantTaggedRequest
+      extends Schema.TaggedRequest<RedundantTaggedRequest>("RedundantTaggedRequest")("RedundantTaggedRequest", {
+                                                           ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377045: Identifier 'RedundantTaggedRequest' is redundant since it equals the _tag value. effect(redundantSchemaTagIdentifier)
+        payload: {},
+        success: Schema.Void,
+        failure: Schema.Never
+      })
+    {}
+    

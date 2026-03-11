@@ -1,0 +1,35 @@
+=== Quick Fix Inventory ===
+
+[D1] (14:14-14:29) TS2322: Type 'Effect<number, never, EnvA | EnvB>' is not assignable to type 'Effect<number, never, EnvA>'.
+  Type 'EnvA | EnvB' is not assignable to type 'EnvA'.
+    Type 'EnvB' is not assignable to type 'EnvA'.
+      Types of property '_tag' are incompatible.
+        Type '"EnvB"' is not assignable to type '"EnvA"'.
+  (no quick fixes)
+
+[D2] (14:14-14:29) TS377004: Missing context EnvB in the expected Effect type. effect(missingEffectContext)
+  Fix 0: "Disable missingEffectContext for this line"
+  Fix 1: "Disable missingEffectContext for entire file"
+
+[D3] (17:14-17:31) TS2322: Type 'Effect<number, never, EnvA | EnvB>' is not assignable to type 'Effect<number, never, never>'.
+  Type 'EnvA | EnvB' is not assignable to type 'never'.
+    Type 'EnvA' is not assignable to type 'never'.
+  (no quick fixes)
+
+[D4] (17:14-17:31) TS377004: Missing context EnvA | EnvB in the expected Effect type. effect(missingEffectContext)
+  Fix 0: "Disable missingEffectContext for this line"
+  Fix 1: "Disable missingEffectContext for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D2] Fix 0: "Disable missingEffectContext for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable missingEffectContext for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable missingEffectContext for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable missingEffectContext for entire file" ===
+skipped by default
