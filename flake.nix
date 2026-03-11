@@ -30,6 +30,24 @@
         "x86_64-darwin"
         "aarch64-darwin"
       ];
+      /*
+       This hash covers the exported `GOMODCACHE` produced by `go mod download all`.
+       It intentionally does not cover generated files or compiled artifacts, so one
+       hash can be shared across systems as long as the downloaded module set stays
+       the same.
+
+       Update this hash whenever the workspace's downloaded module set changes,
+       typically after changes to `go.mod`, `go.work`, or any transitive Go module
+       requirements pulled in by this repository.
+
+       Refresh workflow:
+       1. Temporarily set this value to `lib.fakeHash`.
+       2. Run `nix build .#effect-tsgo --no-write-lock-file`.
+       3. Copy the reported `got: sha256-...` value back here.
+
+       This is a good candidate for automation later, for example via a small script
+       that swaps in `lib.fakeHash`, runs the build, and updates the value.
+      */
       workspaceModuleCacheHash = "sha256-LYZFR4Km+fK1ZnSp7yUB8Tc+h+kOboZolU6uDnEASw0=";
       forAllSystems =
         f: lib.genAttrs supportedSystems (system: f system (import nixpkgs { inherit system; }));
