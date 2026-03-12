@@ -1,1 +1,1 @@
-{"specsPath":".specs","maxIterations":40,"setupCommand":"","checkCommand":"pnpm setup-repo && pnpm check && pnpm lint && pnpm test","commit":true,"push":"","audit":false,"notify":"none"}
+{"specsPath":".specs","maxIterations":40,"setupCommand":"","checkCommand":"pnpm setup-repo && pnpm check && pnpm test && pnpm lint","commit":true,"push":"","audit":false,"notify":"none"}
