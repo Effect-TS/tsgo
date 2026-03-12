@@ -35,11 +35,11 @@
         "aarch64-darwin"
       ];
       /*
-       Hash of the Go module download cache produced by `go mod download`.
-       Only the download cache is stored (zip files + metadata), not
-       extracted module sources — this avoids both non-deterministic file
-       metadata and macOS case-insensitive filesystem issues (the download
-       cache uses `!` escaping for uppercase letters in module paths).
+       Go module vendor hash for buildGoModule (proxyVendor mode).
+       Uses `go mod download` under the hood — the download cache uses `!`
+       escaping for uppercase letters in module paths, making it deterministic
+       across case-sensitive (Linux) and case-insensitive (macOS APFS)
+       filesystems.
 
        Refresh workflow:
        1. Run `./_tools/update-flake-vendor-hash.sh`.
@@ -107,93 +107,37 @@
             chmod -R a-w $out
           '';
 
-          /*
-           Go module download cache. Uses `go mod download` and copies only
-           the download cache (`$GOMODCACHE/cache/download`), not extracted
-           module sources. The download cache uses `!` escaping for uppercase
-           letters in module paths (e.g. `!microsoft` for `Microsoft`), which
-           is case-safe and produces identical output across case-sensitive
-           (Linux) and case-insensitive (macOS APFS) filesystems.
-          */
-          goModCache = pkgs.stdenvNoCC.mkDerivation {
-            name = "effect-tsgo-gomod-cache";
-            inherit src;
-            nativeBuildInputs = [ pkgsUnstable.go_1_26 ];
-            env = {
-              CGO_ENABLED = "0";
-              GOWORK = "auto";
-            };
-            outputHashMode = "recursive";
-            outputHash = vendorHash;
-            buildPhase = ''
-              runHook preBuild
-              export HOME="$TMPDIR"
-              export GOPATH="$TMPDIR/go"
-              export GOMODCACHE="$GOPATH/pkg/mod"
-              export GOCACHE="$TMPDIR/go-cache"
-              mkdir -p "$GOMODCACHE"
+          buildGoModule = pkgsUnstable.buildGoModule.override { go = pkgsUnstable.go_1_26; };
 
-              cp -R "$src"/. work
-              chmod -R u+w work
-
-              (
-                cd work
-                go mod download
-              )
-              runHook postBuild
-            '';
-            installPhase = ''
-              runHook preInstall
-              rm -rf "$GOMODCACHE/cache/download/sumdb"
-              cp -R "$GOMODCACHE/cache/download" $out
-              runHook postInstall
-            '';
-            dontFixup = true;
-          };
-
-          tsgo = pkgs.stdenvNoCC.mkDerivation {
+          tsgo = buildGoModule {
             pname = "effect-tsgo";
             version = "0.0.0";
-            inherit src;
-            nativeBuildInputs = [ pkgsUnstable.go_1_26 ];
-            dontConfigure = true;
+            inherit src vendorHash;
+            proxyVendor = true;
             env = {
               CGO_ENABLED = "0";
               GOWORK = "auto";
             };
-            doCheck = false;
-            buildPhase = ''
-              runHook preBuild
-              export HOME="$TMPDIR"
-              export GOPATH="$TMPDIR/go"
-              export GOMODCACHE="$GOPATH/pkg/mod"
-              export GOCACHE="$TMPDIR/go-cache"
-              mkdir -p "$GOMODCACHE/cache"
-              cp -R ${goModCache} "$GOMODCACHE/cache/download"
-              chmod -R u+w "$GOMODCACHE"
-              export GOPROXY="file://$GOMODCACHE/cache/download"
-              export GONOSUMCHECK="*"
-              export GONOSUMDB="*"
-
-              cp -R "$src"/. work
-              chmod -R u+w work
-
+            /* Prevent codegen (preBuild) from leaking into the goModules
+               derivation — generate.go imports internal/repo which panics
+               when compiled with -trimpath. */
+            overrideModAttrs = _: { preBuild = ""; };
+            preBuild = ''
+              # Codegen needs repo path detection; temporarily remove -trimpath
+              _saved_goflags="$GOFLAGS"
+              export GOFLAGS="''${GOFLAGS//-trimpath/}"
               (
-                cd work/typescript-go/internal/diagnostics
+                cd typescript-go/internal/diagnostics
                 go run generate.go -diagnostics ./diagnostics_generated.go -loc ./loc_generated.go -locdir ./loc
               )
-
-              (
-                cd work
-                go build -trimpath -ldflags="-s -w" -o tsgo ./typescript-go/cmd/tsgo
-              )
-              runHook postBuild
+              export GOFLAGS="$_saved_goflags"
             '';
-            installPhase = ''
-              runHook preInstall
-              install -Dm755 work/tsgo $out/bin/tsgo
-              runHook postInstall
-            '';
+            subPackages = [ "typescript-go/cmd/tsgo" ];
+            ldflags = [
+              "-s"
+              "-w"
+            ];
+            doCheck = false;
           };
 
           effectTsgo = pkgs.symlinkJoin {
