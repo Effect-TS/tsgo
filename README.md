@@ -109,6 +109,23 @@ Some of them are currently on hold due to not yet complete pipeline on the upstr
 |--------|----|----|-------|
 | `keyStrings` | ❌ | ❌ | Extend rename to include key string literals in Effect classes |
 
+## Best Practices
+
+### Relationship to Official TypeScript-Go (`tsgo`)
+
+Effect-tsgo is a **superset** of the official [TypeScript-Go](https://github.com/nicolo-ribaudo/TypeScript-Go) — it embeds a pinned version of `tsgo` with a small patch set on top and adds the Effect language service. This means `effect-tsgo` provides all standard TypeScript-Go functionality plus Effect-specific diagnostics, quick fixes, and refactors.
+
+**Use `effect-tsgo` instead of `tsgo`, not alongside it.** Running both in parallel will produce duplicate diagnostics and degrade editor performance. Configure your editor to use `effect-tsgo` as your sole TypeScript language server.
+
+### Version Pinning
+
+Each release of `effect-tsgo` is built against a specific upstream `tsgo` commit. The pinned commit is recorded in `flake.nix` (`typescript-go-src`). When upstream `tsgo` releases new features or fixes, `effect-tsgo` will adopt them in a subsequent release after validating compatibility with the Effect diagnostics layer.
+
+### When to Upgrade
+
+- Upgrade `effect-tsgo` when a new release includes upstream `tsgo` fixes you need or new Effect diagnostics you want.
+- There is no need to track upstream `tsgo` releases separately — `effect-tsgo` is the single binary to manage.
+
 ## Plugin Options
 
 These options are configured in `tsconfig.json` under `compilerOptions.plugins` for the `@effect/language-service` plugin entry.

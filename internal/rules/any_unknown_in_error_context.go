@@ -86,6 +86,13 @@ var AnyUnknownInErrorContext = rule.Rule{
 				continue
 			}
 
+			// Skip JSX tag names — calling GetTypeAtLocation on them causes
+			// the checker to resolve them as regular identifiers, producing
+			// spurious TS2304 "Cannot find name" errors.
+			if ast.IsJsxTagName(node) {
+				continue
+			}
+
 			// Get the type at this location
 			t := ctx.Checker.GetTypeAtLocation(node)
 

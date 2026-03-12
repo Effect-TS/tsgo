@@ -17,6 +17,9 @@ profile.cov
 # env file
 .env
 
+# Nix
+result
+
 # Project-specific
 node_modules/
 .pnpm-store/
