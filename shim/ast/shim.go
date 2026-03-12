@@ -71,6 +71,7 @@ const CheckFlagsDeferredType = ast.CheckFlagsDeferredType
 const CheckFlagsHasLiteralType = ast.CheckFlagsHasLiteralType
 const CheckFlagsHasNeverType = ast.CheckFlagsHasNeverType
 const CheckFlagsHasNonUniformType = ast.CheckFlagsHasNonUniformType
+const CheckFlagsIndexSymbol = ast.CheckFlagsIndexSymbol
 const CheckFlagsInstantiated = ast.CheckFlagsInstantiated
 const CheckFlagsIsDiscriminant = ast.CheckFlagsIsDiscriminant
 const CheckFlagsIsDiscriminantComputed = ast.CheckFlagsIsDiscriminantComputed
@@ -1206,6 +1207,8 @@ func IsSyntaxList(node *ast.Node) bool
 func IsSyntheticExpression(node *ast.Node) bool
 //go:linkname IsSyntheticReferenceExpression github.com/microsoft/typescript-go/internal/ast.IsSyntheticReferenceExpression
 func IsSyntheticReferenceExpression(node *ast.Node) bool
+//go:linkname IsTagName github.com/microsoft/typescript-go/internal/ast.IsTagName
+func IsTagName(node *ast.Node) bool
 //go:linkname IsTaggedTemplateExpression github.com/microsoft/typescript-go/internal/ast.IsTaggedTemplateExpression
 func IsTaggedTemplateExpression(node *ast.Node) bool
 //go:linkname IsTaggedTemplateTag github.com/microsoft/typescript-go/internal/ast.IsTaggedTemplateTag
@@ -1960,6 +1963,8 @@ func NodeHasKind(node *ast.Node, kind ast.Kind) bool
 //go:linkname NodeHasName github.com/microsoft/typescript-go/internal/ast.NodeHasName
 func NodeHasName(statement *ast.Node, id *ast.Node) bool
 type NodeId = ast.NodeId
+//go:linkname NodeIsDecorated github.com/microsoft/typescript-go/internal/ast.NodeIsDecorated
+func NodeIsDecorated(useLegacyDecorators bool, node *ast.Node, parent *ast.Node, grandparent *ast.Node) bool
 //go:linkname NodeIsMissing github.com/microsoft/typescript-go/internal/ast.NodeIsMissing
 func NodeIsMissing(node *ast.Node) bool
 //go:linkname NodeIsPresent github.com/microsoft/typescript-go/internal/ast.NodeIsPresent
