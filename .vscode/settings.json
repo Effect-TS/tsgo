@@ -2,6 +2,7 @@
   "git.ignoredRepositories": [
     ".repos/effect-language-service",
     ".repos/tsgolint",
-    "typescript-go"
+    "typescript-go",
+    "typescript-go/_submodules/TypeScript"
   ]
 }

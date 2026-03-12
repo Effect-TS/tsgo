@@ -17,6 +17,8 @@ import (
 
 // init registers the Effect diagnostics callbacks with TypeScript-Go.
 func init() {
+	// Set the version suffix so that core.Version() includes the Effect version
+	core.SetVersionSuffix("+effect-tsgo." + etscore.EffectVersion)
 	// Register the after check source file callback
 	checker.RegisterAfterCheckSourceFileCallback(afterCheckSourceFile)
 }
