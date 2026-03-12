@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/effect-ts/effect-typescript-go/etscore"
+	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/rule"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -106,7 +107,7 @@ func analyzeLayerMergeAllCall(c *checker.Checker, sf *ast.SourceFile, node *ast.
 	actuallyProvidedMap := make(map[*checker.Type]*ast.Node)
 
 	for _, arg := range args.Nodes {
-		argType := c.GetTypeAtLocation(arg)
+		argType := checkerutils.GetTypeAtLocation(c, arg)
 		if argType == nil {
 			continue
 		}

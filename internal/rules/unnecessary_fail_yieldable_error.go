@@ -2,6 +2,7 @@ package rules
 
 import (
 	"github.com/effect-ts/effect-typescript-go/etscore"
+	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/rule"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -57,7 +58,7 @@ func AnalyzeUnnecessaryFailYieldableError(c *checker.Checker, sf *ast.SourceFile
 					if typeparser.IsNodeReferenceToEffectModuleApi(c, call.Expression, "fail") {
 						if call.Arguments != nil && len(call.Arguments.Nodes) >= 1 {
 							arg := call.Arguments.Nodes[0]
-							argType := c.GetTypeAtLocation(arg)
+							argType := checkerutils.GetTypeAtLocation(c, arg)
 							if argType != nil && typeparser.IsYieldableErrorType(c, argType) {
 								matches = append(matches, UnnecessaryFailYieldableErrorMatch{
 									Location:     scanner.GetErrorRangeForNode(sf, n),

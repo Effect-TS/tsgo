@@ -2,6 +2,7 @@ package rules
 
 import (
 	"github.com/effect-ts/effect-typescript-go/etscore"
+	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/rule"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -79,7 +80,7 @@ func AnalyzeMultipleEffectProvide(c *checker.Checker, sf *ast.SourceFile) []Mult
 
 			// Check if the first argument is a Layer type
 			arg := transformation.Args[0]
-			argType := c.GetTypeAtLocation(arg)
+			argType := checkerutils.GetTypeAtLocation(c, arg)
 			if argType == nil {
 				finalizeChunk()
 				continue

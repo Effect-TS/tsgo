@@ -1,6 +1,7 @@
 package refactors
 
 import (
+	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/refactor"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -47,7 +48,7 @@ func runTogglePipeStyle(ctx *refactor.Context) []ls.CodeAction {
 		case typeparser.TransformationKindPipe:
 			// pipe(subject, f1, f2) -> subject.pipe(f1, f2)
 			// Check that the subject's type is pipeable
-			subjectType := c.GetTypeAtLocation(pipeCall.Subject)
+			subjectType := checkerutils.GetTypeAtLocation(c, pipeCall.Subject)
 			if !typeparser.IsPipeableType(c, subjectType, pipeCall.Subject) {
 				continue
 			}

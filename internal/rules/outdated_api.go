@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/effect-ts/effect-typescript-go/etscore"
+	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/rule"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -120,7 +121,7 @@ func checkOutdatedApiPropertyAccess(c *checker.Checker, sf *ast.SourceFile, n *a
 		return nil
 	}
 
-	targetType := c.GetTypeAtLocation(expr)
+	targetType := checkerutils.GetTypeAtLocation(c, expr)
 	if targetType == nil {
 		return nil
 	}

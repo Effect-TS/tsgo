@@ -1,6 +1,7 @@
 package refactors
 
 import (
+	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/refactor"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/astnav"
@@ -107,7 +108,7 @@ func runToggleTypeAnnotation(ctx *refactor.Context) []ls.CodeAction {
 	}
 	defer done()
 
-	initializerType := c.GetTypeAtLocation(initializer)
+	initializerType := checkerutils.GetTypeAtLocation(c, initializer)
 	if initializerType == nil {
 		return nil
 	}

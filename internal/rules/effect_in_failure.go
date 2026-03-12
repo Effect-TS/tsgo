@@ -3,6 +3,7 @@ package rules
 
 import (
 	"github.com/effect-ts/effect-typescript-go/etscore"
+	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/rule"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -57,20 +58,7 @@ var EffectInFailure = rule.Rule{
 				continue
 			}
 
-			// Only call GetTypeAtLocation on expression or type nodes,
-			// matching the TS reference's getTypeAtLocation filter.
-			if !ast.IsExpression(node) && !ast.IsTypeNode(node) {
-				continue
-			}
-
-			// Skip JSX tag names — calling GetTypeAtLocation on them causes
-			// the checker to resolve them as regular identifiers, producing
-			// spurious TS2304 "Cannot find name" errors.
-			if ast.IsJsxTagName(node) {
-				continue
-			}
-
-			nodeType := ctx.Checker.GetTypeAtLocation(node)
+			nodeType := checkerutils.GetTypeAtLocation(ctx.Checker, node)
 			if nodeType == nil {
 				continue
 			}
