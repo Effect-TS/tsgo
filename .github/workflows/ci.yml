@@ -11,6 +11,26 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  flake:
+    name: Flake
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Nix
+        uses: DeterminateSystems/determinate-nix-action@v3
+
+      - name: Setup Nix cache
+        uses: DeterminateSystems/flakehub-cache-action@main
+
+      - name: Build flake package
+        run: nix build .#effect-tsgo --no-write-lock-file
+
   test:
     name: Test
     runs-on: ${{ matrix.os }}
