@@ -1,0 +1,20 @@
+diff --git a/internal/core/version.go b/internal/core/version.go
+index 9e04cb52c..639d3ee9a 100644
+--- a/internal/core/version.go
++++ b/internal/core/version.go
+@@ -7,8 +7,14 @@ import (
+ // This is a var so it can be overridden by ldflags.
+ var version = "7.0.0-dev"
+ 
++var versionSuffix string
++
+ func Version() string {
+-	return version
++	return version + versionSuffix
++}
++
++func SetVersionSuffix(s string) {
++	versionSuffix = s
+ }
+ 
+ var versionMajorMinor = func() string {
