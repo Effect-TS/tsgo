@@ -70,7 +70,7 @@ run_build() {
 
 extract_new_hash() {
   perl -ne '
-    if (/To correct the hash mismatch for effect-tsgo-go-vendor, use "([^"]+)"/) {
+    if (/To correct the hash mismatch for effect-tsgo-gomod-cache, use "([^"]+)"/) {
       print "$1\n";
       exit 0;
     }

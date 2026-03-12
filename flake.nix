@@ -35,10 +35,11 @@
         "aarch64-darwin"
       ];
       /*
-       Hash of the vendor directory produced by `go work vendor`.
-       Unlike `go mod download all` (which copies $GOMODCACHE with
-       non-deterministic metadata), `go work vendor` outputs a canonical
-       directory of Go source files — deterministic across all platforms.
+       Hash of the Go module download cache produced by `go mod download`.
+       Only the download cache is stored (zip files + metadata), not
+       extracted module sources — this avoids both non-deterministic file
+       metadata and macOS case-insensitive filesystem issues (the download
+       cache uses `!` escaping for uppercase letters in module paths).
 
        Refresh workflow:
        1. Run `./_tools/update-flake-vendor-hash.sh`.
@@ -49,7 +50,7 @@
        2. Run `nix build .#effect-tsgo --no-write-lock-file`.
        3. Copy the reported `got: sha256-...` value back here.
       */
-      vendorHash = "sha256-ROqSI2i1OtRpzxx/z97sBcqNgvNbuK3KeHJw/WTvvO4=";
+      vendorHash = "sha256-15dQYcuOPxrnIXWV8UVVSqDqMyRJJmQqVEF7o3wgxz4=";
       forAllSystems =
         f: lib.genAttrs supportedSystems (system: f system (import nixpkgs { inherit system; }));
     in
@@ -106,8 +107,16 @@
             chmod -R a-w $out
           '';
 
-          goVendor = pkgs.stdenvNoCC.mkDerivation {
-            name = "effect-tsgo-go-vendor";
+          /*
+           Go module download cache. Uses `go mod download` and copies only
+           the download cache (`$GOMODCACHE/cache/download`), not extracted
+           module sources. The download cache uses `!` escaping for uppercase
+           letters in module paths (e.g. `!microsoft` for `Microsoft`), which
+           is case-safe and produces identical output across case-sensitive
+           (Linux) and case-insensitive (macOS APFS) filesystems.
+          */
+          goModCache = pkgs.stdenvNoCC.mkDerivation {
+            name = "effect-tsgo-gomod-cache";
             inherit src;
             nativeBuildInputs = [ pkgsUnstable.go_1_26 ];
             env = {
@@ -120,20 +129,23 @@
               runHook preBuild
               export HOME="$TMPDIR"
               export GOPATH="$TMPDIR/go"
+              export GOMODCACHE="$GOPATH/pkg/mod"
               export GOCACHE="$TMPDIR/go-cache"
+              mkdir -p "$GOMODCACHE"
 
               cp -R "$src"/. work
               chmod -R u+w work
 
               (
                 cd work
-                go work vendor
+                go mod download
               )
               runHook postBuild
             '';
             installPhase = ''
               runHook preInstall
-              cp -R work/vendor $out
+              rm -rf "$GOMODCACHE/cache/download/sumdb"
+              cp -R "$GOMODCACHE/cache/download" $out
               runHook postInstall
             '';
             dontFixup = true;
@@ -154,22 +166,26 @@
               runHook preBuild
               export HOME="$TMPDIR"
               export GOPATH="$TMPDIR/go"
+              export GOMODCACHE="$GOPATH/pkg/mod"
               export GOCACHE="$TMPDIR/go-cache"
+              mkdir -p "$GOMODCACHE/cache"
+              cp -R ${goModCache} "$GOMODCACHE/cache/download"
+              chmod -R u+w "$GOMODCACHE"
+              export GOPROXY="file://$GOMODCACHE/cache/download"
+              export GONOSUMCHECK="*"
+              export GONOSUMDB="*"
 
               cp -R "$src"/. work
               chmod -R u+w work
 
-              cp -R ${goVendor} work/vendor
-              chmod -R u+w work/vendor
-
               (
                 cd work/typescript-go/internal/diagnostics
-                go run -mod=vendor generate.go -diagnostics ./diagnostics_generated.go -loc ./loc_generated.go -locdir ./loc
+                go run generate.go -diagnostics ./diagnostics_generated.go -loc ./loc_generated.go -locdir ./loc
               )
 
               (
                 cd work
-                go build -mod=vendor -trimpath -ldflags="-s -w" -o tsgo ./typescript-go/cmd/tsgo
+                go build -trimpath -ldflags="-s -w" -o tsgo ./typescript-go/cmd/tsgo
               )
               runHook postBuild
             '';
