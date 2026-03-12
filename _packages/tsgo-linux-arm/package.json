@@ -3,9 +3,13 @@
   "version": "0.0.1",
   "description": "Effect Language Service for TypeScript-Go — Effect-specific diagnostics and hover features.",
   "license": "MIT",
-  "repository": "github:mattiamanzati/effect-typescript-go",
-  "bugs": "https://github.com/mattiamanzati/effect-typescript-go/issues",
-  "homepage": "https://github.com/mattiamanzati/effect-typescript-go#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Effect-TS/tsgo.git",
+    "directory": "_packages/tsgo-linux-arm"
+  },
+  "bugs": "https://github.com/Effect-TS/tsgo/issues",
+  "homepage": "https://github.com/Effect-TS/tsgo#readme",
   "publishConfig": {
     "access": "public"
   },
