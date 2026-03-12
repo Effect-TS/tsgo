@@ -12,6 +12,7 @@
   "homepage": "https://github.com/Effect-TS/tsgo#readme",
   "publishConfig": {
     "access": "public",
+    "provenance": true,
     "bin": {
       "effect-tsgo": "./bin/effect-tsgo.js"
     }

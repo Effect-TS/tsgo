@@ -129,10 +129,8 @@ jobs:
     needs: [changesets, build]
     timeout-minutes: 30
     permissions:
-      contents: write
-      pull-requests: write
+      contents: read
       id-token: write
-      packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -141,6 +139,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "24"
+          registry-url: "https://registry.npmjs.org"
 
       - name: Upgrade npm for publish support
         run: npm install -g npm@latest
@@ -201,4 +200,4 @@ jobs:
       - name: Publish to npm
         run: pnpm changeset publish
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: "true"

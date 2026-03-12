@@ -11,7 +11,8 @@
   "bugs": "https://github.com/Effect-TS/tsgo/issues",
   "homepage": "https://github.com/Effect-TS/tsgo#readme",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "preferUnplugged": true,
   "files": [
