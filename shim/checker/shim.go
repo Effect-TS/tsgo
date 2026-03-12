@@ -176,6 +176,7 @@ type extra_IndexInfo struct {
   valueType *checker.Type
   isReadonly bool
   declaration *ast.Node
+  indexSymbol *ast.Symbol
   components []*ast.Node
 }
 func IndexInfo_keyType(v *checker.IndexInfo) *checker.Type {
@@ -184,7 +185,6 @@ func IndexInfo_keyType(v *checker.IndexInfo) *checker.Type {
 func IndexInfo_valueType(v *checker.IndexInfo) *checker.Type {
   return ((*extra_IndexInfo)(unsafe.Pointer(v))).valueType
 }
-type IndexSymbolLinks = checker.IndexSymbolLinks
 type IndexType = checker.IndexType
 type IndexedAccessType = checker.IndexedAccessType
 type InferenceContext = checker.InferenceContext
