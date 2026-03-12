@@ -12,9 +12,17 @@ concurrency:
 
 jobs:
   flake:
-    name: Flake
-    runs-on: ubuntu-latest
+    name: Flake (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - ubuntu-24.04-arm
+          - macos-13
+          - macos-latest
 
     steps:
       - name: Checkout
