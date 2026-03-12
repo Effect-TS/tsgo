@@ -4,6 +4,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/effectutil"
 	"github.com/effect-ts/effect-typescript-go/internal/layergraph"
 	"github.com/effect-ts/effect-typescript-go/internal/refactor"
@@ -108,7 +109,7 @@ func tryBuildRefactor(ctx *refactor.Context, c *checker.Checker, node *ast.Node,
 	}
 
 	// Parse the outer type as a Layer type to get ROut
-	outerType := c.GetTypeAtLocation(outerAs.Type)
+	outerType := checkerutils.GetTypeAtLocation(c, outerAs.Type)
 	if outerType == nil {
 		return nil
 	}
@@ -281,7 +282,7 @@ func tryPrepareRefactor(ctx *refactor.Context, c *checker.Checker, node *ast.Nod
 	}
 
 	// Parse the expression's current type as a Layer to find "previously provided" types
-	exprType := c.GetTypeAtLocation(atLocation)
+	exprType := checkerutils.GetTypeAtLocation(c, atLocation)
 	var previouslyProvided *checker.Type
 	if exprType != nil {
 		parsedLayer := typeparser.LayerType(c, exprType, atLocation)

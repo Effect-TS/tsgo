@@ -1,6 +1,7 @@
 package refactors
 
 import (
+	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/effectutil"
 	"github.com/effect-ts/effect-typescript-go/internal/refactor"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
@@ -75,7 +76,7 @@ func findSchemaVariableDeclaration(ctx *refactor.Context, c *checker.Checker) *s
 		}
 
 		// Check the initializer's type is a Schema type
-		initType := c.GetTypeAtLocation(varDecl.Initializer)
+		initType := checkerutils.GetTypeAtLocation(c, varDecl.Initializer)
 		if initType == nil {
 			continue
 		}

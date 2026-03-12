@@ -3,6 +3,7 @@ package layergraph
 import (
 	"sort"
 
+	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/graph"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -240,7 +241,7 @@ func extractNodeInfo(c *checker.Checker, node *ast.Node, sf *ast.SourceFile, inP
 			}
 		}
 	} else {
-		t = c.GetTypeAtLocation(node)
+		t = checkerutils.GetTypeAtLocation(c, node)
 	}
 	if t == nil {
 		return info

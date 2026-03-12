@@ -2,6 +2,7 @@ package rules
 
 import (
 	"github.com/effect-ts/effect-typescript-go/etscore"
+	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/rule"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -74,7 +75,7 @@ func checkOverriddenSchemaConstructor(c *checker.Checker, sf *ast.SourceFile, no
 			continue
 		}
 		expr := elem.AsExpressionWithTypeArguments().Expression
-		t := c.GetTypeAtLocation(expr)
+		t := checkerutils.GetTypeAtLocation(c, expr)
 		if t != nil && typeparser.IsSchemaType(c, t, expr) {
 			extendsSchema = true
 			break

@@ -1,6 +1,7 @@
 package refactors
 
 import (
+	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/refactor"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -92,7 +93,7 @@ func tryConvertToDatafirst(c *checker.Checker, pipeCall *typeparser.ParsedPipeCa
 		if arg.Kind == ast.KindCallExpression {
 			argCall := arg.AsCallExpression()
 			if argCall != nil && argCall.Expression != nil {
-				exprType := c.GetTypeAtLocation(argCall.Expression)
+				exprType := checkerutils.GetTypeAtLocation(c, argCall.Expression)
 				if exprType != nil {
 					callSigs := c.GetSignaturesOfType(exprType, checker.SignatureKindCall)
 					argCount := 0

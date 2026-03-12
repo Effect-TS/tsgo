@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/effect-ts/effect-typescript-go/etscore"
+	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/rule"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -109,7 +110,7 @@ func matchLayerEffectCall(c *checker.Checker, sf *ast.SourceFile, node *ast.Node
 	}
 
 	// Get the return type of the call
-	t := c.GetTypeAtLocation(node)
+	t := checkerutils.GetTypeAtLocation(c, node)
 	if t == nil {
 		return nil
 	}

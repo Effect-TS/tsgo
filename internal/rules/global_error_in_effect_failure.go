@@ -3,6 +3,7 @@ package rules
 
 import (
 	"github.com/effect-ts/effect-typescript-go/etscore"
+	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/rule"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -45,7 +46,7 @@ var GlobalErrorInEffectFailure = rule.Rule{
 // checkGlobalErrorInEffectFailure checks a single new expression for the global-error-in-failure pattern.
 func checkGlobalErrorInEffectFailure(ctx *rule.Context, node *ast.Node) *ast.Diagnostic {
 	// Get the type of the new expression
-	newExprType := ctx.Checker.GetTypeAtLocation(node)
+	newExprType := checkerutils.GetTypeAtLocation(ctx.Checker, node)
 	if newExprType == nil {
 		return nil
 	}
@@ -57,7 +58,7 @@ func checkGlobalErrorInEffectFailure(ctx *rule.Context, node *ast.Node) *ast.Dia
 
 	// Walk up the parent chain to find an enclosing Effect type
 	ancestor := ast.FindAncestorOrQuit(node.Parent, func(current *ast.Node) ast.FindAncestorResult {
-		currentType := ctx.Checker.GetTypeAtLocation(current)
+		currentType := checkerutils.GetTypeAtLocation(ctx.Checker, current)
 		if currentType == nil {
 			return ast.FindAncestorFalse
 		}

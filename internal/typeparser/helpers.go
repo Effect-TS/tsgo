@@ -1,6 +1,7 @@
 package typeparser
 
 import (
+	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
 )
@@ -84,7 +85,7 @@ func GetPropertyOfTypeByName(c *checker.Checker, t *checker.Type, name string) *
 			if computed == nil || computed.Expression == nil {
 				continue
 			}
-			exprType := c.GetTypeAtLocation(computed.Expression)
+			exprType := checkerutils.GetTypeAtLocation(c,computed.Expression)
 			if exprType == nil {
 				continue
 			}

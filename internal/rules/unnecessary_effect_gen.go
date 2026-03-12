@@ -2,6 +2,7 @@ package rules
 
 import (
 	"github.com/effect-ts/effect-typescript-go/etscore"
+	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/rule"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -117,7 +118,7 @@ func analyzeUnnecessaryEffectGenNode(c *checker.Checker, sf *ast.SourceFile, n *
 
 	// Determine if the success type is void-like
 	successIsVoid := false
-	t := c.GetTypeAtLocation(yieldedExpr)
+	t := checkerutils.GetTypeAtLocation(c, yieldedExpr)
 	if t != nil {
 		effect := typeparser.EffectType(c, t, yieldedExpr)
 		if effect != nil && effect.A != nil {

@@ -2,6 +2,7 @@ package rules
 
 import (
 	"github.com/effect-ts/effect-typescript-go/etscore"
+	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/rule"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -93,7 +94,7 @@ func checkReturnEffectInGenScope(c *checker.Checker, sf *ast.SourceFile, n *ast.
 		return false
 	}
 
-	t := c.GetTypeAtLocation(returnStmt.Expression)
+	t := checkerutils.GetTypeAtLocation(c, returnStmt.Expression)
 	if t == nil {
 		return false
 	}

@@ -2,6 +2,7 @@ package rules
 
 import (
 	"github.com/effect-ts/effect-typescript-go/etscore"
+	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/rule"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -92,7 +93,7 @@ func checkServicePropertyTypes(ctx *rule.Context, node *ast.Node) []*ast.Diagnos
 
 		switch propertyName {
 		case "succeed":
-			valueType := ctx.Checker.GetTypeAtLocation(initializer)
+			valueType := checkerutils.GetTypeAtLocation(ctx.Checker, initializer)
 			if valueType != nil && isPrimitiveType(valueType) {
 				diags = append(diags, ctx.NewDiagnostic(
 					ctx.GetErrorRange(pa.Name()),
@@ -102,7 +103,7 @@ func checkServicePropertyTypes(ctx *rule.Context, node *ast.Node) []*ast.Diagnos
 			}
 
 		case "sync":
-			valueType := ctx.Checker.GetTypeAtLocation(initializer)
+			valueType := checkerutils.GetTypeAtLocation(ctx.Checker, initializer)
 			if valueType == nil {
 				continue
 			}
@@ -120,7 +121,7 @@ func checkServicePropertyTypes(ctx *rule.Context, node *ast.Node) []*ast.Diagnos
 			}
 
 		case "effect", "scoped":
-			valueType := ctx.Checker.GetTypeAtLocation(initializer)
+			valueType := checkerutils.GetTypeAtLocation(ctx.Checker, initializer)
 			if valueType == nil {
 				continue
 			}

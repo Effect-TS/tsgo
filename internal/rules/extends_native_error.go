@@ -2,6 +2,7 @@ package rules
 
 import (
 	"github.com/effect-ts/effect-typescript-go/etscore"
+	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/rule"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
@@ -80,7 +81,7 @@ func checkExtendsNativeError(c *checker.Checker, sf *ast.SourceFile, node *ast.N
 
 		isNativeError := resolvedSymbol == errorSymbol
 		if !isNativeError && resolvedSymbol != nil && resolvedSymbol != errorSymbol {
-			exprType := c.GetTypeAtLocation(expr)
+			exprType := checkerutils.GetTypeAtLocation(c, expr)
 			if exprType != nil {
 				constructSignatures := c.GetSignaturesOfType(exprType, checker.SignatureKindConstruct)
 				if len(constructSignatures) > 0 {

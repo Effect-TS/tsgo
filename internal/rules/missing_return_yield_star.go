@@ -3,6 +3,7 @@ package rules
 
 import (
 	"github.com/effect-ts/effect-typescript-go/etscore"
+	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/effect-ts/effect-typescript-go/internal/rule"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -91,7 +92,7 @@ func shouldReportMissingReturnYieldStar(c *checker.Checker, exprStmtNode *ast.No
 		return false
 	}
 
-	t := c.GetTypeAtLocation(expr)
+	t := checkerutils.GetTypeAtLocation(c, expr)
 	if t == nil {
 		return false
 	}

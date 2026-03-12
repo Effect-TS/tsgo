@@ -14,6 +14,7 @@ import (
 
 	"github.com/effect-ts/effect-typescript-go/etscore"
 	"github.com/effect-ts/effect-typescript-go/internal/autoimportstyle"
+	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/fixable"
 	"github.com/effect-ts/effect-typescript-go/internal/fixables"
 	"github.com/effect-ts/effect-typescript-go/internal/layergraph"
@@ -108,7 +109,7 @@ func afterQuickInfo(c *checker.Checker, sf *ast.SourceFile, node *ast.Node, symb
 		if yield.AsteriskToken != nil && yield.Expression != nil {
 			scopes := typeparser.FindEnclosingScopes(c, node)
 			if scopes.ScopeKind == typeparser.ScopeKindEffectGen || scopes.ScopeKind == typeparser.ScopeKindEffectFn {
-				t := c.GetTypeAtLocation(yield.Expression)
+				t := checkerutils.GetTypeAtLocation(c, yield.Expression)
 				if t != nil {
 					effect := typeparser.EffectYieldableType(c, t, yield.Expression)
 					if effect != nil {
@@ -123,7 +124,7 @@ func afterQuickInfo(c *checker.Checker, sf *ast.SourceFile, node *ast.Node, symb
 	}
 
 	// General symbol hover: enrich Effect-typed symbols with type parameters
-	t := c.GetTypeAtLocation(node)
+	t := checkerutils.GetTypeAtLocation(c, node)
 	if t == nil {
 		return quickInfo, documentation, nil
 	}

@@ -5,6 +5,7 @@ import (
 	"testing"
 	"testing/fstest"
 
+	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/bundled"
 	"github.com/microsoft/typescript-go/shim/checker"
@@ -76,7 +77,7 @@ func getFirstVariableDeclarationType(t *testing.T, c *checker.Checker, sf *ast.S
 		if node.Kind == ast.KindVariableDeclaration {
 			nameNode := node.AsVariableDeclaration().Name()
 			if nameNode != nil {
-				typ := c.GetTypeAtLocation(nameNode)
+				typ := checkerutils.GetTypeAtLocation(c,nameNode)
 				return typ, node
 			}
 		}

@@ -2,6 +2,7 @@
 package typeparser
 
 import (
+	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
 	"github.com/microsoft/typescript-go/shim/scanner"
@@ -90,7 +91,7 @@ func ParseEffectFnOpportunity(c *checker.Checker, node *ast.Node) *EffectFnOppor
 	}
 
 	// Step 6: Get function type, require exactly 1 call signature
-	functionType := c.GetTypeAtLocation(node)
+	functionType := checkerutils.GetTypeAtLocation(c,node)
 	if functionType == nil {
 		return nil
 	}
@@ -738,7 +739,7 @@ func tryMatchOfInference(c *checker.Checker, objectLiteral *ast.Node) string {
 	if serviceTagExpression == nil {
 		return ""
 	}
-	serviceTagType := c.GetTypeAtLocation(serviceTagExpression)
+	serviceTagType := checkerutils.GetTypeAtLocation(c,serviceTagExpression)
 	if serviceTagType == nil {
 		return ""
 	}

@@ -1,6 +1,7 @@
 package refactors
 
 import (
+	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/effectutil"
 	"github.com/effect-ts/effect-typescript-go/internal/refactor"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
@@ -52,7 +53,7 @@ func runWrapWithEffectGen(ctx *refactor.Context) []ls.CodeAction {
 			}
 		}
 
-		nodeType := c.GetTypeAtLocation(node)
+		nodeType := checkerutils.GetTypeAtLocation(c, node)
 		if nodeType == nil {
 			continue
 		}
