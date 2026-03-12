@@ -40,13 +40,14 @@
        typically after changes to `go.mod`, `go.work`, or any transitive Go module
        requirements pulled in by this repository.
 
-       Refresh workflow:
+       Preferred refresh workflow:
+       1. Run `./_tools/update-flake-module-cache-hash.sh`.
+       2. Commit the resulting `flake.nix` update if the script changed it.
+
+       Manual fallback:
        1. Temporarily set this value to `lib.fakeHash`.
        2. Run `nix build .#effect-tsgo --no-write-lock-file`.
        3. Copy the reported `got: sha256-...` value back here.
-
-       This is a good candidate for automation later, for example via a small script
-       that swaps in `lib.fakeHash`, runs the build, and updates the value.
       */
       workspaceModuleCacheHash = "sha256-LYZFR4Km+fK1ZnSp7yUB8Tc+h+kOboZolU6uDnEASw0=";
       forAllSystems =
