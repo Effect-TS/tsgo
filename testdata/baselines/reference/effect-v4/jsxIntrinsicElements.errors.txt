@@ -1,0 +1,31 @@
+=== Metadata ===
+Effect version: unknown
+
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "jsx": "react-jsx",
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "ignoreEffectErrorsInTscExitCode": true,
+            "skipDisabledOptimization": true
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/test.tsx (0 errors) ====
+    // Regression test: JSX intrinsic elements must not produce TS2304
+    // "Cannot find name" errors when the Effect plugin is enabled.
+    export const view = () => <div>Hello</div>
+    
+    export const nested = () => (
+      <div>
+        <span>World</span>
+      </div>
+    )
+    
