@@ -129,7 +129,6 @@ jobs:
     needs: [changesets, build]
     timeout-minutes: 30
     permissions:
-    permissions:
       contents: write
       pull-requests: write
       id-token: write
@@ -142,7 +141,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "24"
-          registry-url: "https://registry.npmjs.org"
 
       - name: Upgrade npm for publish support
         run: npm install -g npm@latest
