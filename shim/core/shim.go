@@ -135,6 +135,8 @@ const ScriptTargetJSON = core.ScriptTargetJSON
 const ScriptTargetLatest = core.ScriptTargetLatest
 const ScriptTargetLatestStandard = core.ScriptTargetLatestStandard
 const ScriptTargetNone = core.ScriptTargetNone
+//go:linkname SetVersionSuffix github.com/microsoft/typescript-go/internal/core.SetVersionSuffix
+func SetVersionSuffix(suffix string)
 //go:linkname ShouldRewriteModuleSpecifier github.com/microsoft/typescript-go/internal/core.ShouldRewriteModuleSpecifier
 func ShouldRewriteModuleSpecifier(specifier string, compilerOptions *core.CompilerOptions) bool
 type Stack[T any] = core.Stack[T]

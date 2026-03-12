@@ -17,6 +17,8 @@ import (
 
 // init registers the Effect diagnostics callbacks with TypeScript-Go.
 func init() {
+	// Set version suffix to invalidate tsbuildinfo when plugin diagnostics change
+	core.SetVersionSuffix(etscore.EffectPluginVersion)
 	// Register the after check source file callback
 	checker.RegisterAfterCheckSourceFileCallback(afterCheckSourceFile)
 }
