@@ -130,8 +130,6 @@ jobs:
     timeout-minutes: 30
     permissions:
       contents: read
-      id-token: write
-      packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -201,4 +199,4 @@ jobs:
       - name: Publish to npm
         run: pnpm changeset publish
         env:
-          NPM_CONFIG_PROVENANCE: "true"
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
