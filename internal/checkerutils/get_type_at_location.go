@@ -6,14 +6,12 @@ import (
 	"github.com/microsoft/typescript-go/shim/checker"
 )
 
-// GetTypeAtLocation wraps checker.GetTypeAtLocation with JSX safety guards.
-// It returns nil when the node is nil, a JSX tag name, or a JSX attribute name.
-func GetTypeAtLocation(c *checker.Checker, node *ast.Node) *checker.Type {
+// GetTypeAtLocation wraps checker.GetTypeAtLocation with node-kind and JSX safety guards.
+// It returns nil when the node is nil, not an expression/type-node/declaration,
+// a JSX tag name, or a JSX attribute name. It also recovers from checker panics
+// (e.g. nil symbol dereferences on certain declaration nodes) and returns nil.
+func GetTypeAtLocation(c *checker.Checker, node *ast.Node) (result *checker.Type) {
 	if node == nil {
-		return nil
-	}
-
-	if !ast.IsExpression(node) && !ast.IsTypeNode(node) {
 		return nil
 	}
 
@@ -29,6 +27,16 @@ func GetTypeAtLocation(c *checker.Checker, node *ast.Node) *checker.Type {
 			return nil
 		}
 	}
+
+	if !ast.IsExpression(node) && !ast.IsTypeNode(node) && !ast.IsDeclaration(node) {
+		return nil
+	}
+
+	defer func() {
+		if r := recover(); r != nil {
+			result = nil
+		}
+	}()
 
 	return c.GetTypeAtLocation(node)
 }

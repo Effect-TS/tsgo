@@ -76,9 +76,6 @@ var StrictBooleanExpressions = rule.Rule{
 				if !conditionChecks[nodeToCheck.Parent] {
 					continue
 				}
-				if !ast.IsExpression(nodeToCheck) {
-					continue
-				}
 
 				nodeType := checkerutils.GetTypeAtLocation(ctx.Checker, nodeToCheck)
 				if nodeType == nil {
