@@ -1,5 +1,11 @@
 # @effect/tsgo-win32-arm64
 
+## 0.0.3
+
+### Patch Changes
+
+- cc6d58c: Update tsgo upstream
+
 ## 0.0.2
 
 ### Patch Changes
