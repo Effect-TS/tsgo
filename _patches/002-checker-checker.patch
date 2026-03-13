@@ -5,7 +5,7 @@ index b8639053e..e86d2a682 100644
 @@ -30,6 +30,35 @@ import (
  	"github.com/zeebo/xxh3"
  )
- 
+
 +// AfterCheckSourceFileCallback is invoked after type checking each source file.
 +// It allows external packages to run additional diagnostics with full type information.
 +// Use Checker.AddDiagnostic to add diagnostics from within the callback.
@@ -36,7 +36,7 @@ index b8639053e..e86d2a682 100644
 +}
 +
  // CheckMode
- 
+
  type CheckMode uint32
 @@ -2123,6 +2152,9 @@ func (c *Checker) checkSourceFile(ctx context.Context, sourceFile *ast.SourceFil
  	c.checkNotCanceled()
@@ -48,16 +48,18 @@ index b8639053e..e86d2a682 100644
  		c.ctx = ctx
  		// Grammar checking
  		c.checkGrammarSourceFile(sourceFile)
-@@ -2146,6 +2178,12 @@ func (c *Checker) checkSourceFile(ctx context.Context, sourceFile *ast.SourceFil
+@@ -2146,7 +2178,13 @@ func (c *Checker) checkSourceFile(ctx context.Context, sourceFile *ast.SourceFil
  		}
  		c.ctx = nil
  		c.reportedUnreachableNodes.Clear()
+-		links.typeChecked = true
++
++		links.typeChecked = true
 +
 +		// EFFECT HOOK: Run Effect diagnostics after type checking
 +		if AfterCheckSourceFileCallback != nil {
 +			AfterCheckSourceFileCallback(c, sourceFile)
 +		}
-+
- 		links.typeChecked = true
  	}
  }
+
