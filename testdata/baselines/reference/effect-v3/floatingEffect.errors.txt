@@ -5,12 +5,10 @@ Effect version: 3.19.19
 /.src/floatingEffect.ts(8,1): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
 /.src/floatingEffect.ts(12,3): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
 /.src/floatingEffect.ts(15,19): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
-/.src/floatingEffect.ts(16,3): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
 /.src/floatingEffect.ts(25,14): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
-/.src/floatingEffect.ts(26,3): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
 
 
-==== /.src/floatingEffect.ts (7 errors) ====
+==== /.src/floatingEffect.ts (5 errors) ====
     // @effect-v3
     import * as Effect from "effect/Effect"
     
@@ -35,8 +33,6 @@ Effect version: 3.19.19
                       ~~~~~~~~~~~~~~~~~~~~~~~~
       yield* Effect.succeed(1).pipe(Effect.fork)
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      ~~~~~
-!!! error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
       // ^- This is fine, returns a fiber runtime
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     }))
@@ -52,8 +48,6 @@ Effect version: 3.19.19
                  ~~~~~~~~~~~~~~~~~~~~~~~~
       yield* Effect.exit(Effect.void)
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      ~~~~~
-!!! error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
       // ^- This is fine, returns an exit
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     })

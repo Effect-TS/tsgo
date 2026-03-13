@@ -222,5 +222,9 @@
     "Prefer using {0} from {1} instead of the Node.js '{2}' module. effect(nodeBuiltinImport)": {
         "category": "Warning",
         "code": 377057
+    },
+    "Effect-able {0} must be yielded or assigned to a variable. effect(floatingEffect)": {
+        "category": "Error",
+        "code": 377058
     }
 }
