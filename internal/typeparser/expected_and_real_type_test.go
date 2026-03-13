@@ -287,6 +287,57 @@ func TestExpectedAndRealTypes_NilInputs(t *testing.T) {
 	}
 }
 
+func TestEffectType_NilInputs(t *testing.T) {
+	t.Parallel()
+
+	source := `const x: number = 42`
+	c, sf, done := compileAndGetCheckerAndSourceFile(t, source)
+	defer done()
+
+	// nil type must not panic
+	if result := typeparser.EffectType(c, nil, sf.AsNode()); result != nil {
+		t.Error("expected nil for nil type")
+	}
+	// nil checker must not panic
+	if result := typeparser.EffectType(nil, nil, sf.AsNode()); result != nil {
+		t.Error("expected nil for nil checker")
+	}
+	// HasEffectTypeId with nil type must not panic
+	if typeparser.HasEffectTypeId(c, nil, sf.AsNode()) {
+		t.Error("expected false for nil type")
+	}
+}
+
+func TestLayerType_NilInputs(t *testing.T) {
+	t.Parallel()
+
+	source := `const x: number = 42`
+	c, sf, done := compileAndGetCheckerAndSourceFile(t, source)
+	defer done()
+
+	if result := typeparser.LayerType(c, nil, sf.AsNode()); result != nil {
+		t.Error("expected nil for nil type")
+	}
+	if result := typeparser.LayerType(nil, nil, sf.AsNode()); result != nil {
+		t.Error("expected nil for nil checker")
+	}
+}
+
+func TestContextTag_NilInputs(t *testing.T) {
+	t.Parallel()
+
+	source := `const x: number = 42`
+	c, sf, done := compileAndGetCheckerAndSourceFile(t, source)
+	defer done()
+
+	if result := typeparser.ContextTag(c, nil, sf.AsNode()); result != nil {
+		t.Error("expected nil for nil type")
+	}
+	if result := typeparser.ContextTag(nil, nil, sf.AsNode()); result != nil {
+		t.Error("expected nil for nil checker")
+	}
+}
+
 func TestExpectedAndRealTypes_EmptyFile(t *testing.T) {
 	t.Parallel()
 

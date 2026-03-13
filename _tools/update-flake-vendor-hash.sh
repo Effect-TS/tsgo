@@ -42,19 +42,24 @@ update_input_commit() {
   local suffix="${4:-}"
 
   local current
-  current="$(perl -ne "
-    if (/\"github:${repo_url}\\/([a-f0-9]+)${suffix}\"/) {
-      print \"\$1\\n\";
+  current="$(REPO_URL="$repo_url" SUFFIX="$suffix" perl -ne '
+    my $pat = quotemeta("github:$ENV{REPO_URL}/");
+    my $suf = quotemeta($ENV{SUFFIX});
+    if (m{${pat}([a-f0-9]+)${suf}}) {
+      print "$1\n";
       exit 0;
     }
-  " "$flake_file")"
+  ' "$flake_file")"
 
   if [[ "$current" == "$new_commit" ]]; then
     echo "$input_name: already at $new_commit"
   else
-    local escaped_suffix
-    escaped_suffix="$(printf '%s' "$suffix" | sed 's/[?]/\\?/g')"
-    perl -pi -e "s|github:${repo_url}/[a-f0-9]+${escaped_suffix}|github:${repo_url}/${new_commit}${suffix}|" "$flake_file"
+    REPO_URL="$repo_url" OLD_COMMIT="$current" NEW_COMMIT="$new_commit" SUFFIX="$suffix" \
+      perl -pi -e '
+        my $old = quotemeta("github:$ENV{REPO_URL}/$ENV{OLD_COMMIT}$ENV{SUFFIX}");
+        my $new = "github:$ENV{REPO_URL}/$ENV{NEW_COMMIT}$ENV{SUFFIX}";
+        s/$old/$new/;
+      ' "$flake_file"
     echo "$input_name: updated ${current:-unknown} -> $new_commit"
   fi
 }
