@@ -1,10 +1,11 @@
+import * as nodePath from "node:path"
 import * as Option from "effect/Option"
 import * as ts from "typescript"
-import type { Assessment, Target } from "./types.js"
+import type { Assessment, SetupCodeAction, Target } from "./types.js"
 import { LSP_PACKAGE_NAME, LSP_PLUGIN_NAME, PATCH_COMMAND } from "./consts.js"
 
 interface ComputeFileChangesResult {
-  readonly codeActions: ReadonlyArray<ts.CodeAction>
+  readonly codeActions: ReadonlyArray<SetupCodeAction>
   readonly messages: ReadonlyArray<string>
 }
 
@@ -13,7 +14,7 @@ function emptyFileChangesResult(): ComputeFileChangesResult {
 }
 
 export interface ComputeChangesResult {
-  readonly codeActions: ReadonlyArray<ts.CodeAction>
+  readonly codeActions: ReadonlyArray<SetupCodeAction>
   readonly messages: ReadonlyArray<string>
 }
 
@@ -332,7 +333,8 @@ const computePackageJsonChanges = (
       description: descriptions.join("; "),
       changes: [{
         fileName: current.path,
-        textChanges: changes
+        textChanges: changes,
+        isNewFile: false
       }]
     }],
     messages
@@ -440,7 +442,8 @@ const computeTsConfigChanges = (
       description: descriptions.join("; "),
       changes: [{
         fileName: current.sourceFile.fileName,
-        textChanges: changes
+        textChanges: changes,
+        isNewFile: false
       }]
     }],
     messages
@@ -522,7 +525,8 @@ const computeVSCodeSettingsChanges = (
       description: descriptions.join("; "),
       changes: [{
         fileName: current.path,
-        textChanges: changes
+        textChanges: changes,
+        isNewFile: false
       }]
     }],
     messages
@@ -536,7 +540,7 @@ export const computeChanges = (
   assessment: Assessment.State,
   target: Target.State
 ): ComputeChangesResult => {
-  let codeActions: ReadonlyArray<ts.CodeAction> = []
+  let codeActions: ReadonlyArray<SetupCodeAction> = []
   let messages: ReadonlyArray<string> = []
 
   // Compute package.json changes
@@ -562,8 +566,34 @@ export const computeChanges = (
         const vscodeResult = computeVSCodeSettingsChanges(assessment.vscodeSettings.value, vscodeTarget)
         codeActions = [...codeActions, ...vscodeResult.codeActions]
         messages = [...messages, ...vscodeResult.messages]
+      } else {
+        // File doesn't exist — emit a new-file code action with full content
+        const dir = nodePath.dirname(assessment.packageJson.path)
+        const vscodeSettingsPath = nodePath.join(dir, ".vscode", "settings.json")
+        const content = JSON.stringify(vscodeTarget.settings, null, 2) + "\n"
+        codeActions = [...codeActions, {
+          description: "Create .vscode/settings.json",
+          changes: [{
+            fileName: vscodeSettingsPath,
+            textChanges: [{ span: { start: 0, length: 0 }, newText: content }],
+            isNewFile: true
+          }]
+        }]
       }
     }
+  }
+
+  // Add post-apply next-step messages
+  if (Option.isSome(target.packageJson.lspVersion) && codeActions.length > 0) {
+    messages = [
+      ...messages,
+      "Run `effect-tsgo patch` to complete the installation."
+    ]
+  } else if (Option.isNone(target.packageJson.lspVersion) && Option.isSome(assessment.packageJson.lspVersion)) {
+    messages = [
+      ...messages,
+      "Run `effect-tsgo unpatch` to restore the original TypeScript-Go binary."
+    ]
   }
 
   // Add editor-specific setup instructions as messages
@@ -581,23 +611,6 @@ export const computeChanges = (
       ]
     }
 
-    if (target.editors.includes("nvim")) {
-      messages = [
-        ...messages,
-        "Neovim (with nvim-vtsls):",
-        "  Refer to: https://github.com/yioneko/vtsls?tab=readme-ov-file#typescript-plugin-not-activated",
-        ""
-      ]
-    }
-
-    if (target.editors.includes("emacs")) {
-      messages = [
-        ...messages,
-        "Emacs:",
-        "  Step-by-step instructions: https://gosha.net/2025/effect-ls-emacs/",
-        ""
-      ]
-    }
   }
 
   return { codeActions, messages }

@@ -64,31 +64,6 @@ export const gatherTargetState = (
       } satisfies Target.State
     }
 
-    // Prepare Script Configuration
-    const currentPrepareState = Option.match(assessment.packageJson.prepareScript, {
-      onNone: () => false,
-      onSome: (script) => script.hasPatch
-    })
-
-    const prepareScript = yield* Prompt.select({
-      message: "Enable language service diagnostics during TypeScript compilation?",
-      choices: [
-        {
-          title: "Yes",
-          description:
-            "Enable patching - Recommended for LLMs, diagnostics will appear in tsc output and CI/CD, will patch the tsc binary and typescript library locally.",
-          value: true,
-          selected: currentPrepareState
-        },
-        {
-          title: "No",
-          description: "Skip patching - diagnostics only available in your editor",
-          value: false,
-          selected: !currentPrepareState
-        }
-      ]
-    })
-
     // Editor Selection - Using multi-select
     // Pre-select VSCode if .vscode/settings.json exists
     const hasVscodeSettings = Option.isSome(assessment.vscodeSettings)
@@ -124,7 +99,7 @@ export const gatherTargetState = (
     return {
       packageJson: {
         lspVersion: Option.some({ dependencyType: lspDependencyType, version: context.defaultLspVersion }),
-        prepareScript
+        prepareScript: true
       },
       tsconfig: {
         plugin: true

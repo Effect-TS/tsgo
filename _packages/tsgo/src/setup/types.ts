@@ -1,6 +1,15 @@
 import type * as Option from "effect/Option"
 import type * as ts from "typescript"
 
+export interface SetupFileTextChanges extends ts.FileTextChanges {
+  readonly isNewFile: boolean
+}
+
+export interface SetupCodeAction {
+  readonly description: string
+  readonly changes: ReadonlyArray<SetupFileTextChanges>
+}
+
 export interface FileInput {
   readonly fileName: string
   readonly text: string

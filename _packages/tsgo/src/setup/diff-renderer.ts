@@ -3,7 +3,7 @@ import * as Effect from "effect/Effect"
 import * as Option from "effect/Option"
 import type * as ts from "typescript"
 import type { ComputeChangesResult } from "./changes.js"
-import type { Assessment } from "./types.js"
+import type { Assessment, SetupCodeAction } from "./types.js"
 
 // ANSI color helpers using raw escape codes
 const green = (str: string): string => `\x1b[32m${str}\x1b[0m`
@@ -247,22 +247,36 @@ export const renderCodeActions = (
     // Render each code action with diffs
     for (const codeAction of result.codeActions) {
       for (const fileChange of codeAction.changes) {
-        // Find the source file that matches the file name
-        const sourceFile = sourceFiles.find((sf) => sf.fileName === fileChange.fileName)
-
         // Render description and file name
         yield* Console.log("")
         yield* Console.log(bold(codeAction.description))
         yield* Console.log(cyan(fileChange.fileName))
         yield* Console.log("")
 
-        if (sourceFile) {
-          const diffLines = renderFileChanges(sourceFile, fileChange.textChanges)
-          for (const line of diffLines) {
-            yield* Console.log(line)
+        if (fileChange.isNewFile) {
+          // Render new file content as all-green + lines
+          const newFileContent = fileChange.textChanges[0].newText
+          const newFileLines = newFileContent.split("\n")
+          for (let i = 0; i < newFileLines.length; i++) {
+            const line = newFileLines[i]
+            // Skip trailing empty line from split
+            if (i === newFileLines.length - 1 && line.length === 0 && newFileLines.length > 1) {
+              continue
+            }
+            yield* Console.log(renderLine(i + 1, "+", line, green))
           }
         } else {
-          yield* Console.log("  (file will be modified)")
+          // Find the source file that matches the file name
+          const sourceFile = sourceFiles.find((sf) => sf.fileName === fileChange.fileName)
+
+          if (sourceFile) {
+            const diffLines = renderFileChanges(sourceFile, fileChange.textChanges)
+            for (const line of diffLines) {
+              yield* Console.log(line)
+            }
+          } else {
+            yield* Console.log("  (file will be modified)")
+          }
         }
       }
     }

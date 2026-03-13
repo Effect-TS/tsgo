@@ -1,7 +1,6 @@
 import * as Console from "effect/Console"
 import * as Effect from "effect/Effect"
 import * as FileSystem from "effect/FileSystem"
-import * as Option from "effect/Option"
 import * as Path from "effect/Path"
 import * as Command from "effect/unstable/cli/Command"
 import * as Prompt from "effect/unstable/cli/Prompt"
@@ -52,13 +51,7 @@ export const setupCommand = Command.make("setup").pipe(
       // ========================================================================
       yield* renderCodeActions(result, assessmentState)
 
-      // Check if VSCode was selected but settings file doesn't exist
-      const needsNewVSCodeSettings = targetState.editors.includes("vscode") &&
-        Option.isSome(targetState.packageJson.lspVersion) &&
-        Option.isSome(targetState.vscodeSettings) &&
-        Option.isNone(assessmentState.vscodeSettings)
-
-      if (result.codeActions.length === 0 && !needsNewVSCodeSettings) {
+      if (result.codeActions.length === 0) {
         return
       }
 
@@ -100,22 +93,12 @@ export const setupCommand = Command.make("setup").pipe(
             }
 
             yield* fs.writeFileString(fileName, newContent)
+          } else if (fileChange.isNewFile) {
+            const dirName = path.dirname(fileName)
+            yield* fs.makeDirectory(dirName, { recursive: true }).pipe(Effect.ignore)
+            yield* fs.writeFileString(fileName, fileChange.textChanges[0].newText)
           }
         }
-      }
-
-      // Handle creating new .vscode/settings.json if needed
-      if (needsNewVSCodeSettings) {
-        const vscodeDir = path.join(currentDir, ".vscode")
-        const vscodeSettingsPath = path.join(vscodeDir, "settings.json")
-
-        yield* fs.makeDirectory(vscodeDir, { recursive: true }).pipe(Effect.ignore)
-
-        const settings = Option.isSome(targetState.vscodeSettings)
-          ? targetState.vscodeSettings.value.settings
-          : {}
-        const content = JSON.stringify(settings, null, 2) + "\n"
-        yield* fs.writeFileString(vscodeSettingsPath, content)
       }
 
       yield* Console.log("Changes applied successfully!")
