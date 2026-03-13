@@ -421,6 +421,9 @@ func generateLayerGraphBaseline(
 }
 
 // runEffectBaseline compares actual output with reference baseline.
+// It only writes to the filesystem when the actual content differs from the
+// reference (or when the reference doesn't exist yet), so that Go's test
+// cache remains valid for passing tests.
 func runEffectBaseline(t *testing.T, fileName string, actual string, subfolder string) {
 	localDir := BaselineLocalPath(subfolder)
 	referenceDir := BaselineReferencePath(subfolder)
@@ -428,21 +431,17 @@ func runEffectBaseline(t *testing.T, fileName string, actual string, subfolder s
 	localPath := filepath.Join(localDir, fileName)
 	referencePath := filepath.Join(referenceDir, fileName)
 
-	// Ensure local directory exists
-	if err := os.MkdirAll(localDir, 0755); err != nil {
-		t.Fatalf("Failed to create local baseline directory: %v", err)
-	}
-
-	// Write to local
-	if err := os.WriteFile(localPath, []byte(actual), 0644); err != nil {
-		t.Fatalf("Failed to write local baseline: %v", err)
-	}
-
-	// Read reference if it exists
+	// Read reference first to decide whether any writes are needed.
 	referenceContent, err := os.ReadFile(referencePath)
 	if err != nil {
 		if os.IsNotExist(err) {
-			// New baseline - create reference
+			// New baseline — write both local and reference files.
+			if err := os.MkdirAll(localDir, 0755); err != nil {
+				t.Fatalf("Failed to create local baseline directory: %v", err)
+			}
+			if err := os.WriteFile(localPath, []byte(actual), 0644); err != nil {
+				t.Fatalf("Failed to write local baseline: %v", err)
+			}
 			if err := os.MkdirAll(referenceDir, 0755); err != nil {
 				t.Fatalf("Failed to create reference baseline directory: %v", err)
 			}
@@ -455,15 +454,25 @@ func runEffectBaseline(t *testing.T, fileName string, actual string, subfolder s
 		t.Fatalf("Failed to read reference baseline: %v", err)
 	}
 
-	// Compare
+	// Compare actual against reference.
 	expected := string(referenceContent)
-	if actual != expected {
-		diff := baseline.DiffText(referencePath, localPath, expected, actual)
-		// Indent the diff for readability
-		diffLines := strings.Split(diff, "\n")
-		for i := range diffLines {
-			diffLines[i] = "  " + diffLines[i]
-		}
-		t.Errorf("Baseline mismatch:\n%s", strings.Join(diffLines, "\n"))
+	if actual == expected {
+		return
 	}
+
+	// Mismatch — write local baseline so developers can inspect the diff.
+	if err := os.MkdirAll(localDir, 0755); err != nil {
+		t.Fatalf("Failed to create local baseline directory: %v", err)
+	}
+	if err := os.WriteFile(localPath, []byte(actual), 0644); err != nil {
+		t.Fatalf("Failed to write local baseline: %v", err)
+	}
+
+	diff := baseline.DiffText(referencePath, localPath, expected, actual)
+	// Indent the diff for readability
+	diffLines := strings.Split(diff, "\n")
+	for i := range diffLines {
+		diffLines[i] = "  " + diffLines[i]
+	}
+	t.Errorf("Baseline mismatch:\n%s", strings.Join(diffLines, "\n"))
 }
