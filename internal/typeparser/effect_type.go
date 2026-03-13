@@ -127,6 +127,48 @@ func StrictIsEffectType(c *checker.Checker, t *checker.Type, atLocation *ast.Nod
 	return StrictEffectType(c, t, atLocation) != nil
 }
 
+// EffectSubtype detects types that have the Effect variance struct AND a "_tag" or "get"
+// marker property (e.g., Exit, Option, Either, Pool). Returns nil if not an Effect subtype.
+func EffectSubtype(c *checker.Checker, t *checker.Type, atLocation *ast.Node) *Effect {
+	if c == nil || t == nil {
+		return nil
+	}
+	// Check for "_tag" or "get" property first (quick rejection)
+	tagSymbol := c.GetPropertyOfType(t, "_tag")
+	getSymbol := c.GetPropertyOfType(t, "get")
+	if tagSymbol == nil && getSymbol == nil {
+		return nil
+	}
+	// Must also be an Effect type
+	return EffectType(c, t, atLocation)
+}
+
+// IsEffectSubtype returns true if the type is an Effect subtype (has variance struct + "_tag" or "get").
+func IsEffectSubtype(c *checker.Checker, t *checker.Type, atLocation *ast.Node) bool {
+	return EffectSubtype(c, t, atLocation) != nil
+}
+
+// FiberType detects types that have the Effect variance struct AND both "await" and "poll"
+// properties. Returns nil if the type is not a Fiber.
+func FiberType(c *checker.Checker, t *checker.Type, atLocation *ast.Node) *Effect {
+	if c == nil || t == nil {
+		return nil
+	}
+	// Check for both "await" and "poll" properties (quick rejection)
+	awaitSymbol := c.GetPropertyOfType(t, "await")
+	pollSymbol := c.GetPropertyOfType(t, "poll")
+	if awaitSymbol == nil || pollSymbol == nil {
+		return nil
+	}
+	// Must also be an Effect type
+	return EffectType(c, t, atLocation)
+}
+
+// IsFiberType returns true if the type is a Fiber type (has variance struct + "await" and "poll").
+func IsFiberType(c *checker.Checker, t *checker.Type, atLocation *ast.Node) bool {
+	return FiberType(c, t, atLocation) != nil
+}
+
 // HasEffectTypeId returns true if the type has the Effect type identifier.
 // For v4, this is a quick check for the "~effect/Effect" property.
 // For v3/unknown, this defers to IsEffectType since there is no single property shortcut.

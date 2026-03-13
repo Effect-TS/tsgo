@@ -1,0 +1,17 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/floatingEffect_stream.ts(6,3): error TS377058: Effect-able Stream<number, never, never> must be yielded or assigned to a variable. effect(floatingEffect)
+
+
+==== /.src/floatingEffect_stream.ts (1 errors) ====
+    // @effect-v3
+    import * as Effect from "effect/Effect"
+    import * as Stream from "effect/Stream"
+    
+    export const shouldWarn = Effect.gen(function*() {
+      Stream.succeed(42)
+      ~~~~~~~~~~~~~~~~~~
+!!! error TS377058: Effect-able Stream<number, never, never> must be yielded or assigned to a variable. effect(floatingEffect)
+    })
+    

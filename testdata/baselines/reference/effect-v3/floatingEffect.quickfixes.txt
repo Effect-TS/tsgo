@@ -23,21 +23,13 @@
   Fix 1: "Disable unnecessaryEffectGen for entire file"
   Fix 2: "Remove the Effect.gen, and keep the body"
 
-[D7] (16:3-16:8) TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
-  Fix 0: "Disable floatingEffect for this line"
-  Fix 1: "Disable floatingEffect for entire file"
-
-[D8] (25:7-25:11) TS6133: 'main' is declared but its value is never read.
+[D7] (25:7-25:11) TS6133: 'main' is declared but its value is never read.
   (no quick fixes)
 
-[D9] (25:14-28:3) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+[D8] (25:14-28:3) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
   Fix 0: "Disable unnecessaryEffectGen for this line"
   Fix 1: "Disable unnecessaryEffectGen for entire file"
   Fix 2: "Remove the Effect.gen, and keep the body"
-
-[D10] (26:3-26:8) TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
-  Fix 0: "Disable floatingEffect for this line"
-  Fix 1: "Disable floatingEffect for entire file"
 
 === Quick Fix Application Results ===
 
@@ -95,19 +87,13 @@ const main = Effect.gen(function*() {
 })
 
 
-=== [D7] Fix 0: "Disable floatingEffect for this line" ===
+=== [D8] Fix 0: "Disable unnecessaryEffectGen for this line" ===
 skipped by default
 
-=== [D7] Fix 1: "Disable floatingEffect for entire file" ===
+=== [D8] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
 skipped by default
 
-=== [D9] Fix 0: "Disable unnecessaryEffectGen for this line" ===
-skipped by default
-
-=== [D9] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
-skipped by default
-
-=== [D9] Fix 2: "Remove the Effect.gen, and keep the body" ===
+=== [D8] Fix 2: "Remove the Effect.gen, and keep the body" ===
 
 --- file:///.src/floatingEffect.ts ---
 // @effect-v3
@@ -136,9 +122,3 @@ export function constructorFunction(this: { boot: Effect.Effect<void> }) {
 
 const main = Effect.asVoid(Effect.exit(Effect.void))
 
-
-=== [D10] Fix 0: "Disable floatingEffect for this line" ===
-skipped by default
-
-=== [D10] Fix 1: "Disable floatingEffect for entire file" ===
-skipped by default

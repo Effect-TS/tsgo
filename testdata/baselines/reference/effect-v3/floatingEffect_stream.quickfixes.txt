@@ -1,0 +1,13 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:3-6:21) TS377058: Effect-able Stream<number, never, never> must be yielded or assigned to a variable. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default

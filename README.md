@@ -25,7 +25,7 @@ Some of them are currently on hold due to not yet complete pipeline on the upstr
 | `effectMapVoid` | 💡 | ✅ | ✅ | `effectMapVoid_fix` | |
 | `effectSucceedWithVoid` | 💡 | ✅ | ✅ | `effectSucceedWithVoid_fix` | |
 | `extendsNativeError` | — | ✅ | ✅ | | Off by default |
-| `floatingEffect` | ❌ | ✅ | ✅ | | |
+| `floatingEffect` | ❌ | ✅ | ✅ | | Excludes Effect subtypes (Exit, Pool, etc.) and Fiber types; uses "Effect-able {Type}" message for non-strict Effect types |
 | `genericEffectServices` | ⚠️ | ✅ | ➖ | | V3-only — not applicable to V4 |
 | `globalErrorInEffectCatch` | ⚠️ | ✅ | ✅ | | |
 | `globalErrorInEffectFailure` | ⚠️ | ✅ | ✅ | | |

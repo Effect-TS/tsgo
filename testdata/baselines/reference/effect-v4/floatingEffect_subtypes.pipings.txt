@@ -1,0 +1,75 @@
+==== /.src/floatingEffect_subtypes.ts (5 flows) ====
+
+=== Piping Flow ===
+Location: 5:28 - 14:3
+Node: Effect.gen(function*() {\n  // Fiber type: forkDetach returns a Fiber, should NOT trigger\n  yield* Effect.succeed(1).pipe(Effect.forkDetach)\n\n  // Exit type: Effect.exit returns an Exit, should NOT trigger\n  yield* Effect.exit(Effect.void)\n\n  // Pool: subtype of Effect, should NOT trigger\n  yield* Pool.make({ acquire: Effect.succeed(1), size: 10 })\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // Fiber type: forkDetach returns a Fiber, should NOT trigger\n  yield* Effect.succeed(1).pipe(Effect.forkDetach)\n\n  // Exit type: Effect.exit returns an Exit, should NOT trigger\n  yield* Effect.exit(Effect.void)\n\n  // Pool: subtype of Effect, should NOT trigger\n  yield* Pool.make({ acquire: Effect.succeed(1), size: 10 })\n}
+Subject Type: () => Generator<Effect<Fiber<number, never>, never, never> | Effect<Pool<number, never>, never, Scope> | Effect<Exit<void, never>, never, never>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, never, Scope>
+
+=== Piping Flow ===
+Location: 7:9 - 7:51
+Node: Effect.succeed(1).pipe(Effect.forkDetach)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.forkDetach
+      args: (constant)
+      outType: Effect<Fiber<number, never>, never, never>
+
+=== Piping Flow ===
+Location: 10:9 - 10:34
+Node: Effect.exit(Effect.void)
+Node Kind: KindCallExpression
+
+Subject: Effect.void
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.exit
+      args: (constant)
+      outType: Effect<Exit<void, never>, never, never>
+
+=== Piping Flow ===
+Location: 13:9 - 13:61
+Node: Pool.make({ acquire: Effect.succeed(1), size: 10 })
+Node Kind: KindCallExpression
+
+Subject: { acquire: Effect.succeed(1), size: 10 }
+Subject Type: { acquire: Effect<number, never, never>; size: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Pool.make
+      args: (constant)
+      outType: Effect<Pool<number, never>, never, Scope>
+
+=== Piping Flow ===
+Location: 13:30 - 13:48
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
