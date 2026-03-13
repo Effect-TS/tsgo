@@ -885,6 +885,8 @@ func IsJSDocText(node *ast.Node) bool
 func IsJSDocThisTag(node *ast.Node) bool
 //go:linkname IsJSDocThrowsTag github.com/microsoft/typescript-go/internal/ast.IsJSDocThrowsTag
 func IsJSDocThrowsTag(node *ast.Node) bool
+//go:linkname IsJSDocTypeAssertion github.com/microsoft/typescript-go/internal/ast.IsJSDocTypeAssertion
+func IsJSDocTypeAssertion(node *ast.Node) bool
 //go:linkname IsJSDocTypeExpression github.com/microsoft/typescript-go/internal/ast.IsJSDocTypeExpression
 func IsJSDocTypeExpression(node *ast.Node) bool
 //go:linkname IsJSDocTypeLiteral github.com/microsoft/typescript-go/internal/ast.IsJSDocTypeLiteral
