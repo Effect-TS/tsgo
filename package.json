@@ -6,8 +6,11 @@
         "check:cli": "pnpm --filter @effect/tsgo check",
         "changeset": "changeset",
         "lint": "CGO_ENABLED=0 golangci-lint run ./...",
-        "test": "CGO_ENABLED=0 go test ./...",
-        "build": "CGO_ENABLED=0 go build -o tsgo ./typescript-go/cmd/tsgo",
+        "test": "pnpm run test:go && pnpm run test:cli",
+        "test:go": "CGO_ENABLED=0 go test ./...",
+        "test:cli": "pnpm --filter @effect/tsgo test",
+        "build": "pnpm run build:go && pnpm run build:cli",
+        "build:go": "CGO_ENABLED=0 go build -o tsgo ./typescript-go/cmd/tsgo",
         "build:cli": "pnpm --filter @effect/tsgo build",
         "release:prepare": "bash _tools/release-prepare.sh"
     },

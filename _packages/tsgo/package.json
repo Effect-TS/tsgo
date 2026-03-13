@@ -19,7 +19,8 @@
   },
   "scripts": {
     "build": "tsdown --config tsdown.config.mjs",
-    "check": "tsc --noEmit -p tsconfig.json"
+    "check": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run"
   },
   "bin": {
     "effect-tsgo": "./src/cli.ts"
@@ -42,6 +43,7 @@
     "@types/node": "^24.3.0",
     "tsdown": "^0.20.1",
     "typescript": "^5.9.2",
-    "effect": "4.0.0-beta.11"
+    "effect": "4.0.0-beta.11",
+    "vitest": "^3.2.1"
   }
 }
