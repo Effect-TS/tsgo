@@ -13,6 +13,9 @@ import (
 // The detection strategy is chosen based on the detected Effect version:
 // v4 uses direct symbol lookup, v3/unknown uses property iteration.
 func EffectType(c *checker.Checker, t *checker.Type, atLocation *ast.Node) *Effect {
+	if c == nil || t == nil {
+		return nil
+	}
 	version := DetectEffectVersion(c)
 	if version == EffectMajorV4 {
 		// Direct property access using the known Effect v4 type ID
@@ -128,6 +131,9 @@ func StrictIsEffectType(c *checker.Checker, t *checker.Type, atLocation *ast.Nod
 // For v4, this is a quick check for the "~effect/Effect" property.
 // For v3/unknown, this defers to IsEffectType since there is no single property shortcut.
 func HasEffectTypeId(c *checker.Checker, t *checker.Type, atLocation *ast.Node) bool {
+	if c == nil || t == nil {
+		return false
+	}
 	version := DetectEffectVersion(c)
 	if version == EffectMajorV4 {
 		return GetPropertyOfTypeByName(c, t, EffectTypeId) != nil

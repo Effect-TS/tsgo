@@ -36,19 +36,15 @@
       ];
       /*
        Go module vendor hash for buildGoModule (proxyVendor mode).
-       Uses `go mod download` under the hood — the download cache uses `!`
-       escaping for uppercase letters in module paths, making it deterministic
-       across case-sensitive (Linux) and case-insensitive (macOS APFS)
-       filesystems.
+       proxyVendor is required because this project has deps with
+       mixed-case module paths (Microsoft/go-winio vs microsoft/
+       typescript-go) — `go work vendor` produces different directory
+       layouts on case-sensitive (Linux) vs case-insensitive (macOS)
+       filesystems. The download cache uses `!` escaping for uppercase
+       letters, making it deterministic across both.
 
-       Refresh workflow:
-       1. Run `./_tools/update-flake-vendor-hash.sh`.
-       2. Commit the resulting `flake.nix` update if the script changed it.
-
-       Manual fallback:
-       1. Temporarily set this value to `lib.fakeHash`.
-       2. Run `nix build .#effect-tsgo --no-write-lock-file`.
-       3. Copy the reported `got: sha256-...` value back here.
+       Refresh: ./_tools/update-flake-vendor-hash.sh
+       Manual:  set to lib.fakeHash, build, copy the reported hash.
       */
       vendorHash = "sha256-15dQYcuOPxrnIXWV8UVVSqDqMyRJJmQqVEF7o3wgxz4=";
       forAllSystems =

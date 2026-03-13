@@ -33,6 +33,9 @@ func parseLayerVarianceStruct(c *checker.Checker, t *checker.Type, atLocation *a
 // The detection strategy is chosen based on the detected Effect version:
 // v4 uses direct symbol lookup, v3/unknown uses property iteration.
 func LayerType(c *checker.Checker, t *checker.Type, atLocation *ast.Node) *Layer {
+	if c == nil || t == nil {
+		return nil
+	}
 	version := DetectEffectVersion(c)
 	if version == EffectMajorV4 {
 		// Direct property access using the known Layer v4 type ID

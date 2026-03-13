@@ -47,6 +47,9 @@ func IsServiceType(c *checker.Checker, t *checker.Type, atLocation *ast.Node) bo
 // For V3/unknown, this iterates properties looking for a service variance struct,
 // following the same pattern as LayerType() and EffectType().
 func ContextTag(c *checker.Checker, t *checker.Type, atLocation *ast.Node) *Service {
+	if c == nil || t == nil {
+		return nil
+	}
 	version := DetectEffectVersion(c)
 	if version == EffectMajorV4 {
 		return ServiceType(c, t, atLocation)
