@@ -12,7 +12,7 @@ on:
 permissions: {}
 
 concurrency:
-  group: release-${{ github.workflow }}-${{ github.ref }}
+  group: release-${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -127,6 +127,11 @@ jobs:
           path: _packages/${{ matrix.artifact_name }}
 
   publish:
+    if: >-
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.merged == true &&
+      github.event.pull_request.head.ref == 'changeset-release/main' &&
+      github.repository_owner == 'Effect-TS'
     name: Publish Packages
     runs-on: ubuntu-latest
     needs: [build]
