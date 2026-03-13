@@ -1,5 +1,11 @@
 # @effect/tsgo-darwin-arm64
 
+## 0.0.5
+
+### Patch Changes
+
+- f6da8fb: Fix issue caused by nested expression with type arguments in tsgo
+
 ## 0.0.4
 
 ### Patch Changes
