@@ -48,8 +48,6 @@ jobs:
         id: changesets
         uses: changesets/action@v1
         with:
-          commit: Release
-          title: Release
           version: pnpm changeset version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -204,7 +202,7 @@ jobs:
       - name: Build CLI bundle
         run: pnpm build:cli
 
-      - name: Publish to npm
+      - name: Publish packages
         run: pnpm changeset publish
         env:
           NPM_CONFIG_PROVENANCE: "true"
