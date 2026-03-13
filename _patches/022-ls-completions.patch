@@ -1,0 +1,44 @@
+diff --git a/internal/ls/completions.go b/internal/ls/completions.go
+index 9c27bfe08..786212233 100644
+--- a/internal/ls/completions.go
++++ b/internal/ls/completions.go
+@@ -31,13 +31,25 @@ import (
+ 
+ var ErrNeedsAutoImports = errors.New("completion list needs auto imports")
+ 
++// AfterCompletionCallback is invoked after completions are computed
++// to allow external packages to add or modify completion items.
++var AfterCompletionCallback func(sf *ast.SourceFile, position int, items []*lsproto.CompletionItem, program *compiler.Program, langService *LanguageService) []*lsproto.CompletionItem
++
++// RegisterAfterCompletionCallback registers a callback to be called after
++// completions are computed. The callback can add or modify completion items
++// before they are returned.
++// Note: Only one callback can be registered. Subsequent calls will replace the previous callback.
++func RegisterAfterCompletionCallback(cb func(sf *ast.SourceFile, position int, items []*lsproto.CompletionItem, program *compiler.Program, langService *LanguageService) []*lsproto.CompletionItem) {
++	AfterCompletionCallback = cb
++}
++
+ func (l *LanguageService) ProvideCompletion(
+ 	ctx context.Context,
+ 	documentURI lsproto.DocumentUri,
+ 	LSPPosition lsproto.Position,
+ 	context *lsproto.CompletionContext,
+ ) (lsproto.CompletionResponse, error) {
+-	_, file := l.getProgramAndFile(documentURI)
++	program, file := l.getProgramAndFile(documentURI)
+ 	var triggerCharacter *string
+ 	if context != nil {
+ 		triggerCharacter = context.TriggerCharacter
+@@ -54,6 +66,12 @@ func (l *LanguageService) ProvideCompletion(
+ 		return lsproto.CompletionItemsOrListOrNull{}, err
+ 	}
+ 	completionList = ensureItemData(file.FileName(), position, completionList)
++
++	// EFFECT HOOK: Allow Effect to add or modify completion items
++	if AfterCompletionCallback != nil && completionList != nil {
++		completionList.Items = AfterCompletionCallback(file, position, completionList.Items, program, l)
++	}
++
+ 	return lsproto.CompletionItemsOrListOrNull{List: completionList}, nil
+ }
+ 
