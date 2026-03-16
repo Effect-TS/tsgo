@@ -95,6 +95,21 @@ Some of them are currently on hold due to not yet complete pipeline on the upstr
 | `wrapWithPipe` | ❌ | ✅ | Wrap selection in pipe(...) |
 | `writeTagClassAccessors` | ✅ | ➖ | Generate static accessors for Effect.Service/Tag classes |
 
+### Completion Status
+
+| Completion | V3 | V4 | Notes |
+|------------|----|----|-------|
+| `contextSelfInClasses` | ✅ | ➖ | Context.Tag self-type snippets in extends clauses (V3-only) |
+| `effectDataClasses` | ✅ | ✅ | Data class constructor snippets in extends clauses |
+| `effectSchemaSelfInClasses` | ✅ | ✅ | Schema/Model class constructor snippets in extends clauses |
+| `effectSelfInClasses` | ✅ | ➖ | Effect.Service/Effect.Tag self-type snippets in extends clauses (V3-only) |
+| `genFunctionStar` | ✅ | ✅ | `gen(function*(){})` snippet when dot-accessing `.gen` on objects with callable gen property |
+| `effectCodegensComment` | ✅ | ✅ | `@effect-codegens` directive snippet in comments with codegen name choices |
+| `effectDiagnosticsComment` | ✅ | ✅ | `@effect-diagnostics` / `@effect-diagnostics-next-line` directive snippets in comments |
+| `rpcMakeClasses` | ✅ | ➖ | `Rpc.make` constructor snippet in extends clauses (V3-only) |
+| `schemaBrand` | ✅ | ➖ | `brand("varName")` snippet when dot-accessing Schema in variable declarations (V3-only) |
+| `serviceMapSelfInClasses` | ✅ | ✅ | Service map self-type snippets in extends clauses |
+
 ### Codegen Status
 
 | Codegen | V3 | V4 | Notes |

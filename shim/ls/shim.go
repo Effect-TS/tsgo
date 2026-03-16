@@ -16,6 +16,7 @@ import "github.com/microsoft/typescript-go/internal/sourcemap"
 import "github.com/microsoft/typescript-go/internal/tspath"
 import "unsafe"
 
+var AfterCompletionCallback = ls.AfterCompletionCallback
 var AfterInlayHintsCallback = ls.AfterInlayHintsCallback
 var AfterQuickInfoCallback = ls.AfterQuickInfoCallback
 type CallHierarchyDeclaration = ls.CallHierarchyDeclaration
@@ -102,6 +103,8 @@ func ProvideWorkspaceSymbols(ctx context.Context, programs []*compiler.Program, 
 func RangeContainsRange(r1 core.TextRange, r2 core.TextRange) bool
 type RefactorProvider = ls.RefactorProvider
 type ReferenceEntry = ls.ReferenceEntry
+//go:linkname RegisterAfterCompletionCallback github.com/microsoft/typescript-go/internal/ls.RegisterAfterCompletionCallback
+func RegisterAfterCompletionCallback(cb func(sf *ast.SourceFile, position int, items []*lsproto.CompletionItem, program *compiler.Program, langService *ls.LanguageService) []*lsproto.CompletionItem)
 //go:linkname RegisterAfterInlayHintsCallback github.com/microsoft/typescript-go/internal/ls.RegisterAfterInlayHintsCallback
 func RegisterAfterInlayHintsCallback(cb func(c *checker.Checker, sf *ast.SourceFile, span core.TextRange, preferences *lsutil.InlayHintsPreferences, hints []*lsproto.InlayHint, converters *lsconv.Converters) []*lsproto.InlayHint)
 //go:linkname RegisterAfterQuickInfoCallback github.com/microsoft/typescript-go/internal/ls.RegisterAfterQuickInfoCallback

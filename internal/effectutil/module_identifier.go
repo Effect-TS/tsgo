@@ -119,3 +119,65 @@ func FindModuleIdentifier(sf *ast.SourceFile, exportName string) string {
 	}
 	return exportName
 }
+
+// FindModuleIdentifierForPackage resolves the imported identifier name for the given
+// module from an arbitrary package. It checks:
+//   - Namespace imports: import * as X from "<packageName>/<moduleName>"
+//   - Named imports: import { <moduleName> as X } from "<packageName>"
+//
+// Falls back to moduleName if not found.
+func FindModuleIdentifierForPackage(sf *ast.SourceFile, packageName string, moduleName string) string {
+	if sf == nil {
+		return moduleName
+	}
+	for _, stmt := range sf.Statements.Nodes {
+		if stmt.Kind != ast.KindImportDeclaration {
+			continue
+		}
+		importDecl := stmt.AsImportDeclaration()
+		if importDecl.ModuleSpecifier == nil {
+			continue
+		}
+		specifier := scanner.GetTextOfNode(importDecl.ModuleSpecifier)
+		if len(specifier) >= 2 && (specifier[0] == '"' || specifier[0] == '\'') {
+			specifier = specifier[1 : len(specifier)-1]
+		}
+
+		if importDecl.ImportClause == nil {
+			continue
+		}
+		clause := importDecl.ImportClause.AsImportClause()
+		if clause.NamedBindings == nil {
+			continue
+		}
+
+		// Check namespace import: import * as X from "<packageName>/<moduleName>"
+		if specifier == packageName+"/"+moduleName && clause.NamedBindings.Kind == ast.KindNamespaceImport {
+			nsImport := clause.NamedBindings.AsNamespaceImport()
+			if nsImport.Name() != nil {
+				return scanner.GetTextOfNode(nsImport.Name())
+			}
+		}
+
+		// Check named imports: import { <moduleName> as X } from "<packageName>"
+		if specifier == packageName && clause.NamedBindings.Kind == ast.KindNamedImports {
+			namedImports := clause.NamedBindings.AsNamedImports()
+			if namedImports.Elements == nil {
+				continue
+			}
+			for _, elem := range namedImports.Elements.Nodes {
+				spec := elem.AsImportSpecifier()
+				importedName := ""
+				if spec.PropertyName != nil {
+					importedName = scanner.GetTextOfNode(spec.PropertyName)
+				} else {
+					importedName = scanner.GetTextOfNode(spec.Name())
+				}
+				if importedName == moduleName {
+					return scanner.GetTextOfNode(spec.Name())
+				}
+			}
+		}
+	}
+	return moduleName
+}

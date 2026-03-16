@@ -15,6 +15,8 @@ import (
 	"github.com/effect-ts/effect-typescript-go/etscore"
 	"github.com/effect-ts/effect-typescript-go/internal/autoimportstyle"
 	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
+	"github.com/effect-ts/effect-typescript-go/internal/completion"
+	"github.com/effect-ts/effect-typescript-go/internal/completions"
 	"github.com/effect-ts/effect-typescript-go/internal/fixable"
 	"github.com/effect-ts/effect-typescript-go/internal/fixables"
 	"github.com/effect-ts/effect-typescript-go/internal/layergraph"
@@ -27,6 +29,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/core"
 	"github.com/microsoft/typescript-go/shim/ls"
 	"github.com/microsoft/typescript-go/shim/ls/autoimport"
+	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
 	"github.com/microsoft/typescript-go/shim/modulespecifiers"
 )
 
@@ -39,6 +42,8 @@ func init() {
 	ls.RegisterAfterQuickInfoCallback(afterQuickInfo)
 	// Register the Effect inlay hints suppression callback
 	ls.RegisterAfterInlayHintsCallback(afterInlayHints)
+	// Register the Effect completion enrichment callback
+	ls.RegisterAfterCompletionCallback(afterCompletion)
 	// Register the Effect auto-import style transformer factory
 	autoimport.RegisterAutoImportFixTransformer(func(prefs modulespecifiers.UserPreferences, program *compiler.Program) autoimport.FixTransformer {
 		effectStyle := autoimportstyle.PreferencesFromPluginOptions(program.Options().Effect)
@@ -92,6 +97,27 @@ func getEffectRefactorActions(ctx context.Context, file *ast.SourceFile, span co
 	}
 
 	return actions, nil
+}
+
+// afterCompletion is called after TypeScript-Go builds the completion list.
+// It allows Effect to enrich completion responses with custom completions.
+func afterCompletion(sf *ast.SourceFile, position int, items []*lsproto.CompletionItem, program *compiler.Program, langService *ls.LanguageService) []*lsproto.CompletionItem {
+	if program.Options().Effect == nil {
+		return items
+	}
+
+	if len(completions.All) == 0 {
+		return items
+	}
+
+	ctx := completion.NewContext(context.Background(), sf, position, items, program, langService)
+
+	for _, c := range completions.All {
+		results := c.Run(ctx)
+		items = append(items, results...)
+	}
+
+	return items
 }
 
 // afterQuickInfo is called after building hover quickInfo and documentation.

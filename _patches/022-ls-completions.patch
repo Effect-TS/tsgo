@@ -1,0 +1,53 @@
+diff --git a/internal/ls/completions.go b/internal/ls/completions.go
+index 9c27bfe08..2496368b6 100644
+--- a/internal/ls/completions.go
++++ b/internal/ls/completions.go
+@@ -31,13 +31,25 @@ import (
+ 
+ var ErrNeedsAutoImports = errors.New("completion list needs auto imports")
+ 
++// AfterCompletionCallback is invoked after completions are computed
++// to allow external packages to add or modify completion items.
++var AfterCompletionCallback func(sf *ast.SourceFile, position int, items []*lsproto.CompletionItem, program *compiler.Program, langService *LanguageService) []*lsproto.CompletionItem
++
++// RegisterAfterCompletionCallback registers a callback to be called after
++// completions are computed. The callback can add or modify completion items
++// before they are returned.
++// Note: Only one callback can be registered. Subsequent calls will replace the previous callback.
++func RegisterAfterCompletionCallback(cb func(sf *ast.SourceFile, position int, items []*lsproto.CompletionItem, program *compiler.Program, langService *LanguageService) []*lsproto.CompletionItem) {
++	AfterCompletionCallback = cb
++}
++
+ func (l *LanguageService) ProvideCompletion(
+ 	ctx context.Context,
+ 	documentURI lsproto.DocumentUri,
+ 	LSPPosition lsproto.Position,
+ 	context *lsproto.CompletionContext,
+ ) (lsproto.CompletionResponse, error) {
+-	_, file := l.getProgramAndFile(documentURI)
++	program, file := l.getProgramAndFile(documentURI)
+ 	var triggerCharacter *string
+ 	if context != nil {
+ 		triggerCharacter = context.TriggerCharacter
+@@ -53,6 +65,21 @@ func (l *LanguageService) ProvideCompletion(
+ 	if err != nil {
+ 		return lsproto.CompletionItemsOrListOrNull{}, err
+ 	}
++	// EFFECT HOOK: Allow Effect to add or modify completion items
++	if AfterCompletionCallback != nil {
++		var existingItems []*lsproto.CompletionItem
++		if completionList != nil {
++			existingItems = completionList.Items
++		}
++		items := AfterCompletionCallback(file, position, existingItems, program, l)
++		if len(items) > 0 {
++			if completionList == nil {
++				completionList = &lsproto.CompletionList{}
++			}
++			completionList.Items = items
++		}
++	}
++
+ 	completionList = ensureItemData(file.FileName(), position, completionList)
+ 	return lsproto.CompletionItemsOrListOrNull{List: completionList}, nil
+ }
