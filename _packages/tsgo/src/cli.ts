@@ -10,6 +10,7 @@ import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
 import * as Command from "effect/unstable/cli/Command"
 import { setupCommand } from "./setup/index.js"
+import * as pkgJson from "../package.json" with { type: "json" }
 
 class NativePreviewNotInstalledError extends Data.TaggedError("NativePreviewNotInstalledError")<{
   readonly details: string
@@ -160,25 +161,31 @@ const patch = Effect.gen(function*() {
   const backupPath = path.join(path.dirname(targetPath), path.basename(targetPath) + ".original")
   const ourBinaryPath = yield* getPackagedBinaryPath
 
-  const backupExists = yield* fs.exists(backupPath)
-  if (backupExists) {
-    yield* Console.log("Binary is already patched (backup exists at " + backupPath + "). Skipping.")
-    return
-  } else {
-    const targetExists = yield* fs.exists(targetPath)
-    if (!targetExists) {
-      return yield* Effect.fail(new MissingTargetBinaryError({ targetPath }))
-    }
-
-    yield* fs.rename(targetPath, backupPath).pipe(
-      Effect.mapError(() =>
-        new BackupRestoreError({
-          reason: `Failed to back up original binary from ${targetPath} to ${backupPath}.`,
-        })
-      )
-    )
-    yield* Console.log("Backed up original binary to " + backupPath)
+  const targetExists = yield* fs.exists(targetPath)
+  if (!targetExists) {
+    return yield* Effect.fail(new MissingTargetBinaryError({ targetPath }))
   }
+
+  let actualBackupPath = backupPath
+  let counter = 1
+  while (yield* fs.exists(actualBackupPath)) {
+    if (counter > 100) {
+      return yield* Effect.fail(new BackupRestoreError({
+        reason: `Too many backup files exist (over 100). Please clean up old backups in ${path.dirname(targetPath)}.`,
+      }))
+    }
+    actualBackupPath = backupPath + "." + counter
+    counter++
+  }
+
+  yield* fs.rename(targetPath, actualBackupPath).pipe(
+    Effect.mapError(() =>
+      new BackupRestoreError({
+        reason: `Failed to back up original binary from ${targetPath} to ${actualBackupPath}.`,
+      })
+    )
+  )
+  yield* Console.log("Backed up original binary to " + actualBackupPath)
 
   yield* fs.copyFile(ourBinaryPath, targetPath).pipe(
     Effect.mapError(() => new CopyBinaryError({ sourcePath: ourBinaryPath, targetPath }))
@@ -214,7 +221,7 @@ const unpatch = Effect.gen(function*() {
 
   const backupExists = yield* fs.exists(backupPath)
   if (!backupExists) {
-    yield* Console.log("No backup found at " + backupPath + ". Nothing to restore.")
+    yield* Console.error("No backup found at " + backupPath + ". Nothing to restore.")
     return
   }
 
@@ -266,7 +273,7 @@ const rootCommand = Command.make("tsgo").pipe(
 
 
 rootCommand.pipe(
-  Command.run({ version: "0.0.0" }),
+  Command.run({ version: pkgJson.version }),
   Effect.provide(NodeServices.layer),
   NodeRuntime.runMain()
 )
