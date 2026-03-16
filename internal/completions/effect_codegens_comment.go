@@ -54,6 +54,7 @@ func runEffectCodegensComment(ctx *completion.Context) []*lsproto.CompletionItem
 			"@effect-codegens "+enableSnippet,
 			sortText,
 			replacementRange,
+			lsproto.CompletionItemKindConstant,
 		),
 	}
 }

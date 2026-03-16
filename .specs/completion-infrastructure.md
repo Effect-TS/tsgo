@@ -3,9 +3,6 @@
 ## Goal
 Add custom Effect completions support to the Go language service, following the same abstraction pattern used by rules, fixables, and refactors.
 
-## Status
-Spec only — no backlog items yet. To be revisited.
-
 ## Background
 
 ### Current state
@@ -18,10 +15,10 @@ Key reference files:
 - Registry: `.repos/effect-language-service/packages/language-service/src/completions.ts`
 - Individual completions: `.repos/effect-language-service/packages/language-service/src/completions/*.ts` (14 files)
 - Core interface: `.repos/effect-language-service/packages/language-service/src/core/LSP.ts` (lines 109-139)
-- Auto-import middleware: `.repos/effect-language-service/packages/language-service/src/completions/middlewareAutoImports.ts`
 - Tests: `.repos/effect-language-service/packages/language-service/test/completions.test.ts`
 
-Reference completions include: gen(function*(){}), fn(function(){}), Duration input units, Schema brand, Effect.Service self-completions, Context.Tag, RPC Make, Data classes, JSDoc directives (`@effect-diagnostics`, `@effect-codegens`, `@effect-identifier`), and more.
+### Auto-import middleware
+The reference has a `middlewareAutoImports.ts` that post-processes completions for auto-import support. This is **not needed** in the Go version — auto-completion is handled differently.
 
 ## Existing Hook Patterns
 
@@ -39,7 +36,7 @@ All three follow the same shape:
 3. A registry (`All` slice) with lookup helpers
 4. A hook registered in `etslshooks/init.go` that dispatches to all registered instances
 
-## Proposed Design
+## Design
 
 ### Naming
 The abstraction is called **"completion"** (singular for the type, plural `completions` for the registry package) — consistent with rule/rules, fixable/fixables, refactor/refactors.
@@ -67,17 +64,42 @@ This matches how fixables and refactors access the checker through `GetTypeCheck
 The "after callback" pattern (like hover and inlay hints) is the best fit:
 - An `AfterCompletionCallback` receives position, source file, and the existing completion list
 - The Effect layer iterates `completions.All`, runs each, and merges results into the existing list
-- This allows both appending custom entries and post-processing existing entries (e.g., auto-import middleware)
+- This allows appending custom entries to the native completion list
 
-This differs from the "provider" pattern (used by fixables/refactors) because completions need access to the existing completion list to avoid duplicates and to post-process entries.
+This differs from the "provider" pattern (used by fixables/refactors) because completions need access to the existing completion list to avoid duplicates.
 
 ### Injection points in TypeScript-Go
 1. **`typescript-go/internal/ls/completions.go`** — Add `AfterCompletionCallback` variable, call it at the end of `ProvideCompletion()` before returning
 2. **`shim/ls/shim.go`** — Expose `RegisterAfterCompletionCallback` via `//go:linkname`
 3. **A new patch in `_patches/`** — To add the callback to the TypeScript-Go submodule (following the pattern of `012-ls-hover.patch` and `015-ls-inlay-hints.patch`)
 
-## Open Questions
-- Exact shape of `CompletionEntry` return type — should it mirror `lsproto.CompletionItem` directly or use an Effect-specific intermediate type?
-- Whether the context should expose the full existing completion list or just provide a way to check for duplicates.
-- Which of the 14 reference completions to port first, and whether any are not applicable to the Go version.
-- Whether auto-import post-processing middleware needs its own abstraction or can be handled within individual completions.
+## Completions to Port
+
+### V4-compatible (higher priority)
+
+| Completion | Trigger | Needs Checker | Reference file |
+|---|---|---|---|
+| `effectSchemaSelfInClasses` | Extending Schema.Class, TaggedErrorClass, etc. | No (AST) | `completions/effectSchemaSelfInClasses.ts` |
+| `effectDataClasses` | Extending Data.TaggedError, TaggedClass | No (AST) | `completions/effectDataClasses.ts` |
+| `serviceMapSelfInClasses` | Extending ServiceMap.Service (V4 only) | No (AST) | `completions/serviceMapSelfInClasses.ts` |
+| `genFunctionStar` | Dot-accessing `.gen` | Yes | `completions/genFunctionStar.ts` |
+| `fnFunctionStar` | Dot-accessing `.fn` | No (AST) | `completions/fnFunctionStar.ts` |
+| `effectDiagnosticsComment` | `@effect-diagnostics` in comments | No (regex) | `completions/effectDiagnosticsComment.ts` |
+| `effectCodegensComment` | `@effect-codegens` in comments | No (regex) | `completions/effectCodegensComment.ts` |
+| `effectJsdocComment` | `@effect-identifier` in comments | No (regex) | `completions/effectJsdocComment.ts` |
+| `durationInput` | String literal with Duration contextual type | Yes | `completions/durationInput.ts` |
+
+### V3-only (lower priority)
+
+| Completion | Trigger | Needs Checker | Reference file |
+|---|---|---|---|
+| `contextSelfInClasses` | Extending Context.Tag | No (AST) | `completions/contextSelfInClasses.ts` |
+| `effectSelfInClasses` | Extending Effect.Service or Effect.Tag | No (AST) | `completions/effectSelfInClasses.ts` |
+| `effectSqlModelSelfInClasses` | Extending `@effect/sql` Model.Class | No (AST) | `completions/effectSqlModelSelfInClasses.ts` |
+| `rpcMakeClasses` | Extending `@effect/rpc` Rpc | No (AST) | `completions/rpcMakeClasses.ts` |
+| `schemaBrand` | Dot-accessing Schema for `.brand()` | No (AST) | `completions/schemaBrand.ts` |
+
+## Non-Goals
+- Auto-import post-processing middleware (handled differently in the Go version).
+- Changing TypeScript-Go's native completion behavior.
+- Completion sorting/priority beyond what TypeScript-Go provides natively.

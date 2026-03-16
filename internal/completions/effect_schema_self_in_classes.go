@@ -162,8 +162,11 @@ func runEffectSchemaSelfInClasses(ctx *completion.Context) []*lsproto.Completion
 }
 
 // makeCompletionItem creates a CompletionItem with snippet format and a text edit.
-func makeCompletionItem(label string, insertText string, sortText string, replacementRange lsproto.Range) *lsproto.CompletionItem {
-	kind := lsproto.CompletionItemKindConstant
+func makeCompletionItem(label string, insertText string, sortText string, replacementRange lsproto.Range, kindOverride ...lsproto.CompletionItemKind) *lsproto.CompletionItem {
+	kind := lsproto.CompletionItemKindVariable
+	if len(kindOverride) > 0 {
+		kind = kindOverride[0]
+	}
 	format := lsproto.InsertTextFormatSnippet
 	return &lsproto.CompletionItem{
 		Label:           label,

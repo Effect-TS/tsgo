@@ -32,13 +32,13 @@ index 9c27bfe08..786212233 100644
 @@ -54,6 +66,12 @@ func (l *LanguageService) ProvideCompletion(
  		return lsproto.CompletionItemsOrListOrNull{}, err
  	}
- 	completionList = ensureItemData(file.FileName(), position, completionList)
 +
 +	// EFFECT HOOK: Allow Effect to add or modify completion items
 +	if AfterCompletionCallback != nil && completionList != nil {
 +		completionList.Items = AfterCompletionCallback(file, position, completionList.Items, program, l)
 +	}
 +
+ 	completionList = ensureItemData(file.FileName(), position, completionList)
  	return lsproto.CompletionItemsOrListOrNull{List: completionList}, nil
  }
  

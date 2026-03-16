@@ -58,12 +58,14 @@ func runEffectDiagnosticsComment(ctx *completion.Context) []*lsproto.CompletionI
 			"@effect-diagnostics "+disableSnippet,
 			sortText,
 			replacementRange,
+			lsproto.CompletionItemKindConstant,
 		),
 		makeCompletionItem(
 			"@effect-diagnostics-next-line",
 			"@effect-diagnostics-next-line "+disableSnippet,
 			sortText,
 			replacementRange,
+			lsproto.CompletionItemKindConstant,
 		),
 	}
 }

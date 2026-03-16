@@ -39,6 +39,7 @@ func runEffectJsdocComment(ctx *completion.Context) []*lsproto.CompletionItem {
 			"@effect-identifier",
 			sortText,
 			replacementRange,
+			lsproto.CompletionItemKindConstant,
 		),
 	}
 }

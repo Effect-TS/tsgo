@@ -81,6 +81,7 @@ func buildDurationItems(ctx *completion.Context, node *ast.Node) []*lsproto.Comp
 			"${0} "+unit,
 			sortText,
 			replacementRange,
+			lsproto.CompletionItemKindConstant,
 		)
 	}
 	return items
