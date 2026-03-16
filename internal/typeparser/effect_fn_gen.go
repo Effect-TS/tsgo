@@ -14,62 +14,65 @@ func EffectFnGenCall(c *checker.Checker, node *ast.Node) *EffectGenCallResult {
 		return nil
 	}
 
-	call := node.AsCallExpression()
-	if call == nil || call.Arguments == nil || len(call.Arguments.Nodes) == 0 {
-		return nil
-	}
-
-	// Scan arguments for the first FunctionExpression with asteriskToken
-	var genFn *ast.FunctionExpression
-	for _, arg := range call.Arguments.Nodes {
-		if arg != nil && arg.Kind == ast.KindFunctionExpression {
-			fn := arg.AsFunctionExpression()
-			if fn != nil && fn.AsteriskToken != nil {
-				genFn = fn
-				break
-			}
-		}
-	}
-	if genFn == nil {
-		return nil
-	}
-
-	// Determine the expression to check for Effect.fn reference.
-	// For curried calls like Effect.fn("name")(function*(){}), call.Expression is a CallExpression.
-	// For direct calls like Effect.fn(function*(){}), call.Expression is a PropertyAccessExpression.
-	expr := call.Expression
-	if expr == nil {
-		return nil
-	}
-
-	var expressionToCheck *ast.Node
-	if expr.Kind == ast.KindCallExpression {
-		innerCall := expr.AsCallExpression()
-		if innerCall == nil || innerCall.Expression == nil {
+	links := GetEffectLinks(c)
+	return Cached(&links.EffectFnGenCall, node, func() *EffectGenCallResult {
+		call := node.AsCallExpression()
+		if call == nil || call.Arguments == nil || len(call.Arguments.Nodes) == 0 {
 			return nil
 		}
-		expressionToCheck = innerCall.Expression
-	} else {
-		expressionToCheck = expr
-	}
 
-	if expressionToCheck == nil || expressionToCheck.Kind != ast.KindPropertyAccessExpression {
-		return nil
-	}
+		// Scan arguments for the first FunctionExpression with asteriskToken
+		var genFn *ast.FunctionExpression
+		for _, arg := range call.Arguments.Nodes {
+			if arg != nil && arg.Kind == ast.KindFunctionExpression {
+				fn := arg.AsFunctionExpression()
+				if fn != nil && fn.AsteriskToken != nil {
+					genFn = fn
+					break
+				}
+			}
+		}
+		if genFn == nil {
+			return nil
+		}
 
-	if !IsNodeReferenceToEffectModuleApi(c, expressionToCheck, "fn") {
-		return nil
-	}
+		// Determine the expression to check for Effect.fn reference.
+		// For curried calls like Effect.fn("name")(function*(){}), call.Expression is a CallExpression.
+		// For direct calls like Effect.fn(function*(){}), call.Expression is a PropertyAccessExpression.
+		expr := call.Expression
+		if expr == nil {
+			return nil
+		}
 
-	propertyAccess := expressionToCheck.AsPropertyAccessExpression()
-	if propertyAccess == nil {
-		return nil
-	}
+		var expressionToCheck *ast.Node
+		if expr.Kind == ast.KindCallExpression {
+			innerCall := expr.AsCallExpression()
+			if innerCall == nil || innerCall.Expression == nil {
+				return nil
+			}
+			expressionToCheck = innerCall.Expression
+		} else {
+			expressionToCheck = expr
+		}
 
-	return &EffectGenCallResult{
-		Call:              call,
-		EffectModule:      propertyAccess.Expression,
-		GeneratorFunction: genFn,
-		Body:              genFn.Body,
-	}
+		if expressionToCheck == nil || expressionToCheck.Kind != ast.KindPropertyAccessExpression {
+			return nil
+		}
+
+		if !IsNodeReferenceToEffectModuleApi(c, expressionToCheck, "fn") {
+			return nil
+		}
+
+		propertyAccess := expressionToCheck.AsPropertyAccessExpression()
+		if propertyAccess == nil {
+			return nil
+		}
+
+		return &EffectGenCallResult{
+			Call:              call,
+			EffectModule:      propertyAccess.Expression,
+			GeneratorFunction: genFn,
+			Body:              genFn.Body,
+		}
+	})
 }

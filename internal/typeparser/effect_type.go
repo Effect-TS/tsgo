@@ -16,65 +16,68 @@ func EffectType(c *checker.Checker, t *checker.Type, atLocation *ast.Node) *Effe
 	if c == nil || t == nil {
 		return nil
 	}
-	version := DetectEffectVersion(c)
-	if version == EffectMajorV4 {
-		// Direct property access using the known Effect v4 type ID
-		propSymbol := GetPropertyOfTypeByName(c, t, EffectTypeId)
-		if propSymbol == nil {
+	links := GetEffectLinks(c)
+	return Cached(&links.EffectType, t, func() *Effect {
+		version := DetectEffectVersion(c)
+		if version == EffectMajorV4 {
+			// Direct property access using the known Effect v4 type ID
+			propSymbol := GetPropertyOfTypeByName(c, t, EffectTypeId)
+			if propSymbol == nil {
+				return nil
+			}
+
+			// Get the variance struct type
+			varianceStructType := c.GetTypeOfSymbolAtLocation(propSymbol, atLocation)
+
+			// Parse the variance struct to extract A, E, R
+			return parseVarianceStruct(c, varianceStructType, atLocation)
+		}
+
+		// v3 / unknown: iterate properties looking for a variance struct
+		props := c.GetPropertiesOfType(t)
+
+		// Filter to required, non-optional properties with a value declaration
+		var candidates []*ast.Symbol
+		for _, prop := range props {
+			if prop == nil {
+				continue
+			}
+			if prop.Flags&ast.SymbolFlagsProperty == 0 {
+				continue
+			}
+			if prop.Flags&ast.SymbolFlagsOptional != 0 {
+				continue
+			}
+			if prop.ValueDeclaration == nil {
+				continue
+			}
+			candidates = append(candidates, prop)
+		}
+
+		if len(candidates) == 0 {
 			return nil
 		}
 
-		// Get the variance struct type
-		varianceStructType := c.GetTypeOfSymbolAtLocation(propSymbol, atLocation)
+		// Sort so properties containing "EffectTypeId" come first (optimization heuristic)
+		sort.SliceStable(candidates, func(i, j int) bool {
+			iHas := strings.Contains(candidates[i].Name, "EffectTypeId")
+			jHas := strings.Contains(candidates[j].Name, "EffectTypeId")
+			if iHas && !jHas {
+				return true
+			}
+			return false
+		})
 
-		// Parse the variance struct to extract A, E, R
-		return parseVarianceStruct(c, varianceStructType, atLocation)
-	}
+		// Try each candidate as a variance struct
+		for _, prop := range candidates {
+			propType := c.GetTypeOfSymbolAtLocation(prop, atLocation)
+			if result := parseVarianceStruct(c, propType, atLocation); result != nil {
+				return result
+			}
+		}
 
-	// v3 / unknown: iterate properties looking for a variance struct
-	props := c.GetPropertiesOfType(t)
-
-	// Filter to required, non-optional properties with a value declaration
-	var candidates []*ast.Symbol
-	for _, prop := range props {
-		if prop == nil {
-			continue
-		}
-		if prop.Flags&ast.SymbolFlagsProperty == 0 {
-			continue
-		}
-		if prop.Flags&ast.SymbolFlagsOptional != 0 {
-			continue
-		}
-		if prop.ValueDeclaration == nil {
-			continue
-		}
-		candidates = append(candidates, prop)
-	}
-
-	if len(candidates) == 0 {
 		return nil
-	}
-
-	// Sort so properties containing "EffectTypeId" come first (optimization heuristic)
-	sort.SliceStable(candidates, func(i, j int) bool {
-		iHas := strings.Contains(candidates[i].Name, "EffectTypeId")
-		jHas := strings.Contains(candidates[j].Name, "EffectTypeId")
-		if iHas && !jHas {
-			return true
-		}
-		return false
 	})
-
-	// Try each candidate as a variance struct
-	for _, prop := range candidates {
-		propType := c.GetTypeOfSymbolAtLocation(prop, atLocation)
-		if result := parseVarianceStruct(c, propType, atLocation); result != nil {
-			return result
-		}
-	}
-
-	return nil
 }
 
 // parseVarianceStruct extracts A, E, R from a variance struct type.
@@ -106,18 +109,24 @@ func IsEffectType(c *checker.Checker, t *checker.Type, atLocation *ast.Node) boo
 // is "Effect". This filters out types like Stream, Layer, HttpApp.Default that
 // carry the variance struct but are not Effect itself.
 func StrictEffectType(c *checker.Checker, t *checker.Type, atLocation *ast.Node) *Effect {
-	result := EffectType(c, t, atLocation)
-	if result == nil {
+	if c == nil || t == nil {
 		return nil
 	}
-	sym := t.Symbol()
-	if sym == nil {
-		return nil
-	}
-	if sym.Name != "Effect" {
-		return nil
-	}
-	return result
+	links := GetEffectLinks(c)
+	return Cached(&links.StrictEffectType, t, func() *Effect {
+		result := EffectType(c, t, atLocation)
+		if result == nil {
+			return nil
+		}
+		sym := t.Symbol()
+		if sym == nil {
+			return nil
+		}
+		if sym.Name != "Effect" {
+			return nil
+		}
+		return result
+	})
 }
 
 // StrictIsEffectType returns true if the type has the Effect variance struct
@@ -133,14 +142,17 @@ func EffectSubtype(c *checker.Checker, t *checker.Type, atLocation *ast.Node) *E
 	if c == nil || t == nil {
 		return nil
 	}
-	// Check for "_tag" or "get" property first (quick rejection)
-	tagSymbol := c.GetPropertyOfType(t, "_tag")
-	getSymbol := c.GetPropertyOfType(t, "get")
-	if tagSymbol == nil && getSymbol == nil {
-		return nil
-	}
-	// Must also be an Effect type
-	return EffectType(c, t, atLocation)
+	links := GetEffectLinks(c)
+	return Cached(&links.EffectSubtype, t, func() *Effect {
+		// Check for "_tag" or "get" property first (quick rejection)
+		tagSymbol := c.GetPropertyOfType(t, "_tag")
+		getSymbol := c.GetPropertyOfType(t, "get")
+		if tagSymbol == nil && getSymbol == nil {
+			return nil
+		}
+		// Must also be an Effect type
+		return EffectType(c, t, atLocation)
+	})
 }
 
 // IsEffectSubtype returns true if the type is an Effect subtype (has variance struct + "_tag" or "get").
@@ -154,14 +166,17 @@ func FiberType(c *checker.Checker, t *checker.Type, atLocation *ast.Node) *Effec
 	if c == nil || t == nil {
 		return nil
 	}
-	// Check for both "await" and "poll" properties (quick rejection)
-	awaitSymbol := c.GetPropertyOfType(t, "await")
-	pollSymbol := c.GetPropertyOfType(t, "poll")
-	if awaitSymbol == nil || pollSymbol == nil {
-		return nil
-	}
-	// Must also be an Effect type
-	return EffectType(c, t, atLocation)
+	links := GetEffectLinks(c)
+	return Cached(&links.FiberType, t, func() *Effect {
+		// Check for both "await" and "poll" properties (quick rejection)
+		awaitSymbol := c.GetPropertyOfType(t, "await")
+		pollSymbol := c.GetPropertyOfType(t, "poll")
+		if awaitSymbol == nil || pollSymbol == nil {
+			return nil
+		}
+		// Must also be an Effect type
+		return EffectType(c, t, atLocation)
+	})
 }
 
 // IsFiberType returns true if the type is a Fiber type (has variance struct + "await" and "poll").
@@ -176,12 +191,15 @@ func HasEffectTypeId(c *checker.Checker, t *checker.Type, atLocation *ast.Node) 
 	if c == nil || t == nil {
 		return false
 	}
-	version := DetectEffectVersion(c)
-	if version == EffectMajorV4 {
-		return GetPropertyOfTypeByName(c, t, EffectTypeId) != nil
-	}
-	// For v3/unknown, the quick check is not available; defer to full detection.
-	return IsEffectType(c, t, atLocation)
+	links := GetEffectLinks(c)
+	return Cached(&links.HasEffectTypeId, t, func() bool {
+		version := DetectEffectVersion(c)
+		if version == EffectMajorV4 {
+			return GetPropertyOfTypeByName(c, t, EffectTypeId) != nil
+		}
+		// For v3/unknown, the quick check is not available; defer to full detection.
+		return IsEffectType(c, t, atLocation)
+	})
 }
 
 func isEffectTypeSourceFile(c *checker.Checker, sf *ast.SourceFile) bool {

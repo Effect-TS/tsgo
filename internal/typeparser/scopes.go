@@ -37,14 +37,23 @@ func (s *EnclosingScopes) EffectGeneratorFunction() *ast.FunctionExpression {
 
 // FindEnclosingScopes walks parents of startNode to find the nearest function scope and Effect scope.
 func FindEnclosingScopes(c *checker.Checker, startNode *ast.Node) EnclosingScopes {
-	var result EnclosingScopes
-	if startNode == nil {
+	if c == nil || startNode == nil {
+		var result EnclosingScopes
+		if startNode != nil {
+			result.ScopeNode = ast.GetContainingFunction(startNode)
+			if result.ScopeNode != nil {
+				result.ScopeKind = ScopeKindFunction
+			} else {
+				result.ScopeKind = ScopeKindSourceFile
+			}
+		}
 		return result
 	}
+	links := GetEffectLinks(c)
+	return Cached(&links.FindEnclosingScopes, startNode, func() EnclosingScopes {
+		var result EnclosingScopes
+		result.ScopeNode = ast.GetContainingFunction(startNode)
 
-	result.ScopeNode = ast.GetContainingFunction(startNode)
-
-	if c != nil {
 		for current := startNode.Parent; current != nil; current = current.Parent {
 			if effectGen := EffectGenCall(c, current); effectGen != nil {
 				result.EffectGen = effectGen
@@ -60,18 +69,18 @@ func FindEnclosingScopes(c *checker.Checker, startNode *ast.Node) EnclosingScope
 				break
 			}
 		}
-	}
 
-	// Derive ScopeKind
-	if result.EffectGen != nil {
-		result.ScopeKind = ScopeKindEffectGen
-	} else if result.EffectFnGen != nil {
-		result.ScopeKind = ScopeKindEffectFn
-	} else if result.ScopeNode != nil {
-		result.ScopeKind = ScopeKindFunction
-	} else {
-		result.ScopeKind = ScopeKindSourceFile
-	}
+		// Derive ScopeKind
+		if result.EffectGen != nil {
+			result.ScopeKind = ScopeKindEffectGen
+		} else if result.EffectFnGen != nil {
+			result.ScopeKind = ScopeKindEffectFn
+		} else if result.ScopeNode != nil {
+			result.ScopeKind = ScopeKindFunction
+		} else {
+			result.ScopeKind = ScopeKindSourceFile
+		}
 
-	return result
+		return result
+	})
 }

@@ -24,59 +24,62 @@ func ExtendsEffectSqlModelClass(c *checker.Checker, classNode *ast.Node) *SqlMod
 		return nil
 	}
 
-	if classNode.Name() == nil {
+	links := GetEffectLinks(c)
+	return Cached(&links.ExtendsEffectSqlModelClass, classNode, func() *SqlModelClassResult {
+		if classNode.Name() == nil {
+			return nil
+		}
+
+		heritageElements := ast.GetExtendsHeritageClauseElements(classNode)
+		if len(heritageElements) == 0 {
+			return nil
+		}
+
+		for _, element := range heritageElements {
+			if element == nil {
+				continue
+			}
+
+			ewta := element.AsExpressionWithTypeArguments()
+			if ewta == nil || ewta.Expression == nil {
+				continue
+			}
+
+			outerCallNode := ewta.Expression
+			if !ast.IsCallExpression(outerCallNode) {
+				continue
+			}
+			outerCall := outerCallNode.AsCallExpression()
+			if outerCall == nil {
+				continue
+			}
+
+			innerCallNode := outerCall.Expression
+			if innerCallNode == nil || !ast.IsCallExpression(innerCallNode) {
+				continue
+			}
+			innerCall := innerCallNode.AsCallExpression()
+			if innerCall == nil {
+				continue
+			}
+
+			if innerCall.TypeArguments == nil || len(innerCall.TypeArguments.Nodes) == 0 {
+				continue
+			}
+
+			if innerCall.Expression == nil {
+				continue
+			}
+			if !IsNodeReferenceToEffectSqlModelModuleApi(c, innerCall.Expression, "Class") {
+				continue
+			}
+
+			return &SqlModelClassResult{
+				ClassName:    classNode.Name(),
+				SelfTypeNode: innerCall.TypeArguments.Nodes[0],
+			}
+		}
+
 		return nil
-	}
-
-	heritageElements := ast.GetExtendsHeritageClauseElements(classNode)
-	if len(heritageElements) == 0 {
-		return nil
-	}
-
-	for _, element := range heritageElements {
-		if element == nil {
-			continue
-		}
-
-		ewta := element.AsExpressionWithTypeArguments()
-		if ewta == nil || ewta.Expression == nil {
-			continue
-		}
-
-		outerCallNode := ewta.Expression
-		if !ast.IsCallExpression(outerCallNode) {
-			continue
-		}
-		outerCall := outerCallNode.AsCallExpression()
-		if outerCall == nil {
-			continue
-		}
-
-		innerCallNode := outerCall.Expression
-		if innerCallNode == nil || !ast.IsCallExpression(innerCallNode) {
-			continue
-		}
-		innerCall := innerCallNode.AsCallExpression()
-		if innerCall == nil {
-			continue
-		}
-
-		if innerCall.TypeArguments == nil || len(innerCall.TypeArguments.Nodes) == 0 {
-			continue
-		}
-
-		if innerCall.Expression == nil {
-			continue
-		}
-		if !IsNodeReferenceToEffectSqlModelModuleApi(c, innerCall.Expression, "Class") {
-			continue
-		}
-
-		return &SqlModelClassResult{
-			ClassName:    classNode.Name(),
-			SelfTypeNode: innerCall.TypeArguments.Nodes[0],
-		}
-	}
-
-	return nil
+	})
 }

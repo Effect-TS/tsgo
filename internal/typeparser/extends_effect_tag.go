@@ -27,74 +27,77 @@ func ExtendsEffectTag(c *checker.Checker, classNode *ast.Node) *EffectTagResult 
 		return nil
 	}
 
-	// Must have a name
-	if classNode.Name() == nil {
-		return nil
-	}
-
-	heritageElements := ast.GetExtendsHeritageClauseElements(classNode)
-	if len(heritageElements) == 0 {
-		return nil
-	}
-
-	for _, element := range heritageElements {
-		if element == nil {
-			continue
+	links := GetEffectLinks(c)
+	return Cached(&links.ExtendsEffectTag, classNode, func() *EffectTagResult {
+		// Must have a name
+		if classNode.Name() == nil {
+			return nil
 		}
 
-		ewta := element.AsExpressionWithTypeArguments()
-		if ewta == nil || ewta.Expression == nil {
-			continue
+		heritageElements := ast.GetExtendsHeritageClauseElements(classNode)
+		if len(heritageElements) == 0 {
+			return nil
 		}
 
-		// The expression should be a CallExpression (the outer call with type arguments)
-		outerCallNode := ewta.Expression
-		if !ast.IsCallExpression(outerCallNode) {
-			continue
-		}
-		outerCall := outerCallNode.AsCallExpression()
-		if outerCall == nil {
-			continue
-		}
+		for _, element := range heritageElements {
+			if element == nil {
+				continue
+			}
 
-		// The outer call must have type arguments (<Self, Shape>)
-		if outerCall.TypeArguments == nil || len(outerCall.TypeArguments.Nodes) == 0 {
-			continue
-		}
+			ewta := element.AsExpressionWithTypeArguments()
+			if ewta == nil || ewta.Expression == nil {
+				continue
+			}
 
-		// The outer call's expression should also be a CallExpression (the inner call: Effect.Tag("key"))
-		innerCallNode := outerCall.Expression
-		if innerCallNode == nil || !ast.IsCallExpression(innerCallNode) {
-			continue
-		}
-		innerCall := innerCallNode.AsCallExpression()
-		if innerCall == nil {
-			continue
-		}
+			// The expression should be a CallExpression (the outer call with type arguments)
+			outerCallNode := ewta.Expression
+			if !ast.IsCallExpression(outerCallNode) {
+				continue
+			}
+			outerCall := outerCallNode.AsCallExpression()
+			if outerCall == nil {
+				continue
+			}
 
-		// Check if the inner call's expression resolves to Effect.Tag
-		if innerCall.Expression == nil {
-			continue
-		}
-		if !IsNodeReferenceToEffectModuleApi(c, innerCall.Expression, "Tag") {
-			continue
-		}
+			// The outer call must have type arguments (<Self, Shape>)
+			if outerCall.TypeArguments == nil || len(outerCall.TypeArguments.Nodes) == 0 {
+				continue
+			}
 
-		// Extract key string literal from inner call's first argument
-		var keyStringLiteral *ast.Node
-		if innerCall.Arguments != nil && len(innerCall.Arguments.Nodes) > 0 {
-			arg := innerCall.Arguments.Nodes[0]
-			if ast.IsStringLiteral(arg) {
-				keyStringLiteral = arg
+			// The outer call's expression should also be a CallExpression (the inner call: Effect.Tag("key"))
+			innerCallNode := outerCall.Expression
+			if innerCallNode == nil || !ast.IsCallExpression(innerCallNode) {
+				continue
+			}
+			innerCall := innerCallNode.AsCallExpression()
+			if innerCall == nil {
+				continue
+			}
+
+			// Check if the inner call's expression resolves to Effect.Tag
+			if innerCall.Expression == nil {
+				continue
+			}
+			if !IsNodeReferenceToEffectModuleApi(c, innerCall.Expression, "Tag") {
+				continue
+			}
+
+			// Extract key string literal from inner call's first argument
+			var keyStringLiteral *ast.Node
+			if innerCall.Arguments != nil && len(innerCall.Arguments.Nodes) > 0 {
+				arg := innerCall.Arguments.Nodes[0]
+				if ast.IsStringLiteral(arg) {
+					keyStringLiteral = arg
+				}
+			}
+
+			return &EffectTagResult{
+				ClassName:        classNode.Name(),
+				SelfTypeNode:     outerCall.TypeArguments.Nodes[0],
+				KeyStringLiteral: keyStringLiteral,
 			}
 		}
 
-		return &EffectTagResult{
-			ClassName:        classNode.Name(),
-			SelfTypeNode:     outerCall.TypeArguments.Nodes[0],
-			KeyStringLiteral: keyStringLiteral,
-		}
-	}
-
-	return nil
+		return nil
+	})
 }

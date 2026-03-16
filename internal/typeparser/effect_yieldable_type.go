@@ -12,40 +12,46 @@ import (
 // checks if it's callable, and tries EffectType on the return type of each call signature.
 // Returns nil if the type is not an Effect and not yieldable.
 func EffectYieldableType(c *checker.Checker, t *checker.Type, atLocation *ast.Node) *Effect {
-	version := DetectEffectVersion(c)
-
-	// For v3, yieldable types are modeled through Effect subtyping,
-	// so EffectType alone is sufficient.
-	if version != EffectMajorV4 {
-		return EffectType(c, t, atLocation)
-	}
-
-	// v4: first try plain Effect type
-	if result := EffectType(c, t, atLocation); result != nil {
-		return result
-	}
-
-	// v4: look for asEffect() protocol
-	asEffectSymbol := GetPropertyOfTypeByName(c, t, "asEffect")
-	if asEffectSymbol == nil {
+	if c == nil || t == nil {
 		return nil
 	}
+	links := GetEffectLinks(c)
+	return Cached(&links.EffectYieldableType, t, func() *Effect {
+		version := DetectEffectVersion(c)
 
-	asEffectType := c.GetTypeOfSymbolAtLocation(asEffectSymbol, atLocation)
-	if asEffectType == nil {
-		return nil
-	}
-
-	signatures := c.GetSignaturesOfType(asEffectType, checker.SignatureKindCall)
-	for _, sig := range signatures {
-		returnType := c.GetReturnTypeOfSignature(sig)
-		if returnType == nil {
-			continue
+		// For v3, yieldable types are modeled through Effect subtyping,
+		// so EffectType alone is sufficient.
+		if version != EffectMajorV4 {
+			return EffectType(c, t, atLocation)
 		}
-		if result := EffectType(c, returnType, atLocation); result != nil {
+
+		// v4: first try plain Effect type
+		if result := EffectType(c, t, atLocation); result != nil {
 			return result
 		}
-	}
 
-	return nil
+		// v4: look for asEffect() protocol
+		asEffectSymbol := GetPropertyOfTypeByName(c, t, "asEffect")
+		if asEffectSymbol == nil {
+			return nil
+		}
+
+		asEffectType := c.GetTypeOfSymbolAtLocation(asEffectSymbol, atLocation)
+		if asEffectType == nil {
+			return nil
+		}
+
+		signatures := c.GetSignaturesOfType(asEffectType, checker.SignatureKindCall)
+		for _, sig := range signatures {
+			returnType := c.GetReturnTypeOfSignature(sig)
+			if returnType == nil {
+				continue
+			}
+			if result := EffectType(c, returnType, atLocation); result != nil {
+				return result
+			}
+		}
+
+		return nil
+	})
 }

@@ -1,0 +1,11 @@
+diff --git a/internal/checker/checker.go b/internal/checker/checker.go
+--- a/internal/checker/checker.go
++++ b/internal/checker/checker.go
+@@ -612,6 +612,7 @@ type Checker struct {
+ 	TypeCount                                   uint32
+ 	SymbolCount                                 uint32
+ 	TotalInstantiationCount                     uint32
++	EffectLinks                                 any
+ 	instantiationCount                          uint32
+ 	instantiationDepth                          uint32
+ 	inlineLevel                                 int

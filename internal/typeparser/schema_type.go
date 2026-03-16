@@ -27,57 +27,59 @@ func isSchemaType(c *checker.Checker, t *checker.Type, atLocation *ast.Node) boo
 	if c == nil || t == nil {
 		return false
 	}
-
-	version := DetectEffectVersion(c)
-	if version == EffectMajorV4 {
-		return GetPropertyOfTypeByName(c, t, SchemaTypeId) != nil
-	}
-
-	// v3 / unknown: check for 'ast' property first
-	if c.GetPropertyOfType(t, "ast") == nil {
-		return false
-	}
-
-	props := c.GetPropertiesOfType(t)
-	var candidates []*ast.Symbol
-	for _, prop := range props {
-		if prop == nil {
-			continue
+	links := GetEffectLinks(c)
+	return Cached(&links.IsSchemaType, t, func() bool {
+		version := DetectEffectVersion(c)
+		if version == EffectMajorV4 {
+			return GetPropertyOfTypeByName(c, t, SchemaTypeId) != nil
 		}
-		if prop.Flags&ast.SymbolFlagsProperty == 0 {
-			continue
-		}
-		if prop.Flags&ast.SymbolFlagsOptional != 0 {
-			continue
-		}
-		if prop.ValueDeclaration == nil {
-			continue
-		}
-		candidates = append(candidates, prop)
-	}
 
-	if len(candidates) == 0 {
-		return false
-	}
-
-	// Sort so properties containing "TypeId" come first (optimization heuristic)
-	sort.SliceStable(candidates, func(i, j int) bool {
-		iHas := strings.Contains(candidates[i].Name, "TypeId")
-		jHas := strings.Contains(candidates[j].Name, "TypeId")
-		if iHas && !jHas {
-			return true
+		// v3 / unknown: check for 'ast' property first
+		if c.GetPropertyOfType(t, "ast") == nil {
+			return false
 		}
+
+		props := c.GetPropertiesOfType(t)
+		var candidates []*ast.Symbol
+		for _, prop := range props {
+			if prop == nil {
+				continue
+			}
+			if prop.Flags&ast.SymbolFlagsProperty == 0 {
+				continue
+			}
+			if prop.Flags&ast.SymbolFlagsOptional != 0 {
+				continue
+			}
+			if prop.ValueDeclaration == nil {
+				continue
+			}
+			candidates = append(candidates, prop)
+		}
+
+		if len(candidates) == 0 {
+			return false
+		}
+
+		// Sort so properties containing "TypeId" come first (optimization heuristic)
+		sort.SliceStable(candidates, func(i, j int) bool {
+			iHas := strings.Contains(candidates[i].Name, "TypeId")
+			jHas := strings.Contains(candidates[j].Name, "TypeId")
+			if iHas && !jHas {
+				return true
+			}
+			return false
+		})
+
+		for _, prop := range candidates {
+			propType := c.GetTypeOfSymbolAtLocation(prop, atLocation)
+			if parseSchemaVarianceStruct(c, propType, atLocation) {
+				return true
+			}
+		}
+
 		return false
 	})
-
-	for _, prop := range candidates {
-		propType := c.GetTypeOfSymbolAtLocation(prop, atLocation)
-		if parseSchemaVarianceStruct(c, propType, atLocation) {
-			return true
-		}
-	}
-
-	return false
 }
 
 // IsSchemaType returns true if the type is a Schema type (v4 or v3).
@@ -97,49 +99,51 @@ func EffectSchemaTypes(c *checker.Checker, t *checker.Type, atLocation *ast.Node
 	if c == nil || t == nil {
 		return nil
 	}
+	links := GetEffectLinks(c)
+	return Cached(&links.EffectSchemaTypes, t, func() *SchemaTypes {
+		version := DetectEffectVersion(c)
+		if version == EffectMajorV4 {
+			if GetPropertyOfTypeByName(c, t, SchemaTypeId) == nil {
+				return nil
+			}
+			// V4: get Type and Encoded properties directly
+			aType := getPropertyType(c, t, atLocation, "Type")
+			eType := getPropertyType(c, t, atLocation, "Encoded")
+			if aType == nil || eType == nil {
+				return nil
+			}
+			return &SchemaTypes{A: aType, E: eType}
+		}
 
-	version := DetectEffectVersion(c)
-	if version == EffectMajorV4 {
-		if GetPropertyOfTypeByName(c, t, SchemaTypeId) == nil {
+		// V3: check for 'ast' property first
+		if c.GetPropertyOfType(t, "ast") == nil {
 			return nil
 		}
-		// V4: get Type and Encoded properties directly
-		aType := getPropertyType(c, t, atLocation, "Type")
-		eType := getPropertyType(c, t, atLocation, "Encoded")
-		if aType == nil || eType == nil {
-			return nil
-		}
-		return &SchemaTypes{A: aType, E: eType}
-	}
 
-	// V3: check for 'ast' property first
-	if c.GetPropertyOfType(t, "ast") == nil {
+		// Find the variance struct property and extract A/I types
+		props := c.GetPropertiesOfType(t)
+		for _, prop := range props {
+			if prop == nil || prop.Flags&ast.SymbolFlagsProperty == 0 || prop.Flags&ast.SymbolFlagsOptional != 0 || prop.ValueDeclaration == nil {
+				continue
+			}
+			propType := c.GetTypeOfSymbolAtLocation(prop, atLocation)
+			a := extractInvariantType(c, propType, atLocation, "_A")
+			if a == nil {
+				continue
+			}
+			i := extractInvariantType(c, propType, atLocation, "_I")
+			if i == nil {
+				continue
+			}
+			r := extractCovariantType(c, propType, atLocation, "_R")
+			if r == nil {
+				continue
+			}
+			return &SchemaTypes{A: a, E: i}
+		}
+
 		return nil
-	}
-
-	// Find the variance struct property and extract A/I types
-	props := c.GetPropertiesOfType(t)
-	for _, prop := range props {
-		if prop == nil || prop.Flags&ast.SymbolFlagsProperty == 0 || prop.Flags&ast.SymbolFlagsOptional != 0 || prop.ValueDeclaration == nil {
-			continue
-		}
-		propType := c.GetTypeOfSymbolAtLocation(prop, atLocation)
-		a := extractInvariantType(c, propType, atLocation, "_A")
-		if a == nil {
-			continue
-		}
-		i := extractInvariantType(c, propType, atLocation, "_I")
-		if i == nil {
-			continue
-		}
-		r := extractCovariantType(c, propType, atLocation, "_R")
-		if r == nil {
-			continue
-		}
-		return &SchemaTypes{A: a, E: i}
-	}
-
-	return nil
+	})
 }
 
 // getPropertyType extracts the type of a named property from a type.

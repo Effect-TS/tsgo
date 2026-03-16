@@ -13,78 +13,81 @@ func ParseEffectFnIife(c *checker.Checker, node *ast.Node) *EffectFnIifeResult {
 		return nil
 	}
 
-	outerCall := node.AsCallExpression()
-	if outerCall == nil || outerCall.Expression == nil {
+	links := GetEffectLinks(c)
+	return Cached(&links.ParseEffectFnIife, node, func() *EffectFnIifeResult {
+		outerCall := node.AsCallExpression()
+		if outerCall == nil || outerCall.Expression == nil {
+			return nil
+		}
+
+		// The callee of the outer call must itself be a call expression (double-call pattern)
+		innerNode := outerCall.Expression
+		if innerNode.Kind != ast.KindCallExpression {
+			return nil
+		}
+
+		innerCall := innerNode.AsCallExpression()
+		if innerCall == nil {
+			return nil
+		}
+
+		// Try generator parsers first (priority order per spec)
+		// a. Effect.fn generator
+		if result := EffectFnGenCall(c, innerNode); result != nil {
+			pipeArgs, traceExpr := extractGenCallExtras(innerCall, result.GeneratorFunction)
+			return &EffectFnIifeResult{
+				OuterCall:         outerCall,
+				InnerCall:         innerCall,
+				EffectModule:      result.EffectModule,
+				Variant:           "fn",
+				GeneratorFunction: result.GeneratorFunction,
+				PipeArguments:     pipeArgs,
+				TraceExpression:   traceExpr,
+			}
+		}
+
+		// b. Effect.fnUntraced generator
+		if result := EffectFnUntracedGenCall(c, innerNode); result != nil {
+			pipeArgs, _ := extractGenCallExtras(innerCall, result.GeneratorFunction)
+			return &EffectFnIifeResult{
+				OuterCall:         outerCall,
+				InnerCall:         innerCall,
+				EffectModule:      result.EffectModule,
+				Variant:           "fnUntraced",
+				GeneratorFunction: result.GeneratorFunction,
+				PipeArguments:     pipeArgs,
+				TraceExpression:   nil, // fnUntraced has no curried form
+			}
+		}
+
+		// c. Effect.fnUntracedEager generator
+		if result := EffectFnUntracedEagerGenCall(c, innerNode); result != nil {
+			pipeArgs, _ := extractGenCallExtras(innerCall, result.GeneratorFunction)
+			return &EffectFnIifeResult{
+				OuterCall:         outerCall,
+				InnerCall:         innerCall,
+				EffectModule:      result.EffectModule,
+				Variant:           "fnUntracedEager",
+				GeneratorFunction: result.GeneratorFunction,
+				PipeArguments:     pipeArgs,
+				TraceExpression:   nil, // fnUntracedEager has no curried form
+			}
+		}
+
+		// d. Effect.fn non-generator
+		if result := EffectFnCall(c, innerNode); result != nil {
+			return &EffectFnIifeResult{
+				OuterCall:       outerCall,
+				InnerCall:       innerCall,
+				EffectModule:    result.EffectModule,
+				Variant:         result.Kind,
+				PipeArguments:   result.PipeArguments,
+				TraceExpression: result.TraceExpression,
+			}
+		}
+
 		return nil
-	}
-
-	// The callee of the outer call must itself be a call expression (double-call pattern)
-	innerNode := outerCall.Expression
-	if innerNode.Kind != ast.KindCallExpression {
-		return nil
-	}
-
-	innerCall := innerNode.AsCallExpression()
-	if innerCall == nil {
-		return nil
-	}
-
-	// Try generator parsers first (priority order per spec)
-	// a. Effect.fn generator
-	if result := EffectFnGenCall(c, innerNode); result != nil {
-		pipeArgs, traceExpr := extractGenCallExtras(innerCall, result.GeneratorFunction)
-		return &EffectFnIifeResult{
-			OuterCall:         outerCall,
-			InnerCall:         innerCall,
-			EffectModule:      result.EffectModule,
-			Variant:           "fn",
-			GeneratorFunction: result.GeneratorFunction,
-			PipeArguments:     pipeArgs,
-			TraceExpression:   traceExpr,
-		}
-	}
-
-	// b. Effect.fnUntraced generator
-	if result := EffectFnUntracedGenCall(c, innerNode); result != nil {
-		pipeArgs, _ := extractGenCallExtras(innerCall, result.GeneratorFunction)
-		return &EffectFnIifeResult{
-			OuterCall:         outerCall,
-			InnerCall:         innerCall,
-			EffectModule:      result.EffectModule,
-			Variant:           "fnUntraced",
-			GeneratorFunction: result.GeneratorFunction,
-			PipeArguments:     pipeArgs,
-			TraceExpression:   nil, // fnUntraced has no curried form
-		}
-	}
-
-	// c. Effect.fnUntracedEager generator
-	if result := EffectFnUntracedEagerGenCall(c, innerNode); result != nil {
-		pipeArgs, _ := extractGenCallExtras(innerCall, result.GeneratorFunction)
-		return &EffectFnIifeResult{
-			OuterCall:         outerCall,
-			InnerCall:         innerCall,
-			EffectModule:      result.EffectModule,
-			Variant:           "fnUntracedEager",
-			GeneratorFunction: result.GeneratorFunction,
-			PipeArguments:     pipeArgs,
-			TraceExpression:   nil, // fnUntracedEager has no curried form
-		}
-	}
-
-	// d. Effect.fn non-generator
-	if result := EffectFnCall(c, innerNode); result != nil {
-		return &EffectFnIifeResult{
-			OuterCall:       outerCall,
-			InnerCall:       innerCall,
-			EffectModule:    result.EffectModule,
-			Variant:         result.Kind,
-			PipeArguments:   result.PipeArguments,
-			TraceExpression: result.TraceExpression,
-		}
-	}
-
-	return nil
+	})
 }
 
 // extractGenCallExtras extracts pipe arguments and trace expression from the raw AST
