@@ -122,9 +122,7 @@ declare const /*2*/myEffect: Effect.Effect<string, Error, never>`
 	f.VerifyQuickInfoAt(t, "1",
 		"const app: Layer.Layer<Cache, never, never>",
 		"```\n/**\n * - Cache provided at ln 15 col 12 by `Cache.Default`\n */\n```\n"+
-			"{@link https://mermaid.live/edit#pako:eNqckk9TszAQxr_KTk7ve2hLEuuhR-3Rg-N4A4duaWoZY8AQrB3H7-7wpxgqE4K3JfvwZPN79pMk2U6QFdnL7JgcUBt4vIkUQFFunzXmBwggjMhmjQa3WIj5WuyxlCYqg4AnW72oC9F8Fq8oZXMQSwV0CUkm4WoZN-2F1d9E5Km6xr4oPmrMw4hA1-t1c529pztRQHjfVp0KrHYchBE5j2s5CbXrTM1JCtuxMDp7ESuVKdFoOvFZWo0G-1TKldGoihy1UGZAcuHU-rSSQYPuhbQGfYcnoeftZP8usf-fwJ1TP-7UyZ26udM-91tMDk7o1B86HYdOx6FTN3RWQ6_H_sNqU-aHmDkRs1iLtzLVFeKHtrIQ_7S9V9ty_EW5d7EzWzYxW-afLRvPlo1ny9zZ8jpbzPMJiV77BcqdgXI3Vz6RK_fnyse58nGufNCAwmw--4Cgrq0nVMcNqN7GVDI-LLP_Jl_fAQAA__-x8ibJ Show full Layer graph}\n\n"+
-			"{@link https://mermaid.live/edit#pako:eNqqVkrOT0lVslJKy8kvT85ILCpRCHGJyVNQMIiOUXJJLElMSixO1XNJTUsszSmJUYoFSRlGxyg5JyZnYIgr6OrGlBoYGKcqGCjVAgIAAP__QH8cUg Show Layer outline}\n\n"+
-			"```ts\n/* Layer Type Parameters */\ntype Provides = Cache\ntype Error = never\ntype Requires = never\n```\n",
+			"[Show full graph](https://mermaid.live/edit#pako:eNqckk9TszAQxr_KTk7ve2hLEuuhR-3Rg-N4A4duaWoZY8AQrB3H7-7wpxgqE4K3JfvwZPN79pMk2U6QFdnL7JgcUBt4vIkUQFFunzXmBwggjMhmjQa3WIj5WuyxlCYqg4AnW72oC9F8Fq8oZXMQSwV0CUkm4WoZN-2F1d9E5Km6xr4oPmrMw4hA1-t1c529pztRQHjfVp0KrHYchBE5j2s5CbXrTM1JCtuxMDp7ESuVKdFoOvFZWo0G-1TKldGoihy1UGZAcuHU-rSSQYPuhbQGfYcnoeftZP8usf-fwJ1TP-7UyZ26udM-91tMDk7o1B86HYdOx6FTN3RWQ6_H_sNqU-aHmDkRs1iLtzLVFeKHtrIQ_7S9V9ty_EW5d7EzWzYxW-afLRvPlo1ny9zZ8jpbzPMJiV77BcqdgXI3Vz6RK_fnyse58nGufNCAwmw--4Cgrq0nVMcNqN7GVDI-LLP_Jl_fAQAA__-x8ibJ) - [Show outline](https://mermaid.live/edit#pako:eNqqVkrOT0lVslJKy8kvT85ILCpRCHGJyVNQMIiOUXJJLElMSixO1XNJTUsszSmJUYoFSRlGxyg5JyZnYIgr6OrGlBoYGKcqGCjVAgIAAP__QH8cUg)\n\n",
 	)
 
 	// Hover over a plain Effect-typed variable should show Effect type parameters (not Layer)
@@ -175,8 +173,7 @@ const /*1*/app = Cache.Default.pipe(Layer.provide(Database.Default))`
 	// With noExternal=true, hover should show summary and type params but no Mermaid links
 	f.VerifyQuickInfoAt(t, "1",
 		"const app: Layer.Layer<Cache, never, never>",
-		"```\n/**\n * - Cache provided at ln 15 col 12 by `Cache.Default`\n */\n```\n"+
-			"```ts\n/* Layer Type Parameters */\ntype Provides = Cache\ntype Error = never\ntype Requires = never\n```\n",
+		"```\n/**\n * - Cache provided at ln 15 col 12 by `Cache.Default`\n */\n```\n",
 	)
 }
 
@@ -222,9 +219,7 @@ const app2 = /*2*/app`
 	f.VerifyQuickInfoAt(t, "1",
 		"const app: Layer.Layer<Cache, never, never>",
 		"```\n/**\n * - Cache provided at ln 15 col 12 by `Cache.Default`\n */\n```\n"+
-			"{@link https://mermaid.live/edit#pako:eNqckk9TszAQxr_KTk7ve2hLEuuhR-3Rg-N4A4duaWoZY8AQrB3H7-7wpxgqE4K3JfvwZPN79pMk2U6QFdnL7JgcUBt4vIkUQFFunzXmBwggjMhmjQa3WIj5WuyxlCYqg4AnW72oC9F8Fq8oZXMQSwV0CUkm4WoZN-2F1d9E5Km6xr4oPmrMw4hA1-t1c529pztRQHjfVp0KrHYchBE5j2s5CbXrTM1JCtuxMDp7ESuVKdFoOvFZWo0G-1TKldGoihy1UGZAcuHU-rSSQYPuhbQGfYcnoeftZP8usf-fwJ1TP-7UyZ26udM-91tMDk7o1B86HYdOx6FTN3RWQ6_H_sNqU-aHmDkRs1iLtzLVFeKHtrIQ_7S9V9ty_EW5d7EzWzYxW-afLRvPlo1ny9zZ8jpbzPMJiV77BcqdgXI3Vz6RK_fnyse58nGufNCAwmw--4Cgrq0nVMcNqN7GVDI-LLP_Jl_fAQAA__-x8ibJ Show full Layer graph}\n\n"+
-			"{@link https://mermaid.live/edit#pako:eNqqVkrOT0lVslJKy8kvT85ILCpRCHGJyVNQMIiOUXJJLElMSixO1XNJTUsszSmJUYoFSRlGxyg5JyZnYIgr6OrGlBoYGKcqGCjVAgIAAP__QH8cUg Show Layer outline}\n\n"+
-			"```ts\n/* Layer Type Parameters */\ntype Provides = Cache\ntype Error = never\ntype Requires = never\n```\n",
+			"[Show full graph](https://mermaid.live/edit#pako:eNqckk9TszAQxr_KTk7ve2hLEuuhR-3Rg-N4A4duaWoZY8AQrB3H7-7wpxgqE4K3JfvwZPN79pMk2U6QFdnL7JgcUBt4vIkUQFFunzXmBwggjMhmjQa3WIj5WuyxlCYqg4AnW72oC9F8Fq8oZXMQSwV0CUkm4WoZN-2F1d9E5Km6xr4oPmrMw4hA1-t1c529pztRQHjfVp0KrHYchBE5j2s5CbXrTM1JCtuxMDp7ESuVKdFoOvFZWo0G-1TKldGoihy1UGZAcuHU-rSSQYPuhbQGfYcnoeftZP8usf-fwJ1TP-7UyZ26udM-91tMDk7o1B86HYdOx6FTN3RWQ6_H_sNqU-aHmDkRs1iLtzLVFeKHtrIQ_7S9V9ty_EW5d7EzWzYxW-afLRvPlo1ny9zZ8jpbzPMJiV77BcqdgXI3Vz6RK_fnyse58nGufNCAwmw--4Cgrq0nVMcNqN7GVDI-LLP_Jl_fAQAA__-x8ibJ) - [Show outline](https://mermaid.live/edit#pako:eNqqVkrOT0lVslJKy8kvT85ILCpRCHGJyVNQMIiOUXJJLElMSixO1XNJTUsszSmJUYoFSRlGxyg5JyZnYIgr6OrGlBoYGKcqGCjVAgIAAP__QH8cUg)\n\n",
 	)
 
 	// Marker 2: on a reference to `app` in the initializer of another variable declaration.
@@ -279,8 +274,6 @@ const /*1*/app = Cache.Default.pipe(Layer.provide(Database.Default))`
 	f.VerifyQuickInfoAt(t, "1",
 		"const app: Layer.Layer<Cache, never, never>",
 		"```\n/**\n * - Cache provided at ln 15 col 12 by `Cache.Default`\n */\n```\n"+
-			"{@link https://www.mermaidchart.com/play#pako:eNqckk9TszAQxr_KTk7ve2hLEuuhR-3Rg-N4A4duaWoZY8AQrB3H7-7wpxgqE4K3JfvwZPN79pMk2U6QFdnL7JgcUBt4vIkUQFFunzXmBwggjMhmjQa3WIj5WuyxlCYqg4AnW72oC9F8Fq8oZXMQSwV0CUkm4WoZN-2F1d9E5Km6xr4oPmrMw4hA1-t1c529pztRQHjfVp0KrHYchBE5j2s5CbXrTM1JCtuxMDp7ESuVKdFoOvFZWo0G-1TKldGoihy1UGZAcuHU-rSSQYPuhbQGfYcnoeftZP8usf-fwJ1TP-7UyZ26udM-91tMDk7o1B86HYdOx6FTN3RWQ6_H_sNqU-aHmDkRs1iLtzLVFeKHtrIQ_7S9V9ty_EW5d7EzWzYxW-afLRvPlo1ny9zZ8jpbzPMJiV77BcqdgXI3Vz6RK_fnyse58nGufNCAwmw--4Cgrq0nVMcNqN7GVDI-LLP_Jl_fAQAA__-x8ibJ Show full Layer graph}\n\n"+
-			"{@link https://www.mermaidchart.com/play#pako:eNqqVkrOT0lVslJKy8kvT85ILCpRCHGJyVNQMIiOUXJJLElMSixO1XNJTUsszSmJUYoFSRlGxyg5JyZnYIgr6OrGlBoYGKcqGCjVAgIAAP__QH8cUg Show Layer outline}\n\n"+
-			"```ts\n/* Layer Type Parameters */\ntype Provides = Cache\ntype Error = never\ntype Requires = never\n```\n",
+			"[Show full graph](https://www.mermaidchart.com/play#pako:eNqckk9TszAQxr_KTk7ve2hLEuuhR-3Rg-N4A4duaWoZY8AQrB3H7-7wpxgqE4K3JfvwZPN79pMk2U6QFdnL7JgcUBt4vIkUQFFunzXmBwggjMhmjQa3WIj5WuyxlCYqg4AnW72oC9F8Fq8oZXMQSwV0CUkm4WoZN-2F1d9E5Km6xr4oPmrMw4hA1-t1c529pztRQHjfVp0KrHYchBE5j2s5CbXrTM1JCtuxMDp7ESuVKdFoOvFZWo0G-1TKldGoihy1UGZAcuHU-rSSQYPuhbQGfYcnoeftZP8usf-fwJ1TP-7UyZ26udM-91tMDk7o1B86HYdOx6FTN3RWQ6_H_sNqU-aHmDkRs1iLtzLVFeKHtrIQ_7S9V9ty_EW5d7EzWzYxW-afLRvPlo1ny9zZ8jpbzPMJiV77BcqdgXI3Vz6RK_fnyse58nGufNCAwmw--4Cgrq0nVMcNqN7GVDI-LLP_Jl_fAQAA__-x8ibJ) - [Show outline](https://www.mermaidchart.com/play#pako:eNqqVkrOT0lVslJKy8kvT85ILCpRCHGJyVNQMIiOUXJJLElMSixO1XNJTUsszSmJUYoFSRlGxyg5JyZnYIgr6OrGlBoYGKcqGCjVAgIAAP__QH8cUg)\n\n",
 	)
 }

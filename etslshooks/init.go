@@ -207,7 +207,7 @@ func formatLayerHover(c *checker.Checker, sf *ast.SourceFile, node *ast.Node, t 
 		}
 	}
 
-	// Build combined documentation: quickinfo summary first, then layer type params.
+	// Build combined documentation: quickinfo summary (provides/requires) and links.
 	var b strings.Builder
 
 	if quickInfoSummary != "" {
@@ -225,21 +225,30 @@ func formatLayerHover(c *checker.Checker, sf *ast.SourceFile, node *ast.Node, t 
 	if hasGraph && !effectConfig.NoExternal {
 		baseURL := effectConfig.GetMermaidBaseURL()
 
+		var nestedURL, outlineURL string
 		if nestedDiagram != "" {
-			nestedURL := layergraph.EncodeMermaidURL(baseURL, nestedDiagram)
-			fmt.Fprintf(&b, "{@link %s Show full Layer graph}\n\n", nestedURL)
+			nestedURL = layergraph.EncodeMermaidURL(baseURL, nestedDiagram)
 		}
-
 		if outlineDiagram != "" {
-			outlineURL := layergraph.EncodeMermaidURL(baseURL, outlineDiagram)
-			fmt.Fprintf(&b, "{@link %s Show Layer outline}\n\n", outlineURL)
+			outlineURL = layergraph.EncodeMermaidURL(baseURL, outlineDiagram)
 		}
-	}
 
-	// Always show Layer type parameters.
-	layer := typeparser.LayerType(c, t, node)
-	if layer != nil {
-		b.WriteString(formatLayerTypeParams(c, layer, isMarkdown))
+		if isMarkdown {
+			if nestedURL != "" && outlineURL != "" {
+				fmt.Fprintf(&b, "[Show full graph](%s) - [Show outline](%s)\n\n", nestedURL, outlineURL)
+			} else if nestedURL != "" {
+				fmt.Fprintf(&b, "[Show full graph](%s)\n\n", nestedURL)
+			} else if outlineURL != "" {
+				fmt.Fprintf(&b, "[Show outline](%s)\n\n", outlineURL)
+			}
+		} else {
+			if nestedURL != "" {
+				fmt.Fprintf(&b, "{@link %s Show full graph}\n\n", nestedURL)
+			}
+			if outlineURL != "" {
+				fmt.Fprintf(&b, "{@link %s Show outline}\n\n", outlineURL)
+			}
+		}
 	}
 
 	if documentation != "" {
