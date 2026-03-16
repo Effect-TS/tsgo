@@ -22,7 +22,13 @@ type SchemaClassResult struct {
 //
 // Returns nil if the class does not extend Schema.Class.
 func ExtendsSchemaClass(c *checker.Checker, classNode *ast.Node) *SchemaClassResult {
-	return extendsSchemaClassLike(c, classNode, "Class")
+	if c == nil || classNode == nil {
+		return nil
+	}
+	links := GetEffectLinks(c)
+	return Cached(&links.ExtendsSchemaClass, classNode, func() *SchemaClassResult {
+		return extendsSchemaClassLike(c, classNode, "Class")
+	})
 }
 
 // ExtendsSchemaRequestClass checks if a class declaration extends Schema.RequestClass<Self>("name")({}).
@@ -30,7 +36,13 @@ func ExtendsSchemaClass(c *checker.Checker, classNode *ast.Node) *SchemaClassRes
 //
 // Returns nil if the class does not extend Schema.RequestClass.
 func ExtendsSchemaRequestClass(c *checker.Checker, classNode *ast.Node) *SchemaClassResult {
-	return extendsSchemaClassLike(c, classNode, "RequestClass")
+	if c == nil || classNode == nil {
+		return nil
+	}
+	links := GetEffectLinks(c)
+	return Cached(&links.ExtendsSchemaRequestClass, classNode, func() *SchemaClassResult {
+		return extendsSchemaClassLike(c, classNode, "RequestClass")
+	})
 }
 
 // extendsSchemaClassLike is the shared implementation for ExtendsSchemaClass and ExtendsSchemaRequestClass.

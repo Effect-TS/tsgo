@@ -15,41 +15,43 @@ func IsScopeType(c *checker.Checker, t *checker.Type, atLocation *ast.Node) bool
 	if c == nil || t == nil {
 		return false
 	}
+	links := GetEffectLinks(c)
+	return Cached(&links.IsScopeType, t, func() bool {
+		version := DetectEffectVersion(c)
+		if version == EffectMajorV4 {
+			return GetPropertyOfTypeByName(c, t, ScopeTypeId) != nil
+		}
 
-	version := DetectEffectVersion(c)
-	if version == EffectMajorV4 {
-		return GetPropertyOfTypeByName(c, t, ScopeTypeId) != nil
-	}
+		// v3 / unknown: check that the type is "pipeable"
+		pipeSymbol := c.GetPropertyOfType(t, "pipe")
+		if pipeSymbol == nil {
+			return false
+		}
+		pipeType := c.GetTypeOfSymbolAtLocation(pipeSymbol, atLocation)
+		signatures := c.GetSignaturesOfType(pipeType, checker.SignatureKindCall)
+		if len(signatures) == 0 {
+			return false
+		}
 
-	// v3 / unknown: check that the type is "pipeable"
-	pipeSymbol := c.GetPropertyOfType(t, "pipe")
-	if pipeSymbol == nil {
+		// Check if any required non-optional property's symbol name contains "ScopeTypeId"
+		for _, prop := range c.GetPropertiesOfType(t) {
+			if prop == nil {
+				continue
+			}
+			if prop.Flags&ast.SymbolFlagsProperty == 0 {
+				continue
+			}
+			if prop.Flags&ast.SymbolFlagsOptional != 0 {
+				continue
+			}
+			if prop.ValueDeclaration == nil {
+				continue
+			}
+			if strings.Contains(prop.Name, "ScopeTypeId") {
+				return true
+			}
+		}
+
 		return false
-	}
-	pipeType := c.GetTypeOfSymbolAtLocation(pipeSymbol, atLocation)
-	signatures := c.GetSignaturesOfType(pipeType, checker.SignatureKindCall)
-	if len(signatures) == 0 {
-		return false
-	}
-
-	// Check if any required non-optional property's symbol name contains "ScopeTypeId"
-	for _, prop := range c.GetPropertiesOfType(t) {
-		if prop == nil {
-			continue
-		}
-		if prop.Flags&ast.SymbolFlagsProperty == 0 {
-			continue
-		}
-		if prop.Flags&ast.SymbolFlagsOptional != 0 {
-			continue
-		}
-		if prop.ValueDeclaration == nil {
-			continue
-		}
-		if strings.Contains(prop.Name, "ScopeTypeId") {
-			return true
-		}
-	}
-
-	return false
+	})
 }

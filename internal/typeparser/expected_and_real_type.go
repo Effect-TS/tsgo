@@ -74,62 +74,147 @@ func ExpectedAndRealTypes(c *checker.Checker, sf *ast.SourceFile) []ExpectedAndR
 		return nil
 	}
 
-	var result []ExpectedAndRealType
+	links := GetEffectLinks(c)
+	return Cached(&links.ExpectedAndRealTypes, sf, func() []ExpectedAndRealType {
+		var result []ExpectedAndRealType
 
-	// Initialize BFS queue with the source file node
-	queue := []*ast.Node{sf.AsNode()}
+		// Initialize BFS queue with the source file node
+		queue := []*ast.Node{sf.AsNode()}
 
-	for len(queue) > 0 {
-		// Dequeue from front (FIFO/breadth-first) to match TypeScript's shift() behavior
-		node := queue[0]
-		queue = queue[1:]
+		for len(queue) > 0 {
+			// Dequeue from front (FIFO/breadth-first) to match TypeScript's shift() behavior
+			node := queue[0]
+			queue = queue[1:]
 
-		if node == nil {
-			continue
-		}
-
-		// Pattern 1: Variable declaration with initializer
-		if node.Kind == ast.KindVariableDeclaration {
-			vd := node.AsVariableDeclaration()
-			if vd != nil && vd.Initializer != nil {
-				nameNode := vd.Name()
-				if nameNode != nil {
-					expectedType := checkerutils.GetTypeAtLocation(c, nameNode)
-	realType := checkerutils.GetTypeAtLocation(c,vd.Initializer)
-					result = append(result, ExpectedAndRealType{
-						Node:         nameNode,
-						ExpectedType: expectedType,
-						ValueNode:    vd.Initializer,
-						RealType:     realType,
-					})
-				}
-				queue = append(queue, vd.Initializer)
+			if node == nil {
 				continue
 			}
-		}
 
-		// Pattern 2: Call expression arguments
-		if node.Kind == ast.KindCallExpression {
-			call := node.AsCallExpression()
-			if call != nil {
-				resolvedSig := c.GetResolvedSignature(node)
-				if resolvedSig != nil {
-					params := resolvedSig.Parameters()
-					if call.Arguments != nil {
-						for i, param := range params {
-							if i >= len(call.Arguments.Nodes) {
-								break
+			// Pattern 1: Variable declaration with initializer
+			if node.Kind == ast.KindVariableDeclaration {
+				vd := node.AsVariableDeclaration()
+				if vd != nil && vd.Initializer != nil {
+					nameNode := vd.Name()
+					if nameNode != nil {
+						expectedType := checkerutils.GetTypeAtLocation(c, nameNode)
+						realType := checkerutils.GetTypeAtLocation(c, vd.Initializer)
+						result = append(result, ExpectedAndRealType{
+							Node:         nameNode,
+							ExpectedType: expectedType,
+							ValueNode:    vd.Initializer,
+							RealType:     realType,
+						})
+					}
+					queue = append(queue, vd.Initializer)
+					continue
+				}
+			}
+
+			// Pattern 2: Call expression arguments
+			if node.Kind == ast.KindCallExpression {
+				call := node.AsCallExpression()
+				if call != nil {
+					resolvedSig := c.GetResolvedSignature(node)
+					if resolvedSig != nil {
+						params := resolvedSig.Parameters()
+						if call.Arguments != nil {
+							for i, param := range params {
+								if i >= len(call.Arguments.Nodes) {
+									break
+								}
+								arg := call.Arguments.Nodes[i]
+								if arg == nil {
+									continue
+								}
+								expectedType := c.GetTypeOfSymbolAtLocation(param, node)
+								realType := checkerutils.GetTypeAtLocation(c, arg)
+								result = append(result, ExpectedAndRealType{
+									Node:         arg,
+									ExpectedType: expectedType,
+									ValueNode:    arg,
+									RealType:     realType,
+								})
 							}
-							arg := call.Arguments.Nodes[i]
-							if arg == nil {
-								continue
+						}
+					}
+					for child := range node.IterChildren() {
+						queue = append(queue, child)
+					}
+					continue
+				}
+			}
+
+			// Pattern 3: Object literal property keys
+			if node.Kind == ast.KindIdentifier || node.Kind == ast.KindStringLiteral ||
+				node.Kind == ast.KindNumericLiteral || node.Kind == ast.KindNoSubstitutionTemplateLiteral {
+				parent := node.Parent
+				if parent != nil && ast.IsObjectLiteralElement(parent) {
+					grandparent := parent.Parent
+					if grandparent != nil && grandparent.Kind == ast.KindObjectLiteralExpression {
+						// Check that this node is the name of the property (not the value)
+						nameNode := getObjectLiteralElementName(parent)
+						if nameNode == node {
+							contextualType := c.GetContextualType(grandparent, checker.ContextFlagsNone)
+							if contextualType != nil {
+								name := getNodeTextForPropertyLookup(node)
+								if name != "" {
+									sym := c.GetPropertyOfType(contextualType, name)
+									if sym != nil {
+										expectedType := c.GetTypeOfSymbolAtLocation(sym, node)
+										realType := checkerutils.GetTypeAtLocation(c, node)
+										result = append(result, ExpectedAndRealType{
+											Node:         node,
+											ExpectedType: expectedType,
+											ValueNode:    node,
+											RealType:     realType,
+										})
+									}
+								}
 							}
-							expectedType := c.GetTypeOfSymbolAtLocation(param, node)
-							realType := checkerutils.GetTypeAtLocation(c, arg)
+						}
+					}
+				}
+				for child := range node.IterChildren() {
+					queue = append(queue, child)
+				}
+				continue
+			}
+
+			// Pattern 4: Binary assignment (a = expr)
+			if node.Kind == ast.KindBinaryExpression {
+				binExpr := node.AsBinaryExpression()
+				if binExpr != nil && binExpr.OperatorToken != nil &&
+					binExpr.OperatorToken.Kind == ast.KindEqualsToken {
+					if binExpr.Left != nil && binExpr.Right != nil {
+						expectedType := checkerutils.GetTypeAtLocation(c, binExpr.Left)
+						realType := checkerutils.GetTypeAtLocation(c, binExpr.Right)
+						result = append(result, ExpectedAndRealType{
+							Node:         binExpr.Left,
+							ExpectedType: expectedType,
+							ValueNode:    binExpr.Right,
+							RealType:     realType,
+						})
+					}
+					if binExpr.Right != nil {
+						queue = append(queue, binExpr.Right)
+					}
+					continue
+				}
+			}
+
+			// Pattern 5: Return statement
+			if node.Kind == ast.KindReturnStatement {
+				retStmt := node.AsReturnStatement()
+				if retStmt != nil && retStmt.Expression != nil {
+					parentDecl := ast.GetContainingFunction(node)
+					if parentDecl != nil {
+						expectedType := getInferredReturnType(c, parentDecl)
+						if expectedType != nil {
+							realType := checkerutils.GetTypeAtLocation(c, retStmt.Expression)
 							result = append(result, ExpectedAndRealType{
-								Node:         arg,
+								Node:         node,
 								ExpectedType: expectedType,
-								ValueNode:    arg,
+								ValueNode:    node,
 								RealType:     realType,
 							})
 						}
@@ -140,153 +225,71 @@ func ExpectedAndRealTypes(c *checker.Checker, sf *ast.SourceFile) []ExpectedAndR
 				}
 				continue
 			}
-		}
 
-		// Pattern 3: Object literal property keys
-		if node.Kind == ast.KindIdentifier || node.Kind == ast.KindStringLiteral ||
-			node.Kind == ast.KindNumericLiteral || node.Kind == ast.KindNoSubstitutionTemplateLiteral {
-			parent := node.Parent
-			if parent != nil && ast.IsObjectLiteralElement(parent) {
-				grandparent := parent.Parent
-				if grandparent != nil && grandparent.Kind == ast.KindObjectLiteralExpression {
-					// Check that this node is the name of the property (not the value)
-					nameNode := getObjectLiteralElementName(parent)
-					if nameNode == node {
-						contextualType := c.GetContextualType(grandparent, checker.ContextFlagsNone)
-						if contextualType != nil {
-							name := getNodeTextForPropertyLookup(node)
-							if name != "" {
-								sym := c.GetPropertyOfType(contextualType, name)
-								if sym != nil {
-									expectedType := c.GetTypeOfSymbolAtLocation(sym, node)
-									realType := checkerutils.GetTypeAtLocation(c, node)
-									result = append(result, ExpectedAndRealType{
-										Node:         node,
-										ExpectedType: expectedType,
-										ValueNode:    node,
-										RealType:     realType,
-									})
-								}
-							}
+			// Pattern 6 & 7: Arrow function body (expression body)
+			if node.Kind == ast.KindArrowFunction {
+				fn := node.AsArrowFunction()
+				if fn != nil && fn.Body != nil && fn.Body.Kind != ast.KindBlock {
+					body := fn.Body
+					hasTypeParams := fn.TypeParameters != nil && len(fn.TypeParameters.Nodes) > 0
+
+					if !hasTypeParams {
+						// Pattern 6: No type parameters — use contextual type
+						expectedType := c.GetContextualType(body, checker.ContextFlagsNone)
+						if expectedType != nil {
+							realType := checkerutils.GetTypeAtLocation(c, body)
+							result = append(result, ExpectedAndRealType{
+								Node:         body,
+								ExpectedType: expectedType,
+								ValueNode:    body,
+								RealType:     realType,
+							})
+						}
+					} else {
+						// Pattern 7: With type parameters — use inferred return type
+						expectedType := getInferredReturnType(c, node)
+						if expectedType != nil {
+							realType := checkerutils.GetTypeAtLocation(c, body)
+							result = append(result, ExpectedAndRealType{
+								Node:         body,
+								ExpectedType: expectedType,
+								ValueNode:    body,
+								RealType:     realType,
+							})
 						}
 					}
+					for child := range body.IterChildren() {
+						queue = append(queue, child)
+					}
+					continue
 				}
 			}
-			for child := range node.IterChildren() {
-				queue = append(queue, child)
-			}
-			continue
-		}
 
-		// Pattern 4: Binary assignment (a = expr)
-		if node.Kind == ast.KindBinaryExpression {
-			binExpr := node.AsBinaryExpression()
-			if binExpr != nil && binExpr.OperatorToken != nil &&
-				binExpr.OperatorToken.Kind == ast.KindEqualsToken {
-				if binExpr.Left != nil && binExpr.Right != nil {
-					expectedType := checkerutils.GetTypeAtLocation(c,binExpr.Left)
-					realType := checkerutils.GetTypeAtLocation(c,binExpr.Right)
+			// Pattern 8: Satisfies expression
+			if node.Kind == ast.KindSatisfiesExpression {
+				satExpr := node.AsSatisfiesExpression()
+				if satExpr != nil && satExpr.Expression != nil && satExpr.Type != nil {
+					expectedType := checkerutils.GetTypeAtLocation(c, satExpr.Type)
+					realType := checkerutils.GetTypeAtLocation(c, satExpr.Expression)
 					result = append(result, ExpectedAndRealType{
-						Node:         binExpr.Left,
+						Node:         satExpr.Expression,
 						ExpectedType: expectedType,
-						ValueNode:    binExpr.Right,
+						ValueNode:    satExpr.Expression,
 						RealType:     realType,
 					})
+					queue = append(queue, satExpr.Expression)
+					continue
 				}
-				if binExpr.Right != nil {
-					queue = append(queue, binExpr.Right)
-				}
-				continue
 			}
-		}
 
-		// Pattern 5: Return statement
-		if node.Kind == ast.KindReturnStatement {
-			retStmt := node.AsReturnStatement()
-			if retStmt != nil && retStmt.Expression != nil {
-				parentDecl := ast.GetContainingFunction(node)
-				if parentDecl != nil {
-					expectedType := getInferredReturnType(c, parentDecl)
-					if expectedType != nil {
-						realType := checkerutils.GetTypeAtLocation(c, retStmt.Expression)
-						result = append(result, ExpectedAndRealType{
-							Node:         node,
-							ExpectedType: expectedType,
-							ValueNode:    node,
-							RealType:     realType,
-						})
-					}
-				}
-			}
+			// No pattern matched — queue all children for traversal
 			for child := range node.IterChildren() {
 				queue = append(queue, child)
 			}
-			continue
 		}
 
-		// Pattern 6 & 7: Arrow function body (expression body)
-		if node.Kind == ast.KindArrowFunction {
-			fn := node.AsArrowFunction()
-			if fn != nil && fn.Body != nil && fn.Body.Kind != ast.KindBlock {
-				body := fn.Body
-				hasTypeParams := fn.TypeParameters != nil && len(fn.TypeParameters.Nodes) > 0
-
-				if !hasTypeParams {
-					// Pattern 6: No type parameters — use contextual type
-					expectedType := c.GetContextualType(body, checker.ContextFlagsNone)
-					if expectedType != nil {
-						realType := checkerutils.GetTypeAtLocation(c,body)
-						result = append(result, ExpectedAndRealType{
-							Node:         body,
-							ExpectedType: expectedType,
-							ValueNode:    body,
-							RealType:     realType,
-						})
-					}
-				} else {
-					// Pattern 7: With type parameters — use inferred return type
-					expectedType := getInferredReturnType(c, node)
-					if expectedType != nil {
-						realType := checkerutils.GetTypeAtLocation(c,body)
-						result = append(result, ExpectedAndRealType{
-							Node:         body,
-							ExpectedType: expectedType,
-							ValueNode:    body,
-							RealType:     realType,
-						})
-					}
-				}
-				for child := range body.IterChildren() {
-					queue = append(queue, child)
-				}
-				continue
-			}
-		}
-
-		// Pattern 8: Satisfies expression
-		if node.Kind == ast.KindSatisfiesExpression {
-			satExpr := node.AsSatisfiesExpression()
-			if satExpr != nil && satExpr.Expression != nil && satExpr.Type != nil {
-				expectedType := checkerutils.GetTypeAtLocation(c,satExpr.Type)
-				realType := checkerutils.GetTypeAtLocation(c,satExpr.Expression)
-				result = append(result, ExpectedAndRealType{
-					Node:         satExpr.Expression,
-					ExpectedType: expectedType,
-					ValueNode:    satExpr.Expression,
-					RealType:     realType,
-				})
-				queue = append(queue, satExpr.Expression)
-				continue
-			}
-		}
-
-		// No pattern matched — queue all children for traversal
-		for child := range node.IterChildren() {
-			queue = append(queue, child)
-		}
-	}
-
-	return result
+		return result
+	})
 }
 
 // getObjectLiteralElementName returns the name node of an object literal element

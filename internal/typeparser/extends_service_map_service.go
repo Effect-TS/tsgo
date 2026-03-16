@@ -27,74 +27,77 @@ func ExtendsServiceMapService(c *checker.Checker, classNode *ast.Node) *ServiceM
 		return nil
 	}
 
-	// Must have a name
-	if classNode.Name() == nil {
-		return nil
-	}
-
-	heritageElements := ast.GetExtendsHeritageClauseElements(classNode)
-	if len(heritageElements) == 0 {
-		return nil
-	}
-
-	for _, element := range heritageElements {
-		if element == nil {
-			continue
+	links := GetEffectLinks(c)
+	return Cached(&links.ExtendsServiceMapService, classNode, func() *ServiceMapServiceResult {
+		// Must have a name
+		if classNode.Name() == nil {
+			return nil
 		}
 
-		ewta := element.AsExpressionWithTypeArguments()
-		if ewta == nil || ewta.Expression == nil {
-			continue
+		heritageElements := ast.GetExtendsHeritageClauseElements(classNode)
+		if len(heritageElements) == 0 {
+			return nil
 		}
 
-		// The expression should be a CallExpression (the outer call)
-		outerCallNode := ewta.Expression
-		if !ast.IsCallExpression(outerCallNode) {
-			continue
-		}
-		outerCall := outerCallNode.AsCallExpression()
-		if outerCall == nil {
-			continue
-		}
+		for _, element := range heritageElements {
+			if element == nil {
+				continue
+			}
 
-		// The outer call's expression should also be a CallExpression (the inner call)
-		innerCallNode := outerCall.Expression
-		if innerCallNode == nil || !ast.IsCallExpression(innerCallNode) {
-			continue
-		}
-		innerCall := innerCallNode.AsCallExpression()
-		if innerCall == nil {
-			continue
-		}
+			ewta := element.AsExpressionWithTypeArguments()
+			if ewta == nil || ewta.Expression == nil {
+				continue
+			}
 
-		// The inner call must have type arguments (ServiceMap.Service<Self, Shape>())
-		if innerCall.TypeArguments == nil || len(innerCall.TypeArguments.Nodes) == 0 {
-			continue
-		}
+			// The expression should be a CallExpression (the outer call)
+			outerCallNode := ewta.Expression
+			if !ast.IsCallExpression(outerCallNode) {
+				continue
+			}
+			outerCall := outerCallNode.AsCallExpression()
+			if outerCall == nil {
+				continue
+			}
 
-		// Check if the inner call's expression resolves to ServiceMap.Service
-		if innerCall.Expression == nil {
-			continue
-		}
-		if !IsNodeReferenceToServiceMapModuleApi(c, innerCall.Expression, "Service") {
-			continue
-		}
+			// The outer call's expression should also be a CallExpression (the inner call)
+			innerCallNode := outerCall.Expression
+			if innerCallNode == nil || !ast.IsCallExpression(innerCallNode) {
+				continue
+			}
+			innerCall := innerCallNode.AsCallExpression()
+			if innerCall == nil {
+				continue
+			}
 
-		// Extract key string literal from outer call's first argument
-		var keyStringLiteral *ast.Node
-		if outerCall.Arguments != nil && len(outerCall.Arguments.Nodes) > 0 {
-			arg := outerCall.Arguments.Nodes[0]
-			if ast.IsStringLiteral(arg) {
-				keyStringLiteral = arg
+			// The inner call must have type arguments (ServiceMap.Service<Self, Shape>())
+			if innerCall.TypeArguments == nil || len(innerCall.TypeArguments.Nodes) == 0 {
+				continue
+			}
+
+			// Check if the inner call's expression resolves to ServiceMap.Service
+			if innerCall.Expression == nil {
+				continue
+			}
+			if !IsNodeReferenceToServiceMapModuleApi(c, innerCall.Expression, "Service") {
+				continue
+			}
+
+			// Extract key string literal from outer call's first argument
+			var keyStringLiteral *ast.Node
+			if outerCall.Arguments != nil && len(outerCall.Arguments.Nodes) > 0 {
+				arg := outerCall.Arguments.Nodes[0]
+				if ast.IsStringLiteral(arg) {
+					keyStringLiteral = arg
+				}
+			}
+
+			return &ServiceMapServiceResult{
+				ClassName:        classNode.Name(),
+				SelfTypeNode:     innerCall.TypeArguments.Nodes[0],
+				KeyStringLiteral: keyStringLiteral,
 			}
 		}
 
-		return &ServiceMapServiceResult{
-			ClassName:        classNode.Name(),
-			SelfTypeNode:     innerCall.TypeArguments.Nodes[0],
-			KeyStringLiteral: keyStringLiteral,
-		}
-	}
-
-	return nil
+		return nil
+	})
 }

@@ -112,15 +112,33 @@ func extendsSchemaTagged(c *checker.Checker, classNode *ast.Node, memberName str
 
 // ExtendsSchemaTaggedClass checks if a class declaration extends Schema.TaggedClass<T>("identifier")("tag", { ... }).
 func ExtendsSchemaTaggedClass(c *checker.Checker, classNode *ast.Node) *SchemaTaggedResult {
-	return extendsSchemaTagged(c, classNode, "TaggedClass")
+	if c == nil || classNode == nil {
+		return nil
+	}
+	links := GetEffectLinks(c)
+	return Cached(&links.ExtendsSchemaTaggedClass, classNode, func() *SchemaTaggedResult {
+		return extendsSchemaTagged(c, classNode, "TaggedClass")
+	})
 }
 
 // ExtendsSchemaTaggedError checks if a class declaration extends Schema.TaggedError<T>("identifier")("tag", { ... }).
 func ExtendsSchemaTaggedError(c *checker.Checker, classNode *ast.Node) *SchemaTaggedResult {
-	return extendsSchemaTagged(c, classNode, "TaggedError")
+	if c == nil || classNode == nil {
+		return nil
+	}
+	links := GetEffectLinks(c)
+	return Cached(&links.ExtendsSchemaTaggedError, classNode, func() *SchemaTaggedResult {
+		return extendsSchemaTagged(c, classNode, "TaggedError")
+	})
 }
 
 // ExtendsSchemaTaggedRequest checks if a class declaration extends Schema.TaggedRequest<T>("identifier")("tag", { ... }).
 func ExtendsSchemaTaggedRequest(c *checker.Checker, classNode *ast.Node) *SchemaTaggedResult {
-	return extendsSchemaTagged(c, classNode, "TaggedRequest")
+	if c == nil || classNode == nil {
+		return nil
+	}
+	links := GetEffectLinks(c)
+	return Cached(&links.ExtendsSchemaTaggedRequest, classNode, func() *SchemaTaggedResult {
+		return extendsSchemaTagged(c, classNode, "TaggedRequest")
+	})
 }

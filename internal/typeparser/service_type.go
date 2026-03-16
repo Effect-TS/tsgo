@@ -26,14 +26,20 @@ func parseServiceVarianceStruct(c *checker.Checker, t *checker.Type, atLocation 
 // ServiceType parses a Service type and extracts Identifier, Shape parameters.
 // Returns nil if the type is not a Service.
 func ServiceType(c *checker.Checker, t *checker.Type, atLocation *ast.Node) *Service {
-	propSymbol := GetPropertyOfTypeByName(c, t, ServiceTypeId)
-	if propSymbol == nil {
+	if c == nil || t == nil {
 		return nil
 	}
+	links := GetEffectLinks(c)
+	return Cached(&links.ServiceType, t, func() *Service {
+		propSymbol := GetPropertyOfTypeByName(c, t, ServiceTypeId)
+		if propSymbol == nil {
+			return nil
+		}
 
-	varianceStructType := c.GetTypeOfSymbolAtLocation(propSymbol, atLocation)
+		varianceStructType := c.GetTypeOfSymbolAtLocation(propSymbol, atLocation)
 
-	return parseServiceVarianceStruct(c, varianceStructType, atLocation)
+		return parseServiceVarianceStruct(c, varianceStructType, atLocation)
+	})
 }
 
 // IsServiceType returns true if the type has the Service variance struct.
@@ -50,55 +56,58 @@ func ContextTag(c *checker.Checker, t *checker.Type, atLocation *ast.Node) *Serv
 	if c == nil || t == nil {
 		return nil
 	}
-	version := DetectEffectVersion(c)
-	if version == EffectMajorV4 {
-		return ServiceType(c, t, atLocation)
-	}
+	links := GetEffectLinks(c)
+	return Cached(&links.ContextTag, t, func() *Service {
+		version := DetectEffectVersion(c)
+		if version == EffectMajorV4 {
+			return ServiceType(c, t, atLocation)
+		}
 
-	// v3 / unknown: iterate properties looking for a service variance struct
-	props := c.GetPropertiesOfType(t)
+		// v3 / unknown: iterate properties looking for a service variance struct
+		props := c.GetPropertiesOfType(t)
 
-	// Filter to required, non-optional properties with a value declaration
-	var candidates []*ast.Symbol
-	for _, prop := range props {
-		if prop == nil {
-			continue
+		// Filter to required, non-optional properties with a value declaration
+		var candidates []*ast.Symbol
+		for _, prop := range props {
+			if prop == nil {
+				continue
+			}
+			if prop.Flags&ast.SymbolFlagsProperty == 0 {
+				continue
+			}
+			if prop.Flags&ast.SymbolFlagsOptional != 0 {
+				continue
+			}
+			if prop.ValueDeclaration == nil {
+				continue
+			}
+			candidates = append(candidates, prop)
 		}
-		if prop.Flags&ast.SymbolFlagsProperty == 0 {
-			continue
-		}
-		if prop.Flags&ast.SymbolFlagsOptional != 0 {
-			continue
-		}
-		if prop.ValueDeclaration == nil {
-			continue
-		}
-		candidates = append(candidates, prop)
-	}
 
-	if len(candidates) == 0 {
+		if len(candidates) == 0 {
+			return nil
+		}
+
+		// Sort so properties containing "TypeId" come first (optimization heuristic)
+		sort.SliceStable(candidates, func(i, j int) bool {
+			iHas := strings.Contains(candidates[i].Name, "TypeId")
+			jHas := strings.Contains(candidates[j].Name, "TypeId")
+			if iHas && !jHas {
+				return true
+			}
+			return false
+		})
+
+		// Try each candidate as a service variance struct
+		for _, prop := range candidates {
+			propType := c.GetTypeOfSymbolAtLocation(prop, atLocation)
+			if result := parseServiceVarianceStruct(c, propType, atLocation); result != nil {
+				return result
+			}
+		}
+
 		return nil
-	}
-
-	// Sort so properties containing "TypeId" come first (optimization heuristic)
-	sort.SliceStable(candidates, func(i, j int) bool {
-		iHas := strings.Contains(candidates[i].Name, "TypeId")
-		jHas := strings.Contains(candidates[j].Name, "TypeId")
-		if iHas && !jHas {
-			return true
-		}
-		return false
 	})
-
-	// Try each candidate as a service variance struct
-	for _, prop := range candidates {
-		propType := c.GetTypeOfSymbolAtLocation(prop, atLocation)
-		if result := parseServiceVarianceStruct(c, propType, atLocation); result != nil {
-			return result
-		}
-	}
-
-	return nil
 }
 
 // IsContextTag returns true if the type has the Context.Tag variance struct.

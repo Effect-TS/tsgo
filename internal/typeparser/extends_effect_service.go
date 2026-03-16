@@ -28,81 +28,84 @@ func ExtendsEffectService(c *checker.Checker, classNode *ast.Node) *EffectServic
 		return nil
 	}
 
-	// Must have a name
-	if classNode.Name() == nil {
-		return nil
-	}
-
-	heritageElements := ast.GetExtendsHeritageClauseElements(classNode)
-	if len(heritageElements) == 0 {
-		return nil
-	}
-
-	for _, element := range heritageElements {
-		if element == nil {
-			continue
+	links := GetEffectLinks(c)
+	return Cached(&links.ExtendsEffectService, classNode, func() *EffectServiceResult {
+		// Must have a name
+		if classNode.Name() == nil {
+			return nil
 		}
 
-		ewta := element.AsExpressionWithTypeArguments()
-		if ewta == nil || ewta.Expression == nil {
-			continue
+		heritageElements := ast.GetExtendsHeritageClauseElements(classNode)
+		if len(heritageElements) == 0 {
+			return nil
 		}
 
-		// The expression should be a CallExpression (the outer call)
-		outerCallNode := ewta.Expression
-		if !ast.IsCallExpression(outerCallNode) {
-			continue
-		}
-		outerCall := outerCallNode.AsCallExpression()
-		if outerCall == nil {
-			continue
-		}
+		for _, element := range heritageElements {
+			if element == nil {
+				continue
+			}
 
-		// The outer call's expression should also be a CallExpression (the inner call)
-		innerCallNode := outerCall.Expression
-		if innerCallNode == nil || !ast.IsCallExpression(innerCallNode) {
-			continue
-		}
-		innerCall := innerCallNode.AsCallExpression()
-		if innerCall == nil {
-			continue
-		}
+			ewta := element.AsExpressionWithTypeArguments()
+			if ewta == nil || ewta.Expression == nil {
+				continue
+			}
 
-		// The inner call must have type arguments (Effect.Service<Self>())
-		if innerCall.TypeArguments == nil || len(innerCall.TypeArguments.Nodes) == 0 {
-			continue
-		}
+			// The expression should be a CallExpression (the outer call)
+			outerCallNode := ewta.Expression
+			if !ast.IsCallExpression(outerCallNode) {
+				continue
+			}
+			outerCall := outerCallNode.AsCallExpression()
+			if outerCall == nil {
+				continue
+			}
 
-		// Check if the inner call's expression resolves to Effect.Service
-		if innerCall.Expression == nil {
-			continue
-		}
-		if !IsNodeReferenceToEffectModuleApi(c, innerCall.Expression, "Service") {
-			continue
-		}
+			// The outer call's expression should also be a CallExpression (the inner call)
+			innerCallNode := outerCall.Expression
+			if innerCallNode == nil || !ast.IsCallExpression(innerCallNode) {
+				continue
+			}
+			innerCall := innerCallNode.AsCallExpression()
+			if innerCall == nil {
+				continue
+			}
 
-		// Extract the key string literal from outer call's first argument
-		var keyStringLiteral *ast.Node
-		if outerCall.Arguments != nil && len(outerCall.Arguments.Nodes) > 0 {
-			arg := outerCall.Arguments.Nodes[0]
-			if ast.IsStringLiteral(arg) {
-				keyStringLiteral = arg
+			// The inner call must have type arguments (Effect.Service<Self>())
+			if innerCall.TypeArguments == nil || len(innerCall.TypeArguments.Nodes) == 0 {
+				continue
+			}
+
+			// Check if the inner call's expression resolves to Effect.Service
+			if innerCall.Expression == nil {
+				continue
+			}
+			if !IsNodeReferenceToEffectModuleApi(c, innerCall.Expression, "Service") {
+				continue
+			}
+
+			// Extract the key string literal from outer call's first argument
+			var keyStringLiteral *ast.Node
+			if outerCall.Arguments != nil && len(outerCall.Arguments.Nodes) > 0 {
+				arg := outerCall.Arguments.Nodes[0]
+				if ast.IsStringLiteral(arg) {
+					keyStringLiteral = arg
+				}
+			}
+
+			// Extract the options expression (second argument of the outer call, if present)
+			var options *ast.Node
+			if outerCall.Arguments != nil && len(outerCall.Arguments.Nodes) >= 2 {
+				options = outerCall.Arguments.Nodes[1]
+			}
+
+			return &EffectServiceResult{
+				ClassName:        classNode.Name(),
+				SelfTypeNode:     innerCall.TypeArguments.Nodes[0],
+				Options:          options,
+				KeyStringLiteral: keyStringLiteral,
 			}
 		}
 
-		// Extract the options expression (second argument of the outer call, if present)
-		var options *ast.Node
-		if outerCall.Arguments != nil && len(outerCall.Arguments.Nodes) >= 2 {
-			options = outerCall.Arguments.Nodes[1]
-		}
-
-		return &EffectServiceResult{
-			ClassName:        classNode.Name(),
-			SelfTypeNode:     innerCall.TypeArguments.Nodes[0],
-			Options:          options,
-			KeyStringLiteral: keyStringLiteral,
-		}
-	}
-
-	return nil
+		return nil
+	})
 }

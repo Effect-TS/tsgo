@@ -26,58 +26,61 @@ func ExtendsDataTaggedError(c *checker.Checker, classNode *ast.Node) *DataTagged
 		return nil
 	}
 
-	// Must have a name
-	if classNode.Name() == nil {
-		return nil
-	}
-
-	heritageElements := ast.GetExtendsHeritageClauseElements(classNode)
-	if len(heritageElements) == 0 {
-		return nil
-	}
-
-	for _, element := range heritageElements {
-		if element == nil {
-			continue
+	links := GetEffectLinks(c)
+	return Cached(&links.ExtendsDataTaggedError, classNode, func() *DataTaggedErrorResult {
+		// Must have a name
+		if classNode.Name() == nil {
+			return nil
 		}
 
-		ewta := element.AsExpressionWithTypeArguments()
-		if ewta == nil || ewta.Expression == nil {
-			continue
+		heritageElements := ast.GetExtendsHeritageClauseElements(classNode)
+		if len(heritageElements) == 0 {
+			return nil
 		}
 
-		// The expression should be a CallExpression: Data.TaggedError("key")
-		callNode := ewta.Expression
-		if !ast.IsCallExpression(callNode) {
-			continue
-		}
-		call := callNode.AsCallExpression()
-		if call == nil {
-			continue
-		}
+		for _, element := range heritageElements {
+			if element == nil {
+				continue
+			}
 
-		// The call's expression should be a PropertyAccessExpression: Data.TaggedError
-		if call.Expression == nil {
-			continue
-		}
-		if !IsNodeReferenceToEffectDataModuleApi(c, call.Expression, "TaggedError") {
-			continue
-		}
+			ewta := element.AsExpressionWithTypeArguments()
+			if ewta == nil || ewta.Expression == nil {
+				continue
+			}
 
-		// Extract key string literal from call's first argument
-		var keyStringLiteral *ast.Node
-		if call.Arguments != nil && len(call.Arguments.Nodes) > 0 {
-			arg := call.Arguments.Nodes[0]
-			if ast.IsStringLiteral(arg) {
-				keyStringLiteral = arg
+			// The expression should be a CallExpression: Data.TaggedError("key")
+			callNode := ewta.Expression
+			if !ast.IsCallExpression(callNode) {
+				continue
+			}
+			call := callNode.AsCallExpression()
+			if call == nil {
+				continue
+			}
+
+			// The call's expression should be a PropertyAccessExpression: Data.TaggedError
+			if call.Expression == nil {
+				continue
+			}
+			if !IsNodeReferenceToEffectDataModuleApi(c, call.Expression, "TaggedError") {
+				continue
+			}
+
+			// Extract key string literal from call's first argument
+			var keyStringLiteral *ast.Node
+			if call.Arguments != nil && len(call.Arguments.Nodes) > 0 {
+				arg := call.Arguments.Nodes[0]
+				if ast.IsStringLiteral(arg) {
+					keyStringLiteral = arg
+				}
+			}
+
+			return &DataTaggedErrorResult{
+				ClassName:        classNode.Name(),
+				KeyStringLiteral: keyStringLiteral,
 			}
 		}
 
-		return &DataTaggedErrorResult{
-			ClassName:        classNode.Name(),
-			KeyStringLiteral: keyStringLiteral,
-		}
-	}
-
-	return nil
+		return nil
+	})
 }

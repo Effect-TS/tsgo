@@ -50,6 +50,14 @@ func ParseEffectFnOpportunity(c *checker.Checker, node *ast.Node) *EffectFnOppor
 		return nil
 	}
 
+	links := GetEffectLinks(c)
+	return Cached(&links.ParseEffectFnOpportunity, node, func() *EffectFnOpportunityResult {
+		return parseEffectFnOpportunityInner(c, node)
+	})
+}
+
+// parseEffectFnOpportunityInner contains the actual parsing logic for ParseEffectFnOpportunity.
+func parseEffectFnOpportunityInner(c *checker.Checker, node *ast.Node) *EffectFnOpportunityResult {
 	// Step 1: Filter by node kind
 	switch node.Kind {
 	case ast.KindFunctionExpression, ast.KindArrowFunction, ast.KindFunctionDeclaration:

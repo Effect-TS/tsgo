@@ -28,30 +28,72 @@ type parsedSingleArgCallResult struct {
 // ParsePipeCall detects pipe() and .pipe() call patterns.
 // Returns nil when the node is not a recognized pipe call.
 func ParsePipeCall(c *checker.Checker, node *ast.Node) *ParsedPipeCallResult {
-	if node == nil || node.Kind != ast.KindCallExpression {
+	if c == nil || node == nil || node.Kind != ast.KindCallExpression {
 		return nil
 	}
 
-	call := node.AsCallExpression()
-	if call == nil || call.Expression == nil {
-		return nil
-	}
-
-	// Case 1: PropertyAccessExpression — either Namespace.pipe(...) or expr.pipe(...)
-	if call.Expression.Kind == ast.KindPropertyAccessExpression {
-		propAccess := call.Expression.AsPropertyAccessExpression()
-		if propAccess == nil || propAccess.Name() == nil {
+	links := GetEffectLinks(c)
+	return Cached(&links.ParsePipeCall, node, func() *ParsedPipeCallResult {
+		call := node.AsCallExpression()
+		if call == nil || call.Expression == nil {
 			return nil
 		}
 
-		nameText := scanner.GetTextOfNode(propAccess.Name())
-		if nameText != "pipe" {
-			return nil
+		// Case 1: PropertyAccessExpression — either Namespace.pipe(...) or expr.pipe(...)
+		if call.Expression.Kind == ast.KindPropertyAccessExpression {
+			propAccess := call.Expression.AsPropertyAccessExpression()
+			if propAccess == nil || propAccess.Name() == nil {
+				return nil
+			}
+
+			nameText := scanner.GetTextOfNode(propAccess.Name())
+			if nameText != "pipe" {
+				return nil
+			}
+
+			// Check if this is Function.pipe from "effect" package
+			if IsNodeReferenceToEffectPackageExport(c, call.Expression, "pipe") {
+				// This is pipe(subject, f1, f2, ...) via namespace access (e.g., Function.pipe)
+				if call.Arguments == nil || len(call.Arguments.Nodes) == 0 {
+					return nil
+				}
+				return &ParsedPipeCallResult{
+					Node:    call,
+					Subject: call.Arguments.Nodes[0],
+					Args:    call.Arguments.Nodes[1:],
+					Kind:    TransformationKindPipe,
+				}
+			}
+
+			// Not from "effect" package — this is a .pipe() pipeable method call
+			// Any .pipe() call is treated as a pipeable chain
+			subject := propAccess.Expression
+			if subject == nil {
+				return nil
+			}
+			var args []*ast.Node
+			if call.Arguments != nil {
+				args = call.Arguments.Nodes
+			}
+			return &ParsedPipeCallResult{
+				Node:    call,
+				Subject: subject,
+				Args:    args,
+				Kind:    TransformationKindPipeable,
+			}
 		}
 
-		// Check if this is Function.pipe from "effect" package
-		if IsNodeReferenceToEffectPackageExport(c, call.Expression, "pipe") {
-			// This is pipe(subject, f1, f2, ...) via namespace access (e.g., Function.pipe)
+		// Case 2: Identifier — bare pipe(subject, f1, f2, ...)
+		if call.Expression.Kind == ast.KindIdentifier {
+			nameText := scanner.GetTextOfNode(call.Expression)
+			if nameText != "pipe" {
+				return nil
+			}
+
+			if !IsNodeReferenceToEffectPackageExport(c, call.Expression, "pipe") {
+				return nil
+			}
+
 			if call.Arguments == nil || len(call.Arguments.Nodes) == 0 {
 				return nil
 			}
@@ -63,47 +105,8 @@ func ParsePipeCall(c *checker.Checker, node *ast.Node) *ParsedPipeCallResult {
 			}
 		}
 
-		// Not from "effect" package — this is a .pipe() pipeable method call
-		// Any .pipe() call is treated as a pipeable chain
-		subject := propAccess.Expression
-		if subject == nil {
-			return nil
-		}
-		var args []*ast.Node
-		if call.Arguments != nil {
-			args = call.Arguments.Nodes
-		}
-		return &ParsedPipeCallResult{
-			Node:    call,
-			Subject: subject,
-			Args:    args,
-			Kind:    TransformationKindPipeable,
-		}
-	}
-
-	// Case 2: Identifier — bare pipe(subject, f1, f2, ...)
-	if call.Expression.Kind == ast.KindIdentifier {
-		nameText := scanner.GetTextOfNode(call.Expression)
-		if nameText != "pipe" {
-			return nil
-		}
-
-		if !IsNodeReferenceToEffectPackageExport(c, call.Expression, "pipe") {
-			return nil
-		}
-
-		if call.Arguments == nil || len(call.Arguments.Nodes) == 0 {
-			return nil
-		}
-		return &ParsedPipeCallResult{
-			Node:    call,
-			Subject: call.Arguments.Nodes[0],
-			Args:    call.Arguments.Nodes[1:],
-			Kind:    TransformationKindPipe,
-		}
-	}
-
-	return nil
+		return nil
+	})
 }
 
 // parseSingleArgCall detects single-argument call patterns like f(arg).
@@ -235,57 +238,95 @@ func PipingFlows(c *checker.Checker, sf *ast.SourceFile, includeEffectFn bool) [
 		return nil
 	}
 
-	var result []*PipingFlow
-
-	// Initialize work queue with all children of the source file
-	var queue []workItem
-	for child := range sf.AsNode().IterChildren() {
-		queue = append(queue, workItem{node: child})
+	links := GetEffectLinks(c)
+	store := &links.PipingFlowsWithoutEffectFn
+	if includeEffectFn {
+		store = &links.PipingFlowsWithEffectFn
 	}
 
-	for len(queue) > 0 {
-		// Pop from end (stack behavior for depth-first)
-		item := queue[len(queue)-1]
-		queue = queue[:len(queue)-1]
+	return Cached(store, sf, func() []*PipingFlow {
+		var result []*PipingFlow
 
-		node := item.node
-		if node == nil {
-			continue
+		// Initialize work queue with all children of the source file
+		var queue []workItem
+		for child := range sf.AsNode().IterChildren() {
+			queue = append(queue, workItem{node: child})
 		}
 
-		if node.Kind == ast.KindCallExpression {
-			// Try Effect.fn call first (must be before pipe and singleArg)
-			if includeEffectFn {
-				if efnResult := parseEffectFnCall(c, node); efnResult != nil {
-					transformations, subjectType := buildEffectFnTransformations(c, efnResult)
-					flow := &PipingFlow{
-						Node: node,
-						Subject: PipingFlowSubject{
-							Node:    node,
-							OutType: subjectType,
-						},
-						Transformations: transformations,
-					}
-					result = append(result, flow)
+		for len(queue) > 0 {
+			// Pop from end (stack behavior for depth-first)
+			item := queue[len(queue)-1]
+			queue = queue[:len(queue)-1]
 
-					// If we were building a parent flow, finalize it with this node as subject
+			node := item.node
+			if node == nil {
+				continue
+			}
+
+			if node.Kind == ast.KindCallExpression {
+				// Try Effect.fn call first (must be before pipe and singleArg)
+				if includeEffectFn {
+					if efnResult := parseEffectFnCall(c, node); efnResult != nil {
+						transformations, subjectType := buildEffectFnTransformations(c, efnResult)
+						flow := &PipingFlow{
+							Node: node,
+							Subject: PipingFlowSubject{
+								Node:    node,
+								OutType: subjectType,
+							},
+							Transformations: transformations,
+						}
+						result = append(result, flow)
+
+						// If we were building a parent flow, finalize it with this node as subject
+						if item.parentFlow != nil {
+							item.parentFlow.Subject = PipingFlowSubject{
+								Node:    node,
+								OutType: checkerutils.GetTypeAtLocation(c, node),
+							}
+							result = append(result, item.parentFlow)
+						}
+
+						// Queue function body argument children for independent inner flow traversal
+						fnBodyArg := efnResult.node.Arguments.Nodes[efnResult.fnBodyIndex]
+						if fnBodyArg != nil {
+							for child := range fnBodyArg.IterChildren() {
+								queue = append(queue, workItem{node: child})
+							}
+						}
+						// Queue trailing arg children for independent inner flow traversal
+						for _, arg := range efnResult.trailingArgs {
+							if arg != nil {
+								for child := range arg.IterChildren() {
+									queue = append(queue, workItem{node: child})
+								}
+							}
+						}
+						continue
+					}
+				}
+
+				// Try pipe call
+				if pipeResult := ParsePipeCall(c, node); pipeResult != nil {
+					transformations := buildPipeTransformations(c, pipeResult)
+					flowNode := pipeResult.Node.AsNode()
+
 					if item.parentFlow != nil {
-						item.parentFlow.Subject = PipingFlowSubject{
-							Node:    node,
-							OutType: checkerutils.GetTypeAtLocation(c,node),
+						// Extend parent flow: prepend our transformations
+						item.parentFlow.Transformations = append(transformations, item.parentFlow.Transformations...)
+						// Continue traversing the subject for further flattening
+						queue = append(queue, workItem{node: pipeResult.Subject, parentFlow: item.parentFlow})
+					} else {
+						// Start a new flow
+						newFlow := &PipingFlow{
+							Node:            flowNode,
+							Transformations: transformations,
 						}
-						result = append(result, item.parentFlow)
+						queue = append(queue, workItem{node: pipeResult.Subject, parentFlow: newFlow})
 					}
 
-					// Queue function body argument children for independent inner flow traversal
-					fnBodyArg := efnResult.node.Arguments.Nodes[efnResult.fnBodyIndex]
-					if fnBodyArg != nil {
-						for child := range fnBodyArg.IterChildren() {
-							queue = append(queue, workItem{node: child})
-						}
-					}
-					// Queue trailing arg children for independent inner flow traversal
-					for _, arg := range efnResult.trailingArgs {
+					// Queue transformation argument children for independent inner flow traversal
+					for _, arg := range pipeResult.Args {
 						if arg != nil {
 							for child := range arg.IterChildren() {
 								queue = append(queue, workItem{node: child})
@@ -294,102 +335,72 @@ func PipingFlows(c *checker.Checker, sf *ast.SourceFile, includeEffectFn bool) [
 					}
 					continue
 				}
-			}
 
-			// Try pipe call
-			if pipeResult := ParsePipeCall(c, node); pipeResult != nil {
-				transformations := buildPipeTransformations(c, pipeResult)
-				flowNode := pipeResult.Node.AsNode()
-
-				if item.parentFlow != nil {
-					// Extend parent flow: prepend our transformations
-					item.parentFlow.Transformations = append(transformations, item.parentFlow.Transformations...)
-					// Continue traversing the subject for further flattening
-					queue = append(queue, workItem{node: pipeResult.Subject, parentFlow: item.parentFlow})
-				} else {
-					// Start a new flow
-					newFlow := &PipingFlow{
-						Node:            flowNode,
-						Transformations: transformations,
+				// Try single-arg call
+				if singleResult := parseSingleArgCall(node); singleResult != nil {
+					var callOutType *checker.Type
+					if callSig := c.GetResolvedSignature(node); callSig != nil {
+						callOutType = c.GetReturnTypeOfSignature(callSig)
 					}
-					queue = append(queue, workItem{node: pipeResult.Subject, parentFlow: newFlow})
-				}
+					transformation := PipingFlowTransformation{
+						Kind:    TransformationKindCall,
+						Callee:  singleResult.callee,
+						Args:    nil,
+						OutType: callOutType,
+					}
 
-				// Queue transformation argument children for independent inner flow traversal
-				for _, arg := range pipeResult.Args {
-					if arg != nil {
-						for child := range arg.IterChildren() {
-							queue = append(queue, workItem{node: child})
+					if item.parentFlow != nil {
+						// Extend parent flow: prepend this transformation
+						item.parentFlow.Transformations = append(
+							[]PipingFlowTransformation{transformation},
+							item.parentFlow.Transformations...,
+						)
+						// Continue traversing the subject
+						queue = append(queue, workItem{node: singleResult.subject, parentFlow: item.parentFlow})
+					} else {
+						// Start a new flow
+						newFlow := &PipingFlow{
+							Node:            node,
+							Transformations: []PipingFlowTransformation{transformation},
 						}
+						queue = append(queue, workItem{node: singleResult.subject, parentFlow: newFlow})
 					}
+
+					// Queue callee children for independent inner flow traversal
+					for child := range singleResult.callee.IterChildren() {
+						queue = append(queue, workItem{node: child})
+					}
+					continue
 				}
-				continue
 			}
 
-			// Try single-arg call
-			if singleResult := parseSingleArgCall(node); singleResult != nil {
-				var callOutType *checker.Type
-				if callSig := c.GetResolvedSignature(node); callSig != nil {
-					callOutType = c.GetReturnTypeOfSignature(callSig)
+			// Node is not a parseable pipe/call
+			if item.parentFlow != nil {
+				// Subject chain terminated — finalize the flow
+				item.parentFlow.Subject = PipingFlowSubject{
+					Node:    node,
+					OutType: checkerutils.GetTypeAtLocation(c, node),
 				}
-				transformation := PipingFlowTransformation{
-					Kind:    TransformationKindCall,
-					Callee:  singleResult.callee,
-					Args:    nil,
-					OutType: callOutType,
-				}
-
-				if item.parentFlow != nil {
-					// Extend parent flow: prepend this transformation
-					item.parentFlow.Transformations = append(
-						[]PipingFlowTransformation{transformation},
-						item.parentFlow.Transformations...,
-					)
-					// Continue traversing the subject
-					queue = append(queue, workItem{node: singleResult.subject, parentFlow: item.parentFlow})
-				} else {
-					// Start a new flow
-					newFlow := &PipingFlow{
-						Node:            node,
-						Transformations: []PipingFlowTransformation{transformation},
-					}
-					queue = append(queue, workItem{node: singleResult.subject, parentFlow: newFlow})
-				}
-
-				// Queue callee children for independent inner flow traversal
-				for child := range singleResult.callee.IterChildren() {
+				result = append(result, item.parentFlow)
+				// Also queue children to find independent inner flows
+				for child := range node.IterChildren() {
 					queue = append(queue, workItem{node: child})
 				}
-				continue
+			} else {
+				// Not part of any flow; queue children for further traversal
+				for child := range node.IterChildren() {
+					queue = append(queue, workItem{node: child})
+				}
 			}
 		}
 
-		// Node is not a parseable pipe/call
-		if item.parentFlow != nil {
-			// Subject chain terminated — finalize the flow
-			item.parentFlow.Subject = PipingFlowSubject{
-				Node:    node,
-				OutType: checkerutils.GetTypeAtLocation(c,node),
-			}
-			result = append(result, item.parentFlow)
-			// Also queue children to find independent inner flows
-			for child := range node.IterChildren() {
-				queue = append(queue, workItem{node: child})
-			}
-		} else {
-			// Not part of any flow; queue children for further traversal
-			for child := range node.IterChildren() {
-				queue = append(queue, workItem{node: child})
-			}
-		}
-	}
+		// Sort by source position
+		sort.Slice(result, func(i, j int) bool {
+			return result[i].Node.Pos() < result[j].Node.Pos()
+		})
 
-	// Sort by source position
-	sort.Slice(result, func(i, j int) bool {
-		return result[i].Node.Pos() < result[j].Node.Pos()
+		return result
 	})
-
-	return result
 }
 
 // buildPipeTransformations builds PipingFlowTransformation slices from pipe call arguments.

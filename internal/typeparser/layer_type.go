@@ -36,63 +36,66 @@ func LayerType(c *checker.Checker, t *checker.Type, atLocation *ast.Node) *Layer
 	if c == nil || t == nil {
 		return nil
 	}
-	version := DetectEffectVersion(c)
-	if version == EffectMajorV4 {
-		// Direct property access using the known Layer v4 type ID
-		propSymbol := GetPropertyOfTypeByName(c, t, LayerTypeId)
-		if propSymbol == nil {
+	links := GetEffectLinks(c)
+	return Cached(&links.LayerType, t, func() *Layer {
+		version := DetectEffectVersion(c)
+		if version == EffectMajorV4 {
+			// Direct property access using the known Layer v4 type ID
+			propSymbol := GetPropertyOfTypeByName(c, t, LayerTypeId)
+			if propSymbol == nil {
+				return nil
+			}
+
+			varianceStructType := c.GetTypeOfSymbolAtLocation(propSymbol, atLocation)
+
+			return parseLayerVarianceStruct(c, varianceStructType, atLocation)
+		}
+
+		// v3 / unknown: iterate properties looking for a layer variance struct
+		props := c.GetPropertiesOfType(t)
+
+		// Filter to required, non-optional properties with a value declaration
+		var candidates []*ast.Symbol
+		for _, prop := range props {
+			if prop == nil {
+				continue
+			}
+			if prop.Flags&ast.SymbolFlagsProperty == 0 {
+				continue
+			}
+			if prop.Flags&ast.SymbolFlagsOptional != 0 {
+				continue
+			}
+			if prop.ValueDeclaration == nil {
+				continue
+			}
+			candidates = append(candidates, prop)
+		}
+
+		if len(candidates) == 0 {
 			return nil
 		}
 
-		varianceStructType := c.GetTypeOfSymbolAtLocation(propSymbol, atLocation)
+		// Sort so properties containing "LayerTypeId" come first (optimization heuristic)
+		sort.SliceStable(candidates, func(i, j int) bool {
+			iHas := strings.Contains(candidates[i].Name, "LayerTypeId")
+			jHas := strings.Contains(candidates[j].Name, "LayerTypeId")
+			if iHas && !jHas {
+				return true
+			}
+			return false
+		})
 
-		return parseLayerVarianceStruct(c, varianceStructType, atLocation)
-	}
+		// Try each candidate as a layer variance struct
+		for _, prop := range candidates {
+			propType := c.GetTypeOfSymbolAtLocation(prop, atLocation)
+			if result := parseLayerVarianceStruct(c, propType, atLocation); result != nil {
+				return result
+			}
+		}
 
-	// v3 / unknown: iterate properties looking for a layer variance struct
-	props := c.GetPropertiesOfType(t)
-
-	// Filter to required, non-optional properties with a value declaration
-	var candidates []*ast.Symbol
-	for _, prop := range props {
-		if prop == nil {
-			continue
-		}
-		if prop.Flags&ast.SymbolFlagsProperty == 0 {
-			continue
-		}
-		if prop.Flags&ast.SymbolFlagsOptional != 0 {
-			continue
-		}
-		if prop.ValueDeclaration == nil {
-			continue
-		}
-		candidates = append(candidates, prop)
-	}
-
-	if len(candidates) == 0 {
 		return nil
-	}
-
-	// Sort so properties containing "LayerTypeId" come first (optimization heuristic)
-	sort.SliceStable(candidates, func(i, j int) bool {
-		iHas := strings.Contains(candidates[i].Name, "LayerTypeId")
-		jHas := strings.Contains(candidates[j].Name, "LayerTypeId")
-		if iHas && !jHas {
-			return true
-		}
-		return false
 	})
-
-	// Try each candidate as a layer variance struct
-	for _, prop := range candidates {
-		propType := c.GetTypeOfSymbolAtLocation(prop, atLocation)
-		if result := parseLayerVarianceStruct(c, propType, atLocation); result != nil {
-			return result
-		}
-	}
-
-	return nil
 }
 
 // IsLayerType returns true if the type has the Layer variance struct.

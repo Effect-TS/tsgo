@@ -11,15 +11,17 @@ func IsPipeableType(c *checker.Checker, t *checker.Type, atLocation *ast.Node) b
 	if c == nil || t == nil {
 		return false
 	}
+	links := GetEffectLinks(c)
+	return Cached(&links.IsPipeableType, t, func() bool {
+		pipeSymbol := c.GetPropertyOfType(t, "pipe")
+		if pipeSymbol == nil {
+			return false
+		}
 
-	pipeSymbol := c.GetPropertyOfType(t, "pipe")
-	if pipeSymbol == nil {
-		return false
-	}
-
-	pipeType := c.GetTypeOfSymbolAtLocation(pipeSymbol, atLocation)
-	signatures := c.GetSignaturesOfType(pipeType, checker.SignatureKindCall)
-	return len(signatures) > 0
+		pipeType := c.GetTypeOfSymbolAtLocation(pipeSymbol, atLocation)
+		signatures := c.GetSignaturesOfType(pipeType, checker.SignatureKindCall)
+		return len(signatures) > 0
+	})
 }
 
 // IsSafelyPipeableCallee returns true if a callee expression can be safely

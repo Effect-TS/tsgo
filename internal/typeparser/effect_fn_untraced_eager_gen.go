@@ -15,46 +15,49 @@ func EffectFnUntracedEagerGenCall(c *checker.Checker, node *ast.Node) *EffectGen
 		return nil
 	}
 
-	call := node.AsCallExpression()
-	if call == nil || call.Arguments == nil || len(call.Arguments.Nodes) == 0 {
-		return nil
-	}
+	links := GetEffectLinks(c)
+	return Cached(&links.EffectFnUntracedEagerGenCall, node, func() *EffectGenCallResult {
+		call := node.AsCallExpression()
+		if call == nil || call.Arguments == nil || len(call.Arguments.Nodes) == 0 {
+			return nil
+		}
 
-	// Scan arguments for the first FunctionExpression with asteriskToken
-	var genFn *ast.FunctionExpression
-	for _, arg := range call.Arguments.Nodes {
-		if arg != nil && arg.Kind == ast.KindFunctionExpression {
-			fn := arg.AsFunctionExpression()
-			if fn != nil && fn.AsteriskToken != nil {
-				genFn = fn
-				break
+		// Scan arguments for the first FunctionExpression with asteriskToken
+		var genFn *ast.FunctionExpression
+		for _, arg := range call.Arguments.Nodes {
+			if arg != nil && arg.Kind == ast.KindFunctionExpression {
+				fn := arg.AsFunctionExpression()
+				if fn != nil && fn.AsteriskToken != nil {
+					genFn = fn
+					break
+				}
 			}
 		}
-	}
-	if genFn == nil {
-		return nil
-	}
+		if genFn == nil {
+			return nil
+		}
 
-	// fnUntracedEager only supports direct calls (no curried naming).
-	// call.Expression must be a PropertyAccessExpression directly.
-	expr := call.Expression
-	if expr == nil || expr.Kind != ast.KindPropertyAccessExpression {
-		return nil
-	}
+		// fnUntracedEager only supports direct calls (no curried naming).
+		// call.Expression must be a PropertyAccessExpression directly.
+		expr := call.Expression
+		if expr == nil || expr.Kind != ast.KindPropertyAccessExpression {
+			return nil
+		}
 
-	if !IsNodeReferenceToEffectModuleApi(c, expr, "fnUntracedEager") {
-		return nil
-	}
+		if !IsNodeReferenceToEffectModuleApi(c, expr, "fnUntracedEager") {
+			return nil
+		}
 
-	propertyAccess := expr.AsPropertyAccessExpression()
-	if propertyAccess == nil {
-		return nil
-	}
+		propertyAccess := expr.AsPropertyAccessExpression()
+		if propertyAccess == nil {
+			return nil
+		}
 
-	return &EffectGenCallResult{
-		Call:              call,
-		EffectModule:      propertyAccess.Expression,
-		GeneratorFunction: genFn,
-		Body:              genFn.Body,
-	}
+		return &EffectGenCallResult{
+			Call:              call,
+			EffectModule:      propertyAccess.Expression,
+			GeneratorFunction: genFn,
+			Body:              genFn.Body,
+		}
+	})
 }
