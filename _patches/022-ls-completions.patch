@@ -1,5 +1,5 @@
 diff --git a/internal/ls/completions.go b/internal/ls/completions.go
-index 9c27bfe08..786212233 100644
+index 9c27bfe08..2496368b6 100644
 --- a/internal/ls/completions.go
 +++ b/internal/ls/completions.go
 @@ -31,13 +31,25 @@ import (
@@ -29,16 +29,25 @@ index 9c27bfe08..786212233 100644
  	var triggerCharacter *string
  	if context != nil {
  		triggerCharacter = context.TriggerCharacter
-@@ -54,6 +66,12 @@ func (l *LanguageService) ProvideCompletion(
+@@ -53,6 +65,21 @@ func (l *LanguageService) ProvideCompletion(
+ 	if err != nil {
  		return lsproto.CompletionItemsOrListOrNull{}, err
  	}
-+
 +	// EFFECT HOOK: Allow Effect to add or modify completion items
-+	if AfterCompletionCallback != nil && completionList != nil {
-+		completionList.Items = AfterCompletionCallback(file, position, completionList.Items, program, l)
++	if AfterCompletionCallback != nil {
++		var existingItems []*lsproto.CompletionItem
++		if completionList != nil {
++			existingItems = completionList.Items
++		}
++		items := AfterCompletionCallback(file, position, existingItems, program, l)
++		if len(items) > 0 {
++			if completionList == nil {
++				completionList = &lsproto.CompletionList{}
++			}
++			completionList.Items = items
++		}
 +	}
 +
  	completionList = ensureItemData(file.FileName(), position, completionList)
  	return lsproto.CompletionItemsOrListOrNull{List: completionList}, nil
  }
- 
