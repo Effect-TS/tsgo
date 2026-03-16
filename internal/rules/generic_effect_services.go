@@ -26,9 +26,11 @@ var GenericEffectServices = rule.Rule{
 
 		// Stack-based traversal
 		nodeToVisit := make([]*ast.Node, 0)
-		for child := range ctx.SourceFile.AsNode().IterChildren() {
+		pushChild := func(child *ast.Node) bool {
 			nodeToVisit = append(nodeToVisit, child)
+			return false
 		}
+		ctx.SourceFile.AsNode().ForEachChild(pushChild)
 
 		for len(nodeToVisit) > 0 {
 			node := nodeToVisit[len(nodeToVisit)-1]
@@ -49,9 +51,7 @@ var GenericEffectServices = rule.Rule{
 			}
 
 			// Enqueue children for further traversal
-			for child := range node.IterChildren() {
-				nodeToVisit = append(nodeToVisit, child)
-			}
+			node.ForEachChild(pushChild)
 		}
 
 		return diags

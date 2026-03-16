@@ -33,9 +33,11 @@ var AnyUnknownInErrorContext = rule.Rule{
 
 		// Stack-based traversal
 		nodeToVisit := make([]*ast.Node, 0)
-		for child := range ctx.SourceFile.AsNode().IterChildren() {
+		pushChild := func(child *ast.Node) bool {
 			nodeToVisit = append(nodeToVisit, child)
+			return false
 		}
+		ctx.SourceFile.AsNode().ForEachChild(pushChild)
 
 		for len(nodeToVisit) > 0 {
 			// Pop from the end (stack)
@@ -78,9 +80,7 @@ var AnyUnknownInErrorContext = rule.Rule{
 			}
 
 			// Enqueue children for visiting
-			for child := range node.IterChildren() {
-				nodeToVisit = append(nodeToVisit, child)
-			}
+			node.ForEachChild(pushChild)
 
 			// Get the type at this location
 			t := checkerutils.GetTypeAtLocation(ctx.Checker, node)

@@ -23,18 +23,18 @@ var StrictBooleanExpressions = rule.Rule{
 
 		// Breadth-first traversal matching the reference implementation
 		nodeToVisit := make([]*ast.Node, 0)
-		for child := range ctx.SourceFile.AsNode().IterChildren() {
+		pushChild := func(child *ast.Node) bool {
 			nodeToVisit = append(nodeToVisit, child)
+			return false
 		}
+		ctx.SourceFile.AsNode().ForEachChild(pushChild)
 
 		for len(nodeToVisit) > 0 {
 			node := nodeToVisit[0]
 			nodeToVisit = nodeToVisit[1:]
 
 			// Enqueue children
-			for child := range node.IterChildren() {
-				nodeToVisit = append(nodeToVisit, child)
-			}
+			node.ForEachChild(pushChild)
 
 			var nodesToCheck []*ast.Node
 

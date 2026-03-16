@@ -44,10 +44,10 @@ type UnnecessaryEffectGenMatch struct {
 func AnalyzeUnnecessaryEffectGen(c *checker.Checker, sf *ast.SourceFile) []UnnecessaryEffectGenMatch {
 	var matches []UnnecessaryEffectGenMatch
 
-	var walk func(n *ast.Node)
-	walk = func(n *ast.Node) {
+	var walk ast.Visitor
+	walk = func(n *ast.Node) bool {
 		if n == nil {
-			return
+			return false
 		}
 
 		if n.Kind == ast.KindCallExpression {
@@ -56,9 +56,8 @@ func AnalyzeUnnecessaryEffectGen(c *checker.Checker, sf *ast.SourceFile) []Unnec
 			}
 		}
 
-		for child := range n.IterChildren() {
-			walk(child)
-		}
+		n.ForEachChild(walk)
+		return false
 	}
 
 	walk(sf.AsNode())

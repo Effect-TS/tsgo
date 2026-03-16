@@ -48,10 +48,10 @@ type EffectFnOpportunityMatch struct {
 func AnalyzeEffectFnOpportunity(c *checker.Checker, sf *ast.SourceFile) []EffectFnOpportunityMatch {
 	var matches []EffectFnOpportunityMatch
 
-	var walk func(n *ast.Node)
-	walk = func(n *ast.Node) {
+	var walk ast.Visitor
+	walk = func(n *ast.Node) bool {
 		if n == nil {
-			return
+			return false
 		}
 
 		if result := typeparser.ParseEffectFnOpportunity(c, n); result != nil {
@@ -66,9 +66,8 @@ func AnalyzeEffectFnOpportunity(c *checker.Checker, sf *ast.SourceFile) []Effect
 			})
 		}
 
-		for child := range n.IterChildren() {
-			walk(child)
-		}
+		n.ForEachChild(walk)
+		return false
 	}
 
 	walk(sf.AsNode())

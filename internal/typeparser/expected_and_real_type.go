@@ -80,6 +80,10 @@ func ExpectedAndRealTypes(c *checker.Checker, sf *ast.SourceFile) []ExpectedAndR
 
 		// Initialize BFS queue with the source file node
 		queue := []*ast.Node{sf.AsNode()}
+		enqueueChild := func(child *ast.Node) bool {
+			queue = append(queue, child)
+			return false
+		}
 
 		for len(queue) > 0 {
 			// Dequeue from front (FIFO/breadth-first) to match TypeScript's shift() behavior
@@ -137,9 +141,7 @@ func ExpectedAndRealTypes(c *checker.Checker, sf *ast.SourceFile) []ExpectedAndR
 							}
 						}
 					}
-					for child := range node.IterChildren() {
-						queue = append(queue, child)
-					}
+					node.ForEachChild(enqueueChild)
 					continue
 				}
 			}
@@ -174,9 +176,7 @@ func ExpectedAndRealTypes(c *checker.Checker, sf *ast.SourceFile) []ExpectedAndR
 						}
 					}
 				}
-				for child := range node.IterChildren() {
-					queue = append(queue, child)
-				}
+				node.ForEachChild(enqueueChild)
 				continue
 			}
 
@@ -220,9 +220,7 @@ func ExpectedAndRealTypes(c *checker.Checker, sf *ast.SourceFile) []ExpectedAndR
 						}
 					}
 				}
-				for child := range node.IterChildren() {
-					queue = append(queue, child)
-				}
+				node.ForEachChild(enqueueChild)
 				continue
 			}
 
@@ -258,9 +256,7 @@ func ExpectedAndRealTypes(c *checker.Checker, sf *ast.SourceFile) []ExpectedAndR
 							})
 						}
 					}
-					for child := range body.IterChildren() {
-						queue = append(queue, child)
-					}
+					body.ForEachChild(enqueueChild)
 					continue
 				}
 			}
@@ -283,9 +279,7 @@ func ExpectedAndRealTypes(c *checker.Checker, sf *ast.SourceFile) []ExpectedAndR
 			}
 
 			// No pattern matched — queue all children for traversal
-			for child := range node.IterChildren() {
-				queue = append(queue, child)
-			}
+			node.ForEachChild(enqueueChild)
 		}
 
 		return result

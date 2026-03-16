@@ -50,10 +50,10 @@ type EffectFnIifeMatch struct {
 func AnalyzeEffectFnIife(c *checker.Checker, sf *ast.SourceFile) []EffectFnIifeMatch {
 	var matches []EffectFnIifeMatch
 
-	var walk func(n *ast.Node)
-	walk = func(n *ast.Node) {
+	var walk ast.Visitor
+	walk = func(n *ast.Node) bool {
 		if n == nil {
-			return
+			return false
 		}
 
 		if result := typeparser.ParseEffectFnIife(c, n); result != nil {
@@ -63,9 +63,8 @@ func AnalyzeEffectFnIife(c *checker.Checker, sf *ast.SourceFile) []EffectFnIifeM
 			})
 		}
 
-		for child := range n.IterChildren() {
-			walk(child)
-		}
+		n.ForEachChild(walk)
+		return false
 	}
 
 	walk(sf.AsNode())

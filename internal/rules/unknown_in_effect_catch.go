@@ -24,10 +24,10 @@ var UnknownInEffectCatch = rule.Rule{
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		var diags []*ast.Diagnostic
 
-		var walk func(n *ast.Node)
-		walk = func(n *ast.Node) {
+		var walk ast.Visitor
+		walk = func(n *ast.Node) bool {
 			if n == nil {
-				return
+				return false
 			}
 
 			if n.Kind == ast.KindCallExpression {
@@ -36,9 +36,8 @@ var UnknownInEffectCatch = rule.Rule{
 				}
 			}
 
-			for child := range n.IterChildren() {
-				walk(child)
-			}
+			n.ForEachChild(walk)
+			return false
 		}
 
 		walk(ctx.SourceFile.AsNode())

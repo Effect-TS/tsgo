@@ -32,11 +32,11 @@ var FloatingEffect = rule.Rule{
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		var diags []*ast.Diagnostic
 
-		// Walk the entire AST using IterChildren (per 002-diagnostics-framework.md)
-		var walk func(n *ast.Node)
-		walk = func(n *ast.Node) {
+		// Walk the entire AST using ForEachChild
+		var walk ast.Visitor
+		walk = func(n *ast.Node) bool {
 			if n == nil {
-				return
+				return false
 			}
 
 			// Check if this node is a floating Effect expression statement
@@ -62,9 +62,8 @@ var FloatingEffect = rule.Rule{
 			}
 
 			// Recurse into all children
-			for child := range n.IterChildren() {
-				walk(child)
-			}
+			n.ForEachChild(walk)
+			return false
 		}
 
 		walk(ctx.SourceFile.AsNode())

@@ -72,10 +72,48 @@ return diags
 
 ### AST Traversal Patterns
 
-Two established patterns for walking the AST inside `Analyze*` functions:
+Rules and type parsers must use `ForEachChild` for AST traversal. **Do not use `IterChildren`** — it allocates 2 closures per node (the Go iterator + a boolean-inversion wrapper), which dominates allocation counts at scale.
 
-1. **Recursive walk** — for simpler traversals: define a local `var walk func(n *ast.Node)`, recurse via `n.IterChildren()`.
-2. **Stack-based traversal** — for iterative cases: use a `nodeToVisit` slice, pop from the end, push children.
+**Preferred pattern — `ForEachChild` (zero allocation):**
+
+1. **Recursive walk** — define a local `var walk ast.Visitor` once, recurse via `n.ForEachChild(walk)`. The visitor returns `true` to stop early, `false` to continue.
+2. **Stack-based traversal** — use a `nodeToVisit` slice, pop from the end. **Define the push closure once** before the loop, then reuse it on every iteration. Do NOT define an inline closure inside the loop body — that allocates a new closure object on every iteration.
+
+**Stack-based traversal — correct pattern:**
+
+```
+nodeToVisit := []*ast.Node{sf.AsNode()}
+pushChild := func(child *ast.Node) bool {
+    nodeToVisit = append(nodeToVisit, child)
+    return false
+}
+for len(nodeToVisit) > 0 {
+    node := nodeToVisit[len(nodeToVisit)-1]
+    nodeToVisit = nodeToVisit[:len(nodeToVisit)-1]
+    // ... process node ...
+    node.ForEachChild(pushChild)  // reuse closure, zero allocation per iteration
+}
+```
+
+The closure captures `nodeToVisit` by reference (Go closure semantics), so it sees slice growth from `append` correctly. This is safe.
+
+**Anti-pattern — inline closure in loop (do not use):**
+
+```
+for len(nodeToVisit) > 0 {
+    // ...
+    node.ForEachChild(func(child *ast.Node) bool {  // BAD: allocates every iteration
+        nodeToVisit = append(nodeToVisit, child)
+        return false
+    })
+}
+```
+
+This matches how TypeScript-Go's own checker walks the AST (e.g., `node.ForEachChild(c.checkSourceElement)` — a method pointer, defined once).
+
+**Deprecated pattern — `IterChildren` (do not use in new code):**
+
+`IterChildren` wraps `ForEachChild` with `invert(yield)`, allocating closures on every call. It exists for Go range-loop convenience but the allocation cost is prohibitive when multiplied across 40+ rules and thousands of source files.
 
 ### Plugin Options Access
 
