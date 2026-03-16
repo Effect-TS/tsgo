@@ -1,5 +1,11 @@
 # @effect/tsgo-win32-x64
 
+## 0.0.8
+
+### Patch Changes
+
+- 454cae6: Add caching inside Checker
+
 ## 0.0.7
 
 ### Patch Changes
