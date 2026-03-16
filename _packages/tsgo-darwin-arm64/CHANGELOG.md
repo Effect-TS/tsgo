@@ -1,5 +1,11 @@
 # @effect/tsgo-darwin-arm64
 
+## 0.0.7
+
+### Patch Changes
+
+- 3f23d3d: Adjust layer links
+
 ## 0.0.6
 
 ### Patch Changes
