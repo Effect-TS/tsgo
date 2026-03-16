@@ -57,7 +57,7 @@ func runEffectSqlModelSelfInClasses(ctx *completion.Context) []*lsproto.Completi
 	}
 
 	return []*lsproto.CompletionItem{
-		makeCompletionItem(
+		makeExtendsCompletionItem(accessedText,
 			fmt.Sprintf("Class<%s>", className),
 			insertText, sortText, replacementRange,
 		),

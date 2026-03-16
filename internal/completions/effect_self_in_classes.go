@@ -56,7 +56,7 @@ func runEffectSelfInClasses(ctx *completion.Context) []*lsproto.CompletionItem {
 		} else {
 			insertText = fmt.Sprintf(`Service<%s>()("%s", {${0}}){}`, className, tagKey)
 		}
-		items = append(items, makeCompletionItem(
+		items = append(items, makeExtendsCompletionItem(accessedText,
 			fmt.Sprintf("Service<%s>", className),
 			insertText, sortText, replacementRange,
 		))
@@ -70,7 +70,7 @@ func runEffectSelfInClasses(ctx *completion.Context) []*lsproto.CompletionItem {
 		} else {
 			insertText = fmt.Sprintf(`Tag("%s")<%s, {${0}}>(){}`, tagKey, className)
 		}
-		items = append(items, makeCompletionItem(
+		items = append(items, makeExtendsCompletionItem(accessedText,
 			fmt.Sprintf(`Tag("%s")`, className),
 			insertText, sortText, replacementRange,
 		))

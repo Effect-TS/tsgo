@@ -50,7 +50,7 @@ func runEffectSchemaSelfInClasses(ctx *completion.Context) []*lsproto.Completion
 		} else {
 			insertText = fmt.Sprintf(`Class<%s>("%s")({${0}}){}`, className, className)
 		}
-		items = append(items, makeCompletionItem(
+		items = append(items, makeExtendsCompletionItem(accessedText,
 			fmt.Sprintf("Class<%s>", className),
 			insertText, sortText, replacementRange,
 		))
@@ -65,7 +65,7 @@ func runEffectSchemaSelfInClasses(ctx *completion.Context) []*lsproto.Completion
 			} else {
 				insertText = fmt.Sprintf(`TaggedError<%s>()("%s", {${0}}){}`, className, className)
 			}
-			items = append(items, makeCompletionItem(
+			items = append(items, makeExtendsCompletionItem(accessedText,
 				fmt.Sprintf("TaggedError<%s>", className),
 				insertText, sortText, replacementRange,
 			))
@@ -81,7 +81,7 @@ func runEffectSchemaSelfInClasses(ctx *completion.Context) []*lsproto.Completion
 			} else {
 				insertText = fmt.Sprintf(`TaggedErrorClass<%s>()("%s", {${0}}){}`, className, className)
 			}
-			items = append(items, makeCompletionItem(
+			items = append(items, makeExtendsCompletionItem(accessedText,
 				fmt.Sprintf("TaggedErrorClass<%s>", className),
 				insertText, sortText, replacementRange,
 			))
@@ -96,7 +96,7 @@ func runEffectSchemaSelfInClasses(ctx *completion.Context) []*lsproto.Completion
 		} else {
 			insertText = fmt.Sprintf(`TaggedClass<%s>()("%s", {${0}}){}`, className, className)
 		}
-		items = append(items, makeCompletionItem(
+		items = append(items, makeExtendsCompletionItem(accessedText,
 			fmt.Sprintf("TaggedClass<%s>", className),
 			insertText, sortText, replacementRange,
 		))
@@ -111,7 +111,7 @@ func runEffectSchemaSelfInClasses(ctx *completion.Context) []*lsproto.Completion
 			} else {
 				insertText = fmt.Sprintf(`TaggedRequest<%s>()("%s", {${0}}){}`, className, className)
 			}
-			items = append(items, makeCompletionItem(
+			items = append(items, makeExtendsCompletionItem(accessedText,
 				fmt.Sprintf("TaggedRequest<%s>", className),
 				insertText, sortText, replacementRange,
 			))
@@ -127,7 +127,7 @@ func runEffectSchemaSelfInClasses(ctx *completion.Context) []*lsproto.Completion
 			} else {
 				insertText = fmt.Sprintf(`ErrorClass<%s>("%s")({${0}}){}`, className, className)
 			}
-			items = append(items, makeCompletionItem(
+			items = append(items, makeExtendsCompletionItem(accessedText,
 				fmt.Sprintf("ErrorClass<%s>", className),
 				insertText, sortText, replacementRange,
 			))
@@ -151,7 +151,7 @@ func runEffectSchemaSelfInClasses(ctx *completion.Context) []*lsproto.Completion
 			} else {
 				insertText = fmt.Sprintf(`Class<%s>("%s")({${0}}){}`, className, className)
 			}
-			items = append(items, makeCompletionItem(
+			items = append(items, makeExtendsCompletionItem(accessedText,
 				fmt.Sprintf("Class<%s>", className),
 				insertText, sortText, replacementRange,
 			))
@@ -180,6 +180,16 @@ func makeCompletionItem(label string, insertText string, sortText string, replac
 			},
 		},
 	}
+}
+
+// makeExtendsCompletionItem creates a CompletionItem for an extends-clause completion.
+// It sets FilterText to accessedText.label so VS Code can filter correctly when the
+// replacement range covers the full "Module.Property" expression.
+func makeExtendsCompletionItem(accessedText string, label string, insertText string, sortText string, replacementRange lsproto.Range) *lsproto.CompletionItem {
+	item := makeCompletionItem(label, insertText, sortText, replacementRange)
+	filterText := accessedText + "." + label
+	item.FilterText = &filterText
+	return item
 }
 
 // byteSpanToRange converts a byte offset span to an LSP Range.

@@ -60,7 +60,7 @@ func runContextSelfInClasses(ctx *completion.Context) []*lsproto.CompletionItem 
 	}
 
 	return []*lsproto.CompletionItem{
-		makeCompletionItem(
+		makeExtendsCompletionItem(accessedText,
 			fmt.Sprintf(`Tag("%s")`, className),
 			insertText, sortText, replacementRange,
 		),

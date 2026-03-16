@@ -51,7 +51,7 @@ func runRpcMakeClasses(ctx *completion.Context) []*lsproto.CompletionItem {
 	insertText := fmt.Sprintf(`%s.make("%s", {${0}}) {}`, rpcIdentifier, className)
 
 	return []*lsproto.CompletionItem{
-		makeCompletionItem(
+		makeExtendsCompletionItem(accessedText,
 			fmt.Sprintf(`make("%s")`, className),
 			insertText, sortText, replacementRange,
 		),

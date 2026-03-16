@@ -65,7 +65,7 @@ func runServiceMapSelfInClasses(ctx *completion.Context) []*lsproto.CompletionIt
 		} else {
 			insertText = fmt.Sprintf(`Service<%s, {${0}}>()("%s"){}`, className, tagKey)
 		}
-		items = append(items, makeCompletionItem(
+		items = append(items, makeExtendsCompletionItem(accessedText,
 			fmt.Sprintf("Service<%s, {}>", className),
 			insertText, sortText, replacementRange,
 		))
@@ -79,7 +79,7 @@ func runServiceMapSelfInClasses(ctx *completion.Context) []*lsproto.CompletionIt
 		} else {
 			insertText = fmt.Sprintf(`Service<%s>()("%s", { make: ${0} }){}`, className, tagKey)
 		}
-		items = append(items, makeCompletionItem(
+		items = append(items, makeExtendsCompletionItem(accessedText,
 			fmt.Sprintf("Service<%s>({ make })", className),
 			insertText, sortText, replacementRange,
 		))

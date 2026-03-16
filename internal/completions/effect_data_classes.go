@@ -47,7 +47,7 @@ func runEffectDataClasses(ctx *completion.Context) []*lsproto.CompletionItem {
 		} else {
 			insertText = fmt.Sprintf(`TaggedError("%s")<{${0}}>{}`, className)
 		}
-		items = append(items, makeCompletionItem(
+		items = append(items, makeExtendsCompletionItem(accessedText,
 			fmt.Sprintf(`TaggedError("%s")`, className),
 			insertText, sortText, replacementRange,
 		))
@@ -61,7 +61,7 @@ func runEffectDataClasses(ctx *completion.Context) []*lsproto.CompletionItem {
 		} else {
 			insertText = fmt.Sprintf(`TaggedClass("%s")<{${0}}>{}`, className)
 		}
-		items = append(items, makeCompletionItem(
+		items = append(items, makeExtendsCompletionItem(accessedText,
 			fmt.Sprintf(`TaggedClass("%s")`, className),
 			insertText, sortText, replacementRange,
 		))
