@@ -1,5 +1,11 @@
 # @effect/tsgo-linux-arm
 
+## 0.0.6
+
+### Patch Changes
+
+- 594ad7a: Added completions
+
 ## 0.0.5
 
 ### Patch Changes
