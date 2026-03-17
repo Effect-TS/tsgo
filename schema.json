@@ -1,0 +1,2513 @@
+{
+  "$comment": "Note that this schema uses 'null' in various places. The value of 'null' is UNDOCUMENTED (https://github.com/microsoft/TypeScript/pull/18058)",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "allOf": [
+    {
+      "$ref": "#/definitions/compilerOptionsDefinition"
+    },
+    {
+      "$ref": "#/definitions/compileOnSaveDefinition"
+    },
+    {
+      "$ref": "#/definitions/typeAcquisitionDefinition"
+    },
+    {
+      "$ref": "#/definitions/extendsDefinition"
+    },
+    {
+      "$ref": "#/definitions/watchOptionsDefinition"
+    },
+    {
+      "$ref": "#/definitions/buildOptionsDefinition"
+    },
+    {
+      "$ref": "#/definitions/tsNodeDefinition"
+    },
+    {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/filesDefinition"
+        },
+        {
+          "$ref": "#/definitions/excludeDefinition"
+        },
+        {
+          "$ref": "#/definitions/includeDefinition"
+        },
+        {
+          "$ref": "#/definitions/referencesDefinition"
+        }
+      ]
+    }
+  ],
+  "allowTrailingCommas": true,
+  "definitions": {
+    "//": {
+      "explainer": "https://www.typescriptlang.org/docs/handbook/tsconfig-json.html#overview",
+      "reference": "https://www.typescriptlang.org/tsconfig",
+      "reference metadata": "https://github.com/microsoft/TypeScript-Website/blob/v2/packages/tsconfig-reference/scripts/tsconfigRules.ts"
+    },
+    "buildOptionsDefinition": {
+      "properties": {
+        "buildOptions": {
+          "properties": {
+            "assumeChangesOnlyAffectDirectDependencies": {
+              "default": false,
+              "description": "Have recompiles in projects that use `incremental` and `watch` mode assume that changes within a file will only affect files directly depending on it.",
+              "markdownDescription": "Have recompiles in projects that use `incremental` and `watch` mode assume that changes within a file will only affect files directly depending on it.\n\nSee more: https://www.typescriptlang.org/tsconfig#assumeChangesOnlyAffectDirectDependencies",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "dry": {
+              "default": false,
+              "description": "~",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "force": {
+              "default": false,
+              "description": "Build all projects, including those that appear to be up to date",
+              "markdownDescription": "Build all projects, including those that appear to be up to date\n\nSee more: https://www.typescriptlang.org/tsconfig#force",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "incremental": {
+              "default": false,
+              "description": "Save .tsbuildinfo files to allow for incremental compilation of projects.",
+              "markdownDescription": "Save .tsbuildinfo files to allow for incremental compilation of projects.\n\nSee more: https://www.typescriptlang.org/tsconfig#incremental",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "traceResolution": {
+              "default": false,
+              "description": "Log paths used during the `moduleResolution` process.",
+              "markdownDescription": "Log paths used during the `moduleResolution` process.\n\nSee more: https://www.typescriptlang.org/tsconfig#traceResolution",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "verbose": {
+              "default": false,
+              "description": "Enable verbose logging",
+              "markdownDescription": "Enable verbose logging\n\nSee more: https://www.typescriptlang.org/tsconfig#verbose",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "compileOnSaveDefinition": {
+      "properties": {
+        "compileOnSave": {
+          "description": "Enable Compile-on-Save for this project.",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      }
+    },
+    "compilerOptionsDefinition": {
+      "properties": {
+        "compilerOptions": {
+          "description": "Instructs the TypeScript compiler how to compile .ts files.",
+          "properties": {
+            "allowArbitraryExtensions": {
+              "description": "Enable importing files with any extension, provided a declaration file is present.",
+              "markdownDescription": "Enable importing files with any extension, provided a declaration file is present.\n\nSee more: https://www.typescriptlang.org/tsconfig#allowArbitraryExtensions",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "allowImportingTsExtensions": {
+              "description": "Allow imports to include TypeScript file extensions. Requires `--moduleResolution bundler` and either `--noEmit` or `--emitDeclarationOnly` to be set.",
+              "markdownDescription": "Allow imports to include TypeScript file extensions. Requires `--moduleResolution bundler` and either `--noEmit` or `--emitDeclarationOnly` to be set.\n\nSee more: https://www.typescriptlang.org/tsconfig#allowImportingTsExtensions",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "allowJs": {
+              "default": false,
+              "description": "Allow JavaScript files to be a part of your program. Use the `checkJs` option to get errors from these files.",
+              "markdownDescription": "Allow JavaScript files to be a part of your program. Use the `checkJs` option to get errors from these files.\n\nSee more: https://www.typescriptlang.org/tsconfig#allowJs",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "allowSyntheticDefaultImports": {
+              "description": "Allow `import x from y` when a module doesn't have a default export.",
+              "markdownDescription": "Allow `import x from y` when a module doesn't have a default export.\n\nSee more: https://www.typescriptlang.org/tsconfig#allowSyntheticDefaultImports",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "allowUmdGlobalAccess": {
+              "default": false,
+              "description": "Allow accessing UMD globals from modules.",
+              "markdownDescription": "Allow accessing UMD globals from modules.\n\nSee more: https://www.typescriptlang.org/tsconfig#allowUmdGlobalAccess",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "allowUnreachableCode": {
+              "description": "Disable error reporting for unreachable code.",
+              "markdownDescription": "Disable error reporting for unreachable code.\n\nSee more: https://www.typescriptlang.org/tsconfig#allowUnreachableCode",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "allowUnusedLabels": {
+              "description": "Disable error reporting for unused labels.",
+              "markdownDescription": "Disable error reporting for unused labels.\n\nSee more: https://www.typescriptlang.org/tsconfig#allowUnusedLabels",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "alwaysStrict": {
+              "description": "Ensure `use strict` is always emitted.",
+              "markdownDescription": "Ensure `use strict` is always emitted.\n\nSee more: https://www.typescriptlang.org/tsconfig#alwaysStrict",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "assumeChangesOnlyAffectDirectDependencies": {
+              "description": "Have recompiles in projects that use `incremental` and `watch` mode assume that changes within a file will only affect files directly depending on it.",
+              "markdownDescription": "Have recompiles in projects that use `incremental` and `watch` mode assume that changes within a file will only affect files directly depending on it.\n\nSee more: https://www.typescriptlang.org/tsconfig#assumeChangesOnlyAffectDirectDependencies",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "baseUrl": {
+              "description": "Specify the base directory to resolve non-relative module names.",
+              "markdownDescription": "Specify the base directory to resolve non-relative module names.\n\nSee more: https://www.typescriptlang.org/tsconfig#baseUrl",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "charset": {
+              "description": "No longer supported. In early versions, manually set the text encoding for reading files.",
+              "markdownDescription": "No longer supported. In early versions, manually set the text encoding for reading files.\n\nSee more: https://www.typescriptlang.org/tsconfig#charset",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "checkJs": {
+              "default": false,
+              "description": "Enable error reporting in type-checked JavaScript files.",
+              "markdownDescription": "Enable error reporting in type-checked JavaScript files.\n\nSee more: https://www.typescriptlang.org/tsconfig#checkJs",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "composite": {
+              "default": true,
+              "description": "Enable constraints that allow a TypeScript project to be used with project references.",
+              "markdownDescription": "Enable constraints that allow a TypeScript project to be used with project references.\n\nSee more: https://www.typescriptlang.org/tsconfig#composite",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "customConditions": {
+              "description": "Conditions to set in addition to the resolver-specific defaults when resolving imports.",
+              "items": {
+                "type": "string"
+              },
+              "markdownDescription": "Conditions to set in addition to the resolver-specific defaults when resolving imports.\n\nSee more: https://www.typescriptlang.org/tsconfig#customConditions",
+              "type": [
+                "array",
+                "null"
+              ],
+              "uniqueItems": true
+            },
+            "declaration": {
+              "default": false,
+              "description": "Generate .d.ts files from TypeScript and JavaScript files in your project.",
+              "markdownDescription": "Generate .d.ts files from TypeScript and JavaScript files in your project.\n\nSee more: https://www.typescriptlang.org/tsconfig#declaration",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "declarationDir": {
+              "description": "Specify the output directory for generated declaration files.",
+              "markdownDescription": "Specify the output directory for generated declaration files.\n\nSee more: https://www.typescriptlang.org/tsconfig#declarationDir",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "declarationMap": {
+              "default": false,
+              "description": "Create sourcemaps for d.ts files.",
+              "markdownDescription": "Create sourcemaps for d.ts files.\n\nSee more: https://www.typescriptlang.org/tsconfig#declarationMap",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "diagnostics": {
+              "description": "Output compiler performance information after building.",
+              "markdownDescription": "Output compiler performance information after building.\n\nSee more: https://www.typescriptlang.org/tsconfig#diagnostics",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "disableReferencedProjectLoad": {
+              "description": "Reduce the number of projects loaded automatically by TypeScript.",
+              "markdownDescription": "Reduce the number of projects loaded automatically by TypeScript.\n\nSee more: https://www.typescriptlang.org/tsconfig#disableReferencedProjectLoad",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "disableSizeLimit": {
+              "default": false,
+              "description": "Remove the 20mb cap on total source code size for JavaScript files in the TypeScript language server.",
+              "markdownDescription": "Remove the 20mb cap on total source code size for JavaScript files in the TypeScript language server.\n\nSee more: https://www.typescriptlang.org/tsconfig#disableSizeLimit",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "disableSolutionSearching": {
+              "description": "Opt a project out of multi-project reference checking when editing.",
+              "markdownDescription": "Opt a project out of multi-project reference checking when editing.\n\nSee more: https://www.typescriptlang.org/tsconfig#disableSolutionSearching",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "disableSourceOfProjectReferenceRedirect": {
+              "description": "Disable preferring source files instead of declaration files when referencing composite projects.",
+              "markdownDescription": "Disable preferring source files instead of declaration files when referencing composite projects.\n\nSee more: https://www.typescriptlang.org/tsconfig#disableSourceOfProjectReferenceRedirect",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "downlevelIteration": {
+              "default": false,
+              "description": "Emit more compliant, but verbose and less performant JavaScript for iteration.",
+              "markdownDescription": "Emit more compliant, but verbose and less performant JavaScript for iteration.\n\nSee more: https://www.typescriptlang.org/tsconfig#downlevelIteration",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "emitBOM": {
+              "default": false,
+              "description": "Emit a UTF-8 Byte Order Mark (BOM) in the beginning of output files.",
+              "markdownDescription": "Emit a UTF-8 Byte Order Mark (BOM) in the beginning of output files.\n\nSee more: https://www.typescriptlang.org/tsconfig#emitBOM",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "emitDeclarationOnly": {
+              "default": false,
+              "description": "Only output d.ts files and not JavaScript files.",
+              "markdownDescription": "Only output d.ts files and not JavaScript files.\n\nSee more: https://www.typescriptlang.org/tsconfig#emitDeclarationOnly",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "emitDecoratorMetadata": {
+              "description": "Emit design-type metadata for decorated declarations in source files.",
+              "markdownDescription": "Emit design-type metadata for decorated declarations in source files.\n\nSee more: https://www.typescriptlang.org/tsconfig#emitDecoratorMetadata",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "erasableSyntaxOnly": {
+              "default": false,
+              "description": "Do not allow runtime constructs that are not part of ECMAScript.",
+              "markdownDescription": "Do not allow runtime constructs that are not part of ECMAScript.\n\nSee more: https://www.typescriptlang.org/tsconfig#erasableSyntaxOnly",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "esModuleInterop": {
+              "default": false,
+              "description": "Emit additional JavaScript to ease support for importing CommonJS modules. This enables `allowSyntheticDefaultImports` for type compatibility.",
+              "markdownDescription": "Emit additional JavaScript to ease support for importing CommonJS modules. This enables `allowSyntheticDefaultImports` for type compatibility.\n\nSee more: https://www.typescriptlang.org/tsconfig#esModuleInterop",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "exactOptionalPropertyTypes": {
+              "default": false,
+              "description": "Interpret optional property types as written, rather than adding `undefined`.",
+              "markdownDescription": "Interpret optional property types as written, rather than adding `undefined`.\n\nSee more: https://www.typescriptlang.org/tsconfig#exactOptionalPropertyTypes",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "experimentalDecorators": {
+              "description": "Enable experimental support for legacy experimental decorators.",
+              "markdownDescription": "Enable experimental support for legacy experimental decorators.\n\nSee more: https://www.typescriptlang.org/tsconfig#experimentalDecorators",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "extendedDiagnostics": {
+              "default": false,
+              "description": "Output more detailed compiler performance information after building.",
+              "markdownDescription": "Output more detailed compiler performance information after building.\n\nSee more: https://www.typescriptlang.org/tsconfig#extendedDiagnostics",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "fallbackPolling": {
+              "description": "Specify the polling strategy to use when the system runs out of or doesn't support native file watchers. Requires TypeScript version 3.8 or later.",
+              "enum": [
+                "fixedPollingInterval",
+                "priorityPollingInterval",
+                "dynamicPriorityPolling",
+                "fixedInterval",
+                "priorityInterval",
+                "dynamicPriority",
+                "fixedChunkSize"
+              ]
+            },
+            "forceConsistentCasingInFileNames": {
+              "default": true,
+              "description": "Ensure that casing is correct in imports.",
+              "markdownDescription": "Ensure that casing is correct in imports.\n\nSee more: https://www.typescriptlang.org/tsconfig#forceConsistentCasingInFileNames",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "generateCpuProfile": {
+              "default": "profile.cpuprofile",
+              "description": "Emit a v8 CPU profile of the compiler run for debugging.",
+              "markdownDescription": "Emit a v8 CPU profile of the compiler run for debugging.\n\nSee more: https://www.typescriptlang.org/tsconfig#generateCpuProfile",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "importHelpers": {
+              "default": false,
+              "description": "Allow importing helper functions from tslib once per project, instead of including them per-file.",
+              "markdownDescription": "Allow importing helper functions from tslib once per project, instead of including them per-file.\n\nSee more: https://www.typescriptlang.org/tsconfig#importHelpers",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "importsNotUsedAsValues": {
+              "default": "remove",
+              "description": "Specify emit/checking behavior for imports that are only used for types.",
+              "enum": [
+                "remove",
+                "preserve",
+                "error"
+              ],
+              "markdownDescription": "Specify emit/checking behavior for imports that are only used for types.\n\nSee more: https://www.typescriptlang.org/tsconfig#importsNotUsedAsValues"
+            },
+            "incremental": {
+              "description": "Enable incremental compilation. Requires TypeScript version 3.4 or later.",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "inlineSourceMap": {
+              "default": false,
+              "description": "Include sourcemap files inside the emitted JavaScript.",
+              "markdownDescription": "Include sourcemap files inside the emitted JavaScript.\n\nSee more: https://www.typescriptlang.org/tsconfig#inlineSourceMap",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "inlineSources": {
+              "default": false,
+              "description": "Include source code in the sourcemaps inside the emitted JavaScript.",
+              "markdownDescription": "Include source code in the sourcemaps inside the emitted JavaScript.\n\nSee more: https://www.typescriptlang.org/tsconfig#inlineSources",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "isolatedDeclarations": {
+              "default": false,
+              "description": "Require sufficient annotation on exports so other tools can trivially generate declaration files.",
+              "markdownDescription": "Require sufficient annotation on exports so other tools can trivially generate declaration files.\n\nSee more: https://www.typescriptlang.org/tsconfig#isolatedDeclarations",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "isolatedModules": {
+              "default": false,
+              "description": "Ensure that each file can be safely transpiled without relying on other imports.",
+              "markdownDescription": "Ensure that each file can be safely transpiled without relying on other imports.\n\nSee more: https://www.typescriptlang.org/tsconfig#isolatedModules",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "jsx": {
+              "description": "Specify what JSX code is generated.",
+              "enum": [
+                "preserve",
+                "react",
+                "react-jsx",
+                "react-jsxdev",
+                "react-native"
+              ],
+              "markdownDescription": "Specify what JSX code is generated.\n\nSee more: https://www.typescriptlang.org/tsconfig#jsx"
+            },
+            "jsxFactory": {
+              "default": "React.createElement",
+              "description": "Specify the JSX factory function used when targeting React JSX emit, e.g. `React.createElement` or `h`.",
+              "markdownDescription": "Specify the JSX factory function used when targeting React JSX emit, e.g. `React.createElement` or `h`.\n\nSee more: https://www.typescriptlang.org/tsconfig#jsxFactory",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "jsxFragmentFactory": {
+              "default": "React.Fragment",
+              "description": "Specify the JSX Fragment reference used for fragments when targeting React JSX emit e.g. `React.Fragment` or `Fragment`.",
+              "markdownDescription": "Specify the JSX Fragment reference used for fragments when targeting React JSX emit e.g. `React.Fragment` or `Fragment`.\n\nSee more: https://www.typescriptlang.org/tsconfig#jsxFragmentFactory",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "jsxImportSource": {
+              "default": "react",
+              "description": "Specify module specifier used to import the JSX factory functions when using `jsx: react-jsx*`.",
+              "markdownDescription": "Specify module specifier used to import the JSX factory functions when using `jsx: react-jsx*`.\n\nSee more: https://www.typescriptlang.org/tsconfig#jsxImportSource",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "keyofStringsOnly": {
+              "default": false,
+              "description": "Make keyof only return strings instead of string, numbers or symbols. Legacy option.",
+              "markdownDescription": "Make keyof only return strings instead of string, numbers or symbols. Legacy option.\n\nSee more: https://www.typescriptlang.org/tsconfig#keyofStringsOnly",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "lib": {
+              "description": "Specify a set of bundled library declaration files that describe the target runtime environment.",
+              "items": {
+                "anyOf": [
+                  {
+                    "enum": [
+                      "ES5",
+                      "ES6",
+                      "ES2015",
+                      "ES2015.Collection",
+                      "ES2015.Core",
+                      "ES2015.Generator",
+                      "ES2015.Iterable",
+                      "ES2015.Promise",
+                      "ES2015.Proxy",
+                      "ES2015.Reflect",
+                      "ES2015.Symbol.WellKnown",
+                      "ES2015.Symbol",
+                      "ES2016",
+                      "ES2016.Array.Include",
+                      "ES2017",
+                      "ES2017.Intl",
+                      "ES2017.Object",
+                      "ES2017.SharedMemory",
+                      "ES2017.String",
+                      "ES2017.TypedArrays",
+                      "ES2017.ArrayBuffer",
+                      "ES2018",
+                      "ES2018.AsyncGenerator",
+                      "ES2018.AsyncIterable",
+                      "ES2018.Intl",
+                      "ES2018.Promise",
+                      "ES2018.Regexp",
+                      "ES2019",
+                      "ES2019.Array",
+                      "ES2019.Intl",
+                      "ES2019.Object",
+                      "ES2019.String",
+                      "ES2019.Symbol",
+                      "ES2020",
+                      "ES2020.BigInt",
+                      "ES2020.Promise",
+                      "ES2020.String",
+                      "ES2020.Symbol.WellKnown",
+                      "ESNext",
+                      "ESNext.Array",
+                      "ESNext.AsyncIterable",
+                      "ESNext.BigInt",
+                      "ESNext.Collection",
+                      "ESNext.Intl",
+                      "ESNext.Iterator",
+                      "ESNext.Object",
+                      "ESNext.Promise",
+                      "ESNext.Regexp",
+                      "ESNext.String",
+                      "ESNext.Symbol",
+                      "DOM",
+                      "DOM.AsyncIterable",
+                      "DOM.Iterable",
+                      "ScriptHost",
+                      "WebWorker",
+                      "WebWorker.AsyncIterable",
+                      "WebWorker.ImportScripts",
+                      "Webworker.Iterable",
+                      "ES7",
+                      "ES2021",
+                      "ES2020.SharedMemory",
+                      "ES2020.Intl",
+                      "ES2020.Date",
+                      "ES2020.Number",
+                      "ES2021.Promise",
+                      "ES2021.String",
+                      "ES2021.WeakRef",
+                      "ESNext.WeakRef",
+                      "ES2021.Intl",
+                      "ES2022",
+                      "ES2022.Array",
+                      "ES2022.Error",
+                      "ES2022.Intl",
+                      "ES2022.Object",
+                      "ES2022.String",
+                      "ES2022.SharedMemory",
+                      "ES2022.RegExp",
+                      "ES2023",
+                      "ES2023.Array",
+                      "ES2024",
+                      "ES2024.ArrayBuffer",
+                      "ES2024.Collection",
+                      "ES2024.Object",
+                      "ES2024.Promise",
+                      "ES2024.Regexp",
+                      "ES2024.SharedMemory",
+                      "ES2024.String",
+                      "Decorators",
+                      "Decorators.Legacy",
+                      "ES2017.Date",
+                      "ES2023.Collection",
+                      "ESNext.Decorators",
+                      "ESNext.Disposable",
+                      "ESNext.Error",
+                      "ESNext.Sharedmemory"
+                    ]
+                  },
+                  {
+                    "pattern": "^[Ee][Ss]5|[Ee][Ss]6|[Ee][Ss]7$"
+                  },
+                  {
+                    "pattern": "^[Ee][Ss]2015(\\.([Cc][Oo][Ll][Ll][Ee][Cc][Tt][Ii][Oo][Nn]|[Cc][Oo][Rr][Ee]|[Gg][Ee][Nn][Ee][Rr][Aa][Tt][Oo][Rr]|[Ii][Tt][Ee][Rr][Aa][Bb][Ll][Ee]|[Pp][Rr][Oo][Mm][Ii][Ss][Ee]|[Pp][Rr][Oo][Xx][Yy]|[Rr][Ee][Ff][Ll][Ee][Cc][Tt]|[Ss][Yy][Mm][Bb][Oo][Ll]\\.[Ww][Ee][Ll][Ll][Kk][Nn][Oo][Ww][Nn]|[Ss][Yy][Mm][Bb][Oo][Ll]))?$"
+                  },
+                  {
+                    "pattern": "^[Ee][Ss]2016(\\.[Aa][Rr][Rr][Aa][Yy]\\.[Ii][Nn][Cc][Ll][Uu][Dd][Ee])?$"
+                  },
+                  {
+                    "pattern": "^[Ee][Ss]2017(\\.([Ii][Nn][Tt][Ll]|[Oo][Bb][Jj][Ee][Cc][Tt]|[Ss][Hh][Aa][Rr][Ee][Dd][Mm][Ee][Mm][Oo][Rr][Yy]|[Ss][Tt][Rr][Ii][Nn][Gg]|[Tt][Yy][Pp][Ee][Dd][Aa][Rr][Rr][Aa][Yy][Ss]|[Dd][Aa][Tt][Ee]|[Aa][Rr][Rr][Aa][Yy][Bb][Uu][Ff][Ff][Ee][Rr]))?$"
+                  },
+                  {
+                    "pattern": "^[Ee][Ss]2018(\\.([Aa][Ss][Yy][Nn][Cc][Gg][Ee][Nn][Ee][Rr][Aa][Tt][Oo][Rr]|[Aa][Ss][Yy][Nn][Cc][Ii][Tt][Ee][Rr][Aa][Bb][Ll][Ee]|[Ii][Nn][Tt][Ll]|[Pp][Rr][Oo][Mm][Ii][Ss][Ee]|[Rr][Ee][Gg][Ee][Xx][Pp]))?$"
+                  },
+                  {
+                    "pattern": "^[Ee][Ss]2019(\\.([Aa][Rr][Rr][Aa][Yy]|[Ii][Nn][Tt][Ll]|[Oo][Bb][Jj][Ee][Cc][Tt]|[Ss][Tt][Rr][Ii][Nn][Gg]|[Ss][Yy][Mm][Bb][Oo][Ll]))?$"
+                  },
+                  {
+                    "pattern": "^[Ee][Ss]2020(\\.([Bb][Ii][Gg][Ii][Nn][Tt]|[Pp][Rr][Oo][Mm][Ii][Ss][Ee]|[Ss][Tt][Rr][Ii][Nn][Gg]|[Ss][Yy][Mm][Bb][Oo][Ll]\\.[Ww][Ee][Ll][Ll][Kk][Nn][Oo][Ww][Nn]|[Ss][Hh][Aa][Rr][Ee][Dd][Mm][Ee][Mm][Oo][Rr][Yy]|[Ii][Nn][Tt][Ll]|[Dd][Aa][Tt][Ee]|[Nn][Uu][Mm][Bb][Ee][Rr]))?$"
+                  },
+                  {
+                    "pattern": "^[Ee][Ss]2021(\\.([Ii][Nn][Tt][Ll]|[Pp][Rr][Oo][Mm][Ii][Ss][Ee]|[Ss][Tt][Rr][Ii][Nn][Gg]|[Ww][Ee][Aa][Kk][Rr][Ee][Ff]))?$"
+                  },
+                  {
+                    "pattern": "^[Ee][Ss]2022(\\.([Aa][Rr][Rr][Aa][Yy]|[Ee][Rr][Rr][Oo][Rr]|[Ii][Nn][Tt][Ll]|[Oo][Bb][Jj][Ee][Cc][Tt]|[Ss][Tt][Rr][Ii][Nn][Gg]|[Ss][Hh][Aa][Rr][Ee][Dd][Mm][Ee][Mm][Oo][Rr][Yy]|[Rr][Ee][Gg][Ee][Xx][Pp]))?$"
+                  },
+                  {
+                    "pattern": "^[Ee][Ss]2023(\\.([Aa][Rr][Rr][Aa][Yy]|[Cc][Oo][Ll][Ll][Ee][Cc][Tt][Ii][Oo][Nn]))?$"
+                  },
+                  {
+                    "pattern": "^[Ee][Ss]2024(\\.([Aa][Rr][Rr][Aa][Yy][Bb][Uu][Ff][Ff][Ee][Rr]|[Cc][Oo][Ll][Ll][Ee][Cc][Tt][Ii][Oo][Nn]|[Oo][Bb][Jj][Ee][Cc][Tt]|[Pp][Rr][Oo][Mm][Ii][Ss][Ee]|[Rr][Ee][Gg][Ee][Xx][Pp]|[Ss][Hh][Aa][Rr][Ee][Dd][Mm][Ee][Mm][Oo][Rr][Yy]|[Ss][Tt][Rr][Ii][Nn][Gg]))?$"
+                  },
+                  {
+                    "pattern": "^[Ee][Ss][Nn][Ee][Xx][Tt](\\.([Aa][Rr][Rr][Aa][Yy]|[Aa][Ss][Yy][Nn][Cc][Ii][Tt][Ee][Rr][Aa][Bb][Ll][Ee]|[Bb][Ii][Gg][Ii][Nn][Tt]|[Ii][Nn][Tt][Ll]|[Pp][Rr][Oo][Mm][Ii][Ss][Ee]|[Ss][Tt][Rr][Ii][Nn][Gg]|[Ss][Yy][Mm][Bb][Oo][Ll]|[Ww][Ee][Aa][Kk][Rr][Ee][Ff]|[Dd][Ee][Cc][Oo][Rr][Aa][Tt][Oo][Rr][Ss]|[Dd][Ii][Ss][Pp][Oo][Ss][Aa][Bb][Ll][Ee]))?$"
+                  },
+                  {
+                    "pattern": "^[Dd][Oo][Mm](\\.([Aa][Ss][Yy][Nn][Cc])?[Ii][Tt][Ee][Rr][Aa][Bb][Ll][Ee])?$"
+                  },
+                  {
+                    "pattern": "^[Ss][Cc][Rr][Ii][Pp][Tt][Hh][Oo][Ss][Tt]$"
+                  },
+                  {
+                    "pattern": "^[Ww][Ee][Bb][Ww][Oo][Rr][Kk][Ee][Rr](\\.([Ii][Mm][Pp][Oo][Rr][Tt][Ss][Cc][Rr][Ii][Pp][Tt][Ss]|([Aa][Ss][Yy][Nn][Cc])?[Ii][Tt][Ee][Rr][Aa][Bb][Ll][Ee]))?$"
+                  },
+                  {
+                    "pattern": "^[Dd][Ee][Cc][Oo][Rr][Aa][Tt][Oo][Rr][Ss](\\.([Ll][Ee][Gg][Aa][Cc][Yy]))?$"
+                  }
+                ],
+                "type": "string"
+              },
+              "markdownDescription": "Specify a set of bundled library declaration files that describe the target runtime environment.\n\nSee more: https://www.typescriptlang.org/tsconfig#lib",
+              "type": [
+                "array",
+                "null"
+              ],
+              "uniqueItems": true
+            },
+            "libReplacement": {
+              "default": true,
+              "description": "Enable lib replacement.",
+              "markdownDescription": "Enable lib replacement.\n\nSee more: https://www.typescriptlang.org/tsconfig#libReplacement",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "listEmittedFiles": {
+              "default": false,
+              "description": "Print the names of emitted files after a compilation.",
+              "markdownDescription": "Print the names of emitted files after a compilation.\n\nSee more: https://www.typescriptlang.org/tsconfig#listEmittedFiles",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "listFiles": {
+              "default": false,
+              "description": "Print all of the files read during the compilation.",
+              "markdownDescription": "Print all of the files read during the compilation.\n\nSee more: https://www.typescriptlang.org/tsconfig#listFiles",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "listFilesOnly": {
+              "description": "Print names of files that are part of the compilation and then stop processing.",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "mapRoot": {
+              "description": "Specify the location where debugger should locate map files instead of generated locations.",
+              "markdownDescription": "Specify the location where debugger should locate map files instead of generated locations.\n\nSee more: https://www.typescriptlang.org/tsconfig#mapRoot",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "maxNodeModuleJsDepth": {
+              "default": 0,
+              "description": "Specify the maximum folder depth used for checking JavaScript files from `node_modules`. Only applicable with `allowJs`.",
+              "markdownDescription": "Specify the maximum folder depth used for checking JavaScript files from `node_modules`. Only applicable with `allowJs`.\n\nSee more: https://www.typescriptlang.org/tsconfig#maxNodeModuleJsDepth",
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "module": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "commonjs",
+                    "amd",
+                    "system",
+                    "umd",
+                    "es6",
+                    "es2015",
+                    "es2020",
+                    "esnext",
+                    "none",
+                    "es2022",
+                    "node16",
+                    "node18",
+                    "node20",
+                    "nodenext",
+                    "preserve"
+                  ]
+                },
+                {
+                  "pattern": "^([Cc][Oo][Mm][Mm][Oo][Nn][Jj][Ss]|[AaUu][Mm][Dd]|[Ss][Yy][Ss][Tt][Ee][Mm]|[Ee][Ss]([356]|20(1[567]|2[02])|[Nn][Ee][Xx][Tt])|[Nn][Oo][dD][Ee](1[68]|20)|[Nn][Oo][Dd][Ee][Nn][Ee][Xx][Tt]|[Nn][Oo][Nn][Ee]|[Pp][Rr][Ee][Ss][Ee][Rr][Vv][Ee])$"
+                }
+              ],
+              "description": "Specify what module code is generated.",
+              "markdownDescription": "Specify what module code is generated.\n\nSee more: https://www.typescriptlang.org/tsconfig#module",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "moduleDetection": {
+              "description": "Control what method is used to detect module-format JS files.",
+              "enum": [
+                "auto",
+                "legacy",
+                "force"
+              ],
+              "markdownDescription": "Control what method is used to detect module-format JS files.\n\nSee more: https://www.typescriptlang.org/tsconfig#moduleDetection"
+            },
+            "moduleResolution": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "classic",
+                    "node",
+                    "node10",
+                    "node16",
+                    "nodenext",
+                    "bundler"
+                  ],
+                  "markdownEnumDescriptions": [
+                    "It’s recommended to use `\"node16\"` instead",
+                    "Deprecated, use `\"node10\"` in TypeScript 5.0+ instead",
+                    "It’s recommended to use `\"node16\"` instead",
+                    "This is the recommended setting for libraries and Node.js applications",
+                    "This is the recommended setting for libraries and Node.js applications",
+                    "This is the recommended setting in TypeScript 5.0+ for applications that use a bundler"
+                  ]
+                },
+                {
+                  "pattern": "^(([Nn]ode)|([Nn]ode1[06])|([Nn]ode[Nn]ext)|([Cc]lassic)|([Bb]undler))$"
+                }
+              ],
+              "description": "Specify how TypeScript looks up a file from a given module specifier.",
+              "markdownDescription": "Specify how TypeScript looks up a file from a given module specifier.\n\nSee more: https://www.typescriptlang.org/tsconfig#moduleResolution",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "moduleSuffixes": {
+              "description": "List of file name suffixes to search when resolving a module.",
+              "items": {
+                "type": "string"
+              },
+              "markdownDescription": "List of file name suffixes to search when resolving a module.\n\nSee more: https://www.typescriptlang.org/tsconfig#moduleSuffixes",
+              "type": [
+                "array",
+                "null"
+              ],
+              "uniqueItems": true
+            },
+            "newLine": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "crlf",
+                    "lf"
+                  ]
+                },
+                {
+                  "pattern": "^(CRLF|LF|crlf|lf)$"
+                }
+              ],
+              "default": "lf",
+              "description": "Set the newline character for emitting files.",
+              "markdownDescription": "Set the newline character for emitting files.\n\nSee more: https://www.typescriptlang.org/tsconfig#newLine",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "noCheck": {
+              "default": false,
+              "description": "Disable full type checking (only critical parse and emit errors will be reported).",
+              "markdownDescription": "Disable full type checking (only critical parse and emit errors will be reported).\n\nSee more: https://www.typescriptlang.org/tsconfig#noCheck",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "noEmit": {
+              "default": false,
+              "description": "Disable emitting files from a compilation.",
+              "markdownDescription": "Disable emitting files from a compilation.\n\nSee more: https://www.typescriptlang.org/tsconfig#noEmit",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "noEmitHelpers": {
+              "default": false,
+              "description": "Disable generating custom helper functions like `__extends` in compiled output.",
+              "markdownDescription": "Disable generating custom helper functions like `__extends` in compiled output.\n\nSee more: https://www.typescriptlang.org/tsconfig#noEmitHelpers",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "noEmitOnError": {
+              "default": false,
+              "description": "Disable emitting files if any type checking errors are reported.",
+              "markdownDescription": "Disable emitting files if any type checking errors are reported.\n\nSee more: https://www.typescriptlang.org/tsconfig#noEmitOnError",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "noErrorTruncation": {
+              "default": false,
+              "description": "Disable truncating types in error messages.",
+              "markdownDescription": "Disable truncating types in error messages.\n\nSee more: https://www.typescriptlang.org/tsconfig#noErrorTruncation",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "noFallthroughCasesInSwitch": {
+              "default": false,
+              "description": "Enable error reporting for fallthrough cases in switch statements.",
+              "markdownDescription": "Enable error reporting for fallthrough cases in switch statements.\n\nSee more: https://www.typescriptlang.org/tsconfig#noFallthroughCasesInSwitch",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "noImplicitAny": {
+              "description": "Enable error reporting for expressions and declarations with an implied `any` type.",
+              "markdownDescription": "Enable error reporting for expressions and declarations with an implied `any` type.\n\nSee more: https://www.typescriptlang.org/tsconfig#noImplicitAny",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "noImplicitOverride": {
+              "default": false,
+              "description": "Ensure overriding members in derived classes are marked with an override modifier.",
+              "markdownDescription": "Ensure overriding members in derived classes are marked with an override modifier.\n\nSee more: https://www.typescriptlang.org/tsconfig#noImplicitOverride",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "noImplicitReturns": {
+              "default": false,
+              "description": "Enable error reporting for codepaths that do not explicitly return in a function.",
+              "markdownDescription": "Enable error reporting for codepaths that do not explicitly return in a function.\n\nSee more: https://www.typescriptlang.org/tsconfig#noImplicitReturns",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "noImplicitThis": {
+              "description": "Enable error reporting when `this` is given the type `any`.",
+              "markdownDescription": "Enable error reporting when `this` is given the type `any`.\n\nSee more: https://www.typescriptlang.org/tsconfig#noImplicitThis",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "noImplicitUseStrict": {
+              "default": false,
+              "description": "Disable adding `use strict` directives in emitted JavaScript files.",
+              "markdownDescription": "Disable adding `use strict` directives in emitted JavaScript files.\n\nSee more: https://www.typescriptlang.org/tsconfig#noImplicitUseStrict",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "noLib": {
+              "default": false,
+              "description": "Disable including any library files, including the default lib.d.ts.",
+              "markdownDescription": "Disable including any library files, including the default lib.d.ts.\n\nSee more: https://www.typescriptlang.org/tsconfig#noLib",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "noPropertyAccessFromIndexSignature": {
+              "description": "Enforces using indexed accessors for keys declared using an indexed type.",
+              "markdownDescription": "Enforces using indexed accessors for keys declared using an indexed type.\n\nSee more: https://www.typescriptlang.org/tsconfig#noPropertyAccessFromIndexSignature",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "noResolve": {
+              "default": false,
+              "description": "Disallow `import`s, `require`s or `\u003creference\u003e`s from expanding the number of files TypeScript should add to a project.",
+              "markdownDescription": "Disallow `import`s, `require`s or `\u003creference\u003e`s from expanding the number of files TypeScript should add to a project.\n\nSee more: https://www.typescriptlang.org/tsconfig#noResolve",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "noStrictGenericChecks": {
+              "default": false,
+              "description": "Disable strict checking of generic signatures in function types.",
+              "markdownDescription": "Disable strict checking of generic signatures in function types.\n\nSee more: https://www.typescriptlang.org/tsconfig#noStrictGenericChecks",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "noUncheckedIndexedAccess": {
+              "description": "Add `undefined` to a type when accessed using an index.",
+              "markdownDescription": "Add `undefined` to a type when accessed using an index.\n\nSee more: https://www.typescriptlang.org/tsconfig#noUncheckedIndexedAccess",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "noUncheckedSideEffectImports": {
+              "default": false,
+              "description": "Check side effect imports.",
+              "markdownDescription": "Check side effect imports.\n\nSee more: https://www.typescriptlang.org/tsconfig#noUncheckedSideEffectImports",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "noUnusedLocals": {
+              "default": false,
+              "description": "Enable error reporting when local variables aren't read.",
+              "markdownDescription": "Enable error reporting when local variables aren't read.\n\nSee more: https://www.typescriptlang.org/tsconfig#noUnusedLocals",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "noUnusedParameters": {
+              "default": false,
+              "description": "Raise an error when a function parameter isn't read.",
+              "markdownDescription": "Raise an error when a function parameter isn't read.\n\nSee more: https://www.typescriptlang.org/tsconfig#noUnusedParameters",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "out": {
+              "description": "Deprecated setting. Use `outFile` instead.",
+              "markdownDescription": "Deprecated setting. Use `outFile` instead.\n\nSee more: https://www.typescriptlang.org/tsconfig#out",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "outDir": {
+              "description": "Specify an output folder for all emitted files.",
+              "markdownDescription": "Specify an output folder for all emitted files.\n\nSee more: https://www.typescriptlang.org/tsconfig#outDir",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "outFile": {
+              "description": "Specify a file that bundles all outputs into one JavaScript file. If `declaration` is true, also designates a file that bundles all .d.ts output.",
+              "markdownDescription": "Specify a file that bundles all outputs into one JavaScript file. If `declaration` is true, also designates a file that bundles all .d.ts output.\n\nSee more: https://www.typescriptlang.org/tsconfig#outFile",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "paths": {
+              "additionalProperties": {
+                "items": {
+                  "description": "Path mapping to be computed relative to baseUrl option.",
+                  "type": "string"
+                },
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "uniqueItems": true
+              },
+              "description": "Specify a set of entries that re-map imports to additional lookup locations.",
+              "markdownDescription": "Specify a set of entries that re-map imports to additional lookup locations.\n\nSee more: https://www.typescriptlang.org/tsconfig#paths",
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "plugins": {
+              "description": "Specify a list of language service plugins to include.",
+              "items": {
+                "anyOf": [
+                  {
+                    "additionalProperties": false,
+                    "properties": {
+                      "allowedDuplicatedPackages": {
+                        "default": [],
+                        "description": "Package names allowed to have multiple versions without triggering duplicatePackage.",
+                        "items": {
+                          "type": "string"
+                        },
+                        "type": "array"
+                      },
+                      "barrelImportPackages": {
+                        "default": [],
+                        "description": "Package names that should prefer barrel named imports.",
+                        "items": {
+                          "type": "string"
+                        },
+                        "type": "array"
+                      },
+                      "diagnosticSeverity": {
+                        "$ref": "#/definitions/effectLanguageServicePluginDiagnosticSeverityDefinition",
+                        "default": {},
+                        "description": "Maps rule names to severity levels. Use {} to enable diagnostics with rule defaults."
+                      },
+                      "effectFn": {
+                        "default": [
+                          "span"
+                        ],
+                        "description": "Controls which effectFnOpportunity quickfix variants are offered.",
+                        "items": {
+                          "enum": [
+                            "span",
+                            "untraced",
+                            "no-span",
+                            "inferred-span",
+                            "suggested-span"
+                          ],
+                          "type": "string"
+                        },
+                        "type": "array",
+                        "uniqueItems": true
+                      },
+                      "extendedKeyDetection": {
+                        "default": false,
+                        "description": "Enables matching constructors with @effect-identifier annotations.",
+                        "type": "boolean"
+                      },
+                      "ignoreEffectErrorsInTscExitCode": {
+                        "default": false,
+                        "description": "When true, error diagnostics do not affect the tsc exit code.",
+                        "type": "boolean"
+                      },
+                      "ignoreEffectSuggestionsInTscExitCode": {
+                        "default": true,
+                        "description": "When true, suggestion diagnostics do not affect the tsc exit code.",
+                        "type": "boolean"
+                      },
+                      "ignoreEffectWarningsInTscExitCode": {
+                        "default": false,
+                        "description": "When true, warning diagnostics do not affect the tsc exit code.",
+                        "type": "boolean"
+                      },
+                      "importAliases": {
+                        "additionalProperties": {
+                          "type": "string"
+                        },
+                        "default": {},
+                        "description": "Package-level import aliases keyed by package name.",
+                        "type": "object"
+                      },
+                      "inlays": {
+                        "default": false,
+                        "description": "When true, suppresses redundant return-type inlay hints on supported Effect generator functions.",
+                        "type": "boolean"
+                      },
+                      "keyPatterns": {
+                        "default": [
+                          {
+                            "target": "service",
+                            "pattern": "default",
+                            "skipLeadingPath": [
+                              "src/"
+                            ]
+                          },
+                          {
+                            "target": "custom",
+                            "pattern": "default",
+                            "skipLeadingPath": [
+                              "src/"
+                            ]
+                          }
+                        ],
+                        "description": "Configures key pattern formulas for the deterministicKeys rule.",
+                        "items": {
+                          "$ref": "#/definitions/effectLanguageServicePluginKeyPatternDefinition"
+                        },
+                        "type": "array"
+                      },
+                      "layerGraphFollowDepth": {
+                        "default": 0,
+                        "description": "How many levels deep the layer graph extraction follows symbol references.",
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "mermaidProvider": {
+                        "default": "mermaid.live",
+                        "description": "Mermaid rendering service for layer graph links. Accepts mermaid.live, mermaid.com, or a custom URL.",
+                        "type": "string"
+                      },
+                      "name": {
+                        "const": "@effect/language-service",
+                        "type": "string"
+                      },
+                      "namespaceImportPackages": {
+                        "default": [],
+                        "description": "Package names that should prefer namespace imports.",
+                        "items": {
+                          "type": "string"
+                        },
+                        "type": "array"
+                      },
+                      "noExternal": {
+                        "default": false,
+                        "description": "When true, suppresses external Mermaid links in hover output.",
+                        "type": "boolean"
+                      },
+                      "pipeableMinArgCount": {
+                        "default": 2,
+                        "description": "Minimum number of contiguous pipeable transformations to trigger missedPipeableOpportunity.",
+                        "minimum": 1,
+                        "type": "integer"
+                      },
+                      "skipDisabledOptimization": {
+                        "default": false,
+                        "description": "When true, disabled diagnostics are still processed so directives can re-enable them.",
+                        "type": "boolean"
+                      },
+                      "topLevelNamedReexports": {
+                        "default": "ignore",
+                        "description": "Controls whether named reexports are followed at package top-level.",
+                        "enum": [
+                          "ignore",
+                          "follow"
+                        ],
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "name"
+                    ],
+                    "title": "@effect/language-service plugin",
+                    "type": "object"
+                  },
+                  {
+                    "properties": {
+                      "name": {
+                        "description": "Plugin name.",
+                        "not": {
+                          "enum": [
+                            "@effect/language-service"
+                          ]
+                        },
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  }
+                ]
+              },
+              "markdownDescription": "Specify a list of language service plugins to include.\n\nSee more: https://www.typescriptlang.org/tsconfig#plugins",
+              "type": [
+                "array",
+                "null"
+              ]
+            },
+            "preserveConstEnums": {
+              "default": false,
+              "description": "Disable erasing `const enum` declarations in generated code.",
+              "markdownDescription": "Disable erasing `const enum` declarations in generated code.\n\nSee more: https://www.typescriptlang.org/tsconfig#preserveConstEnums",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "preserveSymlinks": {
+              "default": false,
+              "description": "Disable resolving symlinks to their realpath. This correlates to the same flag in node.",
+              "markdownDescription": "Disable resolving symlinks to their realpath. This correlates to the same flag in node.\n\nSee more: https://www.typescriptlang.org/tsconfig#preserveSymlinks",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "preserveValueImports": {
+              "default": false,
+              "description": "Preserve unused imported values in the JavaScript output that would otherwise be removed.",
+              "markdownDescription": "Preserve unused imported values in the JavaScript output that would otherwise be removed.\n\nSee more: https://www.typescriptlang.org/tsconfig#preserveValueImports",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "preserveWatchOutput": {
+              "description": "Disable wiping the console in watch mode.",
+              "markdownDescription": "Disable wiping the console in watch mode.\n\nSee more: https://www.typescriptlang.org/tsconfig#preserveWatchOutput",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "pretty": {
+              "default": true,
+              "description": "Enable color and formatting in TypeScript's output to make compiler errors easier to read.",
+              "markdownDescription": "Enable color and formatting in TypeScript's output to make compiler errors easier to read.\n\nSee more: https://www.typescriptlang.org/tsconfig#pretty",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "reactNamespace": {
+              "default": "React",
+              "description": "Specify the object invoked for `createElement`. This only applies when targeting `react` JSX emit.",
+              "markdownDescription": "Specify the object invoked for `createElement`. This only applies when targeting `react` JSX emit.\n\nSee more: https://www.typescriptlang.org/tsconfig#reactNamespace",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "removeComments": {
+              "default": false,
+              "description": "Disable emitting comments.",
+              "markdownDescription": "Disable emitting comments.\n\nSee more: https://www.typescriptlang.org/tsconfig#removeComments",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "resolveJsonModule": {
+              "default": false,
+              "description": "Enable importing .json files.",
+              "markdownDescription": "Enable importing .json files.\n\nSee more: https://www.typescriptlang.org/tsconfig#resolveJsonModule",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "resolvePackageJsonExports": {
+              "default": false,
+              "description": "Use the package.json 'exports' field when resolving package imports.",
+              "markdownDescription": "Use the package.json 'exports' field when resolving package imports.\n\nSee more: https://www.typescriptlang.org/tsconfig#resolvePackageJsonExports",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "resolvePackageJsonImports": {
+              "default": false,
+              "description": "Use the package.json 'imports' field when resolving imports.",
+              "markdownDescription": "Use the package.json 'imports' field when resolving imports.\n\nSee more: https://www.typescriptlang.org/tsconfig#resolvePackageJsonImports",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "rewriteRelativeImportExtensions": {
+              "default": false,
+              "description": "Rewrite `.ts`, `.tsx`, `.mts`, and `.cts` file extensions in relative import paths to their JavaScript equivalent in output files.",
+              "markdownDescription": "Rewrite `.ts`, `.tsx`, `.mts`, and `.cts` file extensions in relative import paths to their JavaScript equivalent in output files.\n\nSee more: https://www.typescriptlang.org/tsconfig#rewriteRelativeImportExtensions",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "rootDir": {
+              "description": "Specify the root folder within your source files.",
+              "markdownDescription": "Specify the root folder within your source files.\n\nSee more: https://www.typescriptlang.org/tsconfig#rootDir",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "rootDirs": {
+              "description": "Allow multiple folders to be treated as one when resolving modules.",
+              "items": {
+                "type": "string"
+              },
+              "markdownDescription": "Allow multiple folders to be treated as one when resolving modules.\n\nSee more: https://www.typescriptlang.org/tsconfig#rootDirs",
+              "type": [
+                "array",
+                "null"
+              ],
+              "uniqueItems": true
+            },
+            "skipDefaultLibCheck": {
+              "default": false,
+              "description": "Skip type checking .d.ts files that are included with TypeScript.",
+              "markdownDescription": "Skip type checking .d.ts files that are included with TypeScript.\n\nSee more: https://www.typescriptlang.org/tsconfig#skipDefaultLibCheck",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "skipLibCheck": {
+              "default": false,
+              "description": "Skip type checking all .d.ts files.",
+              "markdownDescription": "Skip type checking all .d.ts files.\n\nSee more: https://www.typescriptlang.org/tsconfig#skipLibCheck",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "sourceMap": {
+              "default": false,
+              "description": "Create source map files for emitted JavaScript files.",
+              "markdownDescription": "Create source map files for emitted JavaScript files.\n\nSee more: https://www.typescriptlang.org/tsconfig#sourceMap",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "sourceRoot": {
+              "description": "Specify the root path for debuggers to find the reference source code.",
+              "markdownDescription": "Specify the root path for debuggers to find the reference source code.\n\nSee more: https://www.typescriptlang.org/tsconfig#sourceRoot",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "strict": {
+              "default": false,
+              "description": "Enable all strict type-checking options.",
+              "markdownDescription": "Enable all strict type-checking options.\n\nSee more: https://www.typescriptlang.org/tsconfig#strict",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "strictBindCallApply": {
+              "default": false,
+              "description": "Check that the arguments for `bind`, `call`, and `apply` methods match the original function.",
+              "markdownDescription": "Check that the arguments for `bind`, `call`, and `apply` methods match the original function.\n\nSee more: https://www.typescriptlang.org/tsconfig#strictBindCallApply",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "strictBuiltinIteratorReturn": {
+              "default": false,
+              "description": "Built-in iterators are instantiated with a `TReturn` type of `undefined` instead of `any`.",
+              "markdownDescription": "Built-in iterators are instantiated with a `TReturn` type of `undefined` instead of `any`.\n\nSee more: https://www.typescriptlang.org/tsconfig#strictBuiltinIteratorReturn",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "strictFunctionTypes": {
+              "default": false,
+              "description": "When assigning functions, check to ensure parameters and the return values are subtype-compatible.",
+              "markdownDescription": "When assigning functions, check to ensure parameters and the return values are subtype-compatible.\n\nSee more: https://www.typescriptlang.org/tsconfig#strictFunctionTypes",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "strictNullChecks": {
+              "default": false,
+              "description": "When type checking, take into account `null` and `undefined`.",
+              "markdownDescription": "When type checking, take into account `null` and `undefined`.\n\nSee more: https://www.typescriptlang.org/tsconfig#strictNullChecks",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "strictPropertyInitialization": {
+              "default": false,
+              "description": "Check for class properties that are declared but not set in the constructor.",
+              "markdownDescription": "Check for class properties that are declared but not set in the constructor.\n\nSee more: https://www.typescriptlang.org/tsconfig#strictPropertyInitialization",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "stripInternal": {
+              "description": "Disable emitting declarations that have `@internal` in their JSDoc comments.",
+              "markdownDescription": "Disable emitting declarations that have `@internal` in their JSDoc comments.\n\nSee more: https://www.typescriptlang.org/tsconfig#stripInternal",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "suppressExcessPropertyErrors": {
+              "default": false,
+              "description": "Disable reporting of excess property errors during the creation of object literals.",
+              "markdownDescription": "Disable reporting of excess property errors during the creation of object literals.\n\nSee more: https://www.typescriptlang.org/tsconfig#suppressExcessPropertyErrors",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "suppressImplicitAnyIndexErrors": {
+              "default": false,
+              "description": "Suppress `noImplicitAny` errors when indexing objects that lack index signatures.",
+              "markdownDescription": "Suppress `noImplicitAny` errors when indexing objects that lack index signatures.\n\nSee more: https://www.typescriptlang.org/tsconfig#suppressImplicitAnyIndexErrors",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "target": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "es3",
+                    "es5",
+                    "es6",
+                    "es2015",
+                    "es2016",
+                    "es2017",
+                    "es2018",
+                    "es2019",
+                    "es2020",
+                    "es2021",
+                    "es2022",
+                    "es2023",
+                    "es2024",
+                    "esnext"
+                  ]
+                },
+                {
+                  "pattern": "^([Ee][Ss]([356]|(20(1[56789]|2[01234]))|[Nn][Ee][Xx][Tt]))$"
+                }
+              ],
+              "default": "es3",
+              "description": "Set the JavaScript language version for emitted JavaScript and include compatible library declarations.",
+              "markdownDescription": "Set the JavaScript language version for emitted JavaScript and include compatible library declarations.\n\nSee more: https://www.typescriptlang.org/tsconfig#target",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "traceResolution": {
+              "default": false,
+              "description": "Log paths used during the `moduleResolution` process.",
+              "markdownDescription": "Log paths used during the `moduleResolution` process.\n\nSee more: https://www.typescriptlang.org/tsconfig#traceResolution",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "tsBuildInfoFile": {
+              "default": ".tsbuildinfo",
+              "description": "Specify the path to .tsbuildinfo incremental compilation file.",
+              "markdownDescription": "Specify the path to .tsbuildinfo incremental compilation file.\n\nSee more: https://www.typescriptlang.org/tsconfig#tsBuildInfoFile",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "typeRoots": {
+              "description": "Specify multiple folders that act like `./node_modules/@types`.",
+              "items": {
+                "type": "string"
+              },
+              "markdownDescription": "Specify multiple folders that act like `./node_modules/@types`.\n\nSee more: https://www.typescriptlang.org/tsconfig#typeRoots",
+              "type": [
+                "array",
+                "null"
+              ],
+              "uniqueItems": true
+            },
+            "types": {
+              "description": "Specify type package names to be included without being referenced in a source file.",
+              "items": {
+                "type": "string"
+              },
+              "markdownDescription": "Specify type package names to be included without being referenced in a source file.\n\nSee more: https://www.typescriptlang.org/tsconfig#types",
+              "type": [
+                "array",
+                "null"
+              ],
+              "uniqueItems": true
+            },
+            "useDefineForClassFields": {
+              "default": false,
+              "description": "Emit ECMAScript-standard-compliant class fields.",
+              "markdownDescription": "Emit ECMAScript-standard-compliant class fields.\n\nSee more: https://www.typescriptlang.org/tsconfig#useDefineForClassFields",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "useUnknownInCatchVariables": {
+              "default": false,
+              "description": "Default catch clause variables as `unknown` instead of `any`.",
+              "markdownDescription": "Default catch clause variables as `unknown` instead of `any`.\n\nSee more: https://www.typescriptlang.org/tsconfig#useUnknownInCatchVariables",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "verbatimModuleSyntax": {
+              "description": "Do not transform or elide any imports or exports not marked as type-only, ensuring they are written in the output file's format based on the `module` setting.",
+              "markdownDescription": "Do not transform or elide any imports or exports not marked as type-only, ensuring they are written in the output file's format based on the `module` setting.\n\nSee more: https://www.typescriptlang.org/tsconfig#verbatimModuleSyntax",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "watch": {
+              "description": "Watch input files.",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "watchDirectory": {
+              "default": "useFsEvents",
+              "description": "Specify the strategy for watching directories under systems that lack recursive file-watching functionality. Requires TypeScript version 3.8 or later.",
+              "enum": [
+                "useFsEvents",
+                "fixedPollingInterval",
+                "dynamicPriorityPolling",
+                "fixedChunkSizePolling"
+              ]
+            },
+            "watchFile": {
+              "default": "useFsEvents",
+              "description": "Specify the strategy for watching individual files. Requires TypeScript version 3.8 or later.",
+              "enum": [
+                "fixedPollingInterval",
+                "priorityPollingInterval",
+                "dynamicPriorityPolling",
+                "useFsEvents",
+                "useFsEventsOnParentDirectory",
+                "fixedChunkSizePolling"
+              ]
+            }
+          },
+          "type": [
+            "object",
+            "null"
+          ]
+        }
+      }
+    },
+    "effectLanguageServicePluginDiagnosticSeverityDefinition": {
+      "additionalProperties": {
+        "enum": [
+          "off",
+          "error",
+          "warning",
+          "message",
+          "suggestion"
+        ],
+        "type": "string"
+      },
+      "description": "Allows overriding the default severity for each Effect diagnostic across the project.",
+      "properties": {
+        "anyUnknownInErrorContext": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Detects 'any' or 'unknown' types in Effect error or requirements channels"
+        },
+        "catchAllToMapError": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests using Effect.mapError instead of Effect.catch + Effect.fail"
+        },
+        "catchUnfailableEffect": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Warns when using error handling on Effects that never fail"
+        },
+        "classSelfMismatch": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "error",
+          "description": "Ensures Self type parameter matches the class name in Service/Tag/Schema classes"
+        },
+        "deterministicKeys": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Enforces deterministic naming for service/tag/error identifiers based on class names"
+        },
+        "duplicatePackage": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "warning",
+          "description": "Warns when multiple versions of an Effect-related package are detected in the program"
+        },
+        "effectFnIife": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "warning",
+          "description": "Effect.fn or Effect.fnUntraced is called as an IIFE; use Effect.gen instead"
+        },
+        "effectFnOpportunity": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests using Effect.fn for functions that return an Effect"
+        },
+        "effectGenUsesAdapter": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "warning",
+          "description": "Warns when using the deprecated adapter parameter in Effect.gen"
+        },
+        "effectInFailure": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "warning",
+          "description": "Warns when an Effect is used inside an Effect failure channel"
+        },
+        "effectInVoidSuccess": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "warning",
+          "description": "Detects nested Effects in void success channels that may cause unexecuted effects"
+        },
+        "effectMapVoid": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests using Effect.asVoid instead of Effect.map(() =\u003e void 0), Effect.map(() =\u003e undefined), or Effect.map(() =\u003e {})"
+        },
+        "effectSucceedWithVoid": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests using Effect.void instead of Effect.succeed(undefined) or Effect.succeed(void 0)"
+        },
+        "extendsNativeError": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Warns when a class directly extends the native Error class"
+        },
+        "floatingEffect": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "error",
+          "description": "Detects Effect values that are neither yielded nor assigned"
+        },
+        "genericEffectServices": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "warning",
+          "description": "Prevents services with type parameters that cannot be discriminated at runtime"
+        },
+        "globalErrorInEffectCatch": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "warning",
+          "description": "Warns when catch callbacks return global Error type instead of typed errors"
+        },
+        "globalErrorInEffectFailure": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "warning",
+          "description": "Warns when the global Error type is used in an Effect failure channel"
+        },
+        "instanceOfSchema": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Suggests using Schema.is instead of instanceof for Effect Schema types"
+        },
+        "layerMergeAllWithDependencies": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "warning",
+          "description": "Detects interdependencies in Layer.mergeAll calls where one layer provides a service that another layer requires"
+        },
+        "leakingRequirements": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Detects implementation services leaked in service methods"
+        },
+        "missedPipeableOpportunity": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Suggests using .pipe() for nested function calls"
+        },
+        "missingEffectContext": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "error",
+          "description": "Detects Effect values with unhandled context requirements"
+        },
+        "missingEffectError": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "error",
+          "description": "Detects Effect values with unhandled error types"
+        },
+        "missingEffectServiceDependency": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Checks that Effect.Service dependencies satisfy all required layer inputs"
+        },
+        "missingLayerContext": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "error",
+          "description": "Detects Layer values with unhandled context requirements"
+        },
+        "missingReturnYieldStar": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "error",
+          "description": "Suggests using return yield* for Effects that never succeed"
+        },
+        "missingStarInYieldEffectGen": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "error",
+          "description": "Detects bare yield (without *) inside Effect generator scopes"
+        },
+        "multipleEffectProvide": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "warning",
+          "description": "Warns against chaining Effect.provide calls which can cause service lifecycle issues"
+        },
+        "nodeBuiltinImport": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Warns when importing Node.js built-in modules that have Effect-native counterparts"
+        },
+        "nonObjectEffectServiceType": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "error",
+          "description": "Ensures Effect.Service types are objects, not primitives"
+        },
+        "outdatedApi": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "warning",
+          "description": "Detects usage of APIs that have been removed or renamed in Effect v4"
+        },
+        "overriddenSchemaConstructor": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "error",
+          "description": "Prevents overriding constructors in Schema classes which breaks decoding behavior"
+        },
+        "preferSchemaOverJson": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify"
+        },
+        "redundantSchemaTagIdentifier": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests removing redundant identifier argument when it equals the tag value in Schema.TaggedClass/TaggedError/TaggedRequest"
+        },
+        "returnEffectInGen": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Warns when returning an Effect in a generator causes nested Effect\u003cEffect\u003c...\u003e\u003e"
+        },
+        "runEffectInsideEffect": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests using Runtime methods instead of Effect.run* inside Effect contexts"
+        },
+        "schemaStructWithTag": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests using Schema.TaggedStruct instead of Schema.Struct with _tag field"
+        },
+        "schemaSyncInEffect": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests using Effect-based Schema methods instead of sync methods inside Effect generators"
+        },
+        "schemaUnionOfLiterals": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Suggests combining multiple Schema.Literal calls in Schema.Union into a single Schema.Literal"
+        },
+        "scopeInLayerEffect": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "warning",
+          "description": "Suggests using Layer.scoped instead of Layer.effect when Scope is in requirements"
+        },
+        "serviceNotAsClass": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Warns when ServiceMap.Service is used as a variable instead of a class declaration"
+        },
+        "strictBooleanExpressions": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Enforces boolean types in conditional expressions for type safety"
+        },
+        "strictEffectProvide": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Warns when using Effect.provide with layers outside of application entry points"
+        },
+        "tryCatchInEffectGen": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Discourages try/catch in Effect generators in favor of Effect error handling"
+        },
+        "unknownInEffectCatch": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "warning",
+          "description": "Warns when catch callbacks return unknown instead of typed errors"
+        },
+        "unnecessaryEffectGen": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests removing Effect.gen when it contains only a single return statement"
+        },
+        "unnecessaryFailYieldableError": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests yielding yieldable errors directly instead of wrapping with Effect.fail"
+        },
+        "unnecessaryPipe": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Removes pipe calls with no arguments"
+        },
+        "unnecessaryPipeChain": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Simplifies chained pipe calls into a single pipe call"
+        }
+      },
+      "type": "object"
+    },
+    "effectLanguageServicePluginKeyPatternDefinition": {
+      "additionalProperties": false,
+      "properties": {
+        "pattern": {
+          "default": "default",
+          "description": "Formula used to compute the key.",
+          "enum": [
+            "default",
+            "package-identifier",
+            "default-hashed"
+          ],
+          "type": "string"
+        },
+        "skipLeadingPath": {
+          "default": [
+            "src/"
+          ],
+          "description": "Path prefixes to strip from the sub-directory segment.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "target": {
+          "default": "service",
+          "description": "Target category this pattern applies to.",
+          "enum": [
+            "service",
+            "error",
+            "custom"
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "effectLanguageServicePluginOptionsDefinition": {
+      "additionalProperties": false,
+      "properties": {
+        "allowedDuplicatedPackages": {
+          "default": [],
+          "description": "Package names allowed to have multiple versions without triggering duplicatePackage.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "barrelImportPackages": {
+          "default": [],
+          "description": "Package names that should prefer barrel named imports.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "diagnosticSeverity": {
+          "$ref": "#/definitions/effectLanguageServicePluginDiagnosticSeverityDefinition",
+          "default": {},
+          "description": "Maps rule names to severity levels. Use {} to enable diagnostics with rule defaults."
+        },
+        "effectFn": {
+          "default": [
+            "span"
+          ],
+          "description": "Controls which effectFnOpportunity quickfix variants are offered.",
+          "items": {
+            "enum": [
+              "span",
+              "untraced",
+              "no-span",
+              "inferred-span",
+              "suggested-span"
+            ],
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "extendedKeyDetection": {
+          "default": false,
+          "description": "Enables matching constructors with @effect-identifier annotations.",
+          "type": "boolean"
+        },
+        "ignoreEffectErrorsInTscExitCode": {
+          "default": false,
+          "description": "When true, error diagnostics do not affect the tsc exit code.",
+          "type": "boolean"
+        },
+        "ignoreEffectSuggestionsInTscExitCode": {
+          "default": true,
+          "description": "When true, suggestion diagnostics do not affect the tsc exit code.",
+          "type": "boolean"
+        },
+        "ignoreEffectWarningsInTscExitCode": {
+          "default": false,
+          "description": "When true, warning diagnostics do not affect the tsc exit code.",
+          "type": "boolean"
+        },
+        "importAliases": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "default": {},
+          "description": "Package-level import aliases keyed by package name.",
+          "type": "object"
+        },
+        "inlays": {
+          "default": false,
+          "description": "When true, suppresses redundant return-type inlay hints on supported Effect generator functions.",
+          "type": "boolean"
+        },
+        "keyPatterns": {
+          "default": [
+            {
+              "target": "service",
+              "pattern": "default",
+              "skipLeadingPath": [
+                "src/"
+              ]
+            },
+            {
+              "target": "custom",
+              "pattern": "default",
+              "skipLeadingPath": [
+                "src/"
+              ]
+            }
+          ],
+          "description": "Configures key pattern formulas for the deterministicKeys rule.",
+          "items": {
+            "$ref": "#/definitions/effectLanguageServicePluginKeyPatternDefinition"
+          },
+          "type": "array"
+        },
+        "layerGraphFollowDepth": {
+          "default": 0,
+          "description": "How many levels deep the layer graph extraction follows symbol references.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "mermaidProvider": {
+          "default": "mermaid.live",
+          "description": "Mermaid rendering service for layer graph links. Accepts mermaid.live, mermaid.com, or a custom URL.",
+          "type": "string"
+        },
+        "namespaceImportPackages": {
+          "default": [],
+          "description": "Package names that should prefer namespace imports.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "noExternal": {
+          "default": false,
+          "description": "When true, suppresses external Mermaid links in hover output.",
+          "type": "boolean"
+        },
+        "pipeableMinArgCount": {
+          "default": 2,
+          "description": "Minimum number of contiguous pipeable transformations to trigger missedPipeableOpportunity.",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "skipDisabledOptimization": {
+          "default": false,
+          "description": "When true, disabled diagnostics are still processed so directives can re-enable them.",
+          "type": "boolean"
+        },
+        "topLevelNamedReexports": {
+          "default": "ignore",
+          "description": "Controls whether named reexports are followed at package top-level.",
+          "enum": [
+            "ignore",
+            "follow"
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "effectLanguageServicePluginSeverityDefinition": {
+      "enum": [
+        "off",
+        "error",
+        "warning",
+        "message",
+        "suggestion"
+      ],
+      "type": "string"
+    },
+    "excludeDefinition": {
+      "properties": {
+        "exclude": {
+          "description": "Specifies a list of files to be excluded from compilation. The 'exclude' property only affects the files included via the 'include' property and not the 'files' property. Glob patterns require TypeScript version 2.0 or later.",
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ],
+          "uniqueItems": true
+        }
+      }
+    },
+    "extendsDefinition": {
+      "properties": {
+        "extends": {
+          "description": "Path to base configuration file to inherit from (requires TypeScript version 2.1 or later), or array of base files, with the rightmost files having the greater priority (requires TypeScript version 5.0 or later).",
+          "oneOf": [
+            {
+              "default": "",
+              "type": "string"
+            },
+            {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          ]
+        }
+      }
+    },
+    "filesDefinition": {
+      "properties": {
+        "files": {
+          "description": "If no 'files' or 'include' property is present in a tsconfig.json, the compiler defaults to including all files in the containing directory and subdirectories except those specified by 'exclude'. When a 'files' property is specified, only those files and those specified by 'include' are included.",
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ],
+          "uniqueItems": true
+        }
+      }
+    },
+    "includeDefinition": {
+      "properties": {
+        "include": {
+          "description": "Specifies a list of glob patterns that match files to be included in compilation. If no 'files' or 'include' property is present in a tsconfig.json, the compiler defaults to including all files in the containing directory and subdirectories except those specified by 'exclude'. Requires TypeScript version 2.0 or later.",
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ],
+          "uniqueItems": true
+        }
+      }
+    },
+    "referencesDefinition": {
+      "properties": {
+        "references": {
+          "description": "Referenced projects. Requires TypeScript version 3.0 or later.",
+          "items": {
+            "description": "Project reference.",
+            "properties": {
+              "path": {
+                "description": "Path to referenced tsconfig or to folder containing tsconfig.",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array",
+          "uniqueItems": true
+        }
+      }
+    },
+    "tsNodeDefinition": {
+      "properties": {
+        "ts-node": {
+          "description": "ts-node options.  See also: https://typestrong.org/ts-node/docs/configuration\n\nts-node offers TypeScript execution and REPL for node.js, with source map support.",
+          "properties": {
+            "compiler": {
+              "default": "typescript",
+              "description": "Specify a custom TypeScript compiler.",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "compilerHost": {
+              "default": false,
+              "description": "Use TypeScript's compiler host API instead of the language service API.",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "compilerOptions": {
+              "additionalProperties": true,
+              "allOf": [
+                {
+                  "$ref": "#/definitions/compilerOptionsDefinition/properties/compilerOptions"
+                }
+              ],
+              "description": "JSON object to merge with TypeScript `compilerOptions`.",
+              "properties": {},
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "emit": {
+              "default": false,
+              "description": "Emit output files into `.ts-node` directory.",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "esm": {
+              "description": "Enable native ESM support.\n\nFor details, see https://typestrong.org/ts-node/docs/imports#native-ecmascript-modules",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "experimentalReplAwait": {
+              "description": "Allows the usage of top level await in REPL.\n\nUses node's implementation which accomplishes this with an AST syntax transformation.\n\nEnabled by default when tsconfig target is es2018 or above. Set to false to disable.\n\n**Note**: setting to `true` when tsconfig target is too low will throw an Error.  Leave as `undefined`\nto get default, automatic behavior.",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "experimentalResolver": {
+              "description": "Enable experimental features that re-map imports and require calls to support:\n`baseUrl`, `paths`, `rootDirs`, `.js` to `.ts` file extension mappings,\n`outDir` to `rootDir` mappings for composite projects and monorepos.\n\nFor details, see https://github.com/TypeStrong/ts-node/issues/1514",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "experimentalSpecifierResolution": {
+              "description": "Like node's `--experimental-specifier-resolution`, , but can also be set in your `tsconfig.json` for convenience.\n\nFor details, see https://nodejs.org/dist/latest-v18.x/docs/api/esm.html#customizing-esm-specifier-resolution-algorithm",
+              "enum": [
+                "explicit",
+                "node"
+              ],
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "files": {
+              "default": false,
+              "description": "Load \"files\" and \"include\" from `tsconfig.json` on startup.\n\nDefault is to override `tsconfig.json` \"files\" and \"include\" to only include the entrypoint script.",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "ignore": {
+              "default": [
+                "(?:^|/)node_modules/"
+              ],
+              "description": "Paths which should not be compiled.\n\nEach string in the array is converted to a regular expression via `new RegExp()` and tested against source paths prior to compilation.\n\nSource paths are normalized to posix-style separators, relative to the directory containing `tsconfig.json` or to cwd if no `tsconfig.json` is loaded.\n\nDefault is to ignore all node_modules subdirectories.",
+              "items": {
+                "type": "string"
+              },
+              "type": [
+                "array",
+                "null"
+              ]
+            },
+            "ignoreDiagnostics": {
+              "description": "Ignore TypeScript warnings by diagnostic code.",
+              "items": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "type": [
+                "array",
+                "null"
+              ]
+            },
+            "logError": {
+              "default": false,
+              "description": "Logs TypeScript errors to stderr instead of throwing exceptions.",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "moduleTypes": {
+              "$ref": "#/definitions/tsNodeModuleTypes",
+              "description": "Override certain paths to be compiled and executed as CommonJS or ECMAScript modules.\nWhen overridden, the tsconfig \"module\" and package.json \"type\" fields are overridden, and\nthe file extension is ignored.\nThis is useful if you cannot use .mts, .cts, .mjs, or .cjs file extensions;\nit achieves the same effect.\n\nEach key is a glob pattern following the same rules as tsconfig's \"include\" array.\nWhen multiple patterns match the same file, the last pattern takes precedence.\n\n`cjs` overrides matches files to compile and execute as CommonJS.\n`esm` overrides matches files to compile and execute as native ECMAScript modules.\n`package` overrides either of the above to default behavior, which obeys package.json \"type\" and\ntsconfig.json \"module\" options."
+            },
+            "preferTsExts": {
+              "default": false,
+              "description": "Re-order file extensions so that TypeScript imports are preferred.\n\nFor example, when both `index.js` and `index.ts` exist, enabling this option causes `require('./index')` to resolve to `index.ts` instead of `index.js`",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "pretty": {
+              "default": false,
+              "description": "Use pretty diagnostic formatter.",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "require": {
+              "description": "Modules to require, like node's `--require` flag.\n\nIf specified in `tsconfig.json`, the modules will be resolved relative to the `tsconfig.json` file.\n\nIf specified programmatically, each input string should be pre-resolved to an absolute path for\nbest results.",
+              "items": {
+                "type": "string"
+              },
+              "type": [
+                "array",
+                "null"
+              ]
+            },
+            "scope": {
+              "default": false,
+              "description": "Scope compiler to files within `scopeDir`.",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "scopeDir": {
+              "default": "First of: `tsconfig.json` \"rootDir\" if specified, directory containing `tsconfig.json`, or cwd if no `tsconfig.json` is loaded.",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "skipIgnore": {
+              "default": false,
+              "description": "Skip ignore check, so that compilation will be attempted for all files with matching extensions.",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "swc": {
+              "description": "Transpile with swc instead of the TypeScript compiler, and skip typechecking.\n\nEquivalent to setting both `transpileOnly: true` and `transpiler: 'ts-node/transpilers/swc'`\n\nFor complete instructions: https://typestrong.org/ts-node/docs/transpilers",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "transpileOnly": {
+              "default": false,
+              "description": "Use TypeScript's faster `transpileModule`.",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "transpiler": {
+              "anyOf": [
+                {
+                  "items": [
+                    {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    {
+                      "additionalProperties": true,
+                      "properties": {},
+                      "type": [
+                        "object",
+                        "null"
+                      ]
+                    }
+                  ],
+                  "maxItems": 2,
+                  "minItems": 2,
+                  "type": [
+                    "array",
+                    "null"
+                  ]
+                },
+                {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              ],
+              "description": "Specify a custom transpiler for use with transpileOnly"
+            },
+            "typeCheck": {
+              "default": true,
+              "description": "**DEPRECATED** Specify type-check is enabled (e.g. `transpileOnly == false`).",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            }
+          },
+          "type": [
+            "object",
+            "null"
+          ]
+        }
+      }
+    },
+    "tsNodeModuleTypes": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "typeAcquisitionDefinition": {
+      "properties": {
+        "typeAcquisition": {
+          "description": "Auto type (.d.ts) acquisition options for this project. Requires TypeScript version 2.1 or later.",
+          "properties": {
+            "enable": {
+              "default": false,
+              "description": "Enable auto type acquisition",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "exclude": {
+              "description": "Specifies a list of type declarations to be excluded from auto type acquisition. Ex. [\"jquery\", \"lodash\"]",
+              "items": {
+                "type": "string"
+              },
+              "type": [
+                "array",
+                "null"
+              ],
+              "uniqueItems": true
+            },
+            "include": {
+              "description": "Specifies a list of type declarations to be included in auto type acquisition. Ex. [\"jquery\", \"lodash\"]",
+              "items": {
+                "type": "string"
+              },
+              "type": [
+                "array",
+                "null"
+              ],
+              "uniqueItems": true
+            }
+          },
+          "type": [
+            "object",
+            "null"
+          ]
+        }
+      }
+    },
+    "watchOptionsDefinition": {
+      "properties": {
+        "watchOptions": {
+          "description": "Settings for the watch mode in TypeScript.",
+          "properties": {
+            "excludeDirectories": {
+              "description": "Remove a list of directories from the watch process.",
+              "items": {
+                "type": "string"
+              },
+              "markdownDescription": "Remove a list of directories from the watch process.\n\nSee more: https://www.typescriptlang.org/tsconfig#excludeDirectories",
+              "type": [
+                "array",
+                "null"
+              ],
+              "uniqueItems": true
+            },
+            "excludeFiles": {
+              "description": "Remove a list of files from the watch mode's processing.",
+              "items": {
+                "type": "string"
+              },
+              "markdownDescription": "Remove a list of files from the watch mode's processing.\n\nSee more: https://www.typescriptlang.org/tsconfig#excludeFiles",
+              "type": [
+                "array",
+                "null"
+              ],
+              "uniqueItems": true
+            },
+            "fallbackPolling": {
+              "description": "Specify what approach the watcher should use if the system runs out of native file watchers.",
+              "markdownDescription": "Specify what approach the watcher should use if the system runs out of native file watchers.\n\nSee more: https://www.typescriptlang.org/tsconfig#fallbackPolling",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "force": {
+              "description": "~",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "synchronousWatchDirectory": {
+              "description": "Synchronously call callbacks and update the state of directory watchers on platforms that don`t support recursive watching natively.",
+              "markdownDescription": "Synchronously call callbacks and update the state of directory watchers on platforms that don`t support recursive watching natively.\n\nSee more: https://www.typescriptlang.org/tsconfig#synchronousWatchDirectory",
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "watchDirectory": {
+              "description": "Specify how directories are watched on systems that lack recursive file-watching functionality.",
+              "markdownDescription": "Specify how directories are watched on systems that lack recursive file-watching functionality.\n\nSee more: https://www.typescriptlang.org/tsconfig#watchDirectory",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "watchFile": {
+              "description": "Specify how the TypeScript watch mode works.",
+              "markdownDescription": "Specify how the TypeScript watch mode works.\n\nSee more: https://www.typescriptlang.org/tsconfig#watchFile",
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "type": [
+            "object",
+            "null"
+          ]
+        }
+      }
+    }
+  },
+  "id": "https://json.schemastore.org/tsconfig",
+  "title": "JSON schema for the TypeScript compiler's configuration file",
+  "type": "object"
+}

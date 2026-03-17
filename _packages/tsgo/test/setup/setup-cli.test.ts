@@ -2,6 +2,7 @@ import * as Option from "effect/Option"
 import { describe, expect, it } from "vitest"
 import { assess, type Assessment } from "../../src/setup/assessment.js"
 import { computeChanges } from "../../src/setup/changes.js"
+import { TSCONFIG_SCHEMA_URL } from "../../src/setup/consts.js"
 import type { Target } from "../../src/setup/types.js"
 
 /**
@@ -176,6 +177,7 @@ describe("Setup CLI", () => {
         }
       },
       {
+        $schema: TSCONFIG_SCHEMA_URL,
         compilerOptions: {
           strict: true,
           target: "ES2022",
@@ -195,6 +197,37 @@ describe("Setup CLI", () => {
       },
       tsconfig: {
         plugin: false
+      },
+      vscodeSettings: Option.none(),
+      editors: []
+    }
+
+    expectSetupChanges(assessmentInput, targetState)
+  })
+
+  it("should replace existing tsconfig schema when adding LSP", () => {
+    const assessmentInput = createTestAssessmentInput(
+      {
+        name: "test-project",
+        version: "1.0.0",
+        dependencies: {}
+      },
+      {
+        $schema: "https://json.schemastore.org/tsconfig",
+        compilerOptions: {
+          strict: true,
+          target: "ES2022"
+        }
+      }
+    )
+
+    const targetState: Target.State = {
+      packageJson: {
+        lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
+        prepareScript: false
+      },
+      tsconfig: {
+        plugin: true
       },
       vscodeSettings: Option.none(),
       editors: []

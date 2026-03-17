@@ -2,7 +2,7 @@ import * as nodePath from "node:path"
 import * as Option from "effect/Option"
 import * as ts from "typescript"
 import type { Assessment, SetupCodeAction, Target } from "./types.js"
-import { LSP_PACKAGE_NAME, LSP_PLUGIN_NAME, PATCH_COMMAND } from "./consts.js"
+import { LSP_PACKAGE_NAME, LSP_PLUGIN_NAME, PATCH_COMMAND, TSCONFIG_SCHEMA_URL } from "./consts.js"
 
 interface ComputeFileChangesResult {
   readonly codeActions: ReadonlyArray<SetupCodeAction>
@@ -369,10 +369,20 @@ const computeTsConfigChanges = (
   const fileChanges = tsInternal.textChanges.ChangeTracker.with(
     ctx,
     (tracker: any) => {
+      const schemaProperty = findPropertyInObject(rootObj, "$schema")
       const pluginsProperty = findPropertyInObject(compilerOptions, "plugins")
+      const schemaPropertyAssignment = ts.factory.createPropertyAssignment(
+        ts.factory.createStringLiteral("$schema"),
+        ts.factory.createStringLiteral(TSCONFIG_SCHEMA_URL)
+      )
 
       if (Option.isNone(lspVersion)) {
         // User wants to remove LSP
+        if (schemaProperty) {
+          descriptions.push("Remove $schema from tsconfig")
+          deleteNodeFromList(tracker, current.sourceFile, rootObj.properties, schemaProperty)
+        }
+
         if (pluginsProperty && ts.isArrayLiteralExpression(pluginsProperty.initializer)) {
           const pluginsArray = pluginsProperty.initializer
 
@@ -393,6 +403,17 @@ const computeTsConfigChanges = (
         }
       } else {
         // User wants to add/keep LSP
+        if (!schemaProperty) {
+          descriptions.push("Add $schema to tsconfig")
+          insertNodeAtEndOfList(tracker, current.sourceFile, rootObj.properties, schemaPropertyAssignment)
+        } else if (
+          !ts.isStringLiteral(schemaProperty.initializer) ||
+          schemaProperty.initializer.text !== TSCONFIG_SCHEMA_URL
+        ) {
+          descriptions.push("Update $schema in tsconfig")
+          tracker.replaceNode(current.sourceFile, schemaProperty.initializer, schemaPropertyAssignment.initializer)
+        }
+
         const pluginObject = ts.factory.createObjectLiteralExpression([
           ts.factory.createPropertyAssignment(
             ts.factory.createStringLiteral("name"),
