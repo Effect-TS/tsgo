@@ -1,5 +1,11 @@
 # @effect/tsgo-linux-x64
 
+## 0.0.9
+
+### Patch Changes
+
+- 8c7092a: Caching and perf allocations
+
 ## 0.0.8
 
 ### Patch Changes
