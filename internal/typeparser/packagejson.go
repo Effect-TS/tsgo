@@ -14,25 +14,29 @@ type packageJsonProgram interface {
 }
 
 // PackageJsonForSourceFile returns the nearest package.json contents for a source file, or nil.
+// Results are cached per source file on EffectLinks for the checker's lifetime.
 func PackageJsonForSourceFile(c *checker.Checker, sf *ast.SourceFile) *packagejson.PackageJson {
 	if c == nil || sf == nil {
 		return nil
 	}
 
-	prog, ok := c.Program().(packageJsonProgram)
-	if !ok || prog == nil {
-		return nil
-	}
+	links := GetEffectLinks(c)
+	return Cached(&links.PackageJsonForSourceFile, sf, func() *packagejson.PackageJson {
+		prog, ok := c.Program().(packageJsonProgram)
+		if !ok || prog == nil {
+			return nil
+		}
 
-	meta := prog.GetSourceFileMetaData(sf.Path())
-	if meta.PackageJsonDirectory == "" {
-		return nil
-	}
+		meta := prog.GetSourceFileMetaData(sf.Path())
+		if meta.PackageJsonDirectory == "" {
+			return nil
+		}
 
-	packageJsonPath := tspath.CombinePaths(meta.PackageJsonDirectory, "package.json")
-	info := prog.GetPackageJsonInfo(packageJsonPath)
-	if info == nil {
-		return nil
-	}
-	return info.GetContents()
+		packageJsonPath := tspath.CombinePaths(meta.PackageJsonDirectory, "package.json")
+		info := prog.GetPackageJsonInfo(packageJsonPath)
+		if info == nil {
+			return nil
+		}
+		return info.GetContents()
+	})
 }

@@ -43,10 +43,10 @@ type UnnecessaryFailYieldableErrorMatch struct {
 func AnalyzeUnnecessaryFailYieldableError(c *checker.Checker, sf *ast.SourceFile) []UnnecessaryFailYieldableErrorMatch {
 	var matches []UnnecessaryFailYieldableErrorMatch
 
-	var walk func(n *ast.Node)
-	walk = func(n *ast.Node) {
+	var walk ast.Visitor
+	walk = func(n *ast.Node) bool {
 		if n == nil {
-			return
+			return false
 		}
 
 		if n.Kind == ast.KindYieldExpression {
@@ -73,9 +73,8 @@ func AnalyzeUnnecessaryFailYieldableError(c *checker.Checker, sf *ast.SourceFile
 			}
 		}
 
-		for child := range n.IterChildren() {
-			walk(child)
-		}
+		n.ForEachChild(walk)
+		return false
 	}
 
 	walk(sf.AsNode())

@@ -55,9 +55,11 @@ func AnalyzeDeterministicKeys(c *checker.Checker, sf *ast.SourceFile) []Determin
 	var matches []DeterministicKeyMatch
 
 	nodeToVisit := make([]*ast.Node, 0)
-	for child := range sf.AsNode().IterChildren() {
+	pushChild := func(child *ast.Node) bool {
 		nodeToVisit = append(nodeToVisit, child)
+		return false
 	}
+	sf.AsNode().ForEachChild(pushChild)
 
 	for len(nodeToVisit) > 0 {
 		node := nodeToVisit[len(nodeToVisit)-1]
@@ -69,9 +71,7 @@ func AnalyzeDeterministicKeys(c *checker.Checker, sf *ast.SourceFile) []Determin
 			}
 		}
 
-		for child := range node.IterChildren() {
-			nodeToVisit = append(nodeToVisit, child)
-		}
+		node.ForEachChild(pushChild)
 	}
 
 	return matches
@@ -188,6 +188,10 @@ func matchCustomPattern(c *checker.Checker, sf *ast.SourceFile, classNode *ast.N
 	// BFS through heritage clause nodes
 	nodesToVisit := make([]*ast.Node, 0)
 	nodesToVisit = append(nodesToVisit, heritageClauses.Nodes...)
+	pushHeritageChild := func(child *ast.Node) bool {
+		nodesToVisit = append(nodesToVisit, child)
+		return false
+	}
 
 	for len(nodesToVisit) > 0 {
 		current := nodesToVisit[0]
@@ -240,9 +244,7 @@ func matchCustomPattern(c *checker.Checker, sf *ast.SourceFile, classNode *ast.N
 		}
 
 		// Visit children
-		for child := range current.IterChildren() {
-			nodesToVisit = append(nodesToVisit, child)
-		}
+		current.ForEachChild(pushHeritageChild)
 	}
 
 	return nil

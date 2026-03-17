@@ -51,9 +51,11 @@ func AnalyzeServiceNotAsClass(c *checker.Checker, sf *ast.SourceFile) []ServiceN
 	var matches []ServiceNotAsClassMatch
 
 	nodeToVisit := make([]*ast.Node, 0)
-	for child := range sf.AsNode().IterChildren() {
+	pushChild := func(child *ast.Node) bool {
 		nodeToVisit = append(nodeToVisit, child)
+		return false
 	}
+	sf.AsNode().ForEachChild(pushChild)
 
 	for len(nodeToVisit) > 0 {
 		node := nodeToVisit[len(nodeToVisit)-1]
@@ -65,9 +67,7 @@ func AnalyzeServiceNotAsClass(c *checker.Checker, sf *ast.SourceFile) []ServiceN
 			}
 		}
 
-		for child := range node.IterChildren() {
-			nodeToVisit = append(nodeToVisit, child)
-		}
+		node.ForEachChild(pushChild)
 	}
 
 	return matches

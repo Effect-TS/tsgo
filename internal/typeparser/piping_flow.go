@@ -249,9 +249,11 @@ func PipingFlows(c *checker.Checker, sf *ast.SourceFile, includeEffectFn bool) [
 
 		// Initialize work queue with all children of the source file
 		var queue []workItem
-		for child := range sf.AsNode().IterChildren() {
+		enqueueChild := func(child *ast.Node) bool {
 			queue = append(queue, workItem{node: child})
+			return false
 		}
+		sf.AsNode().ForEachChild(enqueueChild)
 
 		for len(queue) > 0 {
 			// Pop from end (stack behavior for depth-first)
@@ -290,16 +292,12 @@ func PipingFlows(c *checker.Checker, sf *ast.SourceFile, includeEffectFn bool) [
 						// Queue function body argument children for independent inner flow traversal
 						fnBodyArg := efnResult.node.Arguments.Nodes[efnResult.fnBodyIndex]
 						if fnBodyArg != nil {
-							for child := range fnBodyArg.IterChildren() {
-								queue = append(queue, workItem{node: child})
-							}
+							fnBodyArg.ForEachChild(enqueueChild)
 						}
 						// Queue trailing arg children for independent inner flow traversal
 						for _, arg := range efnResult.trailingArgs {
 							if arg != nil {
-								for child := range arg.IterChildren() {
-									queue = append(queue, workItem{node: child})
-								}
+								arg.ForEachChild(enqueueChild)
 							}
 						}
 						continue
@@ -328,9 +326,7 @@ func PipingFlows(c *checker.Checker, sf *ast.SourceFile, includeEffectFn bool) [
 					// Queue transformation argument children for independent inner flow traversal
 					for _, arg := range pipeResult.Args {
 						if arg != nil {
-							for child := range arg.IterChildren() {
-								queue = append(queue, workItem{node: child})
-							}
+							arg.ForEachChild(enqueueChild)
 						}
 					}
 					continue
@@ -367,9 +363,7 @@ func PipingFlows(c *checker.Checker, sf *ast.SourceFile, includeEffectFn bool) [
 					}
 
 					// Queue callee children for independent inner flow traversal
-					for child := range singleResult.callee.IterChildren() {
-						queue = append(queue, workItem{node: child})
-					}
+					singleResult.callee.ForEachChild(enqueueChild)
 					continue
 				}
 			}
@@ -382,16 +376,9 @@ func PipingFlows(c *checker.Checker, sf *ast.SourceFile, includeEffectFn bool) [
 					OutType: checkerutils.GetTypeAtLocation(c, node),
 				}
 				result = append(result, item.parentFlow)
-				// Also queue children to find independent inner flows
-				for child := range node.IterChildren() {
-					queue = append(queue, workItem{node: child})
-				}
-			} else {
-				// Not part of any flow; queue children for further traversal
-				for child := range node.IterChildren() {
-					queue = append(queue, workItem{node: child})
-				}
 			}
+			// Queue children for further traversal (independent inner flows)
+			node.ForEachChild(enqueueChild)
 		}
 
 		// Sort by source position

@@ -46,9 +46,11 @@ func AnalyzeSchemaStructWithTag(c *checker.Checker, sf *ast.SourceFile) []Schema
 
 	// Stack-based traversal
 	nodeToVisit := make([]*ast.Node, 0)
-	for child := range sf.AsNode().IterChildren() {
+	pushChild := func(child *ast.Node) bool {
 		nodeToVisit = append(nodeToVisit, child)
+		return false
 	}
+	sf.AsNode().ForEachChild(pushChild)
 
 	for len(nodeToVisit) > 0 {
 		node := nodeToVisit[len(nodeToVisit)-1]
@@ -61,9 +63,7 @@ func AnalyzeSchemaStructWithTag(c *checker.Checker, sf *ast.SourceFile) []Schema
 		}
 
 		// Enqueue children
-		for child := range node.IterChildren() {
-			nodeToVisit = append(nodeToVisit, child)
-		}
+		node.ForEachChild(pushChild)
 	}
 
 	return matches

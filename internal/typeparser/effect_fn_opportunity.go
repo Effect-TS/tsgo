@@ -448,6 +448,10 @@ func areParametersReferencedIn(c *checker.Checker, fnNode *ast.Node, nodes []*as
 	// Walk all nodes looking for symbols declared in the function parameters
 	queue := make([]*ast.Node, len(nodes))
 	copy(queue, nodes)
+	enqueueChild := func(child *ast.Node) bool {
+		queue = append(queue, child)
+		return false
+	}
 
 	for len(queue) > 0 {
 		current := queue[0]
@@ -476,9 +480,7 @@ func areParametersReferencedIn(c *checker.Checker, fnNode *ast.Node, nodes []*as
 			}
 		}
 
-		for child := range current.IterChildren() {
-			queue = append(queue, child)
-		}
+		current.ForEachChild(enqueueChild)
 	}
 
 	return false

@@ -68,6 +68,10 @@ func getFirstVariableDeclarationType(t *testing.T, c *checker.Checker, sf *ast.S
 	t.Helper()
 
 	queue := []*ast.Node{sf.AsNode()}
+	enqueueChild := func(child *ast.Node) bool {
+		queue = append(queue, child)
+		return false
+	}
 	for len(queue) > 0 {
 		node := queue[0]
 		queue = queue[1:]
@@ -81,9 +85,7 @@ func getFirstVariableDeclarationType(t *testing.T, c *checker.Checker, sf *ast.S
 				return typ, node
 			}
 		}
-		for child := range node.IterChildren() {
-			queue = append(queue, child)
-		}
+		node.ForEachChild(enqueueChild)
 	}
 
 	t.Fatal("No variable declaration found in source file")

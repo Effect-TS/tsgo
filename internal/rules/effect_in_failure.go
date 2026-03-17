@@ -32,6 +32,10 @@ var EffectInFailure = rule.Rule{
 
 		stack := []stackEntry{{node: ctx.SourceFile.AsNode()}}
 		shouldSkip := map[*ast.Node]bool{}
+		pushChild := func(child *ast.Node) bool {
+			stack = append(stack, stackEntry{node: child})
+			return false
+		}
 
 		for len(stack) > 0 {
 			entry := stack[len(stack)-1]
@@ -42,9 +46,7 @@ var EffectInFailure = rule.Rule{
 			// First visit: push self again (marked visited) then push children
 			if !entry.visited {
 				stack = append(stack, stackEntry{node: node, visited: true})
-				for child := range node.IterChildren() {
-					stack = append(stack, stackEntry{node: child})
-				}
+				node.ForEachChild(pushChild)
 				continue
 			}
 

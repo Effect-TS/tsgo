@@ -85,10 +85,10 @@ func isVoidCallback(node *ast.Node) bool {
 func AnalyzeEffectMapVoid(c *checker.Checker, sf *ast.SourceFile) []EffectMapVoidMatch {
 	var matches []EffectMapVoidMatch
 
-	var walk func(n *ast.Node)
-	walk = func(n *ast.Node) {
+	var walk ast.Visitor
+	walk = func(n *ast.Node) bool {
 		if n == nil {
-			return
+			return false
 		}
 
 		if n.Kind == ast.KindCallExpression {
@@ -110,9 +110,8 @@ func AnalyzeEffectMapVoid(c *checker.Checker, sf *ast.SourceFile) []EffectMapVoi
 			}
 		}
 
-		for child := range n.IterChildren() {
-			walk(child)
-		}
+		n.ForEachChild(walk)
+		return false
 	}
 
 	walk(sf.AsNode())

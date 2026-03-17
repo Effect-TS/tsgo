@@ -67,10 +67,10 @@ func AnalyzeOutdatedApi(c *checker.Checker, sf *ast.SourceFile) []OutdatedApiMat
 
 	var matches []OutdatedApiMatch
 
-	var walk func(n *ast.Node)
-	walk = func(n *ast.Node) {
+	var walk ast.Visitor
+	walk = func(n *ast.Node) bool {
 		if n == nil {
-			return
+			return false
 		}
 
 		if n.Kind == ast.KindPropertyAccessExpression {
@@ -79,9 +79,8 @@ func AnalyzeOutdatedApi(c *checker.Checker, sf *ast.SourceFile) []OutdatedApiMat
 			}
 		}
 
-		for child := range n.IterChildren() {
-			walk(child)
-		}
+		n.ForEachChild(walk)
+		return false
 	}
 
 	walk(sf.AsNode())

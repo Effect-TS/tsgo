@@ -41,10 +41,10 @@ type UnnecessaryPipeMatch struct {
 func AnalyzeUnnecessaryPipe(c *checker.Checker, sf *ast.SourceFile) []UnnecessaryPipeMatch {
 	var matches []UnnecessaryPipeMatch
 
-	var walk func(n *ast.Node)
-	walk = func(n *ast.Node) {
+	var walk ast.Visitor
+	walk = func(n *ast.Node) bool {
 		if n == nil {
-			return
+			return false
 		}
 
 		if n.Kind == ast.KindCallExpression {
@@ -58,9 +58,8 @@ func AnalyzeUnnecessaryPipe(c *checker.Checker, sf *ast.SourceFile) []Unnecessar
 			}
 		}
 
-		for child := range n.IterChildren() {
-			walk(child)
-		}
+		n.ForEachChild(walk)
+		return false
 	}
 
 	walk(sf.AsNode())

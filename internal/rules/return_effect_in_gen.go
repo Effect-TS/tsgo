@@ -41,10 +41,10 @@ type ReturnEffectInGenMatch struct {
 func AnalyzeReturnEffectInGen(c *checker.Checker, sf *ast.SourceFile) []ReturnEffectInGenMatch {
 	var matches []ReturnEffectInGenMatch
 
-	var walk func(n *ast.Node)
-	walk = func(n *ast.Node) {
+	var walk ast.Visitor
+	walk = func(n *ast.Node) bool {
 		if n == nil {
-			return
+			return false
 		}
 
 		if n.Kind == ast.KindReturnStatement {
@@ -56,9 +56,8 @@ func AnalyzeReturnEffectInGen(c *checker.Checker, sf *ast.SourceFile) []ReturnEf
 			}
 		}
 
-		for child := range n.IterChildren() {
-			walk(child)
-		}
+		n.ForEachChild(walk)
+		return false
 	}
 
 	walk(sf.AsNode())
