@@ -5,6 +5,8 @@
         "check:go": "CGO_ENABLED=0 go build ./...",
         "check:cli": "pnpm --filter @effect/tsgo check",
         "changeset": "changeset",
+        "changeset:version": "changeset version && bash _tools/version-prepare.sh",
+        "changeset:publish": "changeset publish",
         "lint": "CGO_ENABLED=0 golangci-lint run ./...",
         "test": "pnpm run test:go && pnpm run test:cli",
         "test:go": "CGO_ENABLED=0 go test ./...",

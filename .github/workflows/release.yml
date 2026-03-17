@@ -1,57 +1,20 @@
 name: Release
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     types: [closed]
     branches:
       - main
 
-permissions: {}
+permissions:
+  contents: read
+  id-token: write
 
 concurrency:
   group: release-${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  version:
-    if: github.event_name == 'push' && github.repository_owner == 'Effect-TS'
-    name: Version Packages
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    permissions:
-      contents: write
-      pull-requests: write
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: "24"
-          registry-url: "https://registry.npmjs.org"
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Create or update release PR
-        id: changesets
-        uses: changesets/action@v1
-        with:
-          version: pnpm changeset version
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
   build:
     if: >-
       github.event_name == 'pull_request' &&
@@ -61,8 +24,6 @@ jobs:
     name: Build ${{ matrix.npm_target }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    permissions:
-      contents: read
     strategy:
       matrix:
         include:
@@ -136,9 +97,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build]
     timeout-minutes: 30
-    permissions:
-      contents: read
-      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -208,6 +166,6 @@ jobs:
         run: pnpm build:cli
 
       - name: Publish packages
-        run: pnpm changeset publish
+        run: pnpm changeset:publish
         env:
           NPM_CONFIG_PROVENANCE: "true"
