@@ -1,5 +1,11 @@
 # @effect/tsgo-linux-arm
 
+## 0.0.11
+
+### Patch Changes
+
+- 5d8164e: Skip typeatlocation for class ... implements .. X.Y.Z as well
+
 ## 0.0.10
 
 ### Patch Changes
