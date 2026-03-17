@@ -87,7 +87,7 @@ func runTypeToEffectSchema(ctx *refactor.Context) []ls.CodeAction {
 			gen := schemagen.New(tracker, ctx.SourceFile, version)
 			newNode := gen.Process(matchedNode, false)
 			if newNode != nil {
-				tracker.InsertNodeBefore(ctx.SourceFile, matchedNode, newNode, true)
+				tracker.InsertNodeBefore(ctx.SourceFile, matchedNode, newNode, true, change.LeadingTriviaOptionNone)
 			}
 		},
 	})

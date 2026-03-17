@@ -2138,6 +2138,7 @@ const SubtreeContainsESObjectRestOrSpread = ast.SubtreeContainsESObjectRestOrSpr
 const SubtreeContainsExponentiationOperator = ast.SubtreeContainsExponentiationOperator
 const SubtreeContainsForAwaitOrAsyncGenerator = ast.SubtreeContainsForAwaitOrAsyncGenerator
 const SubtreeContainsIdentifier = ast.SubtreeContainsIdentifier
+const SubtreeContainsInvalidTemplateEscape = ast.SubtreeContainsInvalidTemplateEscape
 const SubtreeContainsJsx = ast.SubtreeContainsJsx
 const SubtreeContainsLexicalSuper = ast.SubtreeContainsLexicalSuper
 const SubtreeContainsLexicalThis = ast.SubtreeContainsLexicalThis
