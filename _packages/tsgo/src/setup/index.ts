@@ -103,11 +103,6 @@ export const setupCommand = Command.make("setup").pipe(
 
       yield* Console.log("Changes applied successfully!")
       yield* Console.log("")
-
-      // Display any additional messages (editor setup instructions)
-      for (const message of result.messages) {
-        yield* Console.log(message)
-      }
     })
   )
 )
