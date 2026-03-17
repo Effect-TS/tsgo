@@ -1,5 +1,11 @@
 # @effect/tsgo-win32-x64
 
+## 0.0.10
+
+### Patch Changes
+
+- 19b0677: Update typescript-go to 03b31eb
+
 ## 0.0.9
 
 ### Patch Changes
