@@ -5,13 +5,13 @@ import "strings"
 // KeyPattern defines a key pattern configuration for the deterministicKeys rule.
 type KeyPattern struct {
 	// Target is the category this pattern applies to: "service", "error", or "custom".
-	Target string `json:"target"`
+	Target string `json:"target" schema_description:"Target category this pattern applies to." schema_default:"\"service\"" schema_enum:"[\"service\",\"error\",\"custom\"]"`
 
 	// Pattern is the formula to compute the key: "default", "package-identifier", or "default-hashed".
-	Pattern string `json:"pattern"`
+	Pattern string `json:"pattern" schema_description:"Formula used to compute the key." schema_default:"\"default\"" schema_enum:"[\"default\",\"package-identifier\",\"default-hashed\"]"`
 
 	// SkipLeadingPath is a list of path prefixes to strip from the sub-directory segment.
-	SkipLeadingPath []string `json:"skipLeadingPath"`
+	SkipLeadingPath []string `json:"skipLeadingPath" schema_description:"Path prefixes to strip from the sub-directory segment." schema_default:"[\"src/\"]" schema_items_type:"string"`
 }
 
 // EffectPluginOptions defines the configuration schema for @effect/language-service.
@@ -20,76 +20,76 @@ type EffectPluginOptions struct {
 	// DiagnosticSeverity maps rule names to severity levels.
 	// If nil, diagnostics are explicitly disabled.
 	// If empty map {}, diagnostics are enabled with defaults.
-	DiagnosticSeverity map[string]Severity `json:"diagnosticSeverity,omitzero"`
+	DiagnosticSeverity map[string]Severity `json:"diagnosticSeverity,omitzero" schema_description:"Maps rule names to severity levels. Use {} to enable diagnostics with rule defaults."`
 
 	// IgnoreEffectSuggestionsInTscExitCode controls whether Effect suggestion/message-category
 	// diagnostics affect the tsc exit code. Default: true (suggestions do NOT affect exit code).
-	IgnoreEffectSuggestionsInTscExitCode bool `json:"ignoreEffectSuggestionsInTscExitCode,omitzero"`
+	IgnoreEffectSuggestionsInTscExitCode bool `json:"ignoreEffectSuggestionsInTscExitCode,omitzero" schema_description:"When true, suggestion diagnostics do not affect the tsc exit code." schema_default:"true"`
 
 	// IgnoreEffectWarningsInTscExitCode controls whether Effect warning-category diagnostics
 	// affect the tsc exit code. Default: false (warnings DO affect exit code).
-	IgnoreEffectWarningsInTscExitCode bool `json:"ignoreEffectWarningsInTscExitCode,omitzero"`
+	IgnoreEffectWarningsInTscExitCode bool `json:"ignoreEffectWarningsInTscExitCode,omitzero" schema_description:"When true, warning diagnostics do not affect the tsc exit code." schema_default:"false"`
 
 	// IgnoreEffectErrorsInTscExitCode controls whether Effect error-category diagnostics
 	// affect the tsc exit code. Default: false (errors DO affect exit code).
-	IgnoreEffectErrorsInTscExitCode bool `json:"ignoreEffectErrorsInTscExitCode,omitzero"`
+	IgnoreEffectErrorsInTscExitCode bool `json:"ignoreEffectErrorsInTscExitCode,omitzero" schema_description:"When true, error diagnostics do not affect the tsc exit code." schema_default:"false"`
 
 	// SkipDisabledOptimization bypasses the optimization that skips off-severity rules entirely.
 	// When true, disabled rules are still processed so per-line or per-section directive overrides
 	// can enable them.
-	SkipDisabledOptimization bool `json:"skipDisabledOptimization,omitzero"`
+	SkipDisabledOptimization bool `json:"skipDisabledOptimization,omitzero" schema_description:"When true, disabled diagnostics are still processed so directives can re-enable them." schema_default:"false"`
 
 	// KeyPatterns configures key pattern formulas for the deterministicKeys rule.
 	// If nil, GetKeyPatterns() returns the defaults.
-	KeyPatterns []KeyPattern `json:"keyPatterns,omitzero"`
+	KeyPatterns []KeyPattern `json:"keyPatterns,omitzero" schema_description:"Configures key pattern formulas for the deterministicKeys rule."`
 
 	// ExtendedKeyDetection enables matching constructors with @effect-identifier annotations.
-	ExtendedKeyDetection bool `json:"extendedKeyDetection,omitzero"`
+	ExtendedKeyDetection bool `json:"extendedKeyDetection,omitzero" schema_description:"Enables matching constructors with @effect-identifier annotations." schema_default:"false"`
 
 	// PipeableMinArgCount is the minimum number of contiguous pipeable transformations
 	// required to trigger the missedPipeableOpportunity diagnostic. Default: 2.
-	PipeableMinArgCount int `json:"pipeableMinArgCount,omitzero"`
+	PipeableMinArgCount int `json:"pipeableMinArgCount,omitzero" schema_description:"Minimum number of contiguous pipeable transformations to trigger missedPipeableOpportunity." schema_default:"2" schema_minimum:"1"`
 
 	// MermaidProvider selects the Mermaid rendering service for hover links.
 	// Accepted values: "" or "mermaid.live" (default), "mermaid.com", or a custom URL.
-	MermaidProvider string `json:"mermaidProvider,omitzero"`
+	MermaidProvider string `json:"mermaidProvider,omitzero" schema_description:"Mermaid rendering service for layer graph links. Accepts mermaid.live, mermaid.com, or a custom URL." schema_default:"\"mermaid.live\""`
 
 	// NoExternal suppresses external links (Mermaid URLs) in hover output. Default: false.
-	NoExternal bool `json:"noExternal,omitzero"`
+	NoExternal bool `json:"noExternal,omitzero" schema_description:"When true, suppresses external Mermaid links in hover output." schema_default:"false"`
 
 	// LayerGraphFollowDepth controls how many levels deep the graph extraction
 	// follows symbol references when building the layer graph. Default: 0.
-	LayerGraphFollowDepth int `json:"layerGraphFollowDepth,omitzero"`
+	LayerGraphFollowDepth int `json:"layerGraphFollowDepth,omitzero" schema_description:"How many levels deep the layer graph extraction follows symbol references." schema_default:"0" schema_minimum:"0"`
 
 	// EffectFn controls which effectFnOpportunity quickfix variants are offered.
 	// Valid values: "span", "untraced", "no-span", "inferred-span", "suggested-span".
 	// Default (when empty/nil): ["span"].
-	EffectFn []string `json:"effectFn,omitzero"`
+	EffectFn []string `json:"effectFn,omitzero" schema_description:"Controls which effectFnOpportunity quickfix variants are offered." schema_default:"[\"span\"]" schema_items_type:"string" schema_items_enum:"[\"span\",\"untraced\",\"no-span\",\"inferred-span\",\"suggested-span\"]" schema_unique_items:"true"`
 
 	// Inlays enables inlay hint middleware. When true, suppresses redundant
 	// return-type inlay hints on Effect.gen, Effect.fn, and Effect.fnUntraced
 	// generator functions. Default: false.
-	Inlays bool `json:"inlays,omitzero"`
+	Inlays bool `json:"inlays,omitzero" schema_description:"When true, suppresses redundant return-type inlay hints on supported Effect generator functions." schema_default:"false"`
 
 	// AllowedDuplicatedPackages is a list of package names that are allowed to
 	// have multiple versions without triggering the duplicatePackage diagnostic.
-	AllowedDuplicatedPackages []string `json:"allowedDuplicatedPackages,omitzero"`
+	AllowedDuplicatedPackages []string `json:"allowedDuplicatedPackages,omitzero" schema_description:"Package names allowed to have multiple versions without triggering duplicatePackage." schema_default:"[]" schema_items_type:"string"`
 
 	// NamespaceImportPackages configures package names that should prefer namespace imports.
 	// Package matching is case-insensitive.
-	NamespaceImportPackages []string `json:"namespaceImportPackages,omitzero"`
+	NamespaceImportPackages []string `json:"namespaceImportPackages,omitzero" schema_description:"Package names that should prefer namespace imports." schema_default:"[]" schema_items_type:"string"`
 
 	// BarrelImportPackages configures package names that should prefer barrel named imports.
 	// Package matching is case-insensitive.
-	BarrelImportPackages []string `json:"barrelImportPackages,omitzero"`
+	BarrelImportPackages []string `json:"barrelImportPackages,omitzero" schema_description:"Package names that should prefer barrel named imports." schema_default:"[]" schema_items_type:"string"`
 
 	// ImportAliases configures package-level import aliases keyed by package name.
 	// Package matching for keys is case-insensitive.
-	ImportAliases map[string]string `json:"importAliases,omitzero"`
+	ImportAliases map[string]string `json:"importAliases,omitzero" schema_description:"Package-level import aliases keyed by package name." schema_default:"{}" schema_additional_properties_type:"string"`
 
 	// TopLevelNamedReexports controls whether named reexports are followed at package top-level.
 	// Accepted values are "ignore" (default) and "follow".
-	TopLevelNamedReexports TopLevelNamedReexportsMode `json:"topLevelNamedReexports,omitzero"`
+	TopLevelNamedReexports TopLevelNamedReexportsMode `json:"topLevelNamedReexports,omitzero" schema_description:"Controls whether named reexports are followed at package top-level." schema_default:"\"ignore\"" schema_enum:"[\"ignore\",\"follow\"]"`
 }
 
 // TopLevelNamedReexportsMode configures top-level named reexport resolution behavior.
