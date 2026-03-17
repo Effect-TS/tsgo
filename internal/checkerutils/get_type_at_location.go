@@ -32,12 +32,9 @@ func GetTypeAtLocation(c *checker.Checker, node *ast.Node) (result *checker.Type
 		return nil
 	}
 
-	// Skip sub-expressions inside interface heritage clauses (e.g. the identifiers and
-	// property-access nodes within "extends Foo.Bar<T>"). Calling GetTypeAtLocation on
-	// these nodes forces the checker to resolve them as value expressions, which can
-	// trigger spurious errors (e.g. TS2689 "Cannot extend an interface") because the
-	// referenced symbols may only exist in the type namespace.
-	if isInsideInterfaceHeritageExpression(node) {
+	// Skip heritage nodes that should remain purely in the type namespace.
+	// This currently applies to interface "extends" and class "implements".
+	if isInsideTypeOnlyHeritageExpression(node) {
 		return nil
 	}
 
@@ -50,37 +47,49 @@ func GetTypeAtLocation(c *checker.Checker, node *ast.Node) (result *checker.Type
 	return c.GetTypeAtLocation(node)
 }
 
-// isInsideInterfaceHeritageExpression reports whether node is an identifier or
-// property-access that is a sub-expression of an ExpressionWithTypeArguments
-// inside a non-class heritage clause (i.e. an interface "extends" clause).
-// The ExpressionWithTypeArguments node itself is NOT skipped — only its
-// inner expression children, which the checker would incorrectly resolve as
-// value expressions.
-func isInsideInterfaceHeritageExpression(node *ast.Node) bool {
+// isInsideTypeOnlyHeritageExpression reports whether node is an
+// ExpressionWithTypeArguments or one of its identifier/property-access
+// sub-expressions inside a type-only heritage clause. The checker can
+// mis-resolve these as value expressions and emit bogus diagnostics.
+func isInsideTypeOnlyHeritageExpression(node *ast.Node) bool {
+	if node.Kind == ast.KindExpressionWithTypeArguments {
+		return isTypeOnlyHeritageClause(node.Parent)
+	}
+
 	if node.Kind != ast.KindIdentifier && node.Kind != ast.KindPropertyAccessExpression {
 		return false
 	}
+
 	// Walk up through identifiers and property-access expressions to find
 	// the enclosing ExpressionWithTypeArguments.
 	for n := node.Parent; n != nil; n = n.Parent {
 		switch n.Kind {
 		case ast.KindPropertyAccessExpression:
-			// Keep walking up through nested property accesses.
 			continue
 		case ast.KindExpressionWithTypeArguments:
-			// Found it — now check if it's inside a non-class heritage clause.
-			// For classes the checker handles this correctly; the problem is
-			// only with interfaces (and type-only heritage clauses).
-			if n.Parent != nil && ast.IsHeritageClause(n.Parent) {
-				grandparent := n.Parent.Parent
-				if grandparent != nil && grandparent.Kind == ast.KindInterfaceDeclaration {
-					return true
-				}
-			}
-			return false
+			return isTypeOnlyHeritageClause(n.Parent)
 		default:
 			return false
 		}
 	}
+
 	return false
+}
+
+func isTypeOnlyHeritageClause(node *ast.Node) bool {
+	if node == nil || !ast.IsHeritageClause(node) {
+		return false
+	}
+
+	heritageClause := node.AsHeritageClause()
+	container := node.Parent
+	if container == nil {
+		return false
+	}
+
+	if container.Kind == ast.KindInterfaceDeclaration {
+		return true
+	}
+
+	return ast.IsClassLike(container) && heritageClause.Token == ast.KindImplementsKeyword
 }
