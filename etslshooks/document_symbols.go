@@ -132,7 +132,7 @@ func newSyntheticNamespaceSymbol(name string) *lsproto.DocumentSymbol {
 	zero := lsproto.Position{}
 	return &lsproto.DocumentSymbol{
 		Name: name,
-		Kind: lsproto.SymbolKindModule,
+		Kind: lsproto.SymbolKindPackage,
 		Range: lsproto.Range{
 			Start: zero,
 			End:   zero,
