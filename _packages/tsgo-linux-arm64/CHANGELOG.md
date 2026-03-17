@@ -1,5 +1,11 @@
 # @effect/tsgo-linux-arm64
 
+## 0.0.12
+
+### Patch Changes
+
+- 931ef77: Add document symbols
+
 ## 0.0.11
 
 ### Patch Changes
