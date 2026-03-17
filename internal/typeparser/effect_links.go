@@ -4,6 +4,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
 	"github.com/microsoft/typescript-go/shim/core"
+	"github.com/microsoft/typescript-go/shim/packagejson"
 )
 
 // EffectLinks holds per-checker cached type-parser results.
@@ -50,7 +51,14 @@ type EffectLinks struct {
 	ParsePipeCall                  core.LinkStore[*ast.Node, *ParsedPipeCallResult]
 	FindEnclosingScopes            core.LinkStore[*ast.Node, EnclosingScopes]
 
+	// Checker-level cached scalar values
+	detectEffectVersionComputed    bool
+	detectEffectVersionValue       EffectMajorVersion
+	supportedEffectVersionComputed bool
+	supportedEffectVersionValue    EffectMajorVersion
+
 	// SourceFile-keyed aggregate parsers
+	PackageJsonForSourceFile   core.LinkStore[*ast.SourceFile, *packagejson.PackageJson]
 	ExpectedAndRealTypes       core.LinkStore[*ast.SourceFile, []ExpectedAndRealType]
 	PipingFlowsWithEffectFn    core.LinkStore[*ast.SourceFile, []*PipingFlow]
 	PipingFlowsWithoutEffectFn core.LinkStore[*ast.SourceFile, []*PipingFlow]

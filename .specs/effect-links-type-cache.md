@@ -112,12 +112,23 @@ All exported type parser functions that take a `*checker.Type` and return a pars
 - `PipingFlows` (includeEffectFn=true) → `[]*PipingFlow`
 - `PipingFlows` (includeEffectFn=false) → `[]*PipingFlow`
 - `ExpectedAndRealTypes` → `[]ExpectedAndRealType`
+- `PackageJsonForSourceFile` → `*packagejson.PackageJson`
 
 `PipingFlows` uses two separate link stores — one per value of the `includeEffectFn` parameter.
 
+### Checker-level cached values (computed once per checker)
+
+These are scalar values cached directly on `EffectLinks` (not in a `LinkStore`), computed once on first access and reused for the lifetime of the checker:
+
+- `SupportedEffectVersion` → `EffectMajorVersion`
+- `DetectEffectVersion` → `EffectMajorVersion`
+
+These functions are called 35+ times across rules, type parsers, completions, and refactors. Each call chains to `DiscoverPackages`, which scans all source files in the program. Caching the result per checker eliminates all redundant scans.
+
+The cached value must distinguish "not yet computed" from "computed as unknown". Use a simple `computed bool` flag alongside the value, or store a pointer (nil = not computed).
+
 ## Non-Goals
 
-- Caching version detection (`SupportedEffectVersion`) — out of scope for now.
 - Caching `IsNodeReferenceTo*` functions — these take a composite key (`*ast.Node` + `memberName string`). Revisit if profiling shows need.
 - Per-rule timing or profiling instrumentation.
 
