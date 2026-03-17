@@ -124,4 +124,6 @@ fi
 echo "Generating diagnostics..."
 (cd typescript-go/internal/diagnostics && go run generate.go -diagnostics ./diagnostics_generated.go -loc ./loc_generated.go -locdir ./loc)
 
+# Generate shims only; release version sync is handled by _tools/version-prepare.sh.
+echo "Generating shims..."
 go run ./_tools/gen_shims
