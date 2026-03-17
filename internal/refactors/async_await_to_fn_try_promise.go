@@ -105,7 +105,7 @@ func transformAsyncToEffectFnTryPromise(tracker *change.Tracker, sf *ast.SourceF
 	// Insert error classes before the top-level statement
 	for _, errorClass := range errorClasses {
 		ast.SetParentInChildren(errorClass)
-		tracker.InsertNodeBefore(sf, topLevelStmt, errorClass, true)
+		tracker.InsertNodeBefore(sf, topLevelStmt, errorClass, true, change.LeadingTriviaOptionNone)
 	}
 
 	// Replace the function

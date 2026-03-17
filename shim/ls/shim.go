@@ -113,6 +113,7 @@ func RegisterAfterQuickInfoCallback(cb func(c *checker.Checker, sf *ast.SourceFi
 func RegisterCodeFixProvider(provider *ls.CodeFixProvider)
 //go:linkname RegisterRefactorProvider github.com/microsoft/typescript-go/internal/ls.RegisterRefactorProvider
 func RegisterRefactorProvider(provider *ls.RefactorProvider)
+type RenameInfo = ls.RenameInfo
 type SortText = ls.SortText
 const SortTextAutoImportSuggestions = ls.SortTextAutoImportSuggestions
 const SortTextClassMemberSnippets = ls.SortTextClassMemberSnippets

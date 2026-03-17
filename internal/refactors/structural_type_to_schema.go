@@ -59,7 +59,7 @@ func runStructuralTypeToSchema(ctx *refactor.Context) []ls.CodeAction {
 			typeMap := map[string]*checker.Type{typeName: t}
 			stmts := gen.Process(typeMap, matchedNode, isExported)
 			for i := len(stmts) - 1; i >= 0; i-- {
-				tracker.InsertNodeBefore(ctx.SourceFile, matchedNode, stmts[i], true)
+				tracker.InsertNodeBefore(ctx.SourceFile, matchedNode, stmts[i], true, change.LeadingTriviaOptionNone)
 			}
 		},
 	})
