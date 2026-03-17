@@ -84,18 +84,19 @@ func TestApplyNamespaceRewrite(t *testing.T) {
 	result := sp.Apply(export, fix)
 	if result == nil {
 		t.Fatal("expected non-nil result")
-	}
-	if result.ImportKind != lsproto.ImportKindNamespace {
-		t.Errorf("expected ImportKindNamespace, got %v", result.ImportKind)
-	}
-	if result.Name != "succeed" {
-		t.Errorf("expected name 'succeed' (original export name), got %q", result.Name)
-	}
-	if result.NamespacePrefix != "Effect" {
-		t.Errorf("expected namespace prefix 'Effect', got %q", result.NamespacePrefix)
-	}
-	if result.ModuleSpecifier != "effect/Effect" {
-		t.Errorf("expected module specifier 'effect/Effect', got %q", result.ModuleSpecifier)
+	} else {
+		if result.ImportKind != lsproto.ImportKindNamespace {
+			t.Errorf("expected ImportKindNamespace, got %v", result.ImportKind)
+		}
+		if result.Name != "succeed" {
+			t.Errorf("expected name 'succeed' (original export name), got %q", result.Name)
+		}
+		if result.NamespacePrefix != "Effect" {
+			t.Errorf("expected namespace prefix 'Effect', got %q", result.NamespacePrefix)
+		}
+		if result.ModuleSpecifier != "effect/Effect" {
+			t.Errorf("expected module specifier 'effect/Effect', got %q", result.ModuleSpecifier)
+		}
 	}
 }
 
@@ -111,15 +112,16 @@ func TestApplyNamespaceRewriteWithAlias(t *testing.T) {
 	result := sp.Apply(export, fix)
 	if result == nil {
 		t.Fatal("expected non-nil result")
-	}
-	if result.ImportKind != lsproto.ImportKindNamespace {
-		t.Errorf("expected ImportKindNamespace, got %v", result.ImportKind)
-	}
-	if result.Name != "succeed" {
-		t.Errorf("expected name 'succeed' (original export name), got %q", result.Name)
-	}
-	if result.NamespacePrefix != "Fx" {
-		t.Errorf("expected namespace prefix 'Fx', got %q", result.NamespacePrefix)
+	} else {
+		if result.ImportKind != lsproto.ImportKindNamespace {
+			t.Errorf("expected ImportKindNamespace, got %v", result.ImportKind)
+		}
+		if result.Name != "succeed" {
+			t.Errorf("expected name 'succeed' (original export name), got %q", result.Name)
+		}
+		if result.NamespacePrefix != "Fx" {
+			t.Errorf("expected namespace prefix 'Fx', got %q", result.NamespacePrefix)
+		}
 	}
 }
 
@@ -134,18 +136,19 @@ func TestApplyBarrelRewrite(t *testing.T) {
 	result := sp.Apply(export, fix)
 	if result == nil {
 		t.Fatal("expected non-nil result")
-	}
-	if result.ImportKind != lsproto.ImportKindNamed {
-		t.Errorf("expected ImportKindNamed, got %v", result.ImportKind)
-	}
-	if result.ModuleSpecifier != "@effect/platform" {
-		t.Errorf("expected module specifier '@effect/platform', got %q", result.ModuleSpecifier)
-	}
-	if result.Name != "request" {
-		t.Errorf("expected name 'request' (original export name), got %q", result.Name)
-	}
-	if result.NamespacePrefix != "HttpClient" {
-		t.Errorf("expected namespace prefix 'HttpClient', got %q", result.NamespacePrefix)
+	} else {
+		if result.ImportKind != lsproto.ImportKindNamed {
+			t.Errorf("expected ImportKindNamed, got %v", result.ImportKind)
+		}
+		if result.ModuleSpecifier != "@effect/platform" {
+			t.Errorf("expected module specifier '@effect/platform', got %q", result.ModuleSpecifier)
+		}
+		if result.Name != "request" {
+			t.Errorf("expected name 'request' (original export name), got %q", result.Name)
+		}
+		if result.NamespacePrefix != "HttpClient" {
+			t.Errorf("expected namespace prefix 'HttpClient', got %q", result.NamespacePrefix)
+		}
 	}
 }
 
@@ -161,12 +164,13 @@ func TestApplyBarrelRewriteWithAlias(t *testing.T) {
 	result := sp.Apply(export, fix)
 	if result == nil {
 		t.Fatal("expected non-nil result")
-	}
-	if result.Name != "request" {
-		t.Errorf("expected name 'request' (original export name), got %q", result.Name)
-	}
-	if result.NamespacePrefix != "Platform" {
-		t.Errorf("expected namespace prefix 'Platform', got %q", result.NamespacePrefix)
+	} else {
+		if result.Name != "request" {
+			t.Errorf("expected name 'request' (original export name), got %q", result.Name)
+		}
+		if result.NamespacePrefix != "Platform" {
+			t.Errorf("expected namespace prefix 'Platform', got %q", result.NamespacePrefix)
+		}
 	}
 }
 
@@ -213,13 +217,14 @@ func TestApplyTopLevelReexportIgnore(t *testing.T) {
 	result := sp.Apply(export, fix)
 	if result == nil {
 		t.Fatal("expected non-nil result")
-	}
-	// When ignoring reexports, the fix should be returned unchanged
-	if result.ImportKind != lsproto.ImportKindNamed {
-		t.Errorf("expected ImportKindNamed (unchanged), got %v", result.ImportKind)
-	}
-	if result.Name != "succeed" {
-		t.Errorf("expected name 'succeed' (unchanged), got %q", result.Name)
+	} else {
+		// When ignoring reexports, the fix should be returned unchanged
+		if result.ImportKind != lsproto.ImportKindNamed {
+			t.Errorf("expected ImportKindNamed (unchanged), got %v", result.ImportKind)
+		}
+		if result.Name != "succeed" {
+			t.Errorf("expected name 'succeed' (unchanged), got %q", result.Name)
+		}
 	}
 }
 
@@ -288,9 +293,10 @@ func TestApplyCaseInsensitiveMatching(t *testing.T) {
 	result := sp.Apply(export, fix)
 	if result == nil {
 		t.Fatal("expected non-nil result")
-	}
-	if result.ImportKind != lsproto.ImportKindNamespace {
-		t.Errorf("expected case-insensitive match to trigger namespace rewrite, got %v", result.ImportKind)
+	} else {
+		if result.ImportKind != lsproto.ImportKindNamespace {
+			t.Errorf("expected case-insensitive match to trigger namespace rewrite, got %v", result.ImportKind)
+		}
 	}
 }
 
