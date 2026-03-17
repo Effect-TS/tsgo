@@ -24,6 +24,7 @@ use (
 	./shim/packagejson
 	./shim/parser
 	./shim/project
+	./shim/project/logging
 	./shim/repo
 	./shim/scanner
 	./shim/testrunner

@@ -1,5 +1,5 @@
 diff --git a/internal/ls/completions.go b/internal/ls/completions.go
-index 9c27bfe08..2496368b6 100644
+index 9c27bfe08..0f3d03446 100644
 --- a/internal/ls/completions.go
 +++ b/internal/ls/completions.go
 @@ -31,13 +31,25 @@ import (
@@ -8,13 +8,13 @@ index 9c27bfe08..2496368b6 100644
  
 +// AfterCompletionCallback is invoked after completions are computed
 +// to allow external packages to add or modify completion items.
-+var AfterCompletionCallback func(sf *ast.SourceFile, position int, items []*lsproto.CompletionItem, program *compiler.Program, langService *LanguageService) []*lsproto.CompletionItem
++var AfterCompletionCallback func(ctx context.Context, sf *ast.SourceFile, position int, items []*lsproto.CompletionItem, program *compiler.Program, langService *LanguageService) []*lsproto.CompletionItem
 +
 +// RegisterAfterCompletionCallback registers a callback to be called after
 +// completions are computed. The callback can add or modify completion items
 +// before they are returned.
 +// Note: Only one callback can be registered. Subsequent calls will replace the previous callback.
-+func RegisterAfterCompletionCallback(cb func(sf *ast.SourceFile, position int, items []*lsproto.CompletionItem, program *compiler.Program, langService *LanguageService) []*lsproto.CompletionItem) {
++func RegisterAfterCompletionCallback(cb func(ctx context.Context, sf *ast.SourceFile, position int, items []*lsproto.CompletionItem, program *compiler.Program, langService *LanguageService) []*lsproto.CompletionItem) {
 +	AfterCompletionCallback = cb
 +}
 +
@@ -39,7 +39,7 @@ index 9c27bfe08..2496368b6 100644
 +		if completionList != nil {
 +			existingItems = completionList.Items
 +		}
-+		items := AfterCompletionCallback(file, position, existingItems, program, l)
++		items := AfterCompletionCallback(ctx, file, position, existingItems, program, l)
 +		if len(items) > 0 {
 +			if completionList == nil {
 +				completionList = &lsproto.CompletionList{}
