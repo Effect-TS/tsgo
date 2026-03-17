@@ -1,0 +1,36 @@
+diff --git a/internal/ls/symbols.go b/internal/ls/symbols.go
+index 8f69208b6..32b82dc62 100644
+--- a/internal/ls/symbols.go
++++ b/internal/ls/symbols.go
+@@ -21,6 +21,18 @@ import (
+ 	"github.com/microsoft/typescript-go/internal/tspath"
+ )
+ 
++// AfterDocumentSymbolsCallback is invoked after document symbols are collected
++// and expando merging is complete, allowing external packages to augment the
++// final hierarchical symbol tree before it is returned or flattened.
++var AfterDocumentSymbolsCallback func(ctx context.Context, sf *ast.SourceFile, symbols []*lsproto.DocumentSymbol, program *compiler.Program, langService *LanguageService) []*lsproto.DocumentSymbol
++
++// RegisterAfterDocumentSymbolsCallback registers a callback that can augment
++// document symbols after upstream collection and expando merging.
++// Note: Only one callback can be registered. Subsequent calls replace it.
++func RegisterAfterDocumentSymbolsCallback(cb func(ctx context.Context, sf *ast.SourceFile, symbols []*lsproto.DocumentSymbol, program *compiler.Program, langService *LanguageService) []*lsproto.DocumentSymbol) {
++	AfterDocumentSymbolsCallback = cb
++}
++
+ func (l *LanguageService) ProvideDocumentSymbols(ctx context.Context, documentURI lsproto.DocumentUri) (lsproto.DocumentSymbolResponse, error) {
+ 	_, file := l.getProgramAndFile(documentURI)
+ 	if lsproto.GetClientCapabilities(ctx).TextDocument.DocumentSymbol.HierarchicalDocumentSymbolSupport {
+@@ -253,7 +265,11 @@ func (l *LanguageService) getDocumentSymbolsForChildren(ctx context.Context, nod
+ 		return false
+ 	}
+ 	node.ForEachChild(visit)
+-	return mergeExpandos(symbols)
++	symbols = mergeExpandos(symbols)
++	if AfterDocumentSymbolsCallback != nil {
++		symbols = AfterDocumentSymbolsCallback(ctx, file, symbols, l.GetProgram(), l)
++	}
++	return symbols
+ }
+ 
+ // Target is `f.prototype`.

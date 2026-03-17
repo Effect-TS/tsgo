@@ -50,6 +50,7 @@ __debug_bin*
 
 # Go coverage output
 *.out
+.tmp/
 
 # Go profiling files
 *.prof

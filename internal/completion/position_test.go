@@ -63,12 +63,13 @@ func TestParseDataForExtendsClassCompletion_StandaloneIdentifier(t *testing.T) {
 	data := ParseDataForExtendsClassCompletion(sf, pos)
 	if data == nil {
 		t.Fatal("expected non-nil result for 'class Foo extends Schema'")
-	}
-	if got := scanner.GetTextOfNode(data.AccessedObject); got != "Schema" {
-		t.Errorf("AccessedObject text = %q, want %q", got, "Schema")
-	}
-	if got := data.ClassNameText(); got != "Foo" {
-		t.Errorf("ClassNameText = %q, want %q", got, "Foo")
+	} else {
+		if got := scanner.GetTextOfNode(data.AccessedObject); got != "Schema" {
+			t.Errorf("AccessedObject text = %q, want %q", got, "Schema")
+		}
+		if got := data.ClassNameText(); got != "Foo" {
+			t.Errorf("ClassNameText = %q, want %q", got, "Foo")
+		}
 	}
 }
 
@@ -107,13 +108,14 @@ func TestParseDataForExtendsClassCompletion_ReplacementSpan(t *testing.T) {
 	data := ParseDataForExtendsClassCompletion(sf, pos)
 	if data == nil {
 		t.Fatal("expected non-nil result")
-	}
-	// The replacement span should cover "Schema.Class"
-	if data.ReplacementLength <= 0 {
-		t.Errorf("expected positive ReplacementLength, got %d", data.ReplacementLength)
-	}
-	replaced := source[data.ReplacementStart : data.ReplacementStart+data.ReplacementLength]
-	if replaced != "Schema.Class" {
-		t.Errorf("replacement span covers %q, want %q", replaced, "Schema.Class")
+	} else {
+		// The replacement span should cover "Schema.Class"
+		if data.ReplacementLength <= 0 {
+			t.Errorf("expected positive ReplacementLength, got %d", data.ReplacementLength)
+		}
+		replaced := source[data.ReplacementStart : data.ReplacementStart+data.ReplacementLength]
+		if replaced != "Schema.Class" {
+			t.Errorf("replacement span covers %q, want %q", replaced, "Schema.Class")
+		}
 	}
 }

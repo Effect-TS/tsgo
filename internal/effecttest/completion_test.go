@@ -47,13 +47,13 @@ class MyService extends ServiceMap./*1*/`
 	completions := f.GetCompletions(t, nil)
 	if completions == nil {
 		t.Fatal("completions is nil")
-	}
-
-	if !findCompletionLabel(completions.Items, "Service<MyService, {}>") {
-		t.Error("expected 'Service<MyService, {}>' completion")
-	}
-	if !findCompletionLabel(completions.Items, "Service<MyService>({ make })") {
-		t.Error("expected 'Service<MyService>({ make })' completion")
+	} else {
+		if !findCompletionLabel(completions.Items, "Service<MyService, {}>") {
+			t.Error("expected 'Service<MyService, {}>' completion")
+		}
+		if !findCompletionLabel(completions.Items, "Service<MyService>({ make })") {
+			t.Error("expected 'Service<MyService>({ make })' completion")
+		}
 	}
 }
 
@@ -85,12 +85,12 @@ class Foo extends Schema./*1*/`
 	completions := f.GetCompletions(t, nil)
 	if completions == nil {
 		t.Fatal("completions is nil")
-	}
-
-	if !findCompletionLabel(completions.Items, "Class<Foo>") {
-		t.Error("expected 'Class<Foo>' completion")
-	}
-	if !findCompletionLabel(completions.Items, "TaggedClass<Foo>") {
-		t.Error("expected 'TaggedClass<Foo>' completion")
+	} else {
+		if !findCompletionLabel(completions.Items, "Class<Foo>") {
+			t.Error("expected 'Class<Foo>' completion")
+		}
+		if !findCompletionLabel(completions.Items, "TaggedClass<Foo>") {
+			t.Error("expected 'TaggedClass<Foo>' completion")
+		}
 	}
 }

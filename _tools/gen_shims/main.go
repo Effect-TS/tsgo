@@ -69,6 +69,7 @@ func main() {
 		"packagejson",
 		"parser",
 		"project",
+		"project/logging",
 		"repo",
 		"scanner",
 		"testrunner",

@@ -17,6 +17,7 @@ linters:
       - std-error-handling
     paths:
       - typescript-go
+      - shim
 
 issues:
   max-issues-per-linter: 0

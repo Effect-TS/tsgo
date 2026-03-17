@@ -40,6 +40,8 @@ func init() {
 	ls.RegisterRefactorProvider(effectRefactorProvider)
 	// Register the Effect hover enrichment callback
 	ls.RegisterAfterQuickInfoCallback(afterQuickInfo)
+	// Register the Effect document symbol enrichment callback
+	ls.RegisterAfterDocumentSymbolsCallback(afterDocumentSymbols)
 	// Register the Effect inlay hints suppression callback
 	ls.RegisterAfterInlayHintsCallback(afterInlayHints)
 	// Register the Effect completion enrichment callback
@@ -101,7 +103,7 @@ func getEffectRefactorActions(ctx context.Context, file *ast.SourceFile, span co
 
 // afterCompletion is called after TypeScript-Go builds the completion list.
 // It allows Effect to enrich completion responses with custom completions.
-func afterCompletion(sf *ast.SourceFile, position int, items []*lsproto.CompletionItem, program *compiler.Program, langService *ls.LanguageService) []*lsproto.CompletionItem {
+func afterCompletion(ctx context.Context, sf *ast.SourceFile, position int, items []*lsproto.CompletionItem, program *compiler.Program, langService *ls.LanguageService) []*lsproto.CompletionItem {
 	if program.Options().Effect == nil {
 		return items
 	}
@@ -110,10 +112,10 @@ func afterCompletion(sf *ast.SourceFile, position int, items []*lsproto.Completi
 		return items
 	}
 
-	ctx := completion.NewContext(context.Background(), sf, position, items, program, langService)
+	completionCtx := completion.NewContext(ctx, sf, position, items, program, langService)
 
 	for _, c := range completions.All {
-		results := c.Run(ctx)
+		results := c.Run(completionCtx)
 		items = append(items, results...)
 	}
 

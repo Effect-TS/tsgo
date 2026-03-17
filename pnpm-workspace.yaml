@@ -1,4 +1,7 @@
 packages:
   - "testdata/tests/effect-v3"
+  - "testdata/tests/effect-v3-refactors"
   - "testdata/tests/effect-v4"
+  - "testdata/tests/effect-v4-document-symbols"
+  - "testdata/tests/effect-v4-refactors"
   - "_packages/*"
