@@ -1,35 +1,15 @@
 === Refactor Inventory ===
 
 [R1] selection: "6:17-6:17"
-  Refactor 0: "Wrap with Effect.gen" (refactor.rewrite.effect.wrapWithEffectGen)
-  Refactor 1: "Convert to Effect.fn(\"methodReturnsEffect\")" (refactor.rewrite.effect.effectGenToFn)
-  Refactor 2: "Toggle return type annotation" (refactor.rewrite.effect.toggleReturnTypeAnnotation)
+  Refactor 0: "Convert to Effect.fn(\"methodReturnsEffect\")" (refactor.rewrite.effect.effectGenToFn)
+  Refactor 1: "Toggle return type annotation" (refactor.rewrite.effect.toggleReturnTypeAnnotation)
 
 [R2] selection: "empty (0:0-0:0)"
   (no refactors)
 
 === Refactor Application Results ===
 
-=== [R1] Refactor 0: "Wrap with Effect.gen" ===
-
---- file:///.src/effectGenToFn_classMethod.ts ---
-// refactor: 6:17
-import * as Eff from "effect/Effect"
-
-class Test {
-  methodReturnsEffect(arg1: number, arg2: number) {
-    return Eff.gen(function*() {
-    return yield* Eff.gen(function*() {
-        const a = yield* Eff.succeed(arg1)
-        const b = yield* Eff.succeed(arg2)
-        return a + b
-    })
-})
-  }
-}
-
-
-=== [R1] Refactor 1: "Convert to Effect.fn(\"methodReturnsEffect\")" ===
+=== [R1] Refactor 0: "Convert to Effect.fn(\"methodReturnsEffect\")" ===
 
 --- file:///.src/effectGenToFn_classMethod.ts ---
 // refactor: 6:17
@@ -44,7 +24,7 @@ class Test {
 }
 
 
-=== [R1] Refactor 2: "Toggle return type annotation" ===
+=== [R1] Refactor 1: "Toggle return type annotation" ===
 
 --- file:///.src/effectGenToFn_classMethod.ts ---
 // refactor: 6:17

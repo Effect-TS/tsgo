@@ -43,8 +43,8 @@ const test = () =>
     return yield* Effect.gen(function*() {
         const test = "test"
         return yield* Effect.succeed(test)
-    })
-}).pipe(Effect.asVoid),
+    }).pipe(Effect.asVoid)
+}),
     Effect.tapError(Effect.logError)
   )
 

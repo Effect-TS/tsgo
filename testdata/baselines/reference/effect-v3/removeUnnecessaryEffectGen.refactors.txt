@@ -1,55 +1,23 @@
 === Refactor Inventory ===
 
 [R1] selection: "5:24-5:24"
-  Refactor 0: "Wrap with Effect.gen" (refactor.rewrite.effect.wrapWithEffectGen)
-  Refactor 1: "Remove unnecessary Effect.gen" (refactor.rewrite.effect.removeUnnecessaryEffectGen)
+  Refactor 0: "Remove unnecessary Effect.gen" (refactor.rewrite.effect.removeUnnecessaryEffectGen)
 
 [R2] selection: "9:24-9:24"
-  Refactor 0: "Wrap with Effect.gen" (refactor.rewrite.effect.wrapWithEffectGen)
-  Refactor 1: "Remove unnecessary Effect.gen" (refactor.rewrite.effect.removeUnnecessaryEffectGen)
+  Refactor 0: "Remove unnecessary Effect.gen" (refactor.rewrite.effect.removeUnnecessaryEffectGen)
 
 [R3] selection: "15:24-15:24"
-  Refactor 0: "Wrap with Effect.gen" (refactor.rewrite.effect.wrapWithEffectGen)
+  (no refactors)
 
 [R4] selection: "20:24-20:24"
-  Refactor 0: "Wrap with Effect.gen" (refactor.rewrite.effect.wrapWithEffectGen)
-  Refactor 1: "Remove unnecessary Effect.gen" (refactor.rewrite.effect.removeUnnecessaryEffectGen)
+  Refactor 0: "Remove unnecessary Effect.gen" (refactor.rewrite.effect.removeUnnecessaryEffectGen)
 
 [R5] selection: "empty (0:0-0:0)"
   (no refactors)
 
 === Refactor Application Results ===
 
-=== [R1] Refactor 0: "Wrap with Effect.gen" ===
-
---- file:///.src/removeUnnecessaryEffectGen.ts ---
-// refactor: 5:24, 9:24, 15:24, 20:24
-// @effect-v3
-import * as Effect from "effect/Effect"
-
-export const test1 = Effect.gen(function*() {
-    return yield* Effect.gen(function*() {
-        return yield* Effect.succeed(42)
-    })
-})
-
-export const test2 = Effect.gen(function*() {
-  return yield* Effect.gen(function*() {
-    return yield* Effect.succeed(42)
-  })
-})
-
-export const test3 = Effect.gen(function*() {
-  yield* Effect.succeed(true)
-  return yield* Effect.succeed(42)
-})
-
-export const test4 = Effect.gen(function*() {
-  yield* Effect.succeed(42)
-})
-
-
-=== [R1] Refactor 1: "Remove unnecessary Effect.gen" ===
+=== [R1] Refactor 0: "Remove unnecessary Effect.gen" ===
 
 --- file:///.src/removeUnnecessaryEffectGen.ts ---
 // refactor: 5:24, 9:24, 15:24, 20:24
@@ -74,36 +42,7 @@ export const test4 = Effect.gen(function*() {
 })
 
 
-=== [R2] Refactor 0: "Wrap with Effect.gen" ===
-
---- file:///.src/removeUnnecessaryEffectGen.ts ---
-// refactor: 5:24, 9:24, 15:24, 20:24
-// @effect-v3
-import * as Effect from "effect/Effect"
-
-export const test1 = Effect.gen(function*() {
-  return yield* Effect.succeed(42)
-})
-
-export const test2 = Effect.gen(function*() {
-    return yield* Effect.gen(function*() {
-        return yield* Effect.gen(function*() {
-            return yield* Effect.succeed(42)
-        })
-    })
-})
-
-export const test3 = Effect.gen(function*() {
-  yield* Effect.succeed(true)
-  return yield* Effect.succeed(42)
-})
-
-export const test4 = Effect.gen(function*() {
-  yield* Effect.succeed(42)
-})
-
-
-=== [R2] Refactor 1: "Remove unnecessary Effect.gen" ===
+=== [R2] Refactor 0: "Remove unnecessary Effect.gen" ===
 
 --- file:///.src/removeUnnecessaryEffectGen.ts ---
 // refactor: 5:24, 9:24, 15:24, 20:24
@@ -128,65 +67,7 @@ export const test4 = Effect.gen(function*() {
 })
 
 
-=== [R3] Refactor 0: "Wrap with Effect.gen" ===
-
---- file:///.src/removeUnnecessaryEffectGen.ts ---
-// refactor: 5:24, 9:24, 15:24, 20:24
-// @effect-v3
-import * as Effect from "effect/Effect"
-
-export const test1 = Effect.gen(function*() {
-  return yield* Effect.succeed(42)
-})
-
-export const test2 = Effect.gen(function*() {
-  return yield* Effect.gen(function*() {
-    return yield* Effect.succeed(42)
-  })
-})
-
-export const test3 = Effect.gen(function*() {
-    return yield* Effect.gen(function*() {
-        yield* Effect.succeed(true)
-        return yield* Effect.succeed(42)
-    })
-})
-
-export const test4 = Effect.gen(function*() {
-  yield* Effect.succeed(42)
-})
-
-
-=== [R4] Refactor 0: "Wrap with Effect.gen" ===
-
---- file:///.src/removeUnnecessaryEffectGen.ts ---
-// refactor: 5:24, 9:24, 15:24, 20:24
-// @effect-v3
-import * as Effect from "effect/Effect"
-
-export const test1 = Effect.gen(function*() {
-  return yield* Effect.succeed(42)
-})
-
-export const test2 = Effect.gen(function*() {
-  return yield* Effect.gen(function*() {
-    return yield* Effect.succeed(42)
-  })
-})
-
-export const test3 = Effect.gen(function*() {
-  yield* Effect.succeed(true)
-  return yield* Effect.succeed(42)
-})
-
-export const test4 = Effect.gen(function*() {
-    return yield* Effect.gen(function*() {
-        yield* Effect.succeed(42)
-    })
-})
-
-
-=== [R4] Refactor 1: "Remove unnecessary Effect.gen" ===
+=== [R4] Refactor 0: "Remove unnecessary Effect.gen" ===
 
 --- file:///.src/removeUnnecessaryEffectGen.ts ---
 // refactor: 5:24, 9:24, 15:24, 20:24
