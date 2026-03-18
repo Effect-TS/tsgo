@@ -120,7 +120,8 @@ export const gatherTargetState = (
     const vscodeSettings: Option.Option<Target.VSCodeSettings> = editors.includes("vscode")
       ? Option.some({
         settings: {
-          "typescript.native-preview.tsdk": "node_modules/@typescript/native-preview"
+          "typescript.native-preview.tsdk": "node_modules/@typescript/native-preview",
+          "typescript.experimental.useTsgo": true
         }
       })
       : Option.none()
