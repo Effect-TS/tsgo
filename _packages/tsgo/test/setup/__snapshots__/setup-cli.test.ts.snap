@@ -188,6 +188,73 @@ exports[`Setup CLI > should add custom diagnostic severities when plugin exists 
 }"
 `;
 
+exports[`Setup CLI > should generate changes for Astro-style configs using the legacy prepare command > change summary 1`] = `
+[
+  {
+    "description": "Add @effect/tsgo@^0.0.5 to devDependencies; Update prepare script to include patch command",
+    "file": "package.json",
+  },
+  {
+    "description": "Add $schema to tsconfig",
+    "file": "tsconfig.json",
+  },
+]
+`;
+
+exports[`Setup CLI > should generate changes for Astro-style configs using the legacy prepare command > messages 1`] = `
+[
+  "Run \`effect-tsgo patch\` to complete the installation.",
+]
+`;
+
+exports[`Setup CLI > should generate changes for Astro-style configs using the legacy prepare command > package.json 1`] = `
+"{
+  "scripts": {
+    "prepare": "effect-language-service patch && effect-tsgo patch",
+    "dev": "astro dev"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@effect/language-service": "^0.80.0",
+    "typescript": "^5.9.3",
+"@effect/tsgo": "^0.0.5"
+  }
+}"
+`;
+
+exports[`Setup CLI > should generate changes for Astro-style configs using the legacy prepare command > tsconfig.json 1`] = `
+"{
+  "extends": "astro/tsconfigs/strictest",
+  "include": [
+    ".astro/types.d.ts",
+    "**/*"
+  ],
+  "exclude": [
+    "dist"
+  ],
+  "compilerOptions": {
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "skipLibCheck": true,
+    "plugins": [
+      {
+        "name": "@effect/language-service",
+        "namespaceImportPackages": [
+          "effect",
+          "@effect/*"
+        ]
+      }
+    ]
+  },
+"$schema": "https://raw.githubusercontent.com/Effect-TS/tsgo/refs/heads/main/schema.json"
+}"
+`;
+
 exports[`Setup CLI > should generate changes for adding LSP with defaults > change summary 1`] = `
 [
   {
