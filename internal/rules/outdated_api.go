@@ -32,6 +32,7 @@ var OutdatedApi = rule.Rule{
 		diags := make([]*ast.Diagnostic, 0, len(matches)+1)
 		for _, m := range matches {
 			diags = append(diags, ctx.NewDiagnostic(
+				m.SourceFile,
 				m.Location,
 				tsdiag.X_0_is_an_Effect_v3_API_but_the_project_is_using_Effect_v4_1_effect_outdatedApi,
 				nil,
@@ -42,6 +43,7 @@ var OutdatedApi = rule.Rule{
 
 		// Append global summary diagnostic at position 0:0
 		diags = append(diags, ctx.NewDiagnostic(
+			ctx.SourceFile,
 			core.NewTextRange(0, 0),
 			tsdiag.This_project_targets_Effect_v4_but_is_using_Effect_v3_APIs_To_find_the_correct_API_to_use_consult_the_Effect_v4_documentation_for_the_corresponding_v4_replacement_effect_outdatedApi,
 			nil,
@@ -53,6 +55,7 @@ var OutdatedApi = rule.Rule{
 
 // OutdatedApiMatch holds the analysis results for one outdated API usage.
 type OutdatedApiMatch struct {
+	SourceFile    *ast.SourceFile
 	Location      core.TextRange
 	PropertyName  string
 	MigrationHint string
@@ -137,6 +140,7 @@ func checkOutdatedApiPropertyAccess(c *checker.Checker, sf *ast.SourceFile, n *a
 	}
 
 	return &OutdatedApiMatch{
+		SourceFile:    sf,
 		Location:      scanner.GetErrorRangeForNode(sf, nameNode),
 		PropertyName:  identifierName,
 		MigrationHint: migrationHintText(migration),

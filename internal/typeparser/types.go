@@ -54,16 +54,17 @@ type EffectGenCallResult struct {
 type TransformationKind string
 
 const (
-	TransformationKindPipe              TransformationKind = "pipe"
-	TransformationKindPipeable          TransformationKind = "pipeable"
-	TransformationKindCall              TransformationKind = "call"
-	TransformationKindEffectFn          TransformationKind = "effectFn"
-	TransformationKindEffectFnUntraced  TransformationKind = "effectFnUntraced"
+	TransformationKindPipe             TransformationKind = "pipe"
+	TransformationKindPipeable         TransformationKind = "pipeable"
+	TransformationKindCall             TransformationKind = "call"
+	TransformationKindEffectFn         TransformationKind = "effectFn"
+	TransformationKindEffectFnUntraced TransformationKind = "effectFnUntraced"
 )
 
 // PipingFlowTransformation represents a single transformation step in a piping flow.
 type PipingFlowTransformation struct {
 	Kind    TransformationKind // How the transformation was expressed
+	Node    *ast.Node          // The full transformation node (call expression or bare callee)
 	Callee  *ast.Node          // The function being applied (e.g., Effect.map)
 	Args    []*ast.Node        // Arguments to the transformation, or nil for constants/single-arg calls
 	OutType *checker.Type      // The resulting type after this transformation (may be nil)
@@ -85,22 +86,22 @@ type PipingFlow struct {
 // EffectFnCallResult represents a parsed Effect.fn(regularFn, ...) call (non-generator).
 type EffectFnCallResult struct {
 	Call            *ast.CallExpression
-	Kind            string          // "fn"
+	Kind            string // "fn"
 	EffectModule    *ast.Expression
-	BodyFunction    *ast.Node       // ArrowFunction or FunctionExpression (non-generator)
-	PipeArguments   []*ast.Node     // Transformation args after the body (may be empty/nil)
-	TraceExpression *ast.Node       // The name string from curried Effect.fn("name")(...), or nil
+	BodyFunction    *ast.Node   // ArrowFunction or FunctionExpression (non-generator)
+	PipeArguments   []*ast.Node // Transformation args after the body (may be empty/nil)
+	TraceExpression *ast.Node   // The name string from curried Effect.fn("name")(...), or nil
 }
 
 // EffectFnIifeResult represents a parsed Effect.fn(...)() or Effect.fnUntraced(...)() IIFE.
 type EffectFnIifeResult struct {
-	OuterCall         *ast.CallExpression    // The entire IIFE expression (the outer () call)
-	InnerCall         *ast.CallExpression    // The Effect.fn(...) call
-	EffectModule      *ast.Expression        // The Effect module identifier
-	Variant           string                 // "fn", "fnUntraced", or "fnUntracedEager"
+	OuterCall         *ast.CallExpression     // The entire IIFE expression (the outer () call)
+	InnerCall         *ast.CallExpression     // The Effect.fn(...) call
+	EffectModule      *ast.Expression         // The Effect module identifier
+	Variant           string                  // "fn", "fnUntraced", or "fnUntracedEager"
 	GeneratorFunction *ast.FunctionExpression // Non-nil for generator bodies (fix available)
-	PipeArguments     []*ast.Node            // Trailing transformation args (may be nil)
-	TraceExpression   *ast.Node              // The name string from curried form, or nil
+	PipeArguments     []*ast.Node             // Trailing transformation args (may be nil)
+	TraceExpression   *ast.Node               // The name string from curried form, or nil
 }
 
 // ParsedLazyExpression represents a parsed arrow function or function expression
@@ -124,16 +125,16 @@ type ExpectedAndRealType struct {
 
 // EffectFnOpportunityResult represents a function that can be converted to Effect.fn.
 type EffectFnOpportunityResult struct {
-	TargetNode             *ast.Node              // The function node being reported
-	NameIdentifier         *ast.Node              // The discovered name node for the function
-	GeneratorFunction      *ast.FunctionExpression // Non-nil for gen opportunity, nil for regular
-	PipeArguments          []*ast.Node            // Pipe args from piped Effect.gen (may be empty)
-	ExplicitTraceExpression *ast.Node              // Span name from Effect.withSpan if last pipe arg, or nil
-	SuggestedTraceName     string                 // The local function/variable name for suggested span
-	InferredTraceName      string                 // Context-aware name (e.g., "ServiceTag.member" or exported name)
-	EffectModule           *ast.Expression        // The Effect module identifier
-	HasGenBody             bool                   // True for gen opportunity, false for regular
-	IsLayerMember          bool                   // True when the target is a property value inside a Layer service definition
+	TargetNode              *ast.Node               // The function node being reported
+	NameIdentifier          *ast.Node               // The discovered name node for the function
+	GeneratorFunction       *ast.FunctionExpression // Non-nil for gen opportunity, nil for regular
+	PipeArguments           []*ast.Node             // Pipe args from piped Effect.gen (may be empty)
+	ExplicitTraceExpression *ast.Node               // Span name from Effect.withSpan if last pipe arg, or nil
+	SuggestedTraceName      string                  // The local function/variable name for suggested span
+	InferredTraceName       string                  // Context-aware name (e.g., "ServiceTag.member" or exported name)
+	EffectModule            *ast.Expression         // The Effect module identifier
+	HasGenBody              bool                    // True for gen opportunity, false for regular
+	IsLayerMember           bool                    // True when the target is a property value inside a Layer service definition
 }
 
 // UnrollUnionMembers returns the constituent types of a union type,

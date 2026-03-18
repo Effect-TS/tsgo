@@ -21,7 +21,7 @@ var EffectSucceedWithVoid = rule.Rule{
 		matches := AnalyzeEffectSucceedWithVoid(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
-			diags[i] = ctx.NewDiagnostic(m.Location, tsdiag.Effect_void_can_be_used_instead_of_Effect_succeed_undefined_or_Effect_succeed_void_0_effect_effectSucceedWithVoid, nil)
+			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Effect_void_can_be_used_instead_of_Effect_succeed_undefined_or_Effect_succeed_void_0_effect_effectSucceedWithVoid, nil)
 		}
 		return diags
 	},
@@ -30,6 +30,7 @@ var EffectSucceedWithVoid = rule.Rule{
 // EffectSucceedWithVoidMatch holds the AST nodes needed by both the diagnostic rule
 // and the quick-fix for the effectSucceedWithVoid pattern.
 type EffectSucceedWithVoidMatch struct {
+	SourceFile       *ast.SourceFile // The source file where the diagnostic should be reported
 	Location         core.TextRange  // The pre-computed error range for this match
 	CallNode         *ast.Node       // The Effect.succeed(...) call expression (replacement target)
 	EffectModuleNode *ast.Node       // The Effect module identifier (e.g., "Effect" in Effect.succeed)
@@ -76,6 +77,7 @@ func AnalyzeEffectSucceedWithVoid(c *checker.Checker, sf *ast.SourceFile) []Effe
 						if isVoidExpression(arg) {
 							propAccess := call.Expression.AsPropertyAccessExpression()
 							matches = append(matches, EffectSucceedWithVoidMatch{
+								SourceFile:       sf,
 								Location:         scanner.GetErrorRangeForNode(sf, n),
 								CallNode:         n,
 								EffectModuleNode: propAccess.Expression,

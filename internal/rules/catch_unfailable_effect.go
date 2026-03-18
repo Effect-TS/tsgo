@@ -16,10 +16,10 @@ var catchFunctions = []string{"catch", "catchAll", "catchIf", "catchSome", "catc
 // CatchUnfailableEffect detects when error-handling functions are applied
 // to an Effect whose error type is never, meaning the handler will never trigger.
 var CatchUnfailableEffect = rule.Rule{
-	Name:        "catchUnfailableEffect",
+	Name:            "catchUnfailableEffect",
 	Description:     "Warns when using error handling on Effects that never fail",
 	DefaultSeverity: etscore.SeveritySuggestion,
-	Codes:       []int32{tsdiag.Looks_like_the_previous_effect_never_fails_so_probably_this_error_handling_will_never_be_triggered_effect_catchUnfailableEffect.Code()},
+	Codes:           []int32{tsdiag.Looks_like_the_previous_effect_never_fails_so_probably_this_error_handling_will_never_be_triggered_effect_catchUnfailableEffect.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		var diags []*ast.Diagnostic
 
@@ -52,7 +52,7 @@ var CatchUnfailableEffect = rule.Rule{
 					continue
 				}
 
-				diags = append(diags, ctx.NewDiagnostic(ctx.GetErrorRange(transformation.Callee), tsdiag.Looks_like_the_previous_effect_never_fails_so_probably_this_error_handling_will_never_be_triggered_effect_catchUnfailableEffect, nil))
+				diags = append(diags, ctx.NewDiagnostic(ast.GetSourceFileOfNode(transformation.Callee), ctx.GetErrorRange(transformation.Callee), tsdiag.Looks_like_the_previous_effect_never_fails_so_probably_this_error_handling_will_never_be_triggered_effect_catchUnfailableEffect, nil))
 			}
 		}
 

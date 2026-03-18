@@ -25,7 +25,7 @@ var ScopeInLayerEffect = rule.Rule{
 		matches := AnalyzeScopeInLayerEffect(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
-			diags[i] = ctx.NewDiagnostic(m.Location, tsdiag.Seems_like_you_are_constructing_a_layer_with_a_scope_in_the_requirements_Consider_using_scoped_instead_to_get_rid_of_the_scope_in_the_requirements_effect_scopeInLayerEffect, nil)
+			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Seems_like_you_are_constructing_a_layer_with_a_scope_in_the_requirements_Consider_using_scoped_instead_to_get_rid_of_the_scope_in_the_requirements_effect_scopeInLayerEffect, nil)
 		}
 		return diags
 	},
@@ -34,6 +34,7 @@ var ScopeInLayerEffect = rule.Rule{
 // ScopeInLayerEffectMatch holds the AST nodes needed by both the diagnostic rule
 // and the quick-fix for the scopeInLayerEffect pattern.
 type ScopeInLayerEffectMatch struct {
+	SourceFile       *ast.SourceFile
 	Location         core.TextRange // The pre-computed error range for this match
 	MethodIdentifier *ast.Node      // The property name identifier node (e.g., "effect" in Layer.effect); nil for class declaration matches
 }
@@ -127,6 +128,7 @@ func matchLayerEffectCall(c *checker.Checker, sf *ast.SourceFile, node *ast.Node
 	}
 
 	return &ScopeInLayerEffectMatch{
+		SourceFile:       sf,
 		Location:         scanner.GetErrorRangeForNode(sf, node),
 		MethodIdentifier: propAccess.Name(),
 	}
@@ -180,6 +182,7 @@ func matchClassWithDefaultLayer(c *checker.Checker, sf *ast.SourceFile, node *as
 	}
 
 	return &ScopeInLayerEffectMatch{
+		SourceFile:       sf,
 		Location:         scanner.GetErrorRangeForNode(sf, node),
 		MethodIdentifier: nil,
 	}

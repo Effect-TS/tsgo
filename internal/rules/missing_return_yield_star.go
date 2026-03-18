@@ -23,7 +23,7 @@ var MissingReturnYieldStar = rule.Rule{
 		matches := AnalyzeMissingReturnYieldStar(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
-			diags[i] = ctx.NewDiagnostic(m.Location, tsdiag.It_is_recommended_to_use_return_yield_Asterisk_for_Effects_that_never_succeed_to_signal_a_definitive_exit_point_for_type_narrowing_and_tooling_support_effect_missingReturnYieldStar, nil)
+			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.It_is_recommended_to_use_return_yield_Asterisk_for_Effects_that_never_succeed_to_signal_a_definitive_exit_point_for_type_narrowing_and_tooling_support_effect_missingReturnYieldStar, nil)
 		}
 		return diags
 	},
@@ -32,6 +32,7 @@ var MissingReturnYieldStar = rule.Rule{
 // MissingReturnYieldStarMatch holds the AST nodes needed by both the diagnostic rule
 // and the quick-fix for the missingReturnYieldStar pattern.
 type MissingReturnYieldStarMatch struct {
+	SourceFile   *ast.SourceFile // The source file where the diagnostic should be reported
 	Location     core.TextRange // The pre-computed error range for this match
 	YieldNode    *ast.Node      // The yield* expression node (for diagnostic location)
 	ExprStmtNode *ast.Node      // The expression statement node (for quickfix replacement)
@@ -56,6 +57,7 @@ func AnalyzeMissingReturnYieldStar(c *checker.Checker, sf *ast.SourceFile) []Mis
 				if yield != nil && yield.AsteriskToken != nil && yield.Expression != nil {
 					if shouldReportMissingReturnYieldStar(c, n, unwrapped, yield.Expression) {
 						matches = append(matches, MissingReturnYieldStarMatch{
+							SourceFile:   sf,
 							Location:     scanner.GetErrorRangeForNode(sf, unwrapped),
 							YieldNode:    unwrapped,
 							ExprStmtNode: n,

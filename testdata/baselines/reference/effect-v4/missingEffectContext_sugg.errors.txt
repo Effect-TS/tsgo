@@ -1,0 +1,57 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+/.src/missingEffectContext_sugg.ts(42,5): error TS2345: Argument of type '<A, E>(effect: Effect<A, E, never>, options?: RunOptions | undefined) => Promise<A>' is not assignable to parameter of type '(_: Effect<{}, never, DbConnection | FileSystem>) => Promise<{}>'.
+/.src/missingEffectContext_sugg.ts(42,5): error TS377004: Missing context DbConnection | FileSystem in the expected Effect type. effect(missingEffectContext)
+
+
+==== /.src/missingEffectContext_sugg.ts (2 errors) ====
+    import { Effect, Layer, ServiceMap, Data } from "effect"
+    
+    export class DbConnection extends ServiceMap.Service<DbConnection>()("DbConnection", {
+      make: Effect.succeed({})
+    }) {
+      static Default = Layer.effect(this, this.make)
+    }
+    
+    export class FileSystem extends ServiceMap.Service<FileSystem>()("FileSystem", {
+      make: Effect.succeed({})
+    }) {
+      static Default = Layer.effect(this, this.make)
+    }
+    
+    export class Cache extends ServiceMap.Service<Cache>()("Cache", {
+      make: Effect.as(FileSystem.asEffect(), {})
+    }) {
+      static Default = Layer.effect(this, this.make)
+    }
+    
+    export class UserRepository extends ServiceMap.Service<UserRepository>()("UserRepository", {
+      make: Effect.as(Effect.andThen(DbConnection.asEffect(), Cache.asEffect()), {})
+    }) {
+      static Default = Layer.effect(this, this.make)
+    }
+    
+    export const liveWithPipeable = UserRepository.Default.pipe(
+      Layer.provide(Cache.Default),
+      Layer.provide(FileSystem.Default),
+      Layer.merge(DbConnection.Default)
+    )
+    
+    const program = Effect.gen(function*(){
+        const fs = yield* FileSystem
+        yield* Effect.addFinalizer(() => Effect.log("Finalizing file system"))
+        return fs
+    })
+    
+    program.pipe(
+        Effect.provide(liveWithPipeable),
+        Effect.scoped,
+        Effect.runPromise
+        ~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '<A, E>(effect: Effect<A, E, never>, options?: RunOptions | undefined) => Promise<A>' is not assignable to parameter of type '(_: Effect<{}, never, DbConnection | FileSystem>) => Promise<{}>'.
+        ~~~~~~~~~~~~~~~~~
+!!! error TS377004: Missing context DbConnection | FileSystem in the expected Effect type. effect(missingEffectContext)
+!!! related TS377059 /.src/missingEffectContext_sugg.ts(40,5): Adjusting this layer composition could provide the missing service. effect(missingEffectContext)
+!!! related TS377060 /.src/missingEffectContext_sugg.ts(12,20): This layer provides the missing service FileSystem. effect(missingEffectContext)
+    )

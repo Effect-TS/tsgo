@@ -50,13 +50,13 @@ var PreferSchemaOverJson = rule.Rule{
 func checkPreferSchemaOverJson(ctx *rule.Context, node *ast.Node, isV4 bool) *ast.Diagnostic {
 	// Try each pattern in order
 	if jsonNode := checkEffectTrySimple(ctx.Checker, node, isV4); jsonNode != nil {
-		return ctx.NewDiagnostic(ctx.GetErrorRange(jsonNode), tsdiag.Consider_using_Effect_Schema_for_JSON_operations_instead_of_JSON_parse_SlashJSON_stringify_effect_preferSchemaOverJson, nil)
+		return ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(jsonNode), tsdiag.Consider_using_Effect_Schema_for_JSON_operations_instead_of_JSON_parse_SlashJSON_stringify_effect_preferSchemaOverJson, nil)
 	}
 	if jsonNode := checkEffectTryObject(ctx.Checker, node); jsonNode != nil {
-		return ctx.NewDiagnostic(ctx.GetErrorRange(jsonNode), tsdiag.Consider_using_Effect_Schema_for_JSON_operations_instead_of_JSON_parse_SlashJSON_stringify_effect_preferSchemaOverJson, nil)
+		return ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(jsonNode), tsdiag.Consider_using_Effect_Schema_for_JSON_operations_instead_of_JSON_parse_SlashJSON_stringify_effect_preferSchemaOverJson, nil)
 	}
 	if jsonNode := checkJsonMethodInEffectGen(ctx.Checker, node); jsonNode != nil {
-		return ctx.NewDiagnostic(ctx.GetErrorRange(jsonNode), tsdiag.Consider_using_Effect_Schema_for_JSON_operations_instead_of_JSON_parse_SlashJSON_stringify_effect_preferSchemaOverJson, nil)
+		return ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(jsonNode), tsdiag.Consider_using_Effect_Schema_for_JSON_operations_instead_of_JSON_parse_SlashJSON_stringify_effect_preferSchemaOverJson, nil)
 	}
 	return nil
 }

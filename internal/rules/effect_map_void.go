@@ -22,7 +22,7 @@ var EffectMapVoid = rule.Rule{
 		matches := AnalyzeEffectMapVoid(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
-			diags[i] = ctx.NewDiagnostic(m.Location, tsdiag.Effect_asVoid_can_be_used_instead_to_discard_the_success_value_effect_effectMapVoid, nil)
+			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Effect_asVoid_can_be_used_instead_to_discard_the_success_value_effect_effectMapVoid, nil)
 		}
 		return diags
 	},
@@ -31,6 +31,7 @@ var EffectMapVoid = rule.Rule{
 // EffectMapVoidMatch holds the AST nodes needed by both the diagnostic rule
 // and the quick-fix for the effectMapVoid pattern.
 type EffectMapVoidMatch struct {
+	SourceFile       *ast.SourceFile // The source file where the diagnostic should be reported
 	Location         core.TextRange  // The pre-computed error range for this match
 	CallNode         *ast.Node       // The Effect.map(...) call expression (replacement target)
 	EffectModuleNode *ast.Node       // The Effect module identifier (e.g., "Effect" in Effect.map)
@@ -100,6 +101,7 @@ func AnalyzeEffectMapVoid(c *checker.Checker, sf *ast.SourceFile) []EffectMapVoi
 						if isVoidCallback(arg) {
 							propAccess := call.Expression.AsPropertyAccessExpression()
 							matches = append(matches, EffectMapVoidMatch{
+								SourceFile:       sf,
 								Location:         scanner.GetErrorRangeForNode(sf, call.Expression),
 								CallNode:         n,
 								EffectModuleNode: propAccess.Expression,

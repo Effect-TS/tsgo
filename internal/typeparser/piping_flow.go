@@ -140,10 +140,10 @@ func parseSingleArgCall(node *ast.Node) *parsedSingleArgCallResult {
 // parsedEffectFnCallResult is the internal result of parsing an Effect.fn or Effect.fnUntraced call
 // with trailing transformation arguments.
 type parsedEffectFnCallResult struct {
-	node        *ast.CallExpression // the outer call expression
-	fnBodyIndex int                 // index of the function/generator argument
-	trailingArgs []*ast.Node       // arguments after the function body
-	kind        TransformationKind  // effectFn or effectFnUntraced
+	node         *ast.CallExpression // the outer call expression
+	fnBodyIndex  int                 // index of the function/generator argument
+	trailingArgs []*ast.Node         // arguments after the function body
+	kind         TransformationKind  // effectFn or effectFnUntraced
 }
 
 // parseEffectFnCall detects Effect.fn(...), Effect.fn("name")(...), and Effect.fnUntraced(...)
@@ -340,6 +340,7 @@ func PipingFlows(c *checker.Checker, sf *ast.SourceFile, includeEffectFn bool) [
 					}
 					transformation := PipingFlowTransformation{
 						Kind:    TransformationKindCall,
+						Node:    node,
 						Callee:  singleResult.callee,
 						Args:    nil,
 						OutType: callOutType,
@@ -414,6 +415,7 @@ func buildPipeTransformations(c *checker.Checker, result *ParsedPipeCallResult) 
 		}
 
 		var callee *ast.Node
+		transformationNode := arg
 		var args []*ast.Node
 
 		if arg.Kind == ast.KindCallExpression {
@@ -429,6 +431,7 @@ func buildPipeTransformations(c *checker.Checker, result *ParsedPipeCallResult) 
 
 		transformations = append(transformations, PipingFlowTransformation{
 			Kind:    result.Kind,
+			Node:    transformationNode,
 			Callee:  callee,
 			Args:    args,
 			OutType: outType,
@@ -473,6 +476,7 @@ func buildEffectFnTransformations(c *checker.Checker, result *parsedEffectFnCall
 		}
 
 		var callee *ast.Node
+		transformationNode := arg
 		var args []*ast.Node
 
 		if arg.Kind == ast.KindCallExpression {
@@ -487,6 +491,7 @@ func buildEffectFnTransformations(c *checker.Checker, result *parsedEffectFnCall
 
 		transformations = append(transformations, PipingFlowTransformation{
 			Kind:    result.kind,
+			Node:    transformationNode,
 			Callee:  callee,
 			Args:    args,
 			OutType: outType,

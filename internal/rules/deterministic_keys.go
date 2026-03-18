@@ -26,7 +26,7 @@ var DeterministicKeys = rule.Rule{
 		matches := AnalyzeDeterministicKeys(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
-			diags[i] = ctx.NewDiagnostic(m.Location, tsdiag.Key_should_be_0_effect_deterministicKeys, nil, m.ExpectedKey)
+			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Key_should_be_0_effect_deterministicKeys, nil, m.ExpectedKey)
 		}
 		return diags
 	},
@@ -35,10 +35,11 @@ var DeterministicKeys = rule.Rule{
 // DeterministicKeyMatch holds the AST nodes and computed key info needed by both
 // the diagnostic rule and the quick-fix for the deterministicKeys pattern.
 type DeterministicKeyMatch struct {
-	Location         core.TextRange // The pre-computed error range for the key string literal
-	KeyStringLiteral *ast.Node      // The key string literal node
-	ActualKey        string         // The actual key string found in the source
-	ExpectedKey      string         // The expected key computed by keybuilder
+	SourceFile       *ast.SourceFile // The source file of the match
+	Location         core.TextRange  // The pre-computed error range for the key string literal
+	KeyStringLiteral *ast.Node       // The key string literal node
+	ActualKey        string          // The actual key string found in the source
+	ExpectedKey      string          // The expected key computed by keybuilder
 }
 
 // AnalyzeDeterministicKeys finds all class declarations where the key string literal
@@ -131,6 +132,7 @@ func checkDeterministicKeyMatch(c *checker.Checker, sf *ast.SourceFile, classNod
 	}
 
 	return &DeterministicKeyMatch{
+		SourceFile:       sf,
 		Location:         scanner.GetErrorRangeForNode(sf, match.keyStringLiteral),
 		KeyStringLiteral: match.keyStringLiteral,
 		ActualKey:        actualKey,

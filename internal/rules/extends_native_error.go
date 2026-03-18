@@ -20,13 +20,14 @@ var ExtendsNativeError = rule.Rule{
 		matches := AnalyzeExtendsNativeError(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
-			diags[i] = ctx.NewDiagnostic(m.Location, tsdiag.Avoid_extending_the_native_Error_class_directly_Consider_using_a_tagged_error_e_g_Data_TaggedError_to_maintain_type_safety_in_the_Effect_failure_channel_effect_extendsNativeError, nil)
+			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Avoid_extending_the_native_Error_class_directly_Consider_using_a_tagged_error_e_g_Data_TaggedError_to_maintain_type_safety_in_the_Effect_failure_channel_effect_extendsNativeError, nil)
 		}
 		return diags
 	},
 }
 
 type ExtendsNativeErrorMatch struct {
+	SourceFile *ast.SourceFile
 	Location core.TextRange
 }
 
@@ -99,6 +100,7 @@ func checkExtendsNativeError(c *checker.Checker, sf *ast.SourceFile, node *ast.N
 				locationNode = expr
 			}
 			return &ExtendsNativeErrorMatch{
+				SourceFile: sf,
 				Location: scanner.GetErrorRangeForNode(sf, locationNode),
 			}
 		}

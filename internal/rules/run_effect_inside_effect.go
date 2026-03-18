@@ -35,11 +35,11 @@ var RunEffectInsideEffect = rule.Rule{
 		matches := AnalyzeRunEffectInsideEffect(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, 0, len(matches))
 		for _, m := range matches {
-			calleeText := scanner.GetSourceTextOfNodeFromSourceFile(ctx.SourceFile, m.CalleeNode, false)
+			calleeText := scanner.GetSourceTextOfNodeFromSourceFile(m.SourceFile, m.CalleeNode, false)
 			if m.IsNestedScope {
-				diags = append(diags, ctx.NewDiagnostic(m.Location, tsdiag.Using_0_inside_an_Effect_is_not_recommended_The_same_runtime_should_generally_be_used_instead_to_run_child_effects_Consider_extracting_the_Runtime_by_using_for_example_Effect_runtime_and_then_use_Runtime_1_with_the_extracted_runtime_instead_effect_runEffectInsideEffect, nil, calleeText, m.MethodName))
+				diags = append(diags, ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Using_0_inside_an_Effect_is_not_recommended_The_same_runtime_should_generally_be_used_instead_to_run_child_effects_Consider_extracting_the_Runtime_by_using_for_example_Effect_runtime_and_then_use_Runtime_1_with_the_extracted_runtime_instead_effect_runEffectInsideEffect, nil, calleeText, m.MethodName))
 			} else {
-				diags = append(diags, ctx.NewDiagnostic(m.Location, tsdiag.Using_0_inside_an_Effect_is_not_recommended_Effects_inside_generators_can_usually_just_be_yielded_effect_runEffectInsideEffect, nil, calleeText))
+				diags = append(diags, ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Using_0_inside_an_Effect_is_not_recommended_Effects_inside_generators_can_usually_just_be_yielded_effect_runEffectInsideEffect, nil, calleeText))
 			}
 		}
 		return diags
@@ -49,6 +49,7 @@ var RunEffectInsideEffect = rule.Rule{
 // RunEffectInsideEffectMatch holds the diagnostic and AST nodes needed by both the
 // diagnostic rule and the quick-fix for the runEffectInsideEffect pattern.
 type RunEffectInsideEffectMatch struct {
+	SourceFile        *ast.SourceFile        // The source file where this match was found
 	Location          core.TextRange          // Pre-computed error range (on the callee expression)
 	CallNode          *ast.Node               // The full call expression node (e.g., Effect.runPromise(check))
 	CalleeNode        *ast.Node               // The callee expression (e.g., Effect.runPromise)
@@ -125,6 +126,7 @@ func analyzeRunEffectInsideEffectNode(c *checker.Checker, sf *ast.SourceFile, no
 	isNestedScope := scopes.ScopeNode != nil && scopes.ScopeNode != genFn.AsNode()
 
 	return RunEffectInsideEffectMatch{
+		SourceFile:        sf,
 		Location:          scanner.GetErrorRangeForNode(sf, callee),
 		CallNode:          node,
 		CalleeNode:        callee,

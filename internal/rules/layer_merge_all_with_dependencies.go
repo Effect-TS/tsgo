@@ -26,7 +26,7 @@ var LayerMergeAllWithDependencies = rule.Rule{
 		matches := AnalyzeLayerMergeAllWithDependencies(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
-			diags[i] = ctx.NewDiagnostic(m.Location, tsdiag.This_layer_provides_0_which_is_required_by_another_layer_in_the_same_Layer_mergeAll_call_Layer_mergeAll_creates_layers_in_parallel_so_dependencies_between_layers_will_not_be_satisfied_Consider_moving_this_layer_into_a_Layer_provideMerge_after_the_Layer_mergeAll_effect_layerMergeAllWithDependencies, nil, m.ProvidedTypes)
+			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.This_layer_provides_0_which_is_required_by_another_layer_in_the_same_Layer_mergeAll_call_Layer_mergeAll_creates_layers_in_parallel_so_dependencies_between_layers_will_not_be_satisfied_Consider_moving_this_layer_into_a_Layer_provideMerge_after_the_Layer_mergeAll_effect_layerMergeAllWithDependencies, nil, m.ProvidedTypes)
 		}
 		return diags
 	},
@@ -35,6 +35,7 @@ var LayerMergeAllWithDependencies = rule.Rule{
 // LayerMergeAllWithDependenciesMatch holds the AST nodes needed by both the
 // diagnostic rule and the quick-fix for the layerMergeAllWithDependencies pattern.
 type LayerMergeAllWithDependenciesMatch struct {
+	SourceFile      *ast.SourceFile
 	Location        core.TextRange // The error range on the provider argument
 	CallNode        *ast.Node      // The full Layer.mergeAll(...) call expression node
 	ProviderArg     *ast.Node      // The specific argument node that is the dependency provider
@@ -179,6 +180,7 @@ func analyzeLayerMergeAllCall(c *checker.Checker, sf *ast.SourceFile, node *ast.
 		}
 
 		matches = append(matches, LayerMergeAllWithDependenciesMatch{
+			SourceFile:      sf,
 			Location:        scanner.GetErrorRangeForNode(sf, arg),
 			CallNode:        node,
 			ProviderArg:     arg,

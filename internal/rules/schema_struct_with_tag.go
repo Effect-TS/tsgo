@@ -23,7 +23,7 @@ var SchemaStructWithTag = rule.Rule{
 		matches := AnalyzeSchemaStructWithTag(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
-			diags[i] = ctx.NewDiagnostic(m.Location, tsdiag.Schema_Struct_with_a_tag_field_can_be_simplified_to_Schema_TaggedStruct_to_make_the_tag_optional_in_the_constructor_effect_schemaStructWithTag, nil)
+			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Schema_Struct_with_a_tag_field_can_be_simplified_to_Schema_TaggedStruct_to_make_the_tag_optional_in_the_constructor_effect_schemaStructWithTag, nil)
 		}
 		return diags
 	},
@@ -32,6 +32,7 @@ var SchemaStructWithTag = rule.Rule{
 // SchemaStructWithTagMatch holds the AST nodes needed by both the diagnostic rule
 // and the quick-fix for the schemaStructWithTag pattern.
 type SchemaStructWithTagMatch struct {
+	SourceFile      *ast.SourceFile
 	Location        core.TextRange // Pre-computed error range for the diagnostic
 	CallNode        *ast.Node      // The full Schema.Struct(...) call expression
 	TagValue        string         // The string value extracted from Schema.Literal("...")
@@ -146,6 +147,7 @@ func analyzeSchemaStructWithTagNode(c *checker.Checker, sf *ast.SourceFile, node
 		}
 
 		return SchemaStructWithTagMatch{
+			SourceFile:      sf,
 			Location:        scanner.GetErrorRangeForNode(sf, node),
 			CallNode:        node,
 			TagValue:        tagValue,

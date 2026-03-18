@@ -14,15 +14,15 @@ import (
 
 // CatchAllToMapError suggests using Effect.mapError instead of Effect.catch + Effect.fail.
 var CatchAllToMapError = rule.Rule{
-	Name:        "catchAllToMapError",
+	Name:            "catchAllToMapError",
 	Description:     "Suggests using Effect.mapError instead of Effect.catch + Effect.fail",
 	DefaultSeverity: etscore.SeveritySuggestion,
-	Codes:       []int32{tsdiag.You_can_use_Effect_mapError_instead_of_Effect_catch_Effect_fail_to_transform_the_error_type_effect_catchAllToMapError.Code()},
+	Codes:           []int32{tsdiag.You_can_use_Effect_mapError_instead_of_Effect_catch_Effect_fail_to_transform_the_error_type_effect_catchAllToMapError.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeCatchAllToMapError(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
-			diags[i] = ctx.NewDiagnostic(m.Location, tsdiag.You_can_use_Effect_mapError_instead_of_Effect_catch_Effect_fail_to_transform_the_error_type_effect_catchAllToMapError, nil)
+			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.You_can_use_Effect_mapError_instead_of_Effect_catch_Effect_fail_to_transform_the_error_type_effect_catchAllToMapError, nil)
 		}
 		return diags
 	},
@@ -31,6 +31,7 @@ var CatchAllToMapError = rule.Rule{
 // CatchAllToMapErrorMatch holds the AST nodes needed by both the diagnostic rule
 // and the quick-fix for the catchAllToMapError pattern.
 type CatchAllToMapErrorMatch struct {
+	SourceFile         *ast.SourceFile // The source file of the match
 	Location           core.TextRange  // The pre-computed error range for this match
 	Callee             *ast.Node       // The Effect.catch callee node (for diagnostic location)
 	CalleeNameNode     *ast.Node       // The "catch" name node within the PropertyAccessExpression (for text replacement)
@@ -88,6 +89,7 @@ func AnalyzeCatchAllToMapError(c *checker.Checker, sf *ast.SourceFile) []CatchAl
 			}
 
 			matches = append(matches, CatchAllToMapErrorMatch{
+				SourceFile:         sf,
 				Location:           scanner.GetErrorRangeForNode(sf, transformation.Callee),
 				Callee:             transformation.Callee,
 				CalleeNameNode:     calleeNameNode,

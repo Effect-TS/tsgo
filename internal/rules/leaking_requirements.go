@@ -109,7 +109,7 @@ var LeakingRequirements = rule.Rule{
 					}
 					formatted := strings.Join(typeNames, " | ")
 
-					diags = append(diags, ctx.NewDiagnostic(ctx.GetErrorRange(ttc.reportNode), tsdiag.Methods_of_this_Service_require_0_from_every_caller_This_leaks_implementation_details_resolve_these_dependencies_at_Layer_creation_time_effect_leakingRequirements, nil, formatted))
+					diags = append(diags, ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(ttc.reportNode), tsdiag.Methods_of_this_Service_require_0_from_every_caller_This_leaks_implementation_details_resolve_these_dependencies_at_Layer_creation_time_effect_leakingRequirements, nil, formatted))
 				} else {
 					matched = true
 				}

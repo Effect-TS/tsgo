@@ -57,6 +57,7 @@ var NodeBuiltinImport = rule.Rule{
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
 			diags[i] = ctx.NewDiagnostic(
+				m.SourceFile,
 				m.Location,
 				tsdiag.Prefer_using_0_from_1_instead_of_the_Node_js_2_module_effect_nodeBuiltinImport,
 				nil,
@@ -70,6 +71,7 @@ var NodeBuiltinImport = rule.Rule{
 }
 
 type NodeBuiltinImportMatch struct {
+	SourceFile  *ast.SourceFile
 	Location    core.TextRange
 	Alternative string
 	Package     string
@@ -94,6 +96,7 @@ func AnalyzeNodeBuiltinImport(c *checker.Checker, sf *ast.SourceFile) []NodeBuil
 			specifier := importDecl.ModuleSpecifier.AsStringLiteral().Text
 			if alt, ok := alternatives[specifier]; ok {
 				matches = append(matches, NodeBuiltinImportMatch{
+					SourceFile:  sf,
 					Location:    scanner.GetErrorRangeForNode(sf, importDecl.ModuleSpecifier),
 					Alternative: alt.Alternative,
 					Package:     alt.Package,
@@ -132,6 +135,7 @@ func AnalyzeNodeBuiltinImport(c *checker.Checker, sf *ast.SourceFile) []NodeBuil
 				specifier := arg.AsStringLiteral().Text
 				if alt, ok := alternatives[specifier]; ok {
 					matches = append(matches, NodeBuiltinImportMatch{
+						SourceFile:  sf,
 						Location:    scanner.GetErrorRangeForNode(sf, arg),
 						Alternative: alt.Alternative,
 						Package:     alt.Package,

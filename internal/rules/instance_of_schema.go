@@ -23,7 +23,7 @@ var InstanceOfSchema = rule.Rule{
 		matches := AnalyzeInstanceOfSchema(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
-			diags[i] = ctx.NewDiagnostic(m.Location, tsdiag.Consider_using_Schema_is_instead_of_instanceof_for_Effect_Schema_types_effect_instanceOfSchema, nil)
+			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Consider_using_Schema_is_instead_of_instanceof_for_Effect_Schema_types_effect_instanceOfSchema, nil)
 		}
 		return diags
 	},
@@ -32,6 +32,7 @@ var InstanceOfSchema = rule.Rule{
 // InstanceOfSchemaMatch holds the AST nodes needed by both the diagnostic rule
 // and the quick-fix for the instanceOfSchema pattern.
 type InstanceOfSchemaMatch struct {
+	SourceFile     *ast.SourceFile
 	Location       core.TextRange // The pre-computed error range for this match
 	InstanceOfNode *ast.Node      // The full BinaryExpression node (the instanceof expression)
 	LeftExpr       *ast.Node      // Left operand of instanceof (the value being tested)
@@ -61,6 +62,7 @@ func AnalyzeInstanceOfSchema(c *checker.Checker, sf *ast.SourceFile) []InstanceO
 			rightType := checkerutils.GetTypeAtLocation(c, rightExpr)
 			if rightType != nil && typeparser.IsSchemaType(c, rightType, rightExpr) {
 				matches = append(matches, InstanceOfSchemaMatch{
+					SourceFile:     sf,
 					Location:       scanner.GetErrorRangeForNode(sf, node),
 					InstanceOfNode: node,
 					LeftExpr:       binExpr.Left,

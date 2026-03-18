@@ -174,7 +174,7 @@ func checkServiceDependencies(ctx *rule.Context, node *ast.Node) []*ast.Diagnost
 
 	if len(missingTypeNames) == 1 {
 		// Singular
-		diag := ctx.NewDiagnostic(ctx.GetErrorRange(className), tsdiag.Service_0_is_required_but_not_provided_by_dependencies_effect_missingEffectServiceDependency, nil, missingTypeNames[0])
+		diag := ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(className), tsdiag.Service_0_is_required_but_not_provided_by_dependencies_effect_missingEffectServiceDependency, nil, missingTypeNames[0])
 		return []*ast.Diagnostic{diag}
 	}
 
@@ -184,6 +184,6 @@ func checkServiceDependencies(ctx *rule.Context, node *ast.Node) []*ast.Diagnost
 		quotedNames = append(quotedNames, fmt.Sprintf("'%s'", name))
 	}
 	formatted := strings.Join(quotedNames, ", ")
-	diag := ctx.NewDiagnostic(ctx.GetErrorRange(className), tsdiag.Services_0_are_required_but_not_provided_by_dependencies_effect_missingEffectServiceDependency, nil, formatted)
+	diag := ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(className), tsdiag.Services_0_are_required_but_not_provided_by_dependencies_effect_missingEffectServiceDependency, nil, formatted)
 	return []*ast.Diagnostic{diag}
 }

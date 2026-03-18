@@ -23,7 +23,7 @@ var UnnecessaryFailYieldableError = rule.Rule{
 		matches := AnalyzeUnnecessaryFailYieldableError(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
-			diags[i] = ctx.NewDiagnostic(m.Location, tsdiag.This_Effect_fail_call_uses_a_yieldable_error_type_as_argument_You_can_yield_Asterisk_the_error_directly_instead_effect_unnecessaryFailYieldableError, nil)
+			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.This_Effect_fail_call_uses_a_yieldable_error_type_as_argument_You_can_yield_Asterisk_the_error_directly_instead_effect_unnecessaryFailYieldableError, nil)
 		}
 		return diags
 	},
@@ -32,6 +32,7 @@ var UnnecessaryFailYieldableError = rule.Rule{
 // UnnecessaryFailYieldableErrorMatch holds the AST nodes needed by both the
 // diagnostic rule and the quick-fix for the unnecessaryFailYieldableError pattern.
 type UnnecessaryFailYieldableErrorMatch struct {
+	SourceFile   *ast.SourceFile // The source file where this match was found
 	Location     core.TextRange  // The pre-computed error range for this match
 	YieldNode    *ast.Node       // The yield* expression node
 	CallNode     *ast.Node       // The Effect.fail(...) call expression (fix replaces this)
@@ -61,6 +62,7 @@ func AnalyzeUnnecessaryFailYieldableError(c *checker.Checker, sf *ast.SourceFile
 							argType := checkerutils.GetTypeAtLocation(c, arg)
 							if argType != nil && typeparser.IsYieldableErrorType(c, argType) {
 								matches = append(matches, UnnecessaryFailYieldableErrorMatch{
+									SourceFile:   sf,
 									Location:     scanner.GetErrorRangeForNode(sf, n),
 									YieldNode:    n,
 									CallNode:     yield.Expression,

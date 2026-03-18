@@ -113,7 +113,7 @@ var StrictBooleanExpressions = rule.Rule{
 
 					// Report the error
 					typeName := ctx.Checker.TypeToString(t)
-					diags = append(diags, ctx.NewDiagnostic(ctx.GetErrorRange(nodeToCheck), tsdiag.Unexpected_0_type_in_condition_expected_strictly_a_boolean_instead_effect_strictBooleanExpressions, nil, typeName))
+					diags = append(diags, ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(nodeToCheck), tsdiag.Unexpected_0_type_in_condition_expected_strictly_a_boolean_instead_effect_strictBooleanExpressions, nil, typeName))
 				}
 			}
 		}

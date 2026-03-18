@@ -36,13 +36,13 @@ func (ctx *Context) GetErrorRange(node *ast.Node) core.TextRange {
 // NewDiagnostic creates a diagnostic using the context's source file and default severity.
 // The loc is the pre-computed error range, message provides the diagnostic code and key,
 // relatedInformation can be nil, and args are variadic message format arguments.
-func (ctx *Context) NewDiagnostic(loc core.TextRange, message *diagnostics.Message, relatedInformation []*ast.Diagnostic, args ...string) *ast.Diagnostic {
+func (ctx *Context) NewDiagnostic(sf *ast.SourceFile, loc core.TextRange, message *diagnostics.Message, relatedInformation []*ast.Diagnostic, args ...string) *ast.Diagnostic {
 	var messageArgs []string
 	if len(args) > 0 {
 		messageArgs = args
 	}
 	return ast.NewDiagnosticFromSerialized(
-		ctx.SourceFile,
+		sf,
 		loc,
 		message.Code(),
 		directives.ToCategory(ctx.defaultSeverity),

@@ -24,7 +24,7 @@ var MultipleEffectProvide = rule.Rule{
 		matches := AnalyzeMultipleEffectProvide(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
-			diags[i] = ctx.NewDiagnostic(m.Location, tsdiag.Avoid_chaining_Effect_provide_calls_as_this_can_lead_to_service_lifecycle_issues_Instead_merge_layers_and_provide_them_in_a_single_call_effect_multipleEffectProvide, nil)
+			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Avoid_chaining_Effect_provide_calls_as_this_can_lead_to_service_lifecycle_issues_Instead_merge_layers_and_provide_them_in_a_single_call_effect_multipleEffectProvide, nil)
 		}
 		return diags
 	},
@@ -33,6 +33,7 @@ var MultipleEffectProvide = rule.Rule{
 // MultipleEffectProvideMatch holds the AST nodes needed by both the
 // diagnostic rule and the quick-fix for the multipleEffectProvide pattern.
 type MultipleEffectProvideMatch struct {
+	SourceFile       *ast.SourceFile // The source file where the diagnostic should be reported
 	Location         core.TextRange // The diagnostic span (error range on the first call in the chunk)
 	Chunk            []*ast.Node    // The list of call expression nodes in the consecutive provide chain (2+ elements)
 	LayerArgs        []*ast.Node    // The layer argument nodes from each Effect.provide(layer) call
@@ -54,6 +55,7 @@ func AnalyzeMultipleEffectProvide(c *checker.Checker, sf *ast.SourceFile) []Mult
 		finalizeChunk := func() {
 			if len(currentChunk) >= 2 {
 				matches = append(matches, MultipleEffectProvideMatch{
+					SourceFile:       sf,
 					Location:         scanner.GetErrorRangeForNode(sf, currentChunk[0]),
 					Chunk:            currentChunk,
 					LayerArgs:        currentLayerArgs,

@@ -21,7 +21,7 @@ var OverriddenSchemaConstructor = rule.Rule{
 		matches := AnalyzeOverriddenSchemaConstructor(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
-			diags[i] = ctx.NewDiagnostic(m.Location, tsdiag.Classes_extending_Schema_must_not_override_the_constructor_this_is_because_it_silently_breaks_the_schema_decoding_behaviour_If_that_s_needed_we_recommend_instead_to_use_a_static_new_method_that_constructs_the_instance_effect_overriddenSchemaConstructor, nil)
+			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Classes_extending_Schema_must_not_override_the_constructor_this_is_because_it_silently_breaks_the_schema_decoding_behaviour_If_that_s_needed_we_recommend_instead_to_use_a_static_new_method_that_constructs_the_instance_effect_overriddenSchemaConstructor, nil)
 		}
 		return diags
 	},
@@ -30,6 +30,7 @@ var OverriddenSchemaConstructor = rule.Rule{
 // OverriddenSchemaConstructorMatch holds the AST nodes needed by both the diagnostic rule
 // and the quick-fixes for the overriddenSchemaConstructor pattern.
 type OverriddenSchemaConstructorMatch struct {
+	SourceFile      *ast.SourceFile
 	Location        core.TextRange // The error range for the constructor node
 	ConstructorNode *ast.Node      // The constructor declaration AST node
 	HasBody         bool           // Whether the constructor has a body (the static fix is only available when true)
@@ -102,6 +103,7 @@ func checkOverriddenSchemaConstructor(c *checker.Checker, sf *ast.SourceFile, no
 			ctor := member.AsConstructorDeclaration()
 			hasBody := ctor.Body != nil && ctor.Body.Kind == ast.KindBlock
 			return &OverriddenSchemaConstructorMatch{
+				SourceFile:      sf,
 				Location:        scanner.GetErrorRangeForNode(sf, member),
 				ConstructorNode: member,
 				HasBody:         hasBody,

@@ -226,5 +226,13 @@
     "Effect-able {0} must be yielded or assigned to a variable. effect(floatingEffect)": {
         "category": "Error",
         "code": 377058
+    },
+    "Adjusting this layer composition could provide the missing service. effect(missingEffectContext)": {
+        "category": "Error",
+        "code": 377059
+    },
+    "This layer provides the missing service {0}. effect(missingEffectContext)": {
+        "category": "Error",
+        "code": 377060
     }
 }

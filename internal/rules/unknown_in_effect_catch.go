@@ -96,7 +96,7 @@ func checkUnknownInEffectCatch(ctx *rule.Context, node *ast.Node) *ast.Diagnosti
 
 		if returnType.Flags()&(checker.TypeFlagsUnknown|checker.TypeFlagsAny) != 0 {
 			calleeText := scanner.GetSourceTextOfNodeFromSourceFile(ctx.SourceFile, callee, false)
-			return ctx.NewDiagnostic(ctx.GetErrorRange(callee), tsdiag.The_catch_callback_in_0_returns_unknown_The_catch_callback_should_be_used_to_provide_typed_errors_Consider_wrapping_unknown_errors_into_Effect_s_Data_TaggedError_for_example_or_narrow_down_the_type_to_the_specific_error_raised_effect_unknownInEffectCatch, nil, calleeText)
+			return ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(callee), tsdiag.The_catch_callback_in_0_returns_unknown_The_catch_callback_should_be_used_to_provide_typed_errors_Consider_wrapping_unknown_errors_into_Effect_s_Data_TaggedError_for_example_or_narrow_down_the_type_to_the_specific_error_raised_effect_unknownInEffectCatch, nil, calleeText)
 		}
 	}
 

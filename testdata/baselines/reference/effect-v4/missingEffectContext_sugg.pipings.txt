@@ -1,0 +1,115 @@
+==== /.src/missingEffectContext_sugg.ts (7 flows) ====
+
+=== Piping Flow ===
+Location: 4:8 - 4:27
+Node: Effect.succeed({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{}, never, never>
+
+=== Piping Flow ===
+Location: 10:8 - 10:27
+Node: Effect.succeed({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{}, never, never>
+
+=== Piping Flow ===
+Location: 27:32 - 31:2
+Node: UserRepository.Default.pipe(\n  Layer.provide(Cache.Default),\n  Layer.provide(FileSystem.Default),\n  Layer.merge(DbConnection.Default)\n)
+Node Kind: KindCallExpression
+
+Subject: UserRepository.Default
+Subject Type: Layer<UserRepository, never, Cache | DbConnection>
+
+Transformations (3):
+  [0] kind: pipeable
+      callee: Layer.provide
+      args: [Cache.Default]
+      outType: Layer<UserRepository, never, DbConnection | FileSystem>
+  [1] kind: pipeable
+      callee: Layer.provide
+      args: [FileSystem.Default]
+      outType: Layer<UserRepository, never, DbConnection>
+  [2] kind: pipeable
+      callee: Layer.merge
+      args: [DbConnection.Default]
+      outType: Layer<DbConnection | UserRepository, never, DbConnection>
+
+=== Piping Flow ===
+Location: 33:16 - 37:3
+Node: Effect.gen(function*(){\n    const fs = yield* FileSystem\n    yield* Effect.addFinalizer(() => Effect.log("Finalizing file system"))\n    return fs\n})
+Node Kind: KindCallExpression
+
+Subject: function*(){\n    const fs = yield* FileSystem\n    yield* Effect.addFinalizer(() => Effect.log("Finalizing file system"))\n    return fs\n}
+Subject Type: () => Generator<Effect<void, never, Scope> | Service<FileSystem, {}>, {}, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<{}, never, FileSystem | Scope>
+
+=== Piping Flow ===
+Location: 35:11 - 35:75
+Node: Effect.addFinalizer(() => Effect.log("Finalizing file system"))
+Node Kind: KindCallExpression
+
+Subject: () => Effect.log("Finalizing file system")
+Subject Type: () => Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.addFinalizer
+      args: (constant)
+      outType: Effect<void, never, Scope>
+
+=== Piping Flow ===
+Location: 35:37 - 35:74
+Node: Effect.log("Finalizing file system")
+Node Kind: KindCallExpression
+
+Subject: "Finalizing file system"
+Subject Type: "Finalizing file system"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 37:3 - 43:2
+Node: program.pipe(\n    Effect.provide(liveWithPipeable),\n    Effect.scoped,\n    Effect.runPromise\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<{}, never, FileSystem | Scope>
+
+Transformations (3):
+  [0] kind: pipeable
+      callee: Effect.provide
+      args: [liveWithPipeable]
+      outType: never
+  [1] kind: pipeable
+      callee: Effect.scoped
+      args: (constant)
+      outType: never
+  [2] kind: pipeable
+      callee: Effect.runPromise
+      args: (constant)
+      outType: never

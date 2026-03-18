@@ -42,7 +42,7 @@ var MissingLayerContext = rule.Rule{
 					return ctx.Checker.TypeToString(unhandled[i]) < ctx.Checker.TypeToString(unhandled[j])
 				})
 				contextTypeStr := formatLayerContextTypes(ctx.Checker, unhandled)
-				diag := ctx.NewDiagnostic(ctx.GetErrorRange(re.ErrorNode), tsdiag.Missing_0_in_the_expected_Layer_context_effect_missingLayerContext, nil, contextTypeStr)
+				diag := ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(re.ErrorNode), tsdiag.Missing_0_in_the_expected_Layer_context_effect_missingLayerContext, nil, contextTypeStr)
 				diags = append(diags, diag)
 			}
 		}
