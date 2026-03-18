@@ -37,7 +37,9 @@ exports[`Setup CLI > should add LSP plugin alongside existing plugins > tsconfig
       {
         "name": "typescript-plugin-css-modules"
       },
-{ "name": "@effect/language-service" }
+{
+	"name": "@effect/language-service"
+}
     ]
   },
 "$schema": "https://raw.githubusercontent.com/Effect-TS/tsgo/refs/heads/main/schema.json"
@@ -46,7 +48,8 @@ exports[`Setup CLI > should add LSP plugin alongside existing plugins > tsconfig
 
 exports[`Setup CLI > should add LSP with VS Code editor selected and create new settings file > .vscode/settings.json 1`] = `
 "{
-  "typescript.native-preview.tsdk": "node_modules/@typescript/native-preview"
+  "typescript.native-preview.tsdk": "node_modules/@typescript/native-preview",
+  "typescript.experimental.useTsgo": true
 }
 "
 `;
@@ -95,8 +98,91 @@ exports[`Setup CLI > should add LSP with VS Code editor selected and create new 
     "strict": true,
     "target": "ES2022",
 "plugins": [
-	{ "name": "@effect/language-service" }
+	{
+		"name": "@effect/language-service"
+	}
 ]
+  },
+"$schema": "https://raw.githubusercontent.com/Effect-TS/tsgo/refs/heads/main/schema.json"
+}"
+`;
+
+exports[`Setup CLI > should add LSP with custom diagnostic severities when no plugin exists > change summary 1`] = `
+[
+  {
+    "description": "Add @effect/tsgo@^0.0.5 to devDependencies",
+    "file": "package.json",
+  },
+  {
+    "description": "Add $schema to tsconfig; Add plugins array with @effect/language-service plugin",
+    "file": "tsconfig.json",
+  },
+]
+`;
+
+exports[`Setup CLI > should add LSP with custom diagnostic severities when no plugin exists > messages 1`] = `
+[
+  "Run \`effect-tsgo patch\` to complete the installation.",
+]
+`;
+
+exports[`Setup CLI > should add LSP with custom diagnostic severities when no plugin exists > package.json 1`] = `
+"{
+  "name": "test-project",
+  "version": "1.0.0",
+  "dependencies": {},
+"devDependencies": { "@effect/tsgo": "^0.0.5" }
+}"
+`;
+
+exports[`Setup CLI > should add LSP with custom diagnostic severities when no plugin exists > tsconfig.json 1`] = `
+"{
+  "compilerOptions": {
+    "strict": true,
+    "target": "ES2022",
+"plugins": [
+	{
+		"name": "@effect/language-service",
+		"diagnosticSeverity": {
+			"floatingEffect": "warning",
+			"missingEffectError": "off"
+		}
+	}
+]
+  },
+"$schema": "https://raw.githubusercontent.com/Effect-TS/tsgo/refs/heads/main/schema.json"
+}"
+`;
+
+exports[`Setup CLI > should add custom diagnostic severities when plugin exists without custom values > change summary 1`] = `
+[
+  {
+    "description": "Add $schema to tsconfig; Add diagnosticSeverity to @effect/language-service plugin",
+    "file": "tsconfig.json",
+  },
+]
+`;
+
+exports[`Setup CLI > should add custom diagnostic severities when plugin exists without custom values > messages 1`] = `
+[
+  "Run \`effect-tsgo patch\` to complete the installation.",
+]
+`;
+
+exports[`Setup CLI > should add custom diagnostic severities when plugin exists without custom values > tsconfig.json 1`] = `
+"{
+  "compilerOptions": {
+    "strict": true,
+    "target": "ES2022",
+    "plugins": [
+      {
+        "name": "@effect/language-service",
+"diagnosticSeverity": {
+	"floatingEffect": "warning",
+	"missingEffectContext": "message"
+}
+      }
+    ]
   },
 "$schema": "https://raw.githubusercontent.com/Effect-TS/tsgo/refs/heads/main/schema.json"
 }"
@@ -136,7 +222,9 @@ exports[`Setup CLI > should generate changes for adding LSP with defaults > tsco
     "strict": true,
     "target": "ES2022",
 "plugins": [
-	{ "name": "@effect/language-service" }
+	{
+		"name": "@effect/language-service"
+	}
 ]
   },
 "$schema": "https://raw.githubusercontent.com/Effect-TS/tsgo/refs/heads/main/schema.json"
@@ -178,7 +266,9 @@ exports[`Setup CLI > should generate changes for adding LSP with prepare script 
     "strict": true,
     "target": "ES2022",
 "plugins": [
-	{ "name": "@effect/language-service" }
+	{
+		"name": "@effect/language-service"
+	}
 ]
   },
 "$schema": "https://raw.githubusercontent.com/Effect-TS/tsgo/refs/heads/main/schema.json"
@@ -311,7 +401,9 @@ exports[`Setup CLI > should not override existing plugins when adding LSP plugin
       {
         "name": "another-typescript-plugin"
       },
-{ "name": "@effect/language-service" }
+{
+	"name": "@effect/language-service"
+}
     ]
   },
 "$schema": "https://raw.githubusercontent.com/Effect-TS/tsgo/refs/heads/main/schema.json"
@@ -335,6 +427,7 @@ exports[`Setup CLI > should preserve all existing VS Code settings from a real r
   "editor.wordBasedSuggestions": "matchingDocuments",
   "editor.parameterHints.enabled": true,
   "files.insertFinalNewline": true,
+"typescript.experimental.useTsgo": true,
 "typescript.native-preview.tsdk": "node_modules/@typescript/native-preview"
 }"
 `;
@@ -350,7 +443,7 @@ exports[`Setup CLI > should preserve all existing VS Code settings from a real r
     "file": "tsconfig.json",
   },
   {
-    "description": "Add typescript.native-preview.tsdk setting",
+    "description": "Add typescript.native-preview.tsdk setting; Add typescript.experimental.useTsgo setting",
     "file": ".vscode/settings.json",
   },
 ]
@@ -383,7 +476,9 @@ exports[`Setup CLI > should preserve all existing VS Code settings from a real r
     "strict": true,
     "target": "ES2022",
 "plugins": [
-	{ "name": "@effect/language-service" }
+	{
+		"name": "@effect/language-service"
+	}
 ]
   },
 "$schema": "https://raw.githubusercontent.com/Effect-TS/tsgo/refs/heads/main/schema.json"
@@ -395,6 +490,7 @@ exports[`Setup CLI > should preserve existing VS Code settings when adding LSP-s
   "editor.formatOnSave": true,
   "editor.tabSize": 2,
   "files.autoSave": "onFocusChange",
+"typescript.experimental.useTsgo": true,
 "typescript.native-preview.tsdk": "node_modules/@typescript/native-preview"
 }"
 `;
@@ -410,7 +506,7 @@ exports[`Setup CLI > should preserve existing VS Code settings when adding LSP-s
     "file": "tsconfig.json",
   },
   {
-    "description": "Add typescript.native-preview.tsdk setting",
+    "description": "Add typescript.native-preview.tsdk setting; Add typescript.experimental.useTsgo setting",
     "file": ".vscode/settings.json",
   },
 ]
@@ -443,7 +539,9 @@ exports[`Setup CLI > should preserve existing VS Code settings when adding LSP-s
     "strict": true,
     "target": "ES2022",
 "plugins": [
-	{ "name": "@effect/language-service" }
+	{
+		"name": "@effect/language-service"
+	}
 ]
   },
 "$schema": "https://raw.githubusercontent.com/Effect-TS/tsgo/refs/heads/main/schema.json"
@@ -574,7 +672,9 @@ exports[`Setup CLI > should replace existing tsconfig schema when adding LSP > t
     "strict": true,
     "target": "ES2022",
 "plugins": [
-	{ "name": "@effect/language-service" }
+	{
+		"name": "@effect/language-service"
+	}
 ]
   }
 }"
@@ -619,6 +719,41 @@ exports[`Setup CLI > should update LSP version when already installed with older
     "plugins": [
       {
         "name": "@effect/language-service"
+      }
+    ]
+  },
+"$schema": "https://raw.githubusercontent.com/Effect-TS/tsgo/refs/heads/main/schema.json"
+}"
+`;
+
+exports[`Setup CLI > should update custom diagnostic severities when plugin already has custom values > change summary 1`] = `
+[
+  {
+    "description": "Add $schema to tsconfig; Update diagnosticSeverity in @effect/language-service plugin",
+    "file": "tsconfig.json",
+  },
+]
+`;
+
+exports[`Setup CLI > should update custom diagnostic severities when plugin already has custom values > messages 1`] = `
+[
+  "Run \`effect-tsgo patch\` to complete the installation.",
+]
+`;
+
+exports[`Setup CLI > should update custom diagnostic severities when plugin already has custom values > tsconfig.json 1`] = `
+"{
+  "compilerOptions": {
+    "strict": true,
+    "target": "ES2022",
+    "plugins": [
+      {
+        "name": "@effect/language-service",
+        "diagnosticSeverity": {
+					"floatingEffect": "warning",
+					"missingEffectError": "off",
+					"missingLayerContext": "error"
+				}
       }
     ]
   },

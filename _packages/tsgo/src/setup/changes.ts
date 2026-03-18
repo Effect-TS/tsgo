@@ -3,6 +3,7 @@ import * as Option from "effect/Option"
 import * as ts from "typescript"
 import type { Assessment, SetupCodeAction, Target } from "./types.js"
 import { LSP_PACKAGE_NAME, LSP_PLUGIN_NAME, PATCH_COMMAND, TSCONFIG_SCHEMA_URL } from "./consts.js"
+import type { RuleSeverity } from "./rule-info.js"
 
 interface ComputeFileChangesResult {
   readonly codeActions: ReadonlyArray<SetupCodeAction>
@@ -91,6 +92,39 @@ function insertNodeAtEndOfList<T extends ts.Node>(
     const lastElement = nodeArray[nodeArray.length - 1]
     tracker.insertNodeAt(sourceFile, lastElement.end, newNode, { prefix: ",\n" })
   }
+}
+
+function createDiagnosticSeverityObject(
+  severities: Record<string, RuleSeverity>
+): ts.ObjectLiteralExpression {
+  const entries = Object.entries(severities).sort(([a], [b]) => a.localeCompare(b))
+  return ts.factory.createObjectLiteralExpression(
+    entries.map(([name, severity]) =>
+      ts.factory.createPropertyAssignment(
+        ts.factory.createStringLiteral(name),
+        ts.factory.createStringLiteral(severity)
+      )
+    ),
+    true
+  )
+}
+
+function createLspPluginObject(target: Target.TsConfig): ts.ObjectLiteralExpression {
+  const properties: Array<ts.PropertyAssignment> = [
+    ts.factory.createPropertyAssignment(
+      ts.factory.createStringLiteral("name"),
+      ts.factory.createStringLiteral(LSP_PLUGIN_NAME)
+    )
+  ]
+  if (Option.isSome(target.diagnosticSeverities)) {
+    properties.push(
+      ts.factory.createPropertyAssignment(
+        ts.factory.createStringLiteral("diagnosticSeverity"),
+        createDiagnosticSeverityObject(target.diagnosticSeverities.value)
+      )
+    )
+  }
+  return ts.factory.createObjectLiteralExpression(properties, true)
 }
 
 /**
@@ -414,12 +448,7 @@ const computeTsConfigChanges = (
           tracker.replaceNode(current.sourceFile, schemaProperty.initializer, schemaPropertyAssignment.initializer)
         }
 
-        const pluginObject = ts.factory.createObjectLiteralExpression([
-          ts.factory.createPropertyAssignment(
-            ts.factory.createStringLiteral("name"),
-            ts.factory.createStringLiteral(LSP_PLUGIN_NAME)
-          )
-        ], false)
+        const pluginObject = createLspPluginObject(target)
 
         if (!pluginsProperty) {
           descriptions.push(`Add plugins array with ${LSP_PLUGIN_NAME} plugin`)
@@ -445,6 +474,24 @@ const computeTsConfigChanges = (
           if (!lspPluginElement) {
             descriptions.push(`Add ${LSP_PLUGIN_NAME} plugin to existing plugins array`)
             insertNodeAtEndOfList(tracker, current.sourceFile, pluginsArray.elements, pluginObject)
+          } else if (ts.isObjectLiteralExpression(lspPluginElement)) {
+            const diagnosticSeverityProperty = findPropertyInObject(lspPluginElement, "diagnosticSeverity")
+            if (Option.isSome(target.diagnosticSeverities)) {
+              const newDiagnosticSeverityValue = createDiagnosticSeverityObject(target.diagnosticSeverities.value)
+              if (!diagnosticSeverityProperty) {
+                descriptions.push(`Add diagnosticSeverity to ${LSP_PLUGIN_NAME} plugin`)
+                insertNodeAtEndOfList(tracker, current.sourceFile, lspPluginElement.properties, ts.factory.createPropertyAssignment(
+                  ts.factory.createStringLiteral("diagnosticSeverity"),
+                  newDiagnosticSeverityValue
+                ))
+              } else if (ts.isPropertyAssignment(diagnosticSeverityProperty)) {
+                descriptions.push(`Update diagnosticSeverity in ${LSP_PLUGIN_NAME} plugin`)
+                tracker.replaceNode(current.sourceFile, diagnosticSeverityProperty.initializer, newDiagnosticSeverityValue)
+              }
+            } else if (diagnosticSeverityProperty) {
+              descriptions.push(`Remove diagnosticSeverity from ${LSP_PLUGIN_NAME} plugin`)
+              deleteNodeFromList(tracker, current.sourceFile, lspPluginElement.properties, diagnosticSeverityProperty)
+            }
           }
         }
       }

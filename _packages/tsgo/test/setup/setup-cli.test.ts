@@ -56,11 +56,19 @@ function expectSetupChanges(
   assessmentInput: Assessment.Input,
   targetState: Target.State
 ) {
+  const normalizedTargetState: Target.State = {
+    ...targetState,
+    tsconfig: {
+      diagnosticSeverities: Option.none(),
+      ...targetState.tsconfig
+    }
+  }
+
   // Run assessment (synchronous in tsgo)
   const assessmentState = assess(assessmentInput)
 
   // Compute changes (synchronous in tsgo)
-  const result = computeChanges(assessmentState, targetState)
+  const result = computeChanges(assessmentState, normalizedTargetState)
 
   // 1. Snapshot of change summary (file + description)
   const changeSummary = result.codeActions.flatMap((action) =>
@@ -130,7 +138,8 @@ function expectSetupChanges(
 
 const VSCODE_SETTINGS: Target.VSCodeSettings = {
   settings: {
-    "typescript.native-preview.tsdk": "node_modules/@typescript/native-preview"
+    "typescript.native-preview.tsdk": "node_modules/@typescript/native-preview",
+    "typescript.experimental.useTsgo": true
   }
 }
 
@@ -227,7 +236,8 @@ describe("Setup CLI", () => {
         prepareScript: false
       },
       tsconfig: {
-        plugin: true
+        plugin: true,
+        diagnosticSeverities: Option.none()
       },
       vscodeSettings: Option.none(),
       editors: []
@@ -337,7 +347,8 @@ describe("Setup CLI", () => {
         prepareScript: false
       },
       tsconfig: {
-        plugin: false
+        plugin: false,
+        diagnosticSeverities: Option.none()
       },
       vscodeSettings: Option.none(),
       editors: []
@@ -420,7 +431,8 @@ describe("Setup CLI", () => {
         prepareScript: false
       },
       tsconfig: {
-        plugin: true
+        plugin: true,
+        diagnosticSeverities: Option.none()
       },
       vscodeSettings: Option.none(),
       editors: []
@@ -614,6 +626,129 @@ describe("Setup CLI", () => {
       },
       vscodeSettings: Option.some(VSCODE_SETTINGS),
       editors: ["vscode"]
+    }
+
+    expectSetupChanges(assessmentInput, targetState)
+  })
+
+  it("should add LSP with custom diagnostic severities when no plugin exists", () => {
+    const assessmentInput = createTestAssessmentInput(
+      {
+        name: "test-project",
+        version: "1.0.0",
+        dependencies: {}
+      },
+      {
+        compilerOptions: {
+          strict: true,
+          target: "ES2022"
+        }
+      }
+    )
+
+    const targetState: Target.State = {
+      packageJson: {
+        lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
+        prepareScript: false
+      },
+      tsconfig: {
+        plugin: true,
+        diagnosticSeverities: Option.some({
+          floatingEffect: "warning",
+          missingEffectError: "off"
+        })
+      },
+      vscodeSettings: Option.none(),
+      editors: []
+    }
+
+    expectSetupChanges(assessmentInput, targetState)
+  })
+
+  it("should update custom diagnostic severities when plugin already has custom values", () => {
+    const assessmentInput = createTestAssessmentInput(
+      {
+        name: "test-project",
+        version: "1.0.0",
+        dependencies: {},
+        devDependencies: {
+          "@effect/tsgo": "^0.0.5"
+        }
+      },
+      {
+        compilerOptions: {
+          strict: true,
+          target: "ES2022",
+          plugins: [
+            {
+              name: "@effect/language-service",
+              diagnosticSeverity: {
+                floatingEffect: "error",
+                missingEffectError: "warning"
+              }
+            }
+          ]
+        }
+      }
+    )
+
+    const targetState: Target.State = {
+      packageJson: {
+        lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
+        prepareScript: false
+      },
+      tsconfig: {
+        plugin: true,
+        diagnosticSeverities: Option.some({
+          floatingEffect: "warning",
+          missingEffectError: "off",
+          missingLayerContext: "error"
+        })
+      },
+      vscodeSettings: Option.none(),
+      editors: []
+    }
+
+    expectSetupChanges(assessmentInput, targetState)
+  })
+
+  it("should add custom diagnostic severities when plugin exists without custom values", () => {
+    const assessmentInput = createTestAssessmentInput(
+      {
+        name: "test-project",
+        version: "1.0.0",
+        dependencies: {},
+        devDependencies: {
+          "@effect/tsgo": "^0.0.5"
+        }
+      },
+      {
+        compilerOptions: {
+          strict: true,
+          target: "ES2022",
+          plugins: [
+            {
+              name: "@effect/language-service"
+            }
+          ]
+        }
+      }
+    )
+
+    const targetState: Target.State = {
+      packageJson: {
+        lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
+        prepareScript: false
+      },
+      tsconfig: {
+        plugin: true,
+        diagnosticSeverities: Option.some({
+          floatingEffect: "warning",
+          missingEffectContext: "message"
+        })
+      },
+      vscodeSettings: Option.none(),
+      editors: []
     }
 
     expectSetupChanges(assessmentInput, targetState)

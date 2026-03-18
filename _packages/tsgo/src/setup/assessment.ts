@@ -7,6 +7,7 @@ import * as ts from "typescript"
 import { FileReadError, PackageJsonNotFoundError } from "./errors.js"
 import type { Assessment, FileInput } from "./types.js"
 import { LSP_PACKAGE_NAME, LSP_PLUGIN_NAME, PATCH_COMMAND } from "./consts.js"
+import type { RuleSeverity } from "./rule-info.js"
 
 /**
  * Read files from file system and create assessment input
@@ -130,6 +131,7 @@ const assessTsConfig = (
   const hasPlugins = parsed.compilerOptions?.plugins !== undefined
   const plugins = parsed.compilerOptions?.plugins ?? []
   const hasLspPlugin = plugins.some((plugin) => plugin.name === LSP_PLUGIN_NAME)
+  const currentDiagnosticSeverities = getCurrentDiagnosticSeverities(plugins)
 
   return {
     path: input.fileName,
@@ -137,8 +139,35 @@ const assessTsConfig = (
     parsed,
     text: input.text,
     hasPlugins,
-    hasLspPlugin
+    hasLspPlugin,
+    currentDiagnosticSeverities
   }
+}
+
+function getCurrentDiagnosticSeverities(
+  plugins: ReadonlyArray<{ name?: string; [key: string]: unknown }>
+): Option.Option<Record<string, RuleSeverity>> {
+  const lspPlugin = plugins.find((plugin) => plugin.name === LSP_PLUGIN_NAME)
+  if (!lspPlugin || typeof lspPlugin !== "object" || lspPlugin === null) {
+    return Option.none()
+  }
+  const diagnosticSeverity = lspPlugin.diagnosticSeverity
+  if (!diagnosticSeverity || typeof diagnosticSeverity !== "object" || Array.isArray(diagnosticSeverity)) {
+    return Option.none()
+  }
+  const result: Record<string, RuleSeverity> = {}
+  for (const [key, value] of Object.entries(diagnosticSeverity)) {
+    if (
+      value === "off" ||
+      value === "suggestion" ||
+      value === "message" ||
+      value === "warning" ||
+      value === "error"
+    ) {
+      result[key] = value
+    }
+  }
+  return Object.keys(result).length > 0 ? Option.some(result) : Option.none()
 }
 
 /**

@@ -1,5 +1,6 @@
 import type * as Option from "effect/Option"
 import type * as ts from "typescript"
+import type { RuleSeverity } from "./rule-info.js"
 
 export interface SetupFileTextChanges extends ts.FileTextChanges {
   readonly isNewFile: boolean
@@ -46,6 +47,7 @@ export namespace Assessment {
     readonly text: string
     readonly hasPlugins: boolean
     readonly hasLspPlugin: boolean
+    readonly currentDiagnosticSeverities: Option.Option<Record<string, RuleSeverity>>
   }
 
   export interface VSCodeSettings {
@@ -73,6 +75,7 @@ export namespace Target {
 
   export interface TsConfig {
     readonly plugin: boolean
+    readonly diagnosticSeverities: Option.Option<Record<string, RuleSeverity>>
   }
 
   export interface VSCodeSettings {

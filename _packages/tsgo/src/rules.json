@@ -1,0 +1,407 @@
+[
+  {
+    "name": "anyUnknownInErrorContext",
+    "description": "Detects 'any' or 'unknown' types in Effect error or requirements channels",
+    "defaultSeverity": "off",
+    "codes": [
+      377030
+    ]
+  },
+  {
+    "name": "catchAllToMapError",
+    "description": "Suggests using Effect.mapError instead of Effect.catch + Effect.fail",
+    "defaultSeverity": "suggestion",
+    "codes": [
+      377010
+    ]
+  },
+  {
+    "name": "catchUnfailableEffect",
+    "description": "Warns when using error handling on Effects that never fail",
+    "defaultSeverity": "suggestion",
+    "codes": [
+      377009
+    ]
+  },
+  {
+    "name": "classSelfMismatch",
+    "description": "Ensures Self type parameter matches the class name in Service/Tag/Schema classes",
+    "defaultSeverity": "error",
+    "codes": [
+      377046
+    ]
+  },
+  {
+    "name": "deterministicKeys",
+    "description": "Enforces deterministic naming for service/tag/error identifiers based on class names",
+    "defaultSeverity": "off",
+    "codes": [
+      377049
+    ]
+  },
+  {
+    "name": "duplicatePackage",
+    "description": "Warns when multiple versions of an Effect-related package are detected in the program",
+    "defaultSeverity": "warning",
+    "codes": [
+      377051
+    ]
+  },
+  {
+    "name": "effectFnIife",
+    "description": "Effect.fn or Effect.fnUntraced is called as an IIFE; use Effect.gen instead",
+    "defaultSeverity": "warning",
+    "codes": [
+      377011
+    ]
+  },
+  {
+    "name": "effectFnOpportunity",
+    "description": "Suggests using Effect.fn for functions that return an Effect",
+    "defaultSeverity": "suggestion",
+    "codes": [
+      377047
+    ]
+  },
+  {
+    "name": "effectGenUsesAdapter",
+    "description": "Warns when using the deprecated adapter parameter in Effect.gen",
+    "defaultSeverity": "warning",
+    "codes": [
+      377027
+    ]
+  },
+  {
+    "name": "effectInFailure",
+    "description": "Warns when an Effect is used inside an Effect failure channel",
+    "defaultSeverity": "warning",
+    "codes": [
+      377054
+    ]
+  },
+  {
+    "name": "effectInVoidSuccess",
+    "description": "Detects nested Effects in void success channels that may cause unexecuted effects",
+    "defaultSeverity": "warning",
+    "codes": [
+      377020
+    ]
+  },
+  {
+    "name": "effectMapVoid",
+    "description": "Suggests using Effect.asVoid instead of Effect.map(() =\u003e void 0), Effect.map(() =\u003e undefined), or Effect.map(() =\u003e {})",
+    "defaultSeverity": "suggestion",
+    "codes": [
+      377018
+    ]
+  },
+  {
+    "name": "effectSucceedWithVoid",
+    "description": "Suggests using Effect.void instead of Effect.succeed(undefined) or Effect.succeed(void 0)",
+    "defaultSeverity": "suggestion",
+    "codes": [
+      377016
+    ]
+  },
+  {
+    "name": "extendsNativeError",
+    "description": "Warns when a class directly extends the native Error class",
+    "defaultSeverity": "off",
+    "codes": [
+      377055
+    ]
+  },
+  {
+    "name": "floatingEffect",
+    "description": "Detects Effect values that are neither yielded nor assigned",
+    "defaultSeverity": "error",
+    "codes": [
+      377001,
+      377058
+    ]
+  },
+  {
+    "name": "genericEffectServices",
+    "description": "Prevents services with type parameters that cannot be discriminated at runtime",
+    "defaultSeverity": "warning",
+    "codes": [
+      377043
+    ]
+  },
+  {
+    "name": "globalErrorInEffectCatch",
+    "description": "Warns when catch callbacks return global Error type instead of typed errors",
+    "defaultSeverity": "warning",
+    "codes": [
+      377022
+    ]
+  },
+  {
+    "name": "globalErrorInEffectFailure",
+    "description": "Warns when the global Error type is used in an Effect failure channel",
+    "defaultSeverity": "warning",
+    "codes": [
+      377023
+    ]
+  },
+  {
+    "name": "instanceOfSchema",
+    "description": "Suggests using Schema.is instead of instanceof for Effect Schema types",
+    "defaultSeverity": "off",
+    "codes": [
+      377042
+    ]
+  },
+  {
+    "name": "layerMergeAllWithDependencies",
+    "description": "Detects interdependencies in Layer.mergeAll calls where one layer provides a service that another layer requires",
+    "defaultSeverity": "warning",
+    "codes": [
+      377035
+    ]
+  },
+  {
+    "name": "leakingRequirements",
+    "description": "Detects implementation services leaked in service methods",
+    "defaultSeverity": "suggestion",
+    "codes": [
+      377041
+    ]
+  },
+  {
+    "name": "missedPipeableOpportunity",
+    "description": "Suggests using .pipe() for nested function calls",
+    "defaultSeverity": "off",
+    "codes": [
+      377050
+    ]
+  },
+  {
+    "name": "missingEffectContext",
+    "description": "Detects Effect values with unhandled context requirements",
+    "defaultSeverity": "error",
+    "codes": [
+      377004
+    ]
+  },
+  {
+    "name": "missingEffectError",
+    "description": "Detects Effect values with unhandled error types",
+    "defaultSeverity": "error",
+    "codes": [
+      377003
+    ]
+  },
+  {
+    "name": "missingEffectServiceDependency",
+    "description": "Checks that Effect.Service dependencies satisfy all required layer inputs",
+    "defaultSeverity": "off",
+    "codes": [
+      377039,
+      377040
+    ]
+  },
+  {
+    "name": "missingLayerContext",
+    "description": "Detects Layer values with unhandled context requirements",
+    "defaultSeverity": "error",
+    "codes": [
+      377034
+    ]
+  },
+  {
+    "name": "missingReturnYieldStar",
+    "description": "Suggests using return yield* for Effects that never succeed",
+    "defaultSeverity": "error",
+    "codes": [
+      377006
+    ]
+  },
+  {
+    "name": "missingStarInYieldEffectGen",
+    "description": "Detects bare yield (without *) inside Effect generator scopes",
+    "defaultSeverity": "error",
+    "codes": [
+      377007,
+      377008
+    ]
+  },
+  {
+    "name": "multipleEffectProvide",
+    "description": "Warns against chaining Effect.provide calls which can cause service lifecycle issues",
+    "defaultSeverity": "warning",
+    "codes": [
+      377033
+    ]
+  },
+  {
+    "name": "nodeBuiltinImport",
+    "description": "Warns when importing Node.js built-in modules that have Effect-native counterparts",
+    "defaultSeverity": "off",
+    "codes": [
+      377057
+    ]
+  },
+  {
+    "name": "nonObjectEffectServiceType",
+    "description": "Ensures Effect.Service types are objects, not primitives",
+    "defaultSeverity": "error",
+    "codes": [
+      377048
+    ]
+  },
+  {
+    "name": "outdatedApi",
+    "description": "Detects usage of APIs that have been removed or renamed in Effect v4",
+    "defaultSeverity": "warning",
+    "codes": [
+      377052,
+      377053
+    ]
+  },
+  {
+    "name": "overriddenSchemaConstructor",
+    "description": "Prevents overriding constructors in Schema classes which breaks decoding behavior",
+    "defaultSeverity": "error",
+    "codes": [
+      377044
+    ]
+  },
+  {
+    "name": "preferSchemaOverJson",
+    "description": "Suggests using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify",
+    "defaultSeverity": "suggestion",
+    "codes": [
+      377026
+    ]
+  },
+  {
+    "name": "redundantSchemaTagIdentifier",
+    "description": "Suggests removing redundant identifier argument when it equals the tag value in Schema.TaggedClass/TaggedError/TaggedRequest",
+    "defaultSeverity": "suggestion",
+    "codes": [
+      377045
+    ]
+  },
+  {
+    "name": "returnEffectInGen",
+    "description": "Warns when returning an Effect in a generator causes nested Effect\u003cEffect\u003c...\u003e\u003e",
+    "defaultSeverity": "suggestion",
+    "codes": [
+      377014
+    ]
+  },
+  {
+    "name": "runEffectInsideEffect",
+    "description": "Suggests using Runtime methods instead of Effect.run* inside Effect contexts",
+    "defaultSeverity": "suggestion",
+    "codes": [
+      377024,
+      377025
+    ]
+  },
+  {
+    "name": "schemaStructWithTag",
+    "description": "Suggests using Schema.TaggedStruct instead of Schema.Struct with _tag field",
+    "defaultSeverity": "suggestion",
+    "codes": [
+      377036
+    ]
+  },
+  {
+    "name": "schemaSyncInEffect",
+    "description": "Suggests using Effect-based Schema methods instead of sync methods inside Effect generators",
+    "defaultSeverity": "suggestion",
+    "codes": [
+      377037
+    ]
+  },
+  {
+    "name": "schemaUnionOfLiterals",
+    "description": "Suggests combining multiple Schema.Literal calls in Schema.Union into a single Schema.Literal",
+    "defaultSeverity": "off",
+    "codes": [
+      377038
+    ]
+  },
+  {
+    "name": "scopeInLayerEffect",
+    "description": "Suggests using Layer.scoped instead of Layer.effect when Scope is in requirements",
+    "defaultSeverity": "warning",
+    "codes": [
+      377031
+    ]
+  },
+  {
+    "name": "serviceNotAsClass",
+    "description": "Warns when ServiceMap.Service is used as a variable instead of a class declaration",
+    "defaultSeverity": "off",
+    "codes": [
+      377056
+    ]
+  },
+  {
+    "name": "strictBooleanExpressions",
+    "description": "Enforces boolean types in conditional expressions for type safety",
+    "defaultSeverity": "off",
+    "codes": [
+      377029
+    ]
+  },
+  {
+    "name": "strictEffectProvide",
+    "description": "Warns when using Effect.provide with layers outside of application entry points",
+    "defaultSeverity": "off",
+    "codes": [
+      377032
+    ]
+  },
+  {
+    "name": "tryCatchInEffectGen",
+    "description": "Discourages try/catch in Effect generators in favor of Effect error handling",
+    "defaultSeverity": "suggestion",
+    "codes": [
+      377012
+    ]
+  },
+  {
+    "name": "unknownInEffectCatch",
+    "description": "Warns when catch callbacks return unknown instead of typed errors",
+    "defaultSeverity": "warning",
+    "codes": [
+      377021
+    ]
+  },
+  {
+    "name": "unnecessaryEffectGen",
+    "description": "Suggests removing Effect.gen when it contains only a single return statement",
+    "defaultSeverity": "suggestion",
+    "codes": [
+      377017
+    ]
+  },
+  {
+    "name": "unnecessaryFailYieldableError",
+    "description": "Suggests yielding yieldable errors directly instead of wrapping with Effect.fail",
+    "defaultSeverity": "suggestion",
+    "codes": [
+      377019
+    ]
+  },
+  {
+    "name": "unnecessaryPipe",
+    "description": "Removes pipe calls with no arguments",
+    "defaultSeverity": "suggestion",
+    "codes": [
+      377013
+    ]
+  },
+  {
+    "name": "unnecessaryPipeChain",
+    "description": "Simplifies chained pipe calls into a single pipe call",
+    "defaultSeverity": "suggestion",
+    "codes": [
+      377015
+    ]
+  }
+]
