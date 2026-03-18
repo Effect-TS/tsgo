@@ -1,5 +1,11 @@
 # @effect/tsgo-linux-x64
 
+## 0.0.14
+
+### Patch Changes
+
+- 18c2262: Fix refactor trigger range
+
 ## 0.0.13
 
 ### Patch Changes
