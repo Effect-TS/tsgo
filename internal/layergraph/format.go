@@ -60,6 +60,15 @@ func mermaidSafe(value string) string {
 
 // getNodeText returns the trimmed source text of a node.
 func getNodeText(node *ast.Node, sf *ast.SourceFile) string {
+	if node != nil && node.Parent != nil && node.Parent.Kind == ast.KindPropertyDeclaration && node.Parent.Name() == node && node.Parent.Parent != nil && node.Parent.Parent.Kind == ast.KindClassDeclaration {
+		if className := node.Parent.Parent.Name(); className != nil {
+			classText := strings.TrimSpace(scanner.GetSourceTextOfNodeFromSourceFile(sf, className, false))
+			propText := strings.TrimSpace(scanner.GetSourceTextOfNodeFromSourceFile(sf, node, false))
+			if classText != "" && propText != "" {
+				return classText + "." + propText
+			}
+		}
+	}
 	return strings.TrimSpace(scanner.GetSourceTextOfNodeFromSourceFile(sf, node, false))
 }
 

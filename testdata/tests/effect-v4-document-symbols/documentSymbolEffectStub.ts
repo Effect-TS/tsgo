@@ -58,3 +58,13 @@ for(const x of myArray) { // <- x variable inside for of should not appear in se
 export type ErrorSchema<A> = A extends { readonly ["TypeId"]: { readonly error: infer E } }
   ? E extends Schema.Top ? E : never
   : never
+
+export class MySchemaClass extends Schema.Class<MySchemaClass>("MySchemaClass")({
+  name: Schema.String,
+  age: Schema.Number
+}) {}
+
+export const MyUser = Schema.Struct({
+  name: Schema.String,
+  age: Schema.Number
+})

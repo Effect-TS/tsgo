@@ -19,6 +19,9 @@
   (Package) Errors range=1:1-1:1 selection=1:1-1:1
     (Class) NotFound range=38:1-40:6 selection=38:1-40:6
     (Class) Forbidden range=42:1-44:6 selection=42:1-44:6
+  (Package) Schemas range=1:1-1:1 selection=1:1-1:1
+    (Class) MySchemaClass range=61:1-64:6 selection=61:1-64:6
+    (Variable) MyUser range=66:14-69:3 selection=66:14-69:3
 (Variable) Effect range=1:10-1:16 selection=1:10-1:16
 (Variable) Layer range=1:18-1:23 selection=1:18-1:23
 (Variable) ServiceMap range=1:25-1:35 selection=1:25-1:35
@@ -51,6 +54,12 @@
 (Variable) myArray range=51:7-51:47 selection=51:7-51:14
 (Variable) x range=52:11-52:12 selection=52:11-52:12
 (Class) ErrorSchema range=57:1-59:10 selection=57:13-57:24
+(Class) MySchemaClass range=61:1-64:6 selection=61:14-61:27
+  (Property) name range=62:3-62:22 selection=62:3-62:7
+  (Property) age range=63:3-63:21 selection=63:3-63:6
+(Variable) MyUser range=66:14-69:3 selection=66:14-66:20
+  (Property) name range=67:3-67:22 selection=67:3-67:7
+  (Property) age range=68:3-68:21 selection=68:3-68:6
 
 -- flat[0] --
 (Package) Effect container="" range=1:1-1:1
@@ -71,6 +80,9 @@
 (Package) Errors container="Effect" range=1:1-1:1
 (Class) NotFound container="Errors" range=38:1-40:6
 (Class) Forbidden container="Errors" range=42:1-44:6
+(Package) Schemas container="Effect" range=1:1-1:1
+(Class) MySchemaClass container="Schemas" range=61:1-64:6
+(Variable) MyUser container="Schemas" range=66:14-69:3
 (Variable) Effect container="" range=1:10-1:16
 (Variable) Layer container="" range=1:18-1:23
 (Variable) ServiceMap container="" range=1:25-1:35
@@ -103,3 +115,9 @@
 (Variable) myArray container="" range=51:7-51:47
 (Variable) x container="" range=52:11-52:12
 (Class) ErrorSchema container="" range=57:1-59:10
+(Class) MySchemaClass container="" range=61:1-64:6
+(Property) name container="MySchemaClass" range=62:3-62:22
+(Property) age container="MySchemaClass" range=63:3-63:21
+(Variable) MyUser container="" range=66:14-69:3
+(Property) name container="MyUser" range=67:3-67:22
+(Property) age container="MyUser" range=68:3-68:21
