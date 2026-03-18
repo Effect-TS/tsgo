@@ -12,10 +12,10 @@
     (Variable) liveWithPipeable detail="<Cache | DbConnection | UserRepository, never, DbConnection | FileSystem>" range=31:14-34:2 selection=31:14-34:2
     (Variable) cacheWithFs detail="<Cache, never, never>" range=36:14-36:81 selection=36:14-36:81
   (Package) Services range=1:1-1:1 selection=1:1-1:1
-    (Class) DbConnection range=3:35-5:3 selection=3:35-5:3
-    (Class) FileSystem range=9:33-11:3 selection=9:33-11:3
-    (Class) Cache range=15:28-17:3 selection=15:28-17:3
-    (Class) UserRepository range=21:37-23:3 selection=21:37-23:3
+    (Class) DbConnection range=3:1-7:2 selection=3:1-7:2
+    (Class) FileSystem range=9:1-13:2 selection=9:1-13:2
+    (Class) Cache range=15:1-19:2 selection=15:1-19:2
+    (Class) UserRepository range=21:1-25:2 selection=21:1-25:2
   (Package) Errors range=1:1-1:1 selection=1:1-1:1
     (Class) NotFound range=38:1-40:6 selection=38:1-40:6
     (Class) Forbidden range=42:1-44:6 selection=42:1-44:6
@@ -23,6 +23,7 @@
 (Variable) Layer range=1:18-1:23 selection=1:18-1:23
 (Variable) ServiceMap range=1:25-1:35 selection=1:25-1:35
 (Variable) Data range=1:37-1:41 selection=1:37-1:41
+(Variable) Schema range=1:43-1:49 selection=1:43-1:49
 (Class) DbConnection range=3:1-7:2 selection=3:14-3:26
   (Property) make range=4:3-4:27 selection=4:3-4:7
   (Property) Default range=6:3-6:49 selection=6:10-6:17
@@ -43,6 +44,13 @@
   (Property) resource range=39:3-39:28 selection=39:12-39:20
 (Class) Forbidden range=42:1-44:6 selection=42:7-42:16
   (Property) reason range=43:3-43:26 selection=43:12-43:18
+(Variable) attempt range=46:14-49:3 selection=46:14-46:21
+  (Property) try range=47:3-47:51 selection=47:3-47:6
+  (Property) catch range=48:3-48:55 selection=48:3-48:8
+    (Property) resource range=48:36-48:52 selection=48:36-48:44
+(Variable) myArray range=51:7-51:47 selection=51:7-51:14
+(Variable) x range=52:11-52:12 selection=52:11-52:12
+(Class) ErrorSchema range=57:1-59:10 selection=57:13-57:24
 
 -- flat[0] --
 (Package) Effect container="" range=1:1-1:1
@@ -56,10 +64,10 @@
 (Variable) liveWithPipeable container="Layers" range=31:14-34:2
 (Variable) cacheWithFs container="Layers" range=36:14-36:81
 (Package) Services container="Effect" range=1:1-1:1
-(Class) DbConnection container="Services" range=3:35-5:3
-(Class) FileSystem container="Services" range=9:33-11:3
-(Class) Cache container="Services" range=15:28-17:3
-(Class) UserRepository container="Services" range=21:37-23:3
+(Class) DbConnection container="Services" range=3:1-7:2
+(Class) FileSystem container="Services" range=9:1-13:2
+(Class) Cache container="Services" range=15:1-19:2
+(Class) UserRepository container="Services" range=21:1-25:2
 (Package) Errors container="Effect" range=1:1-1:1
 (Class) NotFound container="Errors" range=38:1-40:6
 (Class) Forbidden container="Errors" range=42:1-44:6
@@ -67,6 +75,7 @@
 (Variable) Layer container="" range=1:18-1:23
 (Variable) ServiceMap container="" range=1:25-1:35
 (Variable) Data container="" range=1:37-1:41
+(Variable) Schema container="" range=1:43-1:49
 (Class) DbConnection container="" range=3:1-7:2
 (Property) make container="DbConnection" range=4:3-4:27
 (Property) Default container="DbConnection" range=6:3-6:49
@@ -87,3 +96,10 @@
 (Property) resource container="NotFound" range=39:3-39:28
 (Class) Forbidden container="" range=42:1-44:6
 (Property) reason container="Forbidden" range=43:3-43:26
+(Variable) attempt container="" range=46:14-49:3
+(Property) try container="attempt" range=47:3-47:51
+(Property) catch container="attempt" range=48:3-48:55
+(Property) resource container="catch" range=48:36-48:52
+(Variable) myArray container="" range=51:7-51:47
+(Variable) x container="" range=52:11-52:12
+(Class) ErrorSchema container="" range=57:1-59:10

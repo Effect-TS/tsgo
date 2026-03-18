@@ -60,14 +60,15 @@ func collectLayerDocumentSymbols(c *checker.Checker, sf *ast.SourceFile, langSer
 		if current == nil {
 			return false
 		}
-		t := checkerutils.GetTypeAtLocation(c, current)
-		if typeparser.IsLayerType(c, t, current) {
-			displayNode := resolveLayerDisplayNode(current)
-			if _, ok := seen[displayNode]; !ok {
-				seen[displayNode] = struct{}{}
-				symbols = append(symbols, newEffectDocumentSymbol(c, sf, langService, current, displayNode, layerSymbolDetail))
+		if isEffectSymbolDeclaration(current) {
+			if isLayerDeclaration(c, current) {
+				displayNode := resolveLayerDisplayNode(current)
+				if _, ok := seen[displayNode]; !ok {
+					seen[displayNode] = struct{}{}
+					symbols = append(symbols, newEffectDocumentSymbol(c, sf, langService, current, displayNode, layerSymbolDetail))
+				}
+				return false
 			}
-			return false
 		}
 		current.ForEachChild(walk)
 		return false
@@ -84,17 +85,19 @@ func collectServiceDocumentSymbols(c *checker.Checker, sf *ast.SourceFile, langS
 		if current == nil {
 			return false
 		}
-		t := checkerutils.GetTypeAtLocation(c, current)
-		if typeparser.IsServiceType(c, t, current) || typeparser.IsContextTag(c, t, current) {
-			displayNode := resolveServiceDisplayNode(current)
-			if _, ok := seen[displayNode]; !ok {
-				seen[displayNode] = struct{}{}
-				symbols = append(symbols, newEffectDocumentSymbol(c, sf, langService, current, displayNode, nil))
+		if isEffectSymbolDeclaration(current) {
+			if isServiceDeclaration(c, current) {
+				displayNode := resolveServiceDisplayNode(current)
+				if _, ok := seen[displayNode]; !ok {
+					seen[displayNode] = struct{}{}
+					symbols = append(symbols, newEffectDocumentSymbol(c, sf, langService, current, displayNode, nil))
+				}
+				return false
 			}
-			return false
-		}
-		if typeparser.IsLayerType(c, t, current) {
-			return false
+			t := checkerutils.GetTypeAtLocation(c, current)
+			if typeparser.IsLayerType(c, t, current) {
+				return false
+			}
 		}
 		current.ForEachChild(walk)
 		return false
@@ -111,14 +114,15 @@ func collectErrorDocumentSymbols(c *checker.Checker, sf *ast.SourceFile, langSer
 		if current == nil {
 			return false
 		}
-		t := checkerutils.GetTypeAtLocation(c, current)
-		if typeparser.IsYieldableErrorType(c, t) {
-			displayNode := resolveErrorDisplayNode(current)
-			if _, ok := seen[displayNode]; !ok {
-				seen[displayNode] = struct{}{}
-				symbols = append(symbols, newEffectDocumentSymbol(c, sf, langService, current, displayNode, nil))
+		if isEffectSymbolDeclaration(current) {
+			if isErrorDeclaration(c, current) {
+				displayNode := resolveErrorDisplayNode(current)
+				if _, ok := seen[displayNode]; !ok {
+					seen[displayNode] = struct{}{}
+					symbols = append(symbols, newEffectDocumentSymbol(c, sf, langService, current, displayNode, nil))
+				}
+				return false
 			}
-			return false
 		}
 		current.ForEachChild(walk)
 		return false
@@ -181,19 +185,19 @@ func newEffectDocumentSymbol(
 }
 
 func layerSymbolDetail(c *checker.Checker, node *ast.Node) *string {
-	t := checkerutils.GetTypeAtLocation(c, node)
-	if t == nil {
-		return nil
+	typeCheckNode, types := classificationTypes(c, node)
+	for _, t := range types {
+		layer := typeparser.LayerType(c, t, typeCheckNode)
+		if layer == nil {
+			continue
+		}
+		rOut := c.TypeToStringEx(layer.ROut, typeCheckNode, checker.TypeFormatFlagsNoTruncation)
+		e := c.TypeToStringEx(layer.E, typeCheckNode, checker.TypeFormatFlagsNoTruncation)
+		rIn := c.TypeToStringEx(layer.RIn, typeCheckNode, checker.TypeFormatFlagsNoTruncation)
+		detail := "<" + rOut + ", " + e + ", " + rIn + ">"
+		return &detail
 	}
-	layer := typeparser.LayerType(c, t, node)
-	if layer == nil {
-		return nil
-	}
-	rOut := c.TypeToStringEx(layer.ROut, node, checker.TypeFormatFlagsNoTruncation)
-	e := c.TypeToStringEx(layer.E, node, checker.TypeFormatFlagsNoTruncation)
-	rIn := c.TypeToStringEx(layer.RIn, node, checker.TypeFormatFlagsNoTruncation)
-	detail := "<" + rOut + ", " + e + ", " + rIn + ">"
-	return &detail
+	return nil
 }
 
 func resolveLayerDisplayNode(node *ast.Node) *ast.Node {
@@ -216,33 +220,116 @@ func resolveLayerDisplayNode(node *ast.Node) *ast.Node {
 func resolveServiceDisplayNode(node *ast.Node) *ast.Node {
 	for current := node; current != nil; current = current.Parent {
 		switch current.Kind {
-		case ast.KindClassDeclaration, ast.KindClassExpression,
+		case ast.KindClassDeclaration,
 			ast.KindVariableDeclaration,
-			ast.KindPropertyDeclaration,
-			ast.KindPropertyAssignment,
-			ast.KindShorthandPropertyAssignment,
-			ast.KindPropertySignature,
-			ast.KindBindingElement:
+			ast.KindPropertyDeclaration:
 			return current
 		}
 	}
 	return node
 }
 
+func classificationTypes(c *checker.Checker, node *ast.Node) (*ast.Node, []*checker.Type) {
+	if node == nil {
+		return nil, nil
+	}
+	t := checkerutils.GetTypeAtLocation(c, node)
+	if t == nil {
+		return node, nil
+	}
+	types := []*checker.Type{t}
+	if node.Kind == ast.KindClassDeclaration {
+		if className := node.Name(); className != nil {
+			if classSymbol := c.GetSymbolAtLocation(className); classSymbol != nil {
+				if classType := c.GetTypeOfSymbolAtLocation(classSymbol, node); classType != nil && classType != t {
+					types = append(types, classType)
+				}
+			}
+		}
+	}
+	if constructSignatures := c.GetConstructSignatures(t); len(constructSignatures) > 0 {
+		if returnType := c.GetReturnTypeOfSignature(constructSignatures[0]); returnType != nil {
+			types = append(types, returnType)
+		}
+	}
+	if callSignatures := c.GetSignaturesOfType(t, checker.SignatureKindCall); len(callSignatures) > 0 {
+		if returnType := c.GetReturnTypeOfSignature(callSignatures[0]); returnType != nil {
+			types = append(types, returnType)
+		}
+	}
+	return node, types
+}
+
+func isLayerDeclaration(c *checker.Checker, node *ast.Node) bool {
+	typeCheckNode, types := classificationTypes(c, node)
+	for _, t := range types {
+		if typeparser.IsLayerType(c, t, typeCheckNode) {
+			return true
+		}
+	}
+	return false
+}
+
+func isServiceDeclaration(c *checker.Checker, node *ast.Node) bool {
+	if node == nil {
+		return false
+	}
+	typeCheckNode, types := classificationTypes(c, node)
+	for _, t := range types {
+		if typeparser.IsServiceType(c, t, typeCheckNode) || typeparser.IsContextTag(c, t, typeCheckNode) {
+			return true
+		}
+	}
+	return false
+}
+
+func isErrorDeclaration(c *checker.Checker, node *ast.Node) bool {
+	if node == nil {
+		return false
+	}
+	switch node.Kind {
+	case ast.KindClassDeclaration, ast.KindVariableDeclaration:
+	default:
+		return false
+	}
+	_, types := classificationTypes(c, node)
+	for _, t := range types {
+		if typeparser.IsYieldableErrorType(c, t) {
+			return true
+		}
+	}
+	return false
+}
+
 func resolveErrorDisplayNode(node *ast.Node) *ast.Node {
 	for current := node; current != nil; current = current.Parent {
 		switch current.Kind {
-		case ast.KindClassDeclaration, ast.KindClassExpression,
+		case ast.KindClassDeclaration,
 			ast.KindVariableDeclaration,
-			ast.KindPropertyDeclaration,
-			ast.KindPropertyAssignment,
-			ast.KindShorthandPropertyAssignment,
-			ast.KindPropertySignature,
-			ast.KindBindingElement:
+			ast.KindPropertyDeclaration:
 			return current
 		}
 	}
 	return node
+}
+
+func isEffectSymbolDeclaration(node *ast.Node) bool {
+	if node == nil {
+		return false
+	}
+	switch node.Kind {
+	case ast.KindClassDeclaration, ast.KindVariableDeclaration, ast.KindPropertyDeclaration:
+	default:
+		return false
+	}
+	for current := node.Parent; current != nil; current = current.Parent {
+		if current.Kind == ast.KindObjectLiteralExpression ||
+			current.Kind == ast.KindForOfStatement ||
+			current.Kind == ast.KindForInStatement {
+			return false
+		}
+	}
+	return true
 }
 
 func layerSymbolName(sf *ast.SourceFile, node *ast.Node) string {

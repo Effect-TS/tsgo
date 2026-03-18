@@ -1,5 +1,5 @@
 // @Filename: /test.ts
-import { Effect, Layer, ServiceMap, Data } from "effect"
+import { Effect, Layer, ServiceMap, Data, Schema } from "effect"
 
 export class DbConnection extends ServiceMap.Service<DbConnection>()("DbConnection", {
   make: Effect.succeed({})
@@ -43,3 +43,18 @@ class NotFound extends Data.TaggedError("NotFound")<{
 class Forbidden extends Data.TaggedError("Forbidden")<{
   readonly reason: string
 }> {}
+
+export const attempt = Effect.try({
+  try: () => JSON.parse("not a valid JSON string"),
+  catch: (error) => new NotFound({ resource: "user" }) /* <- this should not appear in the errors list */
+})
+
+const myArray: ServiceMap.Key<any, any>[] = []
+for(const x of myArray) { // <- x variable inside for of should not appear in services list
+  console.log(x)
+}
+
+// should not appear in errors list
+export type ErrorSchema<A> = A extends { readonly ["TypeId"]: { readonly error: infer E } }
+  ? E extends Schema.Top ? E : never
+  : never
