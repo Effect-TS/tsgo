@@ -300,6 +300,12 @@ func getDisplayNode(node *ast.Node) *ast.Node {
 			return varDecl.Name()
 		}
 	}
+	if node.Parent != nil && node.Parent.Kind == ast.KindPropertyDeclaration {
+		propDecl := node.Parent.AsPropertyDeclaration()
+		if propDecl.Initializer != nil && propDecl.Initializer == node {
+			return propDecl.Name()
+		}
+	}
 	return node
 }
 

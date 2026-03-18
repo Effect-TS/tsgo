@@ -26,11 +26,12 @@ func afterDocumentSymbols(ctx context.Context, sf *ast.SourceFile, symbols []*ls
 	layerChildren := collectLayerDocumentSymbols(c, sf, langService)
 	serviceChildren := collectServiceDocumentSymbols(c, sf, langService)
 	errorChildren := collectErrorDocumentSymbols(c, sf, langService)
-	if len(layerChildren) == 0 && len(serviceChildren) == 0 && len(errorChildren) == 0 {
+	schemaChildren := collectSchemaDocumentSymbols(c, sf, langService)
+	if len(layerChildren) == 0 && len(serviceChildren) == 0 && len(errorChildren) == 0 && len(schemaChildren) == 0 {
 		return symbols
 	}
 
-	effectChildren := make([]*lsproto.DocumentSymbol, 0, 3)
+	effectChildren := make([]*lsproto.DocumentSymbol, 0, 4)
 	if len(layerChildren) > 0 {
 		layers := newSyntheticNamespaceSymbol("Layers")
 		layers.Children = &layerChildren
@@ -45,6 +46,11 @@ func afterDocumentSymbols(ctx context.Context, sf *ast.SourceFile, symbols []*ls
 		errors := newSyntheticNamespaceSymbol("Errors")
 		errors.Children = &errorChildren
 		effectChildren = append(effectChildren, errors)
+	}
+	if len(schemaChildren) > 0 {
+		schemas := newSyntheticNamespaceSymbol("Schemas")
+		schemas.Children = &schemaChildren
+		effectChildren = append(effectChildren, schemas)
 	}
 	effect := newSyntheticNamespaceSymbol("Effect")
 	effect.Children = &effectChildren
@@ -117,6 +123,31 @@ func collectErrorDocumentSymbols(c *checker.Checker, sf *ast.SourceFile, langSer
 		if isEffectSymbolDeclaration(current) {
 			if isErrorDeclaration(c, current) {
 				displayNode := resolveErrorDisplayNode(current)
+				if _, ok := seen[displayNode]; !ok {
+					seen[displayNode] = struct{}{}
+					symbols = append(symbols, newEffectDocumentSymbol(c, sf, langService, current, displayNode, nil))
+				}
+				return false
+			}
+		}
+		current.ForEachChild(walk)
+		return false
+	}
+	sf.AsNode().ForEachChild(walk)
+	return symbols
+}
+
+func collectSchemaDocumentSymbols(c *checker.Checker, sf *ast.SourceFile, langService *ls.LanguageService) []*lsproto.DocumentSymbol {
+	var symbols []*lsproto.DocumentSymbol
+	seen := map[*ast.Node]struct{}{}
+	var walk ast.Visitor
+	walk = func(current *ast.Node) bool {
+		if current == nil {
+			return false
+		}
+		if isEffectSymbolDeclaration(current) {
+			if isSchemaDeclaration(c, current) {
+				displayNode := resolveSchemaDisplayNode(current)
 				if _, ok := seen[displayNode]; !ok {
 					seen[displayNode] = struct{}{}
 					symbols = append(symbols, newEffectDocumentSymbol(c, sf, langService, current, displayNode, nil))
@@ -301,7 +332,37 @@ func isErrorDeclaration(c *checker.Checker, node *ast.Node) bool {
 	return false
 }
 
+func isSchemaDeclaration(c *checker.Checker, node *ast.Node) bool {
+	if node == nil {
+		return false
+	}
+	switch node.Kind {
+	case ast.KindClassDeclaration, ast.KindVariableDeclaration, ast.KindPropertyDeclaration:
+	default:
+		return false
+	}
+	typeCheckNode, types := classificationTypes(c, node)
+	for _, t := range types {
+		if typeparser.IsSchemaType(c, t, typeCheckNode) {
+			return true
+		}
+	}
+	return false
+}
+
 func resolveErrorDisplayNode(node *ast.Node) *ast.Node {
+	for current := node; current != nil; current = current.Parent {
+		switch current.Kind {
+		case ast.KindClassDeclaration,
+			ast.KindVariableDeclaration,
+			ast.KindPropertyDeclaration:
+			return current
+		}
+	}
+	return node
+}
+
+func resolveSchemaDisplayNode(node *ast.Node) *ast.Node {
 	for current := node; current != nil; current = current.Parent {
 		switch current.Kind {
 		case ast.KindClassDeclaration,

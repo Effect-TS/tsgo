@@ -53,5 +53,5 @@ Effect version: 4.0.0-beta.27
         ~~~~~~~~~~~~~~~~~
 !!! error TS377004: Missing context DbConnection | FileSystem in the expected Effect type. effect(missingEffectContext)
 !!! related TS377059 /.src/missingEffectContext_sugg.ts(40,5): Adjusting this layer composition could provide the missing service. effect(missingEffectContext)
-!!! related TS377060 /.src/missingEffectContext_sugg.ts(12,20): This layer provides the missing service FileSystem. effect(missingEffectContext)
+!!! related TS377060 /.src/missingEffectContext_sugg.ts(12,10): This layer provides the missing service FileSystem. effect(missingEffectContext)
     )

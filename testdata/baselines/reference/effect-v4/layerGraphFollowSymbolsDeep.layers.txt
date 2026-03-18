@@ -18,7 +18,7 @@ flowchart TD
 
 --- nested ---
 flowchart TB
-  subgraph 0 ["`Layer.effect(this, this.make)<br/><small>_ln 11 col 19_</small>`"]
+  subgraph 0 ["`FileSystem.Default<br/><small>_ln 11 col 9_</small>`"]
     subgraph 0_wrap[" "]
       subgraph 0_provides [Provides]
         0_provides_0["FileSystem"]
@@ -51,7 +51,7 @@ flowchart TB
     style 2_wrap stroke:none
   end
   style 2 fill:transparent
-  subgraph 3 ["`Layer.effect(this, this.make)<br/><small>_ln 16 col 19_</small>`"]
+  subgraph 3 ["`Cache.Default<br/><small>_ln 16 col 9_</small>`"]
     subgraph 3_wrap[" "]
       subgraph 3_requires [Requires]
         3_requires_0["FileSystem"]
@@ -101,13 +101,13 @@ flowchart TB
 
 --- outline ---
 flowchart TD
-  0["Layer.effect#40;this, this.make#41;"]
-  1["Layer.effect#40;this, this.make#41;"]
+  0["FileSystem.Default"]
+  1["Cache.Default"]
   1 --> 0
 
 --- quickinfo ---
 /**
- * - Cache provided at ln 16 col 19 by `Layer.effect(this, this.make)`
+ * - Cache provided at ln 16 col 9 by `Cache.Default`
  */
 
 === baseAlias ===
@@ -130,7 +130,7 @@ flowchart TD
 
 --- nested ---
 flowchart TB
-  subgraph 0 ["`Layer.effect(this, this.make)<br/><small>_ln 11 col 19_</small>`"]
+  subgraph 0 ["`FileSystem.Default<br/><small>_ln 11 col 9_</small>`"]
     subgraph 0_wrap[" "]
       subgraph 0_provides [Provides]
         0_provides_0["FileSystem"]
@@ -163,7 +163,7 @@ flowchart TB
     style 2_wrap stroke:none
   end
   style 2 fill:transparent
-  subgraph 3 ["`Layer.effect(this, this.make)<br/><small>_ln 16 col 19_</small>`"]
+  subgraph 3 ["`Cache.Default<br/><small>_ln 16 col 9_</small>`"]
     subgraph 3_wrap[" "]
       subgraph 3_requires [Requires]
         3_requires_0["FileSystem"]
@@ -225,13 +225,13 @@ flowchart TB
 
 --- outline ---
 flowchart TD
-  0["Layer.effect#40;this, this.make#41;"]
-  1["Layer.effect#40;this, this.make#41;"]
+  0["FileSystem.Default"]
+  1["Cache.Default"]
   1 --> 0
 
 --- quickinfo ---
 /**
- * - Cache provided at ln 16 col 19 by `Layer.effect(this, this.make)`
+ * - Cache provided at ln 16 col 9 by `Cache.Default`
  */
 ==== /.src/middle.ts (2 layer exports) ====
 
@@ -255,7 +255,7 @@ flowchart TD
 
 --- nested ---
 flowchart TB
-  subgraph 0 ["`Layer.effect(this, this.make)<br/><small>_in base.ts at ln 11 col 19_</small>`"]
+  subgraph 0 ["`FileSystem.Default<br/><small>_in base.ts at ln 11 col 9_</small>`"]
     subgraph 0_wrap[" "]
       subgraph 0_provides [Provides]
         0_provides_0["FileSystem"]
@@ -288,7 +288,7 @@ flowchart TB
     style 2_wrap stroke:none
   end
   style 2 fill:transparent
-  subgraph 3 ["`Layer.effect(this, this.make)<br/><small>_in base.ts at ln 16 col 19_</small>`"]
+  subgraph 3 ["`Cache.Default<br/><small>_in base.ts at ln 16 col 9_</small>`"]
     subgraph 3_wrap[" "]
       subgraph 3_requires [Requires]
         3_requires_0["FileSystem"]
@@ -350,13 +350,13 @@ flowchart TB
 
 --- outline ---
 flowchart TD
-  0["Layer.effect#40;this, this.make#41;<br/>_in base.ts at ln 11 col 19_"]
-  1["Layer.effect#40;this, this.make#41;<br/>_in base.ts at ln 16 col 19_"]
+  0["FileSystem.Default<br/>_in base.ts at ln 11 col 9_"]
+  1["Cache.Default<br/>_in base.ts at ln 16 col 9_"]
   1 --> 0
 
 --- quickinfo ---
 /**
- * - Cache provided in base.ts at ln 16 col 19 by `Layer.effect(this, this.make)`
+ * - Cache provided in base.ts at ln 16 col 9 by `Cache.Default`
  */
 
 === wrappedAlias ===

@@ -10,7 +10,7 @@ flowchart TD
 
 --- nested ---
 flowchart TB
-  subgraph 0 ["`Layer.effect(this, this.make)<br/><small>_ln 21 col 19_</small>`"]
+  subgraph 0 ["`UserRepository.Default<br/><small>_ln 21 col 9_</small>`"]
     subgraph 0_wrap[" "]
       subgraph 0_requires [Requires]
         0_requires_0["Cache"]
@@ -48,14 +48,14 @@ flowchart TB
 
 --- outline ---
 flowchart TD
-  0["Layer.effect#40;this, this.make#41;"]
+  0["UserRepository.Default"]
 
 --- quickinfo ---
 /**
- * - UserRepository provided at ln 21 col 19 by `Layer.effect(this, this.make)`
+ * - UserRepository provided at ln 21 col 9 by `UserRepository.Default`
  * 
- * - Cache required at ln 21 col 19 by `Layer.effect(this, this.make)`
- * - DbConnection required at ln 21 col 19 by `Layer.effect(this, this.make)`
+ * - Cache required at ln 21 col 9 by `UserRepository.Default`
+ * - DbConnection required at ln 21 col 9 by `UserRepository.Default`
  */
 
 === simplePipeIn ===
@@ -76,7 +76,7 @@ flowchart TD
 
 --- nested ---
 flowchart TB
-  subgraph 0 ["`Layer.effect(this, this.make)<br/><small>_ln 16 col 19_</small>`"]
+  subgraph 0 ["`Cache.Default<br/><small>_ln 16 col 9_</small>`"]
     subgraph 0_wrap[" "]
       subgraph 0_requires [Requires]
         0_requires_0["FileSystem"]
@@ -122,7 +122,7 @@ flowchart TB
     style 2_wrap stroke:none
   end
   style 2 fill:transparent
-  subgraph 3 ["`Layer.effect(this, this.make)<br/><small>_ln 21 col 19_</small>`"]
+  subgraph 3 ["`UserRepository.Default<br/><small>_ln 21 col 9_</small>`"]
     subgraph 3_wrap[" "]
       subgraph 3_requires [Requires]
         3_requires_0["Cache"]
@@ -184,16 +184,16 @@ flowchart TB
 
 --- outline ---
 flowchart TD
-  0["Layer.effect#40;this, this.make#41;"]
-  1["Layer.effect#40;this, this.make#41;"]
+  0["Cache.Default"]
+  1["UserRepository.Default"]
   1 --> 0
 
 --- quickinfo ---
 /**
- * - UserRepository provided at ln 21 col 19 by `Layer.effect(this, this.make)`
+ * - UserRepository provided at ln 21 col 9 by `UserRepository.Default`
  * 
- * - DbConnection required at ln 21 col 19 by `Layer.effect(this, this.make)`
- * - FileSystem required at ln 16 col 19 by `Layer.effect(this, this.make)`
+ * - DbConnection required at ln 21 col 9 by `UserRepository.Default`
+ * - FileSystem required at ln 16 col 9 by `Cache.Default`
  */
 
 === liveWithPipeable ===
@@ -220,7 +220,7 @@ flowchart TD
 
 --- nested ---
 flowchart TB
-  subgraph 0 ["`Layer.effect(this, this.make)<br/><small>_ln 6 col 19_</small>`"]
+  subgraph 0 ["`DbConnection.Default<br/><small>_ln 6 col 9_</small>`"]
     subgraph 0_wrap[" "]
       subgraph 0_provides [Provides]
         0_provides_0["DbConnection"]
@@ -260,7 +260,7 @@ flowchart TB
     style 2_wrap stroke:none
   end
   style 2 fill:transparent
-  subgraph 3 ["`Layer.effect(this, this.make)<br/><small>_ln 16 col 19_</small>`"]
+  subgraph 3 ["`Cache.Default<br/><small>_ln 16 col 9_</small>`"]
     subgraph 3_wrap[" "]
       subgraph 3_requires [Requires]
         3_requires_0["FileSystem"]
@@ -307,7 +307,7 @@ flowchart TB
     style 5_wrap stroke:none
   end
   style 5 fill:transparent
-  subgraph 6 ["`Layer.effect(this, this.make)<br/><small>_ln 21 col 19_</small>`"]
+  subgraph 6 ["`UserRepository.Default<br/><small>_ln 21 col 9_</small>`"]
     subgraph 6_wrap[" "]
       subgraph 6_requires [Requires]
         6_requires_0["Cache"]
@@ -380,20 +380,20 @@ flowchart TB
 
 --- outline ---
 flowchart TD
-  0["Layer.effect#40;this, this.make#41;"]
-  1["Layer.effect#40;this, this.make#41;"]
-  2["Layer.effect#40;this, this.make#41;"]
+  0["DbConnection.Default"]
+  1["Cache.Default"]
+  2["UserRepository.Default"]
   2 --> 1
   2 --> 0
 
 --- quickinfo ---
 /**
- * - Cache provided at ln 16 col 19 by `Layer.effect(this, this.make)`
- * - DbConnection provided at ln 6 col 19 by `Layer.effect(this, this.make)`
- * - UserRepository provided at ln 21 col 19 by `Layer.effect(this, this.make)`
+ * - Cache provided at ln 16 col 9 by `Cache.Default`
+ * - DbConnection provided at ln 6 col 9 by `DbConnection.Default`
+ * - UserRepository provided at ln 21 col 9 by `UserRepository.Default`
  * 
- * - DbConnection required at ln 21 col 19 by `Layer.effect(this, this.make)`
- * - FileSystem required at ln 16 col 19 by `Layer.effect(this, this.make)`
+ * - DbConnection required at ln 21 col 9 by `UserRepository.Default`
+ * - FileSystem required at ln 16 col 9 by `Cache.Default`
  */
 
 === cacheWithFs ===
@@ -414,7 +414,7 @@ flowchart TD
 
 --- nested ---
 flowchart TB
-  subgraph 0 ["`Layer.effect(this, this.make)<br/><small>_ln 11 col 19_</small>`"]
+  subgraph 0 ["`FileSystem.Default<br/><small>_ln 11 col 9_</small>`"]
     subgraph 0_wrap[" "]
       subgraph 0_provides [Provides]
         0_provides_0["FileSystem"]
@@ -447,7 +447,7 @@ flowchart TB
     style 2_wrap stroke:none
   end
   style 2 fill:transparent
-  subgraph 3 ["`Layer.effect(this, this.make)<br/><small>_ln 16 col 19_</small>`"]
+  subgraph 3 ["`Cache.Default<br/><small>_ln 16 col 9_</small>`"]
     subgraph 3_wrap[" "]
       subgraph 3_requires [Requires]
         3_requires_0["FileSystem"]
@@ -497,13 +497,13 @@ flowchart TB
 
 --- outline ---
 flowchart TD
-  0["Layer.effect#40;this, this.make#41;"]
-  1["Layer.effect#40;this, this.make#41;"]
+  0["FileSystem.Default"]
+  1["Cache.Default"]
   1 --> 0
 
 --- quickinfo ---
 /**
- * - Cache provided at ln 16 col 19 by `Layer.effect(this, this.make)`
+ * - Cache provided at ln 16 col 9 by `Cache.Default`
  */
 ==== /.src/followSymbols.ts (2 layer exports) ====
 
@@ -531,7 +531,7 @@ flowchart TD
 
 --- nested ---
 flowchart TB
-  subgraph 0 ["`Layer.effect(this, this.make)<br/><small>_in simple.ts at ln 6 col 19_</small>`"]
+  subgraph 0 ["`DbConnection.Default<br/><small>_in simple.ts at ln 6 col 9_</small>`"]
     subgraph 0_wrap[" "]
       subgraph 0_provides [Provides]
         0_provides_0["DbConnection"]
@@ -680,7 +680,7 @@ flowchart TB
 
 --- outline ---
 flowchart TD
-  0["Layer.effect#40;this, this.make#41;<br/>_in simple.ts at ln 6 col 19_"]
+  0["DbConnection.Default<br/>_in simple.ts at ln 6 col 9_"]
   1["Cache.Default<br/>_in simple.ts at ln 25 col 70_"]
   2["UserRepository.Default<br/>_in simple.ts at ln 25 col 28_"]
   2 --> 1
@@ -723,7 +723,7 @@ flowchart TD
 
 --- nested ---
 flowchart TB
-  subgraph 0 ["`Layer.effect(this, this.make)<br/><small>_in simple.ts at ln 6 col 19_</small>`"]
+  subgraph 0 ["`DbConnection.Default<br/><small>_in simple.ts at ln 6 col 9_</small>`"]
     subgraph 0_wrap[" "]
       subgraph 0_provides [Provides]
         0_provides_0["DbConnection"]
@@ -835,7 +835,7 @@ flowchart TB
     style 8_wrap stroke:none
   end
   style 8 fill:transparent
-  subgraph 9 ["`Layer.effect(this, this.make)<br/><small>_in simple.ts at ln 21 col 19_</small>`"]
+  subgraph 9 ["`UserRepository.Default<br/><small>_in simple.ts at ln 21 col 9_</small>`"]
     subgraph 9_wrap[" "]
       subgraph 9_requires [Requires]
         9_requires_0["Cache"]
@@ -903,18 +903,18 @@ flowchart TB
 
 --- outline ---
 flowchart TD
-  0["Layer.effect#40;this, this.make#41;<br/>_in simple.ts at ln 6 col 19_"]
+  0["DbConnection.Default<br/>_in simple.ts at ln 6 col 9_"]
   1["FileSystem.Default<br/>_in simple.ts at ln 32 col 60_"]
   2["Cache.Default<br/>_in simple.ts at ln 32 col 27_"]
-  3["Layer.effect#40;this, this.make#41;<br/>_in simple.ts at ln 21 col 19_"]
+  3["UserRepository.Default<br/>_in simple.ts at ln 21 col 9_"]
   2 --> 1
   3 --> 2
   3 --> 0
 
 --- quickinfo ---
 /**
- * - DbConnection provided in simple.ts at ln 6 col 19 by `Layer.effect(this, this.make)`
- * - UserRepository provided in simple.ts at ln 21 col 19 by `Layer.effect(this, this.make)`
+ * - DbConnection provided in simple.ts at ln 6 col 9 by `DbConnection.Default`
+ * - UserRepository provided in simple.ts at ln 21 col 9 by `UserRepository.Default`
  * 
- * - DbConnection required in simple.ts at ln 21 col 19 by `Layer.effect(this, this.make)`
+ * - DbConnection required in simple.ts at ln 21 col 9 by `UserRepository.Default`
  */
