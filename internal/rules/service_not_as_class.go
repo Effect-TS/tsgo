@@ -23,7 +23,7 @@ var ServiceNotAsClass = rule.Rule{
 		matches := AnalyzeServiceNotAsClass(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
-			diags[i] = ctx.NewDiagnostic(m.Location, tsdiag.ServiceMap_Service_should_be_used_in_a_class_declaration_instead_of_as_a_variable_Use_Colon_0_effect_serviceNotAsClass, nil, m.SuggestedUsage)
+			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.ServiceMap_Service_should_be_used_in_a_class_declaration_instead_of_as_a_variable_Use_Colon_0_effect_serviceNotAsClass, nil, m.SuggestedUsage)
 		}
 		return diags
 	},
@@ -31,6 +31,7 @@ var ServiceNotAsClass = rule.Rule{
 
 // ServiceNotAsClassMatch holds the data needed by both the diagnostic and the quickfix.
 type ServiceNotAsClassMatch struct {
+	SourceFile     *ast.SourceFile
 	Location       core.TextRange // Error range for the call expression
 	SuggestedUsage string         // The full suggested class declaration string for the diagnostic message
 	CallExprNode   *ast.Node      // The call expression node (ServiceMap.Service<...>(...))
@@ -145,6 +146,7 @@ func checkServiceNotAsClass(c *checker.Checker, sf *ast.SourceFile, node *ast.No
 	}
 
 	return &ServiceNotAsClassMatch{
+		SourceFile:     sf,
 		Location:       scanner.GetErrorRangeForNode(sf, varDecl.Initializer),
 		SuggestedUsage: suggestedUsage,
 		CallExprNode:   varDecl.Initializer,

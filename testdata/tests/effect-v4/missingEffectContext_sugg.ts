@@ -26,13 +26,14 @@ export class UserRepository extends ServiceMap.Service<UserRepository>()("UserRe
 
 export const liveWithPipeable = UserRepository.Default.pipe(
   Layer.provide(Cache.Default),
+  Layer.provide(FileSystem.Default),
   Layer.merge(DbConnection.Default)
 )
 
 const program = Effect.gen(function*(){
-    const cache = yield* Cache
-    yield* Effect.addFinalizer(() => Effect.log("Finalizing cache"))
-    return cache
+    const fs = yield* FileSystem
+    yield* Effect.addFinalizer(() => Effect.log("Finalizing file system"))
+    return fs
 })
 
 program.pipe(

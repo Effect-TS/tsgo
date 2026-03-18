@@ -96,7 +96,7 @@ func checkGlobalErrorInEffectCatch(ctx *rule.Context, node *ast.Node) *ast.Diagn
 
 		if typeparser.IsGlobalErrorType(ctx.Checker, returnType) {
 			calleeText := scanner.GetSourceTextOfNodeFromSourceFile(ctx.SourceFile, callee, false)
-			return ctx.NewDiagnostic(ctx.GetErrorRange(callee), tsdiag.The_catch_callback_in_0_returns_global_Error_which_loses_type_safety_as_untagged_errors_merge_together_Consider_using_a_tagged_error_and_optionally_wrapping_the_original_in_a_cause_property_effect_globalErrorInEffectCatch, nil, calleeText)
+			return ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(callee), tsdiag.The_catch_callback_in_0_returns_global_Error_which_loses_type_safety_as_untagged_errors_merge_together_Consider_using_a_tagged_error_and_optionally_wrapping_the_original_in_a_cause_property_effect_globalErrorInEffectCatch, nil, calleeText)
 		}
 	}
 

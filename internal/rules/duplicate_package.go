@@ -55,6 +55,7 @@ var DuplicatePackage = rule.Rule{
 		diags := make([]*ast.Diagnostic, len(entries))
 		for i, e := range entries {
 			diags[i] = ctx.NewDiagnostic(
+				ctx.SourceFile,
 				loc,
 				tsdiag.Multiple_versions_of_package_0_detected_Colon_1_Consider_cleaning_up_your_lockfile_or_add_0_to_allowedDuplicatedPackages_to_suppress_this_warning_effect_duplicatePackage,
 				nil,

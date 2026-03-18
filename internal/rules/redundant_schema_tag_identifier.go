@@ -23,7 +23,7 @@ var RedundantSchemaTagIdentifier = rule.Rule{
 			if m.KeyStringLiteral.Kind != ast.KindStringLiteral {
 				continue
 			}
-			diags = append(diags, ctx.NewDiagnostic(m.Location, tsdiag.Identifier_0_is_redundant_since_it_equals_the_tag_value_effect_redundantSchemaTagIdentifier, nil, m.KeyStringLiteral.AsStringLiteral().Text))
+			diags = append(diags, ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Identifier_0_is_redundant_since_it_equals_the_tag_value_effect_redundantSchemaTagIdentifier, nil, m.KeyStringLiteral.AsStringLiteral().Text))
 		}
 		return diags
 	},
@@ -32,6 +32,7 @@ var RedundantSchemaTagIdentifier = rule.Rule{
 // RedundantSchemaTagIdentifierMatch holds the AST nodes needed by both the diagnostic rule
 // and the quick-fix for the redundantSchemaTagIdentifier pattern.
 type RedundantSchemaTagIdentifierMatch struct {
+	SourceFile       *ast.SourceFile
 	Location         core.TextRange // Pre-computed error range for the diagnostic (on KeyStringLiteral)
 	KeyStringLiteral *ast.Node      // The redundant identifier string literal in the inner call
 }
@@ -93,6 +94,7 @@ func analyzeRedundantSchemaTagIdentifierNode(c *checker.Checker, sf *ast.SourceF
 	}
 
 	return RedundantSchemaTagIdentifierMatch{
+		SourceFile:       sf,
 		Location:         scanner.GetErrorRangeForNode(sf, result.KeyStringLiteral),
 		KeyStringLiteral: result.KeyStringLiteral,
 	}, true

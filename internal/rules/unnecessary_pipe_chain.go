@@ -23,7 +23,7 @@ var UnnecessaryPipeChain = rule.Rule{
 		matches := AnalyzeUnnecessaryPipeChain(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
-			diags[i] = ctx.NewDiagnostic(m.Location, tsdiag.Chained_pipe_calls_can_be_simplified_to_a_single_pipe_call_effect_unnecessaryPipeChain, nil)
+			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Chained_pipe_calls_can_be_simplified_to_a_single_pipe_call_effect_unnecessaryPipeChain, nil)
 		}
 		return diags
 	},
@@ -32,6 +32,7 @@ var UnnecessaryPipeChain = rule.Rule{
 // UnnecessaryPipeChainMatch holds the diagnostic and parsed pipe call results
 // needed by both the diagnostic rule and the quick-fix.
 type UnnecessaryPipeChainMatch struct {
+	SourceFile *ast.SourceFile                 // The source file where the diagnostic should be reported
 	Location   core.TextRange                 // The pre-computed error range for this match
 	Outer      *typeparser.ParsedPipeCallResult // The outer pipe call parse result
 	Inner      *typeparser.ParsedPipeCallResult // The inner pipe call parse result (subject of outer)
@@ -53,6 +54,7 @@ func AnalyzeUnnecessaryPipeChain(c *checker.Checker, sf *ast.SourceFile) []Unnec
 			if result := typeparser.ParsePipeCall(c, n); result != nil {
 				if inner := typeparser.ParsePipeCall(c, result.Subject); inner != nil {
 					matches = append(matches, UnnecessaryPipeChainMatch{
+						SourceFile: sf,
 						Location: scanner.GetErrorRangeForNode(sf, result.Node.AsNode()),
 						Outer:    result,
 						Inner:      inner,

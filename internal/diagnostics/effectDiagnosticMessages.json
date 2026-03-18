@@ -230,5 +230,9 @@
     "Adjusting this layer composition could provide the missing service. effect(missingEffectContext)": {
         "category": "Error",
         "code": 377059
+    },
+    "This layer provides the missing service {0}. effect(missingEffectContext)": {
+        "category": "Error",
+        "code": 377060
     }
 }

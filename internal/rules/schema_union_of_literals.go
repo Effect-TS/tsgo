@@ -23,7 +23,7 @@ var SchemaUnionOfLiterals = rule.Rule{
 		matches := AnalyzeSchemaUnionOfLiterals(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
-			diags[i] = ctx.NewDiagnostic(m.Location, tsdiag.A_Schema_Union_of_multiple_Schema_Literal_calls_can_be_simplified_to_a_single_Schema_Literal_call_effect_schemaUnionOfLiterals, nil)
+			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.A_Schema_Union_of_multiple_Schema_Literal_calls_can_be_simplified_to_a_single_Schema_Literal_call_effect_schemaUnionOfLiterals, nil)
 		}
 		return diags
 	},
@@ -32,6 +32,7 @@ var SchemaUnionOfLiterals = rule.Rule{
 // SchemaUnionOfLiteralsMatch holds the AST nodes needed by both the diagnostic rule
 // and the quick-fix for the schemaUnionOfLiterals pattern.
 type SchemaUnionOfLiteralsMatch struct {
+	SourceFile             *ast.SourceFile
 	Location               core.TextRange // Pre-computed error range for the diagnostic
 	UnionCallNode          *ast.Node      // The full Schema.Union(...) call expression to be replaced
 	FirstLiteralExpression *ast.Node      // The callee expression (Schema.Literal) from the first argument
@@ -110,6 +111,7 @@ func analyzeSchemaUnionOfLiteralsNode(c *checker.Checker, sf *ast.SourceFile, no
 	}
 
 	return SchemaUnionOfLiteralsMatch{
+		SourceFile:             sf,
 		Location:               scanner.GetErrorRangeForNode(sf, node),
 		UnionCallNode:          node,
 		FirstLiteralExpression: firstLiteralExpression,

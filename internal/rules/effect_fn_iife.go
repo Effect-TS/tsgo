@@ -32,7 +32,7 @@ var EffectFnIife = rule.Rule{
 				traceText := ctx.SourceFile.Text()[result.TraceExpression.Pos():result.TraceExpression.End()]
 				withSpanHint = " with Effect.withSpan(" + traceText + ") piped in the end to maintain tracing spans"
 			}
-			diags[i] = ctx.NewDiagnostic(m.Location, tsdiag.X_0_1_returns_a_reusable_function_that_can_take_arguments_but_here_it_s_called_immediately_Use_Effect_gen_instead_2_effect_effectFnIife, nil, effectModuleName, result.Variant, withSpanHint)
+			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.X_0_1_returns_a_reusable_function_that_can_take_arguments_but_here_it_s_called_immediately_Use_Effect_gen_instead_2_effect_effectFnIife, nil, effectModuleName, result.Variant, withSpanHint)
 		}
 		return diags
 	},
@@ -41,6 +41,7 @@ var EffectFnIife = rule.Rule{
 // EffectFnIifeMatch holds the parsed result needed by both the diagnostic rule
 // and the quick-fix for the effectFnIife pattern.
 type EffectFnIifeMatch struct {
+	SourceFile *ast.SourceFile
 	Location core.TextRange
 	Result     *typeparser.EffectFnIifeResult
 }
@@ -58,6 +59,7 @@ func AnalyzeEffectFnIife(c *checker.Checker, sf *ast.SourceFile) []EffectFnIifeM
 
 		if result := typeparser.ParseEffectFnIife(c, n); result != nil {
 			matches = append(matches, EffectFnIifeMatch{
+				SourceFile: sf,
 				Location: scanner.GetErrorRangeForNode(sf, result.OuterCall.AsNode()),
 				Result:   result,
 			})

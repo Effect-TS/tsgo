@@ -23,7 +23,7 @@ var UnnecessaryPipe = rule.Rule{
 		matches := AnalyzeUnnecessaryPipe(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
-			diags[i] = ctx.NewDiagnostic(m.Location, tsdiag.This_pipe_call_contains_no_arguments_effect_unnecessaryPipe, nil)
+			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.This_pipe_call_contains_no_arguments_effect_unnecessaryPipe, nil)
 		}
 		return diags
 	},
@@ -32,6 +32,7 @@ var UnnecessaryPipe = rule.Rule{
 // UnnecessaryPipeMatch holds the diagnostic and parsed pipe call result needed
 // by both the diagnostic rule and the quick-fix.
 type UnnecessaryPipeMatch struct {
+	SourceFile *ast.SourceFile              // The source file where this match was found
 	Location   core.TextRange               // The pre-computed error range for this match
 	Result     *typeparser.ParsedPipeCallResult // The parsed pipe call (contains Subject node and call Node)
 }
@@ -51,6 +52,7 @@ func AnalyzeUnnecessaryPipe(c *checker.Checker, sf *ast.SourceFile) []Unnecessar
 			if result := typeparser.ParsePipeCall(c, n); result != nil {
 				if len(result.Args) == 0 {
 					matches = append(matches, UnnecessaryPipeMatch{
+						SourceFile: sf,
 						Location: scanner.GetErrorRangeForNode(sf, result.Node.AsNode()),
 						Result:   result,
 					})

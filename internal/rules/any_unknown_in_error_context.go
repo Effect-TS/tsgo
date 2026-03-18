@@ -166,7 +166,7 @@ var AnyUnknownInErrorContext = rule.Rule{
 		// Report all innermost matching nodes
 		var diags []*ast.Diagnostic
 		for _, m := range matches {
-			diags = append(diags, ctx.NewDiagnostic(ctx.GetErrorRange(m.node), tsdiag.X_0_effect_anyUnknownInErrorContext, nil, m.messageText))
+			diags = append(diags, ctx.NewDiagnostic(ast.GetSourceFileOfNode(m.node), ctx.GetErrorRange(m.node), tsdiag.X_0_effect_anyUnknownInErrorContext, nil, m.messageText))
 		}
 
 		return diags

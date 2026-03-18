@@ -2,7 +2,11 @@
 package rules
 
 import (
+	"fmt"
+
 	"github.com/effect-ts/effect-typescript-go/etscore"
+	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
+	"github.com/effect-ts/effect-typescript-go/internal/layergraph"
 	"github.com/effect-ts/effect-typescript-go/internal/rule"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -39,9 +43,10 @@ var MissingEffectContext = rule.Rule{
 			if len(unhandledContexts) > 0 {
 				contextTypeStr := formatContextTypes(ctx.Checker, unhandledContexts)
 				diag := ctx.NewDiagnostic(
+					ctx.SourceFile,
 					ctx.GetErrorRange(re.ErrorNode),
 					tsdiag.Missing_context_0_in_the_expected_Effect_type_effect_missingEffectContext,
-					missingEffectContextRelatedInformation(ctx.Checker, ctx, re.ErrorNode),
+					missingEffectContextRelatedInformation(ctx.Checker, ctx, re.ErrorNode, unhandledContexts),
 					contextTypeStr,
 				)
 				diags = append(diags, diag)
@@ -82,22 +87,31 @@ func formatContextTypes(c *checker.Checker, types []*checker.Type) string {
 	return result
 }
 
-func missingEffectContextRelatedInformation(c *checker.Checker, ctx *rule.Context, errorNode *ast.Node) []*ast.Diagnostic {
+func missingEffectContextRelatedInformation(c *checker.Checker, ctx *rule.Context, errorNode *ast.Node, missingTypes []*checker.Type) []*ast.Diagnostic {
 	provideLocation := findRelatedProvideLocation(c, ctx.SourceFile, errorNode)
-	if provideLocation.Node == nil {
+	if provideLocation.Node == nil || provideLocation.LayerNode == nil {
 		return nil
 	}
-	related := ctx.NewDiagnostic(
+	layerDiagnostics := findRelatedLayerProviderDiagnostics(c, ctx, provideLocation.LayerNode, missingTypes)
+	if len(layerDiagnostics) == 0 {
+		return nil
+	}
+	provideDiagnostic := ctx.NewDiagnostic(
+		ctx.SourceFile,
 		provideLocation.Location,
 		tsdiag.Adjusting_this_layer_composition_could_provide_the_missing_service_effect_missingEffectContext,
 		nil,
 	)
-	return []*ast.Diagnostic{related}
+	relatedInformation := make([]*ast.Diagnostic, 0, 1+len(layerDiagnostics))
+	relatedInformation = append(relatedInformation, provideDiagnostic)
+	relatedInformation = append(relatedInformation, layerDiagnostics...)
+	return relatedInformation
 }
 
 type provideLocation struct {
-	Node     *ast.Node
-	Location core.TextRange
+	Node      *ast.Node
+	LayerNode *ast.Node
+	Location  core.TextRange
 }
 
 func findRelatedProvideLocation(c *checker.Checker, sf *ast.SourceFile, errorNode *ast.Node) provideLocation {
@@ -126,12 +140,112 @@ func findRelatedProvideLocation(c *checker.Checker, sf *ast.SourceFile, errorNod
 				callNode = transformation.Callee
 			}
 			return provideLocation{
-				Node:     callNode,
-				Location: scanner.GetErrorRangeForNode(sf, callNode),
+				Node:      callNode,
+				LayerNode: firstNode(transformation.Args),
+				Location:  scanner.GetErrorRangeForNode(sf, callNode),
 			}
 		}
 	}
 	return provideLocation{}
+}
+
+func findRelatedLayerProviderDiagnostics(
+	c *checker.Checker,
+	ctx *rule.Context,
+	layerNode *ast.Node,
+	missingTypes []*checker.Type,
+) []*ast.Diagnostic {
+	if c == nil || ctx == nil || layerNode == nil || len(missingTypes) == 0 {
+		return nil
+	}
+	rootLayerProvides := rootLayerProvidesTypes(c, layerNode)
+	fullGraph := layergraph.ExtractLayerGraph(c, layerNode, ctx.SourceFile, layergraph.ExtractLayerGraphOptions{
+		FollowSymbolsDepth: 2,
+	})
+	outlineGraph := layergraph.ExtractOutlineGraph(c, fullGraph)
+	if outlineGraph == nil {
+		return nil
+	}
+	var related []*ast.Diagnostic
+	seen := make(map[string]struct{})
+	for _, missingType := range missingTypes {
+		if missingType == nil {
+			continue
+		}
+		if rootProvidesType(c, rootLayerProvides, missingType) {
+			continue
+		}
+		missingTypeText := c.TypeToString(missingType)
+		for _, nodeInfo := range outlineGraph.Nodes() {
+			displayNode := nodeInfo.DisplayNode
+			if displayNode == nil {
+				displayNode = nodeInfo.Node
+			}
+			if displayNode == nil || !outlineNodeProvidesType(c, nodeInfo, missingType) {
+				continue
+			}
+			key := missingTypeText
+			if displayNode.Pos() >= 0 {
+				key += fmt.Sprintf(":%d", displayNode.Pos())
+			}
+			if _, ok := seen[key]; ok {
+				continue
+			}
+			seen[key] = struct{}{}
+			related = append(related, ctx.NewDiagnostic(
+				ast.GetSourceFileOfNode(displayNode),
+				scanner.GetErrorRangeForNode(ast.GetSourceFileOfNode(displayNode), displayNode),
+				tsdiag.This_layer_provides_the_missing_service_0_effect_missingEffectContext,
+				nil,
+				missingTypeText,
+			))
+		}
+	}
+	return related
+}
+
+func rootLayerProvidesTypes(c *checker.Checker, layerNode *ast.Node) []*checker.Type {
+	if c == nil || layerNode == nil {
+		return nil
+	}
+	layerType := typeparser.LayerType(c, checkerutils.GetTypeAtLocation(c, layerNode), layerNode)
+	if layerType == nil {
+		return nil
+	}
+	return typeparser.UnrollUnionMembers(layerType.ROut)
+}
+
+func rootProvidesType(c *checker.Checker, providedTypes []*checker.Type, target *checker.Type) bool {
+	for _, providedType := range providedTypes {
+		if providedType == target {
+			return true
+		}
+		if checker.Checker_isTypeAssignableTo(c, providedType, target) &&
+			checker.Checker_isTypeAssignableTo(c, target, providedType) {
+			return true
+		}
+	}
+	return false
+}
+
+func outlineNodeProvidesType(c *checker.Checker, node layergraph.LayerOutlineGraphNodeInfo, target *checker.Type) bool {
+	for _, providedType := range node.ActualProvides {
+		if providedType == target {
+			return true
+		}
+		if checker.Checker_isTypeAssignableTo(c, providedType, target) &&
+			checker.Checker_isTypeAssignableTo(c, target, providedType) {
+			return true
+		}
+	}
+	return false
+}
+
+func firstNode(nodes []*ast.Node) *ast.Node {
+	if len(nodes) == 0 {
+		return nil
+	}
+	return nodes[0]
 }
 
 func findTransformationIndexContainingNode(flow *typeparser.PipingFlow, target *ast.Node) int {

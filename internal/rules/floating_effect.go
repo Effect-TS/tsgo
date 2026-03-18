@@ -53,10 +53,10 @@ var FloatingEffect = rule.Rule{
 
 				var diag *ast.Diagnostic
 				if result.isStrict {
-					diag = ctx.NewDiagnostic(ctx.GetErrorRange(expr), tsdiag.Effect_must_be_yielded_or_assigned_to_a_variable_effect_floatingEffect, nil)
+					diag = ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(expr), tsdiag.Effect_must_be_yielded_or_assigned_to_a_variable_effect_floatingEffect, nil)
 				} else {
 					typeName := ctx.Checker.TypeToString(result.exprType)
-					diag = ctx.NewDiagnostic(ctx.GetErrorRange(expr), tsdiag.Effect_able_0_must_be_yielded_or_assigned_to_a_variable_effect_floatingEffect, nil, typeName)
+					diag = ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(expr), tsdiag.Effect_able_0_must_be_yielded_or_assigned_to_a_variable_effect_floatingEffect, nil, typeName)
 				}
 				diags = append(diags, diag)
 			}

@@ -50,7 +50,7 @@ func checkTryCatchScope(ctx *rule.Context, tryNode *ast.Node) *ast.Diagnostic {
 	if scopes.ScopeKind == typeparser.ScopeKindEffectGen || scopes.ScopeKind == typeparser.ScopeKindEffectFn {
 		genFn := scopes.EffectGeneratorFunction()
 		if genFn != nil && scopes.ScopeNode == genFn.AsNode() {
-			return ctx.NewDiagnostic(ctx.GetErrorRange(tryNode), tsdiag.Avoid_using_try_Slashcatch_inside_Effect_generators_Use_Effect_s_error_handling_mechanisms_instead_e_g_Effect_try_Effect_tryPromise_Effect_catch_Effect_catchTag_effect_tryCatchInEffectGen, nil)
+			return ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(tryNode), tsdiag.Avoid_using_try_Slashcatch_inside_Effect_generators_Use_Effect_s_error_handling_mechanisms_instead_e_g_Effect_try_Effect_tryPromise_Effect_catch_Effect_catchTag_effect_tryCatchInEffectGen, nil)
 		}
 	}
 	return nil

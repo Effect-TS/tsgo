@@ -78,6 +78,7 @@ var EffectInFailure = rule.Rule{
 			}
 
 			diag := ctx.NewDiagnostic(
+				ctx.SourceFile,
 				ctx.GetErrorRange(node),
 				tsdiag.The_error_channel_contains_an_Effect_0_Putting_Effect_computations_in_the_failure_channel_is_not_intended_keep_only_failure_types_there_effect_effectInFailure,
 				nil,

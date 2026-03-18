@@ -22,7 +22,7 @@ var UnnecessaryEffectGen = rule.Rule{
 		matches := AnalyzeUnnecessaryEffectGen(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
-			diags[i] = ctx.NewDiagnostic(m.Location, tsdiag.This_Effect_gen_contains_a_single_return_statement_effect_unnecessaryEffectGen, nil)
+			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.This_Effect_gen_contains_a_single_return_statement_effect_unnecessaryEffectGen, nil)
 		}
 		return diags
 	},
@@ -31,6 +31,7 @@ var UnnecessaryEffectGen = rule.Rule{
 // UnnecessaryEffectGenMatch holds the AST nodes needed by both the diagnostic rule
 // and the quick-fix for the unnecessaryEffectGen pattern.
 type UnnecessaryEffectGenMatch struct {
+	SourceFile        *ast.SourceFile // The source file where this match was found
 	Location          core.TextRange  // The pre-computed error range for this match
 	CallNode          *ast.Node       // The Effect.gen(...) call expression (replacement target)
 	YieldedExpression *ast.Node       // The expression being yield*-ed (the replacement value)
@@ -126,6 +127,7 @@ func analyzeUnnecessaryEffectGenNode(c *checker.Checker, sf *ast.SourceFile, n *
 	}
 
 	return &UnnecessaryEffectGenMatch{
+		SourceFile:        sf,
 		Location:          scanner.GetErrorRangeForNode(sf, n),
 		CallNode:          n,
 		YieldedExpression: yieldedExpr,
@@ -134,4 +136,3 @@ func analyzeUnnecessaryEffectGenNode(c *checker.Checker, sf *ast.SourceFile, n *
 		EffectModuleNode:  genResult.EffectModule,
 	}
 }
-

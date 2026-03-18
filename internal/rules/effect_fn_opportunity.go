@@ -30,7 +30,7 @@ var EffectFnOpportunity = rule.Rule{
 				continue
 			}
 			expectedSignature := buildExpectedSignature(ctx.SourceFile, m, fixName)
-			diags = append(diags, ctx.NewDiagnostic(m.Location, tsdiag.Can_be_rewritten_as_a_reusable_function_Colon_0_effect_effectFnOpportunity, nil, expectedSignature))
+			diags = append(diags, ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Can_be_rewritten_as_a_reusable_function_Colon_0_effect_effectFnOpportunity, nil, expectedSignature))
 		}
 		return diags
 	},
@@ -39,6 +39,7 @@ var EffectFnOpportunity = rule.Rule{
 // EffectFnOpportunityMatch holds the parsed result needed by both the diagnostic rule
 // and the quick-fix for the effectFnOpportunity pattern.
 type EffectFnOpportunityMatch struct {
+	SourceFile *ast.SourceFile
 	Location core.TextRange
 	Result   *typeparser.EffectFnOpportunityResult
 }
@@ -61,6 +62,7 @@ func AnalyzeEffectFnOpportunity(c *checker.Checker, sf *ast.SourceFile) []Effect
 				reportNode = result.TargetNode
 			}
 			matches = append(matches, EffectFnOpportunityMatch{
+				SourceFile: sf,
 				Location: scanner.GetErrorRangeForNode(sf, reportNode),
 				Result:   result,
 			})

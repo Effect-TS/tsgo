@@ -21,8 +21,8 @@ var MissingStarInYieldEffectGen = rule.Rule{
 		matches := AnalyzeMissingStarInYieldEffectGen(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
-			relatedInfo := ctx.NewDiagnostic(ctx.GetErrorRange(m.GenFnNode), tsdiag.Inside_this_Effect_generator_effect_missingStarInYieldEffectGen, nil)
-			diags[i] = ctx.NewDiagnostic(m.Location, tsdiag.When_yielding_Effects_inside_Effect_gen_you_should_use_yield_Asterisk_instead_of_yield_effect_missingStarInYieldEffectGen, []*ast.Diagnostic{relatedInfo})
+			relatedInfo := ctx.NewDiagnostic(m.SourceFile, ctx.GetErrorRange(m.GenFnNode), tsdiag.Inside_this_Effect_generator_effect_missingStarInYieldEffectGen, nil)
+			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.When_yielding_Effects_inside_Effect_gen_you_should_use_yield_Asterisk_instead_of_yield_effect_missingStarInYieldEffectGen, []*ast.Diagnostic{relatedInfo})
 		}
 		return diags
 	},
@@ -31,6 +31,7 @@ var MissingStarInYieldEffectGen = rule.Rule{
 // MissingStarInYieldEffectGenMatch holds the AST node needed by both the diagnostic rule
 // and the quick-fix for the missingStarInYieldEffectGen pattern.
 type MissingStarInYieldEffectGenMatch struct {
+	SourceFile *ast.SourceFile // The source file where the diagnostic should be reported
 	Location  core.TextRange  // The pre-computed error range for this match
 	YieldNode  *ast.Node       // The yield expression node (for fix range)
 	GenFnNode  *ast.Node       // The generator function node (for related info)
@@ -56,6 +57,7 @@ func AnalyzeMissingStarInYieldEffectGen(c *checker.Checker, sf *ast.SourceFile) 
 					genFn := scopes.EffectGeneratorFunction()
 					if genFn != nil && scopes.ScopeNode == genFn.AsNode() {
 						matches = append(matches, MissingStarInYieldEffectGenMatch{
+							SourceFile: sf,
 							Location:  scanner.GetErrorRangeForNode(sf, n),
 							YieldNode: n,
 							GenFnNode:  genFn.AsNode(),
@@ -73,4 +75,3 @@ func AnalyzeMissingStarInYieldEffectGen(c *checker.Checker, sf *ast.SourceFile) 
 
 	return matches
 }
-

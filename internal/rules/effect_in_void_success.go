@@ -43,7 +43,7 @@ var EffectInVoidSuccess = rule.Rule{
 			members := typeparser.UnrollUnionMembers(realEffect.A)
 			voidedEffect := findFirstStrictEffect(ctx.Checker, members, entry.Node)
 			if voidedEffect != nil {
-				diag := ctx.NewDiagnostic(ctx.GetErrorRange(entry.Node), tsdiag.There_is_a_nested_0_in_the_void_success_channel_beware_that_this_could_lead_to_nested_Effect_Effect_that_won_t_be_executed_effect_effectInVoidSuccess, nil, ctx.Checker.TypeToString(voidedEffect))
+				diag := ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(entry.Node), tsdiag.There_is_a_nested_0_in_the_void_success_channel_beware_that_this_could_lead_to_nested_Effect_Effect_that_won_t_be_executed_effect_effectInVoidSuccess, nil, ctx.Checker.TypeToString(voidedEffect))
 				diags = append(diags, diag)
 			}
 		}

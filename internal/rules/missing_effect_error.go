@@ -24,7 +24,7 @@ var MissingEffectError = rule.Rule{
 		matches := AnalyzeMissingEffectError(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
-			diags[i] = ctx.NewDiagnostic(m.Location, tsdiag.Missing_errors_0_in_the_expected_Effect_type_effect_missingEffectError, nil, m.ErrorTypeStr)
+			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Missing_errors_0_in_the_expected_Effect_type_effect_missingEffectError, nil, m.ErrorTypeStr)
 		}
 		return diags
 	},
@@ -33,6 +33,7 @@ var MissingEffectError = rule.Rule{
 // MissingEffectErrorMatch holds the analysis results needed by both the
 // diagnostic rule and the quick-fixes for the missingEffectError pattern.
 type MissingEffectErrorMatch struct {
+	SourceFile        *ast.SourceFile // The source file where the diagnostic should be reported
 	Location          core.TextRange   // The diagnostic error range
 	ErrorNode         *ast.Node        // The AST node where the type error occurs
 	UnhandledErrors   []*checker.Type  // The individual error types not handled by the target
@@ -64,6 +65,7 @@ func AnalyzeMissingEffectError(c *checker.Checker, sf *ast.SourceFile) []Missing
 		unhandledErrors := findUnhandledErrors(c, srcEffect.E, tgtEffect.E)
 		if len(unhandledErrors) > 0 {
 			matches = append(matches, MissingEffectErrorMatch{
+				SourceFile:        sf,
 				Location:          scanner.GetErrorRangeForNode(sf, re.ErrorNode),
 				ErrorNode:         re.ErrorNode,
 				UnhandledErrors:   unhandledErrors,

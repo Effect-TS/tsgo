@@ -79,7 +79,7 @@ func checkGlobalErrorInEffectFailure(ctx *rule.Context, node *ast.Node) *ast.Dia
 	})
 
 	if ancestor != nil {
-		return ctx.NewDiagnostic(ctx.GetErrorRange(node), tsdiag.Global_Error_loses_type_safety_as_untagged_errors_merge_together_in_the_Effect_failure_channel_Consider_using_a_tagged_error_and_optionally_wrapping_the_original_in_a_cause_property_effect_globalErrorInEffectFailure, nil)
+		return ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(node), tsdiag.Global_Error_loses_type_safety_as_untagged_errors_merge_together_in_the_Effect_failure_channel_Consider_using_a_tagged_error_and_optionally_wrapping_the_original_in_a_cause_property_effect_globalErrorInEffectFailure, nil)
 	}
 
 	return nil

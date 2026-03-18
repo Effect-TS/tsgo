@@ -179,14 +179,7 @@ func generateErrorBaseline(effectVersion string, inputFiles []*harnessutil.TestF
 						fmt.Fprintf(&sb, "!!! %s TS%d: %s\n",
 							categoryToString(errDiag.Category()), errDiag.Code(), errDiag.String())
 
-						// Emit related information entries
-						for _, info := range errDiag.RelatedInformation() {
-							if info.File() != nil {
-								relLine, relChar := scanner.GetECMALineAndUTF16CharacterOfPosition(info.File(), info.Loc().Pos())
-								fmt.Fprintf(&sb, "!!! related TS%d %s(%d,%d): %s\n",
-									info.Code(), info.File().FileName(), relLine+1, relChar+1, info.String())
-							}
-						}
+						appendRelatedDiagnostics(&sb, errDiag.RelatedInformation(), 0)
 					}
 				}
 			}
@@ -194,6 +187,18 @@ func generateErrorBaseline(effectVersion string, inputFiles []*harnessutil.TestF
 	}
 
 	return sb.String()
+}
+
+func appendRelatedDiagnostics(sb *strings.Builder, related []*ast.Diagnostic, depth int) {
+	indent := strings.Repeat("  ", depth)
+	for _, info := range related {
+		if info.File() != nil {
+			relLine, relChar := scanner.GetECMALineAndUTF16CharacterOfPosition(info.File(), info.Loc().Pos())
+			fmt.Fprintf(sb, "%s!!! related TS%d %s(%d,%d): %s\n",
+				indent, info.Code(), info.File().FileName(), relLine+1, relChar+1, info.String())
+		}
+		appendRelatedDiagnostics(sb, info.RelatedInformation(), depth+1)
+	}
 }
 
 // categoryToString converts a diagnostic category to its lowercase string representation.

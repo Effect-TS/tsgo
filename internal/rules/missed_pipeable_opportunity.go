@@ -31,6 +31,7 @@ var MissedPipeableOpportunity = rule.Rule{
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
 			diags[i] = ctx.NewDiagnostic(
+				m.SourceFile,
 				m.Location,
 				tsdiag.Nested_function_calls_can_be_converted_to_pipeable_style_for_better_readability_consider_using_0_pipe_instead_effect_missedPipeableOpportunity,
 				nil,
@@ -44,6 +45,7 @@ var MissedPipeableOpportunity = rule.Rule{
 // MissedPipeableOpportunityMatch holds the parsed result needed by both the diagnostic rule
 // and the quick-fix for the missedPipeableOpportunity pattern.
 type MissedPipeableOpportunityMatch struct {
+	SourceFile              *ast.SourceFile
 	Location                core.TextRange
 	PipeableStartIndex      int
 	PipeableTransformations []typeparser.PipingFlowTransformation
@@ -119,6 +121,7 @@ func AnalyzeMissedPipeableOpportunity(c *checker.Checker, sf *ast.SourceFile, mi
 				afterTransformations := flow.Transformations[pipeableEndIndex:]
 
 				matches = append(matches, MissedPipeableOpportunityMatch{
+					SourceFile:              sf,
 					Location:                scanner.GetErrorRangeForNode(sf, flow.Node),
 					PipeableStartIndex:      firstPipeableIndex,
 					PipeableTransformations: pipeableTransformations,

@@ -23,7 +23,7 @@ var ClassSelfMismatch = rule.Rule{
 		matches := AnalyzeClassSelfMismatch(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
-			diags[i] = ctx.NewDiagnostic(m.Location, tsdiag.Self_type_parameter_should_be_0_effect_classSelfMismatch, nil, m.ExpectedName)
+			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Self_type_parameter_should_be_0_effect_classSelfMismatch, nil, m.ExpectedName)
 		}
 		return diags
 	},
@@ -32,11 +32,12 @@ var ClassSelfMismatch = rule.Rule{
 // ClassSelfMismatchMatch holds the AST nodes needed by both the diagnostic rule
 // and the quick-fix for the classSelfMismatch pattern.
 type ClassSelfMismatchMatch struct {
-	Location     core.TextRange // The pre-computed error range for the selfTypeNode
-	SelfTypeNode *ast.Node      // The Self type argument node
-	ClassName    *ast.Node      // The class name identifier
-	ExpectedName string         // The expected name (from the class declaration)
-	ActualName   string         // The actual name found in the Self type parameter
+	SourceFile   *ast.SourceFile // The source file of the match
+	Location     core.TextRange  // The pre-computed error range for the selfTypeNode
+	SelfTypeNode *ast.Node       // The Self type argument node
+	ClassName    *ast.Node       // The class name identifier
+	ExpectedName string          // The expected name (from the class declaration)
+	ActualName   string          // The actual name found in the Self type parameter
 }
 
 // AnalyzeClassSelfMismatch finds all class declarations where the Self type
@@ -122,6 +123,7 @@ func checkClassSelfMismatch(c *checker.Checker, sf *ast.SourceFile, classNode *a
 	}
 
 	return &ClassSelfMismatchMatch{
+		SourceFile:   sf,
 		Location:     scanner.GetErrorRangeForNode(sf, selfTypeNode),
 		SelfTypeNode: selfTypeNode,
 		ClassName:    className,
