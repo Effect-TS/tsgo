@@ -1,5 +1,12 @@
 # @effect/tsgo
 
+## 0.0.15
+
+### Patch Changes
+
+- e1c3844: Prefer the property name for graphs and locations
+- b8ff941: Handle existing prepare script
+
 ## 0.0.14
 
 ### Patch Changes
