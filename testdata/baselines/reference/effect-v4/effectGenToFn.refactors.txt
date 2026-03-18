@@ -2,21 +2,29 @@
 
 [R1] selection: "5:8-5:8"
   Refactor 0: "Convert to Effect.fn(\"program\")" (refactor.rewrite.effect.effectGenToFn)
+  Refactor 1: "Toggle return type annotation" (refactor.rewrite.effect.toggleReturnTypeAnnotation)
 
 [R2] selection: "12:8-12:8"
-  Refactor 0: "Convert to Effect.fn(\"programWithPipes\")" (refactor.rewrite.effect.effectGenToFn)
+  Refactor 0: "Rewrite as pipe(X, Y, Z, ...)" (refactor.rewrite.effect.togglePipeStyle)
+  Refactor 1: "Wrap with Effect.gen" (refactor.rewrite.effect.wrapWithEffectGen)
+  Refactor 2: "Convert to Effect.fn(\"programWithPipes\")" (refactor.rewrite.effect.effectGenToFn)
+  Refactor 3: "Toggle return type annotation" (refactor.rewrite.effect.toggleReturnTypeAnnotation)
 
 [R3] selection: "21:16-21:16"
   Refactor 0: "Convert to Effect.fn(\"sampleReturns\")" (refactor.rewrite.effect.effectGenToFn)
+  Refactor 1: "Toggle return type annotation" (refactor.rewrite.effect.toggleReturnTypeAnnotation)
 
 [R4] selection: "29:8-29:8"
   Refactor 0: "Convert to Effect.fn(\"sampleReturnsConciseBody\")" (refactor.rewrite.effect.effectGenToFn)
+  Refactor 1: "Toggle return type annotation" (refactor.rewrite.effect.toggleReturnTypeAnnotation)
 
 [R5] selection: "4:17-4:17"
-  (no refactors)
+  Refactor 0: "Toggle type annotation" (refactor.rewrite.effect.toggleTypeAnnotation)
+  Refactor 1: "Toggle lazy const" (refactor.rewrite.effect.toggleLazyConst)
 
 [R6] selection: "11:21-11:21"
-  (no refactors)
+  Refactor 0: "Toggle type annotation" (refactor.rewrite.effect.toggleTypeAnnotation)
+  Refactor 1: "Toggle lazy const" (refactor.rewrite.effect.toggleLazyConst)
 
 [R7] selection: "empty (0:0-0:0)"
   (no refactors)
@@ -60,7 +68,119 @@ export const sampleReturnsConciseBody = <A extends number, B extends number>(arg
   })
 
 
-=== [R2] Refactor 0: "Convert to Effect.fn(\"programWithPipes\")" ===
+=== [R1] Refactor 1: "Toggle return type annotation" ===
+
+--- file:///.src/effectGenToFn.ts ---
+// refactor: 5:8, 12:8, 21:16, 29:8, 4:17, 11:21
+import * as Eff from "effect/Effect"
+
+export const program = (): Eff.Effect<number, never, never> =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(1)
+    const b = yield* Eff.succeed(2)
+    return a + b
+  })
+
+export const programWithPipes = (fa: number, fb: number) =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(fa)
+    const b = yield* Eff.succeed(fb)
+    return a + b
+  }).pipe(
+    Eff.map((a) => a + 1)
+  )
+
+export function sampleReturns<A extends number, B extends number>(arg1: A, arg2: B) {
+  return Eff.gen(function*() {
+    const a = yield* Eff.succeed(arg1)
+    const b = yield* Eff.succeed(arg2)
+    return a + b
+  })
+}
+
+export const sampleReturnsConciseBody = <A extends number, B extends number>(arg1: A, arg2: B) =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(arg1)
+    const b = yield* Eff.succeed(arg2)
+    return a + b
+  })
+
+
+=== [R2] Refactor 0: "Rewrite as pipe(X, Y, Z, ...)" ===
+
+--- file:///.src/effectGenToFn.ts ---
+// refactor: 5:8, 12:8, 21:16, 29:8, 4:17, 11:21
+import * as Eff from "effect/Effect"
+
+export const program = () =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(1)
+    const b = yield* Eff.succeed(2)
+    return a + b
+  })
+
+export const programWithPipes = (fa: number, fb: number) =>
+  pipe(Eff.gen(function*() {
+    const a = yield* Eff.succeed(fa)
+    const b = yield* Eff.succeed(fb)
+    return a + b
+}), Eff.map(a => a + 1))
+
+export function sampleReturns<A extends number, B extends number>(arg1: A, arg2: B) {
+  return Eff.gen(function*() {
+    const a = yield* Eff.succeed(arg1)
+    const b = yield* Eff.succeed(arg2)
+    return a + b
+  })
+}
+
+export const sampleReturnsConciseBody = <A extends number, B extends number>(arg1: A, arg2: B) =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(arg1)
+    const b = yield* Eff.succeed(arg2)
+    return a + b
+  })
+
+
+=== [R2] Refactor 1: "Wrap with Effect.gen" ===
+
+--- file:///.src/effectGenToFn.ts ---
+// refactor: 5:8, 12:8, 21:16, 29:8, 4:17, 11:21
+import * as Eff from "effect/Effect"
+
+export const program = () =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(1)
+    const b = yield* Eff.succeed(2)
+    return a + b
+  })
+
+export const programWithPipes = (fa: number, fb: number) =>
+  Eff.gen(function*() {
+    return yield* Eff.gen(function*() {
+        const a = yield* Eff.succeed(fa)
+        const b = yield* Eff.succeed(fb)
+        return a + b
+    }).pipe(Eff.map(a => a + 1))
+})
+
+export function sampleReturns<A extends number, B extends number>(arg1: A, arg2: B) {
+  return Eff.gen(function*() {
+    const a = yield* Eff.succeed(arg1)
+    const b = yield* Eff.succeed(arg2)
+    return a + b
+  })
+}
+
+export const sampleReturnsConciseBody = <A extends number, B extends number>(arg1: A, arg2: B) =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(arg1)
+    const b = yield* Eff.succeed(arg2)
+    return a + b
+  })
+
+
+=== [R2] Refactor 2: "Convert to Effect.fn(\"programWithPipes\")" ===
 
 --- file:///.src/effectGenToFn.ts ---
 // refactor: 5:8, 12:8, 21:16, 29:8, 4:17, 11:21
@@ -78,6 +198,44 @@ export const programWithPipes = Eff.fn("programWithPipes")(function* (fa: number
     const b = yield* Eff.succeed(fb);
     return a + b;
 }, Eff.map(a => a + 1));
+
+export function sampleReturns<A extends number, B extends number>(arg1: A, arg2: B) {
+  return Eff.gen(function*() {
+    const a = yield* Eff.succeed(arg1)
+    const b = yield* Eff.succeed(arg2)
+    return a + b
+  })
+}
+
+export const sampleReturnsConciseBody = <A extends number, B extends number>(arg1: A, arg2: B) =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(arg1)
+    const b = yield* Eff.succeed(arg2)
+    return a + b
+  })
+
+
+=== [R2] Refactor 3: "Toggle return type annotation" ===
+
+--- file:///.src/effectGenToFn.ts ---
+// refactor: 5:8, 12:8, 21:16, 29:8, 4:17, 11:21
+import * as Eff from "effect/Effect"
+
+export const program = () =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(1)
+    const b = yield* Eff.succeed(2)
+    return a + b
+  })
+
+export const programWithPipes = (fa: number, fb: number): Eff.Effect<number, never, never> =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(fa)
+    const b = yield* Eff.succeed(fb)
+    return a + b
+  }).pipe(
+    Eff.map((a) => a + 1)
+  )
 
 export function sampleReturns<A extends number, B extends number>(arg1: A, arg2: B) {
   return Eff.gen(function*() {
@@ -131,6 +289,44 @@ export const sampleReturnsConciseBody = <A extends number, B extends number>(arg
   })
 
 
+=== [R3] Refactor 1: "Toggle return type annotation" ===
+
+--- file:///.src/effectGenToFn.ts ---
+// refactor: 5:8, 12:8, 21:16, 29:8, 4:17, 11:21
+import * as Eff from "effect/Effect"
+
+export const program = () =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(1)
+    const b = yield* Eff.succeed(2)
+    return a + b
+  })
+
+export const programWithPipes = (fa: number, fb: number) =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(fa)
+    const b = yield* Eff.succeed(fb)
+    return a + b
+  }).pipe(
+    Eff.map((a) => a + 1)
+  )
+
+export function sampleReturns<A extends number, B extends number>(arg1: A, arg2: B): Eff.Effect<number, never, never> {
+  return Eff.gen(function*() {
+    const a = yield* Eff.succeed(arg1)
+    const b = yield* Eff.succeed(arg2)
+    return a + b
+  })
+}
+
+export const sampleReturnsConciseBody = <A extends number, B extends number>(arg1: A, arg2: B) =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(arg1)
+    const b = yield* Eff.succeed(arg2)
+    return a + b
+  })
+
+
 === [R4] Refactor 0: "Convert to Effect.fn(\"sampleReturnsConciseBody\")" ===
 
 --- file:///.src/effectGenToFn.ts ---
@@ -166,4 +362,194 @@ export const sampleReturnsConciseBody = Eff.fn("sampleReturnsConciseBody")(funct
     const b = yield* Eff.succeed(arg2);
     return a + b;
 });
+
+
+=== [R4] Refactor 1: "Toggle return type annotation" ===
+
+--- file:///.src/effectGenToFn.ts ---
+// refactor: 5:8, 12:8, 21:16, 29:8, 4:17, 11:21
+import * as Eff from "effect/Effect"
+
+export const program = () =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(1)
+    const b = yield* Eff.succeed(2)
+    return a + b
+  })
+
+export const programWithPipes = (fa: number, fb: number) =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(fa)
+    const b = yield* Eff.succeed(fb)
+    return a + b
+  }).pipe(
+    Eff.map((a) => a + 1)
+  )
+
+export function sampleReturns<A extends number, B extends number>(arg1: A, arg2: B) {
+  return Eff.gen(function*() {
+    const a = yield* Eff.succeed(arg1)
+    const b = yield* Eff.succeed(arg2)
+    return a + b
+  })
+}
+
+export const sampleReturnsConciseBody = <A extends number, B extends number>(arg1: A, arg2: B): Eff.Effect<number, never, never> =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(arg1)
+    const b = yield* Eff.succeed(arg2)
+    return a + b
+  })
+
+
+=== [R5] Refactor 0: "Toggle type annotation" ===
+
+--- file:///.src/effectGenToFn.ts ---
+// refactor: 5:8, 12:8, 21:16, 29:8, 4:17, 11:21
+import * as Eff from "effect/Effect"
+
+export const program: () => Eff.Effect<number, never, never> = () =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(1)
+    const b = yield* Eff.succeed(2)
+    return a + b
+  })
+
+export const programWithPipes = (fa: number, fb: number) =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(fa)
+    const b = yield* Eff.succeed(fb)
+    return a + b
+  }).pipe(
+    Eff.map((a) => a + 1)
+  )
+
+export function sampleReturns<A extends number, B extends number>(arg1: A, arg2: B) {
+  return Eff.gen(function*() {
+    const a = yield* Eff.succeed(arg1)
+    const b = yield* Eff.succeed(arg2)
+    return a + b
+  })
+}
+
+export const sampleReturnsConciseBody = <A extends number, B extends number>(arg1: A, arg2: B) =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(arg1)
+    const b = yield* Eff.succeed(arg2)
+    return a + b
+  })
+
+
+=== [R5] Refactor 1: "Toggle lazy const" ===
+
+--- file:///.src/effectGenToFn.ts ---
+// refactor: 5:8, 12:8, 21:16, 29:8, 4:17, 11:21
+import * as Eff from "effect/Effect"
+
+export const program =
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(1)
+    const b = yield* Eff.succeed(2)
+    return a + b
+  })
+
+export const programWithPipes = (fa: number, fb: number) =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(fa)
+    const b = yield* Eff.succeed(fb)
+    return a + b
+  }).pipe(
+    Eff.map((a) => a + 1)
+  )
+
+export function sampleReturns<A extends number, B extends number>(arg1: A, arg2: B) {
+  return Eff.gen(function*() {
+    const a = yield* Eff.succeed(arg1)
+    const b = yield* Eff.succeed(arg2)
+    return a + b
+  })
+}
+
+export const sampleReturnsConciseBody = <A extends number, B extends number>(arg1: A, arg2: B) =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(arg1)
+    const b = yield* Eff.succeed(arg2)
+    return a + b
+  })
+
+
+=== [R6] Refactor 0: "Toggle type annotation" ===
+
+--- file:///.src/effectGenToFn.ts ---
+// refactor: 5:8, 12:8, 21:16, 29:8, 4:17, 11:21
+import * as Eff from "effect/Effect"
+
+export const program = () =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(1)
+    const b = yield* Eff.succeed(2)
+    return a + b
+  })
+
+export const programWithPipes: (fa: number, fb: number) => Eff.Effect<number, never, never> = (fa: number, fb: number) =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(fa)
+    const b = yield* Eff.succeed(fb)
+    return a + b
+  }).pipe(
+    Eff.map((a) => a + 1)
+  )
+
+export function sampleReturns<A extends number, B extends number>(arg1: A, arg2: B) {
+  return Eff.gen(function*() {
+    const a = yield* Eff.succeed(arg1)
+    const b = yield* Eff.succeed(arg2)
+    return a + b
+  })
+}
+
+export const sampleReturnsConciseBody = <A extends number, B extends number>(arg1: A, arg2: B) =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(arg1)
+    const b = yield* Eff.succeed(arg2)
+    return a + b
+  })
+
+
+=== [R6] Refactor 1: "Toggle lazy const" ===
+
+--- file:///.src/effectGenToFn.ts ---
+// refactor: 5:8, 12:8, 21:16, 29:8, 4:17, 11:21
+import * as Eff from "effect/Effect"
+
+export const program = () =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(1)
+    const b = yield* Eff.succeed(2)
+    return a + b
+  })
+
+export const programWithPipes = () => (fa: number, fb: number) =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(fa)
+    const b = yield* Eff.succeed(fb)
+    return a + b
+  }).pipe(
+    Eff.map((a) => a + 1)
+  )
+
+export function sampleReturns<A extends number, B extends number>(arg1: A, arg2: B) {
+  return Eff.gen(function*() {
+    const a = yield* Eff.succeed(arg1)
+    const b = yield* Eff.succeed(arg2)
+    return a + b
+  })
+}
+
+export const sampleReturnsConciseBody = <A extends number, B extends number>(arg1: A, arg2: B) =>
+  Eff.gen(function*() {
+    const a = yield* Eff.succeed(arg1)
+    const b = yield* Eff.succeed(arg2)
+    return a + b
+  })
 

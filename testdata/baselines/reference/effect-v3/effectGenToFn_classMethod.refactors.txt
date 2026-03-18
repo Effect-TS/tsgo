@@ -2,6 +2,7 @@
 
 [R1] selection: "7:17-7:17"
   Refactor 0: "Convert to Effect.fn(\"methodReturnsEffect\")" (refactor.rewrite.effect.effectGenToFn)
+  Refactor 1: "Toggle return type annotation" (refactor.rewrite.effect.toggleReturnTypeAnnotation)
 
 [R2] selection: "empty (0:0-0:0)"
   (no refactors)
@@ -21,5 +22,23 @@ class Test {
     const b = yield* Eff.succeed(arg2)
     return a + b
 })
+}
+
+
+=== [R1] Refactor 1: "Toggle return type annotation" ===
+
+--- file:///.src/effectGenToFn_classMethod.ts ---
+// refactor: 7:17
+// @effect-v3
+import * as Eff from "effect/Effect"
+
+class Test {
+  methodReturnsEffect(arg1: number, arg2: number): Eff.Effect<number, never, never> {
+    return Eff.gen(function*() {
+      const a = yield* Eff.succeed(arg1)
+      const b = yield* Eff.succeed(arg2)
+      return a + b
+    })
+  }
 }
 

@@ -31,10 +31,6 @@ type schemaVarInfo struct {
 // findSchemaVariableDeclaration walks the ancestor chain from the cursor to find a
 // VariableDeclaration whose initializer has a Schema type. Returns nil if not found.
 func findSchemaVariableDeclaration(ctx *refactor.Context, c *checker.Checker) *schemaVarInfo {
-	if ctx.Span.Pos() == ctx.Span.End() {
-		return nil
-	}
-
 	token := astnav.GetTokenAtPosition(ctx.SourceFile, ctx.Span.Pos())
 	if token == nil {
 		return nil

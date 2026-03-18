@@ -17,11 +17,6 @@ var FunctionToArrow = refactor.Refactor{
 }
 
 func runFunctionToArrow(ctx *refactor.Context) []ls.CodeAction {
-	// Only applicable with a non-empty selection
-	if ctx.Span.Pos() == ctx.Span.End() {
-		return nil
-	}
-
 	token := astnav.GetTokenAtPosition(ctx.SourceFile, ctx.Span.Pos())
 	if token == nil {
 		return nil
