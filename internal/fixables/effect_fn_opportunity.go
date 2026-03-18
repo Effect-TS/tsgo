@@ -193,9 +193,16 @@ func effectFnBuildReplacement(
 		replacementNode = effectFnBuildVarStatement(tracker, result.TargetNode, callExpr)
 		replaceTarget = result.TargetNode
 	} else if result.IsLayerMember {
-		// Layer member: replace only the property value, preserving the Layer structure
-		replacementNode = callExpr
-		replaceTarget = result.TargetNode
+		// Layer member: replace the enclosing `return { ... }` statement instead of
+		// just the property value. Formatting the larger statement-level replacement
+		// avoids formatter assertions on synthetic embedded statements in function bodies.
+		if returnStmt := effectFnFindEnclosingReturnedObject(result.TargetNode); returnStmt != nil {
+			replacementNode = effectFnBuildLayerMemberReturnStatement(tracker, returnStmt, result.TargetNode, callExpr)
+			replaceTarget = returnStmt
+		} else {
+			replacementNode = callExpr
+			replaceTarget = result.TargetNode
+		}
 	} else if varStmt := effectFnFindEnclosingVarStatement(result.TargetNode); varStmt != nil {
 		replacementNode = effectFnBuildVarStatementFromEnclosing(tracker, varStmt, result.TargetNode, callExpr)
 		replaceTarget = varStmt
@@ -345,6 +352,82 @@ func effectFnCloneNodeList(tracker *change.Tracker, list *ast.NodeList) *ast.Nod
 // Returns nil if the expected parent chain is not found.
 func effectFnFindEnclosingVarStatement(node *ast.Node) *ast.Node {
 	return ast.FindAncestorKind(node, ast.KindVariableStatement)
+}
+
+// effectFnFindEnclosingReturnedObject returns the enclosing ReturnStatement when
+// the target node is the initializer of a PropertyAssignment inside a returned
+// object literal, such as a Layer service member.
+func effectFnFindEnclosingReturnedObject(node *ast.Node) *ast.Node {
+	propAssign := ast.FindAncestorKind(node, ast.KindPropertyAssignment)
+	if propAssign == nil {
+		return nil
+	}
+
+	objLiteral := propAssign.Parent
+	if objLiteral == nil || objLiteral.Kind != ast.KindObjectLiteralExpression {
+		return nil
+	}
+
+	returnStmt := ast.FindAncestorKind(objLiteral, ast.KindReturnStatement)
+	if returnStmt == nil {
+		return nil
+	}
+
+	rs := returnStmt.AsReturnStatement()
+	if rs == nil || rs.Expression != objLiteral {
+		return nil
+	}
+
+	return returnStmt
+}
+
+// effectFnBuildLayerMemberReturnStatement rebuilds a `return { ... }` statement,
+// replacing the target property's initializer with the synthesized Effect.fn call.
+func effectFnBuildLayerMemberReturnStatement(tracker *change.Tracker, returnStmt *ast.Node, targetNode *ast.Node, callExpr *ast.Node) *ast.Node {
+	rs := returnStmt.AsReturnStatement()
+	if rs == nil || rs.Expression == nil || rs.Expression.Kind != ast.KindObjectLiteralExpression {
+		return callExpr
+	}
+
+	targetProp := ast.FindAncestorKind(targetNode, ast.KindPropertyAssignment)
+	if targetProp == nil {
+		return callExpr
+	}
+
+	objLiteral := rs.Expression.AsObjectLiteralExpression()
+	if objLiteral == nil || objLiteral.Properties == nil {
+		return callExpr
+	}
+
+	properties := make([]*ast.Node, len(objLiteral.Properties.Nodes))
+	for i, prop := range objLiteral.Properties.Nodes {
+		if prop != targetProp {
+			properties[i] = tracker.DeepCloneNode(prop)
+			continue
+		}
+
+		pa := prop.AsPropertyAssignment()
+		if pa == nil {
+			properties[i] = tracker.DeepCloneNode(prop)
+			continue
+		}
+
+		var typeNode *ast.Node
+		if pa.Type != nil {
+			typeNode = tracker.DeepCloneNode(pa.Type)
+		}
+
+		properties[i] = tracker.NewPropertyAssignment(
+			nil,
+			tracker.DeepCloneNode(pa.Name()),
+			nil,
+			typeNode,
+			callExpr,
+		)
+	}
+
+	newObjLiteral := tracker.NewObjectLiteralExpression(tracker.NewNodeList(properties), true)
+	return tracker.NewReturnStatement(newObjLiteral)
 }
 
 // effectFnBuildVarStatementFromEnclosing builds a replacement VariableStatement from an
