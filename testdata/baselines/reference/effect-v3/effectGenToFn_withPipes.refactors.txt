@@ -1,14 +1,52 @@
 === Refactor Inventory ===
 
 [R1] selection: "8:13-8:13"
-  Refactor 0: "Convert to Effect.fn(\"test\")" (refactor.rewrite.effect.effectGenToFn)
+  Refactor 0: "Rewrite as X.pipe(Y, Z, ...)" (refactor.rewrite.effect.togglePipeStyle)
+  Refactor 1: "Wrap with Effect.gen" (refactor.rewrite.effect.wrapWithEffectGen)
+  Refactor 2: "Convert to Effect.fn(\"test\")" (refactor.rewrite.effect.effectGenToFn)
+  Refactor 3: "Toggle return type annotation" (refactor.rewrite.effect.toggleReturnTypeAnnotation)
 
 [R2] selection: "empty (0:0-0:0)"
   (no refactors)
 
 === Refactor Application Results ===
 
-=== [R1] Refactor 0: "Convert to Effect.fn(\"test\")" ===
+=== [R1] Refactor 0: "Rewrite as X.pipe(Y, Z, ...)" ===
+
+--- file:///.src/effectGenToFn_withPipes.ts ---
+// refactor: 8:13
+// @effect-v3
+import * as Effect from "effect/Effect"
+import { pipe } from "effect/Function"
+
+const test = () =>
+  Effect.gen(function*() {
+    const test = "test"
+    return yield* Effect.succeed(test)
+}).pipe(Effect.tapError(Effect.logError))
+
+
+=== [R1] Refactor 1: "Wrap with Effect.gen" ===
+
+--- file:///.src/effectGenToFn_withPipes.ts ---
+// refactor: 8:13
+// @effect-v3
+import * as Effect from "effect/Effect"
+import { pipe } from "effect/Function"
+
+const test = () =>
+  pipe(
+    Effect.gen(function*() {
+    return yield* Effect.gen(function*() {
+        const test = "test"
+        return yield* Effect.succeed(test)
+    })
+}),
+    Effect.tapError(Effect.logError)
+  )
+
+
+=== [R1] Refactor 2: "Convert to Effect.fn(\"test\")" ===
 
 --- file:///.src/effectGenToFn_withPipes.ts ---
 // refactor: 8:13
@@ -20,4 +58,22 @@ const test = Effect.fn("test")(function* () {
     const test = "test";
     return yield* Effect.succeed(test);
 }, Effect.tapError(Effect.logError));
+
+
+=== [R1] Refactor 3: "Toggle return type annotation" ===
+
+--- file:///.src/effectGenToFn_withPipes.ts ---
+// refactor: 8:13
+// @effect-v3
+import * as Effect from "effect/Effect"
+import { pipe } from "effect/Function"
+
+const test = (): Effect.Effect<string, never, never> =>
+  pipe(
+    Effect.gen(function*() {
+      const test = "test"
+      return yield* Effect.succeed(test)
+    }),
+    Effect.tapError(Effect.logError)
+  )
 
