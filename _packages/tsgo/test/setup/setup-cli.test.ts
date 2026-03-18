@@ -665,6 +665,56 @@ describe("Setup CLI", () => {
     expectSetupChanges(assessmentInput, targetState)
   })
 
+  it("should generate changes for Astro-style configs using the legacy prepare command", () => {
+    const assessmentInput = createTestAssessmentInput(
+      {
+        scripts: {
+          prepare: "effect-language-service patch",
+          dev: "astro dev"
+        },
+        dependencies: {},
+        devDependencies: {
+          "@effect/language-service": "^0.80.0",
+          typescript: "^5.9.3"
+        }
+      },
+      {
+        extends: "astro/tsconfigs/strictest",
+        include: [".astro/types.d.ts", "**/*"],
+        exclude: ["dist"],
+        compilerOptions: {
+          paths: {
+            "@/*": ["./src/*"]
+          },
+          jsx: "react-jsx",
+          jsxImportSource: "react",
+          skipLibCheck: true,
+          plugins: [
+            {
+              name: "@effect/language-service",
+              namespaceImportPackages: ["effect", "@effect/*"]
+            }
+          ]
+        }
+      }
+    )
+
+    const targetState: Target.State = {
+      packageJson: {
+        lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
+        prepareScript: true
+      },
+      tsconfig: {
+        plugin: true,
+        diagnosticSeverities: Option.none()
+      },
+      vscodeSettings: Option.none(),
+      editors: []
+    }
+
+    expectSetupChanges(assessmentInput, targetState)
+  })
+
   it("should update custom diagnostic severities when plugin already has custom values", () => {
     const assessmentInput = createTestAssessmentInput(
       {

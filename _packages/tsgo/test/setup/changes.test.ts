@@ -13,6 +13,7 @@ function runComputeChanges(opts: {
   vscodeSettingsText?: string | null
   editors?: ReadonlyArray<"vscode" | "nvim" | "emacs">
   lspVersion?: { dependencyType: "dependencies" | "devDependencies"; version: string } | null
+  prepareScript?: boolean
   vscodeTargetSettings?: Record<string, unknown> | null
   diagnosticSeverities?: Record<string, "off" | "suggestion" | "message" | "warning" | "error"> | null
 }) {
@@ -51,7 +52,7 @@ function runComputeChanges(opts: {
   const target = {
     packageJson: {
       lspVersion,
-      prepareScript: true
+      prepareScript: opts.prepareScript ?? true
     },
     tsconfig: {
       plugin: true,
@@ -69,6 +70,116 @@ function runComputeChanges(opts: {
 }
 
 describe("computeChanges", () => {
+  it("should not throw for Astro-style configs that already include the Effect plugin", () => {
+    const packageJsonText = JSON.stringify({
+      scripts: {
+        prepare: "effect-language-service patch",
+        dev: "astro dev"
+      },
+      dependencies: {},
+      devDependencies: {
+        "@effect/language-service": "^0.80.0",
+        typescript: "^5.9.3"
+      }
+    }, null, 2)
+
+    const tsconfigText = JSON.stringify({
+      extends: "astro/tsconfigs/strictest",
+      include: [".astro/types.d.ts", "**/*"],
+      exclude: ["dist"],
+      compilerOptions: {
+        paths: {
+          "@/*": ["./src/*"]
+        },
+        jsx: "react-jsx",
+        jsxImportSource: "react",
+        skipLibCheck: true,
+        plugins: [
+          {
+            name: "@effect/language-service",
+            namespaceImportPackages: ["effect", "@effect/*"]
+          }
+        ]
+      }
+    }, null, 2)
+
+    expect(() =>
+      runComputeChanges({
+        packageJsonText,
+        tsconfigText
+      })
+    ).not.toThrow()
+  })
+
+  it("should not throw when only the package.json matches the Astro install shape", () => {
+    const packageJsonText = JSON.stringify({
+      scripts: {
+        prepare: "effect-language-service patch",
+        dev: "astro dev"
+      },
+      dependencies: {},
+      devDependencies: {
+        "@effect/language-service": "^0.80.0",
+        typescript: "^5.9.3"
+      }
+    }, null, 2)
+
+    expect(() =>
+      runComputeChanges({
+        packageJsonText,
+        prepareScript: false
+      })
+    ).not.toThrow()
+  })
+
+  it("should not throw when updating an existing prepare script from the legacy command", () => {
+    const packageJsonText = JSON.stringify({
+      scripts: {
+        prepare: "effect-language-service patch",
+        dev: "astro dev"
+      },
+      dependencies: {},
+      devDependencies: {
+        typescript: "^5.9.3"
+      }
+    }, null, 2)
+
+    expect(() =>
+      runComputeChanges({
+        packageJsonText,
+        prepareScript: true
+      })
+    ).not.toThrow()
+  })
+
+  it("should not throw when only the tsconfig matches the Astro plugin shape", () => {
+    const tsconfigText = JSON.stringify({
+      extends: "astro/tsconfigs/strictest",
+      include: [".astro/types.d.ts", "**/*"],
+      exclude: ["dist"],
+      compilerOptions: {
+        paths: {
+          "@/*": ["./src/*"]
+        },
+        jsx: "react-jsx",
+        jsxImportSource: "react",
+        skipLibCheck: true,
+        plugins: [
+          {
+            name: "@effect/language-service",
+            namespaceImportPackages: ["effect", "@effect/*"]
+          }
+        ]
+      }
+    }, null, 2)
+
+    expect(() =>
+      runComputeChanges({
+        tsconfigText
+      })
+    ).not.toThrow()
+  })
+
   describe("isNewFile marker", () => {
     it("should set isNewFile to false for package.json modification code actions", () => {
       const result = runComputeChanges({})

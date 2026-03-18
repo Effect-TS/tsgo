@@ -305,12 +305,11 @@ const computePackageJsonChanges = (
 
             const currentScript = current.prepareScript.value.script
             const newScript = `${currentScript} && ${PATCH_COMMAND}`
-
-            const newPrepareProp = ts.factory.createPropertyAssignment(
-              ts.factory.createStringLiteral("prepare"),
+            tracker.replaceNode(
+              current.sourceFile,
+              prepareProperty.initializer,
               ts.factory.createStringLiteral(newScript)
             )
-            tracker.replaceNode(current.sourceFile, prepareProperty, newPrepareProp)
           }
         }
       } else if (
