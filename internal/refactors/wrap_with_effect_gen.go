@@ -55,6 +55,9 @@ func runWrapWithEffectGen(ctx *refactor.Context) []ls.CodeAction {
 		if !typeparser.StrictIsEffectType(c, nodeType, node) {
 			continue
 		}
+		if typeparser.EffectGenCall(c, node) != nil {
+			continue
+		}
 
 		matchedNode = node
 		break

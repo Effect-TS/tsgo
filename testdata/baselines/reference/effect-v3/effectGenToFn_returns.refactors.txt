@@ -2,9 +2,11 @@
 
 [R1] selection: "6:8-6:8"
   Refactor 0: "Convert to Effect.fn(\"sampleReturnsConciseBody\")" (refactor.rewrite.effect.effectGenToFn)
+  Refactor 1: "Toggle return type annotation" (refactor.rewrite.effect.toggleReturnTypeAnnotation)
 
 [R2] selection: "13:8-13:8"
   Refactor 0: "Convert to Effect.fn(\"withGenerics\")" (refactor.rewrite.effect.effectGenToFn)
+  Refactor 1: "Toggle return type annotation" (refactor.rewrite.effect.toggleReturnTypeAnnotation)
 
 [R3] selection: "empty (0:0-0:0)"
   (no refactors)
@@ -23,6 +25,29 @@ export const sampleReturnsConciseBody = Eff.fn("sampleReturnsConciseBody")(funct
     const b = yield* Eff.succeed(arg2);
     return a + b;
 });
+
+export const withGenerics = <A extends number, B>(a: A, b: B): Eff.Effect<A, B> =>
+    Eff.gen(function*() {
+        if(Math.random() > 0.5){
+            return yield* Eff.fail(b)
+        }
+        return a
+    })
+
+
+=== [R1] Refactor 1: "Toggle return type annotation" ===
+
+--- file:///.src/effectGenToFn_returns.ts ---
+// refactor: 6:8, 13:8
+// @effect-v3
+import * as Eff from "effect/Effect"
+
+export const sampleReturnsConciseBody = <A extends number, B extends number>(arg1: A, arg2: B) =>
+    Eff.gen(function*() {
+      const a = yield* Eff.succeed(arg1)
+      const b = yield* Eff.succeed(arg2)
+      return a + b
+    })
 
 export const withGenerics = <A extends number, B>(a: A, b: B): Eff.Effect<A, B> =>
     Eff.gen(function*() {
@@ -53,4 +78,27 @@ export const withGenerics = Eff.fn("withGenerics")(function* <A extends number, 
     }
     return a;
 });
+
+
+=== [R2] Refactor 1: "Toggle return type annotation" ===
+
+--- file:///.src/effectGenToFn_returns.ts ---
+// refactor: 6:8, 13:8
+// @effect-v3
+import * as Eff from "effect/Effect"
+
+export const sampleReturnsConciseBody = <A extends number, B extends number>(arg1: A, arg2: B): Eff.Effect<number> =>
+    Eff.gen(function*() {
+      const a = yield* Eff.succeed(arg1)
+      const b = yield* Eff.succeed(arg2)
+      return a + b
+    })
+
+export const withGenerics = <A extends number, B>(a: A, b: B) =>
+    Eff.gen(function*() {
+        if(Math.random() > 0.5){
+            return yield* Eff.fail(b)
+        }
+        return a
+    })
 
