@@ -3,6 +3,8 @@ import * as Option from "effect/Option"
 import type * as Terminal from "effect/Terminal"
 import * as Prompt from "effect/unstable/cli/Prompt"
 import type { Assessment, Editor, Target } from "./types.js"
+import { getAllRules } from "./rule-info.js"
+import { createRulePrompt } from "./rule-prompt.js"
 
 /**
  * Context input for gathering target state
@@ -57,12 +59,39 @@ export const gatherTargetState = (
           prepareScript: false
         },
         tsconfig: {
-          plugin: false
+          plugin: false,
+          diagnosticSeverities: Option.none()
         },
         vscodeSettings: Option.none(),
         editors: []
       } satisfies Target.State
     }
+
+    const shouldCustomizeDiagnostics = yield* Prompt.select({
+      message: "Would you like to customize the diagnostic severities?",
+      choices: [
+        {
+          title: "Yes",
+          description: "Review the available rules and adjust their severities",
+          value: true,
+          selected: true
+        },
+        {
+          title: "No",
+          description: "Keep the default severities shipped by @effect/tsgo",
+          value: false
+        }
+      ]
+    })
+
+    const diagnosticSeverities = shouldCustomizeDiagnostics
+      ? Option.some(
+        yield* createRulePrompt(
+          getAllRules(),
+          Option.getOrElse(assessment.tsconfig.currentDiagnosticSeverities, () => ({}))
+        )
+      )
+      : Option.none()
 
     // Editor Selection - Using multi-select
     // Pre-select VSCode if .vscode/settings.json exists
@@ -102,7 +131,8 @@ export const gatherTargetState = (
         prepareScript: true
       },
       tsconfig: {
-        plugin: true
+        plugin: true,
+        diagnosticSeverities
       },
       vscodeSettings,
       editors

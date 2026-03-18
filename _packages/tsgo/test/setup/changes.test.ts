@@ -14,6 +14,7 @@ function runComputeChanges(opts: {
   editors?: ReadonlyArray<"vscode" | "nvim" | "emacs">
   lspVersion?: { dependencyType: "dependencies" | "devDependencies"; version: string } | null
   vscodeTargetSettings?: Record<string, unknown> | null
+  diagnosticSeverities?: Record<string, "off" | "suggestion" | "message" | "warning" | "error"> | null
 }) {
   const packageJsonText = opts.packageJsonText ?? JSON.stringify({
     name: "test-project",
@@ -52,7 +53,14 @@ function runComputeChanges(opts: {
       lspVersion,
       prepareScript: true
     },
-    tsconfig: { plugin: true },
+    tsconfig: {
+      plugin: true,
+      diagnosticSeverities: opts.diagnosticSeverities === undefined
+        ? Option.none()
+        : opts.diagnosticSeverities === null
+        ? Option.none()
+        : Option.some(opts.diagnosticSeverities)
+    },
     vscodeSettings: vscodeTargetSettings,
     editors: opts.editors ?? ["vscode"]
   }
@@ -254,6 +262,51 @@ describe("computeChanges", () => {
       expect(result.messages).not.toContain(
         "Run `effect-tsgo unpatch` to restore the original TypeScript-Go binary."
       )
+    })
+  })
+
+  describe("tsconfig diagnosticSeverity", () => {
+    it("should add diagnosticSeverity to the Effect plugin when configured", () => {
+      const result = runComputeChanges({
+        diagnosticSeverities: {
+          floatingEffect: "warning",
+          missingEffectError: "off"
+        }
+      })
+
+      const tsconfigAction = result.codeActions.find((action) =>
+        action.changes.some((change) => change.fileName.includes("tsconfig.json"))
+      )
+      expect(tsconfigAction).toBeDefined()
+      const rendered = tsconfigAction!.changes.flatMap((change) => change.textChanges.map((textChange) => textChange.newText)).join("\n")
+      expect(rendered).toContain("diagnosticSeverity")
+      expect(rendered).toContain("floatingEffect")
+      expect(rendered).toContain("missingEffectError")
+    })
+
+    it("should remove diagnosticSeverity when target uses defaults", () => {
+      const result = runComputeChanges({
+        tsconfigText: JSON.stringify({
+          compilerOptions: {
+            plugins: [
+              {
+                name: "@effect/language-service",
+                diagnosticSeverity: {
+                  floatingEffect: "warning"
+                }
+              }
+            ]
+          }
+        }, null, 2),
+        diagnosticSeverities: null
+      })
+
+      const tsconfigAction = result.codeActions.find((action) =>
+        action.changes.some((change) => change.fileName.includes("tsconfig.json"))
+      )
+      expect(tsconfigAction).toBeDefined()
+      const rendered = tsconfigAction!.changes.flatMap((change) => change.textChanges.map((textChange) => textChange.newText)).join("\n")
+      expect(rendered).not.toContain("diagnosticSeverity")
     })
   })
 })
