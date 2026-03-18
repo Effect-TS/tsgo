@@ -1,0 +1,107 @@
+==== /.src/missingEffectContext_sugg.ts (7 flows) ====
+
+=== Piping Flow ===
+Location: 4:8 - 4:27
+Node: Effect.succeed({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{}, never, never>
+
+=== Piping Flow ===
+Location: 10:8 - 10:27
+Node: Effect.succeed({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{}, never, never>
+
+=== Piping Flow ===
+Location: 27:32 - 30:2
+Node: UserRepository.Default.pipe(\n  Layer.provide(Cache.Default),\n  Layer.merge(DbConnection.Default)\n)
+Node Kind: KindCallExpression
+
+Subject: UserRepository.Default
+Subject Type: Layer<UserRepository, never, Cache | DbConnection>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Layer.provide
+      args: [Cache.Default]
+      outType: Layer<UserRepository, never, DbConnection | FileSystem>
+  [1] kind: pipeable
+      callee: Layer.merge
+      args: [DbConnection.Default]
+      outType: Layer<DbConnection | UserRepository, never, DbConnection | FileSystem>
+
+=== Piping Flow ===
+Location: 32:16 - 36:3
+Node: Effect.gen(function*(){\n    const cache = yield* Cache\n    yield* Effect.addFinalizer(() => Effect.log("Finalizing cache"))\n    return cache\n})
+Node Kind: KindCallExpression
+
+Subject: function*(){\n    const cache = yield* Cache\n    yield* Effect.addFinalizer(() => Effect.log("Finalizing cache"))\n    return cache\n}
+Subject Type: () => Generator<Effect<void, never, Scope> | Service<Cache, {}>, {}, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<{}, never, Cache | Scope>
+
+=== Piping Flow ===
+Location: 34:11 - 34:69
+Node: Effect.addFinalizer(() => Effect.log("Finalizing cache"))
+Node Kind: KindCallExpression
+
+Subject: () => Effect.log("Finalizing cache")
+Subject Type: () => Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.addFinalizer
+      args: (constant)
+      outType: Effect<void, never, Scope>
+
+=== Piping Flow ===
+Location: 34:37 - 34:68
+Node: Effect.log("Finalizing cache")
+Node Kind: KindCallExpression
+
+Subject: "Finalizing cache"
+Subject Type: "Finalizing cache"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 36:3 - 41:2
+Node: program.pipe(\n    Effect.scoped,\n    Effect.runPromise\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<{}, never, Cache | Scope>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.scoped
+      args: (constant)
+      outType: never
+  [1] kind: pipeable
+      callee: Effect.runPromise
+      args: (constant)
+      outType: never

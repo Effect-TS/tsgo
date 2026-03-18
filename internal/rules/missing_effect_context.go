@@ -7,7 +7,9 @@ import (
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
+	"github.com/microsoft/typescript-go/shim/core"
 	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
+	"github.com/microsoft/typescript-go/shim/scanner"
 )
 
 // MissingEffectContext detects when an Effect has context requirements that are not
@@ -17,7 +19,7 @@ var MissingEffectContext = rule.Rule{
 	Name:            "missingEffectContext",
 	Description:     "Detects Effect values with unhandled context requirements",
 	DefaultSeverity: etscore.SeverityError,
-	Codes:       []int32{tsdiag.Missing_context_0_in_the_expected_Effect_type_effect_missingEffectContext.Code()},
+	Codes:           []int32{tsdiag.Missing_context_0_in_the_expected_Effect_type_effect_missingEffectContext.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		var diags []*ast.Diagnostic
 
@@ -36,7 +38,12 @@ var MissingEffectContext = rule.Rule{
 			unhandledContexts := findUnhandledContexts(ctx.Checker, srcEffect.R, tgtEffect.R)
 			if len(unhandledContexts) > 0 {
 				contextTypeStr := formatContextTypes(ctx.Checker, unhandledContexts)
-				diag := ctx.NewDiagnostic(ctx.GetErrorRange(re.ErrorNode), tsdiag.Missing_context_0_in_the_expected_Effect_type_effect_missingEffectContext, nil, contextTypeStr)
+				diag := ctx.NewDiagnostic(
+					ctx.GetErrorRange(re.ErrorNode),
+					tsdiag.Missing_context_0_in_the_expected_Effect_type_effect_missingEffectContext,
+					missingEffectContextRelatedInformation(ctx.Checker, ctx, re.ErrorNode),
+					contextTypeStr,
+				)
 				diags = append(diags, diag)
 			}
 		}
@@ -73,4 +80,76 @@ func formatContextTypes(c *checker.Checker, types []*checker.Type) string {
 		result += " | " + c.TypeToString(types[i])
 	}
 	return result
+}
+
+func missingEffectContextRelatedInformation(c *checker.Checker, ctx *rule.Context, errorNode *ast.Node) []*ast.Diagnostic {
+	provideLocation := findRelatedProvideLocation(c, ctx.SourceFile, errorNode)
+	if provideLocation.Node == nil {
+		return nil
+	}
+	related := ctx.NewDiagnostic(
+		provideLocation.Location,
+		tsdiag.Adjusting_this_layer_composition_could_provide_the_missing_service_effect_missingEffectContext,
+		nil,
+	)
+	return []*ast.Diagnostic{related}
+}
+
+type provideLocation struct {
+	Node     *ast.Node
+	Location core.TextRange
+}
+
+func findRelatedProvideLocation(c *checker.Checker, sf *ast.SourceFile, errorNode *ast.Node) provideLocation {
+	if c == nil || sf == nil || errorNode == nil {
+		return provideLocation{}
+	}
+	flows := typeparser.PipingFlows(c, sf, true)
+	for _, flow := range flows {
+		if flow == nil || flow.Node == nil {
+			continue
+		}
+		if !nodeContains(flow.Node, errorNode) {
+			continue
+		}
+		errorTransformationIndex := findTransformationIndexContainingNode(flow, errorNode)
+		if errorTransformationIndex < 0 {
+			continue
+		}
+		for i := errorTransformationIndex - 1; i >= 0; i-- {
+			transformation := flow.Transformations[i]
+			if !typeparser.IsNodeReferenceToEffectModuleApi(c, transformation.Callee, "provide") {
+				continue
+			}
+			callNode := transformation.Node
+			if callNode == nil {
+				callNode = transformation.Callee
+			}
+			return provideLocation{
+				Node:     callNode,
+				Location: scanner.GetErrorRangeForNode(sf, callNode),
+			}
+		}
+	}
+	return provideLocation{}
+}
+
+func findTransformationIndexContainingNode(flow *typeparser.PipingFlow, target *ast.Node) int {
+	if flow == nil || target == nil {
+		return -1
+	}
+	for i := range flow.Transformations {
+		transformation := flow.Transformations[i]
+		if transformation.Node == target || transformation.Callee == target {
+			return i
+		}
+	}
+	return -1
+}
+
+func nodeContains(ancestor *ast.Node, target *ast.Node) bool {
+	if ancestor == nil || target == nil {
+		return false
+	}
+	return ancestor.Pos() <= target.Pos() && target.End() <= ancestor.End()
 }
