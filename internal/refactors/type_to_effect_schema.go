@@ -21,11 +21,6 @@ var TypeToEffectSchema = refactor.Refactor{
 // to find an InterfaceDeclaration or TypeAliasDeclaration whose name overlaps the
 // selection span, and that has no type parameters.
 func findInterfaceOrTypeAlias(ctx *refactor.Context) *ast.Node {
-	// Only applicable with a non-empty selection
-	if ctx.Span.Pos() == ctx.Span.End() {
-		return nil
-	}
-
 	token := astnav.GetTokenAtPosition(ctx.SourceFile, ctx.Span.Pos())
 	if token == nil {
 		return nil

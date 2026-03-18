@@ -19,11 +19,6 @@ var WrapWithEffectGen = refactor.Refactor{
 }
 
 func runWrapWithEffectGen(ctx *refactor.Context) []ls.CodeAction {
-	// Only applicable with a non-empty selection
-	if ctx.Span.Pos() == ctx.Span.End() {
-		return nil
-	}
-
 	c, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
 	if c == nil {
 		return nil

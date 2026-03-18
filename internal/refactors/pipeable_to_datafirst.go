@@ -19,10 +19,6 @@ var PipeableToDatafirst = refactor.Refactor{
 }
 
 func runPipeableToDatafirst(ctx *refactor.Context) []ls.CodeAction {
-	if ctx.Span.Pos() == ctx.Span.End() {
-		return nil
-	}
-
 	c, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
 	if c == nil {
 		return nil

@@ -24,10 +24,6 @@ var LayerMagic = refactor.Refactor{
 }
 
 func runLayerMagic(ctx *refactor.Context) []ls.CodeAction {
-	if ctx.Span.Pos() == ctx.Span.End() {
-		return nil
-	}
-
 	token := astnav.GetTokenAtPosition(ctx.SourceFile, ctx.Span.Pos())
 	if token == nil {
 		return nil
