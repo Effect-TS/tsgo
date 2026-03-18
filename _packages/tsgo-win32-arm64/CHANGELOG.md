@@ -1,5 +1,11 @@
 # @effect/tsgo-win32-arm64
 
+## 0.0.15
+
+### Patch Changes
+
+- e1c3844: Prefer the property name for graphs and locations
+
 ## 0.0.14
 
 ### Patch Changes
