@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/effect-ts/effect-typescript-go/etscore"
-	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/rule"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -56,7 +55,7 @@ var LeakingRequirements = rule.Rule{
 					if propAccess.Name() != nil && propAccess.Name().Kind == ast.KindIdentifier {
 						name := scanner.GetTextOfNode(propAccess.Name())
 						if name == "GenericTag" || name == "Service" {
-							nodeType := checkerutils.GetTypeAtLocation(ctx.Checker, node)
+							nodeType := typeparser.GetTypeAtLocation(ctx.Checker, node)
 							if nodeType != nil {
 								typesToCheck = append(typesToCheck, typeToCheck{t: nodeType, reportNode: node})
 							}

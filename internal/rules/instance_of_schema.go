@@ -2,7 +2,6 @@ package rules
 
 import (
 	"github.com/effect-ts/effect-typescript-go/etscore"
-	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/rule"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -59,7 +58,7 @@ func AnalyzeInstanceOfSchema(c *checker.Checker, sf *ast.SourceFile) []InstanceO
 		if ast.IsInstanceOfExpression(node) {
 			binExpr := node.AsBinaryExpression()
 			rightExpr := binExpr.Right
-			rightType := checkerutils.GetTypeAtLocation(c, rightExpr)
+			rightType := typeparser.GetTypeAtLocation(c, rightExpr)
 			if rightType != nil && typeparser.IsSchemaType(c, rightType, rightExpr) {
 				matches = append(matches, InstanceOfSchemaMatch{
 					SourceFile:     sf,

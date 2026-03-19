@@ -4,7 +4,6 @@ import (
 	"strings"
 
 	"github.com/effect-ts/effect-typescript-go/etscore"
-	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/rule"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -35,13 +34,13 @@ var LayerMergeAllWithDependencies = rule.Rule{
 // LayerMergeAllWithDependenciesMatch holds the AST nodes needed by both the
 // diagnostic rule and the quick-fix for the layerMergeAllWithDependencies pattern.
 type LayerMergeAllWithDependenciesMatch struct {
-	SourceFile      *ast.SourceFile
-	Location        core.TextRange // The error range on the provider argument
-	CallNode        *ast.Node      // The full Layer.mergeAll(...) call expression node
-	ProviderArg     *ast.Node      // The specific argument node that is the dependency provider
-	ProviderIndex   int            // Index of the provider argument in the call's argument list
-	AllArgs       []*ast.Node // All arguments of the mergeAll call
-	ProvidedTypes string      // Formatted string of provided type names
+	SourceFile    *ast.SourceFile
+	Location      core.TextRange // The error range on the provider argument
+	CallNode      *ast.Node      // The full Layer.mergeAll(...) call expression node
+	ProviderArg   *ast.Node      // The specific argument node that is the dependency provider
+	ProviderIndex int            // Index of the provider argument in the call's argument list
+	AllArgs       []*ast.Node    // All arguments of the mergeAll call
+	ProvidedTypes string         // Formatted string of provided type names
 }
 
 // AnalyzeLayerMergeAllWithDependencies finds all Layer.mergeAll calls with
@@ -108,7 +107,7 @@ func analyzeLayerMergeAllCall(c *checker.Checker, sf *ast.SourceFile, node *ast.
 	actuallyProvidedMap := make(map[*checker.Type]*ast.Node)
 
 	for _, arg := range args.Nodes {
-		argType := checkerutils.GetTypeAtLocation(c, arg)
+		argType := typeparser.GetTypeAtLocation(c, arg)
 		if argType == nil {
 			continue
 		}
@@ -180,11 +179,11 @@ func analyzeLayerMergeAllCall(c *checker.Checker, sf *ast.SourceFile, node *ast.
 		}
 
 		matches = append(matches, LayerMergeAllWithDependenciesMatch{
-			SourceFile:      sf,
-			Location:        scanner.GetErrorRangeForNode(sf, arg),
-			CallNode:        node,
-			ProviderArg:     arg,
-			ProviderIndex:   argIndex,
+			SourceFile:    sf,
+			Location:      scanner.GetErrorRangeForNode(sf, arg),
+			CallNode:      node,
+			ProviderArg:   arg,
+			ProviderIndex: argIndex,
 			AllArgs:       args.Nodes,
 			ProvidedTypes: strings.Join(typeNames, ", "),
 		})

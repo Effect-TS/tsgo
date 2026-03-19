@@ -2,7 +2,6 @@ package rules
 
 import (
 	"github.com/effect-ts/effect-typescript-go/etscore"
-	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/rule"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -77,7 +76,7 @@ var StrictBooleanExpressions = rule.Rule{
 					continue
 				}
 
-				nodeType := checkerutils.GetTypeAtLocation(ctx.Checker, nodeToCheck)
+				nodeType := typeparser.GetTypeAtLocation(ctx.Checker, nodeToCheck)
 				if nodeType == nil {
 					continue
 				}

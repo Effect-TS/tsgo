@@ -2,7 +2,6 @@ package rules
 
 import (
 	"github.com/effect-ts/effect-typescript-go/etscore"
-	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/rule"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -16,7 +15,7 @@ var OverriddenSchemaConstructor = rule.Rule{
 	Name:            "overriddenSchemaConstructor",
 	Description:     "Prevents overriding constructors in Schema classes which breaks decoding behavior",
 	DefaultSeverity: etscore.SeverityError,
-	Codes:       []int32{tsdiag.Classes_extending_Schema_must_not_override_the_constructor_this_is_because_it_silently_breaks_the_schema_decoding_behaviour_If_that_s_needed_we_recommend_instead_to_use_a_static_new_method_that_constructs_the_instance_effect_overriddenSchemaConstructor.Code()},
+	Codes:           []int32{tsdiag.Classes_extending_Schema_must_not_override_the_constructor_this_is_because_it_silently_breaks_the_schema_decoding_behaviour_If_that_s_needed_we_recommend_instead_to_use_a_static_new_method_that_constructs_the_instance_effect_overriddenSchemaConstructor.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeOverriddenSchemaConstructor(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
@@ -76,7 +75,7 @@ func checkOverriddenSchemaConstructor(c *checker.Checker, sf *ast.SourceFile, no
 			continue
 		}
 		expr := elem.AsExpressionWithTypeArguments().Expression
-		t := checkerutils.GetTypeAtLocation(c, expr)
+		t := typeparser.GetTypeAtLocation(c, expr)
 		if t != nil && typeparser.IsSchemaType(c, t, expr) {
 			extendsSchema = true
 			break

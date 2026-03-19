@@ -2,7 +2,6 @@ package rules
 
 import (
 	"github.com/effect-ts/effect-typescript-go/etscore"
-	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/rule"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -14,10 +13,10 @@ import (
 
 // UnnecessaryEffectGen suggests removing Effect.gen when it contains only a single return statement.
 var UnnecessaryEffectGen = rule.Rule{
-	Name:        "unnecessaryEffectGen",
+	Name:            "unnecessaryEffectGen",
 	Description:     "Suggests removing Effect.gen when it contains only a single return statement",
 	DefaultSeverity: etscore.SeveritySuggestion,
-	Codes:       []int32{tsdiag.This_Effect_gen_contains_a_single_return_statement_effect_unnecessaryEffectGen.Code()},
+	Codes:           []int32{tsdiag.This_Effect_gen_contains_a_single_return_statement_effect_unnecessaryEffectGen.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeUnnecessaryEffectGen(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
@@ -118,7 +117,7 @@ func analyzeUnnecessaryEffectGenNode(c *checker.Checker, sf *ast.SourceFile, n *
 
 	// Determine if the success type is void-like
 	successIsVoid := false
-	t := checkerutils.GetTypeAtLocation(c, yieldedExpr)
+	t := typeparser.GetTypeAtLocation(c, yieldedExpr)
 	if t != nil {
 		effect := typeparser.EffectType(c, t, yieldedExpr)
 		if effect != nil && effect.A != nil {

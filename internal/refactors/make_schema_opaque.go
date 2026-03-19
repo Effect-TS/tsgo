@@ -1,7 +1,6 @@
 package refactors
 
 import (
-	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/effectutil"
 	"github.com/effect-ts/effect-typescript-go/internal/refactor"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
@@ -21,11 +20,11 @@ var MakeSchemaOpaque = refactor.Refactor{
 
 // schemaVarInfo holds the result of finding a schema variable declaration.
 type schemaVarInfo struct {
-	identifier  *ast.Node // the variable name identifier
+	identifier   *ast.Node // the variable name identifier
 	varStatement *ast.Node // the enclosing VariableStatement
-	varDeclList *ast.Node // the VariableDeclarationList
-	initializer *ast.Node // the initializer expression
-	schemaTypes *typeparser.SchemaTypes
+	varDeclList  *ast.Node // the VariableDeclarationList
+	initializer  *ast.Node // the initializer expression
+	schemaTypes  *typeparser.SchemaTypes
 }
 
 // findSchemaVariableDeclaration walks the ancestor chain from the cursor to find a
@@ -72,7 +71,7 @@ func findSchemaVariableDeclaration(ctx *refactor.Context, c *checker.Checker) *s
 		}
 
 		// Check the initializer's type is a Schema type
-		initType := checkerutils.GetTypeAtLocation(c, varDecl.Initializer)
+		initType := typeparser.GetTypeAtLocation(c, varDecl.Initializer)
 		if initType == nil {
 			continue
 		}

@@ -17,7 +17,7 @@ var EffectFnIife = rule.Rule{
 	Name:            "effectFnIife",
 	Description:     "Effect.fn or Effect.fnUntraced is called as an IIFE; use Effect.gen instead",
 	DefaultSeverity: etscore.SeverityWarning,
-	Codes:       []int32{tsdiag.X_0_1_returns_a_reusable_function_that_can_take_arguments_but_here_it_s_called_immediately_Use_Effect_gen_instead_2_effect_effectFnIife.Code()},
+	Codes:           []int32{tsdiag.X_0_1_returns_a_reusable_function_that_can_take_arguments_but_here_it_s_called_immediately_Use_Effect_gen_instead_2_effect_effectFnIife.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeEffectFnIife(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
@@ -42,7 +42,7 @@ var EffectFnIife = rule.Rule{
 // and the quick-fix for the effectFnIife pattern.
 type EffectFnIifeMatch struct {
 	SourceFile *ast.SourceFile
-	Location core.TextRange
+	Location   core.TextRange
 	Result     *typeparser.EffectFnIifeResult
 }
 
@@ -60,8 +60,8 @@ func AnalyzeEffectFnIife(c *checker.Checker, sf *ast.SourceFile) []EffectFnIifeM
 		if result := typeparser.ParseEffectFnIife(c, n); result != nil {
 			matches = append(matches, EffectFnIifeMatch{
 				SourceFile: sf,
-				Location: scanner.GetErrorRangeForNode(sf, result.OuterCall.AsNode()),
-				Result:   result,
+				Location:   scanner.GetErrorRangeForNode(sf, result.OuterCall.AsNode()),
+				Result:     result,
 			})
 		}
 
@@ -73,4 +73,3 @@ func AnalyzeEffectFnIife(c *checker.Checker, sf *ast.SourceFile) []EffectFnIifeM
 
 	return matches
 }
-

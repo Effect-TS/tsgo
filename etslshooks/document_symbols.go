@@ -4,7 +4,6 @@ import (
 	"context"
 	"strings"
 
-	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
@@ -100,7 +99,7 @@ func collectServiceDocumentSymbols(c *checker.Checker, sf *ast.SourceFile, langS
 				}
 				return false
 			}
-			t := checkerutils.GetTypeAtLocation(c, current)
+			t := typeparser.GetTypeAtLocation(c, current)
 			if typeparser.IsLayerType(c, t, current) {
 				return false
 			}
@@ -264,7 +263,7 @@ func classificationTypes(c *checker.Checker, node *ast.Node) (*ast.Node, []*chec
 	if node == nil {
 		return nil, nil
 	}
-	t := checkerutils.GetTypeAtLocation(c, node)
+	t := typeparser.GetTypeAtLocation(c, node)
 	if t == nil {
 		return node, nil
 	}

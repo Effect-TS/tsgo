@@ -4,7 +4,6 @@ import (
 	"strings"
 
 	"github.com/effect-ts/effect-typescript-go/etscore"
-	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/rule"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -20,7 +19,7 @@ var ScopeInLayerEffect = rule.Rule{
 	Name:            "scopeInLayerEffect",
 	Description:     "Suggests using Layer.scoped instead of Layer.effect when Scope is in requirements",
 	DefaultSeverity: etscore.SeverityWarning,
-	Codes:       []int32{tsdiag.Seems_like_you_are_constructing_a_layer_with_a_scope_in_the_requirements_Consider_using_scoped_instead_to_get_rid_of_the_scope_in_the_requirements_effect_scopeInLayerEffect.Code()},
+	Codes:           []int32{tsdiag.Seems_like_you_are_constructing_a_layer_with_a_scope_in_the_requirements_Consider_using_scoped_instead_to_get_rid_of_the_scope_in_the_requirements_effect_scopeInLayerEffect.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeScopeInLayerEffect(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
@@ -111,7 +110,7 @@ func matchLayerEffectCall(c *checker.Checker, sf *ast.SourceFile, node *ast.Node
 	}
 
 	// Get the return type of the call
-	t := checkerutils.GetTypeAtLocation(c, node)
+	t := typeparser.GetTypeAtLocation(c, node)
 	if t == nil {
 		return nil
 	}

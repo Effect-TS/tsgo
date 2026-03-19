@@ -3,7 +3,6 @@ package rules
 
 import (
 	"github.com/effect-ts/effect-typescript-go/etscore"
-	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/rule"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -94,7 +93,7 @@ func detectFloatingEffect(c *checker.Checker, node *ast.Node) *floatingEffectRes
 	}
 
 	// Get the type of the expression
-	t := checkerutils.GetTypeAtLocation(c, expr)
+	t := typeparser.GetTypeAtLocation(c, expr)
 	if t == nil {
 		return nil
 	}

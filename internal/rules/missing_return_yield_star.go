@@ -3,14 +3,13 @@ package rules
 
 import (
 	"github.com/effect-ts/effect-typescript-go/etscore"
-	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
-	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/effect-ts/effect-typescript-go/internal/rule"
+	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
 	"github.com/microsoft/typescript-go/shim/core"
-	"github.com/microsoft/typescript-go/shim/scanner"
 	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
+	"github.com/microsoft/typescript-go/shim/scanner"
 )
 
 // MissingReturnYieldStar suggests "return yield*" for Effects that never succeed.
@@ -18,7 +17,7 @@ var MissingReturnYieldStar = rule.Rule{
 	Name:            "missingReturnYieldStar",
 	Description:     "Suggests using return yield* for Effects that never succeed",
 	DefaultSeverity: etscore.SeverityError,
-	Codes:       []int32{tsdiag.It_is_recommended_to_use_return_yield_Asterisk_for_Effects_that_never_succeed_to_signal_a_definitive_exit_point_for_type_narrowing_and_tooling_support_effect_missingReturnYieldStar.Code()},
+	Codes:           []int32{tsdiag.It_is_recommended_to_use_return_yield_Asterisk_for_Effects_that_never_succeed_to_signal_a_definitive_exit_point_for_type_narrowing_and_tooling_support_effect_missingReturnYieldStar.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeMissingReturnYieldStar(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
@@ -33,9 +32,9 @@ var MissingReturnYieldStar = rule.Rule{
 // and the quick-fix for the missingReturnYieldStar pattern.
 type MissingReturnYieldStarMatch struct {
 	SourceFile   *ast.SourceFile // The source file where the diagnostic should be reported
-	Location     core.TextRange // The pre-computed error range for this match
-	YieldNode    *ast.Node      // The yield* expression node (for diagnostic location)
-	ExprStmtNode *ast.Node      // The expression statement node (for quickfix replacement)
+	Location     core.TextRange  // The pre-computed error range for this match
+	YieldNode    *ast.Node       // The yield* expression node (for diagnostic location)
+	ExprStmtNode *ast.Node       // The expression statement node (for quickfix replacement)
 }
 
 // AnalyzeMissingReturnYieldStar finds all yield* expressions inside Effect generators
@@ -93,7 +92,7 @@ func shouldReportMissingReturnYieldStar(c *checker.Checker, exprStmtNode *ast.No
 		return false
 	}
 
-	t := checkerutils.GetTypeAtLocation(c, expr)
+	t := typeparser.GetTypeAtLocation(c, expr)
 	if t == nil {
 		return false
 	}

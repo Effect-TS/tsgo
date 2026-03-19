@@ -1,5 +1,4 @@
-// Package checkerutils provides safe wrappers around checker operations.
-package checkerutils
+package typeparser
 
 import (
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -11,18 +10,26 @@ import (
 // a JSX tag name, or a JSX attribute name. It also recovers from checker panics
 // (e.g. nil symbol dereferences on certain declaration nodes) and returns nil.
 func GetTypeAtLocation(c *checker.Checker, node *ast.Node) (result *checker.Type) {
+	if c == nil || node == nil {
+		return nil
+	}
+
+	links := getEffectLinksRoot(c)
+	return Cached(&links.TypeAtLocation, node, func() *checker.Type {
+		return getTypeAtLocationUncached(c, node)
+	})
+}
+
+func getTypeAtLocationUncached(c *checker.Checker, node *ast.Node) (result *checker.Type) {
 	if node == nil {
 		return nil
 	}
 
-	// Guard against nodes with no parent (e.g. source file root)
 	if node.Parent != nil {
-		// Skip JSX tag names (JsxOpeningElement, JsxClosingElement, JsxSelfClosingElement)
 		if ast.IsJsxTagName(node) {
 			return nil
 		}
 
-		// Skip JSX attribute names
 		if ast.IsJsxAttribute(node.Parent) && node.Parent.Name() == node {
 			return nil
 		}
@@ -32,8 +39,6 @@ func GetTypeAtLocation(c *checker.Checker, node *ast.Node) (result *checker.Type
 		return nil
 	}
 
-	// Skip heritage nodes that should remain purely in the type namespace.
-	// This currently applies to interface "extends" and class "implements".
 	if isInsideTypeOnlyHeritageExpression(node) {
 		return nil
 	}
@@ -60,8 +65,6 @@ func isInsideTypeOnlyHeritageExpression(node *ast.Node) bool {
 		return false
 	}
 
-	// Walk up through identifiers and property-access expressions to find
-	// the enclosing ExpressionWithTypeArguments.
 	for n := node.Parent; n != nil; n = n.Parent {
 		switch n.Kind {
 		case ast.KindPropertyAccessExpression:

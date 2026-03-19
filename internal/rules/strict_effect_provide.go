@@ -2,7 +2,6 @@ package rules
 
 import (
 	"github.com/effect-ts/effect-typescript-go/etscore"
-	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/rule"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -63,7 +62,7 @@ func checkEffectProvideWithLayer(ctx *rule.Context, node *ast.Node) *ast.Diagnos
 
 	// Check if any argument is a Layer type
 	for _, arg := range args.Nodes {
-		argType := checkerutils.GetTypeAtLocation(ctx.Checker, arg)
+		argType := typeparser.GetTypeAtLocation(ctx.Checker, arg)
 		if argType == nil {
 			continue
 		}

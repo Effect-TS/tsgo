@@ -14,10 +14,10 @@ import (
 // EffectMapVoid suggests using Effect.asVoid instead of Effect.map(() => void 0),
 // Effect.map(() => undefined), or Effect.map(() => {}).
 var EffectMapVoid = rule.Rule{
-	Name:        "effectMapVoid",
+	Name:            "effectMapVoid",
 	Description:     "Suggests using Effect.asVoid instead of Effect.map(() => void 0), Effect.map(() => undefined), or Effect.map(() => {})",
 	DefaultSeverity: etscore.SeveritySuggestion,
-	Codes:       []int32{tsdiag.Effect_asVoid_can_be_used_instead_to_discard_the_success_value_effect_effectMapVoid.Code()},
+	Codes:           []int32{tsdiag.Effect_asVoid_can_be_used_instead_to_discard_the_success_value_effect_effectMapVoid.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeEffectMapVoid(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
@@ -119,4 +119,3 @@ func AnalyzeEffectMapVoid(c *checker.Checker, sf *ast.SourceFile) []EffectMapVoi
 	walk(sf.AsNode())
 	return matches
 }
-

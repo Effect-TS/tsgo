@@ -2,8 +2,8 @@ package rules
 
 import (
 	"github.com/effect-ts/effect-typescript-go/etscore"
-	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/rule"
+	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
 	"github.com/microsoft/typescript-go/shim/core"
@@ -28,7 +28,7 @@ var ExtendsNativeError = rule.Rule{
 
 type ExtendsNativeErrorMatch struct {
 	SourceFile *ast.SourceFile
-	Location core.TextRange
+	Location   core.TextRange
 }
 
 func AnalyzeExtendsNativeError(c *checker.Checker, sf *ast.SourceFile) []ExtendsNativeErrorMatch {
@@ -82,7 +82,7 @@ func checkExtendsNativeError(c *checker.Checker, sf *ast.SourceFile, node *ast.N
 
 		isNativeError := resolvedSymbol == errorSymbol
 		if !isNativeError && resolvedSymbol != nil && resolvedSymbol != errorSymbol {
-			exprType := checkerutils.GetTypeAtLocation(c, expr)
+			exprType := typeparser.GetTypeAtLocation(c, expr)
 			if exprType != nil {
 				constructSignatures := c.GetSignaturesOfType(exprType, checker.SignatureKindConstruct)
 				if len(constructSignatures) > 0 {
@@ -101,7 +101,7 @@ func checkExtendsNativeError(c *checker.Checker, sf *ast.SourceFile, node *ast.N
 			}
 			return &ExtendsNativeErrorMatch{
 				SourceFile: sf,
-				Location: scanner.GetErrorRangeForNode(sf, locationNode),
+				Location:   scanner.GetErrorRangeForNode(sf, locationNode),
 			}
 		}
 	}

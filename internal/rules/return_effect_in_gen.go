@@ -2,7 +2,6 @@ package rules
 
 import (
 	"github.com/effect-ts/effect-typescript-go/etscore"
-	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/rule"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -15,10 +14,10 @@ import (
 // ReturnEffectInGen detects return statements inside Effect generators
 // that return an Effect-able type, which would result in nested Effect<Effect<...>>.
 var ReturnEffectInGen = rule.Rule{
-	Name:        "returnEffectInGen",
+	Name:            "returnEffectInGen",
 	Description:     "Warns when returning an Effect in a generator causes nested Effect<Effect<...>>",
 	DefaultSeverity: etscore.SeveritySuggestion,
-	Codes:       []int32{tsdiag.You_are_returning_an_Effect_able_type_inside_a_generator_function_and_will_result_in_nested_Effect_Effect_Maybe_you_wanted_to_return_yield_Asterisk_instead_Nested_Effect_able_types_may_be_intended_if_you_plan_to_later_manually_flatten_or_unwrap_this_Effect_if_so_you_can_safely_disable_this_diagnostic_for_this_line_through_quickfixes_effect_returnEffectInGen.Code()},
+	Codes:           []int32{tsdiag.You_are_returning_an_Effect_able_type_inside_a_generator_function_and_will_result_in_nested_Effect_Effect_Maybe_you_wanted_to_return_yield_Asterisk_instead_Nested_Effect_able_types_may_be_intended_if_you_plan_to_later_manually_flatten_or_unwrap_this_Effect_if_so_you_can_safely_disable_this_diagnostic_for_this_line_through_quickfixes_effect_returnEffectInGen.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeReturnEffectInGen(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
@@ -95,7 +94,7 @@ func checkReturnEffectInGenScope(c *checker.Checker, sf *ast.SourceFile, n *ast.
 		return false
 	}
 
-	t := checkerutils.GetTypeAtLocation(c, returnStmt.Expression)
+	t := typeparser.GetTypeAtLocation(c, returnStmt.Expression)
 	if t == nil {
 		return false
 	}
@@ -106,4 +105,3 @@ func checkReturnEffectInGenScope(c *checker.Checker, sf *ast.SourceFile, n *ast.
 
 	return true
 }
-

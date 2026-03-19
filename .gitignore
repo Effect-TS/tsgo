@@ -85,3 +85,4 @@ custom-gcl*
 # Docker image and development scripts
 Dockerfile
 _tools/docker-dev.sh
+_tools/.perf-out/

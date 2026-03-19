@@ -1,8 +1,8 @@
 package refactors
 
 import (
-	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/refactor"
+	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/astnav"
 	"github.com/microsoft/typescript-go/shim/checker"
@@ -131,7 +131,7 @@ func getInferredReturnTypeFromChecker(c *checker.Checker, declaration *ast.Node)
 	var returnType *checker.Type
 
 	// Try overloaded function handling
-	declType := checkerutils.GetTypeAtLocation(c, declaration)
+	declType := typeparser.GetTypeAtLocation(c, declaration)
 	if declType != nil {
 		signatures := c.GetSignaturesOfType(declType, checker.SignatureKindCall)
 		if len(signatures) > 1 {

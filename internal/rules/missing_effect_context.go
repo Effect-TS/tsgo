@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/effect-ts/effect-typescript-go/etscore"
-	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/layergraph"
 	"github.com/effect-ts/effect-typescript-go/internal/rule"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
@@ -208,7 +207,7 @@ func rootLayerProvidesTypes(c *checker.Checker, layerNode *ast.Node) []*checker.
 	if c == nil || layerNode == nil {
 		return nil
 	}
-	layerType := typeparser.LayerType(c, checkerutils.GetTypeAtLocation(c, layerNode), layerNode)
+	layerType := typeparser.LayerType(c, typeparser.GetTypeAtLocation(c, layerNode), layerNode)
 	if layerType == nil {
 		return nil
 	}

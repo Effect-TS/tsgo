@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/effect-ts/effect-typescript-go/etscore"
-	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/rule"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -120,7 +119,7 @@ func checkServiceDependencies(ctx *rule.Context, node *ast.Node) []*ast.Diagnost
 	providedIndexes := make(map[string]bool)
 
 	if options != nil {
-		optionsType := checkerutils.GetTypeAtLocation(ctx.Checker, options)
+		optionsType := typeparser.GetTypeAtLocation(ctx.Checker, options)
 		if optionsType != nil {
 			dependenciesProp := ctx.Checker.GetPropertyOfType(optionsType, "dependencies")
 			if dependenciesProp != nil {

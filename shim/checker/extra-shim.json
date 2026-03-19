@@ -1,6 +1,6 @@
 {
   "ExtraMethods": {
-    "Checker": ["isTypeAssignableTo", "isArrayType", "isReadonlyArrayType", "getIndexInfosOfType", "getTypeArguments"]
+    "Checker": ["isTypeAssignableTo", "isArrayType", "isReadonlyArrayType", "getIndexInfosOfType", "getTypeArguments", "getLiteralTypeFromProperty"]
   },
   "ExtraFields": {
     "IndexInfo": ["keyType", "valueType"]

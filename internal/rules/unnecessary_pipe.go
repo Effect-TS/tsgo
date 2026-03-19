@@ -15,10 +15,10 @@ import (
 // UnnecessaryPipe detects pipe() and .pipe() calls with no transformation
 // arguments and suggests removing the unnecessary pipe wrapper.
 var UnnecessaryPipe = rule.Rule{
-	Name:        "unnecessaryPipe",
+	Name:            "unnecessaryPipe",
 	Description:     "Removes pipe calls with no arguments",
 	DefaultSeverity: etscore.SeveritySuggestion,
-	Codes:       []int32{tsdiag.This_pipe_call_contains_no_arguments_effect_unnecessaryPipe.Code()},
+	Codes:           []int32{tsdiag.This_pipe_call_contains_no_arguments_effect_unnecessaryPipe.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeUnnecessaryPipe(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
@@ -32,8 +32,8 @@ var UnnecessaryPipe = rule.Rule{
 // UnnecessaryPipeMatch holds the diagnostic and parsed pipe call result needed
 // by both the diagnostic rule and the quick-fix.
 type UnnecessaryPipeMatch struct {
-	SourceFile *ast.SourceFile              // The source file where this match was found
-	Location   core.TextRange               // The pre-computed error range for this match
+	SourceFile *ast.SourceFile                  // The source file where this match was found
+	Location   core.TextRange                   // The pre-computed error range for this match
 	Result     *typeparser.ParsedPipeCallResult // The parsed pipe call (contains Subject node and call Node)
 }
 
@@ -53,8 +53,8 @@ func AnalyzeUnnecessaryPipe(c *checker.Checker, sf *ast.SourceFile) []Unnecessar
 				if len(result.Args) == 0 {
 					matches = append(matches, UnnecessaryPipeMatch{
 						SourceFile: sf,
-						Location: scanner.GetErrorRangeForNode(sf, result.Node.AsNode()),
-						Result:   result,
+						Location:   scanner.GetErrorRangeForNode(sf, result.Node.AsNode()),
+						Result:     result,
 					})
 				}
 			}
@@ -67,4 +67,3 @@ func AnalyzeUnnecessaryPipe(c *checker.Checker, sf *ast.SourceFile) []Unnecessar
 	walk(sf.AsNode())
 	return matches
 }
-

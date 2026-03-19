@@ -4,7 +4,6 @@ package typeparser
 import (
 	"sort"
 
-	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
 	"github.com/microsoft/typescript-go/shim/scanner"
@@ -284,7 +283,7 @@ func PipingFlows(c *checker.Checker, sf *ast.SourceFile, includeEffectFn bool) [
 						if item.parentFlow != nil {
 							item.parentFlow.Subject = PipingFlowSubject{
 								Node:    node,
-								OutType: checkerutils.GetTypeAtLocation(c, node),
+								OutType: GetTypeAtLocation(c, node),
 							}
 							result = append(result, item.parentFlow)
 						}
@@ -374,7 +373,7 @@ func PipingFlows(c *checker.Checker, sf *ast.SourceFile, includeEffectFn bool) [
 				// Subject chain terminated — finalize the flow
 				item.parentFlow.Subject = PipingFlowSubject{
 					Node:    node,
-					OutType: checkerutils.GetTypeAtLocation(c, node),
+					OutType: GetTypeAtLocation(c, node),
 				}
 				result = append(result, item.parentFlow)
 			}

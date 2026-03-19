@@ -15,10 +15,10 @@ import (
 // UnnecessaryPipeChain detects chained pipe() and .pipe() calls that can
 // be simplified to a single pipe call.
 var UnnecessaryPipeChain = rule.Rule{
-	Name:        "unnecessaryPipeChain",
+	Name:            "unnecessaryPipeChain",
 	Description:     "Simplifies chained pipe calls into a single pipe call",
 	DefaultSeverity: etscore.SeveritySuggestion,
-	Codes:       []int32{tsdiag.Chained_pipe_calls_can_be_simplified_to_a_single_pipe_call_effect_unnecessaryPipeChain.Code()},
+	Codes:           []int32{tsdiag.Chained_pipe_calls_can_be_simplified_to_a_single_pipe_call_effect_unnecessaryPipeChain.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeUnnecessaryPipeChain(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
@@ -32,8 +32,8 @@ var UnnecessaryPipeChain = rule.Rule{
 // UnnecessaryPipeChainMatch holds the diagnostic and parsed pipe call results
 // needed by both the diagnostic rule and the quick-fix.
 type UnnecessaryPipeChainMatch struct {
-	SourceFile *ast.SourceFile                 // The source file where the diagnostic should be reported
-	Location   core.TextRange                 // The pre-computed error range for this match
+	SourceFile *ast.SourceFile                  // The source file where the diagnostic should be reported
+	Location   core.TextRange                   // The pre-computed error range for this match
 	Outer      *typeparser.ParsedPipeCallResult // The outer pipe call parse result
 	Inner      *typeparser.ParsedPipeCallResult // The inner pipe call parse result (subject of outer)
 }
@@ -55,8 +55,8 @@ func AnalyzeUnnecessaryPipeChain(c *checker.Checker, sf *ast.SourceFile) []Unnec
 				if inner := typeparser.ParsePipeCall(c, result.Subject); inner != nil {
 					matches = append(matches, UnnecessaryPipeChainMatch{
 						SourceFile: sf,
-						Location: scanner.GetErrorRangeForNode(sf, result.Node.AsNode()),
-						Outer:    result,
+						Location:   scanner.GetErrorRangeForNode(sf, result.Node.AsNode()),
+						Outer:      result,
 						Inner:      inner,
 					})
 				}
@@ -70,4 +70,3 @@ func AnalyzeUnnecessaryPipeChain(c *checker.Checker, sf *ast.SourceFile) []Unnec
 	walk(sf.AsNode())
 	return matches
 }
-

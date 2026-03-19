@@ -81,6 +81,8 @@ func Checker_getTypeArguments(recv *checker.Checker, t *checker.Type) []*checker
 func Checker_isArrayType(recv *checker.Checker, t *checker.Type) bool
 //go:linkname Checker_isReadonlyArrayType github.com/microsoft/typescript-go/internal/checker.(*Checker).isReadonlyArrayType
 func Checker_isReadonlyArrayType(recv *checker.Checker, t *checker.Type) bool
+//go:linkname Checker_getLiteralTypeFromProperty github.com/microsoft/typescript-go/internal/checker.(*Checker).getLiteralTypeFromProperty
+func Checker_getLiteralTypeFromProperty(recv *checker.Checker, prop *ast.Symbol, include checker.TypeFlags, includeNonPublic bool) *checker.Type
 //go:linkname Checker_isTypeAssignableTo github.com/microsoft/typescript-go/internal/checker.(*Checker).isTypeAssignableTo
 func Checker_isTypeAssignableTo(recv *checker.Checker, source *checker.Type, target *checker.Type) bool
 //go:linkname CompareTypes github.com/microsoft/typescript-go/internal/checker.CompareTypes
