@@ -13,10 +13,10 @@ import (
 
 // EffectSucceedWithVoid suggests using Effect.void instead of Effect.succeed(undefined) or Effect.succeed(void 0).
 var EffectSucceedWithVoid = rule.Rule{
-	Name:        "effectSucceedWithVoid",
+	Name:            "effectSucceedWithVoid",
 	Description:     "Suggests using Effect.void instead of Effect.succeed(undefined) or Effect.succeed(void 0)",
 	DefaultSeverity: etscore.SeveritySuggestion,
-	Codes:       []int32{tsdiag.Effect_void_can_be_used_instead_of_Effect_succeed_undefined_or_Effect_succeed_void_0_effect_effectSucceedWithVoid.Code()},
+	Codes:           []int32{tsdiag.Effect_void_can_be_used_instead_of_Effect_succeed_undefined_or_Effect_succeed_void_0_effect_effectSucceedWithVoid.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeEffectSucceedWithVoid(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
@@ -95,4 +95,3 @@ func AnalyzeEffectSucceedWithVoid(c *checker.Checker, sf *ast.SourceFile) []Effe
 	walk(sf.AsNode())
 	return matches
 }
-

@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/effect-ts/effect-typescript-go/etscore"
-	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/rule"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -67,7 +66,7 @@ var AnyUnknownInErrorContext = rule.Rule{
 			// Effect or Layer type annotation, skip it entirely (user intentionally typed it)
 			if node.Kind == ast.KindParameter || node.Kind == ast.KindPropertyDeclaration || node.Kind == ast.KindVariableDeclaration {
 				if typeNode := node.Type(); typeNode != nil {
-					annotationType := checkerutils.GetTypeAtLocation(ctx.Checker, typeNode)
+					annotationType := typeparser.GetTypeAtLocation(ctx.Checker, typeNode)
 					if annotationType != nil {
 						if typeparser.StrictEffectType(ctx.Checker, annotationType, typeNode) != nil {
 							continue
@@ -83,7 +82,7 @@ var AnyUnknownInErrorContext = rule.Rule{
 			node.ForEachChild(pushChild)
 
 			// Get the type at this location
-			t := checkerutils.GetTypeAtLocation(ctx.Checker, node)
+			t := typeparser.GetTypeAtLocation(ctx.Checker, node)
 
 			// For call expressions, use the resolved signature's return type
 			if node.Kind == ast.KindCallExpression {

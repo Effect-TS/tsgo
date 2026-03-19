@@ -1,7 +1,6 @@
 package refactors
 
 import (
-	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/refactor"
 	"github.com/effect-ts/effect-typescript-go/internal/schemagen"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
@@ -44,7 +43,7 @@ func runStructuralTypeToSchema(ctx *refactor.Context) []ls.CodeAction {
 		return nil
 	}
 
-	t := checkerutils.GetTypeAtLocation(c, nameNode)
+	t := typeparser.GetTypeAtLocation(c, nameNode)
 	if t == nil {
 		return nil
 	}

@@ -2,7 +2,6 @@ package rules
 
 import (
 	"github.com/effect-ts/effect-typescript-go/etscore"
-	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/rule"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -15,10 +14,10 @@ import (
 // UnnecessaryFailYieldableError suggests yielding yieldable errors directly
 // instead of wrapping with Effect.fail.
 var UnnecessaryFailYieldableError = rule.Rule{
-	Name:        "unnecessaryFailYieldableError",
+	Name:            "unnecessaryFailYieldableError",
 	Description:     "Suggests yielding yieldable errors directly instead of wrapping with Effect.fail",
 	DefaultSeverity: etscore.SeveritySuggestion,
-	Codes:       []int32{tsdiag.This_Effect_fail_call_uses_a_yieldable_error_type_as_argument_You_can_yield_Asterisk_the_error_directly_instead_effect_unnecessaryFailYieldableError.Code()},
+	Codes:           []int32{tsdiag.This_Effect_fail_call_uses_a_yieldable_error_type_as_argument_You_can_yield_Asterisk_the_error_directly_instead_effect_unnecessaryFailYieldableError.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeUnnecessaryFailYieldableError(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
@@ -59,7 +58,7 @@ func AnalyzeUnnecessaryFailYieldableError(c *checker.Checker, sf *ast.SourceFile
 					if typeparser.IsNodeReferenceToEffectModuleApi(c, call.Expression, "fail") {
 						if call.Arguments != nil && len(call.Arguments.Nodes) >= 1 {
 							arg := call.Arguments.Nodes[0]
-							argType := checkerutils.GetTypeAtLocation(c, arg)
+							argType := typeparser.GetTypeAtLocation(c, arg)
 							if argType != nil && typeparser.IsYieldableErrorType(c, argType) {
 								matches = append(matches, UnnecessaryFailYieldableErrorMatch{
 									SourceFile:   sf,
@@ -82,4 +81,3 @@ func AnalyzeUnnecessaryFailYieldableError(c *checker.Checker, sf *ast.SourceFile
 	walk(sf.AsNode())
 	return matches
 }
-

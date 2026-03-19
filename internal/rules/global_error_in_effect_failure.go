@@ -3,7 +3,6 @@ package rules
 
 import (
 	"github.com/effect-ts/effect-typescript-go/etscore"
-	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/rule"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -16,7 +15,7 @@ var GlobalErrorInEffectFailure = rule.Rule{
 	Name:            "globalErrorInEffectFailure",
 	Description:     "Warns when the global Error type is used in an Effect failure channel",
 	DefaultSeverity: etscore.SeverityWarning,
-	Codes:       []int32{tsdiag.Global_Error_loses_type_safety_as_untagged_errors_merge_together_in_the_Effect_failure_channel_Consider_using_a_tagged_error_and_optionally_wrapping_the_original_in_a_cause_property_effect_globalErrorInEffectFailure.Code()},
+	Codes:           []int32{tsdiag.Global_Error_loses_type_safety_as_untagged_errors_merge_together_in_the_Effect_failure_channel_Consider_using_a_tagged_error_and_optionally_wrapping_the_original_in_a_cause_property_effect_globalErrorInEffectFailure.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		var diags []*ast.Diagnostic
 
@@ -45,7 +44,7 @@ var GlobalErrorInEffectFailure = rule.Rule{
 // checkGlobalErrorInEffectFailure checks a single new expression for the global-error-in-failure pattern.
 func checkGlobalErrorInEffectFailure(ctx *rule.Context, node *ast.Node) *ast.Diagnostic {
 	// Get the type of the new expression
-	newExprType := checkerutils.GetTypeAtLocation(ctx.Checker, node)
+	newExprType := typeparser.GetTypeAtLocation(ctx.Checker, node)
 	if newExprType == nil {
 		return nil
 	}
@@ -57,7 +56,7 @@ func checkGlobalErrorInEffectFailure(ctx *rule.Context, node *ast.Node) *ast.Dia
 
 	// Walk up the parent chain to find an enclosing Effect type
 	ancestor := ast.FindAncestorOrQuit(node.Parent, func(current *ast.Node) ast.FindAncestorResult {
-		currentType := checkerutils.GetTypeAtLocation(ctx.Checker, current)
+		currentType := typeparser.GetTypeAtLocation(ctx.Checker, current)
 		if currentType == nil {
 			return ast.FindAncestorFalse
 		}

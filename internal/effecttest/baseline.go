@@ -10,7 +10,6 @@ import (
 	"testing"
 	"unicode/utf8"
 
-	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/layergraph"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -378,7 +377,7 @@ func generateLayerGraphBaseline(
 				if vd.Name().Kind != ast.KindIdentifier {
 					continue
 				}
-				t := checkerutils.GetTypeAtLocation(c, vd.Initializer)
+				t := typeparser.GetTypeAtLocation(c, vd.Initializer)
 				if !typeparser.IsLayerType(c, t, vd.Initializer) {
 					continue
 				}

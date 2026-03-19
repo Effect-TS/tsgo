@@ -1,7 +1,6 @@
 package refactors
 
 import (
-	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/effectutil"
 	"github.com/effect-ts/effect-typescript-go/internal/refactor"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
@@ -48,7 +47,7 @@ func runWrapWithEffectGen(ctx *refactor.Context) []ls.CodeAction {
 			}
 		}
 
-		nodeType := checkerutils.GetTypeAtLocation(c, node)
+		nodeType := typeparser.GetTypeAtLocation(c, node)
 		if nodeType == nil {
 			continue
 		}
@@ -92,13 +91,13 @@ func runWrapWithEffectGen(ctx *refactor.Context) []ls.CodeAction {
 
 			// function*() { return yield* <expr> }
 			genFn := tracker.NewFunctionExpression(
-				nil,                                    // modifiers
+				nil,                                     // modifiers
 				tracker.NewToken(ast.KindAsteriskToken), // asterisk (generator)
-				nil,                                    // name
-				nil,                                    // typeParameters
-				tracker.NewNodeList([]*ast.Node{}),     // parameters (empty)
-				nil,                                    // returnType
-				nil,                                    // fullSignature
+				nil,                                     // name
+				nil,                                     // typeParameters
+				tracker.NewNodeList([]*ast.Node{}),      // parameters (empty)
+				nil,                                     // returnType
+				nil,                                     // fullSignature
 				body,
 			)
 

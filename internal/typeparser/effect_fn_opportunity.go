@@ -2,7 +2,6 @@
 package typeparser
 
 import (
-	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
 	"github.com/microsoft/typescript-go/shim/scanner"
@@ -99,7 +98,7 @@ func parseEffectFnOpportunityInner(c *checker.Checker, node *ast.Node) *EffectFn
 	}
 
 	// Step 6: Get function type, require exactly 1 call signature
-	functionType := checkerutils.GetTypeAtLocation(c,node)
+	functionType := GetTypeAtLocation(c, node)
 	if functionType == nil {
 		return nil
 	}
@@ -216,9 +215,9 @@ func hasReturnTypeAnnotation(node *ast.Node) bool {
 
 // genOpportunityResult holds the parsed gen opportunity data.
 type genOpportunityResult struct {
-	effectModule           *ast.Expression
-	generatorFunction      *ast.FunctionExpression
-	pipeArguments          []*ast.Node
+	effectModule            *ast.Expression
+	generatorFunction       *ast.FunctionExpression
+	pipeArguments           []*ast.Node
 	explicitTraceExpression *ast.Node
 }
 
@@ -749,7 +748,7 @@ func tryMatchOfInference(c *checker.Checker, objectLiteral *ast.Node) string {
 	if serviceTagExpression == nil {
 		return ""
 	}
-	serviceTagType := checkerutils.GetTypeAtLocation(c,serviceTagExpression)
+	serviceTagType := GetTypeAtLocation(c, serviceTagExpression)
 	if serviceTagType == nil {
 		return ""
 	}

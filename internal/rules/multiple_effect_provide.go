@@ -2,7 +2,6 @@ package rules
 
 import (
 	"github.com/effect-ts/effect-typescript-go/etscore"
-	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/effect-ts/effect-typescript-go/internal/rule"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -34,10 +33,10 @@ var MultipleEffectProvide = rule.Rule{
 // diagnostic rule and the quick-fix for the multipleEffectProvide pattern.
 type MultipleEffectProvideMatch struct {
 	SourceFile       *ast.SourceFile // The source file where the diagnostic should be reported
-	Location         core.TextRange // The diagnostic span (error range on the first call in the chunk)
-	Chunk            []*ast.Node    // The list of call expression nodes in the consecutive provide chain (2+ elements)
-	LayerArgs        []*ast.Node    // The layer argument nodes from each Effect.provide(layer) call
-	EffectModuleNode *ast.Node      // The Effect module identifier node from the first chunk callee
+	Location         core.TextRange  // The diagnostic span (error range on the first call in the chunk)
+	Chunk            []*ast.Node     // The list of call expression nodes in the consecutive provide chain (2+ elements)
+	LayerArgs        []*ast.Node     // The layer argument nodes from each Effect.provide(layer) call
+	EffectModuleNode *ast.Node       // The Effect module identifier node from the first chunk callee
 }
 
 // AnalyzeMultipleEffectProvide finds all consecutive Effect.provide call chains
@@ -82,7 +81,7 @@ func AnalyzeMultipleEffectProvide(c *checker.Checker, sf *ast.SourceFile) []Mult
 
 			// Check if the first argument is a Layer type
 			arg := transformation.Args[0]
-			argType := checkerutils.GetTypeAtLocation(c, arg)
+			argType := typeparser.GetTypeAtLocation(c, arg)
 			if argType == nil {
 				finalizeChunk()
 				continue

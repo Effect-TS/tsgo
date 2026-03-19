@@ -1,7 +1,6 @@
 package typeparser
 
 import (
-	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
 )
@@ -70,41 +69,15 @@ func GetPropertyOfTypeByName(c *checker.Checker, t *checker.Type, name string) *
 		return sym
 	}
 	for _, prop := range c.GetPropertiesOfType(t) {
-		if prop == nil || len(prop.Declarations) == 0 {
+		if prop == nil {
 			continue
 		}
-		for _, decl := range prop.Declarations {
-			if decl == nil {
-				continue
-			}
-			nameNode := decl.Name()
-			if nameNode == nil || nameNode.Kind != ast.KindComputedPropertyName {
-				continue
-			}
-			computed := nameNode.AsComputedPropertyName()
-			if computed == nil || computed.Expression == nil {
-				continue
-			}
-			exprType := checkerutils.GetTypeAtLocation(c,computed.Expression)
-			if exprType == nil {
-				continue
-			}
-			if exprType.IsStringLiteral() {
-				if lit, ok := exprType.AsLiteralType().Value().(string); ok && lit == name {
-					return prop
-				}
-			}
-			if sym := c.GetSymbolAtLocation(computed.Expression); sym != nil {
-				if decl := sym.ValueDeclaration; decl != nil {
-					if typeNode := decl.Type(); typeNode != nil {
-						if tnode := c.GetTypeFromTypeNode(typeNode); tnode != nil && tnode.IsStringLiteral() {
-							if lit, ok := tnode.AsLiteralType().Value().(string); ok && lit == name {
-								return prop
-							}
-						}
-					}
-				}
-			}
+		nameType := checker.Checker_getLiteralTypeFromProperty(c, prop, checker.TypeFlagsStringOrNumberLiteralOrUnique, true)
+		if nameType == nil || !nameType.IsStringLiteral() {
+			continue
+		}
+		if lit, ok := nameType.AsLiteralType().Value().(string); ok && lit == name {
+			return prop
 		}
 	}
 	return nil

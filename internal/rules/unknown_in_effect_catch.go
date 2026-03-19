@@ -20,7 +20,7 @@ var UnknownInEffectCatch = rule.Rule{
 	Name:            "unknownInEffectCatch",
 	Description:     "Warns when catch callbacks return unknown instead of typed errors",
 	DefaultSeverity: etscore.SeverityWarning,
-	Codes:       []int32{tsdiag.The_catch_callback_in_0_returns_unknown_The_catch_callback_should_be_used_to_provide_typed_errors_Consider_wrapping_unknown_errors_into_Effect_s_Data_TaggedError_for_example_or_narrow_down_the_type_to_the_specific_error_raised_effect_unknownInEffectCatch.Code()},
+	Codes:           []int32{tsdiag.The_catch_callback_in_0_returns_unknown_The_catch_callback_should_be_used_to_provide_typed_errors_Consider_wrapping_unknown_errors_into_Effect_s_Data_TaggedError_for_example_or_narrow_down_the_type_to_the_specific_error_raised_effect_unknownInEffectCatch.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		var diags []*ast.Diagnostic
 
@@ -112,4 +112,3 @@ func isUnknownCatchCallee(c *checker.Checker, node *ast.Node) bool {
 	}
 	return false
 }
-

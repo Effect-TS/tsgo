@@ -1,7 +1,7 @@
 package completions
 
 import (
-	"github.com/effect-ts/effect-typescript-go/internal/checkerutils"
+	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/effect-ts/effect-typescript-go/internal/completion"
 	"github.com/microsoft/typescript-go/shim/checker"
 	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
@@ -24,7 +24,7 @@ func runGenFunctionStar(ctx *completion.Context) []*lsproto.CompletionItem {
 	ch, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
 	defer done()
 
-	t := checkerutils.GetTypeAtLocation(ch, result.AccessedObject)
+	t := typeparser.GetTypeAtLocation(ch, result.AccessedObject)
 	if t == nil {
 		return nil
 	}
