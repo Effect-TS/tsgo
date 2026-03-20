@@ -1,0 +1,43 @@
+==== /.src/missingReturnYieldStar_preview.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 5:23 - 8:3
+Node: Effect.gen(function*() {\n  yield* Effect.log("before")\n  yield* Effect.fail("boom")\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  yield* Effect.log("before")\n  yield* Effect.fail("boom")\n}
+Subject Type: () => Generator<Effect<void, never, never> | Effect<never, string, never>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, string, never>
+
+=== Piping Flow ===
+Location: 6:9 - 6:30
+Node: Effect.log("before")
+Node Kind: KindCallExpression
+
+Subject: "before"
+Subject Type: "before"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 7:9 - 7:29
+Node: Effect.fail("boom")
+Node Kind: KindCallExpression
+
+Subject: "boom"
+Subject Type: "boom"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>

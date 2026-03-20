@@ -1,0 +1,29 @@
+==== /.src/missingEffectContext_preview.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 5:56 - 5:75
+Node: Effect.succeed({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{}, never, never>
+
+=== Piping Flow ===
+Location: 8:44 - 8:78
+Node: Db.asEffect().pipe(Effect.asVoid)
+Node Kind: KindCallExpression
+
+Subject: Db.asEffect()
+Subject Type: Effect<{}, never, Db>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.asVoid
+      args: (constant)
+      outType: Effect<void, never, Db>

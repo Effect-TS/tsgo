@@ -1,0 +1,33 @@
+==== /.src/catchUnfailableEffect_preview.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 5:23 - 7:2
+Node: Effect.succeed(1).pipe(\n  Effect.catch(() => Effect.succeed(0))\n)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.catch
+      args: [() => Effect.succeed(0)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 6:21 - 6:39
+Node: Effect.succeed(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>

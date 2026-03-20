@@ -1,0 +1,15 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+
+
+==== /.src/effectInFailure_preview.ts (0 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics effectInFailure:warning
+    import { Effect } from "effect"
+    
+    export const preview = Effect.try({
+      try: () => JSON.parse("{"),
+      catch: (error) => Effect.logError(error)
+    })
+    

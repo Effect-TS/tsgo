@@ -1,0 +1,29 @@
+==== /.src/leakingRequirements_preview.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 6:25 - 8:19
+Node: ServiceMap.Service<FileSystem, {\n  write: (s: string) => Effect.Effect<void>\n}>()("FileSystem")
+Node Kind: KindCallExpression
+
+Subject: "FileSystem"
+Subject Type: "FileSystem"
+
+Transformations (1):
+  [0] kind: call
+      callee: ServiceMap.Service<FileSystem, {\n  write: (s: string) => Effect.Effect<void>\n}>()
+      args: (constant)
+      outType: ServiceClass<FileSystem, "FileSystem", { write: (s: string) => Effect<void, never, never>; }>
+
+=== Piping Flow ===
+Location: 10:27 - 13:14
+Node: ServiceMap.Service<Cache, {\n  read: Effect.Effect<string, never, FileSystem>\n  save: () => Effect.Effect<void, never, FileSystem>\n}>()("Cache")
+Node Kind: KindCallExpression
+
+Subject: "Cache"
+Subject Type: "Cache"
+
+Transformations (1):
+  [0] kind: call
+      callee: ServiceMap.Service<Cache, {\n  read: Effect.Effect<string, never, FileSystem>\n  save: () => Effect.Effect<void, never, FileSystem>\n}>()
+      args: (constant)
+      outType: ServiceClass<Cache, "Cache", { read: Effect<string, never, FileSystem>; save: () => Effect<void, never, FileSystem>; }>

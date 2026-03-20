@@ -15,8 +15,10 @@ import (
 // This rule is disabled by default.
 var InstanceOfSchema = rule.Rule{
 	Name:            "instanceOfSchema",
+	Group:           "effectNative",
 	Description:     "Suggests using Schema.is instead of instanceof for Effect Schema types",
 	DefaultSeverity: etscore.SeverityOff,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Consider_using_Schema_is_instead_of_instanceof_for_Effect_Schema_types_effect_instanceOfSchema.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeInstanceOfSchema(ctx.Checker, ctx.SourceFile)

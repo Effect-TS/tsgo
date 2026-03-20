@@ -16,8 +16,10 @@ import (
 
 var ServiceNotAsClass = rule.Rule{
 	Name:            "serviceNotAsClass",
+	Group:           "style",
 	Description:     "Warns when ServiceMap.Service is used as a variable instead of a class declaration",
 	DefaultSeverity: etscore.SeverityOff,
+	SupportedEffect: []string{"v4"},
 	Codes:           []int32{tsdiag.ServiceMap_Service_should_be_used_in_a_class_declaration_instead_of_as_a_variable_Use_Colon_0_effect_serviceNotAsClass.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeServiceNotAsClass(ctx.Checker, ctx.SourceFile)

@@ -18,8 +18,10 @@ import (
 // configuration option. V3-only, default severity off.
 var MissingEffectServiceDependency = rule.Rule{
 	Name:            "missingEffectServiceDependency",
+	Group:           "style",
 	Description:     "Checks that Effect.Service dependencies satisfy all required layer inputs",
 	DefaultSeverity: etscore.SeverityOff,
+	SupportedEffect: []string{"v3"},
 	Codes: []int32{
 		tsdiag.Service_0_is_required_but_not_provided_by_dependencies_effect_missingEffectServiceDependency.Code(),
 		tsdiag.Services_0_are_required_but_not_provided_by_dependencies_effect_missingEffectServiceDependency.Code(),

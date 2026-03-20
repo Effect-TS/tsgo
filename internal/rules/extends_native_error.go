@@ -13,8 +13,10 @@ import (
 
 var ExtendsNativeError = rule.Rule{
 	Name:            "extendsNativeError",
+	Group:           "effectNative",
 	Description:     "Warns when a class directly extends the native Error class",
 	DefaultSeverity: etscore.SeverityOff,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Avoid_extending_the_native_Error_class_directly_Consider_using_a_tagged_error_e_g_Data_TaggedError_to_maintain_type_safety_in_the_Effect_failure_channel_effect_extendsNativeError.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeExtendsNativeError(ctx.Checker, ctx.SourceFile)

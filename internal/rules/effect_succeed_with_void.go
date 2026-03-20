@@ -14,8 +14,10 @@ import (
 // EffectSucceedWithVoid suggests using Effect.void instead of Effect.succeed(undefined) or Effect.succeed(void 0).
 var EffectSucceedWithVoid = rule.Rule{
 	Name:            "effectSucceedWithVoid",
+	Group:           "style",
 	Description:     "Suggests using Effect.void instead of Effect.succeed(undefined) or Effect.succeed(void 0)",
 	DefaultSeverity: etscore.SeveritySuggestion,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Effect_void_can_be_used_instead_of_Effect_succeed_undefined_or_Effect_succeed_void_0_effect_effectSucceedWithVoid.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeEffectSucceedWithVoid(ctx.Checker, ctx.SourceFile)

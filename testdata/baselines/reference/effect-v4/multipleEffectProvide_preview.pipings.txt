@@ -1,0 +1,47 @@
+==== /.src/multipleEffectProvide_preview.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 5:53 - 5:72
+Node: Effect.succeed({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{}, never, never>
+
+=== Piping Flow ===
+Location: 8:53 - 8:72
+Node: Effect.succeed({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{}, never, never>
+
+=== Piping Flow ===
+Location: 11:23 - 11:94
+Node: Effect.void.pipe(Effect.provide(A.Default), Effect.provide(B.Default))
+Node Kind: KindCallExpression
+
+Subject: Effect.void
+Subject Type: Effect<void, never, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.provide
+      args: [A.Default]
+      outType: Effect<void, never, never>
+  [1] kind: pipeable
+      callee: Effect.provide
+      args: [B.Default]
+      outType: Effect<void, never, never>

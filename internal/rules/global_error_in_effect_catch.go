@@ -18,8 +18,10 @@ var globalErrorCatchApis = []string{"tryPromise", "try", "tryMap", "tryMapPromis
 // type instead of providing typed errors.
 var GlobalErrorInEffectCatch = rule.Rule{
 	Name:            "globalErrorInEffectCatch",
+	Group:           "antipattern",
 	Description:     "Warns when catch callbacks return global Error type instead of typed errors",
 	DefaultSeverity: etscore.SeverityWarning,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.The_catch_callback_in_0_returns_global_Error_which_loses_type_safety_as_untagged_errors_merge_together_Consider_using_a_tagged_error_and_optionally_wrapping_the_original_in_a_cause_property_effect_globalErrorInEffectCatch.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		var diags []*ast.Diagnostic

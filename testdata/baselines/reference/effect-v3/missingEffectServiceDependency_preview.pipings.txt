@@ -1,0 +1,29 @@
+==== /.src/missingEffectServiceDependency_preview.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 7:10 - 10:5
+Node: Effect.gen(function*() {\n    yield* Db\n    return { all: Effect.succeed([] as Array<number>) }\n  })
+Node Kind: KindCallExpression
+
+Subject: function*() {\n    yield* Db\n    return { all: Effect.succeed([] as Array<number>) }\n  }
+Subject Type: () => Generator<YieldWrap<Tag<Db, Db>>, { all: Effect<number[], never, never>; }, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<{ all: Effect<number[], never, never>; }, never, Db>
+
+=== Piping Flow ===
+Location: 9:18 - 9:54
+Node: Effect.succeed([] as Array<number>)
+Node Kind: KindCallExpression
+
+Subject: [] as Array<number>
+Subject Type: number[]
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number[], never, never>

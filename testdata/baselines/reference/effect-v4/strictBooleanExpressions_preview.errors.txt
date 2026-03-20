@@ -1,0 +1,12 @@
+=== Metadata ===
+Effect version: unknown
+
+
+
+==== /.src/strictBooleanExpressions_preview.ts (0 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics strictBooleanExpressions:warning
+    
+    declare const value: string | undefined
+    export const preview = value ? 1 : 0
+    

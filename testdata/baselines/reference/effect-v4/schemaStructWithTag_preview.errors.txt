@@ -1,0 +1,15 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+
+
+==== /.src/schemaStructWithTag_preview.ts (0 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics schemaStructWithTag:warning
+    import * as Schema from "effect/Schema"
+    
+    export const preview = Schema.Struct({
+      _tag: Schema.Literal("User"),
+      name: Schema.String
+    })
+    

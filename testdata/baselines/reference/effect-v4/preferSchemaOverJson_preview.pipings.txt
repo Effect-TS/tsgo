@@ -1,0 +1,43 @@
+==== /.src/preferSchemaOverJson_preview.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 5:23 - 8:3
+Node: Effect.gen(function*() {\n  const text = yield* Effect.succeed('{"ok":true}')\n  return JSON.parse(text)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const text = yield* Effect.succeed('{"ok":true}')\n  return JSON.parse(text)\n}
+Subject Type: () => Generator<Effect<string, never, never>, any, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<any, never, never>
+
+=== Piping Flow ===
+Location: 6:22 - 6:52
+Node: Effect.succeed('{"ok":true}')
+Node Kind: KindCallExpression
+
+Subject: '{"ok":true}'
+Subject Type: "{\"ok\":true}"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 7:9 - 7:26
+Node: JSON.parse(text)
+Node Kind: KindCallExpression
+
+Subject: text
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: any

@@ -16,8 +16,10 @@ import (
 // arguments and suggests removing the unnecessary pipe wrapper.
 var UnnecessaryPipe = rule.Rule{
 	Name:            "unnecessaryPipe",
+	Group:           "style",
 	Description:     "Removes pipe calls with no arguments",
 	DefaultSeverity: etscore.SeveritySuggestion,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.This_pipe_call_contains_no_arguments_effect_unnecessaryPipe.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeUnnecessaryPipe(ctx.Checker, ctx.SourceFile)

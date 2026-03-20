@@ -1,0 +1,37 @@
+==== /.src/missedPipeableOpportunity_preview.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 6:13 - 6:50
+Node: Schema.Struct({ id: Schema.Number })
+Node Kind: KindCallExpression
+
+Subject: { id: Schema.Number }
+Subject Type: { id: Number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly id: Number; }>
+
+=== Piping Flow ===
+Location: 7:23 - 7:80
+Node: identity(identity(Schema.decodeEffect(User)({ id: 1 })))
+Node Kind: KindCallExpression
+
+Subject: { id: 1 }
+Subject Type: { id: number; }
+
+Transformations (3):
+  [0] kind: call
+      callee: Schema.decodeEffect(User)
+      args: (constant)
+      outType: Effect<{ readonly id: number; }, SchemaError, never>
+  [1] kind: call
+      callee: identity
+      args: (constant)
+      outType: Effect<{ readonly id: number; }, SchemaError, never>
+  [2] kind: call
+      callee: identity
+      args: (constant)
+      outType: Effect<{ readonly id: number; }, SchemaError, never>

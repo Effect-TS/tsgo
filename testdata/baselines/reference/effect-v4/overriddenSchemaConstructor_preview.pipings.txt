@@ -1,0 +1,29 @@
+==== /.src/overriddenSchemaConstructor_preview.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 5:26 - 5:78
+Node: Schema.Class<User>("User")({ name: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { name: Schema.String }
+Subject Type: { name: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<User>("User")
+      args: (constant)
+      outType: ExtendableClass<User, Struct<{ readonly name: String; }>, {}>
+
+=== Piping Flow ===
+Location: 6:50 - 6:63
+Node: super(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: super
+      args: (constant)
+      outType: { readonly name: string; }

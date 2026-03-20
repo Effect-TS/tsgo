@@ -20,8 +20,10 @@ import (
 // to a variable/parameter expecting an Effect with fewer or no requirements.
 var MissingEffectContext = rule.Rule{
 	Name:            "missingEffectContext",
+	Group:           "correctness",
 	Description:     "Detects Effect values with unhandled context requirements",
 	DefaultSeverity: etscore.SeverityError,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Missing_context_0_in_the_expected_Effect_type_effect_missingEffectContext.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		var diags []*ast.Diagnostic

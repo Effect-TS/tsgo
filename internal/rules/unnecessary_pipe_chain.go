@@ -16,8 +16,10 @@ import (
 // be simplified to a single pipe call.
 var UnnecessaryPipeChain = rule.Rule{
 	Name:            "unnecessaryPipeChain",
+	Group:           "style",
 	Description:     "Simplifies chained pipe calls into a single pipe call",
 	DefaultSeverity: etscore.SeveritySuggestion,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Chained_pipe_calls_can_be_simplified_to_a_single_pipe_call_effect_unnecessaryPipeChain.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeUnnecessaryPipeChain(ctx.Checker, ctx.SourceFile)

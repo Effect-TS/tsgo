@@ -1,0 +1,12 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+
+
+==== /.src/globalErrorInEffectFailure_preview.ts (0 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics globalErrorInEffectFailure:warning
+    import { Effect } from "effect"
+    
+    export const preview = Effect.fail(new Error("boom"))
+    

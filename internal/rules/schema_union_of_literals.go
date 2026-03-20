@@ -16,8 +16,10 @@ import (
 // Schema.Literal call. This rule is V3-only and disabled by default.
 var SchemaUnionOfLiterals = rule.Rule{
 	Name:            "schemaUnionOfLiterals",
+	Group:           "style",
 	Description:     "Suggests combining multiple Schema.Literal calls in Schema.Union into a single Schema.Literal",
 	DefaultSeverity: etscore.SeverityOff,
+	SupportedEffect: []string{"v3"},
 	Codes:           []int32{tsdiag.A_Schema_Union_of_multiple_Schema_Literal_calls_can_be_simplified_to_a_single_Schema_Literal_call_effect_schemaUnionOfLiterals.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeSchemaUnionOfLiterals(ctx.Checker, ctx.SourceFile)

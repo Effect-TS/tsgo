@@ -16,8 +16,10 @@ import (
 // OutdatedApi detects usage of Effect v3 APIs in projects targeting Effect v4.
 var OutdatedApi = rule.Rule{
 	Name:            "outdatedApi",
+	Group:           "correctness",
 	Description:     "Detects usage of APIs that have been removed or renamed in Effect v4",
 	DefaultSeverity: etscore.SeverityWarning,
+	SupportedEffect: []string{"v4"},
 	Codes: []int32{
 		tsdiag.X_0_is_an_Effect_v3_API_but_the_project_is_using_Effect_v4_1_effect_outdatedApi.Code(),
 		tsdiag.This_project_targets_Effect_v4_but_is_using_Effect_v3_APIs_To_find_the_correct_API_to_use_consult_the_Effect_v4_documentation_for_the_corresponding_v4_replacement_effect_outdatedApi.Code(),

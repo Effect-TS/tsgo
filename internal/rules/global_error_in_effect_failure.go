@@ -13,8 +13,10 @@ import (
 // context where the failure channel (E type parameter) contains the global Error type.
 var GlobalErrorInEffectFailure = rule.Rule{
 	Name:            "globalErrorInEffectFailure",
+	Group:           "antipattern",
 	Description:     "Warns when the global Error type is used in an Effect failure channel",
 	DefaultSeverity: etscore.SeverityWarning,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Global_Error_loses_type_safety_as_untagged_errors_merge_together_in_the_Effect_failure_channel_Consider_using_a_tagged_error_and_optionally_wrapping_the_original_in_a_cause_property_effect_globalErrorInEffectFailure.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		var diags []*ast.Diagnostic

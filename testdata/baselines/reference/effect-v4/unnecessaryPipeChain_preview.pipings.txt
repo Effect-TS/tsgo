@@ -1,0 +1,23 @@
+==== /.src/unnecessaryPipeChain_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 5:23 - 5:85
+Node: Effect.succeed(1).pipe(Effect.asVoid).pipe(Effect.as("done"))
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (3):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.asVoid
+      args: (constant)
+      outType: Effect<void, never, never>
+  [2] kind: pipeable
+      callee: Effect.as
+      args: ["done"]
+      outType: Effect<string, never, never>

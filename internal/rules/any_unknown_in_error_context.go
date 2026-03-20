@@ -17,8 +17,10 @@ import (
 // requirements (R) channels of Effect and Layer types.
 var AnyUnknownInErrorContext = rule.Rule{
 	Name:            "anyUnknownInErrorContext",
+	Group:           "correctness",
 	Description:     "Detects 'any' or 'unknown' types in Effect error or requirements channels",
 	DefaultSeverity: etscore.SeverityOff,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.X_0_effect_anyUnknownInErrorContext.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		type matchEntry struct {

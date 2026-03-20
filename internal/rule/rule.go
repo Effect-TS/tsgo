@@ -14,12 +14,18 @@ type Rule struct {
 	// This name is used in tsconfig.json diagnosticSeverity config and in @effect-diagnostics directives.
 	Name string
 
+	// Group is the diagnostic group this rule belongs to (e.g., "correctness", "antipattern", "effectNative", "style").
+	Group string
+
 	// Description explains what the rule checks for (used in documentation/tooling).
 	Description string
 
 	// DefaultSeverity is the severity used when the user has not explicitly configured this rule.
 	// Every rule must set this field explicitly.
 	DefaultSeverity etscore.Severity
+
+	// SupportedEffect lists which Effect versions this rule supports (e.g., "v3", "v4").
+	SupportedEffect []string
 
 	// Codes is the list of diagnostic codes that this rule can emit.
 	// This is used to build the code-to-rule mapping for codefixes and other lookups.

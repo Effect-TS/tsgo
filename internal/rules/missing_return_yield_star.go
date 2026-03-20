@@ -15,8 +15,10 @@ import (
 // MissingReturnYieldStar suggests "return yield*" for Effects that never succeed.
 var MissingReturnYieldStar = rule.Rule{
 	Name:            "missingReturnYieldStar",
+	Group:           "correctness",
 	Description:     "Suggests using return yield* for Effects that never succeed",
 	DefaultSeverity: etscore.SeverityError,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.It_is_recommended_to_use_return_yield_Asterisk_for_Effects_that_never_succeed_to_signal_a_definitive_exit_point_for_type_narrowing_and_tooling_support_effect_missingReturnYieldStar.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeMissingReturnYieldStar(ctx.Checker, ctx.SourceFile)

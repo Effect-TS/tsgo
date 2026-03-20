@@ -1,0 +1,7 @@
+=== Quick Fix Inventory ===
+
+[D1] (5:37-5:56) TS2740: Type 'Literal<"a">' is missing the following properties from type 'readonly Top[]': length, concat, join, slice, and 26 more.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+(no quick fixes to apply)

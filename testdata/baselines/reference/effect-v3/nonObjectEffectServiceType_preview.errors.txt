@@ -1,0 +1,15 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+
+
+==== /.src/nonObjectEffectServiceType_preview.ts (0 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics nonObjectEffectServiceType:warning
+    import * as Effect from "effect/Effect"
+    
+    export class BadService extends Effect.Service<BadService>()("BadService", {
+      // @ts-expect-error
+      succeed: "hello" as const
+    }) {}
+    

@@ -1,0 +1,29 @@
+==== /.src/strictEffectProvide_preview.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 5:68 - 5:87
+Node: Effect.succeed({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{}, never, never>
+
+=== Piping Flow ===
+Location: 8:23 - 8:72
+Node: Effect.void.pipe(Effect.provide(Config.Default))
+Node Kind: KindCallExpression
+
+Subject: Effect.void
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.provide
+      args: [Config.Default]
+      outType: Effect<void, never, never>

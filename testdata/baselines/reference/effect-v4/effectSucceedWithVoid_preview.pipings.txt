@@ -1,0 +1,15 @@
+==== /.src/effectSucceedWithVoid_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 5:23 - 5:49
+Node: Effect.succeed(undefined)
+Node Kind: KindCallExpression
+
+Subject: undefined
+Subject Type: undefined
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<undefined, never, never>

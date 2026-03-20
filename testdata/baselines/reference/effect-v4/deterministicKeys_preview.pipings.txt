@@ -1,0 +1,15 @@
+==== /.src/deterministicKeys_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 7:10 - 7:71
+Node: ServiceMap.Service<RenamedService, {}>()("CustomIdentifier")
+Node Kind: KindCallExpression
+
+Subject: "CustomIdentifier"
+Subject Type: "CustomIdentifier"
+
+Transformations (1):
+  [0] kind: call
+      callee: ServiceMap.Service<RenamedService, {}>()
+      args: (constant)
+      outType: ServiceClass<RenamedService, "CustomIdentifier", {}>

@@ -1,0 +1,14 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+
+
+==== /.src/effectGenUsesAdapter_preview.ts (0 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics effectGenUsesAdapter:warning
+    import * as Effect from "effect/Effect"
+    
+    export const preview = Effect.gen(function*(_) {
+      return yield* Effect.succeed(1)
+    })
+    

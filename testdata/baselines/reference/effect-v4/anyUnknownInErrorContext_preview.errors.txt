@@ -1,0 +1,15 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+
+
+==== /.src/anyUnknownInErrorContext_preview.ts (0 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics anyUnknownInErrorContext:warning
+    import { Effect } from "effect"
+    
+    export const preview = Effect.gen(function*() {
+      yield* Effect.services<unknown>()
+      return yield* Effect.fail<any>("boom")
+    })
+    

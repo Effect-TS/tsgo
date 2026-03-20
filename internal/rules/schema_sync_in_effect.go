@@ -30,8 +30,10 @@ var syncToEffectMethodV4 = map[string]string{
 // Effect generators and suggests using the Effect-based variants instead.
 var SchemaSyncInEffect = rule.Rule{
 	Name:            "schemaSyncInEffect",
+	Group:           "antipattern",
 	Description:     "Suggests using Effect-based Schema methods instead of sync methods inside Effect generators",
 	DefaultSeverity: etscore.SeveritySuggestion,
+	SupportedEffect: []string{"v3"},
 	Codes:           []int32{tsdiag.Using_0_inside_an_Effect_generator_is_not_recommended_Use_Schema_1_instead_to_get_properly_typed_error_channel_effect_schemaSyncInEffect.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		version := typeparser.SupportedEffectVersion(ctx.Checker)

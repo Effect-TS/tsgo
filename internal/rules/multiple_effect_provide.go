@@ -16,8 +16,10 @@ import (
 // provide call to avoid service lifecycle issues.
 var MultipleEffectProvide = rule.Rule{
 	Name:            "multipleEffectProvide",
+	Group:           "antipattern",
 	Description:     "Warns against chaining Effect.provide calls which can cause service lifecycle issues",
 	DefaultSeverity: etscore.SeverityWarning,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Avoid_chaining_Effect_provide_calls_as_this_can_lead_to_service_lifecycle_issues_Instead_merge_layers_and_provide_them_in_a_single_call_effect_multipleEffectProvide.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeMultipleEffectProvide(ctx.Checker, ctx.SourceFile)

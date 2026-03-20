@@ -1,0 +1,15 @@
+==== /.src/floatingEffect_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 3:40 - 5:24
+Node: Effect.log("forgotten")
+Node Kind: KindCallExpression
+
+Subject: "forgotten"
+Subject Type: "forgotten"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>

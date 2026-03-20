@@ -392,7 +392,84 @@ const computeTsConfigChanges = (
 
   const compilerOptionsProperty = findPropertyInObject(rootObj, "compilerOptions")
   if (!compilerOptionsProperty || !ts.isObjectLiteralExpression(compilerOptionsProperty.initializer)) {
-    return emptyFileChangesResult()
+    // No compilerOptions — if we're removing LSP there's nothing to do
+    if (Option.isNone(lspVersion)) {
+      return emptyFileChangesResult()
+    }
+
+    // Create compilerOptions with the plugin entry
+    const ctx = createTrackerContext()
+
+    const fileChanges = tsInternal.textChanges.ChangeTracker.with(
+      ctx,
+      (tracker: any) => {
+        const schemaProperty = findPropertyInObject(rootObj, "$schema")
+        const shouldAddSchema = !schemaProperty
+        const shouldUpdateSchema = !!schemaProperty && (
+          !ts.isStringLiteral(schemaProperty.initializer) || schemaProperty.initializer.text !== TSCONFIG_SCHEMA_URL
+        )
+
+        if (shouldAddSchema) {
+          descriptions.push("Add $schema to tsconfig")
+        } else if (shouldUpdateSchema) {
+          descriptions.push("Update $schema in tsconfig")
+        }
+
+        descriptions.push(`Add compilerOptions with ${LSP_PLUGIN_NAME} plugin`)
+
+        const schemaPropertyAssignment = ts.factory.createPropertyAssignment(
+          ts.factory.createStringLiteral("$schema"),
+          ts.factory.createStringLiteral(TSCONFIG_SCHEMA_URL)
+        )
+
+        const compilerOptionsAssignment = ts.factory.createPropertyAssignment(
+          ts.factory.createStringLiteral("compilerOptions"),
+          ts.factory.createObjectLiteralExpression([
+            ts.factory.createPropertyAssignment(
+              ts.factory.createStringLiteral("plugins"),
+              ts.factory.createArrayLiteralExpression([createLspPluginObject(target)], true)
+            )
+          ], true)
+        )
+
+        // Rebuild the root object preserving existing properties, updating/adding $schema, appending compilerOptions
+        const nextProperties: Array<ts.ObjectLiteralElementLike> = rootObj.properties.map((property) => {
+          if (schemaProperty && property === schemaProperty) {
+            return schemaPropertyAssignment
+          }
+          return property
+        })
+
+        if (shouldAddSchema) {
+          nextProperties.push(schemaPropertyAssignment)
+        }
+        nextProperties.push(compilerOptionsAssignment)
+
+        tracker.replaceNode(
+          current.sourceFile,
+          rootObj,
+          ts.factory.createObjectLiteralExpression(nextProperties, true)
+        )
+      }
+    )
+
+    const fileChange = fileChanges.find((fc: ts.FileTextChanges) => fc.fileName === current.sourceFile.fileName)
+    const changes = fileChange ? fileChange.textChanges : []
+    if (changes.length === 0) {
+      return { codeActions: [], messages }
+    }
+
+    return {
+      codeActions: [{
+        description: descriptions.join("; "),
+        changes: [{
+          fileName: current.sourceFile.fileName,
+          textChanges: changes,
+          isNewFile: false
+        }]
+      }],
+      messages
+    }
   }
 
   const compilerOptions = compilerOptionsProperty.initializer

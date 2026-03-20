@@ -68,18 +68,19 @@ export const gatherTargetState = (
     }
 
     const shouldCustomizeDiagnostics = yield* Prompt.select({
-      message: "Would you like to customize the diagnostic severities?",
+      message: "Would you like to customize the diagnostics that the language service will provide?",
       choices: [
         {
           title: "Yes",
-          description: "Review the available rules and adjust their severities",
+          description: "Manually review and select which diagnostics to enable",
           value: true,
           selected: true
         },
         {
           title: "No",
-          description: "Keep the default severities shipped by @effect/tsgo",
-          value: false
+          description: "Keep the defaults provided by the language service",
+          value: false,
+          selected: false
         }
       ]
     })

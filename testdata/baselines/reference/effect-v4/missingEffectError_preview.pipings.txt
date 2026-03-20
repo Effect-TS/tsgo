@@ -1,0 +1,15 @@
+==== /.src/missingEffectError_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 6:19 - 6:44
+Node: Data.TaggedError("Boom")
+Node Kind: KindCallExpression
+
+Subject: "Boom"
+Subject Type: "Boom"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: MatchRecord<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }, void, { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "Boom"; } & Readonly<A>

@@ -1,0 +1,10 @@
+=== Quick Fix Inventory ===
+
+[D1] (3:26-3:42) TS2307: Cannot find module 'effect/Context' or its corresponding type declarations.
+  (no quick fixes)
+
+[D2] (8:37-8:42) TS2740: Type 'typeof Cache' is missing the following properties from type 'Key<unknown, { ok: true; }>': Identifier, [ServiceTypeId], Service, key, and 4 more.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+(no quick fixes to apply)

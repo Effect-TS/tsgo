@@ -13,8 +13,10 @@ import (
 
 var OverriddenSchemaConstructor = rule.Rule{
 	Name:            "overriddenSchemaConstructor",
+	Group:           "correctness",
 	Description:     "Prevents overriding constructors in Schema classes which breaks decoding behavior",
 	DefaultSeverity: etscore.SeverityError,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Classes_extending_Schema_must_not_override_the_constructor_this_is_because_it_silently_breaks_the_schema_decoding_behaviour_If_that_s_needed_we_recommend_instead_to_use_a_static_new_method_that_constructs_the_instance_effect_overriddenSchemaConstructor.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeOverriddenSchemaConstructor(ctx.Checker, ctx.SourceFile)
