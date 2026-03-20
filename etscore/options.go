@@ -22,6 +22,10 @@ type EffectPluginOptions struct {
 	// If empty map {}, diagnostics are enabled with defaults.
 	DiagnosticSeverity map[string]Severity `json:"diagnosticSeverity,omitzero" schema_description:"Maps rule names to severity levels. Use {} to enable diagnostics with rule defaults."`
 
+	// IncludeSuggestionsInTsc controls whether suggestion-level Effect diagnostics appear
+	// in tsc CLI output. Default: true (suggestions are included).
+	IncludeSuggestionsInTsc bool `json:"includeSuggestionsInTsc,omitzero" schema_description:"When false, suggestion-level Effect diagnostics are omitted from tsc CLI output." schema_default:"true"`
+
 	// IgnoreEffectSuggestionsInTscExitCode controls whether Effect suggestion/message-category
 	// diagnostics affect the tsc exit code. Default: true (suggestions do NOT affect exit code).
 	IgnoreEffectSuggestionsInTscExitCode bool `json:"ignoreEffectSuggestionsInTscExitCode,omitzero" schema_description:"When true, suggestion diagnostics do not affect the tsc exit code." schema_default:"true"`
@@ -156,6 +160,15 @@ func (e *EffectPluginOptions) GetSeverityOk(ruleName string) (Severity, bool) {
 	}
 	sev, ok := e.DiagnosticSeverity[ruleName]
 	return sev, ok
+}
+
+// GetIncludeSuggestionsInTsc returns whether suggestion diagnostics should appear in tsc output.
+// Returns true (include suggestions) when the receiver is nil.
+func (e *EffectPluginOptions) GetIncludeSuggestionsInTsc() bool {
+	if e == nil {
+		return true
+	}
+	return e.IncludeSuggestionsInTsc
 }
 
 // GetPipeableMinArgCount returns the configured minimum pipeable arg count, or 2 if not set.

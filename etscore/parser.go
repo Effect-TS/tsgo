@@ -37,6 +37,7 @@ func ParseFromPlugins(value any) *EffectPluginOptions {
 		// Found our plugin, parse the config
 		result := &EffectPluginOptions{
 			DiagnosticSeverity:                   make(map[string]Severity), // Start with empty map (enabled)
+			IncludeSuggestionsInTsc:              true,                      // default: true
 			IgnoreEffectSuggestionsInTscExitCode: true,                      // default: true
 			IgnoreEffectWarningsInTscExitCode:    false,                     // default: false
 		}
@@ -48,6 +49,13 @@ func ParseFromPlugins(value any) *EffectPluginOptions {
 				return nil
 			}
 			result.DiagnosticSeverity = parseDiagnosticSeverityMap(diag)
+		}
+
+		// Parse includeSuggestionsInTsc (default: true)
+		if val, exists := getPluginValue("includeSuggestionsInTsc"); exists {
+			if b, ok := val.(bool); ok {
+				result.IncludeSuggestionsInTsc = b
+			}
 		}
 
 		// Parse ignoreEffectSuggestionsInTscExitCode (default: true)

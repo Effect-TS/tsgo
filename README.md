@@ -160,6 +160,7 @@ These options are configured in `tsconfig.json` under `compilerOptions.plugins` 
 | `ignoreEffectSuggestionsInTscExitCode` | `boolean` | `true` | When true, Effect suggestion/message-category diagnostics do not affect the tsc exit code. |
 | `ignoreEffectWarningsInTscExitCode` | `boolean` | `false` | When true, Effect warning-category diagnostics do not affect the tsc exit code. |
 | `ignoreEffectErrorsInTscExitCode` | `boolean` | `false` | When true, Effect error-category diagnostics do not affect the tsc exit code. |
+| `includeSuggestionsInTsc` | `boolean` | `true` | When false, suggestion-level Effect diagnostics are omitted from tsc CLI output. LSP and other flows are unaffected. |
 | `skipDisabledOptimization` | `boolean` | `false` | When true, disabled diagnostics are still processed so per-line or per-section directive overrides can enable them. |
 | `keyPatterns` | `KeyPattern[]` | (see defaults) | Configures key pattern formulas for the `deterministicKeys` rule. |
 | `extendedKeyDetection` | `boolean` | `false` | Enables matching constructors with `@effect-identifier` annotations. |
