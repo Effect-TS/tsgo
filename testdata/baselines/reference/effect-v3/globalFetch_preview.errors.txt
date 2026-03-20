@@ -1,0 +1,11 @@
+=== Metadata ===
+Effect version: unknown
+
+
+
+==== /.src/globalFetch_preview.ts (0 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics globalFetch:warning
+    
+    export const preview = fetch("https://example.com")
+    

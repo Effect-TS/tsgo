@@ -234,5 +234,9 @@
     "This layer provides the missing service {0}. effect(missingEffectContext)": {
         "category": "Error",
         "code": 377060
+    },
+    "Prefer using HttpClient from {0} instead of the global 'fetch' function. effect(globalFetch)": {
+        "category": "Warning",
+        "code": 377061
     }
 }

@@ -29,6 +29,7 @@ var All = []rule.Rule{
 	UnknownInEffectCatch,
 	GlobalErrorInEffectCatch,
 	GlobalErrorInEffectFailure,
+	GlobalFetch,
 	RunEffectInsideEffect,
 	PreferSchemaOverJson,
 	EffectGenUsesAdapter,
