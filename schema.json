@@ -1129,6 +1129,11 @@
                         "description": "Package-level import aliases keyed by package name.",
                         "type": "object"
                       },
+                      "includeSuggestionsInTsc": {
+                        "default": true,
+                        "description": "When false, suggestion-level Effect diagnostics are omitted from tsc CLI output.",
+                        "type": "boolean"
+                      },
                       "inlays": {
                         "default": false,
                         "description": "When true, suppresses redundant return-type inlay hints on supported Effect generator functions.",
@@ -1975,6 +1980,11 @@
           "default": {},
           "description": "Package-level import aliases keyed by package name.",
           "type": "object"
+        },
+        "includeSuggestionsInTsc": {
+          "default": true,
+          "description": "When false, suggestion-level Effect diagnostics are omitted from tsc CLI output.",
+          "type": "boolean"
         },
         "inlays": {
           "default": false,

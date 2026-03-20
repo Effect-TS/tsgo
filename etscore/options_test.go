@@ -95,6 +95,66 @@ func TestParseFromPlugins_ExitCodeNonBooleanFallsBackToDefault(t *testing.T) {
 	}
 }
 
+func TestParseFromPlugins_IncludeSuggestionsInTscDefault(t *testing.T) {
+	plugins := makePlugins(makePluginMap("name", EffectPluginName))
+	opts := ParseFromPlugins(plugins)
+	if opts == nil {
+		t.Fatal("expected non-nil options")
+	}
+	if !opts.IncludeSuggestionsInTsc {
+		t.Error("expected IncludeSuggestionsInTsc to default to true")
+	}
+}
+
+func TestParseFromPlugins_IncludeSuggestionsInTscExplicitTrue(t *testing.T) {
+	plugins := makePlugins(makePluginMap(
+		"name", EffectPluginName,
+		"includeSuggestionsInTsc", true,
+	))
+	opts := ParseFromPlugins(plugins)
+	if opts == nil {
+		t.Fatal("expected non-nil options")
+	}
+	if !opts.IncludeSuggestionsInTsc {
+		t.Error("expected IncludeSuggestionsInTsc to be true")
+	}
+}
+
+func TestParseFromPlugins_IncludeSuggestionsInTscExplicitFalse(t *testing.T) {
+	plugins := makePlugins(makePluginMap(
+		"name", EffectPluginName,
+		"includeSuggestionsInTsc", false,
+	))
+	opts := ParseFromPlugins(plugins)
+	if opts == nil {
+		t.Fatal("expected non-nil options")
+	}
+	if opts.IncludeSuggestionsInTsc {
+		t.Error("expected IncludeSuggestionsInTsc to be false")
+	}
+}
+
+func TestParseFromPlugins_IncludeSuggestionsInTscNonBooleanFallback(t *testing.T) {
+	plugins := makePlugins(makePluginMap(
+		"name", EffectPluginName,
+		"includeSuggestionsInTsc", "yes",
+	))
+	opts := ParseFromPlugins(plugins)
+	if opts == nil {
+		t.Fatal("expected non-nil options")
+	}
+	if !opts.IncludeSuggestionsInTsc {
+		t.Error("expected IncludeSuggestionsInTsc to default to true for non-boolean value")
+	}
+}
+
+func TestGetIncludeSuggestionsInTsc_NilReceiver(t *testing.T) {
+	var opts *EffectPluginOptions
+	if !opts.GetIncludeSuggestionsInTsc() {
+		t.Error("expected GetIncludeSuggestionsInTsc() on nil to return true")
+	}
+}
+
 func TestGetMermaidBaseURL(t *testing.T) {
 	tests := []struct {
 		name     string

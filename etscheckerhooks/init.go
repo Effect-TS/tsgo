@@ -162,8 +162,17 @@ func transformDiagnostics(
 		originalCategory := rd.Diagnostic.Category()
 		newCategory := directives.ToCategory(effectiveSeverity)
 
+		// In CLI mode, filter or convert suggestion/message diagnostics
+		if etscore.IsCommandLineMode() {
+			if !config.GetIncludeSuggestionsInTsc() {
+				// Drop suggestion and message diagnostics entirely
+				if newCategory == tsdiag.CategorySuggestion || newCategory == tsdiag.CategoryMessage {
+					continue
+				}
+			}
+		}
+
 		if originalCategory != newCategory {
-			// Create new diagnostic with updated category (immutable)
 			transformed := createTransformedDiagnostic(rd.Diagnostic, newCategory)
 			results = append(results, transformed)
 		} else {
