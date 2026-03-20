@@ -86,3 +86,6 @@ custom-gcl*
 Dockerfile
 _tools/docker-dev.sh
 _tools/.perf-out/
+
+.lalph
+scripts/worktree-setup.sh
