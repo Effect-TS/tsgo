@@ -1,8 +1,8 @@
 diff --git a/internal/checker/checker.go b/internal/checker/checker.go
-index b8639053e..e86d2a682 100644
+index 000000001..000000002 100644
 --- a/internal/checker/checker.go
 +++ b/internal/checker/checker.go
-@@ -30,6 +30,35 @@ import (
+@@ -30,6 +30,35 @@
  	"github.com/zeebo/xxh3"
  )
 
@@ -38,19 +38,18 @@ index b8639053e..e86d2a682 100644
  // CheckMode
 
  type CheckMode uint32
-@@ -2123,6 +2152,9 @@ func (c *Checker) checkSourceFile(ctx context.Context, sourceFile *ast.SourceFil
- 	c.checkNotCanceled()
+@@ -2131,6 +2160,9 @@ func (c *Checker) checkSourceFile(ctx context.Context, sourceFile *ast.SourceFil
  	links := c.sourceFileLinks.Get(sourceFile)
  	if !links.typeChecked {
+ 		c.saveDeferredDiagnostics = true
 +		// Clear any stale relation errors before type checking
 +		links.relationErrors = nil
 +
- 		c.ctx = ctx
  		// Grammar checking
  		c.checkGrammarSourceFile(sourceFile)
-@@ -2146,7 +2178,13 @@ func (c *Checker) checkSourceFile(ctx context.Context, sourceFile *ast.SourceFil
- 		}
- 		c.ctx = nil
+ 		c.renamedBindingElementsInTypes = nil
+@@ -2147,6 +2179,12 @@ func (c *Checker) checkSourceFile(ctx context.Context, sourceFile *ast.SourceFil
+ 		c.produceDeferredDiagnostics()
  		c.reportedUnreachableNodes.Clear()
 -		links.typeChecked = true
 +
@@ -61,5 +60,5 @@ index b8639053e..e86d2a682 100644
 +			AfterCheckSourceFileCallback(c, sourceFile)
 +		}
  	}
- }
-
+ 	if checkUnused && !links.unusedChecked {
+ 		// The unused identifiers check relies on a full type check having first been performed

@@ -73,6 +73,8 @@ const IndentStyleBlock = lsutil.IndentStyleBlock
 const IndentStyleNone = lsutil.IndentStyleNone
 const IndentStyleSmart = lsutil.IndentStyleSmart
 type InlayHintsPreferences = lsutil.InlayHintsPreferences
+//go:linkname IsCompletedNode github.com/microsoft/typescript-go/internal/ls/lsutil.IsCompletedNode
+func IsCompletedNode(n *ast.Node, sourceFile *ast.SourceFile) bool
 //go:linkname IsNonContextualKeyword github.com/microsoft/typescript-go/internal/ls/lsutil.IsNonContextualKeyword
 func IsNonContextualKeyword(token ast.Kind) bool
 type JsxAttributeCompletionStyle = lsutil.JsxAttributeCompletionStyle
@@ -104,6 +106,8 @@ const OrganizeImportsTypeOrderInline = lsutil.OrganizeImportsTypeOrderInline
 const OrganizeImportsTypeOrderLast = lsutil.OrganizeImportsTypeOrderLast
 //go:linkname ParseNewUserConfig github.com/microsoft/typescript-go/internal/ls/lsutil.ParseNewUserConfig
 func ParseNewUserConfig(items map[string]any) *lsutil.UserConfig
+//go:linkname PositionBelongsToNode github.com/microsoft/typescript-go/internal/ls/lsutil.PositionBelongsToNode
+func PositionBelongsToNode(candidate *ast.Node, position int, file *ast.SourceFile) bool
 //go:linkname PositionIsASICandidate github.com/microsoft/typescript-go/internal/ls/lsutil.PositionIsASICandidate
 func PositionIsASICandidate(pos int, context *ast.Node, file *ast.SourceFile) bool
 //go:linkname ProbablyUsesSemicolons github.com/microsoft/typescript-go/internal/ls/lsutil.ProbablyUsesSemicolons

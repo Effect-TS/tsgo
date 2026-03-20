@@ -131,8 +131,8 @@ export class MyService extends ServiceMap.Service<MyService, {
 
     static layerSucceed = Layer.succeed(this)({
         log: Effect.fn(function(what: string) {
-    return Effect.log(what)
-})
+            return Effect.log(what)
+        })
     })
 
     static layerSync = Layer.sync(this)(() => {
@@ -156,8 +156,8 @@ export class MyService extends ServiceMap.Service<MyService, {
 
     static layerSucceed = Layer.succeed(this)({
         log: Effect.fn("MyService.log")(function(what: string) {
-    return Effect.log(what)
-})
+            return Effect.log(what)
+        })
     })
 
     static layerSync = Layer.sync(this)(() => {
@@ -181,8 +181,8 @@ export class MyService extends ServiceMap.Service<MyService, {
 
     static layerSucceed = Layer.succeed(this)({
         log: Effect.fn("log")(function(what: string) {
-    return Effect.log(what)
-})
+            return Effect.log(what)
+        })
     })
 
     static layerSync = Layer.sync(this)(() => {
