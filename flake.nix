@@ -46,7 +46,7 @@
        Refresh: ./_tools/update-flake-vendor-hash.sh
        Manual:  set to lib.fakeHash, build, copy the reported hash.
       */
-      vendorHash = "sha256-15dQYcuOPxrnIXWV8UVVSqDqMyRJJmQqVEF7o3wgxz4=";
+      vendorHash = "sha256-vmu1da/dP38QbB//fhYgSXqu3nvbns31Pc1KbMWp8yU=";
       forAllSystems =
         f: lib.genAttrs supportedSystems (system: f system (import nixpkgs { inherit system; }));
     in
