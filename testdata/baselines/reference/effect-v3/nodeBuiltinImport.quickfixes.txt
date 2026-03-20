@@ -87,24 +87,35 @@
   Fix 0: "Disable nodeBuiltinImport for this line"
   Fix 1: "Disable nodeBuiltinImport for entire file"
 
-[D26] (20:8-20:17) TS377057: Prefer using FileSystem from @effect/platform instead of the Node.js 'fs' module. effect(nodeBuiltinImport)
+[D26] (18:8-18:12) TS6133: 'http' is declared but its value is never read.
+  (no quick fixes)
+
+[D27] (18:18-18:24) TS377057: Prefer using HttpClient from @effect/platform instead of the Node.js 'http' module. effect(nodeBuiltinImport)
   Fix 0: "Disable nodeBuiltinImport for this line"
   Fix 1: "Disable nodeBuiltinImport for entire file"
 
-[D27] (23:7-23:10) TS6133: 'fs3' is declared but its value is never read.
+[D28] (19:8-19:13) TS6133: 'https' is declared but its value is never read.
   (no quick fixes)
 
-[D28] (23:21-23:30) TS377057: Prefer using FileSystem from @effect/platform instead of the Node.js 'fs' module. effect(nodeBuiltinImport)
+[D29] (19:19-19:31) TS377057: Prefer using HttpClient from @effect/platform instead of the Node.js 'https' module. effect(nodeBuiltinImport)
   Fix 0: "Disable nodeBuiltinImport for this line"
   Fix 1: "Disable nodeBuiltinImport for entire file"
 
-[D29] (27:10-27:20) TS6133: 'FileSystem' is declared but its value is never read.
+[D30] (22:8-22:17) TS377057: Prefer using FileSystem from @effect/platform instead of the Node.js 'fs' module. effect(nodeBuiltinImport)
+  Fix 0: "Disable nodeBuiltinImport for this line"
+  Fix 1: "Disable nodeBuiltinImport for entire file"
+
+[D31] (25:7-25:10) TS6133: 'fs3' is declared but its value is never read.
   (no quick fixes)
 
-[D30] (30:8-30:12) TS6133: 'http' is declared but its value is never read.
+[D32] (25:21-25:30) TS377057: Prefer using FileSystem from @effect/platform instead of the Node.js 'fs' module. effect(nodeBuiltinImport)
+  Fix 0: "Disable nodeBuiltinImport for this line"
+  Fix 1: "Disable nodeBuiltinImport for entire file"
+
+[D33] (29:10-29:20) TS6133: 'FileSystem' is declared but its value is never read.
   (no quick fixes)
 
-[D31] (34:8-34:15) TS6133: 'fsExtra' is declared but its value is never read.
+[D34] (33:8-33:15) TS6133: 'fsExtra' is declared but its value is never read.
   (no quick fixes)
 
 === Quick Fix Application Results ===
@@ -181,14 +192,26 @@ skipped by default
 === [D25] Fix 1: "Disable nodeBuiltinImport for entire file" ===
 skipped by default
 
-=== [D26] Fix 0: "Disable nodeBuiltinImport for this line" ===
+=== [D27] Fix 0: "Disable nodeBuiltinImport for this line" ===
 skipped by default
 
-=== [D26] Fix 1: "Disable nodeBuiltinImport for entire file" ===
+=== [D27] Fix 1: "Disable nodeBuiltinImport for entire file" ===
 skipped by default
 
-=== [D28] Fix 0: "Disable nodeBuiltinImport for this line" ===
+=== [D29] Fix 0: "Disable nodeBuiltinImport for this line" ===
 skipped by default
 
-=== [D28] Fix 1: "Disable nodeBuiltinImport for entire file" ===
+=== [D29] Fix 1: "Disable nodeBuiltinImport for entire file" ===
+skipped by default
+
+=== [D30] Fix 0: "Disable nodeBuiltinImport for this line" ===
+skipped by default
+
+=== [D30] Fix 1: "Disable nodeBuiltinImport for entire file" ===
+skipped by default
+
+=== [D32] Fix 0: "Disable nodeBuiltinImport for this line" ===
+skipped by default
+
+=== [D32] Fix 1: "Disable nodeBuiltinImport for entire file" ===
 skipped by default
