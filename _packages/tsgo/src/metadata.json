@@ -59,7 +59,7 @@
     {
       "name": "classSelfMismatch",
       "group": "correctness",
-      "description": "Ensures Self type parameter matches the class name in Service/Tag/Schema classes",
+      "description": "Ensures Self type parameter matches the class name in ServiceMap/Service/Tag/Schema classes",
       "defaultSeverity": "error",
       "fixable": true,
       "supportedEffect": [

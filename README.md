@@ -19,7 +19,7 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
   <tbody>
     <tr><td colspan="6"><strong>Correctness</strong> <em>Wrong, unsafe, or structurally invalid code patterns.</em></td></tr>
     <tr><td><code>anyUnknownInErrorContext</code></td><td>➖</td><td></td><td>Detects &#39;any&#39; or &#39;unknown&#39; types in Effect error or requirements channels</td><td>✓</td><td>✓</td></tr>
-    <tr><td><code>classSelfMismatch</code></td><td>❌</td><td>🔧</td><td>Ensures Self type parameter matches the class name in Service/Tag/Schema classes</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>classSelfMismatch</code></td><td>❌</td><td>🔧</td><td>Ensures Self type parameter matches the class name in ServiceMap/Service/Tag/Schema classes</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>duplicatePackage</code></td><td>⚠️</td><td></td><td>Warns when multiple versions of an Effect-related package are detected in the program</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>floatingEffect</code></td><td>❌</td><td></td><td>Detects Effect values that are neither yielded nor assigned</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>genericEffectServices</code></td><td>⚠️</td><td></td><td>Prevents services with type parameters that cannot be discriminated at runtime</td><td>✓</td><td>✓</td></tr>

@@ -12,12 +12,13 @@ import (
 )
 
 // ClassSelfMismatch ensures the Self type parameter matches the class name in
-// Effect.Service, Context.Tag, Effect.Tag, Schema.Class, Schema.TaggedClass,
-// Schema.TaggedError, Schema.TaggedRequest, Schema.RequestClass, and Model.Class declarations.
+// Effect.Service, ServiceMap.Service, Context.Tag, Effect.Tag, Schema.Class,
+// Schema.TaggedClass, Schema.TaggedError, Schema.TaggedRequest,
+// Schema.RequestClass, and Model.Class declarations.
 var ClassSelfMismatch = rule.Rule{
 	Name:            "classSelfMismatch",
 	Group:           "correctness",
-	Description:     "Ensures Self type parameter matches the class name in Service/Tag/Schema classes",
+	Description:     "Ensures Self type parameter matches the class name in ServiceMap/Service/Tag/Schema classes",
 	DefaultSeverity: etscore.SeverityError,
 	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Self_type_parameter_should_be_0_effect_classSelfMismatch.Code()},
