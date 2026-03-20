@@ -1,0 +1,85 @@
+==== /.src/leakingRequirements_allowJsdoc.ts (6 flows) ====
+
+=== Piping Flow ===
+Location: 5:32 - 5:58
+Node: Context.Tag("FileSystem")
+Node Kind: KindCallExpression
+
+Subject: "FileSystem"
+Subject Type: "FileSystem"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.Tag
+      args: (constant)
+      outType: <Self, Shape>() => TagClass<Self, "FileSystem", Shape>
+
+=== Piping Flow ===
+Location: 9:27 - 9:48
+Node: Context.Tag("Cache")
+Node Kind: KindCallExpression
+
+Subject: "Cache"
+Subject Type: "Cache"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.Tag
+      args: (constant)
+      outType: <Self, Shape>() => TagClass<Self, "Cache", Shape>
+
+=== Piping Flow ===
+Location: 16:33 - 16:60
+Node: Context.Tag("LeakingDeps")
+Node Kind: KindCallExpression
+
+Subject: "LeakingDeps"
+Subject Type: "LeakingDeps"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.Tag
+      args: (constant)
+      outType: <Self, Shape>() => TagClass<Self, "LeakingDeps", Shape>
+
+=== Piping Flow ===
+Location: 24:34 - 24:62
+Node: Context.Tag("LeakingDeps2")
+Node Kind: KindCallExpression
+
+Subject: "LeakingDeps2"
+Subject Type: "LeakingDeps2"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.Tag
+      args: (constant)
+      outType: <Self, Shape>() => TagClass<Self, "LeakingDeps2", Shape>
+
+=== Piping Flow ===
+Location: 36:34 - 36:62
+Node: Context.Tag("LeakingDeps3")
+Node Kind: KindCallExpression
+
+Subject: "LeakingDeps3"
+Subject Type: "LeakingDeps3"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.Tag
+      args: (constant)
+      outType: <Self, Shape>() => TagClass<Self, "LeakingDeps3", Shape>
+
+=== Piping Flow ===
+Location: 44:28 - 47:19
+Node: Context.GenericTag<{\n  writeCache: () => Effect.Effect<void, never, FileSystem | Cache>\n  readCache: Effect.Effect<void, never, FileSystem | Cache>\n}>("LeakingDeps4")
+Node Kind: KindCallExpression
+
+Subject: "LeakingDeps4"
+Subject Type: "LeakingDeps4"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.GenericTag
+      args: (constant)
+      outType: Tag<{ writeCache: () => Effect<void, never, Cache | FileSystem>; readCache: Effect<void, never, Cache | FileSystem>; }, { writeCache: () => Effect<void, never, Cache | FileSystem>; readCache: Effect<void, never, Cache | FileSystem>; }>

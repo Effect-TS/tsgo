@@ -96,6 +96,9 @@ var LeakingRequirements = rule.Rule{
 
 				leaked := parseLeakedRequirements(ctx.Checker, service.Shape, node)
 				if len(leaked) > 0 {
+					leaked = filterExpectedLeakingRequirements(ctx.Checker, ttc.reportNode, leaked)
+				}
+				if len(leaked) > 0 {
 					matched = true
 
 					// Sort deterministically by type name (alphabetical)
@@ -124,6 +127,79 @@ var LeakingRequirements = rule.Rule{
 
 		return diags
 	},
+}
+
+func filterExpectedLeakingRequirements(c *checker.Checker, reportNode *ast.Node, leaked []*checker.Type) []*checker.Type {
+	if reportNode == nil || len(leaked) == 0 {
+		return leaked
+	}
+
+	filtered := leaked[:0]
+	for _, leakedType := range leaked {
+		if leakedType == nil {
+			continue
+		}
+		if isExpectedLeakingServiceSuppressed(c, reportNode, c.TypeToString(leakedType)) {
+			continue
+		}
+		filtered = append(filtered, leakedType)
+	}
+
+	return filtered
+}
+
+func isExpectedLeakingServiceSuppressed(c *checker.Checker, startNode *ast.Node, leakedServiceName string) bool {
+	if c == nil || startNode == nil || leakedServiceName == "" {
+		return false
+	}
+
+	sourceFile := ast.GetSourceFileOfNode(startNode)
+	if sourceFile == nil {
+		return false
+	}
+
+	return ast.FindAncestorOrQuit(startNode, func(current *ast.Node) ast.FindAncestorResult {
+		if current == nil {
+			return ast.FindAncestorFalse
+		}
+
+		if hasExpectedLeakingComment(sourceFile.Text(), current.Pos(), leakedServiceName) {
+			return ast.FindAncestorTrue
+		}
+
+		if ast.IsClassDeclaration(current) || ast.IsVariableStatement(current) || ast.IsExpressionStatement(current) || ast.IsStatement(current) {
+			return ast.FindAncestorQuit
+		}
+
+		return ast.FindAncestorFalse
+	}) != nil
+}
+
+func hasExpectedLeakingComment(sourceText string, pos int, leakedServiceName string) bool {
+	if sourceText == "" || leakedServiceName == "" || pos < 0 || pos > len(sourceText) {
+		return false
+	}
+
+	for commentRange := range scanner.GetLeadingCommentRanges(&ast.NodeFactory{}, sourceText, pos) {
+		start := commentRange.Pos()
+		end := commentRange.End()
+		if start < 0 || end < 0 || start >= end || end > len(sourceText) {
+			continue
+		}
+
+		commentText := sourceText[start:end]
+		for _, line := range strings.Split(commentText, "\n") {
+			markerIndex := strings.Index(line, "@effect-expect-leaking")
+			if markerIndex == -1 {
+				continue
+			}
+			if strings.Contains(line[markerIndex+len("@effect-expect-leaking"):], leakedServiceName) {
+				return true
+			}
+		}
+	}
+
+	return false
 }
 
 // parseLeakedRequirements analyzes the service shape to find requirement types that
