@@ -16,8 +16,10 @@ import (
 // Schema.TaggedError, Schema.TaggedRequest, Schema.RequestClass, and Model.Class declarations.
 var ClassSelfMismatch = rule.Rule{
 	Name:            "classSelfMismatch",
+	Group:           "correctness",
 	Description:     "Ensures Self type parameter matches the class name in Service/Tag/Schema classes",
 	DefaultSeverity: etscore.SeverityError,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Self_type_parameter_should_be_0_effect_classSelfMismatch.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeClassSelfMismatch(ctx.Checker, ctx.SourceFile)

@@ -1,0 +1,15 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+
+
+==== /.src/globalErrorInEffectCatch_preview.ts (0 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics globalErrorInEffectCatch:warning
+    import { Effect } from "effect"
+    
+    export const preview = Effect.tryPromise({
+      try: async () => 1,
+      catch: (error) => new Error(String(error))
+    })
+    

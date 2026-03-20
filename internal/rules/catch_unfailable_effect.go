@@ -17,8 +17,10 @@ var catchFunctions = []string{"catch", "catchAll", "catchIf", "catchSome", "catc
 // to an Effect whose error type is never, meaning the handler will never trigger.
 var CatchUnfailableEffect = rule.Rule{
 	Name:            "catchUnfailableEffect",
+	Group:           "antipattern",
 	Description:     "Warns when using error handling on Effects that never fail",
 	DefaultSeverity: etscore.SeveritySuggestion,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Looks_like_the_previous_effect_never_fails_so_probably_this_error_handling_will_never_be_triggered_effect_catchUnfailableEffect.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		var diags []*ast.Diagnostic

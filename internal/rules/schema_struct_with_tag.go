@@ -16,8 +16,10 @@ import (
 // suggests using Schema.TaggedStruct instead.
 var SchemaStructWithTag = rule.Rule{
 	Name:            "schemaStructWithTag",
+	Group:           "style",
 	Description:     "Suggests using Schema.TaggedStruct instead of Schema.Struct with _tag field",
 	DefaultSeverity: etscore.SeveritySuggestion,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Schema_Struct_with_a_tag_field_can_be_simplified_to_Schema_TaggedStruct_to_make_the_tag_optional_in_the_constructor_effect_schemaStructWithTag.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeSchemaStructWithTag(ctx.Checker, ctx.SourceFile)

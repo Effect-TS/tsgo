@@ -1,0 +1,17 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+
+
+==== /.src/missingLayerContext_preview.ts (0 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics missingLayerContext:warning
+    import { Effect, Layer, ServiceMap } from "effect"
+    
+    class A extends ServiceMap.Service<A>()("A", { make: Effect.succeed({}) }) {
+      static Default = Layer.effect(this, this.make)
+    }
+    declare const layer: Layer.Layer<A, never, A>
+    // @ts-expect-error
+    export const preview: Layer.Layer<A> = layer
+    

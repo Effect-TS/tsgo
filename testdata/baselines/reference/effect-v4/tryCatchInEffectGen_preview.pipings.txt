@@ -1,0 +1,29 @@
+==== /.src/tryCatchInEffectGen_preview.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 5:23 - 8:3
+Node: Effect.gen(function*() {\n  try { return yield* Effect.succeed(1) }\n  catch { return 0 }\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  try { return yield* Effect.succeed(1) }\n  catch { return 0 }\n}
+Subject Type: () => Generator<Effect<number, never, never>, number, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 6:22 - 6:40
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>

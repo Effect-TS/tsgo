@@ -1,0 +1,29 @@
+==== /.src/anyUnknownInErrorContext_preview.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 5:23 - 8:3
+Node: Effect.gen(function*() {\n  yield* Effect.services<unknown>()\n  return yield* Effect.fail<any>("boom")\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  yield* Effect.services<unknown>()\n  return yield* Effect.fail<any>("boom")\n}
+Subject Type: () => Generator<Effect<never, any, never> | Effect<ServiceMap<unknown>, never, unknown>, never, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<never, any, unknown>
+
+=== Piping Flow ===
+Location: 7:16 - 7:41
+Node: Effect.fail<any>("boom")
+Node Kind: KindCallExpression
+
+Subject: "boom"
+Subject Type: "boom"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, any, never>

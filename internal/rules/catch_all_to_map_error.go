@@ -15,8 +15,10 @@ import (
 // CatchAllToMapError suggests using Effect.mapError instead of Effect.catch + Effect.fail.
 var CatchAllToMapError = rule.Rule{
 	Name:            "catchAllToMapError",
+	Group:           "style",
 	Description:     "Suggests using Effect.mapError instead of Effect.catch + Effect.fail",
 	DefaultSeverity: etscore.SeveritySuggestion,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.You_can_use_Effect_mapError_instead_of_Effect_catch_Effect_fail_to_transform_the_error_type_effect_catchAllToMapError.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeCatchAllToMapError(ctx.Checker, ctx.SourceFile)

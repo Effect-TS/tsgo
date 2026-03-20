@@ -1,0 +1,33 @@
+==== /.src/catchAllToMapError_preview.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 9:23 - 11:2
+Node: Effect.fail("boom").pipe(\n  Effect.catch((cause) => Effect.fail(new WrappedError(cause)))\n)
+Node Kind: KindCallExpression
+
+Subject: "boom"
+Subject Type: "boom"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>
+  [1] kind: pipeable
+      callee: Effect.catch
+      args: [(cause) => Effect.fail(new WrappedError(cause))]
+      outType: Effect<never, WrappedError, never>
+
+=== Piping Flow ===
+Location: 10:26 - 10:63
+Node: Effect.fail(new WrappedError(cause))
+Node Kind: KindCallExpression
+
+Subject: new WrappedError(cause)
+Subject Type: WrappedError
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, WrappedError, never>

@@ -13,8 +13,10 @@ import (
 // are strictly boolean-typed, reporting non-boolean types as diagnostics.
 var StrictBooleanExpressions = rule.Rule{
 	Name:            "strictBooleanExpressions",
+	Group:           "style",
 	Description:     "Enforces boolean types in conditional expressions for type safety",
 	DefaultSeverity: etscore.SeverityOff,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Unexpected_0_type_in_condition_expected_strictly_a_boolean_instead_effect_strictBooleanExpressions.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		var diags []*ast.Diagnostic

@@ -11,8 +11,10 @@ import (
 // EffectGenUsesAdapter warns when using the deprecated adapter parameter in Effect.gen.
 var EffectGenUsesAdapter = rule.Rule{
 	Name:            "effectGenUsesAdapter",
+	Group:           "antipattern",
 	Description:     "Warns when using the deprecated adapter parameter in Effect.gen",
 	DefaultSeverity: etscore.SeverityWarning,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes:       []int32{tsdiag.The_adapter_of_Effect_gen_is_not_required_anymore_it_is_now_just_an_alias_of_pipe_effect_effectGenUsesAdapter.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		var diags []*ast.Diagnostic

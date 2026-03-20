@@ -1,0 +1,15 @@
+==== /.src/layerMergeAllWithDependencies_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 5:53 - 5:72
+Node: Effect.succeed({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{}, never, never>

@@ -1,0 +1,11 @@
+==== /.src/unnecessaryPipe_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 5:23 - 5:31
+Node: pipe(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (0):

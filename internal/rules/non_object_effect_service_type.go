@@ -15,8 +15,10 @@ import (
 // V3-only, default severity error.
 var NonObjectEffectServiceType = rule.Rule{
 	Name:            "nonObjectEffectServiceType",
+	Group:           "correctness",
 	Description:     "Ensures Effect.Service types are objects, not primitives",
 	DefaultSeverity: etscore.SeverityError,
+	SupportedEffect: []string{"v3"},
 	Codes: []int32{
 		tsdiag.Effect_Service_requires_the_service_type_to_be_an_object_and_not_a_primitive_type_Consider_wrapping_the_value_in_an_object_or_manually_using_Context_Tag_or_Effect_Tag_if_you_want_to_use_a_primitive_instead_effect_nonObjectEffectServiceType.Code(),
 	},

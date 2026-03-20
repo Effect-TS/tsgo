@@ -9,64 +9,73 @@ Some of them are currently on hold due to not yet complete pipeline on the upstr
 
 ## Diagnostic Status
 
-| Rule | Sev | V3 | V4 | 🔧 | Notes |
-|------|-----|----|----|-----|-------|
-| `anyUnknownInErrorContext` | — | ✅ | ✅ | | |
-| `catchAllToMapError` | 💡 | ✅ | ✅ | `catchAllToMapError_fix` | |
-| `catchUnfailableEffect` | 💡 | ✅ | ✅ | | |
-| `classSelfMismatch` | ❌ | ✅ | ✅ | `classSelfMismatch_fix` | |
-| `deterministicKeys` | — | ✅ | ✅ | `deterministicKeys_fix` | Off by default |
-| `duplicatePackage` | ⚠️ | ✅ | ✅ | | |
-| `effectFnIife` | ⚠️ | ✅ | ✅ | `effectFnIife_toEffectGen` | |
-| `effectFnOpportunity` | 💡 | ✅ | ✅ | `effectFnOpportunity_toEffectFnWithSpan`, `effectFnOpportunity_toEffectFnUntraced`, `effectFnOpportunity_toEffectFnNoSpan`, `effectFnOpportunity_toEffectFnSpanInferred` | |
-| `effectGenUsesAdapter` | ⚠️ | ✅ | ➖ | | V3-only — not applicable to V4 |
-| `effectInFailure` | ⚠️ | ✅ | ✅ | | |
-| `effectInVoidSuccess` | ⚠️ | ✅ | ✅ | | |
-| `effectMapVoid` | 💡 | ✅ | ✅ | `effectMapVoid_fix` | |
-| `effectSucceedWithVoid` | 💡 | ✅ | ✅ | `effectSucceedWithVoid_fix` | |
-| `extendsNativeError` | — | ✅ | ✅ | | Off by default |
-| `floatingEffect` | ❌ | ✅ | ✅ | | Excludes Effect subtypes (Exit, Pool, etc.) and Fiber types; uses "Effect-able {Type}" message for non-strict Effect types |
-| `genericEffectServices` | ⚠️ | ✅ | ➖ | | V3-only — not applicable to V4 |
-| `globalErrorInEffectCatch` | ⚠️ | ✅ | ✅ | | |
-| `globalErrorInEffectFailure` | ⚠️ | ✅ | ✅ | | |
-| `importFromBarrel` | | ❌ | ❌ | `replaceWithUnbarrelledImport` (not ported yet) | Needs: resolveExternalModuleName, getModuleSpecifier |
-| `instanceOfSchema` | — | ✅ | ✅ | `instanceOfSchema_fix` | |
-| `layerMergeAllWithDependencies` | ⚠️ | ✅ | ✅ | `layerMergeAllWithDependencies_fix` | |
-| `leakingRequirements` | 💡 | ✅ | ✅ | | |
-| `middlewareAutoImportQuickfixes` | | ❌ | ❌ | | Not a diagnostic — auto-import middleware |
-| `missedPipeableOpportunity` | — | ✅ | ✅ | `missedPipeableOpportunity_fix` | Off by default |
-| `missingEffectContext` | ❌ | ✅ | ✅ | | |
-| `missingEffectError` | ❌ | ✅ | ✅ | `missingEffectError_catchAll`/`missingEffectError_catch`, `missingEffectError_tagged` | |
-| `missingEffectServiceDependency` | — | ✅ | ➖ | | V3-only |
-| `missingLayerContext` | ❌ | ✅ | ✅ | | |
-| `missingReturnYieldStar` | ❌ | ✅ | ✅ | `missingReturnYieldStar_fix` | Also detects yieldable wrappers (Option, Either) via asEffect() |
-| `missingStarInYieldEffectGen` | ❌ | ✅ | ✅ | `missingStarInYieldEffectGen_fix` | |
-| `multipleEffectProvide` | ⚠️ | ✅ | ✅ | `multipleEffectProvide_fix` | |
-| `nodeBuiltinImport` | — | ✅ | ✅ | | Off by default |
-| `nonObjectEffectServiceType` | ❌ | ✅ | ➖ | | V3-only |
-| `outdatedApi` | ⚠️ | ➖ | ✅ | | V4-only — detects Effect v3 APIs in v4 projects |
-| `outdatedEffectCodegen` | | ❌ | ❌ | `outdatedEffectCodegen_fix` (not ported yet), `outdatedEffectCodegen_ignore` (not ported yet) | Needs: codegen system |
-| `overriddenSchemaConstructor` | ❌ | ✅ | ✅ | `overriddenSchemaConstructor_static`, `overriddenSchemaConstructor_fix` | |
-| `preferSchemaOverJson` | 💡 | ✅ | ✅ | | |
-| `redundantSchemaTagIdentifier` | 💡 | ✅ | ➖ | `redundantSchemaTagIdentifier_removeIdentifier` | V3-only — not applicable to V4 |
-| `returnEffectInGen` | 💡 | ✅ | ✅ | `returnEffectInGen_fix` | |
-| `runEffectInsideEffect` | 💡 | ✅ | ➖ | `runEffectInsideEffect_fix` | V3-only — not applicable to V4 |
-| `schemaStructWithTag` | 💡 | ✅ | ✅ | `schemaStructWithTag_fix` | |
-| `schemaSyncInEffect` | 💡 | ✅ | ✅ | | |
-| `schemaUnionOfLiterals` | — | ✅ | ✅ | `schemaUnionOfLiterals_fix` | V3-only — not applicable to V4 |
-| `scopeInLayerEffect` | ⚠️ | ✅ | ➖ | `scopeInLayerEffect_scoped` | V3-only — not applicable to V4 |
-| `serviceNotAsClass` | — | ➖ | ✅ | `serviceNotAsClass_fix` | V4-only — off by default |
-| `strictBooleanExpressions` | — | ✅ | ✅ | | |
-| `strictEffectProvide` | — | ✅ | ✅ | | |
-| `tryCatchInEffectGen` | 💡 | ✅ | ✅ | | |
-| `unknownInEffectCatch` | ⚠️ | ✅ | ✅ | | |
-| `unnecessaryEffectGen` | 💡 | ✅ | ✅ | `unnecessaryEffectGen_fix` | |
-| `unnecessaryFailYieldableError` | 💡 | ✅ | ✅ | `unnecessaryFailYieldableError_fix` | |
-| `unnecessaryPipe` | 💡 | ✅ | ✅ | `unnecessaryPipe_fix` | |
-| `unnecessaryPipeChain` | 💡 | ✅ | ✅ | `unnecessaryPipeChain_fix` | |
-| `unsupportedServiceAccessors` | | ❌ | ❌ | `unsupportedServiceAccessors_enableCodegen` (not ported yet) | Needs: refactor analysis |
+Some diagnostics are off by default or have a default severity of suggestion, but you can always enable them or change their default severity in the plugin options.
 
-**Severity icons:** ❌ error · ⚠️ warning · 💡 suggestion · ℹ️ message · — off
+<!-- diagnostics-table:start -->
+<table>
+  <thead>
+    <tr><th>Diagnostic</th><th>Sev</th><th>Fix</th><th>Description</th><th>v3</th><th>v4</th></tr>
+  </thead>
+  <tbody>
+    <tr><td colspan="6"><strong>Correctness</strong> <em>Wrong, unsafe, or structurally invalid code patterns.</em></td></tr>
+    <tr><td><code>anyUnknownInErrorContext</code></td><td>➖</td><td></td><td>Detects &#39;any&#39; or &#39;unknown&#39; types in Effect error or requirements channels</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>classSelfMismatch</code></td><td>❌</td><td>🔧</td><td>Ensures Self type parameter matches the class name in Service/Tag/Schema classes</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>duplicatePackage</code></td><td>⚠️</td><td></td><td>Warns when multiple versions of an Effect-related package are detected in the program</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>floatingEffect</code></td><td>❌</td><td></td><td>Detects Effect values that are neither yielded nor assigned</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>genericEffectServices</code></td><td>⚠️</td><td></td><td>Prevents services with type parameters that cannot be discriminated at runtime</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>missingEffectContext</code></td><td>❌</td><td></td><td>Detects Effect values with unhandled context requirements</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>missingEffectError</code></td><td>❌</td><td>🔧</td><td>Detects Effect values with unhandled error types</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>missingLayerContext</code></td><td>❌</td><td></td><td>Detects Layer values with unhandled context requirements</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>missingReturnYieldStar</code></td><td>❌</td><td>🔧</td><td>Suggests using return yield* for Effects that never succeed</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>missingStarInYieldEffectGen</code></td><td>❌</td><td>🔧</td><td>Detects bare yield (without *) inside Effect generator scopes</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>nonObjectEffectServiceType</code></td><td>❌</td><td></td><td>Ensures Effect.Service types are objects, not primitives</td><td>✓</td><td></td></tr>
+    <tr><td><code>outdatedApi</code></td><td>⚠️</td><td></td><td>Detects usage of APIs that have been removed or renamed in Effect v4</td><td></td><td>✓</td></tr>
+    <tr><td><code>overriddenSchemaConstructor</code></td><td>❌</td><td>🔧</td><td>Prevents overriding constructors in Schema classes which breaks decoding behavior</td><td>✓</td><td>✓</td></tr>
+    <tr><td colspan="6"><strong>Anti-pattern</strong> <em>Discouraged patterns that often lead to bugs or confusing behavior.</em></td></tr>
+    <tr><td><code>catchUnfailableEffect</code></td><td>💡</td><td></td><td>Warns when using error handling on Effects that never fail</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>effectFnIife</code></td><td>⚠️</td><td>🔧</td><td>Effect.fn or Effect.fnUntraced is called as an IIFE; use Effect.gen instead</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>effectGenUsesAdapter</code></td><td>⚠️</td><td></td><td>Warns when using the deprecated adapter parameter in Effect.gen</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>effectInFailure</code></td><td>⚠️</td><td></td><td>Warns when an Effect is used inside an Effect failure channel</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>effectInVoidSuccess</code></td><td>⚠️</td><td></td><td>Detects nested Effects in void success channels that may cause unexecuted effects</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>globalErrorInEffectCatch</code></td><td>⚠️</td><td></td><td>Warns when catch callbacks return global Error type instead of typed errors</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>globalErrorInEffectFailure</code></td><td>⚠️</td><td></td><td>Warns when the global Error type is used in an Effect failure channel</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>layerMergeAllWithDependencies</code></td><td>⚠️</td><td>🔧</td><td>Detects interdependencies in Layer.mergeAll calls where one layer provides a service that another layer requires</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>leakingRequirements</code></td><td>💡</td><td></td><td>Detects implementation services leaked in service methods</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>multipleEffectProvide</code></td><td>⚠️</td><td>🔧</td><td>Warns against chaining Effect.provide calls which can cause service lifecycle issues</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>returnEffectInGen</code></td><td>💡</td><td>🔧</td><td>Warns when returning an Effect in a generator causes nested Effect&lt;Effect&lt;...&gt;&gt;</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>runEffectInsideEffect</code></td><td>💡</td><td>🔧</td><td>Suggests using Runtime methods instead of Effect.run* inside Effect contexts</td><td>✓</td><td></td></tr>
+    <tr><td><code>schemaSyncInEffect</code></td><td>💡</td><td></td><td>Suggests using Effect-based Schema methods instead of sync methods inside Effect generators</td><td>✓</td><td></td></tr>
+    <tr><td><code>scopeInLayerEffect</code></td><td>⚠️</td><td>🔧</td><td>Suggests using Layer.scoped instead of Layer.effect when Scope is in requirements</td><td>✓</td><td></td></tr>
+    <tr><td><code>strictEffectProvide</code></td><td>➖</td><td></td><td>Warns when using Effect.provide with layers outside of application entry points</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>tryCatchInEffectGen</code></td><td>💡</td><td></td><td>Discourages try/catch in Effect generators in favor of Effect error handling</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>unknownInEffectCatch</code></td><td>⚠️</td><td></td><td>Warns when catch callbacks return unknown instead of typed errors</td><td>✓</td><td>✓</td></tr>
+    <tr><td colspan="6"><strong>Effect-native</strong> <em>Prefer Effect-native APIs and abstractions when available.</em></td></tr>
+    <tr><td><code>extendsNativeError</code></td><td>➖</td><td></td><td>Warns when a class directly extends the native Error class</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>instanceOfSchema</code></td><td>➖</td><td>🔧</td><td>Suggests using Schema.is instead of instanceof for Effect Schema types</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>nodeBuiltinImport</code></td><td>➖</td><td></td><td>Warns when importing Node.js built-in modules that have Effect-native counterparts</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>preferSchemaOverJson</code></td><td>💡</td><td></td><td>Suggests using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify</td><td>✓</td><td>✓</td></tr>
+    <tr><td colspan="6"><strong>Style</strong> <em>Cleanup, consistency, and idiomatic Effect code.</em></td></tr>
+    <tr><td><code>catchAllToMapError</code></td><td>💡</td><td>🔧</td><td>Suggests using Effect.mapError instead of Effect.catch + Effect.fail</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>deterministicKeys</code></td><td>➖</td><td>🔧</td><td>Enforces deterministic naming for service/tag/error identifiers based on class names</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>effectFnOpportunity</code></td><td>💡</td><td>🔧</td><td>Suggests using Effect.fn for functions that return an Effect</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>effectMapVoid</code></td><td>💡</td><td>🔧</td><td>Suggests using Effect.asVoid instead of Effect.map(() =&gt; void 0), Effect.map(() =&gt; undefined), or Effect.map(() =&gt; {})</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>effectSucceedWithVoid</code></td><td>💡</td><td>🔧</td><td>Suggests using Effect.void instead of Effect.succeed(undefined) or Effect.succeed(void 0)</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>missedPipeableOpportunity</code></td><td>➖</td><td>🔧</td><td>Suggests using .pipe() for nested function calls</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>missingEffectServiceDependency</code></td><td>➖</td><td></td><td>Checks that Effect.Service dependencies satisfy all required layer inputs</td><td>✓</td><td></td></tr>
+    <tr><td><code>redundantSchemaTagIdentifier</code></td><td>💡</td><td>🔧</td><td>Suggests removing redundant identifier argument when it equals the tag value in Schema.TaggedClass/TaggedError/TaggedRequest</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>schemaStructWithTag</code></td><td>💡</td><td>🔧</td><td>Suggests using Schema.TaggedStruct instead of Schema.Struct with _tag field</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>schemaUnionOfLiterals</code></td><td>➖</td><td>🔧</td><td>Suggests combining multiple Schema.Literal calls in Schema.Union into a single Schema.Literal</td><td>✓</td><td></td></tr>
+    <tr><td><code>serviceNotAsClass</code></td><td>➖</td><td>🔧</td><td>Warns when ServiceMap.Service is used as a variable instead of a class declaration</td><td></td><td>✓</td></tr>
+    <tr><td><code>strictBooleanExpressions</code></td><td>➖</td><td></td><td>Enforces boolean types in conditional expressions for type safety</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>unnecessaryEffectGen</code></td><td>💡</td><td>🔧</td><td>Suggests removing Effect.gen when it contains only a single return statement</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>unnecessaryFailYieldableError</code></td><td>💡</td><td>🔧</td><td>Suggests yielding yieldable errors directly instead of wrapping with Effect.fail</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>unnecessaryPipe</code></td><td>💡</td><td>🔧</td><td>Removes pipe calls with no arguments</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>unnecessaryPipeChain</code></td><td>💡</td><td>🔧</td><td>Simplifies chained pipe calls into a single pipe call</td><td>✓</td><td>✓</td></tr>
+  </tbody>
+</table>
+
+`➖` off by default, `❌` error, `⚠️` warning, `💬` message, `💡` suggestion, `🔧` quick fix available
+<!-- diagnostics-table:end -->
 
 ## Refactor Status
 

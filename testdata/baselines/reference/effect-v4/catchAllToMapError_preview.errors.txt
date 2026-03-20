@@ -1,0 +1,18 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+
+
+==== /.src/catchAllToMapError_preview.ts (0 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics catchAllToMapError:warning
+    import { Effect } from "effect"
+    
+    class WrappedError {
+      constructor(readonly cause: unknown) {}
+    }
+    
+    export const preview = Effect.fail("boom").pipe(
+      Effect.catch((cause) => Effect.fail(new WrappedError(cause)))
+    )
+    

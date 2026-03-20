@@ -20,8 +20,10 @@ var runEffectApis = []string{"runSync", "runPromise", "runFork", "runCallback"}
 // This rule is V3-only — it is not applicable to V4.
 var RunEffectInsideEffect = rule.Rule{
 	Name:        "runEffectInsideEffect",
+	Group:           "antipattern",
 	Description:     "Suggests using Runtime methods instead of Effect.run* inside Effect contexts",
 	DefaultSeverity: etscore.SeveritySuggestion,
+	SupportedEffect: []string{"v3"},
 	Codes: []int32{
 		tsdiag.Using_0_inside_an_Effect_is_not_recommended_Effects_inside_generators_can_usually_just_be_yielded_effect_runEffectInsideEffect.Code(),
 		tsdiag.Using_0_inside_an_Effect_is_not_recommended_The_same_runtime_should_generally_be_used_instead_to_run_child_effects_Consider_extracting_the_Runtime_by_using_for_example_Effect_runtime_and_then_use_Runtime_1_with_the_extracted_runtime_instead_effect_runEffectInsideEffect.Code(),

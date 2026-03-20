@@ -1,0 +1,73 @@
+==== /.src/layerMergeAllWithDependencies_preview.ts (1 layer exports) ====
+
+=== preview ===
+
+--- output ---
+flowchart TD
+  0["B.Default<br/>provides: B<br/>requires: A"]
+  1["A.Default<br/>provides: A<br/>requires: "]
+  2["Layer.mergeAll#40;A.Default, B.Default#41;<br/>provides: A, B<br/>requires: A"]
+  2 -->|"#123;#quot;relationship#quot;:#quot;call#quot;,#quot;argumentIndex#quot;:0#125;"| 1
+  2 -->|"#123;#quot;relationship#quot;:#quot;call#quot;,#quot;argumentIndex#quot;:1#125;"| 0
+
+--- nested ---
+flowchart TB
+  subgraph 0 ["`B.Default<br/><small>_ln 11 col 49_</small>`"]
+    subgraph 0_wrap[" "]
+      subgraph 0_requires [Requires]
+        0_requires_0["A"]
+      end
+      style 0_requires stroke:none
+      subgraph 0_provides [Provides]
+        0_provides_0["B"]
+      end
+      style 0_provides stroke:none
+    end
+    style 0_wrap fill:transparent
+    style 0_wrap stroke:none
+  end
+  style 0 fill:transparent
+  subgraph 1 ["`A.Default<br/><small>_ln 11 col 38_</small>`"]
+    subgraph 1_wrap[" "]
+      subgraph 1_provides [Provides]
+        1_provides_0["A"]
+      end
+      style 1_provides stroke:none
+    end
+    style 1_wrap fill:transparent
+    style 1_wrap stroke:none
+  end
+  style 1 fill:transparent
+  subgraph 2 ["`preview<br/><small>_ln 11 col 13_</small>`"]
+    subgraph 2_wrap[" "]
+      subgraph 2_requires [Requires]
+        2_requires_0["A"]
+      end
+      style 2_requires stroke:none
+      subgraph 2_provides [Provides]
+        2_provides_0["A"]
+        2_provides_1["B"]
+      end
+      style 2_provides stroke:none
+    end
+    style 2_wrap fill:transparent
+    style 2_wrap stroke:none
+  end
+  style 2 fill:transparent
+  2_provides_0 -.-> 1_provides_0
+  2_requires_0 -.-> 0_requires_0
+  2_provides_1 -.-> 0_provides_0
+
+--- outline ---
+flowchart TD
+  0["B.Default"]
+  1["A.Default"]
+  0 --> 1
+
+--- quickinfo ---
+/**
+ * - A provided at ln 11 col 38 by `A.Default`
+ * - B provided at ln 11 col 49 by `B.Default`
+ * 
+ * - A required at ln 11 col 49 by `B.Default`
+ */

@@ -15,8 +15,10 @@ import (
 // Effect.map(() => undefined), or Effect.map(() => {}).
 var EffectMapVoid = rule.Rule{
 	Name:            "effectMapVoid",
+	Group:           "style",
 	Description:     "Suggests using Effect.asVoid instead of Effect.map(() => void 0), Effect.map(() => undefined), or Effect.map(() => {})",
 	DefaultSeverity: etscore.SeveritySuggestion,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Effect_asVoid_can_be_used_instead_to_discard_the_success_value_effect_effectMapVoid.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeEffectMapVoid(ctx.Checker, ctx.SourceFile)

@@ -18,8 +18,10 @@ import (
 // creates layers in parallel, these dependencies will not be satisfied.
 var LayerMergeAllWithDependencies = rule.Rule{
 	Name:            "layerMergeAllWithDependencies",
+	Group:           "antipattern",
 	Description:     "Detects interdependencies in Layer.mergeAll calls where one layer provides a service that another layer requires",
 	DefaultSeverity: etscore.SeverityWarning,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.This_layer_provides_0_which_is_required_by_another_layer_in_the_same_Layer_mergeAll_call_Layer_mergeAll_creates_layers_in_parallel_so_dependencies_between_layers_will_not_be_satisfied_Consider_moving_this_layer_into_a_Layer_provideMerge_after_the_Layer_mergeAll_effect_layerMergeAllWithDependencies.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeLayerMergeAllWithDependencies(ctx.Checker, ctx.SourceFile)

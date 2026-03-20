@@ -17,8 +17,10 @@ import (
 // MissedPipeableOpportunity detects nested function call chains that can be converted to .pipe() style.
 var MissedPipeableOpportunity = rule.Rule{
 	Name:            "missedPipeableOpportunity",
+	Group:           "style",
 	Description:     "Suggests using .pipe() for nested function calls",
 	DefaultSeverity: etscore.SeverityOff,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Nested_function_calls_can_be_converted_to_pipeable_style_for_better_readability_consider_using_0_pipe_instead_effect_missedPipeableOpportunity.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		minArgCount := 2

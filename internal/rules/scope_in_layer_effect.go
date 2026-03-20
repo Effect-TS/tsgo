@@ -17,8 +17,10 @@ import (
 // Scope is detected in the layer's requirements.
 var ScopeInLayerEffect = rule.Rule{
 	Name:            "scopeInLayerEffect",
+	Group:           "antipattern",
 	Description:     "Suggests using Layer.scoped instead of Layer.effect when Scope is in requirements",
 	DefaultSeverity: etscore.SeverityWarning,
+	SupportedEffect: []string{"v3"},
 	Codes:           []int32{tsdiag.Seems_like_you_are_constructing_a_layer_with_a_scope_in_the_requirements_Consider_using_scoped_instead_to_get_rid_of_the_scope_in_the_requirements_effect_scopeInLayerEffect.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeScopeInLayerEffect(ctx.Checker, ctx.SourceFile)

@@ -17,8 +17,10 @@ import (
 // to a variable/parameter expecting a Layer with fewer or no requirements.
 var MissingLayerContext = rule.Rule{
 	Name:            "missingLayerContext",
+	Group:           "correctness",
 	Description:     "Detects Layer values with unhandled context requirements",
 	DefaultSeverity: etscore.SeverityError,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes:       []int32{tsdiag.Missing_0_in_the_expected_Layer_context_effect_missingLayerContext.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		var diags []*ast.Diagnostic

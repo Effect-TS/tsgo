@@ -20,8 +20,10 @@ import (
 // Supports both V3 and V4, default severity suggestion.
 var LeakingRequirements = rule.Rule{
 	Name:            "leakingRequirements",
+	Group:           "antipattern",
 	Description:     "Detects implementation services leaked in service methods",
 	DefaultSeverity: etscore.SeveritySuggestion,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes: []int32{
 		tsdiag.Methods_of_this_Service_require_0_from_every_caller_This_leaks_implementation_details_resolve_these_dependencies_at_Layer_creation_time_effect_leakingRequirements.Code(),
 	},

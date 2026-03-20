@@ -1,0 +1,15 @@
+==== /.src/globalErrorInEffectFailure_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 5:23 - 5:54
+Node: Effect.fail(new Error("boom"))
+Node Kind: KindCallExpression
+
+Subject: new Error("boom")
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, Error, never>

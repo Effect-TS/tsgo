@@ -1,0 +1,57 @@
+==== /.src/schemaSyncInEffect_preview.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 6:15 - 6:74
+Node: Schema.Struct({ name: Schema.String, age: Schema.Number })
+Node Kind: KindCallExpression
+
+Subject: { name: Schema.String, age: Schema.Number }
+Subject Type: { name: typeof String$; age: typeof Number$; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ name: typeof String$; age: typeof Number$; }>
+
+=== Piping Flow ===
+Location: 8:23 - 11:3
+Node: Effect.gen(function*() {\n  const input = yield* Effect.succeed({ name: "Ada", age: 1 })\n  return Schema.decodeSync(Person)(input)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const input = yield* Effect.succeed({ name: "Ada", age: 1 })\n  return Schema.decodeSync(Person)(input)\n}
+Subject Type: () => Generator<YieldWrap<Effect<{ name: string; age: number; }, never, never>>, { readonly name: string; readonly age: number; }, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<{ readonly name: string; readonly age: number; }, never, never>
+
+=== Piping Flow ===
+Location: 9:23 - 9:63
+Node: Effect.succeed({ name: "Ada", age: 1 })
+Node Kind: KindCallExpression
+
+Subject: { name: "Ada", age: 1 }
+Subject Type: { name: string; age: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{ name: string; age: number; }, never, never>
+
+=== Piping Flow ===
+Location: 10:9 - 10:42
+Node: Schema.decodeSync(Person)(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: { name: string; age: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeSync(Person)
+      args: (constant)
+      outType: { readonly name: string; readonly age: number; }

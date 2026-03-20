@@ -376,6 +376,107 @@ describe("computeChanges", () => {
     })
   })
 
+  describe("tsconfig with missing compilerOptions", () => {
+    it("should add compilerOptions with plugin when tsconfig has no compilerOptions", () => {
+      const tsconfigText = JSON.stringify({
+        extends: "./base-tsconfig.json"
+      }, null, 2)
+
+      const result = runComputeChanges({ tsconfigText })
+
+      const tsconfigAction = result.codeActions.find((a) =>
+        a.changes.some((c) => c.fileName.includes("tsconfig.json"))
+      )
+      expect(tsconfigAction).toBeDefined()
+      expect(tsconfigAction!.description).toContain("compilerOptions")
+      expect(tsconfigAction!.description).toContain("@effect/language-service")
+
+      const rendered = tsconfigAction!.changes.flatMap((c) => c.textChanges.map((tc) => tc.newText)).join("")
+      expect(rendered).toContain("compilerOptions")
+      expect(rendered).toContain("plugins")
+      expect(rendered).toContain("@effect/language-service")
+    })
+
+    it("should add $schema when creating compilerOptions on a tsconfig without it", () => {
+      const tsconfigText = JSON.stringify({
+        extends: "./base-tsconfig.json"
+      }, null, 2)
+
+      const result = runComputeChanges({ tsconfigText })
+
+      const tsconfigAction = result.codeActions.find((a) =>
+        a.changes.some((c) => c.fileName.includes("tsconfig.json"))
+      )
+      expect(tsconfigAction).toBeDefined()
+      expect(tsconfigAction!.description).toContain("$schema")
+
+      const rendered = tsconfigAction!.changes.flatMap((c) => c.textChanges.map((tc) => tc.newText)).join("")
+      expect(rendered).toContain("$schema")
+      expect(rendered).toContain("raw.githubusercontent.com")
+    })
+
+    it("should update $schema when creating compilerOptions on a tsconfig with wrong $schema", () => {
+      const tsconfigText = JSON.stringify({
+        $schema: "https://example.com/wrong-schema.json",
+        extends: "./base-tsconfig.json"
+      }, null, 2)
+
+      const result = runComputeChanges({ tsconfigText })
+
+      const tsconfigAction = result.codeActions.find((a) =>
+        a.changes.some((c) => c.fileName.includes("tsconfig.json"))
+      )
+      expect(tsconfigAction).toBeDefined()
+      expect(tsconfigAction!.description).toContain("Update $schema")
+
+      const rendered = tsconfigAction!.changes.flatMap((c) => c.textChanges.map((tc) => tc.newText)).join("")
+      expect(rendered).toContain("raw.githubusercontent.com")
+      expect(rendered).not.toContain("example.com")
+    })
+
+    it("should include diagnosticSeverity in plugin when configured with missing compilerOptions", () => {
+      const tsconfigText = JSON.stringify({
+        extends: "./base-tsconfig.json"
+      }, null, 2)
+
+      const result = runComputeChanges({
+        tsconfigText,
+        diagnosticSeverities: {
+          floatingEffect: "warning",
+          missingEffectError: "off"
+        }
+      })
+
+      const tsconfigAction = result.codeActions.find((a) =>
+        a.changes.some((c) => c.fileName.includes("tsconfig.json"))
+      )
+      expect(tsconfigAction).toBeDefined()
+
+      const rendered = tsconfigAction!.changes.flatMap((c) => c.textChanges.map((tc) => tc.newText)).join("")
+      expect(rendered).toContain("diagnosticSeverity")
+      expect(rendered).toContain("floatingEffect")
+      expect(rendered).toContain("missingEffectError")
+    })
+
+    it("should produce no tsconfig code actions when lspVersion is null and compilerOptions missing", () => {
+      const tsconfigText = JSON.stringify({
+        extends: "./base-tsconfig.json"
+      }, null, 2)
+
+      const result = runComputeChanges({
+        tsconfigText,
+        lspVersion: null,
+        editors: [],
+        vscodeTargetSettings: null
+      })
+
+      const tsconfigActions = result.codeActions.filter((a) =>
+        a.changes.some((c) => c.fileName.includes("tsconfig.json"))
+      )
+      expect(tsconfigActions).toHaveLength(0)
+    })
+  })
+
   describe("tsconfig diagnosticSeverity", () => {
     it("should add diagnosticSeverity to the Effect plugin when configured", () => {
       const result = runComputeChanges({

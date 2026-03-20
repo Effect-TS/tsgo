@@ -1,0 +1,15 @@
+==== /.src/instanceOfSchema_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 5:19 - 5:71
+Node: Schema.Class<User>("User")({ name: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { name: Schema.String }
+Subject Type: { name: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<User>("User")
+      args: (constant)
+      outType: ExtendableClass<User, Struct<{ readonly name: String; }>, {}>

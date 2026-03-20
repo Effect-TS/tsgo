@@ -1,0 +1,11 @@
+=== Metadata ===
+Effect version: unknown
+
+
+
+==== /.src/extendsNativeError_preview.ts (0 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics extendsNativeError:warning
+    
+    export class PreviewError extends Error {}
+    

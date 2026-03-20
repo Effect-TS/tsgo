@@ -14,8 +14,10 @@ import (
 // MissingStarInYieldEffectGen detects bare yield (without *) inside Effect generator scopes.
 var MissingStarInYieldEffectGen = rule.Rule{
 	Name:            "missingStarInYieldEffectGen",
+	Group:           "correctness",
 	Description:     "Detects bare yield (without *) inside Effect generator scopes",
 	DefaultSeverity: etscore.SeverityError,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes:       []int32{tsdiag.Inside_this_Effect_generator_effect_missingStarInYieldEffectGen.Code(), tsdiag.When_yielding_Effects_inside_Effect_gen_you_should_use_yield_Asterisk_instead_of_yield_effect_missingStarInYieldEffectGen.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeMissingStarInYieldEffectGen(ctx.Checker, ctx.SourceFile)

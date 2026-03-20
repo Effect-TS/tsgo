@@ -15,8 +15,10 @@ import (
 // EffectFnIife detects Effect.fn or Effect.fnUntraced calls that are immediately invoked (IIFE pattern).
 var EffectFnIife = rule.Rule{
 	Name:            "effectFnIife",
+	Group:           "antipattern",
 	Description:     "Effect.fn or Effect.fnUntraced is called as an IIFE; use Effect.gen instead",
 	DefaultSeverity: etscore.SeverityWarning,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.X_0_1_returns_a_reusable_function_that_can_take_arguments_but_here_it_s_called_immediately_Use_Effect_gen_instead_2_effect_effectFnIife.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeEffectFnIife(ctx.Checker, ctx.SourceFile)

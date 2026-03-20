@@ -13,8 +13,10 @@ import (
 
 var RedundantSchemaTagIdentifier = rule.Rule{
 	Name:            "redundantSchemaTagIdentifier",
+	Group:           "style",
 	Description:     "Suggests removing redundant identifier argument when it equals the tag value in Schema.TaggedClass/TaggedError/TaggedRequest",
 	DefaultSeverity: etscore.SeveritySuggestion,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Identifier_0_is_redundant_since_it_equals_the_tag_value_effect_redundantSchemaTagIdentifier.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeRedundantSchemaTagIdentifier(ctx.Checker, ctx.SourceFile)

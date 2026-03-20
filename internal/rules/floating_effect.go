@@ -22,8 +22,10 @@ type floatingEffectResult struct {
 // expression statements and are neither yielded nor assigned.
 var FloatingEffect = rule.Rule{
 	Name:            "floatingEffect",
+	Group:           "correctness",
 	Description:     "Detects Effect values that are neither yielded nor assigned",
 	DefaultSeverity: etscore.SeverityError,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes: []int32{
 		tsdiag.Effect_must_be_yielded_or_assigned_to_a_variable_effect_floatingEffect.Code(),
 		tsdiag.Effect_able_0_must_be_yielded_or_assigned_to_a_variable_effect_floatingEffect.Code(),

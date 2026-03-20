@@ -86,7 +86,7 @@ func RunEffectDocumentSymbolsTest(t *testing.T, version EffectVersion, testFile 
 
 	if !hasTsConfig {
 		unitName := tspath.CombinePaths(configDirectory, "tsconfig.json")
-		testfs[unitName] = &fstest.MapFile{Data: []byte(defaultTsConfig)}
+		testfs[unitName] = &fstest.MapFile{Data: []byte(DefaultTsConfig)}
 	}
 
 	fs := vfstest.FromMap(testfs, true /*useCaseSensitiveFileNames*/)

@@ -1,0 +1,29 @@
+==== /.src/globalErrorInEffectCatch_preview.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 5:23 - 8:3
+Node: Effect.tryPromise({\n  try: async () => 1,\n  catch: (error) => new Error(String(error))\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  try: async () => 1,\n  catch: (error) => new Error(String(error))\n}
+Subject Type: { try: () => Promise<number>; catch: (error: unknown) => Error; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<number, Error, never>
+
+=== Piping Flow ===
+Location: 7:31 - 7:44
+Node: String(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: unknown
+
+Transformations (1):
+  [0] kind: call
+      callee: String
+      args: (constant)
+      outType: string

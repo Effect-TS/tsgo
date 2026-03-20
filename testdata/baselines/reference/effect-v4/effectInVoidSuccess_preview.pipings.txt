@@ -1,0 +1,19 @@
+==== /.src/effectInVoidSuccess_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 5:44 - 7:2
+Node: Effect.succeed(\n  Effect.log("nested")\n)
+Node Kind: KindCallExpression
+
+Subject: "nested"
+Subject Type: "nested"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Effect<void, never, never>, never, never>

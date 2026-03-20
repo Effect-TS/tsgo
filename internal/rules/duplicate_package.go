@@ -32,8 +32,10 @@ type duplicatePackageDiag struct {
 // are loaded into the program.
 var DuplicatePackage = rule.Rule{
 	Name:            "duplicatePackage",
+	Group:           "correctness",
 	Description:     "Warns when multiple versions of an Effect-related package are detected in the program",
 	DefaultSeverity: etscore.SeverityWarning,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Multiple_versions_of_package_0_detected_Colon_1_Consider_cleaning_up_your_lockfile_or_add_0_to_allowedDuplicatedPackages_to_suppress_this_warning_effect_duplicatePackage.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		prog := ctx.Checker.Program()

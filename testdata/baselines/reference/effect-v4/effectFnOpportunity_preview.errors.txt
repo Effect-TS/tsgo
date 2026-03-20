@@ -1,0 +1,15 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+
+
+==== /.src/effectFnOpportunity_preview.ts (0 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics effectFnOpportunity:warning
+    // @test-config { "effectFn": ["no-span"] }
+    import * as Effect from "effect/Effect"
+    
+    export const preview = () => Effect.gen(function*() {
+      return yield* Effect.succeed(1)
+    })
+    

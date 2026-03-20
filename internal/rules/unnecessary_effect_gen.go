@@ -14,8 +14,10 @@ import (
 // UnnecessaryEffectGen suggests removing Effect.gen when it contains only a single return statement.
 var UnnecessaryEffectGen = rule.Rule{
 	Name:            "unnecessaryEffectGen",
+	Group:           "style",
 	Description:     "Suggests removing Effect.gen when it contains only a single return statement",
 	DefaultSeverity: etscore.SeveritySuggestion,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.This_Effect_gen_contains_a_single_return_statement_effect_unnecessaryEffectGen.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeUnnecessaryEffectGen(ctx.Checker, ctx.SourceFile)

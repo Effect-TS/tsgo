@@ -13,8 +13,10 @@ import (
 // and suggests using Effect's error handling mechanisms instead.
 var TryCatchInEffectGen = rule.Rule{
 	Name:        "tryCatchInEffectGen",
+	Group:           "antipattern",
 	Description:     "Discourages try/catch in Effect generators in favor of Effect error handling",
 	DefaultSeverity: etscore.SeveritySuggestion,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes:       []int32{tsdiag.Avoid_using_try_Slashcatch_inside_Effect_generators_Use_Effect_s_error_handling_mechanisms_instead_e_g_Effect_try_Effect_tryPromise_Effect_catch_Effect_catchTag_effect_tryCatchInEffectGen.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		var diags []*ast.Diagnostic

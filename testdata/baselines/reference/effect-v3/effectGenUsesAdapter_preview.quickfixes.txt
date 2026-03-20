@@ -1,0 +1,11 @@
+=== Quick Fix Inventory ===
+
+[D1] (5:35-5:43) TS2345: Argument of type '(_: any) => Generator<Effect<number, never, never>, number, any>' is not assignable to parameter of type '() => Generator<Effect<number, never, never>, number, never>'.
+  Target signature provides too few arguments. Expected 1 or more, but got 0.
+  (no quick fixes)
+
+[D2] (5:45-5:46) TS7006: Parameter '_' implicitly has an 'any' type.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+(no quick fixes to apply)

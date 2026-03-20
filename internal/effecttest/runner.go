@@ -106,9 +106,9 @@ func parseTestUnits(content string, defaultFileName string) []*testUnit {
 	return units
 }
 
-// defaultTsConfig is the default tsconfig content injected when a test does not provide one.
+// DefaultTsConfig is the default tsconfig content injected when a test does not provide one.
 // It enables the Effect language service plugin with default diagnostic severities.
-const defaultTsConfig = `{
+const DefaultTsConfig = `{
   "compilerOptions": {
     "plugins": [
       {
@@ -191,7 +191,7 @@ func RunEffectTest(t *testing.T, version EffectVersion, testFile string) {
 		tsconfigInjected = true
 		tsConfigUnit = &testUnit{
 			name:    "tsconfig.json",
-			content: defaultTsConfig,
+			content: DefaultTsConfig,
 		}
 		unitName := tspath.GetNormalizedAbsolutePath(tsConfigUnit.name, currentDirectory)
 		testfs[unitName] = &fstest.MapFile{

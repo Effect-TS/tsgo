@@ -17,8 +17,10 @@ import (
 // to a variable/parameter expecting an Effect with fewer or no errors.
 var MissingEffectError = rule.Rule{
 	Name:            "missingEffectError",
+	Group:           "correctness",
 	Description:     "Detects Effect values with unhandled error types",
 	DefaultSeverity: etscore.SeverityError,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes:       []int32{tsdiag.Missing_errors_0_in_the_expected_Effect_type_effect_missingEffectError.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeMissingEffectError(ctx.Checker, ctx.SourceFile)

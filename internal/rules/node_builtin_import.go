@@ -49,8 +49,10 @@ var moduleAlternativesV4 = map[string]moduleAlternative{
 
 var NodeBuiltinImport = rule.Rule{
 	Name:            "nodeBuiltinImport",
+	Group:           "effectNative",
 	Description:     "Warns when importing Node.js built-in modules that have Effect-native counterparts",
 	DefaultSeverity: etscore.SeverityOff,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Prefer_using_0_from_1_instead_of_the_Node_js_2_module_effect_nodeBuiltinImport.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeNodeBuiltinImport(ctx.Checker, ctx.SourceFile)

@@ -148,7 +148,7 @@ func RunEffectRefactorTest(t *testing.T, version EffectVersion, testFile string)
 		sb.WriteString("// @filename: ")
 		sb.WriteString(tspath.GetNormalizedAbsolutePath("tsconfig.json", currentDirectory))
 		sb.WriteString("\n")
-		sb.WriteString(defaultTsConfig)
+		sb.WriteString(DefaultTsConfig)
 		sb.WriteString("\n")
 	}
 

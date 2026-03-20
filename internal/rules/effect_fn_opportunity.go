@@ -16,8 +16,10 @@ import (
 // EffectFnOpportunity detects functions that can be rewritten as Effect.fn calls.
 var EffectFnOpportunity = rule.Rule{
 	Name:            "effectFnOpportunity",
+	Group:           "style",
 	Description:     "Suggests using Effect.fn for functions that return an Effect",
 	DefaultSeverity: etscore.SeveritySuggestion,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Can_be_rewritten_as_a_reusable_function_Colon_0_effect_effectFnOpportunity.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		effectConfig := ctx.Checker.Program().Options().Effect

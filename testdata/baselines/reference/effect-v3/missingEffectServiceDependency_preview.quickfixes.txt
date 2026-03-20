@@ -1,0 +1,13 @@
+=== Quick Fix Inventory ===
+
+[D1] (5:25-5:32) TS2551: Property 'Service' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'. Did you mean 'service'?
+  (no quick fixes)
+
+[D2] (6:34-6:41) TS2551: Property 'Service' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'. Did you mean 'service'?
+  (no quick fixes)
+
+[D3] (8:12-8:14) TS2488: Type 'typeof Db' must have a '[Symbol.iterator]()' method that returns an iterator.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+(no quick fixes to apply)

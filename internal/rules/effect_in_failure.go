@@ -14,8 +14,10 @@ import (
 // intended; only failure types should appear there.
 var EffectInFailure = rule.Rule{
 	Name:            "effectInFailure",
+	Group:           "antipattern",
 	Description:     "Warns when an Effect is used inside an Effect failure channel",
 	DefaultSeverity: etscore.SeverityWarning,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.The_error_channel_contains_an_Effect_0_Putting_Effect_computations_in_the_failure_channel_is_not_intended_keep_only_failure_types_there_effect_effectInFailure.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		var diags []*ast.Diagnostic

@@ -19,8 +19,10 @@ import (
 // follow a deterministic, location-based naming convention.
 var DeterministicKeys = rule.Rule{
 	Name:            "deterministicKeys",
+	Group:           "style",
 	Description:     "Enforces deterministic naming for service/tag/error identifiers based on class names",
 	DefaultSeverity: etscore.SeverityOff,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Key_should_be_0_effect_deterministicKeys.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeDeterministicKeys(ctx.Checker, ctx.SourceFile)

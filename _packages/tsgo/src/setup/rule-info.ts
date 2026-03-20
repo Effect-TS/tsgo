@@ -1,16 +1,35 @@
-import rulesJson from "../rules.json" with { type: "json" }
+import metadataJson from "../metadata.json" with { type: "json" }
 
 export type RuleSeverity = "off" | "suggestion" | "message" | "warning" | "error"
 
+export interface DiagnosticPreview {
+  readonly sourceText: string
+  readonly diagnostics: ReadonlyArray<{ start: number; end: number; text: string }>
+}
+
 export interface RuleInfo {
   readonly name: string
+  readonly group: string
   readonly description: string
   readonly defaultSeverity: RuleSeverity
+  readonly fixable: boolean
+  readonly supportedEffect: ReadonlyArray<string>
   readonly codes: ReadonlyArray<number>
+  readonly preview: DiagnosticPreview
+}
+
+export interface GroupInfo {
+  readonly id: string
+  readonly name: string
+  readonly description: string
 }
 
 export function getAllRules(): ReadonlyArray<RuleInfo> {
-  return rulesJson as ReadonlyArray<RuleInfo>
+  return metadataJson.rules as ReadonlyArray<RuleInfo>
+}
+
+export function getAllGroups(): ReadonlyArray<GroupInfo> {
+  return metadataJson.groups as ReadonlyArray<GroupInfo>
 }
 
 export function cycleSeverity(

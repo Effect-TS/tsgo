@@ -1,0 +1,12 @@
+=== Metadata ===
+Effect version: 4.0.0-beta.27
+
+
+
+==== /.src/unnecessaryPipe_preview.ts (0 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics unnecessaryPipe:warning
+    import { pipe } from "effect/Function"
+    
+    export const preview = pipe(1)
+    

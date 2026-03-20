@@ -15,8 +15,10 @@ import (
 // instead of wrapping with Effect.fail.
 var UnnecessaryFailYieldableError = rule.Rule{
 	Name:            "unnecessaryFailYieldableError",
+	Group:           "style",
 	Description:     "Suggests yielding yieldable errors directly instead of wrapping with Effect.fail",
 	DefaultSeverity: etscore.SeveritySuggestion,
+	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.This_Effect_fail_call_uses_a_yieldable_error_type_as_argument_You_can_yield_Asterisk_the_error_directly_instead_effect_unnecessaryFailYieldableError.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeUnnecessaryFailYieldableError(ctx.Checker, ctx.SourceFile)
