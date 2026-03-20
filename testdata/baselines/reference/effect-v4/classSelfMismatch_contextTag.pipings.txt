@@ -15,8 +15,8 @@ Transformations (1):
       outType: ServiceClass<ValidContextTag, "ValidContextTag", ServiceShape>
 
 === Piping Flow ===
-Location: 11:39 - 11:112
-Node: ServiceMap.Service<ValidContextTag, ServiceShape>()("InvalidContextTag")
+Location: 11:39 - 11:114
+Node: ServiceMap.Service<InvalidContextTag, ServiceShape>()("InvalidContextTag")
 Node Kind: KindCallExpression
 
 Subject: "InvalidContextTag"
@@ -24,6 +24,6 @@ Subject Type: "InvalidContextTag"
 
 Transformations (1):
   [0] kind: call
-      callee: ServiceMap.Service<ValidContextTag, ServiceShape>()
+      callee: ServiceMap.Service<InvalidContextTag, ServiceShape>()
       args: (constant)
-      outType: ServiceClass<ValidContextTag, "InvalidContextTag", ServiceShape>
+      outType: ServiceClass<InvalidContextTag, "InvalidContextTag", ServiceShape>
