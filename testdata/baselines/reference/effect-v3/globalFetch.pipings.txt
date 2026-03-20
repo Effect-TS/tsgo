@@ -1,7 +1,7 @@
-==== /.src/globalFetch_preview.ts (1 flows) ====
+==== /.src/globalFetch.ts (1 flows) ====
 
 === Piping Flow ===
-Location: 8:23 - 8:52
+Location: 3:23 - 3:52
 Node: fetch("https://example.com")
 Node Kind: KindCallExpression
 

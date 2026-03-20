@@ -1,11 +1,15 @@
 === Metadata ===
-Effect version: unknown
+Effect version: 4.0.0-beta.27
 
 
 
 ==== /.src/globalFetch_preview.ts (0 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics globalFetch:warning
+    
+    import { Effect } from "effect"
+    
+    void Effect
     
     export const preview = fetch("https://example.com")
     

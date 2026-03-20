@@ -1,4 +1,3 @@
-// @effect-diagnostics *:off
 // @effect-diagnostics globalFetch:warning
 
 import { Effect } from "effect"
