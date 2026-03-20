@@ -1,4 +1,4 @@
-==== /.src/leakingRequirements_allowJsdoc.ts (6 flows) ====
+==== /.src/leakingRequirements_allowJsdoc.ts (7 flows) ====
 
 === Piping Flow ===
 Location: 5:32 - 5:58
@@ -83,3 +83,17 @@ Transformations (1):
       callee: Context.GenericTag
       args: (constant)
       outType: Tag<{ writeCache: () => Effect<void, never, Cache | FileSystem>; readCache: Effect<void, never, Cache | FileSystem>; }, { writeCache: () => Effect<void, never, Cache | FileSystem>; readCache: Effect<void, never, Cache | FileSystem>; }>
+
+=== Piping Flow ===
+Location: 59:28 - 59:82
+Node: Context.GenericTag<LeakingDeps5Shape>("LeakingDeps5")
+Node Kind: KindCallExpression
+
+Subject: "LeakingDeps5"
+Subject Type: "LeakingDeps5"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.GenericTag
+      args: (constant)
+      outType: Tag<LeakingDeps5Shape, LeakingDeps5Shape>

@@ -45,3 +45,15 @@ export const LeakingDeps4 = Context.GenericTag<{
   writeCache: () => Effect.Effect<void, never, FileSystem | Cache>
   readCache: Effect.Effect<void, never, FileSystem | Cache>
 }>("LeakingDeps4")
+
+/**
+ * This comment does not suppress GenericTag diagnostics when it is attached to
+ * the shape interface instead of the exported const statement.
+ * @effect-expect-leaking FileSystem Cache
+ */
+interface LeakingDeps5Shape {
+  writeCache: () => Effect.Effect<void, never, FileSystem | Cache>
+  readCache: Effect.Effect<void, never, FileSystem | Cache>
+}
+
+export const LeakingDeps5 = Context.GenericTag<LeakingDeps5Shape>("LeakingDeps5")

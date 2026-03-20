@@ -2,9 +2,10 @@
 Effect version: 3.19.19
 
 /.src/leakingRequirements_allowJsdoc.ts(16,14): suggestion TS377041: Methods of this Service require 'Cache' from every caller. This leaks implementation details — resolve these dependencies at Layer creation time. effect(leakingRequirements)
+/.src/leakingRequirements_allowJsdoc.ts(59,29): suggestion TS377041: Methods of this Service require 'Cache | FileSystem' from every caller. This leaks implementation details — resolve these dependencies at Layer creation time. effect(leakingRequirements)
 
 
-==== /.src/leakingRequirements_allowJsdoc.ts (1 errors) ====
+==== /.src/leakingRequirements_allowJsdoc.ts (2 errors) ====
     // @effect-v3
     import type { Effect } from "effect"
     import { Context } from "effect"
@@ -54,4 +55,18 @@ Effect version: 3.19.19
       writeCache: () => Effect.Effect<void, never, FileSystem | Cache>
       readCache: Effect.Effect<void, never, FileSystem | Cache>
     }>("LeakingDeps4")
+    
+    /**
+     * This comment does not suppress GenericTag diagnostics when it is attached to
+     * the shape interface instead of the exported const statement.
+     * @effect-expect-leaking FileSystem Cache
+     */
+    interface LeakingDeps5Shape {
+      writeCache: () => Effect.Effect<void, never, FileSystem | Cache>
+      readCache: Effect.Effect<void, never, FileSystem | Cache>
+    }
+    
+    export const LeakingDeps5 = Context.GenericTag<LeakingDeps5Shape>("LeakingDeps5")
+                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377041: Methods of this Service require 'Cache | FileSystem' from every caller. This leaks implementation details — resolve these dependencies at Layer creation time. effect(leakingRequirements)
     
