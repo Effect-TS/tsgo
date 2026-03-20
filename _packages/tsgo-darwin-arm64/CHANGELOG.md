@@ -1,5 +1,11 @@
 # @effect/tsgo-darwin-arm64
 
+## 0.0.16
+
+### Patch Changes
+
+- 7a94f7e: Update typescript-go to 50a70608. Upstream changes include auto-import fixes, linked editing support, signature help trigger characters, JSON syntax validation, formatting rule fixes, and various bug fixes.
+
 ## 0.0.15
 
 ### Patch Changes
