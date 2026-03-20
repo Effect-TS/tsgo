@@ -318,23 +318,54 @@ func hasLeakableServiceAnnotation(c *checker.Checker, t *checker.Type) bool {
 		if decl == nil {
 			continue
 		}
-		sf := ast.GetSourceFileOfNode(decl)
-		if sf == nil {
-			continue
-		}
-		text := sf.Text()
-		start := decl.Pos()
-		end := decl.End()
-		if start < 0 || end < 0 || start >= end || end > len(text) {
-			continue
-		}
-		snippet := strings.ToLower(text[start:end])
-		if strings.Contains(snippet, "@effect-leakable-service") {
+		if hasJSDocTag(decl, "effect-leakable-service") {
 			return true
 		}
 	}
 
 	return false
+}
+
+func hasJSDocTag(node *ast.Node, tagName string) bool {
+	for _, host := range jsDocHosts(node) {
+		for _, jsDoc := range host.JSDoc(nil) {
+			if jsDoc == nil || jsDoc.Kind != ast.KindJSDoc {
+				continue
+			}
+			tags := jsDoc.AsJSDoc().Tags
+			if tags == nil {
+				continue
+			}
+			for _, tag := range tags.Nodes {
+				if tag != nil && tag.TagName() != nil && tag.TagName().Text() == tagName {
+					return true
+				}
+			}
+		}
+	}
+
+	return false
+}
+
+func jsDocHosts(node *ast.Node) []*ast.Node {
+	if node == nil {
+		return nil
+	}
+
+	hosts := []*ast.Node{node}
+	if ast.IsVariableDeclaration(node) && ast.IsVariableDeclarationList(node.Parent) {
+		declarations := node.Parent.AsVariableDeclarationList().Declarations
+		if declarations != nil && len(declarations.Nodes) > 0 && declarations.Nodes[0] == node && node.Parent.Parent != nil {
+			hosts = append(hosts, node.Parent.Parent)
+		}
+	}
+	if (ast.IsFunctionExpressionOrArrowFunction(node) || ast.IsClassExpression(node)) && node.Parent != nil {
+		if (ast.IsVariableDeclaration(node.Parent) || ast.IsPropertyDeclaration(node.Parent) || ast.IsPropertyAssignment(node.Parent)) && node.Parent.Initializer() == node {
+			hosts = append(hosts, node.Parent)
+		}
+	}
+
+	return hosts
 }
 
 // intersectStringSlices returns the elements that appear in both slices.
