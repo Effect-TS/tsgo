@@ -1935,7 +1935,6 @@ const NodeFlagsDecoratorContext = ast.NodeFlagsDecoratorContext
 const NodeFlagsDisallowConditionalTypesContext = ast.NodeFlagsDisallowConditionalTypesContext
 const NodeFlagsDisallowInContext = ast.NodeFlagsDisallowInContext
 const NodeFlagsExportContext = ast.NodeFlagsExportContext
-const NodeFlagsHasAggregatedChildData = ast.NodeFlagsHasAggregatedChildData
 const NodeFlagsHasExplicitReturn = ast.NodeFlagsHasExplicitReturn
 const NodeFlagsHasImplicitReturn = ast.NodeFlagsHasImplicitReturn
 const NodeFlagsHasJSDoc = ast.NodeFlagsHasJSDoc

@@ -40,6 +40,8 @@ type FormattingContext = format.FormattingContext
 func GetContainingList(node *ast.Node, sourceFile *ast.SourceFile) *ast.NodeList
 //go:linkname GetFormatCodeSettingsFromContext github.com/microsoft/typescript-go/internal/format.GetFormatCodeSettingsFromContext
 func GetFormatCodeSettingsFromContext(ctx context.Context) *lsutil.FormatCodeSettings
+//go:linkname GetIndentation github.com/microsoft/typescript-go/internal/format.GetIndentation
+func GetIndentation(position int, sourceFile *ast.SourceFile, options *lsutil.FormatCodeSettings, assumeNewLineBeforeCloseBrace bool) int
 //go:linkname GetIndentationForNode github.com/microsoft/typescript-go/internal/format.GetIndentationForNode
 func GetIndentationForNode(n *ast.Node, ignoreActualIndentationRange *core.TextRange, sourceFile *ast.SourceFile, options *lsutil.FormatCodeSettings) int
 //go:linkname GetLineStartPositionForPosition github.com/microsoft/typescript-go/internal/format.GetLineStartPositionForPosition

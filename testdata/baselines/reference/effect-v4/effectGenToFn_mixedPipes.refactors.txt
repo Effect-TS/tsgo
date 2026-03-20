@@ -21,9 +21,9 @@ import { pipe } from "effect/Function"
 const test = () =>
   pipe(
     pipe(Effect.gen(function*() {
-    const test = "test"
-    return yield* Effect.succeed(test)
-}), Effect.asVoid),
+          const test = "test"
+          return yield* Effect.succeed(test)
+      }), Effect.asVoid),
     Effect.tapError(Effect.logError)
   )
 
@@ -38,11 +38,11 @@ import { pipe } from "effect/Function"
 const test = () =>
   pipe(
     Effect.gen(function*() {
-    return yield* Effect.gen(function*() {
-        const test = "test"
-        return yield* Effect.succeed(test)
-    }).pipe(Effect.asVoid)
-}),
+          return yield* Effect.gen(function*() {
+              const test = "test"
+              return yield* Effect.succeed(test)
+          }).pipe(Effect.asVoid)
+      }),
     Effect.tapError(Effect.logError)
   )
 

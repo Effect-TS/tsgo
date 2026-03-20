@@ -36,8 +36,8 @@ class UserService extends ServiceMap.Service<UserService, {
 
 const _shouldTrigger = UserService.of({ // UserService is an Effect Tag
   getUser: Effect.fn("UserService.getUser")(function*(id: string) {
-    yield* Effect.log(`Looking up user ${id}`)
-})
+      yield* Effect.log(`Looking up user ${id}`)
+  })
 })
 
 

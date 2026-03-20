@@ -124,10 +124,10 @@ export const program = () =>
 
 export const programWithPipes = (fa: number, fb: number) =>
   pipe(Eff.gen(function*() {
-    const a = yield* Eff.succeed(fa)
-    const b = yield* Eff.succeed(fb)
-    return a + b
-}), Eff.map(a => a + 1))
+        const a = yield* Eff.succeed(fa)
+        const b = yield* Eff.succeed(fb)
+        return a + b
+    }), Eff.map(a => a + 1))
 
 export function sampleReturns<A extends number, B extends number>(arg1: A, arg2: B) {
   return Eff.gen(function*() {
@@ -161,12 +161,12 @@ export const program = () =>
 
 export const programWithPipes = (fa: number, fb: number) =>
   Eff.gen(function*() {
-    return yield* Eff.gen(function*() {
-        const a = yield* Eff.succeed(fa)
-        const b = yield* Eff.succeed(fb)
-        return a + b
-    }).pipe(Eff.map(a => a + 1))
-})
+        return yield* Eff.gen(function*() {
+            const a = yield* Eff.succeed(fa)
+            const b = yield* Eff.succeed(fb)
+            return a + b
+        }).pipe(Eff.map(a => a + 1))
+    })
 
 export function sampleReturns<A extends number, B extends number>(arg1: A, arg2: B) {
   return Eff.gen(function*() {
