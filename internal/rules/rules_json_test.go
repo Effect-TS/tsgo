@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"html"
 	"maps"
@@ -240,7 +241,10 @@ func buildTsConfigWithTestConfig(testConfig map[string]any) string {
 			"plugins": []any{plugin},
 		},
 	}
-	data, _ := json.Marshal(tsConfig)
+	data, err := json.Marshal(tsConfig)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
@@ -566,12 +570,7 @@ func severityIcon(s etscore.Severity) string {
 }
 
 func containsEffect(supported []string, version string) bool {
-	for _, s := range supported {
-		if s == version {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(supported, version)
 }
 
 func generateReadmeTable() string {
@@ -674,7 +673,7 @@ func generateReadme(committedReadme []byte) ([]byte, error) {
 	startIdx := strings.Index(content, readmeStartMarker)
 	endIdx := strings.Index(content, readmeEndMarker)
 	if startIdx < 0 || endIdx < 0 || endIdx <= startIdx {
-		return nil, fmt.Errorf("README.md missing diagnostics table markers")
+		return nil, errors.New("README.md missing diagnostics table markers")
 	}
 
 	table := generateReadmeTable()

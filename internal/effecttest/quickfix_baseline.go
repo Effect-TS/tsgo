@@ -3,6 +3,7 @@ package effecttest
 import (
 	"fmt"
 	"sort"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -42,7 +43,7 @@ func diagnosticCodeString(d *lsproto.Diagnostic) string {
 		return "?"
 	}
 	if d.Code.Integer != nil {
-		return fmt.Sprintf("%d", *d.Code.Integer)
+		return strconv.Itoa(int(*d.Code.Integer))
 	}
 	if d.Code.String != nil {
 		return *d.Code.String

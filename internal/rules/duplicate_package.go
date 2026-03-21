@@ -147,7 +147,7 @@ func computeDuplicatePackageDiags(c *checker.Checker, prog checker.Program) []du
 			if e.version != "" {
 				parts[i] = fmt.Sprintf("%s @ %s", e.version, e.dir)
 			} else {
-				parts[i] = fmt.Sprintf("(unknown) @ %s", e.dir)
+				parts[i] = "(unknown) @ " + e.dir
 			}
 		}
 		diags = append(diags, duplicatePackageDiag{

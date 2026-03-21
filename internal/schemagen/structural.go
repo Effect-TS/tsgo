@@ -6,7 +6,9 @@
 package schemagen
 
 import (
+	"errors"
 	"fmt"
+	"maps"
 	"regexp"
 
 	"github.com/effect-ts/effect-typescript-go/internal/effectutil"
@@ -118,7 +120,7 @@ func (g *StructuralSchemaGen) pushHoistedVariableStatement(name string, t *check
 // processType converts a TypeScript type to a Schema expression, with hoisting support.
 func (g *StructuralSchemaGen) processType(t *checker.Type, ctx processingContext) (*ast.Node, error) {
 	if ctx.depth >= ctx.maxDepth {
-		return nil, fmt.Errorf("maximum depth exceeded")
+		return nil, errors.New("maximum depth exceeded")
 	}
 
 	// Try to resolve a hoist name from the type
@@ -366,7 +368,7 @@ func (g *StructuralSchemaGen) processIntersectionType(types []*checker.Type, ctx
 	}
 
 	if len(members) == 0 {
-		return nil, false, fmt.Errorf("empty intersection type")
+		return nil, false, errors.New("empty intersection type")
 	}
 	if len(members) == 1 {
 		return members[0], false, nil
@@ -392,7 +394,7 @@ func (g *StructuralSchemaGen) processIntersectionType(types []*checker.Type, ctx
 func (g *StructuralSchemaGen) processArrayType(t *checker.Type, ctx processingContext) (*ast.Node, bool, error) {
 	typeArgs := checker.Checker_getTypeArguments(g.Checker, t)
 	if len(typeArgs) == 0 {
-		return nil, false, fmt.Errorf("array type has no type arguments")
+		return nil, false, errors.New("array type has no type arguments")
 	}
 
 	elemSchema, err := g.processType(typeArgs[0], ctx)
@@ -591,9 +593,7 @@ func (g *StructuralSchemaGen) ScanExistingSchemas(scope *ast.Node) {
 // Process generates schema statements for one or more named types.
 // It populates internal state and returns accumulated statements.
 func (g *StructuralSchemaGen) Process(typeMap map[string]*checker.Type, scope *ast.Node, isExported bool) []*ast.Node {
-	for name, t := range typeMap {
-		g.nameToType[name] = t
-	}
+	maps.Copy(g.nameToType, typeMap)
 
 	// Scan existing schemas in scope for reuse
 	g.ScanExistingSchemas(scope)

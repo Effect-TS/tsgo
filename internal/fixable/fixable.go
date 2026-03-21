@@ -4,6 +4,8 @@
 package fixable
 
 import (
+	"slices"
+
 	"github.com/microsoft/typescript-go/shim/ls"
 )
 
@@ -32,10 +34,5 @@ type Fixable struct {
 
 // HandlesCode returns true if this fixable handles the given error code.
 func (f *Fixable) HandlesCode(code int32) bool {
-	for _, c := range f.ErrorCodes {
-		if c == code {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(f.ErrorCodes, code)
 }

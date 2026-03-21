@@ -10,20 +10,32 @@ linters:
   enable:
     - copyloopvar
     - bodyclose
+    - bidichk
     - errcheck
+    - errchkjson
     - errname
     - errorlint
     - gocritic
+    - gocheckcompilerdirectives
+    - goprintffuncname
     - govet
     - ineffassign
+    - intrange
     - makezero
+    - mirror
     - misspell
+    - modernize
+    - musttag
+    - nakedret
     - nolintlint
+    - perfsprint
     - predeclared
     - reassign
     - revive
     - staticcheck
     - unconvert
+    - usestdlibvars
+    - durationcheck
 
   settings:
     revive:

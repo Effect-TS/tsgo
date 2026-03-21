@@ -159,7 +159,10 @@ func FormatLayerGraph(
 
 	// Edges in index order.
 	for _, edge := range layerGraph.Edges() {
-		jsonBytes, _ := json.Marshal(edge.Data)
+		jsonBytes, err := json.Marshal(edge.Data)
+		if err != nil {
+			continue
+		}
 		edgeLabel := mermaidEntityEncode(string(jsonBytes))
 		edgeLabel = mermaidEscapeOutputLabel(edgeLabel)
 		lines = append(lines, fmt.Sprintf("  %d -->|\"%s\"| %d", edge.Source, edgeLabel, edge.Target))
