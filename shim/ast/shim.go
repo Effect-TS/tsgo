@@ -401,6 +401,8 @@ func HasDecorators(node *ast.Node) bool
 //go:linkname HasDynamicName github.com/microsoft/typescript-go/internal/ast.HasDynamicName
 func HasDynamicName(declaration *ast.Node) bool
 type HasFileName = ast.HasFileName
+//go:linkname HasInferredType github.com/microsoft/typescript-go/internal/ast.HasInferredType
+func HasInferredType(node *ast.Node) bool
 //go:linkname HasInitializer github.com/microsoft/typescript-go/internal/ast.HasInitializer
 func HasInitializer(node *ast.Node) bool
 //go:linkname HasModifier github.com/microsoft/typescript-go/internal/ast.HasModifier
@@ -675,6 +677,8 @@ func IsEnumMember(node *ast.Node) bool
 func IsExclusivelyTypeOnlyImportOrExport(node *ast.Node) bool
 //go:linkname IsExpandoInitializer github.com/microsoft/typescript-go/internal/ast.IsExpandoInitializer
 func IsExpandoInitializer(initializer *ast.Node) bool
+//go:linkname IsExpandoPropertyDeclaration github.com/microsoft/typescript-go/internal/ast.IsExpandoPropertyDeclaration
+func IsExpandoPropertyDeclaration(node *ast.Node) bool
 //go:linkname IsExportAssignment github.com/microsoft/typescript-go/internal/ast.IsExportAssignment
 func IsExportAssignment(node *ast.Node) bool
 //go:linkname IsExportDeclaration github.com/microsoft/typescript-go/internal/ast.IsExportDeclaration
@@ -1119,6 +1123,8 @@ func IsPostfixUnaryExpression(node *ast.Node) bool
 func IsPotentiallyExecutableNode(node *ast.Node) bool
 //go:linkname IsPrefixUnaryExpression github.com/microsoft/typescript-go/internal/ast.IsPrefixUnaryExpression
 func IsPrefixUnaryExpression(node *ast.Node) bool
+//go:linkname IsPrimitiveLiteralValue github.com/microsoft/typescript-go/internal/ast.IsPrimitiveLiteralValue
+func IsPrimitiveLiteralValue(node *ast.Node, includeBigInt bool) bool
 //go:linkname IsPrivateIdentifier github.com/microsoft/typescript-go/internal/ast.IsPrivateIdentifier
 func IsPrivateIdentifier(node *ast.Node) bool
 //go:linkname IsPrivateIdentifierClassElementDeclaration github.com/microsoft/typescript-go/internal/ast.IsPrivateIdentifierClassElementDeclaration
@@ -1317,6 +1323,8 @@ func IsVariableDeclarationInitializedToRequire(node *ast.Node) bool
 func IsVariableDeclarationList(node *ast.Node) bool
 //go:linkname IsVariableLike github.com/microsoft/typescript-go/internal/ast.IsVariableLike
 func IsVariableLike(node *ast.Node) bool
+//go:linkname IsVariableParameterOrProperty github.com/microsoft/typescript-go/internal/ast.IsVariableParameterOrProperty
+func IsVariableParameterOrProperty(node *ast.Node) bool
 //go:linkname IsVariableStatement github.com/microsoft/typescript-go/internal/ast.IsVariableStatement
 func IsVariableStatement(node *ast.Node) bool
 //go:linkname IsVoidExpression github.com/microsoft/typescript-go/internal/ast.IsVoidExpression

@@ -12,4 +12,4 @@ Transformations (1):
   [0] kind: call
       callee: Schema.TaggedClass
       args: (constant)
-      outType: <Tag extends string, Fields extends Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<Preview, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedClass<Preview, Tag, { readonly _tag: tag<Tag>; } & Fields>
+      outType: <Tag extends string, Fields extends Struct.Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<Preview, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedClass<Preview, Tag, { readonly _tag: tag<Tag>; } & Fields>

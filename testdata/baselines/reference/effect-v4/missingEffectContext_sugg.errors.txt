@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 4.0.0-beta.27
 
-/.src/missingEffectContext_sugg.ts(42,5): error TS2345: Argument of type '<A, E>(effect: Effect<A, E, never>, options?: RunOptions | undefined) => Promise<A>' is not assignable to parameter of type '(_: Effect<{}, never, DbConnection | FileSystem>) => Promise<{}>'.
+/.src/missingEffectContext_sugg.ts(42,5): error TS2345: Argument of type '<A, E>(effect: Effect<A, E>, options?: RunOptions | undefined) => Promise<A>' is not assignable to parameter of type '(_: Effect<{}, never, DbConnection | FileSystem>) => Promise<{}>'.
 /.src/missingEffectContext_sugg.ts(42,5): error TS377004: Missing context DbConnection | FileSystem in the expected Effect type. effect(missingEffectContext)
 
 
@@ -49,7 +49,7 @@ Effect version: 4.0.0-beta.27
         Effect.scoped,
         Effect.runPromise
         ~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '<A, E>(effect: Effect<A, E, never>, options?: RunOptions | undefined) => Promise<A>' is not assignable to parameter of type '(_: Effect<{}, never, DbConnection | FileSystem>) => Promise<{}>'.
+!!! error TS2345: Argument of type '<A, E>(effect: Effect<A, E>, options?: RunOptions | undefined) => Promise<A>' is not assignable to parameter of type '(_: Effect<{}, never, DbConnection | FileSystem>) => Promise<{}>'.
         ~~~~~~~~~~~~~~~~~
 !!! error TS377004: Missing context DbConnection | FileSystem in the expected Effect type. effect(missingEffectContext)
 !!! related TS377059 /.src/missingEffectContext_sugg.ts(40,5): Adjusting this layer composition could provide the missing service. effect(missingEffectContext)

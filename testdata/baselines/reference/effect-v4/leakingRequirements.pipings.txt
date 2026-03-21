@@ -12,7 +12,7 @@ Transformations (1):
   [0] kind: call
       callee: ServiceMap.Service<FileSystem, {\n  writeFile: (content: string) => Effect.Effect<void>\n}>()
       args: (constant)
-      outType: ServiceClass<FileSystem, "FileSystem", { writeFile: (content: string) => Effect<void, never, never>; }>
+      outType: ServiceClass<FileSystem, "FileSystem", { writeFile: (content: string) => Effect.Effect<void>; }>
 
 === Piping Flow ===
 Location: 8:33 - 11:20
@@ -26,7 +26,7 @@ Transformations (1):
   [0] kind: call
       callee: ServiceMap.Service<LeakingDeps, {\n  writeCache: () => Effect.Effect<void, never, FileSystem>\n  readCache: Effect.Effect<void, never, FileSystem>\n}>()
       args: (constant)
-      outType: ServiceClass<LeakingDeps, "LeakingDeps", { writeCache: () => Effect<void, never, FileSystem>; readCache: Effect<void, never, FileSystem>; }>
+      outType: ServiceClass<LeakingDeps, "LeakingDeps", { writeCache: () => Effect.Effect<void, never, FileSystem>; readCache: Effect.Effect<void, never, FileSystem>; }>
 
 === Piping Flow ===
 Location: 14:28 - 16:21
@@ -40,7 +40,7 @@ Transformations (1):
   [0] kind: call
       callee: ServiceMap.Service<_LocalClass, {\n    writeFile: (content: string) => Effect.Effect<void>\n  }>()
       args: (constant)
-      outType: ServiceClass<_LocalClass, "LocalClass", { writeFile: (content: string) => Effect<void, never, never>; }>
+      outType: ServiceClass<_LocalClass, "LocalClass", { writeFile: (content: string) => Effect.Effect<void>; }>
 
 === Piping Flow ===
 Location: 18:30 - 21:23
@@ -54,4 +54,4 @@ Transformations (1):
   [0] kind: call
       callee: ServiceMap.Service<_LocalLeaking, {\n    writeCache: () => Effect.Effect<void, never, FileSystem>\n    readCache: Effect.Effect<void, never, FileSystem>\n  }>()
       args: (constant)
-      outType: ServiceClass<_LocalLeaking, "LocalLeaking", { writeCache: () => Effect<void, never, FileSystem>; readCache: Effect<void, never, FileSystem>; }>
+      outType: ServiceClass<_LocalLeaking, "LocalLeaking", { writeCache: () => Effect.Effect<void, never, FileSystem>; readCache: Effect.Effect<void, never, FileSystem>; }>

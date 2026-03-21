@@ -12,7 +12,7 @@ Transformations (1):
   [0] kind: call
       callee: ServiceMap.Service<MyService, {\n  log: (_what: string) => Effect.Effect<void>\n}>()
       args: (constant)
-      outType: ServiceClass<MyService, "MyService", { log: (_what: string) => Effect<void, never, never>; }>
+      outType: ServiceClass<MyService, "MyService", { log: (_what: string) => Effect.Effect<void>; }>
 
 === Piping Flow ===
 Location: 7:23 - 11:4

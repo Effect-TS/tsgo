@@ -83,7 +83,7 @@ class Test {
 // refactor: 4:14-4:15, 5:14-5:15, 8:14-8:15, 11:14-11:15, 13:7-13:8, 14:7-14:8, 17:10-17:11, 18:10-18:11, 19:3-19:4, 20:3-20:4
 import * as T from "effect/Effect"
 
-export const test1: <A>(value: A) => T.Effect<A, never, never> = T.succeed
+export const test1: <A>(value: A) => T.Effect<A> = T.succeed
 export const test2 = T.fail("LOL")
 
 const predefined = 42
