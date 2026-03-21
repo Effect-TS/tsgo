@@ -16,7 +16,8 @@
   },
   "preferUnplugged": true,
   "files": [
-    "lib/tsgo.exe"
+    "lib/tsgo.exe",
+    "README.md"
   ],
   "os": [
     "win32"
