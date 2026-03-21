@@ -11,8 +11,6 @@ import (
 	_ "github.com/effect-ts/effect-typescript-go/etstesthooks"
 )
 
-func stringPtr(v string) *string { return &v }
-
 func TestAutoImportEffectStyleConsistency_namespace(t *testing.T) {
 	t.Parallel()
 	const content = `// @Filename: /tsconfig.json
@@ -46,8 +44,9 @@ succeed/*fix*/(1);
 		IncludeCompletionsForModuleExports:    core.TSTrue,
 		IncludeCompletionsForImportStatements: core.TSTrue,
 	}
+	completion := "completion"
 
-	f.VerifyApplyCodeActionFromCompletion(t, stringPtr("completion"), &fourslash.ApplyCodeActionFromCompletionOptions{
+	f.VerifyApplyCodeActionFromCompletion(t, &completion, &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:        "succeed",
 		Source:      "effect/Effect",
 		Description: "Add import from \"effect/Effect\"",
@@ -99,9 +98,10 @@ request/*fix*/("/");
 		IncludeCompletionsForModuleExports:    core.TSTrue,
 		IncludeCompletionsForImportStatements: core.TSTrue,
 	}
+	completion := "completion"
 
 	// After barrel rewrite, the module specifier changes to the barrel package
-	f.VerifyApplyCodeActionFromCompletion(t, stringPtr("completion"), &fourslash.ApplyCodeActionFromCompletionOptions{
+	f.VerifyApplyCodeActionFromCompletion(t, &completion, &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:        "request",
 		Source:      "@effect/platform",
 		Description: "Add import from \"@effect/platform\"",
@@ -154,10 +154,11 @@ succeed/*fix*/(1);
 		IncludeCompletionsForModuleExports:    core.TSTrue,
 		IncludeCompletionsForImportStatements: core.TSTrue,
 	}
+	completion := "completion"
 
 	// With topLevelNamedReexports="ignore", the reexport from "effect" is kept as named import.
 	// The completion picks the best available fix, which is the named import from the barrel.
-	f.VerifyApplyCodeActionFromCompletion(t, stringPtr("completion"), &fourslash.ApplyCodeActionFromCompletionOptions{
+	f.VerifyApplyCodeActionFromCompletion(t, &completion, &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:        "succeed",
 		Source:      "effect",
 		Description: "Add import from \"effect\"",

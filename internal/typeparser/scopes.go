@@ -71,13 +71,14 @@ func FindEnclosingScopes(c *checker.Checker, startNode *ast.Node) EnclosingScope
 		}
 
 		// Derive ScopeKind
-		if result.EffectGen != nil {
+		switch {
+		case result.EffectGen != nil:
 			result.ScopeKind = ScopeKindEffectGen
-		} else if result.EffectFnGen != nil {
+		case result.EffectFnGen != nil:
 			result.ScopeKind = ScopeKindEffectFn
-		} else if result.ScopeNode != nil {
+		case result.ScopeNode != nil:
 			result.ScopeKind = ScopeKindFunction
-		} else {
+		default:
 			result.ScopeKind = ScopeKindSourceFile
 		}
 

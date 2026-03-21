@@ -189,11 +189,12 @@ func parseEffectFnCall(c *checker.Checker, node *ast.Node) *parsedEffectFnCallRe
 	switch expr.Kind {
 	case ast.KindPropertyAccessExpression:
 		// Direct call: Effect.fn(...) or Effect.fnUntraced(...)
-		if IsNodeReferenceToEffectModuleApi(c, expr, "fn") {
+		switch {
+		case IsNodeReferenceToEffectModuleApi(c, expr, "fn"):
 			kind = TransformationKindEffectFn
-		} else if IsNodeReferenceToEffectModuleApi(c, expr, "fnUntraced") {
+		case IsNodeReferenceToEffectModuleApi(c, expr, "fnUntraced"):
 			kind = TransformationKindEffectFnUntraced
-		} else {
+		default:
 			return nil
 		}
 

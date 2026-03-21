@@ -69,7 +69,7 @@ func AnalyzeReturnEffectInGen(c *checker.Checker, sf *ast.SourceFile) []ReturnEf
 
 // checkReturnEffectInGenScope checks if a return statement inside an Effect generator
 // is returning an Effect-able type (which would cause nested Effect<Effect<...>>).
-func checkReturnEffectInGenScope(c *checker.Checker, sf *ast.SourceFile, n *ast.Node) bool {
+func checkReturnEffectInGenScope(c *checker.Checker, _ *ast.SourceFile, n *ast.Node) bool {
 	returnStmt := n.AsReturnStatement()
 	if returnStmt == nil || returnStmt.Expression == nil {
 		return false

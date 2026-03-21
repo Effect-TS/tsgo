@@ -12,21 +12,22 @@ import (
 // makeDiag creates a minimal diagnostic with the given code and category.
 func makeDiag(code int32, category diagnostics.Category) *ast.Diagnostic {
 	return ast.NewDiagnosticFromSerialized(
-		nil,                      // file
-		core.NewTextRange(0, 0),  // loc
-		code,                     // code
-		category,                 // category
-		"",                       // messageKey
-		nil,                      // messageArgs
-		nil,                      // messageChain
-		nil,                      // relatedInformation
-		false,                    // reportsUnnecessary
-		false,                    // reportsDeprecated
-		false,                    // skippedOnNoEmit
+		nil,                     // file
+		core.NewTextRange(0, 0), // loc
+		code,                    // code
+		category,                // category
+		"",                      // messageKey
+		nil,                     // messageArgs
+		nil,                     // messageChain
+		nil,                     // relatedInformation
+		false,                   // reportsUnnecessary
+		false,                   // reportsDeprecated
+		false,                   // skippedOnNoEmit
 	)
 }
 
 func TestFilterDiagnosticsForExitCode_NilOptions(t *testing.T) {
+	t.Parallel()
 	diags := []*ast.Diagnostic{
 		makeDiag(377009, diagnostics.CategorySuggestion),
 		makeDiag(377001, diagnostics.CategoryError),
@@ -45,6 +46,7 @@ func TestFilterDiagnosticsForExitCode_NilOptions(t *testing.T) {
 }
 
 func TestFilterDiagnosticsForExitCode_DefaultConfig(t *testing.T) {
+	t.Parallel()
 	// Default: suggestions ignored, warnings not ignored
 	opts := &etscore.EffectPluginOptions{
 		IgnoreEffectSuggestionsInTscExitCode: true,
@@ -80,6 +82,7 @@ func TestFilterDiagnosticsForExitCode_DefaultConfig(t *testing.T) {
 }
 
 func TestFilterDiagnosticsForExitCode_IgnoreWarnings(t *testing.T) {
+	t.Parallel()
 	opts := &etscore.EffectPluginOptions{
 		IgnoreEffectSuggestionsInTscExitCode: true,
 		IgnoreEffectWarningsInTscExitCode:    true,
@@ -110,6 +113,7 @@ func TestFilterDiagnosticsForExitCode_IgnoreWarnings(t *testing.T) {
 }
 
 func TestFilterDiagnosticsForExitCode_ErrorsNotFilteredByDefault(t *testing.T) {
+	t.Parallel()
 	// With suggestion+warning ignore set but error ignore NOT set, errors are kept
 	opts := &etscore.EffectPluginOptions{
 		IgnoreEffectSuggestionsInTscExitCode: true,
@@ -135,6 +139,7 @@ func TestFilterDiagnosticsForExitCode_ErrorsNotFilteredByDefault(t *testing.T) {
 }
 
 func TestFilterDiagnosticsForExitCode_IgnoreErrors(t *testing.T) {
+	t.Parallel()
 	// When IgnoreEffectErrorsInTscExitCode is true, Effect errors are filtered
 	opts := &etscore.EffectPluginOptions{
 		IgnoreEffectErrorsInTscExitCode: true,
@@ -157,6 +162,7 @@ func TestFilterDiagnosticsForExitCode_IgnoreErrors(t *testing.T) {
 }
 
 func TestFilterDiagnosticsForExitCode_IgnoreErrorsFalse(t *testing.T) {
+	t.Parallel()
 	// When IgnoreEffectErrorsInTscExitCode is false (default), Effect errors are kept
 	opts := &etscore.EffectPluginOptions{
 		IgnoreEffectErrorsInTscExitCode: false,
@@ -176,6 +182,7 @@ func TestFilterDiagnosticsForExitCode_IgnoreErrorsFalse(t *testing.T) {
 }
 
 func TestFilterDiagnosticsForExitCode_NonEffectErrorsNeverFiltered(t *testing.T) {
+	t.Parallel()
 	// Non-Effect errors are never filtered regardless of option
 	opts := &etscore.EffectPluginOptions{
 		IgnoreEffectErrorsInTscExitCode:      true,
@@ -185,8 +192,8 @@ func TestFilterDiagnosticsForExitCode_NonEffectErrorsNeverFiltered(t *testing.T)
 
 	diags := []*ast.Diagnostic{
 		makeDiag(1002, diagnostics.CategoryError),      // Non-Effect error — kept
-		makeDiag(2304, diagnostics.CategoryWarning),     // Non-Effect warning — kept
-		makeDiag(6133, diagnostics.CategorySuggestion),  // Non-Effect suggestion — kept
+		makeDiag(2304, diagnostics.CategoryWarning),    // Non-Effect warning — kept
+		makeDiag(6133, diagnostics.CategorySuggestion), // Non-Effect suggestion — kept
 	}
 
 	result := FilterDiagnosticsForExitCode(opts, diags)
@@ -202,6 +209,7 @@ func TestFilterDiagnosticsForExitCode_NonEffectErrorsNeverFiltered(t *testing.T)
 }
 
 func TestFilterDiagnosticsForExitCode_NonEffectNeverFiltered(t *testing.T) {
+	t.Parallel()
 	// Non-Effect diagnostics of any category are never filtered
 	opts := &etscore.EffectPluginOptions{
 		IgnoreEffectSuggestionsInTscExitCode: true,
@@ -228,6 +236,7 @@ func TestFilterDiagnosticsForExitCode_NonEffectNeverFiltered(t *testing.T) {
 }
 
 func TestFilterDiagnosticsForExitCode_BothFalse(t *testing.T) {
+	t.Parallel()
 	// When both ignore options are false, nothing is filtered
 	opts := &etscore.EffectPluginOptions{
 		IgnoreEffectSuggestionsInTscExitCode: false,
@@ -248,6 +257,7 @@ func TestFilterDiagnosticsForExitCode_BothFalse(t *testing.T) {
 }
 
 func TestFilterDiagnosticsForExitCode_EmptySlice(t *testing.T) {
+	t.Parallel()
 	opts := &etscore.EffectPluginOptions{
 		IgnoreEffectSuggestionsInTscExitCode: true,
 	}
@@ -264,6 +274,7 @@ func TestFilterDiagnosticsForExitCode_EmptySlice(t *testing.T) {
 }
 
 func TestFilterDiagnosticsForExitCode_MessageCategory(t *testing.T) {
+	t.Parallel()
 	// Message category follows the same config as Suggestion
 	opts := &etscore.EffectPluginOptions{
 		IgnoreEffectSuggestionsInTscExitCode: true,

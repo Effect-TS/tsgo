@@ -5,6 +5,7 @@ import (
 )
 
 func TestMermaidEntityEncode(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		name     string
 		input    string
@@ -69,6 +70,7 @@ func TestMermaidEntityEncode(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			result := mermaidEntityEncode(tt.input)
 			if result != tt.expected {
 				t.Errorf("mermaidEntityEncode(%q) = %q, want %q", tt.input, result, tt.expected)
@@ -78,6 +80,7 @@ func TestMermaidEntityEncode(t *testing.T) {
 }
 
 func TestMermaidSafe(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		name     string
 		input    string
@@ -132,6 +135,7 @@ func TestMermaidSafe(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			result := mermaidSafe(tt.input)
 			if result != tt.expected {
 				t.Errorf("mermaidSafe(%q) = %q, want %q", tt.input, result, tt.expected)

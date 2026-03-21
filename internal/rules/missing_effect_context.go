@@ -3,6 +3,7 @@ package rules
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/effect-ts/effect-typescript-go/etscore"
 	"github.com/effect-ts/effect-typescript-go/internal/layergraph"
@@ -81,11 +82,13 @@ func formatContextTypes(c *checker.Checker, types []*checker.Type) string {
 	if len(types) == 1 {
 		return c.TypeToString(types[0])
 	}
-	result := c.TypeToString(types[0])
+	var result strings.Builder
+	result.WriteString(c.TypeToString(types[0]))
 	for i := 1; i < len(types); i++ {
-		result += " | " + c.TypeToString(types[i])
+		result.WriteString(" | ")
+		result.WriteString(c.TypeToString(types[i]))
 	}
-	return result
+	return result.String()
 }
 
 func missingEffectContextRelatedInformation(c *checker.Checker, ctx *rule.Context, errorNode *ast.Node, missingTypes []*checker.Type) []*ast.Diagnostic {

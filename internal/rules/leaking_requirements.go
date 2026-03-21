@@ -188,12 +188,12 @@ func hasExpectedLeakingComment(sourceText string, pos int, leakedServiceName str
 		}
 
 		commentText := sourceText[start:end]
-		for _, line := range strings.Split(commentText, "\n") {
-			markerIndex := strings.Index(line, "@effect-expect-leaking")
-			if markerIndex == -1 {
+		for line := range strings.SplitSeq(commentText, "\n") {
+			_, suffix, found := strings.Cut(line, "@effect-expect-leaking")
+			if !found {
 				continue
 			}
-			if strings.Contains(line[markerIndex+len("@effect-expect-leaking"):], leakedServiceName) {
+			if strings.Contains(suffix, leakedServiceName) {
 				return true
 			}
 		}

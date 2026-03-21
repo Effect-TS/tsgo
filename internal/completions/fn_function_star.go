@@ -34,10 +34,7 @@ func runFnFunctionStar(ctx *completion.Context) []*lsproto.CompletionItem {
 
 	// Replacement span: from after the dot to the cursor position
 	spanStart := result.AccessedObject.End() + 1
-	spanLength := ctx.Position - spanStart
-	if spanLength < 0 {
-		spanLength = 0
-	}
+	spanLength := max(ctx.Position-spanStart, 0)
 
 	replacementRange := byteSpanToRange(ctx, spanStart, spanLength)
 	sortText := "11"

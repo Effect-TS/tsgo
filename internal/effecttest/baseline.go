@@ -43,7 +43,7 @@ func DoEffectErrorBaseline(
 	baselineName string,
 	allFiles []*harnessutil.TestFile,
 	diagnostics []*ast.Diagnostic,
-	pretty bool,
+	_ bool,
 	subfolder string,
 	effectVersion string,
 ) {

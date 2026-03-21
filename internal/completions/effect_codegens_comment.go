@@ -29,10 +29,7 @@ func runEffectCodegensComment(ctx *completion.Context) []*lsproto.CompletionItem
 
 	// loc[4] and loc[5] are the start/end byte offsets of the `@` capture group
 	atStart := loc[4]
-	spanLength := ctx.Position - atStart
-	if spanLength < 0 {
-		spanLength = 0
-	}
+	spanLength := max(ctx.Position-atStart, 0)
 
 	replacementRange := byteSpanToRange(ctx, atStart, spanLength)
 

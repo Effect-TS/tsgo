@@ -8,13 +8,78 @@ run:
 linters:
   default: none
   enable:
+    - copyloopvar
+    - bodyclose
+    - asasalint
+    - bidichk
+    - errcheck
+    - errchkjson
+    - errname
+    - errorlint
+    - fatcontext
+    - forbidigo
+    - gocritic
+    - gocheckcompilerdirectives
+    - goprintffuncname
     - govet
+    - grouper
+    - ineffassign
+    - inamedparam
+    - intrange
+    - makezero
+    - mirror
+    - misspell
+    - modernize
+    - musttag
+    - nakedret
+    - nolintlint
+    - perfsprint
+    - paralleltest
+    - predeclared
+    - reassign
+    - revive
     - staticcheck
+    - testableexamples
+    - tparallel
+    - unconvert
+    - usestdlibvars
+    - usetesting
+    - durationcheck
+
+  settings:
+    forbidigo:
+      analyze-types: true
+      forbid:
+        - pattern: '.*'
+          msg: tspath should likely be used instead
+          pkg: ^(path|path/filepath)$
+        - pattern: '.*'
+          msg: a host implementation should likely be used instead
+          pkg: ^os(/|$)
+        - pattern: GOOS
+          msg: a host implementation should likely be used instead
+          pkg: ^runtime$
+    paralleltest:
+      ignore-missing-subtests: true
+    revive:
+      rules:
+        - name: increment-decrement
+        - name: unused-parameter
 
   exclusions:
     presets:
       - comments
       - std-error-handling
+    rules:
+      - path: '(.+)_test\.go$'
+        linters:
+          - forbidigo
+      - path: internal/effecttest
+        linters:
+          - forbidigo
+      - path: _tools
+        linters:
+          - forbidigo
     paths:
       - typescript-go
       - shim

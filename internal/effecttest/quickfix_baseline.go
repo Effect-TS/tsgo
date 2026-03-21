@@ -3,6 +3,7 @@ package effecttest
 import (
 	"fmt"
 	"sort"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -42,7 +43,7 @@ func diagnosticCodeString(d *lsproto.Diagnostic) string {
 		return "?"
 	}
 	if d.Code.Integer != nil {
-		return fmt.Sprintf("%d", *d.Code.Integer)
+		return strconv.Itoa(int(*d.Code.Integer))
 	}
 	if d.Code.String != nil {
 		return *d.Code.String
@@ -93,11 +94,12 @@ func generateQuickFixBaseline(inventory []QuickFixInventoryEntry, results []Quic
 				result.FixTitle,
 			)
 
-			if result.Skipped {
+			switch {
+			case result.Skipped:
 				sb.WriteString("skipped by default\n")
-			} else if len(result.Changes) == 0 {
+			case len(result.Changes) == 0:
 				sb.WriteString("(no changes)\n")
-			} else {
+			default:
 				// Sort changes by URI for deterministic output
 				sortedChanges := make([]fourslash.FileChange, len(result.Changes))
 				copy(sortedChanges, result.Changes)
@@ -108,20 +110,21 @@ func generateQuickFixBaseline(inventory []QuickFixInventoryEntry, results []Quic
 				for _, change := range sortedChanges {
 					fmt.Fprintf(&sb, "\n--- %s ---\n", string(change.URI))
 
-					if change.Created {
+					switch {
+					case change.Created:
 						sb.WriteString("(file created)\n")
 						sb.WriteString(change.After)
 						if !strings.HasSuffix(change.After, "\n") {
 							sb.WriteString("\n")
 						}
-					} else if change.Deleted {
+					case change.Deleted:
 						sb.WriteString("(file deleted)\n")
 						sb.WriteString("Before:\n")
 						sb.WriteString(change.Before)
 						if !strings.HasSuffix(change.Before, "\n") {
 							sb.WriteString("\n")
 						}
-					} else {
+					default:
 						sb.WriteString(change.After)
 						if !strings.HasSuffix(change.After, "\n") {
 							sb.WriteString("\n")

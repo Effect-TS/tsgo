@@ -7,6 +7,7 @@ import (
 )
 
 func TestCyrb53(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		input    string
 		expected string
@@ -23,6 +24,7 @@ func TestCyrb53(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.input, func(t *testing.T) {
+			t.Parallel()
 			got := Cyrb53(tt.input)
 			if got != tt.expected {
 				t.Errorf("Cyrb53(%q) = %q, want %q", tt.input, got, tt.expected)
@@ -32,6 +34,7 @@ func TestCyrb53(t *testing.T) {
 }
 
 func TestCyrb53Length(t *testing.T) {
+	t.Parallel()
 	inputs := []string{"", "hello", "test/path/file", "@effect/myapp/services/AuthService"}
 	for _, input := range inputs {
 		got := Cyrb53(input)
@@ -42,6 +45,7 @@ func TestCyrb53Length(t *testing.T) {
 }
 
 func TestCreateString(t *testing.T) {
+	t.Parallel()
 	defaultServicePattern := []etscore.KeyPattern{
 		{Target: "service", Pattern: "default", SkipLeadingPath: []string{"src/"}},
 	}
@@ -211,6 +215,7 @@ func TestCreateString(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			got := CreateString(tt.sourceFileName, tt.packageName, tt.packageDirectory, tt.className, tt.target, tt.keyPatterns)
 			if got != tt.expected {
 				t.Errorf("CreateString(%q, %q, %q, %q, %q, ...) = %q, want %q",

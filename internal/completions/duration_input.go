@@ -68,9 +68,7 @@ func buildDurationItems(ctx *completion.Context, node *ast.Node) []*lsproto.Comp
 	// Replacement range covers the string content (between the quotes)
 	start := scanner.GetTokenPosOfNode(node, ctx.SourceFile, false) + 1 // after opening quote
 	end := node.End() - 1                                               // before closing quote
-	if end < start {
-		end = start
-	}
+	end = max(end, start)
 	replacementRange := byteSpanToRange(ctx, start, end-start)
 	sortText := "11"
 

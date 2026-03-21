@@ -11,6 +11,7 @@ import (
 )
 
 func TestEncodeMermaidURL(t *testing.T) {
+	t.Parallel()
 	diagram := "flowchart TB\n  A --> B"
 	baseURL := "https://mermaid.live/edit#"
 
@@ -53,6 +54,7 @@ func TestEncodeMermaidURL(t *testing.T) {
 }
 
 func TestEncodeMermaidURL_CustomBase(t *testing.T) {
+	t.Parallel()
 	diagram := "flowchart LR\n  X --> Y"
 	baseURL := "https://www.mermaidchart.com/play#"
 
@@ -94,6 +96,7 @@ func TestEncodeMermaidURL_CustomBase(t *testing.T) {
 }
 
 func TestEncodeMermaidURL_Deterministic(t *testing.T) {
+	t.Parallel()
 	diagram := "flowchart TB\n  A --> B --> C"
 	baseURL := "https://mermaid.live/edit#"
 

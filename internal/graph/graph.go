@@ -5,6 +5,7 @@ package graph
 import (
 	"fmt"
 	"iter"
+	"maps"
 	"slices"
 	"strings"
 )
@@ -444,12 +445,8 @@ func (g *Graph[N, E]) Clone() *Graph[N, E] {
 		nextNodeIndex:    g.nextNodeIndex,
 		nextEdgeIndex:    g.nextEdgeIndex,
 	}
-	for k, v := range g.nodes {
-		c.nodes[k] = v
-	}
-	for k, v := range g.edges {
-		c.edges[k] = v
-	}
+	maps.Copy(c.nodes, g.nodes)
+	maps.Copy(c.edges, g.edges)
 	for k, v := range g.adjacency {
 		c.adjacency[k] = append([]EdgeIndex(nil), v...)
 	}

@@ -179,7 +179,7 @@ func matchClassPattern(c *checker.Checker, sf *ast.SourceFile, classNode *ast.No
 
 // matchCustomPattern checks heritage clause nodes for call expressions with string literal
 // arguments whose parameter declarations contain the @effect-identifier annotation.
-func matchCustomPattern(c *checker.Checker, sf *ast.SourceFile, classNode *ast.Node) *deterministicKeyMatch {
+func matchCustomPattern(c *checker.Checker, _ *ast.SourceFile, classNode *ast.Node) *deterministicKeyMatch {
 	if classNode.Name() == nil {
 		return nil
 	}

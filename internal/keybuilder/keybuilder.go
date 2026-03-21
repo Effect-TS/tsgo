@@ -2,10 +2,10 @@ package keybuilder
 
 import (
 	"fmt"
-	"path"
 	"strings"
 
 	"github.com/effect-ts/effect-typescript-go/etscore"
+	"github.com/microsoft/typescript-go/shim/tspath"
 )
 
 // Cyrb53 computes a fast non-cryptographic hash of the input string,
@@ -15,7 +15,7 @@ func Cyrb53(str string) string {
 	var h1 uint32 = 0xdeadbeef
 	var h2 uint32 = 0x41c6ce57
 
-	for i := 0; i < len(str); i++ {
+	for i := range len(str) {
 		ch := uint32(str[i])
 		h1 = imul(h1^ch, 2654435761)
 		h2 = imul(h2^ch, 1597334677)
@@ -71,13 +71,13 @@ func CreateString(sourceFileName, packageName, packageDirectory, className, targ
 		onlyFileName = strings.TrimPrefix(onlyFileName, "/")
 
 		// Construct subDirectory: directory relative to package directory
-		subDirectory := path.Dir(sourceFileName)
+		subDirectory := tspath.GetDirectoryPath(sourceFileName)
 		if !strings.HasPrefix(subDirectory, packageDirectory) {
 			continue
 		}
 		subDirectory = subDirectory[len(packageDirectory):]
 		if !strings.HasSuffix(subDirectory, "/") {
-			subDirectory = subDirectory + "/"
+			subDirectory += "/"
 		}
 		subDirectory = strings.TrimPrefix(subDirectory, "/")
 		for _, prefix := range keyPattern.SkipLeadingPath {

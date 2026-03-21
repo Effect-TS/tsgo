@@ -81,20 +81,21 @@ func generateRefactorBaseline(inventory []RefactorInventoryEntry, results []Refa
 				for _, change := range sortedChanges {
 					fmt.Fprintf(&sb, "\n--- %s ---\n", string(change.URI))
 
-					if change.Created {
+					switch {
+					case change.Created:
 						sb.WriteString("(file created)\n")
 						sb.WriteString(change.After)
 						if !strings.HasSuffix(change.After, "\n") {
 							sb.WriteString("\n")
 						}
-					} else if change.Deleted {
+					case change.Deleted:
 						sb.WriteString("(file deleted)\n")
 						sb.WriteString("Before:\n")
 						sb.WriteString(change.Before)
 						if !strings.HasSuffix(change.Before, "\n") {
 							sb.WriteString("\n")
 						}
-					} else {
+					default:
 						sb.WriteString(change.After)
 						if !strings.HasSuffix(change.After, "\n") {
 							sb.WriteString("\n")

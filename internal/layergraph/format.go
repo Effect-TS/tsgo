@@ -159,7 +159,10 @@ func FormatLayerGraph(
 
 	// Edges in index order.
 	for _, edge := range layerGraph.Edges() {
-		jsonBytes, _ := json.Marshal(edge.Data)
+		jsonBytes, err := json.Marshal(edge.Data)
+		if err != nil {
+			continue
+		}
 		edgeLabel := mermaidEntityEncode(string(jsonBytes))
 		edgeLabel = mermaidEscapeOutputLabel(edgeLabel)
 		lines = append(lines, fmt.Sprintf("  %d -->|\"%s\"| %d", edge.Source, edgeLabel, edge.Target))
@@ -279,7 +282,7 @@ func FormatNestedLayerGraph(
 
 // FormatOutlineGraph renders the outline graph as a Mermaid flowchart TD.
 func FormatOutlineGraph(
-	c *checker.Checker,
+	_ *checker.Checker,
 	outlineGraph *graph.Graph[LayerOutlineGraphNodeInfo, struct{}],
 	sf *ast.SourceFile,
 ) string {

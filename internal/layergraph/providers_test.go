@@ -23,7 +23,9 @@ func tagPredicate(node LayerGraphNodeInfo) bool {
 }
 
 func TestWalkLeavesMatching(t *testing.T) {
+	t.Parallel()
 	t.Run("single node that matches", func(t *testing.T) {
+		t.Parallel()
 		g := graph.New[LayerGraphNodeInfo, LayerGraphEdgeInfo]()
 		n0 := g.AddNode(makeNodeInfo(true))
 
@@ -34,6 +36,7 @@ func TestWalkLeavesMatching(t *testing.T) {
 	})
 
 	t.Run("single node that does not match", func(t *testing.T) {
+		t.Parallel()
 		g := graph.New[LayerGraphNodeInfo, LayerGraphEdgeInfo]()
 		n0 := g.AddNode(makeNodeInfo(false))
 
@@ -44,6 +47,7 @@ func TestWalkLeavesMatching(t *testing.T) {
 	})
 
 	t.Run("linear chain, all match, emits deepest", func(t *testing.T) {
+		t.Parallel()
 		// root(match) -> middle(match) -> leaf(match)
 		// Should emit only the leaf (deepest match).
 		g := graph.New[LayerGraphNodeInfo, LayerGraphEdgeInfo]()
@@ -60,6 +64,7 @@ func TestWalkLeavesMatching(t *testing.T) {
 	})
 
 	t.Run("linear chain, only root matches", func(t *testing.T) {
+		t.Parallel()
 		// root(match) -> middle(no) -> leaf(no)
 		// root's outgoing neighbor (middle) doesn't match, so root is emitted.
 		g := graph.New[LayerGraphNodeInfo, LayerGraphEdgeInfo]()
@@ -76,6 +81,7 @@ func TestWalkLeavesMatching(t *testing.T) {
 	})
 
 	t.Run("branching graph, multiple leaves match", func(t *testing.T) {
+		t.Parallel()
 		// root(match) -> left(match), root -> right(match)
 		// left and right are both leaf matches (no outgoing matching neighbors).
 		g := graph.New[LayerGraphNodeInfo, LayerGraphEdgeInfo]()
@@ -92,6 +98,7 @@ func TestWalkLeavesMatching(t *testing.T) {
 	})
 
 	t.Run("no nodes match predicate", func(t *testing.T) {
+		t.Parallel()
 		g := graph.New[LayerGraphNodeInfo, LayerGraphEdgeInfo]()
 		n0 := g.AddNode(makeNodeInfo(false))
 		n1 := g.AddNode(makeNodeInfo(false))
@@ -104,6 +111,7 @@ func TestWalkLeavesMatching(t *testing.T) {
 	})
 
 	t.Run("diamond graph, all match, emits only sink", func(t *testing.T) {
+		t.Parallel()
 		// A(match) -> B(match), A -> C(match), B -> D(match), C -> D(match)
 		// D is the deepest leaf match. Should only emit D.
 		g := graph.New[LayerGraphNodeInfo, LayerGraphEdgeInfo]()

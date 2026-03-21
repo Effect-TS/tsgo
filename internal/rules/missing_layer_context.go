@@ -3,6 +3,7 @@ package rules
 
 import (
 	"sort"
+	"strings"
 
 	"github.com/effect-ts/effect-typescript-go/etscore"
 	"github.com/effect-ts/effect-typescript-go/internal/rule"
@@ -21,7 +22,7 @@ var MissingLayerContext = rule.Rule{
 	Description:     "Detects Layer values with unhandled context requirements",
 	DefaultSeverity: etscore.SeverityError,
 	SupportedEffect: []string{"v3", "v4"},
-	Codes:       []int32{tsdiag.Missing_0_in_the_expected_Layer_context_effect_missingLayerContext.Code()},
+	Codes:           []int32{tsdiag.Missing_0_in_the_expected_Layer_context_effect_missingLayerContext.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		var diags []*ast.Diagnostic
 
@@ -76,9 +77,11 @@ func formatLayerContextTypes(c *checker.Checker, types []*checker.Type) string {
 	if len(types) == 1 {
 		return c.TypeToString(types[0])
 	}
-	result := c.TypeToString(types[0])
+	var result strings.Builder
+	result.WriteString(c.TypeToString(types[0]))
 	for i := 1; i < len(types); i++ {
-		result += " | " + c.TypeToString(types[i])
+		result.WriteString(" | ")
+		result.WriteString(c.TypeToString(types[i]))
 	}
-	return result
+	return result.String()
 }
