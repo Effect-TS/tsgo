@@ -153,6 +153,16 @@ Each release of `effect-tsgo` is built against a specific upstream `tsgo` commit
 
 ## Plugin Options
 
+When you want schema validation for the plugin config, point `tsconfig.json` at the schema shipped in your local install:
+
+```jsonc
+{
+  "$schema": "./node_modules/@effect/tsgo/schema.json"
+}
+```
+
+The GitHub-hosted `schema.json` is still available, but the local file stays aligned with the installed CLI version.
+
 These options are configured in `tsconfig.json` under `compilerOptions.plugins` for the `@effect/language-service` plugin entry.
 
 | Option | Type | Default | Description |

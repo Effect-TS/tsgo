@@ -18,7 +18,7 @@
     }
   },
   "scripts": {
-    "build": "tsdown --config tsdown.config.mjs",
+    "build": "tsdown --config tsdown.config.mjs && node ./scripts/postbuild.mjs",
     "check": "tsc --noEmit -p tsconfig.json",
     "test": "vitest run"
   },
@@ -26,7 +26,8 @@
     "effect-tsgo": "./src/cli.ts"
   },
   "files": [
-    "bin/"
+    "bin/",
+    "schema.json"
   ],
   "optionalDependencies": {
     "@effect/tsgo-win32-x64": "workspace:*",
