@@ -1,5 +1,13 @@
 # @effect/tsgo-linux-arm
 
+## 0.0.17
+
+### Patch Changes
+
+- cc49924: Add explicit ServiceMap coverage for the class self mismatch diagnostic.
+- 47cb4bf: Ship package-specific README files with every published `@effect/tsgo` package.
+- c7c86e1: Add back includeSuggestionsInTsc setting
+
 ## 0.0.16
 
 ### Patch Changes

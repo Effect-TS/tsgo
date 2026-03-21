@@ -1,5 +1,14 @@
 # @effect/tsgo
 
+## 0.0.17
+
+### Patch Changes
+
+- cc49924: Add explicit ServiceMap coverage for the class self mismatch diagnostic.
+- b1c4cac: Update the pinned `typescript-go` submodule to `a4325da30f285ff85b7b55afe1c65d74f54794af` and regenerate shims for the new upstream API surface.
+- 47cb4bf: Ship package-specific README files with every published `@effect/tsgo` package.
+- c7c86e1: Add back includeSuggestionsInTsc setting
+
 ## 0.0.16
 
 ### Patch Changes
