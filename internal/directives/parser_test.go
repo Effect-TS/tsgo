@@ -8,6 +8,7 @@ import (
 )
 
 func TestEtscoreParseSeverity(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		input    string
 		expected etscore.Severity
@@ -33,6 +34,7 @@ func TestEtscoreParseSeverity(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.input, func(t *testing.T) {
+			t.Parallel()
 			result := etscore.ParseSeverity(tt.input)
 			if result != tt.expected {
 				t.Errorf("etscore.ParseSeverity(%q) = %v, want %v", tt.input, result, tt.expected)
@@ -42,6 +44,7 @@ func TestEtscoreParseSeverity(t *testing.T) {
 }
 
 func TestEtscoreSeverityString(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		severity etscore.Severity
 		expected string
@@ -57,6 +60,7 @@ func TestEtscoreSeverityString(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.expected, func(t *testing.T) {
+			t.Parallel()
 			result := tt.severity.String()
 			if result != tt.expected {
 				t.Errorf("etscore.Severity(%d).String() = %q, want %q", tt.severity, result, tt.expected)
@@ -66,6 +70,7 @@ func TestEtscoreSeverityString(t *testing.T) {
 }
 
 func TestSeverityToCategory(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		name     string
 		severity etscore.Severity
@@ -105,6 +110,7 @@ func TestSeverityToCategory(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			result := ToCategory(tt.severity)
 			if result != tt.expected {
 				t.Errorf("ToCategory(%v) = %v, want %v", tt.severity, result, tt.expected)
@@ -114,6 +120,7 @@ func TestSeverityToCategory(t *testing.T) {
 }
 
 func TestCollectEffectDirectives(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		name     string
 		source   string
@@ -224,6 +231,7 @@ func TestCollectEffectDirectives(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			result := CollectEffectDirectives(tt.source)
 			if len(result) != len(tt.expected) {
 				t.Errorf("CollectEffectDirectives() returned %d directives, want %d", len(result), len(tt.expected))
@@ -254,25 +262,27 @@ func TestCollectEffectDirectives(t *testing.T) {
 }
 
 func TestDirectiveAffectedLine(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
-		name       string
-		directive  Directive
-		wantLine   int
+		name      string
+		directive Directive
+		wantLine  int
 	}{
 		{
-			name:       "same line directive",
-			directive:  Directive{Line: 5, IsNextLine: false},
-			wantLine:   5,
+			name:      "same line directive",
+			directive: Directive{Line: 5, IsNextLine: false},
+			wantLine:  5,
 		},
 		{
-			name:       "next line directive",
-			directive:  Directive{Line: 5, IsNextLine: true},
-			wantLine:   6,
+			name:      "next line directive",
+			directive: Directive{Line: 5, IsNextLine: true},
+			wantLine:  6,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			result := tt.directive.AffectedLine()
 			if result != tt.wantLine {
 				t.Errorf("Directive.AffectedLine() = %d, want %d", result, tt.wantLine)
@@ -282,6 +292,7 @@ func TestDirectiveAffectedLine(t *testing.T) {
 }
 
 func TestDirectiveSetGetEffectiveSeverity(t *testing.T) {
+	t.Parallel()
 	source := `// @effect-diagnostics *:skip-file
 // Normal code
 // @effect-diagnostics-next-line floatingEffect:off
@@ -324,6 +335,7 @@ anotherCall()`
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			result := ds.GetEffectiveSeverity(tt.ruleName, tt.line, tt.defaultSeverity)
 			if result != tt.expected {
 				t.Errorf("GetEffectiveSeverity(%q, %d, %v) = %v, want %v",
@@ -334,6 +346,7 @@ anotherCall()`
 }
 
 func TestDirectiveSetIsSuppressed(t *testing.T) {
+	t.Parallel()
 	source := `// Line 0
 // @effect-diagnostics-next-line floatingEffect:off
 Effect.log("hello")  // Line 2
@@ -370,6 +383,7 @@ Effect.log("hello")  // Line 2
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			result := ds.IsSuppressed(tt.ruleName, tt.line)
 			if result != tt.expected {
 				t.Errorf("IsSuppressed(%q, %d) = %v, want %v",
@@ -380,6 +394,7 @@ Effect.log("hello")  // Line 2
 }
 
 func TestCaseInsensitiveRuleMatching(t *testing.T) {
+	t.Parallel()
 	source := `// @effect-diagnostics-next-line FloatingEffect:off
 Effect.succeed(1)  // Line 1
 // @effect-diagnostics-next-line POCRULE:warning
@@ -428,6 +443,7 @@ Effect.succeed(2)  // Line 3`
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			result := ds.GetEffectiveSeverity(tt.ruleName, tt.line, etscore.SeverityError)
 			if result != tt.expected {
 				t.Errorf("GetEffectiveSeverity(%q, %d, etscore.SeverityError) = %v, want %v",
@@ -438,6 +454,7 @@ Effect.succeed(2)  // Line 3`
 }
 
 func TestSectionDirectives(t *testing.T) {
+	t.Parallel()
 	source := `// Line 0 - normal code
 Effect.succeed(1)  // Line 1 - no suppression
 // @effect-diagnostics floatingEffect:off
@@ -490,6 +507,7 @@ Effect.succeed(6)  // Line 8 - still warning through EOF`
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			result := ds.GetEffectiveSeverity("floatingEffect", tt.line, etscore.SeverityError)
 			if result != tt.expected {
 				t.Errorf("GetEffectiveSeverity(\"floatingEffect\", %d, etscore.SeverityError) = %v, want %v",
@@ -500,6 +518,7 @@ Effect.succeed(6)  // Line 8 - still warning through EOF`
 }
 
 func TestSectionDirectiveAppliesByRuleUntilOverridden(t *testing.T) {
+	t.Parallel()
 	source := `// @effect-diagnostics floatingEffect:off
 Effect.succeed(1)  // Line 1 - floatingEffect off
 // @effect-diagnostics otherRule:warning
@@ -558,6 +577,7 @@ Effect.succeed(5)  // Line 7 - wildcard override error`
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			result := ds.GetEffectiveSeverity(tt.ruleName, tt.line, etscore.SeverityError)
 			if result != tt.expected {
 				t.Errorf("GetEffectiveSeverity(%q, %d, etscore.SeverityError) = %v, want %v",
@@ -568,6 +588,7 @@ Effect.succeed(5)  // Line 7 - wildcard override error`
 }
 
 func TestNextLineDirectiveTakesPrecedenceOverSection(t *testing.T) {
+	t.Parallel()
 	source := `// @effect-diagnostics floatingEffect:off
 Effect.succeed(1)  // Line 1 - suppressed by section
 // @effect-diagnostics-next-line floatingEffect:error
@@ -601,6 +622,7 @@ Effect.succeed(3)  // Line 4 - back to off from section`
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			result := ds.GetEffectiveSeverity("floatingEffect", tt.line, etscore.SeverityError)
 			if result != tt.expected {
 				t.Errorf("GetEffectiveSeverity(\"floatingEffect\", %d, etscore.SeverityError) = %v, want %v",
@@ -611,6 +633,7 @@ Effect.succeed(3)  // Line 4 - back to off from section`
 }
 
 func TestUsedDirectivesTracking(t *testing.T) {
+	t.Parallel()
 	source := `// @effect-diagnostics-next-line floatingEffect:off
 Effect.succeed(1)  // Line 1 - will be checked
 // @effect-diagnostics-next-line pocRule:off
@@ -642,6 +665,7 @@ Effect.succeed(2)  // Line 3 - different rule, won't suppress floatingEffect`
 }
 
 func TestWildcardSectionPrecedence(t *testing.T) {
+	t.Parallel()
 	// Mirrors the reference test: floatingEffect_disabledWildcard.ts
 	// No directive → *:off suppresses → floatingEffect:error re-enables → *:off suppresses again
 	source := `Effect.succeed(1)  // Line 0 - no directive, should fire
@@ -684,6 +708,7 @@ Effect.succeed(1)  // Line 6 - suppressed again by wildcard`
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			result := ds.GetEffectiveSeverity("floatingEffect", tt.line, etscore.SeverityError)
 			if result != tt.expected {
 				t.Errorf("GetEffectiveSeverity(\"floatingEffect\", %d, etscore.SeverityError) = %v, want %v",
@@ -694,6 +719,7 @@ Effect.succeed(1)  // Line 6 - suppressed again by wildcard`
 }
 
 func TestWildcardNextLineSuppression(t *testing.T) {
+	t.Parallel()
 	source := `// @effect-diagnostics-next-line *:off
 Effect.succeed(1)  // Line 1 - suppressed by wildcard next-line
 Effect.succeed(2)  // Line 2 - not suppressed`
@@ -729,6 +755,7 @@ Effect.succeed(2)  // Line 2 - not suppressed`
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			result := ds.GetEffectiveSeverity(tt.ruleName, tt.line, etscore.SeverityError)
 			if result != tt.expected {
 				t.Errorf("GetEffectiveSeverity(%q, %d, etscore.SeverityError) = %v, want %v",
@@ -739,6 +766,7 @@ Effect.succeed(2)  // Line 2 - not suppressed`
 }
 
 func TestWildcardSkipFile(t *testing.T) {
+	t.Parallel()
 	source := `// @effect-diagnostics *:skip-file
 Effect.succeed(1)  // Line 1 - skipped`
 
@@ -756,6 +784,7 @@ Effect.succeed(1)  // Line 1 - skipped`
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			result := ds.GetEffectiveSeverity(tt.ruleName, 1, etscore.SeverityError)
 			if result != etscore.SeveritySkipFile {
 				t.Errorf("GetEffectiveSeverity(%q, 1, etscore.SeverityError) = %v, want etscore.SeveritySkipFile",
@@ -766,6 +795,7 @@ Effect.succeed(1)  // Line 1 - skipped`
 }
 
 func TestWildcardUnusedDirectiveTracking(t *testing.T) {
+	t.Parallel()
 	source := `// @effect-diagnostics-next-line *:off
 Effect.succeed(1)  // Line 1 - wildcard next-line
 // @effect-diagnostics-next-line floatingEffect:off
@@ -792,6 +822,7 @@ Effect.succeed(2)  // Line 3 - specific rule next-line`
 }
 
 func TestHasEnablingDirectiveWithWildcard(t *testing.T) {
+	t.Parallel()
 	source := `// @effect-diagnostics *:error
 Effect.succeed(1)`
 
@@ -817,6 +848,7 @@ Effect.succeed(1)`
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			result := ds.HasEnablingDirective(tt.ruleName)
 			if result != tt.expected {
 				t.Errorf("HasEnablingDirective(%q) = %v, want %v", tt.ruleName, result, tt.expected)
@@ -826,6 +858,7 @@ Effect.succeed(1)`
 }
 
 func TestHasEnablingDirectiveWithWildcardOff(t *testing.T) {
+	t.Parallel()
 	source := `// @effect-diagnostics *:off
 Effect.succeed(1)`
 
@@ -838,4 +871,3 @@ Effect.succeed(1)`
 		t.Errorf("HasEnablingDirective(\"floatingEffect\") = %v, want false (wildcard off should not enable)", result)
 	}
 }
-

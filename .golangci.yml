@@ -29,15 +29,21 @@ linters:
     - nakedret
     - nolintlint
     - perfsprint
+    - paralleltest
     - predeclared
     - reassign
     - revive
     - staticcheck
+    - testableexamples
+    - tparallel
     - unconvert
     - usestdlibvars
+    - usetesting
     - durationcheck
 
   settings:
+    paralleltest:
+      ignore-missing-subtests: true
     revive:
       rules:
         - name: increment-decrement

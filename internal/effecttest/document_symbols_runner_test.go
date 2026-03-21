@@ -11,6 +11,7 @@ import (
 )
 
 func TestEffectDocumentSymbols(t *testing.T) {
+	t.Parallel()
 	if err := effecttest.EnsureEffectInstalled(effecttest.EffectV4); err != nil {
 		t.Skip("Effect not installed:", err)
 	}
@@ -36,6 +37,7 @@ func TestEffectDocumentSymbols(t *testing.T) {
 }
 
 func TestEffectV3DocumentSymbols(t *testing.T) {
+	t.Parallel()
 	if err := effecttest.EnsureEffectInstalled(effecttest.EffectV3); err != nil {
 		t.Skip("Effect V3 not installed:", err)
 	}

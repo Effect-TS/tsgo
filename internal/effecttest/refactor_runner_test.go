@@ -14,6 +14,7 @@ import (
 )
 
 func TestEffectRefactors(t *testing.T) {
+	t.Parallel()
 	if err := effecttest.EnsureEffectInstalled(effecttest.EffectV4); err != nil {
 		t.Skip("Effect not installed:", err)
 	}
@@ -39,6 +40,7 @@ func TestEffectRefactors(t *testing.T) {
 }
 
 func TestEffectV3Refactors(t *testing.T) {
+	t.Parallel()
 	if err := effecttest.EnsureEffectInstalled(effecttest.EffectV3); err != nil {
 		t.Skip("Effect V3 not installed:", err)
 	}

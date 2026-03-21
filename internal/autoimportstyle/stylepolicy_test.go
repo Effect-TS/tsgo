@@ -8,6 +8,7 @@ import (
 )
 
 func TestNewStylePolicy(t *testing.T) {
+	t.Parallel()
 	sp := newStylePolicy(StylePreferences{
 		NamespaceImportPackages: []string{"effect", "Effect"},
 		BarrelImportPackages:    []string{"@effect/platform"},
@@ -29,6 +30,7 @@ func TestNewStylePolicy(t *testing.T) {
 }
 
 func TestStylePolicyIsEmpty(t *testing.T) {
+	t.Parallel()
 	var nilPolicy *stylePolicy
 	if !nilPolicy.isEmpty() {
 		t.Error("nil policy should be empty")
@@ -74,6 +76,7 @@ func makeAddNewFix(importKind lsproto.ImportKind, moduleSpecifier string, name s
 }
 
 func TestApplyNamespaceRewrite(t *testing.T) {
+	t.Parallel()
 	sp := newStylePolicy(StylePreferences{
 		NamespaceImportPackages: []string{"effect"},
 	})
@@ -101,6 +104,7 @@ func TestApplyNamespaceRewrite(t *testing.T) {
 }
 
 func TestApplyNamespaceRewriteWithAlias(t *testing.T) {
+	t.Parallel()
 	sp := newStylePolicy(StylePreferences{
 		NamespaceImportPackages: []string{"effect"},
 		ImportAliases:           map[string]string{"effect": "Fx"},
@@ -126,6 +130,7 @@ func TestApplyNamespaceRewriteWithAlias(t *testing.T) {
 }
 
 func TestApplyBarrelRewrite(t *testing.T) {
+	t.Parallel()
 	sp := newStylePolicy(StylePreferences{
 		BarrelImportPackages: []string{"@effect/platform"},
 	})
@@ -153,6 +158,7 @@ func TestApplyBarrelRewrite(t *testing.T) {
 }
 
 func TestApplyBarrelRewriteWithAlias(t *testing.T) {
+	t.Parallel()
 	sp := newStylePolicy(StylePreferences{
 		BarrelImportPackages: []string{"@effect/platform"},
 		ImportAliases:        map[string]string{"@effect/platform": "Platform"},
@@ -175,6 +181,7 @@ func TestApplyBarrelRewriteWithAlias(t *testing.T) {
 }
 
 func TestApplyNamespaceRewriteWithoutUsagePositionFallsBack(t *testing.T) {
+	t.Parallel()
 	sp := newStylePolicy(StylePreferences{
 		NamespaceImportPackages: []string{"effect"},
 	})
@@ -190,6 +197,7 @@ func TestApplyNamespaceRewriteWithoutUsagePositionFallsBack(t *testing.T) {
 }
 
 func TestApplyBarrelRewriteWithoutUsagePositionFallsBack(t *testing.T) {
+	t.Parallel()
 	sp := newStylePolicy(StylePreferences{
 		BarrelImportPackages: []string{"@effect/platform"},
 	})
@@ -205,6 +213,7 @@ func TestApplyBarrelRewriteWithoutUsagePositionFallsBack(t *testing.T) {
 }
 
 func TestApplyTopLevelReexportIgnore(t *testing.T) {
+	t.Parallel()
 	sp := newStylePolicy(StylePreferences{
 		NamespaceImportPackages: []string{"effect"},
 		FollowTopLevelReexports: false, // "ignore"
@@ -229,6 +238,7 @@ func TestApplyTopLevelReexportIgnore(t *testing.T) {
 }
 
 func TestApplyTopLevelReexportFollow(t *testing.T) {
+	t.Parallel()
 	sp := newStylePolicy(StylePreferences{
 		NamespaceImportPackages: []string{"effect"},
 		FollowTopLevelReexports: true, // "follow"
@@ -247,6 +257,7 @@ func TestApplyTopLevelReexportFollow(t *testing.T) {
 }
 
 func TestApplyNoMatchPassthrough(t *testing.T) {
+	t.Parallel()
 	sp := newStylePolicy(StylePreferences{
 		NamespaceImportPackages: []string{"effect"},
 	})
@@ -261,6 +272,7 @@ func TestApplyNoMatchPassthrough(t *testing.T) {
 }
 
 func TestApplyNonAddNewPassthrough(t *testing.T) {
+	t.Parallel()
 	sp := newStylePolicy(StylePreferences{
 		NamespaceImportPackages: []string{"effect"},
 	})
@@ -282,6 +294,7 @@ func TestApplyNonAddNewPassthrough(t *testing.T) {
 }
 
 func TestApplyCaseInsensitiveMatching(t *testing.T) {
+	t.Parallel()
 	sp := newStylePolicy(StylePreferences{
 		NamespaceImportPackages: []string{"Effect"},
 	})
@@ -299,6 +312,7 @@ func TestApplyCaseInsensitiveMatching(t *testing.T) {
 }
 
 func TestApplyNilInputs(t *testing.T) {
+	t.Parallel()
 	sp := newStylePolicy(StylePreferences{
 		NamespaceImportPackages: []string{"effect"},
 	})
@@ -314,6 +328,7 @@ func TestApplyNilInputs(t *testing.T) {
 }
 
 func TestPackageNameFromSpecifier(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		input    string
 		expected string
@@ -338,6 +353,7 @@ func TestPackageNameFromSpecifier(t *testing.T) {
 }
 
 func TestInferNamespaceName(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		input    string
 		expected string
@@ -359,6 +375,7 @@ func TestInferNamespaceName(t *testing.T) {
 }
 
 func TestNewFixTransformerNilForEmptyPrefs(t *testing.T) {
+	t.Parallel()
 	transformer := NewFixTransformer(StylePreferences{})
 	if transformer != nil {
 		t.Error("expected nil transformer for empty preferences")
@@ -366,6 +383,7 @@ func TestNewFixTransformerNilForEmptyPrefs(t *testing.T) {
 }
 
 func TestNewFixTransformerAppliesPolicy(t *testing.T) {
+	t.Parallel()
 	transformer := NewFixTransformer(StylePreferences{
 		NamespaceImportPackages: []string{"effect"},
 	})

@@ -8,6 +8,7 @@ import (
 )
 
 func TestRuleStruct(t *testing.T) {
+	t.Parallel()
 	// Test that a Rule can be created with all fields
 	dummyRun := func(_ *Context) []*ast.Diagnostic {
 		return nil
@@ -31,6 +32,7 @@ func TestRuleStruct(t *testing.T) {
 }
 
 func TestByName(t *testing.T) {
+	t.Parallel()
 	dummyRun := func(_ *Context) []*ast.Diagnostic {
 		return nil
 	}
@@ -41,6 +43,7 @@ func TestByName(t *testing.T) {
 	}
 
 	t.Run("finds existing rule", func(t *testing.T) {
+		t.Parallel()
 		found := ByName(rules, "rule1")
 		if found == nil {
 			t.Fatal("expected to find rule1")
@@ -50,6 +53,7 @@ func TestByName(t *testing.T) {
 	})
 
 	t.Run("returns nil for non-existent rule", func(t *testing.T) {
+		t.Parallel()
 		found := ByName(rules, "nonexistent")
 		if found != nil {
 			t.Errorf("expected nil for non-existent rule, got %+v", found)
@@ -57,6 +61,7 @@ func TestByName(t *testing.T) {
 	})
 
 	t.Run("returns nil for empty slice", func(t *testing.T) {
+		t.Parallel()
 		found := ByName([]Rule{}, "rule1")
 		if found != nil {
 			t.Errorf("expected nil for empty slice, got %+v", found)
@@ -64,6 +69,7 @@ func TestByName(t *testing.T) {
 	})
 
 	t.Run("returns pointer to actual rule in slice", func(t *testing.T) {
+		t.Parallel()
 		found := ByName(rules, "rule1")
 		if found != &rules[0] {
 			t.Error("expected ByName to return pointer to actual rule in slice")
@@ -71,6 +77,7 @@ func TestByName(t *testing.T) {
 	})
 
 	t.Run("finds second rule correctly", func(t *testing.T) {
+		t.Parallel()
 		found := ByName(rules, "rule2")
 		if found == nil {
 			t.Fatal("expected to find rule2")

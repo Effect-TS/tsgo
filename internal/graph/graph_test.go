@@ -51,7 +51,9 @@ func collectIndices[V any](seq iter.Seq2[int, V]) []int {
 }
 
 func TestNodeOperations(t *testing.T) {
+	t.Parallel()
 	t.Run("Add", func(t *testing.T) {
+		t.Parallel()
 		g := New[string, string]()
 		a := g.AddNode("A")
 		b := g.AddNode("B")
@@ -67,6 +69,7 @@ func TestNodeOperations(t *testing.T) {
 	})
 
 	t.Run("GetExisting", func(t *testing.T) {
+		t.Parallel()
 		g := New[string, string]()
 		a := g.AddNode("hello")
 		data, ok := g.GetNode(a)
@@ -79,6 +82,7 @@ func TestNodeOperations(t *testing.T) {
 	})
 
 	t.Run("GetNonExisting", func(t *testing.T) {
+		t.Parallel()
 		g := New[string, string]()
 		data, ok := g.GetNode(999)
 		if ok {
@@ -90,6 +94,7 @@ func TestNodeOperations(t *testing.T) {
 	})
 
 	t.Run("Has", func(t *testing.T) {
+		t.Parallel()
 		g := New[string, string]()
 		a := g.AddNode("A")
 		if !g.HasNode(a) {
@@ -101,6 +106,7 @@ func TestNodeOperations(t *testing.T) {
 	})
 
 	t.Run("Update", func(t *testing.T) {
+		t.Parallel()
 		g := New[string, string]()
 		a := g.AddNode("old")
 		g.UpdateNode(a, func(_ string) string { return "new" })
@@ -110,13 +116,15 @@ func TestNodeOperations(t *testing.T) {
 		}
 	})
 
-	t.Run("UpdateNonExisting", func(*testing.T) {
+	t.Run("UpdateNonExisting", func(t *testing.T) {
+		t.Parallel()
 		g := New[string, string]()
 		// Should not panic
 		g.UpdateNode(999, func(_ string) string { return "x" })
 	})
 
 	t.Run("Remove", func(t *testing.T) {
+		t.Parallel()
 		g := New[string, string]()
 		a := g.AddNode("A")
 		b := g.AddNode("B")
@@ -131,6 +139,7 @@ func TestNodeOperations(t *testing.T) {
 	})
 
 	t.Run("RemoveSelfLoop", func(t *testing.T) {
+		t.Parallel()
 		g := New[string, string]()
 		a := g.AddNode("A")
 		g.AddEdge(a, a, "self")
@@ -144,6 +153,7 @@ func TestNodeOperations(t *testing.T) {
 	})
 
 	t.Run("Count", func(t *testing.T) {
+		t.Parallel()
 		g := New[string, string]()
 		if g.NodeCount() != 0 {
 			t.Errorf("expected 0, got %d", g.NodeCount())
@@ -161,7 +171,9 @@ func TestNodeOperations(t *testing.T) {
 }
 
 func TestEdgeOperations(t *testing.T) {
+	t.Parallel()
 	t.Run("Add", func(t *testing.T) {
+		t.Parallel()
 		g := New[string, string]()
 		a := g.AddNode("A")
 		b := g.AddNode("B")
@@ -179,6 +191,7 @@ func TestEdgeOperations(t *testing.T) {
 	})
 
 	t.Run("PanicsOnInvalidSource", func(t *testing.T) {
+		t.Parallel()
 		defer func() {
 			if r := recover(); r == nil {
 				t.Errorf("expected panic for invalid source node")
@@ -190,6 +203,7 @@ func TestEdgeOperations(t *testing.T) {
 	})
 
 	t.Run("PanicsOnInvalidTarget", func(t *testing.T) {
+		t.Parallel()
 		defer func() {
 			if r := recover(); r == nil {
 				t.Errorf("expected panic for invalid target node")
@@ -201,6 +215,7 @@ func TestEdgeOperations(t *testing.T) {
 	})
 
 	t.Run("GetExisting", func(t *testing.T) {
+		t.Parallel()
 		g := New[string, string]()
 		a := g.AddNode("A")
 		b := g.AddNode("B")
@@ -215,6 +230,7 @@ func TestEdgeOperations(t *testing.T) {
 	})
 
 	t.Run("GetNonExisting", func(t *testing.T) {
+		t.Parallel()
 		g := New[string, string]()
 		_, ok := g.GetEdge(999)
 		if ok {
@@ -223,6 +239,7 @@ func TestEdgeOperations(t *testing.T) {
 	})
 
 	t.Run("Has", func(t *testing.T) {
+		t.Parallel()
 		g := New[string, string]()
 		a := g.AddNode("A")
 		b := g.AddNode("B")
@@ -236,6 +253,7 @@ func TestEdgeOperations(t *testing.T) {
 	})
 
 	t.Run("Update", func(t *testing.T) {
+		t.Parallel()
 		g := New[string, string]()
 		a := g.AddNode("A")
 		b := g.AddNode("B")
@@ -247,13 +265,15 @@ func TestEdgeOperations(t *testing.T) {
 		}
 	})
 
-	t.Run("UpdateNonExisting", func(*testing.T) {
+	t.Run("UpdateNonExisting", func(t *testing.T) {
+		t.Parallel()
 		g := New[string, string]()
 		// Should not panic
 		g.UpdateEdge(999, func(_ string) string { return "x" })
 	})
 
 	t.Run("Remove", func(t *testing.T) {
+		t.Parallel()
 		g := New[string, string]()
 		a := g.AddNode("A")
 		b := g.AddNode("B")
@@ -268,6 +288,7 @@ func TestEdgeOperations(t *testing.T) {
 	})
 
 	t.Run("Count", func(t *testing.T) {
+		t.Parallel()
 		g := New[string, string]()
 		a := g.AddNode("A")
 		b := g.AddNode("B")
@@ -285,6 +306,7 @@ func TestEdgeOperations(t *testing.T) {
 	})
 
 	t.Run("MultipleSamePair", func(t *testing.T) {
+		t.Parallel()
 		g := New[string, string]()
 		a := g.AddNode("A")
 		b := g.AddNode("B")
@@ -297,7 +319,9 @@ func TestEdgeOperations(t *testing.T) {
 }
 
 func TestIteration(t *testing.T) {
+	t.Parallel()
 	t.Run("Nodes", func(t *testing.T) {
+		t.Parallel()
 		g, _ := buildDiamondGraph()
 		values := collectValues(g.Nodes())
 		expected := []string{"A", "B", "C", "D"}
@@ -307,6 +331,7 @@ func TestIteration(t *testing.T) {
 	})
 
 	t.Run("Edges", func(t *testing.T) {
+		t.Parallel()
 		g, n := buildDiamondGraph()
 		edges := collectValues(g.Edges())
 		if len(edges) != 4 {
@@ -322,6 +347,7 @@ func TestIteration(t *testing.T) {
 	})
 
 	t.Run("Deterministic", func(t *testing.T) {
+		t.Parallel()
 		g, _ := buildDiamondGraph()
 		first := collectValues(g.Nodes())
 		second := collectValues(g.Nodes())
@@ -332,7 +358,9 @@ func TestIteration(t *testing.T) {
 }
 
 func TestQuerying(t *testing.T) {
+	t.Parallel()
 	t.Run("FindNodeMatching", func(t *testing.T) {
+		t.Parallel()
 		g, n := buildDiamondGraph()
 		idx, ok := g.FindNode(func(s string) bool { return s == "C" })
 		if !ok {
@@ -344,6 +372,7 @@ func TestQuerying(t *testing.T) {
 	})
 
 	t.Run("FindNodeNone", func(t *testing.T) {
+		t.Parallel()
 		g, _ := buildDiamondGraph()
 		_, ok := g.FindNode(func(s string) bool { return s == "Z" })
 		if ok {
@@ -352,6 +381,7 @@ func TestQuerying(t *testing.T) {
 	})
 
 	t.Run("FindNodesMultiple", func(t *testing.T) {
+		t.Parallel()
 		g, n := buildDiamondGraph()
 		indices := g.FindNodes(func(s string) bool { return s == "B" || s == "C" })
 		expected := []NodeIndex{n[1], n[2]}
@@ -361,6 +391,7 @@ func TestQuerying(t *testing.T) {
 	})
 
 	t.Run("FindNodesNone", func(t *testing.T) {
+		t.Parallel()
 		g, _ := buildDiamondGraph()
 		indices := g.FindNodes(func(s string) bool { return s == "Z" })
 		if len(indices) != 0 {
@@ -369,6 +400,7 @@ func TestQuerying(t *testing.T) {
 	})
 
 	t.Run("FindEdgeMatching", func(t *testing.T) {
+		t.Parallel()
 		g, _ := buildDiamondGraph()
 		idx, ok := g.FindEdge(func(data string, _, _ NodeIndex) bool { return data == "bd" })
 		if !ok {
@@ -381,6 +413,7 @@ func TestQuerying(t *testing.T) {
 	})
 
 	t.Run("FindEdgeNone", func(t *testing.T) {
+		t.Parallel()
 		g, _ := buildDiamondGraph()
 		_, ok := g.FindEdge(func(data string, _, _ NodeIndex) bool { return data == "zz" })
 		if ok {
@@ -389,6 +422,7 @@ func TestQuerying(t *testing.T) {
 	})
 
 	t.Run("FindEdgesMultiple", func(t *testing.T) {
+		t.Parallel()
 		g, _ := buildDiamondGraph()
 		indices := g.FindEdges(func(data string, _, _ NodeIndex) bool {
 			return data == "ab" || data == "cd"
@@ -399,6 +433,7 @@ func TestQuerying(t *testing.T) {
 	})
 
 	t.Run("FindEdgesNone", func(t *testing.T) {
+		t.Parallel()
 		g, _ := buildDiamondGraph()
 		indices := g.FindEdges(func(_ string, _, _ NodeIndex) bool { return false })
 		if len(indices) != 0 {
@@ -408,7 +443,9 @@ func TestQuerying(t *testing.T) {
 }
 
 func TestNeighborhood(t *testing.T) {
+	t.Parallel()
 	t.Run("Neighbors", func(t *testing.T) {
+		t.Parallel()
 		g, n := buildDiamondGraph()
 		// B's neighbors: A (incoming) and D (outgoing)
 		neighbors := g.Neighbors(n[1])
@@ -419,6 +456,7 @@ func TestNeighborhood(t *testing.T) {
 	})
 
 	t.Run("NeighborsDirectedOutgoing", func(t *testing.T) {
+		t.Parallel()
 		g, n := buildDiamondGraph()
 		// A's outgoing: B, C
 		neighbors := g.NeighborsDirected(n[0], Outgoing)
@@ -429,6 +467,7 @@ func TestNeighborhood(t *testing.T) {
 	})
 
 	t.Run("NeighborsDirectedIncoming", func(t *testing.T) {
+		t.Parallel()
 		g, n := buildDiamondGraph()
 		// D's incoming: B, C
 		neighbors := g.NeighborsDirected(n[3], Incoming)
@@ -440,7 +479,9 @@ func TestNeighborhood(t *testing.T) {
 }
 
 func TestExternals(t *testing.T) {
+	t.Parallel()
 	t.Run("Sinks", func(t *testing.T) {
+		t.Parallel()
 		g, n := buildDiamondGraph()
 		sinks := collectValues(g.Externals(Outgoing))
 		expected := []string{"D"}
@@ -454,6 +495,7 @@ func TestExternals(t *testing.T) {
 	})
 
 	t.Run("Sources", func(t *testing.T) {
+		t.Parallel()
 		g, n := buildDiamondGraph()
 		sources := collectValues(g.Externals(Incoming))
 		expected := []string{"A"}
@@ -468,7 +510,9 @@ func TestExternals(t *testing.T) {
 }
 
 func TestTransformations(t *testing.T) {
+	t.Parallel()
 	t.Run("Reverse", func(t *testing.T) {
+		t.Parallel()
 		g, n := buildDiamondGraph()
 		g.Reverse()
 		// After reverse, edge a→b becomes b→a
@@ -481,6 +525,7 @@ func TestTransformations(t *testing.T) {
 	})
 
 	t.Run("FilterNodes", func(t *testing.T) {
+		t.Parallel()
 		g, _ := buildDiamondGraph()
 		// Keep only A and B
 		g.FilterNodes(func(s string) bool { return s == "A" || s == "B" })
@@ -494,6 +539,7 @@ func TestTransformations(t *testing.T) {
 	})
 
 	t.Run("FilterEdges", func(t *testing.T) {
+		t.Parallel()
 		g, _ := buildDiamondGraph()
 		g.FilterEdges(func(s string) bool { return s == "ab" || s == "cd" })
 		if g.EdgeCount() != 2 {
@@ -506,6 +552,7 @@ func TestTransformations(t *testing.T) {
 	})
 
 	t.Run("MapNodes", func(t *testing.T) {
+		t.Parallel()
 		g, n := buildDiamondGraph()
 		g.MapNodes(strings.ToUpper)
 		data, _ := g.GetNode(n[0])
@@ -523,6 +570,7 @@ func TestTransformations(t *testing.T) {
 	})
 
 	t.Run("MapEdges", func(t *testing.T) {
+		t.Parallel()
 		g, _ := buildDiamondGraph()
 		g.MapEdges(strings.ToUpper)
 		edges := collectValues(g.Edges())
@@ -533,7 +581,9 @@ func TestTransformations(t *testing.T) {
 }
 
 func TestClone(t *testing.T) {
+	t.Parallel()
 	t.Run("MatchesOriginal", func(t *testing.T) {
+		t.Parallel()
 		g, _ := buildDiamondGraph()
 		c := g.Clone()
 		if c.NodeCount() != g.NodeCount() {
@@ -550,6 +600,7 @@ func TestClone(t *testing.T) {
 	})
 
 	t.Run("MutateClone", func(t *testing.T) {
+		t.Parallel()
 		g, _ := buildDiamondGraph()
 		c := g.Clone()
 		c.AddNode("E")
@@ -559,6 +610,7 @@ func TestClone(t *testing.T) {
 	})
 
 	t.Run("MutateOriginal", func(t *testing.T) {
+		t.Parallel()
 		g, _ := buildDiamondGraph()
 		c := g.Clone()
 		g.AddNode("E")
@@ -569,7 +621,9 @@ func TestClone(t *testing.T) {
 }
 
 func TestDFS(t *testing.T) {
+	t.Parallel()
 	t.Run("Chain", func(t *testing.T) {
+		t.Parallel()
 		g, _ := buildChainGraph()
 		result := collectValues(g.DFS(TraversalConfig{}))
 		expected := []string{"A", "B", "C"}
@@ -579,6 +633,7 @@ func TestDFS(t *testing.T) {
 	})
 
 	t.Run("Diamond", func(t *testing.T) {
+		t.Parallel()
 		g, _ := buildDiamondGraph()
 		result := collectValues(g.DFS(TraversalConfig{}))
 		// A first, then B (lower edge-index), then D (B's child), then C
@@ -589,6 +644,7 @@ func TestDFS(t *testing.T) {
 	})
 
 	t.Run("CustomStart", func(t *testing.T) {
+		t.Parallel()
 		g, n := buildDiamondGraph()
 		result := collectValues(g.DFS(TraversalConfig{Start: []NodeIndex{n[1]}}))
 		expected := []string{"B", "D"}
@@ -598,6 +654,7 @@ func TestDFS(t *testing.T) {
 	})
 
 	t.Run("IncomingDirection", func(t *testing.T) {
+		t.Parallel()
 		g, n := buildDiamondGraph()
 		result := collectValues(g.DFS(TraversalConfig{Start: []NodeIndex{n[3]}, Direction: Incoming}))
 		// From D following incoming edges: D, then B (lower edge-index bd<cd), then A, then C
@@ -608,6 +665,7 @@ func TestDFS(t *testing.T) {
 	})
 
 	t.Run("Disconnected", func(t *testing.T) {
+		t.Parallel()
 		g := New[string, string]()
 		a := g.AddNode("A")
 		b := g.AddNode("B")
@@ -623,6 +681,7 @@ func TestDFS(t *testing.T) {
 	})
 
 	t.Run("EarlyTermination", func(t *testing.T) {
+		t.Parallel()
 		g, _ := buildChainGraph()
 		var result []string
 		for _, v := range g.DFS(TraversalConfig{}) {
@@ -639,7 +698,9 @@ func TestDFS(t *testing.T) {
 }
 
 func TestDFSPostOrder(t *testing.T) {
+	t.Parallel()
 	t.Run("Chain", func(t *testing.T) {
+		t.Parallel()
 		g, _ := buildChainGraph()
 		result := collectValues(g.DFSPostOrder(TraversalConfig{}))
 		expected := []string{"C", "B", "A"}
@@ -649,6 +710,7 @@ func TestDFSPostOrder(t *testing.T) {
 	})
 
 	t.Run("Diamond", func(t *testing.T) {
+		t.Parallel()
 		g, _ := buildDiamondGraph()
 		result := collectValues(g.DFSPostOrder(TraversalConfig{}))
 		// D first (deepest via B path), then B, then C (D already visited), then A
@@ -659,6 +721,7 @@ func TestDFSPostOrder(t *testing.T) {
 	})
 
 	t.Run("CustomStart", func(t *testing.T) {
+		t.Parallel()
 		g, n := buildDiamondGraph()
 		result := collectValues(g.DFSPostOrder(TraversalConfig{Start: []NodeIndex{n[1]}}))
 		expected := []string{"D", "B"}
@@ -669,7 +732,9 @@ func TestDFSPostOrder(t *testing.T) {
 }
 
 func TestBFS(t *testing.T) {
+	t.Parallel()
 	t.Run("Chain", func(t *testing.T) {
+		t.Parallel()
 		g, _ := buildChainGraph()
 		result := collectValues(g.BFS(TraversalConfig{}))
 		expected := []string{"A", "B", "C"}
@@ -679,6 +744,7 @@ func TestBFS(t *testing.T) {
 	})
 
 	t.Run("Diamond", func(t *testing.T) {
+		t.Parallel()
 		g, _ := buildDiamondGraph()
 		result := collectValues(g.BFS(TraversalConfig{}))
 		// A (level 0), B and C (level 1), D (level 2)
@@ -689,6 +755,7 @@ func TestBFS(t *testing.T) {
 	})
 
 	t.Run("CustomStart", func(t *testing.T) {
+		t.Parallel()
 		g, n := buildDiamondGraph()
 		result := collectValues(g.BFS(TraversalConfig{Start: []NodeIndex{n[1]}}))
 		expected := []string{"B", "D"}
@@ -698,6 +765,7 @@ func TestBFS(t *testing.T) {
 	})
 
 	t.Run("IncomingDirection", func(t *testing.T) {
+		t.Parallel()
 		g, n := buildDiamondGraph()
 		result := collectValues(g.BFS(TraversalConfig{Start: []NodeIndex{n[3]}, Direction: Incoming}))
 		// From D: D, then B and C (incoming neighbors), then A
@@ -709,7 +777,9 @@ func TestBFS(t *testing.T) {
 }
 
 func TestTopo(t *testing.T) {
+	t.Parallel()
 	t.Run("Chain", func(t *testing.T) {
+		t.Parallel()
 		g, _ := buildChainGraph()
 		result := collectValues(g.Topo())
 		expected := []string{"A", "B", "C"}
@@ -719,6 +789,7 @@ func TestTopo(t *testing.T) {
 	})
 
 	t.Run("Diamond", func(t *testing.T) {
+		t.Parallel()
 		g, _ := buildDiamondGraph()
 		result := collectValues(g.Topo())
 		// A first, then B and C (in index order), then D
@@ -729,6 +800,7 @@ func TestTopo(t *testing.T) {
 	})
 
 	t.Run("MultipleRoots", func(t *testing.T) {
+		t.Parallel()
 		g := New[string, string]()
 		r1 := g.AddNode("R1")
 		r2 := g.AddNode("R2")
@@ -743,6 +815,7 @@ func TestTopo(t *testing.T) {
 	})
 
 	t.Run("Cyclic", func(t *testing.T) {
+		t.Parallel()
 		g := New[string, string]()
 		a := g.AddNode("A")
 		b := g.AddNode("B")
@@ -758,7 +831,9 @@ func TestTopo(t *testing.T) {
 }
 
 func TestIsAcyclic(t *testing.T) {
+	t.Parallel()
 	t.Run("DAG", func(t *testing.T) {
+		t.Parallel()
 		g, _ := buildDiamondGraph()
 		if !g.IsAcyclic() {
 			t.Error("expected diamond graph to be acyclic")
@@ -766,6 +841,7 @@ func TestIsAcyclic(t *testing.T) {
 	})
 
 	t.Run("WithCycle", func(t *testing.T) {
+		t.Parallel()
 		g := New[string, string]()
 		a := g.AddNode("A")
 		b := g.AddNode("B")
@@ -779,6 +855,7 @@ func TestIsAcyclic(t *testing.T) {
 	})
 
 	t.Run("EmptyGraph", func(t *testing.T) {
+		t.Parallel()
 		g := New[string, string]()
 		if !g.IsAcyclic() {
 			t.Error("expected empty graph to be acyclic")
@@ -787,7 +864,9 @@ func TestIsAcyclic(t *testing.T) {
 }
 
 func TestToMermaid(t *testing.T) {
+	t.Parallel()
 	t.Run("Simple", func(t *testing.T) {
+		t.Parallel()
 		g := New[string, string]()
 		a := g.AddNode("A")
 		b := g.AddNode("B")
@@ -803,6 +882,7 @@ func TestToMermaid(t *testing.T) {
 	})
 
 	t.Run("CustomLabels", func(t *testing.T) {
+		t.Parallel()
 		g := New[string, string]()
 		a := g.AddNode("A")
 		b := g.AddNode("B")
@@ -820,6 +900,7 @@ func TestToMermaid(t *testing.T) {
 	})
 
 	t.Run("Direction", func(t *testing.T) {
+		t.Parallel()
 		g := New[string, string]()
 		result := g.ToMermaid(MermaidOptions[string, string]{Direction: "LR"})
 		if !strings.HasPrefix(result, "flowchart LR") {
@@ -828,6 +909,7 @@ func TestToMermaid(t *testing.T) {
 	})
 
 	t.Run("Escaping", func(t *testing.T) {
+		t.Parallel()
 		g := New[string, string]()
 		g.AddNode(`a\b"c[d]e|f` + "\n" + "g")
 		result := g.ToMermaid(MermaidOptions[string, string]{})
@@ -852,6 +934,7 @@ func TestToMermaid(t *testing.T) {
 	})
 
 	t.Run("EmptyGraph", func(t *testing.T) {
+		t.Parallel()
 		g := New[string, string]()
 		result := g.ToMermaid(MermaidOptions[string, string]{})
 		if result != "flowchart TB" {
@@ -860,6 +943,7 @@ func TestToMermaid(t *testing.T) {
 	})
 
 	t.Run("EmptyEdgeLabel", func(t *testing.T) {
+		t.Parallel()
 		g := New[string, string]()
 		a := g.AddNode("A")
 		b := g.AddNode("B")
@@ -877,7 +961,9 @@ func TestToMermaid(t *testing.T) {
 }
 
 func TestEdgeCases(t *testing.T) {
+	t.Parallel()
 	t.Run("EmptyGraph", func(t *testing.T) {
+		t.Parallel()
 		g := New[string, string]()
 		if g.NodeCount() != 0 {
 			t.Errorf("expected 0 nodes, got %d", g.NodeCount())
@@ -895,6 +981,7 @@ func TestEdgeCases(t *testing.T) {
 	})
 
 	t.Run("SelfLoop", func(t *testing.T) {
+		t.Parallel()
 		g := New[string, string]()
 		a := g.AddNode("A")
 		g.AddEdge(a, a, "self")
@@ -908,6 +995,7 @@ func TestEdgeCases(t *testing.T) {
 	})
 
 	t.Run("RemoveLastNode", func(t *testing.T) {
+		t.Parallel()
 		g := New[string, string]()
 		a := g.AddNode("A")
 		g.RemoveNode(a)
@@ -917,6 +1005,7 @@ func TestEdgeCases(t *testing.T) {
 	})
 
 	t.Run("TraversalEmptyGraph", func(t *testing.T) {
+		t.Parallel()
 		g := New[string, string]()
 		dfs := collectValues(g.DFS(TraversalConfig{}))
 		if dfs != nil {

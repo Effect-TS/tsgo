@@ -38,6 +38,7 @@ import (
 )
 
 func TestUpdateReadme(t *testing.T) {
+	t.Parallel()
 	if os.Getenv("UPDATE_README") == "" {
 		t.Skip("set UPDATE_README=1 to regenerate README.md")
 	}
@@ -58,6 +59,7 @@ func TestUpdateReadme(t *testing.T) {
 }
 
 func TestReadmeTable(t *testing.T) {
+	t.Parallel()
 	root := repoRoot(t)
 	localPath := filepath.Join(root, "testdata", "baselines", "local", "README.md")
 	referencePath := filepath.Join(root, "README.md")
@@ -85,6 +87,7 @@ func TestReadmeTable(t *testing.T) {
 }
 
 func TestMetadataJSON(t *testing.T) {
+	t.Parallel()
 	root := repoRoot(t)
 	localPath := filepath.Join(root, "testdata", "baselines", "local", "metadata.json")
 	referencePath := filepath.Join(root, "_packages", "tsgo", "src", "metadata.json")
