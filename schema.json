@@ -1640,7 +1640,7 @@
         "classSelfMismatch": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "error",
-          "description": "Ensures Self type parameter matches the class name in Service/Tag/Schema classes"
+          "description": "Ensures Self type parameter matches the class name in ServiceMap/Service/Tag/Schema classes"
         },
         "deterministicKeys": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",

@@ -1,0 +1,32 @@
+=== Quick Fix Inventory ===
+
+[D1] (10:51-10:62) TS377046: Self type parameter should be 'WrongName'. effect(classSelfMismatch)
+  Fix 0: "Disable classSelfMismatch for this line"
+  Fix 1: "Disable classSelfMismatch for entire file"
+  Fix 2: "Replace 'CorrectName' with 'WrongName'"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable classSelfMismatch for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable classSelfMismatch for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace 'CorrectName' with 'WrongName'" ===
+
+--- file:///.src/classSelfMismatch_service.ts ---
+import { ServiceMap, Effect } from "effect"
+
+// @effect-expect-leaking FileSystem Cache
+export class CorrectName extends ServiceMap.Service<CorrectName, {
+  writeCache: () => Effect.Effect<void, never, FileSystem | Cache>
+  readCache: Effect.Effect<void, never, FileSystem | Cache>
+}>()("CorrectName") {}
+
+// @effect-expect-leaking FileSystem Cache
+export class WrongName extends ServiceMap.Service<WrongName, {
+  writeCache: () => Effect.Effect<void, never, FileSystem | Cache>
+  readCache: Effect.Effect<void, never, FileSystem | Cache>
+}>()("WrongName") {}
+
