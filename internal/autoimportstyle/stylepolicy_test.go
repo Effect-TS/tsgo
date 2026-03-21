@@ -293,10 +293,8 @@ func TestApplyCaseInsensitiveMatching(t *testing.T) {
 	result := sp.Apply(export, fix)
 	if result == nil {
 		t.Fatal("expected non-nil result")
-	} else {
-		if result.ImportKind != lsproto.ImportKindNamespace {
-			t.Errorf("expected case-insensitive match to trigger namespace rewrite, got %v", result.ImportKind)
-		}
+	} else if result.ImportKind != lsproto.ImportKindNamespace {
+		t.Errorf("expected case-insensitive match to trigger namespace rewrite, got %v", result.ImportKind)
 	}
 }
 

@@ -103,17 +103,17 @@ func TestNodeOperations(t *testing.T) {
 	t.Run("Update", func(t *testing.T) {
 		g := New[string, string]()
 		a := g.AddNode("old")
-		g.UpdateNode(a, func(s string) string { return "new" })
+		g.UpdateNode(a, func(_ string) string { return "new" })
 		data, _ := g.GetNode(a)
 		if data != "new" {
 			t.Errorf("expected %q after update, got %q", "new", data)
 		}
 	})
 
-	t.Run("UpdateNonExisting", func(t *testing.T) {
+	t.Run("UpdateNonExisting", func(*testing.T) {
 		g := New[string, string]()
 		// Should not panic
-		g.UpdateNode(999, func(s string) string { return "x" })
+		g.UpdateNode(999, func(_ string) string { return "x" })
 	})
 
 	t.Run("Remove", func(t *testing.T) {
@@ -240,17 +240,17 @@ func TestEdgeOperations(t *testing.T) {
 		a := g.AddNode("A")
 		b := g.AddNode("B")
 		ei := g.AddEdge(a, b, "old")
-		g.UpdateEdge(ei, func(s string) string { return "new" })
+		g.UpdateEdge(ei, func(_ string) string { return "new" })
 		edge, _ := g.GetEdge(ei)
 		if edge.Data != "new" {
 			t.Errorf("expected %q, got %q", "new", edge.Data)
 		}
 	})
 
-	t.Run("UpdateNonExisting", func(t *testing.T) {
+	t.Run("UpdateNonExisting", func(*testing.T) {
 		g := New[string, string]()
 		// Should not panic
-		g.UpdateEdge(999, func(s string) string { return "x" })
+		g.UpdateEdge(999, func(_ string) string { return "x" })
 	})
 
 	t.Run("Remove", func(t *testing.T) {
@@ -370,7 +370,7 @@ func TestQuerying(t *testing.T) {
 
 	t.Run("FindEdgeMatching", func(t *testing.T) {
 		g, _ := buildDiamondGraph()
-		idx, ok := g.FindEdge(func(data string, src, tgt NodeIndex) bool { return data == "bd" })
+		idx, ok := g.FindEdge(func(data string, _, _ NodeIndex) bool { return data == "bd" })
 		if !ok {
 			t.Fatal("expected to find edge")
 		}
@@ -382,7 +382,7 @@ func TestQuerying(t *testing.T) {
 
 	t.Run("FindEdgeNone", func(t *testing.T) {
 		g, _ := buildDiamondGraph()
-		_, ok := g.FindEdge(func(data string, src, tgt NodeIndex) bool { return data == "zz" })
+		_, ok := g.FindEdge(func(data string, _, _ NodeIndex) bool { return data == "zz" })
 		if ok {
 			t.Error("expected not to find edge")
 		}
@@ -390,7 +390,7 @@ func TestQuerying(t *testing.T) {
 
 	t.Run("FindEdgesMultiple", func(t *testing.T) {
 		g, _ := buildDiamondGraph()
-		indices := g.FindEdges(func(data string, src, tgt NodeIndex) bool {
+		indices := g.FindEdges(func(data string, _, _ NodeIndex) bool {
 			return data == "ab" || data == "cd"
 		})
 		if len(indices) != 2 {
@@ -400,7 +400,7 @@ func TestQuerying(t *testing.T) {
 
 	t.Run("FindEdgesNone", func(t *testing.T) {
 		g, _ := buildDiamondGraph()
-		indices := g.FindEdges(func(data string, src, tgt NodeIndex) bool { return false })
+		indices := g.FindEdges(func(_ string, _, _ NodeIndex) bool { return false })
 		if len(indices) != 0 {
 			t.Errorf("expected empty, got %v", indices)
 		}
@@ -507,7 +507,7 @@ func TestTransformations(t *testing.T) {
 
 	t.Run("MapNodes", func(t *testing.T) {
 		g, n := buildDiamondGraph()
-		g.MapNodes(func(s string) string { return strings.ToUpper(s) })
+		g.MapNodes(strings.ToUpper)
 		data, _ := g.GetNode(n[0])
 		if data != "A" {
 			t.Errorf("expected %q, got %q", "A", data)
@@ -515,7 +515,7 @@ func TestTransformations(t *testing.T) {
 		// Already uppercase, let's use lowercase first
 		g2 := New[string, string]()
 		idx := g2.AddNode("hello")
-		g2.MapNodes(func(s string) string { return strings.ToUpper(s) })
+		g2.MapNodes(strings.ToUpper)
 		d, _ := g2.GetNode(idx)
 		if d != "HELLO" {
 			t.Errorf("expected %q, got %q", "HELLO", d)
@@ -524,7 +524,7 @@ func TestTransformations(t *testing.T) {
 
 	t.Run("MapEdges", func(t *testing.T) {
 		g, _ := buildDiamondGraph()
-		g.MapEdges(func(s string) string { return strings.ToUpper(s) })
+		g.MapEdges(strings.ToUpper)
 		edges := collectValues(g.Edges())
 		if edges[0].Data != "AB" {
 			t.Errorf("expected %q, got %q", "AB", edges[0].Data)
@@ -865,7 +865,7 @@ func TestToMermaid(t *testing.T) {
 		b := g.AddNode("B")
 		g.AddEdge(a, b, "ab")
 		result := g.ToMermaid(MermaidOptions[string, string]{
-			EdgeLabel: func(s string) string { return "" },
+			EdgeLabel: func(string) string { return "" },
 		})
 		if !strings.Contains(result, "-->") {
 			t.Error("expected --> in output")

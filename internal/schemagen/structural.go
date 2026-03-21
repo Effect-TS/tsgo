@@ -37,8 +37,8 @@ type StructuralSchemaGen struct {
 }
 
 type hoistedEntry struct {
-	t              *checker.Type
-	createRef      func() *ast.Node
+	t         *checker.Type
+	createRef func() *ast.Node
 }
 
 // processingContext tracks state during recursive type traversal.
@@ -92,7 +92,7 @@ func (g *StructuralSchemaGen) createApiCall(name string, args []*ast.Node) *ast.
 
 // pushHoistedStatement records a generated statement and its reference generator.
 func (g *StructuralSchemaGen) pushHoistedStatement(name string, t *checker.Type, statement *ast.Node, createRef func() *ast.Node) {
-	g.usedGlobalIdentifiers[name] = g.usedGlobalIdentifiers[name] + 1
+	g.usedGlobalIdentifiers[name]++
 	g.schemaStatements = append(g.schemaStatements, statement)
 	g.typeToStatementIndex[t.Id()] = len(g.schemaStatements) - 1
 	g.hoistedSchemas[t.Id()] = hoistedEntry{t: t, createRef: createRef}

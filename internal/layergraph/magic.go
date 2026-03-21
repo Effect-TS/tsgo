@@ -13,7 +13,7 @@ import (
 // then computes an ordered list of layer nodes annotated with merges/provides flags
 // that determine which Layer.* combinator to use (provide, provideMerge, or merge).
 func ConvertOutlineGraphToLayerMagic(
-	c *checker.Checker,
+	_ *checker.Checker,
 	outlineGraph *graph.Graph[LayerOutlineGraphNodeInfo, struct{}],
 	targetOutputTypes []*checker.Type,
 ) *LayerMagicResult {

@@ -8,8 +8,28 @@ run:
 linters:
   default: none
   enable:
+    - copyloopvar
+    - bodyclose
+    - errcheck
+    - errname
+    - errorlint
+    - gocritic
     - govet
+    - ineffassign
+    - makezero
+    - misspell
+    - nolintlint
+    - predeclared
+    - reassign
+    - revive
     - staticcheck
+    - unconvert
+
+  settings:
+    revive:
+      rules:
+        - name: increment-decrement
+        - name: unused-parameter
 
   exclusions:
     presets:

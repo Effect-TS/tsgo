@@ -42,8 +42,8 @@ var EffectFnOpportunity = rule.Rule{
 // and the quick-fix for the effectFnOpportunity pattern.
 type EffectFnOpportunityMatch struct {
 	SourceFile *ast.SourceFile
-	Location core.TextRange
-	Result   *typeparser.EffectFnOpportunityResult
+	Location   core.TextRange
+	Result     *typeparser.EffectFnOpportunityResult
 }
 
 // AnalyzeEffectFnOpportunity finds all functions that can be converted to Effect.fn
@@ -65,8 +65,8 @@ func AnalyzeEffectFnOpportunity(c *checker.Checker, sf *ast.SourceFile) []Effect
 			}
 			matches = append(matches, EffectFnOpportunityMatch{
 				SourceFile: sf,
-				Location: scanner.GetErrorRangeForNode(sf, reportNode),
-				Result:   result,
+				Location:   scanner.GetErrorRangeForNode(sf, reportNode),
+				Result:     result,
 			})
 		}
 
@@ -124,11 +124,12 @@ func buildExpectedSignature(sf *ast.SourceFile, m *EffectFnOpportunityMatch, fix
 	paramStr := getParamNamesString(result.TargetNode)
 
 	var fnSignature string
-	if result.HasGenBody {
+	switch {
+	case result.HasGenBody:
 		fnSignature = "function*" + typeParamStr + "(" + paramStr + ") { ... }"
-	} else if result.TargetNode != nil && result.TargetNode.Kind == ast.KindArrowFunction {
+	case result.TargetNode != nil && result.TargetNode.Kind == ast.KindArrowFunction:
 		fnSignature = typeParamStr + "(" + paramStr + ") => { ... }"
-	} else {
+	default:
 		fnSignature = "function" + typeParamStr + "(" + paramStr + ") { ... }"
 	}
 

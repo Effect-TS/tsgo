@@ -4,9 +4,9 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"maps"
 	"fmt"
 	"html"
+	"maps"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -125,8 +125,8 @@ type metadataGroup struct {
 }
 
 type previewDiagnostic struct {
-	Start int `json:"start"`
-	End   int `json:"end"`
+	Start int    `json:"start"`
+	End   int    `json:"end"`
 	Text  string `json:"text"`
 }
 
@@ -188,7 +188,7 @@ func trimLeadingDirectives(sourceText string) (trimmed string, removedChars int)
 		}
 		removedChars += len(lines[index])
 		if index < len(lines)-1 {
-			removedChars += 1 // newline character
+			removedChars++ // newline character
 		}
 		index++
 	}
@@ -397,8 +397,8 @@ func evaluatePreview(t *testing.T, version effecttest.EffectVersion, sourceText 
 	// Build preview diagnostics with adjusted offsets
 	prevDiags := make([]previewDiagnostic, 0, len(ruleDiags))
 	for _, d := range ruleDiags {
-		start := int(d.Loc().Pos()) - removedChars
-		end := int(d.Loc().End()) - removedChars
+		start := d.Loc().Pos() - removedChars
+		end := d.Loc().End() - removedChars
 		if start < 0 {
 			start = 0
 		}

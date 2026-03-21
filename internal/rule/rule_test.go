@@ -9,7 +9,7 @@ import (
 
 func TestRuleStruct(t *testing.T) {
 	// Test that a Rule can be created with all fields
-	dummyRun := func(ctx *Context) []*ast.Diagnostic {
+	dummyRun := func(_ *Context) []*ast.Diagnostic {
 		return nil
 	}
 
@@ -31,7 +31,7 @@ func TestRuleStruct(t *testing.T) {
 }
 
 func TestByName(t *testing.T) {
-	dummyRun := func(ctx *Context) []*ast.Diagnostic {
+	dummyRun := func(_ *Context) []*ast.Diagnostic {
 		return nil
 	}
 
@@ -40,14 +40,14 @@ func TestByName(t *testing.T) {
 		{Name: "rule2", Description: "Second rule", Run: dummyRun},
 	}
 
-		t.Run("finds existing rule", func(t *testing.T) {
-			found := ByName(rules, "rule1")
-			if found == nil {
-				t.Fatal("expected to find rule1")
-			} else if found.Name != "rule1" {
-				t.Errorf("expected Name to be 'rule1', got %q", found.Name)
-			}
-		})
+	t.Run("finds existing rule", func(t *testing.T) {
+		found := ByName(rules, "rule1")
+		if found == nil {
+			t.Fatal("expected to find rule1")
+		} else if found.Name != "rule1" {
+			t.Errorf("expected Name to be 'rule1', got %q", found.Name)
+		}
+	})
 
 	t.Run("returns nil for non-existent rule", func(t *testing.T) {
 		found := ByName(rules, "nonexistent")
@@ -70,17 +70,17 @@ func TestByName(t *testing.T) {
 		}
 	})
 
-		t.Run("finds second rule correctly", func(t *testing.T) {
-			found := ByName(rules, "rule2")
-			if found == nil {
-				t.Fatal("expected to find rule2")
-			} else {
-				if found.Name != "rule2" {
-					t.Errorf("expected Name to be 'rule2', got %q", found.Name)
-				}
-				if found != &rules[1] {
-					t.Error("expected ByName to return pointer to second rule in slice")
-				}
+	t.Run("finds second rule correctly", func(t *testing.T) {
+		found := ByName(rules, "rule2")
+		if found == nil {
+			t.Fatal("expected to find rule2")
+		} else {
+			if found.Name != "rule2" {
+				t.Errorf("expected Name to be 'rule2', got %q", found.Name)
 			}
-		})
+			if found != &rules[1] {
+				t.Error("expected ByName to return pointer to second rule in slice")
+			}
+		}
+	})
 }

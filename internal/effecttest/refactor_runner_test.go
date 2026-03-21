@@ -28,7 +28,6 @@ func TestEffectRefactors(t *testing.T) {
 	}
 
 	for _, tc := range cases {
-		tc := tc
 		name := filepath.Base(tc)
 		name = strings.TrimSuffix(name, ".ts")
 
@@ -54,7 +53,6 @@ func TestEffectV3Refactors(t *testing.T) {
 	}
 
 	for _, tc := range cases {
-		tc := tc
 		name := filepath.Base(tc)
 		name = strings.TrimSuffix(name, ".ts")
 

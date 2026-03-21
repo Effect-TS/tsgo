@@ -22,7 +22,6 @@ func TestEffectDiagnostics(t *testing.T) {
 	}
 
 	for _, tc := range cases {
-		tc := tc // capture for parallel
 		name := filepath.Base(tc)
 		name = strings.TrimSuffix(name, ".ts")
 
@@ -48,7 +47,6 @@ func TestEffectV3Diagnostics(t *testing.T) {
 	}
 
 	for _, tc := range cases {
-		tc := tc // capture for parallel
 		name := filepath.Base(tc)
 		name = strings.TrimSuffix(name, ".ts")
 

@@ -203,21 +203,21 @@ func readMapFileContent(entry any) (string, bool) {
 
 type noopProjectClient struct{}
 
-func (noopProjectClient) WatchFiles(ctx context.Context, id project.WatcherID, watchers []*lsproto.FileSystemWatcher) error {
+func (noopProjectClient) WatchFiles(_ context.Context, _ project.WatcherID, _ []*lsproto.FileSystemWatcher) error {
 	return nil
 }
 
-func (noopProjectClient) UnwatchFiles(ctx context.Context, id project.WatcherID) error { return nil }
+func (noopProjectClient) UnwatchFiles(_ context.Context, _ project.WatcherID) error { return nil }
 
-func (noopProjectClient) RefreshDiagnostics(ctx context.Context) error { return nil }
+func (noopProjectClient) RefreshDiagnostics(_ context.Context) error { return nil }
 
-func (noopProjectClient) PublishDiagnostics(ctx context.Context, params *lsproto.PublishDiagnosticsParams) error {
+func (noopProjectClient) PublishDiagnostics(_ context.Context, _ *lsproto.PublishDiagnosticsParams) error {
 	return nil
 }
 
-func (noopProjectClient) RefreshInlayHints(ctx context.Context) error { return nil }
+func (noopProjectClient) RefreshInlayHints(_ context.Context) error { return nil }
 
-func (noopProjectClient) RefreshCodeLens(ctx context.Context) error { return nil }
+func (noopProjectClient) RefreshCodeLens(_ context.Context) error { return nil }
 
 func ptrTo[T any](value T) *T {
 	return &value

@@ -25,7 +25,6 @@ func TestEffectDocumentSymbols(t *testing.T) {
 	}
 
 	for _, tc := range cases {
-		tc := tc
 		name := filepath.Base(tc)
 		name = strings.TrimSuffix(name, ".ts")
 
@@ -51,7 +50,6 @@ func TestEffectV3DocumentSymbols(t *testing.T) {
 	}
 
 	for _, tc := range cases {
-		tc := tc
 		name := filepath.Base(tc)
 		name = strings.TrimSuffix(name, ".ts")
 

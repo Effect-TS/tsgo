@@ -77,7 +77,7 @@ func CreateString(sourceFileName, packageName, packageDirectory, className, targ
 		}
 		subDirectory = subDirectory[len(packageDirectory):]
 		if !strings.HasSuffix(subDirectory, "/") {
-			subDirectory = subDirectory + "/"
+			subDirectory += "/"
 		}
 		subDirectory = strings.TrimPrefix(subDirectory, "/")
 		for _, prefix := range keyPattern.SkipLeadingPath {

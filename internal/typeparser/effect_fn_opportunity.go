@@ -445,8 +445,8 @@ func areParametersReferencedIn(c *checker.Checker, fnNode *ast.Node, nodes []*as
 	paramsEnd := lastParam.End()
 
 	// Walk all nodes looking for symbols declared in the function parameters
-	queue := make([]*ast.Node, len(nodes))
-	copy(queue, nodes)
+	queue := make([]*ast.Node, 0, len(nodes))
+	queue = append(queue, nodes...)
 	enqueueChild := func(child *ast.Node) bool {
 		queue = append(queue, child)
 		return false

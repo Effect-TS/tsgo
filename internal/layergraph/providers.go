@@ -20,8 +20,8 @@ func walkLeavesMatching(
 	predicate func(LayerGraphNodeInfo) bool,
 ) []LayerGraphNodeInfo {
 	var result []LayerGraphNodeInfo
-	queue := make([]graph.NodeIndex, len(startIndices))
-	copy(queue, startIndices)
+	queue := make([]graph.NodeIndex, 0, len(startIndices))
+	queue = append(queue, startIndices...)
 	discovered := make(map[graph.NodeIndex]bool)
 
 	for len(queue) > 0 {

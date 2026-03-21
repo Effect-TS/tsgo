@@ -9,10 +9,10 @@ import (
 // ExtendsClassCompletionData holds the parsed context for a completion
 // triggered in the extends clause of a class declaration.
 type ExtendsClassCompletionData struct {
-	AccessedObject  *ast.Node
-	ClassDeclaration *ast.Node
-	ClassName       *ast.Node
-	ReplacementStart int
+	AccessedObject    *ast.Node
+	ClassDeclaration  *ast.Node
+	ClassName         *ast.Node
+	ReplacementStart  int
 	ReplacementLength int
 }
 
@@ -40,8 +40,9 @@ func ParseAccessedExpressionForCompletion(sf *ast.SourceFile, position int) *Acc
 	var replacementStart int
 	replacementLength := 0
 
-	if ast.IsIdentifier(precedingToken) && precedingToken.Parent != nil &&
-		ast.IsPropertyAccessExpression(precedingToken.Parent) {
+	switch {
+	case ast.IsIdentifier(precedingToken) && precedingToken.Parent != nil &&
+		ast.IsPropertyAccessExpression(precedingToken.Parent):
 		// extends Schema.Tag|
 		spanStart := astnav.GetStartOfNode(precedingToken.Parent, sf, false)
 		replacementStart = spanStart
@@ -49,8 +50,8 @@ func ParseAccessedExpressionForCompletion(sf *ast.SourceFile, position int) *Acc
 		prop := precedingToken.Parent.AsPropertyAccessExpression()
 		accessedObject = prop.Expression
 		outerNode = precedingToken.Parent
-	} else if ast.IsTokenKind(precedingToken.Kind) && precedingToken.Kind == ast.KindDotToken &&
-		precedingToken.Parent != nil && ast.IsPropertyAccessExpression(precedingToken.Parent) {
+	case ast.IsTokenKind(precedingToken.Kind) && precedingToken.Kind == ast.KindDotToken &&
+		precedingToken.Parent != nil && ast.IsPropertyAccessExpression(precedingToken.Parent):
 		// extends Schema.|
 		spanStart := astnav.GetStartOfNode(precedingToken.Parent, sf, false)
 		replacementStart = spanStart
@@ -58,14 +59,14 @@ func ParseAccessedExpressionForCompletion(sf *ast.SourceFile, position int) *Acc
 		prop := precedingToken.Parent.AsPropertyAccessExpression()
 		accessedObject = prop.Expression
 		outerNode = precedingToken.Parent
-	} else if ast.IsIdentifier(precedingToken) && precedingToken.Parent != nil {
+	case ast.IsIdentifier(precedingToken) && precedingToken.Parent != nil:
 		// extends Schema|
 		spanStart := astnav.GetStartOfNode(precedingToken, sf, false)
 		replacementStart = spanStart
 		replacementLength = precedingToken.End() - spanStart
 		accessedObject = precedingToken
 		outerNode = precedingToken
-	} else {
+	default:
 		return nil
 	}
 

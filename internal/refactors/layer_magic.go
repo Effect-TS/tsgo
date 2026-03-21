@@ -169,11 +169,12 @@ func buildLayerMagicBuild(tracker *change.Tracker, ctx *refactor.Context, c *che
 	for _, mn := range nodes[1:] {
 		// Determine combinator name
 		var combinatorName string
-		if mn.Merges && mn.Provides {
+		switch {
+		case mn.Merges && mn.Provides:
 			combinatorName = "provideMerge"
-		} else if mn.Merges {
+		case mn.Merges:
 			combinatorName = "merge"
-		} else {
+		default:
 			combinatorName = "provide"
 		}
 
