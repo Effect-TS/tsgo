@@ -4,6 +4,7 @@ export default defineConfig({
   entry: {
     "effect-tsgo": "./src/cli.ts",
   },
+  onSuccess: "node ./scripts/postbuild.mjs",
   inlineOnly: false,
   outDir: "./bin",
   format: ["cjs"],
