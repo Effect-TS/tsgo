@@ -40,7 +40,7 @@ Transformations (1):
   [0] kind: call
       callee: Schema.TaggedClass
       args: (constant)
-      outType: <Tag extends string, Fields extends Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<ValidSchemaTaggedClass, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedClass<ValidSchemaTaggedClass, Tag, { readonly _tag: tag<Tag>; } & Fields>
+      outType: <Tag extends string, Fields extends Struct.Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<ValidSchemaTaggedClass, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedClass<ValidSchemaTaggedClass, Tag, { readonly _tag: tag<Tag>; } & Fields>
 
 === Piping Flow ===
 Location: 22:10 - 22:81
@@ -54,7 +54,7 @@ Transformations (1):
   [0] kind: call
       callee: Schema.TaggedClass
       args: (constant)
-      outType: <Tag extends string, Fields extends Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<ValidSchemaTaggedClass, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedClass<ValidSchemaTaggedClass, Tag, { readonly _tag: tag<Tag>; } & Fields>
+      outType: <Tag extends string, Fields extends Struct.Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<ValidSchemaTaggedClass, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedClass<ValidSchemaTaggedClass, Tag, { readonly _tag: tag<Tag>; } & Fields>
 
 === Piping Flow ===
 Location: 28:10 - 28:79
@@ -68,7 +68,7 @@ Transformations (1):
   [0] kind: call
       callee: Schema.TaggedError
       args: (constant)
-      outType: <Tag extends string, Fields extends Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<ValidSchemaTaggedError, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedErrorClass<ValidSchemaTaggedError, Tag, { readonly _tag: tag<Tag>; } & Fields>
+      outType: <Tag extends string, Fields extends Struct.Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<ValidSchemaTaggedError, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedErrorClass<ValidSchemaTaggedError, Tag, { readonly _tag: tag<Tag>; } & Fields>
 
 === Piping Flow ===
 Location: 35:10 - 35:81
@@ -82,7 +82,7 @@ Transformations (1):
   [0] kind: call
       callee: Schema.TaggedError
       args: (constant)
-      outType: <Tag extends string, Fields extends Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<ValidSchemaTaggedError, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedErrorClass<ValidSchemaTaggedError, Tag, { readonly _tag: tag<Tag>; } & Fields>
+      outType: <Tag extends string, Fields extends Struct.Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<ValidSchemaTaggedError, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedErrorClass<ValidSchemaTaggedError, Tag, { readonly _tag: tag<Tag>; } & Fields>
 
 === Piping Flow ===
 Location: 41:10 - 41:85
@@ -96,7 +96,7 @@ Transformations (1):
   [0] kind: call
       callee: Schema.TaggedRequest
       args: (constant)
-      outType: <Tag extends string, Payload extends Fields, Success extends All, Failure extends All>(tag: Tag, options: { failure: Failure; success: Success; payload: Payload; }, annotations?: ClassAnnotations<ValidSchemaTaggedRequest, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Payload>]: Type<{ readonly _tag: tag<Tag>; } & Payload>[K]; }> | undefined) => TaggedRequestClass<ValidSchemaTaggedRequest, Tag, { readonly _tag: tag<Tag>; } & Payload, Success, Failure>
+      outType: <Tag extends string, Payload extends Struct.Fields, Success extends Schema.All, Failure extends Schema.All>(tag: Tag, options: { failure: Failure; success: Success; payload: Payload; }, annotations?: ClassAnnotations<ValidSchemaTaggedRequest, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Payload>]: Type<{ readonly _tag: tag<Tag>; } & Payload>[K]; }> | undefined) => TaggedRequestClass<ValidSchemaTaggedRequest, Tag, { readonly _tag: tag<Tag>; } & Payload, Success, Failure>
 
 === Piping Flow ===
 Location: 50:10 - 50:87
@@ -110,4 +110,4 @@ Transformations (1):
   [0] kind: call
       callee: Schema.TaggedRequest
       args: (constant)
-      outType: <Tag extends string, Payload extends Fields, Success extends All, Failure extends All>(tag: Tag, options: { failure: Failure; success: Success; payload: Payload; }, annotations?: ClassAnnotations<ValidSchemaTaggedRequest, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Payload>]: Type<{ readonly _tag: tag<Tag>; } & Payload>[K]; }> | undefined) => TaggedRequestClass<ValidSchemaTaggedRequest, Tag, { readonly _tag: tag<Tag>; } & Payload, Success, Failure>
+      outType: <Tag extends string, Payload extends Struct.Fields, Success extends Schema.All, Failure extends Schema.All>(tag: Tag, options: { failure: Failure; success: Success; payload: Payload; }, annotations?: ClassAnnotations<ValidSchemaTaggedRequest, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Payload>]: Type<{ readonly _tag: tag<Tag>; } & Payload>[K]; }> | undefined) => TaggedRequestClass<ValidSchemaTaggedRequest, Tag, { readonly _tag: tag<Tag>; } & Payload, Success, Failure>
