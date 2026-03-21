@@ -12,10 +12,7 @@
   "homepage": "https://github.com/Effect-TS/tsgo#readme",
   "publishConfig": {
     "access": "public",
-    "provenance": true,
-    "bin": {
-      "effect-tsgo": "./bin/effect-tsgo.js"
-    }
+    "provenance": true
   },
   "scripts": {
     "build": "tsdown --config tsdown.config.mjs",
@@ -23,7 +20,7 @@
     "test": "vitest run"
   },
   "bin": {
-    "effect-tsgo": "./src/cli.ts"
+    "effect-tsgo": "./bin/effect-tsgo.js"
   },
   "files": [
     "bin/",
