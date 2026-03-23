@@ -9,6 +9,7 @@ import (
 )
 
 func TestCompareNodesByOrder(t *testing.T) {
+	t.Parallel()
 	g := graph.New[LayerOutlineGraphNodeInfo, struct{}]()
 
 	// Node A: 3 provides, 1 requires
@@ -44,6 +45,7 @@ func TestCompareNodesByOrder(t *testing.T) {
 }
 
 func TestDFSPostOrderWithOrder(t *testing.T) {
+	t.Parallel()
 	// Build a small graph:
 	//   A (3 provides) -> B (1 provides)
 	//   A -> C (2 provides)
@@ -85,6 +87,7 @@ func TestDFSPostOrderWithOrder(t *testing.T) {
 }
 
 func TestDFSPostOrderWithOrderMultipleRoots(t *testing.T) {
+	t.Parallel()
 	g := graph.New[LayerOutlineGraphNodeInfo, struct{}]()
 
 	nodeA := makeOutlineNode(3, 0)
@@ -113,6 +116,7 @@ func TestDFSPostOrderWithOrderMultipleRoots(t *testing.T) {
 }
 
 func TestNeighborsOutgoingSorted(t *testing.T) {
+	t.Parallel()
 	g := graph.New[LayerOutlineGraphNodeInfo, struct{}]()
 
 	nodeA := makeOutlineNode(0, 0)

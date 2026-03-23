@@ -1,8 +1,8 @@
 package completions
 
 import (
-	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/effect-ts/effect-typescript-go/internal/completion"
+	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/checker"
 	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
 )
@@ -44,10 +44,7 @@ func runGenFunctionStar(ctx *completion.Context) []*lsproto.CompletionItem {
 	// This matches the reference: span starts at accessedObject.end + 1 (after the dot)
 	accessedEnd := result.AccessedObject.End()
 	spanStart := accessedEnd + 1
-	spanLength := ctx.Position - spanStart
-	if spanLength < 0 {
-		spanLength = 0
-	}
+	spanLength := max(ctx.Position-spanStart, 0)
 
 	replacementRange := byteSpanToRange(ctx, spanStart, spanLength)
 	sortText := "11"

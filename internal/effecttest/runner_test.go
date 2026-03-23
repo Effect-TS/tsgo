@@ -7,6 +7,7 @@ import (
 )
 
 func TestEffectDiagnostics(t *testing.T) {
+	t.Parallel()
 	// Skip if Effect not installed
 	if err := EnsureEffectInstalled(EffectV4); err != nil {
 		t.Skip("Effect not installed:", err)
@@ -22,7 +23,6 @@ func TestEffectDiagnostics(t *testing.T) {
 	}
 
 	for _, tc := range cases {
-		tc := tc // capture for parallel
 		name := filepath.Base(tc)
 		name = strings.TrimSuffix(name, ".ts")
 
@@ -34,6 +34,7 @@ func TestEffectDiagnostics(t *testing.T) {
 }
 
 func TestEffectV3Diagnostics(t *testing.T) {
+	t.Parallel()
 	if err := EnsureEffectInstalled(EffectV3); err != nil {
 		t.Skip("Effect V3 not installed:", err)
 	}
@@ -48,7 +49,6 @@ func TestEffectV3Diagnostics(t *testing.T) {
 	}
 
 	for _, tc := range cases {
-		tc := tc // capture for parallel
 		name := filepath.Base(tc)
 		name = strings.TrimSuffix(name, ".ts")
 

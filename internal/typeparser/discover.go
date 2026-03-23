@@ -79,9 +79,10 @@ func detectEffectVersionUncached(c *checker.Checker) EffectMajorVersion {
 		}
 
 		var major EffectMajorVersion
-		if pkg.Version == nil {
+		switch {
+		case pkg.Version == nil:
 			major = EffectMajorUnknown
-		} else if len(*pkg.Version) > 0 {
+		case len(*pkg.Version) > 0:
 			switch (*pkg.Version)[0] {
 			case '3':
 				major = EffectMajorV3
@@ -90,7 +91,7 @@ func detectEffectVersionUncached(c *checker.Checker) EffectMajorVersion {
 			default:
 				major = EffectMajorUnknown
 			}
-		} else {
+		default:
 			major = EffectMajorUnknown
 		}
 

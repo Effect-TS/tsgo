@@ -46,7 +46,7 @@ func init() {
 	// Register the Effect completion enrichment callback
 	ls.RegisterAfterCompletionCallback(afterCompletion)
 	// Register the Effect auto-import style transformer factory
-	autoimport.RegisterAutoImportFixTransformer(func(prefs modulespecifiers.UserPreferences, program *compiler.Program) autoimport.FixTransformer {
+	autoimport.RegisterAutoImportFixTransformer(func(_ modulespecifiers.UserPreferences, program *compiler.Program) autoimport.FixTransformer {
 		effectStyle := autoimportstyle.PreferencesFromPluginOptions(program.Options().Effect)
 		return autoimportstyle.NewFixTransformer(effectStyle)
 	})
@@ -123,7 +123,7 @@ func afterCompletion(ctx context.Context, sf *ast.SourceFile, position int, item
 
 // afterQuickInfo is called after building hover quickInfo and documentation.
 // It allows Effect to enrich hover responses with Effect-specific information.
-func afterQuickInfo(c *checker.Checker, sf *ast.SourceFile, node *ast.Node, symbol *ast.Symbol, quickInfo string, documentation string, isMarkdown bool) (string, string, *ast.Node) {
+func afterQuickInfo(c *checker.Checker, sf *ast.SourceFile, node *ast.Node, _ *ast.Symbol, quickInfo string, documentation string, isMarkdown bool) (string, string, *ast.Node) {
 	// Check if Effect is enabled
 	effectConfig := c.Program().Options().Effect
 	if effectConfig == nil {
@@ -177,7 +177,7 @@ func afterQuickInfo(c *checker.Checker, sf *ast.SourceFile, node *ast.Node, symb
 
 // formatLayerHover builds the Layer hover documentation including providers/requirers
 // summary, Mermaid diagram links, and Layer type parameters.
-func formatLayerHover(c *checker.Checker, sf *ast.SourceFile, node *ast.Node, t *checker.Type, documentation string, isMarkdown bool, effectConfig *etscore.EffectPluginOptions) string {
+func formatLayerHover(c *checker.Checker, sf *ast.SourceFile, node *ast.Node, _ *checker.Type, documentation string, isMarkdown bool, effectConfig *etscore.EffectPluginOptions) string {
 	// Try to resolve the initializer expression for layer graph extraction.
 	var initializer *ast.Node
 	if node.Parent != nil {
@@ -235,11 +235,12 @@ func formatLayerHover(c *checker.Checker, sf *ast.SourceFile, node *ast.Node, t 
 		}
 
 		if isMarkdown {
-			if nestedURL != "" && outlineURL != "" {
+			switch {
+			case nestedURL != "" && outlineURL != "":
 				fmt.Fprintf(&b, "[Show full graph](%s) - [Show outline](%s)\n\n", nestedURL, outlineURL)
-			} else if nestedURL != "" {
+			case nestedURL != "":
 				fmt.Fprintf(&b, "[Show full graph](%s)\n\n", nestedURL)
-			} else if outlineURL != "" {
+			case outlineURL != "":
 				fmt.Fprintf(&b, "[Show outline](%s)\n\n", outlineURL)
 			}
 		} else {

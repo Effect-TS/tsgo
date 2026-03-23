@@ -2,6 +2,8 @@
 package typeparser
 
 import (
+	"strings"
+
 	"github.com/microsoft/typescript-go/shim/ast"
 )
 
@@ -63,14 +65,14 @@ func ReconstructPipingFlow(sf *ast.SourceFile, subject *PipingFlowSubject, trans
 			// Pipe or pipeable: apply the transformation
 			if len(t.Args) > 0 {
 				// Curried form: callee(args...)(result)
-				argsText := ""
+				var argsText strings.Builder
 				for i, arg := range t.Args {
 					if i > 0 {
-						argsText += ", "
+						argsText.WriteString(", ")
 					}
-					argsText += nodeText(sf, arg)
+					argsText.WriteString(nodeText(sf, arg))
 				}
-				result = calleeText + "(" + argsText + ")(" + result + ")"
+				result = calleeText + "(" + argsText.String() + ")(" + result + ")"
 			} else {
 				// Constant: callee(result)
 				result = calleeText + "(" + result + ")"

@@ -14,6 +14,7 @@ import (
 )
 
 func TestEffectQuickFixes(t *testing.T) {
+	t.Parallel()
 	if err := effecttest.EnsureEffectInstalled(effecttest.EffectV4); err != nil {
 		t.Skip("Effect not installed:", err)
 	}
@@ -28,7 +29,6 @@ func TestEffectQuickFixes(t *testing.T) {
 	}
 
 	for _, tc := range cases {
-		tc := tc
 		name := filepath.Base(tc)
 		name = strings.TrimSuffix(name, ".ts")
 
@@ -40,6 +40,7 @@ func TestEffectQuickFixes(t *testing.T) {
 }
 
 func TestEffectV3QuickFixes(t *testing.T) {
+	t.Parallel()
 	if err := effecttest.EnsureEffectInstalled(effecttest.EffectV3); err != nil {
 		t.Skip("Effect V3 not installed:", err)
 	}
@@ -54,7 +55,6 @@ func TestEffectV3QuickFixes(t *testing.T) {
 	}
 
 	for _, tc := range cases {
-		tc := tc
 		name := filepath.Base(tc)
 		name = strings.TrimSuffix(name, ".ts")
 

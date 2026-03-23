@@ -165,7 +165,7 @@ func isPipeableAtIndex(c *checker.Checker, flow *typeparser.PipingFlow, index in
 // getSubjectText extracts the subject text for the diagnostic message.
 // If the pipeable segment starts at index 0, uses the subject node text directly.
 // Otherwise, traverses the flow node to find the node at the right depth.
-func getSubjectText(c *checker.Checker, sf *ast.SourceFile, flow *typeparser.PipingFlow, firstPipeableIndex int) string {
+func getSubjectText(_ *checker.Checker, sf *ast.SourceFile, flow *typeparser.PipingFlow, firstPipeableIndex int) string {
 	if firstPipeableIndex == 0 {
 		return trimmedNodeText(sf, flow.Subject.Node)
 	}

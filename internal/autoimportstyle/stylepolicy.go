@@ -235,11 +235,11 @@ func packageNameFromSpecifier(specifier string) string {
 		return specifier[:slashIdx+1+secondSlash]
 	}
 	// Non-scoped: name or name/sub
-	slashIdx := strings.Index(specifier, "/")
-	if slashIdx < 0 {
+	name, _, found := strings.Cut(specifier, "/")
+	if !found {
 		return specifier
 	}
-	return specifier[:slashIdx]
+	return name
 }
 
 // inferNamespaceName derives a namespace name from the last segment of a module specifier path.

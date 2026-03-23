@@ -2,6 +2,8 @@
 package rules
 
 import (
+	"strings"
+
 	"github.com/effect-ts/effect-typescript-go/etscore"
 	"github.com/effect-ts/effect-typescript-go/internal/rule"
 	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
@@ -21,7 +23,7 @@ var MissingEffectError = rule.Rule{
 	Description:     "Detects Effect values with unhandled error types",
 	DefaultSeverity: etscore.SeverityError,
 	SupportedEffect: []string{"v3", "v4"},
-	Codes:       []int32{tsdiag.Missing_errors_0_in_the_expected_Effect_type_effect_missingEffectError.Code()},
+	Codes:           []int32{tsdiag.Missing_errors_0_in_the_expected_Effect_type_effect_missingEffectError.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeMissingEffectError(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
@@ -36,11 +38,11 @@ var MissingEffectError = rule.Rule{
 // diagnostic rule and the quick-fixes for the missingEffectError pattern.
 type MissingEffectErrorMatch struct {
 	SourceFile        *ast.SourceFile // The source file where the diagnostic should be reported
-	Location          core.TextRange   // The diagnostic error range
-	ErrorNode         *ast.Node        // The AST node where the type error occurs
-	UnhandledErrors   []*checker.Type  // The individual error types not handled by the target
-	ExpectedErrorType *checker.Type    // The target Effect's error type (.E)
-	ErrorTypeStr      string           // The formatted union string of unhandled errors
+	Location          core.TextRange  // The diagnostic error range
+	ErrorNode         *ast.Node       // The AST node where the type error occurs
+	UnhandledErrors   []*checker.Type // The individual error types not handled by the target
+	ExpectedErrorType *checker.Type   // The target Effect's error type (.E)
+	ErrorTypeStr      string          // The formatted union string of unhandled errors
 }
 
 // AnalyzeMissingEffectError finds all relation errors where an Effect has error
@@ -103,9 +105,11 @@ func formatErrorTypes(c *checker.Checker, types []*checker.Type) string {
 	if len(types) == 1 {
 		return c.TypeToString(types[0])
 	}
-	result := c.TypeToString(types[0])
+	var result strings.Builder
+	result.WriteString(c.TypeToString(types[0]))
 	for i := 1; i < len(types); i++ {
-		result += " | " + c.TypeToString(types[i])
+		result.WriteString(" | ")
+		result.WriteString(c.TypeToString(types[i]))
 	}
-	return result
+	return result.String()
 }

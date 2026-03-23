@@ -221,7 +221,7 @@ func ExtractLayerGraph(
 }
 
 // extractNodeInfo computes the LayerGraphNodeInfo for a given AST node.
-func extractNodeInfo(c *checker.Checker, node *ast.Node, sf *ast.SourceFile, inPipeContext bool) LayerGraphNodeInfo {
+func extractNodeInfo(c *checker.Checker, node *ast.Node, _ *ast.SourceFile, inPipeContext bool) LayerGraphNodeInfo {
 	info := LayerGraphNodeInfo{
 		Node:        node,
 		DisplayNode: getDisplayNode(node),

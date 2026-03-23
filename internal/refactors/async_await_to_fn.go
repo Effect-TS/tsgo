@@ -112,13 +112,13 @@ func buildEffectFnCall(tracker *change.Tracker, node *ast.Node, body *ast.Node, 
 
 	// function*(params) { ... }
 	genFn := tracker.NewFunctionExpression(
-		nil,                                    // modifiers
+		nil,                                     // modifiers
 		tracker.NewToken(ast.KindAsteriskToken), // asterisk (generator)
-		nil,                                    // name
-		typeParams,                             // typeParameters
-		params,                                 // parameters
-		nil,                                    // returnType
-		nil,                                    // fullSignature
+		nil,                                     // name
+		typeParams,                              // typeParameters
+		params,                                  // parameters
+		nil,                                     // returnType
+		nil,                                     // fullSignature
 		blockBody,
 	)
 
@@ -151,7 +151,7 @@ func buildEffectFnCall(tracker *change.Tracker, node *ast.Node, body *ast.Node, 
 // buildFnDeclaration builds the appropriate declaration wrapping the Effect.fn call.
 // For function declarations: const name = Effect.fn("name")(...)
 // For expressions/arrows: just the Effect.fn("name")(...) expression
-func buildFnDeclaration(tracker *change.Tracker, node *ast.Node, effectFnCall *ast.Node, fnName string) *ast.Node {
+func buildFnDeclaration(tracker *change.Tracker, node *ast.Node, effectFnCall *ast.Node, _ string) *ast.Node {
 	if node.Kind == ast.KindFunctionDeclaration {
 		fd := node.AsFunctionDeclaration()
 		if fd.Name() == nil {

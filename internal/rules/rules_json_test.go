@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"html"
 	"maps"
@@ -37,6 +38,7 @@ import (
 )
 
 func TestUpdateReadme(t *testing.T) {
+	t.Parallel()
 	if os.Getenv("UPDATE_README") == "" {
 		t.Skip("set UPDATE_README=1 to regenerate README.md")
 	}
@@ -57,6 +59,7 @@ func TestUpdateReadme(t *testing.T) {
 }
 
 func TestReadmeTable(t *testing.T) {
+	t.Parallel()
 	root := repoRoot(t)
 	localPath := filepath.Join(root, "testdata", "baselines", "local", "README.md")
 	referencePath := filepath.Join(root, "README.md")
@@ -84,6 +87,7 @@ func TestReadmeTable(t *testing.T) {
 }
 
 func TestMetadataJSON(t *testing.T) {
+	t.Parallel()
 	root := repoRoot(t)
 	localPath := filepath.Join(root, "testdata", "baselines", "local", "metadata.json")
 	referencePath := filepath.Join(root, "_packages", "tsgo", "src", "metadata.json")
@@ -188,7 +192,7 @@ func trimLeadingDirectives(sourceText string) (trimmed string, removedChars int)
 		}
 		removedChars += len(lines[index])
 		if index < len(lines)-1 {
-			removedChars += 1 // newline character
+			removedChars++ // newline character
 		}
 		index++
 	}
@@ -240,7 +244,10 @@ func buildTsConfigWithTestConfig(testConfig map[string]any) string {
 			"plugins": []any{plugin},
 		},
 	}
-	data, _ := json.Marshal(tsConfig)
+	data, err := json.Marshal(tsConfig)
+	if err != nil {
+		panic(err)
+	}
 	return string(data)
 }
 
@@ -397,8 +404,8 @@ func evaluatePreview(t *testing.T, version effecttest.EffectVersion, sourceText 
 	// Build preview diagnostics with adjusted offsets
 	prevDiags := make([]previewDiagnostic, 0, len(ruleDiags))
 	for _, d := range ruleDiags {
-		start := int(d.Loc().Pos()) - removedChars
-		end := int(d.Loc().End()) - removedChars
+		start := d.Loc().Pos() - removedChars
+		end := d.Loc().End() - removedChars
 		if start < 0 {
 			start = 0
 		}
@@ -564,12 +571,7 @@ func severityIcon(s etscore.Severity) string {
 }
 
 func containsEffect(supported []string, version string) bool {
-	for _, s := range supported {
-		if s == version {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(supported, version)
 }
 
 func generateReadmeTable() string {
@@ -672,7 +674,7 @@ func generateReadme(committedReadme []byte) ([]byte, error) {
 	startIdx := strings.Index(content, readmeStartMarker)
 	endIdx := strings.Index(content, readmeEndMarker)
 	if startIdx < 0 || endIdx < 0 || endIdx <= startIdx {
-		return nil, fmt.Errorf("README.md missing diagnostics table markers")
+		return nil, errors.New("README.md missing diagnostics table markers")
 	}
 
 	table := generateReadmeTable()

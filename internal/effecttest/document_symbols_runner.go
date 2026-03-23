@@ -152,11 +152,12 @@ func collectHierarchicalDocumentSymbols(t *testing.T, langService interface {
 	caps := &lsproto.ClientCapabilities{
 		TextDocument: &lsproto.TextDocumentClientCapabilities{
 			DocumentSymbol: &lsproto.DocumentSymbolClientCapabilities{
-				HierarchicalDocumentSymbolSupport: ptrTo(true),
+				HierarchicalDocumentSymbolSupport: &[]bool{true}[0],
 			},
 		},
 	}
-	ctx := lsproto.WithClientCapabilities(context.Background(), ptrTo(lsproto.ResolveClientCapabilities(caps)))
+	resolvedCaps := lsproto.ResolveClientCapabilities(caps)
+	ctx := lsproto.WithClientCapabilities(context.Background(), &resolvedCaps)
 	result, err := langService.ProvideDocumentSymbols(ctx, uri)
 	if err != nil {
 		t.Fatalf("ProvideDocumentSymbols hierarchical failed for %s: %v", uri, err)
@@ -175,11 +176,12 @@ func collectFlatDocumentSymbols(t *testing.T, langService interface {
 	caps := &lsproto.ClientCapabilities{
 		TextDocument: &lsproto.TextDocumentClientCapabilities{
 			DocumentSymbol: &lsproto.DocumentSymbolClientCapabilities{
-				HierarchicalDocumentSymbolSupport: ptrTo(false),
+				HierarchicalDocumentSymbolSupport: &[]bool{false}[0],
 			},
 		},
 	}
-	ctx := lsproto.WithClientCapabilities(context.Background(), ptrTo(lsproto.ResolveClientCapabilities(caps)))
+	resolvedCaps := lsproto.ResolveClientCapabilities(caps)
+	ctx := lsproto.WithClientCapabilities(context.Background(), &resolvedCaps)
 	result, err := langService.ProvideDocumentSymbols(ctx, uri)
 	if err != nil {
 		t.Fatalf("ProvideDocumentSymbols flat failed for %s: %v", uri, err)
@@ -203,22 +205,18 @@ func readMapFileContent(entry any) (string, bool) {
 
 type noopProjectClient struct{}
 
-func (noopProjectClient) WatchFiles(ctx context.Context, id project.WatcherID, watchers []*lsproto.FileSystemWatcher) error {
+func (noopProjectClient) WatchFiles(_ context.Context, _ project.WatcherID, _ []*lsproto.FileSystemWatcher) error {
 	return nil
 }
 
-func (noopProjectClient) UnwatchFiles(ctx context.Context, id project.WatcherID) error { return nil }
+func (noopProjectClient) UnwatchFiles(_ context.Context, _ project.WatcherID) error { return nil }
 
-func (noopProjectClient) RefreshDiagnostics(ctx context.Context) error { return nil }
+func (noopProjectClient) RefreshDiagnostics(_ context.Context) error { return nil }
 
-func (noopProjectClient) PublishDiagnostics(ctx context.Context, params *lsproto.PublishDiagnosticsParams) error {
+func (noopProjectClient) PublishDiagnostics(_ context.Context, _ *lsproto.PublishDiagnosticsParams) error {
 	return nil
 }
 
-func (noopProjectClient) RefreshInlayHints(ctx context.Context) error { return nil }
+func (noopProjectClient) RefreshInlayHints(_ context.Context) error { return nil }
 
-func (noopProjectClient) RefreshCodeLens(ctx context.Context) error { return nil }
-
-func ptrTo[T any](value T) *T {
-	return &value
-}
+func (noopProjectClient) RefreshCodeLens(_ context.Context) error { return nil }

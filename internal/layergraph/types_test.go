@@ -6,6 +6,7 @@ import (
 )
 
 func TestLayerGraphEdgeInfoMarshalJSON(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		name     string
 		edge     LayerGraphEdgeInfo
@@ -45,6 +46,7 @@ func TestLayerGraphEdgeInfoMarshalJSON(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			b, err := json.Marshal(tt.edge)
 			if err != nil {
 				t.Fatalf("MarshalJSON failed: %v", err)
