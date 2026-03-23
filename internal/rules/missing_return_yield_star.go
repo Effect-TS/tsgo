@@ -82,15 +82,7 @@ func shouldReportMissingReturnYieldStar(c *checker.Checker, exprStmtNode *ast.No
 		return false
 	}
 
-	scopes := typeparser.FindEnclosingScopes(c, exprStmtNode)
-	if scopes.ScopeNode == nil {
-		return false
-	}
-	genFn := scopes.EffectGeneratorFunction()
-	if genFn == nil {
-		return false
-	}
-	if scopes.ScopeNode != genFn.AsNode() {
+	if typeparser.GetEffectContextFlags(c, exprStmtNode)&typeparser.EffectContextFlagCanYieldEffect == 0 {
 		return false
 	}
 

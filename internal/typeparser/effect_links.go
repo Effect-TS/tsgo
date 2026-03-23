@@ -49,7 +49,8 @@ type EffectLinks struct {
 	ParseEffectFnIife            core.LinkStore[*ast.Node, *EffectFnIifeResult]
 	ParseEffectFnOpportunity     core.LinkStore[*ast.Node, *EffectFnOpportunityResult]
 	ParsePipeCall                core.LinkStore[*ast.Node, *ParsedPipeCallResult]
-	FindEnclosingScopes          core.LinkStore[*ast.Node, EnclosingScopes]
+	EffectContextFlags           core.LinkStore[*ast.Node, EffectContextFlags]
+	EffectYieldGeneratorFunction core.LinkStore[*ast.Node, *ast.FunctionExpression]
 
 	// Checker-level cached scalar values
 	detectEffectVersionComputed    bool
@@ -59,6 +60,7 @@ type EffectLinks struct {
 
 	// SourceFile-keyed aggregate parsers
 	PackageJsonForSourceFile   core.LinkStore[*ast.SourceFile, *packagejson.PackageJson]
+	EffectContextAnalyzed      core.LinkStore[*ast.SourceFile, bool]
 	ExpectedAndRealTypes       core.LinkStore[*ast.SourceFile, []ExpectedAndRealType]
 	PipingFlowsWithEffectFn    core.LinkStore[*ast.SourceFile, []*PipingFlow]
 	PipingFlowsWithoutEffectFn core.LinkStore[*ast.SourceFile, []*PipingFlow]
