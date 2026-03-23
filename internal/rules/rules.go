@@ -33,6 +33,7 @@ var All = []rule.Rule{
 	RunEffectInsideEffect,
 	PreferSchemaOverJson,
 	EffectGenUsesAdapter,
+	EffectFnImplicitAny,
 	StrictBooleanExpressions,
 	AnyUnknownInErrorContext,
 	ScopeInLayerEffect,

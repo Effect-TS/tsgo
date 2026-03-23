@@ -238,5 +238,9 @@
     "Prefer using HttpClient from {0} instead of the global 'fetch' function. effect(globalFetch)": {
         "category": "Warning",
         "code": 377061
+    },
+    "Parameter '{0}' implicitly has an 'any' type in Effect.fn/Effect.fnUntraced/Effect.fnUntracedEager. Add an explicit type annotation or provide a contextual function type. effect(effectFnImplicitAny)": {
+        "category": "Error",
+        "code": 377062
     }
 }
