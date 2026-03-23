@@ -84,6 +84,14 @@ jobs:
       - name: Setup repo (submodules, patches, generated files)
         run: pnpm setup-repo --ci
 
+      - name: Lint
+        uses: golangci/golangci-lint-action@v7
+        with:
+          version: v2.9
+          args: ./...
+        env:
+          CGO_ENABLED: "0"
+
       - name: Check
         run: pnpm check
 
@@ -92,11 +100,3 @@ jobs:
 
       - name: Test
         run: pnpm test
-
-      - name: Lint
-        uses: golangci/golangci-lint-action@v7
-        with:
-          version: v2.9
-          args: ./...
-        env:
-          CGO_ENABLED: "0"

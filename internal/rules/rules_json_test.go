@@ -516,7 +516,8 @@ func marshalMetadataJSON(t *testing.T) ([]byte, error) {
 			t.Fatalf("%v", err)
 		}
 
-		preview := evaluatePreview(t, version, sourceText, current)
+		var preview *previewPayload
+		preview = evaluatePreview(t, version, sourceText, current)
 
 		exported = append(exported, exportedRule{
 			Name:            current.Name,
