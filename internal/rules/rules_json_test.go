@@ -513,13 +513,10 @@ func marshalMetadataJSON(t *testing.T) ([]byte, error) {
 		// Find and evaluate preview file
 		version, _, sourceText, err := findPreviewFile(root, current.Name)
 		if err != nil {
-			t.Logf("warning: %v", err)
+			t.Fatalf("%v", err)
 		}
 
-		var preview *previewPayload
-		if err == nil {
-			preview = evaluatePreview(t, version, sourceText, current)
-		}
+		preview := evaluatePreview(t, version, sourceText, current)
 
 		exported = append(exported, exportedRule{
 			Name:            current.Name,

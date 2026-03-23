@@ -1,0 +1,42 @@
+=== Quick Fix Inventory ===
+
+[D1] (4:66-4:71) TS377062: Parameter 'input' implicitly has an 'any' type in Effect.fn/Effect.fnUntraced/Effect.fnUntracedEager. Add an explicit type annotation or provide a contextual function type. effect(effectFnImplicitAny)
+  Fix 0: "Disable effectFnImplicitAny for this line"
+  Fix 1: "Disable effectFnImplicitAny for entire file"
+
+[D2] (9:46-9:51) TS7006: Parameter 'input' implicitly has an 'any' type.
+  (no quick fixes)
+
+[D3] (14:64-14:65) TS377062: Parameter 'a' implicitly has an 'any' type in Effect.fn/Effect.fnUntraced/Effect.fnUntracedEager. Add an explicit type annotation or provide a contextual function type. effect(effectFnImplicitAny)
+  Fix 0: "Disable effectFnImplicitAny for this line"
+  Fix 1: "Disable effectFnImplicitAny for entire file"
+
+[D4] (14:67-14:68) TS377062: Parameter 'b' implicitly has an 'any' type in Effect.fn/Effect.fnUntraced/Effect.fnUntracedEager. Add an explicit type annotation or provide a contextual function type. effect(effectFnImplicitAny)
+  Fix 0: "Disable effectFnImplicitAny for this line"
+  Fix 1: "Disable effectFnImplicitAny for entire file"
+
+[D5] (19:44-19:45) TS7006: Parameter 'a' implicitly has an 'any' type.
+  (no quick fixes)
+
+[D6] (19:47-19:48) TS7006: Parameter 'b' implicitly has an 'any' type.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable effectFnImplicitAny for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectFnImplicitAny for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable effectFnImplicitAny for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable effectFnImplicitAny for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable effectFnImplicitAny for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable effectFnImplicitAny for entire file" ===
+skipped by default

@@ -99,6 +99,30 @@
       }
     },
     {
+      "name": "effectFnImplicitAny",
+      "group": "correctness",
+      "description": "Mirrors noImplicitAny for unannotated Effect.fn, Effect.fnUntraced, and Effect.fnUntracedEager callback parameters when no outer contextual function type exists. Requires TS's noImplicitAny: true",
+      "defaultSeverity": "error",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377062
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.fn(\"preview\")((input) =\u003e Effect.succeed(input))\n",
+        "diagnostics": [
+          {
+            "start": 78,
+            "end": 83,
+            "text": "Parameter 'input' implicitly has an 'any' type in Effect.fn/Effect.fnUntraced/Effect.fnUntracedEager. Add an explicit type annotation or provide a contextual function type. effect(effectFnImplicitAny)"
+          }
+        ]
+      }
+    },
+    {
       "name": "floatingEffect",
       "group": "correctness",
       "description": "Detects Effect values that are neither yielded nor assigned",

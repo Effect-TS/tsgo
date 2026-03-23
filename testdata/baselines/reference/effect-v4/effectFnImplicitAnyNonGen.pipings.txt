@@ -1,0 +1,325 @@
+==== /.src/effectFnImplicitAnyNonGen.ts (22 flows) ====
+
+=== Piping Flow ===
+Location: 4:31 - 6:2
+Node: Effect.fn("CallTokenService.createCallToken")(\n  (input) => Effect.succeed(input)\n)
+Node Kind: KindCallExpression
+
+Subject: (input) => Effect.succeed(input)
+Subject Type: (this: unassigned, input: any) => Effect<any, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn("CallTokenService.createCallToken")
+      args: (constant)
+      outType: (input: any) => Effect<any, never, never>
+
+=== Piping Flow ===
+Location: 5:13 - 5:35
+Node: Effect.succeed(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: any
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<any, never, never>
+
+=== Piping Flow ===
+Location: 10:9 - 10:31
+Node: Effect.succeed(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: any
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<any, never, never>
+
+=== Piping Flow ===
+Location: 14:29 - 14:82
+Node: Effect.fn((a, b) => Effect.succeed([a, b] as const))
+Node Kind: KindCallExpression
+
+Subject: (a, b) => Effect.succeed([a, b] as const)
+Subject Type: (this: unassigned, a: any, b: any) => Effect<readonly [any, any], never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn
+      args: (constant)
+      outType: (a: any, b: any) => Effect<readonly [any, any], never, never>
+
+=== Piping Flow ===
+Location: 14:49 - 14:81
+Node: Effect.succeed([a, b] as const)
+Node Kind: KindCallExpression
+
+Subject: [a, b] as const
+Subject Type: readonly [any, any]
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<readonly [any, any], never, never>
+
+=== Piping Flow ===
+Location: 18:9 - 18:41
+Node: Effect.succeed([a, b] as const)
+Node Kind: KindCallExpression
+
+Subject: [a, b] as const
+Subject Type: readonly [any, any]
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<readonly [any, any], never, never>
+
+=== Piping Flow ===
+Location: 22:74 - 24:70
+Node: acceptsAny(Effect.fn("acceptsAny")((input) => Effect.succeed(input)))
+Node Kind: KindCallExpression
+
+Subject: (input) => Effect.succeed(input)
+Subject Type: (this: unassigned, input: any) => Effect<any, never, never>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.fn("acceptsAny")
+      args: (constant)
+      outType: (input: any) => Effect<any, never, never>
+  [1] kind: call
+      callee: acceptsAny
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 24:46 - 24:68
+Node: Effect.succeed(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: any
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<any, never, never>
+
+=== Piping Flow ===
+Location: 24:70 - 29:3
+Node: acceptsAny(function(input) {\n  return Effect.succeed(input)\n})
+Node Kind: KindCallExpression
+
+Subject: function(input) {\n  return Effect.succeed(input)\n}
+Subject Type: (input: any) => Effect<any, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: acceptsAny
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 28:9 - 28:31
+Node: Effect.succeed(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: any
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<any, never, never>
+
+=== Piping Flow ===
+Location: 32:83 - 34:83
+Node: acceptsString(Effect.fn("acceptsString")((input) => Effect.succeed(input.length)))
+Node Kind: KindCallExpression
+
+Subject: (input) => Effect.succeed(input.length)
+Subject Type: (this: unassigned, input: string) => Effect<number, never, never>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.fn("acceptsString")
+      args: (constant)
+      outType: (input: string) => Effect<number, never, never>
+  [1] kind: call
+      callee: acceptsString
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 34:52 - 34:81
+Node: Effect.succeed(input.length)
+Node Kind: KindCallExpression
+
+Subject: input.length
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 34:83 - 39:3
+Node: acceptsString(function(input) {\n  return Effect.succeed(input.length)\n})
+Node Kind: KindCallExpression
+
+Subject: function(input) {\n  return Effect.succeed(input.length)\n}
+Subject Type: (input: string) => Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: acceptsString
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 38:9 - 38:38
+Node: Effect.succeed(input.length)
+Node Kind: KindCallExpression
+
+Subject: input.length
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 42:101 - 44:76
+Node: acceptsRequest(Effect.fn("acceptsRequest")(({ id }) => Effect.succeed(id)))
+Node Kind: KindCallExpression
+
+Subject: ({ id }) => Effect.succeed(id)
+Subject Type: (this: unassigned, { id }: { readonly id: string; }) => Effect<string, never, never>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.fn("acceptsRequest")
+      args: (constant)
+      outType: (args_0: { readonly id: string; }) => Effect<string, never, never>
+  [1] kind: call
+      callee: acceptsRequest
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 44:55 - 44:74
+Node: Effect.succeed(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 44:76 - 49:3
+Node: acceptsRequest(function({ id }) {\n  return Effect.succeed(id)\n})
+Node Kind: KindCallExpression
+
+Subject: function({ id }) {\n  return Effect.succeed(id)\n}
+Subject Type: ({ id }: { readonly id: string; }) => Effect<string, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: acceptsRequest
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 48:9 - 48:28
+Node: Effect.succeed(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 52:74 - 54:65
+Node: make(Effect.fn("make")((input) => Effect.succeed(input.length)))
+Node Kind: KindCallExpression
+
+Subject: (input) => Effect.succeed(input.length)
+Subject Type: (this: unassigned, input: string) => Effect<number, never, never>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.fn("make")
+      args: (constant)
+      outType: (input: string) => Effect<number, never, never>
+  [1] kind: call
+      callee: make
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 54:34 - 54:63
+Node: Effect.succeed(input.length)
+Node Kind: KindCallExpression
+
+Subject: input.length
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 54:65 - 59:3
+Node: make(function(input) {\n  return Effect.succeed(input.length)\n})
+Node Kind: KindCallExpression
+
+Subject: function(input) {\n  return Effect.succeed(input.length)\n}
+Subject Type: (input: string) => Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: make
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 58:9 - 58:38
+Node: Effect.succeed(input.length)
+Node Kind: KindCallExpression
+
+Subject: input.length
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
