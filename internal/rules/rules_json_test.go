@@ -671,15 +671,15 @@ func generateReadmeTable() string {
 }
 
 func generateReadmeExampleConfig() string {
-	typ := reflect.TypeOf(etscore.EffectPluginOptions{})
+	typ := reflect.TypeFor[etscore.EffectPluginOptions]()
 	type readmeEntry struct {
 		name        string
 		description string
 		value       any
 	}
-	entries := make([]readmeEntry, 0, typ.NumField())
-	for i := 0; i < typ.NumField(); i++ {
-		field := typ.Field(i)
+	fields := reflect.VisibleFields(typ)
+	entries := make([]readmeEntry, 0, len(fields))
+	for _, field := range fields {
 		name := jsonFieldName(field)
 		if name == "" {
 			continue
@@ -811,15 +811,21 @@ func generateReadme(committedReadme []byte) ([]byte, error) {
 }
 
 func replaceReadmeSection(content string, startMarker string, endMarker string, body string) string {
-	startIdx := strings.Index(content, startMarker)
-	endIdx := strings.Index(content, endMarker)
+	before, afterStart, ok := strings.Cut(content, startMarker)
+	if !ok {
+		panic("missing start marker: " + startMarker)
+	}
+	_, afterEnd, ok := strings.Cut(afterStart, endMarker)
+	if !ok {
+		panic("missing end marker: " + endMarker)
+	}
 	var buf strings.Builder
-	buf.WriteString(content[:startIdx])
+	buf.WriteString(before)
 	buf.WriteString(startMarker)
 	buf.WriteString("\n")
 	buf.WriteString(body)
 	buf.WriteString("\n")
 	buf.WriteString(endMarker)
-	buf.WriteString(content[endIdx+len(endMarker):])
+	buf.WriteString(afterEnd)
 	return buf.String()
 }
