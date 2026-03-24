@@ -113,6 +113,23 @@ func TestMetadataJSON(t *testing.T) {
 	}
 }
 
+func TestUpdateMetadataJSON(t *testing.T) {
+	t.Parallel()
+	if os.Getenv("UPDATE_METADATA_JSON") == "" {
+		t.Skip("set UPDATE_METADATA_JSON=1 to regenerate metadata.json")
+	}
+	root := repoRoot(t)
+	metadataPath := filepath.Join(root, "_packages", "tsgo", "src", "metadata.json")
+	generated, err := marshalMetadataJSON(t)
+	if err != nil {
+		t.Fatalf("marshal metadata.json: %v", err)
+	}
+	if err := os.WriteFile(metadataPath, generated, 0o644); err != nil {
+		t.Fatalf("write metadata.json: %v", err)
+	}
+	t.Logf("metadata.json updated")
+}
+
 func repoRoot(t *testing.T) string {
 	t.Helper()
 	_, file, _, ok := runtime.Caller(0)
@@ -120,12 +137,6 @@ func repoRoot(t *testing.T) string {
 		t.Fatal("resolve caller path")
 	}
 	return filepath.Clean(filepath.Join(filepath.Dir(file), "..", ".."))
-}
-
-type metadataGroup struct {
-	ID          string `json:"id"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
 }
 
 type previewDiagnostic struct {
@@ -151,8 +162,9 @@ type exportedRule struct {
 }
 
 type metadataDocument struct {
-	Groups []metadataGroup `json:"groups"`
-	Rules  []exportedRule  `json:"rules"`
+	Groups  []rule.MetadataGroup  `json:"groups"`
+	Presets []rule.MetadataPreset `json:"presets"`
+	Rules   []exportedRule        `json:"rules"`
 }
 
 // buildFixableCodes returns a set of diagnostic codes that have non-disable fixables.
@@ -494,12 +506,8 @@ type previewUnit struct {
 func marshalMetadataJSON(t *testing.T) ([]byte, error) {
 	root := repoRoot(t)
 
-	groups := []metadataGroup{
-		{ID: "correctness", Name: "Correctness", Description: "Wrong, unsafe, or structurally invalid code patterns."},
-		{ID: "antipattern", Name: "Anti-pattern", Description: "Discouraged patterns that often lead to bugs or confusing behavior."},
-		{ID: "effectNative", Name: "Effect-native", Description: "Prefer Effect-native APIs and abstractions when available."},
-		{ID: "style", Name: "Style", Description: "Cleanup, consistency, and idiomatic Effect code."},
-	}
+	groups := rules.MetadataGroups()
+	presets := rules.MetadataPresets()
 
 	fixableCodes := buildFixableCodes()
 
@@ -541,8 +549,9 @@ func marshalMetadataJSON(t *testing.T) ([]byte, error) {
 	})
 
 	doc := metadataDocument{
-		Groups: groups,
-		Rules:  exported,
+		Groups:  groups,
+		Presets: presets,
+		Rules:   exported,
 	}
 
 	data, err := json.MarshalIndent(doc, "", "  ")
@@ -574,12 +583,7 @@ func containsEffect(supported []string, version string) bool {
 }
 
 func generateReadmeTable() string {
-	groups := []metadataGroup{
-		{ID: "correctness", Name: "Correctness", Description: "Wrong, unsafe, or structurally invalid code patterns."},
-		{ID: "antipattern", Name: "Anti-pattern", Description: "Discouraged patterns that often lead to bugs or confusing behavior."},
-		{ID: "effectNative", Name: "Effect-native", Description: "Prefer Effect-native APIs and abstractions when available."},
-		{ID: "style", Name: "Style", Description: "Cleanup, consistency, and idiomatic Effect code."},
-	}
+	groups := rules.MetadataGroups()
 
 	fixableCodes := buildFixableCodes()
 

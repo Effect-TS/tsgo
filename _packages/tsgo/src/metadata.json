@@ -21,6 +21,19 @@
       "description": "Cleanup, consistency, and idiomatic Effect code."
     }
   ],
+  "presets": [
+    {
+      "name": "effect-native",
+      "description": "Enable all Effect-native diagnostics at warning level.",
+      "diagnosticSeverity": {
+        "extendsNativeError": "warning",
+        "globalFetch": "warning",
+        "instanceOfSchema": "warning",
+        "nodeBuiltinImport": "warning",
+        "preferSchemaOverJson": "warning"
+      }
+    }
+  ],
   "rules": [
     {
       "name": "anyUnknownInErrorContext",

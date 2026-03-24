@@ -1,9 +1,9 @@
 import * as Option from "effect/Option"
 import { describe, expect, it } from "vitest"
-import { assess, type Assessment } from "../../src/setup/assessment.js"
+import { assess } from "../../src/setup/assessment.js"
 import { computeChanges } from "../../src/setup/changes.js"
 import { TSCONFIG_SCHEMA_URL } from "../../src/setup/consts.js"
-import type { Target } from "../../src/setup/types.js"
+import type { Assessment, Target } from "../../src/setup/types.js"
 
 /**
  * Create a test assessment input from plain objects
@@ -59,8 +59,8 @@ function expectSetupChanges(
   const normalizedTargetState: Target.State = {
     ...targetState,
     tsconfig: {
-      diagnosticSeverities: Option.none(),
-      ...targetState.tsconfig
+      ...targetState.tsconfig,
+      diagnosticSeverities: targetState.tsconfig.diagnosticSeverities ?? Option.none()
     }
   }
 
@@ -164,9 +164,7 @@ describe("Setup CLI", () => {
         lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
         prepareScript: false
       },
-      tsconfig: {
-        plugin: true
-      },
+      tsconfig: { diagnosticSeverities: Option.none() },
       vscodeSettings: Option.none(),
       editors: []
     }
@@ -204,9 +202,7 @@ describe("Setup CLI", () => {
         lspVersion: Option.none(),
         prepareScript: false
       },
-      tsconfig: {
-        plugin: false
-      },
+      tsconfig: { diagnosticSeverities: Option.none() },
       vscodeSettings: Option.none(),
       editors: []
     }
@@ -236,7 +232,6 @@ describe("Setup CLI", () => {
         prepareScript: false
       },
       tsconfig: {
-        plugin: true,
         diagnosticSeverities: Option.none()
       },
       vscodeSettings: Option.none(),
@@ -275,9 +270,7 @@ describe("Setup CLI", () => {
         lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
         prepareScript: false
       },
-      tsconfig: {
-        plugin: true
-      },
+      tsconfig: { diagnosticSeverities: Option.none() },
       vscodeSettings: Option.none(),
       editors: []
     }
@@ -305,9 +298,7 @@ describe("Setup CLI", () => {
         lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
         prepareScript: true
       },
-      tsconfig: {
-        plugin: true
-      },
+      tsconfig: { diagnosticSeverities: Option.none() },
       vscodeSettings: Option.none(),
       editors: []
     }
@@ -347,7 +338,6 @@ describe("Setup CLI", () => {
         prepareScript: false
       },
       tsconfig: {
-        plugin: false,
         diagnosticSeverities: Option.none()
       },
       vscodeSettings: Option.none(),
@@ -389,9 +379,7 @@ describe("Setup CLI", () => {
         lspVersion: Option.none(),
         prepareScript: false
       },
-      tsconfig: {
-        plugin: false
-      },
+      tsconfig: { diagnosticSeverities: Option.none() },
       vscodeSettings: Option.none(),
       editors: []
     }
@@ -431,7 +419,6 @@ describe("Setup CLI", () => {
         prepareScript: false
       },
       tsconfig: {
-        plugin: true,
         diagnosticSeverities: Option.none()
       },
       vscodeSettings: Option.none(),
@@ -466,9 +453,7 @@ describe("Setup CLI", () => {
         lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
         prepareScript: false
       },
-      tsconfig: {
-        plugin: true
-      },
+      tsconfig: { diagnosticSeverities: Option.none() },
       vscodeSettings: Option.none(),
       editors: []
     }
@@ -508,9 +493,7 @@ describe("Setup CLI", () => {
         lspVersion: Option.none(),
         prepareScript: false
       },
-      tsconfig: {
-        plugin: false
-      },
+      tsconfig: { diagnosticSeverities: Option.none() },
       vscodeSettings: Option.none(),
       editors: []
     }
@@ -539,9 +522,7 @@ describe("Setup CLI", () => {
         lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
         prepareScript: false
       },
-      tsconfig: {
-        plugin: true
-      },
+      tsconfig: { diagnosticSeverities: Option.none() },
       vscodeSettings: Option.some(VSCODE_SETTINGS),
       editors: ["vscode"]
     }
@@ -574,9 +555,7 @@ describe("Setup CLI", () => {
         lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
         prepareScript: false
       },
-      tsconfig: {
-        plugin: true
-      },
+      tsconfig: { diagnosticSeverities: Option.none() },
       vscodeSettings: Option.some(VSCODE_SETTINGS),
       editors: ["vscode"]
     }
@@ -621,9 +600,7 @@ describe("Setup CLI", () => {
         lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
         prepareScript: false
       },
-      tsconfig: {
-        plugin: true
-      },
+      tsconfig: { diagnosticSeverities: Option.none() },
       vscodeSettings: Option.some(VSCODE_SETTINGS),
       editors: ["vscode"]
     }
@@ -652,7 +629,6 @@ describe("Setup CLI", () => {
         prepareScript: false
       },
       tsconfig: {
-        plugin: true,
         diagnosticSeverities: Option.some({
           floatingEffect: "warning",
           missingEffectError: "off"
@@ -705,7 +681,6 @@ describe("Setup CLI", () => {
         prepareScript: true
       },
       tsconfig: {
-        plugin: true,
         diagnosticSeverities: Option.none()
       },
       vscodeSettings: Option.none(),
@@ -748,7 +723,6 @@ describe("Setup CLI", () => {
         prepareScript: false
       },
       tsconfig: {
-        plugin: true,
         diagnosticSeverities: Option.some({
           floatingEffect: "warning",
           missingEffectError: "off",
@@ -791,7 +765,6 @@ describe("Setup CLI", () => {
         prepareScript: false
       },
       tsconfig: {
-        plugin: true,
         diagnosticSeverities: Option.some({
           floatingEffect: "warning",
           missingEffectContext: "message"

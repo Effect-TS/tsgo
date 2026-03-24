@@ -55,7 +55,6 @@ function runComputeChanges(opts: {
       prepareScript: opts.prepareScript ?? true
     },
     tsconfig: {
-      plugin: true,
       diagnosticSeverities: opts.diagnosticSeverities === undefined
         ? Option.none()
         : opts.diagnosticSeverities === null

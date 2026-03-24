@@ -1,5 +1,6 @@
 import * as Data from "effect/Data"
 import * as Effect from "effect/Effect"
+import * as Option from "effect/Option"
 import * as Terminal from "effect/Terminal"
 import * as Prompt from "effect/unstable/cli/Prompt"
 import type { GroupInfo, RuleInfo, RuleSeverity } from "./rule-info.js"
@@ -366,13 +367,25 @@ function normalizeStartIndex(length: number, startIndex: number): number {
 
 function isPrintableInput(input: Terminal.UserInput): boolean {
   const printablePattern = new RegExp(String.raw`^[^\u0000-\u001F\u007F]+$`, "u")
+  const inputText = getInputText(input)
   return (
     !input.key.ctrl &&
     !input.key.meta &&
-    input.input !== undefined &&
-    input.input.length > 0 &&
-    printablePattern.test(input.input)
+    inputText !== undefined &&
+    inputText.length > 0 &&
+    printablePattern.test(inputText)
   )
+}
+
+function getInputText(input: Terminal.UserInput): string | undefined {
+  const value = input.input as string | Option.Option<string> | undefined
+  if (typeof value === "string") {
+    return value
+  }
+  if (value === undefined) {
+    return undefined
+  }
+  return Option.getOrUndefined(value)
 }
 
 function buildVisibleEntries(
@@ -554,7 +567,7 @@ function handleProcess(entries: ReadonlyArray<RuleEntry>, groups: ReadonlyArray<
         }))
       default:
         if (!isPrintableInput(input)) return Effect.succeed(Action.Beep())
-        return buildState(entries, groups, 0, state.searchText + input.input, state.severities).pipe(
+        return buildState(entries, groups, 0, state.searchText + getInputText(input)!, state.severities).pipe(
           Effect.map((nextState) => Action.NextFrame({ state: nextState }))
         )
     }

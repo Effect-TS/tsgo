@@ -9,6 +9,7 @@ import * as Effect from "effect/Effect"
 import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
 import * as Command from "effect/unstable/cli/Command"
+import { configCommand } from "./config.js"
 import { setupCommand } from "./setup/index.js"
 import * as pkgJson from "../package.json" with { type: "json" }
 
@@ -268,7 +269,7 @@ const getExePathCommand = Command.make("get-exe-path").pipe(
 )
 
 const rootCommand = Command.make("tsgo").pipe(
-  Command.withSubcommands([patchCommand, unpatchCommand, getExePathCommand, setupCommand])
+  Command.withSubcommands([patchCommand, unpatchCommand, getExePathCommand, setupCommand, configCommand])
 )
 
 

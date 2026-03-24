@@ -17,11 +17,28 @@ function runAndCapture(
 ): Array<string> {
   const captured: Array<string> = []
   const testConsole: Console.Console = {
-    ...Console.defaultConsole,
+    assert: () => {},
+    clear: () => {},
+    count: () => {},
+    countReset: () => {},
+    debug: () => {},
+    dir: () => {},
+    dirxml: () => {},
+    error: () => {},
+    group: () => {},
+    groupCollapsed: () => {},
+    groupEnd: () => {},
+    info: () => {},
     log(...args: ReadonlyArray<unknown>): void {
       captured.push(args.map(String).join(" "))
-    }
-  } as Console.Console
+    },
+    table: () => {},
+    time: () => {},
+    timeEnd: () => {},
+    timeLog: () => {},
+    trace: () => {},
+    warn: () => {}
+  }
   const layer = Layer.succeed(Console.Console, testConsole)
 
   Effect.runSync(
@@ -72,7 +89,8 @@ function makeAssessmentState(opts?: {
       parsed: JSON.parse(tsconfigText),
       text: tsconfigText,
       hasPlugins: false,
-      hasLspPlugin: false
+      hasLspPlugin: false,
+      currentDiagnosticSeverities: Option.none()
     },
     vscodeSettings
   }
@@ -145,7 +163,8 @@ describe("renderCodeActions", () => {
         parsed: JSON.parse(existingText),
         text: existingText,
         hasPlugins: false,
-        hasLspPlugin: false
+        hasLspPlugin: false,
+        currentDiagnosticSeverities: Option.none()
       }
     }
 
