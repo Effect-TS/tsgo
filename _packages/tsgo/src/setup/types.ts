@@ -74,7 +74,6 @@ export namespace Target {
   }
 
   export interface TsConfig {
-    readonly plugin: boolean
     readonly diagnosticSeverities: Option.Option<Record<string, RuleSeverity>>
   }
 

@@ -24,12 +24,22 @@ export interface GroupInfo {
   readonly description: string
 }
 
+export interface DiagnosticPresetInfo {
+  readonly name: string
+  readonly description: string
+  readonly diagnosticSeverity: Readonly<Record<string, RuleSeverity>>
+}
+
 export function getAllRules(): ReadonlyArray<RuleInfo> {
   return metadataJson.rules as ReadonlyArray<RuleInfo>
 }
 
 export function getAllGroups(): ReadonlyArray<GroupInfo> {
   return metadataJson.groups as ReadonlyArray<GroupInfo>
+}
+
+export function getAllPresets(): ReadonlyArray<DiagnosticPresetInfo> {
+  return (metadataJson as { presets?: ReadonlyArray<DiagnosticPresetInfo> }).presets ?? []
 }
 
 export function cycleSeverity(

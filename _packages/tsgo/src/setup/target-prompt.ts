@@ -2,8 +2,10 @@ import * as Effect from "effect/Effect"
 import * as Option from "effect/Option"
 import type * as Terminal from "effect/Terminal"
 import * as Prompt from "effect/unstable/cli/Prompt"
-import type { Assessment, Editor, Target } from "./types.js"
-import { getAllRules } from "./rule-info.js"
+import { applyPresetDiagnosticSeverities, type DiagnosticPresetName, isPresetEnabled } from "../presets.js"
+import type { Assessment } from "./types.js"
+import type { Editor, Target } from "./target.js"
+import { getAllPresets, getAllRules } from "./rule-info.js"
 import { createRulePrompt } from "./rule-prompt.js"
 
 /**
@@ -59,7 +61,6 @@ export const gatherTargetState = (
           prepareScript: false
         },
         tsconfig: {
-          plugin: false,
           diagnosticSeverities: Option.none()
         },
         vscodeSettings: Option.none(),
@@ -67,31 +68,43 @@ export const gatherTargetState = (
       } satisfies Target.State
     }
 
-    const shouldCustomizeDiagnostics = yield* Prompt.select({
-      message: "Would you like to customize the diagnostics that the language service will provide?",
+    const currentDiagnosticSeverities = Option.match(assessment.tsconfig.currentDiagnosticSeverities, {
+      onNone: () => ({}),
+      onSome: (diagnosticSeverities) => diagnosticSeverities
+    })
+
+    const selectedDiagnosticModes = yield* Prompt.multiSelect({
+      message: "Which diagnostic presets would you like to use?",
       choices: [
         {
-          title: "Yes",
-          description: "Manually review and select which diagnostics to enable",
-          value: true,
-          selected: true
+          title: "Custom",
+          description: "Review and adjust individual diagnostic severities after presets are applied",
+          value: "custom" as const
         },
-        {
-          title: "No",
-          description: "Keep the defaults provided by the language service",
-          value: false,
-          selected: false
-        }
+        ...getAllPresets().map((preset) => ({
+          title: preset.name,
+          description: preset.description,
+          value: preset.name as DiagnosticPresetName,
+          selected: isPresetEnabled(preset.name as DiagnosticPresetName, currentDiagnosticSeverities)
+        }))
       ]
     })
 
-    const diagnosticSeverities = shouldCustomizeDiagnostics
-      ? Option.some(
-        yield* createRulePrompt(
-          getAllRules(),
-          Option.getOrElse(assessment.tsconfig.currentDiagnosticSeverities, () => ({}))
-        )
+    const shouldCustomizeDiagnostics = selectedDiagnosticModes.includes("custom")
+    const selectedPresetNames = selectedDiagnosticModes.filter((value): value is DiagnosticPresetName =>
+      value !== "custom"
+    )
+    const initialSeverities = applyPresetDiagnosticSeverities(currentDiagnosticSeverities, selectedPresetNames)
+
+    const diagnosticSeveritiesRecord = shouldCustomizeDiagnostics
+      ? yield* createRulePrompt(
+        getAllRules(),
+        initialSeverities
       )
+      : initialSeverities
+
+    const diagnosticSeverities = Object.keys(diagnosticSeveritiesRecord).length > 0
+      ? Option.some(diagnosticSeveritiesRecord)
       : Option.none()
 
     // Editor Selection - Using multi-select
@@ -122,7 +135,8 @@ export const gatherTargetState = (
       ? Option.some({
         settings: {
           "typescript.native-preview.tsdk": "node_modules/@typescript/native-preview",
-          "typescript.experimental.useTsgo": true
+          "typescript.experimental.useTsgo": true,
+          "js/ts.experimental.useTsgo": true
         }
       })
       : Option.none()
@@ -133,7 +147,6 @@ export const gatherTargetState = (
         prepareScript: true
       },
       tsconfig: {
-        plugin: true,
         diagnosticSeverities
       },
       vscodeSettings,

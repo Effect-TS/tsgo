@@ -8,6 +8,11 @@ import * as Prompt from "effect/unstable/cli/Prompt"
 import { FileReadError, TsConfigNotFoundError } from "./errors.js"
 import type { FileInput } from "./types.js"
 
+const isTsConfigFile = (file: string) => {
+  const fileName = file.toLowerCase()
+  return fileName.endsWith(".json") || fileName.endsWith(".jsonc")
+}
+
 const findTsConfigFiles = (
   currentDir: string
 ): Effect.Effect<ReadonlyArray<string>, PlatformError.PlatformError, FileSystem.FileSystem | Path.Path> =>
@@ -16,12 +21,17 @@ const findTsConfigFiles = (
     const path = yield* Path.Path
 
     const files = yield* fs.readDirectory(currentDir)
-    const tsconfigFiles = Array.filter(files, (file) => {
-      const fileName = file.toLowerCase()
-      return fileName.startsWith("tsconfig") && (fileName.endsWith(".json") || fileName.endsWith(".jsonc"))
-    }).map((file) => path.join(currentDir, file))
+    const tsconfigFiles = Array.filter(files, isTsConfigFile).map((file) => path.join(currentDir, file))
 
     return tsconfigFiles
+  })
+
+const promptForTsConfigPath = (currentDir: string) =>
+  Prompt.file({
+    type: "file",
+    message: "Select tsconfig to configure",
+    startingPath: currentDir,
+    filter: (file) => file === ".." || !file.includes(".") || isTsConfigFile(file)
   })
 
 export const selectTsConfigFile = (
@@ -40,9 +50,7 @@ export const selectTsConfigFile = (
     let selectedTsconfigPath: string
 
     if (tsconfigFiles.length === 0) {
-      selectedTsconfigPath = yield* Prompt.text({
-        message: "Enter path to your tsconfig.json file"
-      })
+      selectedTsconfigPath = yield* promptForTsConfigPath(currentDir)
     } else {
       const choices = [
         ...tsconfigFiles.map((file) => ({
@@ -61,9 +69,7 @@ export const selectTsConfigFile = (
       })
 
       if (selected === "__manual__") {
-        selectedTsconfigPath = yield* Prompt.text({
-          message: "Enter path to your tsconfig.json file"
-        })
+        selectedTsconfigPath = yield* promptForTsConfigPath(currentDir)
       } else {
         selectedTsconfigPath = selected
       }
