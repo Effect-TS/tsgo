@@ -18,7 +18,7 @@ var MissingStarInYieldEffectGen = rule.Rule{
 	Description:     "Detects bare yield (without *) inside Effect generator scopes",
 	DefaultSeverity: etscore.SeverityError,
 	SupportedEffect: []string{"v3", "v4"},
-	Codes:       []int32{tsdiag.Inside_this_Effect_generator_effect_missingStarInYieldEffectGen.Code(), tsdiag.When_yielding_Effects_inside_Effect_gen_you_should_use_yield_Asterisk_instead_of_yield_effect_missingStarInYieldEffectGen.Code()},
+	Codes:           []int32{tsdiag.Inside_this_Effect_generator_effect_missingStarInYieldEffectGen.Code(), tsdiag.When_yielding_Effects_inside_Effect_gen_you_should_use_yield_Asterisk_instead_of_yield_effect_missingStarInYieldEffectGen.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeMissingStarInYieldEffectGen(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
@@ -34,7 +34,7 @@ var MissingStarInYieldEffectGen = rule.Rule{
 // and the quick-fix for the missingStarInYieldEffectGen pattern.
 type MissingStarInYieldEffectGenMatch struct {
 	SourceFile *ast.SourceFile // The source file where the diagnostic should be reported
-	Location  core.TextRange  // The pre-computed error range for this match
+	Location   core.TextRange  // The pre-computed error range for this match
 	YieldNode  *ast.Node       // The yield expression node (for fix range)
 	GenFnNode  *ast.Node       // The generator function node (for related info)
 }
@@ -53,15 +53,13 @@ func AnalyzeMissingStarInYieldEffectGen(c *checker.Checker, sf *ast.SourceFile) 
 		if n.Kind == ast.KindYieldExpression {
 			yield := n.AsYieldExpression()
 			if yield != nil && yield.Expression != nil && yield.AsteriskToken == nil {
-				scopes := typeparser.FindEnclosingScopes(c, n)
-				if scopes.ScopeNode != nil &&
-					(scopes.ScopeKind == typeparser.ScopeKindEffectGen || scopes.ScopeKind == typeparser.ScopeKindEffectFn) {
-					genFn := scopes.EffectGeneratorFunction()
-					if genFn != nil && scopes.ScopeNode == genFn.AsNode() {
+				if typeparser.GetEffectContextFlags(c, n)&typeparser.EffectContextFlagCanYieldEffect != 0 {
+					genFn := typeparser.GetEffectYieldGeneratorFunction(c, n)
+					if genFn != nil {
 						matches = append(matches, MissingStarInYieldEffectGenMatch{
 							SourceFile: sf,
-							Location:  scanner.GetErrorRangeForNode(sf, n),
-							YieldNode: n,
+							Location:   scanner.GetErrorRangeForNode(sf, n),
+							YieldNode:  n,
 							GenFnNode:  genFn.AsNode(),
 						})
 					}

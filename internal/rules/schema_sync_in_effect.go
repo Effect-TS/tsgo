@@ -82,13 +82,11 @@ func checkSchemaSyncInEffect(ctx *rule.Context, node *ast.Node, syncToEffectMeth
 		return nil
 	}
 
-	// Find enclosing scopes
-	scopes := typeparser.FindEnclosingScopes(ctx.Checker, node)
-	if scopes.ScopeKind != typeparser.ScopeKindEffectGen && scopes.ScopeKind != typeparser.ScopeKindEffectFn {
+	if typeparser.GetEffectContextFlags(ctx.Checker, node)&typeparser.EffectContextFlagCanYieldEffect == 0 {
 		return nil
 	}
 
-	genFn := scopes.EffectGeneratorFunction()
+	genFn := typeparser.GetEffectYieldGeneratorFunction(ctx.Checker, node)
 	if genFn == nil {
 		return nil
 	}
@@ -99,11 +97,6 @@ func checkSchemaSyncInEffect(ctx *rule.Context, node *ast.Node, syncToEffectMeth
 	}
 	block := genFn.Body.AsBlock()
 	if block.Statements == nil || len(block.Statements.Nodes) == 0 {
-		return nil
-	}
-
-	// Skip if the call is in a nested function scope (not directly in the generator body)
-	if scopes.ScopeNode != nil && scopes.ScopeNode != genFn.AsNode() {
 		return nil
 	}
 

@@ -134,8 +134,7 @@ func afterQuickInfo(c *checker.Checker, sf *ast.SourceFile, node *ast.Node, _ *a
 	if node.Kind == ast.KindYieldKeyword && node.Parent != nil && node.Parent.Kind == ast.KindYieldExpression {
 		yield := node.Parent.AsYieldExpression()
 		if yield.AsteriskToken != nil && yield.Expression != nil {
-			scopes := typeparser.FindEnclosingScopes(c, node)
-			if scopes.ScopeKind == typeparser.ScopeKindEffectGen || scopes.ScopeKind == typeparser.ScopeKindEffectFn {
+			if typeparser.GetEffectContextFlags(c, node)&typeparser.EffectContextFlagCanYieldEffect != 0 {
 				t := typeparser.GetTypeAtLocation(c, yield.Expression)
 				if t != nil {
 					effect := typeparser.EffectYieldableType(c, t, yield.Expression)

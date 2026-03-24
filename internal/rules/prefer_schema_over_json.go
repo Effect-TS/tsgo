@@ -16,12 +16,12 @@ import (
 // Both Effect v3 and v4 are supported (no version gating), except the simple Effect.try(() => ...)
 // thunk form which is V3-only.
 var PreferSchemaOverJson = rule.Rule{
-	Name:        "preferSchemaOverJson",
+	Name:            "preferSchemaOverJson",
 	Group:           "effectNative",
 	Description:     "Suggests using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify",
 	DefaultSeverity: etscore.SeveritySuggestion,
 	SupportedEffect: []string{"v3", "v4"},
-	Codes:       []int32{tsdiag.Consider_using_Effect_Schema_for_JSON_operations_instead_of_JSON_parse_SlashJSON_stringify_effect_preferSchemaOverJson.Code()},
+	Codes:           []int32{tsdiag.Consider_using_Effect_Schema_for_JSON_operations_instead_of_JSON_parse_SlashJSON_stringify_effect_preferSchemaOverJson.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		var diags []*ast.Diagnostic
 		isV4 := typeparser.SupportedEffectVersion(ctx.Checker) == typeparser.EffectMajorV4
@@ -199,13 +199,11 @@ func checkJsonMethodInEffectGen(c *checker.Checker, node *ast.Node) *ast.Node {
 		return nil
 	}
 
-	// Find enclosing scopes
-	scopes := typeparser.FindEnclosingScopes(c, node)
-	if scopes.ScopeKind != typeparser.ScopeKindEffectGen && scopes.ScopeKind != typeparser.ScopeKindEffectFn {
+	if typeparser.GetEffectContextFlags(c, node)&typeparser.EffectContextFlagCanYieldEffect == 0 {
 		return nil
 	}
 
-	genFn := scopes.EffectGeneratorFunction()
+	genFn := typeparser.GetEffectYieldGeneratorFunction(c, node)
 	if genFn == nil {
 		return nil
 	}
@@ -216,11 +214,6 @@ func checkJsonMethodInEffectGen(c *checker.Checker, node *ast.Node) *ast.Node {
 	}
 	block := genFn.Body.AsBlock()
 	if block.Statements == nil || len(block.Statements.Nodes) == 0 {
-		return nil
-	}
-
-	// Must be in direct scope (not a nested function)
-	if scopes.ScopeNode != nil && scopes.ScopeNode != genFn.AsNode() {
 		return nil
 	}
 

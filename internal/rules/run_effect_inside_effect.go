@@ -19,7 +19,7 @@ var runEffectApis = []string{"runSync", "runPromise", "runFork", "runCallback"}
 // Effect.runCallback call expressions inside Effect generator contexts and suggests alternatives.
 // This rule is V3-only — it is not applicable to V4.
 var RunEffectInsideEffect = rule.Rule{
-	Name:        "runEffectInsideEffect",
+	Name:            "runEffectInsideEffect",
 	Group:           "antipattern",
 	Description:     "Suggests using Runtime methods instead of Effect.run* inside Effect contexts",
 	DefaultSeverity: etscore.SeveritySuggestion,
@@ -51,7 +51,7 @@ var RunEffectInsideEffect = rule.Rule{
 // RunEffectInsideEffectMatch holds the diagnostic and AST nodes needed by both the
 // diagnostic rule and the quick-fix for the runEffectInsideEffect pattern.
 type RunEffectInsideEffectMatch struct {
-	SourceFile        *ast.SourceFile        // The source file where this match was found
+	SourceFile        *ast.SourceFile         // The source file where this match was found
 	Location          core.TextRange          // Pre-computed error range (on the callee expression)
 	CallNode          *ast.Node               // The full call expression node (e.g., Effect.runPromise(check))
 	CalleeNode        *ast.Node               // The callee expression (e.g., Effect.runPromise)
@@ -105,13 +105,17 @@ func analyzeRunEffectInsideEffectNode(c *checker.Checker, sf *ast.SourceFile, no
 		return RunEffectInsideEffectMatch{}, false
 	}
 
-	// Find enclosing scopes
-	scopes := typeparser.FindEnclosingScopes(c, node)
-	if scopes.ScopeKind != typeparser.ScopeKindEffectGen && scopes.ScopeKind != typeparser.ScopeKindEffectFn {
-		return RunEffectInsideEffectMatch{}, false
+	genFn := typeparser.GetEffectYieldGeneratorFunction(c, node)
+	if genFn == nil {
+		for current := node.Parent; current != nil; current = current.Parent {
+			if typeparser.GetEffectContextFlags(c, current)&typeparser.EffectContextFlagCanYieldEffect != 0 {
+				genFn = typeparser.GetEffectYieldGeneratorFunction(c, current)
+				if genFn != nil {
+					break
+				}
+			}
+		}
 	}
-
-	genFn := scopes.EffectGeneratorFunction()
 	if genFn == nil {
 		return RunEffectInsideEffectMatch{}, false
 	}
@@ -125,7 +129,7 @@ func analyzeRunEffectInsideEffectNode(c *checker.Checker, sf *ast.SourceFile, no
 		return RunEffectInsideEffectMatch{}, false
 	}
 
-	isNestedScope := scopes.ScopeNode != nil && scopes.ScopeNode != genFn.AsNode()
+	isNestedScope := ast.GetContainingFunction(node) != genFn.AsNode()
 
 	return RunEffectInsideEffectMatch{
 		SourceFile:        sf,
