@@ -135,7 +135,8 @@ export const gatherTargetState = (
       ? Option.some({
         settings: {
           "typescript.native-preview.tsdk": "node_modules/@typescript/native-preview",
-          "typescript.experimental.useTsgo": true
+          "typescript.experimental.useTsgo": true,
+          "js/ts.experimental.useTsgo": true
         }
       })
       : Option.none()
