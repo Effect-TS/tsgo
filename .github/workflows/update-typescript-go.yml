@@ -34,6 +34,16 @@ jobs:
           go-version: "1.26"
           cache: false
 
+      - name: Cache Go build
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: go-build-update-typescript-go-${{ runner.os }}-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            go-build-update-typescript-go-${{ runner.os }}-
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -67,11 +77,14 @@ jobs:
           before="${{ steps.before.outputs.sha }}"
           after="${{ steps.after.outputs.sha }}"
           compare_url="https://github.com/microsoft/typescript-go/compare/${before}...${after}"
+          commits="$(gh api \
+            repos/microsoft/typescript-go/compare/${before}...${after} \
+            --jq '.commits[] | "- [\(.sha[0:7])](https://github.com/microsoft/typescript-go/commit/\(.sha)) \(.commit.message | split("\n")[0])"')"
 
           {
             echo "compare_url=${compare_url}"
             echo "commits<<EOF"
-            git -C typescript-go log --reverse --pretty=format:'- [%h](https://github.com/microsoft/typescript-go/commit/%H) %s' "${before}..${after}"
+            printf '%s\n' "$commits"
             echo
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
