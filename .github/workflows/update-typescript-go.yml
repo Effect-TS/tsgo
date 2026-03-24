@@ -73,6 +73,8 @@ jobs:
 
       - name: Build upstream changelog
         id: changelog
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           before="${{ steps.before.outputs.sha }}"
           after="${{ steps.after.outputs.sha }}"
