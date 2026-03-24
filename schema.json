@@ -1657,6 +1657,11 @@
           "default": "warning",
           "description": "Effect.fn or Effect.fnUntraced is called as an IIFE; use Effect.gen instead"
         },
+        "effectFnImplicitAny": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "error",
+          "description": "Mirrors noImplicitAny for unannotated Effect.fn, Effect.fnUntraced, and Effect.fnUntracedEager callback parameters when no outer contextual function type exists. Requires TS's noImplicitAny: true"
+        },
         "effectFnOpportunity": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",

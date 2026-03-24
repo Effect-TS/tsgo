@@ -10,6 +10,7 @@ import (
 	"maps"
 	"os"
 	"path/filepath"
+	"reflect"
 	"regexp"
 	"runtime"
 	"slices"
@@ -669,26 +670,162 @@ func generateReadmeTable() string {
 	return strings.Join(lines, "\n")
 }
 
+func generateReadmeExampleConfig() string {
+	typ := reflect.TypeFor[etscore.EffectPluginOptions]()
+	type readmeEntry struct {
+		name        string
+		description string
+		value       any
+	}
+	fields := reflect.VisibleFields(typ)
+	entries := make([]readmeEntry, 0, len(fields))
+	for _, field := range fields {
+		name := jsonFieldName(field)
+		if name == "" {
+			continue
+		}
+		defaultValue := readmeDefaultValue(field)
+		if defaultValue == nil {
+			continue
+		}
+		entries = append(entries, readmeEntry{
+			name:        name,
+			description: field.Tag.Get("schema_description"),
+			value:       defaultValue,
+		})
+	}
+
+	var lines []string
+	lines = append(lines, "```jsonc")
+	lines = append(lines, "{")
+	lines = append(lines, `  "compilerOptions": {`)
+	lines = append(lines, `    "plugins": [`)
+	lines = append(lines, `      {`)
+	lines = append(lines, `        "name": "@effect/language-service",`)
+	for i, entry := range entries {
+		defaultText := compactJSON(entry.value)
+		if entry.description != "" {
+			lines = append(lines, fmt.Sprintf("        // %s (default: %s)", entry.description, defaultText))
+		}
+		encoded := indentedJSON(entry.value, "        ")
+		comma := ","
+		if i == len(entries)-1 {
+			comma = ""
+		}
+		lines = append(lines, fmt.Sprintf(`        %q: %s%s`, entry.name, encoded, comma))
+	}
+	lines = append(lines, `      }`)
+	lines = append(lines, `    ]`)
+	lines = append(lines, `  }`)
+	lines = append(lines, `}`)
+	lines = append(lines, "```")
+
+	return strings.Join(lines, "\n")
+}
+
+func readmeDefaultValue(field reflect.StructField) any {
+	if defaultValue := decodeStructTagJSON(field, "schema_default"); defaultValue != nil {
+		return defaultValue
+	}
+	switch field.Name {
+	case "DiagnosticSeverity":
+		return map[string]any{}
+	case "KeyPatterns":
+		return etscore.DefaultKeyPatterns
+	default:
+		return nil
+	}
+}
+
+func decodeStructTagJSON(field reflect.StructField, key string) any {
+	value := field.Tag.Get(key)
+	if value == "" {
+		return nil
+	}
+	var decoded any
+	if err := json.Unmarshal([]byte(value), &decoded); err != nil {
+		panic(err)
+	}
+	return decoded
+}
+
+func jsonFieldName(field reflect.StructField) string {
+	tag := field.Tag.Get("json")
+	if tag == "" {
+		return ""
+	}
+	name := strings.Split(tag, ",")[0]
+	if name == "-" {
+		return ""
+	}
+	return name
+}
+
+func compactJSON(value any) string {
+	data, err := json.Marshal(value)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
+}
+
+func indentedJSON(value any, prefix string) string {
+	data, err := json.MarshalIndent(value, "", "  ")
+	if err != nil {
+		panic(err)
+	}
+	parts := strings.Split(string(data), "\n")
+	if len(parts) == 1 {
+		return parts[0]
+	}
+	for i := 1; i < len(parts); i++ {
+		parts[i] = prefix + parts[i]
+	}
+	return strings.Join(parts, "\n")
+}
+
 const readmeStartMarker = "<!-- diagnostics-table:start -->"
 const readmeEndMarker = "<!-- diagnostics-table:end -->"
+const readmeExampleStartMarker = "<!-- example-config:start -->"
+const readmeExampleEndMarker = "<!-- example-config:end -->"
 
 func generateReadme(committedReadme []byte) ([]byte, error) {
 	content := string(committedReadme)
-	startIdx := strings.Index(content, readmeStartMarker)
-	endIdx := strings.Index(content, readmeEndMarker)
-	if startIdx < 0 || endIdx < 0 || endIdx <= startIdx {
+	diagnosticsStartIdx := strings.Index(content, readmeStartMarker)
+	diagnosticsEndIdx := strings.Index(content, readmeEndMarker)
+	if diagnosticsStartIdx < 0 || diagnosticsEndIdx < 0 || diagnosticsEndIdx <= diagnosticsStartIdx {
 		return nil, errors.New("README.md missing diagnostics table markers")
+	}
+	exampleStartIdx := strings.Index(content, readmeExampleStartMarker)
+	exampleEndIdx := strings.Index(content, readmeExampleEndMarker)
+	if exampleStartIdx < 0 || exampleEndIdx < 0 || exampleEndIdx <= exampleStartIdx {
+		return nil, errors.New("README.md missing example config markers")
 	}
 
 	table := generateReadmeTable()
-	var buf strings.Builder
-	buf.WriteString(content[:startIdx])
-	buf.WriteString(readmeStartMarker)
-	buf.WriteString("\n")
-	buf.WriteString(table)
-	buf.WriteString("\n")
-	buf.WriteString(readmeEndMarker)
-	buf.WriteString(content[endIdx+len(readmeEndMarker):])
+	example := generateReadmeExampleConfig()
+	content = replaceReadmeSection(content, readmeStartMarker, readmeEndMarker, table)
+	content = replaceReadmeSection(content, readmeExampleStartMarker, readmeExampleEndMarker, example)
 
-	return []byte(buf.String()), nil
+	return []byte(content), nil
+}
+
+func replaceReadmeSection(content string, startMarker string, endMarker string, body string) string {
+	before, afterStart, ok := strings.Cut(content, startMarker)
+	if !ok {
+		panic("missing start marker: " + startMarker)
+	}
+	_, afterEnd, ok := strings.Cut(afterStart, endMarker)
+	if !ok {
+		panic("missing end marker: " + endMarker)
+	}
+	var buf strings.Builder
+	buf.WriteString(before)
+	buf.WriteString(startMarker)
+	buf.WriteString("\n")
+	buf.WriteString(body)
+	buf.WriteString("\n")
+	buf.WriteString(endMarker)
+	buf.WriteString(afterEnd)
+	return buf.String()
 }
