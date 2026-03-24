@@ -168,7 +168,74 @@ Each release of `effect-tsgo` is built against a specific upstream `tsgo` commit
 
 ## Plugin Options
 
-These options are configured in `tsconfig.json` under `compilerOptions.plugins` for the `@effect/language-service` plugin entry.
+<!-- example-config:start -->
+```jsonc
+{
+  "compilerOptions": {
+    "plugins": [
+      {
+        "name": "@effect/language-service",
+        // Maps rule names to severity levels. Use {} to enable diagnostics with rule defaults. (default: {})
+        "diagnosticSeverity": {},
+        // When false, suggestion-level Effect diagnostics are omitted from tsc CLI output. (default: true)
+        "includeSuggestionsInTsc": true,
+        // When true, suggestion diagnostics do not affect the tsc exit code. (default: true)
+        "ignoreEffectSuggestionsInTscExitCode": true,
+        // When true, warning diagnostics do not affect the tsc exit code. (default: false)
+        "ignoreEffectWarningsInTscExitCode": false,
+        // When true, error diagnostics do not affect the tsc exit code. (default: false)
+        "ignoreEffectErrorsInTscExitCode": false,
+        // When true, disabled diagnostics are still processed so directives can re-enable them. (default: false)
+        "skipDisabledOptimization": false,
+        // Configures key pattern formulas for the deterministicKeys rule. (default: [{"target":"service","pattern":"default","skipLeadingPath":["src/"]},{"target":"custom","pattern":"default","skipLeadingPath":["src/"]}])
+        "keyPatterns": [
+          {
+            "target": "service",
+            "pattern": "default",
+            "skipLeadingPath": [
+              "src/"
+            ]
+          },
+          {
+            "target": "custom",
+            "pattern": "default",
+            "skipLeadingPath": [
+              "src/"
+            ]
+          }
+        ],
+        // Enables matching constructors with @effect-identifier annotations. (default: false)
+        "extendedKeyDetection": false,
+        // Minimum number of contiguous pipeable transformations to trigger missedPipeableOpportunity. (default: 2)
+        "pipeableMinArgCount": 2,
+        // Mermaid rendering service for layer graph links. Accepts mermaid.live, mermaid.com, or a custom URL. (default: "mermaid.live")
+        "mermaidProvider": "mermaid.live",
+        // When true, suppresses external Mermaid links in hover output. (default: false)
+        "noExternal": false,
+        // How many levels deep the layer graph extraction follows symbol references. (default: 0)
+        "layerGraphFollowDepth": 0,
+        // Controls which effectFnOpportunity quickfix variants are offered. (default: ["span"])
+        "effectFn": [
+          "span"
+        ],
+        // When true, suppresses redundant return-type inlay hints on supported Effect generator functions. (default: false)
+        "inlays": false,
+        // Package names allowed to have multiple versions without triggering duplicatePackage. (default: [])
+        "allowedDuplicatedPackages": [],
+        // Package names that should prefer namespace imports. (default: [])
+        "namespaceImportPackages": [],
+        // Package names that should prefer barrel named imports. (default: [])
+        "barrelImportPackages": [],
+        // Package-level import aliases keyed by package name. (default: {})
+        "importAliases": {},
+        // Controls whether named reexports are followed at package top-level. (default: "ignore")
+        "topLevelNamedReexports": "ignore"
+      }
+    ]
+  }
+}
+```
+<!-- example-config:end -->
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
