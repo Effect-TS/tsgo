@@ -23,7 +23,7 @@
     "test": "vitest run"
   },
   "bin": {
-    "effect-tsgo": "./src/index.ts"
+    "effect-tsgo": "./src/cli.ts"
   },
   "files": [
     "dist/",
