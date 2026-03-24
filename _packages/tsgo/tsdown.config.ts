@@ -11,7 +11,7 @@ export default defineConfig({
     "effect-tsgo": "./src/cli.ts",
   },
   inlineOnly: false,
-  outDir: "./bin",
+  outDir: "./dist",
   format: ["cjs"],
   platform: "node",
   target: "node22",
