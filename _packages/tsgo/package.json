@@ -14,7 +14,7 @@
     "access": "public",
     "provenance": true,
     "bin": {
-      "effect-tsgo": "./dist/effect-tsgo"
+      "effect-tsgo": "./dist/effect-tsgo.js"
     }
   },
   "scripts": {
@@ -23,7 +23,7 @@
     "test": "vitest run"
   },
   "bin": {
-    "effect-tsgo": "./dist/effect-tsgo"
+    "effect-tsgo": "./src/index.ts"
   },
   "files": [
     "dist/",

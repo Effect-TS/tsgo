@@ -28,16 +28,6 @@ export default defineConfig({
       const fs = yield* FileSystem.FileSystem
       const path = yield* Path.Path
 
-      const builtCliPath = path.join("dist", "effect-tsgo.js")
-      const publishedCliPath = path.join("dist", "effect-tsgo")
-
-      if (yield* fs.exists(builtCliPath)) {
-        if (yield* fs.exists(publishedCliPath)) {
-          yield* fs.remove(publishedCliPath)
-        }
-        yield* fs.rename(builtCliPath, publishedCliPath)
-      }
-
       const readme = yield* fs.readFileString("../../README.md")
       yield* fs.writeFileString(path.join("README.md"), readme)
     }).pipe(Effect.provide(Layer.merge(NodeFileSystem.layer, NodePath.layerPosix)))
