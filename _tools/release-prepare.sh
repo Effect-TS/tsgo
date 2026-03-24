@@ -136,7 +136,7 @@ errors=()
 
 # Check CLI bundle
 if [ "$skip_cli" != "true" ]; then
-  cli_bundle="${PACKAGES_DIR}/tsgo/bin/effect-tsgo.js"
+  cli_bundle="${PACKAGES_DIR}/tsgo/dist/effect-tsgo"
   if [ ! -s "${cli_bundle}" ]; then
     errors+=("Missing or empty CLI bundle: ${cli_bundle}")
   fi

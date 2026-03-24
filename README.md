@@ -7,6 +7,20 @@ This project targets **Effect V4** (codename: "smol") primarily and also Effect 
 The TypeScript-Go version of the Effect LSP should be considered in Alpha. Expect breaking changes between releases and some missing features compared to previous version.
 Some of them are currently on hold due to not yet complete pipeline on the upstream TypeScript repository.
 
+## Installation
+
+The setup of the TSGO version of the LSP can be performed via the command line interface:
+
+```bash
+npx @effect/tsgo setup
+```
+
+This will guide you through the installation process, which includes:
+1. Adding the `@effect/tsgo` dependency to your project.
+2. Configuring your `tsconfig.json` to use the Effect Language Service plugin.
+3. Adjusting plugin options to your preference.
+4. Hinting at any additional editor configuration needed to ensure the LSP is active.
+
 ## Diagnostic Status
 
 Some diagnostics are off by default or have a default severity of suggestion, but you can always enable them or change their default severity in the plugin options.
