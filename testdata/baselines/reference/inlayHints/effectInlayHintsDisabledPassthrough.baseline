@@ -1,0 +1,105 @@
+export function standardShouldAppear() {
+                                      ^
+{
+  "position": {
+    "line": 2,
+    "character": 38
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "number"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
+
+export const sample = Effect.gen(function*() {
+                                            ^
+{
+  "position": {
+    "line": 6,
+    "character": 44
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "Generator",
+      "location": {
+        "uri": "bundled:///libs/lib.es2015.generator.d.ts",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 0
+          },
+          "end": {
+            "line": 0,
+            "character": 0
+          }
+        }
+      }
+    },
+    {
+      "value": "<"
+    },
+    {
+      "value": "Effect",
+      "location": {
+        "uri": "file:///node_modules/effect/dist/Effect.d.ts",
+        "range": {
+          "start": {
+            "line": 136,
+            "character": 17
+          },
+          "end": {
+            "line": 136,
+            "character": 23
+          }
+        }
+      }
+    },
+    {
+      "value": "<"
+    },
+    {
+      "value": "never"
+    },
+    {
+      "value": ","
+    },
+    {
+      "value": "string"
+    },
+    {
+      "value": ","
+    },
+    {
+      "value": "never"
+    },
+    {
+      "value": ">"
+    },
+    {
+      "value": ","
+    },
+    {
+      "value": "number"
+    },
+    {
+      "value": ","
+    },
+    {
+      "value": "any"
+    },
+    {
+      "value": ">"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}

@@ -5,8 +5,9 @@ package fourslash
 
 import "github.com/microsoft/typescript-go/internal/fourslash"
 import "github.com/microsoft/typescript-go/internal/lsp/lsproto"
+import "github.com/microsoft/typescript-go/internal/testutil/lsptestutil"
 import "testing"
-import _ "unsafe"
+import "unsafe"
 
 var AnyTextEdits = fourslash.AnyTextEdits
 type AppliedQuickFixResult = fourslash.AppliedQuickFixResult
@@ -22,6 +23,12 @@ type ExpectedCompletionEditRange = fourslash.ExpectedCompletionEditRange
 type FileChange = fourslash.FileChange
 type FoldingRangeLineExpected = fourslash.FoldingRangeLineExpected
 type FourslashTest = fourslash.FourslashTest
+type extra_FourslashTest_client struct {
+  client *lsptestutil.LSPClient
+}
+func FourslashTest_client(v *fourslash.FourslashTest) *lsptestutil.LSPClient {
+  return ((*extra_FourslashTest_client)(unsafe.Pointer(v))).client
+}
 //go:linkname GetDefaultCapabilities github.com/microsoft/typescript-go/internal/fourslash.GetDefaultCapabilities
 func GetDefaultCapabilities() *lsproto.ClientCapabilities
 type Ignored = fourslash.Ignored

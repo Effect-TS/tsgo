@@ -42,6 +42,7 @@ type ExtraShim struct {
 	ExtraFunctions  []string
 	ExtraMethods    map[string]([]string)
 	ExtraFields     map[string]([]string)
+	CompactFields   map[string]([]string)
 	IgnoreFunctions []string
 }
 
@@ -74,6 +75,7 @@ func main() {
 		"scanner",
 		"testrunner",
 		"testutil",
+		"testutil/lsptestutil",
 		"testutil/baseline",
 		"testutil/harnessutil",
 		"testutil/tsbaseline",
@@ -121,6 +123,9 @@ func main() {
 		}
 		if extraShim.ExtraFields == nil {
 			extraShim.ExtraFields = map[string]([]string){}
+		}
+		if extraShim.CompactFields == nil {
+			extraShim.CompactFields = map[string]([]string){}
 		}
 		if extraShim.IgnoreFunctions == nil {
 			extraShim.IgnoreFunctions = []string{}
@@ -199,6 +204,13 @@ func main() {
 		matchedExtraFields := make(map[string]bool, len(extraShim.ExtraFields))
 		for name := range extraShim.ExtraFields {
 			matchedExtraFields[name] = false
+		}
+		compactFieldNames := make(map[string]map[string]bool, len(extraShim.CompactFields))
+		for name, fields := range extraShim.CompactFields {
+			compactFieldNames[name] = make(map[string]bool, len(fields))
+			for _, field := range fields {
+				compactFieldNames[name][field] = true
+			}
 		}
 
 		scope := pkg.Types.Scope()
@@ -303,10 +315,6 @@ func main() {
 					importPackage("unsafe", true)
 
 					matchedExtraFields[name] = true
-					if err != nil {
-						log.Fatalf("error formatting %v struct body: %v", name, err)
-					}
-					mirrorStructName := "extra_" + name
 
 					var emitExtraStruct func(name string, s *types.Struct)
 					emitExtraStruct = func(name string, s *types.Struct) {
@@ -360,14 +368,49 @@ func main() {
 						log.Fatalf("expected %v to be struct", name)
 					}
 
-					emitExtraStruct(name, strct)
-
 					mappedFieldTypes := make(map[string]*types.Var, strct.NumFields())
-					for field := range strct.Fields() {
+					mappedFieldIndexes := make(map[string]int, strct.NumFields())
+					for i := range strct.NumFields() {
+						field := strct.Field(i)
 						mappedFieldTypes[field.Name()] = field
+						mappedFieldIndexes[field.Name()] = i
+					}
+
+					needsFullMirror := false
+					for _, field := range extraShim.ExtraFields[name] {
+						idx, ok := mappedFieldIndexes[field]
+						if !ok {
+							log.Fatalf("expected struct %q to contain field %q", name, field)
+						}
+						if idx != 0 || !compactFieldNames[name][field] {
+							needsFullMirror = true
+							break
+						}
+					}
+
+					mirrorStructName := "extra_" + name
+					if needsFullMirror {
+						emitExtraStruct(name, strct)
 					}
 
 					for _, field := range extraShim.ExtraFields[name] {
+						fieldVar, ok := mappedFieldTypes[field]
+						if !ok {
+							log.Fatalf("expected struct %q to contain field %q", name, field)
+						}
+
+						accessorStructName := mirrorStructName
+						if mappedFieldIndexes[field] == 0 && compactFieldNames[name][field] {
+							accessorStructName = mirrorStructName + "_" + field
+							shimBuilder.WriteString("type ")
+							shimBuilder.WriteString(accessorStructName)
+							shimBuilder.WriteString(" struct {\n  ")
+							shimBuilder.WriteString(field)
+							shimBuilder.WriteByte(' ')
+							shimBuilder.WriteString(types.TypeString(fieldVar.Type(), qualifierOnlyPackageName))
+							shimBuilder.WriteString("\n}\n")
+						}
+
 						shimBuilder.WriteString("func ")
 						shimBuilder.WriteString(name)
 						shimBuilder.WriteByte('_')
@@ -377,15 +420,10 @@ func main() {
 						shimBuilder.WriteByte('.')
 						shimBuilder.WriteString(name)
 						shimBuilder.WriteString(") ")
-
-						fieldVar, ok := mappedFieldTypes[field]
-						if !ok {
-							log.Fatalf("expected struct %q to contain field %q", name, field)
-						}
 						shimBuilder.WriteString(types.TypeString(fieldVar.Type(), qualifierOnlyPackageName))
 						shimBuilder.WriteString(" {\n")
 						shimBuilder.WriteString("  return ((*")
-						shimBuilder.WriteString(mirrorStructName)
+						shimBuilder.WriteString(accessorStructName)
 						shimBuilder.WriteString(")(unsafe.Pointer(v))).")
 						shimBuilder.WriteString(field)
 						shimBuilder.WriteString("\n")
