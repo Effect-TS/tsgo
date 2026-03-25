@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
 
 /.src/unnecessaryFailYieldableError.ts(22,3): suggestion TS377019: This Effect.fail call uses a yieldable error type as argument. You can yield* the error directly instead. effect(unnecessaryFailYieldableError)
 /.src/unnecessaryFailYieldableError.ts(23,3): suggestion TS377019: This Effect.fail call uses a yieldable error type as argument. You can yield* the error directly instead. effect(unnecessaryFailYieldableError)

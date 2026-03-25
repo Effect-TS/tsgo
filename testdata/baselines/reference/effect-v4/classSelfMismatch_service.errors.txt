@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
 
 /.src/classSelfMismatch_service.ts(10,51): error TS377046: Self type parameter should be 'WrongName'. effect(classSelfMismatch)
 

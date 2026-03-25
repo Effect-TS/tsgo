@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
 
 /.src/unnecessaryPipe.ts(13,29): suggestion TS377013: This pipe call contains no arguments. effect(unnecessaryPipe)
 /.src/unnecessaryPipe.ts(15,35): suggestion TS377013: This pipe call contains no arguments. effect(unnecessaryPipe)

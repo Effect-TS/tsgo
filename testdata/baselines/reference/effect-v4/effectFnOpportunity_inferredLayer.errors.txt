@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
 
 /.src/effectFnOpportunity_inferredLayer.ts(10,12): suggestion TS377047: Can be rewritten as a reusable function: Effect.fn((what) => { ... }). effect(effectFnOpportunity)
 /.src/effectFnOpportunity_inferredLayer.ts(16,12): suggestion TS377047: Can be rewritten as a reusable function: Effect.fn((what) => { ... }). effect(effectFnOpportunity)

@@ -62,7 +62,7 @@ func generateErrorBaseline(effectVersion string, inputFiles []*harnessutil.TestF
 	var sb strings.Builder
 
 	sb.WriteString("=== Metadata ===\n")
-	fmt.Fprintf(&sb, "Effect version: %s\n", effectVersion)
+	fmt.Fprintf(&sb, "Effect version: %s\n", normalizeEffectVersionForBaseline(effectVersion))
 	sb.WriteString("\n")
 
 	// Filter out diagnostics from /node_modules/ files — these are internal
@@ -186,6 +186,13 @@ func generateErrorBaseline(effectVersion string, inputFiles []*harnessutil.TestF
 	}
 
 	return sb.String()
+}
+
+func normalizeEffectVersionForBaseline(version string) string {
+	if i := strings.Index(version, "-"); i >= 0 {
+		return version[:i]
+	}
+	return version
 }
 
 func appendRelatedDiagnostics(sb *strings.Builder, related []*ast.Diagnostic, depth int) {

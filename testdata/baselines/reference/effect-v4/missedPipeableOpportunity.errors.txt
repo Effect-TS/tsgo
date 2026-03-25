@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
 
 /.src/missedPipeableOpportunity.ts(11,30): warning TS377050: Nested function calls can be converted to pipeable style for better readability; consider using addOne(5).pipe(...) instead. effect(missedPipeableOpportunity)
 /.src/missedPipeableOpportunity.ts(15,30): warning TS377050: Nested function calls can be converted to pipeable style for better readability; consider using addOne(10).pipe(...) instead. effect(missedPipeableOpportunity)

@@ -40,7 +40,7 @@ Transformations (1):
   [0] kind: call
       callee: Data.TaggedError
       args: (constant)
-      outType: new <A extends Record<string, any> = {}>(args: MatchRecord<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }, void, { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "RequestError"; } & Readonly<A>
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "RequestError"; } & Readonly<A>
 
 === Piping Flow ===
 Location: 22:33 - 22:72
@@ -54,7 +54,7 @@ Transformations (1):
   [0] kind: call
       callee: Data.TaggedError
       args: (constant)
-      outType: new <A extends Record<string, any> = {}>(args: MatchRecord<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }, void, { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "InvalidStatusError"; } & Readonly<A>
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "InvalidStatusError"; } & Readonly<A>
 
 === Piping Flow ===
 Location: 27:26 - 27:58
@@ -68,7 +68,7 @@ Transformations (1):
   [0] kind: call
       callee: Data.TaggedError
       args: (constant)
-      outType: new <A extends Record<string, any> = {}>(args: MatchRecord<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }, void, { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "DecodeError"; } & Readonly<A>
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "DecodeError"; } & Readonly<A>
 
 === Piping Flow ===
 Location: 34:24 - 36:18

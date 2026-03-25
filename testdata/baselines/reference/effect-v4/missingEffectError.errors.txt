@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
 
 /.src/missingEffectError.ts(9,14): error TS2322: Type 'Effect<number, ErrorA | ErrorB, never>' is not assignable to type 'Effect<number, never, never>'.
 /.src/missingEffectError.ts(9,14): error TS377003: Missing errors ErrorA | ErrorB in the expected Effect type. effect(missingEffectError)

@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
 
 /.src/missingLayerContext.ts(28,8): error TS377034: Missing 'ServiceB | ServiceC' in the expected Layer context. effect(missingLayerContext)
 /.src/missingLayerContext.ts(35,20): error TS377034: Missing 'ServiceC' in the expected Layer context. effect(missingLayerContext)

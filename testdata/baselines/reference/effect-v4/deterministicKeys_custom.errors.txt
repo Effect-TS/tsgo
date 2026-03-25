@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
 
 /.src/test.ts(10,56): error TS377049: Key should be '@effect/test-app/test/MyClass'. effect(deterministicKeys)
 /.src/test.ts(16,6): error TS377049: Key should be '@effect/test-app/test/TTLRequest'. effect(deterministicKeys)

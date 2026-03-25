@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
 
 /.src/schemaSyncInEffect.ts(11,18): suggestion TS377037: Using Schema.decodeSync inside an Effect generator is not recommended. Use Schema.decodeEffect instead to get properly typed error channel. effect(schemaSyncInEffect)
 /.src/schemaSyncInEffect.ts(19,18): suggestion TS377037: Using Schema.decodeUnknownSync inside an Effect generator is not recommended. Use Schema.decodeUnknownEffect instead to get properly typed error channel. effect(schemaSyncInEffect)

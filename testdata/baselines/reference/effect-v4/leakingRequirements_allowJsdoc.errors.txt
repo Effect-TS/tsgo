@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
 
 /.src/leakingRequirements_allowJsdoc.ts(15,14): suggestion TS377041: Methods of this Service require 'Cache' from every caller. This leaks implementation details — resolve these dependencies at Layer creation time. effect(leakingRequirements)
 

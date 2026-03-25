@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
 
 /.src/effectFnIife.ts(4,22): warning TS377011: Effect.fn returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead with Effect.withSpan("test") piped in the end to maintain tracing spans. effect(effectFnIife)
 /.src/effectFnIife.ts(9,22): warning TS377011: Effect.fn returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead with Effect.withSpan("named") piped in the end to maintain tracing spans. effect(effectFnIife)

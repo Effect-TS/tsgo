@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
 
 /.src/effectFnOpportunity_multipleReturns.ts(12,10): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
 /.src/effectFnOpportunity_multipleReturns.ts(19,10): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)

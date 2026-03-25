@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
 
 /.src/effectInVoidSuccess.ts(4,14): warning TS377020: There is a nested 'Effect<number, never, never>' in the 'void' success channel, beware that this could lead to nested Effect<Effect<...>> that won't be executed. effect(effectInVoidSuccess)
 /.src/effectInVoidSuccess.ts(7,3): warning TS377020: There is a nested 'Effect<never, string, never>' in the 'void' success channel, beware that this could lead to nested Effect<Effect<...>> that won't be executed. effect(effectInVoidSuccess)

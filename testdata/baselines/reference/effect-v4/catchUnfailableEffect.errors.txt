@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
 
 /.src/catchUnfailableEffect.ts(11,3): suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
 /.src/catchUnfailableEffect.ts(11,19): error TS2345: Argument of type 'string' is not assignable to parameter of type 'readonly [never, ...never[]]'.

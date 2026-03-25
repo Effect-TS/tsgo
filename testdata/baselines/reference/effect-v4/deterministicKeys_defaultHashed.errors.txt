@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
 
 /.src/test.ts(5,63): error TS377049: Key should be 'de06a820ada693c2'. effect(deterministicKeys)
 /.src/test.ts(8,46): error TS377049: Key should be '1296269f76d642ec'. effect(deterministicKeys)

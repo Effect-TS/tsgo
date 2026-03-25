@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
 
 /.src/instanceOfSchema.ts(11,5): warning TS377042: Consider using Schema.is instead of instanceof for Effect Schema types. effect(instanceOfSchema)
 /.src/instanceOfSchema.ts(19,44): warning TS377042: Consider using Schema.is instead of instanceof for Effect Schema types. effect(instanceOfSchema)

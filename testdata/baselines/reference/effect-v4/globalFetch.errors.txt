@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
 
 /.src/globalFetch.ts(7,24): warning TS377061: Prefer using HttpClient from effect/unstable/http instead of the global 'fetch' function. effect(globalFetch)
 

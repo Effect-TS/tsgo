@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
 
 /.src/floatingEffectSuppressed.ts(4,1): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
 /.src/floatingEffectSuppressed.ts(11,1): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)

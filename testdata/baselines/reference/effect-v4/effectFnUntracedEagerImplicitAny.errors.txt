@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
 
 /.src/effectFnUntracedEagerImplicitAny.ts(4,66): error TS377062: Parameter 'input' implicitly has an 'any' type in Effect.fn/Effect.fnUntraced/Effect.fnUntracedEager. Add an explicit type annotation or provide a contextual function type. effect(effectFnImplicitAny)
 /.src/effectFnUntracedEagerImplicitAny.ts(9,46): error TS7006: Parameter 'input' implicitly has an 'any' type.

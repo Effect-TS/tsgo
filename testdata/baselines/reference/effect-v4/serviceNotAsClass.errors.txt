@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
 
 /.src/serviceNotAsClass.ts(7,16): warning TS377056: ServiceMap.Service should be used in a class declaration instead of as a variable. Use: class Config extends ServiceMap.Service<Config, ConfigService>()("Config") {} effect(serviceNotAsClass)
 /.src/serviceNotAsClass.ts(11,30): warning TS377056: ServiceMap.Service should be used in a class declaration instead of as a variable. Use: class ArtifactStore extends ServiceMap.Service<ArtifactStore, ArtifactStoreService>()("@my-app/ArtifactStore") {} effect(serviceNotAsClass)
