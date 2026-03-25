@@ -31,6 +31,7 @@ use (
 	./shim/testutil
 	./shim/testutil/baseline
 	./shim/testutil/harnessutil
+	./shim/testutil/lsptestutil
 	./shim/testutil/tsbaseline
 	./shim/tsoptions
 	./shim/tspath

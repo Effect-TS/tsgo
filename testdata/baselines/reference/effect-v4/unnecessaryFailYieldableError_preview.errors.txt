@@ -1,9 +1,10 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
+
+/.src/unnecessaryFailYieldableError_preview.ts(8,3): warning TS377019: This Effect.fail call uses a yieldable error type as argument. You can yield* the error directly instead. effect(unnecessaryFailYieldableError)
 
 
-
-==== /.src/unnecessaryFailYieldableError_preview.ts (0 errors) ====
+==== /.src/unnecessaryFailYieldableError_preview.ts (1 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics unnecessaryFailYieldableError:warning
     import * as Data from "effect/Data"
@@ -12,5 +13,7 @@ Effect version: 4.0.0-beta.27
     class Boom extends Data.TaggedError("Boom")<{}> {}
     export const preview = Effect.gen(function*() {
       yield* Effect.fail(new Boom())
+      ~~~~~
+!!! warning TS377019: This Effect.fail call uses a yieldable error type as argument. You can yield* the error directly instead. effect(unnecessaryFailYieldableError)
     })
     

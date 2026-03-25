@@ -1,9 +1,10 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
+
+/.src/outdatedApi_preview.ts(7,24): warning TS377052: runtime is an Effect v3 API, but the project is using Effect v4. Runtime has been removed in Effect v4. Use Effect.services to grab services and then run using Effect.runPromiseWith. effect(outdatedApi)
 
 
-
-==== /.src/outdatedApi_preview.ts (0 errors) ====
+==== /.src/outdatedApi_preview.ts (1 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics outdatedApi:warning
     import { Effect } from "effect"
@@ -11,5 +12,7 @@ Effect version: 4.0.0-beta.27
     export const preview = Effect.gen(function*() {
       // @ts-expect-error
       return yield* Effect.runtime()
+                           ~~~~~~~
+!!! warning TS377052: runtime is an Effect v3 API, but the project is using Effect v4. Runtime has been removed in Effect v4. Use Effect.services to grab services and then run using Effect.runPromiseWith. effect(outdatedApi)
     })
     

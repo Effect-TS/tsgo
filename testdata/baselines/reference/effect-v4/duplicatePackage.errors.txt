@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
 
 /.src/duplicatePackage.ts(4,17): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
 

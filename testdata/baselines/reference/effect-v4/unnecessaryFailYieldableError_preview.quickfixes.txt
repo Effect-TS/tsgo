@@ -1,5 +1,28 @@
 === Quick Fix Inventory ===
-(no diagnostics)
+
+[D1] (8:3-8:8) TS377019: This Effect.fail call uses a yieldable error type as argument. You can yield* the error directly instead. effect(unnecessaryFailYieldableError)
+  Fix 0: "Disable unnecessaryFailYieldableError for this line"
+  Fix 1: "Disable unnecessaryFailYieldableError for entire file"
+  Fix 2: "Replace yield* Effect.fail with yield*"
 
 === Quick Fix Application Results ===
-(no quick fixes to apply)
+
+=== [D1] Fix 0: "Disable unnecessaryFailYieldableError for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable unnecessaryFailYieldableError for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace yield* Effect.fail with yield*" ===
+
+--- file:///.src/unnecessaryFailYieldableError_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics unnecessaryFailYieldableError:warning
+import * as Data from "effect/Data"
+import * as Effect from "effect/Effect"
+
+class Boom extends Data.TaggedError("Boom")<{}> {}
+export const preview = Effect.gen(function*() {
+  yield*new Boom()
+})
+

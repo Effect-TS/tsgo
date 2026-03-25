@@ -1,5 +1,13 @@
 === Quick Fix Inventory ===
-(no diagnostics)
+
+[D1] (10:14-10:19) TS377041: Methods of this Service require 'FileSystem' from every caller. This leaks implementation details — resolve these dependencies at Layer creation time. effect(leakingRequirements)
+  Fix 0: "Disable leakingRequirements for this line"
+  Fix 1: "Disable leakingRequirements for entire file"
 
 === Quick Fix Application Results ===
-(no quick fixes to apply)
+
+=== [D1] Fix 0: "Disable leakingRequirements for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable leakingRequirements for entire file" ===
+skipped by default

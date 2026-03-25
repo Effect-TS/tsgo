@@ -1,5 +1,13 @@
 === Quick Fix Inventory ===
-(no diagnostics)
+
+[D1] (6:3-7:21) TS377012: Avoid using try/catch inside Effect generators. Use Effect's error handling mechanisms instead (e.g. Effect.try, Effect.tryPromise, Effect.catch, Effect.catchTag). effect(tryCatchInEffectGen)
+  Fix 0: "Disable tryCatchInEffectGen for this line"
+  Fix 1: "Disable tryCatchInEffectGen for entire file"
 
 === Quick Fix Application Results ===
-(no quick fixes to apply)
+
+=== [D1] Fix 0: "Disable tryCatchInEffectGen for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable tryCatchInEffectGen for entire file" ===
+skipped by default

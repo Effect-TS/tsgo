@@ -1,14 +1,17 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
+
+/.src/catchUnfailableEffect_preview.ts(6,3): warning TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
 
 
-
-==== /.src/catchUnfailableEffect_preview.ts (0 errors) ====
+==== /.src/catchUnfailableEffect_preview.ts (1 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics catchUnfailableEffect:warning
     import { Effect } from "effect"
     
     export const preview = Effect.succeed(1).pipe(
       Effect.catch(() => Effect.succeed(0))
+      ~~~~~~~~~~~~
+!!! warning TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
     )
     

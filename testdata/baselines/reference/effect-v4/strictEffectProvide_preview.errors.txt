@@ -1,9 +1,10 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
+
+/.src/strictEffectProvide_preview.ts(8,41): warning TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
 
 
-
-==== /.src/strictEffectProvide_preview.ts (0 errors) ====
+==== /.src/strictEffectProvide_preview.ts (1 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics strictEffectProvide:warning
     import { Effect, Layer, ServiceMap } from "effect"
@@ -12,4 +13,6 @@ Effect version: 4.0.0-beta.27
       static Default = Layer.effect(this, this.make)
     }
     export const preview = Effect.void.pipe(Effect.provide(Config.Default))
+                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
     

@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
 
 /.src/missedPipeableOpportunity_error.ts(12,41): warning TS377050: Nested function calls can be converted to pipeable style for better readability; consider using Schema.decodeEffect(MyStruct)({ x: 42, y: 42 }).pipe(...) instead. effect(missedPipeableOpportunity)
 

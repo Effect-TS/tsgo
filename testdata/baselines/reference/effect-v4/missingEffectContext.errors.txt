@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
 
 /.src/missingEffectContext.ts(14,14): error TS2322: Type 'Effect<number, never, EnvA | EnvB>' is not assignable to type 'Effect<number, never, EnvA>'.
 /.src/missingEffectContext.ts(14,14): error TS377004: Missing context EnvB in the expected Effect type. effect(missingEffectContext)

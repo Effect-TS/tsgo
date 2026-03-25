@@ -1,15 +1,19 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
+
+/.src/tryCatchInEffectGen_preview.ts(6,3): warning TS377012: Avoid using try/catch inside Effect generators. Use Effect's error handling mechanisms instead (e.g. Effect.try, Effect.tryPromise, Effect.catch, Effect.catchTag). effect(tryCatchInEffectGen)
 
 
-
-==== /.src/tryCatchInEffectGen_preview.ts (0 errors) ====
+==== /.src/tryCatchInEffectGen_preview.ts (1 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics tryCatchInEffectGen:warning
     import * as Effect from "effect/Effect"
     
     export const preview = Effect.gen(function*() {
       try { return yield* Effect.succeed(1) }
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       catch { return 0 }
+    ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377012: Avoid using try/catch inside Effect generators. Use Effect's error handling mechanisms instead (e.g. Effect.try, Effect.tryPromise, Effect.catch, Effect.catchTag). effect(tryCatchInEffectGen)
     })
     

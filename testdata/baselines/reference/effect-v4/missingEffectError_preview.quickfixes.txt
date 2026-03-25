@@ -1,5 +1,45 @@
 === Quick Fix Inventory ===
-(no diagnostics)
+
+[D1] (10:59-10:65) TS377003: Missing errors Boom in the expected Effect type. effect(missingEffectError)
+  Fix 0: "Disable missingEffectError for this line"
+  Fix 1: "Disable missingEffectError for entire file"
+  Fix 2: "Catch all errors with Effect.catch"
+  Fix 3: "Catch unexpected errors with Effect.catchTag"
 
 === Quick Fix Application Results ===
-(no quick fixes to apply)
+
+=== [D1] Fix 0: "Disable missingEffectError for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable missingEffectError for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Catch all errors with Effect.catch" ===
+
+--- file:///.src/missingEffectError_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics missingEffectError:warning
+import type * as Effect from "effect/Effect"
+import { Data } from "effect"
+
+class Boom extends Data.TaggedError("Boom")<{}> {}
+declare const effect: Effect.Effect<number, Boom>
+
+// @ts-expect-error
+export const preview: () => Effect.Effect<number> = () => Effect.catch(effect, () => Effect.dieMessage("TODO: catch not implemented"))
+
+
+=== [D1] Fix 3: "Catch unexpected errors with Effect.catchTag" ===
+
+--- file:///.src/missingEffectError_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics missingEffectError:warning
+import type * as Effect from "effect/Effect"
+import { Data } from "effect"
+
+class Boom extends Data.TaggedError("Boom")<{}> {}
+declare const effect: Effect.Effect<number, Boom>
+
+// @ts-expect-error
+export const preview: () => Effect.Effect<number> = () => Effect.catchTags(effect, { "Boom": () => Effect.dieMessage("TODO: catchTags() not implemented for Boom") })
+

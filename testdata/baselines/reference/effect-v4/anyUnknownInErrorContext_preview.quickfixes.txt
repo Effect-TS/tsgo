@@ -1,5 +1,37 @@
 === Quick Fix Inventory ===
-(no diagnostics)
+
+[D1] (5:14-5:21) TS377030: This has unknown in the requirements channel and any in the error channel which is not recommended.
+Only service identifiers should appear in the requirements channel.
+Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
+  Fix 0: "Disable anyUnknownInErrorContext for this line"
+  Fix 1: "Disable anyUnknownInErrorContext for entire file"
+
+[D2] (6:10-6:36) TS377030: This has unknown in the requirements channel which is not recommended.
+Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
+  Fix 0: "Disable anyUnknownInErrorContext for this line"
+  Fix 1: "Disable anyUnknownInErrorContext for entire file"
+
+[D3] (7:17-7:41) TS377030: This has any in the error channel which is not recommended.
+Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
+  Fix 0: "Disable anyUnknownInErrorContext for this line"
+  Fix 1: "Disable anyUnknownInErrorContext for entire file"
 
 === Quick Fix Application Results ===
-(no quick fixes to apply)
+
+=== [D1] Fix 0: "Disable anyUnknownInErrorContext for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable anyUnknownInErrorContext for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable anyUnknownInErrorContext for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable anyUnknownInErrorContext for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable anyUnknownInErrorContext for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable anyUnknownInErrorContext for entire file" ===
+skipped by default

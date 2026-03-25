@@ -1,5 +1,13 @@
 === Quick Fix Inventory ===
-(no diagnostics)
+
+[D1] (8:41-8:71) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+  Fix 0: "Disable strictEffectProvide for this line"
+  Fix 1: "Disable strictEffectProvide for entire file"
 
 === Quick Fix Application Results ===
-(no quick fixes to apply)
+
+=== [D1] Fix 0: "Disable strictEffectProvide for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable strictEffectProvide for entire file" ===
+skipped by default

@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
 
 /.src/unnecessaryPipeChain.ts(5,27): suggestion TS377015: Chained pipe calls can be simplified to a single pipe call. effect(unnecessaryPipeChain)
 /.src/unnecessaryPipeChain.ts(8,23): suggestion TS377015: Chained pipe calls can be simplified to a single pipe call. effect(unnecessaryPipeChain)

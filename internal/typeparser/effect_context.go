@@ -56,12 +56,17 @@ func ensureEffectContextAnalyzed(c *checker.Checker, node *ast.Node) *EffectLink
 		return nil
 	}
 
+	links := GetEffectLinks(c)
+
+	if links.EffectContextFlags.Has(node) {
+		return links
+	}
+
 	sf := ast.GetSourceFileOfNode(node)
 	if sf == nil {
 		return nil
 	}
 
-	links := GetEffectLinks(c)
 	Cached(&links.EffectContextAnalyzed, sf, func() bool {
 		analyzeEffectContextForSourceFile(c, sf)
 		return true

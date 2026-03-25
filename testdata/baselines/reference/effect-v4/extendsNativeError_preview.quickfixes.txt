@@ -1,5 +1,13 @@
 === Quick Fix Inventory ===
-(no diagnostics)
+
+[D1] (4:14-4:26) TS377055: Avoid extending the native 'Error' class directly. Consider using a tagged error (e.g. Data.TaggedError) to maintain type safety in the Effect failure channel. effect(extendsNativeError)
+  Fix 0: "Disable extendsNativeError for this line"
+  Fix 1: "Disable extendsNativeError for entire file"
 
 === Quick Fix Application Results ===
-(no quick fixes to apply)
+
+=== [D1] Fix 0: "Disable extendsNativeError for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable extendsNativeError for entire file" ===
+skipped by default

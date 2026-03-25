@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
 
 /.src/outdatedApi.ts(1,1): warning TS377053: This project targets Effect v4, but is using Effect v3 APIs. To find the correct API to use, consult the Effect v4 documentation for the corresponding v4 replacement. effect(outdatedApi)
 /.src/outdatedApi.ts(7,35): error TS2339: Property 'runtime' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'.
@@ -131,7 +131,7 @@ Effect version: 4.0.0-beta.27
     export const p_catchAllCause = Effect.catchAllCause(Effect.fail("err"), (_cause) => Effect.succeed(0))
                                           ~~~~~~~~~~~~~
 !!! error TS2551: Property 'catchAllCause' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'. Did you mean 'catchCause'?
-!!! related TS2728 /node_modules/effect/dist/Effect.d.ts(4603,22): 'catchCause' is declared here.
+!!! related TS2728 /node_modules/effect/dist/Effect.d.ts(4639,22): 'catchCause' is declared here.
                                           ~~~~~~~~~~~~~
 !!! warning TS377052: catchAllCause is an Effect v3 API, but the project is using Effect v4. Renamed to catchCause. effect(outdatedApi)
                                                                              ~~~~~~
@@ -141,7 +141,7 @@ Effect version: 4.0.0-beta.27
     export const p_catchAllDefect = Effect.catchAllDefect(Effect.die("defect"), (_defect) => Effect.succeed(0))
                                            ~~~~~~~~~~~~~~
 !!! error TS2551: Property 'catchAllDefect' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'. Did you mean 'catchDefect'?
-!!! related TS2728 /node_modules/effect/dist/Effect.d.ts(4744,22): 'catchDefect' is declared here.
+!!! related TS2728 /node_modules/effect/dist/Effect.d.ts(4780,22): 'catchDefect' is declared here.
                                            ~~~~~~~~~~~~~~
 !!! warning TS377052: catchAllDefect is an Effect v3 API, but the project is using Effect v4. Renamed to catchDefect. effect(outdatedApi)
                                                                                  ~~~~~~~
@@ -167,7 +167,7 @@ Effect version: 4.0.0-beta.27
     export const p_async = Effect.async<number>((resume) => {
                                   ~~~~~
 !!! error TS2551: Property 'async' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'. Did you mean 'sync'?
-!!! related TS2728 /node_modules/effect/dist/Effect.d.ts(1558,22): 'sync' is declared here.
+!!! related TS2728 /node_modules/effect/dist/Effect.d.ts(1551,22): 'sync' is declared here.
                                   ~~~~~
 !!! warning TS377052: async is an Effect v3 API, but the project is using Effect v4. Renamed to callback. Note: in v4 the callback receives a Scheduler as 'this' context. effect(outdatedApi)
                                                  ~~~~~~

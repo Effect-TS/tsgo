@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
 
 /.src/floatingEffect_disabledWildcard.ts(3,1): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
 /.src/floatingEffect_disabledWildcard.ts(10,1): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)

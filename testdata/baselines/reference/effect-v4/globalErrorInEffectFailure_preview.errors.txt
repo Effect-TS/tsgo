@@ -1,12 +1,15 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
+
+/.src/globalErrorInEffectFailure_preview.ts(5,36): warning TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
 
 
-
-==== /.src/globalErrorInEffectFailure_preview.ts (0 errors) ====
+==== /.src/globalErrorInEffectFailure_preview.ts (1 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics globalErrorInEffectFailure:warning
     import { Effect } from "effect"
     
     export const preview = Effect.fail(new Error("boom"))
+                                       ~~~~~~~~~~~~~~~~~
+!!! warning TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
     

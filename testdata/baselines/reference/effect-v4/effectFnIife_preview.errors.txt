@@ -1,14 +1,19 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
+
+/.src/effectFnIife_preview.ts(5,24): warning TS377011: Effect.fn returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead with Effect.withSpan("preview") piped in the end to maintain tracing spans. effect(effectFnIife)
 
 
-
-==== /.src/effectFnIife_preview.ts (0 errors) ====
+==== /.src/effectFnIife_preview.ts (1 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics effectFnIife:warning
     import * as Effect from "effect/Effect"
     
     export const preview = Effect.fn("preview")(function*() {
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       return yield* Effect.succeed(1)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     })()
+    ~~~~
+!!! warning TS377011: Effect.fn returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead with Effect.withSpan("preview") piped in the end to maintain tracing spans. effect(effectFnIife)
     

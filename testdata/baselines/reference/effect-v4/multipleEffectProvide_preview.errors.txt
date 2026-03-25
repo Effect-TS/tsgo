@@ -1,9 +1,10 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
+
+/.src/multipleEffectProvide_preview.ts(11,41): warning TS377033: Avoid chaining Effect.provide calls, as this can lead to service lifecycle issues. Instead, merge layers and provide them in a single call. effect(multipleEffectProvide)
 
 
-
-==== /.src/multipleEffectProvide_preview.ts (0 errors) ====
+==== /.src/multipleEffectProvide_preview.ts (1 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics multipleEffectProvide:warning
     import { Effect, Layer, ServiceMap } from "effect"
@@ -15,4 +16,6 @@ Effect version: 4.0.0-beta.27
       static Default = Layer.effect(this, this.make)
     }
     export const preview = Effect.void.pipe(Effect.provide(A.Default), Effect.provide(B.Default))
+                                            ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377033: Avoid chaining Effect.provide calls, as this can lead to service lifecycle issues. Instead, merge layers and provide them in a single call. effect(multipleEffectProvide)
     

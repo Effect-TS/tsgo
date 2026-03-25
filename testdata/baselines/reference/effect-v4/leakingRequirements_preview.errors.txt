@@ -1,9 +1,10 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
+
+/.src/leakingRequirements_preview.ts(10,14): warning TS377041: Methods of this Service require 'FileSystem' from every caller. This leaks implementation details — resolve these dependencies at Layer creation time. effect(leakingRequirements)
 
 
-
-==== /.src/leakingRequirements_preview.ts (0 errors) ====
+==== /.src/leakingRequirements_preview.ts (1 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics leakingRequirements:warning
     import type { Effect } from "effect"
@@ -14,6 +15,8 @@ Effect version: 4.0.0-beta.27
     }>()("FileSystem") {}
     
     export class Cache extends ServiceMap.Service<Cache, {
+                 ~~~~~
+!!! warning TS377041: Methods of this Service require 'FileSystem' from every caller. This leaks implementation details — resolve these dependencies at Layer creation time. effect(leakingRequirements)
       read: Effect.Effect<string, never, FileSystem>
       save: () => Effect.Effect<void, never, FileSystem>
     }>()("Cache") {}

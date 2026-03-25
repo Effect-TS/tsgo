@@ -39,12 +39,12 @@
     "@effect/tsgo-darwin-arm64": "workspace:*"
   },
   "devDependencies": {
-    "@effect/platform-node": "^4.0.0-beta.38",
-    "@effect/platform-node-shared": "^4.0.0-beta.38",
+    "@effect/platform-node": "^4.0.0-beta.40",
+    "@effect/platform-node-shared": "^4.0.0-beta.40",
     "@types/node": "^24.3.0",
     "tsdown": "^0.20.1",
     "typescript": "^5.9.2",
-    "effect": "^4.0.0-beta.38",
+    "effect": "^4.0.0-beta.40",
     "vitest": "^3.2.1"
   }
 }

@@ -1,0 +1,18 @@
+export function standardShouldAppear() {
+                                      ^
+{
+  "position": {
+    "line": 0,
+    "character": 38
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "number"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}

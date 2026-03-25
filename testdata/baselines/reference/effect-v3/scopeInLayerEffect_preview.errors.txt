@@ -1,9 +1,11 @@
 === Metadata ===
 Effect version: 3.19.19
 
+/.src/scopeInLayerEffect_preview.ts(8,24): warning TS377031: Seems like you are constructing a layer with a scope in the requirements.
+Consider using "scoped" instead to get rid of the scope in the requirements. effect(scopeInLayerEffect)
 
 
-==== /.src/scopeInLayerEffect_preview.ts (0 errors) ====
+==== /.src/scopeInLayerEffect_preview.ts (1 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics scopeInLayerEffect:warning
     import * as Context from "effect/Context"
@@ -12,7 +14,13 @@ Effect version: 3.19.19
     
     class Cache extends Context.Tag("Cache")<Cache, { ok: true }>() {}
     export const preview = Layer.effect(Cache, Effect.gen(function*() {
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       yield* Effect.addFinalizer(() => Effect.void)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       return { ok: true as const }
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     }))
+    ~~~
+!!! warning TS377031: Seems like you are constructing a layer with a scope in the requirements.
+Consider using "scoped" instead to get rid of the scope in the requirements. effect(scopeInLayerEffect)
     

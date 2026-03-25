@@ -1,5 +1,24 @@
 === Quick Fix Inventory ===
-(no diagnostics)
+
+[D1] (5:24-8:3) TS377036: Schema.Struct with a _tag field can be simplified to Schema.TaggedStruct to make the tag optional in the constructor. effect(schemaStructWithTag)
+  Fix 0: "Disable schemaStructWithTag for this line"
+  Fix 1: "Disable schemaStructWithTag for entire file"
+  Fix 2: "Rewrite as Schema.TaggedStruct"
 
 === Quick Fix Application Results ===
-(no quick fixes to apply)
+
+=== [D1] Fix 0: "Disable schemaStructWithTag for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable schemaStructWithTag for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Rewrite as Schema.TaggedStruct" ===
+
+--- file:///.src/schemaStructWithTag_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics schemaStructWithTag:warning
+import * as Schema from "effect/Schema"
+
+export const preview = Schema.TaggedStruct("User", { name: Schema.String })
+

@@ -1,15 +1,24 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
+
+/.src/effectInFailure_preview.ts(5,14): warning TS377054: The error channel contains an Effect (Effect<void, never, never>). Putting Effect computations in the failure channel is not intended; keep only failure types there. effect(effectInFailure)
+/.src/effectInFailure_preview.ts(5,24): warning TS377054: The error channel contains an Effect (Effect<void, never, never>). Putting Effect computations in the failure channel is not intended; keep only failure types there. effect(effectInFailure)
 
 
-
-==== /.src/effectInFailure_preview.ts (0 errors) ====
+==== /.src/effectInFailure_preview.ts (2 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics effectInFailure:warning
     import { Effect } from "effect"
     
     export const preview = Effect.try({
+                 ~~~~~~~
+!!! warning TS377054: The error channel contains an Effect (Effect<void, never, never>). Putting Effect computations in the failure channel is not intended; keep only failure types there. effect(effectInFailure)
+                           ~~~~~~~~~~~~
       try: () => JSON.parse("{"),
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       catch: (error) => Effect.logError(error)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     })
+    ~~
+!!! warning TS377054: The error channel contains an Effect (Effect<void, never, never>). Putting Effect computations in the failure channel is not intended; keep only failure types there. effect(effectInFailure)
     

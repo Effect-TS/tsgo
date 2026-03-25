@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
 
 /.src/missingReturnYieldStarFnUntraced.ts(4,5): error TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
 /.src/missingReturnYieldStarFnUntraced.ts(8,5): error TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
@@ -24,7 +24,7 @@ Effect version: 4.0.0-beta.27
     export const shouldNotComplainRegularFnUntraced = Effect.fnUntraced((a: string) => {
                                                                         ~~~~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
-!!! related TS2771 /node_modules/effect/dist/Effect.d.ts(15252,9): The last overload is declared here.
+!!! related TS2771 /node_modules/effect/dist/Effect.d.ts(15360,9): The last overload is declared here.
         return Effect.fail(a)
     })
     

@@ -1,5 +1,13 @@
 === Quick Fix Inventory ===
-(no diagnostics)
+
+[D1] (5:14-5:21) TS377020: There is a nested 'Effect<void, never, never>' in the 'void' success channel, beware that this could lead to nested Effect<Effect<...>> that won't be executed. effect(effectInVoidSuccess)
+  Fix 0: "Disable effectInVoidSuccess for this line"
+  Fix 1: "Disable effectInVoidSuccess for entire file"
 
 === Quick Fix Application Results ===
-(no quick fixes to apply)
+
+=== [D1] Fix 0: "Disable effectInVoidSuccess for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectInVoidSuccess for entire file" ===
+skipped by default

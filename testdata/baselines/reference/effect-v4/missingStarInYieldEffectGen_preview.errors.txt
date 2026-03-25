@@ -1,15 +1,19 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
+
+/.src/missingStarInYieldEffectGen_preview.ts(6,17): warning TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
 
 
-
-==== /.src/missingStarInYieldEffectGen_preview.ts (0 errors) ====
+==== /.src/missingStarInYieldEffectGen_preview.ts (1 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics missingStarInYieldEffectGen:warning
     import * as Effect from "effect/Effect"
     
     export const preview = Effect.gen(function*() {
       const value = yield Effect.succeed(1)
+                    ~~~~~
+!!! warning TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+!!! related TS377007 /.src/missingStarInYieldEffectGen_preview.ts(5,35): Inside this Effect generator. effect(missingStarInYieldEffectGen)
       return value
     })
     

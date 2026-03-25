@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
 
 /.src/unnecessaryPipe_disableMidObject.ts(5,6): suggestion TS377013: This pipe call contains no arguments. effect(unnecessaryPipe)
 /.src/unnecessaryPipe_disableMidObject.ts(8,6): suggestion TS377013: This pipe call contains no arguments. effect(unnecessaryPipe)

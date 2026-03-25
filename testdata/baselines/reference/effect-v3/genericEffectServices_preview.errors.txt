@@ -1,14 +1,17 @@
 === Metadata ===
 Effect version: 3.19.19
 
+/.src/genericEffectServices_preview.ts(5,14): warning TS377043: Effect Services with type parameters are not supported because they cannot be properly discriminated at runtime, which may cause unexpected behavior. effect(genericEffectServices)
 
 
-==== /.src/genericEffectServices_preview.ts (0 errors) ====
+==== /.src/genericEffectServices_preview.ts (1 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics genericEffectServices:warning
     import { Effect } from "effect"
     
     export class Preview<_A> extends Effect.Service<Preview<any>>()("Preview", {
+                 ~~~~~~~
+!!! warning TS377043: Effect Services with type parameters are not supported because they cannot be properly discriminated at runtime, which may cause unexpected behavior. effect(genericEffectServices)
       succeed: {}
     }) {}
     

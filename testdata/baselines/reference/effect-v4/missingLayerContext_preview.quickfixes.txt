@@ -1,5 +1,13 @@
 === Quick Fix Inventory ===
-(no diagnostics)
+
+[D1] (10:14-10:21) TS377034: Missing 'A' in the expected Layer context. effect(missingLayerContext)
+  Fix 0: "Disable missingLayerContext for this line"
+  Fix 1: "Disable missingLayerContext for entire file"
 
 === Quick Fix Application Results ===
-(no quick fixes to apply)
+
+=== [D1] Fix 0: "Disable missingLayerContext for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable missingLayerContext for entire file" ===
+skipped by default

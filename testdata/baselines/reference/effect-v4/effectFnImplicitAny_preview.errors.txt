@@ -1,13 +1,16 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
+
+/.src/effectFnImplicitAny_preview.ts(6,46): error TS377062: Parameter 'input' implicitly has an 'any' type in Effect.fn/Effect.fnUntraced/Effect.fnUntracedEager. Add an explicit type annotation or provide a contextual function type. effect(effectFnImplicitAny)
 
 
-
-==== /.src/effectFnImplicitAny_preview.ts (0 errors) ====
+==== /.src/effectFnImplicitAny_preview.ts (1 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics effectFnImplicitAny:error
     // @test-config {"diagnosticSeverity":{"effectFnImplicitAny":"error"}}
     import { Effect } from "effect"
     
     export const preview = Effect.fn("preview")((input) => Effect.succeed(input))
+                                                 ~~~~~
+!!! error TS377062: Parameter 'input' implicitly has an 'any' type in Effect.fn/Effect.fnUntraced/Effect.fnUntracedEager. Add an explicit type annotation or provide a contextual function type. effect(effectFnImplicitAny)
     

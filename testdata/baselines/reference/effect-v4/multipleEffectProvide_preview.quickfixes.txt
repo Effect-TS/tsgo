@@ -1,5 +1,30 @@
 === Quick Fix Inventory ===
-(no diagnostics)
+
+[D1] (11:41-11:66) TS377033: Avoid chaining Effect.provide calls, as this can lead to service lifecycle issues. Instead, merge layers and provide them in a single call. effect(multipleEffectProvide)
+  Fix 0: "Disable multipleEffectProvide for this line"
+  Fix 1: "Disable multipleEffectProvide for entire file"
+  Fix 2: "Combine into a single provide"
 
 === Quick Fix Application Results ===
-(no quick fixes to apply)
+
+=== [D1] Fix 0: "Disable multipleEffectProvide for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable multipleEffectProvide for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Combine into a single provide" ===
+
+--- file:///.src/multipleEffectProvide_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics multipleEffectProvide:warning
+import { Effect, Layer, ServiceMap } from "effect"
+
+class A extends ServiceMap.Service<A>()("A", { make: Effect.succeed({}) }) {
+  static Default = Layer.effect(this, this.make)
+}
+class B extends ServiceMap.Service<B>()("B", { make: Effect.succeed({}) }) {
+  static Default = Layer.effect(this, this.make)
+}
+export const preview = Effect.void.pipe(Effect.provide(Layer.mergeAll(A.Default, B.Default)))
+

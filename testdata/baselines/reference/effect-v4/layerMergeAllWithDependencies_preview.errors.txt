@@ -1,9 +1,10 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
+
+/.src/layerMergeAllWithDependencies_preview.ts(11,39): warning TS377035: This layer provides A which is required by another layer in the same Layer.mergeAll call. Layer.mergeAll creates layers in parallel, so dependencies between layers will not be satisfied. Consider moving this layer into a Layer.provideMerge after the Layer.mergeAll. effect(layerMergeAllWithDependencies)
 
 
-
-==== /.src/layerMergeAllWithDependencies_preview.ts (0 errors) ====
+==== /.src/layerMergeAllWithDependencies_preview.ts (1 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics layerMergeAllWithDependencies:warning
     import { Effect, Layer, ServiceMap } from "effect"
@@ -15,4 +16,6 @@ Effect version: 4.0.0-beta.27
       static Default = Layer.effect(this, this.make)
     }
     export const preview = Layer.mergeAll(A.Default, B.Default)
+                                          ~~~~~~~~~
+!!! warning TS377035: This layer provides A which is required by another layer in the same Layer.mergeAll call. Layer.mergeAll creates layers in parallel, so dependencies between layers will not be satisfied. Consider moving this layer into a Layer.provideMerge after the Layer.mergeAll. effect(layerMergeAllWithDependencies)
     

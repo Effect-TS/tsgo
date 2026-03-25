@@ -1,5 +1,27 @@
 === Quick Fix Inventory ===
-(no diagnostics)
+
+[D1] (6:17-6:22) TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+  Fix 0: "Disable missingStarInYieldEffectGen for this line"
+  Fix 1: "Disable missingStarInYieldEffectGen for entire file"
+  Fix 2: "Replace yield with yield*"
 
 === Quick Fix Application Results ===
-(no quick fixes to apply)
+
+=== [D1] Fix 0: "Disable missingStarInYieldEffectGen for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable missingStarInYieldEffectGen for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace yield with yield*" ===
+
+--- file:///.src/missingStarInYieldEffectGen_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics missingStarInYieldEffectGen:warning
+import * as Effect from "effect/Effect"
+
+export const preview = Effect.gen(function*() {
+  const value = yield* Effect.succeed(1)
+  return value
+})
+

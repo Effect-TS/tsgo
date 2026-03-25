@@ -1,9 +1,10 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
+
+/.src/missingLayerContext_preview.ts(10,14): warning TS377034: Missing 'A' in the expected Layer context. effect(missingLayerContext)
 
 
-
-==== /.src/missingLayerContext_preview.ts (0 errors) ====
+==== /.src/missingLayerContext_preview.ts (1 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics missingLayerContext:warning
     import { Effect, Layer, ServiceMap } from "effect"
@@ -14,4 +15,6 @@ Effect version: 4.0.0-beta.27
     declare const layer: Layer.Layer<A, never, A>
     // @ts-expect-error
     export const preview: Layer.Layer<A> = layer
+                 ~~~~~~~
+!!! warning TS377034: Missing 'A' in the expected Layer context. effect(missingLayerContext)
     

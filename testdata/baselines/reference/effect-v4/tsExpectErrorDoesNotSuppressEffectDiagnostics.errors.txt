@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
 
 /.src/tsExpectErrorDoesNotSuppressEffectDiagnostics.ts(11,14): error TS377004: Missing context EnvA in the expected Effect type. effect(missingEffectContext)
 /.src/tsExpectErrorDoesNotSuppressEffectDiagnostics.ts(15,1): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)

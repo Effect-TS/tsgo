@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
 
 /.src/nodeBuiltinImport.ts(5,16): warning TS377057: Prefer using FileSystem from effect instead of the Node.js 'fs' module. effect(nodeBuiltinImport)
 /.src/nodeBuiltinImport.ts(6,22): warning TS377057: Prefer using FileSystem from effect instead of the Node.js 'fs' module. effect(nodeBuiltinImport)

@@ -1,14 +1,19 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
+
+/.src/unknownInEffectCatch_preview.ts(5,24): warning TS377021: The 'catch' callback in Effect.tryPromise returns 'unknown'. The catch callback should be used to provide typed errors.
+Consider wrapping unknown errors into Effect's Data.TaggedError for example, or narrow down the type to the specific error raised. effect(unknownInEffectCatch)
 
 
-
-==== /.src/unknownInEffectCatch_preview.ts (0 errors) ====
+==== /.src/unknownInEffectCatch_preview.ts (1 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics unknownInEffectCatch:warning
     import { Effect } from "effect"
     
     export const preview = Effect.tryPromise({
+                           ~~~~~~~~~~~~~~~~~
+!!! warning TS377021: The 'catch' callback in Effect.tryPromise returns 'unknown'. The catch callback should be used to provide typed errors.
+Consider wrapping unknown errors into Effect's Data.TaggedError for example, or narrow down the type to the specific error raised. effect(unknownInEffectCatch)
       try: async () => 1,
       catch: (error) => error
     })

@@ -1,12 +1,15 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
+
+/.src/effectSucceedWithVoid_preview.ts(5,24): warning TS377016: Effect.void can be used instead of Effect.succeed(undefined) or Effect.succeed(void 0). effect(effectSucceedWithVoid)
 
 
-
-==== /.src/effectSucceedWithVoid_preview.ts (0 errors) ====
+==== /.src/effectSucceedWithVoid_preview.ts (1 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics effectSucceedWithVoid:warning
     import { Effect } from "effect"
     
     export const preview = Effect.succeed(undefined)
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377016: Effect.void can be used instead of Effect.succeed(undefined) or Effect.succeed(void 0). effect(effectSucceedWithVoid)
     

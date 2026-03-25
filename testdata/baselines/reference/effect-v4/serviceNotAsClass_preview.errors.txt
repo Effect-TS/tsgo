@@ -1,12 +1,15 @@
 === Metadata ===
-Effect version: 4.0.0-beta.27
+Effect version: 4.0.0
+
+/.src/serviceNotAsClass_preview.ts(5,24): warning TS377056: ServiceMap.Service should be used in a class declaration instead of as a variable. Use: class Preview extends ServiceMap.Service<Preview, { port: number }>()("Preview") {} effect(serviceNotAsClass)
 
 
-
-==== /.src/serviceNotAsClass_preview.ts (0 errors) ====
+==== /.src/serviceNotAsClass_preview.ts (1 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics serviceNotAsClass:warning
     import { ServiceMap } from "effect"
     
     export const Preview = ServiceMap.Service<{ port: number }>("Preview")
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377056: ServiceMap.Service should be used in a class declaration instead of as a variable. Use: class Preview extends ServiceMap.Service<Preview, { port: number }>()("Preview") {} effect(serviceNotAsClass)
     

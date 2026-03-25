@@ -1,5 +1,13 @@
 === Quick Fix Inventory ===
-(no diagnostics)
+
+[D1] (10:10-10:27) TS377037: Using Schema.decodeSync inside an Effect generator is not recommended. Use Schema.decodeEffect instead to get properly typed error channel. effect(schemaSyncInEffect)
+  Fix 0: "Disable schemaSyncInEffect for this line"
+  Fix 1: "Disable schemaSyncInEffect for entire file"
 
 === Quick Fix Application Results ===
-(no quick fixes to apply)
+
+=== [D1] Fix 0: "Disable schemaSyncInEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable schemaSyncInEffect for entire file" ===
+skipped by default
