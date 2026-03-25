@@ -1,9 +1,10 @@
 === Metadata ===
 Effect version: 4.0.0
 
+/.src/missingEffectContext_preview.ts(8,14): warning TS377004: Missing context Db in the expected Effect type. effect(missingEffectContext)
 
 
-==== /.src/missingEffectContext_preview.ts (0 errors) ====
+==== /.src/missingEffectContext_preview.ts (1 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics missingEffectContext:warning
     import { Effect, ServiceMap } from "effect"
@@ -12,4 +13,6 @@ Effect version: 4.0.0
     
     // @ts-expect-error
     export const preview: Effect.Effect<void> = Db.asEffect().pipe(Effect.asVoid)
+                 ~~~~~~~
+!!! warning TS377004: Missing context Db in the expected Effect type. effect(missingEffectContext)
     

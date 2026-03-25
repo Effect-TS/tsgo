@@ -1,12 +1,15 @@
 === Metadata ===
 Effect version: 4.0.0
 
+/.src/unnecessaryPipe_preview.ts(5,24): warning TS377013: This pipe call contains no arguments. effect(unnecessaryPipe)
 
 
-==== /.src/unnecessaryPipe_preview.ts (0 errors) ====
+==== /.src/unnecessaryPipe_preview.ts (1 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics unnecessaryPipe:warning
     import { pipe } from "effect/Function"
     
     export const preview = pipe(1)
+                           ~~~~~~~
+!!! warning TS377013: This pipe call contains no arguments. effect(unnecessaryPipe)
     

@@ -1,5 +1,26 @@
 === Quick Fix Inventory ===
-(no diagnostics)
+
+[D1] (7:24-7:80) TS377050: Nested function calls can be converted to pipeable style for better readability; consider using Schema.decodeEffect(User)({ id: 1 }).pipe(...) instead. effect(missedPipeableOpportunity)
+  Fix 0: "Disable missedPipeableOpportunity for this line"
+  Fix 1: "Disable missedPipeableOpportunity for entire file"
+  Fix 2: "Convert to pipe style"
 
 === Quick Fix Application Results ===
-(no quick fixes to apply)
+
+=== [D1] Fix 0: "Disable missedPipeableOpportunity for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable missedPipeableOpportunity for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Convert to pipe style" ===
+
+--- file:///.src/missedPipeableOpportunity_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics missedPipeableOpportunity:warning
+// @test-config { "pipeableMinArgCount": 2 }
+import { identity, Schema } from "effect"
+
+const User = Schema.Struct({ id: Schema.Number })
+export const preview = Schema.decodeEffect(User)({ id: 1 }).pipe(identity, identity)
+

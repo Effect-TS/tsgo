@@ -1,5 +1,24 @@
 === Quick Fix Inventory ===
-(no diagnostics)
+
+[D1] (5:24-5:49) TS377016: Effect.void can be used instead of Effect.succeed(undefined) or Effect.succeed(void 0). effect(effectSucceedWithVoid)
+  Fix 0: "Disable effectSucceedWithVoid for this line"
+  Fix 1: "Disable effectSucceedWithVoid for entire file"
+  Fix 2: "Replace with Effect.void"
 
 === Quick Fix Application Results ===
-(no quick fixes to apply)
+
+=== [D1] Fix 0: "Disable effectSucceedWithVoid for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectSucceedWithVoid for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.void" ===
+
+--- file:///.src/effectSucceedWithVoid_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics effectSucceedWithVoid:warning
+import { Effect } from "effect"
+
+export const preview = Effect.void
+

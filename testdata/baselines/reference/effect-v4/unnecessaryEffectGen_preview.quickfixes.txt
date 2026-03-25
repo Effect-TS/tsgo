@@ -1,5 +1,24 @@
 === Quick Fix Inventory ===
-(no diagnostics)
+
+[D1] (5:24-7:3) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
 
 === Quick Fix Application Results ===
-(no quick fixes to apply)
+
+=== [D1] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/unnecessaryEffectGen_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics unnecessaryEffectGen:warning
+import * as Effect from "effect/Effect"
+
+export const preview = Effect.succeed(1)
+

@@ -1,9 +1,10 @@
 === Metadata ===
 Effect version: 4.0.0
 
+/.src/missedPipeableOpportunity_preview.ts(7,24): warning TS377050: Nested function calls can be converted to pipeable style for better readability; consider using Schema.decodeEffect(User)({ id: 1 }).pipe(...) instead. effect(missedPipeableOpportunity)
 
 
-==== /.src/missedPipeableOpportunity_preview.ts (0 errors) ====
+==== /.src/missedPipeableOpportunity_preview.ts (1 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics missedPipeableOpportunity:warning
     // @test-config { "pipeableMinArgCount": 2 }
@@ -11,4 +12,6 @@ Effect version: 4.0.0
     
     const User = Schema.Struct({ id: Schema.Number })
     export const preview = identity(identity(Schema.decodeEffect(User)({ id: 1 })))
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377050: Nested function calls can be converted to pipeable style for better readability; consider using Schema.decodeEffect(User)({ id: 1 }).pipe(...) instead. effect(missedPipeableOpportunity)
     

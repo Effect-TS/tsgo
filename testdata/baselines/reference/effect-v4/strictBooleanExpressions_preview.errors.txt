@@ -1,12 +1,18 @@
 === Metadata ===
 Effect version: unknown
 
+/.src/strictBooleanExpressions_preview.ts(5,24): warning TS377029: Unexpected `string` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
+/.src/strictBooleanExpressions_preview.ts(5,24): warning TS377029: Unexpected `undefined` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
 
 
-==== /.src/strictBooleanExpressions_preview.ts (0 errors) ====
+==== /.src/strictBooleanExpressions_preview.ts (2 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics strictBooleanExpressions:warning
     
     declare const value: string | undefined
     export const preview = value ? 1 : 0
+                           ~~~~~
+!!! warning TS377029: Unexpected `string` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
+                           ~~~~~
+!!! warning TS377029: Unexpected `undefined` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
     

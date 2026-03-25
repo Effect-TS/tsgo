@@ -3,5 +3,14 @@
 [D1] (3:16-3:25) TS2591: Cannot find name 'node:fs'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
   (no quick fixes)
 
+[D2] (3:16-3:25) TS377057: Prefer using FileSystem from @effect/platform instead of the Node.js 'fs' module. effect(nodeBuiltinImport)
+  Fix 0: "Disable nodeBuiltinImport for this line"
+  Fix 1: "Disable nodeBuiltinImport for entire file"
+
 === Quick Fix Application Results ===
-(no quick fixes to apply)
+
+=== [D2] Fix 0: "Disable nodeBuiltinImport for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable nodeBuiltinImport for entire file" ===
+skipped by default

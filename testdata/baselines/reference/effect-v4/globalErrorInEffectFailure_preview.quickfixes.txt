@@ -1,5 +1,13 @@
 === Quick Fix Inventory ===
-(no diagnostics)
+
+[D1] (5:36-5:53) TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
+  Fix 0: "Disable globalErrorInEffectFailure for this line"
+  Fix 1: "Disable globalErrorInEffectFailure for entire file"
 
 === Quick Fix Application Results ===
-(no quick fixes to apply)
+
+=== [D1] Fix 0: "Disable globalErrorInEffectFailure for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable globalErrorInEffectFailure for entire file" ===
+skipped by default

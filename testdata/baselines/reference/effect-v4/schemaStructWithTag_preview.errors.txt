@@ -1,15 +1,21 @@
 === Metadata ===
 Effect version: 4.0.0
 
+/.src/schemaStructWithTag_preview.ts(5,24): warning TS377036: Schema.Struct with a _tag field can be simplified to Schema.TaggedStruct to make the tag optional in the constructor. effect(schemaStructWithTag)
 
 
-==== /.src/schemaStructWithTag_preview.ts (0 errors) ====
+==== /.src/schemaStructWithTag_preview.ts (1 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics schemaStructWithTag:warning
     import * as Schema from "effect/Schema"
     
     export const preview = Schema.Struct({
+                           ~~~~~~~~~~~~~~~
       _tag: Schema.Literal("User"),
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       name: Schema.String
+    ~~~~~~~~~~~~~~~~~~~~~
     })
+    ~~
+!!! warning TS377036: Schema.Struct with a _tag field can be simplified to Schema.TaggedStruct to make the tag optional in the constructor. effect(schemaStructWithTag)
     

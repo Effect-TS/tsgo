@@ -1,12 +1,15 @@
 === Metadata ===
 Effect version: 4.0.0
 
+/.src/unnecessaryPipeChain_preview.ts(5,24): warning TS377015: Chained pipe calls can be simplified to a single pipe call. effect(unnecessaryPipeChain)
 
 
-==== /.src/unnecessaryPipeChain_preview.ts (0 errors) ====
+==== /.src/unnecessaryPipeChain_preview.ts (1 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics unnecessaryPipeChain:warning
     import * as Effect from "effect/Effect"
     
     export const preview = Effect.succeed(1).pipe(Effect.asVoid).pipe(Effect.as("done"))
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377015: Chained pipe calls can be simplified to a single pipe call. effect(unnecessaryPipeChain)
     

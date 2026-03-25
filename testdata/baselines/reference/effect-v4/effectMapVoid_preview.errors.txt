@@ -1,14 +1,17 @@
 === Metadata ===
 Effect version: 4.0.0
 
+/.src/effectMapVoid_preview.ts(6,3): warning TS377018: Effect.asVoid can be used instead to discard the success value. effect(effectMapVoid)
 
 
-==== /.src/effectMapVoid_preview.ts (0 errors) ====
+==== /.src/effectMapVoid_preview.ts (1 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics effectMapVoid:warning
     import { Effect } from "effect"
     
     export const preview = Effect.succeed(1).pipe(
       Effect.map(() => undefined)
+      ~~~~~~~~~~
+!!! warning TS377018: Effect.asVoid can be used instead to discard the success value. effect(effectMapVoid)
     )
     

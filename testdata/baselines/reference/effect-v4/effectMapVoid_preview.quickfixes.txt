@@ -1,5 +1,26 @@
 === Quick Fix Inventory ===
-(no diagnostics)
+
+[D1] (6:3-6:13) TS377018: Effect.asVoid can be used instead to discard the success value. effect(effectMapVoid)
+  Fix 0: "Disable effectMapVoid for this line"
+  Fix 1: "Disable effectMapVoid for entire file"
+  Fix 2: "Replace with Effect.asVoid"
 
 === Quick Fix Application Results ===
-(no quick fixes to apply)
+
+=== [D1] Fix 0: "Disable effectMapVoid for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectMapVoid for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.asVoid" ===
+
+--- file:///.src/effectMapVoid_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics effectMapVoid:warning
+import { Effect } from "effect"
+
+export const preview = Effect.succeed(1).pipe(
+  Effect.asVoid
+)
+

@@ -1,15 +1,20 @@
 === Metadata ===
 Effect version: 3.19.19
 
+/.src/runEffectInsideEffect_preview.ts(6,21): warning TS377025: Using Effect.runSync inside an Effect is not recommended. The same runtime should generally be used instead to run child effects.
+Consider extracting the Runtime by using for example Effect.runtime and then use Runtime.runSync with the extracted runtime instead. effect(runEffectInsideEffect)
 
 
-==== /.src/runEffectInsideEffect_preview.ts (0 errors) ====
+==== /.src/runEffectInsideEffect_preview.ts (1 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics runEffectInsideEffect:warning
     import { Effect } from "effect"
     
     export const preview = Effect.gen(function*() {
       const run = () => Effect.runSync(Effect.succeed(1))
+                        ~~~~~~~~~~~~~~
+!!! warning TS377025: Using Effect.runSync inside an Effect is not recommended. The same runtime should generally be used instead to run child effects.
+Consider extracting the Runtime by using for example Effect.runtime and then use Runtime.runSync with the extracted runtime instead. effect(runEffectInsideEffect)
       return run()
     })
     

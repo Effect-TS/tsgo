@@ -230,6 +230,19 @@ func (ds *DirectiveSet) IsSuppressed(ruleName string, line int) bool {
 	return severity == etscore.SeverityOff || severity == etscore.SeveritySkipFile
 }
 
+// IsSkipFile returns true if a skip-file directive applies to the given rule.
+// Unlike IsSuppressed, this only considers true file-level skip-file directives.
+func (ds *DirectiveSet) IsSkipFile(ruleName string) bool {
+	ruleLower := strings.ToLower(ruleName)
+	for _, rs := range ds.fileLevel {
+		ruleNameLower := strings.ToLower(rs.Rule)
+		if ruleNameLower == ruleLower || ruleNameLower == "*" {
+			return true
+		}
+	}
+	return false
+}
+
 // GetEffectiveSeverityAndMarkUsed returns the effective severity and marks the directive as used
 // if it affected the result. This is used to track unused directives for warnings.
 func (ds *DirectiveSet) GetEffectiveSeverityAndMarkUsed(ruleName string, line int, defaultSeverity etscore.Severity) etscore.Severity {

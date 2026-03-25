@@ -718,6 +718,59 @@ Effect.succeed(1)  // Line 6 - suppressed again by wildcard`
 	}
 }
 
+func TestWildcardOffThenRuleWarningReEnablesSpecificRule(t *testing.T) {
+	t.Parallel()
+	source := `// @effect-diagnostics *:off
+// @effect-diagnostics nodeBuiltinImport:warning
+import fs from "node:fs"`
+
+	directives := CollectEffectDirectives(source)
+	ds := BuildDirectiveSet(directives)
+
+	if got := ds.GetEffectiveSeverity("nodeBuiltinImport", 2, etscore.SeverityError); got != etscore.SeverityWarning {
+		t.Fatalf("GetEffectiveSeverity(nodeBuiltinImport, 2) = %v, want %v", got, etscore.SeverityWarning)
+	}
+
+	if got := ds.GetEffectiveSeverity("floatingEffect", 2, etscore.SeverityError); got != etscore.SeverityOff {
+		t.Fatalf("GetEffectiveSeverity(floatingEffect, 2) = %v, want %v", got, etscore.SeverityOff)
+	}
+}
+
+func TestWildcardOffAtTopLineStillLooksSuppressedAtLineZero(t *testing.T) {
+	t.Parallel()
+	source := `// @effect-diagnostics *:off
+// @effect-diagnostics nodeBuiltinImport:warning
+import fs from "node:fs"`
+
+	directives := CollectEffectDirectives(source)
+	ds := BuildDirectiveSet(directives)
+
+	if !ds.IsSuppressed("*", 0) {
+		t.Fatalf("IsSuppressed(*, 0) = false, want true")
+	}
+
+	if ds.IsSkipFile("*") {
+		t.Fatalf("IsSkipFile(*) = true, want false")
+	}
+}
+
+func TestWildcardSkipFileIsDistinctFromOff(t *testing.T) {
+	t.Parallel()
+	source := `// @effect-diagnostics *:skip-file
+import fs from "node:fs"`
+
+	directives := CollectEffectDirectives(source)
+	ds := BuildDirectiveSet(directives)
+
+	if !ds.IsSkipFile("*") {
+		t.Fatalf("IsSkipFile(*) = false, want true")
+	}
+
+	if !ds.IsSkipFile("nodeBuiltinImport") {
+		t.Fatalf("IsSkipFile(nodeBuiltinImport) = false, want true")
+	}
+}
+
 func TestWildcardNextLineSuppression(t *testing.T) {
 	t.Parallel()
 	source := `// @effect-diagnostics-next-line *:off

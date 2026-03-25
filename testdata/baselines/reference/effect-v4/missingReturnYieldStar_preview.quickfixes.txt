@@ -1,5 +1,27 @@
 === Quick Fix Inventory ===
-(no diagnostics)
+
+[D1] (7:3-7:8) TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+  Fix 0: "Disable missingReturnYieldStar for this line"
+  Fix 1: "Disable missingReturnYieldStar for entire file"
+  Fix 2: "Add return statement"
 
 === Quick Fix Application Results ===
-(no quick fixes to apply)
+
+=== [D1] Fix 0: "Disable missingReturnYieldStar for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable missingReturnYieldStar for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Add return statement" ===
+
+--- file:///.src/missingReturnYieldStar_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics missingReturnYieldStar:warning
+import * as Effect from "effect/Effect"
+
+export const preview = Effect.gen(function*() {
+  yield* Effect.log("before")
+  return yield* Effect.fail("boom");
+})
+

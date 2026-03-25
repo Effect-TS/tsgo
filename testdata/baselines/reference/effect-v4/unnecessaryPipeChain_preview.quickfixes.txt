@@ -1,5 +1,24 @@
 === Quick Fix Inventory ===
-(no diagnostics)
+
+[D1] (5:24-5:85) TS377015: Chained pipe calls can be simplified to a single pipe call. effect(unnecessaryPipeChain)
+  Fix 0: "Disable unnecessaryPipeChain for this line"
+  Fix 1: "Disable unnecessaryPipeChain for entire file"
+  Fix 2: "Rewrite as single pipe call"
 
 === Quick Fix Application Results ===
-(no quick fixes to apply)
+
+=== [D1] Fix 0: "Disable unnecessaryPipeChain for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable unnecessaryPipeChain for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Rewrite as single pipe call" ===
+
+--- file:///.src/unnecessaryPipeChain_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics unnecessaryPipeChain:warning
+import * as Effect from "effect/Effect"
+
+export const preview = Effect.succeed(1).pipe(Effect.asVoid, Effect.as("done"))
+

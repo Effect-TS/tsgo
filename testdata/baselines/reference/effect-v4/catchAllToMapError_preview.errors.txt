@@ -1,9 +1,10 @@
 === Metadata ===
 Effect version: 4.0.0
 
+/.src/catchAllToMapError_preview.ts(10,3): warning TS377010: You can use Effect.mapError instead of Effect.catch + Effect.fail to transform the error type. effect(catchAllToMapError)
 
 
-==== /.src/catchAllToMapError_preview.ts (0 errors) ====
+==== /.src/catchAllToMapError_preview.ts (1 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics catchAllToMapError:warning
     import { Effect } from "effect"
@@ -14,5 +15,7 @@ Effect version: 4.0.0
     
     export const preview = Effect.fail("boom").pipe(
       Effect.catch((cause) => Effect.fail(new WrappedError(cause)))
+      ~~~~~~~~~~~~
+!!! warning TS377010: You can use Effect.mapError instead of Effect.catch + Effect.fail to transform the error type. effect(catchAllToMapError)
     )
     

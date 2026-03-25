@@ -1,11 +1,14 @@
 === Metadata ===
 Effect version: unknown
 
+/.src/extendsNativeError_preview.ts(4,14): warning TS377055: Avoid extending the native 'Error' class directly. Consider using a tagged error (e.g. Data.TaggedError) to maintain type safety in the Effect failure channel. effect(extendsNativeError)
 
 
-==== /.src/extendsNativeError_preview.ts (0 errors) ====
+==== /.src/extendsNativeError_preview.ts (1 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics extendsNativeError:warning
     
     export class PreviewError extends Error {}
+                 ~~~~~~~~~~~~
+!!! warning TS377055: Avoid extending the native 'Error' class directly. Consider using a tagged error (e.g. Data.TaggedError) to maintain type safety in the Effect failure channel. effect(extendsNativeError)
     

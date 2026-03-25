@@ -1,15 +1,18 @@
 === Metadata ===
 Effect version: 3.19.19
 
+/.src/redundantSchemaTagIdentifier_preview.ts(6,39): warning TS377045: Identifier 'Preview' is redundant since it equals the _tag value. effect(redundantSchemaTagIdentifier)
 
 
-==== /.src/redundantSchemaTagIdentifier_preview.ts (0 errors) ====
+==== /.src/redundantSchemaTagIdentifier_preview.ts (1 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics redundantSchemaTagIdentifier:warning
     import * as Schema from "effect/Schema"
     
     export class Preview
       extends Schema.TaggedClass<Preview>("Preview")("Preview", {
+                                          ~~~~~~~~~
+!!! warning TS377045: Identifier 'Preview' is redundant since it equals the _tag value. effect(redundantSchemaTagIdentifier)
         value: Schema.String
       }) {}
     

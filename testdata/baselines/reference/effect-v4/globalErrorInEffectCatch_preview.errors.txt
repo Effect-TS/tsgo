@@ -1,14 +1,17 @@
 === Metadata ===
 Effect version: 4.0.0
 
+/.src/globalErrorInEffectCatch_preview.ts(5,24): warning TS377022: The 'catch' callback in Effect.tryPromise returns global 'Error', which loses type safety as untagged errors merge together. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectCatch)
 
 
-==== /.src/globalErrorInEffectCatch_preview.ts (0 errors) ====
+==== /.src/globalErrorInEffectCatch_preview.ts (1 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics globalErrorInEffectCatch:warning
     import { Effect } from "effect"
     
     export const preview = Effect.tryPromise({
+                           ~~~~~~~~~~~~~~~~~
+!!! warning TS377022: The 'catch' callback in Effect.tryPromise returns global 'Error', which loses type safety as untagged errors merge together. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectCatch)
       try: async () => 1,
       catch: (error) => new Error(String(error))
     })

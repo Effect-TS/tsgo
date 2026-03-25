@@ -1,14 +1,17 @@
 === Metadata ===
 Effect version: 4.0.0
 
+/.src/effectInVoidSuccess_preview.ts(5,14): warning TS377020: There is a nested 'Effect<void, never, never>' in the 'void' success channel, beware that this could lead to nested Effect<Effect<...>> that won't be executed. effect(effectInVoidSuccess)
 
 
-==== /.src/effectInVoidSuccess_preview.ts (0 errors) ====
+==== /.src/effectInVoidSuccess_preview.ts (1 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics effectInVoidSuccess:warning
     import * as Effect from "effect/Effect"
     
     export const preview: Effect.Effect<void> = Effect.succeed(
+                 ~~~~~~~
+!!! warning TS377020: There is a nested 'Effect<void, never, never>' in the 'void' success channel, beware that this could lead to nested Effect<Effect<...>> that won't be executed. effect(effectInVoidSuccess)
       Effect.log("nested")
     )
     

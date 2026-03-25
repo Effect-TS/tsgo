@@ -1,5 +1,13 @@
 === Quick Fix Inventory ===
-(no diagnostics)
+
+[D1] (6:3-6:15) TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+  Fix 0: "Disable catchUnfailableEffect for this line"
+  Fix 1: "Disable catchUnfailableEffect for entire file"
 
 === Quick Fix Application Results ===
-(no quick fixes to apply)
+
+=== [D1] Fix 0: "Disable catchUnfailableEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable catchUnfailableEffect for entire file" ===
+skipped by default

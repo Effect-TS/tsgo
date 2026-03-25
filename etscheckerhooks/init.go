@@ -61,7 +61,7 @@ func afterCheckSourceFile(c *checker.Checker, sf *ast.SourceFile) {
 	directiveSet := directives.BuildDirectiveSet(effectDirectives)
 
 	// Check for file-level skip-file directive for all rules
-	if directiveSet.IsSuppressed("*", 0) {
+	if directiveSet.IsSkipFile("*") {
 		return
 	}
 
@@ -103,7 +103,7 @@ func collectDiagnostics(
 		}
 
 		// Skip rules with file-level skip-file directive
-		if directiveSet.IsSuppressed(r.Name, 0) {
+		if directiveSet.IsSkipFile(r.Name) {
 			continue
 		}
 

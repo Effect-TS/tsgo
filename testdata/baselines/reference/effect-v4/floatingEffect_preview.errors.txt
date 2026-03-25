@@ -1,12 +1,15 @@
 === Metadata ===
 Effect version: 4.0.0
 
+/.src/floatingEffect_preview.ts(5,1): warning TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
 
 
-==== /.src/floatingEffect_preview.ts (0 errors) ====
+==== /.src/floatingEffect_preview.ts (1 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics floatingEffect:warning
     import * as Effect from "effect/Effect"
     
     Effect.log("forgotten")
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
     

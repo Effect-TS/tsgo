@@ -1,5 +1,13 @@
 === Quick Fix Inventory ===
-(no diagnostics)
+
+[D1] (6:46-6:51) TS377062: Parameter 'input' implicitly has an 'any' type in Effect.fn/Effect.fnUntraced/Effect.fnUntracedEager. Add an explicit type annotation or provide a contextual function type. effect(effectFnImplicitAny)
+  Fix 0: "Disable effectFnImplicitAny for this line"
+  Fix 1: "Disable effectFnImplicitAny for entire file"
 
 === Quick Fix Application Results ===
-(no quick fixes to apply)
+
+=== [D1] Fix 0: "Disable effectFnImplicitAny for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectFnImplicitAny for entire file" ===
+skipped by default

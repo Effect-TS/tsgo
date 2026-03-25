@@ -7,5 +7,14 @@
 [D2] (5:45-5:46) TS7006: Parameter '_' implicitly has an 'any' type.
   (no quick fixes)
 
+[D3] (5:45-5:46) TS377027: The adapter of Effect.gen is not required anymore, it is now just an alias of pipe. effect(effectGenUsesAdapter)
+  Fix 0: "Disable effectGenUsesAdapter for this line"
+  Fix 1: "Disable effectGenUsesAdapter for entire file"
+
 === Quick Fix Application Results ===
-(no quick fixes to apply)
+
+=== [D3] Fix 0: "Disable effectGenUsesAdapter for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable effectGenUsesAdapter for entire file" ===
+skipped by default

@@ -2,14 +2,17 @@
 Effect version: unknown
 
 /.src/nodeBuiltinImport_preview.ts(3,16): error TS2591: Cannot find name 'node:fs'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+/.src/nodeBuiltinImport_preview.ts(3,16): warning TS377057: Prefer using FileSystem from @effect/platform instead of the Node.js 'fs' module. effect(nodeBuiltinImport)
 
 
-==== /.src/nodeBuiltinImport_preview.ts (1 errors) ====
+==== /.src/nodeBuiltinImport_preview.ts (2 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics nodeBuiltinImport:warning
     import fs from "node:fs"
                    ~~~~~~~~~
 !!! error TS2591: Cannot find name 'node:fs'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+                   ~~~~~~~~~
+!!! warning TS377057: Prefer using FileSystem from @effect/platform instead of the Node.js 'fs' module. effect(nodeBuiltinImport)
     
     export const preview = fs.readFileSync
     

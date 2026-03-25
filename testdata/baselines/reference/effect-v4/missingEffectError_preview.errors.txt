@@ -1,9 +1,10 @@
 === Metadata ===
 Effect version: 4.0.0
 
+/.src/missingEffectError_preview.ts(10,59): warning TS377003: Missing errors Boom in the expected Effect type. effect(missingEffectError)
 
 
-==== /.src/missingEffectError_preview.ts (0 errors) ====
+==== /.src/missingEffectError_preview.ts (1 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics missingEffectError:warning
     import type * as Effect from "effect/Effect"
@@ -14,4 +15,6 @@ Effect version: 4.0.0
     
     // @ts-expect-error
     export const preview: () => Effect.Effect<number> = () => effect
+                                                              ~~~~~~
+!!! warning TS377003: Missing errors Boom in the expected Effect type. effect(missingEffectError)
     
