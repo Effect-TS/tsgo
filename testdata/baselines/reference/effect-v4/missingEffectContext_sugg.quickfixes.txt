@@ -3,7 +3,7 @@
 [D1] (1:37-1:41) TS6133: 'Data' is declared but its value is never read.
   (no quick fixes)
 
-[D2] (42:5-42:22) TS2345: Argument of type '<A, E>(effect: Effect<A, E>, options?: RunOptions | undefined) => Promise<A>' is not assignable to parameter of type '(_: Effect<{}, never, DbConnection | FileSystem>) => Promise<{}>'.
+[D2] (42:5-42:22) TS2345: Argument of type '<A, E>(effect: Effect<A, E, never>, options?: RunOptions | undefined) => Promise<A>' is not assignable to parameter of type '(_: Effect<{}, never, DbConnection | FileSystem>) => Promise<{}>'.
   Types of parameters 'effect' and '_' are incompatible.
     Type 'Effect<{}, never, DbConnection | FileSystem>' is not assignable to type 'Effect<{}, never, never>'.
       Type 'DbConnection | FileSystem' is not assignable to type 'never'.

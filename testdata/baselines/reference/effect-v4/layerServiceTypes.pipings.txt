@@ -12,7 +12,7 @@ Transformations (1):
   [0] kind: call
       callee: ServiceMap.Service<Database, {\n  readonly query: (sql: string) => Effect.Effect<string>\n}>()
       args: (constant)
-      outType: ServiceClass<Database, "Database", { readonly query: (sql: string) => Effect.Effect<string>; }>
+      outType: ServiceClass<Database, "Database", { readonly query: (sql: string) => Effect<string, never, never>; }>
 
 === Piping Flow ===
 Location: 8:21 - 10:15
@@ -26,7 +26,7 @@ Transformations (1):
   [0] kind: call
       callee: ServiceMap.Service<Logger, {\n  readonly log: (message: string) => Effect.Effect<void>\n}>()
       args: (constant)
-      outType: ServiceClass<Logger, "Logger", { readonly log: (message: string) => Effect.Effect<void>; }>
+      outType: ServiceClass<Logger, "Logger", { readonly log: (message: string) => Effect<void, never, never>; }>
 
 === Piping Flow ===
 Location: 13:21 - 15:3
@@ -128,7 +128,7 @@ Transformations (1):
   [0] kind: call
       callee: ServiceMap.Service<UserRepo, {\n  readonly getUser: (id: string) => Effect.Effect<string>\n}>()
       args: (constant)
-      outType: ServiceClass<UserRepo, "UserRepo", { readonly getUser: (id: string) => Effect.Effect<string>; }>
+      outType: ServiceClass<UserRepo, "UserRepo", { readonly getUser: (id: string) => Effect<string, never, never>; }>
 
 === Piping Flow ===
 Location: 36:21 - 43:2
@@ -136,7 +136,7 @@ Node: Layer.effect(UserRepo)(\n  Effect.gen(function*() {\n    const db = yield*
 Node Kind: KindCallExpression
 
 Subject: function*() {\n    const db = yield* Database\n    return {\n      getUser: (id: string) => db.query(`SELECT * FROM users WHERE id = ${id}`)\n    }\n  }
-Subject Type: () => Generator<Service<Database, { readonly query: (sql: string) => Effect.Effect<string>; }>, { getUser: (id: string) => Effect<string, never, never>; }, any>
+Subject Type: () => Generator<Service<Database, { readonly query: (sql: string) => Effect<string, never, never>; }>, { getUser: (id: string) => Effect<string, never, never>; }, any>
 
 Transformations (2):
   [0] kind: call
@@ -182,7 +182,7 @@ Node: Effect.gen(function*() {\n  const db = yield* Database\n  return yield* db
 Node Kind: KindCallExpression
 
 Subject: function*() {\n  const db = yield* Database\n  return yield* db.query("SELECT 1")\n}
-Subject Type: () => Generator<Effect<string, never, never> | Service<Database, { readonly query: (sql: string) => Effect.Effect<string>; }>, string, any>
+Subject Type: () => Generator<Effect<string, never, never> | Service<Database, { readonly query: (sql: string) => Effect<string, never, never>; }>, string, any>
 
 Transformations (2):
   [0] kind: call

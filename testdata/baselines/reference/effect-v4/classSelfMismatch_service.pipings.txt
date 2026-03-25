@@ -12,7 +12,7 @@ Transformations (1):
   [0] kind: call
       callee: ServiceMap.Service<CorrectName, {\n  writeCache: () => Effect.Effect<void, never, FileSystem | Cache>\n  readCache: Effect.Effect<void, never, FileSystem | Cache>\n}>()
       args: (constant)
-      outType: ServiceClass<CorrectName, "CorrectName", { writeCache: () => Effect.Effect<void, never, FileSystem | Cache>; readCache: Effect.Effect<void, never, FileSystem | Cache>; }>
+      outType: ServiceClass<CorrectName, "CorrectName", { writeCache: () => Effect<void, never, Cache | FileSystem>; readCache: Effect<void, never, Cache | FileSystem>; }>
 
 === Piping Flow ===
 Location: 10:31 - 13:18
@@ -26,4 +26,4 @@ Transformations (1):
   [0] kind: call
       callee: ServiceMap.Service<CorrectName, {\n  writeCache: () => Effect.Effect<void, never, FileSystem | Cache>\n  readCache: Effect.Effect<void, never, FileSystem | Cache>\n}>()
       args: (constant)
-      outType: ServiceClass<CorrectName, "WrongName", { writeCache: () => Effect.Effect<void, never, FileSystem | Cache>; readCache: Effect.Effect<void, never, FileSystem | Cache>; }>
+      outType: ServiceClass<CorrectName, "WrongName", { writeCache: () => Effect<void, never, Cache | FileSystem>; readCache: Effect<void, never, Cache | FileSystem>; }>

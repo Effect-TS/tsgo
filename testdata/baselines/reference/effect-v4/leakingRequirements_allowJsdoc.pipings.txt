@@ -12,7 +12,7 @@ Transformations (1):
   [0] kind: call
       callee: ServiceMap.Service<FileSystem, {\n  writeFile: (content: string) => Effect.Effect<void>\n}>()
       args: (constant)
-      outType: ServiceClass<FileSystem, "FileSystem", { writeFile: (content: string) => Effect.Effect<void>; }>
+      outType: ServiceClass<FileSystem, "FileSystem", { writeFile: (content: string) => Effect<void, never, never>; }>
 
 === Piping Flow ===
 Location: 8:27 - 10:14
@@ -26,7 +26,7 @@ Transformations (1):
   [0] kind: call
       callee: ServiceMap.Service<Cache, {\n  writeFile: (content: string) => Effect.Effect<void>\n}>()
       args: (constant)
-      outType: ServiceClass<Cache, "Cache", { writeFile: (content: string) => Effect.Effect<void>; }>
+      outType: ServiceClass<Cache, "Cache", { writeFile: (content: string) => Effect<void, never, never>; }>
 
 === Piping Flow ===
 Location: 15:33 - 18:20
@@ -40,7 +40,7 @@ Transformations (1):
   [0] kind: call
       callee: ServiceMap.Service<LeakingDeps, {\n  writeCache: () => Effect.Effect<void, never, FileSystem | Cache>\n  readCache: Effect.Effect<void, never, FileSystem | Cache>\n}>()
       args: (constant)
-      outType: ServiceClass<LeakingDeps, "LeakingDeps", { writeCache: () => Effect.Effect<void, never, FileSystem | Cache>; readCache: Effect.Effect<void, never, FileSystem | Cache>; }>
+      outType: ServiceClass<LeakingDeps, "LeakingDeps", { writeCache: () => Effect<void, never, Cache | FileSystem>; readCache: Effect<void, never, Cache | FileSystem>; }>
 
 === Piping Flow ===
 Location: 23:34 - 26:21
@@ -54,7 +54,7 @@ Transformations (1):
   [0] kind: call
       callee: ServiceMap.Service<LeakingDeps2, {\n  writeCache: () => Effect.Effect<void, never, FileSystem | Cache>\n  readCache: Effect.Effect<void, never, FileSystem | Cache>\n}>()
       args: (constant)
-      outType: ServiceClass<LeakingDeps2, "LeakingDeps2", { writeCache: () => Effect.Effect<void, never, FileSystem | Cache>; readCache: Effect.Effect<void, never, FileSystem | Cache>; }>
+      outType: ServiceClass<LeakingDeps2, "LeakingDeps2", { writeCache: () => Effect<void, never, Cache | FileSystem>; readCache: Effect<void, never, Cache | FileSystem>; }>
 
 === Piping Flow ===
 Location: 35:34 - 38:21
@@ -68,7 +68,7 @@ Transformations (1):
   [0] kind: call
       callee: ServiceMap.Service<LeakingDeps3, {\n  writeCache: () => Effect.Effect<void, never, FileSystem | Cache>\n  readCache: Effect.Effect<void, never, FileSystem | Cache>\n}>()
       args: (constant)
-      outType: ServiceClass<LeakingDeps3, "LeakingDeps3", { writeCache: () => Effect.Effect<void, never, FileSystem | Cache>; readCache: Effect.Effect<void, never, FileSystem | Cache>; }>
+      outType: ServiceClass<LeakingDeps3, "LeakingDeps3", { writeCache: () => Effect<void, never, Cache | FileSystem>; readCache: Effect<void, never, Cache | FileSystem>; }>
 
 === Piping Flow ===
 Location: 43:28 - 46:19
@@ -82,4 +82,4 @@ Transformations (1):
   [0] kind: call
       callee: ServiceMap.Service
       args: (constant)
-      outType: Service<{ writeCache: () => Effect.Effect<void, never, FileSystem | Cache>; readCache: Effect.Effect<void, never, FileSystem | Cache>; }, { writeCache: () => Effect.Effect<void, never, FileSystem | Cache>; readCache: Effect.Effect<void, never, FileSystem | Cache>; }>
+      outType: Service<{ writeCache: () => Effect<void, never, Cache | FileSystem>; readCache: Effect<void, never, Cache | FileSystem>; }, { writeCache: () => Effect<void, never, Cache | FileSystem>; readCache: Effect<void, never, Cache | FileSystem>; }>

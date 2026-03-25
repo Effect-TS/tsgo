@@ -12,7 +12,7 @@ Transformations (1):
   [0] kind: call
       callee: ServiceMap.Service<UserService, {\n    getUser(id: string): Effect.Effect<void>\n  }>()
       args: (constant)
-      outType: ServiceClass<UserService, "UserService", { getUser(id: string): Effect.Effect<void>; }>
+      outType: ServiceClass<UserService, "UserService", { getUser(id: string): Effect<void, never, never>; }>
 
 === Piping Flow ===
 Location: 8:23 - 13:3
@@ -26,7 +26,7 @@ Transformations (1):
   [0] kind: call
       callee: UserService.of
       args: (constant)
-      outType: { getUser(id: string): Effect.Effect<void>; }
+      outType: { getUser(id: string): Effect<void, never, never>; }
 
 === Piping Flow ===
 Location: 9:27 - 12:7
