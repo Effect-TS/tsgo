@@ -158,9 +158,32 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
+      checks: write
       contents: read
 
     steps:
+      - name: Create PR validation check
+        id: create_check
+        uses: actions/github-script@v7
+        env:
+          HEAD_SHA: ${{ needs.update.outputs.head_sha }}
+          PR_NUMBER: ${{ needs.update.outputs.pr_number }}
+        with:
+          script: |
+            const { data } = await github.rest.checks.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: 'Validate generated PR',
+              head_sha: process.env.HEAD_SHA,
+              status: 'in_progress',
+              output: {
+                title: `Validation started for PR #${process.env.PR_NUMBER}`,
+                summary: 'Generated PR validation is running.',
+              },
+            })
+
+            core.setOutput('check_run_id', String(data.id))
+
       - name: Checkout generated PR branch
         uses: actions/checkout@v4
         with:
@@ -201,18 +224,56 @@ jobs:
         run: pnpm setup-repo --ci
 
       - name: Validate check
+        id: validate_check
+        continue-on-error: true
         run: pnpm check
 
       - name: Validate build
+        id: validate_build
+        continue-on-error: true
         run: pnpm build
 
       - name: Validate test
+        id: validate_test
+        continue-on-error: true
         run: pnpm test
 
       - name: Validate lint
+        id: validate_lint
+        continue-on-error: true
         uses: golangci/golangci-lint-action@v7
         with:
           version: v2.9
           args: ./...
         env:
           CGO_ENABLED: "0"
+
+      - name: Complete PR validation check
+        if: always()
+        uses: actions/github-script@v7
+        env:
+          CHECK_RUN_ID: ${{ steps.create_check.outputs.check_run_id }}
+          PR_NUMBER: ${{ needs.update.outputs.pr_number }}
+          CHECK_OUTCOME: ${{ steps.validate_check.outcome }}
+          BUILD_OUTCOME: ${{ steps.validate_build.outcome }}
+          TEST_OUTCOME: ${{ steps.validate_test.outcome }}
+          LINT_OUTCOME: ${{ steps.validate_lint.outcome }}
+        with:
+          script: |
+            const success =
+              process.env.CHECK_OUTCOME === 'success' &&
+              process.env.BUILD_OUTCOME === 'success' &&
+              process.env.TEST_OUTCOME === 'success' &&
+              process.env.LINT_OUTCOME === 'success'
+
+            await github.rest.checks.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              check_run_id: Number(process.env.CHECK_RUN_ID),
+              status: 'completed',
+              conclusion: success ? 'success' : 'failure',
+              output: {
+                title: `Validation result for PR #${process.env.PR_NUMBER}`,
+                summary: success ? 'Generated PR validation passed.' : 'Generated PR validation failed.',
+              },
+            })
