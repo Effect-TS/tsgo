@@ -189,8 +189,9 @@ func generateErrorBaseline(effectVersion string, inputFiles []*harnessutil.TestF
 }
 
 func normalizeEffectVersionForBaseline(version string) string {
-	if i := strings.Index(version, "-"); i >= 0 {
-		return version[:i]
+	base, _, found := strings.Cut(version, "-")
+	if found {
+		return base
 	}
 	return version
 }
