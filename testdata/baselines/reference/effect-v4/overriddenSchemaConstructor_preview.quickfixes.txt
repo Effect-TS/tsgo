@@ -1,5 +1,25 @@
 === Quick Fix Inventory ===
-(no diagnostics)
+
+[D1] (6:3-6:14) TS377044: Classes extending Schema must not override the constructor; this is because it silently breaks the schema decoding behaviour. If that's needed, we recommend instead to use a static 'new' method that constructs the instance. effect(overriddenSchemaConstructor)
+  Fix 0: "Disable overriddenSchemaConstructor for this line"
+  Fix 1: "Disable overriddenSchemaConstructor for entire file"
+  Fix 2: "Remove the constructor override"
 
 === Quick Fix Application Results ===
-(no quick fixes to apply)
+
+=== [D1] Fix 0: "Disable overriddenSchemaConstructor for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable overriddenSchemaConstructor for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Remove the constructor override" ===
+
+--- file:///.src/overriddenSchemaConstructor_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics overriddenSchemaConstructor:warning
+import * as Schema from "effect/Schema"
+
+export class User extends Schema.Class<User>("User")({ name: Schema.String }) {
+}
+
