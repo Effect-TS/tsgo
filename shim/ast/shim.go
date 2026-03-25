@@ -448,6 +448,7 @@ type IndexSignatureDeclaration = ast.IndexSignatureDeclaration
 type IndexedAccessTypeNode = ast.IndexedAccessTypeNode
 type InferTypeNode = ast.InferTypeNode
 type InterfaceDeclaration = ast.InterfaceDeclaration
+const InternalSymbolNameAssignmentDeclaration = ast.InternalSymbolNameAssignmentDeclaration
 const InternalSymbolNameCall = ast.InternalSymbolNameCall
 const InternalSymbolNameClass = ast.InternalSymbolNameClass
 const InternalSymbolNameComputed = ast.InternalSymbolNameComputed

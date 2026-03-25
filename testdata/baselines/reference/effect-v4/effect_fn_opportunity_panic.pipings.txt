@@ -110,7 +110,7 @@ Transformations (1):
   [0] kind: call
       callee: ServiceMap.Service<JsonPlaceholder, {\n  readonly getTodo: (id: number) => Effect.Effect<Todo, JsonPlaceholderError>\n  readonly getUser: (id: number) => Effect.Effect<User, JsonPlaceholderError>\n}>()
       args: (constant)
-      outType: ServiceClass<JsonPlaceholder, "JsonPlaceholder", { readonly getTodo: (id: number) => Effect.Effect<Todo, JsonPlaceholderError>; readonly getUser: (id: number) => Effect.Effect<User, JsonPlaceholderError>; }>
+      outType: ServiceClass<JsonPlaceholder, "JsonPlaceholder", { readonly getTodo: (id: number) => Effect<Todo, JsonPlaceholderError, never>; readonly getUser: (id: number) => Effect<User, JsonPlaceholderError, never>; }>
 
 === Piping Flow ===
 Location: 47:28 - 107:76
@@ -244,7 +244,7 @@ Node: Effect.gen(function* () {\n  const api = yield* JsonPlaceholder\n  const [
 Node Kind: KindCallExpression
 
 Subject: function* () {\n  const api = yield* JsonPlaceholder\n  const [todo, user] = yield* Effect.all([api.getTodo(1), api.getUser(1)])\n\n  yield* Effect.log(`Todo #${todo.id}: ${todo.title}`)\n  yield* Effect.log(`Assigned to: ${user.name} <${user.email}>`)\n  yield* Effect.log(`Completed: ${todo.completed}`)\n}
-Subject Type: () => Generator<Effect<void, never, never> | Effect<[Todo, User], JsonPlaceholderError, never> | Service<JsonPlaceholder, { readonly getTodo: (id: number) => Effect.Effect<Todo, JsonPlaceholderError>; readonly getUser: (id: number) => Effect.Effect<User, JsonPlaceholderError>; }>, void, any>
+Subject Type: () => Generator<Effect<void, never, never> | Effect<[Todo, User], JsonPlaceholderError, never> | Service<JsonPlaceholder, { readonly getTodo: (id: number) => Effect<Todo, JsonPlaceholderError, never>; readonly getUser: (id: number) => Effect<User, JsonPlaceholderError, never>; }>, void, any>
 
 Transformations (3):
   [0] kind: call

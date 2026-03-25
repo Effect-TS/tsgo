@@ -24,7 +24,7 @@ Node: Effect.suspend((): Effect.Effect<void> => {\n  return Stream.empty.pipe(\n
 Node Kind: KindCallExpression
 
 Subject: (): Effect.Effect<void> => {\n  return Stream.empty.pipe(\n    Stream.runCollect,\n    Effect.interruptible,\n    Effect.matchCause({\n      onSuccess: () => "success",\n      onFailure: () => Effect.fail("error")\n    })\n  )\n}
-Subject Type: () => Effect.Effect<void>
+Subject Type: () => Effect<void, never, never>
 
 Transformations (1):
   [0] kind: call
