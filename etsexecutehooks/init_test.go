@@ -3,7 +3,7 @@ package etsexecutehooks
 import (
 	"testing"
 
-	"github.com/effect-ts/effect-typescript-go/etscore"
+	"github.com/effect-ts/tsgo/etscore"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/core"
 	"github.com/microsoft/typescript-go/shim/diagnostics"

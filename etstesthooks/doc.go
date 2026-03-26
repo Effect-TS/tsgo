@@ -6,5 +6,5 @@
 //
 // Import this package with a blank import in test files that use fourslash with Effect:
 //
-//	import _ "github.com/effect-ts/effect-typescript-go/etstesthooks"
+//	import _ "github.com/effect-ts/tsgo/etstesthooks"
 package etstesthooks

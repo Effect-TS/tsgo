@@ -3,9 +3,9 @@ package completions
 import (
 	"fmt"
 
-	"github.com/effect-ts/effect-typescript-go/internal/completion"
-	"github.com/effect-ts/effect-typescript-go/internal/effectutil"
-	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
+	"github.com/effect-ts/tsgo/internal/completion"
+	"github.com/effect-ts/tsgo/internal/effectutil"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
 	"github.com/microsoft/typescript-go/shim/scanner"

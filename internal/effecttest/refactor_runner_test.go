@@ -5,12 +5,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/effect-ts/effect-typescript-go/internal/effecttest"
+	"github.com/effect-ts/tsgo/internal/effecttest"
 
 	// Register fourslash VFS callback to mount Effect packages
-	_ "github.com/effect-ts/effect-typescript-go/etstesthooks"
+	_ "github.com/effect-ts/tsgo/etstesthooks"
 	// Register Effect code fix and refactor providers for LSP code actions
-	_ "github.com/effect-ts/effect-typescript-go/etslshooks"
+	_ "github.com/effect-ts/tsgo/etslshooks"
 )
 
 func TestEffectRefactors(t *testing.T) {

@@ -11,5 +11,5 @@
 //
 // Usage:
 //
-//	import _ "github.com/effect-ts/effect-typescript-go/etslshooks"
+//	import _ "github.com/effect-ts/tsgo/etslshooks"
 package etslshooks

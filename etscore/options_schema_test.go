@@ -11,8 +11,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/effect-ts/effect-typescript-go/etscore"
-	"github.com/effect-ts/effect-typescript-go/internal/rules"
+	"github.com/effect-ts/tsgo/etscore"
+	"github.com/effect-ts/tsgo/internal/rules"
 	"github.com/microsoft/typescript-go/shim/testutil/baseline"
 )
 

@@ -2,7 +2,7 @@
 package codegens
 
 import (
-	"github.com/effect-ts/effect-typescript-go/internal/codegen"
+	"github.com/effect-ts/tsgo/internal/codegen"
 )
 
 // All is the list of all codegens.

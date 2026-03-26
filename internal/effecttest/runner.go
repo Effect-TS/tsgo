@@ -20,10 +20,10 @@ import (
 	"github.com/microsoft/typescript-go/shim/vfs"
 	"github.com/microsoft/typescript-go/shim/vfs/vfstest"
 
-	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 
 	// Import etscheckerhooks to register Effect diagnostic callbacks
-	_ "github.com/effect-ts/effect-typescript-go/etscheckerhooks"
+	_ "github.com/effect-ts/tsgo/etscheckerhooks"
 )
 
 // TestCasesDir returns the path to the Effect test cases directory for the given version.

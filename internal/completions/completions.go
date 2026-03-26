@@ -2,7 +2,7 @@
 // This mirrors the fixables/refactors package structure.
 package completions
 
-import "github.com/effect-ts/effect-typescript-go/internal/completion"
+import "github.com/effect-ts/tsgo/internal/completion"
 
 // All is the list of all completion providers.
 // Add new completions here explicitly - no init() magic.

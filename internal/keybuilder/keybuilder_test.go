@@ -3,7 +3,7 @@ package keybuilder
 import (
 	"testing"
 
-	"github.com/effect-ts/effect-typescript-go/etscore"
+	"github.com/effect-ts/tsgo/etscore"
 )
 
 func TestCyrb53(t *testing.T) {

@@ -3,8 +3,8 @@ package layergraph
 import (
 	"slices"
 
-	"github.com/effect-ts/effect-typescript-go/internal/graph"
-	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
+	"github.com/effect-ts/tsgo/internal/graph"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
 )

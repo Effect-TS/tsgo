@@ -4,7 +4,7 @@
 // Import this package with a blank import in cmd/tsgo/main.go to register
 // Effect code fix providers:
 //
-//	import _ "github.com/effect-ts/effect-typescript-go/etslshooks"
+//	import _ "github.com/effect-ts/tsgo/etslshooks"
 package etslshooks
 
 import (
@@ -12,16 +12,16 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/effect-ts/effect-typescript-go/etscore"
-	"github.com/effect-ts/effect-typescript-go/internal/autoimportstyle"
-	"github.com/effect-ts/effect-typescript-go/internal/completion"
-	"github.com/effect-ts/effect-typescript-go/internal/completions"
-	"github.com/effect-ts/effect-typescript-go/internal/fixable"
-	"github.com/effect-ts/effect-typescript-go/internal/fixables"
-	"github.com/effect-ts/effect-typescript-go/internal/layergraph"
-	"github.com/effect-ts/effect-typescript-go/internal/refactor"
-	"github.com/effect-ts/effect-typescript-go/internal/refactors"
-	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
+	"github.com/effect-ts/tsgo/etscore"
+	"github.com/effect-ts/tsgo/internal/autoimportstyle"
+	"github.com/effect-ts/tsgo/internal/completion"
+	"github.com/effect-ts/tsgo/internal/completions"
+	"github.com/effect-ts/tsgo/internal/fixable"
+	"github.com/effect-ts/tsgo/internal/fixables"
+	"github.com/effect-ts/tsgo/internal/layergraph"
+	"github.com/effect-ts/tsgo/internal/refactor"
+	"github.com/effect-ts/tsgo/internal/refactors"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
 	"github.com/microsoft/typescript-go/shim/compiler"

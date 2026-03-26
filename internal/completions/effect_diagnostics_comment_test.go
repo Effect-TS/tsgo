@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/effect-ts/effect-typescript-go/internal/rules"
+	"github.com/effect-ts/tsgo/internal/rules"
 )
 
 func TestEffectDiagnosticsComment_DoubleSlash(t *testing.T) {

@@ -3,7 +3,7 @@ package etstesthooks
 import (
 	"strings"
 
-	"github.com/effect-ts/effect-typescript-go/internal/effecttest"
+	"github.com/effect-ts/tsgo/internal/effecttest"
 	"github.com/microsoft/typescript-go/shim/fourslash"
 )
 

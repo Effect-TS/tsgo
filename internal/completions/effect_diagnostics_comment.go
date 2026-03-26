@@ -6,8 +6,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/effect-ts/effect-typescript-go/internal/completion"
-	"github.com/effect-ts/effect-typescript-go/internal/rules"
+	"github.com/effect-ts/tsgo/internal/completion"
+	"github.com/effect-ts/tsgo/internal/rules"
 	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
 )
 

@@ -1,7 +1,7 @@
 package refactors
 
 import (
-	"github.com/effect-ts/effect-typescript-go/internal/refactor"
+	"github.com/effect-ts/tsgo/internal/refactor"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/astnav"
 	"github.com/microsoft/typescript-go/shim/core"

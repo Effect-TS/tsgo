@@ -3,7 +3,7 @@ package completions
 import (
 	"strings"
 
-	"github.com/effect-ts/effect-typescript-go/internal/completion"
+	"github.com/effect-ts/tsgo/internal/completion"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/astnav"
 	"github.com/microsoft/typescript-go/shim/checker"

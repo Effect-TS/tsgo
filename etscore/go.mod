@@ -1,4 +1,4 @@
-module github.com/effect-ts/effect-typescript-go/etscore
+module github.com/effect-ts/tsgo/etscore
 
 go 1.26
 
