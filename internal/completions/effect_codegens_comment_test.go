@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/effect-ts/effect-typescript-go/internal/codegens"
+	"github.com/effect-ts/tsgo/internal/codegens"
 )
 
 func TestEffectCodegensComment_DoubleSlash(t *testing.T) {

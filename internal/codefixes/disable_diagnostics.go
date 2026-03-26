@@ -2,8 +2,8 @@
 package codefixes
 
 import (
-	"github.com/effect-ts/effect-typescript-go/internal/rule"
-	"github.com/effect-ts/effect-typescript-go/internal/rules"
+	"github.com/effect-ts/tsgo/internal/rule"
+	"github.com/effect-ts/tsgo/internal/rules"
 )
 
 // EffectDisableErrorCodes returns all Effect diagnostic codes that support disable actions.

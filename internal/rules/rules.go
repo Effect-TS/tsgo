@@ -2,7 +2,7 @@
 package rules
 
 import (
-	"github.com/effect-ts/effect-typescript-go/internal/rule"
+	"github.com/effect-ts/tsgo/internal/rule"
 )
 
 // All is the list of all diagnostic rules.

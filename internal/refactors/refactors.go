@@ -2,7 +2,7 @@
 // This mirrors the fixables package structure for code fixes.
 package refactors
 
-import "github.com/effect-ts/effect-typescript-go/internal/refactor"
+import "github.com/effect-ts/tsgo/internal/refactor"
 
 // All is the list of all refactor providers.
 // Add new refactors here explicitly - no init() magic.

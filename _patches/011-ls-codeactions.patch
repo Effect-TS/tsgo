@@ -20,7 +20,7 @@ index 5460f04f94..6d217f8cee 100644
 +
 +// RegisterCodeFixProvider registers an external code fix provider.
 +// Called by external packages (e.g., etslshooks) during init() to register their providers.
-+// This allows effect-typescript-go to define code fixes without modifying the typescript-go patch.
++// This allows @effect/tsgo to define code fixes without modifying the typescript-go patch.
 +func RegisterCodeFixProvider(provider *CodeFixProvider) {
 +	externalCodeFixProviders = append(externalCodeFixProviders, provider)
 +}

@@ -1,7 +1,7 @@
 package refactors
 
 import (
-	"github.com/effect-ts/effect-typescript-go/internal/refactor"
+	"github.com/effect-ts/tsgo/internal/refactor"
 	"github.com/microsoft/typescript-go/shim/ls"
 	"github.com/microsoft/typescript-go/shim/ls/change"
 )

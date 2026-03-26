@@ -9,7 +9,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	effecttest "github.com/effect-ts/effect-typescript-go/internal/effecttest"
+	effecttest "github.com/effect-ts/tsgo/internal/effecttest"
 	"github.com/microsoft/typescript-go/shim/core"
 	"github.com/microsoft/typescript-go/shim/fourslash"
 	"github.com/microsoft/typescript-go/shim/ls/lsconv"

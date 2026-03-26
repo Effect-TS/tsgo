@@ -3,15 +3,15 @@ package rules
 import (
 	"strings"
 
-	"github.com/effect-ts/effect-typescript-go/internal/rule"
-	"github.com/effect-ts/effect-typescript-go/internal/typeparser"
+	"github.com/effect-ts/tsgo/internal/rule"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
 	"github.com/microsoft/typescript-go/shim/core"
 	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
 	"github.com/microsoft/typescript-go/shim/scanner"
 
-	"github.com/effect-ts/effect-typescript-go/etscore"
+	"github.com/effect-ts/tsgo/etscore"
 )
 
 // MissedPipeableOpportunity detects nested function call chains that can be converted to .pipe() style.

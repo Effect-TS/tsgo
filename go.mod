@@ -1,4 +1,4 @@
-module github.com/effect-ts/effect-typescript-go
+module github.com/effect-ts/tsgo
 
 go 1.26
 
@@ -44,7 +44,7 @@ replace (
 )
 
 require (
-	github.com/effect-ts/effect-typescript-go/etscore v0.0.0
+	github.com/effect-ts/tsgo/etscore v0.0.0
 	github.com/microsoft/typescript-go/shim/ast v0.0.0
 	github.com/microsoft/typescript-go/shim/astnav v0.0.0
 	github.com/microsoft/typescript-go/shim/bundled v0.0.0-00010101000000-000000000000
@@ -89,7 +89,7 @@ require (
 	gotest.tools/v3 v3.5.2 // indirect
 )
 
-replace github.com/effect-ts/effect-typescript-go/etscore => ./etscore
+replace github.com/effect-ts/tsgo/etscore => ./etscore
 
 ignore (
 	./.repos

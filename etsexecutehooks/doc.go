@@ -7,5 +7,5 @@
 //
 // Import this package with a blank import in the main entry point:
 //
-//	import _ "github.com/effect-ts/effect-typescript-go/etsexecutehooks"
+//	import _ "github.com/effect-ts/tsgo/etsexecutehooks"
 package etsexecutehooks

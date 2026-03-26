@@ -3,8 +3,8 @@ package rules
 import (
 	"slices"
 
-	"github.com/effect-ts/effect-typescript-go/etscore"
-	"github.com/effect-ts/effect-typescript-go/internal/rule"
+	"github.com/effect-ts/tsgo/etscore"
+	"github.com/effect-ts/tsgo/internal/rule"
 )
 
 var metadataGroups = []rule.MetadataGroup{

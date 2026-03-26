@@ -7,7 +7,7 @@ index a956278f3..3e476767e 100644
  
  	maps.Copy(rawDiagnosticMessages, rawExtraMessages)
 +
-+	// EFFECT: Read Effect diagnostic messages from the effect-typescript-go project
++	// EFFECT: Read Effect diagnostic messages from the @effect/tsgo project
 +	// This allows Effect to define its own diagnostics without patching extraDiagnosticMessages.json
 +	effectMessagesPath := filepath.Join(filepath.Dir(filename), "..", "..", "..", "internal", "diagnostics", "effectDiagnosticMessages.json")
 +	if _, err := os.Stat(effectMessagesPath); err == nil {

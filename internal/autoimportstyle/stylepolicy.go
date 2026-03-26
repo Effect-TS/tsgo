@@ -3,7 +3,7 @@ package autoimportstyle
 import (
 	"strings"
 
-	"github.com/effect-ts/effect-typescript-go/etscore"
+	"github.com/effect-ts/tsgo/etscore"
 	"github.com/microsoft/typescript-go/shim/ls/autoimport"
 	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
 	"github.com/microsoft/typescript-go/shim/modulespecifiers"

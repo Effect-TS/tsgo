@@ -5,9 +5,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/effect-ts/effect-typescript-go/internal/effecttest"
+	"github.com/effect-ts/tsgo/internal/effecttest"
 
-	_ "github.com/effect-ts/effect-typescript-go/etslshooks"
+	_ "github.com/effect-ts/tsgo/etslshooks"
 )
 
 func TestEffectDocumentSymbols(t *testing.T) {

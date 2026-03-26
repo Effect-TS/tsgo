@@ -1,6 +1,6 @@
 package rule
 
-import "github.com/effect-ts/effect-typescript-go/etscore"
+import "github.com/effect-ts/tsgo/etscore"
 
 type MetadataGroup struct {
 	ID          string `json:"id"`

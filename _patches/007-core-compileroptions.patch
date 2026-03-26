@@ -7,7 +7,7 @@ index 71c23d355c..cc04b38ab2 100644
  	"slices"
  	"strings"
 
-+	"github.com/effect-ts/effect-typescript-go/etscore"
++	"github.com/effect-ts/tsgo/etscore"
  	"github.com/microsoft/typescript-go/internal/collections"
  	"github.com/microsoft/typescript-go/internal/tspath"
  )

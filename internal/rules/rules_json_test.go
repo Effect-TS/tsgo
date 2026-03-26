@@ -19,11 +19,11 @@ import (
 	"testing"
 	"testing/fstest"
 
-	"github.com/effect-ts/effect-typescript-go/etscore"
-	"github.com/effect-ts/effect-typescript-go/internal/effecttest"
-	"github.com/effect-ts/effect-typescript-go/internal/fixables"
-	"github.com/effect-ts/effect-typescript-go/internal/rule"
-	"github.com/effect-ts/effect-typescript-go/internal/rules"
+	"github.com/effect-ts/tsgo/etscore"
+	"github.com/effect-ts/tsgo/internal/effecttest"
+	"github.com/effect-ts/tsgo/internal/fixables"
+	"github.com/effect-ts/tsgo/internal/rule"
+	"github.com/effect-ts/tsgo/internal/rules"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/bundled"
 	"github.com/microsoft/typescript-go/shim/compiler"
@@ -35,7 +35,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/vfs/vfstest"
 
 	// Import etscheckerhooks to register Effect diagnostic callbacks
-	_ "github.com/effect-ts/effect-typescript-go/etscheckerhooks"
+	_ "github.com/effect-ts/tsgo/etscheckerhooks"
 )
 
 func TestUpdateReadme(t *testing.T) {

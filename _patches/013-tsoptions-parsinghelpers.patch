@@ -6,7 +6,7 @@ index a631b28d1..ac6d7ec0d 100644
  	"reflect"
  	"strings"
  
-+	"github.com/effect-ts/effect-typescript-go/etscore"
++	"github.com/effect-ts/tsgo/etscore"
  	"github.com/microsoft/typescript-go/internal/ast"
  	"github.com/microsoft/typescript-go/internal/collections"
  	"github.com/microsoft/typescript-go/internal/core"

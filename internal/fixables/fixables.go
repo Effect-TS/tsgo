@@ -2,7 +2,7 @@
 // This mirrors the rules package structure for diagnostics.
 package fixables
 
-import "github.com/effect-ts/effect-typescript-go/internal/fixable"
+import "github.com/effect-ts/tsgo/internal/fixable"
 
 // All is the list of all code fix providers.
 // Add new fixables here explicitly - no init() magic.

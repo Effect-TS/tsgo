@@ -6,8 +6,8 @@ import (
 	"github.com/microsoft/typescript-go/shim/fourslash"
 	"github.com/microsoft/typescript-go/shim/ls/lsutil"
 
-	_ "github.com/effect-ts/effect-typescript-go/etslshooks"
-	_ "github.com/effect-ts/effect-typescript-go/etstesthooks"
+	_ "github.com/effect-ts/tsgo/etslshooks"
+	_ "github.com/effect-ts/tsgo/etstesthooks"
 )
 
 func TestEffectInlayHintsGenSuppression(t *testing.T) {

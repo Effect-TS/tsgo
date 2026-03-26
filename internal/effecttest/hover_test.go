@@ -5,8 +5,8 @@ import (
 
 	"github.com/microsoft/typescript-go/shim/fourslash"
 
-	_ "github.com/effect-ts/effect-typescript-go/etslshooks"
-	_ "github.com/effect-ts/effect-typescript-go/etstesthooks"
+	_ "github.com/effect-ts/tsgo/etslshooks"
+	_ "github.com/effect-ts/tsgo/etstesthooks"
 )
 
 func TestEffectHoverYieldStar(t *testing.T) {
