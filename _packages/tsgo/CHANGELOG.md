@@ -1,5 +1,11 @@
 # @effect/tsgo
 
+## 0.0.19
+
+### Patch Changes
+
+- cd9663a: Fix `tsgo` CLI suggestion filtering so `includeSuggestionsInTsc: false` is respected during command-line runs.
+
 ## 0.0.18
 
 ### Patch Changes
