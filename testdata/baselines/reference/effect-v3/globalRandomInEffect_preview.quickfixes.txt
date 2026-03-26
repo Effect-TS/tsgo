@@ -1,0 +1,13 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:13-6:26) TS377071: Prefer using the Random service from Effect instead of Math.random() inside Effect generators. effect(globalRandomInEffect)
+  Fix 0: "Disable globalRandomInEffect for this line"
+  Fix 1: "Disable globalRandomInEffect for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable globalRandomInEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable globalRandomInEffect for entire file" ===
+skipped by default

@@ -1,0 +1,14 @@
+=== Metadata ===
+Effect version: unknown
+
+/.src/globalTimers_preview.ts(4,1): warning TS377072: Prefer using Effect.sleep or Schedule from Effect instead of setTimeout. effect(globalTimers)
+
+
+==== /.src/globalTimers_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics globalTimers:warning
+    
+    setTimeout(() => {}, 100)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377072: Prefer using Effect.sleep or Schedule from Effect instead of setTimeout. effect(globalTimers)
+    

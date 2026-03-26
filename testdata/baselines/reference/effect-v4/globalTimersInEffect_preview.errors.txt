@@ -1,0 +1,17 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/globalTimersInEffect_preview.ts(6,3): warning TS377073: Prefer using Effect.sleep or Schedule from Effect instead of setTimeout inside Effect generators. effect(globalTimersInEffect)
+
+
+==== /.src/globalTimersInEffect_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics globalTimersInEffect:warning
+    import { Effect } from "effect"
+    
+    export const preview = Effect.gen(function*() {
+      setTimeout(() => {}, 100)
+      ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377073: Prefer using Effect.sleep or Schedule from Effect instead of setTimeout inside Effect generators. effect(globalTimersInEffect)
+    })
+    

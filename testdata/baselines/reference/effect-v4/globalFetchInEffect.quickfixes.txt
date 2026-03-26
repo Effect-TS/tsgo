@@ -1,0 +1,29 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:3-6:8) TS377063: Prefer using HttpClient from effect/unstable/http instead of the global 'fetch' function inside Effect generators. effect(globalFetchInEffect)
+  Fix 0: "Disable globalFetchInEffect for this line"
+  Fix 1: "Disable globalFetchInEffect for entire file"
+
+[D2] (11:3-11:8) TS377063: Prefer using HttpClient from effect/unstable/http instead of the global 'fetch' function inside Effect generators. effect(globalFetchInEffect)
+  Fix 0: "Disable globalFetchInEffect for this line"
+  Fix 1: "Disable globalFetchInEffect for entire file"
+
+[D3] (15:7-15:19) TS6133: '_moduleFetch' is declared but its value is never read.
+  (no quick fixes)
+
+[D4] (18:7-18:20) TS6133: '_regularFetch' is declared but its value is never read.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable globalFetchInEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable globalFetchInEffect for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable globalFetchInEffect for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable globalFetchInEffect for entire file" ===
+skipped by default

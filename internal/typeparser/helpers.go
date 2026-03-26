@@ -101,6 +101,37 @@ func resolveAliasedSymbol(c *checker.Checker, sym *ast.Symbol) *ast.Symbol {
 	return sym
 }
 
+// ResolveToGlobalSymbol follows aliases and up to two simple variable indirections
+// so rules can recognize references to the original global symbol.
+func ResolveToGlobalSymbol(c *checker.Checker, sym *ast.Symbol) *ast.Symbol {
+	if c == nil || sym == nil {
+		return nil
+	}
+
+	sym = resolveAliasedSymbol(c, sym)
+	depth := 0
+	for depth < 2 && sym != nil && sym.ValueDeclaration != nil && sym.ValueDeclaration.Kind == ast.KindVariableDeclaration {
+		decl := sym.ValueDeclaration.AsVariableDeclaration()
+		if decl == nil || decl.Initializer == nil {
+			break
+		}
+
+		next := c.GetSymbolAtLocation(decl.Initializer)
+		if next == nil {
+			break
+		}
+		next = resolveAliasedSymbol(c, next)
+		if next == sym {
+			break
+		}
+
+		sym = next
+		depth++
+	}
+
+	return sym
+}
+
 func symbolsMatch(c *checker.Checker, a *ast.Symbol, b *ast.Symbol) bool {
 	if a == nil || b == nil {
 		return false

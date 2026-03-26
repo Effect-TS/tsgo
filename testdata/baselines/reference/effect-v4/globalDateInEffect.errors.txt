@@ -1,0 +1,60 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/globalDateInEffect.ts(6,15): warning TS377067: Prefer using Clock or DateTime from Effect instead of Date.now() inside Effect generators. effect(globalDateInEffect)
+/.src/globalDateInEffect.ts(12,15): warning TS377069: Prefer using DateTime from Effect instead of new Date() inside Effect generators. effect(globalDateInEffect)
+/.src/globalDateInEffect.ts(18,16): warning TS377069: Prefer using DateTime from Effect instead of new Date() inside Effect generators. effect(globalDateInEffect)
+/.src/globalDateInEffect.ts(25,15): warning TS377067: Prefer using Clock or DateTime from Effect instead of Date.now() inside Effect generators. effect(globalDateInEffect)
+
+
+==== /.src/globalDateInEffect.ts (4 errors) ====
+    // @effect-diagnostics globalDateInEffect:warning
+    import { Effect } from "effect"
+    
+    // Should trigger - Date.now() inside Effect.gen
+    export const dateNowInGen = Effect.gen(function*() {
+      const now = Date.now()
+                  ~~~~~~~~~~
+!!! warning TS377067: Prefer using Clock or DateTime from Effect instead of Date.now() inside Effect generators. effect(globalDateInEffect)
+      return now
+    })
+    
+    // Should trigger - new Date() inside Effect.gen
+    export const newDateInGen = Effect.gen(function*() {
+      const now = new Date()
+                  ~~~~~~~~~~
+!!! warning TS377069: Prefer using DateTime from Effect instead of new Date() inside Effect generators. effect(globalDateInEffect)
+      return now
+    })
+    
+    // Should trigger - new Date(...) with args inside Effect.fn
+    export const newDateWithArgsInFn = Effect.fn("newDateWithArgsInFn")(function*() {
+      const date = new Date("2024-01-01")
+                   ~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377069: Prefer using DateTime from Effect instead of new Date() inside Effect generators. effect(globalDateInEffect)
+      return date
+    })
+    
+    // Should trigger - aliased Date
+    export const aliasedDate = Effect.gen(function*() {
+      const MyDate = Date
+      const now = MyDate.now()
+                  ~~~~~~~~~~~~
+!!! warning TS377067: Prefer using Clock or DateTime from Effect instead of Date.now() inside Effect generators. effect(globalDateInEffect)
+      return now
+    })
+    
+    // Should NOT trigger - Date.now() at module level
+    const _moduleLevel = Date.now()
+    
+    // Should NOT trigger - new Date() in regular function
+    const _regularNewDate = () => {
+      return new Date()
+    }
+    
+    // Should NOT trigger - Date.now() inside nested arrow in generator
+    export const nestedArrowInGen = Effect.gen(function*() {
+      const fn = () => Date.now()
+      return fn
+    })
+    

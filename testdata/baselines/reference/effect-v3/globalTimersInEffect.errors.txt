@@ -1,0 +1,48 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/globalTimersInEffect.ts(6,3): warning TS377073: Prefer using Effect.sleep or Schedule from Effect instead of setTimeout inside Effect generators. effect(globalTimersInEffect)
+/.src/globalTimersInEffect.ts(11,3): warning TS377073: Prefer using Schedule or Effect.repeat from Effect instead of setInterval inside Effect generators. effect(globalTimersInEffect)
+/.src/globalTimersInEffect.ts(17,3): warning TS377073: Prefer using Effect.sleep or Schedule from Effect instead of setTimeout inside Effect generators. effect(globalTimersInEffect)
+
+
+==== /.src/globalTimersInEffect.ts (3 errors) ====
+    // @effect-diagnostics globalTimersInEffect:warning
+    import { Effect } from "effect"
+    
+    // Should trigger - setTimeout inside Effect.gen
+    export const setTimeoutInGen = Effect.gen(function*() {
+      setTimeout(() => {}, 100)
+      ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377073: Prefer using Effect.sleep or Schedule from Effect instead of setTimeout inside Effect generators. effect(globalTimersInEffect)
+    })
+    
+    // Should trigger - setInterval inside Effect.gen
+    export const setIntervalInGen = Effect.gen(function*() {
+      setInterval(() => {}, 1000)
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377073: Prefer using Schedule or Effect.repeat from Effect instead of setInterval inside Effect generators. effect(globalTimersInEffect)
+    })
+    
+    // Should trigger - aliased setTimeout
+    export const aliasedTimeout = Effect.gen(function*() {
+      const myTimeout = setTimeout
+      myTimeout(() => {}, 100)
+      ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377073: Prefer using Effect.sleep or Schedule from Effect instead of setTimeout inside Effect generators. effect(globalTimersInEffect)
+    })
+    
+    // Should NOT trigger - setTimeout at module level
+    setTimeout(() => {}, 0)
+    
+    // Should NOT trigger - setTimeout in regular function
+    const _regularFn = () => {
+      setTimeout(() => {}, 100)
+    }
+    
+    // Should NOT trigger - setTimeout inside nested arrow in generator
+    export const nestedArrowInGen = Effect.gen(function*() {
+      const fn = () => setTimeout(() => {}, 100)
+      return fn
+    })
+    

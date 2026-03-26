@@ -1,0 +1,18 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/globalRandomInEffect_preview.ts(6,13): warning TS377071: Prefer using the Random service from Effect instead of Math.random() inside Effect generators. effect(globalRandomInEffect)
+
+
+==== /.src/globalRandomInEffect_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics globalRandomInEffect:warning
+    import { Effect } from "effect"
+    
+    export const preview = Effect.gen(function*() {
+      const r = Math.random()
+                ~~~~~~~~~~~~~
+!!! warning TS377071: Prefer using the Random service from Effect instead of Math.random() inside Effect generators. effect(globalRandomInEffect)
+      return r
+    })
+    

@@ -1,18 +1,14 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: unknown
 
-/.src/globalFetch_preview.ts(8,24): warning TS377061: Prefer using HttpClient from effect/unstable/http instead of the global 'fetch' function. effect(globalFetch)
+/.src/globalFetch_preview.ts(4,24): warning TS377061: Prefer using HttpClient from @effect/platform instead of the global 'fetch' function. effect(globalFetch)
 
 
 ==== /.src/globalFetch_preview.ts (1 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics globalFetch:warning
     
-    import { Effect } from "effect"
-    
-    void Effect
-    
     export const preview = fetch("https://example.com")
                            ~~~~~
-!!! warning TS377061: Prefer using HttpClient from effect/unstable/http instead of the global 'fetch' function. effect(globalFetch)
+!!! warning TS377061: Prefer using HttpClient from @effect/platform instead of the global 'fetch' function. effect(globalFetch)
     

@@ -1,13 +1,52 @@
 === Quick Fix Inventory ===
 
-[D1] (3:24-3:29) TS377061: Prefer using HttpClient from @effect/platform instead of the global 'fetch' function. effect(globalFetch)
+[D1] (5:7-5:19) TS6133: '_moduleFetch' is declared but its value is never read.
+  (no quick fixes)
+
+[D2] (5:22-5:27) TS377061: Prefer using HttpClient from effect/unstable/http instead of the global 'fetch' function. effect(globalFetch)
+  Fix 0: "Disable globalFetch for this line"
+  Fix 1: "Disable globalFetch for entire file"
+
+[D3] (8:7-8:20) TS6133: '_regularFetch' is declared but its value is never read.
+  (no quick fixes)
+
+[D4] (8:29-8:34) TS377061: Prefer using HttpClient from effect/unstable/http instead of the global 'fetch' function. effect(globalFetch)
+  Fix 0: "Disable globalFetch for this line"
+  Fix 1: "Disable globalFetch for entire file"
+
+[D5] (12:7-12:20) TS6133: '_aliasedFetch' is declared but its value is never read.
+  (no quick fixes)
+
+[D6] (12:23-12:30) TS377061: Prefer using HttpClient from effect/unstable/http instead of the global 'fetch' function. effect(globalFetch)
+  Fix 0: "Disable globalFetch for this line"
+  Fix 1: "Disable globalFetch for entire file"
+
+[D7] (21:20-21:25) TS377061: Prefer using HttpClient from effect/unstable/http instead of the global 'fetch' function. effect(globalFetch)
   Fix 0: "Disable globalFetch for this line"
   Fix 1: "Disable globalFetch for entire file"
 
 === Quick Fix Application Results ===
 
-=== [D1] Fix 0: "Disable globalFetch for this line" ===
+=== [D2] Fix 0: "Disable globalFetch for this line" ===
 skipped by default
 
-=== [D1] Fix 1: "Disable globalFetch for entire file" ===
+=== [D2] Fix 1: "Disable globalFetch for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable globalFetch for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable globalFetch for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable globalFetch for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable globalFetch for entire file" ===
+skipped by default
+
+=== [D7] Fix 0: "Disable globalFetch for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable globalFetch for entire file" ===
 skipped by default
