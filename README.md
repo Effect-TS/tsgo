@@ -184,10 +184,22 @@ Each release of `effect-tsgo` is built against a specific upstream `tsgo` commit
     "plugins": [
       {
         "name": "@effect/language-service",
+        // Controls Effect refactors. (default: true)
+        "refactors": true,
+        // Controls Effect diagnostics. (default: true)
+        "diagnostics": true,
         // Maps rule names to severity levels. Use {} to enable diagnostics with rule defaults. (default: {})
         "diagnosticSeverity": {},
         // When false, suggestion-level Effect diagnostics are omitted from tsc CLI output. (default: true)
         "includeSuggestionsInTsc": true,
+        // Controls Effect quickinfo. (default: true)
+        "quickinfo": true,
+        // Controls Effect completions. (default: true)
+        "completions": true,
+        // Controls Effect goto references support. (default: true)
+        "goto": true,
+        // Controls Effect rename helpers. (default: true)
+        "renames": true,
         // When true, suggestion diagnostics do not affect the tsc exit code. (default: true)
         "ignoreEffectSuggestionsInTscExitCode": true,
         // When true, warning diagnostics do not affect the tsc exit code. (default: false)

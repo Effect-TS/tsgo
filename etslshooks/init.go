@@ -89,6 +89,10 @@ var effectRefactorProvider = &ls.RefactorProvider{
 
 // getEffectRefactorActions iterates all registered refactors and collects their code actions.
 func getEffectRefactorActions(ctx context.Context, file *ast.SourceFile, span core.TextRange, program *compiler.Program, langService *ls.LanguageService) ([]ls.CodeAction, error) {
+	if effectConfig := program.Options().Effect; effectConfig == nil || !effectConfig.GetRefactorsEnabled() {
+		return nil, nil
+	}
+
 	rCtx := refactor.NewContext(ctx, file, span, program, langService)
 
 	var actions []ls.CodeAction
@@ -103,7 +107,8 @@ func getEffectRefactorActions(ctx context.Context, file *ast.SourceFile, span co
 // afterCompletion is called after TypeScript-Go builds the completion list.
 // It allows Effect to enrich completion responses with custom completions.
 func afterCompletion(ctx context.Context, sf *ast.SourceFile, position int, items []*lsproto.CompletionItem, program *compiler.Program, langService *ls.LanguageService) []*lsproto.CompletionItem {
-	if program.Options().Effect == nil {
+	effectConfig := program.Options().Effect
+	if effectConfig == nil || !effectConfig.GetCompletionsEnabled() {
 		return items
 	}
 
@@ -126,7 +131,7 @@ func afterCompletion(ctx context.Context, sf *ast.SourceFile, position int, item
 func afterQuickInfo(c *checker.Checker, sf *ast.SourceFile, node *ast.Node, _ *ast.Symbol, quickInfo string, documentation string, isMarkdown bool) (string, string, *ast.Node) {
 	// Check if Effect is enabled
 	effectConfig := c.Program().Options().Effect
-	if effectConfig == nil {
+	if effectConfig == nil || !effectConfig.GetQuickinfoEnabled() {
 		return quickInfo, documentation, nil
 	}
 

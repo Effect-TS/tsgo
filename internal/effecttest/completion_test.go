@@ -94,3 +94,41 @@ class Foo extends Schema./*1*/`
 		}
 	}
 }
+
+func TestEffectCompletionDisabled(t *testing.T) {
+	t.Parallel()
+
+	const content = `// @Filename: /tsconfig.json
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "ESNext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "plugins": [
+      {
+        "name": "@effect/language-service",
+        "completions": false
+      }
+    ]
+  }
+}
+// @Filename: /test.ts
+import { ServiceMap } from "effect"
+class MyService extends ServiceMap./*1*/`
+
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+
+	f.GoToMarker(t, "1")
+	completions := f.GetCompletions(t, nil)
+	if completions == nil {
+		t.Fatal("completions is nil")
+	}
+	if findCompletionLabel(completions.Items, "Service<MyService, {}>") {
+		t.Error("did not expect Effect completion when completions=false")
+	}
+	if findCompletionLabel(completions.Items, "Service<MyService>({ make })") {
+		t.Error("did not expect Effect completion when completions=false")
+	}
+}

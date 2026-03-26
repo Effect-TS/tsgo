@@ -36,10 +36,30 @@ func ParseFromPlugins(value any) *EffectPluginOptions {
 
 		// Found our plugin, parse the config
 		result := &EffectPluginOptions{
+			Refactors:                            true,                      // default: true
+			Diagnostics:                          true,                      // default: true
 			DiagnosticSeverity:                   make(map[string]Severity), // Start with empty map (enabled)
 			IncludeSuggestionsInTsc:              true,                      // default: true
+			Quickinfo:                            true,                      // default: true
+			Completions:                          true,                      // default: true
+			Goto:                                 true,                      // default: true
+			Renames:                              true,                      // default: true
 			IgnoreEffectSuggestionsInTscExitCode: true,                      // default: true
 			IgnoreEffectWarningsInTscExitCode:    false,                     // default: false
+		}
+
+		// Parse refactors (default: true)
+		if val, exists := getPluginValue("refactors"); exists {
+			if b, ok := val.(bool); ok {
+				result.Refactors = b
+			}
+		}
+
+		// Parse diagnostics (default: true)
+		if val, exists := getPluginValue("diagnostics"); exists {
+			if b, ok := val.(bool); ok {
+				result.Diagnostics = b
+			}
 		}
 
 		// Parse diagnosticSeverity
@@ -55,6 +75,34 @@ func ParseFromPlugins(value any) *EffectPluginOptions {
 		if val, exists := getPluginValue("includeSuggestionsInTsc"); exists {
 			if b, ok := val.(bool); ok {
 				result.IncludeSuggestionsInTsc = b
+			}
+		}
+
+		// Parse quickinfo (default: true)
+		if val, exists := getPluginValue("quickinfo"); exists {
+			if b, ok := val.(bool); ok {
+				result.Quickinfo = b
+			}
+		}
+
+		// Parse completions (default: true)
+		if val, exists := getPluginValue("completions"); exists {
+			if b, ok := val.(bool); ok {
+				result.Completions = b
+			}
+		}
+
+		// Parse goto (default: true)
+		if val, exists := getPluginValue("goto"); exists {
+			if b, ok := val.(bool); ok {
+				result.Goto = b
+			}
+		}
+
+		// Parse renames (default: true)
+		if val, exists := getPluginValue("renames"); exists {
+			if b, ok := val.(bool); ok {
+				result.Renames = b
 			}
 		}
 
