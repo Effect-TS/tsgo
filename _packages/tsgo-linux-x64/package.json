@@ -1,6 +1,6 @@
 {
   "name": "@effect/tsgo-linux-x64",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "description": "Effect Language Service for TypeScript-Go — Effect-specific diagnostics and hover features.",
   "license": "MIT",
   "repository": {
