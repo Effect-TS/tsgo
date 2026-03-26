@@ -47,3 +47,26 @@ index 44dc673d9..884e54a1f 100644
  		result.Status = ExitStatusDiagnosticsPresent_OutputsGenerated
  	}
  	return result, statistics
+
+diff --git a/internal/execute/tsc.go b/internal/execute/tsc.go
+index ccf497664..8d0848248 100644
+--- a/internal/execute/tsc.go
++++ b/internal/execute/tsc.go
+@@ -4,6 +4,8 @@ import (
+ 	"context"
+ 	"fmt"
+ 	"strings"
++
++	"github.com/effect-ts/tsgo/etscore"
+ 
+ 	"github.com/microsoft/typescript-go/internal/ast"
+ 	"github.com/microsoft/typescript-go/internal/collections"
+@@ -24,6 +26,8 @@ import (
+ )
+ 
+ func CommandLine(sys tsc.System, commandLineArgs []string, testing tsc.CommandLineTesting) tsc.CommandLineResult {
++	restore := etscore.EnterCommandLineMode()
++	defer restore()
+ 	if len(commandLineArgs) > 0 {
+ 		switch strings.ToLower(commandLineArgs[0]) {
+ 		case "-b", "--b", "-build", "--build":
