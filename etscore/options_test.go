@@ -104,6 +104,58 @@ func TestParseFromPlugins_IncludeSuggestionsInTscDefault(t *testing.T) {
 	if !opts.IncludeSuggestionsInTsc {
 		t.Error("expected IncludeSuggestionsInTsc to default to true")
 	}
+	if !opts.Refactors {
+		t.Error("expected Refactors to default to true")
+	}
+	if !opts.Diagnostics {
+		t.Error("expected Diagnostics to default to true")
+	}
+	if !opts.Quickinfo {
+		t.Error("expected Quickinfo to default to true")
+	}
+	if !opts.Completions {
+		t.Error("expected Completions to default to true")
+	}
+	if !opts.Goto {
+		t.Error("expected Goto to default to true")
+	}
+	if !opts.Renames {
+		t.Error("expected Renames to default to true")
+	}
+}
+
+func TestParseFromPlugins_FeatureFlagsExplicitFalse(t *testing.T) {
+	plugins := makePlugins(makePluginMap(
+		"name", EffectPluginName,
+		"refactors", false,
+		"diagnostics", false,
+		"quickinfo", false,
+		"completions", false,
+		"goto", false,
+		"renames", false,
+	))
+	opts := ParseFromPlugins(plugins)
+	if opts == nil {
+		t.Fatal("expected non-nil options")
+	}
+	if opts.Refactors {
+		t.Error("expected Refactors to be false")
+	}
+	if opts.Diagnostics {
+		t.Error("expected Diagnostics to be false")
+	}
+	if opts.Quickinfo {
+		t.Error("expected Quickinfo to be false")
+	}
+	if opts.Completions {
+		t.Error("expected Completions to be false")
+	}
+	if opts.Goto {
+		t.Error("expected Goto to be false")
+	}
+	if opts.Renames {
+		t.Error("expected Renames to be false")
+	}
 }
 
 func TestParseFromPlugins_IncludeSuggestionsInTscExplicitTrue(t *testing.T) {

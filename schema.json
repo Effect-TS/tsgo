@@ -1078,10 +1078,20 @@
                         },
                         "type": "array"
                       },
+                      "completions": {
+                        "default": true,
+                        "description": "Controls Effect completions.",
+                        "type": "boolean"
+                      },
                       "diagnosticSeverity": {
                         "$ref": "#/definitions/effectLanguageServicePluginDiagnosticSeverityDefinition",
                         "default": {},
                         "description": "Maps rule names to severity levels. Use {} to enable diagnostics with rule defaults."
+                      },
+                      "diagnostics": {
+                        "default": true,
+                        "description": "Controls Effect diagnostics.",
+                        "type": "boolean"
                       },
                       "effectFn": {
                         "default": [
@@ -1104,6 +1114,11 @@
                       "extendedKeyDetection": {
                         "default": false,
                         "description": "Enables matching constructors with @effect-identifier annotations.",
+                        "type": "boolean"
+                      },
+                      "goto": {
+                        "default": true,
+                        "description": "Controls Effect goto references support.",
                         "type": "boolean"
                       },
                       "ignoreEffectErrorsInTscExitCode": {
@@ -1195,6 +1210,21 @@
                         "description": "Minimum number of contiguous pipeable transformations to trigger missedPipeableOpportunity.",
                         "minimum": 1,
                         "type": "integer"
+                      },
+                      "quickinfo": {
+                        "default": true,
+                        "description": "Controls Effect quickinfo.",
+                        "type": "boolean"
+                      },
+                      "refactors": {
+                        "default": true,
+                        "description": "Controls Effect refactors.",
+                        "type": "boolean"
+                      },
+                      "renames": {
+                        "default": true,
+                        "description": "Controls Effect rename helpers.",
+                        "type": "boolean"
                       },
                       "skipDisabledOptimization": {
                         "default": false,
@@ -1707,6 +1737,26 @@
           "default": "warning",
           "description": "Prevents services with type parameters that cannot be discriminated at runtime"
         },
+        "globalConsole": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Warns when using console methods outside Effect generators instead of Effect.log/Logger"
+        },
+        "globalConsoleInEffect": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Warns when using console methods inside Effect generators instead of Effect.log/Logger"
+        },
+        "globalDate": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Warns when using Date.now() or new Date() outside Effect generators instead of Clock/DateTime"
+        },
+        "globalDateInEffect": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Warns when using Date.now() or new Date() inside Effect generators instead of Clock/DateTime"
+        },
         "globalErrorInEffectCatch": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "warning",
@@ -1720,7 +1770,32 @@
         "globalFetch": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
-          "description": "Warns when using the global fetch function instead of the Effect HTTP client"
+          "description": "Warns when using the global fetch function outside Effect generators instead of the Effect HTTP client"
+        },
+        "globalFetchInEffect": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Warns when using the global fetch function inside Effect generators instead of the Effect HTTP client"
+        },
+        "globalRandom": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Warns when using Math.random() outside Effect generators instead of the Random service"
+        },
+        "globalRandomInEffect": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Warns when using Math.random() inside Effect generators instead of the Random service"
+        },
+        "globalTimers": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Warns when using setTimeout/setInterval outside Effect generators instead of Effect.sleep/Schedule"
+        },
+        "globalTimersInEffect": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Warns when using setTimeout/setInterval inside Effect generators instead of Effect.sleep/Schedule"
         },
         "instanceOfSchema": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
@@ -1940,10 +2015,20 @@
           },
           "type": "array"
         },
+        "completions": {
+          "default": true,
+          "description": "Controls Effect completions.",
+          "type": "boolean"
+        },
         "diagnosticSeverity": {
           "$ref": "#/definitions/effectLanguageServicePluginDiagnosticSeverityDefinition",
           "default": {},
           "description": "Maps rule names to severity levels. Use {} to enable diagnostics with rule defaults."
+        },
+        "diagnostics": {
+          "default": true,
+          "description": "Controls Effect diagnostics.",
+          "type": "boolean"
         },
         "effectFn": {
           "default": [
@@ -1966,6 +2051,11 @@
         "extendedKeyDetection": {
           "default": false,
           "description": "Enables matching constructors with @effect-identifier annotations.",
+          "type": "boolean"
+        },
+        "goto": {
+          "default": true,
+          "description": "Controls Effect goto references support.",
           "type": "boolean"
         },
         "ignoreEffectErrorsInTscExitCode": {
@@ -2053,6 +2143,21 @@
           "description": "Minimum number of contiguous pipeable transformations to trigger missedPipeableOpportunity.",
           "minimum": 1,
           "type": "integer"
+        },
+        "quickinfo": {
+          "default": true,
+          "description": "Controls Effect quickinfo.",
+          "type": "boolean"
+        },
+        "refactors": {
+          "default": true,
+          "description": "Controls Effect refactors.",
+          "type": "boolean"
+        },
+        "renames": {
+          "default": true,
+          "description": "Controls Effect rename helpers.",
+          "type": "boolean"
         },
         "skipDisabledOptimization": {
           "default": false,

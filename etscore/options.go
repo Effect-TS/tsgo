@@ -17,6 +17,12 @@ type KeyPattern struct {
 // EffectPluginOptions defines the configuration schema for @effect/language-service.
 // This type is stored in CompilerOptions.Effect after parsing tsconfig.json.
 type EffectPluginOptions struct {
+	// Refactors enables Effect refactor actions in the language service.
+	Refactors bool `json:"refactors,omitzero" schema_description:"Controls Effect refactors." schema_default:"true"`
+
+	// Diagnostics enables Effect diagnostics in the checker.
+	Diagnostics bool `json:"diagnostics,omitzero" schema_description:"Controls Effect diagnostics." schema_default:"true"`
+
 	// DiagnosticSeverity maps rule names to severity levels.
 	// If nil, diagnostics are explicitly disabled.
 	// If empty map {}, diagnostics are enabled with defaults.
@@ -25,6 +31,18 @@ type EffectPluginOptions struct {
 	// IncludeSuggestionsInTsc controls whether suggestion-level Effect diagnostics appear
 	// in tsc CLI output. Default: true (suggestions are included).
 	IncludeSuggestionsInTsc bool `json:"includeSuggestionsInTsc,omitzero" schema_description:"When false, suggestion-level Effect diagnostics are omitted from tsc CLI output." schema_default:"true"`
+
+	// Quickinfo enables Effect hover enrichment in the language service.
+	Quickinfo bool `json:"quickinfo,omitzero" schema_description:"Controls Effect quickinfo." schema_default:"true"`
+
+	// Completions enables Effect completions in the language service.
+	Completions bool `json:"completions,omitzero" schema_description:"Controls Effect completions." schema_default:"true"`
+
+	// Goto enables Effect goto/definition helpers in the language service.
+	Goto bool `json:"goto,omitzero" schema_description:"Controls Effect goto references support." schema_default:"true"`
+
+	// Renames enables Effect rename helpers in the language service.
+	Renames bool `json:"renames,omitzero" schema_description:"Controls Effect rename helpers." schema_default:"true"`
 
 	// IgnoreEffectSuggestionsInTscExitCode controls whether Effect suggestion/message-category
 	// diagnostics affect the tsc exit code. Default: true (suggestions do NOT affect exit code).
@@ -137,7 +155,28 @@ func (e *EffectPluginOptions) EffectFnIncludes(variant string) bool {
 // IsEnabled returns true if diagnostics are enabled.
 // Diagnostics are enabled if the DiagnosticSeverity field is not nil.
 func (e *EffectPluginOptions) IsEnabled() bool {
-	return e != nil && e.DiagnosticSeverity != nil
+	return e != nil && e.Diagnostics && e.DiagnosticSeverity != nil
+}
+
+func (e *EffectPluginOptions) GetRefactorsEnabled() bool {
+	if e == nil {
+		return true
+	}
+	return e.Refactors
+}
+
+func (e *EffectPluginOptions) GetQuickinfoEnabled() bool {
+	if e == nil {
+		return true
+	}
+	return e.Quickinfo
+}
+
+func (e *EffectPluginOptions) GetCompletionsEnabled() bool {
+	if e == nil {
+		return true
+	}
+	return e.Completions
 }
 
 // GetSeverity returns the configured severity for a rule.
