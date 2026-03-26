@@ -1,16 +1,24 @@
 diff --git a/cmd/tsgo/main.go b/cmd/tsgo/main.go
-index 5eabc96df..82b7bf932 100644
+index 5eabc96df..91fe324e1 100644
 --- a/cmd/tsgo/main.go
 +++ b/cmd/tsgo/main.go
-@@ -3,6 +3,11 @@ package main
+@@ -3,6 +3,12 @@ package main
  import (
  	"os"
-
+ 
 +	// Import Effect hooks to register via init()
 +	_ "github.com/effect-ts/tsgo/etsexecutehooks" // exit-code filtering hooks
 +	_ "github.com/effect-ts/tsgo/etscheckerhooks" // checker diagnostics hooks
 +	_ "github.com/effect-ts/tsgo/etslshooks"      // LS codefix hooks
++	"github.com/effect-ts/tsgo/etscore"
 +
  	"github.com/microsoft/typescript-go/internal/execute"
  )
-
+@@ -25,6 +31,8 @@ func runMain() int {
+ 		}
+ 	}
++	restore := etscore.EnterCommandLineMode()
++	defer restore()
+ 	result := execute.CommandLine(newSystem(), args, nil)
+ 	return int(result.Status)
+ }
