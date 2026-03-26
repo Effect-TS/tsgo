@@ -1,0 +1,13 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:15-6:25) TS377067: Prefer using Clock or DateTime from Effect instead of Date.now() inside Effect generators. effect(globalDateInEffect)
+  Fix 0: "Disable globalDateInEffect for this line"
+  Fix 1: "Disable globalDateInEffect for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable globalDateInEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable globalDateInEffect for entire file" ===
+skipped by default

@@ -239,6 +239,50 @@
         "category": "Warning",
         "code": 377061
     },
+    "Prefer using HttpClient from {0} instead of the global 'fetch' function inside Effect generators. effect(globalFetchInEffect)": {
+        "category": "Warning",
+        "code": 377063
+    },
+    "Prefer using {0} instead of console.{1}. effect(globalConsole)": {
+        "category": "Warning",
+        "code": 377064
+    },
+    "Prefer using {0} instead of console.{1} inside Effect generators. effect(globalConsoleInEffect)": {
+        "category": "Warning",
+        "code": 377065
+    },
+    "Prefer using Clock or DateTime from Effect instead of Date.now(). effect(globalDate)": {
+        "category": "Warning",
+        "code": 377066
+    },
+    "Prefer using Clock or DateTime from Effect instead of Date.now() inside Effect generators. effect(globalDateInEffect)": {
+        "category": "Warning",
+        "code": 377067
+    },
+    "Prefer using DateTime from Effect instead of new Date(). effect(globalDate)": {
+        "category": "Warning",
+        "code": 377068
+    },
+    "Prefer using DateTime from Effect instead of new Date() inside Effect generators. effect(globalDateInEffect)": {
+        "category": "Warning",
+        "code": 377069
+    },
+    "Prefer using the Random service from Effect instead of Math.random(). effect(globalRandom)": {
+        "category": "Warning",
+        "code": 377070
+    },
+    "Prefer using the Random service from Effect instead of Math.random() inside Effect generators. effect(globalRandomInEffect)": {
+        "category": "Warning",
+        "code": 377071
+    },
+    "Prefer using {0} from Effect instead of {1}. effect(globalTimers)": {
+        "category": "Warning",
+        "code": 377072
+    },
+    "Prefer using {0} from Effect instead of {1} inside Effect generators. effect(globalTimersInEffect)": {
+        "category": "Warning",
+        "code": 377073
+    },
     "Parameter '{0}' implicitly has an 'any' type in Effect.fn/Effect.fnUntraced/Effect.fnUntracedEager. Add an explicit type annotation or provide a contextual function type. effect(effectFnImplicitAny)": {
         "category": "Error",
         "code": 377062

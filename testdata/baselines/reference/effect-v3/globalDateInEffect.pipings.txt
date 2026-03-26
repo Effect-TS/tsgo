@@ -1,0 +1,71 @@
+==== /.src/globalDateInEffect.ts (5 flows) ====
+
+=== Piping Flow ===
+Location: 5:28 - 8:3
+Node: Effect.gen(function*() {\n  const now = Date.now()\n  return now\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const now = Date.now()\n  return now\n}
+Subject Type: () => Generator<never, number, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 11:28 - 14:3
+Node: Effect.gen(function*() {\n  const now = new Date()\n  return now\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const now = new Date()\n  return now\n}
+Subject Type: () => Generator<never, Date, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<Date, never, never>
+
+=== Piping Flow ===
+Location: 17:35 - 20:3
+Node: Effect.fn("newDateWithArgsInFn")(function*() {\n  const date = new Date("2024-01-01")\n  return date\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const date = new Date("2024-01-01")\n  return date\n}
+Subject Type: () => Generator<never, Date, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn("newDateWithArgsInFn")
+      args: (constant)
+      outType: () => Effect<Date, never, never>
+
+=== Piping Flow ===
+Location: 23:27 - 27:3
+Node: Effect.gen(function*() {\n  const MyDate = Date\n  const now = MyDate.now()\n  return now\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const MyDate = Date\n  const now = MyDate.now()\n  return now\n}
+Subject Type: () => Generator<never, number, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 38:32 - 41:3
+Node: Effect.gen(function*() {\n  const fn = () => Date.now()\n  return fn\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const fn = () => Date.now()\n  return fn\n}
+Subject Type: () => Generator<never, () => number, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<() => number, never, never>

@@ -5,8 +5,6 @@ import (
 	"github.com/effect-ts/tsgo/internal/rule"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
-	"github.com/microsoft/typescript-go/shim/core"
 	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
 	"github.com/microsoft/typescript-go/shim/scanner"
 )
@@ -14,65 +12,62 @@ import (
 var GlobalFetch = rule.Rule{
 	Name:            "globalFetch",
 	Group:           "effectNative",
-	Description:     "Warns when using the global fetch function instead of the Effect HTTP client",
+	Description:     "Warns when using the global fetch function outside Effect generators instead of the Effect HTTP client",
 	DefaultSeverity: etscore.SeverityOff,
 	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Prefer_using_HttpClient_from_0_instead_of_the_global_fetch_function_effect_globalFetch.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
-		matches := AnalyzeGlobalFetch(ctx.Checker, ctx.SourceFile)
-		diags := make([]*ast.Diagnostic, len(matches))
-		for i, m := range matches {
-			diags[i] = ctx.NewDiagnostic(
-				m.SourceFile,
-				m.Location,
-				tsdiag.Prefer_using_HttpClient_from_0_instead_of_the_global_fetch_function_effect_globalFetch,
-				nil,
-				m.PackageName,
-			)
-		}
-		return diags
+		return runGlobalFetch(ctx, false)
 	},
 }
 
-type GlobalFetchMatch struct {
-	SourceFile  *ast.SourceFile
-	Location    core.TextRange
-	PackageName string
+var GlobalFetchInEffect = rule.Rule{
+	Name:            "globalFetchInEffect",
+	Group:           "effectNative",
+	Description:     "Warns when using the global fetch function inside Effect generators instead of the Effect HTTP client",
+	DefaultSeverity: etscore.SeverityOff,
+	SupportedEffect: []string{"v3", "v4"},
+	Codes:           []int32{tsdiag.Prefer_using_HttpClient_from_0_instead_of_the_global_fetch_function_inside_Effect_generators_effect_globalFetchInEffect.Code()},
+	Run: func(ctx *rule.Context) []*ast.Diagnostic {
+		return runGlobalFetch(ctx, true)
+	},
 }
 
-func AnalyzeGlobalFetch(c *checker.Checker, sf *ast.SourceFile) []GlobalFetchMatch {
-	fetchSymbol := c.ResolveName("fetch", nil, ast.SymbolFlagsValue, false)
+func runGlobalFetch(ctx *rule.Context, checkInEffect bool) []*ast.Diagnostic {
+	fetchSymbol := ctx.Checker.ResolveName("fetch", nil, ast.SymbolFlagsValue, false)
 	if fetchSymbol == nil {
 		return nil
 	}
 
 	packageName := "effect/unstable/http"
-	if typeparser.SupportedEffectVersion(c) == typeparser.EffectMajorV3 {
+	if typeparser.SupportedEffectVersion(ctx.Checker) == typeparser.EffectMajorV3 {
 		packageName = "@effect/platform"
 	}
 
-	var matches []GlobalFetchMatch
+	message := tsdiag.Prefer_using_HttpClient_from_0_instead_of_the_global_fetch_function_effect_globalFetch
+	if checkInEffect {
+		message = tsdiag.Prefer_using_HttpClient_from_0_instead_of_the_global_fetch_function_inside_Effect_generators_effect_globalFetchInEffect
+	}
 
+	var diags []*ast.Diagnostic
 	var walk ast.Visitor
 	walk = func(node *ast.Node) bool {
 		if node == nil {
 			return false
 		}
-
 		if node.Kind == ast.KindCallExpression {
-			call := node.AsCallExpression()
-			symbol := c.GetSymbolAtLocation(call.Expression)
-			resolvedSymbol := symbol
-			if resolvedSymbol != nil && resolvedSymbol.Flags&ast.SymbolFlagsAlias != 0 {
-				resolvedSymbol = c.GetAliasedSymbol(resolvedSymbol)
-			}
-
-			if resolvedSymbol == fetchSymbol {
-				matches = append(matches, GlobalFetchMatch{
-					SourceFile:  sf,
-					Location:    scanner.GetErrorRangeForNode(sf, call.Expression),
-					PackageName: packageName,
-				})
+			inEffect := typeparser.GetEffectContextFlags(ctx.Checker, node)&typeparser.EffectContextFlagCanYieldEffect != 0
+			if inEffect == checkInEffect {
+				call := node.AsCallExpression()
+				if typeparser.ResolveToGlobalSymbol(ctx.Checker, ctx.Checker.GetSymbolAtLocation(call.Expression)) == fetchSymbol {
+					diags = append(diags, ctx.NewDiagnostic(
+						ctx.SourceFile,
+						scanner.GetErrorRangeForNode(ctx.SourceFile, call.Expression),
+						message,
+						nil,
+						packageName,
+					))
+				}
 			}
 		}
 
@@ -80,7 +75,7 @@ func AnalyzeGlobalFetch(c *checker.Checker, sf *ast.SourceFile) []GlobalFetchMat
 		return false
 	}
 
-	walk(sf.AsNode())
+	walk(ctx.SourceFile.AsNode())
 
-	return matches
+	return diags
 }

@@ -1,0 +1,43 @@
+==== /.src/globalFetchInEffect_preview.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 5:23 - 7:3
+Node: Effect.gen(function*() {\n  return yield* Effect.promise(() => fetch("https://example.com"))\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  return yield* Effect.promise(() => fetch("https://example.com"))\n}
+Subject Type: () => Generator<YieldWrap<Effect<Response, never, never>>, Response, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<Response, never, never>
+
+=== Piping Flow ===
+Location: 6:16 - 6:67
+Node: Effect.promise(() => fetch("https://example.com"))
+Node Kind: KindCallExpression
+
+Subject: () => fetch("https://example.com")
+Subject Type: () => Promise<Response>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<Response, never, never>
+
+=== Piping Flow ===
+Location: 6:37 - 6:66
+Node: fetch("https://example.com")
+Node Kind: KindCallExpression
+
+Subject: "https://example.com"
+Subject Type: "https://example.com"
+
+Transformations (1):
+  [0] kind: call
+      callee: fetch
+      args: (constant)
+      outType: Promise<Response>

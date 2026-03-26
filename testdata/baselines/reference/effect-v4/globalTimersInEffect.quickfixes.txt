@@ -1,0 +1,36 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:3-6:28) TS377073: Prefer using Effect.sleep or Schedule from Effect instead of setTimeout inside Effect generators. effect(globalTimersInEffect)
+  Fix 0: "Disable globalTimersInEffect for this line"
+  Fix 1: "Disable globalTimersInEffect for entire file"
+
+[D2] (11:3-11:30) TS377073: Prefer using Schedule or Effect.repeat from Effect instead of setInterval inside Effect generators. effect(globalTimersInEffect)
+  Fix 0: "Disable globalTimersInEffect for this line"
+  Fix 1: "Disable globalTimersInEffect for entire file"
+
+[D3] (17:3-17:27) TS377073: Prefer using Effect.sleep or Schedule from Effect instead of setTimeout inside Effect generators. effect(globalTimersInEffect)
+  Fix 0: "Disable globalTimersInEffect for this line"
+  Fix 1: "Disable globalTimersInEffect for entire file"
+
+[D4] (24:7-24:17) TS6133: '_regularFn' is declared but its value is never read.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable globalTimersInEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable globalTimersInEffect for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable globalTimersInEffect for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable globalTimersInEffect for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable globalTimersInEffect for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable globalTimersInEffect for entire file" ===
+skipped by default

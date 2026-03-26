@@ -1,0 +1,14 @@
+=== Metadata ===
+Effect version: unknown
+
+/.src/globalRandom_preview.ts(4,24): warning TS377070: Prefer using the Random service from Effect instead of Math.random(). effect(globalRandom)
+
+
+==== /.src/globalRandom_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics globalRandom:warning
+    
+    export const preview = Math.random()
+                           ~~~~~~~~~~~~~
+!!! warning TS377070: Prefer using the Random service from Effect instead of Math.random(). effect(globalRandom)
+    

@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (8:24-8:29) TS377061: Prefer using HttpClient from effect/unstable/http instead of the global 'fetch' function. effect(globalFetch)
+[D1] (4:24-4:29) TS377061: Prefer using HttpClient from @effect/platform instead of the global 'fetch' function. effect(globalFetch)
   Fix 0: "Disable globalFetch for this line"
   Fix 1: "Disable globalFetch for entire file"
 

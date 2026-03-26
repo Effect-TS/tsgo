@@ -219,5 +219,12 @@ func MountEffect(version EffectVersion, testfs map[string]any) error {
 	maps.Copy(testfs, packageFSCache(version, "@standard-schema/spec")())
 	maps.Copy(testfs, packageFSCache(version, "fast-check")())
 	maps.Copy(testfs, packageFSCache(version, "@types/node")())
+
+	packageJSONPath := filepath.Join(EffectTsGoRootPath(), "testdata", "tests", string(version), "package.json")
+	packageJSON, err := os.ReadFile(packageJSONPath)
+	if err != nil {
+		return err
+	}
+	testfs["/.src/package.json"] = &fstest.MapFile{Data: packageJSON}
 	return nil
 }

@@ -1,0 +1,29 @@
+==== /.src/globalConsoleInEffect_preview.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 5:23 - 7:3
+Node: Effect.gen(function*() {\n  console.log("hello")\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  console.log("hello")\n}
+Subject Type: () => Generator<never, void, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 5:48 - 6:23
+Node: console.log("hello")
+Node Kind: KindCallExpression
+
+Subject: "hello"
+Subject Type: "hello"
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void

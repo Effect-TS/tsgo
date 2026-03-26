@@ -1,0 +1,14 @@
+=== Metadata ===
+Effect version: unknown
+
+/.src/globalConsole_preview.ts(4,1): warning TS377064: Prefer using Effect.log or Logger instead of console.log. effect(globalConsole)
+
+
+==== /.src/globalConsole_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics globalConsole:warning
+    
+    console.log("preview")
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377064: Prefer using Effect.log or Logger instead of console.log. effect(globalConsole)
+    
