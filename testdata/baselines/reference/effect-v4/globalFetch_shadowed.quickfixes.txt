@@ -1,5 +1,0 @@
-=== Quick Fix Inventory ===
-(no diagnostics)
-
-=== Quick Fix Application Results ===
-(no quick fixes to apply)
