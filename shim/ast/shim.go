@@ -332,6 +332,8 @@ func GetMeaningFromDeclaration(node *ast.Node) ast.SemanticMeaning
 func GetMembers(symbol *ast.Symbol) ast.SymbolTable
 //go:linkname GetModuleInstanceState github.com/microsoft/typescript-go/internal/ast.GetModuleInstanceState
 func GetModuleInstanceState(node *ast.Node) ast.ModuleInstanceState
+//go:linkname GetModuleSpecifierOfBareOrAccessedRequire github.com/microsoft/typescript-go/internal/ast.GetModuleSpecifierOfBareOrAccessedRequire
+func GetModuleSpecifierOfBareOrAccessedRequire(node *ast.Node) *ast.Node
 //go:linkname GetNameOfDeclaration github.com/microsoft/typescript-go/internal/ast.GetNameOfDeclaration
 func GetNameOfDeclaration(declaration *ast.Node) *ast.Node
 //go:linkname GetNamespaceDeclarationNode github.com/microsoft/typescript-go/internal/ast.GetNamespaceDeclarationNode
@@ -1665,6 +1667,7 @@ const KindLastTemplateToken = ast.KindLastTemplateToken
 const KindLastToken = ast.KindLastToken
 const KindLastTriviaToken = ast.KindLastTriviaToken
 const KindLastTypeNode = ast.KindLastTypeNode
+const KindLastUnaryOperator = ast.KindLastUnaryOperator
 const KindLessThanEqualsToken = ast.KindLessThanEqualsToken
 const KindLessThanLessThanEqualsToken = ast.KindLessThanLessThanEqualsToken
 const KindLessThanLessThanToken = ast.KindLessThanLessThanToken
