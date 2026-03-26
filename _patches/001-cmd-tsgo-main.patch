@@ -5,7 +5,7 @@ index 5eabc96df..82b7bf932 100644
 @@ -3,6 +3,11 @@ package main
  import (
  	"os"
-
+ 
 +	// Import Effect hooks to register via init()
 +	_ "github.com/effect-ts/tsgo/etsexecutehooks" // exit-code filtering hooks
 +	_ "github.com/effect-ts/tsgo/etscheckerhooks" // checker diagnostics hooks
@@ -13,4 +13,4 @@ index 5eabc96df..82b7bf932 100644
 +
  	"github.com/microsoft/typescript-go/internal/execute"
  )
-
+ 
