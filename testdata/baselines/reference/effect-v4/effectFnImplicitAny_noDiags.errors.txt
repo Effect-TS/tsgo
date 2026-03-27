@@ -20,3 +20,10 @@ Effect version: 4.0.0
       })
     )
     
+    export const fn = Effect.fn(
+      function*(s: string) {
+        return s.length
+      },
+      (effect, ...args) => effect.pipe(Effect.map((result) => [result, ...args]))
+    )
+    

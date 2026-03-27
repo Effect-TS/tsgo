@@ -1,4 +1,4 @@
-==== /.src/effectFnImplicitAny_noDiags.ts (2 flows) ====
+==== /.src/effectFnImplicitAny_noDiags.ts (4 flows) ====
 
 === Piping Flow ===
 Location: 5:21 - 15:2
@@ -31,3 +31,31 @@ Transformations (1):
       callee: Effect.fnUntraced
       args: (constant)
       outType: (request: HttpServerRequest) => Effect<HttpServerResponse, never, never>
+
+=== Piping Flow ===
+Location: 17:18 - 22:2
+Node: Effect.fn(\n  function*(s: string) {\n    return s.length\n  },\n  (effect, ...args) => effect.pipe(Effect.map((result) => [result, ...args]))\n)
+Node Kind: KindCallExpression
+
+Subject: Effect.fn(\n  function*(s: string) {\n    return s.length\n  },\n  (effect, ...args) => effect.pipe(Effect.map((result) => [result, ...args]))\n)
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: effectFn
+      callee: (effect, ...args) => effect.pipe(Effect.map((result) => [result, ...args]))
+      args: (constant)
+      outType: Effect<(string | number)[], never, never>
+
+=== Piping Flow ===
+Location: 21:23 - 21:78
+Node: effect.pipe(Effect.map((result) => [result, ...args]))
+Node Kind: KindCallExpression
+
+Subject: effect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [(result) => [result, ...args]]
+      outType: Effect<(string | number)[], never, never>

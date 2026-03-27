@@ -6,6 +6,27 @@ import (
 	"github.com/microsoft/typescript-go/shim/checker"
 )
 
+func firstEffectFnFunctionArgument(args []*ast.Node) (*ast.Node, int) {
+	for i, arg := range args {
+		if arg == nil {
+			continue
+		}
+		switch arg.Kind {
+		case ast.KindArrowFunction, ast.KindFunctionExpression:
+			return arg, i
+		}
+	}
+	return nil, -1
+}
+
+func isGeneratorFunctionNode(node *ast.Node) bool {
+	if node == nil || node.Kind != ast.KindFunctionExpression {
+		return false
+	}
+	fn := node.AsFunctionExpression()
+	return fn != nil && fn.AsteriskToken != nil
+}
+
 // EffectFnCall parses a node as Effect.fn(<regularFn>) or Effect.fn("name")(<regularFn>).
 // It matches only non-generator variants (arrow function or function expression without asteriskToken).
 // Returns nil when the node is not an Effect.fn non-generator call.
@@ -21,28 +42,8 @@ func EffectFnCall(c *checker.Checker, node *ast.Node) *EffectFnCallResult {
 			return nil
 		}
 
-		// Scan arguments for the first ArrowFunction or non-generator FunctionExpression
-		var bodyArg *ast.Node
-		var bodyIndex int
-		for i, arg := range call.Arguments.Nodes {
-			if arg == nil {
-				continue
-			}
-			if arg.Kind == ast.KindArrowFunction {
-				bodyArg = arg
-				bodyIndex = i
-				break
-			}
-			if arg.Kind == ast.KindFunctionExpression {
-				fn := arg.AsFunctionExpression()
-				if fn != nil && fn.AsteriskToken == nil {
-					bodyArg = arg
-					bodyIndex = i
-					break
-				}
-			}
-		}
-		if bodyArg == nil {
+		bodyArg, bodyIndex := firstEffectFnFunctionArgument(call.Arguments.Nodes)
+		if bodyArg == nil || isGeneratorFunctionNode(bodyArg) {
 			return nil
 		}
 
