@@ -1,6 +1,6 @@
 # Effect Language Service (TypeScript-Go)
 
-A wrapper around [TypeScript-Go](https://github.com/nicolo-ribaudo/TypeScript-Go) that builds the Effect Language Service, providing Effect-TS diagnostics and quick fixes. 
+A wrapper around [TypeScript-Go](https://github.com/nicolo-ribaudo/TypeScript-Go) that builds the Effect Language Service, providing Effect-TS diagnostics and quick fixes.
 This project targets **Effect V4** (codename: "smol") primarily and also Effect V3.
 
 ## Currently in Alpha
@@ -20,6 +20,9 @@ This will guide you through the installation process, which includes:
 2. Configuring your `tsconfig.json` to use the Effect Language Service plugin.
 3. Adjusting plugin options to your preference.
 4. Hinting at any additional editor configuration needed to ensure the LSP is active.
+
+> [!NOTE]
+> At the moment, you still need the standard native TypeScript install (`@typescript/native-preview`) alongside `@effect/tsgo`.
 
 ## Diagnostic Status
 
