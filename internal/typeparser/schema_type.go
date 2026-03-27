@@ -8,6 +8,21 @@ import (
 	"github.com/microsoft/typescript-go/shim/checker"
 )
 
+var effectSchemaModuleDescriptor = PackageSourceFileDescriptor{
+	PackageName:       "effect",
+	MatchesSourceFile: isSchemaTypeSourceFile,
+}
+
+var effectParseResultModuleDescriptor = PackageSourceFileDescriptor{
+	PackageName:       "effect",
+	MatchesSourceFile: isParseResultSourceFile,
+}
+
+var effectSchemaParserModuleDescriptor = PackageSourceFileDescriptor{
+	PackageName:       "effect",
+	MatchesSourceFile: isSchemaParserSourceFile,
+}
+
 // parseSchemaVarianceStruct checks if a type is a Schema variance struct (has _A, _I, _R).
 func parseSchemaVarianceStruct(c *checker.Checker, t *checker.Type, atLocation *ast.Node) bool {
 	a := extractInvariantType(c, t, atLocation, "_A")
@@ -160,7 +175,7 @@ func isSchemaTypeSourceFile(c *checker.Checker, sf *ast.SourceFile) bool {
 		return false
 	}
 
-	moduleSym := moduleSymbolFromSourceFile(c, sf)
+	moduleSym := checker.Checker_getSymbolOfDeclaration(c, sf.AsNode())
 	if moduleSym == nil {
 		return false
 	}
@@ -181,53 +196,7 @@ func isSchemaTypeSourceFile(c *checker.Checker, sf *ast.SourceFile) bool {
 // IsNodeReferenceToEffectSchemaModuleApi reports whether node resolves to a member
 // exported by the "effect" package from a module that exports the Schema type.
 func IsNodeReferenceToEffectSchemaModuleApi(c *checker.Checker, node *ast.Node, memberName string) bool {
-	if c == nil || node == nil {
-		return false
-	}
-
-	sym := c.GetSymbolAtLocation(node)
-	if sym == nil && node.Kind == ast.KindPropertyAccessExpression {
-		if prop := node.AsPropertyAccessExpression(); prop != nil && prop.Name() != nil {
-			sym = c.GetSymbolAtLocation(prop.Name())
-		}
-	}
-	sym = resolveAliasedSymbol(c, sym)
-	if sym == nil {
-		return false
-	}
-
-	for _, decl := range sym.Declarations {
-		if decl == nil {
-			continue
-		}
-		sf := ast.GetSourceFileOfNode(decl)
-		if sf == nil {
-			continue
-		}
-		pkg := PackageJsonForSourceFile(c, sf)
-		if pkg == nil {
-			continue
-		}
-		if name, ok := pkg.Name.GetValue(); ok && strings.EqualFold(name, "effect") {
-			if !isSchemaTypeSourceFile(c, sf) {
-				continue
-			}
-			moduleSym := moduleSymbolFromSourceFile(c, sf)
-			if moduleSym == nil {
-				continue
-			}
-			exportSym := c.TryGetMemberInModuleExportsAndProperties(memberName, moduleSym)
-			if exportSym == nil {
-				continue
-			}
-			exportSym = resolveAliasedSymbol(c, exportSym)
-			if symbolsMatch(c, exportSym, sym) {
-				return true
-			}
-		}
-	}
-
-	return false
+	return IsNodeReferenceToModuleExport(c, node, effectSchemaModuleDescriptor, memberName)
 }
 
 func isParseResultSourceFile(c *checker.Checker, sf *ast.SourceFile) bool {
@@ -235,7 +204,7 @@ func isParseResultSourceFile(c *checker.Checker, sf *ast.SourceFile) bool {
 		return false
 	}
 
-	moduleSym := moduleSymbolFromSourceFile(c, sf)
+	moduleSym := checker.Checker_getSymbolOfDeclaration(c, sf.AsNode())
 	if moduleSym == nil {
 		return false
 	}
@@ -261,53 +230,7 @@ func isParseResultSourceFile(c *checker.Checker, sf *ast.SourceFile) bool {
 // IsNodeReferenceToEffectParseResultModuleApi reports whether node resolves to a member
 // exported by the "effect" package from a module that exports the ParseResult type (V3).
 func IsNodeReferenceToEffectParseResultModuleApi(c *checker.Checker, node *ast.Node, memberName string) bool {
-	if c == nil || node == nil {
-		return false
-	}
-
-	sym := c.GetSymbolAtLocation(node)
-	if sym == nil && node.Kind == ast.KindPropertyAccessExpression {
-		if prop := node.AsPropertyAccessExpression(); prop != nil && prop.Name() != nil {
-			sym = c.GetSymbolAtLocation(prop.Name())
-		}
-	}
-	sym = resolveAliasedSymbol(c, sym)
-	if sym == nil {
-		return false
-	}
-
-	for _, decl := range sym.Declarations {
-		if decl == nil {
-			continue
-		}
-		sf := ast.GetSourceFileOfNode(decl)
-		if sf == nil {
-			continue
-		}
-		pkg := PackageJsonForSourceFile(c, sf)
-		if pkg == nil {
-			continue
-		}
-		if name, ok := pkg.Name.GetValue(); ok && strings.EqualFold(name, "effect") {
-			if !isParseResultSourceFile(c, sf) {
-				continue
-			}
-			moduleSym := moduleSymbolFromSourceFile(c, sf)
-			if moduleSym == nil {
-				continue
-			}
-			exportSym := c.TryGetMemberInModuleExportsAndProperties(memberName, moduleSym)
-			if exportSym == nil {
-				continue
-			}
-			exportSym = resolveAliasedSymbol(c, exportSym)
-			if symbolsMatch(c, exportSym, sym) {
-				return true
-			}
-		}
-	}
-
-	return false
+	return IsNodeReferenceToModuleExport(c, node, effectParseResultModuleDescriptor, memberName)
 }
 
 func isSchemaParserSourceFile(c *checker.Checker, sf *ast.SourceFile) bool {
@@ -315,7 +238,7 @@ func isSchemaParserSourceFile(c *checker.Checker, sf *ast.SourceFile) bool {
 		return false
 	}
 
-	moduleSym := moduleSymbolFromSourceFile(c, sf)
+	moduleSym := checker.Checker_getSymbolOfDeclaration(c, sf.AsNode())
 	if moduleSym == nil {
 		return false
 	}
@@ -336,51 +259,5 @@ func isSchemaParserSourceFile(c *checker.Checker, sf *ast.SourceFile) bool {
 // IsNodeReferenceToEffectSchemaParserModuleApi reports whether node resolves to a member
 // exported by the "effect" package from a module that exports the SchemaParser type (V4).
 func IsNodeReferenceToEffectSchemaParserModuleApi(c *checker.Checker, node *ast.Node, memberName string) bool {
-	if c == nil || node == nil {
-		return false
-	}
-
-	sym := c.GetSymbolAtLocation(node)
-	if sym == nil && node.Kind == ast.KindPropertyAccessExpression {
-		if prop := node.AsPropertyAccessExpression(); prop != nil && prop.Name() != nil {
-			sym = c.GetSymbolAtLocation(prop.Name())
-		}
-	}
-	sym = resolveAliasedSymbol(c, sym)
-	if sym == nil {
-		return false
-	}
-
-	for _, decl := range sym.Declarations {
-		if decl == nil {
-			continue
-		}
-		sf := ast.GetSourceFileOfNode(decl)
-		if sf == nil {
-			continue
-		}
-		pkg := PackageJsonForSourceFile(c, sf)
-		if pkg == nil {
-			continue
-		}
-		if name, ok := pkg.Name.GetValue(); ok && strings.EqualFold(name, "effect") {
-			if !isSchemaParserSourceFile(c, sf) {
-				continue
-			}
-			moduleSym := moduleSymbolFromSourceFile(c, sf)
-			if moduleSym == nil {
-				continue
-			}
-			exportSym := c.TryGetMemberInModuleExportsAndProperties(memberName, moduleSym)
-			if exportSym == nil {
-				continue
-			}
-			exportSym = resolveAliasedSymbol(c, exportSym)
-			if symbolsMatch(c, exportSym, sym) {
-				return true
-			}
-		}
-	}
-
-	return false
+	return IsNodeReferenceToModuleExport(c, node, effectSchemaParserModuleDescriptor, memberName)
 }
