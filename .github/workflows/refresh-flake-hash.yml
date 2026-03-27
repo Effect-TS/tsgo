@@ -6,13 +6,16 @@ on:
     types: [opened, reopened, synchronize]
     paths:
       - flake.nix
+      - flake.lock
       - go.mod
       - go.sum
       - go.work
       - go.work.sum
+      - typescript-go
       - _patches/**
       - _tools/update-flake-vendor-hash.sh
       - .github/workflows/ci.yml
+      - .github/workflows/update-typescript-go.yml
 
 concurrency:
   group: refresh-flake-hash-${{ github.event.pull_request.number || github.ref }}
@@ -53,14 +56,14 @@ jobs:
 
       - name: Commit refreshed hash
         run: |
-          if git diff --quiet -- flake.nix; then
+          if git diff --quiet -- flake.nix flake.lock; then
             echo "flake hash already up to date"
             exit 0
           fi
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add flake.nix
+          git add flake.nix flake.lock
           git commit -m "Refresh flake vendor hash"
 
           branch_ref="${GITHUB_HEAD_REF:-${GITHUB_REF_NAME}}"
