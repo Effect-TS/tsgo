@@ -7,8 +7,14 @@ import * as Path from "effect/Path"
 import * as Prompt from "effect/unstable/cli/Prompt"
 import * as ts from "typescript"
 import { renderCodeActions } from "./diff-renderer.js"
-import type { Assessment, SetupCodeAction, Target } from "./types.js"
-import { LSP_PACKAGE_NAME, LSP_PLUGIN_NAME, PATCH_COMMAND, TSCONFIG_SCHEMA_URL } from "./consts.js"
+import type { Assessment, PackageDependency, SetupCodeAction, Target } from "./types.js"
+import {
+  LSP_PACKAGE_NAME,
+  LSP_PLUGIN_NAME,
+  NATIVE_PREVIEW_PACKAGE_NAME,
+  PATCH_COMMAND,
+  TSCONFIG_SCHEMA_URL
+} from "./consts.js"
 import type { RuleSeverity } from "./rule-info.js"
 
 interface ComputeFileChangesResult {
@@ -100,6 +106,55 @@ function insertNodeAtEndOfList<T extends ts.Node>(
   }
 }
 
+function findDependencyCollectionProperty(
+  rootObj: ts.ObjectLiteralExpression,
+  dependencyType: "dependencies" | "devDependencies"
+): ts.PropertyAssignment | undefined {
+  return findPropertyInObject(rootObj, dependencyType)
+}
+
+function upsertDependency(
+  tracker: any,
+  sourceFile: ts.SourceFile,
+  rootObj: ts.ObjectLiteralExpression,
+  dependencyName: string,
+  dependency: PackageDependency
+) {
+  const depsProperty = findDependencyCollectionProperty(rootObj, dependency.dependencyType)
+
+  if (!depsProperty) {
+    const newDepsProp = ts.factory.createPropertyAssignment(
+      ts.factory.createStringLiteral(dependency.dependencyType),
+      ts.factory.createObjectLiteralExpression([
+        ts.factory.createPropertyAssignment(
+          ts.factory.createStringLiteral(dependencyName),
+          ts.factory.createStringLiteral(dependency.version)
+        )
+      ], false)
+    )
+    insertNodeAtEndOfList(tracker, sourceFile, rootObj.properties, newDepsProp)
+    return
+  }
+
+  if (!ts.isObjectLiteralExpression(depsProperty.initializer)) {
+    return
+  }
+
+  const existingProperty = findPropertyInObject(depsProperty.initializer, dependencyName)
+  if (!existingProperty) {
+    const newDepProp = ts.factory.createPropertyAssignment(
+      ts.factory.createStringLiteral(dependencyName),
+      ts.factory.createStringLiteral(dependency.version)
+    )
+    insertNodeAtEndOfList(tracker, sourceFile, depsProperty.initializer.properties, newDepProp)
+    return
+  }
+
+  if (ts.isStringLiteral(existingProperty.initializer) && existingProperty.initializer.text !== dependency.version) {
+    tracker.replaceNode(sourceFile, existingProperty.initializer, ts.factory.createStringLiteral(dependency.version))
+  }
+}
+
 function createDiagnosticSeverityObject(
   severities: Record<string, RuleSeverity>
 ): ts.ObjectLiteralExpression {
@@ -183,6 +238,33 @@ const computePackageJsonChanges = (
   const fileChanges = tsInternal.textChanges.ChangeTracker.with(
     ctx,
     (tracker: any) => {
+      const shouldAddNativePreviewWithDependencyType = (dependencyType: "dependencies" | "devDependencies") =>
+        Option.isSome(target.nativePreviewVersion) &&
+        Option.isNone(current.nativePreviewVersion) &&
+        target.nativePreviewVersion.value.dependencyType === dependencyType
+
+      const ensureNativePreviewDependency = () => {
+        if (Option.isNone(target.nativePreviewVersion) || Option.isSome(current.nativePreviewVersion)) {
+          return
+        }
+
+        const targetNativePreview = target.nativePreviewVersion.value
+        const nativePreviewDepsProperty = findDependencyCollectionProperty(rootObj, targetNativePreview.dependencyType)
+
+        if (
+          !nativePreviewDepsProperty &&
+          Option.isSome(target.lspVersion) &&
+          target.lspVersion.value.dependencyType === targetNativePreview.dependencyType
+        ) {
+          return
+        }
+
+        descriptions.push(
+          `Add ${NATIVE_PREVIEW_PACKAGE_NAME}@${targetNativePreview.version} to ${targetNativePreview.dependencyType}`
+        )
+        upsertDependency(tracker, current.sourceFile, rootObj, NATIVE_PREVIEW_PACKAGE_NAME, targetNativePreview)
+      }
+
       // Handle @effect/tsgo dependency
       if (Option.isSome(target.lspVersion)) {
         const targetDepType = target.lspVersion.value.dependencyType
@@ -206,20 +288,43 @@ const computePackageJsonChanges = (
             }
 
             // Add to new location
-            const newDepsProperty = findPropertyInObject(rootObj, targetDepType)
-            const newLspProp = ts.factory.createPropertyAssignment(
-              ts.factory.createStringLiteral(LSP_PACKAGE_NAME),
-              ts.factory.createStringLiteral(targetVersion)
-            )
+            const newDepsProperty = findDependencyCollectionProperty(rootObj, targetDepType)
 
             if (!newDepsProperty) {
+              const dependencyProperties: Array<ts.PropertyAssignment> = [
+                ts.factory.createPropertyAssignment(
+                  ts.factory.createStringLiteral(LSP_PACKAGE_NAME),
+                  ts.factory.createStringLiteral(targetVersion)
+                )
+              ]
+
+              if (shouldAddNativePreviewWithDependencyType(targetDepType)) {
+                const targetNativePreview = target.nativePreviewVersion.pipe(Option.getOrUndefined)
+                if (targetNativePreview) {
+                dependencyProperties.push(
+                  ts.factory.createPropertyAssignment(
+                    ts.factory.createStringLiteral(NATIVE_PREVIEW_PACKAGE_NAME),
+                    ts.factory.createStringLiteral(targetNativePreview.version)
+                  )
+                )
+                }
+              }
+
               const newDepsProp = ts.factory.createPropertyAssignment(
                 ts.factory.createStringLiteral(targetDepType),
-                ts.factory.createObjectLiteralExpression([newLspProp], false)
+                ts.factory.createObjectLiteralExpression(dependencyProperties, false)
               )
               insertNodeAtEndOfList(tracker, current.sourceFile, rootObj.properties, newDepsProp)
             } else if (ts.isObjectLiteralExpression(newDepsProperty.initializer)) {
-              insertNodeAtEndOfList(tracker, current.sourceFile, newDepsProperty.initializer.properties, newLspProp)
+              insertNodeAtEndOfList(
+                tracker,
+                current.sourceFile,
+                newDepsProperty.initializer.properties,
+                ts.factory.createPropertyAssignment(
+                  ts.factory.createStringLiteral(LSP_PACKAGE_NAME),
+                  ts.factory.createStringLiteral(targetVersion)
+                )
+              )
             }
           } else if (currentVersion !== targetVersion) {
             // Same dependency type, just update version
@@ -241,27 +346,47 @@ const computePackageJsonChanges = (
           // LSP not currently installed, add it
           descriptions.push(`Add ${LSP_PACKAGE_NAME}@${targetVersion} to ${targetDepType}`)
 
-          const depsProperty = findPropertyInObject(rootObj, targetDepType)
+          const depsProperty = findDependencyCollectionProperty(rootObj, targetDepType)
 
           if (!depsProperty) {
+            const dependencyProperties: Array<ts.PropertyAssignment> = [
+              ts.factory.createPropertyAssignment(
+                ts.factory.createStringLiteral(LSP_PACKAGE_NAME),
+                ts.factory.createStringLiteral(targetVersion)
+              )
+            ]
+
+            if (shouldAddNativePreviewWithDependencyType(targetDepType)) {
+              const targetNativePreview = target.nativePreviewVersion.pipe(Option.getOrUndefined)
+              if (targetNativePreview) {
+              dependencyProperties.push(
+                ts.factory.createPropertyAssignment(
+                  ts.factory.createStringLiteral(NATIVE_PREVIEW_PACKAGE_NAME),
+                  ts.factory.createStringLiteral(targetNativePreview.version)
+                )
+              )
+              }
+            }
+
             const newDepsProp = ts.factory.createPropertyAssignment(
               ts.factory.createStringLiteral(targetDepType),
-              ts.factory.createObjectLiteralExpression([
-                ts.factory.createPropertyAssignment(
-                  ts.factory.createStringLiteral(LSP_PACKAGE_NAME),
-                  ts.factory.createStringLiteral(targetVersion)
-                )
-              ], false)
+              ts.factory.createObjectLiteralExpression(dependencyProperties, false)
             )
             insertNodeAtEndOfList(tracker, current.sourceFile, rootObj.properties, newDepsProp)
           } else if (ts.isObjectLiteralExpression(depsProperty.initializer)) {
-            const newLspProp = ts.factory.createPropertyAssignment(
-              ts.factory.createStringLiteral(LSP_PACKAGE_NAME),
-              ts.factory.createStringLiteral(targetVersion)
+            insertNodeAtEndOfList(
+              tracker,
+              current.sourceFile,
+              depsProperty.initializer.properties,
+              ts.factory.createPropertyAssignment(
+                ts.factory.createStringLiteral(LSP_PACKAGE_NAME),
+                ts.factory.createStringLiteral(targetVersion)
+              )
             )
-            insertNodeAtEndOfList(tracker, current.sourceFile, depsProperty.initializer.properties, newLspProp)
           }
         }
+
+        ensureNativePreviewDependency()
       } else if (Option.isSome(current.lspVersion)) {
         // User wants to remove LSP
         descriptions.push(`Remove ${LSP_PACKAGE_NAME} from dependencies`)

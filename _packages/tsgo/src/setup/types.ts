@@ -18,6 +18,11 @@ export interface FileInput {
 
 export type Editor = "vscode" | "nvim" | "emacs"
 
+export interface PackageDependency {
+  readonly dependencyType: "dependencies" | "devDependencies"
+  readonly version: string
+}
+
 export namespace Assessment {
   export interface Input {
     readonly packageJson: FileInput
@@ -30,10 +35,8 @@ export namespace Assessment {
     readonly sourceFile: ts.JsonSourceFile
     readonly parsed: Record<string, unknown>
     readonly text: string
-    readonly lspVersion: Option.Option<{
-      readonly dependencyType: "dependencies" | "devDependencies"
-      readonly version: string
-    }>
+    readonly lspVersion: Option.Option<PackageDependency>
+    readonly nativePreviewVersion: Option.Option<PackageDependency>
     readonly prepareScript: Option.Option<{
       readonly script: string
       readonly hasPatch: boolean
@@ -66,10 +69,8 @@ export namespace Assessment {
 
 export namespace Target {
   export interface PackageJson {
-    readonly lspVersion: Option.Option<{
-      readonly dependencyType: "dependencies" | "devDependencies"
-      readonly version: string
-    }>
+    readonly lspVersion: Option.Option<PackageDependency>
+    readonly nativePreviewVersion: Option.Option<PackageDependency>
     readonly prepareScript: boolean
   }
 

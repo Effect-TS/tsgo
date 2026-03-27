@@ -5,8 +5,8 @@ import * as Path from "effect/Path"
 import type * as PlatformError from "effect/PlatformError"
 import * as ts from "typescript"
 import { FileReadError, PackageJsonNotFoundError } from "./errors.js"
-import type { Assessment, FileInput } from "./types.js"
-import { LSP_PACKAGE_NAME, LSP_PLUGIN_NAME, PATCH_COMMAND } from "./consts.js"
+import type { Assessment, FileInput, PackageDependency } from "./types.js"
+import { LSP_PACKAGE_NAME, LSP_PLUGIN_NAME, NATIVE_PREVIEW_PACKAGE_NAME, PATCH_COMMAND } from "./consts.js"
 import type { RuleSeverity } from "./rule-info.js"
 
 /**
@@ -76,22 +76,26 @@ const assessPackageJson = (
     scripts?: Record<string, string>
   }
 
-  // Check for @effect/tsgo in both dependencies and devDependencies
-  let lspVersion: Option.Option<
-    { readonly dependencyType: "dependencies" | "devDependencies"; readonly version: string }
-  > = Option.none()
+  const assessDependency = (packageName: string): Option.Option<PackageDependency> => {
+    if (packageName in (parsed.devDependencies ?? {})) {
+      return Option.some({
+        dependencyType: "devDependencies" as const,
+        version: parsed.devDependencies![packageName]
+      })
+    }
 
-  if (LSP_PACKAGE_NAME in (parsed.devDependencies ?? {})) {
-    lspVersion = Option.some({
-      dependencyType: "devDependencies" as const,
-      version: parsed.devDependencies![LSP_PACKAGE_NAME]
-    })
-  } else if (LSP_PACKAGE_NAME in (parsed.dependencies ?? {})) {
-    lspVersion = Option.some({
-      dependencyType: "dependencies" as const,
-      version: parsed.dependencies![LSP_PACKAGE_NAME]
-    })
+    if (packageName in (parsed.dependencies ?? {})) {
+      return Option.some({
+        dependencyType: "dependencies" as const,
+        version: parsed.dependencies![packageName]
+      })
+    }
+
+    return Option.none()
   }
+
+  const lspVersion = assessDependency(LSP_PACKAGE_NAME)
+  const nativePreviewVersion = assessDependency(NATIVE_PREVIEW_PACKAGE_NAME)
 
   // Check for prepare script
   const prepareScript = "prepare" in (parsed.scripts ?? {})
@@ -107,6 +111,7 @@ const assessPackageJson = (
     parsed,
     text: input.text,
     lspVersion,
+    nativePreviewVersion,
     prepareScript
   }
 }

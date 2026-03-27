@@ -8,6 +8,7 @@ export type { Editor, Target }
 export const fromAssessment = (inputState: Assessment.State): Target.State => ({
   packageJson: {
     lspVersion: inputState.packageJson.lspVersion,
+    nativePreviewVersion: inputState.packageJson.nativePreviewVersion,
     prepareScript: Option.map(inputState.packageJson.prepareScript, (_) => _.hasPatch).pipe(
       Option.getOrElse(() => false)
     )
