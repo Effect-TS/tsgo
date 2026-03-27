@@ -1,17 +1,6 @@
 package typeparser
 
-import (
-	"sync"
-
-	"github.com/microsoft/typescript-go/shim/checker"
-)
-
-// discoverPackagesCache caches the result of DiscoverPackages for the current
-// program check cycle. Only the most recent program's result is kept, preventing
-// memory leaks when many programs are created (e.g., in tests).
-var discoverPackagesCacheMu sync.Mutex
-var discoverPackagesCacheProg checker.Program
-var discoverPackagesCacheResult []DiscoveredPackage
+import "github.com/microsoft/typescript-go/shim/checker"
 
 // DiscoveredPackage represents a package found in the program's source files.
 type DiscoveredPackage struct {
@@ -162,7 +151,7 @@ func DetectEffectVersionString(c *checker.Checker) string {
 
 // DiscoverPackages iterates all source files in the program, resolves each one's
 // nearest package.json, and returns a deduplicated list of discovered packages.
-// Results are cached per program so repeated calls within the same check cycle
+// Results are cached per checker so repeated calls within the same check cycle
 // (from DetectEffectVersion, DetectEffectVersionString, duplicatePackage rule, etc.)
 // do not re-scan all source files.
 func DiscoverPackages(c *checker.Checker) []DiscoveredPackage {
@@ -170,33 +159,18 @@ func DiscoverPackages(c *checker.Checker) []DiscoveredPackage {
 		return nil
 	}
 
-	prog := c.Program()
-
-	discoverPackagesCacheMu.Lock()
-	defer discoverPackagesCacheMu.Unlock()
-
-	if discoverPackagesCacheProg == prog && discoverPackagesCacheResult != nil {
-		return discoverPackagesCacheResult
+	links := GetEffectLinks(c)
+	if links.discoverPackagesComputed {
+		return links.discoverPackagesValue
 	}
 
 	result := discoverPackagesUncached(c)
-	discoverPackagesCacheProg = prog
-	discoverPackagesCacheResult = result
+	links.discoverPackagesValue = result
+	links.discoverPackagesComputed = true
 	return result
 }
 
-// ClearDiscoverPackagesCache removes the cached DiscoverPackages result,
-// allowing the associated program to be garbage collected. Call this after
-// diagnostics collection is complete (e.g., from ReleaseProgram).
-func ClearDiscoverPackagesCache() {
-	discoverPackagesCacheMu.Lock()
-	defer discoverPackagesCacheMu.Unlock()
-	discoverPackagesCacheProg = nil
-	discoverPackagesCacheResult = nil
-}
-
 // discoverPackagesUncached performs the actual source file scan.
-// Must be called with discoverPackagesCacheMu held.
 func discoverPackagesUncached(c *checker.Checker) []DiscoveredPackage {
 	prog, ok := c.Program().(sourceFileProgram)
 	if !ok || prog == nil {

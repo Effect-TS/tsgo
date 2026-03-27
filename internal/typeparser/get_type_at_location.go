@@ -14,7 +14,7 @@ func GetTypeAtLocation(c *checker.Checker, node *ast.Node) (result *checker.Type
 		return nil
 	}
 
-	links := getEffectLinksRoot(c)
+	links := GetEffectLinks(c)
 	return Cached(&links.TypeAtLocation, node, func() *checker.Type {
 		return getTypeAtLocationUncached(c, node)
 	})

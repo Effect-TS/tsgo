@@ -10,6 +10,7 @@ import (
 // EffectLinks holds per-checker cached type-parser results.
 // One instance is lazily created per Checker and stored in its EffectLinks field.
 type EffectLinks struct {
+	TypeAtLocation       core.LinkStore[*ast.Node, *checker.Type]
 	EffectType           core.LinkStore[*checker.Type, *Effect]
 	StrictEffectType     core.LinkStore[*checker.Type, *Effect]
 	EffectSubtype        core.LinkStore[*checker.Type, *Effect]
@@ -53,6 +54,8 @@ type EffectLinks struct {
 	EffectYieldGeneratorFunction core.LinkStore[*ast.Node, *ast.FunctionExpression]
 
 	// Checker-level cached scalar values
+	discoverPackagesComputed       bool
+	discoverPackagesValue          []DiscoveredPackage
 	detectEffectVersionComputed    bool
 	detectEffectVersionValue       EffectMajorVersion
 	supportedEffectVersionComputed bool
@@ -69,7 +72,8 @@ type EffectLinks struct {
 // GetEffectLinks returns the EffectLinks instance attached to the given checker,
 // lazily creating and storing it on first access.
 func GetEffectLinks(c *checker.Checker) *EffectLinks {
-	return getOrCreateExtra(c, "typeparser.effect-links", func() *EffectLinks {
-		return &EffectLinks{}
-	})
+	if c.EffectLinks == nil {
+		c.EffectLinks = &EffectLinks{}
+	}
+	return c.EffectLinks.(*EffectLinks)
 }
