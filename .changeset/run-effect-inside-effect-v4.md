@@ -1,5 +1,5 @@
 ---
-"@effect/language-service": minor
+"@effect/tsgo": minor
 ---
 
 Add Effect v4 support for the `runEffectInsideEffect` diagnostic and quick fix.
