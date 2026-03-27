@@ -39,7 +39,7 @@ This workflow should be initiated only if asked by the user.
 - If in the git changes against origin/main does not exists a new changeset file describing current changes, create a new one in the .changeset folder, the pattern is something like this:
 ```
 ---
-"@effect/language-service": ${patchType}
+"@effect/tsgo": ${patchType}
 ---
 
 Description of the change with examples

@@ -1,5 +1,5 @@
 ---
-"@effect/language-service": patch
+"@effect/tsgo": patch
 ---
 
 Fix `effectFnImplicitAny` so contextual union types suppress the diagnostic when any union member provides a callable contextual type.
