@@ -121,5 +121,11 @@ func hasOuterContextualFunctionType(c *checker.Checker, node *ast.Node) bool {
 		return false
 	}
 
-	return len(c.GetSignaturesOfType(contextualType, checker.SignatureKindCall)) > 0
+	for _, member := range typeparser.UnrollUnionMembers(contextualType) {
+		if len(c.GetSignaturesOfType(member, checker.SignatureKindCall)) > 0 {
+			return true
+		}
+	}
+
+	return false
 }
