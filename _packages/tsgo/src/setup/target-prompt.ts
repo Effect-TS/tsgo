@@ -3,6 +3,7 @@ import * as Option from "effect/Option"
 import type * as Terminal from "effect/Terminal"
 import * as Prompt from "effect/unstable/cli/Prompt"
 import { applyPresetDiagnosticSeverities, type DiagnosticPresetName, isPresetEnabled } from "../presets.js"
+import { DEFAULT_NATIVE_PREVIEW_VERSION } from "./consts.js"
 import type { Assessment } from "./types.js"
 import type { Editor, Target } from "./target.js"
 import { getAllPresets, getAllRules } from "./rule-info.js"
@@ -58,6 +59,7 @@ export const gatherTargetState = (
       return {
         packageJson: {
           lspVersion: Option.none(),
+          nativePreviewVersion: assessment.packageJson.nativePreviewVersion,
           prepareScript: false
         },
         tsconfig: {
@@ -144,6 +146,10 @@ export const gatherTargetState = (
     return {
       packageJson: {
         lspVersion: Option.some({ dependencyType: lspDependencyType, version: context.defaultLspVersion }),
+        nativePreviewVersion: Option.orElse(
+          assessment.packageJson.nativePreviewVersion,
+          () => Option.some({ dependencyType: lspDependencyType, version: DEFAULT_NATIVE_PREVIEW_VERSION })
+        ),
         prepareScript: true
       },
       tsconfig: {
