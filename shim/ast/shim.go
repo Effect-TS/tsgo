@@ -1150,6 +1150,8 @@ func IsPropertyName(node *ast.Node) bool
 func IsPropertyNameLiteral(node *ast.Node) bool
 //go:linkname IsPropertySignatureDeclaration github.com/microsoft/typescript-go/internal/ast.IsPropertySignatureDeclaration
 func IsPropertySignatureDeclaration(node *ast.Node) bool
+//go:linkname IsPrototypeAccess github.com/microsoft/typescript-go/internal/ast.IsPrototypeAccess
+func IsPrototypeAccess(node *ast.Node) bool
 //go:linkname IsPunctuationKind github.com/microsoft/typescript-go/internal/ast.IsPunctuationKind
 func IsPunctuationKind(token ast.Kind) bool
 //go:linkname IsPushOrUnshiftIdentifier github.com/microsoft/typescript-go/internal/ast.IsPushOrUnshiftIdentifier

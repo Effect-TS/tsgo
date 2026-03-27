@@ -10,6 +10,7 @@ import (
 	"testing/fstest"
 
 	"github.com/microsoft/typescript-go/shim/bundled"
+	"github.com/microsoft/typescript-go/shim/diagnostics"
 	"github.com/microsoft/typescript-go/shim/ls/lsconv"
 	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
 	"github.com/microsoft/typescript-go/shim/project"
@@ -220,3 +221,7 @@ func (noopProjectClient) PublishDiagnostics(_ context.Context, _ *lsproto.Publis
 func (noopProjectClient) RefreshInlayHints(_ context.Context) error { return nil }
 
 func (noopProjectClient) RefreshCodeLens(_ context.Context) error { return nil }
+
+func (noopProjectClient) ProgressStart(_ *diagnostics.Message, _ ...any) {}
+
+func (noopProjectClient) ProgressFinish(_ *diagnostics.Message, _ ...any) {}
