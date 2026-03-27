@@ -13,3 +13,10 @@ export const Route = HttpRouter.use(
     )
   })
 )
+
+export const fn = Effect.fn(
+  function*(s: string) {
+    return s.length
+  },
+  (effect, ...args) => effect.pipe(Effect.map((result) => [result, ...args]))
+)

@@ -22,20 +22,11 @@ func EffectFnUntracedEagerGenCall(c *checker.Checker, node *ast.Node) *EffectGen
 			return nil
 		}
 
-		// Scan arguments for the first FunctionExpression with asteriskToken
-		var genFn *ast.FunctionExpression
-		for _, arg := range call.Arguments.Nodes {
-			if arg != nil && arg.Kind == ast.KindFunctionExpression {
-				fn := arg.AsFunctionExpression()
-				if fn != nil && fn.AsteriskToken != nil {
-					genFn = fn
-					break
-				}
-			}
-		}
-		if genFn == nil {
+		bodyArg, _ := firstEffectFnFunctionArgument(call.Arguments.Nodes)
+		if !isGeneratorFunctionNode(bodyArg) {
 			return nil
 		}
+		genFn := bodyArg.AsFunctionExpression()
 
 		// fnUntracedEager only supports direct calls (no curried naming).
 		// call.Expression must be a PropertyAccessExpression directly.

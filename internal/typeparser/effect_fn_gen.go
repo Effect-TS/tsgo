@@ -21,20 +21,11 @@ func EffectFnGenCall(c *checker.Checker, node *ast.Node) *EffectGenCallResult {
 			return nil
 		}
 
-		// Scan arguments for the first FunctionExpression with asteriskToken
-		var genFn *ast.FunctionExpression
-		for _, arg := range call.Arguments.Nodes {
-			if arg != nil && arg.Kind == ast.KindFunctionExpression {
-				fn := arg.AsFunctionExpression()
-				if fn != nil && fn.AsteriskToken != nil {
-					genFn = fn
-					break
-				}
-			}
-		}
-		if genFn == nil {
+		bodyArg, _ := firstEffectFnFunctionArgument(call.Arguments.Nodes)
+		if !isGeneratorFunctionNode(bodyArg) {
 			return nil
 		}
+		genFn := bodyArg.AsFunctionExpression()
 
 		// Determine the expression to check for Effect.fn reference.
 		// For curried calls like Effect.fn("name")(function*(){}), call.Expression is a CallExpression.
