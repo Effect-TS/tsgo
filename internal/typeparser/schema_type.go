@@ -221,7 +221,7 @@ func IsNodeReferenceToEffectSchemaModuleApi(c *checker.Checker, node *ast.Node, 
 				continue
 			}
 			exportSym = resolveAliasedSymbol(c, exportSym)
-			if symbolsMatch(c, exportSym, sym) {
+			if checker.Checker_getSymbolIfSameReference(c, exportSym, sym) != nil {
 				return true
 			}
 		}
@@ -301,7 +301,7 @@ func IsNodeReferenceToEffectParseResultModuleApi(c *checker.Checker, node *ast.N
 				continue
 			}
 			exportSym = resolveAliasedSymbol(c, exportSym)
-			if symbolsMatch(c, exportSym, sym) {
+			if checker.Checker_getSymbolIfSameReference(c, exportSym, sym) != nil {
 				return true
 			}
 		}
@@ -376,7 +376,7 @@ func IsNodeReferenceToEffectSchemaParserModuleApi(c *checker.Checker, node *ast.
 				continue
 			}
 			exportSym = resolveAliasedSymbol(c, exportSym)
-			if symbolsMatch(c, exportSym, sym) {
+			if checker.Checker_getSymbolIfSameReference(c, exportSym, sym) != nil {
 				return true
 			}
 		}

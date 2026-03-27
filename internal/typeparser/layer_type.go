@@ -169,7 +169,7 @@ func IsNodeReferenceToEffectLayerModuleApi(c *checker.Checker, node *ast.Node, m
 				continue
 			}
 			exportSym = resolveAliasedSymbol(c, exportSym)
-			if symbolsMatch(c, exportSym, sym) {
+			if checker.Checker_getSymbolIfSameReference(c, exportSym, sym) != nil {
 				return true
 			}
 		}

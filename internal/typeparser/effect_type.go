@@ -302,7 +302,7 @@ func IsNodeReferenceToEffectModuleApi(c *checker.Checker, node *ast.Node, member
 				continue
 			}
 			exportSym = resolveAliasedSymbol(c, exportSym)
-			if symbolsMatch(c, exportSym, sym) {
+			if checker.Checker_getSymbolIfSameReference(c, exportSym, sym) != nil {
 				return true
 			}
 		}
@@ -354,7 +354,7 @@ func IsNodeReferenceToEffectPackageExport(c *checker.Checker, node *ast.Node, me
 				continue
 			}
 			exportSym = resolveAliasedSymbol(c, exportSym)
-			if symbolsMatch(c, exportSym, sym) {
+			if checker.Checker_getSymbolIfSameReference(c, exportSym, sym) != nil {
 				return true
 			}
 		}

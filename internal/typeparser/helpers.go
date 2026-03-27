@@ -95,6 +95,9 @@ func moduleSymbolFromSourceFile(c *checker.Checker, sf *ast.SourceFile) *ast.Sym
 }
 
 func resolveAliasedSymbol(c *checker.Checker, sym *ast.Symbol) *ast.Symbol {
+	if c == nil {
+		return sym
+	}
 	for sym != nil && sym.Flags&ast.SymbolFlagsAlias != 0 {
 		sym = c.GetAliasedSymbol(sym)
 	}
@@ -130,42 +133,4 @@ func ResolveToGlobalSymbol(c *checker.Checker, sym *ast.Symbol) *ast.Symbol {
 	}
 
 	return sym
-}
-
-func symbolsMatch(c *checker.Checker, a *ast.Symbol, b *ast.Symbol) bool {
-	if a == nil || b == nil {
-		return false
-	}
-	if a == b {
-		return true
-	}
-	if c != nil {
-		if ea := c.GetExportSymbolOfSymbol(a); ea != nil {
-			if eb := c.GetExportSymbolOfSymbol(b); eb != nil && ea == eb {
-				return true
-			}
-		}
-	}
-	ma := c.GetMergedSymbol(a)
-	mb := c.GetMergedSymbol(b)
-	if ma == mb {
-		return true
-	}
-	if len(a.Declarations) == 0 || len(b.Declarations) == 0 {
-		return false
-	}
-	decls := make(map[*ast.Node]struct{}, len(a.Declarations))
-	for _, d := range a.Declarations {
-		if d != nil {
-			decls[d] = struct{}{}
-		}
-	}
-	for _, d := range b.Declarations {
-		if d != nil {
-			if _, ok := decls[d]; ok {
-				return true
-			}
-		}
-	}
-	return false
 }
