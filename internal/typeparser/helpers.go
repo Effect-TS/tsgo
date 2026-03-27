@@ -83,17 +83,6 @@ func GetPropertyOfTypeByName(c *checker.Checker, t *checker.Type, name string) *
 	return nil
 }
 
-func moduleSymbolFromSourceFile(c *checker.Checker, sf *ast.SourceFile) *ast.Symbol {
-	if c == nil || sf == nil {
-		return nil
-	}
-	sym := sf.AsNode().Symbol()
-	if sym == nil {
-		return nil
-	}
-	return c.GetMergedSymbol(sym)
-}
-
 func resolveAliasedSymbol(c *checker.Checker, sym *ast.Symbol) *ast.Symbol {
 	if c == nil {
 		return sym

@@ -49,7 +49,7 @@ func IsYieldableErrorType(c *checker.Checker, t *checker.Type) bool {
 				continue
 			}
 
-			moduleSym := moduleSymbolFromSourceFile(c, sf)
+			moduleSym := checker.Checker_getSymbolOfDeclaration(c, sf.AsNode())
 			if moduleSym == nil {
 				continue
 			}

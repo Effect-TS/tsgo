@@ -8,6 +8,15 @@ import (
 	"github.com/microsoft/typescript-go/shim/checker"
 )
 
+var effectModuleDescriptor = PackageSourceFileDescriptor{
+	PackageName:       "effect",
+	MatchesSourceFile: isEffectTypeSourceFile,
+}
+
+var effectPackageExportDescriptor = PackageSourceFileDescriptor{
+	PackageName: "effect",
+}
+
 // EffectType parses an Effect type and extracts A, E, R parameters.
 // Returns nil if the type is not an Effect.
 // The detection strategy is chosen based on the detected Effect version:
@@ -207,7 +216,7 @@ func isEffectTypeSourceFile(c *checker.Checker, sf *ast.SourceFile) bool {
 		return false
 	}
 
-	moduleSym := moduleSymbolFromSourceFile(c, sf)
+	moduleSym := checker.Checker_getSymbolOfDeclaration(c, sf.AsNode())
 	if moduleSym == nil {
 		return false
 	}
@@ -228,87 +237,12 @@ func isEffectTypeSourceFile(c *checker.Checker, sf *ast.SourceFile) bool {
 // IsExpressionEffectModule reports whether node resolves to the Effect module namespace
 // (e.g., the `Effect` in `import { Effect } from "effect"`).
 func IsExpressionEffectModule(c *checker.Checker, node *ast.Node) bool {
-	if c == nil || node == nil {
-		return false
-	}
-
-	sym := c.GetSymbolAtLocation(node)
-	sym = resolveAliasedSymbol(c, sym)
-	if sym == nil {
-		return false
-	}
-
-	for _, decl := range sym.Declarations {
-		if decl == nil {
-			continue
-		}
-		sf := ast.GetSourceFileOfNode(decl)
-		if sf == nil {
-			continue
-		}
-		pkg := PackageJsonForSourceFile(c, sf)
-		if pkg == nil {
-			continue
-		}
-		if name, ok := pkg.Name.GetValue(); ok && strings.EqualFold(name, "effect") {
-			if isEffectTypeSourceFile(c, sf) {
-				return true
-			}
-		}
-	}
-
-	return false
+	return IsNodeReferenceToModule(c, node, effectModuleDescriptor)
 }
 
 // IsNodeReferenceToEffectModuleApi reports whether node resolves to a member exported by the "effect" package.
 func IsNodeReferenceToEffectModuleApi(c *checker.Checker, node *ast.Node, memberName string) bool {
-	if c == nil || node == nil {
-		return false
-	}
-
-	sym := c.GetSymbolAtLocation(node)
-	if sym == nil && node.Kind == ast.KindPropertyAccessExpression {
-		if prop := node.AsPropertyAccessExpression(); prop != nil && prop.Name() != nil {
-			sym = c.GetSymbolAtLocation(prop.Name())
-		}
-	}
-	sym = resolveAliasedSymbol(c, sym)
-	if sym == nil {
-		return false
-	}
-
-	for _, decl := range sym.Declarations {
-		if decl == nil {
-			continue
-		}
-		sf := ast.GetSourceFileOfNode(decl)
-		if sf == nil {
-			continue
-		}
-		pkg := PackageJsonForSourceFile(c, sf)
-		if pkg == nil {
-			continue
-		}
-		if name, ok := pkg.Name.GetValue(); ok && strings.EqualFold(name, "effect") {
-			if !isEffectTypeSourceFile(c, sf) {
-				continue
-			}
-			moduleSym := moduleSymbolFromSourceFile(c, sf)
-			if moduleSym == nil {
-				continue
-			}
-			exportSym := c.TryGetMemberInModuleExportsAndProperties(memberName, moduleSym)
-			if exportSym == nil {
-				continue
-			}
-			exportSym = resolveAliasedSymbol(c, exportSym)
-			if checker.Checker_getSymbolIfSameReference(c, exportSym, sym) != nil {
-				return true
-			}
-		}
-	}
-
-	return false
+	return IsNodeReferenceToModuleExport(c, node, effectModuleDescriptor, memberName)
 }
 
 // IsNodeReferenceToEffectPackageExport reports whether node resolves to a member
@@ -317,48 +251,5 @@ func IsNodeReferenceToEffectModuleApi(c *checker.Checker, node *ast.Node, member
 // that the declaration lives inside the "effect" package and matches the named export.
 // This is needed for functions like `pipe` which are exported from `effect/Function`.
 func IsNodeReferenceToEffectPackageExport(c *checker.Checker, node *ast.Node, memberName string) bool {
-	if c == nil || node == nil {
-		return false
-	}
-
-	sym := c.GetSymbolAtLocation(node)
-	if sym == nil && node.Kind == ast.KindPropertyAccessExpression {
-		if prop := node.AsPropertyAccessExpression(); prop != nil && prop.Name() != nil {
-			sym = c.GetSymbolAtLocation(prop.Name())
-		}
-	}
-	sym = resolveAliasedSymbol(c, sym)
-	if sym == nil {
-		return false
-	}
-
-	for _, decl := range sym.Declarations {
-		if decl == nil {
-			continue
-		}
-		sf := ast.GetSourceFileOfNode(decl)
-		if sf == nil {
-			continue
-		}
-		pkg := PackageJsonForSourceFile(c, sf)
-		if pkg == nil {
-			continue
-		}
-		if name, ok := pkg.Name.GetValue(); ok && strings.EqualFold(name, "effect") {
-			moduleSym := moduleSymbolFromSourceFile(c, sf)
-			if moduleSym == nil {
-				continue
-			}
-			exportSym := c.TryGetMemberInModuleExportsAndProperties(memberName, moduleSym)
-			if exportSym == nil {
-				continue
-			}
-			exportSym = resolveAliasedSymbol(c, exportSym)
-			if checker.Checker_getSymbolIfSameReference(c, exportSym, sym) != nil {
-				return true
-			}
-		}
-	}
-
-	return false
+	return IsNodeReferenceToModuleExport(c, node, effectPackageExportDescriptor, memberName)
 }

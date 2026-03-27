@@ -75,6 +75,8 @@ const CheckModeTypeOnly = checker.CheckModeTypeOnly
 type Checker = checker.Checker
 //go:linkname Checker_getSymbolIfSameReference github.com/microsoft/typescript-go/internal/checker.(*Checker).getSymbolIfSameReference
 func Checker_getSymbolIfSameReference(recv *checker.Checker, s1 *ast.Symbol, s2 *ast.Symbol) *ast.Symbol
+//go:linkname Checker_getSymbolOfDeclaration github.com/microsoft/typescript-go/internal/checker.(*Checker).getSymbolOfDeclaration
+func Checker_getSymbolOfDeclaration(recv *checker.Checker, node *ast.Node) *ast.Symbol
 //go:linkname Checker_getIndexInfosOfType github.com/microsoft/typescript-go/internal/checker.(*Checker).getIndexInfosOfType
 func Checker_getIndexInfosOfType(recv *checker.Checker, t *checker.Type) []*checker.IndexInfo
 //go:linkname Checker_getTypeArguments github.com/microsoft/typescript-go/internal/checker.(*Checker).getTypeArguments

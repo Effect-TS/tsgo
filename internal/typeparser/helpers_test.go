@@ -297,7 +297,7 @@ func TestGetSymbolIfSameReference_UsesCanonicalExportSymbol(t *testing.T) {
 		t.Fatal("expected local Foo symbol")
 	}
 
-	moduleSym := moduleSymbolFromSourceFile(c, sf)
+	moduleSym := checker.Checker_getSymbolOfDeclaration(c, sf.AsNode())
 	if moduleSym == nil {
 		t.Fatal("expected module symbol")
 	}
@@ -328,7 +328,7 @@ const value = Bar`,
 		t.Fatal("expected both source files")
 	}
 
-	moduleSym := moduleSymbolFromSourceFile(c, a)
+	moduleSym := checker.Checker_getSymbolOfDeclaration(c, a.AsNode())
 	if moduleSym == nil {
 		t.Fatal("expected module symbol for a.ts")
 	}
