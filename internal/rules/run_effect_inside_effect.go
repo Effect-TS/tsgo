@@ -17,29 +17,30 @@ var runEffectApis = []string{"runSync", "runPromise", "runFork", "runCallback"}
 
 // RunEffectInsideEffect detects Effect.runSync, Effect.runPromise, Effect.runFork, and
 // Effect.runCallback call expressions inside Effect generator contexts and suggests alternatives.
-// This rule is V3-only — it is not applicable to V4.
 var RunEffectInsideEffect = rule.Rule{
 	Name:            "runEffectInsideEffect",
 	Group:           "antipattern",
-	Description:     "Suggests using Runtime methods instead of Effect.run* inside Effect contexts",
+	Description:     "Suggests using Runtime or Effect.run*With methods instead of Effect.run* inside Effect contexts",
 	DefaultSeverity: etscore.SeveritySuggestion,
-	SupportedEffect: []string{"v3"},
+	SupportedEffect: []string{"v3", "v4"},
 	Codes: []int32{
 		tsdiag.Using_0_inside_an_Effect_is_not_recommended_Effects_inside_generators_can_usually_just_be_yielded_effect_runEffectInsideEffect.Code(),
 		tsdiag.Using_0_inside_an_Effect_is_not_recommended_The_same_runtime_should_generally_be_used_instead_to_run_child_effects_Consider_extracting_the_Runtime_by_using_for_example_Effect_runtime_and_then_use_Runtime_1_with_the_extracted_runtime_instead_effect_runEffectInsideEffect.Code(),
+		tsdiag.Using_0_inside_an_Effect_is_not_recommended_The_same_services_should_generally_be_used_instead_to_run_child_effects_Consider_extracting_the_current_services_by_using_for_example_Effect_services_and_then_use_Effect_1_With_with_the_extracted_services_instead_effect_runEffectInsideEffect.Code(),
 	},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
-		// V3-only rule: skip for V4
-		if typeparser.SupportedEffectVersion(ctx.Checker) == typeparser.EffectMajorV4 {
-			return nil
-		}
+		supportedEffect := typeparser.SupportedEffectVersion(ctx.Checker)
 
 		matches := AnalyzeRunEffectInsideEffect(ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, 0, len(matches))
 		for _, m := range matches {
 			calleeText := scanner.GetSourceTextOfNodeFromSourceFile(m.SourceFile, m.CalleeNode, false)
 			if m.IsNestedScope {
-				diags = append(diags, ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Using_0_inside_an_Effect_is_not_recommended_The_same_runtime_should_generally_be_used_instead_to_run_child_effects_Consider_extracting_the_Runtime_by_using_for_example_Effect_runtime_and_then_use_Runtime_1_with_the_extracted_runtime_instead_effect_runEffectInsideEffect, nil, calleeText, m.MethodName))
+				if supportedEffect == typeparser.EffectMajorV4 {
+					diags = append(diags, ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Using_0_inside_an_Effect_is_not_recommended_The_same_services_should_generally_be_used_instead_to_run_child_effects_Consider_extracting_the_current_services_by_using_for_example_Effect_services_and_then_use_Effect_1_With_with_the_extracted_services_instead_effect_runEffectInsideEffect, nil, calleeText, m.MethodName))
+				} else {
+					diags = append(diags, ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Using_0_inside_an_Effect_is_not_recommended_The_same_runtime_should_generally_be_used_instead_to_run_child_effects_Consider_extracting_the_Runtime_by_using_for_example_Effect_runtime_and_then_use_Runtime_1_with_the_extracted_runtime_instead_effect_runEffectInsideEffect, nil, calleeText, m.MethodName))
+				}
 			} else {
 				diags = append(diags, ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Using_0_inside_an_Effect_is_not_recommended_Effects_inside_generators_can_usually_just_be_yielded_effect_runEffectInsideEffect, nil, calleeText))
 			}

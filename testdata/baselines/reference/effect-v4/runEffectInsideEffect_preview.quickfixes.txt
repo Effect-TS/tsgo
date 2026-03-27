@@ -1,10 +1,10 @@
 === Quick Fix Inventory ===
 
-[D1] (7:21-7:35) TS377025: Using Effect.runSync inside an Effect is not recommended. The same runtime should generally be used instead to run child effects.
-Consider extracting the Runtime by using for example Effect.runtime and then use Runtime.runSync with the extracted runtime instead. effect(runEffectInsideEffect)
+[D1] (6:21-6:35) TS377074: Using Effect.runSync inside an Effect is not recommended. The same services should generally be used instead to run child effects.
+Consider extracting the current services by using for example Effect.services and then use Effect.runSyncWith with the extracted services instead. effect(runEffectInsideEffect)
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
-  Fix 2: "Use a runtime to run the Effect"
+  Fix 2: "Use the current services to run the Effect"
 
 === Quick Fix Application Results ===
 
@@ -14,18 +14,17 @@ skipped by default
 === [D1] Fix 1: "Disable runEffectInsideEffect for entire file" ===
 skipped by default
 
-=== [D1] Fix 2: "Use a runtime to run the Effect" ===
+=== [D1] Fix 2: "Use the current services to run the Effect" ===
 
 --- file:///.src/runEffectInsideEffect_preview.ts ---
-// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics runEffectInsideEffect:warning
 import { Effect } from "effect"
 
 export const preview = Effect.gen(function*() {
-const effectRuntime = yield* Effect.runtime<never>();
+const effectServices = yield* Effect.services<never>();
 
-  const run = () => Runtime.runSync(effectRuntime, Effect.succeed(1))
+  const run = () => Effect.runSyncWith(effectServices)(Effect.succeed(1))
   return run()
 })
 

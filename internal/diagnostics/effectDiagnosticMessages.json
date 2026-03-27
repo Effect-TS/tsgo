@@ -95,6 +95,10 @@
         "category": "Suggestion",
         "code": 377025
     },
+    "Using {0} inside an Effect is not recommended. The same services should generally be used instead to run child effects.\nConsider extracting the current services by using for example Effect.services and then use Effect.{1}With with the extracted services instead. effect(runEffectInsideEffect)": {
+        "category": "Suggestion",
+        "code": 377074
+    },
     "Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)": {
         "category": "Suggestion",
         "code": 377026
