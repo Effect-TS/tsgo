@@ -1,5 +1,31 @@
 # @effect/tsgo
 
+## 0.1.1
+
+### Patch Changes
+
+- 9fa65d2: Update the setup CLI to detect existing `@typescript/native-preview` dependencies and preserve whether they are installed in `dependencies` or `devDependencies`.
+
+  When enabling the language service, the setup flow now also adds `@typescript/native-preview@latest` if it is missing.
+
+- 6284611: Fix `effectFnImplicitAny` so it only checks the primary `Effect.fn` callback body instead of reporting helper callback parameters that are contextually typed by the `Effect.fn` result.
+
+  This avoids false positives for secondary callbacks such as `Effect.fn(function* (...) { ... }, (effect, ...args) => ...)`.
+
+- cb0d9bb: Fix the flake refresh workflows so TypeScript-Go submodule updates also refresh `flake.nix` and `flake.lock`.
+
+  This keeps the Nix flake build inputs aligned with the checked-in submodule and generated shim state.
+
+- f7584fa: Refactor typeparser and duplicate-package caching to keep checker-local cache state on `EffectLinks` instead of using process-global cache variables.
+
+  This removes manual cache reset hooks and simplifies repeated package and type lookups without changing diagnostics behavior.
+
+- ff3c088: Refactor typeparser package export matching to reuse shared package source-file descriptors and canonical checker symbol helpers.
+
+  This removes repeated node-to-module export matching logic across Effect-related recognizers while preserving existing diagnostics and quick-fix behavior.
+
+- 542440f: Update [`typescript-go`](https://github.com/microsoft/typescript-go/commit/daa55abfbd632d075380c261b0aba2a5e2448392) to commit `daa55abfbd632d075380c261b0aba2a5e2448392`.
+
 ## 0.1.0
 
 ### Minor Changes
