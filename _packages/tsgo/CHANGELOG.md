@@ -1,5 +1,19 @@
 # @effect/tsgo
 
+## 0.1.0
+
+### Minor Changes
+
+- 4477bfb: Add Effect v4 support for the `runEffectInsideEffect` diagnostic and quick fix.
+
+  Nested `Effect.run*` calls inside generators now suggest and apply `Effect.run*With` fixes using extracted services.
+
+### Patch Changes
+
+- 5642de7: Fix `effectFnImplicitAny` so contextual union types suppress the diagnostic when any union member provides a callable contextual type.
+
+  This aligns nested `Effect.fnUntraced` callbacks in union-typed APIs with TypeScript's `noImplicitAny` behavior.
+
 ## 0.0.20
 
 ### Patch Changes
