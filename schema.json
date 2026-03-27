@@ -1890,7 +1890,7 @@
         "runEffectInsideEffect": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
-          "description": "Suggests using Runtime methods instead of Effect.run* inside Effect contexts"
+          "description": "Suggests using Runtime or Effect.run*With methods instead of Effect.run* inside Effect contexts"
         },
         "schemaStructWithTag": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",

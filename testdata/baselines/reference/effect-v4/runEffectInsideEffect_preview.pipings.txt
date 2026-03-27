@@ -1,7 +1,7 @@
 ==== /.src/runEffectInsideEffect_preview.ts (2 flows) ====
 
 === Piping Flow ===
-Location: 6:23 - 9:3
+Location: 5:23 - 8:3
 Node: Effect.gen(function*() {\n  const run = () => Effect.runSync(Effect.succeed(1))\n  return run()\n})
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 7:20 - 7:54
+Location: 6:20 - 6:54
 Node: Effect.runSync(Effect.succeed(1))
 Node Kind: KindCallExpression
 

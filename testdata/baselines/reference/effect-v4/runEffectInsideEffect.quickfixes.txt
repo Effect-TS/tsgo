@@ -1,14 +1,14 @@
 === Quick Fix Inventory ===
 
-[D1] (15:21-15:35) TS377024: Using Effect.runSync inside an Effect is not recommended. Effects inside generators can usually just be yielded. effect(runEffectInsideEffect)
+[D1] (14:21-14:35) TS377024: Using Effect.runSync inside an Effect is not recommended. Effects inside generators can usually just be yielded. effect(runEffectInsideEffect)
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
 
-[D2] (23:5-23:22) TS377025: Using Effect.runPromise inside an Effect is not recommended. The same runtime should generally be used instead to run child effects.
-Consider extracting the Runtime by using for example Effect.runtime and then use Runtime.runPromise with the extracted runtime instead. effect(runEffectInsideEffect)
+[D2] (22:5-22:22) TS377074: Using Effect.runPromise inside an Effect is not recommended. The same services should generally be used instead to run child effects.
+Consider extracting the current services by using for example Effect.services and then use Effect.runPromiseWith with the extracted services instead. effect(runEffectInsideEffect)
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
-  Fix 2: "Use a runtime to run the Effect"
+  Fix 2: "Use the current services to run the Effect"
 
 === Quick Fix Application Results ===
 
@@ -24,10 +24,9 @@ skipped by default
 === [D2] Fix 1: "Disable runEffectInsideEffect for entire file" ===
 skipped by default
 
-=== [D2] Fix 2: "Use a runtime to run the Effect" ===
+=== [D2] Fix 2: "Use the current services to run the Effect" ===
 
 --- file:///.src/runEffectInsideEffect.ts ---
-// @effect-v3
 import { Data, Effect } from "effect"
 
 class DebuggerError extends Data.TaggedError("DebuggerError")<{
@@ -35,7 +34,7 @@ class DebuggerError extends Data.TaggedError("DebuggerError")<{
 }> {}
 
 export const program = Effect.gen(function*() {
-const effectRuntime = yield* Effect.runtime<never>();
+const effectServices = yield* Effect.services<never>();
 
   const response = yield* Effect.tryPromise({
     try: () => fetch("http://localhost:9229"),
@@ -51,8 +50,8 @@ const effectRuntime = yield* Effect.runtime<never>();
       try: () => fetch(event.data as string),
       catch: (e) => new DebuggerError({ cause: e })
     })
-    Runtime.runPromise(effectRuntime, check)
-    //        ^- no runPromise, use a runtime instead
+    Effect.runPromiseWith(effectServices)(check)
+    //        ^- no runPromise, use the current services instead
   }
 })
 
