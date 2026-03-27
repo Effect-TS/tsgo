@@ -13,8 +13,6 @@ import (
 	"sync"
 	"testing/fstest"
 
-	"github.com/effect-ts/tsgo/internal/rules"
-	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/bundled"
 	"github.com/microsoft/typescript-go/shim/compiler"
@@ -81,8 +79,6 @@ func AcquireProgram() { programSemaphore <- struct{}{} }
 // ReleaseProgram releases a slot back to the program semaphore, clears
 // per-program caches to allow GC of the program, and triggers GC.
 func ReleaseProgram() {
-	typeparser.ClearDiscoverPackagesCache()
-	rules.ClearDuplicatePackageCache()
 	<-programSemaphore
 	runtime.GC()
 }

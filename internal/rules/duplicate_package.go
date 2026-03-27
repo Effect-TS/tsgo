@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"slices"
 	"strings"
-	"sync"
 
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
@@ -13,14 +12,6 @@ import (
 	"github.com/microsoft/typescript-go/shim/checker"
 	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
 )
-
-// duplicatePackageCache caches duplicate-package diagnostics for the current
-// program check cycle so the package scan is not repeated for every source file.
-// Only the most recent program's result is kept, preventing memory leaks when
-// many programs are created (e.g., in tests).
-var duplicatePackageCacheMu sync.Mutex
-var duplicatePackageCacheProg checker.Program
-var duplicatePackageCacheResult []duplicatePackageDiag
 
 // duplicatePackageDiag holds pre-computed diagnostic info for a single duplicated package name.
 type duplicatePackageDiag struct {
@@ -38,8 +29,7 @@ var DuplicatePackage = rule.Rule{
 	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Multiple_versions_of_package_0_detected_Colon_1_Consider_cleaning_up_your_lockfile_or_add_0_to_allowedDuplicatedPackages_to_suppress_this_warning_effect_duplicatePackage.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
-		prog := ctx.Checker.Program()
-		entries := getDuplicatePackageDiags(ctx.Checker, prog)
+		entries := computeDuplicatePackageDiags(ctx.Checker, ctx.Checker.Program())
 		if len(entries) == 0 {
 			return nil
 		}
@@ -67,32 +57,6 @@ var DuplicatePackage = rule.Rule{
 		}
 		return diags
 	},
-}
-
-// ClearDuplicatePackageCache removes the cached duplicate-package diagnostics,
-// allowing the associated program to be garbage collected. Call this after
-// diagnostics collection is complete (e.g., from ReleaseProgram).
-func ClearDuplicatePackageCache() {
-	duplicatePackageCacheMu.Lock()
-	defer duplicatePackageCacheMu.Unlock()
-	duplicatePackageCacheProg = nil
-	duplicatePackageCacheResult = nil
-}
-
-// getDuplicatePackageDiags returns cached duplicate-package diagnostics for the given program.
-// The cache holds at most one entry (the current program), so old programs are released for GC.
-func getDuplicatePackageDiags(c *checker.Checker, prog checker.Program) []duplicatePackageDiag {
-	duplicatePackageCacheMu.Lock()
-	defer duplicatePackageCacheMu.Unlock()
-
-	if duplicatePackageCacheProg == prog {
-		return duplicatePackageCacheResult
-	}
-
-	result := computeDuplicatePackageDiags(c, prog)
-	duplicatePackageCacheProg = prog
-	duplicatePackageCacheResult = result
-	return result
 }
 
 // computeDuplicatePackageDiags scans all packages and finds names with multiple distinct versions.
