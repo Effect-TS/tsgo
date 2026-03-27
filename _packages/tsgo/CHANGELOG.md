@@ -1,5 +1,12 @@
 # @effect/tsgo
 
+## 0.0.20
+
+### Patch Changes
+
+- 46d9376: Add boolean plugin flags for Effect diagnostics, refactors, quickinfo, and completions, and honor them in the Go language-service hooks.
+- 51d09a9: Update [`typescript-go`](https://github.com/microsoft/typescript-go/commit/025d5aa3913ad54c5eae6be37677d3b85f783fd9) to commit `025d5aa3913ad54c5eae6be37677d3b85f783fd9`.
+
 ## 0.0.19
 
 ### Patch Changes
