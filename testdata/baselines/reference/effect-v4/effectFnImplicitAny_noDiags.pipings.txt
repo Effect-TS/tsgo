@@ -1,0 +1,33 @@
+==== /.src/effectFnImplicitAny_noDiags.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 5:21 - 15:2
+Node: HttpRouter.use(\n  Effect.fnUntraced(function*(router) {\n    yield* router.add(\n      "GET",\n      "/",\n      Effect.fnUntraced(function*(request) {\n        return HttpServerResponse.empty()\n      })\n    )\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: function*(router) {\n    yield* router.add(\n      "GET",\n      "/",\n      Effect.fnUntraced(function*(request) {\n        return HttpServerResponse.empty()\n      })\n    )\n  }
+Subject Type: (this: unassigned, router: HttpRouter) => Generator<Effect<void, never, never>, void, any>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.fnUntraced
+      args: (constant)
+      outType: (router: HttpRouter) => Effect<void, never, never>
+  [1] kind: call
+      callee: HttpRouter.use
+      args: (constant)
+      outType: Layer<never, never, HttpRouter>
+
+=== Piping Flow ===
+Location: 9:11 - 12:9
+Node: Effect.fnUntraced(function*(request) {\n        return HttpServerResponse.empty()\n      })
+Node Kind: KindCallExpression
+
+Subject: function*(request) {\n        return HttpServerResponse.empty()\n      }
+Subject Type: (this: unassigned, request: HttpServerRequest) => Generator<never, HttpServerResponse, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fnUntraced
+      args: (constant)
+      outType: (request: HttpServerRequest) => Effect<HttpServerResponse, never, never>
