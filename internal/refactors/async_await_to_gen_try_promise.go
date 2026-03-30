@@ -3,7 +3,6 @@ package refactors
 import (
 	"fmt"
 
-	"github.com/effect-ts/tsgo/internal/effectutil"
 	"github.com/effect-ts/tsgo/internal/refactor"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -31,8 +30,8 @@ func runAsyncAwaitToGenTryPromise(ctx *refactor.Context) []ls.CodeAction {
 		return nil
 	}
 
-	effectModuleName := effectutil.FindEffectModuleIdentifier(ctx.SourceFile)
-	dataModuleName := effectutil.FindModuleIdentifier(ctx.SourceFile, "Data")
+	effectModuleName := typeparser.FindEffectModuleIdentifier(ctx.SourceFile)
+	dataModuleName := typeparser.FindModuleIdentifier(ctx.SourceFile, "Data")
 
 	action := ctx.NewRefactorAction(refactor.RefactorAction{
 		Description: "Rewrite to Effect.gen with failures",
@@ -122,11 +121,11 @@ func findTopLevelStatement(node *ast.Node) *ast.Node {
 func buildYieldStarTryPromise(tracker *change.Tracker, expr *ast.Node, effectModuleName string, errorName string) *ast.Node {
 	// try: () => expr
 	tryArrow := tracker.NewArrowFunction(
-		nil, // modifiers
-		nil, // typeParameters
+		nil,                                // modifiers
+		nil,                                // typeParameters
 		tracker.NewNodeList([]*ast.Node{}), // parameters (empty)
-		nil, // returnType
-		nil, // fullSignature
+		nil,                                // returnType
+		nil,                                // fullSignature
 		tracker.NewToken(ast.KindEqualsGreaterThanToken),
 		expr,
 	)

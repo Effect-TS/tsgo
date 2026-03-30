@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/effect-ts/tsgo/internal/completion"
-	"github.com/effect-ts/tsgo/internal/effectutil"
 	"github.com/effect-ts/tsgo/internal/keybuilder"
+	"github.com/effect-ts/tsgo/internal/pluginoptions"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
@@ -38,7 +38,7 @@ func runServiceMapSelfInClasses(ctx *completion.Context) []*lsproto.CompletionIt
 		return nil
 	}
 
-	serviceMapIdentifier := effectutil.FindModuleIdentifier(ctx.SourceFile, "ServiceMap")
+	serviceMapIdentifier := typeparser.FindModuleIdentifier(ctx.SourceFile, "ServiceMap")
 	accessedText := data.AccessedObjectText()
 	isFullyQualified := serviceMapIdentifier == accessedText
 	className := data.ClassNameText()
@@ -109,7 +109,13 @@ func computeServiceTagKey(ch *checker.Checker, sf *ast.SourceFile, className str
 	if effectConfig == nil {
 		return className
 	}
-	keyPatterns := effectConfig.GetKeyPatterns()
+	resolvedOptions := pluginoptions.ResolveEffectPluginOptionsForSourceFile(
+		effectConfig,
+		sf.FileName(),
+		ch.Program().Options().ConfigFilePath,
+		ch.Program().UseCaseSensitiveFileNames(),
+	)
+	keyPatterns := resolvedOptions.GetKeyPatterns()
 
 	key := keybuilder.CreateString(sf.FileName(), packageName, packageDirectory, className, "service", keyPatterns)
 	if key == "" {

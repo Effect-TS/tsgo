@@ -115,6 +115,8 @@ func generateTSConfigSchema() ([]byte, error) {
 	definitions["effectLanguageServicePluginDiagnosticSeverityDefinition"] = diagnosticSeveritySchema()
 	definitions["effectLanguageServicePluginSeverityDefinition"] = severitySchema()
 	definitions["effectLanguageServicePluginKeyPatternDefinition"] = reflectedSchemaForStruct(reflect.TypeOf(etscore.KeyPattern{}))
+	definitions["effectLanguageServicePluginOverrideDefinition"] = effectLanguageServicePluginOverrideSchema()
+	definitions["effectLanguageServicePluginOverrideOptionsDefinition"] = effectLanguageServicePluginOverrideOptionsSchema()
 
 	plugins["items"] = map[string]any{
 		"anyOf": []any{
@@ -150,6 +152,7 @@ func effectLanguageServicePluginSchema() map[string]any {
 func effectLanguageServicePluginOptionsSchema() map[string]any {
 	schema := reflectedSchemaForStruct(reflect.TypeOf(etscore.EffectPluginOptions{}))
 	properties := schema["properties"].(map[string]any)
+	mergeSchemaProperties(properties, reflectedSchemaForStruct(reflect.TypeOf(etscore.ResolvedEffectPluginOptions{})))
 	properties["diagnosticSeverity"] = map[string]any{
 		"$ref":        "#/definitions/effectLanguageServicePluginDiagnosticSeverityDefinition",
 		"description": structFieldTag(reflect.TypeOf(etscore.EffectPluginOptions{}), "DiagnosticSeverity", "schema_description"),
@@ -157,8 +160,52 @@ func effectLanguageServicePluginOptionsSchema() map[string]any {
 	}
 	properties["keyPatterns"] = map[string]any{
 		"type":        "array",
-		"description": structFieldTag(reflect.TypeOf(etscore.EffectPluginOptions{}), "KeyPatterns", "schema_description"),
+		"description": structFieldTag(reflect.TypeOf(etscore.ResolvedEffectPluginOptions{}), "KeyPatterns", "schema_description"),
 		"default":     etscore.DefaultKeyPatterns,
+		"items": map[string]any{
+			"$ref": "#/definitions/effectLanguageServicePluginKeyPatternDefinition",
+		},
+	}
+	properties["overrides"] = map[string]any{
+		"type":        "array",
+		"description": structFieldTag(reflect.TypeOf(etscore.EffectPluginOptions{}), "Overrides", "schema_description"),
+		"items": map[string]any{
+			"$ref": "#/definitions/effectLanguageServicePluginOverrideDefinition",
+		},
+	}
+	return schema
+}
+
+func mergeSchemaProperties(target map[string]any, source map[string]any) {
+	properties, ok := source["properties"].(map[string]any)
+	if !ok {
+		return
+	}
+	for key, value := range properties {
+		target[key] = value
+	}
+}
+
+func effectLanguageServicePluginOverrideSchema() map[string]any {
+	schema := reflectedSchemaForStruct(reflect.TypeOf(etscore.Override{}))
+	properties := schema["properties"].(map[string]any)
+	properties["options"] = map[string]any{
+		"$ref":        "#/definitions/effectLanguageServicePluginOverrideOptionsDefinition",
+		"description": structFieldTag(reflect.TypeOf(etscore.Override{}), "Options", "schema_description"),
+	}
+	return schema
+}
+
+func effectLanguageServicePluginOverrideOptionsSchema() map[string]any {
+	schema := reflectedSchemaForStruct(reflect.TypeOf(etscore.OverrideOptions{}))
+	properties := schema["properties"].(map[string]any)
+	properties["diagnosticSeverity"] = map[string]any{
+		"$ref":        "#/definitions/effectLanguageServicePluginDiagnosticSeverityDefinition",
+		"description": structFieldTag(reflect.TypeOf(etscore.OverrideOptions{}), "DiagnosticSeverity", "schema_description"),
+	}
+	properties["keyPatterns"] = map[string]any{
+		"type":        "array",
+		"description": structFieldTag(reflect.TypeOf(etscore.OverrideOptions{}), "KeyPatterns", "schema_description"),
 		"items": map[string]any{
 			"$ref": "#/definitions/effectLanguageServicePluginKeyPatternDefinition",
 		},

@@ -1,7 +1,6 @@
 package refactors
 
 import (
-	"github.com/effect-ts/tsgo/internal/effectutil"
 	"github.com/effect-ts/tsgo/internal/refactor"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -215,7 +214,7 @@ func runMakeSchemaOpaque(ctx *refactor.Context) []ls.CodeAction {
 	action := ctx.NewRefactorAction(refactor.RefactorAction{
 		Description: "Make Schema opaque",
 		Run: func(tracker *change.Tracker) {
-			schemaId := effectutil.FindModuleIdentifier(ctx.SourceFile, "Schema")
+			schemaId := typeparser.FindModuleIdentifier(ctx.SourceFile, "Schema")
 			origName := info.identifier.AsIdentifier().Text
 			newName := origName + "_"
 

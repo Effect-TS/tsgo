@@ -11,7 +11,6 @@ import (
 	"maps"
 	"regexp"
 
-	"github.com/effect-ts/tsgo/internal/effectutil"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
@@ -57,7 +56,7 @@ func NewStructuralSchemaGen(tracker *change.Tracker, sf *ast.SourceFile, c *chec
 		Tracker:               tracker,
 		SourceFile:            sf,
 		Checker:               c,
-		SchemaIdentifier:      effectutil.FindModuleIdentifier(sf, "Schema"),
+		SchemaIdentifier:      typeparser.FindModuleIdentifier(sf, "Schema"),
 		Version:               version,
 		hoistedSchemas:        make(map[checker.TypeId]hoistedEntry),
 		typeToStatementIndex:  make(map[checker.TypeId]int),

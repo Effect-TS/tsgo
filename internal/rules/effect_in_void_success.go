@@ -19,7 +19,7 @@ var EffectInVoidSuccess = rule.Rule{
 	Description:     "Detects nested Effects in void success channels that may cause unexecuted effects",
 	DefaultSeverity: etscore.SeverityWarning,
 	SupportedEffect: []string{"v3", "v4"},
-	Codes:       []int32{tsdiag.There_is_a_nested_0_in_the_void_success_channel_beware_that_this_could_lead_to_nested_Effect_Effect_that_won_t_be_executed_effect_effectInVoidSuccess.Code()},
+	Codes:           []int32{tsdiag.There_is_a_nested_0_in_the_void_success_channel_beware_that_this_could_lead_to_nested_Effect_Effect_that_won_t_be_executed_effect_effectInVoidSuccess.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		var diags []*ast.Diagnostic
 

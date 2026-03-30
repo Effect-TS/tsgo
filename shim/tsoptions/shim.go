@@ -75,6 +75,7 @@ var InverseJsxOptionMap = tsoptions.InverseJsxOptionMap
 var LibFilesSet = tsoptions.LibFilesSet
 var LibMap = tsoptions.LibMap
 var Libs = tsoptions.Libs
+var MergeCompilerOptionsCallback = tsoptions.MergeCompilerOptionsCallback
 type NameMap = tsoptions.NameMap
 //go:linkname NewParsedCommandLine github.com/microsoft/typescript-go/internal/tsoptions.NewParsedCommandLine
 func NewParsedCommandLine(compilerOptions *core.CompilerOptions, rootFileNames []string, comparePathsOptions tspath.ComparePathsOptions) *tsoptions.ParsedCommandLine
@@ -115,6 +116,8 @@ func ParseTypeAcquisition(key string, value any, allOptions *core.TypeAcquisitio
 func ParseWatchOptions(key string, value any, allOptions *core.WatchOptions) []*ast.Diagnostic
 type ParsedBuildCommandLine = tsoptions.ParsedBuildCommandLine
 type ParsedCommandLine = tsoptions.ParsedCommandLine
+//go:linkname RegisterMergeCompilerOptionsCallback github.com/microsoft/typescript-go/internal/tsoptions.RegisterMergeCompilerOptionsCallback
+func RegisterMergeCompilerOptionsCallback(cb func(targetOptions *core.CompilerOptions, sourceOptions *core.CompilerOptions, rawSource any, sourceConfigPath string, basePath string))
 type SourceOutputAndProjectReference = tsoptions.SourceOutputAndProjectReference
 type TSConfig = tsoptions.TSConfig
 //go:linkname TargetToLibMap github.com/microsoft/typescript-go/internal/tsoptions.TargetToLibMap

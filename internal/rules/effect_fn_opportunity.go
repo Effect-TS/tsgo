@@ -22,7 +22,7 @@ var EffectFnOpportunity = rule.Rule{
 	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Can_be_rewritten_as_a_reusable_function_Colon_0_effect_effectFnOpportunity.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
-		effectConfig := ctx.Checker.Program().Options().Effect
+		effectConfig := ctx.Options
 		matches := AnalyzeEffectFnOpportunity(ctx.Checker, ctx.SourceFile)
 		var diags []*ast.Diagnostic
 		for i := range matches {
@@ -82,7 +82,7 @@ func AnalyzeEffectFnOpportunity(c *checker.Checker, sf *ast.SourceFile) []Effect
 // firstAvailableFixName determines which fix variant would be first (highest priority)
 // for the given match, matching the reference implementation's fix ordering.
 // Returns empty string when no fix variant passes the config filter.
-func firstAvailableFixName(result *typeparser.EffectFnOpportunityResult, effectConfig *etscore.EffectPluginOptions) string {
+func firstAvailableFixName(result *typeparser.EffectFnOpportunityResult, effectConfig *etscore.ResolvedEffectPluginOptions) string {
 	// Priority order matches upstream: withSpan > untraced > noSpan > spanInferred > spanSuggested
 	if effectConfig.EffectFnIncludes(etscore.EffectFnSpan) && result.ExplicitTraceExpression != nil {
 		return "effectFnOpportunity_toEffectFnWithSpan"

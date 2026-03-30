@@ -19,6 +19,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/fixables"
 	"github.com/effect-ts/tsgo/internal/layergraph"
+	"github.com/effect-ts/tsgo/internal/pluginoptions"
 	"github.com/effect-ts/tsgo/internal/refactor"
 	"github.com/effect-ts/tsgo/internal/refactors"
 	"github.com/effect-ts/tsgo/internal/typeparser"
@@ -68,8 +69,20 @@ func getEffectCodeActions(ctx context.Context, fixCtx *ls.CodeFixContext) ([]ls.
 		return nil, nil
 	}
 
+	var options *etscore.ResolvedEffectPluginOptions
+	if fixCtx.Program != nil {
+		if parsedEffectConfig := fixCtx.Program.Options().Effect; parsedEffectConfig != nil {
+			options = pluginoptions.ResolveEffectPluginOptionsForSourceFile(
+				parsedEffectConfig,
+				fixCtx.SourceFile.FileName(),
+				fixCtx.Program.Options().ConfigFilePath,
+				fixCtx.Program.UseCaseSensitiveFileNames(),
+			)
+		}
+	}
+
 	// Create the fixable context that wraps the code-fix request
-	fCtx := fixable.NewContext(ctx, fixCtx)
+	fCtx := fixable.NewContext(ctx, fixCtx, options)
 
 	// Collect actions from all applicable fixables
 	var actions []ls.CodeAction

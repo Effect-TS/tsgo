@@ -34,13 +34,13 @@ var ServiceNotAsClass = rule.Rule{
 // ServiceNotAsClassMatch holds the data needed by both the diagnostic and the quickfix.
 type ServiceNotAsClassMatch struct {
 	SourceFile     *ast.SourceFile
-	Location       core.TextRange // Error range for the call expression
-	SuggestedUsage string         // The full suggested class declaration string for the diagnostic message
-	CallExprNode   *ast.Node      // The call expression node (ServiceMap.Service<...>(...))
-	VariableName   string         // The variable/class name
-	TypeArgsText   string         // Text of original type arguments (e.g. "ConfigService")
-	ArgsText       string         // Text of original call arguments (e.g. `"Config"`)
-	TargetNode     *ast.Node      // The node to replace (variable statement or declaration list)
+	Location       core.TextRange    // Error range for the call expression
+	SuggestedUsage string            // The full suggested class declaration string for the diagnostic message
+	CallExprNode   *ast.Node         // The call expression node (ServiceMap.Service<...>(...))
+	VariableName   string            // The variable/class name
+	TypeArgsText   string            // Text of original type arguments (e.g. "ConfigService")
+	ArgsText       string            // Text of original call arguments (e.g. `"Config"`)
+	TargetNode     *ast.Node         // The node to replace (variable statement or declaration list)
 	ModifierNodes  *ast.ModifierList // Modifiers from the variable statement (e.g. export)
 }
 

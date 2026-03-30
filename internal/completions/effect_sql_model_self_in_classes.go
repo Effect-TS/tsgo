@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/effect-ts/tsgo/internal/completion"
-	"github.com/effect-ts/tsgo/internal/effectutil"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
 )
@@ -34,7 +33,7 @@ func runEffectSqlModelSelfInClasses(ctx *completion.Context) []*lsproto.Completi
 		return nil
 	}
 
-	modelIdentifier := effectutil.FindModuleIdentifierForPackage(ctx.SourceFile, "@effect/sql", "Model")
+	modelIdentifier := typeparser.FindModuleIdentifierForPackage(ctx.SourceFile, "@effect/sql", "Model")
 	accessedText := data.AccessedObjectText()
 	isFullyQualified := modelIdentifier == accessedText
 	className := data.ClassNameText()

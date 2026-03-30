@@ -6,11 +6,10 @@ import (
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/microsoft/typescript-go/shim/ls/autoimport"
 	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
-	"github.com/microsoft/typescript-go/shim/modulespecifiers"
 )
 
 // StylePreferences holds the auto-import style configuration parsed from Effect plugin options.
-type StylePreferences = modulespecifiers.EffectAutoImportStylePreferences
+type StylePreferences = etscore.EffectAutoImportStylePreferences
 
 // PreferencesFromPluginOptions converts Effect plugin options into StylePreferences
 // for the auto-import style policy. Returns zero-value preferences if opts is nil.

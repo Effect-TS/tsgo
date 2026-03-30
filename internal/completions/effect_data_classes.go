@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/effect-ts/tsgo/internal/completion"
-	"github.com/effect-ts/tsgo/internal/effectutil"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
 )
@@ -24,7 +23,7 @@ func runEffectDataClasses(ctx *completion.Context) []*lsproto.CompletionItem {
 		return nil
 	}
 
-	dataIdentifier := effectutil.FindModuleIdentifier(ctx.SourceFile, "Data")
+	dataIdentifier := typeparser.FindModuleIdentifier(ctx.SourceFile, "Data")
 	accessedText := data.AccessedObjectText()
 	isFullyQualified := dataIdentifier == accessedText
 	className := data.ClassNameText()

@@ -3,7 +3,6 @@ package fixables
 import (
 	"fmt"
 
-	"github.com/effect-ts/tsgo/internal/effectutil"
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/rules"
 	"github.com/effect-ts/tsgo/internal/typeparser"
@@ -88,7 +87,7 @@ func runRunEffectInsideEffectFix(ctx *fixable.Context) []ls.CodeAction {
 					}
 				}
 
-				effectModuleIdentifier := effectutil.FindModuleIdentifier(sf, "Effect")
+				effectModuleIdentifier := typeparser.FindModuleIdentifier(sf, "Effect")
 				if supportedEffect == typeparser.EffectMajorV4 {
 					if servicesIdentifier == "" {
 						servicesIdentifier = "effectServices"
@@ -99,7 +98,7 @@ func runRunEffectInsideEffectFix(ctx *fixable.Context) []ls.CodeAction {
 					insertYieldedEffectModuleCall(tracker, sf, block, effectModuleIdentifier, "runtime", runtimeIdentifier)
 				}
 
-				runtimeModuleIdentifier := effectutil.FindModuleIdentifier(sf, "Runtime")
+				runtimeModuleIdentifier := typeparser.FindModuleIdentifier(sf, "Runtime")
 				calleeTokenPos := scanner.GetTokenPosOfNode(m.CalleeNode, sf, false)
 				firstArgPos := m.CallNode.AsCallExpression().Arguments.Nodes[0].Pos()
 				tracker.DeleteRange(sf, core.NewTextRange(calleeTokenPos, firstArgPos))

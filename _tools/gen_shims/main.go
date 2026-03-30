@@ -84,6 +84,7 @@ func main() {
 		"vfs",
 		"vfs/cachedvfs",
 		"vfs/iovfs",
+		"vfs/vfsmatch",
 		"vfs/osvfs",
 	}
 

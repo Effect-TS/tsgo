@@ -25,7 +25,7 @@ var DeterministicKeys = rule.Rule{
 	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Key_should_be_0_effect_deterministicKeys.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
-		matches := AnalyzeDeterministicKeys(ctx.Checker, ctx.SourceFile)
+		matches := AnalyzeDeterministicKeys(ctx.Checker, ctx.SourceFile, ctx.Options)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
 			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Key_should_be_0_effect_deterministicKeys, nil, m.ExpectedKey)
@@ -46,8 +46,7 @@ type DeterministicKeyMatch struct {
 
 // AnalyzeDeterministicKeys finds all class declarations where the key string literal
 // doesn't match the expected deterministic key.
-func AnalyzeDeterministicKeys(c *checker.Checker, sf *ast.SourceFile) []DeterministicKeyMatch {
-	effectConfig := getEffectConfig(c.Program())
+func AnalyzeDeterministicKeys(c *checker.Checker, sf *ast.SourceFile, effectConfig *etscore.ResolvedEffectPluginOptions) []DeterministicKeyMatch {
 	if effectConfig == nil {
 		return nil
 	}
@@ -78,11 +77,6 @@ func AnalyzeDeterministicKeys(c *checker.Checker, sf *ast.SourceFile) []Determin
 	}
 
 	return matches
-}
-
-// getEffectConfig retrieves the Effect plugin configuration from the program's compiler options.
-func getEffectConfig(p checker.Program) *etscore.EffectPluginOptions {
-	return p.Options().Effect
 }
 
 // deterministicKeyMatch holds the matched key info from a class declaration.

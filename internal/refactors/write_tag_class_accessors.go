@@ -3,7 +3,6 @@ package refactors
 import (
 	"strings"
 
-	"github.com/effect-ts/tsgo/internal/effectutil"
 	"github.com/effect-ts/tsgo/internal/refactor"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -132,7 +131,7 @@ func runWriteTagClassAccessors(ctx *refactor.Context) []ls.CodeAction {
 		return nil
 	}
 
-	effectIdentifier := effectutil.FindEffectModuleIdentifier(ctx.SourceFile)
+	effectIdentifier := typeparser.FindEffectModuleIdentifier(ctx.SourceFile)
 	classNameText := scanner.GetTextOfNode(className)
 
 	action := ctx.NewRefactorAction(refactor.RefactorAction{

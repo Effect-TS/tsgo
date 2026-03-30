@@ -6,6 +6,8 @@ package etscheckerhooks
 import (
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/directives"
+	"github.com/effect-ts/tsgo/internal/effectconfigraw"
+	"github.com/effect-ts/tsgo/internal/pluginoptions"
 	"github.com/effect-ts/tsgo/internal/rule"
 	"github.com/effect-ts/tsgo/internal/rules"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -19,6 +21,7 @@ import (
 func init() {
 	// Set the version suffix so that core.Version() includes the Effect version
 	core.SetVersionSuffix("+effect-tsgo." + etscore.EffectVersion)
+	effectconfigraw.Register()
 	// Register the after check source file callback
 	checker.RegisterAfterCheckSourceFileCallback(afterCheckSourceFile)
 }
@@ -44,9 +47,22 @@ func afterCheckSourceFile(c *checker.Checker, sf *ast.SourceFile) {
 	if effectConfig == nil {
 		return
 	}
+	effectiveConfig := pluginoptions.ResolveEffectPluginOptionsForSourceFile(
+		effectConfig,
+		sf.FileName(),
+		c.Program().Options().ConfigFilePath,
+		c.Program().UseCaseSensitiveFileNames(),
+	)
+
+	resolvedSeverity := pluginoptions.ResolveDiagnosticSeverityForFile(
+		effectConfig,
+		sf.FileName(),
+		c.Program().Options().ConfigFilePath,
+		c.Program().UseCaseSensitiveFileNames(),
+	)
 
 	// Check if diagnostics are enabled (nil DiagnosticSeverity map means explicitly disabled)
-	if !effectConfig.IsEnabled() {
+	if !etscore.DiagnosticsEnabled(effectConfig) || resolvedSeverity == nil {
 		return
 	}
 
@@ -66,10 +82,10 @@ func afterCheckSourceFile(c *checker.Checker, sf *ast.SourceFile) {
 	}
 
 	// Collect all diagnostics from enabled rules
-	allDiagnostics := collectDiagnostics(c, sf, effectConfig, directiveSet)
+	allDiagnostics := collectDiagnostics(c, sf, effectConfig, effectiveConfig, resolvedSeverity, directiveSet)
 
 	// Transform and filter diagnostics based on directives
-	finalDiagnostics := transformDiagnostics(allDiagnostics, sf, directiveSet, effectConfig)
+	finalDiagnostics := transformDiagnostics(allDiagnostics, sf, directiveSet, effectConfig, resolvedSeverity)
 
 	// Emit final diagnostics
 	for _, diag := range finalDiagnostics {
@@ -77,14 +93,16 @@ func afterCheckSourceFile(c *checker.Checker, sf *ast.SourceFile) {
 	}
 
 	// Report unused next-line directives
-	reportUnusedDirectives(c, sf, effectDirectives, directiveSet, effectConfig)
+	reportUnusedDirectives(c, sf, effectDirectives, directiveSet, resolvedSeverity)
 }
 
 // collectDiagnostics runs all enabled rules and collects their diagnostics.
 func collectDiagnostics(
 	c *checker.Checker,
 	sf *ast.SourceFile,
-	config *etscore.EffectPluginOptions,
+	globalConfig *etscore.EffectPluginOptions,
+	options *etscore.ResolvedEffectPluginOptions,
+	resolvedSeverity map[string]etscore.Severity,
 	directiveSet *directives.DirectiveSet,
 ) []*RuleDiagnostic {
 	var results []*RuleDiagnostic
@@ -92,13 +110,13 @@ func collectDiagnostics(
 	for i := range rules.All {
 		r := &rules.All[i]
 		// Determine effective severity: use explicit config if set, otherwise rule's default
-		configSeverity, configuredExplicitly := config.GetSeverityOk(r.Name)
+		configSeverity, configuredExplicitly := severityFromMap(resolvedSeverity, r.Name)
 		if !configuredExplicitly {
 			configSeverity = r.DefaultSeverity
 		}
 		// Skip rules that are off, unless a directive in the source file enables them
 		// or skipDisabledOptimization is set (which bypasses this optimization entirely)
-		if !config.SkipDisabledOptimization && configSeverity.IsOff() && !directiveSet.HasEnablingDirective(r.Name) {
+		if !globalConfig.SkipDisabledOptimization && configSeverity.IsOff() && !directiveSet.HasEnablingDirective(r.Name) {
 			continue
 		}
 
@@ -108,7 +126,7 @@ func collectDiagnostics(
 		}
 
 		// Run the rule
-		ctx := rule.NewContext(c, sf, r.DefaultSeverity)
+		ctx := rule.NewContext(c, sf, options, r.DefaultSeverity)
 		diags := r.Run(ctx)
 
 		// Tag each diagnostic with its rule for directive lookup
@@ -131,7 +149,8 @@ func transformDiagnostics(
 	diags []*RuleDiagnostic,
 	sf *ast.SourceFile,
 	directiveSet *directives.DirectiveSet,
-	config *etscore.EffectPluginOptions,
+	globalConfig *etscore.EffectPluginOptions,
+	resolvedSeverity map[string]etscore.Severity,
 ) []*ast.Diagnostic {
 	var results []*ast.Diagnostic
 	lineMap := sf.ECMALineMap()
@@ -141,7 +160,7 @@ func transformDiagnostics(
 		line := scanner.ComputeLineOfPosition(lineMap, rd.Diagnostic.Pos())
 
 		// Get default severity: use explicit config if set, otherwise rule's default
-		defaultSeverity, configuredExplicitly := config.GetSeverityOk(rd.RuleName)
+		defaultSeverity, configuredExplicitly := severityFromMap(resolvedSeverity, rd.RuleName)
 		if !configuredExplicitly {
 			defaultSeverity = rd.Rule.DefaultSeverity
 		}
@@ -164,7 +183,7 @@ func transformDiagnostics(
 
 		// In CLI mode, filter or convert suggestion/message diagnostics
 		if etscore.IsCommandLineMode() {
-			if !config.GetIncludeSuggestionsInTsc() {
+			if !globalConfig.GetIncludeSuggestionsInTsc() {
 				// Drop suggestion and message diagnostics entirely
 				if newCategory == tsdiag.CategorySuggestion || newCategory == tsdiag.CategoryMessage {
 					continue
@@ -211,10 +230,10 @@ func reportUnusedDirectives(
 	sf *ast.SourceFile,
 	allDirectives []directives.Directive,
 	directiveSet *directives.DirectiveSet,
-	config *etscore.EffectPluginOptions,
+	resolvedSeverity map[string]etscore.Severity,
 ) {
 	// Get configured severity, defaulting to warning (per spec)
-	severity, ok := config.GetSeverityOk("unusedDirective")
+	severity, ok := severityFromMap(resolvedSeverity, "unusedDirective")
 	if !ok {
 		severity = etscore.SeverityWarning // default for unusedDirective
 	}
@@ -243,4 +262,12 @@ func reportUnusedDirectives(
 		)
 		c.AddDiagnostic(diag)
 	}
+}
+
+func severityFromMap(resolved map[string]etscore.Severity, ruleName string) (etscore.Severity, bool) {
+	if resolved == nil {
+		return etscore.SeverityError, false
+	}
+	severity, ok := resolved[ruleName]
+	return severity, ok
 }

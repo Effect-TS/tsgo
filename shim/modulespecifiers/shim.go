@@ -14,7 +14,6 @@ type CheckerShape = modulespecifiers.CheckerShape
 func ContainsNodeModules(s string) bool
 //go:linkname CountPathComponents github.com/microsoft/typescript-go/internal/modulespecifiers.CountPathComponents
 func CountPathComponents(path string) int
-type EffectAutoImportStylePreferences = modulespecifiers.EffectAutoImportStylePreferences
 //go:linkname GetAllowedEndingsInPreferredOrder github.com/microsoft/typescript-go/internal/modulespecifiers.GetAllowedEndingsInPreferredOrder
 func GetAllowedEndingsInPreferredOrder(prefs modulespecifiers.UserPreferences, host modulespecifiers.ModuleSpecifierGenerationHost, compilerOptions *core.CompilerOptions, importingSourceFile modulespecifiers.SourceFileForSpecifierGeneration, oldImportSpecifier string, syntaxImpliedNodeFormat core.ResolutionMode) []modulespecifiers.ModuleSpecifierEnding
 //go:linkname GetEachFileNameOfModule github.com/microsoft/typescript-go/internal/modulespecifiers.GetEachFileNameOfModule

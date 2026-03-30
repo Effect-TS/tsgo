@@ -1205,6 +1205,13 @@
                         "description": "When true, suppresses external Mermaid links in hover output.",
                         "type": "boolean"
                       },
+                      "overrides": {
+                        "description": "Ordered per-file diagnostic option overrides.",
+                        "items": {
+                          "$ref": "#/definitions/effectLanguageServicePluginOverrideDefinition"
+                        },
+                        "type": "array"
+                      },
                       "pipeableMinArgCount": {
                         "default": 2,
                         "description": "Minimum number of contiguous pipeable transformations to trigger missedPipeableOpportunity.",
@@ -2138,6 +2145,13 @@
           "description": "When true, suppresses external Mermaid links in hover output.",
           "type": "boolean"
         },
+        "overrides": {
+          "description": "Ordered per-file diagnostic option overrides.",
+          "items": {
+            "$ref": "#/definitions/effectLanguageServicePluginOverrideDefinition"
+          },
+          "type": "array"
+        },
         "pipeableMinArgCount": {
           "default": 2,
           "description": "Minimum number of contiguous pipeable transformations to trigger missedPipeableOpportunity.",
@@ -2172,6 +2186,61 @@
             "follow"
           ],
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "effectLanguageServicePluginOverrideDefinition": {
+      "additionalProperties": false,
+      "properties": {
+        "exclude": {
+          "description": "Files excluded from this override.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "include": {
+          "description": "Files included by this override.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "options": {
+          "$ref": "#/definitions/effectLanguageServicePluginOverrideOptionsDefinition",
+          "description": "Diagnostic option overrides applied when this override matches."
+        }
+      },
+      "type": "object"
+    },
+    "effectLanguageServicePluginOverrideOptionsDefinition": {
+      "additionalProperties": false,
+      "properties": {
+        "allowedDuplicatedPackages": {
+          "description": "Scoped allow-list for duplicatePackage."
+        },
+        "diagnosticSeverity": {
+          "$ref": "#/definitions/effectLanguageServicePluginDiagnosticSeverityDefinition",
+          "description": "Severity overrides applied when this override matches."
+        },
+        "effectFn": {
+          "description": "Scoped override for effectFn quickfix variants.",
+          "uniqueItems": true
+        },
+        "extendedKeyDetection": {
+          "description": "Scoped override for extended deterministic key detection."
+        },
+        "keyPatterns": {
+          "description": "Scoped key pattern configuration for deterministicKeys.",
+          "items": {
+            "$ref": "#/definitions/effectLanguageServicePluginKeyPatternDefinition"
+          },
+          "type": "array"
+        },
+        "pipeableMinArgCount": {
+          "description": "Minimum number of contiguous pipeable transformations to trigger missedPipeableOpportunity.",
+          "minimum": 1
         }
       },
       "type": "object"

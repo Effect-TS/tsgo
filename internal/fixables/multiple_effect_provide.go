@@ -1,9 +1,9 @@
 package fixables
 
 import (
-	"github.com/effect-ts/tsgo/internal/effectutil"
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/rules"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/core"
 	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
@@ -44,7 +44,7 @@ func runMultipleEffectProvideFix(ctx *fixable.Context) []ls.CodeAction {
 		}
 
 		// Resolve the Layer module name from the source file imports
-		layerModuleName := effectutil.FindModuleIdentifier(sf, "Layer")
+		layerModuleName := typeparser.FindModuleIdentifier(sf, "Layer")
 
 		// Capture loop variables for the closure
 		chunk := match.Chunk
