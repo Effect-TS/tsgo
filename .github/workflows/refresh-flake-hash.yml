@@ -2,6 +2,17 @@ name: Refresh Flake Hash
 
 on:
   workflow_dispatch:
+    inputs:
+      target_ref:
+        description: Branch or ref to refresh
+        required: false
+        type: string
+  workflow_call:
+    inputs:
+      target_ref:
+        description: Branch or ref to refresh
+        required: true
+        type: string
   pull_request_target:
     types: [opened, reopened, synchronize]
     paths:
@@ -18,7 +29,7 @@ on:
       - .github/workflows/update-typescript-go.yml
 
 concurrency:
-  group: refresh-flake-hash-${{ github.event.pull_request.number || github.ref }}
+  group: refresh-flake-hash-${{ github.event.pull_request.number || inputs.target_ref || github.ref }}
   cancel-in-progress: true
 
 permissions:
@@ -27,7 +38,7 @@ permissions:
 jobs:
   refresh:
     name: Refresh flake hash
-    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    if: github.event_name != 'pull_request_target' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -46,6 +57,15 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ inputs.target_ref || github.ref_name }}
+          submodules: recursive
+
+      - name: Checkout requested branch
+        if: github.event_name == 'workflow_call'
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ inputs.target_ref }}
           submodules: recursive
 
       - name: Install Nix
@@ -66,5 +86,5 @@ jobs:
           git add flake.nix flake.lock
           git commit -m "Refresh flake vendor hash"
 
-          branch_ref="${GITHUB_HEAD_REF:-${GITHUB_REF_NAME}}"
+          branch_ref="${{ inputs.target_ref || github.event.pull_request.head.ref || github.ref_name }}"
           git push origin "HEAD:${branch_ref}"

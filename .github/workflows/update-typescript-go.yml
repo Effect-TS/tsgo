@@ -58,9 +58,6 @@ jobs:
         with:
           version: 9
 
-      - name: Install Nix
-        uses: DeterminateSystems/determinate-nix-action@v3
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
@@ -73,9 +70,6 @@ jobs:
 
       - name: Regenerate shims and generated files
         run: pnpm setup-repo --ci
-
-      - name: Refresh flake vendor hash
-        run: ./_tools/update-flake-vendor-hash.sh
 
       - name: Record updated TypeScript-Go commit
         id: after
@@ -283,3 +277,16 @@ jobs:
                 summary: success ? 'Generated PR validation passed.' : 'Generated PR validation failed.',
               },
             })
+
+  refresh-flake-hash:
+    name: Refresh flake hash
+    needs:
+      - update
+      - validate-pr
+    if: needs.update.outputs.has_changes == 'true' && needs.validate-pr.result == 'success'
+    permissions:
+      contents: write
+    uses: ./.github/workflows/refresh-flake-hash.yml
+    with:
+      target_ref: chore/update-typescript-go
+    secrets: inherit
