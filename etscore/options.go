@@ -121,25 +121,15 @@ type EffectPluginOptions struct {
 // ResolvedEffectPluginOptions contains Effect plugin options that may vary per
 // source file after applying matching overrides.
 type ResolvedEffectPluginOptions struct {
-	// KeyPatterns configures key pattern formulas for the deterministicKeys rule.
-	// If nil, GetKeyPatterns() returns the defaults.
-	KeyPatterns []KeyPattern `json:"keyPatterns,omitzero" schema_description:"Configures key pattern formulas for the deterministicKeys rule."`
-
-	// ExtendedKeyDetection enables matching constructors with @effect-identifier annotations.
-	ExtendedKeyDetection bool `json:"extendedKeyDetection,omitzero" schema_description:"Enables matching constructors with @effect-identifier annotations." schema_default:"false"`
-
-	// PipeableMinArgCount is the minimum number of contiguous pipeable transformations
-	// required to trigger the missedPipeableOpportunity diagnostic. Default: 2.
-	PipeableMinArgCount int `json:"pipeableMinArgCount,omitzero" schema_description:"Minimum number of contiguous pipeable transformations to trigger missedPipeableOpportunity." schema_default:"2" schema_minimum:"1"`
-
-	// AllowedDuplicatedPackages is a list of package names that are allowed to
-	// have multiple versions without triggering the duplicatePackage diagnostic.
-	AllowedDuplicatedPackages []string `json:"allowedDuplicatedPackages,omitzero" schema_description:"Package names allowed to have multiple versions without triggering duplicatePackage." schema_default:"[]" schema_items_type:"string"`
-
-	// EffectFn controls which effectFnOpportunity quickfix variants are offered.
-	// Valid values: "span", "untraced", "no-span", "inferred-span", "suggested-span".
-	// Default (when empty/nil): ["span"].
-	EffectFn []string `json:"effectFn,omitzero" schema_description:"Controls which effectFnOpportunity quickfix variants are offered." schema_default:"[\"span\"]" schema_items_type:"string" schema_items_enum:"[\"span\",\"untraced\",\"no-span\",\"inferred-span\",\"suggested-span\"]" schema_unique_items:"true"`
+	NamespaceImportPackages   []string
+	BarrelImportPackages      []string
+	ImportAliases             map[string]string
+	TopLevelNamedReexports    TopLevelNamedReexportsMode
+	KeyPatterns               []KeyPattern
+	ExtendedKeyDetection      bool
+	PipeableMinArgCount       int
+	AllowedDuplicatedPackages []string
+	EffectFn                  []string
 }
 
 // EffectPluginDiagnosticsOptions is a compatibility alias for the resolved
@@ -161,14 +151,6 @@ type OverrideOptions struct {
 	ExtendedKeyDetection      *bool               `json:"extendedKeyDetection,omitzero" schema_description:"Scoped override for extended deterministic key detection."`
 	AllowedDuplicatedPackages *[]string           `json:"allowedDuplicatedPackages,omitzero" schema_description:"Scoped allow-list for duplicatePackage." schema_items_type:"string"`
 	EffectFn                  *[]string           `json:"effectFn,omitzero" schema_description:"Scoped override for effectFn quickfix variants." schema_items_type:"string" schema_items_enum:"[\"span\",\"untraced\",\"no-span\",\"inferred-span\",\"suggested-span\"]" schema_unique_items:"true"`
-}
-
-// EffectAutoImportStylePreferences controls Effect-specific auto-import style rewrites.
-type EffectAutoImportStylePreferences struct {
-	NamespaceImportPackages []string
-	BarrelImportPackages    []string
-	ImportAliases           map[string]string
-	FollowTopLevelReexports bool
 }
 
 // TopLevelNamedReexportsMode configures top-level named reexport resolution behavior.

@@ -47,9 +47,17 @@ func init() {
 	// Register the Effect completion enrichment callback
 	ls.RegisterAfterCompletionCallback(afterCompletion)
 	// Register the Effect auto-import style transformer factory
-	autoimport.RegisterAutoImportFixTransformer(func(_ modulespecifiers.UserPreferences, program *compiler.Program) autoimport.FixTransformer {
-		effectStyle := autoimportstyle.PreferencesFromPluginOptions(program.Options().Effect)
-		return autoimportstyle.NewFixTransformer(effectStyle)
+	autoimport.RegisterAutoImportFixTransformer(func(_ modulespecifiers.UserPreferences, program *compiler.Program, importingFile *ast.SourceFile) autoimport.FixTransformer {
+		var resolvedOptions *etscore.ResolvedEffectPluginOptions
+		if effectConfig := program.Options().Effect; effectConfig != nil {
+			resolvedOptions = pluginoptions.ResolveEffectPluginOptionsForSourceFile(
+				effectConfig,
+				importingFile.FileName(),
+				program.Options().ConfigFilePath,
+				program.UseCaseSensitiveFileNames(),
+			)
+		}
+		return autoimportstyle.NewFixTransformer(resolvedOptions)
 	})
 }
 

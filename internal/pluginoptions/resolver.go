@@ -110,6 +110,10 @@ func cloneOptions(config *etscore.EffectPluginOptions) *etscore.ResolvedEffectPl
 	}
 
 	cloned := etscore.ResolvedEffectPluginOptions{
+		NamespaceImportPackages:   append([]string(nil), config.NamespaceImportPackages...),
+		BarrelImportPackages:      append([]string(nil), config.BarrelImportPackages...),
+		ImportAliases:             cloneStringMap(config.ImportAliases),
+		TopLevelNamedReexports:    config.TopLevelNamedReexports,
 		KeyPatterns:               cloneKeyPatterns(config.KeyPatterns),
 		ExtendedKeyDetection:      config.ExtendedKeyDetection,
 		PipeableMinArgCount:       config.PipeableMinArgCount,
@@ -125,6 +129,15 @@ func cloneDiagnosticSeverity(input map[string]etscore.Severity) map[string]etsco
 		return nil
 	}
 	cloned := make(map[string]etscore.Severity, len(input))
+	maps.Copy(cloned, input)
+	return cloned
+}
+
+func cloneStringMap(input map[string]string) map[string]string {
+	if input == nil {
+		return nil
+	}
+	cloned := make(map[string]string, len(input))
 	maps.Copy(cloned, input)
 	return cloned
 }

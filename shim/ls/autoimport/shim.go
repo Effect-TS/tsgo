@@ -48,7 +48,7 @@ const QueryKindCaseInsensitiveMatch = autoimport.QueryKindCaseInsensitiveMatch
 const QueryKindExactMatch = autoimport.QueryKindExactMatch
 const QueryKindWordPrefix = autoimport.QueryKindWordPrefix
 //go:linkname RegisterAutoImportFixTransformer github.com/microsoft/typescript-go/internal/ls/autoimport.RegisterAutoImportFixTransformer
-func RegisterAutoImportFixTransformer(factory func(prefs modulespecifiers.UserPreferences, program *compiler.Program) autoimport.FixTransformer)
+func RegisterAutoImportFixTransformer(factory func(prefs modulespecifiers.UserPreferences, program *compiler.Program, importingFile *ast.SourceFile) autoimport.FixTransformer)
 type Registry = autoimport.Registry
 type RegistryBucket = autoimport.RegistryBucket
 type RegistryChange = autoimport.RegistryChange
