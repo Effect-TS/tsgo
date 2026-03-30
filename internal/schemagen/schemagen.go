@@ -8,7 +8,6 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/effect-ts/tsgo/internal/effectutil"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/ls/change"
@@ -37,7 +36,7 @@ func New(tracker *change.Tracker, sf *ast.SourceFile, version typeparser.EffectM
 	return &SchemaGen{
 		Tracker:          tracker,
 		SourceFile:       sf,
-		SchemaIdentifier: effectutil.FindModuleIdentifier(sf, "Schema"),
+		SchemaIdentifier: typeparser.FindModuleIdentifier(sf, "Schema"),
 		Version:          version,
 	}
 }
@@ -377,7 +376,7 @@ func (g *SchemaGen) entityNameToDataTypeName(typeName *ast.Node) string {
 		leftName := scanner.GetTextOfNode(qn.Left)
 		// Check if leftName is an imported module identifier for a known module
 		for _, moduleName := range []string{"Option", "Either", "Chunk", "Duration"} {
-			imported := effectutil.FindModuleIdentifier(g.SourceFile, moduleName)
+			imported := typeparser.FindModuleIdentifier(g.SourceFile, moduleName)
 			if leftName == imported && rightName == moduleName {
 				return moduleName
 			}

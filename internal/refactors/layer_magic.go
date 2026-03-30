@@ -4,7 +4,6 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/effect-ts/tsgo/internal/effectutil"
 	"github.com/effect-ts/tsgo/internal/layergraph"
 	"github.com/effect-ts/tsgo/internal/refactor"
 	"github.com/effect-ts/tsgo/internal/typeparser"
@@ -34,7 +33,7 @@ func runLayerMagic(ctx *refactor.Context) []ls.CodeAction {
 	}
 	defer done()
 
-	layerIdentifier := effectutil.FindModuleIdentifier(ctx.SourceFile, "Layer")
+	layerIdentifier := typeparser.FindModuleIdentifier(ctx.SourceFile, "Layer")
 
 	// Collect ancestor nodes from the token up to the source file.
 	var ancestors []*ast.Node

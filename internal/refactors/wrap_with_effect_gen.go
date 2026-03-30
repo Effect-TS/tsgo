@@ -1,7 +1,6 @@
 package refactors
 
 import (
-	"github.com/effect-ts/tsgo/internal/effectutil"
 	"github.com/effect-ts/tsgo/internal/refactor"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -66,7 +65,7 @@ func runWrapWithEffectGen(ctx *refactor.Context) []ls.CodeAction {
 		return nil
 	}
 
-	effectModuleName := effectutil.FindEffectModuleIdentifier(ctx.SourceFile)
+	effectModuleName := typeparser.FindEffectModuleIdentifier(ctx.SourceFile)
 
 	action := ctx.NewRefactorAction(refactor.RefactorAction{
 		Description: "Wrap with Effect.gen",

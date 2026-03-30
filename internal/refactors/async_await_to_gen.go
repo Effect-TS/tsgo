@@ -1,7 +1,6 @@
 package refactors
 
 import (
-	"github.com/effect-ts/tsgo/internal/effectutil"
 	"github.com/effect-ts/tsgo/internal/refactor"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -29,7 +28,7 @@ func runAsyncAwaitToGen(ctx *refactor.Context) []ls.CodeAction {
 		return nil
 	}
 
-	effectModuleName := effectutil.FindEffectModuleIdentifier(ctx.SourceFile)
+	effectModuleName := typeparser.FindEffectModuleIdentifier(ctx.SourceFile)
 
 	action := ctx.NewRefactorAction(refactor.RefactorAction{
 		Description: "Rewrite to Effect.gen",
@@ -210,11 +209,11 @@ func containsAwaitExpression(node *ast.Node) bool {
 func buildYieldStarPromise(tracker *change.Tracker, expr *ast.Node, effectModuleName string) *ast.Node {
 	// () => expr
 	arrowFn := tracker.NewArrowFunction(
-		nil, // modifiers
-		nil, // typeParameters
+		nil,                                // modifiers
+		nil,                                // typeParameters
 		tracker.NewNodeList([]*ast.Node{}), // parameters (empty)
-		nil, // returnType
-		nil, // fullSignature
+		nil,                                // returnType
+		nil,                                // fullSignature
 		tracker.NewToken(ast.KindEqualsGreaterThanToken),
 		expr,
 	)
@@ -250,13 +249,13 @@ func buildEffectGenCall(tracker *change.Tracker, body *ast.Node, effectModuleNam
 
 	// function*() { ... }
 	genFn := tracker.NewFunctionExpression(
-		nil,                                    // modifiers
+		nil,                                     // modifiers
 		tracker.NewToken(ast.KindAsteriskToken), // asterisk (generator)
-		nil,                                    // name
-		nil,                                    // typeParameters
-		tracker.NewNodeList([]*ast.Node{}),     // parameters (empty)
-		nil,                                    // returnType
-		nil,                                    // fullSignature
+		nil,                                     // name
+		nil,                                     // typeParameters
+		tracker.NewNodeList([]*ast.Node{}),      // parameters (empty)
+		nil,                                     // returnType
+		nil,                                     // fullSignature
 		blockBody,
 	)
 

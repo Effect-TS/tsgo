@@ -1,9 +1,11 @@
-package etscore
+package etscore_test
 
 import (
 	"reflect"
 	"testing"
 
+	"github.com/effect-ts/tsgo/etscore"
+	"github.com/effect-ts/tsgo/internal/pluginoptions"
 	"github.com/microsoft/typescript-go/shim/collections"
 )
 
@@ -27,8 +29,8 @@ func makePlugins(maps ...*collections.OrderedMap[string, any]) []any {
 
 func TestParseFromPlugins_ExitCodeDefaults(t *testing.T) {
 	// Plugin with just the name — no exit-code keys present
-	plugins := makePlugins(makePluginMap("name", EffectPluginName))
-	opts := ParseFromPlugins(plugins)
+	plugins := makePlugins(makePluginMap("name", etscore.EffectPluginName))
+	opts := etscore.ParseFromPlugins(plugins)
 	if opts == nil {
 		t.Fatal("expected non-nil options")
 	}
@@ -40,13 +42,122 @@ func TestParseFromPlugins_ExitCodeDefaults(t *testing.T) {
 	}
 }
 
+func TestParseFromPlugins_Overrides(t *testing.T) {
+	plugins := makePlugins(makePluginMap(
+		"name", etscore.EffectPluginName,
+		"overrides", []any{
+			makePluginMap(
+				"include", []any{"src/**/*.ts"},
+				"exclude", []any{"src/**/*.test.ts"},
+				"options", makePluginMap(
+					"diagnosticSeverity", makePluginMap(
+						"deterministicKeys", "warning",
+					),
+					"pipeableMinArgCount", float64(3),
+					"extendedKeyDetection", true,
+					"allowedDuplicatedPackages", []any{"effect"},
+				),
+			),
+		},
+	))
+
+	opts := etscore.ParseFromPlugins(plugins)
+	if opts == nil {
+		t.Fatal("expected non-nil options")
+	}
+	if len(opts.Overrides) != 1 {
+		t.Fatalf("Overrides length = %d, want 1", len(opts.Overrides))
+	}
+	override := opts.Overrides[0]
+	if got, want := override.Include, []string{"src/**/*.ts"}; !reflect.DeepEqual(got, want) {
+		t.Errorf("Include = %v, want %v", got, want)
+	}
+	if got, want := override.Exclude, []string{"src/**/*.test.ts"}; !reflect.DeepEqual(got, want) {
+		t.Errorf("Exclude = %v, want %v", got, want)
+	}
+	if got := override.Options.DiagnosticSeverity["deterministicKeys"]; got != etscore.SeverityWarning {
+		t.Errorf("Diagnostics[deterministicKeys] = %v, want %v", got, etscore.SeverityWarning)
+	}
+	if override.Options.PipeableMinArgCount == nil || *override.Options.PipeableMinArgCount != 3 {
+		t.Fatalf("PipeableMinArgCount = %v, want 3", override.Options.PipeableMinArgCount)
+	}
+	if override.Options.ExtendedKeyDetection == nil || !*override.Options.ExtendedKeyDetection {
+		t.Fatalf("ExtendedKeyDetection = %v, want true", override.Options.ExtendedKeyDetection)
+	}
+	if override.Options.AllowedDuplicatedPackages == nil || !reflect.DeepEqual(*override.Options.AllowedDuplicatedPackages, []string{"effect"}) {
+		t.Fatalf("AllowedDuplicatedPackages = %v, want [effect]", override.Options.AllowedDuplicatedPackages)
+	}
+}
+
+func TestResolveForFile_AppliesMatchingScopesInOrder(t *testing.T) {
+	opts := &etscore.EffectPluginOptions{
+		Diagnostics:         true,
+		DiagnosticSeverity:  map[string]etscore.Severity{"deterministicKeys": etscore.SeverityError},
+		PipeableMinArgCount: 2,
+		Overrides: []etscore.Override{
+			{
+				Include: []string{"src/**/*.ts"},
+				Options: etscore.OverrideOptions{
+					DiagnosticSeverity:  map[string]etscore.Severity{"deterministicKeys": etscore.SeverityWarning},
+					PipeableMinArgCount: intPtr(3),
+				},
+			},
+			{
+				Include: []string{"src/legacy/**/*.ts"},
+				Options: etscore.OverrideOptions{
+					DiagnosticSeverity: map[string]etscore.Severity{"deterministicKeys": etscore.SeverityOff},
+				},
+			},
+		},
+	}
+
+	resolvedSeverity := pluginoptions.ResolveDiagnosticSeverityForFile(opts, "/repo/src/legacy/example.ts", "/repo/tsconfig.json", true)
+	effective := pluginoptions.ResolveEffectPluginOptionsForSourceFile(opts, "/repo/src/legacy/example.ts", "/repo/tsconfig.json", true)
+	if got := resolvedSeverity["deterministicKeys"]; got != etscore.SeverityOff {
+		t.Errorf("deterministicKeys severity = %v, want %v", got, etscore.SeverityOff)
+	}
+	if got := effective.GetPipeableMinArgCount(); got != 3 {
+		t.Errorf("PipeableMinArgCount = %d, want 3", got)
+	}
+}
+
+func TestResolveForFile_ExcludeOnlyAffectsCurrentScope(t *testing.T) {
+	opts := &etscore.EffectPluginOptions{
+		Diagnostics:        true,
+		DiagnosticSeverity: map[string]etscore.Severity{"deterministicKeys": etscore.SeverityError},
+		Overrides: []etscore.Override{
+			{
+				Exclude: []string{"generated/**/*.ts"},
+				Options: etscore.OverrideOptions{
+					DiagnosticSeverity: map[string]etscore.Severity{"deterministicKeys": etscore.SeverityWarning},
+				},
+			},
+			{
+				Include: []string{"generated/**/*.ts"},
+				Options: etscore.OverrideOptions{
+					DiagnosticSeverity: map[string]etscore.Severity{"deterministicKeys": etscore.SeverityOff},
+				},
+			},
+		},
+	}
+
+	resolvedSeverity := pluginoptions.ResolveDiagnosticSeverityForFile(opts, "/repo/generated/example.ts", "/repo/tsconfig.json", true)
+	if got := resolvedSeverity["deterministicKeys"]; got != etscore.SeverityOff {
+		t.Errorf("deterministicKeys severity = %v, want %v", got, etscore.SeverityOff)
+	}
+}
+
+func intPtr(value int) *int {
+	return &value
+}
+
 func TestParseFromPlugins_ExitCodeExplicitTrue(t *testing.T) {
 	plugins := makePlugins(makePluginMap(
-		"name", EffectPluginName,
+		"name", etscore.EffectPluginName,
 		"ignoreEffectSuggestionsInTscExitCode", true,
 		"ignoreEffectWarningsInTscExitCode", true,
 	))
-	opts := ParseFromPlugins(plugins)
+	opts := etscore.ParseFromPlugins(plugins)
 	if opts == nil {
 		t.Fatal("expected non-nil options")
 	}
@@ -60,11 +171,11 @@ func TestParseFromPlugins_ExitCodeExplicitTrue(t *testing.T) {
 
 func TestParseFromPlugins_ExitCodeExplicitFalse(t *testing.T) {
 	plugins := makePlugins(makePluginMap(
-		"name", EffectPluginName,
+		"name", etscore.EffectPluginName,
 		"ignoreEffectSuggestionsInTscExitCode", false,
 		"ignoreEffectWarningsInTscExitCode", false,
 	))
-	opts := ParseFromPlugins(plugins)
+	opts := etscore.ParseFromPlugins(plugins)
 	if opts == nil {
 		t.Fatal("expected non-nil options")
 	}
@@ -79,11 +190,11 @@ func TestParseFromPlugins_ExitCodeExplicitFalse(t *testing.T) {
 func TestParseFromPlugins_ExitCodeNonBooleanFallsBackToDefault(t *testing.T) {
 	// Non-boolean values should fall back to defaults
 	plugins := makePlugins(makePluginMap(
-		"name", EffectPluginName,
+		"name", etscore.EffectPluginName,
 		"ignoreEffectSuggestionsInTscExitCode", "yes",
 		"ignoreEffectWarningsInTscExitCode", 42,
 	))
-	opts := ParseFromPlugins(plugins)
+	opts := etscore.ParseFromPlugins(plugins)
 	if opts == nil {
 		t.Fatal("expected non-nil options")
 	}
@@ -96,8 +207,8 @@ func TestParseFromPlugins_ExitCodeNonBooleanFallsBackToDefault(t *testing.T) {
 }
 
 func TestParseFromPlugins_IncludeSuggestionsInTscDefault(t *testing.T) {
-	plugins := makePlugins(makePluginMap("name", EffectPluginName))
-	opts := ParseFromPlugins(plugins)
+	plugins := makePlugins(makePluginMap("name", etscore.EffectPluginName))
+	opts := etscore.ParseFromPlugins(plugins)
 	if opts == nil {
 		t.Fatal("expected non-nil options")
 	}
@@ -126,7 +237,7 @@ func TestParseFromPlugins_IncludeSuggestionsInTscDefault(t *testing.T) {
 
 func TestParseFromPlugins_FeatureFlagsExplicitFalse(t *testing.T) {
 	plugins := makePlugins(makePluginMap(
-		"name", EffectPluginName,
+		"name", etscore.EffectPluginName,
 		"refactors", false,
 		"diagnostics", false,
 		"quickinfo", false,
@@ -134,7 +245,7 @@ func TestParseFromPlugins_FeatureFlagsExplicitFalse(t *testing.T) {
 		"goto", false,
 		"renames", false,
 	))
-	opts := ParseFromPlugins(plugins)
+	opts := etscore.ParseFromPlugins(plugins)
 	if opts == nil {
 		t.Fatal("expected non-nil options")
 	}
@@ -160,10 +271,10 @@ func TestParseFromPlugins_FeatureFlagsExplicitFalse(t *testing.T) {
 
 func TestParseFromPlugins_IncludeSuggestionsInTscExplicitTrue(t *testing.T) {
 	plugins := makePlugins(makePluginMap(
-		"name", EffectPluginName,
+		"name", etscore.EffectPluginName,
 		"includeSuggestionsInTsc", true,
 	))
-	opts := ParseFromPlugins(plugins)
+	opts := etscore.ParseFromPlugins(plugins)
 	if opts == nil {
 		t.Fatal("expected non-nil options")
 	}
@@ -174,10 +285,10 @@ func TestParseFromPlugins_IncludeSuggestionsInTscExplicitTrue(t *testing.T) {
 
 func TestParseFromPlugins_IncludeSuggestionsInTscExplicitFalse(t *testing.T) {
 	plugins := makePlugins(makePluginMap(
-		"name", EffectPluginName,
+		"name", etscore.EffectPluginName,
 		"includeSuggestionsInTsc", false,
 	))
-	opts := ParseFromPlugins(plugins)
+	opts := etscore.ParseFromPlugins(plugins)
 	if opts == nil {
 		t.Fatal("expected non-nil options")
 	}
@@ -188,10 +299,10 @@ func TestParseFromPlugins_IncludeSuggestionsInTscExplicitFalse(t *testing.T) {
 
 func TestParseFromPlugins_IncludeSuggestionsInTscNonBooleanFallback(t *testing.T) {
 	plugins := makePlugins(makePluginMap(
-		"name", EffectPluginName,
+		"name", etscore.EffectPluginName,
 		"includeSuggestionsInTsc", "yes",
 	))
-	opts := ParseFromPlugins(plugins)
+	opts := etscore.ParseFromPlugins(plugins)
 	if opts == nil {
 		t.Fatal("expected non-nil options")
 	}
@@ -201,7 +312,7 @@ func TestParseFromPlugins_IncludeSuggestionsInTscNonBooleanFallback(t *testing.T
 }
 
 func TestGetIncludeSuggestionsInTsc_NilReceiver(t *testing.T) {
-	var opts *EffectPluginOptions
+	var opts *etscore.EffectPluginOptions
 	if !opts.GetIncludeSuggestionsInTsc() {
 		t.Error("expected GetIncludeSuggestionsInTsc() on nil to return true")
 	}
@@ -220,7 +331,7 @@ func TestGetMermaidBaseURL(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			opts := &EffectPluginOptions{MermaidProvider: tt.provider}
+			opts := &etscore.EffectPluginOptions{MermaidProvider: tt.provider}
 			if got := opts.GetMermaidBaseURL(); got != tt.want {
 				t.Errorf("GetMermaidBaseURL() = %q, want %q", got, tt.want)
 			}
@@ -229,7 +340,7 @@ func TestGetMermaidBaseURL(t *testing.T) {
 }
 
 func TestGetMermaidBaseURL_Nil(t *testing.T) {
-	var opts *EffectPluginOptions
+	var opts *etscore.EffectPluginOptions
 	if got := opts.GetMermaidBaseURL(); got != "https://mermaid.live/edit#" {
 		t.Errorf("GetMermaidBaseURL() on nil = %q, want default", got)
 	}
@@ -237,7 +348,7 @@ func TestGetMermaidBaseURL_Nil(t *testing.T) {
 
 func TestGetLayerGraphFollowDepth(t *testing.T) {
 	// Default (zero value)
-	opts := &EffectPluginOptions{}
+	opts := &etscore.EffectPluginOptions{}
 	if got := opts.GetLayerGraphFollowDepth(); got != 0 {
 		t.Errorf("GetLayerGraphFollowDepth() = %d, want 0", got)
 	}
@@ -249,7 +360,7 @@ func TestGetLayerGraphFollowDepth(t *testing.T) {
 	}
 
 	// Nil receiver
-	var nilOpts *EffectPluginOptions
+	var nilOpts *etscore.EffectPluginOptions
 	if got := nilOpts.GetLayerGraphFollowDepth(); got != 0 {
 		t.Errorf("GetLayerGraphFollowDepth() on nil = %d, want 0", got)
 	}
@@ -257,10 +368,10 @@ func TestGetLayerGraphFollowDepth(t *testing.T) {
 
 func TestParseFromPlugins_MermaidProvider(t *testing.T) {
 	plugins := makePlugins(makePluginMap(
-		"name", EffectPluginName,
+		"name", etscore.EffectPluginName,
 		"mermaidProvider", "mermaid.com",
 	))
-	opts := ParseFromPlugins(plugins)
+	opts := etscore.ParseFromPlugins(plugins)
 	if opts == nil {
 		t.Fatal("expected non-nil options")
 	}
@@ -271,10 +382,10 @@ func TestParseFromPlugins_MermaidProvider(t *testing.T) {
 
 func TestParseFromPlugins_NoExternal(t *testing.T) {
 	plugins := makePlugins(makePluginMap(
-		"name", EffectPluginName,
+		"name", etscore.EffectPluginName,
 		"noExternal", true,
 	))
-	opts := ParseFromPlugins(plugins)
+	opts := etscore.ParseFromPlugins(plugins)
 	if opts == nil {
 		t.Fatal("expected non-nil options")
 	}
@@ -285,10 +396,10 @@ func TestParseFromPlugins_NoExternal(t *testing.T) {
 
 func TestParseFromPlugins_LayerGraphFollowDepth(t *testing.T) {
 	plugins := makePlugins(makePluginMap(
-		"name", EffectPluginName,
+		"name", etscore.EffectPluginName,
 		"layerGraphFollowDepth", float64(2),
 	))
-	opts := ParseFromPlugins(plugins)
+	opts := etscore.ParseFromPlugins(plugins)
 	if opts == nil {
 		t.Fatal("expected non-nil options")
 	}
@@ -299,8 +410,8 @@ func TestParseFromPlugins_LayerGraphFollowDepth(t *testing.T) {
 
 func TestParseFromPlugins_NewOptionsDefaults(t *testing.T) {
 	// Plugin with just the name — new options should have zero-value defaults
-	plugins := makePlugins(makePluginMap("name", EffectPluginName))
-	opts := ParseFromPlugins(plugins)
+	plugins := makePlugins(makePluginMap("name", etscore.EffectPluginName))
+	opts := etscore.ParseFromPlugins(plugins)
 	if opts == nil {
 		t.Fatal("expected non-nil options")
 	}
@@ -320,14 +431,14 @@ func TestParseFromPlugins_NewOptionsDefaults(t *testing.T) {
 
 func TestParseFromPlugins_AllowedDuplicatedPackages(t *testing.T) {
 	plugins := makePlugins(makePluginMap(
-		"name", EffectPluginName,
+		"name", etscore.EffectPluginName,
 		"allowedDuplicatedPackages", []any{"effect", "@effect/platform"},
 	))
-	opts := ParseFromPlugins(plugins)
+	opts := etscore.ParseFromPlugins(plugins)
 	if opts == nil {
 		t.Fatal("expected non-nil options")
 	}
-	got := opts.GetAllowedDuplicatedPackages()
+	got := opts.AllowedDuplicatedPackages
 	if len(got) != 2 {
 		t.Fatalf("AllowedDuplicatedPackages length = %d, want 2", len(got))
 	}
@@ -339,15 +450,8 @@ func TestParseFromPlugins_AllowedDuplicatedPackages(t *testing.T) {
 	}
 }
 
-func TestGetAllowedDuplicatedPackages_Nil(t *testing.T) {
-	var opts *EffectPluginOptions
-	if got := opts.GetAllowedDuplicatedPackages(); got != nil {
-		t.Errorf("GetAllowedDuplicatedPackages() on nil = %v, want nil", got)
-	}
-}
-
 func TestAutoImportStyleDefaults(t *testing.T) {
-	opts := &EffectPluginOptions{}
+	opts := &etscore.EffectPluginOptions{}
 
 	if got := opts.GetNamespaceImportPackages(); len(got) != 0 {
 		t.Errorf("GetNamespaceImportPackages() = %v, want empty list", got)
@@ -358,13 +462,13 @@ func TestAutoImportStyleDefaults(t *testing.T) {
 	if got := opts.GetImportAliases(); len(got) != 0 {
 		t.Errorf("GetImportAliases() = %v, want empty map", got)
 	}
-	if got := opts.GetTopLevelNamedReexports(); got != TopLevelNamedReexportsIgnore {
-		t.Errorf("GetTopLevelNamedReexports() = %q, want %q", got, TopLevelNamedReexportsIgnore)
+	if got := opts.GetTopLevelNamedReexports(); got != etscore.TopLevelNamedReexportsIgnore {
+		t.Errorf("GetTopLevelNamedReexports() = %q, want %q", got, etscore.TopLevelNamedReexportsIgnore)
 	}
 }
 
 func TestAutoImportStyleNormalization(t *testing.T) {
-	opts := &EffectPluginOptions{
+	opts := &etscore.EffectPluginOptions{
 		NamespaceImportPackages: []string{"Effect", " @Effect/Platform ", ""},
 		BarrelImportPackages:    []string{"@Effect/Schema", " EFFECT/SQL "},
 		ImportAliases: map[string]string{
@@ -372,7 +476,7 @@ func TestAutoImportStyleNormalization(t *testing.T) {
 			" @Effect/Platform ": "Platform",
 			"":                   "Invalid",
 		},
-		TopLevelNamedReexports: TopLevelNamedReexportsMode("FOLLOW"),
+		TopLevelNamedReexports: etscore.TopLevelNamedReexportsMode("FOLLOW"),
 	}
 
 	if got, want := opts.GetNamespaceImportPackages(), []string{"effect", "@effect/platform"}; !reflect.DeepEqual(got, want) {
@@ -384,21 +488,21 @@ func TestAutoImportStyleNormalization(t *testing.T) {
 	if got, want := opts.GetImportAliases(), map[string]string{"effect": "E", "@effect/platform": "Platform"}; !reflect.DeepEqual(got, want) {
 		t.Errorf("GetImportAliases() = %v, want %v", got, want)
 	}
-	if got := opts.GetTopLevelNamedReexports(); got != TopLevelNamedReexportsFollow {
-		t.Errorf("GetTopLevelNamedReexports() = %q, want %q", got, TopLevelNamedReexportsFollow)
+	if got := opts.GetTopLevelNamedReexports(); got != etscore.TopLevelNamedReexportsFollow {
+		t.Errorf("GetTopLevelNamedReexports() = %q, want %q", got, etscore.TopLevelNamedReexportsFollow)
 	}
 }
 
 func TestTopLevelNamedReexportsInvalidFallback(t *testing.T) {
-	opts := &EffectPluginOptions{TopLevelNamedReexports: TopLevelNamedReexportsMode("invalid")}
-	if got := opts.GetTopLevelNamedReexports(); got != TopLevelNamedReexportsIgnore {
-		t.Errorf("GetTopLevelNamedReexports() = %q, want %q", got, TopLevelNamedReexportsIgnore)
+	opts := &etscore.EffectPluginOptions{TopLevelNamedReexports: etscore.TopLevelNamedReexportsMode("invalid")}
+	if got := opts.GetTopLevelNamedReexports(); got != etscore.TopLevelNamedReexportsIgnore {
+		t.Errorf("GetTopLevelNamedReexports() = %q, want %q", got, etscore.TopLevelNamedReexportsIgnore)
 	}
 }
 
 func TestParseFromPlugins_AutoImportStyleDefaults(t *testing.T) {
-	plugins := makePlugins(makePluginMap("name", EffectPluginName))
-	opts := ParseFromPlugins(plugins)
+	plugins := makePlugins(makePluginMap("name", etscore.EffectPluginName))
+	opts := etscore.ParseFromPlugins(plugins)
 	if opts == nil {
 		t.Fatal("expected non-nil options")
 	}
@@ -412,14 +516,14 @@ func TestParseFromPlugins_AutoImportStyleDefaults(t *testing.T) {
 	if got := opts.GetImportAliases(); len(got) != 0 {
 		t.Errorf("GetImportAliases() = %v, want empty map", got)
 	}
-	if got := opts.GetTopLevelNamedReexports(); got != TopLevelNamedReexportsIgnore {
-		t.Errorf("GetTopLevelNamedReexports() = %q, want %q", got, TopLevelNamedReexportsIgnore)
+	if got := opts.GetTopLevelNamedReexports(); got != etscore.TopLevelNamedReexportsIgnore {
+		t.Errorf("GetTopLevelNamedReexports() = %q, want %q", got, etscore.TopLevelNamedReexportsIgnore)
 	}
 }
 
 func TestParseFromPlugins_AutoImportStyleValidValues(t *testing.T) {
 	plugins := makePlugins(makePluginMap(
-		"name", EffectPluginName,
+		"name", etscore.EffectPluginName,
 		"namespaceImportPackages", []any{"Effect", " @Effect/Platform "},
 		"barrelImportPackages", []any{"@Effect/Schema", " EFFECT/SQL "},
 		"importAliases", makePluginMap(
@@ -428,7 +532,7 @@ func TestParseFromPlugins_AutoImportStyleValidValues(t *testing.T) {
 		),
 		"topLevelNamedReexports", "FOLLOW",
 	))
-	opts := ParseFromPlugins(plugins)
+	opts := etscore.ParseFromPlugins(plugins)
 	if opts == nil {
 		t.Fatal("expected non-nil options")
 	}
@@ -442,14 +546,14 @@ func TestParseFromPlugins_AutoImportStyleValidValues(t *testing.T) {
 	if got, want := opts.GetImportAliases(), map[string]string{"effect": "E", "@effect/platform": "Platform"}; !reflect.DeepEqual(got, want) {
 		t.Errorf("GetImportAliases() = %v, want %v", got, want)
 	}
-	if got := opts.GetTopLevelNamedReexports(); got != TopLevelNamedReexportsFollow {
-		t.Errorf("GetTopLevelNamedReexports() = %q, want %q", got, TopLevelNamedReexportsFollow)
+	if got := opts.GetTopLevelNamedReexports(); got != etscore.TopLevelNamedReexportsFollow {
+		t.Errorf("GetTopLevelNamedReexports() = %q, want %q", got, etscore.TopLevelNamedReexportsFollow)
 	}
 }
 
 func TestParseFromPlugins_AutoImportStyleInvalidFallback(t *testing.T) {
 	plugins := makePlugins(makePluginMap(
-		"name", EffectPluginName,
+		"name", etscore.EffectPluginName,
 		"namespaceImportPackages", []any{"effect", 1},
 		"barrelImportPackages", "not-an-array",
 		"importAliases", makePluginMap(
@@ -458,7 +562,7 @@ func TestParseFromPlugins_AutoImportStyleInvalidFallback(t *testing.T) {
 		),
 		"topLevelNamedReexports", "invalid",
 	))
-	opts := ParseFromPlugins(plugins)
+	opts := etscore.ParseFromPlugins(plugins)
 	if opts == nil {
 		t.Fatal("expected non-nil options")
 	}
@@ -472,21 +576,21 @@ func TestParseFromPlugins_AutoImportStyleInvalidFallback(t *testing.T) {
 	if got := opts.GetImportAliases(); len(got) != 0 {
 		t.Errorf("GetImportAliases() = %v, want empty map for mixed map fallback", got)
 	}
-	if got := opts.GetTopLevelNamedReexports(); got != TopLevelNamedReexportsIgnore {
-		t.Errorf("GetTopLevelNamedReexports() = %q, want %q for invalid enum fallback", got, TopLevelNamedReexportsIgnore)
+	if got := opts.GetTopLevelNamedReexports(); got != etscore.TopLevelNamedReexportsIgnore {
+		t.Errorf("GetTopLevelNamedReexports() = %q, want %q for invalid enum fallback", got, etscore.TopLevelNamedReexportsIgnore)
 	}
 }
 
 func TestParseFromPlugins_AutoImportStyleWrongTypes(t *testing.T) {
 	// All fields have completely wrong types (not arrays/maps/strings)
 	plugins := makePlugins(makePluginMap(
-		"name", EffectPluginName,
+		"name", etscore.EffectPluginName,
 		"namespaceImportPackages", 42,
 		"barrelImportPackages", 42,
 		"importAliases", "not-a-map",
 		"topLevelNamedReexports", 42,
 	))
-	opts := ParseFromPlugins(plugins)
+	opts := etscore.ParseFromPlugins(plugins)
 	if opts == nil {
 		t.Fatal("expected non-nil options")
 	}
@@ -507,10 +611,10 @@ func TestParseFromPlugins_AutoImportStyleWrongTypes(t *testing.T) {
 
 func TestParseFromPlugins_TopLevelNamedReexportsIgnoreCase(t *testing.T) {
 	plugins := makePlugins(makePluginMap(
-		"name", EffectPluginName,
+		"name", etscore.EffectPluginName,
 		"topLevelNamedReexports", "IGNORE",
 	))
-	opts := ParseFromPlugins(plugins)
+	opts := etscore.ParseFromPlugins(plugins)
 	if opts == nil {
 		t.Fatal("expected non-nil options")
 	}
@@ -520,7 +624,7 @@ func TestParseFromPlugins_TopLevelNamedReexportsIgnoreCase(t *testing.T) {
 }
 
 func TestAutoImportStyleGetters_NilReceiver(t *testing.T) {
-	var opts *EffectPluginOptions
+	var opts *etscore.EffectPluginOptions
 
 	if got := opts.GetNamespaceImportPackages(); len(got) != 0 {
 		t.Errorf("GetNamespaceImportPackages() on nil = %v, want empty list", got)
@@ -531,14 +635,14 @@ func TestAutoImportStyleGetters_NilReceiver(t *testing.T) {
 	if got := opts.GetImportAliases(); len(got) != 0 {
 		t.Errorf("GetImportAliases() on nil = %v, want empty map", got)
 	}
-	if got := opts.GetTopLevelNamedReexports(); got != TopLevelNamedReexportsIgnore {
-		t.Errorf("GetTopLevelNamedReexports() on nil = %q, want %q", got, TopLevelNamedReexportsIgnore)
+	if got := opts.GetTopLevelNamedReexports(); got != etscore.TopLevelNamedReexportsIgnore {
+		t.Errorf("GetTopLevelNamedReexports() on nil = %q, want %q", got, etscore.TopLevelNamedReexportsIgnore)
 	}
 }
 
 func TestParseFromPlugins_AutoImportStyleNormalizationDropsEmptyEntries(t *testing.T) {
 	plugins := makePlugins(makePluginMap(
-		"name", EffectPluginName,
+		"name", etscore.EffectPluginName,
 		"namespaceImportPackages", []any{"  ", "Effect", "\t"},
 		"barrelImportPackages", []any{"", " @Effect/Schema "},
 		"importAliases", makePluginMap(
@@ -547,7 +651,7 @@ func TestParseFromPlugins_AutoImportStyleNormalizationDropsEmptyEntries(t *testi
 			" Effect ", "E",
 		),
 	))
-	opts := ParseFromPlugins(plugins)
+	opts := etscore.ParseFromPlugins(plugins)
 	if opts == nil {
 		t.Fatal("expected non-nil options")
 	}

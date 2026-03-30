@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/effect-ts/tsgo/internal/completion"
-	"github.com/effect-ts/tsgo/internal/effectutil"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
 )
@@ -34,7 +33,7 @@ func runContextSelfInClasses(ctx *completion.Context) []*lsproto.CompletionItem 
 		return nil
 	}
 
-	contextIdentifier := effectutil.FindModuleIdentifier(ctx.SourceFile, "Context")
+	contextIdentifier := typeparser.FindModuleIdentifier(ctx.SourceFile, "Context")
 	accessedText := data.AccessedObjectText()
 	isFullyQualified := contextIdentifier == accessedText
 	className := data.ClassNameText()

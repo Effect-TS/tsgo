@@ -24,7 +24,7 @@ func runDeterministicKeysFix(ctx *fixable.Context) []ls.CodeAction {
 	}
 	defer done()
 
-	matches := rules.AnalyzeDeterministicKeys(c, ctx.SourceFile)
+	matches := rules.AnalyzeDeterministicKeys(c, ctx.SourceFile, ctx.Options)
 	for _, match := range matches {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue

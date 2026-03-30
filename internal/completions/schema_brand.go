@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/effect-ts/tsgo/internal/completion"
-	"github.com/effect-ts/tsgo/internal/effectutil"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
@@ -39,7 +38,7 @@ func runSchemaBrand(ctx *completion.Context) []*lsproto.CompletionItem {
 	}
 
 	// Resolve the Schema module identifier and compare
-	schemaIdentifier := effectutil.FindModuleIdentifier(ctx.SourceFile, "Schema")
+	schemaIdentifier := typeparser.FindModuleIdentifier(ctx.SourceFile, "Schema")
 	accessedText := scanner.GetTextOfNode(result.AccessedObject)
 	if accessedText != schemaIdentifier {
 		return nil

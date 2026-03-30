@@ -36,16 +36,16 @@ func ParseFromPlugins(value any) *EffectPluginOptions {
 
 		// Found our plugin, parse the config
 		result := &EffectPluginOptions{
-			Refactors:                            true,                      // default: true
-			Diagnostics:                          true,                      // default: true
-			DiagnosticSeverity:                   make(map[string]Severity), // Start with empty map (enabled)
-			IncludeSuggestionsInTsc:              true,                      // default: true
-			Quickinfo:                            true,                      // default: true
-			Completions:                          true,                      // default: true
-			Goto:                                 true,                      // default: true
-			Renames:                              true,                      // default: true
-			IgnoreEffectSuggestionsInTscExitCode: true,                      // default: true
-			IgnoreEffectWarningsInTscExitCode:    false,                     // default: false
+			Refactors:                            true,  // default: true
+			Diagnostics:                          true,  // default: true
+			IncludeSuggestionsInTsc:              true,  // default: true
+			Quickinfo:                            true,  // default: true
+			Completions:                          true,  // default: true
+			Goto:                                 true,  // default: true
+			Renames:                              true,  // default: true
+			IgnoreEffectSuggestionsInTscExitCode: true,  // default: true
+			IgnoreEffectWarningsInTscExitCode:    false, // default: false
+			DiagnosticSeverity:                   make(map[string]Severity),
 		}
 
 		// Parse refactors (default: true)
@@ -69,6 +69,13 @@ func ParseFromPlugins(value any) *EffectPluginOptions {
 				return nil
 			}
 			result.DiagnosticSeverity = parseDiagnosticSeverityMap(diag)
+		}
+
+		// Parse overrides (default: nil)
+		if val, exists := getPluginValue("overrides"); exists {
+			if overrides, ok := parseOverrides(val); ok {
+				result.Overrides = overrides
+			}
 		}
 
 		// Parse includeSuggestionsInTsc (default: true)
@@ -291,6 +298,122 @@ func parseNormalizedStringMapStrict(value any) (map[string]string, bool) {
 		return nil, false
 	}
 	return result, true
+}
+
+func parseOverrides(value any) ([]Override, bool) {
+	arr, ok := value.([]any)
+	if !ok {
+		return nil, false
+	}
+
+	result := make([]Override, 0, len(arr))
+	for _, item := range arr {
+		scopeMap, ok := asStringAnyMap(item)
+		if !ok {
+			continue
+		}
+
+		override := Override{}
+		if include, exists := scopeMap("include"); exists {
+			override.Include = parseStringArrayLossy(include)
+		}
+		if exclude, exists := scopeMap("exclude"); exists {
+			override.Exclude = parseStringArrayLossy(exclude)
+		}
+		if options, exists := scopeMap("options"); exists {
+			override.Options = parseOverrideOptions(options)
+		}
+
+		result = append(result, override)
+	}
+
+	return result, true
+}
+
+func parseOverrideOptions(value any) OverrideOptions {
+	result := OverrideOptions{}
+	optionsMap, ok := asStringAnyMap(value)
+	if !ok {
+		return result
+	}
+
+	if value, exists := optionsMap("diagnosticSeverity"); exists {
+		result.DiagnosticSeverity = parseDiagnosticSeverityMap(value)
+	}
+
+	if value, exists := optionsMap("pipeableMinArgCount"); exists {
+		if f, ok := value.(float64); ok {
+			parsed := int(f)
+			result.PipeableMinArgCount = &parsed
+		}
+	}
+	if value, exists := optionsMap("keyPatterns"); exists {
+		if arr, ok := value.([]any); ok {
+			parsed := parseKeyPatterns(arr)
+			result.KeyPatterns = &parsed
+		}
+	}
+	if value, exists := optionsMap("extendedKeyDetection"); exists {
+		if b, ok := value.(bool); ok {
+			result.ExtendedKeyDetection = &b
+		}
+	}
+	if value, exists := optionsMap("allowedDuplicatedPackages"); exists {
+		if pkgs, ok := parseStringArrayStrict(value); ok {
+			result.AllowedDuplicatedPackages = &pkgs
+		}
+	}
+	if value, exists := optionsMap("effectFn"); exists {
+		if variants, ok := parseStringArrayStrict(value); ok {
+			result.EffectFn = &variants
+		}
+	}
+
+	return result
+}
+
+func parseStringArrayStrict(value any) ([]string, bool) {
+	arr, ok := value.([]any)
+	if !ok {
+		return nil, false
+	}
+	result := make([]string, 0, len(arr))
+	for _, item := range arr {
+		s, ok := item.(string)
+		if !ok {
+			return nil, false
+		}
+		result = append(result, s)
+	}
+	return result, true
+}
+
+func parseStringArrayLossy(value any) []string {
+	arr, ok := value.([]any)
+	if !ok {
+		return nil
+	}
+	result := make([]string, 0, len(arr))
+	for _, item := range arr {
+		if s, ok := item.(string); ok {
+			result = append(result, s)
+		}
+	}
+	return result
+}
+
+func asStringAnyMap(value any) (func(string) (any, bool), bool) {
+	switch m := value.(type) {
+	case *collections.OrderedMap[string, any]:
+		return m.Get, true
+	case map[string]any:
+		return func(key string) (any, bool) {
+			val, exists := m[key]
+			return val, exists
+		}, true
+	default:
+		return nil, false
+	}
 }
 
 // parseDiagnosticSeverityMap converts a plugin rule configuration map to map[string]Severity.

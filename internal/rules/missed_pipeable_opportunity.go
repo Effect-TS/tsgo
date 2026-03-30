@@ -24,7 +24,7 @@ var MissedPipeableOpportunity = rule.Rule{
 	Codes:           []int32{tsdiag.Nested_function_calls_can_be_converted_to_pipeable_style_for_better_readability_consider_using_0_pipe_instead_effect_missedPipeableOpportunity.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		minArgCount := 2
-		effectConfig := ctx.Checker.Program().Options().Effect
+		effectConfig := ctx.Options
 		if effectConfig != nil {
 			minArgCount = effectConfig.GetPipeableMinArgCount()
 		}

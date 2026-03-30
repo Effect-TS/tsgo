@@ -15,14 +15,16 @@ import (
 type Context struct {
 	Checker         *checker.Checker
 	SourceFile      *ast.SourceFile
+	Options         *etscore.ResolvedEffectPluginOptions
 	defaultSeverity etscore.Severity
 }
 
 // NewContext creates a new Context for a rule invocation.
-func NewContext(c *checker.Checker, sf *ast.SourceFile, defaultSeverity etscore.Severity) *Context {
+func NewContext(c *checker.Checker, sf *ast.SourceFile, options *etscore.ResolvedEffectPluginOptions, defaultSeverity etscore.Severity) *Context {
 	return &Context{
 		Checker:         c,
 		SourceFile:      sf,
+		Options:         options,
 		defaultSeverity: defaultSeverity,
 	}
 }

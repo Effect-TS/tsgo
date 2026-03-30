@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/effect-ts/tsgo/internal/completion"
-	"github.com/effect-ts/tsgo/internal/effectutil"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
 	"github.com/microsoft/typescript-go/shim/scanner"
@@ -26,7 +26,7 @@ func runFnFunctionStar(ctx *completion.Context) []*lsproto.CompletionItem {
 	}
 
 	// Resolve the local Effect module identifier and compare
-	effectIdentifier := effectutil.FindEffectModuleIdentifier(ctx.SourceFile)
+	effectIdentifier := typeparser.FindEffectModuleIdentifier(ctx.SourceFile)
 	accessedText := scanner.GetTextOfNode(result.AccessedObject)
 	if accessedText != effectIdentifier {
 		return nil

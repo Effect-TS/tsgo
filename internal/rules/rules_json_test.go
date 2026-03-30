@@ -22,6 +22,7 @@ import (
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/effecttest"
 	"github.com/effect-ts/tsgo/internal/fixables"
+	"github.com/effect-ts/tsgo/internal/pluginoptions"
 	"github.com/effect-ts/tsgo/internal/rule"
 	"github.com/effect-ts/tsgo/internal/rules"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -401,7 +402,16 @@ func evaluatePreview(t *testing.T, version effecttest.EffectVersion, sourceText 
 		if sf == nil || sf.IsDeclarationFile {
 			continue
 		}
-		ruleCtx := rule.NewContext(c, sf, r.DefaultSeverity)
+		var options *etscore.ResolvedEffectPluginOptions
+		if parsedEffectConfig := program.Options().Effect; parsedEffectConfig != nil {
+			options = pluginoptions.ResolveEffectPluginOptionsForSourceFile(
+				parsedEffectConfig,
+				sf.FileName(),
+				program.Options().ConfigFilePath,
+				program.UseCaseSensitiveFileNames(),
+			)
+		}
+		ruleCtx := rule.NewContext(c, sf, options, r.DefaultSeverity)
 		diags := r.Run(ruleCtx)
 		ruleDiags = append(ruleDiags, diags...)
 	}
@@ -732,6 +742,17 @@ func readmeDefaultValue(field reflect.StructField) any {
 		return map[string]any{}
 	case "KeyPatterns":
 		return etscore.DefaultKeyPatterns
+	case "Overrides":
+		return []any{
+			map[string]any{
+				"include": []string{"src/**/*.ts"},
+				"options": map[string]any{
+					"diagnosticSeverity": map[string]any{
+						"floatingEffect": "error",
+					},
+				},
+			},
+		}
 	default:
 		return nil
 	}
@@ -784,10 +805,12 @@ func indentedJSON(value any, prefix string) string {
 	return strings.Join(parts, "\n")
 }
 
-const readmeStartMarker = "<!-- diagnostics-table:start -->"
-const readmeEndMarker = "<!-- diagnostics-table:end -->"
-const readmeExampleStartMarker = "<!-- example-config:start -->"
-const readmeExampleEndMarker = "<!-- example-config:end -->"
+const (
+	readmeStartMarker        = "<!-- diagnostics-table:start -->"
+	readmeEndMarker          = "<!-- diagnostics-table:end -->"
+	readmeExampleStartMarker = "<!-- example-config:start -->"
+	readmeExampleEndMarker   = "<!-- example-config:end -->"
+)
 
 func generateReadme(committedReadme []byte) ([]byte, error) {
 	content := string(committedReadme)

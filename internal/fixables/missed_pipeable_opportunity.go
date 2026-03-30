@@ -28,7 +28,7 @@ func runMissedPipeableOpportunityFix(ctx *fixable.Context) []ls.CodeAction {
 	sf := ctx.SourceFile
 
 	minArgCount := 2
-	effectConfig := c.Program().Options().Effect
+	effectConfig := ctx.Options
 	if effectConfig != nil {
 		minArgCount = effectConfig.GetPipeableMinArgCount()
 	}

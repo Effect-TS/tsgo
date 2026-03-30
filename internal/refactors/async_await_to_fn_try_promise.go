@@ -3,7 +3,6 @@ package refactors
 import (
 	"fmt"
 
-	"github.com/effect-ts/tsgo/internal/effectutil"
 	"github.com/effect-ts/tsgo/internal/refactor"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -31,8 +30,8 @@ func runAsyncAwaitToFnTryPromise(ctx *refactor.Context) []ls.CodeAction {
 		return nil
 	}
 
-	effectModuleName := effectutil.FindEffectModuleIdentifier(ctx.SourceFile)
-	dataModuleName := effectutil.FindModuleIdentifier(ctx.SourceFile, "Data")
+	effectModuleName := typeparser.FindEffectModuleIdentifier(ctx.SourceFile)
+	dataModuleName := typeparser.FindModuleIdentifier(ctx.SourceFile, "Data")
 
 	action := ctx.NewRefactorAction(refactor.RefactorAction{
 		Description: "Rewrite to Effect.fn with failures",

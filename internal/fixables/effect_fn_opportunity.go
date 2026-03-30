@@ -35,7 +35,7 @@ func runEffectFnOpportunityFix(ctx *fixable.Context) []ls.CodeAction {
 
 	sf := ctx.SourceFile
 
-	effectConfig := c.Program().Options().Effect
+	effectConfig := ctx.Options
 
 	matches := rules.AnalyzeEffectFnOpportunity(c, sf)
 
@@ -228,14 +228,14 @@ func effectFnBuildGenBody(tracker *change.Tracker, result *typeparser.EffectFnOp
 	body := tracker.DeepCloneNode(genFn.Body)
 
 	return tracker.NewFunctionExpression(
-		nil,                                    // modifiers
+		nil,                                     // modifiers
 		tracker.NewToken(ast.KindAsteriskToken), // asteriskToken
-		nil,                                    // name (anonymous)
-		typeParams,                             // typeParameters
-		params,                                 // parameters
-		nil,                                    // returnType
-		nil,                                    // fullSignature
-		body,                                   // body
+		nil,                                     // name (anonymous)
+		typeParams,                              // typeParameters
+		params,                                  // parameters
+		nil,                                     // returnType
+		nil,                                     // fullSignature
+		body,                                    // body
 	)
 }
 

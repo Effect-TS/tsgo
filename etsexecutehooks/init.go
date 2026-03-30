@@ -17,6 +17,9 @@ func init() {
 // It extracts the Effect plugin options from compiler options and delegates to
 // FilterDiagnosticsForExitCode.
 func filterDiagnosticsForExitCode(opts *core.CompilerOptions, diagnostics []*ast.Diagnostic) []*ast.Diagnostic {
+	if opts.Effect == nil {
+		return FilterDiagnosticsForExitCode(nil, diagnostics)
+	}
 	return FilterDiagnosticsForExitCode(opts.Effect, diagnostics)
 }
 

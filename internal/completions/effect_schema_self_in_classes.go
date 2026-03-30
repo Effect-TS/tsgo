@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/effect-ts/tsgo/internal/completion"
-	"github.com/effect-ts/tsgo/internal/effectutil"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
 	"github.com/microsoft/typescript-go/shim/scanner"
@@ -25,7 +24,7 @@ func runEffectSchemaSelfInClasses(ctx *completion.Context) []*lsproto.Completion
 		return nil
 	}
 
-	schemaIdentifier := effectutil.FindModuleIdentifier(ctx.SourceFile, "Schema")
+	schemaIdentifier := typeparser.FindModuleIdentifier(ctx.SourceFile, "Schema")
 	accessedText := data.AccessedObjectText()
 	isFullyQualified := schemaIdentifier == accessedText
 	className := data.ClassNameText()
@@ -136,10 +135,10 @@ func runEffectSchemaSelfInClasses(ctx *completion.Context) []*lsproto.Completion
 
 	// Model.Class (v4 only)
 	if version == typeparser.EffectMajorV4 {
-		modelIdentifier := effectutil.FindModuleIdentifierForPackage(ctx.SourceFile, "effect/unstable", "schema")
+		modelIdentifier := typeparser.FindModuleIdentifierForPackage(ctx.SourceFile, "effect/unstable", "schema")
 		if modelIdentifier == "schema" {
 			// Fallback: try effect/unstable barrel
-			modelIdentifier = effectutil.FindModuleIdentifierForPackage(ctx.SourceFile, "effect/unstable", "Model")
+			modelIdentifier = typeparser.FindModuleIdentifierForPackage(ctx.SourceFile, "effect/unstable", "Model")
 		}
 
 		isModelFullyQualified := modelIdentifier == accessedText
@@ -169,10 +168,10 @@ func makeCompletionItem(label string, insertText string, sortText string, replac
 	}
 	format := lsproto.InsertTextFormatSnippet
 	return &lsproto.CompletionItem{
-		Label:           label,
-		Kind:            &kind,
+		Label:            label,
+		Kind:             &kind,
 		InsertTextFormat: &format,
-		SortText:        &sortText,
+		SortText:         &sortText,
 		TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 			TextEdit: &lsproto.TextEdit{
 				NewText: insertText,

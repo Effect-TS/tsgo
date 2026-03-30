@@ -19,6 +19,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/fixables"
 	"github.com/effect-ts/tsgo/internal/layergraph"
+	"github.com/effect-ts/tsgo/internal/pluginoptions"
 	"github.com/effect-ts/tsgo/internal/refactor"
 	"github.com/effect-ts/tsgo/internal/refactors"
 	"github.com/effect-ts/tsgo/internal/typeparser"
@@ -46,9 +47,17 @@ func init() {
 	// Register the Effect completion enrichment callback
 	ls.RegisterAfterCompletionCallback(afterCompletion)
 	// Register the Effect auto-import style transformer factory
-	autoimport.RegisterAutoImportFixTransformer(func(_ modulespecifiers.UserPreferences, program *compiler.Program) autoimport.FixTransformer {
-		effectStyle := autoimportstyle.PreferencesFromPluginOptions(program.Options().Effect)
-		return autoimportstyle.NewFixTransformer(effectStyle)
+	autoimport.RegisterAutoImportFixTransformer(func(_ modulespecifiers.UserPreferences, program *compiler.Program, importingFile *ast.SourceFile) autoimport.FixTransformer {
+		var resolvedOptions *etscore.ResolvedEffectPluginOptions
+		if effectConfig := program.Options().Effect; effectConfig != nil {
+			resolvedOptions = pluginoptions.ResolveEffectPluginOptionsForSourceFile(
+				effectConfig,
+				importingFile.FileName(),
+				program.Options().ConfigFilePath,
+				program.UseCaseSensitiveFileNames(),
+			)
+		}
+		return autoimportstyle.NewFixTransformer(resolvedOptions)
 	})
 }
 
@@ -68,8 +77,20 @@ func getEffectCodeActions(ctx context.Context, fixCtx *ls.CodeFixContext) ([]ls.
 		return nil, nil
 	}
 
+	var options *etscore.ResolvedEffectPluginOptions
+	if fixCtx.Program != nil {
+		if parsedEffectConfig := fixCtx.Program.Options().Effect; parsedEffectConfig != nil {
+			options = pluginoptions.ResolveEffectPluginOptionsForSourceFile(
+				parsedEffectConfig,
+				fixCtx.SourceFile.FileName(),
+				fixCtx.Program.Options().ConfigFilePath,
+				fixCtx.Program.UseCaseSensitiveFileNames(),
+			)
+		}
+	}
+
 	// Create the fixable context that wraps the code-fix request
-	fCtx := fixable.NewContext(ctx, fixCtx)
+	fCtx := fixable.NewContext(ctx, fixCtx, options)
 
 	// Collect actions from all applicable fixables
 	var actions []ls.CodeAction

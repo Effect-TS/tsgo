@@ -3,6 +3,7 @@ package fixable
 import (
 	"context"
 
+	"github.com/effect-ts/tsgo/etscore"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
 	"github.com/microsoft/typescript-go/shim/core"
@@ -20,17 +21,19 @@ type Context struct {
 	SourceFile *ast.SourceFile
 	Span       core.TextRange
 	ErrorCode  int32
+	Options    *etscore.ResolvedEffectPluginOptions
 
-	ctx   context.Context
+	ctx    context.Context
 	fixCtx *ls.CodeFixContext
 }
 
 // NewContext creates a fixable Context from the standard code-fix request parameters.
-func NewContext(ctx context.Context, fixCtx *ls.CodeFixContext) *Context {
+func NewContext(ctx context.Context, fixCtx *ls.CodeFixContext, options *etscore.ResolvedEffectPluginOptions) *Context {
 	return &Context{
 		SourceFile: fixCtx.SourceFile,
 		Span:       fixCtx.Span,
 		ErrorCode:  fixCtx.ErrorCode,
+		Options:    options,
 		ctx:        ctx,
 		fixCtx:     fixCtx,
 	}

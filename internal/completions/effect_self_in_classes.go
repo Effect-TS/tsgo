@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/effect-ts/tsgo/internal/completion"
-	"github.com/effect-ts/tsgo/internal/effectutil"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
 )
@@ -34,7 +33,7 @@ func runEffectSelfInClasses(ctx *completion.Context) []*lsproto.CompletionItem {
 		return nil
 	}
 
-	effectIdentifier := effectutil.FindModuleIdentifier(ctx.SourceFile, "Effect")
+	effectIdentifier := typeparser.FindModuleIdentifier(ctx.SourceFile, "Effect")
 	accessedText := data.AccessedObjectText()
 	isFullyQualified := effectIdentifier == accessedText
 	className := data.ClassNameText()
