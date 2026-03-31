@@ -48,6 +48,29 @@ func completionItemsAt(t *testing.T, source string, position int) []*lsproto.Com
 	return completions.Items
 }
 
+func completionItemsAtWithPackageJSON(t *testing.T, packageJSON string, source string, position int) []*lsproto.CompletionItem {
+	t.Helper()
+
+	if position < 0 || position > len(source) {
+		t.Fatalf("invalid completion position %d for source length %d", position, len(source))
+	}
+
+	sourceWithMarker := source[:position] + "/*1*/" + source[position:]
+	content := "// @Filename: /tsconfig.json\n" + completionTestTsConfig + "\n" +
+		"// @Filename: /package.json\n" + packageJSON + "\n" +
+		"// @Filename: /test.ts\n" + sourceWithMarker
+
+	f, done := fourslash.NewFourslash(t, nil, content)
+	defer done()
+
+	f.GoToMarker(t, "1")
+	completions := f.GetCompletions(t, nil)
+	if completions == nil {
+		return nil
+	}
+	return completions.Items
+}
+
 func filterCompletionItems(items []*lsproto.CompletionItem, keep func(*lsproto.CompletionItem) bool) []*lsproto.CompletionItem {
 	if len(items) == 0 {
 		return nil
@@ -119,6 +142,23 @@ func contextSelfInClassesItems(t *testing.T, source string, position int) []*lsp
 	t.Helper()
 	return filterCompletionItems(completionItemsAt(t, source, position), func(item *lsproto.CompletionItem) bool {
 		return strings.HasPrefix(item.Label, `Tag("`)
+	})
+}
+
+func serviceMapSelfInClassesItems(t *testing.T, source string, position int) []*lsproto.CompletionItem {
+	t.Helper()
+	return filterCompletionItems(completionItemsAt(t, source, position), func(item *lsproto.CompletionItem) bool {
+		return strings.HasPrefix(item.Label, "Service<")
+	})
+}
+
+func serviceMapSelfInClassesItemsWithPackageJSON(t *testing.T, source string, position int) []*lsproto.CompletionItem {
+	t.Helper()
+	const packageJSON = `{
+	  "name": "@effect/harness-effect-v4"
+	}`
+	return filterCompletionItems(completionItemsAtWithPackageJSON(t, packageJSON, source, position), func(item *lsproto.CompletionItem) bool {
+		return strings.HasPrefix(item.Label, "Service<")
 	})
 }
 
