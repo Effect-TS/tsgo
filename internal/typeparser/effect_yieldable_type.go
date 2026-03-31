@@ -11,43 +11,42 @@ import (
 // For v4: tries EffectType first; if that fails, looks for an asEffect property,
 // checks if it's callable, and tries EffectType on the return type of each call signature.
 // Returns nil if the type is not an Effect and not yieldable.
-func EffectYieldableType(c *checker.Checker, t *checker.Type, atLocation *ast.Node) *Effect {
-	if c == nil || t == nil {
+func (tp *TypeParser) EffectYieldableType(t *checker.Type, atLocation *ast.Node) *Effect {
+	if tp == nil || tp.checker == nil || t == nil {
 		return nil
 	}
-	links := GetEffectLinks(c)
-	return Cached(&links.EffectYieldableType, t, func() *Effect {
-		version := DetectEffectVersion(c)
+	return Cached(&tp.links.EffectYieldableType, t, func() *Effect {
+		version := tp.DetectEffectVersion()
 
 		// For v3, yieldable types are modeled through Effect subtyping,
 		// so EffectType alone is sufficient.
 		if version != EffectMajorV4 {
-			return EffectType(c, t, atLocation)
+			return tp.EffectType(t, atLocation)
 		}
 
 		// v4: first try plain Effect type
-		if result := EffectType(c, t, atLocation); result != nil {
+		if result := tp.EffectType(t, atLocation); result != nil {
 			return result
 		}
 
 		// v4: look for asEffect() protocol
-		asEffectSymbol := GetPropertyOfTypeByName(c, t, "asEffect")
+		asEffectSymbol := tp.GetPropertyOfTypeByName(t, "asEffect")
 		if asEffectSymbol == nil {
 			return nil
 		}
 
-		asEffectType := c.GetTypeOfSymbolAtLocation(asEffectSymbol, atLocation)
+		asEffectType := tp.checker.GetTypeOfSymbolAtLocation(asEffectSymbol, atLocation)
 		if asEffectType == nil {
 			return nil
 		}
 
-		signatures := c.GetSignaturesOfType(asEffectType, checker.SignatureKindCall)
+		signatures := tp.checker.GetSignaturesOfType(asEffectType, checker.SignatureKindCall)
 		for _, sig := range signatures {
-			returnType := c.GetReturnTypeOfSignature(sig)
+			returnType := tp.checker.GetReturnTypeOfSignature(sig)
 			if returnType == nil {
 				continue
 			}
-			if result := EffectType(c, returnType, atLocation); result != nil {
+			if result := tp.EffectType(returnType, atLocation); result != nil {
 				return result
 			}
 		}

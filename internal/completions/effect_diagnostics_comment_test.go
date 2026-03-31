@@ -1,4 +1,4 @@
-package completions
+package completions_test
 
 import (
 	"sort"
@@ -11,9 +11,7 @@ import (
 func TestEffectDiagnosticsComment_DoubleSlash(t *testing.T) {
 	t.Parallel()
 	source := "// @"
-	ctx := makeFnContext(source, len(source))
-
-	items := runEffectDiagnosticsComment(ctx)
+	items := effectDiagnosticsCommentItems(t, source, len(source))
 	if len(items) != 2 {
 		t.Fatalf("expected 2 items for '// @', got %d", len(items))
 	}
@@ -28,9 +26,7 @@ func TestEffectDiagnosticsComment_DoubleSlash(t *testing.T) {
 func TestEffectDiagnosticsComment_SlashStar(t *testing.T) {
 	t.Parallel()
 	source := "/* @"
-	ctx := makeFnContext(source, len(source))
-
-	items := runEffectDiagnosticsComment(ctx)
+	items := effectDiagnosticsCommentItems(t, source, len(source))
 	if len(items) != 2 {
 		t.Fatalf("expected 2 items for '/* @', got %d", len(items))
 	}
@@ -45,9 +41,7 @@ func TestEffectDiagnosticsComment_SlashStar(t *testing.T) {
 func TestEffectDiagnosticsComment_JSDocComment(t *testing.T) {
 	t.Parallel()
 	source := "/** @"
-	ctx := makeFnContext(source, len(source))
-
-	items := runEffectDiagnosticsComment(ctx)
+	items := effectDiagnosticsCommentItems(t, source, len(source))
 	if len(items) != 2 {
 		t.Fatalf("expected 2 items for '/** @', got %d", len(items))
 	}
@@ -56,9 +50,7 @@ func TestEffectDiagnosticsComment_JSDocComment(t *testing.T) {
 func TestEffectDiagnosticsComment_ExtraWhitespace(t *testing.T) {
 	t.Parallel()
 	source := "//  @  "
-	ctx := makeFnContext(source, len(source))
-
-	items := runEffectDiagnosticsComment(ctx)
+	items := effectDiagnosticsCommentItems(t, source, len(source))
 	if len(items) != 2 {
 		t.Fatalf("expected 2 items for '//  @  ' (extra whitespace), got %d", len(items))
 	}
@@ -67,9 +59,7 @@ func TestEffectDiagnosticsComment_ExtraWhitespace(t *testing.T) {
 func TestEffectDiagnosticsComment_NoAtSymbol(t *testing.T) {
 	t.Parallel()
 	source := "// some comment without at"
-	ctx := makeFnContext(source, len(source))
-
-	items := runEffectDiagnosticsComment(ctx)
+	items := effectDiagnosticsCommentItems(t, source, len(source))
 	if items != nil {
 		t.Errorf("expected nil for comment without @, got %d items", len(items))
 	}
@@ -78,9 +68,7 @@ func TestEffectDiagnosticsComment_NoAtSymbol(t *testing.T) {
 func TestEffectDiagnosticsComment_AtOutsideComment(t *testing.T) {
 	t.Parallel()
 	source := "const x = @"
-	ctx := makeFnContext(source, len(source))
-
-	items := runEffectDiagnosticsComment(ctx)
+	items := effectDiagnosticsCommentItems(t, source, len(source))
 	if items != nil {
 		t.Errorf("expected nil for @ outside comment, got %d items", len(items))
 	}
@@ -89,9 +77,7 @@ func TestEffectDiagnosticsComment_AtOutsideComment(t *testing.T) {
 func TestEffectDiagnosticsComment_SnippetContainsSortedRuleNames(t *testing.T) {
 	t.Parallel()
 	source := "// @"
-	ctx := makeFnContext(source, len(source))
-
-	items := runEffectDiagnosticsComment(ctx)
+	items := effectDiagnosticsCommentItems(t, source, len(source))
 	if len(items) != 2 {
 		t.Fatalf("expected 2 items, got %d", len(items))
 	}
@@ -113,9 +99,7 @@ func TestEffectDiagnosticsComment_SnippetContainsSortedRuleNames(t *testing.T) {
 func TestEffectDiagnosticsComment_SnippetContainsSeverityChoices(t *testing.T) {
 	t.Parallel()
 	source := "// @"
-	ctx := makeFnContext(source, len(source))
-
-	items := runEffectDiagnosticsComment(ctx)
+	items := effectDiagnosticsCommentItems(t, source, len(source))
 	if len(items) != 2 {
 		t.Fatalf("expected 2 items, got %d", len(items))
 	}
@@ -130,9 +114,7 @@ func TestEffectDiagnosticsComment_SnippetContainsSeverityChoices(t *testing.T) {
 func TestEffectDiagnosticsComment_ReplacementSpanStartsAtAt(t *testing.T) {
 	t.Parallel()
 	source := "// @"
-	ctx := makeFnContext(source, len(source))
-
-	items := runEffectDiagnosticsComment(ctx)
+	items := effectDiagnosticsCommentItems(t, source, len(source))
 	if len(items) != 2 {
 		t.Fatalf("expected 2 items, got %d", len(items))
 	}
@@ -147,9 +129,7 @@ func TestEffectDiagnosticsComment_ReplacementSpanStartsAtAt(t *testing.T) {
 func TestEffectDiagnosticsComment_MultilineWithCommentOnSecondLine(t *testing.T) {
 	t.Parallel()
 	source := "const x = 1\n// @"
-	ctx := makeFnContext(source, len(source))
-
-	items := runEffectDiagnosticsComment(ctx)
+	items := effectDiagnosticsCommentItems(t, source, len(source))
 	if len(items) != 2 {
 		t.Fatalf("expected 2 items for multiline source, got %d", len(items))
 	}

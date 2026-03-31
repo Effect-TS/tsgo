@@ -31,8 +31,8 @@ var MissingEffectContext = rule.Rule{
 
 		for _, re := range ctx.Checker.GetRelationErrors(ctx.SourceFile) {
 			// Parse both types as Effects
-			srcEffect := typeparser.EffectType(ctx.Checker, re.Source, re.ErrorNode)
-			tgtEffect := typeparser.EffectType(ctx.Checker, re.Target, re.ErrorNode)
+			srcEffect := ctx.TypeParser.EffectType(re.Source, re.ErrorNode)
+			tgtEffect := ctx.TypeParser.EffectType(re.Target, re.ErrorNode)
 
 			// Both must be Effect types
 			if srcEffect == nil || tgtEffect == nil {
@@ -41,7 +41,7 @@ var MissingEffectContext = rule.Rule{
 
 			// Find unhandled context types by checking each source requirement member
 			// against the target requirement type
-			unhandledContexts := findUnhandledContexts(ctx.Checker, srcEffect.R, tgtEffect.R)
+			unhandledContexts := findUnhandledContexts(ctx.TypeParser, ctx.Checker, srcEffect.R, tgtEffect.R)
 			if len(unhandledContexts) > 0 {
 				contextTypeStr := formatContextTypes(ctx.Checker, unhandledContexts)
 				diag := ctx.NewDiagnostic(
@@ -60,9 +60,9 @@ var MissingEffectContext = rule.Rule{
 }
 
 // findUnhandledContexts returns the source context types that are not assignable to the target context type.
-func findUnhandledContexts(c *checker.Checker, srcR, tgtR *checker.Type) []*checker.Type {
+func findUnhandledContexts(tp *typeparser.TypeParser, c *checker.Checker, srcR, tgtR *checker.Type) []*checker.Type {
 	// Unroll source context union into individual members
-	srcMembers := typeparser.UnrollUnionMembers(srcR)
+	srcMembers := tp.UnrollUnionMembers(srcR)
 
 	var unhandled []*checker.Type
 	for _, member := range srcMembers {
@@ -92,7 +92,7 @@ func formatContextTypes(c *checker.Checker, types []*checker.Type) string {
 }
 
 func missingEffectContextRelatedInformation(c *checker.Checker, ctx *rule.Context, errorNode *ast.Node, missingTypes []*checker.Type) []*ast.Diagnostic {
-	provideLocation := findRelatedProvideLocation(c, ctx.SourceFile, errorNode)
+	provideLocation := findRelatedProvideLocation(ctx.TypeParser, c, ctx.SourceFile, errorNode)
 	if provideLocation.Node == nil || provideLocation.LayerNode == nil {
 		return nil
 	}
@@ -118,11 +118,11 @@ type provideLocation struct {
 	Location  core.TextRange
 }
 
-func findRelatedProvideLocation(c *checker.Checker, sf *ast.SourceFile, errorNode *ast.Node) provideLocation {
+func findRelatedProvideLocation(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile, errorNode *ast.Node) provideLocation {
 	if c == nil || sf == nil || errorNode == nil {
 		return provideLocation{}
 	}
-	flows := typeparser.PipingFlows(c, sf, true)
+	flows := tp.PipingFlows(sf, true)
 	for _, flow := range flows {
 		if flow == nil || flow.Node == nil {
 			continue
@@ -136,7 +136,7 @@ func findRelatedProvideLocation(c *checker.Checker, sf *ast.SourceFile, errorNod
 		}
 		for i := errorTransformationIndex - 1; i >= 0; i-- {
 			transformation := flow.Transformations[i]
-			if !typeparser.IsNodeReferenceToEffectModuleApi(c, transformation.Callee, "provide") {
+			if !tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "provide") {
 				continue
 			}
 			callNode := transformation.Node
@@ -162,8 +162,8 @@ func findRelatedLayerProviderDiagnostics(
 	if c == nil || ctx == nil || layerNode == nil || len(missingTypes) == 0 {
 		return nil
 	}
-	rootLayerProvides := rootLayerProvidesTypes(c, layerNode)
-	fullGraph := layergraph.ExtractLayerGraph(c, layerNode, ctx.SourceFile, layergraph.ExtractLayerGraphOptions{
+	rootLayerProvides := rootLayerProvidesTypes(ctx.TypeParser, c, layerNode)
+	fullGraph := layergraph.ExtractLayerGraph(ctx.TypeParser, c, layerNode, ctx.SourceFile, layergraph.ExtractLayerGraphOptions{
 		FollowSymbolsDepth: 2,
 	})
 	outlineGraph := layergraph.ExtractOutlineGraph(c, fullGraph)
@@ -208,15 +208,15 @@ func findRelatedLayerProviderDiagnostics(
 	return related
 }
 
-func rootLayerProvidesTypes(c *checker.Checker, layerNode *ast.Node) []*checker.Type {
+func rootLayerProvidesTypes(tp *typeparser.TypeParser, c *checker.Checker, layerNode *ast.Node) []*checker.Type {
 	if c == nil || layerNode == nil {
 		return nil
 	}
-	layerType := typeparser.LayerType(c, typeparser.GetTypeAtLocation(c, layerNode), layerNode)
+	layerType := tp.LayerType(tp.GetTypeAtLocation(layerNode), layerNode)
 	if layerType == nil {
 		return nil
 	}
-	return typeparser.UnrollUnionMembers(layerType.ROut)
+	return tp.UnrollUnionMembers(layerType.ROut)
 }
 
 func rootProvidesType(c *checker.Checker, providedTypes []*checker.Type, target *checker.Type) bool {

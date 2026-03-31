@@ -24,7 +24,7 @@ var PreferSchemaOverJson = rule.Rule{
 	Codes:           []int32{tsdiag.Consider_using_Effect_Schema_for_JSON_operations_instead_of_JSON_parse_SlashJSON_stringify_effect_preferSchemaOverJson.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		var diags []*ast.Diagnostic
-		isV4 := typeparser.SupportedEffectVersion(ctx.Checker) == typeparser.EffectMajorV4
+		isV4 := ctx.TypeParser.SupportedEffectVersion() == typeparser.EffectMajorV4
 
 		var walk ast.Visitor
 		walk = func(n *ast.Node) bool {
@@ -51,13 +51,13 @@ var PreferSchemaOverJson = rule.Rule{
 // inside an Effect context (Effect.try or Effect.gen/Effect.fn).
 func checkPreferSchemaOverJson(ctx *rule.Context, node *ast.Node, isV4 bool) *ast.Diagnostic {
 	// Try each pattern in order
-	if jsonNode := checkEffectTrySimple(ctx.Checker, node, isV4); jsonNode != nil {
+	if jsonNode := checkEffectTrySimple(ctx.TypeParser, ctx.Checker, node, isV4); jsonNode != nil {
 		return ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(jsonNode), tsdiag.Consider_using_Effect_Schema_for_JSON_operations_instead_of_JSON_parse_SlashJSON_stringify_effect_preferSchemaOverJson, nil)
 	}
-	if jsonNode := checkEffectTryObject(ctx.Checker, node); jsonNode != nil {
+	if jsonNode := checkEffectTryObject(ctx.TypeParser, ctx.Checker, node); jsonNode != nil {
 		return ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(jsonNode), tsdiag.Consider_using_Effect_Schema_for_JSON_operations_instead_of_JSON_parse_SlashJSON_stringify_effect_preferSchemaOverJson, nil)
 	}
-	if jsonNode := checkJsonMethodInEffectGen(ctx.Checker, node); jsonNode != nil {
+	if jsonNode := checkJsonMethodInEffectGen(ctx.TypeParser, ctx.Checker, node); jsonNode != nil {
 		return ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(jsonNode), tsdiag.Consider_using_Effect_Schema_for_JSON_operations_instead_of_JSON_parse_SlashJSON_stringify_effect_preferSchemaOverJson, nil)
 	}
 	return nil
@@ -105,7 +105,7 @@ func parseJsonMethod(node *ast.Node) *ast.Node {
 
 // checkEffectTrySimple matches Effect.try(() => JSON.parse/stringify(...)) - simple thunk form.
 // This pattern is V3-only (the simple thunk form was removed in V4).
-func checkEffectTrySimple(c *checker.Checker, node *ast.Node, isV4 bool) *ast.Node {
+func checkEffectTrySimple(tp *typeparser.TypeParser, _ *checker.Checker, node *ast.Node, isV4 bool) *ast.Node {
 	if isV4 {
 		return nil
 	}
@@ -116,7 +116,7 @@ func checkEffectTrySimple(c *checker.Checker, node *ast.Node, isV4 bool) *ast.No
 	call := node.AsCallExpression()
 
 	// Check callee is Effect.try
-	if !typeparser.IsNodeReferenceToEffectModuleApi(c, call.Expression, "try") {
+	if !tp.IsNodeReferenceToEffectModuleApi(call.Expression, "try") {
 		return nil
 	}
 
@@ -135,14 +135,14 @@ func checkEffectTrySimple(c *checker.Checker, node *ast.Node, isV4 bool) *ast.No
 }
 
 // checkEffectTryObject matches Effect.try({ try: () => JSON.parse/stringify(...), ... }) - object form.
-func checkEffectTryObject(c *checker.Checker, node *ast.Node) *ast.Node {
+func checkEffectTryObject(tp *typeparser.TypeParser, _ *checker.Checker, node *ast.Node) *ast.Node {
 	if node.Kind != ast.KindCallExpression {
 		return nil
 	}
 	call := node.AsCallExpression()
 
 	// Check callee is Effect.try
-	if !typeparser.IsNodeReferenceToEffectModuleApi(c, call.Expression, "try") {
+	if !tp.IsNodeReferenceToEffectModuleApi(call.Expression, "try") {
 		return nil
 	}
 
@@ -192,18 +192,18 @@ func checkEffectTryObject(c *checker.Checker, node *ast.Node) *ast.Node {
 }
 
 // checkJsonMethodInEffectGen matches direct JSON.parse/stringify inside an Effect generator (Effect.gen or Effect.fn).
-func checkJsonMethodInEffectGen(c *checker.Checker, node *ast.Node) *ast.Node {
+func checkJsonMethodInEffectGen(tp *typeparser.TypeParser, _ *checker.Checker, node *ast.Node) *ast.Node {
 	// First check if this is a JSON method call
 	jsonNode := parseJsonMethod(node)
 	if jsonNode == nil {
 		return nil
 	}
 
-	if typeparser.GetEffectContextFlags(c, node)&typeparser.EffectContextFlagCanYieldEffect == 0 {
+	if tp.GetEffectContextFlags(node)&typeparser.EffectContextFlagCanYieldEffect == 0 {
 		return nil
 	}
 
-	genFn := typeparser.GetEffectYieldGeneratorFunction(c, node)
+	genFn := tp.GetEffectYieldGeneratorFunction(node)
 	if genFn == nil {
 		return nil
 	}

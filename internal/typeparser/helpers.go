@@ -7,7 +7,8 @@ import (
 
 // extractCovariantType gets the type argument from a covariant property.
 // Covariant<A> is encoded as () => A, so we get the return type.
-func extractCovariantType(c *checker.Checker, t *checker.Type, atLocation *ast.Node, propName string) *checker.Type {
+func (tp *TypeParser) extractCovariantType(t *checker.Type, atLocation *ast.Node, propName string) *checker.Type {
+	c := tp.checker
 	propSymbol := c.GetPropertyOfType(t, propName)
 	if propSymbol == nil {
 		return nil
@@ -29,7 +30,8 @@ func extractCovariantType(c *checker.Checker, t *checker.Type, atLocation *ast.N
 
 // extractContravariantType gets the type argument from a contravariant property.
 // Contravariant<A> is encoded as (_: A) => void, so we get the first parameter type.
-func extractContravariantType(c *checker.Checker, t *checker.Type, atLocation *ast.Node, propName string) *checker.Type {
+func (tp *TypeParser) extractContravariantType(t *checker.Type, atLocation *ast.Node, propName string) *checker.Type {
+	c := tp.checker
 	propSymbol := c.GetPropertyOfType(t, propName)
 	if propSymbol == nil {
 		return nil
@@ -56,15 +58,16 @@ func extractContravariantType(c *checker.Checker, t *checker.Type, atLocation *a
 
 // extractInvariantType gets the type argument from an invariant property.
 // Invariant<A> is encoded as (_: A) => A, so we extract the return type (same as covariant).
-func extractInvariantType(c *checker.Checker, t *checker.Type, atLocation *ast.Node, propName string) *checker.Type {
-	return extractCovariantType(c, t, atLocation, propName)
+func (tp *TypeParser) extractInvariantType(t *checker.Type, atLocation *ast.Node, propName string) *checker.Type {
+	return tp.extractCovariantType(t, atLocation, propName)
 }
 
 // GetPropertyOfTypeByName returns a property symbol by name, including computed properties backed by string literals.
-func GetPropertyOfTypeByName(c *checker.Checker, t *checker.Type, name string) *ast.Symbol {
-	if c == nil || t == nil {
+func (tp *TypeParser) GetPropertyOfTypeByName(t *checker.Type, name string) *ast.Symbol {
+	if tp == nil || tp.checker == nil || t == nil {
 		return nil
 	}
+	c := tp.checker
 	if sym := c.GetPropertyOfType(t, name); sym != nil {
 		return sym
 	}
@@ -83,10 +86,11 @@ func GetPropertyOfTypeByName(c *checker.Checker, t *checker.Type, name string) *
 	return nil
 }
 
-func resolveAliasedSymbol(c *checker.Checker, sym *ast.Symbol) *ast.Symbol {
-	if c == nil {
+func (tp *TypeParser) resolveAliasedSymbol(sym *ast.Symbol) *ast.Symbol {
+	if tp == nil || tp.checker == nil {
 		return sym
 	}
+	c := tp.checker
 	for sym != nil && sym.Flags&ast.SymbolFlagsAlias != 0 {
 		sym = c.GetAliasedSymbol(sym)
 	}
@@ -95,12 +99,13 @@ func resolveAliasedSymbol(c *checker.Checker, sym *ast.Symbol) *ast.Symbol {
 
 // ResolveToGlobalSymbol follows aliases and up to two simple variable indirections
 // so rules can recognize references to the original global symbol.
-func ResolveToGlobalSymbol(c *checker.Checker, sym *ast.Symbol) *ast.Symbol {
-	if c == nil || sym == nil {
+func (tp *TypeParser) ResolveToGlobalSymbol(sym *ast.Symbol) *ast.Symbol {
+	if tp == nil || tp.checker == nil || sym == nil {
 		return nil
 	}
+	c := tp.checker
 
-	sym = resolveAliasedSymbol(c, sym)
+	sym = tp.resolveAliasedSymbol(sym)
 	depth := 0
 	for depth < 2 && sym != nil && sym.ValueDeclaration != nil && sym.ValueDeclaration.Kind == ast.KindVariableDeclaration {
 		decl := sym.ValueDeclaration.AsVariableDeclaration()
@@ -112,7 +117,7 @@ func ResolveToGlobalSymbol(c *checker.Checker, sym *ast.Symbol) *ast.Symbol {
 		if next == nil {
 			break
 		}
-		next = resolveAliasedSymbol(c, next)
+		next = tp.resolveAliasedSymbol(next)
 		if next == sym {
 			break
 		}

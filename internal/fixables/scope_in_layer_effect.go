@@ -17,13 +17,9 @@ var ScopeInLayerEffectScopedFix = fixable.Fixable{
 }
 
 func runScopeInLayerEffectScopedFix(ctx *fixable.Context) []ls.CodeAction {
-	c, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	if c == nil {
-		return nil
-	}
-	defer done()
+	c := ctx.Checker
 
-	matches := rules.AnalyzeScopeInLayerEffect(c, ctx.SourceFile)
+	matches := rules.AnalyzeScopeInLayerEffect(ctx.TypeParser, c, ctx.SourceFile)
 	for _, match := range matches {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue

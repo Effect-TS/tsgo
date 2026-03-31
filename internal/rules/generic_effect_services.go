@@ -20,7 +20,7 @@ var GenericEffectServices = rule.Rule{
 	Codes:           []int32{tsdiag.Effect_Services_with_type_parameters_are_not_supported_because_they_cannot_be_properly_discriminated_at_runtime_which_may_cause_unexpected_behavior_effect_genericEffectServices.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		// V3-only rule
-		if typeparser.SupportedEffectVersion(ctx.Checker) != typeparser.EffectMajorV3 {
+		if ctx.TypeParser.SupportedEffectVersion() != typeparser.EffectMajorV3 {
 			return nil
 		}
 
@@ -44,7 +44,7 @@ var GenericEffectServices = rule.Rule{
 					classSym := ctx.Checker.GetSymbolAtLocation(node.Name())
 					if classSym != nil {
 						classType := ctx.Checker.GetTypeOfSymbolAtLocation(classSym, node)
-						if classType != nil && typeparser.IsContextTag(ctx.Checker, classType, node) {
+						if classType != nil && ctx.TypeParser.IsContextTag(classType, node) {
 							diags = append(diags, ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(node.Name()), tsdiag.Effect_Services_with_type_parameters_are_not_supported_because_they_cannot_be_properly_discriminated_at_runtime_which_may_cause_unexpected_behavior_effect_genericEffectServices, nil))
 							continue // skip children
 						}

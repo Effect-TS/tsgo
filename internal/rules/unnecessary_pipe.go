@@ -22,7 +22,7 @@ var UnnecessaryPipe = rule.Rule{
 	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.This_pipe_call_contains_no_arguments_effect_unnecessaryPipe.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
-		matches := AnalyzeUnnecessaryPipe(ctx.Checker, ctx.SourceFile)
+		matches := AnalyzeUnnecessaryPipe(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
 			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.This_pipe_call_contains_no_arguments_effect_unnecessaryPipe, nil)
@@ -41,7 +41,7 @@ type UnnecessaryPipeMatch struct {
 
 // AnalyzeUnnecessaryPipe finds all pipe() and .pipe() calls with no transformation
 // arguments, returning matches with both the diagnostic and the parsed result.
-func AnalyzeUnnecessaryPipe(c *checker.Checker, sf *ast.SourceFile) []UnnecessaryPipeMatch {
+func AnalyzeUnnecessaryPipe(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile) []UnnecessaryPipeMatch {
 	var matches []UnnecessaryPipeMatch
 
 	var walk ast.Visitor
@@ -51,7 +51,7 @@ func AnalyzeUnnecessaryPipe(c *checker.Checker, sf *ast.SourceFile) []Unnecessar
 		}
 
 		if n.Kind == ast.KindCallExpression {
-			if result := typeparser.ParsePipeCall(c, n); result != nil {
+			if result := tp.ParsePipeCall(n); result != nil {
 				if len(result.Args) == 0 {
 					matches = append(matches, UnnecessaryPipeMatch{
 						SourceFile: sf,

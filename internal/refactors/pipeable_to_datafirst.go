@@ -18,11 +18,7 @@ var PipeableToDatafirst = refactor.Refactor{
 }
 
 func runPipeableToDatafirst(ctx *refactor.Context) []ls.CodeAction {
-	c, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	if c == nil {
-		return nil
-	}
-	defer done()
+	c := ctx.Checker
 
 	token := astnav.GetTokenAtPosition(ctx.SourceFile, ctx.Span.Pos())
 	if token == nil {
@@ -35,7 +31,7 @@ func runPipeableToDatafirst(ctx *refactor.Context) []ls.CodeAction {
 			continue
 		}
 
-		pipeCall := typeparser.ParsePipeCall(c, node)
+		pipeCall := ctx.TypeParser.ParsePipeCall(node)
 		if pipeCall == nil {
 			continue
 		}
@@ -88,7 +84,7 @@ func tryConvertToDatafirst(c *checker.Checker, pipeCall *typeparser.ParsedPipeCa
 		if arg.Kind == ast.KindCallExpression {
 			argCall := arg.AsCallExpression()
 			if argCall != nil && argCall.Expression != nil {
-				exprType := typeparser.GetTypeAtLocation(c, argCall.Expression)
+				exprType := ctx.TypeParser.GetTypeAtLocation(argCall.Expression)
 				if exprType != nil {
 					callSigs := c.GetSignaturesOfType(exprType, checker.SignatureKindCall)
 					argCount := 0

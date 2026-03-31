@@ -18,13 +18,7 @@ var DeterministicKeysFix = fixable.Fixable{
 }
 
 func runDeterministicKeysFix(ctx *fixable.Context) []ls.CodeAction {
-	c, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	if c == nil {
-		return nil
-	}
-	defer done()
-
-	matches := rules.AnalyzeDeterministicKeys(c, ctx.SourceFile, ctx.Options)
+	matches := rules.AnalyzeDeterministicKeys(ctx.TypeParser, ctx.Program, ctx.Checker, ctx.SourceFile, ctx.Options)
 	for _, match := range matches {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue

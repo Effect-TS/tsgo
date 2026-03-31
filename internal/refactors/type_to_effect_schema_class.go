@@ -3,7 +3,6 @@ package refactors
 import (
 	"github.com/effect-ts/tsgo/internal/refactor"
 	"github.com/effect-ts/tsgo/internal/schemagen"
-	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ls"
 	"github.com/microsoft/typescript-go/shim/ls/change"
 )
@@ -26,13 +25,7 @@ func runTypeToEffectSchemaClass(ctx *refactor.Context) []ls.CodeAction {
 		return nil
 	}
 
-	c, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	if c == nil {
-		return nil
-	}
-	defer done()
-
-	version := typeparser.SupportedEffectVersion(c)
+	version := ctx.TypeParser.SupportedEffectVersion()
 
 	action := ctx.NewRefactorAction(refactor.RefactorAction{
 		Description: "Generate Schema.Class from type",

@@ -3,7 +3,6 @@ package typeparser
 
 import (
 	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
 	"github.com/microsoft/typescript-go/shim/packagejson"
 	"github.com/microsoft/typescript-go/shim/tspath"
 )
@@ -15,14 +14,13 @@ type packageJsonProgram interface {
 
 // PackageJsonForSourceFile returns the nearest package.json contents for a source file, or nil.
 // Results are cached per source file on EffectLinks for the checker's lifetime.
-func PackageJsonForSourceFile(c *checker.Checker, sf *ast.SourceFile) *packagejson.PackageJson {
-	if c == nil || sf == nil {
+func (tp *TypeParser) PackageJsonForSourceFile(sf *ast.SourceFile) *packagejson.PackageJson {
+	if tp == nil || tp.checker == nil || sf == nil {
 		return nil
 	}
 
-	links := GetEffectLinks(c)
-	return Cached(&links.PackageJsonForSourceFile, sf, func() *packagejson.PackageJson {
-		prog, ok := c.Program().(packageJsonProgram)
+	return Cached(&tp.links.PackageJsonForSourceFile, sf, func() *packagejson.PackageJson {
+		prog, ok := tp.program.(packageJsonProgram)
 		if !ok || prog == nil {
 			return nil
 		}

@@ -29,7 +29,7 @@ var MissedPipeableOpportunity = rule.Rule{
 			minArgCount = effectConfig.GetPipeableMinArgCount()
 		}
 
-		matches := AnalyzeMissedPipeableOpportunity(ctx.Checker, ctx.SourceFile, minArgCount)
+		matches := AnalyzeMissedPipeableOpportunity(ctx.TypeParser, ctx.Checker, ctx.SourceFile, minArgCount)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
 			diags[i] = ctx.NewDiagnostic(
@@ -57,8 +57,8 @@ type MissedPipeableOpportunityMatch struct {
 }
 
 // AnalyzeMissedPipeableOpportunity finds all nested call chains that can be converted to .pipe() style.
-func AnalyzeMissedPipeableOpportunity(c *checker.Checker, sf *ast.SourceFile, minArgCount int) []MissedPipeableOpportunityMatch {
-	flows := typeparser.PipingFlows(c, sf, false)
+func AnalyzeMissedPipeableOpportunity(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile, minArgCount int) []MissedPipeableOpportunityMatch {
+	flows := tp.PipingFlows(sf, false)
 
 	var matches []MissedPipeableOpportunityMatch
 
@@ -85,7 +85,7 @@ func AnalyzeMissedPipeableOpportunity(c *checker.Checker, sf *ast.SourceFile, mi
 			firstPipeableIndex := -1
 
 			for i := searchStartIndex; i <= len(flow.Transformations); i++ {
-				if isPipeableAtIndex(c, flow, i) {
+				if isPipeableAtIndex(tp, flow, i) {
 					firstPipeableIndex = i
 					break
 				}
@@ -100,7 +100,7 @@ func AnalyzeMissedPipeableOpportunity(c *checker.Checker, sf *ast.SourceFile, mi
 
 			for i := firstPipeableIndex; i < len(flow.Transformations); i++ {
 				t := flow.Transformations[i]
-				if !typeparser.IsSafelyPipeableCallee(c, t.Callee) {
+				if !tp.IsSafelyPipeableCallee(t.Callee) {
 					break
 				}
 				pipeableTransformations = append(pipeableTransformations, t)
@@ -146,20 +146,20 @@ func AnalyzeMissedPipeableOpportunity(c *checker.Checker, sf *ast.SourceFile, mi
 
 // isPipeableAtIndex checks if the type at a given index in a flow is pipeable.
 // Index 0 = subject, index > 0 = transformations[index - 1].outType
-func isPipeableAtIndex(c *checker.Checker, flow *typeparser.PipingFlow, index int) bool {
+func isPipeableAtIndex(tp *typeparser.TypeParser, flow *typeparser.PipingFlow, index int) bool {
 	if index == 0 {
 		subjectType := flow.Subject.OutType
 		if subjectType == nil {
 			return false
 		}
-		return typeparser.IsPipeableType(c, subjectType, flow.Subject.Node)
+		return tp.IsPipeableType(subjectType, flow.Subject.Node)
 	}
 
 	t := flow.Transformations[index-1]
 	if t.OutType == nil {
 		return false
 	}
-	return typeparser.IsPipeableType(c, t.OutType, flow.Node)
+	return tp.IsPipeableType(t.OutType, flow.Node)
 }
 
 // getSubjectText extracts the subject text for the diagnostic message.

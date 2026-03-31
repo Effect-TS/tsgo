@@ -3,7 +3,6 @@ package refactors
 import (
 	"github.com/effect-ts/tsgo/internal/refactor"
 	"github.com/effect-ts/tsgo/internal/schemagen"
-	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
 	"github.com/microsoft/typescript-go/shim/ls"
@@ -23,13 +22,9 @@ func runStructuralTypeToSchema(ctx *refactor.Context) []ls.CodeAction {
 		return nil
 	}
 
-	c, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	if c == nil {
-		return nil
-	}
-	defer done()
+	c := ctx.Checker
 
-	version := typeparser.SupportedEffectVersion(c)
+	version := ctx.TypeParser.SupportedEffectVersion()
 
 	// Get the name node and resolve the type
 	var nameNode *ast.Node
@@ -43,7 +38,7 @@ func runStructuralTypeToSchema(ctx *refactor.Context) []ls.CodeAction {
 		return nil
 	}
 
-	t := typeparser.GetTypeAtLocation(c, nameNode)
+	t := ctx.TypeParser.GetTypeAtLocation(nameNode)
 	if t == nil {
 		return nil
 	}
@@ -54,7 +49,7 @@ func runStructuralTypeToSchema(ctx *refactor.Context) []ls.CodeAction {
 	action := ctx.NewRefactorAction(refactor.RefactorAction{
 		Description: "Refactor to Schema (Recursive Structural)",
 		Run: func(tracker *change.Tracker) {
-			gen := schemagen.NewStructuralSchemaGen(tracker, ctx.SourceFile, c, version)
+			gen := schemagen.NewStructuralSchemaGen(tracker, ctx.TypeParser, ctx.SourceFile, c, version)
 			typeMap := map[string]*checker.Type{typeName: t}
 			stmts := gen.Process(typeMap, matchedNode, isExported)
 			for i := len(stmts) - 1; i >= 0; i-- {

@@ -22,7 +22,7 @@ var MultipleEffectProvide = rule.Rule{
 	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Avoid_chaining_Effect_provide_calls_as_this_can_lead_to_service_lifecycle_issues_Instead_merge_layers_and_provide_them_in_a_single_call_effect_multipleEffectProvide.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
-		matches := AnalyzeMultipleEffectProvide(ctx.Checker, ctx.SourceFile)
+		matches := AnalyzeMultipleEffectProvide(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
 			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Avoid_chaining_Effect_provide_calls_as_this_can_lead_to_service_lifecycle_issues_Instead_merge_layers_and_provide_them_in_a_single_call_effect_multipleEffectProvide, nil)
@@ -43,10 +43,10 @@ type MultipleEffectProvideMatch struct {
 
 // AnalyzeMultipleEffectProvide finds all consecutive Effect.provide call chains
 // with Layer-typed arguments within piping flows.
-func AnalyzeMultipleEffectProvide(c *checker.Checker, sf *ast.SourceFile) []MultipleEffectProvideMatch {
+func AnalyzeMultipleEffectProvide(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile) []MultipleEffectProvideMatch {
 	var matches []MultipleEffectProvideMatch
 
-	flows := typeparser.PipingFlows(c, sf, true)
+	flows := tp.PipingFlows(sf, true)
 	for _, flow := range flows {
 		// Track chunks of consecutive Effect.provide calls with Layer arguments.
 		var currentChunk []*ast.Node
@@ -70,7 +70,7 @@ func AnalyzeMultipleEffectProvide(c *checker.Checker, sf *ast.SourceFile) []Mult
 
 		for _, transformation := range flow.Transformations {
 			// Check if this is an Effect.provide call
-			if !typeparser.IsNodeReferenceToEffectModuleApi(c, transformation.Callee, "provide") {
+			if !tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "provide") {
 				finalizeChunk()
 				continue
 			}
@@ -83,13 +83,13 @@ func AnalyzeMultipleEffectProvide(c *checker.Checker, sf *ast.SourceFile) []Mult
 
 			// Check if the first argument is a Layer type
 			arg := transformation.Args[0]
-			argType := typeparser.GetTypeAtLocation(c, arg)
+			argType := tp.GetTypeAtLocation(arg)
 			if argType == nil {
 				finalizeChunk()
 				continue
 			}
 
-			if typeparser.LayerType(c, argType, arg) == nil {
+			if tp.LayerType(argType, arg) == nil {
 				// provide call but not with a Layer argument — breaks the chain
 				finalizeChunk()
 				continue

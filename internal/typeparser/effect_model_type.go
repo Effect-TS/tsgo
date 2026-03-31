@@ -14,7 +14,7 @@ var effectModelPackageSourceFileDescriptor = PackageSourceFileDescriptor{
 // by verifying it exports "Class", "Generated", and "FieldOption".
 // These symbols are chosen to disambiguate Model from Schema (which also exports "Class"),
 // matching the TypeScript reference implementation.
-func isEffectModelTypeSourceFile(c *checker.Checker, sf *ast.SourceFile) bool {
+func isEffectModelTypeSourceFile(_ *TypeParser, c *checker.Checker, sf *ast.SourceFile) bool {
 	if c == nil || sf == nil {
 		return false
 	}
@@ -42,6 +42,6 @@ func isEffectModelTypeSourceFile(c *checker.Checker, sf *ast.SourceFile) bool {
 // IsNodeReferenceToEffectModelModuleApi reports whether node resolves to a member
 // exported by the "effect" package from a module that exports the Model API
 // (effect/unstable/schema).
-func IsNodeReferenceToEffectModelModuleApi(c *checker.Checker, node *ast.Node, memberName string) bool {
-	return IsNodeReferenceToModuleExport(c, node, effectModelPackageSourceFileDescriptor, memberName)
+func (tp *TypeParser) IsNodeReferenceToEffectModelModuleApi(node *ast.Node, memberName string) bool {
+	return tp.IsNodeReferenceToModuleExport(node, effectModelPackageSourceFileDescriptor, memberName)
 }

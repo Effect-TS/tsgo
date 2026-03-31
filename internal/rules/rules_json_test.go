@@ -25,6 +25,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/pluginoptions"
 	"github.com/effect-ts/tsgo/internal/rule"
 	"github.com/effect-ts/tsgo/internal/rules"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/bundled"
 	"github.com/microsoft/typescript-go/shim/compiler"
@@ -411,7 +412,7 @@ func evaluatePreview(t *testing.T, version effecttest.EffectVersion, sourceText 
 				program.UseCaseSensitiveFileNames(),
 			)
 		}
-		ruleCtx := rule.NewContext(c, sf, options, r.DefaultSeverity)
+		ruleCtx := rule.NewContext(context.Background(), program, c, typeparser.NewTypeParser(program, c), sf, options, r.DefaultSeverity)
 		diags := r.Run(ruleCtx)
 		ruleDiags = append(ruleDiags, diags...)
 	}

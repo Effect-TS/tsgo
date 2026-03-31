@@ -56,7 +56,7 @@ func checkUnknownInEffectCatch(ctx *rule.Context, node *ast.Node) *ast.Diagnosti
 	call := node.AsCallExpression()
 
 	callee := call.Expression
-	if !isUnknownCatchCallee(ctx.Checker, callee) {
+	if !isUnknownCatchCallee(ctx.TypeParser, ctx.Checker, callee) {
 		return nil
 	}
 
@@ -75,7 +75,7 @@ func checkUnknownInEffectCatch(ctx *rule.Context, node *ast.Node) *ast.Diagnosti
 		return nil
 	}
 
-	for _, objectType := range typeparser.UnrollUnionMembers(paramType) {
+	for _, objectType := range ctx.TypeParser.UnrollUnionMembers(paramType) {
 		catchSymbol := ctx.Checker.GetPropertyOfType(objectType, "catch")
 		if catchSymbol == nil {
 			continue
@@ -106,9 +106,9 @@ func checkUnknownInEffectCatch(ctx *rule.Context, node *ast.Node) *ast.Diagnosti
 }
 
 // isUnknownCatchCallee checks if a node references one of the Effect module catch APIs.
-func isUnknownCatchCallee(c *checker.Checker, node *ast.Node) bool {
+func isUnknownCatchCallee(tp *typeparser.TypeParser, _ *checker.Checker, node *ast.Node) bool {
 	for _, name := range unknownCatchApis {
-		if typeparser.IsNodeReferenceToEffectModuleApi(c, node, name) {
+		if tp.IsNodeReferenceToEffectModuleApi(node, name) {
 			return true
 		}
 	}

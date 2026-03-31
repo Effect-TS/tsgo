@@ -23,12 +23,10 @@ func runEffectSqlModelSelfInClasses(ctx *completion.Context) []*lsproto.Completi
 		return nil
 	}
 
-	// Get checker for version detection and API reference checks
-	ch, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	defer done()
+	tp := ctx.TypeParser
 
 	// V3 only
-	version := typeparser.SupportedEffectVersion(ch)
+	version := tp.SupportedEffectVersion()
 	if version != typeparser.EffectMajorV3 {
 		return nil
 	}
@@ -39,7 +37,7 @@ func runEffectSqlModelSelfInClasses(ctx *completion.Context) []*lsproto.Completi
 	className := data.ClassNameText()
 
 	// For non-fully-qualified: validate with IsNodeReferenceToEffectSqlModelModuleApi
-	if !isFullyQualified && !typeparser.IsNodeReferenceToEffectSqlModelModuleApi(ch, data.AccessedObject, "Class") {
+	if !isFullyQualified && !tp.IsNodeReferenceToEffectSqlModelModuleApi(data.AccessedObject, "Class") {
 		return nil
 	}
 

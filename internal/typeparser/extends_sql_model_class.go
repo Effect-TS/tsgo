@@ -2,7 +2,6 @@ package typeparser
 
 import (
 	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
 )
 
 // SqlModelClassResult holds the parsed result of a class extending Model.Class.
@@ -19,12 +18,12 @@ type SqlModelClassResult struct {
 // where the ExpressionWithTypeArguments.expression is a CallExpression (outer call)
 // whose own .expression is also a CallExpression (inner call) with type arguments,
 // and the inner call resolves to @effect/sql Model.Class.
-func ExtendsEffectSqlModelClass(c *checker.Checker, classNode *ast.Node) *SqlModelClassResult {
-	if c == nil || classNode == nil {
+func (tp *TypeParser) ExtendsEffectSqlModelClass(classNode *ast.Node) *SqlModelClassResult {
+	if tp == nil || tp.checker == nil || classNode == nil {
 		return nil
 	}
 
-	links := GetEffectLinks(c)
+	links := tp.links
 	return Cached(&links.ExtendsEffectSqlModelClass, classNode, func() *SqlModelClassResult {
 		if classNode.Name() == nil {
 			return nil
@@ -70,7 +69,7 @@ func ExtendsEffectSqlModelClass(c *checker.Checker, classNode *ast.Node) *SqlMod
 			if innerCall.Expression == nil {
 				continue
 			}
-			if !IsNodeReferenceToEffectSqlModelModuleApi(c, innerCall.Expression, "Class") {
+			if !tp.IsNodeReferenceToEffectSqlModelModuleApi(innerCall.Expression, "Class") {
 				continue
 			}
 

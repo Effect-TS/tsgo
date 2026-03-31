@@ -28,8 +28,8 @@ var MissingLayerContext = rule.Rule{
 
 		for _, re := range ctx.Checker.GetRelationErrors(ctx.SourceFile) {
 			// Parse both types as Layers
-			srcLayer := typeparser.LayerType(ctx.Checker, re.Source, re.ErrorNode)
-			tgtLayer := typeparser.LayerType(ctx.Checker, re.Target, re.ErrorNode)
+			srcLayer := ctx.TypeParser.LayerType(re.Source, re.ErrorNode)
+			tgtLayer := ctx.TypeParser.LayerType(re.Target, re.ErrorNode)
 
 			// Both must be Layer types
 			if srcLayer == nil || tgtLayer == nil {
@@ -38,7 +38,7 @@ var MissingLayerContext = rule.Rule{
 
 			// Find unhandled context types by checking each source RIn member
 			// against the target RIn type
-			unhandled := findUnhandledLayerContexts(ctx.Checker, srcLayer.RIn, tgtLayer.RIn)
+			unhandled := findUnhandledLayerContexts(ctx.TypeParser, ctx.Checker, srcLayer.RIn, tgtLayer.RIn)
 			if len(unhandled) > 0 {
 				// Sort deterministically by type name (alphabetical)
 				sort.Slice(unhandled, func(i, j int) bool {
@@ -55,9 +55,9 @@ var MissingLayerContext = rule.Rule{
 }
 
 // findUnhandledLayerContexts returns the source Layer RIn types that are not assignable to the target RIn type.
-func findUnhandledLayerContexts(c *checker.Checker, srcRIn, tgtRIn *checker.Type) []*checker.Type {
+func findUnhandledLayerContexts(tp *typeparser.TypeParser, c *checker.Checker, srcRIn, tgtRIn *checker.Type) []*checker.Type {
 	// Unroll source RIn union into individual members
-	srcMembers := typeparser.UnrollUnionMembers(srcRIn)
+	srcMembers := tp.UnrollUnionMembers(srcRIn)
 
 	var unhandled []*checker.Type
 	for _, member := range srcMembers {

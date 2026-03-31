@@ -23,13 +23,13 @@ var EffectInVoidSuccess = rule.Rule{
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		var diags []*ast.Diagnostic
 
-		for _, entry := range typeparser.ExpectedAndRealTypes(ctx.Checker, ctx.SourceFile) {
+		for _, entry := range ctx.TypeParser.ExpectedAndRealTypes(ctx.SourceFile) {
 			if entry.ExpectedType == entry.RealType {
 				continue
 			}
 
-			expectedEffect := typeparser.EffectType(ctx.Checker, entry.ExpectedType, entry.Node)
-			realEffect := typeparser.EffectType(ctx.Checker, entry.RealType, entry.ValueNode)
+			expectedEffect := ctx.TypeParser.EffectType(entry.ExpectedType, entry.Node)
+			realEffect := ctx.TypeParser.EffectType(entry.RealType, entry.ValueNode)
 
 			if expectedEffect == nil || realEffect == nil {
 				continue
@@ -42,8 +42,8 @@ var EffectInVoidSuccess = rule.Rule{
 
 			// Unroll the real Effect's success type into union members
 			// and check if any member is strictly an Effect type
-			members := typeparser.UnrollUnionMembers(realEffect.A)
-			voidedEffect := findFirstStrictEffect(ctx.Checker, members, entry.Node)
+			members := ctx.TypeParser.UnrollUnionMembers(realEffect.A)
+			voidedEffect := findFirstStrictEffect(ctx.TypeParser, ctx.Checker, members, entry.Node)
 			if voidedEffect != nil {
 				diag := ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(entry.Node), tsdiag.There_is_a_nested_0_in_the_void_success_channel_beware_that_this_could_lead_to_nested_Effect_Effect_that_won_t_be_executed_effect_effectInVoidSuccess, nil, ctx.Checker.TypeToString(voidedEffect))
 				diags = append(diags, diag)
@@ -56,9 +56,9 @@ var EffectInVoidSuccess = rule.Rule{
 
 // findFirstStrictEffect returns the first type in the slice that is strictly an Effect type,
 // or nil if none are found. This mirrors the Nano.firstSuccessOf pattern in the TS reference.
-func findFirstStrictEffect(c *checker.Checker, types []*checker.Type, atLocation *ast.Node) *checker.Type {
+func findFirstStrictEffect(tp *typeparser.TypeParser, _ *checker.Checker, types []*checker.Type, atLocation *ast.Node) *checker.Type {
 	for _, t := range types {
-		if typeparser.StrictIsEffectType(c, t, atLocation) {
+		if tp.StrictIsEffectType(t, atLocation) {
 			return t
 		}
 	}

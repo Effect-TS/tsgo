@@ -2,7 +2,6 @@ package refactors
 
 import (
 	"github.com/effect-ts/tsgo/internal/refactor"
-	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/astnav"
 	"github.com/microsoft/typescript-go/shim/checker"
@@ -97,13 +96,9 @@ func runToggleTypeAnnotation(ctx *refactor.Context) []ls.CodeAction {
 	}
 
 	// Add type annotation: infer type from initializer and insert after name
-	c, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	if c == nil {
-		return nil
-	}
-	defer done()
+	c := ctx.Checker
 
-	initializerType := typeparser.GetTypeAtLocation(c, initializer)
+	initializerType := ctx.TypeParser.GetTypeAtLocation(initializer)
 	if initializerType == nil {
 		return nil
 	}

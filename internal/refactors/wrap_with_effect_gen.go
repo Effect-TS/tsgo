@@ -17,12 +17,6 @@ var WrapWithEffectGen = refactor.Refactor{
 }
 
 func runWrapWithEffectGen(ctx *refactor.Context) []ls.CodeAction {
-	c, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	if c == nil {
-		return nil
-	}
-	defer done()
-
 	token := astnav.GetTokenAtPosition(ctx.SourceFile, ctx.Span.Pos())
 	if token == nil {
 		return nil
@@ -46,14 +40,14 @@ func runWrapWithEffectGen(ctx *refactor.Context) []ls.CodeAction {
 			}
 		}
 
-		nodeType := typeparser.GetTypeAtLocation(c, node)
+		nodeType := ctx.TypeParser.GetTypeAtLocation(node)
 		if nodeType == nil {
 			continue
 		}
-		if !typeparser.StrictIsEffectType(c, nodeType, node) {
+		if !ctx.TypeParser.StrictIsEffectType(nodeType, node) {
 			continue
 		}
-		if typeparser.EffectGenCall(c, node) != nil {
+		if ctx.TypeParser.EffectGenCall(node) != nil {
 			continue
 		}
 

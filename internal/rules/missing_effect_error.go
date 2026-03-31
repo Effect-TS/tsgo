@@ -25,7 +25,7 @@ var MissingEffectError = rule.Rule{
 	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Missing_errors_0_in_the_expected_Effect_type_effect_missingEffectError.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
-		matches := AnalyzeMissingEffectError(ctx.Checker, ctx.SourceFile)
+		matches := AnalyzeMissingEffectError(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
 			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Missing_errors_0_in_the_expected_Effect_type_effect_missingEffectError, nil, m.ErrorTypeStr)
@@ -47,13 +47,13 @@ type MissingEffectErrorMatch struct {
 
 // AnalyzeMissingEffectError finds all relation errors where an Effect has error
 // types that are not handled by the expected type.
-func AnalyzeMissingEffectError(c *checker.Checker, sf *ast.SourceFile) []MissingEffectErrorMatch {
+func AnalyzeMissingEffectError(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []MissingEffectErrorMatch {
 	var matches []MissingEffectErrorMatch
 
 	for _, re := range c.GetRelationErrors(sf) {
 		// Parse both types as Effects
-		srcEffect := typeparser.EffectType(c, re.Source, re.ErrorNode)
-		tgtEffect := typeparser.EffectType(c, re.Target, re.ErrorNode)
+		srcEffect := tp.EffectType(re.Source, re.ErrorNode)
+		tgtEffect := tp.EffectType(re.Target, re.ErrorNode)
 
 		// Both must be Effect types
 		if srcEffect == nil || tgtEffect == nil {
@@ -66,7 +66,7 @@ func AnalyzeMissingEffectError(c *checker.Checker, sf *ast.SourceFile) []Missing
 		}
 
 		// Find unhandled error types
-		unhandledErrors := findUnhandledErrors(c, srcEffect.E, tgtEffect.E)
+		unhandledErrors := findUnhandledErrors(tp, c, srcEffect.E, tgtEffect.E)
 		if len(unhandledErrors) > 0 {
 			matches = append(matches, MissingEffectErrorMatch{
 				SourceFile:        sf,
@@ -83,9 +83,9 @@ func AnalyzeMissingEffectError(c *checker.Checker, sf *ast.SourceFile) []Missing
 }
 
 // findUnhandledErrors returns the source error types that are not assignable to the target error type.
-func findUnhandledErrors(c *checker.Checker, srcE, tgtE *checker.Type) []*checker.Type {
+func findUnhandledErrors(tp *typeparser.TypeParser, c *checker.Checker, srcE, tgtE *checker.Type) []*checker.Type {
 	// Unroll source error union into individual members
-	srcMembers := typeparser.UnrollUnionMembers(srcE)
+	srcMembers := tp.UnrollUnionMembers(srcE)
 
 	var unhandled []*checker.Type
 	for _, member := range srcMembers {

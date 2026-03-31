@@ -3,6 +3,7 @@ package completion
 import (
 	"context"
 
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
 	"github.com/microsoft/typescript-go/shim/compiler"
@@ -12,37 +13,34 @@ import (
 
 // Context bundles the completion request data and provides helpers for completion implementations.
 // It provides access to the source file, cursor position, existing completion items,
-// and type checker access via GetTypeCheckerForFile.
 type Context struct {
 	SourceFile    *ast.SourceFile
 	Position      int
 	ExistingItems []*lsproto.CompletionItem
+	Program       *compiler.Program
+	Checker       *checker.Checker
+	TypeParser    *typeparser.TypeParser
 
-	ctx     context.Context
-	program *compiler.Program
+	Context context.Context
 	ls      *ls.LanguageService
 }
 
 // NewContext creates a completion Context from the completion callback parameters.
-func NewContext(ctx context.Context, sourceFile *ast.SourceFile, position int, existingItems []*lsproto.CompletionItem, program *compiler.Program, langService *ls.LanguageService) *Context {
+func NewContext(ctx context.Context, sourceFile *ast.SourceFile, position int, existingItems []*lsproto.CompletionItem, program *compiler.Program, langService *ls.LanguageService, checker *checker.Checker, tp *typeparser.TypeParser) *Context {
+	if program == nil {
+		panic("completion.NewContext: nil program")
+	}
+	if checker == nil {
+		panic("completion.NewContext: nil checker")
+	}
 	return &Context{
 		SourceFile:    sourceFile,
 		Position:      position,
 		ExistingItems: existingItems,
-		ctx:           ctx,
-		program:       program,
+		Program:       program,
+		Checker:       checker,
+		TypeParser:    tp,
+		Context:       ctx,
 		ls:            langService,
 	}
-}
-
-// GetTypeCheckerForFile returns the type checker for the given source file and a cleanup function.
-// Callers must defer the cleanup function.
-// It calls GetDiagnostics on the returned checker to ensure checkSourceFile has run,
-// so that type-checked state is populated.
-func (c *Context) GetTypeCheckerForFile(sf *ast.SourceFile) (*checker.Checker, func()) {
-	ch, done := c.program.GetTypeCheckerForFile(c.ctx, sf)
-	if ch != nil {
-		ch.GetDiagnostics(c.ctx, sf)
-	}
-	return ch, done
 }

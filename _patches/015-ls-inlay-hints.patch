@@ -8,13 +8,13 @@ index f737425eb0..7462a9bd64 100644
  
 +// AfterInlayHintsCallback is invoked after inlay hints are computed
 +// to allow external packages to filter or modify inlay hints.
-+var AfterInlayHintsCallback func(c *checker.Checker, sf *ast.SourceFile, span core.TextRange, preferences *lsutil.InlayHintsPreferences, hints []*lsproto.InlayHint, converters *lsconv.Converters) []*lsproto.InlayHint
++var AfterInlayHintsCallback func(program checker.Program, c *checker.Checker, sf *ast.SourceFile, span core.TextRange, preferences *lsutil.InlayHintsPreferences, hints []*lsproto.InlayHint, converters *lsconv.Converters) []*lsproto.InlayHint
 +
 +// RegisterAfterInlayHintsCallback registers a callback to be called after
 +// inlay hints are computed. The callback can filter or modify the hints
 +// before they are returned.
 +// Note: Only one callback can be registered. Subsequent calls will replace the previous callback.
-+func RegisterAfterInlayHintsCallback(cb func(c *checker.Checker, sf *ast.SourceFile, span core.TextRange, preferences *lsutil.InlayHintsPreferences, hints []*lsproto.InlayHint, converters *lsconv.Converters) []*lsproto.InlayHint) {
++func RegisterAfterInlayHintsCallback(cb func(program checker.Program, c *checker.Checker, sf *ast.SourceFile, span core.TextRange, preferences *lsutil.InlayHintsPreferences, hints []*lsproto.InlayHint, converters *lsconv.Converters) []*lsproto.InlayHint) {
 +	AfterInlayHintsCallback = cb
 +}
 +
@@ -28,7 +28,7 @@ index f737425eb0..7462a9bd64 100644
 +
 +	// EFFECT HOOK: Allow Effect to filter inlay hints
 +	if AfterInlayHintsCallback != nil {
-+		inlayHintState.result = AfterInlayHintsCallback(checker, file, inlayHintState.span, inlayHintPreferences, inlayHintState.result, l.converters)
++		inlayHintState.result = AfterInlayHintsCallback(program, checker, file, inlayHintState.span, inlayHintPreferences, inlayHintState.result, l.converters)
 +	}
 +
  	return lsproto.InlayHintsOrNull{InlayHints: &inlayHintState.result}, nil

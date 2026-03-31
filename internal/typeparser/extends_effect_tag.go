@@ -2,7 +2,6 @@ package typeparser
 
 import (
 	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
 )
 
 // EffectTagResult holds the parsed result of a class extending Effect.Tag.
@@ -22,13 +21,12 @@ type EffectTagResult struct {
 // (inner call: Effect.Tag("key")), and the inner call's expression resolves to Effect.Tag.
 //
 // Returns nil if the class does not extend Effect.Tag.
-func ExtendsEffectTag(c *checker.Checker, classNode *ast.Node) *EffectTagResult {
-	if c == nil || classNode == nil {
+func (tp *TypeParser) ExtendsEffectTag(classNode *ast.Node) *EffectTagResult {
+	if tp == nil || tp.checker == nil || classNode == nil {
 		return nil
 	}
 
-	links := GetEffectLinks(c)
-	return Cached(&links.ExtendsEffectTag, classNode, func() *EffectTagResult {
+	return Cached(&tp.links.ExtendsEffectTag, classNode, func() *EffectTagResult {
 		// Must have a name
 		if classNode.Name() == nil {
 			return nil
@@ -78,7 +76,7 @@ func ExtendsEffectTag(c *checker.Checker, classNode *ast.Node) *EffectTagResult 
 			if innerCall.Expression == nil {
 				continue
 			}
-			if !IsNodeReferenceToEffectModuleApi(c, innerCall.Expression, "Tag") {
+			if !tp.IsNodeReferenceToEffectModuleApi(innerCall.Expression, "Tag") {
 				continue
 			}
 

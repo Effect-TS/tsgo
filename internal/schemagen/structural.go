@@ -22,6 +22,7 @@ type StructuralSchemaGen struct {
 	Tracker          *change.Tracker
 	SourceFile       *ast.SourceFile
 	Checker          *checker.Checker
+	TypeParser       *typeparser.TypeParser
 	SchemaIdentifier string
 	Version          typeparser.EffectMajorVersion
 
@@ -51,11 +52,12 @@ type processingContext struct {
 }
 
 // NewStructuralSchemaGen creates a StructuralSchemaGen for type-checker-based schema generation.
-func NewStructuralSchemaGen(tracker *change.Tracker, sf *ast.SourceFile, c *checker.Checker, version typeparser.EffectMajorVersion) *StructuralSchemaGen {
+func NewStructuralSchemaGen(tracker *change.Tracker, tp *typeparser.TypeParser, sf *ast.SourceFile, c *checker.Checker, version typeparser.EffectMajorVersion) *StructuralSchemaGen {
 	return &StructuralSchemaGen{
 		Tracker:               tracker,
 		SourceFile:            sf,
 		Checker:               c,
+		TypeParser:            tp,
 		SchemaIdentifier:      typeparser.FindModuleIdentifier(sf, "Schema"),
 		Version:               version,
 		hoistedSchemas:        make(map[checker.TypeId]hoistedEntry),
@@ -574,7 +576,7 @@ func (g *StructuralSchemaGen) ScanExistingSchemas(scope *ast.Node) {
 		if t == nil {
 			continue
 		}
-		schemaTypes := typeparser.EffectSchemaTypes(g.Checker, t, scope)
+		schemaTypes := g.TypeParser.EffectSchemaTypes(t, scope)
 		if schemaTypes == nil {
 			continue
 		}

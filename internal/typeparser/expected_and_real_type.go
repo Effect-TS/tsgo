@@ -6,10 +6,21 @@ import (
 	"github.com/microsoft/typescript-go/shim/scanner"
 )
 
+// ExpectedAndRealType represents a pair of expected and actual types at an assignment site.
+// This is used by diagnostic rules that need to compare what type was expected at a location
+// versus what type was actually provided.
+type ExpectedAndRealType struct {
+	Node         *ast.Node     // The location node (for diagnostic reporting)
+	ExpectedType *checker.Type // The type expected at this location
+	ValueNode    *ast.Node     // The actual value node
+	RealType     *checker.Type // The actual type of the value
+}
+
 // getInferredReturnType extracts the return type from a function-like declaration.
 // It handles overloaded functions (multiple call signatures), type predicates,
 // and regular signature return types.
-func getInferredReturnType(c *checker.Checker, declaration *ast.Node) *checker.Type {
+func (tp *TypeParser) getInferredReturnType(declaration *ast.Node) *checker.Type {
+	c := tp.checker
 	if declaration == nil {
 		return nil
 	}
@@ -25,7 +36,7 @@ func getInferredReturnType(c *checker.Checker, declaration *ast.Node) *checker.T
 	// Try overloaded function handling:
 	// Get the type at the declaration location, get call signatures,
 	// and if there are multiple signatures, union their return types.
-	declType := GetTypeAtLocation(c, declaration)
+	declType := tp.GetTypeAtLocation(declaration)
 	if declType != nil {
 		signatures := c.GetSignaturesOfType(declType, checker.SignatureKindCall)
 		if len(signatures) > 1 {
@@ -68,13 +79,13 @@ func getInferredReturnType(c *checker.Checker, declaration *ast.Node) *checker.T
 // 6. Arrow function body without type params ((): T => expr)
 // 7. Arrow function body with type params (<A>(): T => expr)
 // 8. Satisfies expression (expr satisfies T)
-func ExpectedAndRealTypes(c *checker.Checker, sf *ast.SourceFile) []ExpectedAndRealType {
-	if c == nil || sf == nil {
+func (tp *TypeParser) ExpectedAndRealTypes(sf *ast.SourceFile) []ExpectedAndRealType {
+	if tp == nil || tp.checker == nil || sf == nil {
 		return nil
 	}
+	c := tp.checker
 
-	links := GetEffectLinks(c)
-	return Cached(&links.ExpectedAndRealTypes, sf, func() []ExpectedAndRealType {
+	return Cached(&tp.links.ExpectedAndRealTypes, sf, func() []ExpectedAndRealType {
 		var result []ExpectedAndRealType
 
 		// Initialize BFS queue with the source file node
@@ -99,8 +110,8 @@ func ExpectedAndRealTypes(c *checker.Checker, sf *ast.SourceFile) []ExpectedAndR
 				if vd != nil && vd.Initializer != nil {
 					nameNode := vd.Name()
 					if nameNode != nil {
-						expectedType := GetTypeAtLocation(c, nameNode)
-						realType := GetTypeAtLocation(c, vd.Initializer)
+						expectedType := tp.GetTypeAtLocation(nameNode)
+						realType := tp.GetTypeAtLocation(vd.Initializer)
 						result = append(result, ExpectedAndRealType{
 							Node:         nameNode,
 							ExpectedType: expectedType,
@@ -130,7 +141,7 @@ func ExpectedAndRealTypes(c *checker.Checker, sf *ast.SourceFile) []ExpectedAndR
 									continue
 								}
 								expectedType := c.GetTypeOfSymbolAtLocation(param, node)
-								realType := GetTypeAtLocation(c, arg)
+								realType := tp.GetTypeAtLocation(arg)
 								result = append(result, ExpectedAndRealType{
 									Node:         arg,
 									ExpectedType: expectedType,
@@ -162,7 +173,7 @@ func ExpectedAndRealTypes(c *checker.Checker, sf *ast.SourceFile) []ExpectedAndR
 									sym := c.GetPropertyOfType(contextualType, name)
 									if sym != nil {
 										expectedType := c.GetTypeOfSymbolAtLocation(sym, node)
-										realType := GetTypeAtLocation(c, node)
+										realType := tp.GetTypeAtLocation(node)
 										result = append(result, ExpectedAndRealType{
 											Node:         node,
 											ExpectedType: expectedType,
@@ -185,8 +196,8 @@ func ExpectedAndRealTypes(c *checker.Checker, sf *ast.SourceFile) []ExpectedAndR
 				if binExpr != nil && binExpr.OperatorToken != nil &&
 					binExpr.OperatorToken.Kind == ast.KindEqualsToken {
 					if binExpr.Left != nil && binExpr.Right != nil {
-						expectedType := GetTypeAtLocation(c, binExpr.Left)
-						realType := GetTypeAtLocation(c, binExpr.Right)
+						expectedType := tp.GetTypeAtLocation(binExpr.Left)
+						realType := tp.GetTypeAtLocation(binExpr.Right)
 						result = append(result, ExpectedAndRealType{
 							Node:         binExpr.Left,
 							ExpectedType: expectedType,
@@ -207,9 +218,9 @@ func ExpectedAndRealTypes(c *checker.Checker, sf *ast.SourceFile) []ExpectedAndR
 				if retStmt != nil && retStmt.Expression != nil {
 					parentDecl := ast.GetContainingFunction(node)
 					if parentDecl != nil {
-						expectedType := getInferredReturnType(c, parentDecl)
+						expectedType := tp.getInferredReturnType(parentDecl)
 						if expectedType != nil {
-							realType := GetTypeAtLocation(c, retStmt.Expression)
+							realType := tp.GetTypeAtLocation(retStmt.Expression)
 							result = append(result, ExpectedAndRealType{
 								Node:         node,
 								ExpectedType: expectedType,
@@ -234,7 +245,7 @@ func ExpectedAndRealTypes(c *checker.Checker, sf *ast.SourceFile) []ExpectedAndR
 						// Pattern 6: No type parameters — use contextual type
 						expectedType := c.GetContextualType(body, checker.ContextFlagsNone)
 						if expectedType != nil {
-							realType := GetTypeAtLocation(c, body)
+							realType := tp.GetTypeAtLocation(body)
 							result = append(result, ExpectedAndRealType{
 								Node:         body,
 								ExpectedType: expectedType,
@@ -244,9 +255,9 @@ func ExpectedAndRealTypes(c *checker.Checker, sf *ast.SourceFile) []ExpectedAndR
 						}
 					} else {
 						// Pattern 7: With type parameters — use inferred return type
-						expectedType := getInferredReturnType(c, node)
+						expectedType := tp.getInferredReturnType(node)
 						if expectedType != nil {
-							realType := GetTypeAtLocation(c, body)
+							realType := tp.GetTypeAtLocation(body)
 							result = append(result, ExpectedAndRealType{
 								Node:         body,
 								ExpectedType: expectedType,
@@ -264,8 +275,8 @@ func ExpectedAndRealTypes(c *checker.Checker, sf *ast.SourceFile) []ExpectedAndR
 			if node.Kind == ast.KindSatisfiesExpression {
 				satExpr := node.AsSatisfiesExpression()
 				if satExpr != nil && satExpr.Expression != nil && satExpr.Type != nil {
-					expectedType := GetTypeAtLocation(c, satExpr.Type)
-					realType := GetTypeAtLocation(c, satExpr.Expression)
+					expectedType := tp.GetTypeAtLocation(satExpr.Type)
+					realType := tp.GetTypeAtLocation(satExpr.Expression)
 					result = append(result, ExpectedAndRealType{
 						Node:         satExpr.Expression,
 						ExpectedType: expectedType,

@@ -43,8 +43,7 @@ func runDurationInput(ctx *completion.Context) []*lsproto.CompletionItem {
 		return nil
 	}
 
-	ch, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	defer done()
+	ch := ctx.Checker
 
 	contextualType := ch.GetContextualType(previousToken, checker.ContextFlagsNone)
 	if contextualType == nil || !contextualType.IsUnion() {

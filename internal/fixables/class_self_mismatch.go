@@ -19,15 +19,11 @@ var ClassSelfMismatchFix = fixable.Fixable{
 
 func runClassSelfMismatchFix(ctx *fixable.Context) []ls.CodeAction {
 
-	c, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	if c == nil {
-		return nil
-	}
-	defer done()
+	c := ctx.Checker
 
 	sf := ctx.SourceFile
 
-	matches := rules.AnalyzeClassSelfMismatch(c, sf)
+	matches := rules.AnalyzeClassSelfMismatch(ctx.TypeParser, c, sf)
 	for _, match := range matches {
 		diagRange := match.Location
 		if !diagRange.Intersects(ctx.Span) && !ctx.Span.ContainedBy(diagRange) {

@@ -21,15 +21,11 @@ var MissingReturnYieldStarFix = fixable.Fixable{
 
 func runMissingReturnYieldStarFix(ctx *fixable.Context) []ls.CodeAction {
 
-	c, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	if c == nil {
-		return nil
-	}
-	defer done()
+	c := ctx.Checker
 
 	sf := ctx.SourceFile
 
-	matches := rules.AnalyzeMissingReturnYieldStar(c, sf)
+	matches := rules.AnalyzeMissingReturnYieldStar(ctx.TypeParser, c, sf)
 
 	var matchedExprStmt *ast.Node
 	for _, match := range matches {

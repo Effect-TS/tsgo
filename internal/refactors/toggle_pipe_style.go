@@ -17,12 +17,6 @@ var TogglePipeStyle = refactor.Refactor{
 }
 
 func runTogglePipeStyle(ctx *refactor.Context) []ls.CodeAction {
-	c, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	if c == nil {
-		return nil
-	}
-	defer done()
-
 	token := astnav.GetTokenAtPosition(ctx.SourceFile, ctx.Span.Pos())
 	if token == nil {
 		return nil
@@ -34,7 +28,7 @@ func runTogglePipeStyle(ctx *refactor.Context) []ls.CodeAction {
 			continue
 		}
 
-		pipeCall := typeparser.ParsePipeCall(c, node)
+		pipeCall := ctx.TypeParser.ParsePipeCall(node)
 		if pipeCall == nil {
 			continue
 		}
@@ -43,8 +37,8 @@ func runTogglePipeStyle(ctx *refactor.Context) []ls.CodeAction {
 		case typeparser.TransformationKindPipe:
 			// pipe(subject, f1, f2) -> subject.pipe(f1, f2)
 			// Check that the subject's type is pipeable
-			subjectType := typeparser.GetTypeAtLocation(c, pipeCall.Subject)
-			if !typeparser.IsPipeableType(c, subjectType, pipeCall.Subject) {
+			subjectType := ctx.TypeParser.GetTypeAtLocation(pipeCall.Subject)
+			if !ctx.TypeParser.IsPipeableType(subjectType, pipeCall.Subject) {
 				continue
 			}
 

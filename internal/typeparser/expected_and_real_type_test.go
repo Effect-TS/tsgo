@@ -16,8 +16,8 @@ import (
 )
 
 // compileAndGetCheckerAndSourceFile compiles a TypeScript source string and returns the
-// checker, source file, and a done function to release the checker.
-func compileAndGetCheckerAndSourceFile(t *testing.T, source string) (*checker.Checker, *ast.SourceFile, func()) {
+// checker, type parser, source file, and a done function to release the checker.
+func compileAndGetCheckerAndSourceFile(t *testing.T, source string) (*checker.Checker, *typeparser.TypeParser, *ast.SourceFile, func()) {
 	t.Helper()
 
 	testfs := map[string]any{
@@ -59,7 +59,7 @@ func compileAndGetCheckerAndSourceFile(t *testing.T, source string) (*checker.Ch
 		t.Fatal("Failed to get source file")
 	}
 
-	return c, sf, done
+	return c, typeparser.NewTypeParser(c.Program(), c), sf, done
 }
 
 func TestExpectedAndRealTypes_VariableDeclaration(t *testing.T) {
@@ -70,10 +70,10 @@ const a: number = 42
 const b: string = "hello"
 `
 
-	c, sf, done := compileAndGetCheckerAndSourceFile(t, source)
+	_, tp, sf, done := compileAndGetCheckerAndSourceFile(t, source)
 	defer done()
 
-	results := typeparser.ExpectedAndRealTypes(c, sf)
+	results := tp.ExpectedAndRealTypes(sf)
 
 	// Should find 2 variable declaration sites
 	count := 0
@@ -95,10 +95,10 @@ function foo(x: number, y: string): void {}
 foo(42, "hello")
 `
 
-	c, sf, done := compileAndGetCheckerAndSourceFile(t, source)
+	_, tp, sf, done := compileAndGetCheckerAndSourceFile(t, source)
 	defer done()
 
-	results := typeparser.ExpectedAndRealTypes(c, sf)
+	results := tp.ExpectedAndRealTypes(sf)
 
 	// Should find at least 2 call argument sites (for x and y)
 	count := 0
@@ -120,10 +120,10 @@ interface Obj { a: number; b: string }
 const obj: Obj = { a: 1, b: "hello" }
 `
 
-	c, sf, done := compileAndGetCheckerAndSourceFile(t, source)
+	_, tp, sf, done := compileAndGetCheckerAndSourceFile(t, source)
 	defer done()
 
-	results := typeparser.ExpectedAndRealTypes(c, sf)
+	results := tp.ExpectedAndRealTypes(sf)
 
 	// Should find sites for the variable declaration and the object literal properties
 	if len(results) == 0 {
@@ -149,10 +149,10 @@ let x: number = 0
 x = 42
 `
 
-	c, sf, done := compileAndGetCheckerAndSourceFile(t, source)
+	_, tp, sf, done := compileAndGetCheckerAndSourceFile(t, source)
 	defer done()
 
-	results := typeparser.ExpectedAndRealTypes(c, sf)
+	results := tp.ExpectedAndRealTypes(sf)
 
 	// Should find at least 2 sites: variable declaration + binary assignment
 	if len(results) < 2 {
@@ -182,10 +182,10 @@ function getNum(): number {
 }
 `
 
-	c, sf, done := compileAndGetCheckerAndSourceFile(t, source)
+	_, tp, sf, done := compileAndGetCheckerAndSourceFile(t, source)
 	defer done()
 
-	results := typeparser.ExpectedAndRealTypes(c, sf)
+	results := tp.ExpectedAndRealTypes(sf)
 
 	// Should find at least 1 site for the return statement
 	found := false
@@ -212,10 +212,10 @@ func TestExpectedAndRealTypes_ArrowFunctionBodyNoTypeParams(t *testing.T) {
 const fn: () => number = () => 42
 `
 
-	c, sf, done := compileAndGetCheckerAndSourceFile(t, source)
+	_, tp, sf, done := compileAndGetCheckerAndSourceFile(t, source)
 	defer done()
 
-	results := typeparser.ExpectedAndRealTypes(c, sf)
+	results := tp.ExpectedAndRealTypes(sf)
 
 	// Should find at least 1 site for the variable declaration, and potentially 1 for the arrow body
 	if len(results) == 0 {
@@ -241,10 +241,10 @@ function wrap<T>(fn: () => T): T { return fn() }
 const result = wrap(<A extends number>(): A => 42 as any as A)
 `
 
-	c, sf, done := compileAndGetCheckerAndSourceFile(t, source)
+	_, tp, sf, done := compileAndGetCheckerAndSourceFile(t, source)
 	defer done()
 
-	results := typeparser.ExpectedAndRealTypes(c, sf)
+	results := tp.ExpectedAndRealTypes(sf)
 
 	// Should find at least some assignment sites
 	if len(results) == 0 {
@@ -260,10 +260,10 @@ const x = 42 satisfies number
 const y = "hello" satisfies string
 `
 
-	c, sf, done := compileAndGetCheckerAndSourceFile(t, source)
+	_, tp, sf, done := compileAndGetCheckerAndSourceFile(t, source)
 	defer done()
 
-	results := typeparser.ExpectedAndRealTypes(c, sf)
+	results := tp.ExpectedAndRealTypes(sf)
 
 	// Should find at least 2 satisfies expression sites plus variable declarations
 	satisfiesCount := 0
@@ -281,7 +281,7 @@ func TestExpectedAndRealTypes_NilInputs(t *testing.T) {
 	t.Parallel()
 
 	// Test nil checker
-	results := typeparser.ExpectedAndRealTypes(nil, nil)
+	results := (*typeparser.TypeParser)(nil).ExpectedAndRealTypes(nil)
 	if results != nil {
 		t.Errorf("expected nil for nil checker, got %d results", len(results))
 	}
@@ -291,19 +291,19 @@ func TestEffectType_NilInputs(t *testing.T) {
 	t.Parallel()
 
 	source := `const x: number = 42`
-	c, sf, done := compileAndGetCheckerAndSourceFile(t, source)
+	_, tp, sf, done := compileAndGetCheckerAndSourceFile(t, source)
 	defer done()
 
 	// nil type must not panic
-	if result := typeparser.EffectType(c, nil, sf.AsNode()); result != nil {
+	if result := tp.EffectType(nil, sf.AsNode()); result != nil {
 		t.Error("expected nil for nil type")
 	}
 	// nil checker must not panic
-	if result := typeparser.EffectType(nil, nil, sf.AsNode()); result != nil {
+	if result := (*typeparser.TypeParser)(nil).EffectType(nil, sf.AsNode()); result != nil {
 		t.Error("expected nil for nil checker")
 	}
 	// HasEffectTypeId with nil type must not panic
-	if typeparser.HasEffectTypeId(c, nil, sf.AsNode()) {
+	if tp.HasEffectTypeId(nil, sf.AsNode()) {
 		t.Error("expected false for nil type")
 	}
 }
@@ -312,13 +312,13 @@ func TestLayerType_NilInputs(t *testing.T) {
 	t.Parallel()
 
 	source := `const x: number = 42`
-	c, sf, done := compileAndGetCheckerAndSourceFile(t, source)
+	_, tp, sf, done := compileAndGetCheckerAndSourceFile(t, source)
 	defer done()
 
-	if result := typeparser.LayerType(c, nil, sf.AsNode()); result != nil {
+	if result := tp.LayerType(nil, sf.AsNode()); result != nil {
 		t.Error("expected nil for nil type")
 	}
-	if result := typeparser.LayerType(nil, nil, sf.AsNode()); result != nil {
+	if result := (*typeparser.TypeParser)(nil).LayerType(nil, sf.AsNode()); result != nil {
 		t.Error("expected nil for nil checker")
 	}
 }
@@ -327,13 +327,13 @@ func TestContextTag_NilInputs(t *testing.T) {
 	t.Parallel()
 
 	source := `const x: number = 42`
-	c, sf, done := compileAndGetCheckerAndSourceFile(t, source)
+	_, tp, sf, done := compileAndGetCheckerAndSourceFile(t, source)
 	defer done()
 
-	if result := typeparser.ContextTag(c, nil, sf.AsNode()); result != nil {
+	if result := tp.ContextTag(nil, sf.AsNode()); result != nil {
 		t.Error("expected nil for nil type")
 	}
-	if result := typeparser.ContextTag(nil, nil, sf.AsNode()); result != nil {
+	if result := (*typeparser.TypeParser)(nil).ContextTag(nil, sf.AsNode()); result != nil {
 		t.Error("expected nil for nil checker")
 	}
 }
@@ -343,10 +343,10 @@ func TestExpectedAndRealTypes_EmptyFile(t *testing.T) {
 
 	source := ``
 
-	c, sf, done := compileAndGetCheckerAndSourceFile(t, source)
+	_, tp, sf, done := compileAndGetCheckerAndSourceFile(t, source)
 	defer done()
 
-	results := typeparser.ExpectedAndRealTypes(c, sf)
+	results := tp.ExpectedAndRealTypes(sf)
 
 	if len(results) != 0 {
 		t.Errorf("expected 0 results for empty file, got %d", len(results))
@@ -389,10 +389,10 @@ const id = identity(<A extends string>(): A => "hi" as any as A)
 const s = "test" satisfies string
 `
 
-	c, sf, done := compileAndGetCheckerAndSourceFile(t, source)
+	_, tp, sf, done := compileAndGetCheckerAndSourceFile(t, source)
 	defer done()
 
-	results := typeparser.ExpectedAndRealTypes(c, sf)
+	results := tp.ExpectedAndRealTypes(sf)
 
 	// Should find multiple assignment sites
 	if len(results) < 8 {
@@ -424,10 +424,10 @@ const a: number = 42
 const b: string = "hello"
 `
 
-	c, sf, done := compileAndGetCheckerAndSourceFile(t, source)
+	c, tp, sf, done := compileAndGetCheckerAndSourceFile(t, source)
 	defer done()
 
-	results := typeparser.ExpectedAndRealTypes(c, sf)
+	results := tp.ExpectedAndRealTypes(sf)
 
 	// Verify we can use TypeToString on the results (confirms types are valid checker types)
 	for i, r := range results {

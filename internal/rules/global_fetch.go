@@ -40,7 +40,7 @@ func runGlobalFetch(ctx *rule.Context, checkInEffect bool) []*ast.Diagnostic {
 	}
 
 	packageName := "effect/unstable/http"
-	if typeparser.SupportedEffectVersion(ctx.Checker) == typeparser.EffectMajorV3 {
+	if ctx.TypeParser.SupportedEffectVersion() == typeparser.EffectMajorV3 {
 		packageName = "@effect/platform"
 	}
 
@@ -56,10 +56,10 @@ func runGlobalFetch(ctx *rule.Context, checkInEffect bool) []*ast.Diagnostic {
 			return false
 		}
 		if node.Kind == ast.KindCallExpression {
-			inEffect := typeparser.GetEffectContextFlags(ctx.Checker, node)&typeparser.EffectContextFlagCanYieldEffect != 0
+			inEffect := ctx.TypeParser.GetEffectContextFlags(node)&typeparser.EffectContextFlagCanYieldEffect != 0
 			if inEffect == checkInEffect {
 				call := node.AsCallExpression()
-				if typeparser.ResolveToGlobalSymbol(ctx.Checker, ctx.Checker.GetSymbolAtLocation(call.Expression)) == fetchSymbol {
+				if ctx.TypeParser.ResolveToGlobalSymbol(ctx.Checker.GetSymbolAtLocation(call.Expression)) == fetchSymbol {
 					diags = append(diags, ctx.NewDiagnostic(
 						ctx.SourceFile,
 						scanner.GetErrorRangeForNode(ctx.SourceFile, call.Expression),

@@ -29,9 +29,9 @@ var RunEffectInsideEffect = rule.Rule{
 		tsdiag.Using_0_inside_an_Effect_is_not_recommended_The_same_services_should_generally_be_used_instead_to_run_child_effects_Consider_extracting_the_current_services_by_using_for_example_Effect_services_and_then_use_Effect_1_With_with_the_extracted_services_instead_effect_runEffectInsideEffect.Code(),
 	},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
-		supportedEffect := typeparser.SupportedEffectVersion(ctx.Checker)
+		supportedEffect := ctx.TypeParser.SupportedEffectVersion()
 
-		matches := AnalyzeRunEffectInsideEffect(ctx.Checker, ctx.SourceFile)
+		matches := AnalyzeRunEffectInsideEffect(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, 0, len(matches))
 		for _, m := range matches {
 			calleeText := scanner.GetSourceTextOfNodeFromSourceFile(m.SourceFile, m.CalleeNode, false)
@@ -63,7 +63,7 @@ type RunEffectInsideEffectMatch struct {
 
 // AnalyzeRunEffectInsideEffect finds all Effect.run* calls inside Effect generators,
 // returning matches with structured data for both diagnostics and quick-fixes.
-func AnalyzeRunEffectInsideEffect(c *checker.Checker, sf *ast.SourceFile) []RunEffectInsideEffectMatch {
+func AnalyzeRunEffectInsideEffect(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []RunEffectInsideEffectMatch {
 	var matches []RunEffectInsideEffectMatch
 
 	var walk ast.Visitor
@@ -73,7 +73,7 @@ func AnalyzeRunEffectInsideEffect(c *checker.Checker, sf *ast.SourceFile) []RunE
 		}
 
 		if n.Kind == ast.KindCallExpression {
-			if m, ok := analyzeRunEffectInsideEffectNode(c, sf, n); ok {
+			if m, ok := analyzeRunEffectInsideEffectNode(tp, c, sf, n); ok {
 				matches = append(matches, m)
 			}
 		}
@@ -87,7 +87,7 @@ func AnalyzeRunEffectInsideEffect(c *checker.Checker, sf *ast.SourceFile) []RunE
 }
 
 // analyzeRunEffectInsideEffectNode checks a single call expression for Effect.run* inside an Effect generator.
-func analyzeRunEffectInsideEffectNode(c *checker.Checker, sf *ast.SourceFile, node *ast.Node) (RunEffectInsideEffectMatch, bool) {
+func analyzeRunEffectInsideEffectNode(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile, node *ast.Node) (RunEffectInsideEffectMatch, bool) {
 	if node.Kind != ast.KindCallExpression {
 		return RunEffectInsideEffectMatch{}, false
 	}
@@ -101,16 +101,16 @@ func analyzeRunEffectInsideEffectNode(c *checker.Checker, sf *ast.SourceFile, no
 	callee := call.Expression
 
 	// Check if the callee is one of the Effect.run* APIs
-	methodName := matchRunEffectApi(c, callee)
+	methodName := matchRunEffectApi(tp, c, callee)
 	if methodName == "" {
 		return RunEffectInsideEffectMatch{}, false
 	}
 
-	genFn := typeparser.GetEffectYieldGeneratorFunction(c, node)
+	genFn := tp.GetEffectYieldGeneratorFunction(node)
 	if genFn == nil {
 		for current := node.Parent; current != nil; current = current.Parent {
-			if typeparser.GetEffectContextFlags(c, current)&typeparser.EffectContextFlagCanYieldEffect != 0 {
-				genFn = typeparser.GetEffectYieldGeneratorFunction(c, current)
+			if tp.GetEffectContextFlags(current)&typeparser.EffectContextFlagCanYieldEffect != 0 {
+				genFn = tp.GetEffectYieldGeneratorFunction(current)
 				if genFn != nil {
 					break
 				}
@@ -145,9 +145,9 @@ func analyzeRunEffectInsideEffectNode(c *checker.Checker, sf *ast.SourceFile, no
 
 // matchRunEffectApi checks if the node references one of the Effect.run* APIs and returns the method name.
 // Returns empty string if no match.
-func matchRunEffectApi(c *checker.Checker, node *ast.Node) string {
+func matchRunEffectApi(tp *typeparser.TypeParser, _ *checker.Checker, node *ast.Node) string {
 	for _, name := range runEffectApis {
-		if typeparser.IsNodeReferenceToEffectModuleApi(c, node, name) {
+		if tp.IsNodeReferenceToEffectModuleApi(node, name) {
 			return name
 		}
 	}

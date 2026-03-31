@@ -21,7 +21,7 @@ var MissingReturnYieldStar = rule.Rule{
 	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.It_is_recommended_to_use_return_yield_Asterisk_for_Effects_that_never_succeed_to_signal_a_definitive_exit_point_for_type_narrowing_and_tooling_support_effect_missingReturnYieldStar.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
-		matches := AnalyzeMissingReturnYieldStar(ctx.Checker, ctx.SourceFile)
+		matches := AnalyzeMissingReturnYieldStar(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
 			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.It_is_recommended_to_use_return_yield_Asterisk_for_Effects_that_never_succeed_to_signal_a_definitive_exit_point_for_type_narrowing_and_tooling_support_effect_missingReturnYieldStar, nil)
@@ -41,7 +41,7 @@ type MissingReturnYieldStarMatch struct {
 
 // AnalyzeMissingReturnYieldStar finds all yield* expressions inside Effect generators
 // where the yielded Effect never succeeds, suggesting "return yield*" instead.
-func AnalyzeMissingReturnYieldStar(c *checker.Checker, sf *ast.SourceFile) []MissingReturnYieldStarMatch {
+func AnalyzeMissingReturnYieldStar(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []MissingReturnYieldStarMatch {
 	var matches []MissingReturnYieldStarMatch
 
 	var walk ast.Visitor
@@ -56,7 +56,7 @@ func AnalyzeMissingReturnYieldStar(c *checker.Checker, sf *ast.SourceFile) []Mis
 			if unwrapped != nil && unwrapped.Kind == ast.KindYieldExpression {
 				yield := unwrapped.AsYieldExpression()
 				if yield != nil && yield.AsteriskToken != nil && yield.Expression != nil {
-					if shouldReportMissingReturnYieldStar(c, n, unwrapped, yield.Expression) {
+					if shouldReportMissingReturnYieldStar(tp, c, n, unwrapped, yield.Expression) {
 						matches = append(matches, MissingReturnYieldStarMatch{
 							SourceFile:   sf,
 							Location:     scanner.GetErrorRangeForNode(sf, unwrapped),
@@ -77,20 +77,20 @@ func AnalyzeMissingReturnYieldStar(c *checker.Checker, sf *ast.SourceFile) []Mis
 	return matches
 }
 
-func shouldReportMissingReturnYieldStar(c *checker.Checker, exprStmtNode *ast.Node, yieldNode *ast.Node, expr *ast.Expression) bool {
+func shouldReportMissingReturnYieldStar(tp *typeparser.TypeParser, c *checker.Checker, exprStmtNode *ast.Node, yieldNode *ast.Node, expr *ast.Expression) bool {
 	if c == nil || exprStmtNode == nil || yieldNode == nil || expr == nil {
 		return false
 	}
 
-	if typeparser.GetEffectContextFlags(c, exprStmtNode)&typeparser.EffectContextFlagCanYieldEffect == 0 {
+	if tp.GetEffectContextFlags(exprStmtNode)&typeparser.EffectContextFlagCanYieldEffect == 0 {
 		return false
 	}
 
-	t := typeparser.GetTypeAtLocation(c, expr)
+	t := tp.GetTypeAtLocation(expr)
 	if t == nil {
 		return false
 	}
-	effect := typeparser.EffectYieldableType(c, t, expr.AsNode())
+	effect := tp.EffectYieldableType(t, expr.AsNode())
 	if effect == nil || effect.A == nil {
 		return false
 	}

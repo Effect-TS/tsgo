@@ -27,17 +27,13 @@ var EffectFnOpportunityFix = fixable.Fixable{
 
 func runEffectFnOpportunityFix(ctx *fixable.Context) []ls.CodeAction {
 
-	c, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	if c == nil {
-		return nil
-	}
-	defer done()
+	c := ctx.Checker
 
 	sf := ctx.SourceFile
 
 	effectConfig := ctx.Options
 
-	matches := rules.AnalyzeEffectFnOpportunity(c, sf)
+	matches := rules.AnalyzeEffectFnOpportunity(ctx.TypeParser, c, sf)
 
 	var result *typeparser.EffectFnOpportunityResult
 	for _, match := range matches {

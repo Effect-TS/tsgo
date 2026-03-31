@@ -2,7 +2,6 @@ package typeparser
 
 import (
 	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
 )
 
 // ContextTagResult holds the parsed result of a class extending Context.Tag.
@@ -22,12 +21,12 @@ type ContextTagResult struct {
 // (inner call: Context.Tag("key")), and the inner call's expression resolves to Context.Tag.
 //
 // Returns nil if the class does not extend Context.Tag.
-func ExtendsContextTag(c *checker.Checker, classNode *ast.Node) *ContextTagResult {
-	if c == nil || classNode == nil {
+func (tp *TypeParser) ExtendsContextTag(classNode *ast.Node) *ContextTagResult {
+	if tp == nil || tp.checker == nil || classNode == nil {
 		return nil
 	}
 
-	links := GetEffectLinks(c)
+	links := tp.links
 	return Cached(&links.ExtendsContextTag, classNode, func() *ContextTagResult {
 		// Must have a name
 		if classNode.Name() == nil {
@@ -78,7 +77,7 @@ func ExtendsContextTag(c *checker.Checker, classNode *ast.Node) *ContextTagResul
 			if innerCall.Expression == nil {
 				continue
 			}
-			if !IsNodeReferenceToEffectContextModuleApi(c, innerCall.Expression, "Tag") {
+			if !tp.IsNodeReferenceToEffectContextModuleApi(innerCall.Expression, "Tag") {
 				continue
 			}
 

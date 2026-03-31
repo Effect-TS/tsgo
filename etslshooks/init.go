@@ -86,20 +86,29 @@ func getEffectCodeActions(ctx context.Context, fixCtx *ls.CodeFixContext) ([]ls.
 				fixCtx.Program.Options().ConfigFilePath,
 				fixCtx.Program.UseCaseSensitiveFileNames(),
 			)
+
+			ch, done := fixCtx.Program.GetTypeCheckerForFile(ctx, fixCtx.SourceFile)
+			defer done()
+
+			if ch != nil {
+				tp := typeparser.NewTypeParser(fixCtx.Program, ch)
+
+				// Create the fixable context that wraps the code-fix request
+				fCtx := fixable.NewContext(ctx, fixCtx, options, ch, tp)
+
+				// Collect actions from all applicable fixables
+				var actions []ls.CodeAction
+				for _, f := range applicable {
+					results := f.Run(fCtx)
+					actions = append(actions, results...)
+				}
+
+				return actions, nil
+			}
 		}
 	}
 
-	// Create the fixable context that wraps the code-fix request
-	fCtx := fixable.NewContext(ctx, fixCtx, options)
-
-	// Collect actions from all applicable fixables
-	var actions []ls.CodeAction
-	for _, f := range applicable {
-		results := f.Run(fCtx)
-		actions = append(actions, results...)
-	}
-
-	return actions, nil
+	return nil, nil
 }
 
 // effectRefactorProvider is the RefactorProvider that handles all Effect refactoring actions.
@@ -114,7 +123,11 @@ func getEffectRefactorActions(ctx context.Context, file *ast.SourceFile, span co
 		return nil, nil
 	}
 
-	rCtx := refactor.NewContext(ctx, file, span, program, langService)
+	ch, done := program.GetTypeCheckerForFile(ctx, file)
+	defer done()
+	tp := typeparser.NewTypeParser(program, ch)
+
+	rCtx := refactor.NewContext(ctx, file, span, program, langService, ch, tp)
 
 	var actions []ls.CodeAction
 	for _, r := range refactors.All {
@@ -137,7 +150,11 @@ func afterCompletion(ctx context.Context, sf *ast.SourceFile, position int, item
 		return items
 	}
 
-	completionCtx := completion.NewContext(ctx, sf, position, items, program, langService)
+	ch, done := program.GetTypeCheckerForFile(ctx, sf)
+	defer done()
+	tp := typeparser.NewTypeParser(program, ch)
+
+	completionCtx := completion.NewContext(ctx, sf, position, items, program, langService, ch, tp)
 
 	for _, c := range completions.All {
 		results := c.Run(completionCtx)
@@ -149,9 +166,11 @@ func afterCompletion(ctx context.Context, sf *ast.SourceFile, position int, item
 
 // afterQuickInfo is called after building hover quickInfo and documentation.
 // It allows Effect to enrich hover responses with Effect-specific information.
-func afterQuickInfo(c *checker.Checker, sf *ast.SourceFile, node *ast.Node, _ *ast.Symbol, quickInfo string, documentation string, isMarkdown bool) (string, string, *ast.Node) {
+func afterQuickInfo(program checker.Program, c *checker.Checker, sf *ast.SourceFile, node *ast.Node, _ *ast.Symbol, quickInfo string, documentation string, isMarkdown bool) (string, string, *ast.Node) {
+	tp := typeparser.NewTypeParser(program, c)
+
 	// Check if Effect is enabled
-	effectConfig := c.Program().Options().Effect
+	effectConfig := program.Options().Effect
 	if effectConfig == nil || !effectConfig.GetQuickinfoEnabled() {
 		return quickInfo, documentation, nil
 	}
@@ -160,10 +179,10 @@ func afterQuickInfo(c *checker.Checker, sf *ast.SourceFile, node *ast.Node, _ *a
 	if node.Kind == ast.KindYieldKeyword && node.Parent != nil && node.Parent.Kind == ast.KindYieldExpression {
 		yield := node.Parent.AsYieldExpression()
 		if yield.AsteriskToken != nil && yield.Expression != nil {
-			if typeparser.GetEffectContextFlags(c, node)&typeparser.EffectContextFlagCanYieldEffect != 0 {
-				t := typeparser.GetTypeAtLocation(c, yield.Expression)
+			if tp.GetEffectContextFlags(node)&typeparser.EffectContextFlagCanYieldEffect != 0 {
+				t := tp.GetTypeAtLocation(yield.Expression)
 				if t != nil {
-					effect := typeparser.EffectYieldableType(c, t, yield.Expression)
+					effect := tp.EffectYieldableType(t, yield.Expression)
 					if effect != nil {
 						typeStr := c.TypeToStringEx(t, nil, checker.TypeFormatFlagsNoTruncation)
 						quickInfo = "(yield*) " + typeStr
@@ -176,7 +195,7 @@ func afterQuickInfo(c *checker.Checker, sf *ast.SourceFile, node *ast.Node, _ *a
 	}
 
 	// General symbol hover: enrich Effect-typed symbols with type parameters
-	t := typeparser.GetTypeAtLocation(c, node)
+	t := tp.GetTypeAtLocation(node)
 	if t == nil {
 		return quickInfo, documentation, nil
 	}
@@ -185,12 +204,12 @@ func afterQuickInfo(c *checker.Checker, sf *ast.SourceFile, node *ast.Node, _ *a
 	// Layer extends Effect in V4, so this check must come before the Effect check.
 	// Only activate layer hover enrichment when the cursor is on the name of the declaration,
 	// not on arbitrary nodes within the initializer expression.
-	if typeparser.IsLayerType(c, t, node) && isDeclarationName(node) {
-		documentation = formatLayerHover(c, sf, node, t, documentation, isMarkdown, effectConfig)
+	if tp.IsLayerType(t, node) && isDeclarationName(node) {
+		documentation = formatLayerHover(tp, c, sf, node, t, documentation, isMarkdown, effectConfig)
 		return quickInfo, documentation, nil
 	}
 
-	effect := typeparser.EffectType(c, t, node)
+	effect := tp.EffectType(t, node)
 	if effect == nil {
 		return quickInfo, documentation, nil
 	}
@@ -202,7 +221,7 @@ func afterQuickInfo(c *checker.Checker, sf *ast.SourceFile, node *ast.Node, _ *a
 
 // formatLayerHover builds the Layer hover documentation including providers/requirers
 // summary, Mermaid diagram links, and Layer type parameters.
-func formatLayerHover(c *checker.Checker, sf *ast.SourceFile, node *ast.Node, _ *checker.Type, documentation string, isMarkdown bool, effectConfig *etscore.EffectPluginOptions) string {
+func formatLayerHover(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile, node *ast.Node, _ *checker.Type, documentation string, isMarkdown bool, effectConfig *etscore.EffectPluginOptions) string {
 	// Try to resolve the initializer expression for layer graph extraction.
 	var initializer *ast.Node
 	if node.Parent != nil {
@@ -221,7 +240,7 @@ func formatLayerHover(c *checker.Checker, sf *ast.SourceFile, node *ast.Node, _ 
 		opts := layergraph.ExtractLayerGraphOptions{
 			FollowSymbolsDepth: effectConfig.GetLayerGraphFollowDepth(),
 		}
-		fullGraph := layergraph.ExtractLayerGraph(c, initializer, sf, opts)
+		fullGraph := layergraph.ExtractLayerGraph(tp, c, initializer, sf, opts)
 		info := layergraph.ExtractProvidersAndRequirers(c, fullGraph)
 		quickInfoSummary = layergraph.FormatQuickInfo(c, info, sf)
 		hasGraph = true

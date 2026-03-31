@@ -2,7 +2,6 @@ package typeparser
 
 import (
 	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
 	"github.com/microsoft/typescript-go/shim/core"
 )
 
@@ -13,8 +12,11 @@ const (
 	EffectContextFlagCanYieldEffect EffectContextFlags = 1 << iota
 )
 
-func GetEffectContextFlags(c *checker.Checker, node *ast.Node) EffectContextFlags {
-	links := ensureEffectContextAnalyzed(c, node)
+func (tp *TypeParser) GetEffectContextFlags(node *ast.Node) EffectContextFlags {
+	if tp == nil {
+		return EffectContextFlagNone
+	}
+	links := tp.ensureEffectContextAnalyzed(node)
 	if links == nil {
 		return EffectContextFlagNone
 	}
@@ -25,8 +27,11 @@ func GetEffectContextFlags(c *checker.Checker, node *ast.Node) EffectContextFlag
 	return EffectContextFlagNone
 }
 
-func GetEffectYieldGeneratorFunction(c *checker.Checker, node *ast.Node) *ast.FunctionExpression {
-	links := ensureEffectContextAnalyzed(c, node)
+func (tp *TypeParser) GetEffectYieldGeneratorFunction(node *ast.Node) *ast.FunctionExpression {
+	if tp == nil {
+		return nil
+	}
+	links := tp.ensureEffectContextAnalyzed(node)
 	if links == nil {
 		return nil
 	}
@@ -51,12 +56,11 @@ func getClosestNodeWithLinks[T any](store *core.LinkStore[*ast.Node, T], node *a
 	return nil, false
 }
 
-func ensureEffectContextAnalyzed(c *checker.Checker, node *ast.Node) *EffectLinks {
-	if c == nil || node == nil {
+func (tp *TypeParser) ensureEffectContextAnalyzed(node *ast.Node) *EffectLinks {
+	if tp == nil || tp.checker == nil || node == nil {
 		return nil
 	}
-
-	links := GetEffectLinks(c)
+	links := tp.links
 
 	if links.EffectContextFlags.Has(node) {
 		return links
@@ -68,18 +72,17 @@ func ensureEffectContextAnalyzed(c *checker.Checker, node *ast.Node) *EffectLink
 	}
 
 	Cached(&links.EffectContextAnalyzed, sf, func() bool {
-		analyzeEffectContextForSourceFile(c, sf)
+		tp.analyzeEffectContextForSourceFile(sf)
 		return true
 	})
 	return links
 }
 
-func analyzeEffectContextForSourceFile(c *checker.Checker, sf *ast.SourceFile) {
-	if c == nil || sf == nil {
+func (tp *TypeParser) analyzeEffectContextForSourceFile(sf *ast.SourceFile) {
+	if tp == nil || tp.checker == nil || sf == nil {
 		return
 	}
-
-	links := GetEffectLinks(c)
+	links := tp.links
 
 	var walk ast.Visitor
 	var pendingEnableFlags core.LinkStore[*ast.Node, EffectContextFlags]
@@ -117,22 +120,18 @@ func analyzeEffectContextForSourceFile(c *checker.Checker, sf *ast.SourceFile) {
 		}
 
 		// logic for this node
-		if effectGen := EffectGenCall(c, node); effectGen != nil {
+		if effectGen := tp.EffectGenCall(node); effectGen != nil {
 			bodyNode := effectGen.Body.AsNode()
 			*pendingEnableFlags.Get(bodyNode) |= EffectContextFlagCanYieldEffect
 			*links.EffectYieldGeneratorFunction.Get(bodyNode) = effectGen.GeneratorFunction
-		} else if effectFn := EffectFnGenCall(c, node); effectFn != nil {
-			bodyNode := effectFn.Body.AsNode()
-			*pendingEnableFlags.Get(bodyNode) |= EffectContextFlagCanYieldEffect
-			*links.EffectYieldGeneratorFunction.Get(bodyNode) = effectFn.GeneratorFunction
-		} else if effectFn := EffectFnUntracedGenCall(c, node); effectFn != nil {
-			bodyNode := effectFn.Body.AsNode()
-			*pendingEnableFlags.Get(bodyNode) |= EffectContextFlagCanYieldEffect
-			*links.EffectYieldGeneratorFunction.Get(bodyNode) = effectFn.GeneratorFunction
-		} else if effectFn := EffectFnUntracedEagerGenCall(c, node); effectFn != nil {
-			bodyNode := effectFn.Body.AsNode()
-			*pendingEnableFlags.Get(bodyNode) |= EffectContextFlagCanYieldEffect
-			*links.EffectYieldGeneratorFunction.Get(bodyNode) = effectFn.GeneratorFunction
+		} else if effectFn := tp.EffectFnCall(node); effectFn != nil && effectFn.IsGenerator() {
+			body := effectFn.Body()
+			genFn := effectFn.GeneratorFunction()
+			if body != nil && genFn != nil {
+				bodyNode := body.AsNode()
+				*pendingEnableFlags.Get(bodyNode) |= EffectContextFlagCanYieldEffect
+				*links.EffectYieldGeneratorFunction.Get(bodyNode) = genFn
+			}
 		}
 
 		// Function-like nodes create a new scope, so they should not directly inherit

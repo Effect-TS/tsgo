@@ -41,7 +41,7 @@ var FloatingEffect = rule.Rule{
 			}
 
 			// Check if this node is a floating Effect expression statement
-			if result := detectFloatingEffect(ctx.Checker, n); result != nil {
+			if result := detectFloatingEffect(ctx.TypeParser, ctx.Checker, n); result != nil {
 				// Use the expression's position if this is an expression statement
 				// to avoid including leading trivia in the span
 				expr := n
@@ -76,7 +76,7 @@ var FloatingEffect = rule.Rule{
 // detectFloatingEffect checks if a node is an expression statement containing an Effect type
 // that is neither yielded nor assigned. Returns nil if the node should not be reported,
 // or a result with type info for selecting the appropriate diagnostic message.
-func detectFloatingEffect(c *checker.Checker, node *ast.Node) *floatingEffectResult {
+func detectFloatingEffect(tp *typeparser.TypeParser, _ *checker.Checker, node *ast.Node) *floatingEffectResult {
 	// Must be an ExpressionStatement
 	if node == nil || node.Kind != ast.KindExpressionStatement {
 		return nil
@@ -95,33 +95,33 @@ func detectFloatingEffect(c *checker.Checker, node *ast.Node) *floatingEffectRes
 	}
 
 	// Get the type of the expression
-	t := typeparser.GetTypeAtLocation(c, expr)
+	t := tp.GetTypeAtLocation(expr)
 	if t == nil {
 		return nil
 	}
 
 	// Check if it's an Effect type using the quick check first
-	if !typeparser.HasEffectTypeId(c, t, expr) {
+	if !tp.HasEffectTypeId(t, expr) {
 		return nil
 	}
 
 	// Full validation
-	if !typeparser.IsEffectType(c, t, expr) {
+	if !tp.IsEffectType(t, expr) {
 		return nil
 	}
 
 	// Exclude Fiber types (considered valid floating operations)
-	if typeparser.IsFiberType(c, t, expr) {
+	if tp.IsFiberType(t, expr) {
 		return nil
 	}
 
 	// Exclude Effect subtypes (Exit, Option, Either, Pool, etc.)
-	if typeparser.IsEffectSubtype(c, t, expr) {
+	if tp.IsEffectSubtype(t, expr) {
 		return nil
 	}
 
 	// Determine if this is strictly an Effect or an Effect-able type
-	isStrict := typeparser.StrictIsEffectType(c, t, expr)
+	isStrict := tp.StrictIsEffectType(t, expr)
 	return &floatingEffectResult{
 		isStrict: isStrict,
 		exprType: t,

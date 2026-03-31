@@ -16,7 +16,8 @@ type UniqueTypesResult struct {
 // remaining type checks if it's already in the memory map. New types get fresh IDs
 // ("t1", "t2", etc.); known types get their existing IDs.
 // Returns all indexes encountered (both new and known).
-func AppendToUniqueTypesMap(c *checker.Checker, memory map[string]*checker.Type, initialType *checker.Type, shouldExclude func(*checker.Type) bool) UniqueTypesResult {
+func (tp *TypeParser) AppendToUniqueTypesMap(memory map[string]*checker.Type, initialType *checker.Type, shouldExclude func(*checker.Type) bool) UniqueTypesResult {
+	c := tp.checker
 	var allIndexes []string
 	toTest := []*checker.Type{initialType}
 

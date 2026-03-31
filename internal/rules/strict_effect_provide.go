@@ -3,7 +3,6 @@ package rules
 import (
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
-	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
 )
@@ -58,17 +57,17 @@ func checkEffectProvideWithLayer(ctx *rule.Context, node *ast.Node) *ast.Diagnos
 	}
 
 	// Check if the expression references Effect.provide
-	if !typeparser.IsNodeReferenceToEffectModuleApi(ctx.Checker, call.Expression, "provide") {
+	if !ctx.TypeParser.IsNodeReferenceToEffectModuleApi(call.Expression, "provide") {
 		return nil
 	}
 
 	// Check if any argument is a Layer type
 	for _, arg := range args.Nodes {
-		argType := typeparser.GetTypeAtLocation(ctx.Checker, arg)
+		argType := ctx.TypeParser.GetTypeAtLocation(arg)
 		if argType == nil {
 			continue
 		}
-		if typeparser.LayerType(ctx.Checker, argType, arg) != nil {
+		if ctx.TypeParser.LayerType(argType, arg) != nil {
 			// Found a Layer argument — emit diagnostic on the call expression
 			return ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(node), tsdiag.Effect_provide_with_a_Layer_should_only_be_used_at_application_entry_points_If_this_is_an_entry_point_you_can_safely_disable_this_diagnostic_Otherwise_using_Effect_provide_may_break_scope_lifetimes_Compose_all_layers_at_your_entry_point_and_provide_them_at_once_effect_strictEffectProvide, nil)
 		}

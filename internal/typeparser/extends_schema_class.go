@@ -2,7 +2,6 @@ package typeparser
 
 import (
 	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
 )
 
 // SchemaClassResult holds the parsed result of a class extending Schema.Class or Schema.RequestClass.
@@ -21,13 +20,13 @@ type SchemaClassResult struct {
 // and the inner call resolves to Schema.Class.
 //
 // Returns nil if the class does not extend Schema.Class.
-func ExtendsSchemaClass(c *checker.Checker, classNode *ast.Node) *SchemaClassResult {
-	if c == nil || classNode == nil {
+func (tp *TypeParser) ExtendsSchemaClass(classNode *ast.Node) *SchemaClassResult {
+	if tp == nil || tp.checker == nil || classNode == nil {
 		return nil
 	}
-	links := GetEffectLinks(c)
+	links := tp.links
 	return Cached(&links.ExtendsSchemaClass, classNode, func() *SchemaClassResult {
-		return extendsSchemaClassLike(c, classNode, "Class")
+		return tp.extendsSchemaClassLike(classNode, "Class")
 	})
 }
 
@@ -35,18 +34,19 @@ func ExtendsSchemaClass(c *checker.Checker, classNode *ast.Node) *SchemaClassRes
 // Same double-call pattern as ExtendsSchemaClass but for Schema.RequestClass.
 //
 // Returns nil if the class does not extend Schema.RequestClass.
-func ExtendsSchemaRequestClass(c *checker.Checker, classNode *ast.Node) *SchemaClassResult {
-	if c == nil || classNode == nil {
+func (tp *TypeParser) ExtendsSchemaRequestClass(classNode *ast.Node) *SchemaClassResult {
+	if tp == nil || tp.checker == nil || classNode == nil {
 		return nil
 	}
-	links := GetEffectLinks(c)
+	links := tp.links
 	return Cached(&links.ExtendsSchemaRequestClass, classNode, func() *SchemaClassResult {
-		return extendsSchemaClassLike(c, classNode, "RequestClass")
+		return tp.extendsSchemaClassLike(classNode, "RequestClass")
 	})
 }
 
 // extendsSchemaClassLike is the shared implementation for ExtendsSchemaClass and ExtendsSchemaRequestClass.
-func extendsSchemaClassLike(c *checker.Checker, classNode *ast.Node, memberName string) *SchemaClassResult {
+func (tp *TypeParser) extendsSchemaClassLike(classNode *ast.Node, memberName string) *SchemaClassResult {
+	c := tp.checker
 	if c == nil || classNode == nil {
 		return nil
 	}
@@ -100,7 +100,7 @@ func extendsSchemaClassLike(c *checker.Checker, classNode *ast.Node, memberName 
 		if innerCall.Expression == nil {
 			continue
 		}
-		if !IsNodeReferenceToEffectSchemaModuleApi(c, innerCall.Expression, memberName) {
+		if !tp.IsNodeReferenceToEffectSchemaModuleApi(innerCall.Expression, memberName) {
 			continue
 		}
 

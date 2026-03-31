@@ -9,18 +9,18 @@ import (
 // It returns nil when the node is nil, not an expression/type-node/declaration,
 // a JSX tag name, or a JSX attribute name. It also recovers from checker panics
 // (e.g. nil symbol dereferences on certain declaration nodes) and returns nil.
-func GetTypeAtLocation(c *checker.Checker, node *ast.Node) (result *checker.Type) {
-	if c == nil || node == nil {
+func (tp TypeParser) GetTypeAtLocation(node *ast.Node) (result *checker.Type) {
+	if tp.checker == nil || node == nil {
 		return nil
 	}
 
-	links := GetEffectLinks(c)
-	return Cached(&links.TypeAtLocation, node, func() *checker.Type {
-		return getTypeAtLocationUncached(c, node)
+	return Cached(&tp.links.TypeAtLocation, node, func() *checker.Type {
+		return tp.getTypeAtLocationUncached(node)
 	})
 }
 
-func getTypeAtLocationUncached(c *checker.Checker, node *ast.Node) (result *checker.Type) {
+func (tp TypeParser) getTypeAtLocationUncached(node *ast.Node) (result *checker.Type) {
+	c := tp.checker
 	if node == nil {
 		return nil
 	}

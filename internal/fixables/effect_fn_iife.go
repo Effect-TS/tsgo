@@ -3,7 +3,6 @@ package fixables
 import (
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/rules"
-	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
 	"github.com/microsoft/typescript-go/shim/ls"
@@ -20,17 +19,13 @@ var EffectFnIifeFix = fixable.Fixable{
 
 func runEffectFnIifeFix(ctx *fixable.Context) []ls.CodeAction {
 
-	c, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	if c == nil {
-		return nil
-	}
-	defer done()
+	c := ctx.Checker
 
 	sf := ctx.SourceFile
 
 	// Use shared analysis to find all IIFE matches, then find the one at the diagnostic span
-	matches := rules.AnalyzeEffectFnIife(c, sf)
-	var result *typeparser.EffectFnIifeResult
+	matches := rules.AnalyzeEffectFnIife(ctx.TypeParser, c, sf)
+	var result *rules.EffectFnIifeResult
 	for _, match := range matches {
 		diagRange := match.Location
 		if diagRange.Intersects(ctx.Span) || ctx.Span.ContainedBy(diagRange) {

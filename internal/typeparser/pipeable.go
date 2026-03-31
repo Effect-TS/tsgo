@@ -7,12 +7,12 @@ import (
 
 // IsPipeableType returns true if the type has a callable "pipe" property,
 // indicating it supports the pipeable pattern (e.g., value.pipe(f1, f2, ...)).
-func IsPipeableType(c *checker.Checker, t *checker.Type, atLocation *ast.Node) bool {
-	if c == nil || t == nil {
+func (tp *TypeParser) IsPipeableType(t *checker.Type, atLocation *ast.Node) bool {
+	if tp == nil || tp.checker == nil || t == nil {
 		return false
 	}
-	links := GetEffectLinks(c)
-	return Cached(&links.IsPipeableType, t, func() bool {
+	c := tp.checker
+	return Cached(&tp.links.IsPipeableType, t, func() bool {
 		pipeSymbol := c.GetPropertyOfType(t, "pipe")
 		if pipeSymbol == nil {
 			return false
@@ -28,7 +28,8 @@ func IsPipeableType(c *checker.Checker, t *checker.Type, atLocation *ast.Node) b
 // extracted into a pipe argument without losing `this` context.
 // This is used by the missedPipeableOpportunity rule to determine which
 // call expressions can be converted to pipe style.
-func IsSafelyPipeableCallee(c *checker.Checker, callee *ast.Node) bool {
+func (tp *TypeParser) IsSafelyPipeableCallee(callee *ast.Node) bool {
+	c := tp.checker
 	if callee == nil {
 		return false
 	}
@@ -50,7 +51,7 @@ func IsSafelyPipeableCallee(c *checker.Checker, callee *ast.Node) bool {
 
 	// Parenthesized expressions - check inner
 	if callee.Kind == ast.KindParenthesizedExpression {
-		return IsSafelyPipeableCallee(c, callee.AsParenthesizedExpression().Expression)
+		return tp.IsSafelyPipeableCallee(callee.AsParenthesizedExpression().Expression)
 	}
 
 	// Simple identifiers - check if it's a module/namespace or standalone function

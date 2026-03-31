@@ -48,7 +48,7 @@ var TryCatchInEffectGen = rule.Rule{
 // checkTryCatchScope checks if the try statement is directly inside an Effect
 // generator scope using FindEnclosingScopes.
 func checkTryCatchScope(ctx *rule.Context, tryNode *ast.Node) *ast.Diagnostic {
-	if typeparser.GetEffectContextFlags(ctx.Checker, tryNode)&typeparser.EffectContextFlagCanYieldEffect != 0 {
+	if ctx.TypeParser.GetEffectContextFlags(tryNode)&typeparser.EffectContextFlagCanYieldEffect != 0 {
 		return ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(tryNode), tsdiag.Avoid_using_try_Slashcatch_inside_Effect_generators_Use_Effect_s_error_handling_mechanisms_instead_e_g_Effect_try_Effect_tryPromise_Effect_catch_Effect_catchTag_effect_tryCatchInEffectGen, nil)
 	}
 	return nil

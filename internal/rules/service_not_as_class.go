@@ -22,7 +22,7 @@ var ServiceNotAsClass = rule.Rule{
 	SupportedEffect: []string{"v4"},
 	Codes:           []int32{tsdiag.ServiceMap_Service_should_be_used_in_a_class_declaration_instead_of_as_a_variable_Use_Colon_0_effect_serviceNotAsClass.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
-		matches := AnalyzeServiceNotAsClass(ctx.Checker, ctx.SourceFile)
+		matches := AnalyzeServiceNotAsClass(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
 			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.ServiceMap_Service_should_be_used_in_a_class_declaration_instead_of_as_a_variable_Use_Colon_0_effect_serviceNotAsClass, nil, m.SuggestedUsage)
@@ -46,8 +46,8 @@ type ServiceNotAsClassMatch struct {
 
 // AnalyzeServiceNotAsClass finds all const variable declarations using ServiceMap.Service
 // that should be class declarations instead. V4-only rule.
-func AnalyzeServiceNotAsClass(c *checker.Checker, sf *ast.SourceFile) []ServiceNotAsClassMatch {
-	if typeparser.SupportedEffectVersion(c) != typeparser.EffectMajorV4 {
+func AnalyzeServiceNotAsClass(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []ServiceNotAsClassMatch {
+	if tp.SupportedEffectVersion() != typeparser.EffectMajorV4 {
 		return nil
 	}
 
@@ -65,7 +65,7 @@ func AnalyzeServiceNotAsClass(c *checker.Checker, sf *ast.SourceFile) []ServiceN
 		nodeToVisit = nodeToVisit[:len(nodeToVisit)-1]
 
 		if node.Kind == ast.KindVariableDeclaration {
-			if m := checkServiceNotAsClass(c, sf, node); m != nil {
+			if m := checkServiceNotAsClass(tp, c, sf, node); m != nil {
 				matches = append(matches, *m)
 			}
 		}
@@ -76,7 +76,7 @@ func AnalyzeServiceNotAsClass(c *checker.Checker, sf *ast.SourceFile) []ServiceN
 	return matches
 }
 
-func checkServiceNotAsClass(c *checker.Checker, sf *ast.SourceFile, node *ast.Node) *ServiceNotAsClassMatch {
+func checkServiceNotAsClass(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile, node *ast.Node) *ServiceNotAsClassMatch {
 	varDecl := node.AsVariableDeclaration()
 	if varDecl == nil || varDecl.Initializer == nil {
 		return nil
@@ -101,7 +101,7 @@ func checkServiceNotAsClass(c *checker.Checker, sf *ast.SourceFile, node *ast.No
 	}
 
 	// Check the call expression references ServiceMap.Service
-	if !typeparser.IsNodeReferenceToServiceMapModuleApi(c, callExpr.Expression, "Service") {
+	if !tp.IsNodeReferenceToServiceMapModuleApi(callExpr.Expression, "Service") {
 		return nil
 	}
 

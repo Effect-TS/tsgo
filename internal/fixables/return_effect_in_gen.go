@@ -22,15 +22,11 @@ var ReturnEffectInGenFix = fixable.Fixable{
 
 func runReturnEffectInGenFix(ctx *fixable.Context) []ls.CodeAction {
 
-	c, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	if c == nil {
-		return nil
-	}
-	defer done()
+	c := ctx.Checker
 
 	sf := ctx.SourceFile
 
-	matches := rules.AnalyzeReturnEffectInGen(c, sf)
+	matches := rules.AnalyzeReturnEffectInGen(ctx.TypeParser, c, sf)
 
 	var match *rules.ReturnEffectInGenMatch
 	for i := range matches {

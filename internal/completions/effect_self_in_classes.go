@@ -23,12 +23,11 @@ func runEffectSelfInClasses(ctx *completion.Context) []*lsproto.CompletionItem {
 		return nil
 	}
 
-	// Get checker for version detection and API reference checks
-	ch, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	defer done()
+	ch := ctx.Checker
+	tp := ctx.TypeParser
 
 	// V3 only
-	version := typeparser.SupportedEffectVersion(ch)
+	version := tp.SupportedEffectVersion()
 	if version != typeparser.EffectMajorV3 {
 		return nil
 	}
@@ -39,7 +38,7 @@ func runEffectSelfInClasses(ctx *completion.Context) []*lsproto.CompletionItem {
 	className := data.ClassNameText()
 
 	// Compute deterministic tag key
-	tagKey := computeServiceTagKey(ch, ctx.SourceFile, className)
+	tagKey := computeServiceTagKey(ctx.Program, tp, ch, ctx.SourceFile, className)
 
 	// Build replacement range from byte offsets
 	replacementRange := byteSpanToRange(ctx, data.ReplacementStart, data.ReplacementLength)
@@ -48,7 +47,7 @@ func runEffectSelfInClasses(ctx *completion.Context) []*lsproto.CompletionItem {
 	var items []*lsproto.CompletionItem
 
 	// Service: Effect.Service<ClassName>()("tagKey", {}){}
-	if isFullyQualified || typeparser.IsNodeReferenceToEffectModuleApi(ch, data.AccessedObject, "Service") {
+	if isFullyQualified || tp.IsNodeReferenceToEffectModuleApi(data.AccessedObject, "Service") {
 		var insertText string
 		if isFullyQualified {
 			insertText = fmt.Sprintf(`%s.Service<%s>()("%s", {${0}}){}`, effectIdentifier, className, tagKey)
@@ -62,7 +61,7 @@ func runEffectSelfInClasses(ctx *completion.Context) []*lsproto.CompletionItem {
 	}
 
 	// Tag: Effect.Tag("tagKey")<ClassName, {}>(){}
-	if isFullyQualified || typeparser.IsNodeReferenceToEffectModuleApi(ch, data.AccessedObject, "Tag") {
+	if isFullyQualified || ctx.TypeParser.IsNodeReferenceToEffectModuleApi(data.AccessedObject, "Tag") {
 		var insertText string
 		if isFullyQualified {
 			insertText = fmt.Sprintf(`%s.Tag("%s")<%s, {${0}}>(){}`, effectIdentifier, tagKey, className)

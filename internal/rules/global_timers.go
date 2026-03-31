@@ -72,9 +72,9 @@ func runGlobalTimers(ctx *rule.Context, checkInEffect bool) []*ast.Diagnostic {
 			return false
 		}
 		if node.Kind == ast.KindCallExpression {
-			inEffect := typeparser.GetEffectContextFlags(ctx.Checker, node)&typeparser.EffectContextFlagCanYieldEffect != 0
+			inEffect := ctx.TypeParser.GetEffectContextFlags(node)&typeparser.EffectContextFlagCanYieldEffect != 0
 			if inEffect == checkInEffect {
-				resolved := typeparser.ResolveToGlobalSymbol(ctx.Checker, ctx.Checker.GetSymbolAtLocation(node.AsCallExpression().Expression))
+				resolved := ctx.TypeParser.ResolveToGlobalSymbol(ctx.Checker.GetSymbolAtLocation(node.AsCallExpression().Expression))
 				if resolved != nil {
 					for name, globalSymbol := range globalSymbols {
 						if resolved != globalSymbol {

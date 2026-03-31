@@ -18,15 +18,11 @@ var ServiceNotAsClassFix = fixable.Fixable{
 }
 
 func runServiceNotAsClassFix(ctx *fixable.Context) []ls.CodeAction {
-	c, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	if c == nil {
-		return nil
-	}
-	defer done()
+	c := ctx.Checker
 
 	sf := ctx.SourceFile
 
-	matches := rules.AnalyzeServiceNotAsClass(c, sf)
+	matches := rules.AnalyzeServiceNotAsClass(ctx.TypeParser, c, sf)
 	for _, match := range matches {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue

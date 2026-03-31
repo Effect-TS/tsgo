@@ -26,16 +26,13 @@ var RunEffectInsideEffectFix = fixable.Fixable{
 }
 
 func runRunEffectInsideEffectFix(ctx *fixable.Context) []ls.CodeAction {
-	c, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	if c == nil {
-		return nil
-	}
-	defer done()
+	c := ctx.Checker
+	tp := ctx.TypeParser
 
 	sf := ctx.SourceFile
-	supportedEffect := typeparser.SupportedEffectVersion(c)
+	supportedEffect := tp.SupportedEffectVersion()
 
-	matches := rules.AnalyzeRunEffectInsideEffect(c, sf)
+	matches := rules.AnalyzeRunEffectInsideEffect(ctx.TypeParser, c, sf)
 	for _, match := range matches {
 		if !match.IsNestedScope {
 			continue
@@ -79,10 +76,10 @@ func runRunEffectInsideEffectFix(ctx *fixable.Context) []ls.CodeAction {
 						continue
 					}
 					identifier := scanner.GetTextOfNode(decl.Name())
-					if typeparser.IsNodeReferenceToEffectModuleApi(c, yieldedCall.Expression, "runtime") {
+					if tp.IsNodeReferenceToEffectModuleApi(yieldedCall.Expression, "runtime") {
 						runtimeIdentifier = identifier
 					}
-					if typeparser.IsNodeReferenceToEffectModuleApi(c, yieldedCall.Expression, "services") {
+					if tp.IsNodeReferenceToEffectModuleApi(yieldedCall.Expression, "services") {
 						servicesIdentifier = identifier
 					}
 				}

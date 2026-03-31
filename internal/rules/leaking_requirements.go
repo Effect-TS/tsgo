@@ -57,7 +57,7 @@ var LeakingRequirements = rule.Rule{
 					if propAccess.Name() != nil && propAccess.Name().Kind == ast.KindIdentifier {
 						name := scanner.GetTextOfNode(propAccess.Name())
 						if name == "GenericTag" || name == "Service" {
-							nodeType := typeparser.GetTypeAtLocation(ctx.Checker, node)
+							nodeType := ctx.TypeParser.GetTypeAtLocation(node)
 							if nodeType != nil {
 								typesToCheck = append(typesToCheck, typeToCheck{t: nodeType, reportNode: node})
 							}
@@ -86,15 +86,15 @@ var LeakingRequirements = rule.Rule{
 			matched := false
 			for _, ttc := range typesToCheck {
 				// Try ContextTag first, fall back to ServiceType
-				service := typeparser.ContextTag(ctx.Checker, ttc.t, node)
+				service := ctx.TypeParser.ContextTag(ttc.t, node)
 				if service == nil {
-					service = typeparser.ServiceType(ctx.Checker, ttc.t, node)
+					service = ctx.TypeParser.ServiceType(ttc.t, node)
 				}
 				if service == nil {
 					continue
 				}
 
-				leaked := parseLeakedRequirements(ctx.Checker, service.Shape, node)
+				leaked := parseLeakedRequirements(ctx.TypeParser, ctx.Checker, service.Shape, node)
 				if len(leaked) > 0 {
 					leaked = filterExpectedLeakingRequirements(ctx.Checker, ttc.reportNode, leaked)
 				}
@@ -204,7 +204,7 @@ func hasExpectedLeakingComment(sourceText string, pos int, leakedServiceName str
 
 // parseLeakedRequirements analyzes the service shape to find requirement types that
 // are shared across all effect-typed members. This is the "leaking requirements" heuristic.
-func parseLeakedRequirements(c *checker.Checker, serviceShape *checker.Type, atLocation *ast.Node) []*checker.Type {
+func parseLeakedRequirements(tp *typeparser.TypeParser, c *checker.Checker, serviceShape *checker.Type, atLocation *ast.Node) []*checker.Type {
 	properties := c.GetPropertiesOfType(serviceShape)
 	if len(properties) < 1 {
 		return nil
@@ -221,7 +221,7 @@ func parseLeakedRequirements(c *checker.Checker, serviceShape *checker.Type, atL
 			return true
 		}
 		// Exclude Scope types
-		if typeparser.IsScopeType(c, t, atLocation) {
+		if tp.IsScopeType(t, atLocation) {
 			return true
 		}
 		return false
@@ -241,7 +241,7 @@ func parseLeakedRequirements(c *checker.Checker, serviceShape *checker.Type, atL
 		// or from the return type of a single call signature
 		var effectContextType *checker.Type
 
-		effect := typeparser.EffectType(c, servicePropertyType, atLocation)
+		effect := tp.EffectType(servicePropertyType, atLocation)
 		if effect != nil {
 			effectContextType = effect.R
 		} else {
@@ -250,7 +250,7 @@ func parseLeakedRequirements(c *checker.Checker, serviceShape *checker.Type, atL
 			if len(sigs) == 1 {
 				retType := c.GetReturnTypeOfSignature(sigs[0])
 				if retType != nil {
-					retEffect := typeparser.EffectType(c, retType, atLocation)
+					retEffect := tp.EffectType(retType, atLocation)
 					if retEffect != nil {
 						effectContextType = retEffect.R
 					}
@@ -263,7 +263,7 @@ func parseLeakedRequirements(c *checker.Checker, serviceShape *checker.Type, atL
 		}
 
 		effectMembers++
-		result := typeparser.AppendToUniqueTypesMap(c, memory, effectContextType, shouldExclude)
+		result := tp.AppendToUniqueTypesMap(memory, effectContextType, shouldExclude)
 
 		if !sharedInitialized {
 			sharedRequirementsKeys = result.AllIndexes

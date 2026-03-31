@@ -24,7 +24,7 @@ var LayerMergeAllWithDependencies = rule.Rule{
 	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.This_layer_provides_0_which_is_required_by_another_layer_in_the_same_Layer_mergeAll_call_Layer_mergeAll_creates_layers_in_parallel_so_dependencies_between_layers_will_not_be_satisfied_Consider_moving_this_layer_into_a_Layer_provideMerge_after_the_Layer_mergeAll_effect_layerMergeAllWithDependencies.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
-		matches := AnalyzeLayerMergeAllWithDependencies(ctx.Checker, ctx.SourceFile)
+		matches := AnalyzeLayerMergeAllWithDependencies(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
 			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.This_layer_provides_0_which_is_required_by_another_layer_in_the_same_Layer_mergeAll_call_Layer_mergeAll_creates_layers_in_parallel_so_dependencies_between_layers_will_not_be_satisfied_Consider_moving_this_layer_into_a_Layer_provideMerge_after_the_Layer_mergeAll_effect_layerMergeAllWithDependencies, nil, m.ProvidedTypes)
@@ -47,7 +47,7 @@ type LayerMergeAllWithDependenciesMatch struct {
 
 // AnalyzeLayerMergeAllWithDependencies finds all Layer.mergeAll calls with
 // interdependencies where one layer provides a service required by another.
-func AnalyzeLayerMergeAllWithDependencies(c *checker.Checker, sf *ast.SourceFile) []LayerMergeAllWithDependenciesMatch {
+func AnalyzeLayerMergeAllWithDependencies(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []LayerMergeAllWithDependenciesMatch {
 	var matches []LayerMergeAllWithDependenciesMatch
 
 	// Stack-based traversal
@@ -63,7 +63,7 @@ func AnalyzeLayerMergeAllWithDependencies(c *checker.Checker, sf *ast.SourceFile
 		nodeToVisit = nodeToVisit[:len(nodeToVisit)-1]
 
 		if node.Kind == ast.KindCallExpression {
-			if result := analyzeLayerMergeAllCall(c, sf, node); len(result) > 0 {
+			if result := analyzeLayerMergeAllCall(tp, c, sf, node); len(result) > 0 {
 				matches = append(matches, result...)
 			}
 		}
@@ -82,14 +82,14 @@ type layerInfo struct {
 }
 
 // analyzeLayerMergeAllCall checks a call expression for Layer.mergeAll interdependencies.
-func analyzeLayerMergeAllCall(c *checker.Checker, sf *ast.SourceFile, node *ast.Node) []LayerMergeAllWithDependenciesMatch {
+func analyzeLayerMergeAllCall(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile, node *ast.Node) []LayerMergeAllWithDependenciesMatch {
 	if node.Kind != ast.KindCallExpression {
 		return nil
 	}
 	call := node.AsCallExpression()
 
 	// Check if this is Layer.mergeAll
-	if !typeparser.IsNodeReferenceToEffectLayerModuleApi(c, call.Expression, "mergeAll") {
+	if !tp.IsNodeReferenceToEffectLayerModuleApi(call.Expression, "mergeAll") {
 		return nil
 	}
 
@@ -109,18 +109,18 @@ func analyzeLayerMergeAllCall(c *checker.Checker, sf *ast.SourceFile, node *ast.
 	actuallyProvidedMap := make(map[*checker.Type]*ast.Node)
 
 	for _, arg := range args.Nodes {
-		argType := typeparser.GetTypeAtLocation(c, arg)
+		argType := tp.GetTypeAtLocation(arg)
 		if argType == nil {
 			continue
 		}
 
-		layer := typeparser.LayerType(c, argType, arg)
+		layer := tp.LayerType(argType, arg)
 		if layer == nil {
 			continue
 		}
 
 		// Unroll union members for provided types (ROut)
-		providedMembers := typeparser.UnrollUnionMembers(layer.ROut)
+		providedMembers := tp.UnrollUnionMembers(layer.ROut)
 
 		// Filter out never types and pass-through types
 		for _, providedType := range providedMembers {

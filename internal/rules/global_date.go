@@ -51,7 +51,7 @@ func runGlobalDate(ctx *rule.Context, checkInEffect bool) []*ast.Diagnostic {
 		if node == nil {
 			return false
 		}
-		inEffect := typeparser.GetEffectContextFlags(ctx.Checker, node)&typeparser.EffectContextFlagCanYieldEffect != 0
+		inEffect := ctx.TypeParser.GetEffectContextFlags(node)&typeparser.EffectContextFlagCanYieldEffect != 0
 		if inEffect == checkInEffect {
 			var objectNode *ast.Node
 			message := tsdiag.Prefer_using_Clock_or_DateTime_from_Effect_instead_of_Date_now_effect_globalDate
@@ -76,7 +76,7 @@ func runGlobalDate(ctx *rule.Context, checkInEffect bool) []*ast.Diagnostic {
 				}
 			}
 
-			if objectNode != nil && typeparser.ResolveToGlobalSymbol(ctx.Checker, ctx.Checker.GetSymbolAtLocation(objectNode)) == dateSymbol {
+			if objectNode != nil && ctx.TypeParser.ResolveToGlobalSymbol(ctx.Checker.GetSymbolAtLocation(objectNode)) == dateSymbol {
 				diags = append(diags, ctx.NewDiagnostic(
 					ctx.SourceFile,
 					scanner.GetErrorRangeForNode(ctx.SourceFile, node),

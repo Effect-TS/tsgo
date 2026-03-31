@@ -21,7 +21,7 @@ var CatchAllToMapError = rule.Rule{
 	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.You_can_use_Effect_mapError_instead_of_Effect_catch_Effect_fail_to_transform_the_error_type_effect_catchAllToMapError.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
-		matches := AnalyzeCatchAllToMapError(ctx.Checker, ctx.SourceFile)
+		matches := AnalyzeCatchAllToMapError(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
 			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.You_can_use_Effect_mapError_instead_of_Effect_catch_Effect_fail_to_transform_the_error_type_effect_catchAllToMapError, nil)
@@ -43,14 +43,14 @@ type CatchAllToMapErrorMatch struct {
 
 // AnalyzeCatchAllToMapError finds all Effect.catch callbacks that simply wrap the
 // error with Effect.fail, which can be simplified to Effect.mapError.
-func AnalyzeCatchAllToMapError(c *checker.Checker, sf *ast.SourceFile) []CatchAllToMapErrorMatch {
+func AnalyzeCatchAllToMapError(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile) []CatchAllToMapErrorMatch {
 	var matches []CatchAllToMapErrorMatch
 
-	flows := typeparser.PipingFlows(c, sf, true)
+	flows := tp.PipingFlows(sf, true)
 	for _, flow := range flows {
 		for _, transformation := range flow.Transformations {
-			if !typeparser.IsNodeReferenceToEffectModuleApi(c, transformation.Callee, "catch") &&
-				!typeparser.IsNodeReferenceToEffectModuleApi(c, transformation.Callee, "catchAll") {
+			if !tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "catch") &&
+				!tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "catchAll") {
 				continue
 			}
 
@@ -76,7 +76,7 @@ func AnalyzeCatchAllToMapError(c *checker.Checker, sf *ast.SourceFile) []CatchAl
 				continue
 			}
 
-			if !typeparser.IsNodeReferenceToEffectModuleApi(c, call.Expression, "fail") {
+			if !tp.IsNodeReferenceToEffectModuleApi(call.Expression, "fail") {
 				continue
 			}
 

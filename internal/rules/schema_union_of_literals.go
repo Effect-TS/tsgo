@@ -22,7 +22,7 @@ var SchemaUnionOfLiterals = rule.Rule{
 	SupportedEffect: []string{"v3"},
 	Codes:           []int32{tsdiag.A_Schema_Union_of_multiple_Schema_Literal_calls_can_be_simplified_to_a_single_Schema_Literal_call_effect_schemaUnionOfLiterals.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
-		matches := AnalyzeSchemaUnionOfLiterals(ctx.Checker, ctx.SourceFile)
+		matches := AnalyzeSchemaUnionOfLiterals(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
 			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.A_Schema_Union_of_multiple_Schema_Literal_calls_can_be_simplified_to_a_single_Schema_Literal_call_effect_schemaUnionOfLiterals, nil)
@@ -43,9 +43,9 @@ type SchemaUnionOfLiteralsMatch struct {
 
 // AnalyzeSchemaUnionOfLiterals finds all Schema.Union(...) calls where every argument
 // is a Schema.Literal(...) call, returning matches with captured nodes for diagnostics and fixes.
-func AnalyzeSchemaUnionOfLiterals(c *checker.Checker, sf *ast.SourceFile) []SchemaUnionOfLiteralsMatch {
+func AnalyzeSchemaUnionOfLiterals(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []SchemaUnionOfLiteralsMatch {
 	// V3-only rule
-	if typeparser.SupportedEffectVersion(c) != typeparser.EffectMajorV3 {
+	if tp.SupportedEffectVersion() != typeparser.EffectMajorV3 {
 		return nil
 	}
 
@@ -63,7 +63,7 @@ func AnalyzeSchemaUnionOfLiterals(c *checker.Checker, sf *ast.SourceFile) []Sche
 		nodeToVisit = nodeToVisit[:len(nodeToVisit)-1]
 
 		if node.Kind == ast.KindCallExpression {
-			if m, ok := analyzeSchemaUnionOfLiteralsNode(c, sf, node); ok {
+			if m, ok := analyzeSchemaUnionOfLiteralsNode(tp, c, sf, node); ok {
 				matches = append(matches, m)
 			}
 		}
@@ -76,11 +76,11 @@ func AnalyzeSchemaUnionOfLiterals(c *checker.Checker, sf *ast.SourceFile) []Sche
 
 // analyzeSchemaUnionOfLiteralsNode checks if a call expression is Schema.Union(...)
 // where all arguments are Schema.Literal(...) calls.
-func analyzeSchemaUnionOfLiteralsNode(c *checker.Checker, sf *ast.SourceFile, node *ast.Node) (SchemaUnionOfLiteralsMatch, bool) {
+func analyzeSchemaUnionOfLiteralsNode(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile, node *ast.Node) (SchemaUnionOfLiteralsMatch, bool) {
 	call := node.AsCallExpression()
 
 	// Check if this is Schema.Union
-	if !typeparser.IsNodeReferenceToEffectSchemaModuleApi(c, call.Expression, "Union") {
+	if !tp.IsNodeReferenceToEffectSchemaModuleApi(call.Expression, "Union") {
 		return SchemaUnionOfLiteralsMatch{}, false
 	}
 
@@ -98,7 +98,7 @@ func analyzeSchemaUnionOfLiteralsNode(c *checker.Checker, sf *ast.SourceFile, no
 			return SchemaUnionOfLiteralsMatch{}, false
 		}
 		argCall := arg.AsCallExpression()
-		if !typeparser.IsNodeReferenceToEffectSchemaModuleApi(c, argCall.Expression, "Literal") {
+		if !tp.IsNodeReferenceToEffectSchemaModuleApi(argCall.Expression, "Literal") {
 			return SchemaUnionOfLiteralsMatch{}, false
 		}
 

@@ -20,7 +20,7 @@ var EffectSucceedWithVoid = rule.Rule{
 	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Effect_void_can_be_used_instead_of_Effect_succeed_undefined_or_Effect_succeed_void_0_effect_effectSucceedWithVoid.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
-		matches := AnalyzeEffectSucceedWithVoid(ctx.Checker, ctx.SourceFile)
+		matches := AnalyzeEffectSucceedWithVoid(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
 			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Effect_void_can_be_used_instead_of_Effect_succeed_undefined_or_Effect_succeed_void_0_effect_effectSucceedWithVoid, nil)
@@ -61,7 +61,7 @@ func isVoidExpression(node *ast.Node) bool {
 
 // AnalyzeEffectSucceedWithVoid finds all Effect.succeed(undefined) and Effect.succeed(void 0) calls
 // that can be replaced with Effect.void.
-func AnalyzeEffectSucceedWithVoid(c *checker.Checker, sf *ast.SourceFile) []EffectSucceedWithVoidMatch {
+func AnalyzeEffectSucceedWithVoid(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile) []EffectSucceedWithVoidMatch {
 	var matches []EffectSucceedWithVoidMatch
 
 	var walk ast.Visitor
@@ -73,7 +73,7 @@ func AnalyzeEffectSucceedWithVoid(c *checker.Checker, sf *ast.SourceFile) []Effe
 		if n.Kind == ast.KindCallExpression {
 			call := n.AsCallExpression()
 			if call.Expression != nil && call.Expression.Kind == ast.KindPropertyAccessExpression {
-				if typeparser.IsNodeReferenceToEffectModuleApi(c, call.Expression, "succeed") {
+				if tp.IsNodeReferenceToEffectModuleApi(call.Expression, "succeed") {
 					if call.Arguments != nil && len(call.Arguments.Nodes) >= 1 {
 						arg := call.Arguments.Nodes[0]
 						if isVoidExpression(arg) {

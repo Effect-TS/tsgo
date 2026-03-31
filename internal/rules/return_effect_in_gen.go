@@ -21,7 +21,7 @@ var ReturnEffectInGen = rule.Rule{
 	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.You_are_returning_an_Effect_able_type_inside_a_generator_function_and_will_result_in_nested_Effect_Effect_Maybe_you_wanted_to_return_yield_Asterisk_instead_Nested_Effect_able_types_may_be_intended_if_you_plan_to_later_manually_flatten_or_unwrap_this_Effect_if_so_you_can_safely_disable_this_diagnostic_for_this_line_through_quickfixes_effect_returnEffectInGen.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
-		matches := AnalyzeReturnEffectInGen(ctx.Checker, ctx.SourceFile)
+		matches := AnalyzeReturnEffectInGen(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
 			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.You_are_returning_an_Effect_able_type_inside_a_generator_function_and_will_result_in_nested_Effect_Effect_Maybe_you_wanted_to_return_yield_Asterisk_instead_Nested_Effect_able_types_may_be_intended_if_you_plan_to_later_manually_flatten_or_unwrap_this_Effect_if_so_you_can_safely_disable_this_diagnostic_for_this_line_through_quickfixes_effect_returnEffectInGen, nil)
@@ -40,7 +40,7 @@ type ReturnEffectInGenMatch struct {
 
 // AnalyzeReturnEffectInGen finds all return statements inside Effect generators
 // that return an Effect-able type, returning matches with both the diagnostic and the return node.
-func AnalyzeReturnEffectInGen(c *checker.Checker, sf *ast.SourceFile) []ReturnEffectInGenMatch {
+func AnalyzeReturnEffectInGen(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []ReturnEffectInGenMatch {
 	var matches []ReturnEffectInGenMatch
 
 	var walk ast.Visitor
@@ -50,7 +50,7 @@ func AnalyzeReturnEffectInGen(c *checker.Checker, sf *ast.SourceFile) []ReturnEf
 		}
 
 		if n.Kind == ast.KindReturnStatement {
-			if checkReturnEffectInGenScope(c, sf, n) {
+			if checkReturnEffectInGenScope(tp, c, sf, n) {
 				matches = append(matches, ReturnEffectInGenMatch{
 					SourceFile: sf,
 					Location:   scanner.GetErrorRangeForNode(sf, n),
@@ -69,7 +69,7 @@ func AnalyzeReturnEffectInGen(c *checker.Checker, sf *ast.SourceFile) []ReturnEf
 
 // checkReturnEffectInGenScope checks if a return statement inside an Effect generator
 // is returning an Effect-able type (which would cause nested Effect<Effect<...>>).
-func checkReturnEffectInGenScope(c *checker.Checker, _ *ast.SourceFile, n *ast.Node) bool {
+func checkReturnEffectInGenScope(tp *typeparser.TypeParser, _ *checker.Checker, _ *ast.SourceFile, n *ast.Node) bool {
 	returnStmt := n.AsReturnStatement()
 	if returnStmt == nil || returnStmt.Expression == nil {
 		return false
@@ -80,16 +80,16 @@ func checkReturnEffectInGenScope(c *checker.Checker, _ *ast.SourceFile, n *ast.N
 		return false
 	}
 
-	if typeparser.GetEffectContextFlags(c, n)&typeparser.EffectContextFlagCanYieldEffect == 0 {
+	if tp.GetEffectContextFlags(n)&typeparser.EffectContextFlagCanYieldEffect == 0 {
 		return false
 	}
 
-	t := typeparser.GetTypeAtLocation(c, returnStmt.Expression)
+	t := tp.GetTypeAtLocation(returnStmt.Expression)
 	if t == nil {
 		return false
 	}
 
-	if !typeparser.StrictIsEffectType(c, t, returnStmt.Expression) {
+	if !tp.StrictIsEffectType(t, returnStmt.Expression) {
 		return false
 	}
 

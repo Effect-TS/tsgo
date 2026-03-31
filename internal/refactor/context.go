@@ -3,6 +3,7 @@ package refactor
 import (
 	"context"
 
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
 	"github.com/microsoft/typescript-go/shim/compiler"
@@ -19,33 +20,31 @@ import (
 type Context struct {
 	SourceFile *ast.SourceFile
 	Span       core.TextRange
+	Program    *compiler.Program
+	Checker    *checker.Checker
+	TypeParser *typeparser.TypeParser
 
-	ctx     context.Context
-	program *compiler.Program
+	Context context.Context
 	ls      *ls.LanguageService
 }
 
 // NewContext creates a refactor Context from the refactor provider callback parameters.
-func NewContext(ctx context.Context, sourceFile *ast.SourceFile, span core.TextRange, program *compiler.Program, langService *ls.LanguageService) *Context {
+func NewContext(ctx context.Context, sourceFile *ast.SourceFile, span core.TextRange, program *compiler.Program, langService *ls.LanguageService, checker *checker.Checker, tp *typeparser.TypeParser) *Context {
+	if program == nil {
+		panic("refactor.NewContext: nil program")
+	}
+	if checker == nil {
+		panic("refactor.NewContext: nil checker")
+	}
 	return &Context{
 		SourceFile: sourceFile,
 		Span:       span,
-		ctx:        ctx,
-		program:    program,
+		Program:    program,
+		Checker:    checker,
+		TypeParser: tp,
+		Context:    ctx,
 		ls:         langService,
 	}
-}
-
-// GetTypeCheckerForFile returns the type checker for the given source file and a cleanup function.
-// Callers must defer the cleanup function.
-// It calls GetDiagnostics on the returned checker to ensure checkSourceFile has run,
-// so that GetRelationErrors and other type-checked state is populated.
-func (c *Context) GetTypeCheckerForFile(sf *ast.SourceFile) (*checker.Checker, func()) {
-	ch, done := c.program.GetTypeCheckerForFile(c.ctx, sf)
-	if ch != nil {
-		ch.GetDiagnostics(c.ctx, sf)
-	}
-	return ch, done
 }
 
 // BytePosToLSPPosition converts a single byte offset in the context's SourceFile
@@ -71,8 +70,8 @@ type RefactorAction struct {
 // Returns nil if the closure produced no edits.
 func (c *Context) NewRefactorAction(action RefactorAction) *ls.CodeAction {
 	tracker := change.NewTracker(
-		c.ctx,
-		c.program.Options(),
+		c.Context,
+		c.Program.Options(),
 		c.ls.FormatOptions(),
 		ls.LanguageService_converters(c.ls),
 	)

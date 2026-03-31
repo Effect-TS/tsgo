@@ -21,6 +21,7 @@ type workItem struct {
 //   - First pass: push children for processing
 //   - Second pass: link processed children into the graph
 func ExtractLayerGraph(
+	tp *typeparser.TypeParser,
 	c *checker.Checker,
 	node *ast.Node,
 	sf *ast.SourceFile,
@@ -58,7 +59,7 @@ func ExtractLayerGraph(
 		currentDepth := depthBudget[current]
 
 		// Case 1: Pipe detection
-		if pipeResult := typeparser.ParsePipeCall(c, current); pipeResult != nil {
+		if pipeResult := tp.ParsePipeCall(current); pipeResult != nil {
 			if !visitedNodes[current] {
 				// First pass: push self back, then subject and args.
 				appendNodeToVisit(current, currentDepth)
@@ -86,12 +87,12 @@ func ExtractLayerGraph(
 						lastIdx = childIdx
 					}
 					// Add a node for the pipe call itself, linking to the last child.
-					pipeIdx := addNode(current, extractNodeInfo(c, current, sf, nodeInPipeContext[current]))
+					pipeIdx := addNode(current, extractNodeInfo(tp, c, current, sf, nodeInPipeContext[current]))
 					g.AddEdge(pipeIdx, lastIdx, LayerGraphEdgeInfo{Relationship: EdgeRelationshipPipe})
 				} else {
 					// Not all children are graph nodes — remove partial children and try as leaf.
 					removePartialChildren(allChildren, nodeToGraphIndex, g)
-					info := extractNodeInfo(c, current, sf, nodeInPipeContext[current])
+					info := extractNodeInfo(tp, c, current, sf, nodeInPipeContext[current])
 					if info.LayerType != nil {
 						addNode(current, info)
 					}
@@ -127,7 +128,7 @@ func ExtractLayerGraph(
 
 					if len(childIndices) == len(args) {
 						// All arguments are graph nodes.
-						callIdx := addNode(current, extractNodeInfo(c, current, sf, nodeInPipeContext[current]))
+						callIdx := addNode(current, extractNodeInfo(tp, c, current, sf, nodeInPipeContext[current]))
 						for i, childIdx := range childIndices {
 							g.AddEdge(callIdx, childIdx, LayerGraphEdgeInfo{
 								Relationship:  EdgeRelationshipCall,
@@ -137,7 +138,7 @@ func ExtractLayerGraph(
 					} else {
 						// Not all arguments are graph nodes.
 						removePartialChildren(args, nodeToGraphIndex, g)
-						info := extractNodeInfo(c, current, sf, nodeInPipeContext[current])
+						info := extractNodeInfo(tp, c, current, sf, nodeInPipeContext[current])
 						if info.LayerType != nil {
 							addNode(current, info)
 						}
@@ -165,7 +166,7 @@ func ExtractLayerGraph(
 				// Second pass: collect child graph indices (doesn't require ALL).
 				childIndices := collectChildIndices(elements, nodeToGraphIndex, g)
 				if len(childIndices) > 0 {
-					arrayIdx := addNode(current, extractNodeInfo(c, current, sf, nodeInPipeContext[current]))
+					arrayIdx := addNode(current, extractNodeInfo(tp, c, current, sf, nodeInPipeContext[current]))
 					for i, childIdx := range childIndices {
 						g.AddEdge(arrayIdx, childIdx, LayerGraphEdgeInfo{
 							Relationship: EdgeRelationshipArrayLiteral,
@@ -199,7 +200,7 @@ func ExtractLayerGraph(
 						}
 						// Second pass: link to declaration if it's in the graph.
 						if childIdx, ok := nodeToGraphIndex[declNode]; ok {
-							identIdx := addNode(current, extractNodeInfo(c, current, sf, nodeInPipeContext[current]))
+							identIdx := addNode(current, extractNodeInfo(tp, c, current, sf, nodeInPipeContext[current]))
 							g.AddEdge(identIdx, childIdx, LayerGraphEdgeInfo{Relationship: EdgeRelationshipSymbol})
 							continue
 						}
@@ -210,7 +211,7 @@ func ExtractLayerGraph(
 
 		// Case 5: Leaf node (base case)
 		if ast.IsExpression(current) {
-			info := extractNodeInfo(c, current, sf, nodeInPipeContext[current])
+			info := extractNodeInfo(tp, c, current, sf, nodeInPipeContext[current])
 			if info.LayerType != nil {
 				addNode(current, info)
 			}
@@ -221,7 +222,7 @@ func ExtractLayerGraph(
 }
 
 // extractNodeInfo computes the LayerGraphNodeInfo for a given AST node.
-func extractNodeInfo(c *checker.Checker, node *ast.Node, _ *ast.SourceFile, inPipeContext bool) LayerGraphNodeInfo {
+func extractNodeInfo(tp *typeparser.TypeParser, c *checker.Checker, node *ast.Node, _ *ast.SourceFile, inPipeContext bool) LayerGraphNodeInfo {
 	info := LayerGraphNodeInfo{
 		Node:        node,
 		DisplayNode: getDisplayNode(node),
@@ -240,26 +241,26 @@ func extractNodeInfo(c *checker.Checker, node *ast.Node, _ *ast.SourceFile, inPi
 			}
 		}
 	} else {
-		t = typeparser.GetTypeAtLocation(c, node)
+		t = tp.GetTypeAtLocation(node)
 	}
 	if t == nil {
 		return info
 	}
 
 	// Parse as Layer type.
-	layer := typeparser.LayerType(c, t, node)
+	layer := tp.LayerType(t, node)
 	if layer == nil {
 		return info
 	}
 	info.LayerType = layer
 
 	// Unroll provides and requires, filtering out Never types.
-	for _, p := range typeparser.UnrollUnionMembers(layer.ROut) {
+	for _, p := range tp.UnrollUnionMembers(layer.ROut) {
 		if p.Flags()&checker.TypeFlagsNever == 0 {
 			info.Provides = append(info.Provides, p)
 		}
 	}
-	for _, r := range typeparser.UnrollUnionMembers(layer.RIn) {
+	for _, r := range tp.UnrollUnionMembers(layer.RIn) {
 		if r.Flags()&checker.TypeFlagsNever == 0 {
 			info.Requires = append(info.Requires, r)
 		}

@@ -81,13 +81,9 @@ func runToggleReturnTypeAnnotation(ctx *refactor.Context) []ls.CodeAction {
 		return nil
 	}
 
-	c, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	if c == nil {
-		return nil
-	}
-	defer done()
+	c := ctx.Checker
 
-	returnType := getInferredReturnTypeFromChecker(c, matchedNode)
+	returnType := getInferredReturnTypeFromChecker(ctx.TypeParser, c, matchedNode)
 	if returnType == nil {
 		return nil
 	}
@@ -127,11 +123,11 @@ func getFunctionLikeType(node *ast.Node) *ast.Node {
 
 // getInferredReturnTypeFromChecker extracts the return type from a function-like declaration
 // using the type checker. It handles overloaded functions and regular signatures.
-func getInferredReturnTypeFromChecker(c *checker.Checker, declaration *ast.Node) *checker.Type {
+func getInferredReturnTypeFromChecker(tp *typeparser.TypeParser, c *checker.Checker, declaration *ast.Node) *checker.Type {
 	var returnType *checker.Type
 
 	// Try overloaded function handling
-	declType := typeparser.GetTypeAtLocation(c, declaration)
+	declType := tp.GetTypeAtLocation(declaration)
 	if declType != nil {
 		signatures := c.GetSignaturesOfType(declType, checker.SignatureKindCall)
 		if len(signatures) > 1 {

@@ -4,7 +4,6 @@ package rules
 import (
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
-	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
 )
@@ -61,19 +60,19 @@ var EffectInFailure = rule.Rule{
 				continue
 			}
 
-			nodeType := typeparser.GetTypeAtLocation(ctx.Checker, node)
+			nodeType := ctx.TypeParser.GetTypeAtLocation(node)
 			if nodeType == nil {
 				continue
 			}
 
-			effect := typeparser.StrictEffectType(ctx.Checker, nodeType, node)
+			effect := ctx.TypeParser.StrictEffectType(nodeType, node)
 			if effect == nil {
 				continue
 			}
 
 			// Check if any union member of the failure channel (E) is a strict Effect type
-			failureMembers := typeparser.UnrollUnionMembers(effect.E)
-			memberWithEffect := findFirstStrictEffect(ctx.Checker, failureMembers, node)
+			failureMembers := ctx.TypeParser.UnrollUnionMembers(effect.E)
+			memberWithEffect := findFirstStrictEffect(ctx.TypeParser, ctx.Checker, failureMembers, node)
 			if memberWithEffect == nil {
 				continue
 			}

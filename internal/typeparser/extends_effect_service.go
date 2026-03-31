@@ -2,7 +2,6 @@ package typeparser
 
 import (
 	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
 )
 
 // EffectServiceResult holds the parsed result of a class extending Effect.Service.
@@ -23,13 +22,12 @@ type EffectServiceResult struct {
 // and the inner call resolves to Effect.Service.
 //
 // Returns nil if the class does not extend Effect.Service.
-func ExtendsEffectService(c *checker.Checker, classNode *ast.Node) *EffectServiceResult {
-	if c == nil || classNode == nil {
+func (tp *TypeParser) ExtendsEffectService(classNode *ast.Node) *EffectServiceResult {
+	if tp == nil || tp.checker == nil || classNode == nil {
 		return nil
 	}
 
-	links := GetEffectLinks(c)
-	return Cached(&links.ExtendsEffectService, classNode, func() *EffectServiceResult {
+	return Cached(&tp.links.ExtendsEffectService, classNode, func() *EffectServiceResult {
 		// Must have a name
 		if classNode.Name() == nil {
 			return nil
@@ -79,7 +77,7 @@ func ExtendsEffectService(c *checker.Checker, classNode *ast.Node) *EffectServic
 			if innerCall.Expression == nil {
 				continue
 			}
-			if !IsNodeReferenceToEffectModuleApi(c, innerCall.Expression, "Service") {
+			if !tp.IsNodeReferenceToEffectModuleApi(innerCall.Expression, "Service") {
 				continue
 			}
 

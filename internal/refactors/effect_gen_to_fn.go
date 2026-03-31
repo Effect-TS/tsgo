@@ -19,17 +19,13 @@ var EffectGenToFn = refactor.Refactor{
 
 // effectGenParsed holds the parsed components of a function returning Effect.gen.
 type effectGenParsed struct {
-	funcNode *ast.Node                      // The function-like node (arrow, declaration, expression, method)
+	funcNode *ast.Node                       // The function-like node (arrow, declaration, expression, method)
 	genCall  *typeparser.EffectGenCallResult // The parsed Effect.gen call
-	pipeArgs []*ast.Node                    // Collected pipe arguments (from .pipe() or pipe() wrappers)
+	pipeArgs []*ast.Node                     // Collected pipe arguments (from .pipe() or pipe() wrappers)
 }
 
 func runEffectGenToFn(ctx *refactor.Context) []ls.CodeAction {
-	c, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	if c == nil {
-		return nil
-	}
-	defer done()
+	c := ctx.Checker
 
 	token := astnav.GetTokenAtPosition(ctx.SourceFile, ctx.Span.Pos())
 	if token == nil {
@@ -37,7 +33,7 @@ func runEffectGenToFn(ctx *refactor.Context) []ls.CodeAction {
 	}
 
 	// Walk ancestor chain to find a function-like node returning Effect.gen
-	parsed := findFunctionReturningEffectGen(c, token)
+	parsed := findFunctionReturningEffectGen(ctx.TypeParser, c, token)
 	if parsed == nil {
 		return nil
 	}
@@ -77,11 +73,11 @@ func runEffectGenToFn(ctx *refactor.Context) []ls.CodeAction {
 // findFunctionReturningEffectGen walks from the token up the ancestor chain to find
 // a function-like node whose body directly returns an Effect.gen call, optionally
 // wrapped in pipe/pipeable chains.
-func findFunctionReturningEffectGen(c *checker.Checker, token *ast.Node) *effectGenParsed {
+func findFunctionReturningEffectGen(tp *typeparser.TypeParser, c *checker.Checker, token *ast.Node) *effectGenParsed {
 	for node := token; node != nil; node = node.Parent {
 		switch node.Kind {
 		case ast.KindArrowFunction, ast.KindFunctionDeclaration, ast.KindMethodDeclaration:
-			parsed := parseFunctionReturningEffectGen(c, node)
+			parsed := parseFunctionReturningEffectGen(tp, c, node)
 			if parsed != nil {
 				return parsed
 			}
@@ -93,7 +89,7 @@ func findFunctionReturningEffectGen(c *checker.Checker, token *ast.Node) *effect
 			if fe.AsteriskToken != nil {
 				continue
 			}
-			parsed := parseFunctionReturningEffectGen(c, node)
+			parsed := parseFunctionReturningEffectGen(tp, c, node)
 			if parsed != nil {
 				return parsed
 			}
@@ -105,7 +101,7 @@ func findFunctionReturningEffectGen(c *checker.Checker, token *ast.Node) *effect
 
 // parseFunctionReturningEffectGen extracts the Effect.gen call and any pipe args
 // from a function-like node. Returns nil if the function doesn't match.
-func parseFunctionReturningEffectGen(c *checker.Checker, node *ast.Node) *effectGenParsed {
+func parseFunctionReturningEffectGen(tp *typeparser.TypeParser, _ *checker.Checker, node *ast.Node) *effectGenParsed {
 	body := typeparser.GetFunctionLikeBody(node)
 	if body == nil {
 		return nil
@@ -117,7 +113,7 @@ func parseFunctionReturningEffectGen(c *checker.Checker, node *ast.Node) *effect
 	// Peel off pipe wrappers, collecting args
 	var pipeArgs []*ast.Node
 	for {
-		pipeResult := typeparser.ParsePipeCall(c, subject)
+		pipeResult := tp.ParsePipeCall(subject)
 		if pipeResult == nil {
 			break
 		}
@@ -127,7 +123,7 @@ func parseFunctionReturningEffectGen(c *checker.Checker, node *ast.Node) *effect
 	}
 
 	// Check if the core expression is Effect.gen(function*() { ... })
-	genCall := typeparser.EffectGenCall(c, subject)
+	genCall := tp.EffectGenCall(subject)
 	if genCall == nil {
 		return nil
 	}
@@ -206,13 +202,13 @@ func buildEffectGenToFnReplacement(tracker *change.Tracker, parsed *effectGenPar
 
 	// Build function*(params) { body }
 	genFn := tracker.NewFunctionExpression(
-		nil,                                    // modifiers
+		nil,                                     // modifiers
 		tracker.NewToken(ast.KindAsteriskToken), // asterisk (generator)
-		nil,                                    // name
-		typeParams,                             // typeParameters
-		params,                                 // parameters
-		nil,                                    // returnType
-		nil,                                    // fullSignature
+		nil,                                     // name
+		typeParams,                              // typeParameters
+		params,                                  // parameters
+		nil,                                     // returnType
+		nil,                                     // fullSignature
 		blockBody,
 	)
 

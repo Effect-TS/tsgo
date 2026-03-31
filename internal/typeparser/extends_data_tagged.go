@@ -2,7 +2,6 @@ package typeparser
 
 import (
 	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
 )
 
 // DataTaggedErrorResult holds the parsed result of a class extending Data.TaggedError.
@@ -21,12 +20,12 @@ type DataTaggedErrorResult struct {
 // and the type arguments <Fields> are on the ExpressionWithTypeArguments.
 //
 // Returns nil if the class does not extend Data.TaggedError.
-func ExtendsDataTaggedError(c *checker.Checker, classNode *ast.Node) *DataTaggedErrorResult {
-	if c == nil || classNode == nil {
+func (tp *TypeParser) ExtendsDataTaggedError(classNode *ast.Node) *DataTaggedErrorResult {
+	if tp == nil || tp.checker == nil || classNode == nil {
 		return nil
 	}
 
-	links := GetEffectLinks(c)
+	links := tp.links
 	return Cached(&links.ExtendsDataTaggedError, classNode, func() *DataTaggedErrorResult {
 		// Must have a name
 		if classNode.Name() == nil {
@@ -62,7 +61,7 @@ func ExtendsDataTaggedError(c *checker.Checker, classNode *ast.Node) *DataTagged
 			if call.Expression == nil {
 				continue
 			}
-			if !IsNodeReferenceToEffectDataModuleApi(c, call.Expression, "TaggedError") {
+			if !tp.IsNodeReferenceToEffectDataModuleApi(call.Expression, "TaggedError") {
 				continue
 			}
 

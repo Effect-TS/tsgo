@@ -20,15 +20,11 @@ var UnnecessaryPipeChainFix = fixable.Fixable{
 
 func runUnnecessaryPipeChainFix(ctx *fixable.Context) []ls.CodeAction {
 
-	c, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	if c == nil {
-		return nil
-	}
-	defer done()
+	c := ctx.Checker
 
 	sf := ctx.SourceFile
 
-	matches := rules.AnalyzeUnnecessaryPipeChain(c, sf)
+	matches := rules.AnalyzeUnnecessaryPipeChain(ctx.TypeParser, c, sf)
 
 	var match *rules.UnnecessaryPipeChainMatch
 	for i := range matches {

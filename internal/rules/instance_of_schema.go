@@ -21,7 +21,7 @@ var InstanceOfSchema = rule.Rule{
 	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Consider_using_Schema_is_instead_of_instanceof_for_Effect_Schema_types_effect_instanceOfSchema.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
-		matches := AnalyzeInstanceOfSchema(ctx.Checker, ctx.SourceFile)
+		matches := AnalyzeInstanceOfSchema(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
 			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Consider_using_Schema_is_instead_of_instanceof_for_Effect_Schema_types_effect_instanceOfSchema, nil)
@@ -42,7 +42,7 @@ type InstanceOfSchemaMatch struct {
 
 // AnalyzeInstanceOfSchema finds all `value instanceof SchemaClass` expressions
 // where the right-hand side is an Effect Schema type.
-func AnalyzeInstanceOfSchema(c *checker.Checker, sf *ast.SourceFile) []InstanceOfSchemaMatch {
+func AnalyzeInstanceOfSchema(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile) []InstanceOfSchemaMatch {
 	var matches []InstanceOfSchemaMatch
 
 	// Stack-based traversal
@@ -60,8 +60,8 @@ func AnalyzeInstanceOfSchema(c *checker.Checker, sf *ast.SourceFile) []InstanceO
 		if ast.IsInstanceOfExpression(node) {
 			binExpr := node.AsBinaryExpression()
 			rightExpr := binExpr.Right
-			rightType := typeparser.GetTypeAtLocation(c, rightExpr)
-			if rightType != nil && typeparser.IsSchemaType(c, rightType, rightExpr) {
+			rightType := tp.GetTypeAtLocation(rightExpr)
+			if rightType != nil && tp.IsSchemaType(rightType, rightExpr) {
 				matches = append(matches, InstanceOfSchemaMatch{
 					SourceFile:     sf,
 					Location:       scanner.GetErrorRangeForNode(sf, node),

@@ -24,7 +24,7 @@ var NonObjectEffectServiceType = rule.Rule{
 	},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		// V3-only rule
-		if typeparser.SupportedEffectVersion(ctx.Checker) != typeparser.EffectMajorV3 {
+		if ctx.TypeParser.SupportedEffectVersion() != typeparser.EffectMajorV3 {
 			return nil
 		}
 
@@ -60,7 +60,7 @@ var NonObjectEffectServiceType = rule.Rule{
 // checkServicePropertyTypes checks if a class extending Effect.Service has option
 // properties that resolve to primitive types.
 func checkServicePropertyTypes(ctx *rule.Context, node *ast.Node) []*ast.Diagnostic {
-	serviceResult := typeparser.ExtendsEffectService(ctx.Checker, node)
+	serviceResult := ctx.TypeParser.ExtendsEffectService(node)
 	if serviceResult == nil {
 		return nil
 	}
@@ -94,8 +94,8 @@ func checkServicePropertyTypes(ctx *rule.Context, node *ast.Node) []*ast.Diagnos
 
 		switch propertyName {
 		case "succeed":
-			valueType := typeparser.GetTypeAtLocation(ctx.Checker, initializer)
-			if valueType != nil && isPrimitiveType(valueType) {
+			valueType := ctx.TypeParser.GetTypeAtLocation(initializer)
+			if valueType != nil && isPrimitiveType(ctx.TypeParser, valueType) {
 				diags = append(diags, ctx.NewDiagnostic(
 					ctx.SourceFile,
 					ctx.GetErrorRange(pa.Name()),
@@ -105,14 +105,14 @@ func checkServicePropertyTypes(ctx *rule.Context, node *ast.Node) []*ast.Diagnos
 			}
 
 		case "sync":
-			valueType := typeparser.GetTypeAtLocation(ctx.Checker, initializer)
+			valueType := ctx.TypeParser.GetTypeAtLocation(initializer)
 			if valueType == nil {
 				continue
 			}
 			signatures := ctx.Checker.GetSignaturesOfType(valueType, checker.SignatureKindCall)
 			for _, sig := range signatures {
 				returnType := ctx.Checker.GetReturnTypeOfSignature(sig)
-				if returnType != nil && isPrimitiveType(returnType) {
+				if returnType != nil && isPrimitiveType(ctx.TypeParser, returnType) {
 					diags = append(diags, ctx.NewDiagnostic(
 						ctx.SourceFile,
 						ctx.GetErrorRange(pa.Name()),
@@ -124,15 +124,15 @@ func checkServicePropertyTypes(ctx *rule.Context, node *ast.Node) []*ast.Diagnos
 			}
 
 		case "effect", "scoped":
-			valueType := typeparser.GetTypeAtLocation(ctx.Checker, initializer)
+			valueType := ctx.TypeParser.GetTypeAtLocation(initializer)
 			if valueType == nil {
 				continue
 			}
 
 			// Try direct EffectType parse first
-			effectResult := typeparser.EffectType(ctx.Checker, valueType, initializer)
+			effectResult := ctx.TypeParser.EffectType(valueType, initializer)
 			if effectResult != nil {
-				if isPrimitiveType(effectResult.A) {
+				if isPrimitiveType(ctx.TypeParser, effectResult.A) {
 					diags = append(diags, ctx.NewDiagnostic(
 						ctx.SourceFile,
 						ctx.GetErrorRange(pa.Name()),
@@ -150,8 +150,8 @@ func checkServicePropertyTypes(ctx *rule.Context, node *ast.Node) []*ast.Diagnos
 				if returnType == nil {
 					continue
 				}
-				effectReturnResult := typeparser.EffectType(ctx.Checker, returnType, initializer)
-				if effectReturnResult != nil && isPrimitiveType(effectReturnResult.A) {
+				effectReturnResult := ctx.TypeParser.EffectType(returnType, initializer)
+				if effectReturnResult != nil && isPrimitiveType(ctx.TypeParser, effectReturnResult.A) {
 					diags = append(diags, ctx.NewDiagnostic(
 						ctx.SourceFile,
 						ctx.GetErrorRange(pa.Name()),
@@ -168,7 +168,7 @@ func checkServicePropertyTypes(ctx *rule.Context, node *ast.Node) []*ast.Diagnos
 }
 
 // isPrimitiveType checks if a type (or any member of a union type) is a primitive type.
-func isPrimitiveType(t *checker.Type) bool {
+func isPrimitiveType(tp *typeparser.TypeParser, t *checker.Type) bool {
 	const primitiveFlags = checker.TypeFlagsString |
 		checker.TypeFlagsNumber |
 		checker.TypeFlagsBoolean |
@@ -178,7 +178,7 @@ func isPrimitiveType(t *checker.Type) bool {
 		checker.TypeFlagsUndefined |
 		checker.TypeFlagsNull
 
-	for _, member := range typeparser.UnrollUnionMembers(t) {
+	for _, member := range tp.UnrollUnionMembers(t) {
 		if member.Flags()&primitiveFlags != 0 {
 			return true
 		}

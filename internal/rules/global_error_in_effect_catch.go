@@ -56,7 +56,7 @@ func checkGlobalErrorInEffectCatch(ctx *rule.Context, node *ast.Node) *ast.Diagn
 	call := node.AsCallExpression()
 
 	callee := call.Expression
-	if !isGlobalErrorCatchCallee(ctx.Checker, callee) {
+	if !isGlobalErrorCatchCallee(ctx.TypeParser, ctx.Checker, callee) {
 		return nil
 	}
 
@@ -75,7 +75,7 @@ func checkGlobalErrorInEffectCatch(ctx *rule.Context, node *ast.Node) *ast.Diagn
 		return nil
 	}
 
-	for _, objectType := range typeparser.UnrollUnionMembers(paramType) {
+	for _, objectType := range ctx.TypeParser.UnrollUnionMembers(paramType) {
 		catchSymbol := ctx.Checker.GetPropertyOfType(objectType, "catch")
 		if catchSymbol == nil {
 			continue
@@ -96,7 +96,7 @@ func checkGlobalErrorInEffectCatch(ctx *rule.Context, node *ast.Node) *ast.Diagn
 			continue
 		}
 
-		if typeparser.IsGlobalErrorType(ctx.Checker, returnType) {
+		if ctx.TypeParser.IsGlobalErrorType(returnType) {
 			calleeText := scanner.GetSourceTextOfNodeFromSourceFile(ctx.SourceFile, callee, false)
 			return ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(callee), tsdiag.The_catch_callback_in_0_returns_global_Error_which_loses_type_safety_as_untagged_errors_merge_together_Consider_using_a_tagged_error_and_optionally_wrapping_the_original_in_a_cause_property_effect_globalErrorInEffectCatch, nil, calleeText)
 		}
@@ -106,9 +106,9 @@ func checkGlobalErrorInEffectCatch(ctx *rule.Context, node *ast.Node) *ast.Diagn
 }
 
 // isGlobalErrorCatchCallee checks if a node references one of the Effect module catch APIs.
-func isGlobalErrorCatchCallee(c *checker.Checker, node *ast.Node) bool {
+func isGlobalErrorCatchCallee(tp *typeparser.TypeParser, _ *checker.Checker, node *ast.Node) bool {
 	for _, name := range globalErrorCatchApis {
-		if typeparser.IsNodeReferenceToEffectModuleApi(c, node, name) {
+		if tp.IsNodeReferenceToEffectModuleApi(node, name) {
 			return true
 		}
 	}

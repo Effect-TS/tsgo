@@ -12,7 +12,7 @@ var sqlModelModuleDescriptor = PackageSourceFileDescriptor{
 
 // isSqlModelTypeSourceFile checks if a source file is @effect/sql Model module
 // by verifying it exports "Class", "makeRepository", and "makeDataLoaders".
-func isSqlModelTypeSourceFile(c *checker.Checker, sf *ast.SourceFile) bool {
+func isSqlModelTypeSourceFile(_ *TypeParser, c *checker.Checker, sf *ast.SourceFile) bool {
 	if c == nil || sf == nil {
 		return false
 	}
@@ -37,6 +37,6 @@ func isSqlModelTypeSourceFile(c *checker.Checker, sf *ast.SourceFile) bool {
 
 // IsNodeReferenceToEffectSqlModelModuleApi reports whether node resolves to a member
 // exported by the "@effect/sql" package from a module that exports the Model API.
-func IsNodeReferenceToEffectSqlModelModuleApi(c *checker.Checker, node *ast.Node, memberName string) bool {
-	return IsNodeReferenceToModuleExport(c, node, sqlModelModuleDescriptor, memberName)
+func (tp *TypeParser) IsNodeReferenceToEffectSqlModelModuleApi(node *ast.Node, memberName string) bool {
+	return tp.IsNodeReferenceToModuleExport(node, sqlModelModuleDescriptor, memberName)
 }
