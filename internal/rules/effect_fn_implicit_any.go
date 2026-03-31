@@ -84,7 +84,7 @@ func checkEffectFnImplicitAnyBody(ctx *rule.Context, callNode *ast.Node, fnNode 
 }
 
 func checkEffectFnImplicitAnyParameters(ctx *rule.Context, callNode *ast.Node, params []*ast.Node) []*ast.Diagnostic {
-	if hasOuterContextualFunctionType(ctx.Checker, callNode) {
+	if hasOuterContextualFunctionType(ctx.TypeParser, ctx.Checker, callNode) {
 		return nil
 	}
 
@@ -111,7 +111,7 @@ func checkEffectFnImplicitAnyParameters(ctx *rule.Context, callNode *ast.Node, p
 	return diags
 }
 
-func hasOuterContextualFunctionType(c *checker.Checker, node *ast.Node) bool {
+func hasOuterContextualFunctionType(tp *typeparser.TypeParser, c *checker.Checker, node *ast.Node) bool {
 	if c == nil || node == nil || !ast.IsExpression(node) {
 		return false
 	}
@@ -121,7 +121,7 @@ func hasOuterContextualFunctionType(c *checker.Checker, node *ast.Node) bool {
 		return false
 	}
 
-	for _, member := range typeparser.UnrollUnionMembers(contextualType) {
+	for _, member := range tp.UnrollUnionMembers(contextualType) {
 		if len(c.GetSignaturesOfType(member, checker.SignatureKindCall)) > 0 {
 			return true
 		}

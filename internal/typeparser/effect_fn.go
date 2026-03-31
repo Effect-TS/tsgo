@@ -5,20 +5,86 @@ import (
 	"github.com/microsoft/typescript-go/shim/ast"
 )
 
-func firstEffectFnFunctionArgument(args []*ast.Node) (*ast.Node, []*ast.Node) {
-	for i, arg := range args {
+type EffectFnVariant string
+
+const (
+	EffectFnVariantFn              EffectFnVariant = "fn"
+	EffectFnVariantFnUntraced      EffectFnVariant = "fnUntraced"
+	EffectFnVariantFnUntracedEager EffectFnVariant = "fnUntracedEager"
+)
+
+// EffectFnCallResult represents a parsed Effect.fn-family call.
+type EffectFnCallResult struct {
+	Call            *ast.CallExpression
+	Variant         EffectFnVariant
+	EffectModule    *ast.Expression
+	OptionsNode     *ast.Node
+	FunctionNode    *ast.Node   // ArrowFunction or FunctionExpression
+	PipeArguments   []*ast.Node // Transformation args after the body (may be empty/nil)
+	TraceExpression *ast.Node   // The name string from curried Effect.fn("name")(...), or nil
+}
+
+func (r *EffectFnCallResult) IsGenerator() bool {
+	return r.GeneratorFunction() != nil
+}
+
+func (r *EffectFnCallResult) GeneratorFunction() *ast.FunctionExpression {
+	if r == nil || r.FunctionNode == nil || r.FunctionNode.Kind != ast.KindFunctionExpression {
+		return nil
+	}
+	fn := r.FunctionNode.AsFunctionExpression()
+	if fn == nil || fn.AsteriskToken == nil {
+		return nil
+	}
+	return fn
+}
+
+func (r *EffectFnCallResult) Body() *ast.BlockOrExpression {
+	if r == nil || r.FunctionNode == nil {
+		return nil
+	}
+	switch r.FunctionNode.Kind {
+	case ast.KindArrowFunction:
+		fn := r.FunctionNode.AsArrowFunction()
+		if fn == nil {
+			return nil
+		}
+		return fn.Body
+	case ast.KindFunctionExpression:
+		fn := r.FunctionNode.AsFunctionExpression()
+		if fn == nil {
+			return nil
+		}
+		return fn.Body
+	default:
+		return nil
+	}
+}
+
+func splitEffectFnArguments(args []*ast.Node) (*ast.Node, *ast.Node, []*ast.Node) {
+	start := 0
+	var options *ast.Node
+	if len(args) > 0 {
+		first := args[0]
+		if first != nil && first.Kind != ast.KindArrowFunction && first.Kind != ast.KindFunctionExpression {
+			options = first
+			start = 1
+		}
+	}
+	for i := start; i < len(args); i++ {
+		arg := args[i]
 		if arg == nil {
 			continue
 		}
 		switch arg.Kind {
 		case ast.KindArrowFunction, ast.KindFunctionExpression:
 			if i+1 < len(args) {
-				return arg, args[i+1:]
+				return options, arg, args[i+1:]
 			}
-			return arg, nil
+			return options, arg, nil
 		}
 	}
-	return nil, nil
+	return options, nil, nil
 }
 
 func isGeneratorFunctionNode(node *ast.Node) bool {
@@ -42,7 +108,7 @@ func (tp *TypeParser) EffectFnCall(node *ast.Node) *EffectFnCallResult {
 			return nil
 		}
 
-		bodyArg, pipeArgs := firstEffectFnFunctionArgument(call.Arguments.Nodes)
+		optionsNode, bodyArg, pipeArgs := splitEffectFnArguments(call.Arguments.Nodes)
 		if bodyArg == nil {
 			return nil
 		}
@@ -70,7 +136,6 @@ func (tp *TypeParser) EffectFnCall(node *ast.Node) *EffectFnCallResult {
 			if innerCall.Arguments != nil && len(innerCall.Arguments.Nodes) > 0 {
 				traceExpression = innerCall.Arguments.Nodes[0]
 			}
-			variant = EffectFnVariantFn
 		} else {
 			expressionToCheck = expr
 		}
@@ -105,6 +170,7 @@ func (tp *TypeParser) EffectFnCall(node *ast.Node) *EffectFnCallResult {
 			Call:            call,
 			Variant:         variant,
 			EffectModule:    propertyAccess.Expression,
+			OptionsNode:     optionsNode,
 			FunctionNode:    bodyArg,
 			PipeArguments:   pipeArgs,
 			TraceExpression: traceExpression,

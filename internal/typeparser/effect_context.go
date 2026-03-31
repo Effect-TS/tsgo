@@ -127,14 +127,12 @@ func (tp *TypeParser) analyzeEffectContextForSourceFile(sf *ast.SourceFile) {
 		} else if effectFn := tp.EffectFnCall(node); effectFn != nil && effectFn.IsGenerator() {
 			body := effectFn.Body()
 			genFn := effectFn.GeneratorFunction()
-			if body == nil || genFn == nil {
-				goto next
+			if body != nil && genFn != nil {
+				bodyNode := body.AsNode()
+				*pendingEnableFlags.Get(bodyNode) |= EffectContextFlagCanYieldEffect
+				*links.EffectYieldGeneratorFunction.Get(bodyNode) = genFn
 			}
-			bodyNode := body.AsNode()
-			*pendingEnableFlags.Get(bodyNode) |= EffectContextFlagCanYieldEffect
-			*links.EffectYieldGeneratorFunction.Get(bodyNode) = genFn
 		}
-	next:
 
 		// Function-like nodes create a new scope, so they should not directly inherit
 		// yieldability from an outer Effect scope. Matching Effect helpers re-enable the

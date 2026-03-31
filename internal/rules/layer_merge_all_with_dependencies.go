@@ -120,7 +120,7 @@ func analyzeLayerMergeAllCall(tp *typeparser.TypeParser, c *checker.Checker, sf 
 		}
 
 		// Unroll union members for provided types (ROut)
-		providedMembers := typeparser.UnrollUnionMembers(layer.ROut)
+		providedMembers := tp.UnrollUnionMembers(layer.ROut)
 
 		// Filter out never types and pass-through types
 		for _, providedType := range providedMembers {

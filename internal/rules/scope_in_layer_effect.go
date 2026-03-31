@@ -191,7 +191,7 @@ func matchClassWithDefaultLayer(tp *typeparser.TypeParser, c *checker.Checker, s
 
 // hasScope checks if any union member of the given type is a Scope type.
 func hasScope(tp *typeparser.TypeParser, _ *checker.Checker, t *checker.Type, atLocation *ast.Node) bool {
-	members := typeparser.UnrollUnionMembers(t)
+	members := tp.UnrollUnionMembers(t)
 	for _, member := range members {
 		if tp.IsScopeType(member, atLocation) {
 			return true

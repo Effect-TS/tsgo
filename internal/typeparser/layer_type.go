@@ -13,6 +13,16 @@ var effectLayerModuleDescriptor = PackageSourceFileDescriptor{
 	MatchesSourceFile: isLayerTypeSourceFile,
 }
 
+// LayerTypeId is the property key for Layer's variance struct.
+const LayerTypeId = "~effect/Layer"
+
+// Layer represents parsed Layer<ROut, E, RIn> type parameters.
+type Layer struct {
+	ROut *checker.Type // Provided services (contravariant)
+	E    *checker.Type // Error type (covariant)
+	RIn  *checker.Type // Required services (covariant)
+}
+
 // parseLayerVarianceStruct extracts ROut, E, RIn from a Layer variance struct type.
 func (tp *TypeParser) parseLayerVarianceStruct(t *checker.Type, atLocation *ast.Node) *Layer {
 	rOut := tp.extractContravariantType(t, atLocation, "_ROut")

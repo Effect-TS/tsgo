@@ -3,7 +3,6 @@ package rules
 import (
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
-	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
 	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
@@ -97,7 +96,7 @@ var StrictBooleanExpressions = rule.Rule{
 
 					// Unroll union types
 					if t.Flags()&checker.TypeFlagsUnion != 0 {
-						typesToCheck = append(typesToCheck, typeparser.UnrollUnionMembers(t)...)
+						typesToCheck = append(typesToCheck, ctx.TypeParser.UnrollUnionMembers(t)...)
 						continue
 					}
 

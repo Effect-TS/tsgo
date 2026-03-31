@@ -66,7 +66,7 @@ func AnalyzeMissingEffectError(tp *typeparser.TypeParser, c *checker.Checker, sf
 		}
 
 		// Find unhandled error types
-		unhandledErrors := findUnhandledErrors(c, srcEffect.E, tgtEffect.E)
+		unhandledErrors := findUnhandledErrors(tp, c, srcEffect.E, tgtEffect.E)
 		if len(unhandledErrors) > 0 {
 			matches = append(matches, MissingEffectErrorMatch{
 				SourceFile:        sf,
@@ -83,9 +83,9 @@ func AnalyzeMissingEffectError(tp *typeparser.TypeParser, c *checker.Checker, sf
 }
 
 // findUnhandledErrors returns the source error types that are not assignable to the target error type.
-func findUnhandledErrors(c *checker.Checker, srcE, tgtE *checker.Type) []*checker.Type {
+func findUnhandledErrors(tp *typeparser.TypeParser, c *checker.Checker, srcE, tgtE *checker.Type) []*checker.Type {
 	// Unroll source error union into individual members
-	srcMembers := typeparser.UnrollUnionMembers(srcE)
+	srcMembers := tp.UnrollUnionMembers(srcE)
 
 	var unhandled []*checker.Type
 	for _, member := range srcMembers {

@@ -17,6 +17,17 @@ var effectPackageExportDescriptor = PackageSourceFileDescriptor{
 	PackageName: "effect",
 }
 
+// EffectTypeId is the property key for Effect's variance struct.
+// Effect v4 (effect-smol) uses this pattern to encode type parameters.
+const EffectTypeId = "~effect/Effect"
+
+// Effect represents parsed Effect<A, E, R> type parameters.
+type Effect struct {
+	A *checker.Type // Success type
+	E *checker.Type // Error type
+	R *checker.Type // Requirements type
+}
+
 // EffectType parses an Effect type and extracts A, E, R parameters.
 // Returns nil if the type is not an Effect.
 // The detection strategy is chosen based on the detected Effect version:

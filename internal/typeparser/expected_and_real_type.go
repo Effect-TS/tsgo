@@ -6,6 +6,16 @@ import (
 	"github.com/microsoft/typescript-go/shim/scanner"
 )
 
+// ExpectedAndRealType represents a pair of expected and actual types at an assignment site.
+// This is used by diagnostic rules that need to compare what type was expected at a location
+// versus what type was actually provided.
+type ExpectedAndRealType struct {
+	Node         *ast.Node     // The location node (for diagnostic reporting)
+	ExpectedType *checker.Type // The type expected at this location
+	ValueNode    *ast.Node     // The actual value node
+	RealType     *checker.Type // The actual type of the value
+}
+
 // getInferredReturnType extracts the return type from a function-like declaration.
 // It handles overloaded functions (multiple call signatures), type predicates,
 // and regular signature return types.

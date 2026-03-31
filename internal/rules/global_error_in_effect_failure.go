@@ -4,7 +4,6 @@ package rules
 import (
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
-	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
 	"slices"
@@ -70,7 +69,7 @@ func checkGlobalErrorInEffectFailure(ctx *rule.Context, node *ast.Node) *ast.Dia
 		}
 
 		// Found an Effect type — check if the failure channel contains global Error
-		if slices.ContainsFunc(typeparser.UnrollUnionMembers(effectType.E), ctx.TypeParser.IsGlobalErrorType) {
+		if slices.ContainsFunc(ctx.TypeParser.UnrollUnionMembers(effectType.E), ctx.TypeParser.IsGlobalErrorType) {
 			return ast.FindAncestorTrue
 		}
 

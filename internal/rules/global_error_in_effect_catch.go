@@ -75,7 +75,7 @@ func checkGlobalErrorInEffectCatch(ctx *rule.Context, node *ast.Node) *ast.Diagn
 		return nil
 	}
 
-	for _, objectType := range typeparser.UnrollUnionMembers(paramType) {
+	for _, objectType := range ctx.TypeParser.UnrollUnionMembers(paramType) {
 		catchSymbol := ctx.Checker.GetPropertyOfType(objectType, "catch")
 		if catchSymbol == nil {
 			continue

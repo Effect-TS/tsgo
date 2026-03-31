@@ -255,12 +255,12 @@ func extractNodeInfo(tp *typeparser.TypeParser, c *checker.Checker, node *ast.No
 	info.LayerType = layer
 
 	// Unroll provides and requires, filtering out Never types.
-	for _, p := range typeparser.UnrollUnionMembers(layer.ROut) {
+	for _, p := range tp.UnrollUnionMembers(layer.ROut) {
 		if p.Flags()&checker.TypeFlagsNever == 0 {
 			info.Provides = append(info.Provides, p)
 		}
 	}
-	for _, r := range typeparser.UnrollUnionMembers(layer.RIn) {
+	for _, r := range tp.UnrollUnionMembers(layer.RIn) {
 		if r.Flags()&checker.TypeFlagsNever == 0 {
 			info.Requires = append(info.Requires, r)
 		}

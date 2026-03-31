@@ -129,10 +129,10 @@ func tryBuildRefactor(ctx *refactor.Context, tp *typeparser.TypeParser, c *check
 	}
 
 	// Get target output types from the Layer ROut
-	targetOutputTypes := typeparser.UnrollUnionMembers(layer.ROut)
+	targetOutputTypes := ctx.TypeParser.UnrollUnionMembers(layer.ROut)
 
 	// Convert to magic result
-	magicResult := layergraph.ConvertOutlineGraphToLayerMagic(c, outlineGraph, targetOutputTypes)
+	magicResult := layergraph.ConvertOutlineGraphToLayerMagic(ctx.TypeParser, outlineGraph, targetOutputTypes)
 	if magicResult == nil || len(magicResult.Nodes) == 0 {
 		return nil
 	}

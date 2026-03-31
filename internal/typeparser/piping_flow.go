@@ -9,6 +9,39 @@ import (
 	"github.com/microsoft/typescript-go/shim/scanner"
 )
 
+// TransformationKind represents how a transformation was expressed in source code.
+type TransformationKind string
+
+const (
+	TransformationKindPipe             TransformationKind = "pipe"
+	TransformationKindPipeable         TransformationKind = "pipeable"
+	TransformationKindCall             TransformationKind = "call"
+	TransformationKindEffectFn         TransformationKind = "effectFn"
+	TransformationKindEffectFnUntraced TransformationKind = "effectFnUntraced"
+)
+
+// PipingFlowTransformation represents a single transformation step in a piping flow.
+type PipingFlowTransformation struct {
+	Kind    TransformationKind // How the transformation was expressed
+	Node    *ast.Node          // The full transformation node (call expression or bare callee)
+	Callee  *ast.Node          // The function being applied (e.g., Effect.map)
+	Args    []*ast.Node        // Arguments to the transformation, or nil for constants/single-arg calls
+	OutType *checker.Type      // The resulting type after this transformation (may be nil)
+}
+
+// PipingFlowSubject is the starting expression of a piping flow.
+type PipingFlowSubject struct {
+	Node    *ast.Node     // The expression node
+	OutType *checker.Type // The type of the subject expression (may be nil)
+}
+
+// PipingFlow represents a complete piping flow: a subject followed by transformations.
+type PipingFlow struct {
+	Node            *ast.Node                  // The outermost expression encompassing the entire flow
+	Subject         PipingFlowSubject          // The starting expression and its type
+	Transformations []PipingFlowTransformation // Ordered list of transformations
+}
+
 // ParsedPipeCallResult is the result of parsing a pipe or pipeable call.
 type ParsedPipeCallResult struct {
 	Node    *ast.CallExpression

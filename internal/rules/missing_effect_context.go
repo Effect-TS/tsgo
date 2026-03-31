@@ -41,7 +41,7 @@ var MissingEffectContext = rule.Rule{
 
 			// Find unhandled context types by checking each source requirement member
 			// against the target requirement type
-			unhandledContexts := findUnhandledContexts(ctx.Checker, srcEffect.R, tgtEffect.R)
+			unhandledContexts := findUnhandledContexts(ctx.TypeParser, ctx.Checker, srcEffect.R, tgtEffect.R)
 			if len(unhandledContexts) > 0 {
 				contextTypeStr := formatContextTypes(ctx.Checker, unhandledContexts)
 				diag := ctx.NewDiagnostic(
@@ -60,9 +60,9 @@ var MissingEffectContext = rule.Rule{
 }
 
 // findUnhandledContexts returns the source context types that are not assignable to the target context type.
-func findUnhandledContexts(c *checker.Checker, srcR, tgtR *checker.Type) []*checker.Type {
+func findUnhandledContexts(tp *typeparser.TypeParser, c *checker.Checker, srcR, tgtR *checker.Type) []*checker.Type {
 	// Unroll source context union into individual members
-	srcMembers := typeparser.UnrollUnionMembers(srcR)
+	srcMembers := tp.UnrollUnionMembers(srcR)
 
 	var unhandled []*checker.Type
 	for _, member := range srcMembers {
@@ -216,7 +216,7 @@ func rootLayerProvidesTypes(tp *typeparser.TypeParser, c *checker.Checker, layer
 	if layerType == nil {
 		return nil
 	}
-	return typeparser.UnrollUnionMembers(layerType.ROut)
+	return tp.UnrollUnionMembers(layerType.ROut)
 }
 
 func rootProvidesType(c *checker.Checker, providedTypes []*checker.Type, target *checker.Type) bool {

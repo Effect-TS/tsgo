@@ -5,6 +5,16 @@ import (
 	"github.com/microsoft/typescript-go/shim/ast"
 )
 
+// EffectGenCallResult represents a parsed Effect.gen(...) call.
+type EffectGenCallResult struct {
+	Call              *ast.CallExpression
+	EffectModule      *ast.Expression
+	OptionsNode       *ast.Node
+	GeneratorFunction *ast.FunctionExpression
+	Body              *ast.BlockOrExpression
+	PipeArguments     []*ast.Node
+}
+
 // EffectGenCall parses a node as Effect.gen(<generator>).
 // Returns nil when the node is not an Effect.gen call.
 func (tp *TypeParser) EffectGenCall(node *ast.Node) *EffectGenCallResult {
@@ -18,22 +28,11 @@ func (tp *TypeParser) EffectGenCall(node *ast.Node) *EffectGenCallResult {
 			return nil
 		}
 
-		// Scan arguments for the first FunctionExpression with asteriskToken.
-		// The generator may not be the first argument when an options object
-		// (e.g., {self: this}) is passed before it.
-		var genFn *ast.FunctionExpression
-		for _, arg := range call.Arguments.Nodes {
-			if arg != nil && arg.Kind == ast.KindFunctionExpression {
-				fn := arg.AsFunctionExpression()
-				if fn != nil && fn.AsteriskToken != nil {
-					genFn = fn
-					break
-				}
-			}
-		}
-		if genFn == nil {
+		optionsNode, bodyArg, pipeArgs := splitEffectFnArguments(call.Arguments.Nodes)
+		if !isGeneratorFunctionNode(bodyArg) {
 			return nil
 		}
+		genFn := bodyArg.AsFunctionExpression()
 
 		expr := call.Expression
 		if expr == nil || expr.Kind != ast.KindPropertyAccessExpression {
@@ -52,8 +51,10 @@ func (tp *TypeParser) EffectGenCall(node *ast.Node) *EffectGenCallResult {
 		return &EffectGenCallResult{
 			Call:              call,
 			EffectModule:      propertyAccess.Expression,
+			OptionsNode:       optionsNode,
 			GeneratorFunction: genFn,
 			Body:              genFn.Body,
+			PipeArguments:     pipeArgs,
 		}
 	})
 }

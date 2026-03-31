@@ -4,6 +4,15 @@ import (
 	"github.com/microsoft/typescript-go/shim/ast"
 )
 
+// ParsedLazyExpression represents a parsed arrow function or function expression
+// with its inner expression extracted.
+type ParsedLazyExpression struct {
+	Node       *ast.Node   // The original ArrowFunction or FunctionExpression node
+	Params     []*ast.Node // Parameter declarations (empty when parsed with thunk=true)
+	Body       *ast.Node   // The function body as written (Expression or Block)
+	Expression *ast.Node   // The inner expression (return value)
+}
+
 // ParseLazyExpression parses an arrow function or function expression, extracting its inner expression.
 // When thunk is true, the function must have zero parameters.
 // Returns nil if the node is not a valid lazy expression.

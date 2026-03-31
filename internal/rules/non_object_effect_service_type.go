@@ -95,7 +95,7 @@ func checkServicePropertyTypes(ctx *rule.Context, node *ast.Node) []*ast.Diagnos
 		switch propertyName {
 		case "succeed":
 			valueType := ctx.TypeParser.GetTypeAtLocation(initializer)
-			if valueType != nil && isPrimitiveType(valueType) {
+			if valueType != nil && isPrimitiveType(ctx.TypeParser, valueType) {
 				diags = append(diags, ctx.NewDiagnostic(
 					ctx.SourceFile,
 					ctx.GetErrorRange(pa.Name()),
@@ -112,7 +112,7 @@ func checkServicePropertyTypes(ctx *rule.Context, node *ast.Node) []*ast.Diagnos
 			signatures := ctx.Checker.GetSignaturesOfType(valueType, checker.SignatureKindCall)
 			for _, sig := range signatures {
 				returnType := ctx.Checker.GetReturnTypeOfSignature(sig)
-				if returnType != nil && isPrimitiveType(returnType) {
+				if returnType != nil && isPrimitiveType(ctx.TypeParser, returnType) {
 					diags = append(diags, ctx.NewDiagnostic(
 						ctx.SourceFile,
 						ctx.GetErrorRange(pa.Name()),
@@ -132,7 +132,7 @@ func checkServicePropertyTypes(ctx *rule.Context, node *ast.Node) []*ast.Diagnos
 			// Try direct EffectType parse first
 			effectResult := ctx.TypeParser.EffectType(valueType, initializer)
 			if effectResult != nil {
-				if isPrimitiveType(effectResult.A) {
+				if isPrimitiveType(ctx.TypeParser, effectResult.A) {
 					diags = append(diags, ctx.NewDiagnostic(
 						ctx.SourceFile,
 						ctx.GetErrorRange(pa.Name()),
@@ -151,7 +151,7 @@ func checkServicePropertyTypes(ctx *rule.Context, node *ast.Node) []*ast.Diagnos
 					continue
 				}
 				effectReturnResult := ctx.TypeParser.EffectType(returnType, initializer)
-				if effectReturnResult != nil && isPrimitiveType(effectReturnResult.A) {
+				if effectReturnResult != nil && isPrimitiveType(ctx.TypeParser, effectReturnResult.A) {
 					diags = append(diags, ctx.NewDiagnostic(
 						ctx.SourceFile,
 						ctx.GetErrorRange(pa.Name()),
@@ -168,7 +168,7 @@ func checkServicePropertyTypes(ctx *rule.Context, node *ast.Node) []*ast.Diagnos
 }
 
 // isPrimitiveType checks if a type (or any member of a union type) is a primitive type.
-func isPrimitiveType(t *checker.Type) bool {
+func isPrimitiveType(tp *typeparser.TypeParser, t *checker.Type) bool {
 	const primitiveFlags = checker.TypeFlagsString |
 		checker.TypeFlagsNumber |
 		checker.TypeFlagsBoolean |
@@ -178,7 +178,7 @@ func isPrimitiveType(t *checker.Type) bool {
 		checker.TypeFlagsUndefined |
 		checker.TypeFlagsNull
 
-	for _, member := range typeparser.UnrollUnionMembers(t) {
+	for _, member := range tp.UnrollUnionMembers(t) {
 		if member.Flags()&primitiveFlags != 0 {
 			return true
 		}

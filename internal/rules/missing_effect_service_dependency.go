@@ -130,7 +130,7 @@ func checkServiceDependencies(ctx *rule.Context, node *ast.Node) []*ast.Diagnost
 					// Get the number index type to extract individual dependency types
 					numberIndexType := ctx.Checker.GetNumberIndexType(dependenciesType)
 					if numberIndexType != nil {
-						depTypes := typeparser.UnrollUnionMembers(numberIndexType)
+						depTypes := ctx.TypeParser.UnrollUnionMembers(numberIndexType)
 						for _, depType := range depTypes {
 							// Parse each dependency as Layer type
 							depLayer := ctx.TypeParser.LayerType(depType, options)

@@ -90,7 +90,7 @@ func runWriteTagClassAccessors(ctx *refactor.Context) []ls.CodeAction {
 	}
 
 	// Unroll union and filter out primitives
-	nonPrimitiveServices := filterNonPrimitiveTypes(typeparser.UnrollUnionMembers(contextTag.Shape))
+	nonPrimitiveServices := filterNonPrimitiveTypes(ctx.TypeParser.UnrollUnionMembers(contextTag.Shape))
 	if len(nonPrimitiveServices) == 0 {
 		return nil
 	}

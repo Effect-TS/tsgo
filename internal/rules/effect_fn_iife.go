@@ -45,7 +45,17 @@ var EffectFnIife = rule.Rule{
 type EffectFnIifeMatch struct {
 	SourceFile *ast.SourceFile
 	Location   core.TextRange
-	Result     *typeparser.EffectFnIifeResult
+	Result     *EffectFnIifeResult
+}
+
+type EffectFnIifeResult struct {
+	OuterCall         *ast.CallExpression
+	InnerCall         *ast.CallExpression
+	EffectModule      *ast.Expression
+	Variant           string
+	GeneratorFunction *ast.FunctionExpression
+	PipeArguments     []*ast.Node
+	TraceExpression   *ast.Node
 }
 
 // AnalyzeEffectFnIife finds all Effect.fn or Effect.fnUntraced calls that are
@@ -59,7 +69,7 @@ func AnalyzeEffectFnIife(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.
 			return false
 		}
 
-		if result := tp.ParseEffectFnIife(n); result != nil {
+		if result := parseEffectFnIife(tp, n); result != nil {
 			matches = append(matches, EffectFnIifeMatch{
 				SourceFile: sf,
 				Location:   scanner.GetErrorRangeForNode(sf, result.OuterCall.AsNode()),
@@ -74,4 +84,39 @@ func AnalyzeEffectFnIife(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.
 	walk(sf.AsNode())
 
 	return matches
+}
+
+func parseEffectFnIife(tp *typeparser.TypeParser, node *ast.Node) *EffectFnIifeResult {
+	if tp == nil || node == nil || node.Kind != ast.KindCallExpression {
+		return nil
+	}
+
+	outerCall := node.AsCallExpression()
+	if outerCall == nil || outerCall.Expression == nil {
+		return nil
+	}
+
+	innerNode := outerCall.Expression
+	if innerNode.Kind != ast.KindCallExpression {
+		return nil
+	}
+
+	innerCall := innerNode.AsCallExpression()
+	if innerCall == nil {
+		return nil
+	}
+
+	if result := tp.EffectFnCall(innerNode); result != nil {
+		return &EffectFnIifeResult{
+			OuterCall:         outerCall,
+			InnerCall:         innerCall,
+			EffectModule:      result.EffectModule,
+			Variant:           string(result.Variant),
+			GeneratorFunction: result.GeneratorFunction(),
+			PipeArguments:     result.PipeArguments,
+			TraceExpression:   result.TraceExpression,
+		}
+	}
+
+	return nil
 }

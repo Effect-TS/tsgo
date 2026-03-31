@@ -8,6 +8,15 @@ import (
 	"github.com/microsoft/typescript-go/shim/checker"
 )
 
+// ServiceTypeId is the property key for Service's variance struct.
+const ServiceTypeId = "~effect/ServiceMap/Service"
+
+// Service represents parsed ServiceMap.Service<Identifier, Shape> type parameters.
+type Service struct {
+	Identifier *checker.Type // The service identifier/tag type
+	Shape      *checker.Type // The service implementation shape
+}
+
 // parseServiceVarianceStruct extracts Identifier and Shape from a Service variance struct type.
 func (tp *TypeParser) parseServiceVarianceStruct(t *checker.Type, atLocation *ast.Node) *Service {
 	identifier := tp.extractInvariantType(t, atLocation, "_Identifier")

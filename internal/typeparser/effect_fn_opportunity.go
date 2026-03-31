@@ -7,6 +7,20 @@ import (
 	"github.com/microsoft/typescript-go/shim/scanner"
 )
 
+// EffectFnOpportunityResult represents a function that can be converted to Effect.fn.
+type EffectFnOpportunityResult struct {
+	TargetNode              *ast.Node               // The function node being reported
+	NameIdentifier          *ast.Node               // The discovered name node for the function
+	GeneratorFunction       *ast.FunctionExpression // Non-nil for gen opportunity, nil for regular
+	PipeArguments           []*ast.Node             // Pipe args from piped Effect.gen (may be empty)
+	ExplicitTraceExpression *ast.Node               // Span name from Effect.withSpan if last pipe arg, or nil
+	SuggestedTraceName      string                  // The local function/variable name for suggested span
+	InferredTraceName       string                  // Context-aware name (e.g., "ServiceTag.member" or exported name)
+	EffectModule            *ast.Expression         // The Effect module identifier
+	HasGenBody              bool                    // True for gen opportunity, false for regular
+	IsLayerMember           bool                    // True when the target is a property value inside a Layer service definition
+}
+
 // IsInsideEffectFn checks if a function node is already the first argument
 // of an Effect.fn, Effect.fnGen, or Effect.fnUntraced call.
 func (tp *TypeParser) IsInsideEffectFn(fnNode *ast.Node) bool {
@@ -106,7 +120,7 @@ func (tp *TypeParser) parseEffectFnOpportunityInner(node *ast.Node) *EffectFnOpp
 	if returnType == nil {
 		return nil
 	}
-	unionMembers := UnrollUnionMembers(returnType)
+	unionMembers := tp.UnrollUnionMembers(returnType)
 	if len(unionMembers) == 0 {
 		return nil
 	}
@@ -226,20 +240,27 @@ func (tp *TypeParser) tryParseGenOpportunity(fnNode *ast.Node) *genOpportunityRe
 
 	// Try to parse as a pipe call first to get subject and pipe args
 	var subject *ast.Node
-	var pipeArgs []*ast.Node
+	var outerPipeArgs []*ast.Node
 
 	if pipeResult := tp.ParsePipeCall(bodyExpr); pipeResult != nil {
 		subject = pipeResult.Subject
-		pipeArgs = pipeResult.Args
+		outerPipeArgs = pipeResult.Args
 	} else {
 		subject = bodyExpr
 	}
 
 	// The subject must be an Effect.gen call
-	genResult := tp.effectGenFirstArgOnly(subject)
+	genResult := tp.EffectGenCall(subject)
 	if genResult == nil {
 		return nil
 	}
+
+	// with no this binding
+	if genResult.OptionsNode != nil {
+		return nil
+	}
+	pipeArgs := append([]*ast.Node{}, genResult.PipeArguments...)
+	pipeArgs = append(pipeArgs, outerPipeArgs...)
 
 	// Check if the last pipe argument is Effect.withSpan
 	var explicitTraceExpression *ast.Node
@@ -255,51 +276,6 @@ func (tp *TypeParser) tryParseGenOpportunity(fnNode *ast.Node) *genOpportunityRe
 		generatorFunction:       genResult.GeneratorFunction,
 		pipeArguments:           pipeArgs,
 		explicitTraceExpression: explicitTraceExpression,
-	}
-}
-
-// effectGenFirstArgOnly parses a node as Effect.gen(<generator>) where the generator
-// is the FIRST argument. Unlike EffectGenCall which scans all arguments, this rejects
-// cases like Effect.gen({self: this}, function*(){}) where the generator is not first.
-func (tp *TypeParser) effectGenFirstArgOnly(node *ast.Node) *EffectGenCallResult {
-	if tp == nil || tp.checker == nil || node == nil || node.Kind != ast.KindCallExpression {
-		return nil
-	}
-
-	call := node.AsCallExpression()
-	if call == nil || call.Arguments == nil || len(call.Arguments.Nodes) == 0 {
-		return nil
-	}
-
-	// The first argument must be a generator function expression
-	firstArg := call.Arguments.Nodes[0]
-	if firstArg == nil || firstArg.Kind != ast.KindFunctionExpression {
-		return nil
-	}
-	genFn := firstArg.AsFunctionExpression()
-	if genFn == nil || genFn.AsteriskToken == nil {
-		return nil
-	}
-
-	expr := call.Expression
-	if expr == nil || expr.Kind != ast.KindPropertyAccessExpression {
-		return nil
-	}
-
-	propertyAccess := expr.AsPropertyAccessExpression()
-	if propertyAccess == nil {
-		return nil
-	}
-
-	if !tp.IsNodeReferenceToEffectModuleApi(expr, "gen") {
-		return nil
-	}
-
-	return &EffectGenCallResult{
-		Call:              call,
-		EffectModule:      propertyAccess.Expression,
-		GeneratorFunction: genFn,
-		Body:              genFn.Body,
 	}
 }
 

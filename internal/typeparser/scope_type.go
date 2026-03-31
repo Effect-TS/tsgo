@@ -7,6 +7,9 @@ import (
 	"github.com/microsoft/typescript-go/shim/checker"
 )
 
+// ScopeTypeId is the property key for Scope's variance struct.
+const ScopeTypeId = "~effect/Scope"
+
 // IsScopeType returns true if the type is an Effect Scope type.
 // For v4, this checks for the "~effect/Scope" computed property.
 // For v3/unknown, this checks that the type is "pipeable" (has a callable pipe property)
