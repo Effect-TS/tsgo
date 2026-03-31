@@ -26,7 +26,7 @@ func (tp *TypeParser) ExtendsServiceMapService(classNode *ast.Node) *ServiceMapS
 		return nil
 	}
 
-	links := tp.GetEffectLinks()
+	links := tp.links
 	return Cached(&links.ExtendsServiceMapService, classNode, func() *ServiceMapServiceResult {
 		// Must have a name
 		if classNode.Name() == nil {

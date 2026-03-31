@@ -19,8 +19,7 @@ func (tp *TypeParser) PackageJsonForSourceFile(sf *ast.SourceFile) *packagejson.
 		return nil
 	}
 
-	links := tp.GetEffectLinks()
-	return Cached(&links.PackageJsonForSourceFile, sf, func() *packagejson.PackageJson {
+	return Cached(&tp.links.PackageJsonForSourceFile, sf, func() *packagejson.PackageJson {
 		prog, ok := tp.program.(packageJsonProgram)
 		if !ok || prog == nil {
 			return nil

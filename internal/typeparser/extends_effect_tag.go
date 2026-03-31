@@ -26,8 +26,7 @@ func (tp *TypeParser) ExtendsEffectTag(classNode *ast.Node) *EffectTagResult {
 		return nil
 	}
 
-	links := tp.GetEffectLinks()
-	return Cached(&links.ExtendsEffectTag, classNode, func() *EffectTagResult {
+	return Cached(&tp.links.ExtendsEffectTag, classNode, func() *EffectTagResult {
 		// Must have a name
 		if classNode.Name() == nil {
 			return nil

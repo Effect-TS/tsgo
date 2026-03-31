@@ -12,8 +12,7 @@ func (tp *TypeParser) IsPipeableType(t *checker.Type, atLocation *ast.Node) bool
 		return false
 	}
 	c := tp.checker
-	links := tp.GetEffectLinks()
-	return Cached(&links.IsPipeableType, t, func() bool {
+	return Cached(&tp.links.IsPipeableType, t, func() bool {
 		pipeSymbol := c.GetPropertyOfType(t, "pipe")
 		if pipeSymbol == nil {
 			return false

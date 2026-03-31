@@ -60,7 +60,7 @@ func (tp *TypeParser) ensureEffectContextAnalyzed(node *ast.Node) *EffectLinks {
 	if tp == nil || tp.checker == nil || node == nil {
 		return nil
 	}
-	links := tp.GetEffectLinks()
+	links := tp.links
 
 	if links.EffectContextFlags.Has(node) {
 		return links
@@ -82,7 +82,7 @@ func (tp *TypeParser) analyzeEffectContextForSourceFile(sf *ast.SourceFile) {
 	if tp == nil || tp.checker == nil || sf == nil {
 		return
 	}
-	links := tp.GetEffectLinks()
+	links := tp.links
 
 	var walk ast.Visitor
 	var pendingEnableFlags core.LinkStore[*ast.Node, EffectContextFlags]

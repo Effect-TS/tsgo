@@ -34,8 +34,7 @@ func (tp *TypeParser) EffectFnCall(node *ast.Node) *EffectFnCallResult {
 		return nil
 	}
 
-	links := tp.GetEffectLinks()
-	return Cached(&links.EffectFnCall, node, func() *EffectFnCallResult {
+	return Cached(&tp.links.EffectFnCall, node, func() *EffectFnCallResult {
 		call := node.AsCallExpression()
 		if call == nil || call.Arguments == nil || len(call.Arguments.Nodes) == 0 {
 			return nil

@@ -14,8 +14,7 @@ func (tp TypeParser) GetTypeAtLocation(node *ast.Node) (result *checker.Type) {
 		return nil
 	}
 
-	links := tp.GetEffectLinks()
-	return Cached(&links.TypeAtLocation, node, func() *checker.Type {
+	return Cached(&tp.links.TypeAtLocation, node, func() *checker.Type {
 		return tp.getTypeAtLocationUncached(node)
 	})
 }

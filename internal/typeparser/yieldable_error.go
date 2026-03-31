@@ -18,8 +18,7 @@ func (tp *TypeParser) IsYieldableErrorType(t *checker.Type) bool {
 	if tp == nil || tp.checker == nil || t == nil {
 		return false
 	}
-	links := tp.GetEffectLinks()
-	return Cached(&links.IsYieldableErrorType, t, func() bool {
+	return Cached(&tp.links.IsYieldableErrorType, t, func() bool {
 		// never is assignable to everything, so we need to exclude it
 		if t.Flags()&checker.TypeFlagsNever != 0 {
 			return false

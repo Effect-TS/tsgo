@@ -75,8 +75,7 @@ func (tp *TypeParser) ExpectedAndRealTypes(sf *ast.SourceFile) []ExpectedAndReal
 	}
 	c := tp.checker
 
-	links := tp.GetEffectLinks()
-	return Cached(&links.ExpectedAndRealTypes, sf, func() []ExpectedAndRealType {
+	return Cached(&tp.links.ExpectedAndRealTypes, sf, func() []ExpectedAndRealType {
 		var result []ExpectedAndRealType
 
 		// Initialize BFS queue with the source file node

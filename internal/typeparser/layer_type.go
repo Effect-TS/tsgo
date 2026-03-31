@@ -42,8 +42,7 @@ func (tp *TypeParser) LayerType(t *checker.Type, atLocation *ast.Node) *Layer {
 		return nil
 	}
 	c := tp.checker
-	links := tp.GetEffectLinks()
-	return Cached(&links.LayerType, t, func() *Layer {
+	return Cached(&tp.links.LayerType, t, func() *Layer {
 		version := tp.DetectEffectVersion()
 		if version == EffectMajorV4 {
 			// Direct property access using the known Layer v4 type ID

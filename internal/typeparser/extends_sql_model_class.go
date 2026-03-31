@@ -23,7 +23,7 @@ func (tp *TypeParser) ExtendsEffectSqlModelClass(classNode *ast.Node) *SqlModelC
 		return nil
 	}
 
-	links := tp.GetEffectLinks()
+	links := tp.links
 	return Cached(&links.ExtendsEffectSqlModelClass, classNode, func() *SqlModelClassResult {
 		if classNode.Name() == nil {
 			return nil

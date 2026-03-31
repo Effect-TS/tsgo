@@ -115,7 +115,7 @@ func (tp *TypeParser) ExtendsSchemaTaggedClass(classNode *ast.Node) *SchemaTagge
 	if tp == nil || tp.checker == nil || classNode == nil {
 		return nil
 	}
-	links := tp.GetEffectLinks()
+	links := tp.links
 	return Cached(&links.ExtendsSchemaTaggedClass, classNode, func() *SchemaTaggedResult {
 		return tp.extendsSchemaTagged(classNode, "TaggedClass")
 	})
@@ -126,7 +126,7 @@ func (tp *TypeParser) ExtendsSchemaTaggedError(classNode *ast.Node) *SchemaTagge
 	if tp == nil || tp.checker == nil || classNode == nil {
 		return nil
 	}
-	links := tp.GetEffectLinks()
+	links := tp.links
 	return Cached(&links.ExtendsSchemaTaggedError, classNode, func() *SchemaTaggedResult {
 		return tp.extendsSchemaTagged(classNode, "TaggedError")
 	})
@@ -137,7 +137,7 @@ func (tp *TypeParser) ExtendsSchemaTaggedRequest(classNode *ast.Node) *SchemaTag
 	if tp == nil || tp.checker == nil || classNode == nil {
 		return nil
 	}
-	links := tp.GetEffectLinks()
+	links := tp.links
 	return Cached(&links.ExtendsSchemaTaggedRequest, classNode, func() *SchemaTaggedResult {
 		return tp.extendsSchemaTagged(classNode, "TaggedRequest")
 	})

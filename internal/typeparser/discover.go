@@ -43,13 +43,12 @@ func (tp *TypeParser) DetectEffectVersion() EffectMajorVersion {
 	if tp == nil || tp.checker == nil {
 		return EffectMajorUnknown
 	}
-	links := tp.GetEffectLinks()
-	if links.detectEffectVersionComputed {
-		return links.detectEffectVersionValue
+	if tp.links.detectEffectVersionComputed {
+		return tp.links.detectEffectVersionValue
 	}
 	result := tp.detectEffectVersionUncached()
-	links.detectEffectVersionValue = result
-	links.detectEffectVersionComputed = true
+	tp.links.detectEffectVersionValue = result
+	tp.links.detectEffectVersionComputed = true
 	return result
 }
 
@@ -104,19 +103,10 @@ func (tp TypeParser) SupportedEffectVersion() EffectMajorVersion {
 	if tp.checker == nil {
 		return EffectMajorV3
 	}
-	links := tp.GetEffectLinks()
-	if links.supportedEffectVersionComputed {
-		return links.supportedEffectVersionValue
-	}
-	var result EffectMajorVersion
 	if tp.DetectEffectVersion() == EffectMajorV4 {
-		result = EffectMajorV4
-	} else {
-		result = EffectMajorV3
+		return EffectMajorV4
 	}
-	links.supportedEffectVersionValue = result
-	links.supportedEffectVersionComputed = true
-	return result
+	return EffectMajorV3
 }
 
 // DetectEffectVersionString returns the exact version string of the Effect library.
@@ -160,14 +150,13 @@ func (tp *TypeParser) DiscoverPackages() []DiscoveredPackage {
 		return nil
 	}
 
-	links := tp.GetEffectLinks()
-	if links.discoverPackagesComputed {
-		return links.discoverPackagesValue
+	if tp.links.discoverPackagesComputed {
+		return tp.links.discoverPackagesValue
 	}
 
 	result := tp.discoverPackagesUncached()
-	links.discoverPackagesValue = result
-	links.discoverPackagesComputed = true
+	tp.links.discoverPackagesValue = result
+	tp.links.discoverPackagesComputed = true
 	return result
 }
 

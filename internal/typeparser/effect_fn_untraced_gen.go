@@ -14,8 +14,7 @@ func (tp *TypeParser) EffectFnUntracedGenCall(node *ast.Node) *EffectGenCallResu
 		return nil
 	}
 
-	links := tp.GetEffectLinks()
-	return Cached(&links.EffectFnUntracedGenCall, node, func() *EffectGenCallResult {
+	return Cached(&tp.links.EffectFnUntracedGenCall, node, func() *EffectGenCallResult {
 		call := node.AsCallExpression()
 		if call == nil || call.Arguments == nil || len(call.Arguments.Nodes) == 0 {
 			return nil

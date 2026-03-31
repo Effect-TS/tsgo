@@ -29,8 +29,7 @@ func (tp *TypeParser) ServiceType(t *checker.Type, atLocation *ast.Node) *Servic
 	if tp == nil || tp.checker == nil || t == nil {
 		return nil
 	}
-	links := tp.GetEffectLinks()
-	return Cached(&links.ServiceType, t, func() *Service {
+	return Cached(&tp.links.ServiceType, t, func() *Service {
 		propSymbol := tp.GetPropertyOfTypeByName(t, ServiceTypeId)
 		if propSymbol == nil {
 			return nil
@@ -56,8 +55,7 @@ func (tp *TypeParser) ContextTag(t *checker.Type, atLocation *ast.Node) *Service
 	if tp == nil || tp.checker == nil || t == nil {
 		return nil
 	}
-	links := tp.GetEffectLinks()
-	return Cached(&links.ContextTag, t, func() *Service {
+	return Cached(&tp.links.ContextTag, t, func() *Service {
 		version := tp.DetectEffectVersion()
 		if version == EffectMajorV4 {
 			return tp.ServiceType(t, atLocation)

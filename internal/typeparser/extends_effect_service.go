@@ -27,8 +27,7 @@ func (tp *TypeParser) ExtendsEffectService(classNode *ast.Node) *EffectServiceRe
 		return nil
 	}
 
-	links := tp.GetEffectLinks()
-	return Cached(&links.ExtendsEffectService, classNode, func() *EffectServiceResult {
+	return Cached(&tp.links.ExtendsEffectService, classNode, func() *EffectServiceResult {
 		// Must have a name
 		if classNode.Name() == nil {
 			return nil

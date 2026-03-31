@@ -24,7 +24,7 @@ func (tp *TypeParser) ExtendsSchemaClass(classNode *ast.Node) *SchemaClassResult
 	if tp == nil || tp.checker == nil || classNode == nil {
 		return nil
 	}
-	links := tp.GetEffectLinks()
+	links := tp.links
 	return Cached(&links.ExtendsSchemaClass, classNode, func() *SchemaClassResult {
 		return tp.extendsSchemaClassLike(classNode, "Class")
 	})
@@ -38,7 +38,7 @@ func (tp *TypeParser) ExtendsSchemaRequestClass(classNode *ast.Node) *SchemaClas
 	if tp == nil || tp.checker == nil || classNode == nil {
 		return nil
 	}
-	links := tp.GetEffectLinks()
+	links := tp.links
 	return Cached(&links.ExtendsSchemaRequestClass, classNode, func() *SchemaClassResult {
 		return tp.extendsSchemaClassLike(classNode, "RequestClass")
 	})

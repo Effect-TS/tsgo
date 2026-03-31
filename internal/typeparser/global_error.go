@@ -13,8 +13,7 @@ func (tp *TypeParser) IsGlobalErrorType(t *checker.Type) bool {
 	if tp == nil || tp.checker == nil || t == nil {
 		return false
 	}
-	links := tp.GetEffectLinks()
-	return Cached(&links.IsGlobalErrorType, t, func() bool {
+	return Cached(&tp.links.IsGlobalErrorType, t, func() bool {
 		// Exclude any/unknown — they are bidirectionally assignable to everything
 		if t.Flags()&(checker.TypeFlagsAny|checker.TypeFlagsUnknown) != 0 {
 			return false

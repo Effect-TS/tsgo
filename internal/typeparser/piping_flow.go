@@ -31,8 +31,7 @@ func (tp *TypeParser) ParsePipeCall(node *ast.Node) *ParsedPipeCallResult {
 		return nil
 	}
 
-	links := tp.GetEffectLinks()
-	return Cached(&links.ParsePipeCall, node, func() *ParsedPipeCallResult {
+	return Cached(&tp.links.ParsePipeCall, node, func() *ParsedPipeCallResult {
 		call := node.AsCallExpression()
 		if call == nil || call.Expression == nil {
 			return nil
@@ -239,7 +238,7 @@ func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) []*P
 	}
 	c := tp.checker
 
-	links := tp.GetEffectLinks()
+	links := tp.links
 	store := &links.PipingFlowsWithoutEffectFn
 	if includeEffectFn {
 		store = &links.PipingFlowsWithEffectFn

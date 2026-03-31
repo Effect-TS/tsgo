@@ -25,7 +25,7 @@ func (tp *TypeParser) ExtendsEffectModelClass(classNode *ast.Node) *EffectModelC
 		return nil
 	}
 
-	links := tp.GetEffectLinks()
+	links := tp.links
 	return Cached(&links.ExtendsEffectModelClass, classNode, func() *EffectModelClassResult {
 		if classNode.Name() == nil {
 			return nil

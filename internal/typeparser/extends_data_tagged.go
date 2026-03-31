@@ -25,7 +25,7 @@ func (tp *TypeParser) ExtendsDataTaggedError(classNode *ast.Node) *DataTaggedErr
 		return nil
 	}
 
-	links := tp.GetEffectLinks()
+	links := tp.links
 	return Cached(&links.ExtendsDataTaggedError, classNode, func() *DataTaggedErrorResult {
 		// Must have a name
 		if classNode.Name() == nil {

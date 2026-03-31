@@ -25,8 +25,7 @@ func (tp *TypeParser) EffectType(t *checker.Type, atLocation *ast.Node) *Effect 
 	if tp == nil || tp.checker == nil || t == nil {
 		return nil
 	}
-	links := tp.GetEffectLinks()
-	return Cached(&links.EffectType, t, func() *Effect {
+	return Cached(&tp.links.EffectType, t, func() *Effect {
 		version := tp.DetectEffectVersion()
 		if version == EffectMajorV4 {
 			// Direct property access using the known Effect v4 type ID
@@ -121,8 +120,7 @@ func (tp *TypeParser) StrictEffectType(t *checker.Type, atLocation *ast.Node) *E
 	if tp == nil || tp.checker == nil || t == nil {
 		return nil
 	}
-	links := tp.GetEffectLinks()
-	return Cached(&links.StrictEffectType, t, func() *Effect {
+	return Cached(&tp.links.StrictEffectType, t, func() *Effect {
 		result := tp.EffectType(t, atLocation)
 		if result == nil {
 			return nil
@@ -151,8 +149,7 @@ func (tp *TypeParser) EffectSubtype(t *checker.Type, atLocation *ast.Node) *Effe
 	if tp == nil || tp.checker == nil || t == nil {
 		return nil
 	}
-	links := tp.GetEffectLinks()
-	return Cached(&links.EffectSubtype, t, func() *Effect {
+	return Cached(&tp.links.EffectSubtype, t, func() *Effect {
 		// Check for "_tag" or "get" property first (quick rejection)
 		tagSymbol := tp.checker.GetPropertyOfType(t, "_tag")
 		getSymbol := tp.checker.GetPropertyOfType(t, "get")
@@ -175,8 +172,7 @@ func (tp *TypeParser) FiberType(t *checker.Type, atLocation *ast.Node) *Effect {
 	if tp == nil || tp.checker == nil || t == nil {
 		return nil
 	}
-	links := tp.GetEffectLinks()
-	return Cached(&links.FiberType, t, func() *Effect {
+	return Cached(&tp.links.FiberType, t, func() *Effect {
 		// Check for both "await" and "poll" properties (quick rejection)
 		awaitSymbol := tp.checker.GetPropertyOfType(t, "await")
 		pollSymbol := tp.checker.GetPropertyOfType(t, "poll")
@@ -200,8 +196,7 @@ func (tp *TypeParser) HasEffectTypeId(t *checker.Type, atLocation *ast.Node) boo
 	if tp == nil || tp.checker == nil || t == nil {
 		return false
 	}
-	links := tp.GetEffectLinks()
-	return Cached(&links.HasEffectTypeId, t, func() bool {
+	return Cached(&tp.links.HasEffectTypeId, t, func() bool {
 		version := tp.DetectEffectVersion()
 		if version == EffectMajorV4 {
 			return tp.GetPropertyOfTypeByName(t, EffectTypeId) != nil

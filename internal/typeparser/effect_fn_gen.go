@@ -13,8 +13,7 @@ func (tp *TypeParser) EffectFnGenCall(node *ast.Node) *EffectGenCallResult {
 		return nil
 	}
 
-	links := tp.GetEffectLinks()
-	return Cached(&links.EffectFnGenCall, node, func() *EffectGenCallResult {
+	return Cached(&tp.links.EffectFnGenCall, node, func() *EffectGenCallResult {
 		call := node.AsCallExpression()
 		if call == nil || call.Arguments == nil || len(call.Arguments.Nodes) == 0 {
 			return nil

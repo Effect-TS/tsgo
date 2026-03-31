@@ -26,7 +26,7 @@ func (tp *TypeParser) ExtendsContextTag(classNode *ast.Node) *ContextTagResult {
 		return nil
 	}
 
-	links := tp.GetEffectLinks()
+	links := tp.links
 	return Cached(&links.ExtendsContextTag, classNode, func() *ContextTagResult {
 		// Must have a name
 		if classNode.Name() == nil {

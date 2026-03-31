@@ -49,8 +49,7 @@ func (tp *TypeParser) ParseEffectFnOpportunity(node *ast.Node) *EffectFnOpportun
 		return nil
 	}
 
-	links := tp.GetEffectLinks()
-	return Cached(&links.ParseEffectFnOpportunity, node, func() *EffectFnOpportunityResult {
+	return Cached(&tp.links.ParseEffectFnOpportunity, node, func() *EffectFnOpportunityResult {
 		return tp.parseEffectFnOpportunityInner(node)
 	})
 }

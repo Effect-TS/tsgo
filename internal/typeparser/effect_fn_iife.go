@@ -12,8 +12,7 @@ func (tp *TypeParser) ParseEffectFnIife(node *ast.Node) *EffectFnIifeResult {
 		return nil
 	}
 
-	links := tp.GetEffectLinks()
-	return Cached(&links.ParseEffectFnIife, node, func() *EffectFnIifeResult {
+	return Cached(&tp.links.ParseEffectFnIife, node, func() *EffectFnIifeResult {
 		outerCall := node.AsCallExpression()
 		if outerCall == nil || outerCall.Expression == nil {
 			return nil

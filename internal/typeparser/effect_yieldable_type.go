@@ -15,8 +15,7 @@ func (tp *TypeParser) EffectYieldableType(t *checker.Type, atLocation *ast.Node)
 	if tp == nil || tp.checker == nil || t == nil {
 		return nil
 	}
-	links := tp.GetEffectLinks()
-	return Cached(&links.EffectYieldableType, t, func() *Effect {
+	return Cached(&tp.links.EffectYieldableType, t, func() *Effect {
 		version := tp.DetectEffectVersion()
 
 		// For v3, yieldable types are modeled through Effect subtyping,
