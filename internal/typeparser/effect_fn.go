@@ -29,9 +29,8 @@ func isGeneratorFunctionNode(node *ast.Node) bool {
 	return fn != nil && fn.AsteriskToken != nil
 }
 
-// EffectFnCall parses a node as Effect.fn(<regularFn>) or Effect.fn("name")(<regularFn>).
-// It matches only non-generator variants (arrow function or function expression without asteriskToken).
-// Returns nil when the node is not an Effect.fn non-generator call.
+// EffectFnCall parses a node as an Effect.fn-family call.
+// It supports fn, fnUntraced, and fnUntracedEager, both regular and generator forms.
 func (tp *TypeParser) EffectFnCall(node *ast.Node) *EffectFnCallResult {
 	if tp == nil || tp.checker == nil || node == nil || node.Kind != ast.KindCallExpression {
 		return nil
@@ -44,7 +43,7 @@ func (tp *TypeParser) EffectFnCall(node *ast.Node) *EffectFnCallResult {
 		}
 
 		bodyArg, pipeArgs := firstEffectFnFunctionArgument(call.Arguments.Nodes)
-		if bodyArg == nil || isGeneratorFunctionNode(bodyArg) {
+		if bodyArg == nil {
 			return nil
 		}
 
@@ -58,6 +57,7 @@ func (tp *TypeParser) EffectFnCall(node *ast.Node) *EffectFnCallResult {
 
 		var expressionToCheck *ast.Node
 		var traceExpression *ast.Node
+		var variant EffectFnVariant
 
 		if expr.Kind == ast.KindCallExpression {
 			innerCall := expr.AsCallExpression()
@@ -70,6 +70,7 @@ func (tp *TypeParser) EffectFnCall(node *ast.Node) *EffectFnCallResult {
 			if innerCall.Arguments != nil && len(innerCall.Arguments.Nodes) > 0 {
 				traceExpression = innerCall.Arguments.Nodes[0]
 			}
+			variant = EffectFnVariantFn
 		} else {
 			expressionToCheck = expr
 		}
@@ -78,7 +79,20 @@ func (tp *TypeParser) EffectFnCall(node *ast.Node) *EffectFnCallResult {
 			return nil
 		}
 
-		if !tp.IsNodeReferenceToEffectModuleApi(expressionToCheck, "fn") {
+		switch {
+		case tp.IsNodeReferenceToEffectModuleApi(expressionToCheck, "fn"):
+			variant = EffectFnVariantFn
+		case tp.IsNodeReferenceToEffectModuleApi(expressionToCheck, "fnUntraced"):
+			if traceExpression != nil {
+				return nil
+			}
+			variant = EffectFnVariantFnUntraced
+		case tp.IsNodeReferenceToEffectModuleApi(expressionToCheck, "fnUntracedEager"):
+			if traceExpression != nil {
+				return nil
+			}
+			variant = EffectFnVariantFnUntracedEager
+		default:
 			return nil
 		}
 
@@ -89,9 +103,9 @@ func (tp *TypeParser) EffectFnCall(node *ast.Node) *EffectFnCallResult {
 
 		return &EffectFnCallResult{
 			Call:            call,
-			Kind:            "fn",
+			Variant:         variant,
 			EffectModule:    propertyAccess.Expression,
-			BodyFunction:    bodyArg,
+			FunctionNode:    bodyArg,
 			PipeArguments:   pipeArgs,
 			TraceExpression: traceExpression,
 		}

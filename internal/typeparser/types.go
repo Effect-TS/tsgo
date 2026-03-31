@@ -50,16 +50,13 @@ type EffectGenCallResult struct {
 	Body              *ast.BlockOrExpression
 }
 
-// EffectFnGenCallResult represents a parsed generator-based Effect.fn-family call.
-type EffectFnGenCallResult struct {
-	Call              *ast.CallExpression
-	EffectModule      *ast.Expression
-	GeneratorFunction *ast.FunctionExpression
-	Body              *ast.BlockOrExpression
-	Variant           string      // "fn", "fnUntraced", or "fnUntracedEager"
-	PipeArguments     []*ast.Node // Transformation args after the generator body (may be empty/nil)
-	TraceExpression   *ast.Node   // The name string from curried Effect.fn("name")(...), or nil
-}
+type EffectFnVariant string
+
+const (
+	EffectFnVariantFn              EffectFnVariant = "fn"
+	EffectFnVariantFnUntraced      EffectFnVariant = "fnUntraced"
+	EffectFnVariantFnUntracedEager EffectFnVariant = "fnUntracedEager"
+)
 
 // TransformationKind represents how a transformation was expressed in source code.
 type TransformationKind string
@@ -94,14 +91,51 @@ type PipingFlow struct {
 	Transformations []PipingFlowTransformation // Ordered list of transformations
 }
 
-// EffectFnCallResult represents a parsed Effect.fn(regularFn, ...) call (non-generator).
+// EffectFnCallResult represents a parsed Effect.fn-family call.
 type EffectFnCallResult struct {
 	Call            *ast.CallExpression
-	Kind            string // "fn"
+	Variant         EffectFnVariant
 	EffectModule    *ast.Expression
-	BodyFunction    *ast.Node   // ArrowFunction or FunctionExpression (non-generator)
+	FunctionNode    *ast.Node   // ArrowFunction or FunctionExpression
 	PipeArguments   []*ast.Node // Transformation args after the body (may be empty/nil)
 	TraceExpression *ast.Node   // The name string from curried Effect.fn("name")(...), or nil
+}
+
+func (r *EffectFnCallResult) IsGenerator() bool {
+	return r.GeneratorFunction() != nil
+}
+
+func (r *EffectFnCallResult) GeneratorFunction() *ast.FunctionExpression {
+	if r == nil || r.FunctionNode == nil || r.FunctionNode.Kind != ast.KindFunctionExpression {
+		return nil
+	}
+	fn := r.FunctionNode.AsFunctionExpression()
+	if fn == nil || fn.AsteriskToken == nil {
+		return nil
+	}
+	return fn
+}
+
+func (r *EffectFnCallResult) Body() *ast.BlockOrExpression {
+	if r == nil || r.FunctionNode == nil {
+		return nil
+	}
+	switch r.FunctionNode.Kind {
+	case ast.KindArrowFunction:
+		fn := r.FunctionNode.AsArrowFunction()
+		if fn == nil {
+			return nil
+		}
+		return fn.Body
+	case ast.KindFunctionExpression:
+		fn := r.FunctionNode.AsFunctionExpression()
+		if fn == nil {
+			return nil
+		}
+		return fn.Body
+	default:
+		return nil
+	}
 }
 
 // EffectFnIifeResult represents a parsed Effect.fn(...)() or Effect.fnUntraced(...)() IIFE.

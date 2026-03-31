@@ -35,13 +35,11 @@ var EffectFnImplicitAny = rule.Rule{
 			}
 
 			if result := tp.EffectFnCall(n); result != nil {
-				diags = append(diags, checkEffectFnImplicitAnyBody(ctx, result.Call.AsNode(), result.BodyFunction)...)
-			} else if result := tp.EffectFnGenCall(n); result != nil {
-				diags = append(diags, checkEffectFnImplicitAny(ctx, result)...)
-			} else if result := tp.EffectFnUntracedGenCall(n); result != nil {
-				diags = append(diags, checkEffectFnImplicitAny(ctx, result)...)
-			} else if result := tp.EffectFnUntracedEagerGenCall(n); result != nil {
-				diags = append(diags, checkEffectFnImplicitAny(ctx, result)...)
+				if result.IsGenerator() {
+					diags = append(diags, checkEffectFnImplicitAny(ctx, result)...)
+				} else {
+					diags = append(diags, checkEffectFnImplicitAnyBody(ctx, result.Call.AsNode(), result.FunctionNode)...)
+				}
 			}
 
 			n.ForEachChild(walk)
@@ -54,11 +52,12 @@ var EffectFnImplicitAny = rule.Rule{
 	},
 }
 
-func checkEffectFnImplicitAny(ctx *rule.Context, result *typeparser.EffectFnGenCallResult) []*ast.Diagnostic {
-	if result == nil || result.GeneratorFunction == nil || result.GeneratorFunction.Parameters == nil {
+func checkEffectFnImplicitAny(ctx *rule.Context, result *typeparser.EffectFnCallResult) []*ast.Diagnostic {
+	genFn := result.GeneratorFunction()
+	if result == nil || genFn == nil || genFn.Parameters == nil {
 		return nil
 	}
-	return checkEffectFnImplicitAnyParameters(ctx, result.Call.AsNode(), result.GeneratorFunction.Parameters.Nodes)
+	return checkEffectFnImplicitAnyParameters(ctx, result.Call.AsNode(), genFn.Parameters.Nodes)
 }
 
 func checkEffectFnImplicitAnyBody(ctx *rule.Context, callNode *ast.Node, fnNode *ast.Node) []*ast.Diagnostic {

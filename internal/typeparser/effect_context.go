@@ -124,19 +124,17 @@ func (tp *TypeParser) analyzeEffectContextForSourceFile(sf *ast.SourceFile) {
 			bodyNode := effectGen.Body.AsNode()
 			*pendingEnableFlags.Get(bodyNode) |= EffectContextFlagCanYieldEffect
 			*links.EffectYieldGeneratorFunction.Get(bodyNode) = effectGen.GeneratorFunction
-		} else if effectFn := tp.EffectFnGenCall(node); effectFn != nil {
-			bodyNode := effectFn.Body.AsNode()
+		} else if effectFn := tp.EffectFnCall(node); effectFn != nil && effectFn.IsGenerator() {
+			body := effectFn.Body()
+			genFn := effectFn.GeneratorFunction()
+			if body == nil || genFn == nil {
+				goto next
+			}
+			bodyNode := body.AsNode()
 			*pendingEnableFlags.Get(bodyNode) |= EffectContextFlagCanYieldEffect
-			*links.EffectYieldGeneratorFunction.Get(bodyNode) = effectFn.GeneratorFunction
-		} else if effectFn := tp.EffectFnUntracedGenCall(node); effectFn != nil {
-			bodyNode := effectFn.Body.AsNode()
-			*pendingEnableFlags.Get(bodyNode) |= EffectContextFlagCanYieldEffect
-			*links.EffectYieldGeneratorFunction.Get(bodyNode) = effectFn.GeneratorFunction
-		} else if effectFn := tp.EffectFnUntracedEagerGenCall(node); effectFn != nil {
-			bodyNode := effectFn.Body.AsNode()
-			*pendingEnableFlags.Get(bodyNode) |= EffectContextFlagCanYieldEffect
-			*links.EffectYieldGeneratorFunction.Get(bodyNode) = effectFn.GeneratorFunction
+			*links.EffectYieldGeneratorFunction.Get(bodyNode) = genFn
 		}
+	next:
 
 		// Function-like nodes create a new scope, so they should not directly inherit
 		// yieldability from an outer Effect scope. Matching Effect helpers re-enable the

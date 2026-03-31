@@ -32,12 +32,6 @@ func (tp *TypeParser) IsInsideEffectFn(fnNode *ast.Node) bool {
 	if tp.EffectFnCall(parent) != nil {
 		return true
 	}
-	if tp.EffectFnGenCall(parent) != nil {
-		return true
-	}
-	if tp.EffectFnUntracedGenCall(parent) != nil {
-		return true
-	}
 
 	return false
 }

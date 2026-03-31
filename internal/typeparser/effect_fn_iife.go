@@ -29,56 +29,26 @@ func (tp *TypeParser) ParseEffectFnIife(node *ast.Node) *EffectFnIifeResult {
 			return nil
 		}
 
-		// Try generator parsers first (priority order per spec)
-		// a. Effect.fn generator
-		if result := tp.EffectFnGenCall(innerNode); result != nil {
-			pipeArgs, traceExpr := extractGenCallExtras(innerCall, result.GeneratorFunction)
-			return &EffectFnIifeResult{
-				OuterCall:         outerCall,
-				InnerCall:         innerCall,
-				EffectModule:      result.EffectModule,
-				Variant:           "fn",
-				GeneratorFunction: result.GeneratorFunction,
-				PipeArguments:     pipeArgs,
-				TraceExpression:   traceExpr,
-			}
-		}
-
-		// b. Effect.fnUntraced generator
-		if result := tp.EffectFnUntracedGenCall(innerNode); result != nil {
-			pipeArgs, _ := extractGenCallExtras(innerCall, result.GeneratorFunction)
-			return &EffectFnIifeResult{
-				OuterCall:         outerCall,
-				InnerCall:         innerCall,
-				EffectModule:      result.EffectModule,
-				Variant:           "fnUntraced",
-				GeneratorFunction: result.GeneratorFunction,
-				PipeArguments:     pipeArgs,
-				TraceExpression:   nil, // fnUntraced has no curried form
-			}
-		}
-
-		// c. Effect.fnUntracedEager generator
-		if result := tp.EffectFnUntracedEagerGenCall(innerNode); result != nil {
-			pipeArgs, _ := extractGenCallExtras(innerCall, result.GeneratorFunction)
-			return &EffectFnIifeResult{
-				OuterCall:         outerCall,
-				InnerCall:         innerCall,
-				EffectModule:      result.EffectModule,
-				Variant:           "fnUntracedEager",
-				GeneratorFunction: result.GeneratorFunction,
-				PipeArguments:     pipeArgs,
-				TraceExpression:   nil, // fnUntracedEager has no curried form
-			}
-		}
-
-		// d. Effect.fn non-generator
 		if result := tp.EffectFnCall(innerNode); result != nil {
+			genFn := result.GeneratorFunction()
+			if genFn != nil {
+				return &EffectFnIifeResult{
+					OuterCall:         outerCall,
+					InnerCall:         innerCall,
+					EffectModule:      result.EffectModule,
+					Variant:           string(result.Variant),
+					GeneratorFunction: genFn,
+					PipeArguments:     result.PipeArguments,
+					TraceExpression:   result.TraceExpression,
+				}
+			}
+
+			// Non-generator Effect.fn-family call
 			return &EffectFnIifeResult{
 				OuterCall:       outerCall,
 				InnerCall:       innerCall,
 				EffectModule:    result.EffectModule,
-				Variant:         result.Kind,
+				Variant:         string(result.Variant),
 				PipeArguments:   result.PipeArguments,
 				TraceExpression: result.TraceExpression,
 			}
@@ -86,36 +56,4 @@ func (tp *TypeParser) ParseEffectFnIife(node *ast.Node) *EffectFnIifeResult {
 
 		return nil
 	})
-}
-
-// extractGenCallExtras extracts pipe arguments and trace expression from the raw AST
-// of a generator-based Effect.fn call. The generator parsers (EffectFnGenCall, etc.)
-// return EffectGenCallResult which lacks these fields, so we extract them manually.
-func extractGenCallExtras(innerCall *ast.CallExpression, genFn *ast.FunctionExpression) ([]*ast.Node, *ast.Node) {
-	var pipeArgs []*ast.Node
-	var traceExpr *ast.Node
-
-	// Find the generator function index in arguments and take everything after it as pipe args
-	if innerCall.Arguments != nil {
-		genFnNode := genFn.AsNode()
-		for i, arg := range innerCall.Arguments.Nodes {
-			if arg == genFnNode {
-				if i+1 < len(innerCall.Arguments.Nodes) {
-					pipeArgs = innerCall.Arguments.Nodes[i+1:]
-				}
-				break
-			}
-		}
-	}
-
-	// Check for curried form: if innerCall.Expression is a CallExpression,
-	// it's Effect.fn("name")(...), and the first arg of that call is the trace expression
-	if innerCall.Expression != nil && innerCall.Expression.Kind == ast.KindCallExpression {
-		curried := innerCall.Expression.AsCallExpression()
-		if curried != nil && curried.Arguments != nil && len(curried.Arguments.Nodes) > 0 {
-			traceExpr = curried.Arguments.Nodes[0]
-		}
-	}
-
-	return pipeArgs, traceExpr
 }

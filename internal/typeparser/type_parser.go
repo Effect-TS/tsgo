@@ -50,9 +50,6 @@ type EffectLinks struct {
 
 	EffectGenCall                core.LinkStore[*ast.Node, *EffectGenCallResult]
 	EffectFnCall                 core.LinkStore[*ast.Node, *EffectFnCallResult]
-	EffectFnGenCall              core.LinkStore[*ast.Node, *EffectFnGenCallResult]
-	EffectFnUntracedGenCall      core.LinkStore[*ast.Node, *EffectFnGenCallResult]
-	EffectFnUntracedEagerGenCall core.LinkStore[*ast.Node, *EffectFnGenCallResult]
 	ParseEffectFnIife            core.LinkStore[*ast.Node, *EffectFnIifeResult]
 	ParseEffectFnOpportunity     core.LinkStore[*ast.Node, *EffectFnOpportunityResult]
 	ParsePipeCall                core.LinkStore[*ast.Node, *ParsedPipeCallResult]

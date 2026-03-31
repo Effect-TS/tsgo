@@ -101,14 +101,8 @@ func matchEffectGenCall(tp *typeparser.TypeParser, node *ast.Node) (*ast.Functio
 	if result := tp.EffectGenCall(node); result != nil {
 		return result.GeneratorFunction, result.Body
 	}
-	if result := tp.EffectFnGenCall(node); result != nil {
-		return result.GeneratorFunction, result.Body
-	}
-	if result := tp.EffectFnUntracedGenCall(node); result != nil {
-		return result.GeneratorFunction, result.Body
-	}
-	if result := tp.EffectFnUntracedEagerGenCall(node); result != nil {
-		return result.GeneratorFunction, result.Body
+	if result := tp.EffectFnCall(node); result != nil && result.IsGenerator() {
+		return result.GeneratorFunction(), result.Body()
 	}
 	return nil, nil
 }
