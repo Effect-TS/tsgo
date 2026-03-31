@@ -100,23 +100,22 @@ func detectFloatingEffect(tp *typeparser.TypeParser, _ *checker.Checker, node *a
 		return nil
 	}
 
-	// Check if it's an Effect type using the quick check first
-	if !tp.HasEffectTypeId(t, expr) {
-		return nil
-	}
+	if tp.HasEffectTypeId(t, expr) {
+		// Full Effect validation.
+		if !tp.IsEffectType(t, expr) {
+			return nil
+		}
 
-	// Full validation
-	if !tp.IsEffectType(t, expr) {
-		return nil
-	}
+		// Exclude Fiber types (considered valid floating operations)
+		if tp.IsFiberType(t, expr) {
+			return nil
+		}
 
-	// Exclude Fiber types (considered valid floating operations)
-	if tp.IsFiberType(t, expr) {
-		return nil
-	}
-
-	// Exclude Effect subtypes (Exit, Option, Either, Pool, etc.)
-	if tp.IsEffectSubtype(t, expr) {
+		// Exclude Effect subtypes (Exit, Option, Either, Pool, etc.)
+		if tp.IsEffectSubtype(t, expr) {
+			return nil
+		}
+	} else if tp.StreamType(t, expr) == nil {
 		return nil
 	}
 
