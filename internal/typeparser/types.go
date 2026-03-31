@@ -50,6 +50,17 @@ type EffectGenCallResult struct {
 	Body              *ast.BlockOrExpression
 }
 
+// EffectFnGenCallResult represents a parsed generator-based Effect.fn-family call.
+type EffectFnGenCallResult struct {
+	Call              *ast.CallExpression
+	EffectModule      *ast.Expression
+	GeneratorFunction *ast.FunctionExpression
+	Body              *ast.BlockOrExpression
+	Variant           string      // "fn", "fnUntraced", or "fnUntracedEager"
+	PipeArguments     []*ast.Node // Transformation args after the generator body (may be empty/nil)
+	TraceExpression   *ast.Node   // The name string from curried Effect.fn("name")(...), or nil
+}
+
 // TransformationKind represents how a transformation was expressed in source code.
 type TransformationKind string
 

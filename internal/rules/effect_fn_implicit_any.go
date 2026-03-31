@@ -54,7 +54,7 @@ var EffectFnImplicitAny = rule.Rule{
 	},
 }
 
-func checkEffectFnImplicitAny(ctx *rule.Context, result *typeparser.EffectGenCallResult) []*ast.Diagnostic {
+func checkEffectFnImplicitAny(ctx *rule.Context, result *typeparser.EffectFnGenCallResult) []*ast.Diagnostic {
 	if result == nil || result.GeneratorFunction == nil || result.GeneratorFunction.Parameters == nil {
 		return nil
 	}

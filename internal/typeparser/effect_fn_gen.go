@@ -5,21 +5,21 @@ import (
 	"github.com/microsoft/typescript-go/shim/ast"
 )
 
-// EffectFnGenCall parses a node as Effect.fn(<generator>) or Effect.fn("name")(<generator>).
+// EffectFnGenCall parses a node as Effect.fn(<generator>, ...)
+// or Effect.fn("name")(<generator>, ...).
 // It matches only generator-based variants (function with asteriskToken).
-// Returns nil when the node is not an Effect.fn generator call.
-func (tp *TypeParser) EffectFnGenCall(node *ast.Node) *EffectGenCallResult {
+func (tp *TypeParser) EffectFnGenCall(node *ast.Node) *EffectFnGenCallResult {
 	if tp == nil || tp.checker == nil || node == nil || node.Kind != ast.KindCallExpression {
 		return nil
 	}
 
-	return Cached(&tp.links.EffectFnGenCall, node, func() *EffectGenCallResult {
+	return Cached(&tp.links.EffectFnGenCall, node, func() *EffectFnGenCallResult {
 		call := node.AsCallExpression()
 		if call == nil || call.Arguments == nil || len(call.Arguments.Nodes) == 0 {
 			return nil
 		}
 
-		bodyArg, _ := firstEffectFnFunctionArgument(call.Arguments.Nodes)
+		bodyArg, pipeArgs := firstEffectFnFunctionArgument(call.Arguments.Nodes)
 		if !isGeneratorFunctionNode(bodyArg) {
 			return nil
 		}
@@ -34,12 +34,16 @@ func (tp *TypeParser) EffectFnGenCall(node *ast.Node) *EffectGenCallResult {
 		}
 
 		var expressionToCheck *ast.Node
+		var traceExpression *ast.Node
 		if expr.Kind == ast.KindCallExpression {
 			innerCall := expr.AsCallExpression()
 			if innerCall == nil || innerCall.Expression == nil {
 				return nil
 			}
 			expressionToCheck = innerCall.Expression
+			if innerCall.Arguments != nil && len(innerCall.Arguments.Nodes) > 0 {
+				traceExpression = innerCall.Arguments.Nodes[0]
+			}
 		} else {
 			expressionToCheck = expr
 		}
@@ -57,11 +61,14 @@ func (tp *TypeParser) EffectFnGenCall(node *ast.Node) *EffectGenCallResult {
 			return nil
 		}
 
-		return &EffectGenCallResult{
+		return &EffectFnGenCallResult{
 			Call:              call,
 			EffectModule:      propertyAccess.Expression,
 			GeneratorFunction: genFn,
 			Body:              genFn.Body,
+			Variant:           "fn",
+			PipeArguments:     pipeArgs,
+			TraceExpression:   traceExpression,
 		}
 	})
 }

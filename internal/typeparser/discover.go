@@ -162,13 +162,12 @@ func (tp *TypeParser) DiscoverPackages() []DiscoveredPackage {
 
 // discoverPackagesUncached performs the actual source file scan.
 func (tp *TypeParser) discoverPackagesUncached() []DiscoveredPackage {
-	c := tp.checker
-	prog, ok := c.Program().(sourceFileProgram)
+	prog, ok := tp.program.(sourceFileProgram)
 	if !ok || prog == nil {
 		return nil
 	}
 
-	pjProg, hasPjProg := c.Program().(packageJsonProgram)
+	pjProg, hasPjProg := tp.program.(packageJsonProgram)
 
 	seen := make(map[packageKey]struct{})
 	var result []DiscoveredPackage

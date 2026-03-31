@@ -5,17 +5,20 @@ import (
 	"github.com/microsoft/typescript-go/shim/ast"
 )
 
-func firstEffectFnFunctionArgument(args []*ast.Node) (*ast.Node, int) {
+func firstEffectFnFunctionArgument(args []*ast.Node) (*ast.Node, []*ast.Node) {
 	for i, arg := range args {
 		if arg == nil {
 			continue
 		}
 		switch arg.Kind {
 		case ast.KindArrowFunction, ast.KindFunctionExpression:
-			return arg, i
+			if i+1 < len(args) {
+				return arg, args[i+1:]
+			}
+			return arg, nil
 		}
 	}
-	return nil, -1
+	return nil, nil
 }
 
 func isGeneratorFunctionNode(node *ast.Node) bool {
@@ -40,7 +43,7 @@ func (tp *TypeParser) EffectFnCall(node *ast.Node) *EffectFnCallResult {
 			return nil
 		}
 
-		bodyArg, bodyIndex := firstEffectFnFunctionArgument(call.Arguments.Nodes)
+		bodyArg, pipeArgs := firstEffectFnFunctionArgument(call.Arguments.Nodes)
 		if bodyArg == nil || isGeneratorFunctionNode(bodyArg) {
 			return nil
 		}
@@ -82,12 +85,6 @@ func (tp *TypeParser) EffectFnCall(node *ast.Node) *EffectFnCallResult {
 		propertyAccess := expressionToCheck.AsPropertyAccessExpression()
 		if propertyAccess == nil {
 			return nil
-		}
-
-		// Extract pipe arguments (arguments after the body function)
-		var pipeArgs []*ast.Node
-		if bodyIndex+1 < len(call.Arguments.Nodes) {
-			pipeArgs = call.Arguments.Nodes[bodyIndex+1:]
 		}
 
 		return &EffectFnCallResult{

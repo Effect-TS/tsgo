@@ -70,45 +70,45 @@ func shouldOmitHint(
 	// (e.g. Effect.gen(function*() { ... })). For curried variants like
 	// Effect.fn("name")(function*() { ... }), the outer CallExpression may be
 	// one more level up. Try ancestors up to a reasonable depth.
-	var genResult *typeparser.EffectGenCallResult
+	var genNode *ast.FunctionExpression
+	var genBody *ast.BlockOrExpression
 	for ancestor := node.Parent; ancestor != nil; ancestor = ancestor.Parent {
 		if ancestor.Kind == ast.KindCallExpression {
-			genResult = matchEffectGenCall(tp, ancestor)
-			if genResult != nil {
+			genNode, genBody = matchEffectGenCall(tp, ancestor)
+			if genNode != nil && genBody != nil {
 				break
 			}
 		}
 	}
-	if genResult == nil {
+	if genNode == nil || genBody == nil {
 		return false
 	}
 
 	// Check if the hint position falls between the close paren of the generator
 	// function's parameter list and the start of the body
-	genNode := genResult.GeneratorFunction.AsNode()
-	closeParen := astnav.FindChildOfKind(genNode, ast.KindCloseParenToken, sf)
-	if closeParen == nil || genResult.Body == nil {
+	closeParen := astnav.FindChildOfKind(genNode.AsNode(), ast.KindCloseParenToken, sf)
+	if closeParen == nil {
 		return false
 	}
 
-	bodyStart := astnav.GetStartOfNode(genResult.Body, sf, false)
+	bodyStart := astnav.GetStartOfNode(genBody, sf, false)
 	return offset >= closeParen.End() && offset <= bodyStart
 }
 
 // matchEffectGenCall tries all four Effect generator call patterns and returns
-// the first match, or nil if none match.
-func matchEffectGenCall(tp *typeparser.TypeParser, node *ast.Node) *typeparser.EffectGenCallResult {
+// the generator function and body for the first match.
+func matchEffectGenCall(tp *typeparser.TypeParser, node *ast.Node) (*ast.FunctionExpression, *ast.BlockOrExpression) {
 	if result := tp.EffectGenCall(node); result != nil {
-		return result
+		return result.GeneratorFunction, result.Body
 	}
 	if result := tp.EffectFnGenCall(node); result != nil {
-		return result
+		return result.GeneratorFunction, result.Body
 	}
 	if result := tp.EffectFnUntracedGenCall(node); result != nil {
-		return result
+		return result.GeneratorFunction, result.Body
 	}
 	if result := tp.EffectFnUntracedEagerGenCall(node); result != nil {
-		return result
+		return result.GeneratorFunction, result.Body
 	}
-	return nil
+	return nil, nil
 }
