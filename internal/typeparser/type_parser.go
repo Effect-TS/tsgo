@@ -20,6 +20,7 @@ type TypeParser struct {
 type EffectLinks struct {
 	TypeAtLocation       core.LinkStore[*ast.Node, *checker.Type]
 	EffectType           core.LinkStore[*checker.Type, *Effect]
+	StreamType           core.LinkStore[*checker.Type, *Effect]
 	StrictEffectType     core.LinkStore[*checker.Type, *Effect]
 	EffectSubtype        core.LinkStore[*checker.Type, *Effect]
 	FiberType            core.LinkStore[*checker.Type, *Effect]
