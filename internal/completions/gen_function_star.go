@@ -21,8 +21,7 @@ func runGenFunctionStar(ctx *completion.Context) []*lsproto.CompletionItem {
 		return nil
 	}
 
-	ch, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	defer done()
+	ch := ctx.Checker
 
 	t := typeparser.GetTypeAtLocation(ch, result.AccessedObject)
 	if t == nil {

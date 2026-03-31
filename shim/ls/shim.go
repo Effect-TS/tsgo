@@ -109,9 +109,9 @@ func RegisterAfterCompletionCallback(cb func(ctx context.Context, sf *ast.Source
 //go:linkname RegisterAfterDocumentSymbolsCallback github.com/microsoft/typescript-go/internal/ls.RegisterAfterDocumentSymbolsCallback
 func RegisterAfterDocumentSymbolsCallback(cb func(ctx context.Context, sf *ast.SourceFile, symbols []*lsproto.DocumentSymbol, program *compiler.Program, langService *ls.LanguageService) []*lsproto.DocumentSymbol)
 //go:linkname RegisterAfterInlayHintsCallback github.com/microsoft/typescript-go/internal/ls.RegisterAfterInlayHintsCallback
-func RegisterAfterInlayHintsCallback(cb func(c *checker.Checker, sf *ast.SourceFile, span core.TextRange, preferences *lsutil.InlayHintsPreferences, hints []*lsproto.InlayHint, converters *lsconv.Converters) []*lsproto.InlayHint)
+func RegisterAfterInlayHintsCallback(cb func(program checker.Program, c *checker.Checker, sf *ast.SourceFile, span core.TextRange, preferences *lsutil.InlayHintsPreferences, hints []*lsproto.InlayHint, converters *lsconv.Converters) []*lsproto.InlayHint)
 //go:linkname RegisterAfterQuickInfoCallback github.com/microsoft/typescript-go/internal/ls.RegisterAfterQuickInfoCallback
-func RegisterAfterQuickInfoCallback(cb func(c *checker.Checker, sf *ast.SourceFile, node *ast.Node, symbol *ast.Symbol, quickInfo string, documentation string, isMarkdown bool) (string, string, *ast.Node))
+func RegisterAfterQuickInfoCallback(cb func(program checker.Program, c *checker.Checker, sf *ast.SourceFile, node *ast.Node, symbol *ast.Symbol, quickInfo string, documentation string, isMarkdown bool) (string, string, *ast.Node))
 //go:linkname RegisterCodeFixProvider github.com/microsoft/typescript-go/internal/ls.RegisterCodeFixProvider
 func RegisterCodeFixProvider(provider *ls.CodeFixProvider)
 //go:linkname RegisterRefactorProvider github.com/microsoft/typescript-go/internal/ls.RegisterRefactorProvider

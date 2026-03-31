@@ -24,8 +24,7 @@ func runRpcMakeClasses(ctx *completion.Context) []*lsproto.CompletionItem {
 	}
 
 	// Get checker for version detection
-	ch, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	defer done()
+	ch := ctx.Checker
 
 	// V3 only
 	version := typeparser.SupportedEffectVersion(ch)

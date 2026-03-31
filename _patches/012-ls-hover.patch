@@ -8,13 +8,13 @@ index 32bbf9347..bd7bb3709 100644
  
 +// AfterQuickInfoCallback is invoked after getQuickInfoAndDocumentationForSymbol
 +// to allow external packages to enrich hover responses.
-+var AfterQuickInfoCallback func(c *checker.Checker, sf *ast.SourceFile, node *ast.Node, symbol *ast.Symbol, quickInfo string, documentation string, isMarkdown bool) (string, string, *ast.Node)
++var AfterQuickInfoCallback func(program checker.Program, c *checker.Checker, sf *ast.SourceFile, node *ast.Node, symbol *ast.Symbol, quickInfo string, documentation string, isMarkdown bool) (string, string, *ast.Node)
 +
 +// RegisterAfterQuickInfoCallback registers a callback to be called after
 +// quickInfo and documentation are built for a hover. The callback can
 +// rewrite quickInfo and documentation before they are returned.
 +// Note: Only one callback can be registered. Subsequent calls will replace the previous callback.
-+func RegisterAfterQuickInfoCallback(cb func(c *checker.Checker, sf *ast.SourceFile, node *ast.Node, symbol *ast.Symbol, quickInfo string, documentation string, isMarkdown bool) (string, string, *ast.Node)) {
++func RegisterAfterQuickInfoCallback(cb func(program checker.Program, c *checker.Checker, sf *ast.SourceFile, node *ast.Node, symbol *ast.Symbol, quickInfo string, documentation string, isMarkdown bool) (string, string, *ast.Node)) {
 +	AfterQuickInfoCallback = cb
 +}
 +
@@ -30,7 +30,7 @@ index 32bbf9347..bd7bb3709 100644
 +	if AfterQuickInfoCallback != nil {
 +		isMarkdown := contentFormat == lsproto.MarkupKindMarkdown
 +		var hookRangeNode *ast.Node
-+		quickInfo, documentation, hookRangeNode = AfterQuickInfoCallback(c, file, rangeNode, symbol, quickInfo, documentation, isMarkdown)
++		quickInfo, documentation, hookRangeNode = AfterQuickInfoCallback(program, c, file, rangeNode, symbol, quickInfo, documentation, isMarkdown)
 +		if hookRangeNode != nil {
 +			rangeNode = hookRangeNode
 +		}

@@ -81,11 +81,7 @@ func runToggleReturnTypeAnnotation(ctx *refactor.Context) []ls.CodeAction {
 		return nil
 	}
 
-	c, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	if c == nil {
-		return nil
-	}
-	defer done()
+	c := ctx.Checker
 
 	returnType := getInferredReturnTypeFromChecker(c, matchedNode)
 	if returnType == nil {

@@ -19,17 +19,13 @@ var EffectGenToFn = refactor.Refactor{
 
 // effectGenParsed holds the parsed components of a function returning Effect.gen.
 type effectGenParsed struct {
-	funcNode *ast.Node                      // The function-like node (arrow, declaration, expression, method)
+	funcNode *ast.Node                       // The function-like node (arrow, declaration, expression, method)
 	genCall  *typeparser.EffectGenCallResult // The parsed Effect.gen call
-	pipeArgs []*ast.Node                    // Collected pipe arguments (from .pipe() or pipe() wrappers)
+	pipeArgs []*ast.Node                     // Collected pipe arguments (from .pipe() or pipe() wrappers)
 }
 
 func runEffectGenToFn(ctx *refactor.Context) []ls.CodeAction {
-	c, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	if c == nil {
-		return nil
-	}
-	defer done()
+	c := ctx.Checker
 
 	token := astnav.GetTokenAtPosition(ctx.SourceFile, ctx.Span.Pos())
 	if token == nil {
@@ -206,13 +202,13 @@ func buildEffectGenToFnReplacement(tracker *change.Tracker, parsed *effectGenPar
 
 	// Build function*(params) { body }
 	genFn := tracker.NewFunctionExpression(
-		nil,                                    // modifiers
+		nil,                                     // modifiers
 		tracker.NewToken(ast.KindAsteriskToken), // asterisk (generator)
-		nil,                                    // name
-		typeParams,                             // typeParameters
-		params,                                 // parameters
-		nil,                                    // returnType
-		nil,                                    // fullSignature
+		nil,                                     // name
+		typeParams,                              // typeParameters
+		params,                                  // parameters
+		nil,                                     // returnType
+		nil,                                     // fullSignature
 		blockBody,
 	)
 

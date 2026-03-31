@@ -14,6 +14,7 @@ import (
 // afterInlayHints filters out redundant return-type inlay hints on Effect.gen,
 // Effect.fn, Effect.fnUntraced, and Effect.fnUntracedEager generator functions.
 func afterInlayHints(
+	program checker.Program,
 	c *checker.Checker,
 	sf *ast.SourceFile,
 	_ core.TextRange,
@@ -21,7 +22,9 @@ func afterInlayHints(
 	hints []*lsproto.InlayHint,
 	converters *lsconv.Converters,
 ) []*lsproto.InlayHint {
-	effectConfig := c.Program().Options().Effect
+	tp := typeparser.NewTypeParser(program, c)
+
+	effectConfig := program.Options().Effect
 	if effectConfig == nil || !effectConfig.Inlays {
 		return hints
 	}
@@ -32,7 +35,7 @@ func afterInlayHints(
 
 	result := make([]*lsproto.InlayHint, 0, len(hints))
 	for _, hint := range hints {
-		if shouldOmitHint(c, sf, hint, converters) {
+		if shouldOmitHint(tp, sf, hint, converters) {
 			continue
 		}
 		result = append(result, hint)
@@ -43,7 +46,7 @@ func afterInlayHints(
 // shouldOmitHint checks whether a single inlay hint should be suppressed
 // because it is a return-type hint on an Effect generator function.
 func shouldOmitHint(
-	c *checker.Checker,
+	tp typeparser.TypeParser,
 	sf *ast.SourceFile,
 	hint *lsproto.InlayHint,
 	converters *lsconv.Converters,
@@ -70,7 +73,7 @@ func shouldOmitHint(
 	var genResult *typeparser.EffectGenCallResult
 	for ancestor := node.Parent; ancestor != nil; ancestor = ancestor.Parent {
 		if ancestor.Kind == ast.KindCallExpression {
-			genResult = matchEffectGenCall(c, ancestor)
+			genResult = matchEffectGenCall(tp, ancestor)
 			if genResult != nil {
 				break
 			}
@@ -94,17 +97,17 @@ func shouldOmitHint(
 
 // matchEffectGenCall tries all four Effect generator call patterns and returns
 // the first match, or nil if none match.
-func matchEffectGenCall(c *checker.Checker, node *ast.Node) *typeparser.EffectGenCallResult {
-	if result := typeparser.EffectGenCall(c, node); result != nil {
+func matchEffectGenCall(tp typeparser.TypeParser, node *ast.Node) *typeparser.EffectGenCallResult {
+	if result := tp.EffectGenCall(node); result != nil {
 		return result
 	}
-	if result := typeparser.EffectFnGenCall(c, node); result != nil {
+	if result := tp.EffectFnGenCall(node); result != nil {
 		return result
 	}
-	if result := typeparser.EffectFnUntracedGenCall(c, node); result != nil {
+	if result := tp.EffectFnUntracedGenCall(node); result != nil {
 		return result
 	}
-	if result := typeparser.EffectFnUntracedEagerGenCall(c, node); result != nil {
+	if result := tp.EffectFnUntracedEagerGenCall(node); result != nil {
 		return result
 	}
 	return nil

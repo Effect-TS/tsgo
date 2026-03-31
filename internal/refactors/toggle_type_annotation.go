@@ -97,11 +97,7 @@ func runToggleTypeAnnotation(ctx *refactor.Context) []ls.CodeAction {
 	}
 
 	// Add type annotation: infer type from initializer and insert after name
-	c, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	if c == nil {
-		return nil
-	}
-	defer done()
+	c := ctx.Checker
 
 	initializerType := typeparser.GetTypeAtLocation(c, initializer)
 	if initializerType == nil {

@@ -18,11 +18,7 @@ var RemoveUnnecessaryEffectGen = refactor.Refactor{
 }
 
 func runRemoveUnnecessaryEffectGen(ctx *refactor.Context) []ls.CodeAction {
-	c, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	if c == nil {
-		return nil
-	}
-	defer done()
+	c := ctx.Checker
 
 	matches := rules.AnalyzeUnnecessaryEffectGen(c, ctx.SourceFile)
 	if len(matches) == 0 {

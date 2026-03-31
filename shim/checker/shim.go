@@ -3,6 +3,7 @@
 
 package checker
 
+import "context"
 import "github.com/microsoft/typescript-go/internal/ast"
 import "github.com/microsoft/typescript-go/internal/checker"
 import "github.com/microsoft/typescript-go/internal/diagnostics"
@@ -428,7 +429,7 @@ const ReferenceHintJsx = checker.ReferenceHintJsx
 const ReferenceHintProperty = checker.ReferenceHintProperty
 const ReferenceHintUnspecified = checker.ReferenceHintUnspecified
 //go:linkname RegisterAfterCheckSourceFileCallback github.com/microsoft/typescript-go/internal/checker.RegisterAfterCheckSourceFileCallback
-func RegisterAfterCheckSourceFileCallback(cb func(*checker.Checker, *ast.SourceFile))
+func RegisterAfterCheckSourceFileCallback(cb func(context.Context, checker.Program, *checker.Checker, *ast.SourceFile))
 type Relater = checker.Relater
 type Relation = checker.Relation
 type RelationComparisonResult = checker.RelationComparisonResult

@@ -17,11 +17,7 @@ var MakeSchemaOpaqueWithNs = refactor.Refactor{
 }
 
 func runMakeSchemaOpaqueWithNs(ctx *refactor.Context) []ls.CodeAction {
-	c, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	if c == nil {
-		return nil
-	}
-	defer done()
+	c := ctx.Checker
 
 	info := findSchemaVariableDeclaration(ctx, c)
 	if info == nil {

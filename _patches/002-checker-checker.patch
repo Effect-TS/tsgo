@@ -1,21 +1,21 @@
 diff --git a/internal/checker/checker.go b/internal/checker/checker.go
-index 000000001..000000002 100644
+index 758f880c6..8a52edb7f 100644
 --- a/internal/checker/checker.go
 +++ b/internal/checker/checker.go
-@@ -30,6 +30,35 @@
+@@ -30,6 +30,40 @@ import (
  	"github.com/zeebo/xxh3"
  )
-
+ 
 +// AfterCheckSourceFileCallback is invoked after type checking each source file.
 +// It allows external packages to run additional diagnostics with full type information.
 +// Use Checker.AddDiagnostic to add diagnostics from within the callback.
-+var AfterCheckSourceFileCallback func(*Checker, *ast.SourceFile)
++var AfterCheckSourceFileCallback func(context.Context, Program, *Checker, *ast.SourceFile)
 +
 +// RegisterAfterCheckSourceFileCallback registers a callback to be called after
-+// each source file is type checked. The callback receives the checker with full
-+// type information and the source file that was checked.
++// each source file is type checked. The callback receives the program, checker
++// with full type information, and the source file that was checked.
 +// Note: Only one callback can be registered. Subsequent calls will replace the previous callback.
-+func RegisterAfterCheckSourceFileCallback(cb func(*Checker, *ast.SourceFile)) {
++func RegisterAfterCheckSourceFileCallback(cb func(context.Context, Program, *Checker, *ast.SourceFile)) {
 +	AfterCheckSourceFileCallback = cb
 +}
 +
@@ -32,32 +32,36 @@ index 000000001..000000002 100644
 +// GetRelationErrors returns the collected relation errors for a source file.
 +// These are collected during type checking and persist until the file is re-checked.
 +func (c *Checker) GetRelationErrors(sf *ast.SourceFile) []*RelationError {
-+	return c.sourceFileLinks.Get(sf).relationErrors
++	links := c.sourceFileLinks.Get(sf)
++	if !links.typeChecked {
++		c.GetDiagnostics(c.ctx, sf)
++		links = c.sourceFileLinks.Get(sf)
++	}
++	return links.relationErrors
 +}
 +
  // CheckMode
-
+ 
  type CheckMode uint32
-@@ -2131,6 +2160,9 @@ func (c *Checker) checkSourceFile(ctx context.Context, sourceFile *ast.SourceFil
+@@ -2149,6 +2183,8 @@ func (c *Checker) checkSourceFile(ctx context.Context, sourceFile *ast.SourceFil
  	links := c.sourceFileLinks.Get(sourceFile)
  	if !links.typeChecked {
  		c.saveDeferredDiagnostics = true
 +		// Clear any stale relation errors before type checking
 +		links.relationErrors = nil
-+
  		// Grammar checking
  		c.checkGrammarSourceFile(sourceFile)
  		c.renamedBindingElementsInTypes = nil
-@@ -2147,6 +2179,12 @@ func (c *Checker) checkSourceFile(ctx context.Context, sourceFile *ast.SourceFil
+@@ -2164,7 +2200,13 @@ func (c *Checker) checkSourceFile(ctx context.Context, sourceFile *ast.SourceFil
+ 		c.saveDeferredDiagnostics = false
  		c.produceDeferredDiagnostics()
  		c.reportedUnreachableNodes.Clear()
--		links.typeChecked = true
 +
-+		links.typeChecked = true
+ 		links.typeChecked = true
 +
 +		// EFFECT HOOK: Run Effect diagnostics after type checking
 +		if AfterCheckSourceFileCallback != nil {
-+			AfterCheckSourceFileCallback(c, sourceFile)
++			AfterCheckSourceFileCallback(ctx, c.program, c, sourceFile)
 +		}
  	}
  	if checkUnused && !links.unusedChecked {

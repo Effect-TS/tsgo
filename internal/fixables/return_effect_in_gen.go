@@ -22,11 +22,7 @@ var ReturnEffectInGenFix = fixable.Fixable{
 
 func runReturnEffectInGenFix(ctx *fixable.Context) []ls.CodeAction {
 
-	c, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	if c == nil {
-		return nil
-	}
-	defer done()
+	c := ctx.Checker
 
 	sf := ctx.SourceFile
 

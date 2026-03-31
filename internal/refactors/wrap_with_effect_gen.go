@@ -17,11 +17,7 @@ var WrapWithEffectGen = refactor.Refactor{
 }
 
 func runWrapWithEffectGen(ctx *refactor.Context) []ls.CodeAction {
-	c, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	if c == nil {
-		return nil
-	}
-	defer done()
+	c := ctx.Checker
 
 	token := astnav.GetTokenAtPosition(ctx.SourceFile, ctx.Span.Pos())
 	if token == nil {

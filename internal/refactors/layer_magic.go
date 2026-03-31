@@ -27,11 +27,8 @@ func runLayerMagic(ctx *refactor.Context) []ls.CodeAction {
 		return nil
 	}
 
-	c, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	if c == nil {
-		return nil
-	}
-	defer done()
+	c := ctx.Checker
+	tp := ctx.TypeParser
 
 	layerIdentifier := typeparser.FindModuleIdentifier(ctx.SourceFile, "Layer")
 
@@ -43,13 +40,13 @@ func runLayerMagic(ctx *refactor.Context) []ls.CodeAction {
 
 	// Try build first on all ancestors, then prepare as fallback.
 	for _, node := range ancestors {
-		action := tryBuildRefactor(ctx, c, node, layerIdentifier)
+		action := tryBuildRefactor(ctx, tp, c, node, layerIdentifier)
 		if action != nil {
 			return action
 		}
 	}
 	for _, node := range ancestors {
-		action := tryPrepareRefactor(ctx, c, node, layerIdentifier)
+		action := tryPrepareRefactor(ctx, tp, c, node, layerIdentifier)
 		if action != nil {
 			return action
 		}
@@ -80,7 +77,7 @@ func adjustedNode(node *ast.Node) *ast.Node {
 
 // tryBuildRefactor tries to produce the "build" refactor action for the given node.
 // It detects the `(expr as any) as Layer.Layer<ROut>` pattern.
-func tryBuildRefactor(ctx *refactor.Context, c *checker.Checker, node *ast.Node, layerIdentifier string) []ls.CodeAction {
+func tryBuildRefactor(ctx *refactor.Context, tp typeparser.TypeParser, c *checker.Checker, node *ast.Node, layerIdentifier string) []ls.CodeAction {
 	atLocation := adjustedNode(node)
 
 	// Must be an AsExpression: `... as Layer.Layer<ROut>`
@@ -103,11 +100,11 @@ func tryBuildRefactor(ctx *refactor.Context, c *checker.Checker, node *ast.Node,
 	}
 
 	// Parse the outer type as a Layer type to get ROut
-	outerType := typeparser.GetTypeAtLocation(c, outerAs.Type)
+	outerType := tp.GetTypeAtLocation(outerAs.Type)
 	if outerType == nil {
 		return nil
 	}
-	layer := typeparser.LayerType(c, outerType, outerAs.Type)
+	layer := tp.LayerType(outerType, outerAs.Type)
 	if layer == nil {
 		return nil
 	}
@@ -223,7 +220,7 @@ func buildLayerMagicBuild(tracker *change.Tracker, ctx *refactor.Context, c *che
 
 // tryPrepareRefactor tries to produce the "prepare" refactor action for the given node.
 // It flattens a layer expression into `[...] as any as Layer.Layer<T>`.
-func tryPrepareRefactor(ctx *refactor.Context, c *checker.Checker, node *ast.Node, layerIdentifier string) []ls.CodeAction {
+func tryPrepareRefactor(ctx *refactor.Context, tp typeparser.TypeParser, c *checker.Checker, node *ast.Node, layerIdentifier string) []ls.CodeAction {
 	atLocation := adjustedNode(node)
 
 	// Skip if already in `as any as Layer.Layer<T>` form
@@ -277,10 +274,10 @@ func tryPrepareRefactor(ctx *refactor.Context, c *checker.Checker, node *ast.Nod
 	}
 
 	// Parse the expression's current type as a Layer to find "previously provided" types
-	exprType := typeparser.GetTypeAtLocation(c, atLocation)
+	exprType := tp.GetTypeAtLocation(atLocation)
 	var previouslyProvided *checker.Type
 	if exprType != nil {
-		parsedLayer := typeparser.LayerType(c, exprType, atLocation)
+		parsedLayer := tp.LayerType(exprType, atLocation)
 		if parsedLayer != nil {
 			previouslyProvided = parsedLayer.ROut
 		}

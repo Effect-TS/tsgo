@@ -21,7 +21,8 @@ var EffectFnImplicitAny = rule.Rule{
 	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Parameter_0_implicitly_has_an_any_type_in_Effect_fn_SlashEffect_fnUntraced_SlashEffect_fnUntracedEager_Add_an_explicit_type_annotation_or_provide_a_contextual_function_type_effect_effectFnImplicitAny.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
-		if !ctx.Checker.Program().Options().GetStrictOptionValue(ctx.Checker.Program().Options().NoImplicitAny) {
+		tp := ctx.TypeParser
+		if !ctx.Program.Options().GetStrictOptionValue(ctx.Program.Options().NoImplicitAny) {
 			return nil
 		}
 
@@ -33,13 +34,13 @@ var EffectFnImplicitAny = rule.Rule{
 				return false
 			}
 
-			if result := typeparser.EffectFnCall(ctx.Checker, n); result != nil {
+			if result := tp.EffectFnCall(n); result != nil {
 				diags = append(diags, checkEffectFnImplicitAnyBody(ctx, result.Call.AsNode(), result.BodyFunction)...)
-			} else if result := typeparser.EffectFnGenCall(ctx.Checker, n); result != nil {
+			} else if result := tp.EffectFnGenCall(n); result != nil {
 				diags = append(diags, checkEffectFnImplicitAny(ctx, result)...)
-			} else if result := typeparser.EffectFnUntracedGenCall(ctx.Checker, n); result != nil {
+			} else if result := tp.EffectFnUntracedGenCall(n); result != nil {
 				diags = append(diags, checkEffectFnImplicitAny(ctx, result)...)
-			} else if result := typeparser.EffectFnUntracedEagerGenCall(ctx.Checker, n); result != nil {
+			} else if result := tp.EffectFnUntracedEagerGenCall(n); result != nil {
 				diags = append(diags, checkEffectFnImplicitAny(ctx, result)...)
 			}
 

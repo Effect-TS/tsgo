@@ -23,12 +23,11 @@ func runContextSelfInClasses(ctx *completion.Context) []*lsproto.CompletionItem 
 		return nil
 	}
 
-	// Get checker for version detection and API reference checks
-	ch, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	defer done()
+	ch := ctx.Checker
+	tp := ctx.TypeParser
 
 	// V3 only
-	version := typeparser.SupportedEffectVersion(ch)
+	version := tp.SupportedEffectVersion()
 	if version != typeparser.EffectMajorV3 {
 		return nil
 	}
@@ -39,12 +38,12 @@ func runContextSelfInClasses(ctx *completion.Context) []*lsproto.CompletionItem 
 	className := data.ClassNameText()
 
 	// For non-fully-qualified: validate with IsNodeReferenceToEffectContextModuleApi
-	if !isFullyQualified && !typeparser.IsNodeReferenceToEffectContextModuleApi(ch, data.AccessedObject, "Tag") {
+	if !isFullyQualified && !tp.IsNodeReferenceToEffectContextModuleApi(data.AccessedObject, "Tag") {
 		return nil
 	}
 
 	// Compute deterministic tag key
-	tagKey := computeServiceTagKey(ch, ctx.SourceFile, className)
+	tagKey := computeServiceTagKey(ctx.Program, tp, ch, ctx.SourceFile, className)
 
 	// Build replacement range from byte offsets
 	replacementRange := byteSpanToRange(ctx, data.ReplacementStart, data.ReplacementLength)

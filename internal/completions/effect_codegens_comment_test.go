@@ -1,4 +1,4 @@
-package completions
+package completions_test
 
 import (
 	"sort"
@@ -11,9 +11,7 @@ import (
 func TestEffectCodegensComment_DoubleSlash(t *testing.T) {
 	t.Parallel()
 	source := "// @"
-	ctx := makeFnContext(source, len(source))
-
-	items := runEffectCodegensComment(ctx)
+	items := effectCodegensCommentItems(t, source, len(source))
 	if len(items) != 1 {
 		t.Fatalf("expected 1 item for '// @', got %d", len(items))
 	}
@@ -25,9 +23,7 @@ func TestEffectCodegensComment_DoubleSlash(t *testing.T) {
 func TestEffectCodegensComment_SlashStar(t *testing.T) {
 	t.Parallel()
 	source := "/* @"
-	ctx := makeFnContext(source, len(source))
-
-	items := runEffectCodegensComment(ctx)
+	items := effectCodegensCommentItems(t, source, len(source))
 	if len(items) != 1 {
 		t.Fatalf("expected 1 item for '/* @', got %d", len(items))
 	}
@@ -36,9 +32,7 @@ func TestEffectCodegensComment_SlashStar(t *testing.T) {
 func TestEffectCodegensComment_JSDocComment(t *testing.T) {
 	t.Parallel()
 	source := "/** @"
-	ctx := makeFnContext(source, len(source))
-
-	items := runEffectCodegensComment(ctx)
+	items := effectCodegensCommentItems(t, source, len(source))
 	if len(items) != 1 {
 		t.Fatalf("expected 1 item for '/** @', got %d", len(items))
 	}
@@ -47,9 +41,7 @@ func TestEffectCodegensComment_JSDocComment(t *testing.T) {
 func TestEffectCodegensComment_ExtraWhitespace(t *testing.T) {
 	t.Parallel()
 	source := "//  @  "
-	ctx := makeFnContext(source, len(source))
-
-	items := runEffectCodegensComment(ctx)
+	items := effectCodegensCommentItems(t, source, len(source))
 	if len(items) != 1 {
 		t.Fatalf("expected 1 item for '//  @  ' (extra whitespace), got %d", len(items))
 	}
@@ -58,9 +50,7 @@ func TestEffectCodegensComment_ExtraWhitespace(t *testing.T) {
 func TestEffectCodegensComment_NoAtSymbol(t *testing.T) {
 	t.Parallel()
 	source := "// some comment without at"
-	ctx := makeFnContext(source, len(source))
-
-	items := runEffectCodegensComment(ctx)
+	items := effectCodegensCommentItems(t, source, len(source))
 	if items != nil {
 		t.Errorf("expected nil for comment without @, got %d items", len(items))
 	}
@@ -69,9 +59,7 @@ func TestEffectCodegensComment_NoAtSymbol(t *testing.T) {
 func TestEffectCodegensComment_AtOutsideComment(t *testing.T) {
 	t.Parallel()
 	source := "const x = @"
-	ctx := makeFnContext(source, len(source))
-
-	items := runEffectCodegensComment(ctx)
+	items := effectCodegensCommentItems(t, source, len(source))
 	if items != nil {
 		t.Errorf("expected nil for @ outside comment, got %d items", len(items))
 	}
@@ -80,9 +68,7 @@ func TestEffectCodegensComment_AtOutsideComment(t *testing.T) {
 func TestEffectCodegensComment_SnippetContainsSortedCodegenNames(t *testing.T) {
 	t.Parallel()
 	source := "// @"
-	ctx := makeFnContext(source, len(source))
-
-	items := runEffectCodegensComment(ctx)
+	items := effectCodegensCommentItems(t, source, len(source))
 	if len(items) != 1 {
 		t.Fatalf("expected 1 item, got %d", len(items))
 	}
@@ -104,9 +90,7 @@ func TestEffectCodegensComment_SnippetContainsSortedCodegenNames(t *testing.T) {
 func TestEffectCodegensComment_ReplacementSpanStartsAtAt(t *testing.T) {
 	t.Parallel()
 	source := "// @"
-	ctx := makeFnContext(source, len(source))
-
-	items := runEffectCodegensComment(ctx)
+	items := effectCodegensCommentItems(t, source, len(source))
 	if len(items) != 1 {
 		t.Fatalf("expected 1 item, got %d", len(items))
 	}
@@ -121,9 +105,7 @@ func TestEffectCodegensComment_ReplacementSpanStartsAtAt(t *testing.T) {
 func TestEffectCodegensComment_MultilineWithCommentOnSecondLine(t *testing.T) {
 	t.Parallel()
 	source := "const x = 1\n// @"
-	ctx := makeFnContext(source, len(source))
-
-	items := runEffectCodegensComment(ctx)
+	items := effectCodegensCommentItems(t, source, len(source))
 	if len(items) != 1 {
 		t.Fatalf("expected 1 item for multiline source, got %d", len(items))
 	}

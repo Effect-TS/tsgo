@@ -4,8 +4,10 @@ import (
 	"context"
 
 	"github.com/effect-ts/tsgo/etscore"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
+	"github.com/microsoft/typescript-go/shim/compiler"
 	"github.com/microsoft/typescript-go/shim/core"
 	"github.com/microsoft/typescript-go/shim/ls"
 	"github.com/microsoft/typescript-go/shim/ls/change"
@@ -22,33 +24,33 @@ type Context struct {
 	Span       core.TextRange
 	ErrorCode  int32
 	Options    *etscore.ResolvedEffectPluginOptions
+	Program    *compiler.Program
+	Checker    *checker.Checker
+	TypeParser typeparser.TypeParser
 
-	ctx    context.Context
-	fixCtx *ls.CodeFixContext
+	Context context.Context
+	fixCtx  *ls.CodeFixContext
 }
 
 // NewContext creates a fixable Context from the standard code-fix request parameters.
-func NewContext(ctx context.Context, fixCtx *ls.CodeFixContext, options *etscore.ResolvedEffectPluginOptions) *Context {
+func NewContext(ctx context.Context, fixCtx *ls.CodeFixContext, options *etscore.ResolvedEffectPluginOptions, checker *checker.Checker, tp typeparser.TypeParser) *Context {
+	if fixCtx == nil || fixCtx.Program == nil {
+		panic("fixable.NewContext: nil program")
+	}
+	if checker == nil {
+		panic("fixable.NewContext: nil checker")
+	}
 	return &Context{
 		SourceFile: fixCtx.SourceFile,
 		Span:       fixCtx.Span,
 		ErrorCode:  fixCtx.ErrorCode,
 		Options:    options,
-		ctx:        ctx,
+		Program:    fixCtx.Program,
+		Checker:    checker,
+		TypeParser: tp,
+		Context:    ctx,
 		fixCtx:     fixCtx,
 	}
-}
-
-// GetTypeCheckerForFile returns the type checker for the given source file and a cleanup function.
-// Callers must defer the cleanup function.
-// It calls GetDiagnostics on the returned checker to ensure checkSourceFile has run,
-// so that GetRelationErrors and other type-checked state is populated.
-func (c *Context) GetTypeCheckerForFile(sf *ast.SourceFile) (*checker.Checker, func()) {
-	ch, done := c.fixCtx.Program.GetTypeCheckerForFile(c.ctx, sf)
-	if ch != nil {
-		ch.GetDiagnostics(c.ctx, sf)
-	}
-	return ch, done
 }
 
 // BytePosToLSPPosition converts a single byte offset in the context's SourceFile
@@ -74,8 +76,8 @@ type FixAction struct {
 // Returns nil if the closure produced no edits.
 func (c *Context) NewFixAction(action FixAction) *ls.CodeAction {
 	tracker := change.NewTracker(
-		c.ctx,
-		c.fixCtx.Program.Options(),
+		c.Context,
+		c.Program.Options(),
 		c.fixCtx.LS.FormatOptions(),
 		ls.LanguageService_converters(c.fixCtx.LS),
 	)

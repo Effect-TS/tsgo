@@ -1,34 +1,15 @@
-package completions
+package completions_test
 
 import (
-	"context"
 	"testing"
-
-	"github.com/effect-ts/tsgo/internal/completion"
-	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/core"
-	"github.com/microsoft/typescript-go/shim/parser"
 )
-
-func parseSourceFile(source string) *ast.SourceFile {
-	return parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: "/test.ts",
-	}, source, core.ScriptKindTS)
-}
-
-func makeFnContext(source string, position int) *completion.Context {
-	sf := parseSourceFile(source)
-	return completion.NewContext(context.Background(), sf, position, nil, nil, nil)
-}
 
 func TestFnFunctionStar_NotEffectModule(t *testing.T) {
 	t.Parallel()
 	// Accessing a non-Effect identifier should return nil
 	source := `import * as Foo from "some-lib"
 const x = Foo.fn`
-	ctx := makeFnContext(source, len(source))
-
-	items := runFnFunctionStar(ctx)
+	items := fnFunctionStarItems(t, source, len(source))
 	if items != nil {
 		t.Errorf("expected nil for non-Effect module access, got %d items", len(items))
 	}
@@ -39,9 +20,7 @@ func TestFnFunctionStar_NamespaceImport_InVarDecl(t *testing.T) {
 	// Effect.fn| inside a variable declaration should produce 3 items (named + generic + untraced)
 	source := `import * as Effect from "effect/Effect"
 const myFn = Effect.fn`
-	ctx := makeFnContext(source, len(source))
-
-	items := runFnFunctionStar(ctx)
+	items := fnFunctionStarItems(t, source, len(source))
 	if len(items) != 3 {
 		t.Fatalf("expected 3 items, got %d", len(items))
 	}
@@ -62,9 +41,7 @@ func TestFnFunctionStar_NamedImport_InVarDecl(t *testing.T) {
 	// import { Effect } from "effect" — should also work
 	source := `import { Effect } from "effect"
 const myFn = Effect.fn`
-	ctx := makeFnContext(source, len(source))
-
-	items := runFnFunctionStar(ctx)
+	items := fnFunctionStarItems(t, source, len(source))
 	if len(items) != 3 {
 		t.Fatalf("expected 3 items, got %d", len(items))
 	}
@@ -78,9 +55,7 @@ func TestFnFunctionStar_NotInVarDecl(t *testing.T) {
 	// Effect.fn| not inside a variable declaration — should produce 2 items (no named variant)
 	source := `import * as Effect from "effect/Effect"
 Effect.fn`
-	ctx := makeFnContext(source, len(source))
-
-	items := runFnFunctionStar(ctx)
+	items := fnFunctionStarItems(t, source, len(source))
 	if len(items) != 2 {
 		t.Fatalf("expected 2 items (no named variant), got %d", len(items))
 	}
@@ -97,9 +72,7 @@ func TestFnFunctionStar_AliasedImport(t *testing.T) {
 	// Aliased namespace import: import * as Fx from "effect/Effect" — Fx.fn| should work
 	source := `import * as Fx from "effect/Effect"
 const myFn = Fx.fn`
-	ctx := makeFnContext(source, len(source))
-
-	items := runFnFunctionStar(ctx)
+	items := fnFunctionStarItems(t, source, len(source))
 	if len(items) != 3 {
 		t.Fatalf("expected 3 items for aliased import, got %d", len(items))
 	}
@@ -113,9 +86,7 @@ func TestFnFunctionStar_CursorAfterDot(t *testing.T) {
 	// Cursor right after the dot (no partial text typed)
 	source := `import * as Effect from "effect/Effect"
 const myFn = Effect.`
-	ctx := makeFnContext(source, len(source))
-
-	items := runFnFunctionStar(ctx)
+	items := fnFunctionStarItems(t, source, len(source))
 	if len(items) != 3 {
 		t.Fatalf("expected 3 items for cursor after dot, got %d", len(items))
 	}
@@ -126,9 +97,7 @@ func TestFnFunctionStar_SnippetInsertText(t *testing.T) {
 	// Verify the insert text contains proper snippet placeholders
 	source := `import * as Effect from "effect/Effect"
 const myFn = Effect.fn`
-	ctx := makeFnContext(source, len(source))
-
-	items := runFnFunctionStar(ctx)
+	items := fnFunctionStarItems(t, source, len(source))
 	if len(items) != 3 {
 		t.Fatalf("expected 3 items, got %d", len(items))
 	}

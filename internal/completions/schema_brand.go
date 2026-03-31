@@ -29,8 +29,7 @@ func runSchemaBrand(ctx *completion.Context) []*lsproto.CompletionItem {
 	}
 
 	// V3 only
-	ch, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	defer done()
+	ch := ctx.Checker
 
 	version := typeparser.SupportedEffectVersion(ch)
 	if version != typeparser.EffectMajorV3 {

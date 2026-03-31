@@ -30,8 +30,7 @@ func runEffectSchemaSelfInClasses(ctx *completion.Context) []*lsproto.Completion
 	className := data.ClassNameText()
 
 	// Get checker for version detection and API reference checks
-	ch, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	defer done()
+	ch := ctx.Checker
 
 	version := typeparser.SupportedEffectVersion(ch)
 

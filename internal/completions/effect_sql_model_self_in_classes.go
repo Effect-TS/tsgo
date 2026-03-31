@@ -24,8 +24,7 @@ func runEffectSqlModelSelfInClasses(ctx *completion.Context) []*lsproto.Completi
 	}
 
 	// Get checker for version detection and API reference checks
-	ch, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	defer done()
+	ch := ctx.Checker
 
 	// V3 only
 	version := typeparser.SupportedEffectVersion(ch)

@@ -1,4 +1,4 @@
-package completions
+package completions_test
 
 import (
 	"testing"
@@ -7,9 +7,7 @@ import (
 func TestEffectJsdocComment_DoubleSlash(t *testing.T) {
 	t.Parallel()
 	source := "// @"
-	ctx := makeFnContext(source, len(source))
-
-	items := runEffectJsdocComment(ctx)
+	items := effectJsdocCommentItems(t, source, len(source))
 	if len(items) != 1 {
 		t.Fatalf("expected 1 item for '// @', got %d", len(items))
 	}
@@ -21,9 +19,7 @@ func TestEffectJsdocComment_DoubleSlash(t *testing.T) {
 func TestEffectJsdocComment_SlashStar(t *testing.T) {
 	t.Parallel()
 	source := "/* @"
-	ctx := makeFnContext(source, len(source))
-
-	items := runEffectJsdocComment(ctx)
+	items := effectJsdocCommentItems(t, source, len(source))
 	if len(items) != 1 {
 		t.Fatalf("expected 1 item for '/* @', got %d", len(items))
 	}
@@ -35,9 +31,7 @@ func TestEffectJsdocComment_SlashStar(t *testing.T) {
 func TestEffectJsdocComment_JSDocComment(t *testing.T) {
 	t.Parallel()
 	source := "/** @"
-	ctx := makeFnContext(source, len(source))
-
-	items := runEffectJsdocComment(ctx)
+	items := effectJsdocCommentItems(t, source, len(source))
 	if len(items) != 1 {
 		t.Fatalf("expected 1 item for '/** @', got %d", len(items))
 	}
@@ -46,9 +40,7 @@ func TestEffectJsdocComment_JSDocComment(t *testing.T) {
 func TestEffectJsdocComment_ExtraWhitespace(t *testing.T) {
 	t.Parallel()
 	source := "//  @  "
-	ctx := makeFnContext(source, len(source))
-
-	items := runEffectJsdocComment(ctx)
+	items := effectJsdocCommentItems(t, source, len(source))
 	if len(items) != 1 {
 		t.Fatalf("expected 1 item for '//  @  ' (extra whitespace), got %d", len(items))
 	}
@@ -57,9 +49,7 @@ func TestEffectJsdocComment_ExtraWhitespace(t *testing.T) {
 func TestEffectJsdocComment_NoAtSymbol(t *testing.T) {
 	t.Parallel()
 	source := "// some comment"
-	ctx := makeFnContext(source, len(source))
-
-	items := runEffectJsdocComment(ctx)
+	items := effectJsdocCommentItems(t, source, len(source))
 	if items != nil {
 		t.Errorf("expected nil for comment without @, got %d items", len(items))
 	}
@@ -68,9 +58,7 @@ func TestEffectJsdocComment_NoAtSymbol(t *testing.T) {
 func TestEffectJsdocComment_AtOutsideComment(t *testing.T) {
 	t.Parallel()
 	source := "const x = @"
-	ctx := makeFnContext(source, len(source))
-
-	items := runEffectJsdocComment(ctx)
+	items := effectJsdocCommentItems(t, source, len(source))
 	if items != nil {
 		t.Errorf("expected nil for @ outside comment, got %d items", len(items))
 	}
@@ -79,9 +67,7 @@ func TestEffectJsdocComment_AtOutsideComment(t *testing.T) {
 func TestEffectJsdocComment_InsertText(t *testing.T) {
 	t.Parallel()
 	source := "// @"
-	ctx := makeFnContext(source, len(source))
-
-	items := runEffectJsdocComment(ctx)
+	items := effectJsdocCommentItems(t, source, len(source))
 	if len(items) != 1 {
 		t.Fatalf("expected 1 item, got %d", len(items))
 	}
@@ -95,9 +81,7 @@ func TestEffectJsdocComment_InsertText(t *testing.T) {
 func TestEffectJsdocComment_ReplacementSpanStartsAtAt(t *testing.T) {
 	t.Parallel()
 	source := "// @"
-	ctx := makeFnContext(source, len(source))
-
-	items := runEffectJsdocComment(ctx)
+	items := effectJsdocCommentItems(t, source, len(source))
 	if len(items) != 1 {
 		t.Fatalf("expected 1 item, got %d", len(items))
 	}
@@ -112,9 +96,7 @@ func TestEffectJsdocComment_ReplacementSpanStartsAtAt(t *testing.T) {
 func TestEffectJsdocComment_MultilineWithCommentOnSecondLine(t *testing.T) {
 	t.Parallel()
 	source := "const x = 1\n// @"
-	ctx := makeFnContext(source, len(source))
-
-	items := runEffectJsdocComment(ctx)
+	items := effectJsdocCommentItems(t, source, len(source))
 	if len(items) != 1 {
 		t.Fatalf("expected 1 item for multiline source, got %d", len(items))
 	}

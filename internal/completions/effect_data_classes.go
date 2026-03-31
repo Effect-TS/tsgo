@@ -29,8 +29,7 @@ func runEffectDataClasses(ctx *completion.Context) []*lsproto.CompletionItem {
 	className := data.ClassNameText()
 
 	// Get checker for API reference checks
-	ch, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	defer done()
+	ch := ctx.Checker
 
 	// Build replacement range from byte offsets
 	replacementRange := byteSpanToRange(ctx, data.ReplacementStart, data.ReplacementLength)

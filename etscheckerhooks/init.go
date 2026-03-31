@@ -4,12 +4,14 @@
 package etscheckerhooks
 
 import (
+	"context"
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/directives"
 	"github.com/effect-ts/tsgo/internal/effectconfigraw"
 	"github.com/effect-ts/tsgo/internal/pluginoptions"
 	"github.com/effect-ts/tsgo/internal/rule"
 	"github.com/effect-ts/tsgo/internal/rules"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
 	"github.com/microsoft/typescript-go/shim/core"
@@ -41,24 +43,26 @@ type RuleDiagnostic struct {
 
 // afterCheckSourceFile is called after type checking each source file.
 // It runs Effect diagnostics if the plugin is enabled.
-func afterCheckSourceFile(c *checker.Checker, sf *ast.SourceFile) {
+func afterCheckSourceFile(ctx context.Context, program checker.Program, c *checker.Checker, sf *ast.SourceFile) {
+	tp := typeparser.NewTypeParser(program, c)
+
 	// Get Effect config from program options (parsed during config loading)
-	effectConfig := getEffectConfig(c.Program())
+	effectConfig := getEffectConfig(program)
 	if effectConfig == nil {
 		return
 	}
 	effectiveConfig := pluginoptions.ResolveEffectPluginOptionsForSourceFile(
 		effectConfig,
 		sf.FileName(),
-		c.Program().Options().ConfigFilePath,
-		c.Program().UseCaseSensitiveFileNames(),
+		program.Options().ConfigFilePath,
+		program.UseCaseSensitiveFileNames(),
 	)
 
 	resolvedSeverity := pluginoptions.ResolveDiagnosticSeverityForFile(
 		effectConfig,
 		sf.FileName(),
-		c.Program().Options().ConfigFilePath,
-		c.Program().UseCaseSensitiveFileNames(),
+		program.Options().ConfigFilePath,
+		program.UseCaseSensitiveFileNames(),
 	)
 
 	// Check if diagnostics are enabled (nil DiagnosticSeverity map means explicitly disabled)
@@ -82,7 +86,7 @@ func afterCheckSourceFile(c *checker.Checker, sf *ast.SourceFile) {
 	}
 
 	// Collect all diagnostics from enabled rules
-	allDiagnostics := collectDiagnostics(c, sf, effectConfig, effectiveConfig, resolvedSeverity, directiveSet)
+	allDiagnostics := collectDiagnostics(ctx, program, c, tp, sf, effectConfig, effectiveConfig, resolvedSeverity, directiveSet)
 
 	// Transform and filter diagnostics based on directives
 	finalDiagnostics := transformDiagnostics(allDiagnostics, sf, directiveSet, effectConfig, resolvedSeverity)
@@ -98,7 +102,10 @@ func afterCheckSourceFile(c *checker.Checker, sf *ast.SourceFile) {
 
 // collectDiagnostics runs all enabled rules and collects their diagnostics.
 func collectDiagnostics(
+	ctx context.Context,
+	program checker.Program,
 	c *checker.Checker,
+	tp typeparser.TypeParser,
 	sf *ast.SourceFile,
 	globalConfig *etscore.EffectPluginOptions,
 	options *etscore.ResolvedEffectPluginOptions,
@@ -126,8 +133,8 @@ func collectDiagnostics(
 		}
 
 		// Run the rule
-		ctx := rule.NewContext(c, sf, options, r.DefaultSeverity)
-		diags := r.Run(ctx)
+		ruleCtx := rule.NewContext(ctx, program, c, tp, sf, options, r.DefaultSeverity)
+		diags := r.Run(ruleCtx)
 
 		// Tag each diagnostic with its rule for directive lookup
 		for _, diag := range diags {

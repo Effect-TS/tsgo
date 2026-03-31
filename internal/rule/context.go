@@ -1,8 +1,10 @@
 package rule
 
 import (
+	"context"
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/directives"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
 	"github.com/microsoft/typescript-go/shim/core"
@@ -13,16 +15,22 @@ import (
 // Context bundles the checker, source file, and default severity for a rule invocation.
 // It provides a NewDiagnostic helper that simplifies diagnostic creation.
 type Context struct {
+	Context         context.Context
+	Program         checker.Program
 	Checker         *checker.Checker
+	TypeParser      typeparser.TypeParser
 	SourceFile      *ast.SourceFile
 	Options         *etscore.ResolvedEffectPluginOptions
 	defaultSeverity etscore.Severity
 }
 
 // NewContext creates a new Context for a rule invocation.
-func NewContext(c *checker.Checker, sf *ast.SourceFile, options *etscore.ResolvedEffectPluginOptions, defaultSeverity etscore.Severity) *Context {
+func NewContext(ctx context.Context, program checker.Program, c *checker.Checker, tp typeparser.TypeParser, sf *ast.SourceFile, options *etscore.ResolvedEffectPluginOptions, defaultSeverity etscore.Severity) *Context {
 	return &Context{
+		Context:         ctx,
+		Program:         program,
 		Checker:         c,
+		TypeParser:      tp,
 		SourceFile:      sf,
 		Options:         options,
 		defaultSeverity: defaultSeverity,

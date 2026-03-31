@@ -21,7 +21,7 @@ For Effect V4, setup manages three canonical reference clones:
 
 ## Code Validation Workflow
 The following steps can be skipped if no go or typescript file has been changed in this branch, do not attempt any file change without user consent.
-- run "pnpm setup-repo" to ensure that all the submodules are up to date and the codegen is up to date
+- run "pnpm setup-repo" first before the following steps to ensure that all the submodules are up to date and the codegen is up to date
 - run "pnpm lint" to check and then you should fix linting errors
 - run "pnpm check" to see if you should fix some type errors
 - run "pnpm test" to validate that changes did not broke anything; note that those are quite long to run (15-20min).

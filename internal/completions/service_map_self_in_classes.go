@@ -28,12 +28,10 @@ func runServiceMapSelfInClasses(ctx *completion.Context) []*lsproto.CompletionIt
 		return nil
 	}
 
-	// Get checker for version detection and API reference checks
-	ch, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	defer done()
-
+	ch := ctx.Checker
+	tp := ctx.TypeParser
 	// V4 only
-	version := typeparser.SupportedEffectVersion(ch)
+	version := tp.SupportedEffectVersion()
 	if version != typeparser.EffectMajorV4 {
 		return nil
 	}
@@ -44,12 +42,12 @@ func runServiceMapSelfInClasses(ctx *completion.Context) []*lsproto.CompletionIt
 	className := data.ClassNameText()
 
 	// For non-fully-qualified: validate with IsNodeReferenceToServiceMapModuleApi
-	if !isFullyQualified && !typeparser.IsNodeReferenceToServiceMapModuleApi(ch, data.AccessedObject, "Service") {
+	if !isFullyQualified && !tp.IsNodeReferenceToServiceMapModuleApi(data.AccessedObject, "Service") {
 		return nil
 	}
 
 	// Compute deterministic tag key
-	tagKey := computeServiceTagKey(ch, ctx.SourceFile, className)
+	tagKey := computeServiceTagKey(ctx.Program, tp, ch, ctx.SourceFile, className)
 
 	// Build replacement range from byte offsets
 	replacementRange := byteSpanToRange(ctx, data.ReplacementStart, data.ReplacementLength)
@@ -90,8 +88,8 @@ func runServiceMapSelfInClasses(ctx *completion.Context) []*lsproto.CompletionIt
 
 // computeServiceTagKey computes the deterministic tag key for a service class.
 // Falls back to the class name if keybuilder returns empty.
-func computeServiceTagKey(ch *checker.Checker, sf *ast.SourceFile, className string) string {
-	pkgJson := typeparser.PackageJsonForSourceFile(ch, sf)
+func computeServiceTagKey(program checker.Program, tp typeparser.TypeParser, ch *checker.Checker, sf *ast.SourceFile, className string) string {
+	pkgJson := tp.PackageJsonForSourceFile(sf)
 	if pkgJson == nil {
 		return className
 	}
@@ -100,20 +98,20 @@ func computeServiceTagKey(ch *checker.Checker, sf *ast.SourceFile, className str
 		return className
 	}
 
-	packageDirectory := getCompletionPackageJsonDirectory(ch, sf)
+	packageDirectory := getCompletionPackageJsonDirectory(program, ch, sf)
 	if packageDirectory == "" {
 		return className
 	}
 
-	effectConfig := ch.Program().Options().Effect
+	effectConfig := program.Options().Effect
 	if effectConfig == nil {
 		return className
 	}
 	resolvedOptions := pluginoptions.ResolveEffectPluginOptionsForSourceFile(
 		effectConfig,
 		sf.FileName(),
-		ch.Program().Options().ConfigFilePath,
-		ch.Program().UseCaseSensitiveFileNames(),
+		program.Options().ConfigFilePath,
+		program.UseCaseSensitiveFileNames(),
 	)
 	keyPatterns := resolvedOptions.GetKeyPatterns()
 
@@ -125,12 +123,12 @@ func computeServiceTagKey(ch *checker.Checker, sf *ast.SourceFile, className str
 }
 
 // getCompletionPackageJsonDirectory gets the package.json directory for a source file.
-func getCompletionPackageJsonDirectory(c *checker.Checker, sf *ast.SourceFile) string {
+func getCompletionPackageJsonDirectory(program checker.Program, c *checker.Checker, sf *ast.SourceFile) string {
 	type metaProvider interface {
 		GetSourceFileMetaData(path tspath.Path) ast.SourceFileMetaData
 	}
 
-	prog, ok := c.Program().(metaProvider)
+	prog, ok := program.(metaProvider)
 	if !ok || prog == nil {
 		return ""
 	}

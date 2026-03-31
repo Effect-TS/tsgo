@@ -19,11 +19,7 @@ var MissedPipeableOpportunityFix = fixable.Fixable{
 }
 
 func runMissedPipeableOpportunityFix(ctx *fixable.Context) []ls.CodeAction {
-	c, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	if c == nil {
-		return nil
-	}
-	defer done()
+	c := ctx.Checker
 
 	sf := ctx.SourceFile
 

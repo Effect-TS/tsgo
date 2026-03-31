@@ -23,11 +23,7 @@ func runStructuralTypeToSchema(ctx *refactor.Context) []ls.CodeAction {
 		return nil
 	}
 
-	c, done := ctx.GetTypeCheckerForFile(ctx.SourceFile)
-	if c == nil {
-		return nil
-	}
-	defer done()
+	c := ctx.Checker
 
 	version := typeparser.SupportedEffectVersion(c)
 
