@@ -38,7 +38,7 @@ func runMissingEffectErrorCatchFix(ctx *fixable.Context) []ls.CodeAction {
 	var catchCandidate *fixCandidate
 	var taggedCandidate *fixCandidate
 
-	matches := rules.AnalyzeMissingEffectError(c, sf)
+	matches := rules.AnalyzeMissingEffectError(ctx.TypeParser, c, sf)
 	for _, match := range matches {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue

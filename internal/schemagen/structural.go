@@ -52,12 +52,12 @@ type processingContext struct {
 }
 
 // NewStructuralSchemaGen creates a StructuralSchemaGen for type-checker-based schema generation.
-func NewStructuralSchemaGen(tracker *change.Tracker, sf *ast.SourceFile, c *checker.Checker, version typeparser.EffectMajorVersion) *StructuralSchemaGen {
+func NewStructuralSchemaGen(tracker *change.Tracker, tp *typeparser.TypeParser, sf *ast.SourceFile, c *checker.Checker, version typeparser.EffectMajorVersion) *StructuralSchemaGen {
 	return &StructuralSchemaGen{
 		Tracker:               tracker,
 		SourceFile:            sf,
 		Checker:               c,
-		TypeParser:            typeparser.NewTypeParser(c.Program(), c),
+		TypeParser:            tp,
 		SchemaIdentifier:      typeparser.FindModuleIdentifier(sf, "Schema"),
 		Version:               version,
 		hoistedSchemas:        make(map[checker.TypeId]hoistedEntry),

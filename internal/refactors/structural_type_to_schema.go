@@ -49,7 +49,7 @@ func runStructuralTypeToSchema(ctx *refactor.Context) []ls.CodeAction {
 	action := ctx.NewRefactorAction(refactor.RefactorAction{
 		Description: "Refactor to Schema (Recursive Structural)",
 		Run: func(tracker *change.Tracker) {
-			gen := schemagen.NewStructuralSchemaGen(tracker, ctx.SourceFile, c, version)
+			gen := schemagen.NewStructuralSchemaGen(tracker, ctx.TypeParser, ctx.SourceFile, c, version)
 			typeMap := map[string]*checker.Type{typeName: t}
 			stmts := gen.Process(typeMap, matchedNode, isExported)
 			for i := len(stmts) - 1; i >= 0; i-- {

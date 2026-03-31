@@ -25,7 +25,7 @@ var MissingEffectError = rule.Rule{
 	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Missing_errors_0_in_the_expected_Effect_type_effect_missingEffectError.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
-		matches := AnalyzeMissingEffectError(ctx.Checker, ctx.SourceFile)
+		matches := AnalyzeMissingEffectError(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
 			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Missing_errors_0_in_the_expected_Effect_type_effect_missingEffectError, nil, m.ErrorTypeStr)
@@ -47,9 +47,8 @@ type MissingEffectErrorMatch struct {
 
 // AnalyzeMissingEffectError finds all relation errors where an Effect has error
 // types that are not handled by the expected type.
-func AnalyzeMissingEffectError(c *checker.Checker, sf *ast.SourceFile) []MissingEffectErrorMatch {
+func AnalyzeMissingEffectError(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []MissingEffectErrorMatch {
 	var matches []MissingEffectErrorMatch
-	tp := typeparser.NewTypeParser(c.Program(), c)
 
 	for _, re := range c.GetRelationErrors(sf) {
 		// Parse both types as Effects
