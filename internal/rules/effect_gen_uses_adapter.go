@@ -3,7 +3,6 @@ package rules
 import (
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
-	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
 )
@@ -42,7 +41,7 @@ var EffectGenUsesAdapter = rule.Rule{
 }
 
 func checkEffectGenUsesAdapter(ctx *rule.Context, n *ast.Node) *ast.Diagnostic {
-	genResult := typeparser.EffectGenCall(ctx.Checker, n)
+	genResult := ctx.TypeParser.EffectGenCall(n)
 	if genResult == nil {
 		return nil
 	}

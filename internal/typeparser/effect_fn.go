@@ -3,7 +3,6 @@ package typeparser
 
 import (
 	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
 )
 
 func firstEffectFnFunctionArgument(args []*ast.Node) (*ast.Node, int) {
@@ -30,12 +29,13 @@ func isGeneratorFunctionNode(node *ast.Node) bool {
 // EffectFnCall parses a node as Effect.fn(<regularFn>) or Effect.fn("name")(<regularFn>).
 // It matches only non-generator variants (arrow function or function expression without asteriskToken).
 // Returns nil when the node is not an Effect.fn non-generator call.
-func EffectFnCall(c *checker.Checker, node *ast.Node) *EffectFnCallResult {
-	if c == nil || node == nil || node.Kind != ast.KindCallExpression {
+func (tp *TypeParser) EffectFnCall(node *ast.Node) *EffectFnCallResult {
+	if tp == nil || tp.checker == nil || node == nil || node.Kind != ast.KindCallExpression {
 		return nil
 	}
+	c := tp.checker
 
-	links := GetEffectLinks(c)
+	links := tp.GetEffectLinks()
 	return Cached(&links.EffectFnCall, node, func() *EffectFnCallResult {
 		call := node.AsCallExpression()
 		if call == nil || call.Arguments == nil || len(call.Arguments.Nodes) == 0 {
@@ -77,7 +77,7 @@ func EffectFnCall(c *checker.Checker, node *ast.Node) *EffectFnCallResult {
 			return nil
 		}
 
-		if !IsNodeReferenceToEffectModuleApi(c, expressionToCheck, "fn") {
+		if !(&TypeParser{program: c.Program(), checker: c}).IsNodeReferenceToEffectModuleApi(expressionToCheck, "fn") {
 			return nil
 		}
 

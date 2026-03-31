@@ -23,7 +23,7 @@ var ScopeInLayerEffect = rule.Rule{
 	SupportedEffect: []string{"v3"},
 	Codes:           []int32{tsdiag.Seems_like_you_are_constructing_a_layer_with_a_scope_in_the_requirements_Consider_using_scoped_instead_to_get_rid_of_the_scope_in_the_requirements_effect_scopeInLayerEffect.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
-		matches := AnalyzeScopeInLayerEffect(ctx.Checker, ctx.SourceFile)
+		matches := AnalyzeScopeInLayerEffect(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
 			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Seems_like_you_are_constructing_a_layer_with_a_scope_in_the_requirements_Consider_using_scoped_instead_to_get_rid_of_the_scope_in_the_requirements_effect_scopeInLayerEffect, nil)
@@ -42,9 +42,9 @@ type ScopeInLayerEffectMatch struct {
 
 // AnalyzeScopeInLayerEffect finds all Layer.effect*() calls and class declarations
 // with Default layer properties where Scope is in the layer's requirements.
-func AnalyzeScopeInLayerEffect(c *checker.Checker, sf *ast.SourceFile) []ScopeInLayerEffectMatch {
+func AnalyzeScopeInLayerEffect(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []ScopeInLayerEffectMatch {
 	// V3-only rule
-	if typeparser.SupportedEffectVersion(c) != typeparser.EffectMajorV3 {
+	if tp.SupportedEffectVersion() != typeparser.EffectMajorV3 {
 		return nil
 	}
 
@@ -64,7 +64,7 @@ func AnalyzeScopeInLayerEffect(c *checker.Checker, sf *ast.SourceFile) []ScopeIn
 
 		// Pattern 1: Layer.effect*() calls
 		if node.Kind == ast.KindCallExpression {
-			if m := matchLayerEffectCall(c, sf, node); m != nil {
+			if m := matchLayerEffectCall(tp, c, sf, node); m != nil {
 				matches = append(matches, *m)
 				continue // skip children
 			}
@@ -72,7 +72,7 @@ func AnalyzeScopeInLayerEffect(c *checker.Checker, sf *ast.SourceFile) []ScopeIn
 
 		// Pattern 2: Class declarations with Default layer property
 		if node.Kind == ast.KindClassDeclaration {
-			if m := matchClassWithDefaultLayer(c, sf, node); m != nil {
+			if m := matchClassWithDefaultLayer(tp, c, sf, node); m != nil {
 				matches = append(matches, *m)
 				continue // skip children
 			}
@@ -86,7 +86,7 @@ func AnalyzeScopeInLayerEffect(c *checker.Checker, sf *ast.SourceFile) []ScopeIn
 }
 
 // matchLayerEffectCall checks if a call expression is Layer.effect*() with Scope in RIn.
-func matchLayerEffectCall(c *checker.Checker, sf *ast.SourceFile, node *ast.Node) *ScopeInLayerEffectMatch {
+func matchLayerEffectCall(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile, node *ast.Node) *ScopeInLayerEffectMatch {
 	if node.Kind != ast.KindCallExpression {
 		return nil
 	}
@@ -107,24 +107,24 @@ func matchLayerEffectCall(c *checker.Checker, sf *ast.SourceFile, node *ast.Node
 	}
 
 	// Verify this references the Layer module from the "effect" package
-	if !typeparser.IsNodeReferenceToEffectLayerModuleApi(c, call.Expression, methodName) {
+	if !tp.IsNodeReferenceToEffectLayerModuleApi(call.Expression, methodName) {
 		return nil
 	}
 
 	// Get the return type of the call
-	t := typeparser.GetTypeAtLocation(c, node)
+	t := tp.GetTypeAtLocation(node)
 	if t == nil {
 		return nil
 	}
 
 	// Parse as Layer type
-	layer := typeparser.LayerType(c, t, node)
+	layer := tp.LayerType(t, node)
 	if layer == nil {
 		return nil
 	}
 
 	// Check if RIn contains a Scope type
-	if !hasScope(c, layer.RIn, node) {
+	if !hasScope(tp, c, layer.RIn, node) {
 		return nil
 	}
 
@@ -136,7 +136,7 @@ func matchLayerEffectCall(c *checker.Checker, sf *ast.SourceFile, node *ast.Node
 }
 
 // matchClassWithDefaultLayer checks if a class declaration has a Default layer property with Scope in RIn.
-func matchClassWithDefaultLayer(c *checker.Checker, sf *ast.SourceFile, node *ast.Node) *ScopeInLayerEffectMatch {
+func matchClassWithDefaultLayer(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile, node *ast.Node) *ScopeInLayerEffectMatch {
 	if node.Kind != ast.KindClassDeclaration {
 		return nil
 	}
@@ -172,13 +172,13 @@ func matchClassWithDefaultLayer(c *checker.Checker, sf *ast.SourceFile, node *as
 	}
 
 	// Parse as Layer type
-	layer := typeparser.LayerType(c, defaultType, node)
+	layer := tp.LayerType(defaultType, node)
 	if layer == nil {
 		return nil
 	}
 
 	// Check if RIn contains a Scope type
-	if !hasScope(c, layer.RIn, node) {
+	if !hasScope(tp, c, layer.RIn, node) {
 		return nil
 	}
 
@@ -190,10 +190,10 @@ func matchClassWithDefaultLayer(c *checker.Checker, sf *ast.SourceFile, node *as
 }
 
 // hasScope checks if any union member of the given type is a Scope type.
-func hasScope(c *checker.Checker, t *checker.Type, atLocation *ast.Node) bool {
+func hasScope(tp *typeparser.TypeParser, _ *checker.Checker, t *checker.Type, atLocation *ast.Node) bool {
 	members := typeparser.UnrollUnionMembers(t)
 	for _, member := range members {
-		if typeparser.IsScopeType(c, member, atLocation) {
+		if tp.IsScopeType(member, atLocation) {
 			return true
 		}
 	}

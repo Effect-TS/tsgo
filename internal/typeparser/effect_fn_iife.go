@@ -3,17 +3,17 @@ package typeparser
 
 import (
 	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
 )
 
 // ParseEffectFnIife parses a node as an Effect.fn(...)() or Effect.fnUntraced(...)() IIFE.
 // The node must be the outer call expression. Returns nil if no match.
-func ParseEffectFnIife(c *checker.Checker, node *ast.Node) *EffectFnIifeResult {
-	if c == nil || node == nil || node.Kind != ast.KindCallExpression {
+func (tp *TypeParser) ParseEffectFnIife(node *ast.Node) *EffectFnIifeResult {
+	if tp == nil || tp.checker == nil || node == nil || node.Kind != ast.KindCallExpression {
 		return nil
 	}
+	c := tp.checker
 
-	links := GetEffectLinks(c)
+	links := tp.GetEffectLinks()
 	return Cached(&links.ParseEffectFnIife, node, func() *EffectFnIifeResult {
 		outerCall := node.AsCallExpression()
 		if outerCall == nil || outerCall.Expression == nil {
@@ -33,7 +33,8 @@ func ParseEffectFnIife(c *checker.Checker, node *ast.Node) *EffectFnIifeResult {
 
 		// Try generator parsers first (priority order per spec)
 		// a. Effect.fn generator
-		if result := EffectFnGenCall(c, innerNode); result != nil {
+		tp := &TypeParser{program: c.Program(), checker: c}
+		if result := tp.EffectFnGenCall(innerNode); result != nil {
 			pipeArgs, traceExpr := extractGenCallExtras(innerCall, result.GeneratorFunction)
 			return &EffectFnIifeResult{
 				OuterCall:         outerCall,
@@ -47,7 +48,7 @@ func ParseEffectFnIife(c *checker.Checker, node *ast.Node) *EffectFnIifeResult {
 		}
 
 		// b. Effect.fnUntraced generator
-		if result := EffectFnUntracedGenCall(c, innerNode); result != nil {
+		if result := tp.EffectFnUntracedGenCall(innerNode); result != nil {
 			pipeArgs, _ := extractGenCallExtras(innerCall, result.GeneratorFunction)
 			return &EffectFnIifeResult{
 				OuterCall:         outerCall,
@@ -61,7 +62,7 @@ func ParseEffectFnIife(c *checker.Checker, node *ast.Node) *EffectFnIifeResult {
 		}
 
 		// c. Effect.fnUntracedEager generator
-		if result := EffectFnUntracedEagerGenCall(c, innerNode); result != nil {
+		if result := tp.EffectFnUntracedEagerGenCall(innerNode); result != nil {
 			pipeArgs, _ := extractGenCallExtras(innerCall, result.GeneratorFunction)
 			return &EffectFnIifeResult{
 				OuterCall:         outerCall,
@@ -75,7 +76,7 @@ func ParseEffectFnIife(c *checker.Checker, node *ast.Node) *EffectFnIifeResult {
 		}
 
 		// d. Effect.fn non-generator
-		if result := EffectFnCall(c, innerNode); result != nil {
+		if result := tp.EffectFnCall(innerNode); result != nil {
 			return &EffectFnIifeResult{
 				OuterCall:       outerCall,
 				InnerCall:       innerCall,

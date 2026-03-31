@@ -21,7 +21,7 @@ var EffectFnIife = rule.Rule{
 	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.X_0_1_returns_a_reusable_function_that_can_take_arguments_but_here_it_s_called_immediately_Use_Effect_gen_instead_2_effect_effectFnIife.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
-		matches := AnalyzeEffectFnIife(ctx.Checker, ctx.SourceFile)
+		matches := AnalyzeEffectFnIife(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
 			result := m.Result
@@ -50,7 +50,7 @@ type EffectFnIifeMatch struct {
 
 // AnalyzeEffectFnIife finds all Effect.fn or Effect.fnUntraced calls that are
 // immediately invoked (IIFE pattern) in the given source file.
-func AnalyzeEffectFnIife(c *checker.Checker, sf *ast.SourceFile) []EffectFnIifeMatch {
+func AnalyzeEffectFnIife(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile) []EffectFnIifeMatch {
 	var matches []EffectFnIifeMatch
 
 	var walk ast.Visitor
@@ -59,7 +59,7 @@ func AnalyzeEffectFnIife(c *checker.Checker, sf *ast.SourceFile) []EffectFnIifeM
 			return false
 		}
 
-		if result := typeparser.ParseEffectFnIife(c, n); result != nil {
+		if result := tp.ParseEffectFnIife(n); result != nil {
 			matches = append(matches, EffectFnIifeMatch{
 				SourceFile: sf,
 				Location:   scanner.GetErrorRangeForNode(sf, result.OuterCall.AsNode()),

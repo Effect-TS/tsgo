@@ -25,7 +25,7 @@ func runEffectFnIifeFix(ctx *fixable.Context) []ls.CodeAction {
 	sf := ctx.SourceFile
 
 	// Use shared analysis to find all IIFE matches, then find the one at the diagnostic span
-	matches := rules.AnalyzeEffectFnIife(c, sf)
+	matches := rules.AnalyzeEffectFnIife(ctx.TypeParser, c, sf)
 	var result *typeparser.EffectFnIifeResult
 	for _, match := range matches {
 		diagRange := match.Location

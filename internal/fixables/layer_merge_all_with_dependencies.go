@@ -23,7 +23,7 @@ func runLayerMergeAllWithDependenciesFix(ctx *fixable.Context) []ls.CodeAction {
 
 	sf := ctx.SourceFile
 
-	matches := rules.AnalyzeLayerMergeAllWithDependencies(c, sf)
+	matches := rules.AnalyzeLayerMergeAllWithDependencies(ctx.TypeParser, c, sf)
 	for _, match := range matches {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue

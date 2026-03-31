@@ -26,14 +26,14 @@ type Context struct {
 	Options    *etscore.ResolvedEffectPluginOptions
 	Program    *compiler.Program
 	Checker    *checker.Checker
-	TypeParser typeparser.TypeParser
+	TypeParser *typeparser.TypeParser
 
 	Context context.Context
 	fixCtx  *ls.CodeFixContext
 }
 
 // NewContext creates a fixable Context from the standard code-fix request parameters.
-func NewContext(ctx context.Context, fixCtx *ls.CodeFixContext, options *etscore.ResolvedEffectPluginOptions, checker *checker.Checker, tp typeparser.TypeParser) *Context {
+func NewContext(ctx context.Context, fixCtx *ls.CodeFixContext, options *etscore.ResolvedEffectPluginOptions, checker *checker.Checker, tp *typeparser.TypeParser) *Context {
 	if fixCtx == nil || fixCtx.Program == nil {
 		panic("fixable.NewContext: nil program")
 	}

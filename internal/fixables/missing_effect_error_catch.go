@@ -63,7 +63,7 @@ func runMissingEffectErrorCatchFix(ctx *fixable.Context) []ls.CodeAction {
 		}
 
 		// Offer catchTags only when all missing error members have a literal _tag.
-		if tags, ok := collectLiteralMissingErrorTags(c, errorExpr, match.UnhandledErrors); ok {
+		if tags, ok := collectLiteralMissingErrorTags(ctx.TypeParser, c, errorExpr, match.UnhandledErrors); ok {
 			if taggedCandidate == nil || nodeStartPos < taggedCandidate.start || (nodeStartPos == taggedCandidate.start && nodeEndPos < taggedCandidate.end) {
 				taggedCandidate = &fixCandidate{
 					start: nodeStartPos,
@@ -78,7 +78,7 @@ func runMissingEffectErrorCatchFix(ctx *fixable.Context) []ls.CodeAction {
 
 	if catchCandidate != nil {
 		methodName := "catch"
-		if typeparser.SupportedEffectVersion(c) == typeparser.EffectMajorV3 {
+		if ctx.TypeParser.SupportedEffectVersion() == typeparser.EffectMajorV3 {
 			methodName = "catchAll"
 		}
 
@@ -111,7 +111,7 @@ func runMissingEffectErrorCatchFix(ctx *fixable.Context) []ls.CodeAction {
 	return actions
 }
 
-func collectLiteralMissingErrorTags(c *checker.Checker, atLocation *ast.Node, missing []*checker.Type) ([]string, bool) {
+func collectLiteralMissingErrorTags(tp *typeparser.TypeParser, c *checker.Checker, atLocation *ast.Node, missing []*checker.Type) ([]string, bool) {
 	if len(missing) == 0 {
 		return nil, false
 	}
@@ -121,7 +121,7 @@ func collectLiteralMissingErrorTags(c *checker.Checker, atLocation *ast.Node, mi
 	for _, missingType := range missing {
 		tagProp := c.GetPropertyOfType(missingType, "_tag")
 		if tagProp == nil {
-			tagProp = typeparser.GetPropertyOfTypeByName(c, missingType, "_tag")
+			tagProp = tp.GetPropertyOfTypeByName(missingType, "_tag")
 		}
 		if tagProp == nil {
 			return nil, false

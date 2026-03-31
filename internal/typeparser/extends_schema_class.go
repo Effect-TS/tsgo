@@ -21,13 +21,13 @@ type SchemaClassResult struct {
 // and the inner call resolves to Schema.Class.
 //
 // Returns nil if the class does not extend Schema.Class.
-func ExtendsSchemaClass(c *checker.Checker, classNode *ast.Node) *SchemaClassResult {
-	if c == nil || classNode == nil {
+func (tp *TypeParser) ExtendsSchemaClass(classNode *ast.Node) *SchemaClassResult {
+	if tp == nil || tp.checker == nil || classNode == nil {
 		return nil
 	}
-	links := GetEffectLinks(c)
+	links := tp.GetEffectLinks()
 	return Cached(&links.ExtendsSchemaClass, classNode, func() *SchemaClassResult {
-		return extendsSchemaClassLike(c, classNode, "Class")
+		return extendsSchemaClassLike(tp.checker, classNode, "Class")
 	})
 }
 
@@ -35,13 +35,13 @@ func ExtendsSchemaClass(c *checker.Checker, classNode *ast.Node) *SchemaClassRes
 // Same double-call pattern as ExtendsSchemaClass but for Schema.RequestClass.
 //
 // Returns nil if the class does not extend Schema.RequestClass.
-func ExtendsSchemaRequestClass(c *checker.Checker, classNode *ast.Node) *SchemaClassResult {
-	if c == nil || classNode == nil {
+func (tp *TypeParser) ExtendsSchemaRequestClass(classNode *ast.Node) *SchemaClassResult {
+	if tp == nil || tp.checker == nil || classNode == nil {
 		return nil
 	}
-	links := GetEffectLinks(c)
+	links := tp.GetEffectLinks()
 	return Cached(&links.ExtendsSchemaRequestClass, classNode, func() *SchemaClassResult {
-		return extendsSchemaClassLike(c, classNode, "RequestClass")
+		return extendsSchemaClassLike(tp.checker, classNode, "RequestClass")
 	})
 }
 
@@ -100,7 +100,7 @@ func extendsSchemaClassLike(c *checker.Checker, classNode *ast.Node, memberName 
 		if innerCall.Expression == nil {
 			continue
 		}
-		if !IsNodeReferenceToEffectSchemaModuleApi(c, innerCall.Expression, memberName) {
+		if !(&TypeParser{program: c.Program(), checker: c}).IsNodeReferenceToEffectSchemaModuleApi(innerCall.Expression, memberName) {
 			continue
 		}
 

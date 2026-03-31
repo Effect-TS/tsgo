@@ -36,7 +36,7 @@ var SchemaSyncInEffect = rule.Rule{
 	SupportedEffect: []string{"v3"},
 	Codes:           []int32{tsdiag.Using_0_inside_an_Effect_generator_is_not_recommended_Use_Schema_1_instead_to_get_properly_typed_error_channel_effect_schemaSyncInEffect.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
-		version := typeparser.SupportedEffectVersion(ctx.Checker)
+		version := ctx.TypeParser.SupportedEffectVersion()
 		var syncToEffectMethod map[string]string
 		if version == typeparser.EffectMajorV4 {
 			syncToEffectMethod = syncToEffectMethodV4
@@ -77,16 +77,16 @@ func checkSchemaSyncInEffect(ctx *rule.Context, node *ast.Node, syncToEffectMeth
 	callee := call.Expression
 
 	// Check if the callee is one of the Schema sync methods (try both ParseResult and SchemaParser modules)
-	methodName := matchSchemaSyncMethod(ctx.Checker, callee, syncToEffectMethod)
+	methodName := matchSchemaSyncMethod(ctx.TypeParser, ctx.Checker, callee, syncToEffectMethod)
 	if methodName == "" {
 		return nil
 	}
 
-	if typeparser.GetEffectContextFlags(ctx.Checker, node)&typeparser.EffectContextFlagCanYieldEffect == 0 {
+	if ctx.TypeParser.GetEffectContextFlags(node)&typeparser.EffectContextFlagCanYieldEffect == 0 {
 		return nil
 	}
 
-	genFn := typeparser.GetEffectYieldGeneratorFunction(ctx.Checker, node)
+	genFn := ctx.TypeParser.GetEffectYieldGeneratorFunction(node)
 	if genFn == nil {
 		return nil
 	}
@@ -108,12 +108,12 @@ func checkSchemaSyncInEffect(ctx *rule.Context, node *ast.Node, syncToEffectMeth
 
 // matchSchemaSyncMethod checks if the node references one of the Schema sync methods via
 // either the ParseResult module (V3) or the SchemaParser module (V4).
-func matchSchemaSyncMethod(c *checker.Checker, node *ast.Node, syncToEffectMethod map[string]string) string {
+func matchSchemaSyncMethod(tp *typeparser.TypeParser, _ *checker.Checker, node *ast.Node, syncToEffectMethod map[string]string) string {
 	for methodName := range syncToEffectMethod {
-		if typeparser.IsNodeReferenceToEffectParseResultModuleApi(c, node, methodName) {
+		if tp.IsNodeReferenceToEffectParseResultModuleApi(node, methodName) {
 			return methodName
 		}
-		if typeparser.IsNodeReferenceToEffectSchemaParserModuleApi(c, node, methodName) {
+		if tp.IsNodeReferenceToEffectSchemaParserModuleApi(node, methodName) {
 			return methodName
 		}
 	}

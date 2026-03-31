@@ -41,15 +41,15 @@ func (v EffectMajorVersion) String() string {
 // DetectEffectVersion detects the major version of the Effect library from the program's
 // source files. Returns EffectMajorUnknown if no Effect dependency is found or if
 // conflicting versions are detected. The result is cached per checker lifetime.
-func DetectEffectVersion(c *checker.Checker) EffectMajorVersion {
-	if c == nil {
+func (tp *TypeParser) DetectEffectVersion() EffectMajorVersion {
+	if tp == nil || tp.checker == nil {
 		return EffectMajorUnknown
 	}
-	links := GetEffectLinks(c)
+	links := tp.GetEffectLinks()
 	if links.detectEffectVersionComputed {
 		return links.detectEffectVersionValue
 	}
-	result := detectEffectVersionUncached(c)
+	result := detectEffectVersionUncached(tp.checker)
 	links.detectEffectVersionValue = result
 	links.detectEffectVersionComputed = true
 	return result
@@ -57,7 +57,7 @@ func DetectEffectVersion(c *checker.Checker) EffectMajorVersion {
 
 // detectEffectVersionUncached performs the actual version detection logic.
 func detectEffectVersionUncached(c *checker.Checker) EffectMajorVersion {
-	packages := DiscoverPackages(c)
+	packages := (&TypeParser{program: c.Program(), checker: c}).DiscoverPackages()
 
 	var detected EffectMajorVersion
 	found := false
@@ -102,16 +102,16 @@ func detectEffectVersionUncached(c *checker.Checker) EffectMajorVersion {
 // It returns EffectMajorV4 when v4 is detected, and EffectMajorV3 for all other
 // outcomes (including unknown). This is the central extension point for future
 // compiler-option-based version forcing. The result is cached per checker lifetime.
-func SupportedEffectVersion(c *checker.Checker) EffectMajorVersion {
-	if c == nil {
+func (tp TypeParser) SupportedEffectVersion() EffectMajorVersion {
+	if tp.checker == nil {
 		return EffectMajorV3
 	}
-	links := GetEffectLinks(c)
+	links := tp.GetEffectLinks()
 	if links.supportedEffectVersionComputed {
 		return links.supportedEffectVersionValue
 	}
 	var result EffectMajorVersion
-	if DetectEffectVersion(c) == EffectMajorV4 {
+	if tp.DetectEffectVersion() == EffectMajorV4 {
 		result = EffectMajorV4
 	} else {
 		result = EffectMajorV3
@@ -124,8 +124,11 @@ func SupportedEffectVersion(c *checker.Checker) EffectMajorVersion {
 // DetectEffectVersionString returns the exact version string of the Effect library.
 // Returns "unknown" if no Effect dependency is found, if the version is nil, or if
 // conflicting versions are detected.
-func DetectEffectVersionString(c *checker.Checker) string {
-	packages := DiscoverPackages(c)
+func (tp *TypeParser) DetectEffectVersionString() string {
+	if tp == nil || tp.checker == nil {
+		return "unknown"
+	}
+	packages := tp.DiscoverPackages()
 
 	var detected string
 	found := false
@@ -154,17 +157,17 @@ func DetectEffectVersionString(c *checker.Checker) string {
 // Results are cached per checker so repeated calls within the same check cycle
 // (from DetectEffectVersion, DetectEffectVersionString, duplicatePackage rule, etc.)
 // do not re-scan all source files.
-func DiscoverPackages(c *checker.Checker) []DiscoveredPackage {
-	if c == nil {
+func (tp *TypeParser) DiscoverPackages() []DiscoveredPackage {
+	if tp == nil || tp.checker == nil {
 		return nil
 	}
 
-	links := GetEffectLinks(c)
+	links := tp.GetEffectLinks()
 	if links.discoverPackagesComputed {
 		return links.discoverPackagesValue
 	}
 
-	result := discoverPackagesUncached(c)
+	result := discoverPackagesUncached(tp.checker)
 	links.discoverPackagesValue = result
 	links.discoverPackagesComputed = true
 	return result
@@ -181,13 +184,14 @@ func discoverPackagesUncached(c *checker.Checker) []DiscoveredPackage {
 
 	seen := make(map[packageKey]struct{})
 	var result []DiscoveredPackage
+	tp := &TypeParser{program: c.Program(), checker: c}
 
 	for _, sf := range prog.SourceFiles() {
 		if sf == nil {
 			continue
 		}
 
-		pkg := PackageJsonForSourceFile(c, sf)
+		pkg := tp.PackageJsonForSourceFile(sf)
 		if pkg == nil {
 			continue
 		}

@@ -28,9 +28,6 @@ func runEffectDataClasses(ctx *completion.Context) []*lsproto.CompletionItem {
 	isFullyQualified := dataIdentifier == accessedText
 	className := data.ClassNameText()
 
-	// Get checker for API reference checks
-	ch := ctx.Checker
-
 	// Build replacement range from byte offsets
 	replacementRange := byteSpanToRange(ctx, data.ReplacementStart, data.ReplacementLength)
 
@@ -38,7 +35,7 @@ func runEffectDataClasses(ctx *completion.Context) []*lsproto.CompletionItem {
 	var items []*lsproto.CompletionItem
 
 	// Data.TaggedError
-	if isFullyQualified || typeparser.IsNodeReferenceToEffectDataModuleApi(ch, data.AccessedObject, "TaggedError") {
+	if isFullyQualified || ctx.TypeParser.IsNodeReferenceToEffectDataModuleApi(data.AccessedObject, "TaggedError") {
 		var insertText string
 		if isFullyQualified {
 			insertText = fmt.Sprintf(`%s.TaggedError("%s")<{${0}}>{}`, dataIdentifier, className)
@@ -52,7 +49,7 @@ func runEffectDataClasses(ctx *completion.Context) []*lsproto.CompletionItem {
 	}
 
 	// Data.TaggedClass
-	if isFullyQualified || typeparser.IsNodeReferenceToEffectDataModuleApi(ch, data.AccessedObject, "TaggedClass") {
+	if isFullyQualified || ctx.TypeParser.IsNodeReferenceToEffectDataModuleApi(data.AccessedObject, "TaggedClass") {
 		var insertText string
 		if isFullyQualified {
 			insertText = fmt.Sprintf(`%s.TaggedClass("%s")<{${0}}>{}`, dataIdentifier, className)

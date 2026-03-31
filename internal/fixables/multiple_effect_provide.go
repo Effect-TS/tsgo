@@ -27,7 +27,7 @@ func runMultipleEffectProvideFix(ctx *fixable.Context) []ls.CodeAction {
 
 	var actions []ls.CodeAction
 
-	matches := rules.AnalyzeMultipleEffectProvide(c, sf)
+	matches := rules.AnalyzeMultipleEffectProvide(ctx.TypeParser, c, sf)
 	for _, match := range matches {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue

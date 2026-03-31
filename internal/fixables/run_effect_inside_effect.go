@@ -32,7 +32,7 @@ func runRunEffectInsideEffectFix(ctx *fixable.Context) []ls.CodeAction {
 	sf := ctx.SourceFile
 	supportedEffect := tp.SupportedEffectVersion()
 
-	matches := rules.AnalyzeRunEffectInsideEffect(c, sf)
+	matches := rules.AnalyzeRunEffectInsideEffect(ctx.TypeParser, c, sf)
 	for _, match := range matches {
 		if !match.IsNestedScope {
 			continue

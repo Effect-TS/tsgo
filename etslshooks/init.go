@@ -205,7 +205,7 @@ func afterQuickInfo(program checker.Program, c *checker.Checker, sf *ast.SourceF
 	// Only activate layer hover enrichment when the cursor is on the name of the declaration,
 	// not on arbitrary nodes within the initializer expression.
 	if tp.IsLayerType(t, node) && isDeclarationName(node) {
-		documentation = formatLayerHover(c, sf, node, t, documentation, isMarkdown, effectConfig)
+		documentation = formatLayerHover(tp, c, sf, node, t, documentation, isMarkdown, effectConfig)
 		return quickInfo, documentation, nil
 	}
 
@@ -221,7 +221,7 @@ func afterQuickInfo(program checker.Program, c *checker.Checker, sf *ast.SourceF
 
 // formatLayerHover builds the Layer hover documentation including providers/requirers
 // summary, Mermaid diagram links, and Layer type parameters.
-func formatLayerHover(c *checker.Checker, sf *ast.SourceFile, node *ast.Node, _ *checker.Type, documentation string, isMarkdown bool, effectConfig *etscore.EffectPluginOptions) string {
+func formatLayerHover(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile, node *ast.Node, _ *checker.Type, documentation string, isMarkdown bool, effectConfig *etscore.EffectPluginOptions) string {
 	// Try to resolve the initializer expression for layer graph extraction.
 	var initializer *ast.Node
 	if node.Parent != nil {
@@ -240,7 +240,7 @@ func formatLayerHover(c *checker.Checker, sf *ast.SourceFile, node *ast.Node, _ 
 		opts := layergraph.ExtractLayerGraphOptions{
 			FollowSymbolsDepth: effectConfig.GetLayerGraphFollowDepth(),
 		}
-		fullGraph := layergraph.ExtractLayerGraph(c, initializer, sf, opts)
+		fullGraph := layergraph.ExtractLayerGraph(tp, c, initializer, sf, opts)
 		info := layergraph.ExtractProvidersAndRequirers(c, fullGraph)
 		quickInfoSummary = layergraph.FormatQuickInfo(c, info, sf)
 		hasGraph = true

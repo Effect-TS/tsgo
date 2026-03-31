@@ -28,7 +28,7 @@ type schemaVarInfo struct {
 
 // findSchemaVariableDeclaration walks the ancestor chain from the cursor to find a
 // VariableDeclaration whose initializer has a Schema type. Returns nil if not found.
-func findSchemaVariableDeclaration(ctx *refactor.Context, c *checker.Checker) *schemaVarInfo {
+func findSchemaVariableDeclaration(ctx *refactor.Context, _ *checker.Checker) *schemaVarInfo {
 	token := astnav.GetTokenAtPosition(ctx.SourceFile, ctx.Span.Pos())
 	if token == nil {
 		return nil
@@ -70,12 +70,12 @@ func findSchemaVariableDeclaration(ctx *refactor.Context, c *checker.Checker) *s
 		}
 
 		// Check the initializer's type is a Schema type
-		initType := typeparser.GetTypeAtLocation(c, varDecl.Initializer)
+		initType := ctx.TypeParser.GetTypeAtLocation(varDecl.Initializer)
 		if initType == nil {
 			continue
 		}
 
-		schemaTypes := typeparser.EffectSchemaTypes(c, initType, varDecl.Initializer)
+		schemaTypes := ctx.TypeParser.EffectSchemaTypes(initType, varDecl.Initializer)
 		if schemaTypes == nil {
 			continue
 		}
@@ -204,7 +204,7 @@ func runMakeSchemaOpaque(ctx *refactor.Context) []ls.CodeAction {
 		return nil
 	}
 
-	version := typeparser.SupportedEffectVersion(c)
+	version := ctx.TypeParser.SupportedEffectVersion()
 	isV4 := version == typeparser.EffectMajorV4
 
 	action := ctx.NewRefactorAction(refactor.RefactorAction{

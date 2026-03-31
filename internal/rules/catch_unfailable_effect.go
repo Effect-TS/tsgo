@@ -25,10 +25,10 @@ var CatchUnfailableEffect = rule.Rule{
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		var diags []*ast.Diagnostic
 
-		flows := typeparser.PipingFlows(ctx.Checker, ctx.SourceFile, true)
+		flows := ctx.TypeParser.PipingFlows(ctx.SourceFile, true)
 		for _, flow := range flows {
 			for i, transformation := range flow.Transformations {
-				if !isCatchCallee(ctx.Checker, transformation.Callee) {
+				if !isCatchCallee(ctx.TypeParser, ctx.Checker, transformation.Callee) {
 					continue
 				}
 
@@ -44,7 +44,7 @@ var CatchUnfailableEffect = rule.Rule{
 				}
 
 				// Parse input type as an Effect
-				effect := typeparser.EffectType(ctx.Checker, inputType, transformation.Callee)
+				effect := ctx.TypeParser.EffectType(inputType, transformation.Callee)
 				if effect == nil {
 					continue
 				}
@@ -63,9 +63,9 @@ var CatchUnfailableEffect = rule.Rule{
 }
 
 // isCatchCallee checks if a node references one of the Effect module catch functions.
-func isCatchCallee(c *checker.Checker, node *ast.Node) bool {
+func isCatchCallee(tp *typeparser.TypeParser, _ *checker.Checker, node *ast.Node) bool {
 	for _, name := range catchFunctions {
-		if typeparser.IsNodeReferenceToEffectModuleApi(c, node, name) {
+		if tp.IsNodeReferenceToEffectModuleApi(node, name) {
 			return true
 		}
 	}

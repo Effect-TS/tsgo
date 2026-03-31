@@ -19,14 +19,14 @@ type Context struct {
 	ExistingItems []*lsproto.CompletionItem
 	Program       *compiler.Program
 	Checker       *checker.Checker
-	TypeParser    typeparser.TypeParser
+	TypeParser    *typeparser.TypeParser
 
 	Context context.Context
 	ls      *ls.LanguageService
 }
 
 // NewContext creates a completion Context from the completion callback parameters.
-func NewContext(ctx context.Context, sourceFile *ast.SourceFile, position int, existingItems []*lsproto.CompletionItem, program *compiler.Program, langService *ls.LanguageService, checker *checker.Checker, tp typeparser.TypeParser) *Context {
+func NewContext(ctx context.Context, sourceFile *ast.SourceFile, position int, existingItems []*lsproto.CompletionItem, program *compiler.Program, langService *ls.LanguageService, checker *checker.Checker, tp *typeparser.TypeParser) *Context {
 	if program == nil {
 		panic("completion.NewContext: nil program")
 	}

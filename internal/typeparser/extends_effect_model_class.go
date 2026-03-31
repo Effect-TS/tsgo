@@ -2,7 +2,6 @@ package typeparser
 
 import (
 	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
 )
 
 // EffectModelClassResult holds the parsed result of a class extending Model.Class
@@ -21,12 +20,12 @@ type EffectModelClassResult struct {
 // where the ExpressionWithTypeArguments.expression is a CallExpression (outer call)
 // whose own .expression is also a CallExpression (inner call) with type arguments,
 // and the inner call resolves to the effect Model.Class.
-func ExtendsEffectModelClass(c *checker.Checker, classNode *ast.Node) *EffectModelClassResult {
-	if c == nil || classNode == nil {
+func (tp *TypeParser) ExtendsEffectModelClass(classNode *ast.Node) *EffectModelClassResult {
+	if tp == nil || tp.checker == nil || classNode == nil {
 		return nil
 	}
 
-	links := GetEffectLinks(c)
+	links := tp.GetEffectLinks()
 	return Cached(&links.ExtendsEffectModelClass, classNode, func() *EffectModelClassResult {
 		if classNode.Name() == nil {
 			return nil
@@ -72,7 +71,7 @@ func ExtendsEffectModelClass(c *checker.Checker, classNode *ast.Node) *EffectMod
 			if innerCall.Expression == nil {
 				continue
 			}
-			if !IsNodeReferenceToEffectModelModuleApi(c, innerCall.Expression, "Class") {
+			if !tp.IsNodeReferenceToEffectModelModuleApi(innerCall.Expression, "Class") {
 				continue
 			}
 

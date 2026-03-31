@@ -88,7 +88,7 @@ func runServiceMapSelfInClasses(ctx *completion.Context) []*lsproto.CompletionIt
 
 // computeServiceTagKey computes the deterministic tag key for a service class.
 // Falls back to the class name if keybuilder returns empty.
-func computeServiceTagKey(program checker.Program, tp typeparser.TypeParser, ch *checker.Checker, sf *ast.SourceFile, className string) string {
+func computeServiceTagKey(program checker.Program, tp *typeparser.TypeParser, ch *checker.Checker, sf *ast.SourceFile, className string) string {
 	pkgJson := tp.PackageJsonForSourceFile(sf)
 	if pkgJson == nil {
 		return className
@@ -123,7 +123,7 @@ func computeServiceTagKey(program checker.Program, tp typeparser.TypeParser, ch 
 }
 
 // getCompletionPackageJsonDirectory gets the package.json directory for a source file.
-func getCompletionPackageJsonDirectory(program checker.Program, c *checker.Checker, sf *ast.SourceFile) string {
+func getCompletionPackageJsonDirectory(program checker.Program, _ *checker.Checker, sf *ast.SourceFile) string {
 	type metaProvider interface {
 		GetSourceFileMetaData(path tspath.Path) ast.SourceFileMetaData
 	}

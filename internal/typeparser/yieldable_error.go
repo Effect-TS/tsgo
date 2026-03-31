@@ -14,11 +14,11 @@ type sourceFileProgram interface {
 
 // IsYieldableErrorType reports whether the given type is assignable to Cause.YieldableError
 // from the "effect" package. Returns false for never and any types.
-func IsYieldableErrorType(c *checker.Checker, t *checker.Type) bool {
-	if c == nil || t == nil {
+func (tp *TypeParser) IsYieldableErrorType(t *checker.Type) bool {
+	if tp == nil || tp.checker == nil || t == nil {
 		return false
 	}
-	links := GetEffectLinks(c)
+	links := tp.GetEffectLinks()
 	return Cached(&links.IsYieldableErrorType, t, func() bool {
 		// never is assignable to everything, so we need to exclude it
 		if t.Flags()&checker.TypeFlagsNever != 0 {
@@ -29,7 +29,7 @@ func IsYieldableErrorType(c *checker.Checker, t *checker.Type) bool {
 			return false
 		}
 
-		prog, ok := c.Program().(sourceFileProgram)
+		prog, ok := tp.program.(sourceFileProgram)
 		if !ok || prog == nil {
 			return false
 		}
@@ -40,7 +40,7 @@ func IsYieldableErrorType(c *checker.Checker, t *checker.Type) bool {
 			}
 
 			// Check this source file belongs to the "effect" package
-			pkg := PackageJsonForSourceFile(c, sf)
+			pkg := tp.PackageJsonForSourceFile(sf)
 			if pkg == nil {
 				continue
 			}
@@ -49,34 +49,34 @@ func IsYieldableErrorType(c *checker.Checker, t *checker.Type) bool {
 				continue
 			}
 
-			moduleSym := checker.Checker_getSymbolOfDeclaration(c, sf.AsNode())
+			moduleSym := checker.Checker_getSymbolOfDeclaration(tp.checker, sf.AsNode())
 			if moduleSym == nil {
 				continue
 			}
 
 			// Look for the YieldableError export
-			exportSym := c.TryGetMemberInModuleExportsAndProperties("YieldableError", moduleSym)
+			exportSym := tp.checker.TryGetMemberInModuleExportsAndProperties("YieldableError", moduleSym)
 			if exportSym == nil {
 				continue
 			}
 
 			// Verify this is the Cause module by checking for a Cause export
-			causeSym := c.TryGetMemberInModuleExportsAndProperties("Cause", moduleSym)
+			causeSym := tp.checker.TryGetMemberInModuleExportsAndProperties("Cause", moduleSym)
 			if causeSym == nil {
 				continue
 			}
 
-			exportSym = resolveAliasedSymbol(c, exportSym)
+			exportSym = resolveAliasedSymbol(tp.checker, exportSym)
 			if exportSym == nil {
 				continue
 			}
 
-			yieldableErrorType := c.GetDeclaredTypeOfSymbol(exportSym)
+			yieldableErrorType := tp.checker.GetDeclaredTypeOfSymbol(exportSym)
 			if yieldableErrorType == nil {
 				continue
 			}
 
-			if checker.Checker_isTypeAssignableTo(c, t, yieldableErrorType) {
+			if checker.Checker_isTypeAssignableTo(tp.checker, t, yieldableErrorType) {
 				return true
 			}
 		}

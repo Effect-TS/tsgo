@@ -9,8 +9,8 @@ import (
 
 // IsInsideEffectFn checks if a function node is already the first argument
 // of an Effect.fn, Effect.fnGen, or Effect.fnUntraced call.
-func IsInsideEffectFn(c *checker.Checker, fnNode *ast.Node) bool {
-	if c == nil || fnNode == nil {
+func (tp *TypeParser) IsInsideEffectFn(fnNode *ast.Node) bool {
+	if tp == nil || tp.checker == nil || fnNode == nil {
 		return false
 	}
 
@@ -29,13 +29,13 @@ func IsInsideEffectFn(c *checker.Checker, fnNode *ast.Node) bool {
 		return false
 	}
 
-	if EffectFnCall(c, parent) != nil {
+	if tp.EffectFnCall(parent) != nil {
 		return true
 	}
-	if EffectFnGenCall(c, parent) != nil {
+	if tp.EffectFnGenCall(parent) != nil {
 		return true
 	}
-	if EffectFnUntracedGenCall(c, parent) != nil {
+	if tp.EffectFnUntracedGenCall(parent) != nil {
 		return true
 	}
 
@@ -44,14 +44,14 @@ func IsInsideEffectFn(c *checker.Checker, fnNode *ast.Node) bool {
 
 // ParseEffectFnOpportunity detects whether a function node can be converted to Effect.fn.
 // Returns nil if the node is not an eligible candidate.
-func ParseEffectFnOpportunity(c *checker.Checker, node *ast.Node) *EffectFnOpportunityResult {
-	if c == nil || node == nil {
+func (tp *TypeParser) ParseEffectFnOpportunity(node *ast.Node) *EffectFnOpportunityResult {
+	if tp == nil || tp.checker == nil || node == nil {
 		return nil
 	}
 
-	links := GetEffectLinks(c)
+	links := tp.GetEffectLinks()
 	return Cached(&links.ParseEffectFnOpportunity, node, func() *EffectFnOpportunityResult {
-		return parseEffectFnOpportunityInner(c, node)
+		return parseEffectFnOpportunityInner(tp.checker, node)
 	})
 }
 
@@ -93,12 +93,12 @@ func parseEffectFnOpportunityInner(c *checker.Checker, node *ast.Node) *EffectFn
 	}
 
 	// Step 5: Reject if already inside Effect.fn
-	if IsInsideEffectFn(c, node) {
+	if (&TypeParser{program: c.Program(), checker: c}).IsInsideEffectFn(node) {
 		return nil
 	}
 
 	// Step 6: Get function type, require exactly 1 call signature
-	functionType := GetTypeAtLocation(c, node)
+	functionType := TypeParser{checker: c}.GetTypeAtLocation(node)
 	if functionType == nil {
 		return nil
 	}
@@ -116,8 +116,9 @@ func parseEffectFnOpportunityInner(c *checker.Checker, node *ast.Node) *EffectFn
 	if len(unionMembers) == 0 {
 		return nil
 	}
+	tp := &TypeParser{program: c.Program(), checker: c}
 	for _, member := range unionMembers {
-		if StrictEffectType(c, member, node) == nil {
+		if tp.StrictEffectType(member, node) == nil {
 			return nil
 		}
 	}
@@ -234,7 +235,8 @@ func tryParseGenOpportunity(c *checker.Checker, fnNode *ast.Node) *genOpportunit
 	var subject *ast.Node
 	var pipeArgs []*ast.Node
 
-	if pipeResult := ParsePipeCall(c, bodyExpr); pipeResult != nil {
+	tp := &TypeParser{program: c.Program(), checker: c}
+	if pipeResult := tp.ParsePipeCall(bodyExpr); pipeResult != nil {
 		subject = pipeResult.Subject
 		pipeArgs = pipeResult.Args
 	} else {
@@ -297,7 +299,7 @@ func effectGenFirstArgOnly(c *checker.Checker, node *ast.Node) *EffectGenCallRes
 		return nil
 	}
 
-	if !IsNodeReferenceToEffectModuleApi(c, expr, "gen") {
+	if !(&TypeParser{program: c.Program(), checker: c}).IsNodeReferenceToEffectModuleApi(expr, "gen") {
 		return nil
 	}
 
@@ -414,7 +416,7 @@ func tryExtractWithSpanExpression(c *checker.Checker, expr *ast.Node) *ast.Node 
 		return nil
 	}
 
-	if !IsNodeReferenceToEffectModuleApi(c, call.Expression, "withSpan") {
+	if !(&TypeParser{program: c.Program(), checker: c}).IsNodeReferenceToEffectModuleApi(call.Expression, "withSpan") {
 		return nil
 	}
 
@@ -523,13 +525,13 @@ func tryGetLayerApiMethod(c *checker.Checker, node *ast.Node) string {
 	if c == nil || node == nil {
 		return ""
 	}
-	if IsNodeReferenceToEffectLayerModuleApi(c, node, "effect") {
+	if (&TypeParser{program: c.Program(), checker: c}).IsNodeReferenceToEffectLayerModuleApi(node, "effect") {
 		return "effect"
 	}
-	if IsNodeReferenceToEffectLayerModuleApi(c, node, "succeed") {
+	if (&TypeParser{program: c.Program(), checker: c}).IsNodeReferenceToEffectLayerModuleApi(node, "succeed") {
 		return "succeed"
 	}
-	if IsNodeReferenceToEffectLayerModuleApi(c, node, "sync") {
+	if (&TypeParser{program: c.Program(), checker: c}).IsNodeReferenceToEffectLayerModuleApi(node, "sync") {
 		return "sync"
 	}
 	return ""
@@ -662,7 +664,7 @@ func tryMatchLayerEffectInference(c *checker.Checker, objectLiteral *ast.Node) s
 		return ""
 	}
 	// Verify this is actually an Effect.gen call with our generator
-	parsedGen := EffectGenCall(c, genCallNode)
+	parsedGen := (&TypeParser{program: c.Program(), checker: c}).EffectGenCall(genCallNode)
 	if parsedGen == nil || parsedGen.GeneratorFunction != genFn {
 		return ""
 	}
@@ -748,11 +750,12 @@ func tryMatchOfInference(c *checker.Checker, objectLiteral *ast.Node) string {
 	if serviceTagExpression == nil {
 		return ""
 	}
-	serviceTagType := GetTypeAtLocation(c, serviceTagExpression)
+	tp := &TypeParser{program: c.Program(), checker: c}
+	serviceTagType := tp.GetTypeAtLocation(serviceTagExpression)
 	if serviceTagType == nil {
 		return ""
 	}
-	if !IsContextTag(c, serviceTagType, serviceTagExpression) && !IsServiceType(c, serviceTagType, serviceTagExpression) {
+	if !tp.IsContextTag(serviceTagType, serviceTagExpression) && !tp.IsServiceType(serviceTagType, serviceTagExpression) {
 		return ""
 	}
 	return layerServiceNameFromExpression(serviceTagExpression)
@@ -790,7 +793,7 @@ func tryMatchServiceMapMakeInference(c *checker.Checker, objectLiteral *ast.Node
 		return ""
 	}
 	// Verify this is actually an Effect.gen call with our generator
-	parsedGen := EffectGenCall(c, genCallNode)
+	parsedGen := (&TypeParser{program: c.Program(), checker: c}).EffectGenCall(genCallNode)
 	if parsedGen == nil || parsedGen.GeneratorFunction != genFn {
 		return ""
 	}
@@ -818,7 +821,7 @@ func tryMatchServiceMapMakeInference(c *checker.Checker, objectLiteral *ast.Node
 		return ""
 	}
 	// Verify the class extends ServiceMap.Service
-	if ExtendsServiceMapService(c, currentNode) == nil {
+	if (&TypeParser{program: c.Program(), checker: c}).ExtendsServiceMapService(currentNode) == nil {
 		return ""
 	}
 	return scanner.GetTextOfNode(currentNode.Name())

@@ -164,7 +164,7 @@ func getFirstVariableDeclarationType(t *testing.T, c *checker.Checker, sf *ast.S
 		if node.Kind == ast.KindVariableDeclaration {
 			nameNode := node.AsVariableDeclaration().Name()
 			if nameNode != nil {
-				typ := GetTypeAtLocation(c, nameNode)
+				typ := TypeParser{checker: c}.GetTypeAtLocation(nameNode)
 				return typ, node
 			}
 		}

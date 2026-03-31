@@ -2,7 +2,6 @@ package completions
 
 import (
 	"github.com/effect-ts/tsgo/internal/completion"
-	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/checker"
 	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
 )
@@ -22,8 +21,9 @@ func runGenFunctionStar(ctx *completion.Context) []*lsproto.CompletionItem {
 	}
 
 	ch := ctx.Checker
+	tp := ctx.TypeParser
 
-	t := typeparser.GetTypeAtLocation(ch, result.AccessedObject)
+	t := tp.GetTypeAtLocation(result.AccessedObject)
 	if t == nil {
 		return nil
 	}

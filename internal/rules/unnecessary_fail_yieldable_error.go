@@ -21,7 +21,7 @@ var UnnecessaryFailYieldableError = rule.Rule{
 	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.This_Effect_fail_call_uses_a_yieldable_error_type_as_argument_You_can_yield_Asterisk_the_error_directly_instead_effect_unnecessaryFailYieldableError.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
-		matches := AnalyzeUnnecessaryFailYieldableError(ctx.Checker, ctx.SourceFile)
+		matches := AnalyzeUnnecessaryFailYieldableError(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
 			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.This_Effect_fail_call_uses_a_yieldable_error_type_as_argument_You_can_yield_Asterisk_the_error_directly_instead_effect_unnecessaryFailYieldableError, nil)
@@ -42,7 +42,7 @@ type UnnecessaryFailYieldableErrorMatch struct {
 
 // AnalyzeUnnecessaryFailYieldableError finds all yield* Effect.fail(...) calls
 // where the argument is a yieldable error type that can be yielded directly.
-func AnalyzeUnnecessaryFailYieldableError(c *checker.Checker, sf *ast.SourceFile) []UnnecessaryFailYieldableErrorMatch {
+func AnalyzeUnnecessaryFailYieldableError(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile) []UnnecessaryFailYieldableErrorMatch {
 	var matches []UnnecessaryFailYieldableErrorMatch
 
 	var walk ast.Visitor
@@ -57,11 +57,11 @@ func AnalyzeUnnecessaryFailYieldableError(c *checker.Checker, sf *ast.SourceFile
 			if yield.AsteriskToken != nil && yield.Expression != nil && yield.Expression.Kind == ast.KindCallExpression {
 				call := yield.Expression.AsCallExpression()
 				if call.Expression != nil && call.Expression.Kind == ast.KindPropertyAccessExpression {
-					if typeparser.IsNodeReferenceToEffectModuleApi(c, call.Expression, "fail") {
+					if tp.IsNodeReferenceToEffectModuleApi(call.Expression, "fail") {
 						if call.Arguments != nil && len(call.Arguments.Nodes) >= 1 {
 							arg := call.Arguments.Nodes[0]
-							argType := typeparser.GetTypeAtLocation(c, arg)
-							if argType != nil && typeparser.IsYieldableErrorType(c, argType) {
+							argType := tp.GetTypeAtLocation(arg)
+							if argType != nil && tp.IsYieldableErrorType(argType) {
 								matches = append(matches, UnnecessaryFailYieldableErrorMatch{
 									SourceFile:   sf,
 									Location:     scanner.GetErrorRangeForNode(sf, n),

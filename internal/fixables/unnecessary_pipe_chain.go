@@ -24,7 +24,7 @@ func runUnnecessaryPipeChainFix(ctx *fixable.Context) []ls.CodeAction {
 
 	sf := ctx.SourceFile
 
-	matches := rules.AnalyzeUnnecessaryPipeChain(c, sf)
+	matches := rules.AnalyzeUnnecessaryPipeChain(ctx.TypeParser, c, sf)
 
 	var match *rules.UnnecessaryPipeChainMatch
 	for i := range matches {

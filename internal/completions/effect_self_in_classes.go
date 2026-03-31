@@ -61,7 +61,7 @@ func runEffectSelfInClasses(ctx *completion.Context) []*lsproto.CompletionItem {
 	}
 
 	// Tag: Effect.Tag("tagKey")<ClassName, {}>(){}
-	if isFullyQualified || typeparser.IsNodeReferenceToEffectModuleApi(ch, data.AccessedObject, "Tag") {
+	if isFullyQualified || ctx.TypeParser.IsNodeReferenceToEffectModuleApi(data.AccessedObject, "Tag") {
 		var insertText string
 		if isFullyQualified {
 			insertText = fmt.Sprintf(`%s.Tag("%s")<%s, {${0}}>(){}`, effectIdentifier, tagKey, className)

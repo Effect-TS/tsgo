@@ -13,8 +13,11 @@ const (
 	EffectContextFlagCanYieldEffect EffectContextFlags = 1 << iota
 )
 
-func GetEffectContextFlags(c *checker.Checker, node *ast.Node) EffectContextFlags {
-	links := ensureEffectContextAnalyzed(c, node)
+func (tp *TypeParser) GetEffectContextFlags(node *ast.Node) EffectContextFlags {
+	if tp == nil {
+		return EffectContextFlagNone
+	}
+	links := ensureEffectContextAnalyzed(tp.checker, node)
 	if links == nil {
 		return EffectContextFlagNone
 	}
@@ -25,8 +28,11 @@ func GetEffectContextFlags(c *checker.Checker, node *ast.Node) EffectContextFlag
 	return EffectContextFlagNone
 }
 
-func GetEffectYieldGeneratorFunction(c *checker.Checker, node *ast.Node) *ast.FunctionExpression {
-	links := ensureEffectContextAnalyzed(c, node)
+func (tp *TypeParser) GetEffectYieldGeneratorFunction(node *ast.Node) *ast.FunctionExpression {
+	if tp == nil {
+		return nil
+	}
+	links := ensureEffectContextAnalyzed(tp.checker, node)
 	if links == nil {
 		return nil
 	}
@@ -56,7 +62,7 @@ func ensureEffectContextAnalyzed(c *checker.Checker, node *ast.Node) *EffectLink
 		return nil
 	}
 
-	links := GetEffectLinks(c)
+	links := (&TypeParser{program: c.Program(), checker: c}).GetEffectLinks()
 
 	if links.EffectContextFlags.Has(node) {
 		return links
@@ -79,7 +85,7 @@ func analyzeEffectContextForSourceFile(c *checker.Checker, sf *ast.SourceFile) {
 		return
 	}
 
-	links := GetEffectLinks(c)
+	links := (&TypeParser{program: c.Program(), checker: c}).GetEffectLinks()
 
 	var walk ast.Visitor
 	var pendingEnableFlags core.LinkStore[*ast.Node, EffectContextFlags]
@@ -117,19 +123,20 @@ func analyzeEffectContextForSourceFile(c *checker.Checker, sf *ast.SourceFile) {
 		}
 
 		// logic for this node
-		if effectGen := EffectGenCall(c, node); effectGen != nil {
+		tp := &TypeParser{program: c.Program(), checker: c}
+		if effectGen := tp.EffectGenCall(node); effectGen != nil {
 			bodyNode := effectGen.Body.AsNode()
 			*pendingEnableFlags.Get(bodyNode) |= EffectContextFlagCanYieldEffect
 			*links.EffectYieldGeneratorFunction.Get(bodyNode) = effectGen.GeneratorFunction
-		} else if effectFn := EffectFnGenCall(c, node); effectFn != nil {
+		} else if effectFn := tp.EffectFnGenCall(node); effectFn != nil {
 			bodyNode := effectFn.Body.AsNode()
 			*pendingEnableFlags.Get(bodyNode) |= EffectContextFlagCanYieldEffect
 			*links.EffectYieldGeneratorFunction.Get(bodyNode) = effectFn.GeneratorFunction
-		} else if effectFn := EffectFnUntracedGenCall(c, node); effectFn != nil {
+		} else if effectFn := tp.EffectFnUntracedGenCall(node); effectFn != nil {
 			bodyNode := effectFn.Body.AsNode()
 			*pendingEnableFlags.Get(bodyNode) |= EffectContextFlagCanYieldEffect
 			*links.EffectYieldGeneratorFunction.Get(bodyNode) = effectFn.GeneratorFunction
-		} else if effectFn := EffectFnUntracedEagerGenCall(c, node); effectFn != nil {
+		} else if effectFn := tp.EffectFnUntracedEagerGenCall(node); effectFn != nil {
 			bodyNode := effectFn.Body.AsNode()
 			*pendingEnableFlags.Get(bodyNode) |= EffectContextFlagCanYieldEffect
 			*links.EffectYieldGeneratorFunction.Get(bodyNode) = effectFn.GeneratorFunction

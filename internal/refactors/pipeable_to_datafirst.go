@@ -31,7 +31,7 @@ func runPipeableToDatafirst(ctx *refactor.Context) []ls.CodeAction {
 			continue
 		}
 
-		pipeCall := typeparser.ParsePipeCall(c, node)
+		pipeCall := ctx.TypeParser.ParsePipeCall(node)
 		if pipeCall == nil {
 			continue
 		}
@@ -84,7 +84,7 @@ func tryConvertToDatafirst(c *checker.Checker, pipeCall *typeparser.ParsedPipeCa
 		if arg.Kind == ast.KindCallExpression {
 			argCall := arg.AsCallExpression()
 			if argCall != nil && argCall.Expression != nil {
-				exprType := typeparser.GetTypeAtLocation(c, argCall.Expression)
+				exprType := ctx.TypeParser.GetTypeAtLocation(argCall.Expression)
 				if exprType != nil {
 					callSigs := c.GetSignaturesOfType(exprType, checker.SignatureKindCall)
 					argCount := 0

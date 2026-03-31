@@ -23,7 +23,7 @@ var ClassSelfMismatch = rule.Rule{
 	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Self_type_parameter_should_be_0_effect_classSelfMismatch.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
-		matches := AnalyzeClassSelfMismatch(ctx.Checker, ctx.SourceFile)
+		matches := AnalyzeClassSelfMismatch(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
 			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Self_type_parameter_should_be_0_effect_classSelfMismatch, nil, m.ExpectedName)
@@ -45,7 +45,7 @@ type ClassSelfMismatchMatch struct {
 
 // AnalyzeClassSelfMismatch finds all class declarations where the Self type
 // parameter does not match the class name.
-func AnalyzeClassSelfMismatch(c *checker.Checker, sf *ast.SourceFile) []ClassSelfMismatchMatch {
+func AnalyzeClassSelfMismatch(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []ClassSelfMismatchMatch {
 	var matches []ClassSelfMismatchMatch
 
 	nodeToVisit := make([]*ast.Node, 0)
@@ -60,7 +60,7 @@ func AnalyzeClassSelfMismatch(c *checker.Checker, sf *ast.SourceFile) []ClassSel
 		nodeToVisit = nodeToVisit[:len(nodeToVisit)-1]
 
 		if node.Kind == ast.KindClassDeclaration && node.Name() != nil {
-			if m := checkClassSelfMismatch(c, sf, node); m != nil {
+			if m := checkClassSelfMismatch(tp, c, sf, node); m != nil {
 				matches = append(matches, *m)
 			}
 		}
@@ -71,42 +71,42 @@ func AnalyzeClassSelfMismatch(c *checker.Checker, sf *ast.SourceFile) []ClassSel
 	return matches
 }
 
-func checkClassSelfMismatch(c *checker.Checker, sf *ast.SourceFile, classNode *ast.Node) *ClassSelfMismatchMatch {
+func checkClassSelfMismatch(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile, classNode *ast.Node) *ClassSelfMismatchMatch {
 	var selfTypeNode *ast.Node
 	var className *ast.Node
 
 	// Try extends* functions in order, matching the TS reference
-	if result := typeparser.ExtendsEffectService(c, classNode); result != nil {
+	if result := tp.ExtendsEffectService(classNode); result != nil {
 		selfTypeNode = result.SelfTypeNode
 		className = result.ClassName
-	} else if result := typeparser.ExtendsServiceMapService(c, classNode); result != nil {
+	} else if result := tp.ExtendsServiceMapService(classNode); result != nil {
 		selfTypeNode = result.SelfTypeNode
 		className = result.ClassName
-	} else if result := typeparser.ExtendsContextTag(c, classNode); result != nil {
+	} else if result := tp.ExtendsContextTag(classNode); result != nil {
 		selfTypeNode = result.SelfTypeNode
 		className = result.ClassName
-	} else if result := typeparser.ExtendsEffectTag(c, classNode); result != nil {
+	} else if result := tp.ExtendsEffectTag(classNode); result != nil {
 		selfTypeNode = result.SelfTypeNode
 		className = result.ClassName
-	} else if result := typeparser.ExtendsSchemaClass(c, classNode); result != nil {
+	} else if result := tp.ExtendsSchemaClass(classNode); result != nil {
 		selfTypeNode = result.SelfTypeNode
 		className = result.ClassName
-	} else if result := typeparser.ExtendsSchemaTaggedClass(c, classNode); result != nil {
+	} else if result := tp.ExtendsSchemaTaggedClass(classNode); result != nil {
 		selfTypeNode = result.SelfTypeNode
 		className = result.ClassName
-	} else if result := typeparser.ExtendsSchemaTaggedError(c, classNode); result != nil {
+	} else if result := tp.ExtendsSchemaTaggedError(classNode); result != nil {
 		selfTypeNode = result.SelfTypeNode
 		className = result.ClassName
-	} else if result := typeparser.ExtendsSchemaTaggedRequest(c, classNode); result != nil {
+	} else if result := tp.ExtendsSchemaTaggedRequest(classNode); result != nil {
 		selfTypeNode = result.SelfTypeNode
 		className = result.ClassName
-	} else if result := typeparser.ExtendsSchemaRequestClass(c, classNode); result != nil {
+	} else if result := tp.ExtendsSchemaRequestClass(classNode); result != nil {
 		selfTypeNode = result.SelfTypeNode
 		className = result.ClassName
-	} else if result := typeparser.ExtendsEffectSqlModelClass(c, classNode); result != nil {
+	} else if result := tp.ExtendsEffectSqlModelClass(classNode); result != nil {
 		selfTypeNode = result.SelfTypeNode
 		className = result.ClassName
-	} else if result := typeparser.ExtendsEffectModelClass(c, classNode); result != nil {
+	} else if result := tp.ExtendsEffectModelClass(classNode); result != nil {
 		selfTypeNode = result.SelfTypeNode
 		className = result.ClassName
 	}

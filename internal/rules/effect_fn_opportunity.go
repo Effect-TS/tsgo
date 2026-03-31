@@ -23,7 +23,7 @@ var EffectFnOpportunity = rule.Rule{
 	Codes:           []int32{tsdiag.Can_be_rewritten_as_a_reusable_function_Colon_0_effect_effectFnOpportunity.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		effectConfig := ctx.Options
-		matches := AnalyzeEffectFnOpportunity(ctx.Checker, ctx.SourceFile)
+		matches := AnalyzeEffectFnOpportunity(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
 		var diags []*ast.Diagnostic
 		for i := range matches {
 			m := &matches[i]
@@ -48,7 +48,7 @@ type EffectFnOpportunityMatch struct {
 
 // AnalyzeEffectFnOpportunity finds all functions that can be converted to Effect.fn
 // in the given source file.
-func AnalyzeEffectFnOpportunity(c *checker.Checker, sf *ast.SourceFile) []EffectFnOpportunityMatch {
+func AnalyzeEffectFnOpportunity(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile) []EffectFnOpportunityMatch {
 	var matches []EffectFnOpportunityMatch
 
 	var walk ast.Visitor
@@ -57,7 +57,7 @@ func AnalyzeEffectFnOpportunity(c *checker.Checker, sf *ast.SourceFile) []Effect
 			return false
 		}
 
-		if result := typeparser.ParseEffectFnOpportunity(c, n); result != nil {
+		if result := tp.ParseEffectFnOpportunity(n); result != nil {
 			// Report on the name identifier if available, otherwise the function node
 			reportNode := result.NameIdentifier
 			if reportNode == nil {

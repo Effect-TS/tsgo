@@ -28,7 +28,7 @@ var MissingEffectServiceDependency = rule.Rule{
 	},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		// V3-only rule
-		if typeparser.SupportedEffectVersion(ctx.Checker) != typeparser.EffectMajorV3 {
+		if ctx.TypeParser.SupportedEffectVersion() != typeparser.EffectMajorV3 {
 			return nil
 		}
 
@@ -65,7 +65,7 @@ var MissingEffectServiceDependency = rule.Rule{
 // required service dependencies satisfied.
 func checkServiceDependencies(ctx *rule.Context, node *ast.Node) []*ast.Diagnostic {
 	// Check if this class extends Effect.Service
-	serviceResult := typeparser.ExtendsEffectService(ctx.Checker, node)
+	serviceResult := ctx.TypeParser.ExtendsEffectService(node)
 	if serviceResult == nil {
 		return nil
 	}
@@ -98,7 +98,7 @@ func checkServiceDependencies(ctx *rule.Context, node *ast.Node) []*ast.Diagnost
 	}
 
 	// Parse as Layer type to get RIn
-	layer := typeparser.LayerType(ctx.Checker, defaultType, node)
+	layer := ctx.TypeParser.LayerType(defaultType, node)
 	if layer == nil {
 		return nil
 	}
@@ -110,7 +110,7 @@ func checkServiceDependencies(ctx *rule.Context, node *ast.Node) []*ast.Diagnost
 	}
 
 	// Get all required service indexes from RIn
-	requiredResult := typeparser.AppendToUniqueTypesMap(ctx.Checker, servicesMemory, layer.RIn, excludeNever)
+	requiredResult := ctx.TypeParser.AppendToUniqueTypesMap(servicesMemory, layer.RIn, excludeNever)
 	requiredIndexes := requiredResult.AllIndexes
 
 	if len(requiredIndexes) == 0 {
@@ -121,7 +121,7 @@ func checkServiceDependencies(ctx *rule.Context, node *ast.Node) []*ast.Diagnost
 	providedIndexes := make(map[string]bool)
 
 	if options != nil {
-		optionsType := typeparser.GetTypeAtLocation(ctx.Checker, options)
+		optionsType := ctx.TypeParser.GetTypeAtLocation(options)
 		if optionsType != nil {
 			dependenciesProp := ctx.Checker.GetPropertyOfType(optionsType, "dependencies")
 			if dependenciesProp != nil {
@@ -133,10 +133,10 @@ func checkServiceDependencies(ctx *rule.Context, node *ast.Node) []*ast.Diagnost
 						depTypes := typeparser.UnrollUnionMembers(numberIndexType)
 						for _, depType := range depTypes {
 							// Parse each dependency as Layer type
-							depLayer := typeparser.LayerType(ctx.Checker, depType, options)
+							depLayer := ctx.TypeParser.LayerType(depType, options)
 							if depLayer != nil {
 								// Add the ROut of this dependency to provided services
-								providedResult := typeparser.AppendToUniqueTypesMap(ctx.Checker, servicesMemory, depLayer.ROut, excludeNever)
+								providedResult := ctx.TypeParser.AppendToUniqueTypesMap(servicesMemory, depLayer.ROut, excludeNever)
 								for _, idx := range providedResult.AllIndexes {
 									providedIndexes[idx] = true
 								}

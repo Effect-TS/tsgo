@@ -29,7 +29,7 @@ var DuplicatePackage = rule.Rule{
 	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Multiple_versions_of_package_0_detected_Colon_1_Consider_cleaning_up_your_lockfile_or_add_0_to_allowedDuplicatedPackages_to_suppress_this_warning_effect_duplicatePackage.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
-		entries := computeDuplicatePackageDiags(ctx.Checker, ctx.Options)
+		entries := computeDuplicatePackageDiags(ctx.TypeParser, ctx.Checker, ctx.Options)
 		if len(entries) == 0 {
 			return nil
 		}
@@ -60,8 +60,8 @@ var DuplicatePackage = rule.Rule{
 }
 
 // computeDuplicatePackageDiags scans all packages and finds names with multiple distinct versions.
-func computeDuplicatePackageDiags(c *checker.Checker, effectConfig *etscore.ResolvedEffectPluginOptions) []duplicatePackageDiag {
-	packages := typeparser.DiscoverPackages(c)
+func computeDuplicatePackageDiags(tp *typeparser.TypeParser, _ *checker.Checker, effectConfig *etscore.ResolvedEffectPluginOptions) []duplicatePackageDiag {
+	packages := tp.DiscoverPackages()
 
 	// Filter to Effect-related packages.
 	type versionEntry struct {

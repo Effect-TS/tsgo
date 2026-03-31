@@ -22,14 +22,14 @@ type Context struct {
 	Span       core.TextRange
 	Program    *compiler.Program
 	Checker    *checker.Checker
-	TypeParser typeparser.TypeParser
+	TypeParser *typeparser.TypeParser
 
 	Context context.Context
 	ls      *ls.LanguageService
 }
 
 // NewContext creates a refactor Context from the refactor provider callback parameters.
-func NewContext(ctx context.Context, sourceFile *ast.SourceFile, span core.TextRange, program *compiler.Program, langService *ls.LanguageService, checker *checker.Checker, tp typeparser.TypeParser) *Context {
+func NewContext(ctx context.Context, sourceFile *ast.SourceFile, span core.TextRange, program *compiler.Program, langService *ls.LanguageService, checker *checker.Checker, tp *typeparser.TypeParser) *Context {
 	if program == nil {
 		panic("refactor.NewContext: nil program")
 	}

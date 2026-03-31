@@ -25,7 +25,7 @@ func runMissingReturnYieldStarFix(ctx *fixable.Context) []ls.CodeAction {
 
 	sf := ctx.SourceFile
 
-	matches := rules.AnalyzeMissingReturnYieldStar(c, sf)
+	matches := rules.AnalyzeMissingReturnYieldStar(ctx.TypeParser, c, sf)
 
 	var matchedExprStmt *ast.Node
 	for _, match := range matches {

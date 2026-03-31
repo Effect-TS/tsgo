@@ -33,7 +33,7 @@ func runEffectGenToFn(ctx *refactor.Context) []ls.CodeAction {
 	}
 
 	// Walk ancestor chain to find a function-like node returning Effect.gen
-	parsed := findFunctionReturningEffectGen(c, token)
+	parsed := findFunctionReturningEffectGen(ctx.TypeParser, c, token)
 	if parsed == nil {
 		return nil
 	}
@@ -73,11 +73,11 @@ func runEffectGenToFn(ctx *refactor.Context) []ls.CodeAction {
 // findFunctionReturningEffectGen walks from the token up the ancestor chain to find
 // a function-like node whose body directly returns an Effect.gen call, optionally
 // wrapped in pipe/pipeable chains.
-func findFunctionReturningEffectGen(c *checker.Checker, token *ast.Node) *effectGenParsed {
+func findFunctionReturningEffectGen(tp *typeparser.TypeParser, c *checker.Checker, token *ast.Node) *effectGenParsed {
 	for node := token; node != nil; node = node.Parent {
 		switch node.Kind {
 		case ast.KindArrowFunction, ast.KindFunctionDeclaration, ast.KindMethodDeclaration:
-			parsed := parseFunctionReturningEffectGen(c, node)
+			parsed := parseFunctionReturningEffectGen(tp, c, node)
 			if parsed != nil {
 				return parsed
 			}
@@ -89,7 +89,7 @@ func findFunctionReturningEffectGen(c *checker.Checker, token *ast.Node) *effect
 			if fe.AsteriskToken != nil {
 				continue
 			}
-			parsed := parseFunctionReturningEffectGen(c, node)
+			parsed := parseFunctionReturningEffectGen(tp, c, node)
 			if parsed != nil {
 				return parsed
 			}
@@ -101,7 +101,7 @@ func findFunctionReturningEffectGen(c *checker.Checker, token *ast.Node) *effect
 
 // parseFunctionReturningEffectGen extracts the Effect.gen call and any pipe args
 // from a function-like node. Returns nil if the function doesn't match.
-func parseFunctionReturningEffectGen(c *checker.Checker, node *ast.Node) *effectGenParsed {
+func parseFunctionReturningEffectGen(tp *typeparser.TypeParser, _ *checker.Checker, node *ast.Node) *effectGenParsed {
 	body := typeparser.GetFunctionLikeBody(node)
 	if body == nil {
 		return nil
@@ -113,7 +113,7 @@ func parseFunctionReturningEffectGen(c *checker.Checker, node *ast.Node) *effect
 	// Peel off pipe wrappers, collecting args
 	var pipeArgs []*ast.Node
 	for {
-		pipeResult := typeparser.ParsePipeCall(c, subject)
+		pipeResult := tp.ParsePipeCall(subject)
 		if pipeResult == nil {
 			break
 		}
@@ -123,7 +123,7 @@ func parseFunctionReturningEffectGen(c *checker.Checker, node *ast.Node) *effect
 	}
 
 	// Check if the core expression is Effect.gen(function*() { ... })
-	genCall := typeparser.EffectGenCall(c, subject)
+	genCall := tp.EffectGenCall(subject)
 	if genCall == nil {
 		return nil
 	}

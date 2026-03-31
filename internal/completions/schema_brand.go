@@ -29,9 +29,8 @@ func runSchemaBrand(ctx *completion.Context) []*lsproto.CompletionItem {
 	}
 
 	// V3 only
-	ch := ctx.Checker
-
-	version := typeparser.SupportedEffectVersion(ch)
+	tp := ctx.TypeParser
+	version := tp.SupportedEffectVersion()
 	if version != typeparser.EffectMajorV3 {
 		return nil
 	}

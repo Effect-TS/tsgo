@@ -77,7 +77,7 @@ func extendsSchemaTagged(c *checker.Checker, classNode *ast.Node, memberName str
 		if innerCall.Expression == nil {
 			continue
 		}
-		if !IsNodeReferenceToEffectSchemaModuleApi(c, innerCall.Expression, memberName) {
+		if !(&TypeParser{program: c.Program(), checker: c}).IsNodeReferenceToEffectSchemaModuleApi(innerCall.Expression, memberName) {
 			continue
 		}
 
@@ -111,34 +111,34 @@ func extendsSchemaTagged(c *checker.Checker, classNode *ast.Node, memberName str
 }
 
 // ExtendsSchemaTaggedClass checks if a class declaration extends Schema.TaggedClass<T>("identifier")("tag", { ... }).
-func ExtendsSchemaTaggedClass(c *checker.Checker, classNode *ast.Node) *SchemaTaggedResult {
-	if c == nil || classNode == nil {
+func (tp *TypeParser) ExtendsSchemaTaggedClass(classNode *ast.Node) *SchemaTaggedResult {
+	if tp == nil || tp.checker == nil || classNode == nil {
 		return nil
 	}
-	links := GetEffectLinks(c)
+	links := tp.GetEffectLinks()
 	return Cached(&links.ExtendsSchemaTaggedClass, classNode, func() *SchemaTaggedResult {
-		return extendsSchemaTagged(c, classNode, "TaggedClass")
+		return extendsSchemaTagged(tp.checker, classNode, "TaggedClass")
 	})
 }
 
 // ExtendsSchemaTaggedError checks if a class declaration extends Schema.TaggedError<T>("identifier")("tag", { ... }).
-func ExtendsSchemaTaggedError(c *checker.Checker, classNode *ast.Node) *SchemaTaggedResult {
-	if c == nil || classNode == nil {
+func (tp *TypeParser) ExtendsSchemaTaggedError(classNode *ast.Node) *SchemaTaggedResult {
+	if tp == nil || tp.checker == nil || classNode == nil {
 		return nil
 	}
-	links := GetEffectLinks(c)
+	links := tp.GetEffectLinks()
 	return Cached(&links.ExtendsSchemaTaggedError, classNode, func() *SchemaTaggedResult {
-		return extendsSchemaTagged(c, classNode, "TaggedError")
+		return extendsSchemaTagged(tp.checker, classNode, "TaggedError")
 	})
 }
 
 // ExtendsSchemaTaggedRequest checks if a class declaration extends Schema.TaggedRequest<T>("identifier")("tag", { ... }).
-func ExtendsSchemaTaggedRequest(c *checker.Checker, classNode *ast.Node) *SchemaTaggedResult {
-	if c == nil || classNode == nil {
+func (tp *TypeParser) ExtendsSchemaTaggedRequest(classNode *ast.Node) *SchemaTaggedResult {
+	if tp == nil || tp.checker == nil || classNode == nil {
 		return nil
 	}
-	links := GetEffectLinks(c)
+	links := tp.GetEffectLinks()
 	return Cached(&links.ExtendsSchemaTaggedRequest, classNode, func() *SchemaTaggedResult {
-		return extendsSchemaTagged(c, classNode, "TaggedRequest")
+		return extendsSchemaTagged(tp.checker, classNode, "TaggedRequest")
 	})
 }

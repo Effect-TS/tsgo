@@ -20,7 +20,7 @@ var RemoveUnnecessaryEffectGen = refactor.Refactor{
 func runRemoveUnnecessaryEffectGen(ctx *refactor.Context) []ls.CodeAction {
 	c := ctx.Checker
 
-	matches := rules.AnalyzeUnnecessaryEffectGen(c, ctx.SourceFile)
+	matches := rules.AnalyzeUnnecessaryEffectGen(ctx.TypeParser, c, ctx.SourceFile)
 	if len(matches) == 0 {
 		return nil
 	}

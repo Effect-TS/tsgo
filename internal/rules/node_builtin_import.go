@@ -63,7 +63,7 @@ var NodeBuiltinImport = rule.Rule{
 	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Prefer_using_0_from_1_instead_of_the_Node_js_2_module_effect_nodeBuiltinImport.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
-		matches := AnalyzeNodeBuiltinImport(ctx.Checker, ctx.SourceFile)
+		matches := AnalyzeNodeBuiltinImport(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
 			diags[i] = ctx.NewDiagnostic(
@@ -88,9 +88,9 @@ type NodeBuiltinImportMatch struct {
 	Module      string
 }
 
-func AnalyzeNodeBuiltinImport(c *checker.Checker, sf *ast.SourceFile) []NodeBuiltinImportMatch {
+func AnalyzeNodeBuiltinImport(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile) []NodeBuiltinImportMatch {
 	alternatives := moduleAlternativesV4
-	if typeparser.SupportedEffectVersion(c) == typeparser.EffectMajorV3 {
+	if tp.SupportedEffectVersion() == typeparser.EffectMajorV3 {
 		alternatives = moduleAlternativesV3
 	}
 

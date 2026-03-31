@@ -2,7 +2,6 @@ package typeparser
 
 import (
 	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
 )
 
 // ServiceMapServiceResult holds the parsed result of a class extending ServiceMap.Service.
@@ -22,12 +21,12 @@ type ServiceMapServiceResult struct {
 // and the inner call resolves to ServiceMap.Service.
 //
 // Returns nil if the class does not extend ServiceMap.Service.
-func ExtendsServiceMapService(c *checker.Checker, classNode *ast.Node) *ServiceMapServiceResult {
-	if c == nil || classNode == nil {
+func (tp *TypeParser) ExtendsServiceMapService(classNode *ast.Node) *ServiceMapServiceResult {
+	if tp == nil || tp.checker == nil || classNode == nil {
 		return nil
 	}
 
-	links := GetEffectLinks(c)
+	links := tp.GetEffectLinks()
 	return Cached(&links.ExtendsServiceMapService, classNode, func() *ServiceMapServiceResult {
 		// Must have a name
 		if classNode.Name() == nil {
@@ -78,7 +77,7 @@ func ExtendsServiceMapService(c *checker.Checker, classNode *ast.Node) *ServiceM
 			if innerCall.Expression == nil {
 				continue
 			}
-			if !IsNodeReferenceToServiceMapModuleApi(c, innerCall.Expression, "Service") {
+			if !tp.IsNodeReferenceToServiceMapModuleApi(innerCall.Expression, "Service") {
 				continue
 			}
 

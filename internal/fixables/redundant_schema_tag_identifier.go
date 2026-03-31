@@ -25,7 +25,7 @@ func runRedundantSchemaTagIdentifierFix(ctx *fixable.Context) []ls.CodeAction {
 
 	sf := ctx.SourceFile
 
-	matches := rules.AnalyzeRedundantSchemaTagIdentifier(c, sf)
+	matches := rules.AnalyzeRedundantSchemaTagIdentifier(ctx.TypeParser, c, sf)
 	for _, match := range matches {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue

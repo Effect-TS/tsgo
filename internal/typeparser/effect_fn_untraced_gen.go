@@ -3,19 +3,19 @@ package typeparser
 
 import (
 	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
 )
 
 // EffectFnUntracedGenCall parses a node as Effect.fnUntraced(<generator>).
 // It matches only generator-based variants (function with asteriskToken).
 // Unlike EffectFnGenCall, it does not support curried calls.
 // Returns nil when the node is not an Effect.fnUntraced generator call.
-func EffectFnUntracedGenCall(c *checker.Checker, node *ast.Node) *EffectGenCallResult {
-	if c == nil || node == nil || node.Kind != ast.KindCallExpression {
+func (tp *TypeParser) EffectFnUntracedGenCall(node *ast.Node) *EffectGenCallResult {
+	if tp == nil || tp.checker == nil || node == nil || node.Kind != ast.KindCallExpression {
 		return nil
 	}
+	c := tp.checker
 
-	links := GetEffectLinks(c)
+	links := tp.GetEffectLinks()
 	return Cached(&links.EffectFnUntracedGenCall, node, func() *EffectGenCallResult {
 		call := node.AsCallExpression()
 		if call == nil || call.Arguments == nil || len(call.Arguments.Nodes) == 0 {
@@ -35,7 +35,7 @@ func EffectFnUntracedGenCall(c *checker.Checker, node *ast.Node) *EffectGenCallR
 			return nil
 		}
 
-		if !IsNodeReferenceToEffectModuleApi(c, expr, "fnUntraced") {
+		if !(&TypeParser{program: c.Program(), checker: c}).IsNodeReferenceToEffectModuleApi(expr, "fnUntraced") {
 			return nil
 		}
 

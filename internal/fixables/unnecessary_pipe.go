@@ -23,7 +23,7 @@ func runUnnecessaryPipeFix(ctx *fixable.Context) []ls.CodeAction {
 
 	sf := ctx.SourceFile
 
-	matches := rules.AnalyzeUnnecessaryPipe(c, sf)
+	matches := rules.AnalyzeUnnecessaryPipe(ctx.TypeParser, c, sf)
 
 	var match *rules.UnnecessaryPipeMatch
 	for i := range matches {

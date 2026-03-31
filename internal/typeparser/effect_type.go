@@ -21,29 +21,29 @@ var effectPackageExportDescriptor = PackageSourceFileDescriptor{
 // Returns nil if the type is not an Effect.
 // The detection strategy is chosen based on the detected Effect version:
 // v4 uses direct symbol lookup, v3/unknown uses property iteration.
-func EffectType(c *checker.Checker, t *checker.Type, atLocation *ast.Node) *Effect {
-	if c == nil || t == nil {
+func (tp *TypeParser) EffectType(t *checker.Type, atLocation *ast.Node) *Effect {
+	if tp == nil || tp.checker == nil || t == nil {
 		return nil
 	}
-	links := GetEffectLinks(c)
+	links := tp.GetEffectLinks()
 	return Cached(&links.EffectType, t, func() *Effect {
-		version := DetectEffectVersion(c)
+		version := tp.DetectEffectVersion()
 		if version == EffectMajorV4 {
 			// Direct property access using the known Effect v4 type ID
-			propSymbol := GetPropertyOfTypeByName(c, t, EffectTypeId)
+			propSymbol := tp.GetPropertyOfTypeByName(t, EffectTypeId)
 			if propSymbol == nil {
 				return nil
 			}
 
 			// Get the variance struct type
-			varianceStructType := c.GetTypeOfSymbolAtLocation(propSymbol, atLocation)
+			varianceStructType := tp.checker.GetTypeOfSymbolAtLocation(propSymbol, atLocation)
 
 			// Parse the variance struct to extract A, E, R
-			return parseVarianceStruct(c, varianceStructType, atLocation)
+			return parseVarianceStruct(tp.checker, varianceStructType, atLocation)
 		}
 
 		// v3 / unknown: iterate properties looking for a variance struct
-		props := c.GetPropertiesOfType(t)
+		props := tp.checker.GetPropertiesOfType(t)
 
 		// Filter to required, non-optional properties with a value declaration
 		var candidates []*ast.Symbol
@@ -79,8 +79,8 @@ func EffectType(c *checker.Checker, t *checker.Type, atLocation *ast.Node) *Effe
 
 		// Try each candidate as a variance struct
 		for _, prop := range candidates {
-			propType := c.GetTypeOfSymbolAtLocation(prop, atLocation)
-			if result := parseVarianceStruct(c, propType, atLocation); result != nil {
+			propType := tp.checker.GetTypeOfSymbolAtLocation(prop, atLocation)
+			if result := parseVarianceStruct(tp.checker, propType, atLocation); result != nil {
 				return result
 			}
 		}
@@ -110,20 +110,20 @@ func parseVarianceStruct(c *checker.Checker, t *checker.Type, atLocation *ast.No
 }
 
 // IsEffectType returns true if the type has the Effect variance struct.
-func IsEffectType(c *checker.Checker, t *checker.Type, atLocation *ast.Node) bool {
-	return EffectType(c, t, atLocation) != nil
+func (tp *TypeParser) IsEffectType(t *checker.Type, atLocation *ast.Node) bool {
+	return tp.EffectType(t, atLocation) != nil
 }
 
 // StrictEffectType returns the parsed Effect type only if the type's symbol name
 // is "Effect". This filters out types like Stream, Layer, HttpApp.Default that
 // carry the variance struct but are not Effect itself.
-func StrictEffectType(c *checker.Checker, t *checker.Type, atLocation *ast.Node) *Effect {
-	if c == nil || t == nil {
+func (tp *TypeParser) StrictEffectType(t *checker.Type, atLocation *ast.Node) *Effect {
+	if tp == nil || tp.checker == nil || t == nil {
 		return nil
 	}
-	links := GetEffectLinks(c)
+	links := tp.GetEffectLinks()
 	return Cached(&links.StrictEffectType, t, func() *Effect {
-		result := EffectType(c, t, atLocation)
+		result := tp.EffectType(t, atLocation)
 		if result == nil {
 			return nil
 		}
@@ -141,77 +141,77 @@ func StrictEffectType(c *checker.Checker, t *checker.Type, atLocation *ast.Node)
 // StrictIsEffectType returns true if the type has the Effect variance struct
 // AND the type's symbol name is "Effect". This filters out types like Stream,
 // Layer, HttpApp.Default that carry the variance struct but are not Effect itself.
-func StrictIsEffectType(c *checker.Checker, t *checker.Type, atLocation *ast.Node) bool {
-	return StrictEffectType(c, t, atLocation) != nil
+func (tp *TypeParser) StrictIsEffectType(t *checker.Type, atLocation *ast.Node) bool {
+	return tp.StrictEffectType(t, atLocation) != nil
 }
 
 // EffectSubtype detects types that have the Effect variance struct AND a "_tag" or "get"
 // marker property (e.g., Exit, Option, Either, Pool). Returns nil if not an Effect subtype.
-func EffectSubtype(c *checker.Checker, t *checker.Type, atLocation *ast.Node) *Effect {
-	if c == nil || t == nil {
+func (tp *TypeParser) EffectSubtype(t *checker.Type, atLocation *ast.Node) *Effect {
+	if tp == nil || tp.checker == nil || t == nil {
 		return nil
 	}
-	links := GetEffectLinks(c)
+	links := tp.GetEffectLinks()
 	return Cached(&links.EffectSubtype, t, func() *Effect {
 		// Check for "_tag" or "get" property first (quick rejection)
-		tagSymbol := c.GetPropertyOfType(t, "_tag")
-		getSymbol := c.GetPropertyOfType(t, "get")
+		tagSymbol := tp.checker.GetPropertyOfType(t, "_tag")
+		getSymbol := tp.checker.GetPropertyOfType(t, "get")
 		if tagSymbol == nil && getSymbol == nil {
 			return nil
 		}
 		// Must also be an Effect type
-		return EffectType(c, t, atLocation)
+		return tp.EffectType(t, atLocation)
 	})
 }
 
 // IsEffectSubtype returns true if the type is an Effect subtype (has variance struct + "_tag" or "get").
-func IsEffectSubtype(c *checker.Checker, t *checker.Type, atLocation *ast.Node) bool {
-	return EffectSubtype(c, t, atLocation) != nil
+func (tp *TypeParser) IsEffectSubtype(t *checker.Type, atLocation *ast.Node) bool {
+	return tp.EffectSubtype(t, atLocation) != nil
 }
 
 // FiberType detects types that have the Effect variance struct AND both "await" and "poll"
 // properties. Returns nil if the type is not a Fiber.
-func FiberType(c *checker.Checker, t *checker.Type, atLocation *ast.Node) *Effect {
-	if c == nil || t == nil {
+func (tp *TypeParser) FiberType(t *checker.Type, atLocation *ast.Node) *Effect {
+	if tp == nil || tp.checker == nil || t == nil {
 		return nil
 	}
-	links := GetEffectLinks(c)
+	links := tp.GetEffectLinks()
 	return Cached(&links.FiberType, t, func() *Effect {
 		// Check for both "await" and "poll" properties (quick rejection)
-		awaitSymbol := c.GetPropertyOfType(t, "await")
-		pollSymbol := c.GetPropertyOfType(t, "poll")
+		awaitSymbol := tp.checker.GetPropertyOfType(t, "await")
+		pollSymbol := tp.checker.GetPropertyOfType(t, "poll")
 		if awaitSymbol == nil || pollSymbol == nil {
 			return nil
 		}
 		// Must also be an Effect type
-		return EffectType(c, t, atLocation)
+		return tp.EffectType(t, atLocation)
 	})
 }
 
 // IsFiberType returns true if the type is a Fiber type (has variance struct + "await" and "poll").
-func IsFiberType(c *checker.Checker, t *checker.Type, atLocation *ast.Node) bool {
-	return FiberType(c, t, atLocation) != nil
+func (tp *TypeParser) IsFiberType(t *checker.Type, atLocation *ast.Node) bool {
+	return tp.FiberType(t, atLocation) != nil
 }
 
 // HasEffectTypeId returns true if the type has the Effect type identifier.
 // For v4, this is a quick check for the "~effect/Effect" property.
 // For v3/unknown, this defers to IsEffectType since there is no single property shortcut.
-func HasEffectTypeId(c *checker.Checker, t *checker.Type, atLocation *ast.Node) bool {
-	if c == nil || t == nil {
+func (tp *TypeParser) HasEffectTypeId(t *checker.Type, atLocation *ast.Node) bool {
+	if tp == nil || tp.checker == nil || t == nil {
 		return false
 	}
-	links := GetEffectLinks(c)
+	links := tp.GetEffectLinks()
 	return Cached(&links.HasEffectTypeId, t, func() bool {
-		version := DetectEffectVersion(c)
+		version := tp.DetectEffectVersion()
 		if version == EffectMajorV4 {
-			return GetPropertyOfTypeByName(c, t, EffectTypeId) != nil
+			return tp.GetPropertyOfTypeByName(t, EffectTypeId) != nil
 		}
 		// For v3/unknown, the quick check is not available; defer to full detection.
-		return IsEffectType(c, t, atLocation)
+		return tp.IsEffectType(t, atLocation)
 	})
 }
 
-func isEffectTypeSourceFile(c *checker.Checker, sf *ast.SourceFile) bool {
+func isEffectTypeSourceFile(_ *TypeParser, c *checker.Checker, sf *ast.SourceFile) bool {
 	if c == nil || sf == nil {
 		return false
 	}
@@ -231,18 +231,18 @@ func isEffectTypeSourceFile(c *checker.Checker, sf *ast.SourceFile) bool {
 		return false
 	}
 
-	return EffectType(c, effectType, sf.AsNode()) != nil
+	return (&TypeParser{program: c.Program(), checker: c}).EffectType(effectType, sf.AsNode()) != nil
 }
 
 // IsExpressionEffectModule reports whether node resolves to the Effect module namespace
 // (e.g., the `Effect` in `import { Effect } from "effect"`).
-func IsExpressionEffectModule(c *checker.Checker, node *ast.Node) bool {
-	return IsNodeReferenceToModule(c, node, effectModuleDescriptor)
+func (tp *TypeParser) IsExpressionEffectModule(node *ast.Node) bool {
+	return tp.IsNodeReferenceToModule(node, effectModuleDescriptor)
 }
 
 // IsNodeReferenceToEffectModuleApi reports whether node resolves to a member exported by the "effect" package.
-func IsNodeReferenceToEffectModuleApi(c *checker.Checker, node *ast.Node, memberName string) bool {
-	return IsNodeReferenceToModuleExport(c, node, effectModuleDescriptor, memberName)
+func (tp *TypeParser) IsNodeReferenceToEffectModuleApi(node *ast.Node, memberName string) bool {
+	return tp.IsNodeReferenceToModuleExport(node, effectModuleDescriptor, memberName)
 }
 
 // IsNodeReferenceToEffectPackageExport reports whether node resolves to a member
@@ -250,6 +250,6 @@ func IsNodeReferenceToEffectModuleApi(c *checker.Checker, node *ast.Node, member
 // this does not require the source file to export the Effect type — it only checks
 // that the declaration lives inside the "effect" package and matches the named export.
 // This is needed for functions like `pipe` which are exported from `effect/Function`.
-func IsNodeReferenceToEffectPackageExport(c *checker.Checker, node *ast.Node, memberName string) bool {
-	return IsNodeReferenceToModuleExport(c, node, effectPackageExportDescriptor, memberName)
+func (tp *TypeParser) IsNodeReferenceToEffectPackageExport(node *ast.Node, memberName string) bool {
+	return tp.IsNodeReferenceToModuleExport(node, effectPackageExportDescriptor, memberName)
 }

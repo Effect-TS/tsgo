@@ -49,11 +49,12 @@ type MissingEffectErrorMatch struct {
 // types that are not handled by the expected type.
 func AnalyzeMissingEffectError(c *checker.Checker, sf *ast.SourceFile) []MissingEffectErrorMatch {
 	var matches []MissingEffectErrorMatch
+	tp := typeparser.NewTypeParser(c.Program(), c)
 
 	for _, re := range c.GetRelationErrors(sf) {
 		// Parse both types as Effects
-		srcEffect := typeparser.EffectType(c, re.Source, re.ErrorNode)
-		tgtEffect := typeparser.EffectType(c, re.Target, re.ErrorNode)
+		srcEffect := tp.EffectType(re.Source, re.ErrorNode)
+		tgtEffect := tp.EffectType(re.Target, re.ErrorNode)
 
 		// Both must be Effect types
 		if srcEffect == nil || tgtEffect == nil {

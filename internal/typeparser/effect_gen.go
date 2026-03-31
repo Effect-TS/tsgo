@@ -3,17 +3,17 @@ package typeparser
 
 import (
 	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
 )
 
 // EffectGenCall parses a node as Effect.gen(<generator>).
 // Returns nil when the node is not an Effect.gen call.
-func EffectGenCall(c *checker.Checker, node *ast.Node) *EffectGenCallResult {
-	if c == nil || node == nil || node.Kind != ast.KindCallExpression {
+func (tp *TypeParser) EffectGenCall(node *ast.Node) *EffectGenCallResult {
+	if tp == nil || tp.checker == nil || node == nil || node.Kind != ast.KindCallExpression {
 		return nil
 	}
+	c := tp.checker
 
-	links := GetEffectLinks(c)
+	links := tp.GetEffectLinks()
 	return Cached(&links.EffectGenCall, node, func() *EffectGenCallResult {
 		call := node.AsCallExpression()
 		if call == nil || call.Arguments == nil || len(call.Arguments.Nodes) == 0 {
@@ -47,7 +47,7 @@ func EffectGenCall(c *checker.Checker, node *ast.Node) *EffectGenCallResult {
 			return nil
 		}
 
-		if !IsNodeReferenceToEffectModuleApi(c, expr, "gen") {
+		if !(&TypeParser{program: c.Program(), checker: c}).IsNodeReferenceToEffectModuleApi(expr, "gen") {
 			return nil
 		}
 

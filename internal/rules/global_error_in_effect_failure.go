@@ -7,6 +7,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
+	"slices"
 )
 
 // GlobalErrorInEffectFailure detects when `new Error(...)` expressions appear inside an Effect
@@ -46,33 +47,31 @@ var GlobalErrorInEffectFailure = rule.Rule{
 // checkGlobalErrorInEffectFailure checks a single new expression for the global-error-in-failure pattern.
 func checkGlobalErrorInEffectFailure(ctx *rule.Context, node *ast.Node) *ast.Diagnostic {
 	// Get the type of the new expression
-	newExprType := typeparser.GetTypeAtLocation(ctx.Checker, node)
+	newExprType := ctx.TypeParser.GetTypeAtLocation(node)
 	if newExprType == nil {
 		return nil
 	}
 
 	// Skip if not a global Error type
-	if !typeparser.IsGlobalErrorType(ctx.Checker, newExprType) {
+	if !ctx.TypeParser.IsGlobalErrorType(newExprType) {
 		return nil
 	}
 
 	// Walk up the parent chain to find an enclosing Effect type
 	ancestor := ast.FindAncestorOrQuit(node.Parent, func(current *ast.Node) ast.FindAncestorResult {
-		currentType := typeparser.GetTypeAtLocation(ctx.Checker, current)
+		currentType := ctx.TypeParser.GetTypeAtLocation(current)
 		if currentType == nil {
 			return ast.FindAncestorFalse
 		}
 
-		effectType := typeparser.EffectType(ctx.Checker, currentType, current)
+		effectType := ctx.TypeParser.EffectType(currentType, current)
 		if effectType == nil {
 			return ast.FindAncestorFalse
 		}
 
 		// Found an Effect type — check if the failure channel contains global Error
-		for _, member := range typeparser.UnrollUnionMembers(effectType.E) {
-			if typeparser.IsGlobalErrorType(ctx.Checker, member) {
-				return ast.FindAncestorTrue
-			}
+		if slices.ContainsFunc(typeparser.UnrollUnionMembers(effectType.E), ctx.TypeParser.IsGlobalErrorType) {
+			return ast.FindAncestorTrue
 		}
 
 		// Effect type found but failure channel doesn't contain global Error — stop searching

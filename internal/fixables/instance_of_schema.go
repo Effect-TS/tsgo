@@ -22,7 +22,7 @@ func runInstanceOfSchemaFix(ctx *fixable.Context) []ls.CodeAction {
 
 	sf := ctx.SourceFile
 
-	matches := rules.AnalyzeInstanceOfSchema(c, sf)
+	matches := rules.AnalyzeInstanceOfSchema(ctx.TypeParser, c, sf)
 	for _, match := range matches {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue

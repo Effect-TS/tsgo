@@ -33,7 +33,7 @@ func runEffectFnOpportunityFix(ctx *fixable.Context) []ls.CodeAction {
 
 	effectConfig := ctx.Options
 
-	matches := rules.AnalyzeEffectFnOpportunity(c, sf)
+	matches := rules.AnalyzeEffectFnOpportunity(ctx.TypeParser, c, sf)
 
 	var result *typeparser.EffectFnOpportunityResult
 	for _, match := range matches {

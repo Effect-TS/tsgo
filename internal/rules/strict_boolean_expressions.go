@@ -78,7 +78,7 @@ var StrictBooleanExpressions = rule.Rule{
 					continue
 				}
 
-				nodeType := typeparser.GetTypeAtLocation(ctx.Checker, nodeToCheck)
+				nodeType := ctx.TypeParser.GetTypeAtLocation(nodeToCheck)
 				if nodeType == nil {
 					continue
 				}

@@ -60,12 +60,12 @@ func runGlobalConsole(ctx *rule.Context, checkInEffect bool) []*ast.Diagnostic {
 			return false
 		}
 		if node.Kind == ast.KindCallExpression && node.AsCallExpression().Expression.Kind == ast.KindPropertyAccessExpression {
-			inEffect := typeparser.GetEffectContextFlags(ctx.Checker, node)&typeparser.EffectContextFlagCanYieldEffect != 0
+			inEffect := ctx.TypeParser.GetEffectContextFlags(node)&typeparser.EffectContextFlagCanYieldEffect != 0
 			if inEffect == checkInEffect {
 				prop := node.AsCallExpression().Expression.AsPropertyAccessExpression()
 				method := prop.Name().Text()
 				alternative := globalConsoleMethodAlternatives[method]
-				if alternative != "" && typeparser.ResolveToGlobalSymbol(ctx.Checker, ctx.Checker.GetSymbolAtLocation(prop.Expression)) == consoleSymbol {
+				if alternative != "" && ctx.TypeParser.ResolveToGlobalSymbol(ctx.Checker.GetSymbolAtLocation(prop.Expression)) == consoleSymbol {
 					diags = append(diags, ctx.NewDiagnostic(
 						ctx.SourceFile,
 						scanner.GetErrorRangeForNode(ctx.SourceFile, node),

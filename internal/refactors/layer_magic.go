@@ -77,7 +77,7 @@ func adjustedNode(node *ast.Node) *ast.Node {
 
 // tryBuildRefactor tries to produce the "build" refactor action for the given node.
 // It detects the `(expr as any) as Layer.Layer<ROut>` pattern.
-func tryBuildRefactor(ctx *refactor.Context, tp typeparser.TypeParser, c *checker.Checker, node *ast.Node, layerIdentifier string) []ls.CodeAction {
+func tryBuildRefactor(ctx *refactor.Context, tp *typeparser.TypeParser, c *checker.Checker, node *ast.Node, layerIdentifier string) []ls.CodeAction {
 	atLocation := adjustedNode(node)
 
 	// Must be an AsExpression: `... as Layer.Layer<ROut>`
@@ -113,7 +113,7 @@ func tryBuildRefactor(ctx *refactor.Context, tp typeparser.TypeParser, c *checke
 	castedStructure := innerAs.Expression
 
 	// Extract layer graph from the casted structure
-	layerGraph := layergraph.ExtractLayerGraph(c, castedStructure, ctx.SourceFile, layergraph.ExtractLayerGraphOptions{
+	layerGraph := layergraph.ExtractLayerGraph(ctx.TypeParser, c, castedStructure, ctx.SourceFile, layergraph.ExtractLayerGraphOptions{
 		ArrayLiteralAsMerge:   true,
 		ExplodeOnlyLayerCalls: true,
 		FollowSymbolsDepth:    0,
@@ -220,7 +220,7 @@ func buildLayerMagicBuild(tracker *change.Tracker, ctx *refactor.Context, c *che
 
 // tryPrepareRefactor tries to produce the "prepare" refactor action for the given node.
 // It flattens a layer expression into `[...] as any as Layer.Layer<T>`.
-func tryPrepareRefactor(ctx *refactor.Context, tp typeparser.TypeParser, c *checker.Checker, node *ast.Node, layerIdentifier string) []ls.CodeAction {
+func tryPrepareRefactor(ctx *refactor.Context, tp *typeparser.TypeParser, c *checker.Checker, node *ast.Node, layerIdentifier string) []ls.CodeAction {
 	atLocation := adjustedNode(node)
 
 	// Skip if already in `as any as Layer.Layer<T>` form
@@ -234,7 +234,7 @@ func tryPrepareRefactor(ctx *refactor.Context, tp typeparser.TypeParser, c *chec
 	}
 
 	// Extract layer graph
-	layerGraph := layergraph.ExtractLayerGraph(c, atLocation, ctx.SourceFile, layergraph.ExtractLayerGraphOptions{
+	layerGraph := layergraph.ExtractLayerGraph(ctx.TypeParser, c, atLocation, ctx.SourceFile, layergraph.ExtractLayerGraphOptions{
 		ArrayLiteralAsMerge:   true,
 		ExplodeOnlyLayerCalls: true,
 		FollowSymbolsDepth:    0,

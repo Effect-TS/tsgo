@@ -26,7 +26,7 @@ func runReturnEffectInGenFix(ctx *fixable.Context) []ls.CodeAction {
 
 	sf := ctx.SourceFile
 
-	matches := rules.AnalyzeReturnEffectInGen(c, sf)
+	matches := rules.AnalyzeReturnEffectInGen(ctx.TypeParser, c, sf)
 
 	var match *rules.ReturnEffectInGenMatch
 	for i := range matches {

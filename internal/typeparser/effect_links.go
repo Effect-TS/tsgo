@@ -71,7 +71,11 @@ type EffectLinks struct {
 
 // GetEffectLinks returns the EffectLinks instance attached to the given checker,
 // lazily creating and storing it on first access.
-func GetEffectLinks(c *checker.Checker) *EffectLinks {
+func (tp *TypeParser) GetEffectLinks() *EffectLinks {
+	if tp == nil || tp.checker == nil {
+		return nil
+	}
+	c := tp.checker
 	if c.EffectLinks == nil {
 		c.EffectLinks = &EffectLinks{}
 	}

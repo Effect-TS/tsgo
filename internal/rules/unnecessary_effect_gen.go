@@ -20,7 +20,7 @@ var UnnecessaryEffectGen = rule.Rule{
 	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.This_Effect_gen_contains_a_single_return_statement_effect_unnecessaryEffectGen.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
-		matches := AnalyzeUnnecessaryEffectGen(ctx.Checker, ctx.SourceFile)
+		matches := AnalyzeUnnecessaryEffectGen(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
 			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.This_Effect_gen_contains_a_single_return_statement_effect_unnecessaryEffectGen, nil)
@@ -43,7 +43,7 @@ type UnnecessaryEffectGenMatch struct {
 
 // AnalyzeUnnecessaryEffectGen finds all Effect.gen calls that contain only a single
 // yield* statement and can be replaced with the yielded expression directly.
-func AnalyzeUnnecessaryEffectGen(c *checker.Checker, sf *ast.SourceFile) []UnnecessaryEffectGenMatch {
+func AnalyzeUnnecessaryEffectGen(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []UnnecessaryEffectGenMatch {
 	var matches []UnnecessaryEffectGenMatch
 
 	var walk ast.Visitor
@@ -53,7 +53,7 @@ func AnalyzeUnnecessaryEffectGen(c *checker.Checker, sf *ast.SourceFile) []Unnec
 		}
 
 		if n.Kind == ast.KindCallExpression {
-			if m := analyzeUnnecessaryEffectGenNode(c, sf, n); m != nil {
+			if m := analyzeUnnecessaryEffectGenNode(tp, c, sf, n); m != nil {
 				matches = append(matches, *m)
 			}
 		}
@@ -66,8 +66,8 @@ func AnalyzeUnnecessaryEffectGen(c *checker.Checker, sf *ast.SourceFile) []Unnec
 	return matches
 }
 
-func analyzeUnnecessaryEffectGenNode(c *checker.Checker, sf *ast.SourceFile, n *ast.Node) *UnnecessaryEffectGenMatch {
-	genResult := typeparser.EffectGenCall(c, n)
+func analyzeUnnecessaryEffectGenNode(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile, n *ast.Node) *UnnecessaryEffectGenMatch {
+	genResult := tp.EffectGenCall(n)
 	if genResult == nil {
 		return nil
 	}
@@ -119,9 +119,9 @@ func analyzeUnnecessaryEffectGenNode(c *checker.Checker, sf *ast.SourceFile, n *
 
 	// Determine if the success type is void-like
 	successIsVoid := false
-	t := typeparser.GetTypeAtLocation(c, yieldedExpr)
+	t := tp.GetTypeAtLocation(yieldedExpr)
 	if t != nil {
-		effect := typeparser.EffectType(c, t, yieldedExpr)
+		effect := tp.EffectType(t, yieldedExpr)
 		if effect != nil && effect.A != nil {
 			successIsVoid = effect.A.Flags()&checker.TypeFlagsVoidLike != 0
 		}

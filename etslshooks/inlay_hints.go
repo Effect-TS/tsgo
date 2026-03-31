@@ -46,7 +46,7 @@ func afterInlayHints(
 // shouldOmitHint checks whether a single inlay hint should be suppressed
 // because it is a return-type hint on an Effect generator function.
 func shouldOmitHint(
-	tp typeparser.TypeParser,
+	tp *typeparser.TypeParser,
 	sf *ast.SourceFile,
 	hint *lsproto.InlayHint,
 	converters *lsconv.Converters,
@@ -97,7 +97,7 @@ func shouldOmitHint(
 
 // matchEffectGenCall tries all four Effect generator call patterns and returns
 // the first match, or nil if none match.
-func matchEffectGenCall(tp typeparser.TypeParser, node *ast.Node) *typeparser.EffectGenCallResult {
+func matchEffectGenCall(tp *typeparser.TypeParser, node *ast.Node) *typeparser.EffectGenCallResult {
 	if result := tp.EffectGenCall(node); result != nil {
 		return result
 	}

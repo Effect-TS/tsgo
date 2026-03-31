@@ -29,7 +29,7 @@ func runMissedPipeableOpportunityFix(ctx *fixable.Context) []ls.CodeAction {
 		minArgCount = effectConfig.GetPipeableMinArgCount()
 	}
 
-	matches := rules.AnalyzeMissedPipeableOpportunity(c, sf, minArgCount)
+	matches := rules.AnalyzeMissedPipeableOpportunity(ctx.TypeParser, c, sf, minArgCount)
 
 	var match *rules.MissedPipeableOpportunityMatch
 	for i := range matches {

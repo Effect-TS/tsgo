@@ -24,7 +24,7 @@ func runMakeSchemaOpaqueWithNs(ctx *refactor.Context) []ls.CodeAction {
 		return nil
 	}
 
-	version := typeparser.SupportedEffectVersion(c)
+	version := ctx.TypeParser.SupportedEffectVersion()
 	isV4 := version == typeparser.EffectMajorV4
 
 	action := ctx.NewRefactorAction(refactor.RefactorAction{

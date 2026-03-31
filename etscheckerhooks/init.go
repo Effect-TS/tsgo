@@ -105,7 +105,7 @@ func collectDiagnostics(
 	ctx context.Context,
 	program checker.Program,
 	c *checker.Checker,
-	tp typeparser.TypeParser,
+	tp *typeparser.TypeParser,
 	sf *ast.SourceFile,
 	globalConfig *etscore.EffectPluginOptions,
 	options *etscore.ResolvedEffectPluginOptions,

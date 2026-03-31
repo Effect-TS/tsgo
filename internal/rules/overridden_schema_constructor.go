@@ -19,7 +19,7 @@ var OverriddenSchemaConstructor = rule.Rule{
 	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Classes_extending_Schema_must_not_override_the_constructor_this_is_because_it_silently_breaks_the_schema_decoding_behaviour_If_that_s_needed_we_recommend_instead_to_use_a_static_new_method_that_constructs_the_instance_effect_overriddenSchemaConstructor.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
-		matches := AnalyzeOverriddenSchemaConstructor(ctx.Checker, ctx.SourceFile)
+		matches := AnalyzeOverriddenSchemaConstructor(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
 			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Classes_extending_Schema_must_not_override_the_constructor_this_is_because_it_silently_breaks_the_schema_decoding_behaviour_If_that_s_needed_we_recommend_instead_to_use_a_static_new_method_that_constructs_the_instance_effect_overriddenSchemaConstructor, nil)
@@ -39,7 +39,7 @@ type OverriddenSchemaConstructorMatch struct {
 
 // AnalyzeOverriddenSchemaConstructor finds all class declarations extending Schema
 // that have an overridden constructor which is not an allowed passthrough pattern.
-func AnalyzeOverriddenSchemaConstructor(c *checker.Checker, sf *ast.SourceFile) []OverriddenSchemaConstructorMatch {
+func AnalyzeOverriddenSchemaConstructor(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []OverriddenSchemaConstructorMatch {
 	var matches []OverriddenSchemaConstructorMatch
 
 	nodeToVisit := make([]*ast.Node, 0)
@@ -54,7 +54,7 @@ func AnalyzeOverriddenSchemaConstructor(c *checker.Checker, sf *ast.SourceFile) 
 		nodeToVisit = nodeToVisit[:len(nodeToVisit)-1]
 
 		if node.Kind == ast.KindClassDeclaration {
-			if m := checkOverriddenSchemaConstructor(c, sf, node); m != nil {
+			if m := checkOverriddenSchemaConstructor(tp, c, sf, node); m != nil {
 				matches = append(matches, *m)
 			}
 		}
@@ -65,7 +65,7 @@ func AnalyzeOverriddenSchemaConstructor(c *checker.Checker, sf *ast.SourceFile) 
 	return matches
 }
 
-func checkOverriddenSchemaConstructor(c *checker.Checker, sf *ast.SourceFile, node *ast.Node) *OverriddenSchemaConstructorMatch {
+func checkOverriddenSchemaConstructor(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile, node *ast.Node) *OverriddenSchemaConstructorMatch {
 	extendsElements := ast.GetExtendsHeritageClauseElements(node)
 	if len(extendsElements) == 0 {
 		return nil
@@ -77,8 +77,8 @@ func checkOverriddenSchemaConstructor(c *checker.Checker, sf *ast.SourceFile, no
 			continue
 		}
 		expr := elem.AsExpressionWithTypeArguments().Expression
-		t := typeparser.GetTypeAtLocation(c, expr)
-		if t != nil && typeparser.IsSchemaType(c, t, expr) {
+		t := tp.GetTypeAtLocation(expr)
+		if t != nil && tp.IsSchemaType(t, expr) {
 			extendsSchema = true
 			break
 		}

@@ -3,7 +3,6 @@ package refactors
 import (
 	"github.com/effect-ts/tsgo/internal/refactor"
 	"github.com/effect-ts/tsgo/internal/schemagen"
-	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
 	"github.com/microsoft/typescript-go/shim/ls"
@@ -25,7 +24,7 @@ func runStructuralTypeToSchema(ctx *refactor.Context) []ls.CodeAction {
 
 	c := ctx.Checker
 
-	version := typeparser.SupportedEffectVersion(c)
+	version := ctx.TypeParser.SupportedEffectVersion()
 
 	// Get the name node and resolve the type
 	var nameNode *ast.Node
@@ -39,7 +38,7 @@ func runStructuralTypeToSchema(ctx *refactor.Context) []ls.CodeAction {
 		return nil
 	}
 
-	t := typeparser.GetTypeAtLocation(c, nameNode)
+	t := ctx.TypeParser.GetTypeAtLocation(nameNode)
 	if t == nil {
 		return nil
 	}

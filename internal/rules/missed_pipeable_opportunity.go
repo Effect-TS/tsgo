@@ -29,7 +29,7 @@ var MissedPipeableOpportunity = rule.Rule{
 			minArgCount = effectConfig.GetPipeableMinArgCount()
 		}
 
-		matches := AnalyzeMissedPipeableOpportunity(ctx.Checker, ctx.SourceFile, minArgCount)
+		matches := AnalyzeMissedPipeableOpportunity(ctx.TypeParser, ctx.Checker, ctx.SourceFile, minArgCount)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
 			diags[i] = ctx.NewDiagnostic(
@@ -57,8 +57,8 @@ type MissedPipeableOpportunityMatch struct {
 }
 
 // AnalyzeMissedPipeableOpportunity finds all nested call chains that can be converted to .pipe() style.
-func AnalyzeMissedPipeableOpportunity(c *checker.Checker, sf *ast.SourceFile, minArgCount int) []MissedPipeableOpportunityMatch {
-	flows := typeparser.PipingFlows(c, sf, false)
+func AnalyzeMissedPipeableOpportunity(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile, minArgCount int) []MissedPipeableOpportunityMatch {
+	flows := tp.PipingFlows(sf, false)
 
 	var matches []MissedPipeableOpportunityMatch
 
@@ -100,7 +100,7 @@ func AnalyzeMissedPipeableOpportunity(c *checker.Checker, sf *ast.SourceFile, mi
 
 			for i := firstPipeableIndex; i < len(flow.Transformations); i++ {
 				t := flow.Transformations[i]
-				if !typeparser.IsSafelyPipeableCallee(c, t.Callee) {
+				if !tp.IsSafelyPipeableCallee(t.Callee) {
 					break
 				}
 				pipeableTransformations = append(pipeableTransformations, t)

@@ -22,6 +22,7 @@ type StructuralSchemaGen struct {
 	Tracker          *change.Tracker
 	SourceFile       *ast.SourceFile
 	Checker          *checker.Checker
+	TypeParser       *typeparser.TypeParser
 	SchemaIdentifier string
 	Version          typeparser.EffectMajorVersion
 
@@ -56,6 +57,7 @@ func NewStructuralSchemaGen(tracker *change.Tracker, sf *ast.SourceFile, c *chec
 		Tracker:               tracker,
 		SourceFile:            sf,
 		Checker:               c,
+		TypeParser:            typeparser.NewTypeParser(c.Program(), c),
 		SchemaIdentifier:      typeparser.FindModuleIdentifier(sf, "Schema"),
 		Version:               version,
 		hoistedSchemas:        make(map[checker.TypeId]hoistedEntry),
@@ -574,7 +576,7 @@ func (g *StructuralSchemaGen) ScanExistingSchemas(scope *ast.Node) {
 		if t == nil {
 			continue
 		}
-		schemaTypes := typeparser.EffectSchemaTypes(g.Checker, t, scope)
+		schemaTypes := g.TypeParser.EffectSchemaTypes(t, scope)
 		if schemaTypes == nil {
 			continue
 		}

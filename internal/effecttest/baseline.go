@@ -244,6 +244,7 @@ func generatePipingFlowBaseline(
 	sourceFileGetter func(string) *ast.SourceFile,
 ) string {
 	var sb strings.Builder
+	tp := typeparser.NewTypeParser(c.Program(), c)
 
 	for _, file := range inputFiles {
 		sf := sourceFileGetter(file.UnitName)
@@ -252,7 +253,7 @@ func generatePipingFlowBaseline(
 			continue
 		}
 
-		flows := typeparser.PipingFlows(c, sf, true)
+		flows := tp.PipingFlows(sf, true)
 		fmt.Fprintf(&sb, "==== %s (%d flows) ====\n", file.UnitName, len(flows))
 
 		for _, flow := range flows {
@@ -341,6 +342,7 @@ func generateLayerGraphBaseline(
 	sourceFileGetter func(string) *ast.SourceFile,
 ) string {
 	var sb strings.Builder
+	tp := typeparser.NewTypeParser(c.Program(), c)
 
 	// Read follow depth from program-level plugin options (populated from tsconfig.json)
 	followDepth := 0
@@ -385,8 +387,8 @@ func generateLayerGraphBaseline(
 				if vd.Name().Kind != ast.KindIdentifier {
 					continue
 				}
-				t := typeparser.GetTypeAtLocation(c, vd.Initializer)
-				if !typeparser.IsLayerType(c, t, vd.Initializer) {
+				t := tp.GetTypeAtLocation(vd.Initializer)
+				if !tp.IsLayerType(t, vd.Initializer) {
 					continue
 				}
 				exports = append(exports, layerExport{
@@ -407,7 +409,7 @@ func generateLayerGraphBaseline(
 				ExplodeOnlyLayerCalls: false,
 			}
 
-			fullGraph := layergraph.ExtractLayerGraph(c, export.initializer, sf, opts)
+			fullGraph := layergraph.ExtractLayerGraph(tp, c, export.initializer, sf, opts)
 			outlineGraph := layergraph.ExtractOutlineGraph(c, fullGraph)
 			providersAndRequirers := layergraph.ExtractProvidersAndRequirers(c, fullGraph)
 

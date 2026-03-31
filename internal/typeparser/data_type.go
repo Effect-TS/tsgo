@@ -12,7 +12,7 @@ var effectDataPackageSourceFileDescriptor = PackageSourceFileDescriptor{
 
 // isDataTypeSourceFile checks if a source file is the Data module
 // by verifying it exports both "TaggedError" and either "TaggedEnum" or "taggedEnum".
-func isDataTypeSourceFile(c *checker.Checker, sf *ast.SourceFile) bool {
+func isDataTypeSourceFile(_ *TypeParser, c *checker.Checker, sf *ast.SourceFile) bool {
 	if c == nil || sf == nil {
 		return false
 	}
@@ -42,6 +42,6 @@ func isDataTypeSourceFile(c *checker.Checker, sf *ast.SourceFile) bool {
 
 // IsNodeReferenceToEffectDataModuleApi reports whether node resolves to a member
 // exported by the "effect" package from a module that exports the Data type.
-func IsNodeReferenceToEffectDataModuleApi(c *checker.Checker, node *ast.Node, memberName string) bool {
-	return IsNodeReferenceToModuleExport(c, node, effectDataPackageSourceFileDescriptor, memberName)
+func (tp *TypeParser) IsNodeReferenceToEffectDataModuleApi(node *ast.Node, memberName string) bool {
+	return tp.IsNodeReferenceToModuleExport(node, effectDataPackageSourceFileDescriptor, memberName)
 }

@@ -36,7 +36,7 @@ func runWriteTagClassAccessors(ctx *refactor.Context) []ls.CodeAction {
 	c := ctx.Checker
 
 	// V3-only refactor
-	if typeparser.SupportedEffectVersion(c) == typeparser.EffectMajorV4 {
+	if ctx.TypeParser.SupportedEffectVersion() == typeparser.EffectMajorV4 {
 		return nil
 	}
 
@@ -54,14 +54,14 @@ func runWriteTagClassAccessors(ctx *refactor.Context) []ls.CodeAction {
 
 	// Check ExtendsEffectService (with accessors: true) or ExtendsEffectTag
 	var className *ast.Node
-	serviceResult := typeparser.ExtendsEffectService(c, classNode)
+	serviceResult := ctx.TypeParser.ExtendsEffectService(classNode)
 	if serviceResult != nil {
 		if !hasAccessorsTrue(serviceResult.Options) {
 			return nil
 		}
 		className = serviceResult.ClassName
 	} else {
-		tagResult := typeparser.ExtendsEffectTag(c, classNode)
+		tagResult := ctx.TypeParser.ExtendsEffectTag(classNode)
 		if tagResult != nil {
 			// Effect.Tag always has accessors
 			className = tagResult.ClassName
@@ -84,7 +84,7 @@ func runWriteTagClassAccessors(ctx *refactor.Context) []ls.CodeAction {
 		return nil
 	}
 
-	contextTag := typeparser.ContextTag(c, classType, classNode)
+	contextTag := ctx.TypeParser.ContextTag(classType, classNode)
 	if contextTag == nil || contextTag.Shape == nil {
 		return nil
 	}
@@ -219,7 +219,7 @@ func generateAccessors(
 		// Build signature type strings
 		var sigTypeStrs []string
 		for _, sig := range callSignatures {
-			sigStr := buildProxySignatureText(c, sig, classNode, classNameText, effectIdentifier)
+			sigStr := buildProxySignatureText(ctx.TypeParser, c, sig, classNode, classNameText, effectIdentifier)
 			if sigStr != "" {
 				sigTypeStrs = append(sigTypeStrs, sigStr)
 			}
@@ -272,6 +272,7 @@ func generateAccessors(
 
 // buildProxySignatureText builds the text representation of a proxy function type for a call signature.
 func buildProxySignatureText(
+	tp *typeparser.TypeParser,
 	c *checker.Checker,
 	sig *checker.Signature,
 	classNode *ast.Node,
@@ -317,7 +318,7 @@ func buildProxySignatureText(
 	// Return type
 	sb.WriteString(" => ")
 	returnType := c.GetReturnTypeOfSignature(sig)
-	wrappedReturn := buildWrappedReturnTypeText(c, returnType, classNode, classNameText, effectIdentifier)
+	wrappedReturn := buildWrappedReturnTypeText(tp, c, returnType, classNode, classNameText, effectIdentifier)
 	sb.WriteString(wrappedReturn)
 
 	return sb.String()
@@ -325,6 +326,7 @@ func buildProxySignatureText(
 
 // buildWrappedReturnTypeText builds the text representation of the wrapped return type.
 func buildWrappedReturnTypeText(
+	tp *typeparser.TypeParser,
 	c *checker.Checker,
 	returnType *checker.Type,
 	classNode *ast.Node,
@@ -332,7 +334,7 @@ func buildWrappedReturnTypeText(
 	effectIdentifier string,
 ) string {
 	// Try to parse as Effect type
-	effect := typeparser.EffectType(c, returnType, classNode)
+	effect := tp.EffectType(returnType, classNode)
 	if effect != nil {
 		aStr := c.TypeToStringEx(effect.A, classNode, checker.TypeFormatFlagsNoTruncation)
 		eStr := c.TypeToStringEx(effect.E, classNode, checker.TypeFormatFlagsNoTruncation)

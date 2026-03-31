@@ -322,7 +322,7 @@ func RunEffectTest(t *testing.T, version EffectVersion, testFile string) {
 	t.Run("errors", func(t *testing.T) {
 		c, done := program.GetTypeChecker(ctx)
 		defer done()
-		effectVersion := typeparser.DetectEffectVersionString(c)
+		effectVersion := typeparser.NewTypeParser(program, c).DetectEffectVersionString()
 		DoEffectErrorBaseline(
 			t,
 			baselineName,

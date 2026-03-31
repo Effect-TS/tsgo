@@ -61,10 +61,11 @@ func extractInvariantType(c *checker.Checker, t *checker.Type, atLocation *ast.N
 }
 
 // GetPropertyOfTypeByName returns a property symbol by name, including computed properties backed by string literals.
-func GetPropertyOfTypeByName(c *checker.Checker, t *checker.Type, name string) *ast.Symbol {
-	if c == nil || t == nil {
+func (tp *TypeParser) GetPropertyOfTypeByName(t *checker.Type, name string) *ast.Symbol {
+	if tp == nil || tp.checker == nil || t == nil {
 		return nil
 	}
+	c := tp.checker
 	if sym := c.GetPropertyOfType(t, name); sym != nil {
 		return sym
 	}
@@ -95,10 +96,11 @@ func resolveAliasedSymbol(c *checker.Checker, sym *ast.Symbol) *ast.Symbol {
 
 // ResolveToGlobalSymbol follows aliases and up to two simple variable indirections
 // so rules can recognize references to the original global symbol.
-func ResolveToGlobalSymbol(c *checker.Checker, sym *ast.Symbol) *ast.Symbol {
-	if c == nil || sym == nil {
+func (tp *TypeParser) ResolveToGlobalSymbol(sym *ast.Symbol) *ast.Symbol {
+	if tp == nil || tp.checker == nil || sym == nil {
 		return nil
 	}
+	c := tp.checker
 
 	sym = resolveAliasedSymbol(c, sym)
 	depth := 0

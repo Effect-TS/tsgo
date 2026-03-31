@@ -42,11 +42,11 @@ func isSchemaType(c *checker.Checker, t *checker.Type, atLocation *ast.Node) boo
 	if c == nil || t == nil {
 		return false
 	}
-	links := GetEffectLinks(c)
+	links := (&TypeParser{program: c.Program(), checker: c}).GetEffectLinks()
 	return Cached(&links.IsSchemaType, t, func() bool {
-		version := DetectEffectVersion(c)
+		version := (&TypeParser{program: c.Program(), checker: c}).DetectEffectVersion()
 		if version == EffectMajorV4 {
-			return GetPropertyOfTypeByName(c, t, SchemaTypeId) != nil
+			return (&TypeParser{program: c.Program(), checker: c}).GetPropertyOfTypeByName(t, SchemaTypeId) != nil
 		}
 
 		// v3 / unknown: check for 'ast' property first
@@ -98,8 +98,11 @@ func isSchemaType(c *checker.Checker, t *checker.Type, atLocation *ast.Node) boo
 }
 
 // IsSchemaType returns true if the type is a Schema type (v4 or v3).
-func IsSchemaType(c *checker.Checker, t *checker.Type, atLocation *ast.Node) bool {
-	return isSchemaType(c, t, atLocation)
+func (tp *TypeParser) IsSchemaType(t *checker.Type, atLocation *ast.Node) bool {
+	if tp == nil {
+		return false
+	}
+	return isSchemaType(tp.checker, t, atLocation)
 }
 
 // SchemaTypes holds the A (Type) and E (Encoded) types extracted from a Schema type.
@@ -110,15 +113,16 @@ type SchemaTypes struct {
 
 // EffectSchemaTypes extracts the A (Type) and E (Encoded) types from a Schema type.
 // Returns nil if the type is not a recognized Schema type or types cannot be extracted.
-func EffectSchemaTypes(c *checker.Checker, t *checker.Type, atLocation *ast.Node) *SchemaTypes {
-	if c == nil || t == nil {
+func (tp *TypeParser) EffectSchemaTypes(t *checker.Type, atLocation *ast.Node) *SchemaTypes {
+	if tp == nil || tp.checker == nil || t == nil {
 		return nil
 	}
-	links := GetEffectLinks(c)
+	c := tp.checker
+	links := tp.GetEffectLinks()
 	return Cached(&links.EffectSchemaTypes, t, func() *SchemaTypes {
-		version := DetectEffectVersion(c)
+		version := tp.DetectEffectVersion()
 		if version == EffectMajorV4 {
-			if GetPropertyOfTypeByName(c, t, SchemaTypeId) == nil {
+			if tp.GetPropertyOfTypeByName(t, SchemaTypeId) == nil {
 				return nil
 			}
 			// V4: get Type and Encoded properties directly
@@ -170,7 +174,7 @@ func getPropertyType(c *checker.Checker, t *checker.Type, atLocation *ast.Node, 
 	return c.GetTypeOfSymbolAtLocation(sym, atLocation)
 }
 
-func isSchemaTypeSourceFile(c *checker.Checker, sf *ast.SourceFile) bool {
+func isSchemaTypeSourceFile(_ *TypeParser, c *checker.Checker, sf *ast.SourceFile) bool {
 	if c == nil || sf == nil {
 		return false
 	}
@@ -195,11 +199,11 @@ func isSchemaTypeSourceFile(c *checker.Checker, sf *ast.SourceFile) bool {
 
 // IsNodeReferenceToEffectSchemaModuleApi reports whether node resolves to a member
 // exported by the "effect" package from a module that exports the Schema type.
-func IsNodeReferenceToEffectSchemaModuleApi(c *checker.Checker, node *ast.Node, memberName string) bool {
-	return IsNodeReferenceToModuleExport(c, node, effectSchemaModuleDescriptor, memberName)
+func (tp *TypeParser) IsNodeReferenceToEffectSchemaModuleApi(node *ast.Node, memberName string) bool {
+	return tp.IsNodeReferenceToModuleExport(node, effectSchemaModuleDescriptor, memberName)
 }
 
-func isParseResultSourceFile(c *checker.Checker, sf *ast.SourceFile) bool {
+func isParseResultSourceFile(_ *TypeParser, c *checker.Checker, sf *ast.SourceFile) bool {
 	if c == nil || sf == nil {
 		return false
 	}
@@ -229,11 +233,11 @@ func isParseResultSourceFile(c *checker.Checker, sf *ast.SourceFile) bool {
 
 // IsNodeReferenceToEffectParseResultModuleApi reports whether node resolves to a member
 // exported by the "effect" package from a module that exports the ParseResult type (V3).
-func IsNodeReferenceToEffectParseResultModuleApi(c *checker.Checker, node *ast.Node, memberName string) bool {
-	return IsNodeReferenceToModuleExport(c, node, effectParseResultModuleDescriptor, memberName)
+func (tp *TypeParser) IsNodeReferenceToEffectParseResultModuleApi(node *ast.Node, memberName string) bool {
+	return tp.IsNodeReferenceToModuleExport(node, effectParseResultModuleDescriptor, memberName)
 }
 
-func isSchemaParserSourceFile(c *checker.Checker, sf *ast.SourceFile) bool {
+func isSchemaParserSourceFile(_ *TypeParser, c *checker.Checker, sf *ast.SourceFile) bool {
 	if c == nil || sf == nil {
 		return false
 	}
@@ -258,6 +262,6 @@ func isSchemaParserSourceFile(c *checker.Checker, sf *ast.SourceFile) bool {
 
 // IsNodeReferenceToEffectSchemaParserModuleApi reports whether node resolves to a member
 // exported by the "effect" package from a module that exports the SchemaParser type (V4).
-func IsNodeReferenceToEffectSchemaParserModuleApi(c *checker.Checker, node *ast.Node, memberName string) bool {
-	return IsNodeReferenceToModuleExport(c, node, effectSchemaParserModuleDescriptor, memberName)
+func (tp *TypeParser) IsNodeReferenceToEffectSchemaParserModuleApi(node *ast.Node, memberName string) bool {
+	return tp.IsNodeReferenceToModuleExport(node, effectSchemaParserModuleDescriptor, memberName)
 }

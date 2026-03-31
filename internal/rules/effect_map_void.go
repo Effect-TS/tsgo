@@ -21,7 +21,7 @@ var EffectMapVoid = rule.Rule{
 	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Effect_asVoid_can_be_used_instead_to_discard_the_success_value_effect_effectMapVoid.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
-		matches := AnalyzeEffectMapVoid(ctx.Checker, ctx.SourceFile)
+		matches := AnalyzeEffectMapVoid(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
 			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Effect_asVoid_can_be_used_instead_to_discard_the_success_value_effect_effectMapVoid, nil)
@@ -85,7 +85,7 @@ func isVoidCallback(node *ast.Node) bool {
 
 // AnalyzeEffectMapVoid finds all Effect.map calls with void callbacks
 // that can be replaced with Effect.asVoid.
-func AnalyzeEffectMapVoid(c *checker.Checker, sf *ast.SourceFile) []EffectMapVoidMatch {
+func AnalyzeEffectMapVoid(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile) []EffectMapVoidMatch {
 	var matches []EffectMapVoidMatch
 
 	var walk ast.Visitor
@@ -97,7 +97,7 @@ func AnalyzeEffectMapVoid(c *checker.Checker, sf *ast.SourceFile) []EffectMapVoi
 		if n.Kind == ast.KindCallExpression {
 			call := n.AsCallExpression()
 			if call.Expression != nil && call.Expression.Kind == ast.KindPropertyAccessExpression {
-				if typeparser.IsNodeReferenceToEffectModuleApi(c, call.Expression, "map") {
+				if tp.IsNodeReferenceToEffectModuleApi(call.Expression, "map") {
 					if call.Arguments != nil && len(call.Arguments.Nodes) >= 1 {
 						arg := call.Arguments.Nodes[0]
 						if isVoidCallback(arg) {

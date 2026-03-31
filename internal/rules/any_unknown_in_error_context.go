@@ -6,7 +6,6 @@ import (
 
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
-	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
 	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
@@ -68,12 +67,12 @@ var AnyUnknownInErrorContext = rule.Rule{
 			// Effect or Layer type annotation, skip it entirely (user intentionally typed it)
 			if node.Kind == ast.KindParameter || node.Kind == ast.KindPropertyDeclaration || node.Kind == ast.KindVariableDeclaration {
 				if typeNode := node.Type(); typeNode != nil {
-					annotationType := typeparser.GetTypeAtLocation(ctx.Checker, typeNode)
+					annotationType := ctx.TypeParser.GetTypeAtLocation(typeNode)
 					if annotationType != nil {
-						if typeparser.StrictEffectType(ctx.Checker, annotationType, typeNode) != nil {
+						if ctx.TypeParser.StrictEffectType(annotationType, typeNode) != nil {
 							continue
 						}
-						if typeparser.LayerType(ctx.Checker, annotationType, typeNode) != nil {
+						if ctx.TypeParser.LayerType(annotationType, typeNode) != nil {
 							continue
 						}
 					}
@@ -84,7 +83,7 @@ var AnyUnknownInErrorContext = rule.Rule{
 			node.ForEachChild(pushChild)
 
 			// Get the type at this location
-			t := typeparser.GetTypeAtLocation(ctx.Checker, node)
+			t := ctx.TypeParser.GetTypeAtLocation(node)
 
 			// For call expressions, use the resolved signature's return type
 			if node.Kind == ast.KindCallExpression {
@@ -99,10 +98,10 @@ var AnyUnknownInErrorContext = rule.Rule{
 
 			// Try strict Effect type first, then Layer type
 			var eType, rType *checker.Type
-			if eff := typeparser.StrictEffectType(ctx.Checker, t, node); eff != nil {
+			if eff := ctx.TypeParser.StrictEffectType(t, node); eff != nil {
 				eType = eff.E
 				rType = eff.R
-			} else if layer := typeparser.LayerType(ctx.Checker, t, node); layer != nil {
+			} else if layer := ctx.TypeParser.LayerType(t, node); layer != nil {
 				eType = layer.E
 				rType = layer.RIn
 			}

@@ -26,12 +26,12 @@ type parsedSingleArgCallResult struct {
 
 // ParsePipeCall detects pipe() and .pipe() call patterns.
 // Returns nil when the node is not a recognized pipe call.
-func ParsePipeCall(c *checker.Checker, node *ast.Node) *ParsedPipeCallResult {
-	if c == nil || node == nil || node.Kind != ast.KindCallExpression {
+func (tp *TypeParser) ParsePipeCall(node *ast.Node) *ParsedPipeCallResult {
+	if tp == nil || tp.checker == nil || node == nil || node.Kind != ast.KindCallExpression {
 		return nil
 	}
 
-	links := GetEffectLinks(c)
+	links := tp.GetEffectLinks()
 	return Cached(&links.ParsePipeCall, node, func() *ParsedPipeCallResult {
 		call := node.AsCallExpression()
 		if call == nil || call.Expression == nil {
@@ -51,7 +51,7 @@ func ParsePipeCall(c *checker.Checker, node *ast.Node) *ParsedPipeCallResult {
 			}
 
 			// Check if this is Function.pipe from "effect" package
-			if IsNodeReferenceToEffectPackageExport(c, call.Expression, "pipe") {
+			if tp.IsNodeReferenceToEffectPackageExport(call.Expression, "pipe") {
 				// This is pipe(subject, f1, f2, ...) via namespace access (e.g., Function.pipe)
 				if call.Arguments == nil || len(call.Arguments.Nodes) == 0 {
 					return nil
@@ -89,7 +89,7 @@ func ParsePipeCall(c *checker.Checker, node *ast.Node) *ParsedPipeCallResult {
 				return nil
 			}
 
-			if !IsNodeReferenceToEffectPackageExport(c, call.Expression, "pipe") {
+			if !tp.IsNodeReferenceToEffectPackageExport(call.Expression, "pipe") {
 				return nil
 			}
 
@@ -190,9 +190,9 @@ func parseEffectFnCall(c *checker.Checker, node *ast.Node) *parsedEffectFnCallRe
 	case ast.KindPropertyAccessExpression:
 		// Direct call: Effect.fn(...) or Effect.fnUntraced(...)
 		switch {
-		case IsNodeReferenceToEffectModuleApi(c, expr, "fn"):
+		case (&TypeParser{program: c.Program(), checker: c}).IsNodeReferenceToEffectModuleApi(expr, "fn"):
 			kind = TransformationKindEffectFn
-		case IsNodeReferenceToEffectModuleApi(c, expr, "fnUntraced"):
+		case (&TypeParser{program: c.Program(), checker: c}).IsNodeReferenceToEffectModuleApi(expr, "fnUntraced"):
 			kind = TransformationKindEffectFnUntraced
 		default:
 			return nil
@@ -207,7 +207,7 @@ func parseEffectFnCall(c *checker.Checker, node *ast.Node) *parsedEffectFnCallRe
 		if innerCall.Expression.Kind != ast.KindPropertyAccessExpression {
 			return nil
 		}
-		if !IsNodeReferenceToEffectModuleApi(c, innerCall.Expression, "fn") {
+		if !(&TypeParser{program: c.Program(), checker: c}).IsNodeReferenceToEffectModuleApi(innerCall.Expression, "fn") {
 			return nil
 		}
 		kind = TransformationKindEffectFn
@@ -233,12 +233,13 @@ type workItem struct {
 }
 
 // PipingFlows returns all piping flows found in a source file, sorted by source position.
-func PipingFlows(c *checker.Checker, sf *ast.SourceFile, includeEffectFn bool) []*PipingFlow {
-	if c == nil || sf == nil {
+func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) []*PipingFlow {
+	if tp == nil || tp.checker == nil || sf == nil {
 		return nil
 	}
+	c := tp.checker
 
-	links := GetEffectLinks(c)
+	links := tp.GetEffectLinks()
 	store := &links.PipingFlowsWithoutEffectFn
 	if includeEffectFn {
 		store = &links.PipingFlowsWithEffectFn
@@ -284,7 +285,7 @@ func PipingFlows(c *checker.Checker, sf *ast.SourceFile, includeEffectFn bool) [
 						if item.parentFlow != nil {
 							item.parentFlow.Subject = PipingFlowSubject{
 								Node:    node,
-								OutType: GetTypeAtLocation(c, node),
+								OutType: TypeParser{checker: c}.GetTypeAtLocation(node),
 							}
 							result = append(result, item.parentFlow)
 						}
@@ -305,7 +306,7 @@ func PipingFlows(c *checker.Checker, sf *ast.SourceFile, includeEffectFn bool) [
 				}
 
 				// Try pipe call
-				if pipeResult := ParsePipeCall(c, node); pipeResult != nil {
+				if pipeResult := tp.ParsePipeCall(node); pipeResult != nil {
 					transformations := buildPipeTransformations(c, pipeResult)
 					flowNode := pipeResult.Node.AsNode()
 
@@ -374,7 +375,7 @@ func PipingFlows(c *checker.Checker, sf *ast.SourceFile, includeEffectFn bool) [
 				// Subject chain terminated — finalize the flow
 				item.parentFlow.Subject = PipingFlowSubject{
 					Node:    node,
-					OutType: GetTypeAtLocation(c, node),
+					OutType: TypeParser{checker: c}.GetTypeAtLocation(node),
 				}
 				result = append(result, item.parentFlow)
 			}

@@ -23,7 +23,7 @@ func runMissingStarInYieldEffectGenFix(ctx *fixable.Context) []ls.CodeAction {
 
 	sf := ctx.SourceFile
 
-	matches := rules.AnalyzeMissingStarInYieldEffectGen(c, sf)
+	matches := rules.AnalyzeMissingStarInYieldEffectGen(ctx.TypeParser, c, sf)
 
 	var yieldNode *ast.Node
 	for _, match := range matches {

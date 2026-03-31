@@ -18,14 +18,14 @@ type Context struct {
 	Context         context.Context
 	Program         checker.Program
 	Checker         *checker.Checker
-	TypeParser      typeparser.TypeParser
+	TypeParser      *typeparser.TypeParser
 	SourceFile      *ast.SourceFile
 	Options         *etscore.ResolvedEffectPluginOptions
 	defaultSeverity etscore.Severity
 }
 
 // NewContext creates a new Context for a rule invocation.
-func NewContext(ctx context.Context, program checker.Program, c *checker.Checker, tp typeparser.TypeParser, sf *ast.SourceFile, options *etscore.ResolvedEffectPluginOptions, defaultSeverity etscore.Severity) *Context {
+func NewContext(ctx context.Context, program checker.Program, c *checker.Checker, tp *typeparser.TypeParser, sf *ast.SourceFile, options *etscore.ResolvedEffectPluginOptions, defaultSeverity etscore.Severity) *Context {
 	return &Context{
 		Context:         ctx,
 		Program:         program,

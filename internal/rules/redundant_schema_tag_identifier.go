@@ -19,7 +19,7 @@ var RedundantSchemaTagIdentifier = rule.Rule{
 	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.Identifier_0_is_redundant_since_it_equals_the_tag_value_effect_redundantSchemaTagIdentifier.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
-		matches := AnalyzeRedundantSchemaTagIdentifier(ctx.Checker, ctx.SourceFile)
+		matches := AnalyzeRedundantSchemaTagIdentifier(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, 0, len(matches))
 		for _, m := range matches {
 			if m.KeyStringLiteral.Kind != ast.KindStringLiteral {
@@ -41,7 +41,7 @@ type RedundantSchemaTagIdentifierMatch struct {
 
 // AnalyzeRedundantSchemaTagIdentifier finds all class declarations where the identifier
 // string literal equals the tag value in Schema.TaggedClass/TaggedError/TaggedRequest.
-func AnalyzeRedundantSchemaTagIdentifier(c *checker.Checker, sf *ast.SourceFile) []RedundantSchemaTagIdentifierMatch {
+func AnalyzeRedundantSchemaTagIdentifier(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []RedundantSchemaTagIdentifierMatch {
 	var matches []RedundantSchemaTagIdentifierMatch
 
 	nodeToVisit := make([]*ast.Node, 0)
@@ -56,7 +56,7 @@ func AnalyzeRedundantSchemaTagIdentifier(c *checker.Checker, sf *ast.SourceFile)
 		nodeToVisit = nodeToVisit[:len(nodeToVisit)-1]
 
 		if node.Kind == ast.KindClassDeclaration {
-			if m, ok := analyzeRedundantSchemaTagIdentifierNode(c, sf, node); ok {
+			if m, ok := analyzeRedundantSchemaTagIdentifierNode(tp, c, sf, node); ok {
 				matches = append(matches, m)
 			}
 		}
@@ -67,14 +67,14 @@ func AnalyzeRedundantSchemaTagIdentifier(c *checker.Checker, sf *ast.SourceFile)
 	return matches
 }
 
-func analyzeRedundantSchemaTagIdentifierNode(c *checker.Checker, sf *ast.SourceFile, node *ast.Node) (RedundantSchemaTagIdentifierMatch, bool) {
+func analyzeRedundantSchemaTagIdentifierNode(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile, node *ast.Node) (RedundantSchemaTagIdentifierMatch, bool) {
 	// Try ExtendsSchemaTaggedClass, then TaggedError, then TaggedRequest (short-circuit on first match)
-	result := typeparser.ExtendsSchemaTaggedClass(c, node)
+	result := tp.ExtendsSchemaTaggedClass(node)
 	if result == nil {
-		result = typeparser.ExtendsSchemaTaggedError(c, node)
+		result = tp.ExtendsSchemaTaggedError(node)
 	}
 	if result == nil {
-		result = typeparser.ExtendsSchemaTaggedRequest(c, node)
+		result = tp.ExtendsSchemaTaggedRequest(node)
 	}
 	if result == nil {
 		return RedundantSchemaTagIdentifierMatch{}, false

@@ -24,7 +24,7 @@ func runUnnecessaryEffectGenFix(ctx *fixable.Context) []ls.CodeAction {
 
 	sf := ctx.SourceFile
 
-	matches := rules.AnalyzeUnnecessaryEffectGen(c, sf)
+	matches := rules.AnalyzeUnnecessaryEffectGen(ctx.TypeParser, c, sf)
 	for _, match := range matches {
 		diagRange := match.Location
 		if !diagRange.Intersects(ctx.Span) && !ctx.Span.ContainedBy(diagRange) {

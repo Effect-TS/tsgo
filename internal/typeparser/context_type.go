@@ -12,7 +12,7 @@ var effectContextPackageSourceFileDescriptor = PackageSourceFileDescriptor{
 
 // isContextTypeSourceFile checks if a source file is the Context module
 // by verifying it exports both "Context" and "Tag".
-func isContextTypeSourceFile(c *checker.Checker, sf *ast.SourceFile) bool {
+func isContextTypeSourceFile(_ *TypeParser, c *checker.Checker, sf *ast.SourceFile) bool {
 	if c == nil || sf == nil {
 		return false
 	}
@@ -35,6 +35,6 @@ func isContextTypeSourceFile(c *checker.Checker, sf *ast.SourceFile) bool {
 
 // IsNodeReferenceToEffectContextModuleApi reports whether node resolves to a member
 // exported by the "effect" package from a module that exports the Context type.
-func IsNodeReferenceToEffectContextModuleApi(c *checker.Checker, node *ast.Node, memberName string) bool {
-	return IsNodeReferenceToModuleExport(c, node, effectContextPackageSourceFileDescriptor, memberName)
+func (tp *TypeParser) IsNodeReferenceToEffectContextModuleApi(node *ast.Node, memberName string) bool {
+	return tp.IsNodeReferenceToModuleExport(node, effectContextPackageSourceFileDescriptor, memberName)
 }

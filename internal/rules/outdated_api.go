@@ -25,7 +25,7 @@ var OutdatedApi = rule.Rule{
 		tsdiag.This_project_targets_Effect_v4_but_is_using_Effect_v3_APIs_To_find_the_correct_API_to_use_consult_the_Effect_v4_documentation_for_the_corresponding_v4_replacement_effect_outdatedApi.Code(),
 	},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
-		matches := AnalyzeOutdatedApi(ctx.Checker, ctx.SourceFile)
+		matches := AnalyzeOutdatedApi(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
 		if len(matches) == 0 {
 			return nil
 		}
@@ -64,8 +64,8 @@ type OutdatedApiMatch struct {
 }
 
 // AnalyzeOutdatedApi finds all usages of Effect v3 APIs in an Effect v4 project.
-func AnalyzeOutdatedApi(c *checker.Checker, sf *ast.SourceFile) []OutdatedApiMatch {
-	if typeparser.SupportedEffectVersion(c) != typeparser.EffectMajorV4 {
+func AnalyzeOutdatedApi(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []OutdatedApiMatch {
+	if tp.SupportedEffectVersion() != typeparser.EffectMajorV4 {
 		return nil
 	}
 
@@ -78,7 +78,7 @@ func AnalyzeOutdatedApi(c *checker.Checker, sf *ast.SourceFile) []OutdatedApiMat
 		}
 
 		if n.Kind == ast.KindPropertyAccessExpression {
-			if m := checkOutdatedApiPropertyAccess(c, sf, n); m != nil {
+			if m := checkOutdatedApiPropertyAccess(tp, c, sf, n); m != nil {
 				matches = append(matches, *m)
 			}
 		}
@@ -92,7 +92,7 @@ func AnalyzeOutdatedApi(c *checker.Checker, sf *ast.SourceFile) []OutdatedApiMat
 	return matches
 }
 
-func checkOutdatedApiPropertyAccess(c *checker.Checker, sf *ast.SourceFile, n *ast.Node) *OutdatedApiMatch {
+func checkOutdatedApiPropertyAccess(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile, n *ast.Node) *OutdatedApiMatch {
 	prop := n.AsPropertyAccessExpression()
 	if prop == nil {
 		return nil
@@ -124,7 +124,7 @@ func checkOutdatedApiPropertyAccess(c *checker.Checker, sf *ast.SourceFile, n *a
 		return nil
 	}
 
-	targetType := typeparser.GetTypeAtLocation(c, expr)
+	targetType := tp.GetTypeAtLocation(expr)
 	if targetType == nil {
 		return nil
 	}
@@ -136,7 +136,7 @@ func checkOutdatedApiPropertyAccess(c *checker.Checker, sf *ast.SourceFile, n *a
 	}
 
 	// Verify the expression references the Effect module
-	if !typeparser.IsExpressionEffectModule(c, expr) {
+	if !tp.IsExpressionEffectModule(expr) {
 		return nil
 	}
 
