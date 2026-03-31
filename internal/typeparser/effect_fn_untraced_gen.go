@@ -13,7 +13,6 @@ func (tp *TypeParser) EffectFnUntracedGenCall(node *ast.Node) *EffectGenCallResu
 	if tp == nil || tp.checker == nil || node == nil || node.Kind != ast.KindCallExpression {
 		return nil
 	}
-	c := tp.checker
 
 	links := tp.GetEffectLinks()
 	return Cached(&links.EffectFnUntracedGenCall, node, func() *EffectGenCallResult {
@@ -35,7 +34,7 @@ func (tp *TypeParser) EffectFnUntracedGenCall(node *ast.Node) *EffectGenCallResu
 			return nil
 		}
 
-		if !(&TypeParser{program: c.Program(), checker: c}).IsNodeReferenceToEffectModuleApi(expr, "fnUntraced") {
+		if !tp.IsNodeReferenceToEffectModuleApi(expr, "fnUntraced") {
 			return nil
 		}
 

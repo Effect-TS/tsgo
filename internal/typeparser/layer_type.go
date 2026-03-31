@@ -14,18 +14,18 @@ var effectLayerModuleDescriptor = PackageSourceFileDescriptor{
 }
 
 // parseLayerVarianceStruct extracts ROut, E, RIn from a Layer variance struct type.
-func parseLayerVarianceStruct(c *checker.Checker, t *checker.Type, atLocation *ast.Node) *Layer {
-	rOut := extractContravariantType(c, t, atLocation, "_ROut")
+func (tp *TypeParser) parseLayerVarianceStruct(t *checker.Type, atLocation *ast.Node) *Layer {
+	rOut := tp.extractContravariantType(t, atLocation, "_ROut")
 	if rOut == nil {
 		return nil
 	}
 
-	e := extractCovariantType(c, t, atLocation, "_E")
+	e := tp.extractCovariantType(t, atLocation, "_E")
 	if e == nil {
 		return nil
 	}
 
-	rIn := extractCovariantType(c, t, atLocation, "_RIn")
+	rIn := tp.extractCovariantType(t, atLocation, "_RIn")
 	if rIn == nil {
 		return nil
 	}
@@ -54,7 +54,7 @@ func (tp *TypeParser) LayerType(t *checker.Type, atLocation *ast.Node) *Layer {
 
 			varianceStructType := c.GetTypeOfSymbolAtLocation(propSymbol, atLocation)
 
-			return parseLayerVarianceStruct(c, varianceStructType, atLocation)
+			return tp.parseLayerVarianceStruct(varianceStructType, atLocation)
 		}
 
 		// v3 / unknown: iterate properties looking for a layer variance struct
@@ -95,7 +95,7 @@ func (tp *TypeParser) LayerType(t *checker.Type, atLocation *ast.Node) *Layer {
 		// Try each candidate as a layer variance struct
 		for _, prop := range candidates {
 			propType := c.GetTypeOfSymbolAtLocation(prop, atLocation)
-			if result := parseLayerVarianceStruct(c, propType, atLocation); result != nil {
+			if result := tp.parseLayerVarianceStruct(propType, atLocation); result != nil {
 				return result
 			}
 		}
@@ -109,7 +109,7 @@ func (tp *TypeParser) IsLayerType(t *checker.Type, atLocation *ast.Node) bool {
 	return tp.LayerType(t, atLocation) != nil
 }
 
-func isLayerTypeSourceFile(_ *TypeParser, c *checker.Checker, sf *ast.SourceFile) bool {
+func isLayerTypeSourceFile(tp *TypeParser, c *checker.Checker, sf *ast.SourceFile) bool {
 	if c == nil || sf == nil {
 		return false
 	}
@@ -129,7 +129,7 @@ func isLayerTypeSourceFile(_ *TypeParser, c *checker.Checker, sf *ast.SourceFile
 		return false
 	}
 
-	return (&TypeParser{program: c.Program(), checker: c}).LayerType(layerType, sf.AsNode()) != nil
+	return tp.LayerType(layerType, sf.AsNode()) != nil
 }
 
 // IsNodeReferenceToEffectLayerModuleApi reports whether node resolves to a member

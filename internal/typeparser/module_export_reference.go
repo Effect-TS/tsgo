@@ -25,7 +25,7 @@ func (tp *TypeParser) ReferenceSymbolAtNode(node *ast.Node) *ast.Symbol {
 		}
 	}
 
-	return resolveAliasedSymbol(c, sym)
+	return tp.resolveAliasedSymbol(sym)
 }
 
 func (tp *TypeParser) IsSourceFileInPackage(sf *ast.SourceFile, packageName string) bool {
@@ -62,7 +62,7 @@ func (tp *TypeParser) IsNodeReferenceToModuleExport(node *ast.Node, desc Package
 			continue
 		}
 		exportSym := tp.checker.TryGetMemberInModuleExportsAndProperties(memberName, moduleSym)
-		exportSym = resolveAliasedSymbol(tp.checker, exportSym)
+		exportSym = tp.resolveAliasedSymbol(exportSym)
 		if checker.Checker_getSymbolIfSameReference(tp.checker, exportSym, sym) != nil {
 			return true
 		}

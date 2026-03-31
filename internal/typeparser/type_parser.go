@@ -1,7 +1,6 @@
 package typeparser
 
 import (
-	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
 )
 
@@ -21,8 +20,4 @@ func NewTypeParser(p checker.Program, c *checker.Checker) *TypeParser {
 		panic("typeparser.NewTypeParser: nil checker")
 	}
 	return &TypeParser{program: p, checker: c}
-}
-
-func (tp TypeParser) IsPipeableType(t *checker.Type, atLocation *ast.Node) bool {
-	return IsPipeableType(tp.checker, t, atLocation)
 }

@@ -7,11 +7,12 @@ import (
 
 // IsPipeableType returns true if the type has a callable "pipe" property,
 // indicating it supports the pipeable pattern (e.g., value.pipe(f1, f2, ...)).
-func IsPipeableType(c *checker.Checker, t *checker.Type, atLocation *ast.Node) bool {
-	if c == nil || t == nil {
+func (tp *TypeParser) IsPipeableType(t *checker.Type, atLocation *ast.Node) bool {
+	if tp == nil || tp.checker == nil || t == nil {
 		return false
 	}
-	links := (&TypeParser{program: c.Program(), checker: c}).GetEffectLinks()
+	c := tp.checker
+	links := tp.GetEffectLinks()
 	return Cached(&links.IsPipeableType, t, func() bool {
 		pipeSymbol := c.GetPropertyOfType(t, "pipe")
 		if pipeSymbol == nil {

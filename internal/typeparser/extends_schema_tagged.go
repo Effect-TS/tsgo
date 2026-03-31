@@ -2,7 +2,6 @@ package typeparser
 
 import (
 	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
 )
 
 // SchemaTaggedResult holds the parsed result of a class extending Schema.TaggedClass/TaggedError/TaggedRequest.
@@ -23,7 +22,8 @@ type SchemaTaggedResult struct {
 // and the inner call resolves to Schema.<memberName>.
 //
 // Returns nil if the class does not match.
-func extendsSchemaTagged(c *checker.Checker, classNode *ast.Node, memberName string) *SchemaTaggedResult {
+func (tp *TypeParser) extendsSchemaTagged(classNode *ast.Node, memberName string) *SchemaTaggedResult {
+	c := tp.checker
 	if c == nil || classNode == nil {
 		return nil
 	}
@@ -77,7 +77,7 @@ func extendsSchemaTagged(c *checker.Checker, classNode *ast.Node, memberName str
 		if innerCall.Expression == nil {
 			continue
 		}
-		if !(&TypeParser{program: c.Program(), checker: c}).IsNodeReferenceToEffectSchemaModuleApi(innerCall.Expression, memberName) {
+		if !tp.IsNodeReferenceToEffectSchemaModuleApi(innerCall.Expression, memberName) {
 			continue
 		}
 
@@ -117,7 +117,7 @@ func (tp *TypeParser) ExtendsSchemaTaggedClass(classNode *ast.Node) *SchemaTagge
 	}
 	links := tp.GetEffectLinks()
 	return Cached(&links.ExtendsSchemaTaggedClass, classNode, func() *SchemaTaggedResult {
-		return extendsSchemaTagged(tp.checker, classNode, "TaggedClass")
+		return tp.extendsSchemaTagged(classNode, "TaggedClass")
 	})
 }
 
@@ -128,7 +128,7 @@ func (tp *TypeParser) ExtendsSchemaTaggedError(classNode *ast.Node) *SchemaTagge
 	}
 	links := tp.GetEffectLinks()
 	return Cached(&links.ExtendsSchemaTaggedError, classNode, func() *SchemaTaggedResult {
-		return extendsSchemaTagged(tp.checker, classNode, "TaggedError")
+		return tp.extendsSchemaTagged(classNode, "TaggedError")
 	})
 }
 
@@ -139,6 +139,6 @@ func (tp *TypeParser) ExtendsSchemaTaggedRequest(classNode *ast.Node) *SchemaTag
 	}
 	links := tp.GetEffectLinks()
 	return Cached(&links.ExtendsSchemaTaggedRequest, classNode, func() *SchemaTaggedResult {
-		return extendsSchemaTagged(tp.checker, classNode, "TaggedRequest")
+		return tp.extendsSchemaTagged(classNode, "TaggedRequest")
 	})
 }

@@ -9,13 +9,13 @@ import (
 )
 
 // parseServiceVarianceStruct extracts Identifier and Shape from a Service variance struct type.
-func parseServiceVarianceStruct(c *checker.Checker, t *checker.Type, atLocation *ast.Node) *Service {
-	identifier := extractInvariantType(c, t, atLocation, "_Identifier")
+func (tp *TypeParser) parseServiceVarianceStruct(t *checker.Type, atLocation *ast.Node) *Service {
+	identifier := tp.extractInvariantType(t, atLocation, "_Identifier")
 	if identifier == nil {
 		return nil
 	}
 
-	shape := extractInvariantType(c, t, atLocation, "_Service")
+	shape := tp.extractInvariantType(t, atLocation, "_Service")
 	if shape == nil {
 		return nil
 	}
@@ -38,7 +38,7 @@ func (tp *TypeParser) ServiceType(t *checker.Type, atLocation *ast.Node) *Servic
 
 		varianceStructType := tp.checker.GetTypeOfSymbolAtLocation(propSymbol, atLocation)
 
-		return parseServiceVarianceStruct(tp.checker, varianceStructType, atLocation)
+		return tp.parseServiceVarianceStruct(varianceStructType, atLocation)
 	})
 }
 
@@ -101,7 +101,7 @@ func (tp *TypeParser) ContextTag(t *checker.Type, atLocation *ast.Node) *Service
 		// Try each candidate as a service variance struct
 		for _, prop := range candidates {
 			propType := tp.checker.GetTypeOfSymbolAtLocation(prop, atLocation)
-			if result := parseServiceVarianceStruct(tp.checker, propType, atLocation); result != nil {
+			if result := tp.parseServiceVarianceStruct(propType, atLocation); result != nil {
 				return result
 			}
 		}

@@ -11,7 +11,6 @@ func (tp *TypeParser) EffectGenCall(node *ast.Node) *EffectGenCallResult {
 	if tp == nil || tp.checker == nil || node == nil || node.Kind != ast.KindCallExpression {
 		return nil
 	}
-	c := tp.checker
 
 	links := tp.GetEffectLinks()
 	return Cached(&links.EffectGenCall, node, func() *EffectGenCallResult {
@@ -47,7 +46,7 @@ func (tp *TypeParser) EffectGenCall(node *ast.Node) *EffectGenCallResult {
 			return nil
 		}
 
-		if !(&TypeParser{program: c.Program(), checker: c}).IsNodeReferenceToEffectModuleApi(expr, "gen") {
+		if !tp.IsNodeReferenceToEffectModuleApi(expr, "gen") {
 			return nil
 		}
 

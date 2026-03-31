@@ -11,7 +11,6 @@ func (tp *TypeParser) ParseEffectFnIife(node *ast.Node) *EffectFnIifeResult {
 	if tp == nil || tp.checker == nil || node == nil || node.Kind != ast.KindCallExpression {
 		return nil
 	}
-	c := tp.checker
 
 	links := tp.GetEffectLinks()
 	return Cached(&links.ParseEffectFnIife, node, func() *EffectFnIifeResult {
@@ -33,7 +32,6 @@ func (tp *TypeParser) ParseEffectFnIife(node *ast.Node) *EffectFnIifeResult {
 
 		// Try generator parsers first (priority order per spec)
 		// a. Effect.fn generator
-		tp := &TypeParser{program: c.Program(), checker: c}
 		if result := tp.EffectFnGenCall(innerNode); result != nil {
 			pipeArgs, traceExpr := extractGenCallExtras(innerCall, result.GeneratorFunction)
 			return &EffectFnIifeResult{

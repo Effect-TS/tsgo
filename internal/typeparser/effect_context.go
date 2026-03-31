@@ -2,7 +2,6 @@ package typeparser
 
 import (
 	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
 	"github.com/microsoft/typescript-go/shim/core"
 )
 
@@ -17,7 +16,7 @@ func (tp *TypeParser) GetEffectContextFlags(node *ast.Node) EffectContextFlags {
 	if tp == nil {
 		return EffectContextFlagNone
 	}
-	links := ensureEffectContextAnalyzed(tp.checker, node)
+	links := tp.ensureEffectContextAnalyzed(node)
 	if links == nil {
 		return EffectContextFlagNone
 	}
@@ -32,7 +31,7 @@ func (tp *TypeParser) GetEffectYieldGeneratorFunction(node *ast.Node) *ast.Funct
 	if tp == nil {
 		return nil
 	}
-	links := ensureEffectContextAnalyzed(tp.checker, node)
+	links := tp.ensureEffectContextAnalyzed(node)
 	if links == nil {
 		return nil
 	}
@@ -57,12 +56,11 @@ func getClosestNodeWithLinks[T any](store *core.LinkStore[*ast.Node, T], node *a
 	return nil, false
 }
 
-func ensureEffectContextAnalyzed(c *checker.Checker, node *ast.Node) *EffectLinks {
-	if c == nil || node == nil {
+func (tp *TypeParser) ensureEffectContextAnalyzed(node *ast.Node) *EffectLinks {
+	if tp == nil || tp.checker == nil || node == nil {
 		return nil
 	}
-
-	links := (&TypeParser{program: c.Program(), checker: c}).GetEffectLinks()
+	links := tp.GetEffectLinks()
 
 	if links.EffectContextFlags.Has(node) {
 		return links
@@ -74,18 +72,17 @@ func ensureEffectContextAnalyzed(c *checker.Checker, node *ast.Node) *EffectLink
 	}
 
 	Cached(&links.EffectContextAnalyzed, sf, func() bool {
-		analyzeEffectContextForSourceFile(c, sf)
+		tp.analyzeEffectContextForSourceFile(sf)
 		return true
 	})
 	return links
 }
 
-func analyzeEffectContextForSourceFile(c *checker.Checker, sf *ast.SourceFile) {
-	if c == nil || sf == nil {
+func (tp *TypeParser) analyzeEffectContextForSourceFile(sf *ast.SourceFile) {
+	if tp == nil || tp.checker == nil || sf == nil {
 		return
 	}
-
-	links := (&TypeParser{program: c.Program(), checker: c}).GetEffectLinks()
+	links := tp.GetEffectLinks()
 
 	var walk ast.Visitor
 	var pendingEnableFlags core.LinkStore[*ast.Node, EffectContextFlags]
@@ -123,7 +120,6 @@ func analyzeEffectContextForSourceFile(c *checker.Checker, sf *ast.SourceFile) {
 		}
 
 		// logic for this node
-		tp := &TypeParser{program: c.Program(), checker: c}
 		if effectGen := tp.EffectGenCall(node); effectGen != nil {
 			bodyNode := effectGen.Body.AsNode()
 			*pendingEnableFlags.Get(bodyNode) |= EffectContextFlagCanYieldEffect

@@ -85,7 +85,7 @@ func AnalyzeMissedPipeableOpportunity(tp *typeparser.TypeParser, c *checker.Chec
 			firstPipeableIndex := -1
 
 			for i := searchStartIndex; i <= len(flow.Transformations); i++ {
-				if isPipeableAtIndex(c, flow, i) {
+				if isPipeableAtIndex(tp, flow, i) {
 					firstPipeableIndex = i
 					break
 				}
@@ -146,20 +146,20 @@ func AnalyzeMissedPipeableOpportunity(tp *typeparser.TypeParser, c *checker.Chec
 
 // isPipeableAtIndex checks if the type at a given index in a flow is pipeable.
 // Index 0 = subject, index > 0 = transformations[index - 1].outType
-func isPipeableAtIndex(c *checker.Checker, flow *typeparser.PipingFlow, index int) bool {
+func isPipeableAtIndex(tp *typeparser.TypeParser, flow *typeparser.PipingFlow, index int) bool {
 	if index == 0 {
 		subjectType := flow.Subject.OutType
 		if subjectType == nil {
 			return false
 		}
-		return typeparser.IsPipeableType(c, subjectType, flow.Subject.Node)
+		return tp.IsPipeableType(subjectType, flow.Subject.Node)
 	}
 
 	t := flow.Transformations[index-1]
 	if t.OutType == nil {
 		return false
 	}
-	return typeparser.IsPipeableType(c, t.OutType, flow.Node)
+	return tp.IsPipeableType(t.OutType, flow.Node)
 }
 
 // getSubjectText extracts the subject text for the diagnostic message.

@@ -1,7 +1,5 @@
 package typeparser
 
-import "github.com/microsoft/typescript-go/shim/checker"
-
 // DiscoveredPackage represents a package found in the program's source files.
 type DiscoveredPackage struct {
 	Name             string
@@ -49,15 +47,15 @@ func (tp *TypeParser) DetectEffectVersion() EffectMajorVersion {
 	if links.detectEffectVersionComputed {
 		return links.detectEffectVersionValue
 	}
-	result := detectEffectVersionUncached(tp.checker)
+	result := tp.detectEffectVersionUncached()
 	links.detectEffectVersionValue = result
 	links.detectEffectVersionComputed = true
 	return result
 }
 
 // detectEffectVersionUncached performs the actual version detection logic.
-func detectEffectVersionUncached(c *checker.Checker) EffectMajorVersion {
-	packages := (&TypeParser{program: c.Program(), checker: c}).DiscoverPackages()
+func (tp *TypeParser) detectEffectVersionUncached() EffectMajorVersion {
+	packages := tp.DiscoverPackages()
 
 	var detected EffectMajorVersion
 	found := false
@@ -167,14 +165,15 @@ func (tp *TypeParser) DiscoverPackages() []DiscoveredPackage {
 		return links.discoverPackagesValue
 	}
 
-	result := discoverPackagesUncached(tp.checker)
+	result := tp.discoverPackagesUncached()
 	links.discoverPackagesValue = result
 	links.discoverPackagesComputed = true
 	return result
 }
 
 // discoverPackagesUncached performs the actual source file scan.
-func discoverPackagesUncached(c *checker.Checker) []DiscoveredPackage {
+func (tp *TypeParser) discoverPackagesUncached() []DiscoveredPackage {
+	c := tp.checker
 	prog, ok := c.Program().(sourceFileProgram)
 	if !ok || prog == nil {
 		return nil
@@ -184,8 +183,6 @@ func discoverPackagesUncached(c *checker.Checker) []DiscoveredPackage {
 
 	seen := make(map[packageKey]struct{})
 	var result []DiscoveredPackage
-	tp := &TypeParser{program: c.Program(), checker: c}
-
 	for _, sf := range prog.SourceFiles() {
 		if sf == nil {
 			continue

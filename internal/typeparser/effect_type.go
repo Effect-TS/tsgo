@@ -39,7 +39,7 @@ func (tp *TypeParser) EffectType(t *checker.Type, atLocation *ast.Node) *Effect 
 			varianceStructType := tp.checker.GetTypeOfSymbolAtLocation(propSymbol, atLocation)
 
 			// Parse the variance struct to extract A, E, R
-			return parseVarianceStruct(tp.checker, varianceStructType, atLocation)
+			return tp.parseVarianceStruct(varianceStructType, atLocation)
 		}
 
 		// v3 / unknown: iterate properties looking for a variance struct
@@ -80,7 +80,7 @@ func (tp *TypeParser) EffectType(t *checker.Type, atLocation *ast.Node) *Effect 
 		// Try each candidate as a variance struct
 		for _, prop := range candidates {
 			propType := tp.checker.GetTypeOfSymbolAtLocation(prop, atLocation)
-			if result := parseVarianceStruct(tp.checker, propType, atLocation); result != nil {
+			if result := tp.parseVarianceStruct(propType, atLocation); result != nil {
 				return result
 			}
 		}
@@ -90,18 +90,18 @@ func (tp *TypeParser) EffectType(t *checker.Type, atLocation *ast.Node) *Effect 
 }
 
 // parseVarianceStruct extracts A, E, R from a variance struct type.
-func parseVarianceStruct(c *checker.Checker, t *checker.Type, atLocation *ast.Node) *Effect {
-	a := extractCovariantType(c, t, atLocation, "_A")
+func (tp *TypeParser) parseVarianceStruct(t *checker.Type, atLocation *ast.Node) *Effect {
+	a := tp.extractCovariantType(t, atLocation, "_A")
 	if a == nil {
 		return nil
 	}
 
-	e := extractCovariantType(c, t, atLocation, "_E")
+	e := tp.extractCovariantType(t, atLocation, "_E")
 	if e == nil {
 		return nil
 	}
 
-	r := extractCovariantType(c, t, atLocation, "_R")
+	r := tp.extractCovariantType(t, atLocation, "_R")
 	if r == nil {
 		return nil
 	}
@@ -211,7 +211,7 @@ func (tp *TypeParser) HasEffectTypeId(t *checker.Type, atLocation *ast.Node) boo
 	})
 }
 
-func isEffectTypeSourceFile(_ *TypeParser, c *checker.Checker, sf *ast.SourceFile) bool {
+func isEffectTypeSourceFile(tp *TypeParser, c *checker.Checker, sf *ast.SourceFile) bool {
 	if c == nil || sf == nil {
 		return false
 	}
@@ -231,7 +231,7 @@ func isEffectTypeSourceFile(_ *TypeParser, c *checker.Checker, sf *ast.SourceFil
 		return false
 	}
 
-	return (&TypeParser{program: c.Program(), checker: c}).EffectType(effectType, sf.AsNode()) != nil
+	return tp.EffectType(effectType, sf.AsNode()) != nil
 }
 
 // IsExpressionEffectModule reports whether node resolves to the Effect module namespace

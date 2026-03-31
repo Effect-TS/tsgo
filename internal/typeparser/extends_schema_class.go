@@ -2,7 +2,6 @@ package typeparser
 
 import (
 	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
 )
 
 // SchemaClassResult holds the parsed result of a class extending Schema.Class or Schema.RequestClass.
@@ -27,7 +26,7 @@ func (tp *TypeParser) ExtendsSchemaClass(classNode *ast.Node) *SchemaClassResult
 	}
 	links := tp.GetEffectLinks()
 	return Cached(&links.ExtendsSchemaClass, classNode, func() *SchemaClassResult {
-		return extendsSchemaClassLike(tp.checker, classNode, "Class")
+		return tp.extendsSchemaClassLike(classNode, "Class")
 	})
 }
 
@@ -41,12 +40,13 @@ func (tp *TypeParser) ExtendsSchemaRequestClass(classNode *ast.Node) *SchemaClas
 	}
 	links := tp.GetEffectLinks()
 	return Cached(&links.ExtendsSchemaRequestClass, classNode, func() *SchemaClassResult {
-		return extendsSchemaClassLike(tp.checker, classNode, "RequestClass")
+		return tp.extendsSchemaClassLike(classNode, "RequestClass")
 	})
 }
 
 // extendsSchemaClassLike is the shared implementation for ExtendsSchemaClass and ExtendsSchemaRequestClass.
-func extendsSchemaClassLike(c *checker.Checker, classNode *ast.Node, memberName string) *SchemaClassResult {
+func (tp *TypeParser) extendsSchemaClassLike(classNode *ast.Node, memberName string) *SchemaClassResult {
+	c := tp.checker
 	if c == nil || classNode == nil {
 		return nil
 	}
@@ -100,7 +100,7 @@ func extendsSchemaClassLike(c *checker.Checker, classNode *ast.Node, memberName 
 		if innerCall.Expression == nil {
 			continue
 		}
-		if !(&TypeParser{program: c.Program(), checker: c}).IsNodeReferenceToEffectSchemaModuleApi(innerCall.Expression, memberName) {
+		if !tp.IsNodeReferenceToEffectSchemaModuleApi(innerCall.Expression, memberName) {
 			continue
 		}
 

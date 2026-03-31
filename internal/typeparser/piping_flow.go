@@ -148,8 +148,8 @@ type parsedEffectFnCallResult struct {
 // parseEffectFnCall detects Effect.fn(...), Effect.fn("name")(...), and Effect.fnUntraced(...)
 // calls that have trailing transformation arguments after the function body.
 // Returns nil when the node is not a recognized Effect.fn call with trailing args.
-func parseEffectFnCall(c *checker.Checker, node *ast.Node) *parsedEffectFnCallResult {
-	if c == nil || node == nil || node.Kind != ast.KindCallExpression {
+func (tp *TypeParser) parseEffectFnCall(node *ast.Node) *parsedEffectFnCallResult {
+	if tp == nil || tp.checker == nil || node == nil || node.Kind != ast.KindCallExpression {
 		return nil
 	}
 
@@ -190,9 +190,9 @@ func parseEffectFnCall(c *checker.Checker, node *ast.Node) *parsedEffectFnCallRe
 	case ast.KindPropertyAccessExpression:
 		// Direct call: Effect.fn(...) or Effect.fnUntraced(...)
 		switch {
-		case (&TypeParser{program: c.Program(), checker: c}).IsNodeReferenceToEffectModuleApi(expr, "fn"):
+		case tp.IsNodeReferenceToEffectModuleApi(expr, "fn"):
 			kind = TransformationKindEffectFn
-		case (&TypeParser{program: c.Program(), checker: c}).IsNodeReferenceToEffectModuleApi(expr, "fnUntraced"):
+		case tp.IsNodeReferenceToEffectModuleApi(expr, "fnUntraced"):
 			kind = TransformationKindEffectFnUntraced
 		default:
 			return nil
@@ -207,7 +207,7 @@ func parseEffectFnCall(c *checker.Checker, node *ast.Node) *parsedEffectFnCallRe
 		if innerCall.Expression.Kind != ast.KindPropertyAccessExpression {
 			return nil
 		}
-		if !(&TypeParser{program: c.Program(), checker: c}).IsNodeReferenceToEffectModuleApi(innerCall.Expression, "fn") {
+		if !tp.IsNodeReferenceToEffectModuleApi(innerCall.Expression, "fn") {
 			return nil
 		}
 		kind = TransformationKindEffectFn
@@ -269,8 +269,8 @@ func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) []*P
 			if node.Kind == ast.KindCallExpression {
 				// Try Effect.fn call first (must be before pipe and singleArg)
 				if includeEffectFn {
-					if efnResult := parseEffectFnCall(c, node); efnResult != nil {
-						transformations, subjectType := buildEffectFnTransformations(c, efnResult)
+					if efnResult := tp.parseEffectFnCall(node); efnResult != nil {
+						transformations, subjectType := tp.buildEffectFnTransformations(efnResult)
 						flow := &PipingFlow{
 							Node: node,
 							Subject: PipingFlowSubject{
@@ -285,7 +285,7 @@ func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) []*P
 						if item.parentFlow != nil {
 							item.parentFlow.Subject = PipingFlowSubject{
 								Node:    node,
-								OutType: TypeParser{checker: c}.GetTypeAtLocation(node),
+								OutType: tp.GetTypeAtLocation(node),
 							}
 							result = append(result, item.parentFlow)
 						}
@@ -307,7 +307,7 @@ func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) []*P
 
 				// Try pipe call
 				if pipeResult := tp.ParsePipeCall(node); pipeResult != nil {
-					transformations := buildPipeTransformations(c, pipeResult)
+					transformations := tp.buildPipeTransformations(pipeResult)
 					flowNode := pipeResult.Node.AsNode()
 
 					if item.parentFlow != nil {
@@ -375,7 +375,7 @@ func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) []*P
 				// Subject chain terminated — finalize the flow
 				item.parentFlow.Subject = PipingFlowSubject{
 					Node:    node,
-					OutType: TypeParser{checker: c}.GetTypeAtLocation(node),
+					OutType: tp.GetTypeAtLocation(node),
 				}
 				result = append(result, item.parentFlow)
 			}
@@ -393,7 +393,8 @@ func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) []*P
 }
 
 // buildPipeTransformations builds PipingFlowTransformation slices from pipe call arguments.
-func buildPipeTransformations(c *checker.Checker, result *ParsedPipeCallResult) []PipingFlowTransformation {
+func (tp *TypeParser) buildPipeTransformations(result *ParsedPipeCallResult) []PipingFlowTransformation {
+	c := tp.checker
 	// Get type arguments from the resolved signature for intermediate types.
 	// For pipe(subject, f1, f2, f3), typeArgs = [A, B, C, D]
 	// where A=subject type, B=after f1, C=after f2, D=after f3.
@@ -444,7 +445,8 @@ func buildPipeTransformations(c *checker.Checker, result *ParsedPipeCallResult) 
 
 // buildEffectFnTransformations builds PipingFlowTransformation slices from Effect.fn trailing arguments.
 // It also returns the subject type (from the first transformation's input parameter type).
-func buildEffectFnTransformations(c *checker.Checker, result *parsedEffectFnCallResult) ([]PipingFlowTransformation, *checker.Type) {
+func (tp *TypeParser) buildEffectFnTransformations(result *parsedEffectFnCallResult) ([]PipingFlowTransformation, *checker.Type) {
+	c := tp.checker
 	transformations := make([]PipingFlowTransformation, 0, len(result.trailingArgs))
 	var subjectType *checker.Type
 

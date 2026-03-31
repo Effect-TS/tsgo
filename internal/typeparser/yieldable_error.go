@@ -66,7 +66,7 @@ func (tp *TypeParser) IsYieldableErrorType(t *checker.Type) bool {
 				continue
 			}
 
-			exportSym = resolveAliasedSymbol(tp.checker, exportSym)
+			exportSym = tp.resolveAliasedSymbol(exportSym)
 			if exportSym == nil {
 				continue
 			}

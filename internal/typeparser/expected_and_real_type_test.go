@@ -16,8 +16,8 @@ import (
 )
 
 // compileAndGetCheckerAndSourceFile compiles a TypeScript source string and returns the
-// checker, source file, and a done function to release the checker.
-func compileAndGetCheckerAndSourceFile(t *testing.T, source string) (*checker.Checker, *ast.SourceFile, func()) {
+// checker, type parser, source file, and a done function to release the checker.
+func compileAndGetCheckerAndSourceFile(t *testing.T, source string) (*checker.Checker, *typeparser.TypeParser, *ast.SourceFile, func()) {
 	t.Helper()
 
 	testfs := map[string]any{
@@ -59,7 +59,7 @@ func compileAndGetCheckerAndSourceFile(t *testing.T, source string) (*checker.Ch
 		t.Fatal("Failed to get source file")
 	}
 
-	return c, sf, done
+	return c, typeparser.NewTypeParser(c.Program(), c), sf, done
 }
 
 func TestExpectedAndRealTypes_VariableDeclaration(t *testing.T) {
@@ -70,9 +70,8 @@ const a: number = 42
 const b: string = "hello"
 `
 
-	c, sf, done := compileAndGetCheckerAndSourceFile(t, source)
+	_, tp, sf, done := compileAndGetCheckerAndSourceFile(t, source)
 	defer done()
-	tp := typeparser.NewTypeParser(c.Program(), c)
 
 	results := tp.ExpectedAndRealTypes(sf)
 
@@ -96,9 +95,8 @@ function foo(x: number, y: string): void {}
 foo(42, "hello")
 `
 
-	c, sf, done := compileAndGetCheckerAndSourceFile(t, source)
+	_, tp, sf, done := compileAndGetCheckerAndSourceFile(t, source)
 	defer done()
-	tp := typeparser.NewTypeParser(c.Program(), c)
 
 	results := tp.ExpectedAndRealTypes(sf)
 
@@ -122,9 +120,8 @@ interface Obj { a: number; b: string }
 const obj: Obj = { a: 1, b: "hello" }
 `
 
-	c, sf, done := compileAndGetCheckerAndSourceFile(t, source)
+	_, tp, sf, done := compileAndGetCheckerAndSourceFile(t, source)
 	defer done()
-	tp := typeparser.NewTypeParser(c.Program(), c)
 
 	results := tp.ExpectedAndRealTypes(sf)
 
@@ -152,9 +149,8 @@ let x: number = 0
 x = 42
 `
 
-	c, sf, done := compileAndGetCheckerAndSourceFile(t, source)
+	_, tp, sf, done := compileAndGetCheckerAndSourceFile(t, source)
 	defer done()
-	tp := typeparser.NewTypeParser(c.Program(), c)
 
 	results := tp.ExpectedAndRealTypes(sf)
 
@@ -186,9 +182,8 @@ function getNum(): number {
 }
 `
 
-	c, sf, done := compileAndGetCheckerAndSourceFile(t, source)
+	_, tp, sf, done := compileAndGetCheckerAndSourceFile(t, source)
 	defer done()
-	tp := typeparser.NewTypeParser(c.Program(), c)
 
 	results := tp.ExpectedAndRealTypes(sf)
 
@@ -217,9 +212,8 @@ func TestExpectedAndRealTypes_ArrowFunctionBodyNoTypeParams(t *testing.T) {
 const fn: () => number = () => 42
 `
 
-	c, sf, done := compileAndGetCheckerAndSourceFile(t, source)
+	_, tp, sf, done := compileAndGetCheckerAndSourceFile(t, source)
 	defer done()
-	tp := typeparser.NewTypeParser(c.Program(), c)
 
 	results := tp.ExpectedAndRealTypes(sf)
 
@@ -247,9 +241,8 @@ function wrap<T>(fn: () => T): T { return fn() }
 const result = wrap(<A extends number>(): A => 42 as any as A)
 `
 
-	c, sf, done := compileAndGetCheckerAndSourceFile(t, source)
+	_, tp, sf, done := compileAndGetCheckerAndSourceFile(t, source)
 	defer done()
-	tp := typeparser.NewTypeParser(c.Program(), c)
 
 	results := tp.ExpectedAndRealTypes(sf)
 
@@ -267,9 +260,8 @@ const x = 42 satisfies number
 const y = "hello" satisfies string
 `
 
-	c, sf, done := compileAndGetCheckerAndSourceFile(t, source)
+	_, tp, sf, done := compileAndGetCheckerAndSourceFile(t, source)
 	defer done()
-	tp := typeparser.NewTypeParser(c.Program(), c)
 
 	results := tp.ExpectedAndRealTypes(sf)
 
@@ -299,9 +291,8 @@ func TestEffectType_NilInputs(t *testing.T) {
 	t.Parallel()
 
 	source := `const x: number = 42`
-	c, sf, done := compileAndGetCheckerAndSourceFile(t, source)
+	_, tp, sf, done := compileAndGetCheckerAndSourceFile(t, source)
 	defer done()
-	tp := typeparser.NewTypeParser(c.Program(), c)
 
 	// nil type must not panic
 	if result := tp.EffectType(nil, sf.AsNode()); result != nil {
@@ -321,9 +312,8 @@ func TestLayerType_NilInputs(t *testing.T) {
 	t.Parallel()
 
 	source := `const x: number = 42`
-	c, sf, done := compileAndGetCheckerAndSourceFile(t, source)
+	_, tp, sf, done := compileAndGetCheckerAndSourceFile(t, source)
 	defer done()
-	tp := typeparser.NewTypeParser(c.Program(), c)
 
 	if result := tp.LayerType(nil, sf.AsNode()); result != nil {
 		t.Error("expected nil for nil type")
@@ -337,9 +327,8 @@ func TestContextTag_NilInputs(t *testing.T) {
 	t.Parallel()
 
 	source := `const x: number = 42`
-	c, sf, done := compileAndGetCheckerAndSourceFile(t, source)
+	_, tp, sf, done := compileAndGetCheckerAndSourceFile(t, source)
 	defer done()
-	tp := typeparser.NewTypeParser(c.Program(), c)
 
 	if result := tp.ContextTag(nil, sf.AsNode()); result != nil {
 		t.Error("expected nil for nil type")
@@ -354,9 +343,8 @@ func TestExpectedAndRealTypes_EmptyFile(t *testing.T) {
 
 	source := ``
 
-	c, sf, done := compileAndGetCheckerAndSourceFile(t, source)
+	_, tp, sf, done := compileAndGetCheckerAndSourceFile(t, source)
 	defer done()
-	tp := typeparser.NewTypeParser(c.Program(), c)
 
 	results := tp.ExpectedAndRealTypes(sf)
 
@@ -401,9 +389,8 @@ const id = identity(<A extends string>(): A => "hi" as any as A)
 const s = "test" satisfies string
 `
 
-	c, sf, done := compileAndGetCheckerAndSourceFile(t, source)
+	_, tp, sf, done := compileAndGetCheckerAndSourceFile(t, source)
 	defer done()
-	tp := typeparser.NewTypeParser(c.Program(), c)
 
 	results := tp.ExpectedAndRealTypes(sf)
 
@@ -437,9 +424,8 @@ const a: number = 42
 const b: string = "hello"
 `
 
-	c, sf, done := compileAndGetCheckerAndSourceFile(t, source)
+	c, tp, sf, done := compileAndGetCheckerAndSourceFile(t, source)
 	defer done()
-	tp := typeparser.NewTypeParser(c.Program(), c)
 
 	results := tp.ExpectedAndRealTypes(sf)
 
