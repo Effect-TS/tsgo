@@ -1,5 +1,27 @@
 # @effect/tsgo
 
+## 0.2.0
+
+### Minor Changes
+
+- 24a8a96: Refactor Effect plugin option handling to support per-file `overrides`, simplify
+  TypeScript-Go merge hooks, and clean up the internal config model used by
+  diagnostics, completions, and refactors.
+- 344fdba: Refactor internal rules, fixables, refactors, and completions to thread program,
+  checker, and type parser state explicitly through shared contexts. Simplify the
+  typescript-go hooks and move completion coverage onto the real fourslash-based
+  language-service pipeline.
+
+### Patch Changes
+
+- 90adf4f: Add Effect v4 completion coverage for `ServiceMap.Service` class helpers, including package-aware key generation cases that match the upstream language-service fixtures.
+- e209b5b: Report floating `Stream` expressions in the `floatingEffect` diagnostic for Effect v4, and add the matching diagnostic and quick-fix baselines.
+- 22e8dcd: Sync Effect diagnostic wording with the updated language-service tone so diagnostic text stays neutral and factual while severity is controlled by configuration.
+
+  This also refreshes generated metadata and committed diagnostic baselines to match the new emitted messages.
+
+- 73a7ff0: Update [`typescript-go`](https://github.com/microsoft/typescript-go/commit/a3eef87a57955a90a0d492b4bed9a7bab5d17838) to commit `a3eef87a57955a90a0d492b4bed9a7bab5d17838`.
+
 ## 0.1.1
 
 ### Patch Changes
