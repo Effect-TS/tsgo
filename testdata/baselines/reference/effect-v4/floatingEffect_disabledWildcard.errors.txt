@@ -1,8 +1,8 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/floatingEffect_disabledWildcard.ts(3,1): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
-/.src/floatingEffect_disabledWildcard.ts(10,1): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+/.src/floatingEffect_disabledWildcard.ts(3,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/floatingEffect_disabledWildcard.ts(10,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
 
 
 ==== /.src/floatingEffect_disabledWildcard.ts (2 errors) ====
@@ -10,7 +10,7 @@ Effect version: 4.0.0
     
     Effect.succeed(1)
     ~~~~~~~~~~~~~~~~~
-!!! error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
     
     /** @effect-diagnostics *:off */
     
@@ -19,7 +19,7 @@ Effect version: 4.0.0
     /** @effect-diagnostics floatingEffect:error */
     Effect.succeed(1)
     ~~~~~~~~~~~~~~~~~
-!!! error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
     
     /** @effect-diagnostics *:off */
     Effect.succeed(1)

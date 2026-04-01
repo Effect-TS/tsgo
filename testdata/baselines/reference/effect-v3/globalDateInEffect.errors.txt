@@ -1,10 +1,10 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/globalDateInEffect.ts(6,15): warning TS377067: Prefer using Clock or DateTime from Effect instead of Date.now() inside Effect generators. effect(globalDateInEffect)
-/.src/globalDateInEffect.ts(12,15): warning TS377069: Prefer using DateTime from Effect instead of new Date() inside Effect generators. effect(globalDateInEffect)
-/.src/globalDateInEffect.ts(18,16): warning TS377069: Prefer using DateTime from Effect instead of new Date() inside Effect generators. effect(globalDateInEffect)
-/.src/globalDateInEffect.ts(25,15): warning TS377067: Prefer using Clock or DateTime from Effect instead of Date.now() inside Effect generators. effect(globalDateInEffect)
+/.src/globalDateInEffect.ts(6,15): warning TS377067: This Effect code uses `Date.now()`, time access in Effect code is represented through `Clock` from Effect. effect(globalDateInEffect)
+/.src/globalDateInEffect.ts(12,15): warning TS377069: This Effect code constructs `new Date()`, date values in Effect code are represented through `DateTime` from Effect. effect(globalDateInEffect)
+/.src/globalDateInEffect.ts(18,16): warning TS377069: This Effect code constructs `new Date()`, date values in Effect code are represented through `DateTime` from Effect. effect(globalDateInEffect)
+/.src/globalDateInEffect.ts(25,15): warning TS377067: This Effect code uses `Date.now()`, time access in Effect code is represented through `Clock` from Effect. effect(globalDateInEffect)
 
 
 ==== /.src/globalDateInEffect.ts (4 errors) ====
@@ -15,7 +15,7 @@ Effect version: 3.19.19
     export const dateNowInGen = Effect.gen(function*() {
       const now = Date.now()
                   ~~~~~~~~~~
-!!! warning TS377067: Prefer using Clock or DateTime from Effect instead of Date.now() inside Effect generators. effect(globalDateInEffect)
+!!! warning TS377067: This Effect code uses `Date.now()`, time access in Effect code is represented through `Clock` from Effect. effect(globalDateInEffect)
       return now
     })
     
@@ -23,7 +23,7 @@ Effect version: 3.19.19
     export const newDateInGen = Effect.gen(function*() {
       const now = new Date()
                   ~~~~~~~~~~
-!!! warning TS377069: Prefer using DateTime from Effect instead of new Date() inside Effect generators. effect(globalDateInEffect)
+!!! warning TS377069: This Effect code constructs `new Date()`, date values in Effect code are represented through `DateTime` from Effect. effect(globalDateInEffect)
       return now
     })
     
@@ -31,7 +31,7 @@ Effect version: 3.19.19
     export const newDateWithArgsInFn = Effect.fn("newDateWithArgsInFn")(function*() {
       const date = new Date("2024-01-01")
                    ~~~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377069: Prefer using DateTime from Effect instead of new Date() inside Effect generators. effect(globalDateInEffect)
+!!! warning TS377069: This Effect code constructs `new Date()`, date values in Effect code are represented through `DateTime` from Effect. effect(globalDateInEffect)
       return date
     })
     
@@ -40,7 +40,7 @@ Effect version: 3.19.19
       const MyDate = Date
       const now = MyDate.now()
                   ~~~~~~~~~~~~
-!!! warning TS377067: Prefer using Clock or DateTime from Effect instead of Date.now() inside Effect generators. effect(globalDateInEffect)
+!!! warning TS377067: This Effect code uses `Date.now()`, time access in Effect code is represented through `Clock` from Effect. effect(globalDateInEffect)
       return now
     })
     

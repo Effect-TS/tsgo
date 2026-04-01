@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/schemaStructWithTag_preview.ts(5,24): warning TS377036: Schema.Struct with a _tag field can be simplified to Schema.TaggedStruct to make the tag optional in the constructor. effect(schemaStructWithTag)
+/.src/schemaStructWithTag_preview.ts(5,24): warning TS377036: This `Schema.Struct` includes a `_tag` field. `Schema.TaggedStruct` is the tagged-struct form for this pattern and makes the tag optional in the constructor. effect(schemaStructWithTag)
 
 
 ==== /.src/schemaStructWithTag_preview.ts (1 errors) ====
@@ -17,5 +17,5 @@ Effect version: 4.0.0
     ~~~~~~~~~~~~~~~~~~~~~
     })
     ~~
-!!! warning TS377036: Schema.Struct with a _tag field can be simplified to Schema.TaggedStruct to make the tag optional in the constructor. effect(schemaStructWithTag)
+!!! warning TS377036: This `Schema.Struct` includes a `_tag` field. `Schema.TaggedStruct` is the tagged-struct form for this pattern and makes the tag optional in the constructor. effect(schemaStructWithTag)
     

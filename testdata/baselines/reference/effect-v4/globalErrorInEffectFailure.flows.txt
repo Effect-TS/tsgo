@@ -1,0 +1,636 @@
+==== /.src/globalErrorInEffectFailure.ts (15 flows) ====
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 3:26 - 3:58
+Root: Data.TaggedError("CustomError")
+Path (3 nodes):
+  [0] root {plain A=new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "CustomError"; } & Readonly<A>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="CustomError"} "CustomError"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "CustomError"; } & Readonly<A>} step 0: Data.TaggedError
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "CustomError"; } & Readonly<A>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "CustomError"
+      ordinal: 0
+      result.kind: plain
+      result.A: "CustomError"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Data.TaggedError
+      ordinal: 0
+      result.kind: plain
+      result.A: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "CustomError"; } & Readonly<A>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 5:31 - 5:62
+Root: Effect.fail(new CustomError())
+Path (3 nodes):
+  [0] root {effect A=never E=CustomError R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=CustomError} new CustomError()
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=never E=CustomError R=never} step 0: Effect.fail
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: CustomError
+      result.R: never
+  [1] kind: pipeSubject
+      label: new CustomError()
+      ordinal: 0
+      result.kind: plain
+      result.A: CustomError
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.fail
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: CustomError
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 7:28 - 7:67
+Root: Effect.fail(new Error("global error"))
+Path (3 nodes):
+  [0] root {effect A=never E=Error R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=Error} new Error("global error")
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=never E=Error R=never} step 0: Effect.fail
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: Error
+      result.R: never
+  [1] kind: pipeSubject
+      label: new Error("global error")
+      ordinal: 0
+      result.kind: plain
+      result.A: Error
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.fail
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: Error
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 8:29 - 8:79
+Root: Effect.fail(new globalThis.Error("global error"))
+Path (3 nodes):
+  [0] root {effect A=never E=Error R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=Error} new globalThis.Error("global error")
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=never E=Error R=never} step 0: Effect.fail
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: Error
+      result.R: never
+  [1] kind: pipeSubject
+      label: new globalThis.Error("global error")
+      ordinal: 0
+      result.kind: plain
+      result.A: Error
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.fail
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: Error
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 14:29 - 14:65
+Root: Effect.fail(new BaseExtendsError())
+Path (3 nodes):
+  [0] root {effect A=never E=BaseExtendsError R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=BaseExtendsError} new BaseExtendsError()
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=never E=BaseExtendsError R=never} step 0: Effect.fail
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: BaseExtendsError
+      result.R: never
+  [1] kind: pipeSubject
+      label: new BaseExtendsError()
+      ordinal: 0
+      result.kind: plain
+      result.A: BaseExtendsError
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.fail
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: BaseExtendsError
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 21:32 - 21:75
+Root: Effect.fail(new BaseExtendsErrorWithTag())
+Path (3 nodes):
+  [0] root {effect A=never E=BaseExtendsErrorWithTag R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=BaseExtendsErrorWithTag} new BaseExtendsErrorWithTag()
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=never E=BaseExtendsErrorWithTag R=never} step 0: Effect.fail
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: BaseExtendsErrorWithTag
+      result.R: never
+  [1] kind: pipeSubject
+      label: new BaseExtendsErrorWithTag()
+      ordinal: 0
+      result.kind: plain
+      result.A: BaseExtendsErrorWithTag
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.fail
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: BaseExtendsErrorWithTag
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: effectGen
+Location: 26:31 - 28:3
+Root: Effect.gen(function* () {\n  return yield* Effect.fail(new Error("global error in gen"))\n})
+Path (6 nodes):
+  [0] root {effect A=never E=Error R=never} Effect.gen
+      ==> [executes] -> [1]
+  [1] genSequence {effect A=never E=Error R=never} generator body
+      ==> [next] -> [2]
+  [2] statement {unknown} return yield* Effect.fail(new Error("global error in gen"))
+      ==> [returns] -> [3]
+  [3] return {unknown} return
+      ==> [yield*] -> [4]
+  [4] yield {plain A=never} yield*
+      ==> [operand] -> [5]
+  [5] yieldOperand {effect A=never E=Error R=never} Effect.fail(new Error("global error in gen"))
+
+Nodes (6):
+  [0] kind: root
+      label: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: Error
+      result.R: never
+  [1] kind: genSequence
+      label: generator body
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: Error
+      result.R: never
+  [2] kind: statement
+      label: return yield* Effect.fail(new Error("global error in gen"))
+      ordinal: 0
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [3] kind: return
+      label: return
+      ordinal: 0
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [4] kind: yield
+      label: yield*
+      ordinal: 0
+      result.kind: plain
+      result.A: never
+      result.E: 
+      result.R: 
+  [5] kind: yieldOperand
+      label: Effect.fail(new Error("global error in gen"))
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: Error
+      result.R: never
+Edges (5):
+  0 -> 1 [strong] executes
+  1 -> 2 [strong] next
+  2 -> 3 [strong] returns
+  3 -> 4 [strong] yield*
+  4 -> 5 [strong] operand
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 26:31 - 28:3
+Root: Effect.gen(function* () {\n  return yield* Effect.fail(new Error("global error in gen"))\n})
+Path (3 nodes):
+  [0] root {effect A=never E=Error R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=() => Generator<Effect<never, Error, never>, never, any>} function* () {\n  return yield* Effect.fail(new Error("global error in gen"))\n}
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=never E=Error R=never} step 0: Effect.gen
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: Error
+      result.R: never
+  [1] kind: pipeSubject
+      label: function* () {\n  return yield* Effect.fail(new Error("global error in gen"))\n}
+      ordinal: 0
+      result.kind: plain
+      result.A: () => Generator<Effect<never, Error, never>, never, any>
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: Error
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 27:16 - 27:62
+Root: Effect.fail(new Error("global error in gen"))
+Path (3 nodes):
+  [0] root {effect A=never E=Error R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=Error} new Error("global error in gen")
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=never E=Error R=never} step 0: Effect.fail
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: Error
+      result.R: never
+  [1] kind: pipeSubject
+      label: new Error("global error in gen")
+      ordinal: 0
+      result.kind: plain
+      result.A: Error
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.fail
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: Error
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: effectGen
+Location: 31:34 - 33:3
+Root: Effect.gen(function* () {\n  return yield* Effect.fail(new CustomError())\n})
+Path (6 nodes):
+  [0] root {effect A=never E=CustomError R=never} Effect.gen
+      ==> [executes] -> [1]
+  [1] genSequence {effect A=never E=CustomError R=never} generator body
+      ==> [next] -> [2]
+  [2] statement {unknown} return yield* Effect.fail(new CustomError())
+      ==> [returns] -> [3]
+  [3] return {unknown} return
+      ==> [yield*] -> [4]
+  [4] yield {plain A=never} yield*
+      ==> [operand] -> [5]
+  [5] yieldOperand {effect A=never E=CustomError R=never} Effect.fail(new CustomError())
+
+Nodes (6):
+  [0] kind: root
+      label: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: CustomError
+      result.R: never
+  [1] kind: genSequence
+      label: generator body
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: CustomError
+      result.R: never
+  [2] kind: statement
+      label: return yield* Effect.fail(new CustomError())
+      ordinal: 0
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [3] kind: return
+      label: return
+      ordinal: 0
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [4] kind: yield
+      label: yield*
+      ordinal: 0
+      result.kind: plain
+      result.A: never
+      result.E: 
+      result.R: 
+  [5] kind: yieldOperand
+      label: Effect.fail(new CustomError())
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: CustomError
+      result.R: never
+Edges (5):
+  0 -> 1 [strong] executes
+  1 -> 2 [strong] next
+  2 -> 3 [strong] returns
+  3 -> 4 [strong] yield*
+  4 -> 5 [strong] operand
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 31:34 - 33:3
+Root: Effect.gen(function* () {\n  return yield* Effect.fail(new CustomError())\n})
+Path (3 nodes):
+  [0] root {effect A=never E=CustomError R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=() => Generator<Effect<never, CustomError, never>, never, any>} function* () {\n  return yield* Effect.fail(new CustomError())\n}
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=never E=CustomError R=never} step 0: Effect.gen
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: CustomError
+      result.R: never
+  [1] kind: pipeSubject
+      label: function* () {\n  return yield* Effect.fail(new CustomError())\n}
+      ordinal: 0
+      result.kind: plain
+      result.A: () => Generator<Effect<never, CustomError, never>, never, any>
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: CustomError
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 32:16 - 32:47
+Root: Effect.fail(new CustomError())
+Path (3 nodes):
+  [0] root {effect A=never E=CustomError R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=CustomError} new CustomError()
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=never E=CustomError R=never} step 0: Effect.fail
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: CustomError
+      result.R: never
+  [1] kind: pipeSubject
+      label: new CustomError()
+      ordinal: 0
+      result.kind: plain
+      result.A: CustomError
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.fail
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: CustomError
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 36:31 - 38:2
+Root: Effect.succeed(1).pipe(\n  Effect.flatMap(() => Effect.fail(new Error("global error in map")))\n)
+Path (4 nodes):
+  [0] root {effect A=never E=Error R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=1} 1
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=number E=never R=never} step 0: Effect.succeed
+      ==> [pipeable] -> [3]
+  [3] pipeTransformation {effect A=never E=Error R=never} step 1: Effect.flatMap
+
+Nodes (4):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: Error
+      result.R: never
+  [1] kind: pipeSubject
+      label: 1
+      ordinal: 0
+      result.kind: plain
+      result.A: 1
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [3] kind: pipeTransformation
+      label: step 1: Effect.flatMap
+      ordinal: 1
+      result.kind: effect
+      result.A: never
+      result.E: Error
+      result.R: never
+Edges (3):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+  2 -> 3 [strong] pipeable
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 37:23 - 37:69
+Root: Effect.fail(new Error("global error in map"))
+Path (3 nodes):
+  [0] root {effect A=never E=Error R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=Error} new Error("global error in map")
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=never E=Error R=never} step 0: Effect.fail
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: Error
+      result.R: never
+  [1] kind: pipeSubject
+      label: new Error("global error in map")
+      ordinal: 0
+      result.kind: plain
+      result.A: Error
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.fail
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: Error
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 46:36 - 48:2
+Root: Effect.fail(new CustomError()).pipe(\n  Effect.mapError(() => new Error("mapped to global error"))\n)
+Path (4 nodes):
+  [0] root {effect A=never E=Error R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=CustomError} new CustomError()
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=never E=CustomError R=never} step 0: Effect.fail
+      ==> [pipeable] -> [3]
+  [3] pipeTransformation {effect A=never E=Error R=never} step 1: Effect.mapError
+
+Nodes (4):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: Error
+      result.R: never
+  [1] kind: pipeSubject
+      label: new CustomError()
+      ordinal: 0
+      result.kind: plain
+      result.A: CustomError
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.fail
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: CustomError
+      result.R: never
+  [3] kind: pipeTransformation
+      label: step 1: Effect.mapError
+      ordinal: 1
+      result.kind: effect
+      result.A: never
+      result.E: Error
+      result.R: never
+Edges (3):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+  2 -> 3 [strong] pipeable

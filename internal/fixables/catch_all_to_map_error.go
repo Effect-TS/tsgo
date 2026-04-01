@@ -12,7 +12,7 @@ import (
 var CatchAllToMapErrorFix = fixable.Fixable{
 	Name:        "catchAllToMapError",
 	Description: "Replace Effect.catch + Effect.fail with Effect.mapError",
-	ErrorCodes:  []int32{tsdiag.You_can_use_Effect_mapError_instead_of_Effect_catch_Effect_fail_to_transform_the_error_type_effect_catchAllToMapError.Code()},
+	ErrorCodes:  []int32{tsdiag.Effect_mapError_expresses_the_same_error_type_transformation_more_directly_than_Effect_0_followed_by_Effect_fail_effect_catchAllToMapError.Code()},
 	FixIDs:      []string{"catchAllToMapError_fix"},
 	Run:         runCatchAllToMapErrorFix,
 }

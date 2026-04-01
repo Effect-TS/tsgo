@@ -1,11 +1,11 @@
 === Quick Fix Inventory ===
 
-[D1] (12:5-12:30) TS377042: Consider using Schema.is instead of instanceof for Effect Schema types. effect(instanceOfSchema)
+[D1] (12:5-12:30) TS377042: This code uses `instanceof` with an Effect Schema type. `Schema.is` is the schema-aware runtime check for this case. effect(instanceOfSchema)
   Fix 0: "Disable instanceOfSchema for this line"
   Fix 1: "Disable instanceOfSchema for entire file"
   Fix 2: "Replace with Schema.is"
 
-[D2] (20:44-20:69) TS377042: Consider using Schema.is instead of instanceof for Effect Schema types. effect(instanceOfSchema)
+[D2] (20:44-20:69) TS377042: This code uses `instanceof` with an Effect Schema type. `Schema.is` is the schema-aware runtime check for this case. effect(instanceOfSchema)
   Fix 0: "Disable instanceOfSchema for this line"
   Fix 1: "Disable instanceOfSchema for entire file"
   Fix 2: "Replace with Schema.is"

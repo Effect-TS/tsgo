@@ -15,7 +15,7 @@ import (
 var ReturnEffectInGenFix = fixable.Fixable{
 	Name:        "returnEffectInGen",
 	Description: "Add yield* statement",
-	ErrorCodes:  []int32{tsdiag.You_are_returning_an_Effect_able_type_inside_a_generator_function_and_will_result_in_nested_Effect_Effect_Maybe_you_wanted_to_return_yield_Asterisk_instead_Nested_Effect_able_types_may_be_intended_if_you_plan_to_later_manually_flatten_or_unwrap_this_Effect_if_so_you_can_safely_disable_this_diagnostic_for_this_line_through_quickfixes_effect_returnEffectInGen.Code()},
+	ErrorCodes:  []int32{tsdiag.This_generator_returns_an_Effect_able_value_directly_which_produces_a_nested_Effect_Effect_If_the_intended_result_is_the_inner_Effect_value_return_yield_Asterisk_represents_that_form_effect_returnEffectInGen.Code()},
 	FixIDs:      []string{"returnEffectInGen_fix"},
 	Run:         runReturnEffectInGenFix,
 }

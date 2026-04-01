@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (4:1-4:23) TS377064: Prefer using Effect.log or Logger instead of console.log. effect(globalConsole)
+[D1] (4:1-4:23) TS377064: This code uses `console.log`, the corresponding Effect logging API is `Effect.log or Logger`. effect(globalConsole)
   Fix 0: "Disable globalConsole for this line"
   Fix 1: "Disable globalConsole for entire file"
 

@@ -15,7 +15,7 @@ var GlobalRandom = rule.Rule{
 	Description:     "Warns when using Math.random() outside Effect generators instead of the Random service",
 	DefaultSeverity: etscore.SeverityOff,
 	SupportedEffect: []string{"v3", "v4"},
-	Codes:           []int32{tsdiag.Prefer_using_the_Random_service_from_Effect_instead_of_Math_random_effect_globalRandom.Code()},
+	Codes:           []int32{tsdiag.This_code_uses_Math_random_randomness_is_represented_through_the_Effect_Random_service_effect_globalRandom.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		return runGlobalRandom(ctx, false)
 	},
@@ -27,7 +27,7 @@ var GlobalRandomInEffect = rule.Rule{
 	Description:     "Warns when using Math.random() inside Effect generators instead of the Random service",
 	DefaultSeverity: etscore.SeverityOff,
 	SupportedEffect: []string{"v3", "v4"},
-	Codes:           []int32{tsdiag.Prefer_using_the_Random_service_from_Effect_instead_of_Math_random_inside_Effect_generators_effect_globalRandomInEffect.Code()},
+	Codes:           []int32{tsdiag.This_Effect_code_uses_Math_random_randomness_is_represented_through_the_Effect_Random_service_effect_globalRandomInEffect.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		return runGlobalRandom(ctx, true)
 	},
@@ -39,9 +39,9 @@ func runGlobalRandom(ctx *rule.Context, checkInEffect bool) []*ast.Diagnostic {
 		return nil
 	}
 
-	message := tsdiag.Prefer_using_the_Random_service_from_Effect_instead_of_Math_random_effect_globalRandom
+	message := tsdiag.This_code_uses_Math_random_randomness_is_represented_through_the_Effect_Random_service_effect_globalRandom
 	if checkInEffect {
-		message = tsdiag.Prefer_using_the_Random_service_from_Effect_instead_of_Math_random_inside_Effect_generators_effect_globalRandomInEffect
+		message = tsdiag.This_Effect_code_uses_Math_random_randomness_is_represented_through_the_Effect_Random_service_effect_globalRandomInEffect
 	}
 
 	var diags []*ast.Diagnostic

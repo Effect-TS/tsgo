@@ -1,9 +1,9 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/effectFnOpportunity_plainMany.ts(13,14): suggestion TS377047: Can be rewritten as a reusable function: Effect.fn(() => { ... }). effect(effectFnOpportunity)
-/.src/effectFnOpportunity_plainMany.ts(22,14): suggestion TS377047: Can be rewritten as a reusable function: Effect.fn(function<T>(value) { ... }). effect(effectFnOpportunity)
-/.src/effectFnOpportunity_plainMany.ts(32,17): suggestion TS377047: Can be rewritten as a reusable function: Effect.fn(function<T>(value) { ... }). effect(effectFnOpportunity)
+/.src/effectFnOpportunity_plainMany.ts(13,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn(() => { ... })`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_plainMany.ts(22,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn(function<T>(value) { ... })`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_plainMany.ts(32,17): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn(function<T>(value) { ... })`. effect(effectFnOpportunity)
 
 
 ==== /.src/tsconfig.json (0 errors) ====
@@ -34,7 +34,7 @@ Effect version: 4.0.0
     
     export const arrowPlainMany = () => {
                  ~~~~~~~~~~~~~~
-!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fn(() => { ... }). effect(effectFnOpportunity)
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn(() => { ... })`. effect(effectFnOpportunity)
       const a = 1
       const b = 2
       const c = 3
@@ -45,7 +45,7 @@ Effect version: 4.0.0
     
     export const functionExpressionPlainMany = function<T>(value: T) {
                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fn(function<T>(value) { ... }). effect(effectFnOpportunity)
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn(function<T>(value) { ... })`. effect(effectFnOpportunity)
       const a = 1
       const b = 2
       const c = 3
@@ -57,7 +57,7 @@ Effect version: 4.0.0
     
     export function functionDeclarationPlainMany<T>(value: T) {
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fn(function<T>(value) { ... }). effect(effectFnOpportunity)
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn(function<T>(value) { ... })`. effect(effectFnOpportunity)
       const a = 1
       const b = 2
       const c = 3

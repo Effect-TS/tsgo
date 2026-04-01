@@ -1,10 +1,10 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/floatingEffect.ts(4,1): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
-/.src/floatingEffect.ts(5,1): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
-/.src/floatingEffect.ts(6,1): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
-/.src/floatingEffect.ts(7,1): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+/.src/floatingEffect.ts(4,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/floatingEffect.ts(5,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/floatingEffect.ts(6,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/floatingEffect.ts(7,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
 
 
 ==== /.src/floatingEffect.ts (4 errors) ====
@@ -13,16 +13,16 @@ Effect version: 4.0.0
     // These should trigger floatingEffect diagnostic (code 377001)
     Effect.succeed("floating")
     ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
     Effect.never
     ~~~~~~~~~~~~
-!!! error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
     Effect.void
     ~~~~~~~~~~~
-!!! error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
     Effect.fail("error")
     ~~~~~~~~~~~~~~~~~~~~
-!!! error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
     
     // These should NOT trigger (assigned to variable)
     const ok = Effect.succeed(1)

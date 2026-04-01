@@ -1,21 +1,21 @@
 === Quick Fix Inventory ===
 
-[D1] (5:1-5:28) TS377064: Prefer using Effect.log or Logger instead of console.log. effect(globalConsole)
+[D1] (5:1-5:28) TS377064: This code uses `console.log`, the corresponding Effect logging API is `Effect.log or Logger`. effect(globalConsole)
   Fix 0: "Disable globalConsole for this line"
   Fix 1: "Disable globalConsole for entire file"
 
 [D2] (8:7-8:17) TS6133: '_regularFn' is declared but its value is never read.
   (no quick fixes)
 
-[D3] (9:3-9:26) TS377064: Prefer using Effect.logWarning or Logger instead of console.warn. effect(globalConsole)
+[D3] (9:3-9:26) TS377064: This code uses `console.warn`, the corresponding Effect logging API is `Effect.logWarning or Logger`. effect(globalConsole)
   Fix 0: "Disable globalConsole for this line"
   Fix 1: "Disable globalConsole for entire file"
 
-[D4] (14:1-14:23) TS377064: Prefer using Effect.logInfo or Logger instead of console.info. effect(globalConsole)
+[D4] (14:1-14:23) TS377064: This code uses `console.info`, the corresponding Effect logging API is `Effect.logInfo or Logger`. effect(globalConsole)
   Fix 0: "Disable globalConsole for this line"
   Fix 1: "Disable globalConsole for entire file"
 
-[D5] (28:20-28:43) TS377064: Prefer using Effect.logError or Logger instead of console.error. effect(globalConsole)
+[D5] (28:20-28:43) TS377064: This code uses `console.error`, the corresponding Effect logging API is `Effect.logError or Logger`. effect(globalConsole)
   Fix 0: "Disable globalConsole for this line"
   Fix 1: "Disable globalConsole for entire file"
 

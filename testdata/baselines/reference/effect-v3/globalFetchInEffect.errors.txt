@@ -1,8 +1,8 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/globalFetchInEffect.ts(6,3): warning TS377063: Prefer using HttpClient from @effect/platform instead of the global 'fetch' function inside Effect generators. effect(globalFetchInEffect)
-/.src/globalFetchInEffect.ts(11,3): warning TS377063: Prefer using HttpClient from @effect/platform instead of the global 'fetch' function inside Effect generators. effect(globalFetchInEffect)
+/.src/globalFetchInEffect.ts(6,3): warning TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `@effect/platform`. effect(globalFetchInEffect)
+/.src/globalFetchInEffect.ts(11,3): warning TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `@effect/platform`. effect(globalFetchInEffect)
 
 
 ==== /.src/globalFetchInEffect.ts (2 errors) ====
@@ -13,14 +13,14 @@ Effect version: 3.19.19
     export const fetchInGen = Effect.gen(function*() {
       fetch("https://example.com/in-gen")
       ~~~~~
-!!! warning TS377063: Prefer using HttpClient from @effect/platform instead of the global 'fetch' function inside Effect generators. effect(globalFetchInEffect)
+!!! warning TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `@effect/platform`. effect(globalFetchInEffect)
     })
     
     // Should trigger - fetch directly inside Effect.fn
     export const fetchInFn = Effect.fn("fetchInFn")(function*() {
       fetch("https://example.com/in-fn")
       ~~~~~
-!!! warning TS377063: Prefer using HttpClient from @effect/platform instead of the global 'fetch' function inside Effect generators. effect(globalFetchInEffect)
+!!! warning TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `@effect/platform`. effect(globalFetchInEffect)
     })
     
     // Should NOT trigger - fetch at module level

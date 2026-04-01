@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/effectFnOpportunity_defaultConfig.ts(9,14): suggestion TS377047: Can be rewritten as a reusable function: Effect.fn("withSpanFunction")(function*() { ... }). effect(effectFnOpportunity)
+/.src/effectFnOpportunity_defaultConfig.ts(9,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("withSpanFunction")(function*() { ... })`. effect(effectFnOpportunity)
 /.src/effectFnOpportunity_defaultConfig.ts(10,3): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
 /.src/effectFnOpportunity_defaultConfig.ts(16,3): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
 /.src/effectFnOpportunity_defaultConfig.ts(22,3): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
@@ -30,7 +30,7 @@ Effect version: 4.0.0
     // SHOULD get diagnostic: pipe ends with Effect.withSpan
     export const withSpanFunction = () =>
                  ~~~~~~~~~~~~~~~~
-!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fn("withSpanFunction")(function*() { ... }). effect(effectFnOpportunity)
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("withSpanFunction")(function*() { ... })`. effect(effectFnOpportunity)
       Effect.gen(function*() {
       ~~~~~~~~~~~~~~~~~~~~~~~~
         return yield* Effect.succeed(42)

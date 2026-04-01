@@ -1,9 +1,9 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/tryCatchInEffectGen.ts(4,3): suggestion TS377012: Avoid using try/catch inside Effect generators. Use Effect's error handling mechanisms instead (e.g. Effect.try, Effect.tryPromise, Effect.catch, Effect.catchTag). effect(tryCatchInEffectGen)
-/.src/tryCatchInEffectGen.ts(14,3): suggestion TS377012: Avoid using try/catch inside Effect generators. Use Effect's error handling mechanisms instead (e.g. Effect.try, Effect.tryPromise, Effect.catch, Effect.catchTag). effect(tryCatchInEffectGen)
-/.src/tryCatchInEffectGen.ts(39,5): suggestion TS377012: Avoid using try/catch inside Effect generators. Use Effect's error handling mechanisms instead (e.g. Effect.try, Effect.tryPromise, Effect.catch, Effect.catchTag). effect(tryCatchInEffectGen)
+/.src/tryCatchInEffectGen.ts(4,3): suggestion TS377012: This Effect generator contains `try/catch`; in this context, error handling is expressed with Effect APIs such as Effect.try, Effect.tryPromise, Effect.catch, Effect.catchTag). effect(tryCatchInEffectGen)
+/.src/tryCatchInEffectGen.ts(14,3): suggestion TS377012: This Effect generator contains `try/catch`; in this context, error handling is expressed with Effect APIs such as Effect.try, Effect.tryPromise, Effect.catch, Effect.catchTag). effect(tryCatchInEffectGen)
+/.src/tryCatchInEffectGen.ts(39,5): suggestion TS377012: This Effect generator contains `try/catch`; in this context, error handling is expressed with Effect APIs such as Effect.try, Effect.tryPromise, Effect.catch, Effect.catchTag). effect(tryCatchInEffectGen)
 
 
 ==== /.src/tryCatchInEffectGen.ts (3 errors) ====
@@ -22,7 +22,7 @@ Effect version: 4.0.0
     ~~~~~~~~~~~~~~~~~~~~~~~~
       }
     ~~~
-!!! suggestion TS377012: Avoid using try/catch inside Effect generators. Use Effect's error handling mechanisms instead (e.g. Effect.try, Effect.tryPromise, Effect.catch, Effect.catchTag). effect(tryCatchInEffectGen)
+!!! suggestion TS377012: This Effect generator contains `try/catch`; in this context, error handling is expressed with Effect APIs such as Effect.try, Effect.tryPromise, Effect.catch, Effect.catchTag). effect(tryCatchInEffectGen)
     })
     
     // This should also trigger with Effect.fn
@@ -37,7 +37,7 @@ Effect version: 4.0.0
     ~~~~~~~~~~~~~~~~~~~~
       }
     ~~~
-!!! suggestion TS377012: Avoid using try/catch inside Effect generators. Use Effect's error handling mechanisms instead (e.g. Effect.try, Effect.tryPromise, Effect.catch, Effect.catchTag). effect(tryCatchInEffectGen)
+!!! suggestion TS377012: This Effect generator contains `try/catch`; in this context, error handling is expressed with Effect APIs such as Effect.try, Effect.tryPromise, Effect.catch, Effect.catchTag). effect(tryCatchInEffectGen)
     })
     
     // This should NOT trigger (no try/catch)
@@ -68,7 +68,7 @@ Effect version: 4.0.0
     ~~~~~~~~~~~~~~~~~~~~~~
         }
     ~~~~~
-!!! suggestion TS377012: Avoid using try/catch inside Effect generators. Use Effect's error handling mechanisms instead (e.g. Effect.try, Effect.tryPromise, Effect.catch, Effect.catchTag). effect(tryCatchInEffectGen)
+!!! suggestion TS377012: This Effect generator contains `try/catch`; in this context, error handling is expressed with Effect APIs such as Effect.try, Effect.tryPromise, Effect.catch, Effect.catchTag). effect(tryCatchInEffectGen)
       })
       return inner
     })

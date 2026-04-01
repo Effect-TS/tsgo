@@ -23,12 +23,12 @@ var DeterministicKeys = rule.Rule{
 	Description:     "Enforces deterministic naming for service/tag/error identifiers based on class names",
 	DefaultSeverity: etscore.SeverityOff,
 	SupportedEffect: []string{"v3", "v4"},
-	Codes:           []int32{tsdiag.Key_should_be_0_effect_deterministicKeys.Code()},
+	Codes:           []int32{tsdiag.This_key_does_not_match_the_deterministic_key_for_this_declaration_The_expected_key_is_0_effect_deterministicKeys.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeDeterministicKeys(ctx.TypeParser, ctx.Program, ctx.Checker, ctx.SourceFile, ctx.Options)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
-			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Key_should_be_0_effect_deterministicKeys, nil, m.ExpectedKey)
+			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.This_key_does_not_match_the_deterministic_key_for_this_declaration_The_expected_key_is_0_effect_deterministicKeys, nil, m.ExpectedKey)
 		}
 		return diags
 	},

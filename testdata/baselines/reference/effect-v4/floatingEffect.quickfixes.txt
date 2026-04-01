@@ -1,18 +1,18 @@
 === Quick Fix Inventory ===
 
-[D1] (4:1-4:27) TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+[D1] (4:1-4:27) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
   Fix 0: "Disable floatingEffect for this line"
   Fix 1: "Disable floatingEffect for entire file"
 
-[D2] (5:1-5:13) TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+[D2] (5:1-5:13) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
   Fix 0: "Disable floatingEffect for this line"
   Fix 1: "Disable floatingEffect for entire file"
 
-[D3] (6:1-6:12) TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+[D3] (6:1-6:12) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
   Fix 0: "Disable floatingEffect for this line"
   Fix 1: "Disable floatingEffect for entire file"
 
-[D4] (7:1-7:21) TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+[D4] (7:1-7:21) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
   Fix 0: "Disable floatingEffect for this line"
   Fix 1: "Disable floatingEffect for entire file"
 

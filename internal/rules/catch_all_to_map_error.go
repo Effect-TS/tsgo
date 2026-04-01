@@ -19,12 +19,12 @@ var CatchAllToMapError = rule.Rule{
 	Description:     "Suggests using Effect.mapError instead of Effect.catch + Effect.fail",
 	DefaultSeverity: etscore.SeveritySuggestion,
 	SupportedEffect: []string{"v3", "v4"},
-	Codes:           []int32{tsdiag.You_can_use_Effect_mapError_instead_of_Effect_catch_Effect_fail_to_transform_the_error_type_effect_catchAllToMapError.Code()},
+	Codes:           []int32{tsdiag.Effect_mapError_expresses_the_same_error_type_transformation_more_directly_than_Effect_0_followed_by_Effect_fail_effect_catchAllToMapError.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeCatchAllToMapError(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
-			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.You_can_use_Effect_mapError_instead_of_Effect_catch_Effect_fail_to_transform_the_error_type_effect_catchAllToMapError, nil)
+			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Effect_mapError_expresses_the_same_error_type_transformation_more_directly_than_Effect_0_followed_by_Effect_fail_effect_catchAllToMapError, nil, m.CatchMethodName)
 		}
 		return diags
 	},
@@ -37,6 +37,7 @@ type CatchAllToMapErrorMatch struct {
 	Location           core.TextRange  // The pre-computed error range for this match
 	Callee             *ast.Node       // The Effect.catch callee node (for diagnostic location)
 	CalleeNameNode     *ast.Node       // The "catch" name node within the PropertyAccessExpression (for text replacement)
+	CatchMethodName    string          // The catch variant name (e.g. "catch" or "catchAll")
 	FailCallExpression *ast.Node       // The Effect.fail(arg) call expression node (for replacement range)
 	FailArgument       *ast.Node       // The first argument to Effect.fail (the replacement text)
 }
@@ -82,11 +83,13 @@ func AnalyzeCatchAllToMapError(tp *typeparser.TypeParser, _ *checker.Checker, sf
 
 			// Extract the "catch" name node from the PropertyAccessExpression callee
 			var calleeNameNode *ast.Node
+			catchMethodName := "catch"
 			callee := transformation.Callee
 			if callee.Kind == ast.KindPropertyAccessExpression {
 				prop := callee.AsPropertyAccessExpression()
 				if prop != nil && prop.Name() != nil {
 					calleeNameNode = prop.Name()
+					catchMethodName = prop.Name().Text()
 				}
 			}
 
@@ -95,6 +98,7 @@ func AnalyzeCatchAllToMapError(tp *typeparser.TypeParser, _ *checker.Checker, sf
 				Location:           scanner.GetErrorRangeForNode(sf, transformation.Callee),
 				Callee:             transformation.Callee,
 				CalleeNameNode:     calleeNameNode,
+				CatchMethodName:    catchMethodName,
 				FailCallExpression: expr,
 				FailArgument:       call.Arguments.Nodes[0],
 			})

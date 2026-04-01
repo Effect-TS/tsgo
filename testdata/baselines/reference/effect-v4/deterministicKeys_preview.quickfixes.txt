@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (7:52-7:70) TS377049: Key should be 'effect-v4-tests/deterministicKeys_preview/RenamedService'. effect(deterministicKeys)
+[D1] (7:52-7:70) TS377049: This key does not match the deterministic key for this declaration. The expected key is `effect-v4-tests/deterministicKeys_preview/RenamedService`. effect(deterministicKeys)
   Fix 0: "Disable deterministicKeys for this line"
   Fix 1: "Disable deterministicKeys for entire file"
   Fix 2: "Replace 'CustomIdentifier' with 'effect-v4-tests/deterministicKeys_preview/RenamedService'"

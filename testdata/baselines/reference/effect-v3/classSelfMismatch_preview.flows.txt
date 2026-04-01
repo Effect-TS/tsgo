@@ -1,0 +1,38 @@
+==== /.src/classSelfMismatch_preview.ts (1 flows) ====
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 8:10 - 8:40
+Root: Effect.Tag("ValidContextTag")
+Path (3 nodes):
+  [0] root {plain A=<Self, Type extends Tag.AllowedType>() => TagClass<Self, "ValidContextTag", Type> & (Type extends Record<PropertyKey, any> ? Proxy<Self, Type> : {}) & { use: <X>(body: (_: Type) => X) => [X] extends [Effect<infer A, infer E, infer R>] ? Effect<A, E, R | Self> : [X] extends [PromiseLike<infer A>] ? Effect<A, UnknownException, Self> : Effect<X, never, Self>; }} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="ValidContextTag"} "ValidContextTag"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=<Self, Type extends Tag.AllowedType>() => TagClass<Self, "ValidContextTag", Type> & (Type extends Record<PropertyKey, any> ? Proxy<Self, Type> : {}) & { use: <X>(body: (_: Type) => X) => [X] extends [Effect<infer A, infer E, infer R>] ? Effect<A, E, R | Self> : [X] extends [PromiseLike<infer A>] ? Effect<A, UnknownException, Self> : Effect<X, never, Self>; }} step 0: Effect.Tag
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: <Self, Type extends Tag.AllowedType>() => TagClass<Self, "ValidContextTag", Type> & (Type extends Record<PropertyKey, any> ? Proxy<Self, Type> : {}) & { use: <X>(body: (_: Type) => X) => [X] extends [Effect<infer A, infer E, infer R>] ? Effect<A, E, R | Self> : [X] extends [PromiseLike<infer A>] ? Effect<A, UnknownException, Self> : Effect<X, never, Self>; }
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "ValidContextTag"
+      ordinal: 0
+      result.kind: plain
+      result.A: "ValidContextTag"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.Tag
+      ordinal: 0
+      result.kind: plain
+      result.A: <Self, Type extends Tag.AllowedType>() => TagClass<Self, "ValidContextTag", Type> & (Type extends Record<PropertyKey, any> ? Proxy<Self, Type> : {}) & { use: <X>(body: (_: Type) => X) => [X] extends [Effect<infer A, infer E, infer R>] ? Effect<A, E, R | Self> : [X] extends [PromiseLike<infer A>] ? Effect<A, UnknownException, Self> : Effect<X, never, Self>; }
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call

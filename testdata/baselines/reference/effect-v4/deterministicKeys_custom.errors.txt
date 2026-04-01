@@ -1,8 +1,8 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/test.ts(10,56): error TS377049: Key should be '@effect/test-app/test/MyClass'. effect(deterministicKeys)
-/.src/test.ts(16,6): error TS377049: Key should be '@effect/test-app/test/TTLRequest'. effect(deterministicKeys)
+/.src/test.ts(10,56): error TS377049: This key does not match the deterministic key for this declaration. The expected key is `@effect/test-app/test/MyClass`. effect(deterministicKeys)
+/.src/test.ts(16,6): error TS377049: This key does not match the deterministic key for this declaration. The expected key is `@effect/test-app/test/TTLRequest`. effect(deterministicKeys)
 
 
 ==== /.src/tsconfig.json (0 errors) ====
@@ -64,7 +64,7 @@ Effect version: 4.0.0
     
     export class MyClass extends LocalConstructor<MyClass>("Hello") {
                                                            ~~~~~~~
-!!! error TS377049: Key should be '@effect/test-app/test/MyClass'. effect(deterministicKeys)
+!!! error TS377049: This key does not match the deterministic key for this declaration. The expected key is `@effect/test-app/test/MyClass`. effect(deterministicKeys)
     }
     
     // referenced on another file
@@ -72,7 +72,7 @@ Effect version: 4.0.0
       payload: { id: number }
     }>()("TTLRequest", {
          ~~~~~~~~~~~~
-!!! error TS377049: Key should be '@effect/test-app/test/TTLRequest'. effect(deterministicKeys)
+!!! error TS377049: This key does not match the deterministic key for this declaration. The expected key is `@effect/test-app/test/TTLRequest`. effect(deterministicKeys)
       primaryKey: (req) => `TTLRequest:${req.id}`
     }) {}
     

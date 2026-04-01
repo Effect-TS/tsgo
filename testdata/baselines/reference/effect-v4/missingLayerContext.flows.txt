@@ -1,0 +1,186 @@
+==== /.src/missingLayerContext.ts (5 flows) ====
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 4:8 - 4:37
+Root: Effect.succeed({ value: 1 })
+Path (3 nodes):
+  [0] root {effect A={ value: number; } E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A={ value: number; }} { value: 1 }
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A={ value: number; } E=never R=never} step 0: Effect.succeed
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: { value: number; }
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: { value: 1 }
+      ordinal: 0
+      result.kind: plain
+      result.A: { value: number; }
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: { value: number; }
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 10:8 - 10:37
+Root: Effect.succeed({ value: 2 })
+Path (3 nodes):
+  [0] root {effect A={ value: number; } E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A={ value: number; }} { value: 2 }
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A={ value: number; } E=never R=never} step 0: Effect.succeed
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: { value: number; }
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: { value: 2 }
+      ordinal: 0
+      result.kind: plain
+      result.A: { value: number; }
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: { value: number; }
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 16:8 - 16:37
+Root: Effect.succeed({ value: 3 })
+Path (3 nodes):
+  [0] root {effect A={ value: number; } E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A={ value: number; }} { value: 3 }
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A={ value: number; } E=never R=never} step 0: Effect.succeed
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: { value: number; }
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: { value: 3 }
+      ordinal: 0
+      result.kind: plain
+      result.A: { value: number; }
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: { value: number; }
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 25:2 - 28:26
+Root: testFn(layerWithServices)
+Path (3 nodes):
+  [0] root {layer A=ServiceA E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {layer A=ServiceA E=never R=ServiceB | ServiceC} layerWithServices
+      ~> [call] -> [2]
+  [2] pipeTransformation {layer A=ServiceA E=never R=never} step 0: testFn
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: layer
+      result.A: ServiceA
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: layerWithServices
+      ordinal: 0
+      result.kind: layer
+      result.A: ServiceA
+      result.E: never
+      result.R: ServiceB | ServiceC
+  [2] kind: pipeTransformation
+      label: step 0: testFn
+      ordinal: 0
+      result.kind: layer
+      result.A: ServiceA
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 32:2 - 35:38
+Root: testFnWithServiceB(layerWithServices)
+Path (3 nodes):
+  [0] root {layer A=ServiceA E=never R=ServiceB} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {layer A=ServiceA E=never R=ServiceB | ServiceC} layerWithServices
+      ~> [call] -> [2]
+  [2] pipeTransformation {layer A=ServiceA E=never R=ServiceB} step 0: testFnWithServiceB
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: layer
+      result.A: ServiceA
+      result.E: never
+      result.R: ServiceB
+  [1] kind: pipeSubject
+      label: layerWithServices
+      ordinal: 0
+      result.kind: layer
+      result.A: ServiceA
+      result.E: never
+      result.R: ServiceB | ServiceC
+  [2] kind: pipeTransformation
+      label: step 0: testFnWithServiceB
+      ordinal: 0
+      result.kind: layer
+      result.A: ServiceA
+      result.E: never
+      result.R: ServiceB
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call

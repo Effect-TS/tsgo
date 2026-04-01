@@ -1,8 +1,8 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/unnecessaryFailYieldableError.ts(22,3): suggestion TS377019: This Effect.fail call uses a yieldable error type as argument. You can yield* the error directly instead. effect(unnecessaryFailYieldableError)
-/.src/unnecessaryFailYieldableError.ts(23,3): suggestion TS377019: This Effect.fail call uses a yieldable error type as argument. You can yield* the error directly instead. effect(unnecessaryFailYieldableError)
+/.src/unnecessaryFailYieldableError.ts(22,3): suggestion TS377019: This `yield* Effect.fail(...)` passes a yieldable error value. `yield*` represents that value directly without wrapping it in `Effect.fail`. effect(unnecessaryFailYieldableError)
+/.src/unnecessaryFailYieldableError.ts(23,3): suggestion TS377019: This `yield* Effect.fail(...)` passes a yieldable error value. `yield*` represents that value directly without wrapping it in `Effect.fail`. effect(unnecessaryFailYieldableError)
 
 
 ==== /.src/unnecessaryFailYieldableError.ts (2 errors) ====
@@ -29,10 +29,10 @@ Effect version: 4.0.0
       // should report
       yield* Effect.fail(new DataTaggedError())
       ~~~~~
-!!! suggestion TS377019: This Effect.fail call uses a yieldable error type as argument. You can yield* the error directly instead. effect(unnecessaryFailYieldableError)
+!!! suggestion TS377019: This `yield* Effect.fail(...)` passes a yieldable error value. `yield*` represents that value directly without wrapping it in `Effect.fail`. effect(unnecessaryFailYieldableError)
       yield* Effect.fail(new SchemaError({}))
       ~~~~~
-!!! suggestion TS377019: This Effect.fail call uses a yieldable error type as argument. You can yield* the error directly instead. effect(unnecessaryFailYieldableError)
+!!! suggestion TS377019: This `yield* Effect.fail(...)` passes a yieldable error value. `yield*` represents that value directly without wrapping it in `Effect.fail`. effect(unnecessaryFailYieldableError)
     })
     
     // should not report

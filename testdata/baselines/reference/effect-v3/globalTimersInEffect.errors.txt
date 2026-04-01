@@ -1,9 +1,9 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/globalTimersInEffect.ts(6,3): warning TS377073: Prefer using Effect.sleep or Schedule from Effect instead of setTimeout inside Effect generators. effect(globalTimersInEffect)
-/.src/globalTimersInEffect.ts(11,3): warning TS377073: Prefer using Schedule or Effect.repeat from Effect instead of setInterval inside Effect generators. effect(globalTimersInEffect)
-/.src/globalTimersInEffect.ts(17,3): warning TS377073: Prefer using Effect.sleep or Schedule from Effect instead of setTimeout inside Effect generators. effect(globalTimersInEffect)
+/.src/globalTimersInEffect.ts(6,3): warning TS377073: This Effect code uses `setTimeout`, the corresponding timer API in this context is `Effect.sleep or Schedule` from Effect. effect(globalTimersInEffect)
+/.src/globalTimersInEffect.ts(11,3): warning TS377073: This Effect code uses `setInterval`, the corresponding timer API in this context is `Schedule or Effect.repeat` from Effect. effect(globalTimersInEffect)
+/.src/globalTimersInEffect.ts(17,3): warning TS377073: This Effect code uses `setTimeout`, the corresponding timer API in this context is `Effect.sleep or Schedule` from Effect. effect(globalTimersInEffect)
 
 
 ==== /.src/globalTimersInEffect.ts (3 errors) ====
@@ -14,14 +14,14 @@ Effect version: 3.19.19
     export const setTimeoutInGen = Effect.gen(function*() {
       setTimeout(() => {}, 100)
       ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377073: Prefer using Effect.sleep or Schedule from Effect instead of setTimeout inside Effect generators. effect(globalTimersInEffect)
+!!! warning TS377073: This Effect code uses `setTimeout`, the corresponding timer API in this context is `Effect.sleep or Schedule` from Effect. effect(globalTimersInEffect)
     })
     
     // Should trigger - setInterval inside Effect.gen
     export const setIntervalInGen = Effect.gen(function*() {
       setInterval(() => {}, 1000)
       ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377073: Prefer using Schedule or Effect.repeat from Effect instead of setInterval inside Effect generators. effect(globalTimersInEffect)
+!!! warning TS377073: This Effect code uses `setInterval`, the corresponding timer API in this context is `Schedule or Effect.repeat` from Effect. effect(globalTimersInEffect)
     })
     
     // Should trigger - aliased setTimeout
@@ -29,7 +29,7 @@ Effect version: 3.19.19
       const myTimeout = setTimeout
       myTimeout(() => {}, 100)
       ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377073: Prefer using Effect.sleep or Schedule from Effect instead of setTimeout inside Effect generators. effect(globalTimersInEffect)
+!!! warning TS377073: This Effect code uses `setTimeout`, the corresponding timer API in this context is `Effect.sleep or Schedule` from Effect. effect(globalTimersInEffect)
     })
     
     // Should NOT trigger - setTimeout at module level

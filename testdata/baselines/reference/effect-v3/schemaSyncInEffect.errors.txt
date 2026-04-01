@@ -1,11 +1,11 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/schemaSyncInEffect.ts(12,18): suggestion TS377037: Using Schema.decodeSync inside an Effect generator is not recommended. Use Schema.decode instead to get properly typed error channel. effect(schemaSyncInEffect)
-/.src/schemaSyncInEffect.ts(20,18): suggestion TS377037: Using Schema.decodeUnknownSync inside an Effect generator is not recommended. Use Schema.decodeUnknown instead to get properly typed error channel. effect(schemaSyncInEffect)
-/.src/schemaSyncInEffect.ts(28,19): suggestion TS377037: Using Schema.encodeSync inside an Effect generator is not recommended. Use Schema.encode instead to get properly typed error channel. effect(schemaSyncInEffect)
-/.src/schemaSyncInEffect.ts(36,19): suggestion TS377037: Using Schema.encodeUnknownSync inside an Effect generator is not recommended. Use Schema.encodeUnknown instead to get properly typed error channel. effect(schemaSyncInEffect)
-/.src/schemaSyncInEffect.ts(59,18): suggestion TS377037: Using Schema.decodeSync inside an Effect generator is not recommended. Use Schema.decode instead to get properly typed error channel. effect(schemaSyncInEffect)
+/.src/schemaSyncInEffect.ts(12,18): suggestion TS377037: `Schema.decodeSync` is used inside an Effect generator. `Schema.decode` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
+/.src/schemaSyncInEffect.ts(20,18): suggestion TS377037: `Schema.decodeUnknownSync` is used inside an Effect generator. `Schema.decodeUnknown` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
+/.src/schemaSyncInEffect.ts(28,19): suggestion TS377037: `Schema.encodeSync` is used inside an Effect generator. `Schema.encode` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
+/.src/schemaSyncInEffect.ts(36,19): suggestion TS377037: `Schema.encodeUnknownSync` is used inside an Effect generator. `Schema.encodeUnknown` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
+/.src/schemaSyncInEffect.ts(59,18): suggestion TS377037: `Schema.decodeSync` is used inside an Effect generator. `Schema.decode` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
 
 
 ==== /.src/schemaSyncInEffect.ts (5 errors) ====
@@ -22,7 +22,7 @@ Effect version: 3.19.19
       const input = yield* Effect.succeed({ name: "John", age: 30 })
       const person = Schema.decodeSync(Person)(input)
                      ~~~~~~~~~~~~~~~~~
-!!! suggestion TS377037: Using Schema.decodeSync inside an Effect generator is not recommended. Use Schema.decode instead to get properly typed error channel. effect(schemaSyncInEffect)
+!!! suggestion TS377037: `Schema.decodeSync` is used inside an Effect generator. `Schema.decode` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
       //             ^- should suggest using Schema.decode instead
       return person
     })
@@ -32,7 +32,7 @@ Effect version: 3.19.19
       const input: unknown = yield* Effect.succeed({ name: "Jane", age: 25 })
       const person = Schema.decodeUnknownSync(Person)(input)
                      ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! suggestion TS377037: Using Schema.decodeUnknownSync inside an Effect generator is not recommended. Use Schema.decodeUnknown instead to get properly typed error channel. effect(schemaSyncInEffect)
+!!! suggestion TS377037: `Schema.decodeUnknownSync` is used inside an Effect generator. `Schema.decodeUnknown` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
       //             ^- should suggest using Schema.decodeUnknown instead
       return person
     })
@@ -42,7 +42,7 @@ Effect version: 3.19.19
       const person = { name: "Bob", age: 40 }
       const encoded = Schema.encodeSync(Person)(person)
                       ~~~~~~~~~~~~~~~~~
-!!! suggestion TS377037: Using Schema.encodeSync inside an Effect generator is not recommended. Use Schema.encode instead to get properly typed error channel. effect(schemaSyncInEffect)
+!!! suggestion TS377037: `Schema.encodeSync` is used inside an Effect generator. `Schema.encode` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
       //              ^- should suggest using Schema.encode instead
       return encoded
     })
@@ -52,7 +52,7 @@ Effect version: 3.19.19
       const person: unknown = { name: "Alice", age: 35 }
       const encoded = Schema.encodeUnknownSync(Person)(person as any)
                       ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! suggestion TS377037: Using Schema.encodeUnknownSync inside an Effect generator is not recommended. Use Schema.encodeUnknown instead to get properly typed error channel. effect(schemaSyncInEffect)
+!!! suggestion TS377037: `Schema.encodeUnknownSync` is used inside an Effect generator. `Schema.encodeUnknown` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
       //              ^- should suggest using Schema.encodeUnknown instead
       return encoded
     })
@@ -77,7 +77,7 @@ Effect version: 3.19.19
       const input = { name: "John", age: 30 }
       const person = Schema.decodeSync(Person)(input)
                      ~~~~~~~~~~~~~~~~~
-!!! suggestion TS377037: Using Schema.decodeSync inside an Effect generator is not recommended. Use Schema.decode instead to get properly typed error channel. effect(schemaSyncInEffect)
+!!! suggestion TS377037: `Schema.decodeSync` is used inside an Effect generator. `Schema.decode` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
       //             ^- should suggest using Schema.decode instead
       return person
     })

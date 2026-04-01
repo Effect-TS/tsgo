@@ -1,16 +1,16 @@
 === Quick Fix Inventory ===
 
-[D1] (11:4-11:16) TS377010: You can use Effect.mapError instead of Effect.catch + Effect.fail to transform the error type. effect(catchAllToMapError)
+[D1] (11:4-11:16) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
   Fix 0: "Disable catchAllToMapError for this line"
   Fix 1: "Disable catchAllToMapError for entire file"
   Fix 2: "Replace with Effect.mapError"
 
-[D2] (15:4-15:16) TS377010: You can use Effect.mapError instead of Effect.catch + Effect.fail to transform the error type. effect(catchAllToMapError)
+[D2] (15:4-15:16) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
   Fix 0: "Disable catchAllToMapError for this line"
   Fix 1: "Disable catchAllToMapError for entire file"
   Fix 2: "Replace with Effect.mapError"
 
-[D3] (19:4-19:16) TS377010: You can use Effect.mapError instead of Effect.catch + Effect.fail to transform the error type. effect(catchAllToMapError)
+[D3] (19:4-19:16) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
   Fix 0: "Disable catchAllToMapError for this line"
   Fix 1: "Disable catchAllToMapError for entire file"
   Fix 2: "Replace with Effect.mapError"

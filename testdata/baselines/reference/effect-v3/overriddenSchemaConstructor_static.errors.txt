@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/overriddenSchemaConstructor_static.ts(11,3): error TS377044: Classes extending Schema must not override the constructor; this is because it silently breaks the schema decoding behaviour. If that's needed, we recommend instead to use a static 'new' method that constructs the instance. effect(overriddenSchemaConstructor)
+/.src/overriddenSchemaConstructor_static.ts(11,3): error TS377044: This Schema subclass defines its own constructor. For Schema classes, constructor overrides break decoding behavior for the class shape. Custom construction can be expressed through a static `new` method instead. effect(overriddenSchemaConstructor)
 
 
 ==== /.src/overriddenSchemaConstructor_static.ts (1 errors) ====
@@ -17,7 +17,7 @@ Effect version: 3.19.19
       // should be report here at constructor location
       constructor() {
       ~~~~~~~~~~~
-!!! error TS377044: Classes extending Schema must not override the constructor; this is because it silently breaks the schema decoding behaviour. If that's needed, we recommend instead to use a static 'new' method that constructs the instance. effect(overriddenSchemaConstructor)
+!!! error TS377044: This Schema subclass defines its own constructor. For Schema classes, constructor overrides break decoding behavior for the class shape. Custom construction can be expressed through a static `new` method instead. effect(overriddenSchemaConstructor)
         super({ a: 42 })
         this.b = 56
       }

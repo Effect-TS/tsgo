@@ -1,28 +1,28 @@
 === Quick Fix Inventory ===
 
-[D1] (22:14-22:32) TS377004: Missing context ServiceA | ServiceB | ServiceC in the expected Effect type. effect(missingEffectContext)
+[D1] (22:14-22:32) TS377004: This Effect requires a service that is missing from the expected Effect context: `ServiceA | ServiceB | ServiceC`. effect(missingEffectContext)
   Fix 0: "Disable missingEffectContext for this line"
   Fix 1: "Disable missingEffectContext for entire file"
 
-[D2] (25:14-25:29) TS377004: Missing context ServiceC in the expected Effect type. effect(missingEffectContext)
+[D2] (25:14-25:29) TS377004: This Effect requires a service that is missing from the expected Effect context: `ServiceC`. effect(missingEffectContext)
   Fix 0: "Disable missingEffectContext for this line"
   Fix 1: "Disable missingEffectContext for entire file"
 
-[D3] (30:14-30:42) TS377004: Missing context ServiceC in the expected Effect type. effect(missingEffectContext)
+[D3] (30:14-30:42) TS377004: This Effect requires a service that is missing from the expected Effect context: `ServiceC`. effect(missingEffectContext)
   Fix 0: "Disable missingEffectContext for this line"
   Fix 1: "Disable missingEffectContext for entire file"
 
 [D4] (32:50-32:57) TS6133: 'service' is declared but its value is never read.
   (no quick fixes)
 
-[D5] (34:9-34:24) TS377004: Missing context A in the expected Effect type. effect(missingEffectContext)
+[D5] (34:9-34:24) TS377004: This Effect requires a service that is missing from the expected Effect context: `A`. effect(missingEffectContext)
   Fix 0: "Disable missingEffectContext for this line"
   Fix 1: "Disable missingEffectContext for entire file"
 
 [D6] (39:7-39:8) TS6133: '_' is declared but its value is never read.
   (no quick fixes)
 
-[D7] (39:30-39:39) TS377004: Missing context ServiceA | ServiceB | ServiceC in the expected Effect type. effect(missingEffectContext)
+[D7] (39:30-39:39) TS377004: This Effect requires a service that is missing from the expected Effect context: `ServiceA | ServiceB | ServiceC`. effect(missingEffectContext)
   Fix 0: "Disable missingEffectContext for this line"
   Fix 1: "Disable missingEffectContext for entire file"
 

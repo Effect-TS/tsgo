@@ -22,7 +22,7 @@ var GlobalErrorInEffectCatch = rule.Rule{
 	Description:     "Warns when catch callbacks return global Error type instead of typed errors",
 	DefaultSeverity: etscore.SeverityWarning,
 	SupportedEffect: []string{"v3", "v4"},
-	Codes:           []int32{tsdiag.The_catch_callback_in_0_returns_global_Error_which_loses_type_safety_as_untagged_errors_merge_together_Consider_using_a_tagged_error_and_optionally_wrapping_the_original_in_a_cause_property_effect_globalErrorInEffectCatch.Code()},
+	Codes:           []int32{tsdiag.The_catch_callback_in_0_returns_the_global_Error_type_Untagged_errors_merge_together_in_the_Effect_error_channel_and_lose_type_level_distinction_a_tagged_error_preserves_that_distinction_and_can_wrap_the_original_error_in_a_cause_property_effect_globalErrorInEffectCatch.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		var diags []*ast.Diagnostic
 
@@ -98,7 +98,7 @@ func checkGlobalErrorInEffectCatch(ctx *rule.Context, node *ast.Node) *ast.Diagn
 
 		if ctx.TypeParser.IsGlobalErrorType(returnType) {
 			calleeText := scanner.GetSourceTextOfNodeFromSourceFile(ctx.SourceFile, callee, false)
-			return ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(callee), tsdiag.The_catch_callback_in_0_returns_global_Error_which_loses_type_safety_as_untagged_errors_merge_together_Consider_using_a_tagged_error_and_optionally_wrapping_the_original_in_a_cause_property_effect_globalErrorInEffectCatch, nil, calleeText)
+			return ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(callee), tsdiag.The_catch_callback_in_0_returns_the_global_Error_type_Untagged_errors_merge_together_in_the_Effect_error_channel_and_lose_type_level_distinction_a_tagged_error_preserves_that_distinction_and_can_wrap_the_original_error_in_a_cause_property_effect_globalErrorInEffectCatch, nil, calleeText)
 		}
 	}
 

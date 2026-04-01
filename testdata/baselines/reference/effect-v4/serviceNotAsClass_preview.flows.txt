@@ -1,0 +1,38 @@
+==== /.src/serviceNotAsClass_preview.ts (1 flows) ====
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 5:23 - 5:71
+Root: ServiceMap.Service<{ port: number }>("Preview")
+Path (3 nodes):
+  [0] root {plain A=Service<{ port: number; }, { port: number; }>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="Preview"} "Preview"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=Service<{ port: number; }, { port: number; }>} step 0: ServiceMap.Service
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: Service<{ port: number; }, { port: number; }>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "Preview"
+      ordinal: 0
+      result.kind: plain
+      result.A: "Preview"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: ServiceMap.Service
+      ordinal: 0
+      result.kind: plain
+      result.A: Service<{ port: number; }, { port: number; }>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call

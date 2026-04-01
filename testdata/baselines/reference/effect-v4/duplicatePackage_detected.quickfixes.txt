@@ -1,6 +1,7 @@
 === Quick Fix Inventory ===
 
-[D1] (1:1-1:32) TS377051: Multiple versions of package 'my-effect-lib' detected: 1.0.0 @ /node_modules/my-effect-lib, 2.0.0 @ /node_modules/wrapper/node_modules/my-effect-lib. Consider cleaning up your lockfile, or add 'my-effect-lib' to allowedDuplicatedPackages to suppress this warning. effect(duplicatePackage)
+[D1] (1:1-1:32) TS377051: Multiple versions of package `my-effect-lib` were detected: 1.0.0 @ /node_modules/my-effect-lib, 2.0.0 @ /node_modules/wrapper/node_modules/my-effect-lib. Package duplication can change runtime identity and type equality across Effect modules.
+If this is intentional, set the LSP config `allowedDuplicatedPackages` to ["my-effect-lib"]. effect(duplicatePackage)
   Fix 0: "Disable duplicatePackage for this line"
   Fix 1: "Disable duplicatePackage for entire file"
 

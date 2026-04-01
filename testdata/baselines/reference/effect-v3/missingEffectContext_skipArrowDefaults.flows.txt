@@ -1,0 +1,105 @@
+==== /.src/missingEffectContext_skipArrowDefaults.ts (2 flows) ====
+
+=== Effect Flow ===
+Kind: effectGen
+Location: 4:13 - 8:3
+Root: Effect.gen(function*() {\n  const banana = (rateLimit: RateLimiter.RateLimiter = (_) => _) => Effect.void\n\n  yield* banana()\n})
+Path (6 nodes):
+  [0] root {effect A=void E=never R=never} Effect.gen
+      ==> [executes] -> [1]
+  [1] genSequence {effect A=void E=never R=never} generator body
+      ==> [next] -> [2]
+  [2] statement {unknown} const banana = (rateLimit: RateLimiter.RateLimiter = (_) => _) => Effect.void
+      ==> [next] -> [3]
+  [3] statement {unknown} yield* banana()
+      ==> [yield*] -> [4]
+  [4] yield {plain A=void} yield*
+      ==> [operand] -> [5]
+  [5] yieldOperand {effect A=void E=never R=never} banana()
+
+Nodes (6):
+  [0] kind: root
+      label: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+  [1] kind: genSequence
+      label: generator body
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+  [2] kind: statement
+      label: const banana = (rateLimit: RateLimiter.RateLimiter = (_) => _) => Effect.void
+      ordinal: 0
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [3] kind: statement
+      label: yield* banana()
+      ordinal: 1
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [4] kind: yield
+      label: yield*
+      ordinal: 0
+      result.kind: plain
+      result.A: void
+      result.E: 
+      result.R: 
+  [5] kind: yieldOperand
+      label: banana()
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+Edges (5):
+  0 -> 1 [strong] executes
+  1 -> 2 [strong] next
+  2 -> 3 [strong] next
+  3 -> 4 [strong] yield*
+  4 -> 5 [strong] operand
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 4:13 - 8:3
+Root: Effect.gen(function*() {\n  const banana = (rateLimit: RateLimiter.RateLimiter = (_) => _) => Effect.void\n\n  yield* banana()\n})
+Path (3 nodes):
+  [0] root {effect A=void E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=() => Generator<YieldWrap<Effect<void, never, never>>, void, any>} function*() {\n  const banana = (rateLimit: RateLimiter.RateLimiter = (_) => ...
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=void E=never R=never} step 0: Effect.gen
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: function*() {\n  const banana = (rateLimit: RateLimiter.RateLimiter = (_) => ...
+      ordinal: 0
+      result.kind: plain
+      result.A: () => Generator<YieldWrap<Effect<void, never, never>>, void, any>
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call

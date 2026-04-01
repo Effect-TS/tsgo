@@ -17,12 +17,12 @@ var OverriddenSchemaConstructor = rule.Rule{
 	Description:     "Prevents overriding constructors in Schema classes which breaks decoding behavior",
 	DefaultSeverity: etscore.SeverityError,
 	SupportedEffect: []string{"v3", "v4"},
-	Codes:           []int32{tsdiag.Classes_extending_Schema_must_not_override_the_constructor_this_is_because_it_silently_breaks_the_schema_decoding_behaviour_If_that_s_needed_we_recommend_instead_to_use_a_static_new_method_that_constructs_the_instance_effect_overriddenSchemaConstructor.Code()},
+	Codes:           []int32{tsdiag.This_Schema_subclass_defines_its_own_constructor_For_Schema_classes_constructor_overrides_break_decoding_behavior_for_the_class_shape_Custom_construction_can_be_expressed_through_a_static_new_method_instead_effect_overriddenSchemaConstructor.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeOverriddenSchemaConstructor(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
-			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Classes_extending_Schema_must_not_override_the_constructor_this_is_because_it_silently_breaks_the_schema_decoding_behaviour_If_that_s_needed_we_recommend_instead_to_use_a_static_new_method_that_constructs_the_instance_effect_overriddenSchemaConstructor, nil)
+			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.This_Schema_subclass_defines_its_own_constructor_For_Schema_classes_constructor_overrides_break_decoding_behavior_for_the_class_shape_Custom_construction_can_be_expressed_through_a_static_new_method_instead_effect_overriddenSchemaConstructor, nil)
 		}
 		return diags
 	},

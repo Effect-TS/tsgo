@@ -15,7 +15,7 @@ import (
 var MultipleEffectProvideFix = fixable.Fixable{
 	Name:        "multipleEffectProvide",
 	Description: "Combine into a single provide",
-	ErrorCodes:  []int32{tsdiag.Avoid_chaining_Effect_provide_calls_as_this_can_lead_to_service_lifecycle_issues_Instead_merge_layers_and_provide_them_in_a_single_call_effect_multipleEffectProvide.Code()},
+	ErrorCodes:  []int32{tsdiag.This_expression_chains_multiple_Effect_provide_calls_Providing_Layers_in_multiple_calls_in_a_chain_can_break_service_lifecycle_behavior_compared_with_a_single_combined_provide_with_merged_layers_effect_multipleEffectProvide.Code()},
 	FixIDs:      []string{"multipleEffectProvide_fix"},
 	Run:         runMultipleEffectProvideFix,
 }

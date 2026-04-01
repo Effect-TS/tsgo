@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/unnecessaryFailYieldableError_preview.ts(8,3): warning TS377019: This Effect.fail call uses a yieldable error type as argument. You can yield* the error directly instead. effect(unnecessaryFailYieldableError)
+/.src/unnecessaryFailYieldableError_preview.ts(8,3): warning TS377019: This `yield* Effect.fail(...)` passes a yieldable error value. `yield*` represents that value directly without wrapping it in `Effect.fail`. effect(unnecessaryFailYieldableError)
 
 
 ==== /.src/unnecessaryFailYieldableError_preview.ts (1 errors) ====
@@ -14,6 +14,6 @@ Effect version: 4.0.0
     export const preview = Effect.gen(function*() {
       yield* Effect.fail(new Boom())
       ~~~~~
-!!! warning TS377019: This Effect.fail call uses a yieldable error type as argument. You can yield* the error directly instead. effect(unnecessaryFailYieldableError)
+!!! warning TS377019: This `yield* Effect.fail(...)` passes a yieldable error value. `yield*` represents that value directly without wrapping it in `Effect.fail`. effect(unnecessaryFailYieldableError)
     })
     

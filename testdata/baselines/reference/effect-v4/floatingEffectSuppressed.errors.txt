@@ -1,11 +1,11 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/floatingEffectSuppressed.ts(4,1): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
-/.src/floatingEffectSuppressed.ts(11,1): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
-/.src/floatingEffectSuppressed.ts(18,1): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
-/.src/floatingEffectSuppressed.ts(22,1): warning TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
-/.src/floatingEffectSuppressed.ts(23,1): warning TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+/.src/floatingEffectSuppressed.ts(4,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/floatingEffectSuppressed.ts(11,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/floatingEffectSuppressed.ts(18,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/floatingEffectSuppressed.ts(22,1): warning TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/floatingEffectSuppressed.ts(23,1): warning TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
 
 
 ==== /.src/floatingEffectSuppressed.ts (5 errors) ====
@@ -14,7 +14,7 @@ Effect version: 4.0.0
     // This should trigger (no directive)
     Effect.succeed(true)
     ~~~~~~~~~~~~~~~~~~~~
-!!! error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
     
     // This should be suppressed by next-line directive (JSDoc style)
     /** @effect-diagnostics-next-line floatingEffect:off */
@@ -23,7 +23,7 @@ Effect version: 4.0.0
     // This should trigger (directive only affects previous line)
     Effect.succeed(false)
     ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
     
     // This should be suppressed by next-line directive (comment style)
     // @effect-diagnostics-next-line floatingEffect:off
@@ -32,16 +32,16 @@ Effect version: 4.0.0
     // This should trigger again
     Effect.succeed("world")
     ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
     
     // Section directive: set to warning for rest of file
     /** @effect-diagnostics floatingEffect:warning */
     Effect.succeed(1)
     ~~~~~~~~~~~~~~~~~
-!!! warning TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+!!! warning TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
     Effect.succeed(2)
     ~~~~~~~~~~~~~~~~~
-!!! warning TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+!!! warning TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
     
     // Section directive: turn off for rest of file
     /** @effect-diagnostics floatingEffect:off */

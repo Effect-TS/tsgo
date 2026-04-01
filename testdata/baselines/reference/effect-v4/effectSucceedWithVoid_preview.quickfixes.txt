@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (5:24-5:49) TS377016: Effect.void can be used instead of Effect.succeed(undefined) or Effect.succeed(void 0). effect(effectSucceedWithVoid)
+[D1] (5:24-5:49) TS377016: `Effect.void` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithVoid)
   Fix 0: "Disable effectSucceedWithVoid for this line"
   Fix 1: "Disable effectSucceedWithVoid for entire file"
   Fix 2: "Replace with Effect.void"

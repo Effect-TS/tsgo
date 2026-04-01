@@ -1,8 +1,8 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/effect_fn_opportunity_panic.ts(61,7): suggestion TS377047: Can be rewritten as a reusable function: Effect.fn("JsonPlaceholder.getTodo")((id) => { ... }). effect(effectFnOpportunity)
-/.src/effect_fn_opportunity_panic.ts(83,7): suggestion TS377047: Can be rewritten as a reusable function: Effect.fn("JsonPlaceholder.getUser")((id) => { ... }). effect(effectFnOpportunity)
+/.src/effect_fn_opportunity_panic.ts(61,7): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("JsonPlaceholder.getTodo")((id) => { ... })`. effect(effectFnOpportunity)
+/.src/effect_fn_opportunity_panic.ts(83,7): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("JsonPlaceholder.getUser")((id) => { ... })`. effect(effectFnOpportunity)
 
 
 ==== /.src/tsconfig.json (0 errors) ====
@@ -81,7 +81,7 @@ Effect version: 4.0.0
         return {
           getTodo: (id: number) => {
           ~~~~~~~
-!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fn("JsonPlaceholder.getTodo")((id) => { ... }). effect(effectFnOpportunity)
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("JsonPlaceholder.getTodo")((id) => { ... })`. effect(effectFnOpportunity)
             const path = `/todos/${id}`
             const url = new URL(path, config.baseUrl).toString()
     
@@ -105,7 +105,7 @@ Effect version: 4.0.0
           },
           getUser: (id: number) => {
           ~~~~~~~
-!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fn("JsonPlaceholder.getUser")((id) => { ... }). effect(effectFnOpportunity)
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("JsonPlaceholder.getUser")((id) => { ... })`. effect(effectFnOpportunity)
             const path = `/users/${id}`
             const url = new URL(path, config.baseUrl).toString()
     

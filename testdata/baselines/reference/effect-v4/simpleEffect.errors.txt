@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/simpleEffect.ts(10,29): suggestion TS377015: Chained pipe calls can be simplified to a single pipe call. effect(unnecessaryPipeChain)
+/.src/simpleEffect.ts(10,29): suggestion TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
 
 
 ==== /.src/simpleEffect.ts (1 errors) ====
@@ -24,7 +24,7 @@ Effect version: 4.0.0
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     )
     ~
-!!! suggestion TS377015: Chained pipe calls can be simplified to a single pipe call. effect(unnecessaryPipeChain)
+!!! suggestion TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
     
     export const mixedCallsAndPipes = Effect.map(Effect.succeed(1), (x) => x + 1).pipe(
       Effect.map((x) => x * 2),

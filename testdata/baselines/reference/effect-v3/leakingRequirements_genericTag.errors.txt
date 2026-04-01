@@ -1,7 +1,15 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/leakingRequirements_genericTag.ts(14,27): suggestion TS377041: Methods of this Service require 'FileSystem' from every caller. This leaks implementation details — resolve these dependencies at Layer creation time. effect(leakingRequirements)
+/.src/leakingRequirements_genericTag.ts(14,27): suggestion TS377041: Methods of this Service require `FileSystem` from every caller.
+
+The requirement becomes part of the public service surface instead of remaining internal to Layer implementation.
+
+Resolve these dependencies at Layer creation and provide them to each method, so the service's type reflects its purpose, not its implementation.
+
+To suppress this diagnostic for specific dependency types that are intentionally passed through (e.g., HttpServerRequest), add `@effect-leakable-service` JSDoc to their interface declarations, or to this service by adding a `@effect-expect-leaking FileSystem` JSDoc.
+
+More info and examples at https://effect.website/docs/requirements-management/layers/#avoiding-requirement-leakage effect(leakingRequirements)
 
 
 ==== /.src/leakingRequirements_genericTag.ts (1 errors) ====
@@ -20,5 +28,13 @@ Effect version: 3.19.19
     
     export const GenericTag = Context.GenericTag<LeakingService>("LeakingService")
                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! suggestion TS377041: Methods of this Service require 'FileSystem' from every caller. This leaks implementation details — resolve these dependencies at Layer creation time. effect(leakingRequirements)
+!!! suggestion TS377041: Methods of this Service require `FileSystem` from every caller.
+
+The requirement becomes part of the public service surface instead of remaining internal to Layer implementation.
+
+Resolve these dependencies at Layer creation and provide them to each method, so the service's type reflects its purpose, not its implementation.
+
+To suppress this diagnostic for specific dependency types that are intentionally passed through (e.g., HttpServerRequest), add `@effect-leakable-service` JSDoc to their interface declarations, or to this service by adding a `@effect-expect-leaking FileSystem` JSDoc.
+
+More info and examples at https://effect.website/docs/requirements-management/layers/#avoiding-requirement-leakage effect(leakingRequirements)
     

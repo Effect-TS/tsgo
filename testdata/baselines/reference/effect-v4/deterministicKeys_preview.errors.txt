@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/deterministicKeys_preview.ts(7,52): warning TS377049: Key should be 'effect-v4-tests/deterministicKeys_preview/RenamedService'. effect(deterministicKeys)
+/.src/deterministicKeys_preview.ts(7,52): warning TS377049: This key does not match the deterministic key for this declaration. The expected key is `effect-v4-tests/deterministicKeys_preview/RenamedService`. effect(deterministicKeys)
 
 
 ==== /.src/deterministicKeys_preview.ts (1 errors) ====
@@ -13,5 +13,5 @@ Effect version: 4.0.0
     export class RenamedService
       extends ServiceMap.Service<RenamedService, {}>()("CustomIdentifier") {}
                                                        ~~~~~~~~~~~~~~~~~~
-!!! warning TS377049: Key should be 'effect-v4-tests/deterministicKeys_preview/RenamedService'. effect(deterministicKeys)
+!!! warning TS377049: This key does not match the deterministic key for this declaration. The expected key is `effect-v4-tests/deterministicKeys_preview/RenamedService`. effect(deterministicKeys)
     

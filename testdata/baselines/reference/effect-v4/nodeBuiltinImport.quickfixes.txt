@@ -6,109 +6,109 @@
 [D2] (5:8-5:10) TS6133: 'fs' is declared but its value is never read.
   (no quick fixes)
 
-[D3] (5:16-5:20) TS377057: Prefer using FileSystem from effect instead of the Node.js 'fs' module. effect(nodeBuiltinImport)
+[D3] (5:16-5:20) TS377057: This module reference uses the `fs` module, the corresponding Effect API is `FileSystem` from `effect`. effect(nodeBuiltinImport)
   Fix 0: "Disable nodeBuiltinImport for this line"
   Fix 1: "Disable nodeBuiltinImport for entire file"
 
 [D4] (6:13-6:16) TS6133: 'fs2' is declared but its value is never read.
   (no quick fixes)
 
-[D5] (6:22-6:31) TS377057: Prefer using FileSystem from effect instead of the Node.js 'fs' module. effect(nodeBuiltinImport)
+[D5] (6:22-6:31) TS377057: This module reference uses the `fs` module, the corresponding Effect API is `FileSystem` from `effect`. effect(nodeBuiltinImport)
   Fix 0: "Disable nodeBuiltinImport for this line"
   Fix 1: "Disable nodeBuiltinImport for entire file"
 
 [D6] (7:10-7:18) TS6133: 'readFile' is declared but its value is never read.
   (no quick fixes)
 
-[D7] (7:26-7:39) TS377057: Prefer using FileSystem from effect instead of the Node.js 'fs' module. effect(nodeBuiltinImport)
+[D7] (7:26-7:39) TS377057: This module reference uses the `fs` module, the corresponding Effect API is `FileSystem` from `effect`. effect(nodeBuiltinImport)
   Fix 0: "Disable nodeBuiltinImport for this line"
   Fix 1: "Disable nodeBuiltinImport for entire file"
 
 [D8] (8:22-8:31) TS6133: 'readFile2' is declared but its value is never read.
   (no quick fixes)
 
-[D9] (8:39-8:57) TS377057: Prefer using FileSystem from effect instead of the Node.js 'fs' module. effect(nodeBuiltinImport)
+[D9] (8:39-8:57) TS377057: This module reference uses the `fs` module, the corresponding Effect API is `FileSystem` from `effect`. effect(nodeBuiltinImport)
   Fix 0: "Disable nodeBuiltinImport for this line"
   Fix 1: "Disable nodeBuiltinImport for entire file"
 
 [D10] (9:10-9:14) TS6133: 'join' is declared but its value is never read.
   (no quick fixes)
 
-[D11] (9:22-9:28) TS377057: Prefer using Path from effect instead of the Node.js 'path' module. effect(nodeBuiltinImport)
+[D11] (9:22-9:28) TS377057: This module reference uses the `path` module, the corresponding Effect API is `Path` from `effect`. effect(nodeBuiltinImport)
   Fix 0: "Disable nodeBuiltinImport for this line"
   Fix 1: "Disable nodeBuiltinImport for entire file"
 
 [D12] (10:8-10:12) TS6133: 'path' is declared but its value is never read.
   (no quick fixes)
 
-[D13] (10:18-10:29) TS377057: Prefer using Path from effect instead of the Node.js 'path' module. effect(nodeBuiltinImport)
+[D13] (10:18-10:29) TS377057: This module reference uses the `path` module, the corresponding Effect API is `Path` from `effect`. effect(nodeBuiltinImport)
   Fix 0: "Disable nodeBuiltinImport for this line"
   Fix 1: "Disable nodeBuiltinImport for entire file"
 
 [D14] (11:18-11:23) TS6133: 'join2' is declared but its value is never read.
   (no quick fixes)
 
-[D15] (11:31-11:43) TS377057: Prefer using Path from effect instead of the Node.js 'path' module. effect(nodeBuiltinImport)
+[D15] (11:31-11:43) TS377057: This module reference uses the `path` module, the corresponding Effect API is `Path` from `effect`. effect(nodeBuiltinImport)
   Fix 0: "Disable nodeBuiltinImport for this line"
   Fix 1: "Disable nodeBuiltinImport for entire file"
 
 [D16] (12:18-12:23) TS6133: 'join3' is declared but its value is never read.
   (no quick fixes)
 
-[D17] (12:31-12:48) TS377057: Prefer using Path from effect instead of the Node.js 'path' module. effect(nodeBuiltinImport)
+[D17] (12:31-12:48) TS377057: This module reference uses the `path` module, the corresponding Effect API is `Path` from `effect`. effect(nodeBuiltinImport)
   Fix 0: "Disable nodeBuiltinImport for this line"
   Fix 1: "Disable nodeBuiltinImport for entire file"
 
 [D18] (13:18-13:23) TS6133: 'join4' is declared but its value is never read.
   (no quick fixes)
 
-[D19] (13:31-13:43) TS377057: Prefer using Path from effect instead of the Node.js 'path' module. effect(nodeBuiltinImport)
+[D19] (13:31-13:43) TS377057: This module reference uses the `path` module, the corresponding Effect API is `Path` from `effect`. effect(nodeBuiltinImport)
   Fix 0: "Disable nodeBuiltinImport for this line"
   Fix 1: "Disable nodeBuiltinImport for entire file"
 
 [D20] (14:18-14:23) TS6133: 'join5' is declared but its value is never read.
   (no quick fixes)
 
-[D21] (14:31-14:48) TS377057: Prefer using Path from effect instead of the Node.js 'path' module. effect(nodeBuiltinImport)
+[D21] (14:31-14:48) TS377057: This module reference uses the `path` module, the corresponding Effect API is `Path` from `effect`. effect(nodeBuiltinImport)
   Fix 0: "Disable nodeBuiltinImport for this line"
   Fix 1: "Disable nodeBuiltinImport for entire file"
 
 [D22] (15:10-15:14) TS6133: 'exec' is declared but its value is never read.
   (no quick fixes)
 
-[D23] (15:22-15:37) TS377057: Prefer using ChildProcess from effect instead of the Node.js 'child_process' module. effect(nodeBuiltinImport)
+[D23] (15:22-15:37) TS377057: This module reference uses the `child_process` module, the corresponding Effect API is `ChildProcess` from `effect`. effect(nodeBuiltinImport)
   Fix 0: "Disable nodeBuiltinImport for this line"
   Fix 1: "Disable nodeBuiltinImport for entire file"
 
 [D24] (16:10-16:15) TS6133: 'spawn' is declared but its value is never read.
   (no quick fixes)
 
-[D25] (16:23-16:43) TS377057: Prefer using ChildProcess from effect instead of the Node.js 'child_process' module. effect(nodeBuiltinImport)
+[D25] (16:23-16:43) TS377057: This module reference uses the `child_process` module, the corresponding Effect API is `ChildProcess` from `effect`. effect(nodeBuiltinImport)
   Fix 0: "Disable nodeBuiltinImport for this line"
   Fix 1: "Disable nodeBuiltinImport for entire file"
 
 [D26] (17:8-17:12) TS6133: 'http' is declared but its value is never read.
   (no quick fixes)
 
-[D27] (17:18-17:24) TS377057: Prefer using HttpClient from effect/unstable/http instead of the Node.js 'http' module. effect(nodeBuiltinImport)
+[D27] (17:18-17:24) TS377057: This module reference uses the `http` module, the corresponding Effect API is `HttpClient` from `effect/unstable/http`. effect(nodeBuiltinImport)
   Fix 0: "Disable nodeBuiltinImport for this line"
   Fix 1: "Disable nodeBuiltinImport for entire file"
 
 [D28] (18:8-18:13) TS6133: 'https' is declared but its value is never read.
   (no quick fixes)
 
-[D29] (18:19-18:31) TS377057: Prefer using HttpClient from effect/unstable/http instead of the Node.js 'https' module. effect(nodeBuiltinImport)
+[D29] (18:19-18:31) TS377057: This module reference uses the `https` module, the corresponding Effect API is `HttpClient` from `effect/unstable/http`. effect(nodeBuiltinImport)
   Fix 0: "Disable nodeBuiltinImport for this line"
   Fix 1: "Disable nodeBuiltinImport for entire file"
 
-[D30] (21:8-21:17) TS377057: Prefer using FileSystem from effect instead of the Node.js 'fs' module. effect(nodeBuiltinImport)
+[D30] (21:8-21:17) TS377057: This module reference uses the `fs` module, the corresponding Effect API is `FileSystem` from `effect`. effect(nodeBuiltinImport)
   Fix 0: "Disable nodeBuiltinImport for this line"
   Fix 1: "Disable nodeBuiltinImport for entire file"
 
 [D31] (24:7-24:10) TS6133: 'fs3' is declared but its value is never read.
   (no quick fixes)
 
-[D32] (24:21-24:30) TS377057: Prefer using FileSystem from effect instead of the Node.js 'fs' module. effect(nodeBuiltinImport)
+[D32] (24:21-24:30) TS377057: This module reference uses the `fs` module, the corresponding Effect API is `FileSystem` from `effect`. effect(nodeBuiltinImport)
   Fix 0: "Disable nodeBuiltinImport for this line"
   Fix 1: "Disable nodeBuiltinImport for entire file"
 

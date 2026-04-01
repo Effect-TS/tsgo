@@ -21,8 +21,8 @@ var OutdatedApi = rule.Rule{
 	DefaultSeverity: etscore.SeverityWarning,
 	SupportedEffect: []string{"v4"},
 	Codes: []int32{
-		tsdiag.X_0_is_an_Effect_v3_API_but_the_project_is_using_Effect_v4_1_effect_outdatedApi.Code(),
-		tsdiag.This_project_targets_Effect_v4_but_is_using_Effect_v3_APIs_To_find_the_correct_API_to_use_consult_the_Effect_v4_documentation_for_the_corresponding_v4_replacement_effect_outdatedApi.Code(),
+		tsdiag.This_project_targets_Effect_v4_but_this_code_uses_the_Effect_v3_API_0_The_referenced_API_belongs_to_the_v3_surface_rather_than_the_configured_v4_surface_1_effect_outdatedApi.Code(),
+		tsdiag.This_project_targets_Effect_v4_but_this_code_uses_Effect_v3_APIs_The_referenced_API_belongs_to_the_v3_surface_rather_than_the_configured_v4_surface_effect_outdatedApi.Code(),
 	},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeOutdatedApi(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
@@ -35,7 +35,7 @@ var OutdatedApi = rule.Rule{
 			diags = append(diags, ctx.NewDiagnostic(
 				m.SourceFile,
 				m.Location,
-				tsdiag.X_0_is_an_Effect_v3_API_but_the_project_is_using_Effect_v4_1_effect_outdatedApi,
+				tsdiag.This_project_targets_Effect_v4_but_this_code_uses_the_Effect_v3_API_0_The_referenced_API_belongs_to_the_v3_surface_rather_than_the_configured_v4_surface_1_effect_outdatedApi,
 				nil,
 				m.PropertyName,
 				m.MigrationHint,
@@ -46,7 +46,7 @@ var OutdatedApi = rule.Rule{
 		diags = append(diags, ctx.NewDiagnostic(
 			ctx.SourceFile,
 			core.NewTextRange(0, 0),
-			tsdiag.This_project_targets_Effect_v4_but_is_using_Effect_v3_APIs_To_find_the_correct_API_to_use_consult_the_Effect_v4_documentation_for_the_corresponding_v4_replacement_effect_outdatedApi,
+			tsdiag.This_project_targets_Effect_v4_but_this_code_uses_Effect_v3_APIs_The_referenced_API_belongs_to_the_v3_surface_rather_than_the_configured_v4_surface_effect_outdatedApi,
 			nil,
 		))
 

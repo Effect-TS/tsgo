@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (10:54-10:70) TS377046: Self type parameter should be 'InvalidSchemaClass'. effect(classSelfMismatch)
+[D1] (10:54-10:70) TS377046: The `Self` type parameter for this class should be `InvalidSchemaClass`. effect(classSelfMismatch)
   Fix 0: "Disable classSelfMismatch for this line"
   Fix 1: "Disable classSelfMismatch for entire file"
   Fix 2: "Replace 'ValidSchemaClass' with 'InvalidSchemaClass'"
@@ -10,7 +10,7 @@
   Fix 1: "Disable redundantSchemaTagIdentifier for entire file"
   Fix 2: "Remove redundant identifier 'ValidSchemaTaggedClass'"
 
-[D3] (22:30-22:52) TS377046: Self type parameter should be 'InvalidSchemaTaggedClass'. effect(classSelfMismatch)
+[D3] (22:30-22:52) TS377046: The `Self` type parameter for this class should be `InvalidSchemaTaggedClass`. effect(classSelfMismatch)
   Fix 0: "Disable classSelfMismatch for this line"
   Fix 1: "Disable classSelfMismatch for entire file"
   Fix 2: "Replace 'ValidSchemaTaggedClass' with 'InvalidSchemaTaggedClass'"
@@ -25,7 +25,7 @@
   Fix 1: "Disable redundantSchemaTagIdentifier for entire file"
   Fix 2: "Remove redundant identifier 'ValidSchemaTaggedError'"
 
-[D6] (35:30-35:52) TS377046: Self type parameter should be 'InvalidSchemaTaggedError'. effect(classSelfMismatch)
+[D6] (35:30-35:52) TS377046: The `Self` type parameter for this class should be `InvalidSchemaTaggedError`. effect(classSelfMismatch)
   Fix 0: "Disable classSelfMismatch for this line"
   Fix 1: "Disable classSelfMismatch for entire file"
   Fix 2: "Replace 'ValidSchemaTaggedError' with 'InvalidSchemaTaggedError'"
@@ -40,7 +40,7 @@
   Fix 1: "Disable redundantSchemaTagIdentifier for entire file"
   Fix 2: "Remove redundant identifier 'ValidSchemaTaggedRequest'"
 
-[D9] (50:32-50:56) TS377046: Self type parameter should be 'InvalidSchemaTaggedRequest'. effect(classSelfMismatch)
+[D9] (50:32-50:56) TS377046: The `Self` type parameter for this class should be `InvalidSchemaTaggedRequest`. effect(classSelfMismatch)
   Fix 0: "Disable classSelfMismatch for this line"
   Fix 1: "Disable classSelfMismatch for entire file"
   Fix 2: "Replace 'ValidSchemaTaggedRequest' with 'InvalidSchemaTaggedRequest'"

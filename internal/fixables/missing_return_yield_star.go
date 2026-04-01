@@ -14,7 +14,7 @@ import (
 var MissingReturnYieldStarFix = fixable.Fixable{
 	Name:        "missingReturnYieldStar",
 	Description: "Add return before yield* for never-success Effect yields",
-	ErrorCodes:  []int32{tsdiag.It_is_recommended_to_use_return_yield_Asterisk_for_Effects_that_never_succeed_to_signal_a_definitive_exit_point_for_type_narrowing_and_tooling_support_effect_missingReturnYieldStar.Code()},
+	ErrorCodes:  []int32{tsdiag.This_Effect_never_succeeds_using_return_yield_Asterisk_preserves_a_definitive_generator_exit_point_for_type_narrowing_and_tooling_support_effect_missingReturnYieldStar.Code()},
 	FixIDs:      []string{"missingReturnYieldStar_fix"},
 	Run:         runMissingReturnYieldStarFix,
 }

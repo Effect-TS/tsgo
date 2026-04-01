@@ -1,16 +1,16 @@
 === Quick Fix Inventory ===
 
-[D1] (24:3-24:37) TS377033: Avoid chaining Effect.provide calls, as this can lead to service lifecycle issues. Instead, merge layers and provide them in a single call. effect(multipleEffectProvide)
+[D1] (24:3-24:37) TS377033: This expression chains multiple `Effect.provide` calls. Providing Layers in multiple calls in a chain can break service lifecycle behavior compared with a single combined provide with merged layers. effect(multipleEffectProvide)
   Fix 0: "Disable multipleEffectProvide for this line"
   Fix 1: "Disable multipleEffectProvide for entire file"
   Fix 2: "Combine into a single provide"
 
-[D2] (30:3-30:37) TS377033: Avoid chaining Effect.provide calls, as this can lead to service lifecycle issues. Instead, merge layers and provide them in a single call. effect(multipleEffectProvide)
+[D2] (30:3-30:37) TS377033: This expression chains multiple `Effect.provide` calls. Providing Layers in multiple calls in a chain can break service lifecycle behavior compared with a single combined provide with merged layers. effect(multipleEffectProvide)
   Fix 0: "Disable multipleEffectProvide for this line"
   Fix 1: "Disable multipleEffectProvide for entire file"
   Fix 2: "Combine into a single provide"
 
-[D3] (36:3-36:37) TS377033: Avoid chaining Effect.provide calls, as this can lead to service lifecycle issues. Instead, merge layers and provide them in a single call. effect(multipleEffectProvide)
+[D3] (36:3-36:37) TS377033: This expression chains multiple `Effect.provide` calls. Providing Layers in multiple calls in a chain can break service lifecycle behavior compared with a single combined provide with merged layers. effect(multipleEffectProvide)
   Fix 0: "Disable multipleEffectProvide for this line"
   Fix 1: "Disable multipleEffectProvide for entire file"
   Fix 2: "Combine into a single provide"

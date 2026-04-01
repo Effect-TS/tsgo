@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/outdatedApi_preview.ts(7,24): warning TS377052: runtime is an Effect v3 API, but the project is using Effect v4. Runtime has been removed in Effect v4. Use Effect.services to grab services and then run using Effect.runPromiseWith. effect(outdatedApi)
+/.src/outdatedApi_preview.ts(7,24): warning TS377052: This project targets Effect v4, but this code uses the Effect v3 API `runtime`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Runtime has been removed in Effect v4. Use Effect.services to grab services and then run using Effect.runPromiseWith. effect(outdatedApi)
 
 
 ==== /.src/outdatedApi_preview.ts (1 errors) ====
@@ -13,6 +13,6 @@ Effect version: 4.0.0
       // @ts-expect-error
       return yield* Effect.runtime()
                            ~~~~~~~
-!!! warning TS377052: runtime is an Effect v3 API, but the project is using Effect v4. Runtime has been removed in Effect v4. Use Effect.services to grab services and then run using Effect.runPromiseWith. effect(outdatedApi)
+!!! warning TS377052: This project targets Effect v4, but this code uses the Effect v3 API `runtime`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Runtime has been removed in Effect v4. Use Effect.services to grab services and then run using Effect.runPromiseWith. effect(outdatedApi)
     })
     

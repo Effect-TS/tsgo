@@ -1,0 +1,216 @@
+==== /.src/schemaSyncInEffect_preview.ts (5 flows) ====
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 6:15 - 6:74
+Root: Schema.Struct({ name: Schema.String, age: Schema.Number })
+Path (3 nodes):
+  [0] root {plain A=Struct<{ name: typeof String$; age: typeof Number$; }>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A={ name: typeof String$; age: typeof Number$; }} { name: Schema.String, age: Schema.Number }
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=Struct<{ name: typeof String$; age: typeof Number$; }>} step 0: Schema.Struct
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: Struct<{ name: typeof String$; age: typeof Number$; }>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: { name: Schema.String, age: Schema.Number }
+      ordinal: 0
+      result.kind: plain
+      result.A: { name: typeof String$; age: typeof Number$; }
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Schema.Struct
+      ordinal: 0
+      result.kind: plain
+      result.A: Struct<{ name: typeof String$; age: typeof Number$; }>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: effectGen
+Location: 8:23 - 11:3
+Root: Effect.gen(function*() {\n  const input = yield* Effect.succeed({ name: "Ada", age: 1 })\n  return Schema.decodeSync(Person)(input)\n})
+Path (6 nodes):
+  [0] root {effect A={ readonly name: string; readonly age: number; } E=never R=never} Effect.gen
+      ==> [executes] -> [1]
+  [1] genSequence {effect A={ readonly name: string; readonly age: number; } E=never R=never} generator body
+      ==> [next] -> [2]
+  [2] statement {unknown} const input = yield* Effect.succeed({ name: "Ada", age: 1 })
+      ==> [next] -> [3]
+  [3] statement {unknown} return Schema.decodeSync(Person)(input)
+      ==> [returns] -> [4]
+  [4] return {unknown} return
+      ~> [returns value] -> [5]
+  [5] returnOperand {plain A={ readonly name: string; readonly age: number; }} Schema.decodeSync(Person)(input)
+
+Nodes (6):
+  [0] kind: root
+      label: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: { readonly name: string; readonly age: number; }
+      result.E: never
+      result.R: never
+  [1] kind: genSequence
+      label: generator body
+      ordinal: 0
+      result.kind: effect
+      result.A: { readonly name: string; readonly age: number; }
+      result.E: never
+      result.R: never
+  [2] kind: statement
+      label: const input = yield* Effect.succeed({ name: "Ada", age: 1 })
+      ordinal: 0
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [3] kind: statement
+      label: return Schema.decodeSync(Person)(input)
+      ordinal: 1
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [4] kind: return
+      label: return
+      ordinal: 0
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [5] kind: returnOperand
+      label: Schema.decodeSync(Person)(input)
+      ordinal: 0
+      result.kind: plain
+      result.A: { readonly name: string; readonly age: number; }
+      result.E: 
+      result.R: 
+Edges (5):
+  0 -> 1 [strong] executes
+  1 -> 2 [strong] next
+  2 -> 3 [strong] next
+  3 -> 4 [strong] returns
+  4 -> 5 [weak] returns value
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 8:23 - 11:3
+Root: Effect.gen(function*() {\n  const input = yield* Effect.succeed({ name: "Ada", age: 1 })\n  return Schema.decodeSync(Person)(input)\n})
+Path (3 nodes):
+  [0] root {effect A={ readonly name: string; readonly age: number; } E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=() => Generator<YieldWrap<Effect<{ name: string; age: number; }, never, never>>, { readonly name: string; readonly age: number; }, any>} function*() {\n  const input = yield* Effect.succeed({ name: "Ada", age: 1 })...
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A={ readonly name: string; readonly age: number; } E=never R=never} step 0: Effect.gen
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: { readonly name: string; readonly age: number; }
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: function*() {\n  const input = yield* Effect.succeed({ name: "Ada", age: 1 })...
+      ordinal: 0
+      result.kind: plain
+      result.A: () => Generator<YieldWrap<Effect<{ name: string; age: number; }, never, never>>, { readonly name: string; readonly age: number; }, any>
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: { readonly name: string; readonly age: number; }
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 9:23 - 9:63
+Root: Effect.succeed({ name: "Ada", age: 1 })
+Path (3 nodes):
+  [0] root {effect A={ name: string; age: number; } E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A={ name: string; age: number; }} { name: "Ada", age: 1 }
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A={ name: string; age: number; } E=never R=never} step 0: Effect.succeed
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: { name: string; age: number; }
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: { name: "Ada", age: 1 }
+      ordinal: 0
+      result.kind: plain
+      result.A: { name: string; age: number; }
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: { name: string; age: number; }
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 10:9 - 10:42
+Root: Schema.decodeSync(Person)(input)
+Path (3 nodes):
+  [0] root {plain A={ readonly name: string; readonly age: number; }} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A={ name: string; age: number; }} input
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A={ readonly name: string; readonly age: number; }} step 0: Schema.decodeSync(Person)
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: { readonly name: string; readonly age: number; }
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: input
+      ordinal: 0
+      result.kind: plain
+      result.A: { name: string; age: number; }
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Schema.decodeSync(Person)
+      ordinal: 0
+      result.kind: plain
+      result.A: { readonly name: string; readonly age: number; }
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call

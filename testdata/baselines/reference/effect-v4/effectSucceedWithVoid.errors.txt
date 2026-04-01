@@ -1,11 +1,11 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/effectSucceedWithVoid.ts(4,39): suggestion TS377016: Effect.void can be used instead of Effect.succeed(undefined) or Effect.succeed(void 0). effect(effectSucceedWithVoid)
-/.src/effectSucceedWithVoid.ts(7,35): suggestion TS377016: Effect.void can be used instead of Effect.succeed(undefined) or Effect.succeed(void 0). effect(effectSucceedWithVoid)
-/.src/effectSucceedWithVoid.ts(10,52): suggestion TS377016: Effect.void can be used instead of Effect.succeed(undefined) or Effect.succeed(void 0). effect(effectSucceedWithVoid)
-/.src/effectSucceedWithVoid.ts(13,48): suggestion TS377016: Effect.void can be used instead of Effect.succeed(undefined) or Effect.succeed(void 0). effect(effectSucceedWithVoid)
-/.src/effectSucceedWithVoid.ts(16,58): suggestion TS377016: Effect.void can be used instead of Effect.succeed(undefined) or Effect.succeed(void 0). effect(effectSucceedWithVoid)
+/.src/effectSucceedWithVoid.ts(4,39): suggestion TS377016: `Effect.void` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithVoid)
+/.src/effectSucceedWithVoid.ts(7,35): suggestion TS377016: `Effect.void` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithVoid)
+/.src/effectSucceedWithVoid.ts(10,52): suggestion TS377016: `Effect.void` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithVoid)
+/.src/effectSucceedWithVoid.ts(13,48): suggestion TS377016: `Effect.void` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithVoid)
+/.src/effectSucceedWithVoid.ts(16,58): suggestion TS377016: `Effect.void` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithVoid)
 
 
 ==== /.src/effectSucceedWithVoid.ts (5 errors) ====
@@ -14,27 +14,27 @@ Effect version: 4.0.0
     // Should trigger: Effect.succeed(undefined)
     export const shouldTriggerUndefined = Effect.succeed(undefined)
                                           ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! suggestion TS377016: Effect.void can be used instead of Effect.succeed(undefined) or Effect.succeed(void 0). effect(effectSucceedWithVoid)
+!!! suggestion TS377016: `Effect.void` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithVoid)
     
     // Should trigger: Effect.succeed(void 0)
     export const shouldTriggerVoid0 = Effect.succeed(void 0)
                                       ~~~~~~~~~~~~~~~~~~~~~~
-!!! suggestion TS377016: Effect.void can be used instead of Effect.succeed(undefined) or Effect.succeed(void 0). effect(effectSucceedWithVoid)
+!!! suggestion TS377016: `Effect.void` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithVoid)
     
     // Should trigger: Effect.succeed((undefined)) - parenthesized
     export const shouldTriggerParenthesizedUndefined = Effect.succeed((undefined))
                                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! suggestion TS377016: Effect.void can be used instead of Effect.succeed(undefined) or Effect.succeed(void 0). effect(effectSucceedWithVoid)
+!!! suggestion TS377016: `Effect.void` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithVoid)
     
     // Should trigger: Effect.succeed((void 0)) - parenthesized
     export const shouldTriggerParenthesizedVoid0 = Effect.succeed((void 0))
                                                    ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! suggestion TS377016: Effect.void can be used instead of Effect.succeed(undefined) or Effect.succeed(void 0). effect(effectSucceedWithVoid)
+!!! suggestion TS377016: `Effect.void` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithVoid)
     
     // Should trigger: Effect.succeed(((undefined))) - double parenthesized
     export const shouldTriggerDoubleParenthesizedUndefined = Effect.succeed(((undefined)))
                                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! suggestion TS377016: Effect.void can be used instead of Effect.succeed(undefined) or Effect.succeed(void 0). effect(effectSucceedWithVoid)
+!!! suggestion TS377016: `Effect.void` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithVoid)
     
     // Should NOT trigger: Effect.succeed with actual value
     export const shouldNotTriggerNumber = Effect.succeed(1)

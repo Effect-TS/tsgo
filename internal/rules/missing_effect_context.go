@@ -25,7 +25,7 @@ var MissingEffectContext = rule.Rule{
 	Description:     "Detects Effect values with unhandled context requirements",
 	DefaultSeverity: etscore.SeverityError,
 	SupportedEffect: []string{"v3", "v4"},
-	Codes:           []int32{tsdiag.Missing_context_0_in_the_expected_Effect_type_effect_missingEffectContext.Code()},
+	Codes:           []int32{tsdiag.This_Effect_requires_a_service_that_is_missing_from_the_expected_Effect_context_Colon_0_effect_missingEffectContext.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		var diags []*ast.Diagnostic
 
@@ -47,7 +47,7 @@ var MissingEffectContext = rule.Rule{
 				diag := ctx.NewDiagnostic(
 					ctx.SourceFile,
 					ctx.GetErrorRange(re.ErrorNode),
-					tsdiag.Missing_context_0_in_the_expected_Effect_type_effect_missingEffectContext,
+					tsdiag.This_Effect_requires_a_service_that_is_missing_from_the_expected_Effect_context_Colon_0_effect_missingEffectContext,
 					missingEffectContextRelatedInformation(ctx.Checker, ctx, re.ErrorNode, unhandledContexts),
 					contextTypeStr,
 				)

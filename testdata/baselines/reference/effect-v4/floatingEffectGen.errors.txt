@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/floatingEffectGen.ts(4,4): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+/.src/floatingEffectGen.ts(4,4): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
 
 
 ==== /.src/floatingEffectGen.ts (1 errors) ====
@@ -10,5 +10,5 @@ Effect version: 4.0.0
     export const program = Effect.gen(function*(){
        Effect.log("hello") // <- this should be yielded instead
        ~~~~~~~~~~~~~~~~~~~
-!!! error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
     })

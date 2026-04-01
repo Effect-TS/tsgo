@@ -1,9 +1,8 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/runEffectInsideEffect.ts(15,21): suggestion TS377024: Using Effect.runSync inside an Effect is not recommended. Effects inside generators can usually just be yielded. effect(runEffectInsideEffect)
-/.src/runEffectInsideEffect.ts(23,5): suggestion TS377025: Using Effect.runPromise inside an Effect is not recommended. The same runtime should generally be used instead to run child effects.
-Consider extracting the Runtime by using for example Effect.runtime and then use Runtime.runPromise with the extracted runtime instead. effect(runEffectInsideEffect)
+/.src/runEffectInsideEffect.ts(15,21): suggestion TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
+/.src/runEffectInsideEffect.ts(23,5): suggestion TS377025: `Effect.runPromise` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runPromise`. effect(runEffectInsideEffect)
 
 
 ==== /.src/runEffectInsideEffect.ts (2 errors) ====
@@ -23,7 +22,7 @@ Consider extracting the Runtime by using for example Effect.runtime and then use
     
       const websocket = Effect.runSync(Effect.sync(() => new WebSocket(data.url)))
                         ~~~~~~~~~~~~~~
-!!! suggestion TS377024: Using Effect.runSync inside an Effect is not recommended. Effects inside generators can usually just be yielded. effect(runEffectInsideEffect)
+!!! suggestion TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
       //                        ^- do not runSync in here
     
       websocket.onmessage = (event) => {
@@ -33,8 +32,7 @@ Consider extracting the Runtime by using for example Effect.runtime and then use
         })
         Effect.runPromise(check)
         ~~~~~~~~~~~~~~~~~
-!!! suggestion TS377025: Using Effect.runPromise inside an Effect is not recommended. The same runtime should generally be used instead to run child effects.
-Consider extracting the Runtime by using for example Effect.runtime and then use Runtime.runPromise with the extracted runtime instead. effect(runEffectInsideEffect)
+!!! suggestion TS377025: `Effect.runPromise` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runPromise`. effect(runEffectInsideEffect)
         //        ^- no runPromise, use a runtime instead
       }
     })

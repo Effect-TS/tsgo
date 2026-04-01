@@ -1,11 +1,11 @@
 === Quick Fix Inventory ===
 
-[D1] (10:56-10:63) TS377049: Key should be '@effect/test-app/test/MyClass'. effect(deterministicKeys)
+[D1] (10:56-10:63) TS377049: This key does not match the deterministic key for this declaration. The expected key is `@effect/test-app/test/MyClass`. effect(deterministicKeys)
   Fix 0: "Disable deterministicKeys for this line"
   Fix 1: "Disable deterministicKeys for entire file"
   Fix 2: "Replace 'Hello' with '@effect/test-app/test/MyClass'"
 
-[D2] (16:6-16:18) TS377049: Key should be '@effect/test-app/test/TTLRequest'. effect(deterministicKeys)
+[D2] (16:6-16:18) TS377049: This key does not match the deterministic key for this declaration. The expected key is `@effect/test-app/test/TTLRequest`. effect(deterministicKeys)
   Fix 0: "Disable deterministicKeys for this line"
   Fix 1: "Disable deterministicKeys for entire file"
   Fix 2: "Replace 'TTLRequest' with '@effect/test-app/test/TTLRequest'"

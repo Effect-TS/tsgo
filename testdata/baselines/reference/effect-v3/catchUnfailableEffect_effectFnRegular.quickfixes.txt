@@ -1,10 +1,10 @@
 === Quick Fix Inventory ===
 
-[D1] (7:3-7:18) TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+[D1] (7:3-7:18) TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
   Fix 0: "Disable catchUnfailableEffect for this line"
   Fix 1: "Disable catchUnfailableEffect for entire file"
 
-[D2] (17:3-17:18) TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+[D2] (17:3-17:18) TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
   Fix 0: "Disable catchUnfailableEffect for this line"
   Fix 1: "Disable catchUnfailableEffect for entire file"
 

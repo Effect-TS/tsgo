@@ -1,11 +1,11 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/catchUnfailableEffect_variants.ts(7,3): suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
-/.src/catchUnfailableEffect_variants.ts(12,3): suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
-/.src/catchUnfailableEffect_variants.ts(17,3): suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
-/.src/catchUnfailableEffect_variants.ts(23,3): suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
-/.src/catchUnfailableEffect_variants.ts(28,3): suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+/.src/catchUnfailableEffect_variants.ts(7,3): suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
+/.src/catchUnfailableEffect_variants.ts(12,3): suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
+/.src/catchUnfailableEffect_variants.ts(17,3): suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
+/.src/catchUnfailableEffect_variants.ts(23,3): suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
+/.src/catchUnfailableEffect_variants.ts(28,3): suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
 
 
 ==== /.src/catchUnfailableEffect_variants.ts (5 errors) ====
@@ -17,21 +17,21 @@ Effect version: 3.19.19
     export const catchAllExample = Effect.succeed(42).pipe(
       Effect.catchAll(() => Effect.void) // <- should report here
       ~~~~~~~~~~~~~~~
-!!! suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+!!! suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
     )
     
     // catchIf variant
     export const catchIfExample = Effect.succeed(42).pipe(
       Effect.catchIf((error) => error === "MyError", () => Effect.void) // <- should report here
       ~~~~~~~~~~~~~~
-!!! suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+!!! suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
     )
     
     // catchSome variant
     export const catchSomeExample = Effect.succeed(42).pipe(
       Effect.catchSome(() => Option.some(Effect.void)) // <- should report here
       ~~~~~~~~~~~~~~~~
-!!! suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+!!! suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
     )
     
     // catchTag variant
@@ -39,14 +39,14 @@ Effect version: 3.19.19
       // @ts-expect-error
       Effect.catchTag("MyError", () => Effect.void) // <- should report here
       ~~~~~~~~~~~~~~~
-!!! suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+!!! suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
     )
     
     // catchTags variant
     export const catchTagsExample = Effect.succeed(42).pipe(
       Effect.catchTags({
       ~~~~~~~~~~~~~~~~
-!!! suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+!!! suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
         // @ts-expect-error
         MyError: () => Effect.void
       }) // <- should report here

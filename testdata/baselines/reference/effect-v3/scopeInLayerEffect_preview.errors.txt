@@ -1,8 +1,7 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/scopeInLayerEffect_preview.ts(8,24): warning TS377031: Seems like you are constructing a layer with a scope in the requirements.
-Consider using "scoped" instead to get rid of the scope in the requirements. effect(scopeInLayerEffect)
+/.src/scopeInLayerEffect_preview.ts(8,24): warning TS377031: This layer construction leaves `Scope` in the requirement set. The scoped API removes `Scope` from the resulting requirements. effect(scopeInLayerEffect)
 
 
 ==== /.src/scopeInLayerEffect_preview.ts (1 errors) ====
@@ -21,6 +20,5 @@ Consider using "scoped" instead to get rid of the scope in the requirements. eff
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     }))
     ~~~
-!!! warning TS377031: Seems like you are constructing a layer with a scope in the requirements.
-Consider using "scoped" instead to get rid of the scope in the requirements. effect(scopeInLayerEffect)
+!!! warning TS377031: This layer construction leaves `Scope` in the requirement set. The scoped API removes `Scope` from the resulting requirements. effect(scopeInLayerEffect)
     

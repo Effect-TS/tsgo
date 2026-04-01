@@ -1,26 +1,26 @@
 === Quick Fix Inventory ===
 
-[D1] (17:3-17:18) TS377010: You can use Effect.mapError instead of Effect.catch + Effect.fail to transform the error type. effect(catchAllToMapError)
+[D1] (17:3-17:18) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
   Fix 0: "Disable catchAllToMapError for this line"
   Fix 1: "Disable catchAllToMapError for entire file"
   Fix 2: "Replace with Effect.mapError"
 
-[D2] (22:3-22:18) TS377010: You can use Effect.mapError instead of Effect.catch + Effect.fail to transform the error type. effect(catchAllToMapError)
+[D2] (22:3-22:18) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
   Fix 0: "Disable catchAllToMapError for this line"
   Fix 1: "Disable catchAllToMapError for entire file"
   Fix 2: "Replace with Effect.mapError"
 
-[D3] (30:3-30:18) TS377010: You can use Effect.mapError instead of Effect.catch + Effect.fail to transform the error type. effect(catchAllToMapError)
+[D3] (30:3-30:18) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
   Fix 0: "Disable catchAllToMapError for this line"
   Fix 1: "Disable catchAllToMapError for entire file"
   Fix 2: "Replace with Effect.mapError"
 
-[D4] (35:3-35:18) TS377010: You can use Effect.mapError instead of Effect.catch + Effect.fail to transform the error type. effect(catchAllToMapError)
+[D4] (35:3-35:18) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
   Fix 0: "Disable catchAllToMapError for this line"
   Fix 1: "Disable catchAllToMapError for entire file"
   Fix 2: "Replace with Effect.mapError"
 
-[D5] (64:3-64:18) TS377010: You can use Effect.mapError instead of Effect.catch + Effect.fail to transform the error type. effect(catchAllToMapError)
+[D5] (64:3-64:18) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
   Fix 0: "Disable catchAllToMapError for this line"
   Fix 1: "Disable catchAllToMapError for entire file"
   Fix 2: "Replace with Effect.mapError"

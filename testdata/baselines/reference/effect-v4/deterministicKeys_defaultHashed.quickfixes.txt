@@ -1,11 +1,11 @@
 === Quick Fix Inventory ===
 
-[D1] (5:63-5:90) TS377049: Key should be 'de06a820ada693c2'. effect(deterministicKeys)
+[D1] (5:63-5:90) TS377049: This key does not match the deterministic key for this declaration. The expected key is `de06a820ada693c2`. effect(deterministicKeys)
   Fix 0: "Disable deterministicKeys for this line"
   Fix 1: "Disable deterministicKeys for entire file"
   Fix 2: "Replace 'ExpectedServiceIdentifier' with 'de06a820ada693c2'"
 
-[D2] (8:46-8:54) TS377049: Key should be '1296269f76d642ec'. effect(deterministicKeys)
+[D2] (8:46-8:54) TS377049: This key does not match the deterministic key for this declaration. The expected key is `1296269f76d642ec`. effect(deterministicKeys)
   Fix 0: "Disable deterministicKeys for this line"
   Fix 1: "Disable deterministicKeys for entire file"
   Fix 2: "Replace 'ErrorA' with '1296269f76d642ec'"

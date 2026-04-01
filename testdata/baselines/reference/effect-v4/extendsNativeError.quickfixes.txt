@@ -1,14 +1,14 @@
 === Quick Fix Inventory ===
 
-[D1] (4:7-4:14) TS377055: Avoid extending the native 'Error' class directly. Consider using a tagged error (e.g. Data.TaggedError) to maintain type safety in the Effect failure channel. effect(extendsNativeError)
+[D1] (4:7-4:14) TS377055: This class extends the native `Error` type directly. Untagged native errors lose distinction in the Effect failure channel. effect(extendsNativeError)
   Fix 0: "Disable extendsNativeError for this line"
   Fix 1: "Disable extendsNativeError for entire file"
 
-[D2] (8:7-8:15) TS377055: Avoid extending the native 'Error' class directly. Consider using a tagged error (e.g. Data.TaggedError) to maintain type safety in the Effect failure channel. effect(extendsNativeError)
+[D2] (8:7-8:15) TS377055: This class extends the native `Error` type directly. Untagged native errors lose distinction in the Effect failure channel. effect(extendsNativeError)
   Fix 0: "Disable extendsNativeError for this line"
   Fix 1: "Disable extendsNativeError for entire file"
 
-[D3] (11:7-11:11) TS377055: Avoid extending the native 'Error' class directly. Consider using a tagged error (e.g. Data.TaggedError) to maintain type safety in the Effect failure channel. effect(extendsNativeError)
+[D3] (11:7-11:11) TS377055: This class extends the native `Error` type directly. Untagged native errors lose distinction in the Effect failure channel. effect(extendsNativeError)
   Fix 0: "Disable extendsNativeError for this line"
   Fix 1: "Disable extendsNativeError for entire file"
 

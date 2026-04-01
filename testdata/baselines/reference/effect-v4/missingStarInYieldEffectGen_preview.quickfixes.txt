@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (6:17-6:22) TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+[D1] (6:17-6:22) TS377008: This uses `yield` for an `Effect` value. `yield*` is the Effect-aware form in this context. effect(missingStarInYieldEffectGen)
   Fix 0: "Disable missingStarInYieldEffectGen for this line"
   Fix 1: "Disable missingStarInYieldEffectGen for entire file"
   Fix 2: "Replace yield with yield*"

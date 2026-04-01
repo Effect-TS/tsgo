@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/overriddenSchemaConstructor_preview.ts(6,3): warning TS377044: Classes extending Schema must not override the constructor; this is because it silently breaks the schema decoding behaviour. If that's needed, we recommend instead to use a static 'new' method that constructs the instance. effect(overriddenSchemaConstructor)
+/.src/overriddenSchemaConstructor_preview.ts(6,3): warning TS377044: This Schema subclass defines its own constructor. For Schema classes, constructor overrides break decoding behavior for the class shape. Custom construction can be expressed through a static `new` method instead. effect(overriddenSchemaConstructor)
 
 
 ==== /.src/overriddenSchemaConstructor_preview.ts (1 errors) ====
@@ -12,6 +12,6 @@ Effect version: 4.0.0
     export class User extends Schema.Class<User>("User")({ name: Schema.String }) {
       constructor(readonly input: { name: string }) { super(input) }
       ~~~~~~~~~~~
-!!! warning TS377044: Classes extending Schema must not override the constructor; this is because it silently breaks the schema decoding behaviour. If that's needed, we recommend instead to use a static 'new' method that constructs the instance. effect(overriddenSchemaConstructor)
+!!! warning TS377044: This Schema subclass defines its own constructor. For Schema classes, constructor overrides break decoding behavior for the class shape. Custom construction can be expressed through a static `new` method instead. effect(overriddenSchemaConstructor)
     }
     

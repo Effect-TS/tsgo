@@ -1,8 +1,8 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/catchAllToMapError_effectFnRegular.ts(12,3): suggestion TS377010: You can use Effect.mapError instead of Effect.catch + Effect.fail to transform the error type. effect(catchAllToMapError)
-/.src/catchAllToMapError_effectFnRegular.ts(17,3): suggestion TS377010: You can use Effect.mapError instead of Effect.catch + Effect.fail to transform the error type. effect(catchAllToMapError)
+/.src/catchAllToMapError_effectFnRegular.ts(12,3): suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
+/.src/catchAllToMapError_effectFnRegular.ts(17,3): suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
 
 
 ==== /.src/catchAllToMapError_effectFnRegular.ts (2 errors) ====
@@ -19,14 +19,14 @@ Effect version: 3.19.19
       () => Effect.fail("error"),
       Effect.catchAll((cause) => Effect.fail(new MyErrorTagged(cause)))
       ~~~~~~~~~~~~~~~
-!!! suggestion TS377010: You can use Effect.mapError instead of Effect.catch + Effect.fail to transform the error type. effect(catchAllToMapError)
+!!! suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
     )
     
     export const shouldReportEffectFnRegularTraced = Effect.fn("traced")(
       () => Effect.fail("error"),
       Effect.catchAll((cause) => Effect.fail(new MyErrorTagged(cause)))
       ~~~~~~~~~~~~~~~
-!!! suggestion TS377010: You can use Effect.mapError instead of Effect.catch + Effect.fail to transform the error type. effect(catchAllToMapError)
+!!! suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
     )
     
     // Should NOT report: catchAll returning Effect.succeed

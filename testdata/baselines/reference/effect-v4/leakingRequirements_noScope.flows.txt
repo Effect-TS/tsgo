@@ -1,0 +1,75 @@
+==== /.src/leakingRequirements_noScope.ts (2 flows) ====
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 5:32 - 7:19
+Root: ServiceMap.Service<FileSystem, {\n  writeFile: (content: string) => Effect.Effect<void>\n}>()("FileSystem")
+Path (3 nodes):
+  [0] root {plain A=ServiceClass<FileSystem, "FileSystem", { writeFile: (content: string) => Effect<void, never, never>; }>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="FileSystem"} "FileSystem"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=ServiceClass<FileSystem, "FileSystem", { writeFile: (content: string) => Effect<void, never, never>; }>} step 0: ServiceMap.Service<FileSystem, {\n  writeFile: (content: string) => Effect.Effect<void>\n}>()
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: ServiceClass<FileSystem, "FileSystem", { writeFile: (content: string) => Effect<void, never, never>; }>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "FileSystem"
+      ordinal: 0
+      result.kind: plain
+      result.A: "FileSystem"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: ServiceMap.Service<FileSystem, {\n  writeFile: (content: string) => Effect.Effect<void>\n}>()
+      ordinal: 0
+      result.kind: plain
+      result.A: ServiceClass<FileSystem, "FileSystem", { writeFile: (content: string) => Effect<void, never, never>; }>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 14:26 - 14:87
+Root: ServiceMap.Service<LeakingScopeIsFine>("LeakingScopeIsFine")
+Path (3 nodes):
+  [0] root {plain A=Service<LeakingScopeIsFine, LeakingScopeIsFine>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="LeakingScopeIsFine"} "LeakingScopeIsFine"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=Service<LeakingScopeIsFine, LeakingScopeIsFine>} step 0: ServiceMap.Service
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: Service<LeakingScopeIsFine, LeakingScopeIsFine>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "LeakingScopeIsFine"
+      ordinal: 0
+      result.kind: plain
+      result.A: "LeakingScopeIsFine"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: ServiceMap.Service
+      ordinal: 0
+      result.kind: plain
+      result.A: Service<LeakingScopeIsFine, LeakingScopeIsFine>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call

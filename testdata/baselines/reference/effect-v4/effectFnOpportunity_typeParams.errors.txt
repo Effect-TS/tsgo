@@ -1,15 +1,15 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/effectFnOpportunity_typeParams.ts(11,14): suggestion TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*<T>(value) { ... }). effect(effectFnOpportunity)
+/.src/effectFnOpportunity_typeParams.ts(11,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*<T>(value) { ... })`. effect(effectFnOpportunity)
 /.src/effectFnOpportunity_typeParams.ts(12,10): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
-/.src/effectFnOpportunity_typeParams.ts(17,14): suggestion TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*<T>(value) { ... }). effect(effectFnOpportunity)
+/.src/effectFnOpportunity_typeParams.ts(17,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*<T>(value) { ... })`. effect(effectFnOpportunity)
 /.src/effectFnOpportunity_typeParams.ts(18,10): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
-/.src/effectFnOpportunity_typeParams.ts(23,17): suggestion TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*<T>(value) { ... }). effect(effectFnOpportunity)
+/.src/effectFnOpportunity_typeParams.ts(23,17): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*<T>(value) { ... })`. effect(effectFnOpportunity)
 /.src/effectFnOpportunity_typeParams.ts(24,10): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
-/.src/effectFnOpportunity_typeParams.ts(32,14): suggestion TS377047: Can be rewritten as a reusable function: Effect.fn(<T>(value) => { ... }). effect(effectFnOpportunity)
-/.src/effectFnOpportunity_typeParams.ts(41,14): suggestion TS377047: Can be rewritten as a reusable function: Effect.fn(function<T>(value) { ... }). effect(effectFnOpportunity)
-/.src/effectFnOpportunity_typeParams.ts(50,17): suggestion TS377047: Can be rewritten as a reusable function: Effect.fn(function<T>(value) { ... }). effect(effectFnOpportunity)
+/.src/effectFnOpportunity_typeParams.ts(32,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn(<T>(value) => { ... })`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_typeParams.ts(41,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn(function<T>(value) { ... })`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_typeParams.ts(50,17): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn(function<T>(value) { ... })`. effect(effectFnOpportunity)
 
 
 ==== /.src/tsconfig.json (0 errors) ====
@@ -38,7 +38,7 @@ Effect version: 4.0.0
     
     export const arrowWithTypeParams = <T>(value: T) => {
                  ~~~~~~~~~~~~~~~~~~~
-!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*<T>(value) { ... }). effect(effectFnOpportunity)
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*<T>(value) { ... })`. effect(effectFnOpportunity)
       return Effect.gen(function*() {
              ~~~~~~~~~~~~~~~~~~~~~~~~
         return yield* Effect.succeed(value)
@@ -50,7 +50,7 @@ Effect version: 4.0.0
     
     export const functionExpressionWithTypeParams = function<T>(value: T) {
                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*<T>(value) { ... }). effect(effectFnOpportunity)
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*<T>(value) { ... })`. effect(effectFnOpportunity)
       return Effect.gen(function*() {
              ~~~~~~~~~~~~~~~~~~~~~~~~
         return yield* Effect.succeed(value)
@@ -62,7 +62,7 @@ Effect version: 4.0.0
     
     export function functionDeclarationWithTypeParams<T>(value: T) {
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*<T>(value) { ... }). effect(effectFnOpportunity)
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*<T>(value) { ... })`. effect(effectFnOpportunity)
       return Effect.gen(function*() {
              ~~~~~~~~~~~~~~~~~~~~~~~~
         return yield* Effect.succeed(value)
@@ -77,7 +77,7 @@ Effect version: 4.0.0
     
     export const arrowWithTypeParamsNoGen = <T>(value: T) => {
                  ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fn(<T>(value) => { ... }). effect(effectFnOpportunity)
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn(<T>(value) => { ... })`. effect(effectFnOpportunity)
       const _a = 1
       const _b = 2
       const _c = 3
@@ -88,7 +88,7 @@ Effect version: 4.0.0
     
     export const functionExpressionWithTypeParamsNoGen = function<T>(value: T) {
                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fn(function<T>(value) { ... }). effect(effectFnOpportunity)
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn(function<T>(value) { ... })`. effect(effectFnOpportunity)
       const _a = 1
       const _b = 2
       const _c = 3
@@ -99,7 +99,7 @@ Effect version: 4.0.0
     
     export function functionDeclarationWithTypeParamsNoGen<T>(value: T) {
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fn(function<T>(value) { ... }). effect(effectFnOpportunity)
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn(function<T>(value) { ... })`. effect(effectFnOpportunity)
       const _a = 1
       const _b = 2
       const _c = 3

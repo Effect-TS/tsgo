@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (10:10-10:27) TS377037: Using Schema.decodeSync inside an Effect generator is not recommended. Use Schema.decodeEffect instead to get properly typed error channel. effect(schemaSyncInEffect)
+[D1] (10:10-10:27) TS377037: `Schema.decodeSync` is used inside an Effect generator. `Schema.decodeEffect` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
   Fix 0: "Disable schemaSyncInEffect for this line"
   Fix 1: "Disable schemaSyncInEffect for entire file"
 

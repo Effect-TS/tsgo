@@ -1,26 +1,26 @@
 === Quick Fix Inventory ===
 
-[D1] (11:30-11:57) TS377050: Nested function calls can be converted to pipeable style for better readability; consider using addOne(5).pipe(...) instead. effect(missedPipeableOpportunity)
+[D1] (11:30-11:57) TS377050: This nested call structure has a pipeable form. `addOne(5).pipe(...)` represents the same call sequence in pipe style and may be easier to read. effect(missedPipeableOpportunity)
   Fix 0: "Disable missedPipeableOpportunity for this line"
   Fix 1: "Disable missedPipeableOpportunity for entire file"
   Fix 2: "Convert to pipe style"
 
-[D2] (15:30-15:66) TS377050: Nested function calls can be converted to pipeable style for better readability; consider using addOne(10).pipe(...) instead. effect(missedPipeableOpportunity)
+[D2] (15:30-15:66) TS377050: This nested call structure has a pipeable form. `addOne(10).pipe(...)` represents the same call sequence in pipe style and may be easier to read. effect(missedPipeableOpportunity)
   Fix 0: "Disable missedPipeableOpportunity for this line"
   Fix 1: "Disable missedPipeableOpportunity for entire file"
   Fix 2: "Convert to pipe style"
 
-[D3] (18:30-18:47) TS377050: Nested function calls can be converted to pipeable style for better readability; consider using addOne(5).pipe(...) instead. effect(missedPipeableOpportunity)
+[D3] (18:30-18:47) TS377050: This nested call structure has a pipeable form. `addOne(5).pipe(...)` represents the same call sequence in pipe style and may be easier to read. effect(missedPipeableOpportunity)
   Fix 0: "Disable missedPipeableOpportunity for this line"
   Fix 1: "Disable missedPipeableOpportunity for entire file"
   Fix 2: "Convert to pipe style"
 
-[D4] (23:33-23:73) TS377050: Nested function calls can be converted to pipeable style for better readability; consider using wrapInEffect(regularFunction(5)).pipe(...) instead. effect(missedPipeableOpportunity)
+[D4] (23:33-23:73) TS377050: This nested call structure has a pipeable form. `wrapInEffect(regularFunction(5)).pipe(...)` represents the same call sequence in pipe style and may be easier to read. effect(missedPipeableOpportunity)
   Fix 0: "Disable missedPipeableOpportunity for this line"
   Fix 1: "Disable missedPipeableOpportunity for entire file"
   Fix 2: "Convert to pipe style"
 
-[D5] (27:30-27:67) TS377050: Nested function calls can be converted to pipeable style for better readability; consider using addOne(7).pipe(...) instead. effect(missedPipeableOpportunity)
+[D5] (27:30-27:67) TS377050: This nested call structure has a pipeable form. `addOne(7).pipe(...)` represents the same call sequence in pipe style and may be easier to read. effect(missedPipeableOpportunity)
   Fix 0: "Disable missedPipeableOpportunity for this line"
   Fix 1: "Disable missedPipeableOpportunity for entire file"
   Fix 2: "Convert to pipe style"

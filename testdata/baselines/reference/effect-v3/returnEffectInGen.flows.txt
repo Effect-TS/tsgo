@@ -1,0 +1,132 @@
+==== /.src/returnEffectInGen.ts (3 flows) ====
+
+=== Effect Flow ===
+Kind: effectGen
+Location: 4:26 - 6:3
+Root: Effect.gen(function*() {\n  return Effect.fail("error")\n})
+Path (5 nodes):
+  [0] root {effect A=Effect<never, string, never> E=never R=never} Effect.gen
+      ==> [executes] -> [1]
+  [1] genSequence {effect A=Effect<never, string, never> E=never R=never} generator body
+      ==> [next] -> [2]
+  [2] statement {unknown} return Effect.fail("error")
+      ==> [returns] -> [3]
+  [3] return {unknown} return
+      ~> [returns value] -> [4]
+  [4] returnOperand {effect A=never E=string R=never} Effect.fail("error")
+
+Nodes (5):
+  [0] kind: root
+      label: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: Effect<never, string, never>
+      result.E: never
+      result.R: never
+  [1] kind: genSequence
+      label: generator body
+      ordinal: 0
+      result.kind: effect
+      result.A: Effect<never, string, never>
+      result.E: never
+      result.R: never
+  [2] kind: statement
+      label: return Effect.fail("error")
+      ordinal: 0
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [3] kind: return
+      label: return
+      ordinal: 0
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [4] kind: returnOperand
+      label: Effect.fail("error")
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: string
+      result.R: never
+Edges (4):
+  0 -> 1 [strong] executes
+  1 -> 2 [strong] next
+  2 -> 3 [strong] returns
+  3 -> 4 [weak] returns value
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 4:26 - 6:3
+Root: Effect.gen(function*() {\n  return Effect.fail("error")\n})
+Path (3 nodes):
+  [0] root {effect A=Effect<never, string, never> E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=() => Generator<never, Effect<never, string, never>, never>} function*() {\n  return Effect.fail("error")\n}
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=Effect<never, string, never> E=never R=never} step 0: Effect.gen
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: Effect<never, string, never>
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: function*() {\n  return Effect.fail("error")\n}
+      ordinal: 0
+      result.kind: plain
+      result.A: () => Generator<never, Effect<never, string, never>, never>
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: Effect<never, string, never>
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 5:9 - 5:30
+Root: Effect.fail("error")
+Path (3 nodes):
+  [0] root {effect A=never E=string R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="error"} "error"
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=never E=string R=never} step 0: Effect.fail
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: string
+      result.R: never
+  [1] kind: pipeSubject
+      label: "error"
+      ordinal: 0
+      result.kind: plain
+      result.A: "error"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.fail
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: string
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call

@@ -7,7 +7,7 @@ Effect version: 4.0.0
 /.src/globalErrorInEffectFailure.ts(26,32): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
 /.src/globalErrorInEffectFailure.ts(27,29): warning TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
 /.src/globalErrorInEffectFailure.ts(31,35): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
-/.src/globalErrorInEffectFailure.ts(32,10): suggestion TS377019: This Effect.fail call uses a yieldable error type as argument. You can yield* the error directly instead. effect(unnecessaryFailYieldableError)
+/.src/globalErrorInEffectFailure.ts(32,10): suggestion TS377019: This `yield* Effect.fail(...)` passes a yieldable error value. `yield*` represents that value directly without wrapping it in `Effect.fail`. effect(unnecessaryFailYieldableError)
 /.src/globalErrorInEffectFailure.ts(37,36): warning TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
 /.src/globalErrorInEffectFailure.ts(47,25): warning TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
 
@@ -60,7 +60,7 @@ Effect version: 4.0.0
       return yield* Effect.fail(new CustomError())
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
              ~~~~~
-!!! suggestion TS377019: This Effect.fail call uses a yieldable error type as argument. You can yield* the error directly instead. effect(unnecessaryFailYieldableError)
+!!! suggestion TS377019: This `yield* Effect.fail(...)` passes a yieldable error value. `yield*` represents that value directly without wrapping it in `Effect.fail`. effect(unnecessaryFailYieldableError)
     })
     ~~
 !!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)

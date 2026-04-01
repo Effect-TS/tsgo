@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/effectFn.ts(20,4): suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+/.src/effectFn.ts(20,4): suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
 
 
 ==== /.src/effectFn.ts (1 errors) ====
@@ -26,7 +26,7 @@ Effect version: 4.0.0
       return yield* Effect.succeed(42)
     }, Effect.catch(() => Effect.void))
        ~~~~~~~~~~~~
-!!! suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+!!! suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
     
     // Traced Effect.fn with pipe transformations
     export const tracedEffectFn = Effect.fn("traced")(function*() {

@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (14:26-14:51) TS377046: Self type parameter should be 'InvalidServiceSelfParameter'. effect(classSelfMismatch)
+[D1] (14:26-14:51) TS377046: The `Self` type parameter for this class should be `InvalidServiceSelfParameter`. effect(classSelfMismatch)
   Fix 0: "Disable classSelfMismatch for this line"
   Fix 1: "Disable classSelfMismatch for entire file"
   Fix 2: "Replace 'ValidServiceSelfParameter' with 'InvalidServiceSelfParameter'"

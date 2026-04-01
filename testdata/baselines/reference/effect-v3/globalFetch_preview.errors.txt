@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: unknown
 
-/.src/globalFetch_preview.ts(4,24): warning TS377061: Prefer using HttpClient from @effect/platform instead of the global 'fetch' function. effect(globalFetch)
+/.src/globalFetch_preview.ts(4,24): warning TS377061: This code uses the global `fetch` function, HTTP requests are represented through `HttpClient` from `@effect/platform`. effect(globalFetch)
 
 
 ==== /.src/globalFetch_preview.ts (1 errors) ====
@@ -10,5 +10,5 @@ Effect version: unknown
     
     export const preview = fetch("https://example.com")
                            ~~~~~
-!!! warning TS377061: Prefer using HttpClient from @effect/platform instead of the global 'fetch' function. effect(globalFetch)
+!!! warning TS377061: This code uses the global `fetch` function, HTTP requests are represented through `HttpClient` from `@effect/platform`. effect(globalFetch)
     

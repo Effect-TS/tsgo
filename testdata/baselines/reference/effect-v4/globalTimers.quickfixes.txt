@@ -3,25 +3,25 @@
 [D1] (5:7-5:15) TS6133: '_timeout' is declared but its value is never read.
   (no quick fixes)
 
-[D2] (5:18-5:43) TS377072: Prefer using Effect.sleep or Schedule from Effect instead of setTimeout. effect(globalTimers)
+[D2] (5:18-5:43) TS377072: This code uses `setTimeout`, the corresponding Effect timer API is `Effect.sleep or Schedule` from Effect. effect(globalTimers)
   Fix 0: "Disable globalTimers for this line"
   Fix 1: "Disable globalTimers for entire file"
 
 [D3] (8:7-8:16) TS6133: '_interval' is declared but its value is never read.
   (no quick fixes)
 
-[D4] (8:25-8:51) TS377072: Prefer using Schedule or Effect.repeat from Effect instead of setInterval. effect(globalTimers)
+[D4] (8:25-8:51) TS377072: This code uses `setInterval`, the corresponding Effect timer API is `Schedule or Effect.repeat` from Effect. effect(globalTimers)
   Fix 0: "Disable globalTimers for this line"
   Fix 1: "Disable globalTimers for entire file"
 
 [D5] (12:7-12:22) TS6133: '_aliasedTimeout' is declared but its value is never read.
   (no quick fixes)
 
-[D6] (12:25-12:45) TS377072: Prefer using Effect.sleep or Schedule from Effect instead of setTimeout. effect(globalTimers)
+[D6] (12:25-12:45) TS377072: This code uses `setTimeout`, the corresponding Effect timer API is `Effect.sleep or Schedule` from Effect. effect(globalTimers)
   Fix 0: "Disable globalTimers for this line"
   Fix 1: "Disable globalTimers for entire file"
 
-[D7] (21:20-21:46) TS377072: Prefer using Schedule or Effect.repeat from Effect instead of setInterval. effect(globalTimers)
+[D7] (21:20-21:46) TS377072: This code uses `setInterval`, the corresponding Effect timer API is `Schedule or Effect.repeat` from Effect. effect(globalTimers)
   Fix 0: "Disable globalTimers for this line"
   Fix 1: "Disable globalTimers for entire file"
 

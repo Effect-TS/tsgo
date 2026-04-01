@@ -1,34 +1,34 @@
 === Quick Fix Inventory ===
 
-[D1] (4:22-6:5) TS377011: Effect.fn returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead with Effect.withSpan("test") piped in the end to maintain tracing spans. effect(effectFnIife)
+[D1] (4:22-6:5) TS377011: `Effect.fn` returns a reusable function that can take arguments, but it is invoked immediately here. `Effect.gen` represents the immediate-use form for this pattern with Effect.withSpan("test") piped in the end to maintain tracing spans. effect(effectFnIife)
   Fix 0: "Disable effectFnIife for this line"
   Fix 1: "Disable effectFnIife for entire file"
   Fix 2: "Convert to Effect.gen"
 
-[D2] (9:22-12:5) TS377011: Effect.fn returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead with Effect.withSpan("named") piped in the end to maintain tracing spans. effect(effectFnIife)
+[D2] (9:22-12:5) TS377011: `Effect.fn` returns a reusable function that can take arguments, but it is invoked immediately here. `Effect.gen` represents the immediate-use form for this pattern with Effect.withSpan("named") piped in the end to maintain tracing spans. effect(effectFnIife)
   Fix 0: "Disable effectFnIife for this line"
   Fix 1: "Disable effectFnIife for entire file"
   Fix 2: "Convert to Effect.gen"
 
-[D3] (15:22-17:5) TS377011: Effect.fnUntraced returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead. effect(effectFnIife)
+[D3] (15:22-17:5) TS377011: `Effect.fnUntraced` returns a reusable function that can take arguments, but it is invoked immediately here. `Effect.gen` represents the immediate-use form for this pattern. effect(effectFnIife)
   Fix 0: "Disable effectFnIife for this line"
   Fix 1: "Disable effectFnIife for entire file"
   Fix 2: "Convert to Effect.gen"
 
-[D4] (20:22-20:67) TS377011: Effect.fn returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead with Effect.withSpan("arrow") piped in the end to maintain tracing spans. effect(effectFnIife)
+[D4] (20:22-20:67) TS377011: `Effect.fn` returns a reusable function that can take arguments, but it is invoked immediately here. `Effect.gen` represents the immediate-use form for this pattern with Effect.withSpan("arrow") piped in the end to maintain tracing spans. effect(effectFnIife)
   Fix 0: "Disable effectFnIife for this line"
   Fix 1: "Disable effectFnIife for entire file"
 
-[D5] (23:22-25:5) TS377011: Effect.fn returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead with Effect.withSpan("func") piped in the end to maintain tracing spans. effect(effectFnIife)
+[D5] (23:22-25:5) TS377011: `Effect.fn` returns a reusable function that can take arguments, but it is invoked immediately here. `Effect.gen` represents the immediate-use form for this pattern with Effect.withSpan("func") piped in the end to maintain tracing spans. effect(effectFnIife)
   Fix 0: "Disable effectFnIife for this line"
   Fix 1: "Disable effectFnIife for entire file"
 
-[D6] (28:22-30:31) TS377011: Effect.fn returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead with Effect.withSpan("piped") piped in the end to maintain tracing spans. effect(effectFnIife)
+[D6] (28:22-30:31) TS377011: `Effect.fn` returns a reusable function that can take arguments, but it is invoked immediately here. `Effect.gen` represents the immediate-use form for this pattern with Effect.withSpan("piped") piped in the end to maintain tracing spans. effect(effectFnIife)
   Fix 0: "Disable effectFnIife for this line"
   Fix 1: "Disable effectFnIife for entire file"
   Fix 2: "Convert to Effect.gen"
 
-[D7] (33:22-35:31) TS377011: Effect.fnUntraced returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead. effect(effectFnIife)
+[D7] (33:22-35:31) TS377011: `Effect.fnUntraced` returns a reusable function that can take arguments, but it is invoked immediately here. `Effect.gen` represents the immediate-use form for this pattern. effect(effectFnIife)
   Fix 0: "Disable effectFnIife for this line"
   Fix 1: "Disable effectFnIife for entire file"
   Fix 2: "Convert to Effect.gen"

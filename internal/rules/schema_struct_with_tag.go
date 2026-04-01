@@ -20,12 +20,12 @@ var SchemaStructWithTag = rule.Rule{
 	Description:     "Suggests using Schema.TaggedStruct instead of Schema.Struct with _tag field",
 	DefaultSeverity: etscore.SeveritySuggestion,
 	SupportedEffect: []string{"v3", "v4"},
-	Codes:           []int32{tsdiag.Schema_Struct_with_a_tag_field_can_be_simplified_to_Schema_TaggedStruct_to_make_the_tag_optional_in_the_constructor_effect_schemaStructWithTag.Code()},
+	Codes:           []int32{tsdiag.This_Schema_Struct_includes_a_tag_field_Schema_TaggedStruct_is_the_tagged_struct_form_for_this_pattern_and_makes_the_tag_optional_in_the_constructor_effect_schemaStructWithTag.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeSchemaStructWithTag(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
-			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Schema_Struct_with_a_tag_field_can_be_simplified_to_Schema_TaggedStruct_to_make_the_tag_optional_in_the_constructor_effect_schemaStructWithTag, nil)
+			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.This_Schema_Struct_includes_a_tag_field_Schema_TaggedStruct_is_the_tagged_struct_form_for_this_pattern_and_makes_the_tag_optional_in_the_constructor_effect_schemaStructWithTag, nil)
 		}
 		return diags
 	},

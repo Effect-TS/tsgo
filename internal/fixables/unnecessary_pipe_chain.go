@@ -13,7 +13,7 @@ import (
 var UnnecessaryPipeChainFix = fixable.Fixable{
 	Name:        "unnecessaryPipeChain",
 	Description: "Rewrite as single pipe call",
-	ErrorCodes:  []int32{tsdiag.Chained_pipe_calls_can_be_simplified_to_a_single_pipe_call_effect_unnecessaryPipeChain.Code()},
+	ErrorCodes:  []int32{tsdiag.This_expression_contains_chained_pipe_calls_that_can_be_simplified_to_a_single_pipe_call_effect_unnecessaryPipeChain.Code()},
 	FixIDs:      []string{"unnecessaryPipeChain_fix"},
 	Run:         runUnnecessaryPipeChainFix,
 }

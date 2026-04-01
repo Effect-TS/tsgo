@@ -3,12 +3,12 @@ Effect version: 3.19.19
 
 /.src/effectInFailure.ts(5,14): warning TS377054: The error channel contains an Effect (Effect<void, never, never>). Putting Effect computations in the failure channel is not intended; keep only failure types there. effect(effectInFailure)
 /.src/effectInFailure.ts(5,29): warning TS377054: The error channel contains an Effect (Effect<void, never, never>). Putting Effect computations in the failure channel is not intended; keep only failure types there. effect(effectInFailure)
-/.src/effectInFailure.ts(6,14): suggestion TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
-/.src/effectInFailure.ts(11,14): suggestion TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+/.src/effectInFailure.ts(6,14): suggestion TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
+/.src/effectInFailure.ts(11,14): suggestion TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
 /.src/effectInFailure.ts(15,14): warning TS377054: The error channel contains an Effect (Effect<any, Effect<void, never, never>, never>). Putting Effect computations in the failure channel is not intended; keep only failure types there. effect(effectInFailure)
-/.src/effectInFailure.ts(16,14): suggestion TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+/.src/effectInFailure.ts(16,14): suggestion TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
 /.src/effectInFailure.ts(18,5): warning TS377054: The error channel contains an Effect (Effect<void, never, never>). Putting Effect computations in the failure channel is not intended; keep only failure types there. effect(effectInFailure)
-/.src/effectInFailure.ts(19,18): suggestion TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+/.src/effectInFailure.ts(19,18): suggestion TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
 
 
 ==== /.src/effectInFailure.ts (8 errors) ====
@@ -23,7 +23,7 @@ Effect version: 3.19.19
       try: () => JSON.parse("{"),
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                  ~~~~~~~~~~~~~~~
-!!! suggestion TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+!!! suggestion TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
       catch: (e) => Effect.log(e)
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     })
@@ -33,7 +33,7 @@ Effect version: 3.19.19
     export const shouldNotReport = Effect.try({
       try: () => JSON.parse("{"),
                  ~~~~~~~~~~~~~~~
-!!! suggestion TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+!!! suggestion TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
       catch: (e) => new JsonParseError({ cause: e })
     })
     
@@ -42,14 +42,14 @@ Effect version: 3.19.19
 !!! warning TS377054: The error channel contains an Effect (Effect<any, Effect<void, never, never>, never>). Putting Effect computations in the failure channel is not intended; keep only failure types there. effect(effectInFailure)
       try: () => JSON.parse("{"),
                  ~~~~~~~~~~~~~~~
-!!! suggestion TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+!!! suggestion TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
       catch: (e) =>
         Effect.try({
         ~~~~~~~~~~~~
           try: () => JSON.parse(String(e)),
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                      ~~~~~~~~~~~~~~~~~~~~~
-!!! suggestion TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+!!! suggestion TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
           catch: (innerError) => Effect.log(innerError)
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         })

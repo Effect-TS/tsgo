@@ -5,12 +5,12 @@
   Fix 1: "Disable redundantSchemaTagIdentifier for entire file"
   Fix 2: "Remove redundant identifier 'SchemaError'"
 
-[D2] (21:3-21:8) TS377019: This Effect.fail call uses a yieldable error type as argument. You can yield* the error directly instead. effect(unnecessaryFailYieldableError)
+[D2] (21:3-21:8) TS377019: This `yield* Effect.fail(...)` passes a yieldable error value. `yield*` represents that value directly without wrapping it in `Effect.fail`. effect(unnecessaryFailYieldableError)
   Fix 0: "Disable unnecessaryFailYieldableError for this line"
   Fix 1: "Disable unnecessaryFailYieldableError for entire file"
   Fix 2: "Replace yield* Effect.fail with yield*"
 
-[D3] (22:3-22:8) TS377019: This Effect.fail call uses a yieldable error type as argument. You can yield* the error directly instead. effect(unnecessaryFailYieldableError)
+[D3] (22:3-22:8) TS377019: This `yield* Effect.fail(...)` passes a yieldable error value. `yield*` represents that value directly without wrapping it in `Effect.fail`. effect(unnecessaryFailYieldableError)
   Fix 0: "Disable unnecessaryFailYieldableError for this line"
   Fix 1: "Disable unnecessaryFailYieldableError for entire file"
   Fix 2: "Replace yield* Effect.fail with yield*"

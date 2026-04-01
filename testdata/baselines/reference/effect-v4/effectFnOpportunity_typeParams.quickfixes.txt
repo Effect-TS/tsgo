@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (11:14-11:33) TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*<T>(value) { ... }). effect(effectFnOpportunity)
+[D1] (11:14-11:33) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*<T>(value) { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fnUntraced"
@@ -12,7 +12,7 @@
   Fix 1: "Disable unnecessaryEffectGen for entire file"
   Fix 2: "Remove the Effect.gen, and keep the body"
 
-[D3] (17:14-17:46) TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*<T>(value) { ... }). effect(effectFnOpportunity)
+[D3] (17:14-17:46) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*<T>(value) { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fnUntraced"
@@ -24,7 +24,7 @@
   Fix 1: "Disable unnecessaryEffectGen for entire file"
   Fix 2: "Remove the Effect.gen, and keep the body"
 
-[D5] (23:17-23:50) TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*<T>(value) { ... }). effect(effectFnOpportunity)
+[D5] (23:17-23:50) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*<T>(value) { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fnUntraced"
@@ -36,7 +36,7 @@
   Fix 1: "Disable unnecessaryEffectGen for entire file"
   Fix 2: "Remove the Effect.gen, and keep the body"
 
-[D7] (32:14-32:38) TS377047: Can be rewritten as a reusable function: Effect.fn(<T>(value) => { ... }). effect(effectFnOpportunity)
+[D7] (32:14-32:38) TS377047: This expression can be rewritten in the reusable function form `Effect.fn(<T>(value) => { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fn (no span)"
@@ -57,7 +57,7 @@
 [D12] (37:9-37:11) TS6133: '_e' is declared but its value is never read.
   (no quick fixes)
 
-[D13] (41:14-41:51) TS377047: Can be rewritten as a reusable function: Effect.fn(function<T>(value) { ... }). effect(effectFnOpportunity)
+[D13] (41:14-41:51) TS377047: This expression can be rewritten in the reusable function form `Effect.fn(function<T>(value) { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fn (no span)"
@@ -78,7 +78,7 @@
 [D18] (46:9-46:11) TS6133: '_e' is declared but its value is never read.
   (no quick fixes)
 
-[D19] (50:17-50:55) TS377047: Can be rewritten as a reusable function: Effect.fn(function<T>(value) { ... }). effect(effectFnOpportunity)
+[D19] (50:17-50:55) TS377047: This expression can be rewritten in the reusable function form `Effect.fn(function<T>(value) { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fn (no span)"

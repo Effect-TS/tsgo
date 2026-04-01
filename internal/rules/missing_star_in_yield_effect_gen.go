@@ -18,13 +18,13 @@ var MissingStarInYieldEffectGen = rule.Rule{
 	Description:     "Detects bare yield (without *) inside Effect generator scopes",
 	DefaultSeverity: etscore.SeverityError,
 	SupportedEffect: []string{"v3", "v4"},
-	Codes:           []int32{tsdiag.Inside_this_Effect_generator_effect_missingStarInYieldEffectGen.Code(), tsdiag.When_yielding_Effects_inside_Effect_gen_you_should_use_yield_Asterisk_instead_of_yield_effect_missingStarInYieldEffectGen.Code()},
+	Codes:           []int32{tsdiag.Inside_this_Effect_generator_effect_missingStarInYieldEffectGen.Code(), tsdiag.This_uses_yield_for_an_Effect_value_yield_Asterisk_is_the_Effect_aware_form_in_this_context_effect_missingStarInYieldEffectGen.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeMissingStarInYieldEffectGen(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
 			relatedInfo := ctx.NewDiagnostic(m.SourceFile, ctx.GetErrorRange(m.GenFnNode), tsdiag.Inside_this_Effect_generator_effect_missingStarInYieldEffectGen, nil)
-			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.When_yielding_Effects_inside_Effect_gen_you_should_use_yield_Asterisk_instead_of_yield_effect_missingStarInYieldEffectGen, []*ast.Diagnostic{relatedInfo})
+			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.This_uses_yield_for_an_Effect_value_yield_Asterisk_is_the_Effect_aware_form_in_this_context_effect_missingStarInYieldEffectGen, []*ast.Diagnostic{relatedInfo})
 		}
 		return diags
 	},

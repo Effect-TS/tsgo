@@ -24,7 +24,7 @@ var GlobalConsole = rule.Rule{
 	Description:     "Warns when using console methods outside Effect generators instead of Effect.log/Logger",
 	DefaultSeverity: etscore.SeverityOff,
 	SupportedEffect: []string{"v3", "v4"},
-	Codes:           []int32{tsdiag.Prefer_using_0_instead_of_console_1_effect_globalConsole.Code()},
+	Codes:           []int32{tsdiag.This_code_uses_console_1_the_corresponding_Effect_logging_API_is_0_effect_globalConsole.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		return runGlobalConsole(ctx, false)
 	},
@@ -36,7 +36,7 @@ var GlobalConsoleInEffect = rule.Rule{
 	Description:     "Warns when using console methods inside Effect generators instead of Effect.log/Logger",
 	DefaultSeverity: etscore.SeverityOff,
 	SupportedEffect: []string{"v3", "v4"},
-	Codes:           []int32{tsdiag.Prefer_using_0_instead_of_console_1_inside_Effect_generators_effect_globalConsoleInEffect.Code()},
+	Codes:           []int32{tsdiag.This_Effect_code_uses_console_1_logging_in_Effect_code_is_represented_through_0_effect_globalConsoleInEffect.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		return runGlobalConsole(ctx, true)
 	},
@@ -48,9 +48,9 @@ func runGlobalConsole(ctx *rule.Context, checkInEffect bool) []*ast.Diagnostic {
 		return nil
 	}
 
-	message := tsdiag.Prefer_using_0_instead_of_console_1_effect_globalConsole
+	message := tsdiag.This_code_uses_console_1_the_corresponding_Effect_logging_API_is_0_effect_globalConsole
 	if checkInEffect {
-		message = tsdiag.Prefer_using_0_instead_of_console_1_inside_Effect_generators_effect_globalConsoleInEffect
+		message = tsdiag.This_Effect_code_uses_console_1_logging_in_Effect_code_is_represented_through_0_effect_globalConsoleInEffect
 	}
 
 	var diags []*ast.Diagnostic

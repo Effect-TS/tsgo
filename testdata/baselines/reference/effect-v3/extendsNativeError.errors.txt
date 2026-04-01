@@ -1,9 +1,9 @@
 === Metadata ===
 Effect version: unknown
 
-/.src/extendsNativeError.ts(5,7): warning TS377055: Avoid extending the native 'Error' class directly. Consider using a tagged error (e.g. Data.TaggedError) to maintain type safety in the Effect failure channel. effect(extendsNativeError)
-/.src/extendsNativeError.ts(9,7): warning TS377055: Avoid extending the native 'Error' class directly. Consider using a tagged error (e.g. Data.TaggedError) to maintain type safety in the Effect failure channel. effect(extendsNativeError)
-/.src/extendsNativeError.ts(12,7): warning TS377055: Avoid extending the native 'Error' class directly. Consider using a tagged error (e.g. Data.TaggedError) to maintain type safety in the Effect failure channel. effect(extendsNativeError)
+/.src/extendsNativeError.ts(5,7): warning TS377055: This class extends the native `Error` type directly. Untagged native errors lose distinction in the Effect failure channel. effect(extendsNativeError)
+/.src/extendsNativeError.ts(9,7): warning TS377055: This class extends the native `Error` type directly. Untagged native errors lose distinction in the Effect failure channel. effect(extendsNativeError)
+/.src/extendsNativeError.ts(12,7): warning TS377055: This class extends the native `Error` type directly. Untagged native errors lose distinction in the Effect failure channel. effect(extendsNativeError)
 
 
 ==== /.src/extendsNativeError.ts (3 errors) ====
@@ -13,18 +13,18 @@ Effect version: unknown
     // Flagged: direct extends Error
     class MyError extends Error {}
           ~~~~~~~
-!!! warning TS377055: Avoid extending the native 'Error' class directly. Consider using a tagged error (e.g. Data.TaggedError) to maintain type safety in the Effect failure channel. effect(extendsNativeError)
+!!! warning TS377055: This class extends the native `Error` type directly. Untagged native errors lose distinction in the Effect failure channel. effect(extendsNativeError)
     
     // Flagged: via alias
     const E = Error
     class MyError2 extends E {}
           ~~~~~~~~
-!!! warning TS377055: Avoid extending the native 'Error' class directly. Consider using a tagged error (e.g. Data.TaggedError) to maintain type safety in the Effect failure channel. effect(extendsNativeError)
+!!! warning TS377055: This class extends the native `Error` type directly. Untagged native errors lose distinction in the Effect failure channel. effect(extendsNativeError)
     
     // Not flagged: indirect (extends a subclass of Error)
     class Base extends Error {}
           ~~~~
-!!! warning TS377055: Avoid extending the native 'Error' class directly. Consider using a tagged error (e.g. Data.TaggedError) to maintain type safety in the Effect failure channel. effect(extendsNativeError)
+!!! warning TS377055: This class extends the native `Error` type directly. Untagged native errors lose distinction in the Effect failure channel. effect(extendsNativeError)
     class MyError3 extends Base {}
     
     // Not flagged: unrelated class

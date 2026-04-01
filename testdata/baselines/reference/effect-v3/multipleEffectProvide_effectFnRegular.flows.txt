@@ -1,0 +1,152 @@
+==== /.src/multipleEffectProvide_effectFnRegular.ts (3 flows) ====
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 17:43 - 21:2
+Root: Effect.fn(\n  () => Effect.void,\n  Effect.provide(MyService1.Default),\n  Effect.provide(MyService2.Default)\n)
+Path (4 nodes):
+  [0] root {plain A=() => Effect<void, never, never>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {effect A=void E=never R=never} Effect.fn(\n  () => Effect.void,\n  Effect.provide(MyService1.Default),\n  Ef...
+      ==> [effectFn] -> [2]
+  [2] pipeTransformation {effect A=void E=never R=never} step 0: Effect.provide
+      ==> [effectFn] -> [3]
+  [3] pipeTransformation {effect A=void E=never R=never} step 1: Effect.provide
+
+Nodes (4):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: () => Effect<void, never, never>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: Effect.fn(\n  () => Effect.void,\n  Effect.provide(MyService1.Default),\n  Ef...
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+  [2] kind: pipeTransformation
+      label: step 0: Effect.provide
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+  [3] kind: pipeTransformation
+      label: step 1: Effect.provide
+      ordinal: 1
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+Edges (3):
+  0 -> 1 [strong] subject
+  1 -> 2 [strong] effectFn
+  2 -> 3 [strong] effectFn
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 23:49 - 27:2
+Root: Effect.fn("traced")(\n  () => Effect.void,\n  Effect.provide(MyService1.Default),\n  Effect.provide(MyService2.Default)\n)
+Path (4 nodes):
+  [0] root {plain A=() => Effect<void, never, never>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {effect A=void E=never R=never} Effect.fn("traced")(\n  () => Effect.void,\n  Effect.provide(MyService1.Defau...
+      ==> [effectFn] -> [2]
+  [2] pipeTransformation {effect A=void E=never R=never} step 0: Effect.provide
+      ==> [effectFn] -> [3]
+  [3] pipeTransformation {effect A=void E=never R=never} step 1: Effect.provide
+
+Nodes (4):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: () => Effect<void, never, never>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: Effect.fn("traced")(\n  () => Effect.void,\n  Effect.provide(MyService1.Defau...
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+  [2] kind: pipeTransformation
+      label: step 0: Effect.provide
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+  [3] kind: pipeTransformation
+      label: step 1: Effect.provide
+      ordinal: 1
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+Edges (3):
+  0 -> 1 [strong] subject
+  1 -> 2 [strong] effectFn
+  2 -> 3 [strong] effectFn
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 29:48 - 34:2
+Root: Effect.fn(\n  () => Effect.void,\n  Effect.provide(MyService1.Default),\n  Effect.provide(MyService2.Default),\n  Effect.provide(MyService3.Default)\n)
+Path (5 nodes):
+  [0] root {plain A=() => Effect<void, never, never>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {effect A=void E=never R=never} Effect.fn(\n  () => Effect.void,\n  Effect.provide(MyService1.Default),\n  Ef...
+      ==> [effectFn] -> [2]
+  [2] pipeTransformation {effect A=void E=never R=never} step 0: Effect.provide
+      ==> [effectFn] -> [3]
+  [3] pipeTransformation {effect A=void E=never R=never} step 1: Effect.provide
+      ==> [effectFn] -> [4]
+  [4] pipeTransformation {effect A=void E=never R=never} step 2: Effect.provide
+
+Nodes (5):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: () => Effect<void, never, never>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: Effect.fn(\n  () => Effect.void,\n  Effect.provide(MyService1.Default),\n  Ef...
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+  [2] kind: pipeTransformation
+      label: step 0: Effect.provide
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+  [3] kind: pipeTransformation
+      label: step 1: Effect.provide
+      ordinal: 1
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+  [4] kind: pipeTransformation
+      label: step 2: Effect.provide
+      ordinal: 2
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+Edges (4):
+  0 -> 1 [strong] subject
+  1 -> 2 [strong] effectFn
+  2 -> 3 [strong] effectFn
+  3 -> 4 [strong] effectFn

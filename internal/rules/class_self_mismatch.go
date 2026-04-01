@@ -21,12 +21,12 @@ var ClassSelfMismatch = rule.Rule{
 	Description:     "Ensures Self type parameter matches the class name in ServiceMap/Service/Tag/Schema classes",
 	DefaultSeverity: etscore.SeverityError,
 	SupportedEffect: []string{"v3", "v4"},
-	Codes:           []int32{tsdiag.Self_type_parameter_should_be_0_effect_classSelfMismatch.Code()},
+	Codes:           []int32{tsdiag.The_Self_type_parameter_for_this_class_should_be_0_effect_classSelfMismatch.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeClassSelfMismatch(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
-			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Self_type_parameter_should_be_0_effect_classSelfMismatch, nil, m.ExpectedName)
+			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.The_Self_type_parameter_for_this_class_should_be_0_effect_classSelfMismatch, nil, m.ExpectedName)
 		}
 		return diags
 	},

@@ -1,14 +1,14 @@
 === Quick Fix Inventory ===
 
-[D1] (20:3-20:9) TS377004: Missing context ServiceA | ServiceB | ServiceC in the expected Effect type. effect(missingEffectContext)
+[D1] (20:3-20:9) TS377004: This Effect requires a service that is missing from the expected Effect context: `ServiceA | ServiceB | ServiceC`. effect(missingEffectContext)
   Fix 0: "Disable missingEffectContext for this line"
   Fix 1: "Disable missingEffectContext for entire file"
 
-[D2] (24:63-24:81) TS377004: Missing context ServiceA | ServiceB | ServiceC in the expected Effect type. effect(missingEffectContext)
+[D2] (24:63-24:81) TS377004: This Effect requires a service that is missing from the expected Effect context: `ServiceA | ServiceB | ServiceC`. effect(missingEffectContext)
   Fix 0: "Disable missingEffectContext for this line"
   Fix 1: "Disable missingEffectContext for entire file"
 
-[D3] (28:3-28:21) TS377004: Missing context ServiceC in the expected Effect type. effect(missingEffectContext)
+[D3] (28:3-28:21) TS377004: This Effect requires a service that is missing from the expected Effect context: `ServiceC`. effect(missingEffectContext)
   Fix 0: "Disable missingEffectContext for this line"
   Fix 1: "Disable missingEffectContext for entire file"
 

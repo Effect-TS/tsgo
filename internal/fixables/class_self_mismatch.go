@@ -12,7 +12,7 @@ import (
 var ClassSelfMismatchFix = fixable.Fixable{
 	Name:        "classSelfMismatch",
 	Description: "Replace Self type parameter with the correct class name",
-	ErrorCodes:  []int32{tsdiag.Self_type_parameter_should_be_0_effect_classSelfMismatch.Code()},
+	ErrorCodes:  []int32{tsdiag.The_Self_type_parameter_for_this_class_should_be_0_effect_classSelfMismatch.Code()},
 	FixIDs:      []string{"classSelfMismatch_fix"},
 	Run:         runClassSelfMismatchFix,
 }

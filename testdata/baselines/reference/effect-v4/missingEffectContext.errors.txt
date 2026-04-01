@@ -2,9 +2,9 @@
 Effect version: 4.0.0
 
 /.src/missingEffectContext.ts(14,14): error TS2322: Type 'Effect<number, never, EnvA | EnvB>' is not assignable to type 'Effect<number, never, EnvA>'.
-/.src/missingEffectContext.ts(14,14): error TS377004: Missing context EnvB in the expected Effect type. effect(missingEffectContext)
+/.src/missingEffectContext.ts(14,14): error TS377004: This Effect requires a service that is missing from the expected Effect context: `EnvB`. effect(missingEffectContext)
 /.src/missingEffectContext.ts(17,14): error TS2322: Type 'Effect<number, never, EnvA | EnvB>' is not assignable to type 'Effect<number, never, never>'.
-/.src/missingEffectContext.ts(17,14): error TS377004: Missing context EnvA | EnvB in the expected Effect type. effect(missingEffectContext)
+/.src/missingEffectContext.ts(17,14): error TS377004: This Effect requires a service that is missing from the expected Effect context: `EnvA | EnvB`. effect(missingEffectContext)
 
 
 ==== /.src/missingEffectContext.ts (4 errors) ====
@@ -25,14 +25,14 @@ Effect version: 4.0.0
                  ~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'Effect<number, never, EnvA | EnvB>' is not assignable to type 'Effect<number, never, EnvA>'.
                  ~~~~~~~~~~~~~~~
-!!! error TS377004: Missing context EnvB in the expected Effect type. effect(missingEffectContext)
+!!! error TS377004: This Effect requires a service that is missing from the expected Effect context: `EnvB`. effect(missingEffectContext)
     
     // Should trigger missingEffectContext - assigning Effect with context to Effect<number> (no context)
     export const missingAllContext: Effect.Effect<number> = effectWithContext
                  ~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'Effect<number, never, EnvA | EnvB>' is not assignable to type 'Effect<number, never, never>'.
                  ~~~~~~~~~~~~~~~~~
-!!! error TS377004: Missing context EnvA | EnvB in the expected Effect type. effect(missingEffectContext)
+!!! error TS377004: This Effect requires a service that is missing from the expected Effect context: `EnvA | EnvB`. effect(missingEffectContext)
     
     // Should NOT trigger - context matches
     export const contextMatch: Effect.Effect<number, never, EnvA | EnvB> = effectWithContext

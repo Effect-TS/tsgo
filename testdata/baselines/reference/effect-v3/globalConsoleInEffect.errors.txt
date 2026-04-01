@@ -1,11 +1,11 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/globalConsoleInEffect.ts(6,3): warning TS377065: Prefer using Effect.log or Logger instead of console.log inside Effect generators. effect(globalConsoleInEffect)
-/.src/globalConsoleInEffect.ts(11,3): warning TS377065: Prefer using Effect.logWarning or Logger instead of console.warn inside Effect generators. effect(globalConsoleInEffect)
-/.src/globalConsoleInEffect.ts(16,3): warning TS377065: Prefer using Effect.logError or Logger instead of console.error inside Effect generators. effect(globalConsoleInEffect)
-/.src/globalConsoleInEffect.ts(22,3): warning TS377065: Prefer using Effect.log or Logger instead of console.log inside Effect generators. effect(globalConsoleInEffect)
-/.src/globalConsoleInEffect.ts(47,3): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+/.src/globalConsoleInEffect.ts(6,3): warning TS377065: This Effect code uses `console.log`, logging in Effect code is represented through `Effect.log or Logger`. effect(globalConsoleInEffect)
+/.src/globalConsoleInEffect.ts(11,3): warning TS377065: This Effect code uses `console.warn`, logging in Effect code is represented through `Effect.logWarning or Logger`. effect(globalConsoleInEffect)
+/.src/globalConsoleInEffect.ts(16,3): warning TS377065: This Effect code uses `console.error`, logging in Effect code is represented through `Effect.logError or Logger`. effect(globalConsoleInEffect)
+/.src/globalConsoleInEffect.ts(22,3): warning TS377065: This Effect code uses `console.log`, logging in Effect code is represented through `Effect.log or Logger`. effect(globalConsoleInEffect)
+/.src/globalConsoleInEffect.ts(47,3): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
 
 
 ==== /.src/globalConsoleInEffect.ts (5 errors) ====
@@ -16,21 +16,21 @@ Effect version: 3.19.19
     export const consoleLogInGen = Effect.gen(function*() {
       console.log("hello")
       ~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377065: Prefer using Effect.log or Logger instead of console.log inside Effect generators. effect(globalConsoleInEffect)
+!!! warning TS377065: This Effect code uses `console.log`, logging in Effect code is represented through `Effect.log or Logger`. effect(globalConsoleInEffect)
     })
     
     // Should trigger - console.warn inside Effect.fn
     export const consoleWarnInFn = Effect.fn("consoleWarnInFn")(function*() {
       console.warn("warning")
       ~~~~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377065: Prefer using Effect.logWarning or Logger instead of console.warn inside Effect generators. effect(globalConsoleInEffect)
+!!! warning TS377065: This Effect code uses `console.warn`, logging in Effect code is represented through `Effect.logWarning or Logger`. effect(globalConsoleInEffect)
     })
     
     // Should trigger - console.error inside Effect.gen
     export const consoleErrorInGen = Effect.gen(function*() {
       console.error("error")
       ~~~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377065: Prefer using Effect.logError or Logger instead of console.error inside Effect generators. effect(globalConsoleInEffect)
+!!! warning TS377065: This Effect code uses `console.error`, logging in Effect code is represented through `Effect.logError or Logger`. effect(globalConsoleInEffect)
     })
     
     // Should trigger - aliased console
@@ -38,7 +38,7 @@ Effect version: 3.19.19
       const myConsole = console
       myConsole.log("hello")
       ~~~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377065: Prefer using Effect.log or Logger instead of console.log inside Effect generators. effect(globalConsoleInEffect)
+!!! warning TS377065: This Effect code uses `console.log`, logging in Effect code is represented through `Effect.log or Logger`. effect(globalConsoleInEffect)
     })
     
     // Should NOT trigger - console.log at module level
@@ -65,6 +65,6 @@ Effect version: 3.19.19
       const console = yield* Console.Console
       console.log("hello")
       ~~~~~~~~~~~~~~~~~~~~
-!!! error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
     })
     

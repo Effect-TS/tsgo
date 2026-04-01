@@ -15,7 +15,7 @@ var GlobalFetch = rule.Rule{
 	Description:     "Warns when using the global fetch function outside Effect generators instead of the Effect HTTP client",
 	DefaultSeverity: etscore.SeverityOff,
 	SupportedEffect: []string{"v3", "v4"},
-	Codes:           []int32{tsdiag.Prefer_using_HttpClient_from_0_instead_of_the_global_fetch_function_effect_globalFetch.Code()},
+	Codes:           []int32{tsdiag.This_code_uses_the_global_fetch_function_HTTP_requests_are_represented_through_HttpClient_from_0_effect_globalFetch.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		return runGlobalFetch(ctx, false)
 	},
@@ -27,7 +27,7 @@ var GlobalFetchInEffect = rule.Rule{
 	Description:     "Warns when using the global fetch function inside Effect generators instead of the Effect HTTP client",
 	DefaultSeverity: etscore.SeverityOff,
 	SupportedEffect: []string{"v3", "v4"},
-	Codes:           []int32{tsdiag.Prefer_using_HttpClient_from_0_instead_of_the_global_fetch_function_inside_Effect_generators_effect_globalFetchInEffect.Code()},
+	Codes:           []int32{tsdiag.This_Effect_code_calls_the_global_fetch_function_HTTP_requests_in_Effect_code_are_represented_through_HttpClient_from_0_effect_globalFetchInEffect.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		return runGlobalFetch(ctx, true)
 	},
@@ -44,9 +44,9 @@ func runGlobalFetch(ctx *rule.Context, checkInEffect bool) []*ast.Diagnostic {
 		packageName = "@effect/platform"
 	}
 
-	message := tsdiag.Prefer_using_HttpClient_from_0_instead_of_the_global_fetch_function_effect_globalFetch
+	message := tsdiag.This_code_uses_the_global_fetch_function_HTTP_requests_are_represented_through_HttpClient_from_0_effect_globalFetch
 	if checkInEffect {
-		message = tsdiag.Prefer_using_HttpClient_from_0_instead_of_the_global_fetch_function_inside_Effect_generators_effect_globalFetchInEffect
+		message = tsdiag.This_Effect_code_calls_the_global_fetch_function_HTTP_requests_in_Effect_code_are_represented_through_HttpClient_from_0_effect_globalFetchInEffect
 	}
 
 	var diags []*ast.Diagnostic

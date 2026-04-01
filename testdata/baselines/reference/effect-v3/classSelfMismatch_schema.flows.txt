@@ -1,0 +1,297 @@
+==== /.src/classSelfMismatch_schema.ts (8 flows) ====
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 5:38 - 7:3
+Root: Schema.Class<ValidSchemaClass>("ValidSchemaClass")({\n  prop: Schema.String\n})
+Path (3 nodes):
+  [0] root {plain A=Class<ValidSchemaClass, { prop: typeof String$; }, Encoded<{ prop: typeof String$; }>, never, { readonly prop: string; }, {}, {}>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A={ prop: typeof String$; }} {\n  prop: Schema.String\n}
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=Class<ValidSchemaClass, { prop: typeof String$; }, Encoded<{ prop: typeof String$; }>, never, { readonly prop: string; }, {}, {}>} step 0: Schema.Class<ValidSchemaClass>("ValidSchemaClass")
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: Class<ValidSchemaClass, { prop: typeof String$; }, Encoded<{ prop: typeof String$; }>, never, { readonly prop: string; }, {}, {}>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: {\n  prop: Schema.String\n}
+      ordinal: 0
+      result.kind: plain
+      result.A: { prop: typeof String$; }
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Schema.Class<ValidSchemaClass>("ValidSchemaClass")
+      ordinal: 0
+      result.kind: plain
+      result.A: Class<ValidSchemaClass, { prop: typeof String$; }, Encoded<{ prop: typeof String$; }>, never, { readonly prop: string; }, {}, {}>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 10:40 - 12:3
+Root: Schema.Class<ValidSchemaClass>("InvalidSchemaClass")({\n  prop: Schema.String\n})
+Path (3 nodes):
+  [0] root {plain A=Class<ValidSchemaClass, { prop: typeof String$; }, Encoded<{ prop: typeof String$; }>, never, { readonly prop: string; }, {}, {}>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A={ prop: typeof String$; }} {\n  prop: Schema.String\n}
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=Class<ValidSchemaClass, { prop: typeof String$; }, Encoded<{ prop: typeof String$; }>, never, { readonly prop: string; }, {}, {}>} step 0: Schema.Class<ValidSchemaClass>("InvalidSchemaClass")
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: Class<ValidSchemaClass, { prop: typeof String$; }, Encoded<{ prop: typeof String$; }>, never, { readonly prop: string; }, {}, {}>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: {\n  prop: Schema.String\n}
+      ordinal: 0
+      result.kind: plain
+      result.A: { prop: typeof String$; }
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Schema.Class<ValidSchemaClass>("InvalidSchemaClass")
+      ordinal: 0
+      result.kind: plain
+      result.A: Class<ValidSchemaClass, { prop: typeof String$; }, Encoded<{ prop: typeof String$; }>, never, { readonly prop: string; }, {}, {}>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 15:10 - 15:79
+Root: Schema.TaggedClass<ValidSchemaTaggedClass>("ValidSchemaTaggedClass")
+Path (3 nodes):
+  [0] root {plain A=<Tag extends string, Fields extends Struct.Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<ValidSchemaTaggedClass, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedClass<ValidSchemaTaggedClass, Tag, { readonly _tag: tag<Tag>; } & Fields>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="ValidSchemaTaggedClass"} "ValidSchemaTaggedClass"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=<Tag extends string, Fields extends Struct.Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<ValidSchemaTaggedClass, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedClass<ValidSchemaTaggedClass, Tag, { readonly _tag: tag<Tag>; } & Fields>} step 0: Schema.TaggedClass
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: <Tag extends string, Fields extends Struct.Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<ValidSchemaTaggedClass, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedClass<ValidSchemaTaggedClass, Tag, { readonly _tag: tag<Tag>; } & Fields>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "ValidSchemaTaggedClass"
+      ordinal: 0
+      result.kind: plain
+      result.A: "ValidSchemaTaggedClass"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Schema.TaggedClass
+      ordinal: 0
+      result.kind: plain
+      result.A: <Tag extends string, Fields extends Struct.Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<ValidSchemaTaggedClass, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedClass<ValidSchemaTaggedClass, Tag, { readonly _tag: tag<Tag>; } & Fields>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 22:10 - 22:81
+Root: Schema.TaggedClass<ValidSchemaTaggedClass>("InvalidSchemaTaggedClass")
+Path (3 nodes):
+  [0] root {plain A=<Tag extends string, Fields extends Struct.Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<ValidSchemaTaggedClass, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedClass<ValidSchemaTaggedClass, Tag, { readonly _tag: tag<Tag>; } & Fields>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="InvalidSchemaTaggedClass"} "InvalidSchemaTaggedClass"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=<Tag extends string, Fields extends Struct.Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<ValidSchemaTaggedClass, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedClass<ValidSchemaTaggedClass, Tag, { readonly _tag: tag<Tag>; } & Fields>} step 0: Schema.TaggedClass
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: <Tag extends string, Fields extends Struct.Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<ValidSchemaTaggedClass, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedClass<ValidSchemaTaggedClass, Tag, { readonly _tag: tag<Tag>; } & Fields>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "InvalidSchemaTaggedClass"
+      ordinal: 0
+      result.kind: plain
+      result.A: "InvalidSchemaTaggedClass"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Schema.TaggedClass
+      ordinal: 0
+      result.kind: plain
+      result.A: <Tag extends string, Fields extends Struct.Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<ValidSchemaTaggedClass, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedClass<ValidSchemaTaggedClass, Tag, { readonly _tag: tag<Tag>; } & Fields>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 28:10 - 28:79
+Root: Schema.TaggedError<ValidSchemaTaggedError>("ValidSchemaTaggedError")
+Path (3 nodes):
+  [0] root {plain A=<Tag extends string, Fields extends Struct.Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<ValidSchemaTaggedError, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedErrorClass<ValidSchemaTaggedError, Tag, { readonly _tag: tag<Tag>; } & Fields>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="ValidSchemaTaggedError"} "ValidSchemaTaggedError"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=<Tag extends string, Fields extends Struct.Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<ValidSchemaTaggedError, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedErrorClass<ValidSchemaTaggedError, Tag, { readonly _tag: tag<Tag>; } & Fields>} step 0: Schema.TaggedError
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: <Tag extends string, Fields extends Struct.Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<ValidSchemaTaggedError, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedErrorClass<ValidSchemaTaggedError, Tag, { readonly _tag: tag<Tag>; } & Fields>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "ValidSchemaTaggedError"
+      ordinal: 0
+      result.kind: plain
+      result.A: "ValidSchemaTaggedError"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Schema.TaggedError
+      ordinal: 0
+      result.kind: plain
+      result.A: <Tag extends string, Fields extends Struct.Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<ValidSchemaTaggedError, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedErrorClass<ValidSchemaTaggedError, Tag, { readonly _tag: tag<Tag>; } & Fields>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 35:10 - 35:81
+Root: Schema.TaggedError<ValidSchemaTaggedError>("InvalidSchemaTaggedError")
+Path (3 nodes):
+  [0] root {plain A=<Tag extends string, Fields extends Struct.Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<ValidSchemaTaggedError, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedErrorClass<ValidSchemaTaggedError, Tag, { readonly _tag: tag<Tag>; } & Fields>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="InvalidSchemaTaggedError"} "InvalidSchemaTaggedError"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=<Tag extends string, Fields extends Struct.Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<ValidSchemaTaggedError, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedErrorClass<ValidSchemaTaggedError, Tag, { readonly _tag: tag<Tag>; } & Fields>} step 0: Schema.TaggedError
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: <Tag extends string, Fields extends Struct.Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<ValidSchemaTaggedError, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedErrorClass<ValidSchemaTaggedError, Tag, { readonly _tag: tag<Tag>; } & Fields>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "InvalidSchemaTaggedError"
+      ordinal: 0
+      result.kind: plain
+      result.A: "InvalidSchemaTaggedError"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Schema.TaggedError
+      ordinal: 0
+      result.kind: plain
+      result.A: <Tag extends string, Fields extends Struct.Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<ValidSchemaTaggedError, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedErrorClass<ValidSchemaTaggedError, Tag, { readonly _tag: tag<Tag>; } & Fields>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 41:10 - 41:85
+Root: Schema.TaggedRequest<ValidSchemaTaggedRequest>("ValidSchemaTaggedRequest")
+Path (3 nodes):
+  [0] root {plain A=<Tag extends string, Payload extends Struct.Fields, Success extends Schema.All, Failure extends Schema.All>(tag: Tag, options: { failure: Failure; success: Success; payload: Payload; }, annotations?: ClassAnnotations<ValidSchemaTaggedRequest, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Payload>]: Type<{ readonly _tag: tag<Tag>; } & Payload>[K]; }> | undefined) => TaggedRequestClass<ValidSchemaTaggedRequest, Tag, { readonly _tag: tag<Tag>; } & Payload, Success, Failure>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="ValidSchemaTaggedRequest"} "ValidSchemaTaggedRequest"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=<Tag extends string, Payload extends Struct.Fields, Success extends Schema.All, Failure extends Schema.All>(tag: Tag, options: { failure: Failure; success: Success; payload: Payload; }, annotations?: ClassAnnotations<ValidSchemaTaggedRequest, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Payload>]: Type<{ readonly _tag: tag<Tag>; } & Payload>[K]; }> | undefined) => TaggedRequestClass<ValidSchemaTaggedRequest, Tag, { readonly _tag: tag<Tag>; } & Payload, Success, Failure>} step 0: Schema.TaggedRequest
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: <Tag extends string, Payload extends Struct.Fields, Success extends Schema.All, Failure extends Schema.All>(tag: Tag, options: { failure: Failure; success: Success; payload: Payload; }, annotations?: ClassAnnotations<ValidSchemaTaggedRequest, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Payload>]: Type<{ readonly _tag: tag<Tag>; } & Payload>[K]; }> | undefined) => TaggedRequestClass<ValidSchemaTaggedRequest, Tag, { readonly _tag: tag<Tag>; } & Payload, Success, Failure>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "ValidSchemaTaggedRequest"
+      ordinal: 0
+      result.kind: plain
+      result.A: "ValidSchemaTaggedRequest"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Schema.TaggedRequest
+      ordinal: 0
+      result.kind: plain
+      result.A: <Tag extends string, Payload extends Struct.Fields, Success extends Schema.All, Failure extends Schema.All>(tag: Tag, options: { failure: Failure; success: Success; payload: Payload; }, annotations?: ClassAnnotations<ValidSchemaTaggedRequest, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Payload>]: Type<{ readonly _tag: tag<Tag>; } & Payload>[K]; }> | undefined) => TaggedRequestClass<ValidSchemaTaggedRequest, Tag, { readonly _tag: tag<Tag>; } & Payload, Success, Failure>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 50:10 - 50:87
+Root: Schema.TaggedRequest<ValidSchemaTaggedRequest>("InvalidSchemaTaggedRequest")
+Path (3 nodes):
+  [0] root {plain A=<Tag extends string, Payload extends Struct.Fields, Success extends Schema.All, Failure extends Schema.All>(tag: Tag, options: { failure: Failure; success: Success; payload: Payload; }, annotations?: ClassAnnotations<ValidSchemaTaggedRequest, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Payload>]: Type<{ readonly _tag: tag<Tag>; } & Payload>[K]; }> | undefined) => TaggedRequestClass<ValidSchemaTaggedRequest, Tag, { readonly _tag: tag<Tag>; } & Payload, Success, Failure>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="InvalidSchemaTaggedRequest"} "InvalidSchemaTaggedRequest"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=<Tag extends string, Payload extends Struct.Fields, Success extends Schema.All, Failure extends Schema.All>(tag: Tag, options: { failure: Failure; success: Success; payload: Payload; }, annotations?: ClassAnnotations<ValidSchemaTaggedRequest, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Payload>]: Type<{ readonly _tag: tag<Tag>; } & Payload>[K]; }> | undefined) => TaggedRequestClass<ValidSchemaTaggedRequest, Tag, { readonly _tag: tag<Tag>; } & Payload, Success, Failure>} step 0: Schema.TaggedRequest
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: <Tag extends string, Payload extends Struct.Fields, Success extends Schema.All, Failure extends Schema.All>(tag: Tag, options: { failure: Failure; success: Success; payload: Payload; }, annotations?: ClassAnnotations<ValidSchemaTaggedRequest, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Payload>]: Type<{ readonly _tag: tag<Tag>; } & Payload>[K]; }> | undefined) => TaggedRequestClass<ValidSchemaTaggedRequest, Tag, { readonly _tag: tag<Tag>; } & Payload, Success, Failure>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "InvalidSchemaTaggedRequest"
+      ordinal: 0
+      result.kind: plain
+      result.A: "InvalidSchemaTaggedRequest"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Schema.TaggedRequest
+      ordinal: 0
+      result.kind: plain
+      result.A: <Tag extends string, Payload extends Struct.Fields, Success extends Schema.All, Failure extends Schema.All>(tag: Tag, options: { failure: Failure; success: Success; payload: Payload; }, annotations?: ClassAnnotations<ValidSchemaTaggedRequest, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Payload>]: Type<{ readonly _tag: tag<Tag>; } & Payload>[K]; }> | undefined) => TaggedRequestClass<ValidSchemaTaggedRequest, Tag, { readonly _tag: tag<Tag>; } & Payload, Success, Failure>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call

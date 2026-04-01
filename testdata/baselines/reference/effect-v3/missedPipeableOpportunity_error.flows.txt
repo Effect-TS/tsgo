@@ -1,0 +1,347 @@
+==== /.src/missedPipeableOpportunity_error.ts (8 flows) ====
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 5:17 - 8:3
+Root: Schema.Struct({\n  x: Schema.Number,\n  y: Schema.Number\n})
+Path (3 nodes):
+  [0] root {plain A=Struct<{ x: typeof Number$; y: typeof Number$; }>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A={ x: typeof Number$; y: typeof Number$; }} {\n  x: Schema.Number,\n  y: Schema.Number\n}
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=Struct<{ x: typeof Number$; y: typeof Number$; }>} step 0: Schema.Struct
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: Struct<{ x: typeof Number$; y: typeof Number$; }>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: {\n  x: Schema.Number,\n  y: Schema.Number\n}
+      ordinal: 0
+      result.kind: plain
+      result.A: { x: typeof Number$; y: typeof Number$; }
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Schema.Struct
+      ordinal: 0
+      result.kind: plain
+      result.A: Struct<{ x: typeof Number$; y: typeof Number$; }>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 10:32 - 10:91
+Root: identity(Schema.decodeUnknown(MyStruct)({ x: 42, y: 42 }))
+Path (4 nodes):
+  [0] root {effect A={ readonly x: number; readonly y: number; } E=ParseError R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A={ x: number; y: number; }} { x: 42, y: 42 }
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A={ readonly x: number; readonly y: number; } E=ParseError R=never} step 0: Schema.decodeUnknown(MyStruct)
+      ~> [call] -> [3]
+  [3] pipeTransformation {effect A={ readonly x: number; readonly y: number; } E=ParseError R=never} step 1: identity
+
+Nodes (4):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: { readonly x: number; readonly y: number; }
+      result.E: ParseError
+      result.R: never
+  [1] kind: pipeSubject
+      label: { x: 42, y: 42 }
+      ordinal: 0
+      result.kind: plain
+      result.A: { x: number; y: number; }
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Schema.decodeUnknown(MyStruct)
+      ordinal: 0
+      result.kind: effect
+      result.A: { readonly x: number; readonly y: number; }
+      result.E: ParseError
+      result.R: never
+  [3] kind: pipeTransformation
+      label: step 1: identity
+      ordinal: 1
+      result.kind: effect
+      result.A: { readonly x: number; readonly y: number; }
+      result.E: ParseError
+      result.R: never
+Edges (3):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+  2 -> 3 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 12:40 - 12:109
+Root: identity(identity(Schema.decodeUnknown(MyStruct)({ x: 42, y: 42 })))
+Path (5 nodes):
+  [0] root {effect A={ readonly x: number; readonly y: number; } E=ParseError R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A={ x: number; y: number; }} { x: 42, y: 42 }
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A={ readonly x: number; readonly y: number; } E=ParseError R=never} step 0: Schema.decodeUnknown(MyStruct)
+      ~> [call] -> [3]
+  [3] pipeTransformation {effect A={ readonly x: number; readonly y: number; } E=ParseError R=never} step 1: identity
+      ~> [call] -> [4]
+  [4] pipeTransformation {effect A={ readonly x: number; readonly y: number; } E=ParseError R=never} step 2: identity
+
+Nodes (5):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: { readonly x: number; readonly y: number; }
+      result.E: ParseError
+      result.R: never
+  [1] kind: pipeSubject
+      label: { x: 42, y: 42 }
+      ordinal: 0
+      result.kind: plain
+      result.A: { x: number; y: number; }
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Schema.decodeUnknown(MyStruct)
+      ordinal: 0
+      result.kind: effect
+      result.A: { readonly x: number; readonly y: number; }
+      result.E: ParseError
+      result.R: never
+  [3] kind: pipeTransformation
+      label: step 1: identity
+      ordinal: 1
+      result.kind: effect
+      result.A: { readonly x: number; readonly y: number; }
+      result.E: ParseError
+      result.R: never
+  [4] kind: pipeTransformation
+      label: step 2: identity
+      ordinal: 2
+      result.kind: effect
+      result.A: { readonly x: number; readonly y: number; }
+      result.E: ParseError
+      result.R: never
+Edges (4):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+  2 -> 3 [weak] call
+  3 -> 4 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 14:48 - 17:2
+Root: pipe(\n  Schedule.exponential(Duration.millis(10), 4),\n  Schedule.whileOutput(Duration.lessThanOrEqualTo(Duration.seconds(10))) // should not report\n)
+Path (3 nodes):
+  [0] root {plain A=Schedule<DurationInput, unknown, never>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=Schedule<Duration, unknown, never>} Schedule.exponential(Duration.millis(10), 4)
+      ==> [pipe] -> [2]
+  [2] pipeTransformation {plain A=Schedule<DurationInput, unknown, never>} step 0: Schedule.whileOutput
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: Schedule<DurationInput, unknown, never>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: Schedule.exponential(Duration.millis(10), 4)
+      ordinal: 0
+      result.kind: plain
+      result.A: Schedule<Duration, unknown, never>
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Schedule.whileOutput
+      ordinal: 0
+      result.kind: plain
+      result.A: Schedule<DurationInput, unknown, never>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [strong] pipe
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 15:24 - 15:43
+Root: Duration.millis(10)
+Path (3 nodes):
+  [0] root {plain A=Duration} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=10} 10
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=Duration} step 0: Duration.millis
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: Duration
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: 10
+      ordinal: 0
+      result.kind: plain
+      result.A: 10
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Duration.millis
+      ordinal: 0
+      result.kind: plain
+      result.A: Duration
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 16:24 - 16:72
+Root: Duration.lessThanOrEqualTo(Duration.seconds(10))
+Path (4 nodes):
+  [0] root {plain A=(self: DurationInput) => boolean} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=10} 10
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=Duration} step 0: Duration.seconds
+      ~> [call] -> [3]
+  [3] pipeTransformation {plain A=(self: DurationInput) => boolean} step 1: Duration.lessThanOrEqualTo
+
+Nodes (4):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: (self: DurationInput) => boolean
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: 10
+      ordinal: 0
+      result.kind: plain
+      result.A: 10
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Duration.seconds
+      ordinal: 0
+      result.kind: plain
+      result.A: Duration
+      result.E: 
+      result.R: 
+  [3] kind: pipeTransformation
+      label: step 1: Duration.lessThanOrEqualTo
+      ordinal: 1
+      result.kind: plain
+      result.A: (self: DurationInput) => boolean
+      result.E: 
+      result.R: 
+Edges (3):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+  2 -> 3 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 19:41 - 21:2
+Root: Effect.log("Hello").pipe(\n  Effect.ensuring(Effect.log("World"))\n)
+Path (4 nodes):
+  [0] root {effect A=void E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="Hello"} "Hello"
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=void E=never R=never} step 0: Effect.log
+      ==> [pipeable] -> [3]
+  [3] pipeTransformation {effect A=void E=never R=never} step 1: Effect.ensuring
+
+Nodes (4):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: "Hello"
+      ordinal: 0
+      result.kind: plain
+      result.A: "Hello"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.log
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+  [3] kind: pipeTransformation
+      label: step 1: Effect.ensuring
+      ordinal: 1
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+Edges (3):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+  2 -> 3 [strong] pipeable
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 20:19 - 20:38
+Root: Effect.log("World")
+Path (3 nodes):
+  [0] root {effect A=void E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="World"} "World"
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=void E=never R=never} step 0: Effect.log
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: "World"
+      ordinal: 0
+      result.kind: plain
+      result.A: "World"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.log
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call

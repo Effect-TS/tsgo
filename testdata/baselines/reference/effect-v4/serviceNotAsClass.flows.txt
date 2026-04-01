@@ -1,0 +1,112 @@
+==== /.src/serviceNotAsClass.ts (3 flows) ====
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 7:15 - 7:59
+Root: ServiceMap.Service<ConfigService>("Config")
+Path (3 nodes):
+  [0] root {plain A=Service<ConfigService, ConfigService>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="Config"} "Config"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=Service<ConfigService, ConfigService>} step 0: ServiceMap.Service
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: Service<ConfigService, ConfigService>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "Config"
+      ordinal: 0
+      result.kind: plain
+      result.A: "Config"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: ServiceMap.Service
+      ordinal: 0
+      result.kind: plain
+      result.A: Service<ConfigService, ConfigService>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 11:29 - 11:95
+Root: ServiceMap.Service<ArtifactStoreService>("@my-app/ArtifactStore")
+Path (3 nodes):
+  [0] root {plain A=Service<ArtifactStoreService, ArtifactStoreService>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="@my-app/ArtifactStore"} "@my-app/ArtifactStore"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=Service<ArtifactStoreService, ArtifactStoreService>} step 0: ServiceMap.Service
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: Service<ArtifactStoreService, ArtifactStoreService>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "@my-app/ArtifactStore"
+      ordinal: 0
+      result.kind: plain
+      result.A: "@my-app/ArtifactStore"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: ServiceMap.Service
+      ordinal: 0
+      result.kind: plain
+      result.A: Service<ArtifactStoreService, ArtifactStoreService>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 14:24 - 14:87
+Root: ServiceMap.Service<MyService, { port: number }>()("MyService")
+Path (3 nodes):
+  [0] root {plain A=ServiceClass<MyService, "MyService", { port: number; }>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="MyService"} "MyService"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=ServiceClass<MyService, "MyService", { port: number; }>} step 0: ServiceMap.Service<MyService, { port: number }>()
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: ServiceClass<MyService, "MyService", { port: number; }>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "MyService"
+      ordinal: 0
+      result.kind: plain
+      result.A: "MyService"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: ServiceMap.Service<MyService, { port: number }>()
+      ordinal: 0
+      result.kind: plain
+      result.A: ServiceClass<MyService, "MyService", { port: number; }>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call

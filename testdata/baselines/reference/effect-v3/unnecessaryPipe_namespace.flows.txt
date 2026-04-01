@@ -1,0 +1,65 @@
+==== /.src/unnecessaryPipe_namespace.ts (2 flows) ====
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 4:31 - 7:2
+Root: Fn.pipe(\n  "Hello",\n  (_) => _.length\n)
+Path (3 nodes):
+  [0] root {plain A=number} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="Hello"} "Hello"
+      ==> [pipe] -> [2]
+  [2] pipeTransformation {plain A=number} step 0: (_) => _.length
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: number
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "Hello"
+      ordinal: 0
+      result.kind: plain
+      result.A: "Hello"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: (_) => _.length
+      ordinal: 0
+      result.kind: plain
+      result.A: number
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [strong] pipe
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 9:28 - 11:2
+Root: Fn.pipe(\n  "hello"\n)
+Path (2 nodes):
+  [0] root {plain A="hello"} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="hello"} "hello"
+
+Nodes (2):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: "hello"
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "hello"
+      ordinal: 0
+      result.kind: plain
+      result.A: "hello"
+      result.E: 
+      result.R: 
+Edges (1):
+  0 -> 1 [strong] subject

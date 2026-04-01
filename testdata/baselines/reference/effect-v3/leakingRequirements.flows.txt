@@ -1,0 +1,149 @@
+==== /.src/leakingRequirements.ts (4 flows) ====
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 5:32 - 5:58
+Root: Context.Tag("FileSystem")
+Path (3 nodes):
+  [0] root {plain A=<Self, Shape>() => TagClass<Self, "FileSystem", Shape>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="FileSystem"} "FileSystem"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=<Self, Shape>() => TagClass<Self, "FileSystem", Shape>} step 0: Context.Tag
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: <Self, Shape>() => TagClass<Self, "FileSystem", Shape>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "FileSystem"
+      ordinal: 0
+      result.kind: plain
+      result.A: "FileSystem"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Context.Tag
+      ordinal: 0
+      result.kind: plain
+      result.A: <Self, Shape>() => TagClass<Self, "FileSystem", Shape>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 9:33 - 9:60
+Root: Context.Tag("LeakingDeps")
+Path (3 nodes):
+  [0] root {plain A=<Self, Shape>() => TagClass<Self, "LeakingDeps", Shape>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="LeakingDeps"} "LeakingDeps"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=<Self, Shape>() => TagClass<Self, "LeakingDeps", Shape>} step 0: Context.Tag
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: <Self, Shape>() => TagClass<Self, "LeakingDeps", Shape>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "LeakingDeps"
+      ordinal: 0
+      result.kind: plain
+      result.A: "LeakingDeps"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Context.Tag
+      ordinal: 0
+      result.kind: plain
+      result.A: <Self, Shape>() => TagClass<Self, "LeakingDeps", Shape>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 15:28 - 15:55
+Root: Context.Tag("_LocalClass")
+Path (3 nodes):
+  [0] root {plain A=<Self, Shape>() => TagClass<Self, "_LocalClass", Shape>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="_LocalClass"} "_LocalClass"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=<Self, Shape>() => TagClass<Self, "_LocalClass", Shape>} step 0: Context.Tag
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: <Self, Shape>() => TagClass<Self, "_LocalClass", Shape>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "_LocalClass"
+      ordinal: 0
+      result.kind: plain
+      result.A: "_LocalClass"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Context.Tag
+      ordinal: 0
+      result.kind: plain
+      result.A: <Self, Shape>() => TagClass<Self, "_LocalClass", Shape>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 19:30 - 19:59
+Root: Context.Tag("_LocalLeaking")
+Path (3 nodes):
+  [0] root {plain A=<Self, Shape>() => TagClass<Self, "_LocalLeaking", Shape>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="_LocalLeaking"} "_LocalLeaking"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=<Self, Shape>() => TagClass<Self, "_LocalLeaking", Shape>} step 0: Context.Tag
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: <Self, Shape>() => TagClass<Self, "_LocalLeaking", Shape>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "_LocalLeaking"
+      ordinal: 0
+      result.kind: plain
+      result.A: "_LocalLeaking"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Context.Tag
+      ordinal: 0
+      result.kind: plain
+      result.A: <Self, Shape>() => TagClass<Self, "_LocalLeaking", Shape>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call

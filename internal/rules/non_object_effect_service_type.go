@@ -20,7 +20,7 @@ var NonObjectEffectServiceType = rule.Rule{
 	DefaultSeverity: etscore.SeverityError,
 	SupportedEffect: []string{"v3"},
 	Codes: []int32{
-		tsdiag.Effect_Service_requires_the_service_type_to_be_an_object_and_not_a_primitive_type_Consider_wrapping_the_value_in_an_object_or_manually_using_Context_Tag_or_Effect_Tag_if_you_want_to_use_a_primitive_instead_effect_nonObjectEffectServiceType.Code(),
+		tsdiag.Effect_Service_is_declared_with_a_primitive_service_type_Effect_Service_models_object_shaped_services_primitive_values_use_Context_Tag_or_Effect_Tag_directly_effect_nonObjectEffectServiceType.Code(),
 	},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		// V3-only rule
@@ -99,7 +99,7 @@ func checkServicePropertyTypes(ctx *rule.Context, node *ast.Node) []*ast.Diagnos
 				diags = append(diags, ctx.NewDiagnostic(
 					ctx.SourceFile,
 					ctx.GetErrorRange(pa.Name()),
-					tsdiag.Effect_Service_requires_the_service_type_to_be_an_object_and_not_a_primitive_type_Consider_wrapping_the_value_in_an_object_or_manually_using_Context_Tag_or_Effect_Tag_if_you_want_to_use_a_primitive_instead_effect_nonObjectEffectServiceType,
+					tsdiag.Effect_Service_is_declared_with_a_primitive_service_type_Effect_Service_models_object_shaped_services_primitive_values_use_Context_Tag_or_Effect_Tag_directly_effect_nonObjectEffectServiceType,
 					nil,
 				))
 			}
@@ -116,7 +116,7 @@ func checkServicePropertyTypes(ctx *rule.Context, node *ast.Node) []*ast.Diagnos
 					diags = append(diags, ctx.NewDiagnostic(
 						ctx.SourceFile,
 						ctx.GetErrorRange(pa.Name()),
-						tsdiag.Effect_Service_requires_the_service_type_to_be_an_object_and_not_a_primitive_type_Consider_wrapping_the_value_in_an_object_or_manually_using_Context_Tag_or_Effect_Tag_if_you_want_to_use_a_primitive_instead_effect_nonObjectEffectServiceType,
+						tsdiag.Effect_Service_is_declared_with_a_primitive_service_type_Effect_Service_models_object_shaped_services_primitive_values_use_Context_Tag_or_Effect_Tag_directly_effect_nonObjectEffectServiceType,
 						nil,
 					))
 					break
@@ -136,7 +136,7 @@ func checkServicePropertyTypes(ctx *rule.Context, node *ast.Node) []*ast.Diagnos
 					diags = append(diags, ctx.NewDiagnostic(
 						ctx.SourceFile,
 						ctx.GetErrorRange(pa.Name()),
-						tsdiag.Effect_Service_requires_the_service_type_to_be_an_object_and_not_a_primitive_type_Consider_wrapping_the_value_in_an_object_or_manually_using_Context_Tag_or_Effect_Tag_if_you_want_to_use_a_primitive_instead_effect_nonObjectEffectServiceType,
+						tsdiag.Effect_Service_is_declared_with_a_primitive_service_type_Effect_Service_models_object_shaped_services_primitive_values_use_Context_Tag_or_Effect_Tag_directly_effect_nonObjectEffectServiceType,
 						nil,
 					))
 				}
@@ -155,7 +155,7 @@ func checkServicePropertyTypes(ctx *rule.Context, node *ast.Node) []*ast.Diagnos
 					diags = append(diags, ctx.NewDiagnostic(
 						ctx.SourceFile,
 						ctx.GetErrorRange(pa.Name()),
-						tsdiag.Effect_Service_requires_the_service_type_to_be_an_object_and_not_a_primitive_type_Consider_wrapping_the_value_in_an_object_or_manually_using_Context_Tag_or_Effect_Tag_if_you_want_to_use_a_primitive_instead_effect_nonObjectEffectServiceType,
+						tsdiag.Effect_Service_is_declared_with_a_primitive_service_type_Effect_Service_models_object_shaped_services_primitive_values_use_Context_Tag_or_Effect_Tag_directly_effect_nonObjectEffectServiceType,
 						nil,
 					))
 					break

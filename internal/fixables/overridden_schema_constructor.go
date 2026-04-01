@@ -12,7 +12,7 @@ import (
 var OverriddenSchemaConstructorFix = fixable.Fixable{
 	Name:        "overriddenSchemaConstructorFix",
 	Description: "Remove or rewrite constructor in Schema class",
-	ErrorCodes:  []int32{tsdiag.Classes_extending_Schema_must_not_override_the_constructor_this_is_because_it_silently_breaks_the_schema_decoding_behaviour_If_that_s_needed_we_recommend_instead_to_use_a_static_new_method_that_constructs_the_instance_effect_overriddenSchemaConstructor.Code()},
+	ErrorCodes:  []int32{tsdiag.This_Schema_subclass_defines_its_own_constructor_For_Schema_classes_constructor_overrides_break_decoding_behavior_for_the_class_shape_Custom_construction_can_be_expressed_through_a_static_new_method_instead_effect_overriddenSchemaConstructor.Code()},
 	FixIDs: []string{
 		"overriddenSchemaConstructor_fix",
 		"overriddenSchemaConstructor_static",

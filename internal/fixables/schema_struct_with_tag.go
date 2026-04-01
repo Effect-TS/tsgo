@@ -13,7 +13,7 @@ import (
 var SchemaStructWithTagFix = fixable.Fixable{
 	Name:        "schemaStructWithTag",
 	Description: "Rewrite as Schema.TaggedStruct",
-	ErrorCodes:  []int32{tsdiag.Schema_Struct_with_a_tag_field_can_be_simplified_to_Schema_TaggedStruct_to_make_the_tag_optional_in_the_constructor_effect_schemaStructWithTag.Code()},
+	ErrorCodes:  []int32{tsdiag.This_Schema_Struct_includes_a_tag_field_Schema_TaggedStruct_is_the_tagged_struct_form_for_this_pattern_and_makes_the_tag_optional_in_the_constructor_effect_schemaStructWithTag.Code()},
 	FixIDs:      []string{"schemaStructWithTag_fix"},
 	Run:         runSchemaStructWithTagFix,
 }

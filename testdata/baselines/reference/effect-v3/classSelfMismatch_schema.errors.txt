@@ -1,15 +1,15 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/classSelfMismatch_schema.ts(10,54): error TS377046: Self type parameter should be 'InvalidSchemaClass'. effect(classSelfMismatch)
+/.src/classSelfMismatch_schema.ts(10,54): error TS377046: The `Self` type parameter for this class should be `InvalidSchemaClass`. effect(classSelfMismatch)
 /.src/classSelfMismatch_schema.ts(15,54): suggestion TS377045: Identifier 'ValidSchemaTaggedClass' is redundant since it equals the _tag value. effect(redundantSchemaTagIdentifier)
-/.src/classSelfMismatch_schema.ts(22,30): error TS377046: Self type parameter should be 'InvalidSchemaTaggedClass'. effect(classSelfMismatch)
+/.src/classSelfMismatch_schema.ts(22,30): error TS377046: The `Self` type parameter for this class should be `InvalidSchemaTaggedClass`. effect(classSelfMismatch)
 /.src/classSelfMismatch_schema.ts(22,54): suggestion TS377045: Identifier 'InvalidSchemaTaggedClass' is redundant since it equals the _tag value. effect(redundantSchemaTagIdentifier)
 /.src/classSelfMismatch_schema.ts(28,54): suggestion TS377045: Identifier 'ValidSchemaTaggedError' is redundant since it equals the _tag value. effect(redundantSchemaTagIdentifier)
-/.src/classSelfMismatch_schema.ts(35,30): error TS377046: Self type parameter should be 'InvalidSchemaTaggedError'. effect(classSelfMismatch)
+/.src/classSelfMismatch_schema.ts(35,30): error TS377046: The `Self` type parameter for this class should be `InvalidSchemaTaggedError`. effect(classSelfMismatch)
 /.src/classSelfMismatch_schema.ts(35,54): suggestion TS377045: Identifier 'InvalidSchemaTaggedError' is redundant since it equals the _tag value. effect(redundantSchemaTagIdentifier)
 /.src/classSelfMismatch_schema.ts(41,58): suggestion TS377045: Identifier 'ValidSchemaTaggedRequest' is redundant since it equals the _tag value. effect(redundantSchemaTagIdentifier)
-/.src/classSelfMismatch_schema.ts(50,32): error TS377046: Self type parameter should be 'InvalidSchemaTaggedRequest'. effect(classSelfMismatch)
+/.src/classSelfMismatch_schema.ts(50,32): error TS377046: The `Self` type parameter for this class should be `InvalidSchemaTaggedRequest`. effect(classSelfMismatch)
 /.src/classSelfMismatch_schema.ts(50,58): suggestion TS377045: Identifier 'InvalidSchemaTaggedRequest' is redundant since it equals the _tag value. effect(redundantSchemaTagIdentifier)
 
 
@@ -25,7 +25,7 @@ Effect version: 3.19.19
     // invalid usage: Schema.Class<ValidSchemaClass> should be Schema.Class<InvalidSchemaClass> because the Self type parameter is not the same as the class name
     export class InvalidSchemaClass extends Schema.Class<ValidSchemaClass>("InvalidSchemaClass")({
                                                          ~~~~~~~~~~~~~~~~
-!!! error TS377046: Self type parameter should be 'InvalidSchemaClass'. effect(classSelfMismatch)
+!!! error TS377046: The `Self` type parameter for this class should be `InvalidSchemaClass`. effect(classSelfMismatch)
       prop: Schema.String
     }) {}
     
@@ -41,7 +41,7 @@ Effect version: 3.19.19
     export class InvalidSchemaTaggedClass
       extends Schema.TaggedClass<ValidSchemaTaggedClass>("InvalidSchemaTaggedClass")("InvalidSchemaTaggedClass", {
                                  ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS377046: Self type parameter should be 'InvalidSchemaTaggedClass'. effect(classSelfMismatch)
+!!! error TS377046: The `Self` type parameter for this class should be `InvalidSchemaTaggedClass`. effect(classSelfMismatch)
                                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! suggestion TS377045: Identifier 'InvalidSchemaTaggedClass' is redundant since it equals the _tag value. effect(redundantSchemaTagIdentifier)
         prop: Schema.String
@@ -60,7 +60,7 @@ Effect version: 3.19.19
     export class InvalidSchemaTaggedError
       extends Schema.TaggedError<ValidSchemaTaggedError>("InvalidSchemaTaggedError")("InvalidSchemaTaggedError", {
                                  ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS377046: Self type parameter should be 'InvalidSchemaTaggedError'. effect(classSelfMismatch)
+!!! error TS377046: The `Self` type parameter for this class should be `InvalidSchemaTaggedError`. effect(classSelfMismatch)
                                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! suggestion TS377045: Identifier 'InvalidSchemaTaggedError' is redundant since it equals the _tag value. effect(redundantSchemaTagIdentifier)
         prop: Schema.String
@@ -81,7 +81,7 @@ Effect version: 3.19.19
     export class InvalidSchemaTaggedRequest
       extends Schema.TaggedRequest<ValidSchemaTaggedRequest>("InvalidSchemaTaggedRequest")("InvalidSchemaTaggedRequest", {
                                    ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS377046: Self type parameter should be 'InvalidSchemaTaggedRequest'. effect(classSelfMismatch)
+!!! error TS377046: The `Self` type parameter for this class should be `InvalidSchemaTaggedRequest`. effect(classSelfMismatch)
                                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! suggestion TS377045: Identifier 'InvalidSchemaTaggedRequest' is redundant since it equals the _tag value. effect(redundantSchemaTagIdentifier)
         payload: {},

@@ -34,7 +34,7 @@ var SchemaSyncInEffect = rule.Rule{
 	Description:     "Suggests using Effect-based Schema methods instead of sync methods inside Effect generators",
 	DefaultSeverity: etscore.SeveritySuggestion,
 	SupportedEffect: []string{"v3"},
-	Codes:           []int32{tsdiag.Using_0_inside_an_Effect_generator_is_not_recommended_Use_Schema_1_instead_to_get_properly_typed_error_channel_effect_schemaSyncInEffect.Code()},
+	Codes:           []int32{tsdiag.X_0_is_used_inside_an_Effect_generator_Schema_1_preserves_the_typed_Effect_error_channel_for_this_operation_without_throwing_effect_schemaSyncInEffect.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		version := ctx.TypeParser.SupportedEffectVersion()
 		var syncToEffectMethod map[string]string
@@ -103,7 +103,7 @@ func checkSchemaSyncInEffect(ctx *rule.Context, node *ast.Node, syncToEffectMeth
 	calleeText := scanner.GetSourceTextOfNodeFromSourceFile(ctx.SourceFile, callee, false)
 	effectMethodName := syncToEffectMethod[methodName]
 
-	return ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(callee), tsdiag.Using_0_inside_an_Effect_generator_is_not_recommended_Use_Schema_1_instead_to_get_properly_typed_error_channel_effect_schemaSyncInEffect, nil, calleeText, effectMethodName)
+	return ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(callee), tsdiag.X_0_is_used_inside_an_Effect_generator_Schema_1_preserves_the_typed_Effect_error_channel_for_this_operation_without_throwing_effect_schemaSyncInEffect, nil, calleeText, effectMethodName)
 }
 
 // matchSchemaSyncMethod checks if the node references one of the Schema sync methods via

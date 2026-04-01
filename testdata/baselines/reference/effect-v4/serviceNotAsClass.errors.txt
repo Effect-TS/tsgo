@@ -1,8 +1,8 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/serviceNotAsClass.ts(7,16): warning TS377056: ServiceMap.Service should be used in a class declaration instead of as a variable. Use: class Config extends ServiceMap.Service<Config, ConfigService>()("Config") {} effect(serviceNotAsClass)
-/.src/serviceNotAsClass.ts(11,30): warning TS377056: ServiceMap.Service should be used in a class declaration instead of as a variable. Use: class ArtifactStore extends ServiceMap.Service<ArtifactStore, ArtifactStoreService>()("@my-app/ArtifactStore") {} effect(serviceNotAsClass)
+/.src/serviceNotAsClass.ts(7,16): warning TS377056: `ServiceMap.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `class Config extends ServiceMap.Service<Config, ConfigService>()("Config") {}`. effect(serviceNotAsClass)
+/.src/serviceNotAsClass.ts(11,30): warning TS377056: `ServiceMap.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `class ArtifactStore extends ServiceMap.Service<ArtifactStore, ArtifactStoreService>()("@my-app/ArtifactStore") {}`. effect(serviceNotAsClass)
 
 
 ==== /.src/serviceNotAsClass.ts (2 errors) ====
@@ -14,13 +14,13 @@ Effect version: 4.0.0
     // Flagged: const variable with ServiceMap.Service
     const Config = ServiceMap.Service<ConfigService>("Config")
                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377056: ServiceMap.Service should be used in a class declaration instead of as a variable. Use: class Config extends ServiceMap.Service<Config, ConfigService>()("Config") {} effect(serviceNotAsClass)
+!!! warning TS377056: `ServiceMap.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `class Config extends ServiceMap.Service<Config, ConfigService>()("Config") {}`. effect(serviceNotAsClass)
     
     // Flagged: exported const variable with ServiceMap.Service
     interface ArtifactStoreService {}
     export const ArtifactStore = ServiceMap.Service<ArtifactStoreService>("@my-app/ArtifactStore")
                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377056: ServiceMap.Service should be used in a class declaration instead of as a variable. Use: class ArtifactStore extends ServiceMap.Service<ArtifactStore, ArtifactStoreService>()("@my-app/ArtifactStore") {} effect(serviceNotAsClass)
+!!! warning TS377056: `ServiceMap.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `class ArtifactStore extends ServiceMap.Service<ArtifactStore, ArtifactStoreService>()("@my-app/ArtifactStore") {}`. effect(serviceNotAsClass)
     
     // Not flagged: correct class extends form
     class MyService extends ServiceMap.Service<MyService, { port: number }>()("MyService") {}

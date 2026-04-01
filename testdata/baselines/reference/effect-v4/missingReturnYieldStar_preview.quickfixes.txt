@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (7:3-7:8) TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+[D1] (7:3-7:8) TS377006: This Effect never succeeds; using `return yield*` preserves a definitive generator exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
   Fix 0: "Disable missingReturnYieldStar for this line"
   Fix 1: "Disable missingReturnYieldStar for entire file"
   Fix 2: "Add return statement"

@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (5:24-7:5) TS377011: Effect.fn returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead with Effect.withSpan("preview") piped in the end to maintain tracing spans. effect(effectFnIife)
+[D1] (5:24-7:5) TS377011: `Effect.fn` returns a reusable function that can take arguments, but it is invoked immediately here. `Effect.gen` represents the immediate-use form for this pattern with Effect.withSpan("preview") piped in the end to maintain tracing spans. effect(effectFnIife)
   Fix 0: "Disable effectFnIife for this line"
   Fix 1: "Disable effectFnIife for entire file"
   Fix 2: "Convert to Effect.gen"

@@ -13,7 +13,7 @@ import (
 var EffectMapVoidFix = fixable.Fixable{
 	Name:        "effectMapVoid",
 	Description: "Replace with Effect.asVoid",
-	ErrorCodes:  []int32{tsdiag.Effect_asVoid_can_be_used_instead_to_discard_the_success_value_effect_effectMapVoid.Code()},
+	ErrorCodes:  []int32{tsdiag.This_expression_discards_the_success_value_through_mapping_Effect_asVoid_represents_that_form_directly_effect_effectMapVoid.Code()},
 	FixIDs:      []string{"effectMapVoid_fix"},
 	Run:         runEffectMapVoidFix,
 }

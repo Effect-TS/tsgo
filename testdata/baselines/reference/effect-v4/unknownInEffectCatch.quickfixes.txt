@@ -1,17 +1,14 @@
 === Quick Fix Inventory ===
 
-[D1] (4:24-4:41) TS377021: The 'catch' callback in Effect.tryPromise returns 'unknown'. The catch callback should be used to provide typed errors.
-Consider wrapping unknown errors into Effect's Data.TaggedError for example, or narrow down the type to the specific error raised. effect(unknownInEffectCatch)
+[D1] (4:24-4:41) TS377021: The `catch` callback in `Effect.tryPromise` returns `unknown`, so the Effect error type stays untyped. A specific typed error preserves error-channel information, for example by narrowing the value or wrapping it in `Data.TaggedError`. effect(unknownInEffectCatch)
   Fix 0: "Disable unknownInEffectCatch for this line"
   Fix 1: "Disable unknownInEffectCatch for entire file"
 
-[D2] (18:36-18:53) TS377021: The 'catch' callback in Effect.tryPromise returns 'unknown'. The catch callback should be used to provide typed errors.
-Consider wrapping unknown errors into Effect's Data.TaggedError for example, or narrow down the type to the specific error raised. effect(unknownInEffectCatch)
+[D2] (18:36-18:53) TS377021: The `catch` callback in `Effect.tryPromise` returns `unknown`, so the Effect error type stays untyped. A specific typed error preserves error-channel information, for example by narrowing the value or wrapping it in `Data.TaggedError`. effect(unknownInEffectCatch)
   Fix 0: "Disable unknownInEffectCatch for this line"
   Fix 1: "Disable unknownInEffectCatch for entire file"
 
-[D3] (23:42-23:59) TS377021: The 'catch' callback in Effect.tryPromise returns 'unknown'. The catch callback should be used to provide typed errors.
-Consider wrapping unknown errors into Effect's Data.TaggedError for example, or narrow down the type to the specific error raised. effect(unknownInEffectCatch)
+[D3] (23:42-23:59) TS377021: The `catch` callback in `Effect.tryPromise` returns `unknown`, so the Effect error type stays untyped. A specific typed error preserves error-channel information, for example by narrowing the value or wrapping it in `Data.TaggedError`. effect(unknownInEffectCatch)
   Fix 0: "Disable unknownInEffectCatch for this line"
   Fix 1: "Disable unknownInEffectCatch for entire file"
 

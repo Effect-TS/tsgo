@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/missingReturnYieldStar_yieldable.ts(6,13): error TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+/.src/missingReturnYieldStar_yieldable.ts(6,13): error TS377006: This Effect never succeeds; using `return yield*` preserves a definitive generator exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
 
 
 ==== /.src/missingReturnYieldStar_yieldable.ts (1 errors) ====
@@ -12,7 +12,7 @@ Effect version: 4.0.0
             if (n === 0) {
                 yield* Option.none() // should trigger because Option<A> is yieldable
                 ~~~~~
-!!! error TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+!!! error TS377006: This Effect never succeeds; using `return yield*` preserves a definitive generator exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
             }
             return n / 1
         })

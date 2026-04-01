@@ -1,13 +1,13 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/nonObjectEffectServiceType.ts(12,3): error TS377048: Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)
-/.src/nonObjectEffectServiceType.ts(18,3): error TS377048: Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)
-/.src/nonObjectEffectServiceType.ts(25,5): error TS377048: Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)
-/.src/nonObjectEffectServiceType.ts(32,3): error TS377048: Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)
-/.src/nonObjectEffectServiceType.ts(39,5): error TS377048: Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)
-/.src/nonObjectEffectServiceType.ts(46,3): error TS377048: Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)
-/.src/nonObjectEffectServiceType.ts(52,3): error TS377048: Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)
+/.src/nonObjectEffectServiceType.ts(12,3): error TS377048: `Effect.Service` is declared with a primitive service type. `Effect.Service` models object-shaped services; primitive values use `Context.Tag` or `Effect.Tag` directly. effect(nonObjectEffectServiceType)
+/.src/nonObjectEffectServiceType.ts(18,3): error TS377048: `Effect.Service` is declared with a primitive service type. `Effect.Service` models object-shaped services; primitive values use `Context.Tag` or `Effect.Tag` directly. effect(nonObjectEffectServiceType)
+/.src/nonObjectEffectServiceType.ts(25,5): error TS377048: `Effect.Service` is declared with a primitive service type. `Effect.Service` models object-shaped services; primitive values use `Context.Tag` or `Effect.Tag` directly. effect(nonObjectEffectServiceType)
+/.src/nonObjectEffectServiceType.ts(32,3): error TS377048: `Effect.Service` is declared with a primitive service type. `Effect.Service` models object-shaped services; primitive values use `Context.Tag` or `Effect.Tag` directly. effect(nonObjectEffectServiceType)
+/.src/nonObjectEffectServiceType.ts(39,5): error TS377048: `Effect.Service` is declared with a primitive service type. `Effect.Service` models object-shaped services; primitive values use `Context.Tag` or `Effect.Tag` directly. effect(nonObjectEffectServiceType)
+/.src/nonObjectEffectServiceType.ts(46,3): error TS377048: `Effect.Service` is declared with a primitive service type. `Effect.Service` models object-shaped services; primitive values use `Context.Tag` or `Effect.Tag` directly. effect(nonObjectEffectServiceType)
+/.src/nonObjectEffectServiceType.ts(52,3): error TS377048: `Effect.Service` is declared with a primitive service type. `Effect.Service` models object-shaped services; primitive values use `Context.Tag` or `Effect.Tag` directly. effect(nonObjectEffectServiceType)
 
 
 ==== /.src/nonObjectEffectServiceType.ts (7 errors) ====
@@ -24,7 +24,7 @@ Effect version: 3.19.19
       // @ts-expect-error
       effect: Effect.succeed("test" as ("test" | "other"))
       ~~~~~~
-!!! error TS377048: Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)
+!!! error TS377048: `Effect.Service` is declared with a primitive service type. `Effect.Service` models object-shaped services; primitive values use `Context.Tag` or `Effect.Tag` directly. effect(nonObjectEffectServiceType)
     }) {}
     
     // should warn on "effect" key because it returns an effect that resolves to a primitive
@@ -32,7 +32,7 @@ Effect version: 3.19.19
       // @ts-expect-error
       effect: Effect.succeed("test" as const)
       ~~~~~~
-!!! error TS377048: Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)
+!!! error TS377048: `Effect.Service` is declared with a primitive service type. `Effect.Service` models object-shaped services; primitive values use `Context.Tag` or `Effect.Tag` directly. effect(nonObjectEffectServiceType)
     }) {}
     
     // should warn on "effect" key because it returns a function that returns an effect that resolves to a primitive
@@ -41,7 +41,7 @@ Effect version: 3.19.19
         // @ts-expect-error
         effect: (_: string) => Effect.succeed("test" as const)
         ~~~~~~
-!!! error TS377048: Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)
+!!! error TS377048: `Effect.Service` is declared with a primitive service type. `Effect.Service` models object-shaped services; primitive values use `Context.Tag` or `Effect.Tag` directly. effect(nonObjectEffectServiceType)
       })
     {}
     
@@ -50,7 +50,7 @@ Effect version: 3.19.19
       // @ts-expect-error
       scoped: Effect.succeed("test" as const)
       ~~~~~~
-!!! error TS377048: Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)
+!!! error TS377048: `Effect.Service` is declared with a primitive service type. `Effect.Service` models object-shaped services; primitive values use `Context.Tag` or `Effect.Tag` directly. effect(nonObjectEffectServiceType)
     }) {}
     
     // should warn on "scoped" key because it returns a function that returns an effect that resolves to a primitive
@@ -59,7 +59,7 @@ Effect version: 3.19.19
         // @ts-expect-error
         scoped: (_: string) => Effect.succeed("test" as const)
         ~~~~~~
-!!! error TS377048: Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)
+!!! error TS377048: `Effect.Service` is declared with a primitive service type. `Effect.Service` models object-shaped services; primitive values use `Context.Tag` or `Effect.Tag` directly. effect(nonObjectEffectServiceType)
       })
     {}
     
@@ -68,7 +68,7 @@ Effect version: 3.19.19
       // @ts-expect-error
       succeed: "test" as const
       ~~~~~~~
-!!! error TS377048: Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)
+!!! error TS377048: `Effect.Service` is declared with a primitive service type. `Effect.Service` models object-shaped services; primitive values use `Context.Tag` or `Effect.Tag` directly. effect(nonObjectEffectServiceType)
     }) {}
     
     // should warn on "sync" key because it is function that returns a primitive
@@ -76,6 +76,6 @@ Effect version: 3.19.19
       // @ts-expect-error
       sync: () => "test" as const
       ~~~~
-!!! error TS377048: Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)
+!!! error TS377048: `Effect.Service` is declared with a primitive service type. `Effect.Service` models object-shaped services; primitive values use `Context.Tag` or `Effect.Tag` directly. effect(nonObjectEffectServiceType)
     }) {}
     

@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (7:10-7:26) TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+[D1] (7:10-7:26) TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
   Fix 0: "Disable preferSchemaOverJson for this line"
   Fix 1: "Disable preferSchemaOverJson for entire file"
 

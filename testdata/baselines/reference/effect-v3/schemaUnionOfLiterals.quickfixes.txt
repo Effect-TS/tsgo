@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (5:33-5:87) TS377038: A Schema.Union of multiple Schema.Literal calls can be simplified to a single Schema.Literal call. effect(schemaUnionOfLiterals)
+[D1] (5:33-5:87) TS377038: This `Schema.Union` contains multiple `Schema.Literal` members and can be simplified to a single `Schema.Literal` call. effect(schemaUnionOfLiterals)
   Fix 0: "Disable schemaUnionOfLiterals for this line"
   Fix 1: "Disable schemaUnionOfLiterals for entire file"
   Fix 2: "Replace with a single Schema.Literal call"

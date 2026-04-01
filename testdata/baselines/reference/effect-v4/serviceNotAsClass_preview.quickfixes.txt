@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (5:24-5:71) TS377056: ServiceMap.Service should be used in a class declaration instead of as a variable. Use: class Preview extends ServiceMap.Service<Preview, { port: number }>()("Preview") {} effect(serviceNotAsClass)
+[D1] (5:24-5:71) TS377056: `ServiceMap.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `class Preview extends ServiceMap.Service<Preview, { port: number }>()("Preview") {}`. effect(serviceNotAsClass)
   Fix 0: "Disable serviceNotAsClass for this line"
   Fix 1: "Disable serviceNotAsClass for entire file"
   Fix 2: "Convert to class declaration"

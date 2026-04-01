@@ -3,7 +3,7 @@
 [D1] (1:18-1:23) TS6133: 'Layer' is declared but its value is never read.
   (no quick fixes)
 
-[D2] (6:13-6:20) TS377047: Can be rewritten as a reusable function: Effect.fn("UserService.getUser")(function*(id) { ... }). effect(effectFnOpportunity)
+[D2] (6:13-6:20) TS377047: This expression can be rewritten in the reusable function form `Effect.fn("UserService.getUser")(function*(id) { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fn(\"UserService.getUser\")"
