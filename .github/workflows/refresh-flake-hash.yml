@@ -52,20 +52,12 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           submodules: recursive
 
-      - name: Checkout current branch
-        if: github.event_name == 'workflow_dispatch'
+      - name: Checkout requested branch
+        if: github.event_name != 'pull_request_target'
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           ref: ${{ inputs.target_ref || github.ref_name }}
-          submodules: recursive
-
-      - name: Checkout requested branch
-        if: github.event_name == 'workflow_call'
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          ref: ${{ inputs.target_ref }}
           submodules: recursive
 
       - name: Install Nix
