@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/missingReturnYieldStar_yieldable.ts(8,7): error TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+/.src/missingReturnYieldStar_yieldable.ts(8,7): error TS377006: This Effect never succeeds; using `return yield*` preserves a definitive generator exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
 
 
 ==== /.src/missingReturnYieldStar_yieldable.ts (1 errors) ====
@@ -14,7 +14,7 @@ Effect version: 3.19.19
           // In v3, yieldable parsing falls back to Effect typing.
           yield* Effect.fail("no zero!")
           ~~~~~
-!!! error TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+!!! error TS377006: This Effect never succeeds; using `return yield*` preserves a definitive generator exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
         }
         return n / 1
       })

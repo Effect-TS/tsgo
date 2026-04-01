@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/schemaStructWithTag.ts(4,21): suggestion TS377036: Schema.Struct with a _tag field can be simplified to Schema.TaggedStruct to make the tag optional in the constructor. effect(schemaStructWithTag)
+/.src/schemaStructWithTag.ts(4,21): suggestion TS377036: This `Schema.Struct` includes a `_tag` field. `Schema.TaggedStruct` is the tagged-struct form for this pattern and makes the tag optional in the constructor. effect(schemaStructWithTag)
 
 
 ==== /.src/schemaStructWithTag.ts (1 errors) ====
@@ -18,7 +18,7 @@ Effect version: 4.0.0
     ~~~~~~~~~~~~~~~~~~~~
     })
     ~~
-!!! suggestion TS377036: Schema.Struct with a _tag field can be simplified to Schema.TaggedStruct to make the tag optional in the constructor. effect(schemaStructWithTag)
+!!! suggestion TS377036: This `Schema.Struct` includes a `_tag` field. `Schema.TaggedStruct` is the tagged-struct form for this pattern and makes the tag optional in the constructor. effect(schemaStructWithTag)
     
     // so it can be rewritten as follows
     export const UserWithTag = Schema.TaggedStruct("User", {

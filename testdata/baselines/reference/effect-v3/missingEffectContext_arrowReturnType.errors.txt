@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/missingEffectContext_arrowReturnType.ts(20,3): error TS377004: Missing context R in the expected Effect type. effect(missingEffectContext)
+/.src/missingEffectContext_arrowReturnType.ts(20,3): error TS377004: This Effect requires a service that is missing from the expected Effect context: `R`. effect(missingEffectContext)
 
 
 ==== /.src/missingEffectContext_arrowReturnType.ts (1 errors) ====
@@ -26,5 +26,5 @@ Effect version: 3.19.19
       // @ts-expect-error
       Effect.void.pipe(Effect.andThen(eff))
       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS377004: Missing context R in the expected Effect type. effect(missingEffectContext)
+!!! error TS377004: This Effect requires a service that is missing from the expected Effect context: `R`. effect(missingEffectContext)
     

@@ -1,0 +1,149 @@
+==== /.src/tryCatchInEffectGen_finally.ts (4 flows) ====
+
+=== Effect Flow ===
+Kind: effectGen
+Location: 4:32 - 11:3
+Root: Effect.gen(function*() {\n  try {\n    const result = yield* Effect.succeed(42)\n    return result\n  } finally {\n    console.log("exit")\n  }\n})
+Path (3 nodes):
+  [0] root {effect A=number E=never R=never} Effect.gen
+      ==> [executes] -> [1]
+  [1] genSequence {effect A=number E=never R=never} generator body
+      ==> [next] -> [2]
+  [2] statement {unknown} try {\n    const result = yield* Effect.succeed(42)\n    return result\n  } f...
+
+Nodes (3):
+  [0] kind: root
+      label: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [1] kind: genSequence
+      label: generator body
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [2] kind: statement
+      label: try {\n    const result = yield* Effect.succeed(42)\n    return result\n  } f...
+      ordinal: 0
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] executes
+  1 -> 2 [strong] next
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 4:32 - 11:3
+Root: Effect.gen(function*() {\n  try {\n    const result = yield* Effect.succeed(42)\n    return result\n  } finally {\n    console.log("exit")\n  }\n})
+Path (3 nodes):
+  [0] root {effect A=number E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=() => Generator<Effect<number, never, never>, number, any>} function*() {\n  try {\n    const result = yield* Effect.succeed(42)\n    ret...
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=number E=never R=never} step 0: Effect.gen
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: function*() {\n  try {\n    const result = yield* Effect.succeed(42)\n    ret...
+      ordinal: 0
+      result.kind: plain
+      result.A: () => Generator<Effect<number, never, never>, number, any>
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 6:26 - 6:45
+Root: Effect.succeed(42)
+Path (3 nodes):
+  [0] root {effect A=number E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=42} 42
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=number E=never R=never} step 0: Effect.succeed
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: 42
+      ordinal: 0
+      result.kind: plain
+      result.A: 42
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 8:14 - 9:24
+Root: console.log("exit")
+Path (3 nodes):
+  [0] root {plain A=void} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="exit"} "exit"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=void} step 0: console.log
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: void
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "exit"
+      ordinal: 0
+      result.kind: plain
+      result.A: "exit"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: console.log
+      ordinal: 0
+      result.kind: plain
+      result.A: void
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call

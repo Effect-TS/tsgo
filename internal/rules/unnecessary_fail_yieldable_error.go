@@ -19,12 +19,12 @@ var UnnecessaryFailYieldableError = rule.Rule{
 	Description:     "Suggests yielding yieldable errors directly instead of wrapping with Effect.fail",
 	DefaultSeverity: etscore.SeveritySuggestion,
 	SupportedEffect: []string{"v3", "v4"},
-	Codes:           []int32{tsdiag.This_Effect_fail_call_uses_a_yieldable_error_type_as_argument_You_can_yield_Asterisk_the_error_directly_instead_effect_unnecessaryFailYieldableError.Code()},
+	Codes:           []int32{tsdiag.This_yield_Asterisk_Effect_fail_passes_a_yieldable_error_value_yield_Asterisk_represents_that_value_directly_without_wrapping_it_in_Effect_fail_effect_unnecessaryFailYieldableError.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeUnnecessaryFailYieldableError(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
-			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.This_Effect_fail_call_uses_a_yieldable_error_type_as_argument_You_can_yield_Asterisk_the_error_directly_instead_effect_unnecessaryFailYieldableError, nil)
+			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.This_yield_Asterisk_Effect_fail_passes_a_yieldable_error_value_yield_Asterisk_represents_that_value_directly_without_wrapping_it_in_Effect_fail_effect_unnecessaryFailYieldableError, nil)
 		}
 		return diags
 	},

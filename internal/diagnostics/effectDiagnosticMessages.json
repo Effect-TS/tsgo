@@ -3,7 +3,7 @@
         "category": "Warning",
         "code": 377000
     },
-    "Effect must be yielded or assigned to a variable. effect(floatingEffect)": {
+    "This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)": {
         "category": "Error",
         "code": 377001
     },
@@ -11,11 +11,11 @@
         "category": "Error",
         "code": 377003
     },
-    "Missing context {0} in the expected Effect type. effect(missingEffectContext)": {
+    "This Effect requires a service that is missing from the expected Effect context: `{0}`. effect(missingEffectContext)": {
         "category": "Error",
         "code": 377004
     },
-    "It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)": {
+    "This Effect never succeeds; using `return yield*` preserves a definitive generator exit point for type narrowing and tooling support. effect(missingReturnYieldStar)": {
         "category": "Error",
         "code": 377006
     },
@@ -23,23 +23,23 @@
         "category": "Error",
         "code": 377007
     },
-    "When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)": {
+    "This uses `yield` for an `Effect` value. `yield*` is the Effect-aware form in this context. effect(missingStarInYieldEffectGen)": {
         "category": "Error",
         "code": 377008
     },
-    "Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)": {
+    "The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)": {
         "category": "Suggestion",
         "code": 377009
     },
-    "You can use Effect.mapError instead of Effect.catch + Effect.fail to transform the error type. effect(catchAllToMapError)": {
+    "`Effect.mapError` expresses the same error-type transformation more directly than `Effect.{0}` followed by `Effect.fail`. effect(catchAllToMapError)": {
         "category": "Suggestion",
         "code": 377010
     },
-    "{0}.{1} returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead{2}. effect(effectFnIife)": {
+    "`{0}.{1}` returns a reusable function that can take arguments, but it is invoked immediately here. `Effect.gen` represents the immediate-use form for this pattern{2}. effect(effectFnIife)": {
         "category": "Warning",
         "code": 377011
     },
-    "Avoid using try/catch inside Effect generators. Use Effect's error handling mechanisms instead (e.g. Effect.try, Effect.tryPromise, Effect.catch, Effect.catchTag). effect(tryCatchInEffectGen)": {
+    "This Effect generator contains `try/catch`; in this context, error handling is expressed with Effect APIs such as Effect.try, Effect.tryPromise, Effect.catch, Effect.catchTag). effect(tryCatchInEffectGen)": {
         "category": "Suggestion",
         "code": 377012
     },
@@ -47,15 +47,15 @@
         "category": "Suggestion",
         "code": 377013
     },
-    "You are returning an Effect-able type inside a generator function, and will result in nested Effect<Effect<...>>.\nMaybe you wanted to return yield* instead?\nNested Effect-able types may be intended if you plan to later manually flatten or unwrap this Effect, if so you can safely disable this diagnostic for this line through quickfixes. effect(returnEffectInGen)": {
+    "This generator returns an Effect-able value directly, which produces a nested `Effect<Effect<...>>`. If the intended result is the inner Effect value, `return yield*` represents that form. effect(returnEffectInGen)": {
         "category": "Suggestion",
         "code": 377014
     },
-    "Chained pipe calls can be simplified to a single pipe call. effect(unnecessaryPipeChain)": {
+    "This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)": {
         "category": "Suggestion",
         "code": 377015
     },
-    "Effect.void can be used instead of Effect.succeed(undefined) or Effect.succeed(void 0). effect(effectSucceedWithVoid)": {
+    "`Effect.void` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithVoid)": {
         "category": "Suggestion",
         "code": 377016
     },
@@ -63,11 +63,11 @@
         "category": "Suggestion",
         "code": 377017
     },
-    "Effect.asVoid can be used instead to discard the success value. effect(effectMapVoid)": {
+    "This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)": {
         "category": "Suggestion",
         "code": 377018
     },
-    "This Effect.fail call uses a yieldable error type as argument. You can yield* the error directly instead. effect(unnecessaryFailYieldableError)": {
+    "This `yield* Effect.fail(...)` passes a yieldable error value. `yield*` represents that value directly without wrapping it in `Effect.fail`. effect(unnecessaryFailYieldableError)": {
         "category": "Suggestion",
         "code": 377019
     },
@@ -75,11 +75,11 @@
         "category": "Warning",
         "code": 377020
     },
-    "The 'catch' callback in {0} returns 'unknown'. The catch callback should be used to provide typed errors.\nConsider wrapping unknown errors into Effect's Data.TaggedError for example, or narrow down the type to the specific error raised. effect(unknownInEffectCatch)": {
+    "The `catch` callback in `{0}` returns `unknown`, so the Effect error type stays untyped. A specific typed error preserves error-channel information, for example by narrowing the value or wrapping it in `Data.TaggedError`. effect(unknownInEffectCatch)": {
         "category": "Warning",
         "code": 377021
     },
-    "The 'catch' callback in {0} returns global 'Error', which loses type safety as untagged errors merge together. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectCatch)": {
+    "The `catch` callback in `{0}` returns the global `Error` type. Untagged errors merge together in the Effect error channel and lose type-level distinction; a tagged error preserves that distinction and can wrap the original error in a `cause` property. effect(globalErrorInEffectCatch)": {
         "category": "Warning",
         "code": 377022
     },
@@ -87,19 +87,19 @@
         "category": "Warning",
         "code": 377023
     },
-    "Using {0} inside an Effect is not recommended. Effects inside generators can usually just be yielded. effect(runEffectInsideEffect)": {
+    "`{0}` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)": {
         "category": "Suggestion",
         "code": 377024
     },
-    "Using {0} inside an Effect is not recommended. The same runtime should generally be used instead to run child effects.\nConsider extracting the Runtime by using for example Effect.runtime and then use Runtime.{1} with the extracted runtime instead. effect(runEffectInsideEffect)": {
+    "`{0}` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.{1}`. effect(runEffectInsideEffect)": {
         "category": "Suggestion",
         "code": 377025
     },
-    "Using {0} inside an Effect is not recommended. The same services should generally be used instead to run child effects.\nConsider extracting the current services by using for example Effect.services and then use Effect.{1}With with the extracted services instead. effect(runEffectInsideEffect)": {
+    "`{0}` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.services` and `Effect.{1}With`. effect(runEffectInsideEffect)": {
         "category": "Suggestion",
         "code": 377074
     },
-    "Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)": {
+    "This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)": {
         "category": "Suggestion",
         "code": 377026
     },
@@ -119,7 +119,7 @@
         "category": "Warning",
         "code": 377030
     },
-    "Seems like you are constructing a layer with a scope in the requirements.\nConsider using \"scoped\" instead to get rid of the scope in the requirements. effect(scopeInLayerEffect)": {
+    "This layer construction leaves `Scope` in the requirement set. The scoped API removes `Scope` from the resulting requirements. effect(scopeInLayerEffect)": {
         "category": "Warning",
         "code": 377031
     },
@@ -127,7 +127,7 @@
         "category": "Warning",
         "code": 377032
     },
-    "Avoid chaining Effect.provide calls, as this can lead to service lifecycle issues. Instead, merge layers and provide them in a single call. effect(multipleEffectProvide)": {
+    "This expression chains multiple `Effect.provide` calls. Providing Layers in multiple calls in a chain can break service lifecycle behavior compared with a single combined provide with merged layers. effect(multipleEffectProvide)": {
         "category": "Warning",
         "code": 377033
     },
@@ -139,15 +139,15 @@
         "category": "Warning",
         "code": 377035
     },
-    "Schema.Struct with a _tag field can be simplified to Schema.TaggedStruct to make the tag optional in the constructor. effect(schemaStructWithTag)": {
+    "This `Schema.Struct` includes a `_tag` field. `Schema.TaggedStruct` is the tagged-struct form for this pattern and makes the tag optional in the constructor. effect(schemaStructWithTag)": {
         "category": "Suggestion",
         "code": 377036
     },
-    "Using {0} inside an Effect generator is not recommended. Use Schema.{1} instead to get properly typed error channel. effect(schemaSyncInEffect)": {
+    "`{0}` is used inside an Effect generator. `Schema.{1}` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)": {
         "category": "Suggestion",
         "code": 377037
     },
-    "A Schema.Union of multiple Schema.Literal calls can be simplified to a single Schema.Literal call. effect(schemaUnionOfLiterals)": {
+    "This `Schema.Union` contains multiple `Schema.Literal` members and can be simplified to a single `Schema.Literal` call. effect(schemaUnionOfLiterals)": {
         "category": "Suggestion",
         "code": 377038
     },
@@ -159,11 +159,11 @@
         "category": "Suggestion",
         "code": 377040
     },
-    "Methods of this Service require '{0}' from every caller. This leaks implementation details — resolve these dependencies at Layer creation time. effect(leakingRequirements)": {
+    "Methods of this Service require `{0}` from every caller.\n\nThe requirement becomes part of the public service surface instead of remaining internal to Layer implementation.\n\nResolve these dependencies at Layer creation and provide them to each method, so the service's type reflects its purpose, not its implementation.\n\nTo suppress this diagnostic for specific dependency types that are intentionally passed through (e.g., HttpServerRequest), add `@effect-leakable-service` JSDoc to their interface declarations, or to this service by adding a `@effect-expect-leaking {0}` JSDoc.\n\nMore info and examples at https://effect.website/docs/requirements-management/layers/#avoiding-requirement-leakage effect(leakingRequirements)": {
         "category": "Suggestion",
         "code": 377041
     },
-    "Consider using Schema.is instead of instanceof for Effect Schema types. effect(instanceOfSchema)": {
+    "This code uses `instanceof` with an Effect Schema type. `Schema.is` is the schema-aware runtime check for this case. effect(instanceOfSchema)": {
         "category": "Warning",
         "code": 377042
     },
@@ -171,7 +171,7 @@
         "category": "Warning",
         "code": 377043
     },
-    "Classes extending Schema must not override the constructor; this is because it silently breaks the schema decoding behaviour. If that's needed, we recommend instead to use a static 'new' method that constructs the instance. effect(overriddenSchemaConstructor)": {
+    "This Schema subclass defines its own constructor. For Schema classes, constructor overrides break decoding behavior for the class shape. Custom construction can be expressed through a static `new` method instead. effect(overriddenSchemaConstructor)": {
         "category": "Error",
         "code": 377044
     },
@@ -179,35 +179,35 @@
         "category": "Suggestion",
         "code": 377045
     },
-    "Self type parameter should be '{0}'. effect(classSelfMismatch)": {
+    "The `Self` type parameter for this class should be `{0}`. effect(classSelfMismatch)": {
         "category": "Error",
         "code": 377046
     },
-    "Can be rewritten as a reusable function: {0}. effect(effectFnOpportunity)": {
+    "This expression can be rewritten in the reusable function form `{0}`. effect(effectFnOpportunity)": {
         "category": "Suggestion",
         "code": 377047
     },
-    "Effect.Service requires the service type to be an object {} and not a primitive type. Consider wrapping the value in an object, or manually using Context.Tag or Effect.Tag if you want to use a primitive instead. effect(nonObjectEffectServiceType)": {
+    "`Effect.Service` is declared with a primitive service type. `Effect.Service` models object-shaped services; primitive values use `Context.Tag` or `Effect.Tag` directly. effect(nonObjectEffectServiceType)": {
         "category": "Error",
         "code": 377048
     },
-    "Key should be '{0}'. effect(deterministicKeys)": {
+    "This key does not match the deterministic key for this declaration. The expected key is `{0}`. effect(deterministicKeys)": {
         "category": "Error",
         "code": 377049
     },
-    "Nested function calls can be converted to pipeable style for better readability; consider using {0}.pipe(...) instead. effect(missedPipeableOpportunity)": {
+    "This nested call structure has a pipeable form. `{0}.pipe(...)` represents the same call sequence in pipe style and may be easier to read. effect(missedPipeableOpportunity)": {
         "category": "Suggestion",
         "code": 377050
     },
-    "Multiple versions of package '{0}' detected: {1}. Consider cleaning up your lockfile, or add '{0}' to allowedDuplicatedPackages to suppress this warning. effect(duplicatePackage)": {
+    "Multiple versions of package `{0}` were detected: {1}. Package duplication can change runtime identity and type equality across Effect modules.\nIf this is intentional, set the LSP config `allowedDuplicatedPackages` to {2}. effect(duplicatePackage)": {
         "category": "Warning",
         "code": 377051
     },
-    "{0} is an Effect v3 API, but the project is using Effect v4. {1} effect(outdatedApi)": {
+    "This project targets Effect v4, but this code uses the Effect v3 API `{0}`. The referenced API belongs to the v3 surface rather than the configured v4 surface. {1} effect(outdatedApi)": {
         "category": "Warning",
         "code": 377052
     },
-    "This project targets Effect v4, but is using Effect v3 APIs. To find the correct API to use, consult the Effect v4 documentation for the corresponding v4 replacement. effect(outdatedApi)": {
+    "This project targets Effect v4, but this code uses Effect v3 APIs. The referenced API belongs to the v3 surface rather than the configured v4 surface. effect(outdatedApi)": {
         "category": "Warning",
         "code": 377053
     },
@@ -215,19 +215,19 @@
         "category": "Warning",
         "code": 377054
     },
-    "Avoid extending the native 'Error' class directly. Consider using a tagged error (e.g. Data.TaggedError) to maintain type safety in the Effect failure channel. effect(extendsNativeError)": {
+    "This class extends the native `Error` type directly. Untagged native errors lose distinction in the Effect failure channel. effect(extendsNativeError)": {
         "category": "Warning",
         "code": 377055
     },
-    "ServiceMap.Service should be used in a class declaration instead of as a variable. Use: {0} effect(serviceNotAsClass)": {
+    "`ServiceMap.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `{0}`. effect(serviceNotAsClass)": {
         "category": "Warning",
         "code": 377056
     },
-    "Prefer using {0} from {1} instead of the Node.js '{2}' module. effect(nodeBuiltinImport)": {
+    "This module reference uses the `{2}` module, the corresponding Effect API is `{0}` from `{1}`. effect(nodeBuiltinImport)": {
         "category": "Warning",
         "code": 377057
     },
-    "Effect-able {0} must be yielded or assigned to a variable. effect(floatingEffect)": {
+    "This Effect-able `{0}` value is neither yielded nor assigned to a variable. effect(floatingEffect)": {
         "category": "Error",
         "code": 377058
     },
@@ -239,55 +239,55 @@
         "category": "Error",
         "code": 377060
     },
-    "Prefer using HttpClient from {0} instead of the global 'fetch' function. effect(globalFetch)": {
+    "This code uses the global `fetch` function, HTTP requests are represented through `HttpClient` from `{0}`. effect(globalFetch)": {
         "category": "Warning",
         "code": 377061
     },
-    "Prefer using HttpClient from {0} instead of the global 'fetch' function inside Effect generators. effect(globalFetchInEffect)": {
+    "This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `{0}`. effect(globalFetchInEffect)": {
         "category": "Warning",
         "code": 377063
     },
-    "Prefer using {0} instead of console.{1}. effect(globalConsole)": {
+    "This code uses `console.{1}`, the corresponding Effect logging API is `{0}`. effect(globalConsole)": {
         "category": "Warning",
         "code": 377064
     },
-    "Prefer using {0} instead of console.{1} inside Effect generators. effect(globalConsoleInEffect)": {
+    "This Effect code uses `console.{1}`, logging in Effect code is represented through `{0}`. effect(globalConsoleInEffect)": {
         "category": "Warning",
         "code": 377065
     },
-    "Prefer using Clock or DateTime from Effect instead of Date.now(). effect(globalDate)": {
+    "This code uses `Date.now()`, time access is represented through `Clock` from Effect. effect(globalDate)": {
         "category": "Warning",
         "code": 377066
     },
-    "Prefer using Clock or DateTime from Effect instead of Date.now() inside Effect generators. effect(globalDateInEffect)": {
+    "This Effect code uses `Date.now()`, time access in Effect code is represented through `Clock` from Effect. effect(globalDateInEffect)": {
         "category": "Warning",
         "code": 377067
     },
-    "Prefer using DateTime from Effect instead of new Date(). effect(globalDate)": {
+    "This code constructs `new Date()`, date values are represented through `DateTime` from Effect. effect(globalDate)": {
         "category": "Warning",
         "code": 377068
     },
-    "Prefer using DateTime from Effect instead of new Date() inside Effect generators. effect(globalDateInEffect)": {
+    "This Effect code constructs `new Date()`, date values in Effect code are represented through `DateTime` from Effect. effect(globalDateInEffect)": {
         "category": "Warning",
         "code": 377069
     },
-    "Prefer using the Random service from Effect instead of Math.random(). effect(globalRandom)": {
+    "This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)": {
         "category": "Warning",
         "code": 377070
     },
-    "Prefer using the Random service from Effect instead of Math.random() inside Effect generators. effect(globalRandomInEffect)": {
+    "This Effect code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandomInEffect)": {
         "category": "Warning",
         "code": 377071
     },
-    "Prefer using {0} from Effect instead of {1}. effect(globalTimers)": {
+    "This code uses `{1}`, the corresponding Effect timer API is `{0}` from Effect. effect(globalTimers)": {
         "category": "Warning",
         "code": 377072
     },
-    "Prefer using {0} from Effect instead of {1} inside Effect generators. effect(globalTimersInEffect)": {
+    "This Effect code uses `{1}`, the corresponding timer API in this context is `{0}` from Effect. effect(globalTimersInEffect)": {
         "category": "Warning",
         "code": 377073
     },
-    "Parameter '{0}' implicitly has an 'any' type in Effect.fn/Effect.fnUntraced/Effect.fnUntracedEager. Add an explicit type annotation or provide a contextual function type. effect(effectFnImplicitAny)": {
+    "Parameter `{0}` implicitly has type `any` in `Effect.fn`, `Effect.fnUntraced`, or `Effect.fnUntracedEager`. No parameter type is available from an explicit annotation or contextual function type. effect(effectFnImplicitAny)": {
         "category": "Error",
         "code": 377062
     }

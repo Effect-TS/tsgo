@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/missingReturnYieldStar_preview.ts(7,3): warning TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+/.src/missingReturnYieldStar_preview.ts(7,3): warning TS377006: This Effect never succeeds; using `return yield*` preserves a definitive generator exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
 
 
 ==== /.src/missingReturnYieldStar_preview.ts (1 errors) ====
@@ -13,6 +13,6 @@ Effect version: 4.0.0
       yield* Effect.log("before")
       yield* Effect.fail("boom")
       ~~~~~
-!!! warning TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+!!! warning TS377006: This Effect never succeeds; using `return yield*` preserves a definitive generator exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
     })
     

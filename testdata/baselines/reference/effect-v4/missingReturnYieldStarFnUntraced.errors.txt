@@ -1,8 +1,8 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/missingReturnYieldStarFnUntraced.ts(4,5): error TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
-/.src/missingReturnYieldStarFnUntraced.ts(8,5): error TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+/.src/missingReturnYieldStarFnUntraced.ts(4,5): error TS377006: This Effect never succeeds; using `return yield*` preserves a definitive generator exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+/.src/missingReturnYieldStarFnUntraced.ts(8,5): error TS377006: This Effect never succeeds; using `return yield*` preserves a definitive generator exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
 /.src/missingReturnYieldStarFnUntraced.ts(11,69): error TS2769: No overload matches this call.
 
 
@@ -12,13 +12,13 @@ Effect version: 4.0.0
     export const shouldComplainUntraced = Effect.fnUntraced(function*(){
         yield* Effect.fail("no") // <- should emit an error be return yield*
         ~~~~~
-!!! error TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+!!! error TS377006: This Effect never succeeds; using `return yield*` preserves a definitive generator exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
     })
     
     export const shouldComplainUntracedEager = Effect.fnUntracedEager(function*(){
         yield* Effect.fail("no") // <- should emit an error be return yield*
         ~~~~~
-!!! error TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+!!! error TS377006: This Effect never succeeds; using `return yield*` preserves a definitive generator exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
     })
     
     export const shouldNotComplainRegularFnUntraced = Effect.fnUntraced((a: string) => {

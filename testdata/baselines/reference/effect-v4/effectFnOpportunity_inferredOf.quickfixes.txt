@@ -6,7 +6,7 @@
 [D2] (8:7-8:21) TS6133: '_shouldTrigger' is declared but its value is never read.
   (no quick fixes)
 
-[D3] (9:3-9:10) TS377047: Can be rewritten as a reusable function: Effect.fn("UserService.getUser")(function*(id) { ... }). effect(effectFnOpportunity)
+[D3] (9:3-9:10) TS377047: This expression can be rewritten in the reusable function form `Effect.fn("UserService.getUser")(function*(id) { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fn(\"UserService.getUser\")"

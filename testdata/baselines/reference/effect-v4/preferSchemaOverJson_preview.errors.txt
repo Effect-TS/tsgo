@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/preferSchemaOverJson_preview.ts(7,10): warning TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+/.src/preferSchemaOverJson_preview.ts(7,10): warning TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
 
 
 ==== /.src/preferSchemaOverJson_preview.ts (1 errors) ====
@@ -13,6 +13,6 @@ Effect version: 4.0.0
       const text = yield* Effect.succeed('{"ok":true}')
       return JSON.parse(text)
              ~~~~~~~~~~~~~~~~
-!!! warning TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+!!! warning TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
     })
     

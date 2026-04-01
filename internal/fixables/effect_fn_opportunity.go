@@ -14,7 +14,7 @@ import (
 var EffectFnOpportunityFix = fixable.Fixable{
 	Name:        "effectFnOpportunity",
 	Description: "Convert to Effect.fn",
-	ErrorCodes:  []int32{tsdiag.Can_be_rewritten_as_a_reusable_function_Colon_0_effect_effectFnOpportunity.Code()},
+	ErrorCodes:  []int32{tsdiag.This_expression_can_be_rewritten_in_the_reusable_function_form_0_effect_effectFnOpportunity.Code()},
 	FixIDs: []string{
 		"effectFnOpportunity_toEffectFnWithSpan",
 		"effectFnOpportunity_toEffectFnUntraced",

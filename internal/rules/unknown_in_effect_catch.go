@@ -22,7 +22,7 @@ var UnknownInEffectCatch = rule.Rule{
 	Description:     "Warns when catch callbacks return unknown instead of typed errors",
 	DefaultSeverity: etscore.SeverityWarning,
 	SupportedEffect: []string{"v3", "v4"},
-	Codes:           []int32{tsdiag.The_catch_callback_in_0_returns_unknown_The_catch_callback_should_be_used_to_provide_typed_errors_Consider_wrapping_unknown_errors_into_Effect_s_Data_TaggedError_for_example_or_narrow_down_the_type_to_the_specific_error_raised_effect_unknownInEffectCatch.Code()},
+	Codes:           []int32{tsdiag.The_catch_callback_in_0_returns_unknown_so_the_Effect_error_type_stays_untyped_A_specific_typed_error_preserves_error_channel_information_for_example_by_narrowing_the_value_or_wrapping_it_in_Data_TaggedError_effect_unknownInEffectCatch.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		var diags []*ast.Diagnostic
 
@@ -98,7 +98,7 @@ func checkUnknownInEffectCatch(ctx *rule.Context, node *ast.Node) *ast.Diagnosti
 
 		if returnType.Flags()&(checker.TypeFlagsUnknown|checker.TypeFlagsAny) != 0 {
 			calleeText := scanner.GetSourceTextOfNodeFromSourceFile(ctx.SourceFile, callee, false)
-			return ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(callee), tsdiag.The_catch_callback_in_0_returns_unknown_The_catch_callback_should_be_used_to_provide_typed_errors_Consider_wrapping_unknown_errors_into_Effect_s_Data_TaggedError_for_example_or_narrow_down_the_type_to_the_specific_error_raised_effect_unknownInEffectCatch, nil, calleeText)
+			return ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(callee), tsdiag.The_catch_callback_in_0_returns_unknown_so_the_Effect_error_type_stays_untyped_A_specific_typed_error_preserves_error_channel_information_for_example_by_narrowing_the_value_or_wrapping_it_in_Data_TaggedError_effect_unknownInEffectCatch, nil, calleeText)
 		}
 	}
 

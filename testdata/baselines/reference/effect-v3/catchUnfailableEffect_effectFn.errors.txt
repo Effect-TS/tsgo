@@ -1,9 +1,9 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/catchUnfailableEffect_effectFn.ts(7,4): suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
-/.src/catchUnfailableEffect_effectFn.ts(15,4): suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
-/.src/catchUnfailableEffect_effectFn.ts(19,4): suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+/.src/catchUnfailableEffect_effectFn.ts(7,4): suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
+/.src/catchUnfailableEffect_effectFn.ts(15,4): suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
+/.src/catchUnfailableEffect_effectFn.ts(19,4): suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
 
 
 ==== /.src/catchUnfailableEffect_effectFn.ts (3 errors) ====
@@ -15,7 +15,7 @@ Effect version: 3.19.19
       return yield* Effect.succeed(42)
     }, Effect.catchAll(() => Effect.void)) // <- should report here
        ~~~~~~~~~~~~~~~
-!!! suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+!!! suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
     
     export const shouldNotReportEffectFn = Effect.fn(function*() {
       return yield* Effect.fail("error")
@@ -25,11 +25,11 @@ Effect version: 3.19.19
       return yield* Effect.succeed(42)
     }, Effect.catchAll(() => Effect.void)) // <- should report here
        ~~~~~~~~~~~~~~~
-!!! suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+!!! suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
     
     export const shouldReportEffectFnUntraced = Effect.fnUntraced(function*() {
       return yield* Effect.succeed(42)
     }, Effect.catchAll(() => Effect.void)) // <- should report here
        ~~~~~~~~~~~~~~~
-!!! suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+!!! suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
     

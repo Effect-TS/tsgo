@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (6:3-6:28) TS377073: Prefer using Effect.sleep or Schedule from Effect instead of setTimeout inside Effect generators. effect(globalTimersInEffect)
+[D1] (6:3-6:28) TS377073: This Effect code uses `setTimeout`, the corresponding timer API in this context is `Effect.sleep or Schedule` from Effect. effect(globalTimersInEffect)
   Fix 0: "Disable globalTimersInEffect for this line"
   Fix 1: "Disable globalTimersInEffect for entire file"
 

@@ -31,7 +31,7 @@ var GlobalTimers = rule.Rule{
 	Description:     "Warns when using setTimeout/setInterval outside Effect generators instead of Effect.sleep/Schedule",
 	DefaultSeverity: etscore.SeverityOff,
 	SupportedEffect: []string{"v3", "v4"},
-	Codes:           []int32{tsdiag.Prefer_using_0_from_Effect_instead_of_1_effect_globalTimers.Code()},
+	Codes:           []int32{tsdiag.This_code_uses_1_the_corresponding_Effect_timer_API_is_0_from_Effect_effect_globalTimers.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		return runGlobalTimers(ctx, false)
 	},
@@ -43,7 +43,7 @@ var GlobalTimersInEffect = rule.Rule{
 	Description:     "Warns when using setTimeout/setInterval inside Effect generators instead of Effect.sleep/Schedule",
 	DefaultSeverity: etscore.SeverityOff,
 	SupportedEffect: []string{"v3", "v4"},
-	Codes:           []int32{tsdiag.Prefer_using_0_from_Effect_instead_of_1_inside_Effect_generators_effect_globalTimersInEffect.Code()},
+	Codes:           []int32{tsdiag.This_Effect_code_uses_1_the_corresponding_timer_API_in_this_context_is_0_from_Effect_effect_globalTimersInEffect.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		return runGlobalTimers(ctx, true)
 	},
@@ -60,9 +60,9 @@ func runGlobalTimers(ctx *rule.Context, checkInEffect bool) []*ast.Diagnostic {
 		return nil
 	}
 
-	message := tsdiag.Prefer_using_0_from_Effect_instead_of_1_effect_globalTimers
+	message := tsdiag.This_code_uses_1_the_corresponding_Effect_timer_API_is_0_from_Effect_effect_globalTimers
 	if checkInEffect {
-		message = tsdiag.Prefer_using_0_from_Effect_instead_of_1_inside_Effect_generators_effect_globalTimersInEffect
+		message = tsdiag.This_Effect_code_uses_1_the_corresponding_timer_API_in_this_context_is_0_from_Effect_effect_globalTimersInEffect
 	}
 
 	var diags []*ast.Diagnostic

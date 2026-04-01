@@ -1,10 +1,10 @@
 === Quick Fix Inventory ===
 
-[D1] (4:31-4:41) TS377022: The 'catch' callback in Effect.try returns global 'Error', which loses type safety as untagged errors merge together. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectCatch)
+[D1] (4:31-4:41) TS377022: The `catch` callback in `Effect.try` returns the global `Error` type. Untagged errors merge together in the Effect error channel and lose type-level distinction; a tagged error preserves that distinction and can wrap the original error in a `cause` property. effect(globalErrorInEffectCatch)
   Fix 0: "Disable globalErrorInEffectCatch for this line"
   Fix 1: "Disable globalErrorInEffectCatch for entire file"
 
-[D2] (5:14-5:47) TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+[D2] (5:14-5:47) TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
   Fix 0: "Disable preferSchemaOverJson for this line"
   Fix 1: "Disable preferSchemaOverJson for entire file"
 
@@ -12,11 +12,11 @@
   Fix 0: "Disable globalErrorInEffectFailure for this line"
   Fix 1: "Disable globalErrorInEffectFailure for entire file"
 
-[D4] (10:35-10:45) TS377022: The 'catch' callback in Effect.try returns global 'Error', which loses type safety as untagged errors merge together. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectCatch)
+[D4] (10:35-10:45) TS377022: The `catch` callback in `Effect.try` returns the global `Error` type. Untagged errors merge together in the Effect error channel and lose type-level distinction; a tagged error preserves that distinction and can wrap the original error in a `cause` property. effect(globalErrorInEffectCatch)
   Fix 0: "Disable globalErrorInEffectCatch for this line"
   Fix 1: "Disable globalErrorInEffectCatch for entire file"
 
-[D5] (11:14-11:47) TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+[D5] (11:14-11:47) TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
   Fix 0: "Disable preferSchemaOverJson for this line"
   Fix 1: "Disable preferSchemaOverJson for entire file"
 
@@ -24,15 +24,15 @@
   Fix 0: "Disable globalErrorInEffectFailure for this line"
   Fix 1: "Disable globalErrorInEffectFailure for entire file"
 
-[D7] (18:18-18:34) TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+[D7] (18:18-18:34) TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
   Fix 0: "Disable preferSchemaOverJson for this line"
   Fix 1: "Disable preferSchemaOverJson for entire file"
 
-[D8] (26:16-26:36) TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+[D8] (26:16-26:36) TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
   Fix 0: "Disable preferSchemaOverJson for this line"
   Fix 1: "Disable preferSchemaOverJson for entire file"
 
-[D9] (34:18-34:34) TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+[D9] (34:18-34:34) TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
   Fix 0: "Disable preferSchemaOverJson for this line"
   Fix 1: "Disable preferSchemaOverJson for entire file"
 

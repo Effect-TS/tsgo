@@ -3,12 +3,12 @@
 [D1] (4:7-4:31) TS6133: '_notExportedNoSuggestion' is declared but its value is never read.
   (no quick fixes)
 
-[D2] (11:14-11:34) TS377047: Can be rewritten as a reusable function: Effect.fn("shouldHaveSuggestion")(function*() { ... }). effect(effectFnOpportunity)
+[D2] (11:14-11:34) TS377047: This expression can be rewritten in the reusable function form `Effect.fn("shouldHaveSuggestion")(function*() { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fn(\"shouldHaveSuggestion\")"
 
-[D3] (18:17-18:45) TS377047: Can be rewritten as a reusable function: Effect.fn("shouldHaveSuggestionFunction")(function*() { ... }). effect(effectFnOpportunity)
+[D3] (18:17-18:45) TS377047: This expression can be rewritten in the reusable function form `Effect.fn("shouldHaveSuggestionFunction")(function*() { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fn(\"shouldHaveSuggestionFunction\")"

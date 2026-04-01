@@ -1,15 +1,15 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/catchUnfailableEffect.ts(11,3): suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+/.src/catchUnfailableEffect.ts(11,3): suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
 /.src/catchUnfailableEffect.ts(11,19): error TS2345: Argument of type 'string' is not assignable to parameter of type 'readonly [never, ...never[]]'.
-/.src/catchUnfailableEffect.ts(17,3): suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+/.src/catchUnfailableEffect.ts(17,3): suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
 /.src/catchUnfailableEffect.ts(17,19): error TS2345: Argument of type 'string' is not assignable to parameter of type 'readonly [never, ...never[]]'.
-/.src/catchUnfailableEffect.ts(23,3): suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
-/.src/catchUnfailableEffect.ts(29,3): suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
-/.src/catchUnfailableEffect.ts(35,4): suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+/.src/catchUnfailableEffect.ts(23,3): suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
+/.src/catchUnfailableEffect.ts(29,3): suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
+/.src/catchUnfailableEffect.ts(35,4): suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
 /.src/catchUnfailableEffect.ts(35,20): error TS2345: Argument of type 'string' is not assignable to parameter of type 'readonly [never, ...never[]]'.
-/.src/catchUnfailableEffect.ts(41,3): suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+/.src/catchUnfailableEffect.ts(41,3): suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
 /.src/catchUnfailableEffect.ts(41,19): error TS2345: Argument of type 'string' is not assignable to parameter of type 'readonly [never, ...never[]]'.
 
 
@@ -26,7 +26,7 @@ Effect version: 4.0.0
     export const shouldReportPipeable = Effect.succeed(42).pipe(
       Effect.catchTag("MyError", () => Effect.void)
       ~~~~~~~~~~~~~~~
-!!! suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+!!! suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
                       ~~~~~~~~~
 !!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'readonly [never, ...never[]]'.
     )
@@ -36,7 +36,7 @@ Effect version: 4.0.0
       Effect.succeed(42),
       Effect.catchTag("MyError", () => Effect.void)
       ~~~~~~~~~~~~~~~
-!!! suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+!!! suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
                       ~~~~~~~~~
 !!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'readonly [never, ...never[]]'.
     )
@@ -46,7 +46,7 @@ Effect version: 4.0.0
       Effect.succeed(42),
       Effect.catchTags({})
       ~~~~~~~~~~~~~~~~
-!!! suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+!!! suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
     )
     
     // pipe() with catchIf
@@ -54,7 +54,7 @@ Effect version: 4.0.0
       Effect.succeed(42),
       Effect.catchIf((e) => true, () => Effect.void)
       ~~~~~~~~~~~~~~
-!!! suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+!!! suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
     )
     
     // Effect.fn with trailing catch transformation
@@ -62,7 +62,7 @@ Effect version: 4.0.0
       return yield* Effect.succeed(42)
     }, Effect.catchTag("MyError", () => Effect.void))
        ~~~~~~~~~~~~~~~
-!!! suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+!!! suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
                        ~~~~~~~~~
 !!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'readonly [never, ...never[]]'.
     
@@ -72,7 +72,7 @@ Effect version: 4.0.0
       Effect.map((n) => n + 1),
       Effect.catchTag("MyError", () => Effect.void)
       ~~~~~~~~~~~~~~~
-!!! suggestion TS377009: Looks like the previous effect never fails, so probably this error handling will never be triggered. effect(catchUnfailableEffect)
+!!! suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
                       ~~~~~~~~~
 !!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'readonly [never, ...never[]]'.
     )

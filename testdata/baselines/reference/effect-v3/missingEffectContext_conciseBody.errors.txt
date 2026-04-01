@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/missingEffectContext_conciseBody.ts(11,63): error TS377004: Missing context ServiceA in the expected Effect type. effect(missingEffectContext)
+/.src/missingEffectContext_conciseBody.ts(11,63): error TS377004: This Effect requires a service that is missing from the expected Effect context: `ServiceA`. effect(missingEffectContext)
 
 
 ==== /.src/missingEffectContext_conciseBody.ts (1 errors) ====
@@ -17,5 +17,5 @@ Effect version: 3.19.19
     // @ts-expect-error
     export const conciseBody: () => Effect.Effect<number> = () => effectWithServices
                                                                   ~~~~~~~~~~~~~~~~~~
-!!! error TS377004: Missing context ServiceA in the expected Effect type. effect(missingEffectContext)
+!!! error TS377004: This Effect requires a service that is missing from the expected Effect context: `ServiceA`. effect(missingEffectContext)
     

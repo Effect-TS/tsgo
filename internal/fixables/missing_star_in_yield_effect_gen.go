@@ -12,7 +12,7 @@ import (
 var MissingStarInYieldEffectGenFix = fixable.Fixable{
 	Name:        "missingStarInYieldEffectGen",
 	Description: "Replace yield with yield* inside Effect generator scopes",
-	ErrorCodes:  []int32{tsdiag.When_yielding_Effects_inside_Effect_gen_you_should_use_yield_Asterisk_instead_of_yield_effect_missingStarInYieldEffectGen.Code()},
+	ErrorCodes:  []int32{tsdiag.This_uses_yield_for_an_Effect_value_yield_Asterisk_is_the_Effect_aware_form_in_this_context_effect_missingStarInYieldEffectGen.Code()},
 	FixIDs:      []string{"missingStarInYieldEffectGen_fix"},
 	Run:         runMissingStarInYieldEffectGenFix,
 }

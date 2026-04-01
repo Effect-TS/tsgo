@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/effectFnIife_preview.ts(5,24): warning TS377011: Effect.fn returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead with Effect.withSpan("preview") piped in the end to maintain tracing spans. effect(effectFnIife)
+/.src/effectFnIife_preview.ts(5,24): warning TS377011: `Effect.fn` returns a reusable function that can take arguments, but it is invoked immediately here. `Effect.gen` represents the immediate-use form for this pattern with Effect.withSpan("preview") piped in the end to maintain tracing spans. effect(effectFnIife)
 
 
 ==== /.src/effectFnIife_preview.ts (1 errors) ====
@@ -15,5 +15,5 @@ Effect version: 4.0.0
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     })()
     ~~~~
-!!! warning TS377011: Effect.fn returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead with Effect.withSpan("preview") piped in the end to maintain tracing spans. effect(effectFnIife)
+!!! warning TS377011: `Effect.fn` returns a reusable function that can take arguments, but it is invoked immediately here. `Effect.gen` represents the immediate-use form for this pattern with Effect.withSpan("preview") piped in the end to maintain tracing spans. effect(effectFnIife)
     

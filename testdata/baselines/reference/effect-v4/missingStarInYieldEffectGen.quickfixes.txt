@@ -5,17 +5,17 @@
   Fix 1: "Disable unnecessaryEffectGen for entire file"
   Fix 2: "Remove the Effect.gen, and keep the body"
 
-[D2] (19:3-19:8) TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+[D2] (19:3-19:8) TS377008: This uses `yield` for an `Effect` value. `yield*` is the Effect-aware form in this context. effect(missingStarInYieldEffectGen)
   Fix 0: "Disable missingStarInYieldEffectGen for this line"
   Fix 1: "Disable missingStarInYieldEffectGen for entire file"
   Fix 2: "Replace yield with yield*"
 
-[D3] (24:3-24:8) TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+[D3] (24:3-24:8) TS377008: This uses `yield` for an `Effect` value. `yield*` is the Effect-aware form in this context. effect(missingStarInYieldEffectGen)
   Fix 0: "Disable missingStarInYieldEffectGen for this line"
   Fix 1: "Disable missingStarInYieldEffectGen for entire file"
   Fix 2: "Replace yield with yield*"
 
-[D4] (25:3-25:8) TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+[D4] (25:3-25:8) TS377008: This uses `yield` for an `Effect` value. `yield*` is the Effect-aware form in this context. effect(missingStarInYieldEffectGen)
   Fix 0: "Disable missingStarInYieldEffectGen for this line"
   Fix 1: "Disable missingStarInYieldEffectGen for entire file"
   Fix 2: "Replace yield with yield*"
@@ -25,22 +25,22 @@
   Fix 1: "Disable unnecessaryEffectGen for entire file"
   Fix 2: "Remove the Effect.gen, and keep the body"
 
-[D6] (31:5-31:10) TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+[D6] (31:5-31:10) TS377008: This uses `yield` for an `Effect` value. `yield*` is the Effect-aware form in this context. effect(missingStarInYieldEffectGen)
   Fix 0: "Disable missingStarInYieldEffectGen for this line"
   Fix 1: "Disable missingStarInYieldEffectGen for entire file"
   Fix 2: "Replace yield with yield*"
 
-[D7] (37:3-37:8) TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+[D7] (37:3-37:8) TS377008: This uses `yield` for an `Effect` value. `yield*` is the Effect-aware form in this context. effect(missingStarInYieldEffectGen)
   Fix 0: "Disable missingStarInYieldEffectGen for this line"
   Fix 1: "Disable missingStarInYieldEffectGen for entire file"
   Fix 2: "Replace yield with yield*"
 
-[D8] (42:3-42:8) TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+[D8] (42:3-42:8) TS377008: This uses `yield` for an `Effect` value. `yield*` is the Effect-aware form in this context. effect(missingStarInYieldEffectGen)
   Fix 0: "Disable missingStarInYieldEffectGen for this line"
   Fix 1: "Disable missingStarInYieldEffectGen for entire file"
   Fix 2: "Replace yield with yield*"
 
-[D9] (47:3-47:8) TS377008: When yielding Effects inside Effect.gen, you should use yield* instead of yield. effect(missingStarInYieldEffectGen)
+[D9] (47:3-47:8) TS377008: This uses `yield` for an `Effect` value. `yield*` is the Effect-aware form in this context. effect(missingStarInYieldEffectGen)
   Fix 0: "Disable missingStarInYieldEffectGen for this line"
   Fix 1: "Disable missingStarInYieldEffectGen for entire file"
   Fix 2: "Replace yield with yield*"

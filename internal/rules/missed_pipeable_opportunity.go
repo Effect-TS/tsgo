@@ -21,7 +21,7 @@ var MissedPipeableOpportunity = rule.Rule{
 	Description:     "Suggests using .pipe() for nested function calls",
 	DefaultSeverity: etscore.SeverityOff,
 	SupportedEffect: []string{"v3", "v4"},
-	Codes:           []int32{tsdiag.Nested_function_calls_can_be_converted_to_pipeable_style_for_better_readability_consider_using_0_pipe_instead_effect_missedPipeableOpportunity.Code()},
+	Codes:           []int32{tsdiag.This_nested_call_structure_has_a_pipeable_form_0_pipe_represents_the_same_call_sequence_in_pipe_style_and_may_be_easier_to_read_effect_missedPipeableOpportunity.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		minArgCount := 2
 		effectConfig := ctx.Options
@@ -35,7 +35,7 @@ var MissedPipeableOpportunity = rule.Rule{
 			diags[i] = ctx.NewDiagnostic(
 				m.SourceFile,
 				m.Location,
-				tsdiag.Nested_function_calls_can_be_converted_to_pipeable_style_for_better_readability_consider_using_0_pipe_instead_effect_missedPipeableOpportunity,
+				tsdiag.This_nested_call_structure_has_a_pipeable_form_0_pipe_represents_the_same_call_sequence_in_pipe_style_and_may_be_easier_to_read_effect_missedPipeableOpportunity,
 				nil,
 				m.SubjectText,
 			)

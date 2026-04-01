@@ -1,18 +1,18 @@
 === Quick Fix Inventory ===
 
-[D1] (13:14-13:28) TS377047: Can be rewritten as a reusable function: Effect.fn(() => { ... }). effect(effectFnOpportunity)
+[D1] (13:14-13:28) TS377047: This expression can be rewritten in the reusable function form `Effect.fn(() => { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fn (no span)"
   Fix 3: "Convert to Effect.fn(\"arrowPlainMany\")"
 
-[D2] (22:14-22:41) TS377047: Can be rewritten as a reusable function: Effect.fn(function<T>(value) { ... }). effect(effectFnOpportunity)
+[D2] (22:14-22:41) TS377047: This expression can be rewritten in the reusable function form `Effect.fn(function<T>(value) { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fn (no span)"
   Fix 3: "Convert to Effect.fn(\"functionExpressionPlainMany\")"
 
-[D3] (32:17-32:45) TS377047: Can be rewritten as a reusable function: Effect.fn(function<T>(value) { ... }). effect(effectFnOpportunity)
+[D3] (32:17-32:45) TS377047: This expression can be rewritten in the reusable function form `Effect.fn(function<T>(value) { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fn (no span)"

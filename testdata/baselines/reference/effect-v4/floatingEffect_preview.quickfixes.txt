@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (5:1-5:24) TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+[D1] (5:1-5:24) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
   Fix 0: "Disable floatingEffect for this line"
   Fix 1: "Disable floatingEffect for entire file"
 

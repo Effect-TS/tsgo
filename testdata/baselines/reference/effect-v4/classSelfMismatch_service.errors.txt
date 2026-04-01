@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/classSelfMismatch_service.ts(10,51): error TS377046: Self type parameter should be 'WrongName'. effect(classSelfMismatch)
+/.src/classSelfMismatch_service.ts(10,51): error TS377046: The `Self` type parameter for this class should be `WrongName`. effect(classSelfMismatch)
 
 
 ==== /.src/classSelfMismatch_service.ts (1 errors) ====
@@ -16,7 +16,7 @@ Effect version: 4.0.0
     // @effect-expect-leaking FileSystem Cache
     export class WrongName extends ServiceMap.Service<CorrectName, {
                                                       ~~~~~~~~~~~
-!!! error TS377046: Self type parameter should be 'WrongName'. effect(classSelfMismatch)
+!!! error TS377046: The `Self` type parameter for this class should be `WrongName`. effect(classSelfMismatch)
       writeCache: () => Effect.Effect<void, never, FileSystem | Cache>
       readCache: Effect.Effect<void, never, FileSystem | Cache>
     }>()("WrongName") {}

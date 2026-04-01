@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/serviceNotAsClass_preview.ts(5,24): warning TS377056: ServiceMap.Service should be used in a class declaration instead of as a variable. Use: class Preview extends ServiceMap.Service<Preview, { port: number }>()("Preview") {} effect(serviceNotAsClass)
+/.src/serviceNotAsClass_preview.ts(5,24): warning TS377056: `ServiceMap.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `class Preview extends ServiceMap.Service<Preview, { port: number }>()("Preview") {}`. effect(serviceNotAsClass)
 
 
 ==== /.src/serviceNotAsClass_preview.ts (1 errors) ====
@@ -11,5 +11,5 @@ Effect version: 4.0.0
     
     export const Preview = ServiceMap.Service<{ port: number }>("Preview")
                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377056: ServiceMap.Service should be used in a class declaration instead of as a variable. Use: class Preview extends ServiceMap.Service<Preview, { port: number }>()("Preview") {} effect(serviceNotAsClass)
+!!! warning TS377056: `ServiceMap.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `class Preview extends ServiceMap.Service<Preview, { port: number }>()("Preview") {}`. effect(serviceNotAsClass)
     

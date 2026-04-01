@@ -1,0 +1,75 @@
+==== /.src/missingEffectError_callExpression.ts (2 flows) ====
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 21:2 - 24:25
+Root: testFn(effectWithErrors)
+Path (3 nodes):
+  [0] root {effect A=number E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {effect A=number E=ErrorA | ErrorB | ErrorC R=never} effectWithErrors
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=number E=never R=never} step 0: testFn
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: effectWithErrors
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: ErrorA | ErrorB | ErrorC
+      result.R: never
+  [2] kind: pipeTransformation
+      label: step 0: testFn
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 28:2 - 31:38
+Root: testFnWithServiceAB(effectWithErrors)
+Path (3 nodes):
+  [0] root {effect A=number E=ErrorA | ErrorB R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {effect A=number E=ErrorA | ErrorB | ErrorC R=never} effectWithErrors
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=number E=ErrorA | ErrorB R=never} step 0: testFnWithServiceAB
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: ErrorA | ErrorB
+      result.R: never
+  [1] kind: pipeSubject
+      label: effectWithErrors
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: ErrorA | ErrorB | ErrorC
+      result.R: never
+  [2] kind: pipeTransformation
+      label: step 0: testFnWithServiceAB
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: ErrorA | ErrorB
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call

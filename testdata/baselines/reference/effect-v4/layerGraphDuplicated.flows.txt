@@ -1,0 +1,209 @@
+==== /.src/layerGraphDuplicated.ts (4 flows) ====
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 4:8 - 4:27
+Root: Effect.succeed({})
+Path (3 nodes):
+  [0] root {effect A={} E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A={}} {}
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A={} E=never R=never} step 0: Effect.succeed
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: {}
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: {}
+      ordinal: 0
+      result.kind: plain
+      result.A: {}
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: {}
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 22:8 - 22:27
+Root: Effect.succeed({})
+Path (3 nodes):
+  [0] root {effect A={} E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A={}} {}
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A={} E=never R=never} step 0: Effect.succeed
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: {}
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: {}
+      ordinal: 0
+      result.kind: plain
+      result.A: {}
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: {}
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 45:23 - 59:2
+Root: pipe(\n  Database.Default,\n  Layer.provideMerge(UserRepository.Default),\n  Layer.merge(Analytics.Default),\n  Layer.provideMerge(UserService.Default),\n  Layer.merge(\n    pipe(\n      Database.Default,\n      Layer.provideMerge(EventsRepository.Default),\n      Layer.merge(Analytics.Default),\n      Layer.provideMerge(EventService.Default)\n    )\n  ),\n  Layer.provideMerge(AppService.Default)\n)
+Path (7 nodes):
+  [0] root {layer A=Analytics | AppService | Database | EventService | EventsRepository | UserRepository | UserService E=never R=Analytics | Database | EventService | EventsRepository | UserRepository | UserService} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {layer A=Database E=never R=never} Database.Default
+      ==> [pipe] -> [2]
+  [2] pipeTransformation {layer A=Database | UserRepository E=never R=Database} step 0: Layer.provideMerge
+      ==> [pipe] -> [3]
+  [3] pipeTransformation {layer A=Analytics | Database | UserRepository E=never R=Database} step 1: Layer.merge
+      ==> [pipe] -> [4]
+  [4] pipeTransformation {layer A=Analytics | Database | UserRepository | UserService E=never R=Analytics | Database | UserRepository} step 2: Layer.provideMerge
+      ==> [pipe] -> [5]
+  [5] pipeTransformation {layer A=Analytics | Database | EventService | EventsRepository | UserRepository | UserService E=never R=Analytics | Database | EventsRepository | UserRepository} step 3: Layer.merge
+      ==> [pipe] -> [6]
+  [6] pipeTransformation {layer A=Analytics | AppService | Database | EventService | EventsRepository | UserRepository | UserService E=never R=Analytics | Database | EventService | EventsRepository | UserRepository | UserService} step 4: Layer.provideMerge
+
+Nodes (7):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: layer
+      result.A: Analytics | AppService | Database | EventService | EventsRepository | UserRepository | UserService
+      result.E: never
+      result.R: Analytics | Database | EventService | EventsRepository | UserRepository | UserService
+  [1] kind: pipeSubject
+      label: Database.Default
+      ordinal: 0
+      result.kind: layer
+      result.A: Database
+      result.E: never
+      result.R: never
+  [2] kind: pipeTransformation
+      label: step 0: Layer.provideMerge
+      ordinal: 0
+      result.kind: layer
+      result.A: Database | UserRepository
+      result.E: never
+      result.R: Database
+  [3] kind: pipeTransformation
+      label: step 1: Layer.merge
+      ordinal: 1
+      result.kind: layer
+      result.A: Analytics | Database | UserRepository
+      result.E: never
+      result.R: Database
+  [4] kind: pipeTransformation
+      label: step 2: Layer.provideMerge
+      ordinal: 2
+      result.kind: layer
+      result.A: Analytics | Database | UserRepository | UserService
+      result.E: never
+      result.R: Analytics | Database | UserRepository
+  [5] kind: pipeTransformation
+      label: step 3: Layer.merge
+      ordinal: 3
+      result.kind: layer
+      result.A: Analytics | Database | EventService | EventsRepository | UserRepository | UserService
+      result.E: never
+      result.R: Analytics | Database | EventsRepository | UserRepository
+  [6] kind: pipeTransformation
+      label: step 4: Layer.provideMerge
+      ordinal: 4
+      result.kind: layer
+      result.A: Analytics | AppService | Database | EventService | EventsRepository | UserRepository | UserService
+      result.E: never
+      result.R: Analytics | Database | EventService | EventsRepository | UserRepository | UserService
+Edges (6):
+  0 -> 1 [strong] subject
+  1 -> 2 [strong] pipe
+  2 -> 3 [strong] pipe
+  3 -> 4 [strong] pipe
+  4 -> 5 [strong] pipe
+  5 -> 6 [strong] pipe
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 50:15 - 56:6
+Root: pipe(\n      Database.Default,\n      Layer.provideMerge(EventsRepository.Default),\n      Layer.merge(Analytics.Default),\n      Layer.provideMerge(EventService.Default)\n    )
+Path (5 nodes):
+  [0] root {layer A=Analytics | Database | EventService | EventsRepository E=never R=Analytics | Database | EventsRepository} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {layer A=Database E=never R=never} Database.Default
+      ==> [pipe] -> [2]
+  [2] pipeTransformation {layer A=Database | EventsRepository E=never R=Database} step 0: Layer.provideMerge
+      ==> [pipe] -> [3]
+  [3] pipeTransformation {layer A=Analytics | Database | EventsRepository E=never R=Database} step 1: Layer.merge
+      ==> [pipe] -> [4]
+  [4] pipeTransformation {layer A=Analytics | Database | EventService | EventsRepository E=never R=Analytics | Database | EventsRepository} step 2: Layer.provideMerge
+
+Nodes (5):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: layer
+      result.A: Analytics | Database | EventService | EventsRepository
+      result.E: never
+      result.R: Analytics | Database | EventsRepository
+  [1] kind: pipeSubject
+      label: Database.Default
+      ordinal: 0
+      result.kind: layer
+      result.A: Database
+      result.E: never
+      result.R: never
+  [2] kind: pipeTransformation
+      label: step 0: Layer.provideMerge
+      ordinal: 0
+      result.kind: layer
+      result.A: Database | EventsRepository
+      result.E: never
+      result.R: Database
+  [3] kind: pipeTransformation
+      label: step 1: Layer.merge
+      ordinal: 1
+      result.kind: layer
+      result.A: Analytics | Database | EventsRepository
+      result.E: never
+      result.R: Database
+  [4] kind: pipeTransformation
+      label: step 2: Layer.provideMerge
+      ordinal: 2
+      result.kind: layer
+      result.A: Analytics | Database | EventService | EventsRepository
+      result.E: never
+      result.R: Analytics | Database | EventsRepository
+Edges (4):
+  0 -> 1 [strong] subject
+  1 -> 2 [strong] pipe
+  2 -> 3 [strong] pipe
+  3 -> 4 [strong] pipe

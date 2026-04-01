@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/globalDateInEffect_preview.ts(6,15): warning TS377067: Prefer using Clock or DateTime from Effect instead of Date.now() inside Effect generators. effect(globalDateInEffect)
+/.src/globalDateInEffect_preview.ts(6,15): warning TS377067: This Effect code uses `Date.now()`, time access in Effect code is represented through `Clock` from Effect. effect(globalDateInEffect)
 
 
 ==== /.src/globalDateInEffect_preview.ts (1 errors) ====
@@ -12,7 +12,7 @@ Effect version: 3.19.19
     export const preview = Effect.gen(function*() {
       const now = Date.now()
                   ~~~~~~~~~~
-!!! warning TS377067: Prefer using Clock or DateTime from Effect instead of Date.now() inside Effect generators. effect(globalDateInEffect)
+!!! warning TS377067: This Effect code uses `Date.now()`, time access in Effect code is represented through `Clock` from Effect. effect(globalDateInEffect)
       return now
     })
     

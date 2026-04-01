@@ -7,7 +7,7 @@
         Type '"EnvB"' is not assignable to type '"EnvA"'.
   (no quick fixes)
 
-[D2] (14:14-14:29) TS377004: Missing context EnvB in the expected Effect type. effect(missingEffectContext)
+[D2] (14:14-14:29) TS377004: This Effect requires a service that is missing from the expected Effect context: `EnvB`. effect(missingEffectContext)
   Fix 0: "Disable missingEffectContext for this line"
   Fix 1: "Disable missingEffectContext for entire file"
 
@@ -16,7 +16,7 @@
     Type 'EnvA' is not assignable to type 'never'.
   (no quick fixes)
 
-[D4] (17:14-17:31) TS377004: Missing context EnvA | EnvB in the expected Effect type. effect(missingEffectContext)
+[D4] (17:14-17:31) TS377004: This Effect requires a service that is missing from the expected Effect context: `EnvA | EnvB`. effect(missingEffectContext)
   Fix 0: "Disable missingEffectContext for this line"
   Fix 1: "Disable missingEffectContext for entire file"
 

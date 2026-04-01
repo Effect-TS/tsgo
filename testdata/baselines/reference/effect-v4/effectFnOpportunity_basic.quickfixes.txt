@@ -1,27 +1,27 @@
 === Quick Fix Inventory ===
 
-[D1] (9:14-9:27) TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*() { ... }). effect(effectFnOpportunity)
+[D1] (9:14-9:27) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fnUntraced"
   Fix 3: "Convert to Effect.fn (no span)"
   Fix 4: "Convert to Effect.fn(\"arrowBlockGen\")"
 
-[D2] (16:14-16:32) TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*() { ... }). effect(effectFnOpportunity)
+[D2] (16:14-16:32) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fnUntraced"
   Fix 3: "Convert to Effect.fn (no span)"
   Fix 4: "Convert to Effect.fn(\"arrowExpressionGen\")"
 
-[D3] (22:14-22:35) TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*() { ... }). effect(effectFnOpportunity)
+[D3] (22:14-22:35) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fnUntraced"
   Fix 3: "Convert to Effect.fn (no span)"
   Fix 4: "Convert to Effect.fn(\"functionExpressionGen\")"
 
-[D4] (29:17-29:39) TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*() { ... }). effect(effectFnOpportunity)
+[D4] (29:17-29:39) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fnUntraced"

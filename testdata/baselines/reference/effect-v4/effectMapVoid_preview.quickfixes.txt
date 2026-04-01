@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (6:3-6:13) TS377018: Effect.asVoid can be used instead to discard the success value. effect(effectMapVoid)
+[D1] (6:3-6:13) TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
   Fix 0: "Disable effectMapVoid for this line"
   Fix 1: "Disable effectMapVoid for entire file"
   Fix 2: "Replace with Effect.asVoid"

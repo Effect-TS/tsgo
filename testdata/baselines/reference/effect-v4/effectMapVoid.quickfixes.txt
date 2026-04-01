@@ -1,31 +1,31 @@
 === Quick Fix Inventory ===
 
-[D1] (5:3-5:13) TS377018: Effect.asVoid can be used instead to discard the success value. effect(effectMapVoid)
+[D1] (5:3-5:13) TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
   Fix 0: "Disable effectMapVoid for this line"
   Fix 1: "Disable effectMapVoid for entire file"
   Fix 2: "Replace with Effect.asVoid"
 
-[D2] (10:3-10:13) TS377018: Effect.asVoid can be used instead to discard the success value. effect(effectMapVoid)
+[D2] (10:3-10:13) TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
   Fix 0: "Disable effectMapVoid for this line"
   Fix 1: "Disable effectMapVoid for entire file"
   Fix 2: "Replace with Effect.asVoid"
 
-[D3] (15:3-15:13) TS377018: Effect.asVoid can be used instead to discard the success value. effect(effectMapVoid)
+[D3] (15:3-15:13) TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
   Fix 0: "Disable effectMapVoid for this line"
   Fix 1: "Disable effectMapVoid for entire file"
   Fix 2: "Replace with Effect.asVoid"
 
-[D4] (20:3-20:13) TS377018: Effect.asVoid can be used instead to discard the success value. effect(effectMapVoid)
+[D4] (20:3-20:13) TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
   Fix 0: "Disable effectMapVoid for this line"
   Fix 1: "Disable effectMapVoid for entire file"
   Fix 2: "Replace with Effect.asVoid"
 
-[D5] (25:3-25:13) TS377018: Effect.asVoid can be used instead to discard the success value. effect(effectMapVoid)
+[D5] (25:3-25:13) TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
   Fix 0: "Disable effectMapVoid for this line"
   Fix 1: "Disable effectMapVoid for entire file"
   Fix 2: "Replace with Effect.asVoid"
 
-[D6] (30:3-30:13) TS377018: Effect.asVoid can be used instead to discard the success value. effect(effectMapVoid)
+[D6] (30:3-30:13) TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
   Fix 0: "Disable effectMapVoid for this line"
   Fix 1: "Disable effectMapVoid for entire file"
   Fix 2: "Replace with Effect.asVoid"

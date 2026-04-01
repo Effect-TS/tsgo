@@ -1,0 +1,411 @@
+==== /.src/runEffectInsideEffect.ts (10 flows) ====
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 4:28 - 4:62
+Root: Data.TaggedError("DebuggerError")
+Path (3 nodes):
+  [0] root {plain A=new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "DebuggerError"; } & Readonly<A>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="DebuggerError"} "DebuggerError"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "DebuggerError"; } & Readonly<A>} step 0: Data.TaggedError
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "DebuggerError"; } & Readonly<A>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "DebuggerError"
+      ordinal: 0
+      result.kind: plain
+      result.A: "DebuggerError"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Data.TaggedError
+      ordinal: 0
+      result.kind: plain
+      result.A: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "DebuggerError"; } & Readonly<A>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: effectGen
+Location: 8:23 - 26:3
+Root: Effect.gen(function*() {\n  const response = yield* Effect.tryPromise({\n    try: () => fetch("http://localhost:9229"),\n    catch: (e) => new DebuggerError({ cause: e })\n  })\n  const data = yield* Effect.promise(() => response.json())\n\n  const websocket = Effect.runSync(Effect.sync(() => new WebSocket(data.url)))\n  //                        ^- do not runSync in here\n\n  websocket.onmessage = (event) => {\n    const check = Effect.tryPromise({\n      try: () => fetch(event.data as string),\n      catch: (e) => new DebuggerError({ cause: e })\n    })\n    Effect.runPromise(check)\n    //        ^- no runPromise, use a runtime instead\n  }\n})
+Path (6 nodes):
+  [0] root {effect A=void E=DebuggerError R=never} Effect.gen
+      ==> [executes] -> [1]
+  [1] genSequence {effect A=void E=DebuggerError R=never} generator body
+      ==> [next] -> [2]
+  [2] statement {unknown} const response = yield* Effect.tryPromise({\n    try: () => fetch("http://loc...
+      ==> [next] -> [3]
+  [3] statement {unknown} const data = yield* Effect.promise(() => response.json())
+      ==> [next] -> [4]
+  [4] statement {unknown} const websocket = Effect.runSync(Effect.sync(() => new WebSocket(data.url)))
+      ==> [next] -> [5]
+  [5] statement {unknown} websocket.onmessage = (event) => {\n    const check = Effect.tryPromise({\n  ...
+
+Nodes (6):
+  [0] kind: root
+      label: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: DebuggerError
+      result.R: never
+  [1] kind: genSequence
+      label: generator body
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: DebuggerError
+      result.R: never
+  [2] kind: statement
+      label: const response = yield* Effect.tryPromise({\n    try: () => fetch("http://loc...
+      ordinal: 0
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [3] kind: statement
+      label: const data = yield* Effect.promise(() => response.json())
+      ordinal: 1
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [4] kind: statement
+      label: const websocket = Effect.runSync(Effect.sync(() => new WebSocket(data.url)))
+      ordinal: 2
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [5] kind: statement
+      label: websocket.onmessage = (event) => {\n    const check = Effect.tryPromise({\n  ...
+      ordinal: 3
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+Edges (5):
+  0 -> 1 [strong] executes
+  1 -> 2 [strong] next
+  2 -> 3 [strong] next
+  3 -> 4 [strong] next
+  4 -> 5 [strong] next
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 8:23 - 26:3
+Root: Effect.gen(function*() {\n  const response = yield* Effect.tryPromise({\n    try: () => fetch("http://localhost:9229"),\n    catch: (e) => new DebuggerError({ cause: e })\n  })\n  const data = yield* Effect.promise(() => response.json())\n\n  const websocket = Effect.runSync(Effect.sync(() => new WebSocket(data.url)))\n  //                        ^- do not runSync in here\n\n  websocket.onmessage = (event) => {\n    const check = Effect.tryPromise({\n      try: () => fetch(event.data as string),\n      catch: (e) => new DebuggerError({ cause: e })\n    })\n    Effect.runPromise(check)\n    //        ^- no runPromise, use a runtime instead\n  }\n})
+Path (3 nodes):
+  [0] root {effect A=void E=DebuggerError R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=() => Generator<YieldWrap<Effect<any, never, never>> | YieldWrap<Effect<Response, DebuggerError, never>>, void, any>} function*() {\n  const response = yield* Effect.tryPromise({\n    try: () => ...
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=void E=DebuggerError R=never} step 0: Effect.gen
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: DebuggerError
+      result.R: never
+  [1] kind: pipeSubject
+      label: function*() {\n  const response = yield* Effect.tryPromise({\n    try: () => ...
+      ordinal: 0
+      result.kind: plain
+      result.A: () => Generator<YieldWrap<Effect<any, never, never>> | YieldWrap<Effect<Response, DebuggerError, never>>, void, any>
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: DebuggerError
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 9:26 - 12:5
+Root: Effect.tryPromise({\n    try: () => fetch("http://localhost:9229"),\n    catch: (e) => new DebuggerError({ cause: e })\n  })
+Path (3 nodes):
+  [0] root {effect A=Response E=DebuggerError R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A={ try: () => Promise<Response>; catch: (e: unknown) => DebuggerError; }} {\n    try: () => fetch("http://localhost:9229"),\n    catch: (e) => new Debu...
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=Response E=DebuggerError R=never} step 0: Effect.tryPromise
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: Response
+      result.E: DebuggerError
+      result.R: never
+  [1] kind: pipeSubject
+      label: {\n    try: () => fetch("http://localhost:9229"),\n    catch: (e) => new Debu...
+      ordinal: 0
+      result.kind: plain
+      result.A: { try: () => Promise<Response>; catch: (e: unknown) => DebuggerError; }
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.tryPromise
+      ordinal: 0
+      result.kind: effect
+      result.A: Response
+      result.E: DebuggerError
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 10:15 - 10:46
+Root: fetch("http://localhost:9229")
+Path (3 nodes):
+  [0] root {promise} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="http://localhost:9229"} "http://localhost:9229"
+      ~> [call] -> [2]
+  [2] pipeTransformation {promise} step 0: fetch
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: promise
+      result.A: 
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "http://localhost:9229"
+      ordinal: 0
+      result.kind: plain
+      result.A: "http://localhost:9229"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: fetch
+      ordinal: 0
+      result.kind: promise
+      result.A: 
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 13:22 - 13:60
+Root: Effect.promise(() => response.json())
+Path (3 nodes):
+  [0] root {effect A=any E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=() => Promise<any>} () => response.json()
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=any E=never R=never} step 0: Effect.promise
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: any
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: () => response.json()
+      ordinal: 0
+      result.kind: plain
+      result.A: () => Promise<any>
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.promise
+      ordinal: 0
+      result.kind: effect
+      result.A: any
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 15:20 - 15:79
+Root: Effect.runSync(Effect.sync(() => new WebSocket(data.url)))
+Path (4 nodes):
+  [0] root {plain A=WebSocket} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=() => WebSocket} () => new WebSocket(data.url)
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=WebSocket E=never R=never} step 0: Effect.sync
+      ~> [call] -> [3]
+  [3] pipeTransformation {plain A=WebSocket} step 1: Effect.runSync
+
+Nodes (4):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: WebSocket
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: () => new WebSocket(data.url)
+      ordinal: 0
+      result.kind: plain
+      result.A: () => WebSocket
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.sync
+      ordinal: 0
+      result.kind: effect
+      result.A: WebSocket
+      result.E: never
+      result.R: never
+  [3] kind: pipeTransformation
+      label: step 1: Effect.runSync
+      ordinal: 1
+      result.kind: plain
+      result.A: WebSocket
+      result.E: 
+      result.R: 
+Edges (3):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+  2 -> 3 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 19:18 - 22:7
+Root: Effect.tryPromise({\n      try: () => fetch(event.data as string),\n      catch: (e) => new DebuggerError({ cause: e })\n    })
+Path (3 nodes):
+  [0] root {effect A=Response E=DebuggerError R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A={ try: () => Promise<Response>; catch: (e: unknown) => DebuggerError; }} {\n      try: () => fetch(event.data as string),\n      catch: (e) => new Deb...
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=Response E=DebuggerError R=never} step 0: Effect.tryPromise
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: Response
+      result.E: DebuggerError
+      result.R: never
+  [1] kind: pipeSubject
+      label: {\n      try: () => fetch(event.data as string),\n      catch: (e) => new Deb...
+      ordinal: 0
+      result.kind: plain
+      result.A: { try: () => Promise<Response>; catch: (e: unknown) => DebuggerError; }
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.tryPromise
+      ordinal: 0
+      result.kind: effect
+      result.A: Response
+      result.E: DebuggerError
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 20:17 - 20:45
+Root: fetch(event.data as string)
+Path (3 nodes):
+  [0] root {promise} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=string} event.data as string
+      ~> [call] -> [2]
+  [2] pipeTransformation {promise} step 0: fetch
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: promise
+      result.A: 
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: event.data as string
+      ordinal: 0
+      result.kind: plain
+      result.A: string
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: fetch
+      ordinal: 0
+      result.kind: promise
+      result.A: 
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 22:7 - 23:29
+Root: Effect.runPromise(check)
+Path (3 nodes):
+  [0] root {promise} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {effect A=Response E=DebuggerError R=never} check
+      ~> [call] -> [2]
+  [2] pipeTransformation {promise} step 0: Effect.runPromise
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: promise
+      result.A: 
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: check
+      ordinal: 0
+      result.kind: effect
+      result.A: Response
+      result.E: DebuggerError
+      result.R: never
+  [2] kind: pipeTransformation
+      label: step 0: Effect.runPromise
+      ordinal: 0
+      result.kind: promise
+      result.A: 
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call

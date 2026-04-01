@@ -1,9 +1,9 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/catchAllToMapError_effectFn.ts(12,4): suggestion TS377010: You can use Effect.mapError instead of Effect.catch + Effect.fail to transform the error type. effect(catchAllToMapError)
-/.src/catchAllToMapError_effectFn.ts(16,4): suggestion TS377010: You can use Effect.mapError instead of Effect.catch + Effect.fail to transform the error type. effect(catchAllToMapError)
-/.src/catchAllToMapError_effectFn.ts(20,4): suggestion TS377010: You can use Effect.mapError instead of Effect.catch + Effect.fail to transform the error type. effect(catchAllToMapError)
+/.src/catchAllToMapError_effectFn.ts(12,4): suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
+/.src/catchAllToMapError_effectFn.ts(16,4): suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
+/.src/catchAllToMapError_effectFn.ts(20,4): suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
 
 
 ==== /.src/catchAllToMapError_effectFn.ts (3 errors) ====
@@ -20,19 +20,19 @@ Effect version: 3.19.19
       return yield* Effect.fail("error")
     }, Effect.catchAll((cause) => Effect.fail(new MyErrorTagged(cause))))
        ~~~~~~~~~~~~~~~
-!!! suggestion TS377010: You can use Effect.mapError instead of Effect.catch + Effect.fail to transform the error type. effect(catchAllToMapError)
+!!! suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
     
     export const shouldReportEffectFnTraced = Effect.fn("traced")(function*() {
       return yield* Effect.fail("error")
     }, Effect.catchAll((cause) => Effect.fail(new MyErrorTagged(cause))))
        ~~~~~~~~~~~~~~~
-!!! suggestion TS377010: You can use Effect.mapError instead of Effect.catch + Effect.fail to transform the error type. effect(catchAllToMapError)
+!!! suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
     
     export const shouldReportEffectFnUntraced = Effect.fnUntraced(function*() {
       return yield* Effect.fail("error")
     }, Effect.catchAll((cause) => Effect.fail(new MyErrorTagged(cause))))
        ~~~~~~~~~~~~~~~
-!!! suggestion TS377010: You can use Effect.mapError instead of Effect.catch + Effect.fail to transform the error type. effect(catchAllToMapError)
+!!! suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
     
     // Should NOT report: catchAll returning Effect.succeed
     export const shouldNotReportEffectFn = Effect.fn(function*() {

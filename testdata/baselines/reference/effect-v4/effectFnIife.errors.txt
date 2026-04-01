@@ -1,13 +1,13 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/effectFnIife.ts(4,22): warning TS377011: Effect.fn returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead with Effect.withSpan("test") piped in the end to maintain tracing spans. effect(effectFnIife)
-/.src/effectFnIife.ts(9,22): warning TS377011: Effect.fn returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead with Effect.withSpan("named") piped in the end to maintain tracing spans. effect(effectFnIife)
-/.src/effectFnIife.ts(15,22): warning TS377011: Effect.fnUntraced returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead. effect(effectFnIife)
-/.src/effectFnIife.ts(20,22): warning TS377011: Effect.fn returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead with Effect.withSpan("arrow") piped in the end to maintain tracing spans. effect(effectFnIife)
-/.src/effectFnIife.ts(23,22): warning TS377011: Effect.fn returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead with Effect.withSpan("func") piped in the end to maintain tracing spans. effect(effectFnIife)
-/.src/effectFnIife.ts(28,22): warning TS377011: Effect.fn returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead with Effect.withSpan("piped") piped in the end to maintain tracing spans. effect(effectFnIife)
-/.src/effectFnIife.ts(33,22): warning TS377011: Effect.fnUntraced returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead. effect(effectFnIife)
+/.src/effectFnIife.ts(4,22): warning TS377011: `Effect.fn` returns a reusable function that can take arguments, but it is invoked immediately here. `Effect.gen` represents the immediate-use form for this pattern with Effect.withSpan("test") piped in the end to maintain tracing spans. effect(effectFnIife)
+/.src/effectFnIife.ts(9,22): warning TS377011: `Effect.fn` returns a reusable function that can take arguments, but it is invoked immediately here. `Effect.gen` represents the immediate-use form for this pattern with Effect.withSpan("named") piped in the end to maintain tracing spans. effect(effectFnIife)
+/.src/effectFnIife.ts(15,22): warning TS377011: `Effect.fnUntraced` returns a reusable function that can take arguments, but it is invoked immediately here. `Effect.gen` represents the immediate-use form for this pattern. effect(effectFnIife)
+/.src/effectFnIife.ts(20,22): warning TS377011: `Effect.fn` returns a reusable function that can take arguments, but it is invoked immediately here. `Effect.gen` represents the immediate-use form for this pattern with Effect.withSpan("arrow") piped in the end to maintain tracing spans. effect(effectFnIife)
+/.src/effectFnIife.ts(23,22): warning TS377011: `Effect.fn` returns a reusable function that can take arguments, but it is invoked immediately here. `Effect.gen` represents the immediate-use form for this pattern with Effect.withSpan("func") piped in the end to maintain tracing spans. effect(effectFnIife)
+/.src/effectFnIife.ts(28,22): warning TS377011: `Effect.fn` returns a reusable function that can take arguments, but it is invoked immediately here. `Effect.gen` represents the immediate-use form for this pattern with Effect.withSpan("piped") piped in the end to maintain tracing spans. effect(effectFnIife)
+/.src/effectFnIife.ts(33,22): warning TS377011: `Effect.fnUntraced` returns a reusable function that can take arguments, but it is invoked immediately here. `Effect.gen` represents the immediate-use form for this pattern. effect(effectFnIife)
 /.src/effectFnIife.ts(46,20): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
 
 
@@ -21,7 +21,7 @@ Effect version: 4.0.0
     ~~~~~~~~~~~~~~~~~~~~~~~~~~
     })()
     ~~~~
-!!! warning TS377011: Effect.fn returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead with Effect.withSpan("test") piped in the end to maintain tracing spans. effect(effectFnIife)
+!!! warning TS377011: `Effect.fn` returns a reusable function that can take arguments, but it is invoked immediately here. `Effect.gen` represents the immediate-use form for this pattern with Effect.withSpan("test") piped in the end to maintain tracing spans. effect(effectFnIife)
     
     // Should trigger (with fix) - curried generator IIFE with return
     export const iife2 = Effect.fn("named")(function*() {
@@ -32,7 +32,7 @@ Effect version: 4.0.0
     ~~~~~~~~~~~
     })()
     ~~~~
-!!! warning TS377011: Effect.fn returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead with Effect.withSpan("named") piped in the end to maintain tracing spans. effect(effectFnIife)
+!!! warning TS377011: `Effect.fn` returns a reusable function that can take arguments, but it is invoked immediately here. `Effect.gen` represents the immediate-use form for this pattern with Effect.withSpan("named") piped in the end to maintain tracing spans. effect(effectFnIife)
     
     // Should trigger (with fix) - fnUntraced generator IIFE
     export const iife3 = Effect.fnUntraced(function*() {
@@ -41,12 +41,12 @@ Effect version: 4.0.0
     ~~~~~~~~~~~~~~~~~~~~~~~~~~
     })()
     ~~~~
-!!! warning TS377011: Effect.fnUntraced returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead. effect(effectFnIife)
+!!! warning TS377011: `Effect.fnUntraced` returns a reusable function that can take arguments, but it is invoked immediately here. `Effect.gen` represents the immediate-use form for this pattern. effect(effectFnIife)
     
     // Should trigger (WITHOUT fix) - arrow function (non-generator)
     export const iife4 = Effect.fn("arrow")(() => Effect.succeed(1))()
                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377011: Effect.fn returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead with Effect.withSpan("arrow") piped in the end to maintain tracing spans. effect(effectFnIife)
+!!! warning TS377011: `Effect.fn` returns a reusable function that can take arguments, but it is invoked immediately here. `Effect.gen` represents the immediate-use form for this pattern with Effect.withSpan("arrow") piped in the end to maintain tracing spans. effect(effectFnIife)
     
     // Should trigger (WITHOUT fix) - function expression (non-generator)
     export const iife5 = Effect.fn("func")(function() {
@@ -55,7 +55,7 @@ Effect version: 4.0.0
     ~~~~~~~~~~~~~~~~~~~~~~~~~~
     })()
     ~~~~
-!!! warning TS377011: Effect.fn returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead with Effect.withSpan("func") piped in the end to maintain tracing spans. effect(effectFnIife)
+!!! warning TS377011: `Effect.fn` returns a reusable function that can take arguments, but it is invoked immediately here. `Effect.gen` represents the immediate-use form for this pattern with Effect.withSpan("func") piped in the end to maintain tracing spans. effect(effectFnIife)
     
     // Should trigger (with fix) - generator with pipe arguments
     export const iife6 = Effect.fn("piped")(function*() {
@@ -64,7 +64,7 @@ Effect version: 4.0.0
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     }, Effect.map((n) => n + 1))()
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377011: Effect.fn returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead with Effect.withSpan("piped") piped in the end to maintain tracing spans. effect(effectFnIife)
+!!! warning TS377011: `Effect.fn` returns a reusable function that can take arguments, but it is invoked immediately here. `Effect.gen` represents the immediate-use form for this pattern with Effect.withSpan("piped") piped in the end to maintain tracing spans. effect(effectFnIife)
     
     // Should trigger (with fix) - fnUntraced generator with pipe arguments
     export const iife7 = Effect.fnUntraced(function*() {
@@ -73,7 +73,7 @@ Effect version: 4.0.0
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     }, Effect.map((n) => n + 1))()
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377011: Effect.fnUntraced returns a reusable function that can take arguments, but here it's called immediately. Use Effect.gen instead. effect(effectFnIife)
+!!! warning TS377011: `Effect.fnUntraced` returns a reusable function that can take arguments, but it is invoked immediately here. `Effect.gen` represents the immediate-use form for this pattern. effect(effectFnIife)
     
     // Should NOT trigger - stored for reuse (generator)
     export const myFn = Effect.fn("myFn")(function*() {

@@ -1,10 +1,10 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/effectFnOpportunity_inferredLayer.ts(10,12): suggestion TS377047: Can be rewritten as a reusable function: Effect.fn((what) => { ... }). effect(effectFnOpportunity)
-/.src/effectFnOpportunity_inferredLayer.ts(16,12): suggestion TS377047: Can be rewritten as a reusable function: Effect.fn((what) => { ... }). effect(effectFnOpportunity)
-/.src/effectFnOpportunity_inferredLayer.ts(21,3): suggestion TS377047: Can be rewritten as a reusable function: Effect.fn((what) => { ... }). effect(effectFnOpportunity)
-/.src/effectFnOpportunity_inferredLayer.ts(26,12): suggestion TS377047: Can be rewritten as a reusable function: Effect.fn((what) => { ... }). effect(effectFnOpportunity)
+/.src/effectFnOpportunity_inferredLayer.ts(10,12): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn((what) => { ... })`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_inferredLayer.ts(16,12): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn((what) => { ... })`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_inferredLayer.ts(21,3): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn((what) => { ... })`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_inferredLayer.ts(26,12): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn((what) => { ... })`. effect(effectFnOpportunity)
 
 
 ==== /.src/tsconfig.json (0 errors) ====
@@ -32,7 +32,7 @@ Effect version: 4.0.0
       // Log should be inferred with name MyService.log
       return { log: (what: string) => Effect.log(what) }
                ~~~
-!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fn((what) => { ... }). effect(effectFnOpportunity)
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn((what) => { ... })`. effect(effectFnOpportunity)
     }))
     
     const _shouldTriggerConstructor = Layer.effect(MyService, Effect.gen(function*() {
@@ -40,20 +40,20 @@ Effect version: 4.0.0
       // Log should be inferred with name MyService.log
       return { log: (what: string) => Effect.log(what) }
                ~~~
-!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fn((what) => { ... }). effect(effectFnOpportunity)
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn((what) => { ... })`. effect(effectFnOpportunity)
     }))
     
     const _shouldTriggerSucceed = Layer.succeed(MyService)({
       // Log should be inferred with name MyService.log
       log: (what: string) => Effect.log(what)
       ~~~
-!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fn((what) => { ... }). effect(effectFnOpportunity)
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn((what) => { ... })`. effect(effectFnOpportunity)
     })
     
     const _shouldTriggerSync = Layer.sync(MyService)(() => {
       // Log should be inferred with name MyService.log
       return { log: (what: string) => Effect.log(what) }
                ~~~
-!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fn((what) => { ... }). effect(effectFnOpportunity)
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn((what) => { ... })`. effect(effectFnOpportunity)
     })
     

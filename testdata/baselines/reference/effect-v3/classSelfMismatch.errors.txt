@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/classSelfMismatch.ts(14,26): error TS377046: Self type parameter should be 'InvalidServiceSelfParameter'. effect(classSelfMismatch)
+/.src/classSelfMismatch.ts(14,26): error TS377046: The `Self` type parameter for this class should be `InvalidServiceSelfParameter`. effect(classSelfMismatch)
 
 
 ==== /.src/classSelfMismatch.ts (1 errors) ====
@@ -20,7 +20,7 @@ Effect version: 3.19.19
     export class InvalidServiceSelfParameter
       extends Effect.Service<ValidServiceSelfParameter>()("InvalidServiceSelfParameter", {
                              ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS377046: Self type parameter should be 'InvalidServiceSelfParameter'. effect(classSelfMismatch)
+!!! error TS377046: The `Self` type parameter for this class should be `InvalidServiceSelfParameter`. effect(classSelfMismatch)
         succeed: { value: 1 }
       })
     {

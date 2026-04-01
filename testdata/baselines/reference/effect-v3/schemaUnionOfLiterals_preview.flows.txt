@@ -1,0 +1,75 @@
+==== /.src/schemaUnionOfLiterals_preview.ts (2 flows) ====
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 5:37 - 5:56
+Root: Schema.Literal("a")
+Path (3 nodes):
+  [0] root {plain A=Literal<["a"]>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="a"} "a"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=Literal<["a"]>} step 0: Schema.Literal
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: Literal<["a"]>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "a"
+      ordinal: 0
+      result.kind: plain
+      result.A: "a"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Schema.Literal
+      ordinal: 0
+      result.kind: plain
+      result.A: Literal<["a"]>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 5:57 - 5:77
+Root: Schema.Literal("b")
+Path (3 nodes):
+  [0] root {plain A=Literal<["b"]>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="b"} "b"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=Literal<["b"]>} step 0: Schema.Literal
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: Literal<["b"]>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "b"
+      ordinal: 0
+      result.kind: plain
+      result.A: "b"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Schema.Literal
+      ordinal: 0
+      result.kind: plain
+      result.A: Literal<["b"]>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call

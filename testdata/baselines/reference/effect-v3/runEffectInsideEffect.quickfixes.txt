@@ -1,11 +1,10 @@
 === Quick Fix Inventory ===
 
-[D1] (15:21-15:35) TS377024: Using Effect.runSync inside an Effect is not recommended. Effects inside generators can usually just be yielded. effect(runEffectInsideEffect)
+[D1] (15:21-15:35) TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
 
-[D2] (23:5-23:22) TS377025: Using Effect.runPromise inside an Effect is not recommended. The same runtime should generally be used instead to run child effects.
-Consider extracting the Runtime by using for example Effect.runtime and then use Runtime.runPromise with the extracted runtime instead. effect(runEffectInsideEffect)
+[D2] (23:5-23:22) TS377025: `Effect.runPromise` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runPromise`. effect(runEffectInsideEffect)
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
   Fix 2: "Use a runtime to run the Effect"

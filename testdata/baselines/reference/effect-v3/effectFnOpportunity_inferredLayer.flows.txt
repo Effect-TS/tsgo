@@ -1,0 +1,592 @@
+==== /.src/effectFnOpportunity_inferredLayer.ts (13 flows) ====
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 6:24 - 6:49
+Root: Context.Tag("MyService")
+Path (3 nodes):
+  [0] root {plain A=<Self, Shape>() => TagClass<Self, "MyService", Shape>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="MyService"} "MyService"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=<Self, Shape>() => TagClass<Self, "MyService", Shape>} step 0: Context.Tag
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: <Self, Shape>() => TagClass<Self, "MyService", Shape>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "MyService"
+      ordinal: 0
+      result.kind: plain
+      result.A: "MyService"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Context.Tag
+      ordinal: 0
+      result.kind: plain
+      result.A: <Self, Shape>() => TagClass<Self, "MyService", Shape>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 11:23 - 15:4
+Root: Layer.effect(MyService)(Effect.gen(function*() {\n    yield* Effect.log("log")\n    // Log should be inferred with name MyService.log\n    return { log: (what: string) => Effect.log(what) }\n}))
+Path (4 nodes):
+  [0] root {layer A=MyService E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=() => Generator<YieldWrap<Effect<void, never, never>>, { log: (what: string) => Effect<void, never, never>; }, any>} function*() {\n    yield* Effect.log("log")\n    // Log should be inferred wi...
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A={ log: (what: string) => Effect<void, never, never>; } E=never R=never} step 0: Effect.gen
+      ~> [call] -> [3]
+  [3] pipeTransformation {layer A=MyService E=never R=never} step 1: Layer.effect(MyService)
+
+Nodes (4):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: layer
+      result.A: MyService
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: function*() {\n    yield* Effect.log("log")\n    // Log should be inferred wi...
+      ordinal: 0
+      result.kind: plain
+      result.A: () => Generator<YieldWrap<Effect<void, never, never>>, { log: (what: string) => Effect<void, never, never>; }, any>
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: { log: (what: string) => Effect<void, never, never>; }
+      result.E: never
+      result.R: never
+  [3] kind: pipeTransformation
+      label: step 1: Layer.effect(MyService)
+      ordinal: 1
+      result.kind: layer
+      result.A: MyService
+      result.E: never
+      result.R: never
+Edges (3):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+  2 -> 3 [weak] call
+
+=== Effect Flow ===
+Kind: effectGen
+Location: 11:48 - 15:3
+Root: Effect.gen(function*() {\n    yield* Effect.log("log")\n    // Log should be inferred with name MyService.log\n    return { log: (what: string) => Effect.log(what) }\n})
+Path (8 nodes):
+  [0] root {effect A={ log: (what: string) => Effect<void, never, never>; } E=never R=never} Effect.gen
+      ==> [executes] -> [1]
+  [1] genSequence {effect A={ log: (what: string) => Effect<void, never, never>; } E=never R=never} generator body
+      ==> [next] -> [2]
+  [2] statement {unknown} yield* Effect.log("log")
+      ==> [yield*] -> [3]
+  [3] yield {plain A=void} yield*
+      ==> [operand] -> [4]
+  [4] yieldOperand {effect A=void E=never R=never} Effect.log("log")
+      ==> [next] -> [5]
+  [5] statement {unknown} return { log: (what: string) => Effect.log(what) }
+      ==> [returns] -> [6]
+  [6] return {unknown} return
+      ~> [returns value] -> [7]
+  [7] returnOperand {plain A={ log: (what: string) => Effect<void, never, never>; }} { log: (what: string) => Effect.log(what) }
+
+Nodes (8):
+  [0] kind: root
+      label: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: { log: (what: string) => Effect<void, never, never>; }
+      result.E: never
+      result.R: never
+  [1] kind: genSequence
+      label: generator body
+      ordinal: 0
+      result.kind: effect
+      result.A: { log: (what: string) => Effect<void, never, never>; }
+      result.E: never
+      result.R: never
+  [2] kind: statement
+      label: yield* Effect.log("log")
+      ordinal: 0
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [3] kind: yield
+      label: yield*
+      ordinal: 0
+      result.kind: plain
+      result.A: void
+      result.E: 
+      result.R: 
+  [4] kind: yieldOperand
+      label: Effect.log("log")
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+  [5] kind: statement
+      label: return { log: (what: string) => Effect.log(what) }
+      ordinal: 1
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [6] kind: return
+      label: return
+      ordinal: 0
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [7] kind: returnOperand
+      label: { log: (what: string) => Effect.log(what) }
+      ordinal: 0
+      result.kind: plain
+      result.A: { log: (what: string) => Effect<void, never, never>; }
+      result.E: 
+      result.R: 
+Edges (7):
+  0 -> 1 [strong] executes
+  1 -> 2 [strong] next
+  2 -> 3 [strong] yield*
+  3 -> 4 [strong] operand
+  4 -> 5 [strong] next
+  5 -> 6 [strong] returns
+  6 -> 7 [weak] returns value
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 12:11 - 12:29
+Root: Effect.log("log")
+Path (3 nodes):
+  [0] root {effect A=void E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="log"} "log"
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=void E=never R=never} step 0: Effect.log
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: "log"
+      ordinal: 0
+      result.kind: plain
+      result.A: "log"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.log
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 14:36 - 14:53
+Root: Effect.log(what)
+Path (3 nodes):
+  [0] root {effect A=void E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=string} what
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=void E=never R=never} step 0: Effect.log
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: what
+      ordinal: 0
+      result.kind: plain
+      result.A: string
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.log
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 17:58 - 21:3
+Root: Effect.gen(function*() {\n    yield* Effect.log("log")\n    // Log should be inferred with name MyService.log\n    return { log: (what: string) => Effect.log(what) }\n})
+Path (3 nodes):
+  [0] root {effect A={ log: (what: string) => Effect<void, never, never>; } E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=() => Generator<YieldWrap<Effect<void, never, never>>, { log: (what: string) => Effect<void, never, never>; }, any>} function*() {\n    yield* Effect.log("log")\n    // Log should be inferred wi...
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A={ log: (what: string) => Effect<void, never, never>; } E=never R=never} step 0: Effect.gen
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: { log: (what: string) => Effect<void, never, never>; }
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: function*() {\n    yield* Effect.log("log")\n    // Log should be inferred wi...
+      ordinal: 0
+      result.kind: plain
+      result.A: () => Generator<YieldWrap<Effect<void, never, never>>, { log: (what: string) => Effect<void, never, never>; }, any>
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: { log: (what: string) => Effect<void, never, never>; }
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: effectGen
+Location: 17:58 - 21:3
+Root: Effect.gen(function*() {\n    yield* Effect.log("log")\n    // Log should be inferred with name MyService.log\n    return { log: (what: string) => Effect.log(what) }\n})
+Path (8 nodes):
+  [0] root {effect A={ log: (what: string) => Effect<void, never, never>; } E=never R=never} Effect.gen
+      ==> [executes] -> [1]
+  [1] genSequence {effect A={ log: (what: string) => Effect<void, never, never>; } E=never R=never} generator body
+      ==> [next] -> [2]
+  [2] statement {unknown} yield* Effect.log("log")
+      ==> [yield*] -> [3]
+  [3] yield {plain A=void} yield*
+      ==> [operand] -> [4]
+  [4] yieldOperand {effect A=void E=never R=never} Effect.log("log")
+      ==> [next] -> [5]
+  [5] statement {unknown} return { log: (what: string) => Effect.log(what) }
+      ==> [returns] -> [6]
+  [6] return {unknown} return
+      ~> [returns value] -> [7]
+  [7] returnOperand {plain A={ log: (what: string) => Effect<void, never, never>; }} { log: (what: string) => Effect.log(what) }
+
+Nodes (8):
+  [0] kind: root
+      label: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: { log: (what: string) => Effect<void, never, never>; }
+      result.E: never
+      result.R: never
+  [1] kind: genSequence
+      label: generator body
+      ordinal: 0
+      result.kind: effect
+      result.A: { log: (what: string) => Effect<void, never, never>; }
+      result.E: never
+      result.R: never
+  [2] kind: statement
+      label: yield* Effect.log("log")
+      ordinal: 0
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [3] kind: yield
+      label: yield*
+      ordinal: 0
+      result.kind: plain
+      result.A: void
+      result.E: 
+      result.R: 
+  [4] kind: yieldOperand
+      label: Effect.log("log")
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+  [5] kind: statement
+      label: return { log: (what: string) => Effect.log(what) }
+      ordinal: 1
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [6] kind: return
+      label: return
+      ordinal: 0
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [7] kind: returnOperand
+      label: { log: (what: string) => Effect.log(what) }
+      ordinal: 0
+      result.kind: plain
+      result.A: { log: (what: string) => Effect<void, never, never>; }
+      result.E: 
+      result.R: 
+Edges (7):
+  0 -> 1 [strong] executes
+  1 -> 2 [strong] next
+  2 -> 3 [strong] yield*
+  3 -> 4 [strong] operand
+  4 -> 5 [strong] next
+  5 -> 6 [strong] returns
+  6 -> 7 [weak] returns value
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 18:11 - 18:29
+Root: Effect.log("log")
+Path (3 nodes):
+  [0] root {effect A=void E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="log"} "log"
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=void E=never R=never} step 0: Effect.log
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: "log"
+      ordinal: 0
+      result.kind: plain
+      result.A: "log"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.log
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 20:36 - 20:53
+Root: Effect.log(what)
+Path (3 nodes):
+  [0] root {effect A=void E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=string} what
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=void E=never R=never} step 0: Effect.log
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: what
+      ordinal: 0
+      result.kind: plain
+      result.A: string
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.log
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 23:30 - 26:3
+Root: Layer.succeed(MyService)({\n    // Log should be inferred with name MyService.log\n    log: (what: string) => Effect.log(what)\n})
+Path (3 nodes):
+  [0] root {layer A=MyService E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A={ log: (what: string) => Effect<void, never, never>; }} {\n    // Log should be inferred with name MyService.log\n    log: (what: str...
+      ~> [call] -> [2]
+  [2] pipeTransformation {layer A=MyService E=never R=never} step 0: Layer.succeed(MyService)
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: layer
+      result.A: MyService
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: {\n    // Log should be inferred with name MyService.log\n    log: (what: str...
+      ordinal: 0
+      result.kind: plain
+      result.A: { log: (what: string) => Effect<void, never, never>; }
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Layer.succeed(MyService)
+      ordinal: 0
+      result.kind: layer
+      result.A: MyService
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 25:27 - 25:44
+Root: Effect.log(what)
+Path (3 nodes):
+  [0] root {effect A=void E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=string} what
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=void E=never R=never} step 0: Effect.log
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: what
+      ordinal: 0
+      result.kind: plain
+      result.A: string
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.log
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 28:27 - 31:3
+Root: Layer.sync(MyService)(() => {\n    // Log should be inferred with name MyService.log\n    return { log: (what: string) => Effect.log(what) }\n})
+Path (3 nodes):
+  [0] root {layer A=MyService E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=() => { log: (what: string) => Effect<void, never, never>; }} () => {\n    // Log should be inferred with name MyService.log\n    return { ...
+      ~> [call] -> [2]
+  [2] pipeTransformation {layer A=MyService E=never R=never} step 0: Layer.sync(MyService)
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: layer
+      result.A: MyService
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: () => {\n    // Log should be inferred with name MyService.log\n    return { ...
+      ordinal: 0
+      result.kind: plain
+      result.A: () => { log: (what: string) => Effect<void, never, never>; }
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Layer.sync(MyService)
+      ordinal: 0
+      result.kind: layer
+      result.A: MyService
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 30:36 - 30:53
+Root: Effect.log(what)
+Path (3 nodes):
+  [0] root {effect A=void E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=string} what
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=void E=never R=never} step 0: Effect.log
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: what
+      ordinal: 0
+      result.kind: plain
+      result.A: string
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.log
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call

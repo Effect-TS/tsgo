@@ -1,8 +1,8 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/instanceOfSchema.ts(11,5): warning TS377042: Consider using Schema.is instead of instanceof for Effect Schema types. effect(instanceOfSchema)
-/.src/instanceOfSchema.ts(19,44): warning TS377042: Consider using Schema.is instead of instanceof for Effect Schema types. effect(instanceOfSchema)
+/.src/instanceOfSchema.ts(11,5): warning TS377042: This code uses `instanceof` with an Effect Schema type. `Schema.is` is the schema-aware runtime check for this case. effect(instanceOfSchema)
+/.src/instanceOfSchema.ts(19,44): warning TS377042: This code uses `instanceof` with an Effect Schema type. `Schema.is` is the schema-aware runtime check for this case. effect(instanceOfSchema)
 
 
 ==== /.src/instanceOfSchema.ts (2 errors) ====
@@ -18,7 +18,7 @@ Effect version: 4.0.0
     // Should trigger - instanceof used with Effect Schema
     if (value instanceof MySchema) {
         ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377042: Consider using Schema.is instead of instanceof for Effect Schema types. effect(instanceOfSchema)
+!!! warning TS377042: This code uses `instanceof` with an Effect Schema type. `Schema.is` is the schema-aware runtime check for this case. effect(instanceOfSchema)
       console.log("is my schema")
     }
     
@@ -28,7 +28,7 @@ Effect version: 4.0.0
     }){}
     export const checkPerson = (x: unknown) => x instanceof PersonSchema
                                                ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377042: Consider using Schema.is instead of instanceof for Effect Schema types. effect(instanceOfSchema)
+!!! warning TS377042: This code uses `instanceof` with an Effect Schema type. `Schema.is` is the schema-aware runtime check for this case. effect(instanceOfSchema)
     
     // Should NOT trigger - regular class
     class MyClass {}

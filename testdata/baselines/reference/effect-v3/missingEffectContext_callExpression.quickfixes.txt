@@ -1,18 +1,18 @@
 === Quick Fix Inventory ===
 
-[D1] (23:1-23:27) TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+[D1] (23:1-23:27) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
   Fix 0: "Disable floatingEffect for this line"
   Fix 1: "Disable floatingEffect for entire file"
 
-[D2] (23:8-23:26) TS377004: Missing context ServiceA | ServiceB | ServiceC in the expected Effect type. effect(missingEffectContext)
+[D2] (23:8-23:26) TS377004: This Effect requires a service that is missing from the expected Effect context: `ServiceA | ServiceB | ServiceC`. effect(missingEffectContext)
   Fix 0: "Disable missingEffectContext for this line"
   Fix 1: "Disable missingEffectContext for entire file"
 
-[D3] (30:1-30:40) TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+[D3] (30:1-30:40) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
   Fix 0: "Disable floatingEffect for this line"
   Fix 1: "Disable floatingEffect for entire file"
 
-[D4] (30:21-30:39) TS377004: Missing context ServiceC in the expected Effect type. effect(missingEffectContext)
+[D4] (30:21-30:39) TS377004: This Effect requires a service that is missing from the expected Effect context: `ServiceC`. effect(missingEffectContext)
   Fix 0: "Disable missingEffectContext for this line"
   Fix 1: "Disable missingEffectContext for entire file"
 

@@ -1,11 +1,11 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/effectFnOpportunity_pipeWithSpan.ts(11,14): suggestion TS377047: Can be rewritten as a reusable function: Effect.fn("arrowWithPipe")(function*() { ... }). effect(effectFnOpportunity)
+/.src/effectFnOpportunity_pipeWithSpan.ts(11,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("arrowWithPipe")(function*() { ... })`. effect(effectFnOpportunity)
 /.src/effectFnOpportunity_pipeWithSpan.ts(12,3): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
-/.src/effectFnOpportunity_pipeWithSpan.ts(16,14): suggestion TS377047: Can be rewritten as a reusable function: Effect.fn("functionExpressionWithPipe")(function*() { ... }, ...pipeTransformations). effect(effectFnOpportunity)
+/.src/effectFnOpportunity_pipeWithSpan.ts(16,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("functionExpressionWithPipe")(function*() { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
 /.src/effectFnOpportunity_pipeWithSpan.ts(17,10): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
-/.src/effectFnOpportunity_pipeWithSpan.ts(22,17): suggestion TS377047: Can be rewritten as a reusable function: Effect.fn("functionDeclarationWithPipe")(function*() { ... }, ...pipeTransformations). effect(effectFnOpportunity)
+/.src/effectFnOpportunity_pipeWithSpan.ts(22,17): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("functionDeclarationWithPipe")(function*() { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
 /.src/effectFnOpportunity_pipeWithSpan.ts(23,10): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
 
 
@@ -35,7 +35,7 @@ Effect version: 4.0.0
     
     export const arrowWithPipe = () =>
                  ~~~~~~~~~~~~~
-!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fn("arrowWithPipe")(function*() { ... }). effect(effectFnOpportunity)
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("arrowWithPipe")(function*() { ... })`. effect(effectFnOpportunity)
       Effect.gen(function*() {
       ~~~~~~~~~~~~~~~~~~~~~~~~
         return yield* Effect.succeed(42)
@@ -46,7 +46,7 @@ Effect version: 4.0.0
     
     export const functionExpressionWithPipe = function() {
                  ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fn("functionExpressionWithPipe")(function*() { ... }, ...pipeTransformations). effect(effectFnOpportunity)
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("functionExpressionWithPipe")(function*() { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
       return Effect.gen(function*() {
              ~~~~~~~~~~~~~~~~~~~~~~~~
         return yield* Effect.succeed(42)
@@ -58,7 +58,7 @@ Effect version: 4.0.0
     
     export function functionDeclarationWithPipe() {
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fn("functionDeclarationWithPipe")(function*() { ... }, ...pipeTransformations). effect(effectFnOpportunity)
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("functionDeclarationWithPipe")(function*() { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
       return Effect.gen(function*() {
              ~~~~~~~~~~~~~~~~~~~~~~~~
         return yield* Effect.succeed(42)

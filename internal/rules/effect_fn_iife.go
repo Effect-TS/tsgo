@@ -19,7 +19,7 @@ var EffectFnIife = rule.Rule{
 	Description:     "Effect.fn or Effect.fnUntraced is called as an IIFE; use Effect.gen instead",
 	DefaultSeverity: etscore.SeverityWarning,
 	SupportedEffect: []string{"v3", "v4"},
-	Codes:           []int32{tsdiag.X_0_1_returns_a_reusable_function_that_can_take_arguments_but_here_it_s_called_immediately_Use_Effect_gen_instead_2_effect_effectFnIife.Code()},
+	Codes:           []int32{tsdiag.X_0_1_returns_a_reusable_function_that_can_take_arguments_but_it_is_invoked_immediately_here_Effect_gen_represents_the_immediate_use_form_for_this_pattern_2_effect_effectFnIife.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeEffectFnIife(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
@@ -34,7 +34,7 @@ var EffectFnIife = rule.Rule{
 				traceText := ctx.SourceFile.Text()[result.TraceExpression.Pos():result.TraceExpression.End()]
 				withSpanHint = " with Effect.withSpan(" + traceText + ") piped in the end to maintain tracing spans"
 			}
-			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.X_0_1_returns_a_reusable_function_that_can_take_arguments_but_here_it_s_called_immediately_Use_Effect_gen_instead_2_effect_effectFnIife, nil, effectModuleName, result.Variant, withSpanHint)
+			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.X_0_1_returns_a_reusable_function_that_can_take_arguments_but_it_is_invoked_immediately_here_Effect_gen_represents_the_immediate_use_form_for_this_pattern_2_effect_effectFnIife, nil, effectModuleName, result.Variant, withSpanHint)
 		}
 		return diags
 	},

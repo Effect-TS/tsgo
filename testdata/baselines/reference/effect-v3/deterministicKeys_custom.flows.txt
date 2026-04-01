@@ -1,0 +1,114 @@
+==== /.src/package.json (0 flows) ====
+==== /.src/utils.ts (1 flows) ====
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 5:9 - 5:42
+Root: Context.Tag("hey/" + identifier)
+Path (3 nodes):
+  [0] root {plain A=<Self, Shape>() => TagClass<Self, string, Shape>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=string} "hey/" + identifier
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=<Self, Shape>() => TagClass<Self, string, Shape>} step 0: Context.Tag
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: <Self, Shape>() => TagClass<Self, string, Shape>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "hey/" + identifier
+      ordinal: 0
+      result.kind: plain
+      result.A: string
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Context.Tag
+      ordinal: 0
+      result.kind: plain
+      result.A: <Self, Shape>() => TagClass<Self, string, Shape>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+==== /.src/test.ts (2 flows) ====
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 8:9 - 8:42
+Root: Context.Tag("hey/" + identifier)
+Path (3 nodes):
+  [0] root {plain A=<Self, Shape>() => TagClass<Self, string, Shape>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=string} "hey/" + identifier
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=<Self, Shape>() => TagClass<Self, string, Shape>} step 0: Context.Tag
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: <Self, Shape>() => TagClass<Self, string, Shape>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "hey/" + identifier
+      ordinal: 0
+      result.kind: plain
+      result.A: string
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Context.Tag
+      ordinal: 0
+      result.kind: plain
+      result.A: <Self, Shape>() => TagClass<Self, string, Shape>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 11:29 - 11:55
+Root: LocalConstructor("Hello")
+Path (3 nodes):
+  [0] root {plain A=<Self, Shape>() => TagClass<Self, string, Shape>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="Hello"} "Hello"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=<Self, Shape>() => TagClass<Self, string, Shape>} step 0: LocalConstructor
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: <Self, Shape>() => TagClass<Self, string, Shape>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "Hello"
+      ordinal: 0
+      result.kind: plain
+      result.A: "Hello"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: LocalConstructor
+      ordinal: 0
+      result.kind: plain
+      result.A: <Self, Shape>() => TagClass<Self, string, Shape>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call

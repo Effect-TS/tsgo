@@ -3,12 +3,12 @@
 [D1] (7:7-7:13) TS6133: 'Config' is declared but its value is never read.
   (no quick fixes)
 
-[D2] (7:16-7:59) TS377056: ServiceMap.Service should be used in a class declaration instead of as a variable. Use: class Config extends ServiceMap.Service<Config, ConfigService>()("Config") {} effect(serviceNotAsClass)
+[D2] (7:16-7:59) TS377056: `ServiceMap.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `class Config extends ServiceMap.Service<Config, ConfigService>()("Config") {}`. effect(serviceNotAsClass)
   Fix 0: "Disable serviceNotAsClass for this line"
   Fix 1: "Disable serviceNotAsClass for entire file"
   Fix 2: "Convert to class declaration"
 
-[D3] (11:30-11:95) TS377056: ServiceMap.Service should be used in a class declaration instead of as a variable. Use: class ArtifactStore extends ServiceMap.Service<ArtifactStore, ArtifactStoreService>()("@my-app/ArtifactStore") {} effect(serviceNotAsClass)
+[D3] (11:30-11:95) TS377056: `ServiceMap.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `class ArtifactStore extends ServiceMap.Service<ArtifactStore, ArtifactStoreService>()("@my-app/ArtifactStore") {}`. effect(serviceNotAsClass)
   Fix 0: "Disable serviceNotAsClass for this line"
   Fix 1: "Disable serviceNotAsClass for entire file"
   Fix 2: "Convert to class declaration"

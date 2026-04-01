@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/missingEffectContext_lazy.ts(20,3): error TS377004: Missing context ServiceA in the expected Effect type. effect(missingEffectContext)
+/.src/missingEffectContext_lazy.ts(20,3): error TS377004: This Effect requires a service that is missing from the expected Effect context: `ServiceA`. effect(missingEffectContext)
 
 
 ==== /.src/missingEffectContext_lazy.ts (1 errors) ====
@@ -26,6 +26,6 @@ Effect version: 3.19.19
       // @ts-expect-error
       return Effect.onExit(evaluate(), () => Effect.void)
       ~~~~~~
-!!! error TS377004: Missing context ServiceA in the expected Effect type. effect(missingEffectContext)
+!!! error TS377004: This Effect requires a service that is missing from the expected Effect context: `ServiceA`. effect(missingEffectContext)
     }
     

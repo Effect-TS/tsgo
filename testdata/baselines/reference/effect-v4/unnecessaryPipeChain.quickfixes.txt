@@ -1,11 +1,11 @@
 === Quick Fix Inventory ===
 
-[D1] (5:27-5:106) TS377015: Chained pipe calls can be simplified to a single pipe call. effect(unnecessaryPipeChain)
+[D1] (5:27-5:106) TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
   Fix 0: "Disable unnecessaryPipeChain for this line"
   Fix 1: "Disable unnecessaryPipeChain for entire file"
   Fix 2: "Rewrite as single pipe call"
 
-[D2] (8:23-8:104) TS377015: Chained pipe calls can be simplified to a single pipe call. effect(unnecessaryPipeChain)
+[D2] (8:23-8:104) TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
   Fix 0: "Disable unnecessaryPipeChain for this line"
   Fix 1: "Disable unnecessaryPipeChain for entire file"
   Fix 2: "Rewrite as single pipe call"

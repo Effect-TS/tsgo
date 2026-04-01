@@ -1,0 +1,152 @@
+==== /.src/runEffectInsideEffect_preview.ts (3 flows) ====
+
+=== Effect Flow ===
+Kind: effectGen
+Location: 5:23 - 8:3
+Root: Effect.gen(function*() {\n  const run = () => Effect.runSync(Effect.succeed(1))\n  return run()\n})
+Path (6 nodes):
+  [0] root {effect A=number E=never R=never} Effect.gen
+      ==> [executes] -> [1]
+  [1] genSequence {effect A=number E=never R=never} generator body
+      ==> [next] -> [2]
+  [2] statement {unknown} const run = () => Effect.runSync(Effect.succeed(1))
+      ==> [next] -> [3]
+  [3] statement {unknown} return run()
+      ==> [returns] -> [4]
+  [4] return {unknown} return
+      ~> [returns value] -> [5]
+  [5] returnOperand {plain A=number} run()
+
+Nodes (6):
+  [0] kind: root
+      label: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [1] kind: genSequence
+      label: generator body
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [2] kind: statement
+      label: const run = () => Effect.runSync(Effect.succeed(1))
+      ordinal: 0
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [3] kind: statement
+      label: return run()
+      ordinal: 1
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [4] kind: return
+      label: return
+      ordinal: 0
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [5] kind: returnOperand
+      label: run()
+      ordinal: 0
+      result.kind: plain
+      result.A: number
+      result.E: 
+      result.R: 
+Edges (5):
+  0 -> 1 [strong] executes
+  1 -> 2 [strong] next
+  2 -> 3 [strong] next
+  3 -> 4 [strong] returns
+  4 -> 5 [weak] returns value
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 5:23 - 8:3
+Root: Effect.gen(function*() {\n  const run = () => Effect.runSync(Effect.succeed(1))\n  return run()\n})
+Path (3 nodes):
+  [0] root {effect A=number E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=() => Generator<never, number, never>} function*() {\n  const run = () => Effect.runSync(Effect.succeed(1))\n  retur...
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=number E=never R=never} step 0: Effect.gen
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: function*() {\n  const run = () => Effect.runSync(Effect.succeed(1))\n  retur...
+      ordinal: 0
+      result.kind: plain
+      result.A: () => Generator<never, number, never>
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 6:20 - 6:54
+Root: Effect.runSync(Effect.succeed(1))
+Path (4 nodes):
+  [0] root {plain A=number} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=1} 1
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=number E=never R=never} step 0: Effect.succeed
+      ~> [call] -> [3]
+  [3] pipeTransformation {plain A=number} step 1: Effect.runSync
+
+Nodes (4):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: number
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: 1
+      ordinal: 0
+      result.kind: plain
+      result.A: 1
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [3] kind: pipeTransformation
+      label: step 1: Effect.runSync
+      ordinal: 1
+      result.kind: plain
+      result.A: number
+      result.E: 
+      result.R: 
+Edges (3):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+  2 -> 3 [weak] call

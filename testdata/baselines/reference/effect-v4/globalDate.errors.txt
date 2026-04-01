@@ -1,10 +1,10 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/globalDate.ts(5,25): warning TS377066: Prefer using Clock or DateTime from Effect instead of Date.now(). effect(globalDate)
-/.src/globalDate.ts(9,10): warning TS377068: Prefer using DateTime from Effect instead of new Date(). effect(globalDate)
-/.src/globalDate.ts(14,25): warning TS377066: Prefer using Clock or DateTime from Effect instead of Date.now(). effect(globalDate)
-/.src/globalDate.ts(29,20): warning TS377066: Prefer using Clock or DateTime from Effect instead of Date.now(). effect(globalDate)
+/.src/globalDate.ts(5,25): warning TS377066: This code uses `Date.now()`, time access is represented through `Clock` from Effect. effect(globalDate)
+/.src/globalDate.ts(9,10): warning TS377068: This code constructs `new Date()`, date values are represented through `DateTime` from Effect. effect(globalDate)
+/.src/globalDate.ts(14,25): warning TS377066: This code uses `Date.now()`, time access is represented through `Clock` from Effect. effect(globalDate)
+/.src/globalDate.ts(29,20): warning TS377066: This code uses `Date.now()`, time access is represented through `Clock` from Effect. effect(globalDate)
 
 
 ==== /.src/globalDate.ts (4 errors) ====
@@ -14,20 +14,20 @@ Effect version: 4.0.0
     // Should trigger - Date.now() at module level
     const _moduleLevelNow = Date.now()
                             ~~~~~~~~~~
-!!! warning TS377066: Prefer using Clock or DateTime from Effect instead of Date.now(). effect(globalDate)
+!!! warning TS377066: This code uses `Date.now()`, time access is represented through `Clock` from Effect. effect(globalDate)
     
     // Should trigger - new Date() in regular function
     const _regularNewDate = () => {
       return new Date()
              ~~~~~~~~~~
-!!! warning TS377068: Prefer using DateTime from Effect instead of new Date(). effect(globalDate)
+!!! warning TS377068: This code constructs `new Date()`, date values are represented through `DateTime` from Effect. effect(globalDate)
     }
     
     // Should trigger - aliased Date at module level
     const MyDate = Date
     const _aliasedDateNow = MyDate.now()
                             ~~~~~~~~~~~~
-!!! warning TS377066: Prefer using Clock or DateTime from Effect instead of Date.now(). effect(globalDate)
+!!! warning TS377066: This code uses `Date.now()`, time access is represented through `Clock` from Effect. effect(globalDate)
     
     // Should NOT trigger - Date.now() inside Effect.gen
     export const dateNowInGen = Effect.gen(function*() {
@@ -44,7 +44,7 @@ Effect version: 4.0.0
     export const nestedArrowInGen = Effect.gen(function*() {
       const fn = () => Date.now()
                        ~~~~~~~~~~
-!!! warning TS377066: Prefer using Clock or DateTime from Effect instead of Date.now(). effect(globalDate)
+!!! warning TS377066: This code uses `Date.now()`, time access is represented through `Clock` from Effect. effect(globalDate)
       return fn
     })
     

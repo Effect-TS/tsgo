@@ -1,10 +1,10 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/effectFnImplicitAny.ts(5,14): error TS377062: Parameter 'input' implicitly has an 'any' type in Effect.fn/Effect.fnUntraced/Effect.fnUntracedEager. Add an explicit type annotation or provide a contextual function type. effect(effectFnImplicitAny)
+/.src/effectFnImplicitAny.ts(5,14): error TS377062: Parameter `input` implicitly has type `any` in `Effect.fn`, `Effect.fnUntraced`, or `Effect.fnUntracedEager`. No parameter type is available from an explicit annotation or contextual function type. effect(effectFnImplicitAny)
 /.src/effectFnImplicitAny.ts(11,46): error TS7006: Parameter 'input' implicitly has an 'any' type.
-/.src/effectFnImplicitAny.ts(16,51): error TS377062: Parameter 'a' implicitly has an 'any' type in Effect.fn/Effect.fnUntraced/Effect.fnUntracedEager. Add an explicit type annotation or provide a contextual function type. effect(effectFnImplicitAny)
-/.src/effectFnImplicitAny.ts(16,54): error TS377062: Parameter 'b' implicitly has an 'any' type in Effect.fn/Effect.fnUntraced/Effect.fnUntracedEager. Add an explicit type annotation or provide a contextual function type. effect(effectFnImplicitAny)
+/.src/effectFnImplicitAny.ts(16,51): error TS377062: Parameter `a` implicitly has type `any` in `Effect.fn`, `Effect.fnUntraced`, or `Effect.fnUntracedEager`. No parameter type is available from an explicit annotation or contextual function type. effect(effectFnImplicitAny)
+/.src/effectFnImplicitAny.ts(16,54): error TS377062: Parameter `b` implicitly has type `any` in `Effect.fn`, `Effect.fnUntraced`, or `Effect.fnUntracedEager`. No parameter type is available from an explicit annotation or contextual function type. effect(effectFnImplicitAny)
 /.src/effectFnImplicitAny.ts(21,44): error TS7006: Parameter 'a' implicitly has an 'any' type.
 /.src/effectFnImplicitAny.ts(21,47): error TS7006: Parameter 'b' implicitly has an 'any' type.
 
@@ -29,7 +29,7 @@ Effect version: 4.0.0
     export const createCallToken = Effect.fn("CallTokenService.createCallToken")(
       function* (input) {
                  ~~~~~
-!!! error TS377062: Parameter 'input' implicitly has an 'any' type in Effect.fn/Effect.fnUntraced/Effect.fnUntracedEager. Add an explicit type annotation or provide a contextual function type. effect(effectFnImplicitAny)
+!!! error TS377062: Parameter `input` implicitly has type `any` in `Effect.fn`, `Effect.fnUntraced`, or `Effect.fnUntracedEager`. No parameter type is available from an explicit annotation or contextual function type. effect(effectFnImplicitAny)
         return input
       }
     )
@@ -44,9 +44,9 @@ Effect version: 4.0.0
     // should trigger: multiple positional params without annotations
     export const withTwoParams = Effect.fn(function* (a, b) {
                                                       ~
-!!! error TS377062: Parameter 'a' implicitly has an 'any' type in Effect.fn/Effect.fnUntraced/Effect.fnUntracedEager. Add an explicit type annotation or provide a contextual function type. effect(effectFnImplicitAny)
+!!! error TS377062: Parameter `a` implicitly has type `any` in `Effect.fn`, `Effect.fnUntraced`, or `Effect.fnUntracedEager`. No parameter type is available from an explicit annotation or contextual function type. effect(effectFnImplicitAny)
                                                          ~
-!!! error TS377062: Parameter 'b' implicitly has an 'any' type in Effect.fn/Effect.fnUntraced/Effect.fnUntracedEager. Add an explicit type annotation or provide a contextual function type. effect(effectFnImplicitAny)
+!!! error TS377062: Parameter `b` implicitly has type `any` in `Effect.fn`, `Effect.fnUntraced`, or `Effect.fnUntracedEager`. No parameter type is available from an explicit annotation or contextual function type. effect(effectFnImplicitAny)
       return [a, b] as const
     })
     

@@ -1,0 +1,105 @@
+==== /.src/outdatedApi_preview.ts (2 flows) ====
+
+=== Effect Flow ===
+Kind: effectGen
+Location: 5:23 - 8:3
+Root: Effect.gen(function*() {\n  // @ts-expect-error\n  return yield* Effect.runtime()\n})
+Path (6 nodes):
+  [0] root {effect A=any E=unknown R=unknown} Effect.gen
+      ==> [executes] -> [1]
+  [1] genSequence {effect A=any E=unknown R=unknown} generator body
+      ==> [next] -> [2]
+  [2] statement {unknown} return yield* Effect.runtime()
+      ==> [returns] -> [3]
+  [3] return {unknown} return
+      ==> [yield*] -> [4]
+  [4] yield {plain A=any} yield*
+      ==> [operand] -> [5]
+  [5] yieldOperand {plain A=any} Effect.runtime()
+
+Nodes (6):
+  [0] kind: root
+      label: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: any
+      result.E: unknown
+      result.R: unknown
+  [1] kind: genSequence
+      label: generator body
+      ordinal: 0
+      result.kind: effect
+      result.A: any
+      result.E: unknown
+      result.R: unknown
+  [2] kind: statement
+      label: return yield* Effect.runtime()
+      ordinal: 0
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [3] kind: return
+      label: return
+      ordinal: 0
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [4] kind: yield
+      label: yield*
+      ordinal: 0
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+  [5] kind: yieldOperand
+      label: Effect.runtime()
+      ordinal: 0
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+Edges (5):
+  0 -> 1 [strong] executes
+  1 -> 2 [strong] next
+  2 -> 3 [strong] returns
+  3 -> 4 [strong] yield*
+  4 -> 5 [strong] operand
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 5:23 - 8:3
+Root: Effect.gen(function*() {\n  // @ts-expect-error\n  return yield* Effect.runtime()\n})
+Path (3 nodes):
+  [0] root {effect A=any E=unknown R=unknown} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=() => Generator<any, any, any>} function*() {\n  // @ts-expect-error\n  return yield* Effect.runtime()\n}
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=any E=unknown R=unknown} step 0: Effect.gen
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: any
+      result.E: unknown
+      result.R: unknown
+  [1] kind: pipeSubject
+      label: function*() {\n  // @ts-expect-error\n  return yield* Effect.runtime()\n}
+      ordinal: 0
+      result.kind: plain
+      result.A: () => Generator<any, any, any>
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: any
+      result.E: unknown
+      result.R: unknown
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call

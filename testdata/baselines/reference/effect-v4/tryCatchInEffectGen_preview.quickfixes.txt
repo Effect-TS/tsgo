@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (6:3-7:21) TS377012: Avoid using try/catch inside Effect generators. Use Effect's error handling mechanisms instead (e.g. Effect.try, Effect.tryPromise, Effect.catch, Effect.catchTag). effect(tryCatchInEffectGen)
+[D1] (6:3-7:21) TS377012: This Effect generator contains `try/catch`; in this context, error handling is expressed with Effect APIs such as Effect.try, Effect.tryPromise, Effect.catch, Effect.catchTag). effect(tryCatchInEffectGen)
   Fix 0: "Disable tryCatchInEffectGen for this line"
   Fix 1: "Disable tryCatchInEffectGen for entire file"
 

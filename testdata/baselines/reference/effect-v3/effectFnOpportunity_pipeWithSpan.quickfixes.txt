@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (12:14-12:27) TS377047: Can be rewritten as a reusable function: Effect.fn("arrowWithPipe")(function*() { ... }). effect(effectFnOpportunity)
+[D1] (12:14-12:27) TS377047: This expression can be rewritten in the reusable function form `Effect.fn("arrowWithPipe")(function*() { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fn (with span from withSpan)"
@@ -12,7 +12,7 @@
   Fix 1: "Disable unnecessaryEffectGen for entire file"
   Fix 2: "Remove the Effect.gen, and keep the body"
 
-[D3] (17:14-17:40) TS377047: Can be rewritten as a reusable function: Effect.fn("functionExpressionWithPipe")(function*() { ... }, ...pipeTransformations). effect(effectFnOpportunity)
+[D3] (17:14-17:40) TS377047: This expression can be rewritten in the reusable function form `Effect.fn("functionExpressionWithPipe")(function*() { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fn (with span from withSpan)"
@@ -24,7 +24,7 @@
   Fix 1: "Disable unnecessaryEffectGen for entire file"
   Fix 2: "Remove the Effect.gen, and keep the body"
 
-[D5] (23:17-23:44) TS377047: Can be rewritten as a reusable function: Effect.fn("functionDeclarationWithPipe")(function*() { ... }, ...pipeTransformations). effect(effectFnOpportunity)
+[D5] (23:17-23:44) TS377047: This expression can be rewritten in the reusable function form `Effect.fn("functionDeclarationWithPipe")(function*() { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fn (with span from withSpan)"

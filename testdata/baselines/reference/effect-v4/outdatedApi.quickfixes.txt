@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (1:1-1:1) TS377053: This project targets Effect v4, but is using Effect v3 APIs. To find the correct API to use, consult the Effect v4 documentation for the corresponding v4 replacement. effect(outdatedApi)
+[D1] (1:1-1:1) TS377053: This project targets Effect v4, but this code uses Effect v3 APIs. The referenced API belongs to the v3 surface rather than the configured v4 surface. effect(outdatedApi)
   Fix 0: "Disable outdatedApi for this line"
   Fix 1: "Disable outdatedApi for entire file"
 
@@ -10,21 +10,21 @@
 [D3] (7:35-7:42) TS2339: Property 'runtime' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'.
   (no quick fixes)
 
-[D4] (7:35-7:42) TS377052: runtime is an Effect v3 API, but the project is using Effect v4. Runtime has been removed in Effect v4. Use Effect.services to grab services and then run using Effect.runPromiseWith. effect(outdatedApi)
+[D4] (7:35-7:42) TS377052: This project targets Effect v4, but this code uses the Effect v3 API `runtime`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Runtime has been removed in Effect v4. Use Effect.services to grab services and then run using Effect.runPromiseWith. effect(outdatedApi)
   Fix 0: "Disable outdatedApi for this line"
   Fix 1: "Disable outdatedApi for entire file"
 
 [D5] (11:36-11:46) TS2339: Property 'dieMessage' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'.
   (no quick fixes)
 
-[D6] (11:36-11:46) TS377052: dieMessage is an Effect v3 API, but the project is using Effect v4. Use Effect.die(new Error(message)) instead. effect(outdatedApi)
+[D6] (11:36-11:46) TS377052: This project targets Effect v4, but this code uses the Effect v3 API `dieMessage`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Use Effect.die(new Error(message)) instead. effect(outdatedApi)
   Fix 0: "Disable outdatedApi for this line"
   Fix 1: "Disable outdatedApi for entire file"
 
 [D7] (14:33-14:40) TS2339: Property 'dieSync' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'.
   (no quick fixes)
 
-[D8] (14:33-14:40) TS377052: dieSync is an Effect v3 API, but the project is using Effect v4. Use Effect.die with a lazily evaluated value instead. effect(outdatedApi)
+[D8] (14:33-14:40) TS377052: This project targets Effect v4, but this code uses the Effect v3 API `dieSync`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Use Effect.die with a lazily evaluated value instead. effect(outdatedApi)
   Fix 0: "Disable outdatedApi for this line"
   Fix 1: "Disable outdatedApi for entire file"
 
@@ -34,49 +34,49 @@
 [D10] (17:28-17:31) TS2339: Property 'Tag' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'.
   (no quick fixes)
 
-[D11] (17:28-17:31) TS377052: Tag is an Effect v3 API, but the project is using Effect v4. Use ServiceMap.Service instead of Effect.Tag. effect(outdatedApi)
+[D11] (17:28-17:31) TS377052: This project targets Effect v4, but this code uses the Effect v3 API `Tag`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Use ServiceMap.Service instead of Effect.Tag. effect(outdatedApi)
   Fix 0: "Disable outdatedApi for this line"
   Fix 1: "Disable outdatedApi for entire file"
 
 [D12] (20:33-20:40) TS2339: Property 'zipLeft' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'.
   (no quick fixes)
 
-[D13] (20:33-20:40) TS377052: zipLeft is an Effect v3 API, but the project is using Effect v4. Use Effect.tap instead of Effect.zipLeft. effect(outdatedApi)
+[D13] (20:33-20:40) TS377052: This project targets Effect v4, but this code uses the Effect v3 API `zipLeft`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Use Effect.tap instead of Effect.zipLeft. effect(outdatedApi)
   Fix 0: "Disable outdatedApi for this line"
   Fix 1: "Disable outdatedApi for entire file"
 
 [D14] (23:34-23:42) TS2339: Property 'zipRight' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'.
   (no quick fixes)
 
-[D15] (23:34-23:42) TS377052: zipRight is an Effect v3 API, but the project is using Effect v4. Use Effect.andThen instead of Effect.zipRight. effect(outdatedApi)
+[D15] (23:34-23:42) TS377052: This project targets Effect v4, but this code uses the Effect v3 API `zipRight`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Use Effect.andThen instead of Effect.zipRight. effect(outdatedApi)
   Fix 0: "Disable outdatedApi for this line"
   Fix 1: "Disable outdatedApi for entire file"
 
 [D16] (26:32-26:38) TS2339: Property 'orElse' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'.
   (no quick fixes)
 
-[D17] (26:32-26:38) TS377052: orElse is an Effect v3 API, but the project is using Effect v4. Use Effect.catch or Effect.matchEffect instead. effect(outdatedApi)
+[D17] (26:32-26:38) TS377052: This project targets Effect v4, but this code uses the Effect v3 API `orElse`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Use Effect.catch or Effect.matchEffect instead. effect(outdatedApi)
   Fix 0: "Disable outdatedApi for this line"
   Fix 1: "Disable outdatedApi for entire file"
 
 [D18] (29:35-29:44) TS2339: Property 'makeLatch' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'.
   (no quick fixes)
 
-[D19] (29:35-29:44) TS377052: makeLatch is an Effect v3 API, but the project is using Effect v4. Use Latch.make instead of Effect.makeLatch. effect(outdatedApi)
+[D19] (29:35-29:44) TS377052: This project targets Effect v4, but this code uses the Effect v3 API `makeLatch`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Use Latch.make instead of Effect.makeLatch. effect(outdatedApi)
   Fix 0: "Disable outdatedApi for this line"
   Fix 1: "Disable outdatedApi for entire file"
 
 [D20] (32:39-32:52) TS2339: Property 'makeSemaphore' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'.
   (no quick fixes)
 
-[D21] (32:39-32:52) TS377052: makeSemaphore is an Effect v3 API, but the project is using Effect v4. Use Semaphore.make instead of Effect.makeSemaphore. effect(outdatedApi)
+[D21] (32:39-32:52) TS377052: This project targets Effect v4, but this code uses the Effect v3 API `makeSemaphore`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Use Semaphore.make instead of Effect.makeSemaphore. effect(outdatedApi)
   Fix 0: "Disable outdatedApi for this line"
   Fix 1: "Disable outdatedApi for entire file"
 
 [D22] (37:34-37:42) TS2339: Property 'catchAll' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'.
   (no quick fixes)
 
-[D23] (37:34-37:42) TS377052: catchAll is an Effect v3 API, but the project is using Effect v4. Renamed to catch. effect(outdatedApi)
+[D23] (37:34-37:42) TS377052: This project targets Effect v4, but this code uses the Effect v3 API `catchAll`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Renamed to catch. effect(outdatedApi)
   Fix 0: "Disable outdatedApi for this line"
   Fix 1: "Disable outdatedApi for entire file"
 
@@ -86,7 +86,7 @@
 [D25] (40:39-40:52) TS2551: Property 'catchAllCause' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'. Did you mean 'catchCause'?
   (no quick fixes)
 
-[D26] (40:39-40:52) TS377052: catchAllCause is an Effect v3 API, but the project is using Effect v4. Renamed to catchCause. effect(outdatedApi)
+[D26] (40:39-40:52) TS377052: This project targets Effect v4, but this code uses the Effect v3 API `catchAllCause`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Renamed to catchCause. effect(outdatedApi)
   Fix 0: "Disable outdatedApi for this line"
   Fix 1: "Disable outdatedApi for entire file"
 
@@ -96,7 +96,7 @@
 [D28] (43:40-43:54) TS2551: Property 'catchAllDefect' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'. Did you mean 'catchDefect'?
   (no quick fixes)
 
-[D29] (43:40-43:54) TS377052: catchAllDefect is an Effect v3 API, but the project is using Effect v4. Renamed to catchDefect. effect(outdatedApi)
+[D29] (43:40-43:54) TS377052: This project targets Effect v4, but this code uses the Effect v3 API `catchAllDefect`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Renamed to catchDefect. effect(outdatedApi)
   Fix 0: "Disable outdatedApi for this line"
   Fix 1: "Disable outdatedApi for entire file"
 
@@ -106,21 +106,21 @@
 [D31] (46:30-46:34) TS2339: Property 'fork' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'.
   (no quick fixes)
 
-[D32] (46:30-46:34) TS377052: fork is an Effect v3 API, but the project is using Effect v4. Renamed to forkChild. effect(outdatedApi)
+[D32] (46:30-46:34) TS377052: This project targets Effect v4, but this code uses the Effect v3 API `fork`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Renamed to forkChild. effect(outdatedApi)
   Fix 0: "Disable outdatedApi for this line"
   Fix 1: "Disable outdatedApi for entire file"
 
 [D33] (49:36-49:46) TS2339: Property 'forkDaemon' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'.
   (no quick fixes)
 
-[D34] (49:36-49:46) TS377052: forkDaemon is an Effect v3 API, but the project is using Effect v4. Renamed to forkDetach. effect(outdatedApi)
+[D34] (49:36-49:46) TS377052: This project targets Effect v4, but this code uses the Effect v3 API `forkDaemon`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Renamed to forkDetach. effect(outdatedApi)
   Fix 0: "Disable outdatedApi for this line"
   Fix 1: "Disable outdatedApi for entire file"
 
 [D35] (54:31-54:36) TS2551: Property 'async' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'. Did you mean 'sync'?
   (no quick fixes)
 
-[D36] (54:31-54:36) TS377052: async is an Effect v3 API, but the project is using Effect v4. Renamed to callback. Note: in v4 the callback receives a Scheduler as 'this' context. effect(outdatedApi)
+[D36] (54:31-54:36) TS377052: This project targets Effect v4, but this code uses the Effect v3 API `async`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Renamed to callback. Note: in v4 the callback receives a Scheduler as 'this' context. effect(outdatedApi)
   Fix 0: "Disable outdatedApi for this line"
   Fix 1: "Disable outdatedApi for entire file"
 
@@ -130,7 +130,7 @@
 [D38] (59:32-59:38) TS2339: Property 'either' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'.
   (no quick fixes)
 
-[D39] (59:32-59:38) TS377052: either is an Effect v3 API, but the project is using Effect v4. Renamed to result. Note: returns Result.Result<A, E> instead of Either<E, A>. Use the Result module to work with the result. effect(outdatedApi)
+[D39] (59:32-59:38) TS377052: This project targets Effect v4, but this code uses the Effect v3 API `either`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Renamed to result. Note: returns Result.Result<A, E> instead of Either<E, A>. Use the Result module to work with the result. effect(outdatedApi)
   Fix 0: "Disable outdatedApi for this line"
   Fix 1: "Disable outdatedApi for entire file"
 

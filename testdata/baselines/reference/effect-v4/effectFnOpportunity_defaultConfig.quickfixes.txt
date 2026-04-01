@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (9:14-9:30) TS377047: Can be rewritten as a reusable function: Effect.fn("withSpanFunction")(function*() { ... }). effect(effectFnOpportunity)
+[D1] (9:14-9:30) TS377047: This expression can be rewritten in the reusable function form `Effect.fn("withSpanFunction")(function*() { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fn (with span from withSpan)"

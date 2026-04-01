@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (6:13-6:26) TS377071: Prefer using the Random service from Effect instead of Math.random() inside Effect generators. effect(globalRandomInEffect)
+[D1] (6:13-6:26) TS377071: This Effect code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandomInEffect)
   Fix 0: "Disable globalRandomInEffect for this line"
   Fix 1: "Disable globalRandomInEffect for entire file"
 

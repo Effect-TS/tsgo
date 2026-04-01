@@ -3,7 +3,7 @@
 [D1] (3:13-3:21) TS6133: 'Function' is declared but its value is never read.
   (no quick fixes)
 
-[D2] (14:36-14:53) TS377022: The 'catch' callback in Effect.tryPromise returns global 'Error', which loses type safety as untagged errors merge together. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectCatch)
+[D2] (14:36-14:53) TS377022: The `catch` callback in `Effect.tryPromise` returns the global `Error` type. Untagged errors merge together in the Effect error channel and lose type-level distinction; a tagged error preserves that distinction and can wrap the original error in a `cause` property. effect(globalErrorInEffectCatch)
   Fix 0: "Disable globalErrorInEffectCatch for this line"
   Fix 1: "Disable globalErrorInEffectCatch for entire file"
 
@@ -11,7 +11,7 @@
   Fix 0: "Disable globalErrorInEffectFailure for this line"
   Fix 1: "Disable globalErrorInEffectFailure for entire file"
 
-[D4] (24:61-24:81) TS377022: The 'catch' callback in Effect.tryMapPromise returns global 'Error', which loses type safety as untagged errors merge together. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectCatch)
+[D4] (24:61-24:81) TS377022: The `catch` callback in `Effect.tryMapPromise` returns the global `Error` type. Untagged errors merge together in the Effect error channel and lose type-level distinction; a tagged error preserves that distinction and can wrap the original error in a `cause` property. effect(globalErrorInEffectCatch)
   Fix 0: "Disable globalErrorInEffectCatch for this line"
   Fix 1: "Disable globalErrorInEffectCatch for entire file"
 

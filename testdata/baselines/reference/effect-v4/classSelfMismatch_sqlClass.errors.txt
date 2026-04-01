@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/classSelfMismatch_sqlClass.ts(10,52): error TS377046: Self type parameter should be 'InvalidModelClass'. effect(classSelfMismatch)
+/.src/classSelfMismatch_sqlClass.ts(10,52): error TS377046: The `Self` type parameter for this class should be `InvalidModelClass`. effect(classSelfMismatch)
 
 
 ==== /.src/classSelfMismatch_sqlClass.ts (1 errors) ====
@@ -16,7 +16,7 @@ Effect version: 4.0.0
     // invalid usage: Model.Class<ValidModelClass> should be Model.Class<InvalidModelClass> because the Self type parameter is not the same as the class name
     export class InvalidModelClass extends Model.Class<ValidModelClass>("InvalidModelClass")({
                                                        ~~~~~~~~~~~~~~~
-!!! error TS377046: Self type parameter should be 'InvalidModelClass'. effect(classSelfMismatch)
+!!! error TS377046: The `Self` type parameter for this class should be `InvalidModelClass`. effect(classSelfMismatch)
       id2: Schema.String
     }) {}
     

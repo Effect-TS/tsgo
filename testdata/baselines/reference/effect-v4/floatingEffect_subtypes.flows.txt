@@ -1,0 +1,313 @@
+==== /.src/floatingEffect_subtypes.ts (6 flows) ====
+
+=== Effect Flow ===
+Kind: effectGen
+Location: 5:28 - 14:3
+Root: Effect.gen(function*() {\n  // Fiber type: forkDetach returns a Fiber, should NOT trigger\n  yield* Effect.succeed(1).pipe(Effect.forkDetach)\n\n  // Exit type: Effect.exit returns an Exit, should NOT trigger\n  yield* Effect.exit(Effect.void)\n\n  // Pool: subtype of Effect, should NOT trigger\n  yield* Pool.make({ acquire: Effect.succeed(1), size: 10 })\n})
+Path (11 nodes):
+  [0] root {effect A=void E=never R=Scope} Effect.gen
+      ==> [executes] -> [1]
+  [1] genSequence {effect A=void E=never R=Scope} generator body
+      ==> [next] -> [2]
+  [2] statement {unknown} yield* Effect.succeed(1).pipe(Effect.forkDetach)
+      ==> [yield*] -> [3]
+  [3] yield {plain A=Fiber<number, never>} yield*
+      ==> [operand] -> [4]
+  [4] yieldOperand {effect A=Fiber<number, never> E=never R=never} Effect.succeed(1).pipe(Effect.forkDetach)
+      ==> [next] -> [5]
+  [5] statement {unknown} yield* Effect.exit(Effect.void)
+      ==> [yield*] -> [6]
+  [6] yield {plain A=Exit<void, never>} yield*
+      ==> [operand] -> [7]
+  [7] yieldOperand {effect A=Exit<void, never> E=never R=never} Effect.exit(Effect.void)
+      ==> [next] -> [8]
+  [8] statement {unknown} yield* Pool.make({ acquire: Effect.succeed(1), size: 10 })
+      ==> [yield*] -> [9]
+  [9] yield {plain A=Pool<number, never>} yield*
+      ==> [operand] -> [10]
+  [10] yieldOperand {effect A=Pool<number, never> E=never R=Scope} Pool.make({ acquire: Effect.succeed(1), size: 10 })
+
+Nodes (11):
+  [0] kind: root
+      label: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: Scope
+  [1] kind: genSequence
+      label: generator body
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: Scope
+  [2] kind: statement
+      label: yield* Effect.succeed(1).pipe(Effect.forkDetach)
+      ordinal: 0
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [3] kind: yield
+      label: yield*
+      ordinal: 0
+      result.kind: plain
+      result.A: Fiber<number, never>
+      result.E: 
+      result.R: 
+  [4] kind: yieldOperand
+      label: Effect.succeed(1).pipe(Effect.forkDetach)
+      ordinal: 0
+      result.kind: effect
+      result.A: Fiber<number, never>
+      result.E: never
+      result.R: never
+  [5] kind: statement
+      label: yield* Effect.exit(Effect.void)
+      ordinal: 1
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [6] kind: yield
+      label: yield*
+      ordinal: 0
+      result.kind: plain
+      result.A: Exit<void, never>
+      result.E: 
+      result.R: 
+  [7] kind: yieldOperand
+      label: Effect.exit(Effect.void)
+      ordinal: 0
+      result.kind: effect
+      result.A: Exit<void, never>
+      result.E: never
+      result.R: never
+  [8] kind: statement
+      label: yield* Pool.make({ acquire: Effect.succeed(1), size: 10 })
+      ordinal: 2
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [9] kind: yield
+      label: yield*
+      ordinal: 0
+      result.kind: plain
+      result.A: Pool<number, never>
+      result.E: 
+      result.R: 
+  [10] kind: yieldOperand
+      label: Pool.make({ acquire: Effect.succeed(1), size: 10 })
+      ordinal: 0
+      result.kind: effect
+      result.A: Pool<number, never>
+      result.E: never
+      result.R: Scope
+Edges (10):
+  0 -> 1 [strong] executes
+  1 -> 2 [strong] next
+  2 -> 3 [strong] yield*
+  3 -> 4 [strong] operand
+  4 -> 5 [strong] next
+  5 -> 6 [strong] yield*
+  6 -> 7 [strong] operand
+  7 -> 8 [strong] next
+  8 -> 9 [strong] yield*
+  9 -> 10 [strong] operand
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 5:28 - 14:3
+Root: Effect.gen(function*() {\n  // Fiber type: forkDetach returns a Fiber, should NOT trigger\n  yield* Effect.succeed(1).pipe(Effect.forkDetach)\n\n  // Exit type: Effect.exit returns an Exit, should NOT trigger\n  yield* Effect.exit(Effect.void)\n\n  // Pool: subtype of Effect, should NOT trigger\n  yield* Pool.make({ acquire: Effect.succeed(1), size: 10 })\n})
+Path (3 nodes):
+  [0] root {effect A=void E=never R=Scope} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=() => Generator<Effect<Fiber<number, never>, never, never> | Effect<Pool<number, never>, never, Scope> | Effect<Exit<void, never>, never, never>, void, any>} function*() {\n  // Fiber type: forkDetach returns a Fiber, should NOT trigge...
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=void E=never R=Scope} step 0: Effect.gen
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: Scope
+  [1] kind: pipeSubject
+      label: function*() {\n  // Fiber type: forkDetach returns a Fiber, should NOT trigge...
+      ordinal: 0
+      result.kind: plain
+      result.A: () => Generator<Effect<Fiber<number, never>, never, never> | Effect<Pool<number, never>, never, Scope> | Effect<Exit<void, never>, never, never>, void, any>
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: Scope
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 7:9 - 7:51
+Root: Effect.succeed(1).pipe(Effect.forkDetach)
+Path (4 nodes):
+  [0] root {effect A=Fiber<number, never> E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=1} 1
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=number E=never R=never} step 0: Effect.succeed
+      ==> [pipeable] -> [3]
+  [3] pipeTransformation {effect A=Fiber<number, never> E=never R=never} step 1: Effect.forkDetach
+
+Nodes (4):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: Fiber<number, never>
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: 1
+      ordinal: 0
+      result.kind: plain
+      result.A: 1
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [3] kind: pipeTransformation
+      label: step 1: Effect.forkDetach
+      ordinal: 1
+      result.kind: effect
+      result.A: Fiber<number, never>
+      result.E: never
+      result.R: never
+Edges (3):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+  2 -> 3 [strong] pipeable
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 10:9 - 10:34
+Root: Effect.exit(Effect.void)
+Path (3 nodes):
+  [0] root {effect A=Exit<void, never> E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {effect A=void E=never R=never} Effect.void
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=Exit<void, never> E=never R=never} step 0: Effect.exit
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: Exit<void, never>
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: Effect.void
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+  [2] kind: pipeTransformation
+      label: step 0: Effect.exit
+      ordinal: 0
+      result.kind: effect
+      result.A: Exit<void, never>
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 13:9 - 13:61
+Root: Pool.make({ acquire: Effect.succeed(1), size: 10 })
+Path (3 nodes):
+  [0] root {effect A=Pool<number, never> E=never R=Scope} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A={ acquire: Effect<number, never, never>; size: number; }} { acquire: Effect.succeed(1), size: 10 }
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=Pool<number, never> E=never R=Scope} step 0: Pool.make
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: Pool<number, never>
+      result.E: never
+      result.R: Scope
+  [1] kind: pipeSubject
+      label: { acquire: Effect.succeed(1), size: 10 }
+      ordinal: 0
+      result.kind: plain
+      result.A: { acquire: Effect<number, never, never>; size: number; }
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Pool.make
+      ordinal: 0
+      result.kind: effect
+      result.A: Pool<number, never>
+      result.E: never
+      result.R: Scope
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 13:30 - 13:48
+Root: Effect.succeed(1)
+Path (3 nodes):
+  [0] root {effect A=number E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=1} 1
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=number E=never R=never} step 0: Effect.succeed
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: 1
+      ordinal: 0
+      result.kind: plain
+      result.A: 1
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call

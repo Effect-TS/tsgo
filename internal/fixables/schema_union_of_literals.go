@@ -12,7 +12,7 @@ import (
 var SchemaUnionOfLiteralsFix = fixable.Fixable{
 	Name:        "schemaUnionOfLiterals",
 	Description: "Replace with a single Schema.Literal call",
-	ErrorCodes:  []int32{tsdiag.A_Schema_Union_of_multiple_Schema_Literal_calls_can_be_simplified_to_a_single_Schema_Literal_call_effect_schemaUnionOfLiterals.Code()},
+	ErrorCodes:  []int32{tsdiag.This_Schema_Union_contains_multiple_Schema_Literal_members_and_can_be_simplified_to_a_single_Schema_Literal_call_effect_schemaUnionOfLiterals.Code()},
 	FixIDs:      []string{"schemaUnionOfLiterals_fix"},
 	Run:         runSchemaUnionOfLiteralsFix,
 }

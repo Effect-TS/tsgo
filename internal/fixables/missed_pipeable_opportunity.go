@@ -13,7 +13,7 @@ import (
 var MissedPipeableOpportunityFix = fixable.Fixable{
 	Name:        "missedPipeableOpportunity",
 	Description: "Convert to pipe style",
-	ErrorCodes:  []int32{tsdiag.Nested_function_calls_can_be_converted_to_pipeable_style_for_better_readability_consider_using_0_pipe_instead_effect_missedPipeableOpportunity.Code()},
+	ErrorCodes:  []int32{tsdiag.This_nested_call_structure_has_a_pipeable_form_0_pipe_represents_the_same_call_sequence_in_pipe_style_and_may_be_easier_to_read_effect_missedPipeableOpportunity.Code()},
 	FixIDs:      []string{"missedPipeableOpportunity_fix"},
 	Run:         runMissedPipeableOpportunityFix,
 }

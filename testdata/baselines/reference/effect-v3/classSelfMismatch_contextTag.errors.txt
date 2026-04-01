@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/classSelfMismatch_contextTag.ts(12,71): error TS377046: Self type parameter should be 'InvalidContextTag'. effect(classSelfMismatch)
+/.src/classSelfMismatch_contextTag.ts(12,71): error TS377046: The `Self` type parameter for this class should be `InvalidContextTag`. effect(classSelfMismatch)
 
 
 ==== /.src/classSelfMismatch_contextTag.ts (1 errors) ====
@@ -18,5 +18,5 @@ Effect version: 3.19.19
     // invalid usage: <ValidContextTag, ServiceShape> should be <InvalidContextTag, ServiceShape> because the Self type parameter is not the same as the class name
     export class InvalidContextTag extends Context.Tag("ValidContextTag")<ValidContextTag, ServiceShape>() {}
                                                                           ~~~~~~~~~~~~~~~
-!!! error TS377046: Self type parameter should be 'InvalidContextTag'. effect(classSelfMismatch)
+!!! error TS377046: The `Self` type parameter for this class should be `InvalidContextTag`. effect(classSelfMismatch)
     

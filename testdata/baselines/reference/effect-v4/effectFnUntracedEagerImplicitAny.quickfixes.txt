@@ -1,17 +1,17 @@
 === Quick Fix Inventory ===
 
-[D1] (4:66-4:71) TS377062: Parameter 'input' implicitly has an 'any' type in Effect.fn/Effect.fnUntraced/Effect.fnUntracedEager. Add an explicit type annotation or provide a contextual function type. effect(effectFnImplicitAny)
+[D1] (4:66-4:71) TS377062: Parameter `input` implicitly has type `any` in `Effect.fn`, `Effect.fnUntraced`, or `Effect.fnUntracedEager`. No parameter type is available from an explicit annotation or contextual function type. effect(effectFnImplicitAny)
   Fix 0: "Disable effectFnImplicitAny for this line"
   Fix 1: "Disable effectFnImplicitAny for entire file"
 
 [D2] (9:46-9:51) TS7006: Parameter 'input' implicitly has an 'any' type.
   (no quick fixes)
 
-[D3] (14:64-14:65) TS377062: Parameter 'a' implicitly has an 'any' type in Effect.fn/Effect.fnUntraced/Effect.fnUntracedEager. Add an explicit type annotation or provide a contextual function type. effect(effectFnImplicitAny)
+[D3] (14:64-14:65) TS377062: Parameter `a` implicitly has type `any` in `Effect.fn`, `Effect.fnUntraced`, or `Effect.fnUntracedEager`. No parameter type is available from an explicit annotation or contextual function type. effect(effectFnImplicitAny)
   Fix 0: "Disable effectFnImplicitAny for this line"
   Fix 1: "Disable effectFnImplicitAny for entire file"
 
-[D4] (14:67-14:68) TS377062: Parameter 'b' implicitly has an 'any' type in Effect.fn/Effect.fnUntraced/Effect.fnUntracedEager. Add an explicit type annotation or provide a contextual function type. effect(effectFnImplicitAny)
+[D4] (14:67-14:68) TS377062: Parameter `b` implicitly has type `any` in `Effect.fn`, `Effect.fnUntraced`, or `Effect.fnUntracedEager`. No parameter type is available from an explicit annotation or contextual function type. effect(effectFnImplicitAny)
   Fix 0: "Disable effectFnImplicitAny for this line"
   Fix 1: "Disable effectFnImplicitAny for entire file"
 

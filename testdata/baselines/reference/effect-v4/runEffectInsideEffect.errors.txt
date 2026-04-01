@@ -1,9 +1,8 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/runEffectInsideEffect.ts(14,21): suggestion TS377024: Using Effect.runSync inside an Effect is not recommended. Effects inside generators can usually just be yielded. effect(runEffectInsideEffect)
-/.src/runEffectInsideEffect.ts(22,5): suggestion TS377074: Using Effect.runPromise inside an Effect is not recommended. The same services should generally be used instead to run child effects.
-Consider extracting the current services by using for example Effect.services and then use Effect.runPromiseWith with the extracted services instead. effect(runEffectInsideEffect)
+/.src/runEffectInsideEffect.ts(14,21): suggestion TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
+/.src/runEffectInsideEffect.ts(22,5): suggestion TS377074: `Effect.runPromise` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.services` and `Effect.runPromiseWith`. effect(runEffectInsideEffect)
 
 
 ==== /.src/runEffectInsideEffect.ts (2 errors) ====
@@ -22,7 +21,7 @@ Consider extracting the current services by using for example Effect.services an
     
       const websocket = Effect.runSync(Effect.sync(() => new WebSocket(data.url)))
                         ~~~~~~~~~~~~~~
-!!! suggestion TS377024: Using Effect.runSync inside an Effect is not recommended. Effects inside generators can usually just be yielded. effect(runEffectInsideEffect)
+!!! suggestion TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
       //                        ^- do not runSync in here
     
       websocket.onmessage = (event) => {
@@ -32,8 +31,7 @@ Consider extracting the current services by using for example Effect.services an
         })
         Effect.runPromise(check)
         ~~~~~~~~~~~~~~~~~
-!!! suggestion TS377074: Using Effect.runPromise inside an Effect is not recommended. The same services should generally be used instead to run child effects.
-Consider extracting the current services by using for example Effect.services and then use Effect.runPromiseWith with the extracted services instead. effect(runEffectInsideEffect)
+!!! suggestion TS377074: `Effect.runPromise` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.services` and `Effect.runPromiseWith`. effect(runEffectInsideEffect)
         //        ^- no runPromise, use the current services instead
       }
     })

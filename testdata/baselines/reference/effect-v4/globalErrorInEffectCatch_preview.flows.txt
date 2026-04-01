@@ -1,0 +1,75 @@
+==== /.src/globalErrorInEffectCatch_preview.ts (2 flows) ====
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 5:23 - 8:3
+Root: Effect.tryPromise({\n  try: async () => 1,\n  catch: (error) => new Error(String(error))\n})
+Path (3 nodes):
+  [0] root {effect A=number E=Error R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A={ try: () => Promise<number>; catch: (error: unknown) => Error; }} {\n  try: async () => 1,\n  catch: (error) => new Error(String(error))\n}
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=number E=Error R=never} step 0: Effect.tryPromise
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: Error
+      result.R: never
+  [1] kind: pipeSubject
+      label: {\n  try: async () => 1,\n  catch: (error) => new Error(String(error))\n}
+      ordinal: 0
+      result.kind: plain
+      result.A: { try: () => Promise<number>; catch: (error: unknown) => Error; }
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.tryPromise
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: Error
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 7:31 - 7:44
+Root: String(error)
+Path (3 nodes):
+  [0] root {plain A=string} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=unknown} error
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=string} step 0: String
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: string
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: error
+      ordinal: 0
+      result.kind: plain
+      result.A: unknown
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: String
+      ordinal: 0
+      result.kind: plain
+      result.A: string
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call

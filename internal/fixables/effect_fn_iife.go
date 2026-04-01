@@ -12,7 +12,7 @@ import (
 var EffectFnIifeFix = fixable.Fixable{
 	Name:        "effectFnIife",
 	Description: "Convert Effect.fn IIFE to Effect.gen",
-	ErrorCodes:  []int32{tsdiag.X_0_1_returns_a_reusable_function_that_can_take_arguments_but_here_it_s_called_immediately_Use_Effect_gen_instead_2_effect_effectFnIife.Code()},
+	ErrorCodes:  []int32{tsdiag.X_0_1_returns_a_reusable_function_that_can_take_arguments_but_it_is_invoked_immediately_here_Effect_gen_represents_the_immediate_use_form_for_this_pattern_2_effect_effectFnIife.Code()},
 	FixIDs:      []string{"effectFnIife_toEffectGen"},
 	Run:         runEffectFnIifeFix,
 }

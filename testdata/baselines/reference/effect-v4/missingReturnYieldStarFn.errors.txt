@@ -1,11 +1,11 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/missingReturnYieldStarFn.ts(4,5): error TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
-/.src/missingReturnYieldStarFn.ts(8,5): error TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
-/.src/missingReturnYieldStarFn.ts(18,9): error TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
-/.src/missingReturnYieldStarFn.ts(21,9): error TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
-/.src/missingReturnYieldStarFn.ts(25,5): error TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+/.src/missingReturnYieldStarFn.ts(4,5): error TS377006: This Effect never succeeds; using `return yield*` preserves a definitive generator exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+/.src/missingReturnYieldStarFn.ts(8,5): error TS377006: This Effect never succeeds; using `return yield*` preserves a definitive generator exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+/.src/missingReturnYieldStarFn.ts(18,9): error TS377006: This Effect never succeeds; using `return yield*` preserves a definitive generator exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+/.src/missingReturnYieldStarFn.ts(21,9): error TS377006: This Effect never succeeds; using `return yield*` preserves a definitive generator exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+/.src/missingReturnYieldStarFn.ts(25,5): error TS377006: This Effect never succeeds; using `return yield*` preserves a definitive generator exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
 
 
 ==== /.src/missingReturnYieldStarFn.ts (5 errors) ====
@@ -14,13 +14,13 @@ Effect version: 4.0.0
     export const shouldComplain = Effect.fn(function*(){
         yield* Effect.fail("no") // <- should emit an error be return yield*
         ~~~~~
-!!! error TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+!!! error TS377006: This Effect never succeeds; using `return yield*` preserves a definitive generator exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
     })
     
     export const shouldComplainNamedFn = Effect.fn("named")(function* namedFn(){
         yield* Effect.fail("no") // <- should emit an error be return yield*
         ~~~~~
-!!! error TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+!!! error TS377006: This Effect never succeeds; using `return yield*` preserves a definitive generator exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
     })
     
     export const shouldNotComplainRegularFn = Effect.fn((a: string) => {
@@ -32,16 +32,16 @@ Effect version: 4.0.0
         shouldComplain = Effect.fn({self: this}, function*(){
             yield* Effect.fail(this.a) // <- should emit an error be return yield*
             ~~~~~
-!!! error TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+!!! error TS377006: This Effect never succeeds; using `return yield*` preserves a definitive generator exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
         })
         shouldComplainNamedFn = Effect.fn("named")({self: this}, function* namedFn(){
             yield* Effect.fail(this.a) // <- should emit an error be return yield*
             ~~~~~
-!!! error TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+!!! error TS377006: This Effect never succeeds; using `return yield*` preserves a definitive generator exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
         })
     }
     export const shouldComplainNamedFnWithPipes = Effect.fn("named")(function* namedFn(){
         yield* Effect.fail("no") // <- should emit an error be return yield*
         ~~~~~
-!!! error TS377006: It is recommended to use return yield* for Effects that never succeed to signal a definitive exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+!!! error TS377006: This Effect never succeeds; using `return yield*` preserves a definitive generator exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
     }, Effect.ignore)

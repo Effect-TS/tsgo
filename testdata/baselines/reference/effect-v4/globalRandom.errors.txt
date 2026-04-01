@@ -1,10 +1,10 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/globalRandom.ts(5,23): warning TS377070: Prefer using the Random service from Effect instead of Math.random(). effect(globalRandom)
-/.src/globalRandom.ts(8,30): warning TS377070: Prefer using the Random service from Effect instead of Math.random(). effect(globalRandom)
-/.src/globalRandom.ts(12,24): warning TS377070: Prefer using the Random service from Effect instead of Math.random(). effect(globalRandom)
-/.src/globalRandom.ts(21,20): warning TS377070: Prefer using the Random service from Effect instead of Math.random(). effect(globalRandom)
+/.src/globalRandom.ts(5,23): warning TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
+/.src/globalRandom.ts(8,30): warning TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
+/.src/globalRandom.ts(12,24): warning TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
+/.src/globalRandom.ts(21,20): warning TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
 
 
 ==== /.src/globalRandom.ts (4 errors) ====
@@ -14,18 +14,18 @@ Effect version: 4.0.0
     // Should trigger - Math.random() at module level
     const _moduleRandom = Math.random()
                           ~~~~~~~~~~~~~
-!!! warning TS377070: Prefer using the Random service from Effect instead of Math.random(). effect(globalRandom)
+!!! warning TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
     
     // Should trigger - Math.random() in regular function
     const _regularRandom = () => Math.random()
                                  ~~~~~~~~~~~~~
-!!! warning TS377070: Prefer using the Random service from Effect instead of Math.random(). effect(globalRandom)
+!!! warning TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
     
     // Should trigger - aliased Math at module level
     const MyMath = Math
     const _aliasedRandom = MyMath.random()
                            ~~~~~~~~~~~~~~~
-!!! warning TS377070: Prefer using the Random service from Effect instead of Math.random(). effect(globalRandom)
+!!! warning TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
     
     // Should NOT trigger - Math.random() inside Effect.gen
     export const mathRandomInGen = Effect.gen(function*() {
@@ -36,7 +36,7 @@ Effect version: 4.0.0
     export const nestedArrowInGen = Effect.gen(function*() {
       const fn = () => Math.random()
                        ~~~~~~~~~~~~~
-!!! warning TS377070: Prefer using the Random service from Effect instead of Math.random(). effect(globalRandom)
+!!! warning TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
       return fn
     })
     

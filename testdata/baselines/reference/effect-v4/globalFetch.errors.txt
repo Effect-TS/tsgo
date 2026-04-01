@@ -1,10 +1,10 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/globalFetch.ts(5,22): warning TS377061: Prefer using HttpClient from effect/unstable/http instead of the global 'fetch' function. effect(globalFetch)
-/.src/globalFetch.ts(8,29): warning TS377061: Prefer using HttpClient from effect/unstable/http instead of the global 'fetch' function. effect(globalFetch)
-/.src/globalFetch.ts(12,23): warning TS377061: Prefer using HttpClient from effect/unstable/http instead of the global 'fetch' function. effect(globalFetch)
-/.src/globalFetch.ts(21,20): warning TS377061: Prefer using HttpClient from effect/unstable/http instead of the global 'fetch' function. effect(globalFetch)
+/.src/globalFetch.ts(5,22): warning TS377061: This code uses the global `fetch` function, HTTP requests are represented through `HttpClient` from `effect/unstable/http`. effect(globalFetch)
+/.src/globalFetch.ts(8,29): warning TS377061: This code uses the global `fetch` function, HTTP requests are represented through `HttpClient` from `effect/unstable/http`. effect(globalFetch)
+/.src/globalFetch.ts(12,23): warning TS377061: This code uses the global `fetch` function, HTTP requests are represented through `HttpClient` from `effect/unstable/http`. effect(globalFetch)
+/.src/globalFetch.ts(21,20): warning TS377061: This code uses the global `fetch` function, HTTP requests are represented through `HttpClient` from `effect/unstable/http`. effect(globalFetch)
 
 
 ==== /.src/globalFetch.ts (4 errors) ====
@@ -14,18 +14,18 @@ Effect version: 4.0.0
     // Should trigger - fetch at module level
     const _moduleFetch = fetch("https://example.com/module")
                          ~~~~~
-!!! warning TS377061: Prefer using HttpClient from effect/unstable/http instead of the global 'fetch' function. effect(globalFetch)
+!!! warning TS377061: This code uses the global `fetch` function, HTTP requests are represented through `HttpClient` from `effect/unstable/http`. effect(globalFetch)
     
     // Should trigger - fetch in regular function
     const _regularFetch = () => fetch("https://example.com/regular")
                                 ~~~~~
-!!! warning TS377061: Prefer using HttpClient from effect/unstable/http instead of the global 'fetch' function. effect(globalFetch)
+!!! warning TS377061: This code uses the global `fetch` function, HTTP requests are represented through `HttpClient` from `effect/unstable/http`. effect(globalFetch)
     
     // Should trigger - aliased fetch
     const myFetch = fetch
     const _aliasedFetch = myFetch("https://example.com/alias")
                           ~~~~~~~
-!!! warning TS377061: Prefer using HttpClient from effect/unstable/http instead of the global 'fetch' function. effect(globalFetch)
+!!! warning TS377061: This code uses the global `fetch` function, HTTP requests are represented through `HttpClient` from `effect/unstable/http`. effect(globalFetch)
     
     // Should NOT trigger - fetch directly inside Effect.gen
     export const fetchInGen = Effect.gen(function*() {
@@ -36,7 +36,7 @@ Effect version: 4.0.0
     export const nestedArrowInGen = Effect.gen(function*() {
       const fn = () => fetch("https://example.com/nested")
                        ~~~~~
-!!! warning TS377061: Prefer using HttpClient from effect/unstable/http instead of the global 'fetch' function. effect(globalFetch)
+!!! warning TS377061: This code uses the global `fetch` function, HTTP requests are represented through `HttpClient` from `effect/unstable/http`. effect(globalFetch)
       return fn
     })
     

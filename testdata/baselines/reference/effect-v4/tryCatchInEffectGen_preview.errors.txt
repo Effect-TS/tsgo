@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/tryCatchInEffectGen_preview.ts(6,3): warning TS377012: Avoid using try/catch inside Effect generators. Use Effect's error handling mechanisms instead (e.g. Effect.try, Effect.tryPromise, Effect.catch, Effect.catchTag). effect(tryCatchInEffectGen)
+/.src/tryCatchInEffectGen_preview.ts(6,3): warning TS377012: This Effect generator contains `try/catch`; in this context, error handling is expressed with Effect APIs such as Effect.try, Effect.tryPromise, Effect.catch, Effect.catchTag). effect(tryCatchInEffectGen)
 
 
 ==== /.src/tryCatchInEffectGen_preview.ts (1 errors) ====
@@ -14,6 +14,6 @@ Effect version: 4.0.0
       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       catch { return 0 }
     ~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377012: Avoid using try/catch inside Effect generators. Use Effect's error handling mechanisms instead (e.g. Effect.try, Effect.tryPromise, Effect.catch, Effect.catchTag). effect(tryCatchInEffectGen)
+!!! warning TS377012: This Effect generator contains `try/catch`; in this context, error handling is expressed with Effect APIs such as Effect.try, Effect.tryPromise, Effect.catch, Effect.catchTag). effect(tryCatchInEffectGen)
     })
     

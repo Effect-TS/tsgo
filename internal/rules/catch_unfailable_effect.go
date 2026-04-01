@@ -21,7 +21,7 @@ var CatchUnfailableEffect = rule.Rule{
 	Description:     "Warns when using error handling on Effects that never fail",
 	DefaultSeverity: etscore.SeveritySuggestion,
 	SupportedEffect: []string{"v3", "v4"},
-	Codes:           []int32{tsdiag.Looks_like_the_previous_effect_never_fails_so_probably_this_error_handling_will_never_be_triggered_effect_catchUnfailableEffect.Code()},
+	Codes:           []int32{tsdiag.The_previous_Effect_does_not_fail_so_this_error_handling_branch_will_never_run_effect_catchUnfailableEffect.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		var diags []*ast.Diagnostic
 
@@ -54,7 +54,7 @@ var CatchUnfailableEffect = rule.Rule{
 					continue
 				}
 
-				diags = append(diags, ctx.NewDiagnostic(ast.GetSourceFileOfNode(transformation.Callee), ctx.GetErrorRange(transformation.Callee), tsdiag.Looks_like_the_previous_effect_never_fails_so_probably_this_error_handling_will_never_be_triggered_effect_catchUnfailableEffect, nil))
+				diags = append(diags, ctx.NewDiagnostic(ast.GetSourceFileOfNode(transformation.Callee), ctx.GetErrorRange(transformation.Callee), tsdiag.The_previous_Effect_does_not_fail_so_this_error_handling_branch_will_never_run_effect_catchUnfailableEffect, nil))
 			}
 		}
 

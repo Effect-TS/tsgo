@@ -20,12 +20,12 @@ var MultipleEffectProvide = rule.Rule{
 	Description:     "Warns against chaining Effect.provide calls which can cause service lifecycle issues",
 	DefaultSeverity: etscore.SeverityWarning,
 	SupportedEffect: []string{"v3", "v4"},
-	Codes:           []int32{tsdiag.Avoid_chaining_Effect_provide_calls_as_this_can_lead_to_service_lifecycle_issues_Instead_merge_layers_and_provide_them_in_a_single_call_effect_multipleEffectProvide.Code()},
+	Codes:           []int32{tsdiag.This_expression_chains_multiple_Effect_provide_calls_Providing_Layers_in_multiple_calls_in_a_chain_can_break_service_lifecycle_behavior_compared_with_a_single_combined_provide_with_merged_layers_effect_multipleEffectProvide.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeMultipleEffectProvide(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
-			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Avoid_chaining_Effect_provide_calls_as_this_can_lead_to_service_lifecycle_issues_Instead_merge_layers_and_provide_them_in_a_single_call_effect_multipleEffectProvide, nil)
+			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.This_expression_chains_multiple_Effect_provide_calls_Providing_Layers_in_multiple_calls_in_a_chain_can_break_service_lifecycle_behavior_compared_with_a_single_combined_provide_with_merged_layers_effect_multipleEffectProvide, nil)
 		}
 		return diags
 	},

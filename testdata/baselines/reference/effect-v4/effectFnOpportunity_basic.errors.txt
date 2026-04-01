@@ -1,10 +1,10 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/effectFnOpportunity_basic.ts(9,14): suggestion TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*() { ... }). effect(effectFnOpportunity)
-/.src/effectFnOpportunity_basic.ts(16,14): suggestion TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*() { ... }). effect(effectFnOpportunity)
-/.src/effectFnOpportunity_basic.ts(22,14): suggestion TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*() { ... }). effect(effectFnOpportunity)
-/.src/effectFnOpportunity_basic.ts(29,17): suggestion TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*() { ... }). effect(effectFnOpportunity)
+/.src/effectFnOpportunity_basic.ts(9,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... })`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_basic.ts(16,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... })`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_basic.ts(22,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... })`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_basic.ts(29,17): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... })`. effect(effectFnOpportunity)
 
 
 ==== /.src/tsconfig.json (0 errors) ====
@@ -31,7 +31,7 @@ Effect version: 4.0.0
     
     export const arrowBlockGen = () => {
                  ~~~~~~~~~~~~~
-!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*() { ... }). effect(effectFnOpportunity)
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... })`. effect(effectFnOpportunity)
       return Effect.gen(function*() {
         yield* Effect.succeed(1)
         return 42
@@ -40,7 +40,7 @@ Effect version: 4.0.0
     
     export const arrowExpressionGen = () =>
                  ~~~~~~~~~~~~~~~~~~
-!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*() { ... }). effect(effectFnOpportunity)
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... })`. effect(effectFnOpportunity)
       Effect.gen(function*() {
         yield* Effect.succeed(1)
         return 42
@@ -48,7 +48,7 @@ Effect version: 4.0.0
     
     export const functionExpressionGen = function() {
                  ~~~~~~~~~~~~~~~~~~~~~
-!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*() { ... }). effect(effectFnOpportunity)
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... })`. effect(effectFnOpportunity)
       return Effect.gen(function*() {
         yield* Effect.succeed(1)
         return 42
@@ -57,7 +57,7 @@ Effect version: 4.0.0
     
     export function functionDeclarationGen() {
                     ~~~~~~~~~~~~~~~~~~~~~~
-!!! suggestion TS377047: Can be rewritten as a reusable function: Effect.fnUntraced(function*() { ... }). effect(effectFnOpportunity)
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... })`. effect(effectFnOpportunity)
       return Effect.gen(function*() {
         yield* Effect.succeed(1)
         return 42

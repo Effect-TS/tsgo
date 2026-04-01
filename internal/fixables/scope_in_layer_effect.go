@@ -11,7 +11,7 @@ import (
 var ScopeInLayerEffectScopedFix = fixable.Fixable{
 	Name:        "scopeInLayerEffectScoped",
 	Description: "Use scoped for Layer creation",
-	ErrorCodes:  []int32{tsdiag.Seems_like_you_are_constructing_a_layer_with_a_scope_in_the_requirements_Consider_using_scoped_instead_to_get_rid_of_the_scope_in_the_requirements_effect_scopeInLayerEffect.Code()},
+	ErrorCodes:  []int32{tsdiag.This_layer_construction_leaves_Scope_in_the_requirement_set_The_scoped_API_removes_Scope_from_the_resulting_requirements_effect_scopeInLayerEffect.Code()},
 	FixIDs:      []string{"scopeInLayerEffect_scoped"},
 	Run:         runScopeInLayerEffectScopedFix,
 }

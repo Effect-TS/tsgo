@@ -1,0 +1,38 @@
+==== /.src/test.ts (1 flows) ====
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 1:32 - 4:20
+Root: Effect.log("hello")
+Path (3 nodes):
+  [0] root {effect A=void E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="hello"} "hello"
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=void E=never R=never} step 0: Effect.log
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: "hello"
+      ordinal: 0
+      result.kind: plain
+      result.A: "hello"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.log
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call

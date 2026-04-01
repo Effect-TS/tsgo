@@ -1,0 +1,112 @@
+==== /.src/floatingEffectGen.ts (3 flows) ====
+
+=== Effect Flow ===
+Kind: effectGen
+Location: 3:23 - 5:3
+Root: Effect.gen(function*(){\n   Effect.log("hello") // <- this should be yielded instead\n})
+Path (3 nodes):
+  [0] root {effect A=void E=never R=never} Effect.gen
+      ==> [executes] -> [1]
+  [1] genSequence {effect A=void E=never R=never} generator body
+      ==> [next] -> [2]
+  [2] statement {unknown} Effect.log("hello")
+
+Nodes (3):
+  [0] kind: root
+      label: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+  [1] kind: genSequence
+      label: generator body
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+  [2] kind: statement
+      label: Effect.log("hello")
+      ordinal: 0
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] executes
+  1 -> 2 [strong] next
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 3:23 - 5:3
+Root: Effect.gen(function*(){\n   Effect.log("hello") // <- this should be yielded instead\n})
+Path (3 nodes):
+  [0] root {effect A=void E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=() => Generator<never, void, never>} function*(){\n   Effect.log("hello") // <- this should be yielded instead\n}
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=void E=never R=never} step 0: Effect.gen
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: function*(){\n   Effect.log("hello") // <- this should be yielded instead\n}
+      ordinal: 0
+      result.kind: plain
+      result.A: () => Generator<never, void, never>
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 3:47 - 4:23
+Root: Effect.log("hello")
+Path (3 nodes):
+  [0] root {effect A=void E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="hello"} "hello"
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=void E=never R=never} step 0: Effect.log
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: "hello"
+      ordinal: 0
+      result.kind: plain
+      result.A: "hello"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.log
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call

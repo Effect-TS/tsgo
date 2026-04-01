@@ -3,18 +3,18 @@
 [D1] (4:7-4:14) TS6133: 'noError' is declared but its value is never read.
   (no quick fixes)
 
-[D2] (6:1-6:27) TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+[D2] (6:1-6:27) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
   Fix 0: "Disable floatingEffect for this line"
   Fix 1: "Disable floatingEffect for entire file"
 
-[D3] (8:1-8:13) TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+[D3] (8:1-8:13) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
   Fix 0: "Disable floatingEffect for this line"
   Fix 1: "Disable floatingEffect for entire file"
 
 [D4] (11:9-11:19) TS6133: 'thisIsFine' is declared but its value is never read.
   (no quick fixes)
 
-[D5] (12:3-12:15) TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+[D5] (12:3-12:15) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
   Fix 0: "Disable floatingEffect for this line"
   Fix 1: "Disable floatingEffect for entire file"
 

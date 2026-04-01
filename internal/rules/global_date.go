@@ -16,8 +16,8 @@ var GlobalDate = rule.Rule{
 	DefaultSeverity: etscore.SeverityOff,
 	SupportedEffect: []string{"v3", "v4"},
 	Codes: []int32{
-		tsdiag.Prefer_using_Clock_or_DateTime_from_Effect_instead_of_Date_now_effect_globalDate.Code(),
-		tsdiag.Prefer_using_DateTime_from_Effect_instead_of_new_Date_effect_globalDate.Code(),
+		tsdiag.This_code_uses_Date_now_time_access_is_represented_through_Clock_from_Effect_effect_globalDate.Code(),
+		tsdiag.This_code_constructs_new_Date_date_values_are_represented_through_DateTime_from_Effect_effect_globalDate.Code(),
 	},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		return runGlobalDate(ctx, false)
@@ -31,8 +31,8 @@ var GlobalDateInEffect = rule.Rule{
 	DefaultSeverity: etscore.SeverityOff,
 	SupportedEffect: []string{"v3", "v4"},
 	Codes: []int32{
-		tsdiag.Prefer_using_Clock_or_DateTime_from_Effect_instead_of_Date_now_inside_Effect_generators_effect_globalDateInEffect.Code(),
-		tsdiag.Prefer_using_DateTime_from_Effect_instead_of_new_Date_inside_Effect_generators_effect_globalDateInEffect.Code(),
+		tsdiag.This_Effect_code_uses_Date_now_time_access_in_Effect_code_is_represented_through_Clock_from_Effect_effect_globalDateInEffect.Code(),
+		tsdiag.This_Effect_code_constructs_new_Date_date_values_in_Effect_code_are_represented_through_DateTime_from_Effect_effect_globalDateInEffect.Code(),
 	},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		return runGlobalDate(ctx, true)
@@ -54,7 +54,7 @@ func runGlobalDate(ctx *rule.Context, checkInEffect bool) []*ast.Diagnostic {
 		inEffect := ctx.TypeParser.GetEffectContextFlags(node)&typeparser.EffectContextFlagCanYieldEffect != 0
 		if inEffect == checkInEffect {
 			var objectNode *ast.Node
-			message := tsdiag.Prefer_using_Clock_or_DateTime_from_Effect_instead_of_Date_now_effect_globalDate
+			message := tsdiag.This_code_uses_Date_now_time_access_is_represented_through_Clock_from_Effect_effect_globalDate
 
 			switch node.Kind {
 			case ast.KindCallExpression:
@@ -64,15 +64,15 @@ func runGlobalDate(ctx *rule.Context, checkInEffect bool) []*ast.Diagnostic {
 					if prop.Name().Text() == "now" {
 						objectNode = prop.Expression
 						if checkInEffect {
-							message = tsdiag.Prefer_using_Clock_or_DateTime_from_Effect_instead_of_Date_now_inside_Effect_generators_effect_globalDateInEffect
+							message = tsdiag.This_Effect_code_uses_Date_now_time_access_in_Effect_code_is_represented_through_Clock_from_Effect_effect_globalDateInEffect
 						}
 					}
 				}
 			case ast.KindNewExpression:
 				objectNode = node.AsNewExpression().Expression
-				message = tsdiag.Prefer_using_DateTime_from_Effect_instead_of_new_Date_effect_globalDate
+				message = tsdiag.This_code_constructs_new_Date_date_values_are_represented_through_DateTime_from_Effect_effect_globalDate
 				if checkInEffect {
-					message = tsdiag.Prefer_using_DateTime_from_Effect_instead_of_new_Date_inside_Effect_generators_effect_globalDateInEffect
+					message = tsdiag.This_Effect_code_constructs_new_Date_date_values_in_Effect_code_are_represented_through_DateTime_from_Effect_effect_globalDateInEffect
 				}
 			}
 

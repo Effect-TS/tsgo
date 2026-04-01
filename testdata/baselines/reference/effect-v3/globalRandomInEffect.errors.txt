@@ -1,8 +1,8 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/globalRandomInEffect.ts(6,13): warning TS377071: Prefer using the Random service from Effect instead of Math.random() inside Effect generators. effect(globalRandomInEffect)
-/.src/globalRandomInEffect.ts(13,13): warning TS377071: Prefer using the Random service from Effect instead of Math.random() inside Effect generators. effect(globalRandomInEffect)
+/.src/globalRandomInEffect.ts(6,13): warning TS377071: This Effect code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandomInEffect)
+/.src/globalRandomInEffect.ts(13,13): warning TS377071: This Effect code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandomInEffect)
 
 
 ==== /.src/globalRandomInEffect.ts (2 errors) ====
@@ -13,7 +13,7 @@ Effect version: 3.19.19
     export const mathRandomInGen = Effect.gen(function*() {
       const r = Math.random()
                 ~~~~~~~~~~~~~
-!!! warning TS377071: Prefer using the Random service from Effect instead of Math.random() inside Effect generators. effect(globalRandomInEffect)
+!!! warning TS377071: This Effect code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandomInEffect)
       return r
     })
     
@@ -22,7 +22,7 @@ Effect version: 3.19.19
       const MyMath = Math
       const r = MyMath.random()
                 ~~~~~~~~~~~~~~~
-!!! warning TS377071: Prefer using the Random service from Effect instead of Math.random() inside Effect generators. effect(globalRandomInEffect)
+!!! warning TS377071: This Effect code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandomInEffect)
       return r
     })
     

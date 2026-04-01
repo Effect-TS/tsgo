@@ -12,7 +12,7 @@ import (
 var DeterministicKeysFix = fixable.Fixable{
 	Name:        "deterministicKeys",
 	Description: "Replace key with expected deterministic key",
-	ErrorCodes:  []int32{tsdiag.Key_should_be_0_effect_deterministicKeys.Code()},
+	ErrorCodes:  []int32{tsdiag.This_key_does_not_match_the_deterministic_key_for_this_declaration_The_expected_key_is_0_effect_deterministicKeys.Code()},
 	FixIDs:      []string{"deterministicKeys_fix"},
 	Run:         runDeterministicKeysFix,
 }

@@ -21,7 +21,7 @@ var PreferSchemaOverJson = rule.Rule{
 	Description:     "Suggests using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify",
 	DefaultSeverity: etscore.SeveritySuggestion,
 	SupportedEffect: []string{"v3", "v4"},
-	Codes:           []int32{tsdiag.Consider_using_Effect_Schema_for_JSON_operations_instead_of_JSON_parse_SlashJSON_stringify_effect_preferSchemaOverJson.Code()},
+	Codes:           []int32{tsdiag.This_code_uses_JSON_parse_or_JSON_stringify_Effect_Schema_provides_Effect_aware_APIs_for_JSON_parsing_and_stringifying_effect_preferSchemaOverJson.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		var diags []*ast.Diagnostic
 		isV4 := ctx.TypeParser.SupportedEffectVersion() == typeparser.EffectMajorV4
@@ -52,13 +52,13 @@ var PreferSchemaOverJson = rule.Rule{
 func checkPreferSchemaOverJson(ctx *rule.Context, node *ast.Node, isV4 bool) *ast.Diagnostic {
 	// Try each pattern in order
 	if jsonNode := checkEffectTrySimple(ctx.TypeParser, ctx.Checker, node, isV4); jsonNode != nil {
-		return ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(jsonNode), tsdiag.Consider_using_Effect_Schema_for_JSON_operations_instead_of_JSON_parse_SlashJSON_stringify_effect_preferSchemaOverJson, nil)
+		return ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(jsonNode), tsdiag.This_code_uses_JSON_parse_or_JSON_stringify_Effect_Schema_provides_Effect_aware_APIs_for_JSON_parsing_and_stringifying_effect_preferSchemaOverJson, nil)
 	}
 	if jsonNode := checkEffectTryObject(ctx.TypeParser, ctx.Checker, node); jsonNode != nil {
-		return ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(jsonNode), tsdiag.Consider_using_Effect_Schema_for_JSON_operations_instead_of_JSON_parse_SlashJSON_stringify_effect_preferSchemaOverJson, nil)
+		return ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(jsonNode), tsdiag.This_code_uses_JSON_parse_or_JSON_stringify_Effect_Schema_provides_Effect_aware_APIs_for_JSON_parsing_and_stringifying_effect_preferSchemaOverJson, nil)
 	}
 	if jsonNode := checkJsonMethodInEffectGen(ctx.TypeParser, ctx.Checker, node); jsonNode != nil {
-		return ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(jsonNode), tsdiag.Consider_using_Effect_Schema_for_JSON_operations_instead_of_JSON_parse_SlashJSON_stringify_effect_preferSchemaOverJson, nil)
+		return ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(jsonNode), tsdiag.This_code_uses_JSON_parse_or_JSON_stringify_Effect_Schema_provides_Effect_aware_APIs_for_JSON_parsing_and_stringifying_effect_preferSchemaOverJson, nil)
 	}
 	return nil
 }

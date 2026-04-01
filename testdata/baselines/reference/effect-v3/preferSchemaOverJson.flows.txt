@@ -1,0 +1,999 @@
+==== /.src/preferSchemaOverJson.ts (24 flows) ====
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 5:27 - 5:79
+Root: Effect.try(() => JSON.parse("{\"name\":\"John\"}"))
+Path (3 nodes):
+  [0] root {effect A=any E=UnknownException R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=() => any} () => JSON.parse("{\"name\":\"John\"}")
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=any E=UnknownException R=never} step 0: Effect.try
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: any
+      result.E: UnknownException
+      result.R: never
+  [1] kind: pipeSubject
+      label: () => JSON.parse("{\"name\":\"John\"}")
+      ordinal: 0
+      result.kind: plain
+      result.A: () => any
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.try
+      ordinal: 0
+      result.kind: effect
+      result.A: any
+      result.E: UnknownException
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 5:44 - 5:78
+Root: JSON.parse("{\"name\":\"John\"}")
+Path (3 nodes):
+  [0] root {plain A=any} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="{\"name\":\"John\"}"} "{\"name\":\"John\"}"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=any} step 0: JSON.parse
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "{\"name\":\"John\"}"
+      ordinal: 0
+      result.kind: plain
+      result.A: "{\"name\":\"John\"}"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: JSON.parse
+      ordinal: 0
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 8:30 - 11:3
+Root: Effect.try({\n  try: () => JSON.parse("{\"name\":\"Jane\"}"),\n  catch: () => new Error("Failed to parse")\n})
+Path (3 nodes):
+  [0] root {effect A=any E=Error R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A={ try: () => any; catch: () => Error; }} {\n  try: () => JSON.parse("{\"name\":\"Jane\"}"),\n  catch: () => new Error(...
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=any E=Error R=never} step 0: Effect.try
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: any
+      result.E: Error
+      result.R: never
+  [1] kind: pipeSubject
+      label: {\n  try: () => JSON.parse("{\"name\":\"Jane\"}"),\n  catch: () => new Error(...
+      ordinal: 0
+      result.kind: plain
+      result.A: { try: () => any; catch: () => Error; }
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.try
+      ordinal: 0
+      result.kind: effect
+      result.A: any
+      result.E: Error
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 9:13 - 9:47
+Root: JSON.parse("{\"name\":\"Jane\"}")
+Path (3 nodes):
+  [0] root {plain A=any} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="{\"name\":\"Jane\"}"} "{\"name\":\"Jane\"}"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=any} step 0: JSON.parse
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "{\"name\":\"Jane\"}"
+      ordinal: 0
+      result.kind: plain
+      result.A: "{\"name\":\"Jane\"}"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: JSON.parse
+      ordinal: 0
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 14:31 - 14:81
+Root: Effect.try(() => JSON.stringify({ name: "Bob" }))
+Path (3 nodes):
+  [0] root {effect A=string E=UnknownException R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=() => string} () => JSON.stringify({ name: "Bob" })
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=string E=UnknownException R=never} step 0: Effect.try
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: string
+      result.E: UnknownException
+      result.R: never
+  [1] kind: pipeSubject
+      label: () => JSON.stringify({ name: "Bob" })
+      ordinal: 0
+      result.kind: plain
+      result.A: () => string
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.try
+      ordinal: 0
+      result.kind: effect
+      result.A: string
+      result.E: UnknownException
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 14:48 - 14:80
+Root: JSON.stringify({ name: "Bob" })
+Path (3 nodes):
+  [0] root {plain A=string} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A={ name: string; }} { name: "Bob" }
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=string} step 0: JSON.stringify
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: string
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: { name: "Bob" }
+      ordinal: 0
+      result.kind: plain
+      result.A: { name: string; }
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: JSON.stringify
+      ordinal: 0
+      result.kind: plain
+      result.A: string
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 17:34 - 20:3
+Root: Effect.try({\n  try: () => JSON.stringify({ name: "Alice" }),\n  catch: () => new Error("Failed to stringify")\n})
+Path (3 nodes):
+  [0] root {effect A=string E=Error R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A={ try: () => string; catch: () => Error; }} {\n  try: () => JSON.stringify({ name: "Alice" }),\n  catch: () => new Error(...
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=string E=Error R=never} step 0: Effect.try
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: string
+      result.E: Error
+      result.R: never
+  [1] kind: pipeSubject
+      label: {\n  try: () => JSON.stringify({ name: "Alice" }),\n  catch: () => new Error(...
+      ordinal: 0
+      result.kind: plain
+      result.A: { try: () => string; catch: () => Error; }
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.try
+      ordinal: 0
+      result.kind: effect
+      result.A: string
+      result.E: Error
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 18:13 - 18:47
+Root: JSON.stringify({ name: "Alice" })
+Path (3 nodes):
+  [0] root {plain A=string} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A={ name: string; }} { name: "Alice" }
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=string} step 0: JSON.stringify
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: string
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: { name: "Alice" }
+      ordinal: 0
+      result.kind: plain
+      result.A: { name: string; }
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: JSON.stringify
+      ordinal: 0
+      result.kind: plain
+      result.A: string
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: effectGen
+Location: 23:26 - 28:3
+Root: Effect.gen(function*() {\n  const text = yield* Effect.succeed("{\"name\":\"Test\"}")\n  const parsed = JSON.parse(text)\n  //             ^- should suggest using Effect Schema\n  return parsed\n})
+Path (7 nodes):
+  [0] root {effect A=any E=never R=never} Effect.gen
+      ==> [executes] -> [1]
+  [1] genSequence {effect A=any E=never R=never} generator body
+      ==> [next] -> [2]
+  [2] statement {unknown} const text = yield* Effect.succeed("{\"name\":\"Test\"}")
+      ==> [next] -> [3]
+  [3] statement {unknown} const parsed = JSON.parse(text)
+      ==> [next] -> [4]
+  [4] statement {unknown} return parsed
+      ==> [returns] -> [5]
+  [5] return {unknown} return
+      ~> [returns value] -> [6]
+  [6] returnOperand {plain A=any} parsed
+
+Nodes (7):
+  [0] kind: root
+      label: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: any
+      result.E: never
+      result.R: never
+  [1] kind: genSequence
+      label: generator body
+      ordinal: 0
+      result.kind: effect
+      result.A: any
+      result.E: never
+      result.R: never
+  [2] kind: statement
+      label: const text = yield* Effect.succeed("{\"name\":\"Test\"}")
+      ordinal: 0
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [3] kind: statement
+      label: const parsed = JSON.parse(text)
+      ordinal: 1
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [4] kind: statement
+      label: return parsed
+      ordinal: 2
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [5] kind: return
+      label: return
+      ordinal: 0
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [6] kind: returnOperand
+      label: parsed
+      ordinal: 0
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+Edges (6):
+  0 -> 1 [strong] executes
+  1 -> 2 [strong] next
+  2 -> 3 [strong] next
+  3 -> 4 [strong] next
+  4 -> 5 [strong] returns
+  5 -> 6 [weak] returns value
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 23:26 - 28:3
+Root: Effect.gen(function*() {\n  const text = yield* Effect.succeed("{\"name\":\"Test\"}")\n  const parsed = JSON.parse(text)\n  //             ^- should suggest using Effect Schema\n  return parsed\n})
+Path (3 nodes):
+  [0] root {effect A=any E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=() => Generator<YieldWrap<Effect<string, never, never>>, any, any>} function*() {\n  const text = yield* Effect.succeed("{\"name\":\"Test\"}")\n ...
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=any E=never R=never} step 0: Effect.gen
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: any
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: function*() {\n  const text = yield* Effect.succeed("{\"name\":\"Test\"}")\n ...
+      ordinal: 0
+      result.kind: plain
+      result.A: () => Generator<YieldWrap<Effect<string, never, never>>, any, any>
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: any
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 24:22 - 24:60
+Root: Effect.succeed("{\"name\":\"Test\"}")
+Path (3 nodes):
+  [0] root {effect A=string E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="{\"name\":\"Test\"}"} "{\"name\":\"Test\"}"
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=string E=never R=never} step 0: Effect.succeed
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: string
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: "{\"name\":\"Test\"}"
+      ordinal: 0
+      result.kind: plain
+      result.A: "{\"name\":\"Test\"}"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: string
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 25:17 - 25:34
+Root: JSON.parse(text)
+Path (3 nodes):
+  [0] root {plain A=any} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=string} text
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=any} step 0: JSON.parse
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: text
+      ordinal: 0
+      result.kind: plain
+      result.A: string
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: JSON.parse
+      ordinal: 0
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: effectGen
+Location: 31:30 - 36:3
+Root: Effect.gen(function*() {\n  const data = yield* Effect.succeed({ name: "Test" })\n  const json = JSON.stringify(data)\n  //           ^- should suggest using Effect Schema\n  return json\n})
+Path (7 nodes):
+  [0] root {effect A=string E=never R=never} Effect.gen
+      ==> [executes] -> [1]
+  [1] genSequence {effect A=string E=never R=never} generator body
+      ==> [next] -> [2]
+  [2] statement {unknown} const data = yield* Effect.succeed({ name: "Test" })
+      ==> [next] -> [3]
+  [3] statement {unknown} const json = JSON.stringify(data)
+      ==> [next] -> [4]
+  [4] statement {unknown} return json
+      ==> [returns] -> [5]
+  [5] return {unknown} return
+      ~> [returns value] -> [6]
+  [6] returnOperand {plain A=string} json
+
+Nodes (7):
+  [0] kind: root
+      label: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: string
+      result.E: never
+      result.R: never
+  [1] kind: genSequence
+      label: generator body
+      ordinal: 0
+      result.kind: effect
+      result.A: string
+      result.E: never
+      result.R: never
+  [2] kind: statement
+      label: const data = yield* Effect.succeed({ name: "Test" })
+      ordinal: 0
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [3] kind: statement
+      label: const json = JSON.stringify(data)
+      ordinal: 1
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [4] kind: statement
+      label: return json
+      ordinal: 2
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [5] kind: return
+      label: return
+      ordinal: 0
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [6] kind: returnOperand
+      label: json
+      ordinal: 0
+      result.kind: plain
+      result.A: string
+      result.E: 
+      result.R: 
+Edges (6):
+  0 -> 1 [strong] executes
+  1 -> 2 [strong] next
+  2 -> 3 [strong] next
+  3 -> 4 [strong] next
+  4 -> 5 [strong] returns
+  5 -> 6 [weak] returns value
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 31:30 - 36:3
+Root: Effect.gen(function*() {\n  const data = yield* Effect.succeed({ name: "Test" })\n  const json = JSON.stringify(data)\n  //           ^- should suggest using Effect Schema\n  return json\n})
+Path (3 nodes):
+  [0] root {effect A=string E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=() => Generator<YieldWrap<Effect<{ name: string; }, never, never>>, string, any>} function*() {\n  const data = yield* Effect.succeed({ name: "Test" })\n  cons...
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=string E=never R=never} step 0: Effect.gen
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: string
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: function*() {\n  const data = yield* Effect.succeed({ name: "Test" })\n  cons...
+      ordinal: 0
+      result.kind: plain
+      result.A: () => Generator<YieldWrap<Effect<{ name: string; }, never, never>>, string, any>
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: string
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 32:22 - 32:55
+Root: Effect.succeed({ name: "Test" })
+Path (3 nodes):
+  [0] root {effect A={ name: string; } E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A={ name: string; }} { name: "Test" }
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A={ name: string; } E=never R=never} step 0: Effect.succeed
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: { name: string; }
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: { name: "Test" }
+      ordinal: 0
+      result.kind: plain
+      result.A: { name: string; }
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: { name: string; }
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 33:15 - 33:36
+Root: JSON.stringify(data)
+Path (3 nodes):
+  [0] root {plain A=string} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A={ name: string; }} data
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=string} step 0: JSON.stringify
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: string
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: data
+      ordinal: 0
+      result.kind: plain
+      result.A: { name: string; }
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: JSON.stringify
+      ordinal: 0
+      result.kind: plain
+      result.A: string
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 39:25 - 44:3
+Root: Effect.fn("parseInFn")(function*() {\n  const text = "{\"name\":\"FnTest\"}"\n  const parsed = JSON.parse(text)\n  //             ^- should suggest using Effect Schema\n  return parsed\n})
+Path (3 nodes):
+  [0] root {plain A=() => Effect<any, never, never>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=() => Generator<never, any, never>} function*() {\n  const text = "{\"name\":\"FnTest\"}"\n  const parsed = JSON....
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=() => Effect<any, never, never>} step 0: Effect.fn("parseInFn")
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: () => Effect<any, never, never>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: function*() {\n  const text = "{\"name\":\"FnTest\"}"\n  const parsed = JSON....
+      ordinal: 0
+      result.kind: plain
+      result.A: () => Generator<never, any, never>
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.fn("parseInFn")
+      ordinal: 0
+      result.kind: plain
+      result.A: () => Effect<any, never, never>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 41:17 - 41:34
+Root: JSON.parse(text)
+Path (3 nodes):
+  [0] root {plain A=any} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="{\"name\":\"FnTest\"}"} text
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=any} step 0: JSON.parse
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: text
+      ordinal: 0
+      result.kind: plain
+      result.A: "{\"name\":\"FnTest\"}"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: JSON.parse
+      ordinal: 0
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 49:9 - 49:26
+Root: JSON.parse(text)
+Path (3 nodes):
+  [0] root {plain A=any} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="{\"name\":\"Regular\"}"} text
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=any} step 0: JSON.parse
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: text
+      ordinal: 0
+      result.kind: plain
+      result.A: "{\"name\":\"Regular\"}"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: JSON.parse
+      ordinal: 0
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: effectGen
+Location: 53:35 - 57:3
+Root: Effect.gen(function*() {\n  const parseFn = () => JSON.parse("{\"nested\":true}")\n  //                    ^- this is inside a nested function, should NOT trigger\n  return parseFn()\n})
+Path (6 nodes):
+  [0] root {effect A=any E=never R=never} Effect.gen
+      ==> [executes] -> [1]
+  [1] genSequence {effect A=any E=never R=never} generator body
+      ==> [next] -> [2]
+  [2] statement {unknown} const parseFn = () => JSON.parse("{\"nested\":true}")
+      ==> [next] -> [3]
+  [3] statement {unknown} return parseFn()
+      ==> [returns] -> [4]
+  [4] return {unknown} return
+      ~> [returns value] -> [5]
+  [5] returnOperand {plain A=any} parseFn()
+
+Nodes (6):
+  [0] kind: root
+      label: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: any
+      result.E: never
+      result.R: never
+  [1] kind: genSequence
+      label: generator body
+      ordinal: 0
+      result.kind: effect
+      result.A: any
+      result.E: never
+      result.R: never
+  [2] kind: statement
+      label: const parseFn = () => JSON.parse("{\"nested\":true}")
+      ordinal: 0
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [3] kind: statement
+      label: return parseFn()
+      ordinal: 1
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [4] kind: return
+      label: return
+      ordinal: 0
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [5] kind: returnOperand
+      label: parseFn()
+      ordinal: 0
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+Edges (5):
+  0 -> 1 [strong] executes
+  1 -> 2 [strong] next
+  2 -> 3 [strong] next
+  3 -> 4 [strong] returns
+  4 -> 5 [weak] returns value
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 53:35 - 57:3
+Root: Effect.gen(function*() {\n  const parseFn = () => JSON.parse("{\"nested\":true}")\n  //                    ^- this is inside a nested function, should NOT trigger\n  return parseFn()\n})
+Path (3 nodes):
+  [0] root {effect A=any E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=() => Generator<never, any, never>} function*() {\n  const parseFn = () => JSON.parse("{\"nested\":true}")\n  // ...
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=any E=never R=never} step 0: Effect.gen
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: any
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: function*() {\n  const parseFn = () => JSON.parse("{\"nested\":true}")\n  // ...
+      ordinal: 0
+      result.kind: plain
+      result.A: () => Generator<never, any, never>
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: any
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 54:24 - 54:56
+Root: JSON.parse("{\"nested\":true}")
+Path (3 nodes):
+  [0] root {plain A=any} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="{\"nested\":true}"} "{\"nested\":true}"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=any} step 0: JSON.parse
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "{\"nested\":true}"
+      ordinal: 0
+      result.kind: plain
+      result.A: "{\"nested\":true}"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: JSON.parse
+      ordinal: 0
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 60:35 - 63:3
+Root: Effect.try(() => {\n  const parsed = JSON.parse("{\"indirect\":true}")\n  return parsed.indirect\n})
+Path (3 nodes):
+  [0] root {effect A=any E=UnknownException R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=() => any} () => {\n  const parsed = JSON.parse("{\"indirect\":true}")\n  return parsed....
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=any E=UnknownException R=never} step 0: Effect.try
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: any
+      result.E: UnknownException
+      result.R: never
+  [1] kind: pipeSubject
+      label: () => {\n  const parsed = JSON.parse("{\"indirect\":true}")\n  return parsed....
+      ordinal: 0
+      result.kind: plain
+      result.A: () => any
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.try
+      ordinal: 0
+      result.kind: effect
+      result.A: any
+      result.E: UnknownException
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 61:17 - 61:51
+Root: JSON.parse("{\"indirect\":true}")
+Path (3 nodes):
+  [0] root {plain A=any} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="{\"indirect\":true}"} "{\"indirect\":true}"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=any} step 0: JSON.parse
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "{\"indirect\":true}"
+      ordinal: 0
+      result.kind: plain
+      result.A: "{\"indirect\":true}"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: JSON.parse
+      ordinal: 0
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call

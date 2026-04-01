@@ -1,26 +1,22 @@
 === Quick Fix Inventory ===
 
-[D1] (14:14-14:24) TS377031: Seems like you are constructing a layer with a scope in the requirements.
-Consider using "scoped" instead to get rid of the scope in the requirements. effect(scopeInLayerEffect)
+[D1] (14:14-14:24) TS377031: This layer construction leaves `Scope` in the requirement set. The scoped API removes `Scope` from the resulting requirements. effect(scopeInLayerEffect)
   Fix 0: "Disable scopeInLayerEffect for this line"
   Fix 1: "Disable scopeInLayerEffect for entire file"
 
-[D2] (21:14-21:24) TS377031: Seems like you are constructing a layer with a scope in the requirements.
-Consider using "scoped" instead to get rid of the scope in the requirements. effect(scopeInLayerEffect)
+[D2] (21:14-21:24) TS377031: This layer construction leaves `Scope` in the requirement set. The scoped API removes `Scope` from the resulting requirements. effect(scopeInLayerEffect)
   Fix 0: "Disable scopeInLayerEffect for this line"
   Fix 1: "Disable scopeInLayerEffect for entire file"
 
 [D3] (23:11-23:12) TS6133: '_' is declared but its value is never read.
   (no quick fixes)
 
-[D4] (37:24-43:2) TS377031: Seems like you are constructing a layer with a scope in the requirements.
-Consider using "scoped" instead to get rid of the scope in the requirements. effect(scopeInLayerEffect)
+[D4] (37:24-43:2) TS377031: This layer construction leaves `Scope` in the requirement set. The scoped API removes `Scope` from the resulting requirements. effect(scopeInLayerEffect)
   Fix 0: "Disable scopeInLayerEffect for this line"
   Fix 1: "Disable scopeInLayerEffect for entire file"
   Fix 2: "Use scoped for Layer creation"
 
-[D5] (45:25-52:2) TS377031: Seems like you are constructing a layer with a scope in the requirements.
-Consider using "scoped" instead to get rid of the scope in the requirements. effect(scopeInLayerEffect)
+[D5] (45:25-52:2) TS377031: This layer construction leaves `Scope` in the requirement set. The scoped API removes `Scope` from the resulting requirements. effect(scopeInLayerEffect)
   Fix 0: "Disable scopeInLayerEffect for this line"
   Fix 1: "Disable scopeInLayerEffect for entire file"
   Fix 2: "Use scoped for Layer creation"

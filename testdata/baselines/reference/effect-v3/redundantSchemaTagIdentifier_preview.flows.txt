@@ -1,0 +1,38 @@
+==== /.src/redundantSchemaTagIdentifier_preview.ts (1 flows) ====
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 6:10 - 6:49
+Root: Schema.TaggedClass<Preview>("Preview")
+Path (3 nodes):
+  [0] root {plain A=<Tag extends string, Fields extends Struct.Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<Preview, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedClass<Preview, Tag, { readonly _tag: tag<Tag>; } & Fields>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="Preview"} "Preview"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=<Tag extends string, Fields extends Struct.Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<Preview, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedClass<Preview, Tag, { readonly _tag: tag<Tag>; } & Fields>} step 0: Schema.TaggedClass
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: <Tag extends string, Fields extends Struct.Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<Preview, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedClass<Preview, Tag, { readonly _tag: tag<Tag>; } & Fields>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "Preview"
+      ordinal: 0
+      result.kind: plain
+      result.A: "Preview"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Schema.TaggedClass
+      ordinal: 0
+      result.kind: plain
+      result.A: <Tag extends string, Fields extends Struct.Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<Preview, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedClass<Preview, Tag, { readonly _tag: tag<Tag>; } & Fields>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call

@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (4:21-8:3) TS377036: Schema.Struct with a _tag field can be simplified to Schema.TaggedStruct to make the tag optional in the constructor. effect(schemaStructWithTag)
+[D1] (4:21-8:3) TS377036: This `Schema.Struct` includes a `_tag` field. `Schema.TaggedStruct` is the tagged-struct form for this pattern and makes the tag optional in the constructor. effect(schemaStructWithTag)
   Fix 0: "Disable schemaStructWithTag for this line"
   Fix 1: "Disable schemaStructWithTag for entire file"
   Fix 2: "Rewrite as Schema.TaggedStruct"

@@ -12,7 +12,7 @@ import (
 var ServiceNotAsClassFix = fixable.Fixable{
 	Name:        "serviceNotAsClass",
 	Description: "Convert to class declaration",
-	ErrorCodes:  []int32{tsdiag.ServiceMap_Service_should_be_used_in_a_class_declaration_instead_of_as_a_variable_Use_Colon_0_effect_serviceNotAsClass.Code()},
+	ErrorCodes:  []int32{tsdiag.ServiceMap_Service_is_assigned_to_a_variable_here_but_this_API_is_intended_for_a_class_declaration_shape_such_as_0_effect_serviceNotAsClass.Code()},
 	FixIDs:      []string{"serviceNotAsClass_fix"},
 	Run:         runServiceNotAsClassFix,
 }

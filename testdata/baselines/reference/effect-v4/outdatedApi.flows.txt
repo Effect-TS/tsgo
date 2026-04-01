@@ -1,0 +1,1477 @@
+==== /.src/outdatedApi.ts (38 flows) ====
+
+=== Effect Flow ===
+Kind: effectGen
+Location: 6:25 - 8:3
+Root: Effect.gen(function*() {\n    const runtime = yield* Effect.runtime()\n})
+Path (3 nodes):
+  [0] root {effect A=void E=unknown R=unknown} Effect.gen
+      ==> [executes] -> [1]
+  [1] genSequence {effect A=void E=unknown R=unknown} generator body
+      ==> [next] -> [2]
+  [2] statement {unknown} const runtime = yield* Effect.runtime()
+
+Nodes (3):
+  [0] kind: root
+      label: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: unknown
+      result.R: unknown
+  [1] kind: genSequence
+      label: generator body
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: unknown
+      result.R: unknown
+  [2] kind: statement
+      label: const runtime = yield* Effect.runtime()
+      ordinal: 0
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] executes
+  1 -> 2 [strong] next
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 6:25 - 8:3
+Root: Effect.gen(function*() {\n    const runtime = yield* Effect.runtime()\n})
+Path (3 nodes):
+  [0] root {effect A=void E=unknown R=unknown} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=() => Generator<any, void, any>} function*() {\n    const runtime = yield* Effect.runtime()\n}
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=void E=unknown R=unknown} step 0: Effect.gen
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: unknown
+      result.R: unknown
+  [1] kind: pipeSubject
+      label: function*() {\n    const runtime = yield* Effect.runtime()\n}
+      ordinal: 0
+      result.kind: plain
+      result.A: () => Generator<any, void, any>
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: unknown
+      result.R: unknown
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 11:28 - 11:70
+Root: Effect.dieMessage("something went wrong")
+Path (3 nodes):
+  [0] root {plain A=any} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="something went wrong"} "something went wrong"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=any} step 0: Effect.dieMessage
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "something went wrong"
+      ordinal: 0
+      result.kind: plain
+      result.A: "something went wrong"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.dieMessage
+      ordinal: 0
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 14:25 - 14:65
+Root: Effect.dieSync(() => new Error("boom"))
+Path (3 nodes):
+  [0] root {plain A=any} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=() => Error} () => new Error("boom")
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=any} step 0: Effect.dieSync
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: () => new Error("boom")
+      ordinal: 0
+      result.kind: plain
+      result.A: () => Error
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.dieSync
+      ordinal: 0
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 17:20 - 17:40
+Root: Effect.Tag("MyTag")
+Path (3 nodes):
+  [0] root {plain A=any} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="MyTag"} "MyTag"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=any} step 0: Effect.Tag
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "MyTag"
+      ordinal: 0
+      result.kind: plain
+      result.A: "MyTag"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.Tag
+      ordinal: 0
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 20:41 - 20:58
+Root: Effect.succeed(1)
+Path (3 nodes):
+  [0] root {effect A=number E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=1} 1
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=number E=never R=never} step 0: Effect.succeed
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: 1
+      ordinal: 0
+      result.kind: plain
+      result.A: 1
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 20:59 - 20:77
+Root: Effect.succeed(2)
+Path (3 nodes):
+  [0] root {effect A=number E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=2} 2
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=number E=never R=never} step 0: Effect.succeed
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: 2
+      ordinal: 0
+      result.kind: plain
+      result.A: 2
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 23:43 - 23:60
+Root: Effect.succeed(1)
+Path (3 nodes):
+  [0] root {effect A=number E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=1} 1
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=number E=never R=never} step 0: Effect.succeed
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: 1
+      ordinal: 0
+      result.kind: plain
+      result.A: 1
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 23:61 - 23:79
+Root: Effect.succeed(2)
+Path (3 nodes):
+  [0] root {effect A=number E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=2} 2
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=number E=never R=never} step 0: Effect.succeed
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: 2
+      ordinal: 0
+      result.kind: plain
+      result.A: 2
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 26:39 - 26:57
+Root: Effect.fail("err")
+Path (3 nodes):
+  [0] root {effect A=never E=string R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="err"} "err"
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=never E=string R=never} step 0: Effect.fail
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: string
+      result.R: never
+  [1] kind: pipeSubject
+      label: "err"
+      ordinal: 0
+      result.kind: plain
+      result.A: "err"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.fail
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: string
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 26:64 - 26:82
+Root: Effect.succeed(0)
+Path (3 nodes):
+  [0] root {effect A=number E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=0} 0
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=number E=never R=never} step 0: Effect.succeed
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: 0
+      ordinal: 0
+      result.kind: plain
+      result.A: 0
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 32:31 - 32:55
+Root: Effect.makeSemaphore(1)
+Path (3 nodes):
+  [0] root {plain A=any} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=1} 1
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=any} step 0: Effect.makeSemaphore
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: 1
+      ordinal: 0
+      result.kind: plain
+      result.A: 1
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.makeSemaphore
+      ordinal: 0
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 37:43 - 37:61
+Root: Effect.fail("err")
+Path (3 nodes):
+  [0] root {effect A=never E=string R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="err"} "err"
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=never E=string R=never} step 0: Effect.fail
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: string
+      result.R: never
+  [1] kind: pipeSubject
+      label: "err"
+      ordinal: 0
+      result.kind: plain
+      result.A: "err"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.fail
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: string
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 37:70 - 37:88
+Root: Effect.succeed(0)
+Path (3 nodes):
+  [0] root {effect A=number E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=0} 0
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=number E=never R=never} step 0: Effect.succeed
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: 0
+      ordinal: 0
+      result.kind: plain
+      result.A: 0
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 40:53 - 40:71
+Root: Effect.fail("err")
+Path (3 nodes):
+  [0] root {effect A=never E=string R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="err"} "err"
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=never E=string R=never} step 0: Effect.fail
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: string
+      result.R: never
+  [1] kind: pipeSubject
+      label: "err"
+      ordinal: 0
+      result.kind: plain
+      result.A: "err"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.fail
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: string
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 40:84 - 40:102
+Root: Effect.succeed(0)
+Path (3 nodes):
+  [0] root {effect A=number E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=0} 0
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=number E=never R=never} step 0: Effect.succeed
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: 0
+      ordinal: 0
+      result.kind: plain
+      result.A: 0
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 43:55 - 43:75
+Root: Effect.die("defect")
+Path (3 nodes):
+  [0] root {effect A=never E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="defect"} "defect"
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=never E=never R=never} step 0: Effect.die
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: "defect"
+      ordinal: 0
+      result.kind: plain
+      result.A: "defect"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.die
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 43:89 - 43:107
+Root: Effect.succeed(0)
+Path (3 nodes):
+  [0] root {effect A=number E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=0} 0
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=number E=never R=never} step 0: Effect.succeed
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: 0
+      ordinal: 0
+      result.kind: plain
+      result.A: 0
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 46:22 - 46:53
+Root: Effect.fork(Effect.succeed(1))
+Path (4 nodes):
+  [0] root {plain A=any} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=1} 1
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=number E=never R=never} step 0: Effect.succeed
+      ~> [call] -> [3]
+  [3] pipeTransformation {plain A=any} step 1: Effect.fork
+
+Nodes (4):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: 1
+      ordinal: 0
+      result.kind: plain
+      result.A: 1
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [3] kind: pipeTransformation
+      label: step 1: Effect.fork
+      ordinal: 1
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+Edges (3):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+  2 -> 3 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 49:28 - 49:65
+Root: Effect.forkDaemon(Effect.succeed(1))
+Path (4 nodes):
+  [0] root {plain A=any} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=1} 1
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=number E=never R=never} step 0: Effect.succeed
+      ~> [call] -> [3]
+  [3] pipeTransformation {plain A=any} step 1: Effect.forkDaemon
+
+Nodes (4):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: 1
+      ordinal: 0
+      result.kind: plain
+      result.A: 1
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [3] kind: pipeTransformation
+      label: step 1: Effect.forkDaemon
+      ordinal: 1
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+Edges (3):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+  2 -> 3 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 54:23 - 56:3
+Root: Effect.async<number>((resume) => {\n    resume(Effect.succeed(42))\n})
+Path (3 nodes):
+  [0] root {plain A=any} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=(resume: any) => void} (resume) => {\n    resume(Effect.succeed(42))\n}
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=any} step 0: Effect.async
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: (resume) => {\n    resume(Effect.succeed(42))\n}
+      ordinal: 0
+      result.kind: plain
+      result.A: (resume: any) => void
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.async
+      ordinal: 0
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 54:58 - 55:31
+Root: resume(Effect.succeed(42))
+Path (4 nodes):
+  [0] root {plain A=any} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=42} 42
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=number E=never R=never} step 0: Effect.succeed
+      ~> [call] -> [3]
+  [3] pipeTransformation {plain A=any} step 1: resume
+
+Nodes (4):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: 42
+      ordinal: 0
+      result.kind: plain
+      result.A: 42
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [3] kind: pipeTransformation
+      label: step 1: resume
+      ordinal: 1
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+Edges (3):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+  2 -> 3 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 59:24 - 59:57
+Root: Effect.either(Effect.succeed(1))
+Path (4 nodes):
+  [0] root {plain A=any} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=1} 1
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=number E=never R=never} step 0: Effect.succeed
+      ~> [call] -> [3]
+  [3] pipeTransformation {plain A=any} step 1: Effect.either
+
+Nodes (4):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: 1
+      ordinal: 0
+      result.kind: plain
+      result.A: 1
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [3] kind: pipeTransformation
+      label: step 1: Effect.either
+      ordinal: 1
+      result.kind: plain
+      result.A: any
+      result.E: 
+      result.R: 
+Edges (3):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+  2 -> 3 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 64:25 - 64:43
+Root: Effect.succeed(1)
+Path (3 nodes):
+  [0] root {effect A=number E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=1} 1
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=number E=never R=never} step 0: Effect.succeed
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: 1
+      ordinal: 0
+      result.kind: plain
+      result.A: 1
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 67:33 - 67:50
+Root: Effect.succeed(1)
+Path (3 nodes):
+  [0] root {effect A=number E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=1} 1
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=number E=never R=never} step 0: Effect.succeed
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: 1
+      ordinal: 0
+      result.kind: plain
+      result.A: 1
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: effectGen
+Location: 70:21 - 72:3
+Root: Effect.gen(function*() {\n    return yield* Effect.succeed(1)\n})
+Path (6 nodes):
+  [0] root {effect A=number E=never R=never} Effect.gen
+      ==> [executes] -> [1]
+  [1] genSequence {effect A=number E=never R=never} generator body
+      ==> [next] -> [2]
+  [2] statement {unknown} return yield* Effect.succeed(1)
+      ==> [returns] -> [3]
+  [3] return {unknown} return
+      ==> [yield*] -> [4]
+  [4] yield {plain A=number} yield*
+      ==> [operand] -> [5]
+  [5] yieldOperand {effect A=number E=never R=never} Effect.succeed(1)
+
+Nodes (6):
+  [0] kind: root
+      label: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [1] kind: genSequence
+      label: generator body
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [2] kind: statement
+      label: return yield* Effect.succeed(1)
+      ordinal: 0
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [3] kind: return
+      label: return
+      ordinal: 0
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [4] kind: yield
+      label: yield*
+      ordinal: 0
+      result.kind: plain
+      result.A: number
+      result.E: 
+      result.R: 
+  [5] kind: yieldOperand
+      label: Effect.succeed(1)
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+Edges (5):
+  0 -> 1 [strong] executes
+  1 -> 2 [strong] next
+  2 -> 3 [strong] returns
+  3 -> 4 [strong] yield*
+  4 -> 5 [strong] operand
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 70:21 - 72:3
+Root: Effect.gen(function*() {\n    return yield* Effect.succeed(1)\n})
+Path (3 nodes):
+  [0] root {effect A=number E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=() => Generator<Effect<number, never, never>, number, any>} function*() {\n    return yield* Effect.succeed(1)\n}
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=number E=never R=never} step 0: Effect.gen
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: function*() {\n    return yield* Effect.succeed(1)\n}
+      ordinal: 0
+      result.kind: plain
+      result.A: () => Generator<Effect<number, never, never>, number, any>
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 71:18 - 71:36
+Root: Effect.succeed(1)
+Path (3 nodes):
+  [0] root {effect A=number E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=1} 1
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=number E=never R=never} step 0: Effect.succeed
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: 1
+      ordinal: 0
+      result.kind: plain
+      result.A: 1
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 75:41 - 75:58
+Root: Effect.succeed(1)
+Path (3 nodes):
+  [0] root {effect A=number E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=1} 1
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=number E=never R=never} step 0: Effect.succeed
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: 1
+      ordinal: 0
+      result.kind: plain
+      result.A: 1
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 75:66 - 75:88
+Root: Effect.succeed(n + 1)
+Path (3 nodes):
+  [0] root {effect A=number E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=number} n + 1
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=number E=never R=never} step 0: Effect.succeed
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: n + 1
+      ordinal: 0
+      result.kind: plain
+      result.A: number
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 81:56 - 81:74
+Root: Effect.succeed(1)
+Path (3 nodes):
+  [0] root {effect A=number E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=1} 1
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=number E=never R=never} step 0: Effect.succeed
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: 1
+      ordinal: 0
+      result.kind: plain
+      result.A: 1
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 84:27 - 84:85
+Root: Effect.partition([Effect.succeed(1), Effect.fail("err")])
+Path (3 nodes):
+  [0] root {plain A=(elements: Iterable<unknown>) => Effect<[excluded: unknown[], satisfying: unknown[]], never, unknown>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=(Effect<number, never, never> | Effect<never, string, never>)[]} [Effect.succeed(1), Effect.fail("err")]
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=(elements: Iterable<unknown>) => Effect<[excluded: unknown[], satisfying: unknown[]], never, unknown>} step 0: Effect.partition
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: (elements: Iterable<unknown>) => Effect<[excluded: unknown[], satisfying: unknown[]], never, unknown>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: [Effect.succeed(1), Effect.fail("err")]
+      ordinal: 0
+      result.kind: plain
+      result.A: (Effect<number, never, never> | Effect<never, string, never>)[]
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.partition
+      ordinal: 0
+      result.kind: plain
+      result.A: (elements: Iterable<unknown>) => Effect<[excluded: unknown[], satisfying: unknown[]], never, unknown>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 84:46 - 84:63
+Root: Effect.succeed(1)
+Path (3 nodes):
+  [0] root {effect A=number E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=1} 1
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=number E=never R=never} step 0: Effect.succeed
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: 1
+      ordinal: 0
+      result.kind: plain
+      result.A: 1
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 84:64 - 84:83
+Root: Effect.fail("err")
+Path (3 nodes):
+  [0] root {effect A=never E=string R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="err"} "err"
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=never E=string R=never} step 0: Effect.fail
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: string
+      result.R: never
+  [1] kind: pipeSubject
+      label: "err"
+      ordinal: 0
+      result.kind: plain
+      result.A: "err"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.fail
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: string
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 87:46 - 87:63
+Root: Effect.succeed(1)
+Path (3 nodes):
+  [0] root {effect A=number E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=1} 1
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=number E=never R=never} step 0: Effect.succeed
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: 1
+      ordinal: 0
+      result.kind: plain
+      result.A: 1
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 87:64 - 87:82
+Root: Effect.succeed(2)
+Path (3 nodes):
+  [0] root {effect A=number E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=2} 2
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=number E=never R=never} step 0: Effect.succeed
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: 2
+      ordinal: 0
+      result.kind: plain
+      result.A: 2
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 87:99 - 87:117
+Root: Effect.succeed(n)
+Path (3 nodes):
+  [0] root {effect A=Effect<number, never, never> E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {effect A=number E=never R=never} n
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=Effect<number, never, never> E=never R=never} step 0: Effect.succeed
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: Effect<number, never, never>
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: n
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: Effect<number, never, never>
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 87:119 - 87:140
+Root: Effect.succeed(null)
+Path (3 nodes):
+  [0] root {effect A=null E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=null} null
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=null E=never R=never} step 0: Effect.succeed
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: null
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: null
+      ordinal: 0
+      result.kind: plain
+      result.A: null
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: null
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call

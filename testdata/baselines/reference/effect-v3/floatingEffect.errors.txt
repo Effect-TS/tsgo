@@ -1,9 +1,9 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/floatingEffect.ts(6,1): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
-/.src/floatingEffect.ts(8,1): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
-/.src/floatingEffect.ts(12,3): error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+/.src/floatingEffect.ts(6,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/floatingEffect.ts(8,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/floatingEffect.ts(12,3): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
 /.src/floatingEffect.ts(15,19): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
 /.src/floatingEffect.ts(25,14): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
 
@@ -16,17 +16,17 @@ Effect version: 3.19.19
     
     Effect.succeed("floating")
     ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
     
     Effect.never
     ~~~~~~~~~~~~
-!!! error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
     
     Effect.runPromise(Effect.gen(function*() {
       const thisIsFine = Effect.succeed(1)
       Effect.never
       ~~~~~~~~~~~~
-!!! error TS377001: Effect must be yielded or assigned to a variable. effect(floatingEffect)
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
     }))
     
     Effect.runPromise(Effect.gen(function*() {

@@ -1,0 +1,226 @@
+==== /.src/effectFnOpportunity_inferredServiceMake.ts (5 flows) ====
+
+=== Effect Flow ===
+Kind: effectGen
+Location: 4:10 - 11:7
+Root: Effect.gen(function*() {\n        return {\n            getUser: (id: string) =>\n                Effect.gen(function*() {\n                    yield* Effect.log(`Looking up user ${id}`)\n                })\n        }\n    })
+Path (5 nodes):
+  [0] root {effect A={ getUser: (id: string) => Effect<void, never, never>; } E=never R=never} Effect.gen
+      ==> [executes] -> [1]
+  [1] genSequence {effect A={ getUser: (id: string) => Effect<void, never, never>; } E=never R=never} generator body
+      ==> [next] -> [2]
+  [2] statement {unknown} return {\n            getUser: (id: string) =>\n                Effect.gen(fu...
+      ==> [returns] -> [3]
+  [3] return {unknown} return
+      ~> [returns value] -> [4]
+  [4] returnOperand {plain A={ getUser: (id: string) => Effect<void, never, never>; }} {\n            getUser: (id: string) =>\n                Effect.gen(function*...
+
+Nodes (5):
+  [0] kind: root
+      label: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: { getUser: (id: string) => Effect<void, never, never>; }
+      result.E: never
+      result.R: never
+  [1] kind: genSequence
+      label: generator body
+      ordinal: 0
+      result.kind: effect
+      result.A: { getUser: (id: string) => Effect<void, never, never>; }
+      result.E: never
+      result.R: never
+  [2] kind: statement
+      label: return {\n            getUser: (id: string) =>\n                Effect.gen(fu...
+      ordinal: 0
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [3] kind: return
+      label: return
+      ordinal: 0
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [4] kind: returnOperand
+      label: {\n            getUser: (id: string) =>\n                Effect.gen(function*...
+      ordinal: 0
+      result.kind: plain
+      result.A: { getUser: (id: string) => Effect<void, never, never>; }
+      result.E: 
+      result.R: 
+Edges (4):
+  0 -> 1 [strong] executes
+  1 -> 2 [strong] next
+  2 -> 3 [strong] returns
+  3 -> 4 [weak] returns value
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 4:10 - 11:7
+Root: Effect.gen(function*() {\n        return {\n            getUser: (id: string) =>\n                Effect.gen(function*() {\n                    yield* Effect.log(`Looking up user ${id}`)\n                })\n        }\n    })
+Path (3 nodes):
+  [0] root {effect A={ getUser: (id: string) => Effect<void, never, never>; } E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=() => Generator<never, { getUser: (id: string) => Effect<void, never, never>; }, never>} function*() {\n        return {\n            getUser: (id: string) =>\n      ...
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A={ getUser: (id: string) => Effect<void, never, never>; } E=never R=never} step 0: Effect.gen
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: { getUser: (id: string) => Effect<void, never, never>; }
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: function*() {\n        return {\n            getUser: (id: string) =>\n      ...
+      ordinal: 0
+      result.kind: plain
+      result.A: () => Generator<never, { getUser: (id: string) => Effect<void, never, never>; }, never>
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: { getUser: (id: string) => Effect<void, never, never>; }
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: effectGen
+Location: 6:37 - 9:19
+Root: Effect.gen(function*() {\n                    yield* Effect.log(`Looking up user ${id}`)\n                })
+Path (5 nodes):
+  [0] root {effect A=void E=never R=never} Effect.gen
+      ==> [executes] -> [1]
+  [1] genSequence {effect A=void E=never R=never} generator body
+      ==> [next] -> [2]
+  [2] statement {unknown} yield* Effect.log(`Looking up user ${id}`)
+      ==> [yield*] -> [3]
+  [3] yield {plain A=void} yield*
+      ==> [operand] -> [4]
+  [4] yieldOperand {effect A=void E=never R=never} Effect.log(`Looking up user ${id}`)
+
+Nodes (5):
+  [0] kind: root
+      label: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+  [1] kind: genSequence
+      label: generator body
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+  [2] kind: statement
+      label: yield* Effect.log(`Looking up user ${id}`)
+      ordinal: 0
+      result.kind: unknown
+      result.A: 
+      result.E: 
+      result.R: 
+  [3] kind: yield
+      label: yield*
+      ordinal: 0
+      result.kind: plain
+      result.A: void
+      result.E: 
+      result.R: 
+  [4] kind: yieldOperand
+      label: Effect.log(`Looking up user ${id}`)
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+Edges (4):
+  0 -> 1 [strong] executes
+  1 -> 2 [strong] next
+  2 -> 3 [strong] yield*
+  3 -> 4 [strong] operand
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 6:37 - 9:19
+Root: Effect.gen(function*() {\n                    yield* Effect.log(`Looking up user ${id}`)\n                })
+Path (3 nodes):
+  [0] root {effect A=void E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=() => Generator<Effect<void, never, never>, void, any>} function*() {\n                    yield* Effect.log(`Looking up user ${id}`)...
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=void E=never R=never} step 0: Effect.gen
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: function*() {\n                    yield* Effect.log(`Looking up user ${id}`)...
+      ordinal: 0
+      result.kind: plain
+      result.A: () => Generator<Effect<void, never, never>, void, any>
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.gen
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 8:27 - 8:63
+Root: Effect.log(`Looking up user ${id}`)
+Path (3 nodes):
+  [0] root {effect A=void E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=string} `Looking up user ${id}`
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=void E=never R=never} step 0: Effect.log
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: `Looking up user ${id}`
+      ordinal: 0
+      result.kind: plain
+      result.A: string
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.log
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call

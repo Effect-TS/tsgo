@@ -3,7 +3,7 @@
 [D1] (11:7-11:21) TS6133: '_shouldTrigger' is declared but its value is never read.
   (no quick fixes)
 
-[D2] (14:14-14:17) TS377047: Can be rewritten as a reusable function: Effect.fn((what) => { ... }). effect(effectFnOpportunity)
+[D2] (14:14-14:17) TS377047: This expression can be rewritten in the reusable function form `Effect.fn((what) => { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fn (no span)"
@@ -13,7 +13,7 @@
 [D3] (17:7-17:32) TS6133: '_shouldTriggerConstructor' is declared but its value is never read.
   (no quick fixes)
 
-[D4] (20:14-20:17) TS377047: Can be rewritten as a reusable function: Effect.fn((what) => { ... }). effect(effectFnOpportunity)
+[D4] (20:14-20:17) TS377047: This expression can be rewritten in the reusable function form `Effect.fn((what) => { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fn (no span)"
@@ -23,7 +23,7 @@
 [D5] (23:7-23:28) TS6133: '_shouldTriggerSucceed' is declared but its value is never read.
   (no quick fixes)
 
-[D6] (25:5-25:8) TS377047: Can be rewritten as a reusable function: Effect.fn((what) => { ... }). effect(effectFnOpportunity)
+[D6] (25:5-25:8) TS377047: This expression can be rewritten in the reusable function form `Effect.fn((what) => { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fn (no span)"
@@ -33,7 +33,7 @@
 [D7] (28:7-28:25) TS6133: '_shouldTriggerSync' is declared but its value is never read.
   (no quick fixes)
 
-[D8] (30:14-30:17) TS377047: Can be rewritten as a reusable function: Effect.fn((what) => { ... }). effect(effectFnOpportunity)
+[D8] (30:14-30:17) TS377047: This expression can be rewritten in the reusable function form `Effect.fn((what) => { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fn (no span)"

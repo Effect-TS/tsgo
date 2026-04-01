@@ -1,8 +1,8 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/classSelfMismatch_schema.ts(9,54): error TS377046: Self type parameter should be 'InvalidSchemaClass'. effect(classSelfMismatch)
-/.src/classSelfMismatch_schema.ts(19,59): error TS377046: Self type parameter should be 'InvalidErrorSchemaClass'. effect(classSelfMismatch)
+/.src/classSelfMismatch_schema.ts(9,54): error TS377046: The `Self` type parameter for this class should be `InvalidSchemaClass`. effect(classSelfMismatch)
+/.src/classSelfMismatch_schema.ts(19,59): error TS377046: The `Self` type parameter for this class should be `InvalidErrorSchemaClass`. effect(classSelfMismatch)
 /.src/classSelfMismatch_schema.ts(24,18): error TS2339: Property 'RequestClass' does not exist on type 'typeof import("/node_modules/effect/dist/Schema")'.
 /.src/classSelfMismatch_schema.ts(33,18): error TS2339: Property 'RequestClass' does not exist on type 'typeof import("/node_modules/effect/dist/Schema")'.
 
@@ -18,7 +18,7 @@ Effect version: 4.0.0
     // invalid usage: Schema.Class<ValidSchemaClass> should be Schema.Class<InvalidSchemaClass> because the Self type parameter is not the same as the class name
     export class InvalidSchemaClass extends Schema.Class<ValidSchemaClass>("InvalidSchemaClass")({
                                                          ~~~~~~~~~~~~~~~~
-!!! error TS377046: Self type parameter should be 'InvalidSchemaClass'. effect(classSelfMismatch)
+!!! error TS377046: The `Self` type parameter for this class should be `InvalidSchemaClass`. effect(classSelfMismatch)
       prop: Schema.String
     }) {}
     
@@ -30,7 +30,7 @@ Effect version: 4.0.0
     // invalid usage: Schema.Class<ValidSchemaClass> should be Schema.Class<InvalidSchemaClass> because the Self type parameter is not the same as the class name
     export class InvalidErrorSchemaClass extends Schema.Class<ValidErrorSchemaClass>("InvalidErrorSchemaClass")({
                                                               ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS377046: Self type parameter should be 'InvalidErrorSchemaClass'. effect(classSelfMismatch)
+!!! error TS377046: The `Self` type parameter for this class should be `InvalidErrorSchemaClass`. effect(classSelfMismatch)
       prop: Schema.String
     }) {}
     

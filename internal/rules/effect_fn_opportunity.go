@@ -20,7 +20,7 @@ var EffectFnOpportunity = rule.Rule{
 	Description:     "Suggests using Effect.fn for functions that return an Effect",
 	DefaultSeverity: etscore.SeveritySuggestion,
 	SupportedEffect: []string{"v3", "v4"},
-	Codes:           []int32{tsdiag.Can_be_rewritten_as_a_reusable_function_Colon_0_effect_effectFnOpportunity.Code()},
+	Codes:           []int32{tsdiag.This_expression_can_be_rewritten_in_the_reusable_function_form_0_effect_effectFnOpportunity.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		effectConfig := ctx.Options
 		matches := AnalyzeEffectFnOpportunity(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
@@ -32,7 +32,7 @@ var EffectFnOpportunity = rule.Rule{
 				continue
 			}
 			expectedSignature := buildExpectedSignature(ctx.SourceFile, m, fixName)
-			diags = append(diags, ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.Can_be_rewritten_as_a_reusable_function_Colon_0_effect_effectFnOpportunity, nil, expectedSignature))
+			diags = append(diags, ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.This_expression_can_be_rewritten_in_the_reusable_function_form_0_effect_effectFnOpportunity, nil, expectedSignature))
 		}
 		return diags
 	},

@@ -1,9 +1,9 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/missingEffectContext_returnSignature.ts(20,3): error TS377004: Missing context ServiceA | ServiceB | ServiceC in the expected Effect type. effect(missingEffectContext)
-/.src/missingEffectContext_returnSignature.ts(24,63): error TS377004: Missing context ServiceA | ServiceB | ServiceC in the expected Effect type. effect(missingEffectContext)
-/.src/missingEffectContext_returnSignature.ts(28,3): error TS377004: Missing context ServiceC in the expected Effect type. effect(missingEffectContext)
+/.src/missingEffectContext_returnSignature.ts(20,3): error TS377004: This Effect requires a service that is missing from the expected Effect context: `ServiceA | ServiceB | ServiceC`. effect(missingEffectContext)
+/.src/missingEffectContext_returnSignature.ts(24,63): error TS377004: This Effect requires a service that is missing from the expected Effect context: `ServiceA | ServiceB | ServiceC`. effect(missingEffectContext)
+/.src/missingEffectContext_returnSignature.ts(28,3): error TS377004: This Effect requires a service that is missing from the expected Effect context: `ServiceC`. effect(missingEffectContext)
 
 
 ==== /.src/missingEffectContext_returnSignature.ts (3 errors) ====
@@ -28,17 +28,17 @@ Effect version: 3.19.19
       // @ts-expect-error
       return effectWithServices
       ~~~~~~
-!!! error TS377004: Missing context ServiceA | ServiceB | ServiceC in the expected Effect type. effect(missingEffectContext)
+!!! error TS377004: This Effect requires a service that is missing from the expected Effect context: `ServiceA | ServiceB | ServiceC`. effect(missingEffectContext)
     }
     
     // @ts-expect-error
     export const conciseBody: () => Effect.Effect<number> = () => effectWithServices
                                                                   ~~~~~~~~~~~~~~~~~~
-!!! error TS377004: Missing context ServiceA | ServiceB | ServiceC in the expected Effect type. effect(missingEffectContext)
+!!! error TS377004: This Effect requires a service that is missing from the expected Effect context: `ServiceA | ServiceB | ServiceC`. effect(missingEffectContext)
     
     export const conciseBodyMissingServiceC: () => Effect.Effect<number, never, ServiceA | ServiceB> = () =>
       // @ts-expect-error
       effectWithServices
       ~~~~~~~~~~~~~~~~~~
-!!! error TS377004: Missing context ServiceC in the expected Effect type. effect(missingEffectContext)
+!!! error TS377004: This Effect requires a service that is missing from the expected Effect context: `ServiceC`. effect(missingEffectContext)
     

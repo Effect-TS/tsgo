@@ -1,0 +1,179 @@
+==== /.src/effectInVoidSuccess.ts (4 flows) ====
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 4:49 - 4:84
+Root: Effect.succeed(Effect.succeed(42))
+Path (4 nodes):
+  [0] root {effect A=Effect<number, never, never> E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=42} 42
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=number E=never R=never} step 0: Effect.succeed
+      ~> [call] -> [3]
+  [3] pipeTransformation {effect A=Effect<number, never, never> E=never R=never} step 1: Effect.succeed
+
+Nodes (4):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: Effect<number, never, never>
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: 42
+      ordinal: 0
+      result.kind: plain
+      result.A: 42
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.succeed
+      ordinal: 0
+      result.kind: effect
+      result.A: number
+      result.E: never
+      result.R: never
+  [3] kind: pipeTransformation
+      label: step 1: Effect.succeed
+      ordinal: 1
+      result.kind: effect
+      result.A: Effect<number, never, never>
+      result.E: never
+      result.R: never
+Edges (3):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+  2 -> 3 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 6:29 - 15:3
+Root: Effect.suspend((): Effect.Effect<void> => {\n  return Stream.empty.pipe(\n    Stream.runCollect,\n    Effect.interruptible,\n    Effect.matchCause({\n      onSuccess: () => "success",\n      onFailure: () => Effect.fail("error")\n    })\n  )\n})
+Path (3 nodes):
+  [0] root {effect A=void E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=() => Effect<void, never, never>} (): Effect.Effect<void> => {\n  return Stream.empty.pipe(\n    Stream.runColl...
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=void E=never R=never} step 0: Effect.suspend
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: (): Effect.Effect<void> => {\n  return Stream.empty.pipe(\n    Stream.runColl...
+      ordinal: 0
+      result.kind: plain
+      result.A: () => Effect<void, never, never>
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.suspend
+      ordinal: 0
+      result.kind: effect
+      result.A: void
+      result.E: never
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 7:9 - 14:4
+Root: Stream.empty.pipe(\n    Stream.runCollect,\n    Effect.interruptible,\n    Effect.matchCause({\n      onSuccess: () => "success",\n      onFailure: () => Effect.fail("error")\n    })\n  )
+Path (5 nodes):
+  [0] root {effect A=string | Effect<never, string, never> E=never R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A=Stream<never, never, never>} Stream.empty
+      ==> [pipeable] -> [2]
+  [2] pipeTransformation {effect A=never[] E=never R=never} step 0: Stream.runCollect
+      ==> [pipeable] -> [3]
+  [3] pipeTransformation {effect A=never[] E=never R=never} step 1: Effect.interruptible
+      ==> [pipeable] -> [4]
+  [4] pipeTransformation {effect A=string | Effect<never, string, never> E=never R=never} step 2: Effect.matchCause
+
+Nodes (5):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: string | Effect<never, string, never>
+      result.E: never
+      result.R: never
+  [1] kind: pipeSubject
+      label: Stream.empty
+      ordinal: 0
+      result.kind: plain
+      result.A: Stream<never, never, never>
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Stream.runCollect
+      ordinal: 0
+      result.kind: effect
+      result.A: never[]
+      result.E: never
+      result.R: never
+  [3] kind: pipeTransformation
+      label: step 1: Effect.interruptible
+      ordinal: 1
+      result.kind: effect
+      result.A: never[]
+      result.E: never
+      result.R: never
+  [4] kind: pipeTransformation
+      label: step 2: Effect.matchCause
+      ordinal: 2
+      result.kind: effect
+      result.A: string | Effect<never, string, never>
+      result.E: never
+      result.R: never
+Edges (4):
+  0 -> 1 [strong] subject
+  1 -> 2 [strong] pipeable
+  2 -> 3 [strong] pipeable
+  3 -> 4 [strong] pipeable
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 12:23 - 12:44
+Root: Effect.fail("error")
+Path (3 nodes):
+  [0] root {effect A=never E=string R=never} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="error"} "error"
+      ~> [call] -> [2]
+  [2] pipeTransformation {effect A=never E=string R=never} step 0: Effect.fail
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: string
+      result.R: never
+  [1] kind: pipeSubject
+      label: "error"
+      ordinal: 0
+      result.kind: plain
+      result.A: "error"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Effect.fail
+      ordinal: 0
+      result.kind: effect
+      result.A: never
+      result.E: string
+      result.R: never
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call

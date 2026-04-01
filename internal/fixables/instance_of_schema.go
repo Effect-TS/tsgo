@@ -12,7 +12,7 @@ import (
 var InstanceOfSchemaFix = fixable.Fixable{
 	Name:        "instanceOfSchema",
 	Description: "Replace with Schema.is",
-	ErrorCodes:  []int32{tsdiag.Consider_using_Schema_is_instead_of_instanceof_for_Effect_Schema_types_effect_instanceOfSchema.Code()},
+	ErrorCodes:  []int32{tsdiag.This_code_uses_instanceof_with_an_Effect_Schema_type_Schema_is_is_the_schema_aware_runtime_check_for_this_case_effect_instanceOfSchema.Code()},
 	FixIDs:      []string{"instanceOfSchema_fix"},
 	Run:         runInstanceOfSchemaFix,
 }

@@ -1,11 +1,11 @@
 === Quick Fix Inventory ===
 
-[D1] (9:54-9:70) TS377046: Self type parameter should be 'InvalidSchemaClass'. effect(classSelfMismatch)
+[D1] (9:54-9:70) TS377046: The `Self` type parameter for this class should be `InvalidSchemaClass`. effect(classSelfMismatch)
   Fix 0: "Disable classSelfMismatch for this line"
   Fix 1: "Disable classSelfMismatch for entire file"
   Fix 2: "Replace 'ValidSchemaClass' with 'InvalidSchemaClass'"
 
-[D2] (19:59-19:80) TS377046: Self type parameter should be 'InvalidErrorSchemaClass'. effect(classSelfMismatch)
+[D2] (19:59-19:80) TS377046: The `Self` type parameter for this class should be `InvalidErrorSchemaClass`. effect(classSelfMismatch)
   Fix 0: "Disable classSelfMismatch for this line"
   Fix 1: "Disable classSelfMismatch for entire file"
   Fix 2: "Replace 'ValidErrorSchemaClass' with 'InvalidErrorSchemaClass'"

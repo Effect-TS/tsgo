@@ -1,11 +1,11 @@
 === Quick Fix Inventory ===
 
-[D1] (61:7-61:14) TS377047: Can be rewritten as a reusable function: Effect.fn("JsonPlaceholder.getTodo")((id) => { ... }). effect(effectFnOpportunity)
+[D1] (61:7-61:14) TS377047: This expression can be rewritten in the reusable function form `Effect.fn("JsonPlaceholder.getTodo")((id) => { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fn(\"JsonPlaceholder.getTodo\")"
 
-[D2] (83:7-83:14) TS377047: Can be rewritten as a reusable function: Effect.fn("JsonPlaceholder.getUser")((id) => { ... }). effect(effectFnOpportunity)
+[D2] (83:7-83:14) TS377047: This expression can be rewritten in the reusable function form `Effect.fn("JsonPlaceholder.getUser")((id) => { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fn(\"JsonPlaceholder.getUser\")"

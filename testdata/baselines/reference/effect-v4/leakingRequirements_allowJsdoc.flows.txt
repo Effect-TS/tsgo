@@ -1,0 +1,223 @@
+==== /.src/leakingRequirements_allowJsdoc.ts (6 flows) ====
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 4:32 - 6:19
+Root: ServiceMap.Service<FileSystem, {\n  writeFile: (content: string) => Effect.Effect<void>\n}>()("FileSystem")
+Path (3 nodes):
+  [0] root {plain A=ServiceClass<FileSystem, "FileSystem", { writeFile: (content: string) => Effect<void, never, never>; }>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="FileSystem"} "FileSystem"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=ServiceClass<FileSystem, "FileSystem", { writeFile: (content: string) => Effect<void, never, never>; }>} step 0: ServiceMap.Service<FileSystem, {\n  writeFile: (content: string) => Effect.Effect<void>\n}>()
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: ServiceClass<FileSystem, "FileSystem", { writeFile: (content: string) => Effect<void, never, never>; }>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "FileSystem"
+      ordinal: 0
+      result.kind: plain
+      result.A: "FileSystem"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: ServiceMap.Service<FileSystem, {\n  writeFile: (content: string) => Effect.Effect<void>\n}>()
+      ordinal: 0
+      result.kind: plain
+      result.A: ServiceClass<FileSystem, "FileSystem", { writeFile: (content: string) => Effect<void, never, never>; }>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 8:27 - 10:14
+Root: ServiceMap.Service<Cache, {\n  writeFile: (content: string) => Effect.Effect<void>\n}>()("Cache")
+Path (3 nodes):
+  [0] root {plain A=ServiceClass<Cache, "Cache", { writeFile: (content: string) => Effect<void, never, never>; }>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="Cache"} "Cache"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=ServiceClass<Cache, "Cache", { writeFile: (content: string) => Effect<void, never, never>; }>} step 0: ServiceMap.Service<Cache, {\n  writeFile: (content: string) => Effect.Effect<void>\n}>()
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: ServiceClass<Cache, "Cache", { writeFile: (content: string) => Effect<void, never, never>; }>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "Cache"
+      ordinal: 0
+      result.kind: plain
+      result.A: "Cache"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: ServiceMap.Service<Cache, {\n  writeFile: (content: string) => Effect.Effect<void>\n}>()
+      ordinal: 0
+      result.kind: plain
+      result.A: ServiceClass<Cache, "Cache", { writeFile: (content: string) => Effect<void, never, never>; }>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 15:33 - 18:20
+Root: ServiceMap.Service<LeakingDeps, {\n  writeCache: () => Effect.Effect<void, never, FileSystem | Cache>\n  readCache: Effect.Effect<void, never, FileSystem | Cache>\n}>()("LeakingDeps")
+Path (3 nodes):
+  [0] root {plain A=ServiceClass<LeakingDeps, "LeakingDeps", { writeCache: () => Effect<void, never, Cache | FileSystem>; readCache: Effect<void, never, Cache | FileSystem>; }>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="LeakingDeps"} "LeakingDeps"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=ServiceClass<LeakingDeps, "LeakingDeps", { writeCache: () => Effect<void, never, Cache | FileSystem>; readCache: Effect<void, never, Cache | FileSystem>; }>} step 0: ServiceMap.Service<LeakingDeps, {\n  writeCache: () => Effect.Effect<void, never, FileSystem | Cache>\n  readCache: Effect.Effect<void, never, FileSystem | Cache>\n}>()
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: ServiceClass<LeakingDeps, "LeakingDeps", { writeCache: () => Effect<void, never, Cache | FileSystem>; readCache: Effect<void, never, Cache | FileSystem>; }>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "LeakingDeps"
+      ordinal: 0
+      result.kind: plain
+      result.A: "LeakingDeps"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: ServiceMap.Service<LeakingDeps, {\n  writeCache: () => Effect.Effect<void, never, FileSystem | Cache>\n  readCache: Effect.Effect<void, never, FileSystem | Cache>\n}>()
+      ordinal: 0
+      result.kind: plain
+      result.A: ServiceClass<LeakingDeps, "LeakingDeps", { writeCache: () => Effect<void, never, Cache | FileSystem>; readCache: Effect<void, never, Cache | FileSystem>; }>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 23:34 - 26:21
+Root: ServiceMap.Service<LeakingDeps2, {\n  writeCache: () => Effect.Effect<void, never, FileSystem | Cache>\n  readCache: Effect.Effect<void, never, FileSystem | Cache>\n}>()("LeakingDeps2")
+Path (3 nodes):
+  [0] root {plain A=ServiceClass<LeakingDeps2, "LeakingDeps2", { writeCache: () => Effect<void, never, Cache | FileSystem>; readCache: Effect<void, never, Cache | FileSystem>; }>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="LeakingDeps2"} "LeakingDeps2"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=ServiceClass<LeakingDeps2, "LeakingDeps2", { writeCache: () => Effect<void, never, Cache | FileSystem>; readCache: Effect<void, never, Cache | FileSystem>; }>} step 0: ServiceMap.Service<LeakingDeps2, {\n  writeCache: () => Effect.Effect<void, never, FileSystem | Cache>\n  readCache: Effect.Effect<void, never, FileSystem | Cache>\n}>()
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: ServiceClass<LeakingDeps2, "LeakingDeps2", { writeCache: () => Effect<void, never, Cache | FileSystem>; readCache: Effect<void, never, Cache | FileSystem>; }>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "LeakingDeps2"
+      ordinal: 0
+      result.kind: plain
+      result.A: "LeakingDeps2"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: ServiceMap.Service<LeakingDeps2, {\n  writeCache: () => Effect.Effect<void, never, FileSystem | Cache>\n  readCache: Effect.Effect<void, never, FileSystem | Cache>\n}>()
+      ordinal: 0
+      result.kind: plain
+      result.A: ServiceClass<LeakingDeps2, "LeakingDeps2", { writeCache: () => Effect<void, never, Cache | FileSystem>; readCache: Effect<void, never, Cache | FileSystem>; }>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 35:34 - 38:21
+Root: ServiceMap.Service<LeakingDeps3, {\n  writeCache: () => Effect.Effect<void, never, FileSystem | Cache>\n  readCache: Effect.Effect<void, never, FileSystem | Cache>\n}>()("LeakingDeps3")
+Path (3 nodes):
+  [0] root {plain A=ServiceClass<LeakingDeps3, "LeakingDeps3", { writeCache: () => Effect<void, never, Cache | FileSystem>; readCache: Effect<void, never, Cache | FileSystem>; }>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="LeakingDeps3"} "LeakingDeps3"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=ServiceClass<LeakingDeps3, "LeakingDeps3", { writeCache: () => Effect<void, never, Cache | FileSystem>; readCache: Effect<void, never, Cache | FileSystem>; }>} step 0: ServiceMap.Service<LeakingDeps3, {\n  writeCache: () => Effect.Effect<void, never, FileSystem | Cache>\n  readCache: Effect.Effect<void, never, FileSystem | Cache>\n}>()
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: ServiceClass<LeakingDeps3, "LeakingDeps3", { writeCache: () => Effect<void, never, Cache | FileSystem>; readCache: Effect<void, never, Cache | FileSystem>; }>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "LeakingDeps3"
+      ordinal: 0
+      result.kind: plain
+      result.A: "LeakingDeps3"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: ServiceMap.Service<LeakingDeps3, {\n  writeCache: () => Effect.Effect<void, never, FileSystem | Cache>\n  readCache: Effect.Effect<void, never, FileSystem | Cache>\n}>()
+      ordinal: 0
+      result.kind: plain
+      result.A: ServiceClass<LeakingDeps3, "LeakingDeps3", { writeCache: () => Effect<void, never, Cache | FileSystem>; readCache: Effect<void, never, Cache | FileSystem>; }>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 43:28 - 46:19
+Root: ServiceMap.Service<{\n  writeCache: () => Effect.Effect<void, never, FileSystem | Cache>\n  readCache: Effect.Effect<void, never, FileSystem | Cache>\n}>("LeakingDeps4")
+Path (3 nodes):
+  [0] root {plain A=Service<{ writeCache: () => Effect<void, never, Cache | FileSystem>; readCache: Effect<void, never, Cache | FileSystem>; }, { writeCache: () => Effect<void, never, Cache | FileSystem>; readCache: Effect<void, never, Cache | FileSystem>; }>} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A="LeakingDeps4"} "LeakingDeps4"
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=Service<{ writeCache: () => Effect<void, never, Cache | FileSystem>; readCache: Effect<void, never, Cache | FileSystem>; }, { writeCache: () => Effect<void, never, Cache | FileSystem>; readCache: Effect<void, never, Cache | FileSystem>; }>} step 0: ServiceMap.Service
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: Service<{ writeCache: () => Effect<void, never, Cache | FileSystem>; readCache: Effect<void, never, Cache | FileSystem>; }, { writeCache: () => Effect<void, never, Cache | FileSystem>; readCache: Effect<void, never, Cache | FileSystem>; }>
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: "LeakingDeps4"
+      ordinal: 0
+      result.kind: plain
+      result.A: "LeakingDeps4"
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: ServiceMap.Service
+      ordinal: 0
+      result.kind: plain
+      result.A: Service<{ writeCache: () => Effect<void, never, Cache | FileSystem>; readCache: Effect<void, never, Cache | FileSystem>; }, { writeCache: () => Effect<void, never, Cache | FileSystem>; readCache: Effect<void, never, Cache | FileSystem>; }>
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call

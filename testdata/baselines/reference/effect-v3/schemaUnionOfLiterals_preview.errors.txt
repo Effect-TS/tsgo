@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/schemaUnionOfLiterals_preview.ts(5,24): warning TS377038: A Schema.Union of multiple Schema.Literal calls can be simplified to a single Schema.Literal call. effect(schemaUnionOfLiterals)
+/.src/schemaUnionOfLiterals_preview.ts(5,24): warning TS377038: This `Schema.Union` contains multiple `Schema.Literal` members and can be simplified to a single `Schema.Literal` call. effect(schemaUnionOfLiterals)
 
 
 ==== /.src/schemaUnionOfLiterals_preview.ts (1 errors) ====
@@ -11,5 +11,5 @@ Effect version: 3.19.19
     
     export const preview = Schema.Union(Schema.Literal("a"), Schema.Literal("b"))
                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377038: A Schema.Union of multiple Schema.Literal calls can be simplified to a single Schema.Literal call. effect(schemaUnionOfLiterals)
+!!! warning TS377038: This `Schema.Union` contains multiple `Schema.Literal` members and can be simplified to a single `Schema.Literal` call. effect(schemaUnionOfLiterals)
     

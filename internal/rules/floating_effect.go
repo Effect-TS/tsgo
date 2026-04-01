@@ -27,8 +27,8 @@ var FloatingEffect = rule.Rule{
 	DefaultSeverity: etscore.SeverityError,
 	SupportedEffect: []string{"v3", "v4"},
 	Codes: []int32{
-		tsdiag.Effect_must_be_yielded_or_assigned_to_a_variable_effect_floatingEffect.Code(),
-		tsdiag.Effect_able_0_must_be_yielded_or_assigned_to_a_variable_effect_floatingEffect.Code(),
+		tsdiag.This_Effect_value_is_neither_yielded_nor_used_in_an_assignment_effect_floatingEffect.Code(),
+		tsdiag.This_Effect_able_0_value_is_neither_yielded_nor_assigned_to_a_variable_effect_floatingEffect.Code(),
 	},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		var diags []*ast.Diagnostic
@@ -54,10 +54,10 @@ var FloatingEffect = rule.Rule{
 
 				var diag *ast.Diagnostic
 				if result.isStrict {
-					diag = ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(expr), tsdiag.Effect_must_be_yielded_or_assigned_to_a_variable_effect_floatingEffect, nil)
+					diag = ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(expr), tsdiag.This_Effect_value_is_neither_yielded_nor_used_in_an_assignment_effect_floatingEffect, nil)
 				} else {
 					typeName := ctx.Checker.TypeToString(result.exprType)
-					diag = ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(expr), tsdiag.Effect_able_0_must_be_yielded_or_assigned_to_a_variable_effect_floatingEffect, nil, typeName)
+					diag = ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(expr), tsdiag.This_Effect_able_0_value_is_neither_yielded_nor_assigned_to_a_variable_effect_floatingEffect, nil, typeName)
 				}
 				diags = append(diags, diag)
 			}

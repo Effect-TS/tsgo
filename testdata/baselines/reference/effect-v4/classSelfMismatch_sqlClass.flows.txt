@@ -1,0 +1,75 @@
+==== /.src/classSelfMismatch_sqlClass.ts (2 flows) ====
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 5:37 - 7:3
+Root: Model.Class<ValidModelClass>("ValidModelClass")({\n  id: Schema.String\n})
+Path (3 nodes):
+  [0] root {plain A=Class<ValidModelClass, { readonly id: String; }, Struct<ExtractFields<"select", { readonly id: String; }, true>>> & { readonly json: Struct<{ readonly id: String; }>; readonly insert: Struct<{ readonly id: String; }>; readonly update: Struct<{ readonly id: String; }>; readonly select: Struct<{ readonly id: String; }>; readonly jsonCreate: Struct<{ readonly id: String; }>; readonly jsonUpdate: Struct<{ readonly id: String; }>; }} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A={ id: String; }} {\n  id: Schema.String\n}
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=Class<ValidModelClass, { readonly id: String; }, Struct<ExtractFields<"select", { readonly id: String; }, true>>> & { readonly json: Struct<{ readonly id: String; }>; readonly insert: Struct<{ readonly id: String; }>; readonly update: Struct<{ readonly id: String; }>; readonly select: Struct<{ readonly id: String; }>; readonly jsonCreate: Struct<{ readonly id: String; }>; readonly jsonUpdate: Struct<{ readonly id: String; }>; }} step 0: Model.Class<ValidModelClass>("ValidModelClass")
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: Class<ValidModelClass, { readonly id: String; }, Struct<ExtractFields<"select", { readonly id: String; }, true>>> & { readonly json: Struct<{ readonly id: String; }>; readonly insert: Struct<{ readonly id: String; }>; readonly update: Struct<{ readonly id: String; }>; readonly select: Struct<{ readonly id: String; }>; readonly jsonCreate: Struct<{ readonly id: String; }>; readonly jsonUpdate: Struct<{ readonly id: String; }>; }
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: {\n  id: Schema.String\n}
+      ordinal: 0
+      result.kind: plain
+      result.A: { id: String; }
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Model.Class<ValidModelClass>("ValidModelClass")
+      ordinal: 0
+      result.kind: plain
+      result.A: Class<ValidModelClass, { readonly id: String; }, Struct<ExtractFields<"select", { readonly id: String; }, true>>> & { readonly json: Struct<{ readonly id: String; }>; readonly insert: Struct<{ readonly id: String; }>; readonly update: Struct<{ readonly id: String; }>; readonly select: Struct<{ readonly id: String; }>; readonly jsonCreate: Struct<{ readonly id: String; }>; readonly jsonUpdate: Struct<{ readonly id: String; }>; }
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call
+
+=== Effect Flow ===
+Kind: pipeline
+Location: 10:39 - 12:3
+Root: Model.Class<ValidModelClass>("InvalidModelClass")({\n  id2: Schema.String\n})
+Path (3 nodes):
+  [0] root {plain A=Class<ValidModelClass, { readonly id2: String; }, Struct<ExtractFields<"select", { readonly id2: String; }, true>>> & { readonly json: Struct<{ readonly id2: String; }>; readonly insert: Struct<{ readonly id2: String; }>; readonly update: Struct<{ readonly id2: String; }>; readonly select: Struct<{ readonly id2: String; }>; readonly jsonCreate: Struct<{ readonly id2: String; }>; readonly jsonUpdate: Struct<{ readonly id2: String; }>; }} pipeline
+      ==> [subject] -> [1]
+  [1] pipeSubject {plain A={ id2: String; }} {\n  id2: Schema.String\n}
+      ~> [call] -> [2]
+  [2] pipeTransformation {plain A=Class<ValidModelClass, { readonly id2: String; }, Struct<ExtractFields<"select", { readonly id2: String; }, true>>> & { readonly json: Struct<{ readonly id2: String; }>; readonly insert: Struct<{ readonly id2: String; }>; readonly update: Struct<{ readonly id2: String; }>; readonly select: Struct<{ readonly id2: String; }>; readonly jsonCreate: Struct<{ readonly id2: String; }>; readonly jsonUpdate: Struct<{ readonly id2: String; }>; }} step 0: Model.Class<ValidModelClass>("InvalidModelClass")
+
+Nodes (3):
+  [0] kind: root
+      label: pipeline
+      ordinal: 0
+      result.kind: plain
+      result.A: Class<ValidModelClass, { readonly id2: String; }, Struct<ExtractFields<"select", { readonly id2: String; }, true>>> & { readonly json: Struct<{ readonly id2: String; }>; readonly insert: Struct<{ readonly id2: String; }>; readonly update: Struct<{ readonly id2: String; }>; readonly select: Struct<{ readonly id2: String; }>; readonly jsonCreate: Struct<{ readonly id2: String; }>; readonly jsonUpdate: Struct<{ readonly id2: String; }>; }
+      result.E: 
+      result.R: 
+  [1] kind: pipeSubject
+      label: {\n  id2: Schema.String\n}
+      ordinal: 0
+      result.kind: plain
+      result.A: { id2: String; }
+      result.E: 
+      result.R: 
+  [2] kind: pipeTransformation
+      label: step 0: Model.Class<ValidModelClass>("InvalidModelClass")
+      ordinal: 0
+      result.kind: plain
+      result.A: Class<ValidModelClass, { readonly id2: String; }, Struct<ExtractFields<"select", { readonly id2: String; }, true>>> & { readonly json: Struct<{ readonly id2: String; }>; readonly insert: Struct<{ readonly id2: String; }>; readonly update: Struct<{ readonly id2: String; }>; readonly select: Struct<{ readonly id2: String; }>; readonly jsonCreate: Struct<{ readonly id2: String; }>; readonly jsonUpdate: Struct<{ readonly id2: String; }>; }
+      result.E: 
+      result.R: 
+Edges (2):
+  0 -> 1 [strong] subject
+  1 -> 2 [weak] call

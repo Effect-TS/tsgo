@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (6:3-6:23) TS377065: Prefer using Effect.log or Logger instead of console.log inside Effect generators. effect(globalConsoleInEffect)
+[D1] (6:3-6:23) TS377065: This Effect code uses `console.log`, logging in Effect code is represented through `Effect.log or Logger`. effect(globalConsoleInEffect)
   Fix 0: "Disable globalConsoleInEffect for this line"
   Fix 1: "Disable globalConsoleInEffect for entire file"
 

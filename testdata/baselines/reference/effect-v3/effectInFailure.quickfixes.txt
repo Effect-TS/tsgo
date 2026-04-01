@@ -8,11 +8,11 @@
   Fix 0: "Disable effectInFailure for this line"
   Fix 1: "Disable effectInFailure for entire file"
 
-[D3] (6:14-6:29) TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+[D3] (6:14-6:29) TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
   Fix 0: "Disable preferSchemaOverJson for this line"
   Fix 1: "Disable preferSchemaOverJson for entire file"
 
-[D4] (11:14-11:29) TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+[D4] (11:14-11:29) TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
   Fix 0: "Disable preferSchemaOverJson for this line"
   Fix 1: "Disable preferSchemaOverJson for entire file"
 
@@ -20,7 +20,7 @@
   Fix 0: "Disable effectInFailure for this line"
   Fix 1: "Disable effectInFailure for entire file"
 
-[D6] (16:14-16:29) TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+[D6] (16:14-16:29) TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
   Fix 0: "Disable preferSchemaOverJson for this line"
   Fix 1: "Disable preferSchemaOverJson for entire file"
 
@@ -28,7 +28,7 @@
   Fix 0: "Disable effectInFailure for this line"
   Fix 1: "Disable effectInFailure for entire file"
 
-[D8] (19:18-19:39) TS377026: Consider using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify. effect(preferSchemaOverJson)
+[D8] (19:18-19:39) TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
   Fix 0: "Disable preferSchemaOverJson for this line"
   Fix 1: "Disable preferSchemaOverJson for entire file"
 

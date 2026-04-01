@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/schemaSyncInEffect_preview.ts(10,10): warning TS377037: Using Schema.decodeSync inside an Effect generator is not recommended. Use Schema.decode instead to get properly typed error channel. effect(schemaSyncInEffect)
+/.src/schemaSyncInEffect_preview.ts(10,10): warning TS377037: `Schema.decodeSync` is used inside an Effect generator. `Schema.decode` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
 
 
 ==== /.src/schemaSyncInEffect_preview.ts (1 errors) ====
@@ -16,6 +16,6 @@ Effect version: 3.19.19
       const input = yield* Effect.succeed({ name: "Ada", age: 1 })
       return Schema.decodeSync(Person)(input)
              ~~~~~~~~~~~~~~~~~
-!!! warning TS377037: Using Schema.decodeSync inside an Effect generator is not recommended. Use Schema.decode instead to get properly typed error channel. effect(schemaSyncInEffect)
+!!! warning TS377037: `Schema.decodeSync` is used inside an Effect generator. `Schema.decode` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
     })
     

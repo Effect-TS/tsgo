@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (12:70-12:85) TS377046: Self type parameter should be 'InvalidContextTag'. effect(classSelfMismatch)
+[D1] (12:70-12:85) TS377046: The `Self` type parameter for this class should be `InvalidContextTag`. effect(classSelfMismatch)
   Fix 0: "Disable classSelfMismatch for this line"
   Fix 1: "Disable classSelfMismatch for entire file"
   Fix 2: "Replace 'ValidContextTag' with 'InvalidContextTag'"

@@ -19,7 +19,7 @@ var EffectFnImplicitAny = rule.Rule{
 	Description:     "Mirrors noImplicitAny for unannotated Effect.fn, Effect.fnUntraced, and Effect.fnUntracedEager callback parameters when no outer contextual function type exists. Requires TS's noImplicitAny: true",
 	DefaultSeverity: etscore.SeverityError,
 	SupportedEffect: []string{"v3", "v4"},
-	Codes:           []int32{tsdiag.Parameter_0_implicitly_has_an_any_type_in_Effect_fn_SlashEffect_fnUntraced_SlashEffect_fnUntracedEager_Add_an_explicit_type_annotation_or_provide_a_contextual_function_type_effect_effectFnImplicitAny.Code()},
+	Codes:           []int32{tsdiag.Parameter_0_implicitly_has_type_any_in_Effect_fn_Effect_fnUntraced_or_Effect_fnUntracedEager_No_parameter_type_is_available_from_an_explicit_annotation_or_contextual_function_type_effect_effectFnImplicitAny.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		tp := ctx.TypeParser
 		if !ctx.Program.Options().GetStrictOptionValue(ctx.Program.Options().NoImplicitAny) {
@@ -102,7 +102,7 @@ func checkEffectFnImplicitAnyParameters(ctx *rule.Context, callNode *ast.Node, p
 		diags = append(diags, ctx.NewDiagnostic(
 			ctx.SourceFile,
 			ctx.GetErrorRange(param.Name()),
-			tsdiag.Parameter_0_implicitly_has_an_any_type_in_Effect_fn_SlashEffect_fnUntraced_SlashEffect_fnUntracedEager_Add_an_explicit_type_annotation_or_provide_a_contextual_function_type_effect_effectFnImplicitAny,
+			tsdiag.Parameter_0_implicitly_has_type_any_in_Effect_fn_Effect_fnUntraced_or_Effect_fnUntracedEager_No_parameter_type_is_available_from_an_explicit_annotation_or_contextual_function_type_effect_effectFnImplicitAny,
 			nil,
 			name,
 		))
