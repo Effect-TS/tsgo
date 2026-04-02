@@ -1,0 +1,43 @@
+==== /.src/processEnvInEffect.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 6:24 - 8:3
+Node: Effect.gen(function*() {\n  return process.env.SECRET\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  return process.env.SECRET\n}
+Subject Type: () => Generator<never, string | undefined, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string | undefined, never, never>
+
+=== Piping Flow ===
+Location: 11:23 - 13:3
+Node: Effect.fn("envInFn")(function*() {\n  return process.env["API_KEY"]\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  return process.env["API_KEY"]\n}
+Subject Type: () => Generator<never, string | undefined, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn("envInFn")
+      args: (constant)
+      outType: () => Effect<string | undefined, never, never>
+
+=== Piping Flow ===
+Location: 22:32 - 25:3
+Node: Effect.gen(function*() {\n  const fn = () => process.env.NODE_ENV\n  return fn\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const fn = () => process.env.NODE_ENV\n  return fn\n}
+Subject Type: () => Generator<never, () => string | undefined, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<() => string | undefined, never, never>

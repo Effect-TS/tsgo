@@ -1,0 +1,36 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/processEnv.ts(6,26): warning TS377076: This code reads from `process.env`, environment configuration is represented through `Config` from Effect. effect(processEnv)
+/.src/processEnv.ts(9,33): warning TS377076: This code reads from `process.env`, environment configuration is represented through `Config` from Effect. effect(processEnv)
+/.src/processEnv.ts(18,20): warning TS377076: This code reads from `process.env`, environment configuration is represented through `Config` from Effect. effect(processEnv)
+
+
+==== /.src/processEnv.ts (3 errors) ====
+    // @effect-diagnostics processEnv:warning
+    /// <reference types="node" />
+    import { Effect } from "effect"
+    
+    // Should trigger - process.env at module level
+    export const moduleEnv = process.env.PORT
+                             ~~~~~~~~~~~~~~~~
+!!! warning TS377076: This code reads from `process.env`, environment configuration is represented through `Config` from Effect. effect(processEnv)
+    
+    // Should trigger - bracket access in regular function
+    export const regularEnv = () => process.env["HOST"]
+                                    ~~~~~~~~~~~~~~~~~~~
+!!! warning TS377076: This code reads from `process.env`, environment configuration is represented through `Config` from Effect. effect(processEnv)
+    
+    // Should NOT trigger - process.env directly inside Effect.gen
+    export const envInGen = Effect.gen(function*() {
+      return process.env.SECRET
+    })
+    
+    // Should trigger - process.env inside nested arrow in generator
+    export const nestedArrowInGen = Effect.gen(function*() {
+      const fn = () => process.env.API_KEY
+                       ~~~~~~~~~~~~~~~~~~~
+!!! warning TS377076: This code reads from `process.env`, environment configuration is represented through `Config` from Effect. effect(processEnv)
+      return fn
+    })
+    

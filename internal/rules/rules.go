@@ -31,6 +31,8 @@ var All = []rule.Rule{
 	GlobalErrorInEffectFailure,
 	GlobalFetch,
 	GlobalFetchInEffect,
+	ProcessEnv,
+	ProcessEnvInEffect,
 	GlobalConsole,
 	GlobalConsoleInEffect,
 	GlobalDate,
