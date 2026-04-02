@@ -29,6 +29,8 @@ var All = []rule.Rule{
 	UnknownInEffectCatch,
 	GlobalErrorInEffectCatch,
 	GlobalErrorInEffectFailure,
+	CryptoRandomUUID,
+	CryptoRandomUUIDInEffect,
 	GlobalFetch,
 	GlobalFetchInEffect,
 	ProcessEnv,

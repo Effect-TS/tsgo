@@ -287,6 +287,14 @@
         "category": "Warning",
         "code": 377073
     },
+    "This code uses `crypto.randomUUID()`, prefer the Effect `Random` module instead because it uses Effect-injected randomness rather than the `crypto` module behind the scenes. effect(cryptoRandomUUID)": {
+        "category": "Warning",
+        "code": 377078
+    },
+    "This Effect code uses `crypto.randomUUID()`, prefer the Effect `Random` module instead because it uses Effect-injected randomness rather than the `crypto` module behind the scenes. effect(cryptoRandomUUIDInEffect)": {
+        "category": "Warning",
+        "code": 377079
+    },
     "This code reads from `process.env`, environment configuration is represented through `Config` from Effect. effect(processEnv)": {
         "category": "Warning",
         "code": 377076
