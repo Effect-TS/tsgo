@@ -9,7 +9,7 @@ Reference commit: `$1`
 
 Follow the repository rules in @AGENTS.md.
 
-Create a new branch for this porting work, e.g. `port-<feature-short-name>-<reference-commit-hash>`, and make sure to include the reference commit hash in the branch name for traceability.
+Create a new branch for this porting work based of latest origin/main branch, e.g. `port-<feature-short-name>-<reference-commit-hash>`, and make sure to include the reference commit hash in the branch name for traceability.
 
 Based on the reference commit above, port the change into this repository's Go implementation.
 
