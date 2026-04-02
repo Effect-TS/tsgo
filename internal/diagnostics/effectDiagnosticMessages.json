@@ -287,6 +287,14 @@
         "category": "Warning",
         "code": 377073
     },
+    "This code reads from `process.env`, environment configuration is represented through `Config` from Effect. effect(processEnv)": {
+        "category": "Warning",
+        "code": 377076
+    },
+    "This Effect code reads from `process.env`, environment configuration in Effect code is represented through `Config` from Effect. effect(processEnvInEffect)": {
+        "category": "Warning",
+        "code": 377077
+    },
     "Parameter `{0}` implicitly has type `any` in `Effect.fn`, `Effect.fnUntraced`, or `Effect.fnUntracedEager`. No parameter type is available from an explicit annotation or contextual function type. effect(effectFnImplicitAny)": {
         "category": "Error",
         "code": 377062

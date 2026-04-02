@@ -1884,6 +1884,16 @@
           "default": "suggestion",
           "description": "Suggests using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify"
         },
+        "processEnv": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Warns when reading process.env outside Effect generators instead of using Effect Config"
+        },
+        "processEnvInEffect": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Warns when reading process.env inside Effect generators instead of using Effect Config"
+        },
         "redundantSchemaTagIdentifier": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
