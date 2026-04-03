@@ -1,0 +1,52 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/asyncFunction.ts(5,23): warning TS377081: This code declares an async function, consider representing this async control flow with Effect values and `Effect.gen`. effect(asyncFunction)
+/.src/asyncFunction.ts(11,27): warning TS377081: This code declares an async function, consider representing this async control flow with Effect values and `Effect.gen`. effect(asyncFunction)
+/.src/asyncFunction.ts(18,9): warning TS377081: This code declares an async function, consider representing this async control flow with Effect values and `Effect.gen`. effect(asyncFunction)
+/.src/asyncFunction.ts(26,25): warning TS377081: This code declares an async function, consider representing this async control flow with Effect values and `Effect.gen`. effect(asyncFunction)
+
+
+==== /.src/asyncFunction.ts (4 errors) ====
+    // @effect-diagnostics asyncFunction:warning
+    import { Effect } from "effect"
+    
+    // Should trigger - async function declaration
+    export async function declaredAsync() {
+                          ~~~~~~~~~~~~~
+!!! warning TS377081: This code declares an async function, consider representing this async control flow with Effect values and `Effect.gen`. effect(asyncFunction)
+      await Promise.resolve(1)
+      return 1
+    }
+    
+    // Should trigger - async arrow function
+    export const asyncArrow = async () => {
+                              ~~~~~~~~~~~~~
+!!! warning TS377081: This code declares an async function, consider representing this async control flow with Effect values and `Effect.gen`. effect(asyncFunction)
+      await Promise.resolve(2)
+      return 2
+    }
+    
+    // Should trigger - async method
+    export const asyncMethod = {
+      async run() {
+            ~~~
+!!! warning TS377081: This code declares an async function, consider representing this async control flow with Effect values and `Effect.gen`. effect(asyncFunction)
+        await Promise.resolve(3)
+        return 3
+      }
+    }
+    
+    // Should trigger - async function inside Effect.gen
+    export const asyncInGen = Effect.gen(function*() {
+      return async function nested() {
+                            ~~~~~~
+!!! warning TS377081: This code declares an async function, consider representing this async control flow with Effect values and `Effect.gen`. effect(asyncFunction)
+        await Promise.resolve(4)
+        return 4
+      }
+    })
+    
+    // Should NOT trigger - regular function using Effect
+    export const regularFunction = () => Effect.succeed(5)
+    

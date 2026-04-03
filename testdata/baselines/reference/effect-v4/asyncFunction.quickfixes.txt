@@ -1,0 +1,43 @@
+=== Quick Fix Inventory ===
+
+[D1] (5:23-5:36) TS377081: This code declares an async function, consider representing this async control flow with Effect values and `Effect.gen`. effect(asyncFunction)
+  Fix 0: "Disable asyncFunction for this line"
+  Fix 1: "Disable asyncFunction for entire file"
+
+[D2] (11:27-11:40) TS377081: This code declares an async function, consider representing this async control flow with Effect values and `Effect.gen`. effect(asyncFunction)
+  Fix 0: "Disable asyncFunction for this line"
+  Fix 1: "Disable asyncFunction for entire file"
+
+[D3] (18:9-18:12) TS377081: This code declares an async function, consider representing this async control flow with Effect values and `Effect.gen`. effect(asyncFunction)
+  Fix 0: "Disable asyncFunction for this line"
+  Fix 1: "Disable asyncFunction for entire file"
+
+[D4] (26:25-26:31) TS377081: This code declares an async function, consider representing this async control flow with Effect values and `Effect.gen`. effect(asyncFunction)
+  Fix 0: "Disable asyncFunction for this line"
+  Fix 1: "Disable asyncFunction for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable asyncFunction for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable asyncFunction for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable asyncFunction for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable asyncFunction for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable asyncFunction for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable asyncFunction for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable asyncFunction for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable asyncFunction for entire file" ===
+skipped by default
