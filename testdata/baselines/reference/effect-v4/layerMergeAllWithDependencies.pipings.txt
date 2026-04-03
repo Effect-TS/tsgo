@@ -1,4 +1,4 @@
-==== /.src/layerMergeAllWithDependencies.ts (2 flows) ====
+==== /.src/layerMergeAllWithDependencies.ts (9 flows) ====
 
 === Piping Flow ===
 Location: 4:8 - 4:27
@@ -15,6 +15,20 @@ Transformations (1):
       outType: Effect<{}, never, never>
 
 === Piping Flow ===
+Location: 6:19 - 6:49
+Node: Layer.effect(this, this.make)
+Node Kind: KindCallExpression
+
+Subject: this.make
+Subject Type: Effect<{}, never, never>
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.effect
+      args: [this]
+      outType: Layer<DbConnection, never, never>
+
+=== Piping Flow ===
 Location: 9:8 - 9:27
 Node: Effect.succeed({})
 Node Kind: KindCallExpression
@@ -27,3 +41,91 @@ Transformations (1):
       callee: Effect.succeed
       args: (constant)
       outType: Effect<{}, never, never>
+
+=== Piping Flow ===
+Location: 11:19 - 11:49
+Node: Layer.effect(this, this.make)
+Node Kind: KindCallExpression
+
+Subject: this.make
+Subject Type: Effect<{}, never, never>
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.effect
+      args: [this]
+      outType: Layer<FileSystem, never, never>
+
+=== Piping Flow ===
+Location: 14:8 - 14:45
+Node: Effect.as(FileSystem.asEffect(), {})
+Node Kind: KindCallExpression
+
+Subject: FileSystem.asEffect()
+Subject Type: Effect<{}, never, FileSystem>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.as
+      args: [{}]
+      outType: Effect<{}, never, FileSystem>
+
+=== Piping Flow ===
+Location: 16:19 - 16:49
+Node: Layer.effect(this, this.make)
+Node Kind: KindCallExpression
+
+Subject: this.make
+Subject Type: Effect<{}, never, FileSystem>
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.effect
+      args: [this]
+      outType: Layer<Cache, never, FileSystem>
+
+=== Piping Flow ===
+Location: 19:8 - 19:81
+Node: Effect.as(Effect.andThen(DbConnection.asEffect(), Cache.asEffect()), {})
+Node Kind: KindCallExpression
+
+Subject: DbConnection.asEffect()
+Subject Type: Effect<{}, never, DbConnection>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.andThen
+      args: [Cache.asEffect()]
+      outType: Effect<{}, never, Cache | DbConnection>
+  [1] kind: dataFirst
+      callee: Effect.as
+      args: [{}]
+      outType: Effect<{}, never, Cache | DbConnection>
+
+=== Piping Flow ===
+Location: 21:19 - 21:49
+Node: Layer.effect(this, this.make)
+Node Kind: KindCallExpression
+
+Subject: this.make
+Subject Type: Effect<{}, never, Cache | DbConnection>
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.effect
+      args: [this]
+      outType: Layer<UserRepository, never, Cache | DbConnection>
+
+=== Piping Flow ===
+Location: 24:25 - 24:63
+Node: Layer.effect(Cache, Cache.asEffect())
+Node Kind: KindCallExpression
+
+Subject: Cache.asEffect()
+Subject Type: Effect<{}, never, Cache>
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.effect
+      args: [Cache]
+      outType: Layer<Cache, never, Cache>

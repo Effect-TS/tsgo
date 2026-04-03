@@ -1,4 +1,4 @@
-==== /.src/functionCalls.ts (3 flows) ====
+==== /.src/functionCalls.ts (4 flows) ====
 
 === Piping Flow ===
 Location: 5:23 - 10:2
@@ -21,6 +21,20 @@ Transformations (3):
       callee: Effect.runSync
       args: (constant)
       outType: number
+
+=== Piping Flow ===
+Location: 13:53 - 13:104
+Node: Effect.tap(effect, (a) => Effect.log(`Got: ${a}`))
+Node Kind: KindCallExpression
+
+Subject: effect
+Subject Type: Effect<A, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.tap
+      args: [(a) => Effect.log(`Got: ${a}`)]
+      outType: Effect<A, never, never>
 
 === Piping Flow ===
 Location: 13:79 - 13:103

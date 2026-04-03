@@ -1,4 +1,4 @@
-==== /.src/catchUnfailableEffect.ts (14 flows) ====
+==== /.src/catchUnfailableEffect.ts (16 flows) ====
 
 === Piping Flow ===
 Location: 5:28 - 7:2
@@ -235,3 +235,31 @@ Transformations (1):
       callee: Effect.succeed
       args: (constant)
       outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 40:37 - 43:2
+Node: Effect.catchAll(\n  Effect.never,\n  () => Effect.log("error") // <- should report here\n)
+Node Kind: KindCallExpression
+
+Subject: Effect.never
+Subject Type: Effect<never, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.catchAll
+      args: [() => Effect.log("error")]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 42:8 - 42:28
+Node: Effect.log("error")
+Node Kind: KindCallExpression
+
+Subject: "error"
+Subject Type: "error"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>

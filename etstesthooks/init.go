@@ -3,7 +3,7 @@ package etstesthooks
 import (
 	"strings"
 
-	"github.com/effect-ts/tsgo/internal/effecttest"
+	"github.com/effect-ts/tsgo/internal/bundledeffect"
 	"github.com/microsoft/typescript-go/shim/fourslash"
 )
 
@@ -31,11 +31,11 @@ func prepareTestFS(testfs map[string]any) {
 	if !hasEffectImport {
 		return
 	}
-	version := effecttest.EffectV4
+	version := bundledeffect.EffectV4
 	if hasV3Marker {
-		version = effecttest.EffectV3
+		version = bundledeffect.EffectV3
 	}
-	if err := effecttest.MountEffect(version, testfs); err != nil {
+	if err := bundledeffect.MountEffect(version, testfs); err != nil {
 		panic(err)
 	}
 }

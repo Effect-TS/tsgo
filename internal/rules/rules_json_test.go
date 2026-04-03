@@ -20,6 +20,7 @@ import (
 	"testing/fstest"
 
 	"github.com/effect-ts/tsgo/etscore"
+	"github.com/effect-ts/tsgo/internal/bundledeffect"
 	"github.com/effect-ts/tsgo/internal/effecttest"
 	"github.com/effect-ts/tsgo/internal/fixables"
 	"github.com/effect-ts/tsgo/internal/pluginoptions"
@@ -217,8 +218,8 @@ func trimLeadingDirectives(sourceText string) (trimmed string, removedChars int)
 
 // findPreviewFile locates the preview fixture for a rule, checking v4 first then v3.
 // Returns the version, file path, and source text.
-func findPreviewFile(root string, ruleName string) (effecttest.EffectVersion, string, string, error) {
-	for _, version := range []effecttest.EffectVersion{effecttest.EffectV4, effecttest.EffectV3} {
+func findPreviewFile(root string, ruleName string) (bundledeffect.EffectVersion, string, string, error) {
+	for _, version := range []bundledeffect.EffectVersion{bundledeffect.EffectV4, bundledeffect.EffectV3} {
 		filePath := filepath.Join(root, "testdata", "tests", string(version), ruleName+"_preview.ts")
 		data, err := os.ReadFile(filePath)
 		if err == nil {
@@ -270,7 +271,7 @@ func buildTsConfigWithTestConfig(testConfig map[string]any) string {
 // the specified rule directly to collect diagnostics. We bypass the checker hooks
 // because preview files use "// @effect-diagnostics *:off" which causes the
 // hook to early-return. Instead, we run the rule directly via rule.Run().
-func evaluatePreview(t *testing.T, version effecttest.EffectVersion, sourceText string, r *rule.Rule) *previewPayload {
+func evaluatePreview(t *testing.T, version bundledeffect.EffectVersion, sourceText string, r *rule.Rule) *previewPayload {
 	t.Helper()
 
 	effecttest.AcquireProgram()
@@ -282,7 +283,7 @@ func evaluatePreview(t *testing.T, version effecttest.EffectVersion, sourceText 
 
 	// Create VFS
 	testfs := make(map[string]any)
-	if err := effecttest.MountEffect(version, testfs); err != nil {
+	if err := bundledeffect.MountEffect(version, testfs); err != nil {
 		t.Fatalf("mount effect for preview: %v", err)
 	}
 

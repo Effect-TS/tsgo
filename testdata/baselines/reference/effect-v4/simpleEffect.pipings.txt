@@ -1,4 +1,4 @@
-==== /.src/simpleEffect.ts (9 flows) ====
+==== /.src/simpleEffect.ts (8 flows) ====
 
 === Piping Flow ===
 Location: 4:28 - 8:2
@@ -61,36 +61,30 @@ Location: 16:34 - 20:2
 Node: Effect.map(Effect.succeed(1), (x) => x + 1).pipe(\n  Effect.map((x) => x * 2),\n  Effect.map((x) => x.toString()),\n  Effect.map((x) => x.length > 0)\n)
 Node Kind: KindCallExpression
 
-Subject: Effect.map(Effect.succeed(1), (x) => x + 1)
-Subject Type: Effect<number, never, never>
-
-Transformations (3):
-  [0] kind: pipeable
-      callee: Effect.map
-      args: [(x) => x * 2]
-      outType: Effect<number, never, never>
-  [1] kind: pipeable
-      callee: Effect.map
-      args: [(x) => x.toString()]
-      outType: Effect<string, never, never>
-  [2] kind: pipeable
-      callee: Effect.map
-      args: [(x) => x.length > 0]
-      outType: Effect<boolean, never, never>
-
-=== Piping Flow ===
-Location: 16:46 - 16:63
-Node: Effect.succeed(1)
-Node Kind: KindCallExpression
-
 Subject: 1
 Subject Type: 1
 
-Transformations (1):
+Transformations (5):
   [0] kind: call
       callee: Effect.succeed
       args: (constant)
       outType: Effect<number, never, never>
+  [1] kind: dataFirst
+      callee: Effect.map
+      args: [(x) => x + 1]
+      outType: Effect<number, never, never>
+  [2] kind: pipeable
+      callee: Effect.map
+      args: [(x) => x * 2]
+      outType: Effect<number, never, never>
+  [3] kind: pipeable
+      callee: Effect.map
+      args: [(x) => x.toString()]
+      outType: Effect<string, never, never>
+  [4] kind: pipeable
+      callee: Effect.map
+      args: [(x) => x.length > 0]
+      outType: Effect<boolean, never, never>
 
 === Piping Flow ===
 Location: 22:39 - 24:2

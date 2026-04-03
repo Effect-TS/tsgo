@@ -1,4 +1,4 @@
-==== /.src/multipleEffectProvide.ts (6 flows) ====
+==== /.src/multipleEffectProvide.ts (9 flows) ====
 
 === Piping Flow ===
 Location: 4:8 - 4:37
@@ -15,6 +15,20 @@ Transformations (1):
       outType: Effect<{ value: number; }, never, never>
 
 === Piping Flow ===
+Location: 6:19 - 6:49
+Node: Layer.effect(this, this.make)
+Node Kind: KindCallExpression
+
+Subject: this.make
+Subject Type: Effect<{ value: number; }, never, never>
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.effect
+      args: [this]
+      outType: Layer<MyService1, never, never>
+
+=== Piping Flow ===
 Location: 10:8 - 10:37
 Node: Effect.succeed({ value: 2 })
 Node Kind: KindCallExpression
@@ -29,6 +43,20 @@ Transformations (1):
       outType: Effect<{ value: number; }, never, never>
 
 === Piping Flow ===
+Location: 12:19 - 12:49
+Node: Layer.effect(this, this.make)
+Node Kind: KindCallExpression
+
+Subject: this.make
+Subject Type: Effect<{ value: number; }, never, never>
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.effect
+      args: [this]
+      outType: Layer<MyService2, never, never>
+
+=== Piping Flow ===
 Location: 16:8 - 16:37
 Node: Effect.succeed({ value: 3 })
 Node Kind: KindCallExpression
@@ -41,6 +69,20 @@ Transformations (1):
       callee: Effect.succeed
       args: (constant)
       outType: Effect<{ value: number; }, never, never>
+
+=== Piping Flow ===
+Location: 18:19 - 18:49
+Node: Layer.effect(this, this.make)
+Node Kind: KindCallExpression
+
+Subject: this.make
+Subject Type: Effect<{ value: number; }, never, never>
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.effect
+      args: [this]
+      outType: Layer<MyService3, never, never>
 
 === Piping Flow ===
 Location: 21:28 - 24:2

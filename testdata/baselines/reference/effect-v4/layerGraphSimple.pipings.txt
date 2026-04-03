@@ -1,4 +1,4 @@
-==== /.src/layerGraphSimple.ts (5 flows) ====
+==== /.src/layerGraphSimple.ts (11 flows) ====
 
 === Piping Flow ===
 Location: 12:8 - 12:27
@@ -15,6 +15,20 @@ Transformations (1):
       outType: Effect<{}, never, never>
 
 === Piping Flow ===
+Location: 14:19 - 14:49
+Node: Layer.effect(this, this.make)
+Node Kind: KindCallExpression
+
+Subject: this.make
+Subject Type: Effect<{}, never, never>
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.effect
+      args: [this]
+      outType: Layer<DbConnection, never, never>
+
+=== Piping Flow ===
 Location: 17:8 - 17:27
 Node: Effect.succeed({})
 Node Kind: KindCallExpression
@@ -27,6 +41,80 @@ Transformations (1):
       callee: Effect.succeed
       args: (constant)
       outType: Effect<{}, never, never>
+
+=== Piping Flow ===
+Location: 19:19 - 19:49
+Node: Layer.effect(this, this.make)
+Node Kind: KindCallExpression
+
+Subject: this.make
+Subject Type: Effect<{}, never, never>
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.effect
+      args: [this]
+      outType: Layer<FileSystem, never, never>
+
+=== Piping Flow ===
+Location: 22:8 - 22:45
+Node: Effect.as(FileSystem.asEffect(), {})
+Node Kind: KindCallExpression
+
+Subject: FileSystem.asEffect()
+Subject Type: Effect<{}, never, FileSystem>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.as
+      args: [{}]
+      outType: Effect<{}, never, FileSystem>
+
+=== Piping Flow ===
+Location: 24:19 - 24:49
+Node: Layer.effect(this, this.make)
+Node Kind: KindCallExpression
+
+Subject: this.make
+Subject Type: Effect<{}, never, FileSystem>
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.effect
+      args: [this]
+      outType: Layer<Cache, never, FileSystem>
+
+=== Piping Flow ===
+Location: 27:8 - 27:81
+Node: Effect.as(Effect.andThen(DbConnection.asEffect(), Cache.asEffect()), {})
+Node Kind: KindCallExpression
+
+Subject: DbConnection.asEffect()
+Subject Type: Effect<{}, never, DbConnection>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.andThen
+      args: [Cache.asEffect()]
+      outType: Effect<{}, never, Cache | DbConnection>
+  [1] kind: dataFirst
+      callee: Effect.as
+      args: [{}]
+      outType: Effect<{}, never, Cache | DbConnection>
+
+=== Piping Flow ===
+Location: 29:19 - 29:49
+Node: Layer.effect(this, this.make)
+Node Kind: KindCallExpression
+
+Subject: this.make
+Subject Type: Effect<{}, never, Cache | DbConnection>
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.effect
+      args: [this]
+      outType: Layer<UserRepository, never, Cache | DbConnection>
 
 === Piping Flow ===
 Location: 33:28 - 33:86

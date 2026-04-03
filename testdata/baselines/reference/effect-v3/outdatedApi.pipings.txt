@@ -29,18 +29,22 @@ Transformations (1):
       outType: Effect<never, never, never>
 
 === Piping Flow ===
-Location: 13:43 - 13:61
-Node: Effect.fail("err")
+Location: 13:26 - 13:89
+Node: Effect.catchAll(Effect.fail("err"), (_e) => Effect.succeed(0))
 Node Kind: KindCallExpression
 
 Subject: "err"
 Subject Type: "err"
 
-Transformations (1):
+Transformations (2):
   [0] kind: call
       callee: Effect.fail
       args: (constant)
       outType: Effect<never, string, never>
+  [1] kind: dataFirst
+      callee: Effect.catchAll
+      args: [(_e) => Effect.succeed(0)]
+      outType: Effect<number, never, never>
 
 === Piping Flow ===
 Location: 13:70 - 13:88

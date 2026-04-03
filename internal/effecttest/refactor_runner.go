@@ -9,6 +9,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/effect-ts/tsgo/internal/bundledeffect"
 	"github.com/microsoft/typescript-go/shim/fourslash"
 	"github.com/microsoft/typescript-go/shim/ls/lsconv"
 	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
@@ -16,12 +17,12 @@ import (
 )
 
 // RefactorTestCasesDir returns the path to the Effect refactor test cases directory.
-func RefactorTestCasesDir(version EffectVersion) string {
-	return filepath.Join(EffectTsGoRootPath(), "testdata", "tests", string(version)+"-refactors")
+func RefactorTestCasesDir(version bundledeffect.EffectVersion) string {
+	return filepath.Join(bundledeffect.EffectTsGoRootPath(), "testdata", "tests", string(version)+"-refactors")
 }
 
 // DiscoverRefactorTestCases finds all .ts test files in the refactor test cases directory.
-func DiscoverRefactorTestCases(version EffectVersion) ([]string, error) {
+func DiscoverRefactorTestCases(version bundledeffect.EffectVersion) ([]string, error) {
 	dir := RefactorTestCasesDir(version)
 	entries, err := os.ReadDir(dir)
 	if err != nil {
@@ -111,7 +112,7 @@ func parseRefactorComment(content string) refactorCommentResult {
 // RunEffectRefactorTest executes a single Effect refactor baseline test case.
 // It creates a fourslash test instance, collects refactor inventory and application
 // results for the selection specified by a "// refactor:" comment, and generates a *.refactors.txt baseline.
-func RunEffectRefactorTest(t *testing.T, version EffectVersion, testFile string) {
+func RunEffectRefactorTest(t *testing.T, version bundledeffect.EffectVersion, testFile string) {
 	AcquireProgram()
 	defer ReleaseProgram()
 
