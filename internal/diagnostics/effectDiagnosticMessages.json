@@ -295,6 +295,14 @@
         "category": "Warning",
         "code": 377079
     },
+    "This code constructs `new Promise(...)`, prefer Effect APIs such as `Effect.async`, `Effect.promise`, or `Effect.tryPromise` instead of manual Promise construction. effect(newPromise)": {
+        "category": "Warning",
+        "code": 377080
+    },
+    "This code declares an async function, consider representing this async control flow with Effect values and `Effect.gen`. effect(asyncFunction)": {
+        "category": "Warning",
+        "code": 377081
+    },
     "This code reads from `process.env`, environment configuration is represented through `Config` from Effect. effect(processEnv)": {
         "category": "Warning",
         "code": 377076

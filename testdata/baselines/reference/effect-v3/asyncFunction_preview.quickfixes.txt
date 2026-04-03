@@ -1,0 +1,13 @@
+=== Quick Fix Inventory ===
+
+[D1] (4:24-4:37) TS377081: This code declares an async function, consider representing this async control flow with Effect values and `Effect.gen`. effect(asyncFunction)
+  Fix 0: "Disable asyncFunction for this line"
+  Fix 1: "Disable asyncFunction for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable asyncFunction for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable asyncFunction for entire file" ===
+skipped by default

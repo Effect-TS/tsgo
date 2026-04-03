@@ -49,6 +49,7 @@ var All = []rule.Rule{
 	EffectFnImplicitAny,
 	StrictBooleanExpressions,
 	AnyUnknownInErrorContext,
+	AsyncFunction,
 	ScopeInLayerEffect,
 	StrictEffectProvide,
 	MultipleEffectProvide,
@@ -71,6 +72,7 @@ var All = []rule.Rule{
 	DuplicatePackage,
 	ExtendsNativeError,
 	NodeBuiltinImport,
+	NewPromise,
 	OutdatedApi,
 	ServiceNotAsClass,
 }
