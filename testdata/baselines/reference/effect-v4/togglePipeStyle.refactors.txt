@@ -46,7 +46,7 @@ export const toPipeable = pipe(Effect.succeed(42), Effect.map((x) => x * 2))
 import * as Effect from "effect/Effect"
 import { pipe } from "effect/Function"
 
-export const toRegularPipe = Effect.gen(function*() { return yield* Effect.succeed(42).pipe(Effect.map(x => x * 2)) })
+export const toRegularPipe = Effect.gen(function*() { return yield* Effect.succeed(42).pipe(Effect.map((x) => x * 2)) })
 
 export const toPipeable = pipe(Effect.succeed(42), Effect.map((x) => x * 2))
 
