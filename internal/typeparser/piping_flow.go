@@ -15,6 +15,8 @@ type TransformationKind string
 const (
 	TransformationKindPipe             TransformationKind = "pipe"
 	TransformationKindPipeable         TransformationKind = "pipeable"
+	TransformationKindDataFirst        TransformationKind = "dataFirst"
+	TransformationKindDataLast         TransformationKind = "dataLast"
 	TransformationKindCall             TransformationKind = "call"
 	TransformationKindEffectFn         TransformationKind = "effectFn"
 	TransformationKindEffectFnUntraced TransformationKind = "effectFnUntraced"
@@ -304,6 +306,44 @@ func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) []*P
 
 					// Queue transformation argument children for independent inner flow traversal
 					for _, arg := range pipeResult.Args {
+						if arg != nil {
+							arg.ForEachChild(enqueueChild)
+						}
+					}
+					continue
+				}
+
+				// Try single-arg call
+				if dataFirstResult := tp.ParseDataFirstCallAsPipeable(node); dataFirstResult != nil {
+					callOutType := tp.GetTypeAtLocation(node)
+					kind := TransformationKindDataFirst
+					if dataFirstResult.SubjectIndex != 0 {
+						kind = TransformationKindDataLast
+					}
+					transformation := PipingFlowTransformation{
+						Kind:    kind,
+						Node:    node,
+						Callee:  dataFirstResult.Callee,
+						Args:    dataFirstResult.Args,
+						OutType: callOutType,
+					}
+
+					if item.parentFlow != nil {
+						item.parentFlow.Transformations = append(
+							[]PipingFlowTransformation{transformation},
+							item.parentFlow.Transformations...,
+						)
+						queue = append(queue, workItem{node: dataFirstResult.Subject, parentFlow: item.parentFlow})
+					} else {
+						newFlow := &PipingFlow{
+							Node:            node,
+							Transformations: []PipingFlowTransformation{transformation},
+						}
+						queue = append(queue, workItem{node: dataFirstResult.Subject, parentFlow: newFlow})
+					}
+
+					dataFirstResult.Callee.ForEachChild(enqueueChild)
+					for _, arg := range dataFirstResult.Args {
 						if arg != nil {
 							arg.ForEachChild(enqueueChild)
 						}

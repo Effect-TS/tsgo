@@ -6,6 +6,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/effect-ts/tsgo/internal/bundledeffect"
 	"github.com/microsoft/typescript-go/shim/fourslash"
 	"github.com/microsoft/typescript-go/shim/ls/lsconv"
 	"github.com/microsoft/typescript-go/shim/tspath"
@@ -21,7 +22,7 @@ func isDisableStyleFix(title string) bool {
 // RunEffectQuickFixTest executes a single Effect quick-fix baseline test case.
 // It creates a fourslash test instance, collects quick-fix inventory and application
 // results, and generates a *.quickfixes.txt baseline.
-func RunEffectQuickFixTest(t *testing.T, version EffectVersion, testFile string) {
+func RunEffectQuickFixTest(t *testing.T, version bundledeffect.EffectVersion, testFile string) {
 	AcquireProgram()
 	defer ReleaseProgram()
 

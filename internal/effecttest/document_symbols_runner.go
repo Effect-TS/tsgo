@@ -9,6 +9,7 @@ import (
 	"testing"
 	"testing/fstest"
 
+	"github.com/effect-ts/tsgo/internal/bundledeffect"
 	"github.com/microsoft/typescript-go/shim/bundled"
 	"github.com/microsoft/typescript-go/shim/diagnostics"
 	"github.com/microsoft/typescript-go/shim/ls/lsconv"
@@ -20,12 +21,12 @@ import (
 )
 
 // DocumentSymbolTestCasesDir returns the path to the Effect document-symbol test cases directory.
-func DocumentSymbolTestCasesDir(version EffectVersion) string {
-	return filepath.Join(EffectTsGoRootPath(), "testdata", "tests", string(version)+"-document-symbols")
+func DocumentSymbolTestCasesDir(version bundledeffect.EffectVersion) string {
+	return filepath.Join(bundledeffect.EffectTsGoRootPath(), "testdata", "tests", string(version)+"-document-symbols")
 }
 
 // DiscoverDocumentSymbolTestCases finds all .ts test files in the document-symbol test cases directory.
-func DiscoverDocumentSymbolTestCases(version EffectVersion) ([]string, error) {
+func DiscoverDocumentSymbolTestCases(version bundledeffect.EffectVersion) ([]string, error) {
 	dir := DocumentSymbolTestCasesDir(version)
 	entries, err := os.ReadDir(dir)
 	if err != nil {
@@ -45,7 +46,7 @@ func DiscoverDocumentSymbolTestCases(version EffectVersion) ([]string, error) {
 }
 
 // RunEffectDocumentSymbolsTest executes one document-symbol baseline test case.
-func RunEffectDocumentSymbolsTest(t *testing.T, version EffectVersion, testFile string) {
+func RunEffectDocumentSymbolsTest(t *testing.T, version bundledeffect.EffectVersion, testFile string) {
 	AcquireProgram()
 	defer ReleaseProgram()
 
@@ -58,7 +59,7 @@ func RunEffectDocumentSymbolsTest(t *testing.T, version EffectVersion, testFile 
 	units := parseTestUnits(string(content), defaultFileName)
 
 	testfs := make(map[string]any)
-	if err := MountEffect(version, testfs); err != nil {
+	if err := bundledeffect.MountEffect(version, testfs); err != nil {
 		t.Fatal("Failed to mount Effect:", err)
 	}
 
@@ -147,7 +148,8 @@ func collectDocumentSymbolsForFile(t *testing.T, session *project.Session, fileN
 
 func collectHierarchicalDocumentSymbols(t *testing.T, langService interface {
 	ProvideDocumentSymbols(ctx context.Context, documentURI lsproto.DocumentUri) (lsproto.DocumentSymbolResponse, error)
-}, uri lsproto.DocumentUri) []*lsproto.DocumentSymbol {
+}, uri lsproto.DocumentUri,
+) []*lsproto.DocumentSymbol {
 	t.Helper()
 
 	caps := &lsproto.ClientCapabilities{
@@ -171,7 +173,8 @@ func collectHierarchicalDocumentSymbols(t *testing.T, langService interface {
 
 func collectFlatDocumentSymbols(t *testing.T, langService interface {
 	ProvideDocumentSymbols(ctx context.Context, documentURI lsproto.DocumentUri) (lsproto.DocumentSymbolResponse, error)
-}, uri lsproto.DocumentUri) []*lsproto.SymbolInformation {
+}, uri lsproto.DocumentUri,
+) []*lsproto.SymbolInformation {
 	t.Helper()
 
 	caps := &lsproto.ClientCapabilities{

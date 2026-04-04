@@ -1,4 +1,4 @@
-==== /.src/strictEffectProvide.ts (8 flows) ====
+==== /.src/strictEffectProvide.ts (12 flows) ====
 
 === Piping Flow ===
 Location: 5:8 - 5:37
@@ -15,6 +15,20 @@ Transformations (1):
       outType: Effect<{ value: number; }, never, never>
 
 === Piping Flow ===
+Location: 7:19 - 7:49
+Node: Layer.effect(this, this.make)
+Node Kind: KindCallExpression
+
+Subject: this.make
+Subject Type: Effect<{ value: number; }, never, never>
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.effect
+      args: [this]
+      outType: Layer<MyService1, never, never>
+
+=== Piping Flow ===
 Location: 11:8 - 11:37
 Node: Effect.succeed({ value: 2 })
 Node Kind: KindCallExpression
@@ -27,6 +41,20 @@ Transformations (1):
       callee: Effect.succeed
       args: (constant)
       outType: Effect<{ value: number; }, never, never>
+
+=== Piping Flow ===
+Location: 13:19 - 13:49
+Node: Layer.effect(this, this.make)
+Node Kind: KindCallExpression
+
+Subject: this.make
+Subject Type: Effect<{ value: number; }, never, never>
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.effect
+      args: [this]
+      outType: Layer<MyService2, never, never>
 
 === Piping Flow ===
 Location: 17:29 - 19:2
@@ -107,6 +135,20 @@ Transformations (1):
       outType: { value: number; }
 
 === Piping Flow ===
+Location: 42:32 - 45:2
+Node: Layer.provide(\n  MyService1.Default,\n  MyService2.Default\n)
+Node Kind: KindCallExpression
+
+Subject: MyService1.Default
+Subject Type: Layer<MyService1, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Layer.provide
+      args: [MyService2.Default]
+      outType: Layer<MyService1, never, never>
+
+=== Piping Flow ===
 Location: 48:32 - 51:3
 Node: Effect.gen(function*() {\n  const ctx = yield* Effect.services<MyService1>()\n  return yield* Effect.provide(Effect.void, ctx)\n})
 Node Kind: KindCallExpression
@@ -119,3 +161,17 @@ Transformations (1):
       callee: Effect.gen
       args: (constant)
       outType: Effect<void, never, MyService1>
+
+=== Piping Flow ===
+Location: 50:16 - 50:49
+Node: Effect.provide(Effect.void, ctx)
+Node Kind: KindCallExpression
+
+Subject: Effect.void
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.provide
+      args: [ctx]
+      outType: Effect<void, never, never>

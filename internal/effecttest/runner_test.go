@@ -4,16 +4,18 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"github.com/effect-ts/tsgo/internal/bundledeffect"
 )
 
 func TestEffectDiagnostics(t *testing.T) {
 	t.Parallel()
 	// Skip if Effect not installed
-	if err := EnsureEffectInstalled(EffectV4); err != nil {
+	if err := bundledeffect.EnsurePackageInstalled(bundledeffect.EffectV4, "effect"); err != nil {
 		t.Skip("Effect not installed:", err)
 	}
 
-	cases, err := DiscoverTestCases(EffectV4)
+	cases, err := DiscoverTestCases(bundledeffect.EffectV4)
 	if err != nil {
 		t.Fatal("Failed to discover test cases:", err)
 	}
@@ -28,18 +30,18 @@ func TestEffectDiagnostics(t *testing.T) {
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
-			RunEffectTest(t, EffectV4, tc)
+			RunEffectTest(t, bundledeffect.EffectV4, tc)
 		})
 	}
 }
 
 func TestEffectV3Diagnostics(t *testing.T) {
 	t.Parallel()
-	if err := EnsureEffectInstalled(EffectV3); err != nil {
+	if err := bundledeffect.EnsurePackageInstalled(bundledeffect.EffectV3, "effect"); err != nil {
 		t.Skip("Effect V3 not installed:", err)
 	}
 
-	cases, err := DiscoverTestCases(EffectV3)
+	cases, err := DiscoverTestCases(bundledeffect.EffectV3)
 	if err != nil {
 		t.Fatal("Failed to discover V3 test cases:", err)
 	}
@@ -54,7 +56,7 @@ func TestEffectV3Diagnostics(t *testing.T) {
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
-			RunEffectTest(t, EffectV3, tc)
+			RunEffectTest(t, bundledeffect.EffectV3, tc)
 		})
 	}
 }

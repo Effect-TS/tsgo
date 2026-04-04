@@ -5,6 +5,7 @@ import (
 	"testing"
 	"testing/fstest"
 
+	"github.com/effect-ts/tsgo/internal/bundledeffect"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/bundled"
 	"github.com/microsoft/typescript-go/shim/checker"
@@ -73,6 +74,62 @@ func compileAndGetCheckerAndSourceFileInternal(t *testing.T, source string) (*ch
 		"/.src/test.ts": &fstest.MapFile{
 			Data: []byte(source),
 		},
+	}
+
+	fs := vfstest.FromMap(testfs, true)
+	fs = bundled.WrapFS(fs)
+
+	compilerOptions := &core.CompilerOptions{
+		NewLine:             core.NewLineKindLF,
+		SkipDefaultLibCheck: core.TSTrue,
+		NoErrorTruncation:   core.TSTrue,
+		Target:              core.ScriptTargetESNext,
+		Module:              core.ModuleKindNodeNext,
+		ModuleResolution:    core.ModuleResolutionKindNodeNext,
+		Strict:              core.TSTrue,
+	}
+
+	host := compiler.NewCompilerHost("/.src", fs, bundled.LibPath(), nil, nil)
+	program := compiler.NewProgram(compiler.ProgramOptions{
+		Config: &tsoptions.ParsedCommandLine{
+			ParsedConfig: &core.ParsedOptions{
+				CompilerOptions: compilerOptions,
+				FileNames:       []string{"/.src/test.ts"},
+			},
+		},
+		Host:           host,
+		SingleThreaded: core.TSTrue,
+	})
+
+	ctx := context.Background()
+	c, done := program.GetTypeChecker(ctx)
+	sf := program.GetSourceFile("/.src/test.ts")
+	if sf == nil {
+		done()
+		t.Fatal("Failed to get source file")
+	}
+
+	return c, NewTypeParser(c.Program(), c), sf, done
+}
+
+func compileAndGetCheckerAndSourceFileWithEffectV4Internal(t *testing.T, source string) (*checker.Checker, *TypeParser, *ast.SourceFile, func()) {
+	return compileAndGetCheckerAndSourceFileWithEffectVersionInternal(t, bundledeffect.EffectV4, source)
+}
+
+func compileAndGetCheckerAndSourceFileWithEffectV3Internal(t *testing.T, source string) (*checker.Checker, *TypeParser, *ast.SourceFile, func()) {
+	return compileAndGetCheckerAndSourceFileWithEffectVersionInternal(t, bundledeffect.EffectV3, source)
+}
+
+func compileAndGetCheckerAndSourceFileWithEffectVersionInternal(t *testing.T, version bundledeffect.EffectVersion, source string) (*checker.Checker, *TypeParser, *ast.SourceFile, func()) {
+	t.Helper()
+
+	testfs := map[string]any{
+		"/.src/test.ts": &fstest.MapFile{
+			Data: []byte(source),
+		},
+	}
+	if err := bundledeffect.MountEffect(version, testfs); err != nil {
+		t.Fatalf("failed to mount effect %s: %v", version, err)
 	}
 
 	fs := vfstest.FromMap(testfs, true)

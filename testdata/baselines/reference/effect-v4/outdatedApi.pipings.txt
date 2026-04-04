@@ -1,4 +1,4 @@
-==== /.src/outdatedApi.ts (36 flows) ====
+==== /.src/outdatedApi.ts (37 flows) ====
 
 === Piping Flow ===
 Location: 6:25 - 8:3
@@ -339,17 +339,21 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 67:33 - 67:50
-Node: Effect.succeed(1)
+Location: 67:21 - 67:65
+Node: Effect.map(Effect.succeed(1), (n) => n + 1)
 Node Kind: KindCallExpression
 
 Subject: 1
 Subject Type: 1
 
-Transformations (1):
+Transformations (2):
   [0] kind: call
       callee: Effect.succeed
       args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: dataFirst
+      callee: Effect.map
+      args: [(n) => n + 1]
       outType: Effect<number, never, never>
 
 === Piping Flow ===
@@ -381,17 +385,21 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 75:41 - 75:58
-Node: Effect.succeed(1)
+Location: 75:25 - 75:89
+Node: Effect.flatMap(Effect.succeed(1), (n) => Effect.succeed(n + 1))
 Node Kind: KindCallExpression
 
 Subject: 1
 Subject Type: 1
 
-Transformations (1):
+Transformations (2):
   [0] kind: call
       callee: Effect.succeed
       args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(n) => Effect.succeed(n + 1)]
       outType: Effect<number, never, never>
 
 === Piping Flow ===
@@ -407,6 +415,20 @@ Transformations (1):
       callee: Effect.succeed
       args: (constant)
       outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 81:22 - 81:75
+Node: Effect.bind(Effect.Do, "a", () => Effect.succeed(1))
+Node Kind: KindCallExpression
+
+Subject: Effect.Do
+Subject Type: Effect<{}, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.bind
+      args: ["a", () => Effect.succeed(1)]
+      outType: Effect<{ a: number; }, never, never>
 
 === Piping Flow ===
 Location: 81:56 - 81:74

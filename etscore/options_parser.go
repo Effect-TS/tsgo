@@ -99,6 +99,13 @@ func ParseFromPlugins(value any) *EffectPluginOptions {
 			}
 		}
 
+		// Parse debug (default: false)
+		if val, exists := getPluginValue("debug"); exists {
+			if b, ok := val.(bool); ok {
+				result.Debug = b
+			}
+		}
+
 		// Parse goto (default: true)
 		if val, exists := getPluginValue("goto"); exists {
 			if b, ok := val.(bool); ok {

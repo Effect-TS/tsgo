@@ -5,6 +5,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/effect-ts/tsgo/internal/bundledeffect"
 	"github.com/effect-ts/tsgo/internal/effecttest"
 
 	_ "github.com/effect-ts/tsgo/etslshooks"
@@ -12,11 +13,11 @@ import (
 
 func TestEffectDocumentSymbols(t *testing.T) {
 	t.Parallel()
-	if err := effecttest.EnsureEffectInstalled(effecttest.EffectV4); err != nil {
+	if err := bundledeffect.EnsurePackageInstalled(bundledeffect.EffectV4, "effect"); err != nil {
 		t.Skip("Effect not installed:", err)
 	}
 
-	cases, err := effecttest.DiscoverDocumentSymbolTestCases(effecttest.EffectV4)
+	cases, err := effecttest.DiscoverDocumentSymbolTestCases(bundledeffect.EffectV4)
 	if err != nil {
 		t.Fatal("Failed to discover document symbol test cases:", err)
 	}
@@ -31,18 +32,18 @@ func TestEffectDocumentSymbols(t *testing.T) {
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
-			effecttest.RunEffectDocumentSymbolsTest(t, effecttest.EffectV4, tc)
+			effecttest.RunEffectDocumentSymbolsTest(t, bundledeffect.EffectV4, tc)
 		})
 	}
 }
 
 func TestEffectV3DocumentSymbols(t *testing.T) {
 	t.Parallel()
-	if err := effecttest.EnsureEffectInstalled(effecttest.EffectV3); err != nil {
+	if err := bundledeffect.EnsurePackageInstalled(bundledeffect.EffectV3, "effect"); err != nil {
 		t.Skip("Effect V3 not installed:", err)
 	}
 
-	cases, err := effecttest.DiscoverDocumentSymbolTestCases(effecttest.EffectV3)
+	cases, err := effecttest.DiscoverDocumentSymbolTestCases(bundledeffect.EffectV3)
 	if err != nil {
 		t.Fatal("Failed to discover V3 document symbol test cases:", err)
 	}
@@ -57,7 +58,7 @@ func TestEffectV3DocumentSymbols(t *testing.T) {
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
-			effecttest.RunEffectDocumentSymbolsTest(t, effecttest.EffectV3, tc)
+			effecttest.RunEffectDocumentSymbolsTest(t, bundledeffect.EffectV3, tc)
 		})
 	}
 }

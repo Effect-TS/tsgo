@@ -34,6 +34,9 @@ type EffectPluginOptions struct {
 	// Completions enables Effect completions in the language service.
 	Completions bool `json:"completions,omitzero" schema_description:"Controls Effect completions." schema_default:"true"`
 
+	// Debug enables extra debugging-oriented language service output.
+	Debug bool `json:"debug,omitzero" schema_description:"Enables additional debug-only Effect language service output." schema_default:"false"`
+
 	// Goto enables Effect goto/definition helpers in the language service.
 	Goto bool `json:"goto,omitzero" schema_description:"Controls Effect goto references support." schema_default:"true"`
 
@@ -216,6 +219,13 @@ func (e *EffectPluginOptions) GetCompletionsEnabled() bool {
 		return true
 	}
 	return e.Completions
+}
+
+func (e *EffectPluginOptions) GetDebugEnabled() bool {
+	if e == nil {
+		return false
+	}
+	return e.Debug
 }
 
 // GetIncludeSuggestionsInTsc returns whether suggestion diagnostics should appear in tsc output.

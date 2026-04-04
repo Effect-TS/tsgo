@@ -5,6 +5,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/effect-ts/tsgo/internal/bundledeffect"
 	"github.com/effect-ts/tsgo/internal/effecttest"
 
 	// Register fourslash VFS callback to mount Effect packages
@@ -15,11 +16,11 @@ import (
 
 func TestEffectRefactors(t *testing.T) {
 	t.Parallel()
-	if err := effecttest.EnsureEffectInstalled(effecttest.EffectV4); err != nil {
+	if err := bundledeffect.EnsurePackageInstalled(bundledeffect.EffectV4, "effect"); err != nil {
 		t.Skip("Effect not installed:", err)
 	}
 
-	cases, err := effecttest.DiscoverRefactorTestCases(effecttest.EffectV4)
+	cases, err := effecttest.DiscoverRefactorTestCases(bundledeffect.EffectV4)
 	if err != nil {
 		t.Fatal("Failed to discover refactor test cases:", err)
 	}
@@ -34,18 +35,18 @@ func TestEffectRefactors(t *testing.T) {
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
-			effecttest.RunEffectRefactorTest(t, effecttest.EffectV4, tc)
+			effecttest.RunEffectRefactorTest(t, bundledeffect.EffectV4, tc)
 		})
 	}
 }
 
 func TestEffectV3Refactors(t *testing.T) {
 	t.Parallel()
-	if err := effecttest.EnsureEffectInstalled(effecttest.EffectV3); err != nil {
+	if err := bundledeffect.EnsurePackageInstalled(bundledeffect.EffectV3, "effect"); err != nil {
 		t.Skip("Effect V3 not installed:", err)
 	}
 
-	cases, err := effecttest.DiscoverRefactorTestCases(effecttest.EffectV3)
+	cases, err := effecttest.DiscoverRefactorTestCases(bundledeffect.EffectV3)
 	if err != nil {
 		t.Fatal("Failed to discover V3 refactor test cases:", err)
 	}
@@ -60,7 +61,7 @@ func TestEffectV3Refactors(t *testing.T) {
 
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
-			effecttest.RunEffectRefactorTest(t, effecttest.EffectV3, tc)
+			effecttest.RunEffectRefactorTest(t, bundledeffect.EffectV3, tc)
 		})
 	}
 }

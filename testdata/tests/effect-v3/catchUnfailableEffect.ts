@@ -36,3 +36,8 @@ export const shouldTriggerThirdArgPipe = pipe(
   Effect.flatMap(() => Effect.void),
   Effect.catchAll(() => Effect.succeed(42)) // <- should report here
 )
+
+export const shouldReportDataFirst = Effect.catchAll(
+  Effect.never,
+  () => Effect.log("error") // <- should report here
+)

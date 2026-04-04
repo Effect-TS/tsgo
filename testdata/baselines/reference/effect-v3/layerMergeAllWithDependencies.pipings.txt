@@ -1,1 +1,43 @@
-==== /.src/layerMergeAllWithDependencies.ts (0 flows) ====
+==== /.src/layerMergeAllWithDependencies.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 11:10 - 11:36
+Node: Effect.as(FileSystem, {})
+Node Kind: KindCallExpression
+
+Subject: FileSystem
+Subject Type: typeof FileSystem
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.as
+      args: [{}]
+      outType: Effect<{}, never, FileSystem>
+
+=== Piping Flow ===
+Location: 14:10 - 14:62
+Node: Effect.as(Effect.zipRight(DbConnection, Cache), {})
+Node Kind: KindCallExpression
+
+Subject: Effect.zipRight(DbConnection, Cache)
+Subject Type: Effect<Cache, never, Cache | DbConnection>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.as
+      args: [{}]
+      outType: Effect<{}, never, Cache | DbConnection>
+
+=== Piping Flow ===
+Location: 17:25 - 17:52
+Node: Layer.effect(Cache, Cache)
+Node Kind: KindCallExpression
+
+Subject: Cache
+Subject Type: typeof Cache
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.effect
+      args: [Cache]
+      outType: Layer<Cache, never, Cache>

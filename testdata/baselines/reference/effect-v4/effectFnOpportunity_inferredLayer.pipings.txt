@@ -61,18 +61,22 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 13:58 - 17:3
-Node: Effect.gen(function*() {\n  yield* Effect.log("log")\n  // Log should be inferred with name MyService.log\n  return { log: (what: string) => Effect.log(what) }\n})
+Location: 13:34 - 17:4
+Node: Layer.effect(MyService, Effect.gen(function*() {\n  yield* Effect.log("log")\n  // Log should be inferred with name MyService.log\n  return { log: (what: string) => Effect.log(what) }\n}))
 Node Kind: KindCallExpression
 
 Subject: function*() {\n  yield* Effect.log("log")\n  // Log should be inferred with name MyService.log\n  return { log: (what: string) => Effect.log(what) }\n}
 Subject Type: () => Generator<Effect<void, never, never>, { log: (what: string) => Effect<void, never, never>; }, any>
 
-Transformations (1):
+Transformations (2):
   [0] kind: call
       callee: Effect.gen
       args: (constant)
       outType: Effect<{ log: (what: string) => Effect<void, never, never>; }, never, never>
+  [1] kind: dataLast
+      callee: Layer.effect
+      args: [MyService]
+      outType: Layer<MyService, never, never>
 
 === Piping Flow ===
 Location: 14:9 - 14:27

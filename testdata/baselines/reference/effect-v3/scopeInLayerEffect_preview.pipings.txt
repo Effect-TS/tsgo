@@ -15,18 +15,22 @@ Transformations (1):
       outType: <Self, Shape>() => TagClass<Self, "Cache", Shape>
 
 === Piping Flow ===
-Location: 8:43 - 11:3
-Node: Effect.gen(function*() {\n  yield* Effect.addFinalizer(() => Effect.void)\n  return { ok: true as const }\n})
+Location: 8:23 - 11:4
+Node: Layer.effect(Cache, Effect.gen(function*() {\n  yield* Effect.addFinalizer(() => Effect.void)\n  return { ok: true as const }\n}))
 Node Kind: KindCallExpression
 
 Subject: function*() {\n  yield* Effect.addFinalizer(() => Effect.void)\n  return { ok: true as const }\n}
 Subject Type: () => Generator<YieldWrap<Effect<void, never, Scope>>, { ok: true; }, any>
 
-Transformations (1):
+Transformations (2):
   [0] kind: call
       callee: Effect.gen
       args: (constant)
       outType: Effect<{ ok: true; }, never, Scope>
+  [1] kind: dataLast
+      callee: Layer.effect
+      args: [Cache]
+      outType: Layer<Cache, never, Scope>
 
 === Piping Flow ===
 Location: 9:9 - 9:48

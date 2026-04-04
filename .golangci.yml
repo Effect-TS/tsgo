@@ -77,6 +77,9 @@ linters:
       - path: internal/effecttest
         linters:
           - forbidigo
+      - path: internal/bundledeffect
+        linters:
+          - forbidigo
       - path: _tools
         linters:
           - forbidigo

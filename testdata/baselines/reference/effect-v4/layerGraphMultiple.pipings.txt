@@ -1,4 +1,4 @@
-==== /.src/layerGraphMultiple.ts (3 flows) ====
+==== /.src/layerGraphMultiple.ts (15 flows) ====
 
 === Piping Flow ===
 Location: 12:8 - 12:27
@@ -15,6 +15,76 @@ Transformations (1):
       outType: Effect<{}, never, never>
 
 === Piping Flow ===
+Location: 14:19 - 14:49
+Node: Layer.effect(this, this.make)
+Node Kind: KindCallExpression
+
+Subject: this.make
+Subject Type: Effect<{}, never, never>
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.effect
+      args: [this]
+      outType: Layer<Database, never, never>
+
+=== Piping Flow ===
+Location: 18:8 - 18:43
+Node: Effect.as(Database.asEffect(), {})
+Node Kind: KindCallExpression
+
+Subject: Database.asEffect()
+Subject Type: Effect<{}, never, Database>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.as
+      args: [{}]
+      outType: Effect<{}, never, Database>
+
+=== Piping Flow ===
+Location: 20:19 - 20:49
+Node: Layer.effect(this, this.make)
+Node Kind: KindCallExpression
+
+Subject: this.make
+Subject Type: Effect<{}, never, Database>
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.effect
+      args: [this]
+      outType: Layer<UserRepository, never, Database>
+
+=== Piping Flow ===
+Location: 24:8 - 24:43
+Node: Effect.as(Database.asEffect(), {})
+Node Kind: KindCallExpression
+
+Subject: Database.asEffect()
+Subject Type: Effect<{}, never, Database>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.as
+      args: [{}]
+      outType: Effect<{}, never, Database>
+
+=== Piping Flow ===
+Location: 26:19 - 26:49
+Node: Layer.effect(this, this.make)
+Node Kind: KindCallExpression
+
+Subject: this.make
+Subject Type: Effect<{}, never, Database>
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.effect
+      args: [this]
+      outType: Layer<EventsRepository, never, Database>
+
+=== Piping Flow ===
 Location: 30:8 - 30:27
 Node: Effect.succeed({})
 Node Kind: KindCallExpression
@@ -27,6 +97,116 @@ Transformations (1):
       callee: Effect.succeed
       args: (constant)
       outType: Effect<{}, never, never>
+
+=== Piping Flow ===
+Location: 32:19 - 32:49
+Node: Layer.effect(this, this.make)
+Node Kind: KindCallExpression
+
+Subject: this.make
+Subject Type: Effect<{}, never, never>
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.effect
+      args: [this]
+      outType: Layer<Analytics, never, never>
+
+=== Piping Flow ===
+Location: 36:8 - 36:87
+Node: Effect.as(Effect.andThen(UserRepository.asEffect(), Analytics.asEffect()), {})
+Node Kind: KindCallExpression
+
+Subject: UserRepository.asEffect()
+Subject Type: Effect<{}, never, UserRepository>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.andThen
+      args: [Analytics.asEffect()]
+      outType: Effect<{}, never, Analytics | UserRepository>
+  [1] kind: dataFirst
+      callee: Effect.as
+      args: [{}]
+      outType: Effect<{}, never, Analytics | UserRepository>
+
+=== Piping Flow ===
+Location: 38:19 - 38:49
+Node: Layer.effect(this, this.make)
+Node Kind: KindCallExpression
+
+Subject: this.make
+Subject Type: Effect<{}, never, Analytics | UserRepository>
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.effect
+      args: [this]
+      outType: Layer<UserService, never, Analytics | UserRepository>
+
+=== Piping Flow ===
+Location: 42:8 - 42:89
+Node: Effect.as(Effect.andThen(EventsRepository.asEffect(), Analytics.asEffect()), {})
+Node Kind: KindCallExpression
+
+Subject: EventsRepository.asEffect()
+Subject Type: Effect<{}, never, EventsRepository>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.andThen
+      args: [Analytics.asEffect()]
+      outType: Effect<{}, never, Analytics | EventsRepository>
+  [1] kind: dataFirst
+      callee: Effect.as
+      args: [{}]
+      outType: Effect<{}, never, Analytics | EventsRepository>
+
+=== Piping Flow ===
+Location: 44:19 - 44:49
+Node: Layer.effect(this, this.make)
+Node Kind: KindCallExpression
+
+Subject: this.make
+Subject Type: Effect<{}, never, Analytics | EventsRepository>
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.effect
+      args: [this]
+      outType: Layer<EventService, never, Analytics | EventsRepository>
+
+=== Piping Flow ===
+Location: 48:8 - 48:87
+Node: Effect.as(Effect.andThen(UserService.asEffect(), EventService.asEffect()), {})
+Node Kind: KindCallExpression
+
+Subject: UserService.asEffect()
+Subject Type: Effect<{}, never, UserService>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.andThen
+      args: [EventService.asEffect()]
+      outType: Effect<{}, never, EventService | UserService>
+  [1] kind: dataFirst
+      callee: Effect.as
+      args: [{}]
+      outType: Effect<{}, never, EventService | UserService>
+
+=== Piping Flow ===
+Location: 50:19 - 50:49
+Node: Layer.effect(this, this.make)
+Node Kind: KindCallExpression
+
+Subject: this.make
+Subject Type: Effect<{}, never, EventService | UserService>
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.effect
+      args: [this]
+      outType: Layer<AppService, never, EventService | UserService>
 
 === Piping Flow ===
 Location: 55:23 - 63:2

@@ -1,4 +1,4 @@
-==== /.src/missedPipeableOpportunity.ts (12 flows) ====
+==== /.src/missedPipeableOpportunity.ts (17 flows) ====
 
 === Piping Flow ===
 Location: 5:30 - 5:52
@@ -13,6 +13,48 @@ Transformations (1):
       callee: Effect.succeed
       args: (constant)
       outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 6:45 - 6:73
+Node: Effect.map(e, (n) => n * 2)
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(n) => n * 2]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 7:64 - 7:92
+Node: Effect.map(e, (m) => m * n)
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(m) => m * n]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 8:47 - 8:79
+Node: Effect.map(e, (n) => String(n))
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(n) => String(n)]
+      outType: Effect<string, never, never>
 
 === Piping Flow ===
 Location: 8:68 - 8:78
@@ -49,6 +91,20 @@ Transformations (3):
       callee: toString
       args: (constant)
       outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 14:45 - 14:73
+Node: Effect.map(e, (n) => n * 3)
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(n) => n * 3]
+      outType: Effect<number, never, never>
 
 === Piping Flow ===
 Location: 15:29 - 15:66
@@ -128,6 +184,20 @@ Transformations (3):
   [2] kind: call
       callee: double
       args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 26:49 - 26:79
+Node: Effect.map(e, (n) => n + 100)
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(n) => n + 100]
       outType: Effect<number, never, never>
 
 === Piping Flow ===

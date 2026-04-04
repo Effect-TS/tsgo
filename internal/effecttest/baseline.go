@@ -10,6 +10,7 @@ import (
 	"testing"
 	"unicode/utf8"
 
+	"github.com/effect-ts/tsgo/internal/bundledeffect"
 	"github.com/effect-ts/tsgo/internal/layergraph"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -23,7 +24,7 @@ import (
 
 // TestDataPath returns the path to our testdata directory.
 func TestDataPath() string {
-	return filepath.Join(EffectTsGoRootPath(), "testdata")
+	return filepath.Join(bundledeffect.EffectTsGoRootPath(), "testdata")
 }
 
 // BaselineLocalPath returns the path to write local baselines.
@@ -450,16 +451,16 @@ func runEffectBaseline(t *testing.T, fileName string, actual string, subfolder s
 	if err != nil {
 		if os.IsNotExist(err) {
 			// New baseline — write both local and reference files.
-			if err := os.MkdirAll(localDir, 0755); err != nil {
+			if err := os.MkdirAll(localDir, 0o755); err != nil {
 				t.Fatalf("Failed to create local baseline directory: %v", err)
 			}
-			if err := os.WriteFile(localPath, []byte(actual), 0644); err != nil {
+			if err := os.WriteFile(localPath, []byte(actual), 0o644); err != nil {
 				t.Fatalf("Failed to write local baseline: %v", err)
 			}
-			if err := os.MkdirAll(referenceDir, 0755); err != nil {
+			if err := os.MkdirAll(referenceDir, 0o755); err != nil {
 				t.Fatalf("Failed to create reference baseline directory: %v", err)
 			}
-			if err := os.WriteFile(referencePath, []byte(actual), 0644); err != nil {
+			if err := os.WriteFile(referencePath, []byte(actual), 0o644); err != nil {
 				t.Fatalf("Failed to write reference baseline: %v", err)
 			}
 			t.Logf("Created new baseline at %s", referencePath)
@@ -475,10 +476,10 @@ func runEffectBaseline(t *testing.T, fileName string, actual string, subfolder s
 	}
 
 	// Mismatch — write local baseline so developers can inspect the diff.
-	if err := os.MkdirAll(localDir, 0755); err != nil {
+	if err := os.MkdirAll(localDir, 0o755); err != nil {
 		t.Fatalf("Failed to create local baseline directory: %v", err)
 	}
-	if err := os.WriteFile(localPath, []byte(actual), 0644); err != nil {
+	if err := os.WriteFile(localPath, []byte(actual), 0o644); err != nil {
 		t.Fatalf("Failed to write local baseline: %v", err)
 	}
 

@@ -1,1 +1,29 @@
-==== /.src/missingEffectContext_lazy.ts (0 flows) ====
+==== /.src/missingEffectContext_lazy.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 12:9 - 12:54
+Node: Effect.onExit(evaluate(), () => Effect.void)
+Node Kind: KindCallExpression
+
+Subject: evaluate()
+Subject Type: Effect<A, E, R>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.onExit
+      args: [() => Effect.void]
+      outType: Effect<A, E, R>
+
+=== Piping Flow ===
+Location: 20:9 - 20:54
+Node: Effect.onExit(evaluate(), () => Effect.void)
+Node Kind: KindCallExpression
+
+Subject: evaluate()
+Subject Type: Effect<A, E, R | ServiceA>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.onExit
+      args: [() => Effect.void]
+      outType: Effect<A, E, R | ServiceA>
