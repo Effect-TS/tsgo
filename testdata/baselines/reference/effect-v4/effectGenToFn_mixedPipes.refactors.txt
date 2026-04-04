@@ -21,9 +21,9 @@ import { pipe } from "effect/Function"
 const test = () =>
   pipe(
     pipe(Effect.gen(function*() {
-          const test = "test"
-          return yield* Effect.succeed(test)
-      }), Effect.asVoid),
+      const test = "test"
+      return yield* Effect.succeed(test)
+    }), Effect.asVoid),
     Effect.tapError(Effect.logError)
   )
 
