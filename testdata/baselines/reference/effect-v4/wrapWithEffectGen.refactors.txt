@@ -335,7 +335,11 @@ export const test2 = Effect.succeed(42).pipe(
   Effect.map((n) => n - 1)
 )
 
-export const test4 = Effect.gen(function*() { return yield* pipe(Effect.succeed(42), Effect.map(n => n + 1), Effect.map(n => n - 1)) })
+export const test4 = Effect.gen(function*() { return yield* pipe(
+  Effect.succeed(42),
+  Effect.map((n) => n + 1),
+  Effect.map((n) => n - 1)
+) })
 
 
 === [R6] Refactor 0: "Wrap with pipe" ===

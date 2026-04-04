@@ -1083,6 +1083,11 @@
                         "description": "Controls Effect completions.",
                         "type": "boolean"
                       },
+                      "debug": {
+                        "default": false,
+                        "description": "Enables additional debug-only Effect language service output.",
+                        "type": "boolean"
+                      },
                       "diagnosticSeverity": {
                         "$ref": "#/definitions/effectLanguageServicePluginDiagnosticSeverityDefinition",
                         "default": {},
@@ -1664,6 +1669,11 @@
           "default": "off",
           "description": "Detects 'any' or 'unknown' types in Effect error or requirements channels"
         },
+        "asyncFunction": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Warns when declaring async functions and suggests using Effect values and Effect.gen for async control flow"
+        },
         "catchAllToMapError": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
@@ -1869,6 +1879,11 @@
           "default": "warning",
           "description": "Warns against chaining Effect.provide calls which can cause service lifecycle issues"
         },
+        "newPromise": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Warns when constructing promises with new Promise instead of using Effect APIs"
+        },
         "nodeBuiltinImport": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
@@ -2045,6 +2060,11 @@
         "completions": {
           "default": true,
           "description": "Controls Effect completions.",
+          "type": "boolean"
+        },
+        "debug": {
+          "default": false,
+          "description": "Enables additional debug-only Effect language service output.",
           "type": "boolean"
         },
         "diagnosticSeverity": {

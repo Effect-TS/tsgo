@@ -40,6 +40,23 @@ func TestParseFromPlugins_ExitCodeDefaults(t *testing.T) {
 	if opts.IgnoreEffectWarningsInTscExitCode {
 		t.Error("expected IgnoreEffectWarningsInTscExitCode to default to false")
 	}
+	if opts.GetDebugEnabled() {
+		t.Error("expected Debug to default to false")
+	}
+}
+
+func TestParseFromPlugins_DebugExplicitTrue(t *testing.T) {
+	plugins := makePlugins(makePluginMap(
+		"name", etscore.EffectPluginName,
+		"debug", true,
+	))
+	opts := etscore.ParseFromPlugins(plugins)
+	if opts == nil {
+		t.Fatal("expected non-nil options")
+	}
+	if !opts.GetDebugEnabled() {
+		t.Error("expected Debug to be true")
+	}
 }
 
 func TestParseFromPlugins_Overrides(t *testing.T) {
