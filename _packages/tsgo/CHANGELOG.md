@@ -1,5 +1,33 @@
 # @effect/tsgo
 
+## 0.3.0
+
+### Minor Changes
+
+- 377d99c: Add `asyncFunction` and `newPromise` diagnostics to warn on `async` functions and manual `new Promise(...)` construction in favor of Effect-native async patterns.
+
+  This ports the upstream language-service change into the Go implementation and adds matching v3/v4 fixtures, baselines, metadata, and README updates.
+
+- 8e26cfe: Add `cryptoRandomUUID` and `cryptoRandomUUIDInEffect` diagnostics for Effect v4 to warn on `crypto.randomUUID()` usage and prefer the Effect `Random` module.
+
+  This ports the upstream language-service change into the Go implementation and adds matching v4 fixtures, baselines, metadata, and schema entries.
+
+- dcb4af3: Add data-first and data-last piping flow normalization so data-first Effect and Layer APIs contribute the same flow structure as their pipeable forms.
+
+  This also extracts the shared bundled Effect test VFS helper into `internal/bundledeffect` and updates the affected flow and diagnostics baselines.
+
+- 5a8e7fa: Add `processEnv` and `processEnvInEffect` diagnostics to warn on `process.env` reads and recommend using Effect `Config` instead.
+
+  This ports the upstream language-service change into the Go implementation and adds matching v3/v4 fixtures, baselines, metadata, and schema entries.
+
+### Patch Changes
+
+- 41798ca: Fix the toggle-pipe-style refactor to avoid formatter panics on nested callback bodies such as SQL effects using `.pipe(Effect.flatMap(...))`.
+
+  This adds a regression test and updates the affected refactor baselines to match the new text-preserving rewrite output.
+
+- 3689458: Update [`typescript-go`](https://github.com/microsoft/typescript-go/commit/281b3d0720ab3de6d330d211705cb0383b47500b) to commit `281b3d0720ab3de6d330d211705cb0383b47500b`.
+
 ## 0.2.1
 
 ### Patch Changes
