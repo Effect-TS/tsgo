@@ -1,0 +1,108 @@
+=== Refactor Inventory ===
+
+[R1] selection: "11:9-11:10"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Rewrite as pipe(X, Y, Z, ...)" (refactor.rewrite.effect.togglePipeStyle)
+  Refactor 2: "Wrap with Effect.gen" (refactor.rewrite.effect.wrapWithEffectGen)
+  Refactor 3: "Toggle return type annotation" (refactor.rewrite.effect.toggleReturnTypeAnnotation)
+
+[R2] selection: "empty (0:0-0:0)"
+  (no refactors)
+
+=== Refactor Application Results ===
+
+=== [R1] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/togglePipeStyle_nestedCallback.ts ---
+// refactor: 11:9-11:10
+import * as Effect from "effect/Effect"
+
+type SqlResult = ReadonlyArray<{ id: number }>
+
+const sql = (_strings: TemplateStringsArray, ..._args: ReadonlyArray<unknown>): Effect.Effect<SqlResult> =>
+  Effect.succeed([])
+
+export const insertEnvelope = {
+  pg: () => (_row: { id: string }, messageId: string) =>
+    sql`pipe(
+)      select * from messages where id = ${messageId}
+    `.pipe(Effect.flatMap((rows) => {
+      if (rows.length > 0) return Effect.succeed(rows)
+      return sql`
+        select * from messages where id = ${messageId}
+      `
+    }))
+}
+
+
+=== [R1] Refactor 1: "Rewrite as pipe(X, Y, Z, ...)" ===
+
+--- file:///.src/togglePipeStyle_nestedCallback.ts ---
+// refactor: 11:9-11:10
+import * as Effect from "effect/Effect"
+
+type SqlResult = ReadonlyArray<{ id: number }>
+
+const sql = (_strings: TemplateStringsArray, ..._args: ReadonlyArray<unknown>): Effect.Effect<SqlResult> =>
+  Effect.succeed([])
+
+export const insertEnvelope = {
+  pg: () => (_row: { id: string }, messageId: string) =>
+    pipe(sql`
+      select * from messages where id = ${messageId}
+    `, Effect.flatMap((rows) => {
+      if (rows.length > 0) return Effect.succeed(rows)
+      return sql`
+        select * from messages where id = ${messageId}
+      `
+    }))
+}
+
+
+=== [R1] Refactor 2: "Wrap with Effect.gen" ===
+
+--- file:///.src/togglePipeStyle_nestedCallback.ts ---
+// refactor: 11:9-11:10
+import * as Effect from "effect/Effect"
+
+type SqlResult = ReadonlyArray<{ id: number }>
+
+const sql = (_strings: TemplateStringsArray, ..._args: ReadonlyArray<unknown>): Effect.Effect<SqlResult> =>
+  Effect.succeed([])
+
+export const insertEnvelope = {
+  pg: () => (_row: { id: string }, messageId: string) =>
+    Effect.gen(function*() { return yield* sql`
+      select * from messages where id = ${messageId}
+    ` }).pipe(Effect.flatMap((rows) => {
+      if (rows.length > 0) return Effect.succeed(rows)
+      return sql`
+        select * from messages where id = ${messageId}
+      `
+    }))
+}
+
+
+=== [R1] Refactor 3: "Toggle return type annotation" ===
+
+--- file:///.src/togglePipeStyle_nestedCallback.ts ---
+// refactor: 11:9-11:10
+import * as Effect from "effect/Effect"
+
+type SqlResult = ReadonlyArray<{ id: number }>
+
+const sql = (_strings: TemplateStringsArray, ..._args: ReadonlyArray<unknown>): Effect.Effect<SqlResult> =>
+  Effect.succeed([])
+
+export const insertEnvelope = {
+  pg: () => (_row: { id: string }, messageId: string): Effect.Effect<SqlResult, never, never> =>
+    sql`
+      select * from messages where id = ${messageId}
+    `.pipe(Effect.flatMap((rows) => {
+      if (rows.length > 0) return Effect.succeed(rows)
+      return sql`
+        select * from messages where id = ${messageId}
+      `
+    }))
+}
+

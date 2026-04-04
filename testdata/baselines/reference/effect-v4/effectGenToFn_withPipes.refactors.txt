@@ -20,8 +20,8 @@ import { pipe } from "effect/Function"
 
 const test = () =>
   Effect.gen(function*() {
-        const test = "test"
-        return yield* Effect.succeed(test)
+      const test = "test"
+      return yield* Effect.succeed(test)
     }).pipe(Effect.tapError(Effect.logError))
 
 
