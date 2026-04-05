@@ -1,14 +1,14 @@
 flowchart TB
   0["node: #40;#41; =#gt; Effect.void<br/>type: "]
-  1["type: <br/>callee: Effect.provide<br/>args: #91;MyService1.Default#93;"]
-  2["type: <br/>callee: Effect.provide<br/>args: #91;MyService2.Default#93;"]
+  1["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService1.Default#93;"]
+  2["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService2.Default#93;"]
   3["node: #40;#41; =#gt; Effect.void<br/>type: "]
-  4["type: <br/>callee: Effect.provide<br/>args: #91;MyService1.Default#93;"]
-  5["type: <br/>callee: Effect.provide<br/>args: #91;MyService2.Default#93;"]
+  4["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService1.Default#93;"]
+  5["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService2.Default#93;"]
   6["node: #40;#41; =#gt; Effect.void<br/>type: "]
-  7["type: <br/>callee: Effect.provide<br/>args: #91;MyService1.Default#93;"]
-  8["type: <br/>callee: Effect.provide<br/>args: #91;MyService2.Default#93;"]
-  9["type: <br/>callee: Effect.provide<br/>args: #91;MyService3.Default#93;"]
+  7["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService1.Default#93;"]
+  8["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService2.Default#93;"]
+  9["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService3.Default#93;"]
   0 -->|"kind: fnPipe"| 1
   1 -->|"kind: fnPipe"| 2
   3 -->|"kind: fnPipe"| 4

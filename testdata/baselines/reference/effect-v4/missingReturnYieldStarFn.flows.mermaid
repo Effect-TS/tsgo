@@ -5,5 +5,5 @@ flowchart TB
   3["node: function*#40;#41;#123;#92;n        yield* Effect.fail#40;this.a#41; // #lt;- should emit an error be return yield*#92;n    #125;<br/>type: "]
   4["node: function* namedFn#40;#41;#123;#92;n        yield* Effect.fail#40;this.a#41; // #lt;- should emit an error be return yield*#92;n    #125;<br/>type: "]
   5["node: function* namedFn#40;#41;#123;#92;n    yield* Effect.fail#40;#quot;no#quot;#41; // #lt;- should emit an error be return yield*#92;n#125;<br/>type: "]
-  6["type: <br/>callee: Effect.ignore<br/>args: #91;#93;"]
+  6["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.ignore<br/>args: #91;#93;"]
   5 -->|"kind: fnPipe"| 6

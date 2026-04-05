@@ -8,7 +8,7 @@ flowchart TB
   6["node: Effect.succeed#40;42#41;<br/>type: Effect#lt;number, never, never#gt;"]
   7["type: Effect#lt;void #124; number, never, never#gt;<br/>callee: Effect.catchIf<br/>args: #91;#40;e#41; =#gt; true, #40;#41; =#gt; Effect.void#93;"]
   8["node: function*#40;#41; #123;#92;n  return yield* Effect.succeed#40;42#41;#92;n#125;<br/>type: "]
-  9["type: <br/>callee: Effect.catchTag<br/>args: #91;#quot;MyError#quot;, #40;#41; =#gt; Effect.void#93;"]
+  9["type: Effect#lt;void #124; number, never, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;MyError#quot;, #40;#41; =#gt; Effect.void#93;"]
   10["node: Effect.succeed#40;42#41;<br/>type: Effect#lt;number, never, never#gt;"]
   11["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n + 1#93;"]
   12["type: Effect#lt;void #124; number, never, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;MyError#quot;, #40;#41; =#gt; Effect.void#93;"]

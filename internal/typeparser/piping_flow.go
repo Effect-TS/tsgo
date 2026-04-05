@@ -190,11 +190,12 @@ func parseSingleArgCall(node *ast.Node) *parsedSingleArgCallResult {
 // parsedEffectFnCallResult is the internal result of parsing an Effect.fn or Effect.fnUntraced call
 // with trailing transformation arguments.
 type parsedEffectFnCallResult struct {
-	node               *ast.CallExpression // the outer call expression
-	bodyNode           *ast.Node           // function or generator argument node
-	trailingArgs       []*ast.Node         // arguments after the function body
-	trailingStartIndex int                 // starting arg index of trailingArgs in node.Arguments
-	kind               TransformationKind  // effectFn or effectFnUntraced
+	node                *ast.CallExpression // the outer call expression
+	bodyNode            *ast.Node           // function or generator argument node
+	trailingArgs        []*ast.Node         // arguments after the function body
+	trailingArgsOutType []*checker.Type
+	trailingStartIndex  int                // starting arg index of trailingArgs in node.Arguments
+	kind                TransformationKind // effectFn or effectFnUntraced
 }
 
 // parseEffectFnCall detects Effect.fn-family calls with trailing transformation arguments.
@@ -214,11 +215,12 @@ func (tp *TypeParser) parseEffectFnCall(node *ast.Node) *parsedEffectFnCallResul
 			kind = TransformationKindEffectFnUntraced
 		}
 		return &parsedEffectFnCallResult{
-			node:               result.Call,
-			bodyNode:           result.FunctionNode,
-			trailingArgs:       result.PipeArguments,
-			trailingStartIndex: len(result.Call.Arguments.Nodes) - len(result.PipeArguments),
-			kind:               kind,
+			node:                result.Call,
+			bodyNode:            result.FunctionNode,
+			trailingArgs:        result.PipeArguments,
+			trailingArgsOutType: result.PipeArgsOutType,
+			trailingStartIndex:  len(result.Call.Arguments.Nodes) - len(result.PipeArguments),
+			kind:                kind,
 		}
 	}
 	return nil
@@ -486,11 +488,12 @@ func (tp *TypeParser) buildEffectFnTransformations(result *parsedEffectFnCallRes
 		contextualType := c.GetContextualTypeForArgumentAtIndex(callNode, argIndex)
 
 		var outType *checker.Type
+		if i < len(result.trailingArgsOutType) {
+			outType = result.trailingArgsOutType[i]
+		}
 		if contextualType != nil {
 			callSigs := c.GetSignaturesOfType(contextualType, checker.SignatureKindCall)
 			if len(callSigs) > 0 {
-				outType = c.GetReturnTypeOfSignature(callSigs[0])
-
 				// For the first transformation, extract the subject type from the first parameter
 				if i == 0 {
 					params := callSigs[0].Parameters()

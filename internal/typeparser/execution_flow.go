@@ -153,11 +153,15 @@ func (tp *TypeParser) ExecutionFlow(sf *ast.SourceFile) *ExecutionFlow {
 				})
 				// and then we connect the args
 				lastNode := subjectExecutionNode
-				for _, fnPipeNode := range fnCall.PipeArguments {
+				for i, fnPipeNode := range fnCall.PipeArguments {
+					var outType *checker.Type
+					if i < len(fnCall.PipeArgsOutType) {
+						outType = fnCall.PipeArgsOutType[i]
+					}
 					transformExecInfo := ExecutionNode{
 						Kind: ExecutionNodeKindTransform,
 						Node: fnPipeNode,
-						Type: nil, // TODO
+						Type: outType,
 					}
 					transformNode := g.AddNode(transformExecInfo)
 					kind := ExecutionLinkKindFnPipe
