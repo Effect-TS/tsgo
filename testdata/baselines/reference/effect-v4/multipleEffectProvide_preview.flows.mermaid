@@ -1,0 +1,12 @@
+flowchart TB
+  0["node: this.make<br/>type: Effect#lt;#123;#125;, never, never#gt;"]
+  1["type: Layer#lt;A, never, never#gt;<br/>callee: Layer.effect<br/>args: #91;this#93;"]
+  2["node: this.make<br/>type: Effect#lt;#123;#125;, never, never#gt;"]
+  3["type: Layer#lt;B, never, never#gt;<br/>callee: Layer.effect<br/>args: #91;this#93;"]
+  4["node: Effect.void<br/>type: Effect#lt;void, never, never#gt;"]
+  5["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;A.Default#93;"]
+  6["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;B.Default#93;"]
+  0 -->|"kind: dataLast"| 1
+  2 -->|"kind: dataLast"| 3
+  4 -->|"kind: pipeable"| 5
+  5 -->|"kind: pipeable"| 6

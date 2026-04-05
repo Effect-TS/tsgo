@@ -46,10 +46,12 @@ type PipingFlow struct {
 
 // ParsedPipeCallResult is the result of parsing a pipe or pipeable call.
 type ParsedPipeCallResult struct {
-	Node    *ast.CallExpression
-	Subject *ast.Node
-	Args    []*ast.Node
-	Kind    TransformationKind
+	Node        *ast.CallExpression
+	Subject     *ast.Node
+	Args        []*ast.Node
+	Kind        TransformationKind
+	SubjectType *checker.Type
+	ArgsOutType []*checker.Type
 }
 
 // parsedSingleArgCallResult is the internal result of parsing a single-argument call.
@@ -90,12 +92,7 @@ func (tp *TypeParser) ParsePipeCall(node *ast.Node) *ParsedPipeCallResult {
 				if call.Arguments == nil || len(call.Arguments.Nodes) == 0 {
 					return nil
 				}
-				return &ParsedPipeCallResult{
-					Node:    call,
-					Subject: call.Arguments.Nodes[0],
-					Args:    call.Arguments.Nodes[1:],
-					Kind:    TransformationKindPipe,
-				}
+				return tp.buildParsedPipeCallResult(call, call.Arguments.Nodes[0], call.Arguments.Nodes[1:], TransformationKindPipe)
 			}
 
 			// Not from "effect" package — this is a .pipe() pipeable method call
@@ -108,12 +105,7 @@ func (tp *TypeParser) ParsePipeCall(node *ast.Node) *ParsedPipeCallResult {
 			if call.Arguments != nil {
 				args = call.Arguments.Nodes
 			}
-			return &ParsedPipeCallResult{
-				Node:    call,
-				Subject: subject,
-				Args:    args,
-				Kind:    TransformationKindPipeable,
-			}
+			return tp.buildParsedPipeCallResult(call, subject, args, TransformationKindPipeable)
 		}
 
 		// Case 2: Identifier — bare pipe(subject, f1, f2, ...)
@@ -130,16 +122,41 @@ func (tp *TypeParser) ParsePipeCall(node *ast.Node) *ParsedPipeCallResult {
 			if call.Arguments == nil || len(call.Arguments.Nodes) == 0 {
 				return nil
 			}
-			return &ParsedPipeCallResult{
-				Node:    call,
-				Subject: call.Arguments.Nodes[0],
-				Args:    call.Arguments.Nodes[1:],
-				Kind:    TransformationKindPipe,
-			}
+			return tp.buildParsedPipeCallResult(call, call.Arguments.Nodes[0], call.Arguments.Nodes[1:], TransformationKindPipe)
 		}
 
 		return nil
 	})
+}
+
+func (tp *TypeParser) buildParsedPipeCallResult(
+	call *ast.CallExpression,
+	subject *ast.Node,
+	args []*ast.Node,
+	kind TransformationKind,
+) *ParsedPipeCallResult {
+	result := &ParsedPipeCallResult{
+		Node:        call,
+		Subject:     subject,
+		Args:        args,
+		Kind:        kind,
+		SubjectType: tp.GetTypeAtLocation(subject),
+		ArgsOutType: make([]*checker.Type, len(args)),
+	}
+
+	sig := tp.checker.GetResolvedSignature(call.AsNode())
+	if sig == nil {
+		return result
+	}
+
+	typeArgs := tp.checker.GetTypeArgumentsForResolvedSignature(sig)
+	for i := range args {
+		if i+1 < len(typeArgs) {
+			result.ArgsOutType[i] = typeArgs[i+1]
+		}
+	}
+
+	return result
 }
 
 // parseSingleArgCall detects single-argument call patterns like f(arg).
@@ -412,26 +429,15 @@ func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) []*P
 
 // buildPipeTransformations builds PipingFlowTransformation slices from pipe call arguments.
 func (tp *TypeParser) buildPipeTransformations(result *ParsedPipeCallResult) []PipingFlowTransformation {
-	c := tp.checker
-	// Get type arguments from the resolved signature for intermediate types.
-	// For pipe(subject, f1, f2, f3), typeArgs = [A, B, C, D]
-	// where A=subject type, B=after f1, C=after f2, D=after f3.
-	sig := c.GetResolvedSignature(result.Node.AsNode())
-	var typeArgs []*checker.Type
-	if sig != nil {
-		typeArgs = c.GetTypeArgumentsForResolvedSignature(sig)
-	}
-
 	transformations := make([]PipingFlowTransformation, 0, len(result.Args))
 	for i, arg := range result.Args {
 		if arg == nil {
 			continue
 		}
 
-		// For transformation at index i, outType is typeArgs[i+1]
 		var outType *checker.Type
-		if typeArgs != nil && i+1 < len(typeArgs) {
-			outType = typeArgs[i+1]
+		if i < len(result.ArgsOutType) {
+			outType = result.ArgsOutType[i]
 		}
 
 		var callee *ast.Node

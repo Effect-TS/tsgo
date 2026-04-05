@@ -1,0 +1,4 @@
+flowchart TB
+  0["node: Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.log#40;#quot;log#quot;#41;#92;n    // Log should be inferred with name MyService.log#92;n    return #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;#92;n#125;#41;<br/>type: Effect#lt;#123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;, never, never#gt;"]
+  1["type: Layer#lt;MyService, never, never#gt;<br/>callee: Layer.effect<br/>args: #91;MyService#93;"]
+  0 -->|"kind: dataLast"| 1

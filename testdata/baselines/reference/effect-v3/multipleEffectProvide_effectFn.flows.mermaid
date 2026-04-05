@@ -1,0 +1,23 @@
+flowchart TB
+  0["node: function*#40;#41; #123;#92;n    return yield* Effect.void#92;n  #125;<br/>type: "]
+  1["type: <br/>callee: Effect.provide<br/>args: #91;MyService1.Default#93;"]
+  2["type: <br/>callee: Effect.provide<br/>args: #91;MyService2.Default#93;"]
+  3["node: function*#40;#41; #123;#92;n    return yield* Effect.void#92;n  #125;<br/>type: "]
+  4["type: <br/>callee: Effect.provide<br/>args: #91;MyService1.Default#93;"]
+  5["type: <br/>callee: Effect.provide<br/>args: #91;MyService2.Default#93;"]
+  6["node: function*#40;#41; #123;#92;n    return yield* Effect.void#92;n  #125;<br/>type: "]
+  7["type: <br/>callee: Effect.provide<br/>args: #91;MyService1.Default#93;"]
+  8["type: <br/>callee: Effect.provide<br/>args: #91;MyService2.Default#93;"]
+  9["node: function*#40;#41; #123;#92;n    return yield* Effect.void#92;n  #125;<br/>type: "]
+  10["type: <br/>callee: Effect.provide<br/>args: #91;MyService1.Default#93;"]
+  11["type: <br/>callee: Effect.provide<br/>args: #91;MyService2.Default#93;"]
+  12["type: <br/>callee: Effect.provide<br/>args: #91;MyService3.Default#93;"]
+  0 -->|"kind: fnPipe"| 1
+  1 -->|"kind: fnPipe"| 2
+  3 -->|"kind: fnPipe"| 4
+  4 -->|"kind: fnPipe"| 5
+  6 -->|"kind: fnPipe"| 7
+  7 -->|"kind: fnPipe"| 8
+  9 -->|"kind: fnPipe"| 10
+  10 -->|"kind: fnPipe"| 11
+  11 -->|"kind: fnPipe"| 12
