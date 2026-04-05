@@ -1689,6 +1689,16 @@
           "default": "error",
           "description": "Ensures Self type parameter matches the class name in ServiceMap/Service/Tag/Schema classes"
         },
+        "cryptoRandomUUID": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Warns when using crypto.randomUUID() outside Effect generators instead of the Effect Random module, which uses Effect-injected randomness rather than the crypto module behind the scenes"
+        },
+        "cryptoRandomUUIDInEffect": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Warns when using crypto.randomUUID() inside Effect generators instead of the Effect Random module, which uses Effect-injected randomness rather than the crypto module behind the scenes"
+        },
         "deterministicKeys": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
@@ -1898,6 +1908,16 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
           "description": "Suggests using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify"
+        },
+        "processEnv": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Warns when reading process.env outside Effect generators instead of using Effect Config"
+        },
+        "processEnvInEffect": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Warns when reading process.env inside Effect generators instead of using Effect Config"
         },
         "redundantSchemaTagIdentifier": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",

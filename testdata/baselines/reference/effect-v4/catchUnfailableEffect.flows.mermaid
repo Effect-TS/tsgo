@@ -1,0 +1,29 @@
+flowchart TB
+  0["node: Effect.succeed#40;42#41;<br/>type: Effect#lt;number, never, never#gt;"]
+  1["type: Effect#lt;void #124; number, never, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;MyError#quot;, #40;#41; =#gt; Effect.void#93;"]
+  2["node: Effect.succeed#40;42#41;<br/>type: Effect#lt;number, never, never#gt;"]
+  3["type: Effect#lt;void #124; number, never, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;MyError#quot;, #40;#41; =#gt; Effect.void#93;"]
+  4["node: Effect.succeed#40;42#41;<br/>type: Effect#lt;number, never, never#gt;"]
+  5["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.catchTags<br/>args: #91;#123;#125;#93;"]
+  6["node: Effect.succeed#40;42#41;<br/>type: Effect#lt;number, never, never#gt;"]
+  7["type: Effect#lt;void #124; number, never, never#gt;<br/>callee: Effect.catchIf<br/>args: #91;#40;e#41; =#gt; true, #40;#41; =#gt; Effect.void#93;"]
+  8["node: function*#40;#41; #123;#92;n  return yield* Effect.succeed#40;42#41;#92;n#125;<br/>type: "]
+  9["type: Effect#lt;void #124; number, never, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;MyError#quot;, #40;#41; =#gt; Effect.void#93;"]
+  10["node: Effect.succeed#40;42#41;<br/>type: Effect#lt;number, never, never#gt;"]
+  11["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n + 1#93;"]
+  12["type: Effect#lt;void #124; number, never, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;MyError#quot;, #40;#41; =#gt; Effect.void#93;"]
+  13["node: effectWithErrors<br/>type: Effect#lt;number, MyError, never#gt;"]
+  14["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;MyError#quot;, #40;#41; =#gt; Effect.succeed#40;42#41;#93;"]
+  15["node: Effect.succeed#40;42#41;<br/>type: Effect#lt;number, never, never#gt;"]
+  16["type: Effect#lt;never, MyError, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;#41; =#gt; Effect.fail#40;new MyError#40;#123; message: #quot;oops#quot; #125;#41;#41;#93;"]
+  17["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;MyError#quot;, #40;#41; =#gt; Effect.succeed#40;42#41;#93;"]
+  0 -->|"kind: pipeable"| 1
+  2 -->|"kind: pipe"| 3
+  4 -->|"kind: pipe"| 5
+  6 -->|"kind: pipe"| 7
+  8 -->|"kind: fnPipe"| 9
+  10 -->|"kind: pipe"| 11
+  11 -->|"kind: pipe"| 12
+  13 -->|"kind: pipeable"| 14
+  15 -->|"kind: pipe"| 16
+  16 -->|"kind: pipe"| 17

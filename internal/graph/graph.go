@@ -187,6 +187,18 @@ func (g *Graph[N, E]) HasEdge(source, target NodeIndex) bool {
 	return false
 }
 
+// OutgoingEdges returns the edge indices for all outgoing edges from the given node.
+// The returned indices preserve insertion order.
+func (g *Graph[N, E]) OutgoingEdges(nodeIndex NodeIndex) []EdgeIndex {
+	return append([]EdgeIndex(nil), g.adjacency[nodeIndex]...)
+}
+
+// IncomingEdges returns the edge indices for all incoming edges to the given node.
+// The returned indices preserve insertion order.
+func (g *Graph[N, E]) IncomingEdges(nodeIndex NodeIndex) []EdgeIndex {
+	return append([]EdgeIndex(nil), g.reverseAdjacency[nodeIndex]...)
+}
+
 // UpdateEdge applies fn to the data of the edge at the given index.
 // If the edge does not exist, this is a no-op.
 func (g *Graph[N, E]) UpdateEdge(index EdgeIndex, fn func(E) E) {
@@ -710,11 +722,19 @@ func (g *Graph[N, E]) IsAcyclic() bool {
 
 // escapeMermaidLabel escapes special characters in a Mermaid label.
 func escapeMermaidLabel(label string) string {
-	label = strings.ReplaceAll(label, `\`, `\\`)
-	label = strings.ReplaceAll(label, `"`, `\"`)
-	label = strings.ReplaceAll(label, `[`, `\[`)
-	label = strings.ReplaceAll(label, `]`, `\]`)
-	label = strings.ReplaceAll(label, `|`, `\|`)
+	label = strings.ReplaceAll(label, `#`, `#35;`)
+	label = strings.ReplaceAll(label, `"`, `#quot;`)
+	label = strings.ReplaceAll(label, `<`, `#lt;`)
+	label = strings.ReplaceAll(label, `>`, `#gt;`)
+	label = strings.ReplaceAll(label, `&`, `#amp;`)
+	label = strings.ReplaceAll(label, `[`, `#91;`)
+	label = strings.ReplaceAll(label, `]`, `#93;`)
+	label = strings.ReplaceAll(label, `{`, `#123;`)
+	label = strings.ReplaceAll(label, `}`, `#125;`)
+	label = strings.ReplaceAll(label, `(`, `#40;`)
+	label = strings.ReplaceAll(label, `)`, `#41;`)
+	label = strings.ReplaceAll(label, `|`, `#124;`)
+	label = strings.ReplaceAll(label, `\`, `#92;`)
 	label = strings.ReplaceAll(label, "\n", "<br/>")
 	return label
 }

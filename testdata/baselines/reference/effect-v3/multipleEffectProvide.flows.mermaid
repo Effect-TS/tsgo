@@ -1,0 +1,24 @@
+flowchart TB
+  0["node: Effect.void<br/>type: Effect#lt;void, never, never#gt;"]
+  1["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService1.Default#93;"]
+  2["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService2.Default#93;"]
+  3["node: Effect.void<br/>type: Effect#lt;void, never, never#gt;"]
+  4["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService1.Default#93;"]
+  5["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService2.Default#93;"]
+  6["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.ignoreLogged<br/>args: #91;#93;"]
+  7["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService1.Default#93;"]
+  8["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService2.Default#93;"]
+  9["node: Effect.void<br/>type: Effect#lt;void, never, never#gt;"]
+  10["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService1.Default#93;"]
+  11["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService2.Default#93;"]
+  12["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService3.Default#93;"]
+  0 -->|"kind: pipeable"| 1
+  1 -->|"kind: pipeable"| 2
+  3 -->|"kind: pipeable"| 4
+  4 -->|"kind: pipeable"| 5
+  5 -->|"kind: pipeable"| 6
+  6 -->|"kind: pipeable"| 7
+  7 -->|"kind: pipeable"| 8
+  9 -->|"kind: pipeable"| 10
+  10 -->|"kind: pipeable"| 11
+  11 -->|"kind: pipeable"| 12

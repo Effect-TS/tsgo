@@ -1,0 +1,13 @@
+flowchart TB
+  0["node: function*#40;#41; #123;#92;n  return yield* Effect.fail#40;#quot;error#quot;#41;#92;n#125;<br/>type: "]
+  1["type: Effect#lt;never, MyErrorTagged, never#gt;<br/>callee: Effect.catchAll<br/>args: #91;#40;cause#41; =#gt; Effect.fail#40;new MyErrorTagged#40;cause#41;#41;#93;"]
+  2["node: function*#40;#41; #123;#92;n  return yield* Effect.fail#40;#quot;error#quot;#41;#92;n#125;<br/>type: "]
+  3["type: Effect#lt;never, MyErrorTagged, never#gt;<br/>callee: Effect.catchAll<br/>args: #91;#40;cause#41; =#gt; Effect.fail#40;new MyErrorTagged#40;cause#41;#41;#93;"]
+  4["node: function*#40;#41; #123;#92;n  return yield* Effect.fail#40;#quot;error#quot;#41;#92;n#125;<br/>type: "]
+  5["type: Effect#lt;never, MyErrorTagged, never#gt;<br/>callee: Effect.catchAll<br/>args: #91;#40;cause#41; =#gt; Effect.fail#40;new MyErrorTagged#40;cause#41;#41;#93;"]
+  6["node: function*#40;#41; #123;#92;n  return yield* Effect.fail#40;#quot;error#quot;#41;#92;n#125;<br/>type: "]
+  7["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.catchAll<br/>args: #91;#40;#41; =#gt; Effect.succeed#40;42#41;#93;"]
+  0 -->|"kind: fnPipe"| 1
+  2 -->|"kind: fnPipe"| 3
+  4 -->|"kind: fnPipe"| 5
+  6 -->|"kind: fnPipe"| 7
