@@ -215,6 +215,8 @@ func (tp *TypeParser) ExecutionFlow(sf *ast.SourceFile) *ExecutionFlow {
 				g.UpdateNode(*parentStartingNodeIndex, func(node ExecutionNode) ExecutionNode {
 					if node.Kind == ExecutionNodeKindValue {
 						node.Kind = ExecutionNodeKindLogicMerge
+					}
+					if node.Kind == ExecutionNodeKindLogicMerge {
 						g.AddEdge(*newTrailingNode, *parentStartingNodeIndex, ExecutionLink{
 							Kind: ExecutionLinkKindConnect,
 						})
