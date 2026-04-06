@@ -919,6 +919,34 @@ func TestToMermaid(t *testing.T) {
 		}
 	})
 
+	t.Run("CustomNodeShape", func(t *testing.T) {
+		t.Parallel()
+		g := New[string, string]()
+		a := g.AddNode("A")
+		b := g.AddNode("B")
+		g.AddEdge(a, b, "ab")
+		result := g.ToMermaid(MermaidOptions[string, string]{
+			NodeShape: func(string) (string, string) { return "([", "])" },
+		})
+		if !strings.Contains(result, `0(["A"])`) {
+			t.Errorf("expected custom node shape, got %q", result)
+		}
+	})
+
+	t.Run("CustomEdgeShape", func(t *testing.T) {
+		t.Parallel()
+		g := New[string, string]()
+		a := g.AddNode("A")
+		b := g.AddNode("B")
+		g.AddEdge(a, b, "ab")
+		result := g.ToMermaid(MermaidOptions[string, string]{
+			EdgeShape: func(string) (string, string) { return "-.", ".->" },
+		})
+		if !strings.Contains(result, `0 -.|"ab"|.-> 1`) {
+			t.Errorf("expected custom edge shape, got %q", result)
+		}
+	})
+
 	t.Run("Direction", func(t *testing.T) {
 		t.Parallel()
 		g := New[string, string]()

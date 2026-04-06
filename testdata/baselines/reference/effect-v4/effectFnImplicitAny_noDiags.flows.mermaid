@@ -1,9 +1,0 @@
-flowchart TB
-  0["node: function*#40;router#41; #123;#92;n    yield* router.add#40;#92;n      #quot;GET#quot;,#92;n      #quot;/#quot;,#92;n      Effect.fnUntraced#40;function*#40;request#41; #123;#92;n        return HttpServerResponse.empty#40;#41;#92;n      #125;#41;#92;n    #41;#92;n  #125;<br/>type: "]
-  1["node: function*#40;request#41; #123;#92;n        return HttpServerResponse.empty#40;#41;#92;n      #125;<br/>type: "]
-  2["node: function*#40;s: string#41; #123;#92;n    return s.length#92;n  #125;<br/>type: "]
-  3["type: Effect#lt;#40;string #124; number#41;#91;#93;, never, never#gt;<br/>callee: #40;effect, ...args#41; =#gt; effect.pipe#40;Effect.map#40;#40;result#41; =#gt; #91;result, ...args#93;#41;#41;<br/>args: #91;#93;"]
-  4["node: effect<br/>type: Effect#lt;number, never, never#gt;"]
-  5["type: Effect#lt;#40;string #124; number#41;#91;#93;, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;result#41; =#gt; #91;result, ...args#93;#93;"]
-  2 -->|"kind: fnPipe"| 3
-  4 -->|"kind: pipeable"| 5

@@ -1,0 +1,8 @@
+flowchart TB
+  0((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.succeed#40;1#41;.pipe#40;Effect.asVoid#41;")))
+  1["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.as<br/>args: #91;#quot;done#quot;#93;"]
+  2[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
+  3["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.asVoid<br/>args: #91;#93;"]
+  0 -->|"kind: pipeable"| 1
+  2 -->|"kind: pipeable"| 3
+  3 -->|"kind: connect"| 0

@@ -1,0 +1,26 @@
+flowchart TB
+  0[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  1["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService1.Default#93;"]
+  2[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  3["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService1.Default#93;"]
+  4[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  5["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;#41; =#gt; 42#93;"]
+  6["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService1.Default#93;"]
+  7["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n + 1#93;"]
+  8[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  9["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;Layer.mergeAll#40;MyService1.Default, MyService2.Default#41;#93;"]
+  10[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  11["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provideService<br/>args: #91;MyService1, new MyService1#40;#123; value: 1 #125;#41;#93;"]
+  12[/"type: Layer#lt;MyService1, never, never#gt;<br/>node: MyService1.Default"/]
+  13["type: Layer#lt;MyService1, never, never#gt;<br/>callee: Layer.provide<br/>args: #91;MyService2.Default#93;"]
+  14[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  15["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;ctx#93;"]
+  0 -->|"kind: pipeable"| 1
+  2 -->|"kind: dataFirst"| 3
+  4 -->|"kind: pipeable"| 5
+  5 -->|"kind: pipeable"| 6
+  6 -->|"kind: pipeable"| 7
+  8 -->|"kind: pipeable"| 9
+  10 -->|"kind: pipeable"| 11
+  12 -->|"kind: dataFirst"| 13
+  14 -->|"kind: dataFirst"| 15

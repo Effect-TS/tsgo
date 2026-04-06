@@ -1,9 +1,0 @@
-flowchart TB
-  0["node: Effect.succeed#40;#quot;Hello#quot;#41;<br/>type: Effect#lt;string, never, never#gt;"]
-  1["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x + #quot; World#quot;#93;"]
-  2["node: Effect.succeed#40;#quot;Hello#quot;#41;<br/>type: Effect#lt;string, never, never#gt;"]
-  3["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x + #quot; World#quot;#93;"]
-  4["node: 32<br/>type: 32"]
-  5["node: Effect.succeed#40;32#41;<br/>type: Effect#lt;number, never, never#gt;"]
-  0 -->|"kind: pipe"| 1
-  2 -->|"kind: pipeable"| 3

@@ -1,8 +1,0 @@
-flowchart TB
-  0["node: Stream.empty<br/>type: Stream#lt;never, never, never#gt;"]
-  1["type: Effect#lt;never#91;#93;, never, never#gt;<br/>callee: Stream.runCollect<br/>args: #91;#93;"]
-  2["type: Effect#lt;never#91;#93;, never, never#gt;<br/>callee: Effect.interruptible<br/>args: #91;#93;"]
-  3["type: Effect#lt;string #124; Effect#lt;never, string, never#gt;, never, never#gt;<br/>callee: Effect.matchCause<br/>args: #91;#123;#92;n      onSuccess: #40;#41; =#gt; #quot;success#quot;,#92;n      onFailure: #40;#41; =#gt; Effect.fail#40;#quot;error#quot;#41;#92;n    #125;#93;"]
-  0 -->|"kind: pipeable"| 1
-  1 -->|"kind: pipeable"| 2
-  2 -->|"kind: pipeable"| 3

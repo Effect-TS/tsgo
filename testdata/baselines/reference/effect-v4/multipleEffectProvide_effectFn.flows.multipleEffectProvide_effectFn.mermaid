@@ -1,0 +1,10 @@
+flowchart TB
+  0[/"type: Effect#lt;#123; value: number; #125;, never, never#gt;<br/>node: this.make"/]
+  1["type: Layer#lt;MyService1, never, never#gt;<br/>callee: Layer.effect<br/>args: #91;this#93;"]
+  2[/"type: Effect#lt;#123; value: number; #125;, never, never#gt;<br/>node: this.make"/]
+  3["type: Layer#lt;MyService2, never, never#gt;<br/>callee: Layer.effect<br/>args: #91;this#93;"]
+  4[/"type: Effect#lt;#123; value: number; #125;, never, never#gt;<br/>node: this.make"/]
+  5["type: Layer#lt;MyService3, never, never#gt;<br/>callee: Layer.effect<br/>args: #91;this#93;"]
+  0 -->|"kind: dataLast"| 1
+  2 -->|"kind: dataLast"| 3
+  4 -->|"kind: dataLast"| 5

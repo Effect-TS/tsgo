@@ -1,0 +1,31 @@
+flowchart TB
+  0[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
+  1["type: Effect#lt;undefined, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;#41; =#gt; void 0#93;"]
+  2[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
+  3["type: Effect#lt;undefined, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;#41; =#gt; undefined#93;"]
+  4[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
+  5["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;#41; =#gt; #123;#125;#93;"]
+  6[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
+  7["type: Effect#lt;undefined, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;#41; =#gt; #40;undefined#41;#93;"]
+  8[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
+  9["type: Effect#lt;undefined, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;#41; =#gt; #40;void 0#41;#93;"]
+  10[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
+  11["type: Effect#lt;undefined, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;#41; =#gt; #40;#40;undefined#41;#41;#93;"]
+  12[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
+  13["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n * 2#93;"]
+  14[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
+  15["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;#41; =#gt; 42#93;"]
+  16[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
+  17["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;#41; =#gt; #quot;hello#quot;#93;"]
+  18[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
+  19["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.asVoid<br/>args: #91;#93;"]
+  0 -->|"kind: pipeable"| 1
+  2 -->|"kind: pipeable"| 3
+  4 -->|"kind: pipeable"| 5
+  6 -->|"kind: pipeable"| 7
+  8 -->|"kind: pipeable"| 9
+  10 -->|"kind: pipeable"| 11
+  12 -->|"kind: pipeable"| 13
+  14 -->|"kind: pipeable"| 15
+  16 -->|"kind: pipeable"| 17
+  18 -->|"kind: pipeable"| 19

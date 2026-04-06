@@ -1,0 +1,15 @@
+flowchart TB
+  0((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;.pipe#40;Effect.map#40;#40;x#41; =#gt; x + 2#41;#41;")))
+  1["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x + 3#93;"]
+  2[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
+  3["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x + 2#93;"]
+  4((("type: Effect#lt;number, never, never#gt;<br/>node: pipe#40;Effect.succeed#40;1#41;, Effect.map#40;#40;x#41; =#gt; x + 2#41;#41;")))
+  5["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x + 3#93;"]
+  6[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
+  7["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x + 2#93;"]
+  0 -->|"kind: pipeable"| 1
+  2 -->|"kind: pipeable"| 3
+  3 -->|"kind: connect"| 0
+  4 -->|"kind: pipe"| 5
+  6 -->|"kind: pipe"| 7
+  7 -->|"kind: connect"| 4

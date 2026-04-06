@@ -1,0 +1,9 @@
+flowchart TB
+  0[/"type: Effect#lt;string, never, never#gt;<br/>node: Effect.succeed#40;#quot;Hello#quot;#41;"/]
+  1["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x + #quot; World#quot;#93;"]
+  2[/"type: Effect#lt;string, never, never#gt;<br/>node: Effect.succeed#40;#quot;Hello#quot;#41;"/]
+  3["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x + #quot; World#quot;#93;"]
+  4[/"type: 32<br/>node: 32"/]
+  5[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;32#41;"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: pipeable"| 3

@@ -1,0 +1,16 @@
+flowchart TB
+  0[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;42#41;"/]
+  1["type: Effect#lt;void #124; number, never, never#gt;<br/>callee: Effect.catchAll<br/>args: #91;#40;#41; =#gt; Effect.void#93;"]
+  2[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;42#41;"/]
+  3["type: Effect#lt;void #124; number, never, never#gt;<br/>callee: Effect.catchIf<br/>args: #91;#40;error#41; =#gt; error === #quot;MyError#quot;, #40;#41; =#gt; Effect.void#93;"]
+  4[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;42#41;"/]
+  5["type: Effect#lt;void #124; number, never, never#gt;<br/>callee: Effect.catchSome<br/>args: #91;#40;#41; =#gt; Option.some#40;Effect.void#41;#93;"]
+  6[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;42#41;"/]
+  7["type: Effect#lt;void #124; number, never, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;MyError#quot;, #40;#41; =#gt; Effect.void#93;"]
+  8[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;42#41;"/]
+  9["type: Effect#lt;unknown, unknown, unknown#gt;<br/>callee: Effect.catchTags<br/>args: #91;#123;#92;n    // @ts-expect-error#92;n    MyError: #40;#41; =#gt; Effect.void#92;n  #125;#93;"]
+  0 -->|"kind: pipeable"| 1
+  2 -->|"kind: pipeable"| 3
+  4 -->|"kind: pipeable"| 5
+  6 -->|"kind: pipeable"| 7
+  8 -->|"kind: pipeable"| 9

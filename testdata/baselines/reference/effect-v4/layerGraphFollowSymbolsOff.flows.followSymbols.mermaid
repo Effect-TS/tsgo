@@ -1,0 +1,9 @@
+flowchart TB
+  0[/"type: Layer#lt;UserRepository, never, DbConnection #124; FileSystem#gt;<br/>node: simplePipeIn"/]
+  1["type: Layer#lt;UserRepository, never, FileSystem#gt;<br/>callee: Layer.provide<br/>args: #91;DbConnection.Default#93;"]
+  2[/"type: Layer#lt;UserRepository, never, Cache #124; DbConnection#gt;<br/>node: UserRepository.Default"/]
+  3["type: Layer#lt;UserRepository, never, DbConnection#gt;<br/>callee: Layer.provide<br/>args: #91;cacheWithFs#93;"]
+  4["type: Layer#lt;DbConnection #124; UserRepository, never, DbConnection#gt;<br/>callee: Layer.merge<br/>args: #91;DbConnection.Default#93;"]
+  0 -->|"kind: pipeable"| 1
+  2 -->|"kind: pipeable"| 3
+  3 -->|"kind: pipeable"| 4

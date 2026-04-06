@@ -1,4 +1,0 @@
-flowchart TB
-  0["node: Effect.fail#40;#quot;boom#quot;#41;<br/>type: Effect#lt;never, string, never#gt;"]
-  1["type: Effect#lt;never, WrappedError, never#gt;<br/>callee: Effect.catch<br/>args: #91;#40;cause#41; =#gt; Effect.fail#40;new WrappedError#40;cause#41;#41;#93;"]
-  0 -->|"kind: pipeable"| 1

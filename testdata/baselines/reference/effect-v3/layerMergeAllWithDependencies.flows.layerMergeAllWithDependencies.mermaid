@@ -1,0 +1,10 @@
+flowchart TB
+  0[/"type: typeof FileSystem<br/>node: FileSystem"/]
+  1["type: Effect#lt;#123;#125;, never, FileSystem#gt;<br/>callee: Effect.as<br/>args: #91;#123;#125;#93;"]
+  2[/"type: Effect#lt;Cache, never, Cache #124; DbConnection#gt;<br/>node: Effect.zipRight#40;DbConnection, Cache#41;"/]
+  3["type: Effect#lt;#123;#125;, never, Cache #124; DbConnection#gt;<br/>callee: Effect.as<br/>args: #91;#123;#125;#93;"]
+  4[/"type: typeof Cache<br/>node: Cache"/]
+  5["type: Layer#lt;Cache, never, Cache#gt;<br/>callee: Layer.effect<br/>args: #91;Cache#93;"]
+  0 -->|"kind: dataFirst"| 1
+  2 -->|"kind: dataFirst"| 3
+  4 -->|"kind: dataLast"| 5

@@ -1,0 +1,4 @@
+flowchart TB
+  0[/"type: Effect#lt;#123; ok: true; #125;, never, Scope#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  yield* Effect.addFinalizer#40;#40;#41; =#gt; Effect.void#41;#92;n  return #123; ok: true as const #125;#92;n#125;#41;"/]
+  1["type: Layer#lt;Cache, never, Scope#gt;<br/>callee: Layer.effect<br/>args: #91;Cache#93;"]
+  0 -->|"kind: dataLast"| 1

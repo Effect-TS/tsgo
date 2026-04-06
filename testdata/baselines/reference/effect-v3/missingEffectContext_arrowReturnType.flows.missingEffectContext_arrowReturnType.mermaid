@@ -1,0 +1,14 @@
+flowchart TB
+  0[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  1["type: Effect#lt;A, E, R#gt;<br/>callee: Effect.andThen<br/>args: #91;eff#93;"]
+  2["type: Effect#lt;A, E, Exclude#lt;R, Scope#gt;#gt;<br/>callee: Effect.scoped<br/>args: #91;#93;"]
+  3[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  4["type: Effect#lt;A, E, R#gt;<br/>callee: Effect.andThen<br/>args: #91;eff#93;"]
+  5["type: Effect#lt;A, E, Exclude#lt;R, Scope#gt;#gt;<br/>callee: Effect.scoped<br/>args: #91;#93;"]
+  6[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  7["type: Effect#lt;A, E, R#gt;<br/>callee: Effect.andThen<br/>args: #91;eff#93;"]
+  0 -->|"kind: pipeable"| 1
+  1 -->|"kind: pipeable"| 2
+  3 -->|"kind: pipeable"| 4
+  4 -->|"kind: pipeable"| 5
+  6 -->|"kind: pipeable"| 7

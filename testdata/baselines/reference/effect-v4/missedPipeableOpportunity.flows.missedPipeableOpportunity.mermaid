@@ -1,0 +1,27 @@
+flowchart TB
+  0[/"type: Effect#lt;number, never, never#gt;<br/>node: e"/]
+  1["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n * 2#93;"]
+  2[/"type: Effect#lt;number, never, never#gt;<br/>node: e"/]
+  3["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;m#41; =#gt; m * n#93;"]
+  4[/"type: Effect#lt;number, never, never#gt;<br/>node: e"/]
+  5["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; String#40;n#41;#93;"]
+  6[/"type: Effect#lt;number, never, never#gt;<br/>node: e"/]
+  7["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n * 3#93;"]
+  8[/"type: Effect#lt;number, never, never#gt;<br/>node: e"/]
+  9["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n + 100#93;"]
+  10[/"type: Effect#lt;number, never, never#gt;<br/>node: addOne#40;5#41;"/]
+  11["type: Effect#lt;number, never, never#gt;<br/>callee: double<br/>args: #91;#93;"]
+  12["type: Effect#lt;string, never, never#gt;<br/>callee: toString<br/>args: #91;#93;"]
+  13[/"type: Effect#lt;number, never, never#gt;<br/>node: addOne#40;5#41;"/]
+  14["type: Effect#lt;number, never, never#gt;<br/>callee: double<br/>args: #91;#93;"]
+  15[/"type: Effect#lt;number, never, never#gt;<br/>node: addOne#40;5#41;"/]
+  16["type: Effect#lt;number, never, never#gt;<br/>callee: multiplyBy<br/>args: #91;2#93;"]
+  0 -->|"kind: dataFirst"| 1
+  2 -->|"kind: dataFirst"| 3
+  4 -->|"kind: dataFirst"| 5
+  6 -->|"kind: dataFirst"| 7
+  8 -->|"kind: dataFirst"| 9
+  10 -->|"kind: pipeable"| 11
+  11 -->|"kind: pipeable"| 12
+  13 -->|"kind: pipeable"| 14
+  15 -->|"kind: pipeable"| 16

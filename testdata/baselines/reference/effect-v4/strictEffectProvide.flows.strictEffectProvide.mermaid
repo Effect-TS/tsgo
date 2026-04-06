@@ -1,0 +1,32 @@
+flowchart TB
+  0[/"type: Effect#lt;#123; value: number; #125;, never, never#gt;<br/>node: this.make"/]
+  1["type: Layer#lt;MyService1, never, never#gt;<br/>callee: Layer.effect<br/>args: #91;this#93;"]
+  2[/"type: Effect#lt;#123; value: number; #125;, never, never#gt;<br/>node: this.make"/]
+  3["type: Layer#lt;MyService2, never, never#gt;<br/>callee: Layer.effect<br/>args: #91;this#93;"]
+  4[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  5["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService1.Default#93;"]
+  6[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  7["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;#41; =#gt; 42#93;"]
+  8["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService1.Default#93;"]
+  9["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n + 1#93;"]
+  10[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  11["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;Layer.mergeAll#40;MyService1.Default, MyService2.Default#41;#93;"]
+  12[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  13["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provideService<br/>args: #91;MyService1, MyService1.of#40;#123; value: 1 #125;#41;#93;"]
+  14[/"type: #123; value: number; #125;<br/>node: MyService1.of#40;#123; value: 1 #125;#41;"/]
+  15["type: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, MyService1#gt;#gt;<br/>callee: Effect.provideService<br/>args: #91;MyService1#93;"]
+  16[/"type: Layer#lt;MyService1, never, never#gt;<br/>node: MyService1.Default"/]
+  17["type: Layer#lt;MyService1, never, never#gt;<br/>callee: Layer.provide<br/>args: #91;MyService2.Default#93;"]
+  18[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  19["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;ctx#93;"]
+  0 -->|"kind: dataLast"| 1
+  2 -->|"kind: dataLast"| 3
+  4 -->|"kind: pipeable"| 5
+  6 -->|"kind: pipeable"| 7
+  7 -->|"kind: pipeable"| 8
+  8 -->|"kind: pipeable"| 9
+  10 -->|"kind: pipeable"| 11
+  12 -->|"kind: pipeable"| 13
+  14 -->|"kind: dataLast"| 15
+  16 -->|"kind: dataFirst"| 17
+  18 -->|"kind: dataFirst"| 19

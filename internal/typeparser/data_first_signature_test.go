@@ -30,7 +30,7 @@ const provided = Effect.provide(program, MyService.Default, { local: true })
 
 	call := findVariableInitializerCallByName(t, sf, "provided")
 	logDerivedPipeableSignatureComparison(t, tp, call.AsNode())
-	result := tp.ParseDataFirstCallAsPipeable(call.AsNode())
+	result := tp.DataFirstOrLastCall(call.AsNode())
 	if result == nil {
 		t.Fatal("expected provide call to normalize via derived signature comparison")
 	}
@@ -59,7 +59,7 @@ const live = Layer.succeed(Service, make)
 
 	call := findVariableInitializerCallByName(t, sf, "live")
 	logDerivedPipeableSignatureComparison(t, tp, call.AsNode())
-	result := tp.ParseDataFirstCallAsPipeable(call.AsNode())
+	result := tp.DataFirstOrLastCall(call.AsNode())
 	if result == nil {
 		t.Fatal("expected Layer.succeed call to normalize via derived signature comparison")
 	}
@@ -130,7 +130,7 @@ export const shouldReportDataFirst = Effect.catchAll(
 	defer done()
 
 	call := findVariableInitializerCallByName(t, sf, "shouldReportDataFirst")
-	result := tp.ParseDataFirstCallAsPipeable(call.AsNode())
+	result := tp.DataFirstOrLastCall(call.AsNode())
 	if result == nil {
 		t.Fatal("expected data-first catchAll to normalize")
 	}

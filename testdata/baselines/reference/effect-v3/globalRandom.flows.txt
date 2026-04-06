@@ -1,0 +1,1 @@
+/.src/globalRandom.ts -> globalRandom.flows.globalRandom.mermaid

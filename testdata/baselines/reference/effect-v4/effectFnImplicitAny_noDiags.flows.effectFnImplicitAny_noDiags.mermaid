@@ -1,0 +1,4 @@
+flowchart TB
+  0[/"type: Effect#lt;number, never, never#gt;<br/>node: effect"/]
+  1["type: Effect#lt;#40;string #124; number#41;#91;#93;, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;result#41; =#gt; #91;result, ...args#93;#93;"]
+  0 -->|"kind: pipeable"| 1

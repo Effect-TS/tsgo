@@ -44,7 +44,9 @@ type TraversalConfig struct {
 // MermaidOptions configures Mermaid flowchart rendering.
 type MermaidOptions[N any, E any] struct {
 	NodeLabel func(N) string
+	NodeShape func(N) (string, string)
 	EdgeLabel func(E) string
+	EdgeShape func(E) (string, string)
 	Direction string
 }
 
@@ -749,9 +751,17 @@ func (g *Graph[N, E]) ToMermaid(options MermaidOptions[N, E]) string {
 	if nodeLabel == nil {
 		nodeLabel = func(data N) string { return fmt.Sprint(data) }
 	}
+	nodeShape := options.NodeShape
+	if nodeShape == nil {
+		nodeShape = func(N) (string, string) { return "[", "]" }
+	}
 	edgeLabel := options.EdgeLabel
 	if edgeLabel == nil {
 		edgeLabel = func(data E) string { return fmt.Sprint(data) }
+	}
+	edgeShape := options.EdgeShape
+	if edgeShape == nil {
+		edgeShape = func(E) (string, string) { return "-->", "" }
 	}
 
 	var lines []string
@@ -760,16 +770,18 @@ func (g *Graph[N, E]) ToMermaid(options MermaidOptions[N, E]) string {
 	// Nodes in index order
 	for idx, data := range g.Nodes() {
 		label := escapeMermaidLabel(nodeLabel(data))
-		lines = append(lines, fmt.Sprintf("  %d[\"%s\"]", idx, label))
+		open, close := nodeShape(data)
+		lines = append(lines, fmt.Sprintf("  %d%s\"%s\"%s", idx, open, label, close))
 	}
 
 	// Edges in index order
 	for _, edge := range g.Edges() {
 		label := escapeMermaidLabel(edgeLabel(edge.Data))
+		open, close := edgeShape(edge.Data)
 		if label != "" {
-			lines = append(lines, fmt.Sprintf("  %d -->|\"%s\"| %d", edge.Source, label, edge.Target))
+			lines = append(lines, fmt.Sprintf("  %d %s|\"%s\"|%s %d", edge.Source, open, label, close, edge.Target))
 		} else {
-			lines = append(lines, fmt.Sprintf("  %d --> %d", edge.Source, edge.Target))
+			lines = append(lines, fmt.Sprintf("  %d %s%s %d", edge.Source, open, close, edge.Target))
 		}
 	}
 

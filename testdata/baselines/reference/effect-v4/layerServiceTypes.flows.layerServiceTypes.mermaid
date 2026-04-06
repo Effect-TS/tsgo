@@ -1,0 +1,7 @@
+flowchart TB
+  0[/"type: Layer#lt;UserRepo, never, Database#gt;<br/>node: UserRepoLive"/]
+  1["type: Layer#lt;UserRepo, never, never#gt;<br/>callee: Layer.provide<br/>args: #91;DatabaseLive#93;"]
+  2[/"type: Effect#lt;string, never, Database#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const db = yield* Database#92;n  return yield* db.query#40;#quot;SELECT 1#quot;#41;#92;n#125;#41;"/]
+  3["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;DatabaseLive#93;"]
+  0 -->|"kind: pipeable"| 1
+  2 -->|"kind: pipeable"| 3

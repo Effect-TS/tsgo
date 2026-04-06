@@ -1,0 +1,7 @@
+flowchart TB
+  0[/"type: Effect#lt;A, E, R#gt;<br/>node: evaluate#40;#41;"/]
+  1["type: Effect#lt;A, E, R#gt;<br/>callee: Effect.onExit<br/>args: #91;#40;#41; =#gt; Effect.void#93;"]
+  2[/"type: Effect#lt;A, E, R #124; ServiceA#gt;<br/>node: evaluate#40;#41;"/]
+  3["type: Effect#lt;A, E, R #124; ServiceA#gt;<br/>callee: Effect.onExit<br/>args: #91;#40;#41; =#gt; Effect.void#93;"]
+  0 -->|"kind: dataFirst"| 1
+  2 -->|"kind: dataFirst"| 3

@@ -11,8 +11,9 @@ import (
 type ExecutionNodeKind string
 
 const (
-	ExecutionNodeKindValue     ExecutionNodeKind = "value"
-	ExecutionNodeKindTransform ExecutionNodeKind = "transform"
+	ExecutionNodeKindValue      ExecutionNodeKind = "value"
+	ExecutionNodeKindLogicMerge ExecutionNodeKind = "logicMerge"
+	ExecutionNodeKindTransform  ExecutionNodeKind = "transform"
 )
 
 type ExecutionNode struct {
@@ -30,6 +31,7 @@ type ExecutionLinkKind string
 
 const (
 	ExecutionLinkKindUnknown   ExecutionLinkKind = "unknown"
+	ExecutionLinkKindConnect   ExecutionLinkKind = "connect"
 	ExecutionLinkKindPipe      ExecutionLinkKind = "pipe"
 	ExecutionLinkKindPipeable  ExecutionLinkKind = "pipeable"
 	ExecutionLinkKindEffectFn  ExecutionLinkKind = "effectFn"
@@ -37,6 +39,7 @@ const (
 	ExecutionLinkKindDataFirst ExecutionLinkKind = "dataFirst"
 	ExecutionLinkKindDataLast  ExecutionLinkKind = "dataLast"
 	ExecutionLinkKindFnPipe    ExecutionLinkKind = "fnPipe"
+	ExecutionLinkKindReturn    ExecutionLinkKind = "return"
 )
 
 type ExecutionLink struct {
@@ -118,7 +121,7 @@ func (tp *TypeParser) ExecutionFlow(sf *ast.SourceFile) *ExecutionFlow {
 					*expectFillInPipeTransformInfo.Get(pipeTransformNode) = &transformNode
 				}
 				newTrailingNode = &lastNode
-			} else if dataFirstLastCall := tp.ParseDataFirstCallAsPipeable(node); dataFirstLastCall != nil {
+			} else if dataFirstLastCall := tp.DataFirstOrLastCall(node); dataFirstLastCall != nil {
 				// this is a pipe call, so we have subject and args
 				subjectExecutionNode := g.AddNode(ExecutionNode{
 					Kind: ExecutionNodeKindValue,
@@ -145,46 +148,79 @@ func (tp *TypeParser) ExecutionFlow(sf *ast.SourceFile) *ExecutionFlow {
 				})
 				newTrailingNode = &transformNode
 			} else if fnCall := tp.EffectFnCall(node); fnCall != nil {
-				// this is a pipe call, so we have subject and args
-				subjectExecutionNode := g.AddNode(ExecutionNode{
-					Kind: ExecutionNodeKindValue,
-					Node: fnCall.FunctionNode,
-					Type: nil, // TODO: get return type of function
-				})
-				// and then we connect the args
-				lastNode := subjectExecutionNode
-				for i, fnPipeNode := range fnCall.PipeArguments {
-					var outType *checker.Type
-					if i < len(fnCall.PipeArgsOutType) {
-						outType = fnCall.PipeArgsOutType[i]
-					}
-					transformExecInfo := ExecutionNode{
-						Kind: ExecutionNodeKindTransform,
-						Node: fnPipeNode,
-						Type: outType,
-					}
-					transformNode := g.AddNode(transformExecInfo)
-					kind := ExecutionLinkKindFnPipe
-					g.AddEdge(lastNode, transformNode, ExecutionLink{
-						Kind: kind,
-						Node: node,
+				var lastNode graph.NodeIndex
+				bodyNode := fnCall.Body()
+				handled := false
+				if ast.IsExpressionNode(bodyNode) && fnCall.GeneratorFunction() == nil {
+					// we have an arrow function with an expression
+					lastNode = g.AddNode(ExecutionNode{
+						Kind: ExecutionNodeKindValue,
+						Node: bodyNode,
+						Type: tp.GetTypeAtLocation(bodyNode),
 					})
-					lastNode = transformNode
-					*expectFillInPipeTransformInfo.Get(fnPipeNode) = &transformNode
+					handled = true
+				} else if bodyNode.Kind == ast.KindBlock && fnCall.GeneratorFunction() == nil {
+					// we have a regular function with multiple potential exit points
+					lastNode = g.AddNode(ExecutionNode{
+						Kind: ExecutionNodeKindLogicMerge,
+						Node: fnCall.FunctionNode,
+						Type: nil, // TODO
+					})
+					ast.ForEachReturnStatement(bodyNode, func(node *ast.Node) bool {
+						if node.Kind == ast.KindReturnStatement {
+							returnedExpr := node.AsReturnStatement().Expression
+							if returnedExpr != nil {
+								returnIndex := g.AddNode(ExecutionNode{
+									Kind: ExecutionNodeKindValue,
+									Node: returnedExpr,
+									Type: tp.GetTypeAtLocation(returnedExpr),
+								})
+								g.AddEdge(returnIndex, lastNode, ExecutionLink{
+									Kind: ExecutionLinkKindReturn,
+								})
+								*parentStartingNode.Get(returnedExpr) = &returnIndex
+							}
+						}
+						return false
+					})
+					handled = true
+				}
+				if handled {
+					// and then we connect the args
+					for i, fnPipeNode := range fnCall.PipeArguments {
+						var outType *checker.Type
+						if i < len(fnCall.PipeArgsOutType) {
+							outType = fnCall.PipeArgsOutType[i]
+						}
+						transformExecInfo := ExecutionNode{
+							Kind: ExecutionNodeKindTransform,
+							Node: fnPipeNode,
+							Type: outType,
+						}
+						transformNode := g.AddNode(transformExecInfo)
+						kind := ExecutionLinkKindFnPipe
+						g.AddEdge(lastNode, transformNode, ExecutionLink{
+							Kind: kind,
+							Node: node,
+						})
+						lastNode = transformNode
+						*expectFillInPipeTransformInfo.Get(fnPipeNode) = &transformNode
+					}
 				}
 			}
 
-			// if there was a parent starting flow, we replace that with the last transformation
+			// if there was a parent starting value point, re replace that with a merge, and point last node to that merge
 			if newTrailingNode != nil && parentStartingNode.Has(node) {
 				parentStartingNodeIndex := *parentStartingNode.TryGet(node)
-				if parentStartingNodeIndex != nil {
-					for _, edgeIndex := range g.OutgoingEdges(*parentStartingNodeIndex) {
-						edge, _ := g.GetEdge(edgeIndex)
-						g.AddEdge(*newTrailingNode, edge.Target, edge.Data)
-						g.RemoveEdge(edgeIndex)
+				g.UpdateNode(*parentStartingNodeIndex, func(node ExecutionNode) ExecutionNode {
+					if node.Kind == ExecutionNodeKindValue {
+						node.Kind = ExecutionNodeKindLogicMerge
+						g.AddEdge(*newTrailingNode, *parentStartingNodeIndex, ExecutionLink{
+							Kind: ExecutionLinkKindConnect,
+						})
 					}
-					g.RemoveNode(*parentStartingNodeIndex)
-				}
+					return node
+				})
 			}
 			node.ForEachChild(walk)
 			return false

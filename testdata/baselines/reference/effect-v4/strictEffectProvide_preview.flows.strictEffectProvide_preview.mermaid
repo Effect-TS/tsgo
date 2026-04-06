@@ -1,0 +1,7 @@
+flowchart TB
+  0[/"type: Effect#lt;#123;#125;, never, never#gt;<br/>node: this.make"/]
+  1["type: Layer#lt;Config, never, never#gt;<br/>callee: Layer.effect<br/>args: #91;this#93;"]
+  2[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  3["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;Config.Default#93;"]
+  0 -->|"kind: dataLast"| 1
+  2 -->|"kind: pipeable"| 3

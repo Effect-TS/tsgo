@@ -317,7 +317,8 @@ func generatePipingFlowBaseline(
 	return sb.String()
 }
 
-// DoExecutionFlowBaseline generates a .flows.mermaid baseline for Effect tests.
+// DoExecutionFlowBaseline generates a .flows.txt index baseline and per-source
+// Mermaid baselines for Effect tests.
 func DoExecutionFlowBaseline(
 	t *testing.T,
 	baselineName string,
@@ -326,17 +327,28 @@ func DoExecutionFlowBaseline(
 	sourceFileGetter func(string) *ast.SourceFile,
 	subfolder string,
 ) {
-	content := generateExecutionFlowBaseline(c, inputFiles, sourceFileGetter)
-	runEffectBaseline(t, baselineName+".flows.mermaid", content, subfolder)
+	indexContent, mermaidFiles := generateExecutionFlowBaseline(c, baselineName, inputFiles, sourceFileGetter)
+	runEffectBaseline(t, baselineName+".flows.txt", indexContent, subfolder)
+	for _, mermaidFile := range mermaidFiles {
+		runEffectBaseline(t, mermaidFile.fileName, mermaidFile.content, subfolder)
+	}
+}
+
+type executionFlowMermaidBaseline struct {
+	fileName string
+	content  string
 }
 
 func generateExecutionFlowBaseline(
 	c *checker.Checker,
+	baselineName string,
 	inputFiles []*harnessutil.TestFile,
 	sourceFileGetter func(string) *ast.SourceFile,
-) string {
-	var sb strings.Builder
+) (string, []executionFlowMermaidBaseline) {
+	var index strings.Builder
 	tp := typeparser.NewTypeParser(c.Program(), c)
+	var mermaidFiles []executionFlowMermaidBaseline
+	usedNames := make(map[string]int)
 
 	for _, file := range inputFiles {
 		sf := sourceFileGetter(file.UnitName)
@@ -348,29 +360,68 @@ func generateExecutionFlowBaseline(
 		if flow == nil {
 			continue
 		}
-		sb.WriteString(flow.ToMermaid(graph.MermaidOptions[typeparser.ExecutionNode, typeparser.ExecutionLink]{
-			NodeLabel: func(node typeparser.ExecutionNode) string {
-				return formatExecutionFlowNodeLabel(c, sf, node)
-			},
-			EdgeLabel: func(edge typeparser.ExecutionLink) string {
-				return formatExecutionFlowEdgeLabel(sf, edge)
-			},
-		}))
-		sb.WriteString("\n")
+		fileName := nextExecutionFlowMermaidFileName(baselineName, sf.FileName(), usedNames)
+		mermaidFiles = append(mermaidFiles, executionFlowMermaidBaseline{
+			fileName: fileName,
+			content: flow.ToMermaid(graph.MermaidOptions[typeparser.ExecutionNode, typeparser.ExecutionLink]{
+				NodeLabel: func(node typeparser.ExecutionNode) string {
+					return formatExecutionFlowNodeLabel(c, sf, node)
+				},
+				NodeShape: func(node typeparser.ExecutionNode) (string, string) {
+					switch node.Kind {
+					case typeparser.ExecutionNodeKindLogicMerge:
+						return "(((", ")))"
+					case typeparser.ExecutionNodeKindValue:
+						return "[/", "/]"
+					}
+					return "[", "]"
+				},
+				EdgeLabel: func(edge typeparser.ExecutionLink) string {
+					return formatExecutionFlowEdgeLabel(sf, edge)
+				},
+			}),
+		})
+		index.WriteString(sf.FileName())
+		index.WriteString(" -> ")
+		index.WriteString(fileName)
+		index.WriteString("\n")
 	}
 
-	return sb.String()
+	return index.String(), mermaidFiles
+}
+
+func nextExecutionFlowMermaidFileName(baselineName string, sourceFileName string, usedNames map[string]int) string {
+	base := filepath.Base(sourceFileName)
+	ext := filepath.Ext(base)
+	base = strings.TrimSuffix(base, ext)
+	if base == "" {
+		base = "source"
+	}
+
+	count := usedNames[base]
+	usedNames[base] = count + 1
+	if count > 0 {
+		base = fmt.Sprintf("%s%d", base, count)
+	}
+
+	return fmt.Sprintf("%s.flows.%s.mermaid", baselineName, base)
 }
 
 func formatExecutionFlowNodeLabel(c *checker.Checker, sf *ast.SourceFile, node typeparser.ExecutionNode) string {
 	var lines []string
-	if node.Kind == typeparser.ExecutionNodeKindValue {
-		lines = append(lines, "node: "+formatExecutionSourceNode(sf, node.Node))
+	switch node.Kind {
+	case typeparser.ExecutionNodeKindValue:
 		lines = append(lines, "type: "+formatExecutionType(c, node.Type))
+		lines = append(lines, "node: "+formatExecutionSourceNode(sf, node.Node))
 		return strings.Join(lines, "\n")
+	case typeparser.ExecutionNodeKindLogicMerge:
+		lines = append(lines, "type: "+formatExecutionType(c, node.Type))
+		lines = append(lines, "node: "+formatExecutionSourceNode(sf, node.Node))
+		return strings.Join(lines, "\n")
+	default:
+		lines = append(lines, "type: "+formatExecutionType(c, node.Type))
+		lines = append(lines, "callee: "+formatExecutionSourceNode(sf, node.Callee))
 	}
-	lines = append(lines, "type: "+formatExecutionType(c, node.Type))
-	lines = append(lines, "callee: "+formatExecutionSourceNode(sf, node.Callee))
 
 	args := "[]"
 	if len(node.Args) > 0 {

@@ -333,7 +333,7 @@ func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) []*P
 				}
 
 				// Try single-arg call
-				if dataFirstResult := tp.ParseDataFirstCallAsPipeable(node); dataFirstResult != nil {
+				if dataFirstResult := tp.DataFirstOrLastCall(node); dataFirstResult != nil {
 					callOutType := tp.GetTypeAtLocation(node)
 					kind := TransformationKindDataFirst
 					if dataFirstResult.SubjectIndex != 0 {

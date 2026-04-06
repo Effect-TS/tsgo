@@ -1,0 +1,4 @@
+flowchart TB
+  0[/"type: Effect#lt;never, string, never#gt;<br/>node: Effect.fail#40;#quot;err#quot;#41;"/]
+  1["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.catchAll<br/>args: #91;#40;_e#41; =#gt; Effect.succeed#40;0#41;#93;"]
+  0 -->|"kind: dataFirst"| 1

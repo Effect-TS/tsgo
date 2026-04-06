@@ -1,0 +1,7 @@
+flowchart TB
+  0[/"type: Schedule#lt;Duration, unknown, never, never#gt;<br/>node: Schedule.exponential#40;Duration.millis#40;10#41;, 4#41;"/]
+  1["type: Schedule#lt;Duration, unknown, never, never#gt;<br/>callee: Schedule.while<br/>args: #91;_ =#gt; Duration.isLessThanOrEqualTo#40;Duration.seconds#40;10#41;#41;#40;_.duration#41;#93;"]
+  2[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;#quot;Hello#quot;#41;"/]
+  3["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.ensuring<br/>args: #91;Effect.log#40;#quot;World#quot;#41;#93;"]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: pipeable"| 3
