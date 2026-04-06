@@ -1,7 +1,19 @@
 flowchart TB
   0[/"type: Effect#lt;any, never, never#gt;<br/>node: Effect.succeed#40;input#41;"/]
-  1[/"type: Effect#lt;readonly #91;any, any#93;, never, never#gt;<br/>node: Effect.succeed#40;#91;a, b#93; as const#41;"/]
-  2[/"type: Effect#lt;any, never, never#gt;<br/>node: Effect.succeed#40;input#41;"/]
-  3[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;input.length#41;"/]
-  4[/"type: Effect#lt;string, never, never#gt;<br/>node: Effect.succeed#40;id#41;"/]
-  5[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;input.length#41;"/]
+  1((("type: Effect#lt;any, never, never#gt;<br/>node: #40;input#41; =#gt; Effect.succeed#40;input#41;")))
+  2[/"type: Effect#lt;readonly #91;any, any#93;, never, never#gt;<br/>node: Effect.succeed#40;#91;a, b#93; as const#41;"/]
+  3((("type: Effect#lt;readonly #91;any, any#93;, never, never#gt;<br/>node: #40;a, b#41; =#gt; Effect.succeed#40;#91;a, b#93; as const#41;")))
+  4[/"type: Effect#lt;any, never, never#gt;<br/>node: Effect.succeed#40;input#41;"/]
+  5((("type: Effect#lt;any, never, never#gt;<br/>node: #40;input#41; =#gt; Effect.succeed#40;input#41;")))
+  6[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;input.length#41;"/]
+  7((("type: Effect#lt;number, never, never#gt;<br/>node: #40;input#41; =#gt; Effect.succeed#40;input.length#41;")))
+  8[/"type: Effect#lt;string, never, never#gt;<br/>node: Effect.succeed#40;id#41;"/]
+  9((("type: Effect#lt;string, never, never#gt;<br/>node: #40;#123; id #125;#41; =#gt; Effect.succeed#40;id#41;")))
+  10[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;input.length#41;"/]
+  11((("type: Effect#lt;number, never, never#gt;<br/>node: #40;input#41; =#gt; Effect.succeed#40;input.length#41;")))
+  0 -->|"kind: return"| 1
+  2 -->|"kind: return"| 3
+  4 -->|"kind: return"| 5
+  6 -->|"kind: return"| 7
+  8 -->|"kind: return"| 9
+  10 -->|"kind: return"| 11

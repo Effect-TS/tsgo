@@ -153,10 +153,18 @@ func (tp *TypeParser) ExecutionFlow(sf *ast.SourceFile) *ExecutionFlow {
 				handled := false
 				if ast.IsExpressionNode(bodyNode) && fnCall.GeneratorFunction() == nil {
 					// we have an arrow function with an expression
-					lastNode = g.AddNode(ExecutionNode{
+					returnExprNode := g.AddNode(ExecutionNode{
 						Kind: ExecutionNodeKindValue,
 						Node: bodyNode,
 						Type: tp.GetTypeAtLocation(bodyNode),
+					})
+					lastNode = g.AddNode(ExecutionNode{
+						Kind: ExecutionNodeKindLogicMerge,
+						Node: fnCall.FunctionNode,
+						Type: tp.GetTypeAtLocation(bodyNode),
+					})
+					g.AddEdge(returnExprNode, lastNode, ExecutionLink{
+						Kind: ExecutionLinkKindReturn,
 					})
 					handled = true
 				} else if bodyNode.Kind == ast.KindBlock && fnCall.GeneratorFunction() == nil {
@@ -164,7 +172,7 @@ func (tp *TypeParser) ExecutionFlow(sf *ast.SourceFile) *ExecutionFlow {
 					lastNode = g.AddNode(ExecutionNode{
 						Kind: ExecutionNodeKindLogicMerge,
 						Node: fnCall.FunctionNode,
-						Type: nil, // TODO
+						Type: fnCall.FunctionReturnType,
 					})
 					ast.ForEachReturnStatement(bodyNode, func(node *ast.Node) bool {
 						if node.Kind == ast.KindReturnStatement {

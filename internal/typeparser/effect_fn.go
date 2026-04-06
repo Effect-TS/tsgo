@@ -16,14 +16,15 @@ const (
 
 // EffectFnCallResult represents a parsed Effect.fn-family call.
 type EffectFnCallResult struct {
-	Call            *ast.CallExpression
-	Variant         EffectFnVariant
-	EffectModule    *ast.Expression
-	OptionsNode     *ast.Node
-	FunctionNode    *ast.Node   // ArrowFunction or FunctionExpression
-	PipeArguments   []*ast.Node // Transformation args after the body (may be empty/nil)
-	PipeArgsOutType []*checker.Type
-	TraceExpression *ast.Node // The name string from curried Effect.fn("name")(...), or nil
+	Call               *ast.CallExpression
+	Variant            EffectFnVariant
+	EffectModule       *ast.Expression
+	OptionsNode        *ast.Node
+	FunctionNode       *ast.Node // ArrowFunction or FunctionExpression
+	FunctionReturnType *checker.Type
+	PipeArguments      []*ast.Node // Transformation args after the body (may be empty/nil)
+	PipeArgsOutType    []*checker.Type
+	TraceExpression    *ast.Node // The name string from curried Effect.fn("name")(...), or nil
 }
 
 func (r *EffectFnCallResult) IsGenerator() bool {
@@ -95,6 +96,22 @@ func isGeneratorFunctionNode(node *ast.Node) bool {
 	}
 	fn := node.AsFunctionExpression()
 	return fn != nil && fn.AsteriskToken != nil
+}
+
+func (tp *TypeParser) buildEffectFnFunctionReturnType(bodyArg *ast.Node) *checker.Type {
+	if tp == nil || tp.checker == nil || bodyArg == nil {
+		return nil
+	}
+
+	functionType := tp.GetTypeAtLocation(bodyArg)
+	if functionType == nil {
+		return nil
+	}
+	callSigs := tp.checker.GetSignaturesOfType(functionType, checker.SignatureKindCall)
+	if len(callSigs) == 0 {
+		return nil
+	}
+	return tp.checker.GetReturnTypeOfSignature(callSigs[0])
 }
 
 func (tp *TypeParser) buildEffectFnPipeArgsOutType(call *ast.CallExpression, trailingStartIndex int, pipeArgs []*ast.Node) []*checker.Type {
@@ -193,14 +210,15 @@ func (tp *TypeParser) EffectFnCall(node *ast.Node) *EffectFnCallResult {
 		}
 
 		return &EffectFnCallResult{
-			Call:            call,
-			Variant:         variant,
-			EffectModule:    propertyAccess.Expression,
-			OptionsNode:     optionsNode,
-			FunctionNode:    bodyArg,
-			PipeArguments:   pipeArgs,
-			PipeArgsOutType: tp.buildEffectFnPipeArgsOutType(call, trailingStartIndex, pipeArgs),
-			TraceExpression: traceExpression,
+			Call:               call,
+			Variant:            variant,
+			EffectModule:       propertyAccess.Expression,
+			OptionsNode:        optionsNode,
+			FunctionNode:       bodyArg,
+			FunctionReturnType: tp.buildEffectFnFunctionReturnType(bodyArg),
+			PipeArguments:      pipeArgs,
+			PipeArgsOutType:    tp.buildEffectFnPipeArgsOutType(call, trailingStartIndex, pipeArgs),
+			TraceExpression:    traceExpression,
 		}
 	})
 }
