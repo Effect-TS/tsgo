@@ -1834,6 +1834,11 @@
           "default": "warning",
           "description": "Detects interdependencies in Layer.mergeAll calls where one layer provides a service that another layer requires"
         },
+        "lazyPromiseInEffectSync": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "warning",
+          "description": "Warns when Effect.sync lazily returns a Promise instead of using an async Effect constructor"
+        },
         "leakingRequirements": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",

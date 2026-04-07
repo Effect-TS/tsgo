@@ -299,6 +299,10 @@
         "category": "Warning",
         "code": 377080
     },
+    "This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)": {
+        "category": "Warning",
+        "code": 377082
+    },
     "This code declares an async function, consider representing this async control flow with Effect values and `Effect.gen`. effect(asyncFunction)": {
         "category": "Warning",
         "code": 377081

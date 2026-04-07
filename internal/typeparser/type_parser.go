@@ -33,6 +33,7 @@ type EffectLinks struct {
 	EffectSchemaTypes    core.LinkStore[*checker.Type, *SchemaTypes]
 	IsScopeType          core.LinkStore[*checker.Type, bool]
 	IsPipeableType       core.LinkStore[*checker.Type, bool]
+	PromiseType          core.LinkStore[*checker.Type, *checker.Type]
 	IsGlobalErrorType    core.LinkStore[*checker.Type, bool]
 	IsYieldableErrorType core.LinkStore[*checker.Type, bool]
 

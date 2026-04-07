@@ -1,0 +1,15 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/lazyPromiseInEffectSync_preview.ts(5,36): warning TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
+
+
+==== /.src/lazyPromiseInEffectSync_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics lazyPromiseInEffectSync:warning
+    import { Effect } from "effect"
+    
+    export const preview = Effect.sync(() => Promise.resolve(1))
+                                       ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
+    
