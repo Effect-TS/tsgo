@@ -1,4 +1,4 @@
-==== /.src/globalConsole.ts (10 flows) ====
+==== /.src/globalConsole.ts (11 flows) ====
 
 === Piping Flow ===
 Location: 2:32 - 5:28
@@ -83,6 +83,20 @@ Transformations (1):
       callee: Effect.fn("consoleWarnInFn")
       args: (constant)
       outType: () => Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 22:31 - 22:60
+Node: Effect.fn("consoleWarnInFn")
+Node Kind: KindCallExpression
+
+Subject: "consoleWarnInFn"
+Subject Type: "consoleWarnInFn"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn
+      args: (constant)
+      outType: Gen & NonGen
 
 === Piping Flow ===
 Location: 22:74 - 23:26

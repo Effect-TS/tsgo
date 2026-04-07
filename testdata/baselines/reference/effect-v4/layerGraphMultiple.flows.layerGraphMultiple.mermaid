@@ -1,62 +1,146 @@
 flowchart TB
   0[/"type: Effect#lt;#123;#125;, never, never#gt;<br/>node: this.make"/]
   1["type: Layer#lt;Database, never, never#gt;<br/>callee: Layer.effect<br/>args: #91;this#93;"]
-  2[/"type: Effect#lt;#123;#125;, never, Database#gt;<br/>node: Database.asEffect#40;#41;"/]
-  3["type: Effect#lt;#123;#125;, never, Database#gt;<br/>callee: Effect.as<br/>args: #91;#123;#125;#93;"]
-  4[/"type: Effect#lt;#123;#125;, never, Database#gt;<br/>node: this.make"/]
-  5["type: Layer#lt;UserRepository, never, Database#gt;<br/>callee: Layer.effect<br/>args: #91;this#93;"]
-  6[/"type: Effect#lt;#123;#125;, never, Database#gt;<br/>node: Database.asEffect#40;#41;"/]
-  7["type: Effect#lt;#123;#125;, never, Database#gt;<br/>callee: Effect.as<br/>args: #91;#123;#125;#93;"]
+  2[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;S, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
+  3[/"type: typeof Database<br/>node: this"/]
+  4[/"type: Effect#lt;#123;#125;, never, Database#gt;<br/>node: Database.asEffect#40;#41;"/]
+  5["type: Effect#lt;#123;#125;, never, Database#gt;<br/>callee: Effect.as<br/>args: #91;#123;#125;#93;"]
+  6[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  7[/"type: #123;#125;<br/>node: #123;#125;"/]
   8[/"type: Effect#lt;#123;#125;, never, Database#gt;<br/>node: this.make"/]
-  9["type: Layer#lt;EventsRepository, never, Database#gt;<br/>callee: Layer.effect<br/>args: #91;this#93;"]
-  10[/"type: Effect#lt;#123;#125;, never, never#gt;<br/>node: this.make"/]
-  11["type: Layer#lt;Analytics, never, never#gt;<br/>callee: Layer.effect<br/>args: #91;this#93;"]
-  12((("type: Effect#lt;#123;#125;, never, Analytics #124; UserRepository#gt;<br/>node: Effect.andThen#40;UserRepository.asEffect#40;#41;, Analytics.asEffect#40;#41;#41;")))
-  13["type: Effect#lt;#123;#125;, never, Analytics #124; UserRepository#gt;<br/>callee: Effect.as<br/>args: #91;#123;#125;#93;"]
-  14[/"type: Effect#lt;#123;#125;, never, UserRepository#gt;<br/>node: UserRepository.asEffect#40;#41;"/]
-  15["type: Effect#lt;#123;#125;, never, Analytics #124; UserRepository#gt;<br/>callee: Effect.andThen<br/>args: #91;Analytics.asEffect#40;#41;#93;"]
-  16[/"type: Effect#lt;#123;#125;, never, Analytics #124; UserRepository#gt;<br/>node: this.make"/]
-  17["type: Layer#lt;UserService, never, Analytics #124; UserRepository#gt;<br/>callee: Layer.effect<br/>args: #91;this#93;"]
-  18((("type: Effect#lt;#123;#125;, never, Analytics #124; EventsRepository#gt;<br/>node: Effect.andThen#40;EventsRepository.asEffect#40;#41;, Analytics.asEffect#40;#41;#41;")))
-  19["type: Effect#lt;#123;#125;, never, Analytics #124; EventsRepository#gt;<br/>callee: Effect.as<br/>args: #91;#123;#125;#93;"]
-  20[/"type: Effect#lt;#123;#125;, never, EventsRepository#gt;<br/>node: EventsRepository.asEffect#40;#41;"/]
-  21["type: Effect#lt;#123;#125;, never, Analytics #124; EventsRepository#gt;<br/>callee: Effect.andThen<br/>args: #91;Analytics.asEffect#40;#41;#93;"]
-  22[/"type: Effect#lt;#123;#125;, never, Analytics #124; EventsRepository#gt;<br/>node: this.make"/]
-  23["type: Layer#lt;EventService, never, Analytics #124; EventsRepository#gt;<br/>callee: Layer.effect<br/>args: #91;this#93;"]
-  24((("type: Effect#lt;#123;#125;, never, EventService #124; UserService#gt;<br/>node: Effect.andThen#40;UserService.asEffect#40;#41;, EventService.asEffect#40;#41;#41;")))
-  25["type: Effect#lt;#123;#125;, never, EventService #124; UserService#gt;<br/>callee: Effect.as<br/>args: #91;#123;#125;#93;"]
-  26[/"type: Effect#lt;#123;#125;, never, UserService#gt;<br/>node: UserService.asEffect#40;#41;"/]
-  27["type: Effect#lt;#123;#125;, never, EventService #124; UserService#gt;<br/>callee: Effect.andThen<br/>args: #91;EventService.asEffect#40;#41;#93;"]
-  28[/"type: Effect#lt;#123;#125;, never, EventService #124; UserService#gt;<br/>node: this.make"/]
-  29["type: Layer#lt;AppService, never, EventService #124; UserService#gt;<br/>callee: Layer.effect<br/>args: #91;this#93;"]
-  30[/"type: Layer#lt;Database, never, never#gt;<br/>node: DatabaseLive"/]
-  31["type: Layer#lt;Database #124; UserRepository, never, Database#gt;<br/>callee: Layer.provideMerge<br/>args: #91;UserRepository.Default#93;"]
-  32["type: Layer#lt;Database #124; EventsRepository #124; UserRepository, never, Database#gt;<br/>callee: Layer.provideMerge<br/>args: #91;EventsRepository.Default#93;"]
-  33["type: Layer#lt;Analytics #124; Database #124; EventsRepository #124; UserRepository, never, Database#gt;<br/>callee: Layer.merge<br/>args: #91;Analytics.Default#93;"]
-  34["type: Layer#lt;Analytics #124; Database #124; EventsRepository #124; UserRepository #124; UserService, never, Analytics #124; Database #124; UserRepository#gt;<br/>callee: Layer.provideMerge<br/>args: #91;UserService.Default#93;"]
-  35["type: Layer#lt;Analytics #124; Database #124; EventService #124; EventsRepository #124; UserRepository #124; UserService, never, Analytics #124; Database #124; EventsRepository #124; UserRepository#gt;<br/>callee: Layer.provideMerge<br/>args: #91;EventService.Default#93;"]
-  36["type: Layer#lt;Analytics #124; AppService #124; Database #124; EventService #124; EventsRepository #124; UserRepository #124; UserService, never, Analytics #124; Database #124; EventService #124; EventsRepository #124; UserRepository #124; UserService#gt;<br/>callee: Layer.provideMerge<br/>args: #91;AppService.Default#93;"]
+  9["type: Layer#lt;UserRepository, never, Database#gt;<br/>callee: Layer.effect<br/>args: #91;this#93;"]
+  10[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;S, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
+  11[/"type: typeof UserRepository<br/>node: this"/]
+  12[/"type: Effect#lt;#123;#125;, never, Database#gt;<br/>node: Database.asEffect#40;#41;"/]
+  13["type: Effect#lt;#123;#125;, never, Database#gt;<br/>callee: Effect.as<br/>args: #91;#123;#125;#93;"]
+  14[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  15[/"type: #123;#125;<br/>node: #123;#125;"/]
+  16[/"type: Effect#lt;#123;#125;, never, Database#gt;<br/>node: this.make"/]
+  17["type: Layer#lt;EventsRepository, never, Database#gt;<br/>callee: Layer.effect<br/>args: #91;this#93;"]
+  18[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;S, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
+  19[/"type: typeof EventsRepository<br/>node: this"/]
+  20[/"type: Effect#lt;#123;#125;, never, never#gt;<br/>node: this.make"/]
+  21["type: Layer#lt;Analytics, never, never#gt;<br/>callee: Layer.effect<br/>args: #91;this#93;"]
+  22[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;S, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
+  23[/"type: typeof Analytics<br/>node: this"/]
+  24((("type: Effect#lt;#123;#125;, never, Analytics #124; UserRepository#gt;<br/>node: Effect.andThen#40;UserRepository.asEffect#40;#41;, Analytics.asEffect#40;#41;#41;")))
+  25["type: Effect#lt;#123;#125;, never, Analytics #124; UserRepository#gt;<br/>callee: Effect.as<br/>args: #91;#123;#125;#93;"]
+  26[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  27[/"type: #123;#125;<br/>node: #123;#125;"/]
+  28[/"type: Effect#lt;#123;#125;, never, UserRepository#gt;<br/>node: UserRepository.asEffect#40;#41;"/]
+  29["type: Effect#lt;#123;#125;, never, Analytics #124; UserRepository#gt;<br/>callee: Effect.andThen<br/>args: #91;Analytics.asEffect#40;#41;#93;"]
+  30[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  31[/"type: Effect#lt;#123;#125;, never, Analytics#gt;<br/>node: Analytics.asEffect#40;#41;"/]
+  32[/"type: Effect#lt;#123;#125;, never, Analytics #124; UserRepository#gt;<br/>node: this.make"/]
+  33["type: Layer#lt;UserService, never, Analytics #124; UserRepository#gt;<br/>callee: Layer.effect<br/>args: #91;this#93;"]
+  34[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;S, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
+  35[/"type: typeof UserService<br/>node: this"/]
+  36((("type: Effect#lt;#123;#125;, never, Analytics #124; EventsRepository#gt;<br/>node: Effect.andThen#40;EventsRepository.asEffect#40;#41;, Analytics.asEffect#40;#41;#41;")))
+  37["type: Effect#lt;#123;#125;, never, Analytics #124; EventsRepository#gt;<br/>callee: Effect.as<br/>args: #91;#123;#125;#93;"]
+  38[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  39[/"type: #123;#125;<br/>node: #123;#125;"/]
+  40[/"type: Effect#lt;#123;#125;, never, EventsRepository#gt;<br/>node: EventsRepository.asEffect#40;#41;"/]
+  41["type: Effect#lt;#123;#125;, never, Analytics #124; EventsRepository#gt;<br/>callee: Effect.andThen<br/>args: #91;Analytics.asEffect#40;#41;#93;"]
+  42[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  43[/"type: Effect#lt;#123;#125;, never, Analytics#gt;<br/>node: Analytics.asEffect#40;#41;"/]
+  44[/"type: Effect#lt;#123;#125;, never, Analytics #124; EventsRepository#gt;<br/>node: this.make"/]
+  45["type: Layer#lt;EventService, never, Analytics #124; EventsRepository#gt;<br/>callee: Layer.effect<br/>args: #91;this#93;"]
+  46[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;S, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
+  47[/"type: typeof EventService<br/>node: this"/]
+  48((("type: Effect#lt;#123;#125;, never, EventService #124; UserService#gt;<br/>node: Effect.andThen#40;UserService.asEffect#40;#41;, EventService.asEffect#40;#41;#41;")))
+  49["type: Effect#lt;#123;#125;, never, EventService #124; UserService#gt;<br/>callee: Effect.as<br/>args: #91;#123;#125;#93;"]
+  50[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  51[/"type: #123;#125;<br/>node: #123;#125;"/]
+  52[/"type: Effect#lt;#123;#125;, never, UserService#gt;<br/>node: UserService.asEffect#40;#41;"/]
+  53["type: Effect#lt;#123;#125;, never, EventService #124; UserService#gt;<br/>callee: Effect.andThen<br/>args: #91;EventService.asEffect#40;#41;#93;"]
+  54[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  55[/"type: Effect#lt;#123;#125;, never, EventService#gt;<br/>node: EventService.asEffect#40;#41;"/]
+  56[/"type: Effect#lt;#123;#125;, never, EventService #124; UserService#gt;<br/>node: this.make"/]
+  57["type: Layer#lt;AppService, never, EventService #124; UserService#gt;<br/>callee: Layer.effect<br/>args: #91;this#93;"]
+  58[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;S, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
+  59[/"type: typeof AppService<br/>node: this"/]
+  60[/"type: Layer#lt;Database, never, never#gt;<br/>node: DatabaseLive"/]
+  61["type: Layer#lt;Database #124; UserRepository, never, Database#gt;<br/>callee: Layer.provideMerge<br/>args: #91;UserRepository.Default#93;"]
+  62["type: Layer#lt;Database #124; EventsRepository #124; UserRepository, never, Database#gt;<br/>callee: Layer.provideMerge<br/>args: #91;EventsRepository.Default#93;"]
+  63["type: Layer#lt;Analytics #124; Database #124; EventsRepository #124; UserRepository, never, Database#gt;<br/>callee: Layer.merge<br/>args: #91;Analytics.Default#93;"]
+  64["type: Layer#lt;Analytics #124; Database #124; EventsRepository #124; UserRepository #124; UserService, never, Analytics #124; Database #124; UserRepository#gt;<br/>callee: Layer.provideMerge<br/>args: #91;UserService.Default#93;"]
+  65["type: Layer#lt;Analytics #124; Database #124; EventService #124; EventsRepository #124; UserRepository #124; UserService, never, Analytics #124; Database #124; EventsRepository #124; UserRepository#gt;<br/>callee: Layer.provideMerge<br/>args: #91;EventService.Default#93;"]
+  66["type: Layer#lt;Analytics #124; AppService #124; Database #124; EventService #124; EventsRepository #124; UserRepository #124; UserService, never, Analytics #124; Database #124; EventService #124; EventsRepository #124; UserRepository #124; UserService#gt;<br/>callee: Layer.provideMerge<br/>args: #91;AppService.Default#93;"]
+  67[/"type: #123; #lt;RIn, E, ROut#gt;#40;that: Layer#lt;ROut, E, RIn#gt;#41;: #lt;RIn2, E2, ROut2#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;#41; =#gt; Layer#lt;ROut #124; ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;const Layers extends #91;Any, ...Array#lt;Any#gt;#93;#gt;#40;that: Layers#41;: #lt;A, E, R#gt;#40;self: Layer#lt;A, E, R#gt;#41; =#gt; Layer#lt;A #124; Success#lt;Layers#91;number#93;#gt;, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;RIn2, E2, ROut2, RIn, E, ROut#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;, that: Layer#lt;ROut, E, RIn#gt;#41;: Layer#lt;ROut #124; ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;A, E, R, const Layers extends #91;Any, ...Array#lt;Any#gt;#93;#gt;#40;self: Layer#lt;A, E, R#gt;, that: Layers#41;: Layer#lt;A #124; Success#lt;Layers#91;number#93;#gt;, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #125;<br/>node: Layer.provideMerge"/]
+  68[/"type: Layer#lt;UserRepository, never, Database#gt;<br/>node: UserRepository.Default"/]
+  69[/"type: #123; #lt;RIn, E, ROut#gt;#40;that: Layer#lt;ROut, E, RIn#gt;#41;: #lt;RIn2, E2, ROut2#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;#41; =#gt; Layer#lt;ROut #124; ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;const Layers extends #91;Any, ...Array#lt;Any#gt;#93;#gt;#40;that: Layers#41;: #lt;A, E, R#gt;#40;self: Layer#lt;A, E, R#gt;#41; =#gt; Layer#lt;A #124; Success#lt;Layers#91;number#93;#gt;, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;RIn2, E2, ROut2, RIn, E, ROut#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;, that: Layer#lt;ROut, E, RIn#gt;#41;: Layer#lt;ROut #124; ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;A, E, R, const Layers extends #91;Any, ...Array#lt;Any#gt;#93;#gt;#40;self: Layer#lt;A, E, R#gt;, that: Layers#41;: Layer#lt;A #124; Success#lt;Layers#91;number#93;#gt;, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #125;<br/>node: Layer.provideMerge"/]
+  70[/"type: Layer#lt;EventsRepository, never, Database#gt;<br/>node: EventsRepository.Default"/]
+  71[/"type: #123; #lt;RIn, E, ROut#gt;#40;that: Layer#lt;ROut, E, RIn#gt;#41;: #lt;RIn2, E2, ROut2#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;#41; =#gt; Layer#lt;ROut #124; ROut2, E #124; E2, RIn #124; RIn2#gt;; #lt;const Layers extends #91;Any, ...Array#lt;Any#gt;#93;#gt;#40;that: Layers#41;: #lt;A, E, R#gt;#40;self: Layer#lt;A, E, R#gt;#41; =#gt; Layer#lt;A #124; Success#lt;Layers#91;number#93;#gt;, E #124; Error#lt;Layers#91;number#93;#gt;, R #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;RIn2, E2, ROut2, RIn, E, ROut#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;, that: Layer#lt;ROut, E, RIn#gt;#41;: Layer#lt;ROut #124; ROut2, E #124; E2, RIn #124; RIn2#gt;; #lt;A, E, R, const Layers extends #91;Any, ...Array#lt;Any#gt;#93;#gt;#40;self: Layer#lt;A, E, R#gt;, that: Layers#41;: Layer#lt;A #124; Success#lt;Layers#91;number#93;#gt;, E #124; Error#lt;Layers#91;number#93;#gt;, R #124; Services#lt;Layers#91;number#93;#gt;#gt;; #125;<br/>node: Layer.merge"/]
+  72[/"type: Layer#lt;Analytics, never, never#gt;<br/>node: Analytics.Default"/]
+  73[/"type: #123; #lt;RIn, E, ROut#gt;#40;that: Layer#lt;ROut, E, RIn#gt;#41;: #lt;RIn2, E2, ROut2#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;#41; =#gt; Layer#lt;ROut #124; ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;const Layers extends #91;Any, ...Array#lt;Any#gt;#93;#gt;#40;that: Layers#41;: #lt;A, E, R#gt;#40;self: Layer#lt;A, E, R#gt;#41; =#gt; Layer#lt;A #124; Success#lt;Layers#91;number#93;#gt;, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;RIn2, E2, ROut2, RIn, E, ROut#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;, that: Layer#lt;ROut, E, RIn#gt;#41;: Layer#lt;ROut #124; ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;A, E, R, const Layers extends #91;Any, ...Array#lt;Any#gt;#93;#gt;#40;self: Layer#lt;A, E, R#gt;, that: Layers#41;: Layer#lt;A #124; Success#lt;Layers#91;number#93;#gt;, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #125;<br/>node: Layer.provideMerge"/]
+  74[/"type: Layer#lt;UserService, never, Analytics #124; UserRepository#gt;<br/>node: UserService.Default"/]
+  75[/"type: #123; #lt;RIn, E, ROut#gt;#40;that: Layer#lt;ROut, E, RIn#gt;#41;: #lt;RIn2, E2, ROut2#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;#41; =#gt; Layer#lt;ROut #124; ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;const Layers extends #91;Any, ...Array#lt;Any#gt;#93;#gt;#40;that: Layers#41;: #lt;A, E, R#gt;#40;self: Layer#lt;A, E, R#gt;#41; =#gt; Layer#lt;A #124; Success#lt;Layers#91;number#93;#gt;, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;RIn2, E2, ROut2, RIn, E, ROut#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;, that: Layer#lt;ROut, E, RIn#gt;#41;: Layer#lt;ROut #124; ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;A, E, R, const Layers extends #91;Any, ...Array#lt;Any#gt;#93;#gt;#40;self: Layer#lt;A, E, R#gt;, that: Layers#41;: Layer#lt;A #124; Success#lt;Layers#91;number#93;#gt;, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #125;<br/>node: Layer.provideMerge"/]
+  76[/"type: Layer#lt;EventService, never, Analytics #124; EventsRepository#gt;<br/>node: EventService.Default"/]
+  77[/"type: #123; #lt;RIn, E, ROut#gt;#40;that: Layer#lt;ROut, E, RIn#gt;#41;: #lt;RIn2, E2, ROut2#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;#41; =#gt; Layer#lt;ROut #124; ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;const Layers extends #91;Any, ...Array#lt;Any#gt;#93;#gt;#40;that: Layers#41;: #lt;A, E, R#gt;#40;self: Layer#lt;A, E, R#gt;#41; =#gt; Layer#lt;A #124; Success#lt;Layers#91;number#93;#gt;, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;RIn2, E2, ROut2, RIn, E, ROut#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;, that: Layer#lt;ROut, E, RIn#gt;#41;: Layer#lt;ROut #124; ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;A, E, R, const Layers extends #91;Any, ...Array#lt;Any#gt;#93;#gt;#40;self: Layer#lt;A, E, R#gt;, that: Layers#41;: Layer#lt;A #124; Success#lt;Layers#91;number#93;#gt;, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #125;<br/>node: Layer.provideMerge"/]
+  78[/"type: Layer#lt;AppService, never, EventService #124; UserService#gt;<br/>node: AppService.Default"/]
   0 -->|"kind: dataLast"| 1
-  2 -->|"kind: dataFirst"| 3
-  4 -->|"kind: dataLast"| 5
-  6 -->|"kind: dataFirst"| 7
+  2 -->|"kind: transformCallee"| 1
+  3 -->|"kind: transformArg"| 1
+  4 -->|"kind: dataFirst"| 5
+  6 -->|"kind: transformCallee"| 5
+  7 -->|"kind: transformArg"| 5
   8 -->|"kind: dataLast"| 9
-  10 -->|"kind: dataLast"| 11
+  10 -->|"kind: transformCallee"| 9
+  11 -->|"kind: transformArg"| 9
   12 -->|"kind: dataFirst"| 13
-  14 -->|"kind: dataFirst"| 15
-  15 -->|"kind: connect"| 12
+  14 -->|"kind: transformCallee"| 13
+  15 -->|"kind: transformArg"| 13
   16 -->|"kind: dataLast"| 17
-  18 -->|"kind: dataFirst"| 19
-  20 -->|"kind: dataFirst"| 21
-  21 -->|"kind: connect"| 18
-  22 -->|"kind: dataLast"| 23
+  18 -->|"kind: transformCallee"| 17
+  19 -->|"kind: transformArg"| 17
+  20 -->|"kind: dataLast"| 21
+  22 -->|"kind: transformCallee"| 21
+  23 -->|"kind: transformArg"| 21
   24 -->|"kind: dataFirst"| 25
-  26 -->|"kind: dataFirst"| 27
-  27 -->|"kind: connect"| 24
-  28 -->|"kind: dataLast"| 29
-  30 -->|"kind: pipe"| 31
-  31 -->|"kind: pipe"| 32
-  32 -->|"kind: pipe"| 33
-  33 -->|"kind: pipe"| 34
-  34 -->|"kind: pipe"| 35
-  35 -->|"kind: pipe"| 36
+  26 -->|"kind: transformCallee"| 25
+  27 -->|"kind: transformArg"| 25
+  28 -->|"kind: dataFirst"| 29
+  30 -->|"kind: transformCallee"| 29
+  31 -->|"kind: transformArg"| 29
+  29 -->|"kind: connect"| 24
+  32 -->|"kind: dataLast"| 33
+  34 -->|"kind: transformCallee"| 33
+  35 -->|"kind: transformArg"| 33
+  36 -->|"kind: dataFirst"| 37
+  38 -->|"kind: transformCallee"| 37
+  39 -->|"kind: transformArg"| 37
+  40 -->|"kind: dataFirst"| 41
+  42 -->|"kind: transformCallee"| 41
+  43 -->|"kind: transformArg"| 41
+  41 -->|"kind: connect"| 36
+  44 -->|"kind: dataLast"| 45
+  46 -->|"kind: transformCallee"| 45
+  47 -->|"kind: transformArg"| 45
+  48 -->|"kind: dataFirst"| 49
+  50 -->|"kind: transformCallee"| 49
+  51 -->|"kind: transformArg"| 49
+  52 -->|"kind: dataFirst"| 53
+  54 -->|"kind: transformCallee"| 53
+  55 -->|"kind: transformArg"| 53
+  53 -->|"kind: connect"| 48
+  56 -->|"kind: dataLast"| 57
+  58 -->|"kind: transformCallee"| 57
+  59 -->|"kind: transformArg"| 57
+  60 -->|"kind: pipe"| 61
+  61 -->|"kind: pipe"| 62
+  62 -->|"kind: pipe"| 63
+  63 -->|"kind: pipe"| 64
+  64 -->|"kind: pipe"| 65
+  65 -->|"kind: pipe"| 66
+  67 -->|"kind: transformCallee"| 61
+  68 -->|"kind: transformArg"| 61
+  69 -->|"kind: transformCallee"| 62
+  70 -->|"kind: transformArg"| 62
+  71 -->|"kind: transformCallee"| 63
+  72 -->|"kind: transformArg"| 63
+  73 -->|"kind: transformCallee"| 64
+  74 -->|"kind: transformArg"| 64
+  75 -->|"kind: transformCallee"| 65
+  76 -->|"kind: transformArg"| 65
+  77 -->|"kind: transformCallee"| 66
+  78 -->|"kind: transformArg"| 66

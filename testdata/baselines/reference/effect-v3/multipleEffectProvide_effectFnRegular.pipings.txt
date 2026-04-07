@@ -1,4 +1,4 @@
-==== /.src/multipleEffectProvide_effectFnRegular.ts (3 flows) ====
+==== /.src/multipleEffectProvide_effectFnRegular.ts (11 flows) ====
 
 === Piping Flow ===
 Location: 17:43 - 21:2
@@ -19,6 +19,34 @@ Transformations (2):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
+Location: 18:21 - 19:37
+Node: Effect.provide(MyService1.Default)
+Node Kind: KindCallExpression
+
+Subject: MyService1.Default
+Subject Type: Layer<MyService1, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.provide
+      args: (constant)
+      outType: <A, E, R>(self: Effect<A, E, R>) => Effect<A, E, Exclude<R, MyService1>>
+
+=== Piping Flow ===
+Location: 19:38 - 20:37
+Node: Effect.provide(MyService2.Default)
+Node Kind: KindCallExpression
+
+Subject: MyService2.Default
+Subject Type: Layer<MyService2, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.provide
+      args: (constant)
+      outType: <A, E, R>(self: Effect<A, E, R>) => Effect<A, E, Exclude<R, MyService2>>
+
+=== Piping Flow ===
 Location: 23:49 - 27:2
 Node: Effect.fn("traced")(\n  () => Effect.void,\n  Effect.provide(MyService1.Default),\n  Effect.provide(MyService2.Default)\n)
 Node Kind: KindCallExpression
@@ -35,6 +63,48 @@ Transformations (2):
       callee: Effect.provide
       args: [MyService2.Default]
       outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 23:49 - 23:69
+Node: Effect.fn("traced")
+Node Kind: KindCallExpression
+
+Subject: "traced"
+Subject Type: "traced"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn
+      args: (constant)
+      outType: Gen & NonGen
+
+=== Piping Flow ===
+Location: 24:21 - 25:37
+Node: Effect.provide(MyService1.Default)
+Node Kind: KindCallExpression
+
+Subject: MyService1.Default
+Subject Type: Layer<MyService1, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.provide
+      args: (constant)
+      outType: <A, E, R>(self: Effect<A, E, R>) => Effect<A, E, Exclude<R, MyService1>>
+
+=== Piping Flow ===
+Location: 25:38 - 26:37
+Node: Effect.provide(MyService2.Default)
+Node Kind: KindCallExpression
+
+Subject: MyService2.Default
+Subject Type: Layer<MyService2, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.provide
+      args: (constant)
+      outType: <A, E, R>(self: Effect<A, E, R>) => Effect<A, E, Exclude<R, MyService2>>
 
 === Piping Flow ===
 Location: 29:48 - 34:2
@@ -57,3 +127,45 @@ Transformations (3):
       callee: Effect.provide
       args: [MyService3.Default]
       outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 30:21 - 31:37
+Node: Effect.provide(MyService1.Default)
+Node Kind: KindCallExpression
+
+Subject: MyService1.Default
+Subject Type: Layer<MyService1, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.provide
+      args: (constant)
+      outType: <A, E, R>(self: Effect<A, E, R>) => Effect<A, E, Exclude<R, MyService1>>
+
+=== Piping Flow ===
+Location: 31:38 - 32:37
+Node: Effect.provide(MyService2.Default)
+Node Kind: KindCallExpression
+
+Subject: MyService2.Default
+Subject Type: Layer<MyService2, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.provide
+      args: (constant)
+      outType: <A, E, R>(self: Effect<A, E, R>) => Effect<A, E, Exclude<R, MyService2>>
+
+=== Piping Flow ===
+Location: 32:38 - 33:37
+Node: Effect.provide(MyService3.Default)
+Node Kind: KindCallExpression
+
+Subject: MyService3.Default
+Subject Type: Layer<MyService3, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.provide
+      args: (constant)
+      outType: <A, E, R>(self: Effect<A, E, R>) => Effect<A, E, Exclude<R, MyService3>>

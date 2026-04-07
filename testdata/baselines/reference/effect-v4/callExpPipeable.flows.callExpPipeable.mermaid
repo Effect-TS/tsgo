@@ -1,1 +1,6 @@
 flowchart TB
+  0[["type: #40;x: string#41; =#gt; number<br/>node: #40;x: string#41; =#gt; x.length"]]
+  1[/"type: string<br/>node: x: string"/]
+  2[/"type: number<br/>node: x.length"/]
+  1 -->|"kind: parameter"| 0
+  2 -->|"kind: potentialReturn"| 0

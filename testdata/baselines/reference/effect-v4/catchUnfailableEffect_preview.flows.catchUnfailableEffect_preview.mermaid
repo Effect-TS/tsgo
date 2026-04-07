@@ -1,4 +1,10 @@
 flowchart TB
   0[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
   1["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.catch<br/>args: #91;#40;#41; =#gt; Effect.succeed#40;0#41;#93;"]
-  0 -->|"kind: pipeable"| 1
+  2((("type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;0#41;")))
+  3[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;0#41;"]]
+  4[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;0#41;"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformArg"| 1
+  4 -->|"kind: potentialReturn"| 3
+  3 -->|"kind: connect"| 2

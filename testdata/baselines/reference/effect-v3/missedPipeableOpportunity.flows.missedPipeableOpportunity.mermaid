@@ -1,27 +1,105 @@
 flowchart TB
-  0[/"type: Effect#lt;number, never, never#gt;<br/>node: e"/]
-  1["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n * 2#93;"]
-  2[/"type: Effect#lt;number, never, never#gt;<br/>node: e"/]
-  3["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;m#41; =#gt; m * n#93;"]
-  4[/"type: Effect#lt;number, never, never#gt;<br/>node: e"/]
-  5["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; String#40;n#41;#93;"]
+  0[["type: #40;n: number#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;n: number#41; =#gt; Effect.succeed#40;n + 1#41;"]]
+  1[/"type: number<br/>node: n: number"/]
+  2[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;n + 1#41;"/]
+  3[["type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;e: Effect.Effect#lt;number#gt;#41; =#gt; Effect.map#40;e, #40;n#41; =#gt; n * 2#41;"]]
+  4[/"type: Effect#lt;number, never, never#gt;<br/>node: e: Effect.Effect#lt;number#gt;"/]
+  5((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.map#40;e, #40;n#41; =#gt; n * 2#41;")))
   6[/"type: Effect#lt;number, never, never#gt;<br/>node: e"/]
-  7["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n * 3#93;"]
-  8[/"type: Effect#lt;number, never, never#gt;<br/>node: e"/]
-  9["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n + 100#93;"]
-  10[/"type: Effect#lt;number, never, never#gt;<br/>node: addOne#40;5#41;"/]
-  11["type: Effect#lt;number, never, never#gt;<br/>callee: double<br/>args: #91;#93;"]
-  12["type: Effect#lt;string, never, never#gt;<br/>callee: toString<br/>args: #91;#93;"]
-  13[/"type: Effect#lt;number, never, never#gt;<br/>node: addOne#40;5#41;"/]
-  14["type: Effect#lt;number, never, never#gt;<br/>callee: double<br/>args: #91;#93;"]
-  15[/"type: Effect#lt;number, never, never#gt;<br/>node: addOne#40;5#41;"/]
-  16["type: Effect#lt;number, never, never#gt;<br/>callee: multiplyBy<br/>args: #91;2#93;"]
-  0 -->|"kind: dataFirst"| 1
-  2 -->|"kind: dataFirst"| 3
-  4 -->|"kind: dataFirst"| 5
+  7["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n * 2#93;"]
+  8[["type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n * 2"]]
+  9[/"type: number<br/>node: n"/]
+  10[/"type: number<br/>node: n * 2"/]
+  11[["type: #40;n: number#41; =#gt; #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;n: number#41; =#gt; #40;e: Effect.Effect#lt;number#gt;#41; =#gt; Effect.map#40;e, #40;m#41; =#gt; m * n#41;"]]
+  12[/"type: number<br/>node: n: number"/]
+  13((("type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;e: Effect.Effect#lt;number#gt;#41; =#gt; Effect.map#40;e, #40;m#41; =#gt; m * n#41;")))
+  14[["type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;e: Effect.Effect#lt;number#gt;#41; =#gt; Effect.map#40;e, #40;m#41; =#gt; m * n#41;"]]
+  15[/"type: Effect#lt;number, never, never#gt;<br/>node: e: Effect.Effect#lt;number#gt;"/]
+  16((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.map#40;e, #40;m#41; =#gt; m * n#41;")))
+  17[/"type: Effect#lt;number, never, never#gt;<br/>node: e"/]
+  18["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;m#41; =#gt; m * n#93;"]
+  19[["type: #40;m: number#41; =#gt; number<br/>node: #40;m#41; =#gt; m * n"]]
+  20[/"type: number<br/>node: m"/]
+  21[/"type: number<br/>node: m * n"/]
+  22[["type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;e: Effect.Effect#lt;number#gt;#41; =#gt; Effect.map#40;e, #40;n#41; =#gt; String#40;n#41;#41;"]]
+  23[/"type: Effect#lt;number, never, never#gt;<br/>node: e: Effect.Effect#lt;number#gt;"/]
+  24((("type: Effect#lt;string, never, never#gt;<br/>node: Effect.map#40;e, #40;n#41; =#gt; String#40;n#41;#41;")))
+  25[/"type: Effect#lt;number, never, never#gt;<br/>node: e"/]
+  26["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; String#40;n#41;#93;"]
+  27[["type: #40;n: number#41; =#gt; string<br/>node: #40;n#41; =#gt; String#40;n#41;"]]
+  28[/"type: number<br/>node: n"/]
+  29[/"type: string<br/>node: String#40;n#41;"/]
+  30[["type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;e: Effect.Effect#lt;number#gt;#41; =#gt; Effect.map#40;e, #40;n#41; =#gt; n * 3#41;"]]
+  31[/"type: Effect#lt;number, never, never#gt;<br/>node: e: Effect.Effect#lt;number#gt;"/]
+  32((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.map#40;e, #40;n#41; =#gt; n * 3#41;")))
+  33[/"type: Effect#lt;number, never, never#gt;<br/>node: e"/]
+  34["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n * 3#93;"]
+  35[["type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n * 3"]]
+  36[/"type: number<br/>node: n"/]
+  37[/"type: number<br/>node: n * 3"/]
+  38[["type: #40;n: number#41; =#gt; number<br/>node: #40;n: number#41; =#gt; n + 1"]]
+  39[/"type: number<br/>node: n: number"/]
+  40[/"type: number<br/>node: n + 1"/]
+  41[["type: #40;n: number#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;n: number#41; =#gt; Effect.succeed#40;n#41;"]]
+  42[/"type: number<br/>node: n: number"/]
+  43[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;n#41;"/]
+  44[["type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;e: Effect.Effect#lt;number#gt;#41; =#gt; Effect.map#40;e, #40;n#41; =#gt; n + 100#41;"]]
+  45[/"type: Effect#lt;number, never, never#gt;<br/>node: e: Effect.Effect#lt;number#gt;"/]
+  46((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.map#40;e, #40;n#41; =#gt; n + 100#41;")))
+  47[/"type: Effect#lt;number, never, never#gt;<br/>node: e"/]
+  48["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n + 100#93;"]
+  49[["type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n + 100"]]
+  50[/"type: number<br/>node: n"/]
+  51[/"type: number<br/>node: n + 100"/]
+  52[/"type: Effect#lt;number, never, never#gt;<br/>node: addOne#40;5#41;"/]
+  53["type: Effect#lt;number, never, never#gt;<br/>callee: double<br/>args: #91;#93;"]
+  54["type: Effect#lt;string, never, never#gt;<br/>callee: toString<br/>args: #91;#93;"]
+  55[/"type: Effect#lt;number, never, never#gt;<br/>node: addOne#40;5#41;"/]
+  56["type: Effect#lt;number, never, never#gt;<br/>callee: double<br/>args: #91;#93;"]
+  57[/"type: Effect#lt;number, never, never#gt;<br/>node: addOne#40;5#41;"/]
+  58["type: Effect#lt;number, never, never#gt;<br/>callee: multiplyBy<br/>args: #91;2#93;"]
+  59[/"type: 2<br/>node: 2"/]
+  1 -->|"kind: parameter"| 0
+  2 -->|"kind: potentialReturn"| 0
+  4 -->|"kind: parameter"| 3
+  5 -->|"kind: potentialReturn"| 3
   6 -->|"kind: dataFirst"| 7
-  8 -->|"kind: dataFirst"| 9
-  10 -->|"kind: pipeable"| 11
-  11 -->|"kind: pipeable"| 12
-  13 -->|"kind: pipeable"| 14
-  15 -->|"kind: pipeable"| 16
+  7 -->|"kind: connect"| 5
+  9 -->|"kind: parameter"| 8
+  10 -->|"kind: potentialReturn"| 8
+  12 -->|"kind: parameter"| 11
+  13 -->|"kind: potentialReturn"| 11
+  15 -->|"kind: parameter"| 14
+  16 -->|"kind: potentialReturn"| 14
+  14 -->|"kind: connect"| 13
+  17 -->|"kind: dataFirst"| 18
+  18 -->|"kind: connect"| 16
+  20 -->|"kind: parameter"| 19
+  21 -->|"kind: potentialReturn"| 19
+  23 -->|"kind: parameter"| 22
+  24 -->|"kind: potentialReturn"| 22
+  25 -->|"kind: dataFirst"| 26
+  26 -->|"kind: connect"| 24
+  28 -->|"kind: parameter"| 27
+  29 -->|"kind: potentialReturn"| 27
+  31 -->|"kind: parameter"| 30
+  32 -->|"kind: potentialReturn"| 30
+  33 -->|"kind: dataFirst"| 34
+  34 -->|"kind: connect"| 32
+  36 -->|"kind: parameter"| 35
+  37 -->|"kind: potentialReturn"| 35
+  39 -->|"kind: parameter"| 38
+  40 -->|"kind: potentialReturn"| 38
+  42 -->|"kind: parameter"| 41
+  43 -->|"kind: potentialReturn"| 41
+  45 -->|"kind: parameter"| 44
+  46 -->|"kind: potentialReturn"| 44
+  47 -->|"kind: dataFirst"| 48
+  48 -->|"kind: connect"| 46
+  50 -->|"kind: parameter"| 49
+  51 -->|"kind: potentialReturn"| 49
+  52 -->|"kind: pipe"| 53
+  53 -->|"kind: pipe"| 54
+  55 -->|"kind: pipe"| 56
+  57 -->|"kind: pipe"| 58
+  59 -->|"kind: transformArg"| 58

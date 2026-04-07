@@ -1,7 +1,25 @@
 flowchart TB
-  0[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;42#41;"/]
-  1["type: Effect#lt;Response, MyError, never#gt;<br/>callee: Effect.tryMapPromise<br/>args: #91;#123;#92;n  try: #40;_#41; =#gt; fetch#40;#quot;http://something/#quot; + _#41;,#92;n  catch: #40;e#41; =#gt; new MyError#40;#123; cause: e #125;#41;#92;n#125;#93;"]
-  2[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;42#41;"/]
-  3["type: Effect#lt;Response, Error, never#gt;<br/>callee: Effect.tryMapPromise<br/>args: #91;#123;#92;n  try: #40;_#41; =#gt; fetch#40;#quot;http://something/#quot; + _#41;,#92;n  catch: #40;cause#41; =#gt; new Error#40;#quot;Hey#quot;, #123; cause #125;#41;#92;n#125;#93;"]
-  0 -->|"kind: pipeable"| 1
-  2 -->|"kind: pipeable"| 3
+  0["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>callee: <br/>args: #91;#93;"]
+  1["type: #40;e: unknown#41; =#gt; MyError<br/>callee: <br/>args: #91;#93;"]
+  2[/"type: unknown<br/>node: e"/]
+  3["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>callee: <br/>args: #91;#93;"]
+  4["type: #40;#41; =#gt; Error<br/>callee: <br/>args: #91;#93;"]
+  5[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;42#41;"/]
+  6["type: Effect#lt;Response, MyError, never#gt;<br/>callee: Effect.tryMapPromise<br/>args: #91;#123;#92;n  try: #40;_#41; =#gt; fetch#40;#quot;http://something/#quot; + _#41;,#92;n  catch: #40;e#41; =#gt; new MyError#40;#123; cause: e #125;#41;#92;n#125;#93;"]
+  7["type: #40;_: number#41; =#gt; Promise#lt;Response#gt;<br/>callee: <br/>args: #91;#93;"]
+  8[/"type: number<br/>node: _"/]
+  9["type: #40;e: unknown#41; =#gt; MyError<br/>callee: <br/>args: #91;#93;"]
+  10[/"type: unknown<br/>node: e"/]
+  11[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;42#41;"/]
+  12["type: Effect#lt;Response, Error, never#gt;<br/>callee: Effect.tryMapPromise<br/>args: #91;#123;#92;n  try: #40;_#41; =#gt; fetch#40;#quot;http://something/#quot; + _#41;,#92;n  catch: #40;cause#41; =#gt; new Error#40;#quot;Hey#quot;, #123; cause #125;#41;#92;n#125;#93;"]
+  13["type: #40;_: number#41; =#gt; Promise#lt;Response#gt;<br/>callee: <br/>args: #91;#93;"]
+  14[/"type: number<br/>node: _"/]
+  15["type: #40;cause: unknown#41; =#gt; Error<br/>callee: <br/>args: #91;#93;"]
+  16[/"type: unknown<br/>node: cause"/]
+  2 -->|"kind: parameter"| 1
+  5 -->|"kind: pipeable"| 6
+  8 -->|"kind: parameter"| 7
+  10 -->|"kind: parameter"| 9
+  11 -->|"kind: pipeable"| 12
+  14 -->|"kind: parameter"| 13
+  16 -->|"kind: parameter"| 15

@@ -1,1 +1,22 @@
 flowchart TB
+  0["type: #lt;T#gt;#40;value: T#41; =#gt; Effect#lt;T, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  1[/"type: T<br/>node: value: T"/]
+  2["type: #40;#41; =#gt; Generator#lt;YieldWrap#lt;Effect#lt;T, never, never#gt;#gt;, T, any#gt;<br/>callee: <br/>args: #91;#93;"]
+  3["type: #lt;T#gt;#40;value: T#41; =#gt; Effect#lt;T, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  4[/"type: T<br/>node: value: T"/]
+  5["type: #40;#41; =#gt; Generator#lt;YieldWrap#lt;Effect#lt;T, never, never#gt;#gt;, T, any#gt;<br/>callee: <br/>args: #91;#93;"]
+  6["type: #lt;T#gt;#40;value: T#41; =#gt; Effect#lt;T, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  7[/"type: T<br/>node: value: T"/]
+  8["type: #40;#41; =#gt; Generator#lt;YieldWrap#lt;Effect#lt;T, never, never#gt;#gt;, T, any#gt;<br/>callee: <br/>args: #91;#93;"]
+  9["type: #lt;T#gt;#40;value: T#41; =#gt; Effect#lt;T, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  10[/"type: T<br/>node: value: T"/]
+  11["type: #lt;T#gt;#40;value: T#41; =#gt; Effect#lt;T, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  12[/"type: T<br/>node: value: T"/]
+  13["type: #lt;T#gt;#40;value: T#41; =#gt; Effect#lt;T, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  14[/"type: T<br/>node: value: T"/]
+  1 -->|"kind: parameter"| 0
+  4 -->|"kind: parameter"| 3
+  7 -->|"kind: parameter"| 6
+  10 -->|"kind: parameter"| 9
+  12 -->|"kind: parameter"| 11
+  14 -->|"kind: parameter"| 13

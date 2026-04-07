@@ -1,1 +1,20 @@
 flowchart TB
+  0["type: #123; #40;a: number#41;: Effect#lt;number, never, never#gt;; #40;a: string#41;: Effect#lt;string, never, never#gt;; #125;<br/>callee: <br/>args: #91;#93;"]
+  1[/"type: number<br/>node: a: number"/]
+  2["type: #123; #40;a: number#41;: Effect#lt;number, never, never#gt;; #40;a: string#41;: Effect#lt;string, never, never#gt;; #125;<br/>callee: <br/>args: #91;#93;"]
+  3[/"type: string<br/>node: a: string"/]
+  4["type: #123; #40;a: number#41;: Effect#lt;number, never, never#gt;; #40;a: string#41;: Effect#lt;string, never, never#gt;; #125;<br/>callee: <br/>args: #91;#93;"]
+  5[/"type: string #124; number<br/>node: a: number #124; string"/]
+  6["type: #40;#41; =#gt; Generator#lt;Effect#lt;any, never, never#gt;, any, any#gt;<br/>callee: <br/>args: #91;#93;"]
+  7["type: #123; #40;a: number#41;: Effect#lt;number, never, never#gt;; #40;a: string#41;: Effect#lt;string, never, never#gt;; #125;<br/>callee: <br/>args: #91;#93;"]
+  8[/"type: number<br/>node: a: number"/]
+  9["type: #123; #40;a: number#41;: Effect#lt;number, never, never#gt;; #40;a: string#41;: Effect#lt;string, never, never#gt;; #125;<br/>callee: <br/>args: #91;#93;"]
+  10[/"type: string<br/>node: a: string"/]
+  11["type: #123; #40;a: number#41;: Effect#lt;number, never, never#gt;; #40;a: string#41;: Effect#lt;string, never, never#gt;; #125;<br/>callee: <br/>args: #91;#93;"]
+  12[/"type: string #124; number<br/>node: a: number #124; string"/]
+  1 -->|"kind: parameter"| 0
+  3 -->|"kind: parameter"| 2
+  5 -->|"kind: parameter"| 4
+  8 -->|"kind: parameter"| 7
+  10 -->|"kind: parameter"| 9
+  12 -->|"kind: parameter"| 11

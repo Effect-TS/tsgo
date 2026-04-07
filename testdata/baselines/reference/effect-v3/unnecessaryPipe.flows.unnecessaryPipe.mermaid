@@ -1,9 +1,24 @@
 flowchart TB
   0[/"type: Effect#lt;string, never, never#gt;<br/>node: Effect.succeed#40;#quot;Hello#quot;#41;"/]
   1["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x + #quot; World#quot;#93;"]
-  2[/"type: Effect#lt;string, never, never#gt;<br/>node: Effect.succeed#40;#quot;Hello#quot;#41;"/]
-  3["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x + #quot; World#quot;#93;"]
-  4[/"type: 32<br/>node: 32"/]
-  5[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;32#41;"/]
+  2[/"type: #40;x: string#41; =#gt; string<br/>node: #40;x#41; =#gt; x + #quot; World#quot;"/]
+  3[["type: #40;x: string#41; =#gt; string<br/>node: #40;x#41; =#gt; x + #quot; World#quot;"]]
+  4[/"type: string<br/>node: x"/]
+  5((("type: string<br/>node: x + #quot; World#quot;")))
+  6[/"type: Effect#lt;string, never, never#gt;<br/>node: Effect.succeed#40;#quot;Hello#quot;#41;"/]
+  7["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x + #quot; World#quot;#93;"]
+  8[/"type: #40;x: string#41; =#gt; string<br/>node: #40;x#41; =#gt; x + #quot; World#quot;"/]
+  9[["type: #40;x: string#41; =#gt; string<br/>node: #40;x#41; =#gt; x + #quot; World#quot;"]]
+  10[/"type: string<br/>node: x"/]
+  11[/"type: string<br/>node: x + #quot; World#quot;"/]
+  12[/"type: 32<br/>node: 32"/]
+  13[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;32#41;"/]
   0 -->|"kind: pipe"| 1
-  2 -->|"kind: pipeable"| 3
+  2 -->|"kind: transformArg"| 1
+  4 -->|"kind: parameter"| 3
+  5 -->|"kind: potentialReturn"| 3
+  6 -->|"kind: pipe"| 7
+  8 -->|"kind: transformArg"| 7
+  10 -->|"kind: parameter"| 9
+  11 -->|"kind: potentialReturn"| 9
+  9 -->|"kind: connect"| 5

@@ -770,18 +770,18 @@ func (g *Graph[N, E]) ToMermaid(options MermaidOptions[N, E]) string {
 	// Nodes in index order
 	for idx, data := range g.Nodes() {
 		label := escapeMermaidLabel(nodeLabel(data))
-		open, close := nodeShape(data)
-		lines = append(lines, fmt.Sprintf("  %d%s\"%s\"%s", idx, open, label, close))
+		open, closeShape := nodeShape(data)
+		lines = append(lines, fmt.Sprintf("  %d%s\"%s\"%s", idx, open, label, closeShape))
 	}
 
 	// Edges in index order
 	for _, edge := range g.Edges() {
 		label := escapeMermaidLabel(edgeLabel(edge.Data))
-		open, close := edgeShape(edge.Data)
+		open, closeShape := edgeShape(edge.Data)
 		if label != "" {
-			lines = append(lines, fmt.Sprintf("  %d %s|\"%s\"|%s %d", edge.Source, open, label, close, edge.Target))
+			lines = append(lines, fmt.Sprintf("  %d %s|\"%s\"|%s %d", edge.Source, open, label, closeShape, edge.Target))
 		} else {
-			lines = append(lines, fmt.Sprintf("  %d %s%s %d", edge.Source, open, close, edge.Target))
+			lines = append(lines, fmt.Sprintf("  %d %s%s %d", edge.Source, open, closeShape, edge.Target))
 		}
 	}
 

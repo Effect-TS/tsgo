@@ -1,4 +1,4 @@
-==== /.src/catchUnfailableEffect.ts (16 flows) ====
+==== /.src/catchUnfailableEffect.ts (26 flows) ====
 
 === Piping Flow ===
 Location: 5:28 - 7:2
@@ -19,6 +19,20 @@ Transformations (2):
       outType: Effect<void | number, never, never>
 
 === Piping Flow ===
+Location: 5:53 - 6:37
+Node: Effect.catchAll(() => Effect.void)
+Node Kind: KindCallExpression
+
+Subject: () => Effect.void
+Subject Type: () => Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.catchAll
+      args: (constant)
+      outType: <A, R>(self: Effect<A, never, R>) => Effect<void | A, never, R>
+
+=== Piping Flow ===
 Location: 9:31 - 11:2
 Node: Effect.fail("error").pipe(\n  Effect.catchAll(() => Effect.succeed(42))\n)
 Node Kind: KindCallExpression
@@ -35,6 +49,20 @@ Transformations (2):
       callee: Effect.catchAll
       args: [() => Effect.succeed(42)]
       outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 9:58 - 10:44
+Node: Effect.catchAll(() => Effect.succeed(42))
+Node Kind: KindCallExpression
+
+Subject: () => Effect.succeed(42)
+Subject Type: () => Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.catchAll
+      args: (constant)
+      outType: <A, R>(self: Effect<A, string, R>) => Effect<number | A, never, R>
 
 === Piping Flow ===
 Location: 10:24 - 10:43
@@ -69,6 +97,20 @@ Transformations (2):
       outType: Effect<void | number, never, never>
 
 === Piping Flow ===
+Location: 14:22 - 15:37
+Node: Effect.catchAll(() => Effect.void)
+Node Kind: KindCallExpression
+
+Subject: () => Effect.void
+Subject Type: () => Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.catchAll
+      args: (constant)
+      outType: <A, R>(self: Effect<A, never, R>) => Effect<void | A, never, R>
+
+=== Piping Flow ===
 Location: 18:35 - 21:2
 Node: pipe(\n  Effect.fail("error"),\n  Effect.catchAll(() => Effect.succeed(42)) // <- should not report here\n)
 Node Kind: KindCallExpression
@@ -85,6 +127,20 @@ Transformations (2):
       callee: Effect.catchAll
       args: [() => Effect.succeed(42)]
       outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 19:24 - 20:44
+Node: Effect.catchAll(() => Effect.succeed(42))
+Node Kind: KindCallExpression
+
+Subject: () => Effect.succeed(42)
+Subject Type: () => Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.catchAll
+      args: (constant)
+      outType: <A, R>(self: Effect<A, string, R>) => Effect<number | A, never, R>
 
 === Piping Flow ===
 Location: 20:24 - 20:43
@@ -123,6 +179,20 @@ Transformations (3):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
+Location: 23:62 - 24:45
+Node: Effect.flatMap(() => Effect.fail("error"))
+Node Kind: KindCallExpression
+
+Subject: () => Effect.fail("error")
+Subject Type: () => Effect<never, string, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.flatMap
+      args: (constant)
+      outType: <E, R>(self: Effect<number, E, R>) => Effect<never, string | E, R>
+
+=== Piping Flow ===
 Location: 24:23 - 24:44
 Node: Effect.fail("error")
 Node Kind: KindCallExpression
@@ -135,6 +205,20 @@ Transformations (1):
       callee: Effect.fail
       args: (constant)
       outType: Effect<never, string, never>
+
+=== Piping Flow ===
+Location: 24:46 - 25:44
+Node: Effect.catchAll(() => Effect.succeed(42))
+Node Kind: KindCallExpression
+
+Subject: () => Effect.succeed(42)
+Subject Type: () => Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.catchAll
+      args: (constant)
+      outType: <A, R>(self: Effect<A, string, R>) => Effect<number | A, never, R>
 
 === Piping Flow ===
 Location: 25:24 - 25:43
@@ -173,6 +257,20 @@ Transformations (3):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
+Location: 29:22 - 30:45
+Node: Effect.flatMap(() => Effect.fail("error"))
+Node Kind: KindCallExpression
+
+Subject: () => Effect.fail("error")
+Subject Type: () => Effect<never, string, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.flatMap
+      args: (constant)
+      outType: <E, R>(self: Effect<number, E, R>) => Effect<never, string | E, R>
+
+=== Piping Flow ===
 Location: 30:23 - 30:44
 Node: Effect.fail("error")
 Node Kind: KindCallExpression
@@ -185,6 +283,20 @@ Transformations (1):
       callee: Effect.fail
       args: (constant)
       outType: Effect<never, string, never>
+
+=== Piping Flow ===
+Location: 30:46 - 31:44
+Node: Effect.catchAll(() => Effect.succeed(42))
+Node Kind: KindCallExpression
+
+Subject: () => Effect.succeed(42)
+Subject Type: () => Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.catchAll
+      args: (constant)
+      outType: <A, R>(self: Effect<A, string, R>) => Effect<number | A, never, R>
 
 === Piping Flow ===
 Location: 31:24 - 31:43
@@ -221,6 +333,34 @@ Transformations (3):
       callee: Effect.catchAll
       args: [() => Effect.succeed(42)]
       outType: Effect<void | number, never, never>
+
+=== Piping Flow ===
+Location: 35:22 - 36:36
+Node: Effect.flatMap(() => Effect.void)
+Node Kind: KindCallExpression
+
+Subject: () => Effect.void
+Subject Type: () => Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.flatMap
+      args: (constant)
+      outType: <E, R>(self: Effect<number, E, R>) => Effect<void, E, R>
+
+=== Piping Flow ===
+Location: 36:37 - 37:44
+Node: Effect.catchAll(() => Effect.succeed(42))
+Node Kind: KindCallExpression
+
+Subject: () => Effect.succeed(42)
+Subject Type: () => Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.catchAll
+      args: (constant)
+      outType: <A, R>(self: Effect<A, never, R>) => Effect<number | A, never, R>
 
 === Piping Flow ===
 Location: 37:24 - 37:43

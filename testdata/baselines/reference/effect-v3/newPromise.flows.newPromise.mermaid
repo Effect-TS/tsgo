@@ -1,1 +1,30 @@
 flowchart TB
+  0[["type: #40;resolve: #40;value: number #124; PromiseLike#lt;number#gt;#41; =#gt; void#41; =#gt; void<br/>node: #40;resolve#41; =#gt; resolve#40;1#41;"]]
+  1[/"type: #40;value: number #124; PromiseLike#lt;number#gt;#41; =#gt; void<br/>node: resolve"/]
+  2[/"type: void<br/>node: resolve#40;1#41;"/]
+  3[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: #40;#41; =#gt; new Promise#lt;number#gt;#40;#40;resolve#41; =#gt; resolve#40;2#41;#41;"]]
+  4[/"type: Promise#lt;number#gt;<br/>node: new Promise#lt;number#gt;#40;#40;resolve#41; =#gt; resolve#40;2#41;#41;"/]
+  5[["type: #40;resolve: #40;value: number #124; PromiseLike#lt;number#gt;#41; =#gt; void#41; =#gt; void<br/>node: #40;resolve#41; =#gt; resolve#40;2#41;"]]
+  6[/"type: #40;value: number #124; PromiseLike#lt;number#gt;#41; =#gt; void<br/>node: resolve"/]
+  7[/"type: void<br/>node: resolve#40;2#41;"/]
+  8[["type: #40;resolve: #40;value: number #124; PromiseLike#lt;number#gt;#41; =#gt; void#41; =#gt; void<br/>node: #40;resolve#41; =#gt; resolve#40;3#41;"]]
+  9[/"type: #40;value: number #124; PromiseLike#lt;number#gt;#41; =#gt; void<br/>node: resolve"/]
+  10[/"type: void<br/>node: resolve#40;3#41;"/]
+  11[["type: #40;resolve: #40;value: number #124; PromiseLike#lt;number#gt;#41; =#gt; void#41; =#gt; void<br/>node: #40;resolve#41; =#gt; resolve#40;4#41;"]]
+  12[/"type: #40;value: number #124; PromiseLike#lt;number#gt;#41; =#gt; void<br/>node: resolve"/]
+  13[/"type: void<br/>node: resolve#40;4#41;"/]
+  14[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: #40;#41; =#gt; #123;#92;n  class Promise#lt;A#gt; #123;#92;n    constructor#40;readonly value: A#41; #123;#125;#92;n  #125;#92;n  return new Promise#40;5#41;#92;n#125;"]]
+  15[/"type: Promise#lt;number#gt;<br/>node: new Promise#40;5#41;"/]
+  16[["type: any<br/>node: constructor#40;readonly value: A#41; #123;#125;"]]
+  17[/"type: A<br/>node: readonly value: A"/]
+  1 -->|"kind: parameter"| 0
+  2 -->|"kind: potentialReturn"| 0
+  4 -->|"kind: potentialReturn"| 3
+  6 -->|"kind: parameter"| 5
+  7 -->|"kind: potentialReturn"| 5
+  9 -->|"kind: parameter"| 8
+  10 -->|"kind: potentialReturn"| 8
+  12 -->|"kind: parameter"| 11
+  13 -->|"kind: potentialReturn"| 11
+  15 -->|"kind: potentialReturn"| 14
+  17 -->|"kind: parameter"| 16

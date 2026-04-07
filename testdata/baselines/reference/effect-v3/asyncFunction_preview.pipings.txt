@@ -1,15 +1,1 @@
-==== /.src/asyncFunction_preview.ts (1 flows) ====
-
-=== Piping Flow ===
-Location: 5:8 - 5:27
-Node: Promise.resolve(1)
-Node Kind: KindCallExpression
-
-Subject: 1
-Subject Type: 1
-
-Transformations (1):
-  [0] kind: call
-      callee: Promise.resolve
-      args: (constant)
-      outType: Promise<number>
+==== /.src/asyncFunction_preview.ts (0 flows) ====

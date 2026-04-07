@@ -1,1 +1,6 @@
 flowchart TB
+  0[["type: #40;x: unknown#41; =#gt; x is PersonSchema<br/>node: #40;x: unknown#41; =#gt; x instanceof PersonSchema"]]
+  1[/"type: unknown<br/>node: x: unknown"/]
+  2[/"type: boolean<br/>node: x instanceof PersonSchema"/]
+  1 -->|"kind: parameter"| 0
+  2 -->|"kind: potentialReturn"| 0

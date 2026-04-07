@@ -1,4 +1,4 @@
-==== /.src/missedPipeableOpportunity.ts (17 flows) ====
+==== /.src/missedPipeableOpportunity.ts (18 flows) ====
 
 === Piping Flow ===
 Location: 5:30 - 5:52
@@ -283,6 +283,20 @@ Transformations (2):
       callee: multiplyBy
       args: [2]
       outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 32:48 - 32:61
+Node: multiplyBy(2)
+Node Kind: KindCallExpression
+
+Subject: 2
+Subject Type: 2
+
+Transformations (1):
+  [0] kind: call
+      callee: multiplyBy
+      args: (constant)
+      outType: (e: Effect<number, never, never>) => Effect<number, never, never>
 
 === Piping Flow ===
 Location: 35:28 - 35:67

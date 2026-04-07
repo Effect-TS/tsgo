@@ -1,4 +1,4 @@
-==== /.src/missingEffectContext_arrowReturnType.ts (3 flows) ====
+==== /.src/missingEffectContext_arrowReturnType.ts (6 flows) ====
 
 === Piping Flow ===
 Location: 9:9 - 9:62
@@ -19,6 +19,20 @@ Transformations (2):
       outType: Effect<A, E, Exclude<R, Scope>>
 
 === Piping Flow ===
+Location: 9:27 - 9:46
+Node: Effect.andThen(eff)
+Node Kind: KindCallExpression
+
+Subject: eff
+Subject Type: Effect<A, E, R>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.andThen
+      args: (constant)
+      outType: <A, E, R>(self: Effect<A, E, R>) => Effect<A, E | E, R | R>
+
+=== Piping Flow ===
 Location: 15:46 - 15:99
 Node: Effect.void.pipe(Effect.andThen(eff), Effect.scoped)
 Node Kind: KindCallExpression
@@ -37,6 +51,20 @@ Transformations (2):
       outType: Effect<A, E, Exclude<R, Scope>>
 
 === Piping Flow ===
+Location: 15:64 - 15:83
+Node: Effect.andThen(eff)
+Node Kind: KindCallExpression
+
+Subject: eff
+Subject Type: Effect<A, E, R>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.andThen
+      args: (constant)
+      outType: <A, E, R>(self: Effect<A, E, R>) => Effect<A, E | E, R | R>
+
+=== Piping Flow ===
 Location: 18:109 - 20:40
 Node: Effect.void.pipe(Effect.andThen(eff))
 Node Kind: KindCallExpression
@@ -49,3 +77,17 @@ Transformations (1):
       callee: Effect.andThen
       args: [eff]
       outType: Effect<A, E, R>
+
+=== Piping Flow ===
+Location: 20:20 - 20:39
+Node: Effect.andThen(eff)
+Node Kind: KindCallExpression
+
+Subject: eff
+Subject Type: Effect<A, E, R>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.andThen
+      args: (constant)
+      outType: <A, E, R>(self: Effect<A, E, R>) => Effect<A, E | E, R | R>

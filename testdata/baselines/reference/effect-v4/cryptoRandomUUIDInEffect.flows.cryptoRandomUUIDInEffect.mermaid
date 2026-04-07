@@ -1,1 +1,7 @@
 flowchart TB
+  0[["type: #40;#41; =#gt; `$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;`<br/>node: #40;#41; =#gt; crypto.randomUUID#40;#41;"]]
+  1[/"type: `$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;`<br/>node: crypto.randomUUID#40;#41;"/]
+  2[["type: #40;#41; =#gt; `$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;`<br/>node: #40;#41; =#gt; crypto.randomUUID#40;#41;"]]
+  3[/"type: `$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;`<br/>node: crypto.randomUUID#40;#41;"/]
+  1 -->|"kind: potentialReturn"| 0
+  3 -->|"kind: potentialReturn"| 2

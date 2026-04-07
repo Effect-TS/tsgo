@@ -1,1 +1,14 @@
 flowchart TB
+  0[["type: #40;_: string#41; =#gt; Effect#lt;#quot;test#quot;, never, never#gt;<br/>node: #40;_: string#41; =#gt; Effect.succeed#40;#quot;test#quot; as const#41;"]]
+  1[/"type: string<br/>node: _: string"/]
+  2[/"type: Effect#lt;#quot;test#quot;, never, never#gt;<br/>node: Effect.succeed#40;#quot;test#quot; as const#41;"/]
+  3[["type: #40;_: string#41; =#gt; Effect#lt;#quot;test#quot;, never, never#gt;<br/>node: #40;_: string#41; =#gt; Effect.succeed#40;#quot;test#quot; as const#41;"]]
+  4[/"type: string<br/>node: _: string"/]
+  5[/"type: Effect#lt;#quot;test#quot;, never, never#gt;<br/>node: Effect.succeed#40;#quot;test#quot; as const#41;"/]
+  6[["type: #40;#41; =#gt; #quot;test#quot;<br/>node: #40;#41; =#gt; #quot;test#quot; as const"]]
+  7[/"type: #quot;test#quot;<br/>node: #quot;test#quot; as const"/]
+  1 -->|"kind: parameter"| 0
+  2 -->|"kind: potentialReturn"| 0
+  4 -->|"kind: parameter"| 3
+  5 -->|"kind: potentialReturn"| 3
+  7 -->|"kind: potentialReturn"| 6

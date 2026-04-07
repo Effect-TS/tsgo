@@ -3,6 +3,12 @@ flowchart TB
   1["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.as<br/>args: #91;#quot;done#quot;#93;"]
   2[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
   3["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.asVoid<br/>args: #91;#93;"]
-  0 -->|"kind: pipeable"| 1
-  2 -->|"kind: pipeable"| 3
+  4[/"type: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;void, E, R#gt;<br/>node: Effect.asVoid"/]
+  5[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  6[/"type: #quot;done#quot;<br/>node: #quot;done#quot;"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: pipe"| 3
   3 -->|"kind: connect"| 0
+  4 -->|"kind: transformCallee"| 3
+  5 -->|"kind: transformCallee"| 1
+  6 -->|"kind: transformArg"| 1

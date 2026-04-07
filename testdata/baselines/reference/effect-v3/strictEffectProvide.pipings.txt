@@ -1,4 +1,4 @@
-==== /.src/strictEffectProvide.ts (8 flows) ====
+==== /.src/strictEffectProvide.ts (13 flows) ====
 
 === Piping Flow ===
 Location: 15:29 - 17:2
@@ -13,6 +13,20 @@ Transformations (1):
       callee: Effect.provide
       args: [MyService1.Default]
       outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 15:47 - 16:37
+Node: Effect.provide(MyService1.Default)
+Node Kind: KindCallExpression
+
+Subject: MyService1.Default
+Subject Type: Layer<MyService1, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.provide
+      args: (constant)
+      outType: <A, E, R>(self: Effect<A, E, R>) => Effect<A, E, Exclude<R, MyService1>>
 
 === Piping Flow ===
 Location: 20:29 - 20:77
@@ -51,6 +65,48 @@ Transformations (3):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
+Location: 23:47 - 24:23
+Node: Effect.map(() => 42)
+Node Kind: KindCallExpression
+
+Subject: () => 42
+Subject Type: () => number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.map
+      args: (constant)
+      outType: <E, R>(self: Effect<void, E, R>) => Effect<number, E, R>
+
+=== Piping Flow ===
+Location: 24:24 - 25:37
+Node: Effect.provide(MyService1.Default)
+Node Kind: KindCallExpression
+
+Subject: MyService1.Default
+Subject Type: Layer<MyService1, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.provide
+      args: (constant)
+      outType: <A, E, R>(self: Effect<A, E, R>) => Effect<A, E, Exclude<R, MyService1>>
+
+=== Piping Flow ===
+Location: 25:38 - 26:27
+Node: Effect.map((n) => n + 1)
+Node Kind: KindCallExpression
+
+Subject: (n) => n + 1
+Subject Type: (n: number) => number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.map
+      args: (constant)
+      outType: <E, R>(self: Effect<number, E, R>) => Effect<number, E, R>
+
+=== Piping Flow ===
 Location: 30:29 - 32:2
 Node: Effect.void.pipe(\n  Effect.provide(Layer.mergeAll(MyService1.Default, MyService2.Default))\n)
 Node Kind: KindCallExpression
@@ -63,6 +119,20 @@ Transformations (1):
       callee: Effect.provide
       args: [Layer.mergeAll(MyService1.Default, MyService2.Default)]
       outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 30:47 - 31:73
+Node: Effect.provide(Layer.mergeAll(MyService1.Default, MyService2.Default))
+Node Kind: KindCallExpression
+
+Subject: Layer.mergeAll(MyService1.Default, MyService2.Default)
+Subject Type: Layer<MyService1 | MyService2, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.provide
+      args: (constant)
+      outType: <A, E, R>(self: Effect<A, E, R>) => Effect<A, E, Exclude<R, MyService1 | MyService2>>
 
 === Piping Flow ===
 Location: 35:32 - 37:2

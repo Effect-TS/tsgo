@@ -1,1 +1,7 @@
 flowchart TB
+  0[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; Math.random#40;#41;"]]
+  1[/"type: number<br/>node: Math.random#40;#41;"/]
+  2[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; Math.random#40;#41;"]]
+  3[/"type: number<br/>node: Math.random#40;#41;"/]
+  1 -->|"kind: potentialReturn"| 0
+  3 -->|"kind: potentialReturn"| 2

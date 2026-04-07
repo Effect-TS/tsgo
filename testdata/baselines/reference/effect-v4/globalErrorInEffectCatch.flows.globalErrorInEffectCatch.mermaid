@@ -1,1 +1,15 @@
 flowchart TB
+  0[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;http://something#quot;#41;"]]
+  1[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;http://something#quot;#41;"/]
+  2[["type: #40;e: unknown#41; =#gt; MyError<br/>node: #40;e#41; =#gt; new MyError#40;#123; cause: e #125;#41;"]]
+  3[/"type: unknown<br/>node: e"/]
+  4[/"type: MyError<br/>node: new MyError#40;#123; cause: e #125;#41;"/]
+  5[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;http://something#quot;#41;"]]
+  6[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;http://something#quot;#41;"/]
+  7[["type: #40;#41; =#gt; Error<br/>node: #40;#41; =#gt; new Error#40;#quot;Unknown!#quot;#41;"]]
+  8[/"type: Error<br/>node: new Error#40;#quot;Unknown!#quot;#41;"/]
+  1 -->|"kind: potentialReturn"| 0
+  3 -->|"kind: parameter"| 2
+  4 -->|"kind: potentialReturn"| 2
+  6 -->|"kind: potentialReturn"| 5
+  8 -->|"kind: potentialReturn"| 7

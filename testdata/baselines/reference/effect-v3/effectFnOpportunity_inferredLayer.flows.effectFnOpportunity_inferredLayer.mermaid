@@ -1,4 +1,22 @@
 flowchart TB
-  0[/"type: Effect#lt;#123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.log#40;#quot;log#quot;#41;#92;n    // Log should be inferred with name MyService.log#92;n    return #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;#92;n#125;#41;"/]
-  1["type: Layer#lt;MyService, never, never#gt;<br/>callee: Layer.effect<br/>args: #91;MyService#93;"]
-  0 -->|"kind: dataLast"| 1
+  0["type: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  1[/"type: string<br/>node: what: string"/]
+  2["type: #40;#41; =#gt; Generator#lt;YieldWrap#lt;Effect#lt;void, never, never#gt;#gt;, #123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;, any#gt;<br/>callee: <br/>args: #91;#93;"]
+  3["type: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  4[/"type: string<br/>node: what: string"/]
+  5[/"type: Effect#lt;#123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.log#40;#quot;log#quot;#41;#92;n    // Log should be inferred with name MyService.log#92;n    return #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;#92;n#125;#41;"/]
+  6["type: Layer#lt;MyService, never, never#gt;<br/>callee: Layer.effect<br/>args: #91;MyService#93;"]
+  7["type: #40;#41; =#gt; Generator#lt;YieldWrap#lt;Effect#lt;void, never, never#gt;#gt;, #123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;, any#gt;<br/>callee: <br/>args: #91;#93;"]
+  8["type: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  9[/"type: string<br/>node: what: string"/]
+  10["type: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  11[/"type: string<br/>node: what: string"/]
+  12["type: #40;#41; =#gt; #123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>callee: <br/>args: #91;#93;"]
+  13["type: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  14[/"type: string<br/>node: what: string"/]
+  1 -->|"kind: parameter"| 0
+  4 -->|"kind: parameter"| 3
+  5 -->|"kind: dataLast"| 6
+  9 -->|"kind: parameter"| 8
+  11 -->|"kind: parameter"| 10
+  14 -->|"kind: parameter"| 13

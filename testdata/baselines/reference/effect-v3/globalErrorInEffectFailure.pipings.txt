@@ -1,4 +1,4 @@
-==== /.src/globalErrorInEffectFailure.ts (13 flows) ====
+==== /.src/globalErrorInEffectFailure.ts (15 flows) ====
 
 === Piping Flow ===
 Location: 4:26 - 4:58
@@ -159,6 +159,20 @@ Transformations (2):
       outType: Effect<never, Error, never>
 
 === Piping Flow ===
+Location: 37:55 - 38:70
+Node: Effect.flatMap(() => Effect.fail(new Error("global error in map")))
+Node Kind: KindCallExpression
+
+Subject: () => Effect.fail(new Error("global error in map"))
+Subject Type: () => Effect<never, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.flatMap
+      args: (constant)
+      outType: <E, R>(self: Effect<number, E, R>) => Effect<never, E | Error, R>
+
+=== Piping Flow ===
 Location: 38:23 - 38:69
 Node: Effect.fail(new Error("global error in map"))
 Node Kind: KindCallExpression
@@ -189,3 +203,17 @@ Transformations (2):
       callee: Effect.mapError
       args: [() => new Error("mapped to global error")]
       outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 47:73 - 48:61
+Node: Effect.mapError(() => new Error("mapped to global error"))
+Node Kind: KindCallExpression
+
+Subject: () => new Error("mapped to global error")
+Subject Type: () => Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.mapError
+      args: (constant)
+      outType: <A, R>(self: Effect<A, CustomError, R>) => Effect<A, Error, R>

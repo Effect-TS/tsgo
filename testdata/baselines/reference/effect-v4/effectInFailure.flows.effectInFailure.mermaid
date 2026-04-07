@@ -1,1 +1,33 @@
 flowchart TB
+  0[["type: #40;#41; =#gt; any<br/>node: #40;#41; =#gt; JSON.parse#40;#quot;#123;#quot;#41;"]]
+  1[/"type: any<br/>node: JSON.parse#40;#quot;#123;#quot;#41;"/]
+  2[["type: #40;e: unknown#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;e#41; =#gt; Effect.log#40;e#41;"]]
+  3[/"type: unknown<br/>node: e"/]
+  4[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;e#41;"/]
+  5[["type: #40;#41; =#gt; any<br/>node: #40;#41; =#gt; JSON.parse#40;#quot;#123;#quot;#41;"]]
+  6[/"type: any<br/>node: JSON.parse#40;#quot;#123;#quot;#41;"/]
+  7[["type: #40;e: unknown#41; =#gt; JsonParseError<br/>node: #40;e#41; =#gt; new JsonParseError#40;#123; cause: e #125;#41;"]]
+  8[/"type: unknown<br/>node: e"/]
+  9[/"type: JsonParseError<br/>node: new JsonParseError#40;#123; cause: e #125;#41;"/]
+  10[["type: #40;#41; =#gt; any<br/>node: #40;#41; =#gt; JSON.parse#40;#quot;#123;#quot;#41;"]]
+  11[/"type: any<br/>node: JSON.parse#40;#quot;#123;#quot;#41;"/]
+  12[["type: #40;e: unknown#41; =#gt; Effect#lt;any, Effect#lt;void, never, never#gt;, never#gt;<br/>node: #40;e#41; =#gt;#92;n    Effect.try#40;#123;#92;n      try: #40;#41; =#gt; JSON.parse#40;String#40;e#41;#41;,#92;n      catch: #40;innerError#41; =#gt; Effect.log#40;innerError#41;#92;n    #125;#41;"]]
+  13[/"type: unknown<br/>node: e"/]
+  14[/"type: Effect#lt;any, Effect#lt;void, never, never#gt;, never#gt;<br/>node: Effect.try#40;#123;#92;n      try: #40;#41; =#gt; JSON.parse#40;String#40;e#41;#41;,#92;n      catch: #40;innerError#41; =#gt; Effect.log#40;innerError#41;#92;n    #125;#41;"/]
+  15[["type: #40;#41; =#gt; any<br/>node: #40;#41; =#gt; JSON.parse#40;String#40;e#41;#41;"]]
+  16[/"type: any<br/>node: JSON.parse#40;String#40;e#41;#41;"/]
+  17[["type: #40;innerError: unknown#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;innerError#41; =#gt; Effect.log#40;innerError#41;"]]
+  18[/"type: unknown<br/>node: innerError"/]
+  19[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;innerError#41;"/]
+  1 -->|"kind: potentialReturn"| 0
+  3 -->|"kind: parameter"| 2
+  4 -->|"kind: potentialReturn"| 2
+  6 -->|"kind: potentialReturn"| 5
+  8 -->|"kind: parameter"| 7
+  9 -->|"kind: potentialReturn"| 7
+  11 -->|"kind: potentialReturn"| 10
+  13 -->|"kind: parameter"| 12
+  14 -->|"kind: potentialReturn"| 12
+  16 -->|"kind: potentialReturn"| 15
+  18 -->|"kind: parameter"| 17
+  19 -->|"kind: potentialReturn"| 17

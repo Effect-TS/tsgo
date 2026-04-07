@@ -1,1 +1,11 @@
 flowchart TB
+  0[["type: #40;effect: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: function testFn#40;effect: Effect.Effect#lt;number#gt;#41; #123;#92;n  return effect#92;n#125;"]]
+  1[/"type: Effect#lt;number, never, never#gt;<br/>node: effect: Effect.Effect#lt;number#gt;"/]
+  2[/"type: Effect#lt;number, never, never#gt;<br/>node: effect"/]
+  3[["type: #40;effect: Effect#lt;number, ErrorA #124; ErrorB, never#gt;#41; =#gt; Effect#lt;number, ErrorA #124; ErrorB, never#gt;<br/>node: function testFnWithServiceAB#40;effect: Effect.Effect#lt;number, ErrorA #124; ErrorB#gt;#41; #123;#92;n  return effect#92;n#125;"]]
+  4[/"type: Effect#lt;number, ErrorA #124; ErrorB, never#gt;<br/>node: effect: Effect.Effect#lt;number, ErrorA #124; ErrorB#gt;"/]
+  5[/"type: Effect#lt;number, ErrorA #124; ErrorB, never#gt;<br/>node: effect"/]
+  1 -->|"kind: parameter"| 0
+  2 -->|"kind: potentialReturn"| 0
+  4 -->|"kind: parameter"| 3
+  5 -->|"kind: potentialReturn"| 3

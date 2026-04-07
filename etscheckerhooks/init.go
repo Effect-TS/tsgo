@@ -75,6 +75,10 @@ func afterCheckSourceFile(ctx context.Context, program checker.Program, c *check
 		return
 	}
 
+	// Warm the execution-flow cache once per source file so rules that consult it
+	// do not each pay the traversal cost independently.
+	tp.ExecutionFlow(sf)
+
 	// Collect directives from source file for suppression support
 	sourceText := sf.Text()
 	effectDirectives := directives.CollectEffectDirectives(sourceText)

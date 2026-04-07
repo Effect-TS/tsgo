@@ -1,1 +1,7 @@
 flowchart TB
+  0["type: #40;identifier: string#41; =#gt; #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, string, Shape#gt;<br/>callee: <br/>args: #91;#93;"]
+  1[/"type: string<br/>node: identifier: string"/]
+  2["type: #40;req: #123; id: number; #125;#41; =#gt; string<br/>callee: <br/>args: #91;#93;"]
+  3[/"type: #123; id: number; #125;<br/>node: req"/]
+  1 -->|"kind: parameter"| 0
+  3 -->|"kind: parameter"| 2

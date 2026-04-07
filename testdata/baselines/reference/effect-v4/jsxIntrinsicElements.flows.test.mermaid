@@ -1,1 +1,7 @@
 flowchart TB
+  0[["type: #40;#41; =#gt; Element<br/>node: #40;#41; =#gt; #lt;div#gt;Hello#lt;/div#gt;"]]
+  1[/"type: Element<br/>node: #lt;div#gt;Hello#lt;/div#gt;"/]
+  2[["type: #40;#41; =#gt; Element<br/>node: #40;#41; =#gt; #40;#92;n  #lt;div#gt;#92;n    #lt;span#gt;World#lt;/span#gt;#92;n  #lt;/div#gt;#92;n#41;"]]
+  3[/"type: Element<br/>node: #40;#92;n  #lt;div#gt;#92;n    #lt;span#gt;World#lt;/span#gt;#92;n  #lt;/div#gt;#92;n#41;"/]
+  1 -->|"kind: potentialReturn"| 0
+  3 -->|"kind: potentialReturn"| 2

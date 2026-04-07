@@ -1,7 +1,25 @@
 flowchart TB
-  0[/"type: Effect#lt;A, E, R#gt;<br/>node: evaluate#40;#41;"/]
-  1["type: Effect#lt;A, E, R#gt;<br/>callee: Effect.onExit<br/>args: #91;#40;#41; =#gt; Effect.void#93;"]
-  2[/"type: Effect#lt;A, E, R #124; ServiceA#gt;<br/>node: evaluate#40;#41;"/]
-  3["type: Effect#lt;A, E, R #124; ServiceA#gt;<br/>callee: Effect.onExit<br/>args: #91;#40;#41; =#gt; Effect.void#93;"]
-  0 -->|"kind: dataFirst"| 1
-  2 -->|"kind: dataFirst"| 3
+  0[["type: #lt;A, E, R#gt;#40;evaluate: #40;#41; =#gt; Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R#gt;<br/>node: #lt;A, E, R#gt;#40;...args: #91;evaluate: #40;#41; =#gt; Effect.Effect#lt;A, E, R#gt;#93;#41;: Effect.Effect#lt;A, E, R#gt; =#gt; #123;#92;n  const evaluate: #40;#41; =#gt; Effect.Effect#lt;A, E, R#gt; = args#91;args.length - 1#93;#92;n  return Effect.onExit#40;evaluate#40;#41;, #40;#41; =#gt; Effect.void#41;#92;n#125;"]]
+  1[/"type: #91;evaluate: #40;#41; =#gt; Effect#lt;A, E, R#gt;#93;<br/>node: ...args: #91;evaluate: #40;#41; =#gt; Effect.Effect#lt;A, E, R#gt;#93;"/]
+  2((("type: Effect#lt;A, E, R#gt;<br/>node: Effect.onExit#40;evaluate#40;#41;, #40;#41; =#gt; Effect.void#41;")))
+  3[/"type: Effect#lt;A, E, R#gt;<br/>node: evaluate#40;#41;"/]
+  4["type: Effect#lt;A, E, R#gt;<br/>callee: Effect.onExit<br/>args: #91;#40;#41; =#gt; Effect.void#93;"]
+  5[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  6[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  7[["type: #lt;A, E, R#gt;#40;evaluate: #40;#41; =#gt; Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R#gt;<br/>node: #lt;A, E, R#gt;#40;...args: #91;evaluate: #40;#41; =#gt; Effect.Effect#lt;A, E, R#gt;#93;#41;: Effect.Effect#lt;A, E, R#gt; =#gt; #123;#92;n  const evaluate: #40;#41; =#gt; Effect.Effect#lt;A, E, R #124; ServiceA#gt; = args#91;args.length - 1#93;#92;n  // @ts-expect-error#92;n  return Effect.onExit#40;evaluate#40;#41;, #40;#41; =#gt; Effect.void#41;#92;n#125;"]]
+  8[/"type: #91;evaluate: #40;#41; =#gt; Effect#lt;A, E, R#gt;#93;<br/>node: ...args: #91;evaluate: #40;#41; =#gt; Effect.Effect#lt;A, E, R#gt;#93;"/]
+  9((("type: Effect#lt;A, E, R #124; ServiceA#gt;<br/>node: Effect.onExit#40;evaluate#40;#41;, #40;#41; =#gt; Effect.void#41;")))
+  10[/"type: Effect#lt;A, E, R #124; ServiceA#gt;<br/>node: evaluate#40;#41;"/]
+  11["type: Effect#lt;A, E, R #124; ServiceA#gt;<br/>callee: Effect.onExit<br/>args: #91;#40;#41; =#gt; Effect.void#93;"]
+  12[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  13[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  1 -->|"kind: parameter"| 0
+  2 -->|"kind: potentialReturn"| 0
+  3 -->|"kind: dataFirst"| 4
+  4 -->|"kind: connect"| 2
+  6 -->|"kind: potentialReturn"| 5
+  8 -->|"kind: parameter"| 7
+  9 -->|"kind: potentialReturn"| 7
+  10 -->|"kind: dataFirst"| 11
+  11 -->|"kind: connect"| 9
+  13 -->|"kind: potentialReturn"| 12

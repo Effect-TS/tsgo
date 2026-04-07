@@ -1,4 +1,4 @@
-==== /.src/effectFnIife.ts (22 flows) ====
+==== /.src/effectFnIife.ts (31 flows) ====
 
 === Piping Flow ===
 Location: 5:21 - 7:3
@@ -13,6 +13,20 @@ Transformations (1):
       callee: Effect.fn("test")
       args: (constant)
       outType: () => Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 5:21 - 5:39
+Node: Effect.fn("test")
+Node Kind: KindCallExpression
+
+Subject: "test"
+Subject Type: "test"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn
+      args: (constant)
+      outType: Gen & NonGen
 
 === Piping Flow ===
 Location: 6:9 - 6:27
@@ -41,6 +55,20 @@ Transformations (1):
       callee: Effect.fn("named")
       args: (constant)
       outType: () => Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 10:21 - 10:40
+Node: Effect.fn("named")
+Node Kind: KindCallExpression
+
+Subject: "named"
+Subject Type: "named"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn
+      args: (constant)
+      outType: Gen & NonGen
 
 === Piping Flow ===
 Location: 11:9 - 11:27
@@ -99,6 +127,20 @@ Transformations (1):
       outType: () => Effect<number, never, never>
 
 === Piping Flow ===
+Location: 21:21 - 21:40
+Node: Effect.fn("arrow")
+Node Kind: KindCallExpression
+
+Subject: "arrow"
+Subject Type: "arrow"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn
+      args: (constant)
+      outType: Gen & NonGen
+
+=== Piping Flow ===
 Location: 21:46 - 21:64
 Node: Effect.succeed(1)
 Node Kind: KindCallExpression
@@ -125,6 +167,20 @@ Transformations (1):
       callee: Effect.fn("func")
       args: (constant)
       outType: () => Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 24:21 - 24:39
+Node: Effect.fn("func")
+Node Kind: KindCallExpression
+
+Subject: "func"
+Subject Type: "func"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn
+      args: (constant)
+      outType: Gen & NonGen
 
 === Piping Flow ===
 Location: 25:9 - 25:27
@@ -155,6 +211,20 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
+Location: 29:21 - 29:40
+Node: Effect.fn("piped")
+Node Kind: KindCallExpression
+
+Subject: "piped"
+Subject Type: "piped"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn
+      args: (constant)
+      outType: Gen & NonGen
+
+=== Piping Flow ===
 Location: 30:16 - 30:34
 Node: Effect.succeed(1)
 Node Kind: KindCallExpression
@@ -167,6 +237,20 @@ Transformations (1):
       callee: Effect.succeed
       args: (constant)
       outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 31:3 - 31:28
+Node: Effect.map((n) => n + 1)
+Node Kind: KindCallExpression
+
+Subject: (n) => n + 1
+Subject Type: (n: number) => number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.map
+      args: (constant)
+      outType: <E, R>(self: Effect<number, E, R>) => Effect<number, E, R>
 
 === Piping Flow ===
 Location: 34:21 - 36:29
@@ -197,6 +281,20 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
+Location: 36:3 - 36:28
+Node: Effect.map((n) => n + 1)
+Node Kind: KindCallExpression
+
+Subject: (n) => n + 1
+Subject Type: (n: number) => number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.map
+      args: (constant)
+      outType: <E, R>(self: Effect<number, E, R>) => Effect<number, E, R>
+
+=== Piping Flow ===
 Location: 39:20 - 41:3
 Node: Effect.fn("myFn")(function*() {\n  yield* Effect.succeed(1)\n})
 Node Kind: KindCallExpression
@@ -209,6 +307,20 @@ Transformations (1):
       callee: Effect.fn("myFn")
       args: (constant)
       outType: () => Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 39:20 - 39:38
+Node: Effect.fn("myFn")
+Node Kind: KindCallExpression
+
+Subject: "myFn"
+Subject Type: "myFn"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn
+      args: (constant)
+      outType: Gen & NonGen
 
 === Piping Flow ===
 Location: 40:9 - 40:27
@@ -237,6 +349,20 @@ Transformations (1):
       callee: Effect.fn("myFn2")
       args: (constant)
       outType: () => Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 44:21 - 44:40
+Node: Effect.fn("myFn2")
+Node Kind: KindCallExpression
+
+Subject: "myFn2"
+Subject Type: "myFn2"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn
+      args: (constant)
+      outType: Gen & NonGen
 
 === Piping Flow ===
 Location: 44:46 - 44:64

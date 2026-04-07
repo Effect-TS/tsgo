@@ -1,14 +1,38 @@
 flowchart TB
-  0[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
-  1["type: Effect#lt;A, E, R#gt;<br/>callee: Effect.andThen<br/>args: #91;eff#93;"]
-  2["type: Effect#lt;A, E, Exclude#lt;R, Scope#gt;#gt;<br/>callee: Effect.scoped<br/>args: #91;#93;"]
+  0[["type: #lt;A, E, R#gt;#40;eff: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, Scope#gt;#gt;<br/>node: #lt;A, E, R#gt;#40;eff: Effect.Effect#lt;A, E, R#gt;#41; =#gt; #123;#92;n  return Effect.void.pipe#40;Effect.andThen#40;eff#41;, Effect.scoped#41;#92;n#125;"]]
+  1[/"type: Effect#lt;A, E, R#gt;<br/>node: eff: Effect.Effect#lt;A, E, R#gt;"/]
+  2((("type: Effect#lt;A, E, Exclude#lt;R, Scope#gt;#gt;<br/>node: Effect.void.pipe#40;Effect.andThen#40;eff#41;, Effect.scoped#41;")))
   3[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
   4["type: Effect#lt;A, E, R#gt;<br/>callee: Effect.andThen<br/>args: #91;eff#93;"]
   5["type: Effect#lt;A, E, Exclude#lt;R, Scope#gt;#gt;<br/>callee: Effect.scoped<br/>args: #91;#93;"]
-  6[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
-  7["type: Effect#lt;A, E, R#gt;<br/>callee: Effect.andThen<br/>args: #91;eff#93;"]
-  0 -->|"kind: pipeable"| 1
-  1 -->|"kind: pipeable"| 2
-  3 -->|"kind: pipeable"| 4
-  4 -->|"kind: pipeable"| 5
-  6 -->|"kind: pipeable"| 7
+  6[/"type: Effect#lt;A, E, R#gt;<br/>node: eff"/]
+  7[["type: #lt;A, E, R#gt;#40;eff: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, Scope#gt;#gt;<br/>node: #lt;A, E, R#gt;#40;eff: Effect.Effect#lt;A, E, R#gt;#41; =#gt; Effect.void.pipe#40;Effect.andThen#40;eff#41;, Effect.scoped#41;"]]
+  8[/"type: Effect#lt;A, E, R#gt;<br/>node: eff: Effect.Effect#lt;A, E, R#gt;"/]
+  9((("type: Effect#lt;A, E, Exclude#lt;R, Scope#gt;#gt;<br/>node: Effect.void.pipe#40;Effect.andThen#40;eff#41;, Effect.scoped#41;")))
+  10[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  11["type: Effect#lt;A, E, R#gt;<br/>callee: Effect.andThen<br/>args: #91;eff#93;"]
+  12["type: Effect#lt;A, E, Exclude#lt;R, Scope#gt;#gt;<br/>callee: Effect.scoped<br/>args: #91;#93;"]
+  13[/"type: Effect#lt;A, E, R#gt;<br/>node: eff"/]
+  14[["type: #lt;A, E, R#gt;#40;eff: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, Scope#gt;#gt;<br/>node: #lt;A, E, R#gt;#40;eff: Effect.Effect#lt;A, E, R#gt;#41;: Effect.Effect#lt;A, E, Exclude#lt;R, Scope.Scope#gt;#gt; =#gt;#92;n  // @ts-expect-error#92;n  Effect.void.pipe#40;Effect.andThen#40;eff#41;#41;"]]
+  15[/"type: Effect#lt;A, E, R#gt;<br/>node: eff: Effect.Effect#lt;A, E, R#gt;"/]
+  16((("type: Effect#lt;A, E, R#gt;<br/>node: Effect.void.pipe#40;Effect.andThen#40;eff#41;#41;")))
+  17[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  18["type: Effect#lt;A, E, R#gt;<br/>callee: Effect.andThen<br/>args: #91;eff#93;"]
+  19[/"type: Effect#lt;A, E, R#gt;<br/>node: eff"/]
+  1 -->|"kind: parameter"| 0
+  2 -->|"kind: potentialReturn"| 0
+  3 -->|"kind: pipe"| 4
+  4 -->|"kind: pipe"| 5
+  5 -->|"kind: connect"| 2
+  6 -->|"kind: transformArg"| 4
+  8 -->|"kind: parameter"| 7
+  9 -->|"kind: potentialReturn"| 7
+  10 -->|"kind: pipe"| 11
+  11 -->|"kind: pipe"| 12
+  12 -->|"kind: connect"| 9
+  13 -->|"kind: transformArg"| 11
+  15 -->|"kind: parameter"| 14
+  16 -->|"kind: potentialReturn"| 14
+  17 -->|"kind: pipe"| 18
+  18 -->|"kind: connect"| 16
+  19 -->|"kind: transformArg"| 18

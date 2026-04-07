@@ -1,10 +1,25 @@
 flowchart TB
-  0[/"type: Effect#lt;#123; a: number; #125;, never, Scope#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.addFinalizer#40;#40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;#41;#92;n    return #123; a: 1 #125;#92;n  #125;#41;"/]
-  1["type: Layer#lt;MyService, never, never#gt;<br/>callee: Layer.scoped<br/>args: #91;MyService#93;"]
-  2[/"type: Effect#lt;#123; a: number; #125;, never, Scope#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.addFinalizer#40;#40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;#41;#92;n    return #123; a: 1 #125;#92;n  #125;#41;"/]
-  3["type: Layer#lt;MyService, never, Scope#gt;<br/>callee: Layer.effect<br/>args: #91;MyService#93;"]
-  4[/"type: Effect#lt;#123; a: number; #125;, never, OtherService #124; Scope#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    const _otherService = yield* OtherService#92;n    yield* Effect.addFinalizer#40;#40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;#41;#92;n    return #123; a: 1 #125;#92;n  #125;#41;"/]
-  5["type: Layer#lt;MyService, never, OtherService #124; Scope#gt;<br/>callee: Layer.effect<br/>args: #91;MyService#93;"]
-  0 -->|"kind: dataLast"| 1
-  2 -->|"kind: dataLast"| 3
+  0[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;"]]
+  1[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;#quot;finalizer#quot;#41;"/]
+  2[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;"]]
+  3[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;#quot;finalizer#quot;#41;"/]
+  4[/"type: Effect#lt;#123; a: number; #125;, never, Scope#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.addFinalizer#40;#40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;#41;#92;n    return #123; a: 1 #125;#92;n  #125;#41;"/]
+  5["type: Layer#lt;MyService, never, never#gt;<br/>callee: Layer.scoped<br/>args: #91;MyService#93;"]
+  6[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;"]]
+  7[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;#quot;finalizer#quot;#41;"/]
+  8[/"type: Effect#lt;#123; a: number; #125;, never, Scope#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.addFinalizer#40;#40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;#41;#92;n    return #123; a: 1 #125;#92;n  #125;#41;"/]
+  9["type: Layer#lt;MyService, never, Scope#gt;<br/>callee: Layer.effect<br/>args: #91;MyService#93;"]
+  10[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;"]]
+  11[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;#quot;finalizer#quot;#41;"/]
+  12[/"type: Effect#lt;#123; a: number; #125;, never, OtherService #124; Scope#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    const _otherService = yield* OtherService#92;n    yield* Effect.addFinalizer#40;#40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;#41;#92;n    return #123; a: 1 #125;#92;n  #125;#41;"/]
+  13["type: Layer#lt;MyService, never, OtherService #124; Scope#gt;<br/>callee: Layer.effect<br/>args: #91;MyService#93;"]
+  14[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;"]]
+  15[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;#quot;finalizer#quot;#41;"/]
+  1 -->|"kind: potentialReturn"| 0
+  3 -->|"kind: potentialReturn"| 2
   4 -->|"kind: dataLast"| 5
+  7 -->|"kind: potentialReturn"| 6
+  8 -->|"kind: dataLast"| 9
+  11 -->|"kind: potentialReturn"| 10
+  12 -->|"kind: dataLast"| 13
+  15 -->|"kind: potentialReturn"| 14

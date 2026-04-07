@@ -1,1 +1,7 @@
 flowchart TB
+  0[["type: #40;#41; =#gt; #123; readonly age: number; readonly name: string; #125;<br/>node: #40;#41; =#gt; #123;#92;n  const input = #123; name: #quot;Test#quot;, age: 20 #125;#92;n  const person = Schema.decodeSync#40;Person#41;#40;input#41;#92;n  return person#92;n#125;"]]
+  1[/"type: #123; readonly age: number; readonly name: string; #125;<br/>node: person"/]
+  2[["type: #40;#41; =#gt; #123; readonly age: number; readonly name: string; #125;<br/>node: #40;#41; =#gt; Schema.encodeUnknownSync#40;Person#41;#40;person as any#41;"]]
+  3[/"type: #123; readonly age: number; readonly name: string; #125;<br/>node: Schema.encodeUnknownSync#40;Person#41;#40;person as any#41;"/]
+  1 -->|"kind: potentialReturn"| 0
+  3 -->|"kind: potentialReturn"| 2

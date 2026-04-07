@@ -1,4 +1,4 @@
-==== /.src/overriddenSchemaConstructor_valid.ts (1 flows) ====
+==== /.src/overriddenSchemaConstructor_valid.ts (2 flows) ====
 
 === Piping Flow ===
 Location: 4:27 - 6:3
@@ -13,3 +13,17 @@ Transformations (1):
       callee: Schema.Class<Valid>("Valid")
       args: (constant)
       outType: Class<Valid, { a: typeof Number$; }, Encoded<{ a: typeof Number$; }>, never, { readonly a: number; }, {}, {}>
+
+=== Piping Flow ===
+Location: 4:27 - 4:56
+Node: Schema.Class<Valid>("Valid")
+Node Kind: KindCallExpression
+
+Subject: "Valid"
+Subject Type: "Valid"
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class
+      args: (constant)
+      outType: <Fields extends Struct.Fields>(fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<Valid, { [K in keyof Type<Fields>]: Type<Fields>[K]; }> | undefined) => Class<Valid, Fields, Encoded<Fields>, Context<Fields[keyof Fields]>, Constructor<Fields>, {}, {}>

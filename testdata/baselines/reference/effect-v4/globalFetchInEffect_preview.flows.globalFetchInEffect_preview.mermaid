@@ -1,1 +1,4 @@
 flowchart TB
+  0[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;https://example.com#quot;#41;"]]
+  1[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;https://example.com#quot;#41;"/]
+  1 -->|"kind: potentialReturn"| 0

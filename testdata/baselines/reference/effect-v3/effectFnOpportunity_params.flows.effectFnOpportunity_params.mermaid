@@ -1,1 +1,22 @@
 flowchart TB
+  0[["type: #40;a: number, b: string#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;a: number, b: string#41; =#gt; #123;#92;n  return Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.succeed#40;a#41;#92;n    return b#92;n  #125;#41;#92;n#125;"]]
+  1[/"type: number<br/>node: a: number"/]
+  2[/"type: string<br/>node: b: string"/]
+  3[/"type: Effect#lt;string, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.succeed#40;a#41;#92;n    return b#92;n  #125;#41;"/]
+  4[["type: #40;a: number, b: string#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: function#40;a: number, b: string#41; #123;#92;n  return Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.succeed#40;a#41;#92;n    return b#92;n  #125;#41;#92;n#125;"]]
+  5[/"type: number<br/>node: a: number"/]
+  6[/"type: string<br/>node: b: string"/]
+  7[/"type: Effect#lt;string, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.succeed#40;a#41;#92;n    return b#92;n  #125;#41;"/]
+  8[["type: #40;a: number, b: string#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: export function functionDeclarationWithParams#40;a: number, b: string#41; #123;#92;n  return Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.succeed#40;a#41;#92;n    return b#92;n  #125;#41;#92;n#125;"]]
+  9[/"type: number<br/>node: a: number"/]
+  10[/"type: string<br/>node: b: string"/]
+  11[/"type: Effect#lt;string, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.succeed#40;a#41;#92;n    return b#92;n  #125;#41;"/]
+  1 -->|"kind: parameter"| 0
+  2 -->|"kind: parameter"| 0
+  3 -->|"kind: potentialReturn"| 0
+  5 -->|"kind: parameter"| 4
+  6 -->|"kind: parameter"| 4
+  7 -->|"kind: potentialReturn"| 4
+  9 -->|"kind: parameter"| 8
+  10 -->|"kind: parameter"| 8
+  11 -->|"kind: potentialReturn"| 8

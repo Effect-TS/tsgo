@@ -1,4 +1,4 @@
-==== /.src/missedPipeableOpportunity_error.ts (8 flows) ====
+==== /.src/missedPipeableOpportunity_error.ts (10 flows) ====
 
 === Piping Flow ===
 Location: 5:17 - 8:3
@@ -33,6 +33,20 @@ Transformations (2):
       outType: Effect<{ readonly x: number; readonly y: number; }, ParseError, never>
 
 === Piping Flow ===
+Location: 10:42 - 10:72
+Node: Schema.decodeUnknown(MyStruct)
+Node Kind: KindCallExpression
+
+Subject: MyStruct
+Subject Type: Struct<{ x: typeof Number$; y: typeof Number$; }>
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeUnknown
+      args: (constant)
+      outType: (u: unknown, overrideOptions?: ParseOptions | undefined) => Effect<{ readonly x: number; readonly y: number; }, ParseError, never>
+
+=== Piping Flow ===
 Location: 12:40 - 12:109
 Node: identity(identity(Schema.decodeUnknown(MyStruct)({ x: 42, y: 42 })))
 Node Kind: KindCallExpression
@@ -53,6 +67,20 @@ Transformations (3):
       callee: identity
       args: (constant)
       outType: Effect<{ readonly x: number; readonly y: number; }, ParseError, never>
+
+=== Piping Flow ===
+Location: 12:59 - 12:89
+Node: Schema.decodeUnknown(MyStruct)
+Node Kind: KindCallExpression
+
+Subject: MyStruct
+Subject Type: Struct<{ x: typeof Number$; y: typeof Number$; }>
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeUnknown
+      args: (constant)
+      outType: (u: unknown, overrideOptions?: ParseOptions | undefined) => Effect<{ readonly x: number; readonly y: number; }, ParseError, never>
 
 === Piping Flow ===
 Location: 14:48 - 17:2
@@ -83,14 +111,14 @@ Transformations (1):
       outType: Duration
 
 === Piping Flow ===
-Location: 16:24 - 16:72
-Node: Duration.lessThanOrEqualTo(Duration.seconds(10))
+Location: 15:48 - 16:73
+Node: Schedule.whileOutput(Duration.lessThanOrEqualTo(Duration.seconds(10)))
 Node Kind: KindCallExpression
 
 Subject: 10
 Subject Type: 10
 
-Transformations (2):
+Transformations (3):
   [0] kind: call
       callee: Duration.seconds
       args: (constant)
@@ -99,6 +127,10 @@ Transformations (2):
       callee: Duration.lessThanOrEqualTo
       args: (constant)
       outType: (self: DurationInput) => boolean
+  [2] kind: call
+      callee: Schedule.whileOutput
+      args: (constant)
+      outType: <In, R>(self: Schedule<DurationInput, In, R>) => Schedule<DurationInput, In, R>
 
 === Piping Flow ===
 Location: 19:41 - 21:2
@@ -119,15 +151,19 @@ Transformations (2):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 20:19 - 20:38
-Node: Effect.log("World")
+Location: 19:67 - 20:39
+Node: Effect.ensuring(Effect.log("World"))
 Node Kind: KindCallExpression
 
 Subject: "World"
 Subject Type: "World"
 
-Transformations (1):
+Transformations (2):
   [0] kind: call
       callee: Effect.log
       args: (constant)
       outType: Effect<void, never, never>
+  [1] kind: call
+      callee: Effect.ensuring
+      args: (constant)
+      outType: <A, E, R>(self: Effect<A, E, R>) => Effect<A, E, R>

@@ -1,1 +1,6 @@
 flowchart TB
+  0[["type: #lt;A#gt;#40;error: A#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: export function missingErrorWithGenericType#lt;A#gt;#40;error: A#41; #123;#92;n  // @ts-expect-error#92;n  const missingErrorA: Effect.Effect#lt;never#gt; = Effect.fail#40;error#41;#92;n  return missingErrorA#92;n#125;"]]
+  1[/"type: A<br/>node: error: A"/]
+  2[/"type: Effect#lt;never, never, never#gt;<br/>node: missingErrorA"/]
+  1 -->|"kind: parameter"| 0
+  2 -->|"kind: potentialReturn"| 0

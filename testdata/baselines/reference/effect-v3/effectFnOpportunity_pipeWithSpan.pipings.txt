@@ -1,4 +1,4 @@
-==== /.src/effectFnOpportunity_pipeWithSpan.ts (6 flows) ====
+==== /.src/effectFnOpportunity_pipeWithSpan.ts (11 flows) ====
 
 === Piping Flow ===
 Location: 12:35 - 15:44
@@ -31,6 +31,20 @@ Transformations (1):
       callee: Effect.succeed
       args: (constant)
       outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 15:11 - 15:43
+Node: Effect.withSpan("arrowWithPipe")
+Node Kind: KindCallExpression
+
+Subject: "arrowWithPipe"
+Subject Type: "arrowWithPipe"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.withSpan
+      args: (constant)
+      outType: <A, E, R>(self: Effect<A, E, R>) => Effect<A, E, Exclude<R, ParentSpan>>
 
 === Piping Flow ===
 Location: 18:9 - 20:83
@@ -67,6 +81,34 @@ Transformations (1):
       callee: Effect.succeed
       args: (constant)
       outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 20:11 - 20:35
+Node: Effect.map((x) => x + 1)
+Node Kind: KindCallExpression
+
+Subject: (x) => x + 1
+Subject Type: (x: number) => number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.map
+      args: (constant)
+      outType: <E, R>(self: Effect<number, E, R>) => Effect<number, E, R>
+
+=== Piping Flow ===
+Location: 20:36 - 20:82
+Node: Effect.withSpan("functionExpressionWithPipe")
+Node Kind: KindCallExpression
+
+Subject: "functionExpressionWithPipe"
+Subject Type: "functionExpressionWithPipe"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.withSpan
+      args: (constant)
+      outType: <A, E, R>(self: Effect<A, E, R>) => Effect<A, E, Exclude<R, ParentSpan>>
 
 === Piping Flow ===
 Location: 24:9 - 26:105
@@ -107,3 +149,31 @@ Transformations (1):
       callee: Effect.succeed
       args: (constant)
       outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 26:11 - 26:35
+Node: Effect.map((x) => x + 1)
+Node Kind: KindCallExpression
+
+Subject: (x) => x + 1
+Subject Type: (x: number) => number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.map
+      args: (constant)
+      outType: <E, R>(self: Effect<number, E, R>) => Effect<number, E, R>
+
+=== Piping Flow ===
+Location: 26:57 - 26:104
+Node: Effect.withSpan("functionDeclarationWithPipe")
+Node Kind: KindCallExpression
+
+Subject: "functionDeclarationWithPipe"
+Subject Type: "functionDeclarationWithPipe"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.withSpan
+      args: (constant)
+      outType: <A, E, R>(self: Effect<A, E, R>) => Effect<A, E, Exclude<R, ParentSpan>>

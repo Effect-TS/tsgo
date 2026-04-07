@@ -1,31 +1,42 @@
 flowchart TB
   0[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
   1["type: Effect#lt;undefined, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;#41; =#gt; void 0#93;"]
-  2[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
-  3["type: Effect#lt;undefined, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;#41; =#gt; undefined#93;"]
-  4[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
-  5["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;#41; =#gt; #123;#125;#93;"]
+  2["type: #40;#41; =#gt; undefined<br/>callee: <br/>args: #91;#93;"]
+  3[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
+  4["type: Effect#lt;undefined, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;#41; =#gt; undefined#93;"]
+  5["type: #40;#41; =#gt; undefined<br/>callee: <br/>args: #91;#93;"]
   6[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
-  7["type: Effect#lt;undefined, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;#41; =#gt; #40;undefined#41;#93;"]
-  8[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
-  9["type: Effect#lt;undefined, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;#41; =#gt; #40;void 0#41;#93;"]
-  10[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
-  11["type: Effect#lt;undefined, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;#41; =#gt; #40;#40;undefined#41;#41;#93;"]
+  7["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;#41; =#gt; #123;#125;#93;"]
+  8["type: #40;#41; =#gt; void<br/>callee: <br/>args: #91;#93;"]
+  9[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
+  10["type: Effect#lt;undefined, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;#41; =#gt; #40;undefined#41;#93;"]
+  11["type: #40;#41; =#gt; undefined<br/>callee: <br/>args: #91;#93;"]
   12[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
-  13["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n * 2#93;"]
-  14[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
-  15["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;#41; =#gt; 42#93;"]
-  16[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
-  17["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;#41; =#gt; #quot;hello#quot;#93;"]
+  13["type: Effect#lt;undefined, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;#41; =#gt; #40;void 0#41;#93;"]
+  14["type: #40;#41; =#gt; undefined<br/>callee: <br/>args: #91;#93;"]
+  15[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
+  16["type: Effect#lt;undefined, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;#41; =#gt; #40;#40;undefined#41;#41;#93;"]
+  17["type: #40;#41; =#gt; undefined<br/>callee: <br/>args: #91;#93;"]
   18[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
-  19["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.asVoid<br/>args: #91;#93;"]
+  19["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n * 2#93;"]
+  20["type: #40;n: number#41; =#gt; number<br/>callee: <br/>args: #91;#93;"]
+  21[/"type: number<br/>node: n"/]
+  22[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
+  23["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;#41; =#gt; 42#93;"]
+  24["type: #40;#41; =#gt; number<br/>callee: <br/>args: #91;#93;"]
+  25[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
+  26["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;#41; =#gt; #quot;hello#quot;#93;"]
+  27["type: #40;#41; =#gt; string<br/>callee: <br/>args: #91;#93;"]
+  28[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
+  29["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.asVoid<br/>args: #91;#93;"]
   0 -->|"kind: pipeable"| 1
-  2 -->|"kind: pipeable"| 3
-  4 -->|"kind: pipeable"| 5
+  3 -->|"kind: pipeable"| 4
   6 -->|"kind: pipeable"| 7
-  8 -->|"kind: pipeable"| 9
-  10 -->|"kind: pipeable"| 11
+  9 -->|"kind: pipeable"| 10
   12 -->|"kind: pipeable"| 13
-  14 -->|"kind: pipeable"| 15
-  16 -->|"kind: pipeable"| 17
+  15 -->|"kind: pipeable"| 16
   18 -->|"kind: pipeable"| 19
+  21 -->|"kind: parameter"| 20
+  22 -->|"kind: pipeable"| 23
+  25 -->|"kind: pipeable"| 26
+  28 -->|"kind: pipeable"| 29

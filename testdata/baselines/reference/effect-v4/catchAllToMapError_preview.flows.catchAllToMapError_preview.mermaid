@@ -1,4 +1,15 @@
 flowchart TB
-  0[/"type: Effect#lt;never, string, never#gt;<br/>node: Effect.fail#40;#quot;boom#quot;#41;"/]
-  1["type: Effect#lt;never, WrappedError, never#gt;<br/>callee: Effect.catch<br/>args: #91;#40;cause#41; =#gt; Effect.fail#40;new WrappedError#40;cause#41;#41;#93;"]
-  0 -->|"kind: pipeable"| 1
+  0[["type: any<br/>node: constructor#40;readonly cause: unknown#41; #123;#125;"]]
+  1[/"type: unknown<br/>node: readonly cause: unknown"/]
+  2[/"type: Effect#lt;never, string, never#gt;<br/>node: Effect.fail#40;#quot;boom#quot;#41;"/]
+  3["type: Effect#lt;never, WrappedError, never#gt;<br/>callee: Effect.catch<br/>args: #91;#40;cause#41; =#gt; Effect.fail#40;new WrappedError#40;cause#41;#41;#93;"]
+  4((("type: #40;cause: string#41; =#gt; Effect#lt;never, WrappedError, never#gt;<br/>node: #40;cause#41; =#gt; Effect.fail#40;new WrappedError#40;cause#41;#41;")))
+  5[["type: #40;cause: string#41; =#gt; Effect#lt;never, WrappedError, never#gt;<br/>node: #40;cause#41; =#gt; Effect.fail#40;new WrappedError#40;cause#41;#41;"]]
+  6[/"type: string<br/>node: cause"/]
+  7[/"type: Effect#lt;never, WrappedError, never#gt;<br/>node: Effect.fail#40;new WrappedError#40;cause#41;#41;"/]
+  1 -->|"kind: parameter"| 0
+  2 -->|"kind: pipe"| 3
+  4 -->|"kind: transformArg"| 3
+  6 -->|"kind: parameter"| 5
+  7 -->|"kind: potentialReturn"| 5
+  5 -->|"kind: connect"| 4

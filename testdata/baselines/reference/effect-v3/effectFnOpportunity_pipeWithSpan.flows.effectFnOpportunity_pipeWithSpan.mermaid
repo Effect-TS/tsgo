@@ -1,16 +1,49 @@
 flowchart TB
-  0[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;42#41;#92;n  #125;#41;"/]
-  1["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.withSpan<br/>args: #91;#quot;arrowWithPipe#quot;#93;"]
+  0[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;#41; =#gt;#92;n  Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;42#41;#92;n  #125;#41;.pipe#40;Effect.withSpan#40;#quot;arrowWithPipe#quot;#41;#41;"]]
+  1((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;42#41;#92;n  #125;#41;.pipe#40;Effect.withSpan#40;#quot;arrowWithPipe#quot;#41;#41;")))
   2[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;42#41;#92;n  #125;#41;"/]
-  3["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x + 1#93;"]
-  4["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.withSpan<br/>args: #91;#quot;functionExpressionWithPipe#quot;#93;"]
-  5[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;42#41;#92;n  #125;#41;"/]
-  6["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x + 1#93;"]
-  7["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.ignoreLogged<br/>args: #91;#93;"]
-  8["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.withSpan<br/>args: #91;#quot;functionDeclarationWithPipe#quot;#93;"]
-  0 -->|"kind: pipeable"| 1
-  2 -->|"kind: pipeable"| 3
-  3 -->|"kind: pipeable"| 4
-  5 -->|"kind: pipeable"| 6
-  6 -->|"kind: pipeable"| 7
-  7 -->|"kind: pipeable"| 8
+  3["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.withSpan<br/>args: #91;#quot;arrowWithPipe#quot;#93;"]
+  4[/"type: #quot;arrowWithPipe#quot;<br/>node: #quot;arrowWithPipe#quot;"/]
+  5[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: function#40;#41; #123;#92;n  return Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;42#41;#92;n  #125;#41;.pipe#40;Effect.map#40;#40;x#41; =#gt; x + 1#41;, Effect.withSpan#40;#quot;functionExpressionWithPipe#quot;#41;#41;#92;n#125;"]]
+  6((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;42#41;#92;n  #125;#41;.pipe#40;Effect.map#40;#40;x#41; =#gt; x + 1#41;, Effect.withSpan#40;#quot;functionExpressionWithPipe#quot;#41;#41;")))
+  7[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;42#41;#92;n  #125;#41;"/]
+  8["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x + 1#93;"]
+  9["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.withSpan<br/>args: #91;#quot;functionExpressionWithPipe#quot;#93;"]
+  10[/"type: #40;x: number#41; =#gt; number<br/>node: #40;x#41; =#gt; x + 1"/]
+  11[["type: #40;x: number#41; =#gt; number<br/>node: #40;x#41; =#gt; x + 1"]]
+  12[/"type: number<br/>node: x"/]
+  13[/"type: number<br/>node: x + 1"/]
+  14[/"type: #quot;functionExpressionWithPipe#quot;<br/>node: #quot;functionExpressionWithPipe#quot;"/]
+  15[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: export function functionDeclarationWithPipe#40;#41; #123;#92;n  return Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;42#41;#92;n  #125;#41;.pipe#40;Effect.map#40;#40;x#41; =#gt; x + 1#41;, Effect.ignoreLogged, Effect.withSpan#40;#quot;functionDeclarationWithPipe#quot;#41;#41;#92;n#125;"]]
+  16((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;42#41;#92;n  #125;#41;.pipe#40;Effect.map#40;#40;x#41; =#gt; x + 1#41;, Effect.ignoreLogged, Effect.withSpan#40;#quot;functionDeclarationWithPipe#quot;#41;#41;")))
+  17((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;42#41;#92;n  #125;#41;")))
+  18["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x + 1#93;"]
+  19["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.ignoreLogged<br/>args: #91;#93;"]
+  20["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.withSpan<br/>args: #91;#quot;functionDeclarationWithPipe#quot;#93;"]
+  21[/"type: #40;x: number#41; =#gt; number<br/>node: #40;x#41; =#gt; x + 1"/]
+  22[["type: #40;x: number#41; =#gt; number<br/>node: #40;x#41; =#gt; x + 1"]]
+  23[/"type: number<br/>node: x"/]
+  24[/"type: number<br/>node: x + 1"/]
+  25[/"type: #quot;functionDeclarationWithPipe#quot;<br/>node: #quot;functionDeclarationWithPipe#quot;"/]
+  1 -->|"kind: potentialReturn"| 0
+  2 -->|"kind: pipe"| 3
+  3 -->|"kind: connect"| 1
+  4 -->|"kind: transformArg"| 3
+  6 -->|"kind: potentialReturn"| 5
+  7 -->|"kind: pipe"| 8
+  8 -->|"kind: pipe"| 9
+  9 -->|"kind: connect"| 6
+  10 -->|"kind: transformArg"| 8
+  12 -->|"kind: parameter"| 11
+  13 -->|"kind: potentialReturn"| 11
+  14 -->|"kind: transformArg"| 9
+  16 -->|"kind: potentialReturn"| 15
+  17 -->|"kind: pipe"| 18
+  18 -->|"kind: pipe"| 19
+  19 -->|"kind: pipe"| 20
+  20 -->|"kind: connect"| 16
+  21 -->|"kind: transformArg"| 18
+  23 -->|"kind: parameter"| 22
+  24 -->|"kind: potentialReturn"| 22
+  22 -->|"kind: connect"| 17
+  25 -->|"kind: transformArg"| 20

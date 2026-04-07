@@ -1,1 +1,8 @@
 flowchart TB
+  0["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  1["type: #lt;T#gt;#40;value: T#41; =#gt; Effect#lt;number, never, never#gt; #124; Effect#lt;never, string, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  2[/"type: T<br/>node: value: T"/]
+  3["type: #lt;T#gt;#40;value: T#41; =#gt; Effect#lt;number, never, never#gt; #124; Effect#lt;never, string, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  4[/"type: T<br/>node: value: T"/]
+  2 -->|"kind: parameter"| 1
+  4 -->|"kind: parameter"| 3

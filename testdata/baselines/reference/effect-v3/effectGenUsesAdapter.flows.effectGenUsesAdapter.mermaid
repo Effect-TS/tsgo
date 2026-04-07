@@ -1,1 +1,5 @@
 flowchart TB
+  0["type: #40;#41; =#gt; Generator#lt;YieldWrap#lt;Effect#lt;number, never, never#gt;#gt;, number, any#gt;<br/>callee: <br/>args: #91;#93;"]
+  1["type: #40;_: Adapter#41; =#gt; Generator#lt;YieldWrap#lt;Effect#lt;number, never, never#gt;#gt;, number, any#gt;<br/>callee: <br/>args: #91;#93;"]
+  2[/"type: Adapter<br/>node: _"/]
+  2 -->|"kind: parameter"| 1

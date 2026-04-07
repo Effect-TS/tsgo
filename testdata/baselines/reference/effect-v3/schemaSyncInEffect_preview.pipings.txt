@@ -1,4 +1,4 @@
-==== /.src/schemaSyncInEffect_preview.ts (4 flows) ====
+==== /.src/schemaSyncInEffect_preview.ts (5 flows) ====
 
 === Piping Flow ===
 Location: 6:15 - 6:74
@@ -55,3 +55,17 @@ Transformations (1):
       callee: Schema.decodeSync(Person)
       args: (constant)
       outType: { readonly name: string; readonly age: number; }
+
+=== Piping Flow ===
+Location: 10:9 - 10:35
+Node: Schema.decodeSync(Person)
+Node Kind: KindCallExpression
+
+Subject: Person
+Subject Type: Struct<{ name: typeof String$; age: typeof Number$; }>
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeSync
+      args: (constant)
+      outType: (i: { readonly age: number; readonly name: string; }, overrideOptions?: ParseOptions | undefined) => { readonly name: string; readonly age: number; }

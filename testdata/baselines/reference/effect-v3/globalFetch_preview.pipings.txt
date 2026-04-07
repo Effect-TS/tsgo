@@ -1,15 +1,1 @@
-==== /.src/globalFetch_preview.ts (1 flows) ====
-
-=== Piping Flow ===
-Location: 4:23 - 4:52
-Node: fetch("https://example.com")
-Node Kind: KindCallExpression
-
-Subject: "https://example.com"
-Subject Type: "https://example.com"
-
-Transformations (1):
-  [0] kind: call
-      callee: fetch
-      args: (constant)
-      outType: Promise<Response>
+==== /.src/globalFetch_preview.ts (0 flows) ====

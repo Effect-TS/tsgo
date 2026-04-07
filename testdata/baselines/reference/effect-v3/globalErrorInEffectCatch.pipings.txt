@@ -1,4 +1,4 @@
-==== /.src/globalErrorInEffectCatch.ts (9 flows) ====
+==== /.src/globalErrorInEffectCatch.ts (11 flows) ====
 
 === Piping Flow ===
 Location: 5:22 - 5:50
@@ -89,6 +89,20 @@ Transformations (2):
       outType: Effect<Response, MyError, never>
 
 === Piping Flow ===
+Location: 19:58 - 22:3
+Node: Effect.tryMapPromise({\n  try: (_) => fetch("http://something/" + _),\n  catch: (e) => new MyError({ cause: e })\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  try: (_) => fetch("http://something/" + _),\n  catch: (e) => new MyError({ cause: e })\n}
+Subject Type: { try: (_: number) => Promise<Response>; catch: (e: unknown) => MyError; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryMapPromise
+      args: (constant)
+      outType: <E, R>(self: Effect<number, E, R>) => Effect<Response, E | MyError, R>
+
+=== Piping Flow ===
 Location: 20:14 - 20:45
 Node: fetch("http://something/" + _)
 Node Kind: KindCallExpression
@@ -119,6 +133,20 @@ Transformations (2):
       callee: Effect.tryMapPromise
       args: [{\n  try: (_) => fetch("http://something/" + _),\n  catch: (cause) => new Error("Hey", { cause })\n}]
       outType: Effect<Response, Error, never>
+
+=== Piping Flow ===
+Location: 24:61 - 27:3
+Node: Effect.tryMapPromise({\n  try: (_) => fetch("http://something/" + _),\n  catch: (cause) => new Error("Hey", { cause })\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  try: (_) => fetch("http://something/" + _),\n  catch: (cause) => new Error("Hey", { cause })\n}
+Subject Type: { try: (_: number) => Promise<Response>; catch: (cause: unknown) => Error; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryMapPromise
+      args: (constant)
+      outType: <E, R>(self: Effect<number, E, R>) => Effect<Response, E | Error, R>
 
 === Piping Flow ===
 Location: 25:14 - 25:45

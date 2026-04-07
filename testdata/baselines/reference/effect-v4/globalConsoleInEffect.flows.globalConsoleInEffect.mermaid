@@ -1,1 +1,5 @@
 flowchart TB
+  0[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#92;n  console.log#40;#quot;regular#quot;#41;#92;n#125;"]]
+  1[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; console.log#40;#quot;nested#quot;#41;"]]
+  2[/"type: void<br/>node: console.log#40;#quot;nested#quot;#41;"/]
+  2 -->|"kind: potentialReturn"| 1

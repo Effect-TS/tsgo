@@ -373,6 +373,8 @@ func generateExecutionFlowBaseline(
 						return "(((", ")))"
 					case typeparser.ExecutionNodeKindValue:
 						return "[/", "/]"
+					case typeparser.ExecutionNodeKindFunction:
+						return "[[", "]]"
 					}
 					return "[", "]"
 				},
@@ -415,6 +417,10 @@ func formatExecutionFlowNodeLabel(c *checker.Checker, sf *ast.SourceFile, node t
 		lines = append(lines, "node: "+formatExecutionSourceNode(sf, node.Node))
 		return strings.Join(lines, "\n")
 	case typeparser.ExecutionNodeKindLogicMerge:
+		lines = append(lines, "type: "+formatExecutionType(c, node.Type))
+		lines = append(lines, "node: "+formatExecutionSourceNode(sf, node.Node))
+		return strings.Join(lines, "\n")
+	case typeparser.ExecutionNodeKindFunction:
 		lines = append(lines, "type: "+formatExecutionType(c, node.Type))
 		lines = append(lines, "node: "+formatExecutionSourceNode(sf, node.Node))
 		return strings.Join(lines, "\n")

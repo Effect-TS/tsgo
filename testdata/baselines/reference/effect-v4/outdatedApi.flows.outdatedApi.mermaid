@@ -1,10 +1,69 @@
 flowchart TB
-  0[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
-  1["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n + 1#93;"]
-  2[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
-  3["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;n#41; =#gt; Effect.succeed#40;n + 1#41;#93;"]
-  4[/"type: Effect#lt;#123;#125;, never, never#gt;<br/>node: Effect.Do"/]
-  5["type: Effect#lt;#123; a: number; #125;, never, never#gt;<br/>callee: Effect.bind<br/>args: #91;#quot;a#quot;, #40;#41; =#gt; Effect.succeed#40;1#41;#93;"]
-  0 -->|"kind: dataFirst"| 1
-  2 -->|"kind: dataFirst"| 3
-  4 -->|"kind: dataFirst"| 5
+  0[["type: #40;#41; =#gt; Error<br/>node: #40;#41; =#gt; new Error#40;#quot;boom#quot;#41;"]]
+  1[/"type: Error<br/>node: new Error#40;#quot;boom#quot;#41;"/]
+  2[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;0#41;"]]
+  3[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;0#41;"/]
+  4[["type: #40;_e: any#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;_e#41; =#gt; Effect.succeed#40;0#41;"]]
+  5[/"type: any<br/>node: _e"/]
+  6[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;0#41;"/]
+  7[["type: #40;_cause: any#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;_cause#41; =#gt; Effect.succeed#40;0#41;"]]
+  8[/"type: any<br/>node: _cause"/]
+  9[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;0#41;"/]
+  10[["type: #40;_defect: any#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;_defect#41; =#gt; Effect.succeed#40;0#41;"]]
+  11[/"type: any<br/>node: _defect"/]
+  12[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;0#41;"/]
+  13[["type: #40;resume: any#41; =#gt; void<br/>node: #40;resume#41; =#gt; #123;#92;n    resume#40;Effect.succeed#40;42#41;#41;#92;n#125;"]]
+  14[/"type: any<br/>node: resume"/]
+  15[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
+  16["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n + 1#93;"]
+  17[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  18((("type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n + 1")))
+  19[["type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n + 1"]]
+  20[/"type: number<br/>node: n"/]
+  21[/"type: number<br/>node: n + 1"/]
+  22[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
+  23["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;n#41; =#gt; Effect.succeed#40;n + 1#41;#93;"]
+  24[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  25((("type: #40;n: number#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;n#41; =#gt; Effect.succeed#40;n + 1#41;")))
+  26[["type: #40;n: number#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;n#41; =#gt; Effect.succeed#40;n + 1#41;"]]
+  27[/"type: number<br/>node: n"/]
+  28[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;n + 1#41;"/]
+  29[/"type: Effect#lt;#123;#125;, never, never#gt;<br/>node: Effect.Do"/]
+  30["type: Effect#lt;#123; a: number; #125;, never, never#gt;<br/>callee: Effect.bind<br/>args: #91;#quot;a#quot;, #40;#41; =#gt; Effect.succeed#40;1#41;#93;"]
+  31[/"type: #123; #lt;N extends string, A extends Record#lt;string, any#gt;, B, E2, R2#gt;#40;name: N, f: #40;a: NoInfer#lt;A#gt;#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;Simplify#lt;Omit#lt;A, N#gt; #amp; Record#lt;N, B#gt;#gt;, E #124; E2, R #124; R2#gt;; #lt;A extends Record#lt;string, any#gt;, E, R, B, E2, R2, N extends string#gt;#40;self: Effect#lt;A, E, R#gt;, name: N, f: #40;a: NoInfer#lt;A#gt;#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;Simplify#lt;Omit#lt;A, N#gt; #amp; Record#lt;N, B#gt;#gt;, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.bind"/]
+  32[/"type: #quot;a#quot;<br/>node: #quot;a#quot;"/]
+  33((("type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;1#41;")))
+  34[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;1#41;"]]
+  35[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
+  36[["type: #40;n: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;null, never, never#gt; #124; Effect#lt;Effect#lt;number, never, never#gt;, never, never#gt;<br/>node: #40;n#41; =#gt; n #gt; 1 ? Effect.succeed#40;n#41; : Effect.succeed#40;null#41;"]]
+  37[/"type: Effect#lt;number, never, never#gt;<br/>node: n"/]
+  38[/"type: Effect#lt;null, never, never#gt; #124; Effect#lt;Effect#lt;number, never, never#gt;, never, never#gt;<br/>node: n #gt; 1 ? Effect.succeed#40;n#41; : Effect.succeed#40;null#41;"/]
+  1 -->|"kind: potentialReturn"| 0
+  3 -->|"kind: potentialReturn"| 2
+  5 -->|"kind: parameter"| 4
+  6 -->|"kind: potentialReturn"| 4
+  8 -->|"kind: parameter"| 7
+  9 -->|"kind: potentialReturn"| 7
+  11 -->|"kind: parameter"| 10
+  12 -->|"kind: potentialReturn"| 10
+  14 -->|"kind: parameter"| 13
+  15 -->|"kind: dataFirst"| 16
+  17 -->|"kind: transformCallee"| 16
+  18 -->|"kind: transformArg"| 16
+  20 -->|"kind: parameter"| 19
+  21 -->|"kind: potentialReturn"| 19
+  19 -->|"kind: connect"| 18
+  22 -->|"kind: dataFirst"| 23
+  24 -->|"kind: transformCallee"| 23
+  25 -->|"kind: transformArg"| 23
+  27 -->|"kind: parameter"| 26
+  28 -->|"kind: potentialReturn"| 26
+  26 -->|"kind: connect"| 25
+  29 -->|"kind: dataFirst"| 30
+  31 -->|"kind: transformCallee"| 30
+  32 -->|"kind: transformArg"| 30
+  33 -->|"kind: transformArg"| 30
+  35 -->|"kind: potentialReturn"| 34
+  34 -->|"kind: connect"| 33
+  37 -->|"kind: parameter"| 36
+  38 -->|"kind: potentialReturn"| 36

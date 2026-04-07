@@ -1,1 +1,12 @@
 flowchart TB
+  0[["type: #40;#41; =#gt; Generator#lt;1 #124; 2, void, unknown#gt;<br/>node: function*#40;#41; #123;#92;n  yield 1#92;n  yield 2#92;n#125;"]]
+  1[["type: #40;#41; =#gt; Generator#lt;1 #124; 2, void, unknown#gt;<br/>node: export function* generatorDeclaration#40;#41; #123;#92;n  yield 1#92;n  yield 2#92;n#125;"]]
+  2[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: async #40;#41; =#gt; #123;#92;n  return 42#92;n#125;"]]
+  3[/"type: 42<br/>node: 42"/]
+  4[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: async function#40;#41; #123;#92;n  return 42#92;n#125;"]]
+  5[/"type: 42<br/>node: 42"/]
+  6[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: export async function asyncDeclaration#40;#41; #123;#92;n  return 42#92;n#125;"]]
+  7[/"type: 42<br/>node: 42"/]
+  3 -->|"kind: potentialReturn"| 2
+  5 -->|"kind: potentialReturn"| 4
+  7 -->|"kind: potentialReturn"| 6

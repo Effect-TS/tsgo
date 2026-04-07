@@ -1,1 +1,17 @@
 flowchart TB
+  0["type: #40;#41; =#gt; any<br/>callee: <br/>args: #91;#93;"]
+  1["type: #40;e: unknown#41; =#gt; Effect#lt;void, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  2[/"type: unknown<br/>node: e"/]
+  3["type: #40;#41; =#gt; any<br/>callee: <br/>args: #91;#93;"]
+  4["type: #40;e: unknown#41; =#gt; JsonParseError<br/>callee: <br/>args: #91;#93;"]
+  5[/"type: unknown<br/>node: e"/]
+  6["type: #40;#41; =#gt; any<br/>callee: <br/>args: #91;#93;"]
+  7["type: #40;e: unknown#41; =#gt; Effect#lt;any, Effect#lt;void, never, never#gt;, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  8[/"type: unknown<br/>node: e"/]
+  9["type: #40;#41; =#gt; any<br/>callee: <br/>args: #91;#93;"]
+  10["type: #40;innerError: unknown#41; =#gt; Effect#lt;void, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  11[/"type: unknown<br/>node: innerError"/]
+  2 -->|"kind: parameter"| 1
+  5 -->|"kind: parameter"| 4
+  8 -->|"kind: parameter"| 7
+  11 -->|"kind: parameter"| 10

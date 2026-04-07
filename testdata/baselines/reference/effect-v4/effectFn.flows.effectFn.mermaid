@@ -1,1 +1,61 @@
 flowchart TB
+  0["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x + 1#93;"]
+  1["type: #40;x: number#41; =#gt; number<br/>callee: <br/>args: #91;#93;"]
+  2[/"type: number<br/>node: x"/]
+  3[/"type: number<br/>node: x + 1"/]
+  4["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x + 1#93;"]
+  5["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x.toString#40;#41;#93;"]
+  6["type: Effect#lt;boolean, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x.length #gt; 0#93;"]
+  7["type: #40;x: number#41; =#gt; number<br/>callee: <br/>args: #91;#93;"]
+  8[/"type: number<br/>node: x"/]
+  9[/"type: number<br/>node: x + 1"/]
+  10["type: #40;x: number#41; =#gt; string<br/>callee: <br/>args: #91;#93;"]
+  11[/"type: number<br/>node: x"/]
+  12[/"type: string<br/>node: x.toString#40;#41;"/]
+  13["type: #40;x: string#41; =#gt; boolean<br/>callee: <br/>args: #91;#93;"]
+  14[/"type: string<br/>node: x"/]
+  15[/"type: boolean<br/>node: x.length #gt; 0"/]
+  16["type: Effect#lt;void #124; number, never, never#gt;<br/>callee: Effect.catch<br/>args: #91;#40;#41; =#gt; Effect.void#93;"]
+  17["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  18[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  19["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x + 1#93;"]
+  20["type: #40;x: number#41; =#gt; number<br/>callee: <br/>args: #91;#93;"]
+  21[/"type: number<br/>node: x"/]
+  22[/"type: number<br/>node: x + 1"/]
+  23["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x + 1#93;"]
+  24["type: #40;x: number#41; =#gt; number<br/>callee: <br/>args: #91;#93;"]
+  25[/"type: number<br/>node: x"/]
+  26[/"type: number<br/>node: x + 1"/]
+  27["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x + 1#93;"]
+  28["type: #40;x: number#41; =#gt; number<br/>callee: <br/>args: #91;#93;"]
+  29[/"type: number<br/>node: x"/]
+  30[/"type: number<br/>node: x + 1"/]
+  31["type: Effect#lt;A, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x#93;"]
+  32["type: #40;x: A#41; =#gt; A<br/>callee: <br/>args: #91;#93;"]
+  33[/"type: A<br/>node: x"/]
+  34[/"type: A<br/>node: x"/]
+  35["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x.length#93;"]
+  36["type: #40;x: A#41; =#gt; number<br/>callee: <br/>args: #91;#93;"]
+  37[/"type: A<br/>node: x"/]
+  38[/"type: number<br/>node: x.length"/]
+  2 -->|"kind: parameter"| 1
+  3 -->|"kind: potentialReturn"| 1
+  4 -->|"kind: fnPipe"| 5
+  5 -->|"kind: fnPipe"| 6
+  8 -->|"kind: parameter"| 7
+  9 -->|"kind: potentialReturn"| 7
+  11 -->|"kind: parameter"| 10
+  12 -->|"kind: potentialReturn"| 10
+  14 -->|"kind: parameter"| 13
+  15 -->|"kind: potentialReturn"| 13
+  18 -->|"kind: potentialReturn"| 17
+  21 -->|"kind: parameter"| 20
+  22 -->|"kind: potentialReturn"| 20
+  25 -->|"kind: parameter"| 24
+  26 -->|"kind: potentialReturn"| 24
+  29 -->|"kind: parameter"| 28
+  30 -->|"kind: potentialReturn"| 28
+  33 -->|"kind: parameter"| 32
+  34 -->|"kind: potentialReturn"| 32
+  37 -->|"kind: parameter"| 36
+  38 -->|"kind: potentialReturn"| 36

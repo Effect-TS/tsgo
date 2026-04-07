@@ -1,4 +1,4 @@
-==== /.src/effectFnOpportunity_alreadyEffectFn.ts (6 flows) ====
+==== /.src/effectFnOpportunity_alreadyEffectFn.ts (7 flows) ====
 
 === Piping Flow ===
 Location: 4:39 - 6:3
@@ -13,6 +13,20 @@ Transformations (1):
       callee: Effect.fn("alreadyEffectFnWithName")
       args: (constant)
       outType: () => Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 4:39 - 4:76
+Node: Effect.fn("alreadyEffectFnWithName")
+Node Kind: KindCallExpression
+
+Subject: "alreadyEffectFnWithName"
+Subject Type: "alreadyEffectFnWithName"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn
+      args: (constant)
+      outType: Gen & NonGen
 
 === Piping Flow ===
 Location: 5:16 - 5:35

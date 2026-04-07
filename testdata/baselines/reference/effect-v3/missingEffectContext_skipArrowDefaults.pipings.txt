@@ -1,15 +1,1 @@
-==== /.src/missingEffectContext_skipArrowDefaults.ts (1 flows) ====
-
-=== Piping Flow ===
-Location: 4:13 - 8:3
-Node: Effect.gen(function*() {\n  const banana = (rateLimit: RateLimiter.RateLimiter = (_) => _) => Effect.void\n\n  yield* banana()\n})
-Node Kind: KindCallExpression
-
-Subject: function*() {\n  const banana = (rateLimit: RateLimiter.RateLimiter = (_) => _) => Effect.void\n\n  yield* banana()\n}
-Subject Type: () => Generator<YieldWrap<Effect<void, never, never>>, void, any>
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.gen
-      args: (constant)
-      outType: Effect<void, never, never>
+==== /.src/missingEffectContext_skipArrowDefaults.ts (0 flows) ====

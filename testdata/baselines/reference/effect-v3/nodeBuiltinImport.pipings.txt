@@ -1,15 +1,1 @@
-==== /.src/nodeBuiltinImport.ts (1 flows) ====
-
-=== Piping Flow ===
-Location: 25:12 - 25:31
-Node: require("node:fs")
-Node Kind: KindCallExpression
-
-Subject: "node:fs"
-Subject Type: "node:fs"
-
-Transformations (1):
-  [0] kind: call
-      callee: require
-      args: (constant)
-      outType: any
+==== /.src/nodeBuiltinImport.ts (0 flows) ====

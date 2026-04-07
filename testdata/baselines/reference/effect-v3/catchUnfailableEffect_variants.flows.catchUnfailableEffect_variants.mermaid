@@ -1,16 +1,53 @@
 flowchart TB
   0[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;42#41;"/]
   1["type: Effect#lt;void #124; number, never, never#gt;<br/>callee: Effect.catchAll<br/>args: #91;#40;#41; =#gt; Effect.void#93;"]
-  2[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;42#41;"/]
-  3["type: Effect#lt;void #124; number, never, never#gt;<br/>callee: Effect.catchIf<br/>args: #91;#40;error#41; =#gt; error === #quot;MyError#quot;, #40;#41; =#gt; Effect.void#93;"]
-  4[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;42#41;"/]
-  5["type: Effect#lt;void #124; number, never, never#gt;<br/>callee: Effect.catchSome<br/>args: #91;#40;#41; =#gt; Option.some#40;Effect.void#41;#93;"]
-  6[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;42#41;"/]
-  7["type: Effect#lt;void #124; number, never, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;MyError#quot;, #40;#41; =#gt; Effect.void#93;"]
-  8[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;42#41;"/]
-  9["type: Effect#lt;unknown, unknown, unknown#gt;<br/>callee: Effect.catchTags<br/>args: #91;#123;#92;n    // @ts-expect-error#92;n    MyError: #40;#41; =#gt; Effect.void#92;n  #125;#93;"]
-  0 -->|"kind: pipeable"| 1
-  2 -->|"kind: pipeable"| 3
-  4 -->|"kind: pipeable"| 5
-  6 -->|"kind: pipeable"| 7
-  8 -->|"kind: pipeable"| 9
+  2[/"type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"/]
+  3[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  4((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.void")))
+  5((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;42#41;")))
+  6["type: Effect#lt;void #124; number, never, never#gt;<br/>callee: Effect.catchIf<br/>args: #91;#40;error#41; =#gt; error === #quot;MyError#quot;, #40;#41; =#gt; Effect.void#93;"]
+  7[/"type: #40;error: never#41; =#gt; boolean<br/>node: #40;error#41; =#gt; error === #quot;MyError#quot;"/]
+  8[/"type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"/]
+  9[["type: #40;error: never#41; =#gt; boolean<br/>node: #40;error#41; =#gt; error === #quot;MyError#quot;"]]
+  10[/"type: never<br/>node: error"/]
+  11[/"type: boolean<br/>node: error === #quot;MyError#quot;"/]
+  12[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  13[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  14[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;42#41;"/]
+  15["type: Effect#lt;void #124; number, never, never#gt;<br/>callee: Effect.catchSome<br/>args: #91;#40;#41; =#gt; Option.some#40;Effect.void#41;#93;"]
+  16((("type: #40;#41; =#gt; Option#lt;Effect#lt;void, never, never#gt;#gt;<br/>node: #40;#41; =#gt; Option.some#40;Effect.void#41;")))
+  17[["type: #40;#41; =#gt; Option#lt;Effect#lt;void, never, never#gt;#gt;<br/>node: #40;#41; =#gt; Option.some#40;Effect.void#41;"]]
+  18[/"type: Option#lt;Effect#lt;void, never, never#gt;#gt;<br/>node: Option.some#40;Effect.void#41;"/]
+  19[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;42#41;"/]
+  20["type: Effect#lt;void #124; number, never, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;MyError#quot;, #40;#41; =#gt; Effect.void#93;"]
+  21[/"type: #quot;MyError#quot;<br/>node: #quot;MyError#quot;"/]
+  22[/"type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"/]
+  23[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  24[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  25[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;42#41;"/]
+  26["type: Effect#lt;unknown, unknown, unknown#gt;<br/>callee: Effect.catchTags<br/>args: #91;#123;#92;n    // @ts-expect-error#92;n    MyError: #40;#41; =#gt; Effect.void#92;n  #125;#93;"]
+  27[/"type: #123; MyError: #40;#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #123;#92;n    // @ts-expect-error#92;n    MyError: #40;#41; =#gt; Effect.void#92;n  #125;"/]
+  28[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  29[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformArg"| 1
+  4 -->|"kind: potentialReturn"| 3
+  5 -->|"kind: pipe"| 6
+  7 -->|"kind: transformArg"| 6
+  8 -->|"kind: transformArg"| 6
+  10 -->|"kind: parameter"| 9
+  11 -->|"kind: potentialReturn"| 9
+  9 -->|"kind: connect"| 4
+  13 -->|"kind: potentialReturn"| 12
+  12 -->|"kind: connect"| 5
+  14 -->|"kind: pipe"| 15
+  16 -->|"kind: transformArg"| 15
+  18 -->|"kind: potentialReturn"| 17
+  19 -->|"kind: pipe"| 20
+  21 -->|"kind: transformArg"| 20
+  22 -->|"kind: transformArg"| 20
+  24 -->|"kind: potentialReturn"| 23
+  23 -->|"kind: connect"| 16
+  25 -->|"kind: pipe"| 26
+  27 -->|"kind: transformArg"| 26
+  29 -->|"kind: potentialReturn"| 28

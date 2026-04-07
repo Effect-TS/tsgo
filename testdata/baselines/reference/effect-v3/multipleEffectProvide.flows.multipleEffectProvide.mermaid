@@ -2,23 +2,41 @@ flowchart TB
   0[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
   1["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService1.Default#93;"]
   2["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService2.Default#93;"]
-  3[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
-  4["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService1.Default#93;"]
-  5["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService2.Default#93;"]
-  6["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.ignoreLogged<br/>args: #91;#93;"]
-  7["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService1.Default#93;"]
-  8["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService2.Default#93;"]
-  9[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
-  10["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService1.Default#93;"]
-  11["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService2.Default#93;"]
-  12["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService3.Default#93;"]
-  0 -->|"kind: pipeable"| 1
-  1 -->|"kind: pipeable"| 2
-  3 -->|"kind: pipeable"| 4
-  4 -->|"kind: pipeable"| 5
-  5 -->|"kind: pipeable"| 6
-  6 -->|"kind: pipeable"| 7
-  7 -->|"kind: pipeable"| 8
-  9 -->|"kind: pipeable"| 10
-  10 -->|"kind: pipeable"| 11
-  11 -->|"kind: pipeable"| 12
+  3[/"type: Layer#lt;MyService1, never, never#gt;<br/>node: MyService1.Default"/]
+  4[/"type: Layer#lt;MyService2, never, never#gt;<br/>node: MyService2.Default"/]
+  5[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  6["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService1.Default#93;"]
+  7["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService2.Default#93;"]
+  8["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.ignoreLogged<br/>args: #91;#93;"]
+  9["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService1.Default#93;"]
+  10["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService2.Default#93;"]
+  11[/"type: Layer#lt;MyService1, never, never#gt;<br/>node: MyService1.Default"/]
+  12[/"type: Layer#lt;MyService2, never, never#gt;<br/>node: MyService2.Default"/]
+  13[/"type: Layer#lt;MyService1, never, never#gt;<br/>node: MyService1.Default"/]
+  14[/"type: Layer#lt;MyService2, never, never#gt;<br/>node: MyService2.Default"/]
+  15[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  16["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService1.Default#93;"]
+  17["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService2.Default#93;"]
+  18["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService3.Default#93;"]
+  19[/"type: Layer#lt;MyService1, never, never#gt;<br/>node: MyService1.Default"/]
+  20[/"type: Layer#lt;MyService2, never, never#gt;<br/>node: MyService2.Default"/]
+  21[/"type: Layer#lt;MyService3, never, never#gt;<br/>node: MyService3.Default"/]
+  0 -->|"kind: pipe"| 1
+  1 -->|"kind: pipe"| 2
+  3 -->|"kind: transformArg"| 1
+  4 -->|"kind: transformArg"| 2
+  5 -->|"kind: pipe"| 6
+  6 -->|"kind: pipe"| 7
+  7 -->|"kind: pipe"| 8
+  8 -->|"kind: pipe"| 9
+  9 -->|"kind: pipe"| 10
+  11 -->|"kind: transformArg"| 6
+  12 -->|"kind: transformArg"| 7
+  13 -->|"kind: transformArg"| 9
+  14 -->|"kind: transformArg"| 10
+  15 -->|"kind: pipe"| 16
+  16 -->|"kind: pipe"| 17
+  17 -->|"kind: pipe"| 18
+  19 -->|"kind: transformArg"| 16
+  20 -->|"kind: transformArg"| 17
+  21 -->|"kind: transformArg"| 18

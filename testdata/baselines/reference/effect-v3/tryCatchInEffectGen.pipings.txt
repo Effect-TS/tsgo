@@ -1,4 +1,4 @@
-==== /.src/tryCatchInEffectGen.ts (14 flows) ====
+==== /.src/tryCatchInEffectGen.ts (15 flows) ====
 
 === Piping Flow ===
 Location: 4:29 - 11:3
@@ -55,6 +55,20 @@ Transformations (1):
       callee: Effect.fn("example")
       args: (constant)
       outType: () => Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 14:35 - 14:56
+Node: Effect.fn("example")
+Node Kind: KindCallExpression
+
+Subject: "example"
+Subject Type: "example"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn
+      args: (constant)
+      outType: Gen & NonGen
 
 === Piping Flow ===
 Location: 16:11 - 16:35

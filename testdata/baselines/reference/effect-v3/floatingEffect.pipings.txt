@@ -1,125 +1,15 @@
-==== /.src/floatingEffect.ts (8 flows) ====
-
-=== Piping Flow ===
-Location: 4:16 - 4:34
-Node: Effect.succeed(1)
-Node Kind: KindCallExpression
-
-Subject: 1
-Subject Type: 1
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.succeed
-      args: (constant)
-      outType: Effect<number, never, never>
-
-=== Piping Flow ===
-Location: 4:34 - 6:27
-Node: Effect.succeed("floating")
-Node Kind: KindCallExpression
-
-Subject: "floating"
-Subject Type: "floating"
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.succeed
-      args: (constant)
-      outType: Effect<string, never, never>
-
-=== Piping Flow ===
-Location: 8:13 - 13:4
-Node: Effect.runPromise(Effect.gen(function*() {\n  const thisIsFine = Effect.succeed(1)\n  Effect.never\n}))
-Node Kind: KindCallExpression
-
-Subject: function*() {\n  const thisIsFine = Effect.succeed(1)\n  Effect.never\n}
-Subject Type: () => Generator<never, void, never>
-
-Transformations (2):
-  [0] kind: call
-      callee: Effect.gen
-      args: (constant)
-      outType: Effect<void, never, never>
-  [1] kind: call
-      callee: Effect.runPromise
-      args: (constant)
-      outType: Promise<void>
-
-=== Piping Flow ===
-Location: 11:21 - 11:39
-Node: Effect.succeed(1)
-Node Kind: KindCallExpression
-
-Subject: 1
-Subject Type: 1
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.succeed
-      args: (constant)
-      outType: Effect<number, never, never>
-
-=== Piping Flow ===
-Location: 13:4 - 18:4
-Node: Effect.runPromise(Effect.gen(function*() {\n  yield* Effect.succeed(1).pipe(Effect.fork)\n  // ^- This is fine, returns a fiber runtime\n}))
-Node Kind: KindCallExpression
-
-Subject: function*() {\n  yield* Effect.succeed(1).pipe(Effect.fork)\n  // ^- This is fine, returns a fiber runtime\n}
-Subject Type: () => Generator<YieldWrap<Effect<RuntimeFiber<number, never>, never, never>>, void, any>
-
-Transformations (2):
-  [0] kind: call
-      callee: Effect.gen
-      args: (constant)
-      outType: Effect<void, never, never>
-  [1] kind: call
-      callee: Effect.runPromise
-      args: (constant)
-      outType: Promise<void>
+==== /.src/floatingEffect.ts (1 flows) ====
 
 === Piping Flow ===
 Location: 16:9 - 16:45
 Node: Effect.succeed(1).pipe(Effect.fork)
 Node Kind: KindCallExpression
 
-Subject: 1
-Subject Type: 1
+Subject: Effect.succeed(1)
+Subject Type: Effect<number, never, never>
 
-Transformations (2):
-  [0] kind: call
-      callee: Effect.succeed
-      args: (constant)
-      outType: Effect<number, never, never>
-  [1] kind: pipeable
+Transformations (1):
+  [0] kind: pipeable
       callee: Effect.fork
       args: (constant)
       outType: Effect<RuntimeFiber<number, never>, never, never>
-
-=== Piping Flow ===
-Location: 25:13 - 28:3
-Node: Effect.gen(function*() {\n  yield* Effect.exit(Effect.void)\n  // ^- This is fine, returns an exit\n})
-Node Kind: KindCallExpression
-
-Subject: function*() {\n  yield* Effect.exit(Effect.void)\n  // ^- This is fine, returns an exit\n}
-Subject Type: () => Generator<YieldWrap<Effect<Exit<void, never>, never, never>>, void, any>
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.gen
-      args: (constant)
-      outType: Effect<void, never, never>
-
-=== Piping Flow ===
-Location: 26:9 - 26:34
-Node: Effect.exit(Effect.void)
-Node Kind: KindCallExpression
-
-Subject: Effect.void
-Subject Type: Effect<void, never, never>
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.exit
-      args: (constant)
-      outType: Effect<Exit<void, never>, never, never>
