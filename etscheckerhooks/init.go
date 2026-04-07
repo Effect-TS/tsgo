@@ -5,6 +5,7 @@ package etscheckerhooks
 
 import (
 	"context"
+
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/directives"
 	"github.com/effect-ts/tsgo/internal/effectconfigraw"
@@ -74,10 +75,6 @@ func afterCheckSourceFile(ctx context.Context, program checker.Program, c *check
 	if sf.IsDeclarationFile {
 		return
 	}
-
-	// Warm the execution-flow cache once per source file so rules that consult it
-	// do not each pay the traversal cost independently.
-	tp.ExecutionFlow(sf)
 
 	// Collect directives from source file for suppression support
 	sourceText := sf.Text()
