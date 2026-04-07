@@ -1,0 +1,16 @@
+flowchart TB
+  0[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: #40;#41; =#gt; Promise.resolve#40;1#41;"]]
+  1[/"type: Promise#lt;number#gt;<br/>node: Promise.resolve#40;1#41;"/]
+  2[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: #40;#41; =#gt; promiseValue"]]
+  3[/"type: Promise#lt;number#gt;<br/>node: promiseValue"/]
+  4[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; 1"]]
+  5[/"type: 1<br/>node: 1"/]
+  6[["type: #40;#41; =#gt; #123; then: #40;onFulfilled: #40;value: number#41; =#gt; unknown#41; =#gt; unknown; #125;<br/>node: #40;#41; =#gt; thenableValue"]]
+  7[/"type: #123; then: #40;onFulfilled: #40;value: number#41; =#gt; unknown#41; =#gt; unknown; #125;<br/>node: thenableValue"/]
+  8[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: #40;#41; =#gt; Promise.resolve#40;1#41;"]]
+  9[/"type: Promise#lt;number#gt;<br/>node: Promise.resolve#40;1#41;"/]
+  1 -->|"kind: potentialReturn"| 0
+  3 -->|"kind: potentialReturn"| 2
+  5 -->|"kind: potentialReturn"| 4
+  7 -->|"kind: potentialReturn"| 6
+  9 -->|"kind: potentialReturn"| 8

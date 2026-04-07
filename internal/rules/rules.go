@@ -60,6 +60,7 @@ var All = []rule.Rule{
 	SchemaUnionOfLiterals,
 	MissingEffectServiceDependency,
 	LeakingRequirements,
+	LazyPromiseInEffectSync,
 	InstanceOfSchema,
 	GenericEffectServices,
 	OverriddenSchemaConstructor,

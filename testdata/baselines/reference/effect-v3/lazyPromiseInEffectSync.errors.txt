@@ -1,0 +1,33 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/lazyPromiseInEffectSync.ts(8,47): warning TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
+/.src/lazyPromiseInEffectSync.ts(11,45): warning TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
+
+
+==== /.src/lazyPromiseInEffectSync.ts (2 errors) ====
+    // @effect-diagnostics lazyPromiseInEffectSync:warning
+    import { Effect } from "effect"
+    
+    declare const promiseValue: Promise<number>
+    declare const thenableValue: { then: (onFulfilled: (value: number) => unknown) => unknown }
+    
+    // Should trigger - Promise returned from Effect.sync
+    export const fromPromiseResolve = Effect.sync(() => Promise.resolve(1))
+                                                  ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
+    
+    // Should trigger - declared Promise type returned from Effect.sync
+    export const fromPromiseValue = Effect.sync(() => promiseValue)
+                                                ~~~~~~~~~~~~~~~~~~
+!!! warning TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
+    
+    // Should NOT trigger - sync value
+    export const fromValue = Effect.sync(() => 1)
+    
+    // Should NOT trigger - thenable but not Promise
+    export const fromThenable = Effect.sync(() => thenableValue)
+    
+    // Should NOT trigger - already using the async constructor
+    export const fromEffectPromise = Effect.promise(() => Promise.resolve(1))
+    
