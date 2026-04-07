@@ -1,0 +1,28 @@
+flowchart TB
+  0[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;http://something#quot;#41;"]]
+  1[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;http://something#quot;#41;"/]
+  2[["type: #40;e: unknown#41; =#gt; unknown<br/>node: #40;e#41; =#gt; e"]]
+  3[/"type: unknown<br/>node: e"/]
+  4[/"type: unknown<br/>node: e"/]
+  5[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;http://something#quot;#41;"]]
+  6[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;http://something#quot;#41;"/]
+  7[["type: #40;e: unknown#41; =#gt; MyError<br/>node: #40;e#41; =#gt; new MyError#40;#123; cause: e #125;#41;"]]
+  8[/"type: unknown<br/>node: e"/]
+  9[/"type: MyError<br/>node: new MyError#40;#123; cause: e #125;#41;"/]
+  10[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;http://something#quot;#41;"]]
+  11[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;http://something#quot;#41;"/]
+  12[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;http://something#quot;#41;"]]
+  13[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;http://something#quot;#41;"/]
+  14[["type: #40;_: unknown#41; =#gt; any<br/>node: #40;_#41; =#gt; _ as any"]]
+  15[/"type: unknown<br/>node: _"/]
+  16[/"type: any<br/>node: _ as any"/]
+  1 -->|"kind: potentialReturn"| 0
+  3 -->|"kind: parameter"| 2
+  4 -->|"kind: potentialReturn"| 2
+  6 -->|"kind: potentialReturn"| 5
+  8 -->|"kind: parameter"| 7
+  9 -->|"kind: potentialReturn"| 7
+  11 -->|"kind: potentialReturn"| 10
+  13 -->|"kind: potentialReturn"| 12
+  15 -->|"kind: parameter"| 14
+  16 -->|"kind: potentialReturn"| 14

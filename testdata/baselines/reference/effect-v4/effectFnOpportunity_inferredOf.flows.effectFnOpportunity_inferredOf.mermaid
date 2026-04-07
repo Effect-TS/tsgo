@@ -1,0 +1,6 @@
+flowchart TB
+  0[["type: #40;id: string#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;id: string#41; =#gt;#92;n    Effect.gen#40;function*#40;#41; #123;#92;n      yield* Effect.log#40;`Looking up user $#123;id#125;`#41;#92;n    #125;#41;"]]
+  1[/"type: string<br/>node: id: string"/]
+  2[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n      yield* Effect.log#40;`Looking up user $#123;id#125;`#41;#92;n    #125;#41;"/]
+  1 -->|"kind: parameter"| 0
+  2 -->|"kind: potentialReturn"| 0

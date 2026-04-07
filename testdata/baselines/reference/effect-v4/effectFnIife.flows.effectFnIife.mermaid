@@ -1,0 +1,37 @@
+flowchart TB
+  0[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;1#41;"]]
+  1[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
+  2[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: function#40;#41; #123;#92;n  return Effect.succeed#40;1#41;#92;n#125;"]]
+  3[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
+  4["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n + 1#93;"]
+  5[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  6((("type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n + 1")))
+  7[["type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n + 1"]]
+  8[/"type: number<br/>node: n"/]
+  9[/"type: number<br/>node: n + 1"/]
+  10["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n + 1#93;"]
+  11[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  12((("type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n + 1")))
+  13[["type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n + 1"]]
+  14[/"type: number<br/>node: n"/]
+  15[/"type: number<br/>node: n + 1"/]
+  16[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;1#41;"]]
+  17[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
+  18[["type: #40;n: number#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;n: number#41; =#gt; Effect.succeed#40;n#41;"]]
+  19[/"type: number<br/>node: n: number"/]
+  20[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;n#41;"/]
+  1 -->|"kind: potentialReturn"| 0
+  3 -->|"kind: potentialReturn"| 2
+  5 -->|"kind: transformCallee"| 4
+  6 -->|"kind: transformArg"| 4
+  8 -->|"kind: parameter"| 7
+  9 -->|"kind: potentialReturn"| 7
+  7 -->|"kind: connect"| 6
+  11 -->|"kind: transformCallee"| 10
+  12 -->|"kind: transformArg"| 10
+  14 -->|"kind: parameter"| 13
+  15 -->|"kind: potentialReturn"| 13
+  13 -->|"kind: connect"| 12
+  17 -->|"kind: potentialReturn"| 16
+  19 -->|"kind: parameter"| 18
+  20 -->|"kind: potentialReturn"| 18

@@ -1,0 +1,18 @@
+flowchart TB
+  0[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;#41; =#gt; #123;#92;n  const a = 1#92;n  const b = 2#92;n  const c = 3#92;n  const d = 4#92;n  const e = 5#92;n  return Effect.succeed#40;a + b + c + d + e#41;#92;n#125;"]]
+  1[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;a + b + c + d + e#41;"/]
+  2[["type: #lt;T#gt;#40;value: T#41; =#gt; Effect#lt;number, never, never#gt; #124; Effect#lt;never, string, never#gt;<br/>node: function#lt;T#gt;#40;value: T#41; #123;#92;n  const a = 1#92;n  const b = 2#92;n  const c = 3#92;n  const d = 4#92;n  const e = 5#92;n  if #40;value === null#41; return Effect.fail#40;#quot;Error!#quot;#41;#92;n  return Effect.succeed#40;a + b + c + d + e#41;#92;n#125;"]]
+  3[/"type: T<br/>node: value: T"/]
+  4[/"type: Effect#lt;never, string, never#gt;<br/>node: Effect.fail#40;#quot;Error!#quot;#41;"/]
+  5[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;a + b + c + d + e#41;"/]
+  6[["type: #lt;T#gt;#40;value: T#41; =#gt; Effect#lt;number, never, never#gt; #124; Effect#lt;never, string, never#gt;<br/>node: export function functionDeclarationPlainMany#lt;T#gt;#40;value: T#41; #123;#92;n  const a = 1#92;n  const b = 2#92;n  const c = 3#92;n  const d = 4#92;n  const e = 5#92;n  if #40;value === null#41; return Effect.fail#40;#quot;Error!#quot;#41;#92;n  return Effect.succeed#40;a + b + c + d + e#41;#92;n#125;"]]
+  7[/"type: T<br/>node: value: T"/]
+  8[/"type: Effect#lt;never, string, never#gt;<br/>node: Effect.fail#40;#quot;Error!#quot;#41;"/]
+  9[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;a + b + c + d + e#41;"/]
+  1 -->|"kind: potentialReturn"| 0
+  3 -->|"kind: parameter"| 2
+  4 -->|"kind: potentialReturn"| 2
+  5 -->|"kind: potentialReturn"| 2
+  7 -->|"kind: parameter"| 6
+  8 -->|"kind: potentialReturn"| 6
+  9 -->|"kind: potentialReturn"| 6

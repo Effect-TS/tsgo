@@ -1,0 +1,8 @@
+flowchart TB
+  0[/"type: any<br/>node: #123; value: #quot;WithSpecialChars#quot; #125; as any"/]
+  1["type: Layer#lt;IsGeneric#lt;#quot;With#lt;Special#gt;Chars#35;!#quot;#gt;, never, never#gt;<br/>callee: Layer.succeed<br/>args: #91;WithSpecialChars#93;"]
+  2[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #40;resource: S#41; =#gt; Layer#lt;I, never, never#gt;; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;, resource: NoInfer#lt;S#gt;#41;: Layer#lt;I, never, never#gt;; #125;<br/>node: Layer.succeed"/]
+  3[/"type: Service#lt;IsGeneric#lt;#quot;With#lt;Special#gt;Chars#35;!#quot;#gt;, #123; value: #quot;WithSpecialChars#quot;; #125;#gt;<br/>node: WithSpecialChars"/]
+  0 -->|"kind: dataLast"| 1
+  2 -->|"kind: transformCallee"| 1
+  3 -->|"kind: transformArg"| 1

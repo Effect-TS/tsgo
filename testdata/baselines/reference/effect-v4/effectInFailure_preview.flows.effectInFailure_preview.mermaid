@@ -1,0 +1,9 @@
+flowchart TB
+  0[["type: #40;#41; =#gt; any<br/>node: #40;#41; =#gt; JSON.parse#40;#quot;#123;#quot;#41;"]]
+  1[/"type: any<br/>node: JSON.parse#40;#quot;#123;#quot;#41;"/]
+  2[["type: #40;error: unknown#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;error#41; =#gt; Effect.logError#40;error#41;"]]
+  3[/"type: unknown<br/>node: error"/]
+  4[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.logError#40;error#41;"/]
+  1 -->|"kind: potentialReturn"| 0
+  3 -->|"kind: parameter"| 2
+  4 -->|"kind: potentialReturn"| 2

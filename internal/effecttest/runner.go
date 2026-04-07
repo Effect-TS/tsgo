@@ -368,6 +368,22 @@ func RunEffectTest(t *testing.T, version bundledeffect.EffectVersion, testFile s
 			baselineSubfolder,
 		)
 	})
+
+	// Generate execution flow baseline
+	t.Run("flows", func(t *testing.T) {
+		c, done := program.GetTypeChecker(ctx)
+		defer done()
+		DoExecutionFlowBaseline(
+			t,
+			baselineName,
+			c,
+			inputFiles,
+			func(fileName string) *ast.SourceFile {
+				return program.GetSourceFile(fileName)
+			},
+			baselineSubfolder,
+		)
+	})
 }
 
 // vfsParseConfigHost implements tsoptions.ParseConfigHost for VFS.

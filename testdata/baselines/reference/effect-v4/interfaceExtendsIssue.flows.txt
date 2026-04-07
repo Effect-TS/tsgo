@@ -1,1 +1,1 @@
-==== /.src/interfaceExtendsIssue.ts (0 flows) ====
+/.src/interfaceExtendsIssue.ts -> interfaceExtendsIssue.flows.interfaceExtendsIssue.mermaid

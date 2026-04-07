@@ -1,0 +1,11 @@
+flowchart TB
+  0[["type: #40;n: number#41; =#gt; Effect#lt;number, string, never#gt;<br/>node: #40;n: number#41; =#gt;#92;n    Effect.gen#40;function*#40;#41; #123;#92;n        if #40;n === 0#41; #123;#92;n            yield* Effect.fail#40;#quot;no zero!#quot;#41;#92;n        #125;#92;n        return n / 1#92;n    #125;#41;"]]
+  1[/"type: number<br/>node: n: number"/]
+  2[/"type: Effect#lt;number, string, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n        if #40;n === 0#41; #123;#92;n            yield* Effect.fail#40;#quot;no zero!#quot;#41;#92;n        #125;#92;n        return n / 1#92;n    #125;#41;"/]
+  3[["type: #40;n: number#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;n: number#41; =#gt;#92;n    Effect.gen#40;function*#40;#41; #123;#92;n        yield* Effect.interrupt#92;n        yield* Effect.die#40;#quot;lol#quot;#41;#92;n        return n / 1#92;n    #125;#41;"]]
+  4[/"type: number<br/>node: n: number"/]
+  5[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n        yield* Effect.interrupt#92;n        yield* Effect.die#40;#quot;lol#quot;#41;#92;n        return n / 1#92;n    #125;#41;"/]
+  1 -->|"kind: parameter"| 0
+  2 -->|"kind: potentialReturn"| 0
+  4 -->|"kind: parameter"| 3
+  5 -->|"kind: potentialReturn"| 3

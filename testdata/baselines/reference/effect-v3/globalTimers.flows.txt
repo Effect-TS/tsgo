@@ -1,0 +1,1 @@
+/.src/globalTimers.ts -> globalTimers.flows.globalTimers.mermaid

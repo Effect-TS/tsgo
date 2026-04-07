@@ -1,0 +1,16 @@
+flowchart TB
+  0[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: export async function declaredAsync#40;#41; #123;#92;n  await Promise.resolve#40;1#41;#92;n  return 1#92;n#125;"]]
+  1[/"type: 1<br/>node: 1"/]
+  2[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: async #40;#41; =#gt; #123;#92;n  await Promise.resolve#40;2#41;#92;n  return 2#92;n#125;"]]
+  3[/"type: 2<br/>node: 2"/]
+  4[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: async run#40;#41; #123;#92;n    await Promise.resolve#40;3#41;#92;n    return 3#92;n  #125;"]]
+  5[/"type: 3<br/>node: 3"/]
+  6[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: async function nested#40;#41; #123;#92;n    await Promise.resolve#40;4#41;#92;n    return 4#92;n  #125;"]]
+  7[/"type: 4<br/>node: 4"/]
+  8[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;5#41;"]]
+  9[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;5#41;"/]
+  1 -->|"kind: potentialReturn"| 0
+  3 -->|"kind: potentialReturn"| 2
+  5 -->|"kind: potentialReturn"| 4
+  7 -->|"kind: potentialReturn"| 6
+  9 -->|"kind: potentialReturn"| 8

@@ -1,0 +1,26 @@
+flowchart TB
+  0[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;http://localhost:9229#quot;#41;"]]
+  1[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;http://localhost:9229#quot;#41;"/]
+  2[["type: #40;e: unknown#41; =#gt; DebuggerError<br/>node: #40;e#41; =#gt; new DebuggerError#40;#123; cause: e #125;#41;"]]
+  3[/"type: unknown<br/>node: e"/]
+  4[/"type: DebuggerError<br/>node: new DebuggerError#40;#123; cause: e #125;#41;"/]
+  5[["type: #40;#41; =#gt; Promise#lt;any#gt;<br/>node: #40;#41; =#gt; response.json#40;#41;"]]
+  6[/"type: Promise#lt;any#gt;<br/>node: response.json#40;#41;"/]
+  7[["type: #40;#41; =#gt; WebSocket<br/>node: #40;#41; =#gt; new WebSocket#40;data.url#41;"]]
+  8[/"type: WebSocket<br/>node: new WebSocket#40;data.url#41;"/]
+  9[["type: #40;this: WebSocket, event: MessageEvent#lt;any#gt;#41; =#gt; void<br/>node: #40;event#41; =#gt; #123;#92;n    const check = Effect.tryPromise#40;#123;#92;n      try: #40;#41; =#gt; fetch#40;event.data as string#41;,#92;n      catch: #40;e#41; =#gt; new DebuggerError#40;#123; cause: e #125;#41;#92;n    #125;#41;#92;n    Effect.runPromise#40;check#41;#92;n    //        ^- no runPromise, use the current services instead#92;n  #125;"]]
+  10[/"type: MessageEvent#lt;any#gt;<br/>node: event"/]
+  11[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;event.data as string#41;"]]
+  12[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;event.data as string#41;"/]
+  13[["type: #40;e: unknown#41; =#gt; DebuggerError<br/>node: #40;e#41; =#gt; new DebuggerError#40;#123; cause: e #125;#41;"]]
+  14[/"type: unknown<br/>node: e"/]
+  15[/"type: DebuggerError<br/>node: new DebuggerError#40;#123; cause: e #125;#41;"/]
+  1 -->|"kind: potentialReturn"| 0
+  3 -->|"kind: parameter"| 2
+  4 -->|"kind: potentialReturn"| 2
+  6 -->|"kind: potentialReturn"| 5
+  8 -->|"kind: potentialReturn"| 7
+  10 -->|"kind: parameter"| 9
+  12 -->|"kind: potentialReturn"| 11
+  14 -->|"kind: parameter"| 13
+  15 -->|"kind: potentialReturn"| 13

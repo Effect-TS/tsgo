@@ -3,6 +3,7 @@ package typeparser
 
 import (
 	"github.com/microsoft/typescript-go/shim/ast"
+	"github.com/microsoft/typescript-go/shim/checker"
 )
 
 type EffectFnVariant string
@@ -15,13 +16,15 @@ const (
 
 // EffectFnCallResult represents a parsed Effect.fn-family call.
 type EffectFnCallResult struct {
-	Call            *ast.CallExpression
-	Variant         EffectFnVariant
-	EffectModule    *ast.Expression
-	OptionsNode     *ast.Node
-	FunctionNode    *ast.Node   // ArrowFunction or FunctionExpression
-	PipeArguments   []*ast.Node // Transformation args after the body (may be empty/nil)
-	TraceExpression *ast.Node   // The name string from curried Effect.fn("name")(...), or nil
+	Call               *ast.CallExpression
+	Variant            EffectFnVariant
+	EffectModule       *ast.Expression
+	OptionsNode        *ast.Node
+	FunctionNode       *ast.Node // ArrowFunction or FunctionExpression
+	FunctionReturnType *checker.Type
+	PipeArguments      []*ast.Node // Transformation args after the body (may be empty/nil)
+	PipeArgsOutType    []*checker.Type
+	TraceExpression    *ast.Node // The name string from curried Effect.fn("name")(...), or nil
 }
 
 func (r *EffectFnCallResult) IsGenerator() bool {
@@ -95,6 +98,45 @@ func isGeneratorFunctionNode(node *ast.Node) bool {
 	return fn != nil && fn.AsteriskToken != nil
 }
 
+func (tp *TypeParser) buildEffectFnFunctionReturnType(bodyArg *ast.Node) *checker.Type {
+	if tp == nil || tp.checker == nil || bodyArg == nil {
+		return nil
+	}
+
+	functionType := tp.GetTypeAtLocation(bodyArg)
+	if functionType == nil {
+		return nil
+	}
+	callSigs := tp.checker.GetSignaturesOfType(functionType, checker.SignatureKindCall)
+	if len(callSigs) == 0 {
+		return nil
+	}
+	return tp.checker.GetReturnTypeOfSignature(callSigs[0])
+}
+
+func (tp *TypeParser) buildEffectFnPipeArgsOutType(call *ast.CallExpression, trailingStartIndex int, pipeArgs []*ast.Node) []*checker.Type {
+	outTypes := make([]*checker.Type, len(pipeArgs))
+	if tp == nil || tp.checker == nil || call == nil {
+		return outTypes
+	}
+
+	callNode := call.AsNode()
+	for i := range pipeArgs {
+		argIndex := trailingStartIndex + i
+		contextualType := tp.checker.GetContextualTypeForArgumentAtIndex(callNode, argIndex)
+		if contextualType == nil {
+			continue
+		}
+		callSigs := tp.checker.GetSignaturesOfType(contextualType, checker.SignatureKindCall)
+		if len(callSigs) == 0 {
+			continue
+		}
+		outTypes[i] = tp.checker.GetReturnTypeOfSignature(callSigs[0])
+	}
+
+	return outTypes
+}
+
 // EffectFnCall parses a node as an Effect.fn-family call.
 // It supports fn, fnUntraced, and fnUntracedEager, both regular and generator forms.
 func (tp *TypeParser) EffectFnCall(node *ast.Node) *EffectFnCallResult {
@@ -112,6 +154,7 @@ func (tp *TypeParser) EffectFnCall(node *ast.Node) *EffectFnCallResult {
 		if bodyArg == nil {
 			return nil
 		}
+		trailingStartIndex := len(call.Arguments.Nodes) - len(pipeArgs)
 
 		// Determine the expression to check for Effect.fn reference.
 		// For curried calls like Effect.fn("name")(regularFn), call.Expression is a CallExpression.
@@ -167,13 +210,15 @@ func (tp *TypeParser) EffectFnCall(node *ast.Node) *EffectFnCallResult {
 		}
 
 		return &EffectFnCallResult{
-			Call:            call,
-			Variant:         variant,
-			EffectModule:    propertyAccess.Expression,
-			OptionsNode:     optionsNode,
-			FunctionNode:    bodyArg,
-			PipeArguments:   pipeArgs,
-			TraceExpression: traceExpression,
+			Call:               call,
+			Variant:            variant,
+			EffectModule:       propertyAccess.Expression,
+			OptionsNode:        optionsNode,
+			FunctionNode:       bodyArg,
+			FunctionReturnType: tp.buildEffectFnFunctionReturnType(bodyArg),
+			PipeArguments:      pipeArgs,
+			PipeArgsOutType:    tp.buildEffectFnPipeArgsOutType(call, trailingStartIndex, pipeArgs),
+			TraceExpression:    traceExpression,
 		}
 	})
 }

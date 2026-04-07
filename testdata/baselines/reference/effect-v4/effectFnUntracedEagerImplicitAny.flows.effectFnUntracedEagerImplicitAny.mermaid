@@ -1,0 +1,33 @@
+flowchart TB
+  0[["type: #40;input: any#41; =#gt; any<br/>node: function#40;input#41; #123;#92;n  return input#92;n#125;"]]
+  1[/"type: any<br/>node: input"/]
+  2[/"type: any<br/>node: input"/]
+  3[["type: #40;a: any, b: any#41; =#gt; readonly #91;any, any#93;<br/>node: function#40;a, b#41; #123;#92;n  return #91;a, b#93; as const#92;n#125;"]]
+  4[/"type: any<br/>node: a"/]
+  5[/"type: any<br/>node: b"/]
+  6[/"type: readonly #91;any, any#93;<br/>node: #91;a, b#93; as const"/]
+  7[["type: #40;input: any#41; =#gt; Effect#lt;any, never, never#gt;<br/>node: function#40;input#41; #123;#92;n  return Effect.succeed#40;input#41;#92;n#125;"]]
+  8[/"type: any<br/>node: input"/]
+  9[/"type: Effect#lt;any, never, never#gt;<br/>node: Effect.succeed#40;input#41;"/]
+  10[["type: #40;input: string#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: function#40;input#41; #123;#92;n  return Effect.succeed#40;input.length#41;#92;n#125;"]]
+  11[/"type: string<br/>node: input"/]
+  12[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;input.length#41;"/]
+  13[["type: #40;#123; id #125;: #123; readonly id: string; #125;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: function#40;#123; id #125;#41; #123;#92;n  return Effect.succeed#40;id#41;#92;n#125;"]]
+  14[/"type: #123; readonly id: string; #125;<br/>node: #123; id #125;"/]
+  15[/"type: Effect#lt;string, never, never#gt;<br/>node: Effect.succeed#40;id#41;"/]
+  16[["type: #40;input: string#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: function#40;input#41; #123;#92;n  return Effect.succeed#40;input.length#41;#92;n#125;"]]
+  17[/"type: string<br/>node: input"/]
+  18[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;input.length#41;"/]
+  1 -->|"kind: parameter"| 0
+  2 -->|"kind: potentialReturn"| 0
+  4 -->|"kind: parameter"| 3
+  5 -->|"kind: parameter"| 3
+  6 -->|"kind: potentialReturn"| 3
+  8 -->|"kind: parameter"| 7
+  9 -->|"kind: potentialReturn"| 7
+  11 -->|"kind: parameter"| 10
+  12 -->|"kind: potentialReturn"| 10
+  14 -->|"kind: parameter"| 13
+  15 -->|"kind: potentialReturn"| 13
+  17 -->|"kind: parameter"| 16
+  18 -->|"kind: potentialReturn"| 16

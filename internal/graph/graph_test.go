@@ -476,6 +476,26 @@ func TestNeighborhood(t *testing.T) {
 			t.Errorf("expected %v, got %v", expected, neighbors)
 		}
 	})
+
+	t.Run("OutgoingEdges", func(t *testing.T) {
+		t.Parallel()
+		g, n := buildDiamondGraph()
+		edges := g.OutgoingEdges(n[0])
+		expected := []EdgeIndex{0, 1}
+		if !slices.Equal(edges, expected) {
+			t.Errorf("expected %v, got %v", expected, edges)
+		}
+	})
+
+	t.Run("IncomingEdges", func(t *testing.T) {
+		t.Parallel()
+		g, n := buildDiamondGraph()
+		edges := g.IncomingEdges(n[3])
+		expected := []EdgeIndex{2, 3}
+		if !slices.Equal(edges, expected) {
+			t.Errorf("expected %v, got %v", expected, edges)
+		}
+	})
 }
 
 func TestExternals(t *testing.T) {
@@ -899,6 +919,34 @@ func TestToMermaid(t *testing.T) {
 		}
 	})
 
+	t.Run("CustomNodeShape", func(t *testing.T) {
+		t.Parallel()
+		g := New[string, string]()
+		a := g.AddNode("A")
+		b := g.AddNode("B")
+		g.AddEdge(a, b, "ab")
+		result := g.ToMermaid(MermaidOptions[string, string]{
+			NodeShape: func(string) (string, string) { return "([", "])" },
+		})
+		if !strings.Contains(result, `0(["A"])`) {
+			t.Errorf("expected custom node shape, got %q", result)
+		}
+	})
+
+	t.Run("CustomEdgeShape", func(t *testing.T) {
+		t.Parallel()
+		g := New[string, string]()
+		a := g.AddNode("A")
+		b := g.AddNode("B")
+		g.AddEdge(a, b, "ab")
+		result := g.ToMermaid(MermaidOptions[string, string]{
+			EdgeShape: func(string) (string, string) { return "-.", ".->" },
+		})
+		if !strings.Contains(result, `0 -.|"ab"|.-> 1`) {
+			t.Errorf("expected custom edge shape, got %q", result)
+		}
+	})
+
 	t.Run("Direction", func(t *testing.T) {
 		t.Parallel()
 		g := New[string, string]()
@@ -911,22 +959,46 @@ func TestToMermaid(t *testing.T) {
 	t.Run("Escaping", func(t *testing.T) {
 		t.Parallel()
 		g := New[string, string]()
-		g.AddNode(`a\b"c[d]e|f` + "\n" + "g")
+		g.AddNode(`#a\b"c<d>[e]{f}(g)|h&i` + "\n" + "j")
 		result := g.ToMermaid(MermaidOptions[string, string]{})
-		if !strings.Contains(result, `\\`) {
-			t.Error("expected escaped backslash")
+		if !strings.Contains(result, `#35;`) {
+			t.Error("expected escaped hash entity")
 		}
-		if !strings.Contains(result, `\"`) {
-			t.Error("expected escaped quote")
+		if !strings.Contains(result, `#quot;`) {
+			t.Error("expected escaped quote entity")
 		}
-		if !strings.Contains(result, `\[`) {
-			t.Error("expected escaped open bracket")
+		if !strings.Contains(result, `#lt;`) {
+			t.Error("expected escaped less-than entity")
 		}
-		if !strings.Contains(result, `\]`) {
-			t.Error("expected escaped close bracket")
+		if !strings.Contains(result, `#gt;`) {
+			t.Error("expected escaped greater-than entity")
 		}
-		if !strings.Contains(result, `\|`) {
-			t.Error("expected escaped pipe")
+		if !strings.Contains(result, `#amp;`) {
+			t.Error("expected escaped ampersand entity")
+		}
+		if !strings.Contains(result, `#91;`) {
+			t.Error("expected escaped open bracket entity")
+		}
+		if !strings.Contains(result, `#93;`) {
+			t.Error("expected escaped close bracket entity")
+		}
+		if !strings.Contains(result, `#123;`) {
+			t.Error("expected escaped open brace entity")
+		}
+		if !strings.Contains(result, `#125;`) {
+			t.Error("expected escaped close brace entity")
+		}
+		if !strings.Contains(result, `#40;`) {
+			t.Error("expected escaped open parenthesis entity")
+		}
+		if !strings.Contains(result, `#41;`) {
+			t.Error("expected escaped close parenthesis entity")
+		}
+		if !strings.Contains(result, `#124;`) {
+			t.Error("expected escaped pipe entity")
+		}
+		if !strings.Contains(result, `#92;`) {
+			t.Error("expected escaped backslash entity")
 		}
 		if !strings.Contains(result, "<br/>") {
 			t.Error("expected escaped newline as <br/>")

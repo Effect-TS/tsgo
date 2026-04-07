@@ -1,0 +1,65 @@
+flowchart TB
+  0[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;42#41;"/]
+  1["type: Effect#lt;void #124; number, never, never#gt;<br/>callee: Effect.catchAll<br/>args: #91;#40;#41; =#gt; Effect.void#93;"]
+  2[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catchAll"/]
+  3((("type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void")))
+  4[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  5[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  6[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;42#41;"/]
+  7["type: Effect#lt;void #124; number, never, never#gt;<br/>callee: Effect.catchIf<br/>args: #91;#40;error#41; =#gt; error === #quot;MyError#quot;, #40;#41; =#gt; Effect.void#93;"]
+  8[/"type: #123; #lt;E, EB extends E, A2, E2, R2#gt;#40;refinement: Refinement#lt;NoInfer#lt;E#gt;, EB#gt;, f: #40;e: EB#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2 #124; Exclude#lt;E, EB#gt;, R #124; R2#gt;; #lt;E, A2, E2, R2#gt;#40;predicate: Predicate#lt;NoInfer#lt;E#gt;#gt;, f: #40;e: NoInfer#lt;E#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E #124; E2, R #124; R2#gt;; #lt;A, E, R, EB extends E, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, refinement: Refinement#lt;E, EB#gt;, f: #40;e: EB#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2 #124; Exclude#lt;E, EB#gt;, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, predicate: Predicate#lt;E#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.catchIf"/]
+  9((("type: #40;error: never#41; =#gt; boolean<br/>node: #40;error#41; =#gt; error === #quot;MyError#quot;")))
+  10((("type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void")))
+  11[["type: #40;error: never#41; =#gt; boolean<br/>node: #40;error#41; =#gt; error === #quot;MyError#quot;"]]
+  12[/"type: never<br/>node: error"/]
+  13[/"type: boolean<br/>node: error === #quot;MyError#quot;"/]
+  14[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  15[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  16[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;42#41;"/]
+  17["type: Effect#lt;void #124; number, never, never#gt;<br/>callee: Effect.catchSome<br/>args: #91;#40;#41; =#gt; Option.some#40;Effect.void#41;#93;"]
+  18[/"type: #123; #lt;E, A2, E2, R2#gt;#40;pf: #40;e: NoInfer#lt;E#gt;#41; =#gt; Option#lt;Effect#lt;A2, E2, R2#gt;#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E #124; E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, pf: #40;e: NoInfer#lt;E#gt;#41; =#gt; Option#lt;Effect#lt;A2, E2, R2#gt;#gt;#41;: Effect#lt;A #124; A2, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.catchSome"/]
+  19((("type: #40;#41; =#gt; Option#lt;Effect#lt;void, never, never#gt;#gt;<br/>node: #40;#41; =#gt; Option.some#40;Effect.void#41;")))
+  20[["type: #40;#41; =#gt; Option#lt;Effect#lt;void, never, never#gt;#gt;<br/>node: #40;#41; =#gt; Option.some#40;Effect.void#41;"]]
+  21[/"type: Option#lt;Effect#lt;void, never, never#gt;#gt;<br/>node: Option.some#40;Effect.void#41;"/]
+  22[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;42#41;"/]
+  23["type: Effect#lt;void #124; number, never, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;MyError#quot;, #40;#41; =#gt; Effect.void#93;"]
+  24[/"type: #123; #lt;E, const K extends RA.NonEmptyReadonlyArray#lt;E extends #123; _tag: string; #125; ? E#91;#quot;_tag#quot;#93; : never#gt;, A1, E1, R1#gt;#40;...args: #91;...tags: K, f: #40;e: Extract#lt;NoInfer#lt;E#gt;, #123; _tag: K#91;number#93;; #125;#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;#93;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A1, E1 #124; Exclude#lt;E, #123; _tag: K#91;number#93;; #125;#gt;, R #124; R1#gt;; #lt;A, E, R, const K extends RA.NonEmptyReadonlyArray#lt;E extends #123; _tag: string; #125; ? E#91;#quot;_tag#quot;#93; : never#gt;, A1, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, ...args: #91;...tags: K, f: #40;e: Extract#lt;NoInfer#lt;E#gt;, #123; _tag: K#91;number#93;; #125;#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;#93;#41;: Effect#lt;A #124; A1, E1 #124; Exclude#lt;E, #123; _tag: K#91;number#93;; #125;#gt;, R #124; R1#gt;; #125;<br/>node: Effect.catchTag"/]
+  25[/"type: #quot;MyError#quot;<br/>node: #quot;MyError#quot;"/]
+  26((("type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void")))
+  27[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  28[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  29[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;42#41;"/]
+  30["type: Effect#lt;unknown, unknown, unknown#gt;<br/>callee: Effect.catchTags<br/>args: #91;#123;#92;n    // @ts-expect-error#92;n    MyError: #40;#41; =#gt; Effect.void#92;n  #125;#93;"]
+  31[/"type: #123; #lt;E, Cases extends #123; #91;K in Extract#lt;E, #123; _tag: string; #125;#gt;#91;#quot;_tag#quot;#93;#93;+?: #40;#40;error: Extract#lt;E, #123; _tag: K; #125;#gt;#41; =#gt; Effect#lt;any, any, any#gt;#41;; #125; #amp; #40;unknown extends E ? #123;#125; : #123; #91;K in Exclude#lt;keyof Cases, Extract#lt;E, #123; _tag: string; #125;#gt;#91;#quot;_tag#quot;#93;#gt;#93;: never; #125;#41;#gt;#40;cases: Cases#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;infer A, any, any#gt; ? A : never; #125;#91;keyof Cases#93;, #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;any, infer E, any#gt; ? E : never; #125;#91;keyof Cases#93; #124; Exclude#lt;E, #123; _tag: keyof Cases; #125;#gt;, R #124; #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;any, any, infer R#gt; ? R : never; #125;#91;keyof Cases#93;#gt;; #lt;R, E, A, Cases extends #123; #91;K in Extract#lt;E, #123; _tag: string; #125;#gt;#91;#quot;_tag#quot;#93;#93;+?: #40;#40;error: Extract#lt;E, #123; _tag: K; #125;#gt;#41; =#gt; Effect#lt;any, any, any#gt;#41;; #125; #amp; #40;unknown extends E ? #123;#125; : #123; #91;K in Exclude#lt;keyof Cases, Extract#lt;E, #123; _tag: string; #125;#gt;#91;#quot;_tag#quot;#93;#gt;#93;: never; #125;#41;#gt;#40;self: Effect#lt;A, E, R#gt;, cases: Cases#41;: Effect#lt;A #124; #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;infer A, any, any#gt; ? A : never; #125;#91;keyof Cases#93;, #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;any, infer E, any#gt; ? E : never; #125;#91;keyof Cases#93; #124; Exclude#lt;E, #123; _tag: keyof Cases; #125;#gt;, R #124; #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;any, any, infer R#gt; ? R : never; #125;#91;keyof Cases#93;#gt;; #125;<br/>node: Effect.catchTags"/]
+  32[/"type: #123; MyError: #40;#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #123;#92;n    // @ts-expect-error#92;n    MyError: #40;#41; =#gt; Effect.void#92;n  #125;"/]
+  33[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  34[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1
+  3 -->|"kind: transformArg"| 1
+  5 -->|"kind: potentialReturn"| 4
+  4 -->|"kind: connect"| 3
+  6 -->|"kind: pipe"| 7
+  8 -->|"kind: transformCallee"| 7
+  9 -->|"kind: transformArg"| 7
+  10 -->|"kind: transformArg"| 7
+  12 -->|"kind: parameter"| 11
+  13 -->|"kind: potentialReturn"| 11
+  11 -->|"kind: connect"| 9
+  15 -->|"kind: potentialReturn"| 14
+  14 -->|"kind: connect"| 10
+  16 -->|"kind: pipe"| 17
+  18 -->|"kind: transformCallee"| 17
+  19 -->|"kind: transformArg"| 17
+  21 -->|"kind: potentialReturn"| 20
+  20 -->|"kind: connect"| 19
+  22 -->|"kind: pipe"| 23
+  24 -->|"kind: transformCallee"| 23
+  25 -->|"kind: transformArg"| 23
+  26 -->|"kind: transformArg"| 23
+  28 -->|"kind: potentialReturn"| 27
+  27 -->|"kind: connect"| 26
+  29 -->|"kind: pipe"| 30
+  31 -->|"kind: transformCallee"| 30
+  32 -->|"kind: transformArg"| 30
+  34 -->|"kind: potentialReturn"| 33

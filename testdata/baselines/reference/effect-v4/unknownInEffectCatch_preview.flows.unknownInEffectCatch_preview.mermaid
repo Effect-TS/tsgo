@@ -1,0 +1,9 @@
+flowchart TB
+  0[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: async #40;#41; =#gt; 1"]]
+  1[/"type: 1<br/>node: 1"/]
+  2[["type: #40;error: unknown#41; =#gt; unknown<br/>node: #40;error#41; =#gt; error"]]
+  3[/"type: unknown<br/>node: error"/]
+  4[/"type: unknown<br/>node: error"/]
+  1 -->|"kind: potentialReturn"| 0
+  3 -->|"kind: parameter"| 2
+  4 -->|"kind: potentialReturn"| 2

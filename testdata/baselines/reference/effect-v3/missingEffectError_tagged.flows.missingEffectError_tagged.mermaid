@@ -1,0 +1,7 @@
+flowchart TB
+  0[["type: #40;#41; =#gt; Effect#lt;number, ErrorA #124; ErrorB #124; ErrorC, never#gt;<br/>node: #40;#41; =#gt; effectWithErrors"]]
+  1[/"type: Effect#lt;number, ErrorA #124; ErrorB #124; ErrorC, never#gt;<br/>node: effectWithErrors"/]
+  2[["type: #40;#41; =#gt; Effect#lt;number, ErrorA #124; ErrorB #124; ErrorC, never#gt;<br/>node: #40;#41; =#gt; effectWithErrors"]]
+  3[/"type: Effect#lt;number, ErrorA #124; ErrorB #124; ErrorC, never#gt;<br/>node: effectWithErrors"/]
+  1 -->|"kind: potentialReturn"| 0
+  3 -->|"kind: potentialReturn"| 2

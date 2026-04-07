@@ -1,0 +1,49 @@
+flowchart TB
+  0[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;http://something#quot;#41;"]]
+  1[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;http://something#quot;#41;"/]
+  2[["type: #40;e: unknown#41; =#gt; MyError<br/>node: #40;e#41; =#gt; new MyError#40;#123; cause: e #125;#41;"]]
+  3[/"type: unknown<br/>node: e"/]
+  4[/"type: MyError<br/>node: new MyError#40;#123; cause: e #125;#41;"/]
+  5[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;http://something#quot;#41;"]]
+  6[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;http://something#quot;#41;"/]
+  7[["type: #40;#41; =#gt; Error<br/>node: #40;#41; =#gt; new Error#40;#quot;Unknown!#quot;#41;"]]
+  8[/"type: Error<br/>node: new Error#40;#quot;Unknown!#quot;#41;"/]
+  9[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;42#41;"/]
+  10["type: Effect#lt;Response, MyError, never#gt;<br/>callee: Effect.tryMapPromise<br/>args: #91;#123;#92;n  try: #40;_#41; =#gt; fetch#40;#quot;http://something/#quot; + _#41;,#92;n  catch: #40;e#41; =#gt; new MyError#40;#123; cause: e #125;#41;#92;n#125;#93;"]
+  11[/"type: #123; #lt;A, B, E1#gt;#40;options: #123; readonly try: #40;a: A, signal: AbortSignal#41; =#gt; PromiseLike#lt;B#gt;; readonly catch: #40;error: unknown#41; =#gt; E1; #125;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R#gt;; #lt;A, E, R, B, E1#gt;#40;self: Effect#lt;A, E, R#gt;, options: #123; readonly try: #40;a: A, signal: AbortSignal#41; =#gt; PromiseLike#lt;B#gt;; readonly catch: #40;error: unknown#41; =#gt; E1; #125;#41;: Effect#lt;B, E #124; E1, R#gt;; #125;<br/>node: Effect.tryMapPromise"/]
+  12[/"type: #123; try: #40;_: number#41; =#gt; Promise#lt;Response#gt;; catch: #40;e: unknown#41; =#gt; MyError; #125;<br/>node: #123;#92;n  try: #40;_#41; =#gt; fetch#40;#quot;http://something/#quot; + _#41;,#92;n  catch: #40;e#41; =#gt; new MyError#40;#123; cause: e #125;#41;#92;n#125;"/]
+  13[["type: #40;_: number#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;_#41; =#gt; fetch#40;#quot;http://something/#quot; + _#41;"]]
+  14[/"type: number<br/>node: _"/]
+  15[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;http://something/#quot; + _#41;"/]
+  16[["type: #40;e: unknown#41; =#gt; MyError<br/>node: #40;e#41; =#gt; new MyError#40;#123; cause: e #125;#41;"]]
+  17[/"type: unknown<br/>node: e"/]
+  18[/"type: MyError<br/>node: new MyError#40;#123; cause: e #125;#41;"/]
+  19[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;42#41;"/]
+  20["type: Effect#lt;Response, Error, never#gt;<br/>callee: Effect.tryMapPromise<br/>args: #91;#123;#92;n  try: #40;_#41; =#gt; fetch#40;#quot;http://something/#quot; + _#41;,#92;n  catch: #40;cause#41; =#gt; new Error#40;#quot;Hey#quot;, #123; cause #125;#41;#92;n#125;#93;"]
+  21[/"type: #123; #lt;A, B, E1#gt;#40;options: #123; readonly try: #40;a: A, signal: AbortSignal#41; =#gt; PromiseLike#lt;B#gt;; readonly catch: #40;error: unknown#41; =#gt; E1; #125;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R#gt;; #lt;A, E, R, B, E1#gt;#40;self: Effect#lt;A, E, R#gt;, options: #123; readonly try: #40;a: A, signal: AbortSignal#41; =#gt; PromiseLike#lt;B#gt;; readonly catch: #40;error: unknown#41; =#gt; E1; #125;#41;: Effect#lt;B, E #124; E1, R#gt;; #125;<br/>node: Effect.tryMapPromise"/]
+  22[/"type: #123; try: #40;_: number#41; =#gt; Promise#lt;Response#gt;; catch: #40;cause: unknown#41; =#gt; Error; #125;<br/>node: #123;#92;n  try: #40;_#41; =#gt; fetch#40;#quot;http://something/#quot; + _#41;,#92;n  catch: #40;cause#41; =#gt; new Error#40;#quot;Hey#quot;, #123; cause #125;#41;#92;n#125;"/]
+  23[["type: #40;_: number#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;_#41; =#gt; fetch#40;#quot;http://something/#quot; + _#41;"]]
+  24[/"type: number<br/>node: _"/]
+  25[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;http://something/#quot; + _#41;"/]
+  26[["type: #40;cause: unknown#41; =#gt; Error<br/>node: #40;cause#41; =#gt; new Error#40;#quot;Hey#quot;, #123; cause #125;#41;"]]
+  27[/"type: unknown<br/>node: cause"/]
+  28[/"type: Error<br/>node: new Error#40;#quot;Hey#quot;, #123; cause #125;#41;"/]
+  1 -->|"kind: potentialReturn"| 0
+  3 -->|"kind: parameter"| 2
+  4 -->|"kind: potentialReturn"| 2
+  6 -->|"kind: potentialReturn"| 5
+  8 -->|"kind: potentialReturn"| 7
+  9 -->|"kind: pipe"| 10
+  11 -->|"kind: transformCallee"| 10
+  12 -->|"kind: transformArg"| 10
+  14 -->|"kind: parameter"| 13
+  15 -->|"kind: potentialReturn"| 13
+  17 -->|"kind: parameter"| 16
+  18 -->|"kind: potentialReturn"| 16
+  19 -->|"kind: pipe"| 20
+  21 -->|"kind: transformCallee"| 20
+  22 -->|"kind: transformArg"| 20
+  24 -->|"kind: parameter"| 23
+  25 -->|"kind: potentialReturn"| 23
+  27 -->|"kind: parameter"| 26
+  28 -->|"kind: potentialReturn"| 26

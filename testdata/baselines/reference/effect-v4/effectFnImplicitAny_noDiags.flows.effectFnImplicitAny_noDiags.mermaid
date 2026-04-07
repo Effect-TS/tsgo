@@ -1,0 +1,25 @@
+flowchart TB
+  0["type: Effect#lt;#40;string #124; number#41;#91;#93;, never, never#gt;<br/>callee: #40;effect, ...args#41; =#gt; effect.pipe#40;Effect.map#40;#40;result#41; =#gt; #91;result, ...args#93;#41;#41;<br/>args: #91;#93;"]
+  1[/"type: #40;effect: Effect#lt;number, never, never#gt;, s: string#41; =#gt; Effect#lt;#40;string #124; number#41;#91;#93;, never, never#gt;<br/>node: #40;effect, ...args#41; =#gt; effect.pipe#40;Effect.map#40;#40;result#41; =#gt; #91;result, ...args#93;#41;#41;"/]
+  2[["type: #40;effect: Effect#lt;number, never, never#gt;, s: string#41; =#gt; Effect#lt;#40;string #124; number#41;#91;#93;, never, never#gt;<br/>node: #40;effect, ...args#41; =#gt; effect.pipe#40;Effect.map#40;#40;result#41; =#gt; #91;result, ...args#93;#41;#41;"]]
+  3[/"type: Effect#lt;number, never, never#gt;<br/>node: effect"/]
+  4[/"type: #91;s: string#93;<br/>node: ...args"/]
+  5((("type: Effect#lt;#40;string #124; number#41;#91;#93;, never, never#gt;<br/>node: effect.pipe#40;Effect.map#40;#40;result#41; =#gt; #91;result, ...args#93;#41;#41;")))
+  6[/"type: Effect#lt;number, never, never#gt;<br/>node: effect"/]
+  7["type: Effect#lt;#40;string #124; number#41;#91;#93;, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;result#41; =#gt; #91;result, ...args#93;#93;"]
+  8[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  9((("type: #40;result: number#41; =#gt; #40;string #124; number#41;#91;#93;<br/>node: #40;result#41; =#gt; #91;result, ...args#93;")))
+  10[["type: #40;result: number#41; =#gt; #40;string #124; number#41;#91;#93;<br/>node: #40;result#41; =#gt; #91;result, ...args#93;"]]
+  11[/"type: number<br/>node: result"/]
+  12[/"type: #40;string #124; number#41;#91;#93;<br/>node: #91;result, ...args#93;"/]
+  1 -->|"kind: transformCallee"| 0
+  3 -->|"kind: parameter"| 2
+  4 -->|"kind: parameter"| 2
+  5 -->|"kind: potentialReturn"| 2
+  6 -->|"kind: pipe"| 7
+  7 -->|"kind: connect"| 5
+  8 -->|"kind: transformCallee"| 7
+  9 -->|"kind: transformArg"| 7
+  11 -->|"kind: parameter"| 10
+  12 -->|"kind: potentialReturn"| 10
+  10 -->|"kind: connect"| 9

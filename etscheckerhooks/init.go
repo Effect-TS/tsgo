@@ -5,6 +5,7 @@ package etscheckerhooks
 
 import (
 	"context"
+
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/directives"
 	"github.com/effect-ts/tsgo/internal/effectconfigraw"

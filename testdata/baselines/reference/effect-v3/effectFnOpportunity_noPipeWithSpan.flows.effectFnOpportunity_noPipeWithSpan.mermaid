@@ -1,0 +1,52 @@
+flowchart TB
+  0[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt;#92;n  Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;42#41;#92;n  #125;#41;.pipe#40;Effect.ignoreLogged#41;"]]
+  1((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;42#41;#92;n  #125;#41;.pipe#40;Effect.ignoreLogged#41;")))
+  2[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;42#41;#92;n  #125;#41;"/]
+  3["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.ignoreLogged<br/>args: #91;#93;"]
+  4[/"type: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;void, never, R#gt;<br/>node: Effect.ignoreLogged"/]
+  5[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: function#40;#41; #123;#92;n  return Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;42#41;#92;n  #125;#41;.pipe#40;Effect.withSpan#40;#quot;functionExpressionWithPipe#quot;#41;, Effect.ignoreLogged#41;#92;n#125;"]]
+  6((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;42#41;#92;n  #125;#41;.pipe#40;Effect.withSpan#40;#quot;functionExpressionWithPipe#quot;#41;, Effect.ignoreLogged#41;")))
+  7[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;42#41;#92;n  #125;#41;"/]
+  8["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.withSpan<br/>args: #91;#quot;functionExpressionWithPipe#quot;#93;"]
+  9["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.ignoreLogged<br/>args: #91;#93;"]
+  10[/"type: #123; #40;name: string, options?: SpanOptions #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, ParentSpan#gt;#gt;; #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;, name: string, options?: SpanOptions #124; undefined#41;: Effect#lt;A, E, Exclude#lt;R, ParentSpan#gt;#gt;; #125;<br/>node: Effect.withSpan"/]
+  11[/"type: #quot;functionExpressionWithPipe#quot;<br/>node: #quot;functionExpressionWithPipe#quot;"/]
+  12[/"type: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;void, never, R#gt;<br/>node: Effect.ignoreLogged"/]
+  13[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: export function functionDeclarationWithPipe#40;#41; #123;#92;n  return Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;42#41;#92;n  #125;#41;.pipe#40;Effect.map#40;#40;x#41; =#gt; x + 1#41;, Effect.withSpan#40;#quot;functionDeclarationWithPipe#quot;#41;, Effect.ignoreLogged#41;#92;n#125;"]]
+  14((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;42#41;#92;n  #125;#41;.pipe#40;Effect.map#40;#40;x#41; =#gt; x + 1#41;, Effect.withSpan#40;#quot;functionDeclarationWithPipe#quot;#41;, Effect.ignoreLogged#41;")))
+  15[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;42#41;#92;n  #125;#41;"/]
+  16["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x + 1#93;"]
+  17["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.withSpan<br/>args: #91;#quot;functionDeclarationWithPipe#quot;#93;"]
+  18["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.ignoreLogged<br/>args: #91;#93;"]
+  19[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  20((("type: #40;x: number#41; =#gt; number<br/>node: #40;x#41; =#gt; x + 1")))
+  21[["type: #40;x: number#41; =#gt; number<br/>node: #40;x#41; =#gt; x + 1"]]
+  22[/"type: number<br/>node: x"/]
+  23[/"type: number<br/>node: x + 1"/]
+  24[/"type: #123; #40;name: string, options?: SpanOptions #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, ParentSpan#gt;#gt;; #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;, name: string, options?: SpanOptions #124; undefined#41;: Effect#lt;A, E, Exclude#lt;R, ParentSpan#gt;#gt;; #125;<br/>node: Effect.withSpan"/]
+  25[/"type: #quot;functionDeclarationWithPipe#quot;<br/>node: #quot;functionDeclarationWithPipe#quot;"/]
+  26[/"type: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;void, never, R#gt;<br/>node: Effect.ignoreLogged"/]
+  1 -->|"kind: potentialReturn"| 0
+  2 -->|"kind: pipe"| 3
+  3 -->|"kind: connect"| 1
+  4 -->|"kind: transformCallee"| 3
+  6 -->|"kind: potentialReturn"| 5
+  7 -->|"kind: pipe"| 8
+  8 -->|"kind: pipe"| 9
+  9 -->|"kind: connect"| 6
+  10 -->|"kind: transformCallee"| 8
+  11 -->|"kind: transformArg"| 8
+  12 -->|"kind: transformCallee"| 9
+  14 -->|"kind: potentialReturn"| 13
+  15 -->|"kind: pipe"| 16
+  16 -->|"kind: pipe"| 17
+  17 -->|"kind: pipe"| 18
+  18 -->|"kind: connect"| 14
+  19 -->|"kind: transformCallee"| 16
+  20 -->|"kind: transformArg"| 16
+  22 -->|"kind: parameter"| 21
+  23 -->|"kind: potentialReturn"| 21
+  21 -->|"kind: connect"| 20
+  24 -->|"kind: transformCallee"| 17
+  25 -->|"kind: transformArg"| 17
+  26 -->|"kind: transformCallee"| 18

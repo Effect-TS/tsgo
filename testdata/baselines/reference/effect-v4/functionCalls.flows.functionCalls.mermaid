@@ -1,0 +1,46 @@
+flowchart TB
+  0[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
+  1["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n + 1#93;"]
+  2[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  3((("type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n + 1")))
+  4[["type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n + 1"]]
+  5[/"type: number<br/>node: n"/]
+  6[/"type: number<br/>node: n + 1"/]
+  7[["type: #lt;A#gt;#40;effect: Effect#lt;A, never, never#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: #lt;A#gt;#40;effect: Effect.Effect#lt;A#gt;#41; =#gt; Effect.tap#40;effect, #40;a#41; =#gt; Effect.log#40;`Got: $#123;a#125;`#41;#41;"]]
+  8[/"type: Effect#lt;A, never, never#gt;<br/>node: effect: Effect.Effect#lt;A#gt;"/]
+  9((("type: Effect#lt;A, never, never#gt;<br/>node: Effect.tap#40;effect, #40;a#41; =#gt; Effect.log#40;`Got: $#123;a#125;`#41;#41;")))
+  10[/"type: Effect#lt;A, never, never#gt;<br/>node: effect"/]
+  11["type: Effect#lt;A, never, never#gt;<br/>callee: Effect.tap<br/>args: #91;#40;a#41; =#gt; Effect.log#40;`Got: $#123;a#125;`#41;#93;"]
+  12[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: NoInfer#lt;A#gt;#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: NoInfer#lt;A#gt;#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;A, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;A, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.tap"/]
+  13((("type: #40;a: NoInfer#lt;A#gt;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;a#41; =#gt; Effect.log#40;`Got: $#123;a#125;`#41;")))
+  14[["type: #40;a: NoInfer#lt;A#gt;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;a#41; =#gt; Effect.log#40;`Got: $#123;a#125;`#41;"]]
+  15[/"type: NoInfer#lt;A#gt;<br/>node: a"/]
+  16[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;`Got: $#123;a#125;`#41;"/]
+  17[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
+  18["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n + 1#93;"]
+  19[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  20((("type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n + 1")))
+  21[["type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n + 1"]]
+  22[/"type: number<br/>node: n"/]
+  23[/"type: number<br/>node: n + 1"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1
+  3 -->|"kind: transformArg"| 1
+  5 -->|"kind: parameter"| 4
+  6 -->|"kind: potentialReturn"| 4
+  4 -->|"kind: connect"| 3
+  8 -->|"kind: parameter"| 7
+  9 -->|"kind: potentialReturn"| 7
+  10 -->|"kind: dataFirst"| 11
+  12 -->|"kind: transformCallee"| 11
+  13 -->|"kind: transformArg"| 11
+  11 -->|"kind: connect"| 9
+  15 -->|"kind: parameter"| 14
+  16 -->|"kind: potentialReturn"| 14
+  14 -->|"kind: connect"| 13
+  17 -->|"kind: pipe"| 18
+  19 -->|"kind: transformCallee"| 18
+  20 -->|"kind: transformArg"| 18
+  22 -->|"kind: parameter"| 21
+  23 -->|"kind: potentialReturn"| 21
+  21 -->|"kind: connect"| 20

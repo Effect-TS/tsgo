@@ -1,0 +1,29 @@
+flowchart TB
+  0[/"type: Effect#lt;string, never, never#gt;<br/>node: Effect.succeed#40;#quot;Hello#quot;#41;"/]
+  1["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x + #quot; World#quot;#93;"]
+  2[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  3((("type: #40;x: string#41; =#gt; string<br/>node: #40;x#41; =#gt; x + #quot; World#quot;")))
+  4[["type: #40;x: string#41; =#gt; string<br/>node: #40;x#41; =#gt; x + #quot; World#quot;"]]
+  5[/"type: string<br/>node: x"/]
+  6[/"type: string<br/>node: x + #quot; World#quot;"/]
+  7[/"type: Effect#lt;string, never, never#gt;<br/>node: Effect.succeed#40;#quot;Hello#quot;#41;"/]
+  8["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x + #quot; World#quot;#93;"]
+  9[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  10((("type: #40;x: string#41; =#gt; string<br/>node: #40;x#41; =#gt; x + #quot; World#quot;")))
+  11[["type: #40;x: string#41; =#gt; string<br/>node: #40;x#41; =#gt; x + #quot; World#quot;"]]
+  12[/"type: string<br/>node: x"/]
+  13[/"type: string<br/>node: x + #quot; World#quot;"/]
+  14[/"type: 32<br/>node: 32"/]
+  15[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;32#41;"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1
+  3 -->|"kind: transformArg"| 1
+  5 -->|"kind: parameter"| 4
+  6 -->|"kind: potentialReturn"| 4
+  4 -->|"kind: connect"| 3
+  7 -->|"kind: pipe"| 8
+  9 -->|"kind: transformCallee"| 8
+  10 -->|"kind: transformArg"| 8
+  12 -->|"kind: parameter"| 11
+  13 -->|"kind: potentialReturn"| 11
+  11 -->|"kind: connect"| 10

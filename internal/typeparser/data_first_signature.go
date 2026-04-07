@@ -7,7 +7,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/checker"
 )
 
-type ParsedDataFirstCallResult struct {
+type ParsedDataFirstOrLastCall struct {
 	Node         *ast.CallExpression
 	Callee       *ast.Node
 	Subject      *ast.Node
@@ -15,7 +15,7 @@ type ParsedDataFirstCallResult struct {
 	SubjectIndex int
 }
 
-func (tp *TypeParser) ParseDataFirstCallAsPipeable(node *ast.Node) *ParsedDataFirstCallResult {
+func (tp *TypeParser) DataFirstOrLastCall(node *ast.Node) *ParsedDataFirstOrLastCall {
 	if tp == nil || tp.checker == nil || node == nil || node.Kind != ast.KindCallExpression {
 		return nil
 	}
@@ -93,7 +93,7 @@ func (tp *TypeParser) ParseDataFirstCallAsPipeable(node *ast.Node) *ParsedDataFi
 				continue
 			}
 
-			return &ParsedDataFirstCallResult{
+			return &ParsedDataFirstOrLastCall{
 				Node:         call,
 				Callee:       call.Expression,
 				Subject:      call.Arguments.Nodes[subjectIndex],

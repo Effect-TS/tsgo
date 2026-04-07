@@ -1,0 +1,11 @@
+flowchart TB
+  0[["type: #40;rateLimit?: RateLimiter#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;rateLimit: RateLimiter.RateLimiter = #40;_#41; =#gt; _#41; =#gt; Effect.void"]]
+  1[/"type: RateLimiter<br/>node: rateLimit: RateLimiter.RateLimiter = #40;_#41; =#gt; _"/]
+  2[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  3[["type: #lt;A, E, R#gt;#40;_: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R#gt;<br/>node: #40;_#41; =#gt; _"]]
+  4[/"type: Effect#lt;A, E, R#gt;<br/>node: _"/]
+  5[/"type: Effect#lt;A, E, R#gt;<br/>node: _"/]
+  1 -->|"kind: parameter"| 0
+  2 -->|"kind: potentialReturn"| 0
+  4 -->|"kind: parameter"| 3
+  5 -->|"kind: potentialReturn"| 3

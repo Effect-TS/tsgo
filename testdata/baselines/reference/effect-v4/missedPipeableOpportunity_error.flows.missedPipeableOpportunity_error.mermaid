@@ -1,0 +1,21 @@
+flowchart TB
+  0[/"type: Schedule#lt;Duration, unknown, never, never#gt;<br/>node: Schedule.exponential#40;Duration.millis#40;10#41;, 4#41;"/]
+  1["type: Schedule#lt;Duration, unknown, never, never#gt;<br/>callee: Schedule.while<br/>args: #91;_ =#gt; Duration.isLessThanOrEqualTo#40;Duration.seconds#40;10#41;#41;#40;_.duration#41;#93;"]
+  2[/"type: #123; #lt;Input, Output, Error2 = never, Env2 = never#gt;#40;predicate: #40;metadata: Metadata#lt;Output, Input#gt;#41; =#gt; boolean #124; Effect#lt;boolean, Error2, Env2#gt;#41;: #lt;Error, Env#gt;#40;self: Schedule#lt;Output, Input, Error, Env#gt;#41; =#gt; Schedule#lt;Output, Input, Error #124; Error2, Env #124; Env2#gt;; #lt;Output, Input, Error, Env, Error2 = never, Env2 = never#gt;#40;self: Schedule#lt;Output, Input, Error, Env#gt;, predicate: #40;metadata: Metadata#lt;Output, Input#gt;#41; =#gt; boolean #124; Effect#lt;boolean, Error2, Env2#gt;#41;: Schedule#lt;Output, Input, Error #124; Error2, Env #124; Env2#gt;; #125;<br/>node: Schedule.while"/]
+  3((("type: #40;_: Metadata#lt;Duration, unknown#gt;#41; =#gt; boolean<br/>node: _ =#gt; Duration.isLessThanOrEqualTo#40;Duration.seconds#40;10#41;#41;#40;_.duration#41;")))
+  4[["type: #40;_: Metadata#lt;Duration, unknown#gt;#41; =#gt; boolean<br/>node: _ =#gt; Duration.isLessThanOrEqualTo#40;Duration.seconds#40;10#41;#41;#40;_.duration#41;"]]
+  5[/"type: Metadata#lt;Duration, unknown#gt;<br/>node: _"/]
+  6[/"type: boolean<br/>node: Duration.isLessThanOrEqualTo#40;Duration.seconds#40;10#41;#41;#40;_.duration#41;"/]
+  7[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;#quot;Hello#quot;#41;"/]
+  8["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.ensuring<br/>args: #91;Effect.log#40;#quot;World#quot;#41;#93;"]
+  9[/"type: #123; #lt;X, R1#gt;#40;finalizer: Effect#lt;X, never, R1#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R #124; R1#gt;; #lt;A, E, R, X, R1#gt;#40;self: Effect#lt;A, E, R#gt;, finalizer: Effect#lt;X, never, R1#gt;#41;: Effect#lt;A, E, R #124; R1#gt;; #125;<br/>node: Effect.ensuring"/]
+  10[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;#quot;World#quot;#41;"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1
+  3 -->|"kind: transformArg"| 1
+  5 -->|"kind: parameter"| 4
+  6 -->|"kind: potentialReturn"| 4
+  4 -->|"kind: connect"| 3
+  7 -->|"kind: pipe"| 8
+  9 -->|"kind: transformCallee"| 8
+  10 -->|"kind: transformArg"| 8

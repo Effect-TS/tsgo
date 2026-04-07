@@ -53,6 +53,7 @@ type EffectLinks struct {
 	EffectFnCall                 core.LinkStore[*ast.Node, *EffectFnCallResult]
 	ParseEffectFnOpportunity     core.LinkStore[*ast.Node, *EffectFnOpportunityResult]
 	ParsePipeCall                core.LinkStore[*ast.Node, *ParsedPipeCallResult]
+	ExecutionFlow                core.LinkStore[*ast.SourceFile, *ExecutionFlow]
 	EffectContextFlags           core.LinkStore[*ast.Node, EffectContextFlags]
 	EffectYieldGeneratorFunction core.LinkStore[*ast.Node, *ast.FunctionExpression]
 

@@ -44,7 +44,9 @@ type TraversalConfig struct {
 // MermaidOptions configures Mermaid flowchart rendering.
 type MermaidOptions[N any, E any] struct {
 	NodeLabel func(N) string
+	NodeShape func(N) (string, string)
 	EdgeLabel func(E) string
+	EdgeShape func(E) (string, string)
 	Direction string
 }
 
@@ -185,6 +187,18 @@ func (g *Graph[N, E]) HasEdge(source, target NodeIndex) bool {
 		}
 	}
 	return false
+}
+
+// OutgoingEdges returns the edge indices for all outgoing edges from the given node.
+// The returned indices preserve insertion order.
+func (g *Graph[N, E]) OutgoingEdges(nodeIndex NodeIndex) []EdgeIndex {
+	return append([]EdgeIndex(nil), g.adjacency[nodeIndex]...)
+}
+
+// IncomingEdges returns the edge indices for all incoming edges to the given node.
+// The returned indices preserve insertion order.
+func (g *Graph[N, E]) IncomingEdges(nodeIndex NodeIndex) []EdgeIndex {
+	return append([]EdgeIndex(nil), g.reverseAdjacency[nodeIndex]...)
 }
 
 // UpdateEdge applies fn to the data of the edge at the given index.
@@ -710,11 +724,19 @@ func (g *Graph[N, E]) IsAcyclic() bool {
 
 // escapeMermaidLabel escapes special characters in a Mermaid label.
 func escapeMermaidLabel(label string) string {
-	label = strings.ReplaceAll(label, `\`, `\\`)
-	label = strings.ReplaceAll(label, `"`, `\"`)
-	label = strings.ReplaceAll(label, `[`, `\[`)
-	label = strings.ReplaceAll(label, `]`, `\]`)
-	label = strings.ReplaceAll(label, `|`, `\|`)
+	label = strings.ReplaceAll(label, `#`, `#35;`)
+	label = strings.ReplaceAll(label, `"`, `#quot;`)
+	label = strings.ReplaceAll(label, `<`, `#lt;`)
+	label = strings.ReplaceAll(label, `>`, `#gt;`)
+	label = strings.ReplaceAll(label, `&`, `#amp;`)
+	label = strings.ReplaceAll(label, `[`, `#91;`)
+	label = strings.ReplaceAll(label, `]`, `#93;`)
+	label = strings.ReplaceAll(label, `{`, `#123;`)
+	label = strings.ReplaceAll(label, `}`, `#125;`)
+	label = strings.ReplaceAll(label, `(`, `#40;`)
+	label = strings.ReplaceAll(label, `)`, `#41;`)
+	label = strings.ReplaceAll(label, `|`, `#124;`)
+	label = strings.ReplaceAll(label, `\`, `#92;`)
 	label = strings.ReplaceAll(label, "\n", "<br/>")
 	return label
 }
@@ -729,9 +751,17 @@ func (g *Graph[N, E]) ToMermaid(options MermaidOptions[N, E]) string {
 	if nodeLabel == nil {
 		nodeLabel = func(data N) string { return fmt.Sprint(data) }
 	}
+	nodeShape := options.NodeShape
+	if nodeShape == nil {
+		nodeShape = func(N) (string, string) { return "[", "]" }
+	}
 	edgeLabel := options.EdgeLabel
 	if edgeLabel == nil {
 		edgeLabel = func(data E) string { return fmt.Sprint(data) }
+	}
+	edgeShape := options.EdgeShape
+	if edgeShape == nil {
+		edgeShape = func(E) (string, string) { return "-->", "" }
 	}
 
 	var lines []string
@@ -740,16 +770,18 @@ func (g *Graph[N, E]) ToMermaid(options MermaidOptions[N, E]) string {
 	// Nodes in index order
 	for idx, data := range g.Nodes() {
 		label := escapeMermaidLabel(nodeLabel(data))
-		lines = append(lines, fmt.Sprintf("  %d[\"%s\"]", idx, label))
+		open, closeShape := nodeShape(data)
+		lines = append(lines, fmt.Sprintf("  %d%s\"%s\"%s", idx, open, label, closeShape))
 	}
 
 	// Edges in index order
 	for _, edge := range g.Edges() {
 		label := escapeMermaidLabel(edgeLabel(edge.Data))
+		open, closeShape := edgeShape(edge.Data)
 		if label != "" {
-			lines = append(lines, fmt.Sprintf("  %d -->|\"%s\"| %d", edge.Source, label, edge.Target))
+			lines = append(lines, fmt.Sprintf("  %d %s|\"%s\"|%s %d", edge.Source, open, label, closeShape, edge.Target))
 		} else {
-			lines = append(lines, fmt.Sprintf("  %d --> %d", edge.Source, edge.Target))
+			lines = append(lines, fmt.Sprintf("  %d %s%s %d", edge.Source, open, closeShape, edge.Target))
 		}
 	}
 

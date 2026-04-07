@@ -1,0 +1,1 @@
+/.src/globalConsoleInEffect.ts -> globalConsoleInEffect.flows.globalConsoleInEffect.mermaid

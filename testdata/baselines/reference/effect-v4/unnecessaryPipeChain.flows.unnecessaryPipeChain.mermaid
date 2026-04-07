@@ -1,0 +1,118 @@
+flowchart TB
+  0((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;.pipe#40;Effect.map#40;#40;x#41; =#gt; x + 2#41;#41;")))
+  1["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x + 3#93;"]
+  2[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
+  3["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x + 2#93;"]
+  4[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  5((("type: #40;x: number#41; =#gt; number<br/>node: #40;x#41; =#gt; x + 2")))
+  6[["type: #40;x: number#41; =#gt; number<br/>node: #40;x#41; =#gt; x + 2"]]
+  7[/"type: number<br/>node: x"/]
+  8[/"type: number<br/>node: x + 2"/]
+  9[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  10((("type: #40;x: number#41; =#gt; number<br/>node: #40;x#41; =#gt; x + 3")))
+  11[["type: #40;x: number#41; =#gt; number<br/>node: #40;x#41; =#gt; x + 3"]]
+  12[/"type: number<br/>node: x"/]
+  13[/"type: number<br/>node: x + 3"/]
+  14((("type: Effect#lt;number, never, never#gt;<br/>node: pipe#40;Effect.succeed#40;1#41;, Effect.map#40;#40;x#41; =#gt; x + 2#41;#41;")))
+  15["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x + 3#93;"]
+  16[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
+  17["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x + 2#93;"]
+  18[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  19((("type: #40;x: number#41; =#gt; number<br/>node: #40;x#41; =#gt; x + 2")))
+  20[["type: #40;x: number#41; =#gt; number<br/>node: #40;x#41; =#gt; x + 2"]]
+  21[/"type: number<br/>node: x"/]
+  22[/"type: number<br/>node: x + 2"/]
+  23[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  24((("type: #40;x: number#41; =#gt; number<br/>node: #40;x#41; =#gt; x + 3")))
+  25[["type: #40;x: number#41; =#gt; number<br/>node: #40;x#41; =#gt; x + 3"]]
+  26[/"type: number<br/>node: x"/]
+  27[/"type: number<br/>node: x + 3"/]
+  28[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
+  29["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x + 2#93;"]
+  30["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x + 3#93;"]
+  31[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  32((("type: #40;x: number#41; =#gt; number<br/>node: #40;x#41; =#gt; x + 2")))
+  33[["type: #40;x: number#41; =#gt; number<br/>node: #40;x#41; =#gt; x + 2"]]
+  34[/"type: number<br/>node: x"/]
+  35[/"type: number<br/>node: x + 2"/]
+  36[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  37((("type: #40;x: number#41; =#gt; number<br/>node: #40;x#41; =#gt; x + 3")))
+  38[["type: #40;x: number#41; =#gt; number<br/>node: #40;x#41; =#gt; x + 3"]]
+  39[/"type: number<br/>node: x"/]
+  40[/"type: number<br/>node: x + 3"/]
+  41[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
+  42["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x + 2#93;"]
+  43["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x + 3#93;"]
+  44[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  45((("type: #40;x: number#41; =#gt; number<br/>node: #40;x#41; =#gt; x + 2")))
+  46[["type: #40;x: number#41; =#gt; number<br/>node: #40;x#41; =#gt; x + 2"]]
+  47[/"type: number<br/>node: x"/]
+  48[/"type: number<br/>node: x + 2"/]
+  49[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  50((("type: #40;x: number#41; =#gt; number<br/>node: #40;x#41; =#gt; x + 3")))
+  51[["type: #40;x: number#41; =#gt; number<br/>node: #40;x#41; =#gt; x + 3"]]
+  52[/"type: number<br/>node: x"/]
+  53[/"type: number<br/>node: x + 3"/]
+  54[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;"/]
+  55["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x + 2#93;"]
+  56[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  57((("type: #40;x: number#41; =#gt; number<br/>node: #40;x#41; =#gt; x + 2")))
+  58[["type: #40;x: number#41; =#gt; number<br/>node: #40;x#41; =#gt; x + 2"]]
+  59[/"type: number<br/>node: x"/]
+  60[/"type: number<br/>node: x + 2"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: pipe"| 3
+  3 -->|"kind: connect"| 0
+  4 -->|"kind: transformCallee"| 3
+  5 -->|"kind: transformArg"| 3
+  7 -->|"kind: parameter"| 6
+  8 -->|"kind: potentialReturn"| 6
+  6 -->|"kind: connect"| 5
+  9 -->|"kind: transformCallee"| 1
+  10 -->|"kind: transformArg"| 1
+  12 -->|"kind: parameter"| 11
+  13 -->|"kind: potentialReturn"| 11
+  11 -->|"kind: connect"| 10
+  14 -->|"kind: pipe"| 15
+  16 -->|"kind: pipe"| 17
+  17 -->|"kind: connect"| 14
+  18 -->|"kind: transformCallee"| 17
+  19 -->|"kind: transformArg"| 17
+  21 -->|"kind: parameter"| 20
+  22 -->|"kind: potentialReturn"| 20
+  20 -->|"kind: connect"| 19
+  23 -->|"kind: transformCallee"| 15
+  24 -->|"kind: transformArg"| 15
+  26 -->|"kind: parameter"| 25
+  27 -->|"kind: potentialReturn"| 25
+  25 -->|"kind: connect"| 24
+  28 -->|"kind: pipe"| 29
+  29 -->|"kind: pipe"| 30
+  31 -->|"kind: transformCallee"| 29
+  32 -->|"kind: transformArg"| 29
+  34 -->|"kind: parameter"| 33
+  35 -->|"kind: potentialReturn"| 33
+  33 -->|"kind: connect"| 32
+  36 -->|"kind: transformCallee"| 30
+  37 -->|"kind: transformArg"| 30
+  39 -->|"kind: parameter"| 38
+  40 -->|"kind: potentialReturn"| 38
+  38 -->|"kind: connect"| 37
+  41 -->|"kind: pipe"| 42
+  42 -->|"kind: pipe"| 43
+  44 -->|"kind: transformCallee"| 42
+  45 -->|"kind: transformArg"| 42
+  47 -->|"kind: parameter"| 46
+  48 -->|"kind: potentialReturn"| 46
+  46 -->|"kind: connect"| 45
+  49 -->|"kind: transformCallee"| 43
+  50 -->|"kind: transformArg"| 43
+  52 -->|"kind: parameter"| 51
+  53 -->|"kind: potentialReturn"| 51
+  51 -->|"kind: connect"| 50
+  54 -->|"kind: pipe"| 55
+  56 -->|"kind: transformCallee"| 55
+  57 -->|"kind: transformArg"| 55
+  59 -->|"kind: parameter"| 58
+  60 -->|"kind: potentialReturn"| 58
+  58 -->|"kind: connect"| 57

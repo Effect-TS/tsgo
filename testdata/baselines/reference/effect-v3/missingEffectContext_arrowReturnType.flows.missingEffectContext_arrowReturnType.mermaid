@@ -1,0 +1,48 @@
+flowchart TB
+  0[["type: #lt;A, E, R#gt;#40;eff: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, Scope#gt;#gt;<br/>node: #lt;A, E, R#gt;#40;eff: Effect.Effect#lt;A, E, R#gt;#41; =#gt; #123;#92;n  return Effect.void.pipe#40;Effect.andThen#40;eff#41;, Effect.scoped#41;#92;n#125;"]]
+  1[/"type: Effect#lt;A, E, R#gt;<br/>node: eff: Effect.Effect#lt;A, E, R#gt;"/]
+  2((("type: Effect#lt;A, E, Exclude#lt;R, Scope#gt;#gt;<br/>node: Effect.void.pipe#40;Effect.andThen#40;eff#41;, Effect.scoped#41;")))
+  3[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  4["type: Effect#lt;A, E, R#gt;<br/>callee: Effect.andThen<br/>args: #91;eff#93;"]
+  5["type: Effect#lt;A, E, Exclude#lt;R, Scope#gt;#gt;<br/>callee: Effect.scoped<br/>args: #91;#93;"]
+  6[/"type: #123; #lt;A, X#gt;#40;f: #40;a: NoInfer#lt;A#gt;#41; =#gt; X#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; #91;X#93; extends #91;Effect#lt;infer A1, infer E1, infer R1#gt;#93; ? Effect#lt;A1, E #124; E1, R #124; R1#gt; : #91;X#93; extends #91;PromiseLike#lt;infer A1#gt;#93; ? Effect#lt;A1, E #124; UnknownException, R#gt; : Effect#lt;X, E, R#gt;; #lt;X#gt;#40;f: NotFunction#lt;X#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; #91;X#93; extends #91;Effect#lt;infer A1, infer E1, infer R1#gt;#93; ? Effect#lt;A1, E #124; E1, R #124; R1#gt; : #91;X#93; extends #91;PromiseLike#lt;infer A1#gt;#93; ? Effect#lt;A1, E #124; UnknownException, R#gt; : Effect#lt;X, E, R#gt;; #lt;A, E, R, X#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: NoInfer#lt;A#gt;#41; =#gt; X#41;: #91;X#93; extends #91;Effect#lt;infer A1, infer E1, infer R1#gt;#93; ? Effect#lt;A1, E #124; E1, R #124; R1#gt; : #91;X#93; extends #91;PromiseLike#lt;infer A1#gt;#93; ? Effect#lt;A1, E #124; UnknownException, R#gt; : Effect#lt;X, E, R#gt;; #lt;A, E, R, X#gt;#40;self: Effect#lt;A, E, R#gt;, f: NotFunction#lt;X#gt;#41;: #91;X#93; extends #91;Effect#lt;infer A1, infer E1, infer R1#gt;#93; ? Effect#lt;A1, E #124; E1, R #124; R1#gt; : #91;X#93; extends #91;PromiseLike#lt;infer A1#gt;#93; ? Effect#lt;A1, E #124; UnknownException, R#gt; : Effect#lt;X, E, R#gt;; #125;<br/>node: Effect.andThen"/]
+  7[/"type: Effect#lt;A, E, R#gt;<br/>node: eff"/]
+  8[/"type: #lt;A, E, R#gt;#40;effect: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, Scope#gt;#gt;<br/>node: Effect.scoped"/]
+  9[["type: #lt;A, E, R#gt;#40;eff: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, Scope#gt;#gt;<br/>node: #lt;A, E, R#gt;#40;eff: Effect.Effect#lt;A, E, R#gt;#41; =#gt; Effect.void.pipe#40;Effect.andThen#40;eff#41;, Effect.scoped#41;"]]
+  10[/"type: Effect#lt;A, E, R#gt;<br/>node: eff: Effect.Effect#lt;A, E, R#gt;"/]
+  11((("type: Effect#lt;A, E, Exclude#lt;R, Scope#gt;#gt;<br/>node: Effect.void.pipe#40;Effect.andThen#40;eff#41;, Effect.scoped#41;")))
+  12[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  13["type: Effect#lt;A, E, R#gt;<br/>callee: Effect.andThen<br/>args: #91;eff#93;"]
+  14["type: Effect#lt;A, E, Exclude#lt;R, Scope#gt;#gt;<br/>callee: Effect.scoped<br/>args: #91;#93;"]
+  15[/"type: #123; #lt;A, X#gt;#40;f: #40;a: NoInfer#lt;A#gt;#41; =#gt; X#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; #91;X#93; extends #91;Effect#lt;infer A1, infer E1, infer R1#gt;#93; ? Effect#lt;A1, E #124; E1, R #124; R1#gt; : #91;X#93; extends #91;PromiseLike#lt;infer A1#gt;#93; ? Effect#lt;A1, E #124; UnknownException, R#gt; : Effect#lt;X, E, R#gt;; #lt;X#gt;#40;f: NotFunction#lt;X#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; #91;X#93; extends #91;Effect#lt;infer A1, infer E1, infer R1#gt;#93; ? Effect#lt;A1, E #124; E1, R #124; R1#gt; : #91;X#93; extends #91;PromiseLike#lt;infer A1#gt;#93; ? Effect#lt;A1, E #124; UnknownException, R#gt; : Effect#lt;X, E, R#gt;; #lt;A, E, R, X#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: NoInfer#lt;A#gt;#41; =#gt; X#41;: #91;X#93; extends #91;Effect#lt;infer A1, infer E1, infer R1#gt;#93; ? Effect#lt;A1, E #124; E1, R #124; R1#gt; : #91;X#93; extends #91;PromiseLike#lt;infer A1#gt;#93; ? Effect#lt;A1, E #124; UnknownException, R#gt; : Effect#lt;X, E, R#gt;; #lt;A, E, R, X#gt;#40;self: Effect#lt;A, E, R#gt;, f: NotFunction#lt;X#gt;#41;: #91;X#93; extends #91;Effect#lt;infer A1, infer E1, infer R1#gt;#93; ? Effect#lt;A1, E #124; E1, R #124; R1#gt; : #91;X#93; extends #91;PromiseLike#lt;infer A1#gt;#93; ? Effect#lt;A1, E #124; UnknownException, R#gt; : Effect#lt;X, E, R#gt;; #125;<br/>node: Effect.andThen"/]
+  16[/"type: Effect#lt;A, E, R#gt;<br/>node: eff"/]
+  17[/"type: #lt;A, E, R#gt;#40;effect: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, Scope#gt;#gt;<br/>node: Effect.scoped"/]
+  18[["type: #lt;A, E, R#gt;#40;eff: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, Scope#gt;#gt;<br/>node: #lt;A, E, R#gt;#40;eff: Effect.Effect#lt;A, E, R#gt;#41;: Effect.Effect#lt;A, E, Exclude#lt;R, Scope.Scope#gt;#gt; =#gt;#92;n  // @ts-expect-error#92;n  Effect.void.pipe#40;Effect.andThen#40;eff#41;#41;"]]
+  19[/"type: Effect#lt;A, E, R#gt;<br/>node: eff: Effect.Effect#lt;A, E, R#gt;"/]
+  20((("type: Effect#lt;A, E, R#gt;<br/>node: Effect.void.pipe#40;Effect.andThen#40;eff#41;#41;")))
+  21[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  22["type: Effect#lt;A, E, R#gt;<br/>callee: Effect.andThen<br/>args: #91;eff#93;"]
+  23[/"type: #123; #lt;A, X#gt;#40;f: #40;a: NoInfer#lt;A#gt;#41; =#gt; X#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; #91;X#93; extends #91;Effect#lt;infer A1, infer E1, infer R1#gt;#93; ? Effect#lt;A1, E #124; E1, R #124; R1#gt; : #91;X#93; extends #91;PromiseLike#lt;infer A1#gt;#93; ? Effect#lt;A1, E #124; UnknownException, R#gt; : Effect#lt;X, E, R#gt;; #lt;X#gt;#40;f: NotFunction#lt;X#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; #91;X#93; extends #91;Effect#lt;infer A1, infer E1, infer R1#gt;#93; ? Effect#lt;A1, E #124; E1, R #124; R1#gt; : #91;X#93; extends #91;PromiseLike#lt;infer A1#gt;#93; ? Effect#lt;A1, E #124; UnknownException, R#gt; : Effect#lt;X, E, R#gt;; #lt;A, E, R, X#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: NoInfer#lt;A#gt;#41; =#gt; X#41;: #91;X#93; extends #91;Effect#lt;infer A1, infer E1, infer R1#gt;#93; ? Effect#lt;A1, E #124; E1, R #124; R1#gt; : #91;X#93; extends #91;PromiseLike#lt;infer A1#gt;#93; ? Effect#lt;A1, E #124; UnknownException, R#gt; : Effect#lt;X, E, R#gt;; #lt;A, E, R, X#gt;#40;self: Effect#lt;A, E, R#gt;, f: NotFunction#lt;X#gt;#41;: #91;X#93; extends #91;Effect#lt;infer A1, infer E1, infer R1#gt;#93; ? Effect#lt;A1, E #124; E1, R #124; R1#gt; : #91;X#93; extends #91;PromiseLike#lt;infer A1#gt;#93; ? Effect#lt;A1, E #124; UnknownException, R#gt; : Effect#lt;X, E, R#gt;; #125;<br/>node: Effect.andThen"/]
+  24[/"type: Effect#lt;A, E, R#gt;<br/>node: eff"/]
+  1 -->|"kind: parameter"| 0
+  2 -->|"kind: potentialReturn"| 0
+  3 -->|"kind: pipe"| 4
+  4 -->|"kind: pipe"| 5
+  5 -->|"kind: connect"| 2
+  6 -->|"kind: transformCallee"| 4
+  7 -->|"kind: transformArg"| 4
+  8 -->|"kind: transformCallee"| 5
+  10 -->|"kind: parameter"| 9
+  11 -->|"kind: potentialReturn"| 9
+  12 -->|"kind: pipe"| 13
+  13 -->|"kind: pipe"| 14
+  14 -->|"kind: connect"| 11
+  15 -->|"kind: transformCallee"| 13
+  16 -->|"kind: transformArg"| 13
+  17 -->|"kind: transformCallee"| 14
+  19 -->|"kind: parameter"| 18
+  20 -->|"kind: potentialReturn"| 18
+  21 -->|"kind: pipe"| 22
+  22 -->|"kind: connect"| 20
+  23 -->|"kind: transformCallee"| 22
+  24 -->|"kind: transformArg"| 22

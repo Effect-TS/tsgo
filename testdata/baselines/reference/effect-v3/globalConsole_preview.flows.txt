@@ -1,0 +1,1 @@
+/.src/globalConsole_preview.ts -> globalConsole_preview.flows.globalConsole_preview.mermaid

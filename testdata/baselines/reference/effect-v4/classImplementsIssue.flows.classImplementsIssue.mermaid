@@ -1,0 +1,13 @@
+flowchart TB
+  0[["type: #40;#41; =#gt; void<br/>node: fastForward#40;#41; #123;#92;n    #125;"]]
+  1[["type: #40;#41; =#gt; A #124; undefined<br/>node: take#40;#41;: A #124; undefined #123;#92;n      return 1 as A#92;n    #125;"]]
+  2[/"type: A<br/>node: 1 as A"/]
+  3[["type: #40;n: number#41; =#gt; A#91;#93;<br/>node: takeN#40;n: number#41;: Array#lt;A#gt; #123;#92;n      return 1 as any#92;n    #125;"]]
+  4[/"type: number<br/>node: n: number"/]
+  5[/"type: any<br/>node: 1 as any"/]
+  6[["type: #40;#41; =#gt; A#91;#93;<br/>node: takeAll#40;#41;: Array#lt;A#gt; #123;#92;n      return 1 as any#92;n    #125;"]]
+  7[/"type: any<br/>node: 1 as any"/]
+  2 -->|"kind: potentialReturn"| 1
+  4 -->|"kind: parameter"| 3
+  5 -->|"kind: potentialReturn"| 3
+  7 -->|"kind: potentialReturn"| 6

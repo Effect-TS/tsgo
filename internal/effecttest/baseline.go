@@ -11,6 +11,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/effect-ts/tsgo/internal/bundledeffect"
+	"github.com/effect-ts/tsgo/internal/graph"
 	"github.com/effect-ts/tsgo/internal/layergraph"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
@@ -314,6 +315,150 @@ func generatePipingFlowBaseline(
 	}
 
 	return sb.String()
+}
+
+// DoExecutionFlowBaseline generates a .flows.txt index baseline and per-source
+// Mermaid baselines for Effect tests.
+func DoExecutionFlowBaseline(
+	t *testing.T,
+	baselineName string,
+	c *checker.Checker,
+	inputFiles []*harnessutil.TestFile,
+	sourceFileGetter func(string) *ast.SourceFile,
+	subfolder string,
+) {
+	indexContent, mermaidFiles := generateExecutionFlowBaseline(c, baselineName, inputFiles, sourceFileGetter)
+	runEffectBaseline(t, baselineName+".flows.txt", indexContent, subfolder)
+	for _, mermaidFile := range mermaidFiles {
+		runEffectBaseline(t, mermaidFile.fileName, mermaidFile.content, subfolder)
+	}
+}
+
+type executionFlowMermaidBaseline struct {
+	fileName string
+	content  string
+}
+
+func generateExecutionFlowBaseline(
+	c *checker.Checker,
+	baselineName string,
+	inputFiles []*harnessutil.TestFile,
+	sourceFileGetter func(string) *ast.SourceFile,
+) (string, []executionFlowMermaidBaseline) {
+	var index strings.Builder
+	tp := typeparser.NewTypeParser(c.Program(), c)
+	var mermaidFiles []executionFlowMermaidBaseline
+	usedNames := make(map[string]int)
+
+	for _, file := range inputFiles {
+		sf := sourceFileGetter(file.UnitName)
+		if sf == nil {
+			continue
+		}
+
+		flow := tp.ExecutionFlow(sf)
+		if flow == nil {
+			continue
+		}
+		fileName := nextExecutionFlowMermaidFileName(baselineName, sf.FileName(), usedNames)
+		mermaidFiles = append(mermaidFiles, executionFlowMermaidBaseline{
+			fileName: fileName,
+			content: flow.ToMermaid(graph.MermaidOptions[typeparser.ExecutionNode, typeparser.ExecutionLink]{
+				NodeLabel: func(node typeparser.ExecutionNode) string {
+					return formatExecutionFlowNodeLabel(c, sf, node)
+				},
+				NodeShape: func(node typeparser.ExecutionNode) (string, string) {
+					switch node.Kind {
+					case typeparser.ExecutionNodeKindLogicMerge:
+						return "(((", ")))"
+					case typeparser.ExecutionNodeKindValue:
+						return "[/", "/]"
+					case typeparser.ExecutionNodeKindFunction:
+						return "[[", "]]"
+					}
+					return "[", "]"
+				},
+				EdgeLabel: func(edge typeparser.ExecutionLink) string {
+					return formatExecutionFlowEdgeLabel(sf, edge)
+				},
+			}),
+		})
+		index.WriteString(sf.FileName())
+		index.WriteString(" -> ")
+		index.WriteString(fileName)
+		index.WriteString("\n")
+	}
+
+	return index.String(), mermaidFiles
+}
+
+func nextExecutionFlowMermaidFileName(baselineName string, sourceFileName string, usedNames map[string]int) string {
+	base := filepath.Base(sourceFileName)
+	ext := filepath.Ext(base)
+	base = strings.TrimSuffix(base, ext)
+	if base == "" {
+		base = "source"
+	}
+
+	count := usedNames[base]
+	usedNames[base] = count + 1
+	if count > 0 {
+		base = fmt.Sprintf("%s%d", base, count)
+	}
+
+	return fmt.Sprintf("%s.flows.%s.mermaid", baselineName, base)
+}
+
+func formatExecutionFlowNodeLabel(c *checker.Checker, sf *ast.SourceFile, node typeparser.ExecutionNode) string {
+	var lines []string
+	switch node.Kind {
+	case typeparser.ExecutionNodeKindValue:
+		lines = append(lines, "type: "+formatExecutionType(c, node.Type))
+		lines = append(lines, "node: "+formatExecutionSourceNode(sf, node.Node))
+		return strings.Join(lines, "\n")
+	case typeparser.ExecutionNodeKindLogicMerge:
+		lines = append(lines, "type: "+formatExecutionType(c, node.Type))
+		lines = append(lines, "node: "+formatExecutionSourceNode(sf, node.Node))
+		return strings.Join(lines, "\n")
+	case typeparser.ExecutionNodeKindFunction:
+		lines = append(lines, "type: "+formatExecutionType(c, node.Type))
+		lines = append(lines, "node: "+formatExecutionSourceNode(sf, node.Node))
+		return strings.Join(lines, "\n")
+	default:
+		lines = append(lines, "type: "+formatExecutionType(c, node.Type))
+		lines = append(lines, "callee: "+formatExecutionSourceNode(sf, node.Callee))
+	}
+
+	args := "[]"
+	if len(node.Args) > 0 {
+		parts := make([]string, 0, len(node.Args))
+		for _, arg := range node.Args {
+			parts = append(parts, formatExecutionSourceNode(sf, arg))
+		}
+		args = "[" + strings.Join(parts, ", ") + "]"
+	}
+	lines = append(lines, "args: "+args)
+	return strings.Join(lines, "\n")
+}
+
+func formatExecutionFlowEdgeLabel(_ *ast.SourceFile, edge typeparser.ExecutionLink) string {
+	var lines []string
+	lines = append(lines, "kind: "+string(edge.Kind))
+	return strings.Join(lines, "\n")
+}
+
+func formatExecutionType(c *checker.Checker, typ *checker.Type) string {
+	if typ == nil {
+		return ""
+	}
+	return c.TypeToStringEx(typ, nil, checker.TypeFormatFlagsNoTruncation)
+}
+
+func formatExecutionSourceNode(sf *ast.SourceFile, node *ast.Node) string {
+	if sf == nil || node == nil {
+		return ""
+	}
+	return escapeNewlines(scanner.GetSourceTextOfNodeFromSourceFile(sf, node, false))
 }
 
 // escapeNewlines replaces newlines with \n for baseline display.

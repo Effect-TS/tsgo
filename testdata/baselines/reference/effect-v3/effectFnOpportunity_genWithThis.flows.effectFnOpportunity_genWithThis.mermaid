@@ -1,0 +1,7 @@
+flowchart TB
+  0[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: methodWithThis#40;#41; #123;#92;n    return Effect.gen#40;this, function*#40;#41; #123;#92;n      return yield* Effect.succeed#40;this.value#41;#92;n    #125;#41;#92;n  #125;"]]
+  1[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;this, function*#40;#41; #123;#92;n      return yield* Effect.succeed#40;this.value#41;#92;n    #125;#41;"/]
+  2[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;#41; =#gt; #123;#92;n    return Effect.gen#40;this, function*#40;#41; #123;#92;n      return yield* Effect.succeed#40;this.value#41;#92;n    #125;#41;#92;n  #125;"]]
+  3[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;this, function*#40;#41; #123;#92;n      return yield* Effect.succeed#40;this.value#41;#92;n    #125;#41;"/]
+  1 -->|"kind: potentialReturn"| 0
+  3 -->|"kind: potentialReturn"| 2

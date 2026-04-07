@@ -1,0 +1,37 @@
+flowchart TB
+  0[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;"]]
+  1[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;#quot;finalizer#quot;#41;"/]
+  2[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;"]]
+  3[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;#quot;finalizer#quot;#41;"/]
+  4[/"type: Effect#lt;#123; a: number; #125;, never, Scope#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.addFinalizer#40;#40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;#41;#92;n    return #123; a: 1 #125;#92;n  #125;#41;"/]
+  5["type: Layer#lt;MyService, never, never#gt;<br/>callee: Layer.scoped<br/>args: #91;MyService#93;"]
+  6[/"type: #123; #lt;I, S#gt;#40;tag: Tag#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;tag: Tag#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.scoped"/]
+  7[/"type: typeof MyService<br/>node: MyService"/]
+  8[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;"]]
+  9[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;#quot;finalizer#quot;#41;"/]
+  10[/"type: Effect#lt;#123; a: number; #125;, never, Scope#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.addFinalizer#40;#40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;#41;#92;n    return #123; a: 1 #125;#92;n  #125;#41;"/]
+  11["type: Layer#lt;MyService, never, Scope#gt;<br/>callee: Layer.effect<br/>args: #91;MyService#93;"]
+  12[/"type: #123; #lt;I, S#gt;#40;tag: Tag#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41; =#gt; Layer#lt;I, E, R#gt;; #lt;I, S, E, R#gt;#40;tag: Tag#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, R#gt;; #125;<br/>node: Layer.effect"/]
+  13[/"type: typeof MyService<br/>node: MyService"/]
+  14[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;"]]
+  15[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;#quot;finalizer#quot;#41;"/]
+  16[/"type: Effect#lt;#123; a: number; #125;, never, OtherService #124; Scope#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    const _otherService = yield* OtherService#92;n    yield* Effect.addFinalizer#40;#40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;#41;#92;n    return #123; a: 1 #125;#92;n  #125;#41;"/]
+  17["type: Layer#lt;MyService, never, OtherService #124; Scope#gt;<br/>callee: Layer.effect<br/>args: #91;MyService#93;"]
+  18[/"type: #123; #lt;I, S#gt;#40;tag: Tag#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41; =#gt; Layer#lt;I, E, R#gt;; #lt;I, S, E, R#gt;#40;tag: Tag#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, R#gt;; #125;<br/>node: Layer.effect"/]
+  19[/"type: typeof MyService<br/>node: MyService"/]
+  20[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;"]]
+  21[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;#quot;finalizer#quot;#41;"/]
+  1 -->|"kind: potentialReturn"| 0
+  3 -->|"kind: potentialReturn"| 2
+  4 -->|"kind: dataLast"| 5
+  6 -->|"kind: transformCallee"| 5
+  7 -->|"kind: transformArg"| 5
+  9 -->|"kind: potentialReturn"| 8
+  10 -->|"kind: dataLast"| 11
+  12 -->|"kind: transformCallee"| 11
+  13 -->|"kind: transformArg"| 11
+  15 -->|"kind: potentialReturn"| 14
+  16 -->|"kind: dataLast"| 17
+  18 -->|"kind: transformCallee"| 17
+  19 -->|"kind: transformArg"| 17
+  21 -->|"kind: potentialReturn"| 20
