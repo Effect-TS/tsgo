@@ -24,7 +24,7 @@ Effect version: 4.0.0
     export const shouldNotComplainRegularFnUntraced = Effect.fnUntraced((a: string) => {
                                                                         ~~~~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
-!!! related TS2771 /node_modules/effect/dist/Effect.d.ts(15360,9): The last overload is declared here.
+!!! related TS2771 /node_modules/effect/dist/Effect.d.ts(15361,9): The last overload is declared here.
         return Effect.fail(a)
     })
     
