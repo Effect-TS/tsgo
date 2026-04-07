@@ -117,8 +117,8 @@ importers:
         specifier: ^22.0.0
         version: 22.19.15
       effect:
-        specifier: 4.0.0-beta.40
-        version: 4.0.0-beta.40
+        specifier: 4.0.0-beta.43
+        version: 4.0.0-beta.43
       fast-check:
         specifier: ^4.4.0
         version: 4.5.3
@@ -135,8 +135,8 @@ importers:
         specifier: ^22.0.0
         version: 22.19.15
       effect:
-        specifier: 4.0.0-beta.40
-        version: 4.0.0-beta.40
+        specifier: 4.0.0-beta.43
+        version: 4.0.0-beta.43
       fast-check:
         specifier: ^4.4.0
         version: 4.5.3
@@ -153,8 +153,8 @@ importers:
         specifier: ^22.0.0
         version: 22.19.15
       effect:
-        specifier: 4.0.0-beta.40
-        version: 4.0.0-beta.40
+        specifier: 4.0.0-beta.43
+        version: 4.0.0-beta.43
       fast-check:
         specifier: ^4.4.0
         version: 4.5.3
@@ -878,6 +878,9 @@ packages:
 
   effect@4.0.0-beta.40:
     resolution: {integrity: sha512-GA7Q1TglPIrEjg/Dtj3AvXbyh00A4sAXgu3JGDUHRPZ4hxMRC5CMAsCzCH0140zetRMpe7LOH8uVi5gb4t/8oQ==}
+
+  effect@4.0.0-beta.43:
+    resolution: {integrity: sha512-AJYyDimIwJOn87uUz/JzmgDc5GfjxJbXvEbTvNzMa+M3Uer344bLo/O5mMRkqc1vBleA+Ygs4+dbE3QsqOkKTQ==}
 
   empathic@2.0.0:
     resolution: {integrity: sha512-i6UzDscO/XfAcNYD75CfICkmfLedpyPDdozrLMmQc5ORaQcdMoc21OnlEylMIqI7U8eniKrPMxxtj8k0vhmJhA==}
@@ -2144,6 +2147,19 @@ snapshots:
       fast-check: 3.23.2
 
   effect@4.0.0-beta.40:
+    dependencies:
+      '@standard-schema/spec': 1.1.0
+      fast-check: 4.5.3
+      find-my-way-ts: 0.1.6
+      ini: 6.0.0
+      kubernetes-types: 1.30.0
+      msgpackr: 1.11.8
+      multipasta: 0.2.7
+      toml: 3.0.0
+      uuid: 13.0.0
+      yaml: 2.8.2
+
+  effect@4.0.0-beta.43:
     dependencies:
       '@standard-schema/spec': 1.1.0
       fast-check: 4.5.3
