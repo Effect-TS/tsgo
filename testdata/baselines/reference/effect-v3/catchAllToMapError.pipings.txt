@@ -1,4 +1,4 @@
-==== /.src/catchAllToMapError.ts (27 flows) ====
+==== /.src/catchAllToMapError.ts (18 flows) ====
 
 === Piping Flow ===
 Location: 16:34 - 18:2
@@ -17,20 +17,6 @@ Transformations (2):
       callee: Effect.catchAll
       args: [(cause) => Effect.fail(new MyErrorTagged(cause))]
       outType: Effect<never, MyErrorTagged, never>
-
-=== Piping Flow ===
-Location: 16:61 - 17:68
-Node: Effect.catchAll((cause) => Effect.fail(new MyErrorTagged(cause)))
-Node Kind: KindCallExpression
-
-Subject: (cause) => Effect.fail(new MyErrorTagged(cause))
-Subject Type: (cause: string) => Effect<never, MyErrorTagged, never>
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.catchAll
-      args: (constant)
-      outType: <A, R>(self: Effect<A, string, R>) => Effect<A, MyErrorTagged, R>
 
 === Piping Flow ===
 Location: 17:29 - 17:67
@@ -65,20 +51,6 @@ Transformations (2):
       outType: Effect<never, MyErrorTagged, never>
 
 === Piping Flow ===
-Location: 21:66 - 24:5
-Node: Effect.catchAll((cause) => {\n    return Effect.fail(new MyErrorTagged(cause))\n  })
-Node Kind: KindCallExpression
-
-Subject: (cause) => {\n    return Effect.fail(new MyErrorTagged(cause))\n  }
-Subject Type: (cause: string) => Effect<never, MyErrorTagged, never>
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.catchAll
-      args: (constant)
-      outType: <A, R>(self: Effect<A, string, R>) => Effect<A, MyErrorTagged, R>
-
-=== Piping Flow ===
 Location: 23:11 - 23:49
 Node: Effect.fail(new MyErrorTagged(cause))
 Node Kind: KindCallExpression
@@ -109,20 +81,6 @@ Transformations (2):
       callee: Effect.catchAll
       args: [(cause) => Effect.fail(new MyErrorTagged(cause))]
       outType: Effect<never, MyErrorTagged, never>
-
-=== Piping Flow ===
-Location: 29:24 - 30:68
-Node: Effect.catchAll((cause) => Effect.fail(new MyErrorTagged(cause)))
-Node Kind: KindCallExpression
-
-Subject: (cause) => Effect.fail(new MyErrorTagged(cause))
-Subject Type: (cause: string) => Effect<never, MyErrorTagged, never>
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.catchAll
-      args: (constant)
-      outType: <A, R>(self: Effect<A, string, R>) => Effect<A, MyErrorTagged, R>
 
 === Piping Flow ===
 Location: 30:29 - 30:67
@@ -157,20 +115,6 @@ Transformations (2):
       outType: Effect<never, MyErrorTagged, never>
 
 === Piping Flow ===
-Location: 34:68 - 37:5
-Node: Effect.catchAll(function(cause) {\n    return Effect.fail(new MyErrorTagged(cause))\n  })
-Node Kind: KindCallExpression
-
-Subject: function(cause) {\n    return Effect.fail(new MyErrorTagged(cause))\n  }
-Subject Type: (cause: string) => Effect<never, MyErrorTagged, never>
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.catchAll
-      args: (constant)
-      outType: <A, R>(self: Effect<A, string, R>) => Effect<A, MyErrorTagged, R>
-
-=== Piping Flow ===
 Location: 36:11 - 36:49
 Node: Effect.fail(new MyErrorTagged(cause))
 Node Kind: KindCallExpression
@@ -201,20 +145,6 @@ Transformations (2):
       callee: Effect.catchAll
       args: [(cause) => {\n    console.log(cause)\n    return Effect.fail(new MyErrorTagged(cause))\n  }]
       outType: Effect<never, MyErrorTagged, never>
-
-=== Piping Flow ===
-Location: 41:68 - 45:5
-Node: Effect.catchAll((cause) => {\n    console.log(cause)\n    return Effect.fail(new MyErrorTagged(cause))\n  })
-Node Kind: KindCallExpression
-
-Subject: (cause) => {\n    console.log(cause)\n    return Effect.fail(new MyErrorTagged(cause))\n  }
-Subject Type: (cause: string) => Effect<never, MyErrorTagged, never>
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.catchAll
-      args: (constant)
-      outType: <A, R>(self: Effect<A, string, R>) => Effect<A, MyErrorTagged, R>
 
 === Piping Flow ===
 Location: 42:31 - 43:23
@@ -263,20 +193,6 @@ Transformations (2):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 49:66 - 50:44
-Node: Effect.catchAll(() => Effect.succeed(42))
-Node Kind: KindCallExpression
-
-Subject: () => Effect.succeed(42)
-Subject Type: () => Effect<number, never, never>
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.catchAll
-      args: (constant)
-      outType: <A, R>(self: Effect<A, string, R>) => Effect<number | A, never, R>
-
-=== Piping Flow ===
 Location: 50:24 - 50:43
 Node: Effect.succeed(42)
 Node Kind: KindCallExpression
@@ -309,20 +225,6 @@ Transformations (2):
       outType: Effect<never, MyErrorTagged, never>
 
 === Piping Flow ===
-Location: 54:66 - 59:4
-Node: Effect.catchAll((cause) =>\n    Effect.fail(new MyErrorTagged(cause)).pipe(\n      Effect.tap(() => Effect.void)\n    )\n  )
-Node Kind: KindCallExpression
-
-Subject: (cause) =>\n    Effect.fail(new MyErrorTagged(cause)).pipe(\n      Effect.tap(() => Effect.void)\n    )
-Subject Type: (cause: string) => Effect<never, MyErrorTagged, never>
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.catchAll
-      args: (constant)
-      outType: <A, R>(self: Effect<A, string, R>) => Effect<A, MyErrorTagged, R>
-
-=== Piping Flow ===
 Location: 55:29 - 58:6
 Node: Effect.fail(new MyErrorTagged(cause)).pipe(\n      Effect.tap(() => Effect.void)\n    )
 Node Kind: KindCallExpression
@@ -341,20 +243,6 @@ Transformations (2):
       outType: Effect<never, MyErrorTagged, never>
 
 === Piping Flow ===
-Location: 56:48 - 57:36
-Node: Effect.tap(() => Effect.void)
-Node Kind: KindCallExpression
-
-Subject: () => Effect.void
-Subject Type: () => Effect<void, never, never>
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.tap
-      args: (constant)
-      outType: <E, R>(self: Effect<never, E, R>) => Effect<never, E, R>
-
-=== Piping Flow ===
 Location: 63:35 - 65:2
 Node: Effect.fail("original").pipe(\n  Effect.catchAll((e) => Effect.fail(new AnotherError(String(e))))\n)
 Node Kind: KindCallExpression
@@ -371,20 +259,6 @@ Transformations (2):
       callee: Effect.catchAll
       args: [(e) => Effect.fail(new AnotherError(String(e)))]
       outType: Effect<never, AnotherError, never>
-
-=== Piping Flow ===
-Location: 63:65 - 64:67
-Node: Effect.catchAll((e) => Effect.fail(new AnotherError(String(e))))
-Node Kind: KindCallExpression
-
-Subject: (e) => Effect.fail(new AnotherError(String(e)))
-Subject Type: (e: string) => Effect<never, AnotherError, never>
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.catchAll
-      args: (constant)
-      outType: <A, R>(self: Effect<A, string, R>) => Effect<A, AnotherError, R>
 
 === Piping Flow ===
 Location: 64:25 - 64:66

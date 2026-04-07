@@ -1,4 +1,4 @@
-==== /.src/instanceOfSchema.ts (8 flows) ====
+==== /.src/instanceOfSchema.ts (6 flows) ====
 
 === Piping Flow ===
 Location: 5:23 - 7:3
@@ -13,20 +13,6 @@ Transformations (1):
       callee: Schema.Class<MySchema>("MySchema")
       args: (constant)
       outType: Class<MySchema, { name: typeof String$; }, Encoded<{ name: typeof String$; }>, never, { readonly name: string; }, {}, {}>
-
-=== Piping Flow ===
-Location: 5:23 - 5:58
-Node: Schema.Class<MySchema>("MySchema")
-Node Kind: KindCallExpression
-
-Subject: "MySchema"
-Subject Type: "MySchema"
-
-Transformations (1):
-  [0] kind: call
-      callee: Schema.Class
-      args: (constant)
-      outType: <Fields extends Struct.Fields>(fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<MySchema, { [K in keyof Type<Fields>]: Type<Fields>[K]; }> | undefined) => Class<MySchema, Fields, Encoded<Fields>, Context<Fields[keyof Fields]>, Constructor<Fields>, {}, {}>
 
 === Piping Flow ===
 Location: 12:33 - 13:30
@@ -55,20 +41,6 @@ Transformations (1):
       callee: Schema.Class<PersonSchema>("MySchema")
       args: (constant)
       outType: Class<PersonSchema, { name: typeof String$; }, Encoded<{ name: typeof String$; }>, never, { readonly name: string; }, {}, {}>
-
-=== Piping Flow ===
-Location: 17:27 - 17:66
-Node: Schema.Class<PersonSchema>("MySchema")
-Node Kind: KindCallExpression
-
-Subject: "MySchema"
-Subject Type: "MySchema"
-
-Transformations (1):
-  [0] kind: call
-      callee: Schema.Class
-      args: (constant)
-      outType: <Fields extends Struct.Fields>(fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<PersonSchema, { [K in keyof Type<Fields>]: Type<Fields>[K]; }> | undefined) => Class<PersonSchema, Fields, Encoded<Fields>, Context<Fields[keyof Fields]>, Constructor<Fields>, {}, {}>
 
 === Piping Flow ===
 Location: 24:32 - 25:29

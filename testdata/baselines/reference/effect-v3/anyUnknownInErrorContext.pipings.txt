@@ -1,4 +1,4 @@
-==== /.src/anyUnknownInErrorContext.ts (15 flows) ====
+==== /.src/anyUnknownInErrorContext.ts (14 flows) ====
 
 === Piping Flow ===
 Location: 5:34 - 7:3
@@ -195,17 +195,3 @@ Transformations (1):
       callee: Layer.provide
       args: [layerUnknown]
       outType: Layer<never, never, unknown>
-
-=== Piping Flow ===
-Location: 40:54 - 40:81
-Node: Layer.provide(layerUnknown)
-Node Kind: KindCallExpression
-
-Subject: layerUnknown
-Subject Type: Layer<never, never, unknown>
-
-Transformations (1):
-  [0] kind: call
-      callee: Layer.provide
-      args: (constant)
-      outType: <RIn2, E2, ROut2>(self: Layer<ROut2, E2, RIn2>) => Layer<ROut2, E2, unknown>

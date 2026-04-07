@@ -1,9 +1,13 @@
 === Metadata ===
 Effect version: 3.19.19
 
+/.src/multipleEffectProvide_effectFn.ts(21,3): warning TS377033: This expression chains multiple `Effect.provide` calls. Providing Layers in multiple calls in a chain can break service lifecycle behavior compared with a single combined provide with merged layers. effect(multipleEffectProvide)
+/.src/multipleEffectProvide_effectFn.ts(29,3): warning TS377033: This expression chains multiple `Effect.provide` calls. Providing Layers in multiple calls in a chain can break service lifecycle behavior compared with a single combined provide with merged layers. effect(multipleEffectProvide)
+/.src/multipleEffectProvide_effectFn.ts(37,3): warning TS377033: This expression chains multiple `Effect.provide` calls. Providing Layers in multiple calls in a chain can break service lifecycle behavior compared with a single combined provide with merged layers. effect(multipleEffectProvide)
+/.src/multipleEffectProvide_effectFn.ts(45,3): warning TS377033: This expression chains multiple `Effect.provide` calls. Providing Layers in multiple calls in a chain can break service lifecycle behavior compared with a single combined provide with merged layers. effect(multipleEffectProvide)
 
 
-==== /.src/multipleEffectProvide_effectFn.ts (0 errors) ====
+==== /.src/multipleEffectProvide_effectFn.ts (4 errors) ====
     // @effect-v3
     import * as Effect from "effect/Effect"
     
@@ -25,6 +29,8 @@ Effect version: 3.19.19
         return yield* Effect.void
       },
       Effect.provide(MyService1.Default),
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377033: This expression chains multiple `Effect.provide` calls. Providing Layers in multiple calls in a chain can break service lifecycle behavior compared with a single combined provide with merged layers. effect(multipleEffectProvide)
       Effect.provide(MyService2.Default)
     )
     
@@ -33,6 +39,8 @@ Effect version: 3.19.19
         return yield* Effect.void
       },
       Effect.provide(MyService1.Default),
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377033: This expression chains multiple `Effect.provide` calls. Providing Layers in multiple calls in a chain can break service lifecycle behavior compared with a single combined provide with merged layers. effect(multipleEffectProvide)
       Effect.provide(MyService2.Default)
     )
     
@@ -41,6 +49,8 @@ Effect version: 3.19.19
         return yield* Effect.void
       },
       Effect.provide(MyService1.Default),
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377033: This expression chains multiple `Effect.provide` calls. Providing Layers in multiple calls in a chain can break service lifecycle behavior compared with a single combined provide with merged layers. effect(multipleEffectProvide)
       Effect.provide(MyService2.Default)
     )
     
@@ -49,6 +59,8 @@ Effect version: 3.19.19
         return yield* Effect.void
       },
       Effect.provide(MyService1.Default),
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377033: This expression chains multiple `Effect.provide` calls. Providing Layers in multiple calls in a chain can break service lifecycle behavior compared with a single combined provide with merged layers. effect(multipleEffectProvide)
       Effect.provide(MyService2.Default),
       Effect.provide(MyService3.Default)
     )

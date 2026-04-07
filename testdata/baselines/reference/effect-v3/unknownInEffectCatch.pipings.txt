@@ -1,4 +1,4 @@
-==== /.src/unknownInEffectCatch.ts (17 flows) ====
+==== /.src/unknownInEffectCatch.ts (14 flows) ====
 
 === Piping Flow ===
 Location: 5:23 - 8:3
@@ -117,20 +117,6 @@ Transformations (2):
       outType: Effect<Response, MyError, never>
 
 === Piping Flow ===
-Location: 24:58 - 27:3
-Node: Effect.tryMapPromise({\n  try: (_) => fetch("http://something/" + _),\n  catch: (e) => new MyError({ cause: e })\n})
-Node Kind: KindCallExpression
-
-Subject: {\n  try: (_) => fetch("http://something/" + _),\n  catch: (e) => new MyError({ cause: e })\n}
-Subject Type: { try: (_: number) => Promise<Response>; catch: (e: unknown) => MyError; }
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.tryMapPromise
-      args: (constant)
-      outType: <E, R>(self: Effect<number, E, R>) => Effect<Response, E | MyError, R>
-
-=== Piping Flow ===
 Location: 25:14 - 25:45
 Node: fetch("http://something/" + _)
 Node Kind: KindCallExpression
@@ -163,20 +149,6 @@ Transformations (2):
       outType: Effect<Response, unknown, never>
 
 === Piping Flow ===
-Location: 29:61 - 32:3
-Node: Effect.tryMapPromise({\n  try: (_) => fetch("http://something/" + _),\n  catch: Function.identity\n})
-Node Kind: KindCallExpression
-
-Subject: {\n  try: (_) => fetch("http://something/" + _),\n  catch: Function.identity\n}
-Subject Type: { try: (_: number) => Promise<Response>; catch: <A>(a: A) => A; }
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.tryMapPromise
-      args: (constant)
-      outType: <E, R>(self: Effect<number, E, R>) => Effect<Response, unknown, R>
-
-=== Piping Flow ===
 Location: 30:14 - 30:45
 Node: fetch("http://something/" + _)
 Node Kind: KindCallExpression
@@ -207,20 +179,6 @@ Transformations (2):
       callee: Effect.tryMap
       args: [{\n  try: (_) => "http://something/" + _,\n  catch: Function.identity\n}]
       outType: Effect<string, unknown, never>
-
-=== Piping Flow ===
-Location: 34:61 - 37:3
-Node: Effect.tryMap({\n  try: (_) => "http://something/" + _,\n  catch: Function.identity\n})
-Node Kind: KindCallExpression
-
-Subject: {\n  try: (_) => "http://something/" + _,\n  catch: Function.identity\n}
-Subject Type: { try: (_: number) => string; catch: <A>(a: A) => A; }
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.tryMap
-      args: (constant)
-      outType: <E, R>(self: Effect<number, E, R>) => Effect<string, unknown, R>
 
 === Piping Flow ===
 Location: 39:41 - 42:3

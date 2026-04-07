@@ -1,20 +1,23 @@
 flowchart TB
-  0["type: #123; #40;a: number#41;: Effect#lt;number, never, never#gt;; #40;a: string#41;: Effect#lt;string, never, never#gt;; #125;<br/>callee: <br/>args: #91;#93;"]
+  0[["type: #123; #40;a: number#41;: Effect#lt;number, never, never#gt;; #40;a: string#41;: Effect#lt;string, never, never#gt;; #125;<br/>node: export function overloadedDeclaration#40;a: number#41;: Effect.Effect#lt;number#gt;"]]
   1[/"type: number<br/>node: a: number"/]
-  2["type: #123; #40;a: number#41;: Effect#lt;number, never, never#gt;; #40;a: string#41;: Effect#lt;string, never, never#gt;; #125;<br/>callee: <br/>args: #91;#93;"]
+  2[["type: #123; #40;a: number#41;: Effect#lt;number, never, never#gt;; #40;a: string#41;: Effect#lt;string, never, never#gt;; #125;<br/>node: export function overloadedDeclaration#40;a: string#41;: Effect.Effect#lt;string#gt;"]]
   3[/"type: string<br/>node: a: string"/]
-  4["type: #123; #40;a: number#41;: Effect#lt;number, never, never#gt;; #40;a: string#41;: Effect#lt;string, never, never#gt;; #125;<br/>callee: <br/>args: #91;#93;"]
+  4[["type: #123; #40;a: number#41;: Effect#lt;number, never, never#gt;; #40;a: string#41;: Effect#lt;string, never, never#gt;; #125;<br/>node: export function overloadedDeclaration#40;a: number #124; string#41; #123;#92;n  return Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;a as any#41;#92;n  #125;#41;#92;n#125;"]]
   5[/"type: string #124; number<br/>node: a: number #124; string"/]
-  6["type: #40;#41; =#gt; Generator#lt;Effect#lt;any, never, never#gt;, any, any#gt;<br/>callee: <br/>args: #91;#93;"]
-  7["type: #123; #40;a: number#41;: Effect#lt;number, never, never#gt;; #40;a: string#41;: Effect#lt;string, never, never#gt;; #125;<br/>callee: <br/>args: #91;#93;"]
+  6[/"type: Effect#lt;any, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;a as any#41;#92;n  #125;#41;"/]
+  7[["type: #123; #40;a: number#41;: Effect#lt;number, never, never#gt;; #40;a: string#41;: Effect#lt;string, never, never#gt;; #125;<br/>node: export function overloadedDeclarationNoGen#40;a: number#41;: Effect.Effect#lt;number#gt;"]]
   8[/"type: number<br/>node: a: number"/]
-  9["type: #123; #40;a: number#41;: Effect#lt;number, never, never#gt;; #40;a: string#41;: Effect#lt;string, never, never#gt;; #125;<br/>callee: <br/>args: #91;#93;"]
+  9[["type: #123; #40;a: number#41;: Effect#lt;number, never, never#gt;; #40;a: string#41;: Effect#lt;string, never, never#gt;; #125;<br/>node: export function overloadedDeclarationNoGen#40;a: string#41;: Effect.Effect#lt;string#gt;"]]
   10[/"type: string<br/>node: a: string"/]
-  11["type: #123; #40;a: number#41;: Effect#lt;number, never, never#gt;; #40;a: string#41;: Effect#lt;string, never, never#gt;; #125;<br/>callee: <br/>args: #91;#93;"]
+  11[["type: #123; #40;a: number#41;: Effect#lt;number, never, never#gt;; #40;a: string#41;: Effect#lt;string, never, never#gt;; #125;<br/>node: export function overloadedDeclarationNoGen#40;a: number #124; string#41; #123;#92;n  const _a = 1#92;n  const _b = 2#92;n  const _c = 3#92;n  const _d = 4#92;n  const _e = 5#92;n  return Effect.succeed#40;a as any#41;#92;n#125;"]]
   12[/"type: string #124; number<br/>node: a: number #124; string"/]
+  13[/"type: Effect#lt;any, never, never#gt;<br/>node: Effect.succeed#40;a as any#41;"/]
   1 -->|"kind: parameter"| 0
   3 -->|"kind: parameter"| 2
   5 -->|"kind: parameter"| 4
+  6 -->|"kind: potentialReturn"| 4
   8 -->|"kind: parameter"| 7
   10 -->|"kind: parameter"| 9
   12 -->|"kind: parameter"| 11
+  13 -->|"kind: potentialReturn"| 11

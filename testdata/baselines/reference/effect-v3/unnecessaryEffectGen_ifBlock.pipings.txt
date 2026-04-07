@@ -1,1 +1,57 @@
-==== /.src/unnecessaryEffectGen_ifBlock.ts (0 flows) ====
+==== /.src/unnecessaryEffectGen_ifBlock.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 4:32 - 11:3
+Node: Effect.gen(function*() {\n  const query = yield* Effect.succeed("")\n  yield* Effect.annotateCurrentSpan("query", query)\n  if (query.length < 3) {\n    return yield* Effect.fail("query too short")\n  }\n  return yield* Effect.succeed(true)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const query = yield* Effect.succeed("")\n  yield* Effect.annotateCurrentSpan("query", query)\n  if (query.length < 3) {\n    return yield* Effect.fail("query too short")\n  }\n  return yield* Effect.succeed(true)\n}
+Subject Type: () => Generator<YieldWrap<Effect<void, never, never>> | YieldWrap<Effect<never, string, never>>, boolean, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<boolean, string, never>
+
+=== Piping Flow ===
+Location: 5:23 - 5:42
+Node: Effect.succeed("")
+Node Kind: KindCallExpression
+
+Subject: ""
+Subject Type: ""
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 8:18 - 8:49
+Node: Effect.fail("query too short")
+Node Kind: KindCallExpression
+
+Subject: "query too short"
+Subject Type: "query too short"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>
+
+=== Piping Flow ===
+Location: 10:16 - 10:37
+Node: Effect.succeed(true)
+Node Kind: KindCallExpression
+
+Subject: true
+Subject Type: true
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<boolean, never, never>

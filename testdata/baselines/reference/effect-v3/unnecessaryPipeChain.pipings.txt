@@ -1,4 +1,4 @@
-==== /.src/unnecessaryPipeChain.ts (6 flows) ====
+==== /.src/unnecessaryPipeChain.ts (2 flows) ====
 
 === Piping Flow ===
 Location: 5:26 - 5:106
@@ -23,34 +23,6 @@ Transformations (3):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 5:50 - 5:74
-Node: Effect.map((x) => x + 2)
-Node Kind: KindCallExpression
-
-Subject: (x) => x + 2
-Subject Type: (x: number) => number
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.map
-      args: (constant)
-      outType: <E, R>(self: Effect<number, E, R>) => Effect<number, E, R>
-
-=== Piping Flow ===
-Location: 5:81 - 5:105
-Node: Effect.map((x) => x + 3)
-Node Kind: KindCallExpression
-
-Subject: (x) => x + 3
-Subject Type: (x: number) => number
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.map
-      args: (constant)
-      outType: <E, R>(self: Effect<number, E, R>) => Effect<number, E, R>
-
-=== Piping Flow ===
 Location: 7:22 - 7:104
 Node: pipe(pipe(Effect.succeed(1), Effect.map((x) => x + 2)), Effect.map((x) => x + 3))
 Node Kind: KindCallExpression
@@ -71,31 +43,3 @@ Transformations (3):
       callee: Effect.map
       args: [(x) => x + 3]
       outType: Effect<number, never, never>
-
-=== Piping Flow ===
-Location: 7:51 - 7:76
-Node: Effect.map((x) => x + 2)
-Node Kind: KindCallExpression
-
-Subject: (x) => x + 2
-Subject Type: (x: number) => number
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.map
-      args: (constant)
-      outType: <E, R>(self: Effect<number, E, R>) => Effect<number, E, R>
-
-=== Piping Flow ===
-Location: 7:78 - 7:103
-Node: Effect.map((x) => x + 3)
-Node Kind: KindCallExpression
-
-Subject: (x) => x + 3
-Subject Type: (x: number) => number
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.map
-      args: (constant)
-      outType: <E, R>(self: Effect<number, E, R>) => Effect<number, E, R>

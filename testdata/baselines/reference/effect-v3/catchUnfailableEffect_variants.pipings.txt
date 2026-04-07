@@ -1,4 +1,4 @@
-==== /.src/catchUnfailableEffect_variants.ts (9 flows) ====
+==== /.src/catchUnfailableEffect_variants.ts (6 flows) ====
 
 === Piping Flow ===
 Location: 6:31 - 8:2
@@ -17,20 +17,6 @@ Transformations (2):
       callee: Effect.catchAll
       args: [() => Effect.void]
       outType: Effect<void | number, never, never>
-
-=== Piping Flow ===
-Location: 6:56 - 7:37
-Node: Effect.catchAll(() => Effect.void)
-Node Kind: KindCallExpression
-
-Subject: () => Effect.void
-Subject Type: () => Effect<void, never, never>
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.catchAll
-      args: (constant)
-      outType: <A, R>(self: Effect<A, never, R>) => Effect<void | A, never, R>
 
 === Piping Flow ===
 Location: 11:30 - 13:2
@@ -67,20 +53,6 @@ Transformations (2):
       callee: Effect.catchSome
       args: [() => Option.some(Effect.void)]
       outType: Effect<void | number, never, never>
-
-=== Piping Flow ===
-Location: 16:57 - 17:51
-Node: Effect.catchSome(() => Option.some(Effect.void))
-Node Kind: KindCallExpression
-
-Subject: () => Option.some(Effect.void)
-Subject Type: () => Option<Effect<void, never, never>>
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.catchSome
-      args: (constant)
-      outType: <A, R>(self: Effect<A, never, R>) => Effect<void | A, never, R>
 
 === Piping Flow ===
 Location: 17:25 - 17:50
@@ -131,17 +103,3 @@ Transformations (2):
       callee: Effect.catchTags
       args: [{\n    // @ts-expect-error\n    MyError: () => Effect.void\n  }]
       outType: Effect<unknown, unknown, unknown>
-
-=== Piping Flow ===
-Location: 27:57 - 31:5
-Node: Effect.catchTags({\n    // @ts-expect-error\n    MyError: () => Effect.void\n  })
-Node Kind: KindCallExpression
-
-Subject: {\n    // @ts-expect-error\n    MyError: () => Effect.void\n  }
-Subject Type: { MyError: () => Effect<void, never, never>; }
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.catchTags
-      args: (constant)
-      outType: <A, R>(self: Effect<A, never, R>) => Effect<unknown, unknown, unknown>

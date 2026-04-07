@@ -1,1 +1,29 @@
-==== /.src/floatingEffect_stream.ts (0 flows) ====
+==== /.src/floatingEffect_stream.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 5:26 - 7:3
+Node: Effect.gen(function*() {\n  Stream.succeed(42)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  Stream.succeed(42)\n}
+Subject Type: () => Generator<never, void, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 5:51 - 6:21
+Node: Stream.succeed(42)
+Node Kind: KindCallExpression
+
+Subject: 42
+Subject Type: 42
+
+Transformations (1):
+  [0] kind: call
+      callee: Stream.succeed
+      args: (constant)
+      outType: Stream<number, never, never>

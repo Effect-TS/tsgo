@@ -1,7 +1,11 @@
 flowchart TB
-  0["type: #40;identifier: string#41; =#gt; #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, string, Shape#gt;<br/>callee: <br/>args: #91;#93;"]
+  0[["type: #40;identifier: string#41; =#gt; #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, string, Shape#gt;<br/>node: export function LocalConstructor#40;/** @effect-identifier */ identifier: string#41; #123;#92;n  return Context.Tag#40;#quot;hey/#quot; + identifier#41;#92;n#125;"]]
   1[/"type: string<br/>node: identifier: string"/]
-  2["type: #40;req: #123; id: number; #125;#41; =#gt; string<br/>callee: <br/>args: #91;#93;"]
-  3[/"type: #123; id: number; #125;<br/>node: req"/]
+  2[/"type: #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, string, Shape#gt;<br/>node: Context.Tag#40;#quot;hey/#quot; + identifier#41;"/]
+  3[["type: #40;req: #123; id: number; #125;#41; =#gt; string<br/>node: #40;req#41; =#gt; `TTLRequest:$#123;req.id#125;`"]]
+  4[/"type: #123; id: number; #125;<br/>node: req"/]
+  5[/"type: string<br/>node: `TTLRequest:$#123;req.id#125;`"/]
   1 -->|"kind: parameter"| 0
-  3 -->|"kind: parameter"| 2
+  2 -->|"kind: potentialReturn"| 0
+  4 -->|"kind: parameter"| 3
+  5 -->|"kind: potentialReturn"| 3

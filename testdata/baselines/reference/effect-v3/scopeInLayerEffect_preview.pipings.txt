@@ -1,15 +1,47 @@
-==== /.src/scopeInLayerEffect_preview.ts (1 flows) ====
+==== /.src/scopeInLayerEffect_preview.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 7:20 - 7:41
+Node: Context.Tag("Cache")
+Node Kind: KindCallExpression
+
+Subject: "Cache"
+Subject Type: "Cache"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.Tag
+      args: (constant)
+      outType: <Self, Shape>() => TagClass<Self, "Cache", Shape>
 
 === Piping Flow ===
 Location: 8:23 - 11:4
 Node: Layer.effect(Cache, Effect.gen(function*() {\n  yield* Effect.addFinalizer(() => Effect.void)\n  return { ok: true as const }\n}))
 Node Kind: KindCallExpression
 
-Subject: Effect.gen(function*() {\n  yield* Effect.addFinalizer(() => Effect.void)\n  return { ok: true as const }\n})
-Subject Type: Effect<{ ok: true; }, never, Scope>
+Subject: function*() {\n  yield* Effect.addFinalizer(() => Effect.void)\n  return { ok: true as const }\n}
+Subject Type: () => Generator<YieldWrap<Effect<void, never, Scope>>, { ok: true; }, any>
 
-Transformations (1):
-  [0] kind: dataLast
+Transformations (2):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<{ ok: true; }, never, Scope>
+  [1] kind: dataLast
       callee: Layer.effect
       args: [Cache]
       outType: Layer<Cache, never, Scope>
+
+=== Piping Flow ===
+Location: 9:9 - 9:48
+Node: Effect.addFinalizer(() => Effect.void)
+Node Kind: KindCallExpression
+
+Subject: () => Effect.void
+Subject Type: () => Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.addFinalizer
+      args: (constant)
+      outType: Effect<void, never, Scope>

@@ -1,1 +1,131 @@
-==== /.src/runEffectInsideEffect.ts (0 flows) ====
+==== /.src/runEffectInsideEffect.ts (9 flows) ====
+
+=== Piping Flow ===
+Location: 4:28 - 4:62
+Node: Data.TaggedError("DebuggerError")
+Node Kind: KindCallExpression
+
+Subject: "DebuggerError"
+Subject Type: "DebuggerError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "DebuggerError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 8:23 - 26:3
+Node: Effect.gen(function*() {\n  const response = yield* Effect.tryPromise({\n    try: () => fetch("http://localhost:9229"),\n    catch: (e) => new DebuggerError({ cause: e })\n  })\n  const data = yield* Effect.promise(() => response.json())\n\n  const websocket = Effect.runSync(Effect.sync(() => new WebSocket(data.url)))\n  //                        ^- do not runSync in here\n\n  websocket.onmessage = (event) => {\n    const check = Effect.tryPromise({\n      try: () => fetch(event.data as string),\n      catch: (e) => new DebuggerError({ cause: e })\n    })\n    Effect.runPromise(check)\n    //        ^- no runPromise, use a runtime instead\n  }\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const response = yield* Effect.tryPromise({\n    try: () => fetch("http://localhost:9229"),\n    catch: (e) => new DebuggerError({ cause: e })\n  })\n  const data = yield* Effect.promise(() => response.json())\n\n  const websocket = Effect.runSync(Effect.sync(() => new WebSocket(data.url)))\n  //                        ^- do not runSync in here\n\n  websocket.onmessage = (event) => {\n    const check = Effect.tryPromise({\n      try: () => fetch(event.data as string),\n      catch: (e) => new DebuggerError({ cause: e })\n    })\n    Effect.runPromise(check)\n    //        ^- no runPromise, use a runtime instead\n  }\n}
+Subject Type: () => Generator<YieldWrap<Effect<any, never, never>> | YieldWrap<Effect<Response, DebuggerError, never>>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, DebuggerError, never>
+
+=== Piping Flow ===
+Location: 9:26 - 12:5
+Node: Effect.tryPromise({\n    try: () => fetch("http://localhost:9229"),\n    catch: (e) => new DebuggerError({ cause: e })\n  })
+Node Kind: KindCallExpression
+
+Subject: {\n    try: () => fetch("http://localhost:9229"),\n    catch: (e) => new DebuggerError({ cause: e })\n  }
+Subject Type: { try: () => Promise<Response>; catch: (e: unknown) => DebuggerError; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<Response, DebuggerError, never>
+
+=== Piping Flow ===
+Location: 10:15 - 10:46
+Node: fetch("http://localhost:9229")
+Node Kind: KindCallExpression
+
+Subject: "http://localhost:9229"
+Subject Type: "http://localhost:9229"
+
+Transformations (1):
+  [0] kind: call
+      callee: fetch
+      args: (constant)
+      outType: Promise<Response>
+
+=== Piping Flow ===
+Location: 13:22 - 13:60
+Node: Effect.promise(() => response.json())
+Node Kind: KindCallExpression
+
+Subject: () => response.json()
+Subject Type: () => Promise<any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<any, never, never>
+
+=== Piping Flow ===
+Location: 15:20 - 15:79
+Node: Effect.runSync(Effect.sync(() => new WebSocket(data.url)))
+Node Kind: KindCallExpression
+
+Subject: () => new WebSocket(data.url)
+Subject Type: () => WebSocket
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<WebSocket, never, never>
+  [1] kind: call
+      callee: Effect.runSync
+      args: (constant)
+      outType: WebSocket
+
+=== Piping Flow ===
+Location: 19:18 - 22:7
+Node: Effect.tryPromise({\n      try: () => fetch(event.data as string),\n      catch: (e) => new DebuggerError({ cause: e })\n    })
+Node Kind: KindCallExpression
+
+Subject: {\n      try: () => fetch(event.data as string),\n      catch: (e) => new DebuggerError({ cause: e })\n    }
+Subject Type: { try: () => Promise<Response>; catch: (e: unknown) => DebuggerError; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<Response, DebuggerError, never>
+
+=== Piping Flow ===
+Location: 20:17 - 20:45
+Node: fetch(event.data as string)
+Node Kind: KindCallExpression
+
+Subject: event.data as string
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetch
+      args: (constant)
+      outType: Promise<Response>
+
+=== Piping Flow ===
+Location: 22:7 - 23:29
+Node: Effect.runPromise(check)
+Node Kind: KindCallExpression
+
+Subject: check
+Subject Type: Effect<Response, DebuggerError, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<Response>

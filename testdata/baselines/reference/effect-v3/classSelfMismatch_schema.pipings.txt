@@ -1,4 +1,4 @@
-==== /.src/classSelfMismatch_schema.ts (10 flows) ====
+==== /.src/classSelfMismatch_schema.ts (8 flows) ====
 
 === Piping Flow ===
 Location: 5:38 - 7:3
@@ -15,20 +15,6 @@ Transformations (1):
       outType: Class<ValidSchemaClass, { prop: typeof String$; }, Encoded<{ prop: typeof String$; }>, never, { readonly prop: string; }, {}, {}>
 
 === Piping Flow ===
-Location: 5:38 - 5:89
-Node: Schema.Class<ValidSchemaClass>("ValidSchemaClass")
-Node Kind: KindCallExpression
-
-Subject: "ValidSchemaClass"
-Subject Type: "ValidSchemaClass"
-
-Transformations (1):
-  [0] kind: call
-      callee: Schema.Class
-      args: (constant)
-      outType: <Fields extends Struct.Fields>(fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<ValidSchemaClass, { [K in keyof Type<Fields>]: Type<Fields>[K]; }> | undefined) => Class<ValidSchemaClass, Fields, Encoded<Fields>, Context<Fields[keyof Fields]>, Constructor<Fields>, {}, {}>
-
-=== Piping Flow ===
 Location: 10:40 - 12:3
 Node: Schema.Class<ValidSchemaClass>("InvalidSchemaClass")({\n  prop: Schema.String\n})
 Node Kind: KindCallExpression
@@ -41,20 +27,6 @@ Transformations (1):
       callee: Schema.Class<ValidSchemaClass>("InvalidSchemaClass")
       args: (constant)
       outType: Class<ValidSchemaClass, { prop: typeof String$; }, Encoded<{ prop: typeof String$; }>, never, { readonly prop: string; }, {}, {}>
-
-=== Piping Flow ===
-Location: 10:40 - 10:93
-Node: Schema.Class<ValidSchemaClass>("InvalidSchemaClass")
-Node Kind: KindCallExpression
-
-Subject: "InvalidSchemaClass"
-Subject Type: "InvalidSchemaClass"
-
-Transformations (1):
-  [0] kind: call
-      callee: Schema.Class
-      args: (constant)
-      outType: <Fields extends Struct.Fields>(fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<ValidSchemaClass, { [K in keyof Type<Fields>]: Type<Fields>[K]; }> | undefined) => Class<ValidSchemaClass, Fields, Encoded<Fields>, Context<Fields[keyof Fields]>, Constructor<Fields>, {}, {}>
 
 === Piping Flow ===
 Location: 15:10 - 15:79

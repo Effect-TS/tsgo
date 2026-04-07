@@ -1,9 +1,14 @@
 flowchart TB
   0[/"type: Effect#lt;never, string, never#gt;<br/>node: Effect.fail#40;#quot;err#quot;#41;"/]
   1["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.catchAll<br/>args: #91;#40;_e#41; =#gt; Effect.succeed#40;0#41;#93;"]
-  2[["type: #40;_e: string#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;_e#41; =#gt; Effect.succeed#40;0#41;"]]
-  3[/"type: string<br/>node: _e"/]
-  4[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;0#41;"/]
+  2[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catchAll"/]
+  3((("type: #40;_e: string#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;_e#41; =#gt; Effect.succeed#40;0#41;")))
+  4[["type: #40;_e: string#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;_e#41; =#gt; Effect.succeed#40;0#41;"]]
+  5[/"type: string<br/>node: _e"/]
+  6[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;0#41;"/]
   0 -->|"kind: dataFirst"| 1
-  3 -->|"kind: parameter"| 2
-  4 -->|"kind: potentialReturn"| 2
+  2 -->|"kind: transformCallee"| 1
+  3 -->|"kind: transformArg"| 1
+  5 -->|"kind: parameter"| 4
+  6 -->|"kind: potentialReturn"| 4
+  4 -->|"kind: connect"| 3

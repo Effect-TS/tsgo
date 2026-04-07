@@ -2,10 +2,15 @@ flowchart TB
   0[/"type: typeof ServiceA<br/>node: ServiceA"/]
   1["type: never<br/>callee: Effect.flatMap<br/>args: #91;#40;#41; =#gt; Effect.void#93;"]
   2["type: never<br/>callee: Effect.runPromise<br/>args: #91;#93;"]
-  3[/"type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"/]
-  4[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
-  5[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  3[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  4((("type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void")))
+  5[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  6[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  7[/"type: #lt;A, E#gt;#40;effect: Effect#lt;A, E, never#gt;, options?: #123; readonly signal?: AbortSignal #124; undefined; #125; #124; undefined#41; =#gt; Promise#lt;A#gt;<br/>node: Effect.runPromise"/]
   0 -->|"kind: pipe"| 1
   1 -->|"kind: pipe"| 2
-  3 -->|"kind: transformArg"| 1
-  5 -->|"kind: potentialReturn"| 4
+  3 -->|"kind: transformCallee"| 1
+  4 -->|"kind: transformArg"| 1
+  6 -->|"kind: potentialReturn"| 5
+  5 -->|"kind: connect"| 4
+  7 -->|"kind: transformCallee"| 2

@@ -1,1 +1,159 @@
-==== /.src/effectInFailure.ts (0 flows) ====
+==== /.src/effectInFailure.ts (11 flows) ====
+
+=== Piping Flow ===
+Location: 3:29 - 3:64
+Node: Data.TaggedError("JsonParseError")
+Node Kind: KindCallExpression
+
+Subject: "JsonParseError"
+Subject Type: "JsonParseError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "JsonParseError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 5:28 - 8:3
+Node: Effect.try({\n  try: () => JSON.parse("{"),\n  catch: (e) => Effect.log(e)\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  try: () => JSON.parse("{"),\n  catch: (e) => Effect.log(e)\n}
+Subject Type: { try: () => any; catch: (e: unknown) => Effect<void, never, never>; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<any, Effect<void, never, never>, never>
+
+=== Piping Flow ===
+Location: 6:13 - 6:29
+Node: JSON.parse("{")
+Node Kind: KindCallExpression
+
+Subject: "{"
+Subject Type: "{"
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 7:16 - 7:30
+Node: Effect.log(e)
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: unknown
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 10:31 - 13:3
+Node: Effect.try({\n  try: () => JSON.parse("{"),\n  catch: (e) => new JsonParseError({ cause: e })\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  try: () => JSON.parse("{"),\n  catch: (e) => new JsonParseError({ cause: e })\n}
+Subject Type: { try: () => any; catch: (e: unknown) => JsonParseError; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<any, JsonParseError, never>
+
+=== Piping Flow ===
+Location: 11:13 - 11:29
+Node: JSON.parse("{")
+Node Kind: KindCallExpression
+
+Subject: "{"
+Subject Type: "{"
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 15:37 - 22:3
+Node: Effect.try({\n  try: () => JSON.parse("{"),\n  catch: (e) =>\n    Effect.try({\n      try: () => JSON.parse(String(e)),\n      catch: (innerError) => Effect.log(innerError)\n    })\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  try: () => JSON.parse("{"),\n  catch: (e) =>\n    Effect.try({\n      try: () => JSON.parse(String(e)),\n      catch: (innerError) => Effect.log(innerError)\n    })\n}
+Subject Type: { try: () => any; catch: (e: unknown) => Effect<any, Effect<void, never, never>, never>; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<any, Effect<any, Effect<void, never, never>, never>, never>
+
+=== Piping Flow ===
+Location: 16:13 - 16:29
+Node: JSON.parse("{")
+Node Kind: KindCallExpression
+
+Subject: "{"
+Subject Type: "{"
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 17:16 - 21:7
+Node: Effect.try({\n      try: () => JSON.parse(String(e)),\n      catch: (innerError) => Effect.log(innerError)\n    })
+Node Kind: KindCallExpression
+
+Subject: {\n      try: () => JSON.parse(String(e)),\n      catch: (innerError) => Effect.log(innerError)\n    }
+Subject Type: { try: () => any; catch: (innerError: unknown) => Effect<void, never, never>; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<any, Effect<void, never, never>, never>
+
+=== Piping Flow ===
+Location: 19:17 - 19:39
+Node: JSON.parse(String(e))
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: unknown
+
+Transformations (2):
+  [0] kind: call
+      callee: String
+      args: (constant)
+      outType: string
+  [1] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 20:29 - 20:52
+Node: Effect.log(innerError)
+Node Kind: KindCallExpression
+
+Subject: innerError
+Subject Type: unknown
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>

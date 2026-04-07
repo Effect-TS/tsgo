@@ -1,22 +1,31 @@
 flowchart TB
-  0["type: #lt;T#gt;#40;value: T#41; =#gt; Effect#lt;T, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  0[["type: #lt;T#gt;#40;value: T#41; =#gt; Effect#lt;T, never, never#gt;<br/>node: #lt;T#gt;#40;value: T#41; =#gt; #123;#92;n  return Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;value#41;#92;n  #125;#41;#92;n#125;"]]
   1[/"type: T<br/>node: value: T"/]
-  2["type: #40;#41; =#gt; Generator#lt;YieldWrap#lt;Effect#lt;T, never, never#gt;#gt;, T, any#gt;<br/>callee: <br/>args: #91;#93;"]
-  3["type: #lt;T#gt;#40;value: T#41; =#gt; Effect#lt;T, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  2[/"type: Effect#lt;T, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;value#41;#92;n  #125;#41;"/]
+  3[["type: #lt;T#gt;#40;value: T#41; =#gt; Effect#lt;T, never, never#gt;<br/>node: function#lt;T#gt;#40;value: T#41; #123;#92;n  return Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;value#41;#92;n  #125;#41;#92;n#125;"]]
   4[/"type: T<br/>node: value: T"/]
-  5["type: #40;#41; =#gt; Generator#lt;YieldWrap#lt;Effect#lt;T, never, never#gt;#gt;, T, any#gt;<br/>callee: <br/>args: #91;#93;"]
-  6["type: #lt;T#gt;#40;value: T#41; =#gt; Effect#lt;T, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  5[/"type: Effect#lt;T, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;value#41;#92;n  #125;#41;"/]
+  6[["type: #lt;T#gt;#40;value: T#41; =#gt; Effect#lt;T, never, never#gt;<br/>node: export function functionDeclarationWithTypeParams#lt;T#gt;#40;value: T#41; #123;#92;n  return Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;value#41;#92;n  #125;#41;#92;n#125;"]]
   7[/"type: T<br/>node: value: T"/]
-  8["type: #40;#41; =#gt; Generator#lt;YieldWrap#lt;Effect#lt;T, never, never#gt;#gt;, T, any#gt;<br/>callee: <br/>args: #91;#93;"]
-  9["type: #lt;T#gt;#40;value: T#41; =#gt; Effect#lt;T, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  8[/"type: Effect#lt;T, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;value#41;#92;n  #125;#41;"/]
+  9[["type: #lt;T#gt;#40;value: T#41; =#gt; Effect#lt;T, never, never#gt;<br/>node: #lt;T#gt;#40;value: T#41; =#gt; #123;#92;n  const _a = 1#92;n  const _b = 2#92;n  const _c = 3#92;n  const _d = 4#92;n  const _e = 5#92;n  return Effect.succeed#40;value#41;#92;n#125;"]]
   10[/"type: T<br/>node: value: T"/]
-  11["type: #lt;T#gt;#40;value: T#41; =#gt; Effect#lt;T, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  12[/"type: T<br/>node: value: T"/]
-  13["type: #lt;T#gt;#40;value: T#41; =#gt; Effect#lt;T, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  14[/"type: T<br/>node: value: T"/]
+  11[/"type: Effect#lt;T, never, never#gt;<br/>node: Effect.succeed#40;value#41;"/]
+  12[["type: #lt;T#gt;#40;value: T#41; =#gt; Effect#lt;T, never, never#gt;<br/>node: function#lt;T#gt;#40;value: T#41; #123;#92;n  const _a = 1#92;n  const _b = 2#92;n  const _c = 3#92;n  const _d = 4#92;n  const _e = 5#92;n  return Effect.succeed#40;value#41;#92;n#125;"]]
+  13[/"type: T<br/>node: value: T"/]
+  14[/"type: Effect#lt;T, never, never#gt;<br/>node: Effect.succeed#40;value#41;"/]
+  15[["type: #lt;T#gt;#40;value: T#41; =#gt; Effect#lt;T, never, never#gt;<br/>node: export function functionDeclarationWithTypeParamsNoGen#lt;T#gt;#40;value: T#41; #123;#92;n  const _a = 1#92;n  const _b = 2#92;n  const _c = 3#92;n  const _d = 4#92;n  const _e = 5#92;n  return Effect.succeed#40;value#41;#92;n#125;"]]
+  16[/"type: T<br/>node: value: T"/]
+  17[/"type: Effect#lt;T, never, never#gt;<br/>node: Effect.succeed#40;value#41;"/]
   1 -->|"kind: parameter"| 0
+  2 -->|"kind: potentialReturn"| 0
   4 -->|"kind: parameter"| 3
+  5 -->|"kind: potentialReturn"| 3
   7 -->|"kind: parameter"| 6
+  8 -->|"kind: potentialReturn"| 6
   10 -->|"kind: parameter"| 9
-  12 -->|"kind: parameter"| 11
-  14 -->|"kind: parameter"| 13
+  11 -->|"kind: potentialReturn"| 9
+  13 -->|"kind: parameter"| 12
+  14 -->|"kind: potentialReturn"| 12
+  16 -->|"kind: parameter"| 15
+  17 -->|"kind: potentialReturn"| 15

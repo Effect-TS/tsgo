@@ -1,9 +1,13 @@
 flowchart TB
-  0["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  1["type: #40;#41; =#gt; Generator#lt;YieldWrap#lt;Effect#lt;number, never, never#gt;#gt;, number, any#gt;<br/>callee: <br/>args: #91;#93;"]
-  2["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  3["type: #40;#41; =#gt; Generator#lt;YieldWrap#lt;Effect#lt;number, never, never#gt;#gt;, number, any#gt;<br/>callee: <br/>args: #91;#93;"]
-  4["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  5["type: #40;#41; =#gt; Generator#lt;YieldWrap#lt;Effect#lt;number, never, never#gt;#gt;, number, any#gt;<br/>callee: <br/>args: #91;#93;"]
-  6["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  7["type: #40;#41; =#gt; Generator#lt;YieldWrap#lt;Effect#lt;number, never, never#gt;#gt;, number, any#gt;<br/>callee: <br/>args: #91;#93;"]
+  0[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;#41; =#gt; #123;#92;n  return Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.succeed#40;1#41;#92;n    return 42#92;n  #125;#41;#92;n#125;"]]
+  1[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.succeed#40;1#41;#92;n    return 42#92;n  #125;#41;"/]
+  2[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;#41; =#gt;#92;n  Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.succeed#40;1#41;#92;n    return 42#92;n  #125;#41;"]]
+  3[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.succeed#40;1#41;#92;n    return 42#92;n  #125;#41;"/]
+  4[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: function#40;#41; #123;#92;n  return Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.succeed#40;1#41;#92;n    return 42#92;n  #125;#41;#92;n#125;"]]
+  5[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.succeed#40;1#41;#92;n    return 42#92;n  #125;#41;"/]
+  6[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: export function functionDeclarationGen#40;#41; #123;#92;n  return Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.succeed#40;1#41;#92;n    return 42#92;n  #125;#41;#92;n#125;"]]
+  7[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.succeed#40;1#41;#92;n    return 42#92;n  #125;#41;"/]
+  1 -->|"kind: potentialReturn"| 0
+  3 -->|"kind: potentialReturn"| 2
+  5 -->|"kind: potentialReturn"| 4
+  7 -->|"kind: potentialReturn"| 6

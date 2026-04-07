@@ -1,4 +1,4 @@
-==== /.src/missingStarInYieldEffectGen.ts (14 flows) ====
+==== /.src/missingStarInYieldEffectGen.ts (13 flows) ====
 
 === Piping Flow ===
 Location: 4:23 - 6:3
@@ -167,20 +167,6 @@ Transformations (1):
       callee: Effect.fn("tracedEffectFnUsage")
       args: (constant)
       outType: () => Effect<void, any, any>
-
-=== Piping Flow ===
-Location: 37:35 - 37:68
-Node: Effect.fn("tracedEffectFnUsage")
-Node Kind: KindCallExpression
-
-Subject: "tracedEffectFnUsage"
-Subject Type: "tracedEffectFnUsage"
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.fn
-      args: (constant)
-      outType: Gen & NonGen
 
 === Piping Flow ===
 Location: 42:37 - 44:3

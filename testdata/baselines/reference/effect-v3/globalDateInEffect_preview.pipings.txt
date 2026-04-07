@@ -1,1 +1,15 @@
-==== /.src/globalDateInEffect_preview.ts (0 flows) ====
+==== /.src/globalDateInEffect_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 5:23 - 8:3
+Node: Effect.gen(function*() {\n  const now = Date.now()\n  return now\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const now = Date.now()\n  return now\n}
+Subject Type: () => Generator<never, number, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<number, never, never>

@@ -1,1 +1,87 @@
-==== /.src/missedPipeableOpportunity_safer.ts (0 flows) ====
+==== /.src/missedPipeableOpportunity_safer.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 2:40 - 7:52
+Node: console.log(Effect.runPromise(Effect.log("Hello")))
+Node Kind: KindCallExpression
+
+Subject: "Hello"
+Subject Type: "Hello"
+
+Transformations (3):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<void>
+  [2] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 7:52 - 11:67
+Node: console.log(Effect.runPromise(Effect.ignore(Effect.log("Hello"))))
+Node Kind: KindCallExpression
+
+Subject: "Hello"
+Subject Type: "Hello"
+
+Transformations (4):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: call
+      callee: Effect.ignore
+      args: (constant)
+      outType: Effect<void, never, never>
+  [2] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<void>
+  [3] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 11:67 - 22:2
+Node: console.log(\n  Effect.runPromise(\n    Effect.ignore(\n      Effect.succeed(console.log(Effect.runPromise(Effect.log("Hello"))))\n    )\n  )\n)
+Node Kind: KindCallExpression
+
+Subject: "Hello"
+Subject Type: "Hello"
+
+Transformations (7):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<void>
+  [2] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void
+  [3] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<void, never, never>
+  [4] kind: call
+      callee: Effect.ignore
+      args: (constant)
+      outType: Effect<void, never, never>
+  [5] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<void>
+  [6] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void

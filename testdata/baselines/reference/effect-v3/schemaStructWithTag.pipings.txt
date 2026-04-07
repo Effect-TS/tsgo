@@ -1,1 +1,43 @@
-==== /.src/schemaStructWithTag.ts (0 flows) ====
+==== /.src/schemaStructWithTag.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 5:20 - 9:3
+Node: Schema.Struct({\n  _tag: Schema.Literal("User"), // <- this is the tag\n  name: Schema.String,\n  age: Schema.Number\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  _tag: Schema.Literal("User"), // <- this is the tag\n  name: Schema.String,\n  age: Schema.Number\n}
+Subject Type: { _tag: Literal<["User"]>; name: typeof String$; age: typeof Number$; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ _tag: Literal<["User"]>; name: typeof String$; age: typeof Number$; }>
+
+=== Piping Flow ===
+Location: 6:8 - 6:31
+Node: Schema.Literal("User")
+Node Kind: KindCallExpression
+
+Subject: "User"
+Subject Type: "User"
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Literal
+      args: (constant)
+      outType: Literal<["User"]>
+
+=== Piping Flow ===
+Location: 17:31 - 20:3
+Node: Schema.Struct({\n  name: Schema.String,\n  age: Schema.Number\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  name: Schema.String,\n  age: Schema.Number\n}
+Subject Type: { name: typeof String$; age: typeof Number$; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ name: typeof String$; age: typeof Number$; }>

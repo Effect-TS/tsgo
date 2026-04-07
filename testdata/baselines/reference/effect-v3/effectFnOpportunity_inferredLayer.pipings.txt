@@ -1,4 +1,4 @@
-==== /.src/effectFnOpportunity_inferredLayer.ts (14 flows) ====
+==== /.src/effectFnOpportunity_inferredLayer.ts (11 flows) ====
 
 === Piping Flow ===
 Location: 6:24 - 6:49
@@ -13,20 +13,6 @@ Transformations (1):
       callee: Context.Tag
       args: (constant)
       outType: <Self, Shape>() => TagClass<Self, "MyService", Shape>
-
-=== Piping Flow ===
-Location: 11:23 - 11:47
-Node: Layer.effect(MyService)
-Node Kind: KindCallExpression
-
-Subject: MyService
-Subject Type: typeof MyService
-
-Transformations (1):
-  [0] kind: call
-      callee: Layer.effect
-      args: (constant)
-      outType: <E, R>(effect: Effect<{ log: (what: string) => Effect<void, never, never>; }, E, R>) => Layer<MyService, E, R>
 
 === Piping Flow ===
 Location: 11:23 - 15:4
@@ -135,20 +121,6 @@ Transformations (1):
       outType: Layer<MyService, never, never>
 
 === Piping Flow ===
-Location: 23:30 - 23:55
-Node: Layer.succeed(MyService)
-Node Kind: KindCallExpression
-
-Subject: MyService
-Subject Type: typeof MyService
-
-Transformations (1):
-  [0] kind: call
-      callee: Layer.succeed
-      args: (constant)
-      outType: (resource: { log: (what: string) => Effect<void, never, never>; }) => Layer<MyService, never, never>
-
-=== Piping Flow ===
 Location: 25:27 - 25:44
 Node: Effect.log(what)
 Node Kind: KindCallExpression
@@ -175,20 +147,6 @@ Transformations (1):
       callee: Layer.sync(MyService)
       args: (constant)
       outType: Layer<MyService, never, never>
-
-=== Piping Flow ===
-Location: 28:27 - 28:49
-Node: Layer.sync(MyService)
-Node Kind: KindCallExpression
-
-Subject: MyService
-Subject Type: typeof MyService
-
-Transformations (1):
-  [0] kind: call
-      callee: Layer.sync
-      args: (constant)
-      outType: (evaluate: LazyArg<{ log: (what: string) => Effect<void, never, never>; }>) => Layer<MyService, never, never>
 
 === Piping Flow ===
 Location: 30:36 - 30:53

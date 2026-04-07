@@ -4,8 +4,10 @@ flowchart TB
   2[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;42#41;"/]
   3[/"type: Layer#lt;never, never, never#gt;<br/>node: Layer.empty"/]
   4["type: Layer#lt;never, never, unknown#gt;<br/>callee: Layer.provide<br/>args: #91;layerUnknown#93;"]
-  5[/"type: Layer#lt;never, never, unknown#gt;<br/>node: layerUnknown"/]
+  5[/"type: #123; #lt;RIn, E, ROut#gt;#40;that: Layer#lt;ROut, E, RIn#gt;#41;: #lt;RIn2, E2, ROut2#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;#41; =#gt; Layer#lt;ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;const Layers extends readonly #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;that: Layers#41;: #lt;A, E, R#gt;#40;self: Layer#lt;A, E, R#gt;#41; =#gt; Layer#lt;A, E #124; #123; #91;k in keyof Layers#93;: Error#lt;Layers#91;k#93;#gt;; #125;#91;number#93;, #123; #91;k in keyof Layers#93;: Context#lt;Layers#91;k#93;#gt;; #125;#91;number#93; #124; Exclude#lt;R, #123; #91;k in keyof Layers#93;: Success#lt;Layers#91;k#93;#gt;; #125;#91;number#93;#gt;#gt;; #lt;RIn2, E2, ROut2, RIn, E, ROut#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;, that: Layer#lt;ROut, E, RIn#gt;#41;: Layer#lt;ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;A, E, R, const Layers extends readonly #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;self: Layer#lt;A, E, R#gt;, that: Layers#41;: Layer#lt;A, E #124; #123; #91;k in keyof Layers#93;: Error#lt;Layers#91;k#93;#gt;; #125;#91;number#93;, #123; #91;k in keyof Layers#93;: Context#lt;Layers#91;k#93;#gt;; #125;#91;number#93; #124; Exclude#lt;R, #123; #91;k in keyof Layers#93;: Success#lt;Layers#91;k#93;#gt;; #125;#91;number#93;#gt;#gt;; #125;<br/>node: Layer.provide"/]
+  6[/"type: Layer#lt;never, never, unknown#gt;<br/>node: layerUnknown"/]
   1 -->|"kind: parameter"| 0
   2 -->|"kind: potentialReturn"| 0
   3 -->|"kind: pipe"| 4
-  5 -->|"kind: transformArg"| 4
+  5 -->|"kind: transformCallee"| 4
+  6 -->|"kind: transformArg"| 4

@@ -1,6 +1,8 @@
 === Metadata ===
 Effect version: 3.19.19
 
+/.src/missedPipeableOpportunity_safer.ts(11,1): warning TS377050: This nested call structure has a pipeable form. `Effect.log("Hello").pipe(...)` represents the same call sequence in pipe style and may be easier to read. effect(missedPipeableOpportunity)
+/.src/missedPipeableOpportunity_safer.ts(16,1): warning TS377050: This nested call structure has a pipeable form. `Effect.succeed(console.log(Effect.runPromise(Effect.log("Hello")))).pipe(...)` represents the same call sequence in pipe style and may be easier to read. effect(missedPipeableOpportunity)
 
 
 ==== /.src/tsconfig.json (0 errors) ====
@@ -16,7 +18,7 @@ Effect version: 3.19.19
     }
     
 
-==== /.src/missedPipeableOpportunity_safer.ts (0 errors) ====
+==== /.src/missedPipeableOpportunity_safer.ts (2 errors) ====
     // @effect-diagnostics missedPipeableOpportunity:warning
     import * as Effect from "effect/Effect"
     
@@ -28,15 +30,25 @@ Effect version: 3.19.19
     // this instead should trigger, but the output should be
     // console.log(Effect.log("Hello").pipe(Effect.ignore, Effect.runPromise))
     console.log(Effect.runPromise(Effect.ignore(Effect.log("Hello"))))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377050: This nested call structure has a pipeable form. `Effect.log("Hello").pipe(...)` represents the same call sequence in pipe style and may be easier to read. effect(missedPipeableOpportunity)
     
     // this is silly, but shows how we can move back and forth between the two styles
     // I would expect it to be triggered, but the output should be
     // console.log(Effect.succeed(console.log(Effect.runPromise(Effect.log("Hello")))).pipe(Effect.ignore, Effect.runPromise))
     console.log(
+    ~~~~~~~~~~~~
       Effect.runPromise(
+    ~~~~~~~~~~~~~~~~~~~~
         Effect.ignore(
+    ~~~~~~~~~~~~~~~~~~
           Effect.succeed(console.log(Effect.runPromise(Effect.log("Hello"))))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         )
+    ~~~~~
       )
+    ~~~
     )
+    ~
+!!! warning TS377050: This nested call structure has a pipeable form. `Effect.succeed(console.log(Effect.runPromise(Effect.log("Hello")))).pipe(...)` represents the same call sequence in pipe style and may be easier to read. effect(missedPipeableOpportunity)
     

@@ -1,1 +1,113 @@
-==== /.src/unnecessaryFailYieldableError.ts (0 flows) ====
+==== /.src/unnecessaryFailYieldableError.ts (8 flows) ====
+
+=== Piping Flow ===
+Location: 11:30 - 11:66
+Node: Data.TaggedError("DataTaggedError")
+Node Kind: KindCallExpression
+
+Subject: "DataTaggedError"
+Subject Type: "DataTaggedError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "DataTaggedError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 13:26 - 13:73
+Node: Schema.TaggedError<SchemaError>("SchemaError")
+Node Kind: KindCallExpression
+
+Subject: "SchemaError"
+Subject Type: "SchemaError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.TaggedError
+      args: (constant)
+      outType: <Tag extends string, Fields extends Struct.Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<SchemaError, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedErrorClass<SchemaError, Tag, { readonly _tag: tag<Tag>; } & Fields>
+
+=== Piping Flow ===
+Location: 15:45 - 23:3
+Node: Effect.gen(function*() {\n  // should not report\n  yield* Effect.fail(new NonYieldable("non-yieldable error"))\n  const err = new DataTaggedError()\n  console.log(err)\n  // should report\n  yield* Effect.fail(new DataTaggedError())\n  yield* Effect.fail(new SchemaError("schema error"))\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // should not report\n  yield* Effect.fail(new NonYieldable("non-yieldable error"))\n  const err = new DataTaggedError()\n  console.log(err)\n  // should report\n  yield* Effect.fail(new DataTaggedError())\n  yield* Effect.fail(new SchemaError("schema error"))\n}
+Subject Type: () => Generator<YieldWrap<Effect<never, DataTaggedError, never>> | YieldWrap<Effect<never, NonYieldable, never>> | YieldWrap<Effect<never, SchemaError, never>>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, DataTaggedError | NonYieldable | SchemaError, never>
+
+=== Piping Flow ===
+Location: 17:9 - 17:62
+Node: Effect.fail(new NonYieldable("non-yieldable error"))
+Node Kind: KindCallExpression
+
+Subject: new NonYieldable("non-yieldable error")
+Subject Type: NonYieldable
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, NonYieldable, never>
+
+=== Piping Flow ===
+Location: 18:36 - 19:19
+Node: console.log(err)
+Node Kind: KindCallExpression
+
+Subject: err
+Subject Type: DataTaggedError
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 21:9 - 21:44
+Node: Effect.fail(new DataTaggedError())
+Node Kind: KindCallExpression
+
+Subject: new DataTaggedError()
+Subject Type: DataTaggedError
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, DataTaggedError, never>
+
+=== Piping Flow ===
+Location: 22:9 - 22:54
+Node: Effect.fail(new SchemaError("schema error"))
+Node Kind: KindCallExpression
+
+Subject: new SchemaError("schema error")
+Subject Type: SchemaError
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, SchemaError, never>
+
+=== Piping Flow ===
+Location: 26:31 - 26:66
+Node: Effect.fail(new DataTaggedError())
+Node Kind: KindCallExpression
+
+Subject: new DataTaggedError()
+Subject Type: DataTaggedError
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, DataTaggedError, never>

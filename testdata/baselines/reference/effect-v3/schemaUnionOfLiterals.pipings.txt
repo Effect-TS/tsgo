@@ -1,1 +1,47 @@
-==== /.src/schemaUnionOfLiterals.ts (0 flows) ====
+==== /.src/schemaUnionOfLiterals.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 5:46 - 5:65
+Node: Schema.Literal("A")
+Node Kind: KindCallExpression
+
+Subject: "A"
+Subject Type: "A"
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Literal
+      args: (constant)
+      outType: Literal<["A"]>
+
+=== Piping Flow ===
+Location: 5:66 - 5:86
+Node: Schema.Literal("B")
+Node Kind: KindCallExpression
+
+Subject: "B"
+Subject Type: "B"
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Literal
+      args: (constant)
+      outType: Literal<["B"]>
+
+=== Piping Flow ===
+Location: 7:43 - 7:77
+Node: Schema.Union(Schema.Literal("A"))
+Node Kind: KindCallExpression
+
+Subject: "A"
+Subject Type: "A"
+
+Transformations (2):
+  [0] kind: call
+      callee: Schema.Literal
+      args: (constant)
+      outType: Literal<["A"]>
+  [1] kind: call
+      callee: Schema.Union
+      args: (constant)
+      outType: Literal<["A"]>

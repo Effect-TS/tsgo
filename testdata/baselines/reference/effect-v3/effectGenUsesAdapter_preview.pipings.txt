@@ -1,1 +1,29 @@
-==== /.src/effectGenUsesAdapter_preview.ts (0 flows) ====
+==== /.src/effectGenUsesAdapter_preview.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 5:23 - 7:3
+Node: Effect.gen(function*(_) {\n  return yield* Effect.succeed(1)\n})
+Node Kind: KindCallExpression
+
+Subject: function*(_) {\n  return yield* Effect.succeed(1)\n}
+Subject Type: (_: Adapter) => Generator<YieldWrap<Effect<number, never, never>>, number, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 6:16 - 6:34
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>

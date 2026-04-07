@@ -1,9 +1,12 @@
 === Metadata ===
 Effect version: 3.19.19
 
+/.src/catchUnfailableEffect_effectFn.ts(7,4): suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
+/.src/catchUnfailableEffect_effectFn.ts(15,4): suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
+/.src/catchUnfailableEffect_effectFn.ts(19,4): suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
 
 
-==== /.src/catchUnfailableEffect_effectFn.ts (0 errors) ====
+==== /.src/catchUnfailableEffect_effectFn.ts (3 errors) ====
     // @effect-v3
     import * as Effect from "effect/Effect"
     
@@ -11,6 +14,8 @@ Effect version: 3.19.19
     export const shouldReportEffectFn = Effect.fn(function*() {
       return yield* Effect.succeed(42)
     }, Effect.catchAll(() => Effect.void)) // <- should report here
+       ~~~~~~~~~~~~~~~
+!!! suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
     
     export const shouldNotReportEffectFn = Effect.fn(function*() {
       return yield* Effect.fail("error")
@@ -19,8 +24,12 @@ Effect version: 3.19.19
     export const shouldReportEffectFnTraced = Effect.fn("traced")(function*() {
       return yield* Effect.succeed(42)
     }, Effect.catchAll(() => Effect.void)) // <- should report here
+       ~~~~~~~~~~~~~~~
+!!! suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
     
     export const shouldReportEffectFnUntraced = Effect.fnUntraced(function*() {
       return yield* Effect.succeed(42)
     }, Effect.catchAll(() => Effect.void)) // <- should report here
+       ~~~~~~~~~~~~~~~
+!!! suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
     

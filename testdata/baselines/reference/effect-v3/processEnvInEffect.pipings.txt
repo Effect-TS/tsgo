@@ -1,4 +1,4 @@
-==== /.src/processEnvInEffect.ts (4 flows) ====
+==== /.src/processEnvInEffect.ts (3 flows) ====
 
 === Piping Flow ===
 Location: 6:24 - 8:3
@@ -27,20 +27,6 @@ Transformations (1):
       callee: Effect.fn("envInFn")
       args: (constant)
       outType: () => Effect<string | undefined, never, never>
-
-=== Piping Flow ===
-Location: 11:23 - 11:44
-Node: Effect.fn("envInFn")
-Node Kind: KindCallExpression
-
-Subject: "envInFn"
-Subject Type: "envInFn"
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.fn
-      args: (constant)
-      outType: Gen & NonGen
 
 === Piping Flow ===
 Location: 22:32 - 25:3

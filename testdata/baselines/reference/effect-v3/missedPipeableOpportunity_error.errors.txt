@@ -1,6 +1,7 @@
 === Metadata ===
 Effect version: 3.19.19
 
+/.src/missedPipeableOpportunity_error.ts(12,41): warning TS377050: This nested call structure has a pipeable form. `Schema.decodeUnknown(MyStruct)({ x: 42, y: 42 }).pipe(...)` represents the same call sequence in pipe style and may be easier to read. effect(missedPipeableOpportunity)
 
 
 ==== /.src/tsconfig.json (0 errors) ====
@@ -16,7 +17,7 @@ Effect version: 3.19.19
     }
     
 
-==== /.src/missedPipeableOpportunity_error.ts (0 errors) ====
+==== /.src/missedPipeableOpportunity_error.ts (1 errors) ====
     // @effect-diagnostics missedPipeableOpportunity:warning
     import { Duration, identity, pipe, Schedule, Schema } from "effect"
     import * as Effect from "effect/Effect"
@@ -29,6 +30,8 @@ Effect version: 3.19.19
     export const shouldNotTrigger = identity(Schema.decodeUnknown(MyStruct)({ x: 42, y: 42 }))
     
     export const shouldTriggerBecauseHas2 = identity(identity(Schema.decodeUnknown(MyStruct)({ x: 42, y: 42 })))
+                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377050: This nested call structure has a pipeable form. `Schema.decodeUnknown(MyStruct)({ x: 42, y: 42 }).pipe(...)` represents the same call sequence in pipe style and may be easier to read. effect(missedPipeableOpportunity)
     
     export const shouldNotTriggerFunctionReturned = pipe(
       Schedule.exponential(Duration.millis(10), 4),

@@ -1,15 +1,121 @@
-==== /.src/outdatedApi.ts (1 flows) ====
+==== /.src/outdatedApi.ts (8 flows) ====
+
+=== Piping Flow ===
+Location: 7:25 - 9:3
+Node: Effect.gen(function*() {\n    const runtime = yield* Effect.runtime()\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n    const runtime = yield* Effect.runtime()\n}
+Subject Type: () => Generator<YieldWrap<Effect<Runtime<never>, never, never>>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 11:28 - 11:70
+Node: Effect.dieMessage("something went wrong")
+Node Kind: KindCallExpression
+
+Subject: "something went wrong"
+Subject Type: "something went wrong"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.dieMessage
+      args: (constant)
+      outType: Effect<never, never, never>
 
 === Piping Flow ===
 Location: 13:26 - 13:89
 Node: Effect.catchAll(Effect.fail("err"), (_e) => Effect.succeed(0))
 Node Kind: KindCallExpression
 
-Subject: Effect.fail("err")
-Subject Type: Effect<never, string, never>
+Subject: "err"
+Subject Type: "err"
 
-Transformations (1):
-  [0] kind: dataFirst
+Transformations (2):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>
+  [1] kind: dataFirst
       callee: Effect.catchAll
       args: [(_e) => Effect.succeed(0)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 13:70 - 13:88
+Node: Effect.succeed(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 15:22 - 15:53
+Node: Effect.fork(Effect.succeed(1))
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: call
+      callee: Effect.fork
+      args: (constant)
+      outType: Effect<RuntimeFiber<number, never>, never, never>
+
+=== Piping Flow ===
+Location: 18:25 - 18:43
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 20:21 - 22:3
+Node: Effect.gen(function*() {\n    return yield* Effect.succeed(1)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n    return yield* Effect.succeed(1)\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, number, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 21:18 - 21:36
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
       outType: Effect<number, never, never>

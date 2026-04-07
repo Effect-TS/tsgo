@@ -1,4 +1,4 @@
-==== /.src/globalFetchInEffect.ts (9 flows) ====
+==== /.src/globalFetchInEffect.ts (8 flows) ====
 
 === Piping Flow ===
 Location: 5:26 - 7:3
@@ -41,20 +41,6 @@ Transformations (1):
       callee: Effect.fn("fetchInFn")
       args: (constant)
       outType: () => Effect<void, never, never>
-
-=== Piping Flow ===
-Location: 10:25 - 10:48
-Node: Effect.fn("fetchInFn")
-Node Kind: KindCallExpression
-
-Subject: "fetchInFn"
-Subject Type: "fetchInFn"
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.fn
-      args: (constant)
-      outType: Gen & NonGen
 
 === Piping Flow ===
 Location: 10:62 - 11:37

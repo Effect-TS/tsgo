@@ -1,1 +1,57 @@
-==== /.src/leakingRequirements.ts (0 flows) ====
+==== /.src/leakingRequirements.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 5:32 - 5:58
+Node: Context.Tag("FileSystem")
+Node Kind: KindCallExpression
+
+Subject: "FileSystem"
+Subject Type: "FileSystem"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.Tag
+      args: (constant)
+      outType: <Self, Shape>() => TagClass<Self, "FileSystem", Shape>
+
+=== Piping Flow ===
+Location: 9:33 - 9:60
+Node: Context.Tag("LeakingDeps")
+Node Kind: KindCallExpression
+
+Subject: "LeakingDeps"
+Subject Type: "LeakingDeps"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.Tag
+      args: (constant)
+      outType: <Self, Shape>() => TagClass<Self, "LeakingDeps", Shape>
+
+=== Piping Flow ===
+Location: 15:28 - 15:55
+Node: Context.Tag("_LocalClass")
+Node Kind: KindCallExpression
+
+Subject: "_LocalClass"
+Subject Type: "_LocalClass"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.Tag
+      args: (constant)
+      outType: <Self, Shape>() => TagClass<Self, "_LocalClass", Shape>
+
+=== Piping Flow ===
+Location: 19:30 - 19:59
+Node: Context.Tag("_LocalLeaking")
+Node Kind: KindCallExpression
+
+Subject: "_LocalLeaking"
+Subject Type: "_LocalLeaking"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.Tag
+      args: (constant)
+      outType: <Self, Shape>() => TagClass<Self, "_LocalLeaking", Shape>

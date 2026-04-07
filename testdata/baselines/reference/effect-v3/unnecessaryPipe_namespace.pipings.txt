@@ -1,4 +1,4 @@
-==== /.src/unnecessaryPipe_namespace.ts (1 flows) ====
+==== /.src/unnecessaryPipe_namespace.ts (2 flows) ====
 
 === Piping Flow ===
 Location: 4:31 - 7:2
@@ -13,3 +13,13 @@ Transformations (1):
       callee: (_) => _.length
       args: (constant)
       outType: number
+
+=== Piping Flow ===
+Location: 9:28 - 11:2
+Node: Fn.pipe(\n  "hello"\n)
+Node Kind: KindCallExpression
+
+Subject: "hello"
+Subject Type: "hello"
+
+Transformations (0):

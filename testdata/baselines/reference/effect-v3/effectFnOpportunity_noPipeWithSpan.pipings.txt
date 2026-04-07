@@ -1,4 +1,4 @@
-==== /.src/effectFnOpportunity_noPipeWithSpan.ts (9 flows) ====
+==== /.src/effectFnOpportunity_noPipeWithSpan.ts (6 flows) ====
 
 === Piping Flow ===
 Location: 11:35 - 14:31
@@ -69,20 +69,6 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 19:11 - 19:56
-Node: Effect.withSpan("functionExpressionWithPipe")
-Node Kind: KindCallExpression
-
-Subject: "functionExpressionWithPipe"
-Subject Type: "functionExpressionWithPipe"
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.withSpan
-      args: (constant)
-      outType: <A, E, R>(self: Effect<A, E, R>) => Effect<A, E, Exclude<R, ParentSpan>>
-
-=== Piping Flow ===
 Location: 23:9 - 25:105
 Node: Effect.gen(function*() {\n    return yield* Effect.succeed(42)\n  }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionDeclarationWithPipe"), Effect.ignoreLogged)
 Node Kind: KindCallExpression
@@ -121,31 +107,3 @@ Transformations (1):
       callee: Effect.succeed
       args: (constant)
       outType: Effect<number, never, never>
-
-=== Piping Flow ===
-Location: 25:11 - 25:35
-Node: Effect.map((x) => x + 1)
-Node Kind: KindCallExpression
-
-Subject: (x) => x + 1
-Subject Type: (x: number) => number
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.map
-      args: (constant)
-      outType: <E, R>(self: Effect<number, E, R>) => Effect<number, E, R>
-
-=== Piping Flow ===
-Location: 25:36 - 25:83
-Node: Effect.withSpan("functionDeclarationWithPipe")
-Node Kind: KindCallExpression
-
-Subject: "functionDeclarationWithPipe"
-Subject Type: "functionDeclarationWithPipe"
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.withSpan
-      args: (constant)
-      outType: <A, E, R>(self: Effect<A, E, R>) => Effect<A, E, Exclude<R, ParentSpan>>

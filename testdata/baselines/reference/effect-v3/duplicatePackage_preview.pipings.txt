@@ -1,1 +1,15 @@
-==== /.src/duplicatePackage_preview.ts (0 flows) ====
+==== /.src/duplicatePackage_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 7:23 - 7:44
+Node: Effect.succeed(true)
+Node Kind: KindCallExpression
+
+Subject: true
+Subject Type: true
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<boolean, never, never>

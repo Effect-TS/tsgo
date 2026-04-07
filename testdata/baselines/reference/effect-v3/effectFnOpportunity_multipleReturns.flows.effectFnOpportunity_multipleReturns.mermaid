@@ -1,7 +1,16 @@
 flowchart TB
-  0["type: #40;#41; =#gt; Effect#lt;boolean, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  1["type: #40;#41; =#gt; Generator#lt;YieldWrap#lt;Effect#lt;boolean, never, never#gt;#gt;, boolean, any#gt;<br/>callee: <br/>args: #91;#93;"]
-  2["type: #40;#41; =#gt; Effect#lt;boolean, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  3["type: #40;#41; =#gt; Generator#lt;YieldWrap#lt;Effect#lt;boolean, never, never#gt;#gt;, boolean, any#gt;<br/>callee: <br/>args: #91;#93;"]
-  4["type: #40;#41; =#gt; Effect#lt;boolean, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  5["type: #40;#41; =#gt; Generator#lt;YieldWrap#lt;Effect#lt;boolean, never, never#gt;#gt;, boolean, any#gt;<br/>callee: <br/>args: #91;#93;"]
+  0[["type: #40;#41; =#gt; Effect#lt;boolean, never, never#gt;<br/>node: #40;#41; =#gt; #123;#92;n  if #40;Math.random#40;#41; #gt; 0.5#41; return Effect.succeed#40;true#41;#92;n  return Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;true#41;#92;n  #125;#41;#92;n#125;"]]
+  1[/"type: Effect#lt;boolean, never, never#gt;<br/>node: Effect.succeed#40;true#41;"/]
+  2[/"type: Effect#lt;boolean, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;true#41;#92;n  #125;#41;"/]
+  3[["type: #40;#41; =#gt; Effect#lt;boolean, never, never#gt;<br/>node: function#40;#41; #123;#92;n  if #40;Math.random#40;#41; #gt; 0.5#41; return Effect.succeed#40;true#41;#92;n  return Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;true#41;#92;n  #125;#41;#92;n#125;"]]
+  4[/"type: Effect#lt;boolean, never, never#gt;<br/>node: Effect.succeed#40;true#41;"/]
+  5[/"type: Effect#lt;boolean, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;true#41;#92;n  #125;#41;"/]
+  6[["type: #40;#41; =#gt; Effect#lt;boolean, never, never#gt;<br/>node: export function functionDeclarationMultipleReturns#40;#41; #123;#92;n  if #40;Math.random#40;#41; #gt; 0.5#41; return Effect.succeed#40;true#41;#92;n  return Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;true#41;#92;n  #125;#41;#92;n#125;"]]
+  7[/"type: Effect#lt;boolean, never, never#gt;<br/>node: Effect.succeed#40;true#41;"/]
+  8[/"type: Effect#lt;boolean, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;true#41;#92;n  #125;#41;"/]
+  1 -->|"kind: potentialReturn"| 0
+  2 -->|"kind: potentialReturn"| 0
+  4 -->|"kind: potentialReturn"| 3
+  5 -->|"kind: potentialReturn"| 3
+  7 -->|"kind: potentialReturn"| 6
+  8 -->|"kind: potentialReturn"| 6

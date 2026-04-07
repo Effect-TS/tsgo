@@ -1,4 +1,4 @@
-==== /.src/effectFnOpportunity_paramsInPipe.ts (12 flows) ====
+==== /.src/effectFnOpportunity_paramsInPipe.ts (9 flows) ====
 
 === Piping Flow ===
 Location: 10:9 - 13:71
@@ -65,20 +65,6 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 20:11 - 20:35
-Node: Effect.map((_) => _ + a)
-Node Kind: KindCallExpression
-
-Subject: (_) => _ + a
-Subject Type: (_: string) => string
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.map
-      args: (constant)
-      outType: <E, R>(self: Effect<string, E, R>) => Effect<string, E, R>
-
-=== Piping Flow ===
 Location: 24:9 - 27:55
 Node: Effect.gen(function*() {\n    yield* Effect.succeed(a)\n    return b\n  }).pipe(Effect.map((_) => _ + ":" + args.join(":")))
 Node Kind: KindCallExpression
@@ -109,20 +95,6 @@ Transformations (1):
       callee: Effect.succeed
       args: (constant)
       outType: Effect<number, never, never>
-
-=== Piping Flow ===
-Location: 27:11 - 27:54
-Node: Effect.map((_) => _ + ":" + args.join(":"))
-Node Kind: KindCallExpression
-
-Subject: (_) => _ + ":" + args.join(":")
-Subject Type: (_: string) => string
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.map
-      args: (constant)
-      outType: <E, R>(self: Effect<string, E, R>) => Effect<string, E, R>
 
 === Piping Flow ===
 Location: 27:38 - 27:53
@@ -169,17 +141,3 @@ Transformations (1):
       callee: Effect.succeed
       args: (constant)
       outType: Effect<number, never, never>
-
-=== Piping Flow ===
-Location: 34:11 - 34:47
-Node: Effect.map((_) => _ + ":" + args[0])
-Node Kind: KindCallExpression
-
-Subject: (_) => _ + ":" + args[0]
-Subject Type: (_: string) => string
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.map
-      args: (constant)
-      outType: <E, R>(self: Effect<string, E, R>) => Effect<string, E, R>

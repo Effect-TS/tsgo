@@ -1,1 +1,15 @@
-==== /.src/missingEffectContext_plainAssignment.ts (0 flows) ====
+==== /.src/missingEffectContext_plainAssignment.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 19:46 - 19:64
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>

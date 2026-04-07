@@ -1,1 +1,85 @@
-==== /.src/unnecessaryEffectGen.ts (0 flows) ====
+==== /.src/unnecessaryEffectGen.ts (6 flows) ====
+
+=== Piping Flow ===
+Location: 4:29 - 7:3
+Node: Effect.gen(function*() {\n  yield* Effect.succeed(true)\n  return yield* Effect.succeed(42)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  yield* Effect.succeed(true)\n  return yield* Effect.succeed(42)\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>> | YieldWrap<Effect<boolean, never, never>>, number, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 5:9 - 5:30
+Node: Effect.succeed(true)
+Node Kind: KindCallExpression
+
+Subject: true
+Subject Type: true
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<boolean, never, never>
+
+=== Piping Flow ===
+Location: 6:16 - 6:35
+Node: Effect.succeed(42)
+Node Kind: KindCallExpression
+
+Subject: 42
+Subject Type: 42
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 9:42 - 11:3
+Node: Effect.gen(function*() {\n  return 42\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  return 42\n}
+Subject Type: () => Generator<never, number, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 13:36 - 15:3
+Node: Effect.gen(function*() {\n  return yield* Effect.succeed(42)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  return yield* Effect.succeed(42)\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, number, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 14:16 - 14:35
+Node: Effect.succeed(42)
+Node Kind: KindCallExpression
+
+Subject: 42
+Subject Type: 42
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>

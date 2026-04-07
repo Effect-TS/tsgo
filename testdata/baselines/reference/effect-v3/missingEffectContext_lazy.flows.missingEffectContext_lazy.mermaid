@@ -4,22 +4,32 @@ flowchart TB
   2((("type: Effect#lt;A, E, R#gt;<br/>node: Effect.onExit#40;evaluate#40;#41;, #40;#41; =#gt; Effect.void#41;")))
   3[/"type: Effect#lt;A, E, R#gt;<br/>node: evaluate#40;#41;"/]
   4["type: Effect#lt;A, E, R#gt;<br/>callee: Effect.onExit<br/>args: #91;#40;#41; =#gt; Effect.void#93;"]
-  5[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
-  6[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
-  7[["type: #lt;A, E, R#gt;#40;evaluate: #40;#41; =#gt; Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R#gt;<br/>node: #lt;A, E, R#gt;#40;...args: #91;evaluate: #40;#41; =#gt; Effect.Effect#lt;A, E, R#gt;#93;#41;: Effect.Effect#lt;A, E, R#gt; =#gt; #123;#92;n  const evaluate: #40;#41; =#gt; Effect.Effect#lt;A, E, R #124; ServiceA#gt; = args#91;args.length - 1#93;#92;n  // @ts-expect-error#92;n  return Effect.onExit#40;evaluate#40;#41;, #40;#41; =#gt; Effect.void#41;#92;n#125;"]]
-  8[/"type: #91;evaluate: #40;#41; =#gt; Effect#lt;A, E, R#gt;#93;<br/>node: ...args: #91;evaluate: #40;#41; =#gt; Effect.Effect#lt;A, E, R#gt;#93;"/]
-  9((("type: Effect#lt;A, E, R #124; ServiceA#gt;<br/>node: Effect.onExit#40;evaluate#40;#41;, #40;#41; =#gt; Effect.void#41;")))
-  10[/"type: Effect#lt;A, E, R #124; ServiceA#gt;<br/>node: evaluate#40;#41;"/]
-  11["type: Effect#lt;A, E, R #124; ServiceA#gt;<br/>callee: Effect.onExit<br/>args: #91;#40;#41; =#gt; Effect.void#93;"]
-  12[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
-  13[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  5[/"type: #123; #lt;A, E, X, R2#gt;#40;cleanup: #40;exit: Exit#lt;A, E#gt;#41; =#gt; Effect#lt;X, never, R2#gt;#41;: #lt;R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R #124; R2#gt;; #lt;A, E, R, X, R2#gt;#40;self: Effect#lt;A, E, R#gt;, cleanup: #40;exit: Exit#lt;A, E#gt;#41; =#gt; Effect#lt;X, never, R2#gt;#41;: Effect#lt;A, E, R #124; R2#gt;; #125;<br/>node: Effect.onExit"/]
+  6((("type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void")))
+  7[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  8[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  9[["type: #lt;A, E, R#gt;#40;evaluate: #40;#41; =#gt; Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R#gt;<br/>node: #lt;A, E, R#gt;#40;...args: #91;evaluate: #40;#41; =#gt; Effect.Effect#lt;A, E, R#gt;#93;#41;: Effect.Effect#lt;A, E, R#gt; =#gt; #123;#92;n  const evaluate: #40;#41; =#gt; Effect.Effect#lt;A, E, R #124; ServiceA#gt; = args#91;args.length - 1#93;#92;n  // @ts-expect-error#92;n  return Effect.onExit#40;evaluate#40;#41;, #40;#41; =#gt; Effect.void#41;#92;n#125;"]]
+  10[/"type: #91;evaluate: #40;#41; =#gt; Effect#lt;A, E, R#gt;#93;<br/>node: ...args: #91;evaluate: #40;#41; =#gt; Effect.Effect#lt;A, E, R#gt;#93;"/]
+  11((("type: Effect#lt;A, E, R #124; ServiceA#gt;<br/>node: Effect.onExit#40;evaluate#40;#41;, #40;#41; =#gt; Effect.void#41;")))
+  12[/"type: Effect#lt;A, E, R #124; ServiceA#gt;<br/>node: evaluate#40;#41;"/]
+  13["type: Effect#lt;A, E, R #124; ServiceA#gt;<br/>callee: Effect.onExit<br/>args: #91;#40;#41; =#gt; Effect.void#93;"]
+  14[/"type: #123; #lt;A, E, X, R2#gt;#40;cleanup: #40;exit: Exit#lt;A, E#gt;#41; =#gt; Effect#lt;X, never, R2#gt;#41;: #lt;R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R #124; R2#gt;; #lt;A, E, R, X, R2#gt;#40;self: Effect#lt;A, E, R#gt;, cleanup: #40;exit: Exit#lt;A, E#gt;#41; =#gt; Effect#lt;X, never, R2#gt;#41;: Effect#lt;A, E, R #124; R2#gt;; #125;<br/>node: Effect.onExit"/]
+  15((("type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void")))
+  16[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  17[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
   1 -->|"kind: parameter"| 0
   2 -->|"kind: potentialReturn"| 0
   3 -->|"kind: dataFirst"| 4
+  5 -->|"kind: transformCallee"| 4
+  6 -->|"kind: transformArg"| 4
   4 -->|"kind: connect"| 2
-  6 -->|"kind: potentialReturn"| 5
-  8 -->|"kind: parameter"| 7
-  9 -->|"kind: potentialReturn"| 7
-  10 -->|"kind: dataFirst"| 11
-  11 -->|"kind: connect"| 9
-  13 -->|"kind: potentialReturn"| 12
+  8 -->|"kind: potentialReturn"| 7
+  7 -->|"kind: connect"| 6
+  10 -->|"kind: parameter"| 9
+  11 -->|"kind: potentialReturn"| 9
+  12 -->|"kind: dataFirst"| 13
+  14 -->|"kind: transformCallee"| 13
+  15 -->|"kind: transformArg"| 13
+  13 -->|"kind: connect"| 11
+  17 -->|"kind: potentialReturn"| 16
+  16 -->|"kind: connect"| 15

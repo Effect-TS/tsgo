@@ -1,4 +1,4 @@
-==== /.src/effectMapVoid.ts (19 flows) ====
+==== /.src/effectMapVoid.ts (10 flows) ====
 
 === Piping Flow ===
 Location: 5:34 - 7:2
@@ -19,20 +19,6 @@ Transformations (2):
       outType: Effect<undefined, never, never>
 
 === Piping Flow ===
-Location: 5:58 - 6:27
-Node: Effect.map(() => void 0)
-Node Kind: KindCallExpression
-
-Subject: () => void 0
-Subject Type: () => undefined
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.map
-      args: (constant)
-      outType: <E, R>(self: Effect<number, E, R>) => Effect<undefined, E, R>
-
-=== Piping Flow ===
 Location: 10:38 - 12:2
 Node: Effect.succeed(1).pipe(\n  Effect.map(() => undefined)\n)
 Node Kind: KindCallExpression
@@ -49,20 +35,6 @@ Transformations (2):
       callee: Effect.map
       args: [() => undefined]
       outType: Effect<undefined, never, never>
-
-=== Piping Flow ===
-Location: 10:62 - 11:30
-Node: Effect.map(() => undefined)
-Node Kind: KindCallExpression
-
-Subject: () => undefined
-Subject Type: () => undefined
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.map
-      args: (constant)
-      outType: <E, R>(self: Effect<number, E, R>) => Effect<undefined, E, R>
 
 === Piping Flow ===
 Location: 15:39 - 17:2
@@ -83,20 +55,6 @@ Transformations (2):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 15:63 - 16:23
-Node: Effect.map(() => {})
-Node Kind: KindCallExpression
-
-Subject: () => {}
-Subject Type: () => void
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.map
-      args: (constant)
-      outType: <E, R>(self: Effect<number, E, R>) => Effect<void, E, R>
-
-=== Piping Flow ===
 Location: 20:51 - 23:2
 Node: Effect.succeed(1).pipe(\n  // eslint-disable-next-line @effect/dprint\n  Effect.map(() => (undefined))\n)
 Node Kind: KindCallExpression
@@ -113,20 +71,6 @@ Transformations (2):
       callee: Effect.map
       args: [() => (undefined)]
       outType: Effect<undefined, never, never>
-
-=== Piping Flow ===
-Location: 20:75 - 22:32
-Node: Effect.map(() => (undefined))
-Node Kind: KindCallExpression
-
-Subject: () => (undefined)
-Subject Type: () => undefined
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.map
-      args: (constant)
-      outType: <E, R>(self: Effect<number, E, R>) => Effect<undefined, E, R>
 
 === Piping Flow ===
 Location: 26:47 - 28:2
@@ -147,20 +91,6 @@ Transformations (2):
       outType: Effect<undefined, never, never>
 
 === Piping Flow ===
-Location: 26:71 - 27:29
-Node: Effect.map(() => (void 0))
-Node Kind: KindCallExpression
-
-Subject: () => (void 0)
-Subject Type: () => undefined
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.map
-      args: (constant)
-      outType: <E, R>(self: Effect<number, E, R>) => Effect<undefined, E, R>
-
-=== Piping Flow ===
 Location: 31:57 - 34:2
 Node: Effect.succeed(1).pipe(\n  // eslint-disable-next-line @effect/dprint\n  Effect.map(() => ((undefined)))\n)
 Node Kind: KindCallExpression
@@ -177,20 +107,6 @@ Transformations (2):
       callee: Effect.map
       args: [() => ((undefined))]
       outType: Effect<undefined, never, never>
-
-=== Piping Flow ===
-Location: 31:81 - 33:34
-Node: Effect.map(() => ((undefined)))
-Node Kind: KindCallExpression
-
-Subject: () => ((undefined))
-Subject Type: () => undefined
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.map
-      args: (constant)
-      outType: <E, R>(self: Effect<number, E, R>) => Effect<undefined, E, R>
 
 === Piping Flow ===
 Location: 37:41 - 39:2
@@ -211,20 +127,6 @@ Transformations (2):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 37:65 - 38:27
-Node: Effect.map((n) => n * 2)
-Node Kind: KindCallExpression
-
-Subject: (n) => n * 2
-Subject Type: (n: number) => number
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.map
-      args: (constant)
-      outType: <E, R>(self: Effect<number, E, R>) => Effect<number, E, R>
-
-=== Piping Flow ===
 Location: 42:39 - 44:2
 Node: Effect.succeed(1).pipe(\n  Effect.map(() => 42)\n)
 Node Kind: KindCallExpression
@@ -243,20 +145,6 @@ Transformations (2):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 42:63 - 43:23
-Node: Effect.map(() => 42)
-Node Kind: KindCallExpression
-
-Subject: () => 42
-Subject Type: () => number
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.map
-      args: (constant)
-      outType: <E, R>(self: Effect<number, E, R>) => Effect<number, E, R>
-
-=== Piping Flow ===
 Location: 47:38 - 49:2
 Node: Effect.succeed(1).pipe(\n  Effect.map(() => "hello")\n)
 Node Kind: KindCallExpression
@@ -273,20 +161,6 @@ Transformations (2):
       callee: Effect.map
       args: [() => "hello"]
       outType: Effect<string, never, never>
-
-=== Piping Flow ===
-Location: 47:62 - 48:28
-Node: Effect.map(() => "hello")
-Node Kind: KindCallExpression
-
-Subject: () => "hello"
-Subject Type: () => string
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.map
-      args: (constant)
-      outType: <E, R>(self: Effect<number, E, R>) => Effect<string, E, R>
 
 === Piping Flow ===
 Location: 52:38 - 54:2

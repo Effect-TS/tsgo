@@ -1,3 +1,45 @@
 ==== /.src/package.json (0 flows) ====
-==== /.src/utils.ts (0 flows) ====
-==== /.src/test.ts (0 flows) ====
+==== /.src/utils.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 5:9 - 5:42
+Node: Context.Tag("hey/" + identifier)
+Node Kind: KindCallExpression
+
+Subject: "hey/" + identifier
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.Tag
+      args: (constant)
+      outType: <Self, Shape>() => TagClass<Self, string, Shape>
+==== /.src/test.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 8:9 - 8:42
+Node: Context.Tag("hey/" + identifier)
+Node Kind: KindCallExpression
+
+Subject: "hey/" + identifier
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.Tag
+      args: (constant)
+      outType: <Self, Shape>() => TagClass<Self, string, Shape>
+
+=== Piping Flow ===
+Location: 11:29 - 11:55
+Node: LocalConstructor("Hello")
+Node Kind: KindCallExpression
+
+Subject: "Hello"
+Subject Type: "Hello"
+
+Transformations (1):
+  [0] kind: call
+      callee: LocalConstructor
+      args: (constant)
+      outType: <Self, Shape>() => TagClass<Self, string, Shape>

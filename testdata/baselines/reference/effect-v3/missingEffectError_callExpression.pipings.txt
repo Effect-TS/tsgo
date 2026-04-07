@@ -1,1 +1,29 @@
-==== /.src/missingEffectError_callExpression.ts (0 flows) ====
+==== /.src/missingEffectError_callExpression.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 21:2 - 24:25
+Node: testFn(effectWithErrors)
+Node Kind: KindCallExpression
+
+Subject: effectWithErrors
+Subject Type: Effect<number, ErrorA | ErrorB | ErrorC, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: testFn
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 28:2 - 31:38
+Node: testFnWithServiceAB(effectWithErrors)
+Node Kind: KindCallExpression
+
+Subject: effectWithErrors
+Subject Type: Effect<number, ErrorA | ErrorB | ErrorC, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: testFnWithServiceAB
+      args: (constant)
+      outType: Effect<number, ErrorA | ErrorB, never>

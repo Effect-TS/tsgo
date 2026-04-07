@@ -1,8 +1,8 @@
 ==== /.src/unnecessaryPipe_disableMidObject.ts (3 flows) ====
 
 === Piping Flow ===
-Location: 6:11 - 6:29
-Node: Effect.succeed(42)
+Location: 6:5 - 6:30
+Node: pipe(Effect.succeed(42))
 Node Kind: KindCallExpression
 
 Subject: 42
@@ -15,8 +15,8 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 8:11 - 8:29
-Node: Effect.succeed(43)
+Location: 8:5 - 8:30
+Node: pipe(Effect.succeed(43))
 Node Kind: KindCallExpression
 
 Subject: 43
@@ -29,8 +29,8 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 9:11 - 9:29
-Node: Effect.succeed(44)
+Location: 9:5 - 9:30
+Node: pipe(Effect.succeed(44))
 Node Kind: KindCallExpression
 
 Subject: 44

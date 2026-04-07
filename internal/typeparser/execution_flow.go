@@ -260,7 +260,7 @@ func (tp *TypeParser) ExecutionFlow(sf *ast.SourceFile) *ExecutionFlow {
 					returnExprNode := NewExecValueNode(bodyNode)
 					*connectTrailingOfNodeToMap.Get(bodyNode) = &returnExprNode
 					returnNodes = append(returnNodes, returnExprNode)
-				} else {
+				} else if fnBody != nil {
 					ast.ForEachReturnStatement(fnBody, func(node *ast.Node) bool {
 						if node.Kind == ast.KindReturnStatement {
 							returnedExpr := node.AsReturnStatement().Expression
@@ -286,12 +286,18 @@ func (tp *TypeParser) ExecutionFlow(sf *ast.SourceFile) *ExecutionFlow {
 						})
 					}
 					middleware := extraFunctionMiddleware.Get(node)
-					g.AddEdge(mergeReturn, *middleware.Leading, ExecutionLink{
-						Kind: ExecutionLinkKindFnPipe,
-					})
-					g.AddEdge(*middleware.Trailing, fnExecNode, ExecutionLink{
-						Kind: ExecutionLinkKindPotentialReturn,
-					})
+					if middleware != nil && middleware.Leading != nil && middleware.Trailing != nil {
+						g.AddEdge(mergeReturn, *middleware.Leading, ExecutionLink{
+							Kind: ExecutionLinkKindFnPipe,
+						})
+						g.AddEdge(*middleware.Trailing, fnExecNode, ExecutionLink{
+							Kind: ExecutionLinkKindPotentialReturn,
+						})
+					} else {
+						g.AddEdge(mergeReturn, fnExecNode, ExecutionLink{
+							Kind: ExecutionLinkKindPotentialReturn,
+						})
+					}
 				} else {
 					// no middleware, result jumps directly to function node
 					for _, n := range returnNodes {

@@ -1,10 +1,12 @@
 flowchart TB
   0[/"type: #quot;Hello#quot;<br/>node: #quot;Hello#quot;"/]
   1["type: number<br/>callee: #40;_#41; =#gt; _.length<br/>args: #91;#93;"]
-  2[["type: #40;_: string#41; =#gt; number<br/>node: #40;_#41; =#gt; _.length"]]
-  3[/"type: string<br/>node: _"/]
-  4[/"type: number<br/>node: _.length"/]
-  5[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
+  2[/"type: #40;_: string#41; =#gt; number<br/>node: #40;_#41; =#gt; _.length"/]
+  3[["type: #40;_: string#41; =#gt; number<br/>node: #40;_#41; =#gt; _.length"]]
+  4[/"type: string<br/>node: _"/]
+  5[/"type: number<br/>node: _.length"/]
+  6[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
   0 -->|"kind: pipe"| 1
-  3 -->|"kind: parameter"| 2
-  4 -->|"kind: potentialReturn"| 2
+  2 -->|"kind: transformCallee"| 1
+  4 -->|"kind: parameter"| 3
+  5 -->|"kind: potentialReturn"| 3

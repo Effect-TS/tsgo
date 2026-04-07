@@ -1,4 +1,4 @@
-==== /.src/overriddenSchemaConstructor_static.ts (3 flows) ====
+==== /.src/overriddenSchemaConstructor_static.ts (2 flows) ====
 
 === Piping Flow ===
 Location: 5:10 - 7:5
@@ -13,20 +13,6 @@ Transformations (1):
       callee: Schema.Class<InvalidBecauseOfConstructor>("InvalidBecauseOfConstructor")
       args: (constant)
       outType: Class<InvalidBecauseOfConstructor, { a: typeof Number$; }, Encoded<{ a: typeof Number$; }>, never, { readonly a: number; }, {}, {}>
-
-=== Piping Flow ===
-Location: 5:10 - 5:83
-Node: Schema.Class<InvalidBecauseOfConstructor>("InvalidBecauseOfConstructor")
-Node Kind: KindCallExpression
-
-Subject: "InvalidBecauseOfConstructor"
-Subject Type: "InvalidBecauseOfConstructor"
-
-Transformations (1):
-  [0] kind: call
-      callee: Schema.Class
-      args: (constant)
-      outType: <Fields extends Struct.Fields>(fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<InvalidBecauseOfConstructor, { [K in keyof Type<Fields>]: Type<Fields>[K]; }> | undefined) => Class<InvalidBecauseOfConstructor, Fields, Encoded<Fields>, Context<Fields[keyof Fields]>, Constructor<Fields>, {}, {}>
 
 === Piping Flow ===
 Location: 11:18 - 12:21

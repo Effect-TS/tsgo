@@ -1,4 +1,4 @@
-==== /.src/unnecessaryPipe.ts (5 flows) ====
+==== /.src/unnecessaryPipe.ts (4 flows) ====
 
 === Piping Flow ===
 Location: 5:31 - 8:2
@@ -19,20 +19,6 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 6:27 - 7:34
-Node: Effect.map((x) => x + " World")
-Node Kind: KindCallExpression
-
-Subject: (x) => x + " World"
-Subject Type: (x: string) => string
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.map
-      args: (constant)
-      outType: <E, R>(self: Effect<string, E, R>) => Effect<string, E, R>
-
-=== Piping Flow ===
 Location: 10:32 - 12:2
 Node: Effect.succeed("Hello").pipe(\n  Effect.map((x) => x + " World")\n)
 Node Kind: KindCallExpression
@@ -51,22 +37,18 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 10:62 - 11:34
-Node: Effect.map((x) => x + " World")
+Location: 14:28 - 14:37
+Node: pipe(32)
 Node Kind: KindCallExpression
 
-Subject: (x) => x + " World"
-Subject Type: (x: string) => string
+Subject: 32
+Subject Type: 32
 
-Transformations (1):
-  [0] kind: call
-      callee: Effect.map
-      args: (constant)
-      outType: <E, R>(self: Effect<string, E, R>) => Effect<string, E, R>
+Transformations (0):
 
 === Piping Flow ===
-Location: 16:34 - 16:53
-Node: Effect.succeed(32)
+Location: 16:34 - 16:60
+Node: Effect.succeed(32).pipe()
 Node Kind: KindCallExpression
 
 Subject: 32

@@ -1,1 +1,15 @@
-==== /.src/redundantSchemaTagIdentifier_preview.ts (0 flows) ====
+==== /.src/redundantSchemaTagIdentifier_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 6:10 - 6:49
+Node: Schema.TaggedClass<Preview>("Preview")
+Node Kind: KindCallExpression
+
+Subject: "Preview"
+Subject Type: "Preview"
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.TaggedClass
+      args: (constant)
+      outType: <Tag extends string, Fields extends Struct.Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<Preview, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedClass<Preview, Tag, { readonly _tag: tag<Tag>; } & Fields>

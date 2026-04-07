@@ -1,1 +1,43 @@
-==== /.src/missingEffectError_tagged.ts (0 flows) ====
+==== /.src/missingEffectError_tagged.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 5:21 - 5:48
+Node: Data.TaggedClass("ErrorA")
+Node Kind: KindCallExpression
+
+Subject: "ErrorA"
+Subject Type: "ErrorA"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedClass
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => Readonly<A> & { readonly _tag: "ErrorA"; }
+
+=== Piping Flow ===
+Location: 9:21 - 9:48
+Node: Data.TaggedClass("ErrorB")
+Node Kind: KindCallExpression
+
+Subject: "ErrorB"
+Subject Type: "ErrorB"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedClass
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => Readonly<A> & { readonly _tag: "ErrorB"; }
+
+=== Piping Flow ===
+Location: 13:21 - 13:48
+Node: Data.TaggedClass("ErrorC")
+Node Kind: KindCallExpression
+
+Subject: "ErrorC"
+Subject Type: "ErrorC"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedClass
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => Readonly<A> & { readonly _tag: "ErrorC"; }

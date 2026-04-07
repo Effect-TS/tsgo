@@ -1,10 +1,11 @@
 flowchart TB
-  0["type: #40;#41; =#gt; void<br/>callee: <br/>args: #91;#93;"]
-  1["type: #40;#41; =#gt; Generator#lt;never, void, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  2["type: #40;#41; =#gt; Generator#lt;never, void, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  3["type: #40;#41; =#gt; Generator#lt;never, #40;#41; =#gt; void, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  4["type: #40;#41; =#gt; void<br/>callee: <br/>args: #91;#93;"]
-  5["type: #40;#41; =#gt; void<br/>callee: <br/>args: #91;#93;"]
-  6["type: #40;..._args: unknown#91;#93;#41; =#gt; undefined<br/>callee: <br/>args: #91;#93;"]
-  7[/"type: unknown#91;#93;<br/>node: ..._args: Array#lt;unknown#gt;"/]
-  7 -->|"kind: parameter"| 6
+  0[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#92;n  console.warn#40;#quot;warning#quot;#41;#92;n#125;"]]
+  1[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; console.error#40;#quot;nested#quot;#41;"]]
+  2[/"type: void<br/>node: console.error#40;#quot;nested#quot;#41;"/]
+  3[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#92;n  const console = #123; log: #40;..._args: Array#lt;unknown#gt;#41; =#gt; undefined #125;#92;n  console.log#40;#quot;hello#quot;#41;#92;n#125;"]]
+  4[["type: #40;..._args: unknown#91;#93;#41; =#gt; undefined<br/>node: #40;..._args: Array#lt;unknown#gt;#41; =#gt; undefined"]]
+  5[/"type: unknown#91;#93;<br/>node: ..._args: Array#lt;unknown#gt;"/]
+  6[/"type: undefined<br/>node: undefined"/]
+  2 -->|"kind: potentialReturn"| 1
+  5 -->|"kind: parameter"| 4
+  6 -->|"kind: potentialReturn"| 4

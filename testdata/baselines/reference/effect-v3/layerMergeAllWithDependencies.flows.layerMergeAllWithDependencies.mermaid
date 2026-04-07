@@ -1,10 +1,22 @@
 flowchart TB
   0[/"type: typeof FileSystem<br/>node: FileSystem"/]
   1["type: Effect#lt;#123;#125;, never, FileSystem#gt;<br/>callee: Effect.as<br/>args: #91;#123;#125;#93;"]
-  2[/"type: Effect#lt;Cache, never, Cache #124; DbConnection#gt;<br/>node: Effect.zipRight#40;DbConnection, Cache#41;"/]
-  3["type: Effect#lt;#123;#125;, never, Cache #124; DbConnection#gt;<br/>callee: Effect.as<br/>args: #91;#123;#125;#93;"]
-  4[/"type: typeof Cache<br/>node: Cache"/]
-  5["type: Layer#lt;Cache, never, Cache#gt;<br/>callee: Layer.effect<br/>args: #91;Cache#93;"]
+  2[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  3[/"type: #123;#125;<br/>node: #123;#125;"/]
+  4[/"type: Effect#lt;Cache, never, Cache #124; DbConnection#gt;<br/>node: Effect.zipRight#40;DbConnection, Cache#41;"/]
+  5["type: Effect#lt;#123;#125;, never, Cache #124; DbConnection#gt;<br/>callee: Effect.as<br/>args: #91;#123;#125;#93;"]
+  6[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  7[/"type: #123;#125;<br/>node: #123;#125;"/]
+  8[/"type: typeof Cache<br/>node: Cache"/]
+  9["type: Layer#lt;Cache, never, Cache#gt;<br/>callee: Layer.effect<br/>args: #91;Cache#93;"]
+  10[/"type: #123; #lt;I, S#gt;#40;tag: Tag#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41; =#gt; Layer#lt;I, E, R#gt;; #lt;I, S, E, R#gt;#40;tag: Tag#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, R#gt;; #125;<br/>node: Layer.effect"/]
+  11[/"type: typeof Cache<br/>node: Cache"/]
   0 -->|"kind: dataFirst"| 1
-  2 -->|"kind: dataFirst"| 3
-  4 -->|"kind: dataLast"| 5
+  2 -->|"kind: transformCallee"| 1
+  3 -->|"kind: transformArg"| 1
+  4 -->|"kind: dataFirst"| 5
+  6 -->|"kind: transformCallee"| 5
+  7 -->|"kind: transformArg"| 5
+  8 -->|"kind: dataLast"| 9
+  10 -->|"kind: transformCallee"| 9
+  11 -->|"kind: transformArg"| 9

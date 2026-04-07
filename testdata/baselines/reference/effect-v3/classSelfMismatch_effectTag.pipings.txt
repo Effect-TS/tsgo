@@ -1,1 +1,29 @@
-==== /.src/classSelfMismatch_effectTag.ts (0 flows) ====
+==== /.src/classSelfMismatch_effectTag.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 9:37 - 9:67
+Node: Effect.Tag("ValidContextTag")
+Node Kind: KindCallExpression
+
+Subject: "ValidContextTag"
+Subject Type: "ValidContextTag"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.Tag
+      args: (constant)
+      outType: <Self, Type extends Tag.AllowedType>() => TagClass<Self, "ValidContextTag", Type> & (Type extends Record<PropertyKey, any> ? Proxy<Self, Type> : {}) & { use: <X>(body: (_: Type) => X) => [X] extends [Effect<infer A, infer E, infer R>] ? Effect<A, E, R | Self> : [X] extends [PromiseLike<infer A>] ? Effect<A, UnknownException, Self> : Effect<X, never, Self>; }
+
+=== Piping Flow ===
+Location: 12:39 - 12:69
+Node: Effect.Tag("ValidContextTag")
+Node Kind: KindCallExpression
+
+Subject: "ValidContextTag"
+Subject Type: "ValidContextTag"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.Tag
+      args: (constant)
+      outType: <Self, Type extends Tag.AllowedType>() => TagClass<Self, "ValidContextTag", Type> & (Type extends Record<PropertyKey, any> ? Proxy<Self, Type> : {}) & { use: <X>(body: (_: Type) => X) => [X] extends [Effect<infer A, infer E, infer R>] ? Effect<A, E, R | Self> : [X] extends [PromiseLike<infer A>] ? Effect<A, UnknownException, Self> : Effect<X, never, Self>; }

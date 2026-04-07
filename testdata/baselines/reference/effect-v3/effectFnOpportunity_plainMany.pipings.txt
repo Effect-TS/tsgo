@@ -1,1 +1,71 @@
-==== /.src/effectFnOpportunity_plainMany.ts (0 flows) ====
+==== /.src/effectFnOpportunity_plainMany.ts (5 flows) ====
+
+=== Piping Flow ===
+Location: 20:9 - 20:43
+Node: Effect.succeed(a + b + c + d + e)
+Node Kind: KindCallExpression
+
+Subject: a + b + c + d + e
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 29:29 - 29:51
+Node: Effect.fail("Error!")
+Node Kind: KindCallExpression
+
+Subject: "Error!"
+Subject Type: "Error!"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>
+
+=== Piping Flow ===
+Location: 30:9 - 30:43
+Node: Effect.succeed(a + b + c + d + e)
+Node Kind: KindCallExpression
+
+Subject: a + b + c + d + e
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 39:29 - 39:51
+Node: Effect.fail("Error!")
+Node Kind: KindCallExpression
+
+Subject: "Error!"
+Subject Type: "Error!"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>
+
+=== Piping Flow ===
+Location: 40:9 - 40:43
+Node: Effect.succeed(a + b + c + d + e)
+Node Kind: KindCallExpression
+
+Subject: a + b + c + d + e
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>

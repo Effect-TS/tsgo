@@ -1,4 +1,4 @@
-==== /.src/preferSchemaOverJson.ts (22 flows) ====
+==== /.src/preferSchemaOverJson.ts (21 flows) ====
 
 === Piping Flow ===
 Location: 5:27 - 5:79
@@ -209,20 +209,6 @@ Transformations (1):
       callee: Effect.fn("parseInFn")
       args: (constant)
       outType: () => Effect<any, never, never>
-
-=== Piping Flow ===
-Location: 39:25 - 39:48
-Node: Effect.fn("parseInFn")
-Node Kind: KindCallExpression
-
-Subject: "parseInFn"
-Subject Type: "parseInFn"
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.fn
-      args: (constant)
-      outType: Gen & NonGen
 
 === Piping Flow ===
 Location: 41:17 - 41:34

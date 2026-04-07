@@ -7,99 +7,132 @@ flowchart TB
   5((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.map#40;e, #40;n#41; =#gt; n * 2#41;")))
   6[/"type: Effect#lt;number, never, never#gt;<br/>node: e"/]
   7["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n * 2#93;"]
-  8[["type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n * 2"]]
-  9[/"type: number<br/>node: n"/]
-  10[/"type: number<br/>node: n * 2"/]
-  11[["type: #40;n: number#41; =#gt; #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;n: number#41; =#gt; #40;e: Effect.Effect#lt;number#gt;#41; =#gt; Effect.map#40;e, #40;m#41; =#gt; m * n#41;"]]
-  12[/"type: number<br/>node: n: number"/]
-  13((("type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;e: Effect.Effect#lt;number#gt;#41; =#gt; Effect.map#40;e, #40;m#41; =#gt; m * n#41;")))
-  14[["type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;e: Effect.Effect#lt;number#gt;#41; =#gt; Effect.map#40;e, #40;m#41; =#gt; m * n#41;"]]
-  15[/"type: Effect#lt;number, never, never#gt;<br/>node: e: Effect.Effect#lt;number#gt;"/]
-  16((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.map#40;e, #40;m#41; =#gt; m * n#41;")))
-  17[/"type: Effect#lt;number, never, never#gt;<br/>node: e"/]
-  18["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;m#41; =#gt; m * n#93;"]
-  19[["type: #40;m: number#41; =#gt; number<br/>node: #40;m#41; =#gt; m * n"]]
-  20[/"type: number<br/>node: m"/]
-  21[/"type: number<br/>node: m * n"/]
-  22[["type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;e: Effect.Effect#lt;number#gt;#41; =#gt; Effect.map#40;e, #40;n#41; =#gt; String#40;n#41;#41;"]]
-  23[/"type: Effect#lt;number, never, never#gt;<br/>node: e: Effect.Effect#lt;number#gt;"/]
-  24((("type: Effect#lt;string, never, never#gt;<br/>node: Effect.map#40;e, #40;n#41; =#gt; String#40;n#41;#41;")))
-  25[/"type: Effect#lt;number, never, never#gt;<br/>node: e"/]
-  26["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; String#40;n#41;#93;"]
-  27[["type: #40;n: number#41; =#gt; string<br/>node: #40;n#41; =#gt; String#40;n#41;"]]
-  28[/"type: number<br/>node: n"/]
-  29[/"type: string<br/>node: String#40;n#41;"/]
-  30[["type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;e: Effect.Effect#lt;number#gt;#41; =#gt; Effect.map#40;e, #40;n#41; =#gt; n * 3#41;"]]
-  31[/"type: Effect#lt;number, never, never#gt;<br/>node: e: Effect.Effect#lt;number#gt;"/]
-  32((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.map#40;e, #40;n#41; =#gt; n * 3#41;")))
-  33[/"type: Effect#lt;number, never, never#gt;<br/>node: e"/]
-  34["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n * 3#93;"]
-  35[["type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n * 3"]]
-  36[/"type: number<br/>node: n"/]
-  37[/"type: number<br/>node: n * 3"/]
-  38[["type: #40;n: number#41; =#gt; number<br/>node: #40;n: number#41; =#gt; n + 1"]]
-  39[/"type: number<br/>node: n: number"/]
-  40[/"type: number<br/>node: n + 1"/]
-  41[["type: #40;n: number#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;n: number#41; =#gt; Effect.succeed#40;n#41;"]]
-  42[/"type: number<br/>node: n: number"/]
-  43[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;n#41;"/]
-  44[["type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;e: Effect.Effect#lt;number#gt;#41; =#gt; Effect.map#40;e, #40;n#41; =#gt; n + 100#41;"]]
-  45[/"type: Effect#lt;number, never, never#gt;<br/>node: e: Effect.Effect#lt;number#gt;"/]
-  46((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.map#40;e, #40;n#41; =#gt; n + 100#41;")))
-  47[/"type: Effect#lt;number, never, never#gt;<br/>node: e"/]
-  48["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n + 100#93;"]
-  49[["type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n + 100"]]
-  50[/"type: number<br/>node: n"/]
-  51[/"type: number<br/>node: n + 100"/]
-  52[/"type: Effect#lt;number, never, never#gt;<br/>node: addOne#40;5#41;"/]
-  53["type: Effect#lt;number, never, never#gt;<br/>callee: double<br/>args: #91;#93;"]
-  54["type: Effect#lt;string, never, never#gt;<br/>callee: toString<br/>args: #91;#93;"]
-  55[/"type: Effect#lt;number, never, never#gt;<br/>node: addOne#40;5#41;"/]
-  56["type: Effect#lt;number, never, never#gt;<br/>callee: double<br/>args: #91;#93;"]
-  57[/"type: Effect#lt;number, never, never#gt;<br/>node: addOne#40;5#41;"/]
-  58["type: Effect#lt;number, never, never#gt;<br/>callee: multiplyBy<br/>args: #91;2#93;"]
-  59[/"type: 2<br/>node: 2"/]
+  8[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  9((("type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n * 2")))
+  10[["type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n * 2"]]
+  11[/"type: number<br/>node: n"/]
+  12[/"type: number<br/>node: n * 2"/]
+  13[["type: #40;n: number#41; =#gt; #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;n: number#41; =#gt; #40;e: Effect.Effect#lt;number#gt;#41; =#gt; Effect.map#40;e, #40;m#41; =#gt; m * n#41;"]]
+  14[/"type: number<br/>node: n: number"/]
+  15((("type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;e: Effect.Effect#lt;number#gt;#41; =#gt; Effect.map#40;e, #40;m#41; =#gt; m * n#41;")))
+  16[["type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;e: Effect.Effect#lt;number#gt;#41; =#gt; Effect.map#40;e, #40;m#41; =#gt; m * n#41;"]]
+  17[/"type: Effect#lt;number, never, never#gt;<br/>node: e: Effect.Effect#lt;number#gt;"/]
+  18((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.map#40;e, #40;m#41; =#gt; m * n#41;")))
+  19[/"type: Effect#lt;number, never, never#gt;<br/>node: e"/]
+  20["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;m#41; =#gt; m * n#93;"]
+  21[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  22((("type: #40;m: number#41; =#gt; number<br/>node: #40;m#41; =#gt; m * n")))
+  23[["type: #40;m: number#41; =#gt; number<br/>node: #40;m#41; =#gt; m * n"]]
+  24[/"type: number<br/>node: m"/]
+  25[/"type: number<br/>node: m * n"/]
+  26[["type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;e: Effect.Effect#lt;number#gt;#41; =#gt; Effect.map#40;e, #40;n#41; =#gt; String#40;n#41;#41;"]]
+  27[/"type: Effect#lt;number, never, never#gt;<br/>node: e: Effect.Effect#lt;number#gt;"/]
+  28((("type: Effect#lt;string, never, never#gt;<br/>node: Effect.map#40;e, #40;n#41; =#gt; String#40;n#41;#41;")))
+  29[/"type: Effect#lt;number, never, never#gt;<br/>node: e"/]
+  30["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; String#40;n#41;#93;"]
+  31[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  32((("type: #40;n: number#41; =#gt; string<br/>node: #40;n#41; =#gt; String#40;n#41;")))
+  33[["type: #40;n: number#41; =#gt; string<br/>node: #40;n#41; =#gt; String#40;n#41;"]]
+  34[/"type: number<br/>node: n"/]
+  35[/"type: string<br/>node: String#40;n#41;"/]
+  36[["type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;e: Effect.Effect#lt;number#gt;#41; =#gt; Effect.map#40;e, #40;n#41; =#gt; n * 3#41;"]]
+  37[/"type: Effect#lt;number, never, never#gt;<br/>node: e: Effect.Effect#lt;number#gt;"/]
+  38((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.map#40;e, #40;n#41; =#gt; n * 3#41;")))
+  39[/"type: Effect#lt;number, never, never#gt;<br/>node: e"/]
+  40["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n * 3#93;"]
+  41[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  42((("type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n * 3")))
+  43[["type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n * 3"]]
+  44[/"type: number<br/>node: n"/]
+  45[/"type: number<br/>node: n * 3"/]
+  46[["type: #40;n: number#41; =#gt; number<br/>node: #40;n: number#41; =#gt; n + 1"]]
+  47[/"type: number<br/>node: n: number"/]
+  48[/"type: number<br/>node: n + 1"/]
+  49[["type: #40;n: number#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;n: number#41; =#gt; Effect.succeed#40;n#41;"]]
+  50[/"type: number<br/>node: n: number"/]
+  51[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;n#41;"/]
+  52[["type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;e: Effect.Effect#lt;number#gt;#41; =#gt; Effect.map#40;e, #40;n#41; =#gt; n + 100#41;"]]
+  53[/"type: Effect#lt;number, never, never#gt;<br/>node: e: Effect.Effect#lt;number#gt;"/]
+  54((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.map#40;e, #40;n#41; =#gt; n + 100#41;")))
+  55[/"type: Effect#lt;number, never, never#gt;<br/>node: e"/]
+  56["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n + 100#93;"]
+  57[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  58((("type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n + 100")))
+  59[["type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n + 100"]]
+  60[/"type: number<br/>node: n"/]
+  61[/"type: number<br/>node: n + 100"/]
+  62[/"type: Effect#lt;number, never, never#gt;<br/>node: addOne#40;5#41;"/]
+  63["type: Effect#lt;number, never, never#gt;<br/>callee: double<br/>args: #91;#93;"]
+  64["type: Effect#lt;string, never, never#gt;<br/>callee: toString<br/>args: #91;#93;"]
+  65[/"type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: double"/]
+  66[/"type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: toString"/]
+  67[/"type: Effect#lt;number, never, never#gt;<br/>node: addOne#40;5#41;"/]
+  68["type: Effect#lt;number, never, never#gt;<br/>callee: double<br/>args: #91;#93;"]
+  69[/"type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: double"/]
+  70[/"type: Effect#lt;number, never, never#gt;<br/>node: addOne#40;5#41;"/]
+  71["type: Effect#lt;number, never, never#gt;<br/>callee: multiplyBy<br/>args: #91;2#93;"]
+  72[/"type: #40;n: number#41; =#gt; #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: multiplyBy"/]
+  73[/"type: 2<br/>node: 2"/]
   1 -->|"kind: parameter"| 0
   2 -->|"kind: potentialReturn"| 0
   4 -->|"kind: parameter"| 3
   5 -->|"kind: potentialReturn"| 3
   6 -->|"kind: dataFirst"| 7
+  8 -->|"kind: transformCallee"| 7
+  9 -->|"kind: transformArg"| 7
   7 -->|"kind: connect"| 5
-  9 -->|"kind: parameter"| 8
-  10 -->|"kind: potentialReturn"| 8
-  12 -->|"kind: parameter"| 11
-  13 -->|"kind: potentialReturn"| 11
-  15 -->|"kind: parameter"| 14
-  16 -->|"kind: potentialReturn"| 14
-  14 -->|"kind: connect"| 13
-  17 -->|"kind: dataFirst"| 18
-  18 -->|"kind: connect"| 16
-  20 -->|"kind: parameter"| 19
-  21 -->|"kind: potentialReturn"| 19
-  23 -->|"kind: parameter"| 22
-  24 -->|"kind: potentialReturn"| 22
-  25 -->|"kind: dataFirst"| 26
-  26 -->|"kind: connect"| 24
-  28 -->|"kind: parameter"| 27
-  29 -->|"kind: potentialReturn"| 27
-  31 -->|"kind: parameter"| 30
-  32 -->|"kind: potentialReturn"| 30
-  33 -->|"kind: dataFirst"| 34
-  34 -->|"kind: connect"| 32
-  36 -->|"kind: parameter"| 35
-  37 -->|"kind: potentialReturn"| 35
-  39 -->|"kind: parameter"| 38
-  40 -->|"kind: potentialReturn"| 38
-  42 -->|"kind: parameter"| 41
-  43 -->|"kind: potentialReturn"| 41
-  45 -->|"kind: parameter"| 44
-  46 -->|"kind: potentialReturn"| 44
-  47 -->|"kind: dataFirst"| 48
-  48 -->|"kind: connect"| 46
+  11 -->|"kind: parameter"| 10
+  12 -->|"kind: potentialReturn"| 10
+  10 -->|"kind: connect"| 9
+  14 -->|"kind: parameter"| 13
+  15 -->|"kind: potentialReturn"| 13
+  17 -->|"kind: parameter"| 16
+  18 -->|"kind: potentialReturn"| 16
+  16 -->|"kind: connect"| 15
+  19 -->|"kind: dataFirst"| 20
+  21 -->|"kind: transformCallee"| 20
+  22 -->|"kind: transformArg"| 20
+  20 -->|"kind: connect"| 18
+  24 -->|"kind: parameter"| 23
+  25 -->|"kind: potentialReturn"| 23
+  23 -->|"kind: connect"| 22
+  27 -->|"kind: parameter"| 26
+  28 -->|"kind: potentialReturn"| 26
+  29 -->|"kind: dataFirst"| 30
+  31 -->|"kind: transformCallee"| 30
+  32 -->|"kind: transformArg"| 30
+  30 -->|"kind: connect"| 28
+  34 -->|"kind: parameter"| 33
+  35 -->|"kind: potentialReturn"| 33
+  33 -->|"kind: connect"| 32
+  37 -->|"kind: parameter"| 36
+  38 -->|"kind: potentialReturn"| 36
+  39 -->|"kind: dataFirst"| 40
+  41 -->|"kind: transformCallee"| 40
+  42 -->|"kind: transformArg"| 40
+  40 -->|"kind: connect"| 38
+  44 -->|"kind: parameter"| 43
+  45 -->|"kind: potentialReturn"| 43
+  43 -->|"kind: connect"| 42
+  47 -->|"kind: parameter"| 46
+  48 -->|"kind: potentialReturn"| 46
   50 -->|"kind: parameter"| 49
   51 -->|"kind: potentialReturn"| 49
-  52 -->|"kind: pipe"| 53
-  53 -->|"kind: pipe"| 54
-  55 -->|"kind: pipe"| 56
-  57 -->|"kind: pipe"| 58
-  59 -->|"kind: transformArg"| 58
+  53 -->|"kind: parameter"| 52
+  54 -->|"kind: potentialReturn"| 52
+  55 -->|"kind: dataFirst"| 56
+  57 -->|"kind: transformCallee"| 56
+  58 -->|"kind: transformArg"| 56
+  56 -->|"kind: connect"| 54
+  60 -->|"kind: parameter"| 59
+  61 -->|"kind: potentialReturn"| 59
+  59 -->|"kind: connect"| 58
+  62 -->|"kind: pipe"| 63
+  63 -->|"kind: pipe"| 64
+  65 -->|"kind: transformCallee"| 63
+  66 -->|"kind: transformCallee"| 64
+  67 -->|"kind: pipe"| 68
+  69 -->|"kind: transformCallee"| 68
+  70 -->|"kind: pipe"| 71
+  72 -->|"kind: transformCallee"| 71
+  73 -->|"kind: transformArg"| 71

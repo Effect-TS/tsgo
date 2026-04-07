@@ -1,1 +1,71 @@
-==== /.src/newPromise.ts (0 flows) ====
+==== /.src/newPromise.ts (5 flows) ====
+
+=== Piping Flow ===
+Location: 5:62 - 5:73
+Node: resolve(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: resolve
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 8:69 - 8:80
+Node: resolve(2)
+Node Kind: KindCallExpression
+
+Subject: 2
+Subject Type: 2
+
+Transformations (1):
+  [0] kind: call
+      callee: resolve
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 12:65 - 12:76
+Node: resolve(3)
+Node Kind: KindCallExpression
+
+Subject: 3
+Subject Type: 3
+
+Transformations (1):
+  [0] kind: call
+      callee: resolve
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 15:28 - 17:3
+Node: Effect.gen(function*() {\n  return new Promise<number>((resolve) => resolve(4))\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  return new Promise<number>((resolve) => resolve(4))\n}
+Subject Type: () => Generator<never, Promise<number>, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 16:42 - 16:53
+Node: resolve(4)
+Node Kind: KindCallExpression
+
+Subject: 4
+Subject Type: 4
+
+Transformations (1):
+  [0] kind: call
+      callee: resolve
+      args: (constant)
+      outType: void

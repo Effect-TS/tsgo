@@ -1,4 +1,4 @@
-==== /.src/globalDateInEffect.ts (6 flows) ====
+==== /.src/globalDateInEffect.ts (5 flows) ====
 
 === Piping Flow ===
 Location: 5:28 - 8:3
@@ -41,20 +41,6 @@ Transformations (1):
       callee: Effect.fn("newDateWithArgsInFn")
       args: (constant)
       outType: () => Effect<Date, never, never>
-
-=== Piping Flow ===
-Location: 17:35 - 17:68
-Node: Effect.fn("newDateWithArgsInFn")
-Node Kind: KindCallExpression
-
-Subject: "newDateWithArgsInFn"
-Subject Type: "newDateWithArgsInFn"
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.fn
-      args: (constant)
-      outType: Gen & NonGen
 
 === Piping Flow ===
 Location: 23:27 - 27:3
