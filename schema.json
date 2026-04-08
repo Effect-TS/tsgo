@@ -1989,6 +1989,11 @@
           "default": "warning",
           "description": "Warns when catch callbacks return unknown instead of typed errors"
         },
+        "unnecessaryArrowBlock": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Suggests using a concise arrow body when the block only returns an expression"
+        },
         "unnecessaryEffectGen": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",

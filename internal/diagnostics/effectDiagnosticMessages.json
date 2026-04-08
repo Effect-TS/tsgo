@@ -307,6 +307,10 @@
         "category": "Warning",
         "code": 377083
     },
+    "This arrow function block only returns an expression and can use a concise body. effect(unnecessaryArrowBlock)": {
+        "category": "Warning",
+        "code": 377084
+    },
     "This code declares an async function, consider representing this async control flow with Effect values and `Effect.gen`. effect(asyncFunction)": {
         "category": "Warning",
         "code": 377081
