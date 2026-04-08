@@ -2087,6 +2087,10 @@ func RangeIsSynthesized(loc core.TextRange) bool
 type RegularExpressionLiteral = ast.RegularExpressionLiteral
 //go:linkname ReplaceModifiers github.com/microsoft/typescript-go/internal/ast.ReplaceModifiers
 func ReplaceModifiers(factory *ast.NodeFactory, node *ast.Node, modifierArray *ast.ModifierList) *ast.Node
+type RepopulateDiagnosticInfo = ast.RepopulateDiagnosticInfo
+type RepopulateDiagnosticKind = ast.RepopulateDiagnosticKind
+const RepopulateModeMismatch = ast.RepopulateModeMismatch
+const RepopulateModuleNotFound = ast.RepopulateModuleNotFound
 type RestTypeNode = ast.RestTypeNode
 type ReturnStatement = ast.ReturnStatement
 type SatisfiesExpression = ast.SatisfiesExpression

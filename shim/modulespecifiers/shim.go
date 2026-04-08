@@ -80,4 +80,6 @@ const ResultKindPaths = modulespecifiers.ResultKindPaths
 const ResultKindRedirect = modulespecifiers.ResultKindRedirect
 const ResultKindRelative = modulespecifiers.ResultKindRelative
 type SourceFileForSpecifierGeneration = modulespecifiers.SourceFileForSpecifierGeneration
+//go:linkname TryGetRealFileNameForNonJSDeclarationFileName github.com/microsoft/typescript-go/internal/modulespecifiers.TryGetRealFileNameForNonJSDeclarationFileName
+func TryGetRealFileNameForNonJSDeclarationFileName(fileName string) string
 type UserPreferences = modulespecifiers.UserPreferences
