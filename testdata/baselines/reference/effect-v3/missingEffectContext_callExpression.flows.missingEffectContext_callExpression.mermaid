@@ -2,10 +2,20 @@ flowchart TB
   0[["type: #40;effect: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: function testFn#40;effect: Effect.Effect#lt;number#gt;#41; #123;#92;n  return effect#92;n#125;"]]
   1[/"type: Effect#lt;number, never, never#gt;<br/>node: effect: Effect.Effect#lt;number#gt;"/]
   2[/"type: Effect#lt;number, never, never#gt;<br/>node: effect"/]
-  3[["type: #40;effect: Effect#lt;number, never, ServiceA #124; ServiceB#gt;#41; =#gt; Effect#lt;number, never, ServiceA #124; ServiceB#gt;<br/>node: function testFnWithServiceAB#40;effect: Effect.Effect#lt;number, never, ServiceA #124; ServiceB#gt;#41; #123;#92;n  return effect#92;n#125;"]]
-  4[/"type: Effect#lt;number, never, ServiceA #124; ServiceB#gt;<br/>node: effect: Effect.Effect#lt;number, never, ServiceA #124; ServiceB#gt;"/]
-  5[/"type: Effect#lt;number, never, ServiceA #124; ServiceB#gt;<br/>node: effect"/]
+  3[/"type: Effect#lt;number, never, ServiceA #124; ServiceB #124; ServiceC#gt;<br/>node: effectWithServices"/]
+  4["type: Effect#lt;number, never, never#gt;<br/>callee: testFn<br/>args: #91;#93;"]
+  5[/"type: #40;effect: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: testFn"/]
+  6[["type: #40;effect: Effect#lt;number, never, ServiceA #124; ServiceB#gt;#41; =#gt; Effect#lt;number, never, ServiceA #124; ServiceB#gt;<br/>node: function testFnWithServiceAB#40;effect: Effect.Effect#lt;number, never, ServiceA #124; ServiceB#gt;#41; #123;#92;n  return effect#92;n#125;"]]
+  7[/"type: Effect#lt;number, never, ServiceA #124; ServiceB#gt;<br/>node: effect: Effect.Effect#lt;number, never, ServiceA #124; ServiceB#gt;"/]
+  8[/"type: Effect#lt;number, never, ServiceA #124; ServiceB#gt;<br/>node: effect"/]
+  9[/"type: Effect#lt;number, never, ServiceA #124; ServiceB #124; ServiceC#gt;<br/>node: effectWithServices"/]
+  10["type: Effect#lt;number, never, ServiceA #124; ServiceB#gt;<br/>callee: testFnWithServiceAB<br/>args: #91;#93;"]
+  11[/"type: #40;effect: Effect#lt;number, never, ServiceA #124; ServiceB#gt;#41; =#gt; Effect#lt;number, never, ServiceA #124; ServiceB#gt;<br/>node: testFnWithServiceAB"/]
   1 -->|"kind: parameter"| 0
   2 -->|"kind: potentialReturn"| 0
-  4 -->|"kind: parameter"| 3
-  5 -->|"kind: potentialReturn"| 3
+  3 -->|"kind: pipe"| 4
+  5 -->|"kind: transformCallee"| 4
+  7 -->|"kind: parameter"| 6
+  8 -->|"kind: potentialReturn"| 6
+  9 -->|"kind: pipe"| 10
+  11 -->|"kind: transformCallee"| 10

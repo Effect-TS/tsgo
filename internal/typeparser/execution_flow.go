@@ -206,6 +206,17 @@ func (tp *TypeParser) ExecutionFlow(sf *ast.SourceFile) *ExecutionFlow {
 				}
 			} else if effectGen := tp.EffectGenCall(node); effectGen != nil {
 				*isEffectYieldingGenerator.Get(effectGen.GeneratorFunction.AsNode()) = true
+			} else if parsedInlinePipeableCall := tp.singleArgInlineCall(node); parsedInlinePipeableCall != nil {
+				// this is a Layer.succeed(FileSystem)(arg) where Layer.succeed(FileSystem) has only 1 sig, with 1 arg
+				subjectExecutionNode := NewExecValueNode(parsedInlinePipeableCall.Subject)
+				*connectTrailingOfNodeToMap.Get(parsedInlinePipeableCall.Subject) = &subjectExecutionNode
+				_, last := NewPipeTransformSlice(
+					&subjectExecutionNode,
+					ExecutionLinkKindPipe,
+					[]*ast.Node{parsedInlinePipeableCall.Transform},
+					[]*checker.Type{tp.GetTypeAtLocation(node)},
+				)
+				ConnectTrailingNodeToParentLeading(node, last)
 			} else if parsedPipeCall := tp.ParsePipeCall(node); parsedPipeCall != nil {
 				// this is a pipe call, so we have subject and args
 				subjectExecutionNode := NewExecValueNode(parsedPipeCall.Subject)
@@ -316,4 +327,43 @@ func (tp *TypeParser) ExecutionFlow(sf *ast.SourceFile) *ExecutionFlow {
 		walk(sf.AsNode())
 		return g
 	})
+}
+
+type parsedSingleArgInlineCallTransform struct {
+	Subject   *ast.Node
+	Transform *ast.Node
+}
+
+func (tp *TypeParser) singleArgInlineCall(node *ast.Node) *parsedSingleArgInlineCallTransform {
+	if node == nil {
+		return nil
+	}
+	if node.Kind != ast.KindCallExpression {
+		return nil
+	}
+	outerCallExpr := node.AsCallExpression()
+	if outerCallExpr.Expression == nil {
+		return nil
+	}
+	outerCallArgs := node.Arguments()
+	if len(outerCallArgs) != 1 {
+		return nil
+	}
+	calledExprType := tp.GetTypeAtLocation(outerCallExpr.Expression)
+	if calledExprType == nil {
+		return nil
+	}
+	callSigs := tp.checker.GetCallSignatures(calledExprType)
+	if len(callSigs) != 1 {
+		return nil
+	}
+	params := callSigs[0].Parameters()
+	if len(params) != 1 {
+		return nil
+	}
+
+	return &parsedSingleArgInlineCallTransform{
+		Subject:   outerCallArgs[0],
+		Transform: outerCallExpr.Expression,
+	}
 }

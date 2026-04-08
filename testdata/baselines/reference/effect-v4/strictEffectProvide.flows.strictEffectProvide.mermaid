@@ -1,85 +1,101 @@
 flowchart TB
-  0[/"type: Effect#lt;#123; value: number; #125;, never, never#gt;<br/>node: this.make"/]
-  1["type: Layer#lt;MyService1, never, never#gt;<br/>callee: Layer.effect<br/>args: #91;this#93;"]
-  2[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;S, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
-  3[/"type: typeof MyService1<br/>node: this"/]
-  4[/"type: Effect#lt;#123; value: number; #125;, never, never#gt;<br/>node: this.make"/]
-  5["type: Layer#lt;MyService2, never, never#gt;<br/>callee: Layer.effect<br/>args: #91;this#93;"]
-  6[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;S, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
-  7[/"type: typeof MyService2<br/>node: this"/]
-  8[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
-  9["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService1.Default#93;"]
-  10[/"type: #123; #lt;const Layers extends #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;layers: Layers, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;ROut, E2, RIn#gt;#40;layer: Layer#lt;ROut, E2, RIn#gt;, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;R2#gt;#40;context: ServiceMap#lt;R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #lt;A, E, R, const Layers extends #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;self: Effect#lt;A, E, R#gt;, layers: Layers, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: Effect#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;A, E, R, ROut, E2, RIn#gt;#40;self: Effect#lt;A, E, R#gt;, layer: Layer#lt;ROut, E2, RIn#gt;, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;A, E, R, R2#gt;#40;self: Effect#lt;A, E, R#gt;, context: ServiceMap#lt;R2#gt;#41;: Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #125;<br/>node: Effect.provide"/]
-  11[/"type: Layer#lt;MyService1, never, never#gt;<br/>node: MyService1.Default"/]
-  12[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
-  13["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;#41; =#gt; 42#93;"]
-  14["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService1.Default#93;"]
-  15["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n + 1#93;"]
-  16[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
-  17((("type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; 42")))
-  18[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; 42"]]
-  19[/"type: 42<br/>node: 42"/]
-  20[/"type: #123; #lt;const Layers extends #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;layers: Layers, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;ROut, E2, RIn#gt;#40;layer: Layer#lt;ROut, E2, RIn#gt;, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;R2#gt;#40;context: ServiceMap#lt;R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #lt;A, E, R, const Layers extends #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;self: Effect#lt;A, E, R#gt;, layers: Layers, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: Effect#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;A, E, R, ROut, E2, RIn#gt;#40;self: Effect#lt;A, E, R#gt;, layer: Layer#lt;ROut, E2, RIn#gt;, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;A, E, R, R2#gt;#40;self: Effect#lt;A, E, R#gt;, context: ServiceMap#lt;R2#gt;#41;: Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #125;<br/>node: Effect.provide"/]
-  21[/"type: Layer#lt;MyService1, never, never#gt;<br/>node: MyService1.Default"/]
+  0[/"type: #123; value: number; #125;<br/>node: #123; value: 1 #125;"/]
+  1["type: Effect#lt;#123; value: number; #125;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  2[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  3[/"type: Effect#lt;#123; value: number; #125;, never, never#gt;<br/>node: this.make"/]
+  4["type: Layer#lt;MyService1, never, never#gt;<br/>callee: Layer.effect<br/>args: #91;this#93;"]
+  5[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;S, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
+  6[/"type: typeof MyService1<br/>node: this"/]
+  7[/"type: #123; value: number; #125;<br/>node: #123; value: 2 #125;"/]
+  8["type: Effect#lt;#123; value: number; #125;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  9[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  10[/"type: Effect#lt;#123; value: number; #125;, never, never#gt;<br/>node: this.make"/]
+  11["type: Layer#lt;MyService2, never, never#gt;<br/>callee: Layer.effect<br/>args: #91;this#93;"]
+  12[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;S, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
+  13[/"type: typeof MyService2<br/>node: this"/]
+  14[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  15["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService1.Default#93;"]
+  16[/"type: #123; #lt;const Layers extends #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;layers: Layers, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;ROut, E2, RIn#gt;#40;layer: Layer#lt;ROut, E2, RIn#gt;, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;R2#gt;#40;context: ServiceMap#lt;R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #lt;A, E, R, const Layers extends #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;self: Effect#lt;A, E, R#gt;, layers: Layers, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: Effect#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;A, E, R, ROut, E2, RIn#gt;#40;self: Effect#lt;A, E, R#gt;, layer: Layer#lt;ROut, E2, RIn#gt;, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;A, E, R, R2#gt;#40;self: Effect#lt;A, E, R#gt;, context: ServiceMap#lt;R2#gt;#41;: Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #125;<br/>node: Effect.provide"/]
+  17[/"type: Layer#lt;MyService1, never, never#gt;<br/>node: MyService1.Default"/]
+  18[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  19["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;#41; =#gt; 42#93;"]
+  20["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;MyService1.Default#93;"]
+  21["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n + 1#93;"]
   22[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
-  23((("type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n + 1")))
-  24[["type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n + 1"]]
-  25[/"type: number<br/>node: n"/]
-  26[/"type: number<br/>node: n + 1"/]
-  27[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
-  28["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;Layer.mergeAll#40;MyService1.Default, MyService2.Default#41;#93;"]
-  29[/"type: #123; #lt;const Layers extends #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;layers: Layers, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;ROut, E2, RIn#gt;#40;layer: Layer#lt;ROut, E2, RIn#gt;, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;R2#gt;#40;context: ServiceMap#lt;R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #lt;A, E, R, const Layers extends #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;self: Effect#lt;A, E, R#gt;, layers: Layers, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: Effect#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;A, E, R, ROut, E2, RIn#gt;#40;self: Effect#lt;A, E, R#gt;, layer: Layer#lt;ROut, E2, RIn#gt;, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;A, E, R, R2#gt;#40;self: Effect#lt;A, E, R#gt;, context: ServiceMap#lt;R2#gt;#41;: Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #125;<br/>node: Effect.provide"/]
-  30[/"type: Layer#lt;MyService1 #124; MyService2, never, never#gt;<br/>node: Layer.mergeAll#40;MyService1.Default, MyService2.Default#41;"/]
-  31[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
-  32["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provideService<br/>args: #91;MyService1, MyService1.of#40;#123; value: 1 #125;#41;#93;"]
-  33[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #123; #40;implementation: S#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, I#gt;#gt;; #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;, implementation: S#41;: Effect#lt;A, E, Exclude#lt;R, I#gt;#gt;; #125;; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;, implementation: S#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, I#gt;#gt;; #lt;A, E, R, I, S#gt;#40;self: Effect#lt;A, E, R#gt;, service: Key#lt;I, S#gt;, implementation: S#41;: Effect#lt;A, E, Exclude#lt;R, I#gt;#gt;; #125;<br/>node: Effect.provideService"/]
-  34[/"type: typeof MyService1<br/>node: MyService1"/]
-  35[/"type: #123; value: number; #125;<br/>node: MyService1.of#40;#123; value: 1 #125;#41;"/]
-  36["type: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, MyService1#gt;#gt;<br/>callee: Effect.provideService<br/>args: #91;MyService1#93;"]
-  37[/"type: Layer#lt;MyService1, never, never#gt;<br/>node: MyService1.Default"/]
-  38["type: Layer#lt;MyService1, never, never#gt;<br/>callee: Layer.provide<br/>args: #91;MyService2.Default#93;"]
-  39[/"type: #123; #lt;RIn, E, ROut#gt;#40;that: Layer#lt;ROut, E, RIn#gt;#41;: #lt;RIn2, E2, ROut2#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;#41; =#gt; Layer#lt;ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;const Layers extends #91;Any, ...Array#lt;Any#gt;#93;#gt;#40;that: Layers#41;: #lt;A, E, R#gt;#40;self: Layer#lt;A, E, R#gt;#41; =#gt; Layer#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;RIn2, E2, ROut2, RIn, E, ROut#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;, that: Layer#lt;ROut, E, RIn#gt;#41;: Layer#lt;ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;A, E, R, const Layers extends #91;Any, ...Array#lt;Any#gt;#93;#gt;#40;self: Layer#lt;A, E, R#gt;, that: Layers#41;: Layer#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #125;<br/>node: Layer.provide"/]
-  40[/"type: Layer#lt;MyService2, never, never#gt;<br/>node: MyService2.Default"/]
-  41[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
-  42["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;ctx#93;"]
-  43[/"type: #123; #lt;const Layers extends #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;layers: Layers, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;ROut, E2, RIn#gt;#40;layer: Layer#lt;ROut, E2, RIn#gt;, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;R2#gt;#40;context: ServiceMap#lt;R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #lt;A, E, R, const Layers extends #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;self: Effect#lt;A, E, R#gt;, layers: Layers, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: Effect#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;A, E, R, ROut, E2, RIn#gt;#40;self: Effect#lt;A, E, R#gt;, layer: Layer#lt;ROut, E2, RIn#gt;, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;A, E, R, R2#gt;#40;self: Effect#lt;A, E, R#gt;, context: ServiceMap#lt;R2#gt;#41;: Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #125;<br/>node: Effect.provide"/]
-  44[/"type: ServiceMap#lt;MyService1#gt;<br/>node: ctx"/]
-  0 -->|"kind: dataLast"| 1
+  23((("type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; 42")))
+  24[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; 42"]]
+  25[/"type: 42<br/>node: 42"/]
+  26[/"type: #123; #lt;const Layers extends #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;layers: Layers, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;ROut, E2, RIn#gt;#40;layer: Layer#lt;ROut, E2, RIn#gt;, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;R2#gt;#40;context: ServiceMap#lt;R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #lt;A, E, R, const Layers extends #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;self: Effect#lt;A, E, R#gt;, layers: Layers, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: Effect#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;A, E, R, ROut, E2, RIn#gt;#40;self: Effect#lt;A, E, R#gt;, layer: Layer#lt;ROut, E2, RIn#gt;, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;A, E, R, R2#gt;#40;self: Effect#lt;A, E, R#gt;, context: ServiceMap#lt;R2#gt;#41;: Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #125;<br/>node: Effect.provide"/]
+  27[/"type: Layer#lt;MyService1, never, never#gt;<br/>node: MyService1.Default"/]
+  28[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  29((("type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n + 1")))
+  30[["type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n + 1"]]
+  31[/"type: number<br/>node: n"/]
+  32[/"type: number<br/>node: n + 1"/]
+  33[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  34["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;Layer.mergeAll#40;MyService1.Default, MyService2.Default#41;#93;"]
+  35[/"type: #123; #lt;const Layers extends #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;layers: Layers, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;ROut, E2, RIn#gt;#40;layer: Layer#lt;ROut, E2, RIn#gt;, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;R2#gt;#40;context: ServiceMap#lt;R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #lt;A, E, R, const Layers extends #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;self: Effect#lt;A, E, R#gt;, layers: Layers, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: Effect#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;A, E, R, ROut, E2, RIn#gt;#40;self: Effect#lt;A, E, R#gt;, layer: Layer#lt;ROut, E2, RIn#gt;, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;A, E, R, R2#gt;#40;self: Effect#lt;A, E, R#gt;, context: ServiceMap#lt;R2#gt;#41;: Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #125;<br/>node: Effect.provide"/]
+  36[/"type: Layer#lt;MyService1 #124; MyService2, never, never#gt;<br/>node: Layer.mergeAll#40;MyService1.Default, MyService2.Default#41;"/]
+  37[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  38["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provideService<br/>args: #91;MyService1, MyService1.of#40;#123; value: 1 #125;#41;#93;"]
+  39[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #123; #40;implementation: S#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, I#gt;#gt;; #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;, implementation: S#41;: Effect#lt;A, E, Exclude#lt;R, I#gt;#gt;; #125;; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;, implementation: S#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, I#gt;#gt;; #lt;A, E, R, I, S#gt;#40;self: Effect#lt;A, E, R#gt;, service: Key#lt;I, S#gt;, implementation: S#41;: Effect#lt;A, E, Exclude#lt;R, I#gt;#gt;; #125;<br/>node: Effect.provideService"/]
+  40[/"type: typeof MyService1<br/>node: MyService1"/]
+  41((("type: #123; value: number; #125;<br/>node: MyService1.of#40;#123; value: 1 #125;#41;")))
+  42["type: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, MyService1#gt;#gt;<br/>callee: Effect.provideService<br/>args: #91;MyService1#93;"]
+  43[/"type: #123; value: number; #125;<br/>node: #123; value: 1 #125;"/]
+  44["type: #123; value: number; #125;<br/>callee: MyService1.of<br/>args: #91;#93;"]
+  45[/"type: #40;this: void, self: #123; value: number; #125;#41; =#gt; #123; value: number; #125;<br/>node: MyService1.of"/]
+  46[/"type: Layer#lt;MyService1, never, never#gt;<br/>node: MyService1.Default"/]
+  47["type: Layer#lt;MyService1, never, never#gt;<br/>callee: Layer.provide<br/>args: #91;MyService2.Default#93;"]
+  48[/"type: #123; #lt;RIn, E, ROut#gt;#40;that: Layer#lt;ROut, E, RIn#gt;#41;: #lt;RIn2, E2, ROut2#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;#41; =#gt; Layer#lt;ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;const Layers extends #91;Any, ...Array#lt;Any#gt;#93;#gt;#40;that: Layers#41;: #lt;A, E, R#gt;#40;self: Layer#lt;A, E, R#gt;#41; =#gt; Layer#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;RIn2, E2, ROut2, RIn, E, ROut#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;, that: Layer#lt;ROut, E, RIn#gt;#41;: Layer#lt;ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;A, E, R, const Layers extends #91;Any, ...Array#lt;Any#gt;#93;#gt;#40;self: Layer#lt;A, E, R#gt;, that: Layers#41;: Layer#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #125;<br/>node: Layer.provide"/]
+  49[/"type: Layer#lt;MyService2, never, never#gt;<br/>node: MyService2.Default"/]
+  50[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  51["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;ctx#93;"]
+  52[/"type: #123; #lt;const Layers extends #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;layers: Layers, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;ROut, E2, RIn#gt;#40;layer: Layer#lt;ROut, E2, RIn#gt;, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;R2#gt;#40;context: ServiceMap#lt;R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #lt;A, E, R, const Layers extends #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;self: Effect#lt;A, E, R#gt;, layers: Layers, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: Effect#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;A, E, R, ROut, E2, RIn#gt;#40;self: Effect#lt;A, E, R#gt;, layer: Layer#lt;ROut, E2, RIn#gt;, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;A, E, R, R2#gt;#40;self: Effect#lt;A, E, R#gt;, context: ServiceMap#lt;R2#gt;#41;: Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #125;<br/>node: Effect.provide"/]
+  53[/"type: ServiceMap#lt;MyService1#gt;<br/>node: ctx"/]
+  0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
-  3 -->|"kind: transformArg"| 1
-  4 -->|"kind: dataLast"| 5
-  6 -->|"kind: transformCallee"| 5
-  7 -->|"kind: transformArg"| 5
-  8 -->|"kind: pipe"| 9
-  10 -->|"kind: transformCallee"| 9
-  11 -->|"kind: transformArg"| 9
-  12 -->|"kind: pipe"| 13
-  13 -->|"kind: pipe"| 14
+  3 -->|"kind: dataLast"| 4
+  5 -->|"kind: transformCallee"| 4
+  6 -->|"kind: transformArg"| 4
+  7 -->|"kind: pipe"| 8
+  9 -->|"kind: transformCallee"| 8
+  10 -->|"kind: dataLast"| 11
+  12 -->|"kind: transformCallee"| 11
+  13 -->|"kind: transformArg"| 11
   14 -->|"kind: pipe"| 15
-  16 -->|"kind: transformCallee"| 13
-  17 -->|"kind: transformArg"| 13
-  19 -->|"kind: potentialReturn"| 18
-  18 -->|"kind: connect"| 17
-  20 -->|"kind: transformCallee"| 14
-  21 -->|"kind: transformArg"| 14
-  22 -->|"kind: transformCallee"| 15
-  23 -->|"kind: transformArg"| 15
-  25 -->|"kind: parameter"| 24
-  26 -->|"kind: potentialReturn"| 24
+  16 -->|"kind: transformCallee"| 15
+  17 -->|"kind: transformArg"| 15
+  18 -->|"kind: pipe"| 19
+  19 -->|"kind: pipe"| 20
+  20 -->|"kind: pipe"| 21
+  22 -->|"kind: transformCallee"| 19
+  23 -->|"kind: transformArg"| 19
+  25 -->|"kind: potentialReturn"| 24
   24 -->|"kind: connect"| 23
-  27 -->|"kind: pipe"| 28
-  29 -->|"kind: transformCallee"| 28
-  30 -->|"kind: transformArg"| 28
-  31 -->|"kind: pipe"| 32
-  33 -->|"kind: transformCallee"| 32
-  34 -->|"kind: transformArg"| 32
-  35 -->|"kind: transformArg"| 32
-  35 -->|"kind: dataLast"| 36
-  33 -->|"kind: transformCallee"| 36
-  34 -->|"kind: transformArg"| 36
-  37 -->|"kind: dataFirst"| 38
+  26 -->|"kind: transformCallee"| 20
+  27 -->|"kind: transformArg"| 20
+  28 -->|"kind: transformCallee"| 21
+  29 -->|"kind: transformArg"| 21
+  31 -->|"kind: parameter"| 30
+  32 -->|"kind: potentialReturn"| 30
+  30 -->|"kind: connect"| 29
+  33 -->|"kind: pipe"| 34
+  35 -->|"kind: transformCallee"| 34
+  36 -->|"kind: transformArg"| 34
+  37 -->|"kind: pipe"| 38
   39 -->|"kind: transformCallee"| 38
   40 -->|"kind: transformArg"| 38
-  41 -->|"kind: dataFirst"| 42
-  43 -->|"kind: transformCallee"| 42
-  44 -->|"kind: transformArg"| 42
+  41 -->|"kind: transformArg"| 38
+  41 -->|"kind: dataLast"| 42
+  39 -->|"kind: transformCallee"| 42
+  40 -->|"kind: transformArg"| 42
+  43 -->|"kind: pipe"| 44
+  44 -->|"kind: connect"| 41
+  45 -->|"kind: transformCallee"| 44
+  46 -->|"kind: dataFirst"| 47
+  48 -->|"kind: transformCallee"| 47
+  49 -->|"kind: transformArg"| 47
+  50 -->|"kind: dataFirst"| 51
+  52 -->|"kind: transformCallee"| 51
+  53 -->|"kind: transformArg"| 51

@@ -1,6 +1,11 @@
 flowchart TB
-  0[["type: any<br/>node: protected constructor#40;a: Valid, options: Schema.MakeOptions#41; #123;#92;n    super#40;a, options#41;#92;n  #125;"]]
-  1[/"type: Valid<br/>node: a: Valid"/]
-  2[/"type: MakeOptions<br/>node: options: Schema.MakeOptions"/]
-  1 -->|"kind: parameter"| 0
-  2 -->|"kind: parameter"| 0
+  0[/"type: #quot;Valid#quot;<br/>node: #quot;Valid#quot;"/]
+  1["type: #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;Valid, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: ExtendableClass#lt;Valid, Struct#lt;Fields#gt;, #123;#125;#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;Valid, readonly #91;S#93;#gt; #124; undefined#41;: ExtendableClass#lt;Valid, S, #123;#125;#gt;; #125;<br/>callee: Schema.Class<br/>args: #91;#93;"]
+  2[/"type: #lt;Self, Brand = #123;#125;#gt;#40;identifier: string#41; =#gt; #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;Self, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: ExtendableClass#lt;Self, Struct#lt;Fields#gt;, Brand#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;Self, readonly #91;S#93;#gt; #124; undefined#41;: ExtendableClass#lt;Self, S, Brand#gt;; #125;<br/>node: Schema.Class"/]
+  3[["type: any<br/>node: protected constructor#40;a: Valid, options: Schema.MakeOptions#41; #123;#92;n    super#40;a, options#41;#92;n  #125;"]]
+  4[/"type: Valid<br/>node: a: Valid"/]
+  5[/"type: MakeOptions<br/>node: options: Schema.MakeOptions"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1
+  4 -->|"kind: parameter"| 3
+  5 -->|"kind: parameter"| 3

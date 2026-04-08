@@ -1,2 +1,22 @@
 flowchart TB
-  0[["type: #40;#41; =#gt; void<br/>node: export function local#40;#41; #123;#92;n  class _LocalClass extends Context.Tag#40;#quot;_LocalClass#quot;#41;#lt;_LocalClass, #123;#92;n    writeFile: #40;content: string#41; =#gt; Effect.Effect#lt;void#gt;#92;n  #125;#gt;#40;#41; #123;#125;#92;n#92;n  class _LocalLeaking extends Context.Tag#40;#quot;_LocalLeaking#quot;#41;#lt;_LocalLeaking, #123;#92;n    writeCache: #40;#41; =#gt; Effect.Effect#lt;void, never, FileSystem#gt;#92;n    readCache: Effect.Effect#lt;void, never, FileSystem#gt;#92;n  #125;#gt;#40;#41; #123;#125;#92;n#125;"]]
+  0[/"type: #quot;FileSystem#quot;<br/>node: #quot;FileSystem#quot;"/]
+  1["type: #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, #quot;FileSystem#quot;, Shape#gt;<br/>callee: Context.Tag<br/>args: #91;#93;"]
+  2[/"type: #lt;const Id extends string#gt;#40;id: Id#41; =#gt; #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, Id, Shape#gt;<br/>node: Context.Tag"/]
+  3[/"type: #quot;LeakingDeps#quot;<br/>node: #quot;LeakingDeps#quot;"/]
+  4["type: #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, #quot;LeakingDeps#quot;, Shape#gt;<br/>callee: Context.Tag<br/>args: #91;#93;"]
+  5[/"type: #lt;const Id extends string#gt;#40;id: Id#41; =#gt; #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, Id, Shape#gt;<br/>node: Context.Tag"/]
+  6[["type: #40;#41; =#gt; void<br/>node: export function local#40;#41; #123;#92;n  class _LocalClass extends Context.Tag#40;#quot;_LocalClass#quot;#41;#lt;_LocalClass, #123;#92;n    writeFile: #40;content: string#41; =#gt; Effect.Effect#lt;void#gt;#92;n  #125;#gt;#40;#41; #123;#125;#92;n#92;n  class _LocalLeaking extends Context.Tag#40;#quot;_LocalLeaking#quot;#41;#lt;_LocalLeaking, #123;#92;n    writeCache: #40;#41; =#gt; Effect.Effect#lt;void, never, FileSystem#gt;#92;n    readCache: Effect.Effect#lt;void, never, FileSystem#gt;#92;n  #125;#gt;#40;#41; #123;#125;#92;n#125;"]]
+  7[/"type: #quot;_LocalClass#quot;<br/>node: #quot;_LocalClass#quot;"/]
+  8["type: #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, #quot;_LocalClass#quot;, Shape#gt;<br/>callee: Context.Tag<br/>args: #91;#93;"]
+  9[/"type: #lt;const Id extends string#gt;#40;id: Id#41; =#gt; #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, Id, Shape#gt;<br/>node: Context.Tag"/]
+  10[/"type: #quot;_LocalLeaking#quot;<br/>node: #quot;_LocalLeaking#quot;"/]
+  11["type: #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, #quot;_LocalLeaking#quot;, Shape#gt;<br/>callee: Context.Tag<br/>args: #91;#93;"]
+  12[/"type: #lt;const Id extends string#gt;#40;id: Id#41; =#gt; #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, Id, Shape#gt;<br/>node: Context.Tag"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1
+  3 -->|"kind: pipe"| 4
+  5 -->|"kind: transformCallee"| 4
+  7 -->|"kind: pipe"| 8
+  9 -->|"kind: transformCallee"| 8
+  10 -->|"kind: pipe"| 11
+  12 -->|"kind: transformCallee"| 11

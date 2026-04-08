@@ -1,1 +1,41 @@
 flowchart TB
+  0[/"type: #quot;DataTaggedError#quot;<br/>node: #quot;DataTaggedError#quot;"/]
+  1["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;DataTaggedError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  2[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  3[/"type: #quot;SchemaError#quot;<br/>node: #quot;SchemaError#quot;"/]
+  4["type: #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;SchemaError, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: ErrorClass#lt;SchemaError, Struct#lt;Fields#gt;, YieldableError#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;SchemaError, readonly #91;S#93;#gt; #124; undefined#41;: ErrorClass#lt;SchemaError, S, YieldableError#gt;; #125;<br/>callee: Schema.ErrorClass<br/>args: #91;#93;"]
+  5[/"type: #lt;Self, Brand = #123;#125;#gt;#40;identifier: string#41; =#gt; #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;Self, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: ErrorClass#lt;Self, Struct#lt;Fields#gt;, YieldableError #amp; Brand#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;Self, readonly #91;S#93;#gt; #124; undefined#41;: ErrorClass#lt;Self, S, YieldableError #amp; Brand#gt;; #125;<br/>node: Schema.ErrorClass"/]
+  6[/"type: #quot;SchemaError#quot;<br/>node: #quot;SchemaError#quot;"/]
+  7["type: tag#lt;#quot;SchemaError#quot;#gt;<br/>callee: Schema.tag<br/>args: #91;#93;"]
+  8[/"type: #lt;Tag extends AST.LiteralValue#gt;#40;literal: Tag#41; =#gt; tag#lt;Tag#gt;<br/>node: Schema.tag"/]
+  9[/"type: NonYieldable<br/>node: new NonYieldable#40;#quot;non-yieldable error#quot;#41;"/]
+  10["type: Effect#lt;never, NonYieldable, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  11[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  12[/"type: DataTaggedError<br/>node: err"/]
+  13["type: void<br/>callee: console.log<br/>args: #91;#93;"]
+  14[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
+  15[/"type: DataTaggedError<br/>node: new DataTaggedError#40;#41;"/]
+  16["type: Effect#lt;never, DataTaggedError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  17[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  18[/"type: SchemaError<br/>node: new SchemaError#40;#123;#125;#41;"/]
+  19["type: Effect#lt;never, SchemaError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  20[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  21[/"type: DataTaggedError<br/>node: new DataTaggedError#40;#41;"/]
+  22["type: Effect#lt;never, DataTaggedError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  23[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1
+  3 -->|"kind: pipe"| 4
+  5 -->|"kind: transformCallee"| 4
+  6 -->|"kind: pipe"| 7
+  8 -->|"kind: transformCallee"| 7
+  9 -->|"kind: pipe"| 10
+  11 -->|"kind: transformCallee"| 10
+  12 -->|"kind: pipe"| 13
+  14 -->|"kind: transformCallee"| 13
+  15 -->|"kind: pipe"| 16
+  17 -->|"kind: transformCallee"| 16
+  18 -->|"kind: pipe"| 19
+  20 -->|"kind: transformCallee"| 19
+  21 -->|"kind: pipe"| 22
+  23 -->|"kind: transformCallee"| 22

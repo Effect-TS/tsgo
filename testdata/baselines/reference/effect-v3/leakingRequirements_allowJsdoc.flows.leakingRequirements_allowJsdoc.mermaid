@@ -1,1 +1,36 @@
 flowchart TB
+  0[/"type: #quot;FileSystem#quot;<br/>node: #quot;FileSystem#quot;"/]
+  1["type: #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, #quot;FileSystem#quot;, Shape#gt;<br/>callee: Context.Tag<br/>args: #91;#93;"]
+  2[/"type: #lt;const Id extends string#gt;#40;id: Id#41; =#gt; #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, Id, Shape#gt;<br/>node: Context.Tag"/]
+  3[/"type: #quot;Cache#quot;<br/>node: #quot;Cache#quot;"/]
+  4["type: #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, #quot;Cache#quot;, Shape#gt;<br/>callee: Context.Tag<br/>args: #91;#93;"]
+  5[/"type: #lt;const Id extends string#gt;#40;id: Id#41; =#gt; #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, Id, Shape#gt;<br/>node: Context.Tag"/]
+  6[/"type: #quot;LeakingDeps#quot;<br/>node: #quot;LeakingDeps#quot;"/]
+  7["type: #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, #quot;LeakingDeps#quot;, Shape#gt;<br/>callee: Context.Tag<br/>args: #91;#93;"]
+  8[/"type: #lt;const Id extends string#gt;#40;id: Id#41; =#gt; #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, Id, Shape#gt;<br/>node: Context.Tag"/]
+  9[/"type: #quot;LeakingDeps2#quot;<br/>node: #quot;LeakingDeps2#quot;"/]
+  10["type: #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, #quot;LeakingDeps2#quot;, Shape#gt;<br/>callee: Context.Tag<br/>args: #91;#93;"]
+  11[/"type: #lt;const Id extends string#gt;#40;id: Id#41; =#gt; #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, Id, Shape#gt;<br/>node: Context.Tag"/]
+  12[/"type: #quot;LeakingDeps3#quot;<br/>node: #quot;LeakingDeps3#quot;"/]
+  13["type: #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, #quot;LeakingDeps3#quot;, Shape#gt;<br/>callee: Context.Tag<br/>args: #91;#93;"]
+  14[/"type: #lt;const Id extends string#gt;#40;id: Id#41; =#gt; #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, Id, Shape#gt;<br/>node: Context.Tag"/]
+  15[/"type: #quot;LeakingDeps4#quot;<br/>node: #quot;LeakingDeps4#quot;"/]
+  16["type: Tag#lt;#123; writeCache: #40;#41; =#gt; Effect#lt;void, never, Cache #124; FileSystem#gt;; readCache: Effect#lt;void, never, Cache #124; FileSystem#gt;; #125;, #123; writeCache: #40;#41; =#gt; Effect#lt;void, never, Cache #124; FileSystem#gt;; readCache: Effect#lt;void, never, Cache #124; FileSystem#gt;; #125;#gt;<br/>callee: Context.GenericTag<br/>args: #91;#93;"]
+  17[/"type: #lt;Identifier, Service = Identifier#gt;#40;key: string#41; =#gt; Tag#lt;Identifier, Service#gt;<br/>node: Context.GenericTag"/]
+  18[/"type: #quot;LeakingDeps5#quot;<br/>node: #quot;LeakingDeps5#quot;"/]
+  19["type: Tag#lt;LeakingDeps5Shape, LeakingDeps5Shape#gt;<br/>callee: Context.GenericTag<br/>args: #91;#93;"]
+  20[/"type: #lt;Identifier, Service = Identifier#gt;#40;key: string#41; =#gt; Tag#lt;Identifier, Service#gt;<br/>node: Context.GenericTag"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1
+  3 -->|"kind: pipe"| 4
+  5 -->|"kind: transformCallee"| 4
+  6 -->|"kind: pipe"| 7
+  8 -->|"kind: transformCallee"| 7
+  9 -->|"kind: pipe"| 10
+  11 -->|"kind: transformCallee"| 10
+  12 -->|"kind: pipe"| 13
+  14 -->|"kind: transformCallee"| 13
+  15 -->|"kind: pipe"| 16
+  17 -->|"kind: transformCallee"| 16
+  18 -->|"kind: pipe"| 19
+  20 -->|"kind: transformCallee"| 19

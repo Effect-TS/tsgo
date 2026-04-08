@@ -1,25 +1,30 @@
 flowchart TB
-  0["type: Effect#lt;#40;string #124; number#41;#91;#93;, never, never#gt;<br/>callee: #40;effect, ...args#41; =#gt; effect.pipe#40;Effect.map#40;#40;result#41; =#gt; #91;result, ...args#93;#41;#41;<br/>args: #91;#93;"]
-  1[/"type: #40;effect: Effect#lt;number, never, never#gt;, s: string#41; =#gt; Effect#lt;#40;string #124; number#41;#91;#93;, never, never#gt;<br/>node: #40;effect, ...args#41; =#gt; effect.pipe#40;Effect.map#40;#40;result#41; =#gt; #91;result, ...args#93;#41;#41;"/]
-  2[["type: #40;effect: Effect#lt;number, never, never#gt;, s: string#41; =#gt; Effect#lt;#40;string #124; number#41;#91;#93;, never, never#gt;<br/>node: #40;effect, ...args#41; =#gt; effect.pipe#40;Effect.map#40;#40;result#41; =#gt; #91;result, ...args#93;#41;#41;"]]
-  3[/"type: Effect#lt;number, never, never#gt;<br/>node: effect"/]
-  4[/"type: #91;s: string#93;<br/>node: ...args"/]
-  5((("type: Effect#lt;#40;string #124; number#41;#91;#93;, never, never#gt;<br/>node: effect.pipe#40;Effect.map#40;#40;result#41; =#gt; #91;result, ...args#93;#41;#41;")))
+  0[/"type: #40;router: HttpRouter#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.fnUntraced#40;function*#40;router#41; #123;#92;n    yield* router.add#40;#92;n      #quot;GET#quot;,#92;n      #quot;/#quot;,#92;n      Effect.fnUntraced#40;function*#40;request#41; #123;#92;n        return HttpServerResponse.empty#40;#41;#92;n      #125;#41;#92;n    #41;#92;n  #125;#41;"/]
+  1["type: Layer#lt;never, never, HttpRouter#gt;<br/>callee: HttpRouter.use<br/>args: #91;#93;"]
+  2[/"type: #lt;A, E, R#gt;#40;f: #40;router: HttpRouter#41; =#gt; Effect#lt;A, E, R#gt;#41; =#gt; Layer#lt;never, E, HttpRouter #124; Exclude#lt;R, Scope#gt;#gt;<br/>node: HttpRouter.use"/]
+  3["type: Effect#lt;#40;string #124; number#41;#91;#93;, never, never#gt;<br/>callee: #40;effect, ...args#41; =#gt; effect.pipe#40;Effect.map#40;#40;result#41; =#gt; #91;result, ...args#93;#41;#41;<br/>args: #91;#93;"]
+  4[/"type: #40;effect: Effect#lt;number, never, never#gt;, s: string#41; =#gt; Effect#lt;#40;string #124; number#41;#91;#93;, never, never#gt;<br/>node: #40;effect, ...args#41; =#gt; effect.pipe#40;Effect.map#40;#40;result#41; =#gt; #91;result, ...args#93;#41;#41;"/]
+  5[["type: #40;effect: Effect#lt;number, never, never#gt;, s: string#41; =#gt; Effect#lt;#40;string #124; number#41;#91;#93;, never, never#gt;<br/>node: #40;effect, ...args#41; =#gt; effect.pipe#40;Effect.map#40;#40;result#41; =#gt; #91;result, ...args#93;#41;#41;"]]
   6[/"type: Effect#lt;number, never, never#gt;<br/>node: effect"/]
-  7["type: Effect#lt;#40;string #124; number#41;#91;#93;, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;result#41; =#gt; #91;result, ...args#93;#93;"]
-  8[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
-  9((("type: #40;result: number#41; =#gt; #40;string #124; number#41;#91;#93;<br/>node: #40;result#41; =#gt; #91;result, ...args#93;")))
-  10[["type: #40;result: number#41; =#gt; #40;string #124; number#41;#91;#93;<br/>node: #40;result#41; =#gt; #91;result, ...args#93;"]]
-  11[/"type: number<br/>node: result"/]
-  12[/"type: #40;string #124; number#41;#91;#93;<br/>node: #91;result, ...args#93;"/]
-  1 -->|"kind: transformCallee"| 0
-  3 -->|"kind: parameter"| 2
-  4 -->|"kind: parameter"| 2
-  5 -->|"kind: potentialReturn"| 2
-  6 -->|"kind: pipe"| 7
-  7 -->|"kind: connect"| 5
-  8 -->|"kind: transformCallee"| 7
-  9 -->|"kind: transformArg"| 7
-  11 -->|"kind: parameter"| 10
-  12 -->|"kind: potentialReturn"| 10
-  10 -->|"kind: connect"| 9
+  7[/"type: #91;s: string#93;<br/>node: ...args"/]
+  8((("type: Effect#lt;#40;string #124; number#41;#91;#93;, never, never#gt;<br/>node: effect.pipe#40;Effect.map#40;#40;result#41; =#gt; #91;result, ...args#93;#41;#41;")))
+  9[/"type: Effect#lt;number, never, never#gt;<br/>node: effect"/]
+  10["type: Effect#lt;#40;string #124; number#41;#91;#93;, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;result#41; =#gt; #91;result, ...args#93;#93;"]
+  11[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  12((("type: #40;result: number#41; =#gt; #40;string #124; number#41;#91;#93;<br/>node: #40;result#41; =#gt; #91;result, ...args#93;")))
+  13[["type: #40;result: number#41; =#gt; #40;string #124; number#41;#91;#93;<br/>node: #40;result#41; =#gt; #91;result, ...args#93;"]]
+  14[/"type: number<br/>node: result"/]
+  15[/"type: #40;string #124; number#41;#91;#93;<br/>node: #91;result, ...args#93;"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1
+  4 -->|"kind: transformCallee"| 3
+  6 -->|"kind: parameter"| 5
+  7 -->|"kind: parameter"| 5
+  8 -->|"kind: potentialReturn"| 5
+  9 -->|"kind: pipe"| 10
+  10 -->|"kind: connect"| 8
+  11 -->|"kind: transformCallee"| 10
+  12 -->|"kind: transformArg"| 10
+  14 -->|"kind: parameter"| 13
+  15 -->|"kind: potentialReturn"| 13
+  13 -->|"kind: connect"| 12
