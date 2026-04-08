@@ -1,6 +1,16 @@
 flowchart TB
-  0[["type: #40;id: string#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;id: string#41; =#gt;#92;n    Effect.gen#40;function*#40;#41; #123;#92;n      yield* Effect.log#40;`Looking up user $#123;id#125;`#41;#92;n    #125;#41;"]]
-  1[/"type: string<br/>node: id: string"/]
-  2[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n      yield* Effect.log#40;`Looking up user $#123;id#125;`#41;#92;n    #125;#41;"/]
-  1 -->|"kind: parameter"| 0
-  2 -->|"kind: potentialReturn"| 0
+  0[/"type: #123; getUser: #40;id: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #123; // UserService is an Effect Tag#92;n  getUser: #40;id: string#41; =#gt;#92;n    Effect.gen#40;function*#40;#41; #123;#92;n      yield* Effect.log#40;`Looking up user $#123;id#125;`#41;#92;n    #125;#41;#92;n#125;"/]
+  1["type: #123; getUser#40;id: string#41;: Effect#lt;void, never, never#gt;; #125;<br/>callee: UserService.of<br/>args: #91;#93;"]
+  2[/"type: #40;this: void, self: #123; getUser#40;id: string#41;: Effect#lt;void, never, never#gt;; #125;#41; =#gt; #123; getUser#40;id: string#41;: Effect#lt;void, never, never#gt;; #125;<br/>node: UserService.of"/]
+  3[["type: #40;id: string#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;id: string#41; =#gt;#92;n    Effect.gen#40;function*#40;#41; #123;#92;n      yield* Effect.log#40;`Looking up user $#123;id#125;`#41;#92;n    #125;#41;"]]
+  4[/"type: string<br/>node: id: string"/]
+  5[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n      yield* Effect.log#40;`Looking up user $#123;id#125;`#41;#92;n    #125;#41;"/]
+  6[/"type: string<br/>node: `Looking up user $#123;id#125;`"/]
+  7["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  8[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1
+  4 -->|"kind: parameter"| 3
+  5 -->|"kind: potentialReturn"| 3
+  6 -->|"kind: pipe"| 7
+  8 -->|"kind: transformCallee"| 7

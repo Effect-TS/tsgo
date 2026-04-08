@@ -1,1 +1,6 @@
 flowchart TB
+  0[/"type: undefined<br/>node: undefined"/]
+  1["type: Effect#lt;undefined, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  2[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1

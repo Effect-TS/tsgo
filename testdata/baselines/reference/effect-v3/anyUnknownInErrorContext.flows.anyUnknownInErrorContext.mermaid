@@ -1,13 +1,54 @@
 flowchart TB
-  0[["type: #40;_a: Effect#lt;void, number, any#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: export function explicitAny#40;_a: Effect.Effect#lt;void, number, any#gt;#41; #123;#92;n  return Effect.succeed#40;42#41;#92;n#125;"]]
-  1[/"type: Effect#lt;void, number, any#gt;<br/>node: _a: Effect.Effect#lt;void, number, any#gt;"/]
-  2[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;42#41;"/]
-  3[/"type: Layer#lt;never, never, never#gt;<br/>node: Layer.empty"/]
-  4["type: Layer#lt;never, never, unknown#gt;<br/>callee: Layer.provide<br/>args: #91;layerUnknown#93;"]
-  5[/"type: #123; #lt;RIn, E, ROut#gt;#40;that: Layer#lt;ROut, E, RIn#gt;#41;: #lt;RIn2, E2, ROut2#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;#41; =#gt; Layer#lt;ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;const Layers extends readonly #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;that: Layers#41;: #lt;A, E, R#gt;#40;self: Layer#lt;A, E, R#gt;#41; =#gt; Layer#lt;A, E #124; #123; #91;k in keyof Layers#93;: Error#lt;Layers#91;k#93;#gt;; #125;#91;number#93;, #123; #91;k in keyof Layers#93;: Context#lt;Layers#91;k#93;#gt;; #125;#91;number#93; #124; Exclude#lt;R, #123; #91;k in keyof Layers#93;: Success#lt;Layers#91;k#93;#gt;; #125;#91;number#93;#gt;#gt;; #lt;RIn2, E2, ROut2, RIn, E, ROut#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;, that: Layer#lt;ROut, E, RIn#gt;#41;: Layer#lt;ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;A, E, R, const Layers extends readonly #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;self: Layer#lt;A, E, R#gt;, that: Layers#41;: Layer#lt;A, E #124; #123; #91;k in keyof Layers#93;: Error#lt;Layers#91;k#93;#gt;; #125;#91;number#93;, #123; #91;k in keyof Layers#93;: Context#lt;Layers#91;k#93;#gt;; #125;#91;number#93; #124; Exclude#lt;R, #123; #91;k in keyof Layers#93;: Success#lt;Layers#91;k#93;#gt;; #125;#91;number#93;#gt;#gt;; #125;<br/>node: Layer.provide"/]
-  6[/"type: Layer#lt;never, never, unknown#gt;<br/>node: layerUnknown"/]
-  1 -->|"kind: parameter"| 0
-  2 -->|"kind: potentialReturn"| 0
+  0[/"type: 42<br/>node: 42"/]
+  1["type: Effect#lt;never, any, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  2[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  3[/"type: 42<br/>node: 42"/]
+  4["type: Effect#lt;never, unknown, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  5[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  6[/"type: 42<br/>node: 42"/]
+  7["type: Effect#lt;never, any, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  8[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  9[/"type: 42<br/>node: 42"/]
+  10["type: Effect#lt;never, any, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  11[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  12[["type: #40;_a: Effect#lt;void, number, any#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: export function explicitAny#40;_a: Effect.Effect#lt;void, number, any#gt;#41; #123;#92;n  return Effect.succeed#40;42#41;#92;n#125;"]]
+  13[/"type: Effect#lt;void, number, any#gt;<br/>node: _a: Effect.Effect#lt;void, number, any#gt;"/]
+  14((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;42#41;")))
+  15[/"type: 42<br/>node: 42"/]
+  16["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  17[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  18[/"type: 42<br/>node: 42"/]
+  19["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  20[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  21[/"type: 42<br/>node: 42"/]
+  22["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  23[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  24[/"type: Effect#lt;Context#lt;unknown#gt;, never, unknown#gt;<br/>node: effectUnkown"/]
+  25["type: Layer#lt;never, never, unknown#gt;<br/>callee: Layer.effectDiscard<br/>args: #91;#93;"]
+  26[/"type: #lt;X, E, R#gt;#40;effect: Effect#lt;X, E, R#gt;#41; =#gt; Layer#lt;never, E, R#gt;<br/>node: Layer.effectDiscard"/]
+  27[/"type: Layer#lt;never, never, never#gt;<br/>node: Layer.empty"/]
+  28["type: Layer#lt;never, never, unknown#gt;<br/>callee: Layer.provide<br/>args: #91;layerUnknown#93;"]
+  29[/"type: #123; #lt;RIn, E, ROut#gt;#40;that: Layer#lt;ROut, E, RIn#gt;#41;: #lt;RIn2, E2, ROut2#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;#41; =#gt; Layer#lt;ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;const Layers extends readonly #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;that: Layers#41;: #lt;A, E, R#gt;#40;self: Layer#lt;A, E, R#gt;#41; =#gt; Layer#lt;A, E #124; #123; #91;k in keyof Layers#93;: Error#lt;Layers#91;k#93;#gt;; #125;#91;number#93;, #123; #91;k in keyof Layers#93;: Context#lt;Layers#91;k#93;#gt;; #125;#91;number#93; #124; Exclude#lt;R, #123; #91;k in keyof Layers#93;: Success#lt;Layers#91;k#93;#gt;; #125;#91;number#93;#gt;#gt;; #lt;RIn2, E2, ROut2, RIn, E, ROut#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;, that: Layer#lt;ROut, E, RIn#gt;#41;: Layer#lt;ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;A, E, R, const Layers extends readonly #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;self: Layer#lt;A, E, R#gt;, that: Layers#41;: Layer#lt;A, E #124; #123; #91;k in keyof Layers#93;: Error#lt;Layers#91;k#93;#gt;; #125;#91;number#93;, #123; #91;k in keyof Layers#93;: Context#lt;Layers#91;k#93;#gt;; #125;#91;number#93; #124; Exclude#lt;R, #123; #91;k in keyof Layers#93;: Success#lt;Layers#91;k#93;#gt;; #125;#91;number#93;#gt;#gt;; #125;<br/>node: Layer.provide"/]
+  30[/"type: Layer#lt;never, never, unknown#gt;<br/>node: layerUnknown"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1
   3 -->|"kind: pipe"| 4
   5 -->|"kind: transformCallee"| 4
-  6 -->|"kind: transformArg"| 4
+  6 -->|"kind: pipe"| 7
+  8 -->|"kind: transformCallee"| 7
+  9 -->|"kind: pipe"| 10
+  11 -->|"kind: transformCallee"| 10
+  13 -->|"kind: parameter"| 12
+  14 -->|"kind: potentialReturn"| 12
+  15 -->|"kind: pipe"| 16
+  16 -->|"kind: connect"| 14
+  17 -->|"kind: transformCallee"| 16
+  18 -->|"kind: pipe"| 19
+  20 -->|"kind: transformCallee"| 19
+  21 -->|"kind: pipe"| 22
+  23 -->|"kind: transformCallee"| 22
+  24 -->|"kind: pipe"| 25
+  26 -->|"kind: transformCallee"| 25
+  27 -->|"kind: pipe"| 28
+  29 -->|"kind: transformCallee"| 28
+  30 -->|"kind: transformArg"| 28

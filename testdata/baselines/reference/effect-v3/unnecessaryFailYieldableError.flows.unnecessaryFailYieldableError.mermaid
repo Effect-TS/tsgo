@@ -1,1 +1,36 @@
 flowchart TB
+  0[/"type: #quot;DataTaggedError#quot;<br/>node: #quot;DataTaggedError#quot;"/]
+  1["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;DataTaggedError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  2[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  3[/"type: #quot;SchemaError#quot;<br/>node: #quot;SchemaError#quot;"/]
+  4["type: #lt;Tag extends string, Fields extends Struct.Fields#gt;#40;tag: Tag, fieldsOr: Fields #124; HasFields#lt;Fields#gt;, annotations?: ClassAnnotations#lt;SchemaError, #123; #91;K in keyof Type#lt;#123; readonly _tag: tag#lt;Tag#gt;; #125; #amp; Fields#gt;#93;: Type#lt;#123; readonly _tag: tag#lt;Tag#gt;; #125; #amp; Fields#gt;#91;K#93;; #125;#gt; #124; undefined#41; =#gt; TaggedErrorClass#lt;SchemaError, Tag, #123; readonly _tag: tag#lt;Tag#gt;; #125; #amp; Fields#gt;<br/>callee: Schema.TaggedError<br/>args: #91;#93;"]
+  5[/"type: #lt;Self = never#gt;#40;identifier?: string #124; undefined#41; =#gt; #lt;Tag extends string, Fields extends Struct.Fields#gt;#40;tag: Tag, fieldsOr: Fields #124; HasFields#lt;Fields#gt;, annotations?: ClassAnnotations#lt;Self, #123; #91;K in keyof Type#lt;#123; readonly _tag: tag#lt;Tag#gt;; #125; #amp; Fields#gt;#93;: Type#lt;#123; readonly _tag: tag#lt;Tag#gt;; #125; #amp; Fields#gt;#91;K#93;; #125;#gt; #124; undefined#41; =#gt; #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends TaggedError#lt;Self#gt;#40;#41;#40;#92;#quot;Tag#92;#quot;, #123; ... #125;#41;`#quot; : TaggedErrorClass#lt;Self, Tag, #123; readonly _tag: tag#lt;Tag#gt;; #125; #amp; Fields#gt;<br/>node: Schema.TaggedError"/]
+  6[/"type: NonYieldable<br/>node: new NonYieldable#40;#quot;non-yieldable error#quot;#41;"/]
+  7["type: Effect#lt;never, NonYieldable, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  8[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  9[/"type: DataTaggedError<br/>node: err"/]
+  10["type: void<br/>callee: console.log<br/>args: #91;#93;"]
+  11[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
+  12[/"type: DataTaggedError<br/>node: new DataTaggedError#40;#41;"/]
+  13["type: Effect#lt;never, DataTaggedError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  14[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  15[/"type: SchemaError<br/>node: new SchemaError#40;#quot;schema error#quot;#41;"/]
+  16["type: Effect#lt;never, SchemaError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  17[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  18[/"type: DataTaggedError<br/>node: new DataTaggedError#40;#41;"/]
+  19["type: Effect#lt;never, DataTaggedError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  20[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1
+  3 -->|"kind: pipe"| 4
+  5 -->|"kind: transformCallee"| 4
+  6 -->|"kind: pipe"| 7
+  8 -->|"kind: transformCallee"| 7
+  9 -->|"kind: pipe"| 10
+  11 -->|"kind: transformCallee"| 10
+  12 -->|"kind: pipe"| 13
+  14 -->|"kind: transformCallee"| 13
+  15 -->|"kind: pipe"| 16
+  17 -->|"kind: transformCallee"| 16
+  18 -->|"kind: pipe"| 19
+  20 -->|"kind: transformCallee"| 19

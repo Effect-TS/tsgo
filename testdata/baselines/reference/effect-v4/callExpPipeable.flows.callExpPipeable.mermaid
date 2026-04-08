@@ -1,6 +1,41 @@
 flowchart TB
-  0[["type: #40;x: string#41; =#gt; number<br/>node: #40;x: string#41; =#gt; x.length"]]
-  1[/"type: string<br/>node: x: string"/]
-  2[/"type: number<br/>node: x.length"/]
-  1 -->|"kind: parameter"| 0
-  2 -->|"kind: potentialReturn"| 0
+  0((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;#quot;Hello, world!#quot;#41;")))
+  1["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.as<br/>args: #91;42#93;"]
+  2[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  3[/"type: 42<br/>node: 42"/]
+  4[/"type: #quot;Hello, world!#quot;<br/>node: #quot;Hello, world!#quot;"/]
+  5["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  6[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  7((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.map#40;#40;x: string#41; =#gt; x.length#41;#40;Effect.succeed#40;#quot;Hello, world!#quot;#41;#41;")))
+  8["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.as<br/>args: #91;42#93;"]
+  9[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  10[/"type: 42<br/>node: 42"/]
+  11((("type: Effect#lt;string, never, never#gt;<br/>node: Effect.succeed#40;#quot;Hello, world!#quot;#41;")))
+  12["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x: string#41; =#gt; x.length#93;"]
+  13[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  14((("type: #40;x: string#41; =#gt; number<br/>node: #40;x: string#41; =#gt; x.length")))
+  15[["type: #40;x: string#41; =#gt; number<br/>node: #40;x: string#41; =#gt; x.length"]]
+  16[/"type: string<br/>node: x: string"/]
+  17[/"type: number<br/>node: x.length"/]
+  18[/"type: #quot;Hello, world!#quot;<br/>node: #quot;Hello, world!#quot;"/]
+  19["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  20[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1
+  3 -->|"kind: transformArg"| 1
+  4 -->|"kind: pipe"| 5
+  5 -->|"kind: connect"| 0
+  6 -->|"kind: transformCallee"| 5
+  7 -->|"kind: pipe"| 8
+  9 -->|"kind: transformCallee"| 8
+  10 -->|"kind: transformArg"| 8
+  11 -->|"kind: pipe"| 12
+  12 -->|"kind: connect"| 7
+  13 -->|"kind: transformCallee"| 12
+  14 -->|"kind: transformArg"| 12
+  16 -->|"kind: parameter"| 15
+  17 -->|"kind: potentialReturn"| 15
+  15 -->|"kind: connect"| 14
+  18 -->|"kind: pipe"| 19
+  19 -->|"kind: connect"| 11
+  20 -->|"kind: transformCallee"| 19
