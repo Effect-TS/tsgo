@@ -1,1 +1,54 @@
 flowchart TB
+  0[/"type: Promise#lt;void#gt;<br/>node: Effect.runPromise#40;Effect.log#40;#quot;Hello#quot;#41;#41;"/]
+  1["type: void<br/>callee: console.log<br/>args: #91;#93;"]
+  2[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
+  3[/"type: #quot;Hello#quot;<br/>node: #quot;Hello#quot;"/]
+  4["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  5[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  6[/"type: Promise#lt;void#gt;<br/>node: Effect.runPromise#40;Effect.ignore#40;Effect.log#40;#quot;Hello#quot;#41;#41;#41;"/]
+  7["type: void<br/>callee: console.log<br/>args: #91;#93;"]
+  8[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
+  9((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;#quot;Hello#quot;#41;")))
+  10["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.ignore<br/>args: #91;#93;"]
+  11[/"type: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;void, never, R#gt;<br/>node: Effect.ignore"/]
+  12[/"type: #quot;Hello#quot;<br/>node: #quot;Hello#quot;"/]
+  13["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  14[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  15[/"type: Promise#lt;void#gt;<br/>node: Effect.runPromise#40;#92;n    Effect.ignore#40;#92;n      Effect.succeed#40;console.log#40;Effect.runPromise#40;Effect.log#40;#quot;Hello#quot;#41;#41;#41;#41;#92;n    #41;#92;n  #41;"/]
+  16["type: void<br/>callee: console.log<br/>args: #91;#93;"]
+  17[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
+  18((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.succeed#40;console.log#40;Effect.runPromise#40;Effect.log#40;#quot;Hello#quot;#41;#41;#41;#41;")))
+  19["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.ignore<br/>args: #91;#93;"]
+  20[/"type: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;void, never, R#gt;<br/>node: Effect.ignore"/]
+  21((("type: void<br/>node: console.log#40;Effect.runPromise#40;Effect.log#40;#quot;Hello#quot;#41;#41;#41;")))
+  22["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  23[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  24[/"type: Promise#lt;void#gt;<br/>node: Effect.runPromise#40;Effect.log#40;#quot;Hello#quot;#41;#41;"/]
+  25["type: void<br/>callee: console.log<br/>args: #91;#93;"]
+  26[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
+  27[/"type: #quot;Hello#quot;<br/>node: #quot;Hello#quot;"/]
+  28["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  29[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1
+  3 -->|"kind: pipe"| 4
+  5 -->|"kind: transformCallee"| 4
+  6 -->|"kind: pipe"| 7
+  8 -->|"kind: transformCallee"| 7
+  9 -->|"kind: pipe"| 10
+  11 -->|"kind: transformCallee"| 10
+  12 -->|"kind: pipe"| 13
+  13 -->|"kind: connect"| 9
+  14 -->|"kind: transformCallee"| 13
+  15 -->|"kind: pipe"| 16
+  17 -->|"kind: transformCallee"| 16
+  18 -->|"kind: pipe"| 19
+  20 -->|"kind: transformCallee"| 19
+  21 -->|"kind: pipe"| 22
+  22 -->|"kind: connect"| 18
+  23 -->|"kind: transformCallee"| 22
+  24 -->|"kind: pipe"| 25
+  25 -->|"kind: connect"| 21
+  26 -->|"kind: transformCallee"| 25
+  27 -->|"kind: pipe"| 28
+  29 -->|"kind: transformCallee"| 28

@@ -1,22 +1,27 @@
 flowchart TB
-  0[/"type: Effect#lt;#123;#125;, never, never#gt;<br/>node: this.make"/]
-  1["type: Layer#lt;A, never, never#gt;<br/>callee: Layer.effect<br/>args: #91;this#93;"]
-  2[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;S, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
-  3[/"type: typeof A<br/>node: this"/]
-  4[/"type: Effect#lt;#123;#125;, never, A#gt;<br/>node: A.asEffect#40;#41;"/]
-  5["type: Effect#lt;#123;#125;, never, A#gt;<br/>callee: Effect.as<br/>args: #91;#123;#125;#93;"]
-  6[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
-  7[/"type: #123;#125;<br/>node: #123;#125;"/]
-  8[/"type: Effect#lt;#123;#125;, never, A#gt;<br/>node: this.make"/]
-  9["type: Layer#lt;B, never, A#gt;<br/>callee: Layer.effect<br/>args: #91;this#93;"]
-  10[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;S, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
-  11[/"type: typeof B<br/>node: this"/]
-  0 -->|"kind: dataLast"| 1
+  0[/"type: #123;#125;<br/>node: #123;#125;"/]
+  1["type: Effect#lt;#123;#125;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  2[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  3[/"type: Effect#lt;#123;#125;, never, never#gt;<br/>node: this.make"/]
+  4["type: Layer#lt;A, never, never#gt;<br/>callee: Layer.effect<br/>args: #91;this#93;"]
+  5[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;S, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
+  6[/"type: typeof A<br/>node: this"/]
+  7[/"type: Effect#lt;#123;#125;, never, A#gt;<br/>node: A.asEffect#40;#41;"/]
+  8["type: Effect#lt;#123;#125;, never, A#gt;<br/>callee: Effect.as<br/>args: #91;#123;#125;#93;"]
+  9[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  10[/"type: #123;#125;<br/>node: #123;#125;"/]
+  11[/"type: Effect#lt;#123;#125;, never, A#gt;<br/>node: this.make"/]
+  12["type: Layer#lt;B, never, A#gt;<br/>callee: Layer.effect<br/>args: #91;this#93;"]
+  13[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;S, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
+  14[/"type: typeof B<br/>node: this"/]
+  0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
-  3 -->|"kind: transformArg"| 1
-  4 -->|"kind: dataFirst"| 5
-  6 -->|"kind: transformCallee"| 5
-  7 -->|"kind: transformArg"| 5
-  8 -->|"kind: dataLast"| 9
-  10 -->|"kind: transformCallee"| 9
-  11 -->|"kind: transformArg"| 9
+  3 -->|"kind: dataLast"| 4
+  5 -->|"kind: transformCallee"| 4
+  6 -->|"kind: transformArg"| 4
+  7 -->|"kind: dataFirst"| 8
+  9 -->|"kind: transformCallee"| 8
+  10 -->|"kind: transformArg"| 8
+  11 -->|"kind: dataLast"| 12
+  13 -->|"kind: transformCallee"| 12
+  14 -->|"kind: transformArg"| 12

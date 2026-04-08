@@ -2,10 +2,20 @@ flowchart TB
   0[["type: #40;layer: Layer#lt;ServiceA, never, never#gt;#41; =#gt; Layer#lt;ServiceA, never, never#gt;<br/>node: function testFn#40;layer: Layer.Layer#lt;ServiceA#gt;#41; #123;#92;n  return layer#92;n#125;"]]
   1[/"type: Layer#lt;ServiceA, never, never#gt;<br/>node: layer: Layer.Layer#lt;ServiceA#gt;"/]
   2[/"type: Layer#lt;ServiceA, never, never#gt;<br/>node: layer"/]
-  3[["type: #40;layer: Layer#lt;ServiceA, never, ServiceB#gt;#41; =#gt; Layer#lt;ServiceA, never, ServiceB#gt;<br/>node: function testFnWithServiceB#40;layer: Layer.Layer#lt;ServiceA, never, ServiceB#gt;#41; #123;#92;n  return layer#92;n#125;"]]
-  4[/"type: Layer#lt;ServiceA, never, ServiceB#gt;<br/>node: layer: Layer.Layer#lt;ServiceA, never, ServiceB#gt;"/]
-  5[/"type: Layer#lt;ServiceA, never, ServiceB#gt;<br/>node: layer"/]
+  3[/"type: Layer#lt;ServiceA, never, ServiceB #124; ServiceC#gt;<br/>node: layerWithServices"/]
+  4["type: Layer#lt;ServiceA, never, never#gt;<br/>callee: testFn<br/>args: #91;#93;"]
+  5[/"type: #40;layer: Layer#lt;ServiceA, never, never#gt;#41; =#gt; Layer#lt;ServiceA, never, never#gt;<br/>node: testFn"/]
+  6[["type: #40;layer: Layer#lt;ServiceA, never, ServiceB#gt;#41; =#gt; Layer#lt;ServiceA, never, ServiceB#gt;<br/>node: function testFnWithServiceB#40;layer: Layer.Layer#lt;ServiceA, never, ServiceB#gt;#41; #123;#92;n  return layer#92;n#125;"]]
+  7[/"type: Layer#lt;ServiceA, never, ServiceB#gt;<br/>node: layer: Layer.Layer#lt;ServiceA, never, ServiceB#gt;"/]
+  8[/"type: Layer#lt;ServiceA, never, ServiceB#gt;<br/>node: layer"/]
+  9[/"type: Layer#lt;ServiceA, never, ServiceB #124; ServiceC#gt;<br/>node: layerWithServices"/]
+  10["type: Layer#lt;ServiceA, never, ServiceB#gt;<br/>callee: testFnWithServiceB<br/>args: #91;#93;"]
+  11[/"type: #40;layer: Layer#lt;ServiceA, never, ServiceB#gt;#41; =#gt; Layer#lt;ServiceA, never, ServiceB#gt;<br/>node: testFnWithServiceB"/]
   1 -->|"kind: parameter"| 0
   2 -->|"kind: potentialReturn"| 0
-  4 -->|"kind: parameter"| 3
-  5 -->|"kind: potentialReturn"| 3
+  3 -->|"kind: pipe"| 4
+  5 -->|"kind: transformCallee"| 4
+  7 -->|"kind: parameter"| 6
+  8 -->|"kind: potentialReturn"| 6
+  9 -->|"kind: pipe"| 10
+  11 -->|"kind: transformCallee"| 10

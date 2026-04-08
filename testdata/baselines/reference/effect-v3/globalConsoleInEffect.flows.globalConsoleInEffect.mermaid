@@ -1,5 +1,46 @@
 flowchart TB
-  0[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#92;n  console.log#40;#quot;regular#quot;#41;#92;n#125;"]]
-  1[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; console.log#40;#quot;nested#quot;#41;"]]
-  2[/"type: void<br/>node: console.log#40;#quot;nested#quot;#41;"/]
-  2 -->|"kind: potentialReturn"| 1
+  0[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
+  1["type: void<br/>callee: console.log<br/>args: #91;#93;"]
+  2[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
+  3[/"type: #quot;warning#quot;<br/>node: #quot;warning#quot;"/]
+  4["type: void<br/>callee: console.warn<br/>args: #91;#93;"]
+  5[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.warn"/]
+  6[/"type: #quot;error#quot;<br/>node: #quot;error#quot;"/]
+  7["type: void<br/>callee: console.error<br/>args: #91;#93;"]
+  8[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.error"/]
+  9[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
+  10["type: void<br/>callee: myConsole.log<br/>args: #91;#93;"]
+  11[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: myConsole.log"/]
+  12[/"type: #quot;module level#quot;<br/>node: #quot;module level#quot;"/]
+  13["type: void<br/>callee: console.log<br/>args: #91;#93;"]
+  14[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
+  15[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#92;n  console.log#40;#quot;regular#quot;#41;#92;n#125;"]]
+  16[/"type: #quot;regular#quot;<br/>node: #quot;regular#quot;"/]
+  17["type: void<br/>callee: console.log<br/>args: #91;#93;"]
+  18[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
+  19[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; console.log#40;#quot;nested#quot;#41;"]]
+  20((("type: void<br/>node: console.log#40;#quot;nested#quot;#41;")))
+  21[/"type: #quot;nested#quot;<br/>node: #quot;nested#quot;"/]
+  22["type: void<br/>callee: console.log<br/>args: #91;#93;"]
+  23[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
+  24[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
+  25["type: Effect#lt;void, never, never#gt;<br/>callee: console.log<br/>args: #91;#93;"]
+  26[/"type: #40;...args: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: console.log"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1
+  3 -->|"kind: pipe"| 4
+  5 -->|"kind: transformCallee"| 4
+  6 -->|"kind: pipe"| 7
+  8 -->|"kind: transformCallee"| 7
+  9 -->|"kind: pipe"| 10
+  11 -->|"kind: transformCallee"| 10
+  12 -->|"kind: pipe"| 13
+  14 -->|"kind: transformCallee"| 13
+  16 -->|"kind: pipe"| 17
+  18 -->|"kind: transformCallee"| 17
+  20 -->|"kind: potentialReturn"| 19
+  21 -->|"kind: pipe"| 22
+  22 -->|"kind: connect"| 20
+  23 -->|"kind: transformCallee"| 22
+  24 -->|"kind: pipe"| 25
+  26 -->|"kind: transformCallee"| 25

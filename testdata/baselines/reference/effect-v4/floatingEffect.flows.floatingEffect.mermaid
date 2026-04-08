@@ -1,2 +1,17 @@
 flowchart TB
-  0[["type: any<br/>node: constructor#40;#41; #123;#92;n    this.boot = Effect.void#92;n  #125;"]]
+  0[/"type: #quot;floating#quot;<br/>node: #quot;floating#quot;"/]
+  1["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  2[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  3[/"type: #quot;error#quot;<br/>node: #quot;error#quot;"/]
+  4["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  5[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  6[/"type: 1<br/>node: 1"/]
+  7["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  8[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  9[["type: any<br/>node: constructor#40;#41; #123;#92;n    this.boot = Effect.void#92;n  #125;"]]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1
+  3 -->|"kind: pipe"| 4
+  5 -->|"kind: transformCallee"| 4
+  6 -->|"kind: pipe"| 7
+  8 -->|"kind: transformCallee"| 7

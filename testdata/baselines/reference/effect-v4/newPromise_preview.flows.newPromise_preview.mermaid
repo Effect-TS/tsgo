@@ -1,6 +1,12 @@
 flowchart TB
   0[["type: #40;resolve: #40;value: number #124; PromiseLike#lt;number#gt;#41; =#gt; void#41; =#gt; void<br/>node: #40;resolve#41; =#gt; resolve#40;1#41;"]]
   1[/"type: #40;value: number #124; PromiseLike#lt;number#gt;#41; =#gt; void<br/>node: resolve"/]
-  2[/"type: void<br/>node: resolve#40;1#41;"/]
+  2((("type: void<br/>node: resolve#40;1#41;")))
+  3[/"type: 1<br/>node: 1"/]
+  4["type: void<br/>callee: resolve<br/>args: #91;#93;"]
+  5[/"type: #40;value: number #124; PromiseLike#lt;number#gt;#41; =#gt; void<br/>node: resolve"/]
   1 -->|"kind: parameter"| 0
   2 -->|"kind: potentialReturn"| 0
+  3 -->|"kind: pipe"| 4
+  4 -->|"kind: connect"| 2
+  5 -->|"kind: transformCallee"| 4

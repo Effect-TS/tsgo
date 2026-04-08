@@ -1,12 +1,50 @@
 flowchart TB
-  0[["type: #lt;A#gt;#40;f: #40;#41; =#gt; A#41; =#gt; A<br/>node: function lazy#lt;A#gt;#40;f: #40;#41; =#gt; A#41; #123;#92;n  return f#40;#41;#92;n#125;"]]
-  1[/"type: #40;#41; =#gt; A<br/>node: f: #40;#41; =#gt; A"/]
-  2[/"type: A<br/>node: f#40;#41;"/]
-  3[["type: #40;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;#41; =#gt; #123;#92;n    return Effect.succeed#40;#quot;success#quot;#41;#92;n  #125;"]]
-  4[/"type: Effect#lt;string, never, never#gt;<br/>node: Effect.succeed#40;#quot;success#quot;#41;"/]
-  5[["type: Effect#lt;never, string, never#gt;<br/>node: get value#40;#41; #123;#92;n      return Effect.fail#40;#quot;error#quot;#41;#92;n    #125;"]]
-  6[/"type: Effect#lt;never, string, never#gt;<br/>node: Effect.fail#40;#quot;error#quot;#41;"/]
-  1 -->|"kind: parameter"| 0
-  2 -->|"kind: potentialReturn"| 0
-  4 -->|"kind: potentialReturn"| 3
-  6 -->|"kind: potentialReturn"| 5
+  0[/"type: #quot;about to fail#quot;<br/>node: #quot;about to fail#quot;"/]
+  1["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  2[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  3[/"type: #quot;error#quot;<br/>node: #quot;error#quot;"/]
+  4["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  5[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  6[["type: #lt;A#gt;#40;f: #40;#41; =#gt; A#41; =#gt; A<br/>node: function lazy#lt;A#gt;#40;f: #40;#41; =#gt; A#41; #123;#92;n  return f#40;#41;#92;n#125;"]]
+  7[/"type: #40;#41; =#gt; A<br/>node: f: #40;#41; =#gt; A"/]
+  8[/"type: A<br/>node: f#40;#41;"/]
+  9[/"type: #quot;about to fail#quot;<br/>node: #quot;about to fail#quot;"/]
+  10["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  11[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  12((("type: #40;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;#41; =#gt; #123;#92;n    return Effect.succeed#40;#quot;success#quot;#41;#92;n  #125;")))
+  13["type: Effect#lt;string, never, never#gt;<br/>callee: lazy<br/>args: #91;#93;"]
+  14[/"type: #lt;A#gt;#40;f: #40;#41; =#gt; A#41; =#gt; A<br/>node: lazy"/]
+  15[["type: #40;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;#41; =#gt; #123;#92;n    return Effect.succeed#40;#quot;success#quot;#41;#92;n  #125;"]]
+  16((("type: Effect#lt;string, never, never#gt;<br/>node: Effect.succeed#40;#quot;success#quot;#41;")))
+  17[/"type: #quot;success#quot;<br/>node: #quot;success#quot;"/]
+  18["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  19[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  20[["type: Effect#lt;never, string, never#gt;<br/>node: get value#40;#41; #123;#92;n      return Effect.fail#40;#quot;error#quot;#41;#92;n    #125;"]]
+  21((("type: Effect#lt;never, string, never#gt;<br/>node: Effect.fail#40;#quot;error#quot;#41;")))
+  22[/"type: #quot;error#quot;<br/>node: #quot;error#quot;"/]
+  23["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  24[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  25[/"type: #quot;about to fail#quot;<br/>node: #quot;about to fail#quot;"/]
+  26["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  27[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1
+  3 -->|"kind: pipe"| 4
+  5 -->|"kind: transformCallee"| 4
+  7 -->|"kind: parameter"| 6
+  8 -->|"kind: potentialReturn"| 6
+  9 -->|"kind: pipe"| 10
+  11 -->|"kind: transformCallee"| 10
+  12 -->|"kind: pipe"| 13
+  14 -->|"kind: transformCallee"| 13
+  16 -->|"kind: potentialReturn"| 15
+  15 -->|"kind: connect"| 12
+  17 -->|"kind: pipe"| 18
+  18 -->|"kind: connect"| 16
+  19 -->|"kind: transformCallee"| 18
+  21 -->|"kind: potentialReturn"| 20
+  22 -->|"kind: pipe"| 23
+  23 -->|"kind: connect"| 21
+  24 -->|"kind: transformCallee"| 23
+  25 -->|"kind: pipe"| 26
+  27 -->|"kind: transformCallee"| 26
