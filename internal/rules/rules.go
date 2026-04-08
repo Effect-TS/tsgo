@@ -61,6 +61,7 @@ var All = []rule.Rule{
 	MissingEffectServiceDependency,
 	LeakingRequirements,
 	LazyPromiseInEffectSync,
+	NestedEffectGenYield,
 	InstanceOfSchema,
 	GenericEffectServices,
 	OverriddenSchemaConstructor,

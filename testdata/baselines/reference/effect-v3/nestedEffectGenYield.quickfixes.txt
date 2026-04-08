@@ -1,0 +1,286 @@
+=== Quick Fix Inventory ===
+
+[D1] (5:10-7:5) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D2] (5:10-7:5) TS377083: This `yield*` is applied to a nested `Effect.gen(...)` that can be inlined in the parent Effect generator context. effect(nestedEffectGenYield)
+  Fix 0: "Disable nestedEffectGenYield for this line"
+  Fix 1: "Disable nestedEffectGenYield for entire file"
+
+[D3] (15:10-17:5) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D4] (15:10-17:5) TS377083: This `yield*` is applied to a nested `Effect.gen(...)` that can be inlined in the parent Effect generator context. effect(nestedEffectGenYield)
+  Fix 0: "Disable nestedEffectGenYield for this line"
+  Fix 1: "Disable nestedEffectGenYield for entire file"
+
+[D5] (21:10-23:5) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D6] (21:10-23:5) TS377083: This `yield*` is applied to a nested `Effect.gen(...)` that can be inlined in the parent Effect generator context. effect(nestedEffectGenYield)
+  Fix 0: "Disable nestedEffectGenYield for this line"
+  Fix 1: "Disable nestedEffectGenYield for entire file"
+
+[D7] (28:3-32:5) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D8] (29:11-31:6) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D9] (29:11-31:6) TS377083: This `yield*` is applied to a nested `Effect.gen(...)` that can be inlined in the parent Effect generator context. effect(nestedEffectGenYield)
+  Fix 0: "Disable nestedEffectGenYield for this line"
+  Fix 1: "Disable nestedEffectGenYield for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/nestedEffectGenYield.ts ---
+// @effect-diagnostics nestedEffectGenYield:warning
+import * as Effect from "effect/Effect"
+
+export const inEffectGen = Effect.gen(function*() {
+	 yield* Effect.asVoid(Effect.succeed(1))
+
+	 yield* Effect.gen(function*() {
+	 	return 2
+	 }).pipe(Effect.asVoid)
+})
+
+export const inEffectFn = Effect.fn("inEffectFn")(function*() {
+	 yield* Effect.gen(function*() {
+	 	yield* Effect.succeed(1)
+	 })
+})
+
+export const inEffectFnUntraced = Effect.fnUntraced(function*() {
+	 yield* Effect.gen(function*() {
+	 	yield* Effect.succeed(1)
+	 })
+})
+
+export const nestedRegularFunction = Effect.gen(function*() {
+	const deferred = () =>
+		Effect.gen(function*() {
+			yield* Effect.gen(function*() {
+				yield* Effect.succeed(1)
+			})
+		})
+
+	return deferred
+})
+
+
+=== [D2] Fix 0: "Disable nestedEffectGenYield for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable nestedEffectGenYield for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/nestedEffectGenYield.ts ---
+// @effect-diagnostics nestedEffectGenYield:warning
+import * as Effect from "effect/Effect"
+
+export const inEffectGen = Effect.gen(function*() {
+	 yield* Effect.gen(function*() {
+	 	yield* Effect.succeed(1)
+	 })
+
+	 yield* Effect.gen(function*() {
+	 	return 2
+	 }).pipe(Effect.asVoid)
+})
+
+export const inEffectFn = Effect.fn("inEffectFn")(function*() {
+	 yield* Effect.asVoid(Effect.succeed(1))
+})
+
+export const inEffectFnUntraced = Effect.fnUntraced(function*() {
+	 yield* Effect.gen(function*() {
+	 	yield* Effect.succeed(1)
+	 })
+})
+
+export const nestedRegularFunction = Effect.gen(function*() {
+	const deferred = () =>
+		Effect.gen(function*() {
+			yield* Effect.gen(function*() {
+				yield* Effect.succeed(1)
+			})
+		})
+
+	return deferred
+})
+
+
+=== [D4] Fix 0: "Disable nestedEffectGenYield for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable nestedEffectGenYield for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/nestedEffectGenYield.ts ---
+// @effect-diagnostics nestedEffectGenYield:warning
+import * as Effect from "effect/Effect"
+
+export const inEffectGen = Effect.gen(function*() {
+	 yield* Effect.gen(function*() {
+	 	yield* Effect.succeed(1)
+	 })
+
+	 yield* Effect.gen(function*() {
+	 	return 2
+	 }).pipe(Effect.asVoid)
+})
+
+export const inEffectFn = Effect.fn("inEffectFn")(function*() {
+	 yield* Effect.gen(function*() {
+	 	yield* Effect.succeed(1)
+	 })
+})
+
+export const inEffectFnUntraced = Effect.fnUntraced(function*() {
+	 yield* Effect.asVoid(Effect.succeed(1))
+})
+
+export const nestedRegularFunction = Effect.gen(function*() {
+	const deferred = () =>
+		Effect.gen(function*() {
+			yield* Effect.gen(function*() {
+				yield* Effect.succeed(1)
+			})
+		})
+
+	return deferred
+})
+
+
+=== [D6] Fix 0: "Disable nestedEffectGenYield for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable nestedEffectGenYield for entire file" ===
+skipped by default
+
+=== [D7] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D7] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/nestedEffectGenYield.ts ---
+// @effect-diagnostics nestedEffectGenYield:warning
+import * as Effect from "effect/Effect"
+
+export const inEffectGen = Effect.gen(function*() {
+	 yield* Effect.gen(function*() {
+	 	yield* Effect.succeed(1)
+	 })
+
+	 yield* Effect.gen(function*() {
+	 	return 2
+	 }).pipe(Effect.asVoid)
+})
+
+export const inEffectFn = Effect.fn("inEffectFn")(function*() {
+	 yield* Effect.gen(function*() {
+	 	yield* Effect.succeed(1)
+	 })
+})
+
+export const inEffectFnUntraced = Effect.fnUntraced(function*() {
+	 yield* Effect.gen(function*() {
+	 	yield* Effect.succeed(1)
+	 })
+})
+
+export const nestedRegularFunction = Effect.gen(function*() {
+	const deferred = () => Effect.gen(function*() {
+				yield* Effect.succeed(1)
+			})
+
+	return deferred
+})
+
+
+=== [D8] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D8] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/nestedEffectGenYield.ts ---
+// @effect-diagnostics nestedEffectGenYield:warning
+import * as Effect from "effect/Effect"
+
+export const inEffectGen = Effect.gen(function*() {
+	 yield* Effect.gen(function*() {
+	 	yield* Effect.succeed(1)
+	 })
+
+	 yield* Effect.gen(function*() {
+	 	return 2
+	 }).pipe(Effect.asVoid)
+})
+
+export const inEffectFn = Effect.fn("inEffectFn")(function*() {
+	 yield* Effect.gen(function*() {
+	 	yield* Effect.succeed(1)
+	 })
+})
+
+export const inEffectFnUntraced = Effect.fnUntraced(function*() {
+	 yield* Effect.gen(function*() {
+	 	yield* Effect.succeed(1)
+	 })
+})
+
+export const nestedRegularFunction = Effect.gen(function*() {
+	const deferred = () => Effect.gen(function*() {
+				yield* Effect.succeed(1)
+			})
+
+	return deferred
+})
+
+
+=== [D9] Fix 0: "Disable nestedEffectGenYield for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable nestedEffectGenYield for entire file" ===
+skipped by default

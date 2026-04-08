@@ -303,6 +303,10 @@
         "category": "Warning",
         "code": 377082
     },
+    "This `yield*` is applied to a nested `Effect.gen(...)` that can be inlined in the parent Effect generator context. effect(nestedEffectGenYield)": {
+        "category": "Warning",
+        "code": 377083
+    },
     "This code declares an async function, consider representing this async control flow with Effect values and `Effect.gen`. effect(asyncFunction)": {
         "category": "Warning",
         "code": 377081
