@@ -1889,6 +1889,11 @@
           "default": "off",
           "description": "Warns when constructing promises with new Promise instead of using Effect APIs"
         },
+        "nestedEffectGenYield": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Warns when yielding a nested bare Effect.gen inside an existing Effect generator context"
+        },
         "nodeBuiltinImport": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",

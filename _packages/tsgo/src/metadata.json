@@ -1476,6 +1476,30 @@
       }
     },
     {
+      "name": "nestedEffectGenYield",
+      "group": "style",
+      "description": "Warns when yielding a nested bare Effect.gen inside an existing Effect generator context",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377083
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.gen(function*() {\n\tyield* Effect.gen(function*() {\n\t\treturn 1\n\t})\n})\n",
+        "diagnostics": [
+          {
+            "start": 89,
+            "end": 128,
+            "text": "This `yield*` is applied to a nested `Effect.gen(...)` that can be inlined in the parent Effect generator context. effect(nestedEffectGenYield)"
+          }
+        ]
+      }
+    },
+    {
       "name": "redundantSchemaTagIdentifier",
       "group": "style",
       "description": "Suggests removing redundant identifier argument when it equals the tag value in Schema.TaggedClass/TaggedError/TaggedRequest",

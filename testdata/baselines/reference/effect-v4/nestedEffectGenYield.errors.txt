@@ -1,0 +1,89 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/nestedEffectGenYield.ts(5,9): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/nestedEffectGenYield.ts(5,9): warning TS377083: This `yield*` is applied to a nested `Effect.gen(...)` that can be inlined in the parent Effect generator context. effect(nestedEffectGenYield)
+/.src/nestedEffectGenYield.ts(15,9): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/nestedEffectGenYield.ts(15,9): warning TS377083: This `yield*` is applied to a nested `Effect.gen(...)` that can be inlined in the parent Effect generator context. effect(nestedEffectGenYield)
+/.src/nestedEffectGenYield.ts(21,9): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/nestedEffectGenYield.ts(21,9): warning TS377083: This `yield*` is applied to a nested `Effect.gen(...)` that can be inlined in the parent Effect generator context. effect(nestedEffectGenYield)
+/.src/nestedEffectGenYield.ts(28,3): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/nestedEffectGenYield.ts(29,11): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/nestedEffectGenYield.ts(29,11): warning TS377083: This `yield*` is applied to a nested `Effect.gen(...)` that can be inlined in the parent Effect generator context. effect(nestedEffectGenYield)
+
+
+==== /.src/nestedEffectGenYield.ts (9 errors) ====
+    // @effect-diagnostics nestedEffectGenYield:warning
+    import { Effect } from "effect"
+    
+    export const inEffectGen = Effect.gen(function*() {
+    	yield* Effect.gen(function*() {
+    	       ~~~~~~~~~~~~~~~~~~~~~~~~
+    	       ~~~~~~~~~~~~~~~~~~~~~~~~
+    		yield* Effect.succeed(1)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    	})
+    ~~~
+!!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+    ~~~
+!!! warning TS377083: This `yield*` is applied to a nested `Effect.gen(...)` that can be inlined in the parent Effect generator context. effect(nestedEffectGenYield)
+    
+    	yield* Effect.gen(function*() {
+    		return 2
+    	}).pipe(Effect.asVoid)
+    })
+    
+    export const inEffectFn = Effect.fn("inEffectFn")(function*() {
+    	yield* Effect.gen(function*() {
+    	       ~~~~~~~~~~~~~~~~~~~~~~~~
+    	       ~~~~~~~~~~~~~~~~~~~~~~~~
+    		yield* Effect.succeed(1)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    	})
+    ~~~
+!!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+    ~~~
+!!! warning TS377083: This `yield*` is applied to a nested `Effect.gen(...)` that can be inlined in the parent Effect generator context. effect(nestedEffectGenYield)
+    })
+    
+    export const inEffectFnUntraced = Effect.fnUntraced(function*() {
+    	yield* Effect.gen(function*() {
+    	       ~~~~~~~~~~~~~~~~~~~~~~~~
+    	       ~~~~~~~~~~~~~~~~~~~~~~~~
+    		yield* Effect.succeed(1)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    	})
+    ~~~
+!!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+    ~~~
+!!! warning TS377083: This `yield*` is applied to a nested `Effect.gen(...)` that can be inlined in the parent Effect generator context. effect(nestedEffectGenYield)
+    })
+    
+    export const nestedRegularFunction = Effect.gen(function*() {
+    	const deferred = () =>
+    		Effect.gen(function*() {
+    		~~~~~~~~~~~~~~~~~~~~~~~~
+    			yield* Effect.gen(function*() {
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    			       ~~~~~~~~~~~~~~~~~~~~~~~~
+    			       ~~~~~~~~~~~~~~~~~~~~~~~~
+    				yield* Effect.succeed(1)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    			})
+    ~~~~~
+    ~~~~~
+!!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+    ~~~~~
+!!! warning TS377083: This `yield*` is applied to a nested `Effect.gen(...)` that can be inlined in the parent Effect generator context. effect(nestedEffectGenYield)
+    		})
+    ~~~~
+!!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+    
+    	return deferred
+    })
+    
