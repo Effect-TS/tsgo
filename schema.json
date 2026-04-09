@@ -1709,6 +1709,11 @@
           "default": "warning",
           "description": "Warns when multiple versions of an Effect-related package are detected in the program"
         },
+        "effectDoNotation": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Suggests using Effect.gen or Effect.fn instead of the Effect.Do notation helpers"
+        },
         "effectFnIife": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "warning",
@@ -1884,15 +1889,15 @@
           "default": "warning",
           "description": "Warns against chaining Effect.provide calls which can cause service lifecycle issues"
         },
-        "newPromise": {
-          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
-          "default": "off",
-          "description": "Warns when constructing promises with new Promise instead of using Effect APIs"
-        },
         "nestedEffectGenYield": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
           "description": "Warns when yielding a nested bare Effect.gen inside an existing Effect generator context"
+        },
+        "newPromise": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Warns when constructing promises with new Promise instead of using Effect APIs"
         },
         "nodeBuiltinImport": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",

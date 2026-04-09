@@ -73,6 +73,7 @@ var All = []rule.Rule{
 	DeterministicKeys,
 	MissedPipeableOpportunity,
 	DuplicatePackage,
+	EffectDoNotation,
 	ExtendsNativeError,
 	NodeBuiltinImport,
 	NewPromise,

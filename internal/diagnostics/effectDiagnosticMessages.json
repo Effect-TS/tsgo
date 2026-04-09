@@ -311,6 +311,10 @@
         "category": "Warning",
         "code": 377084
     },
+    "This uses the Effect do emulation. `Effect.gen` or `Effect.fn` achieve the same result with native JS scopes. effect(effectDoNotation)": {
+        "category": "Warning",
+        "code": 377085
+    },
     "This code declares an async function, consider representing this async control flow with Effect values and `Effect.gen`. effect(asyncFunction)": {
         "category": "Warning",
         "code": 377081
