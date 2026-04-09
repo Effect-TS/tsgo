@@ -228,3 +228,7 @@ func (noopProjectClient) RefreshCodeLens(_ context.Context) error { return nil }
 func (noopProjectClient) ProgressStart(_ *diagnostics.Message, _ ...any) {}
 
 func (noopProjectClient) ProgressFinish(_ *diagnostics.Message, _ ...any) {}
+
+func (noopProjectClient) SendTelemetry(_ context.Context, _ lsproto.TelemetryEvent) error { return nil }
+
+func (noopProjectClient) IsActive() bool { return true }
