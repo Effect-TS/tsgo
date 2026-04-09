@@ -315,6 +315,10 @@
         "category": "Warning",
         "code": 377085
     },
+    "`Effect.map` + `Effect.flatten` is the same as `Effect.flatMap` that expresses the same steps more directly. effect(effectMapFlatten)": {
+        "category": "Warning",
+        "code": 377086
+    },
     "This code declares an async function, consider representing this async control flow with Effect values and `Effect.gen`. effect(asyncFunction)": {
         "category": "Warning",
         "code": 377081

@@ -74,6 +74,7 @@ var All = []rule.Rule{
 	MissedPipeableOpportunity,
 	DuplicatePackage,
 	EffectDoNotation,
+	EffectMapFlatten,
 	ExtendsNativeError,
 	NodeBuiltinImport,
 	NewPromise,

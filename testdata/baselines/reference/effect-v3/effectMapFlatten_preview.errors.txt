@@ -1,0 +1,18 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/effectMapFlatten_preview.ts(7,3): warning TS377086: `Effect.map` + `Effect.flatten` is the same as `Effect.flatMap` that expresses the same steps more directly. effect(effectMapFlatten)
+
+
+==== /.src/effectMapFlatten_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics effectMapFlatten:warning
+    import { Effect } from "effect"
+    
+    export const preview = Effect.succeed(1).pipe(
+      Effect.map((n) => Effect.succeed(n + 1)),
+      Effect.flatten
+      ~~~~~~~~~~~~~~
+!!! warning TS377086: `Effect.map` + `Effect.flatten` is the same as `Effect.flatMap` that expresses the same steps more directly. effect(effectMapFlatten)
+    )
+    

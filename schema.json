@@ -1744,6 +1744,11 @@
           "default": "warning",
           "description": "Detects nested Effects in void success channels that may cause unexecuted effects"
         },
+        "effectMapFlatten": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests using Effect.flatMap instead of Effect.map followed by Effect.flatten in piping flows"
+        },
         "effectMapVoid": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
