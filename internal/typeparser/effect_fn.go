@@ -98,22 +98,6 @@ func isGeneratorFunctionNode(node *ast.Node) bool {
 	return fn != nil && fn.AsteriskToken != nil
 }
 
-func (tp *TypeParser) buildEffectFnFunctionReturnType(bodyArg *ast.Node) *checker.Type {
-	if tp == nil || tp.checker == nil || bodyArg == nil {
-		return nil
-	}
-
-	functionType := tp.GetTypeAtLocation(bodyArg)
-	if functionType == nil {
-		return nil
-	}
-	callSigs := tp.checker.GetSignaturesOfType(functionType, checker.SignatureKindCall)
-	if len(callSigs) == 0 {
-		return nil
-	}
-	return tp.checker.GetReturnTypeOfSignature(callSigs[0])
-}
-
 func (tp *TypeParser) buildEffectFnPipeArgsOutType(call *ast.CallExpression, trailingStartIndex int, pipeArgs []*ast.Node) []*checker.Type {
 	outTypes := make([]*checker.Type, len(pipeArgs))
 	if tp == nil || tp.checker == nil || call == nil {
@@ -135,6 +119,46 @@ func (tp *TypeParser) buildEffectFnPipeArgsOutType(call *ast.CallExpression, tra
 	}
 
 	return outTypes
+}
+
+func (tp *TypeParser) buildEffectFnFunctionReturnType(call *ast.CallExpression, trailingStartIndex int, pipeArgs []*ast.Node) *checker.Type {
+	if tp == nil || tp.checker == nil || call == nil {
+		return nil
+	}
+
+	if len(pipeArgs) == 0 {
+		fnType := tp.GetTypeAtLocation(call.AsNode())
+		if fnType == nil {
+			return nil
+		}
+		callSigs := tp.checker.GetSignaturesOfType(fnType, checker.SignatureKindCall)
+		if len(callSigs) == 0 {
+			return nil
+		}
+		return tp.checker.GetReturnTypeOfSignature(callSigs[0])
+	}
+
+	resolved := tp.checker.GetResolvedSignature(call.AsNode())
+	if resolved == nil {
+		return nil
+	}
+	params := resolved.Parameters()
+	if trailingStartIndex >= len(params) {
+		return nil
+	}
+	firstPipeParamType := tp.checker.GetTypeOfSymbolAtLocation(params[trailingStartIndex], pipeArgs[0])
+	if firstPipeParamType == nil {
+		return nil
+	}
+	firstPipeCallSigs := tp.checker.GetSignaturesOfType(firstPipeParamType, checker.SignatureKindCall)
+	if len(firstPipeCallSigs) == 0 {
+		return nil
+	}
+	pipeInputParams := firstPipeCallSigs[0].Parameters()
+	if len(pipeInputParams) == 0 {
+		return nil
+	}
+	return tp.checker.GetTypeOfSymbolAtLocation(pipeInputParams[0], pipeArgs[0])
 }
 
 // EffectFnCall parses a node as an Effect.fn-family call.
@@ -215,7 +239,7 @@ func (tp *TypeParser) EffectFnCall(node *ast.Node) *EffectFnCallResult {
 			EffectModule:       propertyAccess.Expression,
 			OptionsNode:        optionsNode,
 			FunctionNode:       bodyArg,
-			FunctionReturnType: tp.buildEffectFnFunctionReturnType(bodyArg),
+			FunctionReturnType: tp.buildEffectFnFunctionReturnType(call, trailingStartIndex, pipeArgs),
 			PipeArguments:      pipeArgs,
 			PipeArgsOutType:    tp.buildEffectFnPipeArgsOutType(call, trailingStartIndex, pipeArgs),
 			TraceExpression:    traceExpression,

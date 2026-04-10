@@ -1,7 +1,9 @@
 flowchart TB
   0[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;https://example.com/regular#quot;#41;"]]
   1[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;https://example.com/regular#quot;#41;"/]
-  2[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;https://example.com/nested#quot;#41;"]]
-  3[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;https://example.com/nested#quot;#41;"/]
+  2((("type: Effect#lt;void, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  fetch#40;#quot;https://example.com/in-gen#quot;#41;#92;n#125;")))
+  3((("type: Effect#lt;#40;#41; =#gt; Promise#lt;Response#gt;, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  const fn = #40;#41; =#gt; fetch#40;#quot;https://example.com/nested#quot;#41;#92;n  return fn#92;n#125;")))
+  4[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;https://example.com/nested#quot;#41;"]]
+  5[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;https://example.com/nested#quot;#41;"/]
   1 -->|"kind: potentialReturn"| 0
-  3 -->|"kind: potentialReturn"| 2
+  5 -->|"kind: potentialReturn"| 4

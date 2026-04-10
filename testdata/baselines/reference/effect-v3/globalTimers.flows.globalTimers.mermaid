@@ -1,18 +1,32 @@
 flowchart TB
   0[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#125;"]]
-  1[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; setInterval#40;#40;#41; =#gt; #123;#125;, 100#41;"]]
-  2[/"type: number<br/>node: setInterval#40;#40;#41; =#gt; #123;#125;, 100#41;"/]
-  3[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#125;"]]
+  1((("type: void<br/>node: #40;#41; =#gt; #123;#125;")))
+  2[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; setInterval#40;#40;#41; =#gt; #123;#125;, 100#41;"]]
+  3[/"type: number<br/>node: setInterval#40;#40;#41; =#gt; #123;#125;, 100#41;"/]
   4[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#125;"]]
-  5[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#125;"]]
-  6[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; setInterval#40;#40;#41; =#gt; #123;#125;, 100#41;"]]
-  7[/"type: number<br/>node: setInterval#40;#40;#41; =#gt; #123;#125;, 100#41;"/]
-  8[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#125;"]]
-  9[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; #123;#92;n  const setTimeout = #40;#41; =#gt; 0#92;n  return setTimeout#40;#41;#92;n#125;"]]
-  10[/"type: number<br/>node: setTimeout#40;#41;"/]
-  11[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; 0"]]
-  12[/"type: 0<br/>node: 0"/]
-  2 -->|"kind: potentialReturn"| 1
+  5((("type: void<br/>node: #40;#41; =#gt; #123;#125;")))
+  6[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#125;"]]
+  7((("type: void<br/>node: #40;#41; =#gt; #123;#125;")))
+  8((("type: Effect#lt;number, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  return setTimeout#40;#40;#41; =#gt; #123;#125;, 100#41;#92;n#125;")))
+  9[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#125;"]]
+  10((("type: void<br/>node: #40;#41; =#gt; #123;#125;")))
+  11((("type: Effect#lt;#40;#41; =#gt; number, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  const fn = #40;#41; =#gt; setInterval#40;#40;#41; =#gt; #123;#125;, 100#41;#92;n  return fn#92;n#125;")))
+  12[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; setInterval#40;#40;#41; =#gt; #123;#125;, 100#41;"]]
+  13[/"type: number<br/>node: setInterval#40;#40;#41; =#gt; #123;#125;, 100#41;"/]
+  14[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#125;"]]
+  15((("type: void<br/>node: #40;#41; =#gt; #123;#125;")))
+  16[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; #123;#92;n  const setTimeout = #40;#41; =#gt; 0#92;n  return setTimeout#40;#41;#92;n#125;"]]
+  17((("type: number<br/>node: #40;#41; =#gt; #123;#92;n  const setTimeout = #40;#41; =#gt; 0#92;n  return setTimeout#40;#41;#92;n#125;")))
+  18[/"type: number<br/>node: setTimeout#40;#41;"/]
+  19[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; 0"]]
+  20[/"type: 0<br/>node: 0"/]
+  1 -->|"kind: potentialReturn"| 0
+  3 -->|"kind: potentialReturn"| 2
+  5 -->|"kind: potentialReturn"| 4
   7 -->|"kind: potentialReturn"| 6
   10 -->|"kind: potentialReturn"| 9
-  12 -->|"kind: potentialReturn"| 11
+  13 -->|"kind: potentialReturn"| 12
+  15 -->|"kind: potentialReturn"| 14
+  18 -->|"kind: potentialReturn"| 17
+  17 -->|"kind: potentialReturn"| 16
+  20 -->|"kind: potentialReturn"| 19

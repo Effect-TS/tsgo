@@ -1,4 +1,5 @@
 {
+  "ExtraFunctions": ["forEachYieldExpression"],
   "ExtraMethods": {
     "Checker": ["isTypeAssignableTo", "isArrayType", "isReadonlyArrayType", "getIndexInfosOfType", "getTypeArguments", "getLiteralTypeFromProperty", "getSymbolIfSameReference", "getSymbolOfDeclaration", "isSignatureAssignableTo", "isReferenceToType", "newFunctionType", "newCallSignature"]
   },

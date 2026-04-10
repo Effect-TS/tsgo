@@ -8,14 +8,17 @@ flowchart TB
   6[/"type: typeof DatabaseContext<br/>node: this"/]
   7((("type: Layer#lt;never, never, DatabaseContext#gt;<br/>node: Layer.effectDiscard#40;Effect.gen#40;function*#40;#41; #123;#92;n  const databaseContext = yield* DatabaseContext.asEffect#40;#41;#92;n#92;n  return yield* Effect.log#40;databaseContext.value#41;#92;n#125;#41;#41;")))
   8["type: Layer#lt;never, never, never#gt;<br/>callee: Layer.provide<br/>args: #91;DatabaseContext.Default#93;"]
-  9[/"type: Effect#lt;void, never, DatabaseContext#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const databaseContext = yield* DatabaseContext.asEffect#40;#41;#92;n#92;n  return yield* Effect.log#40;databaseContext.value#41;#92;n#125;#41;"/]
+  9((("type: Effect#lt;void, never, DatabaseContext#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const databaseContext = yield* DatabaseContext.asEffect#40;#41;#92;n#92;n  return yield* Effect.log#40;databaseContext.value#41;#92;n#125;#41;")))
   10["type: Layer#lt;never, never, DatabaseContext#gt;<br/>callee: Layer.effectDiscard<br/>args: #91;#93;"]
   11[/"type: #lt;X, E, R#gt;#40;effect: Effect#lt;X, E, R#gt;#41; =#gt; Layer#lt;never, E, Exclude#lt;R, Scope#gt;#gt;<br/>node: Layer.effectDiscard"/]
-  12[/"type: #quot;DatabaseContext#quot;<br/>node: databaseContext.value"/]
-  13["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
-  14[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
-  15[/"type: #123; #lt;RIn, E, ROut#gt;#40;that: Layer#lt;ROut, E, RIn#gt;#41;: #lt;RIn2, E2, ROut2#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;#41; =#gt; Layer#lt;ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;const Layers extends #91;Any, ...Array#lt;Any#gt;#93;#gt;#40;that: Layers#41;: #lt;A, E, R#gt;#40;self: Layer#lt;A, E, R#gt;#41; =#gt; Layer#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;RIn2, E2, ROut2, RIn, E, ROut#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;, that: Layer#lt;ROut, E, RIn#gt;#41;: Layer#lt;ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;A, E, R, const Layers extends #91;Any, ...Array#lt;Any#gt;#93;#gt;#40;self: Layer#lt;A, E, R#gt;, that: Layers#41;: Layer#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #125;<br/>node: Layer.provide"/]
-  16[/"type: Layer#lt;DatabaseContext, never, never#gt;<br/>node: DatabaseContext.Default"/]
+  12((("type: Effect#lt;void, never, DatabaseContext#gt;<br/>node: function*#40;#41; #123;#92;n  const databaseContext = yield* DatabaseContext.asEffect#40;#41;#92;n#92;n  return yield* Effect.log#40;databaseContext.value#41;#92;n#125;")))
+  13[/"type: Effect#lt;#123; value: #quot;DatabaseContext#quot;; #125;, never, DatabaseContext#gt;<br/>node: DatabaseContext.asEffect#40;#41;"/]
+  14((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;databaseContext.value#41;")))
+  15[/"type: #quot;DatabaseContext#quot;<br/>node: databaseContext.value"/]
+  16["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  17[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  18[/"type: #123; #lt;RIn, E, ROut#gt;#40;that: Layer#lt;ROut, E, RIn#gt;#41;: #lt;RIn2, E2, ROut2#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;#41; =#gt; Layer#lt;ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;const Layers extends #91;Any, ...Array#lt;Any#gt;#93;#gt;#40;that: Layers#41;: #lt;A, E, R#gt;#40;self: Layer#lt;A, E, R#gt;#41; =#gt; Layer#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;RIn2, E2, ROut2, RIn, E, ROut#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;, that: Layer#lt;ROut, E, RIn#gt;#41;: Layer#lt;ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;A, E, R, const Layers extends #91;Any, ...Array#lt;Any#gt;#93;#gt;#40;self: Layer#lt;A, E, R#gt;, that: Layers#41;: Layer#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #125;<br/>node: Layer.provide"/]
+  19[/"type: Layer#lt;DatabaseContext, never, never#gt;<br/>node: DatabaseContext.Default"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
   3 -->|"kind: dataLast"| 4
@@ -25,7 +28,11 @@ flowchart TB
   9 -->|"kind: pipe"| 10
   10 -->|"kind: connect"| 7
   11 -->|"kind: transformCallee"| 10
-  12 -->|"kind: pipe"| 13
-  14 -->|"kind: transformCallee"| 13
-  15 -->|"kind: transformCallee"| 8
-  16 -->|"kind: transformArg"| 8
+  13 -->|"kind: yieldable"| 12
+  14 -->|"kind: yieldable"| 12
+  12 -->|"kind: connect"| 9
+  15 -->|"kind: pipe"| 16
+  16 -->|"kind: connect"| 14
+  17 -->|"kind: transformCallee"| 16
+  18 -->|"kind: transformCallee"| 8
+  19 -->|"kind: transformArg"| 8

@@ -1,6 +1,8 @@
 flowchart TB
   0[["type: #40;value: string#41; =#gt; string<br/>node: #40;value: string#41; =#gt; #123;#92;n	return value.trim#40;#41;#92;n#125;"]]
   1[/"type: string<br/>node: value: string"/]
-  2[/"type: string<br/>node: value.trim#40;#41;"/]
+  2((("type: string<br/>node: #40;value: string#41; =#gt; #123;#92;n	return value.trim#40;#41;#92;n#125;")))
+  3[/"type: string<br/>node: value.trim#40;#41;"/]
   1 -->|"kind: parameter"| 0
+  3 -->|"kind: potentialReturn"| 2
   2 -->|"kind: potentialReturn"| 0
