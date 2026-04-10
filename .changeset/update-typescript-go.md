@@ -2,4 +2,4 @@
 "@effect/tsgo": patch
 ---
 
-Update [`typescript-go`](https://github.com/microsoft/typescript-go/commit/2a5e1cf9fe2261f2ad56871a6d2ed12d6ac34083) to commit `2a5e1cf9fe2261f2ad56871a6d2ed12d6ac34083`.
+Update [`typescript-go`](https://github.com/microsoft/typescript-go/commit/c25de70d251d4b717a1cb6f4f6289d2e68fef159) to commit `c25de70d251d4b717a1cb6f4f6289d2e68fef159`.

@@ -29,7 +29,7 @@ func afterInlayHints(
 		return hints
 	}
 
-	if !preferences.IncludeInlayFunctionLikeReturnTypeHints {
+	if !preferences.IncludeInlayFunctionLikeReturnTypeHints.IsTrue() {
 		return hints
 	}
 
