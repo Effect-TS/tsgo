@@ -22,9 +22,10 @@ func verifyLocalBaselineInlayHints(t *testing.T, f *fourslash.FourslashTest, tes
 	t.Helper()
 
 	if preferences == nil {
-		preferences = lsutil.NewDefaultUserPreferences()
+		defaults := lsutil.NewDefaultUserPreferences()
+		preferences = &defaults
 	}
-	reset := f.ConfigureWithReset(t, preferences)
+	reset := f.ConfigureWithReset(t, *preferences)
 	defer reset()
 
 	fileContent := mustFindFourslashFileContent(t, testContent, fileName)

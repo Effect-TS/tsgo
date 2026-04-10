@@ -53,7 +53,7 @@ import * as Effect from "effect/Effect"
 
 // Should trigger (with fix) - curried generator IIFE
 export const iife1 = Effect.gen(function*() {
-    yield* Effect.succeed(1)
+    yield* Effect.succeed(1);
 })
 
 // Should trigger (with fix) - curried generator IIFE with return
@@ -121,8 +121,8 @@ export const iife1 = Effect.fn("test")(function*() {
 
 // Should trigger (with fix) - curried generator IIFE with return
 export const iife2 = Effect.gen(function*() {
-    yield* Effect.succeed(1)
-    return 42
+    yield* Effect.succeed(1);
+    return 42;
 })
 
 // Should trigger (with fix) - fnUntraced generator IIFE
@@ -190,7 +190,7 @@ export const iife2 = Effect.fn("named")(function*() {
 
 // Should trigger (with fix) - fnUntraced generator IIFE
 export const iife3 = Effect.gen(function*() {
-    yield* Effect.succeed(1)
+    yield* Effect.succeed(1);
 })
 
 // Should trigger (WITHOUT fix) - arrow function (non-generator)
@@ -278,7 +278,7 @@ export const iife5 = Effect.fn("func")(function() {
 
 // Should trigger (with fix) - generator with pipe arguments
 export const iife6 = Effect.gen(function*() {
-    return yield* Effect.succeed(1)
+    return yield* Effect.succeed(1);
 }).pipe(Effect.map(n => n + 1))
 
 // Should trigger (with fix) - fnUntraced generator with pipe arguments
@@ -346,7 +346,7 @@ export const iife6 = Effect.fn("piped")(function*() {
 
 // Should trigger (with fix) - fnUntraced generator with pipe arguments
 export const iife7 = Effect.gen(function*() {
-    return yield* Effect.succeed(1)
+    return yield* Effect.succeed(1);
 }).pipe(Effect.map(n => n + 1))
 
 // Should NOT trigger - stored for reuse (generator)

@@ -28,7 +28,7 @@ index f737425eb0..7462a9bd64 100644
 +
 +	// EFFECT HOOK: Allow Effect to filter inlay hints
 +	if AfterInlayHintsCallback != nil {
-+		inlayHintState.result = AfterInlayHintsCallback(program, checker, file, inlayHintState.span, inlayHintPreferences, inlayHintState.result, l.converters)
++		inlayHintState.result = AfterInlayHintsCallback(program, checker, file, inlayHintState.span, &inlayHintPreferences, inlayHintState.result, l.converters)
 +	}
 +
  	return lsproto.InlayHintsOrNull{InlayHints: &inlayHintState.result}, nil

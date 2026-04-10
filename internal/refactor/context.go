@@ -10,7 +10,6 @@ import (
 	"github.com/microsoft/typescript-go/shim/core"
 	"github.com/microsoft/typescript-go/shim/ls"
 	"github.com/microsoft/typescript-go/shim/ls/change"
-	"github.com/microsoft/typescript-go/shim/ls/lsutil"
 	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
 	"github.com/microsoft/typescript-go/shim/scanner"
 )
@@ -52,11 +51,6 @@ func NewContext(ctx context.Context, sourceFile *ast.SourceFile, span core.TextR
 func (c *Context) BytePosToLSPPosition(pos int) lsproto.Position {
 	ln, ch := scanner.GetECMALineAndUTF16CharacterOfPosition(c.SourceFile, pos)
 	return lsproto.Position{Line: uint32(ln), Character: uint32(ch)}
-}
-
-// FormatOptions returns the format code settings from the language service.
-func (c *Context) FormatOptions() *lsutil.FormatCodeSettings {
-	return c.ls.FormatOptions()
 }
 
 // RefactorAction describes a single refactoring action to produce.

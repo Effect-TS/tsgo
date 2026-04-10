@@ -21,6 +21,6 @@ skipped by default
 import * as Effect from "effect/Effect"
 
 export const preview = Effect.gen(function*() {
-    return yield* Effect.succeed(1)
+    return yield* Effect.succeed(1);
 })
 

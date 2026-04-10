@@ -11,7 +11,6 @@ import (
 	"github.com/microsoft/typescript-go/shim/core"
 	"github.com/microsoft/typescript-go/shim/ls"
 	"github.com/microsoft/typescript-go/shim/ls/change"
-	"github.com/microsoft/typescript-go/shim/ls/lsutil"
 	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
 	"github.com/microsoft/typescript-go/shim/scanner"
 )
@@ -58,11 +57,6 @@ func NewContext(ctx context.Context, fixCtx *ls.CodeFixContext, options *etscore
 func (c *Context) BytePosToLSPPosition(pos int) lsproto.Position {
 	ln, ch := scanner.GetECMALineAndUTF16CharacterOfPosition(c.SourceFile, pos)
 	return lsproto.Position{Line: uint32(ln), Character: uint32(ch)}
-}
-
-// FormatOptions returns the format code settings from the language service.
-func (c *Context) FormatOptions() *lsutil.FormatCodeSettings {
-	return c.fixCtx.LS.FormatOptions()
 }
 
 // FixAction describes a single code action that a fixable wants to produce.

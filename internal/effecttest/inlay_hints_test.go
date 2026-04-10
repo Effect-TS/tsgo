@@ -3,6 +3,7 @@ package effecttest_test
 import (
 	"testing"
 
+	"github.com/microsoft/typescript-go/shim/core"
 	"github.com/microsoft/typescript-go/shim/fourslash"
 	"github.com/microsoft/typescript-go/shim/ls/lsutil"
 
@@ -48,7 +49,7 @@ export const sample = Effect.gen(function*() {
 
 	f.GoToFile(t, "/test.ts")
 	verifyLocalBaselineInlayHints(t, f, content, "/test.ts", &lsutil.UserPreferences{InlayHints: lsutil.InlayHintsPreferences{
-		IncludeInlayFunctionLikeReturnTypeHints: true,
+		IncludeInlayFunctionLikeReturnTypeHints: core.TSTrue,
 	}})
 }
 
@@ -93,7 +94,7 @@ export const sampleFn = Effect.fn("sampleFn")(function*(
 
 	f.GoToFile(t, "/test.ts")
 	verifyLocalBaselineInlayHints(t, f, content, "/test.ts", &lsutil.UserPreferences{InlayHints: lsutil.InlayHintsPreferences{
-		IncludeInlayFunctionLikeReturnTypeHints: true,
+		IncludeInlayFunctionLikeReturnTypeHints: core.TSTrue,
 	}})
 }
 
@@ -135,7 +136,7 @@ export const sampleFnUntraced = Effect.fnUntraced(function*(_: boolean) {
 
 	f.GoToFile(t, "/test.ts")
 	verifyLocalBaselineInlayHints(t, f, content, "/test.ts", &lsutil.UserPreferences{InlayHints: lsutil.InlayHintsPreferences{
-		IncludeInlayFunctionLikeReturnTypeHints: true,
+		IncludeInlayFunctionLikeReturnTypeHints: core.TSTrue,
 	}})
 }
 
@@ -167,7 +168,7 @@ export function standardShouldAppear() {
 
 	f.GoToFile(t, "/test.ts")
 	verifyLocalBaselineInlayHints(t, f, content, "/test.ts", &lsutil.UserPreferences{InlayHints: lsutil.InlayHintsPreferences{
-		IncludeInlayFunctionLikeReturnTypeHints: true,
+		IncludeInlayFunctionLikeReturnTypeHints: core.TSTrue,
 	}})
 }
 
@@ -208,6 +209,6 @@ export const sample = Effect.gen(function*() {
 
 	f.GoToFile(t, "/test.ts")
 	verifyLocalBaselineInlayHints(t, f, content, "/test.ts", &lsutil.UserPreferences{InlayHints: lsutil.InlayHintsPreferences{
-		IncludeInlayFunctionLikeReturnTypeHints: true,
+		IncludeInlayFunctionLikeReturnTypeHints: core.TSTrue,
 	}})
 }

@@ -273,6 +273,6 @@ class Sample {
   /**
    * Docs
    */
-  test = (name: string) => name.length
+  test = (name: string) => name.length;
 }
 

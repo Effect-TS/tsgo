@@ -27,9 +27,9 @@ export class InvalidBecauseOfConstructor
   b: number
   // should be report here at constructor location
   public static new() {
-        const _this = new this({ a: 42 })
-        _this.b = 56
-        return _this
+        const _this = new this({ a: 42 });
+        _this.b = 56;
+        return _this;
     }
 }
 
