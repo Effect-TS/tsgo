@@ -78,7 +78,7 @@ type LanguageService = ls.LanguageService
 type extra_LanguageService struct {
   projectPath tspath.Path
   host ls.Host
-  activeConfig *lsutil.UserPreferences
+  activeConfig lsutil.UserPreferences
   program *compiler.Program
   converters *lsconv.Converters
   documentPositionMappers map[string]*sourcemap.DocumentPositionMapper
@@ -99,7 +99,7 @@ func NewSymbolAndEntries(kind ls.DefinitionKind, node *ast.Node, symbol *ast.Sym
 type PossibleTypeArgumentInfo = ls.PossibleTypeArgumentInfo
 type Project = ls.Project
 //go:linkname ProvideWorkspaceSymbols github.com/microsoft/typescript-go/internal/ls.ProvideWorkspaceSymbols
-func ProvideWorkspaceSymbols(ctx context.Context, programs []*compiler.Program, converters *lsconv.Converters, preferences *lsutil.UserPreferences, query string) (lsproto.WorkspaceSymbolResponse, error)
+func ProvideWorkspaceSymbols(ctx context.Context, programs []*compiler.Program, converters *lsconv.Converters, preferences lsutil.UserPreferences, query string) (lsproto.WorkspaceSymbolResponse, error)
 //go:linkname RangeContainsRange github.com/microsoft/typescript-go/internal/ls.RangeContainsRange
 func RangeContainsRange(r1 core.TextRange, r2 core.TextRange) bool
 type RefactorProvider = ls.RefactorProvider

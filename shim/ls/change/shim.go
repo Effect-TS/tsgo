@@ -17,7 +17,7 @@ const LeadingTriviaOptionJSDoc = change.LeadingTriviaOptionJSDoc
 const LeadingTriviaOptionNone = change.LeadingTriviaOptionNone
 const LeadingTriviaOptionStartLine = change.LeadingTriviaOptionStartLine
 //go:linkname NewTracker github.com/microsoft/typescript-go/internal/ls/change.NewTracker
-func NewTracker(ctx context.Context, compilerOptions *core.CompilerOptions, formatOptions *lsutil.FormatCodeSettings, converters *lsconv.Converters) *change.Tracker
+func NewTracker(ctx context.Context, compilerOptions *core.CompilerOptions, formatOptions lsutil.FormatCodeSettings, converters *lsconv.Converters) *change.Tracker
 type NodeOptions = change.NodeOptions
 type Tracker = change.Tracker
 type TrailingTriviaOption = change.TrailingTriviaOption

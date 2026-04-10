@@ -53,7 +53,7 @@ func NewProject(configFileName string, kind project.Kind, currentDirectory strin
 //go:linkname NewSession github.com/microsoft/typescript-go/internal/project.NewSession
 func NewSession(init *project.SessionInit) *project.Session
 //go:linkname NewSnapshot github.com/microsoft/typescript-go/internal/project.NewSnapshot
-func NewSnapshot(id uint64, fs *project.SnapshotFS, sessionOptions *project.SessionOptions, configFileRegistry *project.ConfigFileRegistry, compilerOptionsForInferredProjects *core.CompilerOptions, allUserPreferences *lsutil.UserConfig, autoImports *autoimport.Registry, autoImportsWatch *project.WatchedFiles[map[tspath.Path]string], toPath func(fileName string) tspath.Path) *project.Snapshot
+func NewSnapshot(id uint64, fs *project.SnapshotFS, sessionOptions *project.SessionOptions, configFileRegistry *project.ConfigFileRegistry, compilerOptionsForInferredProjects *core.CompilerOptions, userPreferences lsutil.UserPreferences, autoImports *autoimport.Registry, autoImportsWatch *project.WatchedFiles[map[tspath.Path]string], toPath func(fileName string) tspath.Path) *project.Snapshot
 type Overlay = project.Overlay
 type OwnerCache[K comparable, V, LoadArgs any] = project.OwnerCache[K,V,LoadArgs]
 type ParseCache = project.ParseCache

@@ -11,7 +11,7 @@ import "github.com/microsoft/typescript-go/internal/ls/lsutil"
 import _ "unsafe"
 
 //go:linkname FindFirstNonWhitespaceColumn github.com/microsoft/typescript-go/internal/format.FindFirstNonWhitespaceColumn
-func FindFirstNonWhitespaceColumn(startPos int, endPos int, sourceFile *ast.SourceFile, options *lsutil.FormatCodeSettings) int
+func FindFirstNonWhitespaceColumn(startPos int, endPos int, sourceFile *ast.SourceFile, options lsutil.FormatCodeSettings) int
 //go:linkname FormatDocument github.com/microsoft/typescript-go/internal/format.FormatDocument
 func FormatDocument(ctx context.Context, sourceFile *ast.SourceFile) []core.TextChange
 //go:linkname FormatNodeGivenIndentation github.com/microsoft/typescript-go/internal/format.FormatNodeGivenIndentation
@@ -39,11 +39,11 @@ type FormattingContext = format.FormattingContext
 //go:linkname GetContainingList github.com/microsoft/typescript-go/internal/format.GetContainingList
 func GetContainingList(node *ast.Node, sourceFile *ast.SourceFile) *ast.NodeList
 //go:linkname GetFormatCodeSettingsFromContext github.com/microsoft/typescript-go/internal/format.GetFormatCodeSettingsFromContext
-func GetFormatCodeSettingsFromContext(ctx context.Context) *lsutil.FormatCodeSettings
+func GetFormatCodeSettingsFromContext(ctx context.Context) lsutil.FormatCodeSettings
 //go:linkname GetIndentation github.com/microsoft/typescript-go/internal/format.GetIndentation
-func GetIndentation(position int, sourceFile *ast.SourceFile, options *lsutil.FormatCodeSettings, assumeNewLineBeforeCloseBrace bool) int
+func GetIndentation(position int, sourceFile *ast.SourceFile, options lsutil.FormatCodeSettings, assumeNewLineBeforeCloseBrace bool) int
 //go:linkname GetIndentationForNode github.com/microsoft/typescript-go/internal/format.GetIndentationForNode
-func GetIndentationForNode(n *ast.Node, ignoreActualIndentationRange *core.TextRange, sourceFile *ast.SourceFile, options *lsutil.FormatCodeSettings) int
+func GetIndentationForNode(n *ast.Node, ignoreActualIndentationRange *core.TextRange, sourceFile *ast.SourceFile, options lsutil.FormatCodeSettings) int
 //go:linkname GetLineStartPositionForPosition github.com/microsoft/typescript-go/internal/format.GetLineStartPositionForPosition
 func GetLineStartPositionForPosition(position int, sourceFile *ast.SourceFile) int
 //go:linkname GetNewLineOrDefaultFromContext github.com/microsoft/typescript-go/internal/format.GetNewLineOrDefaultFromContext
@@ -53,11 +53,11 @@ const LineActionLineAdded = format.LineActionLineAdded
 const LineActionLineRemoved = format.LineActionLineRemoved
 const LineActionNone = format.LineActionNone
 //go:linkname NewFormattingContext github.com/microsoft/typescript-go/internal/format.NewFormattingContext
-func NewFormattingContext(file *ast.SourceFile, kind format.FormatRequestKind, options *lsutil.FormatCodeSettings) *format.FormattingContext
+func NewFormattingContext(file *ast.SourceFile, kind format.FormatRequestKind, options lsutil.FormatCodeSettings) *format.FormattingContext
 //go:linkname NewTextRangeWithKind github.com/microsoft/typescript-go/internal/format.NewTextRangeWithKind
 func NewTextRangeWithKind(pos int, end int, kind ast.Kind) format.TextRangeWithKind
 //go:linkname NodeWillIndentChild github.com/microsoft/typescript-go/internal/format.NodeWillIndentChild
-func NodeWillIndentChild(settings *lsutil.FormatCodeSettings, parent *ast.Node, child *ast.Node, sourceFile *ast.SourceFile, indentByDefault bool) bool
+func NodeWillIndentChild(settings lsutil.FormatCodeSettings, parent *ast.Node, child *ast.Node, sourceFile *ast.SourceFile, indentByDefault bool) bool
 type RulesPosition = format.RulesPosition
 const RulesPositionContextRulesAny = format.RulesPositionContextRulesAny
 const RulesPositionContextRulesSpecific = format.RulesPositionContextRulesSpecific
@@ -66,7 +66,7 @@ const RulesPositionNoContextRulesSpecific = format.RulesPositionNoContextRulesSp
 const RulesPositionStopRulesAny = format.RulesPositionStopRulesAny
 const RulesPositionStopRulesSpecific = format.RulesPositionStopRulesSpecific
 //go:linkname ShouldIndentChildNode github.com/microsoft/typescript-go/internal/format.ShouldIndentChildNode
-func ShouldIndentChildNode(settings *lsutil.FormatCodeSettings, parent *ast.Node, child *ast.Node, sourceFile *ast.SourceFile, isNextChildArg ...bool) bool
+func ShouldIndentChildNode(settings lsutil.FormatCodeSettings, parent *ast.Node, child *ast.Node, sourceFile *ast.SourceFile, isNextChildArg ...bool) bool
 type TextRangeWithKind = format.TextRangeWithKind
 //go:linkname WithFormatCodeSettings github.com/microsoft/typescript-go/internal/format.WithFormatCodeSettings
-func WithFormatCodeSettings(ctx context.Context, options *lsutil.FormatCodeSettings, newLine string) context.Context
+func WithFormatCodeSettings(ctx context.Context, options lsutil.FormatCodeSettings, newLine string) context.Context

@@ -28,11 +28,11 @@ var FileExtensionKindModifiers = lsutil.FileExtensionKindModifiers
 func FilterImportDeclarations(statements []*ast.Statement) []*ast.Statement
 type FormatCodeSettings = lsutil.FormatCodeSettings
 //go:linkname FromLSFormatOptions github.com/microsoft/typescript-go/internal/ls/lsutil.FromLSFormatOptions
-func FromLSFormatOptions(f *lsutil.FormatCodeSettings, opt *lsproto.FormattingOptions) *lsutil.FormatCodeSettings
+func FromLSFormatOptions(f lsutil.FormatCodeSettings, opt *lsproto.FormattingOptions) lsutil.FormatCodeSettings
 //go:linkname GetDefaultFormatCodeSettings github.com/microsoft/typescript-go/internal/ls/lsutil.GetDefaultFormatCodeSettings
-func GetDefaultFormatCodeSettings() *lsutil.FormatCodeSettings
+func GetDefaultFormatCodeSettings() lsutil.FormatCodeSettings
 //go:linkname GetDetectionLists github.com/microsoft/typescript-go/internal/ls/lsutil.GetDetectionLists
-func GetDetectionLists(preferences *lsutil.UserPreferences) (comparersToTest []func(a string, b string) int, typeOrdersToTest []lsutil.OrganizeImportsTypeOrder)
+func GetDetectionLists(preferences lsutil.UserPreferences) (comparersToTest []func(a string, b string) int, typeOrdersToTest []lsutil.OrganizeImportsTypeOrder)
 //go:linkname GetExternalModuleName github.com/microsoft/typescript-go/internal/ls/lsutil.GetExternalModuleName
 func GetExternalModuleName(specifier *ast.Expression) string
 //go:linkname GetFirstToken github.com/microsoft/typescript-go/internal/ls/lsutil.GetFirstToken
@@ -48,13 +48,13 @@ func GetLastToken(node *ast.Node, sourceFile *ast.SourceFile) *ast.Node
 //go:linkname GetLastVisitedChild github.com/microsoft/typescript-go/internal/ls/lsutil.GetLastVisitedChild
 func GetLastVisitedChild(node *ast.Node, sourceFile *ast.SourceFile) *ast.Node
 //go:linkname GetNamedImportSpecifierComparer github.com/microsoft/typescript-go/internal/ls/lsutil.GetNamedImportSpecifierComparer
-func GetNamedImportSpecifierComparer(preferences *lsutil.UserPreferences, comparer func(a string, b string) int) func(s1 *ast.Node, s2 *ast.Node) int
+func GetNamedImportSpecifierComparer(preferences lsutil.UserPreferences, comparer func(a string, b string) int) func(s1 *ast.Node, s2 *ast.Node) int
 //go:linkname GetNamedImportSpecifierComparerWithDetection github.com/microsoft/typescript-go/internal/ls/lsutil.GetNamedImportSpecifierComparerWithDetection
-func GetNamedImportSpecifierComparerWithDetection(importDecl *ast.Node, sourceFile *ast.SourceFile, preferences *lsutil.UserPreferences) (specifierComparer func(s1 *ast.Node, s2 *ast.Node) int, isSorted core.Tristate)
+func GetNamedImportSpecifierComparerWithDetection(importDecl *ast.Node, sourceFile *ast.SourceFile, preferences lsutil.UserPreferences) (specifierComparer func(s1 *ast.Node, s2 *ast.Node) int, isSorted core.Tristate)
 //go:linkname GetOrganizeImportsStringComparerWithDetection github.com/microsoft/typescript-go/internal/ls/lsutil.GetOrganizeImportsStringComparerWithDetection
-func GetOrganizeImportsStringComparerWithDetection(originalImportDecls []*ast.Statement, preferences *lsutil.UserPreferences) (comparer func(a string, b string) int, isSorted bool)
+func GetOrganizeImportsStringComparerWithDetection(originalImportDecls []*ast.Statement, preferences lsutil.UserPreferences) (comparer func(a string, b string) int, isSorted bool)
 //go:linkname GetQuotePreference github.com/microsoft/typescript-go/internal/ls/lsutil.GetQuotePreference
-func GetQuotePreference(sourceFile *ast.SourceFile, preferences *lsutil.UserPreferences) lsutil.QuotePreference
+func GetQuotePreference(sourceFile *ast.SourceFile, preferences lsutil.UserPreferences) lsutil.QuotePreference
 //go:linkname GetSymbolKind github.com/microsoft/typescript-go/internal/ls/lsutil.GetSymbolKind
 func GetSymbolKind(typeChecker *checker.Checker, symbol *ast.Symbol, location *ast.Node) lsutil.ScriptElementKind
 //go:linkname GetSymbolModifiers github.com/microsoft/typescript-go/internal/ls/lsutil.GetSymbolModifiers
@@ -87,9 +87,7 @@ func ModuleSpecifierToValidIdentifier(moduleSpecifier string, forceCapitalize bo
 //go:linkname ModuleSymbolToValidIdentifier github.com/microsoft/typescript-go/internal/ls/lsutil.ModuleSymbolToValidIdentifier
 func ModuleSymbolToValidIdentifier(moduleSymbol *ast.Symbol, forceCapitalize bool) string
 //go:linkname NewDefaultUserPreferences github.com/microsoft/typescript-go/internal/ls/lsutil.NewDefaultUserPreferences
-func NewDefaultUserPreferences() *lsutil.UserPreferences
-//go:linkname NewUserConfig github.com/microsoft/typescript-go/internal/ls/lsutil.NewUserConfig
-func NewUserConfig(userPreferences *lsutil.UserPreferences) *lsutil.UserConfig
+func NewDefaultUserPreferences() lsutil.UserPreferences
 //go:linkname NodeIsASICandidate github.com/microsoft/typescript-go/internal/ls/lsutil.NodeIsASICandidate
 func NodeIsASICandidate(node *ast.Node, file *ast.SourceFile) bool
 type OrganizeImportsCaseFirst = lsutil.OrganizeImportsCaseFirst
@@ -104,8 +102,8 @@ const OrganizeImportsTypeOrderAuto = lsutil.OrganizeImportsTypeOrderAuto
 const OrganizeImportsTypeOrderFirst = lsutil.OrganizeImportsTypeOrderFirst
 const OrganizeImportsTypeOrderInline = lsutil.OrganizeImportsTypeOrderInline
 const OrganizeImportsTypeOrderLast = lsutil.OrganizeImportsTypeOrderLast
-//go:linkname ParseNewUserConfig github.com/microsoft/typescript-go/internal/ls/lsutil.ParseNewUserConfig
-func ParseNewUserConfig(items map[string]any) *lsutil.UserConfig
+//go:linkname ParseUserPreferences github.com/microsoft/typescript-go/internal/ls/lsutil.ParseUserPreferences
+func ParseUserPreferences(items map[string]any) lsutil.UserPreferences
 //go:linkname PositionBelongsToNode github.com/microsoft/typescript-go/internal/ls/lsutil.PositionBelongsToNode
 func PositionBelongsToNode(candidate *ast.Node, position int, file *ast.SourceFile) bool
 //go:linkname PositionIsASICandidate github.com/microsoft/typescript-go/internal/ls/lsutil.PositionIsASICandidate
@@ -198,5 +196,4 @@ func SyntaxRequiresTrailingFunctionBlockOrSemicolonOrASI(kind ast.Kind) bool
 func SyntaxRequiresTrailingModuleBlockOrSemicolonOrASI(kind ast.Kind) bool
 //go:linkname SyntaxRequiresTrailingSemicolonOrASI github.com/microsoft/typescript-go/internal/ls/lsutil.SyntaxRequiresTrailingSemicolonOrASI
 func SyntaxRequiresTrailingSemicolonOrASI(kind ast.Kind) bool
-type UserConfig = lsutil.UserConfig
 type UserPreferences = lsutil.UserPreferences
