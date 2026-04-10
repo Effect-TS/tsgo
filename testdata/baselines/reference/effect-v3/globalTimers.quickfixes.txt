@@ -1,31 +1,31 @@
 === Quick Fix Inventory ===
 
-[D1] (5:7-5:15) TS6133: '_timeout' is declared but its value is never read.
+[D1] (6:7-6:15) TS6133: '_timeout' is declared but its value is never read.
   (no quick fixes)
 
-[D2] (5:18-5:43) TS377072: This code uses `setTimeout`, the corresponding Effect timer API is `Effect.sleep or Schedule` from Effect. effect(globalTimers)
+[D2] (6:18-6:43) TS377072: This code uses `setTimeout`, the corresponding Effect timer API is `Effect.sleep or Schedule` from Effect. effect(globalTimers)
   Fix 0: "Disable globalTimers for this line"
   Fix 1: "Disable globalTimers for entire file"
 
-[D3] (8:7-8:16) TS6133: '_interval' is declared but its value is never read.
+[D3] (9:7-9:16) TS6133: '_interval' is declared but its value is never read.
   (no quick fixes)
 
-[D4] (8:25-8:51) TS377072: This code uses `setInterval`, the corresponding Effect timer API is `Schedule or Effect.repeat` from Effect. effect(globalTimers)
+[D4] (9:25-9:51) TS377072: This code uses `setInterval`, the corresponding Effect timer API is `Schedule or Effect.repeat` from Effect. effect(globalTimers)
   Fix 0: "Disable globalTimers for this line"
   Fix 1: "Disable globalTimers for entire file"
 
-[D5] (12:7-12:22) TS6133: '_aliasedTimeout' is declared but its value is never read.
+[D5] (13:7-13:22) TS6133: '_aliasedTimeout' is declared but its value is never read.
   (no quick fixes)
 
-[D6] (12:25-12:45) TS377072: This code uses `setTimeout`, the corresponding Effect timer API is `Effect.sleep or Schedule` from Effect. effect(globalTimers)
+[D6] (13:25-13:45) TS377072: This code uses `setTimeout`, the corresponding Effect timer API is `Effect.sleep or Schedule` from Effect. effect(globalTimers)
   Fix 0: "Disable globalTimers for this line"
   Fix 1: "Disable globalTimers for entire file"
 
-[D7] (21:20-21:46) TS377072: This code uses `setInterval`, the corresponding Effect timer API is `Schedule or Effect.repeat` from Effect. effect(globalTimers)
+[D7] (22:20-22:46) TS377072: This code uses `setInterval`, the corresponding Effect timer API is `Schedule or Effect.repeat` from Effect. effect(globalTimers)
   Fix 0: "Disable globalTimers for this line"
   Fix 1: "Disable globalTimers for entire file"
 
-[D8] (26:7-26:23) TS6133: '_shadowedTimeout' is declared but its value is never read.
+[D8] (27:7-27:23) TS6133: '_shadowedTimeout' is declared but its value is never read.
   (no quick fixes)
 
 === Quick Fix Application Results ===

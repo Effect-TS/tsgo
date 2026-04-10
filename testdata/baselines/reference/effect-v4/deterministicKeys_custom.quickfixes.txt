@@ -23,11 +23,11 @@ skipped by default
 --- file:///.src/test.ts ---
 // @effect-diagnostics deterministicKeys:error
 import * as Persistable from "./utils"
-import { ServiceMap } from "effect"
+import { Context } from "effect"
 
 // simple case inside same file
 export function LocalConstructor<X>(/** @effect-identifier */ identifier: string) {
-  return class extends ServiceMap.Service<X, {}>()("hey/" + identifier) {}
+  return class extends Context.Service<X, {}>()("hey/" + identifier) {}
 }
 
 export class MyClass extends LocalConstructor<MyClass>("@effect/test-app/test/MyClass") {
@@ -52,11 +52,11 @@ skipped by default
 --- file:///.src/test.ts ---
 // @effect-diagnostics deterministicKeys:error
 import * as Persistable from "./utils"
-import { ServiceMap } from "effect"
+import { Context } from "effect"
 
 // simple case inside same file
 export function LocalConstructor<X>(/** @effect-identifier */ identifier: string) {
-  return class extends ServiceMap.Service<X, {}>()("hey/" + identifier) {}
+  return class extends Context.Service<X, {}>()("hey/" + identifier) {}
 }
 
 export class MyClass extends LocalConstructor<MyClass>("Hello") {

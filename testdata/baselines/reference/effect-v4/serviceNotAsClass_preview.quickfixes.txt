@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (5:24-5:71) TS377056: `ServiceMap.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `class Preview extends ServiceMap.Service<Preview, { port: number }>()("Preview") {}`. effect(serviceNotAsClass)
+[D1] (5:24-5:68) TS377056: `Context.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `class Preview extends Context.Service<Preview, { port: number }>()("Preview") {}`. effect(serviceNotAsClass)
   Fix 0: "Disable serviceNotAsClass for this line"
   Fix 1: "Disable serviceNotAsClass for entire file"
   Fix 2: "Convert to class declaration"
@@ -18,9 +18,9 @@ skipped by default
 --- file:///.src/serviceNotAsClass_preview.ts ---
 // @effect-diagnostics *:off
 // @effect-diagnostics serviceNotAsClass:warning
-import { ServiceMap } from "effect"
+import { Context } from "effect"
 
-export class Preview extends ServiceMap.Service<Preview, {
+export class Preview extends Context.Service<Preview, {
     port: number;
 }>()("Preview") {}
 

@@ -1,7 +1,7 @@
 ==== /.src/globalTimersInEffect.ts (4 flows) ====
 
 === Piping Flow ===
-Location: 5:31 - 7:3
+Location: 6:31 - 8:3
 Node: Effect.gen(function*() {\n  setTimeout(() => {}, 100)\n})
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 10:32 - 12:3
+Location: 11:32 - 13:3
 Node: Effect.gen(function*() {\n  setInterval(() => {}, 1000)\n})
 Node Kind: KindCallExpression
 
@@ -29,7 +29,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 15:30 - 18:3
+Location: 16:30 - 19:3
 Node: Effect.gen(function*() {\n  const myTimeout = setTimeout\n  myTimeout(() => {}, 100)\n})
 Node Kind: KindCallExpression
 
@@ -43,7 +43,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 29:32 - 32:3
+Location: 30:32 - 33:3
 Node: Effect.gen(function*() {\n  const fn = () => setTimeout(() => {}, 100)\n  return fn\n})
 Node Kind: KindCallExpression
 

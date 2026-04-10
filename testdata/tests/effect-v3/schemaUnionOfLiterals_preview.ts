@@ -1,3 +1,4 @@
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics schemaUnionOfLiterals:warning
 import * as Schema from "effect/Schema"

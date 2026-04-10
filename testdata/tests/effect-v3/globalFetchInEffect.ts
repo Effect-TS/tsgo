@@ -1,3 +1,4 @@
+// @effect-v3
 // @effect-diagnostics globalFetchInEffect:warning
 import { Effect } from "effect"
 

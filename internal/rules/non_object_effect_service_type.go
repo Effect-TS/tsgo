@@ -60,7 +60,7 @@ var NonObjectEffectServiceType = rule.Rule{
 // checkServicePropertyTypes checks if a class extending Effect.Service has option
 // properties that resolve to primitive types.
 func checkServicePropertyTypes(ctx *rule.Context, node *ast.Node) []*ast.Diagnostic {
-	serviceResult := ctx.TypeParser.ExtendsEffectService(node)
+	serviceResult := ctx.TypeParser.ExtendsEffectV3Service(node)
 	if serviceResult == nil {
 		return nil
 	}

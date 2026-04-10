@@ -1,7 +1,7 @@
 ==== /.src/globalDateInEffect_thunks.ts (6 flows) ====
 
 === Piping Flow ===
-Location: 4:27 - 4:60
+Location: 5:27 - 5:60
 Node: Data.TaggedError("ExampleError")
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "ExampleError"; } & Readonly<A>
 
 === Piping Flow ===
-Location: 6:26 - 6:56
+Location: 7:26 - 7:56
 Node: Effect.sync(() => Date.now())
 Node Kind: KindCallExpression
 
@@ -29,7 +29,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 8:34 - 11:3
+Location: 9:34 - 12:3
 Node: Effect.try({\n  try: () => new Date(),\n  catch: () => new ExampleError()\n})
 Node Kind: KindCallExpression
 
@@ -43,7 +43,7 @@ Transformations (1):
       outType: Effect<Date, ExampleError, never>
 
 === Piping Flow ===
-Location: 13:32 - 13:74
+Location: 14:32 - 14:74
 Node: Effect.tryPromise(async () => Date.now())
 Node Kind: KindCallExpression
 
@@ -57,7 +57,7 @@ Transformations (1):
       outType: Effect<number, UnknownException, never>
 
 === Piping Flow ===
-Location: 15:41 - 18:3
+Location: 16:41 - 19:3
 Node: Effect.tryPromise({\n  try: async () => new Date(),\n  catch: () => new ExampleError()\n})
 Node Kind: KindCallExpression
 
@@ -71,7 +71,7 @@ Transformations (1):
       outType: Effect<Date, ExampleError, never>
 
 === Piping Flow ===
-Location: 20:48 - 20:84
+Location: 21:48 - 21:84
 Node: Effect.sync(() => () => Date.now())
 Node Kind: KindCallExpression
 

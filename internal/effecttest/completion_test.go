@@ -37,8 +37,8 @@ func TestEffectCompletionExtendsServiceMap(t *testing.T) {
   }
 }
 // @Filename: /test.ts
-import { ServiceMap } from "effect"
-class MyService extends ServiceMap./*1*/`
+import * as Context from "effect/Context"
+class MyService extends Context./*1*/`
 
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
@@ -114,8 +114,8 @@ func TestEffectCompletionDisabled(t *testing.T) {
   }
 }
 // @Filename: /test.ts
-import { ServiceMap } from "effect"
-class MyService extends ServiceMap./*1*/`
+import * as Context from "effect/Context"
+class MyService extends Context./*1*/`
 
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()

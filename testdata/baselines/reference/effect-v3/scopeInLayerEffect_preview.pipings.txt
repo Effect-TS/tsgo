@@ -1,7 +1,7 @@
 ==== /.src/scopeInLayerEffect_preview.ts (3 flows) ====
 
 === Piping Flow ===
-Location: 7:20 - 7:41
+Location: 8:20 - 8:41
 Node: Context.Tag("Cache")
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: <Self, Shape>() => TagClass<Self, "Cache", Shape>
 
 === Piping Flow ===
-Location: 8:23 - 11:4
+Location: 9:23 - 12:4
 Node: Layer.effect(Cache, Effect.gen(function*() {\n  yield* Effect.addFinalizer(() => Effect.void)\n  return { ok: true as const }\n}))
 Node Kind: KindCallExpression
 
@@ -33,7 +33,7 @@ Transformations (2):
       outType: Layer<Cache, never, Scope>
 
 === Piping Flow ===
-Location: 9:9 - 9:48
+Location: 10:9 - 10:48
 Node: Effect.addFinalizer(() => Effect.void)
 Node Kind: KindCallExpression
 

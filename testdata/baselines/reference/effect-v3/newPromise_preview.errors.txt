@@ -1,14 +1,14 @@
 === Metadata ===
 Effect version: unknown
 
-/.src/newPromise_preview.ts(4,24): warning TS377080: This code constructs `new Promise(...)`, prefer Effect APIs such as `Effect.async`, `Effect.promise`, or `Effect.tryPromise` instead of manual Promise construction. effect(newPromise)
+/.src/newPromise_preview.ts(5,24): warning TS377080: This code constructs `new Promise(...)`, prefer Effect APIs such as `Effect.async`, `Effect.promise`, or `Effect.tryPromise` instead of manual Promise construction. effect(newPromise)
 
 
 ==== /.src/newPromise_preview.ts (1 errors) ====
+    // @effect-v3
     // @effect-diagnostics *:off
     // @effect-diagnostics newPromise:warning
     
     export const preview = new Promise<number>((resolve) => resolve(1))
                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! warning TS377080: This code constructs `new Promise(...)`, prefer Effect APIs such as `Effect.async`, `Effect.promise`, or `Effect.tryPromise` instead of manual Promise construction. effect(newPromise)
-    

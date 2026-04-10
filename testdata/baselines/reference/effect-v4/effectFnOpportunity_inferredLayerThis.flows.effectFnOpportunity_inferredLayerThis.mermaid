@@ -1,7 +1,7 @@
 flowchart TB
   0[/"type: Effect#lt;#123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n        yield* Effect.log#40;#quot;log#quot;#41;#92;n        return #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;#92;n    #125;#41;"/]
   1["type: Layer#lt;MyService, never, never#gt;<br/>callee: Layer.effect<br/>args: #91;this#93;"]
-  2[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;S, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
+  2[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
   3[/"type: typeof MyService<br/>node: this"/]
   4[/"type: #quot;log#quot;<br/>node: #quot;log#quot;"/]
   5["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
@@ -24,7 +24,7 @@ flowchart TB
   22[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
   23((("type: #40;#41; =#gt; #123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #40;#41; =#gt; #123;#92;n        return #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;#92;n    #125;")))
   24["type: Layer#lt;MyService, never, never#gt;<br/>callee: Layer.sync<br/>args: #91;this#93;"]
-  25[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #40;evaluate: LazyArg#lt;S#gt;#41; =#gt; Layer#lt;I, never, never#gt;; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;, evaluate: LazyArg#lt;S#gt;#41;: Layer#lt;I, never, never#gt;; #125;<br/>node: Layer.sync"/]
+  25[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #40;evaluate: LazyArg#lt;S#gt;#41; =#gt; Layer#lt;I, never, never#gt;; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;, evaluate: LazyArg#lt;NoInfer#lt;S#gt;#gt;#41;: Layer#lt;I, never, never#gt;; #125;<br/>node: Layer.sync"/]
   26[/"type: typeof MyService<br/>node: this"/]
   27[["type: #40;#41; =#gt; #123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #40;#41; =#gt; #123;#92;n        return #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;#92;n    #125;"]]
   28[/"type: #123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;"/]

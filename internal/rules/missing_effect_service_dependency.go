@@ -65,7 +65,7 @@ var MissingEffectServiceDependency = rule.Rule{
 // required service dependencies satisfied.
 func checkServiceDependencies(ctx *rule.Context, node *ast.Node) []*ast.Diagnostic {
 	// Check if this class extends Effect.Service
-	serviceResult := ctx.TypeParser.ExtendsEffectService(node)
+	serviceResult := ctx.TypeParser.ExtendsEffectV3Service(node)
 	if serviceResult == nil {
 		return nil
 	}

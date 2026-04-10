@@ -140,7 +140,7 @@ func checkDeterministicKeyMatch(tp *typeparser.TypeParser, program checker.Progr
 // Priority: service targets first, then error targets, then custom.
 func matchClassPattern(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile, classNode *ast.Node, extendedKeyDetection bool) *deterministicKeyMatch {
 	// Service target: ExtendsEffectService → ExtendsContextTag → ExtendsEffectTag → ExtendsServiceMapService
-	if result := tp.ExtendsEffectService(classNode); result != nil {
+	if result := tp.ExtendsEffectV3Service(classNode); result != nil {
 		return &deterministicKeyMatch{className: result.ClassName, keyStringLiteral: result.KeyStringLiteral, target: "service"}
 	}
 	if result := tp.ExtendsContextTag(classNode); result != nil {
@@ -149,7 +149,7 @@ func matchClassPattern(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.So
 	if result := tp.ExtendsEffectTag(classNode); result != nil {
 		return &deterministicKeyMatch{className: result.ClassName, keyStringLiteral: result.KeyStringLiteral, target: "service"}
 	}
-	if result := tp.ExtendsServiceMapService(classNode); result != nil {
+	if result := tp.ExtendsContextService(classNode); result != nil {
 		return &deterministicKeyMatch{className: result.ClassName, keyStringLiteral: result.KeyStringLiteral, target: "service"}
 	}
 

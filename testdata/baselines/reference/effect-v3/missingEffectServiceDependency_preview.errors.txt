@@ -1,10 +1,11 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/missingEffectServiceDependency_preview.ts(6,14): warning TS377039: Service 'Db' is required but not provided by dependencies. effect(missingEffectServiceDependency)
+/.src/missingEffectServiceDependency_preview.ts(7,14): warning TS377039: Service 'Db' is required but not provided by dependencies. effect(missingEffectServiceDependency)
 
 
 ==== /.src/missingEffectServiceDependency_preview.ts (1 errors) ====
+    // @effect-v3
     // @effect-diagnostics *:off
     // @effect-diagnostics missingEffectServiceDependency:warning
     import * as Effect from "effect/Effect"
@@ -18,4 +19,3 @@ Effect version: 3.19.19
         return { all: Effect.succeed([] as Array<number>) }
       })
     }) {}
-    

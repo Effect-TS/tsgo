@@ -1,11 +1,11 @@
-import { Effect, Layer, ServiceMap } from "effect"
+import { Effect, Layer, Context } from "effect"
 
-// Define services using ServiceMap.Service (V4 pattern)
-class Database extends ServiceMap.Service<Database, {
+// Define services using Context.Service (V4 pattern)
+class Database extends Context.Service<Database, {
   readonly query: (sql: string) => Effect.Effect<string>
 }>()("Database") {}
 
-class Logger extends ServiceMap.Service<Logger, {
+class Logger extends Context.Service<Logger, {
   readonly log: (message: string) => Effect.Effect<void>
 }>()("Logger") {}
 
@@ -29,7 +29,7 @@ const DatabaseFromEffect = Layer.effect(Database)(
 const AppLayer = Layer.mergeAll(DatabaseLive, LoggerLive)
 
 // Layer with dependencies
-class UserRepo extends ServiceMap.Service<UserRepo, {
+class UserRepo extends Context.Service<UserRepo, {
   readonly getUser: (id: string) => Effect.Effect<string>
 }>()("UserRepo") {}
 

@@ -11,7 +11,7 @@
 }
 
 // @filename: effect_fn_opportunity_panic.ts
-import { Data, Effect, flow, Layer, Schema, ServiceMap } from "effect"
+import { Data, Effect, flow, Layer, Schema, Context } from "effect"
 import { FetchHttpClient, HttpClient, HttpClientRequest, HttpClientResponse } from "effect/unstable/http"
 
 class Todo extends Schema.Class<Todo>("Todo")({
@@ -44,7 +44,7 @@ class DecodeError extends Data.TaggedError("DecodeError")<{
 
 type JsonPlaceholderError = RequestError | InvalidStatusError | DecodeError
 
-class ApiConfig extends ServiceMap.Service<ApiConfig, {
+class ApiConfig extends Context.Service<ApiConfig, {
   readonly baseUrl: string
 }>()("ApiConfig") {}
 
@@ -52,7 +52,7 @@ const ApiConfigLive = Layer.succeed(ApiConfig)({
   baseUrl: "https://jsonplaceholder.typicode.com"
 })
 
-class JsonPlaceholder extends ServiceMap.Service<JsonPlaceholder, {
+class JsonPlaceholder extends Context.Service<JsonPlaceholder, {
   readonly getTodo: (id: number) => Effect.Effect<Todo, JsonPlaceholderError>
   readonly getUser: (id: number) => Effect.Effect<User, JsonPlaceholderError>
 }>()("JsonPlaceholder") {}

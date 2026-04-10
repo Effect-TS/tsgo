@@ -72,7 +72,6 @@ export const shouldNotReport5 = addOne(5).pipe(multiplyBy(2))
 // Should trigger
 export const shouldReport = Effect.runPromise(Effect.log("Hello"))
 
-
 === [D2] Fix 0: "Disable missedPipeableOpportunity for this line" ===
 skipped by default
 
@@ -117,7 +116,6 @@ export const shouldNotReport5 = addOne(5).pipe(multiplyBy(2))
 
 // Should trigger
 export const shouldReport = Effect.runPromise(Effect.log("Hello"))
-
 
 === [D3] Fix 0: "Disable missedPipeableOpportunity for this line" ===
 skipped by default
@@ -164,7 +162,6 @@ export const shouldNotReport5 = addOne(5).pipe(multiplyBy(2))
 // Should trigger
 export const shouldReport = Effect.runPromise(Effect.log("Hello"))
 
-
 === [D4] Fix 0: "Disable missedPipeableOpportunity for this line" ===
 skipped by default
 
@@ -210,7 +207,6 @@ export const shouldNotReport5 = addOne(5).pipe(multiplyBy(2))
 // Should trigger
 export const shouldReport = Effect.runPromise(Effect.log("Hello"))
 
-
 === [D5] Fix 0: "Disable missedPipeableOpportunity for this line" ===
 skipped by default
 
@@ -255,4 +251,3 @@ export const shouldNotReport5 = addOne(5).pipe(multiplyBy(2))
 
 // Should trigger
 export const shouldReport = Effect.runPromise(Effect.log("Hello"))
-

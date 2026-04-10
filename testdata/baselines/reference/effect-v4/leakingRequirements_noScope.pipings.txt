@@ -2,7 +2,7 @@
 
 === Piping Flow ===
 Location: 5:32 - 7:19
-Node: ServiceMap.Service<FileSystem, {\n  writeFile: (content: string) => Effect.Effect<void>\n}>()("FileSystem")
+Node: Context.Service<FileSystem, {\n  writeFile: (content: string) => Effect.Effect<void>\n}>()("FileSystem")
 Node Kind: KindCallExpression
 
 Subject: "FileSystem"
@@ -10,13 +10,13 @@ Subject Type: "FileSystem"
 
 Transformations (1):
   [0] kind: call
-      callee: ServiceMap.Service<FileSystem, {\n  writeFile: (content: string) => Effect.Effect<void>\n}>()
+      callee: Context.Service<FileSystem, {\n  writeFile: (content: string) => Effect.Effect<void>\n}>()
       args: (constant)
       outType: ServiceClass<FileSystem, "FileSystem", { writeFile: (content: string) => Effect<void, never, never>; }>
 
 === Piping Flow ===
-Location: 14:26 - 14:87
-Node: ServiceMap.Service<LeakingScopeIsFine>("LeakingScopeIsFine")
+Location: 14:26 - 14:84
+Node: Context.Service<LeakingScopeIsFine>("LeakingScopeIsFine")
 Node Kind: KindCallExpression
 
 Subject: "LeakingScopeIsFine"
@@ -24,6 +24,6 @@ Subject Type: "LeakingScopeIsFine"
 
 Transformations (1):
   [0] kind: call
-      callee: ServiceMap.Service
+      callee: Context.Service
       args: (constant)
       outType: Service<LeakingScopeIsFine, LeakingScopeIsFine>

@@ -1,3 +1,4 @@
+// @effect-v3
 // @effect-diagnostics globalDateInEffect:warning
 import { Data, Effect } from "effect"
 

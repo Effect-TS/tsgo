@@ -1,3 +1,4 @@
+// @effect-v3
 import { Data, Effect, Schema } from "effect"
 
 class ExampleError extends Data.TaggedError("ExampleError")<{}> {}

@@ -1,14 +1,14 @@
 === Metadata ===
 Effect version: unknown
 
-/.src/globalDate_preview.ts(4,24): warning TS377066: This code uses `Date.now()`, time access is represented through `Clock` from Effect. effect(globalDate)
+/.src/globalDate_preview.ts(5,24): warning TS377066: This code uses `Date.now()`, time access is represented through `Clock` from Effect. effect(globalDate)
 
 
 ==== /.src/globalDate_preview.ts (1 errors) ====
+    // @effect-v3
     // @effect-diagnostics *:off
     // @effect-diagnostics globalDate:warning
     
     export const preview = Date.now()
                            ~~~~~~~~~~
 !!! warning TS377066: This code uses `Date.now()`, time access is represented through `Clock` from Effect. effect(globalDate)
-    

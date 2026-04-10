@@ -12,13 +12,13 @@ import (
 )
 
 // ClassSelfMismatch ensures the Self type parameter matches the class name in
-// Effect.Service, ServiceMap.Service, Context.Tag, Effect.Tag, Schema.Class,
+// Effect.Service, Context.Service, Context.Tag, Effect.Tag, Schema.Class,
 // Schema.TaggedClass, Schema.TaggedError, Schema.TaggedRequest,
 // Schema.RequestClass, and Model.Class declarations.
 var ClassSelfMismatch = rule.Rule{
 	Name:            "classSelfMismatch",
 	Group:           "correctness",
-	Description:     "Ensures Self type parameter matches the class name in ServiceMap/Service/Tag/Schema classes",
+	Description:     "Ensures Self type parameter matches the class name in Context/Service/Tag/Schema classes",
 	DefaultSeverity: etscore.SeverityError,
 	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.The_Self_type_parameter_for_this_class_should_be_0_effect_classSelfMismatch.Code()},
@@ -76,10 +76,10 @@ func checkClassSelfMismatch(tp *typeparser.TypeParser, _ *checker.Checker, sf *a
 	var className *ast.Node
 
 	// Try extends* functions in order, matching the TS reference
-	if result := tp.ExtendsEffectService(classNode); result != nil {
+	if result := tp.ExtendsEffectV3Service(classNode); result != nil {
 		selfTypeNode = result.SelfTypeNode
 		className = result.ClassName
-	} else if result := tp.ExtendsServiceMapService(classNode); result != nil {
+	} else if result := tp.ExtendsContextService(classNode); result != nil {
 		selfTypeNode = result.SelfTypeNode
 		className = result.ClassName
 	} else if result := tp.ExtendsContextTag(classNode); result != nil {

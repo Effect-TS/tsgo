@@ -51,9 +51,9 @@ skipped by default
 === [D2] Fix 2: "Convert to Effect.fn (no span)" ===
 
 --- file:///.src/effectFnOpportunity_inferredLayer.ts ---
-import { Effect, Layer, ServiceMap } from "effect"
+import { Effect, Layer, Context } from "effect"
 
-class MyService extends ServiceMap.Service<MyService, {
+class MyService extends Context.Service<MyService, {
   log: (_what: string) => Effect.Effect<void>
 }>()("MyService") {}
 
@@ -87,9 +87,9 @@ const _shouldTriggerSync = Layer.sync(MyService)(() => {
 === [D2] Fix 3: "Convert to Effect.fn(\"MyService.log\")" ===
 
 --- file:///.src/effectFnOpportunity_inferredLayer.ts ---
-import { Effect, Layer, ServiceMap } from "effect"
+import { Effect, Layer, Context } from "effect"
 
-class MyService extends ServiceMap.Service<MyService, {
+class MyService extends Context.Service<MyService, {
   log: (_what: string) => Effect.Effect<void>
 }>()("MyService") {}
 
@@ -123,9 +123,9 @@ const _shouldTriggerSync = Layer.sync(MyService)(() => {
 === [D2] Fix 4: "Convert to Effect.fn(\"log\")" ===
 
 --- file:///.src/effectFnOpportunity_inferredLayer.ts ---
-import { Effect, Layer, ServiceMap } from "effect"
+import { Effect, Layer, Context } from "effect"
 
-class MyService extends ServiceMap.Service<MyService, {
+class MyService extends Context.Service<MyService, {
   log: (_what: string) => Effect.Effect<void>
 }>()("MyService") {}
 
@@ -165,9 +165,9 @@ skipped by default
 === [D4] Fix 2: "Convert to Effect.fn (no span)" ===
 
 --- file:///.src/effectFnOpportunity_inferredLayer.ts ---
-import { Effect, Layer, ServiceMap } from "effect"
+import { Effect, Layer, Context } from "effect"
 
-class MyService extends ServiceMap.Service<MyService, {
+class MyService extends Context.Service<MyService, {
   log: (_what: string) => Effect.Effect<void>
 }>()("MyService") {}
 
@@ -201,9 +201,9 @@ const _shouldTriggerSync = Layer.sync(MyService)(() => {
 === [D4] Fix 3: "Convert to Effect.fn(\"MyService.log\")" ===
 
 --- file:///.src/effectFnOpportunity_inferredLayer.ts ---
-import { Effect, Layer, ServiceMap } from "effect"
+import { Effect, Layer, Context } from "effect"
 
-class MyService extends ServiceMap.Service<MyService, {
+class MyService extends Context.Service<MyService, {
   log: (_what: string) => Effect.Effect<void>
 }>()("MyService") {}
 
@@ -237,9 +237,9 @@ const _shouldTriggerSync = Layer.sync(MyService)(() => {
 === [D4] Fix 4: "Convert to Effect.fn(\"log\")" ===
 
 --- file:///.src/effectFnOpportunity_inferredLayer.ts ---
-import { Effect, Layer, ServiceMap } from "effect"
+import { Effect, Layer, Context } from "effect"
 
-class MyService extends ServiceMap.Service<MyService, {
+class MyService extends Context.Service<MyService, {
   log: (_what: string) => Effect.Effect<void>
 }>()("MyService") {}
 
@@ -279,9 +279,9 @@ skipped by default
 === [D6] Fix 2: "Convert to Effect.fn (no span)" ===
 
 --- file:///.src/effectFnOpportunity_inferredLayer.ts ---
-import { Effect, Layer, ServiceMap } from "effect"
+import { Effect, Layer, Context } from "effect"
 
-class MyService extends ServiceMap.Service<MyService, {
+class MyService extends Context.Service<MyService, {
   log: (_what: string) => Effect.Effect<void>
 }>()("MyService") {}
 
@@ -313,9 +313,9 @@ const _shouldTriggerSync = Layer.sync(MyService)(() => {
 === [D6] Fix 3: "Convert to Effect.fn(\"MyService.log\")" ===
 
 --- file:///.src/effectFnOpportunity_inferredLayer.ts ---
-import { Effect, Layer, ServiceMap } from "effect"
+import { Effect, Layer, Context } from "effect"
 
-class MyService extends ServiceMap.Service<MyService, {
+class MyService extends Context.Service<MyService, {
   log: (_what: string) => Effect.Effect<void>
 }>()("MyService") {}
 
@@ -347,9 +347,9 @@ const _shouldTriggerSync = Layer.sync(MyService)(() => {
 === [D6] Fix 4: "Convert to Effect.fn(\"log\")" ===
 
 --- file:///.src/effectFnOpportunity_inferredLayer.ts ---
-import { Effect, Layer, ServiceMap } from "effect"
+import { Effect, Layer, Context } from "effect"
 
-class MyService extends ServiceMap.Service<MyService, {
+class MyService extends Context.Service<MyService, {
   log: (_what: string) => Effect.Effect<void>
 }>()("MyService") {}
 
@@ -387,9 +387,9 @@ skipped by default
 === [D8] Fix 2: "Convert to Effect.fn (no span)" ===
 
 --- file:///.src/effectFnOpportunity_inferredLayer.ts ---
-import { Effect, Layer, ServiceMap } from "effect"
+import { Effect, Layer, Context } from "effect"
 
-class MyService extends ServiceMap.Service<MyService, {
+class MyService extends Context.Service<MyService, {
   log: (_what: string) => Effect.Effect<void>
 }>()("MyService") {}
 
@@ -423,9 +423,9 @@ const _shouldTriggerSync = Layer.sync(MyService)(() => {
 === [D8] Fix 3: "Convert to Effect.fn(\"MyService.log\")" ===
 
 --- file:///.src/effectFnOpportunity_inferredLayer.ts ---
-import { Effect, Layer, ServiceMap } from "effect"
+import { Effect, Layer, Context } from "effect"
 
-class MyService extends ServiceMap.Service<MyService, {
+class MyService extends Context.Service<MyService, {
   log: (_what: string) => Effect.Effect<void>
 }>()("MyService") {}
 
@@ -459,9 +459,9 @@ const _shouldTriggerSync = Layer.sync(MyService)(() => {
 === [D8] Fix 4: "Convert to Effect.fn(\"log\")" ===
 
 --- file:///.src/effectFnOpportunity_inferredLayer.ts ---
-import { Effect, Layer, ServiceMap } from "effect"
+import { Effect, Layer, Context } from "effect"
 
-class MyService extends ServiceMap.Service<MyService, {
+class MyService extends Context.Service<MyService, {
   log: (_what: string) => Effect.Effect<void>
 }>()("MyService") {}
 

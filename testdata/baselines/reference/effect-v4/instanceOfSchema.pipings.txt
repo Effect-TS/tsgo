@@ -12,7 +12,7 @@ Transformations (1):
   [0] kind: call
       callee: Schema.Class<MySchema>("MySchema")
       args: (constant)
-      outType: ExtendableClass<MySchema, Struct<{ readonly name: String; }>, {}>
+      outType: Class<MySchema, Struct<{ readonly name: String; }>, {}>
 
 === Piping Flow ===
 Location: 11:33 - 12:30
@@ -40,7 +40,7 @@ Transformations (1):
   [0] kind: call
       callee: Schema.Class<PersonSchema>("MySchema")
       args: (constant)
-      outType: ExtendableClass<PersonSchema, Struct<{ readonly name: String; }>, {}>
+      outType: Class<PersonSchema, Struct<{ readonly name: String; }>, {}>
 
 === Piping Flow ===
 Location: 23:32 - 24:29

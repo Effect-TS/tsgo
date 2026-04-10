@@ -31,4 +31,3 @@ Effect version: 3.19.19
       name: Schema.String,
       age: Schema.Number
     })
-    

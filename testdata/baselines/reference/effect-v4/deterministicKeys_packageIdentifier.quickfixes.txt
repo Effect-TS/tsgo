@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (5:63-5:90) TS377049: This key does not match the deterministic key for this declaration. The expected key is `@effect/test-app/test/ExpectedServiceIdentifier`. effect(deterministicKeys)
+[D1] (5:60-5:87) TS377049: This key does not match the deterministic key for this declaration. The expected key is `@effect/test-app/test/ExpectedServiceIdentifier`. effect(deterministicKeys)
   Fix 0: "Disable deterministicKeys for this line"
   Fix 1: "Disable deterministicKeys for entire file"
   Fix 2: "Replace 'ExpectedServiceIdentifier' with '@effect/test-app/test/ExpectedServiceIdentifier'"
@@ -22,10 +22,10 @@ skipped by default
 
 --- file:///.src/test.ts ---
 // @effect-diagnostics deterministicKeys:error
-import { ServiceMap, Data } from "effect"
+import { Context, Data } from "effect"
 
 export class ExpectedServiceIdentifier
-  extends ServiceMap.Service<ExpectedServiceIdentifier, {}>()("@effect/test-app/test/ExpectedServiceIdentifier")
+  extends Context.Service<ExpectedServiceIdentifier, {}>()("@effect/test-app/test/ExpectedServiceIdentifier")
 {}
 
 export class ErrorA extends Data.TaggedError("ErrorA")<{}> {}
@@ -41,10 +41,10 @@ skipped by default
 
 --- file:///.src/test.ts ---
 // @effect-diagnostics deterministicKeys:error
-import { ServiceMap, Data } from "effect"
+import { Context, Data } from "effect"
 
 export class ExpectedServiceIdentifier
-  extends ServiceMap.Service<ExpectedServiceIdentifier, {}>()("ExpectedServiceIdentifier")
+  extends Context.Service<ExpectedServiceIdentifier, {}>()("ExpectedServiceIdentifier")
 {}
 
 export class ErrorA extends Data.TaggedError("@effect/test-app/test/ErrorA")<{}> {}

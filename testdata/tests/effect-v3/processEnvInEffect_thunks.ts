@@ -1,3 +1,4 @@
+// @effect-v3
 // @effect-diagnostics processEnvInEffect:warning
 /// <reference types="node" />
 import { Data, Effect } from "effect"

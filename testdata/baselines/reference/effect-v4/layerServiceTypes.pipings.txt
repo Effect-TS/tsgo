@@ -2,7 +2,7 @@
 
 === Piping Flow ===
 Location: 4:23 - 6:17
-Node: ServiceMap.Service<Database, {\n  readonly query: (sql: string) => Effect.Effect<string>\n}>()("Database")
+Node: Context.Service<Database, {\n  readonly query: (sql: string) => Effect.Effect<string>\n}>()("Database")
 Node Kind: KindCallExpression
 
 Subject: "Database"
@@ -10,13 +10,13 @@ Subject Type: "Database"
 
 Transformations (1):
   [0] kind: call
-      callee: ServiceMap.Service<Database, {\n  readonly query: (sql: string) => Effect.Effect<string>\n}>()
+      callee: Context.Service<Database, {\n  readonly query: (sql: string) => Effect.Effect<string>\n}>()
       args: (constant)
       outType: ServiceClass<Database, "Database", { readonly query: (sql: string) => Effect<string, never, never>; }>
 
 === Piping Flow ===
 Location: 8:21 - 10:15
-Node: ServiceMap.Service<Logger, {\n  readonly log: (message: string) => Effect.Effect<void>\n}>()("Logger")
+Node: Context.Service<Logger, {\n  readonly log: (message: string) => Effect.Effect<void>\n}>()("Logger")
 Node Kind: KindCallExpression
 
 Subject: "Logger"
@@ -24,7 +24,7 @@ Subject Type: "Logger"
 
 Transformations (1):
   [0] kind: call
-      callee: ServiceMap.Service<Logger, {\n  readonly log: (message: string) => Effect.Effect<void>\n}>()
+      callee: Context.Service<Logger, {\n  readonly log: (message: string) => Effect.Effect<void>\n}>()
       args: (constant)
       outType: ServiceClass<Logger, "Logger", { readonly log: (message: string) => Effect<void, never, never>; }>
 
@@ -118,7 +118,7 @@ Transformations (1):
 
 === Piping Flow ===
 Location: 32:23 - 34:17
-Node: ServiceMap.Service<UserRepo, {\n  readonly getUser: (id: string) => Effect.Effect<string>\n}>()("UserRepo")
+Node: Context.Service<UserRepo, {\n  readonly getUser: (id: string) => Effect.Effect<string>\n}>()("UserRepo")
 Node Kind: KindCallExpression
 
 Subject: "UserRepo"
@@ -126,7 +126,7 @@ Subject Type: "UserRepo"
 
 Transformations (1):
   [0] kind: call
-      callee: ServiceMap.Service<UserRepo, {\n  readonly getUser: (id: string) => Effect.Effect<string>\n}>()
+      callee: Context.Service<UserRepo, {\n  readonly getUser: (id: string) => Effect.Effect<string>\n}>()
       args: (constant)
       outType: ServiceClass<UserRepo, "UserRepo", { readonly getUser: (id: string) => Effect<string, never, never>; }>
 

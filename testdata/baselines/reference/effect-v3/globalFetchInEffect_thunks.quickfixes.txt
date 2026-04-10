@@ -1,22 +1,22 @@
 === Quick Fix Inventory ===
 
-[D1] (6:40-6:79) TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
+[D1] (7:40-7:79) TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
   Fix 0: "Disable lazyPromiseInEffectSync for this line"
   Fix 1: "Disable lazyPromiseInEffectSync for entire file"
 
-[D2] (6:46-6:51) TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `effect/unstable/http`. effect(globalFetchInEffect)
+[D2] (7:46-7:51) TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `@effect/platform`. effect(globalFetchInEffect)
   Fix 0: "Disable globalFetchInEffect for this line"
   Fix 1: "Disable globalFetchInEffect for entire file"
 
-[D3] (9:14-9:19) TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `effect/unstable/http`. effect(globalFetchInEffect)
+[D3] (10:14-10:19) TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `@effect/platform`. effect(globalFetchInEffect)
   Fix 0: "Disable globalFetchInEffect for this line"
   Fix 1: "Disable globalFetchInEffect for entire file"
 
-[D4] (13:64-13:69) TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `effect/unstable/http`. effect(globalFetchInEffect)
+[D4] (14:64-14:69) TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `@effect/platform`. effect(globalFetchInEffect)
   Fix 0: "Disable globalFetchInEffect for this line"
   Fix 1: "Disable globalFetchInEffect for entire file"
 
-[D5] (16:20-16:25) TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `effect/unstable/http`. effect(globalFetchInEffect)
+[D5] (17:20-17:25) TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `@effect/platform`. effect(globalFetchInEffect)
   Fix 0: "Disable globalFetchInEffect for this line"
   Fix 1: "Disable globalFetchInEffect for entire file"
 

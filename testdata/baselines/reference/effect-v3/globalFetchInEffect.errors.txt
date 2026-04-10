@@ -1,11 +1,12 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/globalFetchInEffect.ts(6,3): warning TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `@effect/platform`. effect(globalFetchInEffect)
-/.src/globalFetchInEffect.ts(11,3): warning TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `@effect/platform`. effect(globalFetchInEffect)
+/.src/globalFetchInEffect.ts(7,3): warning TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `@effect/platform`. effect(globalFetchInEffect)
+/.src/globalFetchInEffect.ts(12,3): warning TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `@effect/platform`. effect(globalFetchInEffect)
 
 
 ==== /.src/globalFetchInEffect.ts (2 errors) ====
+    // @effect-v3
     // @effect-diagnostics globalFetchInEffect:warning
     import { Effect } from "effect"
     
@@ -34,4 +35,3 @@ Effect version: 3.19.19
       const fn = () => fetch("https://example.com/nested")
       return fn
     })
-    

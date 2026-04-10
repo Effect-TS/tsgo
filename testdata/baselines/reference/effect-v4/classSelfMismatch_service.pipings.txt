@@ -2,7 +2,7 @@
 
 === Piping Flow ===
 Location: 4:33 - 7:20
-Node: ServiceMap.Service<CorrectName, {\n  writeCache: () => Effect.Effect<void, never, FileSystem | Cache>\n  readCache: Effect.Effect<void, never, FileSystem | Cache>\n}>()("CorrectName")
+Node: Context.Service<CorrectName, {\n  writeCache: () => Effect.Effect<void, never, FileSystem | Cache>\n  readCache: Effect.Effect<void, never, FileSystem | Cache>\n}>()("CorrectName")
 Node Kind: KindCallExpression
 
 Subject: "CorrectName"
@@ -10,13 +10,13 @@ Subject Type: "CorrectName"
 
 Transformations (1):
   [0] kind: call
-      callee: ServiceMap.Service<CorrectName, {\n  writeCache: () => Effect.Effect<void, never, FileSystem | Cache>\n  readCache: Effect.Effect<void, never, FileSystem | Cache>\n}>()
+      callee: Context.Service<CorrectName, {\n  writeCache: () => Effect.Effect<void, never, FileSystem | Cache>\n  readCache: Effect.Effect<void, never, FileSystem | Cache>\n}>()
       args: (constant)
       outType: ServiceClass<CorrectName, "CorrectName", { writeCache: () => Effect<void, never, Cache | FileSystem>; readCache: Effect<void, never, Cache | FileSystem>; }>
 
 === Piping Flow ===
 Location: 10:31 - 13:18
-Node: ServiceMap.Service<CorrectName, {\n  writeCache: () => Effect.Effect<void, never, FileSystem | Cache>\n  readCache: Effect.Effect<void, never, FileSystem | Cache>\n}>()("WrongName")
+Node: Context.Service<CorrectName, {\n  writeCache: () => Effect.Effect<void, never, FileSystem | Cache>\n  readCache: Effect.Effect<void, never, FileSystem | Cache>\n}>()("WrongName")
 Node Kind: KindCallExpression
 
 Subject: "WrongName"
@@ -24,6 +24,6 @@ Subject Type: "WrongName"
 
 Transformations (1):
   [0] kind: call
-      callee: ServiceMap.Service<CorrectName, {\n  writeCache: () => Effect.Effect<void, never, FileSystem | Cache>\n  readCache: Effect.Effect<void, never, FileSystem | Cache>\n}>()
+      callee: Context.Service<CorrectName, {\n  writeCache: () => Effect.Effect<void, never, FileSystem | Cache>\n  readCache: Effect.Effect<void, never, FileSystem | Cache>\n}>()
       args: (constant)
       outType: ServiceClass<CorrectName, "WrongName", { writeCache: () => Effect<void, never, Cache | FileSystem>; readCache: Effect<void, never, Cache | FileSystem>; }>

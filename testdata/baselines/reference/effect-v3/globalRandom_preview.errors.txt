@@ -1,14 +1,14 @@
 === Metadata ===
 Effect version: unknown
 
-/.src/globalRandom_preview.ts(4,24): warning TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
+/.src/globalRandom_preview.ts(5,24): warning TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
 
 
 ==== /.src/globalRandom_preview.ts (1 errors) ====
+    // @effect-v3
     // @effect-diagnostics *:off
     // @effect-diagnostics globalRandom:warning
     
     export const preview = Math.random()
                            ~~~~~~~~~~~~~
 !!! warning TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
-    

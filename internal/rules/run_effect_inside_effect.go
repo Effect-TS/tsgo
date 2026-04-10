@@ -26,7 +26,7 @@ var RunEffectInsideEffect = rule.Rule{
 	Codes: []int32{
 		tsdiag.X_0_is_called_inside_an_existing_Effect_context_Here_the_inner_Effect_can_be_used_directly_effect_runEffectInsideEffect.Code(),
 		tsdiag.X_0_is_called_inside_an_Effect_with_a_separate_runtime_invocation_In_this_context_run_child_Effects_with_the_surrounding_runtime_which_can_be_accessed_through_Effect_runtime_and_Runtime_1_effect_runEffectInsideEffect.Code(),
-		tsdiag.X_0_is_called_inside_an_Effect_with_a_separate_services_invocation_In_this_context_child_Effects_run_with_the_surrounding_services_which_can_be_accessed_through_Effect_services_and_Effect_1_With_effect_runEffectInsideEffect.Code(),
+		tsdiag.X_0_is_called_inside_an_Effect_with_a_separate_services_invocation_In_this_context_child_Effects_run_with_the_surrounding_services_which_can_be_accessed_through_Effect_context_and_Effect_1_With_effect_runEffectInsideEffect.Code(),
 	},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		supportedEffect := ctx.TypeParser.SupportedEffectVersion()
@@ -37,7 +37,7 @@ var RunEffectInsideEffect = rule.Rule{
 			calleeText := scanner.GetSourceTextOfNodeFromSourceFile(m.SourceFile, m.CalleeNode, false)
 			if m.IsNestedScope {
 				if supportedEffect == typeparser.EffectMajorV4 {
-					diags = append(diags, ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.X_0_is_called_inside_an_Effect_with_a_separate_services_invocation_In_this_context_child_Effects_run_with_the_surrounding_services_which_can_be_accessed_through_Effect_services_and_Effect_1_With_effect_runEffectInsideEffect, nil, calleeText, m.MethodName))
+					diags = append(diags, ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.X_0_is_called_inside_an_Effect_with_a_separate_services_invocation_In_this_context_child_Effects_run_with_the_surrounding_services_which_can_be_accessed_through_Effect_context_and_Effect_1_With_effect_runEffectInsideEffect, nil, calleeText, m.MethodName))
 				} else {
 					diags = append(diags, ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.X_0_is_called_inside_an_Effect_with_a_separate_runtime_invocation_In_this_context_run_child_Effects_with_the_surrounding_runtime_which_can_be_accessed_through_Effect_runtime_and_Runtime_1_effect_runEffectInsideEffect, nil, calleeText, m.MethodName))
 				}

@@ -31,21 +31,21 @@ skipped by default
 === [D1] Fix 2: "Combine into a single provide" ===
 
 --- file:///.src/multipleEffectProvide_effectFn.ts ---
-import { ServiceMap, Effect, Layer } from "effect"
+import { Context, Effect, Layer } from "effect"
 
-class MyService1 extends ServiceMap.Service<MyService1>()("MyService1", {
+class MyService1 extends Context.Service<MyService1>()("MyService1", {
   make: Effect.succeed({ value: 1 })
 }) {
   static Default = Layer.effect(this, this.make)
 }
 
-class MyService2 extends ServiceMap.Service<MyService2>()("MyService2", {
+class MyService2 extends Context.Service<MyService2>()("MyService2", {
   make: Effect.succeed({ value: 2 })
 }) {
   static Default = Layer.effect(this, this.make)
 }
 
-class MyService3 extends ServiceMap.Service<MyService3>()("MyService3", {
+class MyService3 extends Context.Service<MyService3>()("MyService3", {
   make: Effect.succeed({ value: 3 })
 }) {
   static Default = Layer.effect(this, this.make)
@@ -94,21 +94,21 @@ skipped by default
 === [D2] Fix 2: "Combine into a single provide" ===
 
 --- file:///.src/multipleEffectProvide_effectFn.ts ---
-import { ServiceMap, Effect, Layer } from "effect"
+import { Context, Effect, Layer } from "effect"
 
-class MyService1 extends ServiceMap.Service<MyService1>()("MyService1", {
+class MyService1 extends Context.Service<MyService1>()("MyService1", {
   make: Effect.succeed({ value: 1 })
 }) {
   static Default = Layer.effect(this, this.make)
 }
 
-class MyService2 extends ServiceMap.Service<MyService2>()("MyService2", {
+class MyService2 extends Context.Service<MyService2>()("MyService2", {
   make: Effect.succeed({ value: 2 })
 }) {
   static Default = Layer.effect(this, this.make)
 }
 
-class MyService3 extends ServiceMap.Service<MyService3>()("MyService3", {
+class MyService3 extends Context.Service<MyService3>()("MyService3", {
   make: Effect.succeed({ value: 3 })
 }) {
   static Default = Layer.effect(this, this.make)
@@ -157,21 +157,21 @@ skipped by default
 === [D3] Fix 2: "Combine into a single provide" ===
 
 --- file:///.src/multipleEffectProvide_effectFn.ts ---
-import { ServiceMap, Effect, Layer } from "effect"
+import { Context, Effect, Layer } from "effect"
 
-class MyService1 extends ServiceMap.Service<MyService1>()("MyService1", {
+class MyService1 extends Context.Service<MyService1>()("MyService1", {
   make: Effect.succeed({ value: 1 })
 }) {
   static Default = Layer.effect(this, this.make)
 }
 
-class MyService2 extends ServiceMap.Service<MyService2>()("MyService2", {
+class MyService2 extends Context.Service<MyService2>()("MyService2", {
   make: Effect.succeed({ value: 2 })
 }) {
   static Default = Layer.effect(this, this.make)
 }
 
-class MyService3 extends ServiceMap.Service<MyService3>()("MyService3", {
+class MyService3 extends Context.Service<MyService3>()("MyService3", {
   make: Effect.succeed({ value: 3 })
 }) {
   static Default = Layer.effect(this, this.make)
@@ -220,21 +220,21 @@ skipped by default
 === [D4] Fix 2: "Combine into a single provide" ===
 
 --- file:///.src/multipleEffectProvide_effectFn.ts ---
-import { ServiceMap, Effect, Layer } from "effect"
+import { Context, Effect, Layer } from "effect"
 
-class MyService1 extends ServiceMap.Service<MyService1>()("MyService1", {
+class MyService1 extends Context.Service<MyService1>()("MyService1", {
   make: Effect.succeed({ value: 1 })
 }) {
   static Default = Layer.effect(this, this.make)
 }
 
-class MyService2 extends ServiceMap.Service<MyService2>()("MyService2", {
+class MyService2 extends Context.Service<MyService2>()("MyService2", {
   make: Effect.succeed({ value: 2 })
 }) {
   static Default = Layer.effect(this, this.make)
 }
 
-class MyService3 extends ServiceMap.Service<MyService3>()("MyService3", {
+class MyService3 extends Context.Service<MyService3>()("MyService3", {
   make: Effect.succeed({ value: 3 })
 }) {
   static Default = Layer.effect(this, this.make)

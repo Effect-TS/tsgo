@@ -1,13 +1,14 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/schemaSyncInEffect_thunks.ts(10,47): suggestion TS377037: `Schema.decodeSync` is used inside an Effect generator. `Schema.decode` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
-/.src/schemaSyncInEffect_thunks.ts(13,14): suggestion TS377037: `Schema.decodeSync` is used inside an Effect generator. `Schema.decode` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
-/.src/schemaSyncInEffect_thunks.ts(17,65): suggestion TS377037: `Schema.encodeSync` is used inside an Effect generator. `Schema.encode` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
-/.src/schemaSyncInEffect_thunks.ts(20,20): suggestion TS377037: `Schema.encodeUnknownSync` is used inside an Effect generator. `Schema.encodeUnknown` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
+/.src/schemaSyncInEffect_thunks.ts(11,47): suggestion TS377037: `Schema.decodeSync` is used inside an Effect generator. `Schema.decode` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
+/.src/schemaSyncInEffect_thunks.ts(14,14): suggestion TS377037: `Schema.decodeSync` is used inside an Effect generator. `Schema.decode` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
+/.src/schemaSyncInEffect_thunks.ts(18,65): suggestion TS377037: `Schema.encodeSync` is used inside an Effect generator. `Schema.encode` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
+/.src/schemaSyncInEffect_thunks.ts(21,20): suggestion TS377037: `Schema.encodeUnknownSync` is used inside an Effect generator. `Schema.encodeUnknown` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
 
 
 ==== /.src/schemaSyncInEffect_thunks.ts (4 errors) ====
+    // @effect-v3
     import { Data, Effect, Schema } from "effect"
     
     class ExampleError extends Data.TaggedError("ExampleError")<{}> {}
@@ -42,4 +43,3 @@ Effect version: 3.19.19
     export const shouldNotTriggerReturnedFunction = Effect.sync(
       () => () => Schema.decodeSync(Person)({ name: "Nested", age: 10 })
     )
-    

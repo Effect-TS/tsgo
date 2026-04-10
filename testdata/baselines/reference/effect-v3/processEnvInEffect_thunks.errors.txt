@@ -1,13 +1,14 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/processEnvInEffect_thunks.ts(7,44): warning TS377077: This Effect code reads from `process.env`, environment configuration in Effect code is represented through `Config` from Effect. effect(processEnvInEffect)
-/.src/processEnvInEffect_thunks.ts(10,14): warning TS377077: This Effect code reads from `process.env`, environment configuration in Effect code is represented through `Config` from Effect. effect(processEnvInEffect)
-/.src/processEnvInEffect_thunks.ts(14,62): warning TS377077: This Effect code reads from `process.env`, environment configuration in Effect code is represented through `Config` from Effect. effect(processEnvInEffect)
-/.src/processEnvInEffect_thunks.ts(17,20): warning TS377077: This Effect code reads from `process.env`, environment configuration in Effect code is represented through `Config` from Effect. effect(processEnvInEffect)
+/.src/processEnvInEffect_thunks.ts(8,44): warning TS377077: This Effect code reads from `process.env`, environment configuration in Effect code is represented through `Config` from Effect. effect(processEnvInEffect)
+/.src/processEnvInEffect_thunks.ts(11,14): warning TS377077: This Effect code reads from `process.env`, environment configuration in Effect code is represented through `Config` from Effect. effect(processEnvInEffect)
+/.src/processEnvInEffect_thunks.ts(15,62): warning TS377077: This Effect code reads from `process.env`, environment configuration in Effect code is represented through `Config` from Effect. effect(processEnvInEffect)
+/.src/processEnvInEffect_thunks.ts(18,20): warning TS377077: This Effect code reads from `process.env`, environment configuration in Effect code is represented through `Config` from Effect. effect(processEnvInEffect)
 
 
 ==== /.src/processEnvInEffect_thunks.ts (4 errors) ====
+    // @effect-v3
     // @effect-diagnostics processEnvInEffect:warning
     /// <reference types="node" />
     import { Data, Effect } from "effect"
@@ -37,4 +38,3 @@ Effect version: 3.19.19
     })
     
     export const shouldNotTriggerReturnedFunction = Effect.sync(() => () => process.env.NESTED_SECRET)
-    

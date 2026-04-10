@@ -1,14 +1,15 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/globalFetchInEffect_thunks.ts(6,40): warning TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
-/.src/globalFetchInEffect_thunks.ts(6,46): warning TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `@effect/platform`. effect(globalFetchInEffect)
-/.src/globalFetchInEffect_thunks.ts(9,14): warning TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `@effect/platform`. effect(globalFetchInEffect)
-/.src/globalFetchInEffect_thunks.ts(13,64): warning TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `@effect/platform`. effect(globalFetchInEffect)
-/.src/globalFetchInEffect_thunks.ts(16,20): warning TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `@effect/platform`. effect(globalFetchInEffect)
+/.src/globalFetchInEffect_thunks.ts(7,40): warning TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
+/.src/globalFetchInEffect_thunks.ts(7,46): warning TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `@effect/platform`. effect(globalFetchInEffect)
+/.src/globalFetchInEffect_thunks.ts(10,14): warning TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `@effect/platform`. effect(globalFetchInEffect)
+/.src/globalFetchInEffect_thunks.ts(14,64): warning TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `@effect/platform`. effect(globalFetchInEffect)
+/.src/globalFetchInEffect_thunks.ts(17,20): warning TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `@effect/platform`. effect(globalFetchInEffect)
 
 
 ==== /.src/globalFetchInEffect_thunks.ts (5 errors) ====
+    // @effect-v3
     // @effect-diagnostics globalFetchInEffect:warning
     import { Data, Effect } from "effect"
     
@@ -39,4 +40,3 @@ Effect version: 3.19.19
     })
     
     export const shouldNotTriggerReturnedFunction = Effect.sync(() => () => fetch("https://example.com/nested"))
-    

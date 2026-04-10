@@ -1,7 +1,7 @@
 ==== /.src/effectMapFlatten_preview.ts (2 flows) ====
 
 === Piping Flow ===
-Location: 5:23 - 8:2
+Location: 6:23 - 9:2
 Node: Effect.succeed(1).pipe(\n  Effect.map((n) => Effect.succeed(n + 1)),\n  Effect.flatten\n)
 Node Kind: KindCallExpression
 
@@ -23,7 +23,7 @@ Transformations (3):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 6:20 - 6:42
+Location: 7:20 - 7:42
 Node: Effect.succeed(n + 1)
 Node Kind: KindCallExpression
 

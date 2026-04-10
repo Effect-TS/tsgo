@@ -6,45 +6,45 @@
 // Divergences that do NOT apply (single-file test, no cross-file references):
 //   2. Cross-file location annotations in flat output format (format.go)
 //   3. "at in" double preposition fix in quickinfo for cross-file refs (format.go)
-import { Effect, Layer, ServiceMap, pipe } from "effect"
+import { Effect, Layer, Context, pipe } from "effect"
 
-class Database extends ServiceMap.Service<Database>()("Database", {
+class Database extends Context.Service<Database>()("Database", {
   make: Effect.succeed({})
 }) {
   static Default = Layer.effect(this, this.make)
 }
 
-class UserRepository extends ServiceMap.Service<UserRepository>()("UserRepository", {
+class UserRepository extends Context.Service<UserRepository>()("UserRepository", {
   make: Effect.as(Database.asEffect(), {})
 }) {
   static Default = Layer.effect(this, this.make)
 }
 
-class EventsRepository extends ServiceMap.Service<EventsRepository>()("EventsRepository", {
+class EventsRepository extends Context.Service<EventsRepository>()("EventsRepository", {
   make: Effect.as(Database.asEffect(), {})
 }) {
   static Default = Layer.effect(this, this.make)
 }
 
-class Analytics extends ServiceMap.Service<Analytics>()("Analytics", {
+class Analytics extends Context.Service<Analytics>()("Analytics", {
   make: Effect.succeed({})
 }) {
   static Default = Layer.effect(this, this.make)
 }
 
-class UserService extends ServiceMap.Service<UserService>()("UserService", {
+class UserService extends Context.Service<UserService>()("UserService", {
   make: Effect.as(Effect.andThen(UserRepository.asEffect(), Analytics.asEffect()), {})
 }) {
   static Default = Layer.effect(this, this.make)
 }
 
-class EventService extends ServiceMap.Service<EventService>()("EventService", {
+class EventService extends Context.Service<EventService>()("EventService", {
   make: Effect.as(Effect.andThen(EventsRepository.asEffect(), Analytics.asEffect()), {})
 }) {
   static Default = Layer.effect(this, this.make)
 }
 
-class AppService extends ServiceMap.Service<AppService>()("AppService", {
+class AppService extends Context.Service<AppService>()("AppService", {
   make: Effect.as(Effect.andThen(UserService.asEffect(), EventService.asEffect()), {})
 }) {
   static Default = Layer.effect(this, this.make)

@@ -4,24 +4,24 @@ import (
 	"github.com/microsoft/typescript-go/shim/ast"
 )
 
-// ServiceMapServiceResult holds the parsed result of a class extending ServiceMap.Service.
+// ServiceMapServiceResult holds the parsed result of a class extending Context.Service.
 type ServiceMapServiceResult struct {
 	ClassName        *ast.Node // The class name identifier
 	SelfTypeNode     *ast.Node // The Self type argument node (first type arg of the inner call)
 	KeyStringLiteral *ast.Node // The key string literal from the outer call's first argument, or nil
 }
 
-// ExtendsServiceMapService checks if a class declaration extends ServiceMap.Service<Self, Shape>()(key).
+// ExtendsContextService checks if a class declaration extends Context.Service<Self, Shape>()(key).
 // It detects the double-call pattern:
 //
-//	class X extends ServiceMap.Service<X, Shape>()("key") {}
+//	class X extends Context.Service<X, Shape>()("key") {}
 //
 // where the ExpressionWithTypeArguments.expression is a CallExpression (outer call)
 // whose own .expression is also a CallExpression (inner call) with type arguments,
-// and the inner call resolves to ServiceMap.Service.
+// and the inner call resolves to Context.Service.
 //
-// Returns nil if the class does not extend ServiceMap.Service.
-func (tp *TypeParser) ExtendsServiceMapService(classNode *ast.Node) *ServiceMapServiceResult {
+// Returns nil if the class does not extend Context.Service.
+func (tp *TypeParser) ExtendsContextService(classNode *ast.Node) *ServiceMapServiceResult {
 	if tp == nil || tp.checker == nil || classNode == nil {
 		return nil
 	}
@@ -68,16 +68,16 @@ func (tp *TypeParser) ExtendsServiceMapService(classNode *ast.Node) *ServiceMapS
 				continue
 			}
 
-			// The inner call must have type arguments (ServiceMap.Service<Self, Shape>())
+			// The inner call must have type arguments (Context.Service<Self, Shape>())
 			if innerCall.TypeArguments == nil || len(innerCall.TypeArguments.Nodes) == 0 {
 				continue
 			}
 
-			// Check if the inner call's expression resolves to ServiceMap.Service
+			// Check if the inner call's expression resolves to Context.Service
 			if innerCall.Expression == nil {
 				continue
 			}
-			if !tp.IsNodeReferenceToServiceMapModuleApi(innerCall.Expression, "Service") {
+			if !tp.IsNodeReferenceToEffectContextModuleApi(innerCall.Expression, "Service") {
 				continue
 			}
 

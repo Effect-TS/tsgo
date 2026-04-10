@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (13:27-13:79) TS377041: Methods of this Service require `FileSystem` from every caller.
+[D1] (13:27-13:76) TS377041: Methods of this Service require `FileSystem` from every caller.
 
 The requirement becomes part of the public service surface instead of remaining internal to Layer implementation.
 

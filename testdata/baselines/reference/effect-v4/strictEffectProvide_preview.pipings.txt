@@ -1,7 +1,7 @@
 ==== /.src/strictEffectProvide_preview.ts (3 flows) ====
 
 === Piping Flow ===
-Location: 5:68 - 5:87
+Location: 5:65 - 5:84
 Node: Effect.succeed({})
 Node Kind: KindCallExpression
 

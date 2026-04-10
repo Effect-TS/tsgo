@@ -1,14 +1,14 @@
 === Metadata ===
 Effect version: unknown
 
-/.src/globalConsole_preview.ts(4,1): warning TS377064: This code uses `console.log`, the corresponding Effect logging API is `Effect.log or Logger`. effect(globalConsole)
+/.src/globalConsole_preview.ts(5,1): warning TS377064: This code uses `console.log`, the corresponding Effect logging API is `Effect.log or Logger`. effect(globalConsole)
 
 
 ==== /.src/globalConsole_preview.ts (1 errors) ====
+    // @effect-v3
     // @effect-diagnostics *:off
     // @effect-diagnostics globalConsole:warning
     
     console.log("preview")
     ~~~~~~~~~~~~~~~~~~~~~~
 !!! warning TS377064: This code uses `console.log`, the corresponding Effect logging API is `Effect.log or Logger`. effect(globalConsole)
-    

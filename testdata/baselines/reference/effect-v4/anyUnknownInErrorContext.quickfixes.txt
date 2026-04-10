@@ -10,7 +10,7 @@ Only service identifiers should appear in the requirements channel. effect(anyUn
   Fix 1: "Disable unnecessaryEffectGen for entire file"
   Fix 2: "Remove the Effect.gen, and keep the body"
 
-[D3] (5:10-5:36) TS377030: This has unknown in the requirements channel which is not recommended.
+[D3] (5:10-5:35) TS377030: This has unknown in the requirements channel which is not recommended.
 Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
   Fix 0: "Disable anyUnknownInErrorContext for this line"
   Fix 1: "Disable anyUnknownInErrorContext for entire file"
@@ -25,7 +25,7 @@ Only service identifiers should appear in the requirements channel. effect(anyUn
   Fix 1: "Disable unnecessaryEffectGen for entire file"
   Fix 2: "Remove the Effect.gen, and keep the body"
 
-[D6] (9:10-9:32) TS377030: This has any in the requirements channel which is not recommended.
+[D6] (9:10-9:31) TS377030: This has any in the requirements channel which is not recommended.
 Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
   Fix 0: "Disable anyUnknownInErrorContext for this line"
   Fix 1: "Disable anyUnknownInErrorContext for entire file"
@@ -66,7 +66,7 @@ Having an unknown or any error type is not useful. Consider instead using specif
   Fix 0: "Disable anyUnknownInErrorContext for this line"
   Fix 1: "Disable anyUnknownInErrorContext for entire file"
 
-[D14] (21:10-21:36) TS377030: This has unknown in the requirements channel which is not recommended.
+[D14] (21:10-21:35) TS377030: This has unknown in the requirements channel which is not recommended.
 Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
   Fix 0: "Disable anyUnknownInErrorContext for this line"
   Fix 1: "Disable anyUnknownInErrorContext for entire file"
@@ -81,7 +81,7 @@ Only service identifiers should appear in the requirements channel. effect(anyUn
   Fix 0: "Disable anyUnknownInErrorContext for this line"
   Fix 1: "Disable anyUnknownInErrorContext for entire file"
 
-[D17] (37:22-37:48) TS377030: This has unknown in the requirements channel which is not recommended.
+[D17] (37:22-37:47) TS377030: This has unknown in the requirements channel which is not recommended.
 Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
   Fix 0: "Disable anyUnknownInErrorContext for this line"
   Fix 1: "Disable anyUnknownInErrorContext for entire file"
@@ -126,10 +126,10 @@ skipped by default
 // @effect-diagnostics anyUnknownInErrorContext:warning
 import { Effect, Layer } from "effect"
 
-export const withUnknownContext = Effect.asVoid(Effect.services<unknown>())
+export const withUnknownContext = Effect.asVoid(Effect.context<unknown>())
 
 export const withAnyContext = Effect.gen(function*() {
-  yield* Effect.services<any>()
+  yield* Effect.context<any>()
 })
 
 export const withAnyFailure = Effect.gen(function*() {
@@ -141,7 +141,7 @@ export const withUnknownFailure = Effect.gen(function*() {
 })
 
 export const hasBothAnyUnknown = Effect.gen(function*() {
-  yield* Effect.services<unknown>()
+  yield* Effect.context<unknown>()
   return yield* Effect.fail<any>(42)
 })
 
@@ -157,7 +157,7 @@ export class Test {
   a: Effect.Effect<void, number, any> = Effect.succeed(42)
 }
 
-const effectUnkown = Effect.services<unknown>()
+const effectUnkown = Effect.context<unknown>()
 const layerUnknown = Layer.effectDiscard(effectUnkown)
 export const composedLayerUnknown = Layer.empty.pipe(Layer.provide(layerUnknown))
 
@@ -187,10 +187,10 @@ skipped by default
 import { Effect, Layer } from "effect"
 
 export const withUnknownContext = Effect.gen(function*() {
-  yield* Effect.services<unknown>()
+  yield* Effect.context<unknown>()
 })
 
-export const withAnyContext = Effect.asVoid(Effect.services<any>())
+export const withAnyContext = Effect.asVoid(Effect.context<any>())
 
 export const withAnyFailure = Effect.gen(function*() {
   return yield* Effect.fail<any>(42)
@@ -201,7 +201,7 @@ export const withUnknownFailure = Effect.gen(function*() {
 })
 
 export const hasBothAnyUnknown = Effect.gen(function*() {
-  yield* Effect.services<unknown>()
+  yield* Effect.context<unknown>()
   return yield* Effect.fail<any>(42)
 })
 
@@ -217,7 +217,7 @@ export class Test {
   a: Effect.Effect<void, number, any> = Effect.succeed(42)
 }
 
-const effectUnkown = Effect.services<unknown>()
+const effectUnkown = Effect.context<unknown>()
 const layerUnknown = Layer.effectDiscard(effectUnkown)
 export const composedLayerUnknown = Layer.empty.pipe(Layer.provide(layerUnknown))
 
@@ -247,11 +247,11 @@ skipped by default
 import { Effect, Layer } from "effect"
 
 export const withUnknownContext = Effect.gen(function*() {
-  yield* Effect.services<unknown>()
+  yield* Effect.context<unknown>()
 })
 
 export const withAnyContext = Effect.gen(function*() {
-  yield* Effect.services<any>()
+  yield* Effect.context<any>()
 })
 
 export const withAnyFailure = Effect.fail<any>(42)
@@ -261,7 +261,7 @@ export const withUnknownFailure = Effect.gen(function*() {
 })
 
 export const hasBothAnyUnknown = Effect.gen(function*() {
-  yield* Effect.services<unknown>()
+  yield* Effect.context<unknown>()
   return yield* Effect.fail<any>(42)
 })
 
@@ -277,7 +277,7 @@ export class Test {
   a: Effect.Effect<void, number, any> = Effect.succeed(42)
 }
 
-const effectUnkown = Effect.services<unknown>()
+const effectUnkown = Effect.context<unknown>()
 const layerUnknown = Layer.effectDiscard(effectUnkown)
 export const composedLayerUnknown = Layer.empty.pipe(Layer.provide(layerUnknown))
 
@@ -307,11 +307,11 @@ skipped by default
 import { Effect, Layer } from "effect"
 
 export const withUnknownContext = Effect.gen(function*() {
-  yield* Effect.services<unknown>()
+  yield* Effect.context<unknown>()
 })
 
 export const withAnyContext = Effect.gen(function*() {
-  yield* Effect.services<any>()
+  yield* Effect.context<any>()
 })
 
 export const withAnyFailure = Effect.gen(function*() {
@@ -321,7 +321,7 @@ export const withAnyFailure = Effect.gen(function*() {
 export const withUnknownFailure = Effect.fail<unknown>(42)
 
 export const hasBothAnyUnknown = Effect.gen(function*() {
-  yield* Effect.services<unknown>()
+  yield* Effect.context<unknown>()
   return yield* Effect.fail<any>(42)
 })
 
@@ -337,7 +337,7 @@ export class Test {
   a: Effect.Effect<void, number, any> = Effect.succeed(42)
 }
 
-const effectUnkown = Effect.services<unknown>()
+const effectUnkown = Effect.context<unknown>()
 const layerUnknown = Layer.effectDiscard(effectUnkown)
 export const composedLayerUnknown = Layer.empty.pipe(Layer.provide(layerUnknown))
 

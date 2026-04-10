@@ -14,9 +14,9 @@ More info and examples at https://effect.website/docs/requirements-management/la
 
 ==== /.src/leakingRequirements_genericTag.ts (1 errors) ====
     import type { Effect } from "effect"
-    import { ServiceMap } from "effect"
+    import { Context } from "effect"
     
-    export class FileSystem extends ServiceMap.Service<FileSystem, {
+    export class FileSystem extends Context.Service<FileSystem, {
       writeFile: (content: string) => Effect.Effect<void>
     }>()("FileSystem") {}
     
@@ -25,8 +25,8 @@ More info and examples at https://effect.website/docs/requirements-management/la
       readCache: Effect.Effect<void, never, FileSystem>
     }
     
-    export const GenericTag = ServiceMap.Service<LeakingService>("LeakingService")
-                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    export const GenericTag = Context.Service<LeakingService>("LeakingService")
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! suggestion TS377041: Methods of this Service require `FileSystem` from every caller.
 
 The requirement becomes part of the public service surface instead of remaining internal to Layer implementation.

@@ -150,11 +150,11 @@ Transformations (1):
 
 === Piping Flow ===
 Location: 48:32 - 51:3
-Node: Effect.gen(function*() {\n  const ctx = yield* Effect.services<MyService1>()\n  return yield* Effect.provide(Effect.void, ctx)\n})
+Node: Effect.gen(function*() {\n  const ctx = yield* Effect.context<MyService1>()\n  return yield* Effect.provide(Effect.void, ctx)\n})
 Node Kind: KindCallExpression
 
-Subject: function*() {\n  const ctx = yield* Effect.services<MyService1>()\n  return yield* Effect.provide(Effect.void, ctx)\n}
-Subject Type: () => Generator<Effect<void, never, never> | Effect<ServiceMap<MyService1>, never, MyService1>, void, any>
+Subject: function*() {\n  const ctx = yield* Effect.context<MyService1>()\n  return yield* Effect.provide(Effect.void, ctx)\n}
+Subject Type: () => Generator<Effect<void, never, never> | Effect<Context<MyService1>, never, MyService1>, void, any>
 
 Transformations (1):
   [0] kind: call

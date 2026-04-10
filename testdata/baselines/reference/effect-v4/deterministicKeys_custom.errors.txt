@@ -23,10 +23,10 @@ Effect version: 4.0.0
     
 
 ==== /.src/utils.ts (0 errors) ====
-    import { ServiceMap } from "effect"
+    import { Context } from "effect"
     
     export function MyConstructor<X>(/** @effect-identifier */ identifier: string) {
-      return class extends ServiceMap.Service<X, {}>()("hey/" + identifier) {}
+      return class extends Context.Service<X, {}>()("hey/" + identifier) {}
     }
     
     export const Class = <
@@ -55,11 +55,11 @@ Effect version: 4.0.0
 ==== /.src/test.ts (2 errors) ====
     // @effect-diagnostics deterministicKeys:error
     import * as Persistable from "./utils"
-    import { ServiceMap } from "effect"
+    import { Context } from "effect"
     
     // simple case inside same file
     export function LocalConstructor<X>(/** @effect-identifier */ identifier: string) {
-      return class extends ServiceMap.Service<X, {}>()("hey/" + identifier) {}
+      return class extends Context.Service<X, {}>()("hey/" + identifier) {}
     }
     
     export class MyClass extends LocalConstructor<MyClass>("Hello") {

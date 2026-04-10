@@ -1,12 +1,13 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/globalTimersInEffect.ts(6,3): warning TS377073: This Effect code uses `setTimeout`, the corresponding timer API in this context is `Effect.sleep or Schedule` from Effect. effect(globalTimersInEffect)
-/.src/globalTimersInEffect.ts(11,3): warning TS377073: This Effect code uses `setInterval`, the corresponding timer API in this context is `Schedule or Effect.repeat` from Effect. effect(globalTimersInEffect)
-/.src/globalTimersInEffect.ts(17,3): warning TS377073: This Effect code uses `setTimeout`, the corresponding timer API in this context is `Effect.sleep or Schedule` from Effect. effect(globalTimersInEffect)
+/.src/globalTimersInEffect.ts(7,3): warning TS377073: This Effect code uses `setTimeout`, the corresponding timer API in this context is `Effect.sleep or Schedule` from Effect. effect(globalTimersInEffect)
+/.src/globalTimersInEffect.ts(12,3): warning TS377073: This Effect code uses `setInterval`, the corresponding timer API in this context is `Schedule or Effect.repeat` from Effect. effect(globalTimersInEffect)
+/.src/globalTimersInEffect.ts(18,3): warning TS377073: This Effect code uses `setTimeout`, the corresponding timer API in this context is `Effect.sleep or Schedule` from Effect. effect(globalTimersInEffect)
 
 
 ==== /.src/globalTimersInEffect.ts (3 errors) ====
+    // @effect-v3
     // @effect-diagnostics globalTimersInEffect:warning
     import { Effect } from "effect"
     
@@ -45,4 +46,3 @@ Effect version: 3.19.19
       const fn = () => setTimeout(() => {}, 100)
       return fn
     })
-    

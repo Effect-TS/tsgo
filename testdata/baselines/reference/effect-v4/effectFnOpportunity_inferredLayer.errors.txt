@@ -21,9 +21,9 @@ Effect version: 4.0.0
     
 
 ==== /.src/effectFnOpportunity_inferredLayer.ts (4 errors) ====
-    import { Effect, Layer, ServiceMap } from "effect"
+    import { Effect, Layer, Context } from "effect"
     
-    class MyService extends ServiceMap.Service<MyService, {
+    class MyService extends Context.Service<MyService, {
       log: (_what: string) => Effect.Effect<void>
     }>()("MyService") {}
     

@@ -1,7 +1,7 @@
 ==== /.src/lazyPromiseInEffectSync_preview.ts (2 flows) ====
 
 === Piping Flow ===
-Location: 5:23 - 5:61
+Location: 6:23 - 6:61
 Node: Effect.sync(() => Promise.resolve(1))
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: Effect<Promise<number>, never, never>
 
 === Piping Flow ===
-Location: 5:41 - 5:60
+Location: 6:41 - 6:60
 Node: Promise.resolve(1)
 Node Kind: KindCallExpression
 

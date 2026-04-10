@@ -1,15 +1,15 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/serviceNotAsClass_preview.ts(5,24): warning TS377056: `ServiceMap.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `class Preview extends ServiceMap.Service<Preview, { port: number }>()("Preview") {}`. effect(serviceNotAsClass)
+/.src/serviceNotAsClass_preview.ts(5,24): warning TS377056: `Context.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `class Preview extends Context.Service<Preview, { port: number }>()("Preview") {}`. effect(serviceNotAsClass)
 
 
 ==== /.src/serviceNotAsClass_preview.ts (1 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics serviceNotAsClass:warning
-    import { ServiceMap } from "effect"
+    import { Context } from "effect"
     
-    export const Preview = ServiceMap.Service<{ port: number }>("Preview")
-                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377056: `ServiceMap.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `class Preview extends ServiceMap.Service<Preview, { port: number }>()("Preview") {}`. effect(serviceNotAsClass)
+    export const Preview = Context.Service<{ port: number }>("Preview")
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377056: `Context.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `class Preview extends Context.Service<Preview, { port: number }>()("Preview") {}`. effect(serviceNotAsClass)
     

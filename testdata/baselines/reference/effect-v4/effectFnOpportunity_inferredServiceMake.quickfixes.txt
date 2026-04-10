@@ -24,9 +24,9 @@ skipped by default
 === [D2] Fix 2: "Convert to Effect.fn(\"UserService.getUser\")" ===
 
 --- file:///.src/effectFnOpportunity_inferredServiceMake.ts ---
-import { Effect, Layer, ServiceMap } from "effect"
+import { Effect, Layer, Context } from "effect"
 
-export class UserService extends ServiceMap.Service<UserService>()("UserService", {
+export class UserService extends Context.Service<UserService>()("UserService", {
     make: Effect.gen(function*() {
         return {
     getUser: Effect.fn("UserService.getUser")(function* (id: string) {
@@ -46,9 +46,9 @@ skipped by default
 === [D3] Fix 2: "Remove the Effect.gen, and keep the body" ===
 
 --- file:///.src/effectFnOpportunity_inferredServiceMake.ts ---
-import { Effect, Layer, ServiceMap } from "effect"
+import { Effect, Layer, Context } from "effect"
 
-export class UserService extends ServiceMap.Service<UserService>()("UserService", {
+export class UserService extends Context.Service<UserService>()("UserService", {
     make: Effect.gen(function*() {
         return {
             getUser: (id: string) => Effect.log(`Looking up user ${id}`)

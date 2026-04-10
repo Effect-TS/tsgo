@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (5:36-5:60) TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
+[D1] (6:36-6:60) TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
   Fix 0: "Disable lazyPromiseInEffectSync for this line"
   Fix 1: "Disable lazyPromiseInEffectSync for entire file"
 

@@ -12,7 +12,7 @@ Transformations (1):
   [0] kind: call
       callee: Schema.Class<Todo>("Todo")
       args: (constant)
-      outType: ExtendableClass<Todo, Struct<{ readonly userId: Number; readonly id: Number; readonly title: String; readonly completed: Boolean; }>, {}>
+      outType: Class<Todo, Struct<{ readonly userId: Number; readonly id: Number; readonly title: String; readonly completed: Boolean; }>, {}>
 
 === Piping Flow ===
 Location: 11:19 - 15:3
@@ -26,7 +26,7 @@ Transformations (1):
   [0] kind: call
       callee: Schema.Class<User>("User")
       args: (constant)
-      outType: ExtendableClass<User, Struct<{ readonly id: Number; readonly name: String; readonly email: String; }>, {}>
+      outType: Class<User, Struct<{ readonly id: Number; readonly name: String; readonly email: String; }>, {}>
 
 === Piping Flow ===
 Location: 17:27 - 17:60
@@ -72,7 +72,7 @@ Transformations (1):
 
 === Piping Flow ===
 Location: 34:24 - 36:18
-Node: ServiceMap.Service<ApiConfig, {\n  readonly baseUrl: string\n}>()("ApiConfig")
+Node: Context.Service<ApiConfig, {\n  readonly baseUrl: string\n}>()("ApiConfig")
 Node Kind: KindCallExpression
 
 Subject: "ApiConfig"
@@ -80,7 +80,7 @@ Subject Type: "ApiConfig"
 
 Transformations (1):
   [0] kind: call
-      callee: ServiceMap.Service<ApiConfig, {\n  readonly baseUrl: string\n}>()
+      callee: Context.Service<ApiConfig, {\n  readonly baseUrl: string\n}>()
       args: (constant)
       outType: ServiceClass<ApiConfig, "ApiConfig", { readonly baseUrl: string; }>
 
@@ -100,7 +100,7 @@ Transformations (1):
 
 === Piping Flow ===
 Location: 42:30 - 45:24
-Node: ServiceMap.Service<JsonPlaceholder, {\n  readonly getTodo: (id: number) => Effect.Effect<Todo, JsonPlaceholderError>\n  readonly getUser: (id: number) => Effect.Effect<User, JsonPlaceholderError>\n}>()("JsonPlaceholder")
+Node: Context.Service<JsonPlaceholder, {\n  readonly getTodo: (id: number) => Effect.Effect<Todo, JsonPlaceholderError>\n  readonly getUser: (id: number) => Effect.Effect<User, JsonPlaceholderError>\n}>()("JsonPlaceholder")
 Node Kind: KindCallExpression
 
 Subject: "JsonPlaceholder"
@@ -108,7 +108,7 @@ Subject Type: "JsonPlaceholder"
 
 Transformations (1):
   [0] kind: call
-      callee: ServiceMap.Service<JsonPlaceholder, {\n  readonly getTodo: (id: number) => Effect.Effect<Todo, JsonPlaceholderError>\n  readonly getUser: (id: number) => Effect.Effect<User, JsonPlaceholderError>\n}>()
+      callee: Context.Service<JsonPlaceholder, {\n  readonly getTodo: (id: number) => Effect.Effect<Todo, JsonPlaceholderError>\n  readonly getUser: (id: number) => Effect.Effect<User, JsonPlaceholderError>\n}>()
       args: (constant)
       outType: ServiceClass<JsonPlaceholder, "JsonPlaceholder", { readonly getTodo: (id: number) => Effect<Todo, JsonPlaceholderError, never>; readonly getUser: (id: number) => Effect<User, JsonPlaceholderError, never>; }>
 

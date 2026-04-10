@@ -1,7 +1,7 @@
 ==== /.src/globalFetchInEffect.ts (8 flows) ====
 
 === Piping Flow ===
-Location: 5:26 - 7:3
+Location: 6:26 - 8:3
 Node: Effect.gen(function*() {\n  fetch("https://example.com/in-gen")\n})
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 5:51 - 6:38
+Location: 6:51 - 7:38
 Node: fetch("https://example.com/in-gen")
 Node Kind: KindCallExpression
 
@@ -29,7 +29,7 @@ Transformations (1):
       outType: Promise<Response>
 
 === Piping Flow ===
-Location: 10:25 - 12:3
+Location: 11:25 - 13:3
 Node: Effect.fn("fetchInFn")(function*() {\n  fetch("https://example.com/in-fn")\n})
 Node Kind: KindCallExpression
 
@@ -43,7 +43,7 @@ Transformations (1):
       outType: () => Effect<void, never, never>
 
 === Piping Flow ===
-Location: 10:62 - 11:37
+Location: 11:62 - 12:37
 Node: fetch("https://example.com/in-fn")
 Node Kind: KindCallExpression
 
@@ -57,7 +57,7 @@ Transformations (1):
       outType: Promise<Response>
 
 === Piping Flow ===
-Location: 15:21 - 15:57
+Location: 16:21 - 16:57
 Node: fetch("https://example.com/module")
 Node Kind: KindCallExpression
 
@@ -71,7 +71,7 @@ Transformations (1):
       outType: Promise<Response>
 
 === Piping Flow ===
-Location: 18:28 - 18:65
+Location: 19:28 - 19:65
 Node: fetch("https://example.com/regular")
 Node Kind: KindCallExpression
 
@@ -85,7 +85,7 @@ Transformations (1):
       outType: Promise<Response>
 
 === Piping Flow ===
-Location: 21:32 - 24:3
+Location: 22:32 - 25:3
 Node: Effect.gen(function*() {\n  const fn = () => fetch("https://example.com/nested")\n  return fn\n})
 Node Kind: KindCallExpression
 
@@ -99,7 +99,7 @@ Transformations (1):
       outType: Effect<() => Promise<Response>, never, never>
 
 === Piping Flow ===
-Location: 22:19 - 22:55
+Location: 23:19 - 23:55
 Node: fetch("https://example.com/nested")
 Node Kind: KindCallExpression
 

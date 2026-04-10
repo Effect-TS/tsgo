@@ -1,10 +1,31 @@
 === Quick Fix Inventory ===
 
-[D1] (3:26-3:42) TS2307: Cannot find module 'effect/Context' or its corresponding type declarations.
-  (no quick fixes)
-
-[D2] (8:37-8:42) TS2740: Type 'typeof Cache' is missing the following properties from type 'Key<unknown, { ok: true; }>': Identifier, [ServiceTypeId], Service, key, and 4 more.
-  (no quick fixes)
+[D1] (9:24-12:4) TS377031: This layer construction leaves `Scope` in the requirement set. The scoped API removes `Scope` from the resulting requirements. effect(scopeInLayerEffect)
+  Fix 0: "Disable scopeInLayerEffect for this line"
+  Fix 1: "Disable scopeInLayerEffect for entire file"
+  Fix 2: "Use scoped for Layer creation"
 
 === Quick Fix Application Results ===
-(no quick fixes to apply)
+
+=== [D1] Fix 0: "Disable scopeInLayerEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable scopeInLayerEffect for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Use scoped for Layer creation" ===
+
+--- file:///.src/scopeInLayerEffect_preview.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics scopeInLayerEffect:warning
+import * as Context from "effect/Context"
+import * as Effect from "effect/Effect"
+import * as Layer from "effect/Layer"
+
+class Cache extends Context.Tag("Cache")<Cache, { ok: true }>() {}
+export const preview = Layer.scoped(Cache, Effect.gen(function*() {
+  yield* Effect.addFinalizer(() => Effect.void)
+  return { ok: true as const }
+}))
+

@@ -1,13 +1,14 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/globalConsoleInEffect_thunks.ts(6,48): warning TS377065: This Effect code uses `console.log`, logging in Effect code is represented through `Effect.log or Logger`. effect(globalConsoleInEffect)
-/.src/globalConsoleInEffect_thunks.ts(9,14): warning TS377065: This Effect code uses `console.warn`, logging in Effect code is represented through `Effect.logWarning or Logger`. effect(globalConsoleInEffect)
-/.src/globalConsoleInEffect_thunks.ts(13,66): warning TS377065: This Effect code uses `console.log`, logging in Effect code is represented through `Effect.log or Logger`. effect(globalConsoleInEffect)
-/.src/globalConsoleInEffect_thunks.ts(16,20): warning TS377065: This Effect code uses `console.warn`, logging in Effect code is represented through `Effect.logWarning or Logger`. effect(globalConsoleInEffect)
+/.src/globalConsoleInEffect_thunks.ts(7,48): warning TS377065: This Effect code uses `console.log`, logging in Effect code is represented through `Effect.log or Logger`. effect(globalConsoleInEffect)
+/.src/globalConsoleInEffect_thunks.ts(10,14): warning TS377065: This Effect code uses `console.warn`, logging in Effect code is represented through `Effect.logWarning or Logger`. effect(globalConsoleInEffect)
+/.src/globalConsoleInEffect_thunks.ts(14,66): warning TS377065: This Effect code uses `console.log`, logging in Effect code is represented through `Effect.log or Logger`. effect(globalConsoleInEffect)
+/.src/globalConsoleInEffect_thunks.ts(17,20): warning TS377065: This Effect code uses `console.warn`, logging in Effect code is represented through `Effect.logWarning or Logger`. effect(globalConsoleInEffect)
 
 
 ==== /.src/globalConsoleInEffect_thunks.ts (4 errors) ====
+    // @effect-v3
     // @effect-diagnostics globalConsoleInEffect:warning
     import { Data, Effect } from "effect"
     
@@ -36,4 +37,3 @@ Effect version: 3.19.19
     })
     
     export const shouldNotTriggerReturnedFunction = Effect.sync(() => () => console.log("nested"))
-    

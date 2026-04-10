@@ -20,9 +20,9 @@ Effect version: 4.0.0
     
 
 ==== /.src/effectFnOpportunity_inferredLayerThis.ts (3 errors) ====
-    import { Effect, Layer, ServiceMap } from "effect"
+    import { Effect, Layer, Context } from "effect"
     
-    export class MyService extends ServiceMap.Service<MyService, {
+    export class MyService extends Context.Service<MyService, {
       log: (_what: string) => Effect.Effect<void>
     }>()("MyService") {
         static layer = Layer.effect(this, Effect.gen(function*() {

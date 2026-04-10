@@ -1,10 +1,11 @@
 === Metadata ===
 Effect version: unknown
 
-/.src/processEnv_preview.ts(5,24): warning TS377076: This code reads from `process.env`, environment configuration is represented through `Config` from Effect. effect(processEnv)
+/.src/processEnv_preview.ts(6,24): warning TS377076: This code reads from `process.env`, environment configuration is represented through `Config` from Effect. effect(processEnv)
 
 
 ==== /.src/processEnv_preview.ts (1 errors) ====
+    // @effect-v3
     // @effect-diagnostics *:off
     // @effect-diagnostics processEnv:warning
     /// <reference types="node" />
@@ -12,4 +13,3 @@ Effect version: unknown
     export const preview = process.env.PORT
                            ~~~~~~~~~~~~~~~~
 !!! warning TS377076: This code reads from `process.env`, environment configuration is represented through `Config` from Effect. effect(processEnv)
-    

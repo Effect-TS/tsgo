@@ -27,7 +27,7 @@ export const pipe(ProductId) = Schema.NonEmptyString.pipe(Schema.brand("ProductI
 // refactor: 4:14-4:23
 import * as Schema from "effect/Schema"
 
-export const ProductId: Schema.brand<Schema.String, "ProductId"> = Schema.NonEmptyString.pipe(Schema.brand("ProductId"))
+export const ProductId: Schema.brand<Schema.NonEmptyString, "ProductId"> = Schema.NonEmptyString.pipe(Schema.brand("ProductId"))
 
 
 === [R1] Refactor 2: "Toggle lazy const" ===

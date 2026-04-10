@@ -11,9 +11,9 @@
 }
 
 // @filename: effectFnOpportunity_inferredServiceMake.ts
-import { Effect, Layer, ServiceMap } from "effect"
+import { Effect, Layer, Context } from "effect"
 
-export class UserService extends ServiceMap.Service<UserService>()("UserService", {
+export class UserService extends Context.Service<UserService>()("UserService", {
     make: Effect.gen(function*() {
         return {
             getUser: (id: string) =>

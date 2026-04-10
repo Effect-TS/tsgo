@@ -1,3 +1,4 @@
+// @effect-v3
 // @effect-diagnostics globalRandom:warning
 import { Effect } from "effect"
 

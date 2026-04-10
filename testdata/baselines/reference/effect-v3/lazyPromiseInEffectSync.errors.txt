@@ -1,11 +1,12 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/lazyPromiseInEffectSync.ts(8,47): warning TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
-/.src/lazyPromiseInEffectSync.ts(11,45): warning TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
+/.src/lazyPromiseInEffectSync.ts(9,47): warning TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
+/.src/lazyPromiseInEffectSync.ts(12,45): warning TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
 
 
 ==== /.src/lazyPromiseInEffectSync.ts (2 errors) ====
+    // @effect-v3
     // @effect-diagnostics lazyPromiseInEffectSync:warning
     import { Effect } from "effect"
     
@@ -30,4 +31,3 @@ Effect version: 3.19.19
     
     // Should NOT trigger - already using the async constructor
     export const fromEffectPromise = Effect.promise(() => Promise.resolve(1))
-    

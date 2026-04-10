@@ -1,7 +1,7 @@
 ==== /.src/schemaUnionOfLiterals_preview.ts (2 flows) ====
 
 === Piping Flow ===
-Location: 5:37 - 5:56
+Location: 6:37 - 6:56
 Node: Schema.Literal("a")
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: Literal<["a"]>
 
 === Piping Flow ===
-Location: 5:57 - 5:77
+Location: 6:57 - 6:77
 Node: Schema.Literal("b")
 Node Kind: KindCallExpression
 

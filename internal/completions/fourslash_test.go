@@ -145,20 +145,13 @@ func contextSelfInClassesItems(t *testing.T, source string, position int) []*lsp
 	})
 }
 
-func serviceMapSelfInClassesItems(t *testing.T, source string, position int) []*lsproto.CompletionItem {
-	t.Helper()
-	return filterCompletionItems(completionItemsAt(t, source, position), func(item *lsproto.CompletionItem) bool {
-		return strings.HasPrefix(item.Label, "Service<")
-	})
-}
-
-func serviceMapSelfInClassesItemsWithPackageJSON(t *testing.T, source string, position int) []*lsproto.CompletionItem {
+func contextSelfInClassesItemsWithPackageJSON(t *testing.T, source string, position int) []*lsproto.CompletionItem {
 	t.Helper()
 	const packageJSON = `{
 	  "name": "@effect/harness-effect-v4"
 	}`
 	return filterCompletionItems(completionItemsAtWithPackageJSON(t, packageJSON, source, position), func(item *lsproto.CompletionItem) bool {
-		return strings.HasPrefix(item.Label, "Service<")
+		return strings.HasPrefix(item.Label, `Tag("`) || strings.HasPrefix(item.Label, "Service<")
 	})
 }
 

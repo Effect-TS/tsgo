@@ -1,7 +1,7 @@
 ==== /.src/missingEffectServiceDependency_preview.ts (2 flows) ====
 
 === Piping Flow ===
-Location: 7:10 - 10:5
+Location: 8:10 - 11:5
 Node: Effect.gen(function*() {\n    yield* Db\n    return { all: Effect.succeed([] as Array<number>) }\n  })
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: Effect<{ all: Effect<number[], never, never>; }, never, Db>
 
 === Piping Flow ===
-Location: 9:18 - 9:54
+Location: 10:18 - 10:54
 Node: Effect.succeed([] as Array<number>)
 Node Kind: KindCallExpression
 

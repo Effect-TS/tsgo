@@ -6,24 +6,24 @@
 // Divergences that do NOT apply (single-file test, no cross-file references):
 //   2. Cross-file location annotations in flat output format (format.go)
 //   3. "at in" double preposition fix in quickinfo for cross-file refs (format.go)
-import { Effect, Layer, ServiceMap } from "effect"
+import { Effect, Layer, Context } from "effect"
 
-export class DbConnection extends ServiceMap.Service<DbConnection>()("DbConnection", {
+export class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
   make: Effect.succeed({})
 }) {
   static Default = Layer.effect(this, this.make)
 }
-export class FileSystem extends ServiceMap.Service<FileSystem>()("FileSystem", {
+export class FileSystem extends Context.Service<FileSystem>()("FileSystem", {
   make: Effect.succeed({})
 }) {
   static Default = Layer.effect(this, this.make)
 }
-export class Cache extends ServiceMap.Service<Cache>()("Cache", {
+export class Cache extends Context.Service<Cache>()("Cache", {
   make: Effect.as(FileSystem.asEffect(), {})
 }) {
   static Default = Layer.effect(this, this.make)
 }
-export class UserRepository extends ServiceMap.Service<UserRepository>()("UserRepository", {
+export class UserRepository extends Context.Service<UserRepository>()("UserRepository", {
   make: Effect.as(Effect.andThen(DbConnection.asEffect(), Cache.asEffect()), {})
 }) {
   static Default = Layer.effect(this, this.make)

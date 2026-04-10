@@ -1,3 +1,4 @@
+// @effect-v3
 // @effect-diagnostics globalTimers:warning
 import { Effect } from "effect"
 

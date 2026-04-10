@@ -12,7 +12,7 @@ type EffectServiceResult struct {
 	KeyStringLiteral *ast.Node // The key string literal from the outer call's first argument, or nil
 }
 
-// ExtendsEffectService checks if a class declaration extends Effect.Service<Self>()(key, options).
+// ExtendsEffectV3Service checks if a class declaration extends Effect.Service<Self>()(key, options).
 // It detects the double-call pattern:
 //
 //	class X extends Effect.Service<X>()("key", { ... }) {}
@@ -22,12 +22,16 @@ type EffectServiceResult struct {
 // and the inner call resolves to Effect.Service.
 //
 // Returns nil if the class does not extend Effect.Service.
-func (tp *TypeParser) ExtendsEffectService(classNode *ast.Node) *EffectServiceResult {
+func (tp *TypeParser) ExtendsEffectV3Service(classNode *ast.Node) *EffectServiceResult {
 	if tp == nil || tp.checker == nil || classNode == nil {
 		return nil
 	}
 
 	return Cached(&tp.links.ExtendsEffectService, classNode, func() *EffectServiceResult {
+		if tp.SupportedEffectVersion() == EffectMajorV4 {
+			return nil
+		}
+
 		// Must have a name
 		if classNode.Name() == nil {
 			return nil

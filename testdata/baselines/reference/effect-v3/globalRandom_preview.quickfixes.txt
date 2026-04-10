@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (4:24-4:37) TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
+[D1] (5:24-5:37) TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
   Fix 0: "Disable globalRandom for this line"
   Fix 1: "Disable globalRandom for entire file"
 

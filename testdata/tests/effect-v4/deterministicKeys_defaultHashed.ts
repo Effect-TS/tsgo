@@ -18,10 +18,10 @@
 
 // @filename: test.ts
 // @effect-diagnostics deterministicKeys:error
-import { ServiceMap, Data } from "effect"
+import { Context, Data } from "effect"
 
 export class ExpectedServiceIdentifier
-  extends ServiceMap.Service<ExpectedServiceIdentifier, {}>()("ExpectedServiceIdentifier")
+  extends Context.Service<ExpectedServiceIdentifier, {}>()("ExpectedServiceIdentifier")
 {}
 
 export class ErrorA extends Data.TaggedError("ErrorA")<{}> {}

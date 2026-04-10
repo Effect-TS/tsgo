@@ -12,7 +12,7 @@ import (
 var ServiceNotAsClassFix = fixable.Fixable{
 	Name:        "serviceNotAsClass",
 	Description: "Convert to class declaration",
-	ErrorCodes:  []int32{tsdiag.ServiceMap_Service_is_assigned_to_a_variable_here_but_this_API_is_intended_for_a_class_declaration_shape_such_as_0_effect_serviceNotAsClass.Code()},
+	ErrorCodes:  []int32{tsdiag.Context_Service_is_assigned_to_a_variable_here_but_this_API_is_intended_for_a_class_declaration_shape_such_as_0_effect_serviceNotAsClass.Code()},
 	FixIDs:      []string{"serviceNotAsClass_fix"},
 	Run:         runServiceNotAsClassFix,
 }
@@ -33,9 +33,9 @@ func runServiceNotAsClassFix(ctx *fixable.Context) []ls.CodeAction {
 			Run: func(tracker *change.Tracker) {
 				callExpr := match.CallExprNode.AsCallExpression()
 
-				// Build ServiceMap.Service property access
+				// Build the original service namespace property access.
 				serviceMapService := tracker.NewPropertyAccessExpression(
-					tracker.NewIdentifier("ServiceMap"),
+					tracker.NewIdentifier(match.ServiceModule),
 					nil,
 					tracker.NewIdentifier("Service"),
 					ast.NodeFlagsNone,
@@ -50,7 +50,7 @@ func runServiceNotAsClassFix(ctx *fixable.Context) []ls.CodeAction {
 					}
 				}
 
-				// Build inner call: ServiceMap.Service<Self, ...TypeArgs>()
+				// Build inner call: <ServiceModule>.Service<Self, ...TypeArgs>()
 				innerCall := tracker.NewCallExpression(
 					serviceMapService,
 					nil,
