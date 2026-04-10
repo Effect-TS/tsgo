@@ -1,0 +1,85 @@
+==== /.src/processEnvInEffect_thunks.ts (6 flows) ====
+
+=== Piping Flow ===
+Location: 5:27 - 5:60
+Node: Data.TaggedError("ExampleError")
+Node Kind: KindCallExpression
+
+Subject: "ExampleError"
+Subject Type: "ExampleError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "ExampleError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 7:25 - 7:68
+Node: Effect.sync(() => process.env.SYNC_SECRET)
+Node Kind: KindCallExpression
+
+Subject: () => process.env.SYNC_SECRET
+Subject Type: () => string | undefined
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<string | undefined, never, never>
+
+=== Piping Flow ===
+Location: 9:30 - 12:3
+Node: Effect.try({\n  try: () => process.env.TRY_SECRET,\n  catch: () => new ExampleError()\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  try: () => process.env.TRY_SECRET,\n  catch: () => new ExampleError()\n}
+Subject Type: { try: () => string | undefined; catch: () => ExampleError; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<string | undefined, ExampleError, never>
+
+=== Piping Flow ===
+Location: 14:31 - 14:93
+Node: Effect.tryPromise(async () => process.env.TRY_PROMISE_SECRET)
+Node Kind: KindCallExpression
+
+Subject: async () => process.env.TRY_PROMISE_SECRET
+Subject Type: () => Promise<string | undefined>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<string | undefined, UnknownException, never>
+
+=== Piping Flow ===
+Location: 16:37 - 19:3
+Node: Effect.tryPromise({\n  try: async () => process.env.TRY_PROMISE_OBJECT_SECRET,\n  catch: () => new ExampleError()\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  try: async () => process.env.TRY_PROMISE_OBJECT_SECRET,\n  catch: () => new ExampleError()\n}
+Subject Type: { try: () => Promise<string | undefined>; catch: () => ExampleError; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<string | undefined, ExampleError, never>
+
+=== Piping Flow ===
+Location: 21:48 - 21:99
+Node: Effect.sync(() => () => process.env.NESTED_SECRET)
+Node Kind: KindCallExpression
+
+Subject: () => () => process.env.NESTED_SECRET
+Subject Type: () => () => string | undefined
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<() => string | undefined, never, never>

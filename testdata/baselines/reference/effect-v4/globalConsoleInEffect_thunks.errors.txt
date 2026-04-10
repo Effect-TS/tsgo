@@ -1,0 +1,39 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/globalConsoleInEffect_thunks.ts(6,48): warning TS377065: This Effect code uses `console.log`, logging in Effect code is represented through `Effect.log or Logger`. effect(globalConsoleInEffect)
+/.src/globalConsoleInEffect_thunks.ts(9,14): warning TS377065: This Effect code uses `console.warn`, logging in Effect code is represented through `Effect.logWarning or Logger`. effect(globalConsoleInEffect)
+/.src/globalConsoleInEffect_thunks.ts(13,66): warning TS377065: This Effect code uses `console.log`, logging in Effect code is represented through `Effect.log or Logger`. effect(globalConsoleInEffect)
+/.src/globalConsoleInEffect_thunks.ts(16,20): warning TS377065: This Effect code uses `console.warn`, logging in Effect code is represented through `Effect.logWarning or Logger`. effect(globalConsoleInEffect)
+
+
+==== /.src/globalConsoleInEffect_thunks.ts (4 errors) ====
+    // @effect-diagnostics globalConsoleInEffect:warning
+    import { Data, Effect } from "effect"
+    
+    class ExampleError extends Data.TaggedError("ExampleError")<{}> {}
+    
+    export const consoleInSync = Effect.sync(() => console.log("sync"))
+                                                   ~~~~~~~~~~~~~~~~~~~
+!!! warning TS377065: This Effect code uses `console.log`, logging in Effect code is represented through `Effect.log or Logger`. effect(globalConsoleInEffect)
+    
+    export const consoleInTryObject = Effect.try({
+      try: () => console.warn("try"),
+                 ~~~~~~~~~~~~~~~~~~~
+!!! warning TS377065: This Effect code uses `console.warn`, logging in Effect code is represented through `Effect.logWarning or Logger`. effect(globalConsoleInEffect)
+      catch: () => new ExampleError()
+    })
+    
+    export const consoleInTryPromise = Effect.tryPromise(async () => console.log("try-promise"))
+                                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377065: This Effect code uses `console.log`, logging in Effect code is represented through `Effect.log or Logger`. effect(globalConsoleInEffect)
+    
+    export const consoleInTryPromiseObject = Effect.tryPromise({
+      try: async () => console.warn("try-promise-object"),
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377065: This Effect code uses `console.warn`, logging in Effect code is represented through `Effect.logWarning or Logger`. effect(globalConsoleInEffect)
+      catch: () => new ExampleError()
+    })
+    
+    export const shouldNotTriggerReturnedFunction = Effect.sync(() => () => console.log("nested"))
+    

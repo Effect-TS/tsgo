@@ -82,21 +82,7 @@ func checkSchemaSyncInEffect(ctx *rule.Context, node *ast.Node, syncToEffectMeth
 		return nil
 	}
 
-	if ctx.TypeParser.GetEffectContextFlags(node)&typeparser.EffectContextFlagCanYieldEffect == 0 {
-		return nil
-	}
-
-	genFn := ctx.TypeParser.GetEffectYieldGeneratorFunction(node)
-	if genFn == nil {
-		return nil
-	}
-
-	// Check that the generator body has at least one statement
-	if genFn.Body == nil || genFn.Body.Kind != ast.KindBlock {
-		return nil
-	}
-	block := genFn.Body.AsBlock()
-	if block.Statements == nil || len(block.Statements.Nodes) == 0 {
+	if ctx.TypeParser.GetEffectContextFlags(node)&typeparser.EffectContextFlagInEffect == 0 {
 		return nil
 	}
 

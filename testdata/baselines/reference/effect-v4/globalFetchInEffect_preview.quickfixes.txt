@@ -1,5 +1,13 @@
 === Quick Fix Inventory ===
-(no diagnostics)
+
+[D1] (6:38-6:43) TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `effect/unstable/http`. effect(globalFetchInEffect)
+  Fix 0: "Disable globalFetchInEffect for this line"
+  Fix 1: "Disable globalFetchInEffect for entire file"
 
 === Quick Fix Application Results ===
-(no quick fixes to apply)
+
+=== [D1] Fix 0: "Disable globalFetchInEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable globalFetchInEffect for entire file" ===
+skipped by default

@@ -1,0 +1,155 @@
+==== /.src/globalFetchInEffect_thunks.ts (11 flows) ====
+
+=== Piping Flow ===
+Location: 4:27 - 4:60
+Node: Data.TaggedError("ExampleError")
+Node Kind: KindCallExpression
+
+Subject: "ExampleError"
+Subject Type: "ExampleError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "ExampleError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 6:27 - 6:80
+Node: Effect.sync(() => fetch("https://example.com/sync"))
+Node Kind: KindCallExpression
+
+Subject: () => fetch("https://example.com/sync")
+Subject Type: () => Promise<Response>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<Promise<Response>, never, never>
+
+=== Piping Flow ===
+Location: 6:45 - 6:79
+Node: fetch("https://example.com/sync")
+Node Kind: KindCallExpression
+
+Subject: "https://example.com/sync"
+Subject Type: "https://example.com/sync"
+
+Transformations (1):
+  [0] kind: call
+      callee: fetch
+      args: (constant)
+      outType: Promise<Response>
+
+=== Piping Flow ===
+Location: 8:32 - 11:3
+Node: Effect.try({\n  try: () => fetch("https://example.com/try"),\n  catch: () => new ExampleError()\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  try: () => fetch("https://example.com/try"),\n  catch: () => new ExampleError()\n}
+Subject Type: { try: () => Promise<Response>; catch: () => ExampleError; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<Promise<Response>, ExampleError, never>
+
+=== Piping Flow ===
+Location: 9:13 - 9:46
+Node: fetch("https://example.com/try")
+Node Kind: KindCallExpression
+
+Subject: "https://example.com/try"
+Subject Type: "https://example.com/try"
+
+Transformations (1):
+  [0] kind: call
+      callee: fetch
+      args: (constant)
+      outType: Promise<Response>
+
+=== Piping Flow ===
+Location: 13:33 - 13:105
+Node: Effect.tryPromise(async () => fetch("https://example.com/try-promise"))
+Node Kind: KindCallExpression
+
+Subject: async () => fetch("https://example.com/try-promise")
+Subject Type: () => Promise<Response>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<Response, UnknownException, never>
+
+=== Piping Flow ===
+Location: 13:63 - 13:104
+Node: fetch("https://example.com/try-promise")
+Node Kind: KindCallExpression
+
+Subject: "https://example.com/try-promise"
+Subject Type: "https://example.com/try-promise"
+
+Transformations (1):
+  [0] kind: call
+      callee: fetch
+      args: (constant)
+      outType: Promise<Response>
+
+=== Piping Flow ===
+Location: 15:39 - 18:3
+Node: Effect.tryPromise({\n  try: async () => fetch("https://example.com/try-promise-object"),\n  catch: () => new ExampleError()\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  try: async () => fetch("https://example.com/try-promise-object"),\n  catch: () => new ExampleError()\n}
+Subject Type: { try: () => Promise<Response>; catch: () => ExampleError; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<Response, ExampleError, never>
+
+=== Piping Flow ===
+Location: 16:19 - 16:67
+Node: fetch("https://example.com/try-promise-object")
+Node Kind: KindCallExpression
+
+Subject: "https://example.com/try-promise-object"
+Subject Type: "https://example.com/try-promise-object"
+
+Transformations (1):
+  [0] kind: call
+      callee: fetch
+      args: (constant)
+      outType: Promise<Response>
+
+=== Piping Flow ===
+Location: 20:48 - 20:109
+Node: Effect.sync(() => () => fetch("https://example.com/nested"))
+Node Kind: KindCallExpression
+
+Subject: () => () => fetch("https://example.com/nested")
+Subject Type: () => () => Promise<Response>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<() => Promise<Response>, never, never>
+
+=== Piping Flow ===
+Location: 20:72 - 20:108
+Node: fetch("https://example.com/nested")
+Node Kind: KindCallExpression
+
+Subject: "https://example.com/nested"
+Subject Type: "https://example.com/nested"
+
+Transformations (1):
+  [0] kind: call
+      callee: fetch
+      args: (constant)
+      outType: Promise<Response>

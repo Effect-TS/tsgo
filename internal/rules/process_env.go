@@ -51,7 +51,7 @@ func runProcessEnv(ctx *rule.Context, checkInEffect bool) []*ast.Diagnostic {
 			return false
 		}
 
-		inEffect := ctx.TypeParser.GetEffectContextFlags(node)&typeparser.EffectContextFlagCanYieldEffect != 0
+		inEffect := ctx.TypeParser.GetEffectContextFlags(node)&typeparser.EffectContextFlagInEffect != 0
 		if inEffect == checkInEffect {
 			if processNode := processEnvRoot(node); processNode != nil {
 				if ctx.TypeParser.ResolveToGlobalSymbol(ctx.Checker.GetSymbolAtLocation(processNode)) == processSymbol {

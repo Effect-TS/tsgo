@@ -52,7 +52,7 @@ func runCryptoRandomUUID(ctx *rule.Context, checkInEffect bool) []*ast.Diagnosti
 		}
 		if node.Kind == ast.KindCallExpression {
 			call := node.AsCallExpression()
-			inEffect := ctx.TypeParser.GetEffectContextFlags(node)&typeparser.EffectContextFlagCanYieldEffect != 0
+			inEffect := ctx.TypeParser.GetEffectContextFlags(node)&typeparser.EffectContextFlagInEffect != 0
 			if inEffect == checkInEffect {
 				if receiver := cryptoRandomUUIDReceiver(call); receiver != nil {
 					if ctx.TypeParser.ResolveToGlobalSymbol(ctx.Checker.GetSymbolAtLocation(receiver)) == cryptoSymbol {

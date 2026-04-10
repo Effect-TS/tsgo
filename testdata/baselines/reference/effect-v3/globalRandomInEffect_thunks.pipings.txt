@@ -1,0 +1,85 @@
+==== /.src/globalRandomInEffect_thunks.ts (6 flows) ====
+
+=== Piping Flow ===
+Location: 4:27 - 4:60
+Node: Data.TaggedError("ExampleError")
+Node Kind: KindCallExpression
+
+Subject: "ExampleError"
+Subject Type: "ExampleError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "ExampleError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 6:28 - 6:61
+Node: Effect.sync(() => Math.random())
+Node Kind: KindCallExpression
+
+Subject: () => Math.random()
+Subject Type: () => number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 8:33 - 11:3
+Node: Effect.try({\n  try: () => Math.random(),\n  catch: () => new ExampleError()\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  try: () => Math.random(),\n  catch: () => new ExampleError()\n}
+Subject Type: { try: () => number; catch: () => ExampleError; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<number, ExampleError, never>
+
+=== Piping Flow ===
+Location: 13:34 - 13:79
+Node: Effect.tryPromise(async () => Math.random())
+Node Kind: KindCallExpression
+
+Subject: async () => Math.random()
+Subject Type: () => Promise<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<number, UnknownException, never>
+
+=== Piping Flow ===
+Location: 15:40 - 18:3
+Node: Effect.tryPromise({\n  try: async () => Math.random(),\n  catch: () => new ExampleError()\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  try: async () => Math.random(),\n  catch: () => new ExampleError()\n}
+Subject Type: { try: () => Promise<number>; catch: () => ExampleError; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<number, ExampleError, never>
+
+=== Piping Flow ===
+Location: 20:48 - 20:87
+Node: Effect.sync(() => () => Math.random())
+Node Kind: KindCallExpression
+
+Subject: () => () => Math.random()
+Subject Type: () => () => number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<() => number, never, never>

@@ -51,7 +51,7 @@ func runGlobalDate(ctx *rule.Context, checkInEffect bool) []*ast.Diagnostic {
 		if node == nil {
 			return false
 		}
-		inEffect := ctx.TypeParser.GetEffectContextFlags(node)&typeparser.EffectContextFlagCanYieldEffect != 0
+		inEffect := ctx.TypeParser.GetEffectContextFlags(node)&typeparser.EffectContextFlagInEffect != 0
 		if inEffect == checkInEffect {
 			var objectNode *ast.Node
 			message := tsdiag.This_code_uses_Date_now_time_access_is_represented_through_Clock_from_Effect_effect_globalDate

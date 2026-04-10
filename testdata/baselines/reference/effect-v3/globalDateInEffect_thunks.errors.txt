@@ -1,0 +1,39 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/globalDateInEffect_thunks.ts(6,45): warning TS377067: This Effect code uses `Date.now()`, time access in Effect code is represented through `Clock` from Effect. effect(globalDateInEffect)
+/.src/globalDateInEffect_thunks.ts(9,14): warning TS377069: This Effect code constructs `new Date()`, date values in Effect code are represented through `DateTime` from Effect. effect(globalDateInEffect)
+/.src/globalDateInEffect_thunks.ts(13,63): warning TS377067: This Effect code uses `Date.now()`, time access in Effect code is represented through `Clock` from Effect. effect(globalDateInEffect)
+/.src/globalDateInEffect_thunks.ts(16,20): warning TS377069: This Effect code constructs `new Date()`, date values in Effect code are represented through `DateTime` from Effect. effect(globalDateInEffect)
+
+
+==== /.src/globalDateInEffect_thunks.ts (4 errors) ====
+    // @effect-diagnostics globalDateInEffect:warning
+    import { Data, Effect } from "effect"
+    
+    class ExampleError extends Data.TaggedError("ExampleError")<{}> {}
+    
+    export const dateInSync = Effect.sync(() => Date.now())
+                                                ~~~~~~~~~~
+!!! warning TS377067: This Effect code uses `Date.now()`, time access in Effect code is represented through `Clock` from Effect. effect(globalDateInEffect)
+    
+    export const newDateInTryObject = Effect.try({
+      try: () => new Date(),
+                 ~~~~~~~~~~
+!!! warning TS377069: This Effect code constructs `new Date()`, date values in Effect code are represented through `DateTime` from Effect. effect(globalDateInEffect)
+      catch: () => new ExampleError()
+    })
+    
+    export const dateInTryPromise = Effect.tryPromise(async () => Date.now())
+                                                                  ~~~~~~~~~~
+!!! warning TS377067: This Effect code uses `Date.now()`, time access in Effect code is represented through `Clock` from Effect. effect(globalDateInEffect)
+    
+    export const newDateInTryPromiseObject = Effect.tryPromise({
+      try: async () => new Date(),
+                       ~~~~~~~~~~
+!!! warning TS377069: This Effect code constructs `new Date()`, date values in Effect code are represented through `DateTime` from Effect. effect(globalDateInEffect)
+      catch: () => new ExampleError()
+    })
+    
+    export const shouldNotTriggerReturnedFunction = Effect.sync(() => () => Date.now())
+    
