@@ -1,6 +1,6 @@
 {
   "name": "@effect/tsgo-darwin-x64",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Effect Language Service for TypeScript-Go — Effect-specific diagnostics and hover features.",
   "license": "MIT",
   "repository": {
