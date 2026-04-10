@@ -12,9 +12,10 @@ Effect version: 3.19.19
 /.src/preferSchemaOverJson.ts(25,18): suggestion TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
 /.src/preferSchemaOverJson.ts(33,16): suggestion TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
 /.src/preferSchemaOverJson.ts(41,18): suggestion TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
+/.src/preferSchemaOverJson.ts(61,18): suggestion TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
 
 
-==== /.src/preferSchemaOverJson.ts (11 errors) ====
+==== /.src/preferSchemaOverJson.ts (12 errors) ====
     // @effect-v3
     import { Effect } from "effect"
     
@@ -98,6 +99,8 @@ Effect version: 3.19.19
     // Should NOT trigger - JSON.parse not as direct expression in Effect.try
     export const notDirectExpression = Effect.try(() => {
       const parsed = JSON.parse("{\"indirect\":true}")
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
       return parsed.indirect
     })
     

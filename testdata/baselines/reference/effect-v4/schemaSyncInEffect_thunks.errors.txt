@@ -1,0 +1,45 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/schemaSyncInEffect_thunks.ts(10,47): suggestion TS377037: `Schema.decodeSync` is used inside an Effect generator. `Schema.decodeEffect` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
+/.src/schemaSyncInEffect_thunks.ts(13,14): suggestion TS377037: `Schema.decodeSync` is used inside an Effect generator. `Schema.decodeEffect` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
+/.src/schemaSyncInEffect_thunks.ts(17,65): suggestion TS377037: `Schema.encodeSync` is used inside an Effect generator. `Schema.encodeEffect` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
+/.src/schemaSyncInEffect_thunks.ts(20,20): suggestion TS377037: `Schema.encodeUnknownSync` is used inside an Effect generator. `Schema.encodeUnknownEffect` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
+
+
+==== /.src/schemaSyncInEffect_thunks.ts (4 errors) ====
+    import { Data, Effect, Schema } from "effect"
+    
+    class ExampleError extends Data.TaggedError("ExampleError")<{}> {}
+    
+    const Person = Schema.Struct({
+      name: Schema.String,
+      age: Schema.Number
+    })
+    
+    export const decodeInSync = Effect.sync(() => Schema.decodeSync(Person)({ name: "John", age: 30 }))
+                                                  ~~~~~~~~~~~~~~~~~
+!!! suggestion TS377037: `Schema.decodeSync` is used inside an Effect generator. `Schema.decodeEffect` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
+    
+    export const decodeInTryObject = Effect.try({
+      try: () => Schema.decodeSync(Person)({ name: "Jane", age: 25 }),
+                 ~~~~~~~~~~~~~~~~~
+!!! suggestion TS377037: `Schema.decodeSync` is used inside an Effect generator. `Schema.decodeEffect` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
+      catch: () => new ExampleError()
+    })
+    
+    export const encodeInTryPromise = Effect.tryPromise(async () => Schema.encodeSync(Person)({ name: "Bob", age: 40 }))
+                                                                    ~~~~~~~~~~~~~~~~~
+!!! suggestion TS377037: `Schema.encodeSync` is used inside an Effect generator. `Schema.encodeEffect` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
+    
+    export const encodeInTryPromiseObject = Effect.tryPromise({
+      try: async () => Schema.encodeUnknownSync(Person)({ name: "Carol", age: 50 }),
+                       ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377037: `Schema.encodeUnknownSync` is used inside an Effect generator. `Schema.encodeUnknownEffect` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
+      catch: () => new ExampleError()
+    })
+    
+    export const shouldNotTriggerReturnedFunction = Effect.sync(
+      () => () => Schema.decodeSync(Person)({ name: "Nested", age: 10 })
+    )
+    

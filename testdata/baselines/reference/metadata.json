@@ -1064,7 +1064,13 @@
       ],
       "preview": {
         "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.gen(function*() {\n  return yield* Effect.promise(() =\u003e fetch(\"https://example.com\"))\n})\n",
-        "diagnostics": []
+        "diagnostics": [
+          {
+            "start": 118,
+            "end": 123,
+            "text": "This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `effect/unstable/http`. effect(globalFetchInEffect)"
+          }
+        ]
       }
     },
     {
@@ -1356,6 +1362,30 @@
       }
     },
     {
+      "name": "effectDoNotation",
+      "group": "style",
+      "description": "Suggests using Effect.gen or Effect.fn instead of the Effect.Do notation helpers",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377085
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\nimport { pipe } from \"effect/Function\"\n\nexport const preview = pipe(\n  Effect.Do,\n  Effect.bind(\"a\", () =\u003e Effect.succeed(1)),\n  Effect.let(\"b\", ({ a }) =\u003e a + 1),\n  Effect.bind(\"c\", ({ b }) =\u003e Effect.succeed(b.toString()))\n)\n",
+        "diagnostics": [
+          {
+            "start": 103,
+            "end": 112,
+            "text": "This uses the Effect do emulation. `Effect.gen` or `Effect.fn` achieve the same result with native JS scopes. effect(effectDoNotation)"
+          }
+        ]
+      }
+    },
+    {
       "name": "effectFnOpportunity",
       "group": "style",
       "description": "Suggests using Effect.fn for functions that return an Effect",
@@ -1375,6 +1405,30 @@
             "start": 54,
             "end": 61,
             "text": "This expression can be rewritten in the reusable function form `Effect.fn(function*() { ... })`. effect(effectFnOpportunity)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "effectMapFlatten",
+      "group": "style",
+      "description": "Suggests using Effect.flatMap instead of Effect.map followed by Effect.flatten in piping flows",
+      "defaultSeverity": "suggestion",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377086
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.succeed(1).pipe(\n  Effect.map((n) =\u003e Effect.succeed(n + 1)),\n  Effect.flatten\n)\n",
+        "diagnostics": [
+          {
+            "start": 126,
+            "end": 140,
+            "text": "`Effect.map` + `Effect.flatten` is the same as `Effect.flatMap` that expresses the same steps more directly. effect(effectMapFlatten)"
           }
         ]
       }
@@ -1471,6 +1525,30 @@
             "start": 128,
             "end": 132,
             "text": "Service 'Db' is required but not provided by dependencies. effect(missingEffectServiceDependency)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "nestedEffectGenYield",
+      "group": "style",
+      "description": "Warns when yielding a nested bare Effect.gen inside an existing Effect generator context",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377083
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.gen(function*() {\n\tyield* Effect.gen(function*() {\n\t\treturn 1\n\t})\n})\n",
+        "diagnostics": [
+          {
+            "start": 89,
+            "end": 128,
+            "text": "This `yield*` is applied to a nested `Effect.gen(...)` that can be inlined in the parent Effect generator context. effect(nestedEffectGenYield)"
           }
         ]
       }
@@ -1594,6 +1672,30 @@
             "start": 64,
             "end": 69,
             "text": "Unexpected `undefined` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "unnecessaryArrowBlock",
+      "group": "style",
+      "description": "Suggests using a concise arrow body when the block only returns an expression",
+      "defaultSeverity": "off",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377084
+      ],
+      "preview": {
+        "sourceText": "export const preview = (value: string) =\u003e {\n\treturn value.trim()\n}\n",
+        "diagnostics": [
+          {
+            "start": 42,
+            "end": 66,
+            "text": "This arrow function block only returns an expression and can use a concise body. effect(unnecessaryArrowBlock)"
           }
         ]
       }

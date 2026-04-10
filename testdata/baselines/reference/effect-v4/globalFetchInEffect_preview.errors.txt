@@ -1,14 +1,17 @@
 === Metadata ===
 Effect version: 4.0.0
 
+/.src/globalFetchInEffect_preview.ts(6,38): warning TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `effect/unstable/http`. effect(globalFetchInEffect)
 
 
-==== /.src/globalFetchInEffect_preview.ts (0 errors) ====
+==== /.src/globalFetchInEffect_preview.ts (1 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics globalFetchInEffect:warning
     import { Effect } from "effect"
     
     export const preview = Effect.gen(function*() {
       return yield* Effect.promise(() => fetch("https://example.com"))
+                                         ~~~~~
+!!! warning TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `effect/unstable/http`. effect(globalFetchInEffect)
     })
     

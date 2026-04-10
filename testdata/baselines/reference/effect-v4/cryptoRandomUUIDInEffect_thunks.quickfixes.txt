@@ -1,0 +1,43 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:45-6:64) TS377079: This Effect code uses `crypto.randomUUID()`, prefer the Effect `Random` module instead because it uses Effect-injected randomness rather than the `crypto` module behind the scenes. effect(cryptoRandomUUIDInEffect)
+  Fix 0: "Disable cryptoRandomUUIDInEffect for this line"
+  Fix 1: "Disable cryptoRandomUUIDInEffect for entire file"
+
+[D2] (9:14-9:33) TS377079: This Effect code uses `crypto.randomUUID()`, prefer the Effect `Random` module instead because it uses Effect-injected randomness rather than the `crypto` module behind the scenes. effect(cryptoRandomUUIDInEffect)
+  Fix 0: "Disable cryptoRandomUUIDInEffect for this line"
+  Fix 1: "Disable cryptoRandomUUIDInEffect for entire file"
+
+[D3] (13:63-13:82) TS377079: This Effect code uses `crypto.randomUUID()`, prefer the Effect `Random` module instead because it uses Effect-injected randomness rather than the `crypto` module behind the scenes. effect(cryptoRandomUUIDInEffect)
+  Fix 0: "Disable cryptoRandomUUIDInEffect for this line"
+  Fix 1: "Disable cryptoRandomUUIDInEffect for entire file"
+
+[D4] (16:20-16:39) TS377079: This Effect code uses `crypto.randomUUID()`, prefer the Effect `Random` module instead because it uses Effect-injected randomness rather than the `crypto` module behind the scenes. effect(cryptoRandomUUIDInEffect)
+  Fix 0: "Disable cryptoRandomUUIDInEffect for this line"
+  Fix 1: "Disable cryptoRandomUUIDInEffect for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable cryptoRandomUUIDInEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable cryptoRandomUUIDInEffect for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable cryptoRandomUUIDInEffect for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable cryptoRandomUUIDInEffect for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable cryptoRandomUUIDInEffect for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable cryptoRandomUUIDInEffect for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable cryptoRandomUUIDInEffect for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable cryptoRandomUUIDInEffect for entire file" ===
+skipped by default

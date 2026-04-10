@@ -1,0 +1,85 @@
+==== /.src/cryptoRandomUUIDInEffect_thunks.ts (6 flows) ====
+
+=== Piping Flow ===
+Location: 4:27 - 4:60
+Node: Data.TaggedError("ExampleError")
+Node Kind: KindCallExpression
+
+Subject: "ExampleError"
+Subject Type: "ExampleError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "ExampleError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 6:26 - 6:65
+Node: Effect.sync(() => crypto.randomUUID())
+Node Kind: KindCallExpression
+
+Subject: () => crypto.randomUUID()
+Subject Type: () => `${string}-${string}-${string}-${string}-${string}`
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<`${string}-${string}-${string}-${string}-${string}`, never, never>
+
+=== Piping Flow ===
+Location: 8:31 - 11:3
+Node: Effect.try({\n  try: () => crypto.randomUUID(),\n  catch: () => new ExampleError()\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  try: () => crypto.randomUUID(),\n  catch: () => new ExampleError()\n}
+Subject Type: { try: () => `${string}-${string}-${string}-${string}-${string}`; catch: () => ExampleError; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<`${string}-${string}-${string}-${string}-${string}`, ExampleError, never>
+
+=== Piping Flow ===
+Location: 13:32 - 13:83
+Node: Effect.tryPromise(async () => crypto.randomUUID())
+Node Kind: KindCallExpression
+
+Subject: async () => crypto.randomUUID()
+Subject Type: () => Promise<`${string}-${string}-${string}-${string}-${string}`>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<`${string}-${string}-${string}-${string}-${string}`, UnknownError, never>
+
+=== Piping Flow ===
+Location: 15:38 - 18:3
+Node: Effect.tryPromise({\n  try: async () => crypto.randomUUID(),\n  catch: () => new ExampleError()\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  try: async () => crypto.randomUUID(),\n  catch: () => new ExampleError()\n}
+Subject Type: { try: () => Promise<`${string}-${string}-${string}-${string}-${string}`>; catch: () => ExampleError; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<`${string}-${string}-${string}-${string}-${string}`, ExampleError, never>
+
+=== Piping Flow ===
+Location: 20:48 - 20:93
+Node: Effect.sync(() => () => crypto.randomUUID())
+Node Kind: KindCallExpression
+
+Subject: () => () => crypto.randomUUID()
+Subject Type: () => () => `${string}-${string}-${string}-${string}-${string}`
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<() => `${string}-${string}-${string}-${string}-${string}`, never, never>

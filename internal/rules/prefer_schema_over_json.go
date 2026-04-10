@@ -199,21 +199,7 @@ func checkJsonMethodInEffectGen(tp *typeparser.TypeParser, _ *checker.Checker, n
 		return nil
 	}
 
-	if tp.GetEffectContextFlags(node)&typeparser.EffectContextFlagCanYieldEffect == 0 {
-		return nil
-	}
-
-	genFn := tp.GetEffectYieldGeneratorFunction(node)
-	if genFn == nil {
-		return nil
-	}
-
-	// Check that the generator body has at least one statement
-	if genFn.Body == nil || genFn.Body.Kind != ast.KindBlock {
-		return nil
-	}
-	block := genFn.Body.AsBlock()
-	if block.Statements == nil || len(block.Statements.Nodes) == 0 {
+	if tp.GetEffectContextFlags(node)&typeparser.EffectContextFlagInEffect == 0 {
 		return nil
 	}
 

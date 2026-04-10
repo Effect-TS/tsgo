@@ -1,0 +1,43 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:45-6:55) TS377067: This Effect code uses `Date.now()`, time access in Effect code is represented through `Clock` from Effect. effect(globalDateInEffect)
+  Fix 0: "Disable globalDateInEffect for this line"
+  Fix 1: "Disable globalDateInEffect for entire file"
+
+[D2] (9:14-9:24) TS377069: This Effect code constructs `new Date()`, date values in Effect code are represented through `DateTime` from Effect. effect(globalDateInEffect)
+  Fix 0: "Disable globalDateInEffect for this line"
+  Fix 1: "Disable globalDateInEffect for entire file"
+
+[D3] (13:63-13:73) TS377067: This Effect code uses `Date.now()`, time access in Effect code is represented through `Clock` from Effect. effect(globalDateInEffect)
+  Fix 0: "Disable globalDateInEffect for this line"
+  Fix 1: "Disable globalDateInEffect for entire file"
+
+[D4] (16:20-16:30) TS377069: This Effect code constructs `new Date()`, date values in Effect code are represented through `DateTime` from Effect. effect(globalDateInEffect)
+  Fix 0: "Disable globalDateInEffect for this line"
+  Fix 1: "Disable globalDateInEffect for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable globalDateInEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable globalDateInEffect for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable globalDateInEffect for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable globalDateInEffect for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable globalDateInEffect for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable globalDateInEffect for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable globalDateInEffect for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable globalDateInEffect for entire file" ===
+skipped by default

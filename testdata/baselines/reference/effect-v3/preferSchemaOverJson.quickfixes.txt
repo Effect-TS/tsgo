@@ -47,6 +47,10 @@
 [D12] (47:7-47:20) TS6133: '_regularParse' is declared but its value is never read.
   (no quick fixes)
 
+[D13] (61:18-61:51) TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
+  Fix 0: "Disable preferSchemaOverJson for this line"
+  Fix 1: "Disable preferSchemaOverJson for entire file"
+
 === Quick Fix Application Results ===
 
 === [D1] Fix 0: "Disable preferSchemaOverJson for this line" ===
@@ -113,4 +117,10 @@ skipped by default
 skipped by default
 
 === [D11] Fix 1: "Disable preferSchemaOverJson for entire file" ===
+skipped by default
+
+=== [D13] Fix 0: "Disable preferSchemaOverJson for this line" ===
+skipped by default
+
+=== [D13] Fix 1: "Disable preferSchemaOverJson for entire file" ===
 skipped by default

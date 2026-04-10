@@ -1,0 +1,73 @@
+flowchart TB
+  0[/"type: #quot;ExampleError#quot;<br/>node: #quot;ExampleError#quot;"/]
+  1["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;ExampleError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  2[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  3((("type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; console.log#40;#quot;sync#quot;#41;")))
+  4["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
+  5[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
+  6[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; console.log#40;#quot;sync#quot;#41;"]]
+  7((("type: void<br/>node: console.log#40;#quot;sync#quot;#41;")))
+  8[/"type: #quot;sync#quot;<br/>node: #quot;sync#quot;"/]
+  9["type: void<br/>callee: console.log<br/>args: #91;#93;"]
+  10[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
+  11[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; console.warn#40;#quot;try#quot;#41;"]]
+  12((("type: void<br/>node: console.warn#40;#quot;try#quot;#41;")))
+  13[/"type: #quot;try#quot;<br/>node: #quot;try#quot;"/]
+  14["type: void<br/>callee: console.warn<br/>args: #91;#93;"]
+  15[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.warn"/]
+  16[["type: #40;#41; =#gt; ExampleError<br/>node: #40;#41; =#gt; new ExampleError#40;#41;"]]
+  17[/"type: ExampleError<br/>node: new ExampleError#40;#41;"/]
+  18[["type: #40;#41; =#gt; Promise#lt;void#gt;<br/>node: async #40;#41; =#gt; console.log#40;#quot;try-promise#quot;#41;"]]
+  19((("type: void<br/>node: console.log#40;#quot;try-promise#quot;#41;")))
+  20[/"type: #quot;try-promise#quot;<br/>node: #quot;try-promise#quot;"/]
+  21["type: void<br/>callee: console.log<br/>args: #91;#93;"]
+  22[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
+  23[["type: #40;#41; =#gt; Promise#lt;void#gt;<br/>node: async #40;#41; =#gt; console.warn#40;#quot;try-promise-object#quot;#41;"]]
+  24((("type: void<br/>node: console.warn#40;#quot;try-promise-object#quot;#41;")))
+  25[/"type: #quot;try-promise-object#quot;<br/>node: #quot;try-promise-object#quot;"/]
+  26["type: void<br/>callee: console.warn<br/>args: #91;#93;"]
+  27[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.warn"/]
+  28[["type: #40;#41; =#gt; ExampleError<br/>node: #40;#41; =#gt; new ExampleError#40;#41;"]]
+  29[/"type: ExampleError<br/>node: new ExampleError#40;#41;"/]
+  30((("type: #40;#41; =#gt; #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #40;#41; =#gt; console.log#40;#quot;nested#quot;#41;")))
+  31["type: Effect#lt;#40;#41; =#gt; void, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
+  32[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
+  33[["type: #40;#41; =#gt; #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #40;#41; =#gt; console.log#40;#quot;nested#quot;#41;"]]
+  34((("type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; console.log#40;#quot;nested#quot;#41;")))
+  35[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; console.log#40;#quot;nested#quot;#41;"]]
+  36((("type: void<br/>node: console.log#40;#quot;nested#quot;#41;")))
+  37[/"type: #quot;nested#quot;<br/>node: #quot;nested#quot;"/]
+  38["type: void<br/>callee: console.log<br/>args: #91;#93;"]
+  39[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1
+  3 -->|"kind: pipe"| 4
+  5 -->|"kind: transformCallee"| 4
+  7 -->|"kind: potentialReturn"| 6
+  6 -->|"kind: connect"| 3
+  8 -->|"kind: pipe"| 9
+  9 -->|"kind: connect"| 7
+  10 -->|"kind: transformCallee"| 9
+  12 -->|"kind: potentialReturn"| 11
+  13 -->|"kind: pipe"| 14
+  14 -->|"kind: connect"| 12
+  15 -->|"kind: transformCallee"| 14
+  17 -->|"kind: potentialReturn"| 16
+  19 -->|"kind: potentialReturn"| 18
+  20 -->|"kind: pipe"| 21
+  21 -->|"kind: connect"| 19
+  22 -->|"kind: transformCallee"| 21
+  24 -->|"kind: potentialReturn"| 23
+  25 -->|"kind: pipe"| 26
+  26 -->|"kind: connect"| 24
+  27 -->|"kind: transformCallee"| 26
+  29 -->|"kind: potentialReturn"| 28
+  30 -->|"kind: pipe"| 31
+  32 -->|"kind: transformCallee"| 31
+  34 -->|"kind: potentialReturn"| 33
+  33 -->|"kind: connect"| 30
+  36 -->|"kind: potentialReturn"| 35
+  35 -->|"kind: connect"| 34
+  37 -->|"kind: pipe"| 38
+  38 -->|"kind: connect"| 36
+  39 -->|"kind: transformCallee"| 38
