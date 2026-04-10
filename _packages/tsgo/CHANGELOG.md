@@ -1,5 +1,65 @@
 # @effect/tsgo
 
+## 0.3.0
+
+### Minor Changes
+
+- 377d99c: Add `asyncFunction` and `newPromise` diagnostics to warn on `async` functions and manual `new Promise(...)` construction in favor of Effect-native async patterns.
+
+  This ports the upstream language-service change into the Go implementation and adds matching v3/v4 fixtures, baselines, metadata, and README updates.
+
+- 57c1b81: Add an execution-flow parser that models value flow more directly than the existing piping-flow parser and emits Mermaid flow baselines for Effect fixtures.
+
+  This lays the groundwork for more precise diagnostics around nested, parenthesized, data-first, data-last, and function-pipe transformations while preserving richer flow structure for future rule analysis.
+
+- 8e9578c: Add the `lazyPromiseInEffectSync` diagnostic for `Effect.sync` thunks that return the global `Promise<T>` type.
+
+  This ports the upstream language-service behavior to the Go implementation, including v3/v4 examples, baselines, and exact Promise detection via TypeScriptGo checker shims.
+
+- 8e26cfe: Add `cryptoRandomUUID` and `cryptoRandomUUIDInEffect` diagnostics for Effect v4 to warn on `crypto.randomUUID()` usage and prefer the Effect `Random` module.
+
+  This ports the upstream language-service change into the Go implementation and adds matching v4 fixtures, baselines, metadata, and schema entries.
+
+- 51c3283: Port the `effectDoNotation` diagnostic from the reference language service.
+
+  This adds Effect v3 and v4 examples, generated metadata/schema updates, and committed baselines for diagnostics and disable-style code actions.
+
+- 67f699d: Port the `effectMapFlatten` diagnostic from the reference language service.
+
+  This adds Effect v3 and v4 examples, generated metadata and schema updates, and committed baselines for diagnostics, quick fixes, flows, layers, and pipings.
+
+- 086dff3: Add the `nestedEffectGenYield` diagnostic for nested bare `yield* Effect.gen(...)` calls inside existing Effect generator contexts.
+
+  This ports the upstream language-service behavior to the Go implementation, including v3/v4 examples, generated metadata, schema entries, and reference baselines.
+
+- 7cffed0: Add the `unnecessaryArrowBlock` diagnostic and quick fix for arrow functions whose block body only returns an expression.
+
+  This ports the upstream language-service behavior to the Go implementation, including v3/v4 examples, quickfix baselines, and generated metadata/schema documentation.
+
+- dcb4af3: Add data-first and data-last piping flow normalization so data-first Effect and Layer APIs contribute the same flow structure as their pipeable forms.
+
+  This also extracts the shared bundled Effect test VFS helper into `internal/bundledeffect` and updates the affected flow and diagnostics baselines.
+
+- 5a8e7fa: Add `processEnv` and `processEnvInEffect` diagnostics to warn on `process.env` reads and recommend using Effect `Config` instead.
+
+  This ports the upstream language-service change into the Go implementation and adds matching v3/v4 fixtures, baselines, metadata, and schema entries.
+
+### Patch Changes
+
+- 3cddb7c: Fix execution-flow graph generation for single-argument inline calls such as `Layer.succeed(Service)(value)`.
+
+  This updates the flow parser to connect inline call subjects and transforms correctly, and refreshes the generated reference baselines and metadata outputs to match the new local results.
+
+- e80be4f: Fix Effect v4 service parsing for `effect@4.0.0-beta.43` and update the embedded v4 test packages to that version.
+
+  This keeps `ServiceMap.Service` detection working with the new `Identifier` / `Service` type shape while preserving the existing v3-only `Context.Tag` behavior.
+
+- 41798ca: Fix the toggle-pipe-style refactor to avoid formatter panics on nested callback bodies such as SQL effects using `.pipe(Effect.flatMap(...))`.
+
+  This adds a regression test and updates the affected refactor baselines to match the new text-preserving rewrite output.
+
+- 3689458: Update [`typescript-go`](https://github.com/microsoft/typescript-go/commit/c25de70d251d4b717a1cb6f4f6289d2e68fef159) to commit `c25de70d251d4b717a1cb6f4f6289d2e68fef159`.
+
 ## 0.2.1
 
 ### Patch Changes
