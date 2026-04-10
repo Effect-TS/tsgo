@@ -5,7 +5,9 @@ flowchart TB
   3[["type: any<br/>node: protected constructor#40;a: Valid, options: Schema.MakeOptions#41; #123;#92;n    super#40;a, options#41;#92;n  #125;"]]
   4[/"type: Valid<br/>node: a: Valid"/]
   5[/"type: MakeOptions<br/>node: options: Schema.MakeOptions"/]
+  6((("type: Valid<br/>node: protected constructor#40;a: Valid, options: Schema.MakeOptions#41; #123;#92;n    super#40;a, options#41;#92;n  #125;")))
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
   4 -->|"kind: parameter"| 3
   5 -->|"kind: parameter"| 3
+  6 -->|"kind: potentialReturn"| 3

@@ -1097,3 +1097,5 @@ const WideningKindFunctionReturn = checker.WideningKindFunctionReturn
 const WideningKindGeneratorNext = checker.WideningKindGeneratorNext
 const WideningKindGeneratorYield = checker.WideningKindGeneratorYield
 const WideningKindNormal = checker.WideningKindNormal
+//go:linkname ForEachYieldExpression github.com/microsoft/typescript-go/internal/checker.forEachYieldExpression
+func ForEachYieldExpression(body *ast.Node, visitor func(expr *ast.Node) bool) bool

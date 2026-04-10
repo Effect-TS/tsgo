@@ -1,7 +1,14 @@
 flowchart TB
-  0[["type: #40;#41; =#gt; string #124; undefined<br/>node: #40;#41; =#gt; process.env#91;#quot;HOST#quot;#93;"]]
-  1[/"type: string #124; undefined<br/>node: process.env#91;#quot;HOST#quot;#93;"/]
-  2[["type: #40;#41; =#gt; string #124; undefined<br/>node: #40;#41; =#gt; process.env.NODE_ENV"]]
-  3[/"type: string #124; undefined<br/>node: process.env.NODE_ENV"/]
-  1 -->|"kind: potentialReturn"| 0
+  0((("type: Effect#lt;string #124; undefined, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  return process.env.SECRET#92;n#125;")))
+  1[["type: #40;#41; =#gt; Generator#lt;never, string #124; undefined, never#gt;<br/>node: function*#40;#41; #123;#92;n  return process.env#91;#quot;API_KEY#quot;#93;#92;n#125;"]]
+  2((("type: Effect#lt;string #124; undefined, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  return process.env#91;#quot;API_KEY#quot;#93;#92;n#125;")))
+  3[/"type: string #124; undefined<br/>node: process.env#91;#quot;API_KEY#quot;#93;"/]
+  4[["type: #40;#41; =#gt; string #124; undefined<br/>node: #40;#41; =#gt; process.env#91;#quot;HOST#quot;#93;"]]
+  5[/"type: string #124; undefined<br/>node: process.env#91;#quot;HOST#quot;#93;"/]
+  6((("type: Effect#lt;#40;#41; =#gt; string #124; undefined, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  const fn = #40;#41; =#gt; process.env.NODE_ENV#92;n  return fn#92;n#125;")))
+  7[["type: #40;#41; =#gt; string #124; undefined<br/>node: #40;#41; =#gt; process.env.NODE_ENV"]]
+  8[/"type: string #124; undefined<br/>node: process.env.NODE_ENV"/]
   3 -->|"kind: potentialReturn"| 2
+  2 -->|"kind: potentialReturn"| 1
+  5 -->|"kind: potentialReturn"| 4
+  8 -->|"kind: potentialReturn"| 7

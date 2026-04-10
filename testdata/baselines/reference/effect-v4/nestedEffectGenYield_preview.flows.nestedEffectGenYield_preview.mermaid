@@ -1,1 +1,6 @@
 flowchart TB
+  0((("type: Effect#lt;void, never, never#gt;<br/>node: function*#40;#41; #123;#92;n	yield* Effect.gen#40;function*#40;#41; #123;#92;n		return 1#92;n	#125;#41;#92;n#125;")))
+  1((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n		return 1#92;n	#125;#41;")))
+  2((("type: Effect#lt;number, never, never#gt;<br/>node: function*#40;#41; #123;#92;n		return 1#92;n	#125;")))
+  1 -->|"kind: yieldable"| 0
+  2 -->|"kind: connect"| 1

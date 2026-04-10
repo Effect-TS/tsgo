@@ -1,6 +1,7 @@
 flowchart TB
-  0[/"type: #quot;error#quot;<br/>node: #quot;error#quot;"/]
-  1["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  2[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  0 -->|"kind: pipe"| 1
-  2 -->|"kind: transformCallee"| 1
+  0((("type: Effect#lt;Effect#lt;never, string, never#gt;, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  return Effect.fail#40;#quot;error#quot;#41;#92;n#125;")))
+  1[/"type: #quot;error#quot;<br/>node: #quot;error#quot;"/]
+  2["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  3[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  1 -->|"kind: pipe"| 2
+  3 -->|"kind: transformCallee"| 2

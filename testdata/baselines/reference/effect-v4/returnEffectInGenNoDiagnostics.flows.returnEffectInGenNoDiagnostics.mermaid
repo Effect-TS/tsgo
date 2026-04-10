@@ -1,50 +1,75 @@
 flowchart TB
-  0[/"type: #quot;about to fail#quot;<br/>node: #quot;about to fail#quot;"/]
-  1["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
-  2[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
-  3[/"type: #quot;error#quot;<br/>node: #quot;error#quot;"/]
-  4["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  5[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  6[["type: #lt;A#gt;#40;f: #40;#41; =#gt; A#41; =#gt; A<br/>node: function lazy#lt;A#gt;#40;f: #40;#41; =#gt; A#41; #123;#92;n  return f#40;#41;#92;n#125;"]]
-  7[/"type: #40;#41; =#gt; A<br/>node: f: #40;#41; =#gt; A"/]
-  8[/"type: A<br/>node: f#40;#41;"/]
-  9[/"type: #quot;about to fail#quot;<br/>node: #quot;about to fail#quot;"/]
-  10["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
-  11[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
-  12((("type: #40;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;#41; =#gt; #123;#92;n    return Effect.succeed#40;#quot;success#quot;#41;#92;n  #125;")))
-  13["type: Effect#lt;string, never, never#gt;<br/>callee: lazy<br/>args: #91;#93;"]
-  14[/"type: #lt;A#gt;#40;f: #40;#41; =#gt; A#41; =#gt; A<br/>node: lazy"/]
-  15[["type: #40;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;#41; =#gt; #123;#92;n    return Effect.succeed#40;#quot;success#quot;#41;#92;n  #125;"]]
-  16((("type: Effect#lt;string, never, never#gt;<br/>node: Effect.succeed#40;#quot;success#quot;#41;")))
-  17[/"type: #quot;success#quot;<br/>node: #quot;success#quot;"/]
-  18["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  19[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  20[["type: Effect#lt;never, string, never#gt;<br/>node: get value#40;#41; #123;#92;n      return Effect.fail#40;#quot;error#quot;#41;#92;n    #125;"]]
-  21((("type: Effect#lt;never, string, never#gt;<br/>node: Effect.fail#40;#quot;error#quot;#41;")))
-  22[/"type: #quot;error#quot;<br/>node: #quot;error#quot;"/]
-  23["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  24[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  25[/"type: #quot;about to fail#quot;<br/>node: #quot;about to fail#quot;"/]
-  26["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
-  27[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
-  0 -->|"kind: pipe"| 1
-  2 -->|"kind: transformCallee"| 1
+  0((("type: Effect#lt;never, string, never#gt;<br/>node: function*#40;#41; #123;#92;n  yield* Effect.log#40;#quot;about to fail#quot;#41;#92;n  return yield* Effect.fail#40;#quot;error#quot;#41;#92;n#125;")))
+  1((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;#quot;about to fail#quot;#41;")))
+  2((("type: Effect#lt;never, string, never#gt;<br/>node: Effect.fail#40;#quot;error#quot;#41;")))
+  3[/"type: #quot;about to fail#quot;<br/>node: #quot;about to fail#quot;"/]
+  4["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  5[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  6[/"type: #quot;error#quot;<br/>node: #quot;error#quot;"/]
+  7["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  8[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  9[["type: #lt;A#gt;#40;f: #40;#41; =#gt; A#41; =#gt; A<br/>node: function lazy#lt;A#gt;#40;f: #40;#41; =#gt; A#41; #123;#92;n  return f#40;#41;#92;n#125;"]]
+  10[/"type: #40;#41; =#gt; A<br/>node: f: #40;#41; =#gt; A"/]
+  11((("type: A<br/>node: function lazy#lt;A#gt;#40;f: #40;#41; =#gt; A#41; #123;#92;n  return f#40;#41;#92;n#125;")))
+  12[/"type: A<br/>node: f#40;#41;"/]
+  13((("type: Effect#lt;void, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  yield* Effect.log#40;#quot;about to fail#quot;#41;#92;n  yield* lazy#40;#40;#41; =#gt; #123;#92;n    return Effect.succeed#40;#quot;success#quot;#41;#92;n  #125;#41;#92;n#125;")))
+  14((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;#quot;about to fail#quot;#41;")))
+  15((("type: Effect#lt;string, never, never#gt;<br/>node: lazy#40;#40;#41; =#gt; #123;#92;n    return Effect.succeed#40;#quot;success#quot;#41;#92;n  #125;#41;")))
+  16[/"type: #quot;about to fail#quot;<br/>node: #quot;about to fail#quot;"/]
+  17["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  18[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  19((("type: #40;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;#41; =#gt; #123;#92;n    return Effect.succeed#40;#quot;success#quot;#41;#92;n  #125;")))
+  20["type: Effect#lt;string, never, never#gt;<br/>callee: lazy<br/>args: #91;#93;"]
+  21[/"type: #lt;A#gt;#40;f: #40;#41; =#gt; A#41; =#gt; A<br/>node: lazy"/]
+  22[["type: #40;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;#41; =#gt; #123;#92;n    return Effect.succeed#40;#quot;success#quot;#41;#92;n  #125;"]]
+  23((("type: Effect#lt;string, never, never#gt;<br/>node: #40;#41; =#gt; #123;#92;n    return Effect.succeed#40;#quot;success#quot;#41;#92;n  #125;")))
+  24((("type: Effect#lt;string, never, never#gt;<br/>node: Effect.succeed#40;#quot;success#quot;#41;")))
+  25[/"type: #quot;success#quot;<br/>node: #quot;success#quot;"/]
+  26["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  27[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  28((("type: Effect#lt;typeof Test, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  return class Test #123;#92;n    get value#40;#41; #123;#92;n      return Effect.fail#40;#quot;error#quot;#41;#92;n    #125;#92;n  #125;#92;n#125;")))
+  29[["type: Effect#lt;never, string, never#gt;<br/>node: get value#40;#41; #123;#92;n      return Effect.fail#40;#quot;error#quot;#41;#92;n    #125;"]]
+  30((("type: Effect#lt;never, string, never#gt;<br/>node: get value#40;#41; #123;#92;n      return Effect.fail#40;#quot;error#quot;#41;#92;n    #125;")))
+  31((("type: Effect#lt;never, string, never#gt;<br/>node: Effect.fail#40;#quot;error#quot;#41;")))
+  32[/"type: #quot;error#quot;<br/>node: #quot;error#quot;"/]
+  33["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  34[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  35((("type: Effect#lt;Stream#lt;number, never, never#gt;, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  yield* Effect.log#40;#quot;about to fail#quot;#41;#92;n  return Stream.fromIterable#40;#91;1, 2, 3#93;#41;#92;n#125;")))
+  36((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;#quot;about to fail#quot;#41;")))
+  37[/"type: #quot;about to fail#quot;<br/>node: #quot;about to fail#quot;"/]
+  38["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  39[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  1 -->|"kind: yieldable"| 0
+  2 -->|"kind: yieldable"| 0
   3 -->|"kind: pipe"| 4
+  4 -->|"kind: connect"| 1
   5 -->|"kind: transformCallee"| 4
-  7 -->|"kind: parameter"| 6
-  8 -->|"kind: potentialReturn"| 6
-  9 -->|"kind: pipe"| 10
-  11 -->|"kind: transformCallee"| 10
-  12 -->|"kind: pipe"| 13
-  14 -->|"kind: transformCallee"| 13
-  16 -->|"kind: potentialReturn"| 15
-  15 -->|"kind: connect"| 12
-  17 -->|"kind: pipe"| 18
-  18 -->|"kind: connect"| 16
-  19 -->|"kind: transformCallee"| 18
-  21 -->|"kind: potentialReturn"| 20
-  22 -->|"kind: pipe"| 23
-  23 -->|"kind: connect"| 21
-  24 -->|"kind: transformCallee"| 23
+  6 -->|"kind: pipe"| 7
+  7 -->|"kind: connect"| 2
+  8 -->|"kind: transformCallee"| 7
+  10 -->|"kind: parameter"| 9
+  12 -->|"kind: potentialReturn"| 11
+  11 -->|"kind: potentialReturn"| 9
+  14 -->|"kind: yieldable"| 13
+  15 -->|"kind: yieldable"| 13
+  16 -->|"kind: pipe"| 17
+  17 -->|"kind: connect"| 14
+  18 -->|"kind: transformCallee"| 17
+  19 -->|"kind: pipe"| 20
+  20 -->|"kind: connect"| 15
+  21 -->|"kind: transformCallee"| 20
+  24 -->|"kind: potentialReturn"| 23
+  23 -->|"kind: potentialReturn"| 22
+  22 -->|"kind: connect"| 19
   25 -->|"kind: pipe"| 26
+  26 -->|"kind: connect"| 24
   27 -->|"kind: transformCallee"| 26
+  31 -->|"kind: potentialReturn"| 30
+  30 -->|"kind: potentialReturn"| 29
+  32 -->|"kind: pipe"| 33
+  33 -->|"kind: connect"| 31
+  34 -->|"kind: transformCallee"| 33
+  36 -->|"kind: yieldable"| 35
+  37 -->|"kind: pipe"| 38
+  38 -->|"kind: connect"| 36
+  39 -->|"kind: transformCallee"| 38
