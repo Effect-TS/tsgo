@@ -1,12 +1,13 @@
 === Metadata ===
 Effect version: unknown
 
-/.src/unnecessaryArrowBlock.ts(2,46): warning TS377084: This arrow function block only returns an expression and can use a concise body. effect(unnecessaryArrowBlock)
-/.src/unnecessaryArrowBlock.ts(6,52): warning TS377084: This arrow function block only returns an expression and can use a concise body. effect(unnecessaryArrowBlock)
-/.src/unnecessaryArrowBlock.ts(15,59): warning TS377084: This arrow function block only returns an expression and can use a concise body. effect(unnecessaryArrowBlock)
+/.src/unnecessaryArrowBlock.ts(3,46): warning TS377084: This arrow function block only returns an expression and can use a concise body. effect(unnecessaryArrowBlock)
+/.src/unnecessaryArrowBlock.ts(7,52): warning TS377084: This arrow function block only returns an expression and can use a concise body. effect(unnecessaryArrowBlock)
+/.src/unnecessaryArrowBlock.ts(16,59): warning TS377084: This arrow function block only returns an expression and can use a concise body. effect(unnecessaryArrowBlock)
 
 
 ==== /.src/unnecessaryArrowBlock.ts (3 errors) ====
+    // @effect-v3
     // @effect-diagnostics unnecessaryArrowBlock:warning
     export const shouldReport = (arg: string) => {
                                                  ~
@@ -38,4 +39,3 @@ Effect version: unknown
 !!! warning TS377084: This arrow function block only returns an expression and can use a concise body. effect(unnecessaryArrowBlock)
     
     export const shouldNotReportExpressionBody = (arg: string) => arg.trim()
-    

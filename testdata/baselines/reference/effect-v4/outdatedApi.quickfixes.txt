@@ -10,7 +10,7 @@
 [D3] (7:35-7:42) TS2339: Property 'runtime' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'.
   (no quick fixes)
 
-[D4] (7:35-7:42) TS377052: This project targets Effect v4, but this code uses the Effect v3 API `runtime`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Runtime has been removed in Effect v4. Use Effect.services to grab services and then run using Effect.runPromiseWith. effect(outdatedApi)
+[D4] (7:35-7:42) TS377052: This project targets Effect v4, but this code uses the Effect v3 API `runtime`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Runtime has been removed in Effect v4. Use Effect.context to grab services and then run using Effect.runPromiseWith. effect(outdatedApi)
   Fix 0: "Disable outdatedApi for this line"
   Fix 1: "Disable outdatedApi for entire file"
 
@@ -34,7 +34,7 @@
 [D10] (17:28-17:31) TS2339: Property 'Tag' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'.
   (no quick fixes)
 
-[D11] (17:28-17:31) TS377052: This project targets Effect v4, but this code uses the Effect v3 API `Tag`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Use ServiceMap.Service instead of Effect.Tag. effect(outdatedApi)
+[D11] (17:28-17:31) TS377052: This project targets Effect v4, but this code uses the Effect v3 API `Tag`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Use Context.Service instead of Effect.Tag. effect(outdatedApi)
   Fix 0: "Disable outdatedApi for this line"
   Fix 1: "Disable outdatedApi for entire file"
 

@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (6:9-8:4) TS377083: This `yield*` is applied to a nested `Effect.gen(...)` that can be inlined in the parent Effect generator context. effect(nestedEffectGenYield)
+[D1] (7:9-9:4) TS377083: This `yield*` is applied to a nested `Effect.gen(...)` that can be inlined in the parent Effect generator context. effect(nestedEffectGenYield)
   Fix 0: "Disable nestedEffectGenYield for this line"
   Fix 1: "Disable nestedEffectGenYield for entire file"
 

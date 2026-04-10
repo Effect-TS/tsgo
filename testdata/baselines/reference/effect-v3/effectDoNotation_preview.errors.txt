@@ -1,10 +1,11 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/effectDoNotation_preview.ts(7,3): warning TS377085: This uses the Effect do emulation. `Effect.gen` or `Effect.fn` achieve the same result with native JS scopes. effect(effectDoNotation)
+/.src/effectDoNotation_preview.ts(8,3): warning TS377085: This uses the Effect do emulation. `Effect.gen` or `Effect.fn` achieve the same result with native JS scopes. effect(effectDoNotation)
 
 
 ==== /.src/effectDoNotation_preview.ts (1 errors) ====
+    // @effect-v3
     // @effect-diagnostics *:off
     // @effect-diagnostics effectDoNotation:warning
     import { Effect } from "effect"
@@ -18,4 +19,3 @@ Effect version: 3.19.19
       Effect.let("b", ({ a }) => a + 1),
       Effect.bind("c", ({ b }) => Effect.succeed(b.toString()))
     )
-    

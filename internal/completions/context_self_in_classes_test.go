@@ -1,6 +1,7 @@
 package completions_test
 
 import (
+	"strings"
 	"testing"
 )
 
@@ -63,5 +64,99 @@ func TestContextSelfInClasses_AnonymousClass(t *testing.T) {
 	items := contextSelfInClassesItems(t, source, len(source))
 	if items != nil {
 		t.Errorf("expected nil for anonymous class (no name), got %d items", len(items))
+	}
+}
+
+func TestContextSelfInClasses_V4NamespaceImport(t *testing.T) {
+	t.Parallel()
+
+	source := `import * as Context from "effect/Context"
+
+export class MyService extends Context.`
+	items := contextSelfInClassesItemsWithPackageJSON(t, source, len(source))
+	if len(items) != 2 {
+		t.Fatalf("expected 2 items, got %d", len(items))
+	}
+
+	if items[0].Label != "Service<MyService, {}>" {
+		t.Errorf("item[0].Label = %q, want %q", items[0].Label, "Service<MyService, {}>")
+	}
+	if got := items[0].TextEdit.TextEdit.NewText; !strings.HasPrefix(got, `Context.Service<MyService, {${0}}>()("`) || !strings.HasSuffix(got, `"){}`) {
+		t.Errorf("item[0].insertText = %q", got)
+	}
+
+	if items[1].Label != "Service<MyService>({ make })" {
+		t.Errorf("item[1].Label = %q, want %q", items[1].Label, "Service<MyService>({ make })")
+	}
+	if got := items[1].TextEdit.TextEdit.NewText; got != `Context.Service<MyService>()("@effect/harness-effect-v4/test/MyService", { make: ${0} }){}` {
+		t.Errorf("item[1].insertText = %q", got)
+	}
+}
+
+func TestContextSelfInClasses_V4DirectImport(t *testing.T) {
+	t.Parallel()
+
+	source := `import { Service } from "effect/Context"
+
+export class MyService extends Service`
+	items := contextSelfInClassesItemsWithPackageJSON(t, source, len(source))
+	if len(items) != 2 {
+		t.Fatalf("expected 2 items, got %d", len(items))
+	}
+
+	if got := items[0].TextEdit.TextEdit.NewText; !strings.HasPrefix(got, `Service<MyService, {${0}}>()("`) || !strings.HasSuffix(got, `"){}`) {
+		t.Errorf("item[0].insertText = %q", got)
+	}
+	if got := items[1].TextEdit.TextEdit.NewText; got != `Service<MyService>()("@effect/harness-effect-v4/test/MyService", { make: ${0} }){}` {
+		t.Errorf("item[1].insertText = %q", got)
+	}
+}
+
+func TestContextSelfInClasses_V4IdentifierKeyPattern(t *testing.T) {
+	t.Parallel()
+
+	source := `// @test-config { "keyPatterns": [ { "pattern": "package-identifier", "target": "service" } ] }
+import * as Context from "effect/Context"
+
+export class MyService extends Context.`
+	items := contextSelfInClassesItemsWithPackageJSON(t, source, len(source))
+	if len(items) != 2 {
+		t.Fatalf("expected 2 items, got %d", len(items))
+	}
+
+	for i, item := range items {
+		if !strings.Contains(item.TextEdit.TextEdit.NewText, `"@effect/harness-effect-v4/test/MyService"`) {
+			t.Errorf("item[%d].insertText = %q, want package identifier key", i, item.TextEdit.TextEdit.NewText)
+		}
+	}
+}
+
+func TestContextSelfInClasses_V4MiddleOfIdentifier(t *testing.T) {
+	t.Parallel()
+
+	source := `import { Effect, Stream } from "effect"
+import * as Context from "effect/Context"
+
+class Foo extends Context.S
+
+Stream.unwrap(Effect.gen(function*() {
+	const a = yield* Foo
+
+	return Stream.succeed(a.count)
+}))`
+	position := strings.Index(source, "Context.S") + len("Context.S")
+	items := contextSelfInClassesItemsWithPackageJSON(t, source, position)
+	if len(items) != 2 {
+		t.Fatalf("expected 2 items, got %d", len(items))
+	}
+
+	if items[0].Label != "Service<Foo, {}>" {
+		t.Errorf("item[0].Label = %q, want %q", items[0].Label, "Service<Foo, {}>")
+	}
+	if items[1].Label != "Service<Foo>({ make })" {
+		t.Errorf("item[1].Label = %q, want %q", items[1].Label, "Service<Foo>({ make })")
+	}
+	if got := items[0].TextEdit.TextEdit.NewText; !strings.HasPrefix(got, `Context.Service<Foo, {${0}}>()("`) || !strings.HasSuffix(got, `"){}`) {
+		t.Errorf("item[0].insertText = %q", got)
 	}
 }

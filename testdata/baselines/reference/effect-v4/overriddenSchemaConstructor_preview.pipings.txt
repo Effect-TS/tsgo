@@ -12,7 +12,7 @@ Transformations (1):
   [0] kind: call
       callee: Schema.Class<User>("User")
       args: (constant)
-      outType: ExtendableClass<User, Struct<{ readonly name: String; }>, {}>
+      outType: Class<User, Struct<{ readonly name: String; }>, {}>
 
 === Piping Flow ===
 Location: 6:50 - 6:63

@@ -1,25 +1,25 @@
 // @Filename: /test.ts
-import { Effect, Layer, ServiceMap, Data, Schema } from "effect"
+import { Effect, Layer, Context, Data, Schema } from "effect"
 
-export class DbConnection extends ServiceMap.Service<DbConnection>()("DbConnection", {
+export class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
   make: Effect.succeed({})
 }) {
   static Default = Layer.effect(this, this.make)
 }
 
-export class FileSystem extends ServiceMap.Service<FileSystem>()("FileSystem", {
+export class FileSystem extends Context.Service<FileSystem>()("FileSystem", {
   make: Effect.succeed({})
 }) {
   static Default = Layer.effect(this, this.make)
 }
 
-export class Cache extends ServiceMap.Service<Cache>()("Cache", {
+export class Cache extends Context.Service<Cache>()("Cache", {
   make: Effect.as(FileSystem.asEffect(), {})
 }) {
   static Default = Layer.effect(this, this.make)
 }
 
-export class UserRepository extends ServiceMap.Service<UserRepository>()("UserRepository", {
+export class UserRepository extends Context.Service<UserRepository>()("UserRepository", {
   make: Effect.as(Effect.andThen(DbConnection.asEffect(), Cache.asEffect()), {})
 }) {
   static Default = Layer.effect(this, this.make)
@@ -49,7 +49,7 @@ export const attempt = Effect.try({
   catch: (error) => new NotFound({ resource: "user" }) /* <- this should not appear in the errors list */
 })
 
-const myArray: ServiceMap.Key<any, any>[] = []
+const myArray: Context.Key<any, any>[] = []
 for(const x of myArray) { // <- x variable inside for of should not appear in services list
   console.log(x)
 }

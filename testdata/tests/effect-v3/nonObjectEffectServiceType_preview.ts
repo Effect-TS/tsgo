@@ -1,3 +1,4 @@
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics nonObjectEffectServiceType:warning
 import * as Effect from "effect/Effect"

@@ -2,7 +2,7 @@
 
 === Piping Flow ===
 Location: 3:26 - 5:22
-Node: ServiceMap.Service<UserService, {\n    getUser(id: string): Effect.Effect<void>\n  }>()("UserService")
+Node: Context.Service<UserService, {\n    getUser(id: string): Effect.Effect<void>\n  }>()("UserService")
 Node Kind: KindCallExpression
 
 Subject: "UserService"
@@ -10,7 +10,7 @@ Subject Type: "UserService"
 
 Transformations (1):
   [0] kind: call
-      callee: ServiceMap.Service<UserService, {\n    getUser(id: string): Effect.Effect<void>\n  }>()
+      callee: Context.Service<UserService, {\n    getUser(id: string): Effect.Effect<void>\n  }>()
       args: (constant)
       outType: ServiceClass<UserService, "UserService", { getUser(id: string): Effect<void, never, never>; }>
 

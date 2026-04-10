@@ -95,7 +95,7 @@
         "category": "Suggestion",
         "code": 377025
     },
-    "`{0}` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.services` and `Effect.{1}With`. effect(runEffectInsideEffect)": {
+    "`{0}` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.{1}With`. effect(runEffectInsideEffect)": {
         "category": "Suggestion",
         "code": 377074
     },
@@ -219,7 +219,7 @@
         "category": "Warning",
         "code": 377055
     },
-    "`ServiceMap.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `{0}`. effect(serviceNotAsClass)": {
+    "`Context.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `{0}`. effect(serviceNotAsClass)": {
         "category": "Warning",
         "code": 377056
     },

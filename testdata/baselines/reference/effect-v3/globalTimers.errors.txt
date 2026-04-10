@@ -1,13 +1,14 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/globalTimers.ts(5,18): warning TS377072: This code uses `setTimeout`, the corresponding Effect timer API is `Effect.sleep or Schedule` from Effect. effect(globalTimers)
-/.src/globalTimers.ts(8,25): warning TS377072: This code uses `setInterval`, the corresponding Effect timer API is `Schedule or Effect.repeat` from Effect. effect(globalTimers)
-/.src/globalTimers.ts(12,25): warning TS377072: This code uses `setTimeout`, the corresponding Effect timer API is `Effect.sleep or Schedule` from Effect. effect(globalTimers)
-/.src/globalTimers.ts(21,20): warning TS377072: This code uses `setInterval`, the corresponding Effect timer API is `Schedule or Effect.repeat` from Effect. effect(globalTimers)
+/.src/globalTimers.ts(6,18): warning TS377072: This code uses `setTimeout`, the corresponding Effect timer API is `Effect.sleep or Schedule` from Effect. effect(globalTimers)
+/.src/globalTimers.ts(9,25): warning TS377072: This code uses `setInterval`, the corresponding Effect timer API is `Schedule or Effect.repeat` from Effect. effect(globalTimers)
+/.src/globalTimers.ts(13,25): warning TS377072: This code uses `setTimeout`, the corresponding Effect timer API is `Effect.sleep or Schedule` from Effect. effect(globalTimers)
+/.src/globalTimers.ts(22,20): warning TS377072: This code uses `setInterval`, the corresponding Effect timer API is `Schedule or Effect.repeat` from Effect. effect(globalTimers)
 
 
 ==== /.src/globalTimers.ts (4 errors) ====
+    // @effect-v3
     // @effect-diagnostics globalTimers:warning
     import { Effect } from "effect"
     
@@ -45,4 +46,3 @@ Effect version: 3.19.19
       const setTimeout = () => 0
       return setTimeout()
     }
-    

@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/test.ts(5,63): error TS377049: This key does not match the deterministic key for this declaration. The expected key is `de06a820ada693c2`. effect(deterministicKeys)
+/.src/test.ts(5,60): error TS377049: This key does not match the deterministic key for this declaration. The expected key is `de06a820ada693c2`. effect(deterministicKeys)
 /.src/test.ts(8,46): error TS377049: This key does not match the deterministic key for this declaration. The expected key is `1296269f76d642ec`. effect(deterministicKeys)
 
 
@@ -27,11 +27,11 @@ Effect version: 4.0.0
 
 ==== /.src/test.ts (2 errors) ====
     // @effect-diagnostics deterministicKeys:error
-    import { ServiceMap, Data } from "effect"
+    import { Context, Data } from "effect"
     
     export class ExpectedServiceIdentifier
-      extends ServiceMap.Service<ExpectedServiceIdentifier, {}>()("ExpectedServiceIdentifier")
-                                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      extends Context.Service<ExpectedServiceIdentifier, {}>()("ExpectedServiceIdentifier")
+                                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS377049: This key does not match the deterministic key for this declaration. The expected key is `de06a820ada693c2`. effect(deterministicKeys)
     {}
     

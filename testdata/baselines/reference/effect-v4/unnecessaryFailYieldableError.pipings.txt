@@ -26,7 +26,7 @@ Transformations (1):
   [0] kind: call
       callee: Schema.ErrorClass<SchemaError>("SchemaError")
       args: (constant)
-      outType: ErrorClass<SchemaError, Struct<{ readonly _tag: tag<"SchemaError">; }>, YieldableError>
+      outType: Class<SchemaError, Struct<{ readonly _tag: tag<"SchemaError">; }>, YieldableError>
 
 === Piping Flow ===
 Location: 13:8 - 13:34

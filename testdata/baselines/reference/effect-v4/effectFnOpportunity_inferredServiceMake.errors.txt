@@ -19,9 +19,9 @@ Effect version: 4.0.0
     
 
 ==== /.src/effectFnOpportunity_inferredServiceMake.ts (2 errors) ====
-    import { Effect, Layer, ServiceMap } from "effect"
+    import { Effect, Layer, Context } from "effect"
     
-    export class UserService extends ServiceMap.Service<UserService>()("UserService", {
+    export class UserService extends Context.Service<UserService>()("UserService", {
         make: Effect.gen(function*() {
             return {
                 getUser: (id: string) =>

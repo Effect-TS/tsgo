@@ -2,7 +2,7 @@
 Effect version: 4.0.0
 
 /.src/runEffectInsideEffect.ts(14,21): suggestion TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
-/.src/runEffectInsideEffect.ts(22,5): suggestion TS377074: `Effect.runPromise` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.services` and `Effect.runPromiseWith`. effect(runEffectInsideEffect)
+/.src/runEffectInsideEffect.ts(22,5): suggestion TS377074: `Effect.runPromise` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runPromiseWith`. effect(runEffectInsideEffect)
 
 
 ==== /.src/runEffectInsideEffect.ts (2 errors) ====
@@ -31,7 +31,7 @@ Effect version: 4.0.0
         })
         Effect.runPromise(check)
         ~~~~~~~~~~~~~~~~~
-!!! suggestion TS377074: `Effect.runPromise` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.services` and `Effect.runPromiseWith`. effect(runEffectInsideEffect)
+!!! suggestion TS377074: `Effect.runPromise` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runPromiseWith`. effect(runEffectInsideEffect)
         //        ^- no runPromise, use the current services instead
       }
     })

@@ -1,7 +1,7 @@
 ==== /.src/nestedEffectGenYield_preview.ts (2 flows) ====
 
 === Piping Flow ===
-Location: 5:23 - 9:3
+Location: 6:23 - 10:3
 Node: Effect.gen(function*() {\n	yield* Effect.gen(function*() {\n		return 1\n	})\n})
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 6:8 - 8:4
+Location: 7:8 - 9:4
 Node: Effect.gen(function*() {\n		return 1\n	})
 Node Kind: KindCallExpression
 

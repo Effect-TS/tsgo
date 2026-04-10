@@ -1,18 +1,18 @@
 === Quick Fix Inventory ===
 
-[D1] (10:47-10:64) TS377037: `Schema.decodeSync` is used inside an Effect generator. `Schema.decodeEffect` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
+[D1] (11:47-11:64) TS377037: `Schema.decodeSync` is used inside an Effect generator. `Schema.decode` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
   Fix 0: "Disable schemaSyncInEffect for this line"
   Fix 1: "Disable schemaSyncInEffect for entire file"
 
-[D2] (13:14-13:31) TS377037: `Schema.decodeSync` is used inside an Effect generator. `Schema.decodeEffect` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
+[D2] (14:14-14:31) TS377037: `Schema.decodeSync` is used inside an Effect generator. `Schema.decode` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
   Fix 0: "Disable schemaSyncInEffect for this line"
   Fix 1: "Disable schemaSyncInEffect for entire file"
 
-[D3] (17:65-17:82) TS377037: `Schema.encodeSync` is used inside an Effect generator. `Schema.encodeEffect` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
+[D3] (18:65-18:82) TS377037: `Schema.encodeSync` is used inside an Effect generator. `Schema.encode` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
   Fix 0: "Disable schemaSyncInEffect for this line"
   Fix 1: "Disable schemaSyncInEffect for entire file"
 
-[D4] (20:20-20:44) TS377037: `Schema.encodeUnknownSync` is used inside an Effect generator. `Schema.encodeUnknownEffect` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
+[D4] (21:20-21:44) TS377037: `Schema.encodeUnknownSync` is used inside an Effect generator. `Schema.encodeUnknown` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
   Fix 0: "Disable schemaSyncInEffect for this line"
   Fix 1: "Disable schemaSyncInEffect for entire file"
 

@@ -1,7 +1,24 @@
 === Quick Fix Inventory ===
 
-[D1] (5:37-5:56) TS2740: Type 'Literal<"a">' is missing the following properties from type 'readonly Top[]': length, concat, join, slice, and 26 more.
-  (no quick fixes)
+[D1] (6:24-6:78) TS377038: This `Schema.Union` contains multiple `Schema.Literal` members and can be simplified to a single `Schema.Literal` call. effect(schemaUnionOfLiterals)
+  Fix 0: "Disable schemaUnionOfLiterals for this line"
+  Fix 1: "Disable schemaUnionOfLiterals for entire file"
+  Fix 2: "Replace with a single Schema.Literal call"
 
 === Quick Fix Application Results ===
-(no quick fixes to apply)
+
+=== [D1] Fix 0: "Disable schemaUnionOfLiterals for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable schemaUnionOfLiterals for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with a single Schema.Literal call" ===
+
+--- file:///.src/schemaUnionOfLiterals_preview.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics schemaUnionOfLiterals:warning
+import * as Schema from "effect/Schema"
+
+export const preview = Schema.Literal("a", "b")

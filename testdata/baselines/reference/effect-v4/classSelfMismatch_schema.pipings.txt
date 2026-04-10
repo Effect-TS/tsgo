@@ -12,7 +12,7 @@ Transformations (1):
   [0] kind: call
       callee: Schema.Class<ValidSchemaClass>("ValidSchemaClass")
       args: (constant)
-      outType: ExtendableClass<ValidSchemaClass, Struct<{ readonly prop: String; }>, {}>
+      outType: Class<ValidSchemaClass, Struct<{ readonly prop: String; }>, {}>
 
 === Piping Flow ===
 Location: 9:40 - 11:3
@@ -26,7 +26,7 @@ Transformations (1):
   [0] kind: call
       callee: Schema.Class<ValidSchemaClass>("InvalidSchemaClass")
       args: (constant)
-      outType: ExtendableClass<ValidSchemaClass, Struct<{ readonly prop: String; }>, {}>
+      outType: Class<ValidSchemaClass, Struct<{ readonly prop: String; }>, {}>
 
 === Piping Flow ===
 Location: 14:43 - 16:3
@@ -40,7 +40,7 @@ Transformations (1):
   [0] kind: call
       callee: Schema.Class<ValidErrorSchemaClass>("ValidErrorSchemaClass")
       args: (constant)
-      outType: ExtendableClass<ValidErrorSchemaClass, Struct<{ readonly prop: String; }>, {}>
+      outType: Class<ValidErrorSchemaClass, Struct<{ readonly prop: String; }>, {}>
 
 === Piping Flow ===
 Location: 19:45 - 21:3
@@ -54,7 +54,7 @@ Transformations (1):
   [0] kind: call
       callee: Schema.Class<ValidErrorSchemaClass>("InvalidErrorSchemaClass")
       args: (constant)
-      outType: ExtendableClass<ValidErrorSchemaClass, Struct<{ readonly prop: String; }>, {}>
+      outType: Class<ValidErrorSchemaClass, Struct<{ readonly prop: String; }>, {}>
 
 === Piping Flow ===
 Location: 24:10 - 28:5

@@ -1,18 +1,18 @@
 === Quick Fix Inventory ===
 
-[D1] (6:48-6:67) TS377065: This Effect code uses `console.log`, logging in Effect code is represented through `Effect.log or Logger`. effect(globalConsoleInEffect)
+[D1] (7:48-7:67) TS377065: This Effect code uses `console.log`, logging in Effect code is represented through `Effect.log or Logger`. effect(globalConsoleInEffect)
   Fix 0: "Disable globalConsoleInEffect for this line"
   Fix 1: "Disable globalConsoleInEffect for entire file"
 
-[D2] (9:14-9:33) TS377065: This Effect code uses `console.warn`, logging in Effect code is represented through `Effect.logWarning or Logger`. effect(globalConsoleInEffect)
+[D2] (10:14-10:33) TS377065: This Effect code uses `console.warn`, logging in Effect code is represented through `Effect.logWarning or Logger`. effect(globalConsoleInEffect)
   Fix 0: "Disable globalConsoleInEffect for this line"
   Fix 1: "Disable globalConsoleInEffect for entire file"
 
-[D3] (13:66-13:92) TS377065: This Effect code uses `console.log`, logging in Effect code is represented through `Effect.log or Logger`. effect(globalConsoleInEffect)
+[D3] (14:66-14:92) TS377065: This Effect code uses `console.log`, logging in Effect code is represented through `Effect.log or Logger`. effect(globalConsoleInEffect)
   Fix 0: "Disable globalConsoleInEffect for this line"
   Fix 1: "Disable globalConsoleInEffect for entire file"
 
-[D4] (16:20-16:54) TS377065: This Effect code uses `console.warn`, logging in Effect code is represented through `Effect.logWarning or Logger`. effect(globalConsoleInEffect)
+[D4] (17:20-17:54) TS377065: This Effect code uses `console.warn`, logging in Effect code is represented through `Effect.logWarning or Logger`. effect(globalConsoleInEffect)
   Fix 0: "Disable globalConsoleInEffect for this line"
   Fix 1: "Disable globalConsoleInEffect for entire file"
 

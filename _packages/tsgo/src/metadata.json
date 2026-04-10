@@ -64,7 +64,7 @@
         377030
       ],
       "preview": {
-        "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.gen(function*() {\n  yield* Effect.services\u003cunknown\u003e()\n  return yield* Effect.fail\u003cany\u003e(\"boom\")\n})\n",
+        "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.gen(function*() {\n  yield* Effect.context\u003cunknown\u003e()\n  return yield* Effect.fail\u003cany\u003e(\"boom\")\n})\n",
         "diagnostics": [
           {
             "start": 46,
@@ -73,12 +73,12 @@
           },
           {
             "start": 90,
-            "end": 116,
+            "end": 115,
             "text": "This has unknown in the requirements channel which is not recommended.\nOnly service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)"
           },
           {
-            "start": 133,
-            "end": 157,
+            "start": 132,
+            "end": 156,
             "text": "This has any in the error channel which is not recommended.\nHaving an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)"
           }
         ]
@@ -87,7 +87,7 @@
     {
       "name": "classSelfMismatch",
       "group": "correctness",
-      "description": "Ensures Self type parameter matches the class name in ServiceMap/Service/Tag/Schema classes",
+      "description": "Ensures Self type parameter matches the class name in Context/Service/Tag/Schema classes",
       "defaultSeverity": "error",
       "fixable": true,
       "supportedEffect": [
@@ -122,7 +122,7 @@
         377051
       ],
       "preview": {
-        "sourceText": "import * as Effect from \"effect/Effect\"\n\n// This preview only reports when the workspace resolves duplicated\n// Effect package versions.\nexport const preview = Effect.succeed(true)\n",
+        "sourceText": "import * as Effect from \"effect/Effect\"\n\n// This preview only reports when the workspace resolves duplicated\n// Effect package versions.\nexport const preview = Effect.succeed(true)",
         "diagnostics": []
       }
     },
@@ -213,11 +213,11 @@
         377004
       ],
       "preview": {
-        "sourceText": "import { Effect, ServiceMap } from \"effect\"\n\nclass Db extends ServiceMap.Service\u003cDb\u003e()(\"Db\", { make: Effect.succeed({}) }) {}\n\n// @ts-expect-error\nexport const preview: Effect.Effect\u003cvoid\u003e = Db.asEffect().pipe(Effect.asVoid)\n",
+        "sourceText": "import { Effect, Context } from \"effect\"\n\nclass Db extends Context.Service\u003cDb\u003e()(\"Db\", { make: Effect.succeed({}) }) {}\n\n// @ts-expect-error\nexport const preview: Effect.Effect\u003cvoid\u003e = Db.asEffect().pipe(Effect.asVoid)\n",
         "diagnostics": [
           {
-            "start": 160,
-            "end": 167,
+            "start": 154,
+            "end": 161,
             "text": "This Effect requires a service that is missing from the expected Effect context: `Db`. effect(missingEffectContext)"
           }
         ]
@@ -261,11 +261,11 @@
         377034
       ],
       "preview": {
-        "sourceText": "import { Effect, Layer, ServiceMap } from \"effect\"\n\nclass A extends ServiceMap.Service\u003cA\u003e()(\"A\", { make: Effect.succeed({}) }) {\n  static Default = Layer.effect(this, this.make)\n}\ndeclare const layer: Layer.Layer\u003cA, never, A\u003e\n// @ts-expect-error\nexport const preview: Layer.Layer\u003cA\u003e = layer\n",
+        "sourceText": "import { Effect, Layer, Context } from \"effect\"\n\nclass A extends Context.Service\u003cA\u003e()(\"A\", { make: Effect.succeed({}) }) {\n  static Default = Layer.effect(this, this.make)\n}\ndeclare const layer: Layer.Layer\u003cA, never, A\u003e\n// @ts-expect-error\nexport const preview: Layer.Layer\u003cA\u003e = layer\n",
         "diagnostics": [
           {
-            "start": 259,
-            "end": 266,
+            "start": 253,
+            "end": 260,
             "text": "Missing 'A' in the expected Layer context. effect(missingLayerContext)"
           }
         ]
@@ -333,7 +333,7 @@
         377048
       ],
       "preview": {
-        "sourceText": "import * as Effect from \"effect/Effect\"\n\nexport class BadService extends Effect.Service\u003cBadService\u003e()(\"BadService\", {\n  // @ts-expect-error\n  succeed: \"hello\" as const\n}) {}\n",
+        "sourceText": "import * as Effect from \"effect/Effect\"\n\nexport class BadService extends Effect.Service\u003cBadService\u003e()(\"BadService\", {\n  // @ts-expect-error\n  succeed: \"hello\" as const\n}) {}",
         "diagnostics": [
           {
             "start": 142,
@@ -367,7 +367,7 @@
           {
             "start": 126,
             "end": 133,
-            "text": "This project targets Effect v4, but this code uses the Effect v3 API `runtime`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Runtime has been removed in Effect v4. Use Effect.services to grab services and then run using Effect.runPromiseWith. effect(outdatedApi)"
+            "text": "This project targets Effect v4, but this code uses the Effect v3 API `runtime`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Runtime has been removed in Effect v4. Use Effect.context to grab services and then run using Effect.runPromiseWith. effect(outdatedApi)"
           }
         ]
       }
@@ -583,11 +583,11 @@
         377035
       ],
       "preview": {
-        "sourceText": "import { Effect, Layer, ServiceMap } from \"effect\"\n\nclass A extends ServiceMap.Service\u003cA\u003e()(\"A\", { make: Effect.succeed({}) }) {\n  static Default = Layer.effect(this, this.make)\n}\nclass B extends ServiceMap.Service\u003cB\u003e()(\"B\", { make: Effect.as(A.asEffect(), {}) }) {\n  static Default = Layer.effect(this, this.make)\n}\nexport const preview = Layer.mergeAll(A.Default, B.Default)\n",
+        "sourceText": "import { Effect, Layer, Context } from \"effect\"\n\nclass A extends Context.Service\u003cA\u003e()(\"A\", { make: Effect.succeed({}) }) {\n  static Default = Layer.effect(this, this.make)\n}\nclass B extends Context.Service\u003cB\u003e()(\"B\", { make: Effect.as(A.asEffect(), {}) }) {\n  static Default = Layer.effect(this, this.make)\n}\nexport const preview = Layer.mergeAll(A.Default, B.Default)\n",
         "diagnostics": [
           {
-            "start": 355,
-            "end": 364,
+            "start": 346,
+            "end": 355,
             "text": "This layer provides A which is required by another layer in the same Layer.mergeAll call. Layer.mergeAll creates layers in parallel, so dependencies between layers will not be satisfied. Consider moving this layer into a Layer.provideMerge after the Layer.mergeAll. effect(layerMergeAllWithDependencies)"
           }
         ]
@@ -631,11 +631,11 @@
         377041
       ],
       "preview": {
-        "sourceText": "import type { Effect } from \"effect\"\nimport { ServiceMap } from \"effect\"\n\nclass FileSystem extends ServiceMap.Service\u003cFileSystem, {\n  write: (s: string) =\u003e Effect.Effect\u003cvoid\u003e\n}\u003e()(\"FileSystem\") {}\n\nexport class Cache extends ServiceMap.Service\u003cCache, {\n  read: Effect.Effect\u003cstring, never, FileSystem\u003e\n  save: () =\u003e Effect.Effect\u003cvoid, never, FileSystem\u003e\n}\u003e()(\"Cache\") {}\n",
+        "sourceText": "import type { Effect } from \"effect\"\nimport { Context } from \"effect\"\n\nclass FileSystem extends Context.Service\u003cFileSystem, {\n  write: (s: string) =\u003e Effect.Effect\u003cvoid\u003e\n}\u003e()(\"FileSystem\") {}\n\nexport class Cache extends Context.Service\u003cCache, {\n  read: Effect.Effect\u003cstring, never, FileSystem\u003e\n  save: () =\u003e Effect.Effect\u003cvoid, never, FileSystem\u003e\n}\u003e()(\"Cache\") {}\n",
         "diagnostics": [
           {
-            "start": 212,
-            "end": 217,
+            "start": 206,
+            "end": 211,
             "text": "Methods of this Service require `FileSystem` from every caller.\n\nThe requirement becomes part of the public service surface instead of remaining internal to Layer implementation.\n\nResolve these dependencies at Layer creation and provide them to each method, so the service's type reflects its purpose, not its implementation.\n\nTo suppress this diagnostic for specific dependency types that are intentionally passed through (e.g., HttpServerRequest), add `@effect-leakable-service` JSDoc to their interface declarations, or to this service by adding a `@effect-expect-leaking FileSystem` JSDoc.\n\nMore info and examples at https://effect.website/docs/requirements-management/layers/#avoiding-requirement-leakage effect(leakingRequirements)"
           }
         ]
@@ -655,11 +655,11 @@
         377033
       ],
       "preview": {
-        "sourceText": "import { Effect, Layer, ServiceMap } from \"effect\"\n\nclass A extends ServiceMap.Service\u003cA\u003e()(\"A\", { make: Effect.succeed({}) }) {\n  static Default = Layer.effect(this, this.make)\n}\nclass B extends ServiceMap.Service\u003cB\u003e()(\"B\", { make: Effect.succeed({}) }) {\n  static Default = Layer.effect(this, this.make)\n}\nexport const preview = Effect.void.pipe(Effect.provide(A.Default), Effect.provide(B.Default))\n",
+        "sourceText": "import { Effect, Layer, Context } from \"effect\"\n\nclass A extends Context.Service\u003cA\u003e()(\"A\", { make: Effect.succeed({}) }) {\n  static Default = Layer.effect(this, this.make)\n}\nclass B extends Context.Service\u003cB\u003e()(\"B\", { make: Effect.succeed({}) }) {\n  static Default = Layer.effect(this, this.make)\n}\nexport const preview = Effect.void.pipe(Effect.provide(A.Default), Effect.provide(B.Default))\n",
         "diagnostics": [
           {
-            "start": 348,
-            "end": 373,
+            "start": 339,
+            "end": 364,
             "text": "This expression chains multiple `Effect.provide` calls. Providing Layers in multiple calls in a chain can break service lifecycle behavior compared with a single combined provide with merged layers. effect(multipleEffectProvide)"
           }
         ]
@@ -710,7 +710,7 @@
           {
             "start": 101,
             "end": 115,
-            "text": "`Effect.runSync` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.services` and `Effect.runSyncWith`. effect(runEffectInsideEffect)"
+            "text": "`Effect.runSync` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runSyncWith`. effect(runEffectInsideEffect)"
           }
         ]
       }
@@ -728,7 +728,7 @@
         377037
       ],
       "preview": {
-        "sourceText": "import * as Effect from \"effect/Effect\"\nimport * as Schema from \"effect/Schema\"\n\nconst Person = Schema.Struct({ name: Schema.String, age: Schema.Number })\n\nexport const preview = Effect.gen(function*() {\n  const input = yield* Effect.succeed({ name: \"Ada\", age: 1 })\n  return Schema.decodeSync(Person)(input)\n})\n",
+        "sourceText": "import * as Effect from \"effect/Effect\"\nimport * as Schema from \"effect/Schema\"\n\nconst Person = Schema.Struct({ name: Schema.String, age: Schema.Number })\n\nexport const preview = Effect.gen(function*() {\n  const input = yield* Effect.succeed({ name: \"Ada\", age: 1 })\n  return Schema.decodeSync(Person)(input)\n})",
         "diagnostics": [
           {
             "start": 276,
@@ -775,11 +775,11 @@
         377032
       ],
       "preview": {
-        "sourceText": "import { Effect, Layer, ServiceMap } from \"effect\"\n\nclass Config extends ServiceMap.Service\u003cConfig\u003e()(\"Config\", { make: Effect.succeed({}) }) {\n  static Default = Layer.effect(this, this.make)\n}\nexport const preview = Effect.void.pipe(Effect.provide(Config.Default))\n",
+        "sourceText": "import { Effect, Layer, Context } from \"effect\"\n\nclass Config extends Context.Service\u003cConfig\u003e()(\"Config\", { make: Effect.succeed({}) }) {\n  static Default = Layer.effect(this, this.make)\n}\nexport const preview = Effect.void.pipe(Effect.provide(Config.Default))\n",
         "diagnostics": [
           {
-            "start": 235,
-            "end": 265,
+            "start": 229,
+            "end": 259,
             "text": "Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)"
           }
         ]
@@ -1351,11 +1351,11 @@
         377049
       ],
       "preview": {
-        "sourceText": "import { ServiceMap } from \"effect\"\n\nexport class RenamedService\n  extends ServiceMap.Service\u003cRenamedService, {}\u003e()(\"CustomIdentifier\") {}\n",
+        "sourceText": "import { Context } from \"effect\"\n\nexport class RenamedService\n  extends Context.Service\u003cRenamedService, {}\u003e()(\"CustomIdentifier\") {}\n",
         "diagnostics": [
           {
-            "start": 116,
-            "end": 134,
+            "start": 110,
+            "end": 128,
             "text": "This key does not match the deterministic key for this declaration. The expected key is `effect-v4-tests/preview/RenamedService`. effect(deterministicKeys)"
           }
         ]
@@ -1519,7 +1519,7 @@
         377040
       ],
       "preview": {
-        "sourceText": "import * as Effect from \"effect/Effect\"\n\nclass Db extends Effect.Service\u003cDb\u003e()(\"Db\", { succeed: { ok: true } }) {}\nexport class Repo extends Effect.Service\u003cRepo\u003e()(\"Repo\", {\n  effect: Effect.gen(function*() {\n    yield* Db\n    return { all: Effect.succeed([] as Array\u003cnumber\u003e) }\n  })\n}) {}\n",
+        "sourceText": "import * as Effect from \"effect/Effect\"\n\nclass Db extends Effect.Service\u003cDb\u003e()(\"Db\", { succeed: { ok: true } }) {}\nexport class Repo extends Effect.Service\u003cRepo\u003e()(\"Repo\", {\n  effect: Effect.gen(function*() {\n    yield* Db\n    return { all: Effect.succeed([] as Array\u003cnumber\u003e) }\n  })\n}) {}",
         "diagnostics": [
           {
             "start": 128,
@@ -1614,7 +1614,7 @@
         377038
       ],
       "preview": {
-        "sourceText": "import * as Schema from \"effect/Schema\"\n\nexport const preview = Schema.Union(Schema.Literal(\"a\"), Schema.Literal(\"b\"))\n",
+        "sourceText": "import * as Schema from \"effect/Schema\"\n\nexport const preview = Schema.Union(Schema.Literal(\"a\"), Schema.Literal(\"b\"))",
         "diagnostics": [
           {
             "start": 64,
@@ -1627,7 +1627,7 @@
     {
       "name": "serviceNotAsClass",
       "group": "style",
-      "description": "Warns when ServiceMap.Service is used as a variable instead of a class declaration",
+      "description": "Warns when Context.Service is used as a variable instead of a class declaration",
       "defaultSeverity": "off",
       "fixable": true,
       "supportedEffect": [
@@ -1637,12 +1637,12 @@
         377056
       ],
       "preview": {
-        "sourceText": "import { ServiceMap } from \"effect\"\n\nexport const Preview = ServiceMap.Service\u003c{ port: number }\u003e(\"Preview\")\n",
+        "sourceText": "import { Context } from \"effect\"\n\nexport const Preview = Context.Service\u003c{ port: number }\u003e(\"Preview\")\n",
         "diagnostics": [
           {
-            "start": 60,
-            "end": 107,
-            "text": "`ServiceMap.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `class Preview extends ServiceMap.Service\u003cPreview, { port: number }\u003e()(\"Preview\") {}`. effect(serviceNotAsClass)"
+            "start": 57,
+            "end": 101,
+            "text": "`Context.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `class Preview extends Context.Service\u003cPreview, { port: number }\u003e()(\"Preview\") {}`. effect(serviceNotAsClass)"
           }
         ]
       }

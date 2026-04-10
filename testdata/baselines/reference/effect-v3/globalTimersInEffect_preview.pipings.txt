@@ -1,7 +1,7 @@
 ==== /.src/globalTimersInEffect_preview.ts (1 flows) ====
 
 === Piping Flow ===
-Location: 5:23 - 7:3
+Location: 6:23 - 8:3
 Node: Effect.gen(function*() {\n  setTimeout(() => {}, 100)\n})
 Node Kind: KindCallExpression
 

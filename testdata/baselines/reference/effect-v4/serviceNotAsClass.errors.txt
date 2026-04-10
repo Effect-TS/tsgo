@@ -1,30 +1,30 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/serviceNotAsClass.ts(7,16): warning TS377056: `ServiceMap.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `class Config extends ServiceMap.Service<Config, ConfigService>()("Config") {}`. effect(serviceNotAsClass)
-/.src/serviceNotAsClass.ts(11,30): warning TS377056: `ServiceMap.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `class ArtifactStore extends ServiceMap.Service<ArtifactStore, ArtifactStoreService>()("@my-app/ArtifactStore") {}`. effect(serviceNotAsClass)
+/.src/serviceNotAsClass.ts(7,16): warning TS377056: `Context.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `class Config extends Context.Service<Config, ConfigService>()("Config") {}`. effect(serviceNotAsClass)
+/.src/serviceNotAsClass.ts(11,30): warning TS377056: `Context.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `class ArtifactStore extends Context.Service<ArtifactStore, ArtifactStoreService>()("@my-app/ArtifactStore") {}`. effect(serviceNotAsClass)
 
 
 ==== /.src/serviceNotAsClass.ts (2 errors) ====
     // @effect-diagnostics serviceNotAsClass:warning
-    import { ServiceMap } from "effect"
+    import { Context } from "effect"
     
     interface ConfigService {}
     
-    // Flagged: const variable with ServiceMap.Service
-    const Config = ServiceMap.Service<ConfigService>("Config")
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377056: `ServiceMap.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `class Config extends ServiceMap.Service<Config, ConfigService>()("Config") {}`. effect(serviceNotAsClass)
+    // Flagged: const variable with Context.Service
+    const Config = Context.Service<ConfigService>("Config")
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377056: `Context.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `class Config extends Context.Service<Config, ConfigService>()("Config") {}`. effect(serviceNotAsClass)
     
-    // Flagged: exported const variable with ServiceMap.Service
+    // Flagged: exported const variable with Context.Service
     interface ArtifactStoreService {}
-    export const ArtifactStore = ServiceMap.Service<ArtifactStoreService>("@my-app/ArtifactStore")
-                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377056: `ServiceMap.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `class ArtifactStore extends ServiceMap.Service<ArtifactStore, ArtifactStoreService>()("@my-app/ArtifactStore") {}`. effect(serviceNotAsClass)
+    export const ArtifactStore = Context.Service<ArtifactStoreService>("@my-app/ArtifactStore")
+                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377056: `Context.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `class ArtifactStore extends Context.Service<ArtifactStore, ArtifactStoreService>()("@my-app/ArtifactStore") {}`. effect(serviceNotAsClass)
     
     // Not flagged: correct class extends form
-    class MyService extends ServiceMap.Service<MyService, { port: number }>()("MyService") {}
+    class MyService extends Context.Service<MyService, { port: number }>()("MyService") {}
     
-    // Not flagged: non-ServiceMap.Service const
+    // Not flagged: non-Context.Service const
     const x = 42
     

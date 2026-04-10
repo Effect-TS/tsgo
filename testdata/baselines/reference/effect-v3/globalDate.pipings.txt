@@ -1,7 +1,7 @@
 ==== /.src/globalDate.ts (3 flows) ====
 
 === Piping Flow ===
-Location: 17:28 - 20:3
+Location: 18:28 - 21:3
 Node: Effect.gen(function*() {\n  const now = Date.now()\n  return now\n})
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 23:35 - 25:3
+Location: 24:35 - 26:3
 Node: Effect.fn("newDateWithArgsInFn")(function*() {\n  return new Date("2024-01-01")\n})
 Node Kind: KindCallExpression
 
@@ -29,7 +29,7 @@ Transformations (1):
       outType: () => Effect<Date, never, never>
 
 === Piping Flow ===
-Location: 28:32 - 31:3
+Location: 29:32 - 32:3
 Node: Effect.gen(function*() {\n  const fn = () => Date.now()\n  return fn\n})
 Node Kind: KindCallExpression
 

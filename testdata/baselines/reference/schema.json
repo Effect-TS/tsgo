@@ -1709,6 +1709,11 @@
           "default": "warning",
           "description": "Warns when multiple versions of an Effect-related package are detected in the program"
         },
+        "effectDoNotation": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Suggests using Effect.gen or Effect.fn instead of the Effect.Do notation helpers"
+        },
         "effectFnIife": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "warning",
@@ -1738,6 +1743,11 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "warning",
           "description": "Detects nested Effects in void success channels that may cause unexecuted effects"
+        },
+        "effectMapFlatten": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests using Effect.flatMap instead of Effect.map followed by Effect.flatten in piping flows"
         },
         "effectMapVoid": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
@@ -1884,6 +1894,11 @@
           "default": "warning",
           "description": "Warns against chaining Effect.provide calls which can cause service lifecycle issues"
         },
+        "nestedEffectGenYield": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Warns when yielding a nested bare Effect.gen inside an existing Effect generator context"
+        },
         "newPromise": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
@@ -1983,6 +1998,11 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "warning",
           "description": "Warns when catch callbacks return unknown instead of typed errors"
+        },
+        "unnecessaryArrowBlock": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Suggests using a concise arrow body when the block only returns an expression"
         },
         "unnecessaryEffectGen": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",

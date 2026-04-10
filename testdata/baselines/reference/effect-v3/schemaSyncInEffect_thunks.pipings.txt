@@ -1,7 +1,7 @@
 ==== /.src/schemaSyncInEffect_thunks.ts (12 flows) ====
 
 === Piping Flow ===
-Location: 3:27 - 3:60
+Location: 4:27 - 4:60
 Node: Data.TaggedError("ExampleError")
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "ExampleError"; } & Readonly<A>
 
 === Piping Flow ===
-Location: 5:15 - 8:3
+Location: 6:15 - 9:3
 Node: Schema.Struct({\n  name: Schema.String,\n  age: Schema.Number\n})
 Node Kind: KindCallExpression
 
@@ -29,7 +29,7 @@ Transformations (1):
       outType: Struct<{ name: typeof String$; age: typeof Number$; }>
 
 === Piping Flow ===
-Location: 10:28 - 10:100
+Location: 11:28 - 11:100
 Node: Effect.sync(() => Schema.decodeSync(Person)({ name: "John", age: 30 }))
 Node Kind: KindCallExpression
 
@@ -43,7 +43,7 @@ Transformations (1):
       outType: Effect<{ readonly name: string; readonly age: number; }, never, never>
 
 === Piping Flow ===
-Location: 10:46 - 10:99
+Location: 11:46 - 11:99
 Node: Schema.decodeSync(Person)({ name: "John", age: 30 })
 Node Kind: KindCallExpression
 
@@ -57,7 +57,7 @@ Transformations (1):
       outType: { readonly name: string; readonly age: number; }
 
 === Piping Flow ===
-Location: 12:33 - 15:3
+Location: 13:33 - 16:3
 Node: Effect.try({\n  try: () => Schema.decodeSync(Person)({ name: "Jane", age: 25 }),\n  catch: () => new ExampleError()\n})
 Node Kind: KindCallExpression
 
@@ -71,7 +71,7 @@ Transformations (1):
       outType: Effect<{ readonly name: string; readonly age: number; }, ExampleError, never>
 
 === Piping Flow ===
-Location: 13:13 - 13:66
+Location: 14:13 - 14:66
 Node: Schema.decodeSync(Person)({ name: "Jane", age: 25 })
 Node Kind: KindCallExpression
 
@@ -85,7 +85,7 @@ Transformations (1):
       outType: { readonly name: string; readonly age: number; }
 
 === Piping Flow ===
-Location: 17:34 - 17:117
+Location: 18:34 - 18:117
 Node: Effect.tryPromise(async () => Schema.encodeSync(Person)({ name: "Bob", age: 40 }))
 Node Kind: KindCallExpression
 
@@ -99,7 +99,7 @@ Transformations (1):
       outType: Effect<{ readonly age: number; readonly name: string; }, UnknownException, never>
 
 === Piping Flow ===
-Location: 17:64 - 17:116
+Location: 18:64 - 18:116
 Node: Schema.encodeSync(Person)({ name: "Bob", age: 40 })
 Node Kind: KindCallExpression
 
@@ -113,7 +113,7 @@ Transformations (1):
       outType: { readonly age: number; readonly name: string; }
 
 === Piping Flow ===
-Location: 19:40 - 22:3
+Location: 20:40 - 23:3
 Node: Effect.tryPromise({\n  try: async () => Schema.encodeUnknownSync(Person)({ name: "Carol", age: 50 }),\n  catch: () => new ExampleError()\n})
 Node Kind: KindCallExpression
 
@@ -127,7 +127,7 @@ Transformations (1):
       outType: Effect<{ readonly age: number; readonly name: string; }, ExampleError, never>
 
 === Piping Flow ===
-Location: 20:19 - 20:80
+Location: 21:19 - 21:80
 Node: Schema.encodeUnknownSync(Person)({ name: "Carol", age: 50 })
 Node Kind: KindCallExpression
 
@@ -141,7 +141,7 @@ Transformations (1):
       outType: { readonly age: number; readonly name: string; }
 
 === Piping Flow ===
-Location: 24:48 - 26:2
+Location: 25:48 - 27:2
 Node: Effect.sync(\n  () => () => Schema.decodeSync(Person)({ name: "Nested", age: 10 })\n)
 Node Kind: KindCallExpression
 
@@ -155,7 +155,7 @@ Transformations (1):
       outType: Effect<() => { readonly name: string; readonly age: number; }, never, never>
 
 === Piping Flow ===
-Location: 25:14 - 25:69
+Location: 26:14 - 26:69
 Node: Schema.decodeSync(Person)({ name: "Nested", age: 10 })
 Node Kind: KindCallExpression
 

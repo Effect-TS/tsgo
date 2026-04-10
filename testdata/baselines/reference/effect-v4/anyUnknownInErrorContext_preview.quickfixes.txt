@@ -6,7 +6,7 @@ Having an unknown or any error type is not useful. Consider instead using specif
   Fix 0: "Disable anyUnknownInErrorContext for this line"
   Fix 1: "Disable anyUnknownInErrorContext for entire file"
 
-[D2] (6:10-6:36) TS377030: This has unknown in the requirements channel which is not recommended.
+[D2] (6:10-6:35) TS377030: This has unknown in the requirements channel which is not recommended.
 Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
   Fix 0: "Disable anyUnknownInErrorContext for this line"
   Fix 1: "Disable anyUnknownInErrorContext for entire file"

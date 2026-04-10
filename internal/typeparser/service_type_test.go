@@ -8,16 +8,16 @@ import (
 	"github.com/microsoft/typescript-go/shim/checker"
 )
 
-func TestServiceType_V4ServiceMapBeta43Shape(t *testing.T) {
+func TestServiceType_V4ServiceShape(t *testing.T) {
 	t.Parallel()
 	if err := bundledeffect.EnsurePackageInstalled(bundledeffect.EffectV4, "effect"); err != nil {
 		t.Skip("Effect v4 not installed:", err)
 	}
 
 	c, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectV4Internal(t, `
-import { ServiceMap } from "effect"
+import { Context } from "effect"
 
-export class UserRepo extends ServiceMap.Service<UserRepo, { readonly find: () => string }>()("UserRepo") {}
+export class UserRepo extends Context.Service<UserRepo, { readonly find: () => string }>()("UserRepo") {}
 `)
 	defer done()
 
@@ -28,7 +28,7 @@ export class UserRepo extends ServiceMap.Service<UserRepo, { readonly find: () =
 
 	service := tp.ServiceType(classType, className)
 	if service == nil {
-		t.Fatal("expected v4 ServiceMap.Service type to parse")
+		t.Fatal("expected v4 service type to parse")
 	}
 	if service.Identifier == nil {
 		t.Fatal("expected service identifier type")
@@ -70,7 +70,7 @@ export class Config extends Context.Tag("Config")<Config, { readonly port: numbe
 		t.Fatal("expected context tag shape type")
 	}
 	if tp.ServiceType(classType, className) != nil {
-		t.Fatal("expected v3 Context.Tag not to parse as ServiceMap.Service")
+		t.Fatal("expected v3 Context.Tag not to parse as a v4 service type")
 	}
 }
 

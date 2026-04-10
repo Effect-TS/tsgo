@@ -17,4 +17,4 @@ export const UserWithTag = Schema.TaggedStruct("User", {
 export const OtherWithoutTag = Schema.Struct({
   name: Schema.String,
   age: Schema.Number
-})
+})

@@ -2,11 +2,11 @@
 
 === Piping Flow ===
 Location: 5:23 - 8:3
-Node: Effect.gen(function*() {\n  yield* Effect.services<unknown>()\n  return yield* Effect.fail<any>("boom")\n})
+Node: Effect.gen(function*() {\n  yield* Effect.context<unknown>()\n  return yield* Effect.fail<any>("boom")\n})
 Node Kind: KindCallExpression
 
-Subject: function*() {\n  yield* Effect.services<unknown>()\n  return yield* Effect.fail<any>("boom")\n}
-Subject Type: () => Generator<Effect<never, any, never> | Effect<ServiceMap<unknown>, never, unknown>, never, any>
+Subject: function*() {\n  yield* Effect.context<unknown>()\n  return yield* Effect.fail<any>("boom")\n}
+Subject Type: () => Generator<Effect<never, any, never> | Effect<Context<unknown>, never, unknown>, never, any>
 
 Transformations (1):
   [0] kind: call

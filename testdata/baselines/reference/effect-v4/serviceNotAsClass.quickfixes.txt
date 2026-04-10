@@ -3,12 +3,12 @@
 [D1] (7:7-7:13) TS6133: 'Config' is declared but its value is never read.
   (no quick fixes)
 
-[D2] (7:16-7:59) TS377056: `ServiceMap.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `class Config extends ServiceMap.Service<Config, ConfigService>()("Config") {}`. effect(serviceNotAsClass)
+[D2] (7:16-7:56) TS377056: `Context.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `class Config extends Context.Service<Config, ConfigService>()("Config") {}`. effect(serviceNotAsClass)
   Fix 0: "Disable serviceNotAsClass for this line"
   Fix 1: "Disable serviceNotAsClass for entire file"
   Fix 2: "Convert to class declaration"
 
-[D3] (11:30-11:95) TS377056: `ServiceMap.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `class ArtifactStore extends ServiceMap.Service<ArtifactStore, ArtifactStoreService>()("@my-app/ArtifactStore") {}`. effect(serviceNotAsClass)
+[D3] (11:30-11:92) TS377056: `Context.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `class ArtifactStore extends Context.Service<ArtifactStore, ArtifactStoreService>()("@my-app/ArtifactStore") {}`. effect(serviceNotAsClass)
   Fix 0: "Disable serviceNotAsClass for this line"
   Fix 1: "Disable serviceNotAsClass for entire file"
   Fix 2: "Convert to class declaration"
@@ -31,21 +31,21 @@ skipped by default
 
 --- file:///.src/serviceNotAsClass.ts ---
 // @effect-diagnostics serviceNotAsClass:warning
-import { ServiceMap } from "effect"
+import { Context } from "effect"
 
 interface ConfigService {}
 
-// Flagged: const variable with ServiceMap.Service
-class Config extends ServiceMap.Service<Config, ConfigService>()("Config") {}
+// Flagged: const variable with Context.Service
+class Config extends Context.Service<Config, ConfigService>()("Config") {}
 
-// Flagged: exported const variable with ServiceMap.Service
+// Flagged: exported const variable with Context.Service
 interface ArtifactStoreService {}
-export const ArtifactStore = ServiceMap.Service<ArtifactStoreService>("@my-app/ArtifactStore")
+export const ArtifactStore = Context.Service<ArtifactStoreService>("@my-app/ArtifactStore")
 
 // Not flagged: correct class extends form
-class MyService extends ServiceMap.Service<MyService, { port: number }>()("MyService") {}
+class MyService extends Context.Service<MyService, { port: number }>()("MyService") {}
 
-// Not flagged: non-ServiceMap.Service const
+// Not flagged: non-Context.Service const
 const x = 42
 
 
@@ -59,20 +59,20 @@ skipped by default
 
 --- file:///.src/serviceNotAsClass.ts ---
 // @effect-diagnostics serviceNotAsClass:warning
-import { ServiceMap } from "effect"
+import { Context } from "effect"
 
 interface ConfigService {}
 
-// Flagged: const variable with ServiceMap.Service
-const Config = ServiceMap.Service<ConfigService>("Config")
+// Flagged: const variable with Context.Service
+const Config = Context.Service<ConfigService>("Config")
 
-// Flagged: exported const variable with ServiceMap.Service
+// Flagged: exported const variable with Context.Service
 interface ArtifactStoreService {}
-export class ArtifactStore extends ServiceMap.Service<ArtifactStore, ArtifactStoreService>()("@my-app/ArtifactStore") {}
+export class ArtifactStore extends Context.Service<ArtifactStore, ArtifactStoreService>()("@my-app/ArtifactStore") {}
 
 // Not flagged: correct class extends form
-class MyService extends ServiceMap.Service<MyService, { port: number }>()("MyService") {}
+class MyService extends Context.Service<MyService, { port: number }>()("MyService") {}
 
-// Not flagged: non-ServiceMap.Service const
+// Not flagged: non-Context.Service const
 const x = 42
 

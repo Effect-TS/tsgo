@@ -2,7 +2,7 @@
 
 === Piping Flow ===
 Location: 3:24 - 5:18
-Node: ServiceMap.Service<MyService, {\n  log: (_what: string) => Effect.Effect<void>\n}>()("MyService")
+Node: Context.Service<MyService, {\n  log: (_what: string) => Effect.Effect<void>\n}>()("MyService")
 Node Kind: KindCallExpression
 
 Subject: "MyService"
@@ -10,7 +10,7 @@ Subject Type: "MyService"
 
 Transformations (1):
   [0] kind: call
-      callee: ServiceMap.Service<MyService, {\n  log: (_what: string) => Effect.Effect<void>\n}>()
+      callee: Context.Service<MyService, {\n  log: (_what: string) => Effect.Effect<void>\n}>()
       args: (constant)
       outType: ServiceClass<MyService, "MyService", { log: (_what: string) => Effect<void, never, never>; }>
 

@@ -31,24 +31,24 @@ skipped by default
 === [D1] Fix 2: "Move layer to Layer.provideMerge" ===
 
 --- file:///.src/layerMergeAllWithDependencies.ts ---
-import { Effect, Layer, ServiceMap } from "effect"
+import { Effect, Layer, Context } from "effect"
 
-export class DbConnection extends ServiceMap.Service<DbConnection>()("DbConnection", {
+export class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
   make: Effect.succeed({})
 }) {
   static Default = Layer.effect(this, this.make)
 }
-export class FileSystem extends ServiceMap.Service<FileSystem>()("FileSystem", {
+export class FileSystem extends Context.Service<FileSystem>()("FileSystem", {
   make: Effect.succeed({})
 }) {
   static Default = Layer.effect(this, this.make)
 }
-export class Cache extends ServiceMap.Service<Cache>()("Cache", {
+export class Cache extends Context.Service<Cache>()("Cache", {
   make: Effect.as(FileSystem.asEffect(), {})
 }) {
   static Default = Layer.effect(this, this.make)
 }
-export class UserRepository extends ServiceMap.Service<UserRepository>()("UserRepository", {
+export class UserRepository extends Context.Service<UserRepository>()("UserRepository", {
   make: Effect.as(Effect.andThen(DbConnection.asEffect(), Cache.asEffect()), {})
 }) {
   static Default = Layer.effect(this, this.make)
@@ -88,24 +88,24 @@ skipped by default
 === [D2] Fix 2: "Move layer to Layer.provideMerge" ===
 
 --- file:///.src/layerMergeAllWithDependencies.ts ---
-import { Effect, Layer, ServiceMap } from "effect"
+import { Effect, Layer, Context } from "effect"
 
-export class DbConnection extends ServiceMap.Service<DbConnection>()("DbConnection", {
+export class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
   make: Effect.succeed({})
 }) {
   static Default = Layer.effect(this, this.make)
 }
-export class FileSystem extends ServiceMap.Service<FileSystem>()("FileSystem", {
+export class FileSystem extends Context.Service<FileSystem>()("FileSystem", {
   make: Effect.succeed({})
 }) {
   static Default = Layer.effect(this, this.make)
 }
-export class Cache extends ServiceMap.Service<Cache>()("Cache", {
+export class Cache extends Context.Service<Cache>()("Cache", {
   make: Effect.as(FileSystem.asEffect(), {})
 }) {
   static Default = Layer.effect(this, this.make)
 }
-export class UserRepository extends ServiceMap.Service<UserRepository>()("UserRepository", {
+export class UserRepository extends Context.Service<UserRepository>()("UserRepository", {
   make: Effect.as(Effect.andThen(DbConnection.asEffect(), Cache.asEffect()), {})
 }) {
   static Default = Layer.effect(this, this.make)
@@ -145,24 +145,24 @@ skipped by default
 === [D3] Fix 2: "Move layer to Layer.provideMerge" ===
 
 --- file:///.src/layerMergeAllWithDependencies.ts ---
-import { Effect, Layer, ServiceMap } from "effect"
+import { Effect, Layer, Context } from "effect"
 
-export class DbConnection extends ServiceMap.Service<DbConnection>()("DbConnection", {
+export class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
   make: Effect.succeed({})
 }) {
   static Default = Layer.effect(this, this.make)
 }
-export class FileSystem extends ServiceMap.Service<FileSystem>()("FileSystem", {
+export class FileSystem extends Context.Service<FileSystem>()("FileSystem", {
   make: Effect.succeed({})
 }) {
   static Default = Layer.effect(this, this.make)
 }
-export class Cache extends ServiceMap.Service<Cache>()("Cache", {
+export class Cache extends Context.Service<Cache>()("Cache", {
   make: Effect.as(FileSystem.asEffect(), {})
 }) {
   static Default = Layer.effect(this, this.make)
 }
-export class UserRepository extends ServiceMap.Service<UserRepository>()("UserRepository", {
+export class UserRepository extends Context.Service<UserRepository>()("UserRepository", {
   make: Effect.as(Effect.andThen(DbConnection.asEffect(), Cache.asEffect()), {})
 }) {
   static Default = Layer.effect(this, this.make)
@@ -202,24 +202,24 @@ skipped by default
 === [D4] Fix 2: "Move layer to Layer.provideMerge" ===
 
 --- file:///.src/layerMergeAllWithDependencies.ts ---
-import { Effect, Layer, ServiceMap } from "effect"
+import { Effect, Layer, Context } from "effect"
 
-export class DbConnection extends ServiceMap.Service<DbConnection>()("DbConnection", {
+export class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
   make: Effect.succeed({})
 }) {
   static Default = Layer.effect(this, this.make)
 }
-export class FileSystem extends ServiceMap.Service<FileSystem>()("FileSystem", {
+export class FileSystem extends Context.Service<FileSystem>()("FileSystem", {
   make: Effect.succeed({})
 }) {
   static Default = Layer.effect(this, this.make)
 }
-export class Cache extends ServiceMap.Service<Cache>()("Cache", {
+export class Cache extends Context.Service<Cache>()("Cache", {
   make: Effect.as(FileSystem.asEffect(), {})
 }) {
   static Default = Layer.effect(this, this.make)
 }
-export class UserRepository extends ServiceMap.Service<UserRepository>()("UserRepository", {
+export class UserRepository extends Context.Service<UserRepository>()("UserRepository", {
   make: Effect.as(Effect.andThen(DbConnection.asEffect(), Cache.asEffect()), {})
 }) {
   static Default = Layer.effect(this, this.make)

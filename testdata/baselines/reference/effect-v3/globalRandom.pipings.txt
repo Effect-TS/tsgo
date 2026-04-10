@@ -1,7 +1,7 @@
 ==== /.src/globalRandom.ts (2 flows) ====
 
 === Piping Flow ===
-Location: 15:31 - 17:3
+Location: 16:31 - 18:3
 Node: Effect.gen(function*() {\n  return Math.random()\n})
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 20:32 - 23:3
+Location: 21:32 - 24:3
 Node: Effect.gen(function*() {\n  const fn = () => Math.random()\n  return fn\n})
 Node Kind: KindCallExpression
 

@@ -1,10 +1,11 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/nonObjectEffectServiceType_preview.ts(7,3): warning TS377048: `Effect.Service` is declared with a primitive service type. `Effect.Service` models object-shaped services; primitive values use `Context.Tag` or `Effect.Tag` directly. effect(nonObjectEffectServiceType)
+/.src/nonObjectEffectServiceType_preview.ts(8,3): warning TS377048: `Effect.Service` is declared with a primitive service type. `Effect.Service` models object-shaped services; primitive values use `Context.Tag` or `Effect.Tag` directly. effect(nonObjectEffectServiceType)
 
 
 ==== /.src/nonObjectEffectServiceType_preview.ts (1 errors) ====
+    // @effect-v3
     // @effect-diagnostics *:off
     // @effect-diagnostics nonObjectEffectServiceType:warning
     import * as Effect from "effect/Effect"
@@ -15,4 +16,3 @@ Effect version: 3.19.19
       ~~~~~~~
 !!! warning TS377048: `Effect.Service` is declared with a primitive service type. `Effect.Service` models object-shaped services; primitive values use `Context.Tag` or `Effect.Tag` directly. effect(nonObjectEffectServiceType)
     }) {}
-    

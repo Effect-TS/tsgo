@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (7:3-7:12) TS377085: This uses the Effect do emulation. `Effect.gen` or `Effect.fn` achieve the same result with native JS scopes. effect(effectDoNotation)
+[D1] (8:3-8:12) TS377085: This uses the Effect do emulation. `Effect.gen` or `Effect.fn` achieve the same result with native JS scopes. effect(effectDoNotation)
   Fix 0: "Disable effectDoNotation for this line"
   Fix 1: "Disable effectDoNotation for entire file"
 

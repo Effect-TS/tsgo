@@ -2,11 +2,11 @@
 
 === Piping Flow ===
 Location: 4:34 - 6:3
-Node: Effect.gen(function*() {\n  yield* Effect.services<unknown>()\n})
+Node: Effect.gen(function*() {\n  yield* Effect.context<unknown>()\n})
 Node Kind: KindCallExpression
 
-Subject: function*() {\n  yield* Effect.services<unknown>()\n}
-Subject Type: () => Generator<Effect<ServiceMap<unknown>, never, unknown>, void, any>
+Subject: function*() {\n  yield* Effect.context<unknown>()\n}
+Subject Type: () => Generator<Effect<Context<unknown>, never, unknown>, void, any>
 
 Transformations (1):
   [0] kind: call
@@ -16,11 +16,11 @@ Transformations (1):
 
 === Piping Flow ===
 Location: 8:30 - 10:3
-Node: Effect.gen(function*() {\n  yield* Effect.services<any>()\n})
+Node: Effect.gen(function*() {\n  yield* Effect.context<any>()\n})
 Node Kind: KindCallExpression
 
-Subject: function*() {\n  yield* Effect.services<any>()\n}
-Subject Type: () => Generator<Effect<ServiceMap<any>, never, any>, void, any>
+Subject: function*() {\n  yield* Effect.context<any>()\n}
+Subject Type: () => Generator<Effect<Context<any>, never, any>, void, any>
 
 Transformations (1):
   [0] kind: call
@@ -86,11 +86,11 @@ Transformations (1):
 
 === Piping Flow ===
 Location: 20:33 - 23:3
-Node: Effect.gen(function*() {\n  yield* Effect.services<unknown>()\n  return yield* Effect.fail<any>(42)\n})
+Node: Effect.gen(function*() {\n  yield* Effect.context<unknown>()\n  return yield* Effect.fail<any>(42)\n})
 Node Kind: KindCallExpression
 
-Subject: function*() {\n  yield* Effect.services<unknown>()\n  return yield* Effect.fail<any>(42)\n}
-Subject Type: () => Generator<Effect<never, any, never> | Effect<ServiceMap<unknown>, never, unknown>, never, any>
+Subject: function*() {\n  yield* Effect.context<unknown>()\n  return yield* Effect.fail<any>(42)\n}
+Subject Type: () => Generator<Effect<never, any, never> | Effect<Context<unknown>, never, unknown>, never, any>
 
 Transformations (1):
   [0] kind: call
@@ -174,7 +174,7 @@ Node: Layer.effectDiscard(effectUnkown)
 Node Kind: KindCallExpression
 
 Subject: effectUnkown
-Subject Type: Effect<ServiceMap<unknown>, never, unknown>
+Subject Type: Effect<Context<unknown>, never, unknown>
 
 Transformations (1):
   [0] kind: call

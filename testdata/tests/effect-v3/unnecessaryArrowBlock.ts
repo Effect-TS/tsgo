@@ -1,3 +1,4 @@
+// @effect-v3
 // @effect-diagnostics unnecessaryArrowBlock:warning
 export const shouldReport = (arg: string) => {
 	return arg.trim()

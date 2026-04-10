@@ -2,8 +2,8 @@
 ==== /.src/test.ts (2 flows) ====
 
 === Piping Flow ===
-Location: 5:10 - 5:91
-Node: ServiceMap.Service<ExpectedServiceIdentifier, {}>()("ExpectedServiceIdentifier")
+Location: 5:10 - 5:88
+Node: Context.Service<ExpectedServiceIdentifier, {}>()("ExpectedServiceIdentifier")
 Node Kind: KindCallExpression
 
 Subject: "ExpectedServiceIdentifier"
@@ -11,7 +11,7 @@ Subject Type: "ExpectedServiceIdentifier"
 
 Transformations (1):
   [0] kind: call
-      callee: ServiceMap.Service<ExpectedServiceIdentifier, {}>()
+      callee: Context.Service<ExpectedServiceIdentifier, {}>()
       args: (constant)
       outType: ServiceClass<ExpectedServiceIdentifier, "ExpectedServiceIdentifier", {}>
 

@@ -14,10 +14,10 @@
 }
 
 // @filename: utils.ts
-import { ServiceMap } from "effect"
+import { Context } from "effect"
 
 export function MyConstructor<X>(/** @effect-identifier */ identifier: string) {
-  return class extends ServiceMap.Service<X, {}>()("hey/" + identifier) {}
+  return class extends Context.Service<X, {}>()("hey/" + identifier) {}
 }
 
 export const Class = <
@@ -45,11 +45,11 @@ export const Class = <
 // @filename: test.ts
 // @effect-diagnostics deterministicKeys:error
 import * as Persistable from "./utils"
-import { ServiceMap } from "effect"
+import { Context } from "effect"
 
 // simple case inside same file
 export function LocalConstructor<X>(/** @effect-identifier */ identifier: string) {
-  return class extends ServiceMap.Service<X, {}>()("hey/" + identifier) {}
+  return class extends Context.Service<X, {}>()("hey/" + identifier) {}
 }
 
 export class MyClass extends LocalConstructor<MyClass>("Hello") {

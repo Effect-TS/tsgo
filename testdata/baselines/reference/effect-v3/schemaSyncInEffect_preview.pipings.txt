@@ -1,7 +1,7 @@
 ==== /.src/schemaSyncInEffect_preview.ts (4 flows) ====
 
 === Piping Flow ===
-Location: 6:15 - 6:74
+Location: 7:15 - 7:74
 Node: Schema.Struct({ name: Schema.String, age: Schema.Number })
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: Struct<{ name: typeof String$; age: typeof Number$; }>
 
 === Piping Flow ===
-Location: 8:23 - 11:3
+Location: 9:23 - 12:3
 Node: Effect.gen(function*() {\n  const input = yield* Effect.succeed({ name: "Ada", age: 1 })\n  return Schema.decodeSync(Person)(input)\n})
 Node Kind: KindCallExpression
 
@@ -29,7 +29,7 @@ Transformations (1):
       outType: Effect<{ readonly name: string; readonly age: number; }, never, never>
 
 === Piping Flow ===
-Location: 9:23 - 9:63
+Location: 10:23 - 10:63
 Node: Effect.succeed({ name: "Ada", age: 1 })
 Node Kind: KindCallExpression
 
@@ -43,7 +43,7 @@ Transformations (1):
       outType: Effect<{ name: string; age: number; }, never, never>
 
 === Piping Flow ===
-Location: 10:9 - 10:42
+Location: 11:9 - 11:42
 Node: Schema.decodeSync(Person)(input)
 Node Kind: KindCallExpression
 

@@ -730,7 +730,7 @@ func (tp *TypeParser) tryMatchOfInference(objectLiteral *ast.Node) string {
 }
 
 // tryMatchServiceMapMakeInference checks if an object literal is returned from a generator
-// inside Effect.gen that is the "make" property of a class extending ServiceMap.Service.
+// inside Effect.gen that is the "make" property of a class extending Context.Service.
 // Returns the class name or empty string.
 func (tp *TypeParser) tryMatchServiceMapMakeInference(objectLiteral *ast.Node) string {
 	if objectLiteral == nil || objectLiteral.Parent == nil {
@@ -788,8 +788,8 @@ func (tp *TypeParser) tryMatchServiceMapMakeInference(objectLiteral *ast.Node) s
 	if currentNode == nil || currentNode.Name() == nil {
 		return ""
 	}
-	// Verify the class extends ServiceMap.Service
-	if tp.ExtendsServiceMapService(currentNode) == nil {
+	// Verify the class extends Context.Service
+	if tp.ExtendsContextService(currentNode) == nil {
 		return ""
 	}
 	return scanner.GetTextOfNode(currentNode.Name())

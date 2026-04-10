@@ -20,8 +20,8 @@ Having an unknown or any error type is not useful. Consider instead using specif
 !!! warning TS377030: This has unknown in the requirements channel and any in the error channel which is not recommended.
 Only service identifiers should appear in the requirements channel.
 Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
-      yield* Effect.services<unknown>()
-             ~~~~~~~~~~~~~~~~~~~~~~~~~~
+      yield* Effect.context<unknown>()
+             ~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! warning TS377030: This has unknown in the requirements channel which is not recommended.
 Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
       return yield* Effect.fail<any>("boom")

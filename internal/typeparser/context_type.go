@@ -7,7 +7,7 @@ import (
 
 var effectContextPackageSourceFileDescriptor = PackageSourceFileDescriptor{
 	PackageName: "effect",
-	MatchesSourceFile: func(_ *TypeParser, c *checker.Checker, sf *ast.SourceFile) bool {
+	MatchesSourceFile: func(tp *TypeParser, c *checker.Checker, sf *ast.SourceFile) bool {
 		if c == nil || sf == nil {
 			return false
 		}
@@ -23,7 +23,11 @@ var effectContextPackageSourceFileDescriptor = PackageSourceFileDescriptor{
 			return false
 		}
 
-		// The Context module also exports "Tag"
+		// Effect v3 exports Context.Tag, while newer v4 betas export Context.Service.
+		if tp.SupportedEffectVersion() == EffectMajorV4 {
+			serviceSym := c.TryGetMemberInModuleExportsAndProperties("Service", moduleSym)
+			return serviceSym != nil
+		}
 		tagSym := c.TryGetMemberInModuleExportsAndProperties("Tag", moduleSym)
 		return tagSym != nil
 	},

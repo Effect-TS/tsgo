@@ -1,7 +1,7 @@
 ==== /.src/processEnvInEffect_thunks.ts (6 flows) ====
 
 === Piping Flow ===
-Location: 5:27 - 5:60
+Location: 6:27 - 6:60
 Node: Data.TaggedError("ExampleError")
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "ExampleError"; } & Readonly<A>
 
 === Piping Flow ===
-Location: 7:25 - 7:68
+Location: 8:25 - 8:68
 Node: Effect.sync(() => process.env.SYNC_SECRET)
 Node Kind: KindCallExpression
 
@@ -29,7 +29,7 @@ Transformations (1):
       outType: Effect<string | undefined, never, never>
 
 === Piping Flow ===
-Location: 9:30 - 12:3
+Location: 10:30 - 13:3
 Node: Effect.try({\n  try: () => process.env.TRY_SECRET,\n  catch: () => new ExampleError()\n})
 Node Kind: KindCallExpression
 
@@ -43,7 +43,7 @@ Transformations (1):
       outType: Effect<string | undefined, ExampleError, never>
 
 === Piping Flow ===
-Location: 14:31 - 14:93
+Location: 15:31 - 15:93
 Node: Effect.tryPromise(async () => process.env.TRY_PROMISE_SECRET)
 Node Kind: KindCallExpression
 
@@ -57,7 +57,7 @@ Transformations (1):
       outType: Effect<string | undefined, UnknownException, never>
 
 === Piping Flow ===
-Location: 16:37 - 19:3
+Location: 17:37 - 20:3
 Node: Effect.tryPromise({\n  try: async () => process.env.TRY_PROMISE_OBJECT_SECRET,\n  catch: () => new ExampleError()\n})
 Node Kind: KindCallExpression
 
@@ -71,7 +71,7 @@ Transformations (1):
       outType: Effect<string | undefined, ExampleError, never>
 
 === Piping Flow ===
-Location: 21:48 - 21:99
+Location: 22:48 - 22:99
 Node: Effect.sync(() => () => process.env.NESTED_SECRET)
 Node Kind: KindCallExpression
 

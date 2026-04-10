@@ -27,9 +27,9 @@ skipped by default
 === [D3] Fix 2: "Convert to Effect.fn(\"UserService.getUser\")" ===
 
 --- file:///.src/effectFnOpportunity_inferredOf.ts ---
-import { Effect, Layer, ServiceMap } from "effect"
+import { Effect, Layer, Context } from "effect"
 
-class UserService extends ServiceMap.Service<UserService, {
+class UserService extends Context.Service<UserService, {
     getUser(id: string): Effect.Effect<void>
   }>()("UserService") {}
 
@@ -50,9 +50,9 @@ skipped by default
 === [D4] Fix 2: "Remove the Effect.gen, and keep the body" ===
 
 --- file:///.src/effectFnOpportunity_inferredOf.ts ---
-import { Effect, Layer, ServiceMap } from "effect"
+import { Effect, Layer, Context } from "effect"
 
-class UserService extends ServiceMap.Service<UserService, {
+class UserService extends Context.Service<UserService, {
     getUser(id: string): Effect.Effect<void>
   }>()("UserService") {}
 

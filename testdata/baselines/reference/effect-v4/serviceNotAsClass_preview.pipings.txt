@@ -1,8 +1,8 @@
 ==== /.src/serviceNotAsClass_preview.ts (1 flows) ====
 
 === Piping Flow ===
-Location: 5:23 - 5:71
-Node: ServiceMap.Service<{ port: number }>("Preview")
+Location: 5:23 - 5:68
+Node: Context.Service<{ port: number }>("Preview")
 Node Kind: KindCallExpression
 
 Subject: "Preview"
@@ -10,6 +10,6 @@ Subject Type: "Preview"
 
 Transformations (1):
   [0] kind: call
-      callee: ServiceMap.Service
+      callee: Context.Service
       args: (constant)
       outType: Service<{ port: number; }, { port: number; }>

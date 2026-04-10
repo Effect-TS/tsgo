@@ -19,7 +19,7 @@ var RunEffectInsideEffectFix = fixable.Fixable{
 	Description: "Use the current services or a runtime to run the Effect",
 	ErrorCodes: []int32{
 		tsdiag.X_0_is_called_inside_an_Effect_with_a_separate_runtime_invocation_In_this_context_run_child_Effects_with_the_surrounding_runtime_which_can_be_accessed_through_Effect_runtime_and_Runtime_1_effect_runEffectInsideEffect.Code(),
-		tsdiag.X_0_is_called_inside_an_Effect_with_a_separate_services_invocation_In_this_context_child_Effects_run_with_the_surrounding_services_which_can_be_accessed_through_Effect_services_and_Effect_1_With_effect_runEffectInsideEffect.Code(),
+		tsdiag.X_0_is_called_inside_an_Effect_with_a_separate_services_invocation_In_this_context_child_Effects_run_with_the_surrounding_services_which_can_be_accessed_through_Effect_context_and_Effect_1_With_effect_runEffectInsideEffect.Code(),
 	},
 	FixIDs: []string{"runEffectInsideEffect_fix"},
 	Run:    runRunEffectInsideEffectFix,
@@ -79,7 +79,7 @@ func runRunEffectInsideEffectFix(ctx *fixable.Context) []ls.CodeAction {
 					if tp.IsNodeReferenceToEffectModuleApi(yieldedCall.Expression, "runtime") {
 						runtimeIdentifier = identifier
 					}
-					if tp.IsNodeReferenceToEffectModuleApi(yieldedCall.Expression, "services") {
+					if tp.IsNodeReferenceToEffectModuleApi(yieldedCall.Expression, "context") {
 						servicesIdentifier = identifier
 					}
 				}
@@ -87,8 +87,8 @@ func runRunEffectInsideEffectFix(ctx *fixable.Context) []ls.CodeAction {
 				effectModuleIdentifier := typeparser.FindModuleIdentifier(sf, "Effect")
 				if supportedEffect == typeparser.EffectMajorV4 {
 					if servicesIdentifier == "" {
-						servicesIdentifier = "effectServices"
-						insertYieldedEffectModuleCall(tracker, sf, block, effectModuleIdentifier, "services", servicesIdentifier)
+						servicesIdentifier = "effectContext"
+						insertYieldedEffectModuleCall(tracker, sf, block, effectModuleIdentifier, "context", servicesIdentifier)
 					}
 				} else if runtimeIdentifier == "" {
 					runtimeIdentifier = "effectRuntime"

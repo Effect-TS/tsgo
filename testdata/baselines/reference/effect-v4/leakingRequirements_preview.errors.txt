@@ -16,13 +16,13 @@ More info and examples at https://effect.website/docs/requirements-management/la
     // @effect-diagnostics *:off
     // @effect-diagnostics leakingRequirements:warning
     import type { Effect } from "effect"
-    import { ServiceMap } from "effect"
+    import { Context } from "effect"
     
-    class FileSystem extends ServiceMap.Service<FileSystem, {
+    class FileSystem extends Context.Service<FileSystem, {
       write: (s: string) => Effect.Effect<void>
     }>()("FileSystem") {}
     
-    export class Cache extends ServiceMap.Service<Cache, {
+    export class Cache extends Context.Service<Cache, {
                  ~~~~~
 !!! warning TS377041: Methods of this Service require `FileSystem` from every caller.
 

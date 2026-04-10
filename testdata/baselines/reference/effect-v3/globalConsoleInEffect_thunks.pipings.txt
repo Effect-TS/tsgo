@@ -1,7 +1,7 @@
 ==== /.src/globalConsoleInEffect_thunks.ts (11 flows) ====
 
 === Piping Flow ===
-Location: 4:27 - 4:60
+Location: 5:27 - 5:60
 Node: Data.TaggedError("ExampleError")
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "ExampleError"; } & Readonly<A>
 
 === Piping Flow ===
-Location: 6:29 - 6:68
+Location: 7:29 - 7:68
 Node: Effect.sync(() => console.log("sync"))
 Node Kind: KindCallExpression
 
@@ -29,7 +29,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 6:47 - 6:67
+Location: 7:47 - 7:67
 Node: console.log("sync")
 Node Kind: KindCallExpression
 
@@ -43,7 +43,7 @@ Transformations (1):
       outType: void
 
 === Piping Flow ===
-Location: 8:34 - 11:3
+Location: 9:34 - 12:3
 Node: Effect.try({\n  try: () => console.warn("try"),\n  catch: () => new ExampleError()\n})
 Node Kind: KindCallExpression
 
@@ -57,7 +57,7 @@ Transformations (1):
       outType: Effect<void, ExampleError, never>
 
 === Piping Flow ===
-Location: 9:13 - 9:33
+Location: 10:13 - 10:33
 Node: console.warn("try")
 Node Kind: KindCallExpression
 
@@ -71,7 +71,7 @@ Transformations (1):
       outType: void
 
 === Piping Flow ===
-Location: 13:35 - 13:93
+Location: 14:35 - 14:93
 Node: Effect.tryPromise(async () => console.log("try-promise"))
 Node Kind: KindCallExpression
 
@@ -85,7 +85,7 @@ Transformations (1):
       outType: Effect<void, UnknownException, never>
 
 === Piping Flow ===
-Location: 13:65 - 13:92
+Location: 14:65 - 14:92
 Node: console.log("try-promise")
 Node Kind: KindCallExpression
 
@@ -99,7 +99,7 @@ Transformations (1):
       outType: void
 
 === Piping Flow ===
-Location: 15:41 - 18:3
+Location: 16:41 - 19:3
 Node: Effect.tryPromise({\n  try: async () => console.warn("try-promise-object"),\n  catch: () => new ExampleError()\n})
 Node Kind: KindCallExpression
 
@@ -113,7 +113,7 @@ Transformations (1):
       outType: Effect<void, ExampleError, never>
 
 === Piping Flow ===
-Location: 16:19 - 16:54
+Location: 17:19 - 17:54
 Node: console.warn("try-promise-object")
 Node Kind: KindCallExpression
 
@@ -127,7 +127,7 @@ Transformations (1):
       outType: void
 
 === Piping Flow ===
-Location: 20:48 - 20:95
+Location: 21:48 - 21:95
 Node: Effect.sync(() => () => console.log("nested"))
 Node Kind: KindCallExpression
 
@@ -141,7 +141,7 @@ Transformations (1):
       outType: Effect<() => void, never, never>
 
 === Piping Flow ===
-Location: 20:72 - 20:94
+Location: 21:72 - 21:94
 Node: console.log("nested")
 Node Kind: KindCallExpression
 

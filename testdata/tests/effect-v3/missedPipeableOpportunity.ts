@@ -1,3 +1,4 @@
+// @effect-v3
 // @filename: tsconfig.json
 {
   "compilerOptions": {

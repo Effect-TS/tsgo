@@ -4,11 +4,11 @@ Effect version: 4.0.0
 
 
 ==== /.src/leakingRequirements_noScope.ts (0 errors) ====
-    import { ServiceMap } from "effect"
+    import { Context } from "effect"
     import type * as Effect from "effect/Effect"
     import type * as Scope from "effect/Scope"
     
-    export class FileSystem extends ServiceMap.Service<FileSystem, {
+    export class FileSystem extends Context.Service<FileSystem, {
       writeFile: (content: string) => Effect.Effect<void>
     }>()("FileSystem") {}
     
@@ -17,5 +17,5 @@ Effect version: 4.0.0
       readCache: Effect.Effect<void, never, Scope.Scope>
     }
     
-    export const GenericTag = ServiceMap.Service<LeakingScopeIsFine>("LeakingScopeIsFine")
+    export const GenericTag = Context.Service<LeakingScopeIsFine>("LeakingScopeIsFine")
     

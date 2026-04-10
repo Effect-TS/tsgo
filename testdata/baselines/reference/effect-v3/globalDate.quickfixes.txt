@@ -1,27 +1,27 @@
 === Quick Fix Inventory ===
 
-[D1] (5:7-5:22) TS6133: '_moduleLevelNow' is declared but its value is never read.
+[D1] (6:7-6:22) TS6133: '_moduleLevelNow' is declared but its value is never read.
   (no quick fixes)
 
-[D2] (5:25-5:35) TS377066: This code uses `Date.now()`, time access is represented through `Clock` from Effect. effect(globalDate)
+[D2] (6:25-6:35) TS377066: This code uses `Date.now()`, time access is represented through `Clock` from Effect. effect(globalDate)
   Fix 0: "Disable globalDate for this line"
   Fix 1: "Disable globalDate for entire file"
 
-[D3] (8:7-8:22) TS6133: '_regularNewDate' is declared but its value is never read.
+[D3] (9:7-9:22) TS6133: '_regularNewDate' is declared but its value is never read.
   (no quick fixes)
 
-[D4] (9:10-9:20) TS377068: This code constructs `new Date()`, date values are represented through `DateTime` from Effect. effect(globalDate)
+[D4] (10:10-10:20) TS377068: This code constructs `new Date()`, date values are represented through `DateTime` from Effect. effect(globalDate)
   Fix 0: "Disable globalDate for this line"
   Fix 1: "Disable globalDate for entire file"
 
-[D5] (14:7-14:22) TS6133: '_aliasedDateNow' is declared but its value is never read.
+[D5] (15:7-15:22) TS6133: '_aliasedDateNow' is declared but its value is never read.
   (no quick fixes)
 
-[D6] (14:25-14:37) TS377066: This code uses `Date.now()`, time access is represented through `Clock` from Effect. effect(globalDate)
+[D6] (15:25-15:37) TS377066: This code uses `Date.now()`, time access is represented through `Clock` from Effect. effect(globalDate)
   Fix 0: "Disable globalDate for this line"
   Fix 1: "Disable globalDate for entire file"
 
-[D7] (29:20-29:30) TS377066: This code uses `Date.now()`, time access is represented through `Clock` from Effect. effect(globalDate)
+[D7] (30:20-30:30) TS377066: This code uses `Date.now()`, time access is represented through `Clock` from Effect. effect(globalDate)
   Fix 0: "Disable globalDate for this line"
   Fix 1: "Disable globalDate for entire file"
 

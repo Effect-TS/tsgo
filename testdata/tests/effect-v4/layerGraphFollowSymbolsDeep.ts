@@ -18,19 +18,19 @@
   }
 }
 // @filename: base.ts
-import { Effect, Layer, ServiceMap } from "effect"
+import { Effect, Layer, Context } from "effect"
 
-export class Database extends ServiceMap.Service<Database>()("Database", {
+export class Database extends Context.Service<Database>()("Database", {
   make: Effect.succeed({})
 }) {
   static Default = Layer.effect(this, this.make)
 }
-export class FileSystem extends ServiceMap.Service<FileSystem>()("FileSystem", {
+export class FileSystem extends Context.Service<FileSystem>()("FileSystem", {
   make: Effect.succeed({})
 }) {
   static Default = Layer.effect(this, this.make)
 }
-export class Cache extends ServiceMap.Service<Cache>()("Cache", {
+export class Cache extends Context.Service<Cache>()("Cache", {
   make: Effect.as(FileSystem.asEffect(), {})
 }) {
   static Default = Layer.effect(this, this.make)

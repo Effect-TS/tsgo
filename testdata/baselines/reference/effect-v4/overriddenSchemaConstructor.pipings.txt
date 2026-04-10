@@ -12,7 +12,7 @@ Transformations (1):
   [0] kind: call
       callee: Schema.Class<Valid>("Valid")
       args: (constant)
-      outType: ExtendableClass<Valid, Struct<{ readonly a: Number; }>, {}>
+      outType: Class<Valid, Struct<{ readonly a: Number; }>, {}>
 
 === Piping Flow ===
 Location: 7:28 - 9:3
@@ -26,7 +26,7 @@ Transformations (1):
   [0] kind: call
       callee: Schema.Class<Valid2>("Valid")
       args: (constant)
-      outType: ExtendableClass<Valid2, Struct<{ readonly a: Number; }>, {}>
+      outType: Class<Valid2, Struct<{ readonly a: Number; }>, {}>
 
 === Piping Flow ===
 Location: 24:10 - 26:5
@@ -40,7 +40,7 @@ Transformations (1):
   [0] kind: call
       callee: Schema.Class<InvalidBecauseOfConstructor>("InvalidBecauseOfConstructor")
       args: (constant)
-      outType: ExtendableClass<InvalidBecauseOfConstructor, Struct<{ readonly a: Number; }>, {}>
+      outType: Class<InvalidBecauseOfConstructor, Struct<{ readonly a: Number; }>, {}>
 
 === Piping Flow ===
 Location: 29:18 - 30:21

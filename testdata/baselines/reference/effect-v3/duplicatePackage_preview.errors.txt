@@ -4,6 +4,7 @@ Effect version: 3.19.19
 
 
 ==== /.src/duplicatePackage_preview.ts (0 errors) ====
+    // @effect-v3
     // @effect-diagnostics *:off
     // @effect-diagnostics duplicatePackage:warning
     import * as Effect from "effect/Effect"
@@ -11,4 +12,3 @@ Effect version: 3.19.19
     // This preview only reports when the workspace resolves duplicated
     // Effect package versions.
     export const preview = Effect.succeed(true)
-    

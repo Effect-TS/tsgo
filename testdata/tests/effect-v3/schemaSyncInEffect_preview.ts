@@ -1,3 +1,4 @@
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics schemaSyncInEffect:warning
 import * as Effect from "effect/Effect"

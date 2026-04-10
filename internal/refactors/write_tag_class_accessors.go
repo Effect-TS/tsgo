@@ -54,7 +54,7 @@ func runWriteTagClassAccessors(ctx *refactor.Context) []ls.CodeAction {
 
 	// Check ExtendsEffectService (with accessors: true) or ExtendsEffectTag
 	var className *ast.Node
-	serviceResult := ctx.TypeParser.ExtendsEffectService(classNode)
+	serviceResult := ctx.TypeParser.ExtendsEffectV3Service(classNode)
 	if serviceResult != nil {
 		if !hasAccessorsTrue(serviceResult.Options) {
 			return nil

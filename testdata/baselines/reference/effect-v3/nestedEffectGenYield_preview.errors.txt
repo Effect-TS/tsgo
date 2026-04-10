@@ -1,10 +1,11 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/nestedEffectGenYield_preview.ts(6,9): warning TS377083: This `yield*` is applied to a nested `Effect.gen(...)` that can be inlined in the parent Effect generator context. effect(nestedEffectGenYield)
+/.src/nestedEffectGenYield_preview.ts(7,9): warning TS377083: This `yield*` is applied to a nested `Effect.gen(...)` that can be inlined in the parent Effect generator context. effect(nestedEffectGenYield)
 
 
 ==== /.src/nestedEffectGenYield_preview.ts (1 errors) ====
+    // @effect-v3
     // @effect-diagnostics *:off
     // @effect-diagnostics nestedEffectGenYield:warning
     import * as Effect from "effect/Effect"
@@ -18,4 +19,3 @@ Effect version: 3.19.19
     ~~~
 !!! warning TS377083: This `yield*` is applied to a nested `Effect.gen(...)` that can be inlined in the parent Effect generator context. effect(nestedEffectGenYield)
     })
-    

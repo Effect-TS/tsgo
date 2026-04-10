@@ -12,4 +12,4 @@ Transformations (1):
   [0] kind: call
       callee: Schema.Class<Valid>("Valid")
       args: (constant)
-      outType: ExtendableClass<Valid, Struct<{ readonly a: Number; }>, {}>
+      outType: Class<Valid, Struct<{ readonly a: Number; }>, {}>

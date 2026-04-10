@@ -97,15 +97,15 @@ func TestEffectHoverLayerQuickInfo(t *testing.T) {
   }
 }
 // @Filename: /test.ts
-import { Effect, Layer, ServiceMap } from "effect"
+import { Effect, Layer, Context } from "effect"
 
-class Database extends ServiceMap.Service<Database>()("Database", {
+class Database extends Context.Service<Database>()("Database", {
   make: Effect.succeed({})
 }) {
   static Default = Layer.effect(this, this.make)
 }
 
-class Cache extends ServiceMap.Service<Cache>()("Cache", {
+class Cache extends Context.Service<Cache>()("Cache", {
   make: Effect.as(Database.asEffect(), {})
 }) {
   static Default = Layer.effect(this, this.make)
@@ -151,15 +151,15 @@ func TestEffectHoverLayerNoExternal(t *testing.T) {
   }
 }
 // @Filename: /test.ts
-import { Effect, Layer, ServiceMap } from "effect"
+import { Effect, Layer, Context } from "effect"
 
-class Database extends ServiceMap.Service<Database>()("Database", {
+class Database extends Context.Service<Database>()("Database", {
   make: Effect.succeed({})
 }) {
   static Default = Layer.effect(this, this.make)
 }
 
-class Cache extends ServiceMap.Service<Cache>()("Cache", {
+class Cache extends Context.Service<Cache>()("Cache", {
   make: Effect.as(Database.asEffect(), {})
 }) {
   static Default = Layer.effect(this, this.make)
@@ -195,15 +195,15 @@ func TestEffectHoverLayerNameOnly(t *testing.T) {
   }
 }
 // @Filename: /test.ts
-import { Effect, Layer, ServiceMap } from "effect"
+import { Effect, Layer, Context } from "effect"
 
-class Database extends ServiceMap.Service<Database>()("Database", {
+class Database extends Context.Service<Database>()("Database", {
   make: Effect.succeed({})
 }) {
   static Default = Layer.effect(this, this.make)
 }
 
-class Cache extends ServiceMap.Service<Cache>()("Cache", {
+class Cache extends Context.Service<Cache>()("Cache", {
   make: Effect.as(Database.asEffect(), {})
 }) {
   static Default = Layer.effect(this, this.make)
@@ -282,15 +282,15 @@ func TestEffectHoverLayerMermaidProvider(t *testing.T) {
   }
 }
 // @Filename: /test.ts
-import { Effect, Layer, ServiceMap } from "effect"
+import { Effect, Layer, Context } from "effect"
 
-class Database extends ServiceMap.Service<Database>()("Database", {
+class Database extends Context.Service<Database>()("Database", {
   make: Effect.succeed({})
 }) {
   static Default = Layer.effect(this, this.make)
 }
 
-class Cache extends ServiceMap.Service<Cache>()("Cache", {
+class Cache extends Context.Service<Cache>()("Cache", {
   make: Effect.as(Database.asEffect(), {})
 }) {
   static Default = Layer.effect(this, this.make)

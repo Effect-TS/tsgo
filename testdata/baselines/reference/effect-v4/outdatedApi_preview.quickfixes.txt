@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (7:24-7:31) TS377052: This project targets Effect v4, but this code uses the Effect v3 API `runtime`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Runtime has been removed in Effect v4. Use Effect.services to grab services and then run using Effect.runPromiseWith. effect(outdatedApi)
+[D1] (7:24-7:31) TS377052: This project targets Effect v4, but this code uses the Effect v3 API `runtime`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Runtime has been removed in Effect v4. Use Effect.context to grab services and then run using Effect.runPromiseWith. effect(outdatedApi)
   Fix 0: "Disable outdatedApi for this line"
   Fix 1: "Disable outdatedApi for entire file"
 

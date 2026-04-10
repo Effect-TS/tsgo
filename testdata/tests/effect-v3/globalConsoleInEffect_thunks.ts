@@ -1,3 +1,4 @@
+// @effect-v3
 // @effect-diagnostics globalConsoleInEffect:warning
 import { Data, Effect } from "effect"
 

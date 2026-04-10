@@ -1,18 +1,19 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/nestedEffectGenYield.ts(5,10): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
-/.src/nestedEffectGenYield.ts(5,10): warning TS377083: This `yield*` is applied to a nested `Effect.gen(...)` that can be inlined in the parent Effect generator context. effect(nestedEffectGenYield)
-/.src/nestedEffectGenYield.ts(15,10): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
-/.src/nestedEffectGenYield.ts(15,10): warning TS377083: This `yield*` is applied to a nested `Effect.gen(...)` that can be inlined in the parent Effect generator context. effect(nestedEffectGenYield)
-/.src/nestedEffectGenYield.ts(21,10): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
-/.src/nestedEffectGenYield.ts(21,10): warning TS377083: This `yield*` is applied to a nested `Effect.gen(...)` that can be inlined in the parent Effect generator context. effect(nestedEffectGenYield)
-/.src/nestedEffectGenYield.ts(28,3): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
-/.src/nestedEffectGenYield.ts(29,11): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
-/.src/nestedEffectGenYield.ts(29,11): warning TS377083: This `yield*` is applied to a nested `Effect.gen(...)` that can be inlined in the parent Effect generator context. effect(nestedEffectGenYield)
+/.src/nestedEffectGenYield.ts(6,10): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/nestedEffectGenYield.ts(6,10): warning TS377083: This `yield*` is applied to a nested `Effect.gen(...)` that can be inlined in the parent Effect generator context. effect(nestedEffectGenYield)
+/.src/nestedEffectGenYield.ts(16,10): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/nestedEffectGenYield.ts(16,10): warning TS377083: This `yield*` is applied to a nested `Effect.gen(...)` that can be inlined in the parent Effect generator context. effect(nestedEffectGenYield)
+/.src/nestedEffectGenYield.ts(22,10): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/nestedEffectGenYield.ts(22,10): warning TS377083: This `yield*` is applied to a nested `Effect.gen(...)` that can be inlined in the parent Effect generator context. effect(nestedEffectGenYield)
+/.src/nestedEffectGenYield.ts(29,3): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/nestedEffectGenYield.ts(30,11): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/nestedEffectGenYield.ts(30,11): warning TS377083: This `yield*` is applied to a nested `Effect.gen(...)` that can be inlined in the parent Effect generator context. effect(nestedEffectGenYield)
 
 
 ==== /.src/nestedEffectGenYield.ts (9 errors) ====
+    // @effect-v3
     // @effect-diagnostics nestedEffectGenYield:warning
     import * as Effect from "effect/Effect"
     
@@ -86,4 +87,3 @@ Effect version: 3.19.19
     
     	return deferred
     })
-    

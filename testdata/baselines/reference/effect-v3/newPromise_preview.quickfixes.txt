@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (4:24-4:68) TS377080: This code constructs `new Promise(...)`, prefer Effect APIs such as `Effect.async`, `Effect.promise`, or `Effect.tryPromise` instead of manual Promise construction. effect(newPromise)
+[D1] (5:24-5:68) TS377080: This code constructs `new Promise(...)`, prefer Effect APIs such as `Effect.async`, `Effect.promise`, or `Effect.tryPromise` instead of manual Promise construction. effect(newPromise)
   Fix 0: "Disable newPromise for this line"
   Fix 1: "Disable newPromise for entire file"
 

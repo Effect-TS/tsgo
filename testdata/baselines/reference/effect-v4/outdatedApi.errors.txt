@@ -3,13 +3,13 @@ Effect version: 4.0.0
 
 /.src/outdatedApi.ts(1,1): warning TS377053: This project targets Effect v4, but this code uses Effect v3 APIs. The referenced API belongs to the v3 surface rather than the configured v4 surface. effect(outdatedApi)
 /.src/outdatedApi.ts(7,35): error TS2339: Property 'runtime' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'.
-/.src/outdatedApi.ts(7,35): warning TS377052: This project targets Effect v4, but this code uses the Effect v3 API `runtime`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Runtime has been removed in Effect v4. Use Effect.services to grab services and then run using Effect.runPromiseWith. effect(outdatedApi)
+/.src/outdatedApi.ts(7,35): warning TS377052: This project targets Effect v4, but this code uses the Effect v3 API `runtime`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Runtime has been removed in Effect v4. Use Effect.context to grab services and then run using Effect.runPromiseWith. effect(outdatedApi)
 /.src/outdatedApi.ts(11,36): error TS2339: Property 'dieMessage' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'.
 /.src/outdatedApi.ts(11,36): warning TS377052: This project targets Effect v4, but this code uses the Effect v3 API `dieMessage`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Use Effect.die(new Error(message)) instead. effect(outdatedApi)
 /.src/outdatedApi.ts(14,33): error TS2339: Property 'dieSync' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'.
 /.src/outdatedApi.ts(14,33): warning TS377052: This project targets Effect v4, but this code uses the Effect v3 API `dieSync`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Use Effect.die with a lazily evaluated value instead. effect(outdatedApi)
 /.src/outdatedApi.ts(17,28): error TS2339: Property 'Tag' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'.
-/.src/outdatedApi.ts(17,28): warning TS377052: This project targets Effect v4, but this code uses the Effect v3 API `Tag`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Use ServiceMap.Service instead of Effect.Tag. effect(outdatedApi)
+/.src/outdatedApi.ts(17,28): warning TS377052: This project targets Effect v4, but this code uses the Effect v3 API `Tag`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Use Context.Service instead of Effect.Tag. effect(outdatedApi)
 /.src/outdatedApi.ts(20,33): error TS2339: Property 'zipLeft' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'.
 /.src/outdatedApi.ts(20,33): warning TS377052: This project targets Effect v4, but this code uses the Effect v3 API `zipLeft`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Use Effect.tap instead of Effect.zipLeft. effect(outdatedApi)
 /.src/outdatedApi.ts(23,34): error TS2339: Property 'zipRight' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'.
@@ -57,7 +57,7 @@ Effect version: 4.0.0
                                       ~~~~~~~
 !!! error TS2339: Property 'runtime' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'.
                                       ~~~~~~~
-!!! warning TS377052: This project targets Effect v4, but this code uses the Effect v3 API `runtime`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Runtime has been removed in Effect v4. Use Effect.services to grab services and then run using Effect.runPromiseWith. effect(outdatedApi)
+!!! warning TS377052: This project targets Effect v4, but this code uses the Effect v3 API `runtime`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Runtime has been removed in Effect v4. Use Effect.context to grab services and then run using Effect.runPromiseWith. effect(outdatedApi)
     })
     
     // Effect.dieMessage (removed)
@@ -79,7 +79,7 @@ Effect version: 4.0.0
                                ~~~
 !!! error TS2339: Property 'Tag' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'.
                                ~~~
-!!! warning TS377052: This project targets Effect v4, but this code uses the Effect v3 API `Tag`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Use ServiceMap.Service instead of Effect.Tag. effect(outdatedApi)
+!!! warning TS377052: This project targets Effect v4, but this code uses the Effect v3 API `Tag`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Use Context.Service instead of Effect.Tag. effect(outdatedApi)
     
     // Effect.zipLeft (removed)
     export const p_zipLeft = Effect.zipLeft(Effect.succeed(1), Effect.succeed(2))

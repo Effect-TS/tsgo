@@ -1,31 +1,31 @@
 === Quick Fix Inventory ===
 
-[D1] (5:7-5:20) TS6133: '_moduleRandom' is declared but its value is never read.
+[D1] (6:7-6:20) TS6133: '_moduleRandom' is declared but its value is never read.
   (no quick fixes)
 
-[D2] (5:23-5:36) TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
+[D2] (6:23-6:36) TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
   Fix 0: "Disable globalRandom for this line"
   Fix 1: "Disable globalRandom for entire file"
 
-[D3] (8:7-8:21) TS6133: '_regularRandom' is declared but its value is never read.
+[D3] (9:7-9:21) TS6133: '_regularRandom' is declared but its value is never read.
   (no quick fixes)
 
-[D4] (8:30-8:43) TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
+[D4] (9:30-9:43) TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
   Fix 0: "Disable globalRandom for this line"
   Fix 1: "Disable globalRandom for entire file"
 
-[D5] (12:7-12:21) TS6133: '_aliasedRandom' is declared but its value is never read.
+[D5] (13:7-13:21) TS6133: '_aliasedRandom' is declared but its value is never read.
   (no quick fixes)
 
-[D6] (12:24-12:39) TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
+[D6] (13:24-13:39) TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
   Fix 0: "Disable globalRandom for this line"
   Fix 1: "Disable globalRandom for entire file"
 
-[D7] (21:20-21:33) TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
+[D7] (22:20-22:33) TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
   Fix 0: "Disable globalRandom for this line"
   Fix 1: "Disable globalRandom for entire file"
 
-[D8] (26:7-26:20) TS6133: '_shadowedMath' is declared but its value is never read.
+[D8] (27:7-27:20) TS6133: '_shadowedMath' is declared but its value is never read.
   (no quick fixes)
 
 === Quick Fix Application Results ===

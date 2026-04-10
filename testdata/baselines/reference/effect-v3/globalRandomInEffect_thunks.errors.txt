@@ -1,13 +1,14 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/globalRandomInEffect_thunks.ts(6,47): warning TS377071: This Effect code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandomInEffect)
-/.src/globalRandomInEffect_thunks.ts(9,14): warning TS377071: This Effect code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandomInEffect)
-/.src/globalRandomInEffect_thunks.ts(13,65): warning TS377071: This Effect code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandomInEffect)
-/.src/globalRandomInEffect_thunks.ts(16,20): warning TS377071: This Effect code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandomInEffect)
+/.src/globalRandomInEffect_thunks.ts(7,47): warning TS377071: This Effect code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandomInEffect)
+/.src/globalRandomInEffect_thunks.ts(10,14): warning TS377071: This Effect code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandomInEffect)
+/.src/globalRandomInEffect_thunks.ts(14,65): warning TS377071: This Effect code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandomInEffect)
+/.src/globalRandomInEffect_thunks.ts(17,20): warning TS377071: This Effect code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandomInEffect)
 
 
 ==== /.src/globalRandomInEffect_thunks.ts (4 errors) ====
+    // @effect-v3
     // @effect-diagnostics globalRandomInEffect:warning
     import { Data, Effect } from "effect"
     
@@ -36,4 +37,3 @@ Effect version: 3.19.19
     })
     
     export const shouldNotTriggerReturnedFunction = Effect.sync(() => () => Math.random())
-    

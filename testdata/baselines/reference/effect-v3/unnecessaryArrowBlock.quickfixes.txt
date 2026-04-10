@@ -1,16 +1,16 @@
 === Quick Fix Inventory ===
 
-[D1] (2:46-4:2) TS377084: This arrow function block only returns an expression and can use a concise body. effect(unnecessaryArrowBlock)
+[D1] (3:46-5:2) TS377084: This arrow function block only returns an expression and can use a concise body. effect(unnecessaryArrowBlock)
   Fix 0: "Disable unnecessaryArrowBlock for this line"
   Fix 1: "Disable unnecessaryArrowBlock for entire file"
   Fix 2: "Use a concise arrow body"
 
-[D2] (6:52-8:2) TS377084: This arrow function block only returns an expression and can use a concise body. effect(unnecessaryArrowBlock)
+[D2] (7:52-9:2) TS377084: This arrow function block only returns an expression and can use a concise body. effect(unnecessaryArrowBlock)
   Fix 0: "Disable unnecessaryArrowBlock for this line"
   Fix 1: "Disable unnecessaryArrowBlock for entire file"
   Fix 2: "Use a concise arrow body"
 
-[D3] (15:59-17:2) TS377084: This arrow function block only returns an expression and can use a concise body. effect(unnecessaryArrowBlock)
+[D3] (16:59-18:2) TS377084: This arrow function block only returns an expression and can use a concise body. effect(unnecessaryArrowBlock)
   Fix 0: "Disable unnecessaryArrowBlock for this line"
   Fix 1: "Disable unnecessaryArrowBlock for entire file"
   Fix 2: "Use a concise arrow body"
@@ -26,6 +26,7 @@ skipped by default
 === [D1] Fix 2: "Use a concise arrow body" ===
 
 --- file:///.src/unnecessaryArrowBlock.ts ---
+// @effect-v3
 // @effect-diagnostics unnecessaryArrowBlock:warning
 export const shouldReport = (arg: string) =>(arg.trim())
 
@@ -44,7 +45,6 @@ export const shouldReportObjectLiteral = (arg: string) => {
 
 export const shouldNotReportExpressionBody = (arg: string) => arg.trim()
 
-
 === [D2] Fix 0: "Disable unnecessaryArrowBlock for this line" ===
 skipped by default
 
@@ -54,6 +54,7 @@ skipped by default
 === [D2] Fix 2: "Use a concise arrow body" ===
 
 --- file:///.src/unnecessaryArrowBlock.ts ---
+// @effect-v3
 // @effect-diagnostics unnecessaryArrowBlock:warning
 export const shouldReport = (arg: string) => {
 	return arg.trim()
@@ -72,7 +73,6 @@ export const shouldReportObjectLiteral = (arg: string) => {
 
 export const shouldNotReportExpressionBody = (arg: string) => arg.trim()
 
-
 === [D3] Fix 0: "Disable unnecessaryArrowBlock for this line" ===
 skipped by default
 
@@ -82,6 +82,7 @@ skipped by default
 === [D3] Fix 2: "Use a concise arrow body" ===
 
 --- file:///.src/unnecessaryArrowBlock.ts ---
+// @effect-v3
 // @effect-diagnostics unnecessaryArrowBlock:warning
 export const shouldReport = (arg: string) => {
 	return arg.trim()
@@ -99,4 +100,3 @@ export const shouldNotReportMultipleStatements = (arg: string) => {
 export const shouldReportObjectLiteral = (arg: string) =>({ arg })
 
 export const shouldNotReportExpressionBody = (arg: string) => arg.trim()
-

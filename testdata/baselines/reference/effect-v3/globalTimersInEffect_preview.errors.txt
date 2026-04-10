@@ -1,10 +1,11 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/globalTimersInEffect_preview.ts(6,3): warning TS377073: This Effect code uses `setTimeout`, the corresponding timer API in this context is `Effect.sleep or Schedule` from Effect. effect(globalTimersInEffect)
+/.src/globalTimersInEffect_preview.ts(7,3): warning TS377073: This Effect code uses `setTimeout`, the corresponding timer API in this context is `Effect.sleep or Schedule` from Effect. effect(globalTimersInEffect)
 
 
 ==== /.src/globalTimersInEffect_preview.ts (1 errors) ====
+    // @effect-v3
     // @effect-diagnostics *:off
     // @effect-diagnostics globalTimersInEffect:warning
     import { Effect } from "effect"
@@ -14,4 +15,3 @@ Effect version: 3.19.19
       ~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! warning TS377073: This Effect code uses `setTimeout`, the corresponding timer API in this context is `Effect.sleep or Schedule` from Effect. effect(globalTimersInEffect)
     })
-    

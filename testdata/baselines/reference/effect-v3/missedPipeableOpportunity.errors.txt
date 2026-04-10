@@ -67,4 +67,3 @@ Effect version: 3.19.19
     
     // Should trigger
     export const shouldReport = Effect.runPromise(Effect.log("Hello"))
-    

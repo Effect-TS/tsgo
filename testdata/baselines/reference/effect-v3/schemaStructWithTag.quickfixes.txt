@@ -32,4 +32,3 @@ export const OtherWithoutTag = Schema.Struct({
   name: Schema.String,
   age: Schema.Number
 })
-

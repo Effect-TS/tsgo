@@ -44,7 +44,6 @@ console.log(
   )
 )
 
-
 === [D2] Fix 0: "Disable missedPipeableOpportunity for this line" ===
 skipped by default
 
@@ -70,4 +69,3 @@ console.log(Effect.runPromise(Effect.ignore(Effect.log("Hello"))))
 // I would expect it to be triggered, but the output should be
 // console.log(Effect.succeed(console.log(Effect.runPromise(Effect.log("Hello")))).pipe(Effect.ignore, Effect.runPromise))
 console.log(Effect.succeed(console.log(Effect.runPromise(Effect.log("Hello")))).pipe(Effect.ignore, Effect.runPromise))
-
