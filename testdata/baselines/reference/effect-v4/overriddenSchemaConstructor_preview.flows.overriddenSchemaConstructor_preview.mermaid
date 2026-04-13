@@ -3,9 +3,9 @@ flowchart TB
   1["type: #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;User, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: Class#lt;User, Struct#lt;Fields#gt;, #123;#125;#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;User, readonly #91;S#93;#gt; #124; undefined#41;: Class#lt;User, S, #123;#125;#gt;; #125;<br/>callee: Schema.Class<br/>args: #91;#93;"]
   2[/"type: #lt;Self = never, Brand = #123;#125;#gt;#40;identifier: string#41; =#gt; #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;Self, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.Class#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, Struct#lt;Fields#gt;, Brand#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;Self, readonly #91;S#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.Class#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, S, Brand#gt;; #125;<br/>node: Schema.Class"/]
   3[["type: any<br/>node: constructor#40;readonly input: #123; name: string #125;#41; #123; super#40;input#41; #125;"]]
-  4[/"type: #123; name: string; #125;<br/>node: readonly input: #123; name: string #125;"/]
-  5((("type: User<br/>node: constructor#40;readonly input: #123; name: string #125;#41; #123; super#40;input#41; #125;")))
+  4((("type: User<br/>node: constructor#40;readonly input: #123; name: string #125;#41; #123; super#40;input#41; #125;")))
+  5[/"type: #123; name: string; #125;<br/>node: readonly input: #123; name: string #125;"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
-  4 -->|"kind: parameter"| 3
-  5 -->|"kind: potentialReturn"| 3
+  4 -->|"kind: potentialReturn"| 3
+  5 -->|"kind: parameter"| 3

@@ -6,7 +6,7 @@ flowchart TB
   4[/"type: Effect#lt;number, never, ServiceA #124; ServiceB #124; ServiceC#gt;<br/>node: effectWithServices"/]
   5[["type: #40;#41; =#gt; Effect#lt;number, never, ServiceA #124; ServiceB #124; ServiceC#gt;<br/>node: #40;#41; =#gt;#92;n  // @ts-expect-error#92;n  effectWithServices"]]
   6[/"type: Effect#lt;number, never, ServiceA #124; ServiceB #124; ServiceC#gt;<br/>node: effectWithServices"/]
-  2 -->|"kind: potentialReturn"| 1
   1 -->|"kind: potentialReturn"| 0
+  2 -->|"kind: potentialReturn"| 1
   4 -->|"kind: potentialReturn"| 3
   6 -->|"kind: potentialReturn"| 5

@@ -38,15 +38,15 @@ flowchart TB
   36((("type: #40;e: never#41; =#gt; true<br/>node: #40;e#41; =#gt; true")))
   37((("type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void")))
   38[["type: #40;e: never#41; =#gt; true<br/>node: #40;e#41; =#gt; true"]]
-  39[/"type: never<br/>node: e"/]
-  40[/"type: true<br/>node: true"/]
+  39[/"type: true<br/>node: true"/]
+  40[/"type: never<br/>node: e"/]
   41[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
   42[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
-  43["type: Effect#lt;void #124; number, never, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;MyError#quot;, #40;#41; =#gt; Effect.void#93;"]
-  44[["type: #40;#41; =#gt; Generator#lt;Effect#lt;number, never, never#gt;, number, any#gt;<br/>node: function*#40;#41; #123;#92;n  return yield* Effect.succeed#40;42#41;#92;n#125;"]]
-  45((("type: Effect#lt;number, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  return yield* Effect.succeed#40;42#41;#92;n#125;")))
-  46((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;42#41;")))
-  47[/"type: number<br/>node: yield* Effect.succeed#40;42#41;"/]
+  43[["type: #40;#41; =#gt; Effect#lt;void #124; number, never, never#gt;<br/>node: Effect.fn#40;function*#40;#41; #123;#92;n  return yield* Effect.succeed#40;42#41;#92;n#125;, Effect.catchTag#40;#quot;MyError#quot;, #40;#41; =#gt; Effect.void#41;#41;"]]
+  44((("type: Effect#lt;number, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  return yield* Effect.succeed#40;42#41;#92;n#125;")))
+  45((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;42#41;")))
+  46[/"type: number<br/>node: yield* Effect.succeed#40;42#41;"/]
+  47["type: Effect#lt;void #124; number, never, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;MyError#quot;, #40;#41; =#gt; Effect.void#93;"]
   48[/"type: 42<br/>node: 42"/]
   49["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
   50[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
@@ -64,8 +64,8 @@ flowchart TB
   62[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
   63((("type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n + 1")))
   64[["type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n + 1"]]
-  65[/"type: number<br/>node: n"/]
-  66[/"type: number<br/>node: n + 1"/]
+  65[/"type: number<br/>node: n + 1"/]
+  66[/"type: number<br/>node: n"/]
   67[/"type: #123; #lt;const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, E, A1, E1, R1, A2 = never, E2 = ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;, R2 = never#gt;#40;k: K, f: #40;e: ExtractTag#lt;NoInfer#lt;E#gt;, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A1 #124; A2, E1 #124; E2, R #124; R1 #124; R2#gt;; #lt;A, E, R, const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, R1, E1, A1, A2 = never, E2 = ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;, R2 = never#gt;#40;self: Effect#lt;A, E, R#gt;, k: K, f: #40;e: ExtractTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: Effect#lt;A #124; A1 #124; A2, E1 #124; E2, R #124; R1 #124; R2#gt;; #125;<br/>node: Effect.catchTag"/]
   68[/"type: #quot;MyError#quot;<br/>node: #quot;MyError#quot;"/]
   69((("type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void")))
@@ -135,20 +135,21 @@ flowchart TB
   35 -->|"kind: transformCallee"| 31
   36 -->|"kind: transformArg"| 31
   37 -->|"kind: transformArg"| 31
-  39 -->|"kind: parameter"| 38
-  40 -->|"kind: potentialReturn"| 38
+  39 -->|"kind: potentialReturn"| 38
+  40 -->|"kind: parameter"| 38
   38 -->|"kind: connect"| 36
   42 -->|"kind: potentialReturn"| 41
   41 -->|"kind: connect"| 37
-  46 -->|"kind: yieldable"| 45
-  47 -->|"kind: potentialReturn"| 45
-  45 -->|"kind: potentialReturn"| 44
+  45 -->|"kind: yieldable"| 44
+  46 -->|"kind: potentialReturn"| 44
+  44 -->|"kind: fnPipe"| 47
+  47 -->|"kind: potentialReturn"| 43
   48 -->|"kind: pipe"| 49
-  49 -->|"kind: connect"| 46
+  49 -->|"kind: connect"| 45
   50 -->|"kind: transformCallee"| 49
-  51 -->|"kind: transformCallee"| 43
-  52 -->|"kind: transformArg"| 43
-  53 -->|"kind: transformArg"| 43
+  51 -->|"kind: transformCallee"| 47
+  52 -->|"kind: transformArg"| 47
+  53 -->|"kind: transformArg"| 47
   55 -->|"kind: potentialReturn"| 54
   54 -->|"kind: connect"| 53
   56 -->|"kind: pipe"| 57
@@ -158,8 +159,8 @@ flowchart TB
   61 -->|"kind: transformCallee"| 60
   62 -->|"kind: transformCallee"| 57
   63 -->|"kind: transformArg"| 57
-  65 -->|"kind: parameter"| 64
-  66 -->|"kind: potentialReturn"| 64
+  65 -->|"kind: potentialReturn"| 64
+  66 -->|"kind: parameter"| 64
   64 -->|"kind: connect"| 63
   67 -->|"kind: transformCallee"| 58
   68 -->|"kind: transformArg"| 58

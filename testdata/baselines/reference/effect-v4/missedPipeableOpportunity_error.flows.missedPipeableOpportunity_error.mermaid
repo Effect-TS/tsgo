@@ -25,8 +25,8 @@ flowchart TB
   23[/"type: #123; #lt;Input, Output, Error2 = never, Env2 = never#gt;#40;predicate: #40;metadata: Metadata#lt;Output, Input#gt;#41; =#gt; boolean #124; Effect#lt;boolean, Error2, Env2#gt;#41;: #lt;Error, Env#gt;#40;self: Schedule#lt;Output, Input, Error, Env#gt;#41; =#gt; Schedule#lt;Output, Input, Error #124; Error2, Env #124; Env2#gt;; #lt;Output, Input, Error, Env, Error2 = never, Env2 = never#gt;#40;self: Schedule#lt;Output, Input, Error, Env#gt;, predicate: #40;metadata: Metadata#lt;Output, Input#gt;#41; =#gt; boolean #124; Effect#lt;boolean, Error2, Env2#gt;#41;: Schedule#lt;Output, Input, Error #124; Error2, Env #124; Env2#gt;; #125;<br/>node: Schedule.while"/]
   24((("type: #40;_: Metadata#lt;Duration, unknown#gt;#41; =#gt; boolean<br/>node: _ =#gt; Duration.isLessThanOrEqualTo#40;Duration.seconds#40;10#41;#41;#40;_.duration#41;")))
   25[["type: #40;_: Metadata#lt;Duration, unknown#gt;#41; =#gt; boolean<br/>node: _ =#gt; Duration.isLessThanOrEqualTo#40;Duration.seconds#40;10#41;#41;#40;_.duration#41;"]]
-  26[/"type: Metadata#lt;Duration, unknown#gt;<br/>node: _"/]
-  27((("type: boolean<br/>node: Duration.isLessThanOrEqualTo#40;Duration.seconds#40;10#41;#41;#40;_.duration#41;")))
+  26((("type: boolean<br/>node: Duration.isLessThanOrEqualTo#40;Duration.seconds#40;10#41;#41;#40;_.duration#41;")))
+  27[/"type: Metadata#lt;Duration, unknown#gt;<br/>node: _"/]
   28[/"type: Duration<br/>node: _.duration"/]
   29["type: boolean<br/>callee: Duration.isLessThanOrEqualTo<br/>args: #91;Duration.seconds#40;10#41;#93;"]
   30[/"type: #123; #40;that: Duration#41;: #40;self: Duration#41; =#gt; boolean; #40;self: Duration, that: Duration#41;: boolean; #125;<br/>node: Duration.isLessThanOrEqualTo"/]
@@ -62,11 +62,11 @@ flowchart TB
   22 -->|"kind: transformCallee"| 21
   23 -->|"kind: transformCallee"| 19
   24 -->|"kind: transformArg"| 19
-  26 -->|"kind: parameter"| 25
-  27 -->|"kind: potentialReturn"| 25
+  26 -->|"kind: potentialReturn"| 25
+  27 -->|"kind: parameter"| 25
   25 -->|"kind: connect"| 24
   28 -->|"kind: pipe"| 29
-  29 -->|"kind: connect"| 27
+  29 -->|"kind: connect"| 26
   30 -->|"kind: transformCallee"| 29
   31 -->|"kind: transformArg"| 29
   32 -->|"kind: pipe"| 33

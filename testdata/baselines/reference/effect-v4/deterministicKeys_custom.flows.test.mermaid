@@ -1,18 +1,18 @@
 flowchart TB
   0[["type: #lt;X#gt;#40;identifier: string#41; =#gt; typeof #40;Anonymous class#41;<br/>node: export function LocalConstructor#lt;X#gt;#40;/** @effect-identifier */ identifier: string#41; #123;#92;n  return class extends Context.Service#lt;X, #123;#125;#gt;#40;#41;#40;#quot;hey/#quot; + identifier#41; #123;#125;#92;n#125;"]]
-  1[/"type: string<br/>node: identifier: string"/]
-  2((("type: typeof #40;Anonymous class#41;<br/>node: export function LocalConstructor#lt;X#gt;#40;/** @effect-identifier */ identifier: string#41; #123;#92;n  return class extends Context.Service#lt;X, #123;#125;#gt;#40;#41;#40;#quot;hey/#quot; + identifier#41; #123;#125;#92;n#125;")))
-  3[/"type: typeof #40;Anonymous class#41;<br/>node: class extends Context.Service#lt;X, #123;#125;#gt;#40;#41;#40;#quot;hey/#quot; + identifier#41; #123;#125;"/]
+  1((("type: typeof #40;Anonymous class#41;<br/>node: export function LocalConstructor#lt;X#gt;#40;/** @effect-identifier */ identifier: string#41; #123;#92;n  return class extends Context.Service#lt;X, #123;#125;#gt;#40;#41;#40;#quot;hey/#quot; + identifier#41; #123;#125;#92;n#125;")))
+  2[/"type: typeof #40;Anonymous class#41;<br/>node: class extends Context.Service#lt;X, #123;#125;#gt;#40;#41;#40;#quot;hey/#quot; + identifier#41; #123;#125;"/]
+  3[/"type: string<br/>node: identifier: string"/]
   4[/"type: #quot;Hello#quot;<br/>node: #quot;Hello#quot;"/]
   5["type: typeof #40;Anonymous class#41;<br/>callee: LocalConstructor<br/>args: #91;#93;"]
   6[/"type: #lt;X#gt;#40;identifier: string#41; =#gt; typeof #40;Anonymous class#41;<br/>node: LocalConstructor"/]
   7[["type: #40;req: #123; id: number; #125;#41; =#gt; string<br/>node: #40;req#41; =#gt; `TTLRequest:$#123;req.id#125;`"]]
-  8[/"type: #123; id: number; #125;<br/>node: req"/]
-  9[/"type: string<br/>node: `TTLRequest:$#123;req.id#125;`"/]
-  1 -->|"kind: parameter"| 0
-  3 -->|"kind: potentialReturn"| 2
-  2 -->|"kind: potentialReturn"| 0
+  8[/"type: string<br/>node: `TTLRequest:$#123;req.id#125;`"/]
+  9[/"type: #123; id: number; #125;<br/>node: req"/]
+  1 -->|"kind: potentialReturn"| 0
+  2 -->|"kind: potentialReturn"| 1
+  3 -->|"kind: parameter"| 0
   4 -->|"kind: pipe"| 5
   6 -->|"kind: transformCallee"| 5
-  8 -->|"kind: parameter"| 7
-  9 -->|"kind: potentialReturn"| 7
+  8 -->|"kind: potentialReturn"| 7
+  9 -->|"kind: parameter"| 7

@@ -1,25 +1,25 @@
 flowchart TB
   0[["type: #40;layer: Layer#lt;ServiceA, never, never#gt;#41; =#gt; Layer#lt;ServiceA, never, never#gt;<br/>node: function testFn#40;layer: Layer.Layer#lt;ServiceA#gt;#41; #123;#92;n  return layer#92;n#125;"]]
-  1[/"type: Layer#lt;ServiceA, never, never#gt;<br/>node: layer: Layer.Layer#lt;ServiceA#gt;"/]
-  2((("type: Layer#lt;ServiceA, never, never#gt;<br/>node: function testFn#40;layer: Layer.Layer#lt;ServiceA#gt;#41; #123;#92;n  return layer#92;n#125;")))
-  3[/"type: Layer#lt;ServiceA, never, never#gt;<br/>node: layer"/]
+  1((("type: Layer#lt;ServiceA, never, never#gt;<br/>node: function testFn#40;layer: Layer.Layer#lt;ServiceA#gt;#41; #123;#92;n  return layer#92;n#125;")))
+  2[/"type: Layer#lt;ServiceA, never, never#gt;<br/>node: layer"/]
+  3[/"type: Layer#lt;ServiceA, never, never#gt;<br/>node: layer: Layer.Layer#lt;ServiceA#gt;"/]
   4[/"type: Layer#lt;ServiceA, never, ServiceB #124; ServiceC#gt;<br/>node: layerWithServices"/]
   5["type: Layer#lt;ServiceA, never, never#gt;<br/>callee: testFn<br/>args: #91;#93;"]
   6[/"type: #40;layer: Layer#lt;ServiceA, never, never#gt;#41; =#gt; Layer#lt;ServiceA, never, never#gt;<br/>node: testFn"/]
   7[["type: #40;layer: Layer#lt;ServiceA, never, ServiceB#gt;#41; =#gt; Layer#lt;ServiceA, never, ServiceB#gt;<br/>node: function testFnWithServiceB#40;layer: Layer.Layer#lt;ServiceA, never, ServiceB#gt;#41; #123;#92;n  return layer#92;n#125;"]]
-  8[/"type: Layer#lt;ServiceA, never, ServiceB#gt;<br/>node: layer: Layer.Layer#lt;ServiceA, never, ServiceB#gt;"/]
-  9((("type: Layer#lt;ServiceA, never, ServiceB#gt;<br/>node: function testFnWithServiceB#40;layer: Layer.Layer#lt;ServiceA, never, ServiceB#gt;#41; #123;#92;n  return layer#92;n#125;")))
-  10[/"type: Layer#lt;ServiceA, never, ServiceB#gt;<br/>node: layer"/]
+  8((("type: Layer#lt;ServiceA, never, ServiceB#gt;<br/>node: function testFnWithServiceB#40;layer: Layer.Layer#lt;ServiceA, never, ServiceB#gt;#41; #123;#92;n  return layer#92;n#125;")))
+  9[/"type: Layer#lt;ServiceA, never, ServiceB#gt;<br/>node: layer"/]
+  10[/"type: Layer#lt;ServiceA, never, ServiceB#gt;<br/>node: layer: Layer.Layer#lt;ServiceA, never, ServiceB#gt;"/]
   11[/"type: Layer#lt;ServiceA, never, ServiceB #124; ServiceC#gt;<br/>node: layerWithServices"/]
   12["type: Layer#lt;ServiceA, never, ServiceB#gt;<br/>callee: testFnWithServiceB<br/>args: #91;#93;"]
   13[/"type: #40;layer: Layer#lt;ServiceA, never, ServiceB#gt;#41; =#gt; Layer#lt;ServiceA, never, ServiceB#gt;<br/>node: testFnWithServiceB"/]
-  1 -->|"kind: parameter"| 0
-  3 -->|"kind: potentialReturn"| 2
-  2 -->|"kind: potentialReturn"| 0
+  1 -->|"kind: potentialReturn"| 0
+  2 -->|"kind: potentialReturn"| 1
+  3 -->|"kind: parameter"| 0
   4 -->|"kind: pipe"| 5
   6 -->|"kind: transformCallee"| 5
-  8 -->|"kind: parameter"| 7
-  10 -->|"kind: potentialReturn"| 9
-  9 -->|"kind: potentialReturn"| 7
+  8 -->|"kind: potentialReturn"| 7
+  9 -->|"kind: potentialReturn"| 8
+  10 -->|"kind: parameter"| 7
   11 -->|"kind: pipe"| 12
   13 -->|"kind: transformCallee"| 12

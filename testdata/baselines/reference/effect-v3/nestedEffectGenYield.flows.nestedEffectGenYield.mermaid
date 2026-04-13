@@ -1,72 +1,64 @@
 flowchart TB
-  0((("type: Effect#lt;void, never, never#gt;<br/>node: function*#40;#41; #123;#92;n	 yield* Effect.gen#40;function*#40;#41; #123;#92;n	 	yield* Effect.succeed#40;1#41;#92;n	 #125;#41;#92;n#92;n	 yield* Effect.gen#40;function*#40;#41; #123;#92;n	 	return 2#92;n	 #125;#41;.pipe#40;Effect.asVoid#41;#92;n#125;")))
-  1((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n	 	yield* Effect.succeed#40;1#41;#92;n	 #125;#41;")))
+  0[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n	 yield* Effect.gen#40;function*#40;#41; #123;#92;n	 	yield* Effect.succeed#40;1#41;#92;n	 #125;#41;#92;n#92;n	 yield* Effect.gen#40;function*#40;#41; #123;#92;n	 	return 2#92;n	 #125;#41;.pipe#40;Effect.asVoid#41;#92;n#125;#41;"/]
+  1[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n	 	yield* Effect.succeed#40;1#41;#92;n	 #125;#41;"/]
   2((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n	 	return 2#92;n	 #125;#41;.pipe#40;Effect.asVoid#41;")))
-  3((("type: Effect#lt;void, never, never#gt;<br/>node: function*#40;#41; #123;#92;n	 	yield* Effect.succeed#40;1#41;#92;n	 #125;")))
-  4((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;")))
-  5[/"type: 1<br/>node: 1"/]
-  6["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  7[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  8((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n	 	return 2#92;n	 #125;#41;")))
-  9["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.asVoid<br/>args: #91;#93;"]
-  10((("type: Effect#lt;number, never, never#gt;<br/>node: function*#40;#41; #123;#92;n	 	return 2#92;n	 #125;")))
-  11[/"type: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;void, E, R#gt;<br/>node: Effect.asVoid"/]
-  12[["type: #40;#41; =#gt; Generator#lt;YieldWrap#lt;Effect#lt;void, never, never#gt;#gt;, void, any#gt;<br/>node: function*#40;#41; #123;#92;n	 yield* Effect.gen#40;function*#40;#41; #123;#92;n	 	yield* Effect.succeed#40;1#41;#92;n	 #125;#41;#92;n#125;"]]
-  13((("type: Effect#lt;void, never, never#gt;<br/>node: function*#40;#41; #123;#92;n	 yield* Effect.gen#40;function*#40;#41; #123;#92;n	 	yield* Effect.succeed#40;1#41;#92;n	 #125;#41;#92;n#125;")))
-  14((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n	 	yield* Effect.succeed#40;1#41;#92;n	 #125;#41;")))
-  15((("type: Effect#lt;void, never, never#gt;<br/>node: function*#40;#41; #123;#92;n	 	yield* Effect.succeed#40;1#41;#92;n	 #125;")))
-  16((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;")))
-  17[/"type: 1<br/>node: 1"/]
-  18["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  19[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  20[["type: #40;#41; =#gt; Generator#lt;YieldWrap#lt;Effect#lt;void, never, never#gt;#gt;, void, any#gt;<br/>node: function*#40;#41; #123;#92;n	 yield* Effect.gen#40;function*#40;#41; #123;#92;n	 	yield* Effect.succeed#40;1#41;#92;n	 #125;#41;#92;n#125;"]]
-  21((("type: Effect#lt;void, never, never#gt;<br/>node: function*#40;#41; #123;#92;n	 yield* Effect.gen#40;function*#40;#41; #123;#92;n	 	yield* Effect.succeed#40;1#41;#92;n	 #125;#41;#92;n#125;")))
-  22((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n	 	yield* Effect.succeed#40;1#41;#92;n	 #125;#41;")))
-  23((("type: Effect#lt;void, never, never#gt;<br/>node: function*#40;#41; #123;#92;n	 	yield* Effect.succeed#40;1#41;#92;n	 #125;")))
-  24((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;")))
-  25[/"type: 1<br/>node: 1"/]
-  26["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  27[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  28((("type: Effect#lt;#40;#41; =#gt; Effect#lt;void, never, never#gt;, never, never#gt;<br/>node: function*#40;#41; #123;#92;n	const deferred = #40;#41; =#gt;#92;n		Effect.gen#40;function*#40;#41; #123;#92;n			yield* Effect.gen#40;function*#40;#41; #123;#92;n				yield* Effect.succeed#40;1#41;#92;n			#125;#41;#92;n		#125;#41;#92;n#92;n	return deferred#92;n#125;")))
-  29[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt;#92;n		Effect.gen#40;function*#40;#41; #123;#92;n			yield* Effect.gen#40;function*#40;#41; #123;#92;n				yield* Effect.succeed#40;1#41;#92;n			#125;#41;#92;n		#125;#41;"]]
-  30((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n			yield* Effect.gen#40;function*#40;#41; #123;#92;n				yield* Effect.succeed#40;1#41;#92;n			#125;#41;#92;n		#125;#41;")))
-  31((("type: Effect#lt;void, never, never#gt;<br/>node: function*#40;#41; #123;#92;n			yield* Effect.gen#40;function*#40;#41; #123;#92;n				yield* Effect.succeed#40;1#41;#92;n			#125;#41;#92;n		#125;")))
-  32((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n				yield* Effect.succeed#40;1#41;#92;n			#125;#41;")))
-  33((("type: Effect#lt;void, never, never#gt;<br/>node: function*#40;#41; #123;#92;n				yield* Effect.succeed#40;1#41;#92;n			#125;")))
-  34((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;")))
-  35[/"type: 1<br/>node: 1"/]
-  36["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  37[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  3((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;")))
+  4[/"type: 1<br/>node: 1"/]
+  5["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  6[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  7[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n	 	return 2#92;n	 #125;#41;"/]
+  8["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.asVoid<br/>args: #91;#93;"]
+  9[/"type: 2<br/>node: 2"/]
+  10[/"type: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;void, E, R#gt;<br/>node: Effect.asVoid"/]
+  11[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.fn#40;#quot;inEffectFn#quot;#41;#40;function*#40;#41; #123;#92;n	 yield* Effect.gen#40;function*#40;#41; #123;#92;n	 	yield* Effect.succeed#40;1#41;#92;n	 #125;#41;#92;n#125;#41;"]]
+  12((("type: Effect#lt;void, never, never#gt;<br/>node: function*#40;#41; #123;#92;n	 yield* Effect.gen#40;function*#40;#41; #123;#92;n	 	yield* Effect.succeed#40;1#41;#92;n	 #125;#41;#92;n#125;")))
+  13[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n	 	yield* Effect.succeed#40;1#41;#92;n	 #125;#41;"/]
+  14((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;")))
+  15[/"type: 1<br/>node: 1"/]
+  16["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  17[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  18[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.fnUntraced#40;function*#40;#41; #123;#92;n	 yield* Effect.gen#40;function*#40;#41; #123;#92;n	 	yield* Effect.succeed#40;1#41;#92;n	 #125;#41;#92;n#125;#41;"]]
+  19((("type: Effect#lt;void, never, never#gt;<br/>node: function*#40;#41; #123;#92;n	 yield* Effect.gen#40;function*#40;#41; #123;#92;n	 	yield* Effect.succeed#40;1#41;#92;n	 #125;#41;#92;n#125;")))
+  20[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n	 	yield* Effect.succeed#40;1#41;#92;n	 #125;#41;"/]
+  21((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;")))
+  22[/"type: 1<br/>node: 1"/]
+  23["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  24[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  25[/"type: Effect#lt;#40;#41; =#gt; Effect#lt;void, never, never#gt;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n	const deferred = #40;#41; =#gt;#92;n		Effect.gen#40;function*#40;#41; #123;#92;n			yield* Effect.gen#40;function*#40;#41; #123;#92;n				yield* Effect.succeed#40;1#41;#92;n			#125;#41;#92;n		#125;#41;#92;n#92;n	return deferred#92;n#125;#41;"/]
+  26[/"type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: deferred"/]
+  27[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt;#92;n		Effect.gen#40;function*#40;#41; #123;#92;n			yield* Effect.gen#40;function*#40;#41; #123;#92;n				yield* Effect.succeed#40;1#41;#92;n			#125;#41;#92;n		#125;#41;"]]
+  28[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n			yield* Effect.gen#40;function*#40;#41; #123;#92;n				yield* Effect.succeed#40;1#41;#92;n			#125;#41;#92;n		#125;#41;"/]
+  29[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n				yield* Effect.succeed#40;1#41;#92;n			#125;#41;"/]
+  30((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;")))
+  31[/"type: 1<br/>node: 1"/]
+  32["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  33[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
   1 -->|"kind: yieldable"| 0
   2 -->|"kind: yieldable"| 0
-  4 -->|"kind: yieldable"| 3
-  3 -->|"kind: connect"| 1
-  5 -->|"kind: pipe"| 6
-  6 -->|"kind: connect"| 4
-  7 -->|"kind: transformCallee"| 6
-  8 -->|"kind: pipe"| 9
-  9 -->|"kind: connect"| 2
-  10 -->|"kind: connect"| 8
-  11 -->|"kind: transformCallee"| 9
+  3 -->|"kind: yieldable"| 1
+  4 -->|"kind: pipe"| 5
+  5 -->|"kind: connect"| 3
+  6 -->|"kind: transformCallee"| 5
+  7 -->|"kind: pipe"| 8
+  8 -->|"kind: connect"| 2
+  9 -->|"kind: potentialReturn"| 7
+  10 -->|"kind: transformCallee"| 8
+  13 -->|"kind: yieldable"| 12
+  12 -->|"kind: potentialReturn"| 11
   14 -->|"kind: yieldable"| 13
-  13 -->|"kind: potentialReturn"| 12
-  16 -->|"kind: yieldable"| 15
-  15 -->|"kind: connect"| 14
-  17 -->|"kind: pipe"| 18
-  18 -->|"kind: connect"| 16
-  19 -->|"kind: transformCallee"| 18
-  22 -->|"kind: yieldable"| 21
-  21 -->|"kind: potentialReturn"| 20
-  24 -->|"kind: yieldable"| 23
-  23 -->|"kind: connect"| 22
-  25 -->|"kind: pipe"| 26
-  26 -->|"kind: connect"| 24
-  27 -->|"kind: transformCallee"| 26
-  30 -->|"kind: potentialReturn"| 29
-  32 -->|"kind: yieldable"| 31
-  31 -->|"kind: connect"| 30
-  34 -->|"kind: yieldable"| 33
-  33 -->|"kind: connect"| 32
-  35 -->|"kind: pipe"| 36
-  36 -->|"kind: connect"| 34
-  37 -->|"kind: transformCallee"| 36
+  15 -->|"kind: pipe"| 16
+  16 -->|"kind: connect"| 14
+  17 -->|"kind: transformCallee"| 16
+  20 -->|"kind: yieldable"| 19
+  19 -->|"kind: potentialReturn"| 18
+  21 -->|"kind: yieldable"| 20
+  22 -->|"kind: pipe"| 23
+  23 -->|"kind: connect"| 21
+  24 -->|"kind: transformCallee"| 23
+  26 -->|"kind: potentialReturn"| 25
+  28 -->|"kind: potentialReturn"| 27
+  29 -->|"kind: yieldable"| 28
+  30 -->|"kind: yieldable"| 29
+  31 -->|"kind: pipe"| 32
+  32 -->|"kind: connect"| 30
+  33 -->|"kind: transformCallee"| 32

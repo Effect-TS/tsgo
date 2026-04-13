@@ -1,5 +1,5 @@
 flowchart TB
-  0((("type: Effect#lt;void, number, never#gt;<br/>node: function*#40;#41;#123;#92;n        yield* Effect.fail#40;this.a#41; // #lt;- should emit an error be return yield*#92;n    #125;")))
+  0[/"type: Effect#lt;void, number, never#gt;<br/>node: Effect.gen#40;#123;self: this#125;, function*#40;#41;#123;#92;n        yield* Effect.fail#40;this.a#41; // #lt;- should emit an error be return yield*#92;n    #125;#41;"/]
   1((("type: Effect#lt;never, number, never#gt;<br/>node: Effect.fail#40;this.a#41;")))
   2[/"type: number<br/>node: this.a"/]
   3["type: Effect#lt;never, number, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]

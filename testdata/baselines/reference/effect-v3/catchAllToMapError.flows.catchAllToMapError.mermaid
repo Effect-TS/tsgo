@@ -1,10 +1,10 @@
 flowchart TB
   0[["type: any<br/>node: constructor#40;readonly cause: unknown#41; #123;#125;"]]
-  1[/"type: unknown<br/>node: readonly cause: unknown"/]
-  2((("type: MyErrorTagged<br/>node: constructor#40;readonly cause: unknown#41; #123;#125;")))
+  1((("type: MyErrorTagged<br/>node: constructor#40;readonly cause: unknown#41; #123;#125;")))
+  2[/"type: unknown<br/>node: readonly cause: unknown"/]
   3[["type: any<br/>node: constructor#40;readonly message: string#41; #123;#125;"]]
-  4[/"type: string<br/>node: readonly message: string"/]
-  5((("type: AnotherError<br/>node: constructor#40;readonly message: string#41; #123;#125;")))
+  4((("type: AnotherError<br/>node: constructor#40;readonly message: string#41; #123;#125;")))
+  5[/"type: string<br/>node: readonly message: string"/]
   6((("type: Effect#lt;never, string, never#gt;<br/>node: Effect.fail#40;#quot;error#quot;#41;")))
   7["type: Effect#lt;never, MyErrorTagged, never#gt;<br/>callee: Effect.catchAll<br/>args: #91;#40;cause#41; =#gt; Effect.fail#40;new MyErrorTagged#40;cause#41;#41;#93;"]
   8[/"type: #quot;error#quot;<br/>node: #quot;error#quot;"/]
@@ -13,8 +13,8 @@ flowchart TB
   11[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catchAll"/]
   12((("type: #40;cause: string#41; =#gt; Effect#lt;never, MyErrorTagged, never#gt;<br/>node: #40;cause#41; =#gt; Effect.fail#40;new MyErrorTagged#40;cause#41;#41;")))
   13[["type: #40;cause: string#41; =#gt; Effect#lt;never, MyErrorTagged, never#gt;<br/>node: #40;cause#41; =#gt; Effect.fail#40;new MyErrorTagged#40;cause#41;#41;"]]
-  14[/"type: string<br/>node: cause"/]
-  15((("type: Effect#lt;never, MyErrorTagged, never#gt;<br/>node: Effect.fail#40;new MyErrorTagged#40;cause#41;#41;")))
+  14((("type: Effect#lt;never, MyErrorTagged, never#gt;<br/>node: Effect.fail#40;new MyErrorTagged#40;cause#41;#41;")))
+  15[/"type: string<br/>node: cause"/]
   16[/"type: MyErrorTagged<br/>node: new MyErrorTagged#40;cause#41;"/]
   17["type: Effect#lt;never, MyErrorTagged, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
   18[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
@@ -26,9 +26,9 @@ flowchart TB
   24[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catchAll"/]
   25((("type: #40;cause: string#41; =#gt; Effect#lt;never, MyErrorTagged, never#gt;<br/>node: #40;cause#41; =#gt; #123;#92;n    return Effect.fail#40;new MyErrorTagged#40;cause#41;#41;#92;n  #125;")))
   26[["type: #40;cause: string#41; =#gt; Effect#lt;never, MyErrorTagged, never#gt;<br/>node: #40;cause#41; =#gt; #123;#92;n    return Effect.fail#40;new MyErrorTagged#40;cause#41;#41;#92;n  #125;"]]
-  27[/"type: string<br/>node: cause"/]
-  28((("type: Effect#lt;never, MyErrorTagged, never#gt;<br/>node: #40;cause#41; =#gt; #123;#92;n    return Effect.fail#40;new MyErrorTagged#40;cause#41;#41;#92;n  #125;")))
-  29((("type: Effect#lt;never, MyErrorTagged, never#gt;<br/>node: Effect.fail#40;new MyErrorTagged#40;cause#41;#41;")))
+  27((("type: Effect#lt;never, MyErrorTagged, never#gt;<br/>node: #40;cause#41; =#gt; #123;#92;n    return Effect.fail#40;new MyErrorTagged#40;cause#41;#41;#92;n  #125;")))
+  28((("type: Effect#lt;never, MyErrorTagged, never#gt;<br/>node: Effect.fail#40;new MyErrorTagged#40;cause#41;#41;")))
+  29[/"type: string<br/>node: cause"/]
   30[/"type: MyErrorTagged<br/>node: new MyErrorTagged#40;cause#41;"/]
   31["type: Effect#lt;never, MyErrorTagged, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
   32[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
@@ -40,8 +40,8 @@ flowchart TB
   38[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catchAll"/]
   39((("type: #40;cause: string#41; =#gt; Effect#lt;never, MyErrorTagged, never#gt;<br/>node: #40;cause#41; =#gt; Effect.fail#40;new MyErrorTagged#40;cause#41;#41;")))
   40[["type: #40;cause: string#41; =#gt; Effect#lt;never, MyErrorTagged, never#gt;<br/>node: #40;cause#41; =#gt; Effect.fail#40;new MyErrorTagged#40;cause#41;#41;"]]
-  41[/"type: string<br/>node: cause"/]
-  42((("type: Effect#lt;never, MyErrorTagged, never#gt;<br/>node: Effect.fail#40;new MyErrorTagged#40;cause#41;#41;")))
+  41((("type: Effect#lt;never, MyErrorTagged, never#gt;<br/>node: Effect.fail#40;new MyErrorTagged#40;cause#41;#41;")))
+  42[/"type: string<br/>node: cause"/]
   43[/"type: MyErrorTagged<br/>node: new MyErrorTagged#40;cause#41;"/]
   44["type: Effect#lt;never, MyErrorTagged, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
   45[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
@@ -53,9 +53,9 @@ flowchart TB
   51[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catchAll"/]
   52((("type: #40;cause: string#41; =#gt; Effect#lt;never, MyErrorTagged, never#gt;<br/>node: function#40;cause#41; #123;#92;n    return Effect.fail#40;new MyErrorTagged#40;cause#41;#41;#92;n  #125;")))
   53[["type: #40;cause: string#41; =#gt; Effect#lt;never, MyErrorTagged, never#gt;<br/>node: function#40;cause#41; #123;#92;n    return Effect.fail#40;new MyErrorTagged#40;cause#41;#41;#92;n  #125;"]]
-  54[/"type: string<br/>node: cause"/]
-  55((("type: Effect#lt;never, MyErrorTagged, never#gt;<br/>node: function#40;cause#41; #123;#92;n    return Effect.fail#40;new MyErrorTagged#40;cause#41;#41;#92;n  #125;")))
-  56((("type: Effect#lt;never, MyErrorTagged, never#gt;<br/>node: Effect.fail#40;new MyErrorTagged#40;cause#41;#41;")))
+  54((("type: Effect#lt;never, MyErrorTagged, never#gt;<br/>node: function#40;cause#41; #123;#92;n    return Effect.fail#40;new MyErrorTagged#40;cause#41;#41;#92;n  #125;")))
+  55((("type: Effect#lt;never, MyErrorTagged, never#gt;<br/>node: Effect.fail#40;new MyErrorTagged#40;cause#41;#41;")))
+  56[/"type: string<br/>node: cause"/]
   57[/"type: MyErrorTagged<br/>node: new MyErrorTagged#40;cause#41;"/]
   58["type: Effect#lt;never, MyErrorTagged, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
   59[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
@@ -67,9 +67,9 @@ flowchart TB
   65[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catchAll"/]
   66((("type: #40;cause: string#41; =#gt; Effect#lt;never, MyErrorTagged, never#gt;<br/>node: #40;cause#41; =#gt; #123;#92;n    console.log#40;cause#41;#92;n    return Effect.fail#40;new MyErrorTagged#40;cause#41;#41;#92;n  #125;")))
   67[["type: #40;cause: string#41; =#gt; Effect#lt;never, MyErrorTagged, never#gt;<br/>node: #40;cause#41; =#gt; #123;#92;n    console.log#40;cause#41;#92;n    return Effect.fail#40;new MyErrorTagged#40;cause#41;#41;#92;n  #125;"]]
-  68[/"type: string<br/>node: cause"/]
-  69((("type: Effect#lt;never, MyErrorTagged, never#gt;<br/>node: #40;cause#41; =#gt; #123;#92;n    console.log#40;cause#41;#92;n    return Effect.fail#40;new MyErrorTagged#40;cause#41;#41;#92;n  #125;")))
-  70((("type: Effect#lt;never, MyErrorTagged, never#gt;<br/>node: Effect.fail#40;new MyErrorTagged#40;cause#41;#41;")))
+  68((("type: Effect#lt;never, MyErrorTagged, never#gt;<br/>node: #40;cause#41; =#gt; #123;#92;n    console.log#40;cause#41;#92;n    return Effect.fail#40;new MyErrorTagged#40;cause#41;#41;#92;n  #125;")))
+  69((("type: Effect#lt;never, MyErrorTagged, never#gt;<br/>node: Effect.fail#40;new MyErrorTagged#40;cause#41;#41;")))
+  70[/"type: string<br/>node: cause"/]
   71[/"type: string<br/>node: cause"/]
   72["type: void<br/>callee: console.log<br/>args: #91;#93;"]
   73[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
@@ -96,8 +96,8 @@ flowchart TB
   94[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catchAll"/]
   95((("type: #40;cause: string#41; =#gt; Effect#lt;never, MyErrorTagged, never#gt;<br/>node: #40;cause#41; =#gt;#92;n    Effect.fail#40;new MyErrorTagged#40;cause#41;#41;.pipe#40;#92;n      Effect.tap#40;#40;#41; =#gt; Effect.void#41;#92;n    #41;")))
   96[["type: #40;cause: string#41; =#gt; Effect#lt;never, MyErrorTagged, never#gt;<br/>node: #40;cause#41; =#gt;#92;n    Effect.fail#40;new MyErrorTagged#40;cause#41;#41;.pipe#40;#92;n      Effect.tap#40;#40;#41; =#gt; Effect.void#41;#92;n    #41;"]]
-  97[/"type: string<br/>node: cause"/]
-  98((("type: Effect#lt;never, MyErrorTagged, never#gt;<br/>node: Effect.fail#40;new MyErrorTagged#40;cause#41;#41;.pipe#40;#92;n      Effect.tap#40;#40;#41; =#gt; Effect.void#41;#92;n    #41;")))
+  97((("type: Effect#lt;never, MyErrorTagged, never#gt;<br/>node: Effect.fail#40;new MyErrorTagged#40;cause#41;#41;.pipe#40;#92;n      Effect.tap#40;#40;#41; =#gt; Effect.void#41;#92;n    #41;")))
+  98[/"type: string<br/>node: cause"/]
   99((("type: Effect#lt;never, MyErrorTagged, never#gt;<br/>node: Effect.fail#40;new MyErrorTagged#40;cause#41;#41;")))
   100["type: Effect#lt;never, MyErrorTagged, never#gt;<br/>callee: Effect.tap<br/>args: #91;#40;#41; =#gt; Effect.void#93;"]
   101[/"type: MyErrorTagged<br/>node: new MyErrorTagged#40;cause#41;"/]
@@ -115,29 +115,29 @@ flowchart TB
   113[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catchAll"/]
   114((("type: #40;e: string#41; =#gt; Effect#lt;never, AnotherError, never#gt;<br/>node: #40;e#41; =#gt; Effect.fail#40;new AnotherError#40;String#40;e#41;#41;#41;")))
   115[["type: #40;e: string#41; =#gt; Effect#lt;never, AnotherError, never#gt;<br/>node: #40;e#41; =#gt; Effect.fail#40;new AnotherError#40;String#40;e#41;#41;#41;"]]
-  116[/"type: string<br/>node: e"/]
-  117((("type: Effect#lt;never, AnotherError, never#gt;<br/>node: Effect.fail#40;new AnotherError#40;String#40;e#41;#41;#41;")))
+  116((("type: Effect#lt;never, AnotherError, never#gt;<br/>node: Effect.fail#40;new AnotherError#40;String#40;e#41;#41;#41;")))
+  117[/"type: string<br/>node: e"/]
   118[/"type: AnotherError<br/>node: new AnotherError#40;String#40;e#41;#41;"/]
   119["type: Effect#lt;never, AnotherError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
   120[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
   121[/"type: string<br/>node: e"/]
   122["type: string<br/>callee: String<br/>args: #91;#93;"]
   123[/"type: StringConstructor<br/>node: String"/]
-  1 -->|"kind: parameter"| 0
-  2 -->|"kind: potentialReturn"| 0
-  4 -->|"kind: parameter"| 3
-  5 -->|"kind: potentialReturn"| 3
+  1 -->|"kind: potentialReturn"| 0
+  2 -->|"kind: parameter"| 0
+  4 -->|"kind: potentialReturn"| 3
+  5 -->|"kind: parameter"| 3
   6 -->|"kind: pipe"| 7
   8 -->|"kind: pipe"| 9
   9 -->|"kind: connect"| 6
   10 -->|"kind: transformCallee"| 9
   11 -->|"kind: transformCallee"| 7
   12 -->|"kind: transformArg"| 7
-  14 -->|"kind: parameter"| 13
-  15 -->|"kind: potentialReturn"| 13
+  14 -->|"kind: potentialReturn"| 13
+  15 -->|"kind: parameter"| 13
   13 -->|"kind: connect"| 12
   16 -->|"kind: pipe"| 17
-  17 -->|"kind: connect"| 15
+  17 -->|"kind: connect"| 14
   18 -->|"kind: transformCallee"| 17
   19 -->|"kind: pipe"| 20
   21 -->|"kind: pipe"| 22
@@ -145,12 +145,12 @@ flowchart TB
   23 -->|"kind: transformCallee"| 22
   24 -->|"kind: transformCallee"| 20
   25 -->|"kind: transformArg"| 20
-  27 -->|"kind: parameter"| 26
-  29 -->|"kind: potentialReturn"| 28
-  28 -->|"kind: potentialReturn"| 26
+  27 -->|"kind: potentialReturn"| 26
+  28 -->|"kind: potentialReturn"| 27
+  29 -->|"kind: parameter"| 26
   26 -->|"kind: connect"| 25
   30 -->|"kind: pipe"| 31
-  31 -->|"kind: connect"| 29
+  31 -->|"kind: connect"| 28
   32 -->|"kind: transformCallee"| 31
   33 -->|"kind: pipe"| 34
   35 -->|"kind: pipe"| 36
@@ -158,11 +158,11 @@ flowchart TB
   37 -->|"kind: transformCallee"| 36
   38 -->|"kind: transformCallee"| 34
   39 -->|"kind: transformArg"| 34
-  41 -->|"kind: parameter"| 40
-  42 -->|"kind: potentialReturn"| 40
+  41 -->|"kind: potentialReturn"| 40
+  42 -->|"kind: parameter"| 40
   40 -->|"kind: connect"| 39
   43 -->|"kind: pipe"| 44
-  44 -->|"kind: connect"| 42
+  44 -->|"kind: connect"| 41
   45 -->|"kind: transformCallee"| 44
   46 -->|"kind: pipe"| 47
   48 -->|"kind: pipe"| 49
@@ -170,12 +170,12 @@ flowchart TB
   50 -->|"kind: transformCallee"| 49
   51 -->|"kind: transformCallee"| 47
   52 -->|"kind: transformArg"| 47
-  54 -->|"kind: parameter"| 53
-  56 -->|"kind: potentialReturn"| 55
-  55 -->|"kind: potentialReturn"| 53
+  54 -->|"kind: potentialReturn"| 53
+  55 -->|"kind: potentialReturn"| 54
+  56 -->|"kind: parameter"| 53
   53 -->|"kind: connect"| 52
   57 -->|"kind: pipe"| 58
-  58 -->|"kind: connect"| 56
+  58 -->|"kind: connect"| 55
   59 -->|"kind: transformCallee"| 58
   60 -->|"kind: pipe"| 61
   62 -->|"kind: pipe"| 63
@@ -183,14 +183,14 @@ flowchart TB
   64 -->|"kind: transformCallee"| 63
   65 -->|"kind: transformCallee"| 61
   66 -->|"kind: transformArg"| 61
-  68 -->|"kind: parameter"| 67
-  70 -->|"kind: potentialReturn"| 69
-  69 -->|"kind: potentialReturn"| 67
+  68 -->|"kind: potentialReturn"| 67
+  69 -->|"kind: potentialReturn"| 68
+  70 -->|"kind: parameter"| 67
   67 -->|"kind: connect"| 66
   71 -->|"kind: pipe"| 72
   73 -->|"kind: transformCallee"| 72
   74 -->|"kind: pipe"| 75
-  75 -->|"kind: connect"| 70
+  75 -->|"kind: connect"| 69
   76 -->|"kind: transformCallee"| 75
   77 -->|"kind: pipe"| 78
   79 -->|"kind: pipe"| 80
@@ -209,11 +209,11 @@ flowchart TB
   93 -->|"kind: transformCallee"| 92
   94 -->|"kind: transformCallee"| 90
   95 -->|"kind: transformArg"| 90
-  97 -->|"kind: parameter"| 96
-  98 -->|"kind: potentialReturn"| 96
+  97 -->|"kind: potentialReturn"| 96
+  98 -->|"kind: parameter"| 96
   96 -->|"kind: connect"| 95
   99 -->|"kind: pipe"| 100
-  100 -->|"kind: connect"| 98
+  100 -->|"kind: connect"| 97
   101 -->|"kind: pipe"| 102
   102 -->|"kind: connect"| 99
   103 -->|"kind: transformCallee"| 102
@@ -227,11 +227,11 @@ flowchart TB
   112 -->|"kind: transformCallee"| 111
   113 -->|"kind: transformCallee"| 109
   114 -->|"kind: transformArg"| 109
-  116 -->|"kind: parameter"| 115
-  117 -->|"kind: potentialReturn"| 115
+  116 -->|"kind: potentialReturn"| 115
+  117 -->|"kind: parameter"| 115
   115 -->|"kind: connect"| 114
   118 -->|"kind: pipe"| 119
-  119 -->|"kind: connect"| 117
+  119 -->|"kind: connect"| 116
   120 -->|"kind: transformCallee"| 119
   121 -->|"kind: pipe"| 122
   123 -->|"kind: transformCallee"| 122

@@ -2,15 +2,19 @@ flowchart TB
   0[["type: #40;#41; =#gt; Date<br/>node: #40;#41; =#gt; #123;#92;n  return new Date#40;#41;#92;n#125;"]]
   1((("type: Date<br/>node: #40;#41; =#gt; #123;#92;n  return new Date#40;#41;#92;n#125;")))
   2[/"type: Date<br/>node: new Date#40;#41;"/]
-  3((("type: Effect#lt;number, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  const now = Date.now#40;#41;#92;n  return now#92;n#125;")))
-  4[["type: #40;#41; =#gt; Generator#lt;never, Date, never#gt;<br/>node: function*#40;#41; #123;#92;n  return new Date#40;#quot;2024-01-01#quot;#41;#92;n#125;"]]
-  5((("type: Effect#lt;Date, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  return new Date#40;#quot;2024-01-01#quot;#41;#92;n#125;")))
-  6[/"type: Date<br/>node: new Date#40;#quot;2024-01-01#quot;#41;"/]
-  7((("type: Effect#lt;#40;#41; =#gt; number, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  const fn = #40;#41; =#gt; Date.now#40;#41;#92;n  return fn#92;n#125;")))
-  8[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; Date.now#40;#41;"]]
-  9[/"type: number<br/>node: Date.now#40;#41;"/]
-  2 -->|"kind: potentialReturn"| 1
+  3[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const now = Date.now#40;#41;#92;n  return now#92;n#125;#41;"/]
+  4[/"type: number<br/>node: now"/]
+  5[["type: #40;#41; =#gt; Effect#lt;Date, never, never#gt;<br/>node: Effect.fn#40;#quot;newDateWithArgsInFn#quot;#41;#40;function*#40;#41; #123;#92;n  return new Date#40;#quot;2024-01-01#quot;#41;#92;n#125;#41;"]]
+  6((("type: Effect#lt;Date, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  return new Date#40;#quot;2024-01-01#quot;#41;#92;n#125;")))
+  7[/"type: Date<br/>node: new Date#40;#quot;2024-01-01#quot;#41;"/]
+  8[/"type: Effect#lt;#40;#41; =#gt; number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const fn = #40;#41; =#gt; Date.now#40;#41;#92;n  return fn#92;n#125;#41;"/]
+  9[/"type: #40;#41; =#gt; number<br/>node: fn"/]
+  10[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; Date.now#40;#41;"]]
+  11[/"type: number<br/>node: Date.now#40;#41;"/]
   1 -->|"kind: potentialReturn"| 0
+  2 -->|"kind: potentialReturn"| 1
+  4 -->|"kind: potentialReturn"| 3
+  7 -->|"kind: potentialReturn"| 6
   6 -->|"kind: potentialReturn"| 5
-  5 -->|"kind: potentialReturn"| 4
   9 -->|"kind: potentialReturn"| 8
+  11 -->|"kind: potentialReturn"| 10

@@ -2,33 +2,33 @@ flowchart TB
   0[/"type: #quot;MyService#quot;<br/>node: #quot;MyService#quot;"/]
   1["type: #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, #quot;MyService#quot;, Shape#gt;<br/>callee: Context.Tag<br/>args: #91;#93;"]
   2[/"type: #lt;const Id extends string#gt;#40;id: Id#41; =#gt; #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, Id, Shape#gt;<br/>node: Context.Tag"/]
-  3((("type: Effect#lt;#123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.log#40;#quot;log#quot;#41;#92;n    // Log should be inferred with name MyService.log#92;n    return #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;#92;n#125;#41;")))
+  3[/"type: Effect#lt;#123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.log#40;#quot;log#quot;#41;#92;n    // Log should be inferred with name MyService.log#92;n    return #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;#92;n#125;#41;"/]
   4["type: Layer#lt;MyService, never, never#gt;<br/>callee: Layer.effect<br/>args: #91;MyService#93;"]
   5[/"type: #123; #lt;I, S#gt;#40;tag: Tag#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41; =#gt; Layer#lt;I, E, R#gt;; #lt;I, S, E, R#gt;#40;tag: Tag#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, R#gt;; #125;<br/>node: Layer.effect"/]
   6[/"type: typeof MyService<br/>node: MyService"/]
-  7((("type: Effect#lt;#123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;, never, never#gt;<br/>node: function*#40;#41; #123;#92;n    yield* Effect.log#40;#quot;log#quot;#41;#92;n    // Log should be inferred with name MyService.log#92;n    return #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;#92;n#125;")))
-  8((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;#quot;log#quot;#41;")))
+  7((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;#quot;log#quot;#41;")))
+  8[/"type: #123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;"/]
   9[/"type: #quot;log#quot;<br/>node: #quot;log#quot;"/]
   10["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
   11[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
   12[["type: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;what: string#41; =#gt; Effect.log#40;what#41;"]]
-  13[/"type: string<br/>node: what: string"/]
-  14((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;what#41;")))
+  13((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;what#41;")))
+  14[/"type: string<br/>node: what: string"/]
   15[/"type: string<br/>node: what"/]
   16["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
   17[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
-  18((("type: Effect#lt;#123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.log#40;#quot;log#quot;#41;#92;n    // Log should be inferred with name MyService.log#92;n    return #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;#92;n#125;#41;")))
+  18[/"type: Effect#lt;#123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.log#40;#quot;log#quot;#41;#92;n    // Log should be inferred with name MyService.log#92;n    return #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;#92;n#125;#41;"/]
   19["type: Layer#lt;MyService, never, never#gt;<br/>callee: Layer.effect<br/>args: #91;MyService#93;"]
   20[/"type: #123; #lt;I, S#gt;#40;tag: Tag#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41; =#gt; Layer#lt;I, E, R#gt;; #lt;I, S, E, R#gt;#40;tag: Tag#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, R#gt;; #125;<br/>node: Layer.effect"/]
   21[/"type: typeof MyService<br/>node: MyService"/]
-  22((("type: Effect#lt;#123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;, never, never#gt;<br/>node: function*#40;#41; #123;#92;n    yield* Effect.log#40;#quot;log#quot;#41;#92;n    // Log should be inferred with name MyService.log#92;n    return #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;#92;n#125;")))
-  23((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;#quot;log#quot;#41;")))
+  22((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;#quot;log#quot;#41;")))
+  23[/"type: #123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;"/]
   24[/"type: #quot;log#quot;<br/>node: #quot;log#quot;"/]
   25["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
   26[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
   27[["type: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;what: string#41; =#gt; Effect.log#40;what#41;"]]
-  28[/"type: string<br/>node: what: string"/]
-  29((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;what#41;")))
+  28((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;what#41;")))
+  29[/"type: string<br/>node: what: string"/]
   30[/"type: string<br/>node: what"/]
   31["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
   32[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
@@ -37,8 +37,8 @@ flowchart TB
   35[/"type: #123; #lt;I, S#gt;#40;tag: Tag#lt;I, S#gt;#41;: #40;resource: NoInfer#lt;S#gt;#41; =#gt; Layer#lt;I, never, never#gt;; #lt;I, S#gt;#40;tag: Tag#lt;I, S#gt;, resource: NoInfer#lt;S#gt;#41;: Layer#lt;I, never, never#gt;; #125;<br/>node: Layer.succeed"/]
   36[/"type: typeof MyService<br/>node: MyService"/]
   37[["type: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;what: string#41; =#gt; Effect.log#40;what#41;"]]
-  38[/"type: string<br/>node: what: string"/]
-  39((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;what#41;")))
+  38((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;what#41;")))
+  39[/"type: string<br/>node: what: string"/]
   40[/"type: string<br/>node: what"/]
   41["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
   42[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
@@ -50,8 +50,8 @@ flowchart TB
   48((("type: #123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #40;#41; =#gt; #123;#92;n    // Log should be inferred with name MyService.log#92;n    return #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;#92;n#125;")))
   49[/"type: #123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;"/]
   50[["type: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;what: string#41; =#gt; Effect.log#40;what#41;"]]
-  51[/"type: string<br/>node: what: string"/]
-  52((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;what#41;")))
+  51((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;what#41;")))
+  52[/"type: string<br/>node: what: string"/]
   53[/"type: string<br/>node: what"/]
   54["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
   55[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
@@ -60,45 +60,45 @@ flowchart TB
   3 -->|"kind: pipe"| 4
   5 -->|"kind: transformCallee"| 4
   6 -->|"kind: transformArg"| 4
-  8 -->|"kind: yieldable"| 7
-  7 -->|"kind: connect"| 3
+  7 -->|"kind: yieldable"| 3
+  8 -->|"kind: potentialReturn"| 3
   9 -->|"kind: pipe"| 10
-  10 -->|"kind: connect"| 8
+  10 -->|"kind: connect"| 7
   11 -->|"kind: transformCallee"| 10
-  13 -->|"kind: parameter"| 12
-  14 -->|"kind: potentialReturn"| 12
+  13 -->|"kind: potentialReturn"| 12
+  14 -->|"kind: parameter"| 12
   15 -->|"kind: pipe"| 16
-  16 -->|"kind: connect"| 14
+  16 -->|"kind: connect"| 13
   17 -->|"kind: transformCallee"| 16
   18 -->|"kind: dataLast"| 19
   20 -->|"kind: transformCallee"| 19
   21 -->|"kind: transformArg"| 19
-  23 -->|"kind: yieldable"| 22
-  22 -->|"kind: connect"| 18
+  22 -->|"kind: yieldable"| 18
+  23 -->|"kind: potentialReturn"| 18
   24 -->|"kind: pipe"| 25
-  25 -->|"kind: connect"| 23
+  25 -->|"kind: connect"| 22
   26 -->|"kind: transformCallee"| 25
-  28 -->|"kind: parameter"| 27
-  29 -->|"kind: potentialReturn"| 27
+  28 -->|"kind: potentialReturn"| 27
+  29 -->|"kind: parameter"| 27
   30 -->|"kind: pipe"| 31
-  31 -->|"kind: connect"| 29
+  31 -->|"kind: connect"| 28
   32 -->|"kind: transformCallee"| 31
   33 -->|"kind: pipe"| 34
   35 -->|"kind: transformCallee"| 34
   36 -->|"kind: transformArg"| 34
-  38 -->|"kind: parameter"| 37
-  39 -->|"kind: potentialReturn"| 37
+  38 -->|"kind: potentialReturn"| 37
+  39 -->|"kind: parameter"| 37
   40 -->|"kind: pipe"| 41
-  41 -->|"kind: connect"| 39
+  41 -->|"kind: connect"| 38
   42 -->|"kind: transformCallee"| 41
   43 -->|"kind: pipe"| 44
   45 -->|"kind: transformCallee"| 44
   46 -->|"kind: transformArg"| 44
-  49 -->|"kind: potentialReturn"| 48
   48 -->|"kind: potentialReturn"| 47
+  49 -->|"kind: potentialReturn"| 48
   47 -->|"kind: connect"| 43
-  51 -->|"kind: parameter"| 50
-  52 -->|"kind: potentialReturn"| 50
+  51 -->|"kind: potentialReturn"| 50
+  52 -->|"kind: parameter"| 50
   53 -->|"kind: pipe"| 54
-  54 -->|"kind: connect"| 52
+  54 -->|"kind: connect"| 51
   55 -->|"kind: transformCallee"| 54

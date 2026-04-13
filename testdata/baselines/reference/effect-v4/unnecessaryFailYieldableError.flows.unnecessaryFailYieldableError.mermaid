@@ -8,7 +8,7 @@ flowchart TB
   6[/"type: #quot;SchemaError#quot;<br/>node: #quot;SchemaError#quot;"/]
   7["type: tag#lt;#quot;SchemaError#quot;#gt;<br/>callee: Schema.tag<br/>args: #91;#93;"]
   8[/"type: #lt;Tag extends AST.LiteralValue#gt;#40;literal: Tag#41; =#gt; tag#lt;Tag#gt;<br/>node: Schema.tag"/]
-  9((("type: Effect#lt;void, DataTaggedError #124; NonYieldable #124; SchemaError, never#gt;<br/>node: function*#40;#41; #123;#92;n  // should not report#92;n  yield* Effect.fail#40;new NonYieldable#40;#quot;non-yieldable error#quot;#41;#41;#92;n  const err = new DataTaggedError#40;#41;#92;n  console.log#40;err#41;#92;n  // should report#92;n  yield* Effect.fail#40;new DataTaggedError#40;#41;#41;#92;n  yield* Effect.fail#40;new SchemaError#40;#123;#125;#41;#41;#92;n#125;")))
+  9[/"type: Effect#lt;void, DataTaggedError #124; NonYieldable #124; SchemaError, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  // should not report#92;n  yield* Effect.fail#40;new NonYieldable#40;#quot;non-yieldable error#quot;#41;#41;#92;n  const err = new DataTaggedError#40;#41;#92;n  console.log#40;err#41;#92;n  // should report#92;n  yield* Effect.fail#40;new DataTaggedError#40;#41;#41;#92;n  yield* Effect.fail#40;new SchemaError#40;#123;#125;#41;#41;#92;n#125;#41;"/]
   10((("type: Effect#lt;never, NonYieldable, never#gt;<br/>node: Effect.fail#40;new NonYieldable#40;#quot;non-yieldable error#quot;#41;#41;")))
   11((("type: Effect#lt;never, DataTaggedError, never#gt;<br/>node: Effect.fail#40;new DataTaggedError#40;#41;#41;")))
   12((("type: Effect#lt;never, SchemaError, never#gt;<br/>node: Effect.fail#40;new SchemaError#40;#123;#125;#41;#41;")))

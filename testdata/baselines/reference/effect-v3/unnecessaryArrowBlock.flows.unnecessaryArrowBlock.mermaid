@@ -1,34 +1,34 @@
 flowchart TB
   0[["type: #40;arg: string#41; =#gt; string<br/>node: #40;arg: string#41; =#gt; #123;#92;n	return arg.trim#40;#41;#92;n#125;"]]
-  1[/"type: string<br/>node: arg: string"/]
-  2((("type: string<br/>node: #40;arg: string#41; =#gt; #123;#92;n	return arg.trim#40;#41;#92;n#125;")))
-  3[/"type: string<br/>node: arg.trim#40;#41;"/]
+  1((("type: string<br/>node: #40;arg: string#41; =#gt; #123;#92;n	return arg.trim#40;#41;#92;n#125;")))
+  2[/"type: string<br/>node: arg.trim#40;#41;"/]
+  3[/"type: string<br/>node: arg: string"/]
   4[["type: #40;arg: string#41; =#gt; string<br/>node: #40;arg: string#41; =#gt; #123;#92;n	return arg + #quot;!#quot;#92;n#125;"]]
-  5[/"type: string<br/>node: arg: string"/]
-  6((("type: string<br/>node: #40;arg: string#41; =#gt; #123;#92;n	return arg + #quot;!#quot;#92;n#125;")))
-  7[/"type: string<br/>node: arg + #quot;!#quot;"/]
+  5((("type: string<br/>node: #40;arg: string#41; =#gt; #123;#92;n	return arg + #quot;!#quot;#92;n#125;")))
+  6[/"type: string<br/>node: arg + #quot;!#quot;"/]
+  7[/"type: string<br/>node: arg: string"/]
   8[["type: #40;arg: string#41; =#gt; string<br/>node: #40;arg: string#41; =#gt; #123;#92;n	const trimmed = arg.trim#40;#41;#92;n	return trimmed#92;n#125;"]]
-  9[/"type: string<br/>node: arg: string"/]
-  10((("type: string<br/>node: #40;arg: string#41; =#gt; #123;#92;n	const trimmed = arg.trim#40;#41;#92;n	return trimmed#92;n#125;")))
-  11[/"type: string<br/>node: trimmed"/]
+  9((("type: string<br/>node: #40;arg: string#41; =#gt; #123;#92;n	const trimmed = arg.trim#40;#41;#92;n	return trimmed#92;n#125;")))
+  10[/"type: string<br/>node: trimmed"/]
+  11[/"type: string<br/>node: arg: string"/]
   12[["type: #40;arg: string#41; =#gt; #123; arg: string; #125;<br/>node: #40;arg: string#41; =#gt; #123;#92;n	return #123; arg #125;#92;n#125;"]]
-  13[/"type: string<br/>node: arg: string"/]
-  14((("type: #123; arg: string; #125;<br/>node: #40;arg: string#41; =#gt; #123;#92;n	return #123; arg #125;#92;n#125;")))
-  15[/"type: #123; arg: string; #125;<br/>node: #123; arg #125;"/]
+  13((("type: #123; arg: string; #125;<br/>node: #40;arg: string#41; =#gt; #123;#92;n	return #123; arg #125;#92;n#125;")))
+  14[/"type: #123; arg: string; #125;<br/>node: #123; arg #125;"/]
+  15[/"type: string<br/>node: arg: string"/]
   16[["type: #40;arg: string#41; =#gt; string<br/>node: #40;arg: string#41; =#gt; arg.trim#40;#41;"]]
-  17[/"type: string<br/>node: arg: string"/]
-  18[/"type: string<br/>node: arg.trim#40;#41;"/]
-  1 -->|"kind: parameter"| 0
-  3 -->|"kind: potentialReturn"| 2
-  2 -->|"kind: potentialReturn"| 0
-  5 -->|"kind: parameter"| 4
-  7 -->|"kind: potentialReturn"| 6
-  6 -->|"kind: potentialReturn"| 4
-  9 -->|"kind: parameter"| 8
-  11 -->|"kind: potentialReturn"| 10
-  10 -->|"kind: potentialReturn"| 8
-  13 -->|"kind: parameter"| 12
-  15 -->|"kind: potentialReturn"| 14
-  14 -->|"kind: potentialReturn"| 12
-  17 -->|"kind: parameter"| 16
-  18 -->|"kind: potentialReturn"| 16
+  17[/"type: string<br/>node: arg.trim#40;#41;"/]
+  18[/"type: string<br/>node: arg: string"/]
+  1 -->|"kind: potentialReturn"| 0
+  2 -->|"kind: potentialReturn"| 1
+  3 -->|"kind: parameter"| 0
+  5 -->|"kind: potentialReturn"| 4
+  6 -->|"kind: potentialReturn"| 5
+  7 -->|"kind: parameter"| 4
+  9 -->|"kind: potentialReturn"| 8
+  10 -->|"kind: potentialReturn"| 9
+  11 -->|"kind: parameter"| 8
+  13 -->|"kind: potentialReturn"| 12
+  14 -->|"kind: potentialReturn"| 13
+  15 -->|"kind: parameter"| 12
+  17 -->|"kind: potentialReturn"| 16
+  18 -->|"kind: parameter"| 16

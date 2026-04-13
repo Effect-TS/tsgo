@@ -15,14 +15,14 @@ flowchart TB
   13[/"type: #quot;b#quot;<br/>node: #quot;b#quot;"/]
   14((("type: #40;#123; a #125;: #123; a: number; #125;#41; =#gt; number<br/>node: #40;#123; a #125;#41; =#gt; a + 1")))
   15[["type: #40;#123; a #125;: #123; a: number; #125;#41; =#gt; number<br/>node: #40;#123; a #125;#41; =#gt; a + 1"]]
-  16[/"type: #123; a: number; #125;<br/>node: #123; a #125;"/]
-  17[/"type: number<br/>node: a + 1"/]
+  16[/"type: number<br/>node: a + 1"/]
+  17[/"type: #123; a: number; #125;<br/>node: #123; a #125;"/]
   18[/"type: #123; #lt;N extends string, A extends object, B, E2, R2#gt;#40;name: Exclude#lt;N, keyof A#gt;, f: #40;a: NoInfer#lt;A#gt;#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E1, R1#gt;#40;self: Effect#lt;A, E1, R1#gt;#41; =#gt; Effect#lt;#123; #91;K in N #124; keyof A#93;: K extends keyof A ? A#91;K#93; : B; #125;, E1 #124; E2, R1 #124; R2#gt;; #lt;A extends object, N extends string, E1, R1, B, E2, R2#gt;#40;self: Effect#lt;A, E1, R1#gt;, name: Exclude#lt;N, keyof A#gt;, f: #40;a: NoInfer#lt;A#gt;#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;#123; #91;K in N #124; keyof A#93;: K extends keyof A ? A#91;K#93; : B; #125;, E1 #124; E2, R1 #124; R2#gt;; #125;<br/>node: Effect.bind"/]
   19[/"type: #quot;c#quot;<br/>node: #quot;c#quot;"/]
   20((("type: #40;#123; b #125;: #123; a: number; b: number; #125;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;#123; b #125;#41; =#gt; Effect.succeed#40;b.toString#40;#41;#41;")))
   21[["type: #40;#123; b #125;: #123; a: number; b: number; #125;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;#123; b #125;#41; =#gt; Effect.succeed#40;b.toString#40;#41;#41;"]]
-  22[/"type: #123; a: number; b: number; #125;<br/>node: #123; b #125;"/]
-  23((("type: Effect#lt;string, never, never#gt;<br/>node: Effect.succeed#40;b.toString#40;#41;#41;")))
+  22((("type: Effect#lt;string, never, never#gt;<br/>node: Effect.succeed#40;b.toString#40;#41;#41;")))
+  23[/"type: #123; a: number; b: number; #125;<br/>node: #123; b #125;"/]
   24[/"type: string<br/>node: b.toString#40;#41;"/]
   25["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
   26[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
@@ -40,15 +40,15 @@ flowchart TB
   12 -->|"kind: transformCallee"| 2
   13 -->|"kind: transformArg"| 2
   14 -->|"kind: transformArg"| 2
-  16 -->|"kind: parameter"| 15
-  17 -->|"kind: potentialReturn"| 15
+  16 -->|"kind: potentialReturn"| 15
+  17 -->|"kind: parameter"| 15
   15 -->|"kind: connect"| 14
   18 -->|"kind: transformCallee"| 3
   19 -->|"kind: transformArg"| 3
   20 -->|"kind: transformArg"| 3
-  22 -->|"kind: parameter"| 21
-  23 -->|"kind: potentialReturn"| 21
+  22 -->|"kind: potentialReturn"| 21
+  23 -->|"kind: parameter"| 21
   21 -->|"kind: connect"| 20
   24 -->|"kind: pipe"| 25
-  25 -->|"kind: connect"| 23
+  25 -->|"kind: connect"| 22
   26 -->|"kind: transformCallee"| 25

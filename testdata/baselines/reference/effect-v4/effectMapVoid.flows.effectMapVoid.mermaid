@@ -61,8 +61,8 @@ flowchart TB
   59[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
   60((("type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n * 2")))
   61[["type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n * 2"]]
-  62[/"type: number<br/>node: n"/]
-  63[/"type: number<br/>node: n * 2"/]
+  62[/"type: number<br/>node: n * 2"/]
+  63[/"type: number<br/>node: n"/]
   64((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;")))
   65["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;#41; =#gt; 42#93;"]
   66[/"type: 1<br/>node: 1"/]
@@ -141,8 +141,8 @@ flowchart TB
   58 -->|"kind: transformCallee"| 57
   59 -->|"kind: transformCallee"| 55
   60 -->|"kind: transformArg"| 55
-  62 -->|"kind: parameter"| 61
-  63 -->|"kind: potentialReturn"| 61
+  62 -->|"kind: potentialReturn"| 61
+  63 -->|"kind: parameter"| 61
   61 -->|"kind: connect"| 60
   64 -->|"kind: pipe"| 65
   66 -->|"kind: pipe"| 67

@@ -5,8 +5,8 @@ flowchart TB
   3[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;http://something#quot;#41;"]]
   4[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;http://something#quot;#41;"/]
   5[["type: #40;e: unknown#41; =#gt; MyError<br/>node: #40;e#41; =#gt; new MyError#40;#123; cause: e #125;#41;"]]
-  6[/"type: unknown<br/>node: e"/]
-  7[/"type: MyError<br/>node: new MyError#40;#123; cause: e #125;#41;"/]
+  6[/"type: MyError<br/>node: new MyError#40;#123; cause: e #125;#41;"/]
+  7[/"type: unknown<br/>node: e"/]
   8[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;http://something#quot;#41;"]]
   9[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;http://something#quot;#41;"/]
   10[["type: #40;#41; =#gt; Error<br/>node: #40;#41; =#gt; new Error#40;#quot;Unknown!#quot;#41;"]]
@@ -19,11 +19,11 @@ flowchart TB
   17[/"type: #123; #lt;A, B, E1#gt;#40;options: #123; readonly try: #40;a: A, signal: AbortSignal#41; =#gt; PromiseLike#lt;B#gt;; readonly catch: #40;error: unknown#41; =#gt; E1; #125;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R#gt;; #lt;A, E, R, B, E1#gt;#40;self: Effect#lt;A, E, R#gt;, options: #123; readonly try: #40;a: A, signal: AbortSignal#41; =#gt; PromiseLike#lt;B#gt;; readonly catch: #40;error: unknown#41; =#gt; E1; #125;#41;: Effect#lt;B, E #124; E1, R#gt;; #125;<br/>node: Effect.tryMapPromise"/]
   18[/"type: #123; try: #40;_: number#41; =#gt; Promise#lt;Response#gt;; catch: #40;e: unknown#41; =#gt; MyError; #125;<br/>node: #123;#92;n  try: #40;_#41; =#gt; fetch#40;#quot;http://something/#quot; + _#41;,#92;n  catch: #40;e#41; =#gt; new MyError#40;#123; cause: e #125;#41;#92;n#125;"/]
   19[["type: #40;_: number#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;_#41; =#gt; fetch#40;#quot;http://something/#quot; + _#41;"]]
-  20[/"type: number<br/>node: _"/]
-  21[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;http://something/#quot; + _#41;"/]
+  20[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;http://something/#quot; + _#41;"/]
+  21[/"type: number<br/>node: _"/]
   22[["type: #40;e: unknown#41; =#gt; MyError<br/>node: #40;e#41; =#gt; new MyError#40;#123; cause: e #125;#41;"]]
-  23[/"type: unknown<br/>node: e"/]
-  24[/"type: MyError<br/>node: new MyError#40;#123; cause: e #125;#41;"/]
+  23[/"type: MyError<br/>node: new MyError#40;#123; cause: e #125;#41;"/]
+  24[/"type: unknown<br/>node: e"/]
   25((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;42#41;")))
   26["type: Effect#lt;Response, Error, never#gt;<br/>callee: Effect.tryMapPromise<br/>args: #91;#123;#92;n  try: #40;_#41; =#gt; fetch#40;#quot;http://something/#quot; + _#41;,#92;n  catch: #40;cause#41; =#gt; new Error#40;#quot;Hey#quot;, #123; cause #125;#41;#92;n#125;#93;"]
   27[/"type: 42<br/>node: 42"/]
@@ -32,16 +32,16 @@ flowchart TB
   30[/"type: #123; #lt;A, B, E1#gt;#40;options: #123; readonly try: #40;a: A, signal: AbortSignal#41; =#gt; PromiseLike#lt;B#gt;; readonly catch: #40;error: unknown#41; =#gt; E1; #125;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R#gt;; #lt;A, E, R, B, E1#gt;#40;self: Effect#lt;A, E, R#gt;, options: #123; readonly try: #40;a: A, signal: AbortSignal#41; =#gt; PromiseLike#lt;B#gt;; readonly catch: #40;error: unknown#41; =#gt; E1; #125;#41;: Effect#lt;B, E #124; E1, R#gt;; #125;<br/>node: Effect.tryMapPromise"/]
   31[/"type: #123; try: #40;_: number#41; =#gt; Promise#lt;Response#gt;; catch: #40;cause: unknown#41; =#gt; Error; #125;<br/>node: #123;#92;n  try: #40;_#41; =#gt; fetch#40;#quot;http://something/#quot; + _#41;,#92;n  catch: #40;cause#41; =#gt; new Error#40;#quot;Hey#quot;, #123; cause #125;#41;#92;n#125;"/]
   32[["type: #40;_: number#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;_#41; =#gt; fetch#40;#quot;http://something/#quot; + _#41;"]]
-  33[/"type: number<br/>node: _"/]
-  34[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;http://something/#quot; + _#41;"/]
+  33[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;http://something/#quot; + _#41;"/]
+  34[/"type: number<br/>node: _"/]
   35[["type: #40;cause: unknown#41; =#gt; Error<br/>node: #40;cause#41; =#gt; new Error#40;#quot;Hey#quot;, #123; cause #125;#41;"]]
-  36[/"type: unknown<br/>node: cause"/]
-  37[/"type: Error<br/>node: new Error#40;#quot;Hey#quot;, #123; cause #125;#41;"/]
+  36[/"type: Error<br/>node: new Error#40;#quot;Hey#quot;, #123; cause #125;#41;"/]
+  37[/"type: unknown<br/>node: cause"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
   4 -->|"kind: potentialReturn"| 3
-  6 -->|"kind: parameter"| 5
-  7 -->|"kind: potentialReturn"| 5
+  6 -->|"kind: potentialReturn"| 5
+  7 -->|"kind: parameter"| 5
   9 -->|"kind: potentialReturn"| 8
   11 -->|"kind: potentialReturn"| 10
   12 -->|"kind: pipe"| 13
@@ -50,17 +50,17 @@ flowchart TB
   16 -->|"kind: transformCallee"| 15
   17 -->|"kind: transformCallee"| 13
   18 -->|"kind: transformArg"| 13
-  20 -->|"kind: parameter"| 19
-  21 -->|"kind: potentialReturn"| 19
-  23 -->|"kind: parameter"| 22
-  24 -->|"kind: potentialReturn"| 22
+  20 -->|"kind: potentialReturn"| 19
+  21 -->|"kind: parameter"| 19
+  23 -->|"kind: potentialReturn"| 22
+  24 -->|"kind: parameter"| 22
   25 -->|"kind: pipe"| 26
   27 -->|"kind: pipe"| 28
   28 -->|"kind: connect"| 25
   29 -->|"kind: transformCallee"| 28
   30 -->|"kind: transformCallee"| 26
   31 -->|"kind: transformArg"| 26
-  33 -->|"kind: parameter"| 32
-  34 -->|"kind: potentialReturn"| 32
-  36 -->|"kind: parameter"| 35
-  37 -->|"kind: potentialReturn"| 35
+  33 -->|"kind: potentialReturn"| 32
+  34 -->|"kind: parameter"| 32
+  36 -->|"kind: potentialReturn"| 35
+  37 -->|"kind: parameter"| 35

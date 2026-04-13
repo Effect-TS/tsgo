@@ -9,8 +9,8 @@ flowchart TB
   7["type: #lt;Fields extends Struct.Fields#gt;#40;fieldsOr: Fields #124; HasFields#lt;Fields#gt;, annotations?: ClassAnnotations#lt;PersonSchema, #123; #91;K in keyof Type#lt;Fields#gt;#93;: Type#lt;Fields#gt;#91;K#93;; #125;#gt; #124; undefined#41; =#gt; Class#lt;PersonSchema, Fields, Encoded#lt;Fields#gt;, Context#lt;Fields#91;keyof Fields#93;#gt;, Constructor#lt;Fields#gt;, #123;#125;, #123;#125;#gt;<br/>callee: Schema.Class<br/>args: #91;#93;"]
   8[/"type: #lt;Self = never#gt;#40;identifier: string#41; =#gt; #lt;Fields extends Struct.Fields#gt;#40;fieldsOr: Fields #124; HasFields#lt;Fields#gt;, annotations?: ClassAnnotations#lt;Self, #123; #91;K in keyof Type#lt;Fields#gt;#93;: Type#lt;Fields#gt;#91;K#93;; #125;#gt; #124; undefined#41; =#gt; #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Class#lt;Self#gt;#40;#41;#40;#123; ... #125;#41;`#quot; : Class#lt;Self, Fields, Encoded#lt;Fields#gt;, Context#lt;Fields#91;keyof Fields#93;#gt;, Constructor#lt;Fields#gt;, #123;#125;, #123;#125;#gt;<br/>node: Schema.Class"/]
   9[["type: #40;x: unknown#41; =#gt; x is PersonSchema<br/>node: #40;x: unknown#41; =#gt; x instanceof PersonSchema"]]
-  10[/"type: unknown<br/>node: x: unknown"/]
-  11[/"type: boolean<br/>node: x instanceof PersonSchema"/]
+  10[/"type: boolean<br/>node: x instanceof PersonSchema"/]
+  11[/"type: unknown<br/>node: x: unknown"/]
   12[/"type: #quot;is my class#quot;<br/>node: #quot;is my class#quot;"/]
   13["type: void<br/>callee: console.log<br/>args: #91;#93;"]
   14[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
@@ -26,8 +26,8 @@ flowchart TB
   5 -->|"kind: transformCallee"| 4
   6 -->|"kind: pipe"| 7
   8 -->|"kind: transformCallee"| 7
-  10 -->|"kind: parameter"| 9
-  11 -->|"kind: potentialReturn"| 9
+  10 -->|"kind: potentialReturn"| 9
+  11 -->|"kind: parameter"| 9
   12 -->|"kind: pipe"| 13
   14 -->|"kind: transformCallee"| 13
   15 -->|"kind: pipe"| 16

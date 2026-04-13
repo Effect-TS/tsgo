@@ -1,8 +1,8 @@
 flowchart TB
   0[["type: #40;identifier: string#41; =#gt; #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, string, Shape#gt;<br/>node: export function LocalConstructor#40;/** @effect-identifier */ identifier: string#41; #123;#92;n  return Context.Tag#40;#quot;hey/#quot; + identifier#41;#92;n#125;"]]
-  1[/"type: string<br/>node: identifier: string"/]
-  2((("type: #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, string, Shape#gt;<br/>node: export function LocalConstructor#40;/** @effect-identifier */ identifier: string#41; #123;#92;n  return Context.Tag#40;#quot;hey/#quot; + identifier#41;#92;n#125;")))
-  3((("type: #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, string, Shape#gt;<br/>node: Context.Tag#40;#quot;hey/#quot; + identifier#41;")))
+  1((("type: #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, string, Shape#gt;<br/>node: export function LocalConstructor#40;/** @effect-identifier */ identifier: string#41; #123;#92;n  return Context.Tag#40;#quot;hey/#quot; + identifier#41;#92;n#125;")))
+  2((("type: #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, string, Shape#gt;<br/>node: Context.Tag#40;#quot;hey/#quot; + identifier#41;")))
+  3[/"type: string<br/>node: identifier: string"/]
   4[/"type: string<br/>node: #quot;hey/#quot; + identifier"/]
   5["type: #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, string, Shape#gt;<br/>callee: Context.Tag<br/>args: #91;#93;"]
   6[/"type: #lt;const Id extends string#gt;#40;id: Id#41; =#gt; #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, Id, Shape#gt;<br/>node: Context.Tag"/]
@@ -10,15 +10,15 @@ flowchart TB
   8["type: #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, string, Shape#gt;<br/>callee: LocalConstructor<br/>args: #91;#93;"]
   9[/"type: #40;identifier: string#41; =#gt; #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, string, Shape#gt;<br/>node: LocalConstructor"/]
   10[["type: #40;req: #123; id: number; #125;#41; =#gt; string<br/>node: #40;req#41; =#gt; `TTLRequest:$#123;req.id#125;`"]]
-  11[/"type: #123; id: number; #125;<br/>node: req"/]
-  12[/"type: string<br/>node: `TTLRequest:$#123;req.id#125;`"/]
-  1 -->|"kind: parameter"| 0
-  3 -->|"kind: potentialReturn"| 2
-  2 -->|"kind: potentialReturn"| 0
+  11[/"type: string<br/>node: `TTLRequest:$#123;req.id#125;`"/]
+  12[/"type: #123; id: number; #125;<br/>node: req"/]
+  1 -->|"kind: potentialReturn"| 0
+  2 -->|"kind: potentialReturn"| 1
+  3 -->|"kind: parameter"| 0
   4 -->|"kind: pipe"| 5
-  5 -->|"kind: connect"| 3
+  5 -->|"kind: connect"| 2
   6 -->|"kind: transformCallee"| 5
   7 -->|"kind: pipe"| 8
   9 -->|"kind: transformCallee"| 8
-  11 -->|"kind: parameter"| 10
-  12 -->|"kind: potentialReturn"| 10
+  11 -->|"kind: potentialReturn"| 10
+  12 -->|"kind: parameter"| 10

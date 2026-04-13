@@ -21,16 +21,16 @@ flowchart TB
   19[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
   20[/"type: typeof ServiceC<br/>node: this"/]
   21[["type: #40;layer: Layer#lt;ServiceA, never, never#gt;#41; =#gt; Layer#lt;ServiceA, never, never#gt;<br/>node: function testFn#40;layer: Layer.Layer#lt;ServiceA#gt;#41; #123;#92;n  return layer#92;n#125;"]]
-  22[/"type: Layer#lt;ServiceA, never, never#gt;<br/>node: layer: Layer.Layer#lt;ServiceA#gt;"/]
-  23((("type: Layer#lt;ServiceA, never, never#gt;<br/>node: function testFn#40;layer: Layer.Layer#lt;ServiceA#gt;#41; #123;#92;n  return layer#92;n#125;")))
-  24[/"type: Layer#lt;ServiceA, never, never#gt;<br/>node: layer"/]
+  22((("type: Layer#lt;ServiceA, never, never#gt;<br/>node: function testFn#40;layer: Layer.Layer#lt;ServiceA#gt;#41; #123;#92;n  return layer#92;n#125;")))
+  23[/"type: Layer#lt;ServiceA, never, never#gt;<br/>node: layer"/]
+  24[/"type: Layer#lt;ServiceA, never, never#gt;<br/>node: layer: Layer.Layer#lt;ServiceA#gt;"/]
   25[/"type: Layer#lt;ServiceA, never, ServiceB #124; ServiceC#gt;<br/>node: layerWithServices"/]
   26["type: Layer#lt;ServiceA, never, never#gt;<br/>callee: testFn<br/>args: #91;#93;"]
   27[/"type: #40;layer: Layer#lt;ServiceA, never, never#gt;#41; =#gt; Layer#lt;ServiceA, never, never#gt;<br/>node: testFn"/]
   28[["type: #40;layer: Layer#lt;ServiceA, never, ServiceB#gt;#41; =#gt; Layer#lt;ServiceA, never, ServiceB#gt;<br/>node: function testFnWithServiceB#40;layer: Layer.Layer#lt;ServiceA, never, ServiceB#gt;#41; #123;#92;n  return layer#92;n#125;"]]
-  29[/"type: Layer#lt;ServiceA, never, ServiceB#gt;<br/>node: layer: Layer.Layer#lt;ServiceA, never, ServiceB#gt;"/]
-  30((("type: Layer#lt;ServiceA, never, ServiceB#gt;<br/>node: function testFnWithServiceB#40;layer: Layer.Layer#lt;ServiceA, never, ServiceB#gt;#41; #123;#92;n  return layer#92;n#125;")))
-  31[/"type: Layer#lt;ServiceA, never, ServiceB#gt;<br/>node: layer"/]
+  29((("type: Layer#lt;ServiceA, never, ServiceB#gt;<br/>node: function testFnWithServiceB#40;layer: Layer.Layer#lt;ServiceA, never, ServiceB#gt;#41; #123;#92;n  return layer#92;n#125;")))
+  30[/"type: Layer#lt;ServiceA, never, ServiceB#gt;<br/>node: layer"/]
+  31[/"type: Layer#lt;ServiceA, never, ServiceB#gt;<br/>node: layer: Layer.Layer#lt;ServiceA, never, ServiceB#gt;"/]
   32[/"type: Layer#lt;ServiceA, never, ServiceB #124; ServiceC#gt;<br/>node: layerWithServices"/]
   33["type: Layer#lt;ServiceA, never, ServiceB#gt;<br/>callee: testFnWithServiceB<br/>args: #91;#93;"]
   34[/"type: #40;layer: Layer#lt;ServiceA, never, ServiceB#gt;#41; =#gt; Layer#lt;ServiceA, never, ServiceB#gt;<br/>node: testFnWithServiceB"/]
@@ -49,13 +49,13 @@ flowchart TB
   17 -->|"kind: dataLast"| 18
   19 -->|"kind: transformCallee"| 18
   20 -->|"kind: transformArg"| 18
-  22 -->|"kind: parameter"| 21
-  24 -->|"kind: potentialReturn"| 23
-  23 -->|"kind: potentialReturn"| 21
+  22 -->|"kind: potentialReturn"| 21
+  23 -->|"kind: potentialReturn"| 22
+  24 -->|"kind: parameter"| 21
   25 -->|"kind: pipe"| 26
   27 -->|"kind: transformCallee"| 26
-  29 -->|"kind: parameter"| 28
-  31 -->|"kind: potentialReturn"| 30
-  30 -->|"kind: potentialReturn"| 28
+  29 -->|"kind: potentialReturn"| 28
+  30 -->|"kind: potentialReturn"| 29
+  31 -->|"kind: parameter"| 28
   32 -->|"kind: pipe"| 33
   34 -->|"kind: transformCallee"| 33

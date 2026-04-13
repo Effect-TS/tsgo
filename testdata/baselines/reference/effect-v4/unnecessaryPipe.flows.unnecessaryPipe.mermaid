@@ -7,8 +7,8 @@ flowchart TB
   5[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
   6((("type: #40;x: string#41; =#gt; string<br/>node: #40;x#41; =#gt; x + #quot; World#quot;")))
   7[["type: #40;x: string#41; =#gt; string<br/>node: #40;x#41; =#gt; x + #quot; World#quot;"]]
-  8[/"type: string<br/>node: x"/]
-  9[/"type: string<br/>node: x + #quot; World#quot;"/]
+  8[/"type: string<br/>node: x + #quot; World#quot;"/]
+  9[/"type: string<br/>node: x"/]
   10((("type: Effect#lt;string, never, never#gt;<br/>node: Effect.succeed#40;#quot;Hello#quot;#41;")))
   11["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x + #quot; World#quot;#93;"]
   12[/"type: #quot;Hello#quot;<br/>node: #quot;Hello#quot;"/]
@@ -17,8 +17,8 @@ flowchart TB
   15[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
   16((("type: #40;x: string#41; =#gt; string<br/>node: #40;x#41; =#gt; x + #quot; World#quot;")))
   17[["type: #40;x: string#41; =#gt; string<br/>node: #40;x#41; =#gt; x + #quot; World#quot;"]]
-  18[/"type: string<br/>node: x"/]
-  19[/"type: string<br/>node: x + #quot; World#quot;"/]
+  18[/"type: string<br/>node: x + #quot; World#quot;"/]
+  19[/"type: string<br/>node: x"/]
   20[/"type: 32<br/>node: 32"/]
   21((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;32#41;")))
   22[/"type: 32<br/>node: 32"/]
@@ -30,8 +30,8 @@ flowchart TB
   4 -->|"kind: transformCallee"| 3
   5 -->|"kind: transformCallee"| 1
   6 -->|"kind: transformArg"| 1
-  8 -->|"kind: parameter"| 7
-  9 -->|"kind: potentialReturn"| 7
+  8 -->|"kind: potentialReturn"| 7
+  9 -->|"kind: parameter"| 7
   7 -->|"kind: connect"| 6
   10 -->|"kind: pipe"| 11
   12 -->|"kind: pipe"| 13
@@ -39,8 +39,8 @@ flowchart TB
   14 -->|"kind: transformCallee"| 13
   15 -->|"kind: transformCallee"| 11
   16 -->|"kind: transformArg"| 11
-  18 -->|"kind: parameter"| 17
-  19 -->|"kind: potentialReturn"| 17
+  18 -->|"kind: potentialReturn"| 17
+  19 -->|"kind: parameter"| 17
   17 -->|"kind: connect"| 16
   22 -->|"kind: pipe"| 23
   23 -->|"kind: connect"| 21

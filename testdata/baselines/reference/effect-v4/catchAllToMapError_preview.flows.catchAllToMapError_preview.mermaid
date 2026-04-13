@@ -1,7 +1,7 @@
 flowchart TB
   0[["type: any<br/>node: constructor#40;readonly cause: unknown#41; #123;#125;"]]
-  1[/"type: unknown<br/>node: readonly cause: unknown"/]
-  2((("type: WrappedError<br/>node: constructor#40;readonly cause: unknown#41; #123;#125;")))
+  1((("type: WrappedError<br/>node: constructor#40;readonly cause: unknown#41; #123;#125;")))
+  2[/"type: unknown<br/>node: readonly cause: unknown"/]
   3((("type: Effect#lt;never, string, never#gt;<br/>node: Effect.fail#40;#quot;boom#quot;#41;")))
   4["type: Effect#lt;never, WrappedError, never#gt;<br/>callee: Effect.catch<br/>args: #91;#40;cause#41; =#gt; Effect.fail#40;new WrappedError#40;cause#41;#41;#93;"]
   5[/"type: #quot;boom#quot;<br/>node: #quot;boom#quot;"/]
@@ -10,22 +10,22 @@ flowchart TB
   8[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
   9((("type: #40;cause: string#41; =#gt; Effect#lt;never, WrappedError, never#gt;<br/>node: #40;cause#41; =#gt; Effect.fail#40;new WrappedError#40;cause#41;#41;")))
   10[["type: #40;cause: string#41; =#gt; Effect#lt;never, WrappedError, never#gt;<br/>node: #40;cause#41; =#gt; Effect.fail#40;new WrappedError#40;cause#41;#41;"]]
-  11[/"type: string<br/>node: cause"/]
-  12((("type: Effect#lt;never, WrappedError, never#gt;<br/>node: Effect.fail#40;new WrappedError#40;cause#41;#41;")))
+  11((("type: Effect#lt;never, WrappedError, never#gt;<br/>node: Effect.fail#40;new WrappedError#40;cause#41;#41;")))
+  12[/"type: string<br/>node: cause"/]
   13[/"type: WrappedError<br/>node: new WrappedError#40;cause#41;"/]
   14["type: Effect#lt;never, WrappedError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
   15[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  1 -->|"kind: parameter"| 0
-  2 -->|"kind: potentialReturn"| 0
+  1 -->|"kind: potentialReturn"| 0
+  2 -->|"kind: parameter"| 0
   3 -->|"kind: pipe"| 4
   5 -->|"kind: pipe"| 6
   6 -->|"kind: connect"| 3
   7 -->|"kind: transformCallee"| 6
   8 -->|"kind: transformCallee"| 4
   9 -->|"kind: transformArg"| 4
-  11 -->|"kind: parameter"| 10
-  12 -->|"kind: potentialReturn"| 10
+  11 -->|"kind: potentialReturn"| 10
+  12 -->|"kind: parameter"| 10
   10 -->|"kind: connect"| 9
   13 -->|"kind: pipe"| 14
-  14 -->|"kind: connect"| 12
+  14 -->|"kind: connect"| 11
   15 -->|"kind: transformCallee"| 14

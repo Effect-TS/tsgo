@@ -1,18 +1,18 @@
 flowchart TB
-  0((("type: Effect#lt;void, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  console.log#40;#quot;hello#quot;#41;#92;n#125;")))
+  0[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  console.log#40;#quot;hello#quot;#41;#92;n#125;#41;"/]
   1[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
   2["type: void<br/>callee: console.log<br/>args: #91;#93;"]
   3[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
-  4[["type: #40;#41; =#gt; Generator#lt;never, void, never#gt;<br/>node: function*#40;#41; #123;#92;n  console.warn#40;#quot;warning#quot;#41;#92;n#125;"]]
+  4[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.fn#40;#quot;consoleWarnInFn#quot;#41;#40;function*#40;#41; #123;#92;n  console.warn#40;#quot;warning#quot;#41;#92;n#125;#41;"]]
   5((("type: Effect#lt;void, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  console.warn#40;#quot;warning#quot;#41;#92;n#125;")))
   6[/"type: #quot;warning#quot;<br/>node: #quot;warning#quot;"/]
   7["type: void<br/>callee: console.warn<br/>args: #91;#93;"]
   8[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.warn"/]
-  9((("type: Effect#lt;void, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  console.error#40;#quot;error#quot;#41;#92;n#125;")))
+  9[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  console.error#40;#quot;error#quot;#41;#92;n#125;#41;"/]
   10[/"type: #quot;error#quot;<br/>node: #quot;error#quot;"/]
   11["type: void<br/>callee: console.error<br/>args: #91;#93;"]
   12[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.error"/]
-  13((("type: Effect#lt;void, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  const myConsole = console#92;n  myConsole.log#40;#quot;hello#quot;#41;#92;n#125;")))
+  13[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const myConsole = console#92;n  myConsole.log#40;#quot;hello#quot;#41;#92;n#125;#41;"/]
   14[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
   15["type: void<br/>callee: myConsole.log<br/>args: #91;#93;"]
   16[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: myConsole.log"/]
@@ -24,18 +24,19 @@ flowchart TB
   22[/"type: #quot;regular#quot;<br/>node: #quot;regular#quot;"/]
   23["type: void<br/>callee: console.log<br/>args: #91;#93;"]
   24[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
-  25((("type: Effect#lt;#40;#41; =#gt; void, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  const fn = #40;#41; =#gt; console.log#40;#quot;nested#quot;#41;#92;n  return fn#92;n#125;")))
-  26[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; console.log#40;#quot;nested#quot;#41;"]]
-  27((("type: void<br/>node: console.log#40;#quot;nested#quot;#41;")))
-  28[/"type: #quot;nested#quot;<br/>node: #quot;nested#quot;"/]
-  29["type: void<br/>callee: console.log<br/>args: #91;#93;"]
-  30[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
-  31((("type: Effect#lt;void, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  console.table#40;#123; a: 1 #125;#41;#92;n#125;")))
-  32((("type: Effect#lt;void, never, Console#gt;<br/>node: function*#40;#41; #123;#92;n  const console = yield* Console.Console#92;n  console.log#40;#quot;hello#quot;#41;#92;n#125;")))
-  33[/"type: Tag#lt;Console, Console#gt;<br/>node: Console.Console"/]
-  34[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
-  35["type: Effect#lt;void, never, never#gt;<br/>callee: console.log<br/>args: #91;#93;"]
-  36[/"type: #40;...args: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: console.log"/]
+  25[/"type: Effect#lt;#40;#41; =#gt; void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const fn = #40;#41; =#gt; console.log#40;#quot;nested#quot;#41;#92;n  return fn#92;n#125;#41;"/]
+  26[/"type: #40;#41; =#gt; void<br/>node: fn"/]
+  27[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; console.log#40;#quot;nested#quot;#41;"]]
+  28((("type: void<br/>node: console.log#40;#quot;nested#quot;#41;")))
+  29[/"type: #quot;nested#quot;<br/>node: #quot;nested#quot;"/]
+  30["type: void<br/>callee: console.log<br/>args: #91;#93;"]
+  31[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
+  32[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  console.table#40;#123; a: 1 #125;#41;#92;n#125;#41;"/]
+  33[/"type: Effect#lt;void, never, Console#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const console = yield* Console.Console#92;n  console.log#40;#quot;hello#quot;#41;#92;n#125;#41;"/]
+  34[/"type: Tag#lt;Console, Console#gt;<br/>node: Console.Console"/]
+  35[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
+  36["type: Effect#lt;void, never, never#gt;<br/>callee: console.log<br/>args: #91;#93;"]
+  37[/"type: #40;...args: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: console.log"/]
   1 -->|"kind: pipe"| 2
   3 -->|"kind: transformCallee"| 2
   5 -->|"kind: potentialReturn"| 4
@@ -50,10 +51,11 @@ flowchart TB
   21 -->|"kind: potentialReturn"| 20
   22 -->|"kind: pipe"| 23
   24 -->|"kind: transformCallee"| 23
-  27 -->|"kind: potentialReturn"| 26
-  28 -->|"kind: pipe"| 29
-  29 -->|"kind: connect"| 27
-  30 -->|"kind: transformCallee"| 29
-  33 -->|"kind: yieldable"| 32
-  34 -->|"kind: pipe"| 35
-  36 -->|"kind: transformCallee"| 35
+  26 -->|"kind: potentialReturn"| 25
+  28 -->|"kind: potentialReturn"| 27
+  29 -->|"kind: pipe"| 30
+  30 -->|"kind: connect"| 28
+  31 -->|"kind: transformCallee"| 30
+  34 -->|"kind: yieldable"| 33
+  35 -->|"kind: pipe"| 36
+  37 -->|"kind: transformCallee"| 36

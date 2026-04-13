@@ -17,8 +17,8 @@ flowchart TB
   15((("type: #40;error: never#41; =#gt; boolean<br/>node: #40;error#41; =#gt; error === #quot;MyError#quot;")))
   16((("type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void")))
   17[["type: #40;error: never#41; =#gt; boolean<br/>node: #40;error#41; =#gt; error === #quot;MyError#quot;"]]
-  18[/"type: never<br/>node: error"/]
-  19[/"type: boolean<br/>node: error === #quot;MyError#quot;"/]
+  18[/"type: boolean<br/>node: error === #quot;MyError#quot;"/]
+  19[/"type: never<br/>node: error"/]
   20[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
   21[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
   22((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;42#41;")))
@@ -67,8 +67,8 @@ flowchart TB
   14 -->|"kind: transformCallee"| 10
   15 -->|"kind: transformArg"| 10
   16 -->|"kind: transformArg"| 10
-  18 -->|"kind: parameter"| 17
-  19 -->|"kind: potentialReturn"| 17
+  18 -->|"kind: potentialReturn"| 17
+  19 -->|"kind: parameter"| 17
   17 -->|"kind: connect"| 15
   21 -->|"kind: potentialReturn"| 20
   20 -->|"kind: connect"| 16

@@ -5,15 +5,15 @@ flowchart TB
   3[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: async #40;#41; =#gt; 1"]]
   4[/"type: 1<br/>node: 1"/]
   5[["type: #40;error: unknown#41; =#gt; Error<br/>node: #40;error#41; =#gt; new Error#40;String#40;error#41;#41;"]]
-  6[/"type: unknown<br/>node: error"/]
-  7[/"type: Error<br/>node: new Error#40;String#40;error#41;#41;"/]
+  6[/"type: Error<br/>node: new Error#40;String#40;error#41;#41;"/]
+  7[/"type: unknown<br/>node: error"/]
   8[/"type: unknown<br/>node: error"/]
   9["type: string<br/>callee: String<br/>args: #91;#93;"]
   10[/"type: StringConstructor<br/>node: String"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
   4 -->|"kind: potentialReturn"| 3
-  6 -->|"kind: parameter"| 5
-  7 -->|"kind: potentialReturn"| 5
+  6 -->|"kind: potentialReturn"| 5
+  7 -->|"kind: parameter"| 5
   8 -->|"kind: pipe"| 9
   10 -->|"kind: transformCallee"| 9

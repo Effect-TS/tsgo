@@ -8,12 +8,12 @@ flowchart TB
   6[/"type: typeof DatabaseContext<br/>node: this"/]
   7((("type: Layer#lt;never, never, DatabaseContext#gt;<br/>node: Layer.effectDiscard#40;Effect.gen#40;function*#40;#41; #123;#92;n  const databaseContext = yield* DatabaseContext.asEffect#40;#41;#92;n#92;n  return yield* Effect.log#40;databaseContext.value#41;#92;n#125;#41;#41;")))
   8["type: Layer#lt;never, never, never#gt;<br/>callee: Layer.provide<br/>args: #91;DatabaseContext.Default#93;"]
-  9((("type: Effect#lt;void, never, DatabaseContext#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const databaseContext = yield* DatabaseContext.asEffect#40;#41;#92;n#92;n  return yield* Effect.log#40;databaseContext.value#41;#92;n#125;#41;")))
+  9[/"type: Effect#lt;void, never, DatabaseContext#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const databaseContext = yield* DatabaseContext.asEffect#40;#41;#92;n#92;n  return yield* Effect.log#40;databaseContext.value#41;#92;n#125;#41;"/]
   10["type: Layer#lt;never, never, DatabaseContext#gt;<br/>callee: Layer.effectDiscard<br/>args: #91;#93;"]
   11[/"type: #lt;X, E, R#gt;#40;effect: Effect#lt;X, E, R#gt;#41; =#gt; Layer#lt;never, E, Exclude#lt;R, Scope#gt;#gt;<br/>node: Layer.effectDiscard"/]
-  12((("type: Effect#lt;void, never, DatabaseContext#gt;<br/>node: function*#40;#41; #123;#92;n  const databaseContext = yield* DatabaseContext.asEffect#40;#41;#92;n#92;n  return yield* Effect.log#40;databaseContext.value#41;#92;n#125;")))
-  13[/"type: Effect#lt;#123; value: #quot;DatabaseContext#quot;; #125;, never, DatabaseContext#gt;<br/>node: DatabaseContext.asEffect#40;#41;"/]
-  14((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;databaseContext.value#41;")))
+  12[/"type: Effect#lt;#123; value: #quot;DatabaseContext#quot;; #125;, never, DatabaseContext#gt;<br/>node: DatabaseContext.asEffect#40;#41;"/]
+  13((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;databaseContext.value#41;")))
+  14[/"type: void<br/>node: yield* Effect.log#40;databaseContext.value#41;"/]
   15[/"type: #quot;DatabaseContext#quot;<br/>node: databaseContext.value"/]
   16["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
   17[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
@@ -28,11 +28,11 @@ flowchart TB
   9 -->|"kind: pipe"| 10
   10 -->|"kind: connect"| 7
   11 -->|"kind: transformCallee"| 10
-  13 -->|"kind: yieldable"| 12
-  14 -->|"kind: yieldable"| 12
-  12 -->|"kind: connect"| 9
+  12 -->|"kind: yieldable"| 9
+  13 -->|"kind: yieldable"| 9
+  14 -->|"kind: potentialReturn"| 9
   15 -->|"kind: pipe"| 16
-  16 -->|"kind: connect"| 14
+  16 -->|"kind: connect"| 13
   17 -->|"kind: transformCallee"| 16
   18 -->|"kind: transformCallee"| 8
   19 -->|"kind: transformArg"| 8

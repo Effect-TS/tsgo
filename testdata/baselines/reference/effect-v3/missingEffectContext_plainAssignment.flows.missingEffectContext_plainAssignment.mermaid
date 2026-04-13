@@ -3,11 +3,11 @@ flowchart TB
   1["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
   2[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
   3[["type: #lt;A#gt;#40;service: A#41; =#gt; Effect#lt;Context#lt;A#gt;, never, never#gt;<br/>node: export function missingServiceWithGenericType#lt;A#gt;#40;service: A#41; #123;#92;n  // @ts-expect-error#92;n  const missingServiceA: Effect.Effect#lt;Context.Context#lt;A#gt;#gt; = Effect.context#lt;A#gt;#40;#41;#92;n  return missingServiceA#92;n#125;"]]
-  4[/"type: A<br/>node: service: A"/]
-  5((("type: Effect#lt;Context#lt;A#gt;, never, never#gt;<br/>node: export function missingServiceWithGenericType#lt;A#gt;#40;service: A#41; #123;#92;n  // @ts-expect-error#92;n  const missingServiceA: Effect.Effect#lt;Context.Context#lt;A#gt;#gt; = Effect.context#lt;A#gt;#40;#41;#92;n  return missingServiceA#92;n#125;")))
-  6[/"type: Effect#lt;Context#lt;A#gt;, never, never#gt;<br/>node: missingServiceA"/]
+  4((("type: Effect#lt;Context#lt;A#gt;, never, never#gt;<br/>node: export function missingServiceWithGenericType#lt;A#gt;#40;service: A#41; #123;#92;n  // @ts-expect-error#92;n  const missingServiceA: Effect.Effect#lt;Context.Context#lt;A#gt;#gt; = Effect.context#lt;A#gt;#40;#41;#92;n  return missingServiceA#92;n#125;")))
+  5[/"type: Effect#lt;Context#lt;A#gt;, never, never#gt;<br/>node: missingServiceA"/]
+  6[/"type: A<br/>node: service: A"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
-  4 -->|"kind: parameter"| 3
-  6 -->|"kind: potentialReturn"| 5
-  5 -->|"kind: potentialReturn"| 3
+  4 -->|"kind: potentialReturn"| 3
+  5 -->|"kind: potentialReturn"| 4
+  6 -->|"kind: parameter"| 3
