@@ -168,8 +168,8 @@ func buildFnDeclaration(tracker *change.Tracker, node *ast.Node, effectFnCall *a
 			effectFnCall,
 		)
 		varDeclList := tracker.NewVariableDeclarationList(
-			ast.NodeFlagsConst,
 			tracker.NewNodeList([]*ast.Node{varDecl}),
+			ast.NodeFlagsConst,
 		)
 		return tracker.NewVariableStatement(modifiers, varDeclList)
 	}

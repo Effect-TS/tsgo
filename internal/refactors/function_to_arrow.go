@@ -183,8 +183,8 @@ func wrapArrowInVariableStatement(tracker *change.Tracker, node *ast.Node, arrow
 		arrowFn,
 	)
 	varDeclList := tracker.NewVariableDeclarationList(
-		ast.NodeFlagsConst,
 		tracker.NewNodeList([]*ast.Node{varDecl}),
+		ast.NodeFlagsConst,
 	)
 	return tracker.NewVariableStatement(mods, varDeclList)
 }

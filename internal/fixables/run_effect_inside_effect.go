@@ -167,8 +167,8 @@ func insertYieldedEffectModuleCall(
 		tracker.NewIdentifier(variableName), nil, nil, yieldExpr,
 	)
 	varDeclList := tracker.NewVariableDeclarationList(
-		ast.NodeFlagsConst,
 		tracker.NewNodeList([]*ast.Node{varDecl}),
+		ast.NodeFlagsConst,
 	)
 	varStmt := tracker.NewVariableStatement(nil, varDeclList)
 	ast.SetParentInChildren(varStmt)

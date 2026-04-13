@@ -182,7 +182,10 @@ func getTypeParamString(fnNode *ast.Node) string {
 
 	var names []string
 	for _, tp := range typeParams.Nodes {
-		name := tp.AsTypeParameter().Name()
+		if !ast.IsTypeParameterDeclaration(tp) {
+			continue
+		}
+		name := tp.AsTypeParameterDeclaration().Name()
 		if name != nil {
 			names = append(names, scanner.GetTextOfNode(name))
 		}

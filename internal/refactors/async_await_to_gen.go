@@ -91,7 +91,7 @@ func replaceExpressionViaStatement(tracker *change.Tracker, sf *ast.SourceFile, 
 
 	// Rebuild the VariableDeclarationList
 	vdl := varDecl.Parent.AsVariableDeclarationList()
-	newVarDeclList := tracker.NewVariableDeclarationList(vdl.Flags&ast.NodeFlagsBlockScoped, tracker.NewNodeList([]*ast.Node{newVarDecl}))
+	newVarDeclList := tracker.NewVariableDeclarationList(tracker.NewNodeList([]*ast.Node{newVarDecl}), vdl.Flags&ast.NodeFlagsBlockScoped)
 
 	// Rebuild the VariableStatement with cloned modifiers
 	vs := varStmt.AsVariableStatement()

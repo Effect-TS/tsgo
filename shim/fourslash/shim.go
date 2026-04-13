@@ -51,6 +51,8 @@ type SignatureHelpCase = fourslash.SignatureHelpCase
 func SkipIfFailing(t *testing.T)
 type TestData = fourslash.TestData
 type TestFileInfo = fourslash.TestFileInfo
+type VerifyCodeFixAllOptions = fourslash.VerifyCodeFixAllOptions
+type VerifyCodeFixOptions = fourslash.VerifyCodeFixOptions
 type VerifyCompletionsResult = fourslash.VerifyCompletionsResult
 type VerifySignatureHelpOptions = fourslash.VerifySignatureHelpOptions
 type VerifyWorkspaceSymbolCase = fourslash.VerifyWorkspaceSymbolCase

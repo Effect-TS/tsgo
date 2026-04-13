@@ -57,7 +57,6 @@ func runOverriddenSchemaConstructorFix(ctx *fixable.Context) []ls.CodeAction {
 									return tracker.NewVariableStatement(
 										nil,
 										tracker.NewVariableDeclarationList(
-											ast.NodeFlagsConst,
 											tracker.NewNodeList([]*ast.Node{
 												tracker.NewVariableDeclaration(
 													tracker.NewIdentifier("_this"),
@@ -66,6 +65,7 @@ func runOverriddenSchemaConstructorFix(ctx *fixable.Context) []ls.CodeAction {
 													constructThis,
 												),
 											}),
+											ast.NodeFlagsConst,
 										),
 									)
 								}

@@ -311,7 +311,7 @@ func effectFnBuildVarStatement(tracker *change.Tracker, fnNode *ast.Node, callEx
 
 	// Build variable declaration: const name = callExpr
 	varDecl := tracker.NewVariableDeclaration(tracker.DeepCloneNode(name), nil, nil, callExpr)
-	varDeclList := tracker.NewVariableDeclarationList(ast.NodeFlagsConst, tracker.NewNodeList([]*ast.Node{varDecl}))
+	varDeclList := tracker.NewVariableDeclarationList(tracker.NewNodeList([]*ast.Node{varDecl}), ast.NodeFlagsConst)
 
 	// Build modifier list (export etc.), excluding async
 	var modifierList *ast.ModifierList
@@ -462,7 +462,7 @@ func effectFnBuildVarStatementFromEnclosing(tracker *change.Tracker, varStmt *as
 
 	// Preserve const/let/var flags from the original declaration list node
 	flags := vs.DeclarationList.Flags & (ast.NodeFlagsConst | ast.NodeFlagsLet | ast.NodeFlagsUsing | ast.NodeFlagsAwaitUsing)
-	newDeclList := tracker.NewVariableDeclarationList(flags, tracker.NewNodeList([]*ast.Node{newDecl}))
+	newDeclList := tracker.NewVariableDeclarationList(tracker.NewNodeList([]*ast.Node{newDecl}), flags)
 
 	// Build modifier list (export, declare, etc.)
 	var modifierList *ast.ModifierList

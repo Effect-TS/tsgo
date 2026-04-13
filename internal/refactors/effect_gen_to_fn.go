@@ -276,8 +276,8 @@ func buildEffectGenToFnDeclaration(tracker *change.Tracker, node *ast.Node, effe
 			effectFnCall,
 		)
 		varDeclList := tracker.NewVariableDeclarationList(
-			ast.NodeFlagsConst,
 			tracker.NewNodeList([]*ast.Node{varDecl}),
+			ast.NodeFlagsConst,
 		)
 		return tracker.NewVariableStatement(mods, varDeclList)
 

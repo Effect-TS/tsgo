@@ -617,8 +617,8 @@ func (g *SchemaGen) createExportVariableDeclaration(name string, initializer *as
 		initializer,
 	)
 	varDeclList := g.Tracker.NewVariableDeclarationList(
-		ast.NodeFlagsConst,
 		g.Tracker.NewNodeList([]*ast.Node{varDecl}),
+		ast.NodeFlagsConst,
 	)
 	modifiers := g.Tracker.NewModifierList([]*ast.Node{
 		g.Tracker.NewModifier(ast.KindExportKeyword),

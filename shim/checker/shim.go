@@ -181,9 +181,9 @@ type extra_Checker struct {
   propertiesTypes map[checker.PropertiesTypesKey]*checker.Type
   diagnostics ast.DiagnosticsCollection
   suggestionDiagnostics ast.DiagnosticsCollection
-  symbolPool core.Pool[ast.Symbol]
-  signaturePool core.Pool[checker.Signature]
-  indexInfoPool core.Pool[checker.IndexInfo]
+  symbolArena core.Arena[ast.Symbol]
+  signatureArena core.Arena[checker.Signature]
+  indexInfoArena core.Arena[checker.IndexInfo]
   mergedSymbols map[*ast.Symbol]*ast.Symbol
   factory ast.NodeFactory
   nodeLinks core.LinkStore[*ast.Node, checker.NodeLinks]
