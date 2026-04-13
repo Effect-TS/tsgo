@@ -5,16 +5,16 @@ flowchart TB
   3[["type: #40;#41; =#gt; any<br/>node: #40;#41; =#gt; JSON.parse#40;#quot;#123;#quot;#41;"]]
   4[/"type: any<br/>node: JSON.parse#40;#quot;#123;#quot;#41;"/]
   5[["type: #40;error: unknown#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;error#41; =#gt; Effect.logError#40;error#41;"]]
-  6[/"type: unknown<br/>node: error"/]
-  7((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.logError#40;error#41;")))
+  6((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.logError#40;error#41;")))
+  7[/"type: unknown<br/>node: error"/]
   8[/"type: unknown<br/>node: error"/]
   9["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.logError<br/>args: #91;#93;"]
   10[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.logError"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
   4 -->|"kind: potentialReturn"| 3
-  6 -->|"kind: parameter"| 5
-  7 -->|"kind: potentialReturn"| 5
+  6 -->|"kind: potentialReturn"| 5
+  7 -->|"kind: parameter"| 5
   8 -->|"kind: pipe"| 9
-  9 -->|"kind: connect"| 7
+  9 -->|"kind: connect"| 6
   10 -->|"kind: transformCallee"| 9

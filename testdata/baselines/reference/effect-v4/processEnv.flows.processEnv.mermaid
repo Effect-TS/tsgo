@@ -1,7 +1,13 @@
 flowchart TB
   0[["type: #40;#41; =#gt; string #124; undefined<br/>node: #40;#41; =#gt; process.env#91;#quot;HOST#quot;#93;"]]
   1[/"type: string #124; undefined<br/>node: process.env#91;#quot;HOST#quot;#93;"/]
-  2[["type: #40;#41; =#gt; string #124; undefined<br/>node: #40;#41; =#gt; process.env.API_KEY"]]
-  3[/"type: string #124; undefined<br/>node: process.env.API_KEY"/]
+  2[/"type: Effect#lt;string #124; undefined, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  return process.env.SECRET#92;n#125;#41;"/]
+  3[/"type: string #124; undefined<br/>node: process.env.SECRET"/]
+  4[/"type: Effect#lt;#40;#41; =#gt; string #124; undefined, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const fn = #40;#41; =#gt; process.env.API_KEY#92;n  return fn#92;n#125;#41;"/]
+  5[/"type: #40;#41; =#gt; string #124; undefined<br/>node: fn"/]
+  6[["type: #40;#41; =#gt; string #124; undefined<br/>node: #40;#41; =#gt; process.env.API_KEY"]]
+  7[/"type: string #124; undefined<br/>node: process.env.API_KEY"/]
   1 -->|"kind: potentialReturn"| 0
   3 -->|"kind: potentialReturn"| 2
+  5 -->|"kind: potentialReturn"| 4
+  7 -->|"kind: potentialReturn"| 6

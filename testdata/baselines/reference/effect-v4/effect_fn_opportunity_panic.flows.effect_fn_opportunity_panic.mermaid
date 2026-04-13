@@ -24,93 +24,105 @@ flowchart TB
   22["type: Layer#lt;JsonPlaceholder, never, ApiConfig #124; HttpClient#gt;<br/>callee: Layer.effect<br/>args: #91;JsonPlaceholder#93;"]
   23[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
   24[/"type: typeof JsonPlaceholder<br/>node: JsonPlaceholder"/]
-  25[/"type: HttpClient<br/>node: #40;yield* HttpClient.HttpClient#41;"/]
-  26["type: With#lt;HttpClientError, never#gt;<br/>callee: HttpClient.mapRequest<br/>args: #91;flow#40;#92;n          HttpClientRequest.prependUrl#40;config.baseUrl#41;,#92;n          HttpClientRequest.acceptJson#92;n        #41;#93;"]
-  27["type: With#lt;HttpClientError, never#gt;<br/>callee: HttpClient.filterStatusOk<br/>args: #91;#93;"]
-  28[/"type: #123; #40;f: #40;a: HttpClientRequest#41; =#gt; HttpClientRequest#41;: #lt;E, R#gt;#40;self: With#lt;E, R#gt;#41; =#gt; With#lt;E, R#gt;; #lt;E, R#gt;#40;self: With#lt;E, R#gt;, f: #40;a: HttpClientRequest#41; =#gt; HttpClientRequest#41;: With#lt;E, R#gt;; #125;<br/>node: HttpClient.mapRequest"/]
-  29[/"type: #40;self: HttpClientRequest#41; =#gt; HttpClientRequest<br/>node: flow#40;#92;n          HttpClientRequest.prependUrl#40;config.baseUrl#41;,#92;n          HttpClientRequest.acceptJson#92;n        #41;"/]
-  30[/"type: #lt;E, R#gt;#40;self: With#lt;E, R#gt;#41; =#gt; With#lt;E #124; HttpClientError, R#gt;<br/>node: HttpClient.filterStatusOk"/]
-  31[["type: #40;id: number#41; =#gt; Effect#lt;Todo, DecodeError #124; InvalidStatusError #124; RequestError, never#gt;<br/>node: #40;id: number#41; =#gt; #123;#92;n        const path = `/todos/$#123;id#125;`#92;n        const url = new URL#40;path, config.baseUrl#41;.toString#40;#41;#92;n#92;n        return client.get#40;path#41;.pipe#40;#92;n          Effect.flatMap#40;HttpClientResponse.schemaBodyJson#40;Todo#41;#41;,#92;n          Effect.mapError#40;#40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;#41;#92;n        #41;#92;n      #125;"]]
-  32[/"type: number<br/>node: id: number"/]
-  33((("type: Effect#lt;Todo, DecodeError #124; InvalidStatusError #124; RequestError, never#gt;<br/>node: client.get#40;path#41;.pipe#40;#92;n          Effect.flatMap#40;HttpClientResponse.schemaBodyJson#40;Todo#41;#41;,#92;n          Effect.mapError#40;#40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;#41;#92;n        #41;")))
-  34[/"type: Effect#lt;HttpClientResponse, HttpClientError, never#gt;<br/>node: client.get#40;path#41;"/]
-  35["type: Effect#lt;Todo, HttpClientError #124; SchemaError, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;HttpClientResponse.schemaBodyJson#40;Todo#41;#93;"]
-  36["type: Effect#lt;Todo, DecodeError #124; InvalidStatusError #124; RequestError, never#gt;<br/>callee: Effect.mapError<br/>args: #91;#40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;#93;"]
-  37[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
-  38[/"type: #lt;E#gt;#40;self: HttpIncomingMessage#lt;E#gt;#41; =#gt; Effect#lt;Todo, E #124; SchemaError, never#gt;<br/>node: HttpClientResponse.schemaBodyJson#40;Todo#41;"/]
-  39[/"type: #123; #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E2, R#gt;; #lt;A, E, R, E2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; E2#41;: Effect#lt;A, E2, R#gt;; #125;<br/>node: Effect.mapError"/]
-  40((("type: #40;cause: HttpClientError #124; SchemaError#41; =#gt; DecodeError #124; InvalidStatusError #124; RequestError<br/>node: #40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;")))
-  41[["type: #40;cause: HttpClientError #124; SchemaError#41; =#gt; DecodeError #124; InvalidStatusError #124; RequestError<br/>node: #40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;"]]
-  42[/"type: HttpClientError #124; SchemaError<br/>node: cause"/]
-  43[/"type: InvalidStatusError<br/>node: new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;"/]
-  44[/"type: RequestError<br/>node: new RequestError#40;#123; url, cause #125;#41;"/]
-  45[/"type: DecodeError<br/>node: new DecodeError#40;#123; url, cause #125;#41;"/]
-  46[["type: #40;id: number#41; =#gt; Effect#lt;User, DecodeError #124; InvalidStatusError #124; RequestError, never#gt;<br/>node: #40;id: number#41; =#gt; #123;#92;n        const path = `/users/$#123;id#125;`#92;n        const url = new URL#40;path, config.baseUrl#41;.toString#40;#41;#92;n#92;n        return client.get#40;path#41;.pipe#40;#92;n          Effect.flatMap#40;HttpClientResponse.schemaBodyJson#40;User#41;#41;,#92;n          Effect.mapError#40;#40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;#41;#92;n        #41;#92;n      #125;"]]
-  47[/"type: number<br/>node: id: number"/]
-  48((("type: Effect#lt;User, DecodeError #124; InvalidStatusError #124; RequestError, never#gt;<br/>node: client.get#40;path#41;.pipe#40;#92;n          Effect.flatMap#40;HttpClientResponse.schemaBodyJson#40;User#41;#41;,#92;n          Effect.mapError#40;#40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;#41;#92;n        #41;")))
-  49[/"type: Effect#lt;HttpClientResponse, HttpClientError, never#gt;<br/>node: client.get#40;path#41;"/]
-  50["type: Effect#lt;User, HttpClientError #124; SchemaError, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;HttpClientResponse.schemaBodyJson#40;User#41;#93;"]
-  51["type: Effect#lt;User, DecodeError #124; InvalidStatusError #124; RequestError, never#gt;<br/>callee: Effect.mapError<br/>args: #91;#40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;#93;"]
-  52[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
-  53[/"type: #lt;E#gt;#40;self: HttpIncomingMessage#lt;E#gt;#41; =#gt; Effect#lt;User, E #124; SchemaError, never#gt;<br/>node: HttpClientResponse.schemaBodyJson#40;User#41;"/]
-  54[/"type: #123; #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E2, R#gt;; #lt;A, E, R, E2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; E2#41;: Effect#lt;A, E2, R#gt;; #125;<br/>node: Effect.mapError"/]
-  55((("type: #40;cause: HttpClientError #124; SchemaError#41; =#gt; DecodeError #124; InvalidStatusError #124; RequestError<br/>node: #40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;")))
-  56[["type: #40;cause: HttpClientError #124; SchemaError#41; =#gt; DecodeError #124; InvalidStatusError #124; RequestError<br/>node: #40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;"]]
-  57[/"type: HttpClientError #124; SchemaError<br/>node: cause"/]
-  58[/"type: InvalidStatusError<br/>node: new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;"/]
-  59[/"type: RequestError<br/>node: new RequestError#40;#123; url, cause #125;#41;"/]
-  60[/"type: DecodeError<br/>node: new DecodeError#40;#123; url, cause #125;#41;"/]
-  61[/"type: #123; #lt;RIn, E, ROut#gt;#40;that: Layer#lt;ROut, E, RIn#gt;#41;: #lt;RIn2, E2, ROut2#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;#41; =#gt; Layer#lt;ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;const Layers extends #91;Any, ...Array#lt;Any#gt;#93;#gt;#40;that: Layers#41;: #lt;A, E, R#gt;#40;self: Layer#lt;A, E, R#gt;#41; =#gt; Layer#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;RIn2, E2, ROut2, RIn, E, ROut#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;, that: Layer#lt;ROut, E, RIn#gt;#41;: Layer#lt;ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;A, E, R, const Layers extends #91;Any, ...Array#lt;Any#gt;#93;#gt;#40;self: Layer#lt;A, E, R#gt;, that: Layers#41;: Layer#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #125;<br/>node: Layer.provide"/]
-  62[/"type: Layer#lt;ApiConfig #124; HttpClient, never, never#gt;<br/>node: Layer.mergeAll#40;ApiConfigLive, FetchHttpClient.layer#41;"/]
-  63[/"type: Effect#lt;void, JsonPlaceholderError, JsonPlaceholder#gt;<br/>node: Effect.gen#40;function* #40;#41; #123;#92;n  const api = yield* JsonPlaceholder#92;n  const #91;todo, user#93; = yield* Effect.all#40;#91;api.getTodo#40;1#41;, api.getUser#40;1#41;#93;#41;#92;n#92;n  yield* Effect.log#40;`Todo #35;$#123;todo.id#125;: $#123;todo.title#125;`#41;#92;n  yield* Effect.log#40;`Assigned to: $#123;user.name#125; #lt;$#123;user.email#125;#gt;`#41;#92;n  yield* Effect.log#40;`Completed: $#123;todo.completed#125;`#41;#92;n#125;#41;"/]
-  64["type: Effect#lt;void, JsonPlaceholderError, never#gt;<br/>callee: Effect.provide<br/>args: #91;JsonPlaceholderLive#93;"]
-  65["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.catchTags<br/>args: #91;#123;#92;n    RequestError: #40;error#41; =#gt;#92;n      Effect.log#40;`Request failed for $#123;error.url#125;: $#123;String#40;error.cause#41;#125;`#41;,#92;n    InvalidStatusError: #40;error#41; =#gt;#92;n      Effect.log#40;`Request to $#123;error.url#125; returned status $#123;error.status#125;`#41;,#92;n    DecodeError: #40;error#41; =#gt;#92;n      Effect.log#40;`Could not decode JSON from $#123;error.url#125;: $#123;String#40;error.cause#41;#125;`#41;#92;n  #125;#93;"]
-  66[/"type: 1<br/>node: 1"/]
-  67["type: Effect#lt;Todo, JsonPlaceholderError, never#gt;<br/>callee: api.getTodo<br/>args: #91;#93;"]
-  68[/"type: #40;id: number#41; =#gt; Effect#lt;Todo, JsonPlaceholderError, never#gt;<br/>node: api.getTodo"/]
-  69[/"type: 1<br/>node: 1"/]
-  70["type: Effect#lt;User, JsonPlaceholderError, never#gt;<br/>callee: api.getUser<br/>args: #91;#93;"]
-  71[/"type: #40;id: number#41; =#gt; Effect#lt;User, JsonPlaceholderError, never#gt;<br/>node: api.getUser"/]
-  72[/"type: string<br/>node: `Todo #35;$#123;todo.id#125;: $#123;todo.title#125;`"/]
-  73["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
-  74[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
-  75[/"type: string<br/>node: `Assigned to: $#123;user.name#125; #lt;$#123;user.email#125;#gt;`"/]
-  76["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
-  77[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
-  78[/"type: string<br/>node: `Completed: $#123;todo.completed#125;`"/]
-  79["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
-  80[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
-  81[/"type: #123; #lt;const Layers extends #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;layers: Layers, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;ROut, E2, RIn#gt;#40;layer: Layer#lt;ROut, E2, RIn#gt;, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;R2#gt;#40;context: Context#lt;R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #lt;A, E, R, const Layers extends #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;self: Effect#lt;A, E, R#gt;, layers: Layers, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: Effect#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;A, E, R, ROut, E2, RIn#gt;#40;self: Effect#lt;A, E, R#gt;, layer: Layer#lt;ROut, E2, RIn#gt;, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;A, E, R, R2#gt;#40;self: Effect#lt;A, E, R#gt;, context: Context#lt;R2#gt;#41;: Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #125;<br/>node: Effect.provide"/]
-  82[/"type: Layer#lt;JsonPlaceholder, never, never#gt;<br/>node: JsonPlaceholderLive"/]
-  83[/"type: #123; #lt;E, Cases extends #123; #91;K in Extract#lt;E, #123; _tag: string; #125;#gt;#91;#quot;_tag#quot;#93;#93;+?: #40;#40;error: Extract#lt;E, #123; _tag: K; #125;#gt;#41; =#gt; Effect#lt;any, any, any#gt;#41;; #125; #amp; #40;unknown extends E ? #123;#125; : #123; #91;K in Exclude#lt;keyof Cases, Extract#lt;E, #123; _tag: string; #125;#gt;#91;#quot;_tag#quot;#93;#gt;#93;: never; #125;#41;, A2 = never, E2 = Exclude#lt;E, #123; _tag: keyof Cases; #125;#gt;, R2 = never#gt;#40;cases: Cases, orElse?: #40;#40;e: Exclude#lt;E, #123; _tag: keyof Cases; #125;#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2 #124; #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;infer A, any, any#gt; ? A : never; #125;#91;keyof Cases#93;, E2 #124; #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;any, infer E, any#gt; ? E : never; #125;#91;keyof Cases#93;, R #124; R2 #124; #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;any, any, infer R#gt; ? R : never; #125;#91;keyof Cases#93;#gt;; #lt;R, E, A, Cases extends #123; #91;K in Extract#lt;E, #123; _tag: string; #125;#gt;#91;#quot;_tag#quot;#93;#93;+?: #40;#40;error: Extract#lt;E, #123; _tag: K; #125;#gt;#41; =#gt; Effect#lt;any, any, any#gt;#41;; #125; #amp; #40;unknown extends E ? #123;#125; : #123; #91;K in Exclude#lt;keyof Cases, Extract#lt;E, #123; _tag: string; #125;#gt;#91;#quot;_tag#quot;#93;#gt;#93;: never; #125;#41;, A2 = never, E2 = Exclude#lt;E, #123; _tag: keyof Cases; #125;#gt;, R2 = never#gt;#40;self: Effect#lt;A, E, R#gt;, cases: Cases, orElse?: #40;#40;e: Exclude#lt;E, #123; _tag: keyof Cases; #125;#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: Effect#lt;A #124; A2 #124; #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;infer A, any, any#gt; ? A : never; #125;#91;keyof Cases#93;, E2 #124; #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;any, infer E, any#gt; ? E : never; #125;#91;keyof Cases#93;, R #124; R2 #124; #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;any, any, infer R#gt; ? R : never; #125;#91;keyof Cases#93;#gt;; #125;<br/>node: Effect.catchTags"/]
-  84[/"type: #123; RequestError: #40;error: RequestError#41; =#gt; Effect#lt;void, never, never#gt;; InvalidStatusError: #40;error: InvalidStatusError#41; =#gt; Effect#lt;void, never, never#gt;; DecodeError: #40;error: DecodeError#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #123;#92;n    RequestError: #40;error#41; =#gt;#92;n      Effect.log#40;`Request failed for $#123;error.url#125;: $#123;String#40;error.cause#41;#125;`#41;,#92;n    InvalidStatusError: #40;error#41; =#gt;#92;n      Effect.log#40;`Request to $#123;error.url#125; returned status $#123;error.status#125;`#41;,#92;n    DecodeError: #40;error#41; =#gt;#92;n      Effect.log#40;`Could not decode JSON from $#123;error.url#125;: $#123;String#40;error.cause#41;#125;`#41;#92;n  #125;"/]
-  85[["type: #40;error: RequestError#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;error#41; =#gt;#92;n      Effect.log#40;`Request failed for $#123;error.url#125;: $#123;String#40;error.cause#41;#125;`#41;"]]
-  86[/"type: RequestError<br/>node: error"/]
-  87((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;`Request failed for $#123;error.url#125;: $#123;String#40;error.cause#41;#125;`#41;")))
-  88[/"type: string<br/>node: `Request failed for $#123;error.url#125;: $#123;String#40;error.cause#41;#125;`"/]
-  89["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
-  90[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
-  91[/"type: unknown<br/>node: error.cause"/]
-  92["type: string<br/>callee: String<br/>args: #91;#93;"]
-  93[/"type: StringConstructor<br/>node: String"/]
-  94[["type: #40;error: InvalidStatusError#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;error#41; =#gt;#92;n      Effect.log#40;`Request to $#123;error.url#125; returned status $#123;error.status#125;`#41;"]]
-  95[/"type: InvalidStatusError<br/>node: error"/]
-  96((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;`Request to $#123;error.url#125; returned status $#123;error.status#125;`#41;")))
-  97[/"type: string<br/>node: `Request to $#123;error.url#125; returned status $#123;error.status#125;`"/]
-  98["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
-  99[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
-  100[["type: #40;error: DecodeError#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;error#41; =#gt;#92;n      Effect.log#40;`Could not decode JSON from $#123;error.url#125;: $#123;String#40;error.cause#41;#125;`#41;"]]
-  101[/"type: DecodeError<br/>node: error"/]
-  102((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;`Could not decode JSON from $#123;error.url#125;: $#123;String#40;error.cause#41;#125;`#41;")))
-  103[/"type: string<br/>node: `Could not decode JSON from $#123;error.url#125;: $#123;String#40;error.cause#41;#125;`"/]
-  104["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
-  105[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
-  106[/"type: unknown<br/>node: error.cause"/]
-  107["type: string<br/>callee: String<br/>args: #91;#93;"]
-  108[/"type: StringConstructor<br/>node: String"/]
-  109[/"type: Effect#lt;void, never, never#gt;<br/>node: program"/]
-  110["type: Promise#lt;void#gt;<br/>callee: Effect.runPromise<br/>args: #91;#93;"]
-  111[/"type: #lt;A, E#gt;#40;effect: Effect#lt;A, E, never#gt;, options?: RunOptions #124; undefined#41; =#gt; Promise#lt;A#gt;<br/>node: Effect.runPromise"/]
+  25[/"type: typeof ApiConfig<br/>node: ApiConfig"/]
+  26[/"type: Service#lt;HttpClient, HttpClient#gt;<br/>node: HttpClient.HttpClient"/]
+  27[/"type: #123; getTodo: #40;id: number#41; =#gt; Effect#lt;Todo, DecodeError #124; InvalidStatusError #124; RequestError, never#gt;; getUser: #40;id: number#41; =#gt; Effect#lt;User, DecodeError #124; InvalidStatusError #124; RequestError, never#gt;; #125;<br/>node: #123;#92;n      getTodo: #40;id: number#41; =#gt; #123;#92;n        const path = `/todos/$#123;id#125;`#92;n        const url = new URL#40;path, config.baseUrl#41;.toString#40;#41;#92;n#92;n        return client.get#40;path#41;.pipe#40;#92;n          Effect.flatMap#40;HttpClientResponse.schemaBodyJson#40;Todo#41;#41;,#92;n          Effect.mapError#40;#40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;#41;#92;n        #41;#92;n      #125;,#92;n      getUser: #40;id: number#41; =#gt; #123;#92;n        const path = `/users/$#123;id#125;`#92;n        const url = new URL#40;path, config.baseUrl#41;.toString#40;#41;#92;n#92;n        return client.get#40;path#41;.pipe#40;#92;n          Effect.flatMap#40;HttpClientResponse.schemaBodyJson#40;User#41;#41;,#92;n          Effect.mapError#40;#40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;#41;#92;n        #41;#92;n      #125;#92;n    #125;"/]
+  28[/"type: HttpClient<br/>node: #40;yield* HttpClient.HttpClient#41;"/]
+  29["type: With#lt;HttpClientError, never#gt;<br/>callee: HttpClient.mapRequest<br/>args: #91;flow#40;#92;n          HttpClientRequest.prependUrl#40;config.baseUrl#41;,#92;n          HttpClientRequest.acceptJson#92;n        #41;#93;"]
+  30["type: With#lt;HttpClientError, never#gt;<br/>callee: HttpClient.filterStatusOk<br/>args: #91;#93;"]
+  31[/"type: #123; #40;f: #40;a: HttpClientRequest#41; =#gt; HttpClientRequest#41;: #lt;E, R#gt;#40;self: With#lt;E, R#gt;#41; =#gt; With#lt;E, R#gt;; #lt;E, R#gt;#40;self: With#lt;E, R#gt;, f: #40;a: HttpClientRequest#41; =#gt; HttpClientRequest#41;: With#lt;E, R#gt;; #125;<br/>node: HttpClient.mapRequest"/]
+  32[/"type: #40;self: HttpClientRequest#41; =#gt; HttpClientRequest<br/>node: flow#40;#92;n          HttpClientRequest.prependUrl#40;config.baseUrl#41;,#92;n          HttpClientRequest.acceptJson#92;n        #41;"/]
+  33[/"type: #lt;E, R#gt;#40;self: With#lt;E, R#gt;#41; =#gt; With#lt;E #124; HttpClientError, R#gt;<br/>node: HttpClient.filterStatusOk"/]
+  34[["type: #40;id: number#41; =#gt; Effect#lt;Todo, DecodeError #124; InvalidStatusError #124; RequestError, never#gt;<br/>node: #40;id: number#41; =#gt; #123;#92;n        const path = `/todos/$#123;id#125;`#92;n        const url = new URL#40;path, config.baseUrl#41;.toString#40;#41;#92;n#92;n        return client.get#40;path#41;.pipe#40;#92;n          Effect.flatMap#40;HttpClientResponse.schemaBodyJson#40;Todo#41;#41;,#92;n          Effect.mapError#40;#40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;#41;#92;n        #41;#92;n      #125;"]]
+  35((("type: Effect#lt;Todo, DecodeError #124; InvalidStatusError #124; RequestError, never#gt;<br/>node: #40;id: number#41; =#gt; #123;#92;n        const path = `/todos/$#123;id#125;`#92;n        const url = new URL#40;path, config.baseUrl#41;.toString#40;#41;#92;n#92;n        return client.get#40;path#41;.pipe#40;#92;n          Effect.flatMap#40;HttpClientResponse.schemaBodyJson#40;Todo#41;#41;,#92;n          Effect.mapError#40;#40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;#41;#92;n        #41;#92;n      #125;")))
+  36((("type: Effect#lt;Todo, DecodeError #124; InvalidStatusError #124; RequestError, never#gt;<br/>node: client.get#40;path#41;.pipe#40;#92;n          Effect.flatMap#40;HttpClientResponse.schemaBodyJson#40;Todo#41;#41;,#92;n          Effect.mapError#40;#40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;#41;#92;n        #41;")))
+  37[/"type: number<br/>node: id: number"/]
+  38[/"type: Effect#lt;HttpClientResponse, HttpClientError, never#gt;<br/>node: client.get#40;path#41;"/]
+  39["type: Effect#lt;Todo, HttpClientError #124; SchemaError, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;HttpClientResponse.schemaBodyJson#40;Todo#41;#93;"]
+  40["type: Effect#lt;Todo, DecodeError #124; InvalidStatusError #124; RequestError, never#gt;<br/>callee: Effect.mapError<br/>args: #91;#40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;#93;"]
+  41[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  42[/"type: #lt;E#gt;#40;self: HttpIncomingMessage#lt;E#gt;#41; =#gt; Effect#lt;Todo, E #124; SchemaError, never#gt;<br/>node: HttpClientResponse.schemaBodyJson#40;Todo#41;"/]
+  43[/"type: #123; #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E2, R#gt;; #lt;A, E, R, E2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; E2#41;: Effect#lt;A, E2, R#gt;; #125;<br/>node: Effect.mapError"/]
+  44((("type: #40;cause: HttpClientError #124; SchemaError#41; =#gt; DecodeError #124; InvalidStatusError #124; RequestError<br/>node: #40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;")))
+  45[["type: #40;cause: HttpClientError #124; SchemaError#41; =#gt; DecodeError #124; InvalidStatusError #124; RequestError<br/>node: #40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;"]]
+  46((("type: DecodeError #124; InvalidStatusError #124; RequestError<br/>node: #40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;")))
+  47[/"type: InvalidStatusError<br/>node: new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;"/]
+  48[/"type: RequestError<br/>node: new RequestError#40;#123; url, cause #125;#41;"/]
+  49[/"type: DecodeError<br/>node: new DecodeError#40;#123; url, cause #125;#41;"/]
+  50[/"type: HttpClientError #124; SchemaError<br/>node: cause"/]
+  51[["type: #40;id: number#41; =#gt; Effect#lt;User, DecodeError #124; InvalidStatusError #124; RequestError, never#gt;<br/>node: #40;id: number#41; =#gt; #123;#92;n        const path = `/users/$#123;id#125;`#92;n        const url = new URL#40;path, config.baseUrl#41;.toString#40;#41;#92;n#92;n        return client.get#40;path#41;.pipe#40;#92;n          Effect.flatMap#40;HttpClientResponse.schemaBodyJson#40;User#41;#41;,#92;n          Effect.mapError#40;#40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;#41;#92;n        #41;#92;n      #125;"]]
+  52((("type: Effect#lt;User, DecodeError #124; InvalidStatusError #124; RequestError, never#gt;<br/>node: #40;id: number#41; =#gt; #123;#92;n        const path = `/users/$#123;id#125;`#92;n        const url = new URL#40;path, config.baseUrl#41;.toString#40;#41;#92;n#92;n        return client.get#40;path#41;.pipe#40;#92;n          Effect.flatMap#40;HttpClientResponse.schemaBodyJson#40;User#41;#41;,#92;n          Effect.mapError#40;#40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;#41;#92;n        #41;#92;n      #125;")))
+  53((("type: Effect#lt;User, DecodeError #124; InvalidStatusError #124; RequestError, never#gt;<br/>node: client.get#40;path#41;.pipe#40;#92;n          Effect.flatMap#40;HttpClientResponse.schemaBodyJson#40;User#41;#41;,#92;n          Effect.mapError#40;#40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;#41;#92;n        #41;")))
+  54[/"type: number<br/>node: id: number"/]
+  55[/"type: Effect#lt;HttpClientResponse, HttpClientError, never#gt;<br/>node: client.get#40;path#41;"/]
+  56["type: Effect#lt;User, HttpClientError #124; SchemaError, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;HttpClientResponse.schemaBodyJson#40;User#41;#93;"]
+  57["type: Effect#lt;User, DecodeError #124; InvalidStatusError #124; RequestError, never#gt;<br/>callee: Effect.mapError<br/>args: #91;#40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;#93;"]
+  58[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  59[/"type: #lt;E#gt;#40;self: HttpIncomingMessage#lt;E#gt;#41; =#gt; Effect#lt;User, E #124; SchemaError, never#gt;<br/>node: HttpClientResponse.schemaBodyJson#40;User#41;"/]
+  60[/"type: #123; #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E2, R#gt;; #lt;A, E, R, E2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; E2#41;: Effect#lt;A, E2, R#gt;; #125;<br/>node: Effect.mapError"/]
+  61((("type: #40;cause: HttpClientError #124; SchemaError#41; =#gt; DecodeError #124; InvalidStatusError #124; RequestError<br/>node: #40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;")))
+  62[["type: #40;cause: HttpClientError #124; SchemaError#41; =#gt; DecodeError #124; InvalidStatusError #124; RequestError<br/>node: #40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;"]]
+  63((("type: DecodeError #124; InvalidStatusError #124; RequestError<br/>node: #40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;")))
+  64[/"type: InvalidStatusError<br/>node: new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;"/]
+  65[/"type: RequestError<br/>node: new RequestError#40;#123; url, cause #125;#41;"/]
+  66[/"type: DecodeError<br/>node: new DecodeError#40;#123; url, cause #125;#41;"/]
+  67[/"type: HttpClientError #124; SchemaError<br/>node: cause"/]
+  68[/"type: #123; #lt;RIn, E, ROut#gt;#40;that: Layer#lt;ROut, E, RIn#gt;#41;: #lt;RIn2, E2, ROut2#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;#41; =#gt; Layer#lt;ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;const Layers extends #91;Any, ...Array#lt;Any#gt;#93;#gt;#40;that: Layers#41;: #lt;A, E, R#gt;#40;self: Layer#lt;A, E, R#gt;#41; =#gt; Layer#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;RIn2, E2, ROut2, RIn, E, ROut#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;, that: Layer#lt;ROut, E, RIn#gt;#41;: Layer#lt;ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;A, E, R, const Layers extends #91;Any, ...Array#lt;Any#gt;#93;#gt;#40;self: Layer#lt;A, E, R#gt;, that: Layers#41;: Layer#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #125;<br/>node: Layer.provide"/]
+  69[/"type: Layer#lt;ApiConfig #124; HttpClient, never, never#gt;<br/>node: Layer.mergeAll#40;ApiConfigLive, FetchHttpClient.layer#41;"/]
+  70[/"type: Effect#lt;void, JsonPlaceholderError, JsonPlaceholder#gt;<br/>node: Effect.gen#40;function* #40;#41; #123;#92;n  const api = yield* JsonPlaceholder#92;n  const #91;todo, user#93; = yield* Effect.all#40;#91;api.getTodo#40;1#41;, api.getUser#40;1#41;#93;#41;#92;n#92;n  yield* Effect.log#40;`Todo #35;$#123;todo.id#125;: $#123;todo.title#125;`#41;#92;n  yield* Effect.log#40;`Assigned to: $#123;user.name#125; #lt;$#123;user.email#125;#gt;`#41;#92;n  yield* Effect.log#40;`Completed: $#123;todo.completed#125;`#41;#92;n#125;#41;"/]
+  71["type: Effect#lt;void, JsonPlaceholderError, never#gt;<br/>callee: Effect.provide<br/>args: #91;JsonPlaceholderLive#93;"]
+  72["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.catchTags<br/>args: #91;#123;#92;n    RequestError: #40;error#41; =#gt;#92;n      Effect.log#40;`Request failed for $#123;error.url#125;: $#123;String#40;error.cause#41;#125;`#41;,#92;n    InvalidStatusError: #40;error#41; =#gt;#92;n      Effect.log#40;`Request to $#123;error.url#125; returned status $#123;error.status#125;`#41;,#92;n    DecodeError: #40;error#41; =#gt;#92;n      Effect.log#40;`Could not decode JSON from $#123;error.url#125;: $#123;String#40;error.cause#41;#125;`#41;#92;n  #125;#93;"]
+  73[/"type: typeof JsonPlaceholder<br/>node: JsonPlaceholder"/]
+  74[/"type: Effect#lt;#91;Todo, User#93;, JsonPlaceholderError, never#gt;<br/>node: Effect.all#40;#91;api.getTodo#40;1#41;, api.getUser#40;1#41;#93;#41;"/]
+  75((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;`Todo #35;$#123;todo.id#125;: $#123;todo.title#125;`#41;")))
+  76((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;`Assigned to: $#123;user.name#125; #lt;$#123;user.email#125;#gt;`#41;")))
+  77((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;`Completed: $#123;todo.completed#125;`#41;")))
+  78[/"type: 1<br/>node: 1"/]
+  79["type: Effect#lt;Todo, JsonPlaceholderError, never#gt;<br/>callee: api.getTodo<br/>args: #91;#93;"]
+  80[/"type: #40;id: number#41; =#gt; Effect#lt;Todo, JsonPlaceholderError, never#gt;<br/>node: api.getTodo"/]
+  81[/"type: 1<br/>node: 1"/]
+  82["type: Effect#lt;User, JsonPlaceholderError, never#gt;<br/>callee: api.getUser<br/>args: #91;#93;"]
+  83[/"type: #40;id: number#41; =#gt; Effect#lt;User, JsonPlaceholderError, never#gt;<br/>node: api.getUser"/]
+  84[/"type: string<br/>node: `Todo #35;$#123;todo.id#125;: $#123;todo.title#125;`"/]
+  85["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  86[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  87[/"type: string<br/>node: `Assigned to: $#123;user.name#125; #lt;$#123;user.email#125;#gt;`"/]
+  88["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  89[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  90[/"type: string<br/>node: `Completed: $#123;todo.completed#125;`"/]
+  91["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  92[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  93[/"type: #123; #lt;const Layers extends #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;layers: Layers, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;ROut, E2, RIn#gt;#40;layer: Layer#lt;ROut, E2, RIn#gt;, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;R2#gt;#40;context: Context#lt;R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #lt;A, E, R, const Layers extends #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;self: Effect#lt;A, E, R#gt;, layers: Layers, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: Effect#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;A, E, R, ROut, E2, RIn#gt;#40;self: Effect#lt;A, E, R#gt;, layer: Layer#lt;ROut, E2, RIn#gt;, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;A, E, R, R2#gt;#40;self: Effect#lt;A, E, R#gt;, context: Context#lt;R2#gt;#41;: Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #125;<br/>node: Effect.provide"/]
+  94[/"type: Layer#lt;JsonPlaceholder, never, never#gt;<br/>node: JsonPlaceholderLive"/]
+  95[/"type: #123; #lt;E, Cases extends #123; #91;K in Extract#lt;E, #123; _tag: string; #125;#gt;#91;#quot;_tag#quot;#93;#93;+?: #40;#40;error: Extract#lt;E, #123; _tag: K; #125;#gt;#41; =#gt; Effect#lt;any, any, any#gt;#41;; #125; #amp; #40;unknown extends E ? #123;#125; : #123; #91;K in Exclude#lt;keyof Cases, Extract#lt;E, #123; _tag: string; #125;#gt;#91;#quot;_tag#quot;#93;#gt;#93;: never; #125;#41;, A2 = never, E2 = Exclude#lt;E, #123; _tag: keyof Cases; #125;#gt;, R2 = never#gt;#40;cases: Cases, orElse?: #40;#40;e: Exclude#lt;E, #123; _tag: keyof Cases; #125;#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2 #124; #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;infer A, any, any#gt; ? A : never; #125;#91;keyof Cases#93;, E2 #124; #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;any, infer E, any#gt; ? E : never; #125;#91;keyof Cases#93;, R #124; R2 #124; #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;any, any, infer R#gt; ? R : never; #125;#91;keyof Cases#93;#gt;; #lt;R, E, A, Cases extends #123; #91;K in Extract#lt;E, #123; _tag: string; #125;#gt;#91;#quot;_tag#quot;#93;#93;+?: #40;#40;error: Extract#lt;E, #123; _tag: K; #125;#gt;#41; =#gt; Effect#lt;any, any, any#gt;#41;; #125; #amp; #40;unknown extends E ? #123;#125; : #123; #91;K in Exclude#lt;keyof Cases, Extract#lt;E, #123; _tag: string; #125;#gt;#91;#quot;_tag#quot;#93;#gt;#93;: never; #125;#41;, A2 = never, E2 = Exclude#lt;E, #123; _tag: keyof Cases; #125;#gt;, R2 = never#gt;#40;self: Effect#lt;A, E, R#gt;, cases: Cases, orElse?: #40;#40;e: Exclude#lt;E, #123; _tag: keyof Cases; #125;#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: Effect#lt;A #124; A2 #124; #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;infer A, any, any#gt; ? A : never; #125;#91;keyof Cases#93;, E2 #124; #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;any, infer E, any#gt; ? E : never; #125;#91;keyof Cases#93;, R #124; R2 #124; #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;any, any, infer R#gt; ? R : never; #125;#91;keyof Cases#93;#gt;; #125;<br/>node: Effect.catchTags"/]
+  96[/"type: #123; RequestError: #40;error: RequestError#41; =#gt; Effect#lt;void, never, never#gt;; InvalidStatusError: #40;error: InvalidStatusError#41; =#gt; Effect#lt;void, never, never#gt;; DecodeError: #40;error: DecodeError#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #123;#92;n    RequestError: #40;error#41; =#gt;#92;n      Effect.log#40;`Request failed for $#123;error.url#125;: $#123;String#40;error.cause#41;#125;`#41;,#92;n    InvalidStatusError: #40;error#41; =#gt;#92;n      Effect.log#40;`Request to $#123;error.url#125; returned status $#123;error.status#125;`#41;,#92;n    DecodeError: #40;error#41; =#gt;#92;n      Effect.log#40;`Could not decode JSON from $#123;error.url#125;: $#123;String#40;error.cause#41;#125;`#41;#92;n  #125;"/]
+  97[["type: #40;error: RequestError#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;error#41; =#gt;#92;n      Effect.log#40;`Request failed for $#123;error.url#125;: $#123;String#40;error.cause#41;#125;`#41;"]]
+  98((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;`Request failed for $#123;error.url#125;: $#123;String#40;error.cause#41;#125;`#41;")))
+  99[/"type: RequestError<br/>node: error"/]
+  100[/"type: string<br/>node: `Request failed for $#123;error.url#125;: $#123;String#40;error.cause#41;#125;`"/]
+  101["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  102[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  103[/"type: unknown<br/>node: error.cause"/]
+  104["type: string<br/>callee: String<br/>args: #91;#93;"]
+  105[/"type: StringConstructor<br/>node: String"/]
+  106[["type: #40;error: InvalidStatusError#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;error#41; =#gt;#92;n      Effect.log#40;`Request to $#123;error.url#125; returned status $#123;error.status#125;`#41;"]]
+  107((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;`Request to $#123;error.url#125; returned status $#123;error.status#125;`#41;")))
+  108[/"type: InvalidStatusError<br/>node: error"/]
+  109[/"type: string<br/>node: `Request to $#123;error.url#125; returned status $#123;error.status#125;`"/]
+  110["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  111[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  112[["type: #40;error: DecodeError#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;error#41; =#gt;#92;n      Effect.log#40;`Could not decode JSON from $#123;error.url#125;: $#123;String#40;error.cause#41;#125;`#41;"]]
+  113((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;`Could not decode JSON from $#123;error.url#125;: $#123;String#40;error.cause#41;#125;`#41;")))
+  114[/"type: DecodeError<br/>node: error"/]
+  115[/"type: string<br/>node: `Could not decode JSON from $#123;error.url#125;: $#123;String#40;error.cause#41;#125;`"/]
+  116["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  117[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  118[/"type: unknown<br/>node: error.cause"/]
+  119["type: string<br/>callee: String<br/>args: #91;#93;"]
+  120[/"type: StringConstructor<br/>node: String"/]
+  121[/"type: Effect#lt;void, never, never#gt;<br/>node: program"/]
+  122["type: Promise#lt;void#gt;<br/>callee: Effect.runPromise<br/>args: #91;#93;"]
+  123[/"type: #lt;A, E#gt;#40;effect: Effect#lt;A, E, never#gt;, options?: RunOptions #124; undefined#41; =#gt; Promise#lt;A#gt;<br/>node: Effect.runPromise"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
   3 -->|"kind: pipe"| 4
@@ -129,75 +141,90 @@ flowchart TB
   22 -->|"kind: connect"| 19
   23 -->|"kind: transformCallee"| 22
   24 -->|"kind: transformArg"| 22
-  25 -->|"kind: pipe"| 26
-  26 -->|"kind: pipe"| 27
-  28 -->|"kind: transformCallee"| 26
-  29 -->|"kind: transformArg"| 26
-  30 -->|"kind: transformCallee"| 27
-  32 -->|"kind: parameter"| 31
-  33 -->|"kind: potentialReturn"| 31
-  34 -->|"kind: pipe"| 35
-  35 -->|"kind: pipe"| 36
-  36 -->|"kind: connect"| 33
-  37 -->|"kind: transformCallee"| 35
-  38 -->|"kind: transformArg"| 35
-  39 -->|"kind: transformCallee"| 36
-  40 -->|"kind: transformArg"| 36
-  42 -->|"kind: parameter"| 41
-  43 -->|"kind: potentialReturn"| 41
-  44 -->|"kind: potentialReturn"| 41
-  45 -->|"kind: potentialReturn"| 41
-  41 -->|"kind: connect"| 40
-  47 -->|"kind: parameter"| 46
+  25 -->|"kind: yieldable"| 21
+  26 -->|"kind: yieldable"| 21
+  27 -->|"kind: potentialReturn"| 21
+  28 -->|"kind: pipe"| 29
+  29 -->|"kind: pipe"| 30
+  31 -->|"kind: transformCallee"| 29
+  32 -->|"kind: transformArg"| 29
+  33 -->|"kind: transformCallee"| 30
+  35 -->|"kind: potentialReturn"| 34
+  36 -->|"kind: potentialReturn"| 35
+  37 -->|"kind: parameter"| 34
+  38 -->|"kind: pipe"| 39
+  39 -->|"kind: pipe"| 40
+  40 -->|"kind: connect"| 36
+  41 -->|"kind: transformCallee"| 39
+  42 -->|"kind: transformArg"| 39
+  43 -->|"kind: transformCallee"| 40
+  44 -->|"kind: transformArg"| 40
+  46 -->|"kind: potentialReturn"| 45
+  47 -->|"kind: potentialReturn"| 46
   48 -->|"kind: potentialReturn"| 46
-  49 -->|"kind: pipe"| 50
-  50 -->|"kind: pipe"| 51
-  51 -->|"kind: connect"| 48
-  52 -->|"kind: transformCallee"| 50
-  53 -->|"kind: transformArg"| 50
-  54 -->|"kind: transformCallee"| 51
-  55 -->|"kind: transformArg"| 51
-  57 -->|"kind: parameter"| 56
-  58 -->|"kind: potentialReturn"| 56
-  59 -->|"kind: potentialReturn"| 56
-  60 -->|"kind: potentialReturn"| 56
-  56 -->|"kind: connect"| 55
-  61 -->|"kind: transformCallee"| 20
-  62 -->|"kind: transformArg"| 20
-  63 -->|"kind: pipe"| 64
-  64 -->|"kind: pipe"| 65
-  66 -->|"kind: pipe"| 67
-  68 -->|"kind: transformCallee"| 67
-  69 -->|"kind: pipe"| 70
-  71 -->|"kind: transformCallee"| 70
-  72 -->|"kind: pipe"| 73
-  74 -->|"kind: transformCallee"| 73
-  75 -->|"kind: pipe"| 76
-  77 -->|"kind: transformCallee"| 76
+  49 -->|"kind: potentialReturn"| 46
+  50 -->|"kind: parameter"| 45
+  45 -->|"kind: connect"| 44
+  52 -->|"kind: potentialReturn"| 51
+  53 -->|"kind: potentialReturn"| 52
+  54 -->|"kind: parameter"| 51
+  55 -->|"kind: pipe"| 56
+  56 -->|"kind: pipe"| 57
+  57 -->|"kind: connect"| 53
+  58 -->|"kind: transformCallee"| 56
+  59 -->|"kind: transformArg"| 56
+  60 -->|"kind: transformCallee"| 57
+  61 -->|"kind: transformArg"| 57
+  63 -->|"kind: potentialReturn"| 62
+  64 -->|"kind: potentialReturn"| 63
+  65 -->|"kind: potentialReturn"| 63
+  66 -->|"kind: potentialReturn"| 63
+  67 -->|"kind: parameter"| 62
+  62 -->|"kind: connect"| 61
+  68 -->|"kind: transformCallee"| 20
+  69 -->|"kind: transformArg"| 20
+  70 -->|"kind: pipe"| 71
+  71 -->|"kind: pipe"| 72
+  73 -->|"kind: yieldable"| 70
+  74 -->|"kind: yieldable"| 70
+  75 -->|"kind: yieldable"| 70
+  76 -->|"kind: yieldable"| 70
+  77 -->|"kind: yieldable"| 70
   78 -->|"kind: pipe"| 79
   80 -->|"kind: transformCallee"| 79
-  81 -->|"kind: transformCallee"| 64
-  82 -->|"kind: transformArg"| 64
-  83 -->|"kind: transformCallee"| 65
-  84 -->|"kind: transformArg"| 65
-  86 -->|"kind: parameter"| 85
-  87 -->|"kind: potentialReturn"| 85
-  88 -->|"kind: pipe"| 89
-  89 -->|"kind: connect"| 87
-  90 -->|"kind: transformCallee"| 89
-  91 -->|"kind: pipe"| 92
-  93 -->|"kind: transformCallee"| 92
-  95 -->|"kind: parameter"| 94
-  96 -->|"kind: potentialReturn"| 94
-  97 -->|"kind: pipe"| 98
-  98 -->|"kind: connect"| 96
-  99 -->|"kind: transformCallee"| 98
-  101 -->|"kind: parameter"| 100
-  102 -->|"kind: potentialReturn"| 100
+  81 -->|"kind: pipe"| 82
+  83 -->|"kind: transformCallee"| 82
+  84 -->|"kind: pipe"| 85
+  85 -->|"kind: connect"| 75
+  86 -->|"kind: transformCallee"| 85
+  87 -->|"kind: pipe"| 88
+  88 -->|"kind: connect"| 76
+  89 -->|"kind: transformCallee"| 88
+  90 -->|"kind: pipe"| 91
+  91 -->|"kind: connect"| 77
+  92 -->|"kind: transformCallee"| 91
+  93 -->|"kind: transformCallee"| 71
+  94 -->|"kind: transformArg"| 71
+  95 -->|"kind: transformCallee"| 72
+  96 -->|"kind: transformArg"| 72
+  98 -->|"kind: potentialReturn"| 97
+  99 -->|"kind: parameter"| 97
+  100 -->|"kind: pipe"| 101
+  101 -->|"kind: connect"| 98
+  102 -->|"kind: transformCallee"| 101
   103 -->|"kind: pipe"| 104
-  104 -->|"kind: connect"| 102
   105 -->|"kind: transformCallee"| 104
-  106 -->|"kind: pipe"| 107
-  108 -->|"kind: transformCallee"| 107
+  107 -->|"kind: potentialReturn"| 106
+  108 -->|"kind: parameter"| 106
   109 -->|"kind: pipe"| 110
+  110 -->|"kind: connect"| 107
   111 -->|"kind: transformCallee"| 110
+  113 -->|"kind: potentialReturn"| 112
+  114 -->|"kind: parameter"| 112
+  115 -->|"kind: pipe"| 116
+  116 -->|"kind: connect"| 113
+  117 -->|"kind: transformCallee"| 116
+  118 -->|"kind: pipe"| 119
+  120 -->|"kind: transformCallee"| 119
+  121 -->|"kind: pipe"| 122
+  123 -->|"kind: transformCallee"| 122

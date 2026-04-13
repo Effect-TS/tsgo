@@ -1,11 +1,17 @@
 flowchart TB
-  0[["type: #40;id: string#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;id: string#41; =#gt;#92;n                Effect.gen#40;function*#40;#41; #123;#92;n                    yield* Effect.log#40;`Looking up user $#123;id#125;`#41;#92;n                #125;#41;"]]
-  1[/"type: string<br/>node: id: string"/]
-  2[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n                    yield* Effect.log#40;`Looking up user $#123;id#125;`#41;#92;n                #125;#41;"/]
-  3[/"type: string<br/>node: `Looking up user $#123;id#125;`"/]
-  4["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
-  5[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
-  1 -->|"kind: parameter"| 0
-  2 -->|"kind: potentialReturn"| 0
-  3 -->|"kind: pipe"| 4
-  5 -->|"kind: transformCallee"| 4
+  0[/"type: Effect#lt;#123; getUser: #40;id: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n        return #123;#92;n            getUser: #40;id: string#41; =#gt;#92;n                Effect.gen#40;function*#40;#41; #123;#92;n                    yield* Effect.log#40;`Looking up user $#123;id#125;`#41;#92;n                #125;#41;#92;n        #125;#92;n    #125;#41;"/]
+  1[/"type: #123; getUser: #40;id: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #123;#92;n            getUser: #40;id: string#41; =#gt;#92;n                Effect.gen#40;function*#40;#41; #123;#92;n                    yield* Effect.log#40;`Looking up user $#123;id#125;`#41;#92;n                #125;#41;#92;n        #125;"/]
+  2[["type: #40;id: string#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;id: string#41; =#gt;#92;n                Effect.gen#40;function*#40;#41; #123;#92;n                    yield* Effect.log#40;`Looking up user $#123;id#125;`#41;#92;n                #125;#41;"]]
+  3[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n                    yield* Effect.log#40;`Looking up user $#123;id#125;`#41;#92;n                #125;#41;"/]
+  4[/"type: string<br/>node: id: string"/]
+  5((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;`Looking up user $#123;id#125;`#41;")))
+  6[/"type: string<br/>node: `Looking up user $#123;id#125;`"/]
+  7["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  8[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  1 -->|"kind: potentialReturn"| 0
+  3 -->|"kind: potentialReturn"| 2
+  4 -->|"kind: parameter"| 2
+  5 -->|"kind: yieldable"| 3
+  6 -->|"kind: pipe"| 7
+  7 -->|"kind: connect"| 5
+  8 -->|"kind: transformCallee"| 7

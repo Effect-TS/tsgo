@@ -3,45 +3,56 @@ flowchart TB
   1["type: void<br/>callee: console.log<br/>args: #91;#93;"]
   2[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
   3[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#92;n  console.warn#40;#quot;warning#quot;#41;#92;n#125;"]]
-  4[/"type: #quot;warning#quot;<br/>node: #quot;warning#quot;"/]
-  5["type: void<br/>callee: console.warn<br/>args: #91;#93;"]
-  6[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.warn"/]
-  7[/"type: #quot;info#quot;<br/>node: #quot;info#quot;"/]
-  8["type: void<br/>callee: myConsole.info<br/>args: #91;#93;"]
-  9[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: myConsole.info"/]
-  10[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
-  11["type: void<br/>callee: console.log<br/>args: #91;#93;"]
-  12[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
-  13[/"type: #quot;warning#quot;<br/>node: #quot;warning#quot;"/]
-  14["type: void<br/>callee: console.warn<br/>args: #91;#93;"]
-  15[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.warn"/]
-  16[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; console.error#40;#quot;nested#quot;#41;"]]
-  17((("type: void<br/>node: console.error#40;#quot;nested#quot;#41;")))
-  18[/"type: #quot;nested#quot;<br/>node: #quot;nested#quot;"/]
-  19["type: void<br/>callee: console.error<br/>args: #91;#93;"]
-  20[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.error"/]
-  21[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#92;n  const console = #123; log: #40;..._args: Array#lt;unknown#gt;#41; =#gt; undefined #125;#92;n  console.log#40;#quot;hello#quot;#41;#92;n#125;"]]
-  22[["type: #40;..._args: unknown#91;#93;#41; =#gt; undefined<br/>node: #40;..._args: Array#lt;unknown#gt;#41; =#gt; undefined"]]
-  23[/"type: unknown#91;#93;<br/>node: ..._args: Array#lt;unknown#gt;"/]
-  24[/"type: undefined<br/>node: undefined"/]
-  25[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
-  26["type: undefined<br/>callee: console.log<br/>args: #91;#93;"]
-  27[/"type: #40;..._args: unknown#91;#93;#41; =#gt; undefined<br/>node: console.log"/]
+  4((("type: void<br/>node: #40;#41; =#gt; #123;#92;n  console.warn#40;#quot;warning#quot;#41;#92;n#125;")))
+  5[/"type: #quot;warning#quot;<br/>node: #quot;warning#quot;"/]
+  6["type: void<br/>callee: console.warn<br/>args: #91;#93;"]
+  7[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.warn"/]
+  8[/"type: #quot;info#quot;<br/>node: #quot;info#quot;"/]
+  9["type: void<br/>callee: myConsole.info<br/>args: #91;#93;"]
+  10[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: myConsole.info"/]
+  11[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  console.log#40;#quot;hello#quot;#41;#92;n#125;#41;"/]
+  12[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
+  13["type: void<br/>callee: console.log<br/>args: #91;#93;"]
+  14[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
+  15[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.fn#40;#quot;consoleWarnInFn#quot;#41;#40;function*#40;#41; #123;#92;n  console.warn#40;#quot;warning#quot;#41;#92;n#125;#41;"]]
+  16((("type: Effect#lt;void, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  console.warn#40;#quot;warning#quot;#41;#92;n#125;")))
+  17[/"type: #quot;warning#quot;<br/>node: #quot;warning#quot;"/]
+  18["type: void<br/>callee: console.warn<br/>args: #91;#93;"]
+  19[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.warn"/]
+  20[/"type: Effect#lt;#40;#41; =#gt; void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const fn = #40;#41; =#gt; console.error#40;#quot;nested#quot;#41;#92;n  return fn#92;n#125;#41;"/]
+  21[/"type: #40;#41; =#gt; void<br/>node: fn"/]
+  22[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; console.error#40;#quot;nested#quot;#41;"]]
+  23((("type: void<br/>node: console.error#40;#quot;nested#quot;#41;")))
+  24[/"type: #quot;nested#quot;<br/>node: #quot;nested#quot;"/]
+  25["type: void<br/>callee: console.error<br/>args: #91;#93;"]
+  26[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.error"/]
+  27[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#92;n  const console = #123; log: #40;..._args: Array#lt;unknown#gt;#41; =#gt; undefined #125;#92;n  console.log#40;#quot;hello#quot;#41;#92;n#125;"]]
+  28((("type: void<br/>node: #40;#41; =#gt; #123;#92;n  const console = #123; log: #40;..._args: Array#lt;unknown#gt;#41; =#gt; undefined #125;#92;n  console.log#40;#quot;hello#quot;#41;#92;n#125;")))
+  29[["type: #40;..._args: unknown#91;#93;#41; =#gt; undefined<br/>node: #40;..._args: Array#lt;unknown#gt;#41; =#gt; undefined"]]
+  30[/"type: undefined<br/>node: undefined"/]
+  31[/"type: unknown#91;#93;<br/>node: ..._args: Array#lt;unknown#gt;"/]
+  32[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
+  33["type: undefined<br/>callee: console.log<br/>args: #91;#93;"]
+  34[/"type: #40;..._args: unknown#91;#93;#41; =#gt; undefined<br/>node: console.log"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
-  4 -->|"kind: pipe"| 5
-  6 -->|"kind: transformCallee"| 5
-  7 -->|"kind: pipe"| 8
-  9 -->|"kind: transformCallee"| 8
-  10 -->|"kind: pipe"| 11
-  12 -->|"kind: transformCallee"| 11
-  13 -->|"kind: pipe"| 14
-  15 -->|"kind: transformCallee"| 14
-  17 -->|"kind: potentialReturn"| 16
-  18 -->|"kind: pipe"| 19
-  19 -->|"kind: connect"| 17
-  20 -->|"kind: transformCallee"| 19
-  23 -->|"kind: parameter"| 22
-  24 -->|"kind: potentialReturn"| 22
-  25 -->|"kind: pipe"| 26
-  27 -->|"kind: transformCallee"| 26
+  4 -->|"kind: potentialReturn"| 3
+  5 -->|"kind: pipe"| 6
+  7 -->|"kind: transformCallee"| 6
+  8 -->|"kind: pipe"| 9
+  10 -->|"kind: transformCallee"| 9
+  12 -->|"kind: pipe"| 13
+  14 -->|"kind: transformCallee"| 13
+  16 -->|"kind: potentialReturn"| 15
+  17 -->|"kind: pipe"| 18
+  19 -->|"kind: transformCallee"| 18
+  21 -->|"kind: potentialReturn"| 20
+  23 -->|"kind: potentialReturn"| 22
+  24 -->|"kind: pipe"| 25
+  25 -->|"kind: connect"| 23
+  26 -->|"kind: transformCallee"| 25
+  28 -->|"kind: potentialReturn"| 27
+  30 -->|"kind: potentialReturn"| 29
+  31 -->|"kind: parameter"| 29
+  32 -->|"kind: pipe"| 33
+  34 -->|"kind: transformCallee"| 33

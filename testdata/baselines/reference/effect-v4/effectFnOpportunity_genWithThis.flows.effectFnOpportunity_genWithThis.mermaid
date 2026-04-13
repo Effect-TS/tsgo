@@ -1,17 +1,31 @@
 flowchart TB
   0[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: methodWithThis#40;#41; #123;#92;n    return Effect.gen#40;#123; self: this #125;, function*#40;#41; #123;#92;n      return yield* Effect.succeed#40;this.value#41;#92;n    #125;#41;#92;n  #125;"]]
-  1[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;#123; self: this #125;, function*#40;#41; #123;#92;n      return yield* Effect.succeed#40;this.value#41;#92;n    #125;#41;"/]
-  2[/"type: number<br/>node: this.value"/]
-  3["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  4[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  5[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;#41; =#gt; #123;#92;n    return Effect.gen#40;#123; self: this #125;, function*#40;#41; #123;#92;n      return yield* Effect.succeed#40;this.value#41;#92;n    #125;#41;#92;n  #125;"]]
-  6[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;#123; self: this #125;, function*#40;#41; #123;#92;n      return yield* Effect.succeed#40;this.value#41;#92;n    #125;#41;"/]
-  7[/"type: number<br/>node: this.value"/]
-  8["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  9[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  1((("type: Effect#lt;number, never, never#gt;<br/>node: methodWithThis#40;#41; #123;#92;n    return Effect.gen#40;#123; self: this #125;, function*#40;#41; #123;#92;n      return yield* Effect.succeed#40;this.value#41;#92;n    #125;#41;#92;n  #125;")))
+  2[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;#123; self: this #125;, function*#40;#41; #123;#92;n      return yield* Effect.succeed#40;this.value#41;#92;n    #125;#41;"/]
+  3((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;this.value#41;")))
+  4[/"type: number<br/>node: yield* Effect.succeed#40;this.value#41;"/]
+  5[/"type: number<br/>node: this.value"/]
+  6["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  7[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  8[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;#41; =#gt; #123;#92;n    return Effect.gen#40;#123; self: this #125;, function*#40;#41; #123;#92;n      return yield* Effect.succeed#40;this.value#41;#92;n    #125;#41;#92;n  #125;"]]
+  9((("type: Effect#lt;number, never, never#gt;<br/>node: #40;#41; =#gt; #123;#92;n    return Effect.gen#40;#123; self: this #125;, function*#40;#41; #123;#92;n      return yield* Effect.succeed#40;this.value#41;#92;n    #125;#41;#92;n  #125;")))
+  10[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;#123; self: this #125;, function*#40;#41; #123;#92;n      return yield* Effect.succeed#40;this.value#41;#92;n    #125;#41;"/]
+  11((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;this.value#41;")))
+  12[/"type: number<br/>node: yield* Effect.succeed#40;this.value#41;"/]
+  13[/"type: number<br/>node: this.value"/]
+  14["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  15[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
   1 -->|"kind: potentialReturn"| 0
-  2 -->|"kind: pipe"| 3
-  4 -->|"kind: transformCallee"| 3
-  6 -->|"kind: potentialReturn"| 5
-  7 -->|"kind: pipe"| 8
-  9 -->|"kind: transformCallee"| 8
+  2 -->|"kind: potentialReturn"| 1
+  3 -->|"kind: yieldable"| 2
+  4 -->|"kind: potentialReturn"| 2
+  5 -->|"kind: pipe"| 6
+  6 -->|"kind: connect"| 3
+  7 -->|"kind: transformCallee"| 6
+  9 -->|"kind: potentialReturn"| 8
+  10 -->|"kind: potentialReturn"| 9
+  11 -->|"kind: yieldable"| 10
+  12 -->|"kind: potentialReturn"| 10
+  13 -->|"kind: pipe"| 14
+  14 -->|"kind: connect"| 11
+  15 -->|"kind: transformCallee"| 14

@@ -8,8 +8,8 @@ flowchart TB
   6[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;http://something#quot;#41;"]]
   7[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;http://something#quot;#41;"/]
   8[["type: #40;e: unknown#41; =#gt; MyError<br/>node: #40;e#41; =#gt; new MyError#40;#123; cause: e #125;#41;"]]
-  9[/"type: unknown<br/>node: e"/]
-  10[/"type: MyError<br/>node: new MyError#40;#123; cause: e #125;#41;"/]
+  9[/"type: MyError<br/>node: new MyError#40;#123; cause: e #125;#41;"/]
+  10[/"type: unknown<br/>node: e"/]
   11[/"type: #123; try: #40;#41; =#gt; Promise#lt;Response#gt;; catch: #40;#41; =#gt; Error; #125;<br/>node: #123;#92;n  try: #40;#41; =#gt; fetch#40;#quot;http://something#quot;#41;,#92;n  catch: #40;#41; =#gt; new Error#40;#quot;Unknown!#quot;#41;#92;n#125;"/]
   12["type: Effect#lt;Response, Error, never#gt;<br/>callee: Effect.tryPromise<br/>args: #91;#93;"]
   13[/"type: #lt;A, E = UnknownError#gt;#40;options: #123; readonly try: #40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;; readonly catch: #40;error: unknown#41; =#gt; E; #125; #124; #40;#40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;#41;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.tryPromise"/]
@@ -22,8 +22,8 @@ flowchart TB
   3 -->|"kind: pipe"| 4
   5 -->|"kind: transformCallee"| 4
   7 -->|"kind: potentialReturn"| 6
-  9 -->|"kind: parameter"| 8
-  10 -->|"kind: potentialReturn"| 8
+  9 -->|"kind: potentialReturn"| 8
+  10 -->|"kind: parameter"| 8
   11 -->|"kind: pipe"| 12
   13 -->|"kind: transformCallee"| 12
   15 -->|"kind: potentialReturn"| 14

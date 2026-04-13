@@ -1,6 +1,14 @@
 flowchart TB
-  0[/"type: #quot;boom#quot;<br/>node: #quot;boom#quot;"/]
-  1["type: Effect#lt;never, any, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  2[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  0 -->|"kind: pipe"| 1
-  2 -->|"kind: transformCallee"| 1
+  0[/"type: Effect#lt;never, any, unknown#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  yield* Effect.context#lt;unknown#gt;#40;#41;#92;n  return yield* Effect.fail#lt;any#gt;#40;#quot;boom#quot;#41;#92;n#125;#41;"/]
+  1[/"type: Effect#lt;Context#lt;unknown#gt;, never, unknown#gt;<br/>node: Effect.context#lt;unknown#gt;#40;#41;"/]
+  2((("type: Effect#lt;never, any, never#gt;<br/>node: Effect.fail#lt;any#gt;#40;#quot;boom#quot;#41;")))
+  3[/"type: never<br/>node: yield* Effect.fail#lt;any#gt;#40;#quot;boom#quot;#41;"/]
+  4[/"type: #quot;boom#quot;<br/>node: #quot;boom#quot;"/]
+  5["type: Effect#lt;never, any, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  6[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  1 -->|"kind: yieldable"| 0
+  2 -->|"kind: yieldable"| 0
+  3 -->|"kind: potentialReturn"| 0
+  4 -->|"kind: pipe"| 5
+  5 -->|"kind: connect"| 2
+  6 -->|"kind: transformCallee"| 5

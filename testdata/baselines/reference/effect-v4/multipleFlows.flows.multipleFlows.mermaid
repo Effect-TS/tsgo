@@ -7,8 +7,8 @@ flowchart TB
   5[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
   6((("type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n + 1")))
   7[["type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n + 1"]]
-  8[/"type: number<br/>node: n"/]
-  9[/"type: number<br/>node: n + 1"/]
+  8[/"type: number<br/>node: n + 1"/]
+  9[/"type: number<br/>node: n"/]
   10((("type: Effect#lt;string, never, never#gt;<br/>node: Effect.succeed#40;#quot;hello#quot;#41;")))
   11["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;s#41; =#gt; s.toUpperCase#40;#41;#93;"]
   12[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
@@ -17,23 +17,23 @@ flowchart TB
   15[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
   16((("type: #40;s: string#41; =#gt; string<br/>node: #40;s#41; =#gt; s.toUpperCase#40;#41;")))
   17[["type: #40;s: string#41; =#gt; string<br/>node: #40;s#41; =#gt; s.toUpperCase#40;#41;"]]
-  18[/"type: string<br/>node: s"/]
-  19[/"type: string<br/>node: s.toUpperCase#40;#41;"/]
+  18[/"type: string<br/>node: s.toUpperCase#40;#41;"/]
+  19[/"type: string<br/>node: s"/]
   20[/"type: Effect#lt;#91;number, string#93;, never, never#gt;<br/>node: Effect.all#40;#91;flow1, flow2#93;#41;"/]
   21["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;#91;n, s#93;#41; =#gt; `$#123;s#125;: $#123;n#125;`#93;"]
   22[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
   23((("type: #40;#91;n, s#93;: #91;number, string#93;#41; =#gt; string<br/>node: #40;#91;n, s#93;#41; =#gt; `$#123;s#125;: $#123;n#125;`")))
   24[["type: #40;#91;n, s#93;: #91;number, string#93;#41; =#gt; string<br/>node: #40;#91;n, s#93;#41; =#gt; `$#123;s#125;: $#123;n#125;`"]]
-  25[/"type: #91;number, string#93;<br/>node: #91;n, s#93;"/]
-  26[/"type: string<br/>node: `$#123;s#125;: $#123;n#125;`"/]
+  25[/"type: string<br/>node: `$#123;s#125;: $#123;n#125;`"/]
+  26[/"type: #91;number, string#93;<br/>node: #91;n, s#93;"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: pipe"| 3
   3 -->|"kind: connect"| 0
   4 -->|"kind: transformCallee"| 3
   5 -->|"kind: transformCallee"| 1
   6 -->|"kind: transformArg"| 1
-  8 -->|"kind: parameter"| 7
-  9 -->|"kind: potentialReturn"| 7
+  8 -->|"kind: potentialReturn"| 7
+  9 -->|"kind: parameter"| 7
   7 -->|"kind: connect"| 6
   10 -->|"kind: pipe"| 11
   12 -->|"kind: pipe"| 13
@@ -41,12 +41,12 @@ flowchart TB
   14 -->|"kind: transformCallee"| 13
   15 -->|"kind: transformCallee"| 11
   16 -->|"kind: transformArg"| 11
-  18 -->|"kind: parameter"| 17
-  19 -->|"kind: potentialReturn"| 17
+  18 -->|"kind: potentialReturn"| 17
+  19 -->|"kind: parameter"| 17
   17 -->|"kind: connect"| 16
   20 -->|"kind: pipe"| 21
   22 -->|"kind: transformCallee"| 21
   23 -->|"kind: transformArg"| 21
-  25 -->|"kind: parameter"| 24
-  26 -->|"kind: potentialReturn"| 24
+  25 -->|"kind: potentialReturn"| 24
+  26 -->|"kind: parameter"| 24
   24 -->|"kind: connect"| 23

@@ -13,16 +13,28 @@ flowchart TB
   11[/"type: string<br/>node: JSON.stringify#40;#123; name: #quot;Alice#quot; #125;#41;"/]
   12[["type: #40;#41; =#gt; Error<br/>node: #40;#41; =#gt; new Error#40;#quot;Failed to stringify#quot;#41;"]]
   13[/"type: Error<br/>node: new Error#40;#quot;Failed to stringify#quot;#41;"/]
-  14[/"type: #quot;#123;#92;#quot;name#92;#quot;:#92;#quot;Test#92;#quot;#125;#quot;<br/>node: #quot;#123;#92;#quot;name#92;#quot;:#92;#quot;Test#92;#quot;#125;#quot;"/]
-  15["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  16[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  17[/"type: #123; name: string; #125;<br/>node: #123; name: #quot;Test#quot; #125;"/]
-  18["type: Effect#lt;#123; name: string; #125;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  14[/"type: Effect#lt;any, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const text = yield* Effect.succeed#40;#quot;#123;#92;#quot;name#92;#quot;:#92;#quot;Test#92;#quot;#125;#quot;#41;#92;n  const parsed = JSON.parse#40;text#41;#92;n  //             ^- should suggest using Effect Schema#92;n  return parsed#92;n#125;#41;"/]
+  15((("type: Effect#lt;string, never, never#gt;<br/>node: Effect.succeed#40;#quot;#123;#92;#quot;name#92;#quot;:#92;#quot;Test#92;#quot;#125;#quot;#41;")))
+  16[/"type: any<br/>node: parsed"/]
+  17[/"type: #quot;#123;#92;#quot;name#92;#quot;:#92;#quot;Test#92;#quot;#125;#quot;<br/>node: #quot;#123;#92;#quot;name#92;#quot;:#92;#quot;Test#92;#quot;#125;#quot;"/]
+  18["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
   19[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  20[["type: #40;#41; =#gt; any<br/>node: #40;#41; =#gt; #123;#92;n  const text = #quot;#123;#92;#quot;name#92;#quot;:#92;#quot;Regular#92;#quot;#125;#quot;#92;n  return JSON.parse#40;text#41;#92;n#125;"]]
-  21[/"type: any<br/>node: JSON.parse#40;text#41;"/]
-  22[["type: #40;#41; =#gt; any<br/>node: #40;#41; =#gt; JSON.parse#40;#quot;#123;#92;#quot;nested#92;#quot;:true#125;#quot;#41;"]]
-  23[/"type: any<br/>node: JSON.parse#40;#quot;#123;#92;#quot;nested#92;#quot;:true#125;#quot;#41;"/]
+  20[/"type: Effect#lt;string, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const data = yield* Effect.succeed#40;#123; name: #quot;Test#quot; #125;#41;#92;n  const json = JSON.stringify#40;data#41;#92;n  //           ^- should suggest using Effect Schema#92;n  return json#92;n#125;#41;"/]
+  21((("type: Effect#lt;#123; name: string; #125;, never, never#gt;<br/>node: Effect.succeed#40;#123; name: #quot;Test#quot; #125;#41;")))
+  22[/"type: string<br/>node: json"/]
+  23[/"type: #123; name: string; #125;<br/>node: #123; name: #quot;Test#quot; #125;"/]
+  24["type: Effect#lt;#123; name: string; #125;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  25[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  26[["type: #40;#41; =#gt; Effect#lt;any, never, never#gt;<br/>node: Effect.fn#40;#quot;parseInFn#quot;#41;#40;function*#40;#41; #123;#92;n  const text = #quot;#123;#92;#quot;name#92;#quot;:#92;#quot;FnTest#92;#quot;#125;#quot;#92;n  const parsed = JSON.parse#40;text#41;#92;n  //             ^- should suggest using Effect Schema#92;n  return parsed#92;n#125;#41;"]]
+  27((("type: Effect#lt;any, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  const text = #quot;#123;#92;#quot;name#92;#quot;:#92;#quot;FnTest#92;#quot;#125;#quot;#92;n  const parsed = JSON.parse#40;text#41;#92;n  //             ^- should suggest using Effect Schema#92;n  return parsed#92;n#125;")))
+  28[/"type: any<br/>node: parsed"/]
+  29[["type: #40;#41; =#gt; any<br/>node: #40;#41; =#gt; #123;#92;n  const text = #quot;#123;#92;#quot;name#92;#quot;:#92;#quot;Regular#92;#quot;#125;#quot;#92;n  return JSON.parse#40;text#41;#92;n#125;"]]
+  30((("type: any<br/>node: #40;#41; =#gt; #123;#92;n  const text = #quot;#123;#92;#quot;name#92;#quot;:#92;#quot;Regular#92;#quot;#125;#quot;#92;n  return JSON.parse#40;text#41;#92;n#125;")))
+  31[/"type: any<br/>node: JSON.parse#40;text#41;"/]
+  32[/"type: Effect#lt;any, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const parseFn = #40;#41; =#gt; JSON.parse#40;#quot;#123;#92;#quot;nested#92;#quot;:true#125;#quot;#41;#92;n  //                    ^- this is inside a nested function, should NOT trigger#92;n  return parseFn#40;#41;#92;n#125;#41;"/]
+  33[/"type: any<br/>node: parseFn#40;#41;"/]
+  34[["type: #40;#41; =#gt; any<br/>node: #40;#41; =#gt; JSON.parse#40;#quot;#123;#92;#quot;nested#92;#quot;:true#125;#quot;#41;"]]
+  35[/"type: any<br/>node: JSON.parse#40;#quot;#123;#92;#quot;nested#92;#quot;:true#125;#quot;#41;"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
   4 -->|"kind: potentialReturn"| 3
@@ -31,9 +43,19 @@ flowchart TB
   9 -->|"kind: transformCallee"| 8
   11 -->|"kind: potentialReturn"| 10
   13 -->|"kind: potentialReturn"| 12
-  14 -->|"kind: pipe"| 15
-  16 -->|"kind: transformCallee"| 15
+  15 -->|"kind: yieldable"| 14
+  16 -->|"kind: potentialReturn"| 14
   17 -->|"kind: pipe"| 18
+  18 -->|"kind: connect"| 15
   19 -->|"kind: transformCallee"| 18
-  21 -->|"kind: potentialReturn"| 20
-  23 -->|"kind: potentialReturn"| 22
+  21 -->|"kind: yieldable"| 20
+  22 -->|"kind: potentialReturn"| 20
+  23 -->|"kind: pipe"| 24
+  24 -->|"kind: connect"| 21
+  25 -->|"kind: transformCallee"| 24
+  28 -->|"kind: potentialReturn"| 27
+  27 -->|"kind: potentialReturn"| 26
+  30 -->|"kind: potentialReturn"| 29
+  31 -->|"kind: potentialReturn"| 30
+  33 -->|"kind: potentialReturn"| 32
+  35 -->|"kind: potentialReturn"| 34

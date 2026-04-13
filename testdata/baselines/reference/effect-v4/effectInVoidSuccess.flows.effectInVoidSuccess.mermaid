@@ -9,22 +9,23 @@ flowchart TB
   7["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.suspend<br/>args: #91;#93;"]
   8[/"type: #lt;A, E, R#gt;#40;effect: LazyArg#lt;Effect#lt;A, E, R#gt;#gt;#41; =#gt; Effect#lt;A, E, R#gt;<br/>node: Effect.suspend"/]
   9[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41;: Effect.Effect#lt;void#gt; =#gt; #123;#92;n  return Stream.empty.pipe#40;#92;n    Stream.runCollect,#92;n    Effect.interruptible,#92;n    Effect.matchCause#40;#123;#92;n      onSuccess: #40;#41; =#gt; #quot;success#quot;,#92;n      onFailure: #40;#41; =#gt; Effect.fail#40;#quot;error#quot;#41;#92;n    #125;#41;#92;n  #41;#92;n#125;"]]
-  10((("type: Effect#lt;string #124; Effect#lt;never, string, never#gt;, never, never#gt;<br/>node: Stream.empty.pipe#40;#92;n    Stream.runCollect,#92;n    Effect.interruptible,#92;n    Effect.matchCause#40;#123;#92;n      onSuccess: #40;#41; =#gt; #quot;success#quot;,#92;n      onFailure: #40;#41; =#gt; Effect.fail#40;#quot;error#quot;#41;#92;n    #125;#41;#92;n  #41;")))
-  11[/"type: Stream#lt;never, never, never#gt;<br/>node: Stream.empty"/]
-  12["type: Effect#lt;never#91;#93;, never, never#gt;<br/>callee: Stream.runCollect<br/>args: #91;#93;"]
-  13["type: Effect#lt;never#91;#93;, never, never#gt;<br/>callee: Effect.interruptible<br/>args: #91;#93;"]
-  14["type: Effect#lt;string #124; Effect#lt;never, string, never#gt;, never, never#gt;<br/>callee: Effect.matchCause<br/>args: #91;#123;#92;n      onSuccess: #40;#41; =#gt; #quot;success#quot;,#92;n      onFailure: #40;#41; =#gt; Effect.fail#40;#quot;error#quot;#41;#92;n    #125;#93;"]
-  15[/"type: #lt;A, E, R#gt;#40;self: Stream#lt;A, E, R#gt;#41; =#gt; Effect#lt;A#91;#93;, E, R#gt;<br/>node: Stream.runCollect"/]
-  16[/"type: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R#gt;<br/>node: Effect.interruptible"/]
-  17[/"type: #123; #lt;E, A2, A, A3#gt;#40;options: #123; readonly onFailure: #40;cause: Cause#lt;E#gt;#41; =#gt; A2; readonly onSuccess: #40;a: A#41; =#gt; A3; #125;#41;: #lt;R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A2 #124; A3, never, R#gt;; #lt;A, E, R, A2, A3#gt;#40;self: Effect#lt;A, E, R#gt;, options: #123; readonly onFailure: #40;cause: Cause#lt;E#gt;#41; =#gt; A2; readonly onSuccess: #40;a: A#41; =#gt; A3; #125;#41;: Effect#lt;A2 #124; A3, never, R#gt;; #125;<br/>node: Effect.matchCause"/]
-  18[/"type: #123; onSuccess: #40;#41; =#gt; string; onFailure: #40;#41; =#gt; Effect#lt;never, string, never#gt;; #125;<br/>node: #123;#92;n      onSuccess: #40;#41; =#gt; #quot;success#quot;,#92;n      onFailure: #40;#41; =#gt; Effect.fail#40;#quot;error#quot;#41;#92;n    #125;"/]
-  19[["type: #40;#41; =#gt; string<br/>node: #40;#41; =#gt; #quot;success#quot;"]]
-  20[/"type: #quot;success#quot;<br/>node: #quot;success#quot;"/]
-  21[["type: #40;#41; =#gt; Effect#lt;never, string, never#gt;<br/>node: #40;#41; =#gt; Effect.fail#40;#quot;error#quot;#41;"]]
-  22((("type: Effect#lt;never, string, never#gt;<br/>node: Effect.fail#40;#quot;error#quot;#41;")))
-  23[/"type: #quot;error#quot;<br/>node: #quot;error#quot;"/]
-  24["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  25[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  10((("type: Effect#lt;void, never, never#gt;<br/>node: #40;#41;: Effect.Effect#lt;void#gt; =#gt; #123;#92;n  return Stream.empty.pipe#40;#92;n    Stream.runCollect,#92;n    Effect.interruptible,#92;n    Effect.matchCause#40;#123;#92;n      onSuccess: #40;#41; =#gt; #quot;success#quot;,#92;n      onFailure: #40;#41; =#gt; Effect.fail#40;#quot;error#quot;#41;#92;n    #125;#41;#92;n  #41;#92;n#125;")))
+  11((("type: Effect#lt;string #124; Effect#lt;never, string, never#gt;, never, never#gt;<br/>node: Stream.empty.pipe#40;#92;n    Stream.runCollect,#92;n    Effect.interruptible,#92;n    Effect.matchCause#40;#123;#92;n      onSuccess: #40;#41; =#gt; #quot;success#quot;,#92;n      onFailure: #40;#41; =#gt; Effect.fail#40;#quot;error#quot;#41;#92;n    #125;#41;#92;n  #41;")))
+  12[/"type: Stream#lt;never, never, never#gt;<br/>node: Stream.empty"/]
+  13["type: Effect#lt;never#91;#93;, never, never#gt;<br/>callee: Stream.runCollect<br/>args: #91;#93;"]
+  14["type: Effect#lt;never#91;#93;, never, never#gt;<br/>callee: Effect.interruptible<br/>args: #91;#93;"]
+  15["type: Effect#lt;string #124; Effect#lt;never, string, never#gt;, never, never#gt;<br/>callee: Effect.matchCause<br/>args: #91;#123;#92;n      onSuccess: #40;#41; =#gt; #quot;success#quot;,#92;n      onFailure: #40;#41; =#gt; Effect.fail#40;#quot;error#quot;#41;#92;n    #125;#93;"]
+  16[/"type: #lt;A, E, R#gt;#40;self: Stream#lt;A, E, R#gt;#41; =#gt; Effect#lt;A#91;#93;, E, R#gt;<br/>node: Stream.runCollect"/]
+  17[/"type: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R#gt;<br/>node: Effect.interruptible"/]
+  18[/"type: #123; #lt;E, A2, A, A3#gt;#40;options: #123; readonly onFailure: #40;cause: Cause#lt;E#gt;#41; =#gt; A2; readonly onSuccess: #40;a: A#41; =#gt; A3; #125;#41;: #lt;R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A2 #124; A3, never, R#gt;; #lt;A, E, R, A2, A3#gt;#40;self: Effect#lt;A, E, R#gt;, options: #123; readonly onFailure: #40;cause: Cause#lt;E#gt;#41; =#gt; A2; readonly onSuccess: #40;a: A#41; =#gt; A3; #125;#41;: Effect#lt;A2 #124; A3, never, R#gt;; #125;<br/>node: Effect.matchCause"/]
+  19[/"type: #123; onSuccess: #40;#41; =#gt; string; onFailure: #40;#41; =#gt; Effect#lt;never, string, never#gt;; #125;<br/>node: #123;#92;n      onSuccess: #40;#41; =#gt; #quot;success#quot;,#92;n      onFailure: #40;#41; =#gt; Effect.fail#40;#quot;error#quot;#41;#92;n    #125;"/]
+  20[["type: #40;#41; =#gt; string<br/>node: #40;#41; =#gt; #quot;success#quot;"]]
+  21[/"type: #quot;success#quot;<br/>node: #quot;success#quot;"/]
+  22[["type: #40;#41; =#gt; Effect#lt;never, string, never#gt;<br/>node: #40;#41; =#gt; Effect.fail#40;#quot;error#quot;#41;"]]
+  23((("type: Effect#lt;never, string, never#gt;<br/>node: Effect.fail#40;#quot;error#quot;#41;")))
+  24[/"type: #quot;error#quot;<br/>node: #quot;error#quot;"/]
+  25["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  26[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
   3 -->|"kind: pipe"| 4
@@ -33,17 +34,18 @@ flowchart TB
   6 -->|"kind: pipe"| 7
   8 -->|"kind: transformCallee"| 7
   10 -->|"kind: potentialReturn"| 9
+  11 -->|"kind: potentialReturn"| 10
   9 -->|"kind: connect"| 6
-  11 -->|"kind: pipe"| 12
   12 -->|"kind: pipe"| 13
   13 -->|"kind: pipe"| 14
-  14 -->|"kind: connect"| 10
-  15 -->|"kind: transformCallee"| 12
+  14 -->|"kind: pipe"| 15
+  15 -->|"kind: connect"| 11
   16 -->|"kind: transformCallee"| 13
   17 -->|"kind: transformCallee"| 14
-  18 -->|"kind: transformArg"| 14
-  20 -->|"kind: potentialReturn"| 19
-  22 -->|"kind: potentialReturn"| 21
-  23 -->|"kind: pipe"| 24
-  24 -->|"kind: connect"| 22
-  25 -->|"kind: transformCallee"| 24
+  18 -->|"kind: transformCallee"| 15
+  19 -->|"kind: transformArg"| 15
+  21 -->|"kind: potentialReturn"| 20
+  23 -->|"kind: potentialReturn"| 22
+  24 -->|"kind: pipe"| 25
+  25 -->|"kind: connect"| 23
+  26 -->|"kind: transformCallee"| 25

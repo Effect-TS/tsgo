@@ -1,34 +1,51 @@
 flowchart TB
   0[["type: #123; #40;a: number#41;: Effect#lt;number, never, never#gt;; #40;a: string#41;: Effect#lt;string, never, never#gt;; #125;<br/>node: export function overloadedDeclaration#40;a: number#41;: Effect.Effect#lt;number#gt;"]]
-  1[/"type: number<br/>node: a: number"/]
-  2[["type: #123; #40;a: number#41;: Effect#lt;number, never, never#gt;; #40;a: string#41;: Effect#lt;string, never, never#gt;; #125;<br/>node: export function overloadedDeclaration#40;a: string#41;: Effect.Effect#lt;string#gt;"]]
-  3[/"type: string<br/>node: a: string"/]
-  4[["type: #123; #40;a: number#41;: Effect#lt;number, never, never#gt;; #40;a: string#41;: Effect#lt;string, never, never#gt;; #125;<br/>node: export function overloadedDeclaration#40;a: number #124; string#41; #123;#92;n  return Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;a as any#41;#92;n  #125;#41;#92;n#125;"]]
-  5[/"type: string #124; number<br/>node: a: number #124; string"/]
-  6[/"type: Effect#lt;any, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;a as any#41;#92;n  #125;#41;"/]
-  7[/"type: any<br/>node: a as any"/]
-  8["type: Effect#lt;any, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  9[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  10[["type: #123; #40;a: number#41;: Effect#lt;number, never, never#gt;; #40;a: string#41;: Effect#lt;string, never, never#gt;; #125;<br/>node: export function overloadedDeclarationNoGen#40;a: number#41;: Effect.Effect#lt;number#gt;"]]
-  11[/"type: number<br/>node: a: number"/]
-  12[["type: #123; #40;a: number#41;: Effect#lt;number, never, never#gt;; #40;a: string#41;: Effect#lt;string, never, never#gt;; #125;<br/>node: export function overloadedDeclarationNoGen#40;a: string#41;: Effect.Effect#lt;string#gt;"]]
-  13[/"type: string<br/>node: a: string"/]
-  14[["type: #123; #40;a: number#41;: Effect#lt;number, never, never#gt;; #40;a: string#41;: Effect#lt;string, never, never#gt;; #125;<br/>node: export function overloadedDeclarationNoGen#40;a: number #124; string#41; #123;#92;n  const _a = 1#92;n  const _b = 2#92;n  const _c = 3#92;n  const _d = 4#92;n  const _e = 5#92;n  return Effect.succeed#40;a as any#41;#92;n#125;"]]
-  15[/"type: string #124; number<br/>node: a: number #124; string"/]
-  16((("type: Effect#lt;any, never, never#gt;<br/>node: Effect.succeed#40;a as any#41;")))
-  17[/"type: any<br/>node: a as any"/]
-  18["type: Effect#lt;any, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  19[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  1 -->|"kind: parameter"| 0
-  3 -->|"kind: parameter"| 2
-  5 -->|"kind: parameter"| 4
-  6 -->|"kind: potentialReturn"| 4
-  7 -->|"kind: pipe"| 8
-  9 -->|"kind: transformCallee"| 8
-  11 -->|"kind: parameter"| 10
-  13 -->|"kind: parameter"| 12
-  15 -->|"kind: parameter"| 14
-  16 -->|"kind: potentialReturn"| 14
-  17 -->|"kind: pipe"| 18
-  18 -->|"kind: connect"| 16
-  19 -->|"kind: transformCallee"| 18
+  1((("type: Effect#lt;number, never, never#gt;<br/>node: export function overloadedDeclaration#40;a: number#41;: Effect.Effect#lt;number#gt;")))
+  2[/"type: number<br/>node: a: number"/]
+  3[["type: #123; #40;a: number#41;: Effect#lt;number, never, never#gt;; #40;a: string#41;: Effect#lt;string, never, never#gt;; #125;<br/>node: export function overloadedDeclaration#40;a: string#41;: Effect.Effect#lt;string#gt;"]]
+  4((("type: Effect#lt;string, never, never#gt;<br/>node: export function overloadedDeclaration#40;a: string#41;: Effect.Effect#lt;string#gt;")))
+  5[/"type: string<br/>node: a: string"/]
+  6[["type: #123; #40;a: number#41;: Effect#lt;number, never, never#gt;; #40;a: string#41;: Effect#lt;string, never, never#gt;; #125;<br/>node: export function overloadedDeclaration#40;a: number #124; string#41; #123;#92;n  return Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;a as any#41;#92;n  #125;#41;#92;n#125;"]]
+  7((("type: Effect#lt;any, never, never#gt;<br/>node: export function overloadedDeclaration#40;a: number #124; string#41; #123;#92;n  return Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;a as any#41;#92;n  #125;#41;#92;n#125;")))
+  8[/"type: Effect#lt;any, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;a as any#41;#92;n  #125;#41;"/]
+  9[/"type: string #124; number<br/>node: a: number #124; string"/]
+  10((("type: Effect#lt;any, never, never#gt;<br/>node: Effect.succeed#40;a as any#41;")))
+  11[/"type: any<br/>node: yield* Effect.succeed#40;a as any#41;"/]
+  12[/"type: any<br/>node: a as any"/]
+  13["type: Effect#lt;any, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  14[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  15[["type: #123; #40;a: number#41;: Effect#lt;number, never, never#gt;; #40;a: string#41;: Effect#lt;string, never, never#gt;; #125;<br/>node: export function overloadedDeclarationNoGen#40;a: number#41;: Effect.Effect#lt;number#gt;"]]
+  16((("type: Effect#lt;number, never, never#gt;<br/>node: export function overloadedDeclarationNoGen#40;a: number#41;: Effect.Effect#lt;number#gt;")))
+  17[/"type: number<br/>node: a: number"/]
+  18[["type: #123; #40;a: number#41;: Effect#lt;number, never, never#gt;; #40;a: string#41;: Effect#lt;string, never, never#gt;; #125;<br/>node: export function overloadedDeclarationNoGen#40;a: string#41;: Effect.Effect#lt;string#gt;"]]
+  19((("type: Effect#lt;string, never, never#gt;<br/>node: export function overloadedDeclarationNoGen#40;a: string#41;: Effect.Effect#lt;string#gt;")))
+  20[/"type: string<br/>node: a: string"/]
+  21[["type: #123; #40;a: number#41;: Effect#lt;number, never, never#gt;; #40;a: string#41;: Effect#lt;string, never, never#gt;; #125;<br/>node: export function overloadedDeclarationNoGen#40;a: number #124; string#41; #123;#92;n  const _a = 1#92;n  const _b = 2#92;n  const _c = 3#92;n  const _d = 4#92;n  const _e = 5#92;n  return Effect.succeed#40;a as any#41;#92;n#125;"]]
+  22((("type: Effect#lt;any, never, never#gt;<br/>node: export function overloadedDeclarationNoGen#40;a: number #124; string#41; #123;#92;n  const _a = 1#92;n  const _b = 2#92;n  const _c = 3#92;n  const _d = 4#92;n  const _e = 5#92;n  return Effect.succeed#40;a as any#41;#92;n#125;")))
+  23((("type: Effect#lt;any, never, never#gt;<br/>node: Effect.succeed#40;a as any#41;")))
+  24[/"type: string #124; number<br/>node: a: number #124; string"/]
+  25[/"type: any<br/>node: a as any"/]
+  26["type: Effect#lt;any, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  27[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  1 -->|"kind: potentialReturn"| 0
+  2 -->|"kind: parameter"| 0
+  4 -->|"kind: potentialReturn"| 3
+  5 -->|"kind: parameter"| 3
+  7 -->|"kind: potentialReturn"| 6
+  8 -->|"kind: potentialReturn"| 7
+  9 -->|"kind: parameter"| 6
+  10 -->|"kind: yieldable"| 8
+  11 -->|"kind: potentialReturn"| 8
+  12 -->|"kind: pipe"| 13
+  13 -->|"kind: connect"| 10
+  14 -->|"kind: transformCallee"| 13
+  16 -->|"kind: potentialReturn"| 15
+  17 -->|"kind: parameter"| 15
+  19 -->|"kind: potentialReturn"| 18
+  20 -->|"kind: parameter"| 18
+  22 -->|"kind: potentialReturn"| 21
+  23 -->|"kind: potentialReturn"| 22
+  24 -->|"kind: parameter"| 21
+  25 -->|"kind: pipe"| 26
+  26 -->|"kind: connect"| 23
+  27 -->|"kind: transformCallee"| 26

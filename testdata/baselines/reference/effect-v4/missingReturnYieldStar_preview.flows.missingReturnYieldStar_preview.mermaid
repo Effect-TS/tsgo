@@ -1,11 +1,18 @@
 flowchart TB
-  0[/"type: #quot;before#quot;<br/>node: #quot;before#quot;"/]
-  1["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
-  2[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
-  3[/"type: #quot;boom#quot;<br/>node: #quot;boom#quot;"/]
-  4["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  5[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  0 -->|"kind: pipe"| 1
-  2 -->|"kind: transformCallee"| 1
+  0[/"type: Effect#lt;void, string, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  yield* Effect.log#40;#quot;before#quot;#41;#92;n  yield* Effect.fail#40;#quot;boom#quot;#41;#92;n#125;#41;"/]
+  1((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;#quot;before#quot;#41;")))
+  2((("type: Effect#lt;never, string, never#gt;<br/>node: Effect.fail#40;#quot;boom#quot;#41;")))
+  3[/"type: #quot;before#quot;<br/>node: #quot;before#quot;"/]
+  4["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  5[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  6[/"type: #quot;boom#quot;<br/>node: #quot;boom#quot;"/]
+  7["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  8[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  1 -->|"kind: yieldable"| 0
+  2 -->|"kind: yieldable"| 0
   3 -->|"kind: pipe"| 4
+  4 -->|"kind: connect"| 1
   5 -->|"kind: transformCallee"| 4
+  6 -->|"kind: pipe"| 7
+  7 -->|"kind: connect"| 2
+  8 -->|"kind: transformCallee"| 7

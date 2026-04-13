@@ -1,10 +1,12 @@
 flowchart TB
   0[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: export function testFn#40;#41;: Effect.Effect#lt;number#gt; #123;#92;n  // @ts-expect-error#92;n  return effectWithErrors#92;n#125;"]]
-  1[/"type: Effect#lt;number, ErrorA #124; ErrorB #124; ErrorC, never#gt;<br/>node: effectWithErrors"/]
-  2[["type: #40;#41; =#gt; Effect#lt;number, ErrorA #124; ErrorB #124; ErrorC, never#gt;<br/>node: #40;#41; =#gt; effectWithErrors"]]
-  3[/"type: Effect#lt;number, ErrorA #124; ErrorB #124; ErrorC, never#gt;<br/>node: effectWithErrors"/]
-  4[["type: #40;#41; =#gt; Effect#lt;number, ErrorA #124; ErrorB #124; ErrorC, never#gt;<br/>node: #40;#41; =#gt; effectWithErrors"]]
-  5[/"type: Effect#lt;number, ErrorA #124; ErrorB #124; ErrorC, never#gt;<br/>node: effectWithErrors"/]
+  1((("type: Effect#lt;number, never, never#gt;<br/>node: export function testFn#40;#41;: Effect.Effect#lt;number#gt; #123;#92;n  // @ts-expect-error#92;n  return effectWithErrors#92;n#125;")))
+  2[/"type: Effect#lt;number, ErrorA #124; ErrorB #124; ErrorC, never#gt;<br/>node: effectWithErrors"/]
+  3[["type: #40;#41; =#gt; Effect#lt;number, ErrorA #124; ErrorB #124; ErrorC, never#gt;<br/>node: #40;#41; =#gt; effectWithErrors"]]
+  4[/"type: Effect#lt;number, ErrorA #124; ErrorB #124; ErrorC, never#gt;<br/>node: effectWithErrors"/]
+  5[["type: #40;#41; =#gt; Effect#lt;number, ErrorA #124; ErrorB #124; ErrorC, never#gt;<br/>node: #40;#41; =#gt; effectWithErrors"]]
+  6[/"type: Effect#lt;number, ErrorA #124; ErrorB #124; ErrorC, never#gt;<br/>node: effectWithErrors"/]
   1 -->|"kind: potentialReturn"| 0
-  3 -->|"kind: potentialReturn"| 2
-  5 -->|"kind: potentialReturn"| 4
+  2 -->|"kind: potentialReturn"| 1
+  4 -->|"kind: potentialReturn"| 3
+  6 -->|"kind: potentialReturn"| 5

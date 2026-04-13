@@ -1,22 +1,34 @@
 flowchart TB
   0[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: export async function declaredAsync#40;#41; #123;#92;n  await Promise.resolve#40;1#41;#92;n  return 1#92;n#125;"]]
-  1[/"type: 1<br/>node: 1"/]
-  2[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: async #40;#41; =#gt; #123;#92;n  await Promise.resolve#40;2#41;#92;n  return 2#92;n#125;"]]
-  3[/"type: 2<br/>node: 2"/]
-  4[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: async run#40;#41; #123;#92;n    await Promise.resolve#40;3#41;#92;n    return 3#92;n  #125;"]]
-  5[/"type: 3<br/>node: 3"/]
-  6[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: async function nested#40;#41; #123;#92;n    await Promise.resolve#40;4#41;#92;n    return 4#92;n  #125;"]]
-  7[/"type: 4<br/>node: 4"/]
-  8[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;5#41;"]]
-  9((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;5#41;")))
-  10[/"type: 5<br/>node: 5"/]
-  11["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  12[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  1((("type: Promise#lt;number#gt;<br/>node: export async function declaredAsync#40;#41; #123;#92;n  await Promise.resolve#40;1#41;#92;n  return 1#92;n#125;")))
+  2[/"type: 1<br/>node: 1"/]
+  3[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: async #40;#41; =#gt; #123;#92;n  await Promise.resolve#40;2#41;#92;n  return 2#92;n#125;"]]
+  4((("type: Promise#lt;number#gt;<br/>node: async #40;#41; =#gt; #123;#92;n  await Promise.resolve#40;2#41;#92;n  return 2#92;n#125;")))
+  5[/"type: 2<br/>node: 2"/]
+  6[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: async run#40;#41; #123;#92;n    await Promise.resolve#40;3#41;#92;n    return 3#92;n  #125;"]]
+  7((("type: Promise#lt;number#gt;<br/>node: async run#40;#41; #123;#92;n    await Promise.resolve#40;3#41;#92;n    return 3#92;n  #125;")))
+  8[/"type: 3<br/>node: 3"/]
+  9[/"type: Effect#lt;#40;#41; =#gt; Promise#lt;number#gt;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  return async function nested#40;#41; #123;#92;n    await Promise.resolve#40;4#41;#92;n    return 4#92;n  #125;#92;n#125;#41;"/]
+  10((("type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: async function nested#40;#41; #123;#92;n    await Promise.resolve#40;4#41;#92;n    return 4#92;n  #125;")))
+  11[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: async function nested#40;#41; #123;#92;n    await Promise.resolve#40;4#41;#92;n    return 4#92;n  #125;"]]
+  12((("type: Promise#lt;number#gt;<br/>node: async function nested#40;#41; #123;#92;n    await Promise.resolve#40;4#41;#92;n    return 4#92;n  #125;")))
+  13[/"type: 4<br/>node: 4"/]
+  14[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;5#41;"]]
+  15((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;5#41;")))
+  16[/"type: 5<br/>node: 5"/]
+  17["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  18[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
   1 -->|"kind: potentialReturn"| 0
-  3 -->|"kind: potentialReturn"| 2
+  2 -->|"kind: potentialReturn"| 1
+  4 -->|"kind: potentialReturn"| 3
   5 -->|"kind: potentialReturn"| 4
   7 -->|"kind: potentialReturn"| 6
-  9 -->|"kind: potentialReturn"| 8
-  10 -->|"kind: pipe"| 11
-  11 -->|"kind: connect"| 9
-  12 -->|"kind: transformCallee"| 11
+  8 -->|"kind: potentialReturn"| 7
+  10 -->|"kind: potentialReturn"| 9
+  12 -->|"kind: potentialReturn"| 11
+  13 -->|"kind: potentialReturn"| 12
+  11 -->|"kind: connect"| 10
+  15 -->|"kind: potentialReturn"| 14
+  16 -->|"kind: pipe"| 17
+  17 -->|"kind: connect"| 15
+  18 -->|"kind: transformCallee"| 17
