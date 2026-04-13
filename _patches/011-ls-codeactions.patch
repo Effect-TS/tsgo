@@ -1,16 +1,15 @@
 diff --git a/internal/ls/codeactions.go b/internal/ls/codeactions.go
-index 5460f04f94..6d217f8cee 100644
 --- a/internal/ls/codeactions.go
 +++ b/internal/ls/codeactions.go
-@@ -35,6 +35,7 @@ type CodeFixContext struct {
- type CodeAction struct {
- 	Description string
- 	Changes     []*lsproto.TextEdit
-+	Kind        lsproto.CodeActionKind // optional; used by refactors to specify the code action kind
+@@ -38,6 +38,7 @@ type CodeAction struct {
+ 	Description       string
+ 	Changes           []*lsproto.TextEdit
+ 	FixID             string
++	Kind              lsproto.CodeActionKind // optional; used by refactors to specify the code action kind
+ 	FixAllDescription string
  }
  
- // CombinedCodeActions represents combined code actions for fix-all scenarios
-@@ -49,6 +50,32 @@ var codeFixProviders = []*CodeFixProvider{
+@@ -54,6 +55,32 @@ var codeFixProviders = []*CodeFixProvider{
  	// Add more code fix providers here as they are implemented
  }
  
@@ -43,20 +42,19 @@ index 5460f04f94..6d217f8cee 100644
  // ProvideCodeActions returns code actions for the given range and context
  func (l *LanguageService) ProvideCodeActions(ctx context.Context, params *lsproto.CodeActionParams) (lsproto.CodeActionResponse, error) {
  	program, file := l.getProgramAndFile(params.TextDocument.Uri)
-@@ -76,8 +103,9 @@ func (l *LanguageService) ProvideCodeActions(ctx context.Context, params *lsprot
+@@ -90,7 +117,9 @@ func (l *LanguageService) ProvideCodeActions(ctx context.Context, params *lsprot
  
  			errorCode := *diag.Code.Integer
  
--			// Check all code fix providers
--			for _, provider := range codeFixProviders {
 +			// Check all code fix providers (built-in + external)
 +			allProviders := append(codeFixProviders, externalCodeFixProviders...)
+-			for _, provider := range codeFixProviders {
 +			for _, provider := range allProviders {
  				if !containsErrorCode(provider.ErrorCodes, errorCode) {
  					continue
  				}
-@@ -107,6 +135,22 @@ func (l *LanguageService) ProvideCodeActions(ctx context.Context, params *lsprot
- 		}
+@@ -127,6 +156,22 @@ func (l *LanguageService) ProvideCodeActions(ctx context.Context, params *lsprot
+ 		actions = append(actions, fixAllActions...)
  	}
  
 +	// Run refactor providers when the request includes refactor.* kinds or no filter
@@ -78,7 +76,7 @@ index 5460f04f94..6d217f8cee 100644
  	return lsproto.CommandOrCodeActionArrayOrNull{CommandOrCodeActionArray: &actions}, nil
  }
  
-@@ -189,6 +233,38 @@ func containsErrorCode(codes []int32, code int32) bool {
+@@ -352,6 +397,38 @@ func containsErrorCode(codes []int32, code int32) bool {
  	return slices.Contains(codes, code)
  }
  

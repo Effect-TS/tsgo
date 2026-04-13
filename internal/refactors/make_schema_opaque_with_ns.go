@@ -129,8 +129,8 @@ func runMakeSchemaOpaqueWithNs(ctx *refactor.Context) []ls.CodeAction {
 				tracker.NewIdentifier(newName),
 			)
 			constDeclList := tracker.NewVariableDeclarationList(
-				ast.NodeFlagsConst,
 				tracker.NewNodeList([]*ast.Node{constDecl}),
+				ast.NodeFlagsConst,
 			)
 			constStatement := tracker.NewVariableStatement(
 				opaqueExportModifiers(tracker),

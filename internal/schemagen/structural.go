@@ -109,8 +109,8 @@ func (g *StructuralSchemaGen) pushHoistedVariableStatement(name string, t *check
 		result,
 	)
 	varDeclList := g.Tracker.NewVariableDeclarationList(
-		ast.NodeFlagsConst,
 		g.Tracker.NewNodeList([]*ast.Node{varDecl}),
+		ast.NodeFlagsConst,
 	)
 	stmt := g.Tracker.NewVariableStatement(nil, varDeclList)
 	g.pushHoistedStatement(name, t, stmt, func() *ast.Node {
@@ -636,8 +636,8 @@ func (g *StructuralSchemaGen) Process(typeMap map[string]*checker.Type, scope *a
 			r.result,
 		)
 		varDeclList := g.Tracker.NewVariableDeclarationList(
-			ast.NodeFlagsConst,
 			g.Tracker.NewNodeList([]*ast.Node{varDecl}),
+			ast.NodeFlagsConst,
 		)
 		modifiers := g.Tracker.NewModifierList([]*ast.Node{
 			g.Tracker.NewModifier(ast.KindExportKeyword),
