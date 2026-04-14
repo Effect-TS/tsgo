@@ -311,7 +311,7 @@ func typeToDetail(c *checker.Checker, t *checker.Type, node *ast.Node) *string {
 	if c == nil || t == nil || node == nil {
 		return nil
 	}
-	detail := c.TypeToStringEx(t, node, checker.TypeFormatFlagsNoTruncation)
+	detail := c.TypeToStringEx(t, node, checker.TypeFormatFlagsNoTruncation, nil)
 	return &detail
 }
 
@@ -346,9 +346,9 @@ func layerSymbolDetail(tp *typeparser.TypeParser, c *checker.Checker, node *ast.
 		if layer == nil {
 			continue
 		}
-		rOut := c.TypeToStringEx(layer.ROut, typeCheckNode, checker.TypeFormatFlagsNoTruncation)
-		e := c.TypeToStringEx(layer.E, typeCheckNode, checker.TypeFormatFlagsNoTruncation)
-		rIn := c.TypeToStringEx(layer.RIn, typeCheckNode, checker.TypeFormatFlagsNoTruncation)
+		rOut := c.TypeToStringEx(layer.ROut, typeCheckNode, checker.TypeFormatFlagsNoTruncation, nil)
+		e := c.TypeToStringEx(layer.E, typeCheckNode, checker.TypeFormatFlagsNoTruncation, nil)
+		rIn := c.TypeToStringEx(layer.RIn, typeCheckNode, checker.TypeFormatFlagsNoTruncation, nil)
 		detail := "<" + rOut + ", " + e + ", " + rIn + ">"
 		return &detail
 	}

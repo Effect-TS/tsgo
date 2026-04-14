@@ -202,7 +202,7 @@ func buildLayerMagicBuild(tracker *change.Tracker, ctx *refactor.Context, c *che
 	if len(magicResult.MissingOutputTypes) > 0 {
 		var typeNames []string
 		for _, t := range magicResult.MissingOutputTypes {
-			typeNames = append(typeNames, c.TypeToStringEx(t, nil, checker.TypeFormatFlagsNoTruncation))
+			typeNames = append(typeNames, c.TypeToStringEx(t, nil, checker.TypeFormatFlagsNoTruncation, nil))
 		}
 		comment := " Unable to find " + strings.Join(typeNames, ", ") + " in the provided layers. "
 		newDeclaration = tracker.AddSyntheticTrailingComment(newDeclaration, ast.KindMultiLineCommentTrivia, comment, false)
@@ -339,7 +339,7 @@ func buildLayerMagicPrepare(
 	} else {
 		var typeNodes []*ast.Node
 		for _, t := range newlyIntroduced {
-			typeStr := c.TypeToStringEx(t, nil, checker.TypeFormatFlagsNoTruncation)
+			typeStr := c.TypeToStringEx(t, nil, checker.TypeFormatFlagsNoTruncation, nil)
 			typeNodes = append(typeNodes, tracker.NewTypeReferenceNode(tracker.NewIdentifier(typeStr), nil))
 		}
 		if len(typeNodes) == 1 {
@@ -353,7 +353,7 @@ func buildLayerMagicPrepare(
 	if len(existingBefore) > 0 {
 		var typeStrings []string
 		for _, t := range existingBefore {
-			typeStrings = append(typeStrings, c.TypeToStringEx(t, nil, checker.TypeFormatFlagsNoTruncation))
+			typeStrings = append(typeStrings, c.TypeToStringEx(t, nil, checker.TypeFormatFlagsNoTruncation, nil))
 		}
 		comment := " " + strings.Join(typeStrings, " | ") + " "
 		providesType = tracker.AddSyntheticTrailingComment(providesType, ast.KindMultiLineCommentTrivia, comment, false)
@@ -400,8 +400,8 @@ func sortedTypeSlice(c *checker.Checker, types map[*checker.Type]bool) []*checke
 		result = append(result, t)
 	}
 	sort.Slice(result, func(i, j int) bool {
-		return c.TypeToStringEx(result[i], nil, checker.TypeFormatFlagsNoTruncation) <
-			c.TypeToStringEx(result[j], nil, checker.TypeFormatFlagsNoTruncation)
+		return c.TypeToStringEx(result[i], nil, checker.TypeFormatFlagsNoTruncation, nil) <
+			c.TypeToStringEx(result[j], nil, checker.TypeFormatFlagsNoTruncation, nil)
 	})
 	return result
 }

@@ -88,7 +88,7 @@ func runToggleReturnTypeAnnotation(ctx *refactor.Context) []ls.CodeAction {
 		return nil
 	}
 
-	typeStr := c.TypeToStringEx(returnType, matchedNode, checker.TypeFormatFlagsNoTruncation)
+	typeStr := c.TypeToStringEx(returnType, matchedNode, checker.TypeFormatFlagsNoTruncation, nil)
 	if typeStr == "" {
 		return nil
 	}

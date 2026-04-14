@@ -292,7 +292,7 @@ func buildProxySignatureText(
 			constraintType := c.GetConstraintOfTypeParameter(tp)
 			if constraintType != nil {
 				sb.WriteString(" extends ")
-				sb.WriteString(c.TypeToStringEx(constraintType, classNode, checker.TypeFormatFlagsNoTruncation))
+				sb.WriteString(c.TypeToStringEx(constraintType, classNode, checker.TypeFormatFlagsNoTruncation, nil))
 			}
 		}
 		sb.WriteString(">")
@@ -311,7 +311,7 @@ func buildProxySignatureText(
 		sb.WriteString(param.Name)
 		sb.WriteString(": ")
 		paramType := c.GetTypeOfSymbolAtLocation(param, classNode)
-		sb.WriteString(c.TypeToStringEx(paramType, classNode, checker.TypeFormatFlagsNoTruncation))
+		sb.WriteString(c.TypeToStringEx(paramType, classNode, checker.TypeFormatFlagsNoTruncation, nil))
 	}
 	sb.WriteString(")")
 
@@ -336,27 +336,27 @@ func buildWrappedReturnTypeText(
 	// Try to parse as Effect type
 	effect := tp.EffectType(returnType, classNode)
 	if effect != nil {
-		aStr := c.TypeToStringEx(effect.A, classNode, checker.TypeFormatFlagsNoTruncation)
-		eStr := c.TypeToStringEx(effect.E, classNode, checker.TypeFormatFlagsNoTruncation)
+		aStr := c.TypeToStringEx(effect.A, classNode, checker.TypeFormatFlagsNoTruncation, nil)
+		eStr := c.TypeToStringEx(effect.E, classNode, checker.TypeFormatFlagsNoTruncation, nil)
 
 		var rStr string
 		if effect.R != nil && effect.R.Flags()&checker.TypeFlagsNever != 0 {
 			rStr = classNameText
 		} else {
-			rStr = classNameText + " | " + c.TypeToStringEx(effect.R, classNode, checker.TypeFormatFlagsNoTruncation)
+			rStr = classNameText + " | " + c.TypeToStringEx(effect.R, classNode, checker.TypeFormatFlagsNoTruncation, nil)
 		}
 
 		return effectIdentifier + ".Effect<" + aStr + ", " + eStr + ", " + rStr + ">"
 	}
 
 	// Try to detect Promise<T>
-	returnTypeStr := c.TypeToStringEx(returnType, classNode, checker.TypeFormatFlagsNoTruncation)
+	returnTypeStr := c.TypeToStringEx(returnType, classNode, checker.TypeFormatFlagsNoTruncation, nil)
 	if innerTypeStr, ok := isPromiseTypeString(returnTypeStr); ok {
 		return effectIdentifier + ".Effect<" + innerTypeStr + ", Cause.UnknownException, " + classNameText + ">"
 	}
 
 	// Fallback: Effect<A, never, ClassName>
-	aStr := c.TypeToStringEx(returnType, classNode, checker.TypeFormatFlagsNoTruncation)
+	aStr := c.TypeToStringEx(returnType, classNode, checker.TypeFormatFlagsNoTruncation, nil)
 	return effectIdentifier + ".Effect<" + aStr + ", never, " + classNameText + ">"
 }
 

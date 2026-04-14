@@ -241,7 +241,7 @@ func signatureString(c *checker.Checker, sig *checker.Signature) string {
 	if c == nil || sig == nil {
 		return "<nil>"
 	}
-	return c.SignatureToStringEx(sig, nil, checker.TypeFormatFlagsWriteArrowStyleSignature)
+	return c.SignatureToStringEx(sig, nil, checker.TypeFormatFlagsWriteArrowStyleSignature, nil)
 }
 
 func findFlowByNode(t *testing.T, sf *ast.SourceFile, flows []*PipingFlow, node *ast.Node) *PipingFlow {

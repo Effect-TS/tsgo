@@ -278,7 +278,7 @@ func generatePipingFlowBaseline(
 			subjectText := scanner.GetSourceTextOfNodeFromSourceFile(sf, flow.Subject.Node, false)
 			fmt.Fprintf(&sb, "Subject: %s\n", escapeNewlines(subjectText))
 			if flow.Subject.OutType != nil {
-				fmt.Fprintf(&sb, "Subject Type: %s\n", c.TypeToStringEx(flow.Subject.OutType, nil, checker.TypeFormatFlagsNoTruncation))
+				fmt.Fprintf(&sb, "Subject Type: %s\n", c.TypeToStringEx(flow.Subject.OutType, nil, checker.TypeFormatFlagsNoTruncation, nil))
 			} else {
 				sb.WriteString("Subject Type: \n")
 			}
@@ -303,7 +303,7 @@ func generatePipingFlowBaseline(
 
 				outTypeStr := ""
 				if t.OutType != nil {
-					outTypeStr = c.TypeToStringEx(t.OutType, nil, checker.TypeFormatFlagsNoTruncation)
+					outTypeStr = c.TypeToStringEx(t.OutType, nil, checker.TypeFormatFlagsNoTruncation, nil)
 				}
 
 				fmt.Fprintf(&sb, "  [%d] kind: %s\n", i, string(t.Kind))
@@ -451,7 +451,7 @@ func formatExecutionType(c *checker.Checker, typ *checker.Type) string {
 	if typ == nil {
 		return ""
 	}
-	return c.TypeToStringEx(typ, nil, checker.TypeFormatFlagsNoTruncation)
+	return c.TypeToStringEx(typ, nil, checker.TypeFormatFlagsNoTruncation, nil)
 }
 
 func formatExecutionSourceNode(sf *ast.SourceFile, node *ast.Node) string {

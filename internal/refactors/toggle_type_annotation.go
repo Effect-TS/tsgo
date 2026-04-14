@@ -103,7 +103,7 @@ func runToggleTypeAnnotation(ctx *refactor.Context) []ls.CodeAction {
 		return nil
 	}
 
-	typeStr := c.TypeToStringEx(initializerType, matchedNode, checker.TypeFormatFlagsNoTruncation)
+	typeStr := c.TypeToStringEx(initializerType, matchedNode, checker.TypeFormatFlagsNoTruncation, nil)
 	if typeStr == "" {
 		return nil
 	}
