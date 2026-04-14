@@ -1,5 +1,5 @@
 diff --git a/internal/ls/hover.go b/internal/ls/hover.go
-index 32bbf9347..bd7bb3709 100644
+index 564109a83..7a403395d 100644
 --- a/internal/ls/hover.go
 +++ b/internal/ls/hover.go
 @@ -20,6 +20,18 @@ const (
@@ -18,13 +18,13 @@ index 32bbf9347..bd7bb3709 100644
 +	AfterQuickInfoCallback = cb
 +}
 +
- func (l *LanguageService) ProvideHover(ctx context.Context, documentURI lsproto.DocumentUri, lspPosition lsproto.Position) (lsproto.HoverResponse, error) {
+ func (l *LanguageService) ProvideHover(ctx context.Context, params *lsproto.HoverParams) (lsproto.HoverResponse, error) {
  	caps := lsproto.GetClientCapabilities(ctx)
  	contentFormat := lsproto.PreferredMarkupKind(caps.TextDocument.Hover.ContentFormat)
-@@ -36,6 +48,17 @@ func (l *LanguageService) ProvideHover(ctx context.Context, documentURI lsproto.
- 	rangeNode := getNodeForQuickInfo(node)
- 	symbol := getSymbolAtLocationForQuickInfo(c, node)
- 	quickInfo, documentation := l.getQuickInfoAndDocumentationForSymbol(c, symbol, rangeNode, contentFormat)
+@@ -54,6 +66,17 @@ func (l *LanguageService) ProvideHover(ctx context.Context, params *lsproto.Hove
+ 	}
+ 
+ 	quickInfo, documentation := l.getQuickInfoAndDocumentationForSymbol(c, symbol, rangeNode, contentFormat, vc)
 +
 +	// EFFECT HOOK: Allow Effect to enrich hover responses
 +	if AfterQuickInfoCallback != nil {

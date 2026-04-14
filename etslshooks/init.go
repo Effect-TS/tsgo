@@ -184,7 +184,7 @@ func afterQuickInfo(program checker.Program, c *checker.Checker, sf *ast.SourceF
 				if t != nil {
 					effect := tp.EffectYieldableType(t, yield.Expression)
 					if effect != nil {
-						typeStr := c.TypeToStringEx(t, nil, checker.TypeFormatFlagsNoTruncation)
+						typeStr := c.TypeToStringEx(t, nil, checker.TypeFormatFlagsNoTruncation, nil)
 						quickInfo = "(yield*) " + typeStr
 						documentation = formatEffectTypeParams(c, effect, "", isMarkdown)
 						return quickInfo, documentation, node.Parent
@@ -307,9 +307,9 @@ func formatLayerHover(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.Sou
 
 // formatLayerTypeParams formats Layer type parameters (Provides, Error, Requires).
 func formatLayerTypeParams(c *checker.Checker, layer *typeparser.Layer, isMarkdown bool) string {
-	rOutStr := c.TypeToStringEx(layer.ROut, nil, checker.TypeFormatFlagsNoTruncation)
-	eStr := c.TypeToStringEx(layer.E, nil, checker.TypeFormatFlagsNoTruncation)
-	rInStr := c.TypeToStringEx(layer.RIn, nil, checker.TypeFormatFlagsNoTruncation)
+	rOutStr := c.TypeToStringEx(layer.ROut, nil, checker.TypeFormatFlagsNoTruncation, nil)
+	eStr := c.TypeToStringEx(layer.E, nil, checker.TypeFormatFlagsNoTruncation, nil)
+	rInStr := c.TypeToStringEx(layer.RIn, nil, checker.TypeFormatFlagsNoTruncation, nil)
 
 	if isMarkdown {
 		return fmt.Sprintf("```ts\n/* Layer Type Parameters */\ntype Provides = %s\ntype Error = %s\ntype Requires = %s\n```\n", rOutStr, eStr, rInStr)
@@ -335,9 +335,9 @@ func isDeclarationName(node *ast.Node) bool {
 
 // formatEffectTypeParams formats Effect type parameters (A, E, R) and prepends them to documentation.
 func formatEffectTypeParams(c *checker.Checker, effect *typeparser.Effect, documentation string, isMarkdown bool) string {
-	aStr := c.TypeToStringEx(effect.A, nil, checker.TypeFormatFlagsNoTruncation)
-	eStr := c.TypeToStringEx(effect.E, nil, checker.TypeFormatFlagsNoTruncation)
-	rStr := c.TypeToStringEx(effect.R, nil, checker.TypeFormatFlagsNoTruncation)
+	aStr := c.TypeToStringEx(effect.A, nil, checker.TypeFormatFlagsNoTruncation, nil)
+	eStr := c.TypeToStringEx(effect.E, nil, checker.TypeFormatFlagsNoTruncation, nil)
+	rStr := c.TypeToStringEx(effect.R, nil, checker.TypeFormatFlagsNoTruncation, nil)
 
 	var prefix string
 	if isMarkdown {
