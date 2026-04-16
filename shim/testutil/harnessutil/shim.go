@@ -36,8 +36,8 @@ func NewOutputRecorderFS(fs vfs.FS) vfs.FS
 //go:linkname NewTracerForBaselining github.com/microsoft/typescript-go/internal/testutil/harnessutil.NewTracerForBaselining
 func NewTracerForBaselining(opts tspath.ComparePathsOptions, builder *strings.Builder) *harnessutil.TracerForBaselining
 type OutputRecorderFS = harnessutil.OutputRecorderFS
-//go:linkname SetCompilerOptionsFromTestConfig github.com/microsoft/typescript-go/internal/testutil/harnessutil.SetCompilerOptionsFromTestConfig
-func SetCompilerOptionsFromTestConfig(t *testing.T, testConfig harnessutil.TestConfiguration, compilerOptions *core.CompilerOptions, currentDirectory string)
+//go:linkname SetOptionsFromTestConfig github.com/microsoft/typescript-go/internal/testutil/harnessutil.SetOptionsFromTestConfig
+func SetOptionsFromTestConfig(t *testing.T, testConfig harnessutil.TestConfiguration, compilerOptions *core.CompilerOptions, harnessOptions *harnessutil.HarnessOptions, currentDirectory string, allowUnknownOptions bool)
 //go:linkname SkipUnsupportedCompilerOptions github.com/microsoft/typescript-go/internal/testutil/harnessutil.SkipUnsupportedCompilerOptions
 func SkipUnsupportedCompilerOptions(t *testing.T, options *core.CompilerOptions)
 type SourceFileCacheKey = harnessutil.SourceFileCacheKey

@@ -82,4 +82,6 @@ const ResultKindRelative = modulespecifiers.ResultKindRelative
 type SourceFileForSpecifierGeneration = modulespecifiers.SourceFileForSpecifierGeneration
 //go:linkname TryGetRealFileNameForNonJSDeclarationFileName github.com/microsoft/typescript-go/internal/modulespecifiers.TryGetRealFileNameForNonJSDeclarationFileName
 func TryGetRealFileNameForNonJSDeclarationFileName(fileName string) string
+//go:linkname UpdateModuleSpecifier github.com/microsoft/typescript-go/internal/modulespecifiers.UpdateModuleSpecifier
+func UpdateModuleSpecifier(compilerOptions *core.CompilerOptions, host modulespecifiers.ModuleSpecifierGenerationHost, importingSourceFile *ast.SourceFile, importingSourceFileName string, oldImportSpecifier string, toFileName string, userPreferences modulespecifiers.UserPreferences, options modulespecifiers.ModuleSpecifierOptions) string
 type UserPreferences = modulespecifiers.UserPreferences
