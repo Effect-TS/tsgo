@@ -4,9 +4,10 @@ flowchart TB
   2[/"type: Effect#lt;Context#lt;unknown#gt;, never, unknown#gt;<br/>node: Effect.context#lt;unknown#gt;#40;#41;"/]
   3[/"type: #quot;boom#quot;<br/>node: #quot;boom#quot;"/]
   4["type: Effect#lt;never, any, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  5[/"type: Context#lt;unknown#gt;<br/>node: yield* Effect.context#lt;unknown#gt;#40;#41;"/]
+  5[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  6[/"type: Context#lt;unknown#gt;<br/>node: yield* Effect.context#lt;unknown#gt;#40;#41;"/]
   1 -->|"kind: potentialReturn"| 0
   2 -->|"kind: yieldable"| 0
   3 -->|"kind: pipe"| 4
-  4 -->|"kind: transformCallee"| 4
+  5 -->|"kind: transformCallee"| 4
   4 -->|"kind: yieldable"| 0

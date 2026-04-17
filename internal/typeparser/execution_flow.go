@@ -247,6 +247,7 @@ func (ec *executionCollector) visitEffectFnCall(p *EffectFnCallResult, node *ast
 			}
 			return false
 		})
+		p.Body().ForEachChild(ec.visitNodeVisitor)
 	}
 	// function with parameters
 	s := ec.buildSlice(ExecutionNode{
@@ -258,7 +259,6 @@ func (ec *executionCollector) visitEffectFnCall(p *EffectFnCallResult, node *ast
 		ec.visitNodeAndConnectSlice(arg, s, ExecutionLinkKindParameter)
 	}
 	ec.connectSlices(sExit, s, ExecutionLinkKindPotentialReturn)
-	p.Body().ForEachChild(ec.visitNodeVisitor)
 	return s
 }
 
@@ -309,8 +309,8 @@ func (ec *executionCollector) visitFunctionLikeDeclaration(node *ast.Node) *Grap
 				}
 				return false
 			})
+			fnBody.ForEachChild(ec.visitNodeVisitor)
 		}
-		fnBody.ForEachChild(ec.visitNodeVisitor)
 	}
 	return s
 }

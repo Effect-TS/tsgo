@@ -2,5 +2,6 @@ flowchart TB
   0[/"type: ServiceClass#lt;UserService, #quot;UserService#quot;, #123; getUser#40;id: string#41;: Effect#lt;void, never, never#gt;; #125;#gt;<br/>node: Context.Service#lt;UserService, #123;#92;n    getUser#40;id: string#41;: Effect.Effect#lt;void#gt;#92;n  #125;#gt;#40;#41;#40;#quot;UserService#quot;#41;"/]
   1[/"type: #123; getUser: #40;id: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #123; // UserService is an Effect Tag#92;n  getUser: #40;id: string#41; =#gt;#92;n    Effect.gen#40;function*#40;#41; #123;#92;n      yield* Effect.log#40;`Looking up user $#123;id#125;`#41;#92;n    #125;#41;#92;n#125;"/]
   2["type: #123; getUser#40;id: string#41;: Effect#lt;void, never, never#gt;; #125;<br/>callee: UserService.of<br/>args: #91;#93;"]
+  3[/"type: #40;this: void, self: #123; getUser#40;id: string#41;: Effect#lt;void, never, never#gt;; #125;#41; =#gt; #123; getUser#40;id: string#41;: Effect#lt;void, never, never#gt;; #125;<br/>node: UserService.of"/]
   1 -->|"kind: pipe"| 2
-  2 -->|"kind: transformCallee"| 2
+  3 -->|"kind: transformCallee"| 2

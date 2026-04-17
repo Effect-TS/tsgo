@@ -2,27 +2,29 @@ flowchart TB
   0((("type: Effect#lt;void, string, never#gt;<br/>node: function*#40;#41;#123;#92;n    yield* Effect.fail#40;#quot;no#quot;#41; // #lt;- should emit an error be return yield*#92;n#125;")))
   1[/"type: #quot;no#quot;<br/>node: #quot;no#quot;"/]
   2["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  3[["type: #40;#41; =#gt; Effect#lt;void, string, never#gt;<br/>node: Effect.fnUntraced#40;function*#40;#41;#123;#92;n    yield* Effect.fail#40;#quot;no#quot;#41; // #lt;- should emit an error be return yield*#92;n#125;#41;"]]
-  4[/"type: Untraced<br/>node: Effect.fnUntraced"/]
-  5((("type: Effect#lt;void, string, never#gt;<br/>node: function*#40;#41;#123;#92;n    yield* Effect.fail#40;#quot;no#quot;#41; // #lt;- should emit an error be return yield*#92;n#125;")))
-  6[/"type: #quot;no#quot;<br/>node: #quot;no#quot;"/]
-  7["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  8[["type: #40;#41; =#gt; Effect#lt;void, string, never#gt;<br/>node: Effect.fnUntracedEager#40;function*#40;#41;#123;#92;n    yield* Effect.fail#40;#quot;no#quot;#41; // #lt;- should emit an error be return yield*#92;n#125;#41;"]]
-  9[/"type: Untraced<br/>node: Effect.fnUntracedEager"/]
-  10((("type: Effect#lt;unknown, any, any#gt;<br/>node: #40;a: string#41; =#gt; #123;#92;n    return Effect.fail#40;a#41;#92;n#125;")))
-  11[/"type: string<br/>node: a"/]
-  12["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  13[["type: #40;a: string#41; =#gt; Effect#lt;unknown, any, any#gt;<br/>node: Effect.fnUntraced#40;#40;a: string#41; =#gt; #123;#92;n    return Effect.fail#40;a#41;#92;n#125;#41;"]]
-  14[/"type: Untraced<br/>node: Effect.fnUntraced"/]
+  3[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  4[/"type: never<br/>node: yield* Effect.fail#40;#quot;no#quot;#41;"/]
+  5[["type: #40;#41; =#gt; Effect#lt;void, string, never#gt;<br/>node: Effect.fnUntraced#40;function*#40;#41;#123;#92;n    yield* Effect.fail#40;#quot;no#quot;#41; // #lt;- should emit an error be return yield*#92;n#125;#41;"]]
+  6((("type: Effect#lt;void, string, never#gt;<br/>node: function*#40;#41;#123;#92;n    yield* Effect.fail#40;#quot;no#quot;#41; // #lt;- should emit an error be return yield*#92;n#125;")))
+  7[/"type: #quot;no#quot;<br/>node: #quot;no#quot;"/]
+  8["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  9[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  10[/"type: never<br/>node: yield* Effect.fail#40;#quot;no#quot;#41;"/]
+  11[["type: #40;#41; =#gt; Effect#lt;void, string, never#gt;<br/>node: Effect.fnUntracedEager#40;function*#40;#41;#123;#92;n    yield* Effect.fail#40;#quot;no#quot;#41; // #lt;- should emit an error be return yield*#92;n#125;#41;"]]
+  12((("type: Effect#lt;unknown, any, any#gt;<br/>node: #40;a: string#41; =#gt; #123;#92;n    return Effect.fail#40;a#41;#92;n#125;")))
+  13[/"type: string<br/>node: a"/]
+  14["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  15[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  16[["type: #40;a: string#41; =#gt; Effect#lt;unknown, any, any#gt;<br/>node: Effect.fnUntraced#40;#40;a: string#41; =#gt; #123;#92;n    return Effect.fail#40;a#41;#92;n#125;#41;"]]
   1 -->|"kind: pipe"| 2
-  2 -->|"kind: transformCallee"| 2
+  3 -->|"kind: transformCallee"| 2
   2 -->|"kind: yieldable"| 0
-  0 -->|"kind: potentialReturn"| 3
-  6 -->|"kind: pipe"| 7
-  7 -->|"kind: transformCallee"| 7
-  7 -->|"kind: yieldable"| 5
-  5 -->|"kind: potentialReturn"| 8
-  11 -->|"kind: pipe"| 12
-  12 -->|"kind: transformCallee"| 12
-  12 -->|"kind: potentialReturn"| 10
-  10 -->|"kind: potentialReturn"| 13
+  0 -->|"kind: potentialReturn"| 5
+  7 -->|"kind: pipe"| 8
+  9 -->|"kind: transformCallee"| 8
+  8 -->|"kind: yieldable"| 6
+  6 -->|"kind: potentialReturn"| 11
+  13 -->|"kind: pipe"| 14
+  15 -->|"kind: transformCallee"| 14
+  14 -->|"kind: potentialReturn"| 12
+  12 -->|"kind: potentialReturn"| 16

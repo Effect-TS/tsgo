@@ -7,8 +7,8 @@ flowchart TB
   5[/"type: Date<br/>node: new Date#40;#41;"/]
   6((("type: Effect#lt;Date, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  const date = new Date#40;#quot;2024-01-01#quot;#41;#92;n  return date#92;n#125;")))
   7[/"type: Date<br/>node: date"/]
-  8[["type: #40;#41; =#gt; Effect#lt;Date, never, never#gt;<br/>node: Effect.fn#40;#quot;newDateWithArgsInFn#quot;#41;#40;function*#40;#41; #123;#92;n  const date = new Date#40;#quot;2024-01-01#quot;#41;#92;n  return date#92;n#125;#41;"]]
-  9[/"type: Traced<br/>node: Effect.fn#40;#quot;newDateWithArgsInFn#quot;#41;"/]
+  8[/"type: Date<br/>node: new Date#40;#quot;2024-01-01#quot;#41;"/]
+  9[["type: #40;#41; =#gt; Effect#lt;Date, never, never#gt;<br/>node: Effect.fn#40;#quot;newDateWithArgsInFn#quot;#41;#40;function*#40;#41; #123;#92;n  const date = new Date#40;#quot;2024-01-01#quot;#41;#92;n  return date#92;n#125;#41;"]]
   10((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const MyDate = Date#92;n  const now = MyDate.now#40;#41;#92;n  return now#92;n#125;#41;")))
   11[/"type: number<br/>node: now"/]
   12[/"type: DateConstructor<br/>node: Date"/]
@@ -23,7 +23,7 @@ flowchart TB
   1 -->|"kind: potentialReturn"| 0
   4 -->|"kind: potentialReturn"| 3
   7 -->|"kind: potentialReturn"| 6
-  6 -->|"kind: potentialReturn"| 8
+  6 -->|"kind: potentialReturn"| 9
   11 -->|"kind: potentialReturn"| 10
   16 -->|"kind: potentialReturn"| 15
   18 -->|"kind: potentialReturn"| 17

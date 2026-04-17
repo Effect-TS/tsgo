@@ -2,46 +2,57 @@ flowchart TB
   0((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  console.log#40;#quot;hello#quot;#41;#92;n#125;#41;")))
   1[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
   2["type: void<br/>callee: console.log<br/>args: #91;#93;"]
-  3((("type: Effect#lt;void, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  console.warn#40;#quot;warning#quot;#41;#92;n#125;")))
-  4[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.fn#40;#quot;consoleWarnInFn#quot;#41;#40;function*#40;#41; #123;#92;n  console.warn#40;#quot;warning#quot;#41;#92;n#125;#41;"]]
-  5[/"type: Traced<br/>node: Effect.fn#40;#quot;consoleWarnInFn#quot;#41;"/]
-  6((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  console.error#40;#quot;error#quot;#41;#92;n#125;#41;")))
-  7[/"type: #quot;error#quot;<br/>node: #quot;error#quot;"/]
-  8["type: void<br/>callee: console.error<br/>args: #91;#93;"]
-  9((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const myConsole = console#92;n  myConsole.log#40;#quot;hello#quot;#41;#92;n#125;#41;")))
-  10[/"type: Console<br/>node: console"/]
-  11[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
-  12["type: void<br/>callee: myConsole.log<br/>args: #91;#93;"]
+  3[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
+  4((("type: Effect#lt;void, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  console.warn#40;#quot;warning#quot;#41;#92;n#125;")))
+  5[/"type: #quot;warning#quot;<br/>node: #quot;warning#quot;"/]
+  6["type: void<br/>callee: console.warn<br/>args: #91;#93;"]
+  7[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.warn"/]
+  8[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.fn#40;#quot;consoleWarnInFn#quot;#41;#40;function*#40;#41; #123;#92;n  console.warn#40;#quot;warning#quot;#41;#92;n#125;#41;"]]
+  9((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  console.error#40;#quot;error#quot;#41;#92;n#125;#41;")))
+  10[/"type: #quot;error#quot;<br/>node: #quot;error#quot;"/]
+  11["type: void<br/>callee: console.error<br/>args: #91;#93;"]
+  12[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.error"/]
   13((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const myConsole = console#92;n  myConsole.log#40;#quot;hello#quot;#41;#92;n#125;#41;")))
   14[/"type: Console<br/>node: console"/]
   15[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
   16["type: void<br/>callee: myConsole.log<br/>args: #91;#93;"]
-  17[/"type: #quot;module level#quot;<br/>node: #quot;module level#quot;"/]
-  18["type: void<br/>callee: console.log<br/>args: #91;#93;"]
-  19[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#92;n  console.log#40;#quot;regular#quot;#41;#92;n#125;"]]
-  20[/"type: #quot;regular#quot;<br/>node: #quot;regular#quot;"/]
-  21["type: void<br/>callee: console.log<br/>args: #91;#93;"]
-  22((("type: Effect#lt;#40;#41; =#gt; void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const fn = #40;#41; =#gt; console.log#40;#quot;nested#quot;#41;#92;n  return fn#92;n#125;#41;")))
-  23[/"type: #40;#41; =#gt; void<br/>node: fn"/]
-  24[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; console.log#40;#quot;nested#quot;#41;"]]
-  25[/"type: #quot;nested#quot;<br/>node: #quot;nested#quot;"/]
-  26["type: void<br/>callee: console.log<br/>args: #91;#93;"]
-  27((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  console.table#40;#123; a: 1 #125;#41;#92;n#125;#41;")))
-  28[/"type: void<br/>node: console.table#40;#123; a: 1 #125;#41;"/]
+  17[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: myConsole.log"/]
+  18((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const myConsole = console#92;n  myConsole.log#40;#quot;hello#quot;#41;#92;n#125;#41;")))
+  19[/"type: Console<br/>node: console"/]
+  20[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
+  21["type: void<br/>callee: myConsole.log<br/>args: #91;#93;"]
+  22[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: myConsole.log"/]
+  23[/"type: #quot;module level#quot;<br/>node: #quot;module level#quot;"/]
+  24["type: void<br/>callee: console.log<br/>args: #91;#93;"]
+  25[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
+  26[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#92;n  console.log#40;#quot;regular#quot;#41;#92;n#125;"]]
+  27[/"type: #quot;regular#quot;<br/>node: #quot;regular#quot;"/]
+  28["type: void<br/>callee: console.log<br/>args: #91;#93;"]
+  29[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
+  30((("type: Effect#lt;#40;#41; =#gt; void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const fn = #40;#41; =#gt; console.log#40;#quot;nested#quot;#41;#92;n  return fn#92;n#125;#41;")))
+  31[/"type: #40;#41; =#gt; void<br/>node: fn"/]
+  32[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; console.log#40;#quot;nested#quot;#41;"]]
+  33[/"type: #quot;nested#quot;<br/>node: #quot;nested#quot;"/]
+  34["type: void<br/>callee: console.log<br/>args: #91;#93;"]
+  35[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
+  36((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  console.table#40;#123; a: 1 #125;#41;#92;n#125;#41;")))
+  37[/"type: void<br/>node: console.table#40;#123; a: 1 #125;#41;"/]
   1 -->|"kind: pipe"| 2
-  2 -->|"kind: transformCallee"| 2
-  3 -->|"kind: potentialReturn"| 4
-  7 -->|"kind: pipe"| 8
-  8 -->|"kind: transformCallee"| 8
-  11 -->|"kind: pipe"| 12
-  12 -->|"kind: transformCallee"| 12
+  3 -->|"kind: transformCallee"| 2
+  5 -->|"kind: pipe"| 6
+  7 -->|"kind: transformCallee"| 6
+  4 -->|"kind: potentialReturn"| 8
+  10 -->|"kind: pipe"| 11
+  12 -->|"kind: transformCallee"| 11
   15 -->|"kind: pipe"| 16
-  16 -->|"kind: transformCallee"| 16
-  17 -->|"kind: pipe"| 18
-  18 -->|"kind: transformCallee"| 18
+  17 -->|"kind: transformCallee"| 16
   20 -->|"kind: pipe"| 21
-  21 -->|"kind: transformCallee"| 21
-  23 -->|"kind: potentialReturn"| 22
-  25 -->|"kind: pipe"| 26
-  26 -->|"kind: transformCallee"| 26
-  26 -->|"kind: potentialReturn"| 24
+  22 -->|"kind: transformCallee"| 21
+  23 -->|"kind: pipe"| 24
+  25 -->|"kind: transformCallee"| 24
+  27 -->|"kind: pipe"| 28
+  29 -->|"kind: transformCallee"| 28
+  31 -->|"kind: potentialReturn"| 30
+  33 -->|"kind: pipe"| 34
+  35 -->|"kind: transformCallee"| 34
+  34 -->|"kind: potentialReturn"| 32

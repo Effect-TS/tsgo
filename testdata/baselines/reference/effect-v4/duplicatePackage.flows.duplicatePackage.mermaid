@@ -3,7 +3,8 @@ flowchart TB
   1[/"type: number<br/>node: yield* Effect.succeed#40;42#41;"/]
   2[/"type: 42<br/>node: 42"/]
   3["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  4[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
   1 -->|"kind: potentialReturn"| 0
   2 -->|"kind: pipe"| 3
-  3 -->|"kind: transformCallee"| 3
+  4 -->|"kind: transformCallee"| 3
   3 -->|"kind: yieldable"| 0

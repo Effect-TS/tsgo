@@ -2,8 +2,8 @@ flowchart TB
   0((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  fetch#40;#quot;https://example.com/in-gen#quot;#41;#92;n#125;#41;")))
   1[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;https://example.com/in-gen#quot;#41;"/]
   2((("type: Effect#lt;void, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  fetch#40;#quot;https://example.com/in-fn#quot;#41;#92;n#125;")))
-  3[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.fn#40;#quot;fetchInFn#quot;#41;#40;function*#40;#41; #123;#92;n  fetch#40;#quot;https://example.com/in-fn#quot;#41;#92;n#125;#41;"]]
-  4[/"type: Traced<br/>node: Effect.fn#40;#quot;fetchInFn#quot;#41;"/]
+  3[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;https://example.com/in-fn#quot;#41;"/]
+  4[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.fn#40;#quot;fetchInFn#quot;#41;#40;function*#40;#41; #123;#92;n  fetch#40;#quot;https://example.com/in-fn#quot;#41;#92;n#125;#41;"]]
   5[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;https://example.com/module#quot;#41;"/]
   6[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;https://example.com/regular#quot;#41;"]]
   7[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;https://example.com/regular#quot;#41;"/]
@@ -11,7 +11,7 @@ flowchart TB
   9[/"type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: fn"/]
   10[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;https://example.com/nested#quot;#41;"]]
   11[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;https://example.com/nested#quot;#41;"/]
-  2 -->|"kind: potentialReturn"| 3
+  2 -->|"kind: potentialReturn"| 4
   7 -->|"kind: potentialReturn"| 6
   9 -->|"kind: potentialReturn"| 8
   11 -->|"kind: potentialReturn"| 10

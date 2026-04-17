@@ -5,15 +5,16 @@ flowchart TB
   3[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
   4[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
   5["type: Effect#lt;void, never, Scope#gt;<br/>callee: Effect.addFinalizer<br/>args: #91;#93;"]
-  6[/"type: void<br/>node: yield* Effect.addFinalizer#40;#40;#41; =#gt; Effect.void#41;"/]
-  7["type: Layer#lt;Cache, never, Scope#gt;<br/>callee: <br/>args: #91;#93;"]
-  8[/"type: #123; #lt;I, S#gt;#40;tag: Tag#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41; =#gt; Layer#lt;I, E, R#gt;; #lt;I, S, E, R#gt;#40;tag: Tag#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, R#gt;; #125;<br/>node: Layer.effect"/]
-  9[/"type: typeof Cache<br/>node: Cache"/]
+  6[/"type: #lt;X, R#gt;#40;finalizer: #40;exit: Exit#lt;unknown, unknown#gt;#41; =#gt; Effect#lt;X, never, R#gt;#41; =#gt; Effect#lt;void, never, R #124; Scope#gt;<br/>node: Effect.addFinalizer"/]
+  7[/"type: void<br/>node: yield* Effect.addFinalizer#40;#40;#41; =#gt; Effect.void#41;"/]
+  8["type: Layer#lt;Cache, never, Scope#gt;<br/>callee: <br/>args: #91;#93;"]
+  9[/"type: #123; #lt;I, S#gt;#40;tag: Tag#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41; =#gt; Layer#lt;I, E, R#gt;; #lt;I, S, E, R#gt;#40;tag: Tag#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, R#gt;; #125;<br/>node: Layer.effect"/]
+  10[/"type: typeof Cache<br/>node: Cache"/]
   2 -->|"kind: potentialReturn"| 1
   4 -->|"kind: potentialReturn"| 3
   3 -->|"kind: pipe"| 5
-  5 -->|"kind: transformCallee"| 5
+  6 -->|"kind: transformCallee"| 5
   5 -->|"kind: yieldable"| 1
-  1 -->|"kind: pipe"| 7
-  8 -->|"kind: transformCallee"| 1
-  9 -->|"kind: transformArg"| 1
+  1 -->|"kind: pipe"| 8
+  9 -->|"kind: transformCallee"| 1
+  10 -->|"kind: transformArg"| 1

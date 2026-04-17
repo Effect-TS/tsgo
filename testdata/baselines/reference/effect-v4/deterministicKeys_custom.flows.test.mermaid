@@ -3,7 +3,8 @@ flowchart TB
   1[/"type: typeof #40;Anonymous class#41;<br/>node: class extends Context.Service#lt;X, #123;#125;#gt;#40;#41;#40;#quot;hey/#quot; + identifier#41; #123;#125;"/]
   2[/"type: #quot;Hello#quot;<br/>node: #quot;Hello#quot;"/]
   3["type: typeof #40;Anonymous class#41;<br/>callee: LocalConstructor<br/>args: #91;#93;"]
-  4[/"type: new #40;args: #123; id: number; #125;#41; =#gt; #123; readonly _tag: #quot;TTLRequest#quot;; #125; #amp; #123; readonly id: number; #125;<br/>node: Persistable.Class#lt;#123;#92;n  payload: #123; id: number #125;#92;n#125;#gt;#40;#41;#40;#quot;TTLRequest#quot;, #123;#92;n  primaryKey: #40;req#41; =#gt; `TTLRequest:$#123;req.id#125;`#92;n#125;#41;"/]
+  4[/"type: #lt;X#gt;#40;identifier: string#41; =#gt; typeof #40;Anonymous class#41;<br/>node: LocalConstructor"/]
+  5[/"type: new #40;args: #123; id: number; #125;#41; =#gt; #123; readonly _tag: #quot;TTLRequest#quot;; #125; #amp; #123; readonly id: number; #125;<br/>node: Persistable.Class#lt;#123;#92;n  payload: #123; id: number #125;#92;n#125;#gt;#40;#41;#40;#quot;TTLRequest#quot;, #123;#92;n  primaryKey: #40;req#41; =#gt; `TTLRequest:$#123;req.id#125;`#92;n#125;#41;"/]
   1 -->|"kind: potentialReturn"| 0
   2 -->|"kind: pipe"| 3
-  3 -->|"kind: transformCallee"| 3
+  4 -->|"kind: transformCallee"| 3

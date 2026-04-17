@@ -35,15 +35,17 @@ flowchart TB
   33[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.log#40;#quot;Finalizing file system#quot;#41;"]]
   34[/"type: #quot;Finalizing file system#quot;<br/>node: #quot;Finalizing file system#quot;"/]
   35["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
-  36["type: Effect#lt;void, never, Scope#gt;<br/>callee: Effect.addFinalizer<br/>args: #91;#93;"]
-  37[/"type: #123;#125;<br/>node: yield* FileSystem"/]
-  38[/"type: void<br/>node: yield* Effect.addFinalizer#40;#40;#41; =#gt; Effect.log#40;#quot;Finalizing file system#quot;#41;#41;"/]
-  39[/"type: Effect#lt;#123;#125;, never, FileSystem #124; Scope#gt;<br/>node: program"/]
-  40["type: never<br/>callee: Effect.provide<br/>args: #91;liveWithPipeable#93;"]
-  41[/"type: #123; #lt;const Layers extends #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;layers: Layers, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;ROut, E2, RIn#gt;#40;layer: Layer#lt;ROut, E2, RIn#gt;, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;R2#gt;#40;context: Context#lt;R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #lt;A, E, R, const Layers extends #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;self: Effect#lt;A, E, R#gt;, layers: Layers, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: Effect#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;A, E, R, ROut, E2, RIn#gt;#40;self: Effect#lt;A, E, R#gt;, layer: Layer#lt;ROut, E2, RIn#gt;, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;A, E, R, R2#gt;#40;self: Effect#lt;A, E, R#gt;, context: Context#lt;R2#gt;#41;: Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #125;<br/>node: Effect.provide"/]
-  42[/"type: Layer#lt;DbConnection #124; UserRepository, never, DbConnection#gt;<br/>node: liveWithPipeable"/]
-  43["type: never<br/>callee: Effect.scoped<br/>args: #91;#93;"]
-  44["type: never<br/>callee: Effect.runPromise<br/>args: #91;#93;"]
+  36[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  37["type: Effect#lt;void, never, Scope#gt;<br/>callee: Effect.addFinalizer<br/>args: #91;#93;"]
+  38[/"type: #lt;R#gt;#40;finalizer: #40;exit: Exit#lt;unknown, unknown#gt;#41; =#gt; Effect#lt;void, never, R#gt;#41; =#gt; Effect#lt;void, never, R #124; Scope#gt;<br/>node: Effect.addFinalizer"/]
+  39[/"type: #123;#125;<br/>node: yield* FileSystem"/]
+  40[/"type: void<br/>node: yield* Effect.addFinalizer#40;#40;#41; =#gt; Effect.log#40;#quot;Finalizing file system#quot;#41;#41;"/]
+  41[/"type: Effect#lt;#123;#125;, never, FileSystem #124; Scope#gt;<br/>node: program"/]
+  42["type: never<br/>callee: Effect.provide<br/>args: #91;liveWithPipeable#93;"]
+  43[/"type: #123; #lt;const Layers extends #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;layers: Layers, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;ROut, E2, RIn#gt;#40;layer: Layer#lt;ROut, E2, RIn#gt;, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;R2#gt;#40;context: Context#lt;R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #lt;A, E, R, const Layers extends #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;self: Effect#lt;A, E, R#gt;, layers: Layers, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: Effect#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;A, E, R, ROut, E2, RIn#gt;#40;self: Effect#lt;A, E, R#gt;, layer: Layer#lt;ROut, E2, RIn#gt;, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;A, E, R, R2#gt;#40;self: Effect#lt;A, E, R#gt;, context: Context#lt;R2#gt;#41;: Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #125;<br/>node: Effect.provide"/]
+  44[/"type: Layer#lt;DbConnection #124; UserRepository, never, DbConnection#gt;<br/>node: liveWithPipeable"/]
+  45["type: never<br/>callee: Effect.scoped<br/>args: #91;#93;"]
+  46["type: never<br/>callee: Effect.runPromise<br/>args: #91;#93;"]
   1 -->|"kind: pipe"| 2
   3 -->|"kind: transformCallee"| 1
   4 -->|"kind: transformArg"| 1
@@ -68,15 +70,15 @@ flowchart TB
   31 -->|"kind: potentialReturn"| 30
   32 -->|"kind: yieldable"| 30
   34 -->|"kind: pipe"| 35
-  35 -->|"kind: transformCallee"| 35
+  36 -->|"kind: transformCallee"| 35
   35 -->|"kind: potentialReturn"| 33
-  33 -->|"kind: pipe"| 36
-  36 -->|"kind: transformCallee"| 36
-  36 -->|"kind: yieldable"| 30
-  41 -->|"kind: transformCallee"| 40
-  42 -->|"kind: transformArg"| 40
-  39 -->|"kind: pipe"| 40
-  43 -->|"kind: transformCallee"| 43
-  40 -->|"kind: pipe"| 43
-  44 -->|"kind: transformCallee"| 44
-  43 -->|"kind: pipe"| 44
+  33 -->|"kind: pipe"| 37
+  38 -->|"kind: transformCallee"| 37
+  37 -->|"kind: yieldable"| 30
+  43 -->|"kind: transformCallee"| 42
+  44 -->|"kind: transformArg"| 42
+  41 -->|"kind: pipe"| 42
+  45 -->|"kind: transformCallee"| 45
+  42 -->|"kind: pipe"| 45
+  46 -->|"kind: transformCallee"| 46
+  45 -->|"kind: pipe"| 46

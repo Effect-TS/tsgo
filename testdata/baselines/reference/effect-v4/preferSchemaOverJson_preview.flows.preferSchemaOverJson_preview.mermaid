@@ -3,8 +3,9 @@ flowchart TB
   1[/"type: any<br/>node: JSON.parse#40;text#41;"/]
   2[/"type: #quot;#123;#92;#quot;ok#92;#quot;:true#125;#quot;<br/>node: '#123;#quot;ok#quot;:true#125;'"/]
   3["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  4[/"type: string<br/>node: yield* Effect.succeed#40;'#123;#quot;ok#quot;:true#125;'#41;"/]
+  4[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  5[/"type: string<br/>node: yield* Effect.succeed#40;'#123;#quot;ok#quot;:true#125;'#41;"/]
   1 -->|"kind: potentialReturn"| 0
   2 -->|"kind: pipe"| 3
-  3 -->|"kind: transformCallee"| 3
+  4 -->|"kind: transformCallee"| 3
   3 -->|"kind: yieldable"| 0

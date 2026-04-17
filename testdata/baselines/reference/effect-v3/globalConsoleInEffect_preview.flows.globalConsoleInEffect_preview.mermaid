@@ -2,5 +2,6 @@ flowchart TB
   0((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  console.log#40;#quot;hello#quot;#41;#92;n#125;#41;")))
   1[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
   2["type: void<br/>callee: console.log<br/>args: #91;#93;"]
+  3[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
   1 -->|"kind: pipe"| 2
-  2 -->|"kind: transformCallee"| 2
+  3 -->|"kind: transformCallee"| 2

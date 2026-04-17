@@ -1,8 +1,9 @@
 flowchart TB
   0[/"type: #quot;JsonParseError#quot;<br/>node: #quot;JsonParseError#quot;"/]
   1["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;JsonParseError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
-  2[/"type: Effect#lt;any, Effect#lt;void, never, never#gt;, never#gt;<br/>node: Effect.try#40;#123;#92;n  try: #40;#41; =#gt; JSON.parse#40;#quot;#123;#quot;#41;,#92;n  catch: #40;e#41; =#gt; Effect.log#40;e#41;#92;n#125;#41;"/]
-  3[/"type: Effect#lt;any, JsonParseError, never#gt;<br/>node: Effect.try#40;#123;#92;n  try: #40;#41; =#gt; JSON.parse#40;#quot;#123;#quot;#41;,#92;n  catch: #40;e#41; =#gt; new JsonParseError#40;#123; cause: e #125;#41;#92;n#125;#41;"/]
-  4[/"type: Effect#lt;any, Effect#lt;any, Effect#lt;void, never, never#gt;, never#gt;, never#gt;<br/>node: Effect.try#40;#123;#92;n  try: #40;#41; =#gt; JSON.parse#40;#quot;#123;#quot;#41;,#92;n  catch: #40;e#41; =#gt;#92;n    Effect.try#40;#123;#92;n      try: #40;#41; =#gt; JSON.parse#40;String#40;e#41;#41;,#92;n      catch: #40;innerError#41; =#gt; Effect.log#40;innerError#41;#92;n    #125;#41;#92;n#125;#41;"/]
+  2[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  3[/"type: Effect#lt;any, Effect#lt;void, never, never#gt;, never#gt;<br/>node: Effect.try#40;#123;#92;n  try: #40;#41; =#gt; JSON.parse#40;#quot;#123;#quot;#41;,#92;n  catch: #40;e#41; =#gt; Effect.log#40;e#41;#92;n#125;#41;"/]
+  4[/"type: Effect#lt;any, JsonParseError, never#gt;<br/>node: Effect.try#40;#123;#92;n  try: #40;#41; =#gt; JSON.parse#40;#quot;#123;#quot;#41;,#92;n  catch: #40;e#41; =#gt; new JsonParseError#40;#123; cause: e #125;#41;#92;n#125;#41;"/]
+  5[/"type: Effect#lt;any, Effect#lt;any, Effect#lt;void, never, never#gt;, never#gt;, never#gt;<br/>node: Effect.try#40;#123;#92;n  try: #40;#41; =#gt; JSON.parse#40;#quot;#123;#quot;#41;,#92;n  catch: #40;e#41; =#gt;#92;n    Effect.try#40;#123;#92;n      try: #40;#41; =#gt; JSON.parse#40;String#40;e#41;#41;,#92;n      catch: #40;innerError#41; =#gt; Effect.log#40;innerError#41;#92;n    #125;#41;#92;n#125;#41;"/]
   0 -->|"kind: pipe"| 1
-  1 -->|"kind: transformCallee"| 1
+  2 -->|"kind: transformCallee"| 1

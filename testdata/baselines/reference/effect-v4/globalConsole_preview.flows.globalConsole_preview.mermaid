@@ -1,5 +1,6 @@
 flowchart TB
   0[/"type: #quot;preview#quot;<br/>node: #quot;preview#quot;"/]
   1["type: void<br/>callee: console.log<br/>args: #91;#93;"]
+  2[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
   0 -->|"kind: pipe"| 1
-  1 -->|"kind: transformCallee"| 1
+  2 -->|"kind: transformCallee"| 1

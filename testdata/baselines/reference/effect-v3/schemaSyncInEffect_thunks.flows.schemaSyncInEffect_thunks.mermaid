@@ -1,23 +1,26 @@
 flowchart TB
   0[/"type: #quot;ExampleError#quot;<br/>node: #quot;ExampleError#quot;"/]
   1["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;ExampleError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
-  2[/"type: Struct#lt;#123; name: typeof String$; age: typeof Number$; #125;#gt;<br/>node: Schema.Struct#40;#123;#92;n  name: Schema.String,#92;n  age: Schema.Number#92;n#125;#41;"/]
-  3[["type: #40;#41; =#gt; #123; readonly name: string; readonly age: number; #125;<br/>node: #40;#41; =#gt; Schema.decodeSync#40;Person#41;#40;#123; name: #quot;John#quot;, age: 30 #125;#41;"]]
-  4[/"type: #123; readonly name: string; readonly age: number; #125;<br/>node: Schema.decodeSync#40;Person#41;#40;#123; name: #quot;John#quot;, age: 30 #125;#41;"/]
-  5["type: Effect#lt;#123; readonly name: string; readonly age: number; #125;, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
-  6[/"type: Effect#lt;#123; readonly name: string; readonly age: number; #125;, ExampleError, never#gt;<br/>node: Effect.try#40;#123;#92;n  try: #40;#41; =#gt; Schema.decodeSync#40;Person#41;#40;#123; name: #quot;Jane#quot;, age: 25 #125;#41;,#92;n  catch: #40;#41; =#gt; new ExampleError#40;#41;#92;n#125;#41;"/]
-  7[/"type: Effect#lt;#123; readonly age: number; readonly name: string; #125;, UnknownException, never#gt;<br/>node: Effect.tryPromise#40;async #40;#41; =#gt; Schema.encodeSync#40;Person#41;#40;#123; name: #quot;Bob#quot;, age: 40 #125;#41;#41;"/]
-  8[/"type: Effect#lt;#123; readonly age: number; readonly name: string; #125;, ExampleError, never#gt;<br/>node: Effect.tryPromise#40;#123;#92;n  try: async #40;#41; =#gt; Schema.encodeUnknownSync#40;Person#41;#40;#123; name: #quot;Carol#quot;, age: 50 #125;#41;,#92;n  catch: #40;#41; =#gt; new ExampleError#40;#41;#92;n#125;#41;"/]
-  9[["type: #40;#41; =#gt; #40;#41; =#gt; #123; readonly name: string; readonly age: number; #125;<br/>node: #40;#41; =#gt; #40;#41; =#gt; Schema.decodeSync#40;Person#41;#40;#123; name: #quot;Nested#quot;, age: 10 #125;#41;"]]
-  10[["type: #40;#41; =#gt; #123; readonly name: string; readonly age: number; #125;<br/>node: #40;#41; =#gt; Schema.decodeSync#40;Person#41;#40;#123; name: #quot;Nested#quot;, age: 10 #125;#41;"]]
-  11[/"type: #123; readonly name: string; readonly age: number; #125;<br/>node: Schema.decodeSync#40;Person#41;#40;#123; name: #quot;Nested#quot;, age: 10 #125;#41;"/]
-  12["type: Effect#lt;#40;#41; =#gt; #123; readonly name: string; readonly age: number; #125;, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
+  2[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  3[/"type: Struct#lt;#123; name: typeof String$; age: typeof Number$; #125;#gt;<br/>node: Schema.Struct#40;#123;#92;n  name: Schema.String,#92;n  age: Schema.Number#92;n#125;#41;"/]
+  4[["type: #40;#41; =#gt; #123; readonly name: string; readonly age: number; #125;<br/>node: #40;#41; =#gt; Schema.decodeSync#40;Person#41;#40;#123; name: #quot;John#quot;, age: 30 #125;#41;"]]
+  5[/"type: #123; readonly name: string; readonly age: number; #125;<br/>node: Schema.decodeSync#40;Person#41;#40;#123; name: #quot;John#quot;, age: 30 #125;#41;"/]
+  6["type: Effect#lt;#123; readonly name: string; readonly age: number; #125;, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
+  7[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
+  8[/"type: Effect#lt;#123; readonly name: string; readonly age: number; #125;, ExampleError, never#gt;<br/>node: Effect.try#40;#123;#92;n  try: #40;#41; =#gt; Schema.decodeSync#40;Person#41;#40;#123; name: #quot;Jane#quot;, age: 25 #125;#41;,#92;n  catch: #40;#41; =#gt; new ExampleError#40;#41;#92;n#125;#41;"/]
+  9[/"type: Effect#lt;#123; readonly age: number; readonly name: string; #125;, UnknownException, never#gt;<br/>node: Effect.tryPromise#40;async #40;#41; =#gt; Schema.encodeSync#40;Person#41;#40;#123; name: #quot;Bob#quot;, age: 40 #125;#41;#41;"/]
+  10[/"type: Effect#lt;#123; readonly age: number; readonly name: string; #125;, ExampleError, never#gt;<br/>node: Effect.tryPromise#40;#123;#92;n  try: async #40;#41; =#gt; Schema.encodeUnknownSync#40;Person#41;#40;#123; name: #quot;Carol#quot;, age: 50 #125;#41;,#92;n  catch: #40;#41; =#gt; new ExampleError#40;#41;#92;n#125;#41;"/]
+  11[["type: #40;#41; =#gt; #40;#41; =#gt; #123; readonly name: string; readonly age: number; #125;<br/>node: #40;#41; =#gt; #40;#41; =#gt; Schema.decodeSync#40;Person#41;#40;#123; name: #quot;Nested#quot;, age: 10 #125;#41;"]]
+  12[["type: #40;#41; =#gt; #123; readonly name: string; readonly age: number; #125;<br/>node: #40;#41; =#gt; Schema.decodeSync#40;Person#41;#40;#123; name: #quot;Nested#quot;, age: 10 #125;#41;"]]
+  13[/"type: #123; readonly name: string; readonly age: number; #125;<br/>node: Schema.decodeSync#40;Person#41;#40;#123; name: #quot;Nested#quot;, age: 10 #125;#41;"/]
+  14["type: Effect#lt;#40;#41; =#gt; #123; readonly name: string; readonly age: number; #125;, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
+  15[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
   0 -->|"kind: pipe"| 1
-  1 -->|"kind: transformCallee"| 1
-  4 -->|"kind: potentialReturn"| 3
-  3 -->|"kind: pipe"| 5
-  5 -->|"kind: transformCallee"| 5
-  11 -->|"kind: potentialReturn"| 10
-  10 -->|"kind: potentialReturn"| 9
-  9 -->|"kind: pipe"| 12
-  12 -->|"kind: transformCallee"| 12
+  2 -->|"kind: transformCallee"| 1
+  5 -->|"kind: potentialReturn"| 4
+  4 -->|"kind: pipe"| 6
+  7 -->|"kind: transformCallee"| 6
+  13 -->|"kind: potentialReturn"| 12
+  12 -->|"kind: potentialReturn"| 11
+  11 -->|"kind: pipe"| 14
+  15 -->|"kind: transformCallee"| 14

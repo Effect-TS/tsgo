@@ -11,31 +11,33 @@ flowchart TB
   9[/"type: typeof Logger<br/>node: Logger"/]
   10[/"type: #123; query: #40;sql: string#41; =#gt; Effect#lt;string, never, never#gt;; #125;<br/>node: #123;#92;n    query: #40;sql: string#41; =#gt; Effect.succeed#40;`result: $#123;sql#125;`#41;#92;n  #125;"/]
   11["type: Effect#lt;#123; query: #40;sql: string#41; =#gt; Effect#lt;string, never, never#gt;; #125;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  12["type: Layer#lt;Database, never, never#gt;<br/>callee: Layer.effect<br/>args: #91;Database#93;"]
-  13[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
-  14[/"type: typeof Database<br/>node: Database"/]
-  15[/"type: Layer#lt;Database #124; Logger, never, never#gt;<br/>node: Layer.mergeAll#40;DatabaseLive, LoggerLive#41;"/]
-  16[/"type: ServiceClass#lt;UserRepo, #quot;UserRepo#quot;, #123; readonly getUser: #40;id: string#41; =#gt; Effect#lt;string, never, never#gt;; #125;#gt;<br/>node: Context.Service#lt;UserRepo, #123;#92;n  readonly getUser: #40;id: string#41; =#gt; Effect.Effect#lt;string#gt;#92;n#125;#gt;#40;#41;#40;#quot;UserRepo#quot;#41;"/]
-  17((("type: Effect#lt;#123; getUser: #40;id: string#41; =#gt; Effect#lt;string, never, never#gt;; #125;, never, Database#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    const db = yield* Database#92;n    return #123;#92;n      getUser: #40;id: string#41; =#gt; db.query#40;`SELECT * FROM users WHERE id = $#123;id#125;`#41;#92;n    #125;#92;n  #125;#41;")))
-  18[/"type: #123; getUser: #40;id: string#41; =#gt; Effect#lt;string, never, never#gt;; #125;<br/>node: #123;#92;n      getUser: #40;id: string#41; =#gt; db.query#40;`SELECT * FROM users WHERE id = $#123;id#125;`#41;#92;n    #125;"/]
-  19[/"type: typeof Database<br/>node: Database"/]
-  20[/"type: #123; readonly query: #40;sql: string#41; =#gt; Effect#lt;string, never, never#gt;; #125;<br/>node: yield* Database"/]
-  21["type: Layer#lt;UserRepo, never, Database#gt;<br/>callee: Layer.effect<br/>args: #91;UserRepo#93;"]
-  22[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
-  23[/"type: typeof UserRepo<br/>node: UserRepo"/]
-  24[/"type: Layer#lt;UserRepo, never, Database#gt;<br/>node: UserRepoLive"/]
-  25["type: Layer#lt;UserRepo, never, never#gt;<br/>callee: Layer.provide<br/>args: #91;DatabaseLive#93;"]
-  26[/"type: #123; #lt;RIn, E, ROut#gt;#40;that: Layer#lt;ROut, E, RIn#gt;#41;: #lt;RIn2, E2, ROut2#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;#41; =#gt; Layer#lt;ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;const Layers extends #91;Any, ...Array#lt;Any#gt;#93;#gt;#40;that: Layers#41;: #lt;A, E, R#gt;#40;self: Layer#lt;A, E, R#gt;#41; =#gt; Layer#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;RIn2, E2, ROut2, RIn, E, ROut#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;, that: Layer#lt;ROut, E, RIn#gt;#41;: Layer#lt;ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;A, E, R, const Layers extends #91;Any, ...Array#lt;Any#gt;#93;#gt;#40;self: Layer#lt;A, E, R#gt;, that: Layers#41;: Layer#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #125;<br/>node: Layer.provide"/]
-  27[/"type: Layer#lt;Database, never, never#gt;<br/>node: DatabaseLive"/]
-  28((("type: Effect#lt;string, never, Database#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const db = yield* Database#92;n  return yield* db.query#40;#quot;SELECT 1#quot;#41;#92;n#125;#41;")))
-  29[/"type: string<br/>node: yield* db.query#40;#quot;SELECT 1#quot;#41;"/]
-  30[/"type: typeof Database<br/>node: Database"/]
-  31[/"type: #quot;SELECT 1#quot;<br/>node: #quot;SELECT 1#quot;"/]
-  32["type: Effect#lt;string, never, never#gt;<br/>callee: db.query<br/>args: #91;#93;"]
-  33[/"type: #123; readonly query: #40;sql: string#41; =#gt; Effect#lt;string, never, never#gt;; #125;<br/>node: yield* Database"/]
-  34["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;DatabaseLive#93;"]
-  35[/"type: #123; #lt;const Layers extends #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;layers: Layers, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;ROut, E2, RIn#gt;#40;layer: Layer#lt;ROut, E2, RIn#gt;, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;R2#gt;#40;context: Context#lt;R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #lt;A, E, R, const Layers extends #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;self: Effect#lt;A, E, R#gt;, layers: Layers, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: Effect#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;A, E, R, ROut, E2, RIn#gt;#40;self: Effect#lt;A, E, R#gt;, layer: Layer#lt;ROut, E2, RIn#gt;, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;A, E, R, R2#gt;#40;self: Effect#lt;A, E, R#gt;, context: Context#lt;R2#gt;#41;: Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #125;<br/>node: Effect.provide"/]
-  36[/"type: Layer#lt;Database, never, never#gt;<br/>node: DatabaseLive"/]
+  12[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  13["type: Layer#lt;Database, never, never#gt;<br/>callee: Layer.effect<br/>args: #91;Database#93;"]
+  14[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
+  15[/"type: typeof Database<br/>node: Database"/]
+  16[/"type: Layer#lt;Database #124; Logger, never, never#gt;<br/>node: Layer.mergeAll#40;DatabaseLive, LoggerLive#41;"/]
+  17[/"type: ServiceClass#lt;UserRepo, #quot;UserRepo#quot;, #123; readonly getUser: #40;id: string#41; =#gt; Effect#lt;string, never, never#gt;; #125;#gt;<br/>node: Context.Service#lt;UserRepo, #123;#92;n  readonly getUser: #40;id: string#41; =#gt; Effect.Effect#lt;string#gt;#92;n#125;#gt;#40;#41;#40;#quot;UserRepo#quot;#41;"/]
+  18((("type: Effect#lt;#123; getUser: #40;id: string#41; =#gt; Effect#lt;string, never, never#gt;; #125;, never, Database#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    const db = yield* Database#92;n    return #123;#92;n      getUser: #40;id: string#41; =#gt; db.query#40;`SELECT * FROM users WHERE id = $#123;id#125;`#41;#92;n    #125;#92;n  #125;#41;")))
+  19[/"type: #123; getUser: #40;id: string#41; =#gt; Effect#lt;string, never, never#gt;; #125;<br/>node: #123;#92;n      getUser: #40;id: string#41; =#gt; db.query#40;`SELECT * FROM users WHERE id = $#123;id#125;`#41;#92;n    #125;"/]
+  20[/"type: typeof Database<br/>node: Database"/]
+  21[/"type: #123; readonly query: #40;sql: string#41; =#gt; Effect#lt;string, never, never#gt;; #125;<br/>node: yield* Database"/]
+  22["type: Layer#lt;UserRepo, never, Database#gt;<br/>callee: Layer.effect<br/>args: #91;UserRepo#93;"]
+  23[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
+  24[/"type: typeof UserRepo<br/>node: UserRepo"/]
+  25[/"type: Layer#lt;UserRepo, never, Database#gt;<br/>node: UserRepoLive"/]
+  26["type: Layer#lt;UserRepo, never, never#gt;<br/>callee: Layer.provide<br/>args: #91;DatabaseLive#93;"]
+  27[/"type: #123; #lt;RIn, E, ROut#gt;#40;that: Layer#lt;ROut, E, RIn#gt;#41;: #lt;RIn2, E2, ROut2#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;#41; =#gt; Layer#lt;ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;const Layers extends #91;Any, ...Array#lt;Any#gt;#93;#gt;#40;that: Layers#41;: #lt;A, E, R#gt;#40;self: Layer#lt;A, E, R#gt;#41; =#gt; Layer#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;RIn2, E2, ROut2, RIn, E, ROut#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;, that: Layer#lt;ROut, E, RIn#gt;#41;: Layer#lt;ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;A, E, R, const Layers extends #91;Any, ...Array#lt;Any#gt;#93;#gt;#40;self: Layer#lt;A, E, R#gt;, that: Layers#41;: Layer#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #125;<br/>node: Layer.provide"/]
+  28[/"type: Layer#lt;Database, never, never#gt;<br/>node: DatabaseLive"/]
+  29((("type: Effect#lt;string, never, Database#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const db = yield* Database#92;n  return yield* db.query#40;#quot;SELECT 1#quot;#41;#92;n#125;#41;")))
+  30[/"type: string<br/>node: yield* db.query#40;#quot;SELECT 1#quot;#41;"/]
+  31[/"type: typeof Database<br/>node: Database"/]
+  32[/"type: #quot;SELECT 1#quot;<br/>node: #quot;SELECT 1#quot;"/]
+  33["type: Effect#lt;string, never, never#gt;<br/>callee: db.query<br/>args: #91;#93;"]
+  34[/"type: #40;sql: string#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: db.query"/]
+  35[/"type: #123; readonly query: #40;sql: string#41; =#gt; Effect#lt;string, never, never#gt;; #125;<br/>node: yield* Database"/]
+  36["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.provide<br/>args: #91;DatabaseLive#93;"]
+  37[/"type: #123; #lt;const Layers extends #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;layers: Layers, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;ROut, E2, RIn#gt;#40;layer: Layer#lt;ROut, E2, RIn#gt;, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;R2#gt;#40;context: Context#lt;R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #lt;A, E, R, const Layers extends #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;self: Effect#lt;A, E, R#gt;, layers: Layers, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: Effect#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;A, E, R, ROut, E2, RIn#gt;#40;self: Effect#lt;A, E, R#gt;, layer: Layer#lt;ROut, E2, RIn#gt;, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;A, E, R, R2#gt;#40;self: Effect#lt;A, E, R#gt;, context: Context#lt;R2#gt;#41;: Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #125;<br/>node: Effect.provide"/]
+  38[/"type: Layer#lt;Database, never, never#gt;<br/>node: DatabaseLive"/]
   2 -->|"kind: pipe"| 3
   4 -->|"kind: transformCallee"| 3
   5 -->|"kind: transformArg"| 3
@@ -43,23 +45,23 @@ flowchart TB
   8 -->|"kind: transformCallee"| 7
   9 -->|"kind: transformArg"| 7
   10 -->|"kind: pipe"| 11
-  11 -->|"kind: transformCallee"| 11
-  11 -->|"kind: pipe"| 12
-  13 -->|"kind: transformCallee"| 12
-  14 -->|"kind: transformArg"| 12
-  18 -->|"kind: potentialReturn"| 17
-  19 -->|"kind: yieldable"| 17
-  17 -->|"kind: pipe"| 21
-  22 -->|"kind: transformCallee"| 21
-  23 -->|"kind: transformArg"| 21
-  26 -->|"kind: transformCallee"| 25
-  27 -->|"kind: transformArg"| 25
-  24 -->|"kind: pipe"| 25
-  29 -->|"kind: potentialReturn"| 28
-  30 -->|"kind: yieldable"| 28
-  31 -->|"kind: pipe"| 32
-  32 -->|"kind: transformCallee"| 32
-  32 -->|"kind: yieldable"| 28
-  35 -->|"kind: transformCallee"| 34
-  36 -->|"kind: transformArg"| 34
-  28 -->|"kind: pipe"| 34
+  12 -->|"kind: transformCallee"| 11
+  11 -->|"kind: pipe"| 13
+  14 -->|"kind: transformCallee"| 13
+  15 -->|"kind: transformArg"| 13
+  19 -->|"kind: potentialReturn"| 18
+  20 -->|"kind: yieldable"| 18
+  18 -->|"kind: pipe"| 22
+  23 -->|"kind: transformCallee"| 22
+  24 -->|"kind: transformArg"| 22
+  27 -->|"kind: transformCallee"| 26
+  28 -->|"kind: transformArg"| 26
+  25 -->|"kind: pipe"| 26
+  30 -->|"kind: potentialReturn"| 29
+  31 -->|"kind: yieldable"| 29
+  32 -->|"kind: pipe"| 33
+  34 -->|"kind: transformCallee"| 33
+  33 -->|"kind: yieldable"| 29
+  37 -->|"kind: transformCallee"| 36
+  38 -->|"kind: transformArg"| 36
+  29 -->|"kind: pipe"| 36
