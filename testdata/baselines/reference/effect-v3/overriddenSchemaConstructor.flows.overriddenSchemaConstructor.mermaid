@@ -1,30 +1,15 @@
 flowchart TB
-  0[/"type: #quot;Valid#quot;<br/>node: #quot;Valid#quot;"/]
-  1["type: #lt;Fields extends Struct.Fields#gt;#40;fieldsOr: Fields #124; HasFields#lt;Fields#gt;, annotations?: ClassAnnotations#lt;Valid, #123; #91;K in keyof Type#lt;Fields#gt;#93;: Type#lt;Fields#gt;#91;K#93;; #125;#gt; #124; undefined#41; =#gt; Class#lt;Valid, Fields, Encoded#lt;Fields#gt;, Context#lt;Fields#91;keyof Fields#93;#gt;, Constructor#lt;Fields#gt;, #123;#125;, #123;#125;#gt;<br/>callee: Schema.Class<br/>args: #91;#93;"]
-  2[/"type: #lt;Self = never#gt;#40;identifier: string#41; =#gt; #lt;Fields extends Struct.Fields#gt;#40;fieldsOr: Fields #124; HasFields#lt;Fields#gt;, annotations?: ClassAnnotations#lt;Self, #123; #91;K in keyof Type#lt;Fields#gt;#93;: Type#lt;Fields#gt;#91;K#93;; #125;#gt; #124; undefined#41; =#gt; #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Class#lt;Self#gt;#40;#41;#40;#123; ... #125;#41;`#quot; : Class#lt;Self, Fields, Encoded#lt;Fields#gt;, Context#lt;Fields#91;keyof Fields#93;#gt;, Constructor#lt;Fields#gt;, #123;#125;, #123;#125;#gt;<br/>node: Schema.Class"/]
-  3[/"type: #quot;Valid#quot;<br/>node: #quot;Valid#quot;"/]
-  4["type: #lt;Fields extends Struct.Fields#gt;#40;fieldsOr: Fields #124; HasFields#lt;Fields#gt;, annotations?: ClassAnnotations#lt;Valid2, #123; #91;K in keyof Type#lt;Fields#gt;#93;: Type#lt;Fields#gt;#91;K#93;; #125;#gt; #124; undefined#41; =#gt; Class#lt;Valid2, Fields, Encoded#lt;Fields#gt;, Context#lt;Fields#91;keyof Fields#93;#gt;, Constructor#lt;Fields#gt;, #123;#125;, #123;#125;#gt;<br/>callee: Schema.Class<br/>args: #91;#93;"]
-  5[/"type: #lt;Self = never#gt;#40;identifier: string#41; =#gt; #lt;Fields extends Struct.Fields#gt;#40;fieldsOr: Fields #124; HasFields#lt;Fields#gt;, annotations?: ClassAnnotations#lt;Self, #123; #91;K in keyof Type#lt;Fields#gt;#93;: Type#lt;Fields#gt;#91;K#93;; #125;#gt; #124; undefined#41; =#gt; #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Class#lt;Self#gt;#40;#41;#40;#123; ... #125;#41;`#quot; : Class#lt;Self, Fields, Encoded#lt;Fields#gt;, Context#lt;Fields#91;keyof Fields#93;#gt;, Constructor#lt;Fields#gt;, #123;#125;, #123;#125;#gt;<br/>node: Schema.Class"/]
-  6[["type: #40;#41; =#gt; number<br/>node: otherMethod#40;#41; #123;#92;n    return this.a#92;n  #125;"]]
-  7((("type: number<br/>node: otherMethod#40;#41; #123;#92;n    return this.a#92;n  #125;")))
-  8[/"type: number<br/>node: this.a"/]
-  9[["type: any<br/>node: constructor#40;#41; #123;#92;n    super#40;#41;#92;n  #125;"]]
-  10((("type: Valid3<br/>node: constructor#40;#41; #123;#92;n    super#40;#41;#92;n  #125;")))
-  11[/"type: #quot;InvalidBecauseOfConstructor#quot;<br/>node: #quot;InvalidBecauseOfConstructor#quot;"/]
-  12["type: #lt;Fields extends Struct.Fields#gt;#40;fieldsOr: Fields #124; HasFields#lt;Fields#gt;, annotations?: ClassAnnotations#lt;InvalidBecauseOfConstructor, #123; #91;K in keyof Type#lt;Fields#gt;#93;: Type#lt;Fields#gt;#91;K#93;; #125;#gt; #124; undefined#41; =#gt; Class#lt;InvalidBecauseOfConstructor, Fields, Encoded#lt;Fields#gt;, Context#lt;Fields#91;keyof Fields#93;#gt;, Constructor#lt;Fields#gt;, #123;#125;, #123;#125;#gt;<br/>callee: Schema.Class<br/>args: #91;#93;"]
-  13[/"type: #lt;Self = never#gt;#40;identifier: string#41; =#gt; #lt;Fields extends Struct.Fields#gt;#40;fieldsOr: Fields #124; HasFields#lt;Fields#gt;, annotations?: ClassAnnotations#lt;Self, #123; #91;K in keyof Type#lt;Fields#gt;#93;: Type#lt;Fields#gt;#91;K#93;; #125;#gt; #124; undefined#41; =#gt; #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Class#lt;Self#gt;#40;#41;#40;#123; ... #125;#41;`#quot; : Class#lt;Self, Fields, Encoded#lt;Fields#gt;, Context#lt;Fields#91;keyof Fields#93;#gt;, Constructor#lt;Fields#gt;, #123;#125;, #123;#125;#gt;<br/>node: Schema.Class"/]
-  14[["type: any<br/>node: constructor#40;#41; #123;#92;n    super#40;#123; a: 42 #125;#41;#92;n  #125;"]]
-  15((("type: InvalidBecauseOfConstructor<br/>node: constructor#40;#41; #123;#92;n    super#40;#123; a: 42 #125;#41;#92;n  #125;")))
-  16[["type: any<br/>node: constructor#40;#41; #123;#92;n    super#40;#123;#125; as any as never#41;#92;n  #125;"]]
-  17((("type: InvalidExtendsString<br/>node: constructor#40;#41; #123;#92;n    super#40;#123;#125; as any as never#41;#92;n  #125;")))
-  0 -->|"kind: pipe"| 1
-  2 -->|"kind: transformCallee"| 1
-  3 -->|"kind: pipe"| 4
-  5 -->|"kind: transformCallee"| 4
-  7 -->|"kind: potentialReturn"| 6
-  8 -->|"kind: potentialReturn"| 7
-  10 -->|"kind: potentialReturn"| 9
-  11 -->|"kind: pipe"| 12
-  13 -->|"kind: transformCallee"| 12
-  15 -->|"kind: potentialReturn"| 14
-  17 -->|"kind: potentialReturn"| 16
+  0[/"type: Class#lt;Valid, #123; a: typeof Number$; #125;, Encoded#lt;#123; a: typeof Number$; #125;#gt;, never, #123; readonly a: number; #125;, #123;#125;, #123;#125;#gt;<br/>node: Schema.Class#lt;Valid#gt;#40;#quot;Valid#quot;#41;#40;#123;#92;n  a: Schema.Number#92;n#125;#41;"/]
+  1[/"type: Class#lt;Valid2, #123; a: typeof Number$; #125;, Encoded#lt;#123; a: typeof Number$; #125;#gt;, never, #123; readonly a: number; #125;, #123;#125;, #123;#125;#gt;<br/>node: Schema.Class#lt;Valid2#gt;#40;#quot;Valid#quot;#41;#40;#123;#92;n  a: Schema.Number#92;n#125;#41;"/]
+  2[["type: #40;#41; =#gt; number<br/>node: otherMethod#40;#41; #123;#92;n    return this.a#92;n  #125;"]]
+  3[/"type: number<br/>node: this.a"/]
+  4[/"type: typeof BaseClass<br/>node: BaseClass"/]
+  5[["type: any<br/>node: constructor#40;#41; #123;#92;n    super#40;#41;#92;n  #125;"]]
+  6[/"type: void<br/>node: super#40;#41;"/]
+  7[/"type: Class#lt;InvalidBecauseOfConstructor, #123; a: typeof Number$; #125;, Encoded#lt;#123; a: typeof Number$; #125;#gt;, never, #123; readonly a: number; #125;, #123;#125;, #123;#125;#gt;<br/>node: Schema.Class#lt;InvalidBecauseOfConstructor#gt;#40;#quot;InvalidBecauseOfConstructor#quot;#41;#40;#123;#92;n    a: Schema.Number#92;n  #125;#41;"/]
+  8[["type: any<br/>node: constructor#40;#41; #123;#92;n    super#40;#123; a: 42 #125;#41;#92;n  #125;"]]
+  9[/"type: void<br/>node: super#40;#123; a: 42 #125;#41;"/]
+  10[/"type: Struct#lt;#123;#125;#gt;<br/>node: Schema.Struct#40;#123;#125;#41;"/]
+  11[["type: any<br/>node: constructor#40;#41; #123;#92;n    super#40;#123;#125; as any as never#41;#92;n  #125;"]]
+  12[/"type: void<br/>node: super#40;#123;#125; as any as never#41;"/]
+  3 -->|"kind: potentialReturn"| 2

@@ -1,59 +1,39 @@
 flowchart TB
   0[/"type: #quot;ExampleError#quot;<br/>node: #quot;ExampleError#quot;"/]
-  1["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;ExampleError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  1["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;ExampleError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: <br/>args: #91;#93;"]
   2[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
-  3((("type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; Date.now#40;#41;")))
-  4["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
-  5[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
-  6[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; Date.now#40;#41;"]]
-  7[/"type: number<br/>node: Date.now#40;#41;"/]
-  8[/"type: #123; try: #40;#41; =#gt; Date; catch: #40;#41; =#gt; ExampleError; #125;<br/>node: #123;#92;n  try: #40;#41; =#gt; new Date#40;#41;,#92;n  catch: #40;#41; =#gt; new ExampleError#40;#41;#92;n#125;"/]
-  9["type: Effect#lt;Date, ExampleError, never#gt;<br/>callee: Effect.try<br/>args: #91;#93;"]
-  10[/"type: #lt;A, E#gt;#40;options: #123; try: LazyArg#lt;A#gt;; catch: #40;error: unknown#41; =#gt; E; #125;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.try"/]
-  11[["type: #40;#41; =#gt; Date<br/>node: #40;#41; =#gt; new Date#40;#41;"]]
-  12[/"type: Date<br/>node: new Date#40;#41;"/]
-  13[["type: #40;#41; =#gt; ExampleError<br/>node: #40;#41; =#gt; new ExampleError#40;#41;"]]
-  14[/"type: ExampleError<br/>node: new ExampleError#40;#41;"/]
-  15((("type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: async #40;#41; =#gt; Date.now#40;#41;")))
-  16["type: Effect#lt;number, UnknownError, never#gt;<br/>callee: Effect.tryPromise<br/>args: #91;#93;"]
-  17[/"type: #lt;A, E = UnknownError#gt;#40;options: #123; readonly try: #40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;; readonly catch: #40;error: unknown#41; =#gt; E; #125; #124; #40;#40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;#41;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.tryPromise"/]
-  18[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: async #40;#41; =#gt; Date.now#40;#41;"]]
+  3[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; Date.now#40;#41;"]]
+  4[/"type: number<br/>node: Date.now#40;#41;"/]
+  5["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  6[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
+  7[/"type: #123; try: #40;#41; =#gt; Date; catch: #40;#41; =#gt; ExampleError; #125;<br/>node: #123;#92;n  try: #40;#41; =#gt; new Date#40;#41;,#92;n  catch: #40;#41; =#gt; new ExampleError#40;#41;#92;n#125;"/]
+  8["type: Effect#lt;Date, ExampleError, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  9[/"type: #lt;A, E#gt;#40;options: #123; try: LazyArg#lt;A#gt;; catch: #40;error: unknown#41; =#gt; E; #125;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.try"/]
+  10[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: async #40;#41; =#gt; Date.now#40;#41;"]]
+  11[/"type: number<br/>node: Date.now#40;#41;"/]
+  12["type: Effect#lt;number, UnknownError, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  13[/"type: #lt;A, E = UnknownError#gt;#40;options: #123; readonly try: #40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;; readonly catch: #40;error: unknown#41; =#gt; E; #125; #124; #40;#40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;#41;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.tryPromise"/]
+  14[/"type: #123; try: #40;#41; =#gt; Promise#lt;Date#gt;; catch: #40;#41; =#gt; ExampleError; #125;<br/>node: #123;#92;n  try: async #40;#41; =#gt; new Date#40;#41;,#92;n  catch: #40;#41; =#gt; new ExampleError#40;#41;#92;n#125;"/]
+  15["type: Effect#lt;Date, ExampleError, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  16[/"type: #lt;A, E = UnknownError#gt;#40;options: #123; readonly try: #40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;; readonly catch: #40;error: unknown#41; =#gt; E; #125; #124; #40;#40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;#41;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.tryPromise"/]
+  17[["type: #40;#41; =#gt; #40;#41; =#gt; number<br/>node: #40;#41; =#gt; #40;#41; =#gt; Date.now#40;#41;"]]
+  18[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; Date.now#40;#41;"]]
   19[/"type: number<br/>node: Date.now#40;#41;"/]
-  20[/"type: #123; try: #40;#41; =#gt; Promise#lt;Date#gt;; catch: #40;#41; =#gt; ExampleError; #125;<br/>node: #123;#92;n  try: async #40;#41; =#gt; new Date#40;#41;,#92;n  catch: #40;#41; =#gt; new ExampleError#40;#41;#92;n#125;"/]
-  21["type: Effect#lt;Date, ExampleError, never#gt;<br/>callee: Effect.tryPromise<br/>args: #91;#93;"]
-  22[/"type: #lt;A, E = UnknownError#gt;#40;options: #123; readonly try: #40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;; readonly catch: #40;error: unknown#41; =#gt; E; #125; #124; #40;#40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;#41;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.tryPromise"/]
-  23[["type: #40;#41; =#gt; Promise#lt;Date#gt;<br/>node: async #40;#41; =#gt; new Date#40;#41;"]]
-  24[/"type: Date<br/>node: new Date#40;#41;"/]
-  25[["type: #40;#41; =#gt; ExampleError<br/>node: #40;#41; =#gt; new ExampleError#40;#41;"]]
-  26[/"type: ExampleError<br/>node: new ExampleError#40;#41;"/]
-  27((("type: #40;#41; =#gt; #40;#41; =#gt; number<br/>node: #40;#41; =#gt; #40;#41; =#gt; Date.now#40;#41;")))
-  28["type: Effect#lt;#40;#41; =#gt; number, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
-  29[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
-  30[["type: #40;#41; =#gt; #40;#41; =#gt; number<br/>node: #40;#41; =#gt; #40;#41; =#gt; Date.now#40;#41;"]]
-  31((("type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; Date.now#40;#41;")))
-  32[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; Date.now#40;#41;"]]
-  33[/"type: number<br/>node: Date.now#40;#41;"/]
+  20["type: Effect#lt;#40;#41; =#gt; number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  21[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
-  3 -->|"kind: pipe"| 4
-  5 -->|"kind: transformCallee"| 4
-  7 -->|"kind: potentialReturn"| 6
-  6 -->|"kind: connect"| 3
-  8 -->|"kind: pipe"| 9
-  10 -->|"kind: transformCallee"| 9
-  12 -->|"kind: potentialReturn"| 11
-  14 -->|"kind: potentialReturn"| 13
-  15 -->|"kind: pipe"| 16
-  17 -->|"kind: transformCallee"| 16
+  4 -->|"kind: potentialReturn"| 3
+  3 -->|"kind: pipe"| 5
+  6 -->|"kind: transformCallee"| 5
+  7 -->|"kind: pipe"| 8
+  9 -->|"kind: transformCallee"| 8
+  11 -->|"kind: potentialReturn"| 10
+  10 -->|"kind: pipe"| 12
+  13 -->|"kind: transformCallee"| 12
+  14 -->|"kind: pipe"| 15
+  16 -->|"kind: transformCallee"| 15
   19 -->|"kind: potentialReturn"| 18
-  18 -->|"kind: connect"| 15
-  20 -->|"kind: pipe"| 21
-  22 -->|"kind: transformCallee"| 21
-  24 -->|"kind: potentialReturn"| 23
-  26 -->|"kind: potentialReturn"| 25
-  27 -->|"kind: pipe"| 28
-  29 -->|"kind: transformCallee"| 28
-  31 -->|"kind: potentialReturn"| 30
-  30 -->|"kind: connect"| 27
-  33 -->|"kind: potentialReturn"| 32
-  32 -->|"kind: connect"| 31
+  18 -->|"kind: potentialReturn"| 17
+  17 -->|"kind: pipe"| 20
+  21 -->|"kind: transformCallee"| 20

@@ -1,10 +1,9 @@
 flowchart TB
-  0[/"type: Effect#lt;Effect#lt;never, string, never#gt;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  return Effect.fail#40;#quot;error#quot;#41;#92;n#125;#41;"/]
-  1((("type: Effect#lt;never, string, never#gt;<br/>node: Effect.fail#40;#quot;error#quot;#41;")))
-  2[/"type: #quot;error#quot;<br/>node: #quot;error#quot;"/]
-  3["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  4[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  1 -->|"kind: potentialReturn"| 0
-  2 -->|"kind: pipe"| 3
-  3 -->|"kind: connect"| 1
-  4 -->|"kind: transformCallee"| 3
+  0((("type: Effect#lt;Effect#lt;never, string, never#gt;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  return Effect.fail#40;#quot;error#quot;#41;#92;n#125;#41;")))
+  1[/"type: #quot;error#quot;<br/>node: #quot;error#quot;"/]
+  2["type: Effect#lt;never, string, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  3[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  4[/"type: #123; #lt;Eff extends YieldWrap#lt;Effect#lt;any, any, any#gt;#gt;, AEff#gt;#40;f: #40;resume: Adapter#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;YieldWrap#lt;Effect#lt;infer _A, infer E, infer _R#gt;#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;YieldWrap#lt;Effect#lt;infer _A, infer _E, infer R#gt;#gt;#93; ? R : never#gt;; #lt;Self, Eff extends YieldWrap#lt;Effect#lt;any, any, any#gt;#gt;, AEff#gt;#40;self: Self, f: #40;this: Self, resume: Adapter#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;YieldWrap#lt;Effect#lt;infer _A, infer E, infer _R#gt;#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;YieldWrap#lt;Effect#lt;infer _A, infer _E, infer R#gt;#gt;#93; ? R : never#gt;; #125;<br/>node: Effect.gen"/]
+  1 -->|"kind: pipe"| 2
+  3 -->|"kind: transformCallee"| 2
+  2 -->|"kind: potentialReturn"| 0

@@ -1,85 +1,49 @@
 flowchart TB
   0[/"type: #123; name: String; age: Number; #125;<br/>node: #123;#92;n  name: Schema.String,#92;n  age: Schema.Number#92;n#125;"/]
-  1["type: Struct#lt;#123; readonly name: String; readonly age: Number; #125;#gt;<br/>callee: Schema.Struct<br/>args: #91;#93;"]
+  1["type: Struct#lt;#123; readonly name: String; readonly age: Number; #125;#gt;<br/>callee: <br/>args: #91;#93;"]
   2[/"type: #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields#41; =#gt; Struct#lt;Fields#gt;<br/>node: Schema.Struct"/]
-  3[/"type: Effect#lt;#123; readonly age: number; readonly name: string; #125;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const input = yield* Effect.succeed#40;#123; name: #quot;John#quot;, age: 30 #125;#41;#92;n  const person = Schema.decodeSync#40;Person#41;#40;input#41;#92;n  //             ^- should suggest using Schema.decode instead#92;n  return person#92;n#125;#41;"/]
-  4((("type: Effect#lt;#123; name: string; age: number; #125;, never, never#gt;<br/>node: Effect.succeed#40;#123; name: #quot;John#quot;, age: 30 #125;#41;")))
-  5[/"type: #123; readonly age: number; readonly name: string; #125;<br/>node: person"/]
-  6[/"type: #123; name: string; age: number; #125;<br/>node: #123; name: #quot;John#quot;, age: 30 #125;"/]
-  7["type: Effect#lt;#123; name: string; age: number; #125;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  8[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  9[/"type: Struct#lt;#123; readonly name: String; readonly age: Number; #125;#gt;<br/>node: Person"/]
-  10["type: #40;input: #123; readonly age: number; readonly name: string; #125;, options?: ParseOptions #124; undefined#41; =#gt; #123; readonly age: number; readonly name: string; #125;<br/>callee: Schema.decodeSync<br/>args: #91;#93;"]
-  11[/"type: #lt;S extends Decoder#lt;unknown#gt;#gt;#40;schema: S#41; =#gt; #40;input: S#91;#quot;Encoded#quot;#93;, options?: ParseOptions #124; undefined#41; =#gt; S#91;#quot;Type#quot;#93;<br/>node: Schema.decodeSync"/]
-  12[/"type: Effect#lt;#123; readonly age: number; readonly name: string; #125;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const input: unknown = yield* Effect.succeed#40;#123; name: #quot;Jane#quot;, age: 25 #125;#41;#92;n  const person = Schema.decodeUnknownSync#40;Person#41;#40;input#41;#92;n  //             ^- should suggest using Schema.decodeUnknown instead#92;n  return person#92;n#125;#41;"/]
-  13((("type: Effect#lt;#123; name: string; age: number; #125;, never, never#gt;<br/>node: Effect.succeed#40;#123; name: #quot;Jane#quot;, age: 25 #125;#41;")))
-  14[/"type: #123; readonly age: number; readonly name: string; #125;<br/>node: person"/]
-  15[/"type: #123; name: string; age: number; #125;<br/>node: #123; name: #quot;Jane#quot;, age: 25 #125;"/]
-  16["type: Effect#lt;#123; name: string; age: number; #125;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  17[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  18[/"type: Struct#lt;#123; readonly name: String; readonly age: Number; #125;#gt;<br/>node: Person"/]
-  19["type: #40;input: unknown, options?: ParseOptions #124; undefined#41; =#gt; #123; readonly age: number; readonly name: string; #125;<br/>callee: Schema.decodeUnknownSync<br/>args: #91;#93;"]
-  20[/"type: #lt;S extends Schema.Decoder#lt;unknown#gt;#gt;#40;schema: S#41; =#gt; #40;input: unknown, options?: ParseOptions #124; undefined#41; =#gt; S#91;#quot;Type#quot;#93;<br/>node: Schema.decodeUnknownSync"/]
-  21[/"type: Effect#lt;#123; readonly age: number; readonly name: string; #125;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const person = #123; name: #quot;Bob#quot;, age: 40 #125;#92;n  const encoded = Schema.encodeSync#40;Person#41;#40;person#41;#92;n  //              ^- should suggest using Schema.encode instead#92;n  return encoded#92;n#125;#41;"/]
-  22[/"type: #123; readonly age: number; readonly name: string; #125;<br/>node: encoded"/]
-  23[/"type: Struct#lt;#123; readonly name: String; readonly age: Number; #125;#gt;<br/>node: Person"/]
-  24["type: #40;input: #123; readonly age: number; readonly name: string; #125;, options?: ParseOptions #124; undefined#41; =#gt; #123; readonly age: number; readonly name: string; #125;<br/>callee: Schema.encodeSync<br/>args: #91;#93;"]
-  25[/"type: #lt;S extends Encoder#lt;unknown#gt;#gt;#40;schema: S#41; =#gt; #40;input: S#91;#quot;Type#quot;#93;, options?: ParseOptions #124; undefined#41; =#gt; S#91;#quot;Encoded#quot;#93;<br/>node: Schema.encodeSync"/]
-  26[/"type: Effect#lt;#123; readonly age: number; readonly name: string; #125;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const person: unknown = #123; name: #quot;Alice#quot;, age: 35 #125;#92;n  const encoded = Schema.encodeUnknownSync#40;Person#41;#40;person as any#41;#92;n  //              ^- should suggest using Schema.encodeUnknown instead#92;n  return encoded#92;n#125;#41;"/]
-  27[/"type: #123; readonly age: number; readonly name: string; #125;<br/>node: encoded"/]
-  28[/"type: Struct#lt;#123; readonly name: String; readonly age: Number; #125;#gt;<br/>node: Person"/]
-  29["type: #40;input: unknown, options?: ParseOptions #124; undefined#41; =#gt; #123; readonly age: number; readonly name: string; #125;<br/>callee: Schema.encodeUnknownSync<br/>args: #91;#93;"]
-  30[/"type: #lt;S extends Schema.Encoder#lt;unknown#gt;#gt;#40;schema: S#41; =#gt; #40;input: unknown, options?: ParseOptions #124; undefined#41; =#gt; S#91;#quot;Encoded#quot;#93;<br/>node: Schema.encodeUnknownSync"/]
-  31[["type: #40;#41; =#gt; #123; readonly age: number; readonly name: string; #125;<br/>node: #40;#41; =#gt; #123;#92;n  const input = #123; name: #quot;Test#quot;, age: 20 #125;#92;n  const person = Schema.decodeSync#40;Person#41;#40;input#41;#92;n  return person#92;n#125;"]]
-  32((("type: #123; readonly age: number; readonly name: string; #125;<br/>node: #40;#41; =#gt; #123;#92;n  const input = #123; name: #quot;Test#quot;, age: 20 #125;#92;n  const person = Schema.decodeSync#40;Person#41;#40;input#41;#92;n  return person#92;n#125;")))
-  33[/"type: #123; readonly age: number; readonly name: string; #125;<br/>node: person"/]
-  34[/"type: Struct#lt;#123; readonly name: String; readonly age: Number; #125;#gt;<br/>node: Person"/]
-  35["type: #40;input: #123; readonly age: number; readonly name: string; #125;, options?: ParseOptions #124; undefined#41; =#gt; #123; readonly age: number; readonly name: string; #125;<br/>callee: Schema.decodeSync<br/>args: #91;#93;"]
-  36[/"type: #lt;S extends Decoder#lt;unknown#gt;#gt;#40;schema: S#41; =#gt; #40;input: S#91;#quot;Encoded#quot;#93;, options?: ParseOptions #124; undefined#41; =#gt; S#91;#quot;Type#quot;#93;<br/>node: Schema.decodeSync"/]
-  37[/"type: Effect#lt;#40;#41; =#gt; #123; readonly age: number; readonly name: string; #125;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const person: unknown = #123; name: #quot;Alice#quot;, age: 35 #125;#92;n  const method = #40;#41; =#gt; Schema.encodeUnknownSync#40;Person#41;#40;person as any#41;#92;n  //              ^- this is inside another function context, should NOT trigger#92;n  return method#92;n#125;#41;"/]
-  38[/"type: #40;#41; =#gt; #123; readonly age: number; readonly name: string; #125;<br/>node: method"/]
-  39[["type: #40;#41; =#gt; #123; readonly age: number; readonly name: string; #125;<br/>node: #40;#41; =#gt; Schema.encodeUnknownSync#40;Person#41;#40;person as any#41;"]]
-  40[/"type: #123; readonly age: number; readonly name: string; #125;<br/>node: Schema.encodeUnknownSync#40;Person#41;#40;person as any#41;"/]
-  41[/"type: Struct#lt;#123; readonly name: String; readonly age: Number; #125;#gt;<br/>node: Person"/]
-  42["type: #40;input: unknown, options?: ParseOptions #124; undefined#41; =#gt; #123; readonly age: number; readonly name: string; #125;<br/>callee: Schema.encodeUnknownSync<br/>args: #91;#93;"]
-  43[/"type: #lt;S extends Schema.Encoder#lt;unknown#gt;#gt;#40;schema: S#41; =#gt; #40;input: unknown, options?: ParseOptions #124; undefined#41; =#gt; S#91;#quot;Encoded#quot;#93;<br/>node: Schema.encodeUnknownSync"/]
-  44[["type: #40;#41; =#gt; Effect#lt;#123; readonly age: number; readonly name: string; #125;, never, never#gt;<br/>node: Effect.fn#40;#quot;fn1#quot;#41;#40;function*#40;#41; #123;#92;n  const input = #123; name: #quot;John#quot;, age: 30 #125;#92;n  const person = Schema.decodeSync#40;Person#41;#40;input#41;#92;n  //             ^- should suggest using Schema.decode instead#92;n  return person#92;n#125;#41;"]]
-  45((("type: Effect#lt;#123; readonly age: number; readonly name: string; #125;, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  const input = #123; name: #quot;John#quot;, age: 30 #125;#92;n  const person = Schema.decodeSync#40;Person#41;#40;input#41;#92;n  //             ^- should suggest using Schema.decode instead#92;n  return person#92;n#125;")))
-  46[/"type: #123; readonly age: number; readonly name: string; #125;<br/>node: person"/]
-  47[/"type: Struct#lt;#123; readonly name: String; readonly age: Number; #125;#gt;<br/>node: Person"/]
-  48["type: #40;input: #123; readonly age: number; readonly name: string; #125;, options?: ParseOptions #124; undefined#41; =#gt; #123; readonly age: number; readonly name: string; #125;<br/>callee: Schema.decodeSync<br/>args: #91;#93;"]
-  49[/"type: #lt;S extends Decoder#lt;unknown#gt;#gt;#40;schema: S#41; =#gt; #40;input: S#91;#quot;Encoded#quot;#93;, options?: ParseOptions #124; undefined#41; =#gt; S#91;#quot;Type#quot;#93;<br/>node: Schema.decodeSync"/]
+  3((("type: Effect#lt;#123; readonly age: number; readonly name: string; #125;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const input = yield* Effect.succeed#40;#123; name: #quot;John#quot;, age: 30 #125;#41;#92;n  const person = Schema.decodeSync#40;Person#41;#40;input#41;#92;n  //             ^- should suggest using Schema.decode instead#92;n  return person#92;n#125;#41;")))
+  4[/"type: #123; readonly age: number; readonly name: string; #125;<br/>node: person"/]
+  5[/"type: #123; name: string; age: number; #125;<br/>node: #123; name: #quot;John#quot;, age: 30 #125;"/]
+  6["type: Effect#lt;#123; name: string; age: number; #125;, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  7[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  8[/"type: #123; #lt;Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;f: #40;#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #lt;Self, Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;options: #123; readonly self: Self; #125;, f: #40;this: Self#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #125;<br/>node: Effect.gen"/]
+  9((("type: Effect#lt;#123; readonly age: number; readonly name: string; #125;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const input: unknown = yield* Effect.succeed#40;#123; name: #quot;Jane#quot;, age: 25 #125;#41;#92;n  const person = Schema.decodeUnknownSync#40;Person#41;#40;input#41;#92;n  //             ^- should suggest using Schema.decodeUnknown instead#92;n  return person#92;n#125;#41;")))
+  10[/"type: #123; readonly age: number; readonly name: string; #125;<br/>node: person"/]
+  11[/"type: #123; name: string; age: number; #125;<br/>node: #123; name: #quot;Jane#quot;, age: 25 #125;"/]
+  12["type: Effect#lt;#123; name: string; age: number; #125;, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  13[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  14[/"type: #123; #lt;Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;f: #40;#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #lt;Self, Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;options: #123; readonly self: Self; #125;, f: #40;this: Self#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #125;<br/>node: Effect.gen"/]
+  15((("type: Effect#lt;#123; readonly age: number; readonly name: string; #125;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const person = #123; name: #quot;Bob#quot;, age: 40 #125;#92;n  const encoded = Schema.encodeSync#40;Person#41;#40;person#41;#92;n  //              ^- should suggest using Schema.encode instead#92;n  return encoded#92;n#125;#41;")))
+  16[/"type: #123; readonly age: number; readonly name: string; #125;<br/>node: encoded"/]
+  17[/"type: #123; #lt;Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;f: #40;#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #lt;Self, Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;options: #123; readonly self: Self; #125;, f: #40;this: Self#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #125;<br/>node: Effect.gen"/]
+  18((("type: Effect#lt;#123; readonly age: number; readonly name: string; #125;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const person: unknown = #123; name: #quot;Alice#quot;, age: 35 #125;#92;n  const encoded = Schema.encodeUnknownSync#40;Person#41;#40;person as any#41;#92;n  //              ^- should suggest using Schema.encodeUnknown instead#92;n  return encoded#92;n#125;#41;")))
+  19[/"type: #123; readonly age: number; readonly name: string; #125;<br/>node: encoded"/]
+  20[/"type: #123; #lt;Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;f: #40;#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #lt;Self, Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;options: #123; readonly self: Self; #125;, f: #40;this: Self#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #125;<br/>node: Effect.gen"/]
+  21[["type: #40;#41; =#gt; #123; readonly age: number; readonly name: string; #125;<br/>node: #40;#41; =#gt; #123;#92;n  const input = #123; name: #quot;Test#quot;, age: 20 #125;#92;n  const person = Schema.decodeSync#40;Person#41;#40;input#41;#92;n  return person#92;n#125;"]]
+  22[/"type: #123; readonly age: number; readonly name: string; #125;<br/>node: person"/]
+  23[/"type: #123; name: string; age: number; #125;<br/>node: #123; name: #quot;Test#quot;, age: 20 #125;"/]
+  24[/"type: #123; readonly age: number; readonly name: string; #125;<br/>node: Schema.decodeSync#40;Person#41;#40;input#41;"/]
+  25((("type: Effect#lt;#40;#41; =#gt; #123; readonly age: number; readonly name: string; #125;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const person: unknown = #123; name: #quot;Alice#quot;, age: 35 #125;#92;n  const method = #40;#41; =#gt; Schema.encodeUnknownSync#40;Person#41;#40;person as any#41;#92;n  //              ^- this is inside another function context, should NOT trigger#92;n  return method#92;n#125;#41;")))
+  26[/"type: #40;#41; =#gt; #123; readonly age: number; readonly name: string; #125;<br/>node: method"/]
+  27[/"type: #123; #lt;Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;f: #40;#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #lt;Self, Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;options: #123; readonly self: Self; #125;, f: #40;this: Self#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #125;<br/>node: Effect.gen"/]
+  28((("type: Effect#lt;#123; readonly age: number; readonly name: string; #125;, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  const input = #123; name: #quot;John#quot;, age: 30 #125;#92;n  const person = Schema.decodeSync#40;Person#41;#40;input#41;#92;n  //             ^- should suggest using Schema.decode instead#92;n  return person#92;n#125;")))
+  29[/"type: #123; readonly age: number; readonly name: string; #125;<br/>node: person"/]
+  30[["type: #40;#41; =#gt; Effect#lt;#123; readonly age: number; readonly name: string; #125;, never, never#gt;<br/>node: Effect.fn#40;#quot;fn1#quot;#41;#40;function*#40;#41; #123;#92;n  const input = #123; name: #quot;John#quot;, age: 30 #125;#92;n  const person = Schema.decodeSync#40;Person#41;#40;input#41;#92;n  //             ^- should suggest using Schema.decode instead#92;n  return person#92;n#125;#41;"]]
+  31[/"type: Traced<br/>node: Effect.fn#40;#quot;fn1#quot;#41;"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
-  4 -->|"kind: yieldable"| 3
-  5 -->|"kind: potentialReturn"| 3
-  6 -->|"kind: pipe"| 7
-  7 -->|"kind: connect"| 4
-  8 -->|"kind: transformCallee"| 7
-  9 -->|"kind: pipe"| 10
-  11 -->|"kind: transformCallee"| 10
-  13 -->|"kind: yieldable"| 12
-  14 -->|"kind: potentialReturn"| 12
-  15 -->|"kind: pipe"| 16
-  16 -->|"kind: connect"| 13
-  17 -->|"kind: transformCallee"| 16
-  18 -->|"kind: pipe"| 19
-  20 -->|"kind: transformCallee"| 19
+  4 -->|"kind: potentialReturn"| 3
+  5 -->|"kind: pipe"| 6
+  7 -->|"kind: transformCallee"| 6
+  6 -->|"kind: yieldable"| 3
+  10 -->|"kind: potentialReturn"| 9
+  11 -->|"kind: pipe"| 12
+  13 -->|"kind: transformCallee"| 12
+  12 -->|"kind: yieldable"| 9
+  16 -->|"kind: potentialReturn"| 15
+  19 -->|"kind: potentialReturn"| 18
   22 -->|"kind: potentialReturn"| 21
-  23 -->|"kind: pipe"| 24
-  25 -->|"kind: transformCallee"| 24
-  27 -->|"kind: potentialReturn"| 26
-  28 -->|"kind: pipe"| 29
-  30 -->|"kind: transformCallee"| 29
-  32 -->|"kind: potentialReturn"| 31
-  33 -->|"kind: potentialReturn"| 32
-  34 -->|"kind: pipe"| 35
-  36 -->|"kind: transformCallee"| 35
-  38 -->|"kind: potentialReturn"| 37
-  40 -->|"kind: potentialReturn"| 39
-  41 -->|"kind: pipe"| 42
-  43 -->|"kind: transformCallee"| 42
-  46 -->|"kind: potentialReturn"| 45
-  45 -->|"kind: potentialReturn"| 44
-  47 -->|"kind: pipe"| 48
-  49 -->|"kind: transformCallee"| 48
+  26 -->|"kind: potentialReturn"| 25
+  29 -->|"kind: potentialReturn"| 28
+  28 -->|"kind: potentialReturn"| 30

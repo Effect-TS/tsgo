@@ -1,7 +1,3 @@
 flowchart TB
-  0[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  console.log#40;#quot;hello#quot;#41;#92;n#125;#41;"/]
-  1[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
-  2["type: void<br/>callee: console.log<br/>args: #91;#93;"]
-  3[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
-  1 -->|"kind: pipe"| 2
-  3 -->|"kind: transformCallee"| 2
+  0((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  console.log#40;#quot;hello#quot;#41;#92;n#125;#41;")))
+  1[/"type: #123; #lt;Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;f: #40;#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #lt;Self, Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;options: #123; readonly self: Self; #125;, f: #40;this: Self#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #125;<br/>node: Effect.gen"/]

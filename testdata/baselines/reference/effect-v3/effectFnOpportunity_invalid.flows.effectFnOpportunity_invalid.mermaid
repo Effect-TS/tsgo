@@ -1,22 +1,16 @@
 flowchart TB
   0[["type: #40;#41; =#gt; Generator#lt;1 #124; 2, void, unknown#gt;<br/>node: function*#40;#41; #123;#92;n  yield 1#92;n  yield 2#92;n#125;"]]
-  1((("type: Generator#lt;1 #124; 2, void, unknown#gt;<br/>node: function*#40;#41; #123;#92;n  yield 1#92;n  yield 2#92;n#125;")))
-  2[["type: #40;#41; =#gt; Generator#lt;1 #124; 2, void, unknown#gt;<br/>node: export function* generatorDeclaration#40;#41; #123;#92;n  yield 1#92;n  yield 2#92;n#125;"]]
-  3((("type: Generator#lt;1 #124; 2, void, unknown#gt;<br/>node: export function* generatorDeclaration#40;#41; #123;#92;n  yield 1#92;n  yield 2#92;n#125;")))
-  4[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: async #40;#41; =#gt; #123;#92;n  return 42#92;n#125;"]]
-  5((("type: Promise#lt;number#gt;<br/>node: async #40;#41; =#gt; #123;#92;n  return 42#92;n#125;")))
-  6[/"type: 42<br/>node: 42"/]
-  7[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: async function#40;#41; #123;#92;n  return 42#92;n#125;"]]
-  8((("type: Promise#lt;number#gt;<br/>node: async function#40;#41; #123;#92;n  return 42#92;n#125;")))
+  1[/"type: any<br/>node: yield 1"/]
+  2[/"type: any<br/>node: yield 2"/]
+  3[["type: #40;#41; =#gt; Generator#lt;1 #124; 2, void, unknown#gt;<br/>node: export function* generatorDeclaration#40;#41; #123;#92;n  yield 1#92;n  yield 2#92;n#125;"]]
+  4[/"type: any<br/>node: yield 1"/]
+  5[/"type: any<br/>node: yield 2"/]
+  6[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: async #40;#41; =#gt; #123;#92;n  return 42#92;n#125;"]]
+  7[/"type: 42<br/>node: 42"/]
+  8[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: async function#40;#41; #123;#92;n  return 42#92;n#125;"]]
   9[/"type: 42<br/>node: 42"/]
   10[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: export async function asyncDeclaration#40;#41; #123;#92;n  return 42#92;n#125;"]]
-  11((("type: Promise#lt;number#gt;<br/>node: export async function asyncDeclaration#40;#41; #123;#92;n  return 42#92;n#125;")))
-  12[/"type: 42<br/>node: 42"/]
-  1 -->|"kind: potentialReturn"| 0
-  3 -->|"kind: potentialReturn"| 2
-  5 -->|"kind: potentialReturn"| 4
-  6 -->|"kind: potentialReturn"| 5
-  8 -->|"kind: potentialReturn"| 7
+  11[/"type: 42<br/>node: 42"/]
+  7 -->|"kind: potentialReturn"| 6
   9 -->|"kind: potentialReturn"| 8
   11 -->|"kind: potentialReturn"| 10
-  12 -->|"kind: potentialReturn"| 11

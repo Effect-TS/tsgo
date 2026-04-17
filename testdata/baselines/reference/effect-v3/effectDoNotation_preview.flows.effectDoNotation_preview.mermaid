@@ -1,54 +1,44 @@
 flowchart TB
   0[/"type: Effect#lt;#123;#125;, never, never#gt;<br/>node: Effect.Do"/]
-  1["type: Effect#lt;#123; a: number; #125;, never, never#gt;<br/>callee: Effect.bind<br/>args: #91;#quot;a#quot;, #40;#41; =#gt; Effect.succeed#40;1#41;#93;"]
-  2["type: Effect#lt;#123; a: number; b: number; #125;, never, never#gt;<br/>callee: Effect.let<br/>args: #91;#quot;b#quot;, #40;#123; a #125;#41; =#gt; a + 1#93;"]
-  3["type: Effect#lt;#123; a: number; b: number; c: string; #125;, never, never#gt;<br/>callee: Effect.bind<br/>args: #91;#quot;c#quot;, #40;#123; b #125;#41; =#gt; Effect.succeed#40;b.toString#40;#41;#41;#93;"]
-  4[/"type: #123; #lt;N extends string, A extends object, B, E2, R2#gt;#40;name: Exclude#lt;N, keyof A#gt;, f: #40;a: NoInfer#lt;A#gt;#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E1, R1#gt;#40;self: Effect#lt;A, E1, R1#gt;#41; =#gt; Effect#lt;#123; #91;K in N #124; keyof A#93;: K extends keyof A ? A#91;K#93; : B; #125;, E1 #124; E2, R1 #124; R2#gt;; #lt;A extends object, N extends string, E1, R1, B, E2, R2#gt;#40;self: Effect#lt;A, E1, R1#gt;, name: Exclude#lt;N, keyof A#gt;, f: #40;a: NoInfer#lt;A#gt;#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;#123; #91;K in N #124; keyof A#93;: K extends keyof A ? A#91;K#93; : B; #125;, E1 #124; E2, R1 #124; R2#gt;; #125;<br/>node: Effect.bind"/]
-  5[/"type: #quot;a#quot;<br/>node: #quot;a#quot;"/]
-  6((("type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;1#41;")))
-  7[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;1#41;"]]
-  8((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;")))
-  9[/"type: 1<br/>node: 1"/]
-  10["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  11[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  12[/"type: #123; #lt;N extends string, A extends object, B#gt;#40;name: Exclude#lt;N, keyof A#gt;, f: #40;a: NoInfer#lt;A#gt;#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;#123; #91;K in N #124; keyof A#93;: K extends keyof A ? A#91;K#93; : B; #125;, E, R#gt;; #lt;A extends object, N extends string, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, name: Exclude#lt;N, keyof A#gt;, f: #40;a: NoInfer#lt;A#gt;#41; =#gt; B#41;: Effect#lt;#123; #91;K in N #124; keyof A#93;: K extends keyof A ? A#91;K#93; : B; #125;, E, R#gt;; #125;<br/>node: Effect.let"/]
-  13[/"type: #quot;b#quot;<br/>node: #quot;b#quot;"/]
-  14((("type: #40;#123; a #125;: #123; a: number; #125;#41; =#gt; number<br/>node: #40;#123; a #125;#41; =#gt; a + 1")))
-  15[["type: #40;#123; a #125;: #123; a: number; #125;#41; =#gt; number<br/>node: #40;#123; a #125;#41; =#gt; a + 1"]]
-  16[/"type: number<br/>node: a + 1"/]
-  17[/"type: #123; a: number; #125;<br/>node: #123; a #125;"/]
-  18[/"type: #123; #lt;N extends string, A extends object, B, E2, R2#gt;#40;name: Exclude#lt;N, keyof A#gt;, f: #40;a: NoInfer#lt;A#gt;#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E1, R1#gt;#40;self: Effect#lt;A, E1, R1#gt;#41; =#gt; Effect#lt;#123; #91;K in N #124; keyof A#93;: K extends keyof A ? A#91;K#93; : B; #125;, E1 #124; E2, R1 #124; R2#gt;; #lt;A extends object, N extends string, E1, R1, B, E2, R2#gt;#40;self: Effect#lt;A, E1, R1#gt;, name: Exclude#lt;N, keyof A#gt;, f: #40;a: NoInfer#lt;A#gt;#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;#123; #91;K in N #124; keyof A#93;: K extends keyof A ? A#91;K#93; : B; #125;, E1 #124; E2, R1 #124; R2#gt;; #125;<br/>node: Effect.bind"/]
-  19[/"type: #quot;c#quot;<br/>node: #quot;c#quot;"/]
-  20((("type: #40;#123; b #125;: #123; a: number; b: number; #125;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;#123; b #125;#41; =#gt; Effect.succeed#40;b.toString#40;#41;#41;")))
-  21[["type: #40;#123; b #125;: #123; a: number; b: number; #125;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;#123; b #125;#41; =#gt; Effect.succeed#40;b.toString#40;#41;#41;"]]
-  22((("type: Effect#lt;string, never, never#gt;<br/>node: Effect.succeed#40;b.toString#40;#41;#41;")))
-  23[/"type: #123; a: number; b: number; #125;<br/>node: #123; b #125;"/]
-  24[/"type: string<br/>node: b.toString#40;#41;"/]
-  25["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  26[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  1["type: Effect#lt;#123; a: number; #125;, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  2[/"type: #123; #lt;N extends string, A extends object, B, E2, R2#gt;#40;name: Exclude#lt;N, keyof A#gt;, f: #40;a: NoInfer#lt;A#gt;#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E1, R1#gt;#40;self: Effect#lt;A, E1, R1#gt;#41; =#gt; Effect#lt;#123; #91;K in N #124; keyof A#93;: K extends keyof A ? A#91;K#93; : B; #125;, E1 #124; E2, R1 #124; R2#gt;; #lt;A extends object, N extends string, E1, R1, B, E2, R2#gt;#40;self: Effect#lt;A, E1, R1#gt;, name: Exclude#lt;N, keyof A#gt;, f: #40;a: NoInfer#lt;A#gt;#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;#123; #91;K in N #124; keyof A#93;: K extends keyof A ? A#91;K#93; : B; #125;, E1 #124; E2, R1 #124; R2#gt;; #125;<br/>node: Effect.bind"/]
+  3[/"type: #quot;a#quot;<br/>node: #quot;a#quot;"/]
+  4[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;1#41;"]]
+  5[/"type: 1<br/>node: 1"/]
+  6["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  7[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  8["type: Effect#lt;#123; a: number; b: number; #125;, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  9[/"type: #123; #lt;N extends string, A extends object, B#gt;#40;name: Exclude#lt;N, keyof A#gt;, f: #40;a: NoInfer#lt;A#gt;#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;#123; #91;K in N #124; keyof A#93;: K extends keyof A ? A#91;K#93; : B; #125;, E, R#gt;; #lt;A extends object, N extends string, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, name: Exclude#lt;N, keyof A#gt;, f: #40;a: NoInfer#lt;A#gt;#41; =#gt; B#41;: Effect#lt;#123; #91;K in N #124; keyof A#93;: K extends keyof A ? A#91;K#93; : B; #125;, E, R#gt;; #125;<br/>node: Effect.let"/]
+  10[/"type: #quot;b#quot;<br/>node: #quot;b#quot;"/]
+  11[["type: #40;#123; a #125;: #123; a: number; #125;#41; =#gt; number<br/>node: #40;#123; a #125;#41; =#gt; a + 1"]]
+  12[/"type: number<br/>node: a + 1"/]
+  13["type: Effect#lt;#123; a: number; b: number; c: string; #125;, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  14[/"type: #123; #lt;N extends string, A extends object, B, E2, R2#gt;#40;name: Exclude#lt;N, keyof A#gt;, f: #40;a: NoInfer#lt;A#gt;#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E1, R1#gt;#40;self: Effect#lt;A, E1, R1#gt;#41; =#gt; Effect#lt;#123; #91;K in N #124; keyof A#93;: K extends keyof A ? A#91;K#93; : B; #125;, E1 #124; E2, R1 #124; R2#gt;; #lt;A extends object, N extends string, E1, R1, B, E2, R2#gt;#40;self: Effect#lt;A, E1, R1#gt;, name: Exclude#lt;N, keyof A#gt;, f: #40;a: NoInfer#lt;A#gt;#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;#123; #91;K in N #124; keyof A#93;: K extends keyof A ? A#91;K#93; : B; #125;, E1 #124; E2, R1 #124; R2#gt;; #125;<br/>node: Effect.bind"/]
+  15[/"type: #quot;c#quot;<br/>node: #quot;c#quot;"/]
+  16[["type: #40;#123; b #125;: #123; a: number; b: number; #125;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;#123; b #125;#41; =#gt; Effect.succeed#40;b.toString#40;#41;#41;"]]
+  17[/"type: string<br/>node: b.toString#40;#41;"/]
+  18["type: Effect#lt;string, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  19[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  20[/"type: #123; #lt;A#gt;#40;a: A#41;: A; #lt;A, B = never#gt;#40;a: A, ab: #40;a: A#41; =#gt; B#41;: B; #lt;A, B = never, C = never#gt;#40;a: A, ab: #40;a: A#41; =#gt; B, bc: #40;b: B#41; =#gt; C#41;: C; #lt;A, B = never, C = never, D = never#gt;#40;a: A, ab: #40;a: A#41; =#gt; B, bc: #40;b: B#41; =#gt; C, cd: #40;c: C#41; =#gt; D#41;: D; #lt;A, B = never, C = never, D = never, E = never#gt;#40;a: A, ab: #40;a: A#41; =#gt; B, bc: #40;b: B#41; =#gt; C, cd: #40;c: C#41; =#gt; D, de: #40;d: D#41; =#gt; E#41;: E; #lt;A, B = never, C = never, D = never, E = never, F = never#gt;#40;a: A, ab: #40;a: A#41; =#gt; B, bc: #40;b: B#41; =#gt; C, cd: #40;c: C#41; =#gt; D, de: #40;d: D#41; =#gt; E, ef: #40;e: E#41; =#gt; F#41;: F; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never#gt;#40;a: A, ab: #40;a: A#41; =#gt; B, bc: #40;b: B#41; =#gt; C, cd: #40;c: C#41; =#gt; D, de: #40;d: D#41; =#gt; E, ef: #40;e: E#41; =#gt; F, fg: #40;f: F#41; =#gt; G#41;: G; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never#gt;#40;a: A, ab: #40;a: A#41; =#gt; B, bc: #40;b: B#41; =#gt; C, cd: #40;c: C#41; =#gt; D, de: #40;d: D#41; =#gt; E, ef: #40;e: E#41; =#gt; F, fg: #40;f: F#41; =#gt; G, gh: #40;g: G#41; =#gt; H#41;: H; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never#gt;#40;a: A, ab: #40;a: A#41; =#gt; B, bc: #40;b: B#41; =#gt; C, cd: #40;c: C#41; =#gt; D, de: #40;d: D#41; =#gt; E, ef: #40;e: E#41; =#gt; F, fg: #40;f: F#41; =#gt; G, gh: #40;g: G#41; =#gt; H, hi: #40;h: H#41; =#gt; I#41;: I; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never#gt;#40;a: A, ab: #40;a: A#41; =#gt; B, bc: #40;b: B#41; =#gt; C, cd: #40;c: C#41; =#gt; D, de: #40;d: D#41; =#gt; E, ef: #40;e: E#41; =#gt; F, fg: #40;f: F#41; =#gt; G, gh: #40;g: G#41; =#gt; H, hi: #40;h: H#41; =#gt; I, ij: #40;i: I#41; =#gt; J#41;: J; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never#gt;#40;a: A, ab: #40;a: A#41; =#gt; B, bc: #40;b: B#41; =#gt; C, cd: #40;c: C#41; =#gt; D, de: #40;d: D#41; =#gt; E, ef: #40;e: E#41; =#gt; F, fg: #40;f: F#41; =#gt; G, gh: #40;g: G#41; =#gt; H, hi: #40;h: H#41; =#gt; I, ij: #40;i: I#41; =#gt; J, jk: #40;j: J#41; =#gt; K#41;: K; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never#gt;#40;a: A, ab: #40;a: A#41; =#gt; B, bc: #40;b: B#41; =#gt; C, cd: #40;c: C#41; =#gt; D, de: #40;d: D#41; =#gt; E, ef: #40;e: E#41; =#gt; F, fg: #40;f: F#41; =#gt; G, gh: #40;g: G#41; =#gt; H, hi: #40;h: H#41; =#gt; I, ij: #40;i: I#41; =#gt; J, jk: #40;j: J#41; =#gt; K, kl: #40;k: K#41; =#gt; L#41;: L; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never#gt;#40;a: A, ab: #40;a: A#41; =#gt; B, bc: #40;b: B#41; =#gt; C, cd: #40;c: C#41; =#gt; D, de: #40;d: D#41; =#gt; E, ef: #40;e: E#41; =#gt; F, fg: #40;f: F#41; =#gt; G, gh: #40;g: G#41; =#gt; H, hi: #40;h: H#41; =#gt; I, ij: #40;i: I#41; =#gt; J, jk: #40;j: J#41; =#gt; K, kl: #40;k: K#41; =#gt; L, lm: #40;l: L#41; =#gt; M#41;: M; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never, N = never#gt;#40;a: A, ab: #40;a: A#41; =#gt; B, bc: #40;b: B#41; =#gt; C, cd: #40;c: C#41; =#gt; D, de: #40;d: D#41; =#gt; E, ef: #40;e: E#41; =#gt; F, fg: #40;f: F#41; =#gt; G, gh: #40;g: G#41; =#gt; H, hi: #40;h: H#41; =#gt; I, ij: #40;i: I#41; =#gt; J, jk: #40;j: J#41; =#gt; K, kl: #40;k: K#41; =#gt; L, lm: #40;l: L#41; =#gt; M, mn: #40;m: M#41; =#gt; N#41;: N; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never, N = never, O = never#gt;#40;a: A, ab: #40;a: A#41; =#gt; B, bc: #40;b: B#41; =#gt; C, cd: #40;c: C#41; =#gt; D, de: #40;d: D#41; =#gt; E, ef: #40;e: E#41; =#gt; F, fg: #40;f: F#41; =#gt; G, gh: #40;g: G#41; =#gt; H, hi: #40;h: H#41; =#gt; I, ij: #40;i: I#41; =#gt; J, jk: #40;j: J#41; =#gt; K, kl: #40;k: K#41; =#gt; L, lm: #40;l: L#41; =#gt; M, mn: #40;m: M#41; =#gt; N, no: #40;n: N#41; =#gt; O#41;: O; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never, N = never, O = never, P = never#gt;#40;a: A, ab: #40;a: A#41; =#gt; B, bc: #40;b: B#41; =#gt; C, cd: #40;c: C#41; =#gt; D, de: #40;d: D#41; =#gt; E, ef: #40;e: E#41; =#gt; F, fg: #40;f: F#41; =#gt; G, gh: #40;g: G#41; =#gt; H, hi: #40;h: H#41; =#gt; I, ij: #40;i: I#41; =#gt; J, jk: #40;j: J#41; =#gt; K, kl: #40;k: K#41; =#gt; L, lm: #40;l: L#41; =#gt; M, mn: #40;m: M#41; =#gt; N, no: #40;n: N#41; =#gt; O, op: #40;o: O#41; =#gt; P#41;: P; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never, N = never, O = never, P = never, Q = never#gt;#40;a: A, ab: #40;a: A#41; =#gt; B, bc: #40;b: B#41; =#gt; C, cd: #40;c: C#41; =#gt; D, de: #40;d: D#41; =#gt; E, ef: #40;e: E#41; =#gt; F, fg: #40;f: F#41; =#gt; G, gh: #40;g: G#41; =#gt; H, hi: #40;h: H#41; =#gt; I, ij: #40;i: I#41; =#gt; J, jk: #40;j: J#41; =#gt; K, kl: #40;k: K#41; =#gt; L, lm: #40;l: L#41; =#gt; M, mn: #40;m: M#41; =#gt; N, no: #40;n: N#41; =#gt; O, op: #40;o: O#41; =#gt; P, pq: #40;p: P#41; =#gt; Q#41;: Q; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never, N = never, O = never, P = never, Q = never, R = never#gt;#40;a: A, ab: #40;a: A#41; =#gt; B, bc: #40;b: B#41; =#gt; C, cd: #40;c: C#41; =#gt; D, de: #40;d: D#41; =#gt; E, ef: #40;e: E#41; =#gt; F, fg: #40;f: F#41; =#gt; G, gh: #40;g: G#41; =#gt; H, hi: #40;h: H#41; =#gt; I, ij: #40;i: I#41; =#gt; J, jk: #40;j: J#41; =#gt; K, kl: #40;k: K#41; =#gt; L, lm: #40;l: L#41; =#gt; M, mn: #40;m: M#41; =#gt; N, no: #40;n: N#41; =#gt; O, op: #40;o: O#41; =#gt; P, pq: #40;p: P#41; =#gt; Q, qr: #40;q: Q#41; =#gt; R#41;: R; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never, N = never, O = never, P = never, Q = never, R = never, S = never#gt;#40;a: A, ab: #40;a: A#41; =#gt; B, bc: #40;b: B#41; =#gt; C, cd: #40;c: C#41; =#gt; D, de: #40;d: D#41; =#gt; E, ef: #40;e: E#41; =#gt; F, fg: #40;f: F#41; =#gt; G, gh: #40;g: G#41; =#gt; H, hi: #40;h: H#41; =#gt; I, ij: #40;i: I#41; =#gt; J, jk: #40;j: J#41; =#gt; K, kl: #40;k: K#41; =#gt; L, lm: #40;l: L#41; =#gt; M, mn: #40;m: M#41; =#gt; N, no: #40;n: N#41; =#gt; O, op: #40;o: O#41; =#gt; P, pq: #40;p: P#41; =#gt; Q, qr: #40;q: Q#41; =#gt; R, rs: #40;r: R#41; =#gt; S#41;: S; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never, N = never, O = never, P = never, Q = never, R = never, S = never, T = never#gt;#40;a: A, ab: #40;a: A#41; =#gt; B, bc: #40;b: B#41; =#gt; C, cd: #40;c: C#41; =#gt; D, de: #40;d: D#41; =#gt; E, ef: #40;e: E#41; =#gt; F, fg: #40;f: F#41; =#gt; G, gh: #40;g: G#41; =#gt; H, hi: #40;h: H#41; =#gt; I, ij: #40;i: I#41; =#gt; J, jk: #40;j: J#41; =#gt; K, kl: #40;k: K#41; =#gt; L, lm: #40;l: L#41; =#gt; M, mn: #40;m: M#41; =#gt; N, no: #40;n: N#41; =#gt; O, op: #40;o: O#41; =#gt; P, pq: #40;p: P#41; =#gt; Q, qr: #40;q: Q#41; =#gt; R, rs: #40;r: R#41; =#gt; S, st: #40;s: S#41; =#gt; T#41;: T; #125;<br/>node: pipe"/]
+  21[/"type: #lt;E1, R1#gt;#40;self: Effect#lt;#123;#125;, E1, R1#gt;#41; =#gt; Effect#lt;#123; a: number; #125;, E1, R1#gt;<br/>node: Effect.bind#40;#quot;a#quot;, #40;#41; =#gt; Effect.succeed#40;1#41;#41;"/]
+  22[/"type: #lt;E, R#gt;#40;self: Effect#lt;#123; a: number; #125;, E, R#gt;#41; =#gt; Effect#lt;#123; a: number; b: number; #125;, E, R#gt;<br/>node: Effect.let#40;#quot;b#quot;, #40;#123; a #125;#41; =#gt; a + 1#41;"/]
+  23[/"type: #lt;E1, R1#gt;#40;self: Effect#lt;#123; a: number; b: number; #125;, E1, R1#gt;#41; =#gt; Effect#lt;#123; a: number; b: number; c: string; #125;, E1, R1#gt;<br/>node: Effect.bind#40;#quot;c#quot;, #40;#123; b #125;#41; =#gt; Effect.succeed#40;b.toString#40;#41;#41;#41;"/]
+  2 -->|"kind: transformCallee"| 1
+  3 -->|"kind: transformArg"| 1
+  5 -->|"kind: pipe"| 6
+  7 -->|"kind: transformCallee"| 6
+  6 -->|"kind: potentialReturn"| 4
+  4 -->|"kind: transformArg"| 1
   0 -->|"kind: pipe"| 1
-  1 -->|"kind: pipe"| 2
-  2 -->|"kind: pipe"| 3
-  4 -->|"kind: transformCallee"| 1
-  5 -->|"kind: transformArg"| 1
-  6 -->|"kind: transformArg"| 1
-  8 -->|"kind: potentialReturn"| 7
-  7 -->|"kind: connect"| 6
-  9 -->|"kind: pipe"| 10
-  10 -->|"kind: connect"| 8
-  11 -->|"kind: transformCallee"| 10
-  12 -->|"kind: transformCallee"| 2
-  13 -->|"kind: transformArg"| 2
-  14 -->|"kind: transformArg"| 2
-  16 -->|"kind: potentialReturn"| 15
-  17 -->|"kind: parameter"| 15
-  15 -->|"kind: connect"| 14
-  18 -->|"kind: transformCallee"| 3
-  19 -->|"kind: transformArg"| 3
-  20 -->|"kind: transformArg"| 3
-  22 -->|"kind: potentialReturn"| 21
-  23 -->|"kind: parameter"| 21
-  21 -->|"kind: connect"| 20
-  24 -->|"kind: pipe"| 25
-  25 -->|"kind: connect"| 22
-  26 -->|"kind: transformCallee"| 25
+  9 -->|"kind: transformCallee"| 8
+  10 -->|"kind: transformArg"| 8
+  12 -->|"kind: potentialReturn"| 11
+  11 -->|"kind: transformArg"| 8
+  1 -->|"kind: pipe"| 8
+  14 -->|"kind: transformCallee"| 13
+  15 -->|"kind: transformArg"| 13
+  17 -->|"kind: pipe"| 18
+  19 -->|"kind: transformCallee"| 18
+  18 -->|"kind: potentialReturn"| 16
+  16 -->|"kind: transformArg"| 13
+  8 -->|"kind: pipe"| 13

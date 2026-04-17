@@ -1,14 +1,15 @@
 flowchart TB
-  0[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  fetch#40;#quot;https://example.com/in-gen#quot;#41;#92;n#125;#41;"/]
-  1[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.fn#40;#quot;fetchInFn#quot;#41;#40;function*#40;#41; #123;#92;n  fetch#40;#quot;https://example.com/in-fn#quot;#41;#92;n#125;#41;"]]
+  0((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  fetch#40;#quot;https://example.com/in-gen#quot;#41;#92;n#125;#41;")))
+  1[/"type: #123; #lt;Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;f: #40;#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #lt;Self, Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;options: #123; readonly self: Self; #125;, f: #40;this: Self#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #125;<br/>node: Effect.gen"/]
   2((("type: Effect#lt;void, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  fetch#40;#quot;https://example.com/in-fn#quot;#41;#92;n#125;")))
-  3[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;https://example.com/regular#quot;#41;"]]
-  4[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;https://example.com/regular#quot;#41;"/]
-  5[/"type: Effect#lt;#40;#41; =#gt; Promise#lt;Response#gt;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const fn = #40;#41; =#gt; fetch#40;#quot;https://example.com/nested#quot;#41;#92;n  return fn#92;n#125;#41;"/]
-  6[/"type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: fn"/]
-  7[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;https://example.com/nested#quot;#41;"]]
-  8[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;https://example.com/nested#quot;#41;"/]
-  2 -->|"kind: potentialReturn"| 1
-  4 -->|"kind: potentialReturn"| 3
-  6 -->|"kind: potentialReturn"| 5
-  8 -->|"kind: potentialReturn"| 7
+  3[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.fn#40;#quot;fetchInFn#quot;#41;#40;function*#40;#41; #123;#92;n  fetch#40;#quot;https://example.com/in-fn#quot;#41;#92;n#125;#41;"]]
+  4[/"type: Traced<br/>node: Effect.fn#40;#quot;fetchInFn#quot;#41;"/]
+  5[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;https://example.com/module#quot;#41;"/]
+  6[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;https://example.com/regular#quot;#41;"]]
+  7[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;https://example.com/regular#quot;#41;"/]
+  8((("type: Effect#lt;#40;#41; =#gt; Promise#lt;Response#gt;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const fn = #40;#41; =#gt; fetch#40;#quot;https://example.com/nested#quot;#41;#92;n  return fn#92;n#125;#41;")))
+  9[/"type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: fn"/]
+  10[/"type: #123; #lt;Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;f: #40;#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #lt;Self, Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;options: #123; readonly self: Self; #125;, f: #40;this: Self#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #125;<br/>node: Effect.gen"/]
+  2 -->|"kind: potentialReturn"| 3
+  7 -->|"kind: potentialReturn"| 6
+  9 -->|"kind: potentialReturn"| 8

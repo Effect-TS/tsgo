@@ -1,13 +1,16 @@
 flowchart TB
   0[/"type: #quot;x#quot;<br/>node: #quot;x#quot;"/]
-  1["type: typeof MyTypeId<br/>callee: Symbol.for<br/>args: #91;#93;"]
+  1["type: typeof MyTypeId<br/>callee: <br/>args: #91;#93;"]
   2[/"type: #40;key: string#41; =#gt; symbol<br/>node: Symbol.for"/]
-  3[/"type: any<br/>node: #123; value: #quot;WithSpecialChars#quot; #125; as any"/]
-  4["type: Layer#lt;IsGeneric#lt;#quot;With#lt;Special#gt;Chars#35;!#quot;#gt;, never, never#gt;<br/>callee: Layer.succeed<br/>args: #91;WithSpecialChars#93;"]
-  5[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #40;resource: S#41; =#gt; Layer#lt;I, never, never#gt;; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;, resource: NoInfer#lt;S#gt;#41;: Layer#lt;I, never, never#gt;; #125;<br/>node: Layer.succeed"/]
-  6[/"type: Service#lt;IsGeneric#lt;#quot;With#lt;Special#gt;Chars#35;!#quot;#gt;, #123; value: #quot;WithSpecialChars#quot;; #125;#gt;<br/>node: WithSpecialChars"/]
+  3[/"type: typeof MyTypeId<br/>node: MyTypeId"/]
+  4[/"type: typeof MyTypeId<br/>node: MyTypeId"/]
+  5[/"type: any<br/>node: #123; value: #quot;WithSpecialChars#quot; #125; as any"/]
+  6["type: Layer#lt;IsGeneric#lt;#quot;With#lt;Special#gt;Chars#35;!#quot;#gt;, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  7[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #40;resource: S#41; =#gt; Layer#lt;I, never, never#gt;; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;, resource: NoInfer#lt;S#gt;#41;: Layer#lt;I, never, never#gt;; #125;<br/>node: Layer.succeed"/]
+  8[/"type: Service#lt;IsGeneric#lt;#quot;With#lt;Special#gt;Chars#35;!#quot;#gt;, #123; value: #quot;WithSpecialChars#quot;; #125;#gt;<br/>node: WithSpecialChars"/]
+  9[/"type: Layer#lt;IsGeneric#lt;#quot;With#lt;Special#gt;Chars#35;!#quot;#gt;, never, never#gt;<br/>node: withSpecialCharsLayer"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
-  3 -->|"kind: dataLast"| 4
-  5 -->|"kind: transformCallee"| 4
-  6 -->|"kind: transformArg"| 4
+  5 -->|"kind: pipe"| 6
+  7 -->|"kind: transformCallee"| 5
+  8 -->|"kind: transformArg"| 5

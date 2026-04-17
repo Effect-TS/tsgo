@@ -1,51 +1,34 @@
 flowchart TB
-  0[/"type: #quot;DataTaggedError#quot;<br/>node: #quot;DataTaggedError#quot;"/]
-  1["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;DataTaggedError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
-  2[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
-  3[/"type: #quot;SchemaError#quot;<br/>node: #quot;SchemaError#quot;"/]
-  4["type: #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;SchemaError, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: Class#lt;SchemaError, Struct#lt;Fields#gt;, YieldableError#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;SchemaError, readonly #91;S#93;#gt; #124; undefined#41;: Class#lt;SchemaError, S, YieldableError#gt;; #125;<br/>callee: Schema.ErrorClass<br/>args: #91;#93;"]
-  5[/"type: #lt;Self = never, Brand = #123;#125;#gt;#40;identifier: string#41; =#gt; #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;Self, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.ErrorClass#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, Struct#lt;Fields#gt;, YieldableError #amp; Brand#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;Self, readonly #91;S#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.ErrorClass#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, S, YieldableError #amp; Brand#gt;; #125;<br/>node: Schema.ErrorClass"/]
-  6[/"type: #quot;SchemaError#quot;<br/>node: #quot;SchemaError#quot;"/]
-  7["type: tag#lt;#quot;SchemaError#quot;#gt;<br/>callee: Schema.tag<br/>args: #91;#93;"]
-  8[/"type: #lt;Tag extends AST.LiteralValue#gt;#40;literal: Tag#41; =#gt; tag#lt;Tag#gt;<br/>node: Schema.tag"/]
-  9[/"type: Effect#lt;void, DataTaggedError #124; NonYieldable #124; SchemaError, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  // should not report#92;n  yield* Effect.fail#40;new NonYieldable#40;#quot;non-yieldable error#quot;#41;#41;#92;n  const err = new DataTaggedError#40;#41;#92;n  console.log#40;err#41;#92;n  // should report#92;n  yield* Effect.fail#40;new DataTaggedError#40;#41;#41;#92;n  yield* Effect.fail#40;new SchemaError#40;#123;#125;#41;#41;#92;n#125;#41;"/]
-  10((("type: Effect#lt;never, NonYieldable, never#gt;<br/>node: Effect.fail#40;new NonYieldable#40;#quot;non-yieldable error#quot;#41;#41;")))
-  11((("type: Effect#lt;never, DataTaggedError, never#gt;<br/>node: Effect.fail#40;new DataTaggedError#40;#41;#41;")))
-  12((("type: Effect#lt;never, SchemaError, never#gt;<br/>node: Effect.fail#40;new SchemaError#40;#123;#125;#41;#41;")))
-  13[/"type: NonYieldable<br/>node: new NonYieldable#40;#quot;non-yieldable error#quot;#41;"/]
-  14["type: Effect#lt;never, NonYieldable, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  0[/"type: ErrorConstructor<br/>node: Error"/]
+  1[/"type: #quot;NonYieldable#quot;<br/>node: #quot;NonYieldable#quot;"/]
+  2[/"type: #quot;DataTaggedError#quot;<br/>node: #quot;DataTaggedError#quot;"/]
+  3["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;DataTaggedError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: <br/>args: #91;#93;"]
+  4[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  5[/"type: Class#lt;SchemaError, Struct#lt;#123; readonly _tag: tag#lt;#quot;SchemaError#quot;#gt;; #125;#gt;, YieldableError#gt;<br/>node: Schema.ErrorClass#lt;SchemaError#gt;#40;#quot;SchemaError#quot;#41;#40;#123;#92;n  _tag: Schema.tag#40;#quot;SchemaError#quot;#41;#92;n#125;#41;"/]
+  6((("type: Effect#lt;void, DataTaggedError #124; NonYieldable #124; SchemaError, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  // should not report#92;n  yield* Effect.fail#40;new NonYieldable#40;#quot;non-yieldable error#quot;#41;#41;#92;n  const err = new DataTaggedError#40;#41;#92;n  console.log#40;err#41;#92;n  // should report#92;n  yield* Effect.fail#40;new DataTaggedError#40;#41;#41;#92;n  yield* Effect.fail#40;new SchemaError#40;#123;#125;#41;#41;#92;n#125;#41;")))
+  7[/"type: NonYieldable<br/>node: new NonYieldable#40;#quot;non-yieldable error#quot;#41;"/]
+  8["type: Effect#lt;never, NonYieldable, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  9[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  10[/"type: DataTaggedError<br/>node: new DataTaggedError#40;#41;"/]
+  11["type: Effect#lt;never, DataTaggedError, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  12[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  13[/"type: SchemaError<br/>node: new SchemaError#40;#123;#125;#41;"/]
+  14["type: Effect#lt;never, SchemaError, never#gt;<br/>callee: <br/>args: #91;#93;"]
   15[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  16[/"type: DataTaggedError<br/>node: err"/]
-  17["type: void<br/>callee: console.log<br/>args: #91;#93;"]
-  18[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
-  19[/"type: DataTaggedError<br/>node: new DataTaggedError#40;#41;"/]
-  20["type: Effect#lt;never, DataTaggedError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  21[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  22[/"type: SchemaError<br/>node: new SchemaError#40;#123;#125;#41;"/]
-  23["type: Effect#lt;never, SchemaError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  24[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  25[/"type: DataTaggedError<br/>node: new DataTaggedError#40;#41;"/]
-  26["type: Effect#lt;never, DataTaggedError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  27[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  0 -->|"kind: pipe"| 1
-  2 -->|"kind: transformCallee"| 1
-  3 -->|"kind: pipe"| 4
-  5 -->|"kind: transformCallee"| 4
-  6 -->|"kind: pipe"| 7
-  8 -->|"kind: transformCallee"| 7
-  10 -->|"kind: yieldable"| 9
-  11 -->|"kind: yieldable"| 9
-  12 -->|"kind: yieldable"| 9
+  16[/"type: #123; #lt;Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;f: #40;#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #lt;Self, Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;options: #123; readonly self: Self; #125;, f: #40;this: Self#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #125;<br/>node: Effect.gen"/]
+  17[/"type: DataTaggedError<br/>node: new DataTaggedError#40;#41;"/]
+  18["type: Effect#lt;never, DataTaggedError, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  19[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  2 -->|"kind: pipe"| 3
+  4 -->|"kind: transformCallee"| 3
+  7 -->|"kind: pipe"| 8
+  9 -->|"kind: transformCallee"| 8
+  8 -->|"kind: yieldable"| 6
+  10 -->|"kind: pipe"| 11
+  12 -->|"kind: transformCallee"| 11
+  11 -->|"kind: yieldable"| 6
   13 -->|"kind: pipe"| 14
-  14 -->|"kind: connect"| 10
   15 -->|"kind: transformCallee"| 14
-  16 -->|"kind: pipe"| 17
-  18 -->|"kind: transformCallee"| 17
-  19 -->|"kind: pipe"| 20
-  20 -->|"kind: connect"| 11
-  21 -->|"kind: transformCallee"| 20
-  22 -->|"kind: pipe"| 23
-  23 -->|"kind: connect"| 12
-  24 -->|"kind: transformCallee"| 23
-  25 -->|"kind: pipe"| 26
-  27 -->|"kind: transformCallee"| 26
+  14 -->|"kind: yieldable"| 6
+  17 -->|"kind: pipe"| 18
+  19 -->|"kind: transformCallee"| 18

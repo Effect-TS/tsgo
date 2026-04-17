@@ -1,55 +1,11 @@
 flowchart TB
-  0[/"type: Effect#lt;#123; constant: Effect#lt;1, never, never#gt;; #125;, never, SampleService1#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    const sampleService1 = yield* SampleService1#92;n    return #123;#92;n      constant: Effect.succeed#40;sampleService1.value#41;#92;n    #125;#92;n  #125;#41;"/]
-  1[/"type: typeof SampleService1<br/>node: SampleService1"/]
-  2[/"type: #123; constant: Effect#lt;1, never, never#gt;; #125;<br/>node: #123;#92;n      constant: Effect.succeed#40;sampleService1.value#41;#92;n    #125;"/]
-  3[/"type: 1<br/>node: sampleService1.value"/]
-  4["type: Effect#lt;1, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  5[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  6[/"type: Effect#lt;#123; constant: Effect#lt;1, never, never#gt;; #125;, never, SampleService1#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    const sampleService1 = yield* SampleService1#92;n    return #123;#92;n      constant: Effect.succeed#40;sampleService1.value#41;#92;n    #125;#92;n  #125;#41;"/]
-  7[/"type: typeof SampleService1<br/>node: SampleService1"/]
-  8[/"type: #123; constant: Effect#lt;1, never, never#gt;; #125;<br/>node: #123;#92;n      constant: Effect.succeed#40;sampleService1.value#41;#92;n    #125;"/]
-  9[/"type: 1<br/>node: sampleService1.value"/]
-  10["type: Effect#lt;1, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  11[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  12[/"type: Effect#lt;#123; constant: Effect#lt;number, never, never#gt;; #125;, never, SampleService1 #124; SampleService2#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    const sampleService1 = yield* SampleService1#92;n    const sampleService2 = yield* SampleService2#92;n    return #123;#92;n      constant: Effect.succeed#40;sampleService1.value + sampleService2.value#41;#92;n    #125;#92;n  #125;#41;"/]
-  13[/"type: typeof SampleService1<br/>node: SampleService1"/]
-  14[/"type: typeof SampleService2<br/>node: SampleService2"/]
-  15[/"type: #123; constant: Effect#lt;number, never, never#gt;; #125;<br/>node: #123;#92;n      constant: Effect.succeed#40;sampleService1.value + sampleService2.value#41;#92;n    #125;"/]
-  16[/"type: number<br/>node: sampleService1.value + sampleService2.value"/]
-  17["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  18[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  19[/"type: Effect#lt;#123; constant: Effect#lt;1, never, never#gt;; #125;, never, SampleService1#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    const sampleService1 = yield* SampleService1#92;n    return #123;#92;n      constant: Effect.succeed#40;sampleService1.value#41;#92;n    #125;#92;n  #125;#41;"/]
-  20[/"type: typeof SampleService1<br/>node: SampleService1"/]
-  21[/"type: #123; constant: Effect#lt;1, never, never#gt;; #125;<br/>node: #123;#92;n      constant: Effect.succeed#40;sampleService1.value#41;#92;n    #125;"/]
-  22[/"type: 1<br/>node: sampleService1.value"/]
-  23["type: Effect#lt;1, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  24[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  25[/"type: Effect#lt;#123; constant: Effect#lt;number, never, never#gt;; #125;, never, SampleService1 #124; SampleService2#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    const sampleService1 = yield* SampleService1#92;n    const sampleService2 = yield* SampleService2#92;n    return #123;#92;n      constant: Effect.succeed#40;sampleService1.value + sampleService2.value#41;#92;n    #125;#92;n  #125;#41;"/]
-  26[/"type: typeof SampleService1<br/>node: SampleService1"/]
-  27[/"type: typeof SampleService2<br/>node: SampleService2"/]
-  28[/"type: #123; constant: Effect#lt;number, never, never#gt;; #125;<br/>node: #123;#92;n      constant: Effect.succeed#40;sampleService1.value + sampleService2.value#41;#92;n    #125;"/]
-  29[/"type: number<br/>node: sampleService1.value + sampleService2.value"/]
-  30["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  31[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  1 -->|"kind: yieldable"| 0
-  2 -->|"kind: potentialReturn"| 0
-  3 -->|"kind: pipe"| 4
-  5 -->|"kind: transformCallee"| 4
-  7 -->|"kind: yieldable"| 6
-  8 -->|"kind: potentialReturn"| 6
-  9 -->|"kind: pipe"| 10
-  11 -->|"kind: transformCallee"| 10
-  13 -->|"kind: yieldable"| 12
-  14 -->|"kind: yieldable"| 12
-  15 -->|"kind: potentialReturn"| 12
-  16 -->|"kind: pipe"| 17
-  18 -->|"kind: transformCallee"| 17
-  20 -->|"kind: yieldable"| 19
-  21 -->|"kind: potentialReturn"| 19
-  22 -->|"kind: pipe"| 23
-  24 -->|"kind: transformCallee"| 23
-  26 -->|"kind: yieldable"| 25
-  27 -->|"kind: yieldable"| 25
-  28 -->|"kind: potentialReturn"| 25
-  29 -->|"kind: pipe"| 30
-  31 -->|"kind: transformCallee"| 30
+  0[/"type: Class#lt;SampleService1, #quot;SampleService1#quot;, #123; readonly succeed: #123; readonly value: 1; #125;; #125;#gt;<br/>node: Effect.Service#lt;SampleService1#gt;#40;#41;#40;#quot;SampleService1#quot;, #123;#92;n  succeed: #123; value: 1 #125;#92;n#125;#41;"/]
+  1[/"type: Class#lt;SampleService2, #quot;SampleService2#quot;, #123; readonly succeed: #123; readonly value: 2; #125;; #125;#gt;<br/>node: Effect.Service#lt;SampleService2#gt;#40;#41;#40;#quot;SampleService2#quot;, #123;#92;n  succeed: #123; value: 2 #125;#92;n#125;#41;"/]
+  2[/"type: Class#lt;ValidService, #quot;ValidService#quot;, #123; readonly effect: Effect#lt;#123; constant: Effect#lt;1, never, never#gt;; #125;, never, SampleService1#gt;; readonly dependencies: readonly #91;Layer#lt;SampleService1, never, never#gt;#93;; #125;#gt;<br/>node: Effect.Service#lt;ValidService#gt;#40;#41;#40;#quot;ValidService#quot;, #123;#92;n  effect: Effect.gen#40;function*#40;#41; #123;#92;n    const sampleService1 = yield* SampleService1#92;n    return #123;#92;n      constant: Effect.succeed#40;sampleService1.value#41;#92;n    #125;#92;n  #125;#41;,#92;n  dependencies: #91;SampleService1.Default#93;#92;n#125;#41;"/]
+  3[/"type: Class#lt;ValidService2, #quot;ValidService2#quot;, #123; readonly succeed: #123; readonly value: 3; #125;; #125;#gt;<br/>node: Effect.Service#lt;ValidService2#gt;#40;#41;#40;#quot;ValidService2#quot;, #123;#92;n  succeed: #123; value: 3 #125;#92;n#125;#41;"/]
+  4[/"type: Class#lt;InvalidService2, #quot;InvalidService2#quot;, #123; readonly effect: Effect#lt;#123; constant: Effect#lt;1, never, never#gt;; #125;, never, SampleService1#gt;; #125;#gt;<br/>node: Effect.Service#lt;InvalidService2#gt;#40;#41;#40;#quot;InvalidService2#quot;, #123;#92;n  effect: Effect.gen#40;function*#40;#41; #123;#92;n    const sampleService1 = yield* SampleService1#92;n    return #123;#92;n      constant: Effect.succeed#40;sampleService1.value#41;#92;n    #125;#92;n  #125;#41;#92;n#125;#41;"/]
+  5[/"type: Class#lt;InvalidService3, #quot;InvalidService3#quot;, #123; readonly effect: Effect#lt;#123; constant: Effect#lt;number, never, never#gt;; #125;, never, SampleService1 #124; SampleService2#gt;; readonly dependencies: readonly #91;Layer#lt;SampleService1, never, never#gt;#93;; #125;#gt;<br/>node: Effect.Service#lt;InvalidService3#gt;#40;#41;#40;#quot;InvalidService3#quot;, #123;#92;n  effect: Effect.gen#40;function*#40;#41; #123;#92;n    const sampleService1 = yield* SampleService1#92;n    const sampleService2 = yield* SampleService2#92;n    return #123;#92;n      constant: Effect.succeed#40;sampleService1.value + sampleService2.value#41;#92;n    #125;#92;n  #125;#41;,#92;n  dependencies: #91;SampleService1.Default#93;#92;n#125;#41;"/]
+  6[/"type: readonly #91;Layer#lt;SampleService1, never, never#gt;#93;<br/>node: #91;SampleService1.Default#93; as const"/]
+  7[/"type: Class#lt;ValidService5, #quot;ValidService5#quot;, #123; readonly effect: Effect#lt;#123; constant: Effect#lt;1, never, never#gt;; #125;, never, SampleService1#gt;; readonly dependencies: readonly #91;Layer#lt;SampleService1, never, never#gt;#93;; #125;#gt;<br/>node: Effect.Service#lt;ValidService5#gt;#40;#41;#40;#quot;ValidService5#quot;, #123;#92;n  effect: Effect.gen#40;function*#40;#41; #123;#92;n    const sampleService1 = yield* SampleService1#92;n    return #123;#92;n      constant: Effect.succeed#40;sampleService1.value#41;#92;n    #125;#92;n  #125;#41;,#92;n  dependencies: dependencies1#92;n#125;#41;"/]
+  8[/"type: readonly #91;Layer#lt;SampleService1, never, never#gt;#93;<br/>node: #91;SampleService1.Default#93; as const"/]
+  9[/"type: Class#lt;InvalidService4, #quot;InvalidService4#quot;, #123; readonly effect: Effect#lt;#123; constant: Effect#lt;number, never, never#gt;; #125;, never, SampleService1 #124; SampleService2#gt;; readonly dependencies: readonly #91;Layer#lt;SampleService1, never, never#gt;#93;; #125;#gt;<br/>node: Effect.Service#lt;InvalidService4#gt;#40;#41;#40;#quot;InvalidService4#quot;, #123;#92;n  effect: Effect.gen#40;function*#40;#41; #123;#92;n    const sampleService1 = yield* SampleService1#92;n    const sampleService2 = yield* SampleService2#92;n    return #123;#92;n      constant: Effect.succeed#40;sampleService1.value + sampleService2.value#41;#92;n    #125;#92;n  #125;#41;,#92;n  dependencies: dependencies2#92;n#125;#41;"/]

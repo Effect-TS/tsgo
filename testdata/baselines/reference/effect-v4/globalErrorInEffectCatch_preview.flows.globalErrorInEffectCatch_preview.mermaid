@@ -1,19 +1,6 @@
 flowchart TB
   0[/"type: #123; try: #40;#41; =#gt; Promise#lt;number#gt;; catch: #40;error: unknown#41; =#gt; Error; #125;<br/>node: #123;#92;n  try: async #40;#41; =#gt; 1,#92;n  catch: #40;error#41; =#gt; new Error#40;String#40;error#41;#41;#92;n#125;"/]
-  1["type: Effect#lt;number, Error, never#gt;<br/>callee: Effect.tryPromise<br/>args: #91;#93;"]
+  1["type: Effect#lt;number, Error, never#gt;<br/>callee: <br/>args: #91;#93;"]
   2[/"type: #lt;A, E = UnknownError#gt;#40;options: #123; readonly try: #40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;; readonly catch: #40;error: unknown#41; =#gt; E; #125; #124; #40;#40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;#41;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.tryPromise"/]
-  3[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: async #40;#41; =#gt; 1"]]
-  4[/"type: 1<br/>node: 1"/]
-  5[["type: #40;error: unknown#41; =#gt; Error<br/>node: #40;error#41; =#gt; new Error#40;String#40;error#41;#41;"]]
-  6[/"type: Error<br/>node: new Error#40;String#40;error#41;#41;"/]
-  7[/"type: unknown<br/>node: error"/]
-  8[/"type: unknown<br/>node: error"/]
-  9["type: string<br/>callee: String<br/>args: #91;#93;"]
-  10[/"type: StringConstructor<br/>node: String"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
-  4 -->|"kind: potentialReturn"| 3
-  6 -->|"kind: potentialReturn"| 5
-  7 -->|"kind: parameter"| 5
-  8 -->|"kind: pipe"| 9
-  10 -->|"kind: transformCallee"| 9

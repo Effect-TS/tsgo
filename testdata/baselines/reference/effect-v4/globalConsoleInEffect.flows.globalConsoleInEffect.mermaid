@@ -1,59 +1,30 @@
 flowchart TB
-  0[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  console.log#40;#quot;hello#quot;#41;#92;n#125;#41;"/]
-  1[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
-  2["type: void<br/>callee: console.log<br/>args: #91;#93;"]
-  3[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
-  4[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.fn#40;#quot;consoleWarnInFn#quot;#41;#40;function*#40;#41; #123;#92;n  console.warn#40;#quot;warning#quot;#41;#92;n#125;#41;"]]
-  5((("type: Effect#lt;void, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  console.warn#40;#quot;warning#quot;#41;#92;n#125;")))
-  6[/"type: #quot;warning#quot;<br/>node: #quot;warning#quot;"/]
-  7["type: void<br/>callee: console.warn<br/>args: #91;#93;"]
-  8[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.warn"/]
-  9[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  console.error#40;#quot;error#quot;#41;#92;n#125;#41;"/]
-  10[/"type: #quot;error#quot;<br/>node: #quot;error#quot;"/]
-  11["type: void<br/>callee: console.error<br/>args: #91;#93;"]
-  12[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.error"/]
-  13[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const myConsole = console#92;n  myConsole.log#40;#quot;hello#quot;#41;#92;n#125;#41;"/]
-  14[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
-  15["type: void<br/>callee: myConsole.log<br/>args: #91;#93;"]
-  16[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: myConsole.log"/]
-  17[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const myConsole = console#92;n  myConsole.log#40;#quot;hello#quot;#41;#92;n#125;#41;"/]
-  18[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
-  19["type: void<br/>callee: myConsole.log<br/>args: #91;#93;"]
-  20[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: myConsole.log"/]
-  21[/"type: #quot;module level#quot;<br/>node: #quot;module level#quot;"/]
-  22["type: void<br/>callee: console.log<br/>args: #91;#93;"]
-  23[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
-  24[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#92;n  console.log#40;#quot;regular#quot;#41;#92;n#125;"]]
-  25((("type: void<br/>node: #40;#41; =#gt; #123;#92;n  console.log#40;#quot;regular#quot;#41;#92;n#125;")))
-  26[/"type: #quot;regular#quot;<br/>node: #quot;regular#quot;"/]
-  27["type: void<br/>callee: console.log<br/>args: #91;#93;"]
-  28[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
-  29[/"type: Effect#lt;#40;#41; =#gt; void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const fn = #40;#41; =#gt; console.log#40;#quot;nested#quot;#41;#92;n  return fn#92;n#125;#41;"/]
-  30[/"type: #40;#41; =#gt; void<br/>node: fn"/]
-  31[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; console.log#40;#quot;nested#quot;#41;"]]
-  32((("type: void<br/>node: console.log#40;#quot;nested#quot;#41;")))
-  33[/"type: #quot;nested#quot;<br/>node: #quot;nested#quot;"/]
-  34["type: void<br/>callee: console.log<br/>args: #91;#93;"]
-  35[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
-  36[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  console.table#40;#123; a: 1 #125;#41;#92;n#125;#41;"/]
-  1 -->|"kind: pipe"| 2
-  3 -->|"kind: transformCallee"| 2
-  5 -->|"kind: potentialReturn"| 4
-  6 -->|"kind: pipe"| 7
-  8 -->|"kind: transformCallee"| 7
-  10 -->|"kind: pipe"| 11
-  12 -->|"kind: transformCallee"| 11
-  14 -->|"kind: pipe"| 15
-  16 -->|"kind: transformCallee"| 15
-  18 -->|"kind: pipe"| 19
-  20 -->|"kind: transformCallee"| 19
-  21 -->|"kind: pipe"| 22
-  23 -->|"kind: transformCallee"| 22
-  25 -->|"kind: potentialReturn"| 24
-  26 -->|"kind: pipe"| 27
-  28 -->|"kind: transformCallee"| 27
-  30 -->|"kind: potentialReturn"| 29
-  32 -->|"kind: potentialReturn"| 31
-  33 -->|"kind: pipe"| 34
-  34 -->|"kind: connect"| 32
-  35 -->|"kind: transformCallee"| 34
+  0((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  console.log#40;#quot;hello#quot;#41;#92;n#125;#41;")))
+  1[/"type: #123; #lt;Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;f: #40;#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #lt;Self, Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;options: #123; readonly self: Self; #125;, f: #40;this: Self#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #125;<br/>node: Effect.gen"/]
+  2((("type: Effect#lt;void, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  console.warn#40;#quot;warning#quot;#41;#92;n#125;")))
+  3[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.fn#40;#quot;consoleWarnInFn#quot;#41;#40;function*#40;#41; #123;#92;n  console.warn#40;#quot;warning#quot;#41;#92;n#125;#41;"]]
+  4[/"type: Traced<br/>node: Effect.fn#40;#quot;consoleWarnInFn#quot;#41;"/]
+  5((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  console.error#40;#quot;error#quot;#41;#92;n#125;#41;")))
+  6[/"type: #123; #lt;Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;f: #40;#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #lt;Self, Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;options: #123; readonly self: Self; #125;, f: #40;this: Self#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #125;<br/>node: Effect.gen"/]
+  7((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const myConsole = console#92;n  myConsole.log#40;#quot;hello#quot;#41;#92;n#125;#41;")))
+  8[/"type: #123; #lt;Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;f: #40;#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #lt;Self, Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;options: #123; readonly self: Self; #125;, f: #40;this: Self#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #125;<br/>node: Effect.gen"/]
+  9((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const myConsole = console#92;n  myConsole.log#40;#quot;hello#quot;#41;#92;n#125;#41;")))
+  10[/"type: #123; #lt;Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;f: #40;#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #lt;Self, Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;options: #123; readonly self: Self; #125;, f: #40;this: Self#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #125;<br/>node: Effect.gen"/]
+  11[/"type: #quot;module level#quot;<br/>node: #quot;module level#quot;"/]
+  12["type: void<br/>callee: <br/>args: #91;#93;"]
+  13[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
+  14[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#92;n  console.log#40;#quot;regular#quot;#41;#92;n#125;"]]
+  15[/"type: #quot;regular#quot;<br/>node: #quot;regular#quot;"/]
+  16["type: void<br/>callee: <br/>args: #91;#93;"]
+  17[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
+  18((("type: Effect#lt;#40;#41; =#gt; void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const fn = #40;#41; =#gt; console.log#40;#quot;nested#quot;#41;#92;n  return fn#92;n#125;#41;")))
+  19[/"type: #40;#41; =#gt; void<br/>node: fn"/]
+  20[/"type: #123; #lt;Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;f: #40;#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #lt;Self, Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;options: #123; readonly self: Self; #125;, f: #40;this: Self#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #125;<br/>node: Effect.gen"/]
+  21((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  console.table#40;#123; a: 1 #125;#41;#92;n#125;#41;")))
+  22[/"type: #123; #lt;Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;f: #40;#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #lt;Self, Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;options: #123; readonly self: Self; #125;, f: #40;this: Self#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #125;<br/>node: Effect.gen"/]
+  2 -->|"kind: potentialReturn"| 3
+  11 -->|"kind: pipe"| 12
+  13 -->|"kind: transformCallee"| 12
+  15 -->|"kind: pipe"| 16
+  17 -->|"kind: transformCallee"| 16
+  19 -->|"kind: potentialReturn"| 18

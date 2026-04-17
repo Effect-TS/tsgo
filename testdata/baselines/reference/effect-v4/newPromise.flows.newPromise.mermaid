@@ -1,61 +1,15 @@
 flowchart TB
-  0[["type: #40;resolve: #40;value: number #124; PromiseLike#lt;number#gt;#41; =#gt; void#41; =#gt; void<br/>node: #40;resolve#41; =#gt; resolve#40;1#41;"]]
-  1((("type: void<br/>node: resolve#40;1#41;")))
-  2[/"type: #40;value: number #124; PromiseLike#lt;number#gt;#41; =#gt; void<br/>node: resolve"/]
-  3[/"type: 1<br/>node: 1"/]
-  4["type: void<br/>callee: resolve<br/>args: #91;#93;"]
-  5[/"type: #40;value: number #124; PromiseLike#lt;number#gt;#41; =#gt; void<br/>node: resolve"/]
-  6[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: #40;#41; =#gt; new Promise#lt;number#gt;#40;#40;resolve#41; =#gt; resolve#40;2#41;#41;"]]
-  7[/"type: Promise#lt;number#gt;<br/>node: new Promise#lt;number#gt;#40;#40;resolve#41; =#gt; resolve#40;2#41;#41;"/]
-  8[["type: #40;resolve: #40;value: number #124; PromiseLike#lt;number#gt;#41; =#gt; void#41; =#gt; void<br/>node: #40;resolve#41; =#gt; resolve#40;2#41;"]]
-  9((("type: void<br/>node: resolve#40;2#41;")))
-  10[/"type: #40;value: number #124; PromiseLike#lt;number#gt;#41; =#gt; void<br/>node: resolve"/]
-  11[/"type: 2<br/>node: 2"/]
-  12["type: void<br/>callee: resolve<br/>args: #91;#93;"]
-  13[/"type: #40;value: number #124; PromiseLike#lt;number#gt;#41; =#gt; void<br/>node: resolve"/]
-  14[["type: #40;resolve: #40;value: number #124; PromiseLike#lt;number#gt;#41; =#gt; void#41; =#gt; void<br/>node: #40;resolve#41; =#gt; resolve#40;3#41;"]]
-  15((("type: void<br/>node: resolve#40;3#41;")))
-  16[/"type: #40;value: number #124; PromiseLike#lt;number#gt;#41; =#gt; void<br/>node: resolve"/]
-  17[/"type: 3<br/>node: 3"/]
-  18["type: void<br/>callee: resolve<br/>args: #91;#93;"]
-  19[/"type: #40;value: number #124; PromiseLike#lt;number#gt;#41; =#gt; void<br/>node: resolve"/]
-  20[/"type: Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  return new Promise#lt;number#gt;#40;#40;resolve#41; =#gt; resolve#40;4#41;#41;#92;n#125;#41;"/]
-  21[/"type: Promise#lt;number#gt;<br/>node: new Promise#lt;number#gt;#40;#40;resolve#41; =#gt; resolve#40;4#41;#41;"/]
-  22[["type: #40;resolve: #40;value: number #124; PromiseLike#lt;number#gt;#41; =#gt; void#41; =#gt; void<br/>node: #40;resolve#41; =#gt; resolve#40;4#41;"]]
-  23((("type: void<br/>node: resolve#40;4#41;")))
-  24[/"type: #40;value: number #124; PromiseLike#lt;number#gt;#41; =#gt; void<br/>node: resolve"/]
-  25[/"type: 4<br/>node: 4"/]
-  26["type: void<br/>callee: resolve<br/>args: #91;#93;"]
-  27[/"type: #40;value: number #124; PromiseLike#lt;number#gt;#41; =#gt; void<br/>node: resolve"/]
-  28[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: #40;#41; =#gt; #123;#92;n  class Promise#lt;A#gt; #123;#92;n    constructor#40;readonly value: A#41; #123;#125;#92;n  #125;#92;n  return new Promise#40;5#41;#92;n#125;"]]
-  29((("type: Promise#lt;number#gt;<br/>node: #40;#41; =#gt; #123;#92;n  class Promise#lt;A#gt; #123;#92;n    constructor#40;readonly value: A#41; #123;#125;#92;n  #125;#92;n  return new Promise#40;5#41;#92;n#125;")))
-  30[/"type: Promise#lt;number#gt;<br/>node: new Promise#40;5#41;"/]
-  31[["type: any<br/>node: constructor#40;readonly value: A#41; #123;#125;"]]
-  32((("type: Promise#lt;A#gt;<br/>node: constructor#40;readonly value: A#41; #123;#125;")))
-  33[/"type: A<br/>node: readonly value: A"/]
-  1 -->|"kind: potentialReturn"| 0
-  2 -->|"kind: parameter"| 0
-  3 -->|"kind: pipe"| 4
-  4 -->|"kind: connect"| 1
-  5 -->|"kind: transformCallee"| 4
-  7 -->|"kind: potentialReturn"| 6
+  0[/"type: Promise#lt;number#gt;<br/>node: new Promise#lt;number#gt;#40;#40;resolve#41; =#gt; resolve#40;1#41;#41;"/]
+  1[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: #40;#41; =#gt; new Promise#lt;number#gt;#40;#40;resolve#41; =#gt; resolve#40;2#41;#41;"]]
+  2[/"type: Promise#lt;number#gt;<br/>node: new Promise#lt;number#gt;#40;#40;resolve#41; =#gt; resolve#40;2#41;#41;"/]
+  3[/"type: PromiseConstructor<br/>node: Promise"/]
+  4[/"type: Promise#lt;number#gt;<br/>node: new MyPromise#lt;number#gt;#40;#40;resolve#41; =#gt; resolve#40;3#41;#41;"/]
+  5((("type: Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  return new Promise#lt;number#gt;#40;#40;resolve#41; =#gt; resolve#40;4#41;#41;#92;n#125;#41;")))
+  6[/"type: Promise#lt;number#gt;<br/>node: new Promise#lt;number#gt;#40;#40;resolve#41; =#gt; resolve#40;4#41;#41;"/]
+  7[/"type: #123; #lt;Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;f: #40;#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #lt;Self, Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;options: #123; readonly self: Self; #125;, f: #40;this: Self#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #125;<br/>node: Effect.gen"/]
+  8[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: #40;#41; =#gt; #123;#92;n  class Promise#lt;A#gt; #123;#92;n    constructor#40;readonly value: A#41; #123;#125;#92;n  #125;#92;n  return new Promise#40;5#41;#92;n#125;"]]
+  9[/"type: Promise#lt;number#gt;<br/>node: new Promise#40;5#41;"/]
+  10[["type: any<br/>node: constructor#40;readonly value: A#41; #123;#125;"]]
+  2 -->|"kind: potentialReturn"| 1
+  6 -->|"kind: potentialReturn"| 5
   9 -->|"kind: potentialReturn"| 8
-  10 -->|"kind: parameter"| 8
-  11 -->|"kind: pipe"| 12
-  12 -->|"kind: connect"| 9
-  13 -->|"kind: transformCallee"| 12
-  15 -->|"kind: potentialReturn"| 14
-  16 -->|"kind: parameter"| 14
-  17 -->|"kind: pipe"| 18
-  18 -->|"kind: connect"| 15
-  19 -->|"kind: transformCallee"| 18
-  21 -->|"kind: potentialReturn"| 20
-  23 -->|"kind: potentialReturn"| 22
-  24 -->|"kind: parameter"| 22
-  25 -->|"kind: pipe"| 26
-  26 -->|"kind: connect"| 23
-  27 -->|"kind: transformCallee"| 26
-  29 -->|"kind: potentialReturn"| 28
-  30 -->|"kind: potentialReturn"| 29
-  32 -->|"kind: potentialReturn"| 31
-  33 -->|"kind: parameter"| 31

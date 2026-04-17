@@ -1,28 +1,19 @@
 flowchart TB
-  0[/"type: Effect#lt;number, NoSuchElementError, never#gt;<br/>node: Effect.gen#40;function*#40;#41;#123;#92;n    const option = yield* Option.some#40;1#41;#92;n    return option#92;n#125;#41;"/]
-  1((("type: Option#lt;number#gt;<br/>node: Option.some#40;1#41;")))
-  2[/"type: number<br/>node: option"/]
-  3[/"type: 1<br/>node: 1"/]
-  4["type: Option#lt;number#gt;<br/>callee: Option.some<br/>args: #91;#93;"]
-  5[/"type: #lt;A#gt;#40;value: A#41; =#gt; Option#lt;A#gt;<br/>node: Option.some"/]
-  6((("type: #40;#41; =#gt; Generator#lt;Option#lt;number#gt;, number, any#gt;<br/>node: function*#40;#41;#123;#92;n    const option = yield* Option.some#40;1#41;#92;n    return option#92;n#125;")))
-  7["type: Option#lt;number#gt;<br/>callee: Option.gen<br/>args: #91;#93;"]
-  8[/"type: Gen#lt;OptionTypeLambda#gt;<br/>node: Option.gen"/]
-  9[["type: #40;#41; =#gt; Generator#lt;Option#lt;number#gt;, number, any#gt;<br/>node: function*#40;#41;#123;#92;n    const option = yield* Option.some#40;1#41;#92;n    return option#92;n#125;"]]
-  10((("type: Generator#lt;Option#lt;number#gt;, number, any#gt;<br/>node: function*#40;#41;#123;#92;n    const option = yield* Option.some#40;1#41;#92;n    return option#92;n#125;")))
-  11[/"type: number<br/>node: option"/]
-  12[/"type: 1<br/>node: 1"/]
-  13["type: Option#lt;number#gt;<br/>callee: Option.some<br/>args: #91;#93;"]
-  14[/"type: #lt;A#gt;#40;value: A#41; =#gt; Option#lt;A#gt;<br/>node: Option.some"/]
-  1 -->|"kind: yieldable"| 0
-  2 -->|"kind: potentialReturn"| 0
-  3 -->|"kind: pipe"| 4
-  4 -->|"kind: connect"| 1
-  5 -->|"kind: transformCallee"| 4
-  6 -->|"kind: pipe"| 7
-  8 -->|"kind: transformCallee"| 7
-  10 -->|"kind: potentialReturn"| 9
-  11 -->|"kind: potentialReturn"| 10
-  9 -->|"kind: connect"| 6
-  12 -->|"kind: pipe"| 13
-  14 -->|"kind: transformCallee"| 13
+  0((("type: Effect#lt;number, NoSuchElementError, never#gt;<br/>node: Effect.gen#40;function*#40;#41;#123;#92;n    const option = yield* Option.some#40;1#41;#92;n    return option#92;n#125;#41;")))
+  1[/"type: number<br/>node: option"/]
+  2[/"type: 1<br/>node: 1"/]
+  3["type: Option#lt;number#gt;<br/>callee: <br/>args: #91;#93;"]
+  4[/"type: #lt;A#gt;#40;value: A#41; =#gt; Option#lt;A#gt;<br/>node: Option.some"/]
+  5[/"type: #123; #lt;Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;f: #40;#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #lt;Self, Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;options: #123; readonly self: Self; #125;, f: #40;this: Self#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #125;<br/>node: Effect.gen"/]
+  6[["type: #40;#41; =#gt; Generator#lt;Option#lt;number#gt;, number, any#gt;<br/>node: function*#40;#41;#123;#92;n    const option = yield* Option.some#40;1#41;#92;n    return option#92;n#125;"]]
+  7[/"type: number<br/>node: option"/]
+  8[/"type: number<br/>node: yield* Option.some#40;1#41;"/]
+  9["type: Option#lt;number#gt;<br/>callee: <br/>args: #91;#93;"]
+  10[/"type: Gen#lt;OptionTypeLambda#gt;<br/>node: Option.gen"/]
+  1 -->|"kind: potentialReturn"| 0
+  2 -->|"kind: pipe"| 3
+  4 -->|"kind: transformCallee"| 3
+  3 -->|"kind: yieldable"| 0
+  7 -->|"kind: potentialReturn"| 6
+  6 -->|"kind: pipe"| 9
+  10 -->|"kind: transformCallee"| 9

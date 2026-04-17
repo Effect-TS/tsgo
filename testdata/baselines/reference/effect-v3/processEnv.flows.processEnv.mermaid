@@ -1,13 +1,13 @@
 flowchart TB
-  0[["type: #40;#41; =#gt; string #124; undefined<br/>node: #40;#41; =#gt; process.env#91;#quot;HOST#quot;#93;"]]
-  1[/"type: string #124; undefined<br/>node: process.env#91;#quot;HOST#quot;#93;"/]
-  2[/"type: Effect#lt;string #124; undefined, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  return process.env.SECRET#92;n#125;#41;"/]
-  3[/"type: string #124; undefined<br/>node: process.env.SECRET"/]
-  4[/"type: Effect#lt;#40;#41; =#gt; string #124; undefined, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const fn = #40;#41; =#gt; process.env.API_KEY#92;n  return fn#92;n#125;#41;"/]
-  5[/"type: #40;#41; =#gt; string #124; undefined<br/>node: fn"/]
-  6[["type: #40;#41; =#gt; string #124; undefined<br/>node: #40;#41; =#gt; process.env.API_KEY"]]
-  7[/"type: string #124; undefined<br/>node: process.env.API_KEY"/]
-  1 -->|"kind: potentialReturn"| 0
-  3 -->|"kind: potentialReturn"| 2
-  5 -->|"kind: potentialReturn"| 4
+  0[/"type: string #124; undefined<br/>node: process.env.PORT"/]
+  1[["type: #40;#41; =#gt; string #124; undefined<br/>node: #40;#41; =#gt; process.env#91;#quot;HOST#quot;#93;"]]
+  2[/"type: string #124; undefined<br/>node: process.env#91;#quot;HOST#quot;#93;"/]
+  3((("type: Effect#lt;string #124; undefined, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  return process.env.SECRET#92;n#125;#41;")))
+  4[/"type: string #124; undefined<br/>node: process.env.SECRET"/]
+  5[/"type: #123; #lt;Eff extends YieldWrap#lt;Effect#lt;any, any, any#gt;#gt;, AEff#gt;#40;f: #40;resume: Adapter#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;YieldWrap#lt;Effect#lt;infer _A, infer E, infer _R#gt;#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;YieldWrap#lt;Effect#lt;infer _A, infer _E, infer R#gt;#gt;#93; ? R : never#gt;; #lt;Self, Eff extends YieldWrap#lt;Effect#lt;any, any, any#gt;#gt;, AEff#gt;#40;self: Self, f: #40;this: Self, resume: Adapter#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;YieldWrap#lt;Effect#lt;infer _A, infer E, infer _R#gt;#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;YieldWrap#lt;Effect#lt;infer _A, infer _E, infer R#gt;#gt;#93; ? R : never#gt;; #125;<br/>node: Effect.gen"/]
+  6((("type: Effect#lt;#40;#41; =#gt; string #124; undefined, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const fn = #40;#41; =#gt; process.env.API_KEY#92;n  return fn#92;n#125;#41;")))
+  7[/"type: #40;#41; =#gt; string #124; undefined<br/>node: fn"/]
+  8[/"type: #123; #lt;Eff extends YieldWrap#lt;Effect#lt;any, any, any#gt;#gt;, AEff#gt;#40;f: #40;resume: Adapter#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;YieldWrap#lt;Effect#lt;infer _A, infer E, infer _R#gt;#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;YieldWrap#lt;Effect#lt;infer _A, infer _E, infer R#gt;#gt;#93; ? R : never#gt;; #lt;Self, Eff extends YieldWrap#lt;Effect#lt;any, any, any#gt;#gt;, AEff#gt;#40;self: Self, f: #40;this: Self, resume: Adapter#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;YieldWrap#lt;Effect#lt;infer _A, infer E, infer _R#gt;#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;YieldWrap#lt;Effect#lt;infer _A, infer _E, infer R#gt;#gt;#93; ? R : never#gt;; #125;<br/>node: Effect.gen"/]
+  2 -->|"kind: potentialReturn"| 1
+  4 -->|"kind: potentialReturn"| 3
   7 -->|"kind: potentialReturn"| 6

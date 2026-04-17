@@ -1,54 +1,51 @@
 flowchart TB
   0[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;#41; =#gt; #123;#92;n  const a = 1#92;n  const b = 2#92;n  const c = 3#92;n  const d = 4#92;n  const e = 5#92;n  return Effect.succeed#40;a + b + c + d + e#41;#92;n#125;"]]
-  1((("type: Effect#lt;number, never, never#gt;<br/>node: #40;#41; =#gt; #123;#92;n  const a = 1#92;n  const b = 2#92;n  const c = 3#92;n  const d = 4#92;n  const e = 5#92;n  return Effect.succeed#40;a + b + c + d + e#41;#92;n#125;")))
-  2((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;a + b + c + d + e#41;")))
-  3[/"type: number<br/>node: a + b + c + d + e"/]
-  4["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  5[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  6[["type: #lt;T#gt;#40;value: T#41; =#gt; Effect#lt;number, never, never#gt; #124; Effect#lt;never, string, never#gt;<br/>node: function#lt;T#gt;#40;value: T#41; #123;#92;n  const a = 1#92;n  const b = 2#92;n  const c = 3#92;n  const d = 4#92;n  const e = 5#92;n  if #40;value === null#41; return Effect.fail#40;#quot;Error!#quot;#41;#92;n  return Effect.succeed#40;a + b + c + d + e#41;#92;n#125;"]]
-  7((("type: Effect#lt;number, never, never#gt; #124; Effect#lt;never, string, never#gt;<br/>node: function#lt;T#gt;#40;value: T#41; #123;#92;n  const a = 1#92;n  const b = 2#92;n  const c = 3#92;n  const d = 4#92;n  const e = 5#92;n  if #40;value === null#41; return Effect.fail#40;#quot;Error!#quot;#41;#92;n  return Effect.succeed#40;a + b + c + d + e#41;#92;n#125;")))
-  8((("type: Effect#lt;never, string, never#gt;<br/>node: Effect.fail#40;#quot;Error!#quot;#41;")))
-  9((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;a + b + c + d + e#41;")))
-  10[/"type: T<br/>node: value: T"/]
-  11[/"type: #quot;Error!#quot;<br/>node: #quot;Error!#quot;"/]
-  12["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  13[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  14[/"type: number<br/>node: a + b + c + d + e"/]
-  15["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  16[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  17[["type: #lt;T#gt;#40;value: T#41; =#gt; Effect#lt;number, never, never#gt; #124; Effect#lt;never, string, never#gt;<br/>node: export function functionDeclarationPlainMany#lt;T#gt;#40;value: T#41; #123;#92;n  const a = 1#92;n  const b = 2#92;n  const c = 3#92;n  const d = 4#92;n  const e = 5#92;n  if #40;value === null#41; return Effect.fail#40;#quot;Error!#quot;#41;#92;n  return Effect.succeed#40;a + b + c + d + e#41;#92;n#125;"]]
-  18((("type: Effect#lt;number, never, never#gt; #124; Effect#lt;never, string, never#gt;<br/>node: export function functionDeclarationPlainMany#lt;T#gt;#40;value: T#41; #123;#92;n  const a = 1#92;n  const b = 2#92;n  const c = 3#92;n  const d = 4#92;n  const e = 5#92;n  if #40;value === null#41; return Effect.fail#40;#quot;Error!#quot;#41;#92;n  return Effect.succeed#40;a + b + c + d + e#41;#92;n#125;")))
-  19((("type: Effect#lt;never, string, never#gt;<br/>node: Effect.fail#40;#quot;Error!#quot;#41;")))
-  20((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;a + b + c + d + e#41;")))
-  21[/"type: T<br/>node: value: T"/]
-  22[/"type: #quot;Error!#quot;<br/>node: #quot;Error!#quot;"/]
-  23["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  24[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  25[/"type: number<br/>node: a + b + c + d + e"/]
-  26["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  27[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  1 -->|"kind: potentialReturn"| 0
-  2 -->|"kind: potentialReturn"| 1
-  3 -->|"kind: pipe"| 4
-  4 -->|"kind: connect"| 2
-  5 -->|"kind: transformCallee"| 4
-  7 -->|"kind: potentialReturn"| 6
-  8 -->|"kind: potentialReturn"| 7
-  9 -->|"kind: potentialReturn"| 7
-  10 -->|"kind: parameter"| 6
-  11 -->|"kind: pipe"| 12
-  12 -->|"kind: connect"| 8
-  13 -->|"kind: transformCallee"| 12
-  14 -->|"kind: pipe"| 15
-  15 -->|"kind: connect"| 9
-  16 -->|"kind: transformCallee"| 15
-  18 -->|"kind: potentialReturn"| 17
-  19 -->|"kind: potentialReturn"| 18
-  20 -->|"kind: potentialReturn"| 18
-  21 -->|"kind: parameter"| 17
-  22 -->|"kind: pipe"| 23
-  23 -->|"kind: connect"| 19
-  24 -->|"kind: transformCallee"| 23
-  25 -->|"kind: pipe"| 26
-  26 -->|"kind: connect"| 20
-  27 -->|"kind: transformCallee"| 26
+  1[/"type: number<br/>node: a + b + c + d + e"/]
+  2["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  3[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  4[/"type: 1<br/>node: 1"/]
+  5[/"type: 2<br/>node: 2"/]
+  6[/"type: 3<br/>node: 3"/]
+  7[/"type: 4<br/>node: 4"/]
+  8[/"type: 5<br/>node: 5"/]
+  9[["type: #lt;T#gt;#40;value: T#41; =#gt; Effect#lt;number, never, never#gt; #124; Effect#lt;never, string, never#gt;<br/>node: function#lt;T#gt;#40;value: T#41; #123;#92;n  const a = 1#92;n  const b = 2#92;n  const c = 3#92;n  const d = 4#92;n  const e = 5#92;n  if #40;value === null#41; return Effect.fail#40;#quot;Error!#quot;#41;#92;n  return Effect.succeed#40;a + b + c + d + e#41;#92;n#125;"]]
+  10[/"type: #quot;Error!#quot;<br/>node: #quot;Error!#quot;"/]
+  11["type: Effect#lt;never, string, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  12[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  13[/"type: number<br/>node: a + b + c + d + e"/]
+  14["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  15[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  16[/"type: 1<br/>node: 1"/]
+  17[/"type: 2<br/>node: 2"/]
+  18[/"type: 3<br/>node: 3"/]
+  19[/"type: 4<br/>node: 4"/]
+  20[/"type: 5<br/>node: 5"/]
+  21[/"type: boolean<br/>node: value === null"/]
+  22[["type: #lt;T#gt;#40;value: T#41; =#gt; Effect#lt;number, never, never#gt; #124; Effect#lt;never, string, never#gt;<br/>node: export function functionDeclarationPlainMany#lt;T#gt;#40;value: T#41; #123;#92;n  const a = 1#92;n  const b = 2#92;n  const c = 3#92;n  const d = 4#92;n  const e = 5#92;n  if #40;value === null#41; return Effect.fail#40;#quot;Error!#quot;#41;#92;n  return Effect.succeed#40;a + b + c + d + e#41;#92;n#125;"]]
+  23[/"type: #quot;Error!#quot;<br/>node: #quot;Error!#quot;"/]
+  24["type: Effect#lt;never, string, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  25[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  26[/"type: number<br/>node: a + b + c + d + e"/]
+  27["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  28[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  29[/"type: 1<br/>node: 1"/]
+  30[/"type: 2<br/>node: 2"/]
+  31[/"type: 3<br/>node: 3"/]
+  32[/"type: 4<br/>node: 4"/]
+  33[/"type: 5<br/>node: 5"/]
+  34[/"type: boolean<br/>node: value === null"/]
+  1 -->|"kind: pipe"| 2
+  3 -->|"kind: transformCallee"| 2
+  2 -->|"kind: potentialReturn"| 0
+  10 -->|"kind: pipe"| 11
+  12 -->|"kind: transformCallee"| 11
+  11 -->|"kind: potentialReturn"| 9
+  13 -->|"kind: pipe"| 14
+  15 -->|"kind: transformCallee"| 14
+  14 -->|"kind: potentialReturn"| 9
+  23 -->|"kind: pipe"| 24
+  25 -->|"kind: transformCallee"| 24
+  24 -->|"kind: potentialReturn"| 22
+  26 -->|"kind: pipe"| 27
+  28 -->|"kind: transformCallee"| 27
+  27 -->|"kind: potentialReturn"| 22
