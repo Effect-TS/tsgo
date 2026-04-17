@@ -1,5 +1,18 @@
 # @effect/tsgo
 
+## 0.5.0
+
+### Minor Changes
+
+- d1f126e: Refresh execution-flow graph baselines after the latest graph relationship updates.
+
+  This captures the current local flow outputs used by tests, including the updated graph edge semantics in execution-flow snapshots.
+
+### Patch Changes
+
+- 2f9e068: Fix the refresh flake hash workflow so scheduled TypeScript Go update runs check out the generated branch before refreshing the vendor hash.
+- ab3cf34: Update [`typescript-go`](https://github.com/microsoft/typescript-go/commit/83b8d2aa23b2d385087dabe5a5a8afd5e296013d) to commit `83b8d2aa23b2d385087dabe5a5a8afd5e296013d`.
+
 ## 0.4.0
 
 ### Minor Changes
