@@ -69,6 +69,7 @@ type ImportTracker = ls.ImportTracker
 type ImportsResult = ls.ImportsResult
 //go:linkname IsInString github.com/microsoft/typescript-go/internal/ls.IsInString
 func IsInString(sourceFile *ast.SourceFile, position int, previousToken *ast.Node) bool
+var IsolatedDeclarationsFixProvider = ls.IsolatedDeclarationsFixProvider
 type KeywordCompletionFilters = ls.KeywordCompletionFilters
 const KeywordCompletionFiltersAll = ls.KeywordCompletionFiltersAll
 const KeywordCompletionFiltersClassElementKeywords = ls.KeywordCompletionFiltersClassElementKeywords
@@ -123,6 +124,8 @@ func RegisterCodeFixProvider(provider *ls.CodeFixProvider)
 //go:linkname RegisterRefactorProvider github.com/microsoft/typescript-go/internal/ls.RegisterRefactorProvider
 func RegisterRefactorProvider(provider *ls.RefactorProvider)
 type RenameInfo = ls.RenameInfo
+//go:linkname SemanticTokensLegend github.com/microsoft/typescript-go/internal/ls.SemanticTokensLegend
+func SemanticTokensLegend(clientCapabilities lsproto.ResolvedSemanticTokensClientCapabilities) *lsproto.SemanticTokensLegend
 type SortText = ls.SortText
 const SortTextAutoImportSuggestions = ls.SortTextAutoImportSuggestions
 const SortTextClassMemberSnippets = ls.SortTextClassMemberSnippets
