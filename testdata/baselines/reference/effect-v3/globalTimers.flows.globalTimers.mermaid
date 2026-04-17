@@ -25,8 +25,13 @@ flowchart TB
   7 -->|"kind: usedBy"| 6
   10 -->|"kind: usedBy"| 9
   9 -->|"kind: potentialReturn"| 8
+  9 -->|"kind: usedBy"| 8
   12 -->|"kind: potentialReturn"| 11
   15 -->|"kind: usedBy"| 14
   14 -->|"kind: potentialReturn"| 13
+  13 -->|"kind: usedBy"| 11
+  12 -->|"kind: usedBy"| 11
   17 -->|"kind: potentialReturn"| 16
   19 -->|"kind: potentialReturn"| 18
+  18 -->|"kind: usedBy"| 16
+  17 -->|"kind: usedBy"| 16

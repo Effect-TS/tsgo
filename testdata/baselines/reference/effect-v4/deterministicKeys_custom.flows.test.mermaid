@@ -8,6 +8,7 @@ flowchart TB
   6[["type: #40;req: #123; id: number; #125;#41; =#gt; string<br/>node: #40;req#41; =#gt; `TTLRequest:$#123;req.id#125;`"]]
   7[/"type: string<br/>node: `TTLRequest:$#123;req.id#125;`"/]
   1 -->|"kind: potentialReturn"| 0
+  1 -->|"kind: usedBy"| 0
   2 -->|"kind: pipe"| 3
   4 -->|"kind: transformCallee"| 3
   7 -->|"kind: potentialReturn"| 6

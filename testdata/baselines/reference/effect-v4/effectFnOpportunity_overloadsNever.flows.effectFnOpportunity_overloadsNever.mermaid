@@ -13,17 +13,14 @@ flowchart TB
   11[/"type: any<br/>node: a as any"/]
   12["type: Effect#lt;any, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
   13[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  14[/"type: 1<br/>node: 1"/]
-  15[/"type: 2<br/>node: 2"/]
-  16[/"type: 3<br/>node: 3"/]
-  17[/"type: 4<br/>node: 4"/]
-  18[/"type: 5<br/>node: 5"/]
   5 -->|"kind: pipe"| 6
   7 -->|"kind: transformCallee"| 6
   6 -->|"kind: usedBy"| 4
   4 -->|"kind: potentialReturn"| 3
   6 -->|"kind: yieldable"| 3
   3 -->|"kind: potentialReturn"| 2
+  3 -->|"kind: usedBy"| 2
   11 -->|"kind: pipe"| 12
   13 -->|"kind: transformCallee"| 12
   12 -->|"kind: potentialReturn"| 10
+  12 -->|"kind: usedBy"| 10

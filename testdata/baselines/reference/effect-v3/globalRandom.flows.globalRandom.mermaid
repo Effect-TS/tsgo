@@ -12,13 +12,16 @@ flowchart TB
   10[/"type: number<br/>node: Math.random#40;#41;"/]
   11[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; #123;#92;n  const Math = #123; random: #40;#41; =#gt; 0.5 #125;#92;n  return Math.random#40;#41;#92;n#125;"]]
   12[/"type: number<br/>node: Math.random#40;#41;"/]
-  13[/"type: #123; random: #40;#41; =#gt; number; #125;<br/>node: #123; random: #40;#41; =#gt; 0.5 #125;"/]
-  14[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; 0.5"]]
-  15[/"type: 0.5<br/>node: 0.5"/]
+  13[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; 0.5"]]
+  14[/"type: 0.5<br/>node: 0.5"/]
   2 -->|"kind: potentialReturn"| 1
   6 -->|"kind: potentialReturn"| 5
+  6 -->|"kind: usedBy"| 5
   8 -->|"kind: potentialReturn"| 7
   10 -->|"kind: potentialReturn"| 9
+  9 -->|"kind: usedBy"| 7
+  8 -->|"kind: usedBy"| 7
   12 -->|"kind: potentialReturn"| 11
-  15 -->|"kind: potentialReturn"| 14
-  14 -->|"kind: usedBy"| 13
+  14 -->|"kind: potentialReturn"| 13
+  13 -->|"kind: usedBy"| 11
+  12 -->|"kind: usedBy"| 11

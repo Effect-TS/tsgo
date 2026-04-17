@@ -13,8 +13,10 @@ flowchart TB
   11["type: Layer#lt;ServiceA, never, ServiceB#gt;<br/>callee: testFnWithServiceB<br/>args: #91;#93;"]
   12[/"type: #40;layer: Layer#lt;ServiceA, never, ServiceB#gt;#41; =#gt; Layer#lt;ServiceA, never, ServiceB#gt;<br/>node: testFnWithServiceB"/]
   4 -->|"kind: potentialReturn"| 3
+  4 -->|"kind: usedBy"| 3
   5 -->|"kind: pipe"| 6
   7 -->|"kind: transformCallee"| 6
   9 -->|"kind: potentialReturn"| 8
+  9 -->|"kind: usedBy"| 8
   10 -->|"kind: pipe"| 11
   12 -->|"kind: transformCallee"| 11

@@ -12,8 +12,12 @@ flowchart TB
   10[["type: #40;#41; =#gt; string #124; undefined<br/>node: #40;#41; =#gt; process.env.NODE_ENV"]]
   11[/"type: string #124; undefined<br/>node: process.env.NODE_ENV"/]
   1 -->|"kind: potentialReturn"| 0
+  1 -->|"kind: usedBy"| 0
   3 -->|"kind: potentialReturn"| 2
+  3 -->|"kind: usedBy"| 2
   2 -->|"kind: potentialReturn"| 4
   7 -->|"kind: potentialReturn"| 6
   9 -->|"kind: potentialReturn"| 8
   11 -->|"kind: potentialReturn"| 10
+  10 -->|"kind: usedBy"| 8
+  9 -->|"kind: usedBy"| 8

@@ -26,28 +26,33 @@ flowchart TB
   24["type: void<br/>callee: console.error<br/>args: #91;#93;"]
   25[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.error"/]
   26[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#92;n  const console = #123; log: #40;..._args: Array#lt;unknown#gt;#41; =#gt; undefined #125;#92;n  console.log#40;#quot;hello#quot;#41;#92;n#125;"]]
-  27[/"type: #123; log: #40;..._args: unknown#91;#93;#41; =#gt; undefined; #125;<br/>node: #123; log: #40;..._args: Array#lt;unknown#gt;#41; =#gt; undefined #125;"/]
-  28[["type: #40;..._args: unknown#91;#93;#41; =#gt; undefined<br/>node: #40;..._args: Array#lt;unknown#gt;#41; =#gt; undefined"]]
-  29[/"type: undefined<br/>node: undefined"/]
-  30[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
-  31["type: undefined<br/>callee: console.log<br/>args: #91;#93;"]
-  32[/"type: #40;..._args: unknown#91;#93;#41; =#gt; undefined<br/>node: console.log"/]
+  27[["type: #40;..._args: unknown#91;#93;#41; =#gt; undefined<br/>node: #40;..._args: Array#lt;unknown#gt;#41; =#gt; undefined"]]
+  28[/"type: undefined<br/>node: undefined"/]
+  29[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
+  30["type: undefined<br/>callee: console.log<br/>args: #91;#93;"]
+  31[/"type: #40;..._args: unknown#91;#93;#41; =#gt; undefined<br/>node: console.log"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
   4 -->|"kind: pipe"| 5
   6 -->|"kind: transformCallee"| 5
+  5 -->|"kind: usedBy"| 3
   8 -->|"kind: pipe"| 9
   10 -->|"kind: transformCallee"| 9
   12 -->|"kind: pipe"| 13
   14 -->|"kind: transformCallee"| 13
+  13 -->|"kind: usedBy"| 11
   16 -->|"kind: pipe"| 17
   18 -->|"kind: transformCallee"| 17
+  17 -->|"kind: usedBy"| 15
   15 -->|"kind: potentialReturn"| 19
   21 -->|"kind: potentialReturn"| 20
   23 -->|"kind: pipe"| 24
   25 -->|"kind: transformCallee"| 24
   24 -->|"kind: potentialReturn"| 22
-  29 -->|"kind: potentialReturn"| 28
-  28 -->|"kind: usedBy"| 27
-  30 -->|"kind: pipe"| 31
-  32 -->|"kind: transformCallee"| 31
+  22 -->|"kind: usedBy"| 20
+  21 -->|"kind: usedBy"| 20
+  28 -->|"kind: potentialReturn"| 27
+  27 -->|"kind: usedBy"| 26
+  29 -->|"kind: pipe"| 30
+  31 -->|"kind: transformCallee"| 30
+  30 -->|"kind: usedBy"| 26

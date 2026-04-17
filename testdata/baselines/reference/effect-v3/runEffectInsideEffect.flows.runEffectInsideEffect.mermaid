@@ -18,14 +18,11 @@ flowchart TB
   16[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
   17["type: WebSocket<br/>callee: Effect.runSync<br/>args: #91;#93;"]
   18[/"type: #lt;A, E#gt;#40;effect: Effect#lt;A, E, never#gt;#41; =#gt; A<br/>node: Effect.runSync"/]
-  19[/"type: #40;this: WebSocket, event: MessageEvent#lt;any#gt;#41; =#gt; void<br/>node: websocket.onmessage = #40;event#41; =#gt; #123;#92;n    const check = Effect.tryPromise#40;#123;#92;n      try: #40;#41; =#gt; fetch#40;event.data as string#41;,#92;n      catch: #40;e#41; =#gt; new DebuggerError#40;#123; cause: e #125;#41;#92;n    #125;#41;#92;n    Effect.runPromise#40;check#41;#92;n    //        ^- no runPromise, use a runtime instead#92;n  #125;"/]
-  20[["type: #40;this: WebSocket, event: MessageEvent#lt;any#gt;#41; =#gt; void<br/>node: #40;event#41; =#gt; #123;#92;n    const check = Effect.tryPromise#40;#123;#92;n      try: #40;#41; =#gt; fetch#40;event.data as string#41;,#92;n      catch: #40;e#41; =#gt; new DebuggerError#40;#123; cause: e #125;#41;#92;n    #125;#41;#92;n    Effect.runPromise#40;check#41;#92;n    //        ^- no runPromise, use a runtime instead#92;n  #125;"]]
-  21[/"type: Effect#lt;Response, DebuggerError, never#gt;<br/>node: Effect.tryPromise#40;#123;#92;n      try: #40;#41; =#gt; fetch#40;event.data as string#41;,#92;n      catch: #40;e#41; =#gt; new DebuggerError#40;#123; cause: e #125;#41;#92;n    #125;#41;"/]
-  22[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;event.data as string#41;"]]
-  23[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;event.data as string#41;"/]
-  24[["type: #40;e: unknown#41; =#gt; DebuggerError<br/>node: #40;e#41; =#gt; new DebuggerError#40;#123; cause: e #125;#41;"]]
-  25[/"type: DebuggerError<br/>node: new DebuggerError#40;#123; cause: e #125;#41;"/]
-  26[/"type: Promise#lt;Response#gt;<br/>node: Effect.runPromise#40;check#41;"/]
+  19[["type: #40;this: WebSocket, event: MessageEvent#lt;any#gt;#41; =#gt; void<br/>node: #40;event#41; =#gt; #123;#92;n    const check = Effect.tryPromise#40;#123;#92;n      try: #40;#41; =#gt; fetch#40;event.data as string#41;,#92;n      catch: #40;e#41; =#gt; new DebuggerError#40;#123; cause: e #125;#41;#92;n    #125;#41;#92;n    Effect.runPromise#40;check#41;#92;n    //        ^- no runPromise, use a runtime instead#92;n  #125;"]]
+  20[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;event.data as string#41;"]]
+  21[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;event.data as string#41;"/]
+  22[["type: #40;e: unknown#41; =#gt; DebuggerError<br/>node: #40;e#41; =#gt; new DebuggerError#40;#123; cause: e #125;#41;"]]
+  23[/"type: DebuggerError<br/>node: new DebuggerError#40;#123; cause: e #125;#41;"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
   6 -->|"kind: potentialReturn"| 5
@@ -42,8 +39,9 @@ flowchart TB
   16 -->|"kind: transformCallee"| 15
   15 -->|"kind: pipe"| 17
   18 -->|"kind: transformCallee"| 17
-  23 -->|"kind: potentialReturn"| 22
-  22 -->|"kind: usedBy"| 21
-  25 -->|"kind: potentialReturn"| 24
-  24 -->|"kind: usedBy"| 21
+  17 -->|"kind: usedBy"| 3
+  21 -->|"kind: potentialReturn"| 20
   20 -->|"kind: usedBy"| 19
+  23 -->|"kind: potentialReturn"| 22
+  22 -->|"kind: usedBy"| 19
+  19 -->|"kind: usedBy"| 3

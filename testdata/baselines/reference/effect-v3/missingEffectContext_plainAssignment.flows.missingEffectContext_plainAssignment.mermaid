@@ -11,8 +11,8 @@ flowchart TB
   9[/"type: Effect#lt;number, never, ServiceA #124; ServiceB #124; ServiceC#gt;<br/>node: effectWithServices"/]
   10[["type: #lt;A#gt;#40;service: A#41; =#gt; Effect#lt;Context#lt;A#gt;, never, never#gt;<br/>node: export function missingServiceWithGenericType#lt;A#gt;#40;service: A#41; #123;#92;n  // @ts-expect-error#92;n  const missingServiceA: Effect.Effect#lt;Context.Context#lt;A#gt;#gt; = Effect.context#lt;A#gt;#40;#41;#92;n  return missingServiceA#92;n#125;"]]
   11[/"type: Effect#lt;Context#lt;A#gt;, never, never#gt;<br/>node: missingServiceA"/]
-  12[/"type: Effect#lt;Context#lt;A#gt;, never, A#gt;<br/>node: Effect.context#lt;A#gt;#40;#41;"/]
-  13[/"type: Effect#lt;number, never, ServiceA #124; ServiceB #124; ServiceC#gt;<br/>node: effectWithServices satisfies Effect.Effect#lt;number, never, never#gt;"/]
+  12[/"type: Effect#lt;number, never, ServiceA #124; ServiceB #124; ServiceC#gt;<br/>node: effectWithServices satisfies Effect.Effect#lt;number, never, never#gt;"/]
   3 -->|"kind: pipe"| 4
   5 -->|"kind: transformCallee"| 4
   11 -->|"kind: potentialReturn"| 10
+  11 -->|"kind: usedBy"| 10

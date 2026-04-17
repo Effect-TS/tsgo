@@ -9,5 +9,6 @@ flowchart TB
   7[["type: #40;#41; =#gt; Effect#lt;number, ErrorA #124; ErrorB #124; ErrorC, never#gt;<br/>node: #40;#41; =#gt; effectWithErrors"]]
   8[/"type: Effect#lt;number, ErrorA #124; ErrorB #124; ErrorC, never#gt;<br/>node: effectWithErrors"/]
   4 -->|"kind: potentialReturn"| 3
+  4 -->|"kind: usedBy"| 3
   6 -->|"kind: potentialReturn"| 5
   8 -->|"kind: potentialReturn"| 7

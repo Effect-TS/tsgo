@@ -10,5 +10,8 @@ flowchart TB
   8[/"type: string #124; undefined<br/>node: process.env.API_KEY"/]
   2 -->|"kind: potentialReturn"| 1
   4 -->|"kind: potentialReturn"| 3
+  4 -->|"kind: usedBy"| 3
   6 -->|"kind: potentialReturn"| 5
   8 -->|"kind: potentialReturn"| 7
+  7 -->|"kind: usedBy"| 5
+  6 -->|"kind: usedBy"| 5

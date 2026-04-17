@@ -40,14 +40,13 @@ flowchart TB
   38["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
   39[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
   40[["type: #40;#41; =#gt; void<br/>node: export function shouldNotReportNonEffect#40;#41; #123;#92;n  throw new Error#40;#quot;this is not in an Effect#quot;#41;#92;n#125;"]]
-  41[/"type: Error<br/>node: new Error#40;#quot;this is not in an Effect#quot;#41;"/]
-  42[/"type: CustomError<br/>node: new CustomError#40;#41;"/]
-  43["type: Effect#lt;never, CustomError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  44[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  45["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.mapError<br/>args: #91;#40;#41; =#gt; new Error#40;#quot;mapped to global error#quot;#41;#93;"]
-  46[/"type: #123; #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E2, R#gt;; #lt;A, E, R, E2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; E2#41;: Effect#lt;A, E2, R#gt;; #125;<br/>node: Effect.mapError"/]
-  47[["type: #40;#41; =#gt; Error<br/>node: #40;#41; =#gt; new Error#40;#quot;mapped to global error#quot;#41;"]]
-  48[/"type: Error<br/>node: new Error#40;#quot;mapped to global error#quot;#41;"/]
+  41[/"type: CustomError<br/>node: new CustomError#40;#41;"/]
+  42["type: Effect#lt;never, CustomError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  43[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  44["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.mapError<br/>args: #91;#40;#41; =#gt; new Error#40;#quot;mapped to global error#quot;#41;#93;"]
+  45[/"type: #123; #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E2, R#gt;; #lt;A, E, R, E2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; E2#41;: Effect#lt;A, E2, R#gt;; #125;<br/>node: Effect.mapError"/]
+  46[["type: #40;#41; =#gt; Error<br/>node: #40;#41; =#gt; new Error#40;#quot;mapped to global error#quot;#41;"]]
+  47[/"type: Error<br/>node: new Error#40;#quot;mapped to global error#quot;#41;"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
   3 -->|"kind: pipe"| 4
@@ -78,9 +77,9 @@ flowchart TB
   38 -->|"kind: potentialReturn"| 36
   36 -->|"kind: transformArg"| 34
   32 -->|"kind: pipe"| 34
-  42 -->|"kind: pipe"| 43
-  44 -->|"kind: transformCallee"| 43
-  46 -->|"kind: transformCallee"| 45
-  48 -->|"kind: potentialReturn"| 47
-  47 -->|"kind: transformArg"| 45
-  43 -->|"kind: pipe"| 45
+  41 -->|"kind: pipe"| 42
+  43 -->|"kind: transformCallee"| 42
+  45 -->|"kind: transformCallee"| 44
+  47 -->|"kind: potentialReturn"| 46
+  46 -->|"kind: transformArg"| 44
+  42 -->|"kind: pipe"| 44

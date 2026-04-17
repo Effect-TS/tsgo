@@ -12,7 +12,6 @@ flowchart TB
   10["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
   11[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
   12[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.annotateCurrentSpan#40;#quot;query#quot;, query#41;"/]
-  13[/"type: boolean<br/>node: query.length #lt; 3"/]
   2 -->|"kind: pipe"| 3
   4 -->|"kind: transformCallee"| 3
   3 -->|"kind: usedBy"| 1

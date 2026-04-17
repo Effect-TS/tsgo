@@ -54,44 +54,56 @@ flowchart TB
   52["type: void<br/>callee: make<br/>args: #91;#93;"]
   53[/"type: #40;f: #40;input: string#41; =#gt; Effect#lt;number, never, never#gt;#41; =#gt; void<br/>node: make"/]
   1 -->|"kind: potentialReturn"| 0
+  1 -->|"kind: usedBy"| 0
   0 -->|"kind: potentialReturn"| 2
   4 -->|"kind: potentialReturn"| 3
+  4 -->|"kind: usedBy"| 3
   6 -->|"kind: potentialReturn"| 5
+  6 -->|"kind: usedBy"| 5
   5 -->|"kind: potentialReturn"| 7
   9 -->|"kind: potentialReturn"| 8
+  9 -->|"kind: usedBy"| 8
   11 -->|"kind: potentialReturn"| 10
+  11 -->|"kind: usedBy"| 10
   10 -->|"kind: potentialReturn"| 12
   12 -->|"kind: pipe"| 13
   14 -->|"kind: transformCallee"| 13
   16 -->|"kind: pipe"| 17
   18 -->|"kind: transformCallee"| 17
   17 -->|"kind: potentialReturn"| 15
+  17 -->|"kind: usedBy"| 15
   15 -->|"kind: pipe"| 19
   20 -->|"kind: transformCallee"| 19
   22 -->|"kind: potentialReturn"| 21
+  22 -->|"kind: usedBy"| 21
   21 -->|"kind: potentialReturn"| 23
   23 -->|"kind: pipe"| 24
   25 -->|"kind: transformCallee"| 24
   27 -->|"kind: pipe"| 28
   29 -->|"kind: transformCallee"| 28
   28 -->|"kind: potentialReturn"| 26
+  28 -->|"kind: usedBy"| 26
   26 -->|"kind: pipe"| 30
   31 -->|"kind: transformCallee"| 30
   33 -->|"kind: potentialReturn"| 32
+  33 -->|"kind: usedBy"| 32
   32 -->|"kind: potentialReturn"| 34
   34 -->|"kind: pipe"| 35
   36 -->|"kind: transformCallee"| 35
   38 -->|"kind: pipe"| 39
   40 -->|"kind: transformCallee"| 39
   39 -->|"kind: potentialReturn"| 37
+  39 -->|"kind: usedBy"| 37
   37 -->|"kind: pipe"| 41
   42 -->|"kind: transformCallee"| 41
   44 -->|"kind: potentialReturn"| 43
+  44 -->|"kind: usedBy"| 43
   43 -->|"kind: potentialReturn"| 45
   45 -->|"kind: pipe"| 46
   47 -->|"kind: transformCallee"| 46
   49 -->|"kind: pipe"| 50
   51 -->|"kind: transformCallee"| 50
   50 -->|"kind: potentialReturn"| 48
+  50 -->|"kind: usedBy"| 48
   48 -->|"kind: pipe"| 52
   53 -->|"kind: transformCallee"| 52

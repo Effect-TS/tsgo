@@ -5,11 +5,12 @@ flowchart TB
   3[/"type: #40;input: URL #124; RequestInfo, init?: RequestInit #124; undefined#41; =#gt; Promise#lt;Response#gt;<br/>node: fetch"/]
   4[/"type: Promise#lt;Response#gt;<br/>node: myFetch#40;#quot;https://example.com/alias#quot;#41;"/]
   5((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  fetch#40;#quot;https://example.com/in-gen#quot;#41;#92;n#125;#41;")))
-  6[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;https://example.com/in-gen#quot;#41;"/]
-  7((("type: Effect#lt;#40;#41; =#gt; Promise#lt;Response#gt;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const fn = #40;#41; =#gt; fetch#40;#quot;https://example.com/nested#quot;#41;#92;n  return fn#92;n#125;#41;")))
-  8[/"type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: fn"/]
-  9[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;https://example.com/nested#quot;#41;"]]
-  10[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;https://example.com/nested#quot;#41;"/]
+  6((("type: Effect#lt;#40;#41; =#gt; Promise#lt;Response#gt;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const fn = #40;#41; =#gt; fetch#40;#quot;https://example.com/nested#quot;#41;#92;n  return fn#92;n#125;#41;")))
+  7[/"type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: fn"/]
+  8[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;https://example.com/nested#quot;#41;"]]
+  9[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;https://example.com/nested#quot;#41;"/]
   2 -->|"kind: potentialReturn"| 1
-  8 -->|"kind: potentialReturn"| 7
-  10 -->|"kind: potentialReturn"| 9
+  7 -->|"kind: potentialReturn"| 6
+  9 -->|"kind: potentialReturn"| 8
+  8 -->|"kind: usedBy"| 6
+  7 -->|"kind: usedBy"| 6

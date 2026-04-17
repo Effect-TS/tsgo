@@ -32,6 +32,7 @@ flowchart TB
   3 -->|"kind: yieldable"| 1
   1 -->|"kind: yieldable"| 0
   6 -->|"kind: potentialReturn"| 5
+  6 -->|"kind: usedBy"| 5
   5 -->|"kind: pipe"| 7
   7 -->|"kind: yieldable"| 0
   10 -->|"kind: pipe"| 11
@@ -50,3 +51,5 @@ flowchart TB
   26 -->|"kind: yieldable"| 24
   24 -->|"kind: yieldable"| 23
   23 -->|"kind: potentialReturn"| 22
+  22 -->|"kind: usedBy"| 20
+  21 -->|"kind: usedBy"| 20

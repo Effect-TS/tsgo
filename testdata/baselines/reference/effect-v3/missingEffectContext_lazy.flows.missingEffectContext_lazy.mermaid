@@ -6,21 +6,21 @@ flowchart TB
   4[/"type: #123; #lt;A, E, X, R2#gt;#40;cleanup: #40;exit: Exit#lt;A, E#gt;#41; =#gt; Effect#lt;X, never, R2#gt;#41;: #lt;R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R #124; R2#gt;; #lt;A, E, R, X, R2#gt;#40;self: Effect#lt;A, E, R#gt;, cleanup: #40;exit: Exit#lt;A, E#gt;#41; =#gt; Effect#lt;X, never, R2#gt;#41;: Effect#lt;A, E, R #124; R2#gt;; #125;<br/>node: Effect.onExit"/]
   5[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
   6[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
-  7[/"type: #40;#41; =#gt; Effect#lt;A, E, R#gt;<br/>node: args#91;args.length - 1#93;"/]
-  8[["type: #lt;A, E, R#gt;#40;evaluate: #40;#41; =#gt; Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R#gt;<br/>node: #lt;A, E, R#gt;#40;...args: #91;evaluate: #40;#41; =#gt; Effect.Effect#lt;A, E, R#gt;#93;#41;: Effect.Effect#lt;A, E, R#gt; =#gt; #123;#92;n  const evaluate: #40;#41; =#gt; Effect.Effect#lt;A, E, R #124; ServiceA#gt; = args#91;args.length - 1#93;#92;n  // @ts-expect-error#92;n  return Effect.onExit#40;evaluate#40;#41;, #40;#41; =#gt; Effect.void#41;#92;n#125;"]]
-  9[/"type: Effect#lt;A, E, R #124; ServiceA#gt;<br/>node: evaluate#40;#41;"/]
-  10["type: Effect#lt;A, E, R #124; ServiceA#gt;<br/>callee: <br/>args: #91;#93;"]
-  11[/"type: #123; #lt;A, E, X, R2#gt;#40;cleanup: #40;exit: Exit#lt;A, E#gt;#41; =#gt; Effect#lt;X, never, R2#gt;#41;: #lt;R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R #124; R2#gt;; #lt;A, E, R, X, R2#gt;#40;self: Effect#lt;A, E, R#gt;, cleanup: #40;exit: Exit#lt;A, E#gt;#41; =#gt; Effect#lt;X, never, R2#gt;#41;: Effect#lt;A, E, R #124; R2#gt;; #125;<br/>node: Effect.onExit"/]
-  12[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
-  13[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
-  14[/"type: #40;#41; =#gt; Effect#lt;A, E, R#gt;<br/>node: args#91;args.length - 1#93;"/]
+  7[["type: #lt;A, E, R#gt;#40;evaluate: #40;#41; =#gt; Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R#gt;<br/>node: #lt;A, E, R#gt;#40;...args: #91;evaluate: #40;#41; =#gt; Effect.Effect#lt;A, E, R#gt;#93;#41;: Effect.Effect#lt;A, E, R#gt; =#gt; #123;#92;n  const evaluate: #40;#41; =#gt; Effect.Effect#lt;A, E, R #124; ServiceA#gt; = args#91;args.length - 1#93;#92;n  // @ts-expect-error#92;n  return Effect.onExit#40;evaluate#40;#41;, #40;#41; =#gt; Effect.void#41;#92;n#125;"]]
+  8[/"type: Effect#lt;A, E, R #124; ServiceA#gt;<br/>node: evaluate#40;#41;"/]
+  9["type: Effect#lt;A, E, R #124; ServiceA#gt;<br/>callee: <br/>args: #91;#93;"]
+  10[/"type: #123; #lt;A, E, X, R2#gt;#40;cleanup: #40;exit: Exit#lt;A, E#gt;#41; =#gt; Effect#lt;X, never, R2#gt;#41;: #lt;R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R #124; R2#gt;; #lt;A, E, R, X, R2#gt;#40;self: Effect#lt;A, E, R#gt;, cleanup: #40;exit: Exit#lt;A, E#gt;#41; =#gt; Effect#lt;X, never, R2#gt;#41;: Effect#lt;A, E, R #124; R2#gt;; #125;<br/>node: Effect.onExit"/]
+  11[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  12[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
   2 -->|"kind: pipe"| 3
   4 -->|"kind: transformCallee"| 2
   6 -->|"kind: potentialReturn"| 5
   5 -->|"kind: transformArg"| 2
   3 -->|"kind: potentialReturn"| 1
-  9 -->|"kind: pipe"| 10
-  11 -->|"kind: transformCallee"| 9
-  13 -->|"kind: potentialReturn"| 12
-  12 -->|"kind: transformArg"| 9
-  10 -->|"kind: potentialReturn"| 8
+  3 -->|"kind: usedBy"| 1
+  8 -->|"kind: pipe"| 9
+  10 -->|"kind: transformCallee"| 8
+  12 -->|"kind: potentialReturn"| 11
+  11 -->|"kind: transformArg"| 8
+  9 -->|"kind: potentialReturn"| 7
+  9 -->|"kind: usedBy"| 7

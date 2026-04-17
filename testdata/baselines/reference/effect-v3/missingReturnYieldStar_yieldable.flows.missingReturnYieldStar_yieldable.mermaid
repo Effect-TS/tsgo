@@ -5,9 +5,9 @@ flowchart TB
   3[/"type: #quot;no zero!#quot;<br/>node: #quot;no zero!#quot;"/]
   4["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
   5[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  6[/"type: boolean<br/>node: n === 0"/]
   2 -->|"kind: potentialReturn"| 1
   3 -->|"kind: pipe"| 4
   5 -->|"kind: transformCallee"| 4
   4 -->|"kind: yieldable"| 1
+  2 -->|"kind: usedBy"| 1
   1 -->|"kind: potentialReturn"| 0

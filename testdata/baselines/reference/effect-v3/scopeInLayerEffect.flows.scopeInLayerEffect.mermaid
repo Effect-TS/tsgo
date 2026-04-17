@@ -73,6 +73,7 @@ flowchart TB
   11 -->|"kind: pipe"| 15
   16 -->|"kind: transformCallee"| 15
   15 -->|"kind: yieldable"| 9
+  10 -->|"kind: usedBy"| 9
   9 -->|"kind: usedBy"| 8
   19 -->|"kind: potentialReturn"| 18
   20 -->|"kind: yieldable"| 18
@@ -82,6 +83,7 @@ flowchart TB
   21 -->|"kind: pipe"| 25
   26 -->|"kind: transformCallee"| 25
   25 -->|"kind: yieldable"| 18
+  19 -->|"kind: usedBy"| 18
   18 -->|"kind: usedBy"| 17
   28 -->|"kind: potentialReturn"| 27
   30 -->|"kind: pipe"| 31
@@ -90,6 +92,7 @@ flowchart TB
   29 -->|"kind: pipe"| 33
   34 -->|"kind: transformCallee"| 33
   33 -->|"kind: yieldable"| 27
+  28 -->|"kind: usedBy"| 27
   27 -->|"kind: pipe"| 35
   36 -->|"kind: transformCallee"| 27
   37 -->|"kind: transformArg"| 27
@@ -100,6 +103,7 @@ flowchart TB
   40 -->|"kind: pipe"| 44
   45 -->|"kind: transformCallee"| 44
   44 -->|"kind: yieldable"| 38
+  39 -->|"kind: usedBy"| 38
   38 -->|"kind: pipe"| 46
   47 -->|"kind: transformCallee"| 38
   48 -->|"kind: transformArg"| 38
@@ -111,6 +115,7 @@ flowchart TB
   52 -->|"kind: pipe"| 56
   57 -->|"kind: transformCallee"| 56
   56 -->|"kind: yieldable"| 49
+  50 -->|"kind: usedBy"| 49
   49 -->|"kind: pipe"| 58
   59 -->|"kind: transformCallee"| 49
   60 -->|"kind: transformArg"| 49

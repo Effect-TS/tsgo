@@ -11,5 +11,7 @@ flowchart TB
   2 -->|"kind: pipe"| 3
   4 -->|"kind: transformCallee"| 3
   3 -->|"kind: yieldable"| 0
+  1 -->|"kind: usedBy"| 0
   5 -->|"kind: pipe"| 6
   7 -->|"kind: transformCallee"| 6
+  6 -->|"kind: usedBy"| 0

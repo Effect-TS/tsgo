@@ -54,10 +54,10 @@ type (
 )
 
 type executionCollector struct {
-	tp               *TypeParser
-	g                *ExecutionFlow
-	parsed           *core.LinkStore[*ast.Node, *GraphSlice]
-	parentExpression *GraphSlice
+	tp          *TypeParser
+	g           *ExecutionFlow
+	parsed      *core.LinkStore[*ast.Node, *GraphSlice]
+	usageTarget *GraphSlice
 }
 
 func (ec *executionCollector) buildSlice(node ExecutionNode) *GraphSlice {
@@ -116,8 +116,8 @@ func (ec *executionCollector) visitNode(node *ast.Node) *GraphSlice {
 		return *ec.parsed.TryGet(node)
 	}
 
-	previousParentExpression := ec.parentExpression
-	ec.parentExpression = nil
+	previousUsageTarget := ec.usageTarget
+	ec.usageTarget = nil
 
 	// actual visit logic
 	var s *GraphSlice
@@ -134,11 +134,11 @@ func (ec *executionCollector) visitNode(node *ast.Node) *GraphSlice {
 	} else if ast.IsFunctionLikeDeclaration(node) {
 		s = ec.visitFunctionLikeDeclaration(node)
 	} else {
-		s = ec.visitExpressionNode(node, previousParentExpression)
+		s = ec.visitExpressionNode(node, previousUsageTarget)
 	}
 	// store to avoid double-traversal
 	*ec.parsed.Get(node) = s
-	ec.parentExpression = previousParentExpression
+	ec.usageTarget = previousUsageTarget
 
 	return s
 }
@@ -156,26 +156,33 @@ func (ec *executionCollector) visitNodeAndConnectSlice(n *ast.Node, targetSlice 
 	return false
 }
 
-func (ec *executionCollector) visitNodeVisitor(node *ast.Node) bool {
+func (ec *executionCollector) visitNodeVisitorConnectUsageTarget(node *ast.Node) bool {
 	if node == nil {
 		return false
 	}
-	ec.visitNode(node)
+	s := ec.visitNode(node)
+	ec.connectSlices(s, ec.usageTarget, ExecutionLinkKindUsedBy)
+	return false
+}
+
+func (ec *executionCollector) visitEachChildWithUsageTarget(node *ast.Node, target *GraphSlice) bool {
+	if node == nil {
+		return false
+	}
+	previous := ec.usageTarget
+	ec.usageTarget = target
+	node.ForEachChild(ec.visitNodeVisitorConnectUsageTarget)
+	ec.usageTarget = previous
 	return false
 }
 
 func (ec *executionCollector) visitExpressionNode(node *ast.Expression, parentExpression *GraphSlice) *GraphSlice {
 	rootExpr := parentExpression
-	createdHere := false
 	if parentExpression == nil && ast.IsExpressionNode(node) {
 		rootExpr = ec.buildValueNode(node)
-		createdHere = true
 	}
-	ec.parentExpression = rootExpr
-	for c := range node.IterChildren() { // TODO: any way to avoid iterchildren allocation?
-		ec.visitNodeAndConnectSlice(c, rootExpr, ExecutionLinkKindUsedBy)
-	}
-	if createdHere {
+	ec.visitEachChildWithUsageTarget(node, rootExpr)
+	if rootExpr != parentExpression {
 		return rootExpr
 	}
 	return nil
@@ -221,7 +228,7 @@ func (ec *executionCollector) visitEffectGenCall(p *EffectGenCallResult, node *a
 		return false
 	})
 	if p.Body != nil {
-		p.Body.ForEachChild(ec.visitNodeVisitor)
+		ec.visitEachChildWithUsageTarget(p.Body, s)
 	}
 	return s
 }
@@ -264,7 +271,7 @@ func (ec *executionCollector) visitEffectFnCall(p *EffectFnCallResult, node *ast
 			}
 			return false
 		})
-		p.Body().ForEachChild(ec.visitNodeVisitor)
+		ec.visitEachChildWithUsageTarget(p.Body(), sExit)
 	}
 	// function with parameters
 	s := ec.buildSlice(ExecutionNode{
@@ -326,7 +333,7 @@ func (ec *executionCollector) visitFunctionLikeDeclaration(node *ast.Node) *Grap
 				}
 				return false
 			})
-			fnBody.ForEachChild(ec.visitNodeVisitor)
+			ec.visitEachChildWithUsageTarget(fnBody, s)
 		}
 	}
 	return s

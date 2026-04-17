@@ -9,5 +9,6 @@ flowchart TB
   7[["type: #40;#41; =#gt; Effect#lt;number, never, ServiceA #124; ServiceB #124; ServiceC#gt;<br/>node: #40;#41; =#gt;#92;n  // @ts-expect-error#92;n  effectWithServices"]]
   8[/"type: Effect#lt;number, never, ServiceA #124; ServiceB #124; ServiceC#gt;<br/>node: effectWithServices"/]
   4 -->|"kind: potentialReturn"| 3
+  4 -->|"kind: usedBy"| 3
   6 -->|"kind: potentialReturn"| 5
   8 -->|"kind: potentialReturn"| 7

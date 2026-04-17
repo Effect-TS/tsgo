@@ -13,8 +13,10 @@ flowchart TB
   11["type: Effect#lt;number, ErrorA #124; ErrorB, never#gt;<br/>callee: testFnWithServiceAB<br/>args: #91;#93;"]
   12[/"type: #40;effect: Effect#lt;number, ErrorA #124; ErrorB, never#gt;#41; =#gt; Effect#lt;number, ErrorA #124; ErrorB, never#gt;<br/>node: testFnWithServiceAB"/]
   4 -->|"kind: potentialReturn"| 3
+  4 -->|"kind: usedBy"| 3
   5 -->|"kind: pipe"| 6
   7 -->|"kind: transformCallee"| 6
   9 -->|"kind: potentialReturn"| 8
+  9 -->|"kind: usedBy"| 8
   10 -->|"kind: pipe"| 11
   12 -->|"kind: transformCallee"| 11
