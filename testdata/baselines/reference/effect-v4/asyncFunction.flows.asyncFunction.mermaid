@@ -11,15 +11,13 @@ flowchart TB
   9[/"type: 4<br/>node: 4"/]
   10[/"type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: nested"/]
   11[/"type: number<br/>node: await Promise.resolve#40;4#41;"/]
-  12[/"type: #123; #lt;Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;f: #40;#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #lt;Self, Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;options: #123; readonly self: Self; #125;, f: #40;this: Self#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #125;<br/>node: Effect.gen"/]
-  13[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;5#41;"]]
-  14[/"type: 5<br/>node: 5"/]
-  15["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  16[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  12[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;5#41;"]]
+  13[/"type: 5<br/>node: 5"/]
+  14["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
   1 -->|"kind: potentialReturn"| 0
   4 -->|"kind: potentialReturn"| 3
   9 -->|"kind: potentialReturn"| 8
   8 -->|"kind: potentialReturn"| 7
-  14 -->|"kind: pipe"| 15
-  16 -->|"kind: transformCallee"| 15
-  15 -->|"kind: potentialReturn"| 13
+  13 -->|"kind: pipe"| 14
+  14 -->|"kind: transformCallee"| 14
+  14 -->|"kind: potentialReturn"| 12

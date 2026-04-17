@@ -1,17 +1,14 @@
 flowchart TB
   0[/"type: Effect#lt;number, never, EnvA#gt;<br/>node: effectWithContext"/]
   1[/"type: #quot;floating#quot;<br/>node: #quot;floating#quot;"/]
-  2["type: Effect#lt;string, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  3[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  4[/"type: #quot;ignored#quot;<br/>node: #quot;ignored#quot;"/]
-  5["type: Effect#lt;string, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  6[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  7[/"type: #quot;both suppressed#quot;<br/>node: #quot;both suppressed#quot;"/]
-  8["type: Effect#lt;string, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  9[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  2["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  3[/"type: #quot;ignored#quot;<br/>node: #quot;ignored#quot;"/]
+  4["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  5[/"type: #quot;both suppressed#quot;<br/>node: #quot;both suppressed#quot;"/]
+  6["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
   1 -->|"kind: pipe"| 2
-  3 -->|"kind: transformCallee"| 2
-  4 -->|"kind: pipe"| 5
-  6 -->|"kind: transformCallee"| 5
-  7 -->|"kind: pipe"| 8
-  9 -->|"kind: transformCallee"| 8
+  2 -->|"kind: transformCallee"| 2
+  3 -->|"kind: pipe"| 4
+  4 -->|"kind: transformCallee"| 4
+  5 -->|"kind: pipe"| 6
+  6 -->|"kind: transformCallee"| 6

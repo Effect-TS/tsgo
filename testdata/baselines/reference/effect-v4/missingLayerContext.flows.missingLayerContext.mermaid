@@ -17,13 +17,11 @@ flowchart TB
   15[["type: #40;layer: Layer#lt;ServiceA, never, never#gt;#41; =#gt; Layer#lt;ServiceA, never, never#gt;<br/>node: function testFn#40;layer: Layer.Layer#lt;ServiceA#gt;#41; #123;#92;n  return layer#92;n#125;"]]
   16[/"type: Layer#lt;ServiceA, never, never#gt;<br/>node: layer"/]
   17[/"type: Layer#lt;ServiceA, never, ServiceB #124; ServiceC#gt;<br/>node: layerWithServices"/]
-  18["type: Layer#lt;ServiceA, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  19[/"type: #40;layer: Layer#lt;ServiceA, never, never#gt;#41; =#gt; Layer#lt;ServiceA, never, never#gt;<br/>node: testFn"/]
-  20[["type: #40;layer: Layer#lt;ServiceA, never, ServiceB#gt;#41; =#gt; Layer#lt;ServiceA, never, ServiceB#gt;<br/>node: function testFnWithServiceB#40;layer: Layer.Layer#lt;ServiceA, never, ServiceB#gt;#41; #123;#92;n  return layer#92;n#125;"]]
-  21[/"type: Layer#lt;ServiceA, never, ServiceB#gt;<br/>node: layer"/]
-  22[/"type: Layer#lt;ServiceA, never, ServiceB #124; ServiceC#gt;<br/>node: layerWithServices"/]
-  23["type: Layer#lt;ServiceA, never, ServiceB#gt;<br/>callee: <br/>args: #91;#93;"]
-  24[/"type: #40;layer: Layer#lt;ServiceA, never, ServiceB#gt;#41; =#gt; Layer#lt;ServiceA, never, ServiceB#gt;<br/>node: testFnWithServiceB"/]
+  18["type: Layer#lt;ServiceA, never, never#gt;<br/>callee: testFn<br/>args: #91;#93;"]
+  19[["type: #40;layer: Layer#lt;ServiceA, never, ServiceB#gt;#41; =#gt; Layer#lt;ServiceA, never, ServiceB#gt;<br/>node: function testFnWithServiceB#40;layer: Layer.Layer#lt;ServiceA, never, ServiceB#gt;#41; #123;#92;n  return layer#92;n#125;"]]
+  20[/"type: Layer#lt;ServiceA, never, ServiceB#gt;<br/>node: layer"/]
+  21[/"type: Layer#lt;ServiceA, never, ServiceB #124; ServiceC#gt;<br/>node: layerWithServices"/]
+  22["type: Layer#lt;ServiceA, never, ServiceB#gt;<br/>callee: testFnWithServiceB<br/>args: #91;#93;"]
   1 -->|"kind: pipe"| 2
   3 -->|"kind: transformCallee"| 1
   4 -->|"kind: transformArg"| 1
@@ -35,7 +33,7 @@ flowchart TB
   14 -->|"kind: transformArg"| 11
   16 -->|"kind: potentialReturn"| 15
   17 -->|"kind: pipe"| 18
-  19 -->|"kind: transformCallee"| 18
-  21 -->|"kind: potentialReturn"| 20
-  22 -->|"kind: pipe"| 23
-  24 -->|"kind: transformCallee"| 23
+  18 -->|"kind: transformCallee"| 18
+  20 -->|"kind: potentialReturn"| 19
+  21 -->|"kind: pipe"| 22
+  22 -->|"kind: transformCallee"| 22

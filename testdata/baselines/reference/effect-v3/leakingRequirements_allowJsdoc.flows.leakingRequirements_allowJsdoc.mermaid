@@ -5,12 +5,10 @@ flowchart TB
   3[/"type: TagClass#lt;LeakingDeps2, #quot;LeakingDeps2#quot;, #123; writeCache: #40;#41; =#gt; Effect#lt;void, never, Cache #124; FileSystem#gt;; readCache: Effect#lt;void, never, Cache #124; FileSystem#gt;; #125;#gt;<br/>node: Context.Tag#40;#quot;LeakingDeps2#quot;#41;#lt;LeakingDeps2, #123;#92;n  writeCache: #40;#41; =#gt; Effect.Effect#lt;void, never, FileSystem #124; Cache#gt;#92;n  readCache: Effect.Effect#lt;void, never, FileSystem #124; Cache#gt;#92;n#125;#gt;#40;#41;"/]
   4[/"type: TagClass#lt;LeakingDeps3, #quot;LeakingDeps3#quot;, #123; writeCache: #40;#41; =#gt; Effect#lt;void, never, Cache #124; FileSystem#gt;; readCache: Effect#lt;void, never, Cache #124; FileSystem#gt;; #125;#gt;<br/>node: Context.Tag#40;#quot;LeakingDeps3#quot;#41;#lt;LeakingDeps3, #123;#92;n  writeCache: #40;#41; =#gt; Effect.Effect#lt;void, never, FileSystem #124; Cache#gt;#92;n  readCache: Effect.Effect#lt;void, never, FileSystem #124; Cache#gt;#92;n#125;#gt;#40;#41;"/]
   5[/"type: #quot;LeakingDeps4#quot;<br/>node: #quot;LeakingDeps4#quot;"/]
-  6["type: Tag#lt;#123; writeCache: #40;#41; =#gt; Effect#lt;void, never, Cache #124; FileSystem#gt;; readCache: Effect#lt;void, never, Cache #124; FileSystem#gt;; #125;, #123; writeCache: #40;#41; =#gt; Effect#lt;void, never, Cache #124; FileSystem#gt;; readCache: Effect#lt;void, never, Cache #124; FileSystem#gt;; #125;#gt;<br/>callee: <br/>args: #91;#93;"]
-  7[/"type: #lt;Identifier, Service = Identifier#gt;#40;key: string#41; =#gt; Tag#lt;Identifier, Service#gt;<br/>node: Context.GenericTag"/]
-  8[/"type: #quot;LeakingDeps5#quot;<br/>node: #quot;LeakingDeps5#quot;"/]
-  9["type: Tag#lt;LeakingDeps5Shape, LeakingDeps5Shape#gt;<br/>callee: <br/>args: #91;#93;"]
-  10[/"type: #lt;Identifier, Service = Identifier#gt;#40;key: string#41; =#gt; Tag#lt;Identifier, Service#gt;<br/>node: Context.GenericTag"/]
+  6["type: Tag#lt;#123; writeCache: #40;#41; =#gt; Effect#lt;void, never, Cache #124; FileSystem#gt;; readCache: Effect#lt;void, never, Cache #124; FileSystem#gt;; #125;, #123; writeCache: #40;#41; =#gt; Effect#lt;void, never, Cache #124; FileSystem#gt;; readCache: Effect#lt;void, never, Cache #124; FileSystem#gt;; #125;#gt;<br/>callee: Context.GenericTag<br/>args: #91;#93;"]
+  7[/"type: #quot;LeakingDeps5#quot;<br/>node: #quot;LeakingDeps5#quot;"/]
+  8["type: Tag#lt;LeakingDeps5Shape, LeakingDeps5Shape#gt;<br/>callee: Context.GenericTag<br/>args: #91;#93;"]
   5 -->|"kind: pipe"| 6
-  7 -->|"kind: transformCallee"| 6
-  8 -->|"kind: pipe"| 9
-  10 -->|"kind: transformCallee"| 9
+  6 -->|"kind: transformCallee"| 6
+  7 -->|"kind: pipe"| 8
+  8 -->|"kind: transformCallee"| 8

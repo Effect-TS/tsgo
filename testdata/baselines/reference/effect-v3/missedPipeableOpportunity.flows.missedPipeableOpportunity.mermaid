@@ -1,188 +1,157 @@
 flowchart TB
   0[["type: #40;n: number#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;n: number#41; =#gt; Effect.succeed#40;n + 1#41;"]]
   1[/"type: number<br/>node: n + 1"/]
-  2["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  3[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  4[["type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;e: Effect.Effect#lt;number#gt;#41; =#gt; Effect.map#40;e, #40;n#41; =#gt; n * 2#41;"]]
-  5[/"type: Effect#lt;number, never, never#gt;<br/>node: e"/]
-  6["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  7[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
-  8[["type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n * 2"]]
-  9[/"type: number<br/>node: n * 2"/]
-  10[["type: #40;n: number#41; =#gt; #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;n: number#41; =#gt; #40;e: Effect.Effect#lt;number#gt;#41; =#gt; Effect.map#40;e, #40;m#41; =#gt; m * n#41;"]]
-  11[["type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;e: Effect.Effect#lt;number#gt;#41; =#gt; Effect.map#40;e, #40;m#41; =#gt; m * n#41;"]]
-  12[/"type: Effect#lt;number, never, never#gt;<br/>node: e"/]
-  13["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  14[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
-  15[["type: #40;m: number#41; =#gt; number<br/>node: #40;m#41; =#gt; m * n"]]
-  16[/"type: number<br/>node: m * n"/]
-  17[["type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;e: Effect.Effect#lt;number#gt;#41; =#gt; Effect.map#40;e, #40;n#41; =#gt; String#40;n#41;#41;"]]
-  18[/"type: Effect#lt;number, never, never#gt;<br/>node: e"/]
-  19["type: Effect#lt;string, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  20[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
-  21[["type: #40;n: number#41; =#gt; string<br/>node: #40;n#41; =#gt; String#40;n#41;"]]
-  22[/"type: number<br/>node: n"/]
-  23["type: string<br/>callee: <br/>args: #91;#93;"]
-  24[/"type: StringConstructor<br/>node: String"/]
-  25[/"type: 5<br/>node: 5"/]
-  26["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  27[/"type: #40;n: number#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: addOne"/]
-  28["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  29[/"type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: double"/]
-  30["type: Effect#lt;string, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  31[/"type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: toString"/]
-  32[["type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;e: Effect.Effect#lt;number#gt;#41; =#gt; Effect.map#40;e, #40;n#41; =#gt; n * 3#41;"]]
-  33[/"type: Effect#lt;number, never, never#gt;<br/>node: e"/]
-  34["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  35[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
-  36[["type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n * 3"]]
-  37[/"type: number<br/>node: n * 3"/]
-  38[/"type: 10<br/>node: 10"/]
-  39["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  40[/"type: #40;n: number#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: addOne"/]
-  41["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  42[/"type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: double"/]
-  43["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  44[/"type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: triple"/]
-  45["type: Effect#lt;string, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  46[/"type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: toString"/]
-  47[/"type: 5<br/>node: 5"/]
-  48["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  49[/"type: #40;n: number#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: addOne"/]
-  50["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  51[/"type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: double"/]
-  52[["type: #40;n: number#41; =#gt; number<br/>node: #40;n: number#41; =#gt; n + 1"]]
-  53[/"type: number<br/>node: n + 1"/]
-  54[["type: #40;n: number#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;n: number#41; =#gt; Effect.succeed#40;n#41;"]]
-  55[/"type: number<br/>node: n"/]
-  56["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  57[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  58[/"type: 5<br/>node: 5"/]
-  59["type: number<br/>callee: <br/>args: #91;#93;"]
-  60[/"type: #40;n: number#41; =#gt; number<br/>node: regularFunction"/]
-  61["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  62[/"type: #40;n: number#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: wrapInEffect"/]
-  63["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  64[/"type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: double"/]
-  65[["type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;e: Effect.Effect#lt;number#gt;#41; =#gt; Effect.map#40;e, #40;n#41; =#gt; n + 100#41;"]]
-  66[/"type: Effect#lt;number, never, never#gt;<br/>node: e"/]
-  67["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  68[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
-  69[["type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n + 100"]]
-  70[/"type: number<br/>node: n + 100"/]
-  71[/"type: 7<br/>node: 7"/]
-  72["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  73[/"type: #40;n: number#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: addOne"/]
-  74["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  75[/"type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: double"/]
-  76["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  77[/"type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: addHundred"/]
-  78["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  79[/"type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: triple"/]
-  80[/"type: 5<br/>node: 5"/]
-  81["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  82[/"type: #40;n: number#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: addOne"/]
-  83["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  84[/"type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: double"/]
-  85["type: Effect#lt;string, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  86[/"type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: toString"/]
-  87[/"type: #123; #lt;A#gt;#40;this: A#41;: A; #lt;A, B = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B#41;: B; #lt;A, B = never, C = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C#41;: C; #lt;A, B = never, C = never, D = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D#41;: D; #lt;A, B = never, C = never, D = never, E = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E#41;: E; #lt;A, B = never, C = never, D = never, E = never, F = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F#41;: F; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G#41;: G; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H#41;: H; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I#41;: I; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J#41;: J; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K#41;: K; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K, kl: #40;_: K#41; =#gt; L#41;: L; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K, kl: #40;_: K#41; =#gt; L, lm: #40;_: L#41; =#gt; M#41;: M; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never, N = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K, kl: #40;_: K#41; =#gt; L, lm: #40;_: L#41; =#gt; M, mn: #40;_: M#41; =#gt; N#41;: N; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never, N = never, O = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K, kl: #40;_: K#41; =#gt; L, lm: #40;_: L#41; =#gt; M, mn: #40;_: M#41; =#gt; N, no: #40;_: N#41; =#gt; O#41;: O; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never, N = never, O = never, P = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K, kl: #40;_: K#41; =#gt; L, lm: #40;_: L#41; =#gt; M, mn: #40;_: M#41; =#gt; N, no: #40;_: N#41; =#gt; O, op: #40;_: O#41; =#gt; P#41;: P; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never, N = never, O = never, P = never, Q = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K, kl: #40;_: K#41; =#gt; L, lm: #40;_: L#41; =#gt; M, mn: #40;_: M#41; =#gt; N, no: #40;_: N#41; =#gt; O, op: #40;_: O#41; =#gt; P, pq: #40;_: P#41; =#gt; Q#41;: Q; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never, N = never, O = never, P = never, Q = never, R = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K, kl: #40;_: K#41; =#gt; L, lm: #40;_: L#41; =#gt; M, mn: #40;_: M#41; =#gt; N, no: #40;_: N#41; =#gt; O, op: #40;_: O#41; =#gt; P, pq: #40;_: P#41; =#gt; Q, qr: #40;_: Q#41; =#gt; R#41;: R; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never, N = never, O = never, P = never, Q = never, R = never, S = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K, kl: #40;_: K#41; =#gt; L, lm: #40;_: L#41; =#gt; M, mn: #40;_: M#41; =#gt; N, no: #40;_: N#41; =#gt; O, op: #40;_: O#41; =#gt; P, pq: #40;_: P#41; =#gt; Q, qr: #40;_: Q#41; =#gt; R, rs: #40;_: R#41; =#gt; S#41;: S; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never, N = never, O = never, P = never, Q = never, R = never, S = never, T = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K, kl: #40;_: K#41; =#gt; L, lm: #40;_: L#41; =#gt; M, mn: #40;_: M#41; =#gt; N, no: #40;_: N#41; =#gt; O, op: #40;_: O#41; =#gt; P, pq: #40;_: P#41; =#gt; Q, qr: #40;_: Q#41; =#gt; R, rs: #40;_: R#41; =#gt; S, st: #40;_: S#41; =#gt; T#41;: T; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never, N = never, O = never, P = never, Q = never, R = never, S = never, T = never, U = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K, kl: #40;_: K#41; =#gt; L, lm: #40;_: L#41; =#gt; M, mn: #40;_: M#41; =#gt; N, no: #40;_: N#41; =#gt; O, op: #40;_: O#41; =#gt; P, pq: #40;_: P#41; =#gt; Q, qr: #40;_: Q#41; =#gt; R, rs: #40;_: R#41; =#gt; S, st: #40;_: S#41; =#gt; T, tu: #40;_: T#41; =#gt; U#41;: U; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never, N = never, O = never, P = never, Q = never, R = never, S = never, T = never, U = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K, kl: #40;_: K#41; =#gt; L, lm: #40;_: L#41; =#gt; M, mn: #40;_: M#41; =#gt; N, no: #40;_: N#41; =#gt; O, op: #40;_: O#41; =#gt; P, pq: #40;_: P#41; =#gt; Q, qr: #40;_: Q#41; =#gt; R, rs: #40;_: R#41; =#gt; S, st: #40;_: S#41; =#gt; T, tu: #40;_: T#41; =#gt; U#41;: U; #125;<br/>node: addOne#40;5#41;.pipe"/]
-  88[/"type: 5<br/>node: 5"/]
-  89["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  90[/"type: #40;n: number#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: addOne"/]
-  91["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  92[/"type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: double"/]
-  93[/"type: #123; #lt;A#gt;#40;this: A#41;: A; #lt;A, B = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B#41;: B; #lt;A, B = never, C = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C#41;: C; #lt;A, B = never, C = never, D = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D#41;: D; #lt;A, B = never, C = never, D = never, E = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E#41;: E; #lt;A, B = never, C = never, D = never, E = never, F = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F#41;: F; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G#41;: G; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H#41;: H; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I#41;: I; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J#41;: J; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K#41;: K; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K, kl: #40;_: K#41; =#gt; L#41;: L; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K, kl: #40;_: K#41; =#gt; L, lm: #40;_: L#41; =#gt; M#41;: M; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never, N = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K, kl: #40;_: K#41; =#gt; L, lm: #40;_: L#41; =#gt; M, mn: #40;_: M#41; =#gt; N#41;: N; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never, N = never, O = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K, kl: #40;_: K#41; =#gt; L, lm: #40;_: L#41; =#gt; M, mn: #40;_: M#41; =#gt; N, no: #40;_: N#41; =#gt; O#41;: O; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never, N = never, O = never, P = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K, kl: #40;_: K#41; =#gt; L, lm: #40;_: L#41; =#gt; M, mn: #40;_: M#41; =#gt; N, no: #40;_: N#41; =#gt; O, op: #40;_: O#41; =#gt; P#41;: P; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never, N = never, O = never, P = never, Q = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K, kl: #40;_: K#41; =#gt; L, lm: #40;_: L#41; =#gt; M, mn: #40;_: M#41; =#gt; N, no: #40;_: N#41; =#gt; O, op: #40;_: O#41; =#gt; P, pq: #40;_: P#41; =#gt; Q#41;: Q; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never, N = never, O = never, P = never, Q = never, R = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K, kl: #40;_: K#41; =#gt; L, lm: #40;_: L#41; =#gt; M, mn: #40;_: M#41; =#gt; N, no: #40;_: N#41; =#gt; O, op: #40;_: O#41; =#gt; P, pq: #40;_: P#41; =#gt; Q, qr: #40;_: Q#41; =#gt; R#41;: R; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never, N = never, O = never, P = never, Q = never, R = never, S = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K, kl: #40;_: K#41; =#gt; L, lm: #40;_: L#41; =#gt; M, mn: #40;_: M#41; =#gt; N, no: #40;_: N#41; =#gt; O, op: #40;_: O#41; =#gt; P, pq: #40;_: P#41; =#gt; Q, qr: #40;_: Q#41; =#gt; R, rs: #40;_: R#41; =#gt; S#41;: S; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never, N = never, O = never, P = never, Q = never, R = never, S = never, T = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K, kl: #40;_: K#41; =#gt; L, lm: #40;_: L#41; =#gt; M, mn: #40;_: M#41; =#gt; N, no: #40;_: N#41; =#gt; O, op: #40;_: O#41; =#gt; P, pq: #40;_: P#41; =#gt; Q, qr: #40;_: Q#41; =#gt; R, rs: #40;_: R#41; =#gt; S, st: #40;_: S#41; =#gt; T#41;: T; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never, N = never, O = never, P = never, Q = never, R = never, S = never, T = never, U = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K, kl: #40;_: K#41; =#gt; L, lm: #40;_: L#41; =#gt; M, mn: #40;_: M#41; =#gt; N, no: #40;_: N#41; =#gt; O, op: #40;_: O#41; =#gt; P, pq: #40;_: P#41; =#gt; Q, qr: #40;_: Q#41; =#gt; R, rs: #40;_: R#41; =#gt; S, st: #40;_: S#41; =#gt; T, tu: #40;_: T#41; =#gt; U#41;: U; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never, N = never, O = never, P = never, Q = never, R = never, S = never, T = never, U = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K, kl: #40;_: K#41; =#gt; L, lm: #40;_: L#41; =#gt; M, mn: #40;_: M#41; =#gt; N, no: #40;_: N#41; =#gt; O, op: #40;_: O#41; =#gt; P, pq: #40;_: P#41; =#gt; Q, qr: #40;_: Q#41; =#gt; R, rs: #40;_: R#41; =#gt; S, st: #40;_: S#41; =#gt; T, tu: #40;_: T#41; =#gt; U#41;: U; #125;<br/>node: addOne#40;5#41;.pipe"/]
-  94[/"type: 5<br/>node: 5"/]
-  95["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  96[/"type: #40;n: number#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: addOne"/]
-  97["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  98[/"type: #40;n: number#41; =#gt; #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: multiplyBy"/]
-  99[/"type: 2<br/>node: 2"/]
-  100[/"type: #123; #lt;A#gt;#40;this: A#41;: A; #lt;A, B = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B#41;: B; #lt;A, B = never, C = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C#41;: C; #lt;A, B = never, C = never, D = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D#41;: D; #lt;A, B = never, C = never, D = never, E = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E#41;: E; #lt;A, B = never, C = never, D = never, E = never, F = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F#41;: F; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G#41;: G; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H#41;: H; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I#41;: I; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J#41;: J; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K#41;: K; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K, kl: #40;_: K#41; =#gt; L#41;: L; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K, kl: #40;_: K#41; =#gt; L, lm: #40;_: L#41; =#gt; M#41;: M; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never, N = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K, kl: #40;_: K#41; =#gt; L, lm: #40;_: L#41; =#gt; M, mn: #40;_: M#41; =#gt; N#41;: N; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never, N = never, O = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K, kl: #40;_: K#41; =#gt; L, lm: #40;_: L#41; =#gt; M, mn: #40;_: M#41; =#gt; N, no: #40;_: N#41; =#gt; O#41;: O; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never, N = never, O = never, P = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K, kl: #40;_: K#41; =#gt; L, lm: #40;_: L#41; =#gt; M, mn: #40;_: M#41; =#gt; N, no: #40;_: N#41; =#gt; O, op: #40;_: O#41; =#gt; P#41;: P; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never, N = never, O = never, P = never, Q = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K, kl: #40;_: K#41; =#gt; L, lm: #40;_: L#41; =#gt; M, mn: #40;_: M#41; =#gt; N, no: #40;_: N#41; =#gt; O, op: #40;_: O#41; =#gt; P, pq: #40;_: P#41; =#gt; Q#41;: Q; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never, N = never, O = never, P = never, Q = never, R = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K, kl: #40;_: K#41; =#gt; L, lm: #40;_: L#41; =#gt; M, mn: #40;_: M#41; =#gt; N, no: #40;_: N#41; =#gt; O, op: #40;_: O#41; =#gt; P, pq: #40;_: P#41; =#gt; Q, qr: #40;_: Q#41; =#gt; R#41;: R; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never, N = never, O = never, P = never, Q = never, R = never, S = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K, kl: #40;_: K#41; =#gt; L, lm: #40;_: L#41; =#gt; M, mn: #40;_: M#41; =#gt; N, no: #40;_: N#41; =#gt; O, op: #40;_: O#41; =#gt; P, pq: #40;_: P#41; =#gt; Q, qr: #40;_: Q#41; =#gt; R, rs: #40;_: R#41; =#gt; S#41;: S; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never, N = never, O = never, P = never, Q = never, R = never, S = never, T = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K, kl: #40;_: K#41; =#gt; L, lm: #40;_: L#41; =#gt; M, mn: #40;_: M#41; =#gt; N, no: #40;_: N#41; =#gt; O, op: #40;_: O#41; =#gt; P, pq: #40;_: P#41; =#gt; Q, qr: #40;_: Q#41; =#gt; R, rs: #40;_: R#41; =#gt; S, st: #40;_: S#41; =#gt; T#41;: T; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never, N = never, O = never, P = never, Q = never, R = never, S = never, T = never, U = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K, kl: #40;_: K#41; =#gt; L, lm: #40;_: L#41; =#gt; M, mn: #40;_: M#41; =#gt; N, no: #40;_: N#41; =#gt; O, op: #40;_: O#41; =#gt; P, pq: #40;_: P#41; =#gt; Q, qr: #40;_: Q#41; =#gt; R, rs: #40;_: R#41; =#gt; S, st: #40;_: S#41; =#gt; T, tu: #40;_: T#41; =#gt; U#41;: U; #lt;A, B = never, C = never, D = never, E = never, F = never, G = never, H = never, I = never, J = never, K = never, L = never, M = never, N = never, O = never, P = never, Q = never, R = never, S = never, T = never, U = never#gt;#40;this: A, ab: #40;_: A#41; =#gt; B, bc: #40;_: B#41; =#gt; C, cd: #40;_: C#41; =#gt; D, de: #40;_: D#41; =#gt; E, ef: #40;_: E#41; =#gt; F, fg: #40;_: F#41; =#gt; G, gh: #40;_: G#41; =#gt; H, hi: #40;_: H#41; =#gt; I, ij: #40;_: I#41; =#gt; J, jk: #40;_: J#41; =#gt; K, kl: #40;_: K#41; =#gt; L, lm: #40;_: L#41; =#gt; M, mn: #40;_: M#41; =#gt; N, no: #40;_: N#41; =#gt; O, op: #40;_: O#41; =#gt; P, pq: #40;_: P#41; =#gt; Q, qr: #40;_: Q#41; =#gt; R, rs: #40;_: R#41; =#gt; S, st: #40;_: S#41; =#gt; T, tu: #40;_: T#41; =#gt; U#41;: U; #125;<br/>node: addOne#40;5#41;.pipe"/]
-  101["type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  102[/"type: Promise#lt;void#gt;<br/>node: Effect.runPromise#40;Effect.log#40;#quot;Hello#quot;#41;#41;"/]
+  2["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  3[["type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;e: Effect.Effect#lt;number#gt;#41; =#gt; Effect.map#40;e, #40;n#41; =#gt; n * 2#41;"]]
+  4[/"type: Effect#lt;number, never, never#gt;<br/>node: e"/]
+  5["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  6[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  7[["type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n * 2"]]
+  8[/"type: number<br/>node: n * 2"/]
+  9[["type: #40;n: number#41; =#gt; #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;n: number#41; =#gt; #40;e: Effect.Effect#lt;number#gt;#41; =#gt; Effect.map#40;e, #40;m#41; =#gt; m * n#41;"]]
+  10[["type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;e: Effect.Effect#lt;number#gt;#41; =#gt; Effect.map#40;e, #40;m#41; =#gt; m * n#41;"]]
+  11[/"type: Effect#lt;number, never, never#gt;<br/>node: e"/]
+  12["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  13[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  14[["type: #40;m: number#41; =#gt; number<br/>node: #40;m#41; =#gt; m * n"]]
+  15[/"type: number<br/>node: m * n"/]
+  16[["type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;e: Effect.Effect#lt;number#gt;#41; =#gt; Effect.map#40;e, #40;n#41; =#gt; String#40;n#41;#41;"]]
+  17[/"type: Effect#lt;number, never, never#gt;<br/>node: e"/]
+  18["type: Effect#lt;string, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  19[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  20[["type: #40;n: number#41; =#gt; string<br/>node: #40;n#41; =#gt; String#40;n#41;"]]
+  21[/"type: number<br/>node: n"/]
+  22["type: string<br/>callee: String<br/>args: #91;#93;"]
+  23[/"type: 5<br/>node: 5"/]
+  24["type: Effect#lt;number, never, never#gt;<br/>callee: addOne<br/>args: #91;#93;"]
+  25["type: Effect#lt;number, never, never#gt;<br/>callee: double<br/>args: #91;#93;"]
+  26["type: Effect#lt;string, never, never#gt;<br/>callee: toString<br/>args: #91;#93;"]
+  27[["type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;e: Effect.Effect#lt;number#gt;#41; =#gt; Effect.map#40;e, #40;n#41; =#gt; n * 3#41;"]]
+  28[/"type: Effect#lt;number, never, never#gt;<br/>node: e"/]
+  29["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  30[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  31[["type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n * 3"]]
+  32[/"type: number<br/>node: n * 3"/]
+  33[/"type: 10<br/>node: 10"/]
+  34["type: Effect#lt;number, never, never#gt;<br/>callee: addOne<br/>args: #91;#93;"]
+  35["type: Effect#lt;number, never, never#gt;<br/>callee: double<br/>args: #91;#93;"]
+  36["type: Effect#lt;number, never, never#gt;<br/>callee: triple<br/>args: #91;#93;"]
+  37["type: Effect#lt;string, never, never#gt;<br/>callee: toString<br/>args: #91;#93;"]
+  38[/"type: 5<br/>node: 5"/]
+  39["type: Effect#lt;number, never, never#gt;<br/>callee: addOne<br/>args: #91;#93;"]
+  40["type: Effect#lt;number, never, never#gt;<br/>callee: double<br/>args: #91;#93;"]
+  41[["type: #40;n: number#41; =#gt; number<br/>node: #40;n: number#41; =#gt; n + 1"]]
+  42[/"type: number<br/>node: n + 1"/]
+  43[["type: #40;n: number#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;n: number#41; =#gt; Effect.succeed#40;n#41;"]]
+  44[/"type: number<br/>node: n"/]
+  45["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  46[/"type: 5<br/>node: 5"/]
+  47["type: number<br/>callee: regularFunction<br/>args: #91;#93;"]
+  48["type: Effect#lt;number, never, never#gt;<br/>callee: wrapInEffect<br/>args: #91;#93;"]
+  49["type: Effect#lt;number, never, never#gt;<br/>callee: double<br/>args: #91;#93;"]
+  50[["type: #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;e: Effect.Effect#lt;number#gt;#41; =#gt; Effect.map#40;e, #40;n#41; =#gt; n + 100#41;"]]
+  51[/"type: Effect#lt;number, never, never#gt;<br/>node: e"/]
+  52["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  53[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  54[["type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n + 100"]]
+  55[/"type: number<br/>node: n + 100"/]
+  56[/"type: 7<br/>node: 7"/]
+  57["type: Effect#lt;number, never, never#gt;<br/>callee: addOne<br/>args: #91;#93;"]
+  58["type: Effect#lt;number, never, never#gt;<br/>callee: double<br/>args: #91;#93;"]
+  59["type: Effect#lt;number, never, never#gt;<br/>callee: addHundred<br/>args: #91;#93;"]
+  60["type: Effect#lt;number, never, never#gt;<br/>callee: triple<br/>args: #91;#93;"]
+  61[/"type: 5<br/>node: 5"/]
+  62["type: Effect#lt;number, never, never#gt;<br/>callee: addOne<br/>args: #91;#93;"]
+  63["type: Effect#lt;number, never, never#gt;<br/>callee: double<br/>args: #91;#93;"]
+  64["type: Effect#lt;string, never, never#gt;<br/>callee: toString<br/>args: #91;#93;"]
+  65[/"type: 5<br/>node: 5"/]
+  66["type: Effect#lt;number, never, never#gt;<br/>callee: addOne<br/>args: #91;#93;"]
+  67["type: Effect#lt;number, never, never#gt;<br/>callee: double<br/>args: #91;#93;"]
+  68[/"type: 5<br/>node: 5"/]
+  69["type: Effect#lt;number, never, never#gt;<br/>callee: addOne<br/>args: #91;#93;"]
+  70["type: Effect#lt;number, never, never#gt;<br/>callee: multiplyBy<br/>args: #91;2#93;"]
+  71[/"type: #40;n: number#41; =#gt; #40;e: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: multiplyBy"/]
+  72[/"type: 2<br/>node: 2"/]
+  73[/"type: Promise#lt;void#gt;<br/>node: Effect.runPromise#40;Effect.log#40;#quot;Hello#quot;#41;#41;"/]
   1 -->|"kind: pipe"| 2
-  3 -->|"kind: transformCallee"| 2
+  2 -->|"kind: transformCallee"| 2
   2 -->|"kind: potentialReturn"| 0
-  5 -->|"kind: pipe"| 6
-  7 -->|"kind: transformCallee"| 5
-  9 -->|"kind: potentialReturn"| 8
-  8 -->|"kind: transformArg"| 5
-  6 -->|"kind: potentialReturn"| 4
-  12 -->|"kind: pipe"| 13
-  14 -->|"kind: transformCallee"| 12
-  16 -->|"kind: potentialReturn"| 15
-  15 -->|"kind: transformArg"| 12
-  13 -->|"kind: potentialReturn"| 11
-  11 -->|"kind: potentialReturn"| 10
-  18 -->|"kind: pipe"| 19
-  20 -->|"kind: transformCallee"| 18
-  22 -->|"kind: pipe"| 23
-  24 -->|"kind: transformCallee"| 23
-  23 -->|"kind: potentialReturn"| 21
-  21 -->|"kind: transformArg"| 18
-  19 -->|"kind: potentialReturn"| 17
+  4 -->|"kind: pipe"| 5
+  6 -->|"kind: transformCallee"| 4
+  8 -->|"kind: potentialReturn"| 7
+  7 -->|"kind: transformArg"| 4
+  5 -->|"kind: potentialReturn"| 3
+  11 -->|"kind: pipe"| 12
+  13 -->|"kind: transformCallee"| 11
+  15 -->|"kind: potentialReturn"| 14
+  14 -->|"kind: transformArg"| 11
+  12 -->|"kind: potentialReturn"| 10
+  10 -->|"kind: potentialReturn"| 9
+  17 -->|"kind: pipe"| 18
+  19 -->|"kind: transformCallee"| 17
+  21 -->|"kind: pipe"| 22
+  22 -->|"kind: transformCallee"| 22
+  22 -->|"kind: potentialReturn"| 20
+  20 -->|"kind: transformArg"| 17
+  18 -->|"kind: potentialReturn"| 16
+  23 -->|"kind: pipe"| 24
+  24 -->|"kind: transformCallee"| 24
+  24 -->|"kind: pipe"| 25
+  25 -->|"kind: transformCallee"| 25
   25 -->|"kind: pipe"| 26
-  27 -->|"kind: transformCallee"| 26
-  26 -->|"kind: pipe"| 28
-  29 -->|"kind: transformCallee"| 28
-  28 -->|"kind: pipe"| 30
-  31 -->|"kind: transformCallee"| 30
+  26 -->|"kind: transformCallee"| 26
+  28 -->|"kind: pipe"| 29
+  30 -->|"kind: transformCallee"| 28
+  32 -->|"kind: potentialReturn"| 31
+  31 -->|"kind: transformArg"| 28
+  29 -->|"kind: potentialReturn"| 27
   33 -->|"kind: pipe"| 34
-  35 -->|"kind: transformCallee"| 33
-  37 -->|"kind: potentialReturn"| 36
-  36 -->|"kind: transformArg"| 33
-  34 -->|"kind: potentialReturn"| 32
+  34 -->|"kind: transformCallee"| 34
+  34 -->|"kind: pipe"| 35
+  35 -->|"kind: transformCallee"| 35
+  35 -->|"kind: pipe"| 36
+  36 -->|"kind: transformCallee"| 36
+  36 -->|"kind: pipe"| 37
+  37 -->|"kind: transformCallee"| 37
   38 -->|"kind: pipe"| 39
-  40 -->|"kind: transformCallee"| 39
-  39 -->|"kind: pipe"| 41
-  42 -->|"kind: transformCallee"| 41
-  41 -->|"kind: pipe"| 43
-  44 -->|"kind: transformCallee"| 43
-  43 -->|"kind: pipe"| 45
-  46 -->|"kind: transformCallee"| 45
+  39 -->|"kind: transformCallee"| 39
+  39 -->|"kind: pipe"| 40
+  40 -->|"kind: transformCallee"| 40
+  42 -->|"kind: potentialReturn"| 41
+  44 -->|"kind: pipe"| 45
+  45 -->|"kind: transformCallee"| 45
+  45 -->|"kind: potentialReturn"| 43
+  46 -->|"kind: pipe"| 47
+  47 -->|"kind: transformCallee"| 47
   47 -->|"kind: pipe"| 48
-  49 -->|"kind: transformCallee"| 48
-  48 -->|"kind: pipe"| 50
-  51 -->|"kind: transformCallee"| 50
-  53 -->|"kind: potentialReturn"| 52
-  55 -->|"kind: pipe"| 56
-  57 -->|"kind: transformCallee"| 56
-  56 -->|"kind: potentialReturn"| 54
+  48 -->|"kind: transformCallee"| 48
+  48 -->|"kind: pipe"| 49
+  49 -->|"kind: transformCallee"| 49
+  51 -->|"kind: pipe"| 52
+  53 -->|"kind: transformCallee"| 51
+  55 -->|"kind: potentialReturn"| 54
+  54 -->|"kind: transformArg"| 51
+  52 -->|"kind: potentialReturn"| 50
+  56 -->|"kind: pipe"| 57
+  57 -->|"kind: transformCallee"| 57
+  57 -->|"kind: pipe"| 58
+  58 -->|"kind: transformCallee"| 58
   58 -->|"kind: pipe"| 59
-  60 -->|"kind: transformCallee"| 59
-  59 -->|"kind: pipe"| 61
-  62 -->|"kind: transformCallee"| 61
-  61 -->|"kind: pipe"| 63
-  64 -->|"kind: transformCallee"| 63
+  59 -->|"kind: transformCallee"| 59
+  59 -->|"kind: pipe"| 60
+  60 -->|"kind: transformCallee"| 60
+  61 -->|"kind: pipe"| 62
+  62 -->|"kind: transformCallee"| 62
+  63 -->|"kind: transformCallee"| 63
+  62 -->|"kind: pipe"| 63
+  64 -->|"kind: transformCallee"| 64
+  63 -->|"kind: pipe"| 64
+  65 -->|"kind: pipe"| 66
+  66 -->|"kind: transformCallee"| 66
+  67 -->|"kind: transformCallee"| 67
   66 -->|"kind: pipe"| 67
-  68 -->|"kind: transformCallee"| 66
-  70 -->|"kind: potentialReturn"| 69
-  69 -->|"kind: transformArg"| 66
-  67 -->|"kind: potentialReturn"| 65
-  71 -->|"kind: pipe"| 72
-  73 -->|"kind: transformCallee"| 72
-  72 -->|"kind: pipe"| 74
-  75 -->|"kind: transformCallee"| 74
-  74 -->|"kind: pipe"| 76
-  77 -->|"kind: transformCallee"| 76
-  76 -->|"kind: pipe"| 78
-  79 -->|"kind: transformCallee"| 78
-  80 -->|"kind: pipe"| 81
-  82 -->|"kind: transformCallee"| 81
-  84 -->|"kind: transformCallee"| 83
-  81 -->|"kind: pipe"| 83
-  86 -->|"kind: transformCallee"| 85
-  83 -->|"kind: pipe"| 85
-  88 -->|"kind: pipe"| 89
-  90 -->|"kind: transformCallee"| 89
-  92 -->|"kind: transformCallee"| 91
-  89 -->|"kind: pipe"| 91
-  94 -->|"kind: pipe"| 95
-  96 -->|"kind: transformCallee"| 95
-  98 -->|"kind: transformCallee"| 97
-  99 -->|"kind: transformArg"| 97
-  95 -->|"kind: pipe"| 97
-  99 -->|"kind: pipe"| 101
-  98 -->|"kind: transformCallee"| 101
+  68 -->|"kind: pipe"| 69
+  69 -->|"kind: transformCallee"| 69
+  71 -->|"kind: transformCallee"| 70
+  72 -->|"kind: transformArg"| 70
+  69 -->|"kind: pipe"| 70

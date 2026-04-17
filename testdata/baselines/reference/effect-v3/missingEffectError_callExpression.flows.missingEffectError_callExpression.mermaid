@@ -5,16 +5,14 @@ flowchart TB
   3[["type: #40;effect: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: function testFn#40;effect: Effect.Effect#lt;number#gt;#41; #123;#92;n  return effect#92;n#125;"]]
   4[/"type: Effect#lt;number, never, never#gt;<br/>node: effect"/]
   5[/"type: Effect#lt;number, ErrorA #124; ErrorB #124; ErrorC, never#gt;<br/>node: effectWithErrors"/]
-  6["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  7[/"type: #40;effect: Effect#lt;number, never, never#gt;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: testFn"/]
-  8[["type: #40;effect: Effect#lt;number, ErrorA #124; ErrorB, never#gt;#41; =#gt; Effect#lt;number, ErrorA #124; ErrorB, never#gt;<br/>node: function testFnWithServiceAB#40;effect: Effect.Effect#lt;number, ErrorA #124; ErrorB#gt;#41; #123;#92;n  return effect#92;n#125;"]]
-  9[/"type: Effect#lt;number, ErrorA #124; ErrorB, never#gt;<br/>node: effect"/]
-  10[/"type: Effect#lt;number, ErrorA #124; ErrorB #124; ErrorC, never#gt;<br/>node: effectWithErrors"/]
-  11["type: Effect#lt;number, ErrorA #124; ErrorB, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  12[/"type: #40;effect: Effect#lt;number, ErrorA #124; ErrorB, never#gt;#41; =#gt; Effect#lt;number, ErrorA #124; ErrorB, never#gt;<br/>node: testFnWithServiceAB"/]
+  6["type: Effect#lt;number, never, never#gt;<br/>callee: testFn<br/>args: #91;#93;"]
+  7[["type: #40;effect: Effect#lt;number, ErrorA #124; ErrorB, never#gt;#41; =#gt; Effect#lt;number, ErrorA #124; ErrorB, never#gt;<br/>node: function testFnWithServiceAB#40;effect: Effect.Effect#lt;number, ErrorA #124; ErrorB#gt;#41; #123;#92;n  return effect#92;n#125;"]]
+  8[/"type: Effect#lt;number, ErrorA #124; ErrorB, never#gt;<br/>node: effect"/]
+  9[/"type: Effect#lt;number, ErrorA #124; ErrorB #124; ErrorC, never#gt;<br/>node: effectWithErrors"/]
+  10["type: Effect#lt;number, ErrorA #124; ErrorB, never#gt;<br/>callee: testFnWithServiceAB<br/>args: #91;#93;"]
   4 -->|"kind: potentialReturn"| 3
   5 -->|"kind: pipe"| 6
-  7 -->|"kind: transformCallee"| 6
-  9 -->|"kind: potentialReturn"| 8
-  10 -->|"kind: pipe"| 11
-  12 -->|"kind: transformCallee"| 11
+  6 -->|"kind: transformCallee"| 6
+  8 -->|"kind: potentialReturn"| 7
+  9 -->|"kind: pipe"| 10
+  10 -->|"kind: transformCallee"| 10

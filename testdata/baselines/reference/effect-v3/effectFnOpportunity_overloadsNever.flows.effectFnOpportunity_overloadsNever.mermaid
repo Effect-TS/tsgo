@@ -5,25 +5,22 @@ flowchart TB
   3((("type: Effect#lt;any, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    return yield* Effect.succeed#40;a as any#41;#92;n  #125;#41;")))
   4[/"type: any<br/>node: yield* Effect.succeed#40;a as any#41;"/]
   5[/"type: any<br/>node: a as any"/]
-  6["type: Effect#lt;any, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  7[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  8[/"type: #123; #lt;Eff extends YieldWrap#lt;Effect#lt;any, any, any#gt;#gt;, AEff#gt;#40;f: #40;resume: Adapter#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;YieldWrap#lt;Effect#lt;infer _A, infer E, infer _R#gt;#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;YieldWrap#lt;Effect#lt;infer _A, infer _E, infer R#gt;#gt;#93; ? R : never#gt;; #lt;Self, Eff extends YieldWrap#lt;Effect#lt;any, any, any#gt;#gt;, AEff#gt;#40;self: Self, f: #40;this: Self, resume: Adapter#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;YieldWrap#lt;Effect#lt;infer _A, infer E, infer _R#gt;#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;YieldWrap#lt;Effect#lt;infer _A, infer _E, infer R#gt;#gt;#93; ? R : never#gt;; #125;<br/>node: Effect.gen"/]
-  9[["type: #123; #40;a: number#41;: Effect#lt;number, never, never#gt;; #40;a: string#41;: Effect#lt;string, never, never#gt;; #125;<br/>node: export function overloadedDeclarationNoGen#40;a: number#41;: Effect.Effect#lt;number#gt;"]]
-  10[["type: #123; #40;a: number#41;: Effect#lt;number, never, never#gt;; #40;a: string#41;: Effect#lt;string, never, never#gt;; #125;<br/>node: export function overloadedDeclarationNoGen#40;a: string#41;: Effect.Effect#lt;string#gt;"]]
-  11[["type: #123; #40;a: number#41;: Effect#lt;number, never, never#gt;; #40;a: string#41;: Effect#lt;string, never, never#gt;; #125;<br/>node: export function overloadedDeclarationNoGen#40;a: number #124; string#41; #123;#92;n  const _a = 1#92;n  const _b = 2#92;n  const _c = 3#92;n  const _d = 4#92;n  const _e = 5#92;n  return Effect.succeed#40;a as any#41;#92;n#125;"]]
-  12[/"type: any<br/>node: a as any"/]
-  13["type: Effect#lt;any, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  14[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  15[/"type: 1<br/>node: 1"/]
-  16[/"type: 2<br/>node: 2"/]
-  17[/"type: 3<br/>node: 3"/]
-  18[/"type: 4<br/>node: 4"/]
-  19[/"type: 5<br/>node: 5"/]
+  6["type: Effect#lt;any, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  7[["type: #123; #40;a: number#41;: Effect#lt;number, never, never#gt;; #40;a: string#41;: Effect#lt;string, never, never#gt;; #125;<br/>node: export function overloadedDeclarationNoGen#40;a: number#41;: Effect.Effect#lt;number#gt;"]]
+  8[["type: #123; #40;a: number#41;: Effect#lt;number, never, never#gt;; #40;a: string#41;: Effect#lt;string, never, never#gt;; #125;<br/>node: export function overloadedDeclarationNoGen#40;a: string#41;: Effect.Effect#lt;string#gt;"]]
+  9[["type: #123; #40;a: number#41;: Effect#lt;number, never, never#gt;; #40;a: string#41;: Effect#lt;string, never, never#gt;; #125;<br/>node: export function overloadedDeclarationNoGen#40;a: number #124; string#41; #123;#92;n  const _a = 1#92;n  const _b = 2#92;n  const _c = 3#92;n  const _d = 4#92;n  const _e = 5#92;n  return Effect.succeed#40;a as any#41;#92;n#125;"]]
+  10[/"type: any<br/>node: a as any"/]
+  11["type: Effect#lt;any, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  12[/"type: 1<br/>node: 1"/]
+  13[/"type: 2<br/>node: 2"/]
+  14[/"type: 3<br/>node: 3"/]
+  15[/"type: 4<br/>node: 4"/]
+  16[/"type: 5<br/>node: 5"/]
   4 -->|"kind: potentialReturn"| 3
   5 -->|"kind: pipe"| 6
-  7 -->|"kind: transformCallee"| 6
+  6 -->|"kind: transformCallee"| 6
   6 -->|"kind: yieldable"| 3
   3 -->|"kind: potentialReturn"| 2
-  12 -->|"kind: pipe"| 13
-  14 -->|"kind: transformCallee"| 13
-  13 -->|"kind: potentialReturn"| 11
+  10 -->|"kind: pipe"| 11
+  11 -->|"kind: transformCallee"| 11
+  11 -->|"kind: potentialReturn"| 9

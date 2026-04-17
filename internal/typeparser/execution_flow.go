@@ -178,11 +178,11 @@ func (ec *executionCollector) visitPipeCall(p *ParsedPipeCallResult, node *ast.N
 			Callee: callee,
 			Args:   args,
 		})
+		*ec.parsed.Get(pipedTransform) = transformSlice
 		ec.visitNodeAndConnectSlice(callee, transformSlice, ExecutionLinkKindTransformCallee)
 		ec.visitNodesAndConnectSlice(args, transformSlice, ExecutionLinkKindTransformArg)
 		s = ec.connectSlices(s, transformSlice, ExecutionLinkKindPipe)
 	}
-	node.ForEachChild(ec.visitNodeVisitor)
 	return s
 }
 
@@ -204,8 +204,9 @@ func (ec *executionCollector) visitEffectGenCall(p *EffectGenCallResult, node *a
 		}
 		return false
 	})
-	*ec.parsed.Get(p.GeneratorFunction.AsNode()) = nil // to prevent reparsing as function
-	node.ForEachChild(ec.visitNodeVisitor)
+	if p.Body != nil {
+		p.Body.ForEachChild(ec.visitNodeVisitor)
+	}
 	return s
 }
 
@@ -224,6 +225,7 @@ func (ec *executionCollector) visitEffectFnCall(p *EffectFnCallResult, node *ast
 			Callee: callee,
 			Args:   args,
 		})
+		*ec.parsed.Get(pipedTransform) = transformSlice
 		ec.visitNodeAndConnectSlice(callee, transformSlice, ExecutionLinkKindTransformCallee)
 		ec.visitNodesAndConnectSlice(args, transformSlice, ExecutionLinkKindTransformArg)
 		sExit = ec.connectSlices(sExit, transformSlice, ExecutionLinkKindFnPipe)
@@ -256,8 +258,7 @@ func (ec *executionCollector) visitEffectFnCall(p *EffectFnCallResult, node *ast
 		ec.visitNodeAndConnectSlice(arg, s, ExecutionLinkKindParameter)
 	}
 	ec.connectSlices(sExit, s, ExecutionLinkKindPotentialReturn)
-	*ec.parsed.Get(p.FunctionNode.AsNode()) = nil // to prevent reparsing as function
-	node.ForEachChild(ec.visitNodeVisitor)
+	p.Body().ForEachChild(ec.visitNodeVisitor)
 	return s
 }
 
@@ -274,7 +275,6 @@ func (ec *executionCollector) visitSingleArgInlineCall(p *parsedSingleArgInlineC
 	s = ec.connectSlices(s, transformSlice, ExecutionLinkKindPipe)
 	ec.visitNodeAndConnectSlice(callee, transformSlice, ExecutionLinkKindTransformCallee)
 	ec.visitNodesAndConnectSlice(args, transformSlice, ExecutionLinkKindTransformArg)
-	node.ForEachChild(ec.visitNodeVisitor)
 	return s
 }
 
@@ -288,7 +288,6 @@ func (ec *executionCollector) visitDataFirstOrLastCall(p *ParsedDataFirstOrLastC
 	s = ec.connectSlices(s, transformSlice, ExecutionLinkKindPipe)
 	ec.visitNodeAndConnectSlice(p.Callee, s, ExecutionLinkKindTransformCallee)
 	ec.visitNodesAndConnectSlice(p.Args, s, ExecutionLinkKindTransformArg)
-	node.ForEachChild(ec.visitNodeVisitor)
 	return s
 }
 
@@ -311,8 +310,8 @@ func (ec *executionCollector) visitFunctionLikeDeclaration(node *ast.Node) *Grap
 				return false
 			})
 		}
+		fnBody.ForEachChild(ec.visitNodeVisitor)
 	}
-	node.ForEachChild(ec.visitNodeVisitor)
 	return s
 }
 

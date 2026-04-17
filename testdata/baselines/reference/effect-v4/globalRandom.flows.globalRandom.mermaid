@@ -6,14 +6,15 @@ flowchart TB
   4[/"type: number<br/>node: MyMath.random#40;#41;"/]
   5((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  return Math.random#40;#41;#92;n#125;#41;")))
   6[/"type: number<br/>node: Math.random#40;#41;"/]
-  7[/"type: #123; #lt;Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;f: #40;#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #lt;Self, Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;options: #123; readonly self: Self; #125;, f: #40;this: Self#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #125;<br/>node: Effect.gen"/]
-  8((("type: Effect#lt;#40;#41; =#gt; number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const fn = #40;#41; =#gt; Math.random#40;#41;#92;n  return fn#92;n#125;#41;")))
-  9[/"type: #40;#41; =#gt; number<br/>node: fn"/]
-  10[/"type: #123; #lt;Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;f: #40;#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #lt;Self, Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;options: #123; readonly self: Self; #125;, f: #40;this: Self#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #125;<br/>node: Effect.gen"/]
+  7((("type: Effect#lt;#40;#41; =#gt; number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const fn = #40;#41; =#gt; Math.random#40;#41;#92;n  return fn#92;n#125;#41;")))
+  8[/"type: #40;#41; =#gt; number<br/>node: fn"/]
+  9[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; Math.random#40;#41;"]]
+  10[/"type: number<br/>node: Math.random#40;#41;"/]
   11[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; #123;#92;n  const Math = #123; random: #40;#41; =#gt; 0.5 #125;#92;n  return Math.random#40;#41;#92;n#125;"]]
   12[/"type: number<br/>node: Math.random#40;#41;"/]
   13[/"type: #123; random: #40;#41; =#gt; number; #125;<br/>node: #123; random: #40;#41; =#gt; 0.5 #125;"/]
   2 -->|"kind: potentialReturn"| 1
   6 -->|"kind: potentialReturn"| 5
-  9 -->|"kind: potentialReturn"| 8
+  8 -->|"kind: potentialReturn"| 7
+  10 -->|"kind: potentialReturn"| 9
   12 -->|"kind: potentialReturn"| 11

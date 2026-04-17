@@ -1,15 +1,14 @@
 flowchart TB
   0((("type: Effect#lt;void, string, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  yield* Effect.log#40;#quot;before#quot;#41;#92;n  yield* Effect.fail#40;#quot;boom#quot;#41;#92;n#125;#41;")))
   1[/"type: #quot;before#quot;<br/>node: #quot;before#quot;"/]
-  2["type: Effect#lt;void, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  3[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
-  4[/"type: #quot;boom#quot;<br/>node: #quot;boom#quot;"/]
-  5["type: Effect#lt;never, string, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  6[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  7[/"type: #123; #lt;Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;f: #40;#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #lt;Self, Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;options: #123; readonly self: Self; #125;, f: #40;this: Self#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #125;<br/>node: Effect.gen"/]
+  2["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  3[/"type: #quot;boom#quot;<br/>node: #quot;boom#quot;"/]
+  4["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  5[/"type: void<br/>node: yield* Effect.log#40;#quot;before#quot;#41;"/]
+  6[/"type: never<br/>node: yield* Effect.fail#40;#quot;boom#quot;#41;"/]
   1 -->|"kind: pipe"| 2
-  3 -->|"kind: transformCallee"| 2
+  2 -->|"kind: transformCallee"| 2
   2 -->|"kind: yieldable"| 0
-  4 -->|"kind: pipe"| 5
-  6 -->|"kind: transformCallee"| 5
-  5 -->|"kind: yieldable"| 0
+  3 -->|"kind: pipe"| 4
+  4 -->|"kind: transformCallee"| 4
+  4 -->|"kind: yieldable"| 0

@@ -6,10 +6,9 @@ flowchart TB
   4[/"type: Promise#lt;number#gt;<br/>node: new MyPromise#lt;number#gt;#40;#40;resolve#41; =#gt; resolve#40;3#41;#41;"/]
   5((("type: Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  return new Promise#lt;number#gt;#40;#40;resolve#41; =#gt; resolve#40;4#41;#41;#92;n#125;#41;")))
   6[/"type: Promise#lt;number#gt;<br/>node: new Promise#lt;number#gt;#40;#40;resolve#41; =#gt; resolve#40;4#41;#41;"/]
-  7[/"type: #123; #lt;Eff extends YieldWrap#lt;Effect#lt;any, any, any#gt;#gt;, AEff#gt;#40;f: #40;resume: Adapter#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;YieldWrap#lt;Effect#lt;infer _A, infer E, infer _R#gt;#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;YieldWrap#lt;Effect#lt;infer _A, infer _E, infer R#gt;#gt;#93; ? R : never#gt;; #lt;Self, Eff extends YieldWrap#lt;Effect#lt;any, any, any#gt;#gt;, AEff#gt;#40;self: Self, f: #40;this: Self, resume: Adapter#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;YieldWrap#lt;Effect#lt;infer _A, infer E, infer _R#gt;#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;YieldWrap#lt;Effect#lt;infer _A, infer _E, infer R#gt;#gt;#93; ? R : never#gt;; #125;<br/>node: Effect.gen"/]
-  8[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: #40;#41; =#gt; #123;#92;n  class Promise#lt;A#gt; #123;#92;n    constructor#40;readonly value: A#41; #123;#125;#92;n  #125;#92;n  return new Promise#40;5#41;#92;n#125;"]]
-  9[/"type: Promise#lt;number#gt;<br/>node: new Promise#40;5#41;"/]
-  10[["type: any<br/>node: constructor#40;readonly value: A#41; #123;#125;"]]
+  7[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: #40;#41; =#gt; #123;#92;n  class Promise#lt;A#gt; #123;#92;n    constructor#40;readonly value: A#41; #123;#125;#92;n  #125;#92;n  return new Promise#40;5#41;#92;n#125;"]]
+  8[/"type: Promise#lt;number#gt;<br/>node: new Promise#40;5#41;"/]
+  9[["type: any<br/>node: constructor#40;readonly value: A#41; #123;#125;"]]
   2 -->|"kind: potentialReturn"| 1
   6 -->|"kind: potentialReturn"| 5
-  9 -->|"kind: potentialReturn"| 8
+  8 -->|"kind: potentialReturn"| 7

@@ -6,16 +6,18 @@ flowchart TB
   4[/"type: number<br/>node: MyDate.now#40;#41;"/]
   5((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const now = Date.now#40;#41;#92;n  return now#92;n#125;#41;")))
   6[/"type: number<br/>node: now"/]
-  7[/"type: #123; #lt;Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;f: #40;#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #lt;Self, Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;options: #123; readonly self: Self; #125;, f: #40;this: Self#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #125;<br/>node: Effect.gen"/]
+  7[/"type: number<br/>node: Date.now#40;#41;"/]
   8((("type: Effect#lt;Date, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  return new Date#40;#quot;2024-01-01#quot;#41;#92;n#125;")))
   9[/"type: Date<br/>node: new Date#40;#quot;2024-01-01#quot;#41;"/]
   10[["type: #40;#41; =#gt; Effect#lt;Date, never, never#gt;<br/>node: Effect.fn#40;#quot;newDateWithArgsInFn#quot;#41;#40;function*#40;#41; #123;#92;n  return new Date#40;#quot;2024-01-01#quot;#41;#92;n#125;#41;"]]
   11[/"type: Traced<br/>node: Effect.fn#40;#quot;newDateWithArgsInFn#quot;#41;"/]
   12((("type: Effect#lt;#40;#41; =#gt; number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const fn = #40;#41; =#gt; Date.now#40;#41;#92;n  return fn#92;n#125;#41;")))
   13[/"type: #40;#41; =#gt; number<br/>node: fn"/]
-  14[/"type: #123; #lt;Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;f: #40;#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #lt;Self, Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;options: #123; readonly self: Self; #125;, f: #40;this: Self#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #125;<br/>node: Effect.gen"/]
+  14[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; Date.now#40;#41;"]]
+  15[/"type: number<br/>node: Date.now#40;#41;"/]
   2 -->|"kind: potentialReturn"| 1
   6 -->|"kind: potentialReturn"| 5
   9 -->|"kind: potentialReturn"| 8
   8 -->|"kind: potentialReturn"| 10
   13 -->|"kind: potentialReturn"| 12
+  15 -->|"kind: potentialReturn"| 14

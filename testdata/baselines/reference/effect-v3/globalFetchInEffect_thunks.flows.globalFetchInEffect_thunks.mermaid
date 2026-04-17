@@ -1,25 +1,22 @@
 flowchart TB
   0[/"type: #quot;ExampleError#quot;<br/>node: #quot;ExampleError#quot;"/]
-  1["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;ExampleError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: <br/>args: #91;#93;"]
-  2[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
-  3[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;https://example.com/sync#quot;#41;"]]
-  4[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;https://example.com/sync#quot;#41;"/]
-  5["type: Effect#lt;Promise#lt;Response#gt;, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  6[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
-  7[/"type: Effect#lt;Promise#lt;Response#gt;, ExampleError, never#gt;<br/>node: Effect.try#40;#123;#92;n  try: #40;#41; =#gt; fetch#40;#quot;https://example.com/try#quot;#41;,#92;n  catch: #40;#41; =#gt; new ExampleError#40;#41;#92;n#125;#41;"/]
-  8[/"type: Effect#lt;Response, UnknownException, never#gt;<br/>node: Effect.tryPromise#40;async #40;#41; =#gt; fetch#40;#quot;https://example.com/try-promise#quot;#41;#41;"/]
-  9[/"type: Effect#lt;Response, ExampleError, never#gt;<br/>node: Effect.tryPromise#40;#123;#92;n  try: async #40;#41; =#gt; fetch#40;#quot;https://example.com/try-promise-object#quot;#41;,#92;n  catch: #40;#41; =#gt; new ExampleError#40;#41;#92;n#125;#41;"/]
-  10[["type: #40;#41; =#gt; #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; #40;#41; =#gt; fetch#40;#quot;https://example.com/nested#quot;#41;"]]
-  11[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;https://example.com/nested#quot;#41;"]]
-  12[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;https://example.com/nested#quot;#41;"/]
-  13["type: Effect#lt;#40;#41; =#gt; Promise#lt;Response#gt;, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  14[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
+  1["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;ExampleError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  2[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;https://example.com/sync#quot;#41;"]]
+  3[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;https://example.com/sync#quot;#41;"/]
+  4["type: Effect#lt;Promise#lt;Response#gt;, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
+  5[/"type: Effect#lt;Promise#lt;Response#gt;, ExampleError, never#gt;<br/>node: Effect.try#40;#123;#92;n  try: #40;#41; =#gt; fetch#40;#quot;https://example.com/try#quot;#41;,#92;n  catch: #40;#41; =#gt; new ExampleError#40;#41;#92;n#125;#41;"/]
+  6[/"type: Effect#lt;Response, UnknownException, never#gt;<br/>node: Effect.tryPromise#40;async #40;#41; =#gt; fetch#40;#quot;https://example.com/try-promise#quot;#41;#41;"/]
+  7[/"type: Effect#lt;Response, ExampleError, never#gt;<br/>node: Effect.tryPromise#40;#123;#92;n  try: async #40;#41; =#gt; fetch#40;#quot;https://example.com/try-promise-object#quot;#41;,#92;n  catch: #40;#41; =#gt; new ExampleError#40;#41;#92;n#125;#41;"/]
+  8[["type: #40;#41; =#gt; #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; #40;#41; =#gt; fetch#40;#quot;https://example.com/nested#quot;#41;"]]
+  9[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;https://example.com/nested#quot;#41;"]]
+  10[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;https://example.com/nested#quot;#41;"/]
+  11["type: Effect#lt;#40;#41; =#gt; Promise#lt;Response#gt;, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
   0 -->|"kind: pipe"| 1
-  2 -->|"kind: transformCallee"| 1
-  4 -->|"kind: potentialReturn"| 3
-  3 -->|"kind: pipe"| 5
-  6 -->|"kind: transformCallee"| 5
-  12 -->|"kind: potentialReturn"| 11
-  11 -->|"kind: potentialReturn"| 10
-  10 -->|"kind: pipe"| 13
-  14 -->|"kind: transformCallee"| 13
+  1 -->|"kind: transformCallee"| 1
+  3 -->|"kind: potentialReturn"| 2
+  2 -->|"kind: pipe"| 4
+  4 -->|"kind: transformCallee"| 4
+  10 -->|"kind: potentialReturn"| 9
+  9 -->|"kind: potentialReturn"| 8
+  8 -->|"kind: pipe"| 11
+  11 -->|"kind: transformCallee"| 11

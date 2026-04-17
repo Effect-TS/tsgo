@@ -3,25 +3,24 @@ flowchart TB
   1[/"type: never<br/>node: yield* Effect.fail#40;#quot;query too short#quot;#41;"/]
   2[/"type: boolean<br/>node: yield* Effect.succeed#40;true#41;"/]
   3[/"type: #quot;#quot;<br/>node: #quot;#quot;"/]
-  4["type: Effect#lt;string, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  5[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  6[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.annotateCurrentSpan#40;#quot;query#quot;, query#41;"/]
-  7[/"type: #quot;query too short#quot;<br/>node: #quot;query too short#quot;"/]
-  8["type: Effect#lt;never, string, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  9[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  10[/"type: true<br/>node: true"/]
-  11["type: Effect#lt;boolean, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  12[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  13[/"type: #123; #lt;Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;f: #40;#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #lt;Self, Eff extends Yieldable#lt;any, any, any, any#gt;, AEff#gt;#40;options: #123; readonly self: Self; #125;, f: #40;this: Self#41; =#gt; Generator#lt;Eff, AEff, never#gt;#41;: Effect#lt;AEff, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer E, infer _R#gt;#93; ? E : never, #91;Eff#93; extends #91;never#93; ? never : #91;Eff#93; extends #91;Yieldable#lt;infer _S extends Yieldable#lt;any, any, any, any#gt;, infer _A, infer _E, infer R#gt;#93; ? R : never#gt;; #125;<br/>node: Effect.gen"/]
+  4["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  5[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.annotateCurrentSpan#40;#quot;query#quot;, query#41;"/]
+  6[/"type: #quot;query too short#quot;<br/>node: #quot;query too short#quot;"/]
+  7["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  8[/"type: true<br/>node: true"/]
+  9["type: Effect#lt;boolean, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  10[/"type: string<br/>node: yield* Effect.succeed#40;#quot;#quot;#41;"/]
+  11[/"type: void<br/>node: yield* Effect.annotateCurrentSpan#40;#quot;query#quot;, query#41;"/]
+  12[/"type: boolean<br/>node: query.length #lt; 3"/]
   1 -->|"kind: potentialReturn"| 0
   2 -->|"kind: potentialReturn"| 0
   3 -->|"kind: pipe"| 4
-  5 -->|"kind: transformCallee"| 4
+  4 -->|"kind: transformCallee"| 4
   4 -->|"kind: yieldable"| 0
-  6 -->|"kind: yieldable"| 0
-  7 -->|"kind: pipe"| 8
-  9 -->|"kind: transformCallee"| 8
-  8 -->|"kind: yieldable"| 0
-  10 -->|"kind: pipe"| 11
-  12 -->|"kind: transformCallee"| 11
-  11 -->|"kind: yieldable"| 0
+  5 -->|"kind: yieldable"| 0
+  6 -->|"kind: pipe"| 7
+  7 -->|"kind: transformCallee"| 7
+  7 -->|"kind: yieldable"| 0
+  8 -->|"kind: pipe"| 9
+  9 -->|"kind: transformCallee"| 9
+  9 -->|"kind: yieldable"| 0

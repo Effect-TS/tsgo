@@ -2,29 +2,25 @@ flowchart TB
   0[/"type: Class#lt;MySchema, Struct#lt;#123; readonly name: String; #125;#gt;, #123;#125;#gt;<br/>node: Schema.Class#lt;MySchema#gt;#40;#quot;MySchema#quot;#41;#40;#123;#92;n  name: Schema.String,#92;n#125;#41;"/]
   1[/"type: boolean<br/>node: value instanceof MySchema"/]
   2[/"type: #quot;is my schema#quot;<br/>node: #quot;is my schema#quot;"/]
-  3["type: void<br/>callee: <br/>args: #91;#93;"]
-  4[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
-  5[/"type: Class#lt;PersonSchema, Struct#lt;#123; readonly name: String; #125;#gt;, #123;#125;#gt;<br/>node: Schema.Class#lt;PersonSchema#gt;#40;#quot;MySchema#quot;#41;#40;#123;#92;n  name: Schema.String,#92;n#125;#41;"/]
-  6[["type: #40;x: unknown#41; =#gt; x is PersonSchema<br/>node: #40;x: unknown#41; =#gt; x instanceof PersonSchema"]]
-  7[/"type: boolean<br/>node: x instanceof PersonSchema"/]
-  8[/"type: boolean<br/>node: value instanceof MyClass"/]
-  9[/"type: #quot;is my class#quot;<br/>node: #quot;is my class#quot;"/]
-  10["type: void<br/>callee: <br/>args: #91;#93;"]
-  11[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
-  12[/"type: boolean<br/>node: value instanceof Date"/]
-  13[/"type: #quot;is date#quot;<br/>node: #quot;is date#quot;"/]
-  14["type: void<br/>callee: <br/>args: #91;#93;"]
-  15[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
-  16[/"type: boolean<br/>node: value instanceof RegExp"/]
-  17[/"type: #quot;is regexp#quot;<br/>node: #quot;is regexp#quot;"/]
-  18["type: void<br/>callee: <br/>args: #91;#93;"]
-  19[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
+  3["type: void<br/>callee: console.log<br/>args: #91;#93;"]
+  4[/"type: Class#lt;PersonSchema, Struct#lt;#123; readonly name: String; #125;#gt;, #123;#125;#gt;<br/>node: Schema.Class#lt;PersonSchema#gt;#40;#quot;MySchema#quot;#41;#40;#123;#92;n  name: Schema.String,#92;n#125;#41;"/]
+  5[["type: #40;x: unknown#41; =#gt; x is PersonSchema<br/>node: #40;x: unknown#41; =#gt; x instanceof PersonSchema"]]
+  6[/"type: boolean<br/>node: x instanceof PersonSchema"/]
+  7[/"type: boolean<br/>node: value instanceof MyClass"/]
+  8[/"type: #quot;is my class#quot;<br/>node: #quot;is my class#quot;"/]
+  9["type: void<br/>callee: console.log<br/>args: #91;#93;"]
+  10[/"type: boolean<br/>node: value instanceof Date"/]
+  11[/"type: #quot;is date#quot;<br/>node: #quot;is date#quot;"/]
+  12["type: void<br/>callee: console.log<br/>args: #91;#93;"]
+  13[/"type: boolean<br/>node: value instanceof RegExp"/]
+  14[/"type: #quot;is regexp#quot;<br/>node: #quot;is regexp#quot;"/]
+  15["type: void<br/>callee: console.log<br/>args: #91;#93;"]
   2 -->|"kind: pipe"| 3
-  4 -->|"kind: transformCallee"| 3
-  7 -->|"kind: potentialReturn"| 6
-  9 -->|"kind: pipe"| 10
-  11 -->|"kind: transformCallee"| 10
-  13 -->|"kind: pipe"| 14
-  15 -->|"kind: transformCallee"| 14
-  17 -->|"kind: pipe"| 18
-  19 -->|"kind: transformCallee"| 18
+  3 -->|"kind: transformCallee"| 3
+  6 -->|"kind: potentialReturn"| 5
+  8 -->|"kind: pipe"| 9
+  9 -->|"kind: transformCallee"| 9
+  11 -->|"kind: pipe"| 12
+  12 -->|"kind: transformCallee"| 12
+  14 -->|"kind: pipe"| 15
+  15 -->|"kind: transformCallee"| 15

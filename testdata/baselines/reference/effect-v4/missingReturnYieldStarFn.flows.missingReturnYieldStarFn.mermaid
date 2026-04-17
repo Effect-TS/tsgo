@@ -1,68 +1,61 @@
 flowchart TB
   0((("type: Effect#lt;void, string, never#gt;<br/>node: function*#40;#41;#123;#92;n    yield* Effect.fail#40;#quot;no#quot;#41; // #lt;- should emit an error be return yield*#92;n#125;")))
   1[/"type: #quot;no#quot;<br/>node: #quot;no#quot;"/]
-  2["type: Effect#lt;never, string, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  3[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  4[["type: #40;#41; =#gt; Effect#lt;void, string, never#gt;<br/>node: Effect.fn#40;function*#40;#41;#123;#92;n    yield* Effect.fail#40;#quot;no#quot;#41; // #lt;- should emit an error be return yield*#92;n#125;#41;"]]
-  5[/"type: Traced #amp; #40;#40;name: string, options?: SpanOptionsNoTrace #124; undefined#41; =#gt; Traced#41;<br/>node: Effect.fn"/]
-  6((("type: Effect#lt;void, string, never#gt;<br/>node: function* namedFn#40;#41;#123;#92;n    yield* Effect.fail#40;#quot;no#quot;#41; // #lt;- should emit an error be return yield*#92;n#125;")))
-  7[/"type: #quot;no#quot;<br/>node: #quot;no#quot;"/]
-  8["type: Effect#lt;never, string, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  9[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  10[["type: #40;#41; =#gt; Effect#lt;void, string, never#gt;<br/>node: Effect.fn#40;#quot;named#quot;#41;#40;function* namedFn#40;#41;#123;#92;n    yield* Effect.fail#40;#quot;no#quot;#41; // #lt;- should emit an error be return yield*#92;n#125;#41;"]]
-  11[/"type: Traced<br/>node: Effect.fn#40;#quot;named#quot;#41;"/]
-  12((("type: Effect#lt;never, string, never#gt;<br/>node: #40;a: string#41; =#gt; #123;#92;n    return Effect.fail#40;a#41;#92;n#125;")))
-  13[/"type: string<br/>node: a"/]
-  14["type: Effect#lt;never, string, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  15[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  16[["type: #40;a: string#41; =#gt; Effect#lt;never, string, never#gt;<br/>node: Effect.fn#40;#40;a: string#41; =#gt; #123;#92;n    return Effect.fail#40;a#41;#92;n#125;#41;"]]
-  17[/"type: Traced #amp; #40;#40;name: string, options?: SpanOptionsNoTrace #124; undefined#41; =#gt; Traced#41;<br/>node: Effect.fn"/]
-  18[/"type: 42<br/>node: 42"/]
-  19((("type: Effect#lt;void, number, never#gt;<br/>node: function*#40;#41;#123;#92;n        yield* Effect.fail#40;this.a#41; // #lt;- should emit an error be return yield*#92;n    #125;")))
-  20[/"type: number<br/>node: this.a"/]
-  21["type: Effect#lt;never, number, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  22[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  23[["type: #40;#41; =#gt; Effect#lt;void, number, never#gt;<br/>node: Effect.fn#40;#123;self: this#125;, function*#40;#41;#123;#92;n        yield* Effect.fail#40;this.a#41; // #lt;- should emit an error be return yield*#92;n    #125;#41;"]]
-  24[/"type: Traced #amp; #40;#40;name: string, options?: SpanOptionsNoTrace #124; undefined#41; =#gt; Traced#41;<br/>node: Effect.fn"/]
-  25[/"type: #123; self: this; #125;<br/>node: #123;self: this#125;"/]
-  26((("type: Effect#lt;void, number, never#gt;<br/>node: function* namedFn#40;#41;#123;#92;n        yield* Effect.fail#40;this.a#41; // #lt;- should emit an error be return yield*#92;n    #125;")))
-  27[/"type: number<br/>node: this.a"/]
-  28["type: Effect#lt;never, number, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  29[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  30[["type: #40;#41; =#gt; Effect#lt;void, number, never#gt;<br/>node: Effect.fn#40;#quot;named#quot;#41;#40;#123;self: this#125;, function* namedFn#40;#41;#123;#92;n        yield* Effect.fail#40;this.a#41; // #lt;- should emit an error be return yield*#92;n    #125;#41;"]]
-  31[/"type: Traced<br/>node: Effect.fn#40;#quot;named#quot;#41;"/]
-  32[/"type: #123; self: this; #125;<br/>node: #123;self: this#125;"/]
-  33((("type: Effect#lt;void, string, never#gt;<br/>node: function* namedFn#40;#41;#123;#92;n    yield* Effect.fail#40;#quot;no#quot;#41; // #lt;- should emit an error be return yield*#92;n#125;")))
-  34["type: Effect#lt;void, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  35[/"type: #lt;Arg extends Effect#lt;any, any, any#gt; #124; #123; readonly log?: boolean #124; Severity #124; undefined; readonly message?: string #124; undefined; #125; #124; undefined = #123; readonly log?: boolean #124; Severity #124; undefined; readonly message?: string #124; undefined; #125;#gt;#40;effectOrOptions?: Arg #124; undefined, options?: #123; readonly log?: boolean #124; Severity #124; undefined; readonly message?: string #124; undefined; #125; #124; undefined#41; =#gt; #91;Arg#93; extends #91;Effect#lt;infer _A, infer _E, infer _R#gt;#93; ? Effect#lt;void, never, _R#gt; : #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;void, never, R#gt;<br/>node: Effect.ignore"/]
-  36[/"type: #quot;no#quot;<br/>node: #quot;no#quot;"/]
-  37["type: Effect#lt;never, string, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  38[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  39[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.fn#40;#quot;named#quot;#41;#40;function* namedFn#40;#41;#123;#92;n    yield* Effect.fail#40;#quot;no#quot;#41; // #lt;- should emit an error be return yield*#92;n#125;, Effect.ignore#41;"]]
-  40[/"type: Traced<br/>node: Effect.fn#40;#quot;named#quot;#41;"/]
+  2["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  3[["type: #40;#41; =#gt; Effect#lt;void, string, never#gt;<br/>node: Effect.fn#40;function*#40;#41;#123;#92;n    yield* Effect.fail#40;#quot;no#quot;#41; // #lt;- should emit an error be return yield*#92;n#125;#41;"]]
+  4[/"type: Traced #amp; #40;#40;name: string, options?: SpanOptionsNoTrace #124; undefined#41; =#gt; Traced#41;<br/>node: Effect.fn"/]
+  5((("type: Effect#lt;void, string, never#gt;<br/>node: function* namedFn#40;#41;#123;#92;n    yield* Effect.fail#40;#quot;no#quot;#41; // #lt;- should emit an error be return yield*#92;n#125;")))
+  6[/"type: #quot;no#quot;<br/>node: #quot;no#quot;"/]
+  7["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  8[["type: #40;#41; =#gt; Effect#lt;void, string, never#gt;<br/>node: Effect.fn#40;#quot;named#quot;#41;#40;function* namedFn#40;#41;#123;#92;n    yield* Effect.fail#40;#quot;no#quot;#41; // #lt;- should emit an error be return yield*#92;n#125;#41;"]]
+  9[/"type: Traced<br/>node: Effect.fn#40;#quot;named#quot;#41;"/]
+  10((("type: Effect#lt;never, string, never#gt;<br/>node: #40;a: string#41; =#gt; #123;#92;n    return Effect.fail#40;a#41;#92;n#125;")))
+  11[/"type: string<br/>node: a"/]
+  12["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  13[["type: #40;a: string#41; =#gt; Effect#lt;never, string, never#gt;<br/>node: Effect.fn#40;#40;a: string#41; =#gt; #123;#92;n    return Effect.fail#40;a#41;#92;n#125;#41;"]]
+  14[/"type: Traced #amp; #40;#40;name: string, options?: SpanOptionsNoTrace #124; undefined#41; =#gt; Traced#41;<br/>node: Effect.fn"/]
+  15[/"type: 42<br/>node: 42"/]
+  16((("type: Effect#lt;void, number, never#gt;<br/>node: function*#40;#41;#123;#92;n        yield* Effect.fail#40;this.a#41; // #lt;- should emit an error be return yield*#92;n    #125;")))
+  17[/"type: number<br/>node: this.a"/]
+  18["type: Effect#lt;never, number, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  19[["type: #40;#41; =#gt; Effect#lt;void, number, never#gt;<br/>node: Effect.fn#40;#123;self: this#125;, function*#40;#41;#123;#92;n        yield* Effect.fail#40;this.a#41; // #lt;- should emit an error be return yield*#92;n    #125;#41;"]]
+  20[/"type: Traced #amp; #40;#40;name: string, options?: SpanOptionsNoTrace #124; undefined#41; =#gt; Traced#41;<br/>node: Effect.fn"/]
+  21[/"type: #123; self: this; #125;<br/>node: #123;self: this#125;"/]
+  22((("type: Effect#lt;void, number, never#gt;<br/>node: function* namedFn#40;#41;#123;#92;n        yield* Effect.fail#40;this.a#41; // #lt;- should emit an error be return yield*#92;n    #125;")))
+  23[/"type: number<br/>node: this.a"/]
+  24["type: Effect#lt;never, number, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  25[["type: #40;#41; =#gt; Effect#lt;void, number, never#gt;<br/>node: Effect.fn#40;#quot;named#quot;#41;#40;#123;self: this#125;, function* namedFn#40;#41;#123;#92;n        yield* Effect.fail#40;this.a#41; // #lt;- should emit an error be return yield*#92;n    #125;#41;"]]
+  26[/"type: Traced<br/>node: Effect.fn#40;#quot;named#quot;#41;"/]
+  27[/"type: #123; self: this; #125;<br/>node: #123;self: this#125;"/]
+  28((("type: Effect#lt;void, string, never#gt;<br/>node: function* namedFn#40;#41;#123;#92;n    yield* Effect.fail#40;#quot;no#quot;#41; // #lt;- should emit an error be return yield*#92;n#125;")))
+  29["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.ignore<br/>args: #91;#93;"]
+  30[/"type: #quot;no#quot;<br/>node: #quot;no#quot;"/]
+  31["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  32[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.fn#40;#quot;named#quot;#41;#40;function* namedFn#40;#41;#123;#92;n    yield* Effect.fail#40;#quot;no#quot;#41; // #lt;- should emit an error be return yield*#92;n#125;, Effect.ignore#41;"]]
+  33[/"type: Traced<br/>node: Effect.fn#40;#quot;named#quot;#41;"/]
   1 -->|"kind: pipe"| 2
-  3 -->|"kind: transformCallee"| 2
+  2 -->|"kind: transformCallee"| 2
   2 -->|"kind: yieldable"| 0
-  0 -->|"kind: potentialReturn"| 4
-  7 -->|"kind: pipe"| 8
-  9 -->|"kind: transformCallee"| 8
-  8 -->|"kind: yieldable"| 6
-  6 -->|"kind: potentialReturn"| 10
-  13 -->|"kind: pipe"| 14
-  15 -->|"kind: transformCallee"| 14
-  14 -->|"kind: potentialReturn"| 12
-  12 -->|"kind: potentialReturn"| 16
-  20 -->|"kind: pipe"| 21
-  22 -->|"kind: transformCallee"| 21
-  21 -->|"kind: yieldable"| 19
-  19 -->|"kind: potentialReturn"| 23
-  27 -->|"kind: pipe"| 28
-  29 -->|"kind: transformCallee"| 28
-  28 -->|"kind: yieldable"| 26
-  26 -->|"kind: potentialReturn"| 30
-  35 -->|"kind: transformCallee"| 34
-  33 -->|"kind: fnPipe"| 34
-  36 -->|"kind: pipe"| 37
-  38 -->|"kind: transformCallee"| 37
-  37 -->|"kind: yieldable"| 33
-  34 -->|"kind: potentialReturn"| 39
+  0 -->|"kind: potentialReturn"| 3
+  6 -->|"kind: pipe"| 7
+  7 -->|"kind: transformCallee"| 7
+  7 -->|"kind: yieldable"| 5
+  5 -->|"kind: potentialReturn"| 8
+  11 -->|"kind: pipe"| 12
+  12 -->|"kind: transformCallee"| 12
+  12 -->|"kind: potentialReturn"| 10
+  10 -->|"kind: potentialReturn"| 13
+  17 -->|"kind: pipe"| 18
+  18 -->|"kind: transformCallee"| 18
+  18 -->|"kind: yieldable"| 16
+  16 -->|"kind: potentialReturn"| 19
+  23 -->|"kind: pipe"| 24
+  24 -->|"kind: transformCallee"| 24
+  24 -->|"kind: yieldable"| 22
+  22 -->|"kind: potentialReturn"| 25
+  29 -->|"kind: transformCallee"| 29
+  28 -->|"kind: fnPipe"| 29
+  30 -->|"kind: pipe"| 31
+  31 -->|"kind: transformCallee"| 31
+  31 -->|"kind: yieldable"| 28
+  29 -->|"kind: potentialReturn"| 32
