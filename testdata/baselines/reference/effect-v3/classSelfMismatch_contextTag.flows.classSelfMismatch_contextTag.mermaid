@@ -1,11 +1,15 @@
 flowchart TB
-  0[/"type: #quot;ValidContextTag#quot;<br/>node: #quot;ValidContextTag#quot;"/]
-  1["type: #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, #quot;ValidContextTag#quot;, Shape#gt;<br/>callee: Context.Tag<br/>args: #91;#93;"]
-  2[/"type: #lt;const Id extends string#gt;#40;id: Id#41; =#gt; #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, Id, Shape#gt;<br/>node: Context.Tag"/]
-  3[/"type: #quot;ValidContextTag#quot;<br/>node: #quot;ValidContextTag#quot;"/]
-  4["type: #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, #quot;ValidContextTag#quot;, Shape#gt;<br/>callee: Context.Tag<br/>args: #91;#93;"]
-  5[/"type: #lt;const Id extends string#gt;#40;id: Id#41; =#gt; #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, Id, Shape#gt;<br/>node: Context.Tag"/]
-  0 -->|"kind: pipe"| 1
-  2 -->|"kind: transformCallee"| 1
-  3 -->|"kind: pipe"| 4
-  5 -->|"kind: transformCallee"| 4
+  0[/"type: TagClass#lt;ValidContextTag, #quot;ValidContextTag#quot;, ServiceShape#gt;<br/>node: Context.Tag#40;#quot;ValidContextTag#quot;#41;#lt;ValidContextTag, ServiceShape#gt;#40;#41;"/]
+  1[/"type: #quot;ValidContextTag#quot;<br/>node: #quot;ValidContextTag#quot;"/]
+  2["type: #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, #quot;ValidContextTag#quot;, Shape#gt;<br/>callee: Context.Tag<br/>args: #91;#93;"]
+  3[/"type: #lt;const Id extends string#gt;#40;id: Id#41; =#gt; #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, Id, Shape#gt;<br/>node: Context.Tag"/]
+  4[/"type: TagClass#lt;ValidContextTag, #quot;ValidContextTag#quot;, ServiceShape#gt;<br/>node: Context.Tag#40;#quot;ValidContextTag#quot;#41;#lt;ValidContextTag, ServiceShape#gt;#40;#41;"/]
+  5[/"type: #quot;ValidContextTag#quot;<br/>node: #quot;ValidContextTag#quot;"/]
+  6["type: #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, #quot;ValidContextTag#quot;, Shape#gt;<br/>callee: Context.Tag<br/>args: #91;#93;"]
+  7[/"type: #lt;const Id extends string#gt;#40;id: Id#41; =#gt; #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, Id, Shape#gt;<br/>node: Context.Tag"/]
+  1 -->|"kind: pipe"| 2
+  3 -->|"kind: transformCallee"| 2
+  2 -->|"kind: usedBy"| 0
+  5 -->|"kind: pipe"| 6
+  7 -->|"kind: transformCallee"| 6
+  6 -->|"kind: usedBy"| 4

@@ -2,67 +2,56 @@ flowchart TB
   0[/"type: #quot;DebuggerError#quot;<br/>node: #quot;DebuggerError#quot;"/]
   1["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;DebuggerError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
   2[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
-  3[/"type: Effect#lt;void, DebuggerError, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const response = yield* Effect.tryPromise#40;#123;#92;n    try: #40;#41; =#gt; fetch#40;#quot;http://localhost:9229#quot;#41;,#92;n    catch: #40;e#41; =#gt; new DebuggerError#40;#123; cause: e #125;#41;#92;n  #125;#41;#92;n  const data = yield* Effect.promise#40;#40;#41; =#gt; response.json#40;#41;#41;#92;n#92;n  const websocket = Effect.runSync#40;Effect.sync#40;#40;#41; =#gt; new WebSocket#40;data.url#41;#41;#41;#92;n  //                        ^- do not runSync in here#92;n#92;n  websocket.onmessage = #40;event#41; =#gt; #123;#92;n    const check = Effect.tryPromise#40;#123;#92;n      try: #40;#41; =#gt; fetch#40;event.data as string#41;,#92;n      catch: #40;e#41; =#gt; new DebuggerError#40;#123; cause: e #125;#41;#92;n    #125;#41;#92;n    Effect.runPromise#40;check#41;#92;n    //        ^- no runPromise, use the current services instead#92;n  #125;#92;n#125;#41;"/]
-  4((("type: Effect#lt;Response, DebuggerError, never#gt;<br/>node: Effect.tryPromise#40;#123;#92;n    try: #40;#41; =#gt; fetch#40;#quot;http://localhost:9229#quot;#41;,#92;n    catch: #40;e#41; =#gt; new DebuggerError#40;#123; cause: e #125;#41;#92;n  #125;#41;")))
-  5((("type: Effect#lt;any, never, never#gt;<br/>node: Effect.promise#40;#40;#41; =#gt; response.json#40;#41;#41;")))
-  6[/"type: #123; try: #40;#41; =#gt; Promise#lt;Response#gt;; catch: #40;e: unknown#41; =#gt; DebuggerError; #125;<br/>node: #123;#92;n    try: #40;#41; =#gt; fetch#40;#quot;http://localhost:9229#quot;#41;,#92;n    catch: #40;e#41; =#gt; new DebuggerError#40;#123; cause: e #125;#41;#92;n  #125;"/]
-  7["type: Effect#lt;Response, DebuggerError, never#gt;<br/>callee: Effect.tryPromise<br/>args: #91;#93;"]
-  8[/"type: #lt;A, E = UnknownError#gt;#40;options: #123; readonly try: #40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;; readonly catch: #40;error: unknown#41; =#gt; E; #125; #124; #40;#40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;#41;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.tryPromise"/]
-  9[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;http://localhost:9229#quot;#41;"]]
-  10[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;http://localhost:9229#quot;#41;"/]
-  11[["type: #40;e: unknown#41; =#gt; DebuggerError<br/>node: #40;e#41; =#gt; new DebuggerError#40;#123; cause: e #125;#41;"]]
-  12[/"type: DebuggerError<br/>node: new DebuggerError#40;#123; cause: e #125;#41;"/]
-  13[/"type: unknown<br/>node: e"/]
-  14((("type: #40;#41; =#gt; Promise#lt;any#gt;<br/>node: #40;#41; =#gt; response.json#40;#41;")))
-  15["type: Effect#lt;any, never, never#gt;<br/>callee: Effect.promise<br/>args: #91;#93;"]
-  16[/"type: #lt;A#gt;#40;evaluate: #40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.promise"/]
-  17[["type: #40;#41; =#gt; Promise#lt;any#gt;<br/>node: #40;#41; =#gt; response.json#40;#41;"]]
-  18[/"type: Promise#lt;any#gt;<br/>node: response.json#40;#41;"/]
-  19((("type: Effect#lt;WebSocket, never, never#gt;<br/>node: Effect.sync#40;#40;#41; =#gt; new WebSocket#40;data.url#41;#41;")))
-  20["type: WebSocket<br/>callee: Effect.runSync<br/>args: #91;#93;"]
-  21[/"type: #lt;A, E#gt;#40;effect: Effect#lt;A, E, never#gt;#41; =#gt; A<br/>node: Effect.runSync"/]
-  22((("type: #40;#41; =#gt; WebSocket<br/>node: #40;#41; =#gt; new WebSocket#40;data.url#41;")))
-  23["type: Effect#lt;WebSocket, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
-  24[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
-  25[["type: #40;#41; =#gt; WebSocket<br/>node: #40;#41; =#gt; new WebSocket#40;data.url#41;"]]
-  26[/"type: WebSocket<br/>node: new WebSocket#40;data.url#41;"/]
-  27[["type: #40;this: WebSocket, event: MessageEvent#lt;any#gt;#41; =#gt; void<br/>node: #40;event#41; =#gt; #123;#92;n    const check = Effect.tryPromise#40;#123;#92;n      try: #40;#41; =#gt; fetch#40;event.data as string#41;,#92;n      catch: #40;e#41; =#gt; new DebuggerError#40;#123; cause: e #125;#41;#92;n    #125;#41;#92;n    Effect.runPromise#40;check#41;#92;n    //        ^- no runPromise, use the current services instead#92;n  #125;"]]
-  28((("type: void<br/>node: #40;event#41; =#gt; #123;#92;n    const check = Effect.tryPromise#40;#123;#92;n      try: #40;#41; =#gt; fetch#40;event.data as string#41;,#92;n      catch: #40;e#41; =#gt; new DebuggerError#40;#123; cause: e #125;#41;#92;n    #125;#41;#92;n    Effect.runPromise#40;check#41;#92;n    //        ^- no runPromise, use the current services instead#92;n  #125;")))
-  29[/"type: MessageEvent#lt;any#gt;<br/>node: event"/]
-  30[/"type: #123; try: #40;#41; =#gt; Promise#lt;Response#gt;; catch: #40;e: unknown#41; =#gt; DebuggerError; #125;<br/>node: #123;#92;n      try: #40;#41; =#gt; fetch#40;event.data as string#41;,#92;n      catch: #40;e#41; =#gt; new DebuggerError#40;#123; cause: e #125;#41;#92;n    #125;"/]
-  31["type: Effect#lt;Response, DebuggerError, never#gt;<br/>callee: Effect.tryPromise<br/>args: #91;#93;"]
-  32[/"type: #lt;A, E = UnknownError#gt;#40;options: #123; readonly try: #40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;; readonly catch: #40;error: unknown#41; =#gt; E; #125; #124; #40;#40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;#41;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.tryPromise"/]
-  33[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;event.data as string#41;"]]
-  34[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;event.data as string#41;"/]
-  35[["type: #40;e: unknown#41; =#gt; DebuggerError<br/>node: #40;e#41; =#gt; new DebuggerError#40;#123; cause: e #125;#41;"]]
-  36[/"type: DebuggerError<br/>node: new DebuggerError#40;#123; cause: e #125;#41;"/]
-  37[/"type: unknown<br/>node: e"/]
+  3((("type: Effect#lt;void, DebuggerError, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const response = yield* Effect.tryPromise#40;#123;#92;n    try: #40;#41; =#gt; fetch#40;#quot;http://localhost:9229#quot;#41;,#92;n    catch: #40;e#41; =#gt; new DebuggerError#40;#123; cause: e #125;#41;#92;n  #125;#41;#92;n  const data = yield* Effect.promise#40;#40;#41; =#gt; response.json#40;#41;#41;#92;n#92;n  const websocket = Effect.runSync#40;Effect.sync#40;#40;#41; =#gt; new WebSocket#40;data.url#41;#41;#41;#92;n  //                        ^- do not runSync in here#92;n#92;n  websocket.onmessage = #40;event#41; =#gt; #123;#92;n    const check = Effect.tryPromise#40;#123;#92;n      try: #40;#41; =#gt; fetch#40;event.data as string#41;,#92;n      catch: #40;e#41; =#gt; new DebuggerError#40;#123; cause: e #125;#41;#92;n    #125;#41;#92;n    Effect.runPromise#40;check#41;#92;n    //        ^- no runPromise, use the current services instead#92;n  #125;#92;n#125;#41;")))
+  4[/"type: #123; try: #40;#41; =#gt; Promise#lt;Response#gt;; catch: #40;e: unknown#41; =#gt; DebuggerError; #125;<br/>node: #123;#92;n    try: #40;#41; =#gt; fetch#40;#quot;http://localhost:9229#quot;#41;,#92;n    catch: #40;e#41; =#gt; new DebuggerError#40;#123; cause: e #125;#41;#92;n  #125;"/]
+  5[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;http://localhost:9229#quot;#41;"]]
+  6[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;http://localhost:9229#quot;#41;"/]
+  7[["type: #40;e: unknown#41; =#gt; DebuggerError<br/>node: #40;e#41; =#gt; new DebuggerError#40;#123; cause: e #125;#41;"]]
+  8[/"type: DebuggerError<br/>node: new DebuggerError#40;#123; cause: e #125;#41;"/]
+  9["type: Effect#lt;Response, DebuggerError, never#gt;<br/>callee: Effect.tryPromise<br/>args: #91;#93;"]
+  10[/"type: #lt;A, E = UnknownError#gt;#40;options: #123; readonly try: #40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;; readonly catch: #40;error: unknown#41; =#gt; E; #125; #124; #40;#40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;#41;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.tryPromise"/]
+  11[["type: #40;#41; =#gt; Promise#lt;any#gt;<br/>node: #40;#41; =#gt; response.json#40;#41;"]]
+  12[/"type: Promise#lt;any#gt;<br/>node: response.json#40;#41;"/]
+  13["type: Effect#lt;any, never, never#gt;<br/>callee: Effect.promise<br/>args: #91;#93;"]
+  14[/"type: #lt;A#gt;#40;evaluate: #40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.promise"/]
+  15[["type: #40;#41; =#gt; WebSocket<br/>node: #40;#41; =#gt; new WebSocket#40;data.url#41;"]]
+  16[/"type: WebSocket<br/>node: new WebSocket#40;data.url#41;"/]
+  17["type: Effect#lt;WebSocket, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
+  18[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
+  19["type: WebSocket<br/>callee: Effect.runSync<br/>args: #91;#93;"]
+  20[/"type: #lt;A, E#gt;#40;effect: Effect#lt;A, E, never#gt;#41; =#gt; A<br/>node: Effect.runSync"/]
+  21[["type: #40;this: WebSocket, event: MessageEvent#lt;any#gt;#41; =#gt; void<br/>node: #40;event#41; =#gt; #123;#92;n    const check = Effect.tryPromise#40;#123;#92;n      try: #40;#41; =#gt; fetch#40;event.data as string#41;,#92;n      catch: #40;e#41; =#gt; new DebuggerError#40;#123; cause: e #125;#41;#92;n    #125;#41;#92;n    Effect.runPromise#40;check#41;#92;n    //        ^- no runPromise, use the current services instead#92;n  #125;"]]
+  22[/"type: #123; try: #40;#41; =#gt; Promise#lt;Response#gt;; catch: #40;e: unknown#41; =#gt; DebuggerError; #125;<br/>node: #123;#92;n      try: #40;#41; =#gt; fetch#40;event.data as string#41;,#92;n      catch: #40;e#41; =#gt; new DebuggerError#40;#123; cause: e #125;#41;#92;n    #125;"/]
+  23[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;event.data as string#41;"]]
+  24[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;event.data as string#41;"/]
+  25[["type: #40;e: unknown#41; =#gt; DebuggerError<br/>node: #40;e#41; =#gt; new DebuggerError#40;#123; cause: e #125;#41;"]]
+  26[/"type: DebuggerError<br/>node: new DebuggerError#40;#123; cause: e #125;#41;"/]
+  27["type: Effect#lt;Response, DebuggerError, never#gt;<br/>callee: Effect.tryPromise<br/>args: #91;#93;"]
+  28[/"type: #lt;A, E = UnknownError#gt;#40;options: #123; readonly try: #40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;; readonly catch: #40;error: unknown#41; =#gt; E; #125; #124; #40;#40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;#41;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.tryPromise"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
-  4 -->|"kind: yieldable"| 3
-  5 -->|"kind: yieldable"| 3
-  6 -->|"kind: pipe"| 7
-  7 -->|"kind: connect"| 4
-  8 -->|"kind: transformCallee"| 7
-  10 -->|"kind: potentialReturn"| 9
+  6 -->|"kind: potentialReturn"| 5
+  5 -->|"kind: usedBy"| 4
+  8 -->|"kind: potentialReturn"| 7
+  7 -->|"kind: usedBy"| 4
+  4 -->|"kind: pipe"| 9
+  10 -->|"kind: transformCallee"| 9
+  9 -->|"kind: yieldable"| 3
   12 -->|"kind: potentialReturn"| 11
-  13 -->|"kind: parameter"| 11
-  14 -->|"kind: pipe"| 15
-  15 -->|"kind: connect"| 5
-  16 -->|"kind: transformCallee"| 15
-  18 -->|"kind: potentialReturn"| 17
-  17 -->|"kind: connect"| 14
-  19 -->|"kind: pipe"| 20
-  21 -->|"kind: transformCallee"| 20
-  22 -->|"kind: pipe"| 23
-  23 -->|"kind: connect"| 19
-  24 -->|"kind: transformCallee"| 23
+  11 -->|"kind: pipe"| 13
+  14 -->|"kind: transformCallee"| 13
+  13 -->|"kind: yieldable"| 3
+  16 -->|"kind: potentialReturn"| 15
+  15 -->|"kind: pipe"| 17
+  18 -->|"kind: transformCallee"| 17
+  17 -->|"kind: pipe"| 19
+  20 -->|"kind: transformCallee"| 19
+  19 -->|"kind: usedBy"| 3
+  24 -->|"kind: potentialReturn"| 23
+  23 -->|"kind: usedBy"| 22
   26 -->|"kind: potentialReturn"| 25
-  25 -->|"kind: connect"| 22
-  28 -->|"kind: potentialReturn"| 27
-  29 -->|"kind: parameter"| 27
-  30 -->|"kind: pipe"| 31
-  32 -->|"kind: transformCallee"| 31
-  34 -->|"kind: potentialReturn"| 33
-  36 -->|"kind: potentialReturn"| 35
-  37 -->|"kind: parameter"| 35
+  25 -->|"kind: usedBy"| 22
+  22 -->|"kind: pipe"| 27
+  28 -->|"kind: transformCallee"| 27
+  27 -->|"kind: usedBy"| 21
+  21 -->|"kind: usedBy"| 3

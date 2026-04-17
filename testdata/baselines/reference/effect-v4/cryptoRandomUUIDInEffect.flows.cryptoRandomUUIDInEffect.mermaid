@@ -1,16 +1,21 @@
 flowchart TB
-  0[/"type: Effect#lt;`$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;`, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  return crypto.randomUUID#40;#41;#92;n#125;#41;"/]
+  0((("type: Effect#lt;`$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;`, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  return crypto.randomUUID#40;#41;#92;n#125;#41;")))
   1[/"type: `$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;`<br/>node: crypto.randomUUID#40;#41;"/]
-  2[/"type: Effect#lt;`$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;`, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const globalCrypto = crypto#92;n  return globalCrypto.randomUUID#40;#41;#92;n#125;#41;"/]
+  2((("type: Effect#lt;`$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;`, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const globalCrypto = crypto#92;n  return globalCrypto.randomUUID#40;#41;#92;n#125;#41;")))
   3[/"type: `$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;`<br/>node: globalCrypto.randomUUID#40;#41;"/]
-  4[["type: #40;#41; =#gt; `$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;`<br/>node: #40;#41; =#gt; crypto.randomUUID#40;#41;"]]
-  5[/"type: `$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;`<br/>node: crypto.randomUUID#40;#41;"/]
-  6[/"type: Effect#lt;#40;#41; =#gt; `$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;`, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const fn = #40;#41; =#gt; crypto.randomUUID#40;#41;#92;n  return fn#92;n#125;#41;"/]
-  7[/"type: #40;#41; =#gt; `$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;`<br/>node: fn"/]
-  8[["type: #40;#41; =#gt; `$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;`<br/>node: #40;#41; =#gt; crypto.randomUUID#40;#41;"]]
-  9[/"type: `$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;`<br/>node: crypto.randomUUID#40;#41;"/]
+  4[/"type: `$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;`<br/>node: crypto.randomUUID#40;#41;"/]
+  5[["type: #40;#41; =#gt; `$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;`<br/>node: #40;#41; =#gt; crypto.randomUUID#40;#41;"]]
+  6[/"type: `$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;`<br/>node: crypto.randomUUID#40;#41;"/]
+  7((("type: Effect#lt;#40;#41; =#gt; `$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;`, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const fn = #40;#41; =#gt; crypto.randomUUID#40;#41;#92;n  return fn#92;n#125;#41;")))
+  8[/"type: #40;#41; =#gt; `$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;`<br/>node: fn"/]
+  9[["type: #40;#41; =#gt; `$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;`<br/>node: #40;#41; =#gt; crypto.randomUUID#40;#41;"]]
+  10[/"type: `$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;-$#123;string#125;`<br/>node: crypto.randomUUID#40;#41;"/]
   1 -->|"kind: potentialReturn"| 0
+  1 -->|"kind: usedBy"| 0
   3 -->|"kind: potentialReturn"| 2
-  5 -->|"kind: potentialReturn"| 4
-  7 -->|"kind: potentialReturn"| 6
-  9 -->|"kind: potentialReturn"| 8
+  3 -->|"kind: usedBy"| 2
+  6 -->|"kind: potentialReturn"| 5
+  8 -->|"kind: potentialReturn"| 7
+  10 -->|"kind: potentialReturn"| 9
+  9 -->|"kind: usedBy"| 7
+  8 -->|"kind: usedBy"| 7

@@ -1,71 +1,59 @@
 flowchart TB
-  0[/"type: Effect#lt;#123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n        yield* Effect.log#40;#quot;log#quot;#41;#92;n        return #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;#92;n    #125;#41;"/]
-  1["type: Layer#lt;MyService, never, never#gt;<br/>callee: Layer.effect<br/>args: #91;this#93;"]
-  2[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
-  3[/"type: typeof MyService<br/>node: this"/]
-  4((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;#quot;log#quot;#41;")))
-  5[/"type: #123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;"/]
-  6[/"type: #quot;log#quot;<br/>node: #quot;log#quot;"/]
-  7["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
-  8[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
-  9[["type: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;what: string#41; =#gt; Effect.log#40;what#41;"]]
-  10((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;what#41;")))
-  11[/"type: string<br/>node: what: string"/]
-  12[/"type: string<br/>node: what"/]
-  13["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
-  14[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
-  15[/"type: #123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #123;#92;n        log: #40;what: string#41; =#gt; Effect.log#40;what#41;#92;n    #125;"/]
-  16["type: Layer#lt;MyService, never, never#gt;<br/>callee: Layer.succeed<br/>args: #91;this#93;"]
-  17[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #40;resource: S#41; =#gt; Layer#lt;I, never, never#gt;; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;, resource: NoInfer#lt;S#gt;#41;: Layer#lt;I, never, never#gt;; #125;<br/>node: Layer.succeed"/]
-  18[/"type: typeof MyService<br/>node: this"/]
-  19[["type: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;what: string#41; =#gt; Effect.log#40;what#41;"]]
-  20((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;what#41;")))
-  21[/"type: string<br/>node: what: string"/]
-  22[/"type: string<br/>node: what"/]
-  23["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
-  24[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
-  25((("type: #40;#41; =#gt; #123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #40;#41; =#gt; #123;#92;n        return #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;#92;n    #125;")))
-  26["type: Layer#lt;MyService, never, never#gt;<br/>callee: Layer.sync<br/>args: #91;this#93;"]
-  27[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #40;evaluate: LazyArg#lt;S#gt;#41; =#gt; Layer#lt;I, never, never#gt;; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;, evaluate: LazyArg#lt;NoInfer#lt;S#gt;#gt;#41;: Layer#lt;I, never, never#gt;; #125;<br/>node: Layer.sync"/]
-  28[/"type: typeof MyService<br/>node: this"/]
-  29[["type: #40;#41; =#gt; #123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #40;#41; =#gt; #123;#92;n        return #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;#92;n    #125;"]]
-  30((("type: #123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #40;#41; =#gt; #123;#92;n        return #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;#92;n    #125;")))
-  31[/"type: #123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;"/]
-  32[["type: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;what: string#41; =#gt; Effect.log#40;what#41;"]]
-  33((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;what#41;")))
-  34[/"type: string<br/>node: what: string"/]
-  35[/"type: string<br/>node: what"/]
-  36["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
-  37[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
-  0 -->|"kind: dataLast"| 1
-  2 -->|"kind: transformCallee"| 1
-  3 -->|"kind: transformArg"| 1
-  4 -->|"kind: yieldable"| 0
-  5 -->|"kind: potentialReturn"| 0
-  6 -->|"kind: pipe"| 7
-  7 -->|"kind: connect"| 4
-  8 -->|"kind: transformCallee"| 7
-  10 -->|"kind: potentialReturn"| 9
-  11 -->|"kind: parameter"| 9
-  12 -->|"kind: pipe"| 13
-  13 -->|"kind: connect"| 10
-  14 -->|"kind: transformCallee"| 13
+  0[/"type: ServiceClass#lt;MyService, #quot;MyService#quot;, #123; log: #40;_what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;#gt;<br/>node: Context.Service#lt;MyService, #123;#92;n  log: #40;_what: string#41; =#gt; Effect.Effect#lt;void#gt;#92;n#125;#gt;#40;#41;#40;#quot;MyService#quot;#41;"/]
+  1((("type: Effect#lt;#123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n        yield* Effect.log#40;#quot;log#quot;#41;#92;n        return #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;#92;n    #125;#41;")))
+  2[/"type: #123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;"/]
+  3[["type: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;what: string#41; =#gt; Effect.log#40;what#41;"]]
+  4[/"type: string<br/>node: what"/]
+  5["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  6[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  7[/"type: #quot;log#quot;<br/>node: #quot;log#quot;"/]
+  8["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  9[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  10["type: Layer#lt;MyService, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  11[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
+  12[/"type: typeof MyService<br/>node: this"/]
+  13[/"type: #123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #123;#92;n        log: #40;what: string#41; =#gt; Effect.log#40;what#41;#92;n    #125;"/]
+  14[["type: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;what: string#41; =#gt; Effect.log#40;what#41;"]]
+  15[/"type: string<br/>node: what"/]
+  16["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  17[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  18["type: Layer#lt;MyService, never, never#gt;<br/>callee: Layer.succeed<br/>args: #91;this#93;"]
+  19[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #40;resource: S#41; =#gt; Layer#lt;I, never, never#gt;; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;, resource: NoInfer#lt;S#gt;#41;: Layer#lt;I, never, never#gt;; #125;<br/>node: Layer.succeed"/]
+  20[/"type: typeof MyService<br/>node: this"/]
+  21[["type: #40;#41; =#gt; #123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #40;#41; =#gt; #123;#92;n        return #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;#92;n    #125;"]]
+  22[/"type: #123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;"/]
+  23[["type: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;what: string#41; =#gt; Effect.log#40;what#41;"]]
+  24[/"type: string<br/>node: what"/]
+  25["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  26[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  27["type: Layer#lt;MyService, never, never#gt;<br/>callee: Layer.sync<br/>args: #91;this#93;"]
+  28[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #40;evaluate: LazyArg#lt;S#gt;#41; =#gt; Layer#lt;I, never, never#gt;; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;, evaluate: LazyArg#lt;NoInfer#lt;S#gt;#gt;#41;: Layer#lt;I, never, never#gt;; #125;<br/>node: Layer.sync"/]
+  29[/"type: typeof MyService<br/>node: this"/]
+  4 -->|"kind: pipe"| 5
+  6 -->|"kind: transformCallee"| 5
+  5 -->|"kind: potentialReturn"| 3
+  3 -->|"kind: usedBy"| 2
+  2 -->|"kind: potentialReturn"| 1
+  7 -->|"kind: pipe"| 8
+  9 -->|"kind: transformCallee"| 8
+  8 -->|"kind: yieldable"| 1
+  2 -->|"kind: usedBy"| 1
+  1 -->|"kind: pipe"| 10
+  11 -->|"kind: transformCallee"| 1
+  12 -->|"kind: transformArg"| 1
   15 -->|"kind: pipe"| 16
   17 -->|"kind: transformCallee"| 16
-  18 -->|"kind: transformArg"| 16
-  20 -->|"kind: potentialReturn"| 19
-  21 -->|"kind: parameter"| 19
-  22 -->|"kind: pipe"| 23
-  23 -->|"kind: connect"| 20
-  24 -->|"kind: transformCallee"| 23
-  25 -->|"kind: pipe"| 26
-  27 -->|"kind: transformCallee"| 26
-  28 -->|"kind: transformArg"| 26
-  30 -->|"kind: potentialReturn"| 29
-  31 -->|"kind: potentialReturn"| 30
-  29 -->|"kind: connect"| 25
-  33 -->|"kind: potentialReturn"| 32
-  34 -->|"kind: parameter"| 32
-  35 -->|"kind: pipe"| 36
-  36 -->|"kind: connect"| 33
-  37 -->|"kind: transformCallee"| 36
+  16 -->|"kind: potentialReturn"| 14
+  14 -->|"kind: usedBy"| 13
+  13 -->|"kind: pipe"| 18
+  19 -->|"kind: transformCallee"| 18
+  20 -->|"kind: transformArg"| 18
+  24 -->|"kind: pipe"| 25
+  26 -->|"kind: transformCallee"| 25
+  25 -->|"kind: potentialReturn"| 23
+  23 -->|"kind: usedBy"| 22
+  22 -->|"kind: potentialReturn"| 21
+  22 -->|"kind: usedBy"| 21
+  21 -->|"kind: pipe"| 27
+  28 -->|"kind: transformCallee"| 27
+  29 -->|"kind: transformArg"| 27

@@ -1,16 +1,13 @@
 flowchart TB
   0[["type: #40;n: number#41; =#gt; Effect#lt;number, string, never#gt;<br/>node: #40;n: number#41; =#gt;#92;n  Effect.gen#40;function*#40;#41; #123;#92;n    if #40;n === 0#41; #123;#92;n      // In v3, yieldable parsing falls back to Effect typing.#92;n      yield* Effect.fail#40;#quot;no zero!#quot;#41;#92;n    #125;#92;n    return n / 1#92;n  #125;#41;"]]
-  1[/"type: Effect#lt;number, string, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    if #40;n === 0#41; #123;#92;n      // In v3, yieldable parsing falls back to Effect typing.#92;n      yield* Effect.fail#40;#quot;no zero!#quot;#41;#92;n    #125;#92;n    return n / 1#92;n  #125;#41;"/]
-  2[/"type: number<br/>node: n: number"/]
-  3((("type: Effect#lt;never, string, never#gt;<br/>node: Effect.fail#40;#quot;no zero!#quot;#41;")))
-  4[/"type: number<br/>node: n / 1"/]
-  5[/"type: #quot;no zero!#quot;<br/>node: #quot;no zero!#quot;"/]
-  6["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  7[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  1((("type: Effect#lt;number, string, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    if #40;n === 0#41; #123;#92;n      // In v3, yieldable parsing falls back to Effect typing.#92;n      yield* Effect.fail#40;#quot;no zero!#quot;#41;#92;n    #125;#92;n    return n / 1#92;n  #125;#41;")))
+  2[/"type: number<br/>node: n / 1"/]
+  3[/"type: #quot;no zero!#quot;<br/>node: #quot;no zero!#quot;"/]
+  4["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  5[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  2 -->|"kind: potentialReturn"| 1
+  3 -->|"kind: pipe"| 4
+  5 -->|"kind: transformCallee"| 4
+  4 -->|"kind: yieldable"| 1
+  2 -->|"kind: usedBy"| 1
   1 -->|"kind: potentialReturn"| 0
-  2 -->|"kind: parameter"| 0
-  3 -->|"kind: yieldable"| 1
-  4 -->|"kind: potentialReturn"| 1
-  5 -->|"kind: pipe"| 6
-  6 -->|"kind: connect"| 3
-  7 -->|"kind: transformCallee"| 6

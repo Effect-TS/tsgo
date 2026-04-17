@@ -1,13 +1,18 @@
 flowchart TB
-  0[/"type: 1<br/>node: 1"/]
-  1["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  2[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  3[["type: #lt;A#gt;#40;service: A#41; =#gt; Effect#lt;Context#lt;A#gt;, never, never#gt;<br/>node: export function missingServiceWithGenericType#lt;A#gt;#40;service: A#41; #123;#92;n  // @ts-expect-error#92;n  const missingServiceA: Effect.Effect#lt;Context.Context#lt;A#gt;#gt; = Effect.context#lt;A#gt;#40;#41;#92;n  return missingServiceA#92;n#125;"]]
-  4((("type: Effect#lt;Context#lt;A#gt;, never, never#gt;<br/>node: export function missingServiceWithGenericType#lt;A#gt;#40;service: A#41; #123;#92;n  // @ts-expect-error#92;n  const missingServiceA: Effect.Effect#lt;Context.Context#lt;A#gt;#gt; = Effect.context#lt;A#gt;#40;#41;#92;n  return missingServiceA#92;n#125;")))
-  5[/"type: Effect#lt;Context#lt;A#gt;, never, never#gt;<br/>node: missingServiceA"/]
-  6[/"type: A<br/>node: service: A"/]
-  0 -->|"kind: pipe"| 1
-  2 -->|"kind: transformCallee"| 1
-  4 -->|"kind: potentialReturn"| 3
-  5 -->|"kind: potentialReturn"| 4
-  6 -->|"kind: parameter"| 3
+  0[/"type: Class#lt;ServiceA, #quot;ServiceA#quot;, #123; readonly succeed: #123; readonly a: 1; #125;; #125;#gt;<br/>node: Effect.Service#lt;ServiceA#gt;#40;#41;#40;#quot;ServiceA#quot;, #123;#92;n  succeed: #123; a: 1 #125;#92;n#125;#41;"/]
+  1[/"type: Class#lt;ServiceB, #quot;ServiceB#quot;, #123; readonly succeed: #123; readonly a: 2; #125;; #125;#gt;<br/>node: Effect.Service#lt;ServiceB#gt;#40;#41;#40;#quot;ServiceB#quot;, #123;#92;n  succeed: #123; a: 2 #125;#92;n#125;#41;"/]
+  2[/"type: Class#lt;ServiceC, #quot;ServiceC#quot;, #123; readonly succeed: #123; readonly a: 3; #125;; #125;#gt;<br/>node: Effect.Service#lt;ServiceC#gt;#40;#41;#40;#quot;ServiceC#quot;, #123;#92;n  succeed: #123; a: 3 #125;#92;n#125;#41;"/]
+  3[/"type: 1<br/>node: 1"/]
+  4["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  5[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  6[/"type: Effect#lt;number, never, ServiceA #124; ServiceB #124; ServiceC#gt;<br/>node: effectWithServices"/]
+  7[/"type: Effect#lt;number, never, ServiceA #124; ServiceB #124; ServiceC#gt;<br/>node: effectWithServices"/]
+  8[/"type: <br/>node: Effect.Effect"/]
+  9[/"type: Effect#lt;number, never, ServiceA #124; ServiceB #124; ServiceC#gt;<br/>node: effectWithServices"/]
+  10[["type: #lt;A#gt;#40;service: A#41; =#gt; Effect#lt;Context#lt;A#gt;, never, never#gt;<br/>node: export function missingServiceWithGenericType#lt;A#gt;#40;service: A#41; #123;#92;n  // @ts-expect-error#92;n  const missingServiceA: Effect.Effect#lt;Context.Context#lt;A#gt;#gt; = Effect.context#lt;A#gt;#40;#41;#92;n  return missingServiceA#92;n#125;"]]
+  11[/"type: Effect#lt;Context#lt;A#gt;, never, never#gt;<br/>node: missingServiceA"/]
+  12[/"type: Effect#lt;number, never, ServiceA #124; ServiceB #124; ServiceC#gt;<br/>node: effectWithServices satisfies Effect.Effect#lt;number, never, never#gt;"/]
+  3 -->|"kind: pipe"| 4
+  5 -->|"kind: transformCallee"| 4
+  11 -->|"kind: potentialReturn"| 10
+  11 -->|"kind: usedBy"| 10

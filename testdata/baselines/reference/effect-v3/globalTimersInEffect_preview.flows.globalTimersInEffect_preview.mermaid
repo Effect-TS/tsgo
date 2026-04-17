@@ -1,5 +1,4 @@
 flowchart TB
-  0[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  setTimeout#40;#40;#41; =#gt; #123;#125;, 100#41;#92;n#125;#41;"/]
+  0((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  setTimeout#40;#40;#41; =#gt; #123;#125;, 100#41;#92;n#125;#41;")))
   1[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#125;"]]
-  2((("type: void<br/>node: #40;#41; =#gt; #123;#125;")))
-  2 -->|"kind: potentialReturn"| 1
+  1 -->|"kind: usedBy"| 0

@@ -1,80 +1,71 @@
 flowchart TB
-  0[/"type: Effect#lt;Effect#lt;number, never, never#gt;, string, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    if #40;Math.random#40;#41; #lt; 0.5#41; return Effect.succeed#40;42#41;#92;n    return yield* Effect.fail#40;#quot;no.#quot;#41;#92;n#125;#41;"/]
-  1((("type: Effect#lt;never, string, never#gt;<br/>node: Effect.fail#40;#quot;no.#quot;#41;")))
-  2((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;42#41;")))
-  3[/"type: never<br/>node: yield* Effect.fail#40;#quot;no.#quot;#41;"/]
-  4[/"type: 42<br/>node: 42"/]
-  5["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  6[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  7[/"type: #quot;no.#quot;<br/>node: #quot;no.#quot;"/]
-  8["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  9[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  10[["type: #40;n: number#41; =#gt; Effect#lt;number, string, never#gt;<br/>node: #40;n: number#41; =#gt;#92;n    Effect.gen#40;function*#40;#41; #123;#92;n        if #40;n === 0#41; #123;#92;n            yield* Effect.fail#40;#quot;no zero!#quot;#41;#92;n        #125;#92;n        return n / 1#92;n    #125;#41;"]]
-  11[/"type: Effect#lt;number, string, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n        if #40;n === 0#41; #123;#92;n            yield* Effect.fail#40;#quot;no zero!#quot;#41;#92;n        #125;#92;n        return n / 1#92;n    #125;#41;"/]
-  12[/"type: number<br/>node: n: number"/]
-  13((("type: Effect#lt;never, string, never#gt;<br/>node: Effect.fail#40;#quot;no zero!#quot;#41;")))
-  14[/"type: number<br/>node: n / 1"/]
-  15[/"type: #quot;no zero!#quot;<br/>node: #quot;no zero!#quot;"/]
-  16["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  17[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  18[["type: #40;n: number#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;n: number#41; =#gt;#92;n    Effect.gen#40;function*#40;#41; #123;#92;n        yield* Effect.interrupt#92;n        yield* Effect.die#40;#quot;lol#quot;#41;#92;n        return n / 1#92;n    #125;#41;"]]
-  19[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n        yield* Effect.interrupt#92;n        yield* Effect.die#40;#quot;lol#quot;#41;#92;n        return n / 1#92;n    #125;#41;"/]
-  20[/"type: number<br/>node: n: number"/]
-  21[/"type: Effect#lt;never, never, never#gt;<br/>node: Effect.interrupt"/]
-  22((("type: Effect#lt;never, never, never#gt;<br/>node: Effect.die#40;#quot;lol#quot;#41;")))
-  23[/"type: number<br/>node: n / 1"/]
-  24[/"type: #quot;lol#quot;<br/>node: #quot;lol#quot;"/]
-  25["type: Effect#lt;never, never, never#gt;<br/>callee: Effect.die<br/>args: #91;#93;"]
-  26[/"type: #40;defect: unknown#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: Effect.die"/]
-  27[/"type: Effect#lt;number, number, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    throw yield* Effect.fail#40;42#41;#92;n    return 42#92;n#125;#41;"/]
-  28((("type: Effect#lt;never, number, never#gt;<br/>node: Effect.fail#40;42#41;")))
-  29[/"type: 42<br/>node: 42"/]
-  30[/"type: 42<br/>node: 42"/]
-  31["type: Effect#lt;never, number, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  32[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  33[/"type: Effect#lt;number, string, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n        if #40;Math.random#40;#41; #lt; 0.5#41; #123;#92;n            return yield* Effect.fail#40;#quot;Not ready#quot;#41;#92;n        #125;#92;n        return 42#92;n    #125;#41;"/]
-  34["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.eventually<br/>args: #91;#93;"]
-  35[/"type: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, never, R#gt;<br/>node: Effect.eventually"/]
-  36((("type: Effect#lt;never, string, never#gt;<br/>node: Effect.fail#40;#quot;Not ready#quot;#41;")))
-  37[/"type: never<br/>node: yield* Effect.fail#40;#quot;Not ready#quot;#41;"/]
-  38[/"type: 42<br/>node: 42"/]
-  39[/"type: #quot;Not ready#quot;<br/>node: #quot;Not ready#quot;"/]
-  40["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  41[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  1 -->|"kind: yieldable"| 0
+  0((("type: Effect#lt;Effect#lt;number, never, never#gt;, string, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    if #40;Math.random#40;#41; #lt; 0.5#41; return Effect.succeed#40;42#41;#92;n    return yield* Effect.fail#40;#quot;no.#quot;#41;#92;n#125;#41;")))
+  1[/"type: 42<br/>node: 42"/]
+  2["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  3[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  4[/"type: never<br/>node: yield* Effect.fail#40;#quot;no.#quot;#41;"/]
+  5[/"type: #quot;no.#quot;<br/>node: #quot;no.#quot;"/]
+  6["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  7[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  8[["type: #40;n: number#41; =#gt; Effect#lt;number, string, never#gt;<br/>node: #40;n: number#41; =#gt;#92;n    Effect.gen#40;function*#40;#41; #123;#92;n        if #40;n === 0#41; #123;#92;n            yield* Effect.fail#40;#quot;no zero!#quot;#41;#92;n        #125;#92;n        return n / 1#92;n    #125;#41;"]]
+  9((("type: Effect#lt;number, string, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n        if #40;n === 0#41; #123;#92;n            yield* Effect.fail#40;#quot;no zero!#quot;#41;#92;n        #125;#92;n        return n / 1#92;n    #125;#41;")))
+  10[/"type: number<br/>node: n / 1"/]
+  11[/"type: #quot;no zero!#quot;<br/>node: #quot;no zero!#quot;"/]
+  12["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  13[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  14[["type: #40;n: number#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;n: number#41; =#gt;#92;n    Effect.gen#40;function*#40;#41; #123;#92;n        yield* Effect.interrupt#92;n        yield* Effect.die#40;#quot;lol#quot;#41;#92;n        return n / 1#92;n    #125;#41;"]]
+  15((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n        yield* Effect.interrupt#92;n        yield* Effect.die#40;#quot;lol#quot;#41;#92;n        return n / 1#92;n    #125;#41;")))
+  16[/"type: number<br/>node: n / 1"/]
+  17[/"type: Effect#lt;never, never, never#gt;<br/>node: Effect.interrupt"/]
+  18[/"type: #quot;lol#quot;<br/>node: #quot;lol#quot;"/]
+  19["type: Effect#lt;never, never, never#gt;<br/>callee: Effect.die<br/>args: #91;#93;"]
+  20[/"type: #40;defect: unknown#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: Effect.die"/]
+  21((("type: Effect#lt;number, number, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    throw yield* Effect.fail#40;42#41;#92;n    return 42#92;n#125;#41;")))
+  22[/"type: 42<br/>node: 42"/]
+  23[/"type: 42<br/>node: 42"/]
+  24["type: Effect#lt;never, number, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  25[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  26((("type: Effect#lt;number, string, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n        if #40;Math.random#40;#41; #lt; 0.5#41; #123;#92;n            return yield* Effect.fail#40;#quot;Not ready#quot;#41;#92;n        #125;#92;n        return 42#92;n    #125;#41;")))
+  27[/"type: never<br/>node: yield* Effect.fail#40;#quot;Not ready#quot;#41;"/]
+  28[/"type: #quot;Not ready#quot;<br/>node: #quot;Not ready#quot;"/]
+  29["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  30[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  31[/"type: 42<br/>node: 42"/]
+  32["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.eventually<br/>args: #91;#93;"]
+  33[/"type: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, never, R#gt;<br/>node: Effect.eventually"/]
+  1 -->|"kind: pipe"| 2
+  3 -->|"kind: transformCallee"| 2
   2 -->|"kind: potentialReturn"| 0
-  3 -->|"kind: potentialReturn"| 0
-  4 -->|"kind: pipe"| 5
-  5 -->|"kind: connect"| 2
-  6 -->|"kind: transformCallee"| 5
-  7 -->|"kind: pipe"| 8
-  8 -->|"kind: connect"| 1
-  9 -->|"kind: transformCallee"| 8
-  11 -->|"kind: potentialReturn"| 10
-  12 -->|"kind: parameter"| 10
-  13 -->|"kind: yieldable"| 11
-  14 -->|"kind: potentialReturn"| 11
-  15 -->|"kind: pipe"| 16
-  16 -->|"kind: connect"| 13
-  17 -->|"kind: transformCallee"| 16
-  19 -->|"kind: potentialReturn"| 18
-  20 -->|"kind: parameter"| 18
-  21 -->|"kind: yieldable"| 19
-  22 -->|"kind: yieldable"| 19
-  23 -->|"kind: potentialReturn"| 19
-  24 -->|"kind: pipe"| 25
-  25 -->|"kind: connect"| 22
-  26 -->|"kind: transformCallee"| 25
-  28 -->|"kind: yieldable"| 27
-  29 -->|"kind: potentialReturn"| 27
-  30 -->|"kind: pipe"| 31
-  31 -->|"kind: connect"| 28
-  32 -->|"kind: transformCallee"| 31
-  33 -->|"kind: pipe"| 34
-  35 -->|"kind: transformCallee"| 34
-  36 -->|"kind: yieldable"| 33
-  37 -->|"kind: potentialReturn"| 33
-  38 -->|"kind: potentialReturn"| 33
-  39 -->|"kind: pipe"| 40
-  40 -->|"kind: connect"| 36
-  41 -->|"kind: transformCallee"| 40
+  5 -->|"kind: pipe"| 6
+  7 -->|"kind: transformCallee"| 6
+  6 -->|"kind: usedBy"| 4
+  4 -->|"kind: potentialReturn"| 0
+  6 -->|"kind: yieldable"| 0
+  2 -->|"kind: usedBy"| 0
+  10 -->|"kind: potentialReturn"| 9
+  11 -->|"kind: pipe"| 12
+  13 -->|"kind: transformCallee"| 12
+  12 -->|"kind: yieldable"| 9
+  10 -->|"kind: usedBy"| 9
+  9 -->|"kind: potentialReturn"| 8
+  16 -->|"kind: potentialReturn"| 15
+  17 -->|"kind: yieldable"| 15
+  18 -->|"kind: pipe"| 19
+  20 -->|"kind: transformCallee"| 19
+  19 -->|"kind: yieldable"| 15
+  16 -->|"kind: usedBy"| 15
+  15 -->|"kind: potentialReturn"| 14
+  22 -->|"kind: potentialReturn"| 21
+  23 -->|"kind: pipe"| 24
+  25 -->|"kind: transformCallee"| 24
+  24 -->|"kind: yieldable"| 21
+  22 -->|"kind: usedBy"| 21
+  28 -->|"kind: pipe"| 29
+  30 -->|"kind: transformCallee"| 29
+  29 -->|"kind: usedBy"| 27
+  27 -->|"kind: potentialReturn"| 26
+  31 -->|"kind: potentialReturn"| 26
+  29 -->|"kind: yieldable"| 26
+  31 -->|"kind: usedBy"| 26
+  26 -->|"kind: pipe"| 32
+  33 -->|"kind: transformCallee"| 32

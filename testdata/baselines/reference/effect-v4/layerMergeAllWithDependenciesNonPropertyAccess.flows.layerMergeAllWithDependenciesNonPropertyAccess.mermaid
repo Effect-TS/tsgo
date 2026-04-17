@@ -1,39 +1,47 @@
 flowchart TB
-  0[/"type: #123;#125;<br/>node: #123;#125;"/]
-  1["type: Effect#lt;#123;#125;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  2[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  3[/"type: Effect#lt;#123;#125;, never, never#gt;<br/>node: this.make"/]
-  4["type: Layer#lt;DbConnection, never, never#gt;<br/>callee: Layer.effect<br/>args: #91;this#93;"]
-  5[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
-  6[/"type: typeof DbConnection<br/>node: this"/]
-  7[/"type: #123;#125;<br/>node: #123;#125;"/]
-  8["type: Effect#lt;#123;#125;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  9[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  10[/"type: Effect#lt;#123;#125;, never, never#gt;<br/>node: this.make"/]
-  11["type: Layer#lt;FileSystem, never, never#gt;<br/>callee: Layer.effect<br/>args: #91;this#93;"]
-  12[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
-  13[/"type: typeof FileSystem<br/>node: this"/]
-  14[/"type: Effect#lt;#123;#125;, never, FileSystem#gt;<br/>node: FileSystem.asEffect#40;#41;"/]
-  15["type: Effect#lt;#123;#125;, never, FileSystem#gt;<br/>callee: Effect.as<br/>args: #91;#123;#125;#93;"]
-  16[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
-  17[/"type: #123;#125;<br/>node: #123;#125;"/]
-  18[/"type: Effect#lt;#123;#125;, never, FileSystem#gt;<br/>node: this.make"/]
-  19["type: Layer#lt;Cache, never, FileSystem#gt;<br/>callee: Layer.effect<br/>args: #91;this#93;"]
-  20[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
-  21[/"type: typeof Cache<br/>node: this"/]
-  0 -->|"kind: pipe"| 1
-  2 -->|"kind: transformCallee"| 1
-  3 -->|"kind: dataLast"| 4
-  5 -->|"kind: transformCallee"| 4
-  6 -->|"kind: transformArg"| 4
-  7 -->|"kind: pipe"| 8
-  9 -->|"kind: transformCallee"| 8
-  10 -->|"kind: dataLast"| 11
-  12 -->|"kind: transformCallee"| 11
-  13 -->|"kind: transformArg"| 11
-  14 -->|"kind: dataFirst"| 15
-  16 -->|"kind: transformCallee"| 15
-  17 -->|"kind: transformArg"| 15
-  18 -->|"kind: dataLast"| 19
-  20 -->|"kind: transformCallee"| 19
-  21 -->|"kind: transformArg"| 19
+  0[/"type: ServiceClass#lt;DbConnection, #quot;DbConnection#quot;, #123;#125;#gt; #amp; #123; readonly make: Effect#lt;#123;#125;, never, never#gt;; #125;<br/>node: Context.Service#lt;DbConnection#gt;#40;#41;#40;#quot;DbConnection#quot;, #123;#92;n  make: Effect.succeed#40;#123;#125;#41;#92;n#125;#41;"/]
+  1[/"type: #123;#125;<br/>node: #123;#125;"/]
+  2["type: Effect#lt;#123;#125;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  3[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  4[/"type: Effect#lt;#123;#125;, never, never#gt;<br/>node: this.make"/]
+  5["type: Layer#lt;DbConnection, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  6[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
+  7[/"type: typeof DbConnection<br/>node: this"/]
+  8[/"type: ServiceClass#lt;FileSystem, #quot;FileSystem#quot;, #123;#125;#gt; #amp; #123; readonly make: Effect#lt;#123;#125;, never, never#gt;; #125;<br/>node: Context.Service#lt;FileSystem#gt;#40;#41;#40;#quot;FileSystem#quot;, #123;#92;n  make: Effect.succeed#40;#123;#125;#41;#92;n#125;#41;"/]
+  9[/"type: #123;#125;<br/>node: #123;#125;"/]
+  10["type: Effect#lt;#123;#125;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  11[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  12[/"type: Effect#lt;#123;#125;, never, never#gt;<br/>node: this.make"/]
+  13["type: Layer#lt;FileSystem, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  14[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
+  15[/"type: typeof FileSystem<br/>node: this"/]
+  16[/"type: ServiceClass#lt;Cache, #quot;Cache#quot;, #123;#125;#gt; #amp; #123; readonly make: Effect#lt;#123;#125;, never, FileSystem#gt;; #125;<br/>node: Context.Service#lt;Cache#gt;#40;#41;#40;#quot;Cache#quot;, #123;#92;n  make: Effect.as#40;FileSystem.asEffect#40;#41;, #123;#125;#41;#92;n#125;#41;"/]
+  17[/"type: Effect#lt;#123;#125;, never, FileSystem#gt;<br/>node: FileSystem.asEffect#40;#41;"/]
+  18["type: Effect#lt;#123;#125;, never, FileSystem#gt;<br/>callee: <br/>args: #91;#93;"]
+  19[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  20[/"type: #123;#125;<br/>node: #123;#125;"/]
+  21[/"type: Effect#lt;#123;#125;, never, FileSystem#gt;<br/>node: this.make"/]
+  22["type: Layer#lt;Cache, never, FileSystem#gt;<br/>callee: <br/>args: #91;#93;"]
+  23[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
+  24[/"type: typeof Cache<br/>node: this"/]
+  25[/"type: typeof import#40;#quot;/node_modules/effect/dist/Layer#quot;#41;<br/>node: Layer"/]
+  26[/"type: Layer#lt;Cache #124; DbConnection #124; FileSystem, never, FileSystem#gt;<br/>node: mergeAll#40;#92;n  DbConnection.Default,#92;n  FileSystem.Default,#92;n  Cache.Default#92;n#41;"/]
+  1 -->|"kind: pipe"| 2
+  3 -->|"kind: transformCallee"| 2
+  2 -->|"kind: usedBy"| 0
+  4 -->|"kind: pipe"| 5
+  6 -->|"kind: transformCallee"| 4
+  7 -->|"kind: transformArg"| 4
+  9 -->|"kind: pipe"| 10
+  11 -->|"kind: transformCallee"| 10
+  10 -->|"kind: usedBy"| 8
+  12 -->|"kind: pipe"| 13
+  14 -->|"kind: transformCallee"| 12
+  15 -->|"kind: transformArg"| 12
+  17 -->|"kind: pipe"| 18
+  19 -->|"kind: transformCallee"| 17
+  20 -->|"kind: transformArg"| 17
+  18 -->|"kind: usedBy"| 16
+  21 -->|"kind: pipe"| 22
+  23 -->|"kind: transformCallee"| 21
+  24 -->|"kind: transformArg"| 21

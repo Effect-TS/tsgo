@@ -1,26 +1,32 @@
 flowchart TB
-  0[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const now = Date.now#40;#41;#92;n  return now#92;n#125;#41;"/]
+  0((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const now = Date.now#40;#41;#92;n  return now#92;n#125;#41;")))
   1[/"type: number<br/>node: now"/]
-  2[/"type: Effect#lt;Date, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const now = new Date#40;#41;#92;n  return now#92;n#125;#41;"/]
+  2((("type: Effect#lt;Date, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const now = new Date#40;#41;#92;n  return now#92;n#125;#41;")))
   3[/"type: Date<br/>node: now"/]
-  4[["type: #40;#41; =#gt; Effect#lt;Date, never, never#gt;<br/>node: Effect.fn#40;#quot;newDateWithArgsInFn#quot;#41;#40;function*#40;#41; #123;#92;n  const date = new Date#40;#quot;2024-01-01#quot;#41;#92;n  return date#92;n#125;#41;"]]
-  5((("type: Effect#lt;Date, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  const date = new Date#40;#quot;2024-01-01#quot;#41;#92;n  return date#92;n#125;")))
-  6[/"type: Date<br/>node: date"/]
-  7[/"type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const MyDate = Date#92;n  const now = MyDate.now#40;#41;#92;n  return now#92;n#125;#41;"/]
+  4((("type: Effect#lt;Date, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  const date = new Date#40;#quot;2024-01-01#quot;#41;#92;n  return date#92;n#125;")))
+  5[/"type: Date<br/>node: date"/]
+  6[["type: #40;#41; =#gt; Effect#lt;Date, never, never#gt;<br/>node: Effect.fn#40;#quot;newDateWithArgsInFn#quot;#41;#40;function*#40;#41; #123;#92;n  const date = new Date#40;#quot;2024-01-01#quot;#41;#92;n  return date#92;n#125;#41;"]]
+  7((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const MyDate = Date#92;n  const now = MyDate.now#40;#41;#92;n  return now#92;n#125;#41;")))
   8[/"type: number<br/>node: now"/]
-  9[["type: #40;#41; =#gt; Date<br/>node: #40;#41; =#gt; #123;#92;n  return new Date#40;#41;#92;n#125;"]]
-  10((("type: Date<br/>node: #40;#41; =#gt; #123;#92;n  return new Date#40;#41;#92;n#125;")))
+  9[/"type: number<br/>node: Date.now#40;#41;"/]
+  10[["type: #40;#41; =#gt; Date<br/>node: #40;#41; =#gt; #123;#92;n  return new Date#40;#41;#92;n#125;"]]
   11[/"type: Date<br/>node: new Date#40;#41;"/]
-  12[/"type: Effect#lt;#40;#41; =#gt; number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const fn = #40;#41; =#gt; Date.now#40;#41;#92;n  return fn#92;n#125;#41;"/]
+  12((("type: Effect#lt;#40;#41; =#gt; number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const fn = #40;#41; =#gt; Date.now#40;#41;#92;n  return fn#92;n#125;#41;")))
   13[/"type: #40;#41; =#gt; number<br/>node: fn"/]
   14[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; Date.now#40;#41;"]]
   15[/"type: number<br/>node: Date.now#40;#41;"/]
   1 -->|"kind: potentialReturn"| 0
+  1 -->|"kind: usedBy"| 0
   3 -->|"kind: potentialReturn"| 2
-  6 -->|"kind: potentialReturn"| 5
+  3 -->|"kind: usedBy"| 2
   5 -->|"kind: potentialReturn"| 4
+  5 -->|"kind: usedBy"| 4
+  4 -->|"kind: potentialReturn"| 6
   8 -->|"kind: potentialReturn"| 7
-  10 -->|"kind: potentialReturn"| 9
+  8 -->|"kind: usedBy"| 7
   11 -->|"kind: potentialReturn"| 10
+  11 -->|"kind: usedBy"| 10
   13 -->|"kind: potentialReturn"| 12
   15 -->|"kind: potentialReturn"| 14
+  14 -->|"kind: usedBy"| 12
+  13 -->|"kind: usedBy"| 12
