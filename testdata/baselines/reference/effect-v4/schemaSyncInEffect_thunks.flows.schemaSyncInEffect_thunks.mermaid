@@ -5,85 +5,86 @@ flowchart TB
   3[/"type: #123; name: String; age: Number; #125;<br/>node: #123;#92;n  name: Schema.String,#92;n  age: Schema.Number#92;n#125;"/]
   4["type: Struct#lt;#123; readonly name: String; readonly age: Number; #125;#gt;<br/>callee: Schema.Struct<br/>args: #91;#93;"]
   5[/"type: #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields#41; =#gt; Struct#lt;Fields#gt;<br/>node: Schema.Struct"/]
-  6((("type: #40;#41; =#gt; #123; readonly age: number; readonly name: string; #125;<br/>node: #40;#41; =#gt; Schema.decodeSync#40;Person#41;#40;#123; name: #quot;John#quot;, age: 30 #125;#41;")))
-  7["type: Effect#lt;#123; readonly age: number; readonly name: string; #125;, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
-  8[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
-  9[["type: #40;#41; =#gt; #123; readonly age: number; readonly name: string; #125;<br/>node: #40;#41; =#gt; Schema.decodeSync#40;Person#41;#40;#123; name: #quot;John#quot;, age: 30 #125;#41;"]]
-  10[/"type: #123; readonly age: number; readonly name: string; #125;<br/>node: Schema.decodeSync#40;Person#41;#40;#123; name: #quot;John#quot;, age: 30 #125;#41;"/]
-  11[/"type: Struct#lt;#123; readonly name: String; readonly age: Number; #125;#gt;<br/>node: Person"/]
-  12["type: #40;input: #123; readonly age: number; readonly name: string; #125;, options?: ParseOptions #124; undefined#41; =#gt; #123; readonly age: number; readonly name: string; #125;<br/>callee: Schema.decodeSync<br/>args: #91;#93;"]
-  13[/"type: #lt;S extends Decoder#lt;unknown#gt;#gt;#40;schema: S#41; =#gt; #40;input: S#91;#quot;Encoded#quot;#93;, options?: ParseOptions #124; undefined#41; =#gt; S#91;#quot;Type#quot;#93;<br/>node: Schema.decodeSync"/]
-  14[/"type: #123; try: #40;#41; =#gt; #123; readonly age: number; readonly name: string; #125;; catch: #40;#41; =#gt; ExampleError; #125;<br/>node: #123;#92;n  try: #40;#41; =#gt; Schema.decodeSync#40;Person#41;#40;#123; name: #quot;Jane#quot;, age: 25 #125;#41;,#92;n  catch: #40;#41; =#gt; new ExampleError#40;#41;#92;n#125;"/]
-  15["type: Effect#lt;#123; readonly age: number; readonly name: string; #125;, ExampleError, never#gt;<br/>callee: Effect.try<br/>args: #91;#93;"]
-  16[/"type: #lt;A, E#gt;#40;options: #123; try: LazyArg#lt;A#gt;; catch: #40;error: unknown#41; =#gt; E; #125;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.try"/]
-  17[["type: #40;#41; =#gt; #123; readonly age: number; readonly name: string; #125;<br/>node: #40;#41; =#gt; Schema.decodeSync#40;Person#41;#40;#123; name: #quot;Jane#quot;, age: 25 #125;#41;"]]
-  18[/"type: #123; readonly age: number; readonly name: string; #125;<br/>node: Schema.decodeSync#40;Person#41;#40;#123; name: #quot;Jane#quot;, age: 25 #125;#41;"/]
-  19[/"type: Struct#lt;#123; readonly name: String; readonly age: Number; #125;#gt;<br/>node: Person"/]
-  20["type: #40;input: #123; readonly age: number; readonly name: string; #125;, options?: ParseOptions #124; undefined#41; =#gt; #123; readonly age: number; readonly name: string; #125;<br/>callee: Schema.decodeSync<br/>args: #91;#93;"]
-  21[/"type: #lt;S extends Decoder#lt;unknown#gt;#gt;#40;schema: S#41; =#gt; #40;input: S#91;#quot;Encoded#quot;#93;, options?: ParseOptions #124; undefined#41; =#gt; S#91;#quot;Type#quot;#93;<br/>node: Schema.decodeSync"/]
-  22[["type: #40;#41; =#gt; ExampleError<br/>node: #40;#41; =#gt; new ExampleError#40;#41;"]]
-  23[/"type: ExampleError<br/>node: new ExampleError#40;#41;"/]
-  24((("type: #40;#41; =#gt; Promise#lt;#123; readonly age: number; readonly name: string; #125;#gt;<br/>node: async #40;#41; =#gt; Schema.encodeSync#40;Person#41;#40;#123; name: #quot;Bob#quot;, age: 40 #125;#41;")))
-  25["type: Effect#lt;#123; readonly age: number; readonly name: string; #125;, UnknownError, never#gt;<br/>callee: Effect.tryPromise<br/>args: #91;#93;"]
-  26[/"type: #lt;A, E = UnknownError#gt;#40;options: #123; readonly try: #40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;; readonly catch: #40;error: unknown#41; =#gt; E; #125; #124; #40;#40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;#41;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.tryPromise"/]
-  27[["type: #40;#41; =#gt; Promise#lt;#123; readonly age: number; readonly name: string; #125;#gt;<br/>node: async #40;#41; =#gt; Schema.encodeSync#40;Person#41;#40;#123; name: #quot;Bob#quot;, age: 40 #125;#41;"]]
-  28[/"type: #123; readonly age: number; readonly name: string; #125;<br/>node: Schema.encodeSync#40;Person#41;#40;#123; name: #quot;Bob#quot;, age: 40 #125;#41;"/]
-  29[/"type: Struct#lt;#123; readonly name: String; readonly age: Number; #125;#gt;<br/>node: Person"/]
-  30["type: #40;input: #123; readonly age: number; readonly name: string; #125;, options?: ParseOptions #124; undefined#41; =#gt; #123; readonly age: number; readonly name: string; #125;<br/>callee: Schema.encodeSync<br/>args: #91;#93;"]
-  31[/"type: #lt;S extends Encoder#lt;unknown#gt;#gt;#40;schema: S#41; =#gt; #40;input: S#91;#quot;Type#quot;#93;, options?: ParseOptions #124; undefined#41; =#gt; S#91;#quot;Encoded#quot;#93;<br/>node: Schema.encodeSync"/]
-  32[/"type: #123; try: #40;#41; =#gt; Promise#lt;#123; readonly age: number; readonly name: string; #125;#gt;; catch: #40;#41; =#gt; ExampleError; #125;<br/>node: #123;#92;n  try: async #40;#41; =#gt; Schema.encodeUnknownSync#40;Person#41;#40;#123; name: #quot;Carol#quot;, age: 50 #125;#41;,#92;n  catch: #40;#41; =#gt; new ExampleError#40;#41;#92;n#125;"/]
-  33["type: Effect#lt;#123; readonly age: number; readonly name: string; #125;, ExampleError, never#gt;<br/>callee: Effect.tryPromise<br/>args: #91;#93;"]
-  34[/"type: #lt;A, E = UnknownError#gt;#40;options: #123; readonly try: #40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;; readonly catch: #40;error: unknown#41; =#gt; E; #125; #124; #40;#40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;#41;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.tryPromise"/]
-  35[["type: #40;#41; =#gt; Promise#lt;#123; readonly age: number; readonly name: string; #125;#gt;<br/>node: async #40;#41; =#gt; Schema.encodeUnknownSync#40;Person#41;#40;#123; name: #quot;Carol#quot;, age: 50 #125;#41;"]]
-  36[/"type: #123; readonly age: number; readonly name: string; #125;<br/>node: Schema.encodeUnknownSync#40;Person#41;#40;#123; name: #quot;Carol#quot;, age: 50 #125;#41;"/]
-  37[/"type: Struct#lt;#123; readonly name: String; readonly age: Number; #125;#gt;<br/>node: Person"/]
-  38["type: #40;input: unknown, options?: ParseOptions #124; undefined#41; =#gt; #123; readonly age: number; readonly name: string; #125;<br/>callee: Schema.encodeUnknownSync<br/>args: #91;#93;"]
-  39[/"type: #lt;S extends Schema.Encoder#lt;unknown#gt;#gt;#40;schema: S#41; =#gt; #40;input: unknown, options?: ParseOptions #124; undefined#41; =#gt; S#91;#quot;Encoded#quot;#93;<br/>node: Schema.encodeUnknownSync"/]
-  40[["type: #40;#41; =#gt; ExampleError<br/>node: #40;#41; =#gt; new ExampleError#40;#41;"]]
-  41[/"type: ExampleError<br/>node: new ExampleError#40;#41;"/]
-  42((("type: #40;#41; =#gt; #40;#41; =#gt; #123; readonly age: number; readonly name: string; #125;<br/>node: #40;#41; =#gt; #40;#41; =#gt; Schema.decodeSync#40;Person#41;#40;#123; name: #quot;Nested#quot;, age: 10 #125;#41;")))
-  43["type: Effect#lt;#40;#41; =#gt; #123; readonly age: number; readonly name: string; #125;, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
-  44[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
-  45[["type: #40;#41; =#gt; #40;#41; =#gt; #123; readonly age: number; readonly name: string; #125;<br/>node: #40;#41; =#gt; #40;#41; =#gt; Schema.decodeSync#40;Person#41;#40;#123; name: #quot;Nested#quot;, age: 10 #125;#41;"]]
-  46((("type: #40;#41; =#gt; #123; readonly age: number; readonly name: string; #125;<br/>node: #40;#41; =#gt; Schema.decodeSync#40;Person#41;#40;#123; name: #quot;Nested#quot;, age: 10 #125;#41;")))
-  47[["type: #40;#41; =#gt; #123; readonly age: number; readonly name: string; #125;<br/>node: #40;#41; =#gt; Schema.decodeSync#40;Person#41;#40;#123; name: #quot;Nested#quot;, age: 10 #125;#41;"]]
-  48[/"type: #123; readonly age: number; readonly name: string; #125;<br/>node: Schema.decodeSync#40;Person#41;#40;#123; name: #quot;Nested#quot;, age: 10 #125;#41;"/]
-  49[/"type: Struct#lt;#123; readonly name: String; readonly age: Number; #125;#gt;<br/>node: Person"/]
-  50["type: #40;input: #123; readonly age: number; readonly name: string; #125;, options?: ParseOptions #124; undefined#41; =#gt; #123; readonly age: number; readonly name: string; #125;<br/>callee: Schema.decodeSync<br/>args: #91;#93;"]
-  51[/"type: #lt;S extends Decoder#lt;unknown#gt;#gt;#40;schema: S#41; =#gt; #40;input: S#91;#quot;Encoded#quot;#93;, options?: ParseOptions #124; undefined#41; =#gt; S#91;#quot;Type#quot;#93;<br/>node: Schema.decodeSync"/]
+  6[["type: #40;#41; =#gt; #123; readonly age: number; readonly name: string; #125;<br/>node: #40;#41; =#gt; Schema.decodeSync#40;Person#41;#40;#123; name: #quot;John#quot;, age: 30 #125;#41;"]]
+  7[/"type: #123; readonly age: number; readonly name: string; #125;<br/>node: Schema.decodeSync#40;Person#41;#40;#123; name: #quot;John#quot;, age: 30 #125;#41;"/]
+  8[/"type: Struct#lt;#123; readonly name: String; readonly age: Number; #125;#gt;<br/>node: Person"/]
+  9["type: #40;input: #123; readonly age: number; readonly name: string; #125;, options?: ParseOptions #124; undefined#41; =#gt; #123; readonly age: number; readonly name: string; #125;<br/>callee: Schema.decodeSync<br/>args: #91;#93;"]
+  10[/"type: #lt;S extends Decoder#lt;unknown#gt;#gt;#40;schema: S#41; =#gt; #40;input: S#91;#quot;Encoded#quot;#93;, options?: ParseOptions #124; undefined#41; =#gt; S#91;#quot;Type#quot;#93;<br/>node: Schema.decodeSync"/]
+  11["type: Effect#lt;#123; readonly age: number; readonly name: string; #125;, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
+  12[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
+  13[/"type: #123; try: #40;#41; =#gt; #123; readonly age: number; readonly name: string; #125;; catch: #40;#41; =#gt; ExampleError; #125;<br/>node: #123;#92;n  try: #40;#41; =#gt; Schema.decodeSync#40;Person#41;#40;#123; name: #quot;Jane#quot;, age: 25 #125;#41;,#92;n  catch: #40;#41; =#gt; new ExampleError#40;#41;#92;n#125;"/]
+  14[["type: #40;#41; =#gt; #123; readonly age: number; readonly name: string; #125;<br/>node: #40;#41; =#gt; Schema.decodeSync#40;Person#41;#40;#123; name: #quot;Jane#quot;, age: 25 #125;#41;"]]
+  15[/"type: #123; readonly age: number; readonly name: string; #125;<br/>node: Schema.decodeSync#40;Person#41;#40;#123; name: #quot;Jane#quot;, age: 25 #125;#41;"/]
+  16[/"type: Struct#lt;#123; readonly name: String; readonly age: Number; #125;#gt;<br/>node: Person"/]
+  17["type: #40;input: #123; readonly age: number; readonly name: string; #125;, options?: ParseOptions #124; undefined#41; =#gt; #123; readonly age: number; readonly name: string; #125;<br/>callee: Schema.decodeSync<br/>args: #91;#93;"]
+  18[/"type: #lt;S extends Decoder#lt;unknown#gt;#gt;#40;schema: S#41; =#gt; #40;input: S#91;#quot;Encoded#quot;#93;, options?: ParseOptions #124; undefined#41; =#gt; S#91;#quot;Type#quot;#93;<br/>node: Schema.decodeSync"/]
+  19[["type: #40;#41; =#gt; ExampleError<br/>node: #40;#41; =#gt; new ExampleError#40;#41;"]]
+  20[/"type: ExampleError<br/>node: new ExampleError#40;#41;"/]
+  21["type: Effect#lt;#123; readonly age: number; readonly name: string; #125;, ExampleError, never#gt;<br/>callee: Effect.try<br/>args: #91;#93;"]
+  22[/"type: #lt;A, E#gt;#40;options: #123; try: LazyArg#lt;A#gt;; catch: #40;error: unknown#41; =#gt; E; #125;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.try"/]
+  23[["type: #40;#41; =#gt; Promise#lt;#123; readonly age: number; readonly name: string; #125;#gt;<br/>node: async #40;#41; =#gt; Schema.encodeSync#40;Person#41;#40;#123; name: #quot;Bob#quot;, age: 40 #125;#41;"]]
+  24[/"type: #123; readonly age: number; readonly name: string; #125;<br/>node: Schema.encodeSync#40;Person#41;#40;#123; name: #quot;Bob#quot;, age: 40 #125;#41;"/]
+  25[/"type: Struct#lt;#123; readonly name: String; readonly age: Number; #125;#gt;<br/>node: Person"/]
+  26["type: #40;input: #123; readonly age: number; readonly name: string; #125;, options?: ParseOptions #124; undefined#41; =#gt; #123; readonly age: number; readonly name: string; #125;<br/>callee: Schema.encodeSync<br/>args: #91;#93;"]
+  27[/"type: #lt;S extends Encoder#lt;unknown#gt;#gt;#40;schema: S#41; =#gt; #40;input: S#91;#quot;Type#quot;#93;, options?: ParseOptions #124; undefined#41; =#gt; S#91;#quot;Encoded#quot;#93;<br/>node: Schema.encodeSync"/]
+  28["type: Effect#lt;#123; readonly age: number; readonly name: string; #125;, UnknownError, never#gt;<br/>callee: Effect.tryPromise<br/>args: #91;#93;"]
+  29[/"type: #lt;A, E = UnknownError#gt;#40;options: #123; readonly try: #40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;; readonly catch: #40;error: unknown#41; =#gt; E; #125; #124; #40;#40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;#41;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.tryPromise"/]
+  30[/"type: #123; try: #40;#41; =#gt; Promise#lt;#123; readonly age: number; readonly name: string; #125;#gt;; catch: #40;#41; =#gt; ExampleError; #125;<br/>node: #123;#92;n  try: async #40;#41; =#gt; Schema.encodeUnknownSync#40;Person#41;#40;#123; name: #quot;Carol#quot;, age: 50 #125;#41;,#92;n  catch: #40;#41; =#gt; new ExampleError#40;#41;#92;n#125;"/]
+  31[["type: #40;#41; =#gt; Promise#lt;#123; readonly age: number; readonly name: string; #125;#gt;<br/>node: async #40;#41; =#gt; Schema.encodeUnknownSync#40;Person#41;#40;#123; name: #quot;Carol#quot;, age: 50 #125;#41;"]]
+  32[/"type: #123; readonly age: number; readonly name: string; #125;<br/>node: Schema.encodeUnknownSync#40;Person#41;#40;#123; name: #quot;Carol#quot;, age: 50 #125;#41;"/]
+  33[/"type: Struct#lt;#123; readonly name: String; readonly age: Number; #125;#gt;<br/>node: Person"/]
+  34["type: #40;input: unknown, options?: ParseOptions #124; undefined#41; =#gt; #123; readonly age: number; readonly name: string; #125;<br/>callee: Schema.encodeUnknownSync<br/>args: #91;#93;"]
+  35[/"type: #lt;S extends Schema.Encoder#lt;unknown#gt;#gt;#40;schema: S#41; =#gt; #40;input: unknown, options?: ParseOptions #124; undefined#41; =#gt; S#91;#quot;Encoded#quot;#93;<br/>node: Schema.encodeUnknownSync"/]
+  36[["type: #40;#41; =#gt; ExampleError<br/>node: #40;#41; =#gt; new ExampleError#40;#41;"]]
+  37[/"type: ExampleError<br/>node: new ExampleError#40;#41;"/]
+  38["type: Effect#lt;#123; readonly age: number; readonly name: string; #125;, ExampleError, never#gt;<br/>callee: Effect.tryPromise<br/>args: #91;#93;"]
+  39[/"type: #lt;A, E = UnknownError#gt;#40;options: #123; readonly try: #40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;; readonly catch: #40;error: unknown#41; =#gt; E; #125; #124; #40;#40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;#41;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.tryPromise"/]
+  40[["type: #40;#41; =#gt; #40;#41; =#gt; #123; readonly age: number; readonly name: string; #125;<br/>node: #40;#41; =#gt; #40;#41; =#gt; Schema.decodeSync#40;Person#41;#40;#123; name: #quot;Nested#quot;, age: 10 #125;#41;"]]
+  41[["type: #40;#41; =#gt; #123; readonly age: number; readonly name: string; #125;<br/>node: #40;#41; =#gt; Schema.decodeSync#40;Person#41;#40;#123; name: #quot;Nested#quot;, age: 10 #125;#41;"]]
+  42[/"type: #123; readonly age: number; readonly name: string; #125;<br/>node: Schema.decodeSync#40;Person#41;#40;#123; name: #quot;Nested#quot;, age: 10 #125;#41;"/]
+  43[/"type: Struct#lt;#123; readonly name: String; readonly age: Number; #125;#gt;<br/>node: Person"/]
+  44["type: #40;input: #123; readonly age: number; readonly name: string; #125;, options?: ParseOptions #124; undefined#41; =#gt; #123; readonly age: number; readonly name: string; #125;<br/>callee: Schema.decodeSync<br/>args: #91;#93;"]
+  45[/"type: #lt;S extends Decoder#lt;unknown#gt;#gt;#40;schema: S#41; =#gt; #40;input: S#91;#quot;Encoded#quot;#93;, options?: ParseOptions #124; undefined#41; =#gt; S#91;#quot;Type#quot;#93;<br/>node: Schema.decodeSync"/]
+  46["type: Effect#lt;#40;#41; =#gt; #123; readonly age: number; readonly name: string; #125;, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
+  47[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
   3 -->|"kind: pipe"| 4
   5 -->|"kind: transformCallee"| 4
-  6 -->|"kind: pipe"| 7
-  8 -->|"kind: transformCallee"| 7
-  10 -->|"kind: potentialReturn"| 9
-  9 -->|"kind: connect"| 6
-  11 -->|"kind: pipe"| 12
-  13 -->|"kind: transformCallee"| 12
-  14 -->|"kind: pipe"| 15
-  16 -->|"kind: transformCallee"| 15
-  18 -->|"kind: potentialReturn"| 17
-  19 -->|"kind: pipe"| 20
-  21 -->|"kind: transformCallee"| 20
-  23 -->|"kind: potentialReturn"| 22
-  24 -->|"kind: pipe"| 25
-  26 -->|"kind: transformCallee"| 25
-  28 -->|"kind: potentialReturn"| 27
-  27 -->|"kind: connect"| 24
-  29 -->|"kind: pipe"| 30
-  31 -->|"kind: transformCallee"| 30
-  32 -->|"kind: pipe"| 33
-  34 -->|"kind: transformCallee"| 33
-  36 -->|"kind: potentialReturn"| 35
-  37 -->|"kind: pipe"| 38
+  8 -->|"kind: pipe"| 9
+  10 -->|"kind: transformCallee"| 9
+  9 -->|"kind: usedBy"| 7
+  7 -->|"kind: potentialReturn"| 6
+  6 -->|"kind: pipe"| 11
+  12 -->|"kind: transformCallee"| 11
+  16 -->|"kind: pipe"| 17
+  18 -->|"kind: transformCallee"| 17
+  17 -->|"kind: usedBy"| 15
+  15 -->|"kind: potentialReturn"| 14
+  14 -->|"kind: usedBy"| 13
+  20 -->|"kind: potentialReturn"| 19
+  19 -->|"kind: usedBy"| 13
+  13 -->|"kind: pipe"| 21
+  22 -->|"kind: transformCallee"| 21
+  25 -->|"kind: pipe"| 26
+  27 -->|"kind: transformCallee"| 26
+  26 -->|"kind: usedBy"| 24
+  24 -->|"kind: potentialReturn"| 23
+  23 -->|"kind: pipe"| 28
+  29 -->|"kind: transformCallee"| 28
+  33 -->|"kind: pipe"| 34
+  35 -->|"kind: transformCallee"| 34
+  34 -->|"kind: usedBy"| 32
+  32 -->|"kind: potentialReturn"| 31
+  31 -->|"kind: usedBy"| 30
+  37 -->|"kind: potentialReturn"| 36
+  36 -->|"kind: usedBy"| 30
+  30 -->|"kind: pipe"| 38
   39 -->|"kind: transformCallee"| 38
+  43 -->|"kind: pipe"| 44
+  45 -->|"kind: transformCallee"| 44
+  44 -->|"kind: usedBy"| 42
+  42 -->|"kind: potentialReturn"| 41
   41 -->|"kind: potentialReturn"| 40
-  42 -->|"kind: pipe"| 43
-  44 -->|"kind: transformCallee"| 43
-  46 -->|"kind: potentialReturn"| 45
-  45 -->|"kind: connect"| 42
-  48 -->|"kind: potentialReturn"| 47
-  47 -->|"kind: connect"| 46
-  49 -->|"kind: pipe"| 50
-  51 -->|"kind: transformCallee"| 50
+  40 -->|"kind: pipe"| 46
+  47 -->|"kind: transformCallee"| 46

@@ -1,54 +1,25 @@
 flowchart TB
-  0((("type: #40;router: HttpRouter#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.fnUntraced#40;function*#40;router#41; #123;#92;n    yield* router.add#40;#92;n      #quot;GET#quot;,#92;n      #quot;/#quot;,#92;n      Effect.fnUntraced#40;function*#40;request#41; #123;#92;n        return HttpServerResponse.empty#40;#41;#92;n      #125;#41;#92;n    #41;#92;n  #125;#41;")))
-  1["type: Layer#lt;never, never, HttpRouter#gt;<br/>callee: HttpRouter.use<br/>args: #91;#93;"]
-  2[/"type: #lt;A, E, R#gt;#40;f: #40;router: HttpRouter#41; =#gt; Effect#lt;A, E, R#gt;#41; =#gt; Layer#lt;never, E, HttpRouter #124; Exclude#lt;R, Scope#gt;#gt;<br/>node: HttpRouter.use"/]
-  3[["type: #40;router: HttpRouter#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.fnUntraced#40;function*#40;router#41; #123;#92;n    yield* router.add#40;#92;n      #quot;GET#quot;,#92;n      #quot;/#quot;,#92;n      Effect.fnUntraced#40;function*#40;request#41; #123;#92;n        return HttpServerResponse.empty#40;#41;#92;n      #125;#41;#92;n    #41;#92;n  #125;#41;"]]
-  4((("type: Effect#lt;void, never, never#gt;<br/>node: function*#40;router#41; #123;#92;n    yield* router.add#40;#92;n      #quot;GET#quot;,#92;n      #quot;/#quot;,#92;n      Effect.fnUntraced#40;function*#40;request#41; #123;#92;n        return HttpServerResponse.empty#40;#41;#92;n      #125;#41;#92;n    #41;#92;n  #125;")))
-  5[/"type: Effect#lt;void, never, never#gt;<br/>node: router.add#40;#92;n      #quot;GET#quot;,#92;n      #quot;/#quot;,#92;n      Effect.fnUntraced#40;function*#40;request#41; #123;#92;n        return HttpServerResponse.empty#40;#41;#92;n      #125;#41;#92;n    #41;"/]
-  6[/"type: HttpRouter<br/>node: router"/]
-  7[["type: #40;request: HttpServerRequest#41; =#gt; Effect#lt;HttpServerResponse, never, never#gt;<br/>node: Effect.fnUntraced#40;function*#40;request#41; #123;#92;n        return HttpServerResponse.empty#40;#41;#92;n      #125;#41;"]]
-  8((("type: Effect#lt;HttpServerResponse, never, never#gt;<br/>node: function*#40;request#41; #123;#92;n        return HttpServerResponse.empty#40;#41;#92;n      #125;")))
-  9[/"type: HttpServerResponse<br/>node: HttpServerResponse.empty#40;#41;"/]
-  10[/"type: HttpServerRequest<br/>node: request"/]
+  0((("type: Effect#lt;void, never, never#gt;<br/>node: function*#40;router#41; #123;#92;n    yield* router.add#40;#92;n      #quot;GET#quot;,#92;n      #quot;/#quot;,#92;n      Effect.fnUntraced#40;function*#40;request#41; #123;#92;n        return HttpServerResponse.empty#40;#41;#92;n      #125;#41;#92;n    #41;#92;n  #125;")))
+  1[/"type: Effect#lt;void, never, never#gt;<br/>node: router.add#40;#92;n      #quot;GET#quot;,#92;n      #quot;/#quot;,#92;n      Effect.fnUntraced#40;function*#40;request#41; #123;#92;n        return HttpServerResponse.empty#40;#41;#92;n      #125;#41;#92;n    #41;"/]
+  2((("type: Effect#lt;HttpServerResponse, never, never#gt;<br/>node: function*#40;request#41; #123;#92;n        return HttpServerResponse.empty#40;#41;#92;n      #125;")))
+  3[/"type: HttpServerResponse<br/>node: HttpServerResponse.empty#40;#41;"/]
+  4[["type: #40;request: HttpServerRequest#41; =#gt; Effect#lt;HttpServerResponse, never, never#gt;<br/>node: Effect.fnUntraced#40;function*#40;request#41; #123;#92;n        return HttpServerResponse.empty#40;#41;#92;n      #125;#41;"]]
+  5[["type: #40;router: HttpRouter#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.fnUntraced#40;function*#40;router#41; #123;#92;n    yield* router.add#40;#92;n      #quot;GET#quot;,#92;n      #quot;/#quot;,#92;n      Effect.fnUntraced#40;function*#40;request#41; #123;#92;n        return HttpServerResponse.empty#40;#41;#92;n      #125;#41;#92;n    #41;#92;n  #125;#41;"]]
+  6["type: Layer#lt;never, never, HttpRouter#gt;<br/>callee: HttpRouter.use<br/>args: #91;#93;"]
+  7[/"type: #lt;A, E, R#gt;#40;f: #40;router: HttpRouter#41; =#gt; Effect#lt;A, E, R#gt;#41; =#gt; Layer#lt;never, E, HttpRouter #124; Exclude#lt;R, Scope#gt;#gt;<br/>node: HttpRouter.use"/]
+  8((("type: Effect#lt;number, never, never#gt;<br/>node: function*#40;s: string#41; #123;#92;n    return s.length#92;n  #125;")))
+  9["type: Effect#lt;#40;string #124; number#41;#91;#93;, never, never#gt;<br/>callee: #40;effect, ...args#41; =#gt; effect.pipe#40;Effect.map#40;#40;result#41; =#gt; #91;result, ...args#93;#41;#41;<br/>args: #91;#93;"]
+  10[/"type: number<br/>node: s.length"/]
   11[["type: #40;s: string#41; =#gt; Effect#lt;#40;string #124; number#41;#91;#93;, never, never#gt;<br/>node: Effect.fn#40;#92;n  function*#40;s: string#41; #123;#92;n    return s.length#92;n  #125;,#92;n  #40;effect, ...args#41; =#gt; effect.pipe#40;Effect.map#40;#40;result#41; =#gt; #91;result, ...args#93;#41;#41;#92;n#41;"]]
-  12((("type: Effect#lt;number, never, never#gt;<br/>node: function*#40;s: string#41; #123;#92;n    return s.length#92;n  #125;")))
-  13[/"type: number<br/>node: s.length"/]
-  14["type: Effect#lt;#40;string #124; number#41;#91;#93;, never, never#gt;<br/>callee: #40;effect, ...args#41; =#gt; effect.pipe#40;Effect.map#40;#40;result#41; =#gt; #91;result, ...args#93;#41;#41;<br/>args: #91;#93;"]
-  15[/"type: string<br/>node: s: string"/]
-  16((("type: #40;effect: Effect#lt;number, never, never#gt;, s: string#41; =#gt; Effect#lt;#40;string #124; number#41;#91;#93;, never, never#gt;<br/>node: #40;effect, ...args#41; =#gt; effect.pipe#40;Effect.map#40;#40;result#41; =#gt; #91;result, ...args#93;#41;#41;")))
-  17[["type: #40;effect: Effect#lt;number, never, never#gt;, s: string#41; =#gt; Effect#lt;#40;string #124; number#41;#91;#93;, never, never#gt;<br/>node: #40;effect, ...args#41; =#gt; effect.pipe#40;Effect.map#40;#40;result#41; =#gt; #91;result, ...args#93;#41;#41;"]]
-  18((("type: Effect#lt;#40;string #124; number#41;#91;#93;, never, never#gt;<br/>node: effect.pipe#40;Effect.map#40;#40;result#41; =#gt; #91;result, ...args#93;#41;#41;")))
-  19[/"type: Effect#lt;number, never, never#gt;<br/>node: effect"/]
-  20[/"type: #91;s: string#93;<br/>node: ...args"/]
-  21[/"type: Effect#lt;number, never, never#gt;<br/>node: effect"/]
-  22["type: Effect#lt;#40;string #124; number#41;#91;#93;, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;result#41; =#gt; #91;result, ...args#93;#93;"]
-  23[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
-  24((("type: #40;result: number#41; =#gt; #40;string #124; number#41;#91;#93;<br/>node: #40;result#41; =#gt; #91;result, ...args#93;")))
-  25[["type: #40;result: number#41; =#gt; #40;string #124; number#41;#91;#93;<br/>node: #40;result#41; =#gt; #91;result, ...args#93;"]]
-  26[/"type: #40;string #124; number#41;#91;#93;<br/>node: #91;result, ...args#93;"/]
-  27[/"type: number<br/>node: result"/]
-  0 -->|"kind: pipe"| 1
-  2 -->|"kind: transformCallee"| 1
-  5 -->|"kind: yieldable"| 4
-  4 -->|"kind: potentialReturn"| 3
-  6 -->|"kind: parameter"| 3
-  3 -->|"kind: connect"| 0
-  9 -->|"kind: potentialReturn"| 8
-  8 -->|"kind: potentialReturn"| 7
-  10 -->|"kind: parameter"| 7
-  13 -->|"kind: potentialReturn"| 12
-  12 -->|"kind: fnPipe"| 14
-  14 -->|"kind: potentialReturn"| 11
-  15 -->|"kind: parameter"| 11
-  16 -->|"kind: transformCallee"| 14
-  18 -->|"kind: potentialReturn"| 17
-  19 -->|"kind: parameter"| 17
-  20 -->|"kind: parameter"| 17
-  17 -->|"kind: connect"| 16
-  21 -->|"kind: pipe"| 22
-  22 -->|"kind: connect"| 18
-  23 -->|"kind: transformCallee"| 22
-  24 -->|"kind: transformArg"| 22
-  26 -->|"kind: potentialReturn"| 25
-  27 -->|"kind: parameter"| 25
-  25 -->|"kind: connect"| 24
+  3 -->|"kind: potentialReturn"| 2
+  3 -->|"kind: usedBy"| 2
+  2 -->|"kind: potentialReturn"| 4
+  4 -->|"kind: usedBy"| 1
+  1 -->|"kind: yieldable"| 0
+  0 -->|"kind: potentialReturn"| 5
+  5 -->|"kind: pipe"| 6
+  7 -->|"kind: transformCallee"| 6
+  8 -->|"kind: pipe"| 9
+  10 -->|"kind: potentialReturn"| 8
+  10 -->|"kind: usedBy"| 8
+  9 -->|"kind: potentialReturn"| 11

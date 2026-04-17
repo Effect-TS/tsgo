@@ -1,4 +1,4 @@
 flowchart TB
-  0[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#125;"]]
-  1((("type: void<br/>node: #40;#41; =#gt; #123;#125;")))
-  1 -->|"kind: potentialReturn"| 0
+  0[/"type: number<br/>node: setTimeout#40;#40;#41; =#gt; #123;#125;, 100#41;"/]
+  1[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#125;"]]
+  1 -->|"kind: usedBy"| 0

@@ -1,16 +1,13 @@
 flowchart TB
-  0[/"type: Effect#lt;Response, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  return yield* Effect.promise#40;#40;#41; =#gt; fetch#40;#quot;https://example.com#quot;#41;#41;#92;n#125;#41;"/]
-  1((("type: Effect#lt;Response, never, never#gt;<br/>node: Effect.promise#40;#40;#41; =#gt; fetch#40;#quot;https://example.com#quot;#41;#41;")))
-  2[/"type: Response<br/>node: yield* Effect.promise#40;#40;#41; =#gt; fetch#40;#quot;https://example.com#quot;#41;#41;"/]
-  3((("type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;https://example.com#quot;#41;")))
+  0((("type: Effect#lt;Response, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  return yield* Effect.promise#40;#40;#41; =#gt; fetch#40;#quot;https://example.com#quot;#41;#41;#92;n#125;#41;")))
+  1[/"type: Response<br/>node: yield* Effect.promise#40;#40;#41; =#gt; fetch#40;#quot;https://example.com#quot;#41;#41;"/]
+  2[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;https://example.com#quot;#41;"]]
+  3[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;https://example.com#quot;#41;"/]
   4["type: Effect#lt;Response, never, never#gt;<br/>callee: Effect.promise<br/>args: #91;#93;"]
   5[/"type: #lt;A#gt;#40;evaluate: #40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.promise"/]
-  6[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;https://example.com#quot;#41;"]]
-  7[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;https://example.com#quot;#41;"/]
-  1 -->|"kind: yieldable"| 0
-  2 -->|"kind: potentialReturn"| 0
-  3 -->|"kind: pipe"| 4
-  4 -->|"kind: connect"| 1
+  3 -->|"kind: potentialReturn"| 2
+  2 -->|"kind: pipe"| 4
   5 -->|"kind: transformCallee"| 4
-  7 -->|"kind: potentialReturn"| 6
-  6 -->|"kind: connect"| 3
+  4 -->|"kind: usedBy"| 1
+  1 -->|"kind: potentialReturn"| 0
+  4 -->|"kind: yieldable"| 0

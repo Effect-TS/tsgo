@@ -26,6 +26,7 @@ flowchart TB
   24[/"type: #123; foo: string; #125;<br/>node: #123; foo: #quot;bar#quot; #125;"/]
   25["type: Effect#lt;#123; foo: string; #125;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
   26[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  27[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
   3 -->|"kind: pipe"| 4

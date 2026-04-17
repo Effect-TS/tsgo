@@ -11,47 +11,42 @@ flowchart TB
   9[/"type: Error<br/>node: new globalThis.Error#40;#quot;global error#quot;#41;"/]
   10["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
   11[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  12[/"type: BaseExtendsError<br/>node: new BaseExtendsError#40;#41;"/]
-  13["type: Effect#lt;never, BaseExtendsError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  14[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  15[/"type: BaseExtendsErrorWithTag<br/>node: new BaseExtendsErrorWithTag#40;#41;"/]
-  16["type: Effect#lt;never, BaseExtendsErrorWithTag, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  17[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  18[/"type: Effect#lt;never, Error, never#gt;<br/>node: Effect.gen#40;function* #40;#41; #123;#92;n  return yield* Effect.fail#40;new Error#40;#quot;global error in gen#quot;#41;#41;#92;n#125;#41;"/]
-  19((("type: Effect#lt;never, Error, never#gt;<br/>node: Effect.fail#40;new Error#40;#quot;global error in gen#quot;#41;#41;")))
-  20[/"type: never<br/>node: yield* Effect.fail#40;new Error#40;#quot;global error in gen#quot;#41;#41;"/]
-  21[/"type: Error<br/>node: new Error#40;#quot;global error in gen#quot;#41;"/]
-  22["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  23[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  24[/"type: Effect#lt;never, CustomError, never#gt;<br/>node: Effect.gen#40;function* #40;#41; #123;#92;n  return yield* Effect.fail#40;new CustomError#40;#41;#41;#92;n#125;#41;"/]
-  25((("type: Effect#lt;never, CustomError, never#gt;<br/>node: Effect.fail#40;new CustomError#40;#41;#41;")))
-  26[/"type: never<br/>node: yield* Effect.fail#40;new CustomError#40;#41;#41;"/]
-  27[/"type: CustomError<br/>node: new CustomError#40;#41;"/]
-  28["type: Effect#lt;never, CustomError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  29[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  30((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.succeed#40;1#41;")))
-  31["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;#41; =#gt; Effect.fail#40;new Error#40;#quot;global error in map#quot;#41;#41;#93;"]
-  32[/"type: 1<br/>node: 1"/]
-  33["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  34[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  12[/"type: ErrorConstructor<br/>node: Error"/]
+  13[/"type: BaseExtendsError<br/>node: new BaseExtendsError#40;#41;"/]
+  14["type: Effect#lt;never, BaseExtendsError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  15[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  16[/"type: ErrorConstructor<br/>node: Error"/]
+  17[/"type: #quot;BaseExtendsErrorWithTag#quot;<br/>node: #quot;BaseExtendsErrorWithTag#quot;"/]
+  18[/"type: BaseExtendsErrorWithTag<br/>node: new BaseExtendsErrorWithTag#40;#41;"/]
+  19["type: Effect#lt;never, BaseExtendsErrorWithTag, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  20[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  21((("type: Effect#lt;never, Error, never#gt;<br/>node: Effect.gen#40;function* #40;#41; #123;#92;n  return yield* Effect.fail#40;new Error#40;#quot;global error in gen#quot;#41;#41;#92;n#125;#41;")))
+  22[/"type: never<br/>node: yield* Effect.fail#40;new Error#40;#quot;global error in gen#quot;#41;#41;"/]
+  23[/"type: Error<br/>node: new Error#40;#quot;global error in gen#quot;#41;"/]
+  24["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  25[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  26((("type: Effect#lt;never, CustomError, never#gt;<br/>node: Effect.gen#40;function* #40;#41; #123;#92;n  return yield* Effect.fail#40;new CustomError#40;#41;#41;#92;n#125;#41;")))
+  27[/"type: never<br/>node: yield* Effect.fail#40;new CustomError#40;#41;#41;"/]
+  28[/"type: CustomError<br/>node: new CustomError#40;#41;"/]
+  29["type: Effect#lt;never, CustomError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  30[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  31[/"type: 1<br/>node: 1"/]
+  32["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  33[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  34["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;#41; =#gt; Effect.fail#40;new Error#40;#quot;global error in map#quot;#41;#41;#93;"]
   35[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
-  36((("type: #40;#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: #40;#41; =#gt; Effect.fail#40;new Error#40;#quot;global error in map#quot;#41;#41;")))
-  37[["type: #40;#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: #40;#41; =#gt; Effect.fail#40;new Error#40;#quot;global error in map#quot;#41;#41;"]]
-  38((("type: Effect#lt;never, Error, never#gt;<br/>node: Effect.fail#40;new Error#40;#quot;global error in map#quot;#41;#41;")))
-  39[/"type: Error<br/>node: new Error#40;#quot;global error in map#quot;#41;"/]
-  40["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  41[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  42[["type: #40;#41; =#gt; void<br/>node: export function shouldNotReportNonEffect#40;#41; #123;#92;n  throw new Error#40;#quot;this is not in an Effect#quot;#41;#92;n#125;"]]
-  43((("type: void<br/>node: export function shouldNotReportNonEffect#40;#41; #123;#92;n  throw new Error#40;#quot;this is not in an Effect#quot;#41;#92;n#125;")))
-  44((("type: Effect#lt;never, CustomError, never#gt;<br/>node: Effect.fail#40;new CustomError#40;#41;#41;")))
-  45["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.mapError<br/>args: #91;#40;#41; =#gt; new Error#40;#quot;mapped to global error#quot;#41;#93;"]
-  46[/"type: CustomError<br/>node: new CustomError#40;#41;"/]
-  47["type: Effect#lt;never, CustomError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  48[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  49[/"type: #123; #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E2, R#gt;; #lt;A, E, R, E2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; E2#41;: Effect#lt;A, E2, R#gt;; #125;<br/>node: Effect.mapError"/]
-  50((("type: #40;#41; =#gt; Error<br/>node: #40;#41; =#gt; new Error#40;#quot;mapped to global error#quot;#41;")))
-  51[["type: #40;#41; =#gt; Error<br/>node: #40;#41; =#gt; new Error#40;#quot;mapped to global error#quot;#41;"]]
-  52[/"type: Error<br/>node: new Error#40;#quot;mapped to global error#quot;#41;"/]
+  36[["type: #40;#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: #40;#41; =#gt; Effect.fail#40;new Error#40;#quot;global error in map#quot;#41;#41;"]]
+  37[/"type: Error<br/>node: new Error#40;#quot;global error in map#quot;#41;"/]
+  38["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  39[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  40[["type: #40;#41; =#gt; void<br/>node: export function shouldNotReportNonEffect#40;#41; #123;#92;n  throw new Error#40;#quot;this is not in an Effect#quot;#41;#92;n#125;"]]
+  41[/"type: CustomError<br/>node: new CustomError#40;#41;"/]
+  42["type: Effect#lt;never, CustomError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  43[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  44["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.mapError<br/>args: #91;#40;#41; =#gt; new Error#40;#quot;mapped to global error#quot;#41;#93;"]
+  45[/"type: #123; #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E2, R#gt;; #lt;A, E, R, E2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; E2#41;: Effect#lt;A, E2, R#gt;; #125;<br/>node: Effect.mapError"/]
+  46[["type: #40;#41; =#gt; Error<br/>node: #40;#41; =#gt; new Error#40;#quot;mapped to global error#quot;#41;"]]
+  47[/"type: Error<br/>node: new Error#40;#quot;mapped to global error#quot;#41;"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
   3 -->|"kind: pipe"| 4
@@ -60,37 +55,31 @@ flowchart TB
   8 -->|"kind: transformCallee"| 7
   9 -->|"kind: pipe"| 10
   11 -->|"kind: transformCallee"| 10
-  12 -->|"kind: pipe"| 13
-  14 -->|"kind: transformCallee"| 13
-  15 -->|"kind: pipe"| 16
-  17 -->|"kind: transformCallee"| 16
-  19 -->|"kind: yieldable"| 18
-  20 -->|"kind: potentialReturn"| 18
-  21 -->|"kind: pipe"| 22
-  22 -->|"kind: connect"| 19
-  23 -->|"kind: transformCallee"| 22
-  25 -->|"kind: yieldable"| 24
-  26 -->|"kind: potentialReturn"| 24
-  27 -->|"kind: pipe"| 28
-  28 -->|"kind: connect"| 25
-  29 -->|"kind: transformCallee"| 28
-  30 -->|"kind: pipe"| 31
-  32 -->|"kind: pipe"| 33
-  33 -->|"kind: connect"| 30
-  34 -->|"kind: transformCallee"| 33
-  35 -->|"kind: transformCallee"| 31
-  36 -->|"kind: transformArg"| 31
-  38 -->|"kind: potentialReturn"| 37
-  37 -->|"kind: connect"| 36
-  39 -->|"kind: pipe"| 40
-  40 -->|"kind: connect"| 38
-  41 -->|"kind: transformCallee"| 40
-  43 -->|"kind: potentialReturn"| 42
-  44 -->|"kind: pipe"| 45
-  46 -->|"kind: pipe"| 47
-  47 -->|"kind: connect"| 44
-  48 -->|"kind: transformCallee"| 47
-  49 -->|"kind: transformCallee"| 45
-  50 -->|"kind: transformArg"| 45
-  52 -->|"kind: potentialReturn"| 51
-  51 -->|"kind: connect"| 50
+  13 -->|"kind: pipe"| 14
+  15 -->|"kind: transformCallee"| 14
+  18 -->|"kind: pipe"| 19
+  20 -->|"kind: transformCallee"| 19
+  23 -->|"kind: pipe"| 24
+  25 -->|"kind: transformCallee"| 24
+  24 -->|"kind: usedBy"| 22
+  22 -->|"kind: potentialReturn"| 21
+  24 -->|"kind: yieldable"| 21
+  28 -->|"kind: pipe"| 29
+  30 -->|"kind: transformCallee"| 29
+  29 -->|"kind: usedBy"| 27
+  27 -->|"kind: potentialReturn"| 26
+  29 -->|"kind: yieldable"| 26
+  31 -->|"kind: pipe"| 32
+  33 -->|"kind: transformCallee"| 32
+  35 -->|"kind: transformCallee"| 34
+  37 -->|"kind: pipe"| 38
+  39 -->|"kind: transformCallee"| 38
+  38 -->|"kind: potentialReturn"| 36
+  36 -->|"kind: transformArg"| 34
+  32 -->|"kind: pipe"| 34
+  41 -->|"kind: pipe"| 42
+  43 -->|"kind: transformCallee"| 42
+  45 -->|"kind: transformCallee"| 44
+  47 -->|"kind: potentialReturn"| 46
+  46 -->|"kind: transformArg"| 44
+  42 -->|"kind: pipe"| 44

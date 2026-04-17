@@ -1,36 +1,42 @@
 flowchart TB
-  0[/"type: #quot;MySchema#quot;<br/>node: #quot;MySchema#quot;"/]
-  1["type: #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;MySchema, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: Class#lt;MySchema, Struct#lt;Fields#gt;, #123;#125;#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;MySchema, readonly #91;S#93;#gt; #124; undefined#41;: Class#lt;MySchema, S, #123;#125;#gt;; #125;<br/>callee: Schema.Class<br/>args: #91;#93;"]
-  2[/"type: #lt;Self = never, Brand = #123;#125;#gt;#40;identifier: string#41; =#gt; #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;Self, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.Class#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, Struct#lt;Fields#gt;, Brand#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;Self, readonly #91;S#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.Class#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, S, Brand#gt;; #125;<br/>node: Schema.Class"/]
-  3[/"type: #quot;is my schema#quot;<br/>node: #quot;is my schema#quot;"/]
-  4["type: void<br/>callee: console.log<br/>args: #91;#93;"]
-  5[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
-  6[/"type: #quot;MySchema#quot;<br/>node: #quot;MySchema#quot;"/]
-  7["type: #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;PersonSchema, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: Class#lt;PersonSchema, Struct#lt;Fields#gt;, #123;#125;#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;PersonSchema, readonly #91;S#93;#gt; #124; undefined#41;: Class#lt;PersonSchema, S, #123;#125;#gt;; #125;<br/>callee: Schema.Class<br/>args: #91;#93;"]
-  8[/"type: #lt;Self = never, Brand = #123;#125;#gt;#40;identifier: string#41; =#gt; #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;Self, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.Class#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, Struct#lt;Fields#gt;, Brand#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;Self, readonly #91;S#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.Class#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, S, Brand#gt;; #125;<br/>node: Schema.Class"/]
-  9[["type: #40;x: unknown#41; =#gt; x is PersonSchema<br/>node: #40;x: unknown#41; =#gt; x instanceof PersonSchema"]]
-  10[/"type: boolean<br/>node: x instanceof PersonSchema"/]
-  11[/"type: unknown<br/>node: x: unknown"/]
-  12[/"type: #quot;is my class#quot;<br/>node: #quot;is my class#quot;"/]
-  13["type: void<br/>callee: console.log<br/>args: #91;#93;"]
-  14[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
-  15[/"type: #quot;is date#quot;<br/>node: #quot;is date#quot;"/]
+  0[/"type: Class#lt;MySchema, Struct#lt;#123; readonly name: String; #125;#gt;, #123;#125;#gt;<br/>node: Schema.Class#lt;MySchema#gt;#40;#quot;MySchema#quot;#41;#40;#123;#92;n  name: Schema.String,#92;n#125;#41;"/]
+  1[/"type: #quot;MySchema#quot;<br/>node: #quot;MySchema#quot;"/]
+  2["type: #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;MySchema, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: Class#lt;MySchema, Struct#lt;Fields#gt;, #123;#125;#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;MySchema, readonly #91;S#93;#gt; #124; undefined#41;: Class#lt;MySchema, S, #123;#125;#gt;; #125;<br/>callee: Schema.Class<br/>args: #91;#93;"]
+  3[/"type: #lt;Self = never, Brand = #123;#125;#gt;#40;identifier: string#41; =#gt; #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;Self, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.Class#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, Struct#lt;Fields#gt;, Brand#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;Self, readonly #91;S#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.Class#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, S, Brand#gt;; #125;<br/>node: Schema.Class"/]
+  4[/"type: boolean<br/>node: value instanceof MySchema"/]
+  5[/"type: #quot;is my schema#quot;<br/>node: #quot;is my schema#quot;"/]
+  6["type: void<br/>callee: console.log<br/>args: #91;#93;"]
+  7[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
+  8[/"type: Class#lt;PersonSchema, Struct#lt;#123; readonly name: String; #125;#gt;, #123;#125;#gt;<br/>node: Schema.Class#lt;PersonSchema#gt;#40;#quot;MySchema#quot;#41;#40;#123;#92;n  name: Schema.String,#92;n#125;#41;"/]
+  9[/"type: #quot;MySchema#quot;<br/>node: #quot;MySchema#quot;"/]
+  10["type: #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;PersonSchema, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: Class#lt;PersonSchema, Struct#lt;Fields#gt;, #123;#125;#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;PersonSchema, readonly #91;S#93;#gt; #124; undefined#41;: Class#lt;PersonSchema, S, #123;#125;#gt;; #125;<br/>callee: Schema.Class<br/>args: #91;#93;"]
+  11[/"type: #lt;Self = never, Brand = #123;#125;#gt;#40;identifier: string#41; =#gt; #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;Self, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.Class#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, Struct#lt;Fields#gt;, Brand#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;Self, readonly #91;S#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.Class#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, S, Brand#gt;; #125;<br/>node: Schema.Class"/]
+  12[["type: #40;x: unknown#41; =#gt; x is PersonSchema<br/>node: #40;x: unknown#41; =#gt; x instanceof PersonSchema"]]
+  13[/"type: boolean<br/>node: x instanceof PersonSchema"/]
+  14[/"type: boolean<br/>node: value instanceof MyClass"/]
+  15[/"type: #quot;is my class#quot;<br/>node: #quot;is my class#quot;"/]
   16["type: void<br/>callee: console.log<br/>args: #91;#93;"]
   17[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
-  18[/"type: #quot;is regexp#quot;<br/>node: #quot;is regexp#quot;"/]
-  19["type: void<br/>callee: console.log<br/>args: #91;#93;"]
-  20[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
-  0 -->|"kind: pipe"| 1
-  2 -->|"kind: transformCallee"| 1
-  3 -->|"kind: pipe"| 4
-  5 -->|"kind: transformCallee"| 4
-  6 -->|"kind: pipe"| 7
-  8 -->|"kind: transformCallee"| 7
-  10 -->|"kind: potentialReturn"| 9
-  11 -->|"kind: parameter"| 9
-  12 -->|"kind: pipe"| 13
-  14 -->|"kind: transformCallee"| 13
+  18[/"type: boolean<br/>node: value instanceof Date"/]
+  19[/"type: #quot;is date#quot;<br/>node: #quot;is date#quot;"/]
+  20["type: void<br/>callee: console.log<br/>args: #91;#93;"]
+  21[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
+  22[/"type: boolean<br/>node: value instanceof RegExp"/]
+  23[/"type: #quot;is regexp#quot;<br/>node: #quot;is regexp#quot;"/]
+  24["type: void<br/>callee: console.log<br/>args: #91;#93;"]
+  25[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
+  1 -->|"kind: pipe"| 2
+  3 -->|"kind: transformCallee"| 2
+  2 -->|"kind: usedBy"| 0
+  5 -->|"kind: pipe"| 6
+  7 -->|"kind: transformCallee"| 6
+  9 -->|"kind: pipe"| 10
+  11 -->|"kind: transformCallee"| 10
+  10 -->|"kind: usedBy"| 8
+  13 -->|"kind: potentialReturn"| 12
   15 -->|"kind: pipe"| 16
   17 -->|"kind: transformCallee"| 16
-  18 -->|"kind: pipe"| 19
-  20 -->|"kind: transformCallee"| 19
+  19 -->|"kind: pipe"| 20
+  21 -->|"kind: transformCallee"| 20
+  23 -->|"kind: pipe"| 24
+  25 -->|"kind: transformCallee"| 24

@@ -1,10 +1,9 @@
 flowchart TB
-  0[/"type: Effect#lt;Effect#lt;never, string, never#gt;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  return Effect.fail#40;#quot;error#quot;#41;#92;n#125;#41;"/]
-  1((("type: Effect#lt;never, string, never#gt;<br/>node: Effect.fail#40;#quot;error#quot;#41;")))
-  2[/"type: #quot;error#quot;<br/>node: #quot;error#quot;"/]
-  3["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  4[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  1 -->|"kind: potentialReturn"| 0
-  2 -->|"kind: pipe"| 3
-  3 -->|"kind: connect"| 1
-  4 -->|"kind: transformCallee"| 3
+  0((("type: Effect#lt;Effect#lt;never, string, never#gt;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  return Effect.fail#40;#quot;error#quot;#41;#92;n#125;#41;")))
+  1[/"type: #quot;error#quot;<br/>node: #quot;error#quot;"/]
+  2["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  3[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  1 -->|"kind: pipe"| 2
+  3 -->|"kind: transformCallee"| 2
+  2 -->|"kind: potentialReturn"| 0
+  2 -->|"kind: usedBy"| 0

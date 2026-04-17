@@ -1,21 +1,17 @@
 flowchart TB
-  0[["type: #40;#41; =#gt; void<br/>node: fastForward#40;#41; #123;#92;n    #125;"]]
-  1((("type: void<br/>node: fastForward#40;#41; #123;#92;n    #125;")))
-  2[["type: #40;#41; =#gt; A #124; undefined<br/>node: take#40;#41;: A #124; undefined #123;#92;n      return 1 as A#92;n    #125;"]]
-  3((("type: A #124; undefined<br/>node: take#40;#41;: A #124; undefined #123;#92;n      return 1 as A#92;n    #125;")))
-  4[/"type: A<br/>node: 1 as A"/]
-  5[["type: #40;n: number#41; =#gt; A#91;#93;<br/>node: takeN#40;n: number#41;: Array#lt;A#gt; #123;#92;n      return 1 as any#92;n    #125;"]]
-  6((("type: A#91;#93;<br/>node: takeN#40;n: number#41;: Array#lt;A#gt; #123;#92;n      return 1 as any#92;n    #125;")))
+  0[/"type: <br/>node: PubSub.PubSub.ReplayWindow"/]
+  1[/"type: 1<br/>node: 1"/]
+  2[/"type: 1<br/>node: 1"/]
+  3[["type: #40;#41; =#gt; void<br/>node: fastForward#40;#41; #123;#92;n    #125;"]]
+  4[["type: #40;#41; =#gt; A #124; undefined<br/>node: take#40;#41;: A #124; undefined #123;#92;n      return 1 as A#92;n    #125;"]]
+  5[/"type: A<br/>node: 1 as A"/]
+  6[["type: #40;n: number#41; =#gt; A#91;#93;<br/>node: takeN#40;n: number#41;: Array#lt;A#gt; #123;#92;n      return 1 as any#92;n    #125;"]]
   7[/"type: any<br/>node: 1 as any"/]
-  8[/"type: number<br/>node: n: number"/]
-  9[["type: #40;#41; =#gt; A#91;#93;<br/>node: takeAll#40;#41;: Array#lt;A#gt; #123;#92;n      return 1 as any#92;n    #125;"]]
-  10((("type: A#91;#93;<br/>node: takeAll#40;#41;: Array#lt;A#gt; #123;#92;n      return 1 as any#92;n    #125;")))
-  11[/"type: any<br/>node: 1 as any"/]
-  1 -->|"kind: potentialReturn"| 0
-  3 -->|"kind: potentialReturn"| 2
-  4 -->|"kind: potentialReturn"| 3
-  6 -->|"kind: potentialReturn"| 5
+  8[["type: #40;#41; =#gt; A#91;#93;<br/>node: takeAll#40;#41;: Array#lt;A#gt; #123;#92;n      return 1 as any#92;n    #125;"]]
+  9[/"type: any<br/>node: 1 as any"/]
+  5 -->|"kind: potentialReturn"| 4
+  5 -->|"kind: usedBy"| 4
   7 -->|"kind: potentialReturn"| 6
-  8 -->|"kind: parameter"| 5
-  10 -->|"kind: potentialReturn"| 9
-  11 -->|"kind: potentialReturn"| 10
+  7 -->|"kind: usedBy"| 6
+  9 -->|"kind: potentialReturn"| 8
+  9 -->|"kind: usedBy"| 8

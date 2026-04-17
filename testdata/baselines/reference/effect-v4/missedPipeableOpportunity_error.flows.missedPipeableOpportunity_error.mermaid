@@ -3,81 +3,70 @@ flowchart TB
   1["type: Struct#lt;#123; readonly x: Number; readonly y: Number; #125;#gt;<br/>callee: Schema.Struct<br/>args: #91;#93;"]
   2[/"type: #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields#41; =#gt; Struct#lt;Fields#gt;<br/>node: Schema.Struct"/]
   3[/"type: Effect#lt;#123; readonly x: number; readonly y: number; #125;, SchemaError, never#gt;<br/>node: Schema.decodeEffect#40;MyStruct#41;#40;#123; x: 42, y: 42 #125;#41;"/]
-  4["type: Effect#lt;#123; readonly x: number; readonly y: number; #125;, SchemaError, never#gt;<br/>callee: identity<br/>args: #91;#93;"]
-  5[/"type: #lt;A#gt;#40;a: A#41; =#gt; A<br/>node: identity"/]
-  6[/"type: Struct#lt;#123; readonly x: Number; readonly y: Number; #125;#gt;<br/>node: MyStruct"/]
-  7["type: #40;input: #123; readonly x: number; readonly y: number; #125;, options?: ParseOptions #124; undefined#41; =#gt; Effect#lt;#123; readonly x: number; readonly y: number; #125;, SchemaError, never#gt;<br/>callee: Schema.decodeEffect<br/>args: #91;#93;"]
-  8[/"type: #lt;S extends Top#gt;#40;schema: S#41; =#gt; #40;input: S#91;#quot;Encoded#quot;#93;, options?: ParseOptions #124; undefined#41; =#gt; Effect#lt;S#91;#quot;Type#quot;#93;, SchemaError, S#91;#quot;DecodingServices#quot;#93;#gt;<br/>node: Schema.decodeEffect"/]
-  9((("type: Effect#lt;#123; readonly x: number; readonly y: number; #125;, SchemaError, never#gt;<br/>node: identity#40;Schema.decodeEffect#40;MyStruct#41;#40;#123; x: 42, y: 42 #125;#41;#41;")))
-  10["type: Effect#lt;#123; readonly x: number; readonly y: number; #125;, SchemaError, never#gt;<br/>callee: identity<br/>args: #91;#93;"]
-  11[/"type: #lt;A#gt;#40;a: A#41; =#gt; A<br/>node: identity"/]
-  12[/"type: Effect#lt;#123; readonly x: number; readonly y: number; #125;, SchemaError, never#gt;<br/>node: Schema.decodeEffect#40;MyStruct#41;#40;#123; x: 42, y: 42 #125;#41;"/]
+  4[/"type: Struct#lt;#123; readonly x: Number; readonly y: Number; #125;#gt;<br/>node: MyStruct"/]
+  5["type: #40;input: #123; readonly x: number; readonly y: number; #125;, options?: ParseOptions #124; undefined#41; =#gt; Effect#lt;#123; readonly x: number; readonly y: number; #125;, SchemaError, never#gt;<br/>callee: Schema.decodeEffect<br/>args: #91;#93;"]
+  6[/"type: #lt;S extends Top#gt;#40;schema: S#41; =#gt; #40;input: S#91;#quot;Encoded#quot;#93;, options?: ParseOptions #124; undefined#41; =#gt; Effect#lt;S#91;#quot;Type#quot;#93;, SchemaError, S#91;#quot;DecodingServices#quot;#93;#gt;<br/>node: Schema.decodeEffect"/]
+  7["type: Effect#lt;#123; readonly x: number; readonly y: number; #125;, SchemaError, never#gt;<br/>callee: identity<br/>args: #91;#93;"]
+  8[/"type: #lt;A#gt;#40;a: A#41; =#gt; A<br/>node: identity"/]
+  9[/"type: Effect#lt;#123; readonly x: number; readonly y: number; #125;, SchemaError, never#gt;<br/>node: Schema.decodeEffect#40;MyStruct#41;#40;#123; x: 42, y: 42 #125;#41;"/]
+  10[/"type: Struct#lt;#123; readonly x: Number; readonly y: Number; #125;#gt;<br/>node: MyStruct"/]
+  11["type: #40;input: #123; readonly x: number; readonly y: number; #125;, options?: ParseOptions #124; undefined#41; =#gt; Effect#lt;#123; readonly x: number; readonly y: number; #125;, SchemaError, never#gt;<br/>callee: Schema.decodeEffect<br/>args: #91;#93;"]
+  12[/"type: #lt;S extends Top#gt;#40;schema: S#41; =#gt; #40;input: S#91;#quot;Encoded#quot;#93;, options?: ParseOptions #124; undefined#41; =#gt; Effect#lt;S#91;#quot;Type#quot;#93;, SchemaError, S#91;#quot;DecodingServices#quot;#93;#gt;<br/>node: Schema.decodeEffect"/]
   13["type: Effect#lt;#123; readonly x: number; readonly y: number; #125;, SchemaError, never#gt;<br/>callee: identity<br/>args: #91;#93;"]
   14[/"type: #lt;A#gt;#40;a: A#41; =#gt; A<br/>node: identity"/]
-  15[/"type: Struct#lt;#123; readonly x: Number; readonly y: Number; #125;#gt;<br/>node: MyStruct"/]
-  16["type: #40;input: #123; readonly x: number; readonly y: number; #125;, options?: ParseOptions #124; undefined#41; =#gt; Effect#lt;#123; readonly x: number; readonly y: number; #125;, SchemaError, never#gt;<br/>callee: Schema.decodeEffect<br/>args: #91;#93;"]
-  17[/"type: #lt;S extends Top#gt;#40;schema: S#41; =#gt; #40;input: S#91;#quot;Encoded#quot;#93;, options?: ParseOptions #124; undefined#41; =#gt; Effect#lt;S#91;#quot;Type#quot;#93;, SchemaError, S#91;#quot;DecodingServices#quot;#93;#gt;<br/>node: Schema.decodeEffect"/]
-  18[/"type: Schedule#lt;Duration, unknown, never, never#gt;<br/>node: Schedule.exponential#40;Duration.millis#40;10#41;, 4#41;"/]
-  19["type: Schedule#lt;Duration, unknown, never, never#gt;<br/>callee: Schedule.while<br/>args: #91;_ =#gt; Duration.isLessThanOrEqualTo#40;Duration.seconds#40;10#41;#41;#40;_.duration#41;#93;"]
-  20[/"type: 10<br/>node: 10"/]
-  21["type: Duration<br/>callee: Duration.millis<br/>args: #91;#93;"]
-  22[/"type: #40;millis: number#41; =#gt; Duration<br/>node: Duration.millis"/]
-  23[/"type: #123; #lt;Input, Output, Error2 = never, Env2 = never#gt;#40;predicate: #40;metadata: Metadata#lt;Output, Input#gt;#41; =#gt; boolean #124; Effect#lt;boolean, Error2, Env2#gt;#41;: #lt;Error, Env#gt;#40;self: Schedule#lt;Output, Input, Error, Env#gt;#41; =#gt; Schedule#lt;Output, Input, Error #124; Error2, Env #124; Env2#gt;; #lt;Output, Input, Error, Env, Error2 = never, Env2 = never#gt;#40;self: Schedule#lt;Output, Input, Error, Env#gt;, predicate: #40;metadata: Metadata#lt;Output, Input#gt;#41; =#gt; boolean #124; Effect#lt;boolean, Error2, Env2#gt;#41;: Schedule#lt;Output, Input, Error #124; Error2, Env #124; Env2#gt;; #125;<br/>node: Schedule.while"/]
-  24((("type: #40;_: Metadata#lt;Duration, unknown#gt;#41; =#gt; boolean<br/>node: _ =#gt; Duration.isLessThanOrEqualTo#40;Duration.seconds#40;10#41;#41;#40;_.duration#41;")))
-  25[["type: #40;_: Metadata#lt;Duration, unknown#gt;#41; =#gt; boolean<br/>node: _ =#gt; Duration.isLessThanOrEqualTo#40;Duration.seconds#40;10#41;#41;#40;_.duration#41;"]]
-  26((("type: boolean<br/>node: Duration.isLessThanOrEqualTo#40;Duration.seconds#40;10#41;#41;#40;_.duration#41;")))
-  27[/"type: Metadata#lt;Duration, unknown#gt;<br/>node: _"/]
-  28[/"type: Duration<br/>node: _.duration"/]
-  29["type: boolean<br/>callee: Duration.isLessThanOrEqualTo<br/>args: #91;Duration.seconds#40;10#41;#93;"]
-  30[/"type: #123; #40;that: Duration#41;: #40;self: Duration#41; =#gt; boolean; #40;self: Duration, that: Duration#41;: boolean; #125;<br/>node: Duration.isLessThanOrEqualTo"/]
-  31((("type: Duration<br/>node: Duration.seconds#40;10#41;")))
-  32[/"type: 10<br/>node: 10"/]
-  33["type: Duration<br/>callee: Duration.seconds<br/>args: #91;#93;"]
-  34[/"type: #40;seconds: number#41; =#gt; Duration<br/>node: Duration.seconds"/]
-  35((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;#quot;Hello#quot;#41;")))
-  36["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.ensuring<br/>args: #91;Effect.log#40;#quot;World#quot;#41;#93;"]
-  37[/"type: #quot;Hello#quot;<br/>node: #quot;Hello#quot;"/]
-  38["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
-  39[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
-  40[/"type: #123; #lt;X, R1#gt;#40;finalizer: Effect#lt;X, never, R1#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R #124; R1#gt;; #lt;A, E, R, X, R1#gt;#40;self: Effect#lt;A, E, R#gt;, finalizer: Effect#lt;X, never, R1#gt;#41;: Effect#lt;A, E, R #124; R1#gt;; #125;<br/>node: Effect.ensuring"/]
-  41((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.log#40;#quot;World#quot;#41;")))
-  42[/"type: #quot;World#quot;<br/>node: #quot;World#quot;"/]
-  43["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
-  44[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  15["type: Effect#lt;#123; readonly x: number; readonly y: number; #125;, SchemaError, never#gt;<br/>callee: identity<br/>args: #91;#93;"]
+  16[/"type: #lt;A#gt;#40;a: A#41; =#gt; A<br/>node: identity"/]
+  17[/"type: Schedule#lt;Duration, unknown, never, never#gt;<br/>node: Schedule.exponential#40;Duration.millis#40;10#41;, 4#41;"/]
+  18[/"type: 10<br/>node: 10"/]
+  19["type: Duration<br/>callee: Duration.millis<br/>args: #91;#93;"]
+  20[/"type: #40;millis: number#41; =#gt; Duration<br/>node: Duration.millis"/]
+  21["type: Schedule#lt;Duration, unknown, never, never#gt;<br/>callee: Schedule.while<br/>args: #91;_ =#gt; Duration.isLessThanOrEqualTo#40;Duration.seconds#40;10#41;#41;#40;_.duration#41;#93;"]
+  22[/"type: #123; #lt;Input, Output, Error2 = never, Env2 = never#gt;#40;predicate: #40;metadata: Metadata#lt;Output, Input#gt;#41; =#gt; boolean #124; Effect#lt;boolean, Error2, Env2#gt;#41;: #lt;Error, Env#gt;#40;self: Schedule#lt;Output, Input, Error, Env#gt;#41; =#gt; Schedule#lt;Output, Input, Error #124; Error2, Env #124; Env2#gt;; #lt;Output, Input, Error, Env, Error2 = never, Env2 = never#gt;#40;self: Schedule#lt;Output, Input, Error, Env#gt;, predicate: #40;metadata: Metadata#lt;Output, Input#gt;#41; =#gt; boolean #124; Effect#lt;boolean, Error2, Env2#gt;#41;: Schedule#lt;Output, Input, Error #124; Error2, Env #124; Env2#gt;; #125;<br/>node: Schedule.while"/]
+  23[["type: #40;_: Metadata#lt;Duration, unknown#gt;#41; =#gt; boolean<br/>node: _ =#gt; Duration.isLessThanOrEqualTo#40;Duration.seconds#40;10#41;#41;#40;_.duration#41;"]]
+  24[/"type: Duration<br/>node: _.duration"/]
+  25["type: boolean<br/>callee: Duration.isLessThanOrEqualTo<br/>args: #91;Duration.seconds#40;10#41;#93;"]
+  26[/"type: #123; #40;that: Duration#41;: #40;self: Duration#41; =#gt; boolean; #40;self: Duration, that: Duration#41;: boolean; #125;<br/>node: Duration.isLessThanOrEqualTo"/]
+  27[/"type: 10<br/>node: 10"/]
+  28["type: Duration<br/>callee: Duration.seconds<br/>args: #91;#93;"]
+  29[/"type: #40;seconds: number#41; =#gt; Duration<br/>node: Duration.seconds"/]
+  30[/"type: #quot;Hello#quot;<br/>node: #quot;Hello#quot;"/]
+  31["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  32[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  33["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.ensuring<br/>args: #91;Effect.log#40;#quot;World#quot;#41;#93;"]
+  34[/"type: #123; #lt;X, R1#gt;#40;finalizer: Effect#lt;X, never, R1#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R #124; R1#gt;; #lt;A, E, R, X, R1#gt;#40;self: Effect#lt;A, E, R#gt;, finalizer: Effect#lt;X, never, R1#gt;#41;: Effect#lt;A, E, R #124; R1#gt;; #125;<br/>node: Effect.ensuring"/]
+  35[/"type: #quot;World#quot;<br/>node: #quot;World#quot;"/]
+  36["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  37[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
-  3 -->|"kind: pipe"| 4
-  5 -->|"kind: transformCallee"| 4
-  6 -->|"kind: pipe"| 7
+  4 -->|"kind: pipe"| 5
+  6 -->|"kind: transformCallee"| 5
+  5 -->|"kind: usedBy"| 3
+  3 -->|"kind: pipe"| 7
   8 -->|"kind: transformCallee"| 7
-  9 -->|"kind: pipe"| 10
-  11 -->|"kind: transformCallee"| 10
-  12 -->|"kind: pipe"| 13
-  13 -->|"kind: connect"| 9
+  10 -->|"kind: pipe"| 11
+  12 -->|"kind: transformCallee"| 11
+  11 -->|"kind: usedBy"| 9
+  9 -->|"kind: pipe"| 13
   14 -->|"kind: transformCallee"| 13
-  15 -->|"kind: pipe"| 16
-  17 -->|"kind: transformCallee"| 16
+  13 -->|"kind: pipe"| 15
+  16 -->|"kind: transformCallee"| 15
   18 -->|"kind: pipe"| 19
-  20 -->|"kind: pipe"| 21
+  20 -->|"kind: transformCallee"| 19
+  19 -->|"kind: usedBy"| 17
   22 -->|"kind: transformCallee"| 21
-  23 -->|"kind: transformCallee"| 19
-  24 -->|"kind: transformArg"| 19
-  26 -->|"kind: potentialReturn"| 25
-  27 -->|"kind: parameter"| 25
-  25 -->|"kind: connect"| 24
-  28 -->|"kind: pipe"| 29
-  29 -->|"kind: connect"| 26
-  30 -->|"kind: transformCallee"| 29
-  31 -->|"kind: transformArg"| 29
-  32 -->|"kind: pipe"| 33
-  33 -->|"kind: connect"| 31
+  24 -->|"kind: pipe"| 25
+  26 -->|"kind: transformCallee"| 25
+  27 -->|"kind: pipe"| 28
+  29 -->|"kind: transformCallee"| 28
+  28 -->|"kind: transformArg"| 25
+  25 -->|"kind: potentialReturn"| 23
+  23 -->|"kind: transformArg"| 21
+  17 -->|"kind: pipe"| 21
+  30 -->|"kind: pipe"| 31
+  32 -->|"kind: transformCallee"| 31
   34 -->|"kind: transformCallee"| 33
   35 -->|"kind: pipe"| 36
-  37 -->|"kind: pipe"| 38
-  38 -->|"kind: connect"| 35
-  39 -->|"kind: transformCallee"| 38
-  40 -->|"kind: transformCallee"| 36
-  41 -->|"kind: transformArg"| 36
-  42 -->|"kind: pipe"| 43
-  43 -->|"kind: connect"| 41
-  44 -->|"kind: transformCallee"| 43
+  37 -->|"kind: transformCallee"| 36
+  36 -->|"kind: transformArg"| 33
+  31 -->|"kind: pipe"| 33

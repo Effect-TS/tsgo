@@ -1,1 +1,3 @@
 flowchart TB
+  0[/"type: ServiceClass#lt;FileSystem, #quot;FileSystem#quot;, #123; write: #40;s: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;#gt;<br/>node: Context.Service#lt;FileSystem, #123;#92;n  write: #40;s: string#41; =#gt; Effect.Effect#lt;void#gt;#92;n#125;#gt;#40;#41;#40;#quot;FileSystem#quot;#41;"/]
+  1[/"type: ServiceClass#lt;Cache, #quot;Cache#quot;, #123; read: Effect#lt;string, never, FileSystem#gt;; save: #40;#41; =#gt; Effect#lt;void, never, FileSystem#gt;; #125;#gt;<br/>node: Context.Service#lt;Cache, #123;#92;n  read: Effect.Effect#lt;string, never, FileSystem#gt;#92;n  save: #40;#41; =#gt; Effect.Effect#lt;void, never, FileSystem#gt;#92;n#125;#gt;#40;#41;#40;#quot;Cache#quot;#41;"/]

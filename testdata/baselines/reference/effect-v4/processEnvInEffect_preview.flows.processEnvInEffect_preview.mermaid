@@ -1,4 +1,5 @@
 flowchart TB
-  0[/"type: Effect#lt;string #124; undefined, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  return process.env.PORT#92;n#125;#41;"/]
+  0((("type: Effect#lt;string #124; undefined, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  return process.env.PORT#92;n#125;#41;")))
   1[/"type: string #124; undefined<br/>node: process.env.PORT"/]
   1 -->|"kind: potentialReturn"| 0
+  1 -->|"kind: usedBy"| 0

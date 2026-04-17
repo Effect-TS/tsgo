@@ -31,15 +31,8 @@ type ExecutionNode struct {
 type ExecutionLinkKind string
 
 const (
-	ExecutionLinkKindUnknown         ExecutionLinkKind = "unknown"
-	ExecutionLinkKindConnect         ExecutionLinkKind = "connect"
+	ExecutionLinkKindUsedBy          ExecutionLinkKind = "usedBy"
 	ExecutionLinkKindPipe            ExecutionLinkKind = "pipe"
-	ExecutionLinkKindPipeable        ExecutionLinkKind = "pipeable"
-	ExecutionLinkKindEffectFn        ExecutionLinkKind = "effectFn"
-	ExecutionLinkKindCall            ExecutionLinkKind = "call"
-	ExecutionLinkKindDataFirst       ExecutionLinkKind = "dataFirst"
-	ExecutionLinkKindDataLast        ExecutionLinkKind = "dataLast"
-	ExecutionLinkKindFnPipe          ExecutionLinkKind = "fnPipe"
 	ExecutionLinkKindPotentialReturn ExecutionLinkKind = "potentialReturn"
 	ExecutionLinkKindYieldable       ExecutionLinkKind = "yieldable"
 	ExecutionLinkKindParameter       ExecutionLinkKind = "parameter"
@@ -60,356 +53,305 @@ type (
 	}
 )
 
+type executionCollector struct {
+	tp          *TypeParser
+	g           *ExecutionFlow
+	parsed      *core.LinkStore[*ast.Node, *GraphSlice]
+	usageTarget *GraphSlice
+}
+
+func (ec *executionCollector) buildSlice(node ExecutionNode) *GraphSlice {
+	nodeIndex := ec.g.AddNode(node)
+	return &GraphSlice{
+		Leading:  &nodeIndex,
+		Trailing: &nodeIndex,
+	}
+}
+
+func (ec *executionCollector) buildValueNode(node *ast.Node) *GraphSlice {
+	return ec.buildSlice(ExecutionNode{
+		Kind: ExecutionNodeKindValue,
+		Node: node,
+		Type: ec.tp.GetTypeAtLocation(node),
+	})
+}
+
+func (ec *executionCollector) extractCalleeAndArgs(node *ast.Node) (*ast.Node, []*ast.Node) {
+	if ast.IsParenthesizedExpression(node) {
+		return ec.extractCalleeAndArgs(node.Expression())
+	} else if ast.IsCallExpression(node) {
+		return node.Expression(), node.Arguments()
+	}
+	return node, nil
+}
+
+func (ec *executionCollector) connectSlices(fromSlice *GraphSlice, toSlice *GraphSlice, kind ExecutionLinkKind) *GraphSlice {
+	if fromSlice == nil {
+		return toSlice
+	}
+	if toSlice == nil {
+		return fromSlice
+	}
+	if *fromSlice.Trailing == *toSlice.Leading {
+		return &GraphSlice{
+			Leading:  fromSlice.Leading,
+			Trailing: toSlice.Trailing,
+		}
+	}
+	ec.g.AddEdge(*fromSlice.Trailing, *toSlice.Leading, ExecutionLink{
+		Kind: kind,
+	})
+	return &GraphSlice{
+		Leading:  fromSlice.Leading,
+		Trailing: toSlice.Trailing,
+	}
+}
+
+func (ec *executionCollector) visitNode(node *ast.Node) *GraphSlice {
+	// avoid double traversal
+	if node == nil {
+		return nil
+	}
+	if ec.parsed.Has(node) {
+		return *ec.parsed.TryGet(node)
+	}
+
+	previousUsageTarget := ec.usageTarget
+	ec.usageTarget = nil
+
+	// actual visit logic
+	var s *GraphSlice
+	if parsedEffectGen := ec.tp.EffectGenCall(node); parsedEffectGen != nil {
+		s = ec.visitEffectGenCall(parsedEffectGen, node)
+	} else if parsedEffectFn := ec.tp.EffectFnCall(node); parsedEffectFn != nil {
+		s = ec.visitEffectFnCall(parsedEffectFn, node)
+	} else if parsedPipeCall := ec.tp.ParsePipeCall(node); parsedPipeCall != nil {
+		s = ec.visitPipeCall(parsedPipeCall, node)
+	} else if parsedSingleArg := ec.tp.singleArgInlineCall(node); parsedSingleArg != nil {
+		s = ec.visitSingleArgInlineCall(parsedSingleArg, node)
+	} else if parsedDataFirstOrLast := ec.tp.DataFirstOrLastCall(node); parsedDataFirstOrLast != nil {
+		s = ec.visitDataFirstOrLastCall(parsedDataFirstOrLast, node)
+	} else if ast.IsFunctionLikeDeclaration(node) {
+		s = ec.visitFunctionLikeDeclaration(node)
+	} else {
+		s = ec.visitExpressionNode(node, previousUsageTarget)
+	}
+	// store to avoid double-traversal
+	*ec.parsed.Get(node) = s
+	ec.usageTarget = previousUsageTarget
+
+	return s
+}
+
+func (ec *executionCollector) visitNodesAndConnectSlice(nodes []*ast.Node, targetSlice *GraphSlice, kind ExecutionLinkKind) bool {
+	for _, n := range nodes {
+		ec.visitNodeAndConnectSlice(n, targetSlice, kind)
+	}
+	return false
+}
+
+func (ec *executionCollector) visitNodeAndConnectSlice(n *ast.Node, targetSlice *GraphSlice, kind ExecutionLinkKind) bool {
+	nodeSlice := ec.visitNode(n)
+	ec.connectSlices(nodeSlice, targetSlice, kind)
+	return false
+}
+
+func (ec *executionCollector) visitNodeVisitorConnectUsageTarget(node *ast.Node) bool {
+	if node == nil {
+		return false
+	}
+	s := ec.visitNode(node)
+	ec.connectSlices(s, ec.usageTarget, ExecutionLinkKindUsedBy)
+	return false
+}
+
+func (ec *executionCollector) visitEachChildWithUsageTarget(node *ast.Node, target *GraphSlice) bool {
+	if node == nil {
+		return false
+	}
+	previous := ec.usageTarget
+	ec.usageTarget = target
+	node.ForEachChild(ec.visitNodeVisitorConnectUsageTarget)
+	ec.usageTarget = previous
+	return false
+}
+
+func (ec *executionCollector) visitExpressionNode(node *ast.Expression, parentExpression *GraphSlice) *GraphSlice {
+	rootExpr := parentExpression
+	if parentExpression == nil && ast.IsExpressionNode(node) {
+		rootExpr = ec.buildValueNode(node)
+	}
+	ec.visitEachChildWithUsageTarget(node, rootExpr)
+	if rootExpr != parentExpression {
+		return rootExpr
+	}
+	return nil
+}
+
+func (ec *executionCollector) visitPipeCall(p *ParsedPipeCallResult, _ *ast.Node) *GraphSlice {
+	s := ec.visitNode(p.Subject)
+	for i, pipedTransform := range p.Args {
+		// TODO: OOB argsouttype check
+		callee, args := ec.extractCalleeAndArgs(pipedTransform)
+		transformSlice := ec.buildSlice(ExecutionNode{
+			Kind:   ExecutionNodeKindTransform,
+			Node:   pipedTransform,
+			Type:   p.ArgsOutType[i],
+			Callee: callee,
+			Args:   args,
+		})
+		*ec.parsed.Get(pipedTransform) = transformSlice
+		ec.visitNodeAndConnectSlice(callee, transformSlice, ExecutionLinkKindTransformCallee)
+		ec.visitNodesAndConnectSlice(args, transformSlice, ExecutionLinkKindTransformArg)
+		s = ec.connectSlices(s, transformSlice, ExecutionLinkKindPipe)
+	}
+	return s
+}
+
+func (ec *executionCollector) visitEffectGenCall(p *EffectGenCallResult, node *ast.Node) *GraphSlice {
+	s := ec.buildSlice(ExecutionNode{
+		Kind: ExecutionNodeKindLogicMerge,
+		Node: node,
+		Type: ec.tp.GetTypeAtLocation(node),
+	})
+	ast.ForEachReturnStatement(p.Body, func(stmt *ast.Node) bool {
+		if stmt.Kind == ast.KindReturnStatement {
+			ec.visitNodeAndConnectSlice(stmt.Expression(), s, ExecutionLinkKindPotentialReturn)
+		}
+		return false
+	})
+	checker.ForEachYieldExpression(p.Body, func(expr *ast.Node) bool {
+		if expr != nil && expr.Expression() != nil {
+			*ec.parsed.Get(expr) = nil
+			ec.visitNodeAndConnectSlice(expr.Expression(), s, ExecutionLinkKindYieldable)
+		}
+		return false
+	})
+	if p.Body != nil {
+		ec.visitEachChildWithUsageTarget(p.Body, s)
+	}
+	return s
+}
+
+func (ec *executionCollector) visitEffectFnCall(p *EffectFnCallResult, node *ast.Node) *GraphSlice {
+	sExit := ec.buildSlice(ExecutionNode{
+		Kind: ExecutionNodeKindLogicMerge,
+		Node: p.FunctionNode,
+		Type: p.FunctionReturnType,
+	})
+	for i, pipedTransform := range p.PipeArguments {
+		callee, args := ec.extractCalleeAndArgs(pipedTransform)
+		transformSlice := ec.buildSlice(ExecutionNode{
+			Kind:   ExecutionNodeKindTransform,
+			Node:   pipedTransform,
+			Type:   p.PipeArgsOutType[i], // TODO: OOB?
+			Callee: callee,
+			Args:   args,
+		})
+		*ec.parsed.Get(pipedTransform) = transformSlice
+		ec.visitNodeAndConnectSlice(callee, transformSlice, ExecutionLinkKindTransformCallee)
+		ec.visitNodesAndConnectSlice(args, transformSlice, ExecutionLinkKindTransformArg)
+		sExit = ec.connectSlices(sExit, transformSlice, ExecutionLinkKindPipe)
+	}
+	if p.IsGenerator() {
+		checker.ForEachYieldExpression(p.Body(), func(expr *ast.Node) bool {
+			if expr != nil && expr.Expression() != nil {
+				*ec.parsed.Get(expr) = nil
+				ec.visitNodeAndConnectSlice(expr.Expression(), sExit, ExecutionLinkKindYieldable)
+			}
+			return false
+		})
+	}
+	if ast.IsExpressionNode(p.Body()) {
+		ec.visitNodeAndConnectSlice((p.Body()), sExit, ExecutionLinkKindPipe)
+	} else {
+		ast.ForEachReturnStatement(p.Body(), func(stmt *ast.Node) bool {
+			if stmt.Kind == ast.KindReturnStatement {
+				ec.visitNodeAndConnectSlice(stmt.Expression(), sExit, ExecutionLinkKindPotentialReturn)
+			}
+			return false
+		})
+		ec.visitEachChildWithUsageTarget(p.Body(), sExit)
+	}
+	// function with parameters
+	s := ec.buildSlice(ExecutionNode{
+		Kind: ExecutionNodeKindFunction,
+		Node: node,
+		Type: ec.tp.GetTypeAtLocation(node),
+	})
+	for _, arg := range p.FunctionNode.Parameters() {
+		ec.visitNodeAndConnectSlice(arg, s, ExecutionLinkKindParameter)
+	}
+	ec.connectSlices(sExit, s, ExecutionLinkKindPotentialReturn)
+	return s
+}
+
+func (ec *executionCollector) visitSingleArgInlineCall(p *parsedSingleArgInlineCallTransform, node *ast.Node) *GraphSlice {
+	s := ec.visitNode(p.Subject)
+	callee, args := ec.extractCalleeAndArgs(p.Transform)
+	transformSlice := ec.buildSlice(ExecutionNode{
+		Kind:   ExecutionNodeKindTransform,
+		Node:   p.Transform,
+		Type:   ec.tp.GetTypeAtLocation(node),
+		Callee: callee,
+		Args:   args,
+	})
+	s = ec.connectSlices(s, transformSlice, ExecutionLinkKindPipe)
+	ec.visitNodeAndConnectSlice(callee, transformSlice, ExecutionLinkKindTransformCallee)
+	ec.visitNodesAndConnectSlice(args, transformSlice, ExecutionLinkKindTransformArg)
+	return s
+}
+
+func (ec *executionCollector) visitDataFirstOrLastCall(p *ParsedDataFirstOrLastCall, node *ast.Node) *GraphSlice {
+	s := ec.visitNode(p.Subject)
+	transformSlice := ec.buildSlice(ExecutionNode{
+		Kind: ExecutionNodeKindTransform,
+		Node: node,
+		Type: ec.tp.GetTypeAtLocation(node),
+	})
+	s = ec.connectSlices(s, transformSlice, ExecutionLinkKindPipe)
+	ec.visitNodeAndConnectSlice(p.Callee, s, ExecutionLinkKindTransformCallee)
+	ec.visitNodesAndConnectSlice(p.Args, s, ExecutionLinkKindTransformArg)
+	return s
+}
+
+func (ec *executionCollector) visitFunctionLikeDeclaration(node *ast.Node) *GraphSlice {
+	s := ec.buildSlice(ExecutionNode{
+		Kind: ExecutionNodeKindFunction,
+		Node: node,
+		Type: ec.tp.GetTypeAtLocation(node),
+	})
+	ec.visitNodesAndConnectSlice(node.Parameters(), s, ExecutionLinkKindParameter)
+	fnBody := node.Body()
+	if fnBody != nil {
+		if ast.IsExpressionNode(fnBody) {
+			ec.visitNodeAndConnectSlice(fnBody, s, ExecutionLinkKindPotentialReturn)
+		} else {
+			ast.ForEachReturnStatement(fnBody, func(stmt *ast.Node) bool {
+				if stmt.Kind == ast.KindReturnStatement {
+					ec.visitNodeAndConnectSlice(stmt.Expression(), s, ExecutionLinkKindPotentialReturn)
+				}
+				return false
+			})
+			ec.visitEachChildWithUsageTarget(fnBody, s)
+		}
+	}
+	return s
+}
+
 func (tp *TypeParser) ExecutionFlow(sf *ast.SourceFile) *ExecutionFlow {
 	if tp == nil || tp.checker == nil || sf == nil {
 		return nil
 	}
 
-	// TODO: calls like Layer.succeed(FileSystem)(arg) that are transforms
-	// TODO: special effect generator handling
-
 	return Cached(&tp.links.ExecutionFlow, sf, func() *ExecutionFlow {
 		g := graph.New[ExecutionNode, ExecutionLink]()
-
-		var connectTrailingOfNodeToMap core.LinkStore[*ast.Node, *graph.NodeIndex]
-		var attemptFillCalleeAndArgs core.LinkStore[*ast.Node, *graph.NodeIndex]
-		var valueExecNodeByNode core.LinkStore[*ast.Node, graph.NodeIndex]
-		var skipNodes core.LinkStore[*ast.Node, bool]
-
-		NewExecValueNode := func(node *ast.Node) graph.NodeIndex {
-			maybeIdx := valueExecNodeByNode.TryGet(node)
-			if maybeIdx != nil {
-				return *maybeIdx
-			}
-			newIdx := g.AddNode(ExecutionNode{
-				Kind: ExecutionNodeKindValue,
-				Node: node,
-				Type: tp.GetTypeAtLocation(node),
-			})
-			*valueExecNodeByNode.Get(node) = newIdx
-			return newIdx
+		ec := &executionCollector{
+			tp:     tp,
+			g:      g,
+			parsed: &core.LinkStore[*ast.Node, *GraphSlice]{},
 		}
-
-		PrepareCalleeAndArgs := func(execNode *graph.NodeIndex) bool {
-			g.UpdateNode(*execNode, func(node ExecutionNode) ExecutionNode {
-				if node.Callee != nil {
-					calleeIdx := NewExecValueNode(node.Callee)
-					*connectTrailingOfNodeToMap.Get(node.Callee) = &calleeIdx
-					g.AddEdge(calleeIdx, *execNode, ExecutionLink{
-						Kind: ExecutionLinkKindTransformCallee,
-					})
-				}
-				if node.Args != nil {
-					for _, arg := range node.Args {
-						argIdx := NewExecValueNode(arg)
-						g.AddEdge(argIdx, *execNode, ExecutionLink{
-							Kind: ExecutionLinkKindTransformArg,
-						})
-						*connectTrailingOfNodeToMap.Get(arg) = &argIdx
-					}
-				}
-				return node
-			})
-			return true
-		}
-
-		NewPipeTransformSlice := func(initialNode *graph.NodeIndex, linkKind ExecutionLinkKind, nodes []*ast.Node, types []*checker.Type) (*graph.NodeIndex, *graph.NodeIndex) {
-			lastNode := initialNode
-			firstNode := initialNode
-			for i, arg := range nodes {
-				transformIndex := g.AddNode(ExecutionNode{
-					Kind: ExecutionNodeKindTransform,
-					Type: types[i],
-					Node: arg,
-				})
-				if lastNode != nil {
-					g.AddEdge(*lastNode, transformIndex, ExecutionLink{
-						Kind: linkKind,
-					})
-				}
-				if firstNode == nil {
-					firstNode = &transformIndex
-				}
-				lastNode = &transformIndex
-				*attemptFillCalleeAndArgs.Get(arg) = &transformIndex
-			}
-			return firstNode, lastNode
-		}
-
-		ConnectTrailingNodeToParentLeading := func(node *ast.Node, newTrailingNode *graph.NodeIndex) {
-			if connectTrailingOfNodeToMap.Has(node) {
-				parentStartingNodeIndex := *connectTrailingOfNodeToMap.TryGet(node)
-				if *newTrailingNode != *parentStartingNodeIndex {
-					g.UpdateNode(*parentStartingNodeIndex, func(node ExecutionNode) ExecutionNode {
-						if node.Kind == ExecutionNodeKindValue {
-							node.Kind = ExecutionNodeKindLogicMerge
-						}
-						if node.Kind == ExecutionNodeKindLogicMerge {
-							g.AddEdge(*newTrailingNode, *parentStartingNodeIndex, ExecutionLink{
-								Kind: ExecutionLinkKindConnect,
-							})
-						}
-						return node
-					})
-				}
-			}
-		}
-
-		ConnectYieldStarInBody := func(node *ast.Node, toGraphNode *graph.NodeIndex) {
-			if node != nil {
-				checker.ForEachYieldExpression(node, func(expr *ast.Node) bool {
-					if expr != nil && expr.Expression() != nil {
-						valueNode := NewExecValueNode(expr.Expression())
-						*connectTrailingOfNodeToMap.Get(expr.Expression()) = &valueNode
-						g.AddEdge(valueNode, *toGraphNode, ExecutionLink{
-							Kind: ExecutionLinkKindYieldable,
-						})
-					}
-					return false
-				})
-			}
-		}
-
-		ConnectReturnInBody := func(node *ast.Node, toGraphNode *graph.NodeIndex) {
-			if node != nil {
-				ast.ForEachReturnStatement(node, func(node *ast.Node) bool {
-					if node.Kind == ast.KindReturnStatement {
-						returnedExpr := node.AsReturnStatement().Expression
-						if returnedExpr != nil {
-							returnIndex := NewExecValueNode(returnedExpr)
-							*connectTrailingOfNodeToMap.Get(returnedExpr) = &returnIndex
-							g.AddEdge(returnIndex, *toGraphNode, ExecutionLink{
-								Kind: ExecutionLinkKindPotentialReturn,
-							})
-						}
-					}
-					return false
-				})
-			}
-		}
-
-		var walk ast.Visitor
-		walk = func(node *ast.Node) bool {
-			if node == nil {
-				return false
-			}
-
-			// a parent node may have injected a transformation, and we need to set the callee and args
-			if attemptFillCalleeAndArgs.Has(node) {
-				transformNodeIndex := *attemptFillCalleeAndArgs.TryGet(node)
-				if transformNodeIndex != nil {
-					switch node.Kind {
-					case ast.KindParenthesizedExpression:
-						// (Effect.asVoid)
-						*attemptFillCalleeAndArgs.Get(node.Expression()) = transformNodeIndex
-						// ... possibly other types as well?
-					case ast.KindCallExpression:
-						// Effect.flatMap(...)
-						g.UpdateNode(*transformNodeIndex, func(current ExecutionNode) ExecutionNode {
-							current.Callee = node.Expression()
-							current.Args = node.Arguments()
-							return current
-						})
-						PrepareCalleeAndArgs(transformNodeIndex)
-					default:
-						// Effect.asVoid
-						g.UpdateNode(*transformNodeIndex, func(current ExecutionNode) ExecutionNode {
-							current.Callee = node
-							return current
-						})
-						PrepareCalleeAndArgs(transformNodeIndex)
-					}
-				}
-			}
-
-			if skipNodes.Has(node) {
-				// noop, someone already handled this node somehow
-			} else if fnCall := tp.EffectFnCall(node); fnCall != nil {
-				// an Effect.fn is a special syntax for a function with pipe middleware and gen execution
-				fnExecNode := g.AddNode(ExecutionNode{
-					Kind: ExecutionNodeKindFunction,
-					Type: tp.GetTypeAtLocation(node),
-					Node: node,
-				})
-				fnExitNode := g.AddNode(ExecutionNode{
-					Kind: ExecutionNodeKindLogicMerge,
-					Type: fnCall.FunctionReturnType,
-					Node: fnCall.FunctionNode,
-				})
-				fnBody := fnCall.Body()
-				if fnCall.IsGenerator() {
-					ConnectYieldStarInBody(fnBody, &fnExitNode)
-				}
-				// arrow functions return directly the expression, otherwise look for return in block
-				if fnBody != nil && ast.IsExpressionNode(fnBody) {
-					exprBody := NewExecValueNode(fnBody)
-					*connectTrailingOfNodeToMap.Get(fnBody) = &exprBody
-					g.AddEdge(exprBody, fnExitNode, ExecutionLink{
-						Kind: ExecutionLinkKindPotentialReturn,
-					})
-				} else {
-					ConnectReturnInBody(fnBody, &fnExitNode)
-				}
-				// Effect.fn has traling pipes
-				_, last := NewPipeTransformSlice(
-					&fnExitNode,
-					ExecutionLinkKindFnPipe,
-					fnCall.PipeArguments,
-					fnCall.PipeArgsOutType)
-				g.AddEdge(*last, fnExecNode, ExecutionLink{
-					Kind: ExecutionLinkKindPotentialReturn,
-				})
-				// connect the parameters
-				for _, par := range fnCall.FunctionNode.Parameters() {
-					parNode := NewExecValueNode(par)
-					*connectTrailingOfNodeToMap.Get(par) = &parNode
-					g.AddEdge(parNode, fnExecNode, ExecutionLink{
-						Kind: ExecutionLinkKindParameter,
-					})
-				}
-				// finalize
-				ConnectTrailingNodeToParentLeading(node, &fnExecNode)
-				*skipNodes.Get(fnCall.FunctionNode) = true
-			} else if effectGen := tp.EffectGenCall(node); effectGen != nil {
-				// an Effect.gen is a special syntax for node effect expressions
-				genNode := NewExecValueNode(node)
-				ConnectYieldStarInBody(effectGen.Body, &genNode)
-				ConnectReturnInBody(effectGen.Body, &genNode)
-				ConnectTrailingNodeToParentLeading(node, &genNode)
-				*skipNodes.Get(effectGen.GeneratorFunction.AsNode()) = true
-			} else if parsedInlinePipeableCall := tp.singleArgInlineCall(node); parsedInlinePipeableCall != nil {
-				// this is a Layer.succeed(FileSystem)(arg) where Layer.succeed(FileSystem) has only 1 sig, with 1 arg
-				subjectExecutionNode := NewExecValueNode(parsedInlinePipeableCall.Subject)
-				*connectTrailingOfNodeToMap.Get(parsedInlinePipeableCall.Subject) = &subjectExecutionNode
-				_, last := NewPipeTransformSlice(
-					&subjectExecutionNode,
-					ExecutionLinkKindPipe,
-					[]*ast.Node{parsedInlinePipeableCall.Transform},
-					[]*checker.Type{tp.GetTypeAtLocation(node)},
-				)
-				ConnectTrailingNodeToParentLeading(node, last)
-			} else if parsedPipeCall := tp.ParsePipeCall(node); parsedPipeCall != nil {
-				// this is a pipe call, so we have subject and args
-				subjectExecutionNode := NewExecValueNode(parsedPipeCall.Subject)
-				*connectTrailingOfNodeToMap.Get(parsedPipeCall.Subject) = &subjectExecutionNode
-				// and then we connect the args
-				_, last := NewPipeTransformSlice(
-					&subjectExecutionNode,
-					ExecutionLinkKindPipe,
-					parsedPipeCall.Args,
-					parsedPipeCall.ArgsOutType)
-				ConnectTrailingNodeToParentLeading(node, last)
-			} else if dataFirstLastCall := tp.DataFirstOrLastCall(node); dataFirstLastCall != nil {
-				// this is a pipe call, so we have subject and args
-				subjectExecutionNode := NewExecValueNode(dataFirstLastCall.Subject)
-				*connectTrailingOfNodeToMap.Get(dataFirstLastCall.Subject) = &subjectExecutionNode
-				// transform
-				transformNode := g.AddNode(ExecutionNode{
-					Kind:   ExecutionNodeKindTransform,
-					Node:   node,
-					Type:   tp.GetTypeAtLocation(node),
-					Callee: dataFirstLastCall.Callee,
-					Args:   dataFirstLastCall.Args,
-				})
-				kind := ExecutionLinkKindDataFirst
-				if dataFirstLastCall.SubjectIndex != 0 {
-					kind = ExecutionLinkKindDataLast
-				}
-				g.AddEdge(subjectExecutionNode, transformNode, ExecutionLink{
-					Kind: kind,
-					Node: node,
-				})
-				PrepareCalleeAndArgs(&transformNode)
-				ConnectTrailingNodeToParentLeading(node, &transformNode)
-			} else if ast.IsFunctionLikeDeclaration(node) {
-				// regular function
-				var retType *checker.Type
-				declSig := tp.checker.GetSignatureFromDeclaration(node)
-				if declSig != nil {
-					retType = tp.checker.GetReturnTypeOfSignature(declSig)
-				}
-				fnExecNode := g.AddNode(ExecutionNode{
-					Kind: ExecutionNodeKindFunction,
-					Type: tp.GetTypeAtLocation(node),
-					Node: node,
-				})
-				fnBody := node.Body()
-				// arrow functions return directly the expression, otherwise look for return in block
-				if fnBody != nil && ast.IsExpressionNode(fnBody) {
-					exprBody := NewExecValueNode(fnBody)
-					*connectTrailingOfNodeToMap.Get(fnBody) = &exprBody
-					g.AddEdge(exprBody, fnExecNode, ExecutionLink{
-						Kind: ExecutionLinkKindPotentialReturn,
-					})
-				} else {
-					fnExitNode := g.AddNode(ExecutionNode{
-						Kind: ExecutionNodeKindLogicMerge,
-						Type: retType,
-						Node: node,
-					})
-					g.AddEdge(fnExitNode, fnExecNode, ExecutionLink{
-						Kind: ExecutionLinkKindPotentialReturn,
-					})
-					ConnectReturnInBody(fnBody, &fnExitNode)
-				}
-				// connect the parameters
-				for _, par := range node.Parameters() {
-					parNode := NewExecValueNode(par)
-					*connectTrailingOfNodeToMap.Get(par) = &parNode
-					g.AddEdge(parNode, fnExecNode, ExecutionLink{
-						Kind: ExecutionLinkKindParameter,
-					})
-				}
-				// finalize
-				ConnectTrailingNodeToParentLeading(node, &fnExecNode)
-			}
-
-			node.ForEachChild(walk)
-			return false
-		}
-
-		walk(sf.AsNode())
-
-		/*
-			// cleanup step, we can remove  --- only one connect ---> LogicMerge
-			for idx, node := range g.Nodes() {
-				// we are a merge
-				if node.Kind != ExecutionNodeKindLogicMerge {
-					continue
-				}
-				// with only 1 incoming node
-				incomingEdges := g.IncomingEdges(idx)
-				if len(incomingEdges) != 1 {
-					continue
-				}
-				edge, ok := g.GetEdge(incomingEdges[0])
-				if !ok {
-					continue
-				}
-				// and we are a connect
-				if edge.Data.Kind != ExecutionLinkKindConnect {
-					continue
-				}
-				sourceNode, sourceOk := g.GetNode(edge.Source)
-				if !sourceOk {
-					continue
-				}
-				// the source has same node and type as this one
-				if sourceNode.Node != node.Node || sourceNode.Type != node.Type {
-					continue
-				}
-				// we proceed by reconnecting all of the outgoing edges to the edge source directly
-				for outEdgeIdx := range g.OutgoingEdges(idx) {
-					outEdge, okOut := g.GetEdge(outEdgeIdx)
-					if okOut {
-						g.AddEdge(edge.Source, outEdge.Target, outEdge.Data)
-					}
-				}
-				// and we remove ourself
-				g.RemoveEdge(incomingEdges[0])
-				g.RemoveNode(idx)
-			}*/
-
+		ec.visitNode(sf.AsNode())
 		return g
 	})
 }

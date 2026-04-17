@@ -2,57 +2,54 @@ flowchart TB
   0[/"type: #quot;ExampleError#quot;<br/>node: #quot;ExampleError#quot;"/]
   1["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;ExampleError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
   2[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
-  3((("type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; setTimeout#40;#40;#41; =#gt; #123;#125;, 100#41;")))
-  4["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
-  5[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
-  6[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; setTimeout#40;#40;#41; =#gt; #123;#125;, 100#41;"]]
-  7[/"type: number<br/>node: setTimeout#40;#40;#41; =#gt; #123;#125;, 100#41;"/]
-  8[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#125;"]]
-  9((("type: void<br/>node: #40;#41; =#gt; #123;#125;")))
-  10[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; setInterval#40;#40;#41; =#gt; #123;#125;, 100#41;"]]
-  11[/"type: number<br/>node: setInterval#40;#40;#41; =#gt; #123;#125;, 100#41;"/]
-  12[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#125;"]]
-  13((("type: void<br/>node: #40;#41; =#gt; #123;#125;")))
-  14[["type: #40;#41; =#gt; ExampleError<br/>node: #40;#41; =#gt; new ExampleError#40;#41;"]]
-  15[/"type: ExampleError<br/>node: new ExampleError#40;#41;"/]
-  16[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: async #40;#41; =#gt; setTimeout#40;#40;#41; =#gt; #123;#125;, 100#41;"]]
-  17[/"type: number<br/>node: setTimeout#40;#40;#41; =#gt; #123;#125;, 100#41;"/]
-  18[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#125;"]]
-  19((("type: void<br/>node: #40;#41; =#gt; #123;#125;")))
-  20[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: async #40;#41; =#gt; setInterval#40;#40;#41; =#gt; #123;#125;, 100#41;"]]
-  21[/"type: number<br/>node: setInterval#40;#40;#41; =#gt; #123;#125;, 100#41;"/]
-  22[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#125;"]]
-  23((("type: void<br/>node: #40;#41; =#gt; #123;#125;")))
-  24[["type: #40;#41; =#gt; ExampleError<br/>node: #40;#41; =#gt; new ExampleError#40;#41;"]]
-  25[/"type: ExampleError<br/>node: new ExampleError#40;#41;"/]
-  26((("type: #40;#41; =#gt; #40;#41; =#gt; number<br/>node: #40;#41; =#gt; #40;#41; =#gt; setTimeout#40;#40;#41; =#gt; #123;#125;, 100#41;")))
-  27["type: Effect#lt;#40;#41; =#gt; number, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
-  28[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
-  29[["type: #40;#41; =#gt; #40;#41; =#gt; number<br/>node: #40;#41; =#gt; #40;#41; =#gt; setTimeout#40;#40;#41; =#gt; #123;#125;, 100#41;"]]
-  30((("type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; setTimeout#40;#40;#41; =#gt; #123;#125;, 100#41;")))
-  31[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; setTimeout#40;#40;#41; =#gt; #123;#125;, 100#41;"]]
-  32[/"type: number<br/>node: setTimeout#40;#40;#41; =#gt; #123;#125;, 100#41;"/]
-  33[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#125;"]]
-  34((("type: void<br/>node: #40;#41; =#gt; #123;#125;")))
+  3[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; setTimeout#40;#40;#41; =#gt; #123;#125;, 100#41;"]]
+  4[/"type: number<br/>node: setTimeout#40;#40;#41; =#gt; #123;#125;, 100#41;"/]
+  5[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#125;"]]
+  6["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
+  7[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
+  8[/"type: Effect#lt;number, ExampleError, never#gt;<br/>node: Effect.try#40;#123;#92;n  try: #40;#41; =#gt; setInterval#40;#40;#41; =#gt; #123;#125;, 100#41;,#92;n  catch: #40;#41; =#gt; new ExampleError#40;#41;#92;n#125;#41;"/]
+  9[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; setInterval#40;#40;#41; =#gt; #123;#125;, 100#41;"]]
+  10[/"type: number<br/>node: setInterval#40;#40;#41; =#gt; #123;#125;, 100#41;"/]
+  11[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#125;"]]
+  12[["type: #40;#41; =#gt; ExampleError<br/>node: #40;#41; =#gt; new ExampleError#40;#41;"]]
+  13[/"type: ExampleError<br/>node: new ExampleError#40;#41;"/]
+  14[/"type: Effect#lt;number, UnknownException, never#gt;<br/>node: Effect.tryPromise#40;async #40;#41; =#gt; setTimeout#40;#40;#41; =#gt; #123;#125;, 100#41;#41;"/]
+  15[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: async #40;#41; =#gt; setTimeout#40;#40;#41; =#gt; #123;#125;, 100#41;"]]
+  16[/"type: number<br/>node: setTimeout#40;#40;#41; =#gt; #123;#125;, 100#41;"/]
+  17[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#125;"]]
+  18[/"type: Effect#lt;number, ExampleError, never#gt;<br/>node: Effect.tryPromise#40;#123;#92;n  try: async #40;#41; =#gt; setInterval#40;#40;#41; =#gt; #123;#125;, 100#41;,#92;n  catch: #40;#41; =#gt; new ExampleError#40;#41;#92;n#125;#41;"/]
+  19[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: async #40;#41; =#gt; setInterval#40;#40;#41; =#gt; #123;#125;, 100#41;"]]
+  20[/"type: number<br/>node: setInterval#40;#40;#41; =#gt; #123;#125;, 100#41;"/]
+  21[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#125;"]]
+  22[["type: #40;#41; =#gt; ExampleError<br/>node: #40;#41; =#gt; new ExampleError#40;#41;"]]
+  23[/"type: ExampleError<br/>node: new ExampleError#40;#41;"/]
+  24[["type: #40;#41; =#gt; #40;#41; =#gt; number<br/>node: #40;#41; =#gt; #40;#41; =#gt; setTimeout#40;#40;#41; =#gt; #123;#125;, 100#41;"]]
+  25[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; setTimeout#40;#40;#41; =#gt; #123;#125;, 100#41;"]]
+  26[/"type: number<br/>node: setTimeout#40;#40;#41; =#gt; #123;#125;, 100#41;"/]
+  27[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#125;"]]
+  28["type: Effect#lt;#40;#41; =#gt; number, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
+  29[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
-  3 -->|"kind: pipe"| 4
-  5 -->|"kind: transformCallee"| 4
-  7 -->|"kind: potentialReturn"| 6
-  6 -->|"kind: connect"| 3
-  9 -->|"kind: potentialReturn"| 8
-  11 -->|"kind: potentialReturn"| 10
+  5 -->|"kind: usedBy"| 4
+  4 -->|"kind: potentialReturn"| 3
+  3 -->|"kind: pipe"| 6
+  7 -->|"kind: transformCallee"| 6
+  11 -->|"kind: usedBy"| 10
+  10 -->|"kind: potentialReturn"| 9
+  9 -->|"kind: usedBy"| 8
   13 -->|"kind: potentialReturn"| 12
-  15 -->|"kind: potentialReturn"| 14
-  17 -->|"kind: potentialReturn"| 16
-  19 -->|"kind: potentialReturn"| 18
-  21 -->|"kind: potentialReturn"| 20
+  12 -->|"kind: usedBy"| 8
+  17 -->|"kind: usedBy"| 16
+  16 -->|"kind: potentialReturn"| 15
+  15 -->|"kind: usedBy"| 14
+  21 -->|"kind: usedBy"| 20
+  20 -->|"kind: potentialReturn"| 19
+  19 -->|"kind: usedBy"| 18
   23 -->|"kind: potentialReturn"| 22
+  22 -->|"kind: usedBy"| 18
+  27 -->|"kind: usedBy"| 26
+  26 -->|"kind: potentialReturn"| 25
   25 -->|"kind: potentialReturn"| 24
-  26 -->|"kind: pipe"| 27
-  28 -->|"kind: transformCallee"| 27
-  30 -->|"kind: potentialReturn"| 29
-  29 -->|"kind: connect"| 26
-  32 -->|"kind: potentialReturn"| 31
-  31 -->|"kind: connect"| 30
-  34 -->|"kind: potentialReturn"| 33
+  24 -->|"kind: pipe"| 28
+  29 -->|"kind: transformCallee"| 28
