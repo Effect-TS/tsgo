@@ -188,7 +188,7 @@ func (ec *executionCollector) visitExpressionNode(node *ast.Expression, parentEx
 	return nil
 }
 
-func (ec *executionCollector) visitPipeCall(p *ParsedPipeCallResult, node *ast.Node) *GraphSlice {
+func (ec *executionCollector) visitPipeCall(p *ParsedPipeCallResult, _ *ast.Node) *GraphSlice {
 	s := ec.visitNode(p.Subject)
 	for i, pipedTransform := range p.Args {
 		// TODO: OOB argsouttype check
