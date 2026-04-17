@@ -2,5 +2,4 @@ flowchart TB
   0[/"type: ServiceClass#lt;Db, #quot;Db#quot;, #123;#125;#gt; #amp; #123; readonly make: Effect#lt;#123;#125;, never, never#gt;; #125;<br/>node: Context.Service#lt;Db#gt;#40;#41;#40;#quot;Db#quot;, #123; make: Effect.succeed#40;#123;#125;#41; #125;#41;"/]
   1[/"type: Effect#lt;#123;#125;, never, Db#gt;<br/>node: Db.asEffect#40;#41;"/]
   2["type: Effect#lt;void, never, Db#gt;<br/>callee: Effect.asVoid<br/>args: #91;#93;"]
-  2 -->|"kind: transformCallee"| 2
   1 -->|"kind: pipe"| 2

@@ -98,6 +98,12 @@ func (ec *executionCollector) connectSlices(fromSlice *GraphSlice, toSlice *Grap
 	if toSlice == nil {
 		return fromSlice
 	}
+	if *fromSlice.Trailing == *toSlice.Leading {
+		return &GraphSlice{
+			Leading:  fromSlice.Leading,
+			Trailing: toSlice.Trailing,
+		}
+	}
 	ec.g.AddEdge(*fromSlice.Trailing, *toSlice.Leading, ExecutionLink{
 		Kind: kind,
 	})
