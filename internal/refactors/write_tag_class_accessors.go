@@ -10,7 +10,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/checker"
 	"github.com/microsoft/typescript-go/shim/core"
 	"github.com/microsoft/typescript-go/shim/ls"
-	"github.com/microsoft/typescript-go/shim/ls/change"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/microsoft/typescript-go/shim/scanner"
 )
 
@@ -132,7 +132,7 @@ func runWriteTagClassAccessors(ctx *refactor.Context) []ls.CodeAction {
 
 	action := ctx.NewRefactorAction(refactor.RefactorAction{
 		Description: "Implement Service accessors",
-		Run: func(tracker *change.Tracker) {
+		Run: func(tracker *rewriter.Tracker) {
 			generateAccessors(tracker, ctx, c, classNode, classNameText, effectIdentifier, members)
 		},
 	})
@@ -186,7 +186,7 @@ func filterNonPrimitiveTypes(types []*checker.Type) []*checker.Type {
 
 // generateAccessors generates accessor text directly via InsertText.
 func generateAccessors(
-	tracker *change.Tracker,
+	tracker *rewriter.Tracker,
 	ctx *refactor.Context,
 	c *checker.Checker,
 	classNode *ast.Node,

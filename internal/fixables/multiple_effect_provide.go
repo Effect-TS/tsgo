@@ -8,7 +8,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/core"
 	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
 	"github.com/microsoft/typescript-go/shim/ls"
-	"github.com/microsoft/typescript-go/shim/ls/change"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/microsoft/typescript-go/shim/scanner"
 )
 
@@ -48,7 +48,7 @@ func runMultipleEffectProvideFix(ctx *fixable.Context) []ls.CodeAction {
 
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Combine into a single provide",
-			Run: func(tracker *change.Tracker) {
+			Run: func(tracker *rewriter.Tracker) {
 				// Step 1: Delete the range spanning all consecutive provide call expressions
 				tokenPos := scanner.GetTokenPosOfNode(chunk[0], sf, false)
 				endPos := chunk[len(chunk)-1].End()
@@ -86,7 +86,7 @@ func runMultipleEffectProvideFix(ctx *fixable.Context) []ls.CodeAction {
 				ast.SetParentInChildren(provideCall)
 
 				// Step 3: Insert the new node at the position of the first deleted call
-				tracker.InsertNodeAt(sf, core.TextPos(tokenPos), provideCall, change.NodeOptions{})
+				tracker.InsertNodeAt(sf, core.TextPos(tokenPos), provideCall, rewriter.NodeOptions{})
 			},
 		}); action != nil {
 			actions = append(actions, *action)

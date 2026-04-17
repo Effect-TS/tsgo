@@ -159,7 +159,7 @@ func collectHierarchicalDocumentSymbols(t *testing.T, langService interface {
 			},
 		},
 	}
-	resolvedCaps := lsproto.ResolveClientCapabilities(caps)
+	resolvedCaps := caps.Resolve()
 	ctx := lsproto.WithClientCapabilities(context.Background(), &resolvedCaps)
 	result, err := langService.ProvideDocumentSymbols(ctx, uri)
 	if err != nil {
@@ -184,7 +184,7 @@ func collectFlatDocumentSymbols(t *testing.T, langService interface {
 			},
 		},
 	}
-	resolvedCaps := lsproto.ResolveClientCapabilities(caps)
+	resolvedCaps := caps.Resolve()
 	ctx := lsproto.WithClientCapabilities(context.Background(), &resolvedCaps)
 	result, err := langService.ProvideDocumentSymbols(ctx, uri)
 	if err != nil {

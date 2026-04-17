@@ -6,7 +6,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/ast"
 	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
 	"github.com/microsoft/typescript-go/shim/ls"
-	"github.com/microsoft/typescript-go/shim/ls/change"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var OverriddenSchemaConstructorFix = fixable.Fixable{
@@ -37,7 +37,7 @@ func runOverriddenSchemaConstructorFix(ctx *fixable.Context) []ls.CodeAction {
 		if match.HasBody && constructorSupportsStaticRewrite(match.ConstructorNode) {
 			if action := ctx.NewFixAction(fixable.FixAction{
 				Description: "Rewrite using the static 'new' pattern",
-				Run: func(tracker *change.Tracker) {
+				Run: func(tracker *rewriter.Tracker) {
 					ctor := match.ConstructorNode.AsConstructorDeclaration()
 
 					// Build a visitor that transforms super(...) calls and this keywords
@@ -118,7 +118,7 @@ func runOverriddenSchemaConstructorFix(ctx *fixable.Context) []ls.CodeAction {
 		// _fix action: Remove the constructor override (always available)
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Remove the constructor override",
-			Run: func(tracker *change.Tracker) {
+			Run: func(tracker *rewriter.Tracker) {
 				tracker.Delete(sf, match.ConstructorNode)
 			},
 		}); action != nil {

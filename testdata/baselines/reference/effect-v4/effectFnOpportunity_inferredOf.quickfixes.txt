@@ -35,9 +35,9 @@ class UserService extends Context.Service<UserService, {
 
 
 const _shouldTrigger = UserService.of({ // UserService is an Effect Tag
-  getUser: Effect.fn("UserService.getUser")(function*(id: string) {
-      yield* Effect.log(`Looking up user ${id}`);
-  })
+  getUser: Effect.fn("UserService.getUser")(function* (id: string) {
+    yield* Effect.log(`Looking up user ${id}`);
+})
 })
 
 

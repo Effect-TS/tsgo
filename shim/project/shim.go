@@ -96,3 +96,4 @@ const UpdateReasonRequestedLoadProjectTree = project.UpdateReasonRequestedLoadPr
 const UpdateReasonUnknown = project.UpdateReasonUnknown
 type WatchedFiles[T any] = project.WatchedFiles[T]
 type WatcherID = project.WatcherID
+type Watchers = project.Watchers

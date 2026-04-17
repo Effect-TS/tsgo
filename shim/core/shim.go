@@ -49,6 +49,7 @@ const JsxEmitReactNative = core.JsxEmitReactNative
 type LanguageVariant = core.LanguageVariant
 const LanguageVariantJSX = core.LanguageVariantJSX
 const LanguageVariantStandard = core.LanguageVariantStandard
+type LimitedSemaphore = core.LimitedSemaphore
 type LinkStore[K comparable, V any] = core.LinkStore[K,V]
 type ModuleDetectionKind = core.ModuleDetectionKind
 const ModuleDetectionKindAuto = core.ModuleDetectionKindAuto
@@ -78,6 +79,8 @@ const ModuleResolutionKindNode10 = core.ModuleResolutionKindNode10
 const ModuleResolutionKindNode16 = core.ModuleResolutionKindNode16
 const ModuleResolutionKindNodeNext = core.ModuleResolutionKindNodeNext
 const ModuleResolutionKindUnknown = core.ModuleResolutionKindUnknown
+//go:linkname NewLimitedSemaphore github.com/microsoft/typescript-go/internal/core.NewLimitedSemaphore
+func NewLimitedSemaphore(maxConcurrency int) *core.LimitedSemaphore
 type NewLineKind = core.NewLineKind
 const NewLineKindCRLF = core.NewLineKindCRLF
 const NewLineKindLF = core.NewLineKindLF
@@ -137,6 +140,7 @@ const ScriptTargetJSON = core.ScriptTargetJSON
 const ScriptTargetLatest = core.ScriptTargetLatest
 const ScriptTargetLatestStandard = core.ScriptTargetLatestStandard
 const ScriptTargetNone = core.ScriptTargetNone
+type Semaphore = core.Semaphore
 //go:linkname SetVersionSuffix github.com/microsoft/typescript-go/internal/core.SetVersionSuffix
 func SetVersionSuffix(s string)
 //go:linkname ShouldRewriteModuleSpecifier github.com/microsoft/typescript-go/internal/core.ShouldRewriteModuleSpecifier
@@ -160,6 +164,7 @@ func UTF16Len(s string) core.UTF16Offset
 type UTF16Offset = core.UTF16Offset
 //go:linkname UndefinedTextRange github.com/microsoft/typescript-go/internal/core.UndefinedTextRange
 func UndefinedTextRange() core.TextRange
+type UnlimitedSemaphore = core.UnlimitedSemaphore
 var UnprefixedNodeCoreModules = core.UnprefixedNodeCoreModules
 //go:linkname Version github.com/microsoft/typescript-go/internal/core.Version
 func Version() string

@@ -7,7 +7,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/core"
 	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
 	"github.com/microsoft/typescript-go/shim/ls"
-	"github.com/microsoft/typescript-go/shim/ls/change"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var UnnecessaryEffectGenFix = fixable.Fixable{
@@ -35,7 +35,7 @@ func runUnnecessaryEffectGenFix(ctx *fixable.Context) []ls.CodeAction {
 			// Simple unwrap: delete the prefix and suffix around the yielded expression
 			if action := ctx.NewFixAction(fixable.FixAction{
 				Description: "Remove the Effect.gen, and keep the body",
-				Run: func(tracker *change.Tracker) {
+				Run: func(tracker *rewriter.Tracker) {
 					tracker.DeleteRange(sf, core.NewTextRange(match.CallNode.Pos(), match.YieldedExpression.Pos()))
 					tracker.DeleteRange(sf, core.NewTextRange(match.YieldedExpression.End(), match.CallNode.End()))
 				},
@@ -48,7 +48,7 @@ func runUnnecessaryEffectGenFix(ctx *fixable.Context) []ls.CodeAction {
 		// No return + non-void success: wrap with Effect.asVoid(...)
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Remove the Effect.gen, and keep the body",
-			Run: func(tracker *change.Tracker) {
+			Run: func(tracker *rewriter.Tracker) {
 				// Clone the Effect module identifier (or create a fallback)
 				var effectModuleId *ast.Node
 				if match.EffectModuleNode != nil && match.EffectModuleNode.Kind == ast.KindIdentifier {

@@ -20,7 +20,7 @@ skipped by default
 // @effect-diagnostics effectFnIife:warning
 import * as Effect from "effect/Effect"
 
-export const preview = Effect.gen(function*() {
+export const preview = Effect.gen(function* () {
     return yield* Effect.succeed(1);
 })
 

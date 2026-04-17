@@ -55,6 +55,10 @@ type RegistryChange = autoimport.RegistryChange
 type RegistryCloneHost = autoimport.RegistryCloneHost
 //go:linkname SymbolToExport github.com/microsoft/typescript-go/internal/ls/autoimport.SymbolToExport
 func SymbolToExport(symbol *ast.Symbol, ch *checker.Checker) *autoimport.Export
+//go:linkname TryGetAutoImportableReferenceFromTypeNode github.com/microsoft/typescript-go/internal/ls/autoimport.TryGetAutoImportableReferenceFromTypeNode
+func TryGetAutoImportableReferenceFromTypeNode(importTypeNode *ast.TypeNode, idToSymbol map[*ast.IdentifierNode]*ast.Symbol) (*ast.TypeNode, []*ast.Symbol)
+//go:linkname TypeNodeToAutoImportableTypeNode github.com/microsoft/typescript-go/internal/ls/autoimport.TypeNodeToAutoImportableTypeNode
+func TypeNodeToAutoImportableTypeNode(typeNode *ast.TypeNode, importAdder autoimport.ImportAdder, idToSymbol map[*ast.IdentifierNode]*ast.Symbol) *ast.TypeNode
 //go:linkname TypeToAutoImportableTypeNode github.com/microsoft/typescript-go/internal/ls/autoimport.TypeToAutoImportableTypeNode
 func TypeToAutoImportableTypeNode(c *checker.Checker, importAdder autoimport.ImportAdder, t *checker.Type, contextNode *ast.Node) *ast.TypeNode
 type View = autoimport.View

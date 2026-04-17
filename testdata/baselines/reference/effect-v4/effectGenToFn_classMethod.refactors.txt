@@ -16,11 +16,11 @@
 import * as Eff from "effect/Effect"
 
 class Test {
-  methodReturnsEffect = Eff.fn("methodReturnsEffect")(function*(arg1: number, arg2: number) {
-        const a = yield* Eff.succeed(arg1);
-        const b = yield* Eff.succeed(arg2);
-        return a + b;
-    });
+  methodReturnsEffect = Eff.fn("methodReturnsEffect")(function* (arg1: number, arg2: number) {
+    const a = yield* Eff.succeed(arg1);
+    const b = yield* Eff.succeed(arg2);
+    return a + b;
+});
 }
 
 

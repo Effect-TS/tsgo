@@ -248,7 +248,7 @@ index b8575b1933..022443c14d 100644
 +			delete(f.scriptInfos, state.fileName)
 +		} else if script != nil {
 +			// Restore original content via editScript so the server is notified
-+			f.editScript(t, state.fileName, 0, len(script.content), state.originalContent)
++			f.editScript(t, state.fileName, core.TextChange{TextRange: core.NewTextRange(0, len(script.content)), NewText: state.originalContent})
 +		}
 +	}
 +
@@ -405,7 +405,7 @@ index b8575b1933..022443c14d 100644
 +		if state.originalContent == "" && script != nil {
 +			delete(f.scriptInfos, state.fileName)
 +		} else if script != nil {
-+			f.editScript(t, state.fileName, 0, len(script.content), state.originalContent)
++			f.editScript(t, state.fileName, core.TextChange{TextRange: core.NewTextRange(0, len(script.content)), NewText: state.originalContent})
 +		}
 +	}
 +

@@ -7,7 +7,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/checker"
 	"github.com/microsoft/typescript-go/shim/core"
 	"github.com/microsoft/typescript-go/shim/ls"
-	"github.com/microsoft/typescript-go/shim/ls/change"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var ToggleTypeAnnotation = refactor.Refactor{
@@ -84,7 +84,7 @@ func runToggleTypeAnnotation(ctx *refactor.Context) []ls.CodeAction {
 		// Remove existing type annotation: delete from name.End() to type.End()
 		action := ctx.NewRefactorAction(refactor.RefactorAction{
 			Description: "Toggle type annotation",
-			Run: func(tracker *change.Tracker) {
+			Run: func(tracker *rewriter.Tracker) {
 				tracker.DeleteRange(ctx.SourceFile, core.NewTextRange(name.End(), typeNode.End()))
 			},
 		})
@@ -110,7 +110,7 @@ func runToggleTypeAnnotation(ctx *refactor.Context) []ls.CodeAction {
 
 	action := ctx.NewRefactorAction(refactor.RefactorAction{
 		Description: "Toggle type annotation",
-		Run: func(tracker *change.Tracker) {
+		Run: func(tracker *rewriter.Tracker) {
 			tracker.InsertText(ctx.SourceFile, ctx.BytePosToLSPPosition(name.End()), ": "+typeStr)
 		},
 	})

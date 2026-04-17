@@ -6,7 +6,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/core"
 	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
 	"github.com/microsoft/typescript-go/shim/ls"
-	"github.com/microsoft/typescript-go/shim/ls/change"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var UnnecessaryPipeFix = fixable.Fixable{
@@ -43,7 +43,7 @@ func runUnnecessaryPipeFix(ctx *fixable.Context) []ls.CodeAction {
 	// Unwrap "pipe(subject)" or "subject.pipe()" to just "subject" by deleting the prefix and suffix around the subject.
 	if action := ctx.NewFixAction(fixable.FixAction{
 		Description: "Remove the pipe call",
-		Run: func(tracker *change.Tracker) {
+		Run: func(tracker *rewriter.Tracker) {
 			tracker.DeleteRange(sf, core.NewTextRange(callNode.Pos(), result.Subject.Pos()))
 			tracker.DeleteRange(sf, core.NewTextRange(result.Subject.End(), callNode.End()))
 		},

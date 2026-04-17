@@ -6,7 +6,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
 	"github.com/microsoft/typescript-go/shim/ls"
-	"github.com/microsoft/typescript-go/shim/ls/change"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var StructuralTypeToSchema = refactor.Refactor{
@@ -48,12 +48,12 @@ func runStructuralTypeToSchema(ctx *refactor.Context) []ls.CodeAction {
 
 	action := ctx.NewRefactorAction(refactor.RefactorAction{
 		Description: "Refactor to Schema (Recursive Structural)",
-		Run: func(tracker *change.Tracker) {
+		Run: func(tracker *rewriter.Tracker) {
 			gen := schemagen.NewStructuralSchemaGen(tracker, ctx.TypeParser, ctx.SourceFile, c, version)
 			typeMap := map[string]*checker.Type{typeName: t}
 			stmts := gen.Process(typeMap, matchedNode, isExported)
 			for i := len(stmts) - 1; i >= 0; i-- {
-				tracker.InsertNodeBefore(ctx.SourceFile, matchedNode, stmts[i], true, change.LeadingTriviaOptionNone)
+				tracker.InsertNodeBefore(ctx.SourceFile, matchedNode, stmts[i], true, rewriter.LeadingTriviaOptionNone)
 			}
 		},
 	})

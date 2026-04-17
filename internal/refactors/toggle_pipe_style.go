@@ -8,7 +8,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/astnav"
 	"github.com/microsoft/typescript-go/shim/ls"
-	"github.com/microsoft/typescript-go/shim/ls/change"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
 	"github.com/microsoft/typescript-go/shim/scanner"
 )
@@ -48,7 +48,7 @@ func runTogglePipeStyle(ctx *refactor.Context) []ls.CodeAction {
 
 			action := ctx.NewRefactorAction(refactor.RefactorAction{
 				Description: "Rewrite as X.pipe(Y, Z, ...)",
-				Run: func(tracker *change.Tracker) {
+				Run: func(tracker *rewriter.Tracker) {
 					start := astnav.GetStartOfNode(node, ctx.SourceFile, false)
 					rewritten := togglePipeToMethodText(ctx.SourceFile, pipeCall.Subject, pipeCall.Args)
 					tracker.ReplaceRangeWithText(ctx.SourceFile, lsproto.Range{
@@ -67,7 +67,7 @@ func runTogglePipeStyle(ctx *refactor.Context) []ls.CodeAction {
 			// subject.pipe(f1, f2) -> pipe(subject, f1, f2)
 			action := ctx.NewRefactorAction(refactor.RefactorAction{
 				Description: "Rewrite as pipe(X, Y, Z, ...)",
-				Run: func(tracker *change.Tracker) {
+				Run: func(tracker *rewriter.Tracker) {
 					start := astnav.GetStartOfNode(node, ctx.SourceFile, false)
 					rewritten := togglePipeToFunctionText(ctx.SourceFile, pipeCall.Subject, pipeCall.Args)
 					tracker.ReplaceRangeWithText(ctx.SourceFile, lsproto.Range{

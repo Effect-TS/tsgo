@@ -7,7 +7,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/core"
 	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
 	"github.com/microsoft/typescript-go/shim/ls"
-	"github.com/microsoft/typescript-go/shim/ls/change"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var LayerMergeAllWithDependenciesFix = fixable.Fixable{
@@ -31,7 +31,7 @@ func runLayerMergeAllWithDependenciesFix(ctx *fixable.Context) []ls.CodeAction {
 
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Move layer to Layer.provideMerge",
-			Run: func(tracker *change.Tracker) {
+			Run: func(tracker *rewriter.Tracker) {
 				// Step A: Delete the provider argument from the mergeAll call
 				if match.ProviderIndex == 0 && len(match.AllArgs) > 1 {
 					// First argument with more args: delete from arg start to next arg start
@@ -75,7 +75,7 @@ func runLayerMergeAllWithDependenciesFix(ctx *fixable.Context) []ls.CodeAction {
 				// Step C: Insert .pipe(Layer.provideMerge(...)) at the end of the call
 				// Use two separate operations because the Suffix dedup logic in the
 				// change tracker skips ")" when the formatted call already ends with ")".
-				tracker.InsertNodeAt(sf, core.TextPos(match.CallNode.End()), provideMergeCall, change.NodeOptions{
+				tracker.InsertNodeAt(sf, core.TextPos(match.CallNode.End()), provideMergeCall, rewriter.NodeOptions{
 					Prefix: ".pipe(",
 				})
 				tracker.InsertText(sf, ctx.BytePosToLSPPosition(match.CallNode.End()), ")")

@@ -6,7 +6,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/astnav"
 	"github.com/microsoft/typescript-go/shim/ls"
-	"github.com/microsoft/typescript-go/shim/ls/change"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var AsyncAwaitToGen = refactor.Refactor{
@@ -32,7 +32,7 @@ func runAsyncAwaitToGen(ctx *refactor.Context) []ls.CodeAction {
 
 	action := ctx.NewRefactorAction(refactor.RefactorAction{
 		Description: "Rewrite to Effect.gen",
-		Run: func(tracker *change.Tracker) {
+		Run: func(tracker *rewriter.Tracker) {
 			newDecl := transformAsyncToEffectGen(tracker, asyncFn, effectModuleName)
 			if newDecl != nil {
 				ast.SetParentInChildren(newDecl)
@@ -61,7 +61,7 @@ func runAsyncAwaitToGen(ctx *refactor.Context) []ls.CodeAction {
 // initializer, and replacing the entire statement. This avoids a printer
 // assertion failure that occurs when replacing non-statement nodes with
 // complex synthetic trees.
-func replaceExpressionViaStatement(tracker *change.Tracker, sf *ast.SourceFile, oldExpr *ast.Node, newExpr *ast.Node) {
+func replaceExpressionViaStatement(tracker *rewriter.Tracker, sf *ast.SourceFile, oldExpr *ast.Node, newExpr *ast.Node) {
 	// Walk up to find containing VariableDeclaration
 	varDecl := findParentOfKind(oldExpr, ast.KindVariableDeclaration)
 	if varDecl == nil {
@@ -140,14 +140,14 @@ func findAsyncFunction(token *ast.Node) *ast.Node {
 }
 
 // transformAsyncToEffectGen transforms an async function to use Effect.gen.
-func transformAsyncToEffectGen(tracker *change.Tracker, node *ast.Node, effectModuleName string) *ast.Node {
+func transformAsyncToEffectGen(tracker *rewriter.Tracker, node *ast.Node, effectModuleName string) *ast.Node {
 	body := typeparser.GetFunctionLikeBody(node)
 	if body == nil {
 		return nil
 	}
 
 	// Transform await expressions to yield* Effect.promise(...)
-	transformedBody := transformBodyAwaitToYield(tracker, body, func(t *change.Tracker, expr *ast.Node) *ast.Node {
+	transformedBody := transformBodyAwaitToYield(tracker, body, func(t *rewriter.Tracker, expr *ast.Node) *ast.Node {
 		return buildYieldStarPromise(t, expr, effectModuleName)
 	})
 
@@ -159,11 +159,11 @@ func transformAsyncToEffectGen(tracker *change.Tracker, node *ast.Node, effectMo
 }
 
 // TransformAwaitExpr is the callback type for transforming await expressions.
-type TransformAwaitExpr func(tracker *change.Tracker, expr *ast.Node) *ast.Node
+type TransformAwaitExpr func(tracker *rewriter.Tracker, expr *ast.Node) *ast.Node
 
 // transformBodyAwaitToYield replaces all AwaitExpression nodes in the body
 // with the result of onAwait. Returns a deep-cloned, fully synthetic tree.
-func transformBodyAwaitToYield(tracker *change.Tracker, body *ast.Node, onAwait TransformAwaitExpr) *ast.Node {
+func transformBodyAwaitToYield(tracker *rewriter.Tracker, body *ast.Node, onAwait TransformAwaitExpr) *ast.Node {
 	// If no await expressions, just deep-clone the body
 	if !containsAwaitExpression(body) {
 		return tracker.DeepCloneNode(body)
@@ -206,7 +206,7 @@ func containsAwaitExpression(node *ast.Node) bool {
 }
 
 // buildYieldStarPromise builds: yield* Effect.promise(() => expr)
-func buildYieldStarPromise(tracker *change.Tracker, expr *ast.Node, effectModuleName string) *ast.Node {
+func buildYieldStarPromise(tracker *rewriter.Tracker, expr *ast.Node, effectModuleName string) *ast.Node {
 	// () => expr
 	arrowFn := tracker.NewArrowFunction(
 		nil,                                // modifiers
@@ -237,7 +237,7 @@ func buildYieldStarPromise(tracker *change.Tracker, expr *ast.Node, effectModule
 }
 
 // buildEffectGenCall builds: Effect.gen(function*() { body })
-func buildEffectGenCall(tracker *change.Tracker, body *ast.Node, effectModuleName string) *ast.Node {
+func buildEffectGenCall(tracker *rewriter.Tracker, body *ast.Node, effectModuleName string) *ast.Node {
 	var blockBody *ast.Node
 	if body.Kind == ast.KindBlock {
 		blockBody = body
@@ -273,7 +273,7 @@ func buildEffectGenCall(tracker *change.Tracker, body *ast.Node, effectModuleNam
 
 // buildNonAsyncDeclaration builds a new function declaration/expression/arrow
 // without the async modifier, with the given effectGenCall as the new body.
-func buildNonAsyncDeclaration(tracker *change.Tracker, node *ast.Node, effectGenCall *ast.Node) *ast.Node {
+func buildNonAsyncDeclaration(tracker *rewriter.Tracker, node *ast.Node, effectGenCall *ast.Node) *ast.Node {
 	modifiers := getModifiersWithoutAsync(tracker, node)
 
 	switch node.Kind {
@@ -332,7 +332,7 @@ func buildNonAsyncDeclaration(tracker *change.Tracker, node *ast.Node, effectGen
 }
 
 // getModifiersWithoutAsync returns a new modifier list with the async keyword removed.
-func getModifiersWithoutAsync(tracker *change.Tracker, node *ast.Node) *ast.ModifierList {
+func getModifiersWithoutAsync(tracker *rewriter.Tracker, node *ast.Node) *ast.ModifierList {
 	var srcModifiers *ast.ModifierList
 	switch node.Kind {
 	case ast.KindFunctionDeclaration:
@@ -362,7 +362,7 @@ func getModifiersWithoutAsync(tracker *change.Tracker, node *ast.Node) *ast.Modi
 }
 
 // cloneNodeList deep-clones a NodeList if non-nil.
-func cloneNodeList(tracker *change.Tracker, list *ast.NodeList) *ast.NodeList {
+func cloneNodeList(tracker *rewriter.Tracker, list *ast.NodeList) *ast.NodeList {
 	if list == nil {
 		return nil
 	}

@@ -6,7 +6,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
 	"github.com/microsoft/typescript-go/shim/ls"
-	"github.com/microsoft/typescript-go/shim/ls/change"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var MakeSchemaOpaqueWithNs = refactor.Refactor{
@@ -29,7 +29,7 @@ func runMakeSchemaOpaqueWithNs(ctx *refactor.Context) []ls.CodeAction {
 
 	action := ctx.NewRefactorAction(refactor.RefactorAction{
 		Description: "Make Schema opaque with namespace",
-		Run: func(tracker *change.Tracker) {
+		Run: func(tracker *rewriter.Tracker) {
 			schemaId := typeparser.FindModuleIdentifier(ctx.SourceFile, "Schema")
 			origName := info.identifier.AsIdentifier().Text
 			newName := origName + "_"

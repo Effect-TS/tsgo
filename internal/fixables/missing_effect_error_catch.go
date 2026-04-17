@@ -12,7 +12,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/checker"
 	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
 	"github.com/microsoft/typescript-go/shim/ls"
-	"github.com/microsoft/typescript-go/shim/ls/change"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/microsoft/typescript-go/shim/scanner"
 )
 
@@ -87,7 +87,7 @@ func runMissingEffectErrorCatchFix(ctx *fixable.Context) []ls.CodeAction {
 
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: description,
-			Run: func(tracker *change.Tracker) {
+			Run: func(tracker *rewriter.Tracker) {
 				tracker.InsertText(sf, ctx.BytePosToLSPPosition(catchCandidate.start), "Effect."+methodName+"(")
 				tracker.InsertText(sf, ctx.BytePosToLSPPosition(catchCandidate.end), ", () => Effect.dieMessage("+strconv.Quote(todoMessage)+"))")
 			},
@@ -99,7 +99,7 @@ func runMissingEffectErrorCatchFix(ctx *fixable.Context) []ls.CodeAction {
 	if taggedCandidate != nil {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Catch unexpected errors with Effect.catchTag",
-			Run: func(tracker *change.Tracker) {
+			Run: func(tracker *rewriter.Tracker) {
 				tracker.InsertText(sf, ctx.BytePosToLSPPosition(taggedCandidate.start), "Effect.catchTags(")
 				tracker.InsertText(sf, ctx.BytePosToLSPPosition(taggedCandidate.end), ", "+buildCatchTagsHandlersObject(taggedCandidate.tags)+")")
 			},

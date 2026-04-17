@@ -5,7 +5,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/rules"
 	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
 	"github.com/microsoft/typescript-go/shim/ls"
-	"github.com/microsoft/typescript-go/shim/ls/change"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var ScopeInLayerEffectScopedFix = fixable.Fixable{
@@ -34,7 +34,7 @@ func runScopeInLayerEffectScopedFix(ctx *fixable.Context) []ls.CodeAction {
 
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Use scoped for Layer creation",
-			Run: func(tracker *change.Tracker) {
+			Run: func(tracker *rewriter.Tracker) {
 				tracker.ReplaceNode(sf, match.MethodIdentifier, tracker.NewIdentifier("scoped"), nil)
 			},
 		}); action != nil {

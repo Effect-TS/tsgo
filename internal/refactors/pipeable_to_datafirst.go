@@ -7,7 +7,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/astnav"
 	"github.com/microsoft/typescript-go/shim/checker"
 	"github.com/microsoft/typescript-go/shim/ls"
-	"github.com/microsoft/typescript-go/shim/ls/change"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var PipeableToDatafirst = refactor.Refactor{
@@ -114,7 +114,7 @@ func tryConvertToDatafirst(c *checker.Checker, pipeCall *typeparser.ParsedPipeCa
 
 	action := ctx.NewRefactorAction(refactor.RefactorAction{
 		Description: "Rewrite to datafirst",
-		Run: func(tracker *change.Tracker) {
+		Run: func(tracker *rewriter.Tracker) {
 			// Build the replacement node by accumulating from the subject
 			newNode := tracker.DeepCloneNode(pipeCall.Subject)
 

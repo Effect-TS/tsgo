@@ -64,7 +64,7 @@ export const ProductId: Schema.Schema<ProductId, ProductIdEncoded, ProductIdCont
 import * as Schema from "effect/Schema"
 
 export const ProductId_ = Schema.NonEmptyString.pipe(Schema.brand("ProductId"))
-export interface ProductId extends Schema.Schema.Type<typeof ProductId_> {}
+export interface ProductId extends Schema.Schema.Type<typeof ProductId_> { }
 export namespace ProductId {
     export type Encoded = Schema.Schema.Encoded<typeof ProductId_>;
     export type Context = Schema.Schema.Context<typeof ProductId_>;

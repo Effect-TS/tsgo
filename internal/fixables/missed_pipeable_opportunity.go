@@ -7,7 +7,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/ast"
 	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
 	"github.com/microsoft/typescript-go/shim/ls"
-	"github.com/microsoft/typescript-go/shim/ls/change"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var MissedPipeableOpportunityFix = fixable.Fixable{
@@ -45,7 +45,7 @@ func runMissedPipeableOpportunityFix(ctx *fixable.Context) []ls.CodeAction {
 
 	if action := ctx.NewFixAction(fixable.FixAction{
 		Description: "Convert to pipe style",
-		Run: func(tracker *change.Tracker) {
+		Run: func(tracker *rewriter.Tracker) {
 			buildMissedPipeableReplacement(tracker, sf, match)
 		},
 	}); action != nil {
@@ -55,7 +55,7 @@ func runMissedPipeableOpportunityFix(ctx *fixable.Context) []ls.CodeAction {
 }
 
 // buildMissedPipeableReplacement builds the .pipe() replacement and applies it via tracker.ReplaceNode.
-func buildMissedPipeableReplacement(tracker *change.Tracker, sf *ast.SourceFile, match *rules.MissedPipeableOpportunityMatch) {
+func buildMissedPipeableReplacement(tracker *rewriter.Tracker, sf *ast.SourceFile, match *rules.MissedPipeableOpportunityMatch) {
 	flow := match.Flow
 
 	// Build the subject node for the pipe call
@@ -107,7 +107,7 @@ func buildMissedPipeableReplacement(tracker *change.Tracker, sf *ast.SourceFile,
 
 // findSubjectNodeAtDepth traverses the flow node into arguments to find the subject at the right depth,
 // then deep-clones it.
-func findSubjectNodeAtDepth(tracker *change.Tracker, flow *typeparser.PipingFlow, firstPipeableIndex int) *ast.Node {
+func findSubjectNodeAtDepth(tracker *rewriter.Tracker, flow *typeparser.PipingFlow, firstPipeableIndex int) *ast.Node {
 	current := flow.Node
 	for i := len(flow.Transformations); i > firstPipeableIndex; i-- {
 		t := flow.Transformations[i-1]
@@ -129,7 +129,7 @@ func findSubjectNodeAtDepth(tracker *change.Tracker, flow *typeparser.PipingFlow
 // For "call" kind: callee(innerNode)
 // For "pipe"/"pipeable" kind with args: callee(args...)(innerNode) (curried)
 // For "pipe"/"pipeable" kind without args: callee(innerNode)
-func wrapWithAfterTransformations(tracker *change.Tracker, inner *ast.Node, transformations []typeparser.PipingFlowTransformation) *ast.Node {
+func wrapWithAfterTransformations(tracker *rewriter.Tracker, inner *ast.Node, transformations []typeparser.PipingFlowTransformation) *ast.Node {
 	result := inner
 	for _, t := range transformations {
 		if t.Kind == typeparser.TransformationKindEffectFn || t.Kind == typeparser.TransformationKindEffectFnUntraced {

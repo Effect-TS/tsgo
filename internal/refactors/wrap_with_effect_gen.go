@@ -6,7 +6,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/astnav"
 	"github.com/microsoft/typescript-go/shim/ls"
-	"github.com/microsoft/typescript-go/shim/ls/change"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
 )
 
@@ -64,7 +64,7 @@ func runWrapWithEffectGen(ctx *refactor.Context) []ls.CodeAction {
 
 	action := ctx.NewRefactorAction(refactor.RefactorAction{
 		Description: "Wrap with Effect.gen",
-		Run: func(tracker *change.Tracker) {
+		Run: func(tracker *rewriter.Tracker) {
 			start := astnav.GetStartOfNode(matchedNode, ctx.SourceFile, false)
 			textRange := ctx.SourceFile.Text()[start:matchedNode.End()]
 			wrapped := effectModuleName + ".gen(function*() { return yield* " + textRange + " })"
