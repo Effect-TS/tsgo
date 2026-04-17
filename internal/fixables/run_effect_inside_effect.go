@@ -10,7 +10,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/core"
 	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
 	"github.com/microsoft/typescript-go/shim/ls"
-	"github.com/microsoft/typescript-go/shim/ls/change"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/microsoft/typescript-go/shim/scanner"
 )
 
@@ -45,7 +45,7 @@ func runRunEffectInsideEffectFix(ctx *fixable.Context) []ls.CodeAction {
 
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: runEffectInsideEffectFixDescription(supportedEffect),
-			Run: func(tracker *change.Tracker) {
+			Run: func(tracker *rewriter.Tracker) {
 				genFn := m.GeneratorFunction
 				block := genFn.Body.AsBlock()
 
@@ -141,7 +141,7 @@ func runEffectInsideEffectReplacementText(
 }
 
 func insertYieldedEffectModuleCall(
-	tracker *change.Tracker,
+	tracker *rewriter.Tracker,
 	sf *ast.SourceFile,
 	block *ast.Block,
 	effectModuleIdentifier string,
@@ -174,5 +174,5 @@ func insertYieldedEffectModuleCall(
 	ast.SetParentInChildren(varStmt)
 
 	insertPos := core.TextPos(block.Statements.Nodes[0].Pos())
-	tracker.InsertNodeAt(sf, insertPos, varStmt, change.NodeOptions{Prefix: "\n", Suffix: "\n"})
+	tracker.InsertNodeAt(sf, insertPos, varStmt, rewriter.NodeOptions{Prefix: "\n", Suffix: "\n"})
 }

@@ -8,7 +8,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/core"
 	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
 	"github.com/microsoft/typescript-go/shim/ls"
-	"github.com/microsoft/typescript-go/shim/ls/change"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/microsoft/typescript-go/shim/scanner"
 )
 
@@ -36,7 +36,7 @@ func runRedundantSchemaTagIdentifierFix(ctx *fixable.Context) []ls.CodeAction {
 
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: fmt.Sprintf("Remove redundant identifier '%s'", keyText),
-			Run: func(tracker *change.Tracker) {
+			Run: func(tracker *rewriter.Tracker) {
 				tokenPos := scanner.GetTokenPosOfNode(keyNode, sf, false)
 				tracker.DeleteRange(sf, core.NewTextRange(tokenPos, keyNode.End()))
 			},

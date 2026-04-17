@@ -6,7 +6,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/core"
 	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
 	"github.com/microsoft/typescript-go/shim/ls"
-	"github.com/microsoft/typescript-go/shim/ls/change"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/microsoft/typescript-go/shim/scanner"
 )
 
@@ -31,7 +31,7 @@ func runUnnecessaryArrowBlockFix(ctx *fixable.Context) []ls.CodeAction {
 		replacementText := "(" + scanner.GetSourceTextOfNodeFromSourceFile(sf, match.ReturnedExpression, false) + ")"
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Use a concise arrow body",
-			Run: func(tracker *change.Tracker) {
+			Run: func(tracker *rewriter.Tracker) {
 				tracker.DeleteRange(sf, core.NewTextRange(match.BodyBlock.Pos(), match.BodyBlock.End()))
 				tracker.InsertText(sf, ctx.BytePosToLSPPosition(match.BodyBlock.Pos()), replacementText)
 			},

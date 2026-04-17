@@ -14,12 +14,12 @@ import (
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
-	"github.com/microsoft/typescript-go/shim/ls/change"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 // StructuralSchemaGen holds the context for converting resolved types to Schema expressions.
 type StructuralSchemaGen struct {
-	Tracker          *change.Tracker
+	Tracker          *rewriter.Tracker
 	SourceFile       *ast.SourceFile
 	Checker          *checker.Checker
 	TypeParser       *typeparser.TypeParser
@@ -52,7 +52,7 @@ type processingContext struct {
 }
 
 // NewStructuralSchemaGen creates a StructuralSchemaGen for type-checker-based schema generation.
-func NewStructuralSchemaGen(tracker *change.Tracker, tp *typeparser.TypeParser, sf *ast.SourceFile, c *checker.Checker, version typeparser.EffectMajorVersion) *StructuralSchemaGen {
+func NewStructuralSchemaGen(tracker *rewriter.Tracker, tp *typeparser.TypeParser, sf *ast.SourceFile, c *checker.Checker, version typeparser.EffectMajorVersion) *StructuralSchemaGen {
 	return &StructuralSchemaGen{
 		Tracker:               tracker,
 		SourceFile:            sf,

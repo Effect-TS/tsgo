@@ -53,7 +53,7 @@ skipped by default
 import * as Effect from "effect/Effect"
 
 // Should trigger - IIFE with Effect.fn and generator
-export const iife1 = Effect.gen(function*() {
+export const iife1 = Effect.gen(function* () {
     yield* Effect.succeed(1);
 })
 
@@ -122,7 +122,7 @@ export const iife1 = Effect.fn("test")(function*() {
 })()
 
 // Should trigger - IIFE with Effect.fn and name, generator
-export const iife2 = Effect.gen(function*() {
+export const iife2 = Effect.gen(function* () {
     yield* Effect.succeed(1);
     return 42;
 })
@@ -192,7 +192,7 @@ export const iife2 = Effect.fn("named")(function*() {
 })()
 
 // Should trigger - IIFE with Effect.fnUntraced
-export const iife3 = Effect.gen(function*() {
+export const iife3 = Effect.gen(function* () {
     yield* Effect.succeed(1);
 })
 
@@ -281,7 +281,7 @@ export const iife5 = Effect.fn("func")(function() {
 })()
 
 // Should trigger - IIFE with Effect.fn, generator, and pipe arguments
-export const iife6 = Effect.gen(function*() {
+export const iife6 = Effect.gen(function* () {
     return yield* Effect.succeed(1);
 }).pipe(Effect.map(n => n + 1))
 
@@ -350,7 +350,7 @@ export const iife6 = Effect.fn("piped")(function*() {
 }, Effect.map((n) => n + 1))()
 
 // Should trigger - IIFE with Effect.fnUntraced and pipe arguments
-export const iife7 = Effect.gen(function*() {
+export const iife7 = Effect.gen(function* () {
     return yield* Effect.succeed(1);
 }).pipe(Effect.map(n => n + 1))
 

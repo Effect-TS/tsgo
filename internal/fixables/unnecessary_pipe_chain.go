@@ -7,7 +7,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/ast"
 	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
 	"github.com/microsoft/typescript-go/shim/ls"
-	"github.com/microsoft/typescript-go/shim/ls/change"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var UnnecessaryPipeChainFix = fixable.Fixable{
@@ -43,7 +43,7 @@ func runUnnecessaryPipeChainFix(ctx *fixable.Context) []ls.CodeAction {
 
 	if action := ctx.NewFixAction(fixable.FixAction{
 		Description: "Rewrite as single pipe call",
-		Run: func(tracker *change.Tracker) {
+		Run: func(tracker *rewriter.Tracker) {
 			// Collect all arguments: deep-clone inner args then outer args
 			allArgs := make([]*ast.Node, 0, len(inner.Args)+len(outer.Args))
 			for _, arg := range inner.Args {

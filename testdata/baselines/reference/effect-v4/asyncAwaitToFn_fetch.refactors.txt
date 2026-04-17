@@ -42,6 +42,8 @@ export function getUserName(userId: string) {
 === [R1] Refactor 2: "Rewrite to Effect.gen with failures" ===
 
 --- file:///.src/asyncAwaitToFn_fetch.ts ---
+// refactor: 3:30-3:31
+
 export class Error1 extends Data.TaggedError("Error1")<{
     cause: unknown;
 }> {}
@@ -49,8 +51,6 @@ export class Error1 extends Data.TaggedError("Error1")<{
 export class Error2 extends Data.TaggedError("Error2")<{
     cause: unknown;
 }> {}
-
-// refactor: 3:30-3:31
 
 export function getUserName(userId: string) {
     return Effect.gen(function* () {
@@ -76,6 +76,8 @@ export const getUserName = Effect.fn("getUserName")(function* (userId: string) {
 === [R1] Refactor 4: "Rewrite to Effect.fn with failures" ===
 
 --- file:///.src/asyncAwaitToFn_fetch.ts ---
+// refactor: 3:30-3:31
+
 export class Error1 extends Data.TaggedError("Error1")<{
     cause: unknown;
 }> {}
@@ -83,8 +85,6 @@ export class Error1 extends Data.TaggedError("Error1")<{
 export class Error2 extends Data.TaggedError("Error2")<{
     cause: unknown;
 }> {}
-
-// refactor: 3:30-3:31
 
 export const getUserName = Effect.fn("getUserName")(function* (userId: string) {
     const user = yield* Effect.tryPromise({ try: () => fetch(`https://api.example.com/users/${userId}`), catch: cause => new Error1({ cause }) });

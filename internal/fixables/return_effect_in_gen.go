@@ -7,7 +7,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/ast"
 	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
 	"github.com/microsoft/typescript-go/shim/ls"
-	"github.com/microsoft/typescript-go/shim/ls/change"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 // ReturnEffectInGenFix adds "yield*" before the return expression in an Effect generator
@@ -42,7 +42,7 @@ func runReturnEffectInGenFix(ctx *fixable.Context) []ls.CodeAction {
 
 	if action := ctx.NewFixAction(fixable.FixAction{
 		Description: "Add yield* statement",
-		Run: func(tracker *change.Tracker) {
+		Run: func(tracker *rewriter.Tracker) {
 			clonedExpr := tracker.DeepCloneNode(match.ReturnNode.AsReturnStatement().Expression)
 			newYieldExpr := tracker.NewYieldExpression(tracker.NewToken(ast.KindAsteriskToken), clonedExpr)
 			ast.SetParentInChildren(newYieldExpr)

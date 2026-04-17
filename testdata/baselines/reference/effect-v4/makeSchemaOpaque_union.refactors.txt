@@ -75,7 +75,7 @@ export const MyUnion_ = Schema.Union([
   Schema.Literal("A"),
   Schema.Literal("B")
 ])
-export interface MyUnion extends Schema.Schema.Type<typeof MyUnion_> {}
+export interface MyUnion extends Schema.Schema.Type<typeof MyUnion_> { }
 export namespace MyUnion {
     export type Encoded = Schema.Codec.Encoded<typeof MyUnion_>;
     export type DecodingServices = Schema.Codec.DecodingServices<typeof MyUnion_>;

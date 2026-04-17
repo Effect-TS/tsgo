@@ -3,6 +3,7 @@ package refactor
 import (
 	"context"
 
+	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
@@ -56,19 +57,20 @@ func (c *Context) BytePosToLSPPosition(pos int) lsproto.Position {
 // RefactorAction describes a single refactoring action to produce.
 type RefactorAction struct {
 	Description string
-	Run         func(tracker *change.Tracker)
+	Run         func(tracker *rewriter.Tracker)
 }
 
 // NewRefactorAction creates a tracker, runs the action's edit closure, and returns
 // a *ls.CodeAction wrapping the resulting edits for the current SourceFile.
 // Returns nil if the closure produced no edits.
 func (c *Context) NewRefactorAction(action RefactorAction) *ls.CodeAction {
-	tracker := change.NewTracker(
+	rawTracker := change.NewTracker(
 		c.Context,
 		c.Program.Options(),
 		c.ls.FormatOptions(),
 		ls.LanguageService_converters(c.ls),
 	)
+	tracker := rewriter.NewTracker(rawTracker)
 	action.Run(tracker)
 	edits := tracker.GetChanges()[c.SourceFile.FileName()]
 	if len(edits) == 0 {

@@ -6,7 +6,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/ast"
 	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
 	"github.com/microsoft/typescript-go/shim/ls"
-	"github.com/microsoft/typescript-go/shim/ls/change"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var DeterministicKeysFix = fixable.Fixable{
@@ -34,7 +34,7 @@ func runDeterministicKeysFix(ctx *fixable.Context) []ls.CodeAction {
 		sf := ctx.SourceFile
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: description,
-			Run: func(tracker *change.Tracker) {
+			Run: func(tracker *rewriter.Tracker) {
 				tracker.ReplaceNode(sf, match.KeyStringLiteral, tracker.NewStringLiteral(match.ExpectedKey, flags), nil)
 			},
 		}); action != nil {

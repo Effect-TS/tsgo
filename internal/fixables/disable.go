@@ -7,7 +7,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/rules"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/ls"
-	"github.com/microsoft/typescript-go/shim/ls/change"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 // EffectDisable provides "disable for line/file" actions for all Effect diagnostics.
@@ -66,7 +66,7 @@ func createDisableNextLineAction(ctx *fixable.Context, ruleName string) *ls.Code
 
 	return ctx.NewFixAction(fixable.FixAction{
 		Description: "Disable " + ruleName + " for this line",
-		Run: func(tracker *change.Tracker) {
+		Run: func(tracker *rewriter.Tracker) {
 			tracker.InsertText(sourceFile, insertPos, comment)
 		},
 	})
@@ -83,7 +83,7 @@ func createDisableFileAction(ctx *fixable.Context, ruleName string) *ls.CodeActi
 
 	return ctx.NewFixAction(fixable.FixAction{
 		Description: "Disable " + ruleName + " for entire file",
-		Run: func(tracker *change.Tracker) {
+		Run: func(tracker *rewriter.Tracker) {
 			tracker.InsertText(ctx.SourceFile, insertPos, comment)
 		},
 	})

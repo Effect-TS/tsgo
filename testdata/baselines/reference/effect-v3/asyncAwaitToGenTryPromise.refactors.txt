@@ -54,6 +54,7 @@ export function refactorMe(arg: string) {
 // @effect-v3
 import * as Effect from "effect/Effect"
 
+// this is a function existing jsdoc
 export class Error1 extends Data.TaggedError("Error1")<{
     cause: unknown;
 }> {}
@@ -62,7 +63,6 @@ export class Error2 extends Data.TaggedError("Error2")<{
     cause: unknown;
 }> {}
 
-// this is a function existing jsdoc
 export function refactorMe(arg: string) {
     return Effect.gen(function* () {
         for (let i = 0; i < 10; i++) {
@@ -96,6 +96,7 @@ export const refactorMe = Effect.fn("refactorMe")(function* (arg: string) {
 // @effect-v3
 import * as Effect from "effect/Effect"
 
+// this is a function existing jsdoc
 export class Error1 extends Data.TaggedError("Error1")<{
     cause: unknown;
 }> {}
@@ -104,7 +105,6 @@ export class Error2 extends Data.TaggedError("Error2")<{
     cause: unknown;
 }> {}
 
-// this is a function existing jsdoc
 export const refactorMe = Effect.fn("refactorMe")(function* (arg: string) {
     for (let i = 0; i < 10; i++) {
         yield* Effect.tryPromise({ try: () => Promise.resolve(i), catch: cause => new Error1({ cause }) });

@@ -11,7 +11,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/astnav"
 	"github.com/microsoft/typescript-go/shim/checker"
 	"github.com/microsoft/typescript-go/shim/ls"
-	"github.com/microsoft/typescript-go/shim/ls/change"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var LayerMagic = refactor.Refactor{
@@ -139,7 +139,7 @@ func tryBuildRefactor(ctx *refactor.Context, tp *typeparser.TypeParser, c *check
 
 	action := ctx.NewRefactorAction(refactor.RefactorAction{
 		Description: "Compose layers automatically with target output services",
-		Run: func(tracker *change.Tracker) {
+		Run: func(tracker *rewriter.Tracker) {
 			buildLayerMagicBuild(tracker, ctx, c, atLocation, magicResult, layerIdentifier)
 		},
 	})
@@ -151,7 +151,7 @@ func tryBuildRefactor(ctx *refactor.Context, tp *typeparser.TypeParser, c *check
 }
 
 // buildLayerMagicBuild generates: firstLayer.pipe(Layer.provideMerge(...), Layer.provide(...), ...)
-func buildLayerMagicBuild(tracker *change.Tracker, ctx *refactor.Context, c *checker.Checker, oldNode *ast.Node, magicResult *layergraph.LayerMagicResult, layerIdentifier string) {
+func buildLayerMagicBuild(tracker *rewriter.Tracker, ctx *refactor.Context, c *checker.Checker, oldNode *ast.Node, magicResult *layergraph.LayerMagicResult, layerIdentifier string) {
 	nodes := magicResult.Nodes
 	if len(nodes) == 0 {
 		return
@@ -297,7 +297,7 @@ func tryPrepareRefactor(ctx *refactor.Context, tp *typeparser.TypeParser, c *che
 
 	action := ctx.NewRefactorAction(refactor.RefactorAction{
 		Description: "Prepare layers for automatic composition",
-		Run: func(tracker *change.Tracker) {
+		Run: func(tracker *rewriter.Tracker) {
 			buildLayerMagicPrepare(tracker, ctx, c, atLocation, layerNodes, newlyIntroduced, existingBefore, layerIdentifier)
 		},
 	})
@@ -310,7 +310,7 @@ func tryPrepareRefactor(ctx *refactor.Context, tp *typeparser.TypeParser, c *che
 
 // buildLayerMagicPrepare generates: [leaf1, leaf2, ...] as any as Layer.Layer<NewTypes /* ExistingTypes */>
 func buildLayerMagicPrepare(
-	tracker *change.Tracker,
+	tracker *rewriter.Tracker,
 	ctx *refactor.Context,
 	c *checker.Checker,
 	oldNode *ast.Node,

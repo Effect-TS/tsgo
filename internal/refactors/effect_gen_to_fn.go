@@ -7,7 +7,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/astnav"
 	"github.com/microsoft/typescript-go/shim/checker"
 	"github.com/microsoft/typescript-go/shim/ls"
-	"github.com/microsoft/typescript-go/shim/ls/change"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var EffectGenToFn = refactor.Refactor{
@@ -47,7 +47,7 @@ func runEffectGenToFn(ctx *refactor.Context) []ls.CodeAction {
 
 	action := ctx.NewRefactorAction(refactor.RefactorAction{
 		Description: description,
-		Run: func(tracker *change.Tracker) {
+		Run: func(tracker *rewriter.Tracker) {
 			newNode := buildEffectGenToFnReplacement(tracker, parsed, fnName)
 			if newNode == nil {
 				return
@@ -156,7 +156,7 @@ func skipReturnBlock(node *ast.Node) *ast.Node {
 }
 
 // buildEffectGenToFnReplacement builds the replacement node for the effectGenToFn refactor.
-func buildEffectGenToFnReplacement(tracker *change.Tracker, parsed *effectGenParsed, fnName string) *ast.Node {
+func buildEffectGenToFnReplacement(tracker *rewriter.Tracker, parsed *effectGenParsed, fnName string) *ast.Node {
 	node := parsed.funcNode
 	genCall := parsed.genCall
 
@@ -248,7 +248,7 @@ func buildEffectGenToFnReplacement(tracker *change.Tracker, parsed *effectGenPar
 }
 
 // buildEffectGenToFnDeclaration wraps the Effect.fn call in the appropriate declaration.
-func buildEffectGenToFnDeclaration(tracker *change.Tracker, node *ast.Node, effectFnCall *ast.Node) *ast.Node {
+func buildEffectGenToFnDeclaration(tracker *rewriter.Tracker, node *ast.Node, effectFnCall *ast.Node) *ast.Node {
 	switch node.Kind {
 	case ast.KindFunctionDeclaration:
 		fd := node.AsFunctionDeclaration()

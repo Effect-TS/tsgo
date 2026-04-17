@@ -60,7 +60,7 @@ export const ProductId: Schema.Codec<ProductId, ProductIdEncoded, ProductIdDecod
 import * as Schema from "effect/Schema"
 
 export const ProductId_ = Schema.NonEmptyString.pipe(Schema.brand("ProductId"))
-export interface ProductId extends Schema.Schema.Type<typeof ProductId_> {}
+export interface ProductId extends Schema.Schema.Type<typeof ProductId_> { }
 export namespace ProductId {
     export type Encoded = Schema.Codec.Encoded<typeof ProductId_>;
     export type DecodingServices = Schema.Codec.DecodingServices<typeof ProductId_>;

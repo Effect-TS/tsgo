@@ -6,7 +6,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/core"
 	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
 	"github.com/microsoft/typescript-go/shim/ls"
-	"github.com/microsoft/typescript-go/shim/ls/change"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var CatchAllToMapErrorFix = fixable.Fixable{
@@ -32,7 +32,7 @@ func runCatchAllToMapErrorFix(ctx *fixable.Context) []ls.CodeAction {
 
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.mapError",
-			Run: func(tracker *change.Tracker) {
+			Run: func(tracker *rewriter.Tracker) {
 				// Edit 1: Replace "catch" with "mapError" in the callee
 				if match.CalleeNameNode != nil {
 					tracker.ReplaceNode(sf, match.CalleeNameNode, tracker.NewIdentifier("mapError"), nil)

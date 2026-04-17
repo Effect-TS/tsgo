@@ -6,7 +6,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/core"
 	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
 	"github.com/microsoft/typescript-go/shim/ls"
-	"github.com/microsoft/typescript-go/shim/ls/change"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var UnnecessaryFailYieldableErrorFix = fixable.Fixable{
@@ -34,7 +34,7 @@ func runUnnecessaryFailYieldableErrorFix(ctx *fixable.Context) []ls.CodeAction {
 		// This keeps "yield*" in place, changing "yield* Effect.fail(error)" to "yield* error".
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace yield* Effect.fail with yield*",
-			Run: func(tracker *change.Tracker) {
+			Run: func(tracker *rewriter.Tracker) {
 				tracker.DeleteRange(sf, core.NewTextRange(match.CallNode.Pos(), match.FailArgument.Pos()))
 				tracker.DeleteRange(sf, core.NewTextRange(match.FailArgument.End(), match.CallNode.End()))
 			},

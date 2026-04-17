@@ -62,8 +62,8 @@ export const MyStruct_ = S.Struct({
   id: S.Number,
   name: S.String
 })
-export interface MyStruct extends S.Schema.Type<typeof MyStruct_> {}
-export interface MyStructEncoded extends S.Schema.Encoded<typeof MyStruct_> {}
+export interface MyStruct extends S.Schema.Type<typeof MyStruct_> { }
+export interface MyStructEncoded extends S.Schema.Encoded<typeof MyStruct_> { }
 export type MyStructContext = S.Schema.Context<typeof MyStruct_>;
 export const MyStruct: S.Schema<MyStruct, MyStructEncoded, MyStructContext> = MyStruct_;
 
@@ -79,9 +79,9 @@ export const MyStruct_ = S.Struct({
   id: S.Number,
   name: S.String
 })
-export interface MyStruct extends S.Schema.Type<typeof MyStruct_> {}
+export interface MyStruct extends S.Schema.Type<typeof MyStruct_> { }
 export namespace MyStruct {
-    export interface Encoded extends S.Schema.Encoded<typeof MyStruct_> {}
+    export interface Encoded extends S.Schema.Encoded<typeof MyStruct_> { }
     export type Context = S.Schema.Context<typeof MyStruct_>;
 }
 export const MyStruct: S.Schema<MyStruct, MyStruct.Encoded, MyStruct.Context> = MyStruct_;

@@ -6,7 +6,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/ast"
 	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
 	"github.com/microsoft/typescript-go/shim/ls"
-	"github.com/microsoft/typescript-go/shim/ls/change"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var ClassSelfMismatchFix = fixable.Fixable{
@@ -41,7 +41,7 @@ func runClassSelfMismatchFix(ctx *fixable.Context) []ls.CodeAction {
 		description := "Replace '" + match.ActualName + "' with '" + match.ExpectedName + "'"
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: description,
-			Run: func(tracker *change.Tracker) {
+			Run: func(tracker *rewriter.Tracker) {
 				tracker.ReplaceNode(sf, targetNode, tracker.NewIdentifier(match.ExpectedName), nil)
 			},
 		}); action != nil {

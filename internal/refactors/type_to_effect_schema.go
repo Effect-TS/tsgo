@@ -6,7 +6,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/astnav"
 	"github.com/microsoft/typescript-go/shim/ls"
-	"github.com/microsoft/typescript-go/shim/ls/change"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var TypeToEffectSchema = refactor.Refactor{
@@ -71,11 +71,11 @@ func runTypeToEffectSchema(ctx *refactor.Context) []ls.CodeAction {
 
 	action := ctx.NewRefactorAction(refactor.RefactorAction{
 		Description: "Generate Effect.Schema from type",
-		Run: func(tracker *change.Tracker) {
+		Run: func(tracker *rewriter.Tracker) {
 			gen := schemagen.New(tracker, ctx.SourceFile, version)
 			newNode := gen.Process(matchedNode, false)
 			if newNode != nil {
-				tracker.InsertNodeBefore(ctx.SourceFile, matchedNode, newNode, true, change.LeadingTriviaOptionNone)
+				tracker.InsertNodeBefore(ctx.SourceFile, matchedNode, newNode, true, rewriter.LeadingTriviaOptionNone)
 			}
 		},
 	})

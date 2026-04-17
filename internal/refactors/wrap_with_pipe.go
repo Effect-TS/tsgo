@@ -3,7 +3,7 @@ package refactors
 import (
 	"github.com/effect-ts/tsgo/internal/refactor"
 	"github.com/microsoft/typescript-go/shim/ls"
-	"github.com/microsoft/typescript-go/shim/ls/change"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var WrapWithPipe = refactor.Refactor{
@@ -24,7 +24,7 @@ func runWrapWithPipe(ctx *refactor.Context) []ls.CodeAction {
 
 	action := ctx.NewRefactorAction(refactor.RefactorAction{
 		Description: "Wrap with pipe",
-		Run: func(tracker *change.Tracker) {
+		Run: func(tracker *rewriter.Tracker) {
 			tracker.InsertText(ctx.SourceFile, startPos, "pipe(")
 			tracker.InsertText(ctx.SourceFile, endPos, ")")
 		},

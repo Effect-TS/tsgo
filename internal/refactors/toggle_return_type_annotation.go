@@ -8,7 +8,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/checker"
 	"github.com/microsoft/typescript-go/shim/core"
 	"github.com/microsoft/typescript-go/shim/ls"
-	"github.com/microsoft/typescript-go/shim/ls/change"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var ToggleReturnTypeAnnotation = refactor.Refactor{
@@ -63,7 +63,7 @@ func runToggleReturnTypeAnnotation(ctx *refactor.Context) []ls.CodeAction {
 		// Remove existing return type annotation: delete from endNode.End() to type.End()
 		action := ctx.NewRefactorAction(refactor.RefactorAction{
 			Description: "Toggle return type annotation",
-			Run: func(tracker *change.Tracker) {
+			Run: func(tracker *rewriter.Tracker) {
 				tracker.DeleteRange(ctx.SourceFile, core.NewTextRange(endNode.End(), typeNode.End()))
 			},
 		})
@@ -95,7 +95,7 @@ func runToggleReturnTypeAnnotation(ctx *refactor.Context) []ls.CodeAction {
 
 	action := ctx.NewRefactorAction(refactor.RefactorAction{
 		Description: "Toggle return type annotation",
-		Run: func(tracker *change.Tracker) {
+		Run: func(tracker *rewriter.Tracker) {
 			tracker.InsertText(ctx.SourceFile, ctx.BytePosToLSPPosition(endNode.End()), ": "+typeStr)
 		},
 	})

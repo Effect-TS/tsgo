@@ -8,7 +8,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/astnav"
 	"github.com/microsoft/typescript-go/shim/ls"
-	"github.com/microsoft/typescript-go/shim/ls/change"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var AsyncAwaitToFnTryPromise = refactor.Refactor{
@@ -35,7 +35,7 @@ func runAsyncAwaitToFnTryPromise(ctx *refactor.Context) []ls.CodeAction {
 
 	action := ctx.NewRefactorAction(refactor.RefactorAction{
 		Description: "Rewrite to Effect.fn with failures",
-		Run: func(tracker *change.Tracker) {
+		Run: func(tracker *rewriter.Tracker) {
 			transformAsyncToEffectFnTryPromise(tracker, ctx.SourceFile, asyncFn, effectModuleName, dataModuleName)
 		},
 	})
@@ -47,7 +47,7 @@ func runAsyncAwaitToFnTryPromise(ctx *refactor.Context) []ls.CodeAction {
 	return []ls.CodeAction{*action}
 }
 
-func transformAsyncToEffectFnTryPromise(tracker *change.Tracker, sf *ast.SourceFile, node *ast.Node, effectModuleName string, dataModuleName string) {
+func transformAsyncToEffectFnTryPromise(tracker *rewriter.Tracker, sf *ast.SourceFile, node *ast.Node, effectModuleName string, dataModuleName string) {
 	body := typeparser.GetFunctionLikeBody(node)
 	if body == nil {
 		return
@@ -68,7 +68,7 @@ func transformAsyncToEffectFnTryPromise(tracker *change.Tracker, sf *ast.SourceF
 	}
 
 	// Transform await expressions to yield* Effect.tryPromise(...)
-	transformedBody := transformBodyAwaitToYield(tracker, body, func(t *change.Tracker, expr *ast.Node) *ast.Node {
+	transformedBody := transformBodyAwaitToYield(tracker, body, func(t *rewriter.Tracker, expr *ast.Node) *ast.Node {
 		errorCount++
 		errorName := fmt.Sprintf("Error%d", errorCount)
 
@@ -99,7 +99,7 @@ func transformAsyncToEffectFnTryPromise(tracker *change.Tracker, sf *ast.SourceF
 	// Insert error classes before the top-level statement
 	for _, errorClass := range errorClasses {
 		ast.SetParentInChildren(errorClass)
-		tracker.InsertNodeBefore(sf, topLevelStmt, errorClass, true, change.LeadingTriviaOptionNone)
+		tracker.InsertNodeBefore(sf, topLevelStmt, errorClass, true, rewriter.LeadingTriviaOptionNone)
 	}
 
 	// Replace the function

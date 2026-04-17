@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/effect-ts/tsgo/etscore"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
@@ -16,7 +17,7 @@ import (
 )
 
 // Context bundles the code-fix request data and provides helpers for fixable implementations.
-// It replaces the (context.Context, *change.Tracker, *ls.CodeFixContext) parameter triple,
+// It replaces the (context.Context, *rewriter.Tracker, *ls.CodeFixContext) parameter triple,
 // giving each fixable self-contained access to the checker, tracker lifecycle, and edit finalization.
 type Context struct {
 	SourceFile *ast.SourceFile
@@ -62,19 +63,20 @@ func (c *Context) BytePosToLSPPosition(pos int) lsproto.Position {
 // FixAction describes a single code action that a fixable wants to produce.
 type FixAction struct {
 	Description string
-	Run         func(tracker *change.Tracker)
+	Run         func(tracker *rewriter.Tracker)
 }
 
 // NewFixAction creates a tracker, runs the action's edit closure, and returns
 // a *ls.CodeAction wrapping the resulting edits for the current SourceFile.
 // Returns nil if the closure produced no edits.
 func (c *Context) NewFixAction(action FixAction) *ls.CodeAction {
-	tracker := change.NewTracker(
+	rawTracker := change.NewTracker(
 		c.Context,
 		c.Program.Options(),
 		c.fixCtx.LS.FormatOptions(),
 		ls.LanguageService_converters(c.fixCtx.LS),
 	)
+	tracker := rewriter.NewTracker(rawTracker)
 	action.Run(tracker)
 	edits := tracker.GetChanges()[c.SourceFile.FileName()]
 	if len(edits) == 0 {

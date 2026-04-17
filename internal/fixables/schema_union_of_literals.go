@@ -6,7 +6,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/ast"
 	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
 	"github.com/microsoft/typescript-go/shim/ls"
-	"github.com/microsoft/typescript-go/shim/ls/change"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var SchemaUnionOfLiteralsFix = fixable.Fixable{
@@ -35,7 +35,7 @@ func runSchemaUnionOfLiteralsFix(ctx *fixable.Context) []ls.CodeAction {
 
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with a single Schema.Literal call",
-			Run: func(tracker *change.Tracker) {
+			Run: func(tracker *rewriter.Tracker) {
 				clonedExpression := tracker.DeepCloneNode(firstLiteralExpression)
 				clonedArgs := make([]*ast.Node, len(allLiteralArgs))
 				for i, arg := range allLiteralArgs {
