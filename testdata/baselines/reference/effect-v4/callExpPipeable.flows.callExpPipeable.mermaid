@@ -16,8 +16,6 @@ flowchart TB
   14["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.as<br/>args: #91;42#93;"]
   15[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
   16[/"type: 42<br/>node: 42"/]
-  17[/"type: number<br/>node: yield* Effect.as#40;42#41;#40;Effect.log#40;#quot;Hello, world!#quot;#41;#41;"/]
-  18[/"type: number<br/>node: yield* Effect.as#40;42#41;#40;Effect.map#40;#40;x: string#41; =#gt; x.length#41;#40;Effect.succeed#40;#quot;Hello, world!#quot;#41;#41;#41;"/]
   1 -->|"kind: pipe"| 2
   3 -->|"kind: transformCallee"| 2
   2 -->|"kind: pipe"| 4

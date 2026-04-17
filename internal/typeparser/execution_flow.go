@@ -206,6 +206,7 @@ func (ec *executionCollector) visitEffectGenCall(p *EffectGenCallResult, node *a
 	})
 	checker.ForEachYieldExpression(p.Body, func(expr *ast.Node) bool {
 		if expr != nil && expr.Expression() != nil {
+			*ec.parsed.Get(expr) = nil
 			ec.visitNodeAndConnectSlice(expr.Expression(), s, ExecutionLinkKindYieldable)
 		}
 		return false
@@ -239,6 +240,7 @@ func (ec *executionCollector) visitEffectFnCall(p *EffectFnCallResult, node *ast
 	if p.IsGenerator() {
 		checker.ForEachYieldExpression(p.Body(), func(expr *ast.Node) bool {
 			if expr != nil && expr.Expression() != nil {
+				*ec.parsed.Get(expr) = nil
 				ec.visitNodeAndConnectSlice(expr.Expression(), sExit, ExecutionLinkKindYieldable)
 			}
 			return false

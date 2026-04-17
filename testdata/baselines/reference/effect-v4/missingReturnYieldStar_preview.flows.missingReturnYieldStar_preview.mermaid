@@ -6,8 +6,6 @@ flowchart TB
   4[/"type: #quot;boom#quot;<br/>node: #quot;boom#quot;"/]
   5["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
   6[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  7[/"type: void<br/>node: yield* Effect.log#40;#quot;before#quot;#41;"/]
-  8[/"type: never<br/>node: yield* Effect.fail#40;#quot;boom#quot;#41;"/]
   1 -->|"kind: pipe"| 2
   3 -->|"kind: transformCallee"| 2
   2 -->|"kind: yieldable"| 0

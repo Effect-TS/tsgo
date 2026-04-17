@@ -10,9 +10,6 @@ flowchart TB
   8[/"type: #123; acquire: Effect#lt;number, never, never#gt;; size: number; #125;<br/>node: #123; acquire: Effect.succeed#40;1#41;, size: 10 #125;"/]
   9["type: Effect#lt;Pool#lt;number, never#gt;, never, Scope#gt;<br/>callee: Pool.make<br/>args: #91;#93;"]
   10[/"type: #lt;A, E, R#gt;#40;options: #123; readonly acquire: Effect#lt;A, E, R#gt;; readonly size: number; readonly concurrency?: number #124; undefined; readonly targetUtilization?: number #124; undefined; #125;#41; =#gt; Effect#lt;Pool#lt;A, E#gt;, never, R #124; Scope#gt;<br/>node: Pool.make"/]
-  11[/"type: Fiber#lt;number, never#gt;<br/>node: yield* Effect.succeed#40;1#41;.pipe#40;Effect.forkDetach#41;"/]
-  12[/"type: Exit#lt;void, never#gt;<br/>node: yield* Effect.exit#40;Effect.void#41;"/]
-  13[/"type: Pool#lt;number, never#gt;<br/>node: yield* Pool.make#40;#123; acquire: Effect.succeed#40;1#41;, size: 10 #125;#41;"/]
   1 -->|"kind: pipe"| 2
   3 -->|"kind: transformCallee"| 2
   2 -->|"kind: pipe"| 4

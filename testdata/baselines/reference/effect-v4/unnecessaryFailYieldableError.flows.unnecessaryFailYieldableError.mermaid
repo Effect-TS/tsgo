@@ -15,16 +15,13 @@ flowchart TB
   13[/"type: SchemaError<br/>node: new SchemaError#40;#123;#125;#41;"/]
   14["type: Effect#lt;never, SchemaError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
   15[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  16[/"type: never<br/>node: yield* Effect.fail#40;new NonYieldable#40;#quot;non-yieldable error#quot;#41;#41;"/]
-  17[/"type: DataTaggedError<br/>node: new DataTaggedError#40;#41;"/]
-  18[/"type: DataTaggedError<br/>node: err"/]
-  19["type: void<br/>callee: console.log<br/>args: #91;#93;"]
-  20[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
-  21[/"type: never<br/>node: yield* Effect.fail#40;new DataTaggedError#40;#41;#41;"/]
-  22[/"type: never<br/>node: yield* Effect.fail#40;new SchemaError#40;#123;#125;#41;#41;"/]
-  23[/"type: DataTaggedError<br/>node: new DataTaggedError#40;#41;"/]
-  24["type: Effect#lt;never, DataTaggedError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  25[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  16[/"type: DataTaggedError<br/>node: new DataTaggedError#40;#41;"/]
+  17[/"type: DataTaggedError<br/>node: err"/]
+  18["type: void<br/>callee: console.log<br/>args: #91;#93;"]
+  19[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
+  20[/"type: DataTaggedError<br/>node: new DataTaggedError#40;#41;"/]
+  21["type: Effect#lt;never, DataTaggedError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  22[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
   2 -->|"kind: pipe"| 3
   4 -->|"kind: transformCallee"| 3
   7 -->|"kind: pipe"| 8
@@ -36,7 +33,7 @@ flowchart TB
   13 -->|"kind: pipe"| 14
   15 -->|"kind: transformCallee"| 14
   14 -->|"kind: yieldable"| 6
-  18 -->|"kind: pipe"| 19
-  20 -->|"kind: transformCallee"| 19
-  23 -->|"kind: pipe"| 24
-  25 -->|"kind: transformCallee"| 24
+  17 -->|"kind: pipe"| 18
+  19 -->|"kind: transformCallee"| 18
+  20 -->|"kind: pipe"| 21
+  22 -->|"kind: transformCallee"| 21

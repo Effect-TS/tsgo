@@ -12,9 +12,7 @@ flowchart TB
   10[/"type: true<br/>node: true"/]
   11["type: Effect#lt;boolean, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
   12[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  13[/"type: string<br/>node: yield* Effect.succeed#40;#quot;#quot;#41;"/]
-  14[/"type: void<br/>node: yield* Effect.annotateCurrentSpan#40;#quot;query#quot;, query#41;"/]
-  15[/"type: boolean<br/>node: query.length #lt; 3"/]
+  13[/"type: boolean<br/>node: query.length #lt; 3"/]
   1 -->|"kind: potentialReturn"| 0
   2 -->|"kind: potentialReturn"| 0
   3 -->|"kind: pipe"| 4

@@ -5,46 +5,44 @@ flowchart TB
   3[/"type: #quot;log#quot;<br/>node: #quot;log#quot;"/]
   4["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
   5[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
-  6[/"type: void<br/>node: yield* Effect.log#40;#quot;log#quot;#41;"/]
-  7["type: Layer#lt;MyService, never, never#gt;<br/>callee: Layer.effect<br/>args: #91;MyService#93;"]
-  8[/"type: #123; #lt;I, S#gt;#40;tag: Tag#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41; =#gt; Layer#lt;I, E, R#gt;; #lt;I, S, E, R#gt;#40;tag: Tag#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, R#gt;; #125;<br/>node: Layer.effect"/]
-  9[/"type: typeof MyService<br/>node: MyService"/]
-  10((("type: Effect#lt;#123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.log#40;#quot;log#quot;#41;#92;n    // Log should be inferred with name MyService.log#92;n    return #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;#92;n#125;#41;")))
-  11[/"type: #123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;"/]
-  12[/"type: #quot;log#quot;<br/>node: #quot;log#quot;"/]
-  13["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
-  14[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
-  15[/"type: void<br/>node: yield* Effect.log#40;#quot;log#quot;#41;"/]
-  16["type: Layer#lt;MyService, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  17[/"type: #123; #lt;I, S#gt;#40;tag: Tag#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41; =#gt; Layer#lt;I, E, R#gt;; #lt;I, S, E, R#gt;#40;tag: Tag#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, R#gt;; #125;<br/>node: Layer.effect"/]
-  18[/"type: typeof MyService<br/>node: MyService"/]
-  19[/"type: #123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #123;#92;n    // Log should be inferred with name MyService.log#92;n    log: #40;what: string#41; =#gt; Effect.log#40;what#41;#92;n#125;"/]
-  20["type: Layer#lt;MyService, never, never#gt;<br/>callee: Layer.succeed<br/>args: #91;MyService#93;"]
-  21[/"type: #123; #lt;I, S#gt;#40;tag: Tag#lt;I, S#gt;#41;: #40;resource: NoInfer#lt;S#gt;#41; =#gt; Layer#lt;I, never, never#gt;; #lt;I, S#gt;#40;tag: Tag#lt;I, S#gt;, resource: NoInfer#lt;S#gt;#41;: Layer#lt;I, never, never#gt;; #125;<br/>node: Layer.succeed"/]
-  22[/"type: typeof MyService<br/>node: MyService"/]
-  23[["type: #40;#41; =#gt; #123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #40;#41; =#gt; #123;#92;n    // Log should be inferred with name MyService.log#92;n    return #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;#92;n#125;"]]
-  24[/"type: #123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;"/]
-  25["type: Layer#lt;MyService, never, never#gt;<br/>callee: Layer.sync<br/>args: #91;MyService#93;"]
-  26[/"type: #123; #lt;I, S#gt;#40;tag: Tag#lt;I, S#gt;#41;: #40;evaluate: LazyArg#lt;NoInfer#lt;S#gt;#gt;#41; =#gt; Layer#lt;I, never, never#gt;; #lt;I, S#gt;#40;tag: Tag#lt;I, S#gt;, evaluate: LazyArg#lt;NoInfer#lt;S#gt;#gt;#41;: Layer#lt;I, never, never#gt;; #125;<br/>node: Layer.sync"/]
-  27[/"type: typeof MyService<br/>node: MyService"/]
+  6["type: Layer#lt;MyService, never, never#gt;<br/>callee: Layer.effect<br/>args: #91;MyService#93;"]
+  7[/"type: #123; #lt;I, S#gt;#40;tag: Tag#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41; =#gt; Layer#lt;I, E, R#gt;; #lt;I, S, E, R#gt;#40;tag: Tag#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, R#gt;; #125;<br/>node: Layer.effect"/]
+  8[/"type: typeof MyService<br/>node: MyService"/]
+  9((("type: Effect#lt;#123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.log#40;#quot;log#quot;#41;#92;n    // Log should be inferred with name MyService.log#92;n    return #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;#92;n#125;#41;")))
+  10[/"type: #123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;"/]
+  11[/"type: #quot;log#quot;<br/>node: #quot;log#quot;"/]
+  12["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  13[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  14["type: Layer#lt;MyService, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  15[/"type: #123; #lt;I, S#gt;#40;tag: Tag#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41; =#gt; Layer#lt;I, E, R#gt;; #lt;I, S, E, R#gt;#40;tag: Tag#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, R#gt;; #125;<br/>node: Layer.effect"/]
+  16[/"type: typeof MyService<br/>node: MyService"/]
+  17[/"type: #123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #123;#92;n    // Log should be inferred with name MyService.log#92;n    log: #40;what: string#41; =#gt; Effect.log#40;what#41;#92;n#125;"/]
+  18["type: Layer#lt;MyService, never, never#gt;<br/>callee: Layer.succeed<br/>args: #91;MyService#93;"]
+  19[/"type: #123; #lt;I, S#gt;#40;tag: Tag#lt;I, S#gt;#41;: #40;resource: NoInfer#lt;S#gt;#41; =#gt; Layer#lt;I, never, never#gt;; #lt;I, S#gt;#40;tag: Tag#lt;I, S#gt;, resource: NoInfer#lt;S#gt;#41;: Layer#lt;I, never, never#gt;; #125;<br/>node: Layer.succeed"/]
+  20[/"type: typeof MyService<br/>node: MyService"/]
+  21[["type: #40;#41; =#gt; #123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #40;#41; =#gt; #123;#92;n    // Log should be inferred with name MyService.log#92;n    return #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;#92;n#125;"]]
+  22[/"type: #123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;"/]
+  23["type: Layer#lt;MyService, never, never#gt;<br/>callee: Layer.sync<br/>args: #91;MyService#93;"]
+  24[/"type: #123; #lt;I, S#gt;#40;tag: Tag#lt;I, S#gt;#41;: #40;evaluate: LazyArg#lt;NoInfer#lt;S#gt;#gt;#41; =#gt; Layer#lt;I, never, never#gt;; #lt;I, S#gt;#40;tag: Tag#lt;I, S#gt;, evaluate: LazyArg#lt;NoInfer#lt;S#gt;#gt;#41;: Layer#lt;I, never, never#gt;; #125;<br/>node: Layer.sync"/]
+  25[/"type: typeof MyService<br/>node: MyService"/]
   2 -->|"kind: potentialReturn"| 1
   3 -->|"kind: pipe"| 4
   5 -->|"kind: transformCallee"| 4
   4 -->|"kind: yieldable"| 1
-  1 -->|"kind: pipe"| 7
-  8 -->|"kind: transformCallee"| 7
-  9 -->|"kind: transformArg"| 7
-  11 -->|"kind: potentialReturn"| 10
-  12 -->|"kind: pipe"| 13
-  14 -->|"kind: transformCallee"| 13
-  13 -->|"kind: yieldable"| 10
-  10 -->|"kind: pipe"| 16
-  17 -->|"kind: transformCallee"| 10
-  18 -->|"kind: transformArg"| 10
-  19 -->|"kind: pipe"| 20
-  21 -->|"kind: transformCallee"| 20
-  22 -->|"kind: transformArg"| 20
-  24 -->|"kind: potentialReturn"| 23
-  23 -->|"kind: pipe"| 25
-  26 -->|"kind: transformCallee"| 25
-  27 -->|"kind: transformArg"| 25
+  1 -->|"kind: pipe"| 6
+  7 -->|"kind: transformCallee"| 6
+  8 -->|"kind: transformArg"| 6
+  10 -->|"kind: potentialReturn"| 9
+  11 -->|"kind: pipe"| 12
+  13 -->|"kind: transformCallee"| 12
+  12 -->|"kind: yieldable"| 9
+  9 -->|"kind: pipe"| 14
+  15 -->|"kind: transformCallee"| 9
+  16 -->|"kind: transformArg"| 9
+  17 -->|"kind: pipe"| 18
+  19 -->|"kind: transformCallee"| 18
+  20 -->|"kind: transformArg"| 18
+  22 -->|"kind: potentialReturn"| 21
+  21 -->|"kind: pipe"| 23
+  24 -->|"kind: transformCallee"| 23
+  25 -->|"kind: transformArg"| 23

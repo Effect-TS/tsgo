@@ -4,7 +4,6 @@ flowchart TB
   2[/"type: number<br/>node: this.a"/]
   3["type: Effect#lt;never, number, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
   4[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  5[/"type: never<br/>node: yield* Effect.fail#40;this.a#41;"/]
   2 -->|"kind: pipe"| 3
   4 -->|"kind: transformCallee"| 3
   3 -->|"kind: yieldable"| 1

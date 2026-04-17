@@ -5,7 +5,6 @@ flowchart TB
   3[["type: #lt;A, E, R#gt;#40;_: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R#gt;<br/>node: #40;_#41; =#gt; _"]]
   4[/"type: Effect#lt;A, E, R#gt;<br/>node: _"/]
   5[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
-  6[/"type: void<br/>node: yield* banana#40;#41;"/]
   1 -->|"kind: yieldable"| 0
   4 -->|"kind: potentialReturn"| 3
   5 -->|"kind: potentialReturn"| 2

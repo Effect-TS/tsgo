@@ -15,22 +15,18 @@ flowchart TB
   13["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
   14[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
   15[/"type: boolean<br/>node: n === 0"/]
-  16[/"type: never<br/>node: yield* Effect.fail#40;#quot;no zero!#quot;#41;"/]
-  17[["type: #40;n: number#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;n: number#41; =#gt;#92;n  Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.interrupt#92;n    yield* Effect.die#40;#quot;lol#quot;#41;#92;n    return n / 1#92;n  #125;#41;"]]
-  18((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.interrupt#92;n    yield* Effect.die#40;#quot;lol#quot;#41;#92;n    return n / 1#92;n  #125;#41;")))
-  19[/"type: number<br/>node: n / 1"/]
-  20[/"type: Effect#lt;never, never, never#gt;<br/>node: Effect.interrupt"/]
-  21[/"type: #quot;lol#quot;<br/>node: #quot;lol#quot;"/]
-  22["type: Effect#lt;never, never, never#gt;<br/>callee: Effect.die<br/>args: #91;#93;"]
-  23[/"type: #40;defect: unknown#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: Effect.die"/]
-  24[/"type: never<br/>node: yield* Effect.interrupt"/]
-  25[/"type: never<br/>node: yield* Effect.die#40;#quot;lol#quot;#41;"/]
-  26((("type: Effect#lt;number, number, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  throw yield* Effect.fail#40;42#41;#92;n  return 42#92;n#125;#41;")))
-  27[/"type: 42<br/>node: 42"/]
-  28[/"type: 42<br/>node: 42"/]
-  29["type: Effect#lt;never, number, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  30[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  31[/"type: never<br/>node: yield* Effect.fail#40;42#41;"/]
+  16[["type: #40;n: number#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;n: number#41; =#gt;#92;n  Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.interrupt#92;n    yield* Effect.die#40;#quot;lol#quot;#41;#92;n    return n / 1#92;n  #125;#41;"]]
+  17((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.interrupt#92;n    yield* Effect.die#40;#quot;lol#quot;#41;#92;n    return n / 1#92;n  #125;#41;")))
+  18[/"type: number<br/>node: n / 1"/]
+  19[/"type: Effect#lt;never, never, never#gt;<br/>node: Effect.interrupt"/]
+  20[/"type: #quot;lol#quot;<br/>node: #quot;lol#quot;"/]
+  21["type: Effect#lt;never, never, never#gt;<br/>callee: Effect.die<br/>args: #91;#93;"]
+  22[/"type: #40;defect: unknown#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: Effect.die"/]
+  23((("type: Effect#lt;number, number, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  throw yield* Effect.fail#40;42#41;#92;n  return 42#92;n#125;#41;")))
+  24[/"type: 42<br/>node: 42"/]
+  25[/"type: 42<br/>node: 42"/]
+  26["type: Effect#lt;never, number, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  27[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
   1 -->|"kind: pipe"| 2
   3 -->|"kind: transformCallee"| 2
   2 -->|"kind: potentialReturn"| 0
@@ -43,13 +39,13 @@ flowchart TB
   14 -->|"kind: transformCallee"| 13
   13 -->|"kind: yieldable"| 10
   10 -->|"kind: potentialReturn"| 9
-  19 -->|"kind: potentialReturn"| 18
-  20 -->|"kind: yieldable"| 18
-  21 -->|"kind: pipe"| 22
-  23 -->|"kind: transformCallee"| 22
-  22 -->|"kind: yieldable"| 18
   18 -->|"kind: potentialReturn"| 17
-  27 -->|"kind: potentialReturn"| 26
-  28 -->|"kind: pipe"| 29
-  30 -->|"kind: transformCallee"| 29
-  29 -->|"kind: yieldable"| 26
+  19 -->|"kind: yieldable"| 17
+  20 -->|"kind: pipe"| 21
+  22 -->|"kind: transformCallee"| 21
+  21 -->|"kind: yieldable"| 17
+  17 -->|"kind: potentialReturn"| 16
+  24 -->|"kind: potentialReturn"| 23
+  25 -->|"kind: pipe"| 26
+  27 -->|"kind: transformCallee"| 26
+  26 -->|"kind: yieldable"| 23

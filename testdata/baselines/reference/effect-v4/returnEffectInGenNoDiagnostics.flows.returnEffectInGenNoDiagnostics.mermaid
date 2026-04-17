@@ -7,29 +7,25 @@ flowchart TB
   5[/"type: #quot;error#quot;<br/>node: #quot;error#quot;"/]
   6["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
   7[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  8[/"type: void<br/>node: yield* Effect.log#40;#quot;about to fail#quot;#41;"/]
-  9[["type: #lt;A#gt;#40;f: #40;#41; =#gt; A#41; =#gt; A<br/>node: function lazy#lt;A#gt;#40;f: #40;#41; =#gt; A#41; #123;#92;n  return f#40;#41;#92;n#125;"]]
-  10[/"type: A<br/>node: f#40;#41;"/]
-  11((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  yield* Effect.log#40;#quot;about to fail#quot;#41;#92;n  yield* lazy#40;#40;#41; =#gt; #123;#92;n    return Effect.succeed#40;#quot;success#quot;#41;#92;n  #125;#41;#92;n#125;#41;")))
-  12[/"type: #quot;about to fail#quot;<br/>node: #quot;about to fail#quot;"/]
-  13["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
-  14[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
-  15[["type: #40;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;#41; =#gt; #123;#92;n    return Effect.succeed#40;#quot;success#quot;#41;#92;n  #125;"]]
-  16[/"type: #quot;success#quot;<br/>node: #quot;success#quot;"/]
-  17["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  18[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  19["type: Effect#lt;string, never, never#gt;<br/>callee: lazy<br/>args: #91;#93;"]
-  20[/"type: #lt;A#gt;#40;f: #40;#41; =#gt; A#41; =#gt; A<br/>node: lazy"/]
-  21[/"type: void<br/>node: yield* Effect.log#40;#quot;about to fail#quot;#41;"/]
-  22[/"type: string<br/>node: yield* lazy#40;#40;#41; =#gt; #123;#92;n    return Effect.succeed#40;#quot;success#quot;#41;#92;n  #125;#41;"/]
-  23((("type: Effect#lt;typeof Test, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  return class Test #123;#92;n    get value#40;#41; #123;#92;n      return Effect.fail#40;#quot;error#quot;#41;#92;n    #125;#92;n  #125;#92;n#125;#41;")))
-  24[/"type: typeof Test<br/>node: class Test #123;#92;n    get value#40;#41; #123;#92;n      return Effect.fail#40;#quot;error#quot;#41;#92;n    #125;#92;n  #125;"/]
-  25((("type: Effect#lt;Stream#lt;number, never, never#gt;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  yield* Effect.log#40;#quot;about to fail#quot;#41;#92;n  return Stream.fromIterable#40;#91;1, 2, 3#93;#41;#92;n#125;#41;")))
-  26[/"type: Stream#lt;number, never, never#gt;<br/>node: Stream.fromIterable#40;#91;1, 2, 3#93;#41;"/]
-  27[/"type: #quot;about to fail#quot;<br/>node: #quot;about to fail#quot;"/]
-  28["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
-  29[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
-  30[/"type: void<br/>node: yield* Effect.log#40;#quot;about to fail#quot;#41;"/]
+  8[["type: #lt;A#gt;#40;f: #40;#41; =#gt; A#41; =#gt; A<br/>node: function lazy#lt;A#gt;#40;f: #40;#41; =#gt; A#41; #123;#92;n  return f#40;#41;#92;n#125;"]]
+  9[/"type: A<br/>node: f#40;#41;"/]
+  10((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  yield* Effect.log#40;#quot;about to fail#quot;#41;#92;n  yield* lazy#40;#40;#41; =#gt; #123;#92;n    return Effect.succeed#40;#quot;success#quot;#41;#92;n  #125;#41;#92;n#125;#41;")))
+  11[/"type: #quot;about to fail#quot;<br/>node: #quot;about to fail#quot;"/]
+  12["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  13[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  14[["type: #40;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;#41; =#gt; #123;#92;n    return Effect.succeed#40;#quot;success#quot;#41;#92;n  #125;"]]
+  15[/"type: #quot;success#quot;<br/>node: #quot;success#quot;"/]
+  16["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  17[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  18["type: Effect#lt;string, never, never#gt;<br/>callee: lazy<br/>args: #91;#93;"]
+  19[/"type: #lt;A#gt;#40;f: #40;#41; =#gt; A#41; =#gt; A<br/>node: lazy"/]
+  20((("type: Effect#lt;typeof Test, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  return class Test #123;#92;n    get value#40;#41; #123;#92;n      return Effect.fail#40;#quot;error#quot;#41;#92;n    #125;#92;n  #125;#92;n#125;#41;")))
+  21[/"type: typeof Test<br/>node: class Test #123;#92;n    get value#40;#41; #123;#92;n      return Effect.fail#40;#quot;error#quot;#41;#92;n    #125;#92;n  #125;"/]
+  22((("type: Effect#lt;Stream#lt;number, never, never#gt;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  yield* Effect.log#40;#quot;about to fail#quot;#41;#92;n  return Stream.fromIterable#40;#91;1, 2, 3#93;#41;#92;n#125;#41;")))
+  23[/"type: Stream#lt;number, never, never#gt;<br/>node: Stream.fromIterable#40;#91;1, 2, 3#93;#41;"/]
+  24[/"type: #quot;about to fail#quot;<br/>node: #quot;about to fail#quot;"/]
+  25["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  26[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
   1 -->|"kind: potentialReturn"| 0
   2 -->|"kind: pipe"| 3
   4 -->|"kind: transformCallee"| 3
@@ -37,18 +33,18 @@ flowchart TB
   5 -->|"kind: pipe"| 6
   7 -->|"kind: transformCallee"| 6
   6 -->|"kind: yieldable"| 0
-  10 -->|"kind: potentialReturn"| 9
-  12 -->|"kind: pipe"| 13
-  14 -->|"kind: transformCallee"| 13
-  13 -->|"kind: yieldable"| 11
-  16 -->|"kind: pipe"| 17
-  18 -->|"kind: transformCallee"| 17
-  17 -->|"kind: potentialReturn"| 15
-  15 -->|"kind: pipe"| 19
-  20 -->|"kind: transformCallee"| 19
-  19 -->|"kind: yieldable"| 11
-  24 -->|"kind: potentialReturn"| 23
-  26 -->|"kind: potentialReturn"| 25
-  27 -->|"kind: pipe"| 28
-  29 -->|"kind: transformCallee"| 28
-  28 -->|"kind: yieldable"| 25
+  9 -->|"kind: potentialReturn"| 8
+  11 -->|"kind: pipe"| 12
+  13 -->|"kind: transformCallee"| 12
+  12 -->|"kind: yieldable"| 10
+  15 -->|"kind: pipe"| 16
+  17 -->|"kind: transformCallee"| 16
+  16 -->|"kind: potentialReturn"| 14
+  14 -->|"kind: pipe"| 18
+  19 -->|"kind: transformCallee"| 18
+  18 -->|"kind: yieldable"| 10
+  21 -->|"kind: potentialReturn"| 20
+  23 -->|"kind: potentialReturn"| 22
+  24 -->|"kind: pipe"| 25
+  26 -->|"kind: transformCallee"| 25
+  25 -->|"kind: yieldable"| 22

@@ -34,10 +34,9 @@ flowchart TB
   32[/"type: void<br/>node: console.table#40;#123; a: 1 #125;#41;"/]
   33((("type: Effect#lt;void, never, Console#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const console = yield* Console.Console#92;n  console.log#40;#quot;hello#quot;#41;#92;n#125;#41;")))
   34[/"type: Tag#lt;Console, Console#gt;<br/>node: Console.Console"/]
-  35[/"type: Console<br/>node: yield* Console.Console"/]
-  36[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
-  37["type: Effect#lt;void, never, never#gt;<br/>callee: console.log<br/>args: #91;#93;"]
-  38[/"type: #40;...args: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: console.log"/]
+  35[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
+  36["type: Effect#lt;void, never, never#gt;<br/>callee: console.log<br/>args: #91;#93;"]
+  37[/"type: #40;...args: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: console.log"/]
   1 -->|"kind: pipe"| 2
   3 -->|"kind: transformCallee"| 2
   5 -->|"kind: pipe"| 6
@@ -56,5 +55,5 @@ flowchart TB
   30 -->|"kind: transformCallee"| 29
   29 -->|"kind: potentialReturn"| 27
   34 -->|"kind: yieldable"| 33
-  36 -->|"kind: pipe"| 37
-  38 -->|"kind: transformCallee"| 37
+  35 -->|"kind: pipe"| 36
+  37 -->|"kind: transformCallee"| 36

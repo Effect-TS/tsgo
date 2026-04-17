@@ -5,30 +5,29 @@ flowchart TB
   3[/"type: #quot;log#quot;<br/>node: #quot;log#quot;"/]
   4["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
   5[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
-  6[/"type: void<br/>node: yield* Effect.log#40;#quot;log#quot;#41;"/]
-  7["type: Layer#lt;MyService, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  8[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
-  9[/"type: typeof MyService<br/>node: this"/]
-  10[/"type: #123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #123;#92;n        log: #40;what: string#41; =#gt; Effect.log#40;what#41;#92;n    #125;"/]
-  11["type: Layer#lt;MyService, never, never#gt;<br/>callee: Layer.succeed<br/>args: #91;this#93;"]
-  12[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #40;resource: S#41; =#gt; Layer#lt;I, never, never#gt;; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;, resource: NoInfer#lt;S#gt;#41;: Layer#lt;I, never, never#gt;; #125;<br/>node: Layer.succeed"/]
-  13[/"type: typeof MyService<br/>node: this"/]
-  14[["type: #40;#41; =#gt; #123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #40;#41; =#gt; #123;#92;n        return #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;#92;n    #125;"]]
-  15[/"type: #123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;"/]
-  16["type: Layer#lt;MyService, never, never#gt;<br/>callee: Layer.sync<br/>args: #91;this#93;"]
-  17[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #40;evaluate: LazyArg#lt;S#gt;#41; =#gt; Layer#lt;I, never, never#gt;; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;, evaluate: LazyArg#lt;NoInfer#lt;S#gt;#gt;#41;: Layer#lt;I, never, never#gt;; #125;<br/>node: Layer.sync"/]
-  18[/"type: typeof MyService<br/>node: this"/]
+  6["type: Layer#lt;MyService, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  7[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
+  8[/"type: typeof MyService<br/>node: this"/]
+  9[/"type: #123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #123;#92;n        log: #40;what: string#41; =#gt; Effect.log#40;what#41;#92;n    #125;"/]
+  10["type: Layer#lt;MyService, never, never#gt;<br/>callee: Layer.succeed<br/>args: #91;this#93;"]
+  11[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #40;resource: S#41; =#gt; Layer#lt;I, never, never#gt;; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;, resource: NoInfer#lt;S#gt;#41;: Layer#lt;I, never, never#gt;; #125;<br/>node: Layer.succeed"/]
+  12[/"type: typeof MyService<br/>node: this"/]
+  13[["type: #40;#41; =#gt; #123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #40;#41; =#gt; #123;#92;n        return #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;#92;n    #125;"]]
+  14[/"type: #123; log: #40;what: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #123; log: #40;what: string#41; =#gt; Effect.log#40;what#41; #125;"/]
+  15["type: Layer#lt;MyService, never, never#gt;<br/>callee: Layer.sync<br/>args: #91;this#93;"]
+  16[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #40;evaluate: LazyArg#lt;S#gt;#41; =#gt; Layer#lt;I, never, never#gt;; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;, evaluate: LazyArg#lt;NoInfer#lt;S#gt;#gt;#41;: Layer#lt;I, never, never#gt;; #125;<br/>node: Layer.sync"/]
+  17[/"type: typeof MyService<br/>node: this"/]
   2 -->|"kind: potentialReturn"| 1
   3 -->|"kind: pipe"| 4
   5 -->|"kind: transformCallee"| 4
   4 -->|"kind: yieldable"| 1
-  1 -->|"kind: pipe"| 7
-  8 -->|"kind: transformCallee"| 1
-  9 -->|"kind: transformArg"| 1
-  10 -->|"kind: pipe"| 11
-  12 -->|"kind: transformCallee"| 11
-  13 -->|"kind: transformArg"| 11
-  15 -->|"kind: potentialReturn"| 14
-  14 -->|"kind: pipe"| 16
-  17 -->|"kind: transformCallee"| 16
-  18 -->|"kind: transformArg"| 16
+  1 -->|"kind: pipe"| 6
+  7 -->|"kind: transformCallee"| 1
+  8 -->|"kind: transformArg"| 1
+  9 -->|"kind: pipe"| 10
+  11 -->|"kind: transformCallee"| 10
+  12 -->|"kind: transformArg"| 10
+  14 -->|"kind: potentialReturn"| 13
+  13 -->|"kind: pipe"| 15
+  16 -->|"kind: transformCallee"| 15
+  17 -->|"kind: transformArg"| 15
