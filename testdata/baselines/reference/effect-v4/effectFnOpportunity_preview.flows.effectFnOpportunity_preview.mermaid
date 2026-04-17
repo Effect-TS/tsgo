@@ -5,8 +5,9 @@ flowchart TB
   3[/"type: 1<br/>node: 1"/]
   4["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
   5[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  2 -->|"kind: potentialReturn"| 1
   3 -->|"kind: pipe"| 4
   5 -->|"kind: transformCallee"| 4
+  4 -->|"kind: usedBy"| 2
+  2 -->|"kind: potentialReturn"| 1
   4 -->|"kind: yieldable"| 1
   1 -->|"kind: potentialReturn"| 0

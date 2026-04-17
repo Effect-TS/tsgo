@@ -80,8 +80,11 @@ flowchart TB
   78[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
   79[["type: #40;e: string#41; =#gt; Effect#lt;never, AnotherError, never#gt;<br/>node: #40;e#41; =#gt; Effect.fail#40;new AnotherError#40;String#40;e#41;#41;#41;"]]
   80[/"type: AnotherError<br/>node: new AnotherError#40;String#40;e#41;#41;"/]
-  81["type: Effect#lt;never, AnotherError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  82[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  81[/"type: string<br/>node: e"/]
+  82["type: string<br/>callee: String<br/>args: #91;#93;"]
+  83[/"type: StringConstructor<br/>node: String"/]
+  84["type: Effect#lt;never, AnotherError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  85[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
   4 -->|"kind: pipe"| 5
   6 -->|"kind: transformCallee"| 5
   8 -->|"kind: transformCallee"| 7
@@ -147,8 +150,11 @@ flowchart TB
   74 -->|"kind: pipe"| 75
   76 -->|"kind: transformCallee"| 75
   78 -->|"kind: transformCallee"| 77
-  80 -->|"kind: pipe"| 81
-  82 -->|"kind: transformCallee"| 81
-  81 -->|"kind: potentialReturn"| 79
+  81 -->|"kind: pipe"| 82
+  83 -->|"kind: transformCallee"| 82
+  82 -->|"kind: usedBy"| 80
+  80 -->|"kind: pipe"| 84
+  85 -->|"kind: transformCallee"| 84
+  84 -->|"kind: potentialReturn"| 79
   79 -->|"kind: transformArg"| 77
   75 -->|"kind: pipe"| 77

@@ -38,6 +38,8 @@ flowchart TB
   36["type: Effect#lt;unknown, unknown, unknown#gt;<br/>callee: Effect.catchTags<br/>args: #91;#123;#92;n    // @ts-expect-error#92;n    MyError: #40;#41; =#gt; Effect.void#92;n  #125;#93;"]
   37[/"type: #123; #lt;E, Cases extends #123; #91;K in Extract#lt;E, #123; _tag: string; #125;#gt;#91;#quot;_tag#quot;#93;#93;+?: #40;#40;error: Extract#lt;E, #123; _tag: K; #125;#gt;#41; =#gt; Effect#lt;any, any, any#gt;#41;; #125; #amp; #40;unknown extends E ? #123;#125; : #123; #91;K in Exclude#lt;keyof Cases, Extract#lt;E, #123; _tag: string; #125;#gt;#91;#quot;_tag#quot;#93;#gt;#93;: never; #125;#41;#gt;#40;cases: Cases#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;infer A, any, any#gt; ? A : never; #125;#91;keyof Cases#93;, #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;any, infer E, any#gt; ? E : never; #125;#91;keyof Cases#93; #124; Exclude#lt;E, #123; _tag: keyof Cases; #125;#gt;, R #124; #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;any, any, infer R#gt; ? R : never; #125;#91;keyof Cases#93;#gt;; #lt;R, E, A, Cases extends #123; #91;K in Extract#lt;E, #123; _tag: string; #125;#gt;#91;#quot;_tag#quot;#93;#93;+?: #40;#40;error: Extract#lt;E, #123; _tag: K; #125;#gt;#41; =#gt; Effect#lt;any, any, any#gt;#41;; #125; #amp; #40;unknown extends E ? #123;#125; : #123; #91;K in Exclude#lt;keyof Cases, Extract#lt;E, #123; _tag: string; #125;#gt;#91;#quot;_tag#quot;#93;#gt;#93;: never; #125;#41;#gt;#40;self: Effect#lt;A, E, R#gt;, cases: Cases#41;: Effect#lt;A #124; #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;infer A, any, any#gt; ? A : never; #125;#91;keyof Cases#93;, #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;any, infer E, any#gt; ? E : never; #125;#91;keyof Cases#93; #124; Exclude#lt;E, #123; _tag: keyof Cases; #125;#gt;, R #124; #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;any, any, infer R#gt; ? R : never; #125;#91;keyof Cases#93;#gt;; #125;<br/>node: Effect.catchTags"/]
   38[/"type: #123; MyError: #40;#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #123;#92;n    // @ts-expect-error#92;n    MyError: #40;#41; =#gt; Effect.void#92;n  #125;"/]
+  39[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  40[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
   4 -->|"kind: transformCallee"| 3
@@ -70,5 +72,7 @@ flowchart TB
   33 -->|"kind: pipe"| 34
   35 -->|"kind: transformCallee"| 34
   37 -->|"kind: transformCallee"| 36
+  40 -->|"kind: potentialReturn"| 39
+  39 -->|"kind: usedBy"| 38
   38 -->|"kind: transformArg"| 36
   34 -->|"kind: pipe"| 36

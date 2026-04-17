@@ -9,30 +9,42 @@ flowchart TB
   7["type: Effect#lt;#123; readonly x: number; readonly y: number; #125;, ParseError, never#gt;<br/>callee: identity<br/>args: #91;#93;"]
   8[/"type: #lt;A#gt;#40;a: A#41; =#gt; A<br/>node: identity"/]
   9[/"type: Schedule#lt;Duration, unknown, never#gt;<br/>node: Schedule.exponential#40;Duration.millis#40;10#41;, 4#41;"/]
-  10["type: Schedule#lt;DurationInput, unknown, never#gt;<br/>callee: Schedule.whileOutput<br/>args: #91;Duration.lessThanOrEqualTo#40;Duration.seconds#40;10#41;#41;#93;"]
-  11[/"type: #123; #lt;Out#gt;#40;f: Predicate#lt;Out#gt;#41;: #lt;In, R#gt;#40;self: Schedule#lt;Out, In, R#gt;#41; =#gt; Schedule#lt;Out, In, R#gt;; #lt;Out, In, R#gt;#40;self: Schedule#lt;Out, In, R#gt;, f: Predicate#lt;Out#gt;#41;: Schedule#lt;Out, In, R#gt;; #125;<br/>node: Schedule.whileOutput"/]
-  12[/"type: #40;self: DurationInput#41; =#gt; boolean<br/>node: Duration.lessThanOrEqualTo#40;Duration.seconds#40;10#41;#41;"/]
-  13[/"type: #quot;Hello#quot;<br/>node: #quot;Hello#quot;"/]
-  14["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
-  15[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
-  16["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.ensuring<br/>args: #91;Effect.log#40;#quot;World#quot;#41;#93;"]
-  17[/"type: #123; #lt;X, R1#gt;#40;finalizer: Effect#lt;X, never, R1#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R #124; R1#gt;; #lt;A, E, R, X, R1#gt;#40;self: Effect#lt;A, E, R#gt;, finalizer: Effect#lt;X, never, R1#gt;#41;: Effect#lt;A, E, R #124; R1#gt;; #125;<br/>node: Effect.ensuring"/]
-  18[/"type: #quot;World#quot;<br/>node: #quot;World#quot;"/]
-  19["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
-  20[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  10[/"type: 10<br/>node: 10"/]
+  11["type: Duration<br/>callee: Duration.millis<br/>args: #91;#93;"]
+  12[/"type: #40;millis: number#41; =#gt; Duration<br/>node: Duration.millis"/]
+  13["type: Schedule#lt;DurationInput, unknown, never#gt;<br/>callee: Schedule.whileOutput<br/>args: #91;Duration.lessThanOrEqualTo#40;Duration.seconds#40;10#41;#41;#93;"]
+  14[/"type: #123; #lt;Out#gt;#40;f: Predicate#lt;Out#gt;#41;: #lt;In, R#gt;#40;self: Schedule#lt;Out, In, R#gt;#41; =#gt; Schedule#lt;Out, In, R#gt;; #lt;Out, In, R#gt;#40;self: Schedule#lt;Out, In, R#gt;, f: Predicate#lt;Out#gt;#41;: Schedule#lt;Out, In, R#gt;; #125;<br/>node: Schedule.whileOutput"/]
+  15[/"type: #40;self: DurationInput#41; =#gt; boolean<br/>node: Duration.lessThanOrEqualTo#40;Duration.seconds#40;10#41;#41;"/]
+  16[/"type: 10<br/>node: 10"/]
+  17["type: Duration<br/>callee: Duration.seconds<br/>args: #91;#93;"]
+  18[/"type: #40;seconds: number#41; =#gt; Duration<br/>node: Duration.seconds"/]
+  19[/"type: #quot;Hello#quot;<br/>node: #quot;Hello#quot;"/]
+  20["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  21[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  22["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.ensuring<br/>args: #91;Effect.log#40;#quot;World#quot;#41;#93;"]
+  23[/"type: #123; #lt;X, R1#gt;#40;finalizer: Effect#lt;X, never, R1#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R #124; R1#gt;; #lt;A, E, R, X, R1#gt;#40;self: Effect#lt;A, E, R#gt;, finalizer: Effect#lt;X, never, R1#gt;#41;: Effect#lt;A, E, R #124; R1#gt;; #125;<br/>node: Effect.ensuring"/]
+  24[/"type: #quot;World#quot;<br/>node: #quot;World#quot;"/]
+  25["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  26[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
   1 -->|"kind: pipe"| 2
   3 -->|"kind: transformCallee"| 2
   4 -->|"kind: pipe"| 5
   6 -->|"kind: transformCallee"| 5
   5 -->|"kind: pipe"| 7
   8 -->|"kind: transformCallee"| 7
-  11 -->|"kind: transformCallee"| 10
-  12 -->|"kind: transformArg"| 10
-  9 -->|"kind: pipe"| 10
-  13 -->|"kind: pipe"| 14
-  15 -->|"kind: transformCallee"| 14
-  17 -->|"kind: transformCallee"| 16
-  18 -->|"kind: pipe"| 19
-  20 -->|"kind: transformCallee"| 19
-  19 -->|"kind: transformArg"| 16
-  14 -->|"kind: pipe"| 16
+  10 -->|"kind: pipe"| 11
+  12 -->|"kind: transformCallee"| 11
+  11 -->|"kind: usedBy"| 9
+  14 -->|"kind: transformCallee"| 13
+  16 -->|"kind: pipe"| 17
+  18 -->|"kind: transformCallee"| 17
+  17 -->|"kind: usedBy"| 15
+  15 -->|"kind: transformArg"| 13
+  9 -->|"kind: pipe"| 13
+  19 -->|"kind: pipe"| 20
+  21 -->|"kind: transformCallee"| 20
+  23 -->|"kind: transformCallee"| 22
+  24 -->|"kind: pipe"| 25
+  26 -->|"kind: transformCallee"| 25
+  25 -->|"kind: transformArg"| 22
+  20 -->|"kind: pipe"| 22

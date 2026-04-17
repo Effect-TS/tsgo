@@ -29,19 +29,20 @@ flowchart TB
   27[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
   28((("type: Effect#lt;number, string, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n        if #40;Math.random#40;#41; #lt; 0.5#41; #123;#92;n            return yield* Effect.fail#40;#quot;Not ready#quot;#41;#92;n        #125;#92;n        return 42#92;n    #125;#41;")))
   29[/"type: never<br/>node: yield* Effect.fail#40;#quot;Not ready#quot;#41;"/]
-  30[/"type: 42<br/>node: 42"/]
-  31[/"type: #quot;Not ready#quot;<br/>node: #quot;Not ready#quot;"/]
-  32["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  33[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  30[/"type: #quot;Not ready#quot;<br/>node: #quot;Not ready#quot;"/]
+  31["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  32[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  33[/"type: 42<br/>node: 42"/]
   34[/"type: boolean<br/>node: Math.random#40;#41; #lt; 0.5"/]
   35["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.eventually<br/>args: #91;#93;"]
   36[/"type: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, never, R#gt;<br/>node: Effect.eventually"/]
   1 -->|"kind: pipe"| 2
   3 -->|"kind: transformCallee"| 2
   2 -->|"kind: potentialReturn"| 0
-  4 -->|"kind: potentialReturn"| 0
   5 -->|"kind: pipe"| 6
   7 -->|"kind: transformCallee"| 6
+  6 -->|"kind: usedBy"| 4
+  4 -->|"kind: potentialReturn"| 0
   6 -->|"kind: yieldable"| 0
   11 -->|"kind: potentialReturn"| 10
   12 -->|"kind: pipe"| 13
@@ -58,10 +59,11 @@ flowchart TB
   25 -->|"kind: pipe"| 26
   27 -->|"kind: transformCallee"| 26
   26 -->|"kind: yieldable"| 23
+  30 -->|"kind: pipe"| 31
+  32 -->|"kind: transformCallee"| 31
+  31 -->|"kind: usedBy"| 29
   29 -->|"kind: potentialReturn"| 28
-  30 -->|"kind: potentialReturn"| 28
-  31 -->|"kind: pipe"| 32
-  33 -->|"kind: transformCallee"| 32
-  32 -->|"kind: yieldable"| 28
+  33 -->|"kind: potentialReturn"| 28
+  31 -->|"kind: yieldable"| 28
   28 -->|"kind: pipe"| 35
   36 -->|"kind: transformCallee"| 35

@@ -1,7 +1,13 @@
 flowchart TB
   0[/"type: TagClass#lt;FileSystem, #quot;FileSystem#quot;, #123; writeFile: #40;content: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;#gt;<br/>node: Context.Tag#40;#quot;FileSystem#quot;#41;#lt;FileSystem, #123;#92;n  writeFile: #40;content: string#41; =#gt; Effect.Effect#lt;void#gt;#92;n#125;#gt;#40;#41;"/]
-  1[/"type: #quot;LeakingScopeIsFine#quot;<br/>node: #quot;LeakingScopeIsFine#quot;"/]
-  2["type: Tag#lt;LeakingScopeIsFine, LeakingScopeIsFine#gt;<br/>callee: Context.GenericTag<br/>args: #91;#93;"]
-  3[/"type: #lt;Identifier, Service = Identifier#gt;#40;key: string#41; =#gt; Tag#lt;Identifier, Service#gt;<br/>node: Context.GenericTag"/]
+  1[/"type: #quot;FileSystem#quot;<br/>node: #quot;FileSystem#quot;"/]
+  2["type: #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, #quot;FileSystem#quot;, Shape#gt;<br/>callee: Context.Tag<br/>args: #91;#93;"]
+  3[/"type: #lt;const Id extends string#gt;#40;id: Id#41; =#gt; #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, Id, Shape#gt;<br/>node: Context.Tag"/]
+  4[/"type: #quot;LeakingScopeIsFine#quot;<br/>node: #quot;LeakingScopeIsFine#quot;"/]
+  5["type: Tag#lt;LeakingScopeIsFine, LeakingScopeIsFine#gt;<br/>callee: Context.GenericTag<br/>args: #91;#93;"]
+  6[/"type: #lt;Identifier, Service = Identifier#gt;#40;key: string#41; =#gt; Tag#lt;Identifier, Service#gt;<br/>node: Context.GenericTag"/]
   1 -->|"kind: pipe"| 2
   3 -->|"kind: transformCallee"| 2
+  2 -->|"kind: usedBy"| 0
+  4 -->|"kind: pipe"| 5
+  6 -->|"kind: transformCallee"| 5

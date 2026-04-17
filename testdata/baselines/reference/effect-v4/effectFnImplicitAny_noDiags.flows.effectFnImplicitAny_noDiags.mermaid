@@ -1,17 +1,23 @@
 flowchart TB
   0((("type: Effect#lt;void, never, never#gt;<br/>node: function*#40;router#41; #123;#92;n    yield* router.add#40;#92;n      #quot;GET#quot;,#92;n      #quot;/#quot;,#92;n      Effect.fnUntraced#40;function*#40;request#41; #123;#92;n        return HttpServerResponse.empty#40;#41;#92;n      #125;#41;#92;n    #41;#92;n  #125;")))
   1[/"type: Effect#lt;void, never, never#gt;<br/>node: router.add#40;#92;n      #quot;GET#quot;,#92;n      #quot;/#quot;,#92;n      Effect.fnUntraced#40;function*#40;request#41; #123;#92;n        return HttpServerResponse.empty#40;#41;#92;n      #125;#41;#92;n    #41;"/]
-  2[["type: #40;router: HttpRouter#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.fnUntraced#40;function*#40;router#41; #123;#92;n    yield* router.add#40;#92;n      #quot;GET#quot;,#92;n      #quot;/#quot;,#92;n      Effect.fnUntraced#40;function*#40;request#41; #123;#92;n        return HttpServerResponse.empty#40;#41;#92;n      #125;#41;#92;n    #41;#92;n  #125;#41;"]]
-  3["type: Layer#lt;never, never, HttpRouter#gt;<br/>callee: HttpRouter.use<br/>args: #91;#93;"]
-  4[/"type: #lt;A, E, R#gt;#40;f: #40;router: HttpRouter#41; =#gt; Effect#lt;A, E, R#gt;#41; =#gt; Layer#lt;never, E, HttpRouter #124; Exclude#lt;R, Scope#gt;#gt;<br/>node: HttpRouter.use"/]
-  5((("type: Effect#lt;number, never, never#gt;<br/>node: function*#40;s: string#41; #123;#92;n    return s.length#92;n  #125;")))
-  6["type: Effect#lt;#40;string #124; number#41;#91;#93;, never, never#gt;<br/>callee: #40;effect, ...args#41; =#gt; effect.pipe#40;Effect.map#40;#40;result#41; =#gt; #91;result, ...args#93;#41;#41;<br/>args: #91;#93;"]
-  7[/"type: number<br/>node: s.length"/]
-  8[["type: #40;s: string#41; =#gt; Effect#lt;#40;string #124; number#41;#91;#93;, never, never#gt;<br/>node: Effect.fn#40;#92;n  function*#40;s: string#41; #123;#92;n    return s.length#92;n  #125;,#92;n  #40;effect, ...args#41; =#gt; effect.pipe#40;Effect.map#40;#40;result#41; =#gt; #91;result, ...args#93;#41;#41;#92;n#41;"]]
+  2((("type: Effect#lt;HttpServerResponse, never, never#gt;<br/>node: function*#40;request#41; #123;#92;n        return HttpServerResponse.empty#40;#41;#92;n      #125;")))
+  3[/"type: HttpServerResponse<br/>node: HttpServerResponse.empty#40;#41;"/]
+  4[["type: #40;request: HttpServerRequest#41; =#gt; Effect#lt;HttpServerResponse, never, never#gt;<br/>node: Effect.fnUntraced#40;function*#40;request#41; #123;#92;n        return HttpServerResponse.empty#40;#41;#92;n      #125;#41;"]]
+  5[["type: #40;router: HttpRouter#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.fnUntraced#40;function*#40;router#41; #123;#92;n    yield* router.add#40;#92;n      #quot;GET#quot;,#92;n      #quot;/#quot;,#92;n      Effect.fnUntraced#40;function*#40;request#41; #123;#92;n        return HttpServerResponse.empty#40;#41;#92;n      #125;#41;#92;n    #41;#92;n  #125;#41;"]]
+  6["type: Layer#lt;never, never, HttpRouter#gt;<br/>callee: HttpRouter.use<br/>args: #91;#93;"]
+  7[/"type: #lt;A, E, R#gt;#40;f: #40;router: HttpRouter#41; =#gt; Effect#lt;A, E, R#gt;#41; =#gt; Layer#lt;never, E, HttpRouter #124; Exclude#lt;R, Scope#gt;#gt;<br/>node: HttpRouter.use"/]
+  8((("type: Effect#lt;number, never, never#gt;<br/>node: function*#40;s: string#41; #123;#92;n    return s.length#92;n  #125;")))
+  9["type: Effect#lt;#40;string #124; number#41;#91;#93;, never, never#gt;<br/>callee: #40;effect, ...args#41; =#gt; effect.pipe#40;Effect.map#40;#40;result#41; =#gt; #91;result, ...args#93;#41;#41;<br/>args: #91;#93;"]
+  10[/"type: number<br/>node: s.length"/]
+  11[["type: #40;s: string#41; =#gt; Effect#lt;#40;string #124; number#41;#91;#93;, never, never#gt;<br/>node: Effect.fn#40;#92;n  function*#40;s: string#41; #123;#92;n    return s.length#92;n  #125;,#92;n  #40;effect, ...args#41; =#gt; effect.pipe#40;Effect.map#40;#40;result#41; =#gt; #91;result, ...args#93;#41;#41;#92;n#41;"]]
+  3 -->|"kind: potentialReturn"| 2
+  2 -->|"kind: potentialReturn"| 4
+  4 -->|"kind: usedBy"| 1
   1 -->|"kind: yieldable"| 0
-  0 -->|"kind: potentialReturn"| 2
-  2 -->|"kind: pipe"| 3
-  4 -->|"kind: transformCallee"| 3
-  5 -->|"kind: fnPipe"| 6
-  7 -->|"kind: potentialReturn"| 5
-  6 -->|"kind: potentialReturn"| 8
+  0 -->|"kind: potentialReturn"| 5
+  5 -->|"kind: pipe"| 6
+  7 -->|"kind: transformCallee"| 6
+  8 -->|"kind: pipe"| 9
+  10 -->|"kind: potentialReturn"| 8
+  9 -->|"kind: potentialReturn"| 11

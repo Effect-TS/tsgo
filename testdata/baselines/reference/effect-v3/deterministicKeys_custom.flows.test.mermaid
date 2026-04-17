@@ -4,7 +4,17 @@ flowchart TB
   2["type: #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, string, Shape#gt;<br/>callee: Context.Tag<br/>args: #91;#93;"]
   3[/"type: #lt;const Id extends string#gt;#40;id: Id#41; =#gt; #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, Id, Shape#gt;<br/>node: Context.Tag"/]
   4[/"type: TagClass#lt;MyClass, string, #123;#125;#gt;<br/>node: LocalConstructor#40;#quot;Hello#quot;#41;#lt;MyClass, #123;#125;#gt;#40;#41;"/]
-  5[/"type: new #40;args: #123; id: number; #125;#41; =#gt; #123; readonly _tag: #quot;TTLRequest#quot;; #125; #amp; #123; readonly id: number; #125;<br/>node: Persistable.Class#lt;#123;#92;n  payload: #123; id: number #125;#92;n#125;#gt;#40;#41;#40;#quot;TTLRequest#quot;, #123;#92;n  primaryKey: #40;req#41; =#gt; `TTLRequest:$#123;req.id#125;`#92;n#125;#41;"/]
+  5[/"type: #quot;Hello#quot;<br/>node: #quot;Hello#quot;"/]
+  6["type: #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, string, Shape#gt;<br/>callee: LocalConstructor<br/>args: #91;#93;"]
+  7[/"type: #40;identifier: string#41; =#gt; #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, string, Shape#gt;<br/>node: LocalConstructor"/]
+  8[/"type: new #40;args: #123; id: number; #125;#41; =#gt; #123; readonly _tag: #quot;TTLRequest#quot;; #125; #amp; #123; readonly id: number; #125;<br/>node: Persistable.Class#lt;#123;#92;n  payload: #123; id: number #125;#92;n#125;#gt;#40;#41;#40;#quot;TTLRequest#quot;, #123;#92;n  primaryKey: #40;req#41; =#gt; `TTLRequest:$#123;req.id#125;`#92;n#125;#41;"/]
+  9[["type: #40;req: #123; id: number; #125;#41; =#gt; string<br/>node: #40;req#41; =#gt; `TTLRequest:$#123;req.id#125;`"]]
+  10[/"type: string<br/>node: `TTLRequest:$#123;req.id#125;`"/]
   1 -->|"kind: pipe"| 2
   3 -->|"kind: transformCallee"| 2
   2 -->|"kind: potentialReturn"| 0
+  5 -->|"kind: pipe"| 6
+  7 -->|"kind: transformCallee"| 6
+  6 -->|"kind: usedBy"| 4
+  10 -->|"kind: potentialReturn"| 9
+  9 -->|"kind: usedBy"| 8

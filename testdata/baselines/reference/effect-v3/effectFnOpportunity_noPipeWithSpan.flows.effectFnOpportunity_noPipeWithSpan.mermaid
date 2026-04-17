@@ -30,24 +30,27 @@ flowchart TB
   28[/"type: #123; #40;name: string, options?: SpanOptions #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, ParentSpan#gt;#gt;; #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;, name: string, options?: SpanOptions #124; undefined#41;: Effect#lt;A, E, Exclude#lt;R, ParentSpan#gt;#gt;; #125;<br/>node: Effect.withSpan"/]
   29[/"type: #quot;functionDeclarationWithPipe#quot;<br/>node: #quot;functionDeclarationWithPipe#quot;"/]
   30["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.ignoreLogged<br/>args: #91;#93;"]
-  2 -->|"kind: potentialReturn"| 1
   3 -->|"kind: pipe"| 4
   5 -->|"kind: transformCallee"| 4
+  4 -->|"kind: usedBy"| 2
+  2 -->|"kind: potentialReturn"| 1
   4 -->|"kind: yieldable"| 1
   1 -->|"kind: pipe"| 6
   6 -->|"kind: potentialReturn"| 0
-  9 -->|"kind: potentialReturn"| 8
   10 -->|"kind: pipe"| 11
   12 -->|"kind: transformCallee"| 11
+  11 -->|"kind: usedBy"| 9
+  9 -->|"kind: potentialReturn"| 8
   11 -->|"kind: yieldable"| 8
   14 -->|"kind: transformCallee"| 13
   15 -->|"kind: transformArg"| 13
   8 -->|"kind: pipe"| 13
   13 -->|"kind: pipe"| 16
   16 -->|"kind: potentialReturn"| 7
-  19 -->|"kind: potentialReturn"| 18
   20 -->|"kind: pipe"| 21
   22 -->|"kind: transformCallee"| 21
+  21 -->|"kind: usedBy"| 19
+  19 -->|"kind: potentialReturn"| 18
   21 -->|"kind: yieldable"| 18
   24 -->|"kind: transformCallee"| 23
   26 -->|"kind: potentialReturn"| 25

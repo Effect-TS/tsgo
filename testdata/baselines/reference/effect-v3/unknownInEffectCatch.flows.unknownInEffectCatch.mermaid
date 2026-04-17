@@ -1,43 +1,87 @@
 flowchart TB
   0[/"type: Effect#lt;Response, unknown, never#gt;<br/>node: Effect.tryPromise#40;#123;#92;n  try: #40;#41; =#gt; fetch#40;#quot;http://something#quot;#41;,#92;n  catch: #40;e#41; =#gt; e // #lt;- This is the error#92;n#125;#41;"/]
-  1[/"type: #quot;MyError#quot;<br/>node: #quot;MyError#quot;"/]
-  2["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;MyError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
-  3[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
-  4[/"type: Effect#lt;Response, MyError, never#gt;<br/>node: Effect.tryPromise#40;#123;#92;n  try: #40;#41; =#gt; fetch#40;#quot;http://something#quot;#41;,#92;n  catch: #40;e#41; =#gt; new MyError#40;#123; cause: e #125;#41;#92;n#125;#41;"/]
-  5[/"type: Effect#lt;Response, unknown, never#gt;<br/>node: Effect.tryPromise#40;#123;#92;n  try: #40;#41; =#gt; fetch#40;#quot;http://something#quot;#41;,#92;n  catch: Function.identity#92;n#125;#41;"/]
-  6[/"type: 42<br/>node: 42"/]
-  7["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  8[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  9["type: Effect#lt;Response, MyError, never#gt;<br/>callee: Effect.tryMapPromise<br/>args: #91;#123;#92;n  try: #40;_#41; =#gt; fetch#40;#quot;http://something/#quot; + _#41;,#92;n  catch: #40;e#41; =#gt; new MyError#40;#123; cause: e #125;#41;#92;n#125;#93;"]
-  10[/"type: #123; #lt;A, B, E1#gt;#40;options: #123; readonly try: #40;a: A, signal: AbortSignal#41; =#gt; PromiseLike#lt;B#gt;; readonly catch: #40;error: unknown#41; =#gt; E1; #125;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R#gt;; #lt;A, E, R, B, E1#gt;#40;self: Effect#lt;A, E, R#gt;, options: #123; readonly try: #40;a: A, signal: AbortSignal#41; =#gt; PromiseLike#lt;B#gt;; readonly catch: #40;error: unknown#41; =#gt; E1; #125;#41;: Effect#lt;B, E #124; E1, R#gt;; #125;<br/>node: Effect.tryMapPromise"/]
-  11[/"type: #123; try: #40;_: number#41; =#gt; Promise#lt;Response#gt;; catch: #40;e: unknown#41; =#gt; MyError; #125;<br/>node: #123;#92;n  try: #40;_#41; =#gt; fetch#40;#quot;http://something/#quot; + _#41;,#92;n  catch: #40;e#41; =#gt; new MyError#40;#123; cause: e #125;#41;#92;n#125;"/]
-  12[/"type: 42<br/>node: 42"/]
-  13["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  14[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  15["type: Effect#lt;Response, unknown, never#gt;<br/>callee: Effect.tryMapPromise<br/>args: #91;#123;#92;n  try: #40;_#41; =#gt; fetch#40;#quot;http://something/#quot; + _#41;,#92;n  catch: Function.identity#92;n#125;#93;"]
-  16[/"type: #123; #lt;A, B, E1#gt;#40;options: #123; readonly try: #40;a: A, signal: AbortSignal#41; =#gt; PromiseLike#lt;B#gt;; readonly catch: #40;error: unknown#41; =#gt; E1; #125;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R#gt;; #lt;A, E, R, B, E1#gt;#40;self: Effect#lt;A, E, R#gt;, options: #123; readonly try: #40;a: A, signal: AbortSignal#41; =#gt; PromiseLike#lt;B#gt;; readonly catch: #40;error: unknown#41; =#gt; E1; #125;#41;: Effect#lt;B, E #124; E1, R#gt;; #125;<br/>node: Effect.tryMapPromise"/]
-  17[/"type: #123; try: #40;_: number#41; =#gt; Promise#lt;Response#gt;; catch: #lt;A#gt;#40;a: A#41; =#gt; A; #125;<br/>node: #123;#92;n  try: #40;_#41; =#gt; fetch#40;#quot;http://something/#quot; + _#41;,#92;n  catch: Function.identity#92;n#125;"/]
-  18[/"type: 42<br/>node: 42"/]
-  19["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  20[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  21["type: Effect#lt;string, unknown, never#gt;<br/>callee: Effect.tryMap<br/>args: #91;#123;#92;n  try: #40;_#41; =#gt; #quot;http://something/#quot; + _,#92;n  catch: Function.identity#92;n#125;#93;"]
-  22[/"type: #123; #lt;A, B, E1#gt;#40;options: #123; readonly try: #40;a: A#41; =#gt; B; readonly catch: #40;error: unknown#41; =#gt; E1; #125;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R#gt;; #lt;A, E, R, B, E1#gt;#40;self: Effect#lt;A, E, R#gt;, options: #123; readonly try: #40;a: A#41; =#gt; B; readonly catch: #40;error: unknown#41; =#gt; E1; #125;#41;: Effect#lt;B, E #124; E1, R#gt;; #125;<br/>node: Effect.tryMap"/]
-  23[/"type: #123; try: #40;_: number#41; =#gt; string; catch: #lt;A#gt;#40;a: A#41; =#gt; A; #125;<br/>node: #123;#92;n  try: #40;_#41; =#gt; #quot;http://something/#quot; + _,#92;n  catch: Function.identity#92;n#125;"/]
-  24[/"type: Effect#lt;Response, any, never#gt;<br/>node: Effect.tryPromise#40;#123;#92;n  try: #40;#41; =#gt; fetch#40;#quot;http://something#quot;#41;,#92;n  catch: #40;_#41; =#gt; _ as any#92;n#125;#41;"/]
-  1 -->|"kind: pipe"| 2
-  3 -->|"kind: transformCallee"| 2
-  6 -->|"kind: pipe"| 7
-  8 -->|"kind: transformCallee"| 7
-  10 -->|"kind: transformCallee"| 9
-  11 -->|"kind: transformArg"| 9
-  7 -->|"kind: pipe"| 9
-  12 -->|"kind: pipe"| 13
-  14 -->|"kind: transformCallee"| 13
-  16 -->|"kind: transformCallee"| 15
-  17 -->|"kind: transformArg"| 15
-  13 -->|"kind: pipe"| 15
-  18 -->|"kind: pipe"| 19
+  1[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;http://something#quot;#41;"]]
+  2[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;http://something#quot;#41;"/]
+  3[["type: #40;e: unknown#41; =#gt; unknown<br/>node: #40;e#41; =#gt; e"]]
+  4[/"type: unknown<br/>node: e"/]
+  5[/"type: #quot;MyError#quot;<br/>node: #quot;MyError#quot;"/]
+  6["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;MyError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  7[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  8[/"type: Effect#lt;Response, MyError, never#gt;<br/>node: Effect.tryPromise#40;#123;#92;n  try: #40;#41; =#gt; fetch#40;#quot;http://something#quot;#41;,#92;n  catch: #40;e#41; =#gt; new MyError#40;#123; cause: e #125;#41;#92;n#125;#41;"/]
+  9[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;http://something#quot;#41;"]]
+  10[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;http://something#quot;#41;"/]
+  11[["type: #40;e: unknown#41; =#gt; MyError<br/>node: #40;e#41; =#gt; new MyError#40;#123; cause: e #125;#41;"]]
+  12[/"type: MyError<br/>node: new MyError#40;#123; cause: e #125;#41;"/]
+  13[/"type: Effect#lt;Response, unknown, never#gt;<br/>node: Effect.tryPromise#40;#123;#92;n  try: #40;#41; =#gt; fetch#40;#quot;http://something#quot;#41;,#92;n  catch: Function.identity#92;n#125;#41;"/]
+  14[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;http://something#quot;#41;"]]
+  15[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;http://something#quot;#41;"/]
+  16[/"type: 42<br/>node: 42"/]
+  17["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  18[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  19["type: Effect#lt;Response, MyError, never#gt;<br/>callee: Effect.tryMapPromise<br/>args: #91;#123;#92;n  try: #40;_#41; =#gt; fetch#40;#quot;http://something/#quot; + _#41;,#92;n  catch: #40;e#41; =#gt; new MyError#40;#123; cause: e #125;#41;#92;n#125;#93;"]
+  20[/"type: #123; #lt;A, B, E1#gt;#40;options: #123; readonly try: #40;a: A, signal: AbortSignal#41; =#gt; PromiseLike#lt;B#gt;; readonly catch: #40;error: unknown#41; =#gt; E1; #125;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R#gt;; #lt;A, E, R, B, E1#gt;#40;self: Effect#lt;A, E, R#gt;, options: #123; readonly try: #40;a: A, signal: AbortSignal#41; =#gt; PromiseLike#lt;B#gt;; readonly catch: #40;error: unknown#41; =#gt; E1; #125;#41;: Effect#lt;B, E #124; E1, R#gt;; #125;<br/>node: Effect.tryMapPromise"/]
+  21[/"type: #123; try: #40;_: number#41; =#gt; Promise#lt;Response#gt;; catch: #40;e: unknown#41; =#gt; MyError; #125;<br/>node: #123;#92;n  try: #40;_#41; =#gt; fetch#40;#quot;http://something/#quot; + _#41;,#92;n  catch: #40;e#41; =#gt; new MyError#40;#123; cause: e #125;#41;#92;n#125;"/]
+  22[["type: #40;_: number#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;_#41; =#gt; fetch#40;#quot;http://something/#quot; + _#41;"]]
+  23[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;http://something/#quot; + _#41;"/]
+  24[["type: #40;e: unknown#41; =#gt; MyError<br/>node: #40;e#41; =#gt; new MyError#40;#123; cause: e #125;#41;"]]
+  25[/"type: MyError<br/>node: new MyError#40;#123; cause: e #125;#41;"/]
+  26[/"type: 42<br/>node: 42"/]
+  27["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  28[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  29["type: Effect#lt;Response, unknown, never#gt;<br/>callee: Effect.tryMapPromise<br/>args: #91;#123;#92;n  try: #40;_#41; =#gt; fetch#40;#quot;http://something/#quot; + _#41;,#92;n  catch: Function.identity#92;n#125;#93;"]
+  30[/"type: #123; #lt;A, B, E1#gt;#40;options: #123; readonly try: #40;a: A, signal: AbortSignal#41; =#gt; PromiseLike#lt;B#gt;; readonly catch: #40;error: unknown#41; =#gt; E1; #125;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R#gt;; #lt;A, E, R, B, E1#gt;#40;self: Effect#lt;A, E, R#gt;, options: #123; readonly try: #40;a: A, signal: AbortSignal#41; =#gt; PromiseLike#lt;B#gt;; readonly catch: #40;error: unknown#41; =#gt; E1; #125;#41;: Effect#lt;B, E #124; E1, R#gt;; #125;<br/>node: Effect.tryMapPromise"/]
+  31[/"type: #123; try: #40;_: number#41; =#gt; Promise#lt;Response#gt;; catch: #lt;A#gt;#40;a: A#41; =#gt; A; #125;<br/>node: #123;#92;n  try: #40;_#41; =#gt; fetch#40;#quot;http://something/#quot; + _#41;,#92;n  catch: Function.identity#92;n#125;"/]
+  32[["type: #40;_: number#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;_#41; =#gt; fetch#40;#quot;http://something/#quot; + _#41;"]]
+  33[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;http://something/#quot; + _#41;"/]
+  34[/"type: 42<br/>node: 42"/]
+  35["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  36[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  37["type: Effect#lt;string, unknown, never#gt;<br/>callee: Effect.tryMap<br/>args: #91;#123;#92;n  try: #40;_#41; =#gt; #quot;http://something/#quot; + _,#92;n  catch: Function.identity#92;n#125;#93;"]
+  38[/"type: #123; #lt;A, B, E1#gt;#40;options: #123; readonly try: #40;a: A#41; =#gt; B; readonly catch: #40;error: unknown#41; =#gt; E1; #125;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R#gt;; #lt;A, E, R, B, E1#gt;#40;self: Effect#lt;A, E, R#gt;, options: #123; readonly try: #40;a: A#41; =#gt; B; readonly catch: #40;error: unknown#41; =#gt; E1; #125;#41;: Effect#lt;B, E #124; E1, R#gt;; #125;<br/>node: Effect.tryMap"/]
+  39[/"type: #123; try: #40;_: number#41; =#gt; string; catch: #lt;A#gt;#40;a: A#41; =#gt; A; #125;<br/>node: #123;#92;n  try: #40;_#41; =#gt; #quot;http://something/#quot; + _,#92;n  catch: Function.identity#92;n#125;"/]
+  40[["type: #40;_: number#41; =#gt; string<br/>node: #40;_#41; =#gt; #quot;http://something/#quot; + _"]]
+  41[/"type: string<br/>node: #quot;http://something/#quot; + _"/]
+  42[/"type: Effect#lt;Response, any, never#gt;<br/>node: Effect.tryPromise#40;#123;#92;n  try: #40;#41; =#gt; fetch#40;#quot;http://something#quot;#41;,#92;n  catch: #40;_#41; =#gt; _ as any#92;n#125;#41;"/]
+  43[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: #40;#41; =#gt; fetch#40;#quot;http://something#quot;#41;"]]
+  44[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;http://something#quot;#41;"/]
+  45[["type: #40;_: unknown#41; =#gt; any<br/>node: #40;_#41; =#gt; _ as any"]]
+  46[/"type: any<br/>node: _ as any"/]
+  2 -->|"kind: potentialReturn"| 1
+  1 -->|"kind: usedBy"| 0
+  4 -->|"kind: potentialReturn"| 3
+  3 -->|"kind: usedBy"| 0
+  5 -->|"kind: pipe"| 6
+  7 -->|"kind: transformCallee"| 6
+  10 -->|"kind: potentialReturn"| 9
+  9 -->|"kind: usedBy"| 8
+  12 -->|"kind: potentialReturn"| 11
+  11 -->|"kind: usedBy"| 8
+  15 -->|"kind: potentialReturn"| 14
+  14 -->|"kind: usedBy"| 13
+  16 -->|"kind: pipe"| 17
+  18 -->|"kind: transformCallee"| 17
   20 -->|"kind: transformCallee"| 19
-  22 -->|"kind: transformCallee"| 21
-  23 -->|"kind: transformArg"| 21
-  19 -->|"kind: pipe"| 21
+  23 -->|"kind: potentialReturn"| 22
+  22 -->|"kind: usedBy"| 21
+  25 -->|"kind: potentialReturn"| 24
+  24 -->|"kind: usedBy"| 21
+  21 -->|"kind: transformArg"| 19
+  17 -->|"kind: pipe"| 19
+  26 -->|"kind: pipe"| 27
+  28 -->|"kind: transformCallee"| 27
+  30 -->|"kind: transformCallee"| 29
+  33 -->|"kind: potentialReturn"| 32
+  32 -->|"kind: usedBy"| 31
+  31 -->|"kind: transformArg"| 29
+  27 -->|"kind: pipe"| 29
+  34 -->|"kind: pipe"| 35
+  36 -->|"kind: transformCallee"| 35
+  38 -->|"kind: transformCallee"| 37
+  41 -->|"kind: potentialReturn"| 40
+  40 -->|"kind: usedBy"| 39
+  39 -->|"kind: transformArg"| 37
+  35 -->|"kind: pipe"| 37
+  44 -->|"kind: potentialReturn"| 43
+  43 -->|"kind: usedBy"| 42
+  46 -->|"kind: potentialReturn"| 45
+  45 -->|"kind: usedBy"| 42

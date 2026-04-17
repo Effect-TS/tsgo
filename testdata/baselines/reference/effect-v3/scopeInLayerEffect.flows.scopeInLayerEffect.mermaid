@@ -1,70 +1,116 @@
 flowchart TB
   0[/"type: TagClass#lt;MyService, #quot;MyService#quot;, #123; a: number; #125;#gt;<br/>node: Context.Tag#40;#quot;MyService#quot;#41;#lt;MyService, #123;#92;n  a: number#92;n#125;#gt;#40;#41;"/]
-  1[/"type: TagClass#lt;OtherService, #quot;OtherService#quot;, #123; b: number; #125;#gt;<br/>node: Context.Tag#40;#quot;OtherService#quot;#41;#lt;OtherService, #123;#92;n  b: number#92;n#125;#gt;#40;#41;"/]
-  2[/"type: Class#lt;MyService2, #quot;MyService2#quot;, #123; readonly effect: Effect#lt;#123; a: number; #125;, never, Scope#gt;; #125;#gt;<br/>node: Effect.Service#lt;MyService2#gt;#40;#41;#40;#quot;MyService2#quot;, #123;#92;n  effect: Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.addFinalizer#40;#40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;#41;#92;n    return #123; a: 1 #125;#92;n  #125;#41;#92;n#125;#41;"/]
-  3[/"type: Class#lt;MyService3, #quot;MyService2#quot;, #123; readonly effect: Effect#lt;#123; a: number; #125;, never, OtherService #124; Scope#gt;; #125;#gt;<br/>node: Effect.Service#lt;MyService3#gt;#40;#41;#40;#quot;MyService2#quot;, #123;#92;n  effect: Effect.gen#40;function*#40;#41; #123;#92;n    const _ = yield* OtherService#92;n    yield* Effect.addFinalizer#40;#40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;#41;#92;n    return #123; a: 1 #125;#92;n  #125;#41;#92;n#125;#41;"/]
-  4((("type: Effect#lt;#123; a: number; #125;, never, Scope#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.addFinalizer#40;#40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;#41;#92;n    return #123; a: 1 #125;#92;n  #125;#41;")))
-  5[/"type: #123; a: number; #125;<br/>node: #123; a: 1 #125;"/]
-  6[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;"]]
-  7[/"type: #quot;finalizer#quot;<br/>node: #quot;finalizer#quot;"/]
-  8["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
-  9[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
-  10["type: Effect#lt;void, never, Scope#gt;<br/>callee: Effect.addFinalizer<br/>args: #91;#93;"]
-  11[/"type: #lt;X, R#gt;#40;finalizer: #40;exit: Exit#lt;unknown, unknown#gt;#41; =#gt; Effect#lt;X, never, R#gt;#41; =#gt; Effect#lt;void, never, R #124; Scope#gt;<br/>node: Effect.addFinalizer"/]
-  12["type: Layer#lt;MyService, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  13[/"type: #123; #lt;I, S#gt;#40;tag: Tag#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;tag: Tag#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.scoped"/]
-  14[/"type: typeof MyService<br/>node: MyService"/]
-  15((("type: Effect#lt;#123; a: number; #125;, never, Scope#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.addFinalizer#40;#40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;#41;#92;n    return #123; a: 1 #125;#92;n  #125;#41;")))
-  16[/"type: #123; a: number; #125;<br/>node: #123; a: 1 #125;"/]
-  17[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;"]]
-  18[/"type: #quot;finalizer#quot;<br/>node: #quot;finalizer#quot;"/]
-  19["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
-  20[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
-  21["type: Effect#lt;void, never, Scope#gt;<br/>callee: Effect.addFinalizer<br/>args: #91;#93;"]
-  22[/"type: #lt;X, R#gt;#40;finalizer: #40;exit: Exit#lt;unknown, unknown#gt;#41; =#gt; Effect#lt;X, never, R#gt;#41; =#gt; Effect#lt;void, never, R #124; Scope#gt;<br/>node: Effect.addFinalizer"/]
-  23["type: Layer#lt;MyService, never, Scope#gt;<br/>callee: <br/>args: #91;#93;"]
-  24[/"type: #123; #lt;I, S#gt;#40;tag: Tag#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41; =#gt; Layer#lt;I, E, R#gt;; #lt;I, S, E, R#gt;#40;tag: Tag#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, R#gt;; #125;<br/>node: Layer.effect"/]
-  25[/"type: typeof MyService<br/>node: MyService"/]
-  26((("type: Effect#lt;#123; a: number; #125;, never, OtherService #124; Scope#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    const _otherService = yield* OtherService#92;n    yield* Effect.addFinalizer#40;#40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;#41;#92;n    return #123; a: 1 #125;#92;n  #125;#41;")))
-  27[/"type: #123; a: number; #125;<br/>node: #123; a: 1 #125;"/]
-  28[/"type: typeof OtherService<br/>node: OtherService"/]
+  1[/"type: #quot;MyService#quot;<br/>node: #quot;MyService#quot;"/]
+  2["type: #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, #quot;MyService#quot;, Shape#gt;<br/>callee: Context.Tag<br/>args: #91;#93;"]
+  3[/"type: #lt;const Id extends string#gt;#40;id: Id#41; =#gt; #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, Id, Shape#gt;<br/>node: Context.Tag"/]
+  4[/"type: TagClass#lt;OtherService, #quot;OtherService#quot;, #123; b: number; #125;#gt;<br/>node: Context.Tag#40;#quot;OtherService#quot;#41;#lt;OtherService, #123;#92;n  b: number#92;n#125;#gt;#40;#41;"/]
+  5[/"type: #quot;OtherService#quot;<br/>node: #quot;OtherService#quot;"/]
+  6["type: #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, #quot;OtherService#quot;, Shape#gt;<br/>callee: Context.Tag<br/>args: #91;#93;"]
+  7[/"type: #lt;const Id extends string#gt;#40;id: Id#41; =#gt; #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, Id, Shape#gt;<br/>node: Context.Tag"/]
+  8[/"type: Class#lt;MyService2, #quot;MyService2#quot;, #123; readonly effect: Effect#lt;#123; a: number; #125;, never, Scope#gt;; #125;#gt;<br/>node: Effect.Service#lt;MyService2#gt;#40;#41;#40;#quot;MyService2#quot;, #123;#92;n  effect: Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.addFinalizer#40;#40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;#41;#92;n    return #123; a: 1 #125;#92;n  #125;#41;#92;n#125;#41;"/]
+  9((("type: Effect#lt;#123; a: number; #125;, never, Scope#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.addFinalizer#40;#40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;#41;#92;n    return #123; a: 1 #125;#92;n  #125;#41;")))
+  10[/"type: #123; a: number; #125;<br/>node: #123; a: 1 #125;"/]
+  11[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;"]]
+  12[/"type: #quot;finalizer#quot;<br/>node: #quot;finalizer#quot;"/]
+  13["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  14[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  15["type: Effect#lt;void, never, Scope#gt;<br/>callee: Effect.addFinalizer<br/>args: #91;#93;"]
+  16[/"type: #lt;X, R#gt;#40;finalizer: #40;exit: Exit#lt;unknown, unknown#gt;#41; =#gt; Effect#lt;X, never, R#gt;#41; =#gt; Effect#lt;void, never, R #124; Scope#gt;<br/>node: Effect.addFinalizer"/]
+  17[/"type: Class#lt;MyService3, #quot;MyService2#quot;, #123; readonly effect: Effect#lt;#123; a: number; #125;, never, OtherService #124; Scope#gt;; #125;#gt;<br/>node: Effect.Service#lt;MyService3#gt;#40;#41;#40;#quot;MyService2#quot;, #123;#92;n  effect: Effect.gen#40;function*#40;#41; #123;#92;n    const _ = yield* OtherService#92;n    yield* Effect.addFinalizer#40;#40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;#41;#92;n    return #123; a: 1 #125;#92;n  #125;#41;#92;n#125;#41;"/]
+  18((("type: Effect#lt;#123; a: number; #125;, never, OtherService #124; Scope#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    const _ = yield* OtherService#92;n    yield* Effect.addFinalizer#40;#40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;#41;#92;n    return #123; a: 1 #125;#92;n  #125;#41;")))
+  19[/"type: #123; a: number; #125;<br/>node: #123; a: 1 #125;"/]
+  20[/"type: typeof OtherService<br/>node: OtherService"/]
+  21[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;"]]
+  22[/"type: #quot;finalizer#quot;<br/>node: #quot;finalizer#quot;"/]
+  23["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  24[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  25["type: Effect#lt;void, never, Scope#gt;<br/>callee: Effect.addFinalizer<br/>args: #91;#93;"]
+  26[/"type: #lt;X, R#gt;#40;finalizer: #40;exit: Exit#lt;unknown, unknown#gt;#41; =#gt; Effect#lt;X, never, R#gt;#41; =#gt; Effect#lt;void, never, R #124; Scope#gt;<br/>node: Effect.addFinalizer"/]
+  27((("type: Effect#lt;#123; a: number; #125;, never, Scope#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.addFinalizer#40;#40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;#41;#92;n    return #123; a: 1 #125;#92;n  #125;#41;")))
+  28[/"type: #123; a: number; #125;<br/>node: #123; a: 1 #125;"/]
   29[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;"]]
   30[/"type: #quot;finalizer#quot;<br/>node: #quot;finalizer#quot;"/]
   31["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
   32[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
   33["type: Effect#lt;void, never, Scope#gt;<br/>callee: Effect.addFinalizer<br/>args: #91;#93;"]
   34[/"type: #lt;X, R#gt;#40;finalizer: #40;exit: Exit#lt;unknown, unknown#gt;#41; =#gt; Effect#lt;X, never, R#gt;#41; =#gt; Effect#lt;void, never, R #124; Scope#gt;<br/>node: Effect.addFinalizer"/]
-  35["type: Layer#lt;MyService, never, OtherService #124; Scope#gt;<br/>callee: <br/>args: #91;#93;"]
-  36[/"type: #123; #lt;I, S#gt;#40;tag: Tag#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41; =#gt; Layer#lt;I, E, R#gt;; #lt;I, S, E, R#gt;#40;tag: Tag#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, R#gt;; #125;<br/>node: Layer.effect"/]
+  35["type: Layer#lt;MyService, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  36[/"type: #123; #lt;I, S#gt;#40;tag: Tag#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;tag: Tag#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.scoped"/]
   37[/"type: typeof MyService<br/>node: MyService"/]
-  5 -->|"kind: potentialReturn"| 4
-  7 -->|"kind: pipe"| 8
-  9 -->|"kind: transformCallee"| 8
-  8 -->|"kind: potentialReturn"| 6
-  6 -->|"kind: pipe"| 10
-  11 -->|"kind: transformCallee"| 10
-  10 -->|"kind: yieldable"| 4
-  4 -->|"kind: pipe"| 12
-  13 -->|"kind: transformCallee"| 4
-  14 -->|"kind: transformArg"| 4
-  16 -->|"kind: potentialReturn"| 15
-  18 -->|"kind: pipe"| 19
-  20 -->|"kind: transformCallee"| 19
-  19 -->|"kind: potentialReturn"| 17
-  17 -->|"kind: pipe"| 21
-  22 -->|"kind: transformCallee"| 21
-  21 -->|"kind: yieldable"| 15
-  15 -->|"kind: pipe"| 23
-  24 -->|"kind: transformCallee"| 15
-  25 -->|"kind: transformArg"| 15
-  27 -->|"kind: potentialReturn"| 26
-  28 -->|"kind: yieldable"| 26
+  38((("type: Effect#lt;#123; a: number; #125;, never, Scope#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    yield* Effect.addFinalizer#40;#40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;#41;#92;n    return #123; a: 1 #125;#92;n  #125;#41;")))
+  39[/"type: #123; a: number; #125;<br/>node: #123; a: 1 #125;"/]
+  40[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;"]]
+  41[/"type: #quot;finalizer#quot;<br/>node: #quot;finalizer#quot;"/]
+  42["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  43[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  44["type: Effect#lt;void, never, Scope#gt;<br/>callee: Effect.addFinalizer<br/>args: #91;#93;"]
+  45[/"type: #lt;X, R#gt;#40;finalizer: #40;exit: Exit#lt;unknown, unknown#gt;#41; =#gt; Effect#lt;X, never, R#gt;#41; =#gt; Effect#lt;void, never, R #124; Scope#gt;<br/>node: Effect.addFinalizer"/]
+  46["type: Layer#lt;MyService, never, Scope#gt;<br/>callee: <br/>args: #91;#93;"]
+  47[/"type: #123; #lt;I, S#gt;#40;tag: Tag#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41; =#gt; Layer#lt;I, E, R#gt;; #lt;I, S, E, R#gt;#40;tag: Tag#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, R#gt;; #125;<br/>node: Layer.effect"/]
+  48[/"type: typeof MyService<br/>node: MyService"/]
+  49((("type: Effect#lt;#123; a: number; #125;, never, OtherService #124; Scope#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    const _otherService = yield* OtherService#92;n    yield* Effect.addFinalizer#40;#40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;#41;#92;n    return #123; a: 1 #125;#92;n  #125;#41;")))
+  50[/"type: #123; a: number; #125;<br/>node: #123; a: 1 #125;"/]
+  51[/"type: typeof OtherService<br/>node: OtherService"/]
+  52[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.log#40;#quot;finalizer#quot;#41;"]]
+  53[/"type: #quot;finalizer#quot;<br/>node: #quot;finalizer#quot;"/]
+  54["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  55[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  56["type: Effect#lt;void, never, Scope#gt;<br/>callee: Effect.addFinalizer<br/>args: #91;#93;"]
+  57[/"type: #lt;X, R#gt;#40;finalizer: #40;exit: Exit#lt;unknown, unknown#gt;#41; =#gt; Effect#lt;X, never, R#gt;#41; =#gt; Effect#lt;void, never, R #124; Scope#gt;<br/>node: Effect.addFinalizer"/]
+  58["type: Layer#lt;MyService, never, OtherService #124; Scope#gt;<br/>callee: <br/>args: #91;#93;"]
+  59[/"type: #123; #lt;I, S#gt;#40;tag: Tag#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41; =#gt; Layer#lt;I, E, R#gt;; #lt;I, S, E, R#gt;#40;tag: Tag#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, R#gt;; #125;<br/>node: Layer.effect"/]
+  60[/"type: typeof MyService<br/>node: MyService"/]
+  1 -->|"kind: pipe"| 2
+  3 -->|"kind: transformCallee"| 2
+  2 -->|"kind: usedBy"| 0
+  5 -->|"kind: pipe"| 6
+  7 -->|"kind: transformCallee"| 6
+  6 -->|"kind: usedBy"| 4
+  10 -->|"kind: potentialReturn"| 9
+  12 -->|"kind: pipe"| 13
+  14 -->|"kind: transformCallee"| 13
+  13 -->|"kind: potentialReturn"| 11
+  11 -->|"kind: pipe"| 15
+  16 -->|"kind: transformCallee"| 15
+  15 -->|"kind: yieldable"| 9
+  9 -->|"kind: usedBy"| 8
+  19 -->|"kind: potentialReturn"| 18
+  20 -->|"kind: yieldable"| 18
+  22 -->|"kind: pipe"| 23
+  24 -->|"kind: transformCallee"| 23
+  23 -->|"kind: potentialReturn"| 21
+  21 -->|"kind: pipe"| 25
+  26 -->|"kind: transformCallee"| 25
+  25 -->|"kind: yieldable"| 18
+  18 -->|"kind: usedBy"| 17
+  28 -->|"kind: potentialReturn"| 27
   30 -->|"kind: pipe"| 31
   32 -->|"kind: transformCallee"| 31
   31 -->|"kind: potentialReturn"| 29
   29 -->|"kind: pipe"| 33
   34 -->|"kind: transformCallee"| 33
-  33 -->|"kind: yieldable"| 26
-  26 -->|"kind: pipe"| 35
-  36 -->|"kind: transformCallee"| 26
-  37 -->|"kind: transformArg"| 26
+  33 -->|"kind: yieldable"| 27
+  27 -->|"kind: pipe"| 35
+  36 -->|"kind: transformCallee"| 27
+  37 -->|"kind: transformArg"| 27
+  39 -->|"kind: potentialReturn"| 38
+  41 -->|"kind: pipe"| 42
+  43 -->|"kind: transformCallee"| 42
+  42 -->|"kind: potentialReturn"| 40
+  40 -->|"kind: pipe"| 44
+  45 -->|"kind: transformCallee"| 44
+  44 -->|"kind: yieldable"| 38
+  38 -->|"kind: pipe"| 46
+  47 -->|"kind: transformCallee"| 38
+  48 -->|"kind: transformArg"| 38
+  50 -->|"kind: potentialReturn"| 49
+  51 -->|"kind: yieldable"| 49
+  53 -->|"kind: pipe"| 54
+  55 -->|"kind: transformCallee"| 54
+  54 -->|"kind: potentialReturn"| 52
+  52 -->|"kind: pipe"| 56
+  57 -->|"kind: transformCallee"| 56
+  56 -->|"kind: yieldable"| 49
+  49 -->|"kind: pipe"| 58
+  59 -->|"kind: transformCallee"| 49
+  60 -->|"kind: transformArg"| 49

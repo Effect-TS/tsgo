@@ -36,11 +36,11 @@ flowchart TB
   34[/"type: Layer#lt;MyService2, never, never#gt;<br/>node: MyService2.Default"/]
   35((("type: Effect#lt;void, never, MyService1#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const ctx = yield* Effect.context#lt;MyService1#gt;#40;#41;#92;n  return yield* Effect.provide#40;Effect.void, ctx#41;#92;n#125;#41;")))
   36[/"type: void<br/>node: yield* Effect.provide#40;Effect.void, ctx#41;"/]
-  37[/"type: Effect#lt;Context#lt;MyService1#gt;, never, MyService1#gt;<br/>node: Effect.context#lt;MyService1#gt;#40;#41;"/]
-  38[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
-  39["type: Effect#lt;void, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  40[/"type: #123; #lt;const Layers extends readonly #91;Layer.Layer.Any, ...Array#lt;Layer.Layer.Any#gt;#93;#gt;#40;layers: Layers#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; #123; #91;k in keyof Layers#93;: Error#lt;Layers#91;k#93;#gt;; #125;#91;number#93;, #123; #91;k in keyof Layers#93;: Context#lt;Layers#91;k#93;#gt;; #125;#91;number#93; #124; Exclude#lt;R, #123; #91;k in keyof Layers#93;: Success#lt;Layers#91;k#93;#gt;; #125;#91;number#93;#gt;#gt;; #lt;ROut, E2, RIn#gt;#40;layer: Layer#lt;ROut, E2, RIn#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;R2#gt;#40;context: Context#lt;R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #lt;R2#gt;#40;runtime: Runtime#lt;R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #lt;E2, R2#gt;#40;managedRuntime: ManagedRuntime#lt;R2, E2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, Exclude#lt;R, R2#gt;#gt;; #lt;A, E, R, const Layers extends readonly #91;Layer.Layer.Any, ...Array#lt;Layer.Layer.Any#gt;#93;#gt;#40;self: Effect#lt;A, E, R#gt;, layers: Layers#41;: Effect#lt;A, E #124; #123; #91;k in keyof Layers#93;: Error#lt;Layers#91;k#93;#gt;; #125;#91;number#93;, #123; #91;k in keyof Layers#93;: Context#lt;Layers#91;k#93;#gt;; #125;#91;number#93; #124; Exclude#lt;R, #123; #91;k in keyof Layers#93;: Success#lt;Layers#91;k#93;#gt;; #125;#91;number#93;#gt;#gt;; #lt;A, E, R, ROut, E2, RIn#gt;#40;self: Effect#lt;A, E, R#gt;, layer: Layer#lt;ROut, E2, RIn#gt;#41;: Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;A, E, R, R2#gt;#40;self: Effect#lt;A, E, R#gt;, context: Context#lt;R2#gt;#41;: Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #lt;A, E, R, R2#gt;#40;self: Effect#lt;A, E, R#gt;, runtime: Runtime#lt;R2#gt;#41;: Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #lt;A, E, E2, R, R2#gt;#40;self: Effect#lt;A, E, R#gt;, runtime: ManagedRuntime#lt;R2, E2#gt;#41;: Effect#lt;A, E #124; E2, Exclude#lt;R, R2#gt;#gt;; #125;<br/>node: Effect.provide"/]
-  41[/"type: Context#lt;MyService1#gt;<br/>node: ctx"/]
+  37[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  38["type: Effect#lt;void, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  39[/"type: #123; #lt;const Layers extends readonly #91;Layer.Layer.Any, ...Array#lt;Layer.Layer.Any#gt;#93;#gt;#40;layers: Layers#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; #123; #91;k in keyof Layers#93;: Error#lt;Layers#91;k#93;#gt;; #125;#91;number#93;, #123; #91;k in keyof Layers#93;: Context#lt;Layers#91;k#93;#gt;; #125;#91;number#93; #124; Exclude#lt;R, #123; #91;k in keyof Layers#93;: Success#lt;Layers#91;k#93;#gt;; #125;#91;number#93;#gt;#gt;; #lt;ROut, E2, RIn#gt;#40;layer: Layer#lt;ROut, E2, RIn#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;R2#gt;#40;context: Context#lt;R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #lt;R2#gt;#40;runtime: Runtime#lt;R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #lt;E2, R2#gt;#40;managedRuntime: ManagedRuntime#lt;R2, E2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, Exclude#lt;R, R2#gt;#gt;; #lt;A, E, R, const Layers extends readonly #91;Layer.Layer.Any, ...Array#lt;Layer.Layer.Any#gt;#93;#gt;#40;self: Effect#lt;A, E, R#gt;, layers: Layers#41;: Effect#lt;A, E #124; #123; #91;k in keyof Layers#93;: Error#lt;Layers#91;k#93;#gt;; #125;#91;number#93;, #123; #91;k in keyof Layers#93;: Context#lt;Layers#91;k#93;#gt;; #125;#91;number#93; #124; Exclude#lt;R, #123; #91;k in keyof Layers#93;: Success#lt;Layers#91;k#93;#gt;; #125;#91;number#93;#gt;#gt;; #lt;A, E, R, ROut, E2, RIn#gt;#40;self: Effect#lt;A, E, R#gt;, layer: Layer#lt;ROut, E2, RIn#gt;#41;: Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;A, E, R, R2#gt;#40;self: Effect#lt;A, E, R#gt;, context: Context#lt;R2#gt;#41;: Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #lt;A, E, R, R2#gt;#40;self: Effect#lt;A, E, R#gt;, runtime: Runtime#lt;R2#gt;#41;: Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #lt;A, E, E2, R, R2#gt;#40;self: Effect#lt;A, E, R#gt;, runtime: ManagedRuntime#lt;R2, E2#gt;#41;: Effect#lt;A, E #124; E2, Exclude#lt;R, R2#gt;#gt;; #125;<br/>node: Effect.provide"/]
+  40[/"type: Context#lt;MyService1#gt;<br/>node: ctx"/]
+  41[/"type: Effect#lt;Context#lt;MyService1#gt;, never, MyService1#gt;<br/>node: Effect.context#lt;MyService1#gt;#40;#41;"/]
   4 -->|"kind: transformCallee"| 3
   5 -->|"kind: transformArg"| 3
   2 -->|"kind: pipe"| 3
@@ -68,9 +68,10 @@ flowchart TB
   31 -->|"kind: pipe"| 32
   33 -->|"kind: transformCallee"| 31
   34 -->|"kind: transformArg"| 31
+  37 -->|"kind: pipe"| 38
+  39 -->|"kind: transformCallee"| 37
+  40 -->|"kind: transformArg"| 37
+  38 -->|"kind: usedBy"| 36
   36 -->|"kind: potentialReturn"| 35
-  37 -->|"kind: yieldable"| 35
-  38 -->|"kind: pipe"| 39
-  40 -->|"kind: transformCallee"| 38
-  41 -->|"kind: transformArg"| 38
-  39 -->|"kind: yieldable"| 35
+  41 -->|"kind: yieldable"| 35
+  38 -->|"kind: yieldable"| 35

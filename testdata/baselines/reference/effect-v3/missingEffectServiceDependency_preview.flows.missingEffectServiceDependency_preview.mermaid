@@ -1,3 +1,15 @@
 flowchart TB
   0[/"type: Class#lt;Db, #quot;Db#quot;, #123; readonly succeed: #123; readonly ok: true; #125;; #125;#gt;<br/>node: Effect.Service#lt;Db#gt;#40;#41;#40;#quot;Db#quot;, #123; succeed: #123; ok: true #125; #125;#41;"/]
   1[/"type: Class#lt;Repo, #quot;Repo#quot;, #123; readonly effect: Effect#lt;#123; all: Effect#lt;number#91;#93;, never, never#gt;; #125;, never, Db#gt;; #125;#gt;<br/>node: Effect.Service#lt;Repo#gt;#40;#41;#40;#quot;Repo#quot;, #123;#92;n  effect: Effect.gen#40;function*#40;#41; #123;#92;n    yield* Db#92;n    return #123; all: Effect.succeed#40;#91;#93; as Array#lt;number#gt;#41; #125;#92;n  #125;#41;#92;n#125;#41;"/]
+  2((("type: Effect#lt;#123; all: Effect#lt;number#91;#93;, never, never#gt;; #125;, never, Db#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    yield* Db#92;n    return #123; all: Effect.succeed#40;#91;#93; as Array#lt;number#gt;#41; #125;#92;n  #125;#41;")))
+  3[/"type: #123; all: Effect#lt;number#91;#93;, never, never#gt;; #125;<br/>node: #123; all: Effect.succeed#40;#91;#93; as Array#lt;number#gt;#41; #125;"/]
+  4[/"type: number#91;#93;<br/>node: #91;#93; as Array#lt;number#gt;"/]
+  5["type: Effect#lt;number#91;#93;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  6[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  7[/"type: typeof Db<br/>node: Db"/]
+  4 -->|"kind: pipe"| 5
+  6 -->|"kind: transformCallee"| 5
+  5 -->|"kind: usedBy"| 3
+  3 -->|"kind: potentialReturn"| 2
+  7 -->|"kind: yieldable"| 2
+  2 -->|"kind: usedBy"| 1

@@ -1,22 +1,32 @@
 flowchart TB
   0[/"type: number<br/>node: setTimeout#40;#40;#41; =#gt; #123;#125;, 100#41;"/]
-  1[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; setInterval#40;#40;#41; =#gt; #123;#125;, 100#41;"]]
-  2[/"type: number<br/>node: setInterval#40;#40;#41; =#gt; #123;#125;, 100#41;"/]
-  3[/"type: #40;handler: TimerHandler, timeout?: number #124; undefined, ...arguments: any#91;#93;#41; =#gt; number<br/>node: setTimeout"/]
-  4[/"type: number<br/>node: later#40;#40;#41; =#gt; #123;#125;, 100#41;"/]
-  5((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  return setTimeout#40;#40;#41; =#gt; #123;#125;, 100#41;#92;n#125;#41;")))
-  6[/"type: number<br/>node: setTimeout#40;#40;#41; =#gt; #123;#125;, 100#41;"/]
-  7((("type: Effect#lt;#40;#41; =#gt; number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const fn = #40;#41; =#gt; setInterval#40;#40;#41; =#gt; #123;#125;, 100#41;#92;n  return fn#92;n#125;#41;")))
-  8[/"type: #40;#41; =#gt; number<br/>node: fn"/]
-  9[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; setInterval#40;#40;#41; =#gt; #123;#125;, 100#41;"]]
-  10[/"type: number<br/>node: setInterval#40;#40;#41; =#gt; #123;#125;, 100#41;"/]
-  11[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; #123;#92;n  const setTimeout = #40;#41; =#gt; 0#92;n  return setTimeout#40;#41;#92;n#125;"]]
-  12[/"type: number<br/>node: setTimeout#40;#41;"/]
-  13[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; 0"]]
-  14[/"type: 0<br/>node: 0"/]
-  2 -->|"kind: potentialReturn"| 1
-  6 -->|"kind: potentialReturn"| 5
-  8 -->|"kind: potentialReturn"| 7
-  10 -->|"kind: potentialReturn"| 9
+  1[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#125;"]]
+  2[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; setInterval#40;#40;#41; =#gt; #123;#125;, 100#41;"]]
+  3[/"type: number<br/>node: setInterval#40;#40;#41; =#gt; #123;#125;, 100#41;"/]
+  4[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#125;"]]
+  5[/"type: #40;handler: TimerHandler, timeout?: number #124; undefined, ...arguments: any#91;#93;#41; =#gt; number<br/>node: setTimeout"/]
+  6[/"type: number<br/>node: later#40;#40;#41; =#gt; #123;#125;, 100#41;"/]
+  7[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#125;"]]
+  8((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  return setTimeout#40;#40;#41; =#gt; #123;#125;, 100#41;#92;n#125;#41;")))
+  9[/"type: number<br/>node: setTimeout#40;#40;#41; =#gt; #123;#125;, 100#41;"/]
+  10[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#125;"]]
+  11((("type: Effect#lt;#40;#41; =#gt; number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const fn = #40;#41; =#gt; setInterval#40;#40;#41; =#gt; #123;#125;, 100#41;#92;n  return fn#92;n#125;#41;")))
+  12[/"type: #40;#41; =#gt; number<br/>node: fn"/]
+  13[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; setInterval#40;#40;#41; =#gt; #123;#125;, 100#41;"]]
+  14[/"type: number<br/>node: setInterval#40;#40;#41; =#gt; #123;#125;, 100#41;"/]
+  15[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#125;"]]
+  16[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; #123;#92;n  const setTimeout = #40;#41; =#gt; 0#92;n  return setTimeout#40;#41;#92;n#125;"]]
+  17[/"type: number<br/>node: setTimeout#40;#41;"/]
+  18[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; 0"]]
+  19[/"type: 0<br/>node: 0"/]
+  1 -->|"kind: usedBy"| 0
+  4 -->|"kind: usedBy"| 3
+  3 -->|"kind: potentialReturn"| 2
+  7 -->|"kind: usedBy"| 6
+  10 -->|"kind: usedBy"| 9
+  9 -->|"kind: potentialReturn"| 8
   12 -->|"kind: potentialReturn"| 11
+  15 -->|"kind: usedBy"| 14
   14 -->|"kind: potentialReturn"| 13
+  17 -->|"kind: potentialReturn"| 16
+  19 -->|"kind: potentialReturn"| 18

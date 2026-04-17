@@ -18,9 +18,10 @@ flowchart TB
   16[/"type: 3<br/>node: 3"/]
   17[/"type: 4<br/>node: 4"/]
   18[/"type: 5<br/>node: 5"/]
-  4 -->|"kind: potentialReturn"| 3
   5 -->|"kind: pipe"| 6
   7 -->|"kind: transformCallee"| 6
+  6 -->|"kind: usedBy"| 4
+  4 -->|"kind: potentialReturn"| 3
   6 -->|"kind: yieldable"| 3
   3 -->|"kind: potentialReturn"| 2
   11 -->|"kind: pipe"| 12

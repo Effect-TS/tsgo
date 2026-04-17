@@ -1,12 +1,30 @@
 flowchart TB
   0[/"type: Class#lt;Valid, Struct#lt;#123; readonly a: Number; #125;#gt;, #123;#125;#gt;<br/>node: Schema.Class#lt;Valid#gt;#40;#quot;Valid#quot;#41;#40;#123;#92;n  a: Schema.Number#92;n#125;#41;"/]
-  1[/"type: Class#lt;Valid2, Struct#lt;#123; readonly a: Number; #125;#gt;, #123;#125;#gt;<br/>node: Schema.Class#lt;Valid2#gt;#40;#quot;Valid#quot;#41;#40;#123;#92;n  a: Schema.Number#92;n#125;#41;"/]
-  2[["type: #40;#41; =#gt; number<br/>node: otherMethod#40;#41; #123;#92;n    return this.a#92;n  #125;"]]
-  3[/"type: number<br/>node: this.a"/]
-  4[/"type: typeof BaseClass<br/>node: BaseClass"/]
-  5[["type: any<br/>node: constructor#40;#41; #123;#92;n    super#40;#41;#92;n  #125;"]]
-  6[/"type: void<br/>node: super#40;#41;"/]
-  7[/"type: Class#lt;InvalidBecauseOfConstructor, Struct#lt;#123; readonly a: Number; #125;#gt;, #123;#125;#gt;<br/>node: Schema.Class#lt;InvalidBecauseOfConstructor#gt;#40;#quot;InvalidBecauseOfConstructor#quot;#41;#40;#123;#92;n    a: Schema.Number#92;n  #125;#41;"/]
-  8[["type: any<br/>node: constructor#40;#41; #123;#92;n    super#40;#123; a: 42 #125;#41;#92;n  #125;"]]
-  9[/"type: void<br/>node: super#40;#123; a: 42 #125;#41;"/]
-  3 -->|"kind: potentialReturn"| 2
+  1[/"type: #quot;Valid#quot;<br/>node: #quot;Valid#quot;"/]
+  2["type: #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;Valid, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: Class#lt;Valid, Struct#lt;Fields#gt;, #123;#125;#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;Valid, readonly #91;S#93;#gt; #124; undefined#41;: Class#lt;Valid, S, #123;#125;#gt;; #125;<br/>callee: Schema.Class<br/>args: #91;#93;"]
+  3[/"type: #lt;Self = never, Brand = #123;#125;#gt;#40;identifier: string#41; =#gt; #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;Self, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.Class#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, Struct#lt;Fields#gt;, Brand#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;Self, readonly #91;S#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.Class#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, S, Brand#gt;; #125;<br/>node: Schema.Class"/]
+  4[/"type: Class#lt;Valid2, Struct#lt;#123; readonly a: Number; #125;#gt;, #123;#125;#gt;<br/>node: Schema.Class#lt;Valid2#gt;#40;#quot;Valid#quot;#41;#40;#123;#92;n  a: Schema.Number#92;n#125;#41;"/]
+  5[/"type: #quot;Valid#quot;<br/>node: #quot;Valid#quot;"/]
+  6["type: #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;Valid2, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: Class#lt;Valid2, Struct#lt;Fields#gt;, #123;#125;#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;Valid2, readonly #91;S#93;#gt; #124; undefined#41;: Class#lt;Valid2, S, #123;#125;#gt;; #125;<br/>callee: Schema.Class<br/>args: #91;#93;"]
+  7[/"type: #lt;Self = never, Brand = #123;#125;#gt;#40;identifier: string#41; =#gt; #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;Self, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.Class#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, Struct#lt;Fields#gt;, Brand#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;Self, readonly #91;S#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.Class#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, S, Brand#gt;; #125;<br/>node: Schema.Class"/]
+  8[["type: #40;#41; =#gt; number<br/>node: otherMethod#40;#41; #123;#92;n    return this.a#92;n  #125;"]]
+  9[/"type: number<br/>node: this.a"/]
+  10[/"type: typeof BaseClass<br/>node: BaseClass"/]
+  11[["type: any<br/>node: constructor#40;#41; #123;#92;n    super#40;#41;#92;n  #125;"]]
+  12[/"type: void<br/>node: super#40;#41;"/]
+  13[/"type: Class#lt;InvalidBecauseOfConstructor, Struct#lt;#123; readonly a: Number; #125;#gt;, #123;#125;#gt;<br/>node: Schema.Class#lt;InvalidBecauseOfConstructor#gt;#40;#quot;InvalidBecauseOfConstructor#quot;#41;#40;#123;#92;n    a: Schema.Number#92;n  #125;#41;"/]
+  14[/"type: #quot;InvalidBecauseOfConstructor#quot;<br/>node: #quot;InvalidBecauseOfConstructor#quot;"/]
+  15["type: #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;InvalidBecauseOfConstructor, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: Class#lt;InvalidBecauseOfConstructor, Struct#lt;Fields#gt;, #123;#125;#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;InvalidBecauseOfConstructor, readonly #91;S#93;#gt; #124; undefined#41;: Class#lt;InvalidBecauseOfConstructor, S, #123;#125;#gt;; #125;<br/>callee: Schema.Class<br/>args: #91;#93;"]
+  16[/"type: #lt;Self = never, Brand = #123;#125;#gt;#40;identifier: string#41; =#gt; #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;Self, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.Class#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, Struct#lt;Fields#gt;, Brand#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;Self, readonly #91;S#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.Class#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, S, Brand#gt;; #125;<br/>node: Schema.Class"/]
+  17[["type: any<br/>node: constructor#40;#41; #123;#92;n    super#40;#123; a: 42 #125;#41;#92;n  #125;"]]
+  18[/"type: void<br/>node: super#40;#123; a: 42 #125;#41;"/]
+  1 -->|"kind: pipe"| 2
+  3 -->|"kind: transformCallee"| 2
+  2 -->|"kind: usedBy"| 0
+  5 -->|"kind: pipe"| 6
+  7 -->|"kind: transformCallee"| 6
+  6 -->|"kind: usedBy"| 4
+  9 -->|"kind: potentialReturn"| 8
+  14 -->|"kind: pipe"| 15
+  16 -->|"kind: transformCallee"| 15
+  15 -->|"kind: usedBy"| 13

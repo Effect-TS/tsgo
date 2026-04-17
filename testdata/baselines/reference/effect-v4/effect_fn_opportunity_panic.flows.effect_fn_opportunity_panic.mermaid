@@ -1,93 +1,205 @@
 flowchart TB
   0[/"type: Class#lt;Todo, Struct#lt;#123; readonly userId: Number; readonly id: Number; readonly title: String; readonly completed: Boolean; #125;#gt;, #123;#125;#gt;<br/>node: Schema.Class#lt;Todo#gt;#40;#quot;Todo#quot;#41;#40;#123;#92;n  userId: Schema.Number,#92;n  id: Schema.Number,#92;n  title: Schema.String,#92;n  completed: Schema.Boolean#92;n#125;#41;"/]
-  1[/"type: Class#lt;User, Struct#lt;#123; readonly id: Number; readonly name: String; readonly email: String; #125;#gt;, #123;#125;#gt;<br/>node: Schema.Class#lt;User#gt;#40;#quot;User#quot;#41;#40;#123;#92;n  id: Schema.Number,#92;n  name: Schema.String,#92;n  email: Schema.String#92;n#125;#41;"/]
-  2[/"type: #quot;RequestError#quot;<br/>node: #quot;RequestError#quot;"/]
-  3["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;RequestError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
-  4[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
-  5[/"type: #quot;InvalidStatusError#quot;<br/>node: #quot;InvalidStatusError#quot;"/]
-  6["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;InvalidStatusError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
-  7[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
-  8[/"type: #quot;DecodeError#quot;<br/>node: #quot;DecodeError#quot;"/]
-  9["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;DecodeError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  1[/"type: #quot;Todo#quot;<br/>node: #quot;Todo#quot;"/]
+  2["type: #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;Todo, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: Class#lt;Todo, Struct#lt;Fields#gt;, #123;#125;#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;Todo, readonly #91;S#93;#gt; #124; undefined#41;: Class#lt;Todo, S, #123;#125;#gt;; #125;<br/>callee: Schema.Class<br/>args: #91;#93;"]
+  3[/"type: #lt;Self = never, Brand = #123;#125;#gt;#40;identifier: string#41; =#gt; #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;Self, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.Class#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, Struct#lt;Fields#gt;, Brand#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;Self, readonly #91;S#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.Class#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, S, Brand#gt;; #125;<br/>node: Schema.Class"/]
+  4[/"type: Class#lt;User, Struct#lt;#123; readonly id: Number; readonly name: String; readonly email: String; #125;#gt;, #123;#125;#gt;<br/>node: Schema.Class#lt;User#gt;#40;#quot;User#quot;#41;#40;#123;#92;n  id: Schema.Number,#92;n  name: Schema.String,#92;n  email: Schema.String#92;n#125;#41;"/]
+  5[/"type: #quot;User#quot;<br/>node: #quot;User#quot;"/]
+  6["type: #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;User, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: Class#lt;User, Struct#lt;Fields#gt;, #123;#125;#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;User, readonly #91;S#93;#gt; #124; undefined#41;: Class#lt;User, S, #123;#125;#gt;; #125;<br/>callee: Schema.Class<br/>args: #91;#93;"]
+  7[/"type: #lt;Self = never, Brand = #123;#125;#gt;#40;identifier: string#41; =#gt; #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;Self, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.Class#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, Struct#lt;Fields#gt;, Brand#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;Self, readonly #91;S#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.Class#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, S, Brand#gt;; #125;<br/>node: Schema.Class"/]
+  8[/"type: #quot;RequestError#quot;<br/>node: #quot;RequestError#quot;"/]
+  9["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;RequestError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
   10[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
-  11[/"type: ServiceClass#lt;ApiConfig, #quot;ApiConfig#quot;, #123; readonly baseUrl: string; #125;#gt;<br/>node: Context.Service#lt;ApiConfig, #123;#92;n  readonly baseUrl: string#92;n#125;#gt;#40;#41;#40;#quot;ApiConfig#quot;#41;"/]
-  12[/"type: #123; baseUrl: string; #125;<br/>node: #123;#92;n  baseUrl: #quot;https://jsonplaceholder.typicode.com#quot;#92;n#125;"/]
-  13["type: Layer#lt;ApiConfig, never, never#gt;<br/>callee: Layer.succeed<br/>args: #91;ApiConfig#93;"]
-  14[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #40;resource: S#41; =#gt; Layer#lt;I, never, never#gt;; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;, resource: NoInfer#lt;S#gt;#41;: Layer#lt;I, never, never#gt;; #125;<br/>node: Layer.succeed"/]
-  15[/"type: typeof ApiConfig<br/>node: ApiConfig"/]
-  16[/"type: ServiceClass#lt;JsonPlaceholder, #quot;JsonPlaceholder#quot;, #123; readonly getTodo: #40;id: number#41; =#gt; Effect#lt;Todo, JsonPlaceholderError, never#gt;; readonly getUser: #40;id: number#41; =#gt; Effect#lt;User, JsonPlaceholderError, never#gt;; #125;#gt;<br/>node: Context.Service#lt;JsonPlaceholder, #123;#92;n  readonly getTodo: #40;id: number#41; =#gt; Effect.Effect#lt;Todo, JsonPlaceholderError#gt;#92;n  readonly getUser: #40;id: number#41; =#gt; Effect.Effect#lt;User, JsonPlaceholderError#gt;#92;n#125;#gt;#40;#41;#40;#quot;JsonPlaceholder#quot;#41;"/]
-  17((("type: Effect#lt;#123; getTodo: #40;id: number#41; =#gt; Effect#lt;Todo, DecodeError #124; InvalidStatusError #124; RequestError, never#gt;; getUser: #40;id: number#41; =#gt; Effect#lt;User, DecodeError #124; InvalidStatusError #124; RequestError, never#gt;; #125;, never, ApiConfig #124; HttpClient#gt;<br/>node: Effect.gen#40;function* #40;#41; #123;#92;n    const config = yield* ApiConfig#92;n    const client = #40;yield* HttpClient.HttpClient#41;.pipe#40;#92;n      HttpClient.mapRequest#40;#92;n        flow#40;#92;n          HttpClientRequest.prependUrl#40;config.baseUrl#41;,#92;n          HttpClientRequest.acceptJson#92;n        #41;#92;n      #41;,#92;n      HttpClient.filterStatusOk#92;n    #41;#92;n#92;n    return #123;#92;n      getTodo: #40;id: number#41; =#gt; #123;#92;n        const path = `/todos/$#123;id#125;`#92;n        const url = new URL#40;path, config.baseUrl#41;.toString#40;#41;#92;n#92;n        return client.get#40;path#41;.pipe#40;#92;n          Effect.flatMap#40;HttpClientResponse.schemaBodyJson#40;Todo#41;#41;,#92;n          Effect.mapError#40;#40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;#41;#92;n        #41;#92;n      #125;,#92;n      getUser: #40;id: number#41; =#gt; #123;#92;n        const path = `/users/$#123;id#125;`#92;n        const url = new URL#40;path, config.baseUrl#41;.toString#40;#41;#92;n#92;n        return client.get#40;path#41;.pipe#40;#92;n          Effect.flatMap#40;HttpClientResponse.schemaBodyJson#40;User#41;#41;,#92;n          Effect.mapError#40;#40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;#41;#92;n        #41;#92;n      #125;#92;n    #125;#92;n  #125;#41;")))
-  18[/"type: #123; getTodo: #40;id: number#41; =#gt; Effect#lt;Todo, DecodeError #124; InvalidStatusError #124; RequestError, never#gt;; getUser: #40;id: number#41; =#gt; Effect#lt;User, DecodeError #124; InvalidStatusError #124; RequestError, never#gt;; #125;<br/>node: #123;#92;n      getTodo: #40;id: number#41; =#gt; #123;#92;n        const path = `/todos/$#123;id#125;`#92;n        const url = new URL#40;path, config.baseUrl#41;.toString#40;#41;#92;n#92;n        return client.get#40;path#41;.pipe#40;#92;n          Effect.flatMap#40;HttpClientResponse.schemaBodyJson#40;Todo#41;#41;,#92;n          Effect.mapError#40;#40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;#41;#92;n        #41;#92;n      #125;,#92;n      getUser: #40;id: number#41; =#gt; #123;#92;n        const path = `/users/$#123;id#125;`#92;n        const url = new URL#40;path, config.baseUrl#41;.toString#40;#41;#92;n#92;n        return client.get#40;path#41;.pipe#40;#92;n          Effect.flatMap#40;HttpClientResponse.schemaBodyJson#40;User#41;#41;,#92;n          Effect.mapError#40;#40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;#41;#92;n        #41;#92;n      #125;#92;n    #125;"/]
-  19[/"type: typeof ApiConfig<br/>node: ApiConfig"/]
-  20[/"type: Service#lt;HttpClient, HttpClient#gt;<br/>node: HttpClient.HttpClient"/]
-  21[/"type: HttpClient<br/>node: #40;yield* HttpClient.HttpClient#41;"/]
-  22["type: With#lt;HttpClientError, never#gt;<br/>callee: HttpClient.mapRequest<br/>args: #91;flow#40;#92;n          HttpClientRequest.prependUrl#40;config.baseUrl#41;,#92;n          HttpClientRequest.acceptJson#92;n        #41;#93;"]
-  23[/"type: #123; #40;f: #40;a: HttpClientRequest#41; =#gt; HttpClientRequest#41;: #lt;E, R#gt;#40;self: With#lt;E, R#gt;#41; =#gt; With#lt;E, R#gt;; #lt;E, R#gt;#40;self: With#lt;E, R#gt;, f: #40;a: HttpClientRequest#41; =#gt; HttpClientRequest#41;: With#lt;E, R#gt;; #125;<br/>node: HttpClient.mapRequest"/]
-  24[/"type: #40;self: HttpClientRequest#41; =#gt; HttpClientRequest<br/>node: flow#40;#92;n          HttpClientRequest.prependUrl#40;config.baseUrl#41;,#92;n          HttpClientRequest.acceptJson#92;n        #41;"/]
-  25["type: With#lt;HttpClientError, never#gt;<br/>callee: HttpClient.filterStatusOk<br/>args: #91;#93;"]
-  26["type: Layer#lt;JsonPlaceholder, never, ApiConfig #124; HttpClient#gt;<br/>callee: Layer.effect<br/>args: #91;JsonPlaceholder#93;"]
-  27[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
-  28[/"type: typeof JsonPlaceholder<br/>node: JsonPlaceholder"/]
-  29["type: Layer#lt;JsonPlaceholder, never, never#gt;<br/>callee: Layer.provide<br/>args: #91;Layer.mergeAll#40;ApiConfigLive, FetchHttpClient.layer#41;#93;"]
-  30[/"type: #123; #lt;RIn, E, ROut#gt;#40;that: Layer#lt;ROut, E, RIn#gt;#41;: #lt;RIn2, E2, ROut2#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;#41; =#gt; Layer#lt;ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;const Layers extends #91;Any, ...Array#lt;Any#gt;#93;#gt;#40;that: Layers#41;: #lt;A, E, R#gt;#40;self: Layer#lt;A, E, R#gt;#41; =#gt; Layer#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;RIn2, E2, ROut2, RIn, E, ROut#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;, that: Layer#lt;ROut, E, RIn#gt;#41;: Layer#lt;ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;A, E, R, const Layers extends #91;Any, ...Array#lt;Any#gt;#93;#gt;#40;self: Layer#lt;A, E, R#gt;, that: Layers#41;: Layer#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #125;<br/>node: Layer.provide"/]
-  31[/"type: Layer#lt;ApiConfig #124; HttpClient, never, never#gt;<br/>node: Layer.mergeAll#40;ApiConfigLive, FetchHttpClient.layer#41;"/]
-  32((("type: Effect#lt;void, JsonPlaceholderError, JsonPlaceholder#gt;<br/>node: Effect.gen#40;function* #40;#41; #123;#92;n  const api = yield* JsonPlaceholder#92;n  const #91;todo, user#93; = yield* Effect.all#40;#91;api.getTodo#40;1#41;, api.getUser#40;1#41;#93;#41;#92;n#92;n  yield* Effect.log#40;`Todo #35;$#123;todo.id#125;: $#123;todo.title#125;`#41;#92;n  yield* Effect.log#40;`Assigned to: $#123;user.name#125; #lt;$#123;user.email#125;#gt;`#41;#92;n  yield* Effect.log#40;`Completed: $#123;todo.completed#125;`#41;#92;n#125;#41;")))
-  33[/"type: typeof JsonPlaceholder<br/>node: JsonPlaceholder"/]
-  34[/"type: Effect#lt;#91;Todo, User#93;, JsonPlaceholderError, never#gt;<br/>node: Effect.all#40;#91;api.getTodo#40;1#41;, api.getUser#40;1#41;#93;#41;"/]
-  35[/"type: string<br/>node: `Todo #35;$#123;todo.id#125;: $#123;todo.title#125;`"/]
-  36["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
-  37[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
-  38[/"type: string<br/>node: `Assigned to: $#123;user.name#125; #lt;$#123;user.email#125;#gt;`"/]
-  39["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
-  40[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
-  41[/"type: string<br/>node: `Completed: $#123;todo.completed#125;`"/]
-  42["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
-  43[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
-  44["type: Effect#lt;void, JsonPlaceholderError, never#gt;<br/>callee: Effect.provide<br/>args: #91;JsonPlaceholderLive#93;"]
-  45[/"type: #123; #lt;const Layers extends #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;layers: Layers, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;ROut, E2, RIn#gt;#40;layer: Layer#lt;ROut, E2, RIn#gt;, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;R2#gt;#40;context: Context#lt;R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #lt;A, E, R, const Layers extends #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;self: Effect#lt;A, E, R#gt;, layers: Layers, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: Effect#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;A, E, R, ROut, E2, RIn#gt;#40;self: Effect#lt;A, E, R#gt;, layer: Layer#lt;ROut, E2, RIn#gt;, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;A, E, R, R2#gt;#40;self: Effect#lt;A, E, R#gt;, context: Context#lt;R2#gt;#41;: Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #125;<br/>node: Effect.provide"/]
-  46[/"type: Layer#lt;JsonPlaceholder, never, never#gt;<br/>node: JsonPlaceholderLive"/]
-  47["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.catchTags<br/>args: #91;#123;#92;n    RequestError: #40;error#41; =#gt;#92;n      Effect.log#40;`Request failed for $#123;error.url#125;: $#123;String#40;error.cause#41;#125;`#41;,#92;n    InvalidStatusError: #40;error#41; =#gt;#92;n      Effect.log#40;`Request to $#123;error.url#125; returned status $#123;error.status#125;`#41;,#92;n    DecodeError: #40;error#41; =#gt;#92;n      Effect.log#40;`Could not decode JSON from $#123;error.url#125;: $#123;String#40;error.cause#41;#125;`#41;#92;n  #125;#93;"]
-  48[/"type: #123; #lt;E, Cases extends #123; #91;K in Extract#lt;E, #123; _tag: string; #125;#gt;#91;#quot;_tag#quot;#93;#93;+?: #40;#40;error: Extract#lt;E, #123; _tag: K; #125;#gt;#41; =#gt; Effect#lt;any, any, any#gt;#41;; #125; #amp; #40;unknown extends E ? #123;#125; : #123; #91;K in Exclude#lt;keyof Cases, Extract#lt;E, #123; _tag: string; #125;#gt;#91;#quot;_tag#quot;#93;#gt;#93;: never; #125;#41;, A2 = never, E2 = Exclude#lt;E, #123; _tag: keyof Cases; #125;#gt;, R2 = never#gt;#40;cases: Cases, orElse?: #40;#40;e: Exclude#lt;E, #123; _tag: keyof Cases; #125;#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2 #124; #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;infer A, any, any#gt; ? A : never; #125;#91;keyof Cases#93;, E2 #124; #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;any, infer E, any#gt; ? E : never; #125;#91;keyof Cases#93;, R #124; R2 #124; #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;any, any, infer R#gt; ? R : never; #125;#91;keyof Cases#93;#gt;; #lt;R, E, A, Cases extends #123; #91;K in Extract#lt;E, #123; _tag: string; #125;#gt;#91;#quot;_tag#quot;#93;#93;+?: #40;#40;error: Extract#lt;E, #123; _tag: K; #125;#gt;#41; =#gt; Effect#lt;any, any, any#gt;#41;; #125; #amp; #40;unknown extends E ? #123;#125; : #123; #91;K in Exclude#lt;keyof Cases, Extract#lt;E, #123; _tag: string; #125;#gt;#91;#quot;_tag#quot;#93;#gt;#93;: never; #125;#41;, A2 = never, E2 = Exclude#lt;E, #123; _tag: keyof Cases; #125;#gt;, R2 = never#gt;#40;self: Effect#lt;A, E, R#gt;, cases: Cases, orElse?: #40;#40;e: Exclude#lt;E, #123; _tag: keyof Cases; #125;#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: Effect#lt;A #124; A2 #124; #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;infer A, any, any#gt; ? A : never; #125;#91;keyof Cases#93;, E2 #124; #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;any, infer E, any#gt; ? E : never; #125;#91;keyof Cases#93;, R #124; R2 #124; #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;any, any, infer R#gt; ? R : never; #125;#91;keyof Cases#93;#gt;; #125;<br/>node: Effect.catchTags"/]
-  49[/"type: #123; RequestError: #40;error: RequestError#41; =#gt; Effect#lt;void, never, never#gt;; InvalidStatusError: #40;error: InvalidStatusError#41; =#gt; Effect#lt;void, never, never#gt;; DecodeError: #40;error: DecodeError#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #123;#92;n    RequestError: #40;error#41; =#gt;#92;n      Effect.log#40;`Request failed for $#123;error.url#125;: $#123;String#40;error.cause#41;#125;`#41;,#92;n    InvalidStatusError: #40;error#41; =#gt;#92;n      Effect.log#40;`Request to $#123;error.url#125; returned status $#123;error.status#125;`#41;,#92;n    DecodeError: #40;error#41; =#gt;#92;n      Effect.log#40;`Could not decode JSON from $#123;error.url#125;: $#123;String#40;error.cause#41;#125;`#41;#92;n  #125;"/]
-  50[/"type: Effect#lt;void, never, never#gt;<br/>node: program"/]
-  51["type: Promise#lt;void#gt;<br/>callee: Effect.runPromise<br/>args: #91;#93;"]
-  2 -->|"kind: pipe"| 3
-  4 -->|"kind: transformCallee"| 3
+  11[/"type: #quot;InvalidStatusError#quot;<br/>node: #quot;InvalidStatusError#quot;"/]
+  12["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;InvalidStatusError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  13[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  14[/"type: #quot;DecodeError#quot;<br/>node: #quot;DecodeError#quot;"/]
+  15["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;DecodeError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  16[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  17[/"type: ServiceClass#lt;ApiConfig, #quot;ApiConfig#quot;, #123; readonly baseUrl: string; #125;#gt;<br/>node: Context.Service#lt;ApiConfig, #123;#92;n  readonly baseUrl: string#92;n#125;#gt;#40;#41;#40;#quot;ApiConfig#quot;#41;"/]
+  18[/"type: #123; baseUrl: string; #125;<br/>node: #123;#92;n  baseUrl: #quot;https://jsonplaceholder.typicode.com#quot;#92;n#125;"/]
+  19["type: Layer#lt;ApiConfig, never, never#gt;<br/>callee: Layer.succeed<br/>args: #91;ApiConfig#93;"]
+  20[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #40;resource: S#41; =#gt; Layer#lt;I, never, never#gt;; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;, resource: NoInfer#lt;S#gt;#41;: Layer#lt;I, never, never#gt;; #125;<br/>node: Layer.succeed"/]
+  21[/"type: typeof ApiConfig<br/>node: ApiConfig"/]
+  22[/"type: ServiceClass#lt;JsonPlaceholder, #quot;JsonPlaceholder#quot;, #123; readonly getTodo: #40;id: number#41; =#gt; Effect#lt;Todo, JsonPlaceholderError, never#gt;; readonly getUser: #40;id: number#41; =#gt; Effect#lt;User, JsonPlaceholderError, never#gt;; #125;#gt;<br/>node: Context.Service#lt;JsonPlaceholder, #123;#92;n  readonly getTodo: #40;id: number#41; =#gt; Effect.Effect#lt;Todo, JsonPlaceholderError#gt;#92;n  readonly getUser: #40;id: number#41; =#gt; Effect.Effect#lt;User, JsonPlaceholderError#gt;#92;n#125;#gt;#40;#41;#40;#quot;JsonPlaceholder#quot;#41;"/]
+  23((("type: Effect#lt;#123; getTodo: #40;id: number#41; =#gt; Effect#lt;Todo, DecodeError #124; InvalidStatusError #124; RequestError, never#gt;; getUser: #40;id: number#41; =#gt; Effect#lt;User, DecodeError #124; InvalidStatusError #124; RequestError, never#gt;; #125;, never, ApiConfig #124; HttpClient#gt;<br/>node: Effect.gen#40;function* #40;#41; #123;#92;n    const config = yield* ApiConfig#92;n    const client = #40;yield* HttpClient.HttpClient#41;.pipe#40;#92;n      HttpClient.mapRequest#40;#92;n        flow#40;#92;n          HttpClientRequest.prependUrl#40;config.baseUrl#41;,#92;n          HttpClientRequest.acceptJson#92;n        #41;#92;n      #41;,#92;n      HttpClient.filterStatusOk#92;n    #41;#92;n#92;n    return #123;#92;n      getTodo: #40;id: number#41; =#gt; #123;#92;n        const path = `/todos/$#123;id#125;`#92;n        const url = new URL#40;path, config.baseUrl#41;.toString#40;#41;#92;n#92;n        return client.get#40;path#41;.pipe#40;#92;n          Effect.flatMap#40;HttpClientResponse.schemaBodyJson#40;Todo#41;#41;,#92;n          Effect.mapError#40;#40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;#41;#92;n        #41;#92;n      #125;,#92;n      getUser: #40;id: number#41; =#gt; #123;#92;n        const path = `/users/$#123;id#125;`#92;n        const url = new URL#40;path, config.baseUrl#41;.toString#40;#41;#92;n#92;n        return client.get#40;path#41;.pipe#40;#92;n          Effect.flatMap#40;HttpClientResponse.schemaBodyJson#40;User#41;#41;,#92;n          Effect.mapError#40;#40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;#41;#92;n        #41;#92;n      #125;#92;n    #125;#92;n  #125;#41;")))
+  24[/"type: #123; getTodo: #40;id: number#41; =#gt; Effect#lt;Todo, DecodeError #124; InvalidStatusError #124; RequestError, never#gt;; getUser: #40;id: number#41; =#gt; Effect#lt;User, DecodeError #124; InvalidStatusError #124; RequestError, never#gt;; #125;<br/>node: #123;#92;n      getTodo: #40;id: number#41; =#gt; #123;#92;n        const path = `/todos/$#123;id#125;`#92;n        const url = new URL#40;path, config.baseUrl#41;.toString#40;#41;#92;n#92;n        return client.get#40;path#41;.pipe#40;#92;n          Effect.flatMap#40;HttpClientResponse.schemaBodyJson#40;Todo#41;#41;,#92;n          Effect.mapError#40;#40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;#41;#92;n        #41;#92;n      #125;,#92;n      getUser: #40;id: number#41; =#gt; #123;#92;n        const path = `/users/$#123;id#125;`#92;n        const url = new URL#40;path, config.baseUrl#41;.toString#40;#41;#92;n#92;n        return client.get#40;path#41;.pipe#40;#92;n          Effect.flatMap#40;HttpClientResponse.schemaBodyJson#40;User#41;#41;,#92;n          Effect.mapError#40;#40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;#41;#92;n        #41;#92;n      #125;#92;n    #125;"/]
+  25[["type: #40;id: number#41; =#gt; Effect#lt;Todo, DecodeError #124; InvalidStatusError #124; RequestError, never#gt;<br/>node: #40;id: number#41; =#gt; #123;#92;n        const path = `/todos/$#123;id#125;`#92;n        const url = new URL#40;path, config.baseUrl#41;.toString#40;#41;#92;n#92;n        return client.get#40;path#41;.pipe#40;#92;n          Effect.flatMap#40;HttpClientResponse.schemaBodyJson#40;Todo#41;#41;,#92;n          Effect.mapError#40;#40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;#41;#92;n        #41;#92;n      #125;"]]
+  26[/"type: Effect#lt;HttpClientResponse, HttpClientError, never#gt;<br/>node: client.get#40;path#41;"/]
+  27["type: Effect#lt;Todo, HttpClientError #124; SchemaError, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;HttpClientResponse.schemaBodyJson#40;Todo#41;#93;"]
+  28[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  29[/"type: #lt;E#gt;#40;self: HttpIncomingMessage#lt;E#gt;#41; =#gt; Effect#lt;Todo, E #124; SchemaError, never#gt;<br/>node: HttpClientResponse.schemaBodyJson#40;Todo#41;"/]
+  30["type: Effect#lt;Todo, DecodeError #124; InvalidStatusError #124; RequestError, never#gt;<br/>callee: Effect.mapError<br/>args: #91;#40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;#93;"]
+  31[/"type: #123; #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E2, R#gt;; #lt;A, E, R, E2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; E2#41;: Effect#lt;A, E2, R#gt;; #125;<br/>node: Effect.mapError"/]
+  32[["type: #40;cause: HttpClientError #124; SchemaError#41; =#gt; DecodeError #124; InvalidStatusError #124; RequestError<br/>node: #40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;"]]
+  33[/"type: InvalidStatusError<br/>node: new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;"/]
+  34[/"type: RequestError<br/>node: new RequestError#40;#123; url, cause #125;#41;"/]
+  35[/"type: DecodeError<br/>node: new DecodeError#40;#123; url, cause #125;#41;"/]
+  36[/"type: boolean<br/>node: cause._tag === #quot;HttpClientError#quot;"/]
+  37[/"type: boolean<br/>node: cause.reason._tag === #quot;StatusCodeError#quot;"/]
+  38[/"type: string<br/>node: `/todos/$#123;id#125;`"/]
+  39[/"type: string<br/>node: new URL#40;path, config.baseUrl#41;.toString#40;#41;"/]
+  40[["type: #40;id: number#41; =#gt; Effect#lt;User, DecodeError #124; InvalidStatusError #124; RequestError, never#gt;<br/>node: #40;id: number#41; =#gt; #123;#92;n        const path = `/users/$#123;id#125;`#92;n        const url = new URL#40;path, config.baseUrl#41;.toString#40;#41;#92;n#92;n        return client.get#40;path#41;.pipe#40;#92;n          Effect.flatMap#40;HttpClientResponse.schemaBodyJson#40;User#41;#41;,#92;n          Effect.mapError#40;#40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;#41;#92;n        #41;#92;n      #125;"]]
+  41[/"type: Effect#lt;HttpClientResponse, HttpClientError, never#gt;<br/>node: client.get#40;path#41;"/]
+  42["type: Effect#lt;User, HttpClientError #124; SchemaError, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;HttpClientResponse.schemaBodyJson#40;User#41;#93;"]
+  43[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  44[/"type: #lt;E#gt;#40;self: HttpIncomingMessage#lt;E#gt;#41; =#gt; Effect#lt;User, E #124; SchemaError, never#gt;<br/>node: HttpClientResponse.schemaBodyJson#40;User#41;"/]
+  45["type: Effect#lt;User, DecodeError #124; InvalidStatusError #124; RequestError, never#gt;<br/>callee: Effect.mapError<br/>args: #91;#40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;#93;"]
+  46[/"type: #123; #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E2, R#gt;; #lt;A, E, R, E2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; E2#41;: Effect#lt;A, E2, R#gt;; #125;<br/>node: Effect.mapError"/]
+  47[["type: #40;cause: HttpClientError #124; SchemaError#41; =#gt; DecodeError #124; InvalidStatusError #124; RequestError<br/>node: #40;cause#41; =#gt; #123;#92;n            if #40;cause._tag === #quot;HttpClientError#quot;#41; #123;#92;n              if #40;cause.reason._tag === #quot;StatusCodeError#quot;#41; #123;#92;n                return new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;#92;n              #125;#92;n#92;n              return new RequestError#40;#123; url, cause #125;#41;#92;n            #125;#92;n#92;n            return new DecodeError#40;#123; url, cause #125;#41;#92;n          #125;"]]
+  48[/"type: InvalidStatusError<br/>node: new InvalidStatusError#40;#123;#92;n                  url,#92;n                  status: cause.reason.response.status#92;n                #125;#41;"/]
+  49[/"type: RequestError<br/>node: new RequestError#40;#123; url, cause #125;#41;"/]
+  50[/"type: DecodeError<br/>node: new DecodeError#40;#123; url, cause #125;#41;"/]
+  51[/"type: boolean<br/>node: cause._tag === #quot;HttpClientError#quot;"/]
+  52[/"type: boolean<br/>node: cause.reason._tag === #quot;StatusCodeError#quot;"/]
+  53[/"type: string<br/>node: `/users/$#123;id#125;`"/]
+  54[/"type: string<br/>node: new URL#40;path, config.baseUrl#41;.toString#40;#41;"/]
+  55[/"type: typeof ApiConfig<br/>node: ApiConfig"/]
+  56[/"type: Service#lt;HttpClient, HttpClient#gt;<br/>node: HttpClient.HttpClient"/]
+  57[/"type: HttpClient<br/>node: #40;yield* HttpClient.HttpClient#41;"/]
+  58["type: With#lt;HttpClientError, never#gt;<br/>callee: HttpClient.mapRequest<br/>args: #91;flow#40;#92;n          HttpClientRequest.prependUrl#40;config.baseUrl#41;,#92;n          HttpClientRequest.acceptJson#92;n        #41;#93;"]
+  59[/"type: #123; #40;f: #40;a: HttpClientRequest#41; =#gt; HttpClientRequest#41;: #lt;E, R#gt;#40;self: With#lt;E, R#gt;#41; =#gt; With#lt;E, R#gt;; #lt;E, R#gt;#40;self: With#lt;E, R#gt;, f: #40;a: HttpClientRequest#41; =#gt; HttpClientRequest#41;: With#lt;E, R#gt;; #125;<br/>node: HttpClient.mapRequest"/]
+  60[/"type: #40;self: HttpClientRequest#41; =#gt; HttpClientRequest<br/>node: flow#40;#92;n          HttpClientRequest.prependUrl#40;config.baseUrl#41;,#92;n          HttpClientRequest.acceptJson#92;n        #41;"/]
+  61["type: With#lt;HttpClientError, never#gt;<br/>callee: HttpClient.filterStatusOk<br/>args: #91;#93;"]
+  62["type: Layer#lt;JsonPlaceholder, never, ApiConfig #124; HttpClient#gt;<br/>callee: Layer.effect<br/>args: #91;JsonPlaceholder#93;"]
+  63[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
+  64[/"type: typeof JsonPlaceholder<br/>node: JsonPlaceholder"/]
+  65["type: Layer#lt;JsonPlaceholder, never, never#gt;<br/>callee: Layer.provide<br/>args: #91;Layer.mergeAll#40;ApiConfigLive, FetchHttpClient.layer#41;#93;"]
+  66[/"type: #123; #lt;RIn, E, ROut#gt;#40;that: Layer#lt;ROut, E, RIn#gt;#41;: #lt;RIn2, E2, ROut2#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;#41; =#gt; Layer#lt;ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;const Layers extends #91;Any, ...Array#lt;Any#gt;#93;#gt;#40;that: Layers#41;: #lt;A, E, R#gt;#40;self: Layer#lt;A, E, R#gt;#41; =#gt; Layer#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;RIn2, E2, ROut2, RIn, E, ROut#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;, that: Layer#lt;ROut, E, RIn#gt;#41;: Layer#lt;ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;A, E, R, const Layers extends #91;Any, ...Array#lt;Any#gt;#93;#gt;#40;self: Layer#lt;A, E, R#gt;, that: Layers#41;: Layer#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #125;<br/>node: Layer.provide"/]
+  67[/"type: Layer#lt;ApiConfig #124; HttpClient, never, never#gt;<br/>node: Layer.mergeAll#40;ApiConfigLive, FetchHttpClient.layer#41;"/]
+  68((("type: Effect#lt;void, JsonPlaceholderError, JsonPlaceholder#gt;<br/>node: Effect.gen#40;function* #40;#41; #123;#92;n  const api = yield* JsonPlaceholder#92;n  const #91;todo, user#93; = yield* Effect.all#40;#91;api.getTodo#40;1#41;, api.getUser#40;1#41;#93;#41;#92;n#92;n  yield* Effect.log#40;`Todo #35;$#123;todo.id#125;: $#123;todo.title#125;`#41;#92;n  yield* Effect.log#40;`Assigned to: $#123;user.name#125; #lt;$#123;user.email#125;#gt;`#41;#92;n  yield* Effect.log#40;`Completed: $#123;todo.completed#125;`#41;#92;n#125;#41;")))
+  69[/"type: typeof JsonPlaceholder<br/>node: JsonPlaceholder"/]
+  70[/"type: Effect#lt;#91;Todo, User#93;, JsonPlaceholderError, never#gt;<br/>node: Effect.all#40;#91;api.getTodo#40;1#41;, api.getUser#40;1#41;#93;#41;"/]
+  71[/"type: 1<br/>node: 1"/]
+  72["type: Effect#lt;Todo, JsonPlaceholderError, never#gt;<br/>callee: api.getTodo<br/>args: #91;#93;"]
+  73[/"type: #40;id: number#41; =#gt; Effect#lt;Todo, JsonPlaceholderError, never#gt;<br/>node: api.getTodo"/]
+  74[/"type: 1<br/>node: 1"/]
+  75["type: Effect#lt;User, JsonPlaceholderError, never#gt;<br/>callee: api.getUser<br/>args: #91;#93;"]
+  76[/"type: #40;id: number#41; =#gt; Effect#lt;User, JsonPlaceholderError, never#gt;<br/>node: api.getUser"/]
+  77[/"type: string<br/>node: `Todo #35;$#123;todo.id#125;: $#123;todo.title#125;`"/]
+  78["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  79[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  80[/"type: string<br/>node: `Assigned to: $#123;user.name#125; #lt;$#123;user.email#125;#gt;`"/]
+  81["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  82[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  83[/"type: string<br/>node: `Completed: $#123;todo.completed#125;`"/]
+  84["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  85[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  86["type: Effect#lt;void, JsonPlaceholderError, never#gt;<br/>callee: Effect.provide<br/>args: #91;JsonPlaceholderLive#93;"]
+  87[/"type: #123; #lt;const Layers extends #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;layers: Layers, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;ROut, E2, RIn#gt;#40;layer: Layer#lt;ROut, E2, RIn#gt;, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;R2#gt;#40;context: Context#lt;R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #lt;A, E, R, const Layers extends #91;Layer.Any, ...Array#lt;Layer.Any#gt;#93;#gt;#40;self: Effect#lt;A, E, R#gt;, layers: Layers, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: Effect#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;A, E, R, ROut, E2, RIn#gt;#40;self: Effect#lt;A, E, R#gt;, layer: Layer#lt;ROut, E2, RIn#gt;, options?: #123; readonly local?: boolean #124; undefined; #125; #124; undefined#41;: Effect#lt;A, E #124; E2, RIn #124; Exclude#lt;R, ROut#gt;#gt;; #lt;A, E, R, R2#gt;#40;self: Effect#lt;A, E, R#gt;, context: Context#lt;R2#gt;#41;: Effect#lt;A, E, Exclude#lt;R, R2#gt;#gt;; #125;<br/>node: Effect.provide"/]
+  88[/"type: Layer#lt;JsonPlaceholder, never, never#gt;<br/>node: JsonPlaceholderLive"/]
+  89["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.catchTags<br/>args: #91;#123;#92;n    RequestError: #40;error#41; =#gt;#92;n      Effect.log#40;`Request failed for $#123;error.url#125;: $#123;String#40;error.cause#41;#125;`#41;,#92;n    InvalidStatusError: #40;error#41; =#gt;#92;n      Effect.log#40;`Request to $#123;error.url#125; returned status $#123;error.status#125;`#41;,#92;n    DecodeError: #40;error#41; =#gt;#92;n      Effect.log#40;`Could not decode JSON from $#123;error.url#125;: $#123;String#40;error.cause#41;#125;`#41;#92;n  #125;#93;"]
+  90[/"type: #123; #lt;E, Cases extends #123; #91;K in Extract#lt;E, #123; _tag: string; #125;#gt;#91;#quot;_tag#quot;#93;#93;+?: #40;#40;error: Extract#lt;E, #123; _tag: K; #125;#gt;#41; =#gt; Effect#lt;any, any, any#gt;#41;; #125; #amp; #40;unknown extends E ? #123;#125; : #123; #91;K in Exclude#lt;keyof Cases, Extract#lt;E, #123; _tag: string; #125;#gt;#91;#quot;_tag#quot;#93;#gt;#93;: never; #125;#41;, A2 = never, E2 = Exclude#lt;E, #123; _tag: keyof Cases; #125;#gt;, R2 = never#gt;#40;cases: Cases, orElse?: #40;#40;e: Exclude#lt;E, #123; _tag: keyof Cases; #125;#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2 #124; #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;infer A, any, any#gt; ? A : never; #125;#91;keyof Cases#93;, E2 #124; #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;any, infer E, any#gt; ? E : never; #125;#91;keyof Cases#93;, R #124; R2 #124; #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;any, any, infer R#gt; ? R : never; #125;#91;keyof Cases#93;#gt;; #lt;R, E, A, Cases extends #123; #91;K in Extract#lt;E, #123; _tag: string; #125;#gt;#91;#quot;_tag#quot;#93;#93;+?: #40;#40;error: Extract#lt;E, #123; _tag: K; #125;#gt;#41; =#gt; Effect#lt;any, any, any#gt;#41;; #125; #amp; #40;unknown extends E ? #123;#125; : #123; #91;K in Exclude#lt;keyof Cases, Extract#lt;E, #123; _tag: string; #125;#gt;#91;#quot;_tag#quot;#93;#gt;#93;: never; #125;#41;, A2 = never, E2 = Exclude#lt;E, #123; _tag: keyof Cases; #125;#gt;, R2 = never#gt;#40;self: Effect#lt;A, E, R#gt;, cases: Cases, orElse?: #40;#40;e: Exclude#lt;E, #123; _tag: keyof Cases; #125;#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: Effect#lt;A #124; A2 #124; #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;infer A, any, any#gt; ? A : never; #125;#91;keyof Cases#93;, E2 #124; #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;any, infer E, any#gt; ? E : never; #125;#91;keyof Cases#93;, R #124; R2 #124; #123; #91;K in keyof Cases#93;: Cases#91;K#93; extends #40;...args: any#91;#93;#41; =#gt; Effect#lt;any, any, infer R#gt; ? R : never; #125;#91;keyof Cases#93;#gt;; #125;<br/>node: Effect.catchTags"/]
+  91[/"type: #123; RequestError: #40;error: RequestError#41; =#gt; Effect#lt;void, never, never#gt;; InvalidStatusError: #40;error: InvalidStatusError#41; =#gt; Effect#lt;void, never, never#gt;; DecodeError: #40;error: DecodeError#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #123;#92;n    RequestError: #40;error#41; =#gt;#92;n      Effect.log#40;`Request failed for $#123;error.url#125;: $#123;String#40;error.cause#41;#125;`#41;,#92;n    InvalidStatusError: #40;error#41; =#gt;#92;n      Effect.log#40;`Request to $#123;error.url#125; returned status $#123;error.status#125;`#41;,#92;n    DecodeError: #40;error#41; =#gt;#92;n      Effect.log#40;`Could not decode JSON from $#123;error.url#125;: $#123;String#40;error.cause#41;#125;`#41;#92;n  #125;"/]
+  92[["type: #40;error: RequestError#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;error#41; =#gt;#92;n      Effect.log#40;`Request failed for $#123;error.url#125;: $#123;String#40;error.cause#41;#125;`#41;"]]
+  93[/"type: string<br/>node: `Request failed for $#123;error.url#125;: $#123;String#40;error.cause#41;#125;`"/]
+  94[/"type: unknown<br/>node: error.cause"/]
+  95["type: string<br/>callee: String<br/>args: #91;#93;"]
+  96[/"type: StringConstructor<br/>node: String"/]
+  97["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  98[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  99[["type: #40;error: InvalidStatusError#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;error#41; =#gt;#92;n      Effect.log#40;`Request to $#123;error.url#125; returned status $#123;error.status#125;`#41;"]]
+  100[/"type: string<br/>node: `Request to $#123;error.url#125; returned status $#123;error.status#125;`"/]
+  101["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  102[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  103[["type: #40;error: DecodeError#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;error#41; =#gt;#92;n      Effect.log#40;`Could not decode JSON from $#123;error.url#125;: $#123;String#40;error.cause#41;#125;`#41;"]]
+  104[/"type: string<br/>node: `Could not decode JSON from $#123;error.url#125;: $#123;String#40;error.cause#41;#125;`"/]
+  105[/"type: unknown<br/>node: error.cause"/]
+  106["type: string<br/>callee: String<br/>args: #91;#93;"]
+  107[/"type: StringConstructor<br/>node: String"/]
+  108["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  109[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  110[/"type: Effect#lt;void, never, never#gt;<br/>node: program"/]
+  111["type: Promise#lt;void#gt;<br/>callee: Effect.runPromise<br/>args: #91;#93;"]
+  1 -->|"kind: pipe"| 2
+  3 -->|"kind: transformCallee"| 2
+  2 -->|"kind: usedBy"| 0
   5 -->|"kind: pipe"| 6
   7 -->|"kind: transformCallee"| 6
+  6 -->|"kind: usedBy"| 4
   8 -->|"kind: pipe"| 9
   10 -->|"kind: transformCallee"| 9
-  12 -->|"kind: pipe"| 13
-  14 -->|"kind: transformCallee"| 13
-  15 -->|"kind: transformArg"| 13
-  18 -->|"kind: potentialReturn"| 17
-  19 -->|"kind: yieldable"| 17
-  20 -->|"kind: yieldable"| 17
-  23 -->|"kind: transformCallee"| 22
-  24 -->|"kind: transformArg"| 22
-  21 -->|"kind: pipe"| 22
-  22 -->|"kind: pipe"| 25
-  17 -->|"kind: pipe"| 26
-  27 -->|"kind: transformCallee"| 26
-  28 -->|"kind: transformArg"| 26
-  30 -->|"kind: transformCallee"| 29
-  31 -->|"kind: transformArg"| 29
-  26 -->|"kind: pipe"| 29
-  33 -->|"kind: yieldable"| 32
-  34 -->|"kind: yieldable"| 32
-  35 -->|"kind: pipe"| 36
-  37 -->|"kind: transformCallee"| 36
-  36 -->|"kind: yieldable"| 32
-  38 -->|"kind: pipe"| 39
-  40 -->|"kind: transformCallee"| 39
-  39 -->|"kind: yieldable"| 32
-  41 -->|"kind: pipe"| 42
+  11 -->|"kind: pipe"| 12
+  13 -->|"kind: transformCallee"| 12
+  14 -->|"kind: pipe"| 15
+  16 -->|"kind: transformCallee"| 15
+  18 -->|"kind: pipe"| 19
+  20 -->|"kind: transformCallee"| 19
+  21 -->|"kind: transformArg"| 19
+  28 -->|"kind: transformCallee"| 27
+  29 -->|"kind: transformArg"| 27
+  26 -->|"kind: pipe"| 27
+  31 -->|"kind: transformCallee"| 30
+  33 -->|"kind: potentialReturn"| 32
+  34 -->|"kind: potentialReturn"| 32
+  35 -->|"kind: potentialReturn"| 32
+  32 -->|"kind: transformArg"| 30
+  27 -->|"kind: pipe"| 30
+  30 -->|"kind: potentialReturn"| 25
+  25 -->|"kind: usedBy"| 24
   43 -->|"kind: transformCallee"| 42
-  42 -->|"kind: yieldable"| 32
-  45 -->|"kind: transformCallee"| 44
-  46 -->|"kind: transformArg"| 44
-  32 -->|"kind: pipe"| 44
-  48 -->|"kind: transformCallee"| 47
-  49 -->|"kind: transformArg"| 47
-  44 -->|"kind: pipe"| 47
-  50 -->|"kind: pipe"| 51
+  44 -->|"kind: transformArg"| 42
+  41 -->|"kind: pipe"| 42
+  46 -->|"kind: transformCallee"| 45
+  48 -->|"kind: potentialReturn"| 47
+  49 -->|"kind: potentialReturn"| 47
+  50 -->|"kind: potentialReturn"| 47
+  47 -->|"kind: transformArg"| 45
+  42 -->|"kind: pipe"| 45
+  45 -->|"kind: potentialReturn"| 40
+  40 -->|"kind: usedBy"| 24
+  24 -->|"kind: potentialReturn"| 23
+  55 -->|"kind: yieldable"| 23
+  56 -->|"kind: yieldable"| 23
+  59 -->|"kind: transformCallee"| 58
+  60 -->|"kind: transformArg"| 58
+  57 -->|"kind: pipe"| 58
+  58 -->|"kind: pipe"| 61
+  23 -->|"kind: pipe"| 62
+  63 -->|"kind: transformCallee"| 62
+  64 -->|"kind: transformArg"| 62
+  66 -->|"kind: transformCallee"| 65
+  67 -->|"kind: transformArg"| 65
+  62 -->|"kind: pipe"| 65
+  69 -->|"kind: yieldable"| 68
+  71 -->|"kind: pipe"| 72
+  73 -->|"kind: transformCallee"| 72
+  72 -->|"kind: usedBy"| 70
+  74 -->|"kind: pipe"| 75
+  76 -->|"kind: transformCallee"| 75
+  75 -->|"kind: usedBy"| 70
+  70 -->|"kind: yieldable"| 68
+  77 -->|"kind: pipe"| 78
+  79 -->|"kind: transformCallee"| 78
+  78 -->|"kind: yieldable"| 68
+  80 -->|"kind: pipe"| 81
+  82 -->|"kind: transformCallee"| 81
+  81 -->|"kind: yieldable"| 68
+  83 -->|"kind: pipe"| 84
+  85 -->|"kind: transformCallee"| 84
+  84 -->|"kind: yieldable"| 68
+  87 -->|"kind: transformCallee"| 86
+  88 -->|"kind: transformArg"| 86
+  68 -->|"kind: pipe"| 86
+  90 -->|"kind: transformCallee"| 89
+  94 -->|"kind: pipe"| 95
+  96 -->|"kind: transformCallee"| 95
+  95 -->|"kind: usedBy"| 93
+  93 -->|"kind: pipe"| 97
+  98 -->|"kind: transformCallee"| 97
+  97 -->|"kind: potentialReturn"| 92
+  92 -->|"kind: usedBy"| 91
+  100 -->|"kind: pipe"| 101
+  102 -->|"kind: transformCallee"| 101
+  101 -->|"kind: potentialReturn"| 99
+  99 -->|"kind: usedBy"| 91
+  105 -->|"kind: pipe"| 106
+  107 -->|"kind: transformCallee"| 106
+  106 -->|"kind: usedBy"| 104
+  104 -->|"kind: pipe"| 108
+  109 -->|"kind: transformCallee"| 108
+  108 -->|"kind: potentialReturn"| 103
+  103 -->|"kind: usedBy"| 91
+  91 -->|"kind: transformArg"| 89
+  86 -->|"kind: pipe"| 89
+  110 -->|"kind: pipe"| 111

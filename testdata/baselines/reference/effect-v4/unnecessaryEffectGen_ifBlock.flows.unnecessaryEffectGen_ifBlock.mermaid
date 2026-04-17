@@ -1,27 +1,29 @@
 flowchart TB
   0((("type: Effect#lt;boolean, string, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const query = yield* Effect.succeed#40;#quot;#quot;#41;#92;n  yield* Effect.annotateCurrentSpan#40;#quot;query#quot;, query#41;#92;n  if #40;query.length #lt; 3#41; #123;#92;n    return yield* Effect.fail#40;#quot;query too short#quot;#41;#92;n  #125;#92;n  return yield* Effect.succeed#40;true#41;#92;n#125;#41;")))
   1[/"type: never<br/>node: yield* Effect.fail#40;#quot;query too short#quot;#41;"/]
-  2[/"type: boolean<br/>node: yield* Effect.succeed#40;true#41;"/]
-  3[/"type: #quot;#quot;<br/>node: #quot;#quot;"/]
-  4["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  5[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  6[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.annotateCurrentSpan#40;#quot;query#quot;, query#41;"/]
-  7[/"type: #quot;query too short#quot;<br/>node: #quot;query too short#quot;"/]
-  8["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  9[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  10[/"type: true<br/>node: true"/]
-  11["type: Effect#lt;boolean, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  12[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  2[/"type: #quot;query too short#quot;<br/>node: #quot;query too short#quot;"/]
+  3["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  4[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  5[/"type: boolean<br/>node: yield* Effect.succeed#40;true#41;"/]
+  6[/"type: true<br/>node: true"/]
+  7["type: Effect#lt;boolean, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  8[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  9[/"type: #quot;#quot;<br/>node: #quot;#quot;"/]
+  10["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  11[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  12[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.annotateCurrentSpan#40;#quot;query#quot;, query#41;"/]
   13[/"type: boolean<br/>node: query.length #lt; 3"/]
+  2 -->|"kind: pipe"| 3
+  4 -->|"kind: transformCallee"| 3
+  3 -->|"kind: usedBy"| 1
   1 -->|"kind: potentialReturn"| 0
-  2 -->|"kind: potentialReturn"| 0
-  3 -->|"kind: pipe"| 4
-  5 -->|"kind: transformCallee"| 4
-  4 -->|"kind: yieldable"| 0
-  6 -->|"kind: yieldable"| 0
-  7 -->|"kind: pipe"| 8
-  9 -->|"kind: transformCallee"| 8
-  8 -->|"kind: yieldable"| 0
-  10 -->|"kind: pipe"| 11
-  12 -->|"kind: transformCallee"| 11
-  11 -->|"kind: yieldable"| 0
+  6 -->|"kind: pipe"| 7
+  8 -->|"kind: transformCallee"| 7
+  7 -->|"kind: usedBy"| 5
+  5 -->|"kind: potentialReturn"| 0
+  9 -->|"kind: pipe"| 10
+  11 -->|"kind: transformCallee"| 10
+  10 -->|"kind: yieldable"| 0
+  12 -->|"kind: yieldable"| 0
+  3 -->|"kind: yieldable"| 0
+  7 -->|"kind: yieldable"| 0

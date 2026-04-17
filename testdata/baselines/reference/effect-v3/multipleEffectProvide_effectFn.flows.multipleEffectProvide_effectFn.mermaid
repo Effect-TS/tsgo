@@ -43,36 +43,36 @@ flowchart TB
   41[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.fn#40;#92;n  function*#40;#41; #123;#92;n    return yield* Effect.void#92;n  #125;,#92;n  Effect.provide#40;MyService1.Default#41;,#92;n  Effect.provide#40;MyService2.Default#41;,#92;n  Effect.provide#40;MyService3.Default#41;#92;n#41;"]]
   5 -->|"kind: transformCallee"| 4
   6 -->|"kind: transformArg"| 4
-  3 -->|"kind: fnPipe"| 4
+  3 -->|"kind: pipe"| 4
   8 -->|"kind: transformCallee"| 7
   9 -->|"kind: transformArg"| 7
-  4 -->|"kind: fnPipe"| 7
+  4 -->|"kind: pipe"| 7
   10 -->|"kind: yieldable"| 3
   7 -->|"kind: potentialReturn"| 11
   14 -->|"kind: transformCallee"| 13
   15 -->|"kind: transformArg"| 13
-  12 -->|"kind: fnPipe"| 13
+  12 -->|"kind: pipe"| 13
   17 -->|"kind: transformCallee"| 16
   18 -->|"kind: transformArg"| 16
-  13 -->|"kind: fnPipe"| 16
+  13 -->|"kind: pipe"| 16
   19 -->|"kind: yieldable"| 12
   16 -->|"kind: potentialReturn"| 20
   23 -->|"kind: transformCallee"| 22
   24 -->|"kind: transformArg"| 22
-  21 -->|"kind: fnPipe"| 22
+  21 -->|"kind: pipe"| 22
   26 -->|"kind: transformCallee"| 25
   27 -->|"kind: transformArg"| 25
-  22 -->|"kind: fnPipe"| 25
+  22 -->|"kind: pipe"| 25
   28 -->|"kind: yieldable"| 21
   25 -->|"kind: potentialReturn"| 29
   32 -->|"kind: transformCallee"| 31
   33 -->|"kind: transformArg"| 31
-  30 -->|"kind: fnPipe"| 31
+  30 -->|"kind: pipe"| 31
   35 -->|"kind: transformCallee"| 34
   36 -->|"kind: transformArg"| 34
-  31 -->|"kind: fnPipe"| 34
+  31 -->|"kind: pipe"| 34
   38 -->|"kind: transformCallee"| 37
   39 -->|"kind: transformArg"| 37
-  34 -->|"kind: fnPipe"| 37
+  34 -->|"kind: pipe"| 37
   40 -->|"kind: yieldable"| 30
   37 -->|"kind: potentialReturn"| 41

@@ -1,6 +1,18 @@
 flowchart TB
   0[/"type: #123; try: #40;#41; =#gt; any; catch: #40;error: unknown#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #123;#92;n  try: #40;#41; =#gt; JSON.parse#40;#quot;#123;#quot;#41;,#92;n  catch: #40;error#41; =#gt; Effect.logError#40;error#41;#92;n#125;"/]
-  1["type: Effect#lt;any, Effect#lt;void, never, never#gt;, never#gt;<br/>callee: Effect.try<br/>args: #91;#93;"]
-  2[/"type: #lt;A, E#gt;#40;options: #123; try: LazyArg#lt;A#gt;; catch: #40;error: unknown#41; =#gt; E; #125;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.try"/]
-  0 -->|"kind: pipe"| 1
-  2 -->|"kind: transformCallee"| 1
+  1[["type: #40;#41; =#gt; any<br/>node: #40;#41; =#gt; JSON.parse#40;#quot;#123;#quot;#41;"]]
+  2[/"type: any<br/>node: JSON.parse#40;#quot;#123;#quot;#41;"/]
+  3[["type: #40;error: unknown#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;error#41; =#gt; Effect.logError#40;error#41;"]]
+  4[/"type: unknown<br/>node: error"/]
+  5["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.logError<br/>args: #91;#93;"]
+  6[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.logError"/]
+  7["type: Effect#lt;any, Effect#lt;void, never, never#gt;, never#gt;<br/>callee: Effect.try<br/>args: #91;#93;"]
+  8[/"type: #lt;A, E#gt;#40;options: #123; try: LazyArg#lt;A#gt;; catch: #40;error: unknown#41; =#gt; E; #125;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.try"/]
+  2 -->|"kind: potentialReturn"| 1
+  1 -->|"kind: usedBy"| 0
+  4 -->|"kind: pipe"| 5
+  6 -->|"kind: transformCallee"| 5
+  5 -->|"kind: potentialReturn"| 3
+  3 -->|"kind: usedBy"| 0
+  0 -->|"kind: pipe"| 7
+  8 -->|"kind: transformCallee"| 7

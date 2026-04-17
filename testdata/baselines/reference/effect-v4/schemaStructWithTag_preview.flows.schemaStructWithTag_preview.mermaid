@@ -1,6 +1,12 @@
 flowchart TB
   0[/"type: #123; _tag: Literal#lt;#quot;User#quot;#gt;; name: String; #125;<br/>node: #123;#92;n  _tag: Schema.Literal#40;#quot;User#quot;#41;,#92;n  name: Schema.String#92;n#125;"/]
-  1["type: Struct#lt;#123; readonly _tag: Literal#lt;#quot;User#quot;#gt;; readonly name: String; #125;#gt;<br/>callee: Schema.Struct<br/>args: #91;#93;"]
-  2[/"type: #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields#41; =#gt; Struct#lt;Fields#gt;<br/>node: Schema.Struct"/]
-  0 -->|"kind: pipe"| 1
-  2 -->|"kind: transformCallee"| 1
+  1[/"type: #quot;User#quot;<br/>node: #quot;User#quot;"/]
+  2["type: Literal#lt;#quot;User#quot;#gt;<br/>callee: Schema.Literal<br/>args: #91;#93;"]
+  3[/"type: #lt;L extends AST.LiteralValue#gt;#40;literal: L#41; =#gt; Literal#lt;L#gt;<br/>node: Schema.Literal"/]
+  4["type: Struct#lt;#123; readonly _tag: Literal#lt;#quot;User#quot;#gt;; readonly name: String; #125;#gt;<br/>callee: Schema.Struct<br/>args: #91;#93;"]
+  5[/"type: #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields#41; =#gt; Struct#lt;Fields#gt;<br/>node: Schema.Struct"/]
+  1 -->|"kind: pipe"| 2
+  3 -->|"kind: transformCallee"| 2
+  2 -->|"kind: usedBy"| 0
+  0 -->|"kind: pipe"| 4
+  5 -->|"kind: transformCallee"| 4

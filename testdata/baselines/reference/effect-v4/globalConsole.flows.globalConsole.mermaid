@@ -27,9 +27,11 @@ flowchart TB
   25[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.error"/]
   26[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#92;n  const console = #123; log: #40;..._args: Array#lt;unknown#gt;#41; =#gt; undefined #125;#92;n  console.log#40;#quot;hello#quot;#41;#92;n#125;"]]
   27[/"type: #123; log: #40;..._args: unknown#91;#93;#41; =#gt; undefined; #125;<br/>node: #123; log: #40;..._args: Array#lt;unknown#gt;#41; =#gt; undefined #125;"/]
-  28[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
-  29["type: undefined<br/>callee: console.log<br/>args: #91;#93;"]
-  30[/"type: #40;..._args: unknown#91;#93;#41; =#gt; undefined<br/>node: console.log"/]
+  28[["type: #40;..._args: unknown#91;#93;#41; =#gt; undefined<br/>node: #40;..._args: Array#lt;unknown#gt;#41; =#gt; undefined"]]
+  29[/"type: undefined<br/>node: undefined"/]
+  30[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
+  31["type: undefined<br/>callee: console.log<br/>args: #91;#93;"]
+  32[/"type: #40;..._args: unknown#91;#93;#41; =#gt; undefined<br/>node: console.log"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
   4 -->|"kind: pipe"| 5
@@ -45,5 +47,7 @@ flowchart TB
   23 -->|"kind: pipe"| 24
   25 -->|"kind: transformCallee"| 24
   24 -->|"kind: potentialReturn"| 22
-  28 -->|"kind: pipe"| 29
-  30 -->|"kind: transformCallee"| 29
+  29 -->|"kind: potentialReturn"| 28
+  28 -->|"kind: usedBy"| 27
+  30 -->|"kind: pipe"| 31
+  32 -->|"kind: transformCallee"| 31

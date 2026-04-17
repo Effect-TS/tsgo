@@ -7,12 +7,18 @@ flowchart TB
   5[["type: #40;#41; =#gt; Generator#lt;Option#lt;number#gt;, number, any#gt;<br/>node: function*#40;#41;#123;#92;n    const option = yield* Option.some#40;1#41;#92;n    return option#92;n#125;"]]
   6[/"type: number<br/>node: option"/]
   7[/"type: number<br/>node: yield* Option.some#40;1#41;"/]
-  8["type: Option#lt;number#gt;<br/>callee: Option.gen<br/>args: #91;#93;"]
-  9[/"type: Gen#lt;OptionTypeLambda#gt;<br/>node: Option.gen"/]
+  8[/"type: 1<br/>node: 1"/]
+  9["type: Option#lt;number#gt;<br/>callee: Option.some<br/>args: #91;#93;"]
+  10[/"type: #lt;A#gt;#40;value: A#41; =#gt; Option#lt;A#gt;<br/>node: Option.some"/]
+  11["type: Option#lt;number#gt;<br/>callee: Option.gen<br/>args: #91;#93;"]
+  12[/"type: Gen#lt;OptionTypeLambda#gt;<br/>node: Option.gen"/]
   1 -->|"kind: potentialReturn"| 0
   2 -->|"kind: pipe"| 3
   4 -->|"kind: transformCallee"| 3
   3 -->|"kind: yieldable"| 0
   6 -->|"kind: potentialReturn"| 5
-  5 -->|"kind: pipe"| 8
-  9 -->|"kind: transformCallee"| 8
+  8 -->|"kind: pipe"| 9
+  10 -->|"kind: transformCallee"| 9
+  9 -->|"kind: usedBy"| 7
+  5 -->|"kind: pipe"| 11
+  12 -->|"kind: transformCallee"| 11

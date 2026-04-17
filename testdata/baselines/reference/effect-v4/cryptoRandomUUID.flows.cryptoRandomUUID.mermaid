@@ -13,8 +13,12 @@ flowchart TB
   11[["type: #40;#41; =#gt; string<br/>node: #40;#41; =#gt; #123;#92;n  const crypto = #123; randomUUID: #40;#41; =#gt; #quot;fixed#quot; #125;#92;n  return crypto.randomUUID#40;#41;#92;n#125;"]]
   12[/"type: string<br/>node: crypto.randomUUID#40;#41;"/]
   13[/"type: #123; randomUUID: #40;#41; =#gt; string; #125;<br/>node: #123; randomUUID: #40;#41; =#gt; #quot;fixed#quot; #125;"/]
+  14[["type: #40;#41; =#gt; string<br/>node: #40;#41; =#gt; #quot;fixed#quot;"]]
+  15[/"type: #quot;fixed#quot;<br/>node: #quot;fixed#quot;"/]
   2 -->|"kind: potentialReturn"| 1
   6 -->|"kind: potentialReturn"| 5
   8 -->|"kind: potentialReturn"| 7
   10 -->|"kind: potentialReturn"| 9
   12 -->|"kind: potentialReturn"| 11
+  15 -->|"kind: potentialReturn"| 14
+  14 -->|"kind: usedBy"| 13

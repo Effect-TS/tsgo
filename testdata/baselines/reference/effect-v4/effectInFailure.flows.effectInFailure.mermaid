@@ -3,19 +3,69 @@ flowchart TB
   1["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;JsonParseError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
   2[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
   3[/"type: #123; try: #40;#41; =#gt; any; catch: #40;e: unknown#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #123;#92;n  try: #40;#41; =#gt; JSON.parse#40;#quot;#123;#quot;#41;,#92;n  catch: #40;e#41; =#gt; Effect.log#40;e#41;#92;n#125;"/]
-  4["type: Effect#lt;any, Effect#lt;void, never, never#gt;, never#gt;<br/>callee: Effect.try<br/>args: #91;#93;"]
-  5[/"type: #lt;A, E#gt;#40;options: #123; try: LazyArg#lt;A#gt;; catch: #40;error: unknown#41; =#gt; E; #125;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.try"/]
-  6[/"type: #123; try: #40;#41; =#gt; any; catch: #40;e: unknown#41; =#gt; JsonParseError; #125;<br/>node: #123;#92;n  try: #40;#41; =#gt; JSON.parse#40;#quot;#123;#quot;#41;,#92;n  catch: #40;e#41; =#gt; new JsonParseError#40;#123; cause: e #125;#41;#92;n#125;"/]
-  7["type: Effect#lt;any, JsonParseError, never#gt;<br/>callee: Effect.try<br/>args: #91;#93;"]
-  8[/"type: #lt;A, E#gt;#40;options: #123; try: LazyArg#lt;A#gt;; catch: #40;error: unknown#41; =#gt; E; #125;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.try"/]
-  9[/"type: #123; try: #40;#41; =#gt; any; catch: #40;e: unknown#41; =#gt; Effect#lt;any, Effect#lt;void, never, never#gt;, never#gt;; #125;<br/>node: #123;#92;n  try: #40;#41; =#gt; JSON.parse#40;#quot;#123;#quot;#41;,#92;n  catch: #40;e#41; =#gt;#92;n    Effect.try#40;#123;#92;n      try: #40;#41; =#gt; JSON.parse#40;String#40;e#41;#41;,#92;n      catch: #40;innerError#41; =#gt; Effect.log#40;innerError#41;#92;n    #125;#41;#92;n#125;"/]
-  10["type: Effect#lt;any, Effect#lt;any, Effect#lt;void, never, never#gt;, never#gt;, never#gt;<br/>callee: Effect.try<br/>args: #91;#93;"]
+  4[["type: #40;#41; =#gt; any<br/>node: #40;#41; =#gt; JSON.parse#40;#quot;#123;#quot;#41;"]]
+  5[/"type: any<br/>node: JSON.parse#40;#quot;#123;#quot;#41;"/]
+  6[["type: #40;e: unknown#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;e#41; =#gt; Effect.log#40;e#41;"]]
+  7[/"type: unknown<br/>node: e"/]
+  8["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  9[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  10["type: Effect#lt;any, Effect#lt;void, never, never#gt;, never#gt;<br/>callee: Effect.try<br/>args: #91;#93;"]
   11[/"type: #lt;A, E#gt;#40;options: #123; try: LazyArg#lt;A#gt;; catch: #40;error: unknown#41; =#gt; E; #125;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.try"/]
+  12[/"type: #123; try: #40;#41; =#gt; any; catch: #40;e: unknown#41; =#gt; JsonParseError; #125;<br/>node: #123;#92;n  try: #40;#41; =#gt; JSON.parse#40;#quot;#123;#quot;#41;,#92;n  catch: #40;e#41; =#gt; new JsonParseError#40;#123; cause: e #125;#41;#92;n#125;"/]
+  13[["type: #40;#41; =#gt; any<br/>node: #40;#41; =#gt; JSON.parse#40;#quot;#123;#quot;#41;"]]
+  14[/"type: any<br/>node: JSON.parse#40;#quot;#123;#quot;#41;"/]
+  15[["type: #40;e: unknown#41; =#gt; JsonParseError<br/>node: #40;e#41; =#gt; new JsonParseError#40;#123; cause: e #125;#41;"]]
+  16[/"type: JsonParseError<br/>node: new JsonParseError#40;#123; cause: e #125;#41;"/]
+  17["type: Effect#lt;any, JsonParseError, never#gt;<br/>callee: Effect.try<br/>args: #91;#93;"]
+  18[/"type: #lt;A, E#gt;#40;options: #123; try: LazyArg#lt;A#gt;; catch: #40;error: unknown#41; =#gt; E; #125;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.try"/]
+  19[/"type: #123; try: #40;#41; =#gt; any; catch: #40;e: unknown#41; =#gt; Effect#lt;any, Effect#lt;void, never, never#gt;, never#gt;; #125;<br/>node: #123;#92;n  try: #40;#41; =#gt; JSON.parse#40;#quot;#123;#quot;#41;,#92;n  catch: #40;e#41; =#gt;#92;n    Effect.try#40;#123;#92;n      try: #40;#41; =#gt; JSON.parse#40;String#40;e#41;#41;,#92;n      catch: #40;innerError#41; =#gt; Effect.log#40;innerError#41;#92;n    #125;#41;#92;n#125;"/]
+  20[["type: #40;#41; =#gt; any<br/>node: #40;#41; =#gt; JSON.parse#40;#quot;#123;#quot;#41;"]]
+  21[/"type: any<br/>node: JSON.parse#40;#quot;#123;#quot;#41;"/]
+  22[["type: #40;e: unknown#41; =#gt; Effect#lt;any, Effect#lt;void, never, never#gt;, never#gt;<br/>node: #40;e#41; =#gt;#92;n    Effect.try#40;#123;#92;n      try: #40;#41; =#gt; JSON.parse#40;String#40;e#41;#41;,#92;n      catch: #40;innerError#41; =#gt; Effect.log#40;innerError#41;#92;n    #125;#41;"]]
+  23[/"type: #123; try: #40;#41; =#gt; any; catch: #40;innerError: unknown#41; =#gt; Effect#lt;void, never, never#gt;; #125;<br/>node: #123;#92;n      try: #40;#41; =#gt; JSON.parse#40;String#40;e#41;#41;,#92;n      catch: #40;innerError#41; =#gt; Effect.log#40;innerError#41;#92;n    #125;"/]
+  24[["type: #40;#41; =#gt; any<br/>node: #40;#41; =#gt; JSON.parse#40;String#40;e#41;#41;"]]
+  25[/"type: any<br/>node: JSON.parse#40;String#40;e#41;#41;"/]
+  26[/"type: unknown<br/>node: e"/]
+  27["type: string<br/>callee: String<br/>args: #91;#93;"]
+  28[/"type: StringConstructor<br/>node: String"/]
+  29[["type: #40;innerError: unknown#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;innerError#41; =#gt; Effect.log#40;innerError#41;"]]
+  30[/"type: unknown<br/>node: innerError"/]
+  31["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  32[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  33["type: Effect#lt;any, Effect#lt;void, never, never#gt;, never#gt;<br/>callee: Effect.try<br/>args: #91;#93;"]
+  34[/"type: #lt;A, E#gt;#40;options: #123; try: LazyArg#lt;A#gt;; catch: #40;error: unknown#41; =#gt; E; #125;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.try"/]
+  35["type: Effect#lt;any, Effect#lt;any, Effect#lt;void, never, never#gt;, never#gt;, never#gt;<br/>callee: Effect.try<br/>args: #91;#93;"]
+  36[/"type: #lt;A, E#gt;#40;options: #123; try: LazyArg#lt;A#gt;; catch: #40;error: unknown#41; =#gt; E; #125;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.try"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
-  3 -->|"kind: pipe"| 4
-  5 -->|"kind: transformCallee"| 4
-  6 -->|"kind: pipe"| 7
-  8 -->|"kind: transformCallee"| 7
-  9 -->|"kind: pipe"| 10
+  5 -->|"kind: potentialReturn"| 4
+  4 -->|"kind: usedBy"| 3
+  7 -->|"kind: pipe"| 8
+  9 -->|"kind: transformCallee"| 8
+  8 -->|"kind: potentialReturn"| 6
+  6 -->|"kind: usedBy"| 3
+  3 -->|"kind: pipe"| 10
   11 -->|"kind: transformCallee"| 10
+  14 -->|"kind: potentialReturn"| 13
+  13 -->|"kind: usedBy"| 12
+  16 -->|"kind: potentialReturn"| 15
+  15 -->|"kind: usedBy"| 12
+  12 -->|"kind: pipe"| 17
+  18 -->|"kind: transformCallee"| 17
+  21 -->|"kind: potentialReturn"| 20
+  20 -->|"kind: usedBy"| 19
+  26 -->|"kind: pipe"| 27
+  28 -->|"kind: transformCallee"| 27
+  27 -->|"kind: usedBy"| 25
+  25 -->|"kind: potentialReturn"| 24
+  24 -->|"kind: usedBy"| 23
+  30 -->|"kind: pipe"| 31
+  32 -->|"kind: transformCallee"| 31
+  31 -->|"kind: potentialReturn"| 29
+  29 -->|"kind: usedBy"| 23
+  23 -->|"kind: pipe"| 33
+  34 -->|"kind: transformCallee"| 33
+  33 -->|"kind: potentialReturn"| 22
+  22 -->|"kind: usedBy"| 19
+  19 -->|"kind: pipe"| 35
+  36 -->|"kind: transformCallee"| 35

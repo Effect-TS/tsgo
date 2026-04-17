@@ -11,8 +11,14 @@ flowchart TB
   9["type: Effect#lt;string #124; Effect#lt;never, string, never#gt;, never, never#gt;<br/>callee: Effect.matchCause<br/>args: #91;#123;#92;n      onSuccess: #40;#41; =#gt; #quot;success#quot;,#92;n      onFailure: #40;#41; =#gt; Effect.fail#40;#quot;error#quot;#41;#92;n    #125;#93;"]
   10[/"type: #123; #lt;E, A2, A, A3#gt;#40;options: #123; readonly onFailure: #40;cause: Cause#lt;E#gt;#41; =#gt; A2; readonly onSuccess: #40;a: A#41; =#gt; A3; #125;#41;: #lt;R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A2 #124; A3, never, R#gt;; #lt;A, E, R, A2, A3#gt;#40;self: Effect#lt;A, E, R#gt;, options: #123; readonly onFailure: #40;cause: Cause#lt;E#gt;#41; =#gt; A2; readonly onSuccess: #40;a: A#41; =#gt; A3; #125;#41;: Effect#lt;A2 #124; A3, never, R#gt;; #125;<br/>node: Effect.matchCause"/]
   11[/"type: #123; onSuccess: #40;#41; =#gt; string; onFailure: #40;#41; =#gt; Effect#lt;never, string, never#gt;; #125;<br/>node: #123;#92;n      onSuccess: #40;#41; =#gt; #quot;success#quot;,#92;n      onFailure: #40;#41; =#gt; Effect.fail#40;#quot;error#quot;#41;#92;n    #125;"/]
-  12["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.suspend<br/>args: #91;#93;"]
-  13[/"type: #lt;A, E, R#gt;#40;effect: LazyArg#lt;Effect#lt;A, E, R#gt;#gt;#41; =#gt; Effect#lt;A, E, R#gt;<br/>node: Effect.suspend"/]
+  12[["type: #40;#41; =#gt; string<br/>node: #40;#41; =#gt; #quot;success#quot;"]]
+  13[/"type: #quot;success#quot;<br/>node: #quot;success#quot;"/]
+  14[["type: #40;#41; =#gt; Effect#lt;never, string, never#gt;<br/>node: #40;#41; =#gt; Effect.fail#40;#quot;error#quot;#41;"]]
+  15[/"type: #quot;error#quot;<br/>node: #quot;error#quot;"/]
+  16["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  17[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  18["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.suspend<br/>args: #91;#93;"]
+  19[/"type: #lt;A, E, R#gt;#40;effect: LazyArg#lt;Effect#lt;A, E, R#gt;#gt;#41; =#gt; Effect#lt;A, E, R#gt;<br/>node: Effect.suspend"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
   1 -->|"kind: pipe"| 3
@@ -20,8 +26,14 @@ flowchart TB
   6 -->|"kind: pipe"| 7
   7 -->|"kind: pipe"| 8
   10 -->|"kind: transformCallee"| 9
+  13 -->|"kind: potentialReturn"| 12
+  12 -->|"kind: usedBy"| 11
+  15 -->|"kind: pipe"| 16
+  17 -->|"kind: transformCallee"| 16
+  16 -->|"kind: potentialReturn"| 14
+  14 -->|"kind: usedBy"| 11
   11 -->|"kind: transformArg"| 9
   8 -->|"kind: pipe"| 9
   9 -->|"kind: potentialReturn"| 5
-  5 -->|"kind: pipe"| 12
-  13 -->|"kind: transformCallee"| 12
+  5 -->|"kind: pipe"| 18
+  19 -->|"kind: transformCallee"| 18

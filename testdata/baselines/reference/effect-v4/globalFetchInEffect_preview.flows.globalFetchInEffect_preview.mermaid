@@ -5,8 +5,9 @@ flowchart TB
   3[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;https://example.com#quot;#41;"/]
   4["type: Effect#lt;Response, never, never#gt;<br/>callee: Effect.promise<br/>args: #91;#93;"]
   5[/"type: #lt;A#gt;#40;evaluate: #40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.promise"/]
-  1 -->|"kind: potentialReturn"| 0
   3 -->|"kind: potentialReturn"| 2
   2 -->|"kind: pipe"| 4
   5 -->|"kind: transformCallee"| 4
+  4 -->|"kind: usedBy"| 1
+  1 -->|"kind: potentialReturn"| 0
   4 -->|"kind: yieldable"| 0

@@ -31,15 +31,8 @@ type ExecutionNode struct {
 type ExecutionLinkKind string
 
 const (
-	ExecutionLinkKindUnknown         ExecutionLinkKind = "unknown"
-	ExecutionLinkKindConnect         ExecutionLinkKind = "connect"
+	ExecutionLinkKindUsedBy          ExecutionLinkKind = "usedBy"
 	ExecutionLinkKindPipe            ExecutionLinkKind = "pipe"
-	ExecutionLinkKindPipeable        ExecutionLinkKind = "pipeable"
-	ExecutionLinkKindEffectFn        ExecutionLinkKind = "effectFn"
-	ExecutionLinkKindCall            ExecutionLinkKind = "call"
-	ExecutionLinkKindDataFirst       ExecutionLinkKind = "dataFirst"
-	ExecutionLinkKindDataLast        ExecutionLinkKind = "dataLast"
-	ExecutionLinkKindFnPipe          ExecutionLinkKind = "fnPipe"
 	ExecutionLinkKindPotentialReturn ExecutionLinkKind = "potentialReturn"
 	ExecutionLinkKindYieldable       ExecutionLinkKind = "yieldable"
 	ExecutionLinkKindParameter       ExecutionLinkKind = "parameter"
@@ -61,9 +54,10 @@ type (
 )
 
 type executionCollector struct {
-	tp     *TypeParser
-	g      *ExecutionFlow
-	parsed *core.LinkStore[*ast.Node, *GraphSlice]
+	tp               *TypeParser
+	g                *ExecutionFlow
+	parsed           *core.LinkStore[*ast.Node, *GraphSlice]
+	parentExpression *GraphSlice
 }
 
 func (ec *executionCollector) buildSlice(node ExecutionNode) *GraphSlice {
@@ -122,6 +116,9 @@ func (ec *executionCollector) visitNode(node *ast.Node) *GraphSlice {
 		return *ec.parsed.TryGet(node)
 	}
 
+	previousParentExpression := ec.parentExpression
+	ec.parentExpression = nil
+
 	// actual visit logic
 	var s *GraphSlice
 	if parsedEffectGen := ec.tp.EffectGenCall(node); parsedEffectGen != nil {
@@ -136,13 +133,12 @@ func (ec *executionCollector) visitNode(node *ast.Node) *GraphSlice {
 		s = ec.visitDataFirstOrLastCall(parsedDataFirstOrLast, node)
 	} else if ast.IsFunctionLikeDeclaration(node) {
 		s = ec.visitFunctionLikeDeclaration(node)
-	} else if ast.IsExpressionNode(node) {
-		s = ec.visitExpressionNode(node)
 	} else {
-		node.ForEachChild(ec.visitNodeVisitor)
+		s = ec.visitExpressionNode(node, previousParentExpression)
 	}
 	// store to avoid double-traversal
 	*ec.parsed.Get(node) = s
+	ec.parentExpression = previousParentExpression
 
 	return s
 }
@@ -168,8 +164,21 @@ func (ec *executionCollector) visitNodeVisitor(node *ast.Node) bool {
 	return false
 }
 
-func (ec *executionCollector) visitExpressionNode(node *ast.Expression) *GraphSlice {
-	return ec.buildValueNode(node)
+func (ec *executionCollector) visitExpressionNode(node *ast.Expression, parentExpression *GraphSlice) *GraphSlice {
+	rootExpr := parentExpression
+	createdHere := false
+	if parentExpression == nil && ast.IsExpressionNode(node) {
+		rootExpr = ec.buildValueNode(node)
+		createdHere = true
+	}
+	ec.parentExpression = rootExpr
+	for c := range node.IterChildren() { // TODO: any way to avoid iterchildren allocation?
+		ec.visitNodeAndConnectSlice(c, rootExpr, ExecutionLinkKindUsedBy)
+	}
+	if createdHere {
+		return rootExpr
+	}
+	return nil
 }
 
 func (ec *executionCollector) visitPipeCall(p *ParsedPipeCallResult, node *ast.Node) *GraphSlice {
@@ -235,7 +244,7 @@ func (ec *executionCollector) visitEffectFnCall(p *EffectFnCallResult, node *ast
 		*ec.parsed.Get(pipedTransform) = transformSlice
 		ec.visitNodeAndConnectSlice(callee, transformSlice, ExecutionLinkKindTransformCallee)
 		ec.visitNodesAndConnectSlice(args, transformSlice, ExecutionLinkKindTransformArg)
-		sExit = ec.connectSlices(sExit, transformSlice, ExecutionLinkKindFnPipe)
+		sExit = ec.connectSlices(sExit, transformSlice, ExecutionLinkKindPipe)
 	}
 	if p.IsGenerator() {
 		checker.ForEachYieldExpression(p.Body(), func(expr *ast.Node) bool {

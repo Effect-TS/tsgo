@@ -1,3 +1,13 @@
 flowchart TB
   0[/"type: #123; Class: #lt;A#gt;#40;#41; =#gt; #40;_name: string, _config: #123; primaryKey: #40;_req: A#41; =#gt; string; #125;#41; =#gt; typeof #40;Anonymous class#41;; #125;<br/>node: #123;#92;n  Class: #lt;A#gt;#40;#41; =#gt;#92;n    #40;#92;n      _name: string,#92;n      _config: #123;#92;n        primaryKey: #40;_req: A#41; =#gt; string#92;n      #125;#92;n    #41; =#gt;#92;n      class #123;#125;#92;n#125;"/]
-  1[/"type: typeof #40;Anonymous class#41;<br/>node: Persistable.Class#lt;#123;#92;n  payload: #123; id: number #125;#92;n#125;#gt;#40;#41;#40;#quot;TTLRequest#quot;, #123;#92;n  primaryKey: #40;req#41; =#gt; `TTLRequest:$#123;req.payload.id#125;`#92;n#125;#41;"/]
+  1[["type: #lt;A#gt;#40;#41; =#gt; #40;_name: string, _config: #123; primaryKey: #40;_req: A#41; =#gt; string; #125;#41; =#gt; typeof #40;Anonymous class#41;<br/>node: #lt;A#gt;#40;#41; =#gt;#92;n    #40;#92;n      _name: string,#92;n      _config: #123;#92;n        primaryKey: #40;_req: A#41; =#gt; string#92;n      #125;#92;n    #41; =#gt;#92;n      class #123;#125;"]]
+  2[["type: #40;_name: string, _config: #123; primaryKey: #40;_req: A#41; =#gt; string; #125;#41; =#gt; typeof #40;Anonymous class#41;<br/>node: #40;#92;n      _name: string,#92;n      _config: #123;#92;n        primaryKey: #40;_req: A#41; =#gt; string#92;n      #125;#92;n    #41; =#gt;#92;n      class #123;#125;"]]
+  3[/"type: typeof #40;Anonymous class#41;<br/>node: class #123;#125;"/]
+  4[/"type: typeof #40;Anonymous class#41;<br/>node: Persistable.Class#lt;#123;#92;n  payload: #123; id: number #125;#92;n#125;#gt;#40;#41;#40;#quot;TTLRequest#quot;, #123;#92;n  primaryKey: #40;req#41; =#gt; `TTLRequest:$#123;req.payload.id#125;`#92;n#125;#41;"/]
+  5[["type: #40;req: #123; payload: #123; id: number; #125;; #125;#41; =#gt; string<br/>node: #40;req#41; =#gt; `TTLRequest:$#123;req.payload.id#125;`"]]
+  6[/"type: string<br/>node: `TTLRequest:$#123;req.payload.id#125;`"/]
+  3 -->|"kind: potentialReturn"| 2
+  2 -->|"kind: potentialReturn"| 1
+  1 -->|"kind: usedBy"| 0
+  6 -->|"kind: potentialReturn"| 5
+  5 -->|"kind: usedBy"| 4

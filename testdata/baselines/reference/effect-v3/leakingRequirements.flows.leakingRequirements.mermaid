@@ -1,6 +1,30 @@
 flowchart TB
   0[/"type: TagClass#lt;FileSystem, #quot;FileSystem#quot;, #123; writeFile: #40;content: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;#gt;<br/>node: Context.Tag#40;#quot;FileSystem#quot;#41;#lt;FileSystem, #123;#92;n  writeFile: #40;content: string#41; =#gt; Effect.Effect#lt;void#gt;#92;n#125;#gt;#40;#41;"/]
-  1[/"type: TagClass#lt;LeakingDeps, #quot;LeakingDeps#quot;, #123; writeCache: #40;#41; =#gt; Effect#lt;void, never, FileSystem#gt;; readCache: Effect#lt;void, never, FileSystem#gt;; #125;#gt;<br/>node: Context.Tag#40;#quot;LeakingDeps#quot;#41;#lt;LeakingDeps, #123;#92;n  writeCache: #40;#41; =#gt; Effect.Effect#lt;void, never, FileSystem#gt;#92;n  readCache: Effect.Effect#lt;void, never, FileSystem#gt;#92;n#125;#gt;#40;#41;"/]
-  2[["type: #40;#41; =#gt; void<br/>node: export function local#40;#41; #123;#92;n  class _LocalClass extends Context.Tag#40;#quot;_LocalClass#quot;#41;#lt;_LocalClass, #123;#92;n    writeFile: #40;content: string#41; =#gt; Effect.Effect#lt;void#gt;#92;n  #125;#gt;#40;#41; #123;#125;#92;n#92;n  class _LocalLeaking extends Context.Tag#40;#quot;_LocalLeaking#quot;#41;#lt;_LocalLeaking, #123;#92;n    writeCache: #40;#41; =#gt; Effect.Effect#lt;void, never, FileSystem#gt;#92;n    readCache: Effect.Effect#lt;void, never, FileSystem#gt;#92;n  #125;#gt;#40;#41; #123;#125;#92;n#125;"]]
-  3[/"type: TagClass#lt;_LocalClass, #quot;_LocalClass#quot;, #123; writeFile: #40;content: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;#gt;<br/>node: Context.Tag#40;#quot;_LocalClass#quot;#41;#lt;_LocalClass, #123;#92;n    writeFile: #40;content: string#41; =#gt; Effect.Effect#lt;void#gt;#92;n  #125;#gt;#40;#41;"/]
-  4[/"type: TagClass#lt;_LocalLeaking, #quot;_LocalLeaking#quot;, #123; writeCache: #40;#41; =#gt; Effect#lt;void, never, FileSystem#gt;; readCache: Effect#lt;void, never, FileSystem#gt;; #125;#gt;<br/>node: Context.Tag#40;#quot;_LocalLeaking#quot;#41;#lt;_LocalLeaking, #123;#92;n    writeCache: #40;#41; =#gt; Effect.Effect#lt;void, never, FileSystem#gt;#92;n    readCache: Effect.Effect#lt;void, never, FileSystem#gt;#92;n  #125;#gt;#40;#41;"/]
+  1[/"type: #quot;FileSystem#quot;<br/>node: #quot;FileSystem#quot;"/]
+  2["type: #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, #quot;FileSystem#quot;, Shape#gt;<br/>callee: Context.Tag<br/>args: #91;#93;"]
+  3[/"type: #lt;const Id extends string#gt;#40;id: Id#41; =#gt; #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, Id, Shape#gt;<br/>node: Context.Tag"/]
+  4[/"type: TagClass#lt;LeakingDeps, #quot;LeakingDeps#quot;, #123; writeCache: #40;#41; =#gt; Effect#lt;void, never, FileSystem#gt;; readCache: Effect#lt;void, never, FileSystem#gt;; #125;#gt;<br/>node: Context.Tag#40;#quot;LeakingDeps#quot;#41;#lt;LeakingDeps, #123;#92;n  writeCache: #40;#41; =#gt; Effect.Effect#lt;void, never, FileSystem#gt;#92;n  readCache: Effect.Effect#lt;void, never, FileSystem#gt;#92;n#125;#gt;#40;#41;"/]
+  5[/"type: #quot;LeakingDeps#quot;<br/>node: #quot;LeakingDeps#quot;"/]
+  6["type: #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, #quot;LeakingDeps#quot;, Shape#gt;<br/>callee: Context.Tag<br/>args: #91;#93;"]
+  7[/"type: #lt;const Id extends string#gt;#40;id: Id#41; =#gt; #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, Id, Shape#gt;<br/>node: Context.Tag"/]
+  8[["type: #40;#41; =#gt; void<br/>node: export function local#40;#41; #123;#92;n  class _LocalClass extends Context.Tag#40;#quot;_LocalClass#quot;#41;#lt;_LocalClass, #123;#92;n    writeFile: #40;content: string#41; =#gt; Effect.Effect#lt;void#gt;#92;n  #125;#gt;#40;#41; #123;#125;#92;n#92;n  class _LocalLeaking extends Context.Tag#40;#quot;_LocalLeaking#quot;#41;#lt;_LocalLeaking, #123;#92;n    writeCache: #40;#41; =#gt; Effect.Effect#lt;void, never, FileSystem#gt;#92;n    readCache: Effect.Effect#lt;void, never, FileSystem#gt;#92;n  #125;#gt;#40;#41; #123;#125;#92;n#125;"]]
+  9[/"type: TagClass#lt;_LocalClass, #quot;_LocalClass#quot;, #123; writeFile: #40;content: string#41; =#gt; Effect#lt;void, never, never#gt;; #125;#gt;<br/>node: Context.Tag#40;#quot;_LocalClass#quot;#41;#lt;_LocalClass, #123;#92;n    writeFile: #40;content: string#41; =#gt; Effect.Effect#lt;void#gt;#92;n  #125;#gt;#40;#41;"/]
+  10[/"type: #quot;_LocalClass#quot;<br/>node: #quot;_LocalClass#quot;"/]
+  11["type: #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, #quot;_LocalClass#quot;, Shape#gt;<br/>callee: Context.Tag<br/>args: #91;#93;"]
+  12[/"type: #lt;const Id extends string#gt;#40;id: Id#41; =#gt; #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, Id, Shape#gt;<br/>node: Context.Tag"/]
+  13[/"type: TagClass#lt;_LocalLeaking, #quot;_LocalLeaking#quot;, #123; writeCache: #40;#41; =#gt; Effect#lt;void, never, FileSystem#gt;; readCache: Effect#lt;void, never, FileSystem#gt;; #125;#gt;<br/>node: Context.Tag#40;#quot;_LocalLeaking#quot;#41;#lt;_LocalLeaking, #123;#92;n    writeCache: #40;#41; =#gt; Effect.Effect#lt;void, never, FileSystem#gt;#92;n    readCache: Effect.Effect#lt;void, never, FileSystem#gt;#92;n  #125;#gt;#40;#41;"/]
+  14[/"type: #quot;_LocalLeaking#quot;<br/>node: #quot;_LocalLeaking#quot;"/]
+  15["type: #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, #quot;_LocalLeaking#quot;, Shape#gt;<br/>callee: Context.Tag<br/>args: #91;#93;"]
+  16[/"type: #lt;const Id extends string#gt;#40;id: Id#41; =#gt; #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, Id, Shape#gt;<br/>node: Context.Tag"/]
+  1 -->|"kind: pipe"| 2
+  3 -->|"kind: transformCallee"| 2
+  2 -->|"kind: usedBy"| 0
+  5 -->|"kind: pipe"| 6
+  7 -->|"kind: transformCallee"| 6
+  6 -->|"kind: usedBy"| 4
+  10 -->|"kind: pipe"| 11
+  12 -->|"kind: transformCallee"| 11
+  11 -->|"kind: usedBy"| 9
+  14 -->|"kind: pipe"| 15
+  16 -->|"kind: transformCallee"| 15
+  15 -->|"kind: usedBy"| 13

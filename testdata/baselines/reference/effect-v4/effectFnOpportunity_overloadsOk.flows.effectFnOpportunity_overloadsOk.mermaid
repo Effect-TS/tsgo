@@ -29,14 +29,16 @@ flowchart TB
   27[/"type: 3<br/>node: 3"/]
   28[/"type: 4<br/>node: 4"/]
   29[/"type: 5<br/>node: 5"/]
-  2 -->|"kind: potentialReturn"| 1
   3 -->|"kind: pipe"| 4
   5 -->|"kind: transformCallee"| 4
+  4 -->|"kind: usedBy"| 2
+  2 -->|"kind: potentialReturn"| 1
   4 -->|"kind: yieldable"| 1
   1 -->|"kind: potentialReturn"| 0
-  8 -->|"kind: potentialReturn"| 7
   9 -->|"kind: pipe"| 10
   11 -->|"kind: transformCallee"| 10
+  10 -->|"kind: usedBy"| 8
+  8 -->|"kind: potentialReturn"| 7
   10 -->|"kind: yieldable"| 7
   7 -->|"kind: potentialReturn"| 6
   13 -->|"kind: pipe"| 14

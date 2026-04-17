@@ -2,15 +2,31 @@ flowchart TB
   0[/"type: Class#lt;DbConnection, #quot;DbConnection#quot;, #123; readonly succeed: #123;#125;; #125;#gt;<br/>node: Effect.Service#lt;DbConnection#gt;#40;#41;#40;#quot;DbConnection#quot;, #123;#92;n  succeed: #123;#125;#92;n#125;#41;"/]
   1[/"type: Class#lt;FileSystem, #quot;FileSystem#quot;, #123; readonly succeed: #123;#125;; #125;#gt;<br/>node: Effect.Service#lt;FileSystem#gt;#40;#41;#40;#quot;FileSystem#quot;, #123;#92;n  succeed: #123;#125;#92;n#125;#41;"/]
   2[/"type: Class#lt;Cache, #quot;Cache#quot;, #123; readonly effect: Effect#lt;#123;#125;, never, FileSystem#gt;; #125;#gt;<br/>node: Effect.Service#lt;Cache#gt;#40;#41;#40;#quot;Cache#quot;, #123;#92;n  effect: Effect.as#40;FileSystem, #123;#125;#41;#92;n#125;#41;"/]
-  3[/"type: Class#lt;UserRepository, #quot;UserRepository#quot;, #123; readonly effect: Effect#lt;#123;#125;, never, Cache #124; DbConnection#gt;; #125;#gt;<br/>node: Effect.Service#lt;UserRepository#gt;#40;#41;#40;#quot;UserRepository#quot;, #123;#92;n  effect: Effect.as#40;Effect.zipRight#40;DbConnection, Cache#41;, #123;#125;#41;#92;n#125;#41;"/]
-  4[/"type: typeof Cache<br/>node: Cache"/]
-  5["type: Layer#lt;Cache, never, Cache#gt;<br/>callee: <br/>args: #91;#93;"]
-  6[/"type: #123; #lt;I, S#gt;#40;tag: Tag#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41; =#gt; Layer#lt;I, E, R#gt;; #lt;I, S, E, R#gt;#40;tag: Tag#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, R#gt;; #125;<br/>node: Layer.effect"/]
-  7[/"type: typeof Cache<br/>node: Cache"/]
-  8[/"type: Layer#lt;DbConnection #124; FileSystem, never, never#gt;<br/>node: Layer.mergeAll#40;#92;n  DbConnection.Default,#92;n  FileSystem.Default#92;n#41;"/]
-  9[/"type: Layer#lt;Cache #124; UserRepository, never, Cache #124; DbConnection#gt;<br/>node: Layer.mergeAll#40;#92;n  UserRepository.Default,#92;n  cachePassthrough#92;n#41;"/]
-  10[/"type: Layer#lt;Cache #124; DbConnection #124; FileSystem, never, FileSystem#gt;<br/>node: Layer.mergeAll#40;#92;n  DbConnection.Default,#92;n  FileSystem.Default,#92;n  Cache.Default // #lt;- this requires a DbConnection#92;n#41;"/]
-  11[/"type: Layer#lt;Cache #124; DbConnection #124; FileSystem #124; UserRepository, never, Cache #124; DbConnection #124; FileSystem#gt;<br/>node: Layer.mergeAll#40;#92;n  DbConnection.Default,#92;n  FileSystem.Default,#92;n  Cache.Default, // #lt;- this requires a FileSystem,#92;n  UserRepository.Default // #lt;- this requires a DbConnection#92;n#41;"/]
-  4 -->|"kind: pipe"| 5
-  6 -->|"kind: transformCallee"| 4
-  7 -->|"kind: transformArg"| 4
+  3[/"type: typeof FileSystem<br/>node: FileSystem"/]
+  4["type: Effect#lt;#123;#125;, never, FileSystem#gt;<br/>callee: <br/>args: #91;#93;"]
+  5[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  6[/"type: #123;#125;<br/>node: #123;#125;"/]
+  7[/"type: Class#lt;UserRepository, #quot;UserRepository#quot;, #123; readonly effect: Effect#lt;#123;#125;, never, Cache #124; DbConnection#gt;; #125;#gt;<br/>node: Effect.Service#lt;UserRepository#gt;#40;#41;#40;#quot;UserRepository#quot;, #123;#92;n  effect: Effect.as#40;Effect.zipRight#40;DbConnection, Cache#41;, #123;#125;#41;#92;n#125;#41;"/]
+  8[/"type: Effect#lt;Cache, never, Cache #124; DbConnection#gt;<br/>node: Effect.zipRight#40;DbConnection, Cache#41;"/]
+  9["type: Effect#lt;#123;#125;, never, Cache #124; DbConnection#gt;<br/>callee: <br/>args: #91;#93;"]
+  10[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  11[/"type: #123;#125;<br/>node: #123;#125;"/]
+  12[/"type: typeof Cache<br/>node: Cache"/]
+  13["type: Layer#lt;Cache, never, Cache#gt;<br/>callee: <br/>args: #91;#93;"]
+  14[/"type: #123; #lt;I, S#gt;#40;tag: Tag#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41; =#gt; Layer#lt;I, E, R#gt;; #lt;I, S, E, R#gt;#40;tag: Tag#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, R#gt;; #125;<br/>node: Layer.effect"/]
+  15[/"type: typeof Cache<br/>node: Cache"/]
+  16[/"type: Layer#lt;DbConnection #124; FileSystem, never, never#gt;<br/>node: Layer.mergeAll#40;#92;n  DbConnection.Default,#92;n  FileSystem.Default#92;n#41;"/]
+  17[/"type: Layer#lt;Cache #124; UserRepository, never, Cache #124; DbConnection#gt;<br/>node: Layer.mergeAll#40;#92;n  UserRepository.Default,#92;n  cachePassthrough#92;n#41;"/]
+  18[/"type: Layer#lt;Cache #124; DbConnection #124; FileSystem, never, FileSystem#gt;<br/>node: Layer.mergeAll#40;#92;n  DbConnection.Default,#92;n  FileSystem.Default,#92;n  Cache.Default // #lt;- this requires a DbConnection#92;n#41;"/]
+  19[/"type: Layer#lt;Cache #124; DbConnection #124; FileSystem #124; UserRepository, never, Cache #124; DbConnection #124; FileSystem#gt;<br/>node: Layer.mergeAll#40;#92;n  DbConnection.Default,#92;n  FileSystem.Default,#92;n  Cache.Default, // #lt;- this requires a FileSystem,#92;n  UserRepository.Default // #lt;- this requires a DbConnection#92;n#41;"/]
+  3 -->|"kind: pipe"| 4
+  5 -->|"kind: transformCallee"| 3
+  6 -->|"kind: transformArg"| 3
+  4 -->|"kind: usedBy"| 2
+  8 -->|"kind: pipe"| 9
+  10 -->|"kind: transformCallee"| 8
+  11 -->|"kind: transformArg"| 8
+  9 -->|"kind: usedBy"| 7
+  12 -->|"kind: pipe"| 13
+  14 -->|"kind: transformCallee"| 12
+  15 -->|"kind: transformArg"| 12

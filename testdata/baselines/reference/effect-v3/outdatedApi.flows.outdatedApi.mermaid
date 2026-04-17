@@ -43,7 +43,8 @@ flowchart TB
   18 -->|"kind: transformCallee"| 17
   19 -->|"kind: pipe"| 20
   21 -->|"kind: transformCallee"| 20
-  23 -->|"kind: potentialReturn"| 22
   24 -->|"kind: pipe"| 25
   26 -->|"kind: transformCallee"| 25
+  25 -->|"kind: usedBy"| 23
+  23 -->|"kind: potentialReturn"| 22
   25 -->|"kind: yieldable"| 22
