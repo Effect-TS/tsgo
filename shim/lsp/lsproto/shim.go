@@ -224,6 +224,7 @@ type CustomClosingTagCompletionOrNull = lsproto.CustomClosingTagCompletionOrNull
 type CustomClosingTagCompletionResponse = lsproto.CustomClosingTagCompletionResponse
 var CustomInitializeAPISessionInfo = lsproto.CustomInitializeAPISessionInfo
 type CustomInitializeAPISessionResponse = lsproto.CustomInitializeAPISessionResponse
+type CustomMultiDocumentHighlightResponse = lsproto.CustomMultiDocumentHighlightResponse
 var CustomProjectInfoInfo = lsproto.CustomProjectInfoInfo
 type CustomProjectInfoResponse = lsproto.CustomProjectInfoResponse
 var CustomRunGCInfo = lsproto.CustomRunGCInfo
@@ -232,6 +233,7 @@ var CustomSaveHeapProfileInfo = lsproto.CustomSaveHeapProfileInfo
 var CustomStartCPUProfileInfo = lsproto.CustomStartCPUProfileInfo
 var CustomStopCPUProfileInfo = lsproto.CustomStopCPUProfileInfo
 var CustomTextDocumentClosingTagCompletionInfo = lsproto.CustomTextDocumentClosingTagCompletionInfo
+var CustomTextDocumentMultiDocumentHighlightInfo = lsproto.CustomTextDocumentMultiDocumentHighlightInfo
 var CustomTextDocumentSourceDefinitionInfo = lsproto.CustomTextDocumentSourceDefinitionInfo
 type CustomTextDocumentSourceDefinitionResponse = lsproto.CustomTextDocumentSourceDefinitionResponse
 type DeclarationClientCapabilities = lsproto.DeclarationClientCapabilities
@@ -590,6 +592,7 @@ const MethodCustomSaveHeapProfile = lsproto.MethodCustomSaveHeapProfile
 const MethodCustomStartCPUProfile = lsproto.MethodCustomStartCPUProfile
 const MethodCustomStopCPUProfile = lsproto.MethodCustomStopCPUProfile
 const MethodCustomTextDocumentClosingTagCompletion = lsproto.MethodCustomTextDocumentClosingTagCompletion
+const MethodCustomTextDocumentMultiDocumentHighlight = lsproto.MethodCustomTextDocumentMultiDocumentHighlight
 const MethodCustomTextDocumentSourceDefinition = lsproto.MethodCustomTextDocumentSourceDefinition
 const MethodDocumentLinkResolve = lsproto.MethodDocumentLinkResolve
 const MethodExit = lsproto.MethodExit
@@ -686,6 +689,9 @@ type MonikerParams = lsproto.MonikerParams
 type MonikerRegistrationOptions = lsproto.MonikerRegistrationOptions
 type MonikerResponse = lsproto.MonikerResponse
 type MonikersOrNull = lsproto.MonikersOrNull
+type MultiDocumentHighlight = lsproto.MultiDocumentHighlight
+type MultiDocumentHighlightParams = lsproto.MultiDocumentHighlightParams
+type MultiDocumentHighlightsOrNull = lsproto.MultiDocumentHighlightsOrNull
 //go:linkname NewBaseReader github.com/microsoft/typescript-go/internal/lsp/lsproto.NewBaseReader
 func NewBaseReader(r io.Reader) *lsproto.BaseReader
 //go:linkname NewBaseWriter github.com/microsoft/typescript-go/internal/lsp/lsproto.NewBaseWriter
