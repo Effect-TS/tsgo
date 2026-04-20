@@ -1,5 +1,19 @@
 # @effect/tsgo
 
+## 0.5.0
+
+### Minor Changes
+
+- d1f126e: Refresh execution-flow graph baselines after the latest graph relationship updates.
+
+  This captures the current local flow outputs used by tests, including the updated graph edge semantics in execution-flow snapshots.
+
+### Patch Changes
+
+- 2f9e068: Fix the refresh flake hash workflow so scheduled TypeScript Go update runs check out the generated branch before refreshing the vendor hash.
+- 8869556: Reduce typeparser property lookup overhead by using direct property type access for Effect-related type detection, and add a regression test covering the plugin-only TS2589 failure path in `effectInFailure`.
+- ab3cf34: Update [`typescript-go`](https://github.com/microsoft/typescript-go/commit/1de8d68230f8759af6fb71d9cf0f9c37d2c65507) to commit `1de8d68230f8759af6fb71d9cf0f9c37d2c65507`.
+
 ## 0.4.0
 
 ### Minor Changes
