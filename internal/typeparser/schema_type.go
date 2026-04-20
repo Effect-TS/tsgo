@@ -49,7 +49,7 @@ func (tp *TypeParser) isSchemaType(t *checker.Type, atLocation *ast.Node) bool {
 	return Cached(&tp.links.IsSchemaType, t, func() bool {
 		version := tp.DetectEffectVersion()
 		if version == EffectMajorV4 {
-			return tp.GetPropertyOfTypeByName(t, SchemaTypeId) != nil
+			return tp.GetTypeOfPropertyByName(t, SchemaTypeId) != nil
 		}
 
 		// v3 / unknown: check for 'ast' property first
@@ -124,7 +124,7 @@ func (tp *TypeParser) EffectSchemaTypes(t *checker.Type, atLocation *ast.Node) *
 	return Cached(&tp.links.EffectSchemaTypes, t, func() *SchemaTypes {
 		version := tp.DetectEffectVersion()
 		if version == EffectMajorV4 {
-			if tp.GetPropertyOfTypeByName(t, SchemaTypeId) == nil {
+			if tp.GetTypeOfPropertyByName(t, SchemaTypeId) == nil {
 				return nil
 			}
 			// V4: get Type and Encoded properties directly

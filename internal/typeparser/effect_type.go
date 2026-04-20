@@ -39,14 +39,10 @@ func (tp *TypeParser) EffectType(t *checker.Type, atLocation *ast.Node) *Effect 
 	return Cached(&tp.links.EffectType, t, func() *Effect {
 		version := tp.DetectEffectVersion()
 		if version == EffectMajorV4 {
-			// Direct property access using the known Effect v4 type ID
-			propSymbol := tp.GetPropertyOfTypeByName(t, EffectTypeId)
-			if propSymbol == nil {
+			varianceStructType := tp.GetTypeOfPropertyByName(t, EffectTypeId)
+			if varianceStructType == nil {
 				return nil
 			}
-
-			// Get the variance struct type
-			varianceStructType := tp.checker.GetTypeOfSymbolAtLocation(propSymbol, atLocation)
 
 			// Parse the variance struct to extract A, E, R
 			return tp.parseVarianceStruct(varianceStructType, atLocation)
@@ -210,7 +206,7 @@ func (tp *TypeParser) HasEffectTypeId(t *checker.Type, atLocation *ast.Node) boo
 	return Cached(&tp.links.HasEffectTypeId, t, func() bool {
 		version := tp.DetectEffectVersion()
 		if version == EffectMajorV4 {
-			return tp.GetPropertyOfTypeByName(t, EffectTypeId) != nil
+			return tp.GetTypeOfPropertyByName(t, EffectTypeId) != nil
 		}
 		// For v3/unknown, the quick check is not available; defer to full detection.
 		return tp.IsEffectType(t, atLocation)

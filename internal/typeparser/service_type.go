@@ -43,22 +43,16 @@ func (tp *TypeParser) ServiceType(t *checker.Type, atLocation *ast.Node) *Servic
 			return nil
 		}
 
-		serviceKeyTypeIDSymbol := tp.GetPropertyOfTypeByName(t, ServiceTypeId)
-		if serviceKeyTypeIDSymbol == nil {
+		serviceKeyTypeIDType := tp.GetTypeOfPropertyByName(t, ServiceTypeId)
+		if serviceKeyTypeIDType == nil {
 			return nil
 		}
-		identifierSymbol := tp.GetPropertyOfTypeByName(t, "Identifier")
-		if identifierSymbol == nil {
+		identifier := tp.GetTypeOfPropertyByName(t, "Identifier")
+		if identifier == nil {
 			return nil
 		}
-		serviceSymbol := tp.GetPropertyOfTypeByName(t, "Service")
-		if serviceSymbol == nil {
-			return nil
-		}
-
-		identifier := tp.checker.GetTypeOfSymbolAtLocation(identifierSymbol, atLocation)
-		shape := tp.checker.GetTypeOfSymbolAtLocation(serviceSymbol, atLocation)
-		if identifier == nil || shape == nil {
+		shape := tp.GetTypeOfPropertyByName(t, "Service")
+		if shape == nil {
 			return nil
 		}
 

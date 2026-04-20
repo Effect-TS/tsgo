@@ -7,14 +7,12 @@ import (
 
 // extractCovariantType gets the type argument from a covariant property.
 // Covariant<A> is encoded as () => A, so we get the return type.
-func (tp *TypeParser) extractCovariantType(t *checker.Type, atLocation *ast.Node, propName string) *checker.Type {
+func (tp *TypeParser) extractCovariantType(t *checker.Type, _ *ast.Node, propName string) *checker.Type {
 	c := tp.checker
-	propSymbol := c.GetPropertyOfType(t, propName)
-	if propSymbol == nil {
+	propType := tp.GetTypeOfPropertyByName(t, propName)
+	if propType == nil {
 		return nil
 	}
-
-	propType := c.GetTypeOfSymbolAtLocation(propSymbol, atLocation)
 	signatures := c.GetSignaturesOfType(propType, checker.SignatureKindCall)
 
 	if len(signatures) != 1 {
@@ -30,14 +28,12 @@ func (tp *TypeParser) extractCovariantType(t *checker.Type, atLocation *ast.Node
 
 // extractContravariantType gets the type argument from a contravariant property.
 // Contravariant<A> is encoded as (_: A) => void, so we get the first parameter type.
-func (tp *TypeParser) extractContravariantType(t *checker.Type, atLocation *ast.Node, propName string) *checker.Type {
+func (tp *TypeParser) extractContravariantType(t *checker.Type, _ *ast.Node, propName string) *checker.Type {
 	c := tp.checker
-	propSymbol := c.GetPropertyOfType(t, propName)
-	if propSymbol == nil {
+	propType := tp.GetTypeOfPropertyByName(t, propName)
+	if propType == nil {
 		return nil
 	}
-
-	propType := c.GetTypeOfSymbolAtLocation(propSymbol, atLocation)
 	signatures := c.GetSignaturesOfType(propType, checker.SignatureKindCall)
 
 	if len(signatures) != 1 {
@@ -62,28 +58,13 @@ func (tp *TypeParser) extractInvariantType(t *checker.Type, atLocation *ast.Node
 	return tp.extractCovariantType(t, atLocation, propName)
 }
 
-// GetPropertyOfTypeByName returns a property symbol by name, including computed properties backed by string literals.
-func (tp *TypeParser) GetPropertyOfTypeByName(t *checker.Type, name string) *ast.Symbol {
+// GetTypeOfPropertyByName returns the type of a property by name.
+// Prefer this when only the property type is needed.
+func (tp *TypeParser) GetTypeOfPropertyByName(t *checker.Type, name string) *checker.Type {
 	if tp == nil || tp.checker == nil || t == nil {
 		return nil
 	}
-	c := tp.checker
-	if sym := c.GetPropertyOfType(t, name); sym != nil {
-		return sym
-	}
-	for _, prop := range c.GetPropertiesOfType(t) {
-		if prop == nil {
-			continue
-		}
-		nameType := checker.Checker_getLiteralTypeFromProperty(c, prop, checker.TypeFlagsStringOrNumberLiteralOrUnique, true)
-		if nameType == nil || !nameType.IsStringLiteral() {
-			continue
-		}
-		if lit, ok := nameType.AsLiteralType().Value().(string); ok && lit == name {
-			return prop
-		}
-	}
-	return nil
+	return tp.checker.GetTypeOfPropertyOfType(t, name)
 }
 
 func (tp *TypeParser) resolveAliasedSymbol(sym *ast.Symbol) *ast.Symbol {

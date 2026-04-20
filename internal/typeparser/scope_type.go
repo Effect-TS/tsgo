@@ -21,7 +21,7 @@ func (tp *TypeParser) IsScopeType(t *checker.Type, atLocation *ast.Node) bool {
 	return Cached(&tp.links.IsScopeType, t, func() bool {
 		version := tp.DetectEffectVersion()
 		if version == EffectMajorV4 {
-			return tp.GetPropertyOfTypeByName(t, ScopeTypeId) != nil
+			return tp.GetTypeOfPropertyByName(t, ScopeTypeId) != nil
 		}
 
 		// v3 / unknown: check that the type is "pipeable"

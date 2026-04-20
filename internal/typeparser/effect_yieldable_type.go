@@ -30,12 +30,7 @@ func (tp *TypeParser) EffectYieldableType(t *checker.Type, atLocation *ast.Node)
 		}
 
 		// v4: look for asEffect() protocol
-		asEffectSymbol := tp.GetPropertyOfTypeByName(t, "asEffect")
-		if asEffectSymbol == nil {
-			return nil
-		}
-
-		asEffectType := tp.checker.GetTypeOfSymbolAtLocation(asEffectSymbol, atLocation)
+		asEffectType := tp.GetTypeOfPropertyByName(t, "asEffect")
 		if asEffectType == nil {
 			return nil
 		}
