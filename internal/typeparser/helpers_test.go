@@ -240,9 +240,9 @@ func TestExtractCovariantType_RejectsGenericSignature(t *testing.T) {
 	c, tp, sf, done := compileAndGetCheckerAndSourceFileInternal(t, source)
 	defer done()
 
-	typ, decl := getFirstVariableDeclarationType(t, tp, sf)
+	typ, _ := getFirstVariableDeclarationType(t, tp, sf)
 
-	result := tp.extractCovariantType(typ, decl, "prop")
+	result := tp.extractCovariantType(typ, "prop")
 	if result != nil {
 		t.Errorf("expected nil for generic covariant signature, got %s", c.TypeToString(result))
 	}
@@ -256,9 +256,9 @@ func TestExtractContravariantType_RejectsGenericSignature(t *testing.T) {
 	c, tp, sf, done := compileAndGetCheckerAndSourceFileInternal(t, source)
 	defer done()
 
-	typ, decl := getFirstVariableDeclarationType(t, tp, sf)
+	typ, _ := getFirstVariableDeclarationType(t, tp, sf)
 
-	result := tp.extractContravariantType(typ, decl, "prop")
+	result := tp.extractContravariantType(typ, "prop")
 	if result != nil {
 		t.Errorf("expected nil for generic contravariant signature, got %s", c.TypeToString(result))
 	}
@@ -272,9 +272,9 @@ func TestExtractCovariantType_AcceptsNonGenericSignature(t *testing.T) {
 	c, tp, sf, done := compileAndGetCheckerAndSourceFileInternal(t, source)
 	defer done()
 
-	typ, decl := getFirstVariableDeclarationType(t, tp, sf)
+	typ, _ := getFirstVariableDeclarationType(t, tp, sf)
 
-	result := tp.extractCovariantType(typ, decl, "prop")
+	result := tp.extractCovariantType(typ, "prop")
 	if result == nil {
 		t.Fatal("expected non-nil result for non-generic covariant signature")
 	}
@@ -293,9 +293,9 @@ func TestExtractInvariantType_RejectsGenericSignature(t *testing.T) {
 	c, tp, sf, done := compileAndGetCheckerAndSourceFileInternal(t, source)
 	defer done()
 
-	typ, decl := getFirstVariableDeclarationType(t, tp, sf)
+	typ, _ := getFirstVariableDeclarationType(t, tp, sf)
 
-	result := tp.extractInvariantType(typ, decl, "prop")
+	result := tp.extractInvariantType(typ, "prop")
 	if result != nil {
 		t.Errorf("expected nil for generic invariant signature, got %s", c.TypeToString(result))
 	}
@@ -309,9 +309,9 @@ func TestExtractInvariantType_AcceptsNonGenericSignature(t *testing.T) {
 	c, tp, sf, done := compileAndGetCheckerAndSourceFileInternal(t, source)
 	defer done()
 
-	typ, decl := getFirstVariableDeclarationType(t, tp, sf)
+	typ, _ := getFirstVariableDeclarationType(t, tp, sf)
 
-	result := tp.extractInvariantType(typ, decl, "prop")
+	result := tp.extractInvariantType(typ, "prop")
 	if result == nil {
 		t.Fatal("expected non-nil result for non-generic invariant signature")
 	}
@@ -330,9 +330,9 @@ func TestExtractContravariantType_AcceptsNonGenericSignature(t *testing.T) {
 	c, tp, sf, done := compileAndGetCheckerAndSourceFileInternal(t, source)
 	defer done()
 
-	typ, decl := getFirstVariableDeclarationType(t, tp, sf)
+	typ, _ := getFirstVariableDeclarationType(t, tp, sf)
 
-	result := tp.extractContravariantType(typ, decl, "prop")
+	result := tp.extractContravariantType(typ, "prop")
 	if result == nil {
 		t.Fatal("expected non-nil result for non-generic contravariant signature")
 	}

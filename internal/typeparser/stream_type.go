@@ -19,12 +19,10 @@ func (tp *TypeParser) StreamType(t *checker.Type, atLocation *ast.Node) *Effect 
 			return tp.EffectType(t, atLocation)
 		}
 
-		propSymbol := tp.GetPropertyOfTypeByName(t, StreamTypeId)
-		if propSymbol == nil {
+		varianceStructType := tp.GetTypeOfPropertyByName(t, StreamTypeId)
+		if varianceStructType == nil {
 			return nil
 		}
-
-		varianceStructType := tp.checker.GetTypeOfSymbolAtLocation(propSymbol, atLocation)
-		return tp.parseVarianceStruct(varianceStructType, atLocation)
+		return tp.parseVarianceStruct(varianceStructType)
 	})
 }

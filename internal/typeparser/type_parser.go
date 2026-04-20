@@ -29,7 +29,6 @@ type EffectLinks struct {
 	LayerType            core.LinkStore[*checker.Type, *Layer]
 	ServiceType          core.LinkStore[*checker.Type, *Service]
 	ContextTag           core.LinkStore[*checker.Type, *Service]
-	IsSchemaType         core.LinkStore[*checker.Type, bool]
 	EffectSchemaTypes    core.LinkStore[*checker.Type, *SchemaTypes]
 	IsScopeType          core.LinkStore[*checker.Type, bool]
 	IsPipeableType       core.LinkStore[*checker.Type, bool]

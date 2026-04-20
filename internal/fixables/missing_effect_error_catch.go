@@ -6,13 +6,13 @@ import (
 	"strings"
 
 	"github.com/effect-ts/tsgo/internal/fixable"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
 	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
 	"github.com/microsoft/typescript-go/shim/ls"
-	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/microsoft/typescript-go/shim/scanner"
 )
 
@@ -63,7 +63,7 @@ func runMissingEffectErrorCatchFix(ctx *fixable.Context) []ls.CodeAction {
 		}
 
 		// Offer catchTags only when all missing error members have a literal _tag.
-		if tags, ok := collectLiteralMissingErrorTags(ctx.TypeParser, c, errorExpr, match.UnhandledErrors); ok {
+		if tags, ok := collectLiteralMissingErrorTags(ctx.TypeParser, c, match.UnhandledErrors); ok {
 			if taggedCandidate == nil || nodeStartPos < taggedCandidate.start || (nodeStartPos == taggedCandidate.start && nodeEndPos < taggedCandidate.end) {
 				taggedCandidate = &fixCandidate{
 					start: nodeStartPos,
@@ -111,7 +111,7 @@ func runMissingEffectErrorCatchFix(ctx *fixable.Context) []ls.CodeAction {
 	return actions
 }
 
-func collectLiteralMissingErrorTags(tp *typeparser.TypeParser, c *checker.Checker, atLocation *ast.Node, missing []*checker.Type) ([]string, bool) {
+func collectLiteralMissingErrorTags(tp *typeparser.TypeParser, c *checker.Checker, missing []*checker.Type) ([]string, bool) {
 	if len(missing) == 0 {
 		return nil, false
 	}
@@ -119,14 +119,13 @@ func collectLiteralMissingErrorTags(tp *typeparser.TypeParser, c *checker.Checke
 	seen := make(map[string]bool)
 	tags := make([]string, 0, len(missing))
 	for _, missingType := range missing {
-		tagProp := c.GetPropertyOfType(missingType, "_tag")
-		if tagProp == nil {
-			tagProp = tp.GetPropertyOfTypeByName(missingType, "_tag")
+		tagType := c.GetTypeOfPropertyOfType(missingType, "_tag")
+		if tagType == nil {
+			tagType = tp.GetTypeOfPropertyByName(missingType, "_tag")
 		}
-		if tagProp == nil {
+		if tagType == nil {
 			return nil, false
 		}
-		tagType := c.GetTypeOfSymbolAtLocation(tagProp, atLocation)
 		if tagType == nil || tagType.Flags()&checker.TypeFlagsStringLiteral == 0 {
 			return nil, false
 		}

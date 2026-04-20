@@ -39,17 +39,13 @@ func (tp *TypeParser) EffectType(t *checker.Type, atLocation *ast.Node) *Effect 
 	return Cached(&tp.links.EffectType, t, func() *Effect {
 		version := tp.DetectEffectVersion()
 		if version == EffectMajorV4 {
-			// Direct property access using the known Effect v4 type ID
-			propSymbol := tp.GetPropertyOfTypeByName(t, EffectTypeId)
-			if propSymbol == nil {
+			varianceStructType := tp.GetTypeOfPropertyByName(t, EffectTypeId)
+			if varianceStructType == nil {
 				return nil
 			}
 
-			// Get the variance struct type
-			varianceStructType := tp.checker.GetTypeOfSymbolAtLocation(propSymbol, atLocation)
-
 			// Parse the variance struct to extract A, E, R
-			return tp.parseVarianceStruct(varianceStructType, atLocation)
+			return tp.parseVarianceStruct(varianceStructType)
 		}
 
 		// v3 / unknown: iterate properties looking for a variance struct
@@ -90,7 +86,7 @@ func (tp *TypeParser) EffectType(t *checker.Type, atLocation *ast.Node) *Effect 
 		// Try each candidate as a variance struct
 		for _, prop := range candidates {
 			propType := tp.checker.GetTypeOfSymbolAtLocation(prop, atLocation)
-			if result := tp.parseVarianceStruct(propType, atLocation); result != nil {
+			if result := tp.parseVarianceStruct(propType); result != nil {
 				return result
 			}
 		}
@@ -100,18 +96,18 @@ func (tp *TypeParser) EffectType(t *checker.Type, atLocation *ast.Node) *Effect 
 }
 
 // parseVarianceStruct extracts A, E, R from a variance struct type.
-func (tp *TypeParser) parseVarianceStruct(t *checker.Type, atLocation *ast.Node) *Effect {
-	a := tp.extractCovariantType(t, atLocation, "_A")
+func (tp *TypeParser) parseVarianceStruct(t *checker.Type) *Effect {
+	a := tp.extractCovariantType(t, "_A")
 	if a == nil {
 		return nil
 	}
 
-	e := tp.extractCovariantType(t, atLocation, "_E")
+	e := tp.extractCovariantType(t, "_E")
 	if e == nil {
 		return nil
 	}
 
-	r := tp.extractCovariantType(t, atLocation, "_R")
+	r := tp.extractCovariantType(t, "_R")
 	if r == nil {
 		return nil
 	}
@@ -210,7 +206,7 @@ func (tp *TypeParser) HasEffectTypeId(t *checker.Type, atLocation *ast.Node) boo
 	return Cached(&tp.links.HasEffectTypeId, t, func() bool {
 		version := tp.DetectEffectVersion()
 		if version == EffectMajorV4 {
-			return tp.GetPropertyOfTypeByName(t, EffectTypeId) != nil
+			return tp.GetTypeOfPropertyByName(t, EffectTypeId) != nil
 		}
 		// For v3/unknown, the quick check is not available; defer to full detection.
 		return tp.IsEffectType(t, atLocation)

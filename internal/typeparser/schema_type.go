@@ -1,9 +1,6 @@
 package typeparser
 
 import (
-	"sort"
-	"strings"
-
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
 )
@@ -27,77 +24,17 @@ var effectSchemaParserModuleDescriptor = PackageSourceFileDescriptor{
 const SchemaTypeId = "~effect/Schema/Schema"
 
 // parseSchemaVarianceStruct checks if a type is a Schema variance struct (has _A, _I, _R).
-func (tp *TypeParser) parseSchemaVarianceStruct(t *checker.Type, atLocation *ast.Node) bool {
-	a := tp.extractInvariantType(t, atLocation, "_A")
+func (tp *TypeParser) parseSchemaVarianceStruct(t *checker.Type) bool {
+	a := tp.extractInvariantType(t, "_A")
 	if a == nil {
 		return false
 	}
-	i := tp.extractInvariantType(t, atLocation, "_I")
+	i := tp.extractInvariantType(t, "_I")
 	if i == nil {
 		return false
 	}
-	r := tp.extractCovariantType(t, atLocation, "_R")
+	r := tp.extractCovariantType(t, "_R")
 	return r != nil
-}
-
-// isSchemaType checks if a type is a Schema type (v4 or v3).
-func (tp *TypeParser) isSchemaType(t *checker.Type, atLocation *ast.Node) bool {
-	c := tp.checker
-	if c == nil || t == nil {
-		return false
-	}
-	return Cached(&tp.links.IsSchemaType, t, func() bool {
-		version := tp.DetectEffectVersion()
-		if version == EffectMajorV4 {
-			return tp.GetPropertyOfTypeByName(t, SchemaTypeId) != nil
-		}
-
-		// v3 / unknown: check for 'ast' property first
-		if c.GetPropertyOfType(t, "ast") == nil {
-			return false
-		}
-
-		props := c.GetPropertiesOfType(t)
-		var candidates []*ast.Symbol
-		for _, prop := range props {
-			if prop == nil {
-				continue
-			}
-			if prop.Flags&ast.SymbolFlagsProperty == 0 {
-				continue
-			}
-			if prop.Flags&ast.SymbolFlagsOptional != 0 {
-				continue
-			}
-			if prop.ValueDeclaration == nil {
-				continue
-			}
-			candidates = append(candidates, prop)
-		}
-
-		if len(candidates) == 0 {
-			return false
-		}
-
-		// Sort so properties containing "TypeId" come first (optimization heuristic)
-		sort.SliceStable(candidates, func(i, j int) bool {
-			iHas := strings.Contains(candidates[i].Name, "TypeId")
-			jHas := strings.Contains(candidates[j].Name, "TypeId")
-			if iHas && !jHas {
-				return true
-			}
-			return false
-		})
-
-		for _, prop := range candidates {
-			propType := c.GetTypeOfSymbolAtLocation(prop, atLocation)
-			if tp.parseSchemaVarianceStruct(propType, atLocation) {
-				return true
-			}
-		}
-
-		return false
-	})
 }
 
 // IsSchemaType returns true if the type is a Schema type (v4 or v3).
@@ -105,7 +42,7 @@ func (tp *TypeParser) IsSchemaType(t *checker.Type, atLocation *ast.Node) bool {
 	if tp == nil {
 		return false
 	}
-	return tp.isSchemaType(t, atLocation)
+	return tp.EffectSchemaTypes(t, atLocation) != nil
 }
 
 // SchemaTypes holds the A (Type) and E (Encoded) types extracted from a Schema type.
@@ -124,7 +61,7 @@ func (tp *TypeParser) EffectSchemaTypes(t *checker.Type, atLocation *ast.Node) *
 	return Cached(&tp.links.EffectSchemaTypes, t, func() *SchemaTypes {
 		version := tp.DetectEffectVersion()
 		if version == EffectMajorV4 {
-			if tp.GetPropertyOfTypeByName(t, SchemaTypeId) == nil {
+			if tp.GetTypeOfPropertyByName(t, SchemaTypeId) == nil {
 				return nil
 			}
 			// V4: get Type and Encoded properties directly
@@ -148,15 +85,15 @@ func (tp *TypeParser) EffectSchemaTypes(t *checker.Type, atLocation *ast.Node) *
 				continue
 			}
 			propType := c.GetTypeOfSymbolAtLocation(prop, atLocation)
-			a := tp.extractInvariantType(propType, atLocation, "_A")
+			a := tp.extractInvariantType(propType, "_A")
 			if a == nil {
 				continue
 			}
-			i := tp.extractInvariantType(propType, atLocation, "_I")
+			i := tp.extractInvariantType(propType, "_I")
 			if i == nil {
 				continue
 			}
-			r := tp.extractCovariantType(propType, atLocation, "_R")
+			r := tp.extractCovariantType(propType, "_R")
 			if r == nil {
 				continue
 			}
@@ -197,7 +134,7 @@ func isSchemaTypeSourceFile(tp *TypeParser, c *checker.Checker, sf *ast.SourceFi
 		return false
 	}
 
-	return tp.isSchemaType(schemaType, sf.AsNode())
+	return tp.IsSchemaType(schemaType, sf.AsNode())
 }
 
 // IsNodeReferenceToEffectSchemaModuleApi reports whether node resolves to a member
