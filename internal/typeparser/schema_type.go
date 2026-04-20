@@ -27,16 +27,16 @@ var effectSchemaParserModuleDescriptor = PackageSourceFileDescriptor{
 const SchemaTypeId = "~effect/Schema/Schema"
 
 // parseSchemaVarianceStruct checks if a type is a Schema variance struct (has _A, _I, _R).
-func (tp *TypeParser) parseSchemaVarianceStruct(t *checker.Type, atLocation *ast.Node) bool {
-	a := tp.extractInvariantType(t, atLocation, "_A")
+func (tp *TypeParser) parseSchemaVarianceStruct(t *checker.Type) bool {
+	a := tp.extractInvariantType(t, "_A")
 	if a == nil {
 		return false
 	}
-	i := tp.extractInvariantType(t, atLocation, "_I")
+	i := tp.extractInvariantType(t, "_I")
 	if i == nil {
 		return false
 	}
-	r := tp.extractCovariantType(t, atLocation, "_R")
+	r := tp.extractCovariantType(t, "_R")
 	return r != nil
 }
 
@@ -91,7 +91,7 @@ func (tp *TypeParser) isSchemaType(t *checker.Type, atLocation *ast.Node) bool {
 
 		for _, prop := range candidates {
 			propType := c.GetTypeOfSymbolAtLocation(prop, atLocation)
-			if tp.parseSchemaVarianceStruct(propType, atLocation) {
+			if tp.parseSchemaVarianceStruct(propType) {
 				return true
 			}
 		}
@@ -148,15 +148,15 @@ func (tp *TypeParser) EffectSchemaTypes(t *checker.Type, atLocation *ast.Node) *
 				continue
 			}
 			propType := c.GetTypeOfSymbolAtLocation(prop, atLocation)
-			a := tp.extractInvariantType(propType, atLocation, "_A")
+			a := tp.extractInvariantType(propType, "_A")
 			if a == nil {
 				continue
 			}
-			i := tp.extractInvariantType(propType, atLocation, "_I")
+			i := tp.extractInvariantType(propType, "_I")
 			if i == nil {
 				continue
 			}
-			r := tp.extractCovariantType(propType, atLocation, "_R")
+			r := tp.extractCovariantType(propType, "_R")
 			if r == nil {
 				continue
 			}

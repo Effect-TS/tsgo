@@ -24,18 +24,18 @@ type Layer struct {
 }
 
 // parseLayerVarianceStruct extracts ROut, E, RIn from a Layer variance struct type.
-func (tp *TypeParser) parseLayerVarianceStruct(t *checker.Type, atLocation *ast.Node) *Layer {
-	rOut := tp.extractContravariantType(t, atLocation, "_ROut")
+func (tp *TypeParser) parseLayerVarianceStruct(t *checker.Type) *Layer {
+	rOut := tp.extractContravariantType(t, "_ROut")
 	if rOut == nil {
 		return nil
 	}
 
-	e := tp.extractCovariantType(t, atLocation, "_E")
+	e := tp.extractCovariantType(t, "_E")
 	if e == nil {
 		return nil
 	}
 
-	rIn := tp.extractCovariantType(t, atLocation, "_RIn")
+	rIn := tp.extractCovariantType(t, "_RIn")
 	if rIn == nil {
 		return nil
 	}
@@ -60,7 +60,7 @@ func (tp *TypeParser) LayerType(t *checker.Type, atLocation *ast.Node) *Layer {
 				return nil
 			}
 
-			return tp.parseLayerVarianceStruct(varianceStructType, atLocation)
+			return tp.parseLayerVarianceStruct(varianceStructType)
 		}
 
 		// v3 / unknown: iterate properties looking for a layer variance struct
@@ -101,7 +101,7 @@ func (tp *TypeParser) LayerType(t *checker.Type, atLocation *ast.Node) *Layer {
 		// Try each candidate as a layer variance struct
 		for _, prop := range candidates {
 			propType := c.GetTypeOfSymbolAtLocation(prop, atLocation)
-			if result := tp.parseLayerVarianceStruct(propType, atLocation); result != nil {
+			if result := tp.parseLayerVarianceStruct(propType); result != nil {
 				return result
 			}
 		}

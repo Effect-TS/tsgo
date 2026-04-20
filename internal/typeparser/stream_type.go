@@ -23,6 +23,6 @@ func (tp *TypeParser) StreamType(t *checker.Type, atLocation *ast.Node) *Effect 
 		if varianceStructType == nil {
 			return nil
 		}
-		return tp.parseVarianceStruct(varianceStructType, atLocation)
+		return tp.parseVarianceStruct(varianceStructType)
 	})
 }

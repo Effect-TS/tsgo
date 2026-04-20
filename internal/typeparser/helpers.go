@@ -7,7 +7,7 @@ import (
 
 // extractCovariantType gets the type argument from a covariant property.
 // Covariant<A> is encoded as () => A, so we get the return type.
-func (tp *TypeParser) extractCovariantType(t *checker.Type, _ *ast.Node, propName string) *checker.Type {
+func (tp *TypeParser) extractCovariantType(t *checker.Type, propName string) *checker.Type {
 	c := tp.checker
 	propType := tp.GetTypeOfPropertyByName(t, propName)
 	if propType == nil {
@@ -28,7 +28,7 @@ func (tp *TypeParser) extractCovariantType(t *checker.Type, _ *ast.Node, propNam
 
 // extractContravariantType gets the type argument from a contravariant property.
 // Contravariant<A> is encoded as (_: A) => void, so we get the first parameter type.
-func (tp *TypeParser) extractContravariantType(t *checker.Type, _ *ast.Node, propName string) *checker.Type {
+func (tp *TypeParser) extractContravariantType(t *checker.Type, propName string) *checker.Type {
 	c := tp.checker
 	propType := tp.GetTypeOfPropertyByName(t, propName)
 	if propType == nil {
@@ -54,8 +54,8 @@ func (tp *TypeParser) extractContravariantType(t *checker.Type, _ *ast.Node, pro
 
 // extractInvariantType gets the type argument from an invariant property.
 // Invariant<A> is encoded as (_: A) => A, so we extract the return type (same as covariant).
-func (tp *TypeParser) extractInvariantType(t *checker.Type, atLocation *ast.Node, propName string) *checker.Type {
-	return tp.extractCovariantType(t, atLocation, propName)
+func (tp *TypeParser) extractInvariantType(t *checker.Type, propName string) *checker.Type {
+	return tp.extractCovariantType(t, propName)
 }
 
 // GetTypeOfPropertyByName returns the type of a property by name.

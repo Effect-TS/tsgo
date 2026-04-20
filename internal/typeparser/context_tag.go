@@ -57,7 +57,7 @@ func (tp *TypeParser) ContextTag(t *checker.Type, atLocation *ast.Node) *Service
 
 		for _, prop := range candidates {
 			propType := tp.checker.GetTypeOfSymbolAtLocation(prop, atLocation)
-			if result := tp.parseServiceVarianceStruct(propType, atLocation); result != nil {
+			if result := tp.parseServiceVarianceStruct(propType); result != nil {
 				return result
 			}
 		}

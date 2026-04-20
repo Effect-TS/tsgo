@@ -15,13 +15,13 @@ type Service struct {
 }
 
 // parseServiceVarianceStruct extracts Identifier and Shape from a Service variance struct type.
-func (tp *TypeParser) parseServiceVarianceStruct(t *checker.Type, atLocation *ast.Node) *Service {
-	identifier := tp.extractInvariantType(t, atLocation, "_Identifier")
+func (tp *TypeParser) parseServiceVarianceStruct(t *checker.Type) *Service {
+	identifier := tp.extractInvariantType(t, "_Identifier")
 	if identifier == nil {
 		return nil
 	}
 
-	shape := tp.extractInvariantType(t, atLocation, "_Service")
+	shape := tp.extractInvariantType(t, "_Service")
 	if shape == nil {
 		return nil
 	}
