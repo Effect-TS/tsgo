@@ -1,9 +1,9 @@
 diff --git a/internal/ls/hover.go b/internal/ls/hover.go
-index 564109a83..7a403395d 100644
+index 401bfd7ac..9d1f81463 100644
 --- a/internal/ls/hover.go
 +++ b/internal/ls/hover.go
 @@ -20,6 +20,18 @@ const (
- 	typeFormatFlags   = checker.TypeFormatFlagsUseAliasDefinedOutsideCurrentScope
+ 	typeFormatFlags   = checker.TypeFormatFlagsUseAliasDefinedOutsideCurrentScope | checker.TypeFormatFlagsUseInstantiationExpressions
  )
  
 +// AfterQuickInfoCallback is invoked after getQuickInfoAndDocumentationForSymbol
