@@ -21,15 +21,19 @@ func MergeEffectCompilerOptions(targetOptions, sourceOptions *core.CompilerOptio
 	if targetOptions == nil || sourceOptions == nil {
 		return
 	}
-	sourcePluginRaw := getEffectPluginRaw(rawSource)
-	if sourcePluginRaw == nil {
-		return
-	}
 	sourceEffect := cloneEffectOptions(sourceOptions.Effect)
 	if sourceEffect == nil {
 		return
 	}
 	rewriteEffectOptionsOverrides(sourceEffect, sourceConfigPath, basePath)
+	sourcePluginRaw := getEffectPluginRaw(rawSource)
+	if sourcePluginRaw == nil {
+		// No local plugin stanza means sourceEffect already represents the fully
+		// merged config for this branch. Carry it forward so pass-through extends
+		// hops do not drop inherited Effect settings.
+		targetOptions.Effect = sourceEffect
+		return
+	}
 
 	if targetOptions.Effect == nil {
 		targetOptions.Effect = sourceEffect
