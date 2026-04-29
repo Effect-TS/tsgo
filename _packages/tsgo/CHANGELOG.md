@@ -1,5 +1,20 @@
 # @effect/tsgo
 
+## 0.5.2
+
+### Patch Changes
+
+- f1c940b: Skip Effect diagnostics for source files resolved from external libraries.
+- 561c053: Fix a false-positive `TS2683` when using `this` inside directly yielded expressions in `Effect.gen({ self: this })`.
+
+  This avoids losing contextual `this` typing during data-first call analysis for Effect generator code such as `yield* Scope.close(this.#scope, Exit.void)`.
+
+- 1a562ee: Fix `@effect/language-service` activation when the plugin is inherited through multiple `tsconfig` `extends` hops.
+
+  Effect diagnostics now continue to work for config chains like `tsconfig.json -> worker.json -> base.json` without duplicating the plugin stanza in intermediate configs.
+
+- 7c153f4: Update [`typescript-go`](https://github.com/microsoft/typescript-go/commit/2de4a3f1746f614fe5a19deec6a4ad9d0640d67a) to commit `2de4a3f1746f614fe5a19deec6a4ad9d0640d67a`.
+
 ## 0.5.1
 
 ### Patch Changes
