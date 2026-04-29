@@ -1,8 +1,8 @@
 diff --git a/internal/checker/checker.go b/internal/checker/checker.go
-index 758f880c6..8a52edb7f 100644
+index 2e1622418..66059cab4 100644
 --- a/internal/checker/checker.go
 +++ b/internal/checker/checker.go
-@@ -30,6 +30,40 @@ import (
+@@ -31,6 +31,40 @@ import (
  	"github.com/zeebo/xxh3"
  )
  
@@ -43,23 +43,21 @@ index 758f880c6..8a52edb7f 100644
  // CheckMode
  
  type CheckMode uint32
-@@ -2149,6 +2183,8 @@ func (c *Checker) checkSourceFile(ctx context.Context, sourceFile *ast.SourceFil
+@@ -2145,6 +2179,8 @@ func (c *Checker) checkSourceFile(ctx context.Context, sourceFile *ast.SourceFil
  	links := c.sourceFileLinks.Get(sourceFile)
  	if !links.typeChecked {
  		c.saveDeferredDiagnostics = true
-+		// Clear any stale relation errors before type checking
++		// Clear any stale relation errors before type checking.
 +		links.relationErrors = nil
- 		// Grammar checking
- 		c.checkGrammarSourceFile(sourceFile)
- 		c.renamedBindingElementsInTypes = nil
-@@ -2164,7 +2200,13 @@ func (c *Checker) checkSourceFile(ctx context.Context, sourceFile *ast.SourceFil
- 		c.saveDeferredDiagnostics = false
+ 		if tr := c.tracer; tr != nil {
+ 			defer tr.Push(tracing.PhaseCheck, "checkSourceFile", map[string]any{"path": sourceFile.FileName()}, true)()
+ 		}
+@@ -2164,6 +2200,11 @@ func (c *Checker) checkSourceFile(ctx context.Context, sourceFile *ast.SourceFil
  		c.produceDeferredDiagnostics()
  		c.reportedUnreachableNodes.Clear()
-+
  		links.typeChecked = true
 +
-+		// EFFECT HOOK: Run Effect diagnostics after type checking
++		// Run Effect diagnostics after type checking.
 +		if AfterCheckSourceFileCallback != nil {
 +			AfterCheckSourceFileCallback(ctx, c.program, c, sourceFile)
 +		}

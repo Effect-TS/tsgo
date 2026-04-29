@@ -70,7 +70,7 @@ var effectFixProvider = &ls.CodeFixProvider{
 }
 
 // getEffectCodeActions finds applicable fixables and collects their code actions.
-func getEffectCodeActions(ctx context.Context, fixCtx *ls.CodeFixContext) ([]ls.CodeAction, error) {
+func getEffectCodeActions(ctx context.Context, fixCtx *ls.CodeFixContext) ([]*ls.CodeAction, error) {
 	// Find all fixables that handle this error code
 	applicable := fixables.ByErrorCode(fixCtx.ErrorCode)
 	if len(applicable) == 0 {
@@ -97,10 +97,13 @@ func getEffectCodeActions(ctx context.Context, fixCtx *ls.CodeFixContext) ([]ls.
 				fCtx := fixable.NewContext(ctx, fixCtx, options, ch, tp)
 
 				// Collect actions from all applicable fixables
-				var actions []ls.CodeAction
+				var actions []*ls.CodeAction
 				for _, f := range applicable {
 					results := f.Run(fCtx)
-					actions = append(actions, results...)
+					for i := range results {
+						action := results[i]
+						actions = append(actions, &action)
+					}
 				}
 
 				return actions, nil
