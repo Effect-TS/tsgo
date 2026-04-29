@@ -39,6 +39,9 @@ func (tp *TypeParser) DataFirstOrLastCall(node *ast.Node) *ParsedDataFirstOrLast
 	if len(resolved.Parameters()) != len(call.Arguments.Nodes) {
 		return nil
 	}
+	if tp.GetEffectContextFlags(node)&EffectContextFlagCanYieldEffect != 0 && callHasNonBareThisArgument(call.Arguments.Nodes) {
+		return nil
+	}
 
 	resolvedSymbol := checker.Checker_getSymbolOfDeclaration(c, resolved.Declaration())
 	if resolvedSymbol == nil {
@@ -104,6 +107,36 @@ func (tp *TypeParser) DataFirstOrLastCall(node *ast.Node) *ParsedDataFirstOrLast
 	}
 
 	return nil
+}
+
+func callHasNonBareThisArgument(args []*ast.Node) bool {
+	for _, arg := range args {
+		if arg == nil || arg.Kind == ast.KindThisKeyword {
+			continue
+		}
+		if containsThisKeyword(arg) {
+			return true
+		}
+	}
+	return false
+}
+
+func containsThisKeyword(node *ast.Node) bool {
+	if node == nil {
+		return false
+	}
+	if node.Kind == ast.KindThisKeyword {
+		return true
+	}
+	contains := false
+	node.ForEachChild(func(child *ast.Node) bool {
+		if containsThisKeyword(child) {
+			contains = true
+			return true
+		}
+		return false
+	})
+	return contains
 }
 
 func derivePipeableSignatureFromDataFirst(c *checker.Checker, sig *checker.Signature, subjectIndex int) *checker.Signature {
