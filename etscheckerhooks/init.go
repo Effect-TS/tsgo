@@ -45,7 +45,9 @@ type RuleDiagnostic struct {
 // afterCheckSourceFile is called after type checking each source file.
 // It runs Effect diagnostics if the plugin is enabled.
 func afterCheckSourceFile(ctx context.Context, program checker.Program, c *checker.Checker, sf *ast.SourceFile) {
-	tp := typeparser.NewTypeParser(program, c)
+	if sf.IsDeclarationFile || program.IsSourceFileFromExternalLibrary(sf) {
+		return
+	}
 
 	// Get Effect config from program options (parsed during config loading)
 	effectConfig := getEffectConfig(program)
@@ -71,10 +73,7 @@ func afterCheckSourceFile(ctx context.Context, program checker.Program, c *check
 		return
 	}
 
-	// Skip declaration files
-	if sf.IsDeclarationFile {
-		return
-	}
+	tp := typeparser.NewTypeParser(program, c)
 
 	// Collect directives from source file for suppression support
 	sourceText := sf.Text()
