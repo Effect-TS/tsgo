@@ -217,3 +217,50 @@ Effect.succeed(1)`
 
 	f.VerifyDiagnostics(t, nil)
 }
+
+func TestEffectDiagnosticsWorkThroughMultiHopExtends(t *testing.T) {
+	t.Parallel()
+
+	const content = `// @Filename: /base.json
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "ESNext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "plugins": [
+      {
+        "name": "@effect/language-service",
+        "diagnosticSeverity": {
+          "floatingEffect": "error"
+        }
+      }
+    ]
+  }
+}
+// @Filename: /worker.json
+{
+  "extends": "./base.json",
+  "compilerOptions": {
+    "jsx": "react-jsx"
+  }
+}
+// @Filename: /tsconfig.json
+{
+  "extends": "./worker.json",
+  "include": ["./index.ts"]
+}
+// @Filename: /index.ts
+import { Effect } from "effect"
+
+[|Effect.succeed(1)|]`
+
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+
+	ranges := f.Ranges()
+	if len(ranges) != 1 {
+		t.Fatalf("expected exactly one range, got %d", len(ranges))
+	}
+	f.VerifyErrorExistsAtRange(t, ranges[0], 377001, "")
+}
