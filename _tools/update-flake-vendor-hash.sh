@@ -22,8 +22,11 @@ if [[ -n "${NIX_BUILD_ARGS:-}" ]]; then
 fi
 
 # --- Step 1: Sync flake inputs with submodule commits ---
-
-tsgo_commit="$(git ls-tree HEAD typescript-go | awk '{print $3}')"
+#
+# Prefer the staged gitlink so local refreshes can be run before committing an
+# updated submodule pointer. In CI this matches HEAD once the update commit
+# exists.
+tsgo_commit="$(git ls-files --stage -- typescript-go | awk 'NR==1 {print $2}')"
 if [[ -z "$tsgo_commit" ]]; then
   echo "error: cannot determine typescript-go submodule commit" >&2
   exit 1
@@ -70,7 +73,7 @@ update_input_commit "typescript-src" "$ts_commit" "microsoft/TypeScript"
 # --- Step 2: Refresh vendor hash ---
 
 run_build() {
-  nix build "$flake_attr" --no-write-lock-file -L "${extra_args[@]}" >"$build_log" 2>&1
+  nix build "$flake_attr" --no-write-lock-file -L "${extra_args[@]+"${extra_args[@]}"}" >"$build_log" 2>&1
 }
 
 extract_new_hash() {
