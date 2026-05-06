@@ -31,15 +31,21 @@ func (tp *TypeParser) DataFirstOrLastCall(node *ast.Node) *ParsedDataFirstOrLast
 		}
 	}
 
+	if tp.GetEffectContextFlags(node) != 0 {
+		if callHasNonBareThisArgument(call.Arguments.Nodes) ||
+			containsThisKeyword(call.Expression) ||
+			callHasArrowFunctionArgument(call.Arguments.Nodes) ||
+			callHasGenericCallee(tp, call) {
+			return nil
+		}
+	}
+
 	c := tp.checker
 	resolved := c.GetResolvedSignature(node)
 	if resolved == nil || resolved.Declaration() == nil {
 		return nil
 	}
 	if len(resolved.Parameters()) != len(call.Arguments.Nodes) {
-		return nil
-	}
-	if tp.GetEffectContextFlags(node)&EffectContextFlagCanYieldEffect != 0 && callHasNonBareThisArgument(call.Arguments.Nodes) {
 		return nil
 	}
 
@@ -115,6 +121,35 @@ func callHasNonBareThisArgument(args []*ast.Node) bool {
 			continue
 		}
 		if containsThisKeyword(arg) {
+			return true
+		}
+	}
+	return false
+}
+
+func callHasArrowFunctionArgument(args []*ast.Node) bool {
+	for _, arg := range args {
+		if arg != nil && arg.Kind == ast.KindArrowFunction {
+			return true
+		}
+	}
+	return false
+}
+
+func callHasGenericCallee(tp *TypeParser, call *ast.CallExpression) bool {
+	if call == nil || call.Expression == nil {
+		return false
+	}
+	sym := tp.ReferenceSymbolAtNode(call.Expression)
+	if sym == nil {
+		return false
+	}
+	for _, decl := range sym.Declarations {
+		if decl == nil {
+			continue
+		}
+		typeParams := GetFunctionLikeTypeParameters(decl)
+		if typeParams != nil && len(typeParams.Nodes) > 0 {
 			return true
 		}
 	}

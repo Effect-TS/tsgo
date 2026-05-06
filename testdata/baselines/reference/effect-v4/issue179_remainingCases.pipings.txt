@@ -1,0 +1,145 @@
+==== /.src/issue179_remainingCases.ts (10 flows) ====
+
+=== Piping Flow ===
+Location: 8:11 - 8:38
+Node: Effect.tryPromise(request)
+Node Kind: KindCallExpression
+
+Subject: request
+Subject Type: () => PromiseLike<T>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<T, never, never>
+
+=== Piping Flow ===
+Location: 15:15 - 15:37
+Node: Effect.succeed(a + b)
+Node Kind: KindCallExpression
+
+Subject: a + b
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 23:15 - 23:33
+Node: Effect.succeed(a)
+Node Kind: KindCallExpression
+
+Subject: a
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 27:27 - 27:72
+Node: effect.pipe(Effect.annotateLogs("key", key))
+Node Kind: KindCallExpression
+
+Subject: effect
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.annotateLogs
+      args: ["key", key]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 38:26 - 38:80
+Node: Effect.tryPromise(() => Promise.resolve(this.#value))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.resolve(this.#value)
+Subject Type: () => Promise<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<number, UnknownError, never>
+
+=== Piping Flow ===
+Location: 38:50 - 38:79
+Node: Promise.resolve(this.#value)
+Node Kind: KindCallExpression
+
+Subject: this.#value
+Subject Type: 42
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.resolve
+      args: (constant)
+      outType: Promise<number>
+
+=== Piping Flow ===
+Location: 44:26 - 44:67
+Node: Effect.sync(() => this.#innerSync(1, 2))
+Node Kind: KindCallExpression
+
+Subject: () => this.#innerSync(1, 2)
+Subject Type: () => number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 50:26 - 50:75
+Node: this.#innerOne(1).pipe(Effect.map((n) => n + 1))
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: this.#innerOne
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [(n) => n + 1]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 55:15 - 59:10
+Node: this.#getWrapper(key)(\n            Effect.gen({ self: this }, function* () {\n                return\n            })\n        )
+Node Kind: KindCallExpression
+
+Subject: Effect.gen({ self: this }, function* () {\n                return\n            })
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: this.#getWrapper(key)
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 65:67 - 65:87
+Node: Promise.resolve(42)
+Node Kind: KindCallExpression
+
+Subject: 42
+Subject Type: 42
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.resolve
+      args: (constant)
+      outType: Promise<number>
