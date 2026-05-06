@@ -1,5 +1,13 @@
 # @effect/tsgo
 
+## 0.5.3
+
+### Patch Changes
+
+- 8336e7c: Update the pinned `typescript-go` submodule to `1e58c8419142e35f338840dc50822c48dcc4ec1f` and refresh the local patch metadata needed to apply cleanly on that upstream revision.
+
+  Regenerate shim bindings for upstream API changes introduced by the submodule update.
+
 ## 0.5.2
 
 ### Patch Changes
