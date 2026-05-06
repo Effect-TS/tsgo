@@ -1,8 +1,8 @@
 diff --git a/cmd/tsgo/main.go b/cmd/tsgo/main.go
-index 5eabc96df..82b7bf932 100644
+index a2fe02e8c..10044042c 100644
 --- a/cmd/tsgo/main.go
 +++ b/cmd/tsgo/main.go
-@@ -3,6 +3,11 @@ package main
+@@ -3,7 +3,12 @@ package main
  import (
  	"os"
  
@@ -11,6 +11,7 @@ index 5eabc96df..82b7bf932 100644
 +	_ "github.com/effect-ts/tsgo/etscheckerhooks" // checker diagnostics hooks
 +	_ "github.com/effect-ts/tsgo/etslshooks"      // LS codefix hooks
 +
+ 	"github.com/microsoft/typescript-go/internal/core"
  	"github.com/microsoft/typescript-go/internal/execute"
  )
  
