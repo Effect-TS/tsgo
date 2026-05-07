@@ -1,5 +1,7 @@
 # @effect/tsgo-linux-arm
 
+## 0.5.4
+
 ## 0.5.3
 
 ## 0.5.2
