@@ -1,0 +1,8 @@
+flowchart TB
+  0[/"type: Effect#lt;string, never, never#gt;<br/>node: program as Effect.Effect#lt;string, never, never#gt;"/]
+  1[/"type: Effect#lt;string, never, #quot;service#quot;#gt;<br/>node: anyError as Effect.Effect#lt;string, never, #quot;service#quot;#gt;"/]
+  2[/"type: Effect#lt;string, #quot;boom#quot;, never#gt;<br/>node: anyRequirements as Effect.Effect#lt;string, #quot;boom#quot;, never#gt;"/]
+  3[/"type: Effect#lt;string, #quot;boom#quot; #124; #quot;other#quot;, #quot;service#quot;#gt;<br/>node: program as Effect.Effect#lt;string, #quot;boom#quot; #124; #quot;other#quot;, #quot;service#quot;#gt;"/]
+  4[/"type: Effect#lt;string, never, never#gt;<br/>node: noError as Effect.Effect#lt;string, never, never#gt;"/]
+  5[/"type: Effect#lt;string, never, never#gt;<br/>node: noRequirements as Effect.Effect#lt;string, never, never#gt;"/]
+  6[/"type: number<br/>node: 1 as number"/]

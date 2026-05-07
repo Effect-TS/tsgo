@@ -31,6 +31,7 @@ var All = []fixable.Fixable{
 	OverriddenSchemaConstructorFix,
 	InstanceOfSchemaFix,
 	LayerMergeAllWithDependenciesFix,
+	UnsafeEffectTypeAssertionFix,
 	MissingEffectErrorCatchFix,
 	MultipleEffectProvideFix,
 	SchemaStructWithTagFix,

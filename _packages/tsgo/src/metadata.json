@@ -45,7 +45,8 @@
         "nodeBuiltinImport": "warning",
         "preferSchemaOverJson": "warning",
         "processEnv": "warning",
-        "processEnvInEffect": "warning"
+        "processEnvInEffect": "warning",
+        "unsafeEffectTypeAssertion": "warning"
       }
     }
   ],
@@ -1309,6 +1310,30 @@
             "start": 121,
             "end": 137,
             "text": "This Effect code reads from `process.env`, environment configuration in Effect code is represented through `Config` from Effect. effect(processEnvInEffect)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "unsafeEffectTypeAssertion",
+      "group": "effectNative",
+      "description": "Detects unsafe type assertions that narrow Effect error or requirements channels",
+      "defaultSeverity": "off",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377075
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const program: Effect.Effect\u003cstring, \"boom\", \"service\"\u003e\n\nexport const preview = program as Effect.Effect\u003cstring, never, never\u003e\n",
+        "diagnostics": [
+          {
+            "start": 121,
+            "end": 167,
+            "text": "This type assertion unsafely narrows the Effect error or requirements channels. effect(unsafeEffectTypeAssertion)"
           }
         ]
       }
