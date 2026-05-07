@@ -248,3 +248,78 @@ TestClock.testClockWith(() => undefined as any);`),
 TestClock.testClockWith(() => undefined as any);
 `}, preferences)
 }
+
+func TestAutoImportEffectStyleConsistency_testClockWithNamespaceAlongsideNamedImport(t *testing.T) {
+	t.Parallel()
+	const content = `// @Filename: /tsconfig.json
+{
+  "compilerOptions": {
+    "plugins": [
+      {
+        "name": "@effect/language-service",
+        "namespaceImportPackages": ["effect"]
+      }
+    ]
+  }
+}
+// @effect-v4
+// @Filename: /mainFix.ts
+import { adjust } from "effect/testing/TestClock"
+
+void adjust
+testClockWith/*fix*/(() => undefined as any);
+`
+
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+
+	preferences := &lsutil.UserPreferences{
+		IncludeCompletionsForModuleExports:    core.TSTrue,
+		IncludeCompletionsForImportStatements: core.TSTrue,
+	}
+
+	f.GoToMarker(t, "fix")
+	f.VerifyImportFixAtPosition(t, []string{`import * as TestClock from "effect/testing/TestClock";
+import { adjust } from "effect/testing/TestClock"
+
+void adjust
+TestClock.testClockWith(() => undefined as any);
+`}, preferences)
+}
+
+func TestAutoImportEffectStyleConsistency_testClockWithUsesExistingNamespaceImport(t *testing.T) {
+	t.Parallel()
+	const content = `// @Filename: /tsconfig.json
+{
+  "compilerOptions": {
+    "plugins": [
+      {
+        "name": "@effect/language-service",
+        "namespaceImportPackages": ["effect"]
+      }
+    ]
+  }
+}
+// @effect-v4
+// @Filename: /mainFix.ts
+import * as TestClock from "effect/testing/TestClock";
+
+void TestClock.adjust
+testClockWith/*fix*/(() => undefined as any);
+`
+
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+
+	preferences := &lsutil.UserPreferences{
+		IncludeCompletionsForModuleExports:    core.TSTrue,
+		IncludeCompletionsForImportStatements: core.TSTrue,
+	}
+
+	f.GoToMarker(t, "fix")
+	f.VerifyImportFixAtPosition(t, []string{`import * as TestClock from "effect/testing/TestClock";
+
+void TestClock.adjust
+TestClock.testClockWith(() => undefined as any);
+`}, preferences)
+}
