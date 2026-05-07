@@ -1,10 +1,13 @@
 === Quick Fix Inventory ===
 
-[D1] (4:23-4:27) TS2688: Cannot find type definition file for 'node'.
-  (no quick fixes)
-
-[D2] (6:24-6:31) TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
-  (no quick fixes)
+[D1] (6:24-6:40) TS377076: This code reads from `process.env`, environment configuration is represented through `Config` from Effect. effect(processEnv)
+  Fix 0: "Disable processEnv for this line"
+  Fix 1: "Disable processEnv for entire file"
 
 === Quick Fix Application Results ===
-(no quick fixes to apply)
+
+=== [D1] Fix 0: "Disable processEnv for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable processEnv for entire file" ===
+skipped by default
