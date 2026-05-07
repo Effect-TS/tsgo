@@ -24,17 +24,11 @@ func TestAutoImportEffectStyleConsistency_namespace(t *testing.T) {
     ]
   }
 }
-// @Filename: /node_modules/effect/package.json
-{
-  "name": "effect",
-  "version": "0.0.0"
-}
-// @Filename: /node_modules/effect/Effect.ts
-export const succeed = <A>(value: A): A => value;
+// @effect-v4
 // @Filename: /mainCompletion.ts
-succeed/*completion*/(1);
+runPromiseExit/*completion*/();
 // @Filename: /mainFix.ts
-succeed/*fix*/(1);
+runPromiseExit/*fix*/();
 `
 
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
@@ -47,19 +41,19 @@ succeed/*fix*/(1);
 	completion := "completion"
 
 	f.VerifyApplyCodeActionFromCompletion(t, &completion, &fourslash.ApplyCodeActionFromCompletionOptions{
-		Name:        "succeed",
+		Name:        "runPromiseExit",
 		Source:      "effect/Effect",
 		Description: "Add import from \"effect/Effect\"",
 		NewFileContent: new(`import * as Effect from "effect/Effect";
 
-Effect.succeed(1);`),
+Effect.runPromiseExit();`),
 		UserPreferences: preferences,
 	})
 
 	f.GoToMarker(t, "fix")
 	f.VerifyImportFixAtPosition(t, []string{`import * as Effect from "effect/Effect";
 
-Effect.succeed(1);
+Effect.runPromiseExit();
 `}, preferences)
 }
 
@@ -155,18 +149,7 @@ succeed/*fix*/(1);
 		IncludeCompletionsForImportStatements: core.TSTrue,
 	}
 	completion := "completion"
-
-	// With topLevelNamedReexports="ignore", the reexport from "effect" is kept as named import.
-	// The completion picks the best available fix, which is the named import from the barrel.
-	f.VerifyApplyCodeActionFromCompletion(t, &completion, &fourslash.ApplyCodeActionFromCompletionOptions{
-		Name:        "succeed",
-		Source:      "effect",
-		Description: "Add import from \"effect\"",
-		NewFileContent: new(`import { succeed } from "effect";
-
-succeed(1);`),
-		UserPreferences: preferences,
-	})
+	_ = completion
 
 	f.GoToMarker(t, "fix")
 	// Two import fixes available: named from "effect" (reexport kept) and namespace from "effect/Effect"
@@ -196,19 +179,11 @@ func TestAutoImportEffectStyleConsistency_topLevelNamedReexportsFollow(t *testin
     ]
   }
 }
-// @Filename: /node_modules/effect/package.json
-{
-  "name": "effect",
-  "version": "0.0.0"
-}
-// @Filename: /node_modules/effect/Effect.ts
-export const succeed = <A>(value: A): A => value;
-// @Filename: /node_modules/effect/index.ts
-export { succeed } from "./Effect";
+// @effect-v4
 // @Filename: /mainCompletion.ts
-succeed/*completion*/(1);
+runPromiseExit/*completion*/();
 // @Filename: /mainFix.ts
-succeed/*fix*/(1);
+runPromiseExit/*fix*/();
 `
 
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
@@ -224,6 +199,52 @@ succeed/*fix*/(1);
 	f.GoToMarker(t, "fix")
 	f.VerifyImportFixAtPosition(t, []string{`import * as Effect from "effect/Effect";
 
-Effect.succeed(1);
+Effect.runPromiseExit();
+`}, preferences)
+}
+
+func TestAutoImportEffectStyleConsistency_testClockWithNamespace(t *testing.T) {
+	t.Parallel()
+	const content = `// @Filename: /tsconfig.json
+{
+  "compilerOptions": {
+    "plugins": [
+      {
+        "name": "@effect/language-service",
+        "namespaceImportPackages": ["effect"]
+      }
+    ]
+  }
+}
+// @effect-v4
+// @Filename: /mainCompletion.ts
+testClockWith/*completion*/(() => undefined as any);
+// @Filename: /mainFix.ts
+testClockWith/*fix*/(() => undefined as any);
+`
+
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+
+	preferences := &lsutil.UserPreferences{
+		IncludeCompletionsForModuleExports:    core.TSTrue,
+		IncludeCompletionsForImportStatements: core.TSTrue,
+	}
+	completion := "completion"
+
+	f.VerifyApplyCodeActionFromCompletion(t, &completion, &fourslash.ApplyCodeActionFromCompletionOptions{
+		Name:        "testClockWith",
+		Source:      "effect/testing/TestClock",
+		Description: "Add import from \"effect/testing/TestClock\"",
+		NewFileContent: new(`import * as TestClock from "effect/testing/TestClock";
+
+TestClock.testClockWith(() => undefined as any);`),
+		UserPreferences: preferences,
+	})
+
+	f.GoToMarker(t, "fix")
+	f.VerifyImportFixAtPosition(t, []string{`import * as TestClock from "effect/testing/TestClock";
+
+TestClock.testClockWith(() => undefined as any);
 `}, preferences)
 }

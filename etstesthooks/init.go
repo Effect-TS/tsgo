@@ -11,11 +11,12 @@ func init() {
 	fourslash.RegisterPrepareTestFSCallback(prepareTestFS)
 }
 
-// prepareTestFS detects Effect imports in test files and mounts real Effect packages.
-// It checks for a // @effect-v3 marker at the start of any file to choose the library version.
+// prepareTestFS detects Effect imports or explicit version markers in test files
+// and mounts real Effect packages into the fourslash VFS.
 func prepareTestFS(testfs map[string]any) {
 	hasEffectImport := false
 	hasV3Marker := false
+	hasV4Marker := false
 	for _, v := range testfs {
 		content, ok := v.(string)
 		if !ok {
@@ -27,8 +28,11 @@ func prepareTestFS(testfs map[string]any) {
 		if strings.HasPrefix(content, "// @effect-v3") || strings.Contains(content, "\n// @effect-v3") {
 			hasV3Marker = true
 		}
+		if strings.HasPrefix(content, "// @effect-v4") || strings.Contains(content, "\n// @effect-v4") {
+			hasV4Marker = true
+		}
 	}
-	if !hasEffectImport {
+	if !hasEffectImport && !hasV3Marker && !hasV4Marker {
 		return
 	}
 	version := bundledeffect.EffectV4
