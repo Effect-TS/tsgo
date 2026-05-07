@@ -104,6 +104,34 @@ func TestApplyNamespaceRewrite(t *testing.T) {
 	}
 }
 
+func TestApplyNamespaceRewriteFromAddToExisting(t *testing.T) {
+	t.Parallel()
+	sp := newStylePolicy(&etscore.ResolvedEffectPluginOptions{
+		NamespaceImportPackages: []string{"effect"},
+	})
+
+	export := makeExport("effect", "effect/testing/TestClock", "")
+	fix := makeAddNewFix(lsproto.ImportKindNamed, "effect/testing/TestClock", "testClockWith")
+	fix.Kind = lsproto.AutoImportFixKindAddToExisting
+
+	result := sp.Apply(export, fix)
+	if result == nil {
+		t.Fatal("expected non-nil result")
+	}
+	if result.Kind != lsproto.AutoImportFixKindAddNew {
+		t.Errorf("expected rewrite to AddNew, got %v", result.Kind)
+	}
+	if result.ImportKind != lsproto.ImportKindNamespace {
+		t.Errorf("expected ImportKindNamespace, got %v", result.ImportKind)
+	}
+	if result.ModuleSpecifier != "effect/testing/TestClock" {
+		t.Errorf("expected module specifier 'effect/testing/TestClock', got %q", result.ModuleSpecifier)
+	}
+	if result.NamespacePrefix != "TestClock" {
+		t.Errorf("expected namespace prefix 'TestClock', got %q", result.NamespacePrefix)
+	}
+}
+
 func TestApplyNamespaceRewriteWithAlias(t *testing.T) {
 	t.Parallel()
 	sp := newStylePolicy(&etscore.ResolvedEffectPluginOptions{
@@ -401,5 +429,34 @@ func TestNewFixTransformerAppliesPolicy(t *testing.T) {
 	}
 	if result[0].ImportKind != lsproto.ImportKindNamespace {
 		t.Errorf("expected ImportKindNamespace, got %v", result[0].ImportKind)
+	}
+}
+
+func TestNewFixTransformerPrefersExistingNamespaceUse(t *testing.T) {
+	t.Parallel()
+	transformer := NewFixTransformer(&etscore.ResolvedEffectPluginOptions{
+		NamespaceImportPackages: []string{"effect"},
+	})
+	if transformer == nil {
+		t.Fatal("expected non-nil transformer")
+	}
+
+	export := makeExport("effect", "effect/testing/TestClock", "")
+	useNamespace := &autoimport.Fix{AutoImportFix: &lsproto.AutoImportFix{
+		Kind:            lsproto.AutoImportFixKindUseNamespace,
+		ImportKind:      lsproto.ImportKindNamespace,
+		ModuleSpecifier: "effect/testing/TestClock",
+		Name:            "testClockWith",
+		NamespacePrefix: "TestClock",
+	}}
+	addToExisting := makeAddNewFix(lsproto.ImportKindNamed, "effect/testing/TestClock", "testClockWith")
+	addToExisting.Kind = lsproto.AutoImportFixKindAddToExisting
+
+	result := transformer(export, []*autoimport.Fix{useNamespace, addToExisting})
+	if len(result) != 1 {
+		t.Fatalf("expected 1 fix, got %d", len(result))
+	}
+	if result[0].Kind != lsproto.AutoImportFixKindUseNamespace {
+		t.Fatalf("expected UseNamespace fix, got %v", result[0].Kind)
 	}
 }

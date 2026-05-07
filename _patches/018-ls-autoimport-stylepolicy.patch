@@ -1,8 +1,24 @@
+diff --git a/internal/ls/autoimport/aliasresolver.go b/internal/ls/autoimport/aliasresolver.go
+index e34b62822..b733cd122 100644
+--- a/internal/ls/autoimport/aliasresolver.go
++++ b/internal/ls/autoimport/aliasresolver.go
+@@ -219,6 +219,11 @@ func (r *aliasResolver) IsSourceFileDefaultLibrary(path tspath.Path) bool {
+ 	panic("unimplemented")
+ }
+ 
++// IsSourceFileFromExternalLibrary implements checker.Program.
++func (r *aliasResolver) IsSourceFileFromExternalLibrary(file *ast.SourceFile) bool {
++	return false
++}
++
+ // IsSourceFromProjectReference implements checker.Program.
+ func (r *aliasResolver) IsSourceFromProjectReference(path tspath.Path) bool {
+ 	panic("unimplemented")
 diff --git a/internal/ls/autoimport/fix.go b/internal/ls/autoimport/fix.go
-index b2107443f..bf5161047 100644
+index 991bea0db..42a0745ae 100644
 --- a/internal/ls/autoimport/fix.go
 +++ b/internal/ls/autoimport/fix.go
-@@ -74,14 +74,19 @@ func (f *Fix) Edits(
+@@ -74,14 +74,18 @@ func (f *Fix) Edits(
  	case lsproto.AutoImportFixKindAddNew:
  		var declarations []*ast.Statement
  		defaultImport := core.IfElse(f.ImportKind == lsproto.ImportKindDefault, &newImportBinding{name: f.Name, addAsTypeOnly: f.AddAsTypeOnly}, nil)
@@ -13,7 +29,7 @@ index b2107443f..bf5161047 100644
 +		}
 +		namedImports := core.IfElse(f.ImportKind == lsproto.ImportKindNamed, []*newImportBinding{{name: namedBindingName, addAsTypeOnly: f.AddAsTypeOnly}}, nil)
  		var namespaceLikeImport *newImportBinding
- 		// qualification := f.qualification()
+-		// qualification := f.qualification()
  		if f.ImportKind == lsproto.ImportKindNamespace || f.ImportKind == lsproto.ImportKindCommonJS {
 -			namespaceLikeImport = &newImportBinding{kind: f.ImportKind, name: f.Name}
 -			// if qualification != nil && qualification.namespacePref != "" {
@@ -27,7 +43,7 @@ index b2107443f..bf5161047 100644
  		}
  
  		quotePreference := lsutil.GetQuotePreference(file, preferences)
-@@ -98,9 +103,11 @@ func (f *Fix) Edits(
+@@ -98,9 +102,11 @@ func (f *Fix) Edits(
  			/*blankLineBetween*/ true,
  			preferences,
  		)
@@ -42,16 +58,18 @@ index b2107443f..bf5161047 100644
  		return tracker.GetChanges()[file.FileName()], diagnostics.Add_import_from_0.Localize(locale, f.ModuleSpecifier)
  	case lsproto.AutoImportFixKindPromoteTypeOnly:
  		promotedDeclaration := promoteFromTypeOnly(tracker, f.TypeOnlyAliasDeclaration, compilerOptions, file, preferences)
-@@ -541,7 +548,7 @@ func (v *View) GetFixes(ctx context.Context, export *Export, forJSX bool, isVali
+@@ -540,8 +546,8 @@ func (v *View) GetFixes(ctx context.Context, export *Export, forJSX bool, isVali
+ 		fixes = append(fixes, namespaceFix)
  	}
  
- 	if fix := v.tryAddToExistingImport(ctx, export, isValidTypeOnlyUseSite); fix != nil {
+-	if fix := v.tryAddToExistingImport(ctx, export, isValidTypeOnlyUseSite); fix != nil {
 -		return append(fixes, fix)
++	if fix := v.tryAddToExistingImport(ctx, export, isValidTypeOnlyUseSite, usagePosition); fix != nil {
 +		return v.applyStylePolicy(export, append(fixes, fix))
  	}
  
  	// !!! getNewImportFromExistingSpecifier - even worth it?
-@@ -549,7 +556,7 @@ func (v *View) GetFixes(ctx context.Context, export *Export, forJSX bool, isVali
+@@ -549,7 +555,7 @@ func (v *View) GetFixes(ctx context.Context, export *Export, forJSX bool, isVali
  	moduleSpecifier, moduleSpecifierKind := v.GetModuleSpecifier(export, v.preferences)
  	if moduleSpecifier == "" {
  		if len(fixes) > 0 {
@@ -60,7 +78,7 @@ index b2107443f..bf5161047 100644
  		}
  		return nil
  	}
-@@ -559,7 +566,7 @@ func (v *View) GetFixes(ctx context.Context, export *Export, forJSX bool, isVali
+@@ -559,7 +565,7 @@ func (v *View) GetFixes(ctx context.Context, export *Export, forJSX bool, isVali
  	importedSymbolHasValueMeaning := export.Flags&ast.SymbolFlagsValue != 0 || export.IsUnresolvedAlias()
  	if !importedSymbolHasValueMeaning && isJs && usagePosition != nil {
  		// For pure types in JS files, use JSDoc import type syntax
@@ -69,7 +87,7 @@ index b2107443f..bf5161047 100644
  			{
  				AutoImportFix: &lsproto.AutoImportFix{
  					Kind:            lsproto.AutoImportFixKindJsdocTypeImport,
-@@ -571,7 +578,7 @@ func (v *View) GetFixes(ctx context.Context, export *Export, forJSX bool, isVali
+@@ -571,7 +577,7 @@ func (v *View) GetFixes(ctx context.Context, export *Export, forJSX bool, isVali
  				IsReExport:          export.Target.ModuleID != export.ModuleID,
  				ModuleFileName:      export.ModuleFileName,
  			},
@@ -78,7 +96,7 @@ index b2107443f..bf5161047 100644
  	}
  
  	importKind := getImportKind(v.importingFile, export, v.program)
-@@ -587,7 +594,7 @@ func (v *View) GetFixes(ctx context.Context, export *Export, forJSX bool, isVali
+@@ -587,7 +593,7 @@ func (v *View) GetFixes(ctx context.Context, export *Export, forJSX bool, isVali
  		}
  	}
  
@@ -87,7 +105,7 @@ index b2107443f..bf5161047 100644
  		AutoImportFix: &lsproto.AutoImportFix{
  			Kind:            lsproto.AutoImportFixKindAddNew,
  			ImportKind:      importKind,
-@@ -595,11 +602,37 @@ func (v *View) GetFixes(ctx context.Context, export *Export, forJSX bool, isVali
+@@ -595,11 +601,37 @@ func (v *View) GetFixes(ctx context.Context, export *Export, forJSX bool, isVali
  			Name:            name,
  			UseRequire:      v.shouldUseRequire(),
  			AddAsTypeOnly:   addAsTypeOnly,
@@ -126,18 +144,27 @@ index b2107443f..bf5161047 100644
  }
  
  // getAddAsTypeOnly determines if an import should be type-only based on usage context
-diff --git a/internal/ls/autoimport/aliasresolver.go b/internal/ls/autoimport/aliasresolver.go
---- a/internal/ls/autoimport/aliasresolver.go
-+++ b/internal/ls/autoimport/aliasresolver.go
-@@ -220,6 +220,11 @@ func (r *aliasResolver) IsSourceFileDefaultLibrary(path tspath.Path) bool {
- 	panic("unimplemented")
- }
+@@ -674,6 +706,7 @@ func (v *View) tryAddToExistingImport(
+ 	ctx context.Context,
+ 	export *Export,
+ 	isValidTypeOnlyUseSite bool,
++	usagePosition *lsproto.Position,
+ ) *Fix {
+ 	existingImports := v.getExistingImports(ctx)
+ 	matchingDeclarations := existingImports.Get(export.ModuleID)
+@@ -711,6 +744,7 @@ func (v *View) tryAddToExistingImport(
+ 						ImportIndex:     int32(existingImport.index),
+ 						ModuleSpecifier: existingImport.moduleSpecifier,
+ 						AddAsTypeOnly:   addAsTypeOnly,
++						UsagePosition:   usagePosition,
+ 					},
+ 				}
+ 				// Variable declarations are never type-only.
+@@ -759,6 +793,7 @@ func (v *View) tryAddToExistingImport(
+ 				ImportIndex:     int32(existingImport.index),
+ 				ModuleSpecifier: existingImport.moduleSpecifier,
+ 				AddAsTypeOnly:   addAsTypeOnly,
++				UsagePosition:   usagePosition,
+ 			},
+ 		}
  
-+// IsSourceFileFromExternalLibrary implements checker.Program.
-+func (r *aliasResolver) IsSourceFileFromExternalLibrary(file *ast.SourceFile) bool {
-+	return false
-+}
-+
- // IsSourceFromProjectReference implements checker.Program.
- func (r *aliasResolver) IsSourceFromProjectReference(path tspath.Path) bool {
- 	panic("unimplemented")

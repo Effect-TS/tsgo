@@ -25,17 +25,38 @@ func NewFixTransformer(resolved *etscore.ResolvedEffectPluginOptions) autoimport
 	}
 	return func(export *autoimport.Export, fixes []*autoimport.Fix) []*autoimport.Fix {
 		rewritten := make([]*autoimport.Fix, 0, len(fixes))
+		hasUseNamespace := make(map[string]bool)
 		for _, fix := range fixes {
 			adjusted := sp.Apply(export, fix)
 			if adjusted != nil {
+				if adjusted.Kind == lsproto.AutoImportFixKindUseNamespace {
+					hasUseNamespace[namespaceFixKey(adjusted)] = true
+				}
 				rewritten = append(rewritten, adjusted)
 			}
+		}
+		if len(hasUseNamespace) != 0 {
+			filtered := rewritten[:0]
+			for _, fix := range rewritten {
+				if fix.Kind == lsproto.AutoImportFixKindAddNew && fix.ImportKind == lsproto.ImportKindNamespace && hasUseNamespace[namespaceFixKey(fix)] {
+					continue
+				}
+				filtered = append(filtered, fix)
+			}
+			rewritten = filtered
 		}
 		if len(rewritten) == 0 {
 			return nil
 		}
 		return rewritten
 	}
+}
+
+func namespaceFixKey(fix *autoimport.Fix) string {
+	if fix == nil {
+		return ""
+	}
+	return fix.ModuleSpecifier + "\x00" + fix.NamespacePrefix
 }
 
 // newStylePolicy creates a stylePolicy from the given resolved options.
@@ -75,8 +96,8 @@ func (sp *stylePolicy) Apply(export *autoimport.Export, fix *autoimport.Fix) *au
 		return fix
 	}
 
-	// Only rewrite AddNew fixes
-	if fix.Kind != lsproto.AutoImportFixKindAddNew {
+	// Only rewrite new imports or additions to existing imports.
+	if fix.Kind != lsproto.AutoImportFixKindAddNew && fix.Kind != lsproto.AutoImportFixKindAddToExisting {
 		return fix
 	}
 
