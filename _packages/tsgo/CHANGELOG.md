@@ -1,5 +1,16 @@
 # @effect/tsgo
 
+## 0.5.4
+
+### Patch Changes
+
+- de8fb53: Fix false-positive `TS2683` diagnostics for `Effect.gen({ self: this }, ...)` by avoiding eager call-signature analysis in affected Effect contexts.
+
+  This includes nested `Effect.gen` generic calls plus related cases such as `this` in callees, `Effect.sync`/`Effect.tryPromise` callbacks, `.pipe()` chains, and curried wrappers.
+
+- 54da1c5: Mount real Effect packages in fourslash tests when `@effect-v3` or `@effect-v4` markers are present, and cover Effect auto-import namespace behavior against the real mounted package.
+- 9bab9e4: Update [`typescript-go`](https://github.com/microsoft/typescript-go/commit/18f93b85d447e24e9a03188dd630e7395cad5fe1) to commit `18f93b85d447e24e9a03188dd630e7395cad5fe1`.
+
 ## 0.5.3
 
 ### Patch Changes
