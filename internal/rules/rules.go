@@ -52,6 +52,7 @@ var All = []rule.Rule{
 	AsyncFunction,
 	ScopeInLayerEffect,
 	StrictEffectProvide,
+	UnsafeEffectTypeAssertion,
 	MultipleEffectProvide,
 	MissingLayerContext,
 	LayerMergeAllWithDependencies,

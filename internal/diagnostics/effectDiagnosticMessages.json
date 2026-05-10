@@ -99,6 +99,14 @@
         "category": "Suggestion",
         "code": 377074
     },
+    "This type assertion unsafely narrows the Effect error or requirements channels. effect(unsafeEffectTypeAssertion)": {
+        "category": "Warning",
+        "code": 377075
+    },
+    "The {0} channel is narrowed from `{1}` to `{2}`. effect(unsafeEffectTypeAssertion)": {
+        "category": "Warning",
+        "code": 377087
+    },
     "This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)": {
         "category": "Suggestion",
         "code": 377026
