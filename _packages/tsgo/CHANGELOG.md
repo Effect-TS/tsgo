@@ -1,5 +1,17 @@
 # @effect/tsgo
 
+## 0.6.0
+
+### Minor Changes
+
+- 3512164: Add the `unsafeEffectTypeAssertion` diagnostic and quick-fix to detect assertions that unsafely narrow Effect error or requirements channels.
+
+  This also ports the matching v3/v4 examples, preview coverage, and baselines for the new rule.
+
+### Patch Changes
+
+- 2a4738a: Update [`typescript-go`](https://github.com/microsoft/typescript-go/commit/092b34f534182baf2875887c20ffed2177f14d92) to commit `092b34f534182baf2875887c20ffed2177f14d92`.
+
 ## 0.5.4
 
 ### Patch Changes
