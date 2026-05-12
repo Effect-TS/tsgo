@@ -29,12 +29,12 @@ Transformations (1):
       outType: Layer<A, never, never>
 
 === Piping Flow ===
-Location: 8:50 - 8:78
-Node: Effect.as(A.asEffect(), {})
+Location: 8:50 - 8:67
+Node: Effect.as(A, {})
 Node Kind: KindCallExpression
 
-Subject: A.asEffect()
-Subject Type: Effect<{}, never, A>
+Subject: A
+Subject Type: typeof A
 
 Transformations (1):
   [0] kind: dataFirst

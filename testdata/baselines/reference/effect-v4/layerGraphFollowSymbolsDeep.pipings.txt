@@ -57,12 +57,12 @@ Transformations (1):
       outType: Layer<FileSystem, never, never>
 
 === Piping Flow ===
-Location: 14:8 - 14:45
-Node: Effect.as(FileSystem.asEffect(), {})
+Location: 14:8 - 14:34
+Node: Effect.as(FileSystem, {})
 Node Kind: KindCallExpression
 
-Subject: FileSystem.asEffect()
-Subject Type: Effect<{}, never, FileSystem>
+Subject: FileSystem
+Subject Type: typeof FileSystem
 
 Transformations (1):
   [0] kind: dataFirst

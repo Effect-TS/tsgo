@@ -6,7 +6,7 @@ import (
 )
 
 // EffectYieldableType resolves both plain Effect types and yieldable wrappers
-// (Option, Either, etc.) that implement the asEffect() protocol.
+// that implement the asEffect() protocol.
 // For v3: delegates directly to EffectType (v3 models yieldable through Effect subtyping).
 // For v4: tries EffectType first; if that fails, looks for an asEffect property,
 // checks if it's callable, and tries EffectType on the return type of each call signature.

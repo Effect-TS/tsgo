@@ -12,7 +12,7 @@ Effect version: 4.0.0
     class Db extends Context.Service<Db>()("Db", { make: Effect.succeed({}) }) {}
     
     // @ts-expect-error
-    export const preview: Effect.Effect<void> = Db.asEffect().pipe(Effect.asVoid)
+    export const preview: Effect.Effect<void> = Db.pipe(Effect.asVoid)
                  ~~~~~~~
 !!! warning TS377004: This Effect requires a service that is missing from the expected Effect context: `Db`. effect(missingEffectContext)
     

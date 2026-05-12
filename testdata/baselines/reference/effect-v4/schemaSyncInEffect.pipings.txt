@@ -20,13 +20,13 @@ Node: Effect.gen(function*() {\n  const input = yield* Effect.succeed({ name: "J
 Node Kind: KindCallExpression
 
 Subject: function*() {\n  const input = yield* Effect.succeed({ name: "John", age: 30 })\n  const person = Schema.decodeSync(Person)(input)\n  //             ^- should suggest using Schema.decode instead\n  return person\n}
-Subject Type: () => Generator<Effect<{ name: string; age: number; }, never, never>, { readonly age: number; readonly name: string; }, any>
+Subject Type: () => Generator<Effect<{ name: string; age: number; }, never, never>, { readonly name: string; readonly age: number; }, any>
 
 Transformations (1):
   [0] kind: call
       callee: Effect.gen
       args: (constant)
-      outType: Effect<{ readonly age: number; readonly name: string; }, never, never>
+      outType: Effect<{ readonly name: string; readonly age: number; }, never, never>
 
 === Piping Flow ===
 Location: 10:23 - 10:65
@@ -54,7 +54,7 @@ Transformations (1):
   [0] kind: call
       callee: Schema.decodeSync(Person)
       args: (constant)
-      outType: { readonly age: number; readonly name: string; }
+      outType: { readonly name: string; readonly age: number; }
 
 === Piping Flow ===
 Location: 17:24 - 22:3
@@ -62,13 +62,13 @@ Node: Effect.gen(function*() {\n  const input: unknown = yield* Effect.succeed({
 Node Kind: KindCallExpression
 
 Subject: function*() {\n  const input: unknown = yield* Effect.succeed({ name: "Jane", age: 25 })\n  const person = Schema.decodeUnknownSync(Person)(input)\n  //             ^- should suggest using Schema.decodeUnknown instead\n  return person\n}
-Subject Type: () => Generator<Effect<{ name: string; age: number; }, never, never>, { readonly age: number; readonly name: string; }, any>
+Subject Type: () => Generator<Effect<{ name: string; age: number; }, never, never>, { readonly name: string; readonly age: number; }, any>
 
 Transformations (1):
   [0] kind: call
       callee: Effect.gen
       args: (constant)
-      outType: Effect<{ readonly age: number; readonly name: string; }, never, never>
+      outType: Effect<{ readonly name: string; readonly age: number; }, never, never>
 
 === Piping Flow ===
 Location: 18:32 - 18:74
@@ -96,7 +96,7 @@ Transformations (1):
   [0] kind: call
       callee: Schema.decodeUnknownSync(Person)
       args: (constant)
-      outType: { readonly age: number; readonly name: string; }
+      outType: { readonly name: string; readonly age: number; }
 
 === Piping Flow ===
 Location: 25:24 - 30:3
@@ -104,13 +104,13 @@ Node: Effect.gen(function*() {\n  const person = { name: "Bob", age: 40 }\n  con
 Node Kind: KindCallExpression
 
 Subject: function*() {\n  const person = { name: "Bob", age: 40 }\n  const encoded = Schema.encodeSync(Person)(person)\n  //              ^- should suggest using Schema.encode instead\n  return encoded\n}
-Subject Type: () => Generator<never, { readonly age: number; readonly name: string; }, never>
+Subject Type: () => Generator<never, { readonly name: string; readonly age: number; }, never>
 
 Transformations (1):
   [0] kind: call
       callee: Effect.gen
       args: (constant)
-      outType: Effect<{ readonly age: number; readonly name: string; }, never, never>
+      outType: Effect<{ readonly name: string; readonly age: number; }, never, never>
 
 === Piping Flow ===
 Location: 27:18 - 27:52
@@ -124,7 +124,7 @@ Transformations (1):
   [0] kind: call
       callee: Schema.encodeSync(Person)
       args: (constant)
-      outType: { readonly age: number; readonly name: string; }
+      outType: { readonly name: string; readonly age: number; }
 
 === Piping Flow ===
 Location: 33:24 - 38:3
@@ -132,13 +132,13 @@ Node: Effect.gen(function*() {\n  const person: unknown = { name: "Alice", age: 
 Node Kind: KindCallExpression
 
 Subject: function*() {\n  const person: unknown = { name: "Alice", age: 35 }\n  const encoded = Schema.encodeUnknownSync(Person)(person as any)\n  //              ^- should suggest using Schema.encodeUnknown instead\n  return encoded\n}
-Subject Type: () => Generator<never, { readonly age: number; readonly name: string; }, never>
+Subject Type: () => Generator<never, { readonly name: string; readonly age: number; }, never>
 
 Transformations (1):
   [0] kind: call
       callee: Effect.gen
       args: (constant)
-      outType: Effect<{ readonly age: number; readonly name: string; }, never, never>
+      outType: Effect<{ readonly name: string; readonly age: number; }, never, never>
 
 === Piping Flow ===
 Location: 35:18 - 35:66
@@ -152,7 +152,7 @@ Transformations (1):
   [0] kind: call
       callee: Schema.encodeUnknownSync(Person)
       args: (constant)
-      outType: { readonly age: number; readonly name: string; }
+      outType: { readonly name: string; readonly age: number; }
 
 === Piping Flow ===
 Location: 43:17 - 43:50
@@ -166,7 +166,7 @@ Transformations (1):
   [0] kind: call
       callee: Schema.decodeSync(Person)
       args: (constant)
-      outType: { readonly age: number; readonly name: string; }
+      outType: { readonly name: string; readonly age: number; }
 
 === Piping Flow ===
 Location: 48:38 - 53:3
@@ -174,13 +174,13 @@ Node: Effect.gen(function*() {\n  const person: unknown = { name: "Alice", age: 
 Node Kind: KindCallExpression
 
 Subject: function*() {\n  const person: unknown = { name: "Alice", age: 35 }\n  const method = () => Schema.encodeUnknownSync(Person)(person as any)\n  //              ^- this is inside another function context, should NOT trigger\n  return method\n}
-Subject Type: () => Generator<never, () => { readonly age: number; readonly name: string; }, never>
+Subject Type: () => Generator<never, () => { readonly name: string; readonly age: number; }, never>
 
 Transformations (1):
   [0] kind: call
       callee: Effect.gen
       args: (constant)
-      outType: Effect<() => { readonly age: number; readonly name: string; }, never, never>
+      outType: Effect<() => { readonly name: string; readonly age: number; }, never, never>
 
 === Piping Flow ===
 Location: 50:23 - 50:71
@@ -194,7 +194,7 @@ Transformations (1):
   [0] kind: call
       callee: Schema.encodeUnknownSync(Person)
       args: (constant)
-      outType: { readonly age: number; readonly name: string; }
+      outType: { readonly name: string; readonly age: number; }
 
 === Piping Flow ===
 Location: 56:19 - 61:3
@@ -202,13 +202,13 @@ Node: Effect.fn("fn1")(function*() {\n  const input = { name: "John", age: 30 }\
 Node Kind: KindCallExpression
 
 Subject: function*() {\n  const input = { name: "John", age: 30 }\n  const person = Schema.decodeSync(Person)(input)\n  //             ^- should suggest using Schema.decode instead\n  return person\n}
-Subject Type: () => Generator<never, { readonly age: number; readonly name: string; }, never>
+Subject Type: () => Generator<never, { readonly name: string; readonly age: number; }, never>
 
 Transformations (1):
   [0] kind: call
       callee: Effect.fn("fn1")
       args: (constant)
-      outType: () => Effect<{ readonly age: number; readonly name: string; }, never, never>
+      outType: () => Effect<{ readonly name: string; readonly age: number; }, never, never>
 
 === Piping Flow ===
 Location: 58:17 - 58:50
@@ -222,4 +222,4 @@ Transformations (1):
   [0] kind: call
       callee: Schema.decodeSync(Person)
       args: (constant)
-      outType: { readonly age: number; readonly name: string; }
+      outType: { readonly name: string; readonly age: number; }

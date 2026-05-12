@@ -34,10 +34,10 @@
   (Property) make range=10:3-10:27 selection=10:3-10:7
   (Property) Default range=12:3-12:49 selection=12:10-12:17
 (Class) Cache range=15:1-19:2 selection=15:14-15:19
-  (Property) make range=16:3-16:45 selection=16:3-16:7
+  (Property) make range=16:3-16:34 selection=16:3-16:7
   (Property) Default range=18:3-18:49 selection=18:10-18:17
 (Class) UserRepository range=21:1-25:2 selection=21:14-21:28
-  (Property) make range=22:3-22:81 selection=22:3-22:7
+  (Property) make range=22:3-22:59 selection=22:3-22:7
   (Property) Default range=24:3-24:49 selection=24:10-24:17
 (Variable) expect range=27:14-27:45 selection=27:14-27:20
 (Variable) simplePipeIn range=29:14-29:86 selection=29:14-29:26
@@ -95,10 +95,10 @@
 (Property) make container="FileSystem" range=10:3-10:27
 (Property) Default container="FileSystem" range=12:3-12:49
 (Class) Cache container="" range=15:1-19:2
-(Property) make container="Cache" range=16:3-16:45
+(Property) make container="Cache" range=16:3-16:34
 (Property) Default container="Cache" range=18:3-18:49
 (Class) UserRepository container="" range=21:1-25:2
-(Property) make container="UserRepository" range=22:3-22:81
+(Property) make container="UserRepository" range=22:3-22:59
 (Property) Default container="UserRepository" range=24:3-24:49
 (Variable) expect container="" range=27:14-27:45
 (Variable) simplePipeIn container="" range=29:14-29:86

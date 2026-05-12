@@ -6,8 +6,8 @@
 flowchart TD
   0["DatabaseContext.Default<br/>provides: DatabaseContext<br/>requires: "]
   1["Layer.provide#40;DatabaseContext.Default#41;<br/>provides: <br/>requires: "]
-  2["Layer.effectDiscard#40;Effect.gen#40;function*#40;#41; #123;<br/>  const databaseContext = yield* DatabaseContext.asEffect#40;#41;<br/><br/>  return yield* Effect.log#40;databaseContext.value#41;<br/>#125;#41;#41;<br/>provides: <br/>requires: DatabaseContext"]
-  3["Layer.effectDiscard#40;Effect.gen#40;function*#40;#41; #123;<br/>  const databaseContext = yield* DatabaseContext.asEffect#40;#41;<br/><br/>  return yield* Effect.log#40;databaseContext.value#41;<br/>#125;#41;#41;.pipe#40;Layer.provide#40;DatabaseContext.Default#41;#41;<br/>provides: <br/>requires: "]
+  2["Layer.effectDiscard#40;Effect.gen#40;function*#40;#41; #123;<br/>  const databaseContext = yield* DatabaseContext<br/><br/>  return yield* Effect.log#40;databaseContext.value#41;<br/>#125;#41;#41;<br/>provides: <br/>requires: DatabaseContext"]
+  3["Layer.effectDiscard#40;Effect.gen#40;function*#40;#41; #123;<br/>  const databaseContext = yield* DatabaseContext<br/><br/>  return yield* Effect.log#40;databaseContext.value#41;<br/>#125;#41;#41;.pipe#40;Layer.provide#40;DatabaseContext.Default#41;#41;<br/>provides: <br/>requires: "]
   1 -->|"#123;#quot;relationship#quot;:#quot;call#quot;,#quot;argumentIndex#quot;:0#125;"| 0
   1 -->|"#123;#quot;relationship#quot;:#quot;pipe#quot;#125;"| 2
   3 -->|"#123;#quot;relationship#quot;:#quot;pipe#quot;#125;"| 1
@@ -57,7 +57,7 @@ flowchart TB
 --- outline ---
 flowchart TD
   0["DatabaseContext.Default"]
-  1["Layer.effectDiscard#35;40;Effect.gen#35;40;function*#35;40;#35;41; #35;123;<br/>  const databaseContext = yield* DatabaseContext.asEffect#35;40;#35;41;<br/><br/>  return yield* Effect.log#35;40;databaseContext.value#35;41;<br/>#35;125;#35;41;#35;41;"]
+  1["Layer.effectDiscard#35;40;Effect.gen#35;40;function*#35;40;#35;41; #35;123;<br/>  const databaseContext = yield* DatabaseContext<br/><br/>  return yield* Effect.log#35;40;databaseContext.value#35;41;<br/>#35;125;#35;41;#35;41;"]
   1 --> 0
 
 --- quickinfo ---

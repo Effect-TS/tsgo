@@ -11,7 +11,7 @@ export class FileSystem extends Context.Service<FileSystem>()("FileSystem", {
   static Default = Layer.effect(this, this.make)
 }
 export class Cache extends Context.Service<Cache>()("Cache", {
-  make: Effect.as(FileSystem.asEffect(), {})
+  make: Effect.as(FileSystem, {})
 }) {
   static Default = Layer.effect(this, this.make)
 }

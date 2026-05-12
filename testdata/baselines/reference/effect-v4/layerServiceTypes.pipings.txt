@@ -136,7 +136,7 @@ Node: Layer.effect(UserRepo)(\n  Effect.gen(function*() {\n    const db = yield*
 Node Kind: KindCallExpression
 
 Subject: function*() {\n    const db = yield* Database\n    return {\n      getUser: (id: string) => db.query(`SELECT * FROM users WHERE id = ${id}`)\n    }\n  }
-Subject Type: () => Generator<Service<Database, { readonly query: (sql: string) => Effect<string, never, never>; }>, { getUser: (id: string) => Effect<string, never, never>; }, any>
+Subject Type: () => Generator<Effect<{ readonly query: (sql: string) => Effect<string, never, never>; }, never, Database>, { getUser: (id: string) => Effect<string, never, never>; }, any>
 
 Transformations (2):
   [0] kind: call
@@ -182,7 +182,7 @@ Node: Effect.gen(function*() {\n  const db = yield* Database\n  return yield* db
 Node Kind: KindCallExpression
 
 Subject: function*() {\n  const db = yield* Database\n  return yield* db.query("SELECT 1")\n}
-Subject Type: () => Generator<Effect<string, never, never> | Service<Database, { readonly query: (sql: string) => Effect<string, never, never>; }>, string, any>
+Subject Type: () => Generator<Effect<string, never, never> | Effect<{ readonly query: (sql: string) => Effect<string, never, never>; }, never, Database>, string, any>
 
 Transformations (2):
   [0] kind: call

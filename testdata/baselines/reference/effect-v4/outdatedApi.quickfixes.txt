@@ -145,7 +145,7 @@
 
 [D42] (87:92-87:140) TS2322: Type 'Effect<null, never, never> | Effect<Effect<number, never, never>, never, never>' is not assignable to type 'Result<unknown, unknown>'.
   Type 'Effect<null, never, never>' is not assignable to type 'Result<unknown, unknown>'.
-    Type 'Effect<null, never, never>' is missing the following properties from type 'Success<unknown, unknown>': _tag, _op, success, [TypeId], and 2 more.
+    Type 'Effect<null, never, never>' is missing the following properties from type 'Success<unknown, unknown>': _tag, _op, success, [TypeId]
   (no quick fixes)
 
 [D43] (87:92-87:97) TS2365: Operator '>' cannot be applied to types 'Effect<number, never, never>' and 'number'.

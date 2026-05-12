@@ -257,7 +257,7 @@ var EffectModuleMigrationDb = map[string]Migration{
 	"filterOrDieMessage":          removed("Use Effect.filterOrFail and Effect.orDie instead."),
 	"finalizersMask":              removed("Finalizer masking has been removed in Effect v4."),
 	"findFirst":                   unchanged(),
-	"firstSuccessOf":              removed("Use Effect.raceAll instead."),
+	"firstSuccessOf":              unchanged(),
 	"flipWith":                    removed("Use Effect.flip combined with the desired transformation instead."),
 	"fromFiber":                   removed("Use Fiber.join instead."),
 	"fromFiberEffect":             removed("Use Effect.flatMap with Fiber.join instead."),

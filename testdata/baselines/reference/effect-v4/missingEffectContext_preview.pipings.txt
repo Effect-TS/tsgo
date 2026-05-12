@@ -15,12 +15,12 @@ Transformations (1):
       outType: Effect<{}, never, never>
 
 === Piping Flow ===
-Location: 8:44 - 8:78
-Node: Db.asEffect().pipe(Effect.asVoid)
+Location: 8:44 - 8:67
+Node: Db.pipe(Effect.asVoid)
 Node Kind: KindCallExpression
 
-Subject: Db.asEffect()
-Subject Type: Effect<{}, never, Db>
+Subject: Db
+Subject Type: typeof Db
 
 Transformations (1):
   [0] kind: pipeable

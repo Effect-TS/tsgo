@@ -30,10 +30,10 @@ Transformations (1):
 
 === Piping Flow ===
 Location: 11:23 - 15:49
-Node: Layer.effectDiscard(Effect.gen(function*() {\n  const databaseContext = yield* DatabaseContext.asEffect()\n\n  return yield* Effect.log(databaseContext.value)\n})).pipe(Layer.provide(DatabaseContext.Default))
+Node: Layer.effectDiscard(Effect.gen(function*() {\n  const databaseContext = yield* DatabaseContext\n\n  return yield* Effect.log(databaseContext.value)\n})).pipe(Layer.provide(DatabaseContext.Default))
 Node Kind: KindCallExpression
 
-Subject: function*() {\n  const databaseContext = yield* DatabaseContext.asEffect()\n\n  return yield* Effect.log(databaseContext.value)\n}
+Subject: function*() {\n  const databaseContext = yield* DatabaseContext\n\n  return yield* Effect.log(databaseContext.value)\n}
 Subject Type: () => Generator<Effect<void, never, never> | Effect<{ value: "DatabaseContext"; }, never, DatabaseContext>, void, any>
 
 Transformations (3):

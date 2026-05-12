@@ -106,7 +106,7 @@ class Database extends Context.Service<Database>()("Database", {
 }
 
 class Cache extends Context.Service<Cache>()("Cache", {
-  make: Effect.as(Database.asEffect(), {})
+  make: Effect.as(Database, {})
 }) {
   static Default = Layer.effect(this, this.make)
 }
@@ -160,7 +160,7 @@ class Database extends Context.Service<Database>()("Database", {
 }
 
 class Cache extends Context.Service<Cache>()("Cache", {
-  make: Effect.as(Database.asEffect(), {})
+  make: Effect.as(Database, {})
 }) {
   static Default = Layer.effect(this, this.make)
 }
@@ -204,7 +204,7 @@ class Database extends Context.Service<Database>()("Database", {
 }
 
 class Cache extends Context.Service<Cache>()("Cache", {
-  make: Effect.as(Database.asEffect(), {})
+  make: Effect.as(Database, {})
 }) {
   static Default = Layer.effect(this, this.make)
 }
@@ -291,7 +291,7 @@ class Database extends Context.Service<Database>()("Database", {
 }
 
 class Cache extends Context.Service<Cache>()("Cache", {
-  make: Effect.as(Database.asEffect(), {})
+  make: Effect.as(Database, {})
 }) {
   static Default = Layer.effect(this, this.make)
 }

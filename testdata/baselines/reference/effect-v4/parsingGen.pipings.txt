@@ -12,7 +12,7 @@ Transformations (1):
   [0] kind: call
       callee: Effect.gen
       args: (constant)
-      outType: Effect<number, NoSuchElementError, never>
+      outType: Effect<number, any, any>
 
 === Piping Flow ===
 Location: 4:26 - 4:41

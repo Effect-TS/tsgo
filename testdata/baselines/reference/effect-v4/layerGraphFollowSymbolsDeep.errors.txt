@@ -29,7 +29,7 @@ Effect version: 4.0.0
       static Default = Layer.effect(this, this.make)
     }
     export class Cache extends Context.Service<Cache>()("Cache", {
-      make: Effect.as(FileSystem.asEffect(), {})
+      make: Effect.as(FileSystem, {})
     }) {
       static Default = Layer.effect(this, this.make)
     }

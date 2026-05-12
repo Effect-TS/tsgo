@@ -34,13 +34,13 @@ Node: Effect.sync(() => Schema.decodeSync(Person)({ name: "John", age: 30 }))
 Node Kind: KindCallExpression
 
 Subject: () => Schema.decodeSync(Person)({ name: "John", age: 30 })
-Subject Type: () => { readonly age: number; readonly name: string; }
+Subject Type: () => { readonly name: string; readonly age: number; }
 
 Transformations (1):
   [0] kind: call
       callee: Effect.sync
       args: (constant)
-      outType: Effect<{ readonly age: number; readonly name: string; }, never, never>
+      outType: Effect<{ readonly name: string; readonly age: number; }, never, never>
 
 === Piping Flow ===
 Location: 10:46 - 10:99
@@ -54,7 +54,7 @@ Transformations (1):
   [0] kind: call
       callee: Schema.decodeSync(Person)
       args: (constant)
-      outType: { readonly age: number; readonly name: string; }
+      outType: { readonly name: string; readonly age: number; }
 
 === Piping Flow ===
 Location: 12:33 - 15:3
@@ -62,13 +62,13 @@ Node: Effect.try({\n  try: () => Schema.decodeSync(Person)({ name: "Jane", age: 
 Node Kind: KindCallExpression
 
 Subject: {\n  try: () => Schema.decodeSync(Person)({ name: "Jane", age: 25 }),\n  catch: () => new ExampleError()\n}
-Subject Type: { try: () => { readonly age: number; readonly name: string; }; catch: () => ExampleError; }
+Subject Type: { try: () => { readonly name: string; readonly age: number; }; catch: () => ExampleError; }
 
 Transformations (1):
   [0] kind: call
       callee: Effect.try
       args: (constant)
-      outType: Effect<{ readonly age: number; readonly name: string; }, ExampleError, never>
+      outType: Effect<{ readonly name: string; readonly age: number; }, ExampleError, never>
 
 === Piping Flow ===
 Location: 13:13 - 13:66
@@ -82,7 +82,7 @@ Transformations (1):
   [0] kind: call
       callee: Schema.decodeSync(Person)
       args: (constant)
-      outType: { readonly age: number; readonly name: string; }
+      outType: { readonly name: string; readonly age: number; }
 
 === Piping Flow ===
 Location: 17:34 - 17:117
@@ -90,13 +90,13 @@ Node: Effect.tryPromise(async () => Schema.encodeSync(Person)({ name: "Bob", age
 Node Kind: KindCallExpression
 
 Subject: async () => Schema.encodeSync(Person)({ name: "Bob", age: 40 })
-Subject Type: () => Promise<{ readonly age: number; readonly name: string; }>
+Subject Type: () => Promise<{ readonly name: string; readonly age: number; }>
 
 Transformations (1):
   [0] kind: call
       callee: Effect.tryPromise
       args: (constant)
-      outType: Effect<{ readonly age: number; readonly name: string; }, UnknownError, never>
+      outType: Effect<{ readonly name: string; readonly age: number; }, UnknownError, never>
 
 === Piping Flow ===
 Location: 17:64 - 17:116
@@ -110,7 +110,7 @@ Transformations (1):
   [0] kind: call
       callee: Schema.encodeSync(Person)
       args: (constant)
-      outType: { readonly age: number; readonly name: string; }
+      outType: { readonly name: string; readonly age: number; }
 
 === Piping Flow ===
 Location: 19:40 - 22:3
@@ -118,13 +118,13 @@ Node: Effect.tryPromise({\n  try: async () => Schema.encodeUnknownSync(Person)({
 Node Kind: KindCallExpression
 
 Subject: {\n  try: async () => Schema.encodeUnknownSync(Person)({ name: "Carol", age: 50 }),\n  catch: () => new ExampleError()\n}
-Subject Type: { try: () => Promise<{ readonly age: number; readonly name: string; }>; catch: () => ExampleError; }
+Subject Type: { try: () => Promise<{ readonly name: string; readonly age: number; }>; catch: () => ExampleError; }
 
 Transformations (1):
   [0] kind: call
       callee: Effect.tryPromise
       args: (constant)
-      outType: Effect<{ readonly age: number; readonly name: string; }, ExampleError, never>
+      outType: Effect<{ readonly name: string; readonly age: number; }, ExampleError, never>
 
 === Piping Flow ===
 Location: 20:19 - 20:80
@@ -138,7 +138,7 @@ Transformations (1):
   [0] kind: call
       callee: Schema.encodeUnknownSync(Person)
       args: (constant)
-      outType: { readonly age: number; readonly name: string; }
+      outType: { readonly name: string; readonly age: number; }
 
 === Piping Flow ===
 Location: 24:48 - 26:2
@@ -146,13 +146,13 @@ Node: Effect.sync(\n  () => () => Schema.decodeSync(Person)({ name: "Nested", ag
 Node Kind: KindCallExpression
 
 Subject: () => () => Schema.decodeSync(Person)({ name: "Nested", age: 10 })
-Subject Type: () => () => { readonly age: number; readonly name: string; }
+Subject Type: () => () => { readonly name: string; readonly age: number; }
 
 Transformations (1):
   [0] kind: call
       callee: Effect.sync
       args: (constant)
-      outType: Effect<() => { readonly age: number; readonly name: string; }, never, never>
+      outType: Effect<() => { readonly name: string; readonly age: number; }, never, never>
 
 === Piping Flow ===
 Location: 25:14 - 25:69
@@ -166,4 +166,4 @@ Transformations (1):
   [0] kind: call
       callee: Schema.decodeSync(Person)
       args: (constant)
-      outType: { readonly age: number; readonly name: string; }
+      outType: { readonly name: string; readonly age: number; }

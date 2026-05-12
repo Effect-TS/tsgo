@@ -21,13 +21,13 @@ Effect version: 4.0.0
     }
     
     export class Cache extends Context.Service<Cache>()("Cache", {
-      make: Effect.as(FileSystem.asEffect(), {})
+      make: Effect.as(FileSystem, {})
     }) {
       static Default = Layer.effect(this, this.make)
     }
     
     export class UserRepository extends Context.Service<UserRepository>()("UserRepository", {
-      make: Effect.as(Effect.andThen(DbConnection.asEffect(), Cache.asEffect()), {})
+      make: Effect.as(Effect.andThen(DbConnection, Cache), {})
     }) {
       static Default = Layer.effect(this, this.make)
     }
@@ -55,3 +55,4 @@ Effect version: 4.0.0
 !!! related TS377059 /.src/missingEffectContext_sugg.ts(40,5): Adjusting this layer composition could provide the missing service. effect(missingEffectContext)
 !!! related TS377060 /.src/missingEffectContext_sugg.ts(12,10): This layer provides the missing service FileSystem. effect(missingEffectContext)
     )
+    

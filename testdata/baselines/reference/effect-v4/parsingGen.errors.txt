@@ -1,12 +1,16 @@
 === Metadata ===
 Effect version: 4.0.0
 
+/.src/parsingGen.ts(3,35): error TS2345: Argument of type '() => Generator<Option.Option<number>, number, any>' is not assignable to parameter of type '() => Generator<Effect<any, any, any>, number, never>'.
 
 
-==== /.src/parsingGen.ts (0 errors) ====
+==== /.src/parsingGen.ts (1 errors) ====
     import { Effect, Option } from "effect"
     
     export const program = Effect.gen(function*(){
+                                      ~~~~~~~~
+!!! error TS2345: Argument of type '() => Generator<Option.Option<number>, number, any>' is not assignable to parameter of type '() => Generator<Effect<any, any, any>, number, never>'.
+!!! related TS2728 /node_modules/effect/dist/Effect.d.ts(148,14): '[TypeId]' is declared here.
         const option = yield* Option.some(1)
         return option
     })

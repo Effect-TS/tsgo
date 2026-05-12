@@ -12,8 +12,8 @@
 
 [D3] (11:69-11:85) TS2769: No overload matches this call.
   The last overload gave the following error.
-    Argument of type '(a: string) => Effect.Effect<never, string, never>' is not assignable to parameter of type '(this: unknown, a: string) => Generator<Yieldable<any, any, any, any>, unknown, never>'.
-      Type 'Effect<never, string, never>' is missing the following properties from type 'Generator<Yieldable<any, any, any, any>, unknown, never>': next, return, throw, map, and 11 more.
+    Argument of type '(a: string) => Effect.Effect<never, string, never>' is not assignable to parameter of type '(this: unknown, a: string) => Generator<Effect<any, any, any>, unknown, never>'.
+      Type 'Effect<never, string, never>' is missing the following properties from type 'Generator<Effect<any, any, any>, unknown, never>': next, return, throw, map, and 11 more.
   (no quick fixes)
 
 === Quick Fix Application Results ===

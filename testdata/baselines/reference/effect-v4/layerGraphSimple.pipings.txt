@@ -57,12 +57,12 @@ Transformations (1):
       outType: Layer<FileSystem, never, never>
 
 === Piping Flow ===
-Location: 22:8 - 22:45
-Node: Effect.as(FileSystem.asEffect(), {})
+Location: 22:8 - 22:34
+Node: Effect.as(FileSystem, {})
 Node Kind: KindCallExpression
 
-Subject: FileSystem.asEffect()
-Subject Type: Effect<{}, never, FileSystem>
+Subject: FileSystem
+Subject Type: typeof FileSystem
 
 Transformations (1):
   [0] kind: dataFirst
@@ -85,17 +85,17 @@ Transformations (1):
       outType: Layer<Cache, never, FileSystem>
 
 === Piping Flow ===
-Location: 27:8 - 27:81
-Node: Effect.as(Effect.andThen(DbConnection.asEffect(), Cache.asEffect()), {})
+Location: 27:8 - 27:59
+Node: Effect.as(Effect.andThen(DbConnection, Cache), {})
 Node Kind: KindCallExpression
 
-Subject: DbConnection.asEffect()
-Subject Type: Effect<{}, never, DbConnection>
+Subject: DbConnection
+Subject Type: typeof DbConnection
 
 Transformations (2):
   [0] kind: dataFirst
       callee: Effect.andThen
-      args: [Cache.asEffect()]
+      args: [Cache]
       outType: Effect<{}, never, Cache | DbConnection>
   [1] kind: dataFirst
       callee: Effect.as
