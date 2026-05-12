@@ -1687,7 +1687,7 @@
         "classSelfMismatch": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "error",
-          "description": "Ensures Self type parameter matches the class name in ServiceMap/Service/Tag/Schema classes"
+          "description": "Ensures Self type parameter matches the class name in Context/Service/Tag/Schema classes"
         },
         "cryptoRandomUUID": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
@@ -1977,7 +1977,7 @@
         "serviceNotAsClass": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
-          "description": "Warns when ServiceMap.Service is used as a variable instead of a class declaration"
+          "description": "Warns when Context.Service is used as a variable instead of a class declaration"
         },
         "strictBooleanExpressions": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
@@ -2023,6 +2023,11 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
           "description": "Simplifies chained pipe calls into a single pipe call"
+        },
+        "unsafeEffectTypeAssertion": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Detects unsafe type assertions that narrow Effect, Stream, or Layer error or requirements channels"
         }
       },
       "type": "object"

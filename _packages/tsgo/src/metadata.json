@@ -1317,7 +1317,7 @@
     {
       "name": "unsafeEffectTypeAssertion",
       "group": "effectNative",
-      "description": "Detects unsafe type assertions that narrow Effect error or requirements channels",
+      "description": "Detects unsafe type assertions that narrow Effect, Stream, or Layer error or requirements channels",
       "defaultSeverity": "off",
       "fixable": true,
       "supportedEffect": [
@@ -1333,7 +1333,7 @@
           {
             "start": 121,
             "end": 167,
-            "text": "This type assertion unsafely narrows the Effect error or requirements channels. effect(unsafeEffectTypeAssertion)"
+            "text": "This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)"
           }
         ]
       }

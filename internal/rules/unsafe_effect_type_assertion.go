@@ -14,10 +14,10 @@ import (
 var UnsafeEffectTypeAssertion = rule.Rule{
 	Name:            "unsafeEffectTypeAssertion",
 	Group:           "effectNative",
-	Description:     "Detects unsafe type assertions that narrow Effect error or requirements channels",
+	Description:     "Detects unsafe type assertions that narrow Effect, Stream, or Layer error or requirements channels",
 	DefaultSeverity: etscore.SeverityOff,
 	SupportedEffect: []string{"v3", "v4"},
-	Codes:           []int32{tsdiag.This_type_assertion_unsafely_narrows_the_Effect_error_or_requirements_channels_effect_unsafeEffectTypeAssertion.Code()},
+	Codes:           []int32{tsdiag.This_type_assertion_unsafely_narrows_the_error_or_requirements_channels_effect_unsafeEffectTypeAssertion.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeUnsafeEffectTypeAssertion(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
@@ -25,7 +25,7 @@ var UnsafeEffectTypeAssertion = rule.Rule{
 			diags[i] = ctx.NewDiagnostic(
 				match.SourceFile,
 				match.Location,
-				tsdiag.This_type_assertion_unsafely_narrows_the_Effect_error_or_requirements_channels_effect_unsafeEffectTypeAssertion,
+				tsdiag.This_type_assertion_unsafely_narrows_the_error_or_requirements_channels_effect_unsafeEffectTypeAssertion,
 				unsafeEffectTypeAssertionRelatedInformation(ctx, match),
 			)
 		}
@@ -54,6 +54,18 @@ func AnalyzeUnsafeEffectTypeAssertion(tp *typeparser.TypeParser, c *checker.Chec
 	}
 
 	var matches []UnsafeEffectTypeAssertionMatch
+	parseEffectStreamOrLayer := func(t *checker.Type, atLocation *ast.Node) (e *checker.Type, r *checker.Type, ok bool) {
+		if effect := tp.EffectType(t, atLocation); effect != nil {
+			return effect.E, effect.R, true
+		}
+		if stream := tp.StreamType(t, atLocation); stream != nil {
+			return stream.E, stream.R, true
+		}
+		if layer := tp.LayerType(t, atLocation); layer != nil {
+			return layer.E, layer.RIn, true
+		}
+		return nil, nil, false
+	}
 	nodesToVisit := make([]*ast.Node, 0)
 	pushChild := func(child *ast.Node) bool {
 		nodesToVisit = append(nodesToVisit, child)
@@ -81,29 +93,29 @@ func AnalyzeUnsafeEffectTypeAssertion(tp *typeparser.TypeParser, c *checker.Chec
 			continue
 		}
 
-		originalEffect := tp.EffectType(originalType, expr)
-		if originalEffect == nil {
+		originalE, originalR, ok := parseEffectStreamOrLayer(originalType, expr)
+		if !ok {
 			continue
 		}
 
-		assertedEffect := tp.EffectType(assertedType, node)
-		if assertedEffect == nil {
+		assertedE, assertedR, ok := parseEffectStreamOrLayer(assertedType, node)
+		if !ok {
 			continue
 		}
 
 		channels := make([]UnsafeEffectTypeAssertionChannel, 0, 2)
-		if originalEffect.E != nil && assertedEffect.E != nil && !isAnyType(originalEffect.E) && !checker.Checker_isTypeAssignableTo(c, originalEffect.E, assertedEffect.E) {
+		if originalE != nil && assertedE != nil && !isAnyType(originalE) && !checker.Checker_isTypeAssignableTo(c, originalE, assertedE) {
 			channels = append(channels, UnsafeEffectTypeAssertionChannel{
 				Name:     "error",
-				Original: c.TypeToString(originalEffect.E),
-				Asserted: c.TypeToString(assertedEffect.E),
+				Original: c.TypeToString(originalE),
+				Asserted: c.TypeToString(assertedE),
 			})
 		}
-		if originalEffect.R != nil && assertedEffect.R != nil && !isAnyType(originalEffect.R) && !checker.Checker_isTypeAssignableTo(c, originalEffect.R, assertedEffect.R) {
+		if originalR != nil && assertedR != nil && !isAnyType(originalR) && !checker.Checker_isTypeAssignableTo(c, originalR, assertedR) {
 			channels = append(channels, UnsafeEffectTypeAssertionChannel{
 				Name:     "requirements",
-				Original: c.TypeToString(originalEffect.R),
-				Asserted: c.TypeToString(assertedEffect.R),
+				Original: c.TypeToString(originalR),
+				Asserted: c.TypeToString(assertedR),
 			})
 		}
 		if len(channels) == 0 {

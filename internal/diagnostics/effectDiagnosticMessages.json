@@ -99,7 +99,7 @@
         "category": "Suggestion",
         "code": 377074
     },
-    "This type assertion unsafely narrows the Effect error or requirements channels. effect(unsafeEffectTypeAssertion)": {
+    "This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)": {
         "category": "Warning",
         "code": 377075
     },

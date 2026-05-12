@@ -10,8 +10,8 @@ import (
 
 var UnsafeEffectTypeAssertionFix = fixable.Fixable{
 	Name:        "unsafeEffectTypeAssertion",
-	Description: "Remove the unsafe Effect assertion",
-	ErrorCodes:  []int32{tsdiag.This_type_assertion_unsafely_narrows_the_Effect_error_or_requirements_channels_effect_unsafeEffectTypeAssertion.Code()},
+	Description: "Remove the unsafe assertion",
+	ErrorCodes:  []int32{tsdiag.This_type_assertion_unsafely_narrows_the_error_or_requirements_channels_effect_unsafeEffectTypeAssertion.Code()},
 	FixIDs:      []string{"unsafeEffectTypeAssertion_fix"},
 	Run:         runUnsafeEffectTypeAssertionFix,
 }
@@ -25,7 +25,7 @@ func runUnsafeEffectTypeAssertionFix(ctx *fixable.Context) []ls.CodeAction {
 		}
 
 		if action := ctx.NewFixAction(fixable.FixAction{
-			Description: "Remove the unsafe Effect assertion",
+			Description: "Remove the unsafe assertion",
 			Run: func(tracker *rewriter.Tracker) {
 				tracker.ReplaceNode(ctx.SourceFile, match.AssertionNode, match.ExpressionNode, nil)
 			},
