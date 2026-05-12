@@ -2,7 +2,7 @@ diff --git a/internal/checker/types.go b/internal/checker/types.go
 index 000000001..000000002 100644
 --- a/internal/checker/types.go
 +++ b/internal/checker/types.go
-@@ -340,6 +340,13 @@ type AssertionLinks struct {
+@@ -386,6 +386,13 @@ type AssertionLinks struct {
 
  // SourceFile links
 
@@ -14,13 +14,13 @@ index 000000001..000000002 100644
 +}
 +
  type SourceFileLinks struct {
- 	typeChecked               bool
- 	unusedChecked             bool
-@@ -350,6 +357,7 @@ type SourceFileLinks struct {
- 	localJsxFactory           *ast.EntityName
- 	localJsxFragmentFactory   *ast.EntityName
- 	jsxFragmentType           *Type
-+	relationErrors            []*RelationError // Collected during type checking for Effect diagnostics
+ 	typeChecked                  bool
+ 	unusedChecked                bool
+@@ -396,6 +403,7 @@ type SourceFileLinks struct {
+ 	localJsxFactory              *ast.EntityName
+ 	localJsxFragmentFactory      *ast.EntityName
+ 	jsxFragmentType              *Type
++	relationErrors               []*RelationError // Collected during type checking for Effect diagnostics
  }
 
  // Signature specific links
