@@ -1,9 +1,9 @@
 === Quick Fix Inventory ===
 
-[D1] (7:24-7:70) TS377075: This type assertion unsafely narrows the Effect error or requirements channels. effect(unsafeEffectTypeAssertion)
+[D1] (7:24-7:70) TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
   Fix 0: "Disable unsafeEffectTypeAssertion for this line"
   Fix 1: "Disable unsafeEffectTypeAssertion for entire file"
-  Fix 2: "Remove the unsafe Effect assertion"
+  Fix 2: "Remove the unsafe assertion"
 
 === Quick Fix Application Results ===
 
@@ -13,7 +13,7 @@ skipped by default
 === [D1] Fix 1: "Disable unsafeEffectTypeAssertion for entire file" ===
 skipped by default
 
-=== [D1] Fix 2: "Remove the unsafe Effect assertion" ===
+=== [D1] Fix 2: "Remove the unsafe assertion" ===
 
 --- file:///.src/unsafeEffectTypeAssertion_preview.ts ---
 // @effect-diagnostics *:off

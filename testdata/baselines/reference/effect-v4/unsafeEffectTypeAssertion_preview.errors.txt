@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/unsafeEffectTypeAssertion_preview.ts(7,24): warning TS377075: This type assertion unsafely narrows the Effect error or requirements channels. effect(unsafeEffectTypeAssertion)
+/.src/unsafeEffectTypeAssertion_preview.ts(7,24): warning TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
 
 
 ==== /.src/unsafeEffectTypeAssertion_preview.ts (1 errors) ====
@@ -13,7 +13,7 @@ Effect version: 4.0.0
     
     export const preview = program as Effect.Effect<string, never, never>
                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377075: This type assertion unsafely narrows the Effect error or requirements channels. effect(unsafeEffectTypeAssertion)
+!!! warning TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
 !!! related TS377087 /.src/unsafeEffectTypeAssertion_preview.ts(7,35): The error channel is narrowed from `"boom"` to `never`. effect(unsafeEffectTypeAssertion)
 !!! related TS377087 /.src/unsafeEffectTypeAssertion_preview.ts(7,35): The requirements channel is narrowed from `"service"` to `never`. effect(unsafeEffectTypeAssertion)
     
