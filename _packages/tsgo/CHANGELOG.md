@@ -1,5 +1,13 @@
 # @effect/tsgo
 
+## 0.6.1
+
+### Patch Changes
+
+- ef1d235: Update Effect v4 test coverage and metadata for `4.0.0-beta.66`, including direct `Context.Service` yielding and the restored `Effect.firstSuccessOf` API.
+- ad7a8fa: Extend unsafe effect type assertion diagnostics to Stream and Layer assertions.
+- 3316083: Update the TypeScript-Go submodule to include upstream declaration emit fixes.
+
 ## 0.6.0
 
 ### Minor Changes
