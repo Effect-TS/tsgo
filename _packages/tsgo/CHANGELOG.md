@@ -1,5 +1,13 @@
 # @effect/tsgo
 
+## 0.7.0
+
+### Minor Changes
+
+- 50753fe: Add a native `getEffectDiagnostics` API entrypoint that runs Effect diagnostics for a specific source file with explicit rule selection and Effect options.
+
+  This also exposes a shared internal rule runner so the checker hook and native API use the same directive, severity, and override behavior.
+
 ## 0.6.2
 
 ### Patch Changes
