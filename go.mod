@@ -4,6 +4,7 @@ go 1.26
 
 replace (
 	github.com/microsoft/typescript-go => ./typescript-go
+	github.com/microsoft/typescript-go/shim/api => ./shim/api
 	github.com/microsoft/typescript-go/shim/ast => ./shim/ast
 	github.com/microsoft/typescript-go/shim/astnav => ./shim/astnav
 	github.com/microsoft/typescript-go/shim/bundled => ./shim/bundled
@@ -45,6 +46,7 @@ replace (
 
 require (
 	github.com/effect-ts/tsgo/etscore v0.0.0
+	github.com/microsoft/typescript-go/shim/api v0.0.0
 	github.com/microsoft/typescript-go/shim/ast v0.0.0
 	github.com/microsoft/typescript-go/shim/astnav v0.0.0
 	github.com/microsoft/typescript-go/shim/bundled v0.0.0-00010101000000-000000000000

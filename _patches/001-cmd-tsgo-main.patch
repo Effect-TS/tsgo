@@ -2,11 +2,12 @@ diff --git a/cmd/tsgo/main.go b/cmd/tsgo/main.go
 index a2fe02e8c..10044042c 100644
 --- a/cmd/tsgo/main.go
 +++ b/cmd/tsgo/main.go
-@@ -3,7 +3,12 @@ package main
+@@ -3,6 +3,12 @@ package main
  import (
  	"os"
  
 +	// Import Effect hooks to register via init()
++	_ "github.com/effect-ts/tsgo/etsapihooks"     // native API hooks
 +	_ "github.com/effect-ts/tsgo/etsexecutehooks" // exit-code filtering hooks
 +	_ "github.com/effect-ts/tsgo/etscheckerhooks" // checker diagnostics hooks
 +	_ "github.com/effect-ts/tsgo/etslshooks"      // LS codefix hooks

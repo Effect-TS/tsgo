@@ -48,6 +48,7 @@ type ExtraShim struct {
 
 func main() {
 	packagesToShim := []string{
+		"api",
 		"ast",
 		"astnav",
 		"bundled",
