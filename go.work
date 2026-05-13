@@ -3,6 +3,7 @@ go 1.26
 use (
 	.
 	./etscore
+	./shim/api
 	./shim/ast
 	./shim/astnav
 	./shim/bundled
