@@ -1,5 +1,11 @@
 # @effect/tsgo
 
+## 0.7.2
+
+### Patch Changes
+
+- c078d7b: Avoid triggering stray TypeScript diagnostics while detecting data-first and data-last Effect APIs during piping-flow analysis.
+
 ## 0.7.1
 
 ### Patch Changes
