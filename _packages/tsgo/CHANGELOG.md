@@ -1,5 +1,12 @@
 # @effect/tsgo
 
+## 0.7.1
+
+### Patch Changes
+
+- dba3fe7: Update the auto-import style consistency tests to use the mounted Effect fixtures and assert the full rewritten fix shapes for barrel and namespace import behavior.
+- a608a39: Update [`typescript-go`](https://github.com/microsoft/typescript-go/commit/c282336ea94f8a2e63187afd0f8d4bfb3b3f4d3b) to commit `c282336ea94f8a2e63187afd0f8d4bfb3b3f4d3b`.
+
 ## 0.7.0
 
 ### Minor Changes
