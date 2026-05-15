@@ -31,15 +31,6 @@ func (tp *TypeParser) DataFirstOrLastCall(node *ast.Node) *ParsedDataFirstOrLast
 		}
 	}
 
-	if tp.GetEffectContextFlags(node) != 0 {
-		if callHasNonBareThisArgument(call.Arguments.Nodes) ||
-			containsThisKeyword(call.Expression) ||
-			callHasArrowFunctionArgument(call.Arguments.Nodes) ||
-			callHasGenericCallee(tp, call) {
-			return nil
-		}
-	}
-
 	c := tp.checker
 	resolved := c.GetResolvedSignature(node)
 	if resolved == nil || resolved.Declaration() == nil {
@@ -117,65 +108,6 @@ func (tp *TypeParser) DataFirstOrLastCall(node *ast.Node) *ParsedDataFirstOrLast
 	}
 
 	return nil
-}
-
-func callHasNonBareThisArgument(args []*ast.Node) bool {
-	for _, arg := range args {
-		if arg == nil || arg.Kind == ast.KindThisKeyword {
-			continue
-		}
-		if containsThisKeyword(arg) {
-			return true
-		}
-	}
-	return false
-}
-
-func callHasArrowFunctionArgument(args []*ast.Node) bool {
-	for _, arg := range args {
-		if arg != nil && arg.Kind == ast.KindArrowFunction {
-			return true
-		}
-	}
-	return false
-}
-
-func callHasGenericCallee(tp *TypeParser, call *ast.CallExpression) bool {
-	if call == nil || call.Expression == nil {
-		return false
-	}
-	sym := tp.ReferenceSymbolAtNode(call.Expression)
-	if sym == nil {
-		return false
-	}
-	for _, decl := range sym.Declarations {
-		if decl == nil {
-			continue
-		}
-		typeParams := GetFunctionLikeTypeParameters(decl)
-		if typeParams != nil && len(typeParams.Nodes) > 0 {
-			return true
-		}
-	}
-	return false
-}
-
-func containsThisKeyword(node *ast.Node) bool {
-	if node == nil {
-		return false
-	}
-	if node.Kind == ast.KindThisKeyword {
-		return true
-	}
-	contains := false
-	node.ForEachChild(func(child *ast.Node) bool {
-		if containsThisKeyword(child) {
-			contains = true
-			return true
-		}
-		return false
-	})
-	return contains
 }
 
 func derivePipeableSignatureFromDataFirst(c *checker.Checker, sig *checker.Signature, subjectIndex int) *checker.Signature {
