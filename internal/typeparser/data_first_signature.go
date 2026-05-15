@@ -53,6 +53,11 @@ func (tp *TypeParser) DataFirstOrLastCall(node *ast.Node) *ParsedDataFirstOrLast
 	if resolvedSymbol == nil {
 		return nil
 	}
+	calleeType := tp.GetTypeAtLocation(call.Expression)
+	if calleeType == nil {
+		return nil
+	}
+	candidates := c.GetSignaturesOfType(calleeType, checker.SignatureKindCall)
 
 	subjectIndexes := []int{0}
 	if len(call.Arguments.Nodes) == 2 {
@@ -68,7 +73,6 @@ func (tp *TypeParser) DataFirstOrLastCall(node *ast.Node) *ParsedDataFirstOrLast
 		}
 	}
 
-	_, candidates := checker.GetResolvedSignatureForSignatureHelp(node, len(call.Arguments.Nodes)-1, c)
 	for _, subjectIndex := range subjectIndexes {
 		derived := derivePipeableSignatureFromDataFirst(c, resolved, subjectIndex)
 		if derived == nil {

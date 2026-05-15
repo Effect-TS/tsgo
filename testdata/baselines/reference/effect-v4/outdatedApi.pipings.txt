@@ -1,4 +1,4 @@
-==== /.src/outdatedApi.ts (37 flows) ====
+==== /.src/outdatedApi.ts (38 flows) ====
 
 === Piping Flow ===
 Location: 6:25 - 8:3
@@ -485,6 +485,20 @@ Transformations (1):
       callee: Effect.fail
       args: (constant)
       outType: Effect<never, string, never>
+
+=== Piping Flow ===
+Location: 87:27 - 87:141
+Node: Effect.filterMap([Effect.succeed(1), Effect.succeed(2)], (n) => n > 1 ? Effect.succeed(n) : Effect.succeed(null))
+Node Kind: KindCallExpression
+
+Subject: [Effect.succeed(1), Effect.succeed(2)]
+Subject Type: Effect<number, never, never>[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.filterMap
+      args: [(n) => n > 1 ? Effect.succeed(n) : Effect.succeed(null)]
+      outType: Effect<unknown[], never, never>
 
 === Piping Flow ===
 Location: 87:46 - 87:63

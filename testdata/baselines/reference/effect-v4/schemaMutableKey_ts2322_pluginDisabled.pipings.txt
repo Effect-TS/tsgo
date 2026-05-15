@@ -1,0 +1,29 @@
+==== /.src/schemaMutableKey_ts2322_pluginDisabled.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 30:27 - 30:133
+Node: Struct_.lambda<optionalKeyLambda>((schema) => Schema.make(SchemaAST.optionalKey(schema.ast), { schema }))
+Node Kind: KindCallExpression
+
+Subject: (schema) => Schema.make(SchemaAST.optionalKey(schema.ast), { schema })
+Subject Type: (schema: Top) => optionalKey<Top>
+
+Transformations (1):
+  [0] kind: call
+      callee: Struct_.lambda
+      args: (constant)
+      outType: optionalKeyLambda
+
+=== Piping Flow ===
+Location: 30:86 - 30:119
+Node: SchemaAST.optionalKey(schema.ast)
+Node Kind: KindCallExpression
+
+Subject: schema.ast
+Subject Type: AST
+
+Transformations (1):
+  [0] kind: call
+      callee: SchemaAST.optionalKey
+      args: (constant)
+      outType: AST

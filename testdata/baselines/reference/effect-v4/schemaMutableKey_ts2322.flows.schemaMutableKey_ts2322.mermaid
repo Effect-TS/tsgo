@@ -1,0 +1,15 @@
+flowchart TB
+  0[/"type: <br/>node: Struct_.Lambda"/]
+  1[["type: #40;schema: Top#41; =#gt; optionalKey#lt;Top#gt;<br/>node: #40;schema#41; =#gt; Schema.make#40;SchemaAST.optionalKey#40;schema.ast#41;, #123; schema #125;#41;"]]
+  2[/"type: optionalKey#lt;Top#gt;<br/>node: Schema.make#40;SchemaAST.optionalKey#40;schema.ast#41;, #123; schema #125;#41;"/]
+  3[/"type: AST<br/>node: schema.ast"/]
+  4["type: AST<br/>callee: SchemaAST.optionalKey<br/>args: #91;#93;"]
+  5[/"type: #lt;A extends AST#gt;#40;ast: A#41; =#gt; A<br/>node: SchemaAST.optionalKey"/]
+  6["type: optionalKeyLambda<br/>callee: Struct_.lambda<br/>args: #91;#93;"]
+  7[/"type: #lt;L extends #40;a: any#41; =#gt; any#gt;#40;f: #40;a: Parameters#lt;L#gt;#91;0#93;#41; =#gt; ReturnType#lt;L#gt;#41; =#gt; L<br/>node: Struct_.lambda"/]
+  3 -->|"kind: pipe"| 4
+  5 -->|"kind: transformCallee"| 4
+  4 -->|"kind: usedBy"| 2
+  2 -->|"kind: potentialReturn"| 1
+  1 -->|"kind: pipe"| 6
+  7 -->|"kind: transformCallee"| 6
