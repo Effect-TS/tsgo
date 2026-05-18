@@ -1,5 +1,5 @@
 diff --git a/internal/fourslash/fourslash.go b/internal/fourslash/fourslash.go
-index b8575b1933..022443c14d 100644
+index d1087aabdf..803535aedc 100644
 --- a/internal/fourslash/fourslash.go
 +++ b/internal/fourslash/fourslash.go
 @@ -41,6 +41,16 @@ import (
@@ -19,7 +19,7 @@ index b8575b1933..022443c14d 100644
  type FourslashTest struct {
  	client *lsptestutil.LSPClient
  	vfs    vfs.FS
-@@ -149,6 +159,11 @@ func NewFourslash(t *testing.T, capabilities *lsproto.ClientCapabilities, conten
+@@ -155,6 +165,11 @@ func NewFourslash(t *testing.T, capabilities *lsproto.ClientCapabilities, conten
  		testfs[filePath] = vfstest.Symlink(tspath.GetNormalizedAbsolutePath(target, rootDir))
  	}
  
@@ -31,10 +31,10 @@ index b8575b1933..022443c14d 100644
  	// !!! use default compiler options for inferred project as base
  	compilerOptions := &core.CompilerOptions{
  		SkipDefaultLibCheck: core.TSTrue,
-@@ -4319,3 +4334,379 @@ func (f *FourslashTest) VerifyErrorExistsBeforeMarker(t *testing.T, markerName s
- 	}
+@@ -5586,6 +5601,383 @@ func (f *FourslashTest) VerifyErrorExistsBeforeMarker(t *testing.T, markerName s
  	t.Fatalf("Expected error before marker '%s' but none was found", markerName)
  }
+ 
 +
 +// QuickFixInfo holds a diagnostic and the titles of its available quick fixes.
 +type QuickFixInfo struct {
@@ -411,3 +411,7 @@ index b8575b1933..022443c14d 100644
 +
 +	return result
 +}
++
+ func updatePositionForTextEdit(position int, editStart int, editEnd int, newTextLength int) int {
+ 	if position <= editStart {
+ 		return position
