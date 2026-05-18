@@ -58,6 +58,7 @@ const ExportKindExportEquals = ls.ExportKindExportEquals
 const ExportKindModule = ls.ExportKindModule
 const ExportKindNamed = ls.ExportKindNamed
 const ExportKindUMD = ls.ExportKindUMD
+var FixClassIncorrectlyImplementsInterfaceProvider = ls.FixClassIncorrectlyImplementsInterfaceProvider
 type Host = ls.Host
 type ImpExpKind = ls.ImpExpKind
 const ImpExpKindExport = ls.ImpExpKindExport
