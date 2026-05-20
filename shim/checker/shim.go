@@ -175,6 +175,7 @@ type extra_Checker struct {
   errorTypes map[checker.CacheHashKey]*checker.Type
   moduleSymbols map[*ast.Node]*ast.Symbol
   globalThisSymbol *ast.Symbol
+  symbolTableAliasCache map[checker.symbolTableID][]*ast.Symbol
   resolveName func(location *ast.Node, name string, meaning ast.SymbolFlags, nameNotFoundMessage *diagnostics.Message, isUse bool, excludeGlobals bool) *ast.Symbol
   resolveNameForSymbolSuggestion func(location *ast.Node, name string, meaning ast.SymbolFlags, nameNotFoundMessage *diagnostics.Message, isUse bool, excludeGlobals bool) *ast.Symbol
   tupleTypes map[checker.CacheHashKey]*checker.Type
