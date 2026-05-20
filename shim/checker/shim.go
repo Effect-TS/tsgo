@@ -100,6 +100,10 @@ func Checker_getLiteralTypeFromProperty(recv *checker.Checker, prop *ast.Symbol,
 func Checker_newFunctionType(recv *checker.Checker, typeParameters []*checker.Type, thisParameter *ast.Symbol, parameters []*ast.Symbol, returnType *checker.Type) *checker.Type
 //go:linkname Checker_newCallSignature github.com/microsoft/typescript-go/internal/checker.(*Checker).newCallSignature
 func Checker_newCallSignature(recv *checker.Checker, typeParameters []*checker.Type, thisParameter *ast.Symbol, parameters []*ast.Symbol, returnType *checker.Type) *checker.Signature
+//go:linkname Checker_isSymbolAssigned github.com/microsoft/typescript-go/internal/checker.(*Checker).isSymbolAssigned
+func Checker_isSymbolAssigned(recv *checker.Checker, symbol *ast.Symbol) bool
+//go:linkname Checker_isPastLastAssignment github.com/microsoft/typescript-go/internal/checker.(*Checker).isPastLastAssignment
+func Checker_isPastLastAssignment(recv *checker.Checker, symbol *ast.Symbol, location *ast.Node) bool
 //go:linkname Checker_isTypeAssignableTo github.com/microsoft/typescript-go/internal/checker.(*Checker).isTypeAssignableTo
 func Checker_isTypeAssignableTo(recv *checker.Checker, source *checker.Type, target *checker.Type) bool
 //go:linkname Checker_isSignatureAssignableTo github.com/microsoft/typescript-go/internal/checker.(*Checker).isSignatureAssignableTo
@@ -144,10 +148,8 @@ type extra_Checker struct {
   evaluate evaluator.Evaluator
   stringLiteralTypes map[string]*checker.Type
   numberLiteralTypes map[jsnum.Number]*checker.Type
-  nanType *checker.Type
   bigintLiteralTypes map[jsnum.PseudoBigInt]*checker.Type
   enumLiteralTypes map[checker.EnumLiteralKey]*checker.Type
-  enumNaNLiteralTypes map[*ast.Symbol]*checker.Type
   indexedAccessTypes map[checker.CacheHashKey]*checker.Type
   templateLiteralTypes map[checker.CacheHashKey]*checker.Type
   stringMappingTypes map[checker.StringMappingKey]*checker.Type
@@ -175,7 +177,6 @@ type extra_Checker struct {
   errorTypes map[checker.CacheHashKey]*checker.Type
   moduleSymbols map[*ast.Node]*ast.Symbol
   globalThisSymbol *ast.Symbol
-  symbolTableAliasCache map[checker.symbolTableID][]*ast.Symbol
   resolveName func(location *ast.Node, name string, meaning ast.SymbolFlags, nameNotFoundMessage *diagnostics.Message, isUse bool, excludeGlobals bool) *ast.Symbol
   resolveNameForSymbolSuggestion func(location *ast.Node, name string, meaning ast.SymbolFlags, nameNotFoundMessage *diagnostics.Message, isUse bool, excludeGlobals bool) *ast.Symbol
   tupleTypes map[checker.CacheHashKey]*checker.Type

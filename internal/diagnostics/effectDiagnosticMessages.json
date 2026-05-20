@@ -342,5 +342,13 @@
     "Parameter `{0}` implicitly has type `any` in `Effect.fn`, `Effect.fnUntraced`, or `Effect.fnUntracedEager`. No parameter type is available from an explicit annotation or contextual function type. effect(effectFnImplicitAny)": {
         "category": "Error",
         "code": 377062
+    },
+    "This generator applies the same trailing `Effect.mapError(...)` to every yielded effect. Hoist it once at the generator result: `Effect.gen(...).pipe(Effect.mapError(...))`, or the trailing pipe arguments of generator-form `Effect.fn(...)`. effect(redundantMapError)": {
+        "category": "Suggestion",
+        "code": 377088
+    },
+    "This repeated `Effect.mapError(...)` site participates in the hoistable generator-wide mapping. effect(redundantMapError)": {
+        "category": "Suggestion",
+        "code": 377089
     }
 }

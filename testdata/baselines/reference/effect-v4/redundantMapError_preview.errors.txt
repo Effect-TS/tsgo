@@ -1,0 +1,32 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/redundantMapError_preview.ts(12,35): warning TS377088: This generator applies the same trailing `Effect.mapError(...)` to every yielded effect. Hoist it once at the generator result: `Effect.gen(...).pipe(Effect.mapError(...))`, or the trailing pipe arguments of generator-form `Effect.fn(...)`. effect(redundantMapError)
+
+
+==== /.src/redundantMapError_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics redundantMapError:warning
+    import { Effect } from "effect"
+    
+    declare const first: Effect.Effect<number, unknown>
+    declare const second: Effect.Effect<string, unknown>
+    
+    class RepoError {
+      constructor(readonly args: { cause: unknown }) {}
+    }
+    
+    export const program = Effect.gen(function*() {
+                                      ~~~~~~~~~
+!!! warning TS377088: This generator applies the same trailing `Effect.mapError(...)` to every yielded effect. Hoist it once at the generator result: `Effect.gen(...).pipe(Effect.mapError(...))`, or the trailing pipe arguments of generator-form `Effect.fn(...)`. effect(redundantMapError)
+!!! related TS377089 /.src/redundantMapError_preview.ts(14,5): This repeated `Effect.mapError(...)` site participates in the hoistable generator-wide mapping. effect(redundantMapError)
+!!! related TS377089 /.src/redundantMapError_preview.ts(18,5): This repeated `Effect.mapError(...)` site participates in the hoistable generator-wide mapping. effect(redundantMapError)
+      yield* first.pipe(
+        Effect.mapError((cause) => new RepoError({ cause }))
+      )
+    
+      return yield* second.pipe(
+        Effect.mapError((cause) => new RepoError({ cause }))
+      )
+    })
+    

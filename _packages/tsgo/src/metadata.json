@@ -1579,6 +1579,31 @@
       }
     },
     {
+      "name": "redundantMapError",
+      "group": "style",
+      "description": "Suggests hoisting a repeated trailing Effect.mapError from every yield in an Effect generator",
+      "defaultSeverity": "suggestion",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377088,
+        377089
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const first: Effect.Effect\u003cnumber, unknown\u003e\ndeclare const second: Effect.Effect\u003cstring, unknown\u003e\n\nclass RepoError {\n  constructor(readonly args: { cause: unknown }) {}\n}\n\nexport const program = Effect.gen(function*() {\n  yield* first.pipe(\n    Effect.mapError((cause) =\u003e new RepoError({ cause }))\n  )\n\n  return yield* second.pipe(\n    Effect.mapError((cause) =\u003e new RepoError({ cause }))\n  )\n})\n",
+        "diagnostics": [
+          {
+            "start": 246,
+            "end": 255,
+            "text": "This generator applies the same trailing `Effect.mapError(...)` to every yielded effect. Hoist it once at the generator result: `Effect.gen(...).pipe(Effect.mapError(...))`, or the trailing pipe arguments of generator-form `Effect.fn(...)`. effect(redundantMapError)"
+          }
+        ]
+      }
+    },
+    {
       "name": "redundantSchemaTagIdentifier",
       "group": "style",
       "description": "Suggests removing redundant identifier argument when it equals the tag value in Schema.TaggedClass/TaggedError/TaggedRequest",

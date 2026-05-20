@@ -63,6 +63,7 @@ var All = []rule.Rule{
 	LeakingRequirements,
 	LazyPromiseInEffectSync,
 	NestedEffectGenYield,
+	RedundantMapError,
 	UnnecessaryArrowBlock,
 	InstanceOfSchema,
 	GenericEffectServices,

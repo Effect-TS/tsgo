@@ -1,7 +1,7 @@
 {
   "ExtraFunctions": ["forEachYieldExpression"],
   "ExtraMethods": {
-    "Checker": ["isTypeAssignableTo", "isArrayType", "isReadonlyArrayType", "getIndexInfosOfType", "getTypeArguments", "getLiteralTypeFromProperty", "getSymbolIfSameReference", "getSymbolOfDeclaration", "isSignatureAssignableTo", "isReferenceToType", "newFunctionType", "newCallSignature"]
+    "Checker": ["isTypeAssignableTo", "isArrayType", "isReadonlyArrayType", "getIndexInfosOfType", "getTypeArguments", "getLiteralTypeFromProperty", "getSymbolIfSameReference", "getSymbolOfDeclaration", "isSignatureAssignableTo", "isReferenceToType", "newFunctionType", "newCallSignature", "isSymbolAssigned", "isPastLastAssignment"]
   },
   "ExtraFields": {
     "Checker": ["getGlobalPromiseTypeChecked", "emptyGenericType"],

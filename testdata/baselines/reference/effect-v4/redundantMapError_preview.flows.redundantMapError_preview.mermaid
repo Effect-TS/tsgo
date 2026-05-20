@@ -1,0 +1,26 @@
+flowchart TB
+  0[["type: any<br/>node: constructor#40;readonly args: #123; cause: unknown #125;#41; #123;#125;"]]
+  1((("type: Effect#lt;string, RepoError, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  yield* first.pipe#40;#92;n    Effect.mapError#40;#40;cause#41; =#gt; new RepoError#40;#123; cause #125;#41;#41;#92;n  #41;#92;n#92;n  return yield* second.pipe#40;#92;n    Effect.mapError#40;#40;cause#41; =#gt; new RepoError#40;#123; cause #125;#41;#41;#92;n  #41;#92;n#125;#41;")))
+  2[/"type: string<br/>node: yield* second.pipe#40;#92;n    Effect.mapError#40;#40;cause#41; =#gt; new RepoError#40;#123; cause #125;#41;#41;#92;n  #41;"/]
+  3[/"type: Effect#lt;string, unknown, never#gt;<br/>node: second"/]
+  4["type: Effect#lt;string, RepoError, never#gt;<br/>callee: Effect.mapError<br/>args: #91;#40;cause#41; =#gt; new RepoError#40;#123; cause #125;#41;#93;"]
+  5[/"type: #123; #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E2, R#gt;; #lt;A, E, R, E2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; E2#41;: Effect#lt;A, E2, R#gt;; #125;<br/>node: Effect.mapError"/]
+  6[["type: #40;cause: unknown#41; =#gt; RepoError<br/>node: #40;cause#41; =#gt; new RepoError#40;#123; cause #125;#41;"]]
+  7[/"type: RepoError<br/>node: new RepoError#40;#123; cause #125;#41;"/]
+  8[/"type: Effect#lt;number, unknown, never#gt;<br/>node: first"/]
+  9["type: Effect#lt;number, RepoError, never#gt;<br/>callee: Effect.mapError<br/>args: #91;#40;cause#41; =#gt; new RepoError#40;#123; cause #125;#41;#93;"]
+  10[/"type: #123; #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E2, R#gt;; #lt;A, E, R, E2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; E2#41;: Effect#lt;A, E2, R#gt;; #125;<br/>node: Effect.mapError"/]
+  11[["type: #40;cause: unknown#41; =#gt; RepoError<br/>node: #40;cause#41; =#gt; new RepoError#40;#123; cause #125;#41;"]]
+  12[/"type: RepoError<br/>node: new RepoError#40;#123; cause #125;#41;"/]
+  5 -->|"kind: transformCallee"| 4
+  7 -->|"kind: potentialReturn"| 6
+  6 -->|"kind: transformArg"| 4
+  3 -->|"kind: pipe"| 4
+  4 -->|"kind: usedBy"| 2
+  2 -->|"kind: potentialReturn"| 1
+  10 -->|"kind: transformCallee"| 9
+  12 -->|"kind: potentialReturn"| 11
+  11 -->|"kind: transformArg"| 9
+  8 -->|"kind: pipe"| 9
+  9 -->|"kind: yieldable"| 1
+  4 -->|"kind: yieldable"| 1

@@ -1,0 +1,235 @@
+==== /.src/redundantMapError.ts (15 flows) ====
+
+=== Piping Flow ===
+Location: 18:28 - 30:3
+Node: Effect.fn("TodosRepo.writeTodos")(function*(todos: ReadonlyArray<Todo>) {\n  const encoded = yield* encodeTodos(todos).pipe(\n    Effect.mapError((cause) => new TodosRepoError({ cause }))\n  )\n\n  yield* makeDirectory(filePath).pipe(\n    Effect.mapError((cause) => new TodosRepoError({ cause }))\n  )\n\n  yield* writeFile(filePath, `${encoded}\n`).pipe(\n    Effect.mapError((cause) => new TodosRepoError({ cause }))\n  )\n})
+Node Kind: KindCallExpression
+
+Subject: function*(todos: ReadonlyArray<Todo>) {\n  const encoded = yield* encodeTodos(todos).pipe(\n    Effect.mapError((cause) => new TodosRepoError({ cause }))\n  )\n\n  yield* makeDirectory(filePath).pipe(\n    Effect.mapError((cause) => new TodosRepoError({ cause }))\n  )\n\n  yield* writeFile(filePath, `${encoded}\n`).pipe(\n    Effect.mapError((cause) => new TodosRepoError({ cause }))\n  )\n}
+Subject Type: (todos: readonly Todo[]) => Generator<Effect<void, TodosRepoError, never>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn("TodosRepo.writeTodos")
+      args: (constant)
+      outType: (todos: readonly Todo[]) => Effect<void, TodosRepoError, never>
+
+=== Piping Flow ===
+Location: 19:25 - 21:4
+Node: encodeTodos(todos).pipe(\n    Effect.mapError((cause) => new TodosRepoError({ cause }))\n  )
+Node Kind: KindCallExpression
+
+Subject: todos
+Subject Type: readonly Todo[]
+
+Transformations (2):
+  [0] kind: call
+      callee: encodeTodos
+      args: (constant)
+      outType: Effect<string, unknown, never>
+  [1] kind: pipeable
+      callee: Effect.mapError
+      args: [(cause) => new TodosRepoError({ cause })]
+      outType: Effect<string, TodosRepoError, never>
+
+=== Piping Flow ===
+Location: 23:9 - 25:4
+Node: makeDirectory(filePath).pipe(\n    Effect.mapError((cause) => new TodosRepoError({ cause }))\n  )
+Node Kind: KindCallExpression
+
+Subject: filePath
+Subject Type: "todos.json"
+
+Transformations (2):
+  [0] kind: call
+      callee: makeDirectory
+      args: (constant)
+      outType: Effect<void, unknown, never>
+  [1] kind: pipeable
+      callee: Effect.mapError
+      args: [(cause) => new TodosRepoError({ cause })]
+      outType: Effect<void, TodosRepoError, never>
+
+=== Piping Flow ===
+Location: 27:9 - 29:4
+Node: writeFile(filePath, `${encoded}\n`).pipe(\n    Effect.mapError((cause) => new TodosRepoError({ cause }))\n  )
+Node Kind: KindCallExpression
+
+Subject: writeFile(filePath, `${encoded}\n`)
+Subject Type: Effect<void, unknown, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.mapError
+      args: [(cause) => new TodosRepoError({ cause })]
+      outType: Effect<void, TodosRepoError, never>
+
+=== Piping Flow ===
+Location: 32:46 - 40:3
+Node: Effect.gen(function*() {\n  yield* makeDirectory(filePath).pipe(\n    Effect.mapError((cause) => new TodosRepoError({ cause }))\n  )\n\n  yield* writeFile(filePath, "body").pipe(\n    Effect.mapError((cause) => new TodosRepoError({ cause, filePath }))\n  )\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  yield* makeDirectory(filePath).pipe(\n    Effect.mapError((cause) => new TodosRepoError({ cause }))\n  )\n\n  yield* writeFile(filePath, "body").pipe(\n    Effect.mapError((cause) => new TodosRepoError({ cause, filePath }))\n  )\n}
+Subject Type: () => Generator<Effect<void, TodosRepoError, never>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, TodosRepoError, never>
+
+=== Piping Flow ===
+Location: 33:9 - 35:4
+Node: makeDirectory(filePath).pipe(\n    Effect.mapError((cause) => new TodosRepoError({ cause }))\n  )
+Node Kind: KindCallExpression
+
+Subject: filePath
+Subject Type: "todos.json"
+
+Transformations (2):
+  [0] kind: call
+      callee: makeDirectory
+      args: (constant)
+      outType: Effect<void, unknown, never>
+  [1] kind: pipeable
+      callee: Effect.mapError
+      args: [(cause) => new TodosRepoError({ cause })]
+      outType: Effect<void, TodosRepoError, never>
+
+=== Piping Flow ===
+Location: 37:9 - 39:4
+Node: writeFile(filePath, "body").pipe(\n    Effect.mapError((cause) => new TodosRepoError({ cause, filePath }))\n  )
+Node Kind: KindCallExpression
+
+Subject: writeFile(filePath, "body")
+Subject Type: Effect<void, unknown, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.mapError
+      args: [(cause) => new TodosRepoError({ cause, filePath })]
+      outType: Effect<void, TodosRepoError, never>
+
+=== Piping Flow ===
+Location: 42:43 - 52:3
+Node: Effect.gen(function*() {\n  const suffix = "!"\n\n  yield* makeDirectory(filePath).pipe(\n    Effect.mapError((cause) => new TodosRepoError({ cause, captured: suffix }))\n  )\n\n  yield* writeFile(filePath, suffix).pipe(\n    Effect.mapError((cause) => new TodosRepoError({ cause, captured: suffix }))\n  )\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const suffix = "!"\n\n  yield* makeDirectory(filePath).pipe(\n    Effect.mapError((cause) => new TodosRepoError({ cause, captured: suffix }))\n  )\n\n  yield* writeFile(filePath, suffix).pipe(\n    Effect.mapError((cause) => new TodosRepoError({ cause, captured: suffix }))\n  )\n}
+Subject Type: () => Generator<Effect<void, TodosRepoError, never>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, TodosRepoError, never>
+
+=== Piping Flow ===
+Location: 45:9 - 47:4
+Node: makeDirectory(filePath).pipe(\n    Effect.mapError((cause) => new TodosRepoError({ cause, captured: suffix }))\n  )
+Node Kind: KindCallExpression
+
+Subject: filePath
+Subject Type: "todos.json"
+
+Transformations (2):
+  [0] kind: call
+      callee: makeDirectory
+      args: (constant)
+      outType: Effect<void, unknown, never>
+  [1] kind: pipeable
+      callee: Effect.mapError
+      args: [(cause) => new TodosRepoError({ cause, captured: suffix })]
+      outType: Effect<void, TodosRepoError, never>
+
+=== Piping Flow ===
+Location: 49:9 - 51:4
+Node: writeFile(filePath, suffix).pipe(\n    Effect.mapError((cause) => new TodosRepoError({ cause, captured: suffix }))\n  )
+Node Kind: KindCallExpression
+
+Subject: writeFile(filePath, suffix)
+Subject Type: Effect<void, unknown, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.mapError
+      args: [(cause) => new TodosRepoError({ cause, captured: suffix })]
+      outType: Effect<void, TodosRepoError, never>
+
+=== Piping Flow ===
+Location: 54:46 - 60:3
+Node: Effect.gen(function*() {\n  yield* makeDirectory(filePath).pipe(\n    Effect.mapError((cause) => new TodosRepoError({ cause }))\n  )\n\n  yield* writeFile(filePath, "body")\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  yield* makeDirectory(filePath).pipe(\n    Effect.mapError((cause) => new TodosRepoError({ cause }))\n  )\n\n  yield* writeFile(filePath, "body")\n}
+Subject Type: () => Generator<Effect<void, unknown, never>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, unknown, never>
+
+=== Piping Flow ===
+Location: 55:9 - 57:4
+Node: makeDirectory(filePath).pipe(\n    Effect.mapError((cause) => new TodosRepoError({ cause }))\n  )
+Node Kind: KindCallExpression
+
+Subject: filePath
+Subject Type: "todos.json"
+
+Transformations (2):
+  [0] kind: call
+      callee: makeDirectory
+      args: (constant)
+      outType: Effect<void, unknown, never>
+  [1] kind: pipeable
+      callee: Effect.mapError
+      args: [(cause) => new TodosRepoError({ cause })]
+      outType: Effect<void, TodosRepoError, never>
+
+=== Piping Flow ===
+Location: 62:39 - 68:3
+Node: Effect.gen(function*() {\n  yield* makeDirectory(filePath).pipe(\n    Effect.mapError((cause) => new TodosRepoError({ cause }))\n  )\n\n  yield* Effect.mapError(writeFile(filePath, "body"), (cause) => new TodosRepoError({ cause }))\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  yield* makeDirectory(filePath).pipe(\n    Effect.mapError((cause) => new TodosRepoError({ cause }))\n  )\n\n  yield* Effect.mapError(writeFile(filePath, "body"), (cause) => new TodosRepoError({ cause }))\n}
+Subject Type: () => Generator<Effect<void, TodosRepoError, never>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, TodosRepoError, never>
+
+=== Piping Flow ===
+Location: 63:9 - 65:4
+Node: makeDirectory(filePath).pipe(\n    Effect.mapError((cause) => new TodosRepoError({ cause }))\n  )
+Node Kind: KindCallExpression
+
+Subject: filePath
+Subject Type: "todos.json"
+
+Transformations (2):
+  [0] kind: call
+      callee: makeDirectory
+      args: (constant)
+      outType: Effect<void, unknown, never>
+  [1] kind: pipeable
+      callee: Effect.mapError
+      args: [(cause) => new TodosRepoError({ cause })]
+      outType: Effect<void, TodosRepoError, never>
+
+=== Piping Flow ===
+Location: 67:9 - 67:96
+Node: Effect.mapError(writeFile(filePath, "body"), (cause) => new TodosRepoError({ cause }))
+Node Kind: KindCallExpression
+
+Subject: writeFile(filePath, "body")
+Subject Type: Effect<void, unknown, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.mapError
+      args: [(cause) => new TodosRepoError({ cause })]
+      outType: Effect<void, TodosRepoError, never>
