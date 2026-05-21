@@ -1,0 +1,13 @@
+=== Quick Fix Inventory ===
+
+[D1] (13:3-13:18) TS377092: These 2 consecutive `catchTag` transformations can be collapsed into a single `catchTags` call. effect(multipleCatchTag)
+  Fix 0: "Disable multipleCatchTag for this line"
+  Fix 1: "Disable multipleCatchTag for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable multipleCatchTag for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable multipleCatchTag for entire file" ===
+skipped by default

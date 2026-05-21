@@ -358,5 +358,13 @@
     "This `typeof ... .Type` query can be replaced with `{0}`. effect(unnecessaryTypeofType)": {
         "category": "Suggestion",
         "code": 377090
+    },
+    "These {0} consecutive `catchTag` transformations can be collapsed into a single `catchTags` call. effect(multipleCatchTag)": {
+        "category": "Suggestion",
+        "code": 377092
+    },
+    "This `catchTag` transformation is part of a consecutive chain that can be collapsed into `catchTags`. effect(multipleCatchTag)": {
+        "category": "Suggestion",
+        "code": 377093
     }
 }

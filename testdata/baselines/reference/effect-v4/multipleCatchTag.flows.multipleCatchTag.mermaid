@@ -1,0 +1,240 @@
+flowchart TB
+  0[/"type: #quot;NotFound#quot;<br/>node: #quot;NotFound#quot;"/]
+  1["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;NotFound#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  2[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  3[/"type: #quot;Unauthorized#quot;<br/>node: #quot;Unauthorized#quot;"/]
+  4["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;Unauthorized#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  5[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  6[/"type: #quot;ValidationError#quot;<br/>node: #quot;ValidationError#quot;"/]
+  7["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;ValidationError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  8[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  9[/"type: #quot;Retryable#quot;<br/>node: #quot;Retryable#quot;"/]
+  10["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;Retryable#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  11[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  12[/"type: Effect#lt;string, NotFound #124; Unauthorized #124; ValidationError, never#gt;<br/>node: program"/]
+  13["type: Effect#lt;string, Unauthorized #124; ValidationError, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;NotFound#quot;, #40;#41; =#gt; Effect.succeed#40;#quot;missing#quot;#41;#93;"]
+  14[/"type: #123; #lt;const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, E, A1, E1, R1, A2 = never, E2 = ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;, R2 = never#gt;#40;k: K, f: #40;e: ExtractTag#lt;NoInfer#lt;E#gt;, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A1 #124; A2, E1 #124; E2, R #124; R1 #124; R2#gt;; #lt;A, E, R, const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, R1, E1, A1, A2 = never, E2 = ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;, R2 = never#gt;#40;self: Effect#lt;A, E, R#gt;, k: K, f: #40;e: ExtractTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: Effect#lt;A #124; A1 #124; A2, E1 #124; E2, R #124; R1 #124; R2#gt;; #125;<br/>node: Effect.catchTag"/]
+  15[/"type: #quot;NotFound#quot;<br/>node: #quot;NotFound#quot;"/]
+  16[["type: #40;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;#quot;missing#quot;#41;"]]
+  17[/"type: #quot;missing#quot;<br/>node: #quot;missing#quot;"/]
+  18["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  19[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  20["type: Effect#lt;string, ValidationError, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;Unauthorized#quot;, #40;#41; =#gt; Effect.succeed#40;#quot;denied#quot;#41;#93;"]
+  21[/"type: #123; #lt;const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, E, A1, E1, R1, A2 = never, E2 = ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;, R2 = never#gt;#40;k: K, f: #40;e: ExtractTag#lt;NoInfer#lt;E#gt;, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A1 #124; A2, E1 #124; E2, R #124; R1 #124; R2#gt;; #lt;A, E, R, const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, R1, E1, A1, A2 = never, E2 = ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;, R2 = never#gt;#40;self: Effect#lt;A, E, R#gt;, k: K, f: #40;e: ExtractTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: Effect#lt;A #124; A1 #124; A2, E1 #124; E2, R #124; R1 #124; R2#gt;; #125;<br/>node: Effect.catchTag"/]
+  22[/"type: #quot;Unauthorized#quot;<br/>node: #quot;Unauthorized#quot;"/]
+  23[["type: #40;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;#quot;denied#quot;#41;"]]
+  24[/"type: #quot;denied#quot;<br/>node: #quot;denied#quot;"/]
+  25["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  26[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  27[/"type: Effect#lt;string, NotFound #124; Unauthorized #124; ValidationError, never#gt;<br/>node: program"/]
+  28["type: Effect#lt;string, Unauthorized #124; ValidationError, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;NotFound#quot;, #40;#41; =#gt; Effect.succeed#40;#quot;missing#quot;#41;#93;"]
+  29[/"type: #123; #lt;const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, E, A1, E1, R1, A2 = never, E2 = ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;, R2 = never#gt;#40;k: K, f: #40;e: ExtractTag#lt;NoInfer#lt;E#gt;, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A1 #124; A2, E1 #124; E2, R #124; R1 #124; R2#gt;; #lt;A, E, R, const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, R1, E1, A1, A2 = never, E2 = ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;, R2 = never#gt;#40;self: Effect#lt;A, E, R#gt;, k: K, f: #40;e: ExtractTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: Effect#lt;A #124; A1 #124; A2, E1 #124; E2, R #124; R1 #124; R2#gt;; #125;<br/>node: Effect.catchTag"/]
+  30[/"type: #quot;NotFound#quot;<br/>node: #quot;NotFound#quot;"/]
+  31[["type: #40;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;#quot;missing#quot;#41;"]]
+  32[/"type: #quot;missing#quot;<br/>node: #quot;missing#quot;"/]
+  33["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  34[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  35["type: Effect#lt;string, ValidationError, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;Unauthorized#quot;, #40;#41; =#gt; Effect.succeed#40;#quot;denied#quot;#41;#93;"]
+  36[/"type: #123; #lt;const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, E, A1, E1, R1, A2 = never, E2 = ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;, R2 = never#gt;#40;k: K, f: #40;e: ExtractTag#lt;NoInfer#lt;E#gt;, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A1 #124; A2, E1 #124; E2, R #124; R1 #124; R2#gt;; #lt;A, E, R, const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, R1, E1, A1, A2 = never, E2 = ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;, R2 = never#gt;#40;self: Effect#lt;A, E, R#gt;, k: K, f: #40;e: ExtractTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: Effect#lt;A #124; A1 #124; A2, E1 #124; E2, R #124; R1 #124; R2#gt;; #125;<br/>node: Effect.catchTag"/]
+  37[/"type: #quot;Unauthorized#quot;<br/>node: #quot;Unauthorized#quot;"/]
+  38[["type: #40;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;#quot;denied#quot;#41;"]]
+  39[/"type: #quot;denied#quot;<br/>node: #quot;denied#quot;"/]
+  40["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  41[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  42["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;ValidationError#quot;, #40;#41; =#gt; Effect.succeed#40;#quot;invalid#quot;#41;#93;"]
+  43[/"type: #123; #lt;const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, E, A1, E1, R1, A2 = never, E2 = ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;, R2 = never#gt;#40;k: K, f: #40;e: ExtractTag#lt;NoInfer#lt;E#gt;, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A1 #124; A2, E1 #124; E2, R #124; R1 #124; R2#gt;; #lt;A, E, R, const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, R1, E1, A1, A2 = never, E2 = ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;, R2 = never#gt;#40;self: Effect#lt;A, E, R#gt;, k: K, f: #40;e: ExtractTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: Effect#lt;A #124; A1 #124; A2, E1 #124; E2, R #124; R1 #124; R2#gt;; #125;<br/>node: Effect.catchTag"/]
+  44[/"type: #quot;ValidationError#quot;<br/>node: #quot;ValidationError#quot;"/]
+  45[["type: #40;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;#quot;invalid#quot;#41;"]]
+  46[/"type: #quot;invalid#quot;<br/>node: #quot;invalid#quot;"/]
+  47["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  48[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  49[/"type: Effect#lt;string, NotFound #124; Unauthorized #124; ValidationError, never#gt;<br/>node: program"/]
+  50["type: Effect#lt;string, Unauthorized #124; ValidationError, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;NotFound#quot;, #40;#41; =#gt; Effect.succeed#40;#quot;missing#quot;#41;#93;"]
+  51[/"type: #123; #lt;const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, E, A1, E1, R1, A2 = never, E2 = ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;, R2 = never#gt;#40;k: K, f: #40;e: ExtractTag#lt;NoInfer#lt;E#gt;, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A1 #124; A2, E1 #124; E2, R #124; R1 #124; R2#gt;; #lt;A, E, R, const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, R1, E1, A1, A2 = never, E2 = ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;, R2 = never#gt;#40;self: Effect#lt;A, E, R#gt;, k: K, f: #40;e: ExtractTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: Effect#lt;A #124; A1 #124; A2, E1 #124; E2, R #124; R1 #124; R2#gt;; #125;<br/>node: Effect.catchTag"/]
+  52[/"type: #quot;NotFound#quot;<br/>node: #quot;NotFound#quot;"/]
+  53[["type: #40;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;#quot;missing#quot;#41;"]]
+  54[/"type: #quot;missing#quot;<br/>node: #quot;missing#quot;"/]
+  55["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  56[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  57["type: Effect#lt;string, Unauthorized #124; ValidationError, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;value#41; =#gt; value.toUpperCase#40;#41;#93;"]
+  58[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  59[["type: #40;value: string#41; =#gt; string<br/>node: #40;value#41; =#gt; value.toUpperCase#40;#41;"]]
+  60[/"type: string<br/>node: value.toUpperCase#40;#41;"/]
+  61["type: Effect#lt;string, ValidationError, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;Unauthorized#quot;, #40;#41; =#gt; Effect.succeed#40;#quot;denied#quot;#41;#93;"]
+  62[/"type: #123; #lt;const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, E, A1, E1, R1, A2 = never, E2 = ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;, R2 = never#gt;#40;k: K, f: #40;e: ExtractTag#lt;NoInfer#lt;E#gt;, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A1 #124; A2, E1 #124; E2, R #124; R1 #124; R2#gt;; #lt;A, E, R, const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, R1, E1, A1, A2 = never, E2 = ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;, R2 = never#gt;#40;self: Effect#lt;A, E, R#gt;, k: K, f: #40;e: ExtractTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: Effect#lt;A #124; A1 #124; A2, E1 #124; E2, R #124; R1 #124; R2#gt;; #125;<br/>node: Effect.catchTag"/]
+  63[/"type: #quot;Unauthorized#quot;<br/>node: #quot;Unauthorized#quot;"/]
+  64[["type: #40;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;#quot;denied#quot;#41;"]]
+  65[/"type: #quot;denied#quot;<br/>node: #quot;denied#quot;"/]
+  66["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  67[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  68[/"type: Effect#lt;string, NotFound #124; Unauthorized #124; ValidationError, never#gt;<br/>node: program"/]
+  69["type: Effect#lt;string, Unauthorized #124; ValidationError, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;NotFound#quot;, #40;#41; =#gt; Effect.succeed#40;#quot;missing#quot;#41;, #40;error#41; =#gt; Effect.fail#40;error#41;#93;"]
+  70[/"type: #123; #lt;const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, E, A1, E1, R1, A2 = never, E2 = ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;, R2 = never#gt;#40;k: K, f: #40;e: ExtractTag#lt;NoInfer#lt;E#gt;, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A1 #124; A2, E1 #124; E2, R #124; R1 #124; R2#gt;; #lt;A, E, R, const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, R1, E1, A1, A2 = never, E2 = ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;, R2 = never#gt;#40;self: Effect#lt;A, E, R#gt;, k: K, f: #40;e: ExtractTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: Effect#lt;A #124; A1 #124; A2, E1 #124; E2, R #124; R1 #124; R2#gt;; #125;<br/>node: Effect.catchTag"/]
+  71[/"type: #quot;NotFound#quot;<br/>node: #quot;NotFound#quot;"/]
+  72[["type: #40;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;#quot;missing#quot;#41;"]]
+  73[/"type: #quot;missing#quot;<br/>node: #quot;missing#quot;"/]
+  74["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  75[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  76[["type: #40;error: Unauthorized #124; ValidationError#41; =#gt; Effect#lt;never, Unauthorized #124; ValidationError, never#gt;<br/>node: #40;error#41; =#gt; Effect.fail#40;error#41;"]]
+  77[/"type: Unauthorized #124; ValidationError<br/>node: error"/]
+  78["type: Effect#lt;never, Unauthorized #124; ValidationError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  79[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  80["type: Effect#lt;string, ValidationError, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;Unauthorized#quot;, #40;#41; =#gt; Effect.succeed#40;#quot;denied#quot;#41;#93;"]
+  81[/"type: #123; #lt;const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, E, A1, E1, R1, A2 = never, E2 = ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;, R2 = never#gt;#40;k: K, f: #40;e: ExtractTag#lt;NoInfer#lt;E#gt;, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A1 #124; A2, E1 #124; E2, R #124; R1 #124; R2#gt;; #lt;A, E, R, const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, R1, E1, A1, A2 = never, E2 = ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;, R2 = never#gt;#40;self: Effect#lt;A, E, R#gt;, k: K, f: #40;e: ExtractTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: Effect#lt;A #124; A1 #124; A2, E1 #124; E2, R #124; R1 #124; R2#gt;; #125;<br/>node: Effect.catchTag"/]
+  82[/"type: #quot;Unauthorized#quot;<br/>node: #quot;Unauthorized#quot;"/]
+  83[["type: #40;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;#quot;denied#quot;#41;"]]
+  84[/"type: #quot;denied#quot;<br/>node: #quot;denied#quot;"/]
+  85["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  86[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  87[/"type: Effect#lt;string, NotFound #124; Unauthorized #124; ValidationError, never#gt;<br/>node: program"/]
+  88["type: Effect#lt;string, Retryable #124; Unauthorized #124; ValidationError, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;NotFound#quot;, #40;#41; =#gt; Effect.fail#40;new Retryable#40;#41;#41;#93;"]
+  89[/"type: #123; #lt;const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, E, A1, E1, R1, A2 = never, E2 = ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;, R2 = never#gt;#40;k: K, f: #40;e: ExtractTag#lt;NoInfer#lt;E#gt;, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A1 #124; A2, E1 #124; E2, R #124; R1 #124; R2#gt;; #lt;A, E, R, const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, R1, E1, A1, A2 = never, E2 = ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;, R2 = never#gt;#40;self: Effect#lt;A, E, R#gt;, k: K, f: #40;e: ExtractTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: Effect#lt;A #124; A1 #124; A2, E1 #124; E2, R #124; R1 #124; R2#gt;; #125;<br/>node: Effect.catchTag"/]
+  90[/"type: #quot;NotFound#quot;<br/>node: #quot;NotFound#quot;"/]
+  91[["type: #40;#41; =#gt; Effect#lt;never, Retryable, never#gt;<br/>node: #40;#41; =#gt; Effect.fail#40;new Retryable#40;#41;#41;"]]
+  92[/"type: Retryable<br/>node: new Retryable#40;#41;"/]
+  93["type: Effect#lt;never, Retryable, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  94[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  95["type: Effect#lt;string, Unauthorized #124; ValidationError, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;Retryable#quot;, #40;#41; =#gt; Effect.succeed#40;#quot;retried#quot;#41;#93;"]
+  96[/"type: #123; #lt;const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, E, A1, E1, R1, A2 = never, E2 = ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;, R2 = never#gt;#40;k: K, f: #40;e: ExtractTag#lt;NoInfer#lt;E#gt;, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A1 #124; A2, E1 #124; E2, R #124; R1 #124; R2#gt;; #lt;A, E, R, const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, R1, E1, A1, A2 = never, E2 = ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;, R2 = never#gt;#40;self: Effect#lt;A, E, R#gt;, k: K, f: #40;e: ExtractTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: Effect#lt;A #124; A1 #124; A2, E1 #124; E2, R #124; R1 #124; R2#gt;; #125;<br/>node: Effect.catchTag"/]
+  97[/"type: #quot;Retryable#quot;<br/>node: #quot;Retryable#quot;"/]
+  98[["type: #40;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;#quot;retried#quot;#41;"]]
+  99[/"type: #quot;retried#quot;<br/>node: #quot;retried#quot;"/]
+  100["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  101[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  102[/"type: Effect#lt;string, NotFound #124; Unauthorized #124; ValidationError, never#gt;<br/>node: program"/]
+  103["type: Effect#lt;string, Unauthorized #124; ValidationError, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;NotFound#quot;, #40;#41; =#gt; Effect.succeed#40;#quot;missing#quot;#41;#93;"]
+  104[/"type: #123; #lt;const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, E, A1, E1, R1, A2 = never, E2 = ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;, R2 = never#gt;#40;k: K, f: #40;e: ExtractTag#lt;NoInfer#lt;E#gt;, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A1 #124; A2, E1 #124; E2, R #124; R1 #124; R2#gt;; #lt;A, E, R, const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, R1, E1, A1, A2 = never, E2 = ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;, R2 = never#gt;#40;self: Effect#lt;A, E, R#gt;, k: K, f: #40;e: ExtractTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: Effect#lt;A #124; A1 #124; A2, E1 #124; E2, R #124; R1 #124; R2#gt;; #125;<br/>node: Effect.catchTag"/]
+  105[/"type: #quot;NotFound#quot;<br/>node: #quot;NotFound#quot;"/]
+  106[["type: #40;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;#quot;missing#quot;#41;"]]
+  107[/"type: #quot;missing#quot;<br/>node: #quot;missing#quot;"/]
+  108["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  109[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  110[/"type: Effect#lt;string, NotFound #124; Unauthorized #124; ValidationError, never#gt;<br/>node: program"/]
+  111["type: Effect#lt;string, Unauthorized #124; ValidationError, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;NotFound#quot;, #40;#41; =#gt; Effect.succeed#40;#quot;missing#quot;#41;#93;"]
+  112[/"type: #123; #lt;const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, E, A1, E1, R1, A2 = never, E2 = ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;, R2 = never#gt;#40;k: K, f: #40;e: ExtractTag#lt;NoInfer#lt;E#gt;, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A1 #124; A2, E1 #124; E2, R #124; R1 #124; R2#gt;; #lt;A, E, R, const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, R1, E1, A1, A2 = never, E2 = ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;, R2 = never#gt;#40;self: Effect#lt;A, E, R#gt;, k: K, f: #40;e: ExtractTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: Effect#lt;A #124; A1 #124; A2, E1 #124; E2, R #124; R1 #124; R2#gt;; #125;<br/>node: Effect.catchTag"/]
+  113[/"type: #quot;NotFound#quot;<br/>node: #quot;NotFound#quot;"/]
+  114[["type: #40;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;#quot;missing#quot;#41;"]]
+  115[/"type: #quot;missing#quot;<br/>node: #quot;missing#quot;"/]
+  116["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  117[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  118["type: Effect#lt;string, ValidationError, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;Unauthorized#quot;, #40;#41; =#gt; Effect.succeed#40;#quot;denied#quot;#41;#93;"]
+  119[/"type: #123; #lt;const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, E, A1, E1, R1, A2 = never, E2 = ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;, R2 = never#gt;#40;k: K, f: #40;e: ExtractTag#lt;NoInfer#lt;E#gt;, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A1 #124; A2, E1 #124; E2, R #124; R1 #124; R2#gt;; #lt;A, E, R, const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, R1, E1, A1, A2 = never, E2 = ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;, R2 = never#gt;#40;self: Effect#lt;A, E, R#gt;, k: K, f: #40;e: ExtractTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: Effect#lt;A #124; A1 #124; A2, E1 #124; E2, R #124; R1 #124; R2#gt;; #125;<br/>node: Effect.catchTag"/]
+  120[/"type: #quot;Unauthorized#quot;<br/>node: #quot;Unauthorized#quot;"/]
+  121[["type: #40;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;#quot;denied#quot;#41;"]]
+  122[/"type: #quot;denied#quot;<br/>node: #quot;denied#quot;"/]
+  123["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  124[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1
+  3 -->|"kind: pipe"| 4
+  5 -->|"kind: transformCallee"| 4
+  6 -->|"kind: pipe"| 7
+  8 -->|"kind: transformCallee"| 7
+  9 -->|"kind: pipe"| 10
+  11 -->|"kind: transformCallee"| 10
+  14 -->|"kind: transformCallee"| 13
+  15 -->|"kind: transformArg"| 13
+  17 -->|"kind: pipe"| 18
+  19 -->|"kind: transformCallee"| 18
+  18 -->|"kind: potentialReturn"| 16
+  16 -->|"kind: transformArg"| 13
+  12 -->|"kind: pipe"| 13
+  21 -->|"kind: transformCallee"| 20
+  22 -->|"kind: transformArg"| 20
+  24 -->|"kind: pipe"| 25
+  26 -->|"kind: transformCallee"| 25
+  25 -->|"kind: potentialReturn"| 23
+  23 -->|"kind: transformArg"| 20
+  13 -->|"kind: pipe"| 20
+  29 -->|"kind: transformCallee"| 28
+  30 -->|"kind: transformArg"| 28
+  32 -->|"kind: pipe"| 33
+  34 -->|"kind: transformCallee"| 33
+  33 -->|"kind: potentialReturn"| 31
+  31 -->|"kind: transformArg"| 28
+  27 -->|"kind: pipe"| 28
+  36 -->|"kind: transformCallee"| 35
+  37 -->|"kind: transformArg"| 35
+  39 -->|"kind: pipe"| 40
+  41 -->|"kind: transformCallee"| 40
+  40 -->|"kind: potentialReturn"| 38
+  38 -->|"kind: transformArg"| 35
+  28 -->|"kind: pipe"| 35
+  43 -->|"kind: transformCallee"| 42
+  44 -->|"kind: transformArg"| 42
+  46 -->|"kind: pipe"| 47
+  48 -->|"kind: transformCallee"| 47
+  47 -->|"kind: potentialReturn"| 45
+  45 -->|"kind: transformArg"| 42
+  35 -->|"kind: pipe"| 42
+  51 -->|"kind: transformCallee"| 50
+  52 -->|"kind: transformArg"| 50
+  54 -->|"kind: pipe"| 55
+  56 -->|"kind: transformCallee"| 55
+  55 -->|"kind: potentialReturn"| 53
+  53 -->|"kind: transformArg"| 50
+  49 -->|"kind: pipe"| 50
+  58 -->|"kind: transformCallee"| 57
+  60 -->|"kind: potentialReturn"| 59
+  59 -->|"kind: transformArg"| 57
+  50 -->|"kind: pipe"| 57
+  62 -->|"kind: transformCallee"| 61
+  63 -->|"kind: transformArg"| 61
+  65 -->|"kind: pipe"| 66
+  67 -->|"kind: transformCallee"| 66
+  66 -->|"kind: potentialReturn"| 64
+  64 -->|"kind: transformArg"| 61
+  57 -->|"kind: pipe"| 61
+  70 -->|"kind: transformCallee"| 69
+  71 -->|"kind: transformArg"| 69
+  73 -->|"kind: pipe"| 74
+  75 -->|"kind: transformCallee"| 74
+  74 -->|"kind: potentialReturn"| 72
+  72 -->|"kind: transformArg"| 69
+  77 -->|"kind: pipe"| 78
+  79 -->|"kind: transformCallee"| 78
+  78 -->|"kind: potentialReturn"| 76
+  76 -->|"kind: transformArg"| 69
+  68 -->|"kind: pipe"| 69
+  81 -->|"kind: transformCallee"| 80
+  82 -->|"kind: transformArg"| 80
+  84 -->|"kind: pipe"| 85
+  86 -->|"kind: transformCallee"| 85
+  85 -->|"kind: potentialReturn"| 83
+  83 -->|"kind: transformArg"| 80
+  69 -->|"kind: pipe"| 80
+  89 -->|"kind: transformCallee"| 88
+  90 -->|"kind: transformArg"| 88
+  92 -->|"kind: pipe"| 93
+  94 -->|"kind: transformCallee"| 93
+  93 -->|"kind: potentialReturn"| 91
+  91 -->|"kind: transformArg"| 88
+  87 -->|"kind: pipe"| 88
+  96 -->|"kind: transformCallee"| 95
+  97 -->|"kind: transformArg"| 95
+  99 -->|"kind: pipe"| 100
+  101 -->|"kind: transformCallee"| 100
+  100 -->|"kind: potentialReturn"| 98
+  98 -->|"kind: transformArg"| 95
+  88 -->|"kind: pipe"| 95
+  104 -->|"kind: transformCallee"| 103
+  105 -->|"kind: transformArg"| 103
+  107 -->|"kind: pipe"| 108
+  109 -->|"kind: transformCallee"| 108
+  108 -->|"kind: potentialReturn"| 106
+  106 -->|"kind: transformArg"| 103
+  102 -->|"kind: pipe"| 103
+  112 -->|"kind: transformCallee"| 111
+  113 -->|"kind: transformArg"| 111
+  115 -->|"kind: pipe"| 116
+  117 -->|"kind: transformCallee"| 116
+  116 -->|"kind: potentialReturn"| 114
+  114 -->|"kind: transformArg"| 111
+  110 -->|"kind: pipe"| 111
+  119 -->|"kind: transformCallee"| 118
+  120 -->|"kind: transformArg"| 118
+  122 -->|"kind: pipe"| 123
+  124 -->|"kind: transformCallee"| 123
+  123 -->|"kind: potentialReturn"| 121
+  121 -->|"kind: transformArg"| 118
+  111 -->|"kind: pipe"| 118

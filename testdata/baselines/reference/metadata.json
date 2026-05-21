@@ -1578,6 +1578,29 @@
       }
     },
     {
+      "name": "multipleCatchTag",
+      "group": "style",
+      "description": "Suggests collapsing consecutive Effect.catchTag transformations into a single Effect.catchTags call when semantics stay equivalent",
+      "defaultSeverity": "suggestion",
+      "fixable": false,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377092
+      ],
+      "preview": {
+        "sourceText": "import { Data, Effect, pipe } from \"effect\"\n\nclass NotFound extends Data.TaggedError(\"NotFound\")\u003c{}\u003e {}\nclass Unauthorized extends Data.TaggedError(\"Unauthorized\")\u003c{}\u003e {}\n\ndeclare const program: Effect.Effect\u003cstring, NotFound | Unauthorized\u003e\n\nexport const preview = pipe(\n  program,\n  Effect.catchTag(\"NotFound\", () =\u003e Effect.succeed(\"missing\")),\n  Effect.catchTag(\"Unauthorized\", () =\u003e Effect.succeed(\"denied\"))\n)\n",
+        "diagnostics": [
+          {
+            "start": 285,
+            "end": 300,
+            "text": "These 2 consecutive `catchTag` transformations can be collapsed into a single `catchTags` call. effect(multipleCatchTag)"
+          }
+        ]
+      }
+    },
+    {
       "name": "nestedEffectGenYield",
       "group": "style",
       "description": "Warns when yielding a nested bare Effect.gen inside an existing Effect generator context",

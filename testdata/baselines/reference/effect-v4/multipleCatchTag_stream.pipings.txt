@@ -1,0 +1,245 @@
+==== /.src/multipleCatchTag_stream.ts (16 flows) ====
+
+=== Piping Flow ===
+Location: 4:23 - 4:52
+Node: Data.TaggedError("NotFound")
+Node Kind: KindCallExpression
+
+Subject: "NotFound"
+Subject Type: "NotFound"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "NotFound"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 5:27 - 5:60
+Node: Data.TaggedError("Unauthorized")
+Node Kind: KindCallExpression
+
+Subject: "Unauthorized"
+Subject Type: "Unauthorized"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "Unauthorized"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 6:24 - 6:54
+Node: Data.TaggedError("Retryable")
+Node Kind: KindCallExpression
+
+Subject: "Retryable"
+Subject Type: "Retryable"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "Retryable"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 11:34 - 15:2
+Node: pipe(\n  stream,\n  Stream.catchTag("NotFound", () => Stream.succeed("missing")),\n  Stream.catchTag("Unauthorized", () => Stream.succeed("denied"))\n)
+Node Kind: KindCallExpression
+
+Subject: stream
+Subject Type: Stream<string, NotFound | Unauthorized, never>
+
+Transformations (2):
+  [0] kind: pipe
+      callee: Stream.catchTag
+      args: ["NotFound", () => Stream.succeed("missing")]
+      outType: Stream<string, Unauthorized, never>
+  [1] kind: pipe
+      callee: Stream.catchTag
+      args: ["Unauthorized", () => Stream.succeed("denied")]
+      outType: Stream<string, never, never>
+
+=== Piping Flow ===
+Location: 13:36 - 13:62
+Node: Stream.succeed("missing")
+Node Kind: KindCallExpression
+
+Subject: "missing"
+Subject Type: "missing"
+
+Transformations (1):
+  [0] kind: call
+      callee: Stream.succeed
+      args: (constant)
+      outType: Stream<string, never, never>
+
+=== Piping Flow ===
+Location: 14:40 - 14:65
+Node: Stream.succeed("denied")
+Node Kind: KindCallExpression
+
+Subject: "denied"
+Subject Type: "denied"
+
+Transformations (1):
+  [0] kind: call
+      callee: Stream.succeed
+      args: (constant)
+      outType: Stream<string, never, never>
+
+=== Piping Flow ===
+Location: 18:42 - 23:2
+Node: pipe(\n  stream,\n  Stream.catchTag("NotFound", () => Stream.succeed("missing")),\n  Stream.map((value) => value.toUpperCase()),\n  Stream.catchTag("Unauthorized", () => Stream.succeed("denied"))\n)
+Node Kind: KindCallExpression
+
+Subject: stream
+Subject Type: Stream<string, NotFound | Unauthorized, never>
+
+Transformations (3):
+  [0] kind: pipe
+      callee: Stream.catchTag
+      args: ["NotFound", () => Stream.succeed("missing")]
+      outType: Stream<string, Unauthorized, never>
+  [1] kind: pipe
+      callee: Stream.map
+      args: [(value) => value.toUpperCase()]
+      outType: Stream<string, Unauthorized, never>
+  [2] kind: pipe
+      callee: Stream.catchTag
+      args: ["Unauthorized", () => Stream.succeed("denied")]
+      outType: Stream<string, never, never>
+
+=== Piping Flow ===
+Location: 20:36 - 20:62
+Node: Stream.succeed("missing")
+Node Kind: KindCallExpression
+
+Subject: "missing"
+Subject Type: "missing"
+
+Transformations (1):
+  [0] kind: call
+      callee: Stream.succeed
+      args: (constant)
+      outType: Stream<string, never, never>
+
+=== Piping Flow ===
+Location: 22:40 - 22:65
+Node: Stream.succeed("denied")
+Node Kind: KindCallExpression
+
+Subject: "denied"
+Subject Type: "denied"
+
+Transformations (1):
+  [0] kind: call
+      callee: Stream.succeed
+      args: (constant)
+      outType: Stream<string, never, never>
+
+=== Piping Flow ===
+Location: 26:37 - 30:2
+Node: pipe(\n  stream,\n  Stream.catchTag("NotFound", () => Stream.succeed("missing"), (error) => Stream.fail(error)),\n  Stream.catchTag("Unauthorized", () => Stream.succeed("denied"))\n)
+Node Kind: KindCallExpression
+
+Subject: stream
+Subject Type: Stream<string, NotFound | Unauthorized, never>
+
+Transformations (2):
+  [0] kind: pipe
+      callee: Stream.catchTag
+      args: ["NotFound", () => Stream.succeed("missing"), (error) => Stream.fail(error)]
+      outType: Stream<string, Unauthorized, never>
+  [1] kind: pipe
+      callee: Stream.catchTag
+      args: ["Unauthorized", () => Stream.succeed("denied")]
+      outType: Stream<string, never, never>
+
+=== Piping Flow ===
+Location: 28:36 - 28:62
+Node: Stream.succeed("missing")
+Node Kind: KindCallExpression
+
+Subject: "missing"
+Subject Type: "missing"
+
+Transformations (1):
+  [0] kind: call
+      callee: Stream.succeed
+      args: (constant)
+      outType: Stream<string, never, never>
+
+=== Piping Flow ===
+Location: 28:74 - 28:93
+Node: Stream.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Unauthorized
+
+Transformations (1):
+  [0] kind: call
+      callee: Stream.fail
+      args: (constant)
+      outType: Stream<never, Unauthorized, never>
+
+=== Piping Flow ===
+Location: 29:40 - 29:65
+Node: Stream.succeed("denied")
+Node Kind: KindCallExpression
+
+Subject: "denied"
+Subject Type: "denied"
+
+Transformations (1):
+  [0] kind: call
+      callee: Stream.succeed
+      args: (constant)
+      outType: Stream<string, never, never>
+
+=== Piping Flow ===
+Location: 33:38 - 37:2
+Node: pipe(\n  stream,\n  Stream.catchTag("NotFound", () => Stream.fail(new Retryable())),\n  Stream.catchTag("Retryable", () => Stream.succeed("retried"))\n)
+Node Kind: KindCallExpression
+
+Subject: stream
+Subject Type: Stream<string, NotFound | Unauthorized, never>
+
+Transformations (2):
+  [0] kind: pipe
+      callee: Stream.catchTag
+      args: ["NotFound", () => Stream.fail(new Retryable())]
+      outType: Stream<string, Retryable | Unauthorized, never>
+  [1] kind: pipe
+      callee: Stream.catchTag
+      args: ["Retryable", () => Stream.succeed("retried")]
+      outType: Stream<string, Unauthorized, never>
+
+=== Piping Flow ===
+Location: 35:36 - 35:65
+Node: Stream.fail(new Retryable())
+Node Kind: KindCallExpression
+
+Subject: new Retryable()
+Subject Type: Retryable
+
+Transformations (1):
+  [0] kind: call
+      callee: Stream.fail
+      args: (constant)
+      outType: Stream<never, Retryable, never>
+
+=== Piping Flow ===
+Location: 36:37 - 36:63
+Node: Stream.succeed("retried")
+Node Kind: KindCallExpression
+
+Subject: "retried"
+Subject Type: "retried"
+
+Transformations (1):
+  [0] kind: call
+      callee: Stream.succeed
+      args: (constant)
+      outType: Stream<string, never, never>

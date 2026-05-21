@@ -1894,6 +1894,11 @@
           "default": "error",
           "description": "Detects bare yield (without *) inside Effect generator scopes"
         },
+        "multipleCatchTag": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests collapsing consecutive Effect.catchTag transformations into a single Effect.catchTags call when semantics stay equivalent"
+        },
         "multipleEffectProvide": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "warning",
