@@ -343,7 +343,7 @@
         "category": "Error",
         "code": 377062
     },
-    "This generator applies the same trailing `Effect.mapError(...)` to every yielded effect. Hoist it once at the generator result: `Effect.gen(...).pipe(Effect.mapError(...))`, or the trailing pipe arguments of generator-form `Effect.fn(...)`. effect(redundantMapError)": {
+    "This generator applies the same inline `Effect.mapError(...)` to every yielded effect. Keep that `Effect.mapError(...)` inline and hoist it once to the generator result: `Effect.gen(...).pipe(Effect.mapError(...))`, or `Effect.fn(function*(){ ... }, Effect.mapError(...))`. effect(redundantMapError)": {
         "category": "Suggestion",
         "code": 377088
     },

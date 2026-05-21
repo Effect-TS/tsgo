@@ -18,7 +18,7 @@ var RedundantMapError = rule.Rule{
 	DefaultSeverity: etscore.SeveritySuggestion,
 	SupportedEffect: []string{"v3", "v4"},
 	Codes: []int32{
-		tsdiag.This_generator_applies_the_same_trailing_Effect_mapError_to_every_yielded_effect_Hoist_it_once_at_the_generator_result_Colon_Effect_gen_pipe_Effect_mapError_or_the_trailing_pipe_arguments_of_generator_form_Effect_fn_effect_redundantMapError.Code(),
+		tsdiag.This_generator_applies_the_same_inline_Effect_mapError_to_every_yielded_effect_Keep_that_Effect_mapError_inline_and_hoist_it_once_to_the_generator_result_Colon_Effect_gen_pipe_Effect_mapError_or_Effect_fn_function_Asterisk_Effect_mapError_effect_redundantMapError.Code(),
 		tsdiag.This_repeated_Effect_mapError_site_participates_in_the_hoistable_generator_wide_mapping_effect_redundantMapError.Code(),
 	},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
@@ -28,7 +28,7 @@ var RedundantMapError = rule.Rule{
 			diags[i] = ctx.NewDiagnostic(
 				match.SourceFile,
 				match.Location,
-				tsdiag.This_generator_applies_the_same_trailing_Effect_mapError_to_every_yielded_effect_Hoist_it_once_at_the_generator_result_Colon_Effect_gen_pipe_Effect_mapError_or_the_trailing_pipe_arguments_of_generator_form_Effect_fn_effect_redundantMapError,
+				tsdiag.This_generator_applies_the_same_inline_Effect_mapError_to_every_yielded_effect_Keep_that_Effect_mapError_inline_and_hoist_it_once_to_the_generator_result_Colon_Effect_gen_pipe_Effect_mapError_or_Effect_fn_function_Asterisk_Effect_mapError_effect_redundantMapError,
 				redundantMapErrorRelatedInformation(ctx, match),
 			)
 		}
