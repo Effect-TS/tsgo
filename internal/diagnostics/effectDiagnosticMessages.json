@@ -107,7 +107,7 @@
         "category": "Warning",
         "code": 377087
     },
-    "This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)": {
+    "This code uses `JSON.parse` or `JSON.stringify`. {0} effect(preferSchemaOverJson)": {
         "category": "Suggestion",
         "code": 377026
     },

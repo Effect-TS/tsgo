@@ -1926,7 +1926,7 @@
         },
         "preferSchemaOverJson": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
-          "default": "suggestion",
+          "default": "off",
           "description": "Suggests using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify"
         },
         "processEnv": {
@@ -1938,6 +1938,11 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
           "description": "Warns when reading process.env inside Effect generators instead of using Effect Config"
+        },
+        "redundantMapError": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests hoisting a repeated trailing Effect.mapError from every yield in an Effect generator"
         },
         "redundantSchemaTagIdentifier": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
@@ -2023,6 +2028,11 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
           "description": "Simplifies chained pipe calls into a single pipe call"
+        },
+        "unnecessaryTypeofType": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests replacing typeof Schema.Type style annotations with the matching named type when available"
         },
         "unsafeEffectTypeAssertion": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",

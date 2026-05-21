@@ -1,18 +1,19 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/preferSchemaOverJson.ts(4,31): warning TS377022: The `catch` callback in `Effect.try` returns the global `Error` type. Untagged errors merge together in the Effect error channel and lose type-level distinction; a tagged error preserves that distinction and can wrap the original error in a `cause` property. effect(globalErrorInEffectCatch)
-/.src/preferSchemaOverJson.ts(5,14): suggestion TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
-/.src/preferSchemaOverJson.ts(6,16): warning TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
-/.src/preferSchemaOverJson.ts(10,35): warning TS377022: The `catch` callback in `Effect.try` returns the global `Error` type. Untagged errors merge together in the Effect error channel and lose type-level distinction; a tagged error preserves that distinction and can wrap the original error in a `cause` property. effect(globalErrorInEffectCatch)
-/.src/preferSchemaOverJson.ts(11,14): suggestion TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
-/.src/preferSchemaOverJson.ts(12,16): warning TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
-/.src/preferSchemaOverJson.ts(18,18): suggestion TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
-/.src/preferSchemaOverJson.ts(26,16): suggestion TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
-/.src/preferSchemaOverJson.ts(34,18): suggestion TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
+/.src/preferSchemaOverJson.ts(5,31): warning TS377022: The `catch` callback in `Effect.try` returns the global `Error` type. Untagged errors merge together in the Effect error channel and lose type-level distinction; a tagged error preserves that distinction and can wrap the original error in a `cause` property. effect(globalErrorInEffectCatch)
+/.src/preferSchemaOverJson.ts(6,14): warning TS377026: This code uses `JSON.parse` or `JSON.stringify`. Use `Schema.UnknownFromJsonString` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(preferSchemaOverJson)
+/.src/preferSchemaOverJson.ts(7,16): warning TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
+/.src/preferSchemaOverJson.ts(11,35): warning TS377022: The `catch` callback in `Effect.try` returns the global `Error` type. Untagged errors merge together in the Effect error channel and lose type-level distinction; a tagged error preserves that distinction and can wrap the original error in a `cause` property. effect(globalErrorInEffectCatch)
+/.src/preferSchemaOverJson.ts(12,14): warning TS377026: This code uses `JSON.parse` or `JSON.stringify`. Use `Schema.UnknownFromJsonString` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(preferSchemaOverJson)
+/.src/preferSchemaOverJson.ts(13,16): warning TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
+/.src/preferSchemaOverJson.ts(19,18): warning TS377026: This code uses `JSON.parse` or `JSON.stringify`. Use `Schema.UnknownFromJsonString` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(preferSchemaOverJson)
+/.src/preferSchemaOverJson.ts(27,16): warning TS377026: This code uses `JSON.parse` or `JSON.stringify`. Use `Schema.UnknownFromJsonString` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(preferSchemaOverJson)
+/.src/preferSchemaOverJson.ts(35,18): warning TS377026: This code uses `JSON.parse` or `JSON.stringify`. Use `Schema.UnknownFromJsonString` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(preferSchemaOverJson)
 
 
 ==== /.src/preferSchemaOverJson.ts (9 errors) ====
+    // @effect-diagnostics preferSchemaOverJson:warning
     import { Effect } from "effect"
     
     // Should trigger diagnostic - JSON.parse inside Effect.try (object form)
@@ -21,7 +22,7 @@ Effect version: 4.0.0
 !!! warning TS377022: The `catch` callback in `Effect.try` returns the global `Error` type. Untagged errors merge together in the Effect error channel and lose type-level distinction; a tagged error preserves that distinction and can wrap the original error in a `cause` property. effect(globalErrorInEffectCatch)
       try: () => JSON.parse("{\"name\":\"Jane\"}"),
                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! suggestion TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
+!!! warning TS377026: This code uses `JSON.parse` or `JSON.stringify`. Use `Schema.UnknownFromJsonString` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(preferSchemaOverJson)
       catch: () => new Error("Failed to parse")
                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! warning TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
@@ -33,7 +34,7 @@ Effect version: 4.0.0
 !!! warning TS377022: The `catch` callback in `Effect.try` returns the global `Error` type. Untagged errors merge together in the Effect error channel and lose type-level distinction; a tagged error preserves that distinction and can wrap the original error in a `cause` property. effect(globalErrorInEffectCatch)
       try: () => JSON.stringify({ name: "Alice" }),
                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! suggestion TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
+!!! warning TS377026: This code uses `JSON.parse` or `JSON.stringify`. Use `Schema.UnknownFromJsonString` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(preferSchemaOverJson)
       catch: () => new Error("Failed to stringify")
                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! warning TS377023: Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)
@@ -44,7 +45,7 @@ Effect version: 4.0.0
       const text = yield* Effect.succeed("{\"name\":\"Test\"}")
       const parsed = JSON.parse(text)
                      ~~~~~~~~~~~~~~~~
-!!! suggestion TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
+!!! warning TS377026: This code uses `JSON.parse` or `JSON.stringify`. Use `Schema.UnknownFromJsonString` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(preferSchemaOverJson)
       //             ^- should suggest using Effect Schema
       return parsed
     })
@@ -54,7 +55,7 @@ Effect version: 4.0.0
       const data = yield* Effect.succeed({ name: "Test" })
       const json = JSON.stringify(data)
                    ~~~~~~~~~~~~~~~~~~~~
-!!! suggestion TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
+!!! warning TS377026: This code uses `JSON.parse` or `JSON.stringify`. Use `Schema.UnknownFromJsonString` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(preferSchemaOverJson)
       //           ^- should suggest using Effect Schema
       return json
     })
@@ -64,7 +65,7 @@ Effect version: 4.0.0
       const text = "{\"name\":\"FnTest\"}"
       const parsed = JSON.parse(text)
                      ~~~~~~~~~~~~~~~~
-!!! suggestion TS377026: This code uses `JSON.parse` or `JSON.stringify`. Effect Schema provides Effect-aware APIs for JSON parsing and stringifying. effect(preferSchemaOverJson)
+!!! warning TS377026: This code uses `JSON.parse` or `JSON.stringify`. Use `Schema.UnknownFromJsonString` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(preferSchemaOverJson)
       //             ^- should suggest using Effect Schema
       return parsed
     })
