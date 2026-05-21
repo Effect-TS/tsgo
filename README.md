@@ -112,6 +112,7 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><code>unnecessaryFailYieldableError</code></td><td>💡</td><td>🔧</td><td>Suggests yielding yieldable errors directly instead of wrapping with Effect.fail</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>unnecessaryPipe</code></td><td>💡</td><td>🔧</td><td>Removes pipe calls with no arguments</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>unnecessaryPipeChain</code></td><td>💡</td><td>🔧</td><td>Simplifies chained pipe calls into a single pipe call</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>unnecessaryTypeofType</code></td><td>💡</td><td>🔧</td><td>Suggests replacing typeof Schema.Type style annotations with the matching named type when available</td><td>✓</td><td>✓</td></tr>
   </tbody>
 </table>
 
