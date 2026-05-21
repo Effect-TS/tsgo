@@ -1,5 +1,12 @@
 # @effect/tsgo
 
+## 0.7.5
+
+### Patch Changes
+
+- 49c33b7: Add the `redundantMapError` diagnostic for hoistable repeated `Effect.mapError(...)` usage in `Effect.gen` and generator-form `Effect.fn`.
+- f61c7b1: Update [`typescript-go`](https://github.com/microsoft/typescript-go/commit/2cf002eed790973677ee285b54bd1687ac2c76cb) to commit `2cf002eed790973677ee285b54bd1687ac2c76cb`.
+
 ## 0.7.4
 
 ### Patch Changes
