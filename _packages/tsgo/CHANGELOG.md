@@ -1,5 +1,15 @@
 # @effect/tsgo
 
+## 0.9.0
+
+### Minor Changes
+
+- d95c7dc: Add the `lazyEffect` diagnostic for exported zero-argument functions, exported interface members, and `Context.Service` members that lazily return `Effect` or `Stream` values.
+
+### Patch Changes
+
+- eda19ad: Update `preferSchemaOverJson` to be off by default, while keeping the effect-native preset at warning and improving the diagnostic guidance for Effect v3 and v4 projects.
+
 ## 0.8.0
 
 ### Minor Changes
