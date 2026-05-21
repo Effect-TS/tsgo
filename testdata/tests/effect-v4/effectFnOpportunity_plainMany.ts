@@ -23,13 +23,13 @@ import * as Effect from "effect/Effect"
 // - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
 // - Trailing semicolons on replacement statements (`});` vs `})`)
 
-export const arrowPlainMany = () => {
+export const arrowPlainMany = (n: number) => {
   const a = 1
   const b = 2
   const c = 3
   const d = 4
   const e = 5
-  return Effect.succeed(a + b + c + d + e)
+  return Effect.succeed(a + b + c + d + e + n)
 }
 
 export const functionExpressionPlainMany = function<T>(value: T) {

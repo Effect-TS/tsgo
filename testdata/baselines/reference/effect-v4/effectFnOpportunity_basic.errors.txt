@@ -1,10 +1,10 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/effectFnOpportunity_basic.ts(9,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... })`. effect(effectFnOpportunity)
-/.src/effectFnOpportunity_basic.ts(16,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... })`. effect(effectFnOpportunity)
-/.src/effectFnOpportunity_basic.ts(22,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... })`. effect(effectFnOpportunity)
-/.src/effectFnOpportunity_basic.ts(29,17): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... })`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_basic.ts(9,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_basic.ts(16,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_basic.ts(22,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_basic.ts(29,17): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
 
 
 ==== /.src/tsconfig.json (0 errors) ====
@@ -29,38 +29,38 @@ Effect version: 4.0.0
     // Converting to Effect.fnUntraced improves performance by not
     // reallocating the generator function on every call.
     
-    export const arrowBlockGen = () => {
+    export const arrowBlockGen = (n: number) => {
                  ~~~~~~~~~~~~~
-!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... })`. effect(effectFnOpportunity)
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
       return Effect.gen(function*() {
         yield* Effect.succeed(1)
-        return 42
+        return n
       })
     }
     
-    export const arrowExpressionGen = () =>
+    export const arrowExpressionGen = (n: number) =>
                  ~~~~~~~~~~~~~~~~~~
-!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... })`. effect(effectFnOpportunity)
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
       Effect.gen(function*() {
         yield* Effect.succeed(1)
-        return 42
+        return n
       })
     
-    export const functionExpressionGen = function() {
+    export const functionExpressionGen = function(n: number) {
                  ~~~~~~~~~~~~~~~~~~~~~
-!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... })`. effect(effectFnOpportunity)
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
       return Effect.gen(function*() {
         yield* Effect.succeed(1)
-        return 42
+        return n
       })
     }
     
-    export function functionDeclarationGen() {
+    export function functionDeclarationGen(n: number) {
                     ~~~~~~~~~~~~~~~~~~~~~~
-!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... })`. effect(effectFnOpportunity)
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
       return Effect.gen(function*() {
         yield* Effect.succeed(1)
-        return 42
+        return n
       })
     }
     

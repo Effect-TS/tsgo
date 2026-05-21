@@ -1844,6 +1844,11 @@
           "default": "warning",
           "description": "Detects interdependencies in Layer.mergeAll calls where one layer provides a service that another layer requires"
         },
+        "lazyEffect": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests avoiding exported zero-argument functions and service members that lazily return Effect or Stream values"
+        },
         "lazyPromiseInEffectSync": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "warning",

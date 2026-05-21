@@ -18,19 +18,19 @@ import * as Effect from "effect/Effect"
 // is config-enabled for them.
 
 // SHOULD get diagnostic: pipe ends with Effect.withSpan
-export const withSpanFunction = () =>
+export const withSpanFunction = (n: number) =>
   Effect.gen(function*() {
-    return yield* Effect.succeed(42)
+    return yield* Effect.succeed(n)
   }).pipe(Effect.withSpan("withSpanFunction"))
 
 // Should NOT get diagnostic: no pipe, no withSpan
-export const basicGen = () =>
+export const basicGen = (n: number) =>
   Effect.gen(function*() {
-    return yield* Effect.succeed(42)
+    return yield* Effect.succeed(n)
   })
 
 // Should NOT get diagnostic: pipe does not end with withSpan
-export const pipeWithMap = () =>
+export const pipeWithMap = (n: number) =>
   Effect.gen(function*() {
-    return yield* Effect.succeed(42)
+    return yield* Effect.succeed(n)
   }).pipe(Effect.map((x) => x + 1))

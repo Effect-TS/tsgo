@@ -1,12 +1,12 @@
 ==== /.src/effectFnOpportunity_plainFew.ts (6 flows) ====
 
 === Piping Flow ===
-Location: 7:34 - 7:52
-Node: Effect.succeed(1)
+Location: 7:43 - 7:61
+Node: Effect.succeed(n)
 Node Kind: KindCallExpression
 
-Subject: 1
-Subject Type: 1
+Subject: n
+Subject Type: number
 
 Transformations (1):
   [0] kind: call
@@ -16,11 +16,11 @@ Transformations (1):
 
 === Piping Flow ===
 Location: 10:9 - 10:27
-Node: Effect.succeed(1)
+Node: Effect.succeed(n)
 Node Kind: KindCallExpression
 
-Subject: 1
-Subject Type: 1
+Subject: n
+Subject Type: number
 
 Transformations (1):
   [0] kind: call

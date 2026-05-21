@@ -16,7 +16,7 @@ Transformations (1):
 
 === Piping Flow ===
 Location: 8:30 - 12:17
-Node: Context.Service<ValidTag, {\n  invalid: Effect.Effect<void, never, never>\n  writeCache: () => Effect.Effect<void, never, FileSystem>\n  readCache: Effect.Effect<void, never, FileSystem>\n}>()("ValidTag")
+Node: Context.Service<ValidTag, {\n  invalid: Effect.Effect<void, never, never>\n  writeCache: (key: string) => Effect.Effect<void, never, FileSystem>\n  readCache: Effect.Effect<void, never, FileSystem>\n}>()("ValidTag")
 Node Kind: KindCallExpression
 
 Subject: "ValidTag"
@@ -24,6 +24,6 @@ Subject Type: "ValidTag"
 
 Transformations (1):
   [0] kind: call
-      callee: Context.Service<ValidTag, {\n  invalid: Effect.Effect<void, never, never>\n  writeCache: () => Effect.Effect<void, never, FileSystem>\n  readCache: Effect.Effect<void, never, FileSystem>\n}>()
+      callee: Context.Service<ValidTag, {\n  invalid: Effect.Effect<void, never, never>\n  writeCache: (key: string) => Effect.Effect<void, never, FileSystem>\n  readCache: Effect.Effect<void, never, FileSystem>\n}>()
       args: (constant)
-      outType: ServiceClass<ValidTag, "ValidTag", { invalid: Effect<void, never, never>; writeCache: () => Effect<void, never, FileSystem>; readCache: Effect<void, never, FileSystem>; }>
+      outType: ServiceClass<ValidTag, "ValidTag", { invalid: Effect<void, never, never>; writeCache: (key: string) => Effect<void, never, FileSystem>; readCache: Effect<void, never, FileSystem>; }>

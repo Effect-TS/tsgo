@@ -1,7 +1,7 @@
 ==== /.src/effectFnOpportunity_multipleReturns.ts (9 flows) ====
 
 === Piping Flow ===
-Location: 11:34 - 11:55
+Location: 11:20 - 11:41
 Node: Effect.succeed(true)
 Node Kind: KindCallExpression
 
@@ -43,7 +43,7 @@ Transformations (1):
       outType: Effect<boolean, never, never>
 
 === Piping Flow ===
-Location: 18:34 - 18:55
+Location: 18:20 - 18:41
 Node: Effect.succeed(true)
 Node Kind: KindCallExpression
 
@@ -85,7 +85,7 @@ Transformations (1):
       outType: Effect<boolean, never, never>
 
 === Piping Flow ===
-Location: 25:34 - 25:55
+Location: 25:20 - 25:41
 Node: Effect.succeed(true)
 Node Kind: KindCallExpression
 

@@ -20,22 +20,22 @@ import * as Effect from "effect/Effect"
 // calls (each has a single-statement body). The Go test harness runs all rules,
 // unlike upstream which runs only the rule matching the file name prefix.
 
-export const arrowMultipleReturns = () => {
-  if (Math.random() > 0.5) return Effect.succeed(true)
+export const arrowMultipleReturns = (n: number) => {
+  if (n > 0) return Effect.succeed(true)
   return Effect.gen(function*() {
     return yield* Effect.succeed(true)
   })
 }
 
-export const functionExpressionMultipleReturns = function() {
-  if (Math.random() > 0.5) return Effect.succeed(true)
+export const functionExpressionMultipleReturns = function(n: number) {
+  if (n > 0) return Effect.succeed(true)
   return Effect.gen(function*() {
     return yield* Effect.succeed(true)
   })
 }
 
-export function functionDeclarationMultipleReturns() {
-  if (Math.random() > 0.5) return Effect.succeed(true)
+export function functionDeclarationMultipleReturns(n: number) {
+  if (n > 0) return Effect.succeed(true)
   return Effect.gen(function*() {
     return yield* Effect.succeed(true)
   })

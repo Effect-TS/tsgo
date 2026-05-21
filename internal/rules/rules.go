@@ -61,6 +61,7 @@ var All = []rule.Rule{
 	SchemaUnionOfLiterals,
 	MissingEffectServiceDependency,
 	LeakingRequirements,
+	LazyEffect,
 	LazyPromiseInEffectSync,
 	NestedEffectGenYield,
 	RedundantMapError,

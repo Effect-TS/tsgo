@@ -29,5 +29,5 @@ export const asyncInGen = Effect.gen(function*() {
   }
 })
 
-// Should NOT trigger - regular function using Effect
-export const regularFunction = () => Effect.succeed(5)
+// Should NOT trigger - regular function using Effect with a real parameter
+export const regularFunction = (n: number) => Effect.succeed(n)

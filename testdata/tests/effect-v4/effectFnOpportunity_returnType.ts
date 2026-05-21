@@ -20,20 +20,20 @@ import * as Effect from "effect/Effect"
 // calls (each has a single-statement body). The Go test harness runs all rules,
 // unlike upstream which runs only the rule matching the file name prefix.
 
-export const arrowWithReturnType = (): Effect.Effect<number> => {
+export const arrowWithReturnType = (n: number): Effect.Effect<number> => {
   return Effect.gen(function*() {
-    return yield* Effect.succeed(42)
+    return yield* Effect.succeed(n)
   })
 }
 
-export const functionExpressionWithReturnType = function(): Effect.Effect<number> {
+export const functionExpressionWithReturnType = function(n: number): Effect.Effect<number> {
   return Effect.gen(function*() {
-    return yield* Effect.succeed(42)
+    return yield* Effect.succeed(n)
   })
 }
 
-export function functionDeclarationWithReturnType(): Effect.Effect<number> {
+export function functionDeclarationWithReturnType(n: number): Effect.Effect<number> {
   return Effect.gen(function*() {
-    return yield* Effect.succeed(42)
+    return yield* Effect.succeed(n)
   })
 }

@@ -71,12 +71,12 @@ Transformations (1):
       outType: Promise<number>
 
 === Piping Flow ===
-Location: 33:37 - 33:55
-Node: Effect.succeed(5)
+Location: 33:46 - 33:64
+Node: Effect.succeed(n)
 Node Kind: KindCallExpression
 
-Subject: 5
-Subject Type: 5
+Subject: n
+Subject Type: number
 
 Transformations (1):
   [0] kind: call

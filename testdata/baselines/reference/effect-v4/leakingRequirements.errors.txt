@@ -40,7 +40,7 @@ Resolve these dependencies at Layer creation and provide them to each method, so
 To suppress this diagnostic for specific dependency types that are intentionally passed through (e.g., HttpServerRequest), add `@effect-leakable-service` JSDoc to their interface declarations, or to this service by adding a `@effect-expect-leaking FileSystem` JSDoc.
 
 More info and examples at https://effect.website/docs/requirements-management/layers/#avoiding-requirement-leakage effect(leakingRequirements)
-      writeCache: () => Effect.Effect<void, never, FileSystem>
+      writeCache: (key: string) => Effect.Effect<void, never, FileSystem>
       readCache: Effect.Effect<void, never, FileSystem>
     }>()("LeakingDeps") {}
     
@@ -60,7 +60,7 @@ Resolve these dependencies at Layer creation and provide them to each method, so
 To suppress this diagnostic for specific dependency types that are intentionally passed through (e.g., HttpServerRequest), add `@effect-leakable-service` JSDoc to their interface declarations, or to this service by adding a `@effect-expect-leaking FileSystem` JSDoc.
 
 More info and examples at https://effect.website/docs/requirements-management/layers/#avoiding-requirement-leakage effect(leakingRequirements)
-        writeCache: () => Effect.Effect<void, never, FileSystem>
+        writeCache: (key: string) => Effect.Effect<void, never, FileSystem>
         readCache: Effect.Effect<void, never, FileSystem>
       }>()("LocalLeaking") {}
     }

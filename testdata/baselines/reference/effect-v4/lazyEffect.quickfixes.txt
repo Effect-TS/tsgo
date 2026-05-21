@@ -1,0 +1,73 @@
+=== Quick Fix Inventory ===
+
+[D1] (8:14-8:24) TS377091: Exported declaration 'lazyEffect' returns a lazy Effect or Stream. Effect and Stream are already lazy, so wrapping them in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+  Fix 0: "Disable lazyEffect for this line"
+  Fix 1: "Disable lazyEffect for entire file"
+
+[D2] (11:14-11:24) TS377091: Exported declaration 'lazyStream' returns a lazy Effect or Stream. Effect and Stream are already lazy, so wrapping them in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+  Fix 0: "Disable lazyEffect for this line"
+  Fix 1: "Disable lazyEffect for entire file"
+
+[D3] (14:14-14:27) TS377091: Exported declaration 'lazyAnnotated' returns a lazy Effect or Stream. Effect and Stream are already lazy, so wrapping them in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+  Fix 0: "Disable lazyEffect for this line"
+  Fix 1: "Disable lazyEffect for entire file"
+
+[D4] (47:3-47:7) TS377091: Interface 'RepoShape' member 'load' returns a lazy Effect or Stream. Effect and Stream are already lazy, so wrapping them in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+  Fix 0: "Disable lazyEffect for this line"
+  Fix 1: "Disable lazyEffect for entire file"
+
+[D5] (50:3-50:8) TS377091: Interface 'RepoShape' member 'watch' returns a lazy Effect or Stream. Effect and Stream are already lazy, so wrapping them in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+  Fix 0: "Disable lazyEffect for this line"
+  Fix 1: "Disable lazyEffect for entire file"
+
+[D6] (61:14-61:18) TS377091: Service 'Repo' member 'load' returns a lazy Effect or Stream. Effect and Stream are already lazy, so wrapping them in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+  Fix 0: "Disable lazyEffect for this line"
+  Fix 1: "Disable lazyEffect for entire file"
+
+[D7] (61:14-61:18) TS377091: Service 'Repo' member 'watch' returns a lazy Effect or Stream. Effect and Stream are already lazy, so wrapping them in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+  Fix 0: "Disable lazyEffect for this line"
+  Fix 1: "Disable lazyEffect for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable lazyEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable lazyEffect for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable lazyEffect for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable lazyEffect for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable lazyEffect for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable lazyEffect for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable lazyEffect for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable lazyEffect for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable lazyEffect for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable lazyEffect for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable lazyEffect for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable lazyEffect for entire file" ===
+skipped by default
+
+=== [D7] Fix 0: "Disable lazyEffect for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable lazyEffect for entire file" ===
+skipped by default

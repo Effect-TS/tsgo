@@ -30,10 +30,10 @@ Transformations (1):
 
 === Piping Flow ===
 Location: 11:9 - 14:5
-Node: Effect.gen(function*() {\n    yield* Effect.succeed(1)\n    return 42\n  })
+Node: Effect.gen(function*() {\n    yield* Effect.succeed(1)\n    return n\n  })
 Node Kind: KindCallExpression
 
-Subject: function*() {\n    yield* Effect.succeed(1)\n    return 42\n  }
+Subject: function*() {\n    yield* Effect.succeed(1)\n    return n\n  }
 Subject Type: () => Generator<Effect<number, never, never>, number, any>
 
 Transformations (1):
@@ -58,10 +58,10 @@ Transformations (1):
 
 === Piping Flow ===
 Location: 18:9 - 21:5
-Node: Effect.gen(function*() {\n    yield* Effect.succeed(1)\n    return 42\n  })
+Node: Effect.gen(function*() {\n    yield* Effect.succeed(1)\n    return n\n  })
 Node Kind: KindCallExpression
 
-Subject: function*() {\n    yield* Effect.succeed(1)\n    return 42\n  }
+Subject: function*() {\n    yield* Effect.succeed(1)\n    return n\n  }
 Subject Type: () => Generator<Effect<number, never, never>, number, any>
 
 Transformations (1):

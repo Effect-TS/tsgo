@@ -45,7 +45,8 @@
         "nodeBuiltinImport": "warning",
         "preferSchemaOverJson": "warning",
         "processEnv": "warning",
-        "processEnvInEffect": "warning"
+        "processEnvInEffect": "warning",
+        "unsafeEffectTypeAssertion": "warning"
       }
     }
   ],
@@ -213,7 +214,7 @@
         377004
       ],
       "preview": {
-        "sourceText": "import { Effect, Context } from \"effect\"\n\nclass Db extends Context.Service\u003cDb\u003e()(\"Db\", { make: Effect.succeed({}) }) {}\n\n// @ts-expect-error\nexport const preview: Effect.Effect\u003cvoid\u003e = Db.asEffect().pipe(Effect.asVoid)\n",
+        "sourceText": "import { Effect, Context } from \"effect\"\n\nclass Db extends Context.Service\u003cDb\u003e()(\"Db\", { make: Effect.succeed({}) }) {}\n\n// @ts-expect-error\nexport const preview: Effect.Effect\u003cvoid\u003e = Db.pipe(Effect.asVoid)\n",
         "diagnostics": [
           {
             "start": 154,
@@ -400,7 +401,7 @@
       "name": "catchUnfailableEffect",
       "group": "antipattern",
       "description": "Warns when using error handling on Effects that never fail",
-      "defaultSeverity": "off",
+      "defaultSeverity": "suggestion",
       "fixable": false,
       "supportedEffect": [
         "v3",
@@ -583,12 +584,35 @@
         377035
       ],
       "preview": {
-        "sourceText": "import { Effect, Layer, Context } from \"effect\"\n\nclass A extends Context.Service\u003cA\u003e()(\"A\", { make: Effect.succeed({}) }) {\n  static Default = Layer.effect(this, this.make)\n}\nclass B extends Context.Service\u003cB\u003e()(\"B\", { make: Effect.as(A.asEffect(), {}) }) {\n  static Default = Layer.effect(this, this.make)\n}\nexport const preview = Layer.mergeAll(A.Default, B.Default)\n",
+        "sourceText": "import { Effect, Layer, Context } from \"effect\"\n\nclass A extends Context.Service\u003cA\u003e()(\"A\", { make: Effect.succeed({}) }) {\n  static Default = Layer.effect(this, this.make)\n}\nclass B extends Context.Service\u003cB\u003e()(\"B\", { make: Effect.as(A, {}) }) {\n  static Default = Layer.effect(this, this.make)\n}\nexport const preview = Layer.mergeAll(A.Default, B.Default)\n",
         "diagnostics": [
           {
-            "start": 346,
-            "end": 355,
+            "start": 335,
+            "end": 344,
             "text": "This layer provides A which is required by another layer in the same Layer.mergeAll call. Layer.mergeAll creates layers in parallel, so dependencies between layers will not be satisfied. Consider moving this layer into a Layer.provideMerge after the Layer.mergeAll. effect(layerMergeAllWithDependencies)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "lazyEffect",
+      "group": "antipattern",
+      "description": "Suggests avoiding exported zero-argument functions and service members that lazily return Effect or Stream values",
+      "defaultSeverity": "suggestion",
+      "fixable": false,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377091
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport interface PreviewService {\n  preview: () =\u003e Effect.Effect\u003cvoid\u003e\n}\n",
+        "diagnostics": [
+          {
+            "start": 69,
+            "end": 76,
+            "text": "Interface 'PreviewService' member 'preview' returns a lazy Effect or Stream. Effect and Stream are already lazy, so wrapping them in a zero-argument function adds unnecessary indirection. effect(lazyEffect)"
           }
         ]
       }
@@ -1245,7 +1269,7 @@
       "name": "preferSchemaOverJson",
       "group": "effectNative",
       "description": "Suggests using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify",
-      "defaultSeverity": "suggestion",
+      "defaultSeverity": "off",
       "fixable": false,
       "supportedEffect": [
         "v3",
@@ -1309,6 +1333,30 @@
             "start": 121,
             "end": 137,
             "text": "This Effect code reads from `process.env`, environment configuration in Effect code is represented through `Config` from Effect. effect(processEnvInEffect)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "unsafeEffectTypeAssertion",
+      "group": "effectNative",
+      "description": "Detects unsafe type assertions that narrow Effect, Stream, or Layer error or requirements channels",
+      "defaultSeverity": "off",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377075
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const program: Effect.Effect\u003cstring, \"boom\", \"service\"\u003e\n\nexport const preview = program as Effect.Effect\u003cstring, never, never\u003e\n",
+        "diagnostics": [
+          {
+            "start": 121,
+            "end": 167,
+            "text": "This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)"
           }
         ]
       }
@@ -1554,6 +1602,31 @@
       }
     },
     {
+      "name": "redundantMapError",
+      "group": "style",
+      "description": "Suggests hoisting a repeated trailing Effect.mapError from every yield in an Effect generator",
+      "defaultSeverity": "suggestion",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377088,
+        377089
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const first: Effect.Effect\u003cnumber, unknown\u003e\ndeclare const second: Effect.Effect\u003cstring, unknown\u003e\n\nclass RepoError {\n  constructor(readonly args: { cause: unknown }) {}\n}\n\nexport const program = Effect.gen(function*() {\n  yield* first.pipe(\n    Effect.mapError((cause) =\u003e new RepoError({ cause }))\n  )\n\n  return yield* second.pipe(\n    Effect.mapError((cause) =\u003e new RepoError({ cause }))\n  )\n})\n",
+        "diagnostics": [
+          {
+            "start": 246,
+            "end": 255,
+            "text": "This generator applies the same inline `Effect.mapError(...)` to every yielded effect. Keep that `Effect.mapError(...)` inline and hoist it once to the generator result: `Effect.gen(...).pipe(Effect.mapError(...))`, or `Effect.fn(function*(){ ... }, Effect.mapError(...))`. effect(redundantMapError)"
+          }
+        ]
+      }
+    },
+    {
       "name": "redundantSchemaTagIdentifier",
       "group": "style",
       "description": "Suggests removing redundant identifier argument when it equals the tag value in Schema.TaggedClass/TaggedError/TaggedRequest",
@@ -1792,6 +1865,30 @@
             "start": 64,
             "end": 125,
             "text": "This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "unnecessaryTypeofType",
+      "group": "style",
+      "description": "Suggests replacing typeof Schema.Type style annotations with the matching named type when available",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377090
+      ],
+      "preview": {
+        "sourceText": "import { Schema } from \"effect\"\n\nexport namespace UsersRepo {\n  export const User = Schema.Struct({ id: Schema.Number })\n  export type User = typeof User.Type\n}\n\nexport const preview: typeof UsersRepo.User.Type = { id: 1 }\n",
+        "diagnostics": [
+          {
+            "start": 184,
+            "end": 210,
+            "text": "This `typeof ... .Type` query can be replaced with `UsersRepo.User`. effect(unnecessaryTypeofType)"
           }
         ]
       }

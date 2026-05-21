@@ -17,10 +17,10 @@ import * as Effect from "effect/Effect"
 // since there's no Effect.gen). However, given that the function body has
 // too few statements (<= 5), we are not suggesting the conversion.
 
-export const arrowConcise = () => Effect.succeed(1)
+export const arrowConcise = (n: number) => Effect.succeed(n)
 
-export const arrowPlainFew = () => {
-  return Effect.succeed(1)
+export const arrowPlainFew = (n: number) => {
+  return Effect.succeed(n)
 }
 
 export const functionExpressionPlainFew = function<T>(value: T) {

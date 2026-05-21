@@ -1676,7 +1676,7 @@
         },
         "catchAllToMapError": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
-          "default": "off",
+          "default": "suggestion",
           "description": "Suggests using Effect.mapError instead of Effect.catch + Effect.fail"
         },
         "catchUnfailableEffect": {
@@ -1687,7 +1687,7 @@
         "classSelfMismatch": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "error",
-          "description": "Ensures Self type parameter matches the class name in ServiceMap/Service/Tag/Schema classes"
+          "description": "Ensures Self type parameter matches the class name in Context/Service/Tag/Schema classes"
         },
         "cryptoRandomUUID": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
@@ -1844,6 +1844,11 @@
           "default": "warning",
           "description": "Detects interdependencies in Layer.mergeAll calls where one layer provides a service that another layer requires"
         },
+        "lazyEffect": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests avoiding exported zero-argument functions and service members that lazily return Effect or Stream values"
+        },
         "lazyPromiseInEffectSync": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "warning",
@@ -1926,7 +1931,7 @@
         },
         "preferSchemaOverJson": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
-          "default": "suggestion",
+          "default": "off",
           "description": "Suggests using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify"
         },
         "processEnv": {
@@ -1938,6 +1943,11 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
           "description": "Warns when reading process.env inside Effect generators instead of using Effect Config"
+        },
+        "redundantMapError": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests hoisting a repeated trailing Effect.mapError from every yield in an Effect generator"
         },
         "redundantSchemaTagIdentifier": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
@@ -1977,7 +1987,7 @@
         "serviceNotAsClass": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
-          "description": "Warns when ServiceMap.Service is used as a variable instead of a class declaration"
+          "description": "Warns when Context.Service is used as a variable instead of a class declaration"
         },
         "strictBooleanExpressions": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
@@ -2023,6 +2033,16 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
           "description": "Simplifies chained pipe calls into a single pipe call"
+        },
+        "unnecessaryTypeofType": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests replacing typeof Schema.Type style annotations with the matching named type when available"
+        },
+        "unsafeEffectTypeAssertion": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Detects unsafe type assertions that narrow Effect, Stream, or Layer error or requirements channels"
         }
       },
       "type": "object"

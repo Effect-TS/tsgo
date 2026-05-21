@@ -20,19 +20,19 @@ import * as Effect from "effect/Effect"
 // calls (each has a single-statement body). The Go test harness runs all rules,
 // unlike upstream which runs only the rule matching the file name prefix.
 
-export const arrowWithPipe = () =>
+export const arrowWithPipe = (n: number) =>
   Effect.gen(function*() {
-    return yield* Effect.succeed(42)
+    return yield* Effect.succeed(n)
   }).pipe(Effect.ignore)
 
-export const functionExpressionWithPipe = function() {
+export const functionExpressionWithPipe = function(n: number) {
   return Effect.gen(function*() {
-    return yield* Effect.succeed(42)
+    return yield* Effect.succeed(n)
   }).pipe(Effect.withSpan("functionExpressionWithPipe"), Effect.ignore)
 }
 
-export function functionDeclarationWithPipe() {
+export function functionDeclarationWithPipe(n: number) {
   return Effect.gen(function*() {
-    return yield* Effect.succeed(42)
+    return yield* Effect.succeed(n)
   }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionDeclarationWithPipe"), Effect.ignore)
 }
