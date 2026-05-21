@@ -1,5 +1,15 @@
 # @effect/tsgo
 
+## 0.10.0
+
+### Minor Changes
+
+- db13c5e: Add the `multipleCatchTag` diagnostic to suggest collapsing consecutive `catchTag` transformations into `catchTags` when the chain is uninterrupted and semantics remain equivalent.
+
+### Patch Changes
+
+- 783a75a: Extend the `lazyEffect` diagnostic to also detect lazy `Layer` returns and mention the concrete lazy type in its message.
+
 ## 0.9.0
 
 ### Minor Changes
