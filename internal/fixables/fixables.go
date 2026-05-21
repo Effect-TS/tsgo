@@ -22,6 +22,7 @@ var All = []fixable.Fixable{
 	EffectSucceedWithVoidFix,
 	UnnecessaryEffectGenFix,
 	UnnecessaryArrowBlockFix,
+	UnnecessaryTypeofTypeFix,
 	EffectMapVoidFix,
 	UnnecessaryFailYieldableErrorFix,
 	ClassSelfMismatchFix,

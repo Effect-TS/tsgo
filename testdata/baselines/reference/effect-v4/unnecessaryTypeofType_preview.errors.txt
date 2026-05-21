@@ -1,0 +1,20 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/unnecessaryTypeofType_preview.ts(10,23): warning TS377090: This `typeof ... .Type` query can be replaced with `UsersRepo.User`. effect(unnecessaryTypeofType)
+
+
+==== /.src/unnecessaryTypeofType_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics unnecessaryTypeofType:warning
+    import { Schema } from "effect"
+    
+    export namespace UsersRepo {
+      export const User = Schema.Struct({ id: Schema.Number })
+      export type User = typeof User.Type
+    }
+    
+    export const preview: typeof UsersRepo.User.Type = { id: 1 }
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377090: This `typeof ... .Type` query can be replaced with `UsersRepo.User`. effect(unnecessaryTypeofType)
+    

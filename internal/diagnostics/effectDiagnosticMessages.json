@@ -350,5 +350,9 @@
     "This repeated `Effect.mapError(...)` site participates in the hoistable generator-wide mapping. effect(redundantMapError)": {
         "category": "Suggestion",
         "code": 377089
+    },
+    "This `typeof ... .Type` query can be replaced with `{0}`. effect(unnecessaryTypeofType)": {
+        "category": "Suggestion",
+        "code": 377090
     }
 }

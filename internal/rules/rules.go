@@ -65,6 +65,7 @@ var All = []rule.Rule{
 	NestedEffectGenYield,
 	RedundantMapError,
 	UnnecessaryArrowBlock,
+	UnnecessaryTypeofType,
 	InstanceOfSchema,
 	GenericEffectServices,
 	OverriddenSchemaConstructor,
