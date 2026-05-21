@@ -111,7 +111,7 @@
         "category": "Suggestion",
         "code": 377026
     },
-    "{0} returns a lazy Effect or Stream. Effect and Stream are already lazy, so wrapping them in a zero-argument function adds unnecessary indirection. effect(lazyEffect)": {
+    "{0} returns a lazy {1}. {1} is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)": {
         "category": "Suggestion",
         "code": 377091
     },

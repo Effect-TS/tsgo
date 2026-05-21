@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/lazyEffect_preview.ts(6,3): warning TS377091: Interface 'PreviewService' member 'preview' returns a lazy Effect or Stream. Effect and Stream are already lazy, so wrapping them in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+/.src/lazyEffect_preview.ts(6,3): warning TS377091: Interface 'PreviewService' member 'preview' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
 
 
 ==== /.src/lazyEffect_preview.ts (1 errors) ====
@@ -12,6 +12,6 @@ Effect version: 4.0.0
     export interface PreviewService {
       preview: () => Effect.Effect<void>
       ~~~~~~~
-!!! warning TS377091: Interface 'PreviewService' member 'preview' returns a lazy Effect or Stream. Effect and Stream are already lazy, so wrapping them in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+!!! warning TS377091: Interface 'PreviewService' member 'preview' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
     }
     
