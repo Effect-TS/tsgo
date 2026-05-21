@@ -13,7 +13,7 @@ export class Cache extends Context.Service<Cache, {
 
 // @effect-expect-leaking FileSystem
 export class LeakingDeps extends Context.Service<LeakingDeps, {
-  writeCache: () => Effect.Effect<void, never, FileSystem | Cache>
+  writeCache: (key: string) => Effect.Effect<void, never, FileSystem | Cache>
   readCache: Effect.Effect<void, never, FileSystem | Cache>
 }>()("LeakingDeps") {}
 
@@ -21,7 +21,7 @@ export class LeakingDeps extends Context.Service<LeakingDeps, {
 
 // @effect-expect-leaking FileSystem Cache
 export class LeakingDeps2 extends Context.Service<LeakingDeps2, {
-  writeCache: () => Effect.Effect<void, never, FileSystem | Cache>
+  writeCache: (key: string) => Effect.Effect<void, never, FileSystem | Cache>
   readCache: Effect.Effect<void, never, FileSystem | Cache>
 }>()("LeakingDeps2") {}
 
@@ -33,7 +33,7 @@ export class LeakingDeps2 extends Context.Service<LeakingDeps2, {
  * @effect-expect-leaking FileSystem Cache
  */
 export class LeakingDeps3 extends Context.Service<LeakingDeps3, {
-  writeCache: () => Effect.Effect<void, never, FileSystem | Cache>
+  writeCache: (key: string) => Effect.Effect<void, never, FileSystem | Cache>
   readCache: Effect.Effect<void, never, FileSystem | Cache>
 }>()("LeakingDeps3") {}
 
@@ -41,6 +41,6 @@ export class LeakingDeps3 extends Context.Service<LeakingDeps3, {
 
 // @effect-expect-leaking FileSystem Cache
 export const LeakingDeps4 = Context.Service<{
-  writeCache: () => Effect.Effect<void, never, FileSystem | Cache>
+  writeCache: (key: string) => Effect.Effect<void, never, FileSystem | Cache>
   readCache: Effect.Effect<void, never, FileSystem | Cache>
 }>("LeakingDeps4")

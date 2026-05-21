@@ -1,0 +1,127 @@
+==== /.src/lazyEffect.ts (9 flows) ====
+
+=== Piping Flow ===
+Location: 14:64 - 14:85
+Node: Effect.succeed("ok")
+Node Kind: KindCallExpression
+
+Subject: "ok"
+Subject Type: "ok"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 17:28 - 17:46
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 20:28 - 20:46
+Node: Stream.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Stream.succeed
+      args: (constant)
+      outType: Stream<number, never, never>
+
+=== Piping Flow ===
+Location: 29:39 - 29:58
+Node: Effect.succeed(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 62:8 - 80:5
+Node: Effect.succeed({\n    // Should trigger: service member returns a zero-arg lazy Effect\n    load: () => Effect.succeed("value"),\n\n    // Should trigger: service member returns a zero-arg lazy Stream\n    watch: () => Stream.succeed(1),\n\n    // Should not trigger: direct Effect values are allowed\n    program: Effect.void,\n\n    // Should not trigger: one optional argument is allowed\n    maybeLoad: (_?: void) => Effect.succeed("value"),\n\n    // Should not trigger: rest arguments are allowed\n    variadic: (..._args: ReadonlyArray<string>) => Effect.void,\n\n    // Should not trigger: required arguments are allowed\n    byId: (id: string) => Effect.succeed(id)\n  })
+Node Kind: KindCallExpression
+
+Subject: {\n    // Should trigger: service member returns a zero-arg lazy Effect\n    load: () => Effect.succeed("value"),\n\n    // Should trigger: service member returns a zero-arg lazy Stream\n    watch: () => Stream.succeed(1),\n\n    // Should not trigger: direct Effect values are allowed\n    program: Effect.void,\n\n    // Should not trigger: one optional argument is allowed\n    maybeLoad: (_?: void) => Effect.succeed("value"),\n\n    // Should not trigger: rest arguments are allowed\n    variadic: (..._args: ReadonlyArray<string>) => Effect.void,\n\n    // Should not trigger: required arguments are allowed\n    byId: (id: string) => Effect.succeed(id)\n  }
+Subject Type: { load: () => Effect<string, never, never>; watch: () => Stream<number, never, never>; program: Effect<void, never, never>; maybeLoad: (_?: void | undefined) => Effect<string, never, never>; variadic: (..._args: readonly string[]) => Effect<void, never, never>; byId: (id: string) => Effect<string, never, never>; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{ load: () => Effect<string, never, never>; watch: () => Stream<number, never, never>; program: Effect<void, never, never>; maybeLoad: (_?: void | undefined) => Effect<string, never, never>; variadic: (..._args: readonly string[]) => Effect<void, never, never>; byId: (id: string) => Effect<string, never, never>; }, never, never>
+
+=== Piping Flow ===
+Location: 64:16 - 64:40
+Node: Effect.succeed("value")
+Node Kind: KindCallExpression
+
+Subject: "value"
+Subject Type: "value"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 67:17 - 67:35
+Node: Stream.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Stream.succeed
+      args: (constant)
+      outType: Stream<number, never, never>
+
+=== Piping Flow ===
+Location: 73:29 - 73:53
+Node: Effect.succeed("value")
+Node Kind: KindCallExpression
+
+Subject: "value"
+Subject Type: "value"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 79:26 - 79:45
+Node: Effect.succeed(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>

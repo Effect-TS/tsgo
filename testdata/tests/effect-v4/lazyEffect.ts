@@ -1,0 +1,83 @@
+// @effect-diagnostics lazyEffect:warning
+import { Context, Effect, Stream } from "effect"
+
+declare const effectValue: Effect.Effect<void>
+declare const streamValue: Stream.Stream<number>
+
+// Should trigger: exported zero-arg lazy Effect
+export const lazyEffect = () => effectValue
+
+// Should trigger: exported zero-arg lazy Stream
+export const lazyStream = () => streamValue
+
+// Should trigger: exported explicit zero-arg function type returning Effect
+export const lazyAnnotated: () => Effect.Effect<string> = () => Effect.succeed("ok")
+
+// Should not trigger: Effect values are already lazy
+export const directEffect = Effect.succeed(1)
+
+// Should not trigger: Stream values are already lazy
+export const directStream = Stream.succeed(1)
+
+// Should not trigger: one optional argument is allowed
+export const optionalArg = (_?: void) => effectValue
+
+// Should not trigger: rest arguments are allowed
+export const restArgs = (..._args: ReadonlyArray<unknown>) => effectValue
+
+// Should not trigger: required arguments are allowed
+export const withArg = (id: string) => Effect.succeed(id)
+
+// Should not trigger: non-exported declarations are out of scope
+const localLazy = () => effectValue
+
+// Should not trigger: overloaded functions are excluded
+export function overloaded(): Effect.Effect<void>
+export function overloaded(_input: string): Effect.Effect<void>
+export function overloaded(_input?: string) {
+  return Effect.void
+}
+
+interface SharedShape {
+  inherited: () => Effect.Effect<string>
+}
+
+export interface RepoShape extends SharedShape {
+  // Should trigger: interface property returning a zero-arg lazy Effect
+  load: () => Effect.Effect<string>
+
+  // Should trigger: interface method returning a zero-arg lazy Stream
+  watch(): Stream.Stream<number>
+
+  // Should not trigger: one optional argument is allowed
+  maybeLoad(_?: void): Effect.Effect<string>
+
+  // Should not trigger: rest arguments are allowed
+  variadic(..._args: ReadonlyArray<string>): Effect.Effect<void>
+
+  // Should not trigger: inherited members are out of scope for this interface declaration
+}
+
+export class Repo extends Context.Service<Repo>()("Repo", {
+  make: Effect.succeed({
+    // Should trigger: service member returns a zero-arg lazy Effect
+    load: () => Effect.succeed("value"),
+
+    // Should trigger: service member returns a zero-arg lazy Stream
+    watch: () => Stream.succeed(1),
+
+    // Should not trigger: direct Effect values are allowed
+    program: Effect.void,
+
+    // Should not trigger: one optional argument is allowed
+    maybeLoad: (_?: void) => Effect.succeed("value"),
+
+    // Should not trigger: rest arguments are allowed
+    variadic: (..._args: ReadonlyArray<string>) => Effect.void,
+
+    // Should not trigger: required arguments are allowed
+    byId: (id: string) => Effect.succeed(id)
+  })
+}) {}
+
+void localLazy

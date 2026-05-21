@@ -1,0 +1,13 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:3-6:10) TS377091: Interface 'PreviewService' member 'preview' returns a lazy Effect or Stream. Effect and Stream are already lazy, so wrapping them in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+  Fix 0: "Disable lazyEffect for this line"
+  Fix 1: "Disable lazyEffect for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable lazyEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable lazyEffect for entire file" ===
+skipped by default

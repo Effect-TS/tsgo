@@ -9,8 +9,8 @@ flowchart TB
   7((("type: Effect#lt;#40;#41; =#gt; Promise#lt;number#gt;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  return async function nested#40;#41; #123;#92;n    await Promise.resolve#40;4#41;#92;n    return 4#92;n  #125;#92;n#125;#41;")))
   8[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: async function nested#40;#41; #123;#92;n    await Promise.resolve#40;4#41;#92;n    return 4#92;n  #125;"]]
   9[/"type: 4<br/>node: 4"/]
-  10[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;5#41;"]]
-  11[/"type: 5<br/>node: 5"/]
+  10[["type: #40;n: number#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;n: number#41; =#gt; Effect.succeed#40;n#41;"]]
+  11[/"type: number<br/>node: n"/]
   12["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
   13[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
   1 -->|"kind: potentialReturn"| 0

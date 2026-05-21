@@ -595,6 +595,29 @@
       }
     },
     {
+      "name": "lazyEffect",
+      "group": "antipattern",
+      "description": "Suggests avoiding exported zero-argument functions and service members that lazily return Effect or Stream values",
+      "defaultSeverity": "suggestion",
+      "fixable": false,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377091
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport interface PreviewService {\n  preview: () =\u003e Effect.Effect\u003cvoid\u003e\n}\n",
+        "diagnostics": [
+          {
+            "start": 69,
+            "end": 76,
+            "text": "Interface 'PreviewService' member 'preview' returns a lazy Effect or Stream. Effect and Stream are already lazy, so wrapping them in a zero-argument function adds unnecessary indirection. effect(lazyEffect)"
+          }
+        ]
+      }
+    },
+    {
       "name": "lazyPromiseInEffectSync",
       "group": "antipattern",
       "description": "Warns when Effect.sync lazily returns a Promise instead of using an async Effect constructor",

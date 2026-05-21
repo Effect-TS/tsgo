@@ -3,12 +3,12 @@
 [D1] (3:7-3:31) TS6133: '_notExportedNoSuggestion' is declared but its value is never read.
   (no quick fixes)
 
-[D2] (10:14-10:34) TS377047: This expression can be rewritten in the reusable function form `Effect.fn("shouldHaveSuggestion")(function*() { ... })`. effect(effectFnOpportunity)
+[D2] (10:14-10:34) TS377047: This expression can be rewritten in the reusable function form `Effect.fn("shouldHaveSuggestion")(function*(n) { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fn(\"shouldHaveSuggestion\")"
 
-[D3] (17:17-17:45) TS377047: This expression can be rewritten in the reusable function form `Effect.fn("shouldHaveSuggestionFunction")(function*() { ... })`. effect(effectFnOpportunity)
+[D3] (17:17-17:45) TS377047: This expression can be rewritten in the reusable function form `Effect.fn("shouldHaveSuggestionFunction")(function*(n) { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fn(\"shouldHaveSuggestionFunction\")"
@@ -33,15 +33,15 @@ const _notExportedNoSuggestion = () => {
   })
 }
 
-export const shouldHaveSuggestion = Effect.fn("shouldHaveSuggestion")(function* () {
+export const shouldHaveSuggestion = Effect.fn("shouldHaveSuggestion")(function* (n: number) {
     yield* Effect.succeed(1);
-    return 42;
+    return n;
 });
 
-export function shouldHaveSuggestionFunction() {
+export function shouldHaveSuggestionFunction(n: number) {
   return Effect.gen(function*() {
     yield* Effect.succeed(1)
-    return 42
+    return n
   })
 }
 
@@ -64,15 +64,15 @@ const _notExportedNoSuggestion = () => {
   })
 }
 
-export const shouldHaveSuggestion = () => {
+export const shouldHaveSuggestion = (n: number) => {
   return Effect.gen(function*() {
     yield* Effect.succeed(1)
-    return 42
+    return n
   })
 }
 
-export const shouldHaveSuggestionFunction = Effect.fn("shouldHaveSuggestionFunction")(function* () {
+export const shouldHaveSuggestionFunction = Effect.fn("shouldHaveSuggestionFunction")(function* (n: number) {
     yield* Effect.succeed(1);
-    return 42;
+    return n;
 });
 

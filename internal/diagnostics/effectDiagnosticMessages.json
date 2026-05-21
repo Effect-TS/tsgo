@@ -111,6 +111,10 @@
         "category": "Suggestion",
         "code": 377026
     },
+    "{0} returns a lazy Effect or Stream. Effect and Stream are already lazy, so wrapping them in a zero-argument function adds unnecessary indirection. effect(lazyEffect)": {
+        "category": "Suggestion",
+        "code": 377091
+    },
     "The adapter of Effect.gen is not required anymore, it is now just an alias of pipe. effect(effectGenUsesAdapter)": {
         "category": "Warning",
         "code": 377027

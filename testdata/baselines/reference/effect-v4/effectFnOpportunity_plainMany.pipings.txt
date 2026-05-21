@@ -1,11 +1,11 @@
 ==== /.src/effectFnOpportunity_plainMany.ts (5 flows) ====
 
 === Piping Flow ===
-Location: 19:9 - 19:43
-Node: Effect.succeed(a + b + c + d + e)
+Location: 19:9 - 19:47
+Node: Effect.succeed(a + b + c + d + e + n)
 Node Kind: KindCallExpression
 
-Subject: a + b + c + d + e
+Subject: a + b + c + d + e + n
 Subject Type: number
 
 Transformations (1):

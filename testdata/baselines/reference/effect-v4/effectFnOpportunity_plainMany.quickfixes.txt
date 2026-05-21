@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (13:14-13:28) TS377047: This expression can be rewritten in the reusable function form `Effect.fn(() => { ... })`. effect(effectFnOpportunity)
+[D1] (13:14-13:28) TS377047: This expression can be rewritten in the reusable function form `Effect.fn((n) => { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fn (no span)"
@@ -41,13 +41,13 @@ import * as Effect from "effect/Effect"
 // - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
 // - Trailing semicolons on replacement statements (`});` vs `})`)
 
-export const arrowPlainMany = Effect.fn(function () {
+export const arrowPlainMany = Effect.fn(function (n: number) {
     const a = 1;
     const b = 2;
     const c = 3;
     const d = 4;
     const e = 5;
-    return Effect.succeed(a + b + c + d + e);
+    return Effect.succeed(a + b + c + d + e + n);
 });
 
 export const functionExpressionPlainMany = function<T>(value: T) {
@@ -86,13 +86,13 @@ import * as Effect from "effect/Effect"
 // - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
 // - Trailing semicolons on replacement statements (`});` vs `})`)
 
-export const arrowPlainMany = Effect.fn("arrowPlainMany")(function () {
+export const arrowPlainMany = Effect.fn("arrowPlainMany")(function (n: number) {
     const a = 1;
     const b = 2;
     const c = 3;
     const d = 4;
     const e = 5;
-    return Effect.succeed(a + b + c + d + e);
+    return Effect.succeed(a + b + c + d + e + n);
 });
 
 export const functionExpressionPlainMany = function<T>(value: T) {
@@ -137,13 +137,13 @@ import * as Effect from "effect/Effect"
 // - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
 // - Trailing semicolons on replacement statements (`});` vs `})`)
 
-export const arrowPlainMany = () => {
+export const arrowPlainMany = (n: number) => {
   const a = 1
   const b = 2
   const c = 3
   const d = 4
   const e = 5
-  return Effect.succeed(a + b + c + d + e)
+  return Effect.succeed(a + b + c + d + e + n)
 }
 
 export const functionExpressionPlainMany = Effect.fn(function <T>(value: T) {
@@ -182,13 +182,13 @@ import * as Effect from "effect/Effect"
 // - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
 // - Trailing semicolons on replacement statements (`});` vs `})`)
 
-export const arrowPlainMany = () => {
+export const arrowPlainMany = (n: number) => {
   const a = 1
   const b = 2
   const c = 3
   const d = 4
   const e = 5
-  return Effect.succeed(a + b + c + d + e)
+  return Effect.succeed(a + b + c + d + e + n)
 }
 
 export const functionExpressionPlainMany = Effect.fn("functionExpressionPlainMany")(function <T>(value: T) {
@@ -233,13 +233,13 @@ import * as Effect from "effect/Effect"
 // - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
 // - Trailing semicolons on replacement statements (`});` vs `})`)
 
-export const arrowPlainMany = () => {
+export const arrowPlainMany = (n: number) => {
   const a = 1
   const b = 2
   const c = 3
   const d = 4
   const e = 5
-  return Effect.succeed(a + b + c + d + e)
+  return Effect.succeed(a + b + c + d + e + n)
 }
 
 export const functionExpressionPlainMany = function<T>(value: T) {
@@ -278,13 +278,13 @@ import * as Effect from "effect/Effect"
 // - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
 // - Trailing semicolons on replacement statements (`});` vs `})`)
 
-export const arrowPlainMany = () => {
+export const arrowPlainMany = (n: number) => {
   const a = 1
   const b = 2
   const c = 3
   const d = 4
   const e = 5
-  return Effect.succeed(a + b + c + d + e)
+  return Effect.succeed(a + b + c + d + e + n)
 }
 
 export const functionExpressionPlainMany = function<T>(value: T) {

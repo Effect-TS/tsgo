@@ -16,7 +16,7 @@ Transformations (1):
 
 === Piping Flow ===
 Location: 8:33 - 11:20
-Node: Context.Service<LeakingDeps, {\n  writeCache: () => Effect.Effect<void, never, FileSystem>\n  readCache: Effect.Effect<void, never, FileSystem>\n}>()("LeakingDeps")
+Node: Context.Service<LeakingDeps, {\n  writeCache: (key: string) => Effect.Effect<void, never, FileSystem>\n  readCache: Effect.Effect<void, never, FileSystem>\n}>()("LeakingDeps")
 Node Kind: KindCallExpression
 
 Subject: "LeakingDeps"
@@ -24,9 +24,9 @@ Subject Type: "LeakingDeps"
 
 Transformations (1):
   [0] kind: call
-      callee: Context.Service<LeakingDeps, {\n  writeCache: () => Effect.Effect<void, never, FileSystem>\n  readCache: Effect.Effect<void, never, FileSystem>\n}>()
+      callee: Context.Service<LeakingDeps, {\n  writeCache: (key: string) => Effect.Effect<void, never, FileSystem>\n  readCache: Effect.Effect<void, never, FileSystem>\n}>()
       args: (constant)
-      outType: ServiceClass<LeakingDeps, "LeakingDeps", { writeCache: () => Effect<void, never, FileSystem>; readCache: Effect<void, never, FileSystem>; }>
+      outType: ServiceClass<LeakingDeps, "LeakingDeps", { writeCache: (key: string) => Effect<void, never, FileSystem>; readCache: Effect<void, never, FileSystem>; }>
 
 === Piping Flow ===
 Location: 14:28 - 16:21
@@ -44,7 +44,7 @@ Transformations (1):
 
 === Piping Flow ===
 Location: 18:30 - 21:23
-Node: Context.Service<_LocalLeaking, {\n    writeCache: () => Effect.Effect<void, never, FileSystem>\n    readCache: Effect.Effect<void, never, FileSystem>\n  }>()("LocalLeaking")
+Node: Context.Service<_LocalLeaking, {\n    writeCache: (key: string) => Effect.Effect<void, never, FileSystem>\n    readCache: Effect.Effect<void, never, FileSystem>\n  }>()("LocalLeaking")
 Node Kind: KindCallExpression
 
 Subject: "LocalLeaking"
@@ -52,6 +52,6 @@ Subject Type: "LocalLeaking"
 
 Transformations (1):
   [0] kind: call
-      callee: Context.Service<_LocalLeaking, {\n    writeCache: () => Effect.Effect<void, never, FileSystem>\n    readCache: Effect.Effect<void, never, FileSystem>\n  }>()
+      callee: Context.Service<_LocalLeaking, {\n    writeCache: (key: string) => Effect.Effect<void, never, FileSystem>\n    readCache: Effect.Effect<void, never, FileSystem>\n  }>()
       args: (constant)
-      outType: ServiceClass<_LocalLeaking, "LocalLeaking", { writeCache: () => Effect<void, never, FileSystem>; readCache: Effect<void, never, FileSystem>; }>
+      outType: ServiceClass<_LocalLeaking, "LocalLeaking", { writeCache: (key: string) => Effect<void, never, FileSystem>; readCache: Effect<void, never, FileSystem>; }>

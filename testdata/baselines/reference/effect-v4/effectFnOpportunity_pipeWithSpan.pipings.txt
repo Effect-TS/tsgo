@@ -1,11 +1,11 @@
 ==== /.src/effectFnOpportunity_pipeWithSpan.ts (6 flows) ====
 
 === Piping Flow ===
-Location: 11:35 - 14:44
-Node: Effect.gen(function*() {\n    return yield* Effect.succeed(42)\n  }).pipe(Effect.withSpan("arrowWithPipe"))
+Location: 11:44 - 14:44
+Node: Effect.gen(function*() {\n    return yield* Effect.succeed(n)\n  }).pipe(Effect.withSpan("arrowWithPipe"))
 Node Kind: KindCallExpression
 
-Subject: function*() {\n    return yield* Effect.succeed(42)\n  }
+Subject: function*() {\n    return yield* Effect.succeed(n)\n  }
 Subject Type: () => Generator<Effect<number, never, never>, number, any>
 
 Transformations (2):
@@ -19,12 +19,12 @@ Transformations (2):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 13:18 - 13:37
-Node: Effect.succeed(42)
+Location: 13:18 - 13:36
+Node: Effect.succeed(n)
 Node Kind: KindCallExpression
 
-Subject: 42
-Subject Type: 42
+Subject: n
+Subject Type: number
 
 Transformations (1):
   [0] kind: call
@@ -34,10 +34,10 @@ Transformations (1):
 
 === Piping Flow ===
 Location: 17:9 - 19:83
-Node: Effect.gen(function*() {\n    return yield* Effect.succeed(42)\n  }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionExpressionWithPipe"))
+Node: Effect.gen(function*() {\n    return yield* Effect.succeed(n)\n  }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionExpressionWithPipe"))
 Node Kind: KindCallExpression
 
-Subject: function*() {\n    return yield* Effect.succeed(42)\n  }
+Subject: function*() {\n    return yield* Effect.succeed(n)\n  }
 Subject Type: () => Generator<Effect<number, never, never>, number, any>
 
 Transformations (3):
@@ -55,12 +55,12 @@ Transformations (3):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 18:18 - 18:37
-Node: Effect.succeed(42)
+Location: 18:18 - 18:36
+Node: Effect.succeed(n)
 Node Kind: KindCallExpression
 
-Subject: 42
-Subject Type: 42
+Subject: n
+Subject Type: number
 
 Transformations (1):
   [0] kind: call
@@ -70,10 +70,10 @@ Transformations (1):
 
 === Piping Flow ===
 Location: 23:9 - 25:99
-Node: Effect.gen(function*() {\n    return yield* Effect.succeed(42)\n  }).pipe(Effect.map((x) => x + 1), Effect.ignore, Effect.withSpan("functionDeclarationWithPipe"))
+Node: Effect.gen(function*() {\n    return yield* Effect.succeed(n)\n  }).pipe(Effect.map((x) => x + 1), Effect.ignore, Effect.withSpan("functionDeclarationWithPipe"))
 Node Kind: KindCallExpression
 
-Subject: function*() {\n    return yield* Effect.succeed(42)\n  }
+Subject: function*() {\n    return yield* Effect.succeed(n)\n  }
 Subject Type: () => Generator<Effect<number, never, never>, number, any>
 
 Transformations (4):
@@ -95,12 +95,12 @@ Transformations (4):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 24:18 - 24:37
-Node: Effect.succeed(42)
+Location: 24:18 - 24:36
+Node: Effect.succeed(n)
 Node Kind: KindCallExpression
 
-Subject: 42
-Subject Type: 42
+Subject: n
+Subject Type: number
 
 Transformations (1):
   [0] kind: call

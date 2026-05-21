@@ -20,16 +20,16 @@ const _notExportedNoSuggestion = () => {
   })
 }
 
-export const shouldHaveSuggestion = () => {
+export const shouldHaveSuggestion = (n: number) => {
   return Effect.gen(function*() {
     yield* Effect.succeed(1)
-    return 42
+    return n
   })
 }
 
-export function shouldHaveSuggestionFunction() {
+export function shouldHaveSuggestionFunction(n: number) {
   return Effect.gen(function*() {
     yield* Effect.succeed(1)
-    return 42
+    return n
   })
 }

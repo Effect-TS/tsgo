@@ -1,11 +1,11 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/effectFnOpportunity_pipeWithSpan.ts(11,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("arrowWithPipe")(function*() { ... })`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_pipeWithSpan.ts(11,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("arrowWithPipe")(function*(n) { ... })`. effect(effectFnOpportunity)
 /.src/effectFnOpportunity_pipeWithSpan.ts(12,3): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
-/.src/effectFnOpportunity_pipeWithSpan.ts(16,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("functionExpressionWithPipe")(function*() { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_pipeWithSpan.ts(16,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("functionExpressionWithPipe")(function*(n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
 /.src/effectFnOpportunity_pipeWithSpan.ts(17,10): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
-/.src/effectFnOpportunity_pipeWithSpan.ts(22,17): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("functionDeclarationWithPipe")(function*() { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_pipeWithSpan.ts(22,17): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("functionDeclarationWithPipe")(function*(n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
 /.src/effectFnOpportunity_pipeWithSpan.ts(23,10): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
 
 
@@ -33,36 +33,36 @@ Effect version: 4.0.0
     // Using Effect.fn is an improvement because the stack traces will include
     // the call site of that function, not just the span in the traces.
     
-    export const arrowWithPipe = () =>
+    export const arrowWithPipe = (n: number) =>
                  ~~~~~~~~~~~~~
-!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("arrowWithPipe")(function*() { ... })`. effect(effectFnOpportunity)
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("arrowWithPipe")(function*(n) { ... })`. effect(effectFnOpportunity)
       Effect.gen(function*() {
       ~~~~~~~~~~~~~~~~~~~~~~~~
-        return yield* Effect.succeed(42)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        return yield* Effect.succeed(n)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       }).pipe(Effect.withSpan("arrowWithPipe"))
     ~~~~
 !!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
     
-    export const functionExpressionWithPipe = function() {
+    export const functionExpressionWithPipe = function(n: number) {
                  ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("functionExpressionWithPipe")(function*() { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("functionExpressionWithPipe")(function*(n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
       return Effect.gen(function*() {
              ~~~~~~~~~~~~~~~~~~~~~~~~
-        return yield* Effect.succeed(42)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        return yield* Effect.succeed(n)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionExpressionWithPipe"))
     ~~~~
 !!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
     }
     
-    export function functionDeclarationWithPipe() {
+    export function functionDeclarationWithPipe(n: number) {
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("functionDeclarationWithPipe")(function*() { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("functionDeclarationWithPipe")(function*(n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
       return Effect.gen(function*() {
              ~~~~~~~~~~~~~~~~~~~~~~~~
-        return yield* Effect.succeed(42)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        return yield* Effect.succeed(n)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       }).pipe(Effect.map((x) => x + 1), Effect.ignore, Effect.withSpan("functionDeclarationWithPipe"))
     ~~~~
 !!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)

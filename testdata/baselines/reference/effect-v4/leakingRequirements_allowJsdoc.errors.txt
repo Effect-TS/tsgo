@@ -38,7 +38,7 @@ Resolve these dependencies at Layer creation and provide them to each method, so
 To suppress this diagnostic for specific dependency types that are intentionally passed through (e.g., HttpServerRequest), add `@effect-leakable-service` JSDoc to their interface declarations, or to this service by adding a `@effect-expect-leaking Cache` JSDoc.
 
 More info and examples at https://effect.website/docs/requirements-management/layers/#avoiding-requirement-leakage effect(leakingRequirements)
-      writeCache: () => Effect.Effect<void, never, FileSystem | Cache>
+      writeCache: (key: string) => Effect.Effect<void, never, FileSystem | Cache>
       readCache: Effect.Effect<void, never, FileSystem | Cache>
     }>()("LeakingDeps") {}
     
@@ -46,7 +46,7 @@ More info and examples at https://effect.website/docs/requirements-management/la
     
     // @effect-expect-leaking FileSystem Cache
     export class LeakingDeps2 extends Context.Service<LeakingDeps2, {
-      writeCache: () => Effect.Effect<void, never, FileSystem | Cache>
+      writeCache: (key: string) => Effect.Effect<void, never, FileSystem | Cache>
       readCache: Effect.Effect<void, never, FileSystem | Cache>
     }>()("LeakingDeps2") {}
     
@@ -58,7 +58,7 @@ More info and examples at https://effect.website/docs/requirements-management/la
      * @effect-expect-leaking FileSystem Cache
      */
     export class LeakingDeps3 extends Context.Service<LeakingDeps3, {
-      writeCache: () => Effect.Effect<void, never, FileSystem | Cache>
+      writeCache: (key: string) => Effect.Effect<void, never, FileSystem | Cache>
       readCache: Effect.Effect<void, never, FileSystem | Cache>
     }>()("LeakingDeps3") {}
     
@@ -66,7 +66,7 @@ More info and examples at https://effect.website/docs/requirements-management/la
     
     // @effect-expect-leaking FileSystem Cache
     export const LeakingDeps4 = Context.Service<{
-      writeCache: () => Effect.Effect<void, never, FileSystem | Cache>
+      writeCache: (key: string) => Effect.Effect<void, never, FileSystem | Cache>
       readCache: Effect.Effect<void, never, FileSystem | Cache>
     }>("LeakingDeps4")
     

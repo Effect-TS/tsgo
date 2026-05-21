@@ -1,11 +1,11 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/effectFnOpportunity_noPipeWithSpan.ts(10,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_noPipeWithSpan.ts(10,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
 /.src/effectFnOpportunity_noPipeWithSpan.ts(11,3): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
-/.src/effectFnOpportunity_noPipeWithSpan.ts(15,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_noPipeWithSpan.ts(15,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
 /.src/effectFnOpportunity_noPipeWithSpan.ts(16,10): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
-/.src/effectFnOpportunity_noPipeWithSpan.ts(21,17): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_noPipeWithSpan.ts(21,17): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
 /.src/effectFnOpportunity_noPipeWithSpan.ts(22,10): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
 
 
@@ -32,36 +32,36 @@ Effect version: 4.0.0
     // calls (each has a single-statement body). The Go test harness runs all rules,
     // unlike upstream which runs only the rule matching the file name prefix.
     
-    export const arrowWithPipe = () =>
+    export const arrowWithPipe = (n: number) =>
                  ~~~~~~~~~~~~~
-!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
       Effect.gen(function*() {
       ~~~~~~~~~~~~~~~~~~~~~~~~
-        return yield* Effect.succeed(42)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        return yield* Effect.succeed(n)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       }).pipe(Effect.ignore)
     ~~~~
 !!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
     
-    export const functionExpressionWithPipe = function() {
+    export const functionExpressionWithPipe = function(n: number) {
                  ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
       return Effect.gen(function*() {
              ~~~~~~~~~~~~~~~~~~~~~~~~
-        return yield* Effect.succeed(42)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        return yield* Effect.succeed(n)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       }).pipe(Effect.withSpan("functionExpressionWithPipe"), Effect.ignore)
     ~~~~
 !!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
     }
     
-    export function functionDeclarationWithPipe() {
+    export function functionDeclarationWithPipe(n: number) {
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
       return Effect.gen(function*() {
              ~~~~~~~~~~~~~~~~~~~~~~~~
-        return yield* Effect.succeed(42)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        return yield* Effect.succeed(n)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionDeclarationWithPipe"), Effect.ignore)
     ~~~~
 !!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)

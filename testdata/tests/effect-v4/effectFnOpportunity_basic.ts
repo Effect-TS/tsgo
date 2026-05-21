@@ -19,29 +19,29 @@ import * as Effect from "effect/Effect"
 // Converting to Effect.fnUntraced improves performance by not
 // reallocating the generator function on every call.
 
-export const arrowBlockGen = () => {
+export const arrowBlockGen = (n: number) => {
   return Effect.gen(function*() {
     yield* Effect.succeed(1)
-    return 42
+    return n
   })
 }
 
-export const arrowExpressionGen = () =>
+export const arrowExpressionGen = (n: number) =>
   Effect.gen(function*() {
     yield* Effect.succeed(1)
-    return 42
+    return n
   })
 
-export const functionExpressionGen = function() {
+export const functionExpressionGen = function(n: number) {
   return Effect.gen(function*() {
     yield* Effect.succeed(1)
-    return 42
+    return n
   })
 }
 
-export function functionDeclarationGen() {
+export function functionDeclarationGen(n: number) {
   return Effect.gen(function*() {
     yield* Effect.succeed(1)
-    return 42
+    return n
   })
 }

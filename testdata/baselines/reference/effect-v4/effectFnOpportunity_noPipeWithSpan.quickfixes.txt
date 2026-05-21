@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (10:14-10:27) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+[D1] (10:14-10:27) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fnUntraced"
@@ -12,7 +12,7 @@
   Fix 1: "Disable unnecessaryEffectGen for entire file"
   Fix 2: "Remove the Effect.gen, and keep the body"
 
-[D3] (15:14-15:40) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+[D3] (15:14-15:40) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fnUntraced"
@@ -24,7 +24,7 @@
   Fix 1: "Disable unnecessaryEffectGen for entire file"
   Fix 2: "Remove the Effect.gen, and keep the body"
 
-[D5] (21:17-21:44) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+[D5] (21:17-21:44) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fnUntraced"
@@ -56,19 +56,19 @@ import * as Effect from "effect/Effect"
 // calls (each has a single-statement body). The Go test harness runs all rules,
 // unlike upstream which runs only the rule matching the file name prefix.
 
-export const arrowWithPipe = Effect.fnUntraced(function* () {
-    return yield* Effect.succeed(42);
+export const arrowWithPipe = Effect.fnUntraced(function* (n: number) {
+    return yield* Effect.succeed(n);
 }, Effect.ignore);
 
-export const functionExpressionWithPipe = function() {
+export const functionExpressionWithPipe = function(n: number) {
   return Effect.gen(function*() {
-    return yield* Effect.succeed(42)
+    return yield* Effect.succeed(n)
   }).pipe(Effect.withSpan("functionExpressionWithPipe"), Effect.ignore)
 }
 
-export function functionDeclarationWithPipe() {
+export function functionDeclarationWithPipe(n: number) {
   return Effect.gen(function*() {
-    return yield* Effect.succeed(42)
+    return yield* Effect.succeed(n)
   }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionDeclarationWithPipe"), Effect.ignore)
 }
 
@@ -85,19 +85,19 @@ import * as Effect from "effect/Effect"
 // calls (each has a single-statement body). The Go test harness runs all rules,
 // unlike upstream which runs only the rule matching the file name prefix.
 
-export const arrowWithPipe = Effect.fn(function* () {
-    return yield* Effect.succeed(42);
+export const arrowWithPipe = Effect.fn(function* (n: number) {
+    return yield* Effect.succeed(n);
 }, Effect.ignore);
 
-export const functionExpressionWithPipe = function() {
+export const functionExpressionWithPipe = function(n: number) {
   return Effect.gen(function*() {
-    return yield* Effect.succeed(42)
+    return yield* Effect.succeed(n)
   }).pipe(Effect.withSpan("functionExpressionWithPipe"), Effect.ignore)
 }
 
-export function functionDeclarationWithPipe() {
+export function functionDeclarationWithPipe(n: number) {
   return Effect.gen(function*() {
-    return yield* Effect.succeed(42)
+    return yield* Effect.succeed(n)
   }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionDeclarationWithPipe"), Effect.ignore)
 }
 
@@ -114,19 +114,19 @@ import * as Effect from "effect/Effect"
 // calls (each has a single-statement body). The Go test harness runs all rules,
 // unlike upstream which runs only the rule matching the file name prefix.
 
-export const arrowWithPipe = Effect.fn("arrowWithPipe")(function* () {
-    return yield* Effect.succeed(42);
+export const arrowWithPipe = Effect.fn("arrowWithPipe")(function* (n: number) {
+    return yield* Effect.succeed(n);
 }, Effect.ignore);
 
-export const functionExpressionWithPipe = function() {
+export const functionExpressionWithPipe = function(n: number) {
   return Effect.gen(function*() {
-    return yield* Effect.succeed(42)
+    return yield* Effect.succeed(n)
   }).pipe(Effect.withSpan("functionExpressionWithPipe"), Effect.ignore)
 }
 
-export function functionDeclarationWithPipe() {
+export function functionDeclarationWithPipe(n: number) {
   return Effect.gen(function*() {
-    return yield* Effect.succeed(42)
+    return yield* Effect.succeed(n)
   }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionDeclarationWithPipe"), Effect.ignore)
 }
 
@@ -149,17 +149,17 @@ import * as Effect from "effect/Effect"
 // calls (each has a single-statement body). The Go test harness runs all rules,
 // unlike upstream which runs only the rule matching the file name prefix.
 
-export const arrowWithPipe = () => Effect.succeed(42).pipe(Effect.ignore)
+export const arrowWithPipe = (n: number) => Effect.succeed(n).pipe(Effect.ignore)
 
-export const functionExpressionWithPipe = function() {
+export const functionExpressionWithPipe = function(n: number) {
   return Effect.gen(function*() {
-    return yield* Effect.succeed(42)
+    return yield* Effect.succeed(n)
   }).pipe(Effect.withSpan("functionExpressionWithPipe"), Effect.ignore)
 }
 
-export function functionDeclarationWithPipe() {
+export function functionDeclarationWithPipe(n: number) {
   return Effect.gen(function*() {
-    return yield* Effect.succeed(42)
+    return yield* Effect.succeed(n)
   }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionDeclarationWithPipe"), Effect.ignore)
 }
 
@@ -182,18 +182,18 @@ import * as Effect from "effect/Effect"
 // calls (each has a single-statement body). The Go test harness runs all rules,
 // unlike upstream which runs only the rule matching the file name prefix.
 
-export const arrowWithPipe = () =>
+export const arrowWithPipe = (n: number) =>
   Effect.gen(function*() {
-    return yield* Effect.succeed(42)
+    return yield* Effect.succeed(n)
   }).pipe(Effect.ignore)
 
-export const functionExpressionWithPipe = Effect.fnUntraced(function* () {
-    return yield* Effect.succeed(42);
+export const functionExpressionWithPipe = Effect.fnUntraced(function* (n: number) {
+    return yield* Effect.succeed(n);
 }, Effect.withSpan("functionExpressionWithPipe"), Effect.ignore);
 
-export function functionDeclarationWithPipe() {
+export function functionDeclarationWithPipe(n: number) {
   return Effect.gen(function*() {
-    return yield* Effect.succeed(42)
+    return yield* Effect.succeed(n)
   }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionDeclarationWithPipe"), Effect.ignore)
 }
 
@@ -210,18 +210,18 @@ import * as Effect from "effect/Effect"
 // calls (each has a single-statement body). The Go test harness runs all rules,
 // unlike upstream which runs only the rule matching the file name prefix.
 
-export const arrowWithPipe = () =>
+export const arrowWithPipe = (n: number) =>
   Effect.gen(function*() {
-    return yield* Effect.succeed(42)
+    return yield* Effect.succeed(n)
   }).pipe(Effect.ignore)
 
-export const functionExpressionWithPipe = Effect.fn(function* () {
-    return yield* Effect.succeed(42);
+export const functionExpressionWithPipe = Effect.fn(function* (n: number) {
+    return yield* Effect.succeed(n);
 }, Effect.withSpan("functionExpressionWithPipe"), Effect.ignore);
 
-export function functionDeclarationWithPipe() {
+export function functionDeclarationWithPipe(n: number) {
   return Effect.gen(function*() {
-    return yield* Effect.succeed(42)
+    return yield* Effect.succeed(n)
   }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionDeclarationWithPipe"), Effect.ignore)
 }
 
@@ -238,18 +238,18 @@ import * as Effect from "effect/Effect"
 // calls (each has a single-statement body). The Go test harness runs all rules,
 // unlike upstream which runs only the rule matching the file name prefix.
 
-export const arrowWithPipe = () =>
+export const arrowWithPipe = (n: number) =>
   Effect.gen(function*() {
-    return yield* Effect.succeed(42)
+    return yield* Effect.succeed(n)
   }).pipe(Effect.ignore)
 
-export const functionExpressionWithPipe = Effect.fn("functionExpressionWithPipe")(function* () {
-    return yield* Effect.succeed(42);
+export const functionExpressionWithPipe = Effect.fn("functionExpressionWithPipe")(function* (n: number) {
+    return yield* Effect.succeed(n);
 }, Effect.withSpan("functionExpressionWithPipe"), Effect.ignore);
 
-export function functionDeclarationWithPipe() {
+export function functionDeclarationWithPipe(n: number) {
   return Effect.gen(function*() {
-    return yield* Effect.succeed(42)
+    return yield* Effect.succeed(n)
   }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionDeclarationWithPipe"), Effect.ignore)
 }
 
@@ -272,18 +272,18 @@ import * as Effect from "effect/Effect"
 // calls (each has a single-statement body). The Go test harness runs all rules,
 // unlike upstream which runs only the rule matching the file name prefix.
 
-export const arrowWithPipe = () =>
+export const arrowWithPipe = (n: number) =>
   Effect.gen(function*() {
-    return yield* Effect.succeed(42)
+    return yield* Effect.succeed(n)
   }).pipe(Effect.ignore)
 
-export const functionExpressionWithPipe = function() {
-  return Effect.succeed(42).pipe(Effect.withSpan("functionExpressionWithPipe"), Effect.ignore)
+export const functionExpressionWithPipe = function(n: number) {
+  return Effect.succeed(n).pipe(Effect.withSpan("functionExpressionWithPipe"), Effect.ignore)
 }
 
-export function functionDeclarationWithPipe() {
+export function functionDeclarationWithPipe(n: number) {
   return Effect.gen(function*() {
-    return yield* Effect.succeed(42)
+    return yield* Effect.succeed(n)
   }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionDeclarationWithPipe"), Effect.ignore)
 }
 
@@ -306,19 +306,19 @@ import * as Effect from "effect/Effect"
 // calls (each has a single-statement body). The Go test harness runs all rules,
 // unlike upstream which runs only the rule matching the file name prefix.
 
-export const arrowWithPipe = () =>
+export const arrowWithPipe = (n: number) =>
   Effect.gen(function*() {
-    return yield* Effect.succeed(42)
+    return yield* Effect.succeed(n)
   }).pipe(Effect.ignore)
 
-export const functionExpressionWithPipe = function() {
+export const functionExpressionWithPipe = function(n: number) {
   return Effect.gen(function*() {
-    return yield* Effect.succeed(42)
+    return yield* Effect.succeed(n)
   }).pipe(Effect.withSpan("functionExpressionWithPipe"), Effect.ignore)
 }
 
-export const functionDeclarationWithPipe = Effect.fnUntraced(function* () {
-    return yield* Effect.succeed(42);
+export const functionDeclarationWithPipe = Effect.fnUntraced(function* (n: number) {
+    return yield* Effect.succeed(n);
 }, Effect.map(x => x + 1), Effect.withSpan("functionDeclarationWithPipe"), Effect.ignore);
 
 
@@ -334,19 +334,19 @@ import * as Effect from "effect/Effect"
 // calls (each has a single-statement body). The Go test harness runs all rules,
 // unlike upstream which runs only the rule matching the file name prefix.
 
-export const arrowWithPipe = () =>
+export const arrowWithPipe = (n: number) =>
   Effect.gen(function*() {
-    return yield* Effect.succeed(42)
+    return yield* Effect.succeed(n)
   }).pipe(Effect.ignore)
 
-export const functionExpressionWithPipe = function() {
+export const functionExpressionWithPipe = function(n: number) {
   return Effect.gen(function*() {
-    return yield* Effect.succeed(42)
+    return yield* Effect.succeed(n)
   }).pipe(Effect.withSpan("functionExpressionWithPipe"), Effect.ignore)
 }
 
-export const functionDeclarationWithPipe = Effect.fn(function* () {
-    return yield* Effect.succeed(42);
+export const functionDeclarationWithPipe = Effect.fn(function* (n: number) {
+    return yield* Effect.succeed(n);
 }, Effect.map(x => x + 1), Effect.withSpan("functionDeclarationWithPipe"), Effect.ignore);
 
 
@@ -362,19 +362,19 @@ import * as Effect from "effect/Effect"
 // calls (each has a single-statement body). The Go test harness runs all rules,
 // unlike upstream which runs only the rule matching the file name prefix.
 
-export const arrowWithPipe = () =>
+export const arrowWithPipe = (n: number) =>
   Effect.gen(function*() {
-    return yield* Effect.succeed(42)
+    return yield* Effect.succeed(n)
   }).pipe(Effect.ignore)
 
-export const functionExpressionWithPipe = function() {
+export const functionExpressionWithPipe = function(n: number) {
   return Effect.gen(function*() {
-    return yield* Effect.succeed(42)
+    return yield* Effect.succeed(n)
   }).pipe(Effect.withSpan("functionExpressionWithPipe"), Effect.ignore)
 }
 
-export const functionDeclarationWithPipe = Effect.fn("functionDeclarationWithPipe")(function* () {
-    return yield* Effect.succeed(42);
+export const functionDeclarationWithPipe = Effect.fn("functionDeclarationWithPipe")(function* (n: number) {
+    return yield* Effect.succeed(n);
 }, Effect.map(x => x + 1), Effect.withSpan("functionDeclarationWithPipe"), Effect.ignore);
 
 
@@ -396,18 +396,18 @@ import * as Effect from "effect/Effect"
 // calls (each has a single-statement body). The Go test harness runs all rules,
 // unlike upstream which runs only the rule matching the file name prefix.
 
-export const arrowWithPipe = () =>
+export const arrowWithPipe = (n: number) =>
   Effect.gen(function*() {
-    return yield* Effect.succeed(42)
+    return yield* Effect.succeed(n)
   }).pipe(Effect.ignore)
 
-export const functionExpressionWithPipe = function() {
+export const functionExpressionWithPipe = function(n: number) {
   return Effect.gen(function*() {
-    return yield* Effect.succeed(42)
+    return yield* Effect.succeed(n)
   }).pipe(Effect.withSpan("functionExpressionWithPipe"), Effect.ignore)
 }
 
-export function functionDeclarationWithPipe() {
-  return Effect.succeed(42).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionDeclarationWithPipe"), Effect.ignore)
+export function functionDeclarationWithPipe(n: number) {
+  return Effect.succeed(n).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionDeclarationWithPipe"), Effect.ignore)
 }
 
