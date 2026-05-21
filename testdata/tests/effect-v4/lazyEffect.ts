@@ -1,14 +1,18 @@
 // @effect-diagnostics lazyEffect:warning
-import { Context, Effect, Stream } from "effect"
+import { Context, Effect, Layer, Stream } from "effect"
 
 declare const effectValue: Effect.Effect<void>
 declare const streamValue: Stream.Stream<number>
+declare const layerValue: Layer.Layer<string>
 
 // Should trigger: exported zero-arg lazy Effect
 export const lazyEffect = () => effectValue
 
 // Should trigger: exported zero-arg lazy Stream
 export const lazyStream = () => streamValue
+
+// Should trigger: exported zero-arg lazy Layer
+export const lazyLayer = () => layerValue
 
 // Should trigger: exported explicit zero-arg function type returning Effect
 export const lazyAnnotated: () => Effect.Effect<string> = () => Effect.succeed("ok")
@@ -49,6 +53,9 @@ export interface RepoShape extends SharedShape {
   // Should trigger: interface method returning a zero-arg lazy Stream
   watch(): Stream.Stream<number>
 
+  // Should trigger: interface property returning a zero-arg lazy Layer
+  live: () => Layer.Layer<string>
+
   // Should not trigger: one optional argument is allowed
   maybeLoad(_?: void): Effect.Effect<string>
 
@@ -65,6 +72,9 @@ export class Repo extends Context.Service<Repo>()("Repo", {
 
     // Should trigger: service member returns a zero-arg lazy Stream
     watch: () => Stream.succeed(1),
+
+    // Should trigger: service member returns a zero-arg lazy Layer
+    live: () => layerValue,
 
     // Should not trigger: direct Effect values are allowed
     program: Effect.void,

@@ -1,36 +1,45 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/lazyEffect.ts(8,14): warning TS377091: Exported declaration 'lazyEffect' returns a lazy Effect or Stream. Effect and Stream are already lazy, so wrapping them in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
-/.src/lazyEffect.ts(11,14): warning TS377091: Exported declaration 'lazyStream' returns a lazy Effect or Stream. Effect and Stream are already lazy, so wrapping them in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
-/.src/lazyEffect.ts(14,14): warning TS377091: Exported declaration 'lazyAnnotated' returns a lazy Effect or Stream. Effect and Stream are already lazy, so wrapping them in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
-/.src/lazyEffect.ts(47,3): warning TS377091: Interface 'RepoShape' member 'load' returns a lazy Effect or Stream. Effect and Stream are already lazy, so wrapping them in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
-/.src/lazyEffect.ts(50,3): warning TS377091: Interface 'RepoShape' member 'watch' returns a lazy Effect or Stream. Effect and Stream are already lazy, so wrapping them in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
-/.src/lazyEffect.ts(61,14): warning TS377091: Service 'Repo' member 'load' returns a lazy Effect or Stream. Effect and Stream are already lazy, so wrapping them in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
-/.src/lazyEffect.ts(61,14): warning TS377091: Service 'Repo' member 'watch' returns a lazy Effect or Stream. Effect and Stream are already lazy, so wrapping them in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+/.src/lazyEffect.ts(9,14): warning TS377091: Exported declaration 'lazyEffect' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+/.src/lazyEffect.ts(12,14): warning TS377091: Exported declaration 'lazyStream' returns a lazy Stream. Stream is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+/.src/lazyEffect.ts(15,14): warning TS377091: Exported declaration 'lazyLayer' returns a lazy Layer. Layer is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+/.src/lazyEffect.ts(18,14): warning TS377091: Exported declaration 'lazyAnnotated' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+/.src/lazyEffect.ts(51,3): warning TS377091: Interface 'RepoShape' member 'load' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+/.src/lazyEffect.ts(54,3): warning TS377091: Interface 'RepoShape' member 'watch' returns a lazy Stream. Stream is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+/.src/lazyEffect.ts(57,3): warning TS377091: Interface 'RepoShape' member 'live' returns a lazy Layer. Layer is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+/.src/lazyEffect.ts(68,14): warning TS377091: Service 'Repo' member 'live' returns a lazy Layer. Layer is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+/.src/lazyEffect.ts(68,14): warning TS377091: Service 'Repo' member 'load' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+/.src/lazyEffect.ts(68,14): warning TS377091: Service 'Repo' member 'watch' returns a lazy Stream. Stream is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
 
 
-==== /.src/lazyEffect.ts (7 errors) ====
+==== /.src/lazyEffect.ts (10 errors) ====
     // @effect-diagnostics lazyEffect:warning
-    import { Context, Effect, Stream } from "effect"
+    import { Context, Effect, Layer, Stream } from "effect"
     
     declare const effectValue: Effect.Effect<void>
     declare const streamValue: Stream.Stream<number>
+    declare const layerValue: Layer.Layer<string>
     
     // Should trigger: exported zero-arg lazy Effect
     export const lazyEffect = () => effectValue
                  ~~~~~~~~~~
-!!! warning TS377091: Exported declaration 'lazyEffect' returns a lazy Effect or Stream. Effect and Stream are already lazy, so wrapping them in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+!!! warning TS377091: Exported declaration 'lazyEffect' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
     
     // Should trigger: exported zero-arg lazy Stream
     export const lazyStream = () => streamValue
                  ~~~~~~~~~~
-!!! warning TS377091: Exported declaration 'lazyStream' returns a lazy Effect or Stream. Effect and Stream are already lazy, so wrapping them in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+!!! warning TS377091: Exported declaration 'lazyStream' returns a lazy Stream. Stream is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+    
+    // Should trigger: exported zero-arg lazy Layer
+    export const lazyLayer = () => layerValue
+                 ~~~~~~~~~
+!!! warning TS377091: Exported declaration 'lazyLayer' returns a lazy Layer. Layer is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
     
     // Should trigger: exported explicit zero-arg function type returning Effect
     export const lazyAnnotated: () => Effect.Effect<string> = () => Effect.succeed("ok")
                  ~~~~~~~~~~~~~
-!!! warning TS377091: Exported declaration 'lazyAnnotated' returns a lazy Effect or Stream. Effect and Stream are already lazy, so wrapping them in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+!!! warning TS377091: Exported declaration 'lazyAnnotated' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
     
     // Should not trigger: Effect values are already lazy
     export const directEffect = Effect.succeed(1)
@@ -65,12 +74,17 @@ Effect version: 4.0.0
       // Should trigger: interface property returning a zero-arg lazy Effect
       load: () => Effect.Effect<string>
       ~~~~
-!!! warning TS377091: Interface 'RepoShape' member 'load' returns a lazy Effect or Stream. Effect and Stream are already lazy, so wrapping them in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+!!! warning TS377091: Interface 'RepoShape' member 'load' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
     
       // Should trigger: interface method returning a zero-arg lazy Stream
       watch(): Stream.Stream<number>
       ~~~~~
-!!! warning TS377091: Interface 'RepoShape' member 'watch' returns a lazy Effect or Stream. Effect and Stream are already lazy, so wrapping them in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+!!! warning TS377091: Interface 'RepoShape' member 'watch' returns a lazy Stream. Stream is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+    
+      // Should trigger: interface property returning a zero-arg lazy Layer
+      live: () => Layer.Layer<string>
+      ~~~~
+!!! warning TS377091: Interface 'RepoShape' member 'live' returns a lazy Layer. Layer is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
     
       // Should not trigger: one optional argument is allowed
       maybeLoad(_?: void): Effect.Effect<string>
@@ -83,15 +97,20 @@ Effect version: 4.0.0
     
     export class Repo extends Context.Service<Repo>()("Repo", {
                  ~~~~
-!!! warning TS377091: Service 'Repo' member 'load' returns a lazy Effect or Stream. Effect and Stream are already lazy, so wrapping them in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+!!! warning TS377091: Service 'Repo' member 'live' returns a lazy Layer. Layer is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
                  ~~~~
-!!! warning TS377091: Service 'Repo' member 'watch' returns a lazy Effect or Stream. Effect and Stream are already lazy, so wrapping them in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+!!! warning TS377091: Service 'Repo' member 'load' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+                 ~~~~
+!!! warning TS377091: Service 'Repo' member 'watch' returns a lazy Stream. Stream is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
       make: Effect.succeed({
         // Should trigger: service member returns a zero-arg lazy Effect
         load: () => Effect.succeed("value"),
     
         // Should trigger: service member returns a zero-arg lazy Stream
         watch: () => Stream.succeed(1),
+    
+        // Should trigger: service member returns a zero-arg lazy Layer
+        live: () => layerValue,
     
         // Should not trigger: direct Effect values are allowed
         program: Effect.void,

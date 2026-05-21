@@ -20,7 +20,7 @@ var LazyEffect = rule.Rule{
 	DefaultSeverity: etscore.SeveritySuggestion,
 	SupportedEffect: []string{"v4"},
 	Codes: []int32{
-		tsdiag.X_0_returns_a_lazy_Effect_or_Stream_Effect_and_Stream_are_already_lazy_so_wrapping_them_in_a_zero_argument_function_adds_unnecessary_indirection_effect_lazyEffect.Code(),
+		tsdiag.X_0_returns_a_lazy_1_1_is_already_lazy_so_wrapping_it_in_a_zero_argument_function_adds_unnecessary_indirection_effect_lazyEffect.Code(),
 	},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		if !strings.HasPrefix(ctx.TypeParser.DetectEffectVersionString(), "4.") {
@@ -59,7 +59,8 @@ func checkLazyEffectInterface(ctx *rule.Context, stmt *ast.Node) []*ast.Diagnost
 		}
 
 		memberType := ctx.TypeParser.GetTypeAtLocation(member.Name())
-		if memberType == nil || !isLazyEffectLikeType(ctx.Checker, ctx.TypeParser, memberType, member.Name()) {
+		lazyTypeName, ok := lazyEffectLikeTypeName(ctx.Checker, ctx.TypeParser, memberType, member.Name())
+		if !ok {
 			continue
 		}
 
@@ -67,9 +68,10 @@ func checkLazyEffectInterface(ctx *rule.Context, stmt *ast.Node) []*ast.Diagnost
 		diags = append(diags, ctx.NewDiagnostic(
 			ctx.SourceFile,
 			ctx.GetErrorRange(member.Name()),
-			tsdiag.X_0_returns_a_lazy_Effect_or_Stream_Effect_and_Stream_are_already_lazy_so_wrapping_them_in_a_zero_argument_function_adds_unnecessary_indirection_effect_lazyEffect,
+			tsdiag.X_0_returns_a_lazy_1_1_is_already_lazy_so_wrapping_it_in_a_zero_argument_function_adds_unnecessary_indirection_effect_lazyEffect,
 			nil,
 			messageSubject,
+			lazyTypeName,
 		))
 	}
 
@@ -109,7 +111,8 @@ func checkLazyEffectExport(ctx *rule.Context, stmt *ast.Node) []*ast.Diagnostic 
 
 func lazyEffectDiagnosticForExportedDeclaration(ctx *rule.Context, name *ast.Node) []*ast.Diagnostic {
 	declType := ctx.TypeParser.GetTypeAtLocation(name)
-	if declType == nil || !isLazyEffectLikeType(ctx.Checker, ctx.TypeParser, declType, name) {
+	lazyTypeName, ok := lazyEffectLikeTypeName(ctx.Checker, ctx.TypeParser, declType, name)
+	if !ok {
 		return nil
 	}
 
@@ -117,9 +120,10 @@ func lazyEffectDiagnosticForExportedDeclaration(ctx *rule.Context, name *ast.Nod
 	return []*ast.Diagnostic{ctx.NewDiagnostic(
 		ctx.SourceFile,
 		ctx.GetErrorRange(name),
-		tsdiag.X_0_returns_a_lazy_Effect_or_Stream_Effect_and_Stream_are_already_lazy_so_wrapping_them_in_a_zero_argument_function_adds_unnecessary_indirection_effect_lazyEffect,
+		tsdiag.X_0_returns_a_lazy_1_1_is_already_lazy_so_wrapping_it_in_a_zero_argument_function_adds_unnecessary_indirection_effect_lazyEffect,
 		nil,
 		messageSubject,
+		lazyTypeName,
 	)}
 }
 
@@ -153,7 +157,8 @@ func checkLazyEffectService(ctx *rule.Context, stmt *ast.Node) []*ast.Diagnostic
 		}
 
 		memberType := ctx.Checker.GetTypeOfSymbolAtLocation(member, stmt.Name())
-		if memberType == nil || !isLazyEffectLikeType(ctx.Checker, ctx.TypeParser, memberType, stmt.Name()) {
+		lazyTypeName, ok := lazyEffectLikeTypeName(ctx.Checker, ctx.TypeParser, memberType, stmt.Name())
+		if !ok {
 			continue
 		}
 
@@ -161,34 +166,45 @@ func checkLazyEffectService(ctx *rule.Context, stmt *ast.Node) []*ast.Diagnostic
 		diags = append(diags, ctx.NewDiagnostic(
 			ctx.SourceFile,
 			ctx.GetErrorRange(stmt.Name()),
-			tsdiag.X_0_returns_a_lazy_Effect_or_Stream_Effect_and_Stream_are_already_lazy_so_wrapping_them_in_a_zero_argument_function_adds_unnecessary_indirection_effect_lazyEffect,
+			tsdiag.X_0_returns_a_lazy_1_1_is_already_lazy_so_wrapping_it_in_a_zero_argument_function_adds_unnecessary_indirection_effect_lazyEffect,
 			nil,
 			messageSubject,
+			lazyTypeName,
 		))
 	}
 
 	return diags
 }
 
-func isLazyEffectLikeType(c *checker.Checker, tp *typeparser.TypeParser, t *checker.Type, atLocation *ast.Node) bool {
+func lazyEffectLikeTypeName(c *checker.Checker, tp *typeparser.TypeParser, t *checker.Type, atLocation *ast.Node) (string, bool) {
 	if c == nil || tp == nil || t == nil {
-		return false
+		return "", false
 	}
 
 	callSignatures := c.GetSignaturesOfType(t, checker.SignatureKindCall)
 	if len(callSignatures) != 1 {
-		return false
+		return "", false
 	}
 
 	sig := callSignatures[0]
 	if len(sig.Parameters()) != 0 {
-		return false
+		return "", false
 	}
 
 	returnType := c.GetReturnTypeOfSignature(sig)
 	if returnType == nil {
-		return false
+		return "", false
 	}
 
-	return tp.StrictIsEffectType(returnType, atLocation) || tp.StreamType(returnType, atLocation) != nil
+	if tp.StrictIsEffectType(returnType, atLocation) {
+		return "Effect", true
+	}
+	if tp.LayerType(returnType, atLocation) != nil {
+		return "Layer", true
+	}
+	if tp.StreamType(returnType, atLocation) != nil {
+		return "Stream", true
+	}
+
+	return "", false
 }

@@ -612,7 +612,7 @@
           {
             "start": 69,
             "end": 76,
-            "text": "Interface 'PreviewService' member 'preview' returns a lazy Effect or Stream. Effect and Stream are already lazy, so wrapping them in a zero-argument function adds unnecessary indirection. effect(lazyEffect)"
+            "text": "Interface 'PreviewService' member 'preview' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)"
           }
         ]
       }
