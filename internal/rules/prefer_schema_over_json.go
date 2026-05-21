@@ -19,9 +19,9 @@ var PreferSchemaOverJson = rule.Rule{
 	Name:            "preferSchemaOverJson",
 	Group:           "effectNative",
 	Description:     "Suggests using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify",
-	DefaultSeverity: etscore.SeveritySuggestion,
+	DefaultSeverity: etscore.SeverityOff,
 	SupportedEffect: []string{"v3", "v4"},
-	Codes:           []int32{tsdiag.This_code_uses_JSON_parse_or_JSON_stringify_Effect_Schema_provides_Effect_aware_APIs_for_JSON_parsing_and_stringifying_effect_preferSchemaOverJson.Code()},
+	Codes:           []int32{tsdiag.This_code_uses_JSON_parse_or_JSON_stringify_0_effect_preferSchemaOverJson.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		var diags []*ast.Diagnostic
 		isV4 := ctx.TypeParser.SupportedEffectVersion() == typeparser.EffectMajorV4
@@ -50,17 +50,27 @@ var PreferSchemaOverJson = rule.Rule{
 // checkPreferSchemaOverJson checks a single call expression for JSON.parse/stringify
 // inside an Effect context (Effect.try or Effect.gen/Effect.fn).
 func checkPreferSchemaOverJson(ctx *rule.Context, node *ast.Node, isV4 bool) *ast.Diagnostic {
+	recommendation := preferSchemaOverJsonRecommendation(isV4)
+
 	// Try each pattern in order
 	if jsonNode := checkEffectTrySimple(ctx.TypeParser, ctx.Checker, node, isV4); jsonNode != nil {
-		return ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(jsonNode), tsdiag.This_code_uses_JSON_parse_or_JSON_stringify_Effect_Schema_provides_Effect_aware_APIs_for_JSON_parsing_and_stringifying_effect_preferSchemaOverJson, nil)
+		return ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(jsonNode), tsdiag.This_code_uses_JSON_parse_or_JSON_stringify_0_effect_preferSchemaOverJson, nil, recommendation)
 	}
 	if jsonNode := checkEffectTryObject(ctx.TypeParser, ctx.Checker, node); jsonNode != nil {
-		return ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(jsonNode), tsdiag.This_code_uses_JSON_parse_or_JSON_stringify_Effect_Schema_provides_Effect_aware_APIs_for_JSON_parsing_and_stringifying_effect_preferSchemaOverJson, nil)
+		return ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(jsonNode), tsdiag.This_code_uses_JSON_parse_or_JSON_stringify_0_effect_preferSchemaOverJson, nil, recommendation)
 	}
 	if jsonNode := checkJsonMethodInEffectGen(ctx.TypeParser, ctx.Checker, node); jsonNode != nil {
-		return ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(jsonNode), tsdiag.This_code_uses_JSON_parse_or_JSON_stringify_Effect_Schema_provides_Effect_aware_APIs_for_JSON_parsing_and_stringifying_effect_preferSchemaOverJson, nil)
+		return ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(jsonNode), tsdiag.This_code_uses_JSON_parse_or_JSON_stringify_0_effect_preferSchemaOverJson, nil, recommendation)
 	}
 	return nil
+}
+
+func preferSchemaOverJsonRecommendation(isV4 bool) string {
+	if isV4 {
+		return "Use `Schema.UnknownFromJsonString` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings."
+	}
+
+	return "Use `Schema.parseJson(Schema.Unknown)` for unknown shapes or `Schema.parseJson(schema)` for known ones."
 }
 
 // parseJsonMethod checks if a call expression is JSON.parse or JSON.stringify.

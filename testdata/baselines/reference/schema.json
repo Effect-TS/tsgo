@@ -1676,7 +1676,7 @@
         },
         "catchAllToMapError": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
-          "default": "suggestion",
+          "default": "off",
           "description": "Suggests using Effect.mapError instead of Effect.catch + Effect.fail"
         },
         "catchUnfailableEffect": {
