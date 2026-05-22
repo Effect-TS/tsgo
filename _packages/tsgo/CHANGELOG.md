@@ -1,5 +1,31 @@
 # @effect/tsgo
 
+## 0.11.0
+
+### Minor Changes
+
+- ad2dd86: Add the `newSchemaClass` diagnostic for Effect v4 to discourage constructing Schema classes with `new` and suggest using `SchemaClass.make(...)` instead.
+
+  Example:
+
+  ```ts
+  class User extends Schema.Class<User>("User")({
+    name: Schema.String,
+  }) {}
+
+  const user = new User({ name: "John" });
+  ```
+
+  Now reports `newSchemaClass` and can be rewritten to:
+
+  ```ts
+  const user = User.make({ name: "John" });
+  ```
+
+### Patch Changes
+
+- b6792a1: Update [`typescript-go`](https://github.com/microsoft/typescript-go/commit/d99f6b2a5ff82ab5ca80cb679d59600c90bc8f05) to commit `d99f6b2a5ff82ab5ca80cb679d59600c90bc8f05`.
+
 ## 0.10.0
 
 ### Minor Changes
