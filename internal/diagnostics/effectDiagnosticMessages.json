@@ -159,6 +159,10 @@
         "category": "Suggestion",
         "code": 377037
     },
+    "This Schema class is constructed with `new`. `{0}.make(...)` can be used to construct the Schema class instance. effect(newSchemaClass)": {
+        "category": "Suggestion",
+        "code": 377094
+    },
     "This `Schema.Union` contains multiple `Schema.Literal` members and can be simplified to a single `Schema.Literal` call. effect(schemaUnionOfLiterals)": {
         "category": "Suggestion",
         "code": 377038

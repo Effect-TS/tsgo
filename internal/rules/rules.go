@@ -60,6 +60,7 @@ var All = []rule.Rule{
 	SchemaStructWithTag,
 	SchemaSyncInEffect,
 	SchemaUnionOfLiterals,
+	NewSchemaClass,
 	MissingEffectServiceDependency,
 	LeakingRequirements,
 	LazyEffect,
