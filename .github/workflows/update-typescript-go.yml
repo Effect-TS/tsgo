@@ -32,6 +32,9 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           submodules: recursive
 
+      - name: Track TypeScript-Go submodule updates in Git
+        run: git config submodule.typescript-go.ignore none
+
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
@@ -74,6 +77,9 @@ jobs:
       - name: Record updated TypeScript-Go commit
         id: after
         run: echo "sha=$(git -C typescript-go rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Stage TypeScript-Go submodule pointer
+        run: git add typescript-go
 
       - name: Build upstream changelog
         id: changelog
