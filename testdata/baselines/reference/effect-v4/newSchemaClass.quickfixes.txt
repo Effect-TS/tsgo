@@ -1,0 +1,147 @@
+=== Quick Fix Inventory ===
+
+[D1] (12:28-12:32) TS377094: This Schema class is constructed with `new`. `User.make(...)` can be used to construct the Schema class instance. effect(newSchemaClass)
+  Fix 0: "Disable newSchemaClass for this line"
+  Fix 1: "Disable newSchemaClass for entire file"
+  Fix 2: "Replace with .make"
+
+[D2] (15:14-15:18) TS377094: This Schema class is constructed with `new`. `User.make(...)` can be used to construct the Schema class instance. effect(newSchemaClass)
+  Fix 0: "Disable newSchemaClass for this line"
+  Fix 1: "Disable newSchemaClass for entire file"
+  Fix 2: "Replace with .make"
+
+[D3] (19:30-19:34) TS377094: This Schema class is constructed with `new`. `User.make(...)` can be used to construct the Schema class instance. effect(newSchemaClass)
+  Fix 0: "Disable newSchemaClass for this line"
+  Fix 1: "Disable newSchemaClass for entire file"
+  Fix 2: "Replace with .make"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable newSchemaClass for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable newSchemaClass for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with .make" ===
+
+--- file:///.src/newSchemaClass.ts ---
+// @effect-diagnostics newSchemaClass:suggestion
+import { Effect, Schema } from "effect"
+
+class User extends Schema.Class<User>("User")({
+  name: Schema.String
+}) {}
+
+const PlainSchema = Schema.Struct({
+  name: Schema.String
+})
+
+export const newUser = User.make({ name: "John" })
+
+export const newInsideEffect = Effect.gen(function*() {
+  return new User({ name: "Jane" })
+})
+
+export const nestedFunction = Effect.gen(function*() {
+  const makeUser = () => new User({ name: "Nested" })
+  return makeUser
+})
+
+export const plainSchemaInGen = Effect.gen(function*() {
+  const user = PlainSchema.make({ name: "Struct" })
+  return user
+})
+
+class RegularUser {
+  constructor(readonly name: string) {}
+}
+
+export const regular = new RegularUser("Regular")
+
+
+=== [D2] Fix 0: "Disable newSchemaClass for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable newSchemaClass for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with .make" ===
+
+--- file:///.src/newSchemaClass.ts ---
+// @effect-diagnostics newSchemaClass:suggestion
+import { Effect, Schema } from "effect"
+
+class User extends Schema.Class<User>("User")({
+  name: Schema.String
+}) {}
+
+const PlainSchema = Schema.Struct({
+  name: Schema.String
+})
+
+export const newUser = new User({ name: "John" })
+
+export const newInsideEffect = Effect.gen(function*() {
+  return User.make({ name: "Jane" })
+})
+
+export const nestedFunction = Effect.gen(function*() {
+  const makeUser = () => new User({ name: "Nested" })
+  return makeUser
+})
+
+export const plainSchemaInGen = Effect.gen(function*() {
+  const user = PlainSchema.make({ name: "Struct" })
+  return user
+})
+
+class RegularUser {
+  constructor(readonly name: string) {}
+}
+
+export const regular = new RegularUser("Regular")
+
+
+=== [D3] Fix 0: "Disable newSchemaClass for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable newSchemaClass for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with .make" ===
+
+--- file:///.src/newSchemaClass.ts ---
+// @effect-diagnostics newSchemaClass:suggestion
+import { Effect, Schema } from "effect"
+
+class User extends Schema.Class<User>("User")({
+  name: Schema.String
+}) {}
+
+const PlainSchema = Schema.Struct({
+  name: Schema.String
+})
+
+export const newUser = new User({ name: "John" })
+
+export const newInsideEffect = Effect.gen(function*() {
+  return new User({ name: "Jane" })
+})
+
+export const nestedFunction = Effect.gen(function*() {
+  const makeUser = () => User.make({ name: "Nested" })
+  return makeUser
+})
+
+export const plainSchemaInGen = Effect.gen(function*() {
+  const user = PlainSchema.make({ name: "Struct" })
+  return user
+})
+
+class RegularUser {
+  constructor(readonly name: string) {}
+}
+
+export const regular = new RegularUser("Regular")
+

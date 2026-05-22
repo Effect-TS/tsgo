@@ -40,6 +40,7 @@ var All = []fixable.Fixable{
 	RunEffectInsideEffectFix,
 	SchemaUnionOfLiteralsFix,
 	MissedPipeableOpportunityFix,
+	NewSchemaClassFix,
 	ServiceNotAsClassFix,
 }
 
