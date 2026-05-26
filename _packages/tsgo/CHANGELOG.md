@@ -1,5 +1,11 @@
 # @effect/tsgo
 
+## 0.11.1
+
+### Patch Changes
+
+- d18a012: Update [`typescript-go`](https://github.com/microsoft/typescript-go/commit/2b43ca072d8e9ba7cefb006520b47d7dfc642066) to commit `2b43ca072d8e9ba7cefb006520b47d7dfc642066`.
+
 ## 0.11.0
 
 ### Minor Changes
