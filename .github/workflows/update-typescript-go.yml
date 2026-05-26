@@ -33,7 +33,7 @@ jobs:
           submodules: recursive
 
       - name: Track TypeScript-Go submodule updates in Git
-        run: git config submodule.typescript-go.ignore none
+        run: git config submodule.typescript-go.ignore dirty
 
       - name: Setup Go
         uses: actions/setup-go@v5
