@@ -1,5 +1,11 @@
 # @effect/tsgo
 
+## 0.11.2
+
+### Patch Changes
+
+- 8352a3a: Fix the automated TypeScript-Go update workflow so it tracks submodule commit changes while still ignoring local patched worktree noise inside the `typescript-go` submodule.
+
 ## 0.11.1
 
 ### Patch Changes
