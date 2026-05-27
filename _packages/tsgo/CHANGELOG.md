@@ -1,5 +1,13 @@
 # @effect/tsgo
 
+## 0.11.2
+
+### Patch Changes
+
+- 7499b7d: Fix shim generation for mirrored struct fields that reference unexported named types.
+- 8352a3a: Fix the automated TypeScript-Go update workflow so it tracks submodule commit changes while still ignoring local patched worktree noise inside the `typescript-go` submodule.
+- d2a35cf: Update [`typescript-go`](https://github.com/microsoft/typescript-go/commit/c54ff7cc5528734fd303461719b54b70115f5445) to commit `c54ff7cc5528734fd303461719b54b70115f5445`.
+
 ## 0.11.1
 
 ### Patch Changes
