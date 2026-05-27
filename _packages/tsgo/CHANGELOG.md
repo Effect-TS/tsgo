@@ -1,5 +1,11 @@
 # @effect/tsgo
 
+## 0.11.3
+
+### Patch Changes
+
+- d5c3765: Fix the lazyEffect diagnostic to allow generic zero-argument functions returning Effect values.
+
 ## 0.11.2
 
 ### Patch Changes
