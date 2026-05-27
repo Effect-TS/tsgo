@@ -151,6 +151,25 @@ func main() {
 		var qualifierEmptyPackageName types.Qualifier = func(p *types.Package) string {
 			return ""
 		}
+		var fieldTypeString func(types.Type) string
+		fieldTypeString = func(t types.Type) string {
+			switch ty := t.(type) {
+			case *types.Named:
+				if !ty.Obj().Exported() {
+					return fieldTypeString(ty.Underlying())
+				}
+			case *types.Pointer:
+				return "*" + fieldTypeString(ty.Elem())
+			case *types.Slice:
+				return "[]" + fieldTypeString(ty.Elem())
+			case *types.Array:
+				return fmt.Sprintf("[%d]%s", ty.Len(), fieldTypeString(ty.Elem()))
+			case *types.Map:
+				return "map[" + fieldTypeString(ty.Key()) + "]" + fieldTypeString(ty.Elem())
+			}
+
+			return types.TypeString(t, qualifierOnlyPackageName)
+		}
 
 		emitGoLinknameDirective := func(localName string, fn *types.Func) {
 			// //go:linkname only allowed in Go files that import "unsafe"
@@ -353,10 +372,7 @@ func main() {
 								}
 							}
 
-							shimBuilder.WriteString(
-								// TODO: move to extra-shim.json
-								strings.ReplaceAll(types.TypeString(field.Type(), qualifierOnlyPackageName), "checker.thisAssignmentDeclarationKind", "int32"),
-							)
+							shimBuilder.WriteString(fieldTypeString(field.Type()))
 						}
 						shimBuilder.WriteString("\n}\n")
 
