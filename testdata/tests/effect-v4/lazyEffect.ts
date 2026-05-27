@@ -17,6 +17,9 @@ export const lazyLayer = () => layerValue
 // Should trigger: exported explicit zero-arg function type returning Effect
 export const lazyAnnotated: () => Effect.Effect<string> = () => Effect.succeed("ok")
 
+// Should not trigger: generic lazy functions may need to construct type-dependent Effects
+export const genericLazyEffect = <A>() => Effect.succeed(null as A)
+
 // Should not trigger: Effect values are already lazy
 export const directEffect = Effect.succeed(1)
 
@@ -56,6 +59,9 @@ export interface RepoShape extends SharedShape {
   // Should trigger: interface property returning a zero-arg lazy Layer
   live: () => Layer.Layer<string>
 
+  // Should not trigger: generic lazy functions may need to construct type-dependent Effects
+  genericLoad: <A>() => Effect.Effect<A>
+
   // Should not trigger: one optional argument is allowed
   maybeLoad(_?: void): Effect.Effect<string>
 
@@ -75,6 +81,9 @@ export class Repo extends Context.Service<Repo>()("Repo", {
 
     // Should trigger: service member returns a zero-arg lazy Layer
     live: () => layerValue,
+
+    // Should not trigger: generic lazy functions may need to construct type-dependent Effects
+    genericLoad: <A>() => Effect.succeed(null as A),
 
     // Should not trigger: direct Effect values are allowed
     program: Effect.void,

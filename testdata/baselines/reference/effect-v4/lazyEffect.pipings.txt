@@ -1,4 +1,4 @@
-==== /.src/lazyEffect.ts (9 flows) ====
+==== /.src/lazyEffect.ts (11 flows) ====
 
 === Piping Flow ===
 Location: 18:64 - 18:85
@@ -15,7 +15,21 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 21:28 - 21:46
+Location: 21:42 - 21:68
+Node: Effect.succeed(null as A)
+Node Kind: KindCallExpression
+
+Subject: null as A
+Subject Type: A
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<A, never, never>
+
+=== Piping Flow ===
+Location: 24:28 - 24:46
 Node: Effect.succeed(1)
 Node Kind: KindCallExpression
 
@@ -29,7 +43,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 24:28 - 24:46
+Location: 27:28 - 27:46
 Node: Stream.succeed(1)
 Node Kind: KindCallExpression
 
@@ -43,7 +57,7 @@ Transformations (1):
       outType: Stream<number, never, never>
 
 === Piping Flow ===
-Location: 33:39 - 33:58
+Location: 36:39 - 36:58
 Node: Effect.succeed(id)
 Node Kind: KindCallExpression
 
@@ -57,21 +71,21 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 69:8 - 90:5
-Node: Effect.succeed({\n    // Should trigger: service member returns a zero-arg lazy Effect\n    load: () => Effect.succeed("value"),\n\n    // Should trigger: service member returns a zero-arg lazy Stream\n    watch: () => Stream.succeed(1),\n\n    // Should trigger: service member returns a zero-arg lazy Layer\n    live: () => layerValue,\n\n    // Should not trigger: direct Effect values are allowed\n    program: Effect.void,\n\n    // Should not trigger: one optional argument is allowed\n    maybeLoad: (_?: void) => Effect.succeed("value"),\n\n    // Should not trigger: rest arguments are allowed\n    variadic: (..._args: ReadonlyArray<string>) => Effect.void,\n\n    // Should not trigger: required arguments are allowed\n    byId: (id: string) => Effect.succeed(id)\n  })
+Location: 75:8 - 99:5
+Node: Effect.succeed({\n    // Should trigger: service member returns a zero-arg lazy Effect\n    load: () => Effect.succeed("value"),\n\n    // Should trigger: service member returns a zero-arg lazy Stream\n    watch: () => Stream.succeed(1),\n\n    // Should trigger: service member returns a zero-arg lazy Layer\n    live: () => layerValue,\n\n    // Should not trigger: generic lazy functions may need to construct type-dependent Effects\n    genericLoad: <A>() => Effect.succeed(null as A),\n\n    // Should not trigger: direct Effect values are allowed\n    program: Effect.void,\n\n    // Should not trigger: one optional argument is allowed\n    maybeLoad: (_?: void) => Effect.succeed("value"),\n\n    // Should not trigger: rest arguments are allowed\n    variadic: (..._args: ReadonlyArray<string>) => Effect.void,\n\n    // Should not trigger: required arguments are allowed\n    byId: (id: string) => Effect.succeed(id)\n  })
 Node Kind: KindCallExpression
 
-Subject: {\n    // Should trigger: service member returns a zero-arg lazy Effect\n    load: () => Effect.succeed("value"),\n\n    // Should trigger: service member returns a zero-arg lazy Stream\n    watch: () => Stream.succeed(1),\n\n    // Should trigger: service member returns a zero-arg lazy Layer\n    live: () => layerValue,\n\n    // Should not trigger: direct Effect values are allowed\n    program: Effect.void,\n\n    // Should not trigger: one optional argument is allowed\n    maybeLoad: (_?: void) => Effect.succeed("value"),\n\n    // Should not trigger: rest arguments are allowed\n    variadic: (..._args: ReadonlyArray<string>) => Effect.void,\n\n    // Should not trigger: required arguments are allowed\n    byId: (id: string) => Effect.succeed(id)\n  }
-Subject Type: { load: () => Effect<string, never, never>; watch: () => Stream<number, never, never>; live: () => Layer<string, never, never>; program: Effect<void, never, never>; maybeLoad: (_?: void | undefined) => Effect<string, never, never>; variadic: (..._args: readonly string[]) => Effect<void, never, never>; byId: (id: string) => Effect<string, never, never>; }
+Subject: {\n    // Should trigger: service member returns a zero-arg lazy Effect\n    load: () => Effect.succeed("value"),\n\n    // Should trigger: service member returns a zero-arg lazy Stream\n    watch: () => Stream.succeed(1),\n\n    // Should trigger: service member returns a zero-arg lazy Layer\n    live: () => layerValue,\n\n    // Should not trigger: generic lazy functions may need to construct type-dependent Effects\n    genericLoad: <A>() => Effect.succeed(null as A),\n\n    // Should not trigger: direct Effect values are allowed\n    program: Effect.void,\n\n    // Should not trigger: one optional argument is allowed\n    maybeLoad: (_?: void) => Effect.succeed("value"),\n\n    // Should not trigger: rest arguments are allowed\n    variadic: (..._args: ReadonlyArray<string>) => Effect.void,\n\n    // Should not trigger: required arguments are allowed\n    byId: (id: string) => Effect.succeed(id)\n  }
+Subject Type: { load: () => Effect<string, never, never>; watch: () => Stream<number, never, never>; live: () => Layer<string, never, never>; genericLoad: <A>() => Effect<A, never, never>; program: Effect<void, never, never>; maybeLoad: (_?: void | undefined) => Effect<string, never, never>; variadic: (..._args: readonly string[]) => Effect<void, never, never>; byId: (id: string) => Effect<string, never, never>; }
 
 Transformations (1):
   [0] kind: call
       callee: Effect.succeed
       args: (constant)
-      outType: Effect<{ load: () => Effect<string, never, never>; watch: () => Stream<number, never, never>; live: () => Layer<string, never, never>; program: Effect<void, never, never>; maybeLoad: (_?: void | undefined) => Effect<string, never, never>; variadic: (..._args: readonly string[]) => Effect<void, never, never>; byId: (id: string) => Effect<string, never, never>; }, never, never>
+      outType: Effect<{ load: () => Effect<string, never, never>; watch: () => Stream<number, never, never>; live: () => Layer<string, never, never>; genericLoad: <A>() => Effect<A, never, never>; program: Effect<void, never, never>; maybeLoad: (_?: void | undefined) => Effect<string, never, never>; variadic: (..._args: readonly string[]) => Effect<void, never, never>; byId: (id: string) => Effect<string, never, never>; }, never, never>
 
 === Piping Flow ===
-Location: 71:16 - 71:40
+Location: 77:16 - 77:40
 Node: Effect.succeed("value")
 Node Kind: KindCallExpression
 
@@ -85,7 +99,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 74:17 - 74:35
+Location: 80:17 - 80:35
 Node: Stream.succeed(1)
 Node Kind: KindCallExpression
 
@@ -99,7 +113,21 @@ Transformations (1):
       outType: Stream<number, never, never>
 
 === Piping Flow ===
-Location: 83:29 - 83:53
+Location: 86:26 - 86:52
+Node: Effect.succeed(null as A)
+Node Kind: KindCallExpression
+
+Subject: null as A
+Subject Type: A
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<A, never, never>
+
+=== Piping Flow ===
+Location: 92:29 - 92:53
 Node: Effect.succeed("value")
 Node Kind: KindCallExpression
 
@@ -113,7 +141,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 89:26 - 89:45
+Location: 98:26 - 98:45
 Node: Effect.succeed(id)
 Node Kind: KindCallExpression
 

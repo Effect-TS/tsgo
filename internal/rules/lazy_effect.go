@@ -187,6 +187,9 @@ func lazyEffectLikeTypeName(c *checker.Checker, tp *typeparser.TypeParser, t *ch
 	}
 
 	sig := callSignatures[0]
+	if len(sig.TypeParameters()) != 0 {
+		return "", false
+	}
 	if len(sig.Parameters()) != 0 {
 		return "", false
 	}

@@ -16,27 +16,27 @@
   Fix 0: "Disable lazyEffect for this line"
   Fix 1: "Disable lazyEffect for entire file"
 
-[D5] (51:3-51:7) TS377091: Interface 'RepoShape' member 'load' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+[D5] (54:3-54:7) TS377091: Interface 'RepoShape' member 'load' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
   Fix 0: "Disable lazyEffect for this line"
   Fix 1: "Disable lazyEffect for entire file"
 
-[D6] (54:3-54:8) TS377091: Interface 'RepoShape' member 'watch' returns a lazy Stream. Stream is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+[D6] (57:3-57:8) TS377091: Interface 'RepoShape' member 'watch' returns a lazy Stream. Stream is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
   Fix 0: "Disable lazyEffect for this line"
   Fix 1: "Disable lazyEffect for entire file"
 
-[D7] (57:3-57:7) TS377091: Interface 'RepoShape' member 'live' returns a lazy Layer. Layer is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+[D7] (60:3-60:7) TS377091: Interface 'RepoShape' member 'live' returns a lazy Layer. Layer is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
   Fix 0: "Disable lazyEffect for this line"
   Fix 1: "Disable lazyEffect for entire file"
 
-[D8] (68:14-68:18) TS377091: Service 'Repo' member 'live' returns a lazy Layer. Layer is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+[D8] (74:14-74:18) TS377091: Service 'Repo' member 'live' returns a lazy Layer. Layer is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
   Fix 0: "Disable lazyEffect for this line"
   Fix 1: "Disable lazyEffect for entire file"
 
-[D9] (68:14-68:18) TS377091: Service 'Repo' member 'load' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+[D9] (74:14-74:18) TS377091: Service 'Repo' member 'load' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
   Fix 0: "Disable lazyEffect for this line"
   Fix 1: "Disable lazyEffect for entire file"
 
-[D10] (68:14-68:18) TS377091: Service 'Repo' member 'watch' returns a lazy Stream. Stream is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+[D10] (74:14-74:18) TS377091: Service 'Repo' member 'watch' returns a lazy Stream. Stream is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
   Fix 0: "Disable lazyEffect for this line"
   Fix 1: "Disable lazyEffect for entire file"
 
