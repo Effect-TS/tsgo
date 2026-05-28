@@ -182,7 +182,7 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
 
 ### Relationship to Official TypeScript-Go (`tsgo`)
 
-Effect-tsgo is a **superset** of the official [TypeScript-Go](https://github.com/nicolo-ribaudo/TypeScript-Go) — it embeds a pinned version of `tsgo` with a small patch set on top and adds the Effect language service. This means `effect-tsgo` provides all standard TypeScript-Go functionality plus Effect-specific diagnostics, quick fixes, and refactors.
+Effect-tsgo is a **superset** of the official [TypeScript-Go](https://github.com/microsoft/TypeScript-Go) — it embeds a pinned version of `tsgo` with a small patch set on top and adds the Effect language service. This means `effect-tsgo` provides all standard TypeScript-Go functionality plus Effect-specific diagnostics, quick fixes, and refactors.
 
 **Use `effect-tsgo` instead of `tsgo`, not alongside it.** Running both in parallel will produce duplicate diagnostics and degrade editor performance. Configure your editor to use `effect-tsgo` as your sole TypeScript language server.
 
