@@ -1,5 +1,11 @@
 # @effect/tsgo
 
+## 0.13.0
+
+### Minor Changes
+
+- 5c766f1: Add the `redundantOrDie` diagnostic, which suggests hoisting repeated trailing `Effect.orDie` calls from every yielded effect to the generator result.
+
 ## 0.12.0
 
 ### Minor Changes
