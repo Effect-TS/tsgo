@@ -1,4 +1,7 @@
 {
+  "ExtraMethods": {
+    "LanguageService": ["getQuickInfoAndDocumentationForSymbol"]
+  },
   "ExtraFields": {
     "LanguageService": ["converters"]
   }

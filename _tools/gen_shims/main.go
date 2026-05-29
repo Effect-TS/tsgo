@@ -67,6 +67,7 @@ func main() {
 		"ls/lsutil",
 		"lsp",
 		"lsp/lsproto",
+		"module",
 		"modulespecifiers",
 		"packagejson",
 		"parser",

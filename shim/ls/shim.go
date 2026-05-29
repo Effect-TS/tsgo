@@ -83,6 +83,8 @@ const KeywordCompletionFiltersTypeAssertionKeywords = ls.KeywordCompletionFilter
 const KeywordCompletionFiltersTypeKeyword = ls.KeywordCompletionFiltersTypeKeyword
 const KeywordCompletionFiltersTypeKeywords = ls.KeywordCompletionFiltersTypeKeywords
 type LanguageService = ls.LanguageService
+//go:linkname LanguageService_getQuickInfoAndDocumentationForSymbol github.com/microsoft/typescript-go/internal/ls.(*LanguageService).getQuickInfoAndDocumentationForSymbol
+func LanguageService_getQuickInfoAndDocumentationForSymbol(recv *ls.LanguageService, c *checker.Checker, symbol *ast.Symbol, node *ast.Node, contentFormat lsproto.MarkupKind, vc *checker.VerbosityContext) (string, string)
 type extra_LanguageService struct {
   projectPath tspath.Path
   host ls.Host

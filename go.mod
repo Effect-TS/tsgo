@@ -23,6 +23,7 @@ replace (
 	github.com/microsoft/typescript-go/shim/ls/lsutil => ./shim/ls/lsutil
 	github.com/microsoft/typescript-go/shim/lsp => ./shim/lsp
 	github.com/microsoft/typescript-go/shim/lsp/lsproto => ./shim/lsp/lsproto
+	github.com/microsoft/typescript-go/shim/module => ./shim/module
 	github.com/microsoft/typescript-go/shim/modulespecifiers => ./shim/modulespecifiers
 	github.com/microsoft/typescript-go/shim/packagejson => ./shim/packagejson
 	github.com/microsoft/typescript-go/shim/parser => ./shim/parser
@@ -62,6 +63,7 @@ require (
 	github.com/microsoft/typescript-go/shim/ls/lsconv v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/ls/lsutil v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/lsp/lsproto v0.0.0-00010101000000-000000000000
+	github.com/microsoft/typescript-go/shim/module v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/modulespecifiers v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/packagejson v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/parser v0.0.0-00010101000000-000000000000

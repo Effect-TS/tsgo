@@ -21,6 +21,7 @@ use (
 	./shim/ls/lsutil
 	./shim/lsp
 	./shim/lsp/lsproto
+	./shim/module
 	./shim/modulespecifiers
 	./shim/packagejson
 	./shim/parser
