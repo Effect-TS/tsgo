@@ -1,0 +1,13 @@
+flowchart TB
+  0((("type: Effect#lt;string, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  yield* first.pipe#40;Effect.orDie#41;#92;n#92;n  return yield* second.pipe#40;Effect.orDie#41;#92;n#125;#41;")))
+  1[/"type: string<br/>node: yield* second.pipe#40;Effect.orDie#41;"/]
+  2[/"type: Effect#lt;string, unknown, never#gt;<br/>node: second"/]
+  3["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.orDie<br/>args: #91;#93;"]
+  4[/"type: Effect#lt;number, unknown, never#gt;<br/>node: first"/]
+  5["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.orDie<br/>args: #91;#93;"]
+  2 -->|"kind: pipe"| 3
+  3 -->|"kind: usedBy"| 1
+  1 -->|"kind: potentialReturn"| 0
+  4 -->|"kind: pipe"| 5
+  5 -->|"kind: yieldable"| 0
+  3 -->|"kind: yieldable"| 0

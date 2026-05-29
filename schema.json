@@ -1964,6 +1964,11 @@
           "default": "suggestion",
           "description": "Suggests hoisting a repeated trailing Effect.mapError from every yield in an Effect generator"
         },
+        "redundantOrDie": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests hoisting a repeated trailing Effect.orDie from every yield in an Effect generator"
+        },
         "redundantSchemaTagIdentifier": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",

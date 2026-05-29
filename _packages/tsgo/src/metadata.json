@@ -1697,6 +1697,31 @@
       }
     },
     {
+      "name": "redundantOrDie",
+      "group": "style",
+      "description": "Suggests hoisting a repeated trailing Effect.orDie from every yield in an Effect generator",
+      "defaultSeverity": "suggestion",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377096,
+        377097
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const first: Effect.Effect\u003cnumber, unknown\u003e\ndeclare const second: Effect.Effect\u003cstring, unknown\u003e\n\nexport const program = Effect.gen(function*() {\n  yield* first.pipe(Effect.orDie)\n\n  return yield* second.pipe(Effect.orDie)\n})\n",
+        "diagnostics": [
+          {
+            "start": 173,
+            "end": 182,
+            "text": "This generator applies `Effect.orDie` to every yielded effect. Hoist it once to the generator result: `Effect.gen(...).pipe(Effect.orDie)`, or `Effect.fn(function*(){ ... }, Effect.orDie)`. effect(redundantOrDie)"
+          }
+        ]
+      }
+    },
+    {
       "name": "redundantSchemaTagIdentifier",
       "group": "style",
       "description": "Suggests removing redundant identifier argument when it equals the tag value in Schema.TaggedClass/TaggedError/TaggedRequest",

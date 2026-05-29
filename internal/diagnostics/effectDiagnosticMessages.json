@@ -359,6 +359,14 @@
         "category": "Suggestion",
         "code": 377089
     },
+    "This generator applies `Effect.orDie` to every yielded effect. Hoist it once to the generator result: `Effect.gen(...).pipe(Effect.orDie)`, or `Effect.fn(function*(){ ... }, Effect.orDie)`. effect(redundantOrDie)": {
+        "category": "Suggestion",
+        "code": 377096
+    },
+    "This repeated `Effect.orDie` site participates in the hoistable generator-wide `orDie`. effect(redundantOrDie)": {
+        "category": "Suggestion",
+        "code": 377097
+    },
     "This `typeof ... .Type` query can be replaced with `{0}`. effect(unnecessaryTypeofType)": {
         "category": "Suggestion",
         "code": 377090

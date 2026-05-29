@@ -68,6 +68,7 @@ var All = []rule.Rule{
 	LazyPromiseInEffectSync,
 	NestedEffectGenYield,
 	RedundantMapError,
+	RedundantOrDie,
 	UnnecessaryArrowBlock,
 	UnnecessaryTypeofType,
 	InstanceOfSchema,
