@@ -1,7 +1,7 @@
 ==== /.src/catchAllToMapError_effectFn.ts (12 flows) ====
 
 === Piping Flow ===
-Location: 10:36 - 12:70
+Location: 11:36 - 13:70
 Node: Effect.fn(function*() {\n  return yield* Effect.fail("error")\n}, Effect.catchAll((cause) => Effect.fail(new MyErrorTagged(cause))))
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: Effect<never, MyErrorTagged, never>
 
 === Piping Flow ===
-Location: 11:16 - 11:37
+Location: 12:16 - 12:37
 Node: Effect.fail("error")
 Node Kind: KindCallExpression
 
@@ -29,7 +29,7 @@ Transformations (1):
       outType: Effect<never, string, never>
 
 === Piping Flow ===
-Location: 12:30 - 12:68
+Location: 13:30 - 13:68
 Node: Effect.fail(new MyErrorTagged(cause))
 Node Kind: KindCallExpression
 
@@ -43,7 +43,7 @@ Transformations (1):
       outType: Effect<never, MyErrorTagged, never>
 
 === Piping Flow ===
-Location: 14:42 - 16:70
+Location: 15:42 - 17:70
 Node: Effect.fn("traced")(function*() {\n  return yield* Effect.fail("error")\n}, Effect.catchAll((cause) => Effect.fail(new MyErrorTagged(cause))))
 Node Kind: KindCallExpression
 
@@ -57,7 +57,7 @@ Transformations (1):
       outType: Effect<never, MyErrorTagged, never>
 
 === Piping Flow ===
-Location: 15:16 - 15:37
+Location: 16:16 - 16:37
 Node: Effect.fail("error")
 Node Kind: KindCallExpression
 
@@ -71,7 +71,7 @@ Transformations (1):
       outType: Effect<never, string, never>
 
 === Piping Flow ===
-Location: 16:30 - 16:68
+Location: 17:30 - 17:68
 Node: Effect.fail(new MyErrorTagged(cause))
 Node Kind: KindCallExpression
 
@@ -85,7 +85,7 @@ Transformations (1):
       outType: Effect<never, MyErrorTagged, never>
 
 === Piping Flow ===
-Location: 18:44 - 20:70
+Location: 19:44 - 21:70
 Node: Effect.fnUntraced(function*() {\n  return yield* Effect.fail("error")\n}, Effect.catchAll((cause) => Effect.fail(new MyErrorTagged(cause))))
 Node Kind: KindCallExpression
 
@@ -99,7 +99,7 @@ Transformations (1):
       outType: Effect<never, MyErrorTagged, never>
 
 === Piping Flow ===
-Location: 19:16 - 19:37
+Location: 20:16 - 20:37
 Node: Effect.fail("error")
 Node Kind: KindCallExpression
 
@@ -113,7 +113,7 @@ Transformations (1):
       outType: Effect<never, string, never>
 
 === Piping Flow ===
-Location: 20:30 - 20:68
+Location: 21:30 - 21:68
 Node: Effect.fail(new MyErrorTagged(cause))
 Node Kind: KindCallExpression
 
@@ -127,7 +127,7 @@ Transformations (1):
       outType: Effect<never, MyErrorTagged, never>
 
 === Piping Flow ===
-Location: 23:39 - 25:46
+Location: 24:39 - 26:46
 Node: Effect.fn(function*() {\n  return yield* Effect.fail("error")\n}, Effect.catchAll(() => Effect.succeed(42)))
 Node Kind: KindCallExpression
 
@@ -141,7 +141,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 24:16 - 24:37
+Location: 25:16 - 25:37
 Node: Effect.fail("error")
 Node Kind: KindCallExpression
 
@@ -155,7 +155,7 @@ Transformations (1):
       outType: Effect<never, string, never>
 
 === Piping Flow ===
-Location: 25:25 - 25:44
+Location: 26:25 - 26:44
 Node: Effect.succeed(42)
 Node Kind: KindCallExpression
 

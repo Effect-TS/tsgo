@@ -370,5 +370,9 @@
     "This `catchTag` transformation is part of a consecutive chain that can be collapsed into `catchTags`. effect(multipleCatchTag)": {
         "category": "Suggestion",
         "code": 377093
+    },
+    "`Effect.orElseSucceed` expresses the same recovery more directly than `Effect.{0}` followed by `Effect.succeed`. effect(catchToOrElseSucceed)": {
+        "category": "Suggestion",
+        "code": 377095
     }
 }

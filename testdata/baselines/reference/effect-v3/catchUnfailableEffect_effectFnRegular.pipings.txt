@@ -1,7 +1,7 @@
 ==== /.src/catchUnfailableEffect_effectFnRegular.ts (7 flows) ====
 
 === Piping Flow ===
-Location: 5:43 - 8:2
+Location: 6:43 - 9:2
 Node: Effect.fn(\n  () => Effect.succeed(42),\n  Effect.catchAll(() => Effect.void)\n)
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: Effect<void | number, never, never>
 
 === Piping Flow ===
-Location: 6:8 - 6:27
+Location: 7:8 - 7:27
 Node: Effect.succeed(42)
 Node Kind: KindCallExpression
 
@@ -29,7 +29,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 10:46 - 13:2
+Location: 11:46 - 14:2
 Node: Effect.fn(\n  () => Effect.fail("error"),\n  Effect.catchAll(() => Effect.succeed(42))\n)
 Node Kind: KindCallExpression
 
@@ -43,7 +43,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 11:8 - 11:29
+Location: 12:8 - 12:29
 Node: Effect.fail("error")
 Node Kind: KindCallExpression
 
@@ -57,7 +57,7 @@ Transformations (1):
       outType: Effect<never, string, never>
 
 === Piping Flow ===
-Location: 12:24 - 12:43
+Location: 13:24 - 13:43
 Node: Effect.succeed(42)
 Node Kind: KindCallExpression
 
@@ -71,7 +71,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 15:49 - 18:2
+Location: 16:49 - 19:2
 Node: Effect.fn("traced")(\n  () => Effect.succeed(42),\n  Effect.catchAll(() => Effect.void)\n)
 Node Kind: KindCallExpression
 
@@ -85,7 +85,7 @@ Transformations (1):
       outType: Effect<void | number, never, never>
 
 === Piping Flow ===
-Location: 16:8 - 16:27
+Location: 17:8 - 17:27
 Node: Effect.succeed(42)
 Node Kind: KindCallExpression
 

@@ -1,12 +1,13 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/catchAllToMapError_effectFn.ts(11,4): suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
-/.src/catchAllToMapError_effectFn.ts(15,4): suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
-/.src/catchAllToMapError_effectFn.ts(19,4): suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
+/.src/catchAllToMapError_effectFn.ts(12,4): suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
+/.src/catchAllToMapError_effectFn.ts(16,4): suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
+/.src/catchAllToMapError_effectFn.ts(20,4): suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
 
 
 ==== /.src/catchAllToMapError_effectFn.ts (3 errors) ====
+    // @effect-diagnostics catchToOrElseSucceed:off
     import { Effect } from "effect"
     
     class MyErrorTagged {

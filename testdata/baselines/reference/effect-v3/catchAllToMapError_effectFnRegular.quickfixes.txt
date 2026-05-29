@@ -1,11 +1,11 @@
 === Quick Fix Inventory ===
 
-[D1] (12:3-12:18) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
+[D1] (13:3-13:18) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
   Fix 0: "Disable catchAllToMapError for this line"
   Fix 1: "Disable catchAllToMapError for entire file"
   Fix 2: "Replace with Effect.mapError"
 
-[D2] (17:3-17:18) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
+[D2] (18:3-18:18) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
   Fix 0: "Disable catchAllToMapError for this line"
   Fix 1: "Disable catchAllToMapError for entire file"
   Fix 2: "Replace with Effect.mapError"
@@ -22,6 +22,7 @@ skipped by default
 
 --- file:///.src/catchAllToMapError_effectFnRegular.ts ---
 // @effect-v3
+// @effect-diagnostics catchToOrElseSucceed:off
 import * as Effect from "effect/Effect"
 
 class MyErrorTagged {
@@ -57,6 +58,7 @@ skipped by default
 
 --- file:///.src/catchAllToMapError_effectFnRegular.ts ---
 // @effect-v3
+// @effect-diagnostics catchToOrElseSucceed:off
 import * as Effect from "effect/Effect"
 
 class MyErrorTagged {

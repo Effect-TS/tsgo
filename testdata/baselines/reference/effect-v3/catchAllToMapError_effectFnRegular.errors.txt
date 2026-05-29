@@ -1,12 +1,13 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/catchAllToMapError_effectFnRegular.ts(12,3): suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
-/.src/catchAllToMapError_effectFnRegular.ts(17,3): suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
+/.src/catchAllToMapError_effectFnRegular.ts(13,3): suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
+/.src/catchAllToMapError_effectFnRegular.ts(18,3): suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
 
 
 ==== /.src/catchAllToMapError_effectFnRegular.ts (2 errors) ====
     // @effect-v3
+    // @effect-diagnostics catchToOrElseSucceed:off
     import * as Effect from "effect/Effect"
     
     class MyErrorTagged {

@@ -1,7 +1,7 @@
 ==== /.src/catchUnfailableEffect.ts (16 flows) ====
 
 === Piping Flow ===
-Location: 5:28 - 7:2
+Location: 6:28 - 8:2
 Node: Effect.succeed(42).pipe(\n  Effect.catchAll(() => Effect.void) // <- should report here\n)
 Node Kind: KindCallExpression
 
@@ -19,7 +19,7 @@ Transformations (2):
       outType: Effect<void | number, never, never>
 
 === Piping Flow ===
-Location: 9:31 - 11:2
+Location: 10:31 - 12:2
 Node: Effect.fail("error").pipe(\n  Effect.catchAll(() => Effect.succeed(42))\n)
 Node Kind: KindCallExpression
 
@@ -37,7 +37,7 @@ Transformations (2):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 10:24 - 10:43
+Location: 11:24 - 11:43
 Node: Effect.succeed(42)
 Node Kind: KindCallExpression
 
@@ -51,7 +51,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 13:32 - 16:2
+Location: 14:32 - 17:2
 Node: pipe(\n  Effect.succeed(42),\n  Effect.catchAll(() => Effect.void) // <- should report here\n)
 Node Kind: KindCallExpression
 
@@ -69,7 +69,7 @@ Transformations (2):
       outType: Effect<void | number, never, never>
 
 === Piping Flow ===
-Location: 18:35 - 21:2
+Location: 19:35 - 22:2
 Node: pipe(\n  Effect.fail("error"),\n  Effect.catchAll(() => Effect.succeed(42)) // <- should not report here\n)
 Node Kind: KindCallExpression
 
@@ -87,7 +87,7 @@ Transformations (2):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 20:24 - 20:43
+Location: 21:24 - 21:43
 Node: Effect.succeed(42)
 Node Kind: KindCallExpression
 
@@ -101,7 +101,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 23:37 - 26:2
+Location: 24:37 - 27:2
 Node: Effect.succeed(42).pipe(\n  Effect.flatMap(() => Effect.fail("error")),\n  Effect.catchAll(() => Effect.succeed(42)) // <- should not report here\n)
 Node Kind: KindCallExpression
 
@@ -123,7 +123,7 @@ Transformations (3):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 24:23 - 24:44
+Location: 25:23 - 25:44
 Node: Effect.fail("error")
 Node Kind: KindCallExpression
 
@@ -137,7 +137,7 @@ Transformations (1):
       outType: Effect<never, string, never>
 
 === Piping Flow ===
-Location: 25:24 - 25:43
+Location: 26:24 - 26:43
 Node: Effect.succeed(42)
 Node Kind: KindCallExpression
 
@@ -151,7 +151,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 28:44 - 32:2
+Location: 29:44 - 33:2
 Node: pipe(\n  Effect.succeed(42),\n  Effect.flatMap(() => Effect.fail("error")),\n  Effect.catchAll(() => Effect.succeed(42)) // <- should not report here\n)
 Node Kind: KindCallExpression
 
@@ -173,7 +173,7 @@ Transformations (3):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 30:23 - 30:44
+Location: 31:23 - 31:44
 Node: Effect.fail("error")
 Node Kind: KindCallExpression
 
@@ -187,7 +187,7 @@ Transformations (1):
       outType: Effect<never, string, never>
 
 === Piping Flow ===
-Location: 31:24 - 31:43
+Location: 32:24 - 32:43
 Node: Effect.succeed(42)
 Node Kind: KindCallExpression
 
@@ -201,7 +201,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 34:41 - 38:2
+Location: 35:41 - 39:2
 Node: pipe(\n  Effect.succeed(42),\n  Effect.flatMap(() => Effect.void),\n  Effect.catchAll(() => Effect.succeed(42)) // <- should report here\n)
 Node Kind: KindCallExpression
 
@@ -223,7 +223,7 @@ Transformations (3):
       outType: Effect<void | number, never, never>
 
 === Piping Flow ===
-Location: 37:24 - 37:43
+Location: 38:24 - 38:43
 Node: Effect.succeed(42)
 Node Kind: KindCallExpression
 
@@ -237,7 +237,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 40:37 - 43:2
+Location: 41:37 - 44:2
 Node: Effect.catchAll(\n  Effect.never,\n  () => Effect.log("error") // <- should report here\n)
 Node Kind: KindCallExpression
 
@@ -251,7 +251,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 42:8 - 42:28
+Location: 43:8 - 43:28
 Node: Effect.log("error")
 Node Kind: KindCallExpression
 

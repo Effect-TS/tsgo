@@ -1386,6 +1386,30 @@
       }
     },
     {
+      "name": "catchToOrElseSucceed",
+      "group": "style",
+      "description": "Suggests using Effect.orElseSucceed instead of Effect.catch + Effect.succeed",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377095
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport const program = Effect.fail(\"error\").pipe(\n  Effect.catch(() =\u003e Effect.succeed(42))\n)\n",
+        "diagnostics": [
+          {
+            "start": 85,
+            "end": 97,
+            "text": "`Effect.orElseSucceed` expresses the same recovery more directly than `Effect.catch` followed by `Effect.succeed`. effect(catchToOrElseSucceed)"
+          }
+        ]
+      }
+    },
+    {
       "name": "deterministicKeys",
       "group": "style",
       "description": "Enforces deterministic naming for service/tag/error identifiers based on class names",

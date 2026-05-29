@@ -1,18 +1,18 @@
 === Quick Fix Inventory ===
 
-[D1] (6:3-6:18) TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
+[D1] (7:3-7:18) TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
   Fix 0: "Disable catchUnfailableEffect for this line"
   Fix 1: "Disable catchUnfailableEffect for entire file"
 
-[D2] (15:3-15:18) TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
+[D2] (16:3-16:18) TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
   Fix 0: "Disable catchUnfailableEffect for this line"
   Fix 1: "Disable catchUnfailableEffect for entire file"
 
-[D3] (37:3-37:18) TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
+[D3] (38:3-38:18) TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
   Fix 0: "Disable catchUnfailableEffect for this line"
   Fix 1: "Disable catchUnfailableEffect for entire file"
 
-[D4] (40:38-40:53) TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
+[D4] (41:38-41:53) TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
   Fix 0: "Disable catchUnfailableEffect for this line"
   Fix 1: "Disable catchUnfailableEffect for entire file"
 

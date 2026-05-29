@@ -15,6 +15,7 @@ var All = []fixable.Fixable{
 	MissingReturnYieldStarFix,
 	MissingStarInYieldEffectGenFix,
 	CatchAllToMapErrorFix,
+	CatchToOrElseSucceedFix,
 	EffectFnIifeFix,
 	UnnecessaryPipeFix,
 	UnnecessaryPipeChainFix,

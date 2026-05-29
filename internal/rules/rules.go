@@ -15,6 +15,7 @@ var All = []rule.Rule{
 	MissingStarInYieldEffectGen,
 	CatchUnfailableEffect,
 	CatchAllToMapError,
+	CatchToOrElseSucceed,
 	MultipleCatchTag,
 	EffectFnIife,
 	TryCatchInEffectGen,

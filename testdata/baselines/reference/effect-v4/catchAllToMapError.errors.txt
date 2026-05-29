@@ -1,14 +1,15 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/catchAllToMapError.ts(15,3): suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
-/.src/catchAllToMapError.ts(20,3): suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
-/.src/catchAllToMapError.ts(28,3): suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
-/.src/catchAllToMapError.ts(33,3): suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
-/.src/catchAllToMapError.ts(62,3): suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
+/.src/catchAllToMapError.ts(16,3): suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
+/.src/catchAllToMapError.ts(21,3): suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
+/.src/catchAllToMapError.ts(29,3): suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
+/.src/catchAllToMapError.ts(34,3): suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
+/.src/catchAllToMapError.ts(63,3): suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
 
 
 ==== /.src/catchAllToMapError.ts (5 errors) ====
+    // @effect-diagnostics catchToOrElseSucceed:off
     import { Effect, pipe } from "effect"
     
     class MyErrorTagged {

@@ -1679,6 +1679,11 @@
           "default": "suggestion",
           "description": "Suggests using Effect.mapError instead of Effect.catch + Effect.fail"
         },
+        "catchToOrElseSucceed": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests using Effect.orElseSucceed instead of Effect.catch + Effect.succeed"
+        },
         "catchUnfailableEffect": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
@@ -1913,6 +1918,11 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
           "description": "Warns when constructing promises with new Promise instead of using Effect APIs"
+        },
+        "newSchemaClass": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Suggests using Schema make instead of new for Schema classes"
         },
         "nodeBuiltinImport": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",

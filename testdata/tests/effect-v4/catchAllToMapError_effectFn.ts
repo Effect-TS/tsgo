@@ -1,3 +1,4 @@
+// @effect-diagnostics catchToOrElseSucceed:off
 import { Effect } from "effect"
 
 class MyErrorTagged {

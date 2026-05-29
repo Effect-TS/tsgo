@@ -1,4 +1,5 @@
 // @effect-v3
+// @effect-diagnostics catchToOrElseSucceed:off
 import * as Effect from "effect/Effect"
 
 // Effect.fn with regular (non-generator) function

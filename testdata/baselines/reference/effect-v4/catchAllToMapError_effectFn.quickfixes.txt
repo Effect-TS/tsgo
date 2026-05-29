@@ -1,16 +1,16 @@
 === Quick Fix Inventory ===
 
-[D1] (11:4-11:16) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
+[D1] (12:4-12:16) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
   Fix 0: "Disable catchAllToMapError for this line"
   Fix 1: "Disable catchAllToMapError for entire file"
   Fix 2: "Replace with Effect.mapError"
 
-[D2] (15:4-15:16) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
+[D2] (16:4-16:16) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
   Fix 0: "Disable catchAllToMapError for this line"
   Fix 1: "Disable catchAllToMapError for entire file"
   Fix 2: "Replace with Effect.mapError"
 
-[D3] (19:4-19:16) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
+[D3] (20:4-20:16) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
   Fix 0: "Disable catchAllToMapError for this line"
   Fix 1: "Disable catchAllToMapError for entire file"
   Fix 2: "Replace with Effect.mapError"
@@ -26,6 +26,7 @@ skipped by default
 === [D1] Fix 2: "Replace with Effect.mapError" ===
 
 --- file:///.src/catchAllToMapError_effectFn.ts ---
+// @effect-diagnostics catchToOrElseSucceed:off
 import { Effect } from "effect"
 
 class MyErrorTagged {
@@ -61,6 +62,7 @@ skipped by default
 === [D2] Fix 2: "Replace with Effect.mapError" ===
 
 --- file:///.src/catchAllToMapError_effectFn.ts ---
+// @effect-diagnostics catchToOrElseSucceed:off
 import { Effect } from "effect"
 
 class MyErrorTagged {
@@ -96,6 +98,7 @@ skipped by default
 === [D3] Fix 2: "Replace with Effect.mapError" ===
 
 --- file:///.src/catchAllToMapError_effectFn.ts ---
+// @effect-diagnostics catchToOrElseSucceed:off
 import { Effect } from "effect"
 
 class MyErrorTagged {

@@ -1,26 +1,26 @@
 === Quick Fix Inventory ===
 
-[D1] (17:3-17:18) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
+[D1] (18:3-18:18) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
   Fix 0: "Disable catchAllToMapError for this line"
   Fix 1: "Disable catchAllToMapError for entire file"
   Fix 2: "Replace with Effect.mapError"
 
-[D2] (22:3-22:18) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
+[D2] (23:3-23:18) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
   Fix 0: "Disable catchAllToMapError for this line"
   Fix 1: "Disable catchAllToMapError for entire file"
   Fix 2: "Replace with Effect.mapError"
 
-[D3] (30:3-30:18) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
+[D3] (31:3-31:18) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
   Fix 0: "Disable catchAllToMapError for this line"
   Fix 1: "Disable catchAllToMapError for entire file"
   Fix 2: "Replace with Effect.mapError"
 
-[D4] (35:3-35:18) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
+[D4] (36:3-36:18) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
   Fix 0: "Disable catchAllToMapError for this line"
   Fix 1: "Disable catchAllToMapError for entire file"
   Fix 2: "Replace with Effect.mapError"
 
-[D5] (64:3-64:18) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
+[D5] (65:3-65:18) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
   Fix 0: "Disable catchAllToMapError for this line"
   Fix 1: "Disable catchAllToMapError for entire file"
   Fix 2: "Replace with Effect.mapError"
@@ -37,6 +37,7 @@ skipped by default
 
 --- file:///.src/catchAllToMapError.ts ---
 // @effect-v3
+// @effect-diagnostics catchToOrElseSucceed:off
 import * as Effect from "effect/Effect"
 import { pipe } from "effect/Function"
 
@@ -113,6 +114,7 @@ skipped by default
 
 --- file:///.src/catchAllToMapError.ts ---
 // @effect-v3
+// @effect-diagnostics catchToOrElseSucceed:off
 import * as Effect from "effect/Effect"
 import { pipe } from "effect/Function"
 
@@ -189,6 +191,7 @@ skipped by default
 
 --- file:///.src/catchAllToMapError.ts ---
 // @effect-v3
+// @effect-diagnostics catchToOrElseSucceed:off
 import * as Effect from "effect/Effect"
 import { pipe } from "effect/Function"
 
@@ -265,6 +268,7 @@ skipped by default
 
 --- file:///.src/catchAllToMapError.ts ---
 // @effect-v3
+// @effect-diagnostics catchToOrElseSucceed:off
 import * as Effect from "effect/Effect"
 import { pipe } from "effect/Function"
 
@@ -341,6 +345,7 @@ skipped by default
 
 --- file:///.src/catchAllToMapError.ts ---
 // @effect-v3
+// @effect-diagnostics catchToOrElseSucceed:off
 import * as Effect from "effect/Effect"
 import { pipe } from "effect/Function"
 

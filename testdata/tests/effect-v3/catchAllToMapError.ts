@@ -1,4 +1,5 @@
 // @effect-v3
+// @effect-diagnostics catchToOrElseSucceed:off
 import * as Effect from "effect/Effect"
 import { pipe } from "effect/Function"
 
