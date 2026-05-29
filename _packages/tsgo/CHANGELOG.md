@@ -1,5 +1,11 @@
 # @effect/tsgo
 
+## 0.12.0
+
+### Minor Changes
+
+- 1d8c203: Add the `catchToOrElseSucceed` diagnostic, which suggests `Effect.orElseSucceed` for `Effect.catch(() => Effect.succeed(value))` in Effect v4 and `Effect.catchAll(() => Effect.succeed(value))` in Effect v3.
+
 ## 0.11.5
 
 ### Patch Changes
