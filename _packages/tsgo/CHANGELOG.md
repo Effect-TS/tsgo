@@ -1,5 +1,12 @@
 # @effect/tsgo
 
+## 0.13.1
+
+### Patch Changes
+
+- 6d2a846: Expose additional TypeScript-Go shims for module resolution and language service quick info documentation.
+- 227abe1: Update [`typescript-go`](https://github.com/microsoft/typescript-go/commit/fe932f69bf61cb1b1c22bd936663eb2c994e8a81) to commit `fe932f69bf61cb1b1c22bd936663eb2c994e8a81`.
+
 ## 0.13.0
 
 ### Minor Changes
