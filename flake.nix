@@ -7,7 +7,7 @@
     /* Source of truth: git submodule `typescript-go` commit.
        Keep in sync via `_tools/update-flake-vendor-hash.sh`. */
     typescript-go-src = {
-      url = "github:microsoft/typescript-go/73868c8588924d4d972782c9ea102b322d7f3212?submodules=1";
+      url = "github:microsoft/typescript-go/fe932f69bf61cb1b1c22bd936663eb2c994e8a81?submodules=1";
       flake = false;
     };
     /* Source of truth: typescript-go's `_submodules/TypeScript` commit.
@@ -46,7 +46,7 @@
        Refresh: ./_tools/update-flake-vendor-hash.sh
        Manual:  set to lib.fakeHash, build, copy the reported hash.
       */
-      vendorHash = "sha256-iEuzyArW0UWSlxKmfcV/QP4XVWQgwKhQamnCwDHKS0s=";
+      vendorHash = "sha256-oTd91EBSSmMjtpJhrUEiAKcsalXuHHkfSWdoYjQSB9k=";
       forAllSystems =
         f: lib.genAttrs supportedSystems (system: f system (import nixpkgs { inherit system; }));
     in
