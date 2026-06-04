@@ -1,5 +1,12 @@
 # @effect/tsgo
 
+## 0.13.2
+
+### Patch Changes
+
+- 9819ab5: Update `typescript-go` to commit `70b87f0321dea818af0a648809e2aaf06ec3f6a1` and refresh patches and generated shims for upstream API changes.
+- 2619351: Update [`typescript-go`](https://github.com/microsoft/typescript-go/commit/40f6707e0ae5474907c77bf25ec83c171a55df90) to commit `40f6707e0ae5474907c77bf25ec83c171a55df90`.
+
 ## 0.13.1
 
 ### Patch Changes
