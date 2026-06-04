@@ -3,7 +3,7 @@ import { Effect, Schema } from "effect"
 
 const Person = Schema.Struct({
   name: Schema.String,
-  age: Schema.Number
+  age: Schema.Finite
 })
 
 // Should trigger diagnostic - using decodeSync inside Effect.gen

@@ -3,7 +3,7 @@ import * as Schema from "effect/Schema"
 
 export class InvalidBecauseOfConstructor
   extends Schema.Class<InvalidBecauseOfConstructor>("InvalidBecauseOfConstructor")({
-    a: Schema.Number
+    a: Schema.Finite
   })
 {
   b: number

@@ -1,0 +1,22 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/schemaNumber_preview.ts(7,15): warning TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+/.src/schemaNumber_preview.ts(8,17): warning TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.FiniteFromString` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+
+
+==== /.src/schemaNumber_preview.ts (2 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics schemaNumber:warning
+    
+    import { Schema } from "effect"
+    
+    export const User = Schema.Struct({
+      age: Schema.Number,
+                  ~~~~~~
+!!! warning TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+      score: Schema.NumberFromString
+                    ~~~~~~~~~~~~~~~~
+!!! warning TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.FiniteFromString` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+    })
+    

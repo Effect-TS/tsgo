@@ -1,0 +1,1 @@
+/.src/schemaNumber.ts -> schemaNumber.flows.schemaNumber.mermaid

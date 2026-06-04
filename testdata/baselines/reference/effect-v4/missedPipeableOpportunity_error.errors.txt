@@ -23,8 +23,8 @@ Effect version: 4.0.0
     import * as Effect from "effect/Effect"
     
     const MyStruct = Schema.Struct({
-      x: Schema.Number,
-      y: Schema.Number
+      x: Schema.Finite,
+      y: Schema.Finite
     })
     
     export const shouldNotTrigger = identity(Schema.decodeEffect(MyStruct)({ x: 42, y: 42 }))

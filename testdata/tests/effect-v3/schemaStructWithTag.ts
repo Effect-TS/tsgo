@@ -5,16 +5,16 @@ import * as Schema from "effect/Schema"
 export const User = Schema.Struct({
   _tag: Schema.Literal("User"), // <- this is the tag
   name: Schema.String,
-  age: Schema.Number
+  age: Schema.Finite
 })
 
 // so it can be rewritten as follows
 export const UserWithTag = Schema.TaggedStruct("User", {
   name: Schema.String,
-  age: Schema.Number
+  age: Schema.Finite
 })
 
 export const OtherWithoutTag = Schema.Struct({
   name: Schema.String,
-  age: Schema.Number
-})
+  age: Schema.Finite
+})

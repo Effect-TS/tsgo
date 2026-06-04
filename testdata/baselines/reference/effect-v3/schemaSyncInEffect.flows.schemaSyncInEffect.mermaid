@@ -1,5 +1,5 @@
 flowchart TB
-  0[/"type: Struct#lt;#123; name: typeof String$; age: typeof Number$; #125;#gt;<br/>node: Schema.Struct#40;#123;#92;n  name: Schema.String,#92;n  age: Schema.Number#92;n#125;#41;"/]
+  0[/"type: Struct#lt;#123; name: typeof String$; age: typeof Finite; #125;#gt;<br/>node: Schema.Struct#40;#123;#92;n  name: Schema.String,#92;n  age: Schema.Finite#92;n#125;#41;"/]
   1((("type: Effect#lt;#123; readonly name: string; readonly age: number; #125;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const input = yield* Effect.succeed#40;#123; name: #quot;John#quot;, age: 30 #125;#41;#92;n  const person = Schema.decodeSync#40;Person#41;#40;input#41;#92;n  //             ^- should suggest using Schema.decode instead#92;n  return person#92;n#125;#41;")))
   2[/"type: #123; readonly name: string; readonly age: number; #125;<br/>node: person"/]
   3[/"type: #123; name: string; age: number; #125;<br/>node: #123; name: #quot;John#quot;, age: 30 #125;"/]

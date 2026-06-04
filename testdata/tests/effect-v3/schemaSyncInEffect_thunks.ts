@@ -5,7 +5,7 @@ class ExampleError extends Data.TaggedError("ExampleError")<{}> {}
 
 const Person = Schema.Struct({
   name: Schema.String,
-  age: Schema.Number
+  age: Schema.Finite
 })
 
 export const decodeInSync = Effect.sync(() => Schema.decodeSync(Person)({ name: "John", age: 30 }))

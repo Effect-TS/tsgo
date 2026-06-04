@@ -1,5 +1,5 @@
 flowchart TB
-  0[/"type: Struct#lt;#123; x: typeof Number$; y: typeof Number$; #125;#gt;<br/>node: Schema.Struct#40;#123;#92;n  x: Schema.Number,#92;n  y: Schema.Number#92;n#125;#41;"/]
+  0[/"type: Struct#lt;#123; x: typeof Finite; y: typeof Finite; #125;#gt;<br/>node: Schema.Struct#40;#123;#92;n  x: Schema.Finite,#92;n  y: Schema.Finite#92;n#125;#41;"/]
   1[/"type: Effect#lt;#123; readonly x: number; readonly y: number; #125;, ParseError, never#gt;<br/>node: Schema.decodeUnknown#40;MyStruct#41;#40;#123; x: 42, y: 42 #125;#41;"/]
   2["type: Effect#lt;#123; readonly x: number; readonly y: number; #125;, ParseError, never#gt;<br/>callee: identity<br/>args: #91;#93;"]
   3[/"type: #lt;A#gt;#40;a: A#41; =#gt; A<br/>node: identity"/]

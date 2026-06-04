@@ -2,17 +2,17 @@
 
 === Piping Flow ===
 Location: 3:15 - 6:3
-Node: Schema.Struct({\n  name: Schema.String,\n  age: Schema.Number\n})
+Node: Schema.Struct({\n  name: Schema.String,\n  age: Schema.Finite\n})
 Node Kind: KindCallExpression
 
-Subject: {\n  name: Schema.String,\n  age: Schema.Number\n}
-Subject Type: { name: String; age: Number; }
+Subject: {\n  name: Schema.String,\n  age: Schema.Finite\n}
+Subject Type: { name: String; age: Finite; }
 
 Transformations (1):
   [0] kind: call
       callee: Schema.Struct
       args: (constant)
-      outType: Struct<{ readonly name: String; readonly age: Number; }>
+      outType: Struct<{ readonly name: String; readonly age: Finite; }>
 
 === Piping Flow ===
 Location: 9:24 - 14:3

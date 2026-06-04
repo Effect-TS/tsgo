@@ -15,7 +15,7 @@ Effect version: 3.19.19
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       name: Schema.String,
     ~~~~~~~~~~~~~~~~~~~~~~
-      age: Schema.Number
+      age: Schema.Finite
     ~~~~~~~~~~~~~~~~~~~~
     })
     ~~
@@ -24,10 +24,11 @@ Effect version: 3.19.19
     // so it can be rewritten as follows
     export const UserWithTag = Schema.TaggedStruct("User", {
       name: Schema.String,
-      age: Schema.Number
+      age: Schema.Finite
     })
     
     export const OtherWithoutTag = Schema.Struct({
       name: Schema.String,
-      age: Schema.Number
+      age: Schema.Finite
     })
+    

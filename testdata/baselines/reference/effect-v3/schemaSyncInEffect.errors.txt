@@ -14,7 +14,7 @@ Effect version: 3.19.19
     
     const Person = Schema.Struct({
       name: Schema.String,
-      age: Schema.Number
+      age: Schema.Finite
     })
     
     // Should trigger diagnostic - using decodeSync inside Effect.gen

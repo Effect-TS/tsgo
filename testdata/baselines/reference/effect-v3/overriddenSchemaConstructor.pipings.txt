@@ -2,45 +2,45 @@
 
 === Piping Flow ===
 Location: 4:27 - 6:3
-Node: Schema.Class<Valid>("Valid")({\n  a: Schema.Number\n})
+Node: Schema.Class<Valid>("Valid")({\n  a: Schema.Finite\n})
 Node Kind: KindCallExpression
 
-Subject: {\n  a: Schema.Number\n}
-Subject Type: { a: typeof Number$; }
+Subject: {\n  a: Schema.Finite\n}
+Subject Type: { a: typeof Finite; }
 
 Transformations (1):
   [0] kind: call
       callee: Schema.Class<Valid>("Valid")
       args: (constant)
-      outType: Class<Valid, { a: typeof Number$; }, Encoded<{ a: typeof Number$; }>, never, { readonly a: number; }, {}, {}>
+      outType: Class<Valid, { a: typeof Finite; }, Encoded<{ a: typeof Finite; }>, never, { readonly a: number; }, {}, {}>
 
 === Piping Flow ===
 Location: 8:28 - 10:3
-Node: Schema.Class<Valid2>("Valid")({\n  a: Schema.Number\n})
+Node: Schema.Class<Valid2>("Valid")({\n  a: Schema.Finite\n})
 Node Kind: KindCallExpression
 
-Subject: {\n  a: Schema.Number\n}
-Subject Type: { a: typeof Number$; }
+Subject: {\n  a: Schema.Finite\n}
+Subject Type: { a: typeof Finite; }
 
 Transformations (1):
   [0] kind: call
       callee: Schema.Class<Valid2>("Valid")
       args: (constant)
-      outType: Class<Valid2, { a: typeof Number$; }, Encoded<{ a: typeof Number$; }>, never, { readonly a: number; }, {}, {}>
+      outType: Class<Valid2, { a: typeof Finite; }, Encoded<{ a: typeof Finite; }>, never, { readonly a: number; }, {}, {}>
 
 === Piping Flow ===
 Location: 25:10 - 27:5
-Node: Schema.Class<InvalidBecauseOfConstructor>("InvalidBecauseOfConstructor")({\n    a: Schema.Number\n  })
+Node: Schema.Class<InvalidBecauseOfConstructor>("InvalidBecauseOfConstructor")({\n    a: Schema.Finite\n  })
 Node Kind: KindCallExpression
 
-Subject: {\n    a: Schema.Number\n  }
-Subject Type: { a: typeof Number$; }
+Subject: {\n    a: Schema.Finite\n  }
+Subject Type: { a: typeof Finite; }
 
 Transformations (1):
   [0] kind: call
       callee: Schema.Class<InvalidBecauseOfConstructor>("InvalidBecauseOfConstructor")
       args: (constant)
-      outType: Class<InvalidBecauseOfConstructor, { a: typeof Number$; }, Encoded<{ a: typeof Number$; }>, never, { readonly a: number; }, {}, {}>
+      outType: Class<InvalidBecauseOfConstructor, { a: typeof Finite; }, Encoded<{ a: typeof Finite; }>, never, { readonly a: number; }, {}, {}>
 
 === Piping Flow ===
 Location: 30:18 - 31:21

@@ -1,0 +1,187 @@
+=== Quick Fix Inventory ===
+
+[D1] (8:15-8:21) TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+  Fix 0: "Disable schemaNumber for this line"
+  Fix 1: "Disable schemaNumber for entire file"
+  Fix 2: "Replace with Schema.Finite"
+
+[D2] (9:17-9:33) TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.FiniteFromString` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+  Fix 0: "Disable schemaNumber for this line"
+  Fix 1: "Disable schemaNumber for entire file"
+  Fix 2: "Replace with Schema.FiniteFromString"
+
+[D3] (15:23-15:29) TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+  Fix 0: "Disable schemaNumber for this line"
+  Fix 1: "Disable schemaNumber for entire file"
+  Fix 2: "Replace with Schema.Finite"
+
+[D4] (16:23-16:39) TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.FiniteFromString` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+  Fix 0: "Disable schemaNumber for this line"
+  Fix 1: "Disable schemaNumber for entire file"
+  Fix 2: "Replace with Schema.FiniteFromString"
+
+[D5] (20:13-20:25) TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+  Fix 0: "Disable schemaNumber for this line"
+  Fix 1: "Disable schemaNumber for entire file"
+
+[D6] (21:11-21:27) TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.FiniteFromString` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+  Fix 0: "Disable schemaNumber for this line"
+  Fix 1: "Disable schemaNumber for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable schemaNumber for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable schemaNumber for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Schema.Finite" ===
+
+--- file:///.src/schemaNumber.ts ---
+// @effect-diagnostics schemaNumber:warning
+
+import { Schema } from "effect"
+import * as SchemaModule from "effect/Schema"
+import { Number as NumberSchema, NumberFromString } from "effect/Schema"
+
+export const user = Schema.Struct({
+  age: Schema.Finite,
+  score: Schema.NumberFromString,
+  height: Schema.Finite,
+  weight: Schema.FiniteFromString
+})
+
+export const product = SchemaModule.Struct({
+  price: SchemaModule.Number,
+  stock: SchemaModule.NumberFromString
+})
+
+export const direct = Schema.Struct({
+  quantity: NumberSchema,
+  amount: NumberFromString
+})
+
+// @effect-diagnostics-next-line schemaNumber:off
+export const intentionallyNonFinite = Schema.Number
+
+
+=== [D2] Fix 0: "Disable schemaNumber for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable schemaNumber for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Schema.FiniteFromString" ===
+
+--- file:///.src/schemaNumber.ts ---
+// @effect-diagnostics schemaNumber:warning
+
+import { Schema } from "effect"
+import * as SchemaModule from "effect/Schema"
+import { Number as NumberSchema, NumberFromString } from "effect/Schema"
+
+export const user = Schema.Struct({
+  age: Schema.Number,
+  score: Schema.FiniteFromString,
+  height: Schema.Finite,
+  weight: Schema.FiniteFromString
+})
+
+export const product = SchemaModule.Struct({
+  price: SchemaModule.Number,
+  stock: SchemaModule.NumberFromString
+})
+
+export const direct = Schema.Struct({
+  quantity: NumberSchema,
+  amount: NumberFromString
+})
+
+// @effect-diagnostics-next-line schemaNumber:off
+export const intentionallyNonFinite = Schema.Number
+
+
+=== [D3] Fix 0: "Disable schemaNumber for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable schemaNumber for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Schema.Finite" ===
+
+--- file:///.src/schemaNumber.ts ---
+// @effect-diagnostics schemaNumber:warning
+
+import { Schema } from "effect"
+import * as SchemaModule from "effect/Schema"
+import { Number as NumberSchema, NumberFromString } from "effect/Schema"
+
+export const user = Schema.Struct({
+  age: Schema.Number,
+  score: Schema.NumberFromString,
+  height: Schema.Finite,
+  weight: Schema.FiniteFromString
+})
+
+export const product = SchemaModule.Struct({
+  price: SchemaModule.Finite,
+  stock: SchemaModule.NumberFromString
+})
+
+export const direct = Schema.Struct({
+  quantity: NumberSchema,
+  amount: NumberFromString
+})
+
+// @effect-diagnostics-next-line schemaNumber:off
+export const intentionallyNonFinite = Schema.Number
+
+
+=== [D4] Fix 0: "Disable schemaNumber for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable schemaNumber for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Schema.FiniteFromString" ===
+
+--- file:///.src/schemaNumber.ts ---
+// @effect-diagnostics schemaNumber:warning
+
+import { Schema } from "effect"
+import * as SchemaModule from "effect/Schema"
+import { Number as NumberSchema, NumberFromString } from "effect/Schema"
+
+export const user = Schema.Struct({
+  age: Schema.Number,
+  score: Schema.NumberFromString,
+  height: Schema.Finite,
+  weight: Schema.FiniteFromString
+})
+
+export const product = SchemaModule.Struct({
+  price: SchemaModule.Number,
+  stock: SchemaModule.FiniteFromString
+})
+
+export const direct = Schema.Struct({
+  quantity: NumberSchema,
+  amount: NumberFromString
+})
+
+// @effect-diagnostics-next-line schemaNumber:off
+export const intentionallyNonFinite = Schema.Number
+
+
+=== [D5] Fix 0: "Disable schemaNumber for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable schemaNumber for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable schemaNumber for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable schemaNumber for entire file" ===
+skipped by default

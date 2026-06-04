@@ -382,5 +382,9 @@
     "`Effect.orElseSucceed` expresses the same recovery more directly than `Effect.{0}` followed by `Effect.succeed`. effect(catchToOrElseSucceed)": {
         "category": "Suggestion",
         "code": 377095
+    },
+    "This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `{0}` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)": {
+        "category": "Suggestion",
+        "code": 377098
     }
 }

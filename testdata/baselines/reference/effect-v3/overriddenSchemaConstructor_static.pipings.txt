@@ -2,17 +2,17 @@
 
 === Piping Flow ===
 Location: 5:10 - 7:5
-Node: Schema.Class<InvalidBecauseOfConstructor>("InvalidBecauseOfConstructor")({\n    a: Schema.Number\n  })
+Node: Schema.Class<InvalidBecauseOfConstructor>("InvalidBecauseOfConstructor")({\n    a: Schema.Finite\n  })
 Node Kind: KindCallExpression
 
-Subject: {\n    a: Schema.Number\n  }
-Subject Type: { a: typeof Number$; }
+Subject: {\n    a: Schema.Finite\n  }
+Subject Type: { a: typeof Finite; }
 
 Transformations (1):
   [0] kind: call
       callee: Schema.Class<InvalidBecauseOfConstructor>("InvalidBecauseOfConstructor")
       args: (constant)
-      outType: Class<InvalidBecauseOfConstructor, { a: typeof Number$; }, Encoded<{ a: typeof Number$; }>, never, { readonly a: number; }, {}, {}>
+      outType: Class<InvalidBecauseOfConstructor, { a: typeof Finite; }, Encoded<{ a: typeof Finite; }>, never, { readonly a: number; }, {}, {}>
 
 === Piping Flow ===
 Location: 11:18 - 12:21

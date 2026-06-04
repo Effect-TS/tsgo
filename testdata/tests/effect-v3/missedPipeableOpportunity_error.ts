@@ -16,8 +16,8 @@ import { Duration, identity, pipe, Schedule, Schema } from "effect"
 import * as Effect from "effect/Effect"
 
 const MyStruct = Schema.Struct({
-  x: Schema.Number,
-  y: Schema.Number
+  x: Schema.Finite,
+  y: Schema.Finite
 })
 
 export const shouldNotTrigger = identity(Schema.decodeUnknown(MyStruct)({ x: 42, y: 42 }))

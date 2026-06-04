@@ -2,14 +2,14 @@
 
 === Piping Flow ===
 Location: 4:27 - 6:3
-Node: Schema.Class<Valid>("Valid")({\n  a: Schema.Number\n})
+Node: Schema.Class<Valid>("Valid")({\n  a: Schema.Finite\n})
 Node Kind: KindCallExpression
 
-Subject: {\n  a: Schema.Number\n}
-Subject Type: { a: typeof Number$; }
+Subject: {\n  a: Schema.Finite\n}
+Subject Type: { a: typeof Finite; }
 
 Transformations (1):
   [0] kind: call
       callee: Schema.Class<Valid>("Valid")
       args: (constant)
-      outType: Class<Valid, { a: typeof Number$; }, Encoded<{ a: typeof Number$; }>, never, { readonly a: number; }, {}, {}>
+      outType: Class<Valid, { a: typeof Finite; }, Encoded<{ a: typeof Finite; }>, never, { readonly a: number; }, {}, {}>

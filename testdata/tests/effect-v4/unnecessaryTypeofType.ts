@@ -17,12 +17,12 @@ export type UserId = typeof UserId.Type
 export const SessionId = Schema.Struct({})
 
 export namespace UsersRepo {
-  export const User = Schema.Struct({ id: Schema.Number })
+  export const User = Schema.Struct({ id: Schema.Finite })
   export type User = typeof User.Type
 }
 
 export namespace OrdersRepo {
-  export const Order = Schema.Struct({ id: Schema.Number })
+  export const Order = Schema.Struct({ id: Schema.Finite })
   export type Order = { readonly id: string }
 }
 // @filename: test.ts

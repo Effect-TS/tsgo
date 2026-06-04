@@ -6,12 +6,12 @@ flowchart TB
   4[/"type: #123;#125;<br/>node: #123;#125;"/]
   5["type: Struct#lt;#123;#125;#gt;<br/>callee: Schema.Struct<br/>args: #91;#93;"]
   6[/"type: #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields#41; =#gt; Struct#lt;Fields#gt;<br/>node: Schema.Struct"/]
-  7[/"type: #123; id: Number; #125;<br/>node: #123; id: Schema.Number #125;"/]
-  8["type: Struct#lt;#123; readonly id: Number; #125;#gt;<br/>callee: Schema.Struct<br/>args: #91;#93;"]
+  7[/"type: #123; id: Finite; #125;<br/>node: #123; id: Schema.Finite #125;"/]
+  8["type: Struct#lt;#123; readonly id: Finite; #125;#gt;<br/>callee: Schema.Struct<br/>args: #91;#93;"]
   9[/"type: #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields#41; =#gt; Struct#lt;Fields#gt;<br/>node: Schema.Struct"/]
   10[/"type: <br/>node: User.Type"/]
-  11[/"type: #123; id: Number; #125;<br/>node: #123; id: Schema.Number #125;"/]
-  12["type: Struct#lt;#123; readonly id: Number; #125;#gt;<br/>callee: Schema.Struct<br/>args: #91;#93;"]
+  11[/"type: #123; id: Finite; #125;<br/>node: #123; id: Schema.Finite #125;"/]
+  12["type: Struct#lt;#123; readonly id: Finite; #125;#gt;<br/>callee: Schema.Struct<br/>args: #91;#93;"]
   13[/"type: #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields#41; =#gt; Struct#lt;Fields#gt;<br/>node: Schema.Struct"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1

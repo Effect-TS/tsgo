@@ -60,6 +60,7 @@ var All = []rule.Rule{
 	LayerMergeAllWithDependencies,
 	SchemaStructWithTag,
 	SchemaSyncInEffect,
+	SchemaNumber,
 	SchemaUnionOfLiterals,
 	NewSchemaClass,
 	MissingEffectServiceDependency,

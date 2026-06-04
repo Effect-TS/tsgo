@@ -4,7 +4,7 @@
 import * as Effect from "effect/Effect"
 import * as Schema from "effect/Schema"
 
-const Person = Schema.Struct({ name: Schema.String, age: Schema.Number })
+const Person = Schema.Struct({ name: Schema.String, age: Schema.Finite })
 
 export const preview = Effect.gen(function*() {
   const input = yield* Effect.succeed({ name: "Ada", age: 1 })

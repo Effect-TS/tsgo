@@ -37,6 +37,7 @@ var All = []fixable.Fixable{
 	MissingEffectErrorCatchFix,
 	MultipleEffectProvideFix,
 	SchemaStructWithTagFix,
+	SchemaNumberFix,
 	RedundantSchemaTagIdentifierRemoveIdentifierFix,
 	RunEffectInsideEffectFix,
 	SchemaUnionOfLiteralsFix,

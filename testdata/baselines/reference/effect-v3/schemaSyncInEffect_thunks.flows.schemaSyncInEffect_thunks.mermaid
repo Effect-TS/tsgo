@@ -2,7 +2,7 @@ flowchart TB
   0[/"type: #quot;ExampleError#quot;<br/>node: #quot;ExampleError#quot;"/]
   1["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;ExampleError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
   2[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
-  3[/"type: Struct#lt;#123; name: typeof String$; age: typeof Number$; #125;#gt;<br/>node: Schema.Struct#40;#123;#92;n  name: Schema.String,#92;n  age: Schema.Number#92;n#125;#41;"/]
+  3[/"type: Struct#lt;#123; name: typeof String$; age: typeof Finite; #125;#gt;<br/>node: Schema.Struct#40;#123;#92;n  name: Schema.String,#92;n  age: Schema.Finite#92;n#125;#41;"/]
   4[["type: #40;#41; =#gt; #123; readonly name: string; readonly age: number; #125;<br/>node: #40;#41; =#gt; Schema.decodeSync#40;Person#41;#40;#123; name: #quot;John#quot;, age: 30 #125;#41;"]]
   5[/"type: #123; readonly name: string; readonly age: number; #125;<br/>node: Schema.decodeSync#40;Person#41;#40;#123; name: #quot;John#quot;, age: 30 #125;#41;"/]
   6["type: Effect#lt;#123; readonly name: string; readonly age: number; #125;, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]

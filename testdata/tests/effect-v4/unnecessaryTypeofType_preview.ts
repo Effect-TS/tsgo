@@ -3,7 +3,7 @@
 import { Schema } from "effect"
 
 export namespace UsersRepo {
-  export const User = Schema.Struct({ id: Schema.Number })
+  export const User = Schema.Struct({ id: Schema.Finite })
   export type User = typeof User.Type
 }
 

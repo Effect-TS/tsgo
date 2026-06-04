@@ -2,17 +2,17 @@
 
 === Piping Flow ===
 Location: 5:17 - 8:3
-Node: Schema.Struct({\n  x: Schema.Number,\n  y: Schema.Number\n})
+Node: Schema.Struct({\n  x: Schema.Finite,\n  y: Schema.Finite\n})
 Node Kind: KindCallExpression
 
-Subject: {\n  x: Schema.Number,\n  y: Schema.Number\n}
-Subject Type: { x: Number; y: Number; }
+Subject: {\n  x: Schema.Finite,\n  y: Schema.Finite\n}
+Subject Type: { x: Finite; y: Finite; }
 
 Transformations (1):
   [0] kind: call
       callee: Schema.Struct
       args: (constant)
-      outType: Struct<{ readonly x: Number; readonly y: Number; }>
+      outType: Struct<{ readonly x: Finite; readonly y: Finite; }>
 
 === Piping Flow ===
 Location: 10:32 - 10:90

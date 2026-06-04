@@ -752,7 +752,7 @@
         377037
       ],
       "preview": {
-        "sourceText": "import * as Effect from \"effect/Effect\"\nimport * as Schema from \"effect/Schema\"\n\nconst Person = Schema.Struct({ name: Schema.String, age: Schema.Number })\n\nexport const preview = Effect.gen(function*() {\n  const input = yield* Effect.succeed({ name: \"Ada\", age: 1 })\n  return Schema.decodeSync(Person)(input)\n})",
+        "sourceText": "import * as Effect from \"effect/Effect\"\nimport * as Schema from \"effect/Schema\"\n\nconst Person = Schema.Struct({ name: Schema.String, age: Schema.Finite })\n\nexport const preview = Effect.gen(function*() {\n  const input = yield* Effect.succeed({ name: \"Ada\", age: 1 })\n  return Schema.decodeSync(Person)(input)\n})\n",
         "diagnostics": [
           {
             "start": 276,
@@ -1567,7 +1567,7 @@
         377050
       ],
       "preview": {
-        "sourceText": "import { identity, Schema } from \"effect\"\n\nconst User = Schema.Struct({ id: Schema.Number })\nexport const preview = identity(identity(Schema.decodeEffect(User)({ id: 1 })))\n",
+        "sourceText": "import { identity, Schema } from \"effect\"\n\nconst User = Schema.Struct({ id: Schema.Finite })\nexport const preview = identity(identity(Schema.decodeEffect(User)({ id: 1 })))\n",
         "diagnostics": [
           {
             "start": 116,
@@ -1741,6 +1741,34 @@
             "start": 100,
             "end": 109,
             "text": "Identifier 'Preview' is redundant since it equals the _tag value. effect(redundantSchemaTagIdentifier)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "schemaNumber",
+      "group": "style",
+      "description": "Suggests Schema.Finite and Schema.FiniteFromString instead of Schema.Number APIs when describing domain numbers",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377098
+      ],
+      "preview": {
+        "sourceText": "\nimport { Schema } from \"effect\"\n\nexport const User = Schema.Struct({\n  age: Schema.Number,\n  score: Schema.NumberFromString\n})\n",
+        "diagnostics": [
+          {
+            "start": 84,
+            "end": 90,
+            "text": "This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)"
+          },
+          {
+            "start": 108,
+            "end": 124,
+            "text": "This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.FiniteFromString` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)"
           }
         ]
       }
@@ -1978,7 +2006,7 @@
         377090
       ],
       "preview": {
-        "sourceText": "import { Schema } from \"effect\"\n\nexport namespace UsersRepo {\n  export const User = Schema.Struct({ id: Schema.Number })\n  export type User = typeof User.Type\n}\n\nexport const preview: typeof UsersRepo.User.Type = { id: 1 }\n",
+        "sourceText": "import { Schema } from \"effect\"\n\nexport namespace UsersRepo {\n  export const User = Schema.Struct({ id: Schema.Finite })\n  export type User = typeof User.Type\n}\n\nexport const preview: typeof UsersRepo.User.Type = { id: 1 }\n",
         "diagnostics": [
           {
             "start": 184,

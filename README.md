@@ -108,6 +108,7 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><code>redundantMapError</code></td><td>💡</td><td></td><td>Suggests hoisting a repeated trailing Effect.mapError from every yield in an Effect generator</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>redundantOrDie</code></td><td>💡</td><td></td><td>Suggests hoisting a repeated trailing Effect.orDie from every yield in an Effect generator</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>redundantSchemaTagIdentifier</code></td><td>💡</td><td>🔧</td><td>Suggests removing redundant identifier argument when it equals the tag value in Schema.TaggedClass/TaggedError/TaggedRequest</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>schemaNumber</code></td><td>💡</td><td>🔧</td><td>Suggests Schema.Finite and Schema.FiniteFromString instead of Schema.Number APIs when describing domain numbers</td><td></td><td>✓</td></tr>
     <tr><td><code>schemaStructWithTag</code></td><td>💡</td><td>🔧</td><td>Suggests using Schema.TaggedStruct instead of Schema.Struct with _tag field</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>schemaUnionOfLiterals</code></td><td>➖</td><td>🔧</td><td>Suggests combining multiple Schema.Literal calls in Schema.Union into a single Schema.Literal</td><td>✓</td><td></td></tr>
     <tr><td><code>serviceNotAsClass</code></td><td>➖</td><td>🔧</td><td>Warns when Context.Service is used as a variable instead of a class declaration</td><td></td><td>✓</td></tr>
