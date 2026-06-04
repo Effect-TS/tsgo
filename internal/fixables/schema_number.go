@@ -19,7 +19,7 @@ var SchemaNumberFix = fixable.Fixable{
 }
 
 func runSchemaNumberFix(ctx *fixable.Context) []ls.CodeAction {
-	matches := rules.AnalyzeSchemaNumber(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
+	matches := rules.AnalyzeSchemaNumber(ctx.TypeParser, ctx.SourceFile)
 	for _, match := range matches {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue

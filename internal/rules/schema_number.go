@@ -1,13 +1,10 @@
 package rules
 
 import (
-	"strings"
-
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
 	"github.com/microsoft/typescript-go/shim/core"
 	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
 	"github.com/microsoft/typescript-go/shim/scanner"
@@ -21,7 +18,7 @@ var SchemaNumber = rule.Rule{
 	SupportedEffect: []string{"v4"},
 	Codes:           []int32{tsdiag.This_Schema_number_API_accepts_NaN_Infinity_and_Infinity_Use_0_for_finite_domain_numbers_If_non_finite_values_are_intentional_disable_this_diagnostic_for_that_line_effect_schemaNumber.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
-		matches := AnalyzeSchemaNumber(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
+		matches := AnalyzeSchemaNumber(ctx.TypeParser, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, m := range matches {
 			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.This_Schema_number_API_accepts_NaN_Infinity_and_Infinity_Use_0_for_finite_domain_numbers_If_non_finite_values_are_intentional_disable_this_diagnostic_for_that_line_effect_schemaNumber, nil, m.Replacement)
@@ -38,11 +35,8 @@ type SchemaNumberMatch struct {
 	ReplacementIdentifier string
 }
 
-func AnalyzeSchemaNumber(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []SchemaNumberMatch {
+func AnalyzeSchemaNumber(tp *typeparser.TypeParser, sf *ast.SourceFile) []SchemaNumberMatch {
 	if tp.SupportedEffectVersion() != typeparser.EffectMajorV4 {
-		return nil
-	}
-	if !sourceFileDeclaresEffectV4(tp, sf) {
 		return nil
 	}
 
@@ -55,14 +49,14 @@ func AnalyzeSchemaNumber(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.
 
 		switch node.Kind {
 		case ast.KindPropertyAccessExpression:
-			if match := analyzeSchemaNumberReference(tp, c, sf, node); match != nil {
+			if match := analyzeSchemaNumberReference(tp, sf, node); match != nil {
 				matches = append(matches, *match)
 			}
 		case ast.KindIdentifier:
 			if !isSchemaNumberIdentifierReference(node) {
 				break
 			}
-			if match := analyzeSchemaNumberReference(tp, c, sf, node); match != nil {
+			if match := analyzeSchemaNumberReference(tp, sf, node); match != nil {
 				matches = append(matches, *match)
 			}
 		}
@@ -75,9 +69,9 @@ func AnalyzeSchemaNumber(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.
 	return matches
 }
 
-func analyzeSchemaNumberReference(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile, node *ast.Node) *SchemaNumberMatch {
+func analyzeSchemaNumberReference(tp *typeparser.TypeParser, sf *ast.SourceFile, node *ast.Node) *SchemaNumberMatch {
 	for _, api := range schemaNumberApis {
-		if tp.IsNodeReferenceToEffectSchemaModuleApi(node, api.Name) && hasSchemaFiniteFromStringExport(tp, c, node) {
+		if tp.IsNodeReferenceToEffectSchemaModuleApi(node, api.Name) {
 			referenceNode := schemaNumberReferenceLocation(node)
 			return &SchemaNumberMatch{
 				SourceFile:            sf,
@@ -89,57 +83,6 @@ func analyzeSchemaNumberReference(tp *typeparser.TypeParser, c *checker.Checker,
 		}
 	}
 	return nil
-}
-
-func sourceFileDeclaresEffectV4(tp *typeparser.TypeParser, sf *ast.SourceFile) bool {
-	if tp == nil || sf == nil {
-		return false
-	}
-	pkg := tp.PackageJsonForSourceFile(sf)
-	if pkg == nil {
-		return false
-	}
-	var isV4 bool
-	pkg.RangeDependencies(func(name string, version string, _ string) bool {
-		if name == "effect" && strings.Contains(version, "4") {
-			isV4 = true
-			return false
-		}
-		return true
-	})
-	return isV4
-}
-
-func hasSchemaFiniteFromStringExport(tp *typeparser.TypeParser, c *checker.Checker, node *ast.Node) bool {
-	if tp == nil || c == nil || node == nil {
-		return false
-	}
-	sym := tp.ReferenceSymbolAtNode(node)
-	if sym == nil {
-		return false
-	}
-	for _, decl := range sym.Declarations {
-		if decl == nil {
-			continue
-		}
-		sourceFile := ast.GetSourceFileOfNode(decl)
-		if sourceFile == nil || !tp.IsSourceFileInPackage(sourceFile, "effect") {
-			continue
-		}
-		pkg := tp.PackageJsonForSourceFile(sourceFile)
-		if pkg == nil {
-			continue
-		}
-		version, ok := pkg.Version.GetValue()
-		if !ok || !strings.HasPrefix(version, "4.") {
-			continue
-		}
-		moduleSym := checker.Checker_getSymbolOfDeclaration(c, sourceFile.AsNode())
-		if moduleSym != nil && c.TryGetMemberInModuleExportsAndProperties("FiniteFromString", moduleSym) != nil {
-			return true
-		}
-	}
-	return false
 }
 
 type schemaNumberApi struct {
