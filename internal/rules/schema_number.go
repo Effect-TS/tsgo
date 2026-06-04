@@ -48,14 +48,14 @@ func AnalyzeSchemaNumber(tp *typeparser.TypeParser, sf *ast.SourceFile) []Schema
 		}
 
 		switch node.Kind {
+		case ast.KindImportDeclaration, ast.KindImportEqualsDeclaration:
+			return false
 		case ast.KindPropertyAccessExpression:
 			if match := analyzeSchemaNumberReference(tp, sf, node); match != nil {
 				matches = append(matches, *match)
+				return false
 			}
 		case ast.KindIdentifier:
-			if !isSchemaNumberIdentifierReference(node) {
-				break
-			}
 			if match := analyzeSchemaNumberReference(tp, sf, node); match != nil {
 				matches = append(matches, *match)
 			}
@@ -103,19 +103,4 @@ func schemaNumberReferenceLocation(node *ast.Node) *ast.Node {
 		}
 	}
 	return node
-}
-
-func isSchemaNumberIdentifierReference(node *ast.Node) bool {
-	if node.Parent == nil {
-		return true
-	}
-
-	switch node.Parent.Kind {
-	case ast.KindPropertyAccessExpression:
-		return node.Parent.AsPropertyAccessExpression().Name() != node
-	case ast.KindImportSpecifier, ast.KindImportClause, ast.KindNamespaceImport:
-		return false
-	}
-
-	return true
 }
