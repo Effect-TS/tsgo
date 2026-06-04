@@ -1,9 +1,9 @@
 diff --git a/internal/api/proto.go b/internal/api/proto.go
 --- a/internal/api/proto.go
 +++ b/internal/api/proto.go
-@@ -6,6 +6,7 @@ import (
- 	"strconv"
- 	"strings"
+@@ -4,6 +4,7 @@ import (
+ 	"errors"
+ 	"fmt"
  
 +	"github.com/effect-ts/tsgo/etscore"
  	"github.com/microsoft/typescript-go/internal/ast"
@@ -17,7 +17,7 @@ diff --git a/internal/api/proto.go b/internal/api/proto.go
  	MethodGetSuggestionDiagnostics        Method = "getSuggestionDiagnostics"
  	MethodGetDeclarationDiagnostics       Method = "getDeclarationDiagnostics"
  	MethodGetConfigFileParsingDiagnostics Method = "getConfigFileParsingDiagnostics"
-@@ -389,6 +391,7 @@ var unmarshalers = map[Method]func(json.Value) (any, error){
+@@ -357,6 +359,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
  	MethodGetESSymbolType:                   unmarshallerFor[GetIntrinsicTypeParams],
  	MethodGetSyntacticDiagnostics:           unmarshallerFor[GetDiagnosticsParams],
  	MethodGetSemanticDiagnostics:            unmarshallerFor[GetDiagnosticsParams],
@@ -25,14 +25,14 @@ diff --git a/internal/api/proto.go b/internal/api/proto.go
  	MethodGetSuggestionDiagnostics:          unmarshallerFor[GetDiagnosticsParams],
  	MethodGetDeclarationDiagnostics:         unmarshallerFor[GetDiagnosticsParams],
  	MethodGetConfigFileParsingDiagnostics:   unmarshallerFor[GetProjectDiagnosticsParams],
-@@ -863,6 +866,15 @@ type GetDiagnosticsParams struct {
- 	File     *DocumentIdentifier      `json:"file,omitempty"`
+@@ -829,6 +832,15 @@ type GetDiagnosticsParams struct {
+ 	File     *DocumentIdentifier `json:"file,omitempty"`
  }
  
 +// GetEffectDiagnosticsParams are parameters for Effect diagnostic rules.
 +type GetEffectDiagnosticsParams struct {
-+	Snapshot Handle[project.Snapshot]     `json:"snapshot"`
-+	Project  Handle[project.Project]      `json:"project"`
++	Snapshot SnapshotID                   `json:"snapshot"`
++	Project  ProjectID                    `json:"project"`
 +	File     DocumentIdentifier           `json:"file"`
 +	Options  *etscore.EffectPluginOptions `json:"options,omitempty"`
 +	Rules    []string                     `json:"rules,omitempty"`
@@ -40,7 +40,7 @@ diff --git a/internal/api/proto.go b/internal/api/proto.go
 +
  // GetProjectDiagnosticsParams are parameters for project-wide diagnostic methods.
  type GetProjectDiagnosticsParams struct {
- 	Snapshot Handle[project.Snapshot] `json:"snapshot"`
+ 	Snapshot SnapshotID `json:"snapshot"`
 diff --git a/internal/api/session.go b/internal/api/session.go
 --- a/internal/api/session.go
 +++ b/internal/api/session.go

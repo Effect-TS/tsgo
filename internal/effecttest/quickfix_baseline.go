@@ -51,6 +51,16 @@ func diagnosticCodeString(d *lsproto.Diagnostic) string {
 	return "?"
 }
 
+func diagnosticMessageString(d *lsproto.Diagnostic) string {
+	if d.Message.String != nil {
+		return *d.Message.String
+	}
+	if d.Message.MarkupContent != nil {
+		return d.Message.MarkupContent.Value
+	}
+	return ""
+}
+
 // generateQuickFixBaseline creates the content for a *.quickfixes.txt baseline file.
 func generateQuickFixBaseline(inventory []QuickFixInventoryEntry, results []QuickFixApplicationResult) string {
 	var sb strings.Builder
@@ -69,7 +79,7 @@ func generateQuickFixBaseline(inventory []QuickFixInventoryEntry, results []Quic
 				entry.Diagnostic.Range.End.Line+1,
 				entry.Diagnostic.Range.End.Character+1,
 				diagnosticCodeString(entry.Diagnostic),
-				entry.Diagnostic.Message,
+				diagnosticMessageString(entry.Diagnostic),
 			)
 			if len(entry.FixTitles) == 0 {
 				sb.WriteString("  (no quick fixes)\n")
