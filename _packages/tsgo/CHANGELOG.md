@@ -1,5 +1,15 @@
 # @effect/tsgo
 
+## 0.14.0
+
+### Minor Changes
+
+- c5a1e55: Add a `schemaNumber` suggestion diagnostic for Effect v4 that recommends `Schema.Finite` and `Schema.FiniteFromString` over number schemas that also accept `NaN` and infinities.
+
+### Patch Changes
+
+- 95d3819: Update [`typescript-go`](https://github.com/microsoft/typescript-go/commit/69d658da1a632a723275439339e34842d4d8f401) to commit `69d658da1a632a723275439339e34842d4d8f401`.
+
 ## 0.13.2
 
 ### Patch Changes
