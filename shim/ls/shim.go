@@ -129,6 +129,7 @@ func RegisterRefactorProvider(provider *ls.RefactorProvider)
 type RenameInfo = ls.RenameInfo
 //go:linkname SemanticTokensLegend github.com/microsoft/typescript-go/internal/ls.SemanticTokensLegend
 func SemanticTokensLegend(clientCapabilities lsproto.ResolvedSemanticTokensClientCapabilities) *lsproto.SemanticTokensLegend
+type SignatureUsage = ls.SignatureUsage
 type SortText = ls.SortText
 const SortTextAutoImportSuggestions = ls.SortTextAutoImportSuggestions
 const SortTextClassMemberSnippets = ls.SortTextClassMemberSnippets
