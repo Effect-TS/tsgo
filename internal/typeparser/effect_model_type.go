@@ -27,8 +27,10 @@ func isEffectModelTypeSourceFile(_ *TypeParser, c *checker.Checker, sf *ast.Sour
 	if c.TryGetMemberInModuleExportsAndProperties("Class", moduleSym) == nil {
 		return false
 	}
-	// Generated is unique to Model, not present in Schema
-	if c.TryGetMemberInModuleExportsAndProperties("Generated", moduleSym) == nil {
+	// Generated was split into GeneratedByDb / GeneratedByApp in newer v4 betas.
+	if c.TryGetMemberInModuleExportsAndProperties("Generated", moduleSym) == nil &&
+		c.TryGetMemberInModuleExportsAndProperties("GeneratedByDb", moduleSym) == nil &&
+		c.TryGetMemberInModuleExportsAndProperties("GeneratedByApp", moduleSym) == nil {
 		return false
 	}
 	// FieldOption is unique to v4 Model

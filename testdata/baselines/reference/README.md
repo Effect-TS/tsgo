@@ -93,6 +93,7 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><code>unsafeEffectTypeAssertion</code></td><td>➖</td><td>🔧</td><td>Detects unsafe type assertions that narrow Effect, Stream, or Layer error or requirements channels</td><td>✓</td><td>✓</td></tr>
     <tr><td colspan="6"><strong>Style</strong> <em>Cleanup, consistency, and idiomatic Effect code.</em></td></tr>
     <tr><td><code>catchAllToMapError</code></td><td>💡</td><td>🔧</td><td>Suggests using Effect.mapError instead of Effect.catch + Effect.fail</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>catchToOrElseSucceed</code></td><td>💡</td><td>🔧</td><td>Suggests using Effect.orElseSucceed instead of Effect.catch + Effect.succeed</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>deterministicKeys</code></td><td>➖</td><td>🔧</td><td>Enforces deterministic naming for service/tag/error identifiers based on class names</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>effectDoNotation</code></td><td>➖</td><td></td><td>Suggests using Effect.gen or Effect.fn instead of the Effect.Do notation helpers</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>effectFnOpportunity</code></td><td>💡</td><td>🔧</td><td>Suggests using Effect.fn for functions that return an Effect</td><td>✓</td><td>✓</td></tr>
@@ -103,8 +104,11 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><code>missingEffectServiceDependency</code></td><td>➖</td><td></td><td>Checks that Effect.Service dependencies satisfy all required layer inputs</td><td>✓</td><td></td></tr>
     <tr><td><code>multipleCatchTag</code></td><td>💡</td><td></td><td>Suggests collapsing consecutive Effect.catchTag transformations into a single Effect.catchTags call when semantics stay equivalent</td><td></td><td>✓</td></tr>
     <tr><td><code>nestedEffectGenYield</code></td><td>➖</td><td></td><td>Warns when yielding a nested bare Effect.gen inside an existing Effect generator context</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>newSchemaClass</code></td><td>➖</td><td>🔧</td><td>Suggests using Schema make instead of new for Schema classes</td><td></td><td>✓</td></tr>
     <tr><td><code>redundantMapError</code></td><td>💡</td><td></td><td>Suggests hoisting a repeated trailing Effect.mapError from every yield in an Effect generator</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>redundantOrDie</code></td><td>💡</td><td></td><td>Suggests hoisting a repeated trailing Effect.orDie from every yield in an Effect generator</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>redundantSchemaTagIdentifier</code></td><td>💡</td><td>🔧</td><td>Suggests removing redundant identifier argument when it equals the tag value in Schema.TaggedClass/TaggedError/TaggedRequest</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>schemaNumber</code></td><td>💡</td><td>🔧</td><td>Suggests Schema.Finite and Schema.FiniteFromString instead of Schema.Number APIs when describing domain numbers</td><td></td><td>✓</td></tr>
     <tr><td><code>schemaStructWithTag</code></td><td>💡</td><td>🔧</td><td>Suggests using Schema.TaggedStruct instead of Schema.Struct with _tag field</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>schemaUnionOfLiterals</code></td><td>➖</td><td>🔧</td><td>Suggests combining multiple Schema.Literal calls in Schema.Union into a single Schema.Literal</td><td>✓</td><td></td></tr>
     <tr><td><code>serviceNotAsClass</code></td><td>➖</td><td>🔧</td><td>Warns when Context.Service is used as a variable instead of a class declaration</td><td></td><td>✓</td></tr>

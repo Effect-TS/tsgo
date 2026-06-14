@@ -53,11 +53,11 @@ export const sample = Effect.gen(function*() {
         "uri": "file:///node_modules/effect/dist/Effect.d.ts",
         "range": {
           "start": {
-            "line": 146,
+            "line": 79,
             "character": 17
           },
           "end": {
-            "line": 146,
+            "line": 79,
             "character": 23
           }
         }
