@@ -15,8 +15,8 @@ Define `@effect/tsgo` as a CLI-only package, with command-driven usage and no li
 3. The package must not define or maintain a `/lib` distribution contract for consumers.
 4. Consumers must not be expected to import exported helper functions from `@effect/tsgo`.
 5. Any behavior currently accessible by exported functions must be available through CLI commands instead.
-6. The CLI package dependency on `effect` must use this exact package version target: `4.0.0-beta.11`.
-7. The CLI package dependency on `@effect/platform-node` must use this exact package version target: `4.0.0-beta.11`.
+6. The CLI package dependency on `effect` must use this exact package version target: `4.0.0-beta.83`.
+7. The CLI package dependency on `@effect/platform-node` must use this exact package version target: `4.0.0-beta.83`.
 8. CLI builds must use a coherent Effect pre-release dependency graph: resolved `@effect/*` packages consumed by the CLI must be mutually compatible with the pinned `effect` target and must not mix incompatible beta lines.
 9. CI and release workflows that build the CLI must use lockfile-immutable dependency installation so dependency resolution does not drift between local and CI runs.
 10. Any intentional dependency graph update for CLI runtime packages must be accompanied by lockfile updates and successful CLI build validation in the same change.
