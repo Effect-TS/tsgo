@@ -34,6 +34,7 @@ type CodeFixProvider = ls.CodeFixProvider
 type CombinedCodeActions = ls.CombinedCodeActions
 //go:linkname CompareCompletionEntries github.com/microsoft/typescript-go/internal/ls.CompareCompletionEntries
 func CompareCompletionEntries(a *lsproto.CompletionItem, b *lsproto.CompletionItem) int
+type CompletionItem = ls.CompletionItem
 type CompletionKind = ls.CompletionKind
 const CompletionKindGlobal = ls.CompletionKindGlobal
 const CompletionKindMemberLike = ls.CompletionKindMemberLike
@@ -41,6 +42,7 @@ const CompletionKindNone = ls.CompletionKindNone
 const CompletionKindObjectPropertyDeclaration = ls.CompletionKindObjectPropertyDeclaration
 const CompletionKindPropertyAccess = ls.CompletionKindPropertyAccess
 const CompletionKindString = ls.CompletionKindString
+type CompletionList = ls.CompletionList
 type CompletionsTriggerCharacter = ls.CompletionsTriggerCharacter
 type CrossProjectOrchestrator = ls.CrossProjectOrchestrator
 type DeclarationInfo = ls.DeclarationInfo

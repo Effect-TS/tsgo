@@ -1,5 +1,5 @@
 diff --git a/internal/execute/tsc.go b/internal/execute/tsc.go
-index 385ceba18..72ee9639f 100644
+index 80a9bdac9..8ac89fa6d 100644
 --- a/internal/execute/tsc.go
 +++ b/internal/execute/tsc.go
 @@ -5,6 +5,7 @@ import (
@@ -10,10 +10,10 @@ index 385ceba18..72ee9639f 100644
  	"github.com/microsoft/typescript-go/internal/ast"
  	"github.com/microsoft/typescript-go/internal/collections"
  	"github.com/microsoft/typescript-go/internal/compiler"
-@@ -50,6 +51,9 @@ func stopTracing(sys tsc.System, tr *tracing.Tracing) {
+@@ -49,6 +50,9 @@ func stopTracing(sys tsc.System, tr *tracing.Tracing) {
  }
  
- func CommandLine(sys tsc.System, commandLineArgs []string, testing tsc.CommandLineTesting) tsc.CommandLineResult {
+ func CommandLine(ctx context.Context, sys tsc.System, commandLineArgs []string, testing tsc.CommandLineTesting) tsc.CommandLineResult {
 +	restore := etscore.EnterCommandLineMode()
 +	defer restore()
 +
@@ -21,7 +21,7 @@ index 385ceba18..72ee9639f 100644
  		switch strings.ToLower(commandLineArgs[0]) {
  		case "-b", "--b", "-build", "--build":
 diff --git a/internal/execute/tsc/emit.go b/internal/execute/tsc/emit.go
-index 16080d1f8..9286d1e95 100644
+index 3a1e3de69..8cb7c24c0 100644
 --- a/internal/execute/tsc/emit.go
 +++ b/internal/execute/tsc/emit.go
 @@ -10,6 +10,7 @@ import (

@@ -77,7 +77,7 @@ diff --git a/internal/api/session.go b/internal/api/session.go
  	case string(MethodGetSuggestionDiagnostics):
  		return s.handleGetSuggestionDiagnostics(ctx, parsed.(*GetDiagnosticsParams))
  	case string(MethodGetDeclarationDiagnostics):
-@@ -2003,6 +2015,40 @@ func (s *Session) handleGetSemanticDiagnostics(ctx context.Context, params *GetD
+@@ -2169,4 +2181,38 @@ func (s *Session) handleGetSemanticDiagnostics(ctx context.Context, params *GetD
  	return NewDiagnosticResponses(diags), nil
  }
  
@@ -116,5 +116,3 @@ diff --git a/internal/api/session.go b/internal/api/session.go
 +}
 +
  // handleGetSuggestionDiagnostics returns suggestion diagnostics for a file or all files.
- func (s *Session) handleGetSuggestionDiagnostics(ctx context.Context, params *GetDiagnosticsParams) ([]*DiagnosticResponse, error) {
- 	sd, err := s.getSnapshotData(params.Snapshot)
