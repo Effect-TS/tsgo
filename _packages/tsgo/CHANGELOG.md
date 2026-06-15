@@ -1,5 +1,12 @@
 # @effect/tsgo
 
+## 0.14.4
+
+### Patch Changes
+
+- d12134c: Update Effect v4 package references and embedded test fixtures to `4.0.0-beta.83`.
+- 2af8382: Update the pinned TypeScript-Go submodule to `551b02d6c10e78610fc5ca7c23b77c9d531ee59b` and refresh generated shims.
+
 ## 0.14.3
 
 ### Patch Changes
