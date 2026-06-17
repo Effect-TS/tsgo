@@ -3,7 +3,7 @@ index e34b62822..b733cd122 100644
 --- a/internal/ls/autoimport/aliasresolver.go
 +++ b/internal/ls/autoimport/aliasresolver.go
 @@ -219,6 +219,11 @@ func (r *aliasResolver) IsSourceFileDefaultLibrary(path tspath.Path) bool {
- 	panic("unimplemented")
+ 	return false
  }
  
 +// IsSourceFileFromExternalLibrary implements checker.Program.

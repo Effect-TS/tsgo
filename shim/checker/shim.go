@@ -118,6 +118,7 @@ type extra_Checker struct {
   compareSymbolChains func([]*ast.Symbol, []*ast.Symbol) int
   TypeCount uint32
   SymbolCount uint32
+  SignatureCount uint32
   TotalInstantiationCount uint32
   EffectLinks any
   instantiationCount uint32
@@ -181,6 +182,7 @@ type extra_Checker struct {
   moduleSymbols map[*ast.Node]*ast.Symbol
   globalThisSymbol *ast.Symbol
   symbolTableAliasCache map[uint64][]*ast.Symbol
+  classExpressionNameTables map[ast.NodeId]ast.SymbolTable
   resolveName func(location *ast.Node, name string, meaning ast.SymbolFlags, nameNotFoundMessage *diagnostics.Message, isUse bool, excludeGlobals bool) *ast.Symbol
   resolveNameForSymbolSuggestion func(location *ast.Node, name string, meaning ast.SymbolFlags, nameNotFoundMessage *diagnostics.Message, isUse bool, excludeGlobals bool) *ast.Symbol
   tupleTypes map[checker.CacheHashKey]*checker.Type
@@ -858,6 +860,7 @@ const SignatureFlagsIsSignatureCandidateForOverloadFailure = checker.SignatureFl
 const SignatureFlagsIsUntypedSignatureInJSFile = checker.SignatureFlagsIsUntypedSignatureInJSFile
 const SignatureFlagsNone = checker.SignatureFlagsNone
 const SignatureFlagsPropagatingFlags = checker.SignatureFlagsPropagatingFlags
+type SignatureId = checker.SignatureId
 var SignatureKeyBase = checker.SignatureKeyBase
 var SignatureKeyCanonical = checker.SignatureKeyCanonical
 var SignatureKeyErased = checker.SignatureKeyErased

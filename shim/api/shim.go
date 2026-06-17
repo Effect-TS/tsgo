@@ -38,23 +38,20 @@ type GetDefaultProjectForFileParams = api.GetDefaultProjectForFileParams
 type GetDiagnosticsParams = api.GetDiagnosticsParams
 var GetEffectDiagnosticsCallback = api.GetEffectDiagnosticsCallback
 type GetEffectDiagnosticsParams = api.GetEffectDiagnosticsParams
-type GetExportSymbolOfSymbolParams = api.GetExportSymbolOfSymbolParams
-type GetExportsOfSymbolParams = api.GetExportsOfSymbolParams
 type GetIntrinsicTypeParams = api.GetIntrinsicTypeParams
-type GetMembersOfSymbolParams = api.GetMembersOfSymbolParams
 type GetNonNullableTypeParams = api.GetNonNullableTypeParams
 type GetParameterTypeParams = api.GetParameterTypeParams
-type GetParentOfSymbolParams = api.GetParentOfSymbolParams
 type GetProjectDiagnosticsParams = api.GetProjectDiagnosticsParams
 type GetReferencedSymbolsForNodeParams = api.GetReferencedSymbolsForNodeParams
 type GetReferencesToSymbolInFileParams = api.GetReferencesToSymbolInFileParams
 type GetResolvedSignatureParams = api.GetResolvedSignatureParams
+type GetSignaturePropertyParams = api.GetSignaturePropertyParams
 type GetSignatureUsagesParams = api.GetSignatureUsagesParams
 type GetSignaturesOfTypeParams = api.GetSignaturesOfTypeParams
 type GetSourceFileParams = api.GetSourceFileParams
 type GetSymbolAtLocationParams = api.GetSymbolAtLocationParams
 type GetSymbolAtPositionParams = api.GetSymbolAtPositionParams
-type GetSymbolOfTypeParams = api.GetSymbolOfTypeParams
+type GetSymbolPropertyParams = api.GetSymbolPropertyParams
 type GetSymbolsAtLocationsParams = api.GetSymbolsAtLocationsParams
 type GetSymbolsAtPositionsParams = api.GetSymbolsAtPositionsParams
 type GetTypeAtLocationParams = api.GetTypeAtLocationParams
@@ -118,6 +115,7 @@ const MethodGetNumberType = api.MethodGetNumberType
 const MethodGetObjectTypeOfType = api.MethodGetObjectTypeOfType
 const MethodGetOuterTypeParametersOfType = api.MethodGetOuterTypeParametersOfType
 const MethodGetParameterType = api.MethodGetParameterType
+const MethodGetParametersOfSignature = api.MethodGetParametersOfSignature
 const MethodGetParentOfSymbol = api.MethodGetParentOfSymbol
 const MethodGetPropertiesOfType = api.MethodGetPropertiesOfType
 const MethodGetReferencedSymbolsForNode = api.MethodGetReferencedSymbolsForNode
@@ -139,7 +137,9 @@ const MethodGetSymbolOfType = api.MethodGetSymbolOfType
 const MethodGetSymbolsAtLocations = api.MethodGetSymbolsAtLocations
 const MethodGetSymbolsAtPositions = api.MethodGetSymbolsAtPositions
 const MethodGetSyntacticDiagnostics = api.MethodGetSyntacticDiagnostics
+const MethodGetTargetOfSignature = api.MethodGetTargetOfSignature
 const MethodGetTargetOfType = api.MethodGetTargetOfType
+const MethodGetThisParameterOfSignature = api.MethodGetThisParameterOfSignature
 const MethodGetTypeArguments = api.MethodGetTypeArguments
 const MethodGetTypeAtLocation = api.MethodGetTypeAtLocation
 const MethodGetTypeAtLocations = api.MethodGetTypeAtLocations
@@ -147,6 +147,7 @@ const MethodGetTypeAtPosition = api.MethodGetTypeAtPosition
 const MethodGetTypeFromTypeNode = api.MethodGetTypeFromTypeNode
 const MethodGetTypeOfSymbol = api.MethodGetTypeOfSymbol
 const MethodGetTypeOfSymbolAtLocation = api.MethodGetTypeOfSymbolAtLocation
+const MethodGetTypeParametersOfSignature = api.MethodGetTypeParametersOfSignature
 const MethodGetTypeParametersOfType = api.MethodGetTypeParametersOfType
 const MethodGetTypePredicateOfSignature = api.MethodGetTypePredicateOfSignature
 const MethodGetTypesAtPositions = api.MethodGetTypesAtPositions
@@ -193,8 +194,6 @@ func NewSession(projectSession *project.Session, options *api.SessionOptions) *a
 func NewStdioServer(options *api.StdioServerOptions) *api.StdioServer
 //go:linkname NewStdioTransport github.com/microsoft/typescript-go/internal/api.NewStdioTransport
 func NewStdioTransport(stdin io.ReadCloser, stdout io.WriteCloser) *api.StdioTransport
-//go:linkname NewSymbolResponse github.com/microsoft/typescript-go/internal/api.NewSymbolResponse
-func NewSymbolResponse(symbol *ast.Symbol) *api.SymbolResponse
 //go:linkname NewSyncConn github.com/microsoft/typescript-go/internal/api.NewSyncConn
 func NewSyncConn(rwc io.ReadWriteCloser, protocol api.Protocol, handler api.Handler) *api.SyncConn
 type NodeHandle = api.NodeHandle
@@ -218,7 +217,7 @@ type ResolveNameParams = api.ResolveNameParams
 type Session = api.Session
 type SessionOptions = api.SessionOptions
 //go:linkname SignatureHandle github.com/microsoft/typescript-go/internal/api.SignatureHandle
-func SignatureHandle(id uint64) api.SignatureID
+func SignatureHandle(sig *checker.Signature) api.SignatureID
 type SignatureID = api.SignatureID
 type SignatureResponse = api.SignatureResponse
 type SignatureToSignatureDeclarationParams = api.SignatureToSignatureDeclarationParams
