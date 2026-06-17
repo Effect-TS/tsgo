@@ -1,5 +1,11 @@
 # @effect/tsgo
 
+## 0.14.5
+
+### Patch Changes
+
+- 7f0ca5d: Update TypeScript Go to microsoft/typescript-go@2fb5d4ce13935aef1f3c2896fad76d0ab4d43604.
+
 ## 0.14.4
 
 ### Patch Changes
