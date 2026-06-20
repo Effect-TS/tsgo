@@ -1,0 +1,95 @@
+name: Generate Stable Branch
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: generate-stable-branch
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  generate:
+    name: Generate generated/stable
+    if: github.repository_owner == 'Effect-TS'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: main
+          submodules: recursive
+
+      - name: Track TypeScript-Go submodule updates in Git
+        run: git config submodule.typescript-go.ignore dirty
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.26"
+          cache: false
+
+      - name: Cache Go build
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: go-build-generate-stable-${{ runner.os }}-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            go-build-generate-stable-${{ runner.os }}-
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Resolve TypeScript metadata
+        id: typescript
+        env:
+          TYPESCRIPT_SPEC: typescript@rc
+        run: |
+          metadata="$(npm view "${TYPESCRIPT_SPEC}" version gitHead --json)"
+          version="$(node -e 'const m = JSON.parse(process.argv[1]); if (!m.version) process.exit(1); process.stdout.write(m.version)' "$metadata")"
+          git_head="$(node -e 'const m = JSON.parse(process.argv[1]); if (!/^[0-9a-f]{40}$/.test(m.gitHead || "")) process.exit(1); process.stdout.write(m.gitHead)' "$metadata")"
+
+          echo "spec=${TYPESCRIPT_SPEC}" >> "$GITHUB_OUTPUT"
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+          echo "git_head=${git_head}" >> "$GITHUB_OUTPUT"
+
+      - name: Pin TypeScript-Go to TypeScript commit
+        run: |
+          git -C typescript-go fetch --depth 1 origin "${{ steps.typescript.outputs.git_head }}"
+          git -C typescript-go checkout --detach "${{ steps.typescript.outputs.git_head }}"
+          git -C typescript-go submodule sync --recursive
+          git -C typescript-go submodule update --init --recursive --force
+
+      - name: Regenerate shims and generated files
+        run: bash _tools/setup-repo.sh --ci
+
+      - name: Commit generated stable branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+
+          if git diff --cached --quiet; then
+            echo "No generated stable changes; publishing main as generated/stable."
+          else
+            git commit -m "chore: generate stable TypeScript-Go branch" \
+              -m "TypeScript package: ${{ steps.typescript.outputs.spec }}" \
+              -m "TypeScript version: ${{ steps.typescript.outputs.version }}" \
+              -m "TypeScript-Go commit: ${{ steps.typescript.outputs.git_head }}"
+          fi
+
+      - name: Push generated stable branch
+        run: git push --force origin HEAD:generated/stable

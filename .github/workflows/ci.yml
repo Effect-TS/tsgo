@@ -2,7 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - generated/stable
   pull_request:
     branches: [main]
 
@@ -13,6 +15,7 @@ concurrency:
 jobs:
   flake:
     name: Flake (${{ matrix.os }})
+    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
     runs-on: ${{ matrix.os }}
     timeout-minutes: 30
     strategy:
