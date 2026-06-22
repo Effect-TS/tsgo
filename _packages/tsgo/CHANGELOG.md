@@ -1,5 +1,16 @@
 # @effect/tsgo
 
+## 0.14.6
+
+### Patch Changes
+
+- 070f2b5: Publish platform packages with both the `tsgo` binary built from `main` and the `tsc` binary built from `generated/stable`.
+- ef53ddd: Add automation that publishes a generated `generated/stable` branch pinned to the TypeScript RC `typescript-go` commit and runs CI on that branch.
+- eb0dbbc: Update the generated stable branch automation to open a pull request and validate it before merging.
+- ef0a5a0: Fix the automated TypeScript-Go update workflow to pin the submodule to the commit shipped by `@typescript/native-preview@latest`.
+- fb3096f: Update to [`@typescript/native-preview@7.0.0-dev.20260620.1`](https://www.npmjs.com/package/@typescript/native-preview/v/7.0.0-dev.20260620.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/dc37b5249ab60e2bbce936f71b883e6c8136167e) commit `dc37b5249ab60e2bbce936f71b883e6c8136167e`.
+- 4423d1d: Make the TypeScript-Go version suffix patch apply across upstream TypeScript version literal changes.
+
 ## 0.14.5
 
 ### Patch Changes
