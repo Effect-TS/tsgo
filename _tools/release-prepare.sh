@@ -3,39 +3,41 @@ set -euo pipefail
 
 # release-prepare.sh — Single entrypoint for preparing publish-ready workspace packages.
 #
-# Usage: release-prepare.sh [--target <platform-arch> ...] [--skip-cli]
-#   --target    Select specific platform targets (repeatable). Omit to build all.
-#   --skip-cli  Skip the CLI bundle build and its validation. Used by matrix build jobs.
+# Usage: release-prepare.sh [--target <platform-arch> ...] [--binary-name <name>] [--skip-cli]
+#   --target       Select specific platform targets (repeatable). Omit to build all.
+#   --binary-name  Set the output executable base name. Defaults to tsgo.
+#   --skip-cli     Skip the CLI bundle build and its validation. Used by matrix build jobs.
 #
 # Steps:
-#   1. Cross-compile tsgo binaries for selected platforms directly into _packages
+#   1. Cross-compile binaries for selected platforms directly into _packages
 #   2. Build CLI bundle
 #   Followed by artifact validation.
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 PACKAGES_DIR="${REPO_ROOT}/_packages"
 
-# Unified target matrix: goos goarch goarm npm_platform npm_arch binary_name
+# Unified target matrix: goos goarch goarm npm_platform npm_arch
 # Build order: Darwin first, then Windows, then Linux
 ALL_TARGETS=(
-  "darwin  arm64 - darwin arm64 tsgo"
-  "darwin  amd64 - darwin x64   tsgo"
-  "windows amd64 - win32  x64   tsgo.exe"
-  "windows arm64 - win32  arm64 tsgo.exe"
-  "linux   amd64 - linux  x64   tsgo"
-  "linux   arm64 - linux  arm64 tsgo"
-  "linux   arm   6 linux  arm   tsgo"
+  "darwin  arm64 - darwin arm64"
+  "darwin  amd64 - darwin x64"
+  "windows amd64 - win32  x64"
+  "windows arm64 - win32  arm64"
+  "linux   amd64 - linux  x64"
+  "linux   arm64 - linux  arm64"
+  "linux   arm   6 linux  arm"
 )
 
 # Build list of valid target identifiers from the matrix
 valid_ids=()
 for target in "${ALL_TARGETS[@]}"; do
-  read -r _goos _goarch _goarm npm_platform npm_arch _binary <<< "$target"
+  read -r _goos _goarch _goarm npm_platform npm_arch <<< "$target"
   valid_ids+=("${npm_platform}-${npm_arch}")
 done
 
 # ── Argument parsing ──────────────────────────────────────────────────────────
 selected_ids=()
+binary_name="tsgo"
 skip_cli=false
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -48,18 +50,31 @@ while [ $# -gt 0 ]; do
       selected_ids+=("$2")
       shift 2
       ;;
+    --binary-name)
+      if [ $# -lt 2 ]; then
+        echo "ERROR: --binary-name requires a value (e.g., --binary-name tsgo)."
+        exit 1
+      fi
+      binary_name="$2"
+      shift 2
+      ;;
     --skip-cli)
       skip_cli=true
       shift 1
       ;;
     *)
       echo "ERROR: Unknown flag '$1'."
-      echo "Usage: release-prepare.sh [--target <platform-arch> ...] [--skip-cli]"
+      echo "Usage: release-prepare.sh [--target <platform-arch> ...] [--binary-name <name>] [--skip-cli]"
       echo "Valid targets: ${valid_ids[*]}"
       exit 1
       ;;
   esac
 done
+
+if [[ ! "${binary_name}" =~ ^[A-Za-z0-9._-]+$ ]]; then
+  echo "ERROR: --binary-name must contain only letters, numbers, dots, underscores, and dashes."
+  exit 1
+fi
 
 # ── Target validation & filtering ─────────────────────────────────────────────
 if [ ${#selected_ids[@]} -gt 0 ]; then
@@ -81,7 +96,7 @@ if [ ${#selected_ids[@]} -gt 0 ]; then
   # Filter ALL_TARGETS to only selected entries
   TARGETS=()
   for target in "${ALL_TARGETS[@]}"; do
-    read -r _goos _goarch _goarm npm_platform npm_arch _binary <<< "$target"
+    read -r _goos _goarch _goarm npm_platform npm_arch <<< "$target"
     tid="${npm_platform}-${npm_arch}"
     for id in "${selected_ids[@]}"; do
       if [ "$tid" = "$id" ]; then
@@ -103,10 +118,15 @@ fi
 echo "==> Step 1/${total_steps}: Cross-compiling ${#TARGETS[@]} target(s) sequentially"
 
 for target in "${TARGETS[@]}"; do
-  read -r goos goarch goarm npm_platform npm_arch binary_name <<< "$target"
+  read -r goos goarch goarm npm_platform npm_arch <<< "$target"
+
+  output_name="${binary_name}"
+  if [ "$goos" = "windows" ]; then
+    output_name="${output_name}.exe"
+  fi
 
   dest_dir="${PACKAGES_DIR}/tsgo-${npm_platform}-${npm_arch}/lib"
-  dest="${dest_dir}/${binary_name}"
+  dest="${dest_dir}/${output_name}"
 
   echo "  Building ${goos}/${goarch} -> ${dest}"
   mkdir -p "${dest_dir}"
@@ -144,8 +164,14 @@ fi
 
 # Check platform binaries
 for target in "${TARGETS[@]}"; do
-  read -r _goos _goarch _goarm npm_platform npm_arch binary_name <<< "$target"
-  bin_path="${PACKAGES_DIR}/tsgo-${npm_platform}-${npm_arch}/lib/${binary_name}"
+  read -r goos _goarch _goarm npm_platform npm_arch <<< "$target"
+
+  output_name="${binary_name}"
+  if [ "$goos" = "windows" ]; then
+    output_name="${output_name}.exe"
+  fi
+
+  bin_path="${PACKAGES_DIR}/tsgo-${npm_platform}-${npm_arch}/lib/${output_name}"
   if [ ! -s "${bin_path}" ]; then
     errors+=("Missing or empty binary: ${bin_path}")
   fi

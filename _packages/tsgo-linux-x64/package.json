@@ -17,6 +17,7 @@
   "preferUnplugged": true,
   "files": [
     "lib/tsgo",
+    "lib/tsc",
     "README.md"
   ],
   "os": [

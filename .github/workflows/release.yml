@@ -21,31 +21,29 @@ jobs:
       github.event.pull_request.merged == true &&
       github.event.pull_request.head.ref == 'changeset-release/main' &&
       github.repository_owner == 'Effect-TS'
-    name: Build ${{ matrix.npm_target }}
+    name: Build ${{ matrix.binary.name }} ${{ matrix.npm_target }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     strategy:
       matrix:
-        include:
-          - npm_target: darwin-arm64
-            artifact_name: tsgo-darwin-arm64
-          - npm_target: darwin-x64
-            artifact_name: tsgo-darwin-x64
-          - npm_target: win32-x64
-            artifact_name: tsgo-win32-x64
-          - npm_target: win32-arm64
-            artifact_name: tsgo-win32-arm64
-          - npm_target: linux-x64
-            artifact_name: tsgo-linux-x64
-          - npm_target: linux-arm64
-            artifact_name: tsgo-linux-arm64
-          - npm_target: linux-arm
-            artifact_name: tsgo-linux-arm
+        npm_target:
+          - darwin-arm64
+          - darwin-x64
+          - win32-x64
+          - win32-arm64
+          - linux-x64
+          - linux-arm64
+          - linux-arm
+        binary:
+          - name: tsgo
+            ref: main
+          - name: tsc
+            ref: generated/stable
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ matrix.binary.ref }}
           submodules: recursive
 
       - name: Setup Go
@@ -58,9 +56,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/go-build
-          key: go-build-release-${{ matrix.npm_target }}-${{ hashFiles('**/go.sum') }}
+          key: go-build-release-${{ matrix.binary.name }}-${{ matrix.npm_target }}-${{ hashFiles('**/go.sum') }}
           restore-keys: |
-            go-build-release-${{ matrix.npm_target }}-
+            go-build-release-${{ matrix.binary.name }}-${{ matrix.npm_target }}-
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -78,14 +76,14 @@ jobs:
       - name: Setup repo
         run: pnpm setup-repo --ci
 
-      - name: Build ${{ matrix.npm_target }}
-        run: pnpm release:prepare --target ${{ matrix.npm_target }} --skip-cli
+      - name: Build ${{ matrix.binary.name }} ${{ matrix.npm_target }}
+        run: pnpm release:prepare --target ${{ matrix.npm_target }} --binary-name ${{ matrix.binary.name }} --skip-cli
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.artifact_name }}
-          path: _packages/${{ matrix.artifact_name }}
+          name: ${{ matrix.binary.name }}-${{ matrix.npm_target }}
+          path: _packages/tsgo-${{ matrix.npm_target }}/lib/${{ matrix.binary.name }}${{ startsWith(matrix.npm_target, 'win32-') && '.exe' || '' }}
 
   publish:
     if: >-
@@ -120,47 +118,26 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Download darwin-arm64
+      - name: Download platform binaries
         uses: actions/download-artifact@v4
         with:
-          name: tsgo-darwin-arm64
-          path: _packages/tsgo-darwin-arm64
+          path: _release-artifacts
 
-      - name: Download darwin-x64
-        uses: actions/download-artifact@v4
-        with:
-          name: tsgo-darwin-x64
-          path: _packages/tsgo-darwin-x64
+      - name: Copy binaries into platform packages
+        run: |
+          for artifact_dir in _release-artifacts/*-*; do
+            artifact_name="${artifact_dir##*/}"
+            binary_name="${artifact_name%%-*}"
+            npm_target="${artifact_name#*-}"
+            package_dir="_packages/tsgo-${npm_target}/lib"
 
-      - name: Download win32-x64
-        uses: actions/download-artifact@v4
-        with:
-          name: tsgo-win32-x64
-          path: _packages/tsgo-win32-x64
-
-      - name: Download win32-arm64
-        uses: actions/download-artifact@v4
-        with:
-          name: tsgo-win32-arm64
-          path: _packages/tsgo-win32-arm64
-
-      - name: Download linux-x64
-        uses: actions/download-artifact@v4
-        with:
-          name: tsgo-linux-x64
-          path: _packages/tsgo-linux-x64
-
-      - name: Download linux-arm64
-        uses: actions/download-artifact@v4
-        with:
-          name: tsgo-linux-arm64
-          path: _packages/tsgo-linux-arm64
-
-      - name: Download linux-arm
-        uses: actions/download-artifact@v4
-        with:
-          name: tsgo-linux-arm
-          path: _packages/tsgo-linux-arm
+            mkdir -p "${package_dir}"
+            if [ -f "${artifact_dir}/${binary_name}.exe" ]; then
+              cp "${artifact_dir}/${binary_name}.exe" "${package_dir}/${binary_name}.exe"
+            else
+              cp "${artifact_dir}/${binary_name}" "${package_dir}/${binary_name}"
+            fi
+          done
 
       - name: Build CLI bundle
         run: pnpm build:cli
