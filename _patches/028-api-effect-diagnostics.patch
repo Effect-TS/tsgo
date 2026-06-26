@@ -9,23 +9,23 @@ diff --git a/internal/api/proto.go b/internal/api/proto.go
  	"github.com/microsoft/typescript-go/internal/ast"
  	"github.com/microsoft/typescript-go/internal/checker"
  	"github.com/microsoft/typescript-go/internal/core"
-@@ -156,6 +157,7 @@ const (
- 	// Diagnostic methods
+@@ -142,6 +143,7 @@ const (
  	MethodGetSyntacticDiagnostics         Method = "getSyntacticDiagnostics"
+ 	MethodGetBindDiagnostics              Method = "getBindDiagnostics"
  	MethodGetSemanticDiagnostics          Method = "getSemanticDiagnostics"
 +	MethodGetEffectDiagnostics            Method = "getEffectDiagnostics"
  	MethodGetSuggestionDiagnostics        Method = "getSuggestionDiagnostics"
  	MethodGetDeclarationDiagnostics       Method = "getDeclarationDiagnostics"
- 	MethodGetConfigFileParsingDiagnostics Method = "getConfigFileParsingDiagnostics"
-@@ -357,6 +359,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
- 	MethodGetESSymbolType:                   unmarshallerFor[GetIntrinsicTypeParams],
+ 	MethodGetProgramDiagnostics           Method = "getProgramDiagnostics"
+@@ -415,6 +417,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
  	MethodGetSyntacticDiagnostics:           unmarshallerFor[GetDiagnosticsParams],
+ 	MethodGetBindDiagnostics:                unmarshallerFor[GetDiagnosticsParams],
  	MethodGetSemanticDiagnostics:            unmarshallerFor[GetDiagnosticsParams],
 +	MethodGetEffectDiagnostics:              unmarshallerFor[GetEffectDiagnosticsParams],
  	MethodGetSuggestionDiagnostics:          unmarshallerFor[GetDiagnosticsParams],
  	MethodGetDeclarationDiagnostics:         unmarshallerFor[GetDiagnosticsParams],
- 	MethodGetConfigFileParsingDiagnostics:   unmarshallerFor[GetProjectDiagnosticsParams],
-@@ -829,6 +832,15 @@ type GetDiagnosticsParams struct {
+ 	MethodGetProgramDiagnostics:             unmarshallerFor[GetProjectDiagnosticsParams],
+@@ -994,6 +997,15 @@ type GetDiagnosticsParams struct {
  	File     *DocumentIdentifier `json:"file,omitempty"`
  }
  
@@ -44,7 +44,7 @@ diff --git a/internal/api/proto.go b/internal/api/proto.go
 diff --git a/internal/api/session.go b/internal/api/session.go
 --- a/internal/api/session.go
 +++ b/internal/api/session.go
-@@ -7,6 +7,7 @@ import (
+@@ -9,6 +9,7 @@ import (
  	"sync"
  	"sync/atomic"
  
@@ -52,7 +52,7 @@ diff --git a/internal/api/session.go b/internal/api/session.go
  	"github.com/microsoft/typescript-go/internal/api/encoder"
  	"github.com/microsoft/typescript-go/internal/ast"
  	"github.com/microsoft/typescript-go/internal/astnav"
-@@ -21,6 +22,15 @@ import (
+@@ -27,6 +28,15 @@ import (
  	"github.com/microsoft/typescript-go/internal/tspath"
  )
  
@@ -68,8 +68,8 @@ diff --git a/internal/api/session.go b/internal/api/session.go
  var sessionIDCounter atomic.Uint64
  
  // snapshotData holds the per-snapshot state including the snapshot itself
-@@ -459,6 +469,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
- 		return s.handleGetSyntacticDiagnostics(ctx, parsed.(*GetDiagnosticsParams))
+@@ -675,6 +685,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
+ 		return s.handleGetBindDiagnostics(ctx, parsed.(*GetDiagnosticsParams))
  	case string(MethodGetSemanticDiagnostics):
  		return s.handleGetSemanticDiagnostics(ctx, parsed.(*GetDiagnosticsParams))
 +	case string(MethodGetEffectDiagnostics):
@@ -77,7 +77,7 @@ diff --git a/internal/api/session.go b/internal/api/session.go
  	case string(MethodGetSuggestionDiagnostics):
  		return s.handleGetSuggestionDiagnostics(ctx, parsed.(*GetDiagnosticsParams))
  	case string(MethodGetDeclarationDiagnostics):
-@@ -2169,4 +2181,38 @@ func (s *Session) handleGetSemanticDiagnostics(ctx context.Context, params *GetD
+@@ -2484,6 +2496,41 @@ func (s *Session) handleGetSemanticDiagnostics(ctx context.Context, params *GetD
  	return NewDiagnosticResponses(diags), nil
  }
  
@@ -87,6 +87,7 @@ diff --git a/internal/api/session.go b/internal/api/session.go
 +		return nil, fmt.Errorf("getEffectDiagnostics callback is not registered")
 +	}
 +
++	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
 +	sd, err := s.getSnapshotData(params.Snapshot)
 +	if err != nil {
 +		return nil, err
@@ -116,3 +117,5 @@ diff --git a/internal/api/session.go b/internal/api/session.go
 +}
 +
  // handleGetSuggestionDiagnostics returns suggestion diagnostics for a file or all files.
+ func (s *Session) handleGetSuggestionDiagnostics(ctx context.Context, params *GetDiagnosticsParams) ([]*DiagnosticResponse, error) {
+ 	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
