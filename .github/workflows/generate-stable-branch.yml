@@ -23,7 +23,7 @@ jobs:
     outputs:
       has_changes: ${{ steps.changes.outputs.has_changes }}
       pr_number: ${{ steps.pr.outputs.pr_number }}
-      head_sha: ${{ steps.pr.outputs.head_sha }}
+      head_sha: ${{ steps.changes.outputs.head_sha }}
     permissions:
       contents: write
       pull-requests: write
@@ -83,36 +83,35 @@ jobs:
       - name: Regenerate shims and generated files
         run: bash _tools/setup-repo.sh --ci
 
-      - name: Commit generated stable changes
+      - name: Create generated stable commit
+        id: changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-
-          if git diff --cached --quiet; then
-            echo "No generated stable changes to commit."
-          else
-            git commit -m "chore: generate stable TypeScript-Go branch" \
-              -m "TypeScript package: ${{ steps.typescript.outputs.spec }}" \
-              -m "TypeScript version: ${{ steps.typescript.outputs.version }}" \
-              -m "TypeScript-Go commit: ${{ steps.typescript.outputs.git_head }}"
-          fi
-
-      - name: Check for generated/stable changes
-        id: changes
-        run: |
           git fetch --depth 1 origin generated/stable
 
-          if git diff --quiet FETCH_HEAD HEAD; then
+          git add -A
+          generated_tree="$(git write-tree)"
+          stable_tree="$(git rev-parse FETCH_HEAD^{tree})"
+
+          if [ "${generated_tree}" = "${stable_tree}" ]; then
+            echo "Generated stable branch is already up to date."
             echo "has_changes=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
+          head_sha="$(git commit-tree "${generated_tree}" \
+            -p FETCH_HEAD \
+            -m "chore: generate stable TypeScript-Go branch" \
+            -m "TypeScript package: ${{ steps.typescript.outputs.spec }}" \
+            -m "TypeScript version: ${{ steps.typescript.outputs.version }}" \
+            -m "TypeScript-Go commit: ${{ steps.typescript.outputs.git_head }}")"
           echo "has_changes=true" >> "$GITHUB_OUTPUT"
+          echo "head_sha=${head_sha}" >> "$GITHUB_OUTPUT"
 
       - name: Push generated stable PR branch
         if: steps.changes.outputs.has_changes == 'true'
-        run: git push --force origin HEAD:chore/generate-stable-branch
+        run: git push --force origin "${{ steps.changes.outputs.head_sha }}:chore/generate-stable-branch"
 
       - name: Create or update generated stable PR
         id: pr
@@ -159,7 +158,6 @@ jobs:
           fi
 
           echo "pr_number=${pr_number}" >> "$GITHUB_OUTPUT"
-          echo "head_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
   validate-pr:
     name: Validate generated stable PR
