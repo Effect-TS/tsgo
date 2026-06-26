@@ -75,6 +75,7 @@ func main() {
 		"project/logging",
 		"repo",
 		"scanner",
+		"sourcemap",
 		"testrunner",
 		"testutil",
 		"testutil/lsptestutil",

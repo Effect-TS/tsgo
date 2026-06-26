@@ -3,12 +3,9 @@
 
 package api
 
-import "context"
-import "github.com/effect-ts/tsgo/etscore"
 import "github.com/microsoft/typescript-go/internal/api"
 import "github.com/microsoft/typescript-go/internal/ast"
 import "github.com/microsoft/typescript-go/internal/checker"
-import "github.com/microsoft/typescript-go/internal/compiler"
 import "github.com/microsoft/typescript-go/internal/project"
 import "io"
 import _ "unsafe"
@@ -36,8 +33,6 @@ type GetCompletionsAtPositionParams = api.GetCompletionsAtPositionParams
 type GetContextualTypeParams = api.GetContextualTypeParams
 type GetDefaultProjectForFileParams = api.GetDefaultProjectForFileParams
 type GetDiagnosticsParams = api.GetDiagnosticsParams
-var GetEffectDiagnosticsCallback = api.GetEffectDiagnosticsCallback
-type GetEffectDiagnosticsParams = api.GetEffectDiagnosticsParams
 type GetIntrinsicTypeParams = api.GetIntrinsicTypeParams
 type GetNonNullableTypeParams = api.GetNonNullableTypeParams
 type GetParameterTypeParams = api.GetParameterTypeParams
@@ -99,7 +94,6 @@ const MethodGetDeclarationDiagnostics = api.MethodGetDeclarationDiagnostics
 const MethodGetDeclaredTypeOfSymbol = api.MethodGetDeclaredTypeOfSymbol
 const MethodGetDefaultProjectForFile = api.MethodGetDefaultProjectForFile
 const MethodGetESSymbolType = api.MethodGetESSymbolType
-const MethodGetEffectDiagnostics = api.MethodGetEffectDiagnostics
 const MethodGetExportSymbolOfSymbol = api.MethodGetExportSymbolOfSymbol
 const MethodGetExportsOfSymbol = api.MethodGetExportsOfSymbol
 const MethodGetExtendsTypeOfType = api.MethodGetExtendsTypeOfType
@@ -210,8 +204,6 @@ type ProjectResponse = api.ProjectResponse
 type Protocol = api.Protocol
 type RawBinary = api.RawBinary
 type ReferencedSymbolEntry = api.ReferencedSymbolEntry
-//go:linkname RegisterGetEffectDiagnosticsCallback github.com/microsoft/typescript-go/internal/api.RegisterGetEffectDiagnosticsCallback
-func RegisterGetEffectDiagnosticsCallback(cb func(ctx context.Context, program *compiler.Program, c *checker.Checker, sourceFile *ast.SourceFile, options *etscore.EffectPluginOptions, rules []string) ([]*ast.Diagnostic, error))
 type ReleaseParams = api.ReleaseParams
 type ResolveNameParams = api.ResolveNameParams
 type Session = api.Session
