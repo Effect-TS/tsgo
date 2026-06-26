@@ -31,6 +31,7 @@ replace (
 	github.com/microsoft/typescript-go/shim/project/logging => ./shim/project/logging
 	github.com/microsoft/typescript-go/shim/repo => ./shim/repo
 	github.com/microsoft/typescript-go/shim/scanner => ./shim/scanner
+	github.com/microsoft/typescript-go/shim/sourcemap => ./shim/sourcemap
 	github.com/microsoft/typescript-go/shim/testrunner => ./shim/testrunner
 	github.com/microsoft/typescript-go/shim/testutil => ./shim/testutil
 	github.com/microsoft/typescript-go/shim/testutil/baseline => ./shim/testutil/baseline
@@ -69,6 +70,7 @@ require (
 	github.com/microsoft/typescript-go/shim/parser v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/project/logging v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/scanner v0.0.0-00010101000000-000000000000
+	github.com/microsoft/typescript-go/shim/sourcemap v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/testutil/baseline v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/testutil/harnessutil v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/tsoptions v0.0.0-00010101000000-000000000000

@@ -29,6 +29,7 @@ use (
 	./shim/project/logging
 	./shim/repo
 	./shim/scanner
+	./shim/sourcemap
 	./shim/testrunner
 	./shim/testutil
 	./shim/testutil/baseline
