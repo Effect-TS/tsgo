@@ -7,19 +7,21 @@ import * as Console from "effect/Console"
 import * as Data from "effect/Data"
 import * as Effect from "effect/Effect"
 import * as FileSystem from "effect/FileSystem"
+import * as Option from "effect/Option"
 import * as Path from "effect/Path"
 import * as Command from "effect/unstable/cli/Command"
 import { configCommand } from "./config.js"
 import { setupCommand } from "./setup/index.js"
+import { nativePreviewBackend, typescriptBackend, type NativeBackend } from "./setup/consts.js"
 import * as pkgJson from "../package.json" with { type: "json" }
 
-class NativePreviewNotInstalledError extends Data.TaggedError("NativePreviewNotInstalledError")<{
+class NativeBackendNotInstalledError extends Data.TaggedError("NativeBackendNotInstalledError")<{
   readonly details: string
 }> {
   get message(): string {
     return (
-      "@typescript/native-preview is not installed. " +
-      "Please install it first: npm install @typescript/native-preview"
+      "No native TypeScript backend is installed. " +
+      "Install one of the following first: `@typescript/native-preview` or `typescript` (>= 7, e.g. `typescript@rc`)."
     )
   }
 }
@@ -30,7 +32,7 @@ class UnsupportedPlatformPackageError extends Data.TaggedError("UnsupportedPlatf
   get message(): string {
     return (
       `Unable to resolve ${this.packageName}. ` +
-      "Your platform may not be supported by @typescript/native-preview."
+      "Your platform may not be supported by the installed native TypeScript backend."
     )
   }
 }
@@ -40,9 +42,9 @@ class MissingTargetBinaryError extends Data.TaggedError("MissingTargetBinaryErro
 }> {
   get message(): string {
     return (
-      "TypeScript-Go binary not found at " +
+      "Native TypeScript binary not found at " +
       this.targetPath +
-      ". Is @typescript/native-preview installed correctly?"
+      ". Is the native TypeScript backend installed correctly?"
     )
   }
 }
@@ -93,7 +95,7 @@ class VerificationFailedError extends Data.TaggedError("VerificationFailedError"
 }
 
 type CliDomainError =
-  | NativePreviewNotInstalledError
+  | NativeBackendNotInstalledError
   | UnsupportedPlatformPackageError
   | MissingTargetBinaryError
   | ResolvePackagedBinaryError
@@ -103,26 +105,80 @@ type CliDomainError =
   | VerificationFailedError
 
 
-const getNativePreviewBinaryPath = Effect.gen(function*() {
+/**
+ * Outcome of probing a single native backend.
+ * - `resolved`: the platform binary path was found.
+ * - `notInstalled`: the main package is absent or fails the version check; the
+ *   caller should try the next backend.
+ * - `unsupportedPlatform`: the main package is installed but its platform
+ *   sub-package is missing; a concrete, actionable error.
+ */
+type BackendProbe =
+  | { readonly _tag: "resolved"; readonly path: string }
+  | { readonly _tag: "notInstalled" }
+  | { readonly _tag: "unsupportedPlatform"; readonly packageName: string }
+
+const probeBackend = (backend: NativeBackend, cwdRequire: NodeRequire, path: Path.Path): BackendProbe => {
+  const isWin = process.platform === "win32"
+
+  let mainPkg: { version?: string }
+  try {
+    mainPkg = cwdRequire(backend.packageName + "/package.json")
+  } catch {
+    return { _tag: "notInstalled" }
+  }
+
+  if (backend.versionCheck !== undefined && !backend.versionCheck(mainPkg)) {
+    return { _tag: "notInstalled" }
+  }
+
+  let mainPackageJsonPath: string
+  try {
+    mainPackageJsonPath = cwdRequire.resolve(backend.packageName + "/package.json")
+  } catch {
+    return { _tag: "notInstalled" }
+  }
+
+  const backendRequire = nodeModule.createRequire(mainPackageJsonPath)
+  const platformPackageName = backend.platformPackagePrefix + "-" + process.platform + "-" + process.arch
+  let platformPackageJsonPath: string
+  try {
+    platformPackageJsonPath = backendRequire.resolve(platformPackageName + "/package.json")
+  } catch {
+    return { _tag: "unsupportedPlatform", packageName: platformPackageName }
+  }
+
+  const platformDir = path.dirname(platformPackageJsonPath)
+  const binaryName = backend.binaryName + (isWin ? ".exe" : "")
+  return { _tag: "resolved", path: path.join(platformDir, "lib", binaryName) }
+}
+
+/**
+ * Resolve the native TypeScript binary to patch. The `@typescript/native-preview`
+ * backend is tried first (back-compat), then the `typescript` >= 7 package so
+ * that the TypeScript 7 RC/stable release is supported out of the box.
+ */
+const getNativeBackendBinaryPath = Effect.gen(function*() {
   const path = yield* Path.Path
   const cwdRequire = nodeModule.createRequire(path.join(process.cwd(), "noop.js"))
 
-  const nativePreviewPackageJsonPath: string = yield* Effect.try({
-    try: () => cwdRequire.resolve("@typescript/native-preview/package.json"),
-    catch: () => new NativePreviewNotInstalledError({ details: "missing package" }),
-  })
+  const nativePreviewResult = probeBackend(nativePreviewBackend, cwdRequire, path)
+  if (nativePreviewResult._tag === "resolved") {
+    return nativePreviewResult.path
+  }
+  if (nativePreviewResult._tag === "unsupportedPlatform") {
+    return yield* Effect.fail(new UnsupportedPlatformPackageError({ packageName: nativePreviewResult.packageName }))
+  }
 
-  const nativePreviewRequire = nodeModule.createRequire(nativePreviewPackageJsonPath)
-  const expectedPackage = "native-preview-" + process.platform + "-" + process.arch
-  const platformPackageName = "@typescript/" + expectedPackage
-  const platformPackageJsonPath: string = yield* Effect.try({
-    try: () => nativePreviewRequire.resolve(platformPackageName + "/package.json"),
-    catch: () => new UnsupportedPlatformPackageError({ packageName: platformPackageName }),
-  })
+  const typescriptResult = probeBackend(typescriptBackend, cwdRequire, path)
+  if (typescriptResult._tag === "resolved") {
+    return typescriptResult.path
+  }
+  if (typescriptResult._tag === "unsupportedPlatform") {
+    return yield* Effect.fail(new UnsupportedPlatformPackageError({ packageName: typescriptResult.packageName }))
+  }
 
-  const platformDir = path.dirname(platformPackageJsonPath)
-  const binaryName = process.platform === "win32" ? "tsgo.exe" : "tsgo"
-  return path.join(platformDir, "lib", binaryName)
+  return yield* Effect.fail(new NativeBackendNotInstalledError({ details: "no native backend found" }))
 })
 
 const getPackagedBinaryPath = Effect.gen(function*() {
@@ -158,7 +214,7 @@ const getPackagedBinaryPath = Effect.gen(function*() {
 const patch = Effect.gen(function*() {
   const fs = yield* FileSystem.FileSystem
   const path = yield* Path.Path
-  const targetPath = yield* getNativePreviewBinaryPath
+  const targetPath = yield* getNativeBackendBinaryPath
   const backupPath = path.join(path.dirname(targetPath), path.basename(targetPath) + ".original")
   const ourBinaryPath = yield* getPackagedBinaryPath
 
@@ -217,7 +273,7 @@ const patch = Effect.gen(function*() {
 const unpatch = Effect.gen(function*() {
   const fs = yield* FileSystem.FileSystem
   const path = yield* Path.Path
-  const targetPath = yield* getNativePreviewBinaryPath
+  const targetPath = yield* getNativeBackendBinaryPath
   const backupPath = path.join(path.dirname(targetPath), path.basename(targetPath) + ".original")
 
   const backupExists = yield* fs.exists(backupPath)
