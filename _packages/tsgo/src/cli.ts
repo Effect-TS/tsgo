@@ -114,7 +114,7 @@ type CliDomainError =
  *   sub-package is missing; a concrete, actionable error.
  */
 type BackendProbe =
-  | { readonly _tag: "resolved"; readonly path: string }
+  | { readonly _tag: "resolved"; readonly path: string; readonly binaryName: string }
   | { readonly _tag: "notInstalled" }
   | { readonly _tag: "unsupportedPlatform"; readonly packageName: string }
 
@@ -150,13 +150,17 @@ const probeBackend = (backend: NativeBackend, cwdRequire: NodeRequire, path: Pat
 
   const platformDir = path.dirname(platformPackageJsonPath)
   const binaryName = backend.binaryName + (isWin ? ".exe" : "")
-  return { _tag: "resolved", path: path.join(platformDir, "lib", binaryName) }
+  return { _tag: "resolved", path: path.join(platformDir, "lib", binaryName), binaryName: backend.binaryName }
 }
 
 /**
  * Resolve the native TypeScript binary to patch. The `@typescript/native-preview`
  * backend is tried first (back-compat), then the `typescript` >= 7 package so
  * that the TypeScript 7 RC/stable release is supported out of the box.
+ *
+ * Returns the target binary path plus the backend's base binary name (`tsgo` or
+ * `tsc`); the latter selects the matching Effect-patched artifact from
+ * `@effect/tsgo-*` (which ships separate `lib/tsgo` and `lib/tsc` builds).
  */
 const getNativeBackendBinaryPath = Effect.gen(function*() {
   const path = yield* Path.Path
@@ -164,7 +168,7 @@ const getNativeBackendBinaryPath = Effect.gen(function*() {
 
   const nativePreviewResult = probeBackend(nativePreviewBackend, cwdRequire, path)
   if (nativePreviewResult._tag === "resolved") {
-    return nativePreviewResult.path
+    return { targetPath: nativePreviewResult.path, binaryName: nativePreviewResult.binaryName }
   }
   if (nativePreviewResult._tag === "unsupportedPlatform") {
     return yield* Effect.fail(new UnsupportedPlatformPackageError({ packageName: nativePreviewResult.packageName }))
@@ -172,7 +176,7 @@ const getNativeBackendBinaryPath = Effect.gen(function*() {
 
   const typescriptResult = probeBackend(typescriptBackend, cwdRequire, path)
   if (typescriptResult._tag === "resolved") {
-    return typescriptResult.path
+    return { targetPath: typescriptResult.path, binaryName: typescriptResult.binaryName }
   }
   if (typescriptResult._tag === "unsupportedPlatform") {
     return yield* Effect.fail(new UnsupportedPlatformPackageError({ packageName: typescriptResult.packageName }))
@@ -181,42 +185,50 @@ const getNativeBackendBinaryPath = Effect.gen(function*() {
   return yield* Effect.fail(new NativeBackendNotInstalledError({ details: "no native backend found" }))
 })
 
-const getPackagedBinaryPath = Effect.gen(function*() {
-  const fs = yield* FileSystem.FileSystem
-  const path = yield* Path.Path
-  const packageName = "@effect/tsgo-" + process.platform + "-" + process.arch
-  const selfRequire = nodeModule.createRequire(import.meta.url)
-  const packageJsonPath: string = yield* Effect.try({
-    try: () => selfRequire.resolve(packageName + "/package.json"),
-    catch: () =>
-      new ResolvePackagedBinaryError({
-        reason:
-          `Unable to resolve ${packageName}. ` +
-          "Either your platform is unsupported, or the platform package is not installed.",
-      }),
+/**
+ * Resolve the Effect-patched binary to copy over the native target. The
+ * `@effect/tsgo-*` platform package ships separate `lib/tsgo` (built from
+ * `main`) and `lib/tsc` (built from `generated/stable`) artifacts; `binaryName`
+ * selects the one matching the detected native backend so the correct build is
+ * installed. Defaults to `tsgo` for the `get-exe-path` command.
+ */
+const getPackagedBinaryPath = (binaryName: string = "tsgo") =>
+  Effect.gen(function*() {
+    const fs = yield* FileSystem.FileSystem
+    const path = yield* Path.Path
+    const packageName = "@effect/tsgo-" + process.platform + "-" + process.arch
+    const selfRequire = nodeModule.createRequire(import.meta.url)
+    const packageJsonPath: string = yield* Effect.try({
+      try: () => selfRequire.resolve(packageName + "/package.json"),
+      catch: () =>
+        new ResolvePackagedBinaryError({
+          reason:
+            `Unable to resolve ${packageName}. ` +
+            "Either your platform is unsupported, or the platform package is not installed.",
+        }),
+    })
+
+    const packageDir = path.dirname(packageJsonPath)
+    const exeName = binaryName + (process.platform === "win32" ? ".exe" : "")
+    const exePath = path.join(packageDir, "lib", exeName)
+    const exists = yield* fs.exists(exePath)
+    if (!exists) {
+      return yield* Effect.fail(
+        new ResolvePackagedBinaryError({
+          reason: "Executable not found: " + exePath,
+        })
+      )
+    }
+
+    return exePath
   })
-
-  const packageDir = path.dirname(packageJsonPath)
-  const binaryName = process.platform === "win32" ? "tsgo.exe" : "tsgo"
-  const exePath = path.join(packageDir, "lib", binaryName)
-  const exists = yield* fs.exists(exePath)
-  if (!exists) {
-    return yield* Effect.fail(
-      new ResolvePackagedBinaryError({
-        reason: "Executable not found: " + exePath,
-      })
-    )
-  }
-
-  return exePath
-})
 
 const patch = Effect.gen(function*() {
   const fs = yield* FileSystem.FileSystem
   const path = yield* Path.Path
-  const targetPath = yield* getNativeBackendBinaryPath
+  const { targetPath, binaryName } = yield* getNativeBackendBinaryPath
   const backupPath = path.join(path.dirname(targetPath), path.basename(targetPath) + ".original")
-  const ourBinaryPath = yield* getPackagedBinaryPath
+  const ourBinaryPath = yield* getPackagedBinaryPath(binaryName)
 
   const targetExists = yield* fs.exists(targetPath)
   if (!targetExists) {
@@ -273,7 +285,7 @@ const patch = Effect.gen(function*() {
 const unpatch = Effect.gen(function*() {
   const fs = yield* FileSystem.FileSystem
   const path = yield* Path.Path
-  const targetPath = yield* getNativeBackendBinaryPath
+  const { targetPath } = yield* getNativeBackendBinaryPath
   const backupPath = path.join(path.dirname(targetPath), path.basename(targetPath) + ".original")
 
   const backupExists = yield* fs.exists(backupPath)
@@ -321,7 +333,7 @@ const unpatchCommand = Command.make("unpatch").pipe(
 
 const getExePathCommand = Command.make("get-exe-path").pipe(
   Command.withDescription("Print the Effect Language Service executable path"),
-  Command.withHandler(() => getPackagedBinaryPath.pipe(Effect.flatMap((exePath) => Console.log(exePath))))
+  Command.withHandler(() => getPackagedBinaryPath().pipe(Effect.flatMap((exePath) => Console.log(exePath))))
 )
 
 const rootCommand = Command.make("tsgo").pipe(
