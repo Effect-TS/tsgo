@@ -21,6 +21,13 @@ export type Editor = "vscode" | "nvim" | "emacs"
 export interface PackageDependency {
   readonly dependencyType: "dependencies" | "devDependencies"
   readonly version: string
+  /**
+   * The npm package name this dependency refers to. Used by the native
+   * backend logic to distinguish `@typescript/native-preview` from
+   * `typescript` >= 7. Defaults to `@typescript/native-preview` when absent,
+   * preserving the behavior expected by existing setup consumers.
+   */
+  readonly packageName?: string
 }
 
 export namespace Assessment {

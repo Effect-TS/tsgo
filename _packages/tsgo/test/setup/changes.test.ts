@@ -13,7 +13,7 @@ function runComputeChanges(opts: {
   vscodeSettingsText?: string | null
   editors?: ReadonlyArray<"vscode" | "nvim" | "emacs">
   lspVersion?: { dependencyType: "dependencies" | "devDependencies"; version: string } | null
-  nativePreviewVersion?: { dependencyType: "dependencies" | "devDependencies"; version: string } | null
+  nativePreviewVersion?: { dependencyType: "dependencies" | "devDependencies"; version: string; packageName?: string } | null
   prepareScript?: boolean
   vscodeTargetSettings?: Record<string, unknown> | null
   diagnosticSeverities?: Record<string, "off" | "suggestion" | "message" | "warning" | "error"> | null
@@ -163,6 +163,74 @@ describe("computeChanges", () => {
     }))
   })
 
+  it("should assess typescript >= 7 from dependencies as the native backend", () => {
+    const packageJsonText = JSON.stringify({
+      name: "test-project",
+      version: "1.0.0",
+      dependencies: {
+        "typescript": "^7.0.1-rc"
+      }
+    }, null, 2)
+
+    const input: Assessment.Input = {
+      packageJson: { fileName: "/test/package.json", text: packageJsonText },
+      tsconfig: { fileName: "/test/tsconfig.json", text: "{}" },
+      vscodeSettings: Option.none()
+    }
+
+    const assessment = assess(input)
+
+    expect(assessment.packageJson.nativePreviewVersion).toEqual(Option.some({
+      dependencyType: "dependencies",
+      version: "^7.0.1-rc",
+      packageName: "typescript"
+    }))
+  })
+
+  it("should not assess typescript < 7 as the native backend", () => {
+    const packageJsonText = JSON.stringify({
+      name: "test-project",
+      version: "1.0.0",
+      dependencies: {
+        "typescript": "^5.9.2"
+      }
+    }, null, 2)
+
+    const input: Assessment.Input = {
+      packageJson: { fileName: "/test/package.json", text: packageJsonText },
+      tsconfig: { fileName: "/test/tsconfig.json", text: "{}" },
+      vscodeSettings: Option.none()
+    }
+
+    const assessment = assess(input)
+
+    expect(assessment.packageJson.nativePreviewVersion).toEqual(Option.none())
+  })
+
+  it("should prefer @typescript/native-preview over typescript >= 7 when both are installed", () => {
+    const packageJsonText = JSON.stringify({
+      name: "test-project",
+      version: "1.0.0",
+      dependencies: {
+        "@typescript/native-preview": "^7.0.0-dev.20260327",
+        "typescript": "^7.0.1-rc"
+      }
+    }, null, 2)
+
+    const input: Assessment.Input = {
+      packageJson: { fileName: "/test/package.json", text: packageJsonText },
+      tsconfig: { fileName: "/test/tsconfig.json", text: "{}" },
+      vscodeSettings: Option.none()
+    }
+
+    const assessment = assess(input)
+
+    expect(assessment.packageJson.nativePreviewVersion).toEqual(Option.some({
+      dependencyType: "dependencies",
+      version: "^7.0.0-dev.20260327"
+    }))
+  })
+
   it("should add @typescript/native-preview when installing the LSP if it is missing", () => {
     const result = runComputeChanges({
       packageJsonText: JSON.stringify({
@@ -183,6 +251,29 @@ describe("computeChanges", () => {
     expect(packageJsonChange).toBeDefined()
     expect(packageJsonChange?.textChanges.some((change) => change.newText.includes("@typescript/native-preview"))).toBe(true)
     expect(result.codeActions[0]?.description).toContain("Add @typescript/native-preview@latest to devDependencies")
+  })
+
+  it("should add the typescript backend (not @typescript/native-preview) when it is the selected native backend", () => {
+    const result = runComputeChanges({
+      packageJsonText: JSON.stringify({
+        name: "test-project",
+        version: "1.0.0",
+        devDependencies: {}
+      }, null, 2),
+      lspVersion: { dependencyType: "devDependencies", version: "0.0.4" },
+      nativePreviewVersion: { dependencyType: "devDependencies", version: "^7.0.1-rc", packageName: "typescript" },
+      prepareScript: false,
+      editors: []
+    })
+
+    const packageJsonChange = result.codeActions
+      .flatMap((action) => action.changes)
+      .find((change) => change.fileName === "/test/package.json")
+
+    expect(packageJsonChange).toBeDefined()
+    expect(packageJsonChange?.textChanges.some((change) => change.newText.includes('"typescript"'))).toBe(true)
+    expect(packageJsonChange?.textChanges.some((change) => change.newText.includes("@typescript/native-preview"))).toBe(false)
+    expect(result.codeActions[0]?.description).toContain("Add typescript@^7.0.1-rc to devDependencies")
   })
 
   it("should not throw when updating an existing prepare script from the legacy command", () => {
