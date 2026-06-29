@@ -238,6 +238,11 @@ const computePackageJsonChanges = (
   const fileChanges = tsInternal.textChanges.ChangeTracker.with(
     ctx,
     (tracker: any) => {
+      const nativeBackendPackageName = Option.match(target.nativePreviewVersion, {
+        onNone: () => NATIVE_PREVIEW_PACKAGE_NAME,
+        onSome: (dep) => dep.packageName ?? NATIVE_PREVIEW_PACKAGE_NAME
+      })
+
       const shouldAddNativePreviewWithDependencyType = (dependencyType: "dependencies" | "devDependencies") =>
         Option.isSome(target.nativePreviewVersion) &&
         Option.isNone(current.nativePreviewVersion) &&
@@ -260,9 +265,9 @@ const computePackageJsonChanges = (
         }
 
         descriptions.push(
-          `Add ${NATIVE_PREVIEW_PACKAGE_NAME}@${targetNativePreview.version} to ${targetNativePreview.dependencyType}`
+          `Add ${nativeBackendPackageName}@${targetNativePreview.version} to ${targetNativePreview.dependencyType}`
         )
-        upsertDependency(tracker, current.sourceFile, rootObj, NATIVE_PREVIEW_PACKAGE_NAME, targetNativePreview)
+        upsertDependency(tracker, current.sourceFile, rootObj, nativeBackendPackageName, targetNativePreview)
       }
 
       // Handle @effect/tsgo dependency
@@ -303,7 +308,7 @@ const computePackageJsonChanges = (
                 if (targetNativePreview) {
                 dependencyProperties.push(
                   ts.factory.createPropertyAssignment(
-                    ts.factory.createStringLiteral(NATIVE_PREVIEW_PACKAGE_NAME),
+                    ts.factory.createStringLiteral(nativeBackendPackageName),
                     ts.factory.createStringLiteral(targetNativePreview.version)
                   )
                 )
@@ -361,7 +366,7 @@ const computePackageJsonChanges = (
               if (targetNativePreview) {
               dependencyProperties.push(
                 ts.factory.createPropertyAssignment(
-                  ts.factory.createStringLiteral(NATIVE_PREVIEW_PACKAGE_NAME),
+                  ts.factory.createStringLiteral(nativeBackendPackageName),
                   ts.factory.createStringLiteral(targetNativePreview.version)
                 )
               )
