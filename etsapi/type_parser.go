@@ -27,9 +27,29 @@ type Layer struct {
 	RIn  *checker.Type
 }
 
+// Service represents parsed service identifier and implementation shape types.
+type Service struct {
+	Identifier *checker.Type
+	Shape      *checker.Type
+}
+
+// SchemaTypes represents parsed Schema type and encoded type parameters.
+type SchemaTypes struct {
+	A *checker.Type
+	E *checker.Type
+}
+
 // NewTypeParser builds a checker-backed TypeParser.
 func NewTypeParser(program checker.Program, checker *checker.Checker) *TypeParser {
 	return &TypeParser{inner: typeparser.NewTypeParser(program, checker)}
+}
+
+// GetTypeAtLocation returns the checker type for node using the parser's safety guards.
+func (tp *TypeParser) GetTypeAtLocation(node *ast.Node) *checker.Type {
+	if tp == nil || tp.inner == nil {
+		return nil
+	}
+	return tp.inner.GetTypeAtLocation(node)
 }
 
 // EffectType parses an Effect type and extracts A, E, R parameters.
@@ -46,6 +66,30 @@ func (tp *TypeParser) LayerType(t *checker.Type, atLocation *ast.Node) *Layer {
 		return nil
 	}
 	return layerFromInternal(tp.inner.LayerType(t, atLocation))
+}
+
+// ServiceType parses a v4 service type and extracts Identifier and Shape parameters.
+func (tp *TypeParser) ServiceType(t *checker.Type, atLocation *ast.Node) *Service {
+	if tp == nil || tp.inner == nil {
+		return nil
+	}
+	return serviceFromInternal(tp.inner.ServiceType(t, atLocation))
+}
+
+// ContextTag parses a v3 Context.Tag type and extracts Identifier and Shape parameters.
+func (tp *TypeParser) ContextTag(t *checker.Type, atLocation *ast.Node) *Service {
+	if tp == nil || tp.inner == nil {
+		return nil
+	}
+	return serviceFromInternal(tp.inner.ContextTag(t, atLocation))
+}
+
+// EffectSchemaTypes extracts the type and encoded type from a Schema type.
+func (tp *TypeParser) EffectSchemaTypes(t *checker.Type, atLocation *ast.Node) *SchemaTypes {
+	if tp == nil || tp.inner == nil {
+		return nil
+	}
+	return schemaTypesFromInternal(tp.inner.EffectSchemaTypes(t, atLocation))
 }
 
 // StreamType parses a Stream type and extracts A, E, R parameters.
@@ -85,4 +129,18 @@ func layerFromInternal(layer *typeparser.Layer) *Layer {
 		return nil
 	}
 	return &Layer{ROut: layer.ROut, E: layer.E, RIn: layer.RIn}
+}
+
+func serviceFromInternal(service *typeparser.Service) *Service {
+	if service == nil {
+		return nil
+	}
+	return &Service{Identifier: service.Identifier, Shape: service.Shape}
+}
+
+func schemaTypesFromInternal(schemaTypes *typeparser.SchemaTypes) *SchemaTypes {
+	if schemaTypes == nil {
+		return nil
+	}
+	return &SchemaTypes{A: schemaTypes.A, E: schemaTypes.E}
 }
