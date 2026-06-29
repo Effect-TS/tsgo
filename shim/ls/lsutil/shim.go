@@ -92,6 +92,12 @@ const OrganizeImportsCaseFirstUpper = lsutil.OrganizeImportsCaseFirstUpper
 type OrganizeImportsCollation = lsutil.OrganizeImportsCollation
 const OrganizeImportsCollationOrdinal = lsutil.OrganizeImportsCollationOrdinal
 const OrganizeImportsCollationUnicode = lsutil.OrganizeImportsCollationUnicode
+type OrganizeImportsSort = lsutil.OrganizeImportsSort
+const OrganizeImportsSortAuto = lsutil.OrganizeImportsSortAuto
+const OrganizeImportsSortNatural = lsutil.OrganizeImportsSortNatural
+const OrganizeImportsSortNaturalIgnoreCase = lsutil.OrganizeImportsSortNaturalIgnoreCase
+const OrganizeImportsSortOrdinal = lsutil.OrganizeImportsSortOrdinal
+const OrganizeImportsSortOrdinalIgnoreCase = lsutil.OrganizeImportsSortOrdinalIgnoreCase
 type OrganizeImportsTypeOrder = lsutil.OrganizeImportsTypeOrder
 const OrganizeImportsTypeOrderAuto = lsutil.OrganizeImportsTypeOrderAuto
 const OrganizeImportsTypeOrderFirst = lsutil.OrganizeImportsTypeOrderFirst
@@ -112,6 +118,8 @@ const QuotePreferenceDouble = lsutil.QuotePreferenceDouble
 func QuotePreferenceFromString(str *ast.StringLiteral) lsutil.QuotePreference
 const QuotePreferenceSingle = lsutil.QuotePreferenceSingle
 const QuotePreferenceUnknown = lsutil.QuotePreferenceUnknown
+//go:linkname ResolveOrganizeImportsSort github.com/microsoft/typescript-go/internal/ls/lsutil.ResolveOrganizeImportsSort
+func ResolveOrganizeImportsSort(preferences lsutil.UserPreferences) lsutil.OrganizeImportsSort
 type ScriptElementKind = lsutil.ScriptElementKind
 const ScriptElementKindAlias = lsutil.ScriptElementKindAlias
 const ScriptElementKindCallSignatureElement = lsutil.ScriptElementKindCallSignatureElement
