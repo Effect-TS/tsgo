@@ -16,14 +16,14 @@ type workItem struct {
 	depth int
 }
 
-// ExtractLayerGraph builds a directed graph of Layer composition from the given AST node.
+// ExtractLayerGraph builds a directed graph of Layer composition from the given AST nodes.
 // It performs a DFS with a two-pass approach using an explicit work stack:
 //   - First pass: push children for processing
 //   - Second pass: link processed children into the graph
 func ExtractLayerGraph(
 	tp *typeparser.TypeParser,
 	c *checker.Checker,
-	node *ast.Node,
+	nodes []*ast.Node,
 	sf *ast.SourceFile,
 	opts ExtractLayerGraphOptions,
 ) *graph.Graph[LayerGraphNodeInfo, LayerGraphEdgeInfo] {
@@ -34,15 +34,20 @@ func ExtractLayerGraph(
 	depthBudget := make(map[*ast.Node]int)
 
 	// Resolve the Layer module import name for ExplodeOnlyLayerCalls checks.
-	layerModuleName := findLayerModuleName(sf)
+	layerModuleName := ""
+	if !opts.SkipExplode {
+		layerModuleName = findLayerModuleName(sf)
+	}
 
-	// Initialize the work stack with the root node.
-	stack := []workItem{{node: node, depth: opts.FollowSymbolsDepth}}
-	depthBudget[node] = opts.FollowSymbolsDepth
+	// Initialize the work stack with the root nodes.
+	stack := []workItem{}
 
 	appendNodeToVisit := func(n *ast.Node, depth int) {
 		depthBudget[n] = depth
 		stack = append(stack, workItem{node: n, depth: depth})
+	}
+	for _, node := range nodes {
+		appendNodeToVisit(node, opts.FollowSymbolsDepth)
 	}
 
 	addNode := func(n *ast.Node, info LayerGraphNodeInfo) graph.NodeIndex {
@@ -59,50 +64,52 @@ func ExtractLayerGraph(
 		currentDepth := depthBudget[current]
 
 		// Case 1: Pipe detection
-		if pipeResult := tp.ParsePipeCall(current); pipeResult != nil {
-			if !visitedNodes[current] {
-				// First pass: push self back, then subject and args.
-				appendNodeToVisit(current, currentDepth)
-				appendNodeToVisit(pipeResult.Subject, currentDepth)
-				for _, arg := range pipeResult.Args {
-					appendNodeToVisit(arg, currentDepth)
-					nodeInPipeContext[arg] = true
-				}
-				visitedNodes[current] = true
-			} else {
-				// Second pass: collect child graph indices.
-				allChildren := make([]*ast.Node, 0, 1+len(pipeResult.Args))
-				allChildren = append(allChildren, pipeResult.Subject)
-				allChildren = append(allChildren, pipeResult.Args...)
-
-				childIndices := collectChildIndices(allChildren, nodeToGraphIndex, g)
-
-				if len(childIndices) == len(allChildren) {
-					// All members are graph nodes — link them sequentially.
-					var lastIdx graph.NodeIndex
-					for i, childIdx := range childIndices {
-						if i > 0 {
-							g.AddEdge(childIdx, lastIdx, LayerGraphEdgeInfo{Relationship: EdgeRelationshipPipe})
-						}
-						lastIdx = childIdx
+		if !opts.SkipExplode {
+			if pipeResult := tp.ParsePipeCall(current); pipeResult != nil {
+				if !visitedNodes[current] {
+					// First pass: push self back, then subject and args.
+					appendNodeToVisit(current, currentDepth)
+					appendNodeToVisit(pipeResult.Subject, currentDepth)
+					for _, arg := range pipeResult.Args {
+						appendNodeToVisit(arg, currentDepth)
+						nodeInPipeContext[arg] = true
 					}
-					// Add a node for the pipe call itself, linking to the last child.
-					pipeIdx := addNode(current, extractNodeInfo(tp, c, current, sf, nodeInPipeContext[current]))
-					g.AddEdge(pipeIdx, lastIdx, LayerGraphEdgeInfo{Relationship: EdgeRelationshipPipe})
+					visitedNodes[current] = true
 				} else {
-					// Not all children are graph nodes — remove partial children and try as leaf.
-					removePartialChildren(allChildren, nodeToGraphIndex, g)
-					info := extractNodeInfo(tp, c, current, sf, nodeInPipeContext[current])
-					if info.LayerType != nil {
-						addNode(current, info)
+					// Second pass: collect child graph indices.
+					allChildren := make([]*ast.Node, 0, 1+len(pipeResult.Args))
+					allChildren = append(allChildren, pipeResult.Subject)
+					allChildren = append(allChildren, pipeResult.Args...)
+
+					childIndices := collectChildIndices(allChildren, nodeToGraphIndex, g)
+
+					if len(childIndices) == len(allChildren) {
+						// All members are graph nodes — link them sequentially.
+						var lastIdx graph.NodeIndex
+						for i, childIdx := range childIndices {
+							if i > 0 {
+								g.AddEdge(childIdx, lastIdx, LayerGraphEdgeInfo{Relationship: EdgeRelationshipPipe})
+							}
+							lastIdx = childIdx
+						}
+						// Add a node for the pipe call itself, linking to the last child.
+						pipeIdx := addNode(current, extractNodeInfo(tp, c, current, sf, nodeInPipeContext[current]))
+						g.AddEdge(pipeIdx, lastIdx, LayerGraphEdgeInfo{Relationship: EdgeRelationshipPipe})
+					} else {
+						// Not all children are graph nodes — remove partial children and try as leaf.
+						removePartialChildren(allChildren, nodeToGraphIndex, g)
+						info := extractNodeInfo(tp, c, current, sf, nodeInPipeContext[current])
+						if info.LayerType != nil {
+							addNode(current, info)
+						}
 					}
 				}
+				continue
 			}
-			continue
 		}
 
 		// Case 2: Call expression
-		if current.Kind == ast.KindCallExpression {
+		if !opts.SkipExplode && current.Kind == ast.KindCallExpression {
 			callExpr := current.AsCallExpression()
 			shouldExplode := !opts.ExplodeOnlyLayerCalls
 			if opts.ExplodeOnlyLayerCalls {
@@ -149,7 +156,7 @@ func ExtractLayerGraph(
 		}
 
 		// Case 3: Array literal (when ArrayLiteralAsMerge is enabled)
-		if opts.ArrayLiteralAsMerge && current.Kind == ast.KindArrayLiteralExpression {
+		if !opts.SkipExplode && opts.ArrayLiteralAsMerge && current.Kind == ast.KindArrayLiteralExpression {
 			arrayExpr := current.AsArrayLiteralExpression()
 			var elements []*ast.Node
 			if arrayExpr.Elements != nil {
