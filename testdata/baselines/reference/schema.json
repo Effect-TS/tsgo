@@ -1679,6 +1679,11 @@
           "default": "suggestion",
           "description": "Suggests using Effect.mapError instead of Effect.catch + Effect.fail"
         },
+        "catchToIgnore": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests using Effect.ignore or Effect.ignoreCause instead of Effect.catch/catchCause returning Effect.void"
+        },
         "catchToOrElseSucceed": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
@@ -1983,6 +1988,11 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
           "description": "Suggests using Runtime or Effect.run*With methods instead of Effect.run* inside Effect contexts"
+        },
+        "schemaNumber": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Schema.Finite and Schema.FiniteFromString instead of Schema.Number APIs when describing domain numbers"
         },
         "schemaStructWithTag": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",

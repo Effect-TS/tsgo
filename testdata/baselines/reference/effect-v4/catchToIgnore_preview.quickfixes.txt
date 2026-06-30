@@ -1,0 +1,26 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:3-6:15) TS377099: `Effect.ignore` expresses ignored failure more directly than `Effect.catch` returning `Effect.void`. effect(catchToIgnore)
+  Fix 0: "Disable catchToIgnore for this line"
+  Fix 1: "Disable catchToIgnore for entire file"
+  Fix 2: "Replace with Effect.ignore"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable catchToIgnore for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable catchToIgnore for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.ignore" ===
+
+--- file:///.src/catchToIgnore_preview.ts ---
+import { Effect } from "effect"
+
+declare const program: Effect.Effect<void, string, never>
+
+export const recovered = program.pipe(
+  Effect.ignore
+)
+

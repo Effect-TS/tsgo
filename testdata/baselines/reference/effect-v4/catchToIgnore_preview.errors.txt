@@ -1,0 +1,17 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/catchToIgnore_preview.ts(6,3): suggestion TS377099: `Effect.ignore` expresses ignored failure more directly than `Effect.catch` returning `Effect.void`. effect(catchToIgnore)
+
+
+==== /.src/catchToIgnore_preview.ts (1 errors) ====
+    import { Effect } from "effect"
+    
+    declare const program: Effect.Effect<void, string, never>
+    
+    export const recovered = program.pipe(
+      Effect.catch(() => Effect.void)
+      ~~~~~~~~~~~~
+!!! suggestion TS377099: `Effect.ignore` expresses ignored failure more directly than `Effect.catch` returning `Effect.void`. effect(catchToIgnore)
+    )
+    

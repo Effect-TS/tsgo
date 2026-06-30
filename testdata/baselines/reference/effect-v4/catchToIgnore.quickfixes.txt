@@ -1,0 +1,286 @@
+=== Quick Fix Inventory ===
+
+[D1] (9:3-9:15) TS377099: `Effect.ignore` expresses ignored failure more directly than `Effect.catch` returning `Effect.void`. effect(catchToIgnore)
+  Fix 0: "Disable catchToIgnore for this line"
+  Fix 1: "Disable catchToIgnore for entire file"
+  Fix 2: "Replace with Effect.ignore"
+
+[D2] (14:3-14:20) TS377099: `Effect.ignoreCause` expresses ignored failure more directly than `Effect.catchCause` returning `Effect.void`. effect(catchToIgnore)
+  Fix 0: "Disable catchToIgnore for this line"
+  Fix 1: "Disable catchToIgnore for entire file"
+  Fix 2: "Replace with Effect.ignoreCause"
+
+[D3] (20:3-20:15) TS377099: `Effect.ignore` expresses ignored failure more directly than `Effect.catch` returning `Effect.void`. effect(catchToIgnore)
+  Fix 0: "Disable catchToIgnore for this line"
+  Fix 1: "Disable catchToIgnore for entire file"
+  Fix 2: "Replace with Effect.ignore"
+
+[D4] (25:3-25:15) TS377099: `Effect.ignore` expresses ignored failure more directly than `Effect.catch` returning `Effect.void`. effect(catchToIgnore)
+  Fix 0: "Disable catchToIgnore for this line"
+  Fix 1: "Disable catchToIgnore for entire file"
+  Fix 2: "Replace with Effect.ignore"
+
+[D5] (31:39-31:51) TS377099: `Effect.ignore` expresses ignored failure more directly than `Effect.catch` returning `Effect.void`. effect(catchToIgnore)
+  Fix 0: "Disable catchToIgnore for this line"
+  Fix 1: "Disable catchToIgnore for entire file"
+  Fix 2: "Replace with Effect.ignore"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable catchToIgnore for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable catchToIgnore for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.ignore" ===
+
+--- file:///.src/catchToIgnore.ts ---
+import { Effect, pipe } from "effect"
+
+declare const voidEffect: Effect.Effect<void, string, never>
+declare const undefinedEffect: Effect.Effect<undefined, string, never>
+declare const numberEffect: Effect.Effect<number, string, never>
+
+// Should trigger: catch returning Effect.void on a void success channel
+export const shouldTriggerCatch = voidEffect.pipe(
+  Effect.ignore
+)
+
+// Should trigger: catchCause returning Effect.void on a void success channel
+export const shouldTriggerCatchCause = voidEffect.pipe(
+  Effect.catchCause((_cause) => Effect.void)
+)
+
+// Should trigger: pipe style
+export const shouldTriggerPipe = pipe(
+  Effect.fail("error"),
+  Effect.catch(() => Effect.void)
+)
+
+// Should trigger: block body
+export const shouldTriggerBlock = undefinedEffect.pipe(
+  Effect.catch(() => {
+    return Effect.void
+  })
+)
+
+// Should trigger: data-first style
+export const shouldTriggerDataFirst = Effect.catch(voidEffect, () => Effect.void)
+
+// Should NOT trigger: Effect.ignore would discard the number success value
+export const shouldNotTriggerValueSuccess = numberEffect.pipe(
+  Effect.catch(() => Effect.void)
+)
+
+// Should NOT trigger: fallback is not exactly Effect.void
+export const shouldNotTriggerOtherFallback = voidEffect.pipe(
+  Effect.catch(() => Effect.sync(() => undefined))
+)
+
+
+=== [D2] Fix 0: "Disable catchToIgnore for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable catchToIgnore for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.ignoreCause" ===
+
+--- file:///.src/catchToIgnore.ts ---
+import { Effect, pipe } from "effect"
+
+declare const voidEffect: Effect.Effect<void, string, never>
+declare const undefinedEffect: Effect.Effect<undefined, string, never>
+declare const numberEffect: Effect.Effect<number, string, never>
+
+// Should trigger: catch returning Effect.void on a void success channel
+export const shouldTriggerCatch = voidEffect.pipe(
+  Effect.catch(() => Effect.void)
+)
+
+// Should trigger: catchCause returning Effect.void on a void success channel
+export const shouldTriggerCatchCause = voidEffect.pipe(
+  Effect.ignoreCause
+)
+
+// Should trigger: pipe style
+export const shouldTriggerPipe = pipe(
+  Effect.fail("error"),
+  Effect.catch(() => Effect.void)
+)
+
+// Should trigger: block body
+export const shouldTriggerBlock = undefinedEffect.pipe(
+  Effect.catch(() => {
+    return Effect.void
+  })
+)
+
+// Should trigger: data-first style
+export const shouldTriggerDataFirst = Effect.catch(voidEffect, () => Effect.void)
+
+// Should NOT trigger: Effect.ignore would discard the number success value
+export const shouldNotTriggerValueSuccess = numberEffect.pipe(
+  Effect.catch(() => Effect.void)
+)
+
+// Should NOT trigger: fallback is not exactly Effect.void
+export const shouldNotTriggerOtherFallback = voidEffect.pipe(
+  Effect.catch(() => Effect.sync(() => undefined))
+)
+
+
+=== [D3] Fix 0: "Disable catchToIgnore for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable catchToIgnore for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.ignore" ===
+
+--- file:///.src/catchToIgnore.ts ---
+import { Effect, pipe } from "effect"
+
+declare const voidEffect: Effect.Effect<void, string, never>
+declare const undefinedEffect: Effect.Effect<undefined, string, never>
+declare const numberEffect: Effect.Effect<number, string, never>
+
+// Should trigger: catch returning Effect.void on a void success channel
+export const shouldTriggerCatch = voidEffect.pipe(
+  Effect.catch(() => Effect.void)
+)
+
+// Should trigger: catchCause returning Effect.void on a void success channel
+export const shouldTriggerCatchCause = voidEffect.pipe(
+  Effect.catchCause((_cause) => Effect.void)
+)
+
+// Should trigger: pipe style
+export const shouldTriggerPipe = pipe(
+  Effect.fail("error"),
+  Effect.ignore
+)
+
+// Should trigger: block body
+export const shouldTriggerBlock = undefinedEffect.pipe(
+  Effect.catch(() => {
+    return Effect.void
+  })
+)
+
+// Should trigger: data-first style
+export const shouldTriggerDataFirst = Effect.catch(voidEffect, () => Effect.void)
+
+// Should NOT trigger: Effect.ignore would discard the number success value
+export const shouldNotTriggerValueSuccess = numberEffect.pipe(
+  Effect.catch(() => Effect.void)
+)
+
+// Should NOT trigger: fallback is not exactly Effect.void
+export const shouldNotTriggerOtherFallback = voidEffect.pipe(
+  Effect.catch(() => Effect.sync(() => undefined))
+)
+
+
+=== [D4] Fix 0: "Disable catchToIgnore for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable catchToIgnore for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.ignore" ===
+
+--- file:///.src/catchToIgnore.ts ---
+import { Effect, pipe } from "effect"
+
+declare const voidEffect: Effect.Effect<void, string, never>
+declare const undefinedEffect: Effect.Effect<undefined, string, never>
+declare const numberEffect: Effect.Effect<number, string, never>
+
+// Should trigger: catch returning Effect.void on a void success channel
+export const shouldTriggerCatch = voidEffect.pipe(
+  Effect.catch(() => Effect.void)
+)
+
+// Should trigger: catchCause returning Effect.void on a void success channel
+export const shouldTriggerCatchCause = voidEffect.pipe(
+  Effect.catchCause((_cause) => Effect.void)
+)
+
+// Should trigger: pipe style
+export const shouldTriggerPipe = pipe(
+  Effect.fail("error"),
+  Effect.catch(() => Effect.void)
+)
+
+// Should trigger: block body
+export const shouldTriggerBlock = undefinedEffect.pipe(
+  Effect.ignore
+)
+
+// Should trigger: data-first style
+export const shouldTriggerDataFirst = Effect.catch(voidEffect, () => Effect.void)
+
+// Should NOT trigger: Effect.ignore would discard the number success value
+export const shouldNotTriggerValueSuccess = numberEffect.pipe(
+  Effect.catch(() => Effect.void)
+)
+
+// Should NOT trigger: fallback is not exactly Effect.void
+export const shouldNotTriggerOtherFallback = voidEffect.pipe(
+  Effect.catch(() => Effect.sync(() => undefined))
+)
+
+
+=== [D5] Fix 0: "Disable catchToIgnore for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable catchToIgnore for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Replace with Effect.ignore" ===
+
+--- file:///.src/catchToIgnore.ts ---
+import { Effect, pipe } from "effect"
+
+declare const voidEffect: Effect.Effect<void, string, never>
+declare const undefinedEffect: Effect.Effect<undefined, string, never>
+declare const numberEffect: Effect.Effect<number, string, never>
+
+// Should trigger: catch returning Effect.void on a void success channel
+export const shouldTriggerCatch = voidEffect.pipe(
+  Effect.catch(() => Effect.void)
+)
+
+// Should trigger: catchCause returning Effect.void on a void success channel
+export const shouldTriggerCatchCause = voidEffect.pipe(
+  Effect.catchCause((_cause) => Effect.void)
+)
+
+// Should trigger: pipe style
+export const shouldTriggerPipe = pipe(
+  Effect.fail("error"),
+  Effect.catch(() => Effect.void)
+)
+
+// Should trigger: block body
+export const shouldTriggerBlock = undefinedEffect.pipe(
+  Effect.catch(() => {
+    return Effect.void
+  })
+)
+
+// Should trigger: data-first style
+export const shouldTriggerDataFirst = Effect.ignore(voidEffect)
+
+// Should NOT trigger: Effect.ignore would discard the number success value
+export const shouldNotTriggerValueSuccess = numberEffect.pipe(
+  Effect.catch(() => Effect.void)
+)
+
+// Should NOT trigger: fallback is not exactly Effect.void
+export const shouldNotTriggerOtherFallback = voidEffect.pipe(
+  Effect.catch(() => Effect.sync(() => undefined))
+)
+

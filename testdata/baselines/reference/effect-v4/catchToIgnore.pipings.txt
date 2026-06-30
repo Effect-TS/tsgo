@@ -1,0 +1,117 @@
+==== /.src/catchToIgnore.ts (8 flows) ====
+
+=== Piping Flow ===
+Location: 8:34 - 10:2
+Node: voidEffect.pipe(\n  Effect.catch(() => Effect.void)\n)
+Node Kind: KindCallExpression
+
+Subject: voidEffect
+Subject Type: Effect<void, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [() => Effect.void]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 13:39 - 15:2
+Node: voidEffect.pipe(\n  Effect.catchCause((_cause) => Effect.void)\n)
+Node Kind: KindCallExpression
+
+Subject: voidEffect
+Subject Type: Effect<void, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catchCause
+      args: [(_cause) => Effect.void]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 18:33 - 21:2
+Node: pipe(\n  Effect.fail("error"),\n  Effect.catch(() => Effect.void)\n)
+Node Kind: KindCallExpression
+
+Subject: "error"
+Subject Type: "error"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>
+  [1] kind: pipe
+      callee: Effect.catch
+      args: [() => Effect.void]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 24:34 - 28:2
+Node: undefinedEffect.pipe(\n  Effect.catch(() => {\n    return Effect.void\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: undefinedEffect
+Subject Type: Effect<undefined, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [() => {\n    return Effect.void\n  }]
+      outType: Effect<void | undefined, never, never>
+
+=== Piping Flow ===
+Location: 31:38 - 31:82
+Node: Effect.catch(voidEffect, () => Effect.void)
+Node Kind: KindCallExpression
+
+Subject: voidEffect
+Subject Type: Effect<void, string, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.catch
+      args: [() => Effect.void]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 34:44 - 36:2
+Node: numberEffect.pipe(\n  Effect.catch(() => Effect.void)\n)
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [() => Effect.void]
+      outType: Effect<void | number, never, never>
+
+=== Piping Flow ===
+Location: 39:45 - 41:2
+Node: voidEffect.pipe(\n  Effect.catch(() => Effect.sync(() => undefined))\n)
+Node Kind: KindCallExpression
+
+Subject: voidEffect
+Subject Type: Effect<void, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [() => Effect.sync(() => undefined)]
+      outType: Effect<void | undefined, never, never>
+
+=== Piping Flow ===
+Location: 40:21 - 40:50
+Node: Effect.sync(() => undefined)
+Node Kind: KindCallExpression
+
+Subject: () => undefined
+Subject Type: () => undefined
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<undefined, never, never>
