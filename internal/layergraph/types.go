@@ -109,4 +109,5 @@ type ExtractLayerGraphOptions struct {
 	ArrayLiteralAsMerge   bool // Treat array literals [l1, l2] as implicit Layer.mergeAll (default: false)
 	ExplodeOnlyLayerCalls bool // Only explode calls to Layer module APIs (default: false)
 	FollowSymbolsDepth    int  // How many levels deep to follow identifier references (default: 0)
+	SkipExplode           bool // Do not decompose pipe/call/array expressions (default: false)
 }
