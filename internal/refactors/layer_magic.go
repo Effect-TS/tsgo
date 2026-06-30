@@ -6,12 +6,12 @@ import (
 
 	"github.com/effect-ts/tsgo/internal/layergraph"
 	"github.com/effect-ts/tsgo/internal/refactor"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/astnav"
 	"github.com/microsoft/typescript-go/shim/checker"
 	"github.com/microsoft/typescript-go/shim/ls"
-	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var LayerMagic = refactor.Refactor{
@@ -113,7 +113,7 @@ func tryBuildRefactor(ctx *refactor.Context, tp *typeparser.TypeParser, c *check
 	castedStructure := innerAs.Expression
 
 	// Extract layer graph from the casted structure
-	layerGraph := layergraph.ExtractLayerGraph(ctx.TypeParser, c, castedStructure, ctx.SourceFile, layergraph.ExtractLayerGraphOptions{
+	layerGraph := layergraph.ExtractLayerGraph(ctx.TypeParser, c, []*ast.Node{castedStructure}, ctx.SourceFile, layergraph.ExtractLayerGraphOptions{
 		ArrayLiteralAsMerge:   true,
 		ExplodeOnlyLayerCalls: true,
 		FollowSymbolsDepth:    0,
@@ -234,7 +234,7 @@ func tryPrepareRefactor(ctx *refactor.Context, tp *typeparser.TypeParser, c *che
 	}
 
 	// Extract layer graph
-	layerGraph := layergraph.ExtractLayerGraph(ctx.TypeParser, c, atLocation, ctx.SourceFile, layergraph.ExtractLayerGraphOptions{
+	layerGraph := layergraph.ExtractLayerGraph(ctx.TypeParser, c, []*ast.Node{atLocation}, ctx.SourceFile, layergraph.ExtractLayerGraphOptions{
 		ArrayLiteralAsMerge:   true,
 		ExplodeOnlyLayerCalls: true,
 		FollowSymbolsDepth:    0,

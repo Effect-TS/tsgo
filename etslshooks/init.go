@@ -243,7 +243,7 @@ func formatLayerHover(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.Sou
 		opts := layergraph.ExtractLayerGraphOptions{
 			FollowSymbolsDepth: effectConfig.GetLayerGraphFollowDepth(),
 		}
-		fullGraph := layergraph.ExtractLayerGraph(tp, c, initializer, sf, opts)
+		fullGraph := layergraph.ExtractLayerGraph(tp, c, []*ast.Node{initializer}, sf, opts)
 		info := layergraph.ExtractProvidersAndRequirers(c, fullGraph)
 		quickInfoSummary = layergraph.FormatQuickInfo(c, info, sf)
 		hasGraph = true
