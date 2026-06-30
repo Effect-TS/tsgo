@@ -16,6 +16,7 @@ var All = []rule.Rule{
 	CatchUnfailableEffect,
 	CatchAllToMapError,
 	CatchToOrElseSucceed,
+	CatchToIgnore,
 	MultipleCatchTag,
 	EffectFnIife,
 	TryCatchInEffectGen,

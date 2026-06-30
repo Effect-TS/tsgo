@@ -1,0 +1,75 @@
+flowchart TB
+  0[/"type: Effect#lt;void, string, never#gt;<br/>node: voidEffect"/]
+  1["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.catch<br/>args: #91;#40;#41; =#gt; Effect.void#93;"]
+  2[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  3[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  4[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  5[/"type: Effect#lt;void, string, never#gt;<br/>node: voidEffect"/]
+  6["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.catchCause<br/>args: #91;#40;_cause#41; =#gt; Effect.void#93;"]
+  7[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;cause: Cause#lt;E#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;cause: Cause#lt;E#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catchCause"/]
+  8[["type: #40;_cause: Cause#lt;string#gt;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;_cause#41; =#gt; Effect.void"]]
+  9[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  10[/"type: #quot;error#quot;<br/>node: #quot;error#quot;"/]
+  11["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  12[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  13["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.catch<br/>args: #91;#40;#41; =#gt; Effect.void#93;"]
+  14[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  15[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  16[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  17[/"type: Effect#lt;undefined, string, never#gt;<br/>node: undefinedEffect"/]
+  18["type: Effect#lt;void #124; undefined, never, never#gt;<br/>callee: Effect.catch<br/>args: #91;#40;#41; =#gt; #123;#92;n    return Effect.void#92;n  #125;#93;"]
+  19[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  20[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; #123;#92;n    return Effect.void#92;n  #125;"]]
+  21[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  22[/"type: Effect#lt;void, string, never#gt;<br/>node: voidEffect"/]
+  23["type: Effect#lt;void, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  24[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  25[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  26[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  27[/"type: Effect#lt;number, string, never#gt;<br/>node: numberEffect"/]
+  28["type: Effect#lt;void #124; number, never, never#gt;<br/>callee: Effect.catch<br/>args: #91;#40;#41; =#gt; Effect.void#93;"]
+  29[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  30[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  31[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  32[/"type: Effect#lt;void, string, never#gt;<br/>node: voidEffect"/]
+  33["type: Effect#lt;void #124; undefined, never, never#gt;<br/>callee: Effect.catch<br/>args: #91;#40;#41; =#gt; Effect.sync#40;#40;#41; =#gt; undefined#41;#93;"]
+  34[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  35[["type: #40;#41; =#gt; Effect#lt;undefined, never, never#gt;<br/>node: #40;#41; =#gt; Effect.sync#40;#40;#41; =#gt; undefined#41;"]]
+  36[["type: #40;#41; =#gt; undefined<br/>node: #40;#41; =#gt; undefined"]]
+  37[/"type: undefined<br/>node: undefined"/]
+  38["type: Effect#lt;undefined, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
+  39[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
+  2 -->|"kind: transformCallee"| 1
+  4 -->|"kind: potentialReturn"| 3
+  3 -->|"kind: transformArg"| 1
+  0 -->|"kind: pipe"| 1
+  7 -->|"kind: transformCallee"| 6
+  9 -->|"kind: potentialReturn"| 8
+  8 -->|"kind: transformArg"| 6
+  5 -->|"kind: pipe"| 6
+  10 -->|"kind: pipe"| 11
+  12 -->|"kind: transformCallee"| 11
+  14 -->|"kind: transformCallee"| 13
+  16 -->|"kind: potentialReturn"| 15
+  15 -->|"kind: transformArg"| 13
+  11 -->|"kind: pipe"| 13
+  19 -->|"kind: transformCallee"| 18
+  21 -->|"kind: potentialReturn"| 20
+  21 -->|"kind: usedBy"| 20
+  20 -->|"kind: transformArg"| 18
+  17 -->|"kind: pipe"| 18
+  22 -->|"kind: pipe"| 23
+  24 -->|"kind: transformCallee"| 22
+  26 -->|"kind: potentialReturn"| 25
+  25 -->|"kind: transformArg"| 22
+  29 -->|"kind: transformCallee"| 28
+  31 -->|"kind: potentialReturn"| 30
+  30 -->|"kind: transformArg"| 28
+  27 -->|"kind: pipe"| 28
+  34 -->|"kind: transformCallee"| 33
+  37 -->|"kind: potentialReturn"| 36
+  36 -->|"kind: pipe"| 38
+  39 -->|"kind: transformCallee"| 38
+  38 -->|"kind: potentialReturn"| 35
+  35 -->|"kind: transformArg"| 33
+  32 -->|"kind: pipe"| 33
