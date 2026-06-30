@@ -1386,6 +1386,29 @@
       }
     },
     {
+      "name": "catchToIgnore",
+      "group": "style",
+      "description": "Suggests using Effect.ignore or Effect.ignoreCause instead of Effect.catch/catchCause returning Effect.void",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377099
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const program: Effect.Effect\u003cvoid, string, never\u003e\n\nexport const recovered = program.pipe(\n  Effect.catch(() =\u003e Effect.void)\n)\n",
+        "diagnostics": [
+          {
+            "start": 133,
+            "end": 145,
+            "text": "`Effect.ignore` expresses ignored failure more directly than `Effect.catch` returning `Effect.void`. effect(catchToIgnore)"
+          }
+        ]
+      }
+    },
+    {
       "name": "catchToOrElseSucceed",
       "group": "style",
       "description": "Suggests using Effect.orElseSucceed instead of Effect.catch + Effect.succeed",

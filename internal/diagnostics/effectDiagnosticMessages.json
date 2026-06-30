@@ -386,5 +386,9 @@
     "This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `{0}` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)": {
         "category": "Suggestion",
         "code": 377098
+    },
+    "`Effect.{1}` expresses ignored failure more directly than `Effect.{0}` returning `Effect.void`. effect(catchToIgnore)": {
+        "category": "Suggestion",
+        "code": 377099
     }
 }

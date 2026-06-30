@@ -71,9 +71,12 @@ func ConvertOutlineGraphToLayerMagic(
 		}
 
 		result = append(result, LayerMagicNode{
-			Merges:   shouldMerge,
-			Provides: true,
-			Node:     nodeInfo.Node,
+			Merges:              shouldMerge,
+			Provides:            true,
+			Node:                nodeInfo.Node,
+			ProvidedTypes:       nodeInfo.Provides,
+			ActualProvidedTypes: nodeInfo.ActualProvides,
+			RequiredTypes:       nodeInfo.Requires,
 		})
 	}
 
