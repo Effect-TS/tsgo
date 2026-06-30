@@ -77,9 +77,12 @@ type LayerOutlineGraphNodeInfo struct {
 // LayerMagicNode represents a single node in the layer magic result,
 // annotated with flags that determine which Layer.* combinator to use.
 type LayerMagicNode struct {
-	Merges   bool      // Whether this node should be merged (provides a target output type)
-	Provides bool      // Whether this node provides services
-	Node     *ast.Node // The layer expression AST node
+	Merges              bool            // Whether this node should be merged (provides a target output type)
+	Provides            bool            // Whether this node provides services
+	Node                *ast.Node       // The layer expression AST node
+	ProvidedTypes       []*checker.Type // Service types provided
+	ActualProvidedTypes []*checker.Type // Actual (non-pass-through) provides
+	RequiredTypes       []*checker.Type // Service types required
 }
 
 // LayerMagicResult holds the output of ConvertOutlineGraphToLayerMagic.

@@ -9,9 +9,12 @@ import (
 // LayerMagicNode represents a layer expression annotated with the combinator
 // choice needed to compose it.
 type LayerMagicNode struct {
-	Merges   bool
-	Provides bool
-	Node     *ast.Node
+	Merges              bool
+	Provides            bool
+	Node                *ast.Node
+	ProvidedTypes       []*checker.Type
+	ActualProvidedTypes []*checker.Type
+	RequiredTypes       []*checker.Type
 }
 
 // LayerMagicResult holds the layer magic extraction result.
@@ -46,9 +49,12 @@ func layerMagicResultFromInternal(result *layergraph.LayerMagicResult) *LayerMag
 	nodes := make([]LayerMagicNode, 0, len(result.Nodes))
 	for _, node := range result.Nodes {
 		nodes = append(nodes, LayerMagicNode{
-			Merges:   node.Merges,
-			Provides: node.Provides,
-			Node:     node.Node,
+			Merges:              node.Merges,
+			Provides:            node.Provides,
+			Node:                node.Node,
+			ProvidedTypes:       node.ProvidedTypes,
+			ActualProvidedTypes: node.ActualProvidedTypes,
+			RequiredTypes:       node.RequiredTypes,
 		})
 	}
 	return &LayerMagicResult{
