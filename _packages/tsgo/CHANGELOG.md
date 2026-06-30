@@ -1,5 +1,16 @@
 # @effect/tsgo
 
+## 0.16.0
+
+### Minor Changes
+
+- dbc279b: Add an ETS API helper for extracting layer magic from caller-provided layer nodes, and allow layer graph extraction to start from multiple nodes without exploding expressions.
+- f5da105: Add the `catchToIgnore` diagnostic, which suggests `Effect.ignore` or `Effect.ignoreCause` when `Effect.catch` or `Effect.catchCause` returns `Effect.void` on a void success channel.
+
+### Patch Changes
+
+- 8078f7a: Add a public `etsapi` package exposing a narrow wrapper around the internal type parser for Effect, Layer, Stream, service, Context.Tag, Schema, union member, and YieldableError type inspection.
+
 ## 0.15.0
 
 ### Minor Changes
