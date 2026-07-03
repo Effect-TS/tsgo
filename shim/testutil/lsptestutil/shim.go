@@ -9,8 +9,6 @@ import "testing"
 import _ "unsafe"
 
 type LSPClient = lsptestutil.LSPClient
-type LSPReader = lsptestutil.LSPReader
-type LSPWriter = lsptestutil.LSPWriter
 //go:linkname NewLSPClient github.com/microsoft/typescript-go/internal/testutil/lsptestutil.NewLSPClient
 func NewLSPClient(t *testing.T, serverOpts lsp.ServerOptions, onServerRequest lsptestutil.ServerRequestHandler) (*lsptestutil.LSPClient, func() error)
 type ServerNotificationHandler = lsptestutil.ServerNotificationHandler
