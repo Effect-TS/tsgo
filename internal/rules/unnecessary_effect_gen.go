@@ -116,6 +116,9 @@ func analyzeUnnecessaryEffectGenNode(tp *typeparser.TypeParser, _ *checker.Check
 	}
 
 	yieldedExpr := yield.Expression
+	if checker.ForEachYieldExpression(yieldedExpr, isYieldStarExpression) {
+		return nil
+	}
 
 	// Determine if the success type is void-like
 	successIsVoid := false
@@ -136,4 +139,8 @@ func analyzeUnnecessaryEffectGenNode(tp *typeparser.TypeParser, _ *checker.Check
 		SuccessIsVoid:     successIsVoid,
 		EffectModuleNode:  genResult.EffectModule,
 	}
+}
+
+func isYieldStarExpression(expr *ast.Node) bool {
+	return expr.AsYieldExpression().AsteriskToken != nil
 }

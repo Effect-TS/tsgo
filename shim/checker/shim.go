@@ -112,6 +112,7 @@ type extra_Checker struct {
   id uint32
   program checker.Program
   compilerOptions *core.CompilerOptions
+  EffectLinks any
   files []*ast.SourceFile
   fileIndexMap map[*ast.SourceFile]int
   compareSymbols func(*ast.Symbol, *ast.Symbol) int
@@ -120,7 +121,6 @@ type extra_Checker struct {
   SymbolCount uint32
   SignatureCount uint32
   TotalInstantiationCount uint32
-  EffectLinks any
   instantiationCount uint32
   instantiationDepth uint32
   inlineLevel int
