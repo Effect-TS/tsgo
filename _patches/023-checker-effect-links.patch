@@ -1,12 +1,11 @@
 diff --git a/internal/checker/checker.go b/internal/checker/checker.go
 --- a/internal/checker/checker.go
 +++ b/internal/checker/checker.go
-@@ -622,7 +622,8 @@ type Checker struct {
- 	TypeCount                                   uint32
- 	SymbolCount                                 uint32
- 	SignatureCount                              uint32
- 	TotalInstantiationCount                     uint32
+@@ -581,6 +581,7 @@ type Checker struct {
+ 	id                                          uint32
+ 	program                                     Program
+ 	compilerOptions                             *core.CompilerOptions
 +	EffectLinks                                 any
- 	instantiationCount                          uint32
- 	instantiationDepth                          uint32
- 	inlineLevel                                 int
+ 	files                                       []*ast.SourceFile
+ 	fileIndexMap                                map[*ast.SourceFile]int
+ 	compareSymbols                              func(*ast.Symbol, *ast.Symbol) int
