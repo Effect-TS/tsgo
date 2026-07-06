@@ -7,13 +7,13 @@
     /* Source of truth: git submodule `typescript-go` commit.
        Keep in sync via `_tools/update-flake-vendor-hash.sh`. */
     typescript-go-src = {
-      url = "github:microsoft/typescript-go/f7c4664176a1ac8be4ba7b4981d0b17c0457a74c?submodules=1";
+      url = "github:microsoft/typescript-go/acfaa5bcc8631d3c51ad65a8562a656c8d6a4bd5?submodules=1";
       flake = false;
     };
     /* Source of truth: typescript-go's `_submodules/TypeScript` commit.
        Keep in sync via `_tools/update-flake-vendor-hash.sh`. */
     typescript-src = {
-      url = "github:microsoft/TypeScript/c3bd12d888b86f676718b16e64d7d2abcb423514";
+      url = "github:microsoft/TypeScript/4d4f005c8541e0255a9d8791205fdce326e462bc";
       flake = false;
     };
   };
