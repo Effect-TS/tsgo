@@ -88,6 +88,8 @@ const KeywordCompletionFiltersTypeKeywords = ls.KeywordCompletionFiltersTypeKeyw
 type LanguageService = ls.LanguageService
 //go:linkname LanguageService_getQuickInfoAndDocumentationForSymbol github.com/microsoft/typescript-go/internal/ls.(*LanguageService).getQuickInfoAndDocumentationForSymbol
 func LanguageService_getQuickInfoAndDocumentationForSymbol(recv *ls.LanguageService, c *checker.Checker, symbol *ast.Symbol, node *ast.Node, contentFormat lsproto.MarkupKind, vc *checker.VerbosityContext) (string, string)
+//go:linkname LanguageService_ListImportableModuleSpecifiers github.com/microsoft/typescript-go/internal/ls.(*LanguageService).ListImportableModuleSpecifiers
+func LanguageService_ListImportableModuleSpecifiers(recv *ls.LanguageService, ctx context.Context, fileName string, fragment string) []string
 type extra_LanguageService struct {
   projectPath tspath.Path
   host ls.Host
@@ -152,3 +154,5 @@ const SourceTypeOnlyAlias = ls.SourceTypeOnlyAlias
 type SymbolAndEntries = ls.SymbolAndEntries
 type SymbolAndEntriesData = ls.SymbolAndEntriesData
 var TriggerCharacters = ls.TriggerCharacters
+//go:linkname GetJSDocOrTag github.com/microsoft/typescript-go/internal/ls.getJSDocOrTag
+func GetJSDocOrTag(c *checker.Checker, node *ast.Node) *ast.Node

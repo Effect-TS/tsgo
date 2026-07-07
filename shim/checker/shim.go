@@ -32,6 +32,21 @@ const AccessFlagsSuppressNoImplicitAnyError = checker.AccessFlagsSuppressNoImpli
 const AccessFlagsWriting = checker.AccessFlagsWriting
 var AfterCheckSourceFileCallback = checker.AfterCheckSourceFileCallback
 type AliasSymbolLinks = checker.AliasSymbolLinks
+type extra_AliasSymbolLinks struct {
+  immediateTarget *ast.Symbol
+  aliasTarget *ast.Symbol
+  referenced bool
+  typeOnlyDeclaration *ast.Node
+}
+func AliasSymbolLinks_immediateTarget(v *checker.AliasSymbolLinks) *ast.Symbol {
+  return ((*extra_AliasSymbolLinks)(unsafe.Pointer(v))).immediateTarget
+}
+func AliasSymbolLinks_aliasTarget(v *checker.AliasSymbolLinks) *ast.Symbol {
+  return ((*extra_AliasSymbolLinks)(unsafe.Pointer(v))).aliasTarget
+}
+func AliasSymbolLinks_referenced(v *checker.AliasSymbolLinks) bool {
+  return ((*extra_AliasSymbolLinks)(unsafe.Pointer(v))).referenced
+}
 type ArrayLiteralLinks = checker.ArrayLiteralLinks
 type ArrayToSingleTypeMapper = checker.ArrayToSingleTypeMapper
 type ArrayTypeMapper = checker.ArrayTypeMapper
@@ -434,6 +449,30 @@ func Checker_getGlobalPromiseTypeChecked(v *checker.Checker) func() *checker.Typ
 func Checker_emptyGenericType(v *checker.Checker) *checker.Type {
   return ((*extra_Checker)(unsafe.Pointer(v))).emptyGenericType
 }
+func Checker_symbolReferenceLinks(v *checker.Checker) core.LinkStore[*ast.Symbol, checker.SymbolReferenceLinks] {
+  return ((*extra_Checker)(unsafe.Pointer(v))).symbolReferenceLinks
+}
+func Checker_valueSymbolLinks(v *checker.Checker) core.LinkStore[*ast.Symbol, checker.ValueSymbolLinks] {
+  return ((*extra_Checker)(unsafe.Pointer(v))).valueSymbolLinks
+}
+func Checker_aliasSymbolLinks(v *checker.Checker) core.LinkStore[*ast.Symbol, checker.AliasSymbolLinks] {
+  return ((*extra_Checker)(unsafe.Pointer(v))).aliasSymbolLinks
+}
+func Checker_moduleSymbolLinks(v *checker.Checker) core.LinkStore[*ast.Symbol, checker.ModuleSymbolLinks] {
+  return ((*extra_Checker)(unsafe.Pointer(v))).moduleSymbolLinks
+}
+func Checker_typeAliasLinks(v *checker.Checker) core.LinkStore[*ast.Symbol, checker.TypeAliasLinks] {
+  return ((*extra_Checker)(unsafe.Pointer(v))).typeAliasLinks
+}
+func Checker_declaredTypeLinks(v *checker.Checker) core.LinkStore[*ast.Symbol, checker.DeclaredTypeLinks] {
+  return ((*extra_Checker)(unsafe.Pointer(v))).declaredTypeLinks
+}
+func Checker_symbolNodeLinks(v *checker.Checker) core.LinkStore[*ast.Node, checker.SymbolNodeLinks] {
+  return ((*extra_Checker)(unsafe.Pointer(v))).symbolNodeLinks
+}
+func Checker_typeNodeLinks(v *checker.Checker) core.LinkStore[*ast.Node, checker.TypeNodeLinks] {
+  return ((*extra_Checker)(unsafe.Pointer(v))).typeNodeLinks
+}
 //go:linkname CompareTypes github.com/microsoft/typescript-go/internal/checker.CompareTypes
 func CompareTypes(t1 *checker.Type, t2 *checker.Type) int
 type CompositeSignature = checker.CompositeSignature
@@ -471,6 +510,16 @@ const DeclarationSpacesExportType = checker.DeclarationSpacesExportType
 const DeclarationSpacesExportValue = checker.DeclarationSpacesExportValue
 const DeclarationSpacesNone = checker.DeclarationSpacesNone
 type DeclaredTypeLinks = checker.DeclaredTypeLinks
+type extra_DeclaredTypeLinks struct {
+  declaredType *checker.Type
+  interfaceChecked bool
+  indexSignaturesChecked bool
+  typeParametersChecked bool
+  enumChecked bool
+}
+func DeclaredTypeLinks_declaredType(v *checker.DeclaredTypeLinks) *checker.Type {
+  return ((*extra_DeclaredTypeLinks)(unsafe.Pointer(v))).declaredType
+}
 type DeferredSymbolLinks = checker.DeferredSymbolLinks
 type DeferredTypeMapper = checker.DeferredTypeMapper
 type DiagnosticAndArguments = checker.DiagnosticAndArguments
@@ -705,6 +754,17 @@ const MinArgumentCountFlagsNone = checker.MinArgumentCountFlagsNone
 const MinArgumentCountFlagsStrongArityForUntypedJS = checker.MinArgumentCountFlagsStrongArityForUntypedJS
 const MinArgumentCountFlagsVoidIsNonOptional = checker.MinArgumentCountFlagsVoidIsNonOptional
 type ModuleSymbolLinks = checker.ModuleSymbolLinks
+type extra_ModuleSymbolLinks struct {
+  resolvedExports ast.SymbolTable
+  typeOnlyExportStarMap map[string]*ast.Node
+  exportsChecked bool
+}
+func ModuleSymbolLinks_resolvedExports(v *checker.ModuleSymbolLinks) ast.SymbolTable {
+  return ((*extra_ModuleSymbolLinks)(unsafe.Pointer(v))).resolvedExports
+}
+func ModuleSymbolLinks_exportsChecked(v *checker.ModuleSymbolLinks) bool {
+  return ((*extra_ModuleSymbolLinks)(unsafe.Pointer(v))).exportsChecked
+}
 type NarrowedTypeKey = checker.NarrowedTypeKey
 //go:linkname NewChecker github.com/microsoft/typescript-go/internal/checker.NewChecker
 func NewChecker(program checker.Program, tracer *checker.Tracer) (*checker.Checker, *sync.Mutex)
@@ -892,7 +952,19 @@ const SymbolFormatFlagsUseOnlyExternalAliasing = checker.SymbolFormatFlagsUseOnl
 const SymbolFormatFlagsWriteComputedProps = checker.SymbolFormatFlagsWriteComputedProps
 const SymbolFormatFlagsWriteTypeParametersOrArguments = checker.SymbolFormatFlagsWriteTypeParametersOrArguments
 type SymbolNodeLinks = checker.SymbolNodeLinks
+type extra_SymbolNodeLinks struct {
+  resolvedSymbol *ast.Symbol
+}
+func SymbolNodeLinks_resolvedSymbol(v *checker.SymbolNodeLinks) *ast.Symbol {
+  return ((*extra_SymbolNodeLinks)(unsafe.Pointer(v))).resolvedSymbol
+}
 type SymbolReferenceLinks = checker.SymbolReferenceLinks
+type extra_SymbolReferenceLinks struct {
+  referenceKinds ast.SymbolFlags
+}
+func SymbolReferenceLinks_referenceKinds(v *checker.SymbolReferenceLinks) ast.SymbolFlags {
+  return ((*extra_SymbolReferenceLinks)(unsafe.Pointer(v))).referenceKinds
+}
 type SymbolTrackerImpl = checker.SymbolTrackerImpl
 type TemplateLiteralType = checker.TemplateLiteralType
 type Ternary = checker.Ternary
@@ -910,6 +982,15 @@ type TupleType = checker.TupleType
 type Type = checker.Type
 type TypeAlias = checker.TypeAlias
 type TypeAliasLinks = checker.TypeAliasLinks
+type extra_TypeAliasLinks struct {
+  declaredType *checker.Type
+  typeParameters []*checker.Type
+  instantiations map[checker.CacheHashKey]*checker.Type
+  isConstructorDeclaredProperty bool
+}
+func TypeAliasLinks_declaredType(v *checker.TypeAliasLinks) *checker.Type {
+  return ((*extra_TypeAliasLinks)(unsafe.Pointer(v))).declaredType
+}
 type TypeBase = checker.TypeBase
 type TypeComparer = checker.TypeComparer
 type TypeData = checker.TypeData
@@ -1102,6 +1183,13 @@ const TypeMapperKindMerged = checker.TypeMapperKindMerged
 const TypeMapperKindSimple = checker.TypeMapperKindSimple
 const TypeMapperKindUnknown = checker.TypeMapperKindUnknown
 type TypeNodeLinks = checker.TypeNodeLinks
+type extra_TypeNodeLinks struct {
+  resolvedType *checker.Type
+  outerTypeParameters []*checker.Type
+}
+func TypeNodeLinks_resolvedType(v *checker.TypeNodeLinks) *checker.Type {
+  return ((*extra_TypeNodeLinks)(unsafe.Pointer(v))).resolvedType
+}
 type TypeParameter = checker.TypeParameter
 type TypePredicate = checker.TypePredicate
 type TypePredicateKind = checker.TypePredicateKind
@@ -1135,6 +1223,21 @@ type UnusedKind = checker.UnusedKind
 const UnusedKindLocal = checker.UnusedKindLocal
 const UnusedKindParameter = checker.UnusedKindParameter
 type ValueSymbolLinks = checker.ValueSymbolLinks
+type extra_ValueSymbolLinks struct {
+  resolvedType *checker.Type
+  writeType *checker.Type
+  target *ast.Symbol
+  mapper *checker.TypeMapper
+  nameType *checker.Type
+  containingType *checker.Type
+  functionOrConstructorChecked bool
+}
+func ValueSymbolLinks_resolvedType(v *checker.ValueSymbolLinks) *checker.Type {
+  return ((*extra_ValueSymbolLinks)(unsafe.Pointer(v))).resolvedType
+}
+func ValueSymbolLinks_writeType(v *checker.ValueSymbolLinks) *checker.Type {
+  return ((*extra_ValueSymbolLinks)(unsafe.Pointer(v))).writeType
+}
 //go:linkname ValueToString github.com/microsoft/typescript-go/internal/checker.ValueToString
 func ValueToString(value any) string
 type VarianceFlags = checker.VarianceFlags
