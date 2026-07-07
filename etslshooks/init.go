@@ -250,7 +250,7 @@ func formatLayerHover(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.Sou
 
 		if !effectConfig.NoExternal {
 			nestedDiagram = layergraph.FormatNestedLayerGraph(c, fullGraph, sf)
-			outlineGraph := layergraph.ExtractOutlineGraph(c, fullGraph)
+			outlineGraph := layergraph.ExtractOutlineGraph(tp, c, fullGraph)
 			outlineDiagram = layergraph.FormatOutlineGraph(c, outlineGraph, sf)
 		}
 	}

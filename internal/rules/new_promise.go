@@ -30,7 +30,7 @@ var NewPromise = rule.Rule{
 
 			if node.Kind == ast.KindNewExpression {
 				newExpr := node.AsNewExpression()
-				if ctx.TypeParser.ResolveToGlobalSymbol(ctx.Checker.GetSymbolAtLocation(newExpr.Expression)) == promiseSymbol {
+				if ctx.TypeParser.ResolveToGlobalSymbol(ctx.TypeParser.GetSymbolAtLocation(newExpr.Expression)) == promiseSymbol {
 					diags = append(diags, ctx.NewDiagnostic(
 						ctx.SourceFile,
 						scanner.GetErrorRangeForNode(ctx.SourceFile, node),

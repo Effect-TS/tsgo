@@ -166,7 +166,7 @@ func findRelatedLayerProviderDiagnostics(
 	fullGraph := layergraph.ExtractLayerGraph(ctx.TypeParser, c, []*ast.Node{layerNode}, ctx.SourceFile, layergraph.ExtractLayerGraphOptions{
 		FollowSymbolsDepth: 2,
 	})
-	outlineGraph := layergraph.ExtractOutlineGraph(c, fullGraph)
+	outlineGraph := layergraph.ExtractOutlineGraph(ctx.TypeParser, c, fullGraph)
 	if outlineGraph == nil {
 		return nil
 	}

@@ -16,12 +16,11 @@ func (tp *TypeParser) ReferenceSymbolAtNode(node *ast.Node) *ast.Symbol {
 	if tp == nil || tp.checker == nil || node == nil {
 		return nil
 	}
-	c := tp.checker
 
-	sym := c.GetSymbolAtLocation(node)
+	sym := tp.GetSymbolAtLocation(node)
 	if sym == nil && node.Kind == ast.KindPropertyAccessExpression {
 		if prop := node.AsPropertyAccessExpression(); prop != nil && prop.Name() != nil {
-			sym = c.GetSymbolAtLocation(prop.Name())
+			sym = tp.GetSymbolAtLocation(prop.Name())
 		}
 	}
 

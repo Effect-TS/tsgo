@@ -7,8 +7,9 @@ import (
 
 // GetTypeAtLocation wraps checker.GetTypeAtLocation with node-kind and JSX safety guards.
 // It returns nil when the node is nil, not an expression/type-node/declaration,
-// a JSX tag name, or a JSX attribute name. It also recovers from checker panics
-// (e.g. nil symbol dereferences on certain declaration nodes) and returns nil.
+// an import clause, a JSX tag name, or a JSX attribute name. It also recovers
+// from checker panics (e.g. nil symbol dereferences on certain declaration
+// nodes) and returns nil.
 func (tp TypeParser) GetTypeAtLocation(node *ast.Node) (result *checker.Type) {
 	if tp.checker == nil || node == nil {
 		return nil
@@ -36,6 +37,22 @@ func (tp TypeParser) getTypeAtLocationUncached(node *ast.Node) (result *checker.
 	}
 
 	if !ast.IsExpression(node) && !ast.IsTypeNode(node) && !ast.IsDeclaration(node) {
+		return nil
+	}
+
+	// ImportClause passes the IsDeclaration check above, but a clause without a
+	// default binding (import { A } from "x", import * as ns from "x") declares
+	// no symbol itself, and checker.GetTypeAtLocation panics dereferencing the
+	// nil symbol. The clause type is never useful to rules: its bindings are
+	// visited as separate nodes and carry the actual types.
+	if node.Kind == ast.KindImportClause {
+		return nil
+	}
+
+	// A meta property used as a call callee (import.defer(...)) has no type of
+	// its own and the checker debug-asserts when asked (checkMetaProperty); the
+	// enclosing call expression carries the meaningful type.
+	if node.Kind == ast.KindMetaProperty && node.Parent != nil && ast.IsCallExpression(node.Parent) && node.Parent.Expression() == node {
 		return nil
 	}
 

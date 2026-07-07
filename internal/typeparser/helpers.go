@@ -67,6 +67,21 @@ func (tp *TypeParser) GetTypeOfPropertyByName(t *checker.Type, name string) *che
 	return tp.checker.GetTypeOfPropertyOfType(t, name)
 }
 
+// GetSymbolAtLocation wraps checker.GetSymbolAtLocation with a meta-property
+// guard. Meta properties (import.meta, import.defer, new.target) never
+// reference a symbol rules care about, and the checker debug-asserts (panics)
+// when asked for `import.defer` used as an import-call callee. Always use
+// this instead of the raw checker call.
+func (tp *TypeParser) GetSymbolAtLocation(node *ast.Node) *ast.Symbol {
+	if tp == nil || tp.checker == nil || node == nil {
+		return nil
+	}
+	if node.Kind == ast.KindMetaProperty {
+		return nil
+	}
+	return tp.checker.GetSymbolAtLocation(node)
+}
+
 func (tp *TypeParser) resolveAliasedSymbol(sym *ast.Symbol) *ast.Symbol {
 	if tp == nil || tp.checker == nil {
 		return sym
@@ -84,7 +99,6 @@ func (tp *TypeParser) ResolveToGlobalSymbol(sym *ast.Symbol) *ast.Symbol {
 	if tp == nil || tp.checker == nil || sym == nil {
 		return nil
 	}
-	c := tp.checker
 
 	sym = tp.resolveAliasedSymbol(sym)
 	depth := 0
@@ -94,7 +108,7 @@ func (tp *TypeParser) ResolveToGlobalSymbol(sym *ast.Symbol) *ast.Symbol {
 			break
 		}
 
-		next := c.GetSymbolAtLocation(decl.Initializer)
+		next := tp.GetSymbolAtLocation(decl.Initializer)
 		if next == nil {
 			break
 		}

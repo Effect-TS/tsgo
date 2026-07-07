@@ -395,7 +395,7 @@ func classificationTypes(tp *typeparser.TypeParser, c *checker.Checker, node *as
 	types := []*checker.Type{t}
 	if node.Kind == ast.KindClassDeclaration {
 		if className := node.Name(); className != nil {
-			if classSymbol := c.GetSymbolAtLocation(className); classSymbol != nil {
+			if classSymbol := tp.GetSymbolAtLocation(className); classSymbol != nil {
 				if classType := c.GetTypeOfSymbolAtLocation(classSymbol, node); classType != nil && classType != t {
 					types = append(types, classType)
 				}
