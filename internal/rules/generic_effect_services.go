@@ -41,7 +41,7 @@ var GenericEffectServices = rule.Rule{
 			if node.Kind == ast.KindClassDeclaration {
 				classDecl := node.AsClassDeclaration()
 				if node.Name() != nil && classDecl.TypeParameters != nil && classDecl.HeritageClauses != nil {
-					classSym := ctx.Checker.GetSymbolAtLocation(node.Name())
+					classSym := ctx.TypeParser.GetSymbolAtLocation(node.Name())
 					if classSym != nil {
 						classType := ctx.Checker.GetTypeOfSymbolAtLocation(classSym, node)
 						if classType != nil && ctx.TypeParser.IsContextTag(classType, node) {

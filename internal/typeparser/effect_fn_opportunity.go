@@ -433,7 +433,7 @@ func (tp *TypeParser) areParametersReferencedIn(fnNode *ast.Node, nodes []*ast.N
 
 		// Check identifiers
 		if current.Kind == ast.KindIdentifier {
-			sym := c.GetSymbolAtLocation(current)
+			sym := tp.GetSymbolAtLocation(current)
 			if sym != nil && isSymbolDeclaredInRange(sym, paramsStart, paramsEnd) {
 				return true
 			}

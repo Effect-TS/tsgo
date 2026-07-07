@@ -123,7 +123,7 @@ func tryBuildRefactor(ctx *refactor.Context, tp *typeparser.TypeParser, c *check
 	}
 
 	// Extract outline graph
-	outlineGraph := layergraph.ExtractOutlineGraph(c, layerGraph)
+	outlineGraph := layergraph.ExtractOutlineGraph(ctx.TypeParser, c, layerGraph)
 	if outlineGraph == nil || outlineGraph.NodeCount() <= 1 {
 		return nil
 	}
@@ -244,7 +244,7 @@ func tryPrepareRefactor(ctx *refactor.Context, tp *typeparser.TypeParser, c *che
 	}
 
 	// Extract outline graph
-	outlineGraph := layergraph.ExtractOutlineGraph(c, layerGraph)
+	outlineGraph := layergraph.ExtractOutlineGraph(ctx.TypeParser, c, layerGraph)
 	if outlineGraph == nil || outlineGraph.NodeCount() <= 1 {
 		return nil
 	}

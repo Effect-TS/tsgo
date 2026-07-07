@@ -34,7 +34,7 @@ func (tp *TypeParser) ExtractLayerMagic(sourceFile *ast.SourceFile, nodes []*ast
 	fullGraph := layergraph.ExtractLayerGraph(tp.inner, tp.checker, nodes, sourceFile, layergraph.ExtractLayerGraphOptions{
 		SkipExplode: true,
 	})
-	outlineGraph := layergraph.ExtractOutlineGraph(tp.checker, fullGraph)
+	outlineGraph := layergraph.ExtractOutlineGraph(tp.inner, tp.checker, fullGraph)
 	if outlineGraph == nil {
 		return nil
 	}

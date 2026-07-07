@@ -55,7 +55,7 @@ func runCryptoRandomUUID(ctx *rule.Context, checkInEffect bool) []*ast.Diagnosti
 			inEffect := ctx.TypeParser.GetEffectContextFlags(node)&typeparser.EffectContextFlagInEffect != 0
 			if inEffect == checkInEffect {
 				if receiver := cryptoRandomUUIDReceiver(call); receiver != nil {
-					if ctx.TypeParser.ResolveToGlobalSymbol(ctx.Checker.GetSymbolAtLocation(receiver)) == cryptoSymbol {
+					if ctx.TypeParser.ResolveToGlobalSymbol(ctx.TypeParser.GetSymbolAtLocation(receiver)) == cryptoSymbol {
 						diags = append(diags, ctx.NewDiagnostic(
 							ctx.SourceFile,
 							scanner.GetErrorRangeForNode(ctx.SourceFile, node),
