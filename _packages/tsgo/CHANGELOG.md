@@ -1,5 +1,15 @@
 # @effect/tsgo
 
+## 0.16.1
+
+### Patch Changes
+
+- c45a407: Fix `internal/effecttest` LSP test helpers broken by the `typescript-go` update: the untyped `SendRequestWorker` now returns the response result as a raw `json.Value`, so the inlay hint, diagnostic, and code action helpers decode it via `RequestInfo.UnmarshalResult` instead of type-asserting the typed response struct.
+- e094fda: Make the EffectLinks checker patch apply across newer typescript-go commits by anchoring it to stable Checker fields.
+- cb7d6bc: Avoid suggesting `unnecessaryEffectGen` when a single-return generator contains nested `yield*` expressions.
+- 64343c5: Fix the release workflow embedding a stale `EffectVersion` in the published `tsc` binary. The version bump from the changeset release PR only lands on `main`, while the `tsc` binary builds from `generated/stable`; the workflow now syncs `_packages/tsgo/package.json` from the release merge commit and re-runs `_tools/version-prepare.sh` before building. All release checkouts are also pinned to the merge commit SHA instead of the moving `main` ref so the release is deterministic.
+- abfa2ef: Update to [`@typescript/native-preview@7.0.0-dev.20260703.1`](https://www.npmjs.com/package/@typescript/native-preview/v/7.0.0-dev.20260703.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/acfaa5bcc8631d3c51ad65a8562a656c8d6a4bd5) commit `acfaa5bcc8631d3c51ad65a8562a656c8d6a4bd5`.
+
 ## 0.16.0
 
 ### Minor Changes

@@ -65,7 +65,7 @@ func runGlobalConsole(ctx *rule.Context, checkInEffect bool) []*ast.Diagnostic {
 				prop := node.AsCallExpression().Expression.AsPropertyAccessExpression()
 				method := prop.Name().Text()
 				alternative := globalConsoleMethodAlternatives[method]
-				if alternative != "" && ctx.TypeParser.ResolveToGlobalSymbol(ctx.Checker.GetSymbolAtLocation(prop.Expression)) == consoleSymbol {
+				if alternative != "" && ctx.TypeParser.ResolveToGlobalSymbol(ctx.TypeParser.GetSymbolAtLocation(prop.Expression)) == consoleSymbol {
 					diags = append(diags, ctx.NewDiagnostic(
 						ctx.SourceFile,
 						scanner.GetErrorRangeForNode(ctx.SourceFile, node),

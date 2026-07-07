@@ -75,7 +75,7 @@ func runWriteTagClassAccessors(ctx *refactor.Context) []ls.CodeAction {
 	}
 
 	// Resolve the service shape type via the _Service variance struct
-	classSymbol := c.GetSymbolAtLocation(className)
+	classSymbol := ctx.TypeParser.GetSymbolAtLocation(className)
 	if classSymbol == nil {
 		return nil
 	}

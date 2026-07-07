@@ -135,7 +135,7 @@ func checkLazyEffectService(ctx *rule.Context, stmt *ast.Node) []*ast.Diagnostic
 		return nil
 	}
 
-	classSym := ctx.Checker.GetSymbolAtLocation(stmt.Name())
+	classSym := ctx.TypeParser.GetSymbolAtLocation(stmt.Name())
 	if classSym == nil {
 		return nil
 	}

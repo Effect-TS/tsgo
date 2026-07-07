@@ -556,7 +556,7 @@ func generateLayerGraphBaseline(
 			}
 
 			fullGraph := layergraph.ExtractLayerGraph(tp, c, []*ast.Node{export.initializer}, sf, opts)
-			outlineGraph := layergraph.ExtractOutlineGraph(c, fullGraph)
+			outlineGraph := layergraph.ExtractOutlineGraph(tp, c, fullGraph)
 			providersAndRequirers := layergraph.ExtractProvidersAndRequirers(c, fullGraph)
 
 			sb.WriteString("\n--- output ---\n")

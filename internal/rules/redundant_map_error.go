@@ -166,7 +166,7 @@ func analyzeRedundantGeneratorMapErrorCandidate(tp *typeparser.TypeParser, c *ch
 			validYieldCount = -1
 			return true
 		}
-		if !mapperCanBeHoisted(c, generatorFunction.AsNode(), generatorCallNode, candidate.mapperNode) {
+		if !mapperCanBeHoisted(tp, c, generatorFunction.AsNode(), generatorCallNode, candidate.mapperNode) {
 			validYieldCount = -1
 			return true
 		}
@@ -241,8 +241,8 @@ func enclosingGeneratorCall(node *ast.Node) *ast.Node {
 	return nil
 }
 
-func mapperCanBeHoisted(c *checker.Checker, generatorFunctionNode *ast.Node, hoistLocation *ast.Node, mapperNode *ast.Node) bool {
-	if c == nil || generatorFunctionNode == nil || hoistLocation == nil || mapperNode == nil {
+func mapperCanBeHoisted(tp *typeparser.TypeParser, c *checker.Checker, generatorFunctionNode *ast.Node, hoistLocation *ast.Node, mapperNode *ast.Node) bool {
+	if tp == nil || c == nil || generatorFunctionNode == nil || hoistLocation == nil || mapperNode == nil {
 		return false
 	}
 
@@ -253,7 +253,7 @@ func mapperCanBeHoisted(c *checker.Checker, generatorFunctionNode *ast.Node, hoi
 			return canHoist
 		}
 		if node.Kind == ast.KindIdentifier && isHoistSensitiveValueReference(node) {
-			symbol := hoistSensitiveReferenceSymbol(c, node)
+			symbol := hoistSensitiveReferenceSymbol(tp, c, node)
 			if symbol != nil {
 				if allSymbolDeclarationsInsideNode(symbol, mapperNode) {
 					node.ForEachChild(walk)
@@ -303,8 +303,8 @@ func allSymbolDeclarationsOutsideNode(symbol *ast.Symbol, node *ast.Node) bool {
 	return true
 }
 
-func hoistSensitiveReferenceSymbol(c *checker.Checker, node *ast.Node) *ast.Symbol {
-	if c == nil || node == nil {
+func hoistSensitiveReferenceSymbol(tp *typeparser.TypeParser, c *checker.Checker, node *ast.Node) *ast.Symbol {
+	if tp == nil || c == nil || node == nil {
 		return nil
 	}
 	if node.Parent != nil && node.Parent.Kind == ast.KindShorthandPropertyAssignment {
@@ -312,7 +312,7 @@ func hoistSensitiveReferenceSymbol(c *checker.Checker, node *ast.Node) *ast.Symb
 			return symbol
 		}
 	}
-	return c.GetSymbolAtLocation(node)
+	return tp.GetSymbolAtLocation(node)
 }
 
 func generatorFunctionKeywordRange(sf *ast.SourceFile, generatorFunction *ast.FunctionExpression) core.TextRange {

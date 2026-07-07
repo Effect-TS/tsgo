@@ -4,6 +4,7 @@ import (
 	"sort"
 
 	"github.com/effect-ts/tsgo/internal/graph"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
 )
@@ -12,6 +13,7 @@ import (
 // It keeps only leaf nodes (deduplicated by symbol) and connects them based on
 // type compatibility: if node A requires a service that node B provides, add an edge.
 func ExtractOutlineGraph(
+	tp *typeparser.TypeParser,
 	c *checker.Checker,
 	layerGraph *graph.Graph[LayerGraphNodeInfo, LayerGraphEdgeInfo],
 ) *graph.Graph[LayerOutlineGraphNodeInfo, struct{}] {
@@ -25,7 +27,7 @@ func ExtractOutlineGraph(
 	// Step 1: Get leaf nodes (nodes with no outgoing edges) and deduplicate by symbol.
 	var dedupedLeafNodes []LayerGraphNodeInfo
 	for _, leafNode := range layerGraph.Externals(graph.Outgoing) {
-		sym := c.GetSymbolAtLocation(leafNode.Node)
+		sym := tp.GetSymbolAtLocation(leafNode.Node)
 		if sym == nil {
 			dedupedLeafNodes = append(dedupedLeafNodes, leafNode)
 		} else if _, seen := knownSymbols[sym]; !seen {
