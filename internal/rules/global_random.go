@@ -54,7 +54,7 @@ func runGlobalRandom(ctx *rule.Context, checkInEffect bool) []*ast.Diagnostic {
 			inEffect := ctx.TypeParser.GetEffectContextFlags(node)&typeparser.EffectContextFlagInEffect != 0
 			if inEffect == checkInEffect {
 				prop := node.AsCallExpression().Expression.AsPropertyAccessExpression()
-				if prop.Name().Text() == "random" && ctx.TypeParser.ResolveToGlobalSymbol(ctx.Checker.GetSymbolAtLocation(prop.Expression)) == mathSymbol {
+				if prop.Name().Text() == "random" && ctx.TypeParser.ResolveToGlobalSymbol(ctx.TypeParser.GetSymbolAtLocation(prop.Expression)) == mathSymbol {
 					diags = append(diags, ctx.NewDiagnostic(
 						ctx.SourceFile,
 						scanner.GetErrorRangeForNode(ctx.SourceFile, node),

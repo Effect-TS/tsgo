@@ -66,7 +66,7 @@ var LeakingRequirements = rule.Rule{
 				}
 			case ast.KindClassDeclaration:
 				if node.Name() != nil && node.AsClassDeclaration().HeritageClauses != nil {
-					classSym := ctx.Checker.GetSymbolAtLocation(node.Name())
+					classSym := ctx.TypeParser.GetSymbolAtLocation(node.Name())
 					if classSym != nil {
 						classType := ctx.Checker.GetTypeOfSymbolAtLocation(classSym, node)
 						if classType != nil {

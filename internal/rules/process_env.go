@@ -54,7 +54,7 @@ func runProcessEnv(ctx *rule.Context, checkInEffect bool) []*ast.Diagnostic {
 		inEffect := ctx.TypeParser.GetEffectContextFlags(node)&typeparser.EffectContextFlagInEffect != 0
 		if inEffect == checkInEffect {
 			if processNode := processEnvRoot(node); processNode != nil {
-				if ctx.TypeParser.ResolveToGlobalSymbol(ctx.Checker.GetSymbolAtLocation(processNode)) == processSymbol {
+				if ctx.TypeParser.ResolveToGlobalSymbol(ctx.TypeParser.GetSymbolAtLocation(processNode)) == processSymbol {
 					diags = append(diags, ctx.NewDiagnostic(
 						ctx.SourceFile,
 						scanner.GetErrorRangeForNode(ctx.SourceFile, node),

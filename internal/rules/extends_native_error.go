@@ -76,7 +76,7 @@ func checkExtendsNativeError(tp *typeparser.TypeParser, c *checker.Checker, sf *
 		}
 		expr := elem.AsExpressionWithTypeArguments().Expression
 
-		exprSymbol := c.GetSymbolAtLocation(expr)
+		exprSymbol := tp.GetSymbolAtLocation(expr)
 		resolvedSymbol := exprSymbol
 		if resolvedSymbol != nil && resolvedSymbol.Flags&ast.SymbolFlagsAlias != 0 {
 			resolvedSymbol = c.GetAliasedSymbol(resolvedSymbol)

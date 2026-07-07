@@ -76,7 +76,7 @@ func runGlobalDate(ctx *rule.Context, checkInEffect bool) []*ast.Diagnostic {
 				}
 			}
 
-			if objectNode != nil && ctx.TypeParser.ResolveToGlobalSymbol(ctx.Checker.GetSymbolAtLocation(objectNode)) == dateSymbol {
+			if objectNode != nil && ctx.TypeParser.ResolveToGlobalSymbol(ctx.TypeParser.GetSymbolAtLocation(objectNode)) == dateSymbol {
 				diags = append(diags, ctx.NewDiagnostic(
 					ctx.SourceFile,
 					scanner.GetErrorRangeForNode(ctx.SourceFile, node),

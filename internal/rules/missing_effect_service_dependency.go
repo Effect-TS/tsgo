@@ -74,7 +74,7 @@ func checkServiceDependencies(ctx *rule.Context, node *ast.Node) []*ast.Diagnost
 	options := serviceResult.Options
 
 	// Get the class symbol and type
-	classSym := ctx.Checker.GetSymbolAtLocation(className)
+	classSym := ctx.TypeParser.GetSymbolAtLocation(className)
 	if classSym == nil {
 		return nil
 	}

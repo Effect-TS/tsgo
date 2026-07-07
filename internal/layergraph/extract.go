@@ -187,7 +187,7 @@ func ExtractLayerGraph(
 
 		// Case 4: Symbol following
 		if currentDepth > 0 && isSimpleIdentifier(current) {
-			sym := c.GetSymbolAtLocation(current)
+			sym := tp.GetSymbolAtLocation(current)
 			if sym != nil {
 				if sym.Flags&ast.SymbolFlagsAlias != 0 {
 					resolved := checker.SkipAlias(sym, c)

@@ -29,7 +29,6 @@ func (tp *TypeParser) IsPipeableType(t *checker.Type, atLocation *ast.Node) bool
 // This is used by the missedPipeableOpportunity rule to determine which
 // call expressions can be converted to pipe style.
 func (tp *TypeParser) IsSafelyPipeableCallee(callee *ast.Node) bool {
-	c := tp.checker
 	if callee == nil {
 		return false
 	}
@@ -56,7 +55,7 @@ func (tp *TypeParser) IsSafelyPipeableCallee(callee *ast.Node) bool {
 
 	// Simple identifiers - check if it's a module/namespace or standalone function
 	if ast.IsIdentifier(callee) {
-		sym := c.GetSymbolAtLocation(callee)
+		sym := tp.GetSymbolAtLocation(callee)
 		if sym == nil {
 			return false
 		}
@@ -86,7 +85,7 @@ func (tp *TypeParser) IsSafelyPipeableCallee(callee *ast.Node) bool {
 	if ast.IsPropertyAccessExpression(callee) {
 		propAccess := callee.AsPropertyAccessExpression()
 		subject := propAccess.Expression
-		sym := c.GetSymbolAtLocation(subject)
+		sym := tp.GetSymbolAtLocation(subject)
 		if sym == nil {
 			return false
 		}

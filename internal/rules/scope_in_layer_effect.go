@@ -148,7 +148,7 @@ func matchClassWithDefaultLayer(tp *typeparser.TypeParser, c *checker.Checker, s
 	}
 
 	// Get the class symbol
-	classSym := c.GetSymbolAtLocation(node.Name())
+	classSym := tp.GetSymbolAtLocation(node.Name())
 	if classSym == nil {
 		return nil
 	}
