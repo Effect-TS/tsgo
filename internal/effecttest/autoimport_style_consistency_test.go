@@ -130,9 +130,9 @@ func verifyImportFixContentsUnordered(t *testing.T, f *fourslash.FourslashTest, 
 	if !ok {
 		t.Fatal("diagnostic request failed")
 	}
-	diagResult, ok := diagResp.Result.(lsproto.DocumentDiagnosticResponse)
-	if !ok {
-		t.Fatal("unexpected diagnostic response type")
+	diagResult, err := lsproto.TextDocumentDiagnosticInfo.UnmarshalResult(diagResp.Result)
+	if err != nil {
+		t.Fatalf("failed to unmarshal diagnostic response: %v", err)
 	}
 
 	var diagnostics []*lsproto.Diagnostic
@@ -151,9 +151,9 @@ func verifyImportFixContentsUnordered(t *testing.T, f *fourslash.FourslashTest, 
 	if !ok {
 		t.Fatal("code action request failed")
 	}
-	actionResult, ok := actionResp.Result.(lsproto.CodeActionResponse)
-	if !ok {
-		t.Fatal("unexpected code action response type")
+	actionResult, err := lsproto.TextDocumentCodeActionInfo.UnmarshalResult(actionResp.Result)
+	if err != nil {
+		t.Fatalf("failed to unmarshal code action response: %v", err)
 	}
 
 	var actual []string

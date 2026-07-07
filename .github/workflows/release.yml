@@ -36,7 +36,7 @@ jobs:
           - linux-arm
         binary:
           - name: tsgo
-            ref: main
+            ref: ${{ github.event.pull_request.merge_commit_sha }}
           - name: tsc
             ref: generated/stable
     steps:
@@ -76,6 +76,13 @@ jobs:
       - name: Setup repo
         run: pnpm setup-repo --ci
 
+      - name: Sync Effect version from release commit
+        if: matrix.binary.ref != github.event.pull_request.merge_commit_sha
+        run: |
+          git fetch --depth=1 origin "${{ github.event.pull_request.merge_commit_sha }}"
+          git checkout "${{ github.event.pull_request.merge_commit_sha }}" -- _packages/tsgo/package.json
+          bash _tools/version-prepare.sh
+
       - name: Build ${{ matrix.binary.name }} ${{ matrix.npm_target }}
         run: pnpm release:prepare --target ${{ matrix.npm_target }} --binary-name ${{ matrix.binary.name }} --skip-cli
 
@@ -99,7 +106,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
 
       - name: Setup Node
         uses: actions/setup-node@v4
