@@ -48,11 +48,11 @@ replace (
 
 require (
 	github.com/effect-ts/tsgo/etscore v0.0.0
-	github.com/microsoft/typescript-go/shim/api v0.0.0
 	github.com/microsoft/typescript-go/shim/ast v0.0.0
 	github.com/microsoft/typescript-go/shim/astnav v0.0.0
 	github.com/microsoft/typescript-go/shim/bundled v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/checker v0.0.0
+	github.com/microsoft/typescript-go/shim/collections v0.0.0
 	github.com/microsoft/typescript-go/shim/compiler v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/core v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/diagnostics v0.0.0-00010101000000-000000000000
@@ -64,13 +64,12 @@ require (
 	github.com/microsoft/typescript-go/shim/ls/lsconv v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/ls/lsutil v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/lsp/lsproto v0.0.0-00010101000000-000000000000
-	github.com/microsoft/typescript-go/shim/module v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/modulespecifiers v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/packagejson v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/parser v0.0.0-00010101000000-000000000000
+	github.com/microsoft/typescript-go/shim/project v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/project/logging v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/scanner v0.0.0-00010101000000-000000000000
-	github.com/microsoft/typescript-go/shim/sourcemap v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/testutil/baseline v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/testutil/harnessutil v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/tsoptions v0.0.0-00010101000000-000000000000
@@ -81,17 +80,16 @@ require (
 
 require (
 	github.com/Microsoft/go-winio v0.6.2 // indirect
-	github.com/dlclark/regexp2 v1.11.5 // indirect
-	github.com/go-json-experiment/json v0.0.0-20260214004413-d219187c3433 // indirect
+	github.com/go-json-experiment/json v0.0.0-20260623181947-01eb4420fa68 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.10 // indirect
+	github.com/mackerelio/go-osstat v0.2.7 // indirect
 	github.com/microsoft/typescript-go v0.0.0 // indirect
-	github.com/microsoft/typescript-go/shim/collections v0.0.0 // indirect
 	github.com/peter-evans/patience v0.3.0 // indirect
 	github.com/zeebo/xxh3 v1.1.0 // indirect
-	golang.org/x/sync v0.19.0 // indirect
-	golang.org/x/sys v0.41.0 // indirect
-	golang.org/x/text v0.34.0 // indirect
+	golang.org/x/sync v0.21.0 // indirect
+	golang.org/x/sys v0.46.0 // indirect
+	golang.org/x/text v0.38.0 // indirect
 	gotest.tools/v3 v3.5.2 // indirect
 )
 
