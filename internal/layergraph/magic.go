@@ -39,7 +39,7 @@ func ConvertOutlineGraphToLayerMagic(
 		rootIndices = append(rootIndices, idx)
 	}
 
-	// Sort roots by provides count descending, then requires count descending
+	// Sort roots by layer shape, then provides/requires count.
 	slices.SortFunc(rootIndices, func(a, b graph.NodeIndex) int {
 		return compareNodesByOrder(reversedGraph, a, b)
 	})
@@ -95,7 +95,7 @@ func ConvertOutlineGraphToLayerMagic(
 }
 
 // dfsPostOrderWithOrder performs an iterative post-order DFS with custom node ordering.
-// Neighbors are sorted by provides count descending, then requires count descending.
+// Neighbors are sorted by layer shape, then provides/requires count.
 func dfsPostOrderWithOrder(
 	g *graph.Graph[LayerOutlineGraphNodeInfo, struct{}],
 	start []graph.NodeIndex,
@@ -145,7 +145,7 @@ func dfsPostOrderWithOrder(
 }
 
 // neighborsOutgoingSorted returns outgoing neighbor indices sorted by the layer ordering:
-// provides count descending, then requires count descending.
+// layer shape, then provides/requires count.
 func neighborsOutgoingSorted(
 	g *graph.Graph[LayerOutlineGraphNodeInfo, struct{}],
 	nodeIndex graph.NodeIndex,
@@ -157,7 +157,8 @@ func neighborsOutgoingSorted(
 	return neighbors
 }
 
-// compareNodesByOrder compares two nodes by provides count descending, then requires count descending.
+// compareNodesByOrder compares two nodes by composition priority:
+// both provides/requires, only provides, neither, only requires.
 func compareNodesByOrder(
 	g *graph.Graph[LayerOutlineGraphNodeInfo, struct{}],
 	a, b graph.NodeIndex,
@@ -165,10 +166,31 @@ func compareNodesByOrder(
 	nodeA, _ := g.GetNode(a)
 	nodeB, _ := g.GetNode(b)
 
+	if rankDiff := layerOrderRank(nodeA) - layerOrderRank(nodeB); rankDiff != 0 {
+		return rankDiff
+	}
 	// Sort by provides count descending (reverse order)
 	if lenDiff := len(nodeB.Provides) - len(nodeA.Provides); lenDiff != 0 {
 		return lenDiff
 	}
 	// Tiebreak by requires count descending (reverse order)
-	return len(nodeB.Requires) - len(nodeA.Requires)
+	if lenDiff := len(nodeB.Requires) - len(nodeA.Requires); lenDiff != 0 {
+		return lenDiff
+	}
+	return a - b
+}
+
+func layerOrderRank(node LayerOutlineGraphNodeInfo) int {
+	hasProvides := len(node.Provides) > 0
+	hasRequires := len(node.Requires) > 0
+	switch {
+	case hasProvides && hasRequires:
+		return 0
+	case hasProvides:
+		return 1
+	case !hasRequires:
+		return 2
+	default:
+		return 3
+	}
 }
