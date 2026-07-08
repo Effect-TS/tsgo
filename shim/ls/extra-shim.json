@@ -1,4 +1,5 @@
 {
+  "ExtraFunctions": ["getJSDocOrTag"],
   "ExtraMethods": {
     "LanguageService": ["getQuickInfoAndDocumentationForSymbol"]
   },
