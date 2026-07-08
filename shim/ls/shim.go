@@ -151,3 +151,5 @@ const SourceTypeOnlyAlias = ls.SourceTypeOnlyAlias
 type SymbolAndEntries = ls.SymbolAndEntries
 type SymbolAndEntriesData = ls.SymbolAndEntriesData
 var TriggerCharacters = ls.TriggerCharacters
+//go:linkname GetJSDocOrTag github.com/microsoft/typescript-go/internal/ls.getJSDocOrTag
+func GetJSDocOrTag(c *checker.Checker, node *ast.Node) *ast.Node

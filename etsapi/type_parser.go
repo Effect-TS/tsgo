@@ -10,6 +10,7 @@ import (
 
 // TypeParser wraps the internal type parser with a narrow public API.
 type TypeParser struct {
+	program checker.Program
 	inner   *typeparser.TypeParser
 	checker *checker.Checker
 }
@@ -42,7 +43,7 @@ type SchemaTypes struct {
 
 // NewTypeParser builds a checker-backed TypeParser.
 func NewTypeParser(program checker.Program, checker *checker.Checker) *TypeParser {
-	return &TypeParser{inner: typeparser.NewTypeParser(program, checker), checker: checker}
+	return &TypeParser{program: program, inner: typeparser.NewTypeParser(program, checker), checker: checker}
 }
 
 // GetTypeAtLocation returns the checker type for node using the parser's safety guards.
