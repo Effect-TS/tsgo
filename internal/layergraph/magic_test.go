@@ -44,6 +44,28 @@ func TestCompareNodesByOrder(t *testing.T) {
 	}
 }
 
+func TestCompareNodesByOrderLayerShapes(t *testing.T) {
+	t.Parallel()
+	g := graph.New[LayerOutlineGraphNodeInfo, struct{}]()
+
+	bothProvidesAndRequires := g.AddNode(makeOutlineNode(1, 1))
+	onlyProvides := g.AddNode(makeOutlineNode(1, 0))
+	noProvidesOrRequires := g.AddNode(makeOutlineNode(0, 0))
+	onlyRequires := g.AddNode(makeOutlineNode(0, 1))
+
+	ordered := []graph.NodeIndex{
+		bothProvidesAndRequires,
+		onlyProvides,
+		noProvidesOrRequires,
+		onlyRequires,
+	}
+	for i := range len(ordered) - 1 {
+		if cmp := compareNodesByOrder(g, ordered[i], ordered[i+1]); cmp >= 0 {
+			t.Fatalf("expected node at order %d to sort before order %d, got %d", i, i+1, cmp)
+		}
+	}
+}
+
 func TestDFSPostOrderWithOrder(t *testing.T) {
 	t.Parallel()
 	// Build a small graph:
@@ -112,6 +134,46 @@ func TestDFSPostOrderWithOrderMultipleRoots(t *testing.T) {
 	}
 	if len(result[1].Provides) != 1 {
 		t.Errorf("expected second node to have 1 provides, got %d", len(result[1].Provides))
+	}
+}
+
+func TestConvertOutlineGraphToLayerMagicOrdersUnrelatedLayers(t *testing.T) {
+	t.Parallel()
+	g := graph.New[LayerOutlineGraphNodeInfo, struct{}]()
+
+	bothProvidesAndRequires := makeOutlineNode(1, 1)
+	onlyProvides := makeOutlineNode(1, 0)
+	noProvidesOrRequires := makeOutlineNode(0, 0)
+	onlyRequires := makeOutlineNode(0, 1)
+
+	// Add nodes in an order that differs from the expected composition order to
+	// verify unrelated roots are sorted by their layer shape, not source order.
+	g.AddNode(noProvidesOrRequires)
+	g.AddNode(onlyRequires)
+	g.AddNode(onlyProvides)
+	g.AddNode(bothProvidesAndRequires)
+
+	result := ConvertOutlineGraphToLayerMagic(nil, g, nil)
+	if len(result.Nodes) != 4 {
+		t.Fatalf("expected 4 nodes, got %d", len(result.Nodes))
+	}
+
+	expected := []LayerOutlineGraphNodeInfo{
+		bothProvidesAndRequires,
+		onlyProvides,
+		noProvidesOrRequires,
+		onlyRequires,
+	}
+	for i, expectedNode := range expected {
+		if result.Nodes[i].Node != expectedNode.Node {
+			t.Fatalf("result[%d] expected provides=%d requires=%d, got provides=%d requires=%d",
+				i,
+				len(expectedNode.Provides),
+				len(expectedNode.Requires),
+				len(result.Nodes[i].ProvidedTypes),
+				len(result.Nodes[i].RequiredTypes),
+			)
+		}
 	}
 }
 
