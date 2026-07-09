@@ -1,5 +1,15 @@
 # @effect/tsgo
 
+## 0.16.4
+
+### Patch Changes
+
+- d7f6e86: Expose additional generated shims for TypeScript-Go language-service and checker internals, and add an `etsapi` helper for rendering structural schema statements from a resolved type.
+- 082a955: Update TypeScript-Go automation so `main` tracks `typescript@next`, while release `tsc` binaries are built from a generated `generated/latest` branch pinned to `typescript@latest`.
+- 98bbce0: Fix layer magic ordering for unrelated layers so layers that only require services are composed after layers that provide no services.
+- 5cfbe23: Update to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260708.3), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/52168999f3dcfc9205432d47f6f600051f02f1a2) commit `52168999f3dcfc9205432d47f6f600051f02f1a2`.
+- d46803d: Publish TypeScript upstream metadata beside packaged binaries and select the patched binary whose TypeScript git head matches the installed `typescript` package, with `effect-tsgo patch --force` as an explicit fallback.
+
 ## 0.16.3
 
 ### Patch Changes
