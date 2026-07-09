@@ -45,7 +45,7 @@ jobs:
     steps:
       - name: Checkout PR branch
         if: github.event_name == 'pull_request_target'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
@@ -54,7 +54,7 @@ jobs:
 
       - name: Checkout requested branch
         if: github.event_name != 'pull_request_target' && inputs.target_ref != ''
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           ref: ${{ inputs.target_ref }}
@@ -62,7 +62,7 @@ jobs:
 
       - name: Checkout current branch
         if: github.event_name != 'pull_request_target' && inputs.target_ref == ''
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           ref: ${{ github.ref_name }}
