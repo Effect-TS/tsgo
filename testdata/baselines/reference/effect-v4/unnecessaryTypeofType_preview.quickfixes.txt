@@ -1,0 +1,29 @@
+=== Quick Fix Inventory ===
+
+[D1] (10:23-10:49) TS377090: This `typeof ... .Type` query can be replaced with `UsersRepo.User`. effect(unnecessaryTypeofType)
+  Fix 0: "Disable unnecessaryTypeofType for this line"
+  Fix 1: "Disable unnecessaryTypeofType for entire file"
+  Fix 2: "Replace with 'UsersRepo.User'"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable unnecessaryTypeofType for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable unnecessaryTypeofType for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with 'UsersRepo.User'" ===
+
+--- file:///.src/unnecessaryTypeofType_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics unnecessaryTypeofType:warning
+import { Schema } from "effect"
+
+export namespace UsersRepo {
+  export const User = Schema.Struct({ id: Schema.Finite })
+  export type User = typeof User.Type
+}
+
+export const preview: UsersRepo.User = { id: 1 }
+

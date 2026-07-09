@@ -1,0 +1,74 @@
+diff --git a/internal/checker/checker.go b/internal/checker/checker.go
+index 2e1622418..66059cab4 100644
+--- a/internal/checker/checker.go
++++ b/internal/checker/checker.go
+@@ -31,6 +31,40 @@ import (
+ 	"github.com/zeebo/xxh3"
+ )
+ 
++// AfterCheckSourceFileCallback is invoked after type checking each source file.
++// It allows external packages to run additional diagnostics with full type information.
++// Use Checker.AddDiagnostic to add diagnostics from within the callback.
++var AfterCheckSourceFileCallback func(context.Context, Program, *Checker, *ast.SourceFile)
++
++// RegisterAfterCheckSourceFileCallback registers a callback to be called after
++// each source file is type checked. The callback receives the program, checker
++// with full type information, and the source file that was checked.
++// Note: Only one callback can be registered. Subsequent calls will replace the previous callback.
++func RegisterAfterCheckSourceFileCallback(cb func(context.Context, Program, *Checker, *ast.SourceFile)) {
++	AfterCheckSourceFileCallback = cb
++}
++
++// AddDiagnostic adds a diagnostic to the checker's diagnostics collection.
++func (c *Checker) AddDiagnostic(diagnostic *ast.Diagnostic) {
++	c.diagnostics.Add(diagnostic)
++}
++
++// Program returns the program being checked.
++func (c *Checker) Program() Program {
++	return c.program
++}
++
++// GetRelationErrors returns the collected relation errors for a source file.
++// These are collected during type checking and persist until the file is re-checked.
++func (c *Checker) GetRelationErrors(sf *ast.SourceFile) []*RelationError {
++	links := c.sourceFileLinks.Get(sf)
++	if !links.typeChecked {
++		c.GetDiagnostics(c.ctx, sf)
++		links = c.sourceFileLinks.Get(sf)
++	}
++	return links.relationErrors
++}
++
+ // CheckMode
+ 
+ type CheckMode uint32
+@@ -559,6 +593,7 @@ type Program interface {
+ 	GetImportHelpersImportSpecifier(path tspath.Path) *ast.Node
+ 	SourceFileMayBeEmitted(sourceFile *ast.SourceFile, forceDtsEmit bool) bool
+ 	IsSourceFileDefaultLibrary(path tspath.Path) bool
++	IsSourceFileFromExternalLibrary(file *ast.SourceFile) bool
+ 	GetProjectReferenceFromOutputDts(path tspath.Path) *tsoptions.SourceOutputAndProjectReference
+ 	GetRedirectForResolution(file ast.HasFileName) *tsoptions.ParsedCommandLine
+ 	CommonSourceDirectory() string
+@@ -2145,6 +2179,8 @@ func (c *Checker) checkSourceFile(ctx context.Context, sourceFile *ast.SourceFil
+ 	links := c.sourceFileLinks.Get(sourceFile)
+ 	if !links.typeChecked {
+ 		c.saveDeferredDiagnostics = true
++		// Clear any stale relation errors before type checking.
++		links.relationErrors = nil
+ 		if tr := c.tracer; tr != nil {
+ 			defer tr.Push(tracing.PhaseCheck, "checkSourceFile", map[string]any{"path": sourceFile.FileName()}, true)()
+ 		}
+@@ -2164,6 +2200,11 @@ func (c *Checker) checkSourceFile(ctx context.Context, sourceFile *ast.SourceFil
+ 		c.produceDeferredDiagnostics()
+ 		c.reportedUnreachableNodes.Clear()
+ 		links.typeChecked = true
++
++		// Run Effect diagnostics after type checking.
++		if AfterCheckSourceFileCallback != nil {
++			AfterCheckSourceFileCallback(ctx, c.program, c, sourceFile)
++		}
+ 	}
+ 	if checkUnused && !links.unusedChecked {
+ 		// The unused identifiers check relies on a full type check having first been performed

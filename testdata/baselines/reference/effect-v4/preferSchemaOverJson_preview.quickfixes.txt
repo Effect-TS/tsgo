@@ -1,0 +1,13 @@
+=== Quick Fix Inventory ===
+
+[D1] (7:10-7:26) TS377026: This code uses `JSON.parse` or `JSON.stringify`. Use `Schema.UnknownFromJsonString` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(preferSchemaOverJson)
+  Fix 0: "Disable preferSchemaOverJson for this line"
+  Fix 1: "Disable preferSchemaOverJson for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable preferSchemaOverJson for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable preferSchemaOverJson for entire file" ===
+skipped by default

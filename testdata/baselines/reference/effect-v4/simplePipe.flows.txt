@@ -1,0 +1,1 @@
+/.src/simplePipe.ts -> simplePipe.flows.simplePipe.mermaid

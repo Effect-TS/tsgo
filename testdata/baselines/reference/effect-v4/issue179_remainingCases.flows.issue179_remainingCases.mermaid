@@ -1,0 +1,126 @@
+flowchart TB
+  0[["type: #lt;T#gt;#40;name: string, label: string, request: #40;#41; =#gt; PromiseLike#lt;T#gt;#41; =#gt; Effect#lt;T, never, never#gt;<br/>node: function runMcpRequest#lt;T#gt;#40;#92;n    name: string,#92;n    label: string,#92;n    request: #40;#41; =#gt; PromiseLike#lt;T#gt;#92;n#41;: Effect.Effect#lt;T#gt; #123;#92;n    return Effect.tryPromise#40;request#41;#92;n#125;"]]
+  1[/"type: #40;#41; =#gt; PromiseLike#lt;T#gt;<br/>node: request"/]
+  2["type: Effect#lt;T, never, never#gt;<br/>callee: Effect.tryPromise<br/>args: #91;#93;"]
+  3[/"type: #lt;A, E = UnknownError#gt;#40;options: #123; readonly try: #40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;; readonly catch: #40;error: unknown#41; =#gt; E; #125; #124; #40;#40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;#41;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.tryPromise"/]
+  4[/"type: 42<br/>node: 42"/]
+  5[["type: #40;a: number, b: number#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #35;innerEffect#40;a: number, b: number#41;: Effect.Effect#lt;number#gt; #123;#92;n        return Effect.succeed#40;a + b#41;#92;n    #125;"]]
+  6[/"type: number<br/>node: a + b"/]
+  7["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  8[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  9[["type: #40;a: number, b: number#41; =#gt; number<br/>node: #35;innerSync#40;a: number, b: number#41;: number #123;#92;n        return a + b#92;n    #125;"]]
+  10[/"type: number<br/>node: a + b"/]
+  11[["type: #40;a: number#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #35;innerOne#40;a: number#41;: Effect.Effect#lt;number#gt; #123;#92;n        return Effect.succeed#40;a#41;#92;n    #125;"]]
+  12[/"type: number<br/>node: a"/]
+  13["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  14[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  15[["type: #40;key: string#41; =#gt; #40;effect: Effect#lt;void, never, never#gt;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #35;getWrapper#40;key: string#41;: #40;effect: Effect.Effect#lt;void#gt;#41; =#gt; Effect.Effect#lt;void#gt; #123;#92;n        return #40;effect#41; =#gt; effect.pipe#40;Effect.annotateLogs#40;#quot;key#quot;, key#41;#41;#92;n    #125;"]]
+  16[["type: #40;effect: Effect#lt;void, never, never#gt;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;effect#41; =#gt; effect.pipe#40;Effect.annotateLogs#40;#quot;key#quot;, key#41;#41;"]]
+  17[/"type: Effect#lt;void, never, never#gt;<br/>node: effect"/]
+  18["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.annotateLogs<br/>args: #91;#quot;key#quot;, key#93;"]
+  19[/"type: #123; #40;key: string, value: unknown#41;: #lt;A, E, R#gt;#40;effect: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R#gt;; #40;values: Record#lt;string, unknown#gt;#41;: #lt;A, E, R#gt;#40;effect: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R#gt;; #125; #amp; #123; #lt;A, E, R#gt;#40;effect: Effect#lt;A, E, R#gt;, key: string, value: unknown#41;: Effect#lt;A, E, R#gt;; #lt;A, E, R#gt;#40;effect: Effect#lt;A, E, R#gt;, values: Record#lt;string, unknown#gt;#41;: Effect#lt;A, E, R#gt;; #125;<br/>node: Effect.annotateLogs"/]
+  20[/"type: #quot;key#quot;<br/>node: #quot;key#quot;"/]
+  21[/"type: string<br/>node: key"/]
+  22[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: calleeExpression#40;#41;: Effect.Effect#lt;number#gt; #123;#92;n        return Effect.gen#40;#123; self: this #125;, function* #40;#41; #123;#92;n            return yield* this.#35;innerEffect#40;1, 2#41;#92;n        #125;#41;#92;n    #125;"]]
+  23((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;#123; self: this #125;, function* #40;#41; #123;#92;n            return yield* this.#35;innerEffect#40;1, 2#41;#92;n        #125;#41;")))
+  24[/"type: number<br/>node: yield* this.#35;innerEffect#40;1, 2#41;"/]
+  25[["type: #40;#41; =#gt; Effect#lt;number, unknown, never#gt;<br/>node: tryPromiseCallback#40;#41;: Effect.Effect#lt;number, unknown#gt; #123;#92;n        return Effect.gen#40;#123; self: this #125;, function* #40;#41; #123;#92;n            return yield* Effect.tryPromise#40;#40;#41; =#gt; Promise.resolve#40;this.#35;value#41;#41;#92;n        #125;#41;#92;n    #125;"]]
+  26((("type: Effect#lt;number, UnknownError, never#gt;<br/>node: Effect.gen#40;#123; self: this #125;, function* #40;#41; #123;#92;n            return yield* Effect.tryPromise#40;#40;#41; =#gt; Promise.resolve#40;this.#35;value#41;#41;#92;n        #125;#41;")))
+  27[/"type: number<br/>node: yield* Effect.tryPromise#40;#40;#41; =#gt; Promise.resolve#40;this.#35;value#41;#41;"/]
+  28[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: #40;#41; =#gt; Promise.resolve#40;this.#35;value#41;"]]
+  29[/"type: Promise#lt;number#gt;<br/>node: Promise.resolve#40;this.#35;value#41;"/]
+  30["type: Effect#lt;number, UnknownError, never#gt;<br/>callee: Effect.tryPromise<br/>args: #91;#93;"]
+  31[/"type: #lt;A, E = UnknownError#gt;#40;options: #123; readonly try: #40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;; readonly catch: #40;error: unknown#41; =#gt; E; #125; #124; #40;#40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;#41;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.tryPromise"/]
+  32[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: syncCallbackMultiArg#40;#41;: Effect.Effect#lt;number#gt; #123;#92;n        return Effect.gen#40;#123; self: this #125;, function* #40;#41; #123;#92;n            return yield* Effect.sync#40;#40;#41; =#gt; this.#35;innerSync#40;1, 2#41;#41;#92;n        #125;#41;#92;n    #125;"]]
+  33((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;#123; self: this #125;, function* #40;#41; #123;#92;n            return yield* Effect.sync#40;#40;#41; =#gt; this.#35;innerSync#40;1, 2#41;#41;#92;n        #125;#41;")))
+  34[/"type: number<br/>node: yield* Effect.sync#40;#40;#41; =#gt; this.#35;innerSync#40;1, 2#41;#41;"/]
+  35[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; this.#35;innerSync#40;1, 2#41;"]]
+  36[/"type: number<br/>node: this.#35;innerSync#40;1, 2#41;"/]
+  37["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
+  38[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
+  39[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: calleeWithPipe#40;#41;: Effect.Effect#lt;number#gt; #123;#92;n        return Effect.gen#40;#123; self: this #125;, function* #40;#41; #123;#92;n            return yield* this.#35;innerOne#40;1#41;.pipe#40;Effect.map#40;#40;n#41; =#gt; n + 1#41;#41;#92;n        #125;#41;#92;n    #125;"]]
+  40((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;#123; self: this #125;, function* #40;#41; #123;#92;n            return yield* this.#35;innerOne#40;1#41;.pipe#40;Effect.map#40;#40;n#41; =#gt; n + 1#41;#41;#92;n        #125;#41;")))
+  41[/"type: number<br/>node: yield* this.#35;innerOne#40;1#41;.pipe#40;Effect.map#40;#40;n#41; =#gt; n + 1#41;#41;"/]
+  42[/"type: 1<br/>node: 1"/]
+  43["type: Effect#lt;number, never, never#gt;<br/>callee: this.#35;innerOne<br/>args: #91;#93;"]
+  44[/"type: #40;a: number#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: this.#35;innerOne"/]
+  45["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n + 1#93;"]
+  46[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  47[["type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n + 1"]]
+  48[/"type: number<br/>node: n + 1"/]
+  49[["type: #40;key: string#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: curriedWrapper#40;key: string#41;: Effect.Effect#lt;void#gt; #123;#92;n        return this.#35;getWrapper#40;key#41;#40;#92;n            Effect.gen#40;#123; self: this #125;, function* #40;#41; #123;#92;n                return#92;n            #125;#41;#92;n        #41;#92;n    #125;"]]
+  50((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;#123; self: this #125;, function* #40;#41; #123;#92;n                return#92;n            #125;#41;")))
+  51["type: Effect#lt;void, never, never#gt;<br/>callee: this.#35;getWrapper<br/>args: #91;key#93;"]
+  52[/"type: #40;key: string#41; =#gt; #40;effect: Effect#lt;void, never, never#gt;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: this.#35;getWrapper"/]
+  53[/"type: string<br/>node: key"/]
+  54[["type: #40;server: #123; readonly name: string; #125;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: nestedGenericCallback#40;server: #123; readonly name: string #125;#41;: Effect.Effect#lt;void#gt; #123;#92;n        return Effect.gen#40;#123; self: this #125;, function* #40;#41; #123;#92;n            return yield* Effect.gen#40;#123; self: this #125;, function* #40;#41; #123;#92;n                yield* runMcpRequest#40;server.name, #quot;connect#quot;, #40;#41; =#gt; Promise.resolve#40;42#41;#41;#92;n            #125;#41;#92;n        #125;#41;#92;n    #125;"]]
+  55((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;#123; self: this #125;, function* #40;#41; #123;#92;n            return yield* Effect.gen#40;#123; self: this #125;, function* #40;#41; #123;#92;n                yield* runMcpRequest#40;server.name, #quot;connect#quot;, #40;#41; =#gt; Promise.resolve#40;42#41;#41;#92;n            #125;#41;#92;n        #125;#41;")))
+  56[/"type: void<br/>node: yield* Effect.gen#40;#123; self: this #125;, function* #40;#41; #123;#92;n                yield* runMcpRequest#40;server.name, #quot;connect#quot;, #40;#41; =#gt; Promise.resolve#40;42#41;#41;#92;n            #125;#41;"/]
+  57((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;#123; self: this #125;, function* #40;#41; #123;#92;n                yield* runMcpRequest#40;server.name, #quot;connect#quot;, #40;#41; =#gt; Promise.resolve#40;42#41;#41;#92;n            #125;#41;")))
+  58[/"type: Effect#lt;number, never, never#gt;<br/>node: runMcpRequest#40;server.name, #quot;connect#quot;, #40;#41; =#gt; Promise.resolve#40;42#41;#41;"/]
+  59[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: #40;#41; =#gt; Promise.resolve#40;42#41;"]]
+  60[/"type: Promise#lt;number#gt;<br/>node: Promise.resolve#40;42#41;"/]
+  1 -->|"kind: pipe"| 2
+  3 -->|"kind: transformCallee"| 2
+  2 -->|"kind: potentialReturn"| 0
+  2 -->|"kind: usedBy"| 0
+  6 -->|"kind: pipe"| 7
+  8 -->|"kind: transformCallee"| 7
+  7 -->|"kind: potentialReturn"| 5
+  7 -->|"kind: usedBy"| 5
+  10 -->|"kind: potentialReturn"| 9
+  10 -->|"kind: usedBy"| 9
+  12 -->|"kind: pipe"| 13
+  14 -->|"kind: transformCallee"| 13
+  13 -->|"kind: potentialReturn"| 11
+  13 -->|"kind: usedBy"| 11
+  19 -->|"kind: transformCallee"| 18
+  20 -->|"kind: transformArg"| 18
+  21 -->|"kind: transformArg"| 18
+  17 -->|"kind: pipe"| 18
+  18 -->|"kind: potentialReturn"| 16
+  16 -->|"kind: potentialReturn"| 15
+  16 -->|"kind: usedBy"| 15
+  24 -->|"kind: potentialReturn"| 23
+  23 -->|"kind: potentialReturn"| 22
+  23 -->|"kind: usedBy"| 22
+  29 -->|"kind: potentialReturn"| 28
+  28 -->|"kind: pipe"| 30
+  31 -->|"kind: transformCallee"| 30
+  30 -->|"kind: usedBy"| 27
+  27 -->|"kind: potentialReturn"| 26
+  30 -->|"kind: yieldable"| 26
+  26 -->|"kind: potentialReturn"| 25
+  26 -->|"kind: usedBy"| 25
+  36 -->|"kind: potentialReturn"| 35
+  35 -->|"kind: pipe"| 37
+  38 -->|"kind: transformCallee"| 37
+  37 -->|"kind: usedBy"| 34
+  34 -->|"kind: potentialReturn"| 33
+  37 -->|"kind: yieldable"| 33
+  33 -->|"kind: potentialReturn"| 32
+  33 -->|"kind: usedBy"| 32
+  42 -->|"kind: pipe"| 43
+  44 -->|"kind: transformCallee"| 43
+  46 -->|"kind: transformCallee"| 45
+  48 -->|"kind: potentialReturn"| 47
+  47 -->|"kind: transformArg"| 45
+  43 -->|"kind: pipe"| 45
+  45 -->|"kind: usedBy"| 41
+  41 -->|"kind: potentialReturn"| 40
+  45 -->|"kind: yieldable"| 40
+  40 -->|"kind: potentialReturn"| 39
+  40 -->|"kind: usedBy"| 39
+  50 -->|"kind: pipe"| 51
+  52 -->|"kind: transformCallee"| 51
+  53 -->|"kind: transformArg"| 51
+  51 -->|"kind: potentialReturn"| 49
+  51 -->|"kind: usedBy"| 49
+  60 -->|"kind: potentialReturn"| 59
+  59 -->|"kind: usedBy"| 58
+  58 -->|"kind: yieldable"| 57
+  57 -->|"kind: usedBy"| 56
+  56 -->|"kind: potentialReturn"| 55
+  57 -->|"kind: yieldable"| 55
+  55 -->|"kind: potentialReturn"| 54
+  55 -->|"kind: usedBy"| 54

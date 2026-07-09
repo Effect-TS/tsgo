@@ -1,0 +1,136 @@
+flowchart TB
+  0[["type: any<br/>node: constructor#40;readonly args: #123; cause: unknown #125; #amp; Record#lt;string, unknown#gt;#41; #123;#125;"]]
+  1[/"type: #quot;todos.json#quot;<br/>node: #quot;todos.json#quot;"/]
+  2((("type: Effect#lt;void, TodosRepoError, never#gt;<br/>node: function*#40;todos: ReadonlyArray#lt;Todo#gt;#41; #123;#92;n  const encoded = yield* encodeTodos#40;todos#41;.pipe#40;#92;n    Effect.mapError#40;#40;cause#41; =#gt; new TodosRepoError#40;#123; cause #125;#41;#41;#92;n  #41;#92;n#92;n  yield* makeDirectory#40;filePath#41;.pipe#40;#92;n    Effect.mapError#40;#40;cause#41; =#gt; new TodosRepoError#40;#123; cause #125;#41;#41;#92;n  #41;#92;n#92;n  yield* writeFile#40;filePath, `$#123;encoded#125;#92;n`#41;.pipe#40;#92;n    Effect.mapError#40;#40;cause#41; =#gt; new TodosRepoError#40;#123; cause #125;#41;#41;#92;n  #41;#92;n#125;")))
+  3[/"type: readonly Todo#91;#93;<br/>node: todos"/]
+  4["type: Effect#lt;string, unknown, never#gt;<br/>callee: encodeTodos<br/>args: #91;#93;"]
+  5[/"type: #40;todos: readonly Todo#91;#93;#41; =#gt; Effect#lt;string, unknown, never#gt;<br/>node: encodeTodos"/]
+  6["type: Effect#lt;string, TodosRepoError, never#gt;<br/>callee: Effect.mapError<br/>args: #91;#40;cause#41; =#gt; new TodosRepoError#40;#123; cause #125;#41;#93;"]
+  7[/"type: #123; #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E2, R#gt;; #lt;A, E, R, E2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; E2#41;: Effect#lt;A, E2, R#gt;; #125;<br/>node: Effect.mapError"/]
+  8[["type: #40;cause: unknown#41; =#gt; TodosRepoError<br/>node: #40;cause#41; =#gt; new TodosRepoError#40;#123; cause #125;#41;"]]
+  9[/"type: TodosRepoError<br/>node: new TodosRepoError#40;#123; cause #125;#41;"/]
+  10[/"type: #quot;todos.json#quot;<br/>node: filePath"/]
+  11["type: Effect#lt;void, unknown, never#gt;<br/>callee: makeDirectory<br/>args: #91;#93;"]
+  12[/"type: #40;path: string#41; =#gt; Effect#lt;void, unknown, never#gt;<br/>node: makeDirectory"/]
+  13["type: Effect#lt;void, TodosRepoError, never#gt;<br/>callee: Effect.mapError<br/>args: #91;#40;cause#41; =#gt; new TodosRepoError#40;#123; cause #125;#41;#93;"]
+  14[/"type: #123; #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E2, R#gt;; #lt;A, E, R, E2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; E2#41;: Effect#lt;A, E2, R#gt;; #125;<br/>node: Effect.mapError"/]
+  15[["type: #40;cause: unknown#41; =#gt; TodosRepoError<br/>node: #40;cause#41; =#gt; new TodosRepoError#40;#123; cause #125;#41;"]]
+  16[/"type: TodosRepoError<br/>node: new TodosRepoError#40;#123; cause #125;#41;"/]
+  17[/"type: Effect#lt;void, unknown, never#gt;<br/>node: writeFile#40;filePath, `$#123;encoded#125;#92;n`#41;"/]
+  18["type: Effect#lt;void, TodosRepoError, never#gt;<br/>callee: Effect.mapError<br/>args: #91;#40;cause#41; =#gt; new TodosRepoError#40;#123; cause #125;#41;#93;"]
+  19[/"type: #123; #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E2, R#gt;; #lt;A, E, R, E2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; E2#41;: Effect#lt;A, E2, R#gt;; #125;<br/>node: Effect.mapError"/]
+  20[["type: #40;cause: unknown#41; =#gt; TodosRepoError<br/>node: #40;cause#41; =#gt; new TodosRepoError#40;#123; cause #125;#41;"]]
+  21[/"type: TodosRepoError<br/>node: new TodosRepoError#40;#123; cause #125;#41;"/]
+  22[["type: #40;todos: readonly Todo#91;#93;#41; =#gt; Effect#lt;void, TodosRepoError, never#gt;<br/>node: Effect.fn#40;#quot;TodosRepo.writeTodos#quot;#41;#40;function*#40;todos: ReadonlyArray#lt;Todo#gt;#41; #123;#92;n  const encoded = yield* encodeTodos#40;todos#41;.pipe#40;#92;n    Effect.mapError#40;#40;cause#41; =#gt; new TodosRepoError#40;#123; cause #125;#41;#41;#92;n  #41;#92;n#92;n  yield* makeDirectory#40;filePath#41;.pipe#40;#92;n    Effect.mapError#40;#40;cause#41; =#gt; new TodosRepoError#40;#123; cause #125;#41;#41;#92;n  #41;#92;n#92;n  yield* writeFile#40;filePath, `$#123;encoded#125;#92;n`#41;.pipe#40;#92;n    Effect.mapError#40;#40;cause#41; =#gt; new TodosRepoError#40;#123; cause #125;#41;#41;#92;n  #41;#92;n#125;#41;"]]
+  23((("type: Effect#lt;void, TodosRepoError, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  yield* makeDirectory#40;filePath#41;.pipe#40;#92;n    Effect.mapError#40;#40;cause#41; =#gt; new TodosRepoError#40;#123; cause #125;#41;#41;#92;n  #41;#92;n#92;n  yield* writeFile#40;filePath, #quot;body#quot;#41;.pipe#40;#92;n    Effect.mapError#40;#40;cause#41; =#gt; new TodosRepoError#40;#123; cause, filePath #125;#41;#41;#92;n  #41;#92;n#125;#41;")))
+  24[/"type: #quot;todos.json#quot;<br/>node: filePath"/]
+  25["type: Effect#lt;void, unknown, never#gt;<br/>callee: makeDirectory<br/>args: #91;#93;"]
+  26[/"type: #40;path: string#41; =#gt; Effect#lt;void, unknown, never#gt;<br/>node: makeDirectory"/]
+  27["type: Effect#lt;void, TodosRepoError, never#gt;<br/>callee: Effect.mapError<br/>args: #91;#40;cause#41; =#gt; new TodosRepoError#40;#123; cause #125;#41;#93;"]
+  28[/"type: #123; #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E2, R#gt;; #lt;A, E, R, E2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; E2#41;: Effect#lt;A, E2, R#gt;; #125;<br/>node: Effect.mapError"/]
+  29[["type: #40;cause: unknown#41; =#gt; TodosRepoError<br/>node: #40;cause#41; =#gt; new TodosRepoError#40;#123; cause #125;#41;"]]
+  30[/"type: TodosRepoError<br/>node: new TodosRepoError#40;#123; cause #125;#41;"/]
+  31[/"type: Effect#lt;void, unknown, never#gt;<br/>node: writeFile#40;filePath, #quot;body#quot;#41;"/]
+  32["type: Effect#lt;void, TodosRepoError, never#gt;<br/>callee: Effect.mapError<br/>args: #91;#40;cause#41; =#gt; new TodosRepoError#40;#123; cause, filePath #125;#41;#93;"]
+  33[/"type: #123; #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E2, R#gt;; #lt;A, E, R, E2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; E2#41;: Effect#lt;A, E2, R#gt;; #125;<br/>node: Effect.mapError"/]
+  34[["type: #40;cause: unknown#41; =#gt; TodosRepoError<br/>node: #40;cause#41; =#gt; new TodosRepoError#40;#123; cause, filePath #125;#41;"]]
+  35[/"type: TodosRepoError<br/>node: new TodosRepoError#40;#123; cause, filePath #125;#41;"/]
+  36((("type: Effect#lt;void, TodosRepoError, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const suffix = #quot;!#quot;#92;n#92;n  yield* makeDirectory#40;filePath#41;.pipe#40;#92;n    Effect.mapError#40;#40;cause#41; =#gt; new TodosRepoError#40;#123; cause, captured: suffix #125;#41;#41;#92;n  #41;#92;n#92;n  yield* writeFile#40;filePath, suffix#41;.pipe#40;#92;n    Effect.mapError#40;#40;cause#41; =#gt; new TodosRepoError#40;#123; cause, captured: suffix #125;#41;#41;#92;n  #41;#92;n#125;#41;")))
+  37[/"type: #quot;todos.json#quot;<br/>node: filePath"/]
+  38["type: Effect#lt;void, unknown, never#gt;<br/>callee: makeDirectory<br/>args: #91;#93;"]
+  39[/"type: #40;path: string#41; =#gt; Effect#lt;void, unknown, never#gt;<br/>node: makeDirectory"/]
+  40["type: Effect#lt;void, TodosRepoError, never#gt;<br/>callee: Effect.mapError<br/>args: #91;#40;cause#41; =#gt; new TodosRepoError#40;#123; cause, captured: suffix #125;#41;#93;"]
+  41[/"type: #123; #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E2, R#gt;; #lt;A, E, R, E2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; E2#41;: Effect#lt;A, E2, R#gt;; #125;<br/>node: Effect.mapError"/]
+  42[["type: #40;cause: unknown#41; =#gt; TodosRepoError<br/>node: #40;cause#41; =#gt; new TodosRepoError#40;#123; cause, captured: suffix #125;#41;"]]
+  43[/"type: TodosRepoError<br/>node: new TodosRepoError#40;#123; cause, captured: suffix #125;#41;"/]
+  44[/"type: Effect#lt;void, unknown, never#gt;<br/>node: writeFile#40;filePath, suffix#41;"/]
+  45["type: Effect#lt;void, TodosRepoError, never#gt;<br/>callee: Effect.mapError<br/>args: #91;#40;cause#41; =#gt; new TodosRepoError#40;#123; cause, captured: suffix #125;#41;#93;"]
+  46[/"type: #123; #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E2, R#gt;; #lt;A, E, R, E2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; E2#41;: Effect#lt;A, E2, R#gt;; #125;<br/>node: Effect.mapError"/]
+  47[["type: #40;cause: unknown#41; =#gt; TodosRepoError<br/>node: #40;cause#41; =#gt; new TodosRepoError#40;#123; cause, captured: suffix #125;#41;"]]
+  48[/"type: TodosRepoError<br/>node: new TodosRepoError#40;#123; cause, captured: suffix #125;#41;"/]
+  49((("type: Effect#lt;void, unknown, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  yield* makeDirectory#40;filePath#41;.pipe#40;#92;n    Effect.mapError#40;#40;cause#41; =#gt; new TodosRepoError#40;#123; cause #125;#41;#41;#92;n  #41;#92;n#92;n  yield* writeFile#40;filePath, #quot;body#quot;#41;#92;n#125;#41;")))
+  50[/"type: #quot;todos.json#quot;<br/>node: filePath"/]
+  51["type: Effect#lt;void, unknown, never#gt;<br/>callee: makeDirectory<br/>args: #91;#93;"]
+  52[/"type: #40;path: string#41; =#gt; Effect#lt;void, unknown, never#gt;<br/>node: makeDirectory"/]
+  53["type: Effect#lt;void, TodosRepoError, never#gt;<br/>callee: Effect.mapError<br/>args: #91;#40;cause#41; =#gt; new TodosRepoError#40;#123; cause #125;#41;#93;"]
+  54[/"type: #123; #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E2, R#gt;; #lt;A, E, R, E2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; E2#41;: Effect#lt;A, E2, R#gt;; #125;<br/>node: Effect.mapError"/]
+  55[["type: #40;cause: unknown#41; =#gt; TodosRepoError<br/>node: #40;cause#41; =#gt; new TodosRepoError#40;#123; cause #125;#41;"]]
+  56[/"type: TodosRepoError<br/>node: new TodosRepoError#40;#123; cause #125;#41;"/]
+  57[/"type: Effect#lt;void, unknown, never#gt;<br/>node: writeFile#40;filePath, #quot;body#quot;#41;"/]
+  58((("type: Effect#lt;void, TodosRepoError, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  yield* makeDirectory#40;filePath#41;.pipe#40;#92;n    Effect.mapError#40;#40;cause#41; =#gt; new TodosRepoError#40;#123; cause #125;#41;#41;#92;n  #41;#92;n#92;n  yield* Effect.mapError#40;writeFile#40;filePath, #quot;body#quot;#41;, #40;cause#41; =#gt; new TodosRepoError#40;#123; cause #125;#41;#41;#92;n#125;#41;")))
+  59[/"type: #quot;todos.json#quot;<br/>node: filePath"/]
+  60["type: Effect#lt;void, unknown, never#gt;<br/>callee: makeDirectory<br/>args: #91;#93;"]
+  61[/"type: #40;path: string#41; =#gt; Effect#lt;void, unknown, never#gt;<br/>node: makeDirectory"/]
+  62["type: Effect#lt;void, TodosRepoError, never#gt;<br/>callee: Effect.mapError<br/>args: #91;#40;cause#41; =#gt; new TodosRepoError#40;#123; cause #125;#41;#93;"]
+  63[/"type: #123; #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E2, R#gt;; #lt;A, E, R, E2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; E2#41;: Effect#lt;A, E2, R#gt;; #125;<br/>node: Effect.mapError"/]
+  64[["type: #40;cause: unknown#41; =#gt; TodosRepoError<br/>node: #40;cause#41; =#gt; new TodosRepoError#40;#123; cause #125;#41;"]]
+  65[/"type: TodosRepoError<br/>node: new TodosRepoError#40;#123; cause #125;#41;"/]
+  66[/"type: Effect#lt;void, unknown, never#gt;<br/>node: writeFile#40;filePath, #quot;body#quot;#41;"/]
+  67["type: Effect#lt;void, TodosRepoError, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  68[/"type: #123; #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E2, R#gt;; #lt;A, E, R, E2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; E2#41;: Effect#lt;A, E2, R#gt;; #125;<br/>node: Effect.mapError"/]
+  69[["type: #40;cause: unknown#41; =#gt; TodosRepoError<br/>node: #40;cause#41; =#gt; new TodosRepoError#40;#123; cause #125;#41;"]]
+  70[/"type: TodosRepoError<br/>node: new TodosRepoError#40;#123; cause #125;#41;"/]
+  3 -->|"kind: pipe"| 4
+  5 -->|"kind: transformCallee"| 4
+  7 -->|"kind: transformCallee"| 6
+  9 -->|"kind: potentialReturn"| 8
+  8 -->|"kind: transformArg"| 6
+  4 -->|"kind: pipe"| 6
+  6 -->|"kind: yieldable"| 2
+  10 -->|"kind: pipe"| 11
+  12 -->|"kind: transformCallee"| 11
+  14 -->|"kind: transformCallee"| 13
+  16 -->|"kind: potentialReturn"| 15
+  15 -->|"kind: transformArg"| 13
+  11 -->|"kind: pipe"| 13
+  13 -->|"kind: yieldable"| 2
+  19 -->|"kind: transformCallee"| 18
+  21 -->|"kind: potentialReturn"| 20
+  20 -->|"kind: transformArg"| 18
+  17 -->|"kind: pipe"| 18
+  18 -->|"kind: yieldable"| 2
+  2 -->|"kind: potentialReturn"| 22
+  24 -->|"kind: pipe"| 25
+  26 -->|"kind: transformCallee"| 25
+  28 -->|"kind: transformCallee"| 27
+  30 -->|"kind: potentialReturn"| 29
+  29 -->|"kind: transformArg"| 27
+  25 -->|"kind: pipe"| 27
+  27 -->|"kind: yieldable"| 23
+  33 -->|"kind: transformCallee"| 32
+  35 -->|"kind: potentialReturn"| 34
+  34 -->|"kind: transformArg"| 32
+  31 -->|"kind: pipe"| 32
+  32 -->|"kind: yieldable"| 23
+  37 -->|"kind: pipe"| 38
+  39 -->|"kind: transformCallee"| 38
+  41 -->|"kind: transformCallee"| 40
+  43 -->|"kind: potentialReturn"| 42
+  42 -->|"kind: transformArg"| 40
+  38 -->|"kind: pipe"| 40
+  40 -->|"kind: yieldable"| 36
+  46 -->|"kind: transformCallee"| 45
+  48 -->|"kind: potentialReturn"| 47
+  47 -->|"kind: transformArg"| 45
+  44 -->|"kind: pipe"| 45
+  45 -->|"kind: yieldable"| 36
+  50 -->|"kind: pipe"| 51
+  52 -->|"kind: transformCallee"| 51
+  54 -->|"kind: transformCallee"| 53
+  56 -->|"kind: potentialReturn"| 55
+  55 -->|"kind: transformArg"| 53
+  51 -->|"kind: pipe"| 53
+  53 -->|"kind: yieldable"| 49
+  57 -->|"kind: yieldable"| 49
+  59 -->|"kind: pipe"| 60
+  61 -->|"kind: transformCallee"| 60
+  63 -->|"kind: transformCallee"| 62
+  65 -->|"kind: potentialReturn"| 64
+  64 -->|"kind: transformArg"| 62
+  60 -->|"kind: pipe"| 62
+  62 -->|"kind: yieldable"| 58
+  66 -->|"kind: pipe"| 67
+  68 -->|"kind: transformCallee"| 66
+  70 -->|"kind: potentialReturn"| 69
+  69 -->|"kind: transformArg"| 66
+  67 -->|"kind: yieldable"| 58

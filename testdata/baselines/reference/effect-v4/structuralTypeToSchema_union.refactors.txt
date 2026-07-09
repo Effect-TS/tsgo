@@ -1,0 +1,54 @@
+=== Refactor Inventory ===
+
+[R1] selection: "4:13-4:19"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Generate Effect.Schema from type" (refactor.rewrite.effect.typeToEffectSchema)
+  Refactor 2: "Generate Schema.Class from type" (refactor.rewrite.effect.typeToEffectSchemaClass)
+  Refactor 3: "Refactor to Schema (Recursive Structural)" (refactor.rewrite.effect.structuralTypeToSchema)
+
+[R2] selection: "empty (0:0-0:0)"
+  (no refactors)
+
+=== Refactor Application Results ===
+
+=== [R1] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/structuralTypeToSchema_union.ts ---
+// refactor: 4:13-4:19
+import * as Schema from "effect/Schema"
+
+export type pipe(Status) = "pending" | "active" | "completed"
+
+
+=== [R1] Refactor 1: "Generate Effect.Schema from type" ===
+
+--- file:///.src/structuralTypeToSchema_union.ts ---
+// refactor: 4:13-4:19
+import * as Schema from "effect/Schema"
+
+export const Status = Schema.Union([Schema.Literal("pending"), Schema.Literal("active"), Schema.Literal("completed")]);
+
+export type Status = "pending" | "active" | "completed"
+
+
+=== [R1] Refactor 2: "Generate Schema.Class from type" ===
+
+--- file:///.src/structuralTypeToSchema_union.ts ---
+// refactor: 4:13-4:19
+import * as Schema from "effect/Schema"
+
+export const Status = Schema.Union([Schema.Literal("pending"), Schema.Literal("active"), Schema.Literal("completed")]);
+
+export type Status = "pending" | "active" | "completed"
+
+
+=== [R1] Refactor 3: "Refactor to Schema (Recursive Structural)" ===
+
+--- file:///.src/structuralTypeToSchema_union.ts ---
+// refactor: 4:13-4:19
+import * as Schema from "effect/Schema"
+
+export const Status = Schema.Union([Schema.Literal("active"), Schema.Literal("completed"), Schema.Literal("pending")]);
+
+export type Status = "pending" | "active" | "completed"
+

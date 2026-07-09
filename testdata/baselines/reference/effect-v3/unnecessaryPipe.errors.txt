@@ -1,0 +1,29 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/unnecessaryPipe.ts(14,29): suggestion TS377013: This pipe call contains no arguments. effect(unnecessaryPipe)
+/.src/unnecessaryPipe.ts(16,35): suggestion TS377013: This pipe call contains no arguments. effect(unnecessaryPipe)
+
+
+==== /.src/unnecessaryPipe.ts (2 errors) ====
+    // @effect-v3
+    import * as Effect from "effect/Effect"
+    import { pipe } from "effect/Function"
+    
+    export const shouldNotReport = pipe(
+      Effect.succeed("Hello"),
+      Effect.map((x) => x + " World")
+    )
+    
+    export const shouldNotReport2 = Effect.succeed("Hello").pipe(
+      Effect.map((x) => x + " World")
+    )
+    
+    export const shouldReport = pipe(32)
+                                ~~~~~~~~
+!!! suggestion TS377013: This pipe call contains no arguments. effect(unnecessaryPipe)
+    
+    export const shouldReportNoArgs = Effect.succeed(32).pipe()
+                                      ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377013: This pipe call contains no arguments. effect(unnecessaryPipe)
+    

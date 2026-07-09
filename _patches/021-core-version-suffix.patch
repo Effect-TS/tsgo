@@ -1,0 +1,18 @@
+diff --git a/internal/core/version.go b/internal/core/version.go
+index 9e04cb52c..639d3ee9a 100644
+--- a/internal/core/version.go
++++ b/internal/core/version.go
+@@ -10,6 +10,12 @@
+ 
++var versionSuffix string
++
+ func Version() string {
+-	return version
++	return version + versionSuffix
++}
++
++func SetVersionSuffix(s string) {
++	versionSuffix = s
+ }
+ 
+ var versionMajorMinor = func() string {

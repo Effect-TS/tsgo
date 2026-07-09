@@ -1,0 +1,126 @@
+=== Quick Fix Inventory ===
+
+[D1] (12:10-14:5) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D2] (18:10-20:5) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D3] (24:10-26:5) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/effectFnOpportunity_returnType.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+// The diagnostic should never trigger on these cases because there is
+// a return type annotation. When there's an explicit return type, the
+// function could be recursive at some point.
+// Note: unnecessaryEffectGen diagnostics ARE expected for the inner Effect.gen
+// calls (each has a single-statement body). The Go test harness runs all rules,
+// unlike upstream which runs only the rule matching the file name prefix.
+
+export const arrowWithReturnType = (): Effect.Effect<number> => {
+  return Effect.succeed(42)
+}
+
+export const functionExpressionWithReturnType = function(): Effect.Effect<number> {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  })
+}
+
+export function functionDeclarationWithReturnType(): Effect.Effect<number> {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  })
+}
+
+
+=== [D2] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/effectFnOpportunity_returnType.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+// The diagnostic should never trigger on these cases because there is
+// a return type annotation. When there's an explicit return type, the
+// function could be recursive at some point.
+// Note: unnecessaryEffectGen diagnostics ARE expected for the inner Effect.gen
+// calls (each has a single-statement body). The Go test harness runs all rules,
+// unlike upstream which runs only the rule matching the file name prefix.
+
+export const arrowWithReturnType = (): Effect.Effect<number> => {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  })
+}
+
+export const functionExpressionWithReturnType = function(): Effect.Effect<number> {
+  return Effect.succeed(42)
+}
+
+export function functionDeclarationWithReturnType(): Effect.Effect<number> {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  })
+}
+
+
+=== [D3] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/effectFnOpportunity_returnType.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+// The diagnostic should never trigger on these cases because there is
+// a return type annotation. When there's an explicit return type, the
+// function could be recursive at some point.
+// Note: unnecessaryEffectGen diagnostics ARE expected for the inner Effect.gen
+// calls (each has a single-statement body). The Go test harness runs all rules,
+// unlike upstream which runs only the rule matching the file name prefix.
+
+export const arrowWithReturnType = (): Effect.Effect<number> => {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  })
+}
+
+export const functionExpressionWithReturnType = function(): Effect.Effect<number> {
+  return Effect.gen(function*() {
+    return yield* Effect.succeed(42)
+  })
+}
+
+export function functionDeclarationWithReturnType(): Effect.Effect<number> {
+  return Effect.succeed(42)
+}
+

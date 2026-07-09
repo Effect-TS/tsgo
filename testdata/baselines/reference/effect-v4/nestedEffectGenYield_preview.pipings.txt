@@ -1,0 +1,29 @@
+==== /.src/nestedEffectGenYield_preview.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 5:23 - 9:3
+Node: Effect.gen(function*() {\n	yield* Effect.gen(function*() {\n		return 1\n	})\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n	yield* Effect.gen(function*() {\n		return 1\n	})\n}
+Subject Type: () => Generator<Effect<number, never, never>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 6:8 - 8:4
+Node: Effect.gen(function*() {\n		return 1\n	})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n		return 1\n	}
+Subject Type: () => Generator<never, number, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<number, never, never>

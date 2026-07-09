@@ -1,0 +1,16 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/returnEffectInGen.ts(5,3): suggestion TS377014: This generator returns an Effect-able value directly, which produces a nested `Effect<Effect<...>>`. If the intended result is the inner Effect value, `return yield*` represents that form. effect(returnEffectInGen)
+
+
+==== /.src/returnEffectInGen.ts (1 errors) ====
+    // @effect-v3
+    import * as Effect from "effect/Effect"
+    
+    export const shouldWarn = Effect.gen(function*() {
+      return Effect.fail("error")
+      ~~~~~~
+!!! suggestion TS377014: This generator returns an Effect-able value directly, which produces a nested `Effect<Effect<...>>`. If the intended result is the inner Effect value, `return yield*` represents that form. effect(returnEffectInGen)
+    })
+    

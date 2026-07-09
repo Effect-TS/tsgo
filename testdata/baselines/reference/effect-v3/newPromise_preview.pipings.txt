@@ -1,0 +1,15 @@
+==== /.src/newPromise_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 5:56 - 5:67
+Node: resolve(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: resolve
+      args: (constant)
+      outType: void

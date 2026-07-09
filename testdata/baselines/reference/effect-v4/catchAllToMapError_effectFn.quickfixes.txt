@@ -1,0 +1,126 @@
+=== Quick Fix Inventory ===
+
+[D1] (12:4-12:16) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
+  Fix 0: "Disable catchAllToMapError for this line"
+  Fix 1: "Disable catchAllToMapError for entire file"
+  Fix 2: "Replace with Effect.mapError"
+
+[D2] (16:4-16:16) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
+  Fix 0: "Disable catchAllToMapError for this line"
+  Fix 1: "Disable catchAllToMapError for entire file"
+  Fix 2: "Replace with Effect.mapError"
+
+[D3] (20:4-20:16) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
+  Fix 0: "Disable catchAllToMapError for this line"
+  Fix 1: "Disable catchAllToMapError for entire file"
+  Fix 2: "Replace with Effect.mapError"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable catchAllToMapError for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable catchAllToMapError for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.mapError" ===
+
+--- file:///.src/catchAllToMapError_effectFn.ts ---
+// @effect-diagnostics catchToOrElseSucceed:off
+import { Effect } from "effect"
+
+class MyErrorTagged {
+  readonly _tag = "MyErrorTagged"
+  constructor(readonly cause: unknown) {}
+}
+
+// Effect.fn with catch that should be mapError
+export const shouldReportEffectFn = Effect.fn(function*() {
+  return yield* Effect.fail("error")
+}, Effect.mapError((cause) =>new MyErrorTagged(cause)))
+
+export const shouldReportEffectFnTraced = Effect.fn("traced")(function*() {
+  return yield* Effect.fail("error")
+}, Effect.catch((cause) => Effect.fail(new MyErrorTagged(cause))))
+
+export const shouldReportEffectFnUntraced = Effect.fnUntraced(function*() {
+  return yield* Effect.fail("error")
+}, Effect.catch((cause) => Effect.fail(new MyErrorTagged(cause))))
+
+// Should NOT report: catch returning Effect.succeed
+export const shouldNotReportEffectFn = Effect.fn(function*() {
+  return yield* Effect.fail("error")
+}, Effect.catch(() => Effect.succeed(42)))
+
+
+=== [D2] Fix 0: "Disable catchAllToMapError for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable catchAllToMapError for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.mapError" ===
+
+--- file:///.src/catchAllToMapError_effectFn.ts ---
+// @effect-diagnostics catchToOrElseSucceed:off
+import { Effect } from "effect"
+
+class MyErrorTagged {
+  readonly _tag = "MyErrorTagged"
+  constructor(readonly cause: unknown) {}
+}
+
+// Effect.fn with catch that should be mapError
+export const shouldReportEffectFn = Effect.fn(function*() {
+  return yield* Effect.fail("error")
+}, Effect.catch((cause) => Effect.fail(new MyErrorTagged(cause))))
+
+export const shouldReportEffectFnTraced = Effect.fn("traced")(function*() {
+  return yield* Effect.fail("error")
+}, Effect.mapError((cause) =>new MyErrorTagged(cause)))
+
+export const shouldReportEffectFnUntraced = Effect.fnUntraced(function*() {
+  return yield* Effect.fail("error")
+}, Effect.catch((cause) => Effect.fail(new MyErrorTagged(cause))))
+
+// Should NOT report: catch returning Effect.succeed
+export const shouldNotReportEffectFn = Effect.fn(function*() {
+  return yield* Effect.fail("error")
+}, Effect.catch(() => Effect.succeed(42)))
+
+
+=== [D3] Fix 0: "Disable catchAllToMapError for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable catchAllToMapError for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.mapError" ===
+
+--- file:///.src/catchAllToMapError_effectFn.ts ---
+// @effect-diagnostics catchToOrElseSucceed:off
+import { Effect } from "effect"
+
+class MyErrorTagged {
+  readonly _tag = "MyErrorTagged"
+  constructor(readonly cause: unknown) {}
+}
+
+// Effect.fn with catch that should be mapError
+export const shouldReportEffectFn = Effect.fn(function*() {
+  return yield* Effect.fail("error")
+}, Effect.catch((cause) => Effect.fail(new MyErrorTagged(cause))))
+
+export const shouldReportEffectFnTraced = Effect.fn("traced")(function*() {
+  return yield* Effect.fail("error")
+}, Effect.catch((cause) => Effect.fail(new MyErrorTagged(cause))))
+
+export const shouldReportEffectFnUntraced = Effect.fnUntraced(function*() {
+  return yield* Effect.fail("error")
+}, Effect.mapError((cause) =>new MyErrorTagged(cause)))
+
+// Should NOT report: catch returning Effect.succeed
+export const shouldNotReportEffectFn = Effect.fn(function*() {
+  return yield* Effect.fail("error")
+}, Effect.catch(() => Effect.succeed(42)))
+

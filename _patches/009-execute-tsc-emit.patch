@@ -1,0 +1,69 @@
+diff --git a/internal/execute/tsc.go b/internal/execute/tsc.go
+index 80a9bdac9..8ac89fa6d 100644
+--- a/internal/execute/tsc.go
++++ b/internal/execute/tsc.go
+@@ -5,6 +5,7 @@ import (
+ 	"fmt"
+ 	"strings"
+ 
++	"github.com/effect-ts/tsgo/etscore"
+ 	"github.com/microsoft/typescript-go/internal/ast"
+ 	"github.com/microsoft/typescript-go/internal/collections"
+ 	"github.com/microsoft/typescript-go/internal/compiler"
+@@ -49,6 +50,9 @@ func stopTracing(sys tsc.System, tr *tracing.Tracing) {
+ }
+ 
+ func CommandLine(ctx context.Context, sys tsc.System, commandLineArgs []string, testing tsc.CommandLineTesting) tsc.CommandLineResult {
++	restore := etscore.EnterCommandLineMode()
++	defer restore()
++
+ 	if len(commandLineArgs) > 0 {
+ 		switch strings.ToLower(commandLineArgs[0]) {
+ 		case "-b", "--b", "-build", "--build":
+diff --git a/internal/execute/tsc/emit.go b/internal/execute/tsc/emit.go
+index 3a1e3de69..8cb7c24c0 100644
+--- a/internal/execute/tsc/emit.go
++++ b/internal/execute/tsc/emit.go
+@@ -10,6 +10,7 @@ import (
+ 	"github.com/microsoft/typescript-go/internal/ast"
+ 	"github.com/microsoft/typescript-go/internal/collections"
+ 	"github.com/microsoft/typescript-go/internal/compiler"
++	"github.com/microsoft/typescript-go/internal/core"
+ 	"github.com/microsoft/typescript-go/internal/diagnostics"
+ 	"github.com/microsoft/typescript-go/internal/locale"
+ 	"github.com/microsoft/typescript-go/internal/tracing"
+@@ -17,6 +18,17 @@ import (
+ 	"github.com/microsoft/typescript-go/internal/tspath"
+ )
+ 
++// FilterDiagnosticsForExitCodeCallback is invoked to filter diagnostics before
++// exit-code determination. It allows external packages to exclude certain
++// diagnostics from affecting the exit code while still reporting them.
++var FilterDiagnosticsForExitCodeCallback func(*core.CompilerOptions, []*ast.Diagnostic) []*ast.Diagnostic
++
++// RegisterFilterDiagnosticsForExitCodeCallback registers a callback to filter
++// diagnostics for exit-code determination.
++func RegisterFilterDiagnosticsForExitCodeCallback(cb func(*core.CompilerOptions, []*ast.Diagnostic) []*ast.Diagnostic) {
++	FilterDiagnosticsForExitCodeCallback = cb
++}
++
+ func GetTraceWithWriterFromSys(w io.Writer, locale locale.Locale, testing CommandLineTesting) func(msg *diagnostics.Message, args ...any) {
+ 	if testing == nil {
+ 		return func(msg *diagnostics.Message, args ...any) {
+@@ -62,9 +74,14 @@ func EmitAndReportStatistics(input EmitInput) (CompileAndEmitResult, *Statistics
+ 		statistics.Report(input.Writer, input.Testing)
+ 	}
+ 
+-	if result.EmitResult.EmitSkipped && len(result.Diagnostics) > 0 {
++	diagnosticsForExitCode := result.Diagnostics
++	if FilterDiagnosticsForExitCodeCallback != nil {
++		diagnosticsForExitCode = FilterDiagnosticsForExitCodeCallback(input.Config.CompilerOptions(), result.Diagnostics)
++	}
++
++	if result.EmitResult.EmitSkipped && len(diagnosticsForExitCode) > 0 {
+ 		result.Status = ExitStatusDiagnosticsPresent_OutputsSkipped
+-	} else if len(result.Diagnostics) > 0 {
++	} else if len(diagnosticsForExitCode) > 0 {
+ 		result.Status = ExitStatusDiagnosticsPresent_OutputsGenerated
+ 	}
+ 	return result, statistics

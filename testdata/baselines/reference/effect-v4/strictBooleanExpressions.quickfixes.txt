@@ -1,0 +1,113 @@
+=== Quick Fix Inventory ===
+
+[D1] (3:37-3:47) TS377029: Unexpected `string` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
+  Fix 0: "Disable strictBooleanExpressions for this line"
+  Fix 1: "Disable strictBooleanExpressions for entire file"
+
+[D2] (6:45-6:50) TS377029: Unexpected `undefined` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
+  Fix 0: "Disable strictBooleanExpressions for this line"
+  Fix 1: "Disable strictBooleanExpressions for entire file"
+
+[D3] (9:40-9:46) TS377029: Unexpected `null` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
+  Fix 0: "Disable strictBooleanExpressions for this line"
+  Fix 1: "Disable strictBooleanExpressions for entire file"
+
+[D4] (12:45-12:51) TS377029: Unexpected `undefined` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
+  Fix 0: "Disable strictBooleanExpressions for this line"
+  Fix 1: "Disable strictBooleanExpressions for entire file"
+
+[D5] (14:42-14:48) TS377029: Unexpected `undefined` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
+  Fix 0: "Disable strictBooleanExpressions for this line"
+  Fix 1: "Disable strictBooleanExpressions for entire file"
+
+[D6] (16:55-16:65) TS377029: Unexpected `string` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
+  Fix 0: "Disable strictBooleanExpressions for this line"
+  Fix 1: "Disable strictBooleanExpressions for entire file"
+
+[D7] (21:30-21:58) TS377029: Unexpected `undefined` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
+  Fix 0: "Disable strictBooleanExpressions for this line"
+  Fix 1: "Disable strictBooleanExpressions for entire file"
+
+[D8] (22:54-22:64) TS377029: Unexpected `string` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
+  Fix 0: "Disable strictBooleanExpressions for this line"
+  Fix 1: "Disable strictBooleanExpressions for entire file"
+
+[D9] (24:5-24:11) TS377029: Unexpected `null` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
+  Fix 0: "Disable strictBooleanExpressions for this line"
+  Fix 1: "Disable strictBooleanExpressions for entire file"
+
+[D10] (24:5-24:21) TS377029: Unexpected `undefined` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
+  Fix 0: "Disable strictBooleanExpressions for this line"
+  Fix 1: "Disable strictBooleanExpressions for entire file"
+
+[D11] (24:15-24:21) TS377029: Unexpected `undefined` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)
+  Fix 0: "Disable strictBooleanExpressions for this line"
+  Fix 1: "Disable strictBooleanExpressions for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable strictBooleanExpressions for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable strictBooleanExpressions for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable strictBooleanExpressions for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable strictBooleanExpressions for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable strictBooleanExpressions for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable strictBooleanExpressions for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable strictBooleanExpressions for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable strictBooleanExpressions for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable strictBooleanExpressions for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable strictBooleanExpressions for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable strictBooleanExpressions for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable strictBooleanExpressions for entire file" ===
+skipped by default
+
+=== [D7] Fix 0: "Disable strictBooleanExpressions for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable strictBooleanExpressions for entire file" ===
+skipped by default
+
+=== [D8] Fix 0: "Disable strictBooleanExpressions for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable strictBooleanExpressions for entire file" ===
+skipped by default
+
+=== [D9] Fix 0: "Disable strictBooleanExpressions for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable strictBooleanExpressions for entire file" ===
+skipped by default
+
+=== [D10] Fix 0: "Disable strictBooleanExpressions for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable strictBooleanExpressions for entire file" ===
+skipped by default
+
+=== [D11] Fix 0: "Disable strictBooleanExpressions for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable strictBooleanExpressions for entire file" ===
+skipped by default

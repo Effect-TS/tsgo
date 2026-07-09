@@ -1,0 +1,349 @@
+==== /.src/layerMergeAllWithDependencies.ts (4 layer exports) ====
+
+=== shouldNotWarn ===
+
+--- output ---
+flowchart TD
+  0["FileSystem.Default<br/>provides: FileSystem<br/>requires: "]
+  1["DbConnection.Default<br/>provides: DbConnection<br/>requires: "]
+  2["Layer.mergeAll#40;<br/>  DbConnection.Default,<br/>  FileSystem.Default<br/>#41;<br/>provides: DbConnection, FileSystem<br/>requires: "]
+  2 -->|"#123;#quot;relationship#quot;:#quot;call#quot;,#quot;argumentIndex#quot;:0#125;"| 1
+  2 -->|"#123;#quot;relationship#quot;:#quot;call#quot;,#quot;argumentIndex#quot;:1#125;"| 0
+
+--- nested ---
+flowchart TB
+  subgraph 0 ["`FileSystem.Default<br/><small>_ln 21 col 2_</small>`"]
+    subgraph 0_wrap[" "]
+      subgraph 0_provides [Provides]
+        0_provides_0["FileSystem"]
+      end
+      style 0_provides stroke:none
+    end
+    style 0_wrap fill:transparent
+    style 0_wrap stroke:none
+  end
+  style 0 fill:transparent
+  subgraph 1 ["`DbConnection.Default<br/><small>_ln 20 col 2_</small>`"]
+    subgraph 1_wrap[" "]
+      subgraph 1_provides [Provides]
+        1_provides_0["DbConnection"]
+      end
+      style 1_provides stroke:none
+    end
+    style 1_wrap fill:transparent
+    style 1_wrap stroke:none
+  end
+  style 1 fill:transparent
+  subgraph 2 ["`shouldNotWarn<br/><small>_ln 19 col 13_</small>`"]
+    subgraph 2_wrap[" "]
+      subgraph 2_provides [Provides]
+        2_provides_0["DbConnection"]
+        2_provides_1["FileSystem"]
+      end
+      style 2_provides stroke:none
+    end
+    style 2_wrap fill:transparent
+    style 2_wrap stroke:none
+  end
+  style 2 fill:transparent
+  2_provides_0 -.-> 1_provides_0
+  2_provides_1 -.-> 0_provides_0
+
+--- outline ---
+flowchart TD
+  0["FileSystem.Default"]
+  1["DbConnection.Default"]
+
+--- quickinfo ---
+/**
+ * - DbConnection provided at ln 20 col 2 by `DbConnection.Default`
+ * - FileSystem provided at ln 21 col 2 by `FileSystem.Default`
+ */
+
+=== shouldNotWarn2 ===
+
+--- output ---
+flowchart TD
+  0["cachePassthrough<br/>provides: Cache<br/>requires: Cache"]
+  1["UserRepository.Default<br/>provides: UserRepository<br/>requires: Cache, DbConnection"]
+  2["Layer.mergeAll#40;<br/>  UserRepository.Default,<br/>  cachePassthrough<br/>#41;<br/>provides: Cache, UserRepository<br/>requires: Cache, DbConnection"]
+  2 -->|"#123;#quot;relationship#quot;:#quot;call#quot;,#quot;argumentIndex#quot;:0#125;"| 1
+  2 -->|"#123;#quot;relationship#quot;:#quot;call#quot;,#quot;argumentIndex#quot;:1#125;"| 0
+
+--- nested ---
+flowchart TB
+  subgraph 0 ["`cachePassthrough<br/><small>_ln 26 col 2_</small>`"]
+    subgraph 0_wrap[" "]
+      subgraph 0_requires [Requires]
+        0_requires_0["Cache"]
+      end
+      style 0_requires stroke:none
+      subgraph 0_provides [Provides]
+        0_provides_0["Cache"]
+      end
+      style 0_provides stroke:none
+    end
+    style 0_wrap fill:transparent
+    style 0_wrap stroke:none
+  end
+  style 0 fill:transparent
+  subgraph 1 ["`UserRepository.Default<br/><small>_ln 25 col 2_</small>`"]
+    subgraph 1_wrap[" "]
+      subgraph 1_requires [Requires]
+        1_requires_0["Cache"]
+        1_requires_1["DbConnection"]
+      end
+      style 1_requires stroke:none
+      subgraph 1_provides [Provides]
+        1_provides_0["UserRepository"]
+      end
+      style 1_provides stroke:none
+    end
+    style 1_wrap fill:transparent
+    style 1_wrap stroke:none
+  end
+  style 1 fill:transparent
+  subgraph 2 ["`shouldNotWarn2<br/><small>_ln 24 col 13_</small>`"]
+    subgraph 2_wrap[" "]
+      subgraph 2_requires [Requires]
+        2_requires_0["Cache"]
+        2_requires_1["DbConnection"]
+      end
+      style 2_requires stroke:none
+      subgraph 2_provides [Provides]
+        2_provides_0["Cache"]
+        2_provides_1["UserRepository"]
+      end
+      style 2_provides stroke:none
+    end
+    style 2_wrap fill:transparent
+    style 2_wrap stroke:none
+  end
+  style 2 fill:transparent
+  2_requires_0 -.-> 1_requires_0
+  2_requires_1 -.-> 1_requires_1
+  2_provides_1 -.-> 1_provides_0
+  2_requires_0 -.-> 0_requires_0
+  2_provides_0 -.-> 0_provides_0
+
+--- outline ---
+flowchart TD
+  0["cachePassthrough"]
+  1["UserRepository.Default"]
+
+--- quickinfo ---
+/**
+ * - Cache provided at ln 26 col 2 by `cachePassthrough`
+ * - UserRepository provided at ln 25 col 2 by `UserRepository.Default`
+ * 
+ * - Cache required at ln 25 col 2 by `UserRepository.Default`, ln 26 col 2 by `cachePassthrough`
+ * - DbConnection required at ln 25 col 2 by `UserRepository.Default`
+ */
+
+=== shouldWarn ===
+
+--- output ---
+flowchart TD
+  0["Cache.Default<br/>provides: Cache<br/>requires: FileSystem"]
+  1["FileSystem.Default<br/>provides: FileSystem<br/>requires: "]
+  2["DbConnection.Default<br/>provides: DbConnection<br/>requires: "]
+  3["Layer.mergeAll#40;<br/>  DbConnection.Default,<br/>  FileSystem.Default,<br/>  Cache.Default // #lt;- this requires a DbConnection<br/>#41;<br/>provides: Cache, DbConnection, FileSystem<br/>requires: FileSystem"]
+  3 -->|"#123;#quot;relationship#quot;:#quot;call#quot;,#quot;argumentIndex#quot;:0#125;"| 2
+  3 -->|"#123;#quot;relationship#quot;:#quot;call#quot;,#quot;argumentIndex#quot;:1#125;"| 1
+  3 -->|"#123;#quot;relationship#quot;:#quot;call#quot;,#quot;argumentIndex#quot;:2#125;"| 0
+
+--- nested ---
+flowchart TB
+  subgraph 0 ["`Cache.Default<br/><small>_ln 32 col 2_</small>`"]
+    subgraph 0_wrap[" "]
+      subgraph 0_requires [Requires]
+        0_requires_0["FileSystem"]
+      end
+      style 0_requires stroke:none
+      subgraph 0_provides [Provides]
+        0_provides_0["Cache"]
+      end
+      style 0_provides stroke:none
+    end
+    style 0_wrap fill:transparent
+    style 0_wrap stroke:none
+  end
+  style 0 fill:transparent
+  subgraph 1 ["`FileSystem.Default<br/><small>_ln 31 col 2_</small>`"]
+    subgraph 1_wrap[" "]
+      subgraph 1_provides [Provides]
+        1_provides_0["FileSystem"]
+      end
+      style 1_provides stroke:none
+    end
+    style 1_wrap fill:transparent
+    style 1_wrap stroke:none
+  end
+  style 1 fill:transparent
+  subgraph 2 ["`DbConnection.Default<br/><small>_ln 30 col 2_</small>`"]
+    subgraph 2_wrap[" "]
+      subgraph 2_provides [Provides]
+        2_provides_0["DbConnection"]
+      end
+      style 2_provides stroke:none
+    end
+    style 2_wrap fill:transparent
+    style 2_wrap stroke:none
+  end
+  style 2 fill:transparent
+  subgraph 3 ["`shouldWarn<br/><small>_ln 29 col 13_</small>`"]
+    subgraph 3_wrap[" "]
+      subgraph 3_requires [Requires]
+        3_requires_0["FileSystem"]
+      end
+      style 3_requires stroke:none
+      subgraph 3_provides [Provides]
+        3_provides_0["Cache"]
+        3_provides_1["DbConnection"]
+        3_provides_2["FileSystem"]
+      end
+      style 3_provides stroke:none
+    end
+    style 3_wrap fill:transparent
+    style 3_wrap stroke:none
+  end
+  style 3 fill:transparent
+  3_provides_1 -.-> 2_provides_0
+  3_provides_2 -.-> 1_provides_0
+  3_requires_0 -.-> 0_requires_0
+  3_provides_0 -.-> 0_provides_0
+
+--- outline ---
+flowchart TD
+  0["Cache.Default"]
+  1["FileSystem.Default"]
+  2["DbConnection.Default"]
+  0 --> 1
+
+--- quickinfo ---
+/**
+ * - Cache provided at ln 32 col 2 by `Cache.Default`
+ * - DbConnection provided at ln 30 col 2 by `DbConnection.Default`
+ * - FileSystem provided at ln 31 col 2 by `FileSystem.Default`
+ * 
+ * - FileSystem required at ln 32 col 2 by `Cache.Default`
+ */
+
+=== shouldWarn2 ===
+
+--- output ---
+flowchart TD
+  0["UserRepository.Default<br/>provides: UserRepository<br/>requires: Cache, DbConnection"]
+  1["Cache.Default<br/>provides: Cache<br/>requires: FileSystem"]
+  2["FileSystem.Default<br/>provides: FileSystem<br/>requires: "]
+  3["DbConnection.Default<br/>provides: DbConnection<br/>requires: "]
+  4["Layer.mergeAll#40;<br/>  DbConnection.Default,<br/>  FileSystem.Default,<br/>  Cache.Default, // #lt;- this requires a FileSystem,<br/>  UserRepository.Default // #lt;- this requires a DbConnection<br/>#41;<br/>provides: Cache, DbConnection, FileSystem, UserRepository<br/>requires: Cache, DbConnection, FileSystem"]
+  4 -->|"#123;#quot;relationship#quot;:#quot;call#quot;,#quot;argumentIndex#quot;:0#125;"| 3
+  4 -->|"#123;#quot;relationship#quot;:#quot;call#quot;,#quot;argumentIndex#quot;:1#125;"| 2
+  4 -->|"#123;#quot;relationship#quot;:#quot;call#quot;,#quot;argumentIndex#quot;:2#125;"| 1
+  4 -->|"#123;#quot;relationship#quot;:#quot;call#quot;,#quot;argumentIndex#quot;:3#125;"| 0
+
+--- nested ---
+flowchart TB
+  subgraph 0 ["`UserRepository.Default<br/><small>_ln 39 col 2_</small>`"]
+    subgraph 0_wrap[" "]
+      subgraph 0_requires [Requires]
+        0_requires_0["Cache"]
+        0_requires_1["DbConnection"]
+      end
+      style 0_requires stroke:none
+      subgraph 0_provides [Provides]
+        0_provides_0["UserRepository"]
+      end
+      style 0_provides stroke:none
+    end
+    style 0_wrap fill:transparent
+    style 0_wrap stroke:none
+  end
+  style 0 fill:transparent
+  subgraph 1 ["`Cache.Default<br/><small>_ln 38 col 2_</small>`"]
+    subgraph 1_wrap[" "]
+      subgraph 1_requires [Requires]
+        1_requires_0["FileSystem"]
+      end
+      style 1_requires stroke:none
+      subgraph 1_provides [Provides]
+        1_provides_0["Cache"]
+      end
+      style 1_provides stroke:none
+    end
+    style 1_wrap fill:transparent
+    style 1_wrap stroke:none
+  end
+  style 1 fill:transparent
+  subgraph 2 ["`FileSystem.Default<br/><small>_ln 37 col 2_</small>`"]
+    subgraph 2_wrap[" "]
+      subgraph 2_provides [Provides]
+        2_provides_0["FileSystem"]
+      end
+      style 2_provides stroke:none
+    end
+    style 2_wrap fill:transparent
+    style 2_wrap stroke:none
+  end
+  style 2 fill:transparent
+  subgraph 3 ["`DbConnection.Default<br/><small>_ln 36 col 2_</small>`"]
+    subgraph 3_wrap[" "]
+      subgraph 3_provides [Provides]
+        3_provides_0["DbConnection"]
+      end
+      style 3_provides stroke:none
+    end
+    style 3_wrap fill:transparent
+    style 3_wrap stroke:none
+  end
+  style 3 fill:transparent
+  subgraph 4 ["`shouldWarn2<br/><small>_ln 35 col 13_</small>`"]
+    subgraph 4_wrap[" "]
+      subgraph 4_requires [Requires]
+        4_requires_0["Cache"]
+        4_requires_1["DbConnection"]
+        4_requires_2["FileSystem"]
+      end
+      style 4_requires stroke:none
+      subgraph 4_provides [Provides]
+        4_provides_0["Cache"]
+        4_provides_1["DbConnection"]
+        4_provides_2["FileSystem"]
+        4_provides_3["UserRepository"]
+      end
+      style 4_provides stroke:none
+    end
+    style 4_wrap fill:transparent
+    style 4_wrap stroke:none
+  end
+  style 4 fill:transparent
+  4_provides_1 -.-> 3_provides_0
+  4_provides_2 -.-> 2_provides_0
+  4_requires_2 -.-> 1_requires_0
+  4_provides_0 -.-> 1_provides_0
+  4_requires_0 -.-> 0_requires_0
+  4_requires_1 -.-> 0_requires_1
+  4_provides_3 -.-> 0_provides_0
+
+--- outline ---
+flowchart TD
+  0["UserRepository.Default"]
+  1["Cache.Default"]
+  2["FileSystem.Default"]
+  3["DbConnection.Default"]
+  0 --> 1
+  0 --> 3
+  1 --> 2
+
+--- quickinfo ---
+/**
+ * - Cache provided at ln 38 col 2 by `Cache.Default`
+ * - DbConnection provided at ln 36 col 2 by `DbConnection.Default`
+ * - FileSystem provided at ln 37 col 2 by `FileSystem.Default`
+ * - UserRepository provided at ln 39 col 2 by `UserRepository.Default`
+ * 
+ * - Cache required at ln 39 col 2 by `UserRepository.Default`
+ * - DbConnection required at ln 39 col 2 by `UserRepository.Default`
+ * - FileSystem required at ln 38 col 2 by `Cache.Default`
+ */

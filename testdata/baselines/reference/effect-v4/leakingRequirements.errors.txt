@@ -1,0 +1,67 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/leakingRequirements.ts(8,14): suggestion TS377041: Methods of this Service require `FileSystem` from every caller.
+
+The requirement becomes part of the public service surface instead of remaining internal to Layer implementation.
+
+Resolve these dependencies at Layer creation and provide them to each method, so the service's type reflects its purpose, not its implementation.
+
+To suppress this diagnostic for specific dependency types that are intentionally passed through (e.g., HttpServerRequest), add `@effect-leakable-service` JSDoc to their interface declarations, or to this service by adding a `@effect-expect-leaking FileSystem` JSDoc.
+
+More info and examples at https://effect.website/docs/requirements-management/layers/#avoiding-requirement-leakage effect(leakingRequirements)
+/.src/leakingRequirements.ts(18,9): suggestion TS377041: Methods of this Service require `FileSystem` from every caller.
+
+The requirement becomes part of the public service surface instead of remaining internal to Layer implementation.
+
+Resolve these dependencies at Layer creation and provide them to each method, so the service's type reflects its purpose, not its implementation.
+
+To suppress this diagnostic for specific dependency types that are intentionally passed through (e.g., HttpServerRequest), add `@effect-leakable-service` JSDoc to their interface declarations, or to this service by adding a `@effect-expect-leaking FileSystem` JSDoc.
+
+More info and examples at https://effect.website/docs/requirements-management/layers/#avoiding-requirement-leakage effect(leakingRequirements)
+
+
+==== /.src/leakingRequirements.ts (2 errors) ====
+    import type { Effect } from "effect"
+    import { Context } from "effect"
+    
+    export class FileSystem extends Context.Service<FileSystem, {
+      writeFile: (content: string) => Effect.Effect<void>
+    }>()("FileSystem") {}
+    
+    export class LeakingDeps extends Context.Service<LeakingDeps, {
+                 ~~~~~~~~~~~
+!!! suggestion TS377041: Methods of this Service require `FileSystem` from every caller.
+
+The requirement becomes part of the public service surface instead of remaining internal to Layer implementation.
+
+Resolve these dependencies at Layer creation and provide them to each method, so the service's type reflects its purpose, not its implementation.
+
+To suppress this diagnostic for specific dependency types that are intentionally passed through (e.g., HttpServerRequest), add `@effect-leakable-service` JSDoc to their interface declarations, or to this service by adding a `@effect-expect-leaking FileSystem` JSDoc.
+
+More info and examples at https://effect.website/docs/requirements-management/layers/#avoiding-requirement-leakage effect(leakingRequirements)
+      writeCache: (key: string) => Effect.Effect<void, never, FileSystem>
+      readCache: Effect.Effect<void, never, FileSystem>
+    }>()("LeakingDeps") {}
+    
+    export function local() {
+      class _LocalClass extends Context.Service<_LocalClass, {
+        writeFile: (content: string) => Effect.Effect<void>
+      }>()("LocalClass") {}
+    
+      class _LocalLeaking extends Context.Service<_LocalLeaking, {
+            ~~~~~~~~~~~~~
+!!! suggestion TS377041: Methods of this Service require `FileSystem` from every caller.
+
+The requirement becomes part of the public service surface instead of remaining internal to Layer implementation.
+
+Resolve these dependencies at Layer creation and provide them to each method, so the service's type reflects its purpose, not its implementation.
+
+To suppress this diagnostic for specific dependency types that are intentionally passed through (e.g., HttpServerRequest), add `@effect-leakable-service` JSDoc to their interface declarations, or to this service by adding a `@effect-expect-leaking FileSystem` JSDoc.
+
+More info and examples at https://effect.website/docs/requirements-management/layers/#avoiding-requirement-leakage effect(leakingRequirements)
+        writeCache: (key: string) => Effect.Effect<void, never, FileSystem>
+        readCache: Effect.Effect<void, never, FileSystem>
+      }>()("LocalLeaking") {}
+    }
+    

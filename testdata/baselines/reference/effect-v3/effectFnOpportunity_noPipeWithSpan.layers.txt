@@ -1,0 +1,1 @@
+==== /.src/effectFnOpportunity_noPipeWithSpan.ts (0 layer exports) ====

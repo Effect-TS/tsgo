@@ -1,0 +1,27 @@
+diff --git a/internal/checker/exports.go b/internal/checker/exports.go
+index 1976fc674..b0d11ee42 100644
+--- a/internal/checker/exports.go
++++ b/internal/checker/exports.go
+@@ -271,6 +271,22 @@ func (c *Checker) IsContextSensitive(node *ast.Node) bool {
+ 	return c.isContextSensitive(node)
+ }
+ 
++// GetTypeArgumentsForResolvedSignature returns the instantiated type arguments
++// for a resolved (non-generic) signature. Returns nil if the signature has no mapper.
++func (c *Checker) GetTypeArgumentsForResolvedSignature(sig *Signature) []*Type {
++	if sig == nil || sig.mapper == nil {
++		return nil
++	}
++	typeParams := sig.typeParameters
++	if sig.target != nil {
++		typeParams = sig.target.typeParameters
++	}
++	if len(typeParams) == 0 {
++		return nil
++	}
++	return c.instantiateTypes(typeParams, sig.mapper)
++}
++
+ func (c *Checker) FillMissingTypeArguments(typeArguments []*Type, typeParameters []*Type, minTypeArgumentCount int, isJavaScriptImplicitAny bool) []*Type {
+ 	return c.fillMissingTypeArguments(typeArguments, typeParameters, minTypeArgumentCount, isJavaScriptImplicitAny)
+ }

@@ -1,0 +1,18 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/processEnvInEffect_preview.ts(7,10): warning TS377077: This Effect code reads from `process.env`, environment configuration in Effect code is represented through `Config` from Effect. effect(processEnvInEffect)
+
+
+==== /.src/processEnvInEffect_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics processEnvInEffect:warning
+    /// <reference types="node" />
+    import { Effect } from "effect"
+    
+    export const preview = Effect.gen(function*() {
+      return process.env.PORT
+             ~~~~~~~~~~~~~~~~
+!!! warning TS377077: This Effect code reads from `process.env`, environment configuration in Effect code is represented through `Config` from Effect. effect(processEnvInEffect)
+    })
+    

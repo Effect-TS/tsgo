@@ -1,0 +1,17 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/effectMapVoid_preview.ts(6,3): warning TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
+
+
+==== /.src/effectMapVoid_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics effectMapVoid:warning
+    import { Effect } from "effect"
+    
+    export const preview = Effect.succeed(1).pipe(
+      Effect.map(() => undefined)
+      ~~~~~~~~~~
+!!! warning TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
+    )
+    

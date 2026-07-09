@@ -1,0 +1,99 @@
+==== /.src/lazyPromiseInEffectSync.ts (7 flows) ====
+
+=== Piping Flow ===
+Location: 8:34 - 8:72
+Node: Effect.sync(() => Promise.resolve(1))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.resolve(1)
+Subject Type: () => Promise<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 8:52 - 8:71
+Node: Promise.resolve(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.resolve
+      args: (constant)
+      outType: Promise<number>
+
+=== Piping Flow ===
+Location: 11:32 - 11:64
+Node: Effect.sync(() => promiseValue)
+Node Kind: KindCallExpression
+
+Subject: () => promiseValue
+Subject Type: () => Promise<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 14:25 - 14:46
+Node: Effect.sync(() => 1)
+Node Kind: KindCallExpression
+
+Subject: () => 1
+Subject Type: () => number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 17:28 - 17:61
+Node: Effect.sync(() => thenableValue)
+Node Kind: KindCallExpression
+
+Subject: () => thenableValue
+Subject Type: () => { then: (onFulfilled: (value: number) => unknown) => unknown; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<{ then: (onFulfilled: (value: number) => unknown) => unknown; }, never, never>
+
+=== Piping Flow ===
+Location: 20:33 - 20:74
+Node: Effect.promise(() => Promise.resolve(1))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.resolve(1)
+Subject Type: () => Promise<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 20:54 - 20:73
+Node: Promise.resolve(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.resolve
+      args: (constant)
+      outType: Promise<number>

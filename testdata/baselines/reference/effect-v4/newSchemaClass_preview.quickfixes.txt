@@ -1,0 +1,26 @@
+=== Quick Fix Inventory ===
+
+[D1] (7:28-7:32) TS377094: This Schema class is constructed with `new`. `User.make(...)` can be used to construct the Schema class instance. effect(newSchemaClass)
+  Fix 0: "Disable newSchemaClass for this line"
+  Fix 1: "Disable newSchemaClass for entire file"
+  Fix 2: "Replace with .make"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable newSchemaClass for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable newSchemaClass for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with .make" ===
+
+--- file:///.src/newSchemaClass_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics newSchemaClass:suggestion
+import { Schema } from "effect"
+
+class User extends Schema.Class<User>("User")({ name: Schema.String }) {}
+
+export const preview = User.make({ name: "John" })
+

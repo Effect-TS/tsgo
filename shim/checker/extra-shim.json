@@ -1,0 +1,29 @@
+{
+  "ExtraFunctions": ["forEachYieldExpression"],
+  "ExtraMethods": {
+    "Checker": ["isTypeAssignableTo", "isArrayType", "isReadonlyArrayType", "getIndexInfosOfType", "getTypeArguments", "getLiteralTypeFromProperty", "getSymbolIfSameReference", "getSymbolOfDeclaration", "isSignatureAssignableTo", "isReferenceToType", "newFunctionType", "newCallSignature", "isSymbolAssigned", "isPastLastAssignment"]
+  },
+  "ExtraFields": {
+    "Checker": [
+      "getGlobalPromiseTypeChecked",
+      "emptyGenericType",
+      "symbolReferenceLinks",
+      "valueSymbolLinks",
+      "aliasSymbolLinks",
+      "moduleSymbolLinks",
+      "typeAliasLinks",
+      "declaredTypeLinks",
+      "symbolNodeLinks",
+      "typeNodeLinks"
+    ],
+    "IndexInfo": ["keyType", "valueType"],
+    "SymbolReferenceLinks": ["referenceKinds"],
+    "ValueSymbolLinks": ["resolvedType", "writeType"],
+    "AliasSymbolLinks": ["immediateTarget", "aliasTarget", "referenced"],
+    "ModuleSymbolLinks": ["resolvedExports", "exportsChecked"],
+    "TypeAliasLinks": ["declaredType"],
+    "DeclaredTypeLinks": ["declaredType"],
+    "SymbolNodeLinks": ["resolvedSymbol"],
+    "TypeNodeLinks": ["resolvedType"]
+  }
+}

@@ -1,0 +1,20 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/genericEffectServices.ts(8,14): warning TS377043: Effect Services with type parameters are not supported because they cannot be properly discriminated at runtime, which may cause unexpected behavior. effect(genericEffectServices)
+
+
+==== /.src/genericEffectServices.ts (1 errors) ====
+    // @effect-v3
+    import { Effect } from "effect"
+    
+    export class ShouldNotReport extends Effect.Service<ShouldNotReport>()("ShouldNotReport", {
+      succeed: {}
+    }) {}
+    
+    export class ShouldReport<_A> extends Effect.Service<ShouldReport<any>>()("ShouldReport", {
+                 ~~~~~~~~~~~~
+!!! warning TS377043: Effect Services with type parameters are not supported because they cannot be properly discriminated at runtime, which may cause unexpected behavior. effect(genericEffectServices)
+      succeed: {}
+    }) {}
+    

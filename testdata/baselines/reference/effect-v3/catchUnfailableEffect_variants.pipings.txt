@@ -1,0 +1,105 @@
+==== /.src/catchUnfailableEffect_variants.ts (6 flows) ====
+
+=== Piping Flow ===
+Location: 6:31 - 8:2
+Node: Effect.succeed(42).pipe(\n  Effect.catchAll(() => Effect.void) // <- should report here\n)
+Node Kind: KindCallExpression
+
+Subject: 42
+Subject Type: 42
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.catchAll
+      args: [() => Effect.void]
+      outType: Effect<void | number, never, never>
+
+=== Piping Flow ===
+Location: 11:30 - 13:2
+Node: Effect.succeed(42).pipe(\n  Effect.catchIf((error) => error === "MyError", () => Effect.void) // <- should report here\n)
+Node Kind: KindCallExpression
+
+Subject: 42
+Subject Type: 42
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.catchIf
+      args: [(error) => error === "MyError", () => Effect.void]
+      outType: Effect<void | number, never, never>
+
+=== Piping Flow ===
+Location: 16:32 - 18:2
+Node: Effect.succeed(42).pipe(\n  Effect.catchSome(() => Option.some(Effect.void)) // <- should report here\n)
+Node Kind: KindCallExpression
+
+Subject: 42
+Subject Type: 42
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.catchSome
+      args: [() => Option.some(Effect.void)]
+      outType: Effect<void | number, never, never>
+
+=== Piping Flow ===
+Location: 17:25 - 17:50
+Node: Option.some(Effect.void)
+Node Kind: KindCallExpression
+
+Subject: Effect.void
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Option.some
+      args: (constant)
+      outType: Option<Effect<void, never, never>>
+
+=== Piping Flow ===
+Location: 21:31 - 24:2
+Node: Effect.succeed(42).pipe(\n  // @ts-expect-error\n  Effect.catchTag("MyError", () => Effect.void) // <- should report here\n)
+Node Kind: KindCallExpression
+
+Subject: 42
+Subject Type: 42
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.catchTag
+      args: ["MyError", () => Effect.void]
+      outType: Effect<void | number, never, never>
+
+=== Piping Flow ===
+Location: 27:32 - 32:2
+Node: Effect.succeed(42).pipe(\n  Effect.catchTags({\n    // @ts-expect-error\n    MyError: () => Effect.void\n  }) // <- should report here\n)
+Node Kind: KindCallExpression
+
+Subject: 42
+Subject Type: 42
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.catchTags
+      args: [{\n    // @ts-expect-error\n    MyError: () => Effect.void\n  }]
+      outType: Effect<unknown, unknown, unknown>

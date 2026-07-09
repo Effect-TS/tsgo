@@ -1,0 +1,264 @@
+=== Refactor Inventory ===
+
+[R1] selection: "4:18-4:26"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Generate Effect.Schema from type" (refactor.rewrite.effect.typeToEffectSchema)
+  Refactor 2: "Generate Schema.Class from type" (refactor.rewrite.effect.typeToEffectSchemaClass)
+  Refactor 3: "Refactor to Schema (Recursive Structural)" (refactor.rewrite.effect.structuralTypeToSchema)
+
+[R2] selection: "empty (0:0-0:0)"
+  (no refactors)
+
+=== Refactor Application Results ===
+
+=== [R1] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/structuralTypeToSchema.ts ---
+// refactor: 4:18-4:26
+import * as Schema from "effect/Schema"
+
+export interface pipe(MyStruct) {
+  anyProp: any
+  bigintProp: bigint
+  booleanProp: boolean
+  neverProp: never
+  nullProp: null
+  numberProp: number
+  stringProp: string
+  undefinedProp: undefined
+  unknownProp: unknown
+  voidProp: void
+  arrayTypeProp: Array<string>
+  arrayProp: Array<string>
+  readonlyArrayProp: ReadonlyArray<string>
+  arrayWithReadonlyProp: readonly string[]
+  dateProp: Date
+  trueProp: true
+  falseProp: false
+  literalProp: "hello"
+  numericLiteralProp: 42
+  unionProp: string | boolean
+  intersectionProp: { a: string } & { b: number }
+  recordProp: Record<string, number>
+  inlineStruct: { a: string; b: number }
+  optionalProp?: string
+  prop: string
+  prop2: string
+}
+
+
+=== [R1] Refactor 1: "Generate Effect.Schema from type" ===
+
+--- file:///.src/structuralTypeToSchema.ts ---
+// refactor: 4:18-4:26
+import * as Schema from "effect/Schema"
+
+export const MyStruct = Schema.Struct({
+    anyProp: Schema.Any,
+    bigintProp: Schema.BigInt,
+    booleanProp: Schema.Boolean,
+    neverProp: Schema.Never,
+    nullProp: Schema.Null,
+    numberProp: Schema.Number,
+    stringProp: Schema.String,
+    undefinedProp: Schema.Undefined,
+    unknownProp: Schema.Unknown,
+    voidProp: Schema.Void,
+    arrayTypeProp: Schema.Array(Schema.String),
+    arrayProp: Schema.Array(Schema.String),
+    readonlyArrayProp: Schema.Array(Schema.String),
+    arrayWithReadonlyProp: Schema.Array(Schema.String),
+    dateProp: Schema.Date,
+    trueProp: Schema.Literal(true),
+    falseProp: Schema.Literal(false),
+    literalProp: Schema.Literal("hello"),
+    numericLiteralProp: Schema.Literal(42),
+    unionProp: Schema.Union([Schema.String, Schema.Boolean]),
+    intersectionProp: Schema.Struct({
+        a: Schema.String
+    }).pipe(Schema.extend(Schema.Struct({
+        b: Schema.Number
+    }))),
+    recordProp: Schema.Record(Schema.String, Schema.Number),
+    inlineStruct: Schema.Struct({
+        a: Schema.String,
+        b: Schema.Number
+    }),
+    optionalProp: Schema.optional(Schema.String),
+    prop: Schema.String,
+    prop2: Schema.String
+});
+
+export interface MyStruct {
+  anyProp: any
+  bigintProp: bigint
+  booleanProp: boolean
+  neverProp: never
+  nullProp: null
+  numberProp: number
+  stringProp: string
+  undefinedProp: undefined
+  unknownProp: unknown
+  voidProp: void
+  arrayTypeProp: Array<string>
+  arrayProp: Array<string>
+  readonlyArrayProp: ReadonlyArray<string>
+  arrayWithReadonlyProp: readonly string[]
+  dateProp: Date
+  trueProp: true
+  falseProp: false
+  literalProp: "hello"
+  numericLiteralProp: 42
+  unionProp: string | boolean
+  intersectionProp: { a: string } & { b: number }
+  recordProp: Record<string, number>
+  inlineStruct: { a: string; b: number }
+  optionalProp?: string
+  prop: string
+  prop2: string
+}
+
+
+=== [R1] Refactor 2: "Generate Schema.Class from type" ===
+
+--- file:///.src/structuralTypeToSchema.ts ---
+// refactor: 4:18-4:26
+import * as Schema from "effect/Schema"
+
+export class MyStruct extends Schema.Class<MyStruct>("MyStruct")({
+    anyProp: Schema.Any,
+    bigintProp: Schema.BigInt,
+    booleanProp: Schema.Boolean,
+    neverProp: Schema.Never,
+    nullProp: Schema.Null,
+    numberProp: Schema.Number,
+    stringProp: Schema.String,
+    undefinedProp: Schema.Undefined,
+    unknownProp: Schema.Unknown,
+    voidProp: Schema.Void,
+    arrayTypeProp: Schema.Array(Schema.String),
+    arrayProp: Schema.Array(Schema.String),
+    readonlyArrayProp: Schema.Array(Schema.String),
+    arrayWithReadonlyProp: Schema.Array(Schema.String),
+    dateProp: Schema.Date,
+    trueProp: Schema.Literal(true),
+    falseProp: Schema.Literal(false),
+    literalProp: Schema.Literal("hello"),
+    numericLiteralProp: Schema.Literal(42),
+    unionProp: Schema.Union([Schema.String, Schema.Boolean]),
+    intersectionProp: Schema.Struct({
+        a: Schema.String
+    }).pipe(Schema.extend(Schema.Struct({
+        b: Schema.Number
+    }))),
+    recordProp: Schema.Record(Schema.String, Schema.Number),
+    inlineStruct: Schema.Struct({
+        a: Schema.String,
+        b: Schema.Number
+    }),
+    optionalProp: Schema.optional(Schema.String),
+    prop: Schema.String,
+    prop2: Schema.String
+}) {}
+
+export interface MyStruct {
+  anyProp: any
+  bigintProp: bigint
+  booleanProp: boolean
+  neverProp: never
+  nullProp: null
+  numberProp: number
+  stringProp: string
+  undefinedProp: undefined
+  unknownProp: unknown
+  voidProp: void
+  arrayTypeProp: Array<string>
+  arrayProp: Array<string>
+  readonlyArrayProp: ReadonlyArray<string>
+  arrayWithReadonlyProp: readonly string[]
+  dateProp: Date
+  trueProp: true
+  falseProp: false
+  literalProp: "hello"
+  numericLiteralProp: 42
+  unionProp: string | boolean
+  intersectionProp: { a: string } & { b: number }
+  recordProp: Record<string, number>
+  inlineStruct: { a: string; b: number }
+  optionalProp?: string
+  prop: string
+  prop2: string
+}
+
+
+=== [R1] Refactor 3: "Refactor to Schema (Recursive Structural)" ===
+
+--- file:///.src/structuralTypeToSchema.ts ---
+// refactor: 4:18-4:26
+import * as Schema from "effect/Schema"
+
+export class MyStruct extends Schema.Class<MyStruct>("MyStruct")({
+    anyProp: Schema.Any,
+    bigintProp: Schema.BigInt,
+    booleanProp: Schema.Boolean,
+    neverProp: Schema.Never,
+    nullProp: Schema.Null,
+    numberProp: Schema.Number,
+    stringProp: Schema.String,
+    undefinedProp: Schema.Undefined,
+    unknownProp: Schema.Unknown,
+    voidProp: Schema.Void,
+    arrayTypeProp: Schema.mutable(Schema.Array(Schema.String)),
+    arrayProp: Schema.mutable(Schema.Array(Schema.String)),
+    readonlyArrayProp: Schema.Array(Schema.String),
+    arrayWithReadonlyProp: Schema.Array(Schema.String),
+    dateProp: Schema.Date,
+    trueProp: Schema.Literal(true),
+    falseProp: Schema.Literal(false),
+    literalProp: Schema.Literal("hello"),
+    numericLiteralProp: Schema.Literal(42),
+    unionProp: Schema.Union([Schema.String, Schema.Literal(false), Schema.Literal(true)]),
+    intersectionProp: Schema.Struct({
+        a: Schema.String
+    }).pipe(Schema.extend(Schema.Struct({
+        b: Schema.Number
+    }))),
+    recordProp: Schema.StructWithRest(Schema.Struct({}), [Schema.Record(Schema.String, Schema.Number)]),
+    inlineStruct: Schema.Struct({
+        a: Schema.String,
+        b: Schema.Number
+    }),
+    optionalProp: Schema.optional(Schema.Union([Schema.Undefined, Schema.String])),
+    prop: Schema.String,
+    prop2: Schema.String
+}) {}
+
+export interface MyStruct {
+  anyProp: any
+  bigintProp: bigint
+  booleanProp: boolean
+  neverProp: never
+  nullProp: null
+  numberProp: number
+  stringProp: string
+  undefinedProp: undefined
+  unknownProp: unknown
+  voidProp: void
+  arrayTypeProp: Array<string>
+  arrayProp: Array<string>
+  readonlyArrayProp: ReadonlyArray<string>
+  arrayWithReadonlyProp: readonly string[]
+  dateProp: Date
+  trueProp: true
+  falseProp: false
+  literalProp: "hello"
+  numericLiteralProp: 42
+  unionProp: string | boolean
+  intersectionProp: { a: string } & { b: number }
+  recordProp: Record<string, number>
+  inlineStruct: { a: string; b: number }
+  optionalProp?: string
+  prop: string
+  prop2: string
+}
+

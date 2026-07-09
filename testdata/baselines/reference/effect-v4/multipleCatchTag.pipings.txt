@@ -1,0 +1,397 @@
+==== /.src/multipleCatchTag.ts (26 flows) ====
+
+=== Piping Flow ===
+Location: 4:23 - 4:52
+Node: Data.TaggedError("NotFound")
+Node Kind: KindCallExpression
+
+Subject: "NotFound"
+Subject Type: "NotFound"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "NotFound"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 5:27 - 5:60
+Node: Data.TaggedError("Unauthorized")
+Node Kind: KindCallExpression
+
+Subject: "Unauthorized"
+Subject Type: "Unauthorized"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "Unauthorized"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 6:30 - 6:66
+Node: Data.TaggedError("ValidationError")
+Node Kind: KindCallExpression
+
+Subject: "ValidationError"
+Subject Type: "ValidationError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "ValidationError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 7:24 - 7:54
+Node: Data.TaggedError("Retryable")
+Node Kind: KindCallExpression
+
+Subject: "Retryable"
+Subject Type: "Retryable"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "Retryable"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 12:31 - 16:2
+Node: pipe(\n  program,\n  Effect.catchTag("NotFound", () => Effect.succeed("missing")),\n  Effect.catchTag("Unauthorized", () => Effect.succeed("denied"))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, NotFound | Unauthorized | ValidationError, never>
+
+Transformations (2):
+  [0] kind: pipe
+      callee: Effect.catchTag
+      args: ["NotFound", () => Effect.succeed("missing")]
+      outType: Effect<string, Unauthorized | ValidationError, never>
+  [1] kind: pipe
+      callee: Effect.catchTag
+      args: ["Unauthorized", () => Effect.succeed("denied")]
+      outType: Effect<string, ValidationError, never>
+
+=== Piping Flow ===
+Location: 14:36 - 14:62
+Node: Effect.succeed("missing")
+Node Kind: KindCallExpression
+
+Subject: "missing"
+Subject Type: "missing"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 15:40 - 15:65
+Node: Effect.succeed("denied")
+Node Kind: KindCallExpression
+
+Subject: "denied"
+Subject Type: "denied"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 19:33 - 24:2
+Node: pipe(\n  program,\n  Effect.catchTag("NotFound", () => Effect.succeed("missing")),\n  Effect.catchTag("Unauthorized", () => Effect.succeed("denied")),\n  Effect.catchTag("ValidationError", () => Effect.succeed("invalid"))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, NotFound | Unauthorized | ValidationError, never>
+
+Transformations (3):
+  [0] kind: pipe
+      callee: Effect.catchTag
+      args: ["NotFound", () => Effect.succeed("missing")]
+      outType: Effect<string, Unauthorized | ValidationError, never>
+  [1] kind: pipe
+      callee: Effect.catchTag
+      args: ["Unauthorized", () => Effect.succeed("denied")]
+      outType: Effect<string, ValidationError, never>
+  [2] kind: pipe
+      callee: Effect.catchTag
+      args: ["ValidationError", () => Effect.succeed("invalid")]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 21:36 - 21:62
+Node: Effect.succeed("missing")
+Node Kind: KindCallExpression
+
+Subject: "missing"
+Subject Type: "missing"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 22:40 - 22:65
+Node: Effect.succeed("denied")
+Node Kind: KindCallExpression
+
+Subject: "denied"
+Subject Type: "denied"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 23:43 - 23:69
+Node: Effect.succeed("invalid")
+Node Kind: KindCallExpression
+
+Subject: "invalid"
+Subject Type: "invalid"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 27:42 - 32:2
+Node: pipe(\n  program,\n  Effect.catchTag("NotFound", () => Effect.succeed("missing")),\n  Effect.map((value) => value.toUpperCase()),\n  Effect.catchTag("Unauthorized", () => Effect.succeed("denied"))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, NotFound | Unauthorized | ValidationError, never>
+
+Transformations (3):
+  [0] kind: pipe
+      callee: Effect.catchTag
+      args: ["NotFound", () => Effect.succeed("missing")]
+      outType: Effect<string, Unauthorized | ValidationError, never>
+  [1] kind: pipe
+      callee: Effect.map
+      args: [(value) => value.toUpperCase()]
+      outType: Effect<string, Unauthorized | ValidationError, never>
+  [2] kind: pipe
+      callee: Effect.catchTag
+      args: ["Unauthorized", () => Effect.succeed("denied")]
+      outType: Effect<string, ValidationError, never>
+
+=== Piping Flow ===
+Location: 29:36 - 29:62
+Node: Effect.succeed("missing")
+Node Kind: KindCallExpression
+
+Subject: "missing"
+Subject Type: "missing"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 31:40 - 31:65
+Node: Effect.succeed("denied")
+Node Kind: KindCallExpression
+
+Subject: "denied"
+Subject Type: "denied"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 35:37 - 39:2
+Node: pipe(\n  program,\n  Effect.catchTag("NotFound", () => Effect.succeed("missing"), (error) => Effect.fail(error)),\n  Effect.catchTag("Unauthorized", () => Effect.succeed("denied"))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, NotFound | Unauthorized | ValidationError, never>
+
+Transformations (2):
+  [0] kind: pipe
+      callee: Effect.catchTag
+      args: ["NotFound", () => Effect.succeed("missing"), (error) => Effect.fail(error)]
+      outType: Effect<string, Unauthorized | ValidationError, never>
+  [1] kind: pipe
+      callee: Effect.catchTag
+      args: ["Unauthorized", () => Effect.succeed("denied")]
+      outType: Effect<string, ValidationError, never>
+
+=== Piping Flow ===
+Location: 37:36 - 37:62
+Node: Effect.succeed("missing")
+Node Kind: KindCallExpression
+
+Subject: "missing"
+Subject Type: "missing"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 37:74 - 37:93
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Unauthorized | ValidationError
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, Unauthorized | ValidationError, never>
+
+=== Piping Flow ===
+Location: 38:40 - 38:65
+Node: Effect.succeed("denied")
+Node Kind: KindCallExpression
+
+Subject: "denied"
+Subject Type: "denied"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 42:38 - 46:2
+Node: pipe(\n  program,\n  Effect.catchTag("NotFound", () => Effect.fail(new Retryable())),\n  Effect.catchTag("Retryable", () => Effect.succeed("retried"))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, NotFound | Unauthorized | ValidationError, never>
+
+Transformations (2):
+  [0] kind: pipe
+      callee: Effect.catchTag
+      args: ["NotFound", () => Effect.fail(new Retryable())]
+      outType: Effect<string, Retryable | Unauthorized | ValidationError, never>
+  [1] kind: pipe
+      callee: Effect.catchTag
+      args: ["Retryable", () => Effect.succeed("retried")]
+      outType: Effect<string, Unauthorized | ValidationError, never>
+
+=== Piping Flow ===
+Location: 44:36 - 44:65
+Node: Effect.fail(new Retryable())
+Node Kind: KindCallExpression
+
+Subject: new Retryable()
+Subject Type: Retryable
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, Retryable, never>
+
+=== Piping Flow ===
+Location: 45:37 - 45:63
+Node: Effect.succeed("retried")
+Node Kind: KindCallExpression
+
+Subject: "retried"
+Subject Type: "retried"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 49:37 - 52:2
+Node: pipe(\n  program,\n  Effect.catchTag("NotFound", () => Effect.succeed("missing"))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, NotFound | Unauthorized | ValidationError, never>
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.catchTag
+      args: ["NotFound", () => Effect.succeed("missing")]
+      outType: Effect<string, Unauthorized | ValidationError, never>
+
+=== Piping Flow ===
+Location: 51:36 - 51:62
+Node: Effect.succeed("missing")
+Node Kind: KindCallExpression
+
+Subject: "missing"
+Subject Type: "missing"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 55:36 - 58:2
+Node: program.pipe(\n  Effect.catchTag("NotFound", () => Effect.succeed("missing")),\n  Effect.catchTag("Unauthorized", () => Effect.succeed("denied"))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, NotFound | Unauthorized | ValidationError, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.catchTag
+      args: ["NotFound", () => Effect.succeed("missing")]
+      outType: Effect<string, Unauthorized | ValidationError, never>
+  [1] kind: pipeable
+      callee: Effect.catchTag
+      args: ["Unauthorized", () => Effect.succeed("denied")]
+      outType: Effect<string, ValidationError, never>
+
+=== Piping Flow ===
+Location: 56:36 - 56:62
+Node: Effect.succeed("missing")
+Node Kind: KindCallExpression
+
+Subject: "missing"
+Subject Type: "missing"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 57:40 - 57:65
+Node: Effect.succeed("denied")
+Node Kind: KindCallExpression
+
+Subject: "denied"
+Subject Type: "denied"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>

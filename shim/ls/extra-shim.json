@@ -1,0 +1,9 @@
+{
+  "ExtraFunctions": ["getJSDocOrTag"],
+  "ExtraMethods": {
+    "LanguageService": ["getQuickInfoAndDocumentationForSymbol"]
+  },
+  "ExtraFields": {
+    "LanguageService": ["converters"]
+  }
+}

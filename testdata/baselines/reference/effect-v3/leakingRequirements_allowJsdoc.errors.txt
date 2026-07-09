@@ -1,0 +1,104 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/leakingRequirements_allowJsdoc.ts(16,14): suggestion TS377041: Methods of this Service require `Cache` from every caller.
+
+The requirement becomes part of the public service surface instead of remaining internal to Layer implementation.
+
+Resolve these dependencies at Layer creation and provide them to each method, so the service's type reflects its purpose, not its implementation.
+
+To suppress this diagnostic for specific dependency types that are intentionally passed through (e.g., HttpServerRequest), add `@effect-leakable-service` JSDoc to their interface declarations, or to this service by adding a `@effect-expect-leaking Cache` JSDoc.
+
+More info and examples at https://effect.website/docs/requirements-management/layers/#avoiding-requirement-leakage effect(leakingRequirements)
+/.src/leakingRequirements_allowJsdoc.ts(59,29): suggestion TS377041: Methods of this Service require `Cache | FileSystem` from every caller.
+
+The requirement becomes part of the public service surface instead of remaining internal to Layer implementation.
+
+Resolve these dependencies at Layer creation and provide them to each method, so the service's type reflects its purpose, not its implementation.
+
+To suppress this diagnostic for specific dependency types that are intentionally passed through (e.g., HttpServerRequest), add `@effect-leakable-service` JSDoc to their interface declarations, or to this service by adding a `@effect-expect-leaking Cache | FileSystem` JSDoc.
+
+More info and examples at https://effect.website/docs/requirements-management/layers/#avoiding-requirement-leakage effect(leakingRequirements)
+
+
+==== /.src/leakingRequirements_allowJsdoc.ts (2 errors) ====
+    // @effect-v3
+    import type { Effect } from "effect"
+    import { Context } from "effect"
+    
+    export class FileSystem extends Context.Tag("FileSystem")<FileSystem, {
+      writeFile: (content: string) => Effect.Effect<void>
+    }>() {}
+    
+    export class Cache extends Context.Tag("Cache")<Cache, {
+      writeFile: (content: string) => Effect.Effect<void>
+    }>() {}
+    
+    // LeakingDeps is leaking FileSystem and Cache, but only Cache should be considered to be leaked
+    
+    // @effect-expect-leaking FileSystem
+    export class LeakingDeps extends Context.Tag("LeakingDeps")<LeakingDeps, {
+                 ~~~~~~~~~~~
+!!! suggestion TS377041: Methods of this Service require `Cache` from every caller.
+
+The requirement becomes part of the public service surface instead of remaining internal to Layer implementation.
+
+Resolve these dependencies at Layer creation and provide them to each method, so the service's type reflects its purpose, not its implementation.
+
+To suppress this diagnostic for specific dependency types that are intentionally passed through (e.g., HttpServerRequest), add `@effect-leakable-service` JSDoc to their interface declarations, or to this service by adding a `@effect-expect-leaking Cache` JSDoc.
+
+More info and examples at https://effect.website/docs/requirements-management/layers/#avoiding-requirement-leakage effect(leakingRequirements)
+      writeCache: () => Effect.Effect<void, never, FileSystem | Cache>
+      readCache: Effect.Effect<void, never, FileSystem | Cache>
+    }>() {}
+    
+    // LeakingDeps2 is leaking FileSystem and Cache, but both are expected to be leaked
+    
+    // @effect-expect-leaking FileSystem Cache
+    export class LeakingDeps2 extends Context.Tag("LeakingDeps2")<LeakingDeps2, {
+      writeCache: () => Effect.Effect<void, never, FileSystem | Cache>
+      readCache: Effect.Effect<void, never, FileSystem | Cache>
+    }>() {}
+    
+    // LeakingDeps3 is leaking FileSystem and Cache, but both are expected to be leaked
+    
+    /**
+     * Example inside of a class with multiple JSDoc
+     * @effect-leakable-service
+     * @effect-expect-leaking FileSystem Cache
+     */
+    export class LeakingDeps3 extends Context.Tag("LeakingDeps3")<LeakingDeps3, {
+      writeCache: () => Effect.Effect<void, never, FileSystem | Cache>
+      readCache: Effect.Effect<void, never, FileSystem | Cache>
+    }>() {}
+    
+    // LeakingDeps4 is leaking FileSystem and Cache, but both are expected to be leaked
+    
+    // @effect-expect-leaking FileSystem Cache
+    export const LeakingDeps4 = Context.GenericTag<{
+      writeCache: () => Effect.Effect<void, never, FileSystem | Cache>
+      readCache: Effect.Effect<void, never, FileSystem | Cache>
+    }>("LeakingDeps4")
+    
+    /**
+     * This comment does not suppress GenericTag diagnostics when it is attached to
+     * the shape interface instead of the exported const statement.
+     * @effect-expect-leaking FileSystem Cache
+     */
+    interface LeakingDeps5Shape {
+      writeCache: () => Effect.Effect<void, never, FileSystem | Cache>
+      readCache: Effect.Effect<void, never, FileSystem | Cache>
+    }
+    
+    export const LeakingDeps5 = Context.GenericTag<LeakingDeps5Shape>("LeakingDeps5")
+                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377041: Methods of this Service require `Cache | FileSystem` from every caller.
+
+The requirement becomes part of the public service surface instead of remaining internal to Layer implementation.
+
+Resolve these dependencies at Layer creation and provide them to each method, so the service's type reflects its purpose, not its implementation.
+
+To suppress this diagnostic for specific dependency types that are intentionally passed through (e.g., HttpServerRequest), add `@effect-leakable-service` JSDoc to their interface declarations, or to this service by adding a `@effect-expect-leaking Cache | FileSystem` JSDoc.
+
+More info and examples at https://effect.website/docs/requirements-management/layers/#avoiding-requirement-leakage effect(leakingRequirements)
+    

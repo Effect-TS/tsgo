@@ -1,0 +1,26 @@
+=== Quick Fix Inventory ===
+
+[D1] (7:24-7:80) TS377050: This nested call structure has a pipeable form. `Schema.decodeEffect(User)({ id: 1 }).pipe(...)` represents the same call sequence in pipe style and may be easier to read. effect(missedPipeableOpportunity)
+  Fix 0: "Disable missedPipeableOpportunity for this line"
+  Fix 1: "Disable missedPipeableOpportunity for entire file"
+  Fix 2: "Convert to pipe style"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable missedPipeableOpportunity for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable missedPipeableOpportunity for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Convert to pipe style" ===
+
+--- file:///.src/missedPipeableOpportunity_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics missedPipeableOpportunity:warning
+// @test-config { "pipeableMinArgCount": 2 }
+import { identity, Schema } from "effect"
+
+const User = Schema.Struct({ id: Schema.Finite })
+export const preview = Schema.decodeEffect(User)({ id: 1 }).pipe(identity, identity)
+

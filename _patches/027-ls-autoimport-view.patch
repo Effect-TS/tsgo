@@ -1,0 +1,42 @@
+diff --git a/internal/ls/autoimport/view.go b/internal/ls/autoimport/view.go
+index 35441eede..e340feb1b 100644
+--- a/internal/ls/autoimport/view.go
++++ b/internal/ls/autoimport/view.go
+@@ -18,11 +18,12 @@ import (
+ )
+ 
+ type View struct {
+-	registry      *Registry
+-	importingFile *ast.SourceFile
+-	program       *compiler.Program
+-	preferences   modulespecifiers.UserPreferences
+-	projectKey    tspath.Path
++	registry       *Registry
++	importingFile  *ast.SourceFile
++	program        *compiler.Program
++	preferences    modulespecifiers.UserPreferences
++	fixTransformer FixTransformer
++	projectKey     tspath.Path
+ 
+ 	allowedEndings                   []modulespecifiers.ModuleSpecifierEnding
+ 	conditions                       *collections.Set[string]
+@@ -32,7 +33,7 @@ type View struct {
+ }
+ 
+ func NewView(registry *Registry, importingFile *ast.SourceFile, projectKey tspath.Path, program *compiler.Program, preferences modulespecifiers.UserPreferences) *View {
+-	return &View{
++	view := &View{
+ 		registry:      registry,
+ 		importingFile: importingFile,
+ 		program:       program,
+@@ -44,6 +45,10 @@ func NewView(registry *Registry, importingFile *ast.SourceFile, projectKey tspat
+ 		),
+ 		shouldUseUriStyleNodeCoreModules: lsutil.ShouldUseUriStyleNodeCoreModules(importingFile, program),
+ 	}
++	if autoImportFixTransformerFactory != nil {
++		view.fixTransformer = autoImportFixTransformerFactory(preferences, program, importingFile)
++	}
++	return view
+ }
+ 
+ func (v *View) getAllowedEndings() []modulespecifiers.ModuleSpecifierEnding {

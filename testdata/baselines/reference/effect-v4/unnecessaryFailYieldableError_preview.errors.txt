@@ -1,0 +1,19 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/unnecessaryFailYieldableError_preview.ts(8,3): warning TS377019: This `yield* Effect.fail(...)` passes a yieldable error value. `yield*` represents that value directly without wrapping it in `Effect.fail`. effect(unnecessaryFailYieldableError)
+
+
+==== /.src/unnecessaryFailYieldableError_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics unnecessaryFailYieldableError:warning
+    import * as Data from "effect/Data"
+    import * as Effect from "effect/Effect"
+    
+    class Boom extends Data.TaggedError("Boom")<{}> {}
+    export const preview = Effect.gen(function*() {
+      yield* Effect.fail(new Boom())
+      ~~~~~
+!!! warning TS377019: This `yield* Effect.fail(...)` passes a yieldable error value. `yield*` represents that value directly without wrapping it in `Effect.fail`. effect(unnecessaryFailYieldableError)
+    })
+    

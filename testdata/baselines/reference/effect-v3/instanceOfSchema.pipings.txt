@@ -1,0 +1,85 @@
+==== /.src/instanceOfSchema.ts (6 flows) ====
+
+=== Piping Flow ===
+Location: 5:23 - 7:3
+Node: Schema.Class<MySchema>("MySchema")({\n  name: Schema.String,\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  name: Schema.String,\n}
+Subject Type: { name: typeof String$; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<MySchema>("MySchema")
+      args: (constant)
+      outType: Class<MySchema, { name: typeof String$; }, Encoded<{ name: typeof String$; }>, never, { readonly name: string; }, {}, {}>
+
+=== Piping Flow ===
+Location: 12:33 - 13:30
+Node: console.log("is my schema")
+Node Kind: KindCallExpression
+
+Subject: "is my schema"
+Subject Type: "is my schema"
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 17:27 - 19:3
+Node: Schema.Class<PersonSchema>("MySchema")({\n  name: Schema.String,\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  name: Schema.String,\n}
+Subject Type: { name: typeof String$; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<PersonSchema>("MySchema")
+      args: (constant)
+      outType: Class<PersonSchema, { name: typeof String$; }, Encoded<{ name: typeof String$; }>, never, { readonly name: string; }, {}, {}>
+
+=== Piping Flow ===
+Location: 24:32 - 25:29
+Node: console.log("is my class")
+Node Kind: KindCallExpression
+
+Subject: "is my class"
+Subject Type: "is my class"
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 29:29 - 30:25
+Node: console.log("is date")
+Node Kind: KindCallExpression
+
+Subject: "is date"
+Subject Type: "is date"
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 33:31 - 34:27
+Node: console.log("is regexp")
+Node Kind: KindCallExpression
+
+Subject: "is regexp"
+Subject Type: "is regexp"
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void

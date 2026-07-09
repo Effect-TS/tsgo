@@ -1,0 +1,20 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/classSelfMismatch_preview.ts(8,41): warning TS377046: The `Self` type parameter for this class should be `InvalidContextTag`. effect(classSelfMismatch)
+
+
+==== /.src/classSelfMismatch_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics classSelfMismatch:warning
+    import * as Effect from "effect/Effect"
+    
+    interface ServiceShape { value: number }
+    
+    export class InvalidContextTag
+      extends Effect.Tag("ValidContextTag")<ValidContextTag, ServiceShape>() {}
+                                            ~~~~~~~~~~~~~~~
+!!! warning TS377046: The `Self` type parameter for this class should be `InvalidContextTag`. effect(classSelfMismatch)
+    
+    declare class ValidContextTag {}
+    

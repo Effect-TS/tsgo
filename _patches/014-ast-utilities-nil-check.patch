@@ -1,0 +1,13 @@
+diff --git a/internal/ast/utilities.go b/internal/ast/utilities.go
+index b2dcc9b68d..8e737aa431 100644
+--- a/internal/ast/utilities.go
++++ b/internal/ast/utilities.go
+@@ -3007,7 +3007,7 @@ func IsJSDocSingleCommentNodeComment(node *Node) bool {
+ // In Strada, if a JSDoc node has a single comment, that comment is represented as a string property
+ // as a simplification, and therefore that comment is not visited by `forEachChild`.
+ func IsJSDocSingleCommentNode(node *Node) bool {
+-	return hasComment(node.Kind) && node.CommentList() != nil && len(node.CommentList().Nodes) == 1
++	return node != nil && hasComment(node.Kind) && node.CommentList() != nil && len(node.CommentList().Nodes) == 1
+ }
+ 
+ func IsValidTypeOnlyAliasUseSite(useSite *Node) bool {

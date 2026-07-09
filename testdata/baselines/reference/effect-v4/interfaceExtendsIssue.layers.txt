@@ -1,0 +1,1 @@
+==== /.src/interfaceExtendsIssue.ts (0 layer exports) ====

@@ -1,0 +1,96 @@
+package rules
+
+import (
+	"github.com/effect-ts/tsgo/etscore"
+	"github.com/effect-ts/tsgo/internal/rule"
+	"github.com/effect-ts/tsgo/internal/typeparser"
+	"github.com/microsoft/typescript-go/shim/ast"
+	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
+	"github.com/microsoft/typescript-go/shim/scanner"
+)
+
+var GlobalDate = rule.Rule{
+	Name:            "globalDate",
+	Group:           "effectNative",
+	Description:     "Warns when using Date.now() or new Date() outside Effect generators instead of Clock/DateTime",
+	DefaultSeverity: etscore.SeverityOff,
+	SupportedEffect: []string{"v3", "v4"},
+	Codes: []int32{
+		tsdiag.This_code_uses_Date_now_time_access_is_represented_through_Clock_from_Effect_effect_globalDate.Code(),
+		tsdiag.This_code_constructs_new_Date_date_values_are_represented_through_DateTime_from_Effect_effect_globalDate.Code(),
+	},
+	Run: func(ctx *rule.Context) []*ast.Diagnostic {
+		return runGlobalDate(ctx, false)
+	},
+}
+
+var GlobalDateInEffect = rule.Rule{
+	Name:            "globalDateInEffect",
+	Group:           "effectNative",
+	Description:     "Warns when using Date.now() or new Date() inside Effect generators instead of Clock/DateTime",
+	DefaultSeverity: etscore.SeverityOff,
+	SupportedEffect: []string{"v3", "v4"},
+	Codes: []int32{
+		tsdiag.This_Effect_code_uses_Date_now_time_access_in_Effect_code_is_represented_through_Clock_from_Effect_effect_globalDateInEffect.Code(),
+		tsdiag.This_Effect_code_constructs_new_Date_date_values_in_Effect_code_are_represented_through_DateTime_from_Effect_effect_globalDateInEffect.Code(),
+	},
+	Run: func(ctx *rule.Context) []*ast.Diagnostic {
+		return runGlobalDate(ctx, true)
+	},
+}
+
+func runGlobalDate(ctx *rule.Context, checkInEffect bool) []*ast.Diagnostic {
+	dateSymbol := ctx.Checker.ResolveName("Date", nil, ast.SymbolFlagsValue, false)
+	if dateSymbol == nil {
+		return nil
+	}
+
+	var diags []*ast.Diagnostic
+	var walk ast.Visitor
+	walk = func(node *ast.Node) bool {
+		if node == nil {
+			return false
+		}
+		inEffect := ctx.TypeParser.GetEffectContextFlags(node)&typeparser.EffectContextFlagInEffect != 0
+		if inEffect == checkInEffect {
+			var objectNode *ast.Node
+			message := tsdiag.This_code_uses_Date_now_time_access_is_represented_through_Clock_from_Effect_effect_globalDate
+
+			switch node.Kind {
+			case ast.KindCallExpression:
+				call := node.AsCallExpression()
+				if call.Expression.Kind == ast.KindPropertyAccessExpression {
+					prop := call.Expression.AsPropertyAccessExpression()
+					if prop.Name().Text() == "now" {
+						objectNode = prop.Expression
+						if checkInEffect {
+							message = tsdiag.This_Effect_code_uses_Date_now_time_access_in_Effect_code_is_represented_through_Clock_from_Effect_effect_globalDateInEffect
+						}
+					}
+				}
+			case ast.KindNewExpression:
+				objectNode = node.AsNewExpression().Expression
+				message = tsdiag.This_code_constructs_new_Date_date_values_are_represented_through_DateTime_from_Effect_effect_globalDate
+				if checkInEffect {
+					message = tsdiag.This_Effect_code_constructs_new_Date_date_values_in_Effect_code_are_represented_through_DateTime_from_Effect_effect_globalDateInEffect
+				}
+			}
+
+			if objectNode != nil && ctx.TypeParser.ResolveToGlobalSymbol(ctx.TypeParser.GetSymbolAtLocation(objectNode)) == dateSymbol {
+				diags = append(diags, ctx.NewDiagnostic(
+					ctx.SourceFile,
+					scanner.GetErrorRangeForNode(ctx.SourceFile, node),
+					message,
+					nil,
+				))
+			}
+		}
+
+		node.ForEachChild(walk)
+		return false
+	}
+
+	walk(ctx.SourceFile.AsNode())
+
+	return diags
+}

@@ -1,0 +1,36 @@
+==== /.src/missingLayerContext_preview.ts (1 layer exports) ====
+
+=== preview ===
+
+--- output ---
+flowchart TD
+  0["layer<br/>provides: A<br/>requires: A"]
+
+--- nested ---
+flowchart TB
+  subgraph 0 ["`preview<br/><small>_ln 10 col 13_</small>`"]
+    subgraph 0_wrap[" "]
+      subgraph 0_requires [Requires]
+        0_requires_0["A"]
+      end
+      style 0_requires stroke:none
+      subgraph 0_provides [Provides]
+        0_provides_0["A"]
+      end
+      style 0_provides stroke:none
+    end
+    style 0_wrap fill:transparent
+    style 0_wrap stroke:none
+  end
+  style 0 fill:transparent
+
+--- outline ---
+flowchart TD
+  0["preview"]
+
+--- quickinfo ---
+/**
+ * - A provided at ln 10 col 13 by `preview`
+ * 
+ * - A required at ln 10 col 13 by `preview`
+ */

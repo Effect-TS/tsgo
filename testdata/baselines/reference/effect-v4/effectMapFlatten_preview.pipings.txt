@@ -1,0 +1,37 @@
+==== /.src/effectMapFlatten_preview.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 5:23 - 8:2
+Node: Effect.succeed(1).pipe(\n  Effect.map((n) => Effect.succeed(n + 1)),\n  Effect.flatten\n)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (3):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [(n) => Effect.succeed(n + 1)]
+      outType: Effect<Effect<number, never, never>, never, never>
+  [2] kind: pipeable
+      callee: Effect.flatten
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 6:20 - 6:42
+Node: Effect.succeed(n + 1)
+Node Kind: KindCallExpression
+
+Subject: n + 1
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>

@@ -1,0 +1,24 @@
+=== Quick Fix Inventory ===
+
+[D1] (4:3-4:9) TS377014: This generator returns an Effect-able value directly, which produces a nested `Effect<Effect<...>>`. If the intended result is the inner Effect value, `return yield*` represents that form. effect(returnEffectInGen)
+  Fix 0: "Disable returnEffectInGen for this line"
+  Fix 1: "Disable returnEffectInGen for entire file"
+  Fix 2: "Add yield* statement"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable returnEffectInGen for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable returnEffectInGen for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Add yield* statement" ===
+
+--- file:///.src/returnEffectInGen.ts ---
+import { Effect } from "effect"
+
+export const shouldWarn = Effect.gen(function*() {
+  return yield* Effect.fail("error")
+})
+

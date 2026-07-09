@@ -1,0 +1,33 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:26-6:42) TS377076: This code reads from `process.env`, environment configuration is represented through `Config` from Effect. effect(processEnv)
+  Fix 0: "Disable processEnv for this line"
+  Fix 1: "Disable processEnv for entire file"
+
+[D2] (9:33-9:52) TS377076: This code reads from `process.env`, environment configuration is represented through `Config` from Effect. effect(processEnv)
+  Fix 0: "Disable processEnv for this line"
+  Fix 1: "Disable processEnv for entire file"
+
+[D3] (18:20-18:39) TS377076: This code reads from `process.env`, environment configuration is represented through `Config` from Effect. effect(processEnv)
+  Fix 0: "Disable processEnv for this line"
+  Fix 1: "Disable processEnv for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable processEnv for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable processEnv for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable processEnv for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable processEnv for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable processEnv for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable processEnv for entire file" ===
+skipped by default

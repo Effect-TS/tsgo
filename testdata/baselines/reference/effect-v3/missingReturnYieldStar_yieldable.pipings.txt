@@ -1,0 +1,29 @@
+==== /.src/missingReturnYieldStar_yieldable.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 4:45 - 11:5
+Node: Effect.gen(function*() {\n    if (n === 0) {\n      // In v3, yieldable parsing falls back to Effect typing.\n      yield* Effect.fail("no zero!")\n    }\n    return n / 1\n  })
+Node Kind: KindCallExpression
+
+Subject: function*() {\n    if (n === 0) {\n      // In v3, yieldable parsing falls back to Effect typing.\n      yield* Effect.fail("no zero!")\n    }\n    return n / 1\n  }
+Subject Type: () => Generator<YieldWrap<Effect<never, string, never>>, number, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 8:13 - 8:37
+Node: Effect.fail("no zero!")
+Node Kind: KindCallExpression
+
+Subject: "no zero!"
+Subject Type: "no zero!"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>

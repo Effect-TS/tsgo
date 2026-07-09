@@ -1,0 +1,58 @@
+==== /.src/schemas.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 3:22 - 3:40
+Node: Schema.Struct({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 6:25 - 6:43
+Node: Schema.Struct({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>
+
+=== Piping Flow ===
+Location: 9:22 - 9:59
+Node: Schema.Struct({ id: Schema.Finite })
+Node Kind: KindCallExpression
+
+Subject: { id: Schema.Finite }
+Subject Type: { id: Finite; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly id: Finite; }>
+
+=== Piping Flow ===
+Location: 14:23 - 14:60
+Node: Schema.Struct({ id: Schema.Finite })
+Node Kind: KindCallExpression
+
+Subject: { id: Schema.Finite }
+Subject Type: { id: Finite; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly id: Finite; }>
+==== /.src/test.ts (0 flows) ====

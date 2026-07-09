@@ -1,0 +1,10 @@
+// @effect-v3
+import * as Context from "effect/Context"
+
+interface ServiceShape {
+  value: number
+}
+
+export class OtherService extends Context.Tag("OtherService")<OtherService, {}>() {}
+
+export class MyService extends Context.Tag("MyService")<MyService | OtherService, ServiceShape>() {}

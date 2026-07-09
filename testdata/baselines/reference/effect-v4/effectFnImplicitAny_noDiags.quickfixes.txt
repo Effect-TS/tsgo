@@ -1,0 +1,7 @@
+=== Quick Fix Inventory ===
+
+[D1] (10:35-10:42) TS6133: 'request' is declared but its value is never read.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+(no quick fixes to apply)

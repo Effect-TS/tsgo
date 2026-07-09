@@ -1,0 +1,55 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/globalConsole.ts(5,1): warning TS377064: This code uses `console.log`, the corresponding Effect logging API is `Effect.log or Logger`. effect(globalConsole)
+/.src/globalConsole.ts(9,3): warning TS377064: This code uses `console.warn`, the corresponding Effect logging API is `Effect.logWarning or Logger`. effect(globalConsole)
+/.src/globalConsole.ts(14,1): warning TS377064: This code uses `console.info`, the corresponding Effect logging API is `Effect.logInfo or Logger`. effect(globalConsole)
+/.src/globalConsole.ts(28,20): warning TS377064: This code uses `console.error`, the corresponding Effect logging API is `Effect.logError or Logger`. effect(globalConsole)
+
+
+==== /.src/globalConsole.ts (4 errors) ====
+    // @effect-diagnostics globalConsole:warning
+    import { Effect } from "effect"
+    
+    // Should trigger - console.log at module level
+    console.log("module level")
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377064: This code uses `console.log`, the corresponding Effect logging API is `Effect.log or Logger`. effect(globalConsole)
+    
+    // Should trigger - console.warn in regular function
+    const _regularFn = () => {
+      console.warn("warning")
+      ~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377064: This code uses `console.warn`, the corresponding Effect logging API is `Effect.logWarning or Logger`. effect(globalConsole)
+    }
+    
+    // Should trigger - aliased console at module level
+    const myConsole = console
+    myConsole.info("info")
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377064: This code uses `console.info`, the corresponding Effect logging API is `Effect.logInfo or Logger`. effect(globalConsole)
+    
+    // Should NOT trigger - console.log inside Effect.gen
+    export const consoleLogInGen = Effect.gen(function*() {
+      console.log("hello")
+    })
+    
+    // Should NOT trigger - console.warn inside Effect.fn
+    export const consoleWarnInFn = Effect.fn("consoleWarnInFn")(function*() {
+      console.warn("warning")
+    })
+    
+    // Should trigger - console.error inside nested arrow in generator
+    export const nestedArrowInGen = Effect.gen(function*() {
+      const fn = () => console.error("nested")
+                       ~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377064: This code uses `console.error`, the corresponding Effect logging API is `Effect.logError or Logger`. effect(globalConsole)
+      return fn
+    })
+    
+    // Should NOT trigger - shadowed console
+    const _shadowedConsole = () => {
+      const console = { log: (..._args: Array<unknown>) => undefined }
+      console.log("hello")
+    }
+    

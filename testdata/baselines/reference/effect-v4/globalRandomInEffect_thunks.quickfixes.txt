@@ -1,0 +1,43 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:47-6:60) TS377071: This Effect code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandomInEffect)
+  Fix 0: "Disable globalRandomInEffect for this line"
+  Fix 1: "Disable globalRandomInEffect for entire file"
+
+[D2] (9:14-9:27) TS377071: This Effect code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandomInEffect)
+  Fix 0: "Disable globalRandomInEffect for this line"
+  Fix 1: "Disable globalRandomInEffect for entire file"
+
+[D3] (13:65-13:78) TS377071: This Effect code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandomInEffect)
+  Fix 0: "Disable globalRandomInEffect for this line"
+  Fix 1: "Disable globalRandomInEffect for entire file"
+
+[D4] (16:20-16:33) TS377071: This Effect code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandomInEffect)
+  Fix 0: "Disable globalRandomInEffect for this line"
+  Fix 1: "Disable globalRandomInEffect for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable globalRandomInEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable globalRandomInEffect for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable globalRandomInEffect for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable globalRandomInEffect for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable globalRandomInEffect for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable globalRandomInEffect for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable globalRandomInEffect for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable globalRandomInEffect for entire file" ===
+skipped by default

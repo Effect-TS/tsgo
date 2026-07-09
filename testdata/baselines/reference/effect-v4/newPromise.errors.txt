@@ -1,0 +1,44 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/newPromise.ts(5,30): warning TS377080: This code constructs `new Promise(...)`, prefer Effect APIs such as `Effect.async`, `Effect.promise`, or `Effect.tryPromise` instead of manual Promise construction. effect(newPromise)
+/.src/newPromise.ts(8,37): warning TS377080: This code constructs `new Promise(...)`, prefer Effect APIs such as `Effect.async`, `Effect.promise`, or `Effect.tryPromise` instead of manual Promise construction. effect(newPromise)
+/.src/newPromise.ts(12,31): warning TS377080: This code constructs `new Promise(...)`, prefer Effect APIs such as `Effect.async`, `Effect.promise`, or `Effect.tryPromise` instead of manual Promise construction. effect(newPromise)
+/.src/newPromise.ts(16,10): warning TS377080: This code constructs `new Promise(...)`, prefer Effect APIs such as `Effect.async`, `Effect.promise`, or `Effect.tryPromise` instead of manual Promise construction. effect(newPromise)
+
+
+==== /.src/newPromise.ts (4 errors) ====
+    // @effect-diagnostics newPromise:warning
+    import { Effect } from "effect"
+    
+    // Should trigger - new Promise at module level
+    export const modulePromise = new Promise<number>((resolve) => resolve(1))
+                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377080: This code constructs `new Promise(...)`, prefer Effect APIs such as `Effect.async`, `Effect.promise`, or `Effect.tryPromise` instead of manual Promise construction. effect(newPromise)
+    
+    // Should trigger - new Promise in regular function
+    export const regularPromise = () => new Promise<number>((resolve) => resolve(2))
+                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377080: This code constructs `new Promise(...)`, prefer Effect APIs such as `Effect.async`, `Effect.promise`, or `Effect.tryPromise` instead of manual Promise construction. effect(newPromise)
+    
+    // Should trigger - aliased Promise
+    const MyPromise = Promise
+    export const aliasedPromise = new MyPromise<number>((resolve) => resolve(3))
+                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377080: This code constructs `new Promise(...)`, prefer Effect APIs such as `Effect.async`, `Effect.promise`, or `Effect.tryPromise` instead of manual Promise construction. effect(newPromise)
+    
+    // Should trigger - new Promise inside Effect.gen
+    export const promiseInGen = Effect.gen(function*() {
+      return new Promise<number>((resolve) => resolve(4))
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377080: This code constructs `new Promise(...)`, prefer Effect APIs such as `Effect.async`, `Effect.promise`, or `Effect.tryPromise` instead of manual Promise construction. effect(newPromise)
+    })
+    
+    // Should NOT trigger - shadowed Promise
+    export const shadowedPromise = () => {
+      class Promise<A> {
+        constructor(readonly value: A) {}
+      }
+      return new Promise(5)
+    }
+    

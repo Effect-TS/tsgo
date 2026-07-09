@@ -1,0 +1,18 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/unknownInEffectCatch_preview.ts(5,24): warning TS377021: The `catch` callback in `Effect.tryPromise` returns `unknown`, so the Effect error type stays untyped. A specific typed error preserves error-channel information, for example by narrowing the value or wrapping it in `Data.TaggedError`. effect(unknownInEffectCatch)
+
+
+==== /.src/unknownInEffectCatch_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics unknownInEffectCatch:warning
+    import { Effect } from "effect"
+    
+    export const preview = Effect.tryPromise({
+                           ~~~~~~~~~~~~~~~~~
+!!! warning TS377021: The `catch` callback in `Effect.tryPromise` returns `unknown`, so the Effect error type stays untyped. A specific typed error preserves error-channel information, for example by narrowing the value or wrapping it in `Data.TaggedError`. effect(unknownInEffectCatch)
+      try: async () => 1,
+      catch: (error) => error
+    })
+    

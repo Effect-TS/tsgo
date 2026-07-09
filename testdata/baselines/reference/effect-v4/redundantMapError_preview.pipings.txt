@@ -1,0 +1,43 @@
+==== /.src/redundantMapError_preview.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 12:23 - 20:3
+Node: Effect.gen(function*() {\n  yield* first.pipe(\n    Effect.mapError((cause) => new RepoError({ cause }))\n  )\n\n  return yield* second.pipe(\n    Effect.mapError((cause) => new RepoError({ cause }))\n  )\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  yield* first.pipe(\n    Effect.mapError((cause) => new RepoError({ cause }))\n  )\n\n  return yield* second.pipe(\n    Effect.mapError((cause) => new RepoError({ cause }))\n  )\n}
+Subject Type: () => Generator<Effect<string, RepoError, never> | Effect<number, RepoError, never>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, RepoError, never>
+
+=== Piping Flow ===
+Location: 13:9 - 15:4
+Node: first.pipe(\n    Effect.mapError((cause) => new RepoError({ cause }))\n  )
+Node Kind: KindCallExpression
+
+Subject: first
+Subject Type: Effect<number, unknown, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.mapError
+      args: [(cause) => new RepoError({ cause })]
+      outType: Effect<number, RepoError, never>
+
+=== Piping Flow ===
+Location: 17:16 - 19:4
+Node: second.pipe(\n    Effect.mapError((cause) => new RepoError({ cause }))\n  )
+Node Kind: KindCallExpression
+
+Subject: second
+Subject Type: Effect<string, unknown, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.mapError
+      args: [(cause) => new RepoError({ cause })]
+      outType: Effect<string, RepoError, never>

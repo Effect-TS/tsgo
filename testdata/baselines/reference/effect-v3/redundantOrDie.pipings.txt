@@ -1,0 +1,285 @@
+==== /.src/redundantOrDie.ts (20 flows) ====
+
+=== Piping Flow ===
+Location: 10:28 - 15:3
+Node: Effect.gen(function*() {\n  const a = yield* first.pipe(Effect.orDie)\n  const b = yield* second.pipe(Effect.orDie)\n\n  return [a, b] as const\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const a = yield* first.pipe(Effect.orDie)\n  const b = yield* second.pipe(Effect.orDie)\n\n  return [a, b] as const\n}
+Subject Type: () => Generator<YieldWrap<Effect<string, never, never>> | YieldWrap<Effect<number, never, never>>, readonly [number, string], any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<readonly [number, string], never, never>
+
+=== Piping Flow ===
+Location: 11:19 - 11:44
+Node: first.pipe(Effect.orDie)
+Node Kind: KindCallExpression
+
+Subject: first
+Subject Type: Effect<number, unknown, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.orDie
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 12:19 - 12:45
+Node: second.pipe(Effect.orDie)
+Node Kind: KindCallExpression
+
+Subject: second
+Subject Type: Effect<string, unknown, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.orDie
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 17:36 - 22:3
+Node: Effect.fn("service.method")(function*() {\n  const a = yield* first.pipe(Effect.orDie)\n  const b = yield* second.pipe(Effect.orDie)\n\n  return [a, b] as const\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const a = yield* first.pipe(Effect.orDie)\n  const b = yield* second.pipe(Effect.orDie)\n\n  return [a, b] as const\n}
+Subject Type: () => Generator<YieldWrap<Effect<string, never, never>> | YieldWrap<Effect<number, never, never>>, readonly [number, string], any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn("service.method")
+      args: (constant)
+      outType: () => Effect<readonly [number, string], never, never>
+
+=== Piping Flow ===
+Location: 18:19 - 18:44
+Node: first.pipe(Effect.orDie)
+Node Kind: KindCallExpression
+
+Subject: first
+Subject Type: Effect<number, unknown, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.orDie
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 19:19 - 19:45
+Node: second.pipe(Effect.orDie)
+Node Kind: KindCallExpression
+
+Subject: second
+Subject Type: Effect<string, unknown, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.orDie
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 24:39 - 29:3
+Node: Effect.gen(function*() {\n  const a = yield* first.pipe(Effect.orDie)\n  const b = yield* Effect.orDie(second)\n\n  return [a, b] as const\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const a = yield* first.pipe(Effect.orDie)\n  const b = yield* Effect.orDie(second)\n\n  return [a, b] as const\n}
+Subject Type: () => Generator<YieldWrap<Effect<string, never, never>> | YieldWrap<Effect<number, never, never>>, readonly [number, string], any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<readonly [number, string], never, never>
+
+=== Piping Flow ===
+Location: 25:19 - 25:44
+Node: first.pipe(Effect.orDie)
+Node Kind: KindCallExpression
+
+Subject: first
+Subject Type: Effect<number, unknown, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.orDie
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 26:19 - 26:40
+Node: Effect.orDie(second)
+Node Kind: KindCallExpression
+
+Subject: second
+Subject Type: Effect<string, unknown, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.orDie
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 31:43 - 36:3
+Node: Effect.gen(function*() {\n  const a = yield* first.pipe(Effect.orDie)\n  const b = yield* second\n\n  return [a, b] as const\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const a = yield* first.pipe(Effect.orDie)\n  const b = yield* second\n\n  return [a, b] as const\n}
+Subject Type: () => Generator<YieldWrap<Effect<string, unknown, never>> | YieldWrap<Effect<number, never, never>>, readonly [number, string], any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<readonly [number, string], unknown, never>
+
+=== Piping Flow ===
+Location: 32:19 - 32:44
+Node: first.pipe(Effect.orDie)
+Node Kind: KindCallExpression
+
+Subject: first
+Subject Type: Effect<number, unknown, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.orDie
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 38:39 - 40:3
+Node: Effect.gen(function*() {\n  return yield* first.pipe(Effect.orDie)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  return yield* first.pipe(Effect.orDie)\n}
+Subject Type: () => Generator<YieldWrap<Effect<number, never, never>>, number, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 39:16 - 39:41
+Node: first.pipe(Effect.orDie)
+Node Kind: KindCallExpression
+
+Subject: first
+Subject Type: Effect<number, unknown, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.orDie
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 42:47 - 50:3
+Node: Effect.gen(function*() {\n  const a = yield* first.pipe(\n    Effect.orDie,\n    Effect.map((value) => value + 1)\n  )\n  const b = yield* second.pipe(Effect.orDie)\n\n  return [a, b] as const\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const a = yield* first.pipe(\n    Effect.orDie,\n    Effect.map((value) => value + 1)\n  )\n  const b = yield* second.pipe(Effect.orDie)\n\n  return [a, b] as const\n}
+Subject Type: () => Generator<YieldWrap<Effect<string, never, never>> | YieldWrap<Effect<number, never, never>>, readonly [number, string], any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<readonly [number, string], never, never>
+
+=== Piping Flow ===
+Location: 43:19 - 46:4
+Node: first.pipe(\n    Effect.orDie,\n    Effect.map((value) => value + 1)\n  )
+Node Kind: KindCallExpression
+
+Subject: first
+Subject Type: Effect<number, unknown, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.orDie
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [(value) => value + 1]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 47:19 - 47:45
+Node: second.pipe(Effect.orDie)
+Node Kind: KindCallExpression
+
+Subject: second
+Subject Type: Effect<string, unknown, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.orDie
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 52:49 - 59:3
+Node: Effect.gen(function*() {\n  yield* first.pipe(Effect.orDie)\n\n  yield* Effect.gen(function*() {\n    yield* second.pipe(Effect.orDie)\n    yield* third\n  })\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  yield* first.pipe(Effect.orDie)\n\n  yield* Effect.gen(function*() {\n    yield* second.pipe(Effect.orDie)\n    yield* third\n  })\n}
+Subject Type: () => Generator<YieldWrap<Effect<void, unknown, never>>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, unknown, never>
+
+=== Piping Flow ===
+Location: 53:9 - 53:34
+Node: first.pipe(Effect.orDie)
+Node Kind: KindCallExpression
+
+Subject: first
+Subject Type: Effect<number, unknown, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.orDie
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 55:9 - 58:5
+Node: Effect.gen(function*() {\n    yield* second.pipe(Effect.orDie)\n    yield* third\n  })
+Node Kind: KindCallExpression
+
+Subject: function*() {\n    yield* second.pipe(Effect.orDie)\n    yield* third\n  }
+Subject Type: () => Generator<YieldWrap<Effect<string, never, never>> | YieldWrap<Effect<boolean, unknown, never>>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, unknown, never>
+
+=== Piping Flow ===
+Location: 56:11 - 56:37
+Node: second.pipe(Effect.orDie)
+Node Kind: KindCallExpression
+
+Subject: second
+Subject Type: Effect<string, unknown, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.orDie
+      args: (constant)
+      outType: Effect<string, never, never>

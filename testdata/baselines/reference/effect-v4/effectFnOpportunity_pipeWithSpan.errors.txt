@@ -1,0 +1,70 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/effectFnOpportunity_pipeWithSpan.ts(11,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("arrowWithPipe")(function*(n) { ... })`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_pipeWithSpan.ts(12,3): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/effectFnOpportunity_pipeWithSpan.ts(16,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("functionExpressionWithPipe")(function*(n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_pipeWithSpan.ts(17,10): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/effectFnOpportunity_pipeWithSpan.ts(22,17): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("functionDeclarationWithPipe")(function*(n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_pipeWithSpan.ts(23,10): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "effectFn": ["span", "suggested-span", "inferred-span", "no-span", "untraced"]
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/effectFnOpportunity_pipeWithSpan.ts (6 errors) ====
+    import * as Effect from "effect/Effect"
+    
+    // For these cases we should suggest using Effect.fn (not Effect.fnUntraced)
+    // because the piped transformations end with Effect.withSpan. We can extract
+    // the span name expression from withSpan and use it as the parameter to
+    // Effect.fn("spanName")(function*() { ... }).
+    //
+    // Using Effect.fn is an improvement because the stack traces will include
+    // the call site of that function, not just the span in the traces.
+    
+    export const arrowWithPipe = (n: number) =>
+                 ~~~~~~~~~~~~~
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("arrowWithPipe")(function*(n) { ... })`. effect(effectFnOpportunity)
+      Effect.gen(function*() {
+      ~~~~~~~~~~~~~~~~~~~~~~~~
+        return yield* Effect.succeed(n)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      }).pipe(Effect.withSpan("arrowWithPipe"))
+    ~~~~
+!!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+    
+    export const functionExpressionWithPipe = function(n: number) {
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("functionExpressionWithPipe")(function*(n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+      return Effect.gen(function*() {
+             ~~~~~~~~~~~~~~~~~~~~~~~~
+        return yield* Effect.succeed(n)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionExpressionWithPipe"))
+    ~~~~
+!!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+    }
+    
+    export function functionDeclarationWithPipe(n: number) {
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("functionDeclarationWithPipe")(function*(n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+      return Effect.gen(function*() {
+             ~~~~~~~~~~~~~~~~~~~~~~~~
+        return yield* Effect.succeed(n)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      }).pipe(Effect.map((x) => x + 1), Effect.ignore, Effect.withSpan("functionDeclarationWithPipe"))
+    ~~~~
+!!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+    }
+    

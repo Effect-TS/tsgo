@@ -1,0 +1,1 @@
+/.src/interfaceExtendsIssueNoPlugin.ts -> interfaceExtendsIssueNoPlugin.flows.interfaceExtendsIssueNoPlugin.mermaid

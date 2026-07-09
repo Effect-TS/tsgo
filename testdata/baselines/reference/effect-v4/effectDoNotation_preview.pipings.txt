@@ -1,0 +1,51 @@
+==== /.src/effectDoNotation_preview.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 6:23 - 11:2
+Node: pipe(\n  Effect.Do,\n  Effect.bind("a", () => Effect.succeed(1)),\n  Effect.let("b", ({ a }) => a + 1),\n  Effect.bind("c", ({ b }) => Effect.succeed(b.toString()))\n)
+Node Kind: KindCallExpression
+
+Subject: Effect.Do
+Subject Type: Effect<{}, never, never>
+
+Transformations (3):
+  [0] kind: pipe
+      callee: Effect.bind
+      args: ["a", () => Effect.succeed(1)]
+      outType: Effect<{ a: number; }, never, never>
+  [1] kind: pipe
+      callee: Effect.let
+      args: ["b", ({ a }) => a + 1]
+      outType: Effect<{ a: number; b: number; }, never, never>
+  [2] kind: pipe
+      callee: Effect.bind
+      args: ["c", ({ b }) => Effect.succeed(b.toString())]
+      outType: Effect<{ a: number; b: number; c: string; }, never, never>
+
+=== Piping Flow ===
+Location: 8:25 - 8:43
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 10:30 - 10:59
+Node: Effect.succeed(b.toString())
+Node Kind: KindCallExpression
+
+Subject: b.toString()
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>

@@ -1,0 +1,1 @@
+/.src/parsingGen.ts -> parsingGen.flows.parsingGen.mermaid

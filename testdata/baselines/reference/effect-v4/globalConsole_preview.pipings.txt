@@ -1,0 +1,15 @@
+==== /.src/globalConsole_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 1:1 - 4:23
+Node: console.log("preview")
+Node Kind: KindCallExpression
+
+Subject: "preview"
+Subject Type: "preview"
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void

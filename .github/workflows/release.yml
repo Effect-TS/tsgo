@@ -1,0 +1,159 @@
+name: Release
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: release-${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    if: >-
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.merged == true &&
+      github.event.pull_request.head.ref == 'changeset-release/main' &&
+      github.repository_owner == 'Effect-TS'
+    name: Build ${{ matrix.binary.name }} ${{ matrix.npm_target }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      matrix:
+        npm_target:
+          - darwin-arm64
+          - darwin-x64
+          - win32-x64
+          - win32-arm64
+          - linux-x64
+          - linux-arm64
+          - linux-arm
+        binary:
+          - name: tsc-next
+            ref: ${{ github.event.pull_request.merge_commit_sha }}
+          - name: tsc
+            ref: generated/latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ matrix.binary.ref }}
+          submodules: recursive
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.26"
+          cache-dependency-path: "**/go.sum"
+
+      - name: Cache Go build
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/go-build
+          key: go-build-release-${{ matrix.binary.name }}-${{ matrix.npm_target }}-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            go-build-release-${{ matrix.binary.name }}-${{ matrix.npm_target }}-
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Setup repo
+        run: pnpm setup-repo --ci
+
+      - name: Sync Effect version from release commit
+        if: matrix.binary.ref != github.event.pull_request.merge_commit_sha
+        run: |
+          git fetch --depth=1 origin "${{ github.event.pull_request.merge_commit_sha }}"
+          git checkout "${{ github.event.pull_request.merge_commit_sha }}" -- _packages/tsgo/package.json
+          bash _tools/version-prepare.sh
+
+      - name: Build ${{ matrix.binary.name }} ${{ matrix.npm_target }}
+        run: pnpm release:prepare --target ${{ matrix.npm_target }} --binary-name ${{ matrix.binary.name }} --skip-cli
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.npm_target }}__${{ matrix.binary.name }}
+          path: |
+            _packages/tsgo-${{ matrix.npm_target }}/lib/${{ matrix.binary.name }}${{ startsWith(matrix.npm_target, 'win32-') && '.exe' || '' }}
+            _packages/tsgo-${{ matrix.npm_target }}/lib/${{ matrix.binary.name }}${{ startsWith(matrix.npm_target, 'win32-') && '.exe' || '' }}.json
+
+  publish:
+    if: >-
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.merged == true &&
+      github.event.pull_request.head.ref == 'changeset-release/main' &&
+      github.repository_owner == 'Effect-TS'
+    name: Publish Packages
+    runs-on: ubuntu-latest
+    needs: [build]
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Upgrade npm for publish support
+        run: npm install -g npm@latest
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Download platform binaries
+        uses: actions/download-artifact@v4
+        with:
+          path: _release-artifacts
+
+      - name: Copy binaries into platform packages
+        run: |
+          for artifact_dir in _release-artifacts/*__*; do
+            artifact_name="${artifact_dir##*/}"
+            npm_target="${artifact_name%%__*}"
+            binary_name="${artifact_name#*__}"
+            package_dir="_packages/tsgo-${npm_target}/lib"
+
+            mkdir -p "${package_dir}"
+            if [ -f "${artifact_dir}/${binary_name}.exe" ]; then
+              cp "${artifact_dir}/${binary_name}.exe" "${package_dir}/${binary_name}.exe"
+              cp "${artifact_dir}/${binary_name}.exe.json" "${package_dir}/${binary_name}.exe.json"
+            else
+              cp "${artifact_dir}/${binary_name}" "${package_dir}/${binary_name}"
+              cp "${artifact_dir}/${binary_name}.json" "${package_dir}/${binary_name}.json"
+            fi
+          done
+
+      - name: Build CLI bundle
+        run: pnpm build:cli
+
+      - name: Publish packages
+        run: pnpm changeset:publish
+        env:
+          NPM_CONFIG_PROVENANCE: "true"

@@ -1,0 +1,41 @@
+=== Metadata ===
+Effect version: unknown
+
+/.src/unnecessaryArrowBlock.ts(2,46): warning TS377084: This arrow function block only returns an expression and can use a concise body. effect(unnecessaryArrowBlock)
+/.src/unnecessaryArrowBlock.ts(6,52): warning TS377084: This arrow function block only returns an expression and can use a concise body. effect(unnecessaryArrowBlock)
+/.src/unnecessaryArrowBlock.ts(15,59): warning TS377084: This arrow function block only returns an expression and can use a concise body. effect(unnecessaryArrowBlock)
+
+
+==== /.src/unnecessaryArrowBlock.ts (3 errors) ====
+    // @effect-diagnostics unnecessaryArrowBlock:warning
+    export const shouldReport = (arg: string) => {
+                                                 ~
+    	return arg.trim()
+    ~~~~~~~~~~~~~~~~~~
+    }
+    ~
+!!! warning TS377084: This arrow function block only returns an expression and can use a concise body. effect(unnecessaryArrowBlock)
+    
+    export const shouldReportParens = (arg: string) => {
+                                                       ~
+    	return arg + "!"
+    ~~~~~~~~~~~~~~~~~
+    }
+    ~
+!!! warning TS377084: This arrow function block only returns an expression and can use a concise body. effect(unnecessaryArrowBlock)
+    
+    export const shouldNotReportMultipleStatements = (arg: string) => {
+    	const trimmed = arg.trim()
+    	return trimmed
+    }
+    
+    export const shouldReportObjectLiteral = (arg: string) => {
+                                                              ~
+    	return { arg }
+    ~~~~~~~~~~~~~~~
+    }
+    ~
+!!! warning TS377084: This arrow function block only returns an expression and can use a concise body. effect(unnecessaryArrowBlock)
+    
+    export const shouldNotReportExpressionBody = (arg: string) => arg.trim()
+    

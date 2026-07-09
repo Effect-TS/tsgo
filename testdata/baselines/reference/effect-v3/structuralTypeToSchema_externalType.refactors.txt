@@ -1,0 +1,62 @@
+=== Refactor Inventory ===
+
+[R1] selection: "6:13-6:19"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Generate Effect.Schema from type" (refactor.rewrite.effect.typeToEffectSchema)
+  Refactor 2: "Generate Schema.Class from type" (refactor.rewrite.effect.typeToEffectSchemaClass)
+  Refactor 3: "Refactor to Schema (Recursive Structural)" (refactor.rewrite.effect.structuralTypeToSchema)
+
+[R2] selection: "empty (0:0-0:0)"
+  (no refactors)
+
+=== Refactor Application Results ===
+
+=== [R1] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/structuralTypeToSchema_externalType.ts ---
+// refactor: 6:13-6:19
+// @effect-v3
+import type { ExternalUser } from "@/utils/types"
+import * as Schema from "effect/Schema"
+
+export type pipe(Config) = ExternalUser
+
+
+=== [R1] Refactor 1: "Generate Effect.Schema from type" ===
+
+--- file:///.src/structuralTypeToSchema_externalType.ts ---
+// refactor: 6:13-6:19
+// @effect-v3
+import type { ExternalUser } from "@/utils/types"
+import * as Schema from "effect/Schema"
+
+export const Config = ExternalUser;
+
+export type Config = ExternalUser
+
+
+=== [R1] Refactor 2: "Generate Schema.Class from type" ===
+
+--- file:///.src/structuralTypeToSchema_externalType.ts ---
+// refactor: 6:13-6:19
+// @effect-v3
+import type { ExternalUser } from "@/utils/types"
+import * as Schema from "effect/Schema"
+
+export const Config = ExternalUser;
+
+export type Config = ExternalUser
+
+
+=== [R1] Refactor 3: "Refactor to Schema (Recursive Structural)" ===
+
+--- file:///.src/structuralTypeToSchema_externalType.ts ---
+// refactor: 6:13-6:19
+// @effect-v3
+import type { ExternalUser } from "@/utils/types"
+import * as Schema from "effect/Schema"
+
+export const Config = Schema.Any;
+
+export type Config = ExternalUser
+

@@ -1,0 +1,88 @@
+==== /.src/unsafeEffectTypeAssertion.ts (3 layer exports) ====
+
+=== narrowsLayerBoth ===
+
+--- output ---
+flowchart TD
+  0["layer as Layer.Layer#lt;#quot;out#quot;, never, never#gt;<br/>provides: #quot;out#quot;<br/>requires: "]
+
+--- nested ---
+flowchart TB
+  subgraph 0 ["`narrowsLayerBoth<br/><small>_ln 21 col 13_</small>`"]
+    subgraph 0_wrap[" "]
+      subgraph 0_provides [Provides]
+        0_provides_0["#quot;out#quot;"]
+      end
+      style 0_provides stroke:none
+    end
+    style 0_wrap fill:transparent
+    style 0_wrap stroke:none
+  end
+  style 0 fill:transparent
+
+--- outline ---
+flowchart TD
+  0["narrowsLayerBoth"]
+
+--- quickinfo ---
+/**
+ * - "out" provided at ln 21 col 13 by `narrowsLayerBoth`
+ */
+
+=== narrowsLayerRequirements ===
+
+--- output ---
+flowchart TD
+  0["layerNoError as Layer.Layer#lt;#quot;out#quot;, never, never#gt;<br/>provides: #quot;out#quot;<br/>requires: "]
+
+--- nested ---
+flowchart TB
+  subgraph 0 ["`narrowsLayerRequirements<br/><small>_ln 22 col 13_</small>`"]
+    subgraph 0_wrap[" "]
+      subgraph 0_provides [Provides]
+        0_provides_0["#quot;out#quot;"]
+      end
+      style 0_provides stroke:none
+    end
+    style 0_wrap fill:transparent
+    style 0_wrap stroke:none
+  end
+  style 0 fill:transparent
+
+--- outline ---
+flowchart TD
+  0["narrowsLayerRequirements"]
+
+--- quickinfo ---
+/**
+ * - "out" provided at ln 22 col 13 by `narrowsLayerRequirements`
+ */
+
+=== narrowsLayerError ===
+
+--- output ---
+flowchart TD
+  0["layerNoRequirements as Layer.Layer#lt;#quot;out#quot;, never, never#gt;<br/>provides: #quot;out#quot;<br/>requires: "]
+
+--- nested ---
+flowchart TB
+  subgraph 0 ["`narrowsLayerError<br/><small>_ln 23 col 13_</small>`"]
+    subgraph 0_wrap[" "]
+      subgraph 0_provides [Provides]
+        0_provides_0["#quot;out#quot;"]
+      end
+      style 0_provides stroke:none
+    end
+    style 0_wrap fill:transparent
+    style 0_wrap stroke:none
+  end
+  style 0 fill:transparent
+
+--- outline ---
+flowchart TD
+  0["narrowsLayerError"]
+
+--- quickinfo ---
+/**
+ * - "out" provided at ln 23 col 13 by `narrowsLayerError`
+ */

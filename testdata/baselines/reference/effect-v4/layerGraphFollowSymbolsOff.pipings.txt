@@ -1,0 +1,178 @@
+==== /.src/simple.ts (10 flows) ====
+
+=== Piping Flow ===
+Location: 4:8 - 4:27
+Node: Effect.succeed({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{}, never, never>
+
+=== Piping Flow ===
+Location: 6:19 - 6:49
+Node: Layer.effect(this, this.make)
+Node Kind: KindCallExpression
+
+Subject: this.make
+Subject Type: Effect<{}, never, never>
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.effect
+      args: [this]
+      outType: Layer<DbConnection, never, never>
+
+=== Piping Flow ===
+Location: 9:8 - 9:27
+Node: Effect.succeed({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{}, never, never>
+
+=== Piping Flow ===
+Location: 11:19 - 11:49
+Node: Layer.effect(this, this.make)
+Node Kind: KindCallExpression
+
+Subject: this.make
+Subject Type: Effect<{}, never, never>
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.effect
+      args: [this]
+      outType: Layer<FileSystem, never, never>
+
+=== Piping Flow ===
+Location: 14:8 - 14:34
+Node: Effect.as(FileSystem, {})
+Node Kind: KindCallExpression
+
+Subject: FileSystem
+Subject Type: typeof FileSystem
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.as
+      args: [{}]
+      outType: Effect<{}, never, FileSystem>
+
+=== Piping Flow ===
+Location: 16:19 - 16:49
+Node: Layer.effect(this, this.make)
+Node Kind: KindCallExpression
+
+Subject: this.make
+Subject Type: Effect<{}, never, FileSystem>
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.effect
+      args: [this]
+      outType: Layer<Cache, never, FileSystem>
+
+=== Piping Flow ===
+Location: 19:8 - 19:59
+Node: Effect.as(Effect.andThen(DbConnection, Cache), {})
+Node Kind: KindCallExpression
+
+Subject: DbConnection
+Subject Type: typeof DbConnection
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.andThen
+      args: [Cache]
+      outType: Effect<{}, never, Cache | DbConnection>
+  [1] kind: dataFirst
+      callee: Effect.as
+      args: [{}]
+      outType: Effect<{}, never, Cache | DbConnection>
+
+=== Piping Flow ===
+Location: 21:19 - 21:49
+Node: Layer.effect(this, this.make)
+Node Kind: KindCallExpression
+
+Subject: this.make
+Subject Type: Effect<{}, never, Cache | DbConnection>
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.effect
+      args: [this]
+      outType: Layer<UserRepository, never, Cache | DbConnection>
+
+=== Piping Flow ===
+Location: 23:28 - 23:86
+Node: UserRepository.Default.pipe(Layer.provide(Cache.Default))
+Node Kind: KindCallExpression
+
+Subject: UserRepository.Default
+Subject Type: Layer<UserRepository, never, Cache | DbConnection>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Layer.provide
+      args: [Cache.Default]
+      outType: Layer<UserRepository, never, DbConnection | FileSystem>
+
+=== Piping Flow ===
+Location: 25:27 - 25:81
+Node: Cache.Default.pipe(Layer.provide(FileSystem.Default))
+Node Kind: KindCallExpression
+
+Subject: Cache.Default
+Subject Type: Layer<Cache, never, FileSystem>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Layer.provide
+      args: [FileSystem.Default]
+      outType: Layer<Cache, never, never>
+==== /.src/followSymbols.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 4:29 - 4:84
+Node: simplePipeIn.pipe(Layer.provide(DbConnection.Default))
+Node Kind: KindCallExpression
+
+Subject: simplePipeIn
+Subject Type: Layer<UserRepository, never, DbConnection | FileSystem>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Layer.provide
+      args: [DbConnection.Default]
+      outType: Layer<UserRepository, never, FileSystem>
+
+=== Piping Flow ===
+Location: 6:27 - 6:118
+Node: UserRepository.Default.pipe(Layer.provide(cacheWithFs), Layer.merge(DbConnection.Default))
+Node Kind: KindCallExpression
+
+Subject: UserRepository.Default
+Subject Type: Layer<UserRepository, never, Cache | DbConnection>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Layer.provide
+      args: [cacheWithFs]
+      outType: Layer<UserRepository, never, DbConnection>
+  [1] kind: pipeable
+      callee: Layer.merge
+      args: [DbConnection.Default]
+      outType: Layer<DbConnection | UserRepository, never, DbConnection>

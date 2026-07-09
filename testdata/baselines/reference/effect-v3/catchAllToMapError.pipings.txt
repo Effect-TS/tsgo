@@ -1,0 +1,289 @@
+==== /.src/catchAllToMapError.ts (18 flows) ====
+
+=== Piping Flow ===
+Location: 17:34 - 19:2
+Node: Effect.fail("error").pipe(\n  Effect.catchAll((cause) => Effect.fail(new MyErrorTagged(cause)))\n)
+Node Kind: KindCallExpression
+
+Subject: "error"
+Subject Type: "error"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>
+  [1] kind: pipeable
+      callee: Effect.catchAll
+      args: [(cause) => Effect.fail(new MyErrorTagged(cause))]
+      outType: Effect<never, MyErrorTagged, never>
+
+=== Piping Flow ===
+Location: 18:29 - 18:67
+Node: Effect.fail(new MyErrorTagged(cause))
+Node Kind: KindCallExpression
+
+Subject: new MyErrorTagged(cause)
+Subject Type: MyErrorTagged
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, MyErrorTagged, never>
+
+=== Piping Flow ===
+Location: 22:39 - 26:2
+Node: Effect.fail("error").pipe(\n  Effect.catchAll((cause) => {\n    return Effect.fail(new MyErrorTagged(cause))\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: "error"
+Subject Type: "error"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>
+  [1] kind: pipeable
+      callee: Effect.catchAll
+      args: [(cause) => {\n    return Effect.fail(new MyErrorTagged(cause))\n  }]
+      outType: Effect<never, MyErrorTagged, never>
+
+=== Piping Flow ===
+Location: 24:11 - 24:49
+Node: Effect.fail(new MyErrorTagged(cause))
+Node Kind: KindCallExpression
+
+Subject: new MyErrorTagged(cause)
+Subject Type: MyErrorTagged
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, MyErrorTagged, never>
+
+=== Piping Flow ===
+Location: 29:33 - 32:2
+Node: pipe(\n  Effect.fail("error"),\n  Effect.catchAll((cause) => Effect.fail(new MyErrorTagged(cause)))\n)
+Node Kind: KindCallExpression
+
+Subject: "error"
+Subject Type: "error"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>
+  [1] kind: pipe
+      callee: Effect.catchAll
+      args: [(cause) => Effect.fail(new MyErrorTagged(cause))]
+      outType: Effect<never, MyErrorTagged, never>
+
+=== Piping Flow ===
+Location: 31:29 - 31:67
+Node: Effect.fail(new MyErrorTagged(cause))
+Node Kind: KindCallExpression
+
+Subject: new MyErrorTagged(cause)
+Subject Type: MyErrorTagged
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, MyErrorTagged, never>
+
+=== Piping Flow ===
+Location: 35:41 - 39:2
+Node: Effect.fail("error").pipe(\n  Effect.catchAll(function(cause) {\n    return Effect.fail(new MyErrorTagged(cause))\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: "error"
+Subject Type: "error"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>
+  [1] kind: pipeable
+      callee: Effect.catchAll
+      args: [function(cause) {\n    return Effect.fail(new MyErrorTagged(cause))\n  }]
+      outType: Effect<never, MyErrorTagged, never>
+
+=== Piping Flow ===
+Location: 37:11 - 37:49
+Node: Effect.fail(new MyErrorTagged(cause))
+Node Kind: KindCallExpression
+
+Subject: new MyErrorTagged(cause)
+Subject Type: MyErrorTagged
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, MyErrorTagged, never>
+
+=== Piping Flow ===
+Location: 42:41 - 47:2
+Node: Effect.fail("error").pipe(\n  Effect.catchAll((cause) => {\n    console.log(cause)\n    return Effect.fail(new MyErrorTagged(cause))\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: "error"
+Subject Type: "error"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>
+  [1] kind: pipeable
+      callee: Effect.catchAll
+      args: [(cause) => {\n    console.log(cause)\n    return Effect.fail(new MyErrorTagged(cause))\n  }]
+      outType: Effect<never, MyErrorTagged, never>
+
+=== Piping Flow ===
+Location: 43:31 - 44:23
+Node: console.log(cause)
+Node Kind: KindCallExpression
+
+Subject: cause
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 45:11 - 45:49
+Node: Effect.fail(new MyErrorTagged(cause))
+Node Kind: KindCallExpression
+
+Subject: new MyErrorTagged(cause)
+Subject Type: MyErrorTagged
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, MyErrorTagged, never>
+
+=== Piping Flow ===
+Location: 50:39 - 52:2
+Node: Effect.fail("error").pipe(\n  Effect.catchAll(() => Effect.succeed(42))\n)
+Node Kind: KindCallExpression
+
+Subject: "error"
+Subject Type: "error"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>
+  [1] kind: pipeable
+      callee: Effect.catchAll
+      args: [() => Effect.succeed(42)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 51:24 - 51:43
+Node: Effect.succeed(42)
+Node Kind: KindCallExpression
+
+Subject: 42
+Subject Type: 42
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 55:39 - 61:2
+Node: Effect.fail("error").pipe(\n  Effect.catchAll((cause) =>\n    Effect.fail(new MyErrorTagged(cause)).pipe(\n      Effect.tap(() => Effect.void)\n    )\n  )\n)
+Node Kind: KindCallExpression
+
+Subject: "error"
+Subject Type: "error"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>
+  [1] kind: pipeable
+      callee: Effect.catchAll
+      args: [(cause) =>\n    Effect.fail(new MyErrorTagged(cause)).pipe(\n      Effect.tap(() => Effect.void)\n    )]
+      outType: Effect<never, MyErrorTagged, never>
+
+=== Piping Flow ===
+Location: 56:29 - 59:6
+Node: Effect.fail(new MyErrorTagged(cause)).pipe(\n      Effect.tap(() => Effect.void)\n    )
+Node Kind: KindCallExpression
+
+Subject: new MyErrorTagged(cause)
+Subject Type: MyErrorTagged
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, MyErrorTagged, never>
+  [1] kind: pipeable
+      callee: Effect.tap
+      args: [() => Effect.void]
+      outType: Effect<never, MyErrorTagged, never>
+
+=== Piping Flow ===
+Location: 64:35 - 66:2
+Node: Effect.fail("original").pipe(\n  Effect.catchAll((e) => Effect.fail(new AnotherError(String(e))))\n)
+Node Kind: KindCallExpression
+
+Subject: "original"
+Subject Type: "original"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>
+  [1] kind: pipeable
+      callee: Effect.catchAll
+      args: [(e) => Effect.fail(new AnotherError(String(e)))]
+      outType: Effect<never, AnotherError, never>
+
+=== Piping Flow ===
+Location: 65:25 - 65:66
+Node: Effect.fail(new AnotherError(String(e)))
+Node Kind: KindCallExpression
+
+Subject: new AnotherError(String(e))
+Subject Type: AnotherError
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, AnotherError, never>
+
+=== Piping Flow ===
+Location: 65:55 - 65:64
+Node: String(e)
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: String
+      args: (constant)
+      outType: string

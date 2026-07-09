@@ -1,0 +1,82 @@
+// @filename: tsconfig.json
+{
+  "compilerOptions": {
+    "strict": true,
+    "plugins": [
+      {
+        "name": "@effect/language-service"
+      }
+    ]
+  }
+}
+
+// @filename: issue179_remainingCases.ts
+import { Effect } from "effect"
+
+function runMcpRequest<T>(
+    name: string,
+    label: string,
+    request: () => PromiseLike<T>
+): Effect.Effect<T> {
+    return Effect.tryPromise(request)
+}
+
+export class Repro {
+    readonly #value = 42
+
+    #innerEffect(a: number, b: number): Effect.Effect<number> {
+        return Effect.succeed(a + b)
+    }
+
+    #innerSync(a: number, b: number): number {
+        return a + b
+    }
+
+    #innerOne(a: number): Effect.Effect<number> {
+        return Effect.succeed(a)
+    }
+
+    #getWrapper(key: string): (effect: Effect.Effect<void>) => Effect.Effect<void> {
+        return (effect) => effect.pipe(Effect.annotateLogs("key", key))
+    }
+
+    calleeExpression(): Effect.Effect<number> {
+        return Effect.gen({ self: this }, function* () {
+            return yield* this.#innerEffect(1, 2)
+        })
+    }
+
+    tryPromiseCallback(): Effect.Effect<number, unknown> {
+        return Effect.gen({ self: this }, function* () {
+            return yield* Effect.tryPromise(() => Promise.resolve(this.#value))
+        })
+    }
+
+    syncCallbackMultiArg(): Effect.Effect<number> {
+        return Effect.gen({ self: this }, function* () {
+            return yield* Effect.sync(() => this.#innerSync(1, 2))
+        })
+    }
+
+    calleeWithPipe(): Effect.Effect<number> {
+        return Effect.gen({ self: this }, function* () {
+            return yield* this.#innerOne(1).pipe(Effect.map((n) => n + 1))
+        })
+    }
+
+    curriedWrapper(key: string): Effect.Effect<void> {
+        return this.#getWrapper(key)(
+            Effect.gen({ self: this }, function* () {
+                return
+            })
+        )
+    }
+
+    nestedGenericCallback(server: { readonly name: string }): Effect.Effect<void> {
+        return Effect.gen({ self: this }, function* () {
+            return yield* Effect.gen({ self: this }, function* () {
+                yield* runMcpRequest(server.name, "connect", () => Promise.resolve(42))
+            })
+        })
+    }
+}

@@ -1,0 +1,29 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:21-6:35) TS377074: `Effect.runSync` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runSyncWith`. effect(runEffectInsideEffect)
+  Fix 0: "Disable runEffectInsideEffect for this line"
+  Fix 1: "Disable runEffectInsideEffect for entire file"
+  Fix 2: "Use the current services to run the Effect"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable runEffectInsideEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable runEffectInsideEffect for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Use the current services to run the Effect" ===
+
+--- file:///.src/runEffectInsideEffect_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics runEffectInsideEffect:warning
+import { Effect } from "effect"
+
+export const preview = Effect.gen(function*() {
+const effectContext = yield* Effect.context<never>();
+
+  const run = () => Effect.runSyncWith(effectContext)(Effect.succeed(1))
+  return run()
+})
+

@@ -1,0 +1,75 @@
+==== /.src/multipleCatchTag_preview.ts (5 flows) ====
+
+=== Piping Flow ===
+Location: 5:23 - 5:52
+Node: Data.TaggedError("NotFound")
+Node Kind: KindCallExpression
+
+Subject: "NotFound"
+Subject Type: "NotFound"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "NotFound"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 6:27 - 6:60
+Node: Data.TaggedError("Unauthorized")
+Node Kind: KindCallExpression
+
+Subject: "Unauthorized"
+Subject Type: "Unauthorized"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "Unauthorized"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 10:23 - 14:2
+Node: pipe(\n  program,\n  Effect.catchTag("NotFound", () => Effect.succeed("missing")),\n  Effect.catchTag("Unauthorized", () => Effect.succeed("denied"))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, NotFound | Unauthorized, never>
+
+Transformations (2):
+  [0] kind: pipe
+      callee: Effect.catchTag
+      args: ["NotFound", () => Effect.succeed("missing")]
+      outType: Effect<string, Unauthorized, never>
+  [1] kind: pipe
+      callee: Effect.catchTag
+      args: ["Unauthorized", () => Effect.succeed("denied")]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 12:36 - 12:62
+Node: Effect.succeed("missing")
+Node Kind: KindCallExpression
+
+Subject: "missing"
+Subject Type: "missing"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 13:40 - 13:65
+Node: Effect.succeed("denied")
+Node Kind: KindCallExpression
+
+Subject: "denied"
+Subject Type: "denied"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>

@@ -1,0 +1,29 @@
+==== /.src/missingEffectContext_callExpression.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 20:2 - 23:27
+Node: testFn(effectWithServices)
+Node Kind: KindCallExpression
+
+Subject: effectWithServices
+Subject Type: Effect<number, never, ServiceA | ServiceB | ServiceC>
+
+Transformations (1):
+  [0] kind: call
+      callee: testFn
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 27:2 - 30:40
+Node: testFnWithServiceAB(effectWithServices)
+Node Kind: KindCallExpression
+
+Subject: effectWithServices
+Subject Type: Effect<number, never, ServiceA | ServiceB | ServiceC>
+
+Transformations (1):
+  [0] kind: call
+      callee: testFnWithServiceAB
+      args: (constant)
+      outType: Effect<number, never, ServiceA | ServiceB>

@@ -1,0 +1,86 @@
+=== Refactor Inventory ===
+
+[R1] selection: "6:8-6:13"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Implement Service accessors" (refactor.rewrite.effect.writeTagClassAccessors)
+
+[R2] selection: "empty (0:0-0:0)"
+  (no refactors)
+
+=== Refactor Application Results ===
+
+=== [R1] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/writeTagClassAccessors.ts ---
+// refactor: 6:8-6:13
+// @effect-v3
+import type * as Cause from "effect/Cause"
+import * as Effect from "effect/Effect"
+
+export pipe(class) MyService extends Effect.Service<MyService>()("MyService", {
+  accessors: true,
+  effect: Effect.gen(function*() {
+    function methodWithOverridesNoGenerics(value: string): Effect.Effect<string>
+    function methodWithOverridesNoGenerics(value: string, opts: { discard: true }): Effect.Effect<void>
+    function methodWithOverridesNoGenerics(value: string, opts?: { discard: true }): Effect.Effect<string | void> {
+      return opts && opts.discard ? Effect.void : Effect.succeed(value)
+    }
+
+    function methodWithOverridesAndGenerics<A>(value: A): Effect.Effect<A>
+    function methodWithOverridesAndGenerics<A>(value: A, opts: { discard: true }): Effect.Effect<void>
+    function methodWithOverridesAndGenerics<A>(value: A, opts?: { discard: true }): Effect.Effect<A | void> {
+      return opts && opts.discard ? Effect.void : Effect.succeed(value)
+    }
+
+    return {
+      constant: Effect.succeed("Hello, world!"),
+      methodReturnsPromise: () => Promise.resolve(42),
+      methodWithGeneric: <A>(value: A, _test: string) => Effect.succeed(value),
+      methodNoGenerics: (value: string) => Effect.succeed(value),
+      methodWithOverridesAndGenerics,
+      methodWithOverridesNoGenerics
+    }
+  })
+}) {
+}
+
+
+=== [R1] Refactor 1: "Implement Service accessors" ===
+
+--- file:///.src/writeTagClassAccessors.ts ---
+// refactor: 6:8-6:13
+// @effect-v3
+import type * as Cause from "effect/Cause"
+import * as Effect from "effect/Effect"
+
+export class MyService extends Effect.Service<MyService>()("MyService", {
+  accessors: true,
+  effect: Effect.gen(function*() {
+    function methodWithOverridesNoGenerics(value: string): Effect.Effect<string>
+    function methodWithOverridesNoGenerics(value: string, opts: { discard: true }): Effect.Effect<void>
+    function methodWithOverridesNoGenerics(value: string, opts?: { discard: true }): Effect.Effect<string | void> {
+      return opts && opts.discard ? Effect.void : Effect.succeed(value)
+    }
+
+    function methodWithOverridesAndGenerics<A>(value: A): Effect.Effect<A>
+    function methodWithOverridesAndGenerics<A>(value: A, opts: { discard: true }): Effect.Effect<void>
+    function methodWithOverridesAndGenerics<A>(value: A, opts?: { discard: true }): Effect.Effect<A | void> {
+      return opts && opts.discard ? Effect.void : Effect.succeed(value)
+    }
+
+    return {
+      constant: Effect.succeed("Hello, world!"),
+      methodReturnsPromise: () => Promise.resolve(42),
+      methodWithGeneric: <A>(value: A, _test: string) => Effect.succeed(value),
+      methodNoGenerics: (value: string) => Effect.succeed(value),
+      methodWithOverridesAndGenerics,
+      methodWithOverridesNoGenerics
+    }
+  })
+}) {
+
+  static override methodWithGeneric: <A>(value: A, _test: string) => Effect.Effect<A, never, MyService> = (...args) => Effect.andThen(MyService, (_) => _.methodWithGeneric(...args))
+  static override methodWithOverridesAndGenerics: (<A>(value: A) => Effect.Effect<A, never, MyService>) & (<A>(value: A, opts: { discard: true; }) => Effect.Effect<void, never, MyService>) = (...args: any[]) => Effect.andThen(MyService, (_: any) => _.methodWithOverridesAndGenerics(...args)) as any
+  static override methodWithOverridesNoGenerics: ((value: string) => Effect.Effect<string, never, MyService>) & ((value: string, opts: { discard: true; }) => Effect.Effect<void, never, MyService>) = (...args: any[]) => Effect.andThen(MyService, (_: any) => _.methodWithOverridesNoGenerics(...args)) as any
+}
+

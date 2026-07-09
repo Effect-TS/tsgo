@@ -1,0 +1,67 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/missingEffectError_plainAssignment.ts(22,14): error TS377003: Missing errors ErrorA | ErrorB | ErrorC in the expected Effect type. effect(missingEffectError)
+/.src/missingEffectError_plainAssignment.ts(25,14): error TS377003: Missing errors ErrorC in the expected Effect type. effect(missingEffectError)
+/.src/missingEffectError_plainAssignment.ts(25,14): error TS377003: Missing errors YieldableError & Readonly<{ a: 3; }> in the expected Effect type. effect(missingEffectError)
+/.src/missingEffectError_plainAssignment.ts(30,14): error TS377003: Missing errors ErrorC in the expected Effect type. effect(missingEffectError)
+/.src/missingEffectError_plainAssignment.ts(30,14): error TS377003: Missing errors YieldableError & Readonly<{ a: 3; }> in the expected Effect type. effect(missingEffectError)
+/.src/missingEffectError_plainAssignment.ts(34,9): error TS377003: Missing errors A in the expected Effect type. effect(missingEffectError)
+/.src/missingEffectError_plainAssignment.ts(39,28): error TS377003: Missing errors ErrorA | ErrorB | ErrorC in the expected Effect type. effect(missingEffectError)
+
+
+==== /.src/missingEffectError_plainAssignment.ts (7 errors) ====
+    // @effect-v3
+    import * as Data from "effect/Data"
+    import * as Effect from "effect/Effect"
+    
+    class ErrorA extends Data.Error<{
+      a: 1
+    }> {}
+    
+    class ErrorB extends Data.Error<{
+      a: 2
+    }> {}
+    
+    class ErrorC extends Data.Error<{
+      a: 3
+    }> {}
+    
+    declare const effectWithErrors: Effect.Effect<number, ErrorA | ErrorB | ErrorC>
+    
+    export const noError: Effect.Effect<number> = Effect.succeed(1)
+    
+    // @ts-expect-error
+    export const missingAllErrors: Effect.Effect<number> = effectWithErrors
+                 ~~~~~~~~~~~~~~~~
+!!! error TS377003: Missing errors ErrorA | ErrorB | ErrorC in the expected Effect type. effect(missingEffectError)
+    
+    // @ts-expect-error
+    export const missingErrorC: Effect.Effect<number, ErrorA | ErrorB> = effectWithErrors
+                 ~~~~~~~~~~~~~
+!!! error TS377003: Missing errors ErrorC in the expected Effect type. effect(missingEffectError)
+                 ~~~~~~~~~~~~~
+!!! error TS377003: Missing errors YieldableError & Readonly<{ a: 3; }> in the expected Effect type. effect(missingEffectError)
+    
+    export interface EffectSubtyping<A> extends Effect.Effect<A, ErrorA | ErrorB> {}
+    
+    // @ts-expect-error
+    export const missingErrorCWithSubtyping: EffectSubtyping<number> = effectWithErrors
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377003: Missing errors ErrorC in the expected Effect type. effect(missingEffectError)
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377003: Missing errors YieldableError & Readonly<{ a: 3; }> in the expected Effect type. effect(missingEffectError)
+    
+    export function missingErrorWithGenericType<A>(error: A) {
+      // @ts-expect-error
+      const missingErrorA: Effect.Effect<never> = Effect.fail(error)
+            ~~~~~~~~~~~~~
+!!! error TS377003: Missing errors A in the expected Effect type. effect(missingEffectError)
+      return missingErrorA
+    }
+    
+    // @ts-expect-error
+    const _ = effectWithErrors satisfies Effect.Effect<number, never, never>
+                               ~~~~~~~~~
+!!! error TS377003: Missing errors ErrorA | ErrorB | ErrorC in the expected Effect type. effect(missingEffectError)
+    

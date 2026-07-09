@@ -1,0 +1,1 @@
+/.src/floatingEffectGen.ts -> floatingEffectGen.flows.floatingEffectGen.mermaid

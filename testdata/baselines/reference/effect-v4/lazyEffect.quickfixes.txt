@@ -1,0 +1,103 @@
+=== Quick Fix Inventory ===
+
+[D1] (9:14-9:24) TS377091: Exported declaration 'lazyEffect' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+  Fix 0: "Disable lazyEffect for this line"
+  Fix 1: "Disable lazyEffect for entire file"
+
+[D2] (12:14-12:24) TS377091: Exported declaration 'lazyStream' returns a lazy Stream. Stream is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+  Fix 0: "Disable lazyEffect for this line"
+  Fix 1: "Disable lazyEffect for entire file"
+
+[D3] (15:14-15:23) TS377091: Exported declaration 'lazyLayer' returns a lazy Layer. Layer is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+  Fix 0: "Disable lazyEffect for this line"
+  Fix 1: "Disable lazyEffect for entire file"
+
+[D4] (18:14-18:27) TS377091: Exported declaration 'lazyAnnotated' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+  Fix 0: "Disable lazyEffect for this line"
+  Fix 1: "Disable lazyEffect for entire file"
+
+[D5] (54:3-54:7) TS377091: Interface 'RepoShape' member 'load' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+  Fix 0: "Disable lazyEffect for this line"
+  Fix 1: "Disable lazyEffect for entire file"
+
+[D6] (57:3-57:8) TS377091: Interface 'RepoShape' member 'watch' returns a lazy Stream. Stream is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+  Fix 0: "Disable lazyEffect for this line"
+  Fix 1: "Disable lazyEffect for entire file"
+
+[D7] (60:3-60:7) TS377091: Interface 'RepoShape' member 'live' returns a lazy Layer. Layer is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+  Fix 0: "Disable lazyEffect for this line"
+  Fix 1: "Disable lazyEffect for entire file"
+
+[D8] (74:14-74:18) TS377091: Service 'Repo' member 'live' returns a lazy Layer. Layer is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+  Fix 0: "Disable lazyEffect for this line"
+  Fix 1: "Disable lazyEffect for entire file"
+
+[D9] (74:14-74:18) TS377091: Service 'Repo' member 'load' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+  Fix 0: "Disable lazyEffect for this line"
+  Fix 1: "Disable lazyEffect for entire file"
+
+[D10] (74:14-74:18) TS377091: Service 'Repo' member 'watch' returns a lazy Stream. Stream is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+  Fix 0: "Disable lazyEffect for this line"
+  Fix 1: "Disable lazyEffect for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable lazyEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable lazyEffect for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable lazyEffect for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable lazyEffect for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable lazyEffect for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable lazyEffect for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable lazyEffect for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable lazyEffect for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable lazyEffect for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable lazyEffect for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable lazyEffect for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable lazyEffect for entire file" ===
+skipped by default
+
+=== [D7] Fix 0: "Disable lazyEffect for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable lazyEffect for entire file" ===
+skipped by default
+
+=== [D8] Fix 0: "Disable lazyEffect for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable lazyEffect for entire file" ===
+skipped by default
+
+=== [D9] Fix 0: "Disable lazyEffect for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable lazyEffect for entire file" ===
+skipped by default
+
+=== [D10] Fix 0: "Disable lazyEffect for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable lazyEffect for entire file" ===
+skipped by default

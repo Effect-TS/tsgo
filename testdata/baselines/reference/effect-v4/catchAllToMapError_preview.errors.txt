@@ -1,0 +1,21 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/catchAllToMapError_preview.ts(10,3): warning TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
+
+
+==== /.src/catchAllToMapError_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics catchAllToMapError:warning
+    import { Effect } from "effect"
+    
+    class WrappedError {
+      constructor(readonly cause: unknown) {}
+    }
+    
+    export const preview = Effect.fail("boom").pipe(
+      Effect.catch((cause) => Effect.fail(new WrappedError(cause)))
+      ~~~~~~~~~~~~
+!!! warning TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
+    )
+    

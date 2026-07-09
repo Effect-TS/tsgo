@@ -1,0 +1,29 @@
+==== /.src/effectFnImplicitAny_preview.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 6:23 - 6:78
+Node: Effect.fn("preview")((input) => Effect.succeed(input))
+Node Kind: KindCallExpression
+
+Subject: (input) => Effect.succeed(input)
+Subject Type: (this: unassigned, input: any) => Effect<any, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn("preview")
+      args: (constant)
+      outType: (input: any) => Effect<any, never, never>
+
+=== Piping Flow ===
+Location: 6:55 - 6:77
+Node: Effect.succeed(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: any
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<any, never, never>

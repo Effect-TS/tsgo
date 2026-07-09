@@ -1,0 +1,178 @@
+=== Quick Fix Inventory ===
+
+[D1] (5:28-5:34) TS377014: This generator returns an Effect-able value directly, which produces a nested `Effect<Effect<...>>`. If the intended result is the inner Effect value, `return yield*` represents that form. effect(returnEffectInGen)
+  Fix 0: "Disable returnEffectInGen for this line"
+  Fix 1: "Disable returnEffectInGen for entire file"
+  Fix 2: "Add yield* statement"
+
+[D2] (12:7-12:12) TS377006: This Effect never succeeds; using `return yield*` preserves a definitive generator exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+  Fix 0: "Disable missingReturnYieldStar for this line"
+  Fix 1: "Disable missingReturnYieldStar for entire file"
+  Fix 2: "Add return statement"
+
+[D3] (19:5-19:10) TS377006: This Effect never succeeds; using `return yield*` preserves a definitive generator exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+  Fix 0: "Disable missingReturnYieldStar for this line"
+  Fix 1: "Disable missingReturnYieldStar for entire file"
+  Fix 2: "Add return statement"
+
+[D4] (20:5-20:10) TS377006: This Effect never succeeds; using `return yield*` preserves a definitive generator exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+  Fix 0: "Disable missingReturnYieldStar for this line"
+  Fix 1: "Disable missingReturnYieldStar for entire file"
+  Fix 2: "Add return statement"
+
+[D5] (26:3-26:12) TS7027: Unreachable code detected.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable returnEffectInGen for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable returnEffectInGen for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Add yield* statement" ===
+
+--- file:///.src/missingReturnYieldStar.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+export const shouldNotComplain = Effect.gen(function*() {
+  if (Math.random() < 0.5) return yield* Effect.succeed(42)
+  return yield* Effect.fail("no.")
+})
+
+export const shouldComplain = (n: number) =>
+  Effect.gen(function*() {
+    if (n === 0) {
+      yield* Effect.fail("no zero!")
+    }
+    return n / 1
+  })
+
+export const shouldComplainOther = (n: number) =>
+  Effect.gen(function*() {
+    yield* Effect.interrupt
+    yield* Effect.die("lol")
+    return n / 1
+  })
+
+export const shouldNotComplainThrows = Effect.gen(function*() {
+  throw yield* Effect.fail(42)
+  return 42
+})
+
+
+=== [D2] Fix 0: "Disable missingReturnYieldStar for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable missingReturnYieldStar for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Add return statement" ===
+
+--- file:///.src/missingReturnYieldStar.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+export const shouldNotComplain = Effect.gen(function*() {
+  if (Math.random() < 0.5) return Effect.succeed(42)
+  return yield* Effect.fail("no.")
+})
+
+export const shouldComplain = (n: number) =>
+  Effect.gen(function*() {
+    if (n === 0) {
+      return yield* Effect.fail("no zero!");
+    }
+    return n / 1
+  })
+
+export const shouldComplainOther = (n: number) =>
+  Effect.gen(function*() {
+    yield* Effect.interrupt
+    yield* Effect.die("lol")
+    return n / 1
+  })
+
+export const shouldNotComplainThrows = Effect.gen(function*() {
+  throw yield* Effect.fail(42)
+  return 42
+})
+
+
+=== [D3] Fix 0: "Disable missingReturnYieldStar for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable missingReturnYieldStar for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Add return statement" ===
+
+--- file:///.src/missingReturnYieldStar.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+export const shouldNotComplain = Effect.gen(function*() {
+  if (Math.random() < 0.5) return Effect.succeed(42)
+  return yield* Effect.fail("no.")
+})
+
+export const shouldComplain = (n: number) =>
+  Effect.gen(function*() {
+    if (n === 0) {
+      yield* Effect.fail("no zero!")
+    }
+    return n / 1
+  })
+
+export const shouldComplainOther = (n: number) =>
+  Effect.gen(function*() {
+    return yield* Effect.interrupt;
+    yield* Effect.die("lol")
+    return n / 1
+  })
+
+export const shouldNotComplainThrows = Effect.gen(function*() {
+  throw yield* Effect.fail(42)
+  return 42
+})
+
+
+=== [D4] Fix 0: "Disable missingReturnYieldStar for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable missingReturnYieldStar for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Add return statement" ===
+
+--- file:///.src/missingReturnYieldStar.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+export const shouldNotComplain = Effect.gen(function*() {
+  if (Math.random() < 0.5) return Effect.succeed(42)
+  return yield* Effect.fail("no.")
+})
+
+export const shouldComplain = (n: number) =>
+  Effect.gen(function*() {
+    if (n === 0) {
+      yield* Effect.fail("no zero!")
+    }
+    return n / 1
+  })
+
+export const shouldComplainOther = (n: number) =>
+  Effect.gen(function*() {
+    yield* Effect.interrupt
+    return yield* Effect.die("lol");
+    return n / 1
+  })
+
+export const shouldNotComplainThrows = Effect.gen(function*() {
+  throw yield* Effect.fail(42)
+  return 42
+})
+

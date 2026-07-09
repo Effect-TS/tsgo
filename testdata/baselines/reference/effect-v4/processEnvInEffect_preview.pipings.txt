@@ -1,0 +1,15 @@
+==== /.src/processEnvInEffect_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 6:23 - 8:3
+Node: Effect.gen(function*() {\n  return process.env.PORT\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  return process.env.PORT\n}
+Subject Type: () => Generator<never, string | undefined, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string | undefined, never, never>

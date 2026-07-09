@@ -1,0 +1,63 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/catchToIgnore.ts(9,3): suggestion TS377099: `Effect.ignore` expresses ignored failure more directly than `Effect.catch` returning `Effect.void`. effect(catchToIgnore)
+/.src/catchToIgnore.ts(14,3): suggestion TS377099: `Effect.ignoreCause` expresses ignored failure more directly than `Effect.catchCause` returning `Effect.void`. effect(catchToIgnore)
+/.src/catchToIgnore.ts(20,3): suggestion TS377099: `Effect.ignore` expresses ignored failure more directly than `Effect.catch` returning `Effect.void`. effect(catchToIgnore)
+/.src/catchToIgnore.ts(25,3): suggestion TS377099: `Effect.ignore` expresses ignored failure more directly than `Effect.catch` returning `Effect.void`. effect(catchToIgnore)
+/.src/catchToIgnore.ts(31,39): suggestion TS377099: `Effect.ignore` expresses ignored failure more directly than `Effect.catch` returning `Effect.void`. effect(catchToIgnore)
+
+
+==== /.src/catchToIgnore.ts (5 errors) ====
+    import { Effect, pipe } from "effect"
+    
+    declare const voidEffect: Effect.Effect<void, string, never>
+    declare const undefinedEffect: Effect.Effect<undefined, string, never>
+    declare const numberEffect: Effect.Effect<number, string, never>
+    
+    // Should trigger: catch returning Effect.void on a void success channel
+    export const shouldTriggerCatch = voidEffect.pipe(
+      Effect.catch(() => Effect.void)
+      ~~~~~~~~~~~~
+!!! suggestion TS377099: `Effect.ignore` expresses ignored failure more directly than `Effect.catch` returning `Effect.void`. effect(catchToIgnore)
+    )
+    
+    // Should trigger: catchCause returning Effect.void on a void success channel
+    export const shouldTriggerCatchCause = voidEffect.pipe(
+      Effect.catchCause((_cause) => Effect.void)
+      ~~~~~~~~~~~~~~~~~
+!!! suggestion TS377099: `Effect.ignoreCause` expresses ignored failure more directly than `Effect.catchCause` returning `Effect.void`. effect(catchToIgnore)
+    )
+    
+    // Should trigger: pipe style
+    export const shouldTriggerPipe = pipe(
+      Effect.fail("error"),
+      Effect.catch(() => Effect.void)
+      ~~~~~~~~~~~~
+!!! suggestion TS377099: `Effect.ignore` expresses ignored failure more directly than `Effect.catch` returning `Effect.void`. effect(catchToIgnore)
+    )
+    
+    // Should trigger: block body
+    export const shouldTriggerBlock = undefinedEffect.pipe(
+      Effect.catch(() => {
+      ~~~~~~~~~~~~
+!!! suggestion TS377099: `Effect.ignore` expresses ignored failure more directly than `Effect.catch` returning `Effect.void`. effect(catchToIgnore)
+        return Effect.void
+      })
+    )
+    
+    // Should trigger: data-first style
+    export const shouldTriggerDataFirst = Effect.catch(voidEffect, () => Effect.void)
+                                          ~~~~~~~~~~~~
+!!! suggestion TS377099: `Effect.ignore` expresses ignored failure more directly than `Effect.catch` returning `Effect.void`. effect(catchToIgnore)
+    
+    // Should NOT trigger: Effect.ignore would discard the number success value
+    export const shouldNotTriggerValueSuccess = numberEffect.pipe(
+      Effect.catch(() => Effect.void)
+    )
+    
+    // Should NOT trigger: fallback is not exactly Effect.void
+    export const shouldNotTriggerOtherFallback = voidEffect.pipe(
+      Effect.catch(() => Effect.sync(() => undefined))
+    )
+    

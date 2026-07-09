@@ -1,0 +1,107 @@
+package rules
+
+import (
+	"github.com/effect-ts/tsgo/etscore"
+	"github.com/effect-ts/tsgo/internal/rule"
+	"github.com/effect-ts/tsgo/internal/typeparser"
+	"github.com/microsoft/typescript-go/shim/ast"
+	"github.com/microsoft/typescript-go/shim/checker"
+	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
+	"github.com/microsoft/typescript-go/shim/scanner"
+)
+
+// syncToEffectMethodV3 maps Schema sync method names to their Effect-based V3 equivalents.
+var syncToEffectMethodV3 = map[string]string{
+	"decodeSync":        "decode",
+	"decodeUnknownSync": "decodeUnknown",
+	"encodeSync":        "encode",
+	"encodeUnknownSync": "encodeUnknown",
+}
+
+// syncToEffectMethodV4 maps Schema sync method names to their Effect-based V4 equivalents.
+var syncToEffectMethodV4 = map[string]string{
+	"decodeSync":        "decodeEffect",
+	"decodeUnknownSync": "decodeUnknownEffect",
+	"encodeSync":        "encodeEffect",
+	"encodeUnknownSync": "encodeUnknownEffect",
+}
+
+// SchemaSyncInEffect detects Schema sync methods (decodeSync, encodeSync, etc.) used inside
+// Effect generators and suggests using the Effect-based variants instead.
+var SchemaSyncInEffect = rule.Rule{
+	Name:            "schemaSyncInEffect",
+	Group:           "antipattern",
+	Description:     "Suggests using Effect-based Schema methods instead of sync methods inside Effect generators",
+	DefaultSeverity: etscore.SeveritySuggestion,
+	SupportedEffect: []string{"v3"},
+	Codes:           []int32{tsdiag.X_0_is_used_inside_an_Effect_generator_Schema_1_preserves_the_typed_Effect_error_channel_for_this_operation_without_throwing_effect_schemaSyncInEffect.Code()},
+	Run: func(ctx *rule.Context) []*ast.Diagnostic {
+		version := ctx.TypeParser.SupportedEffectVersion()
+		var syncToEffectMethod map[string]string
+		if version == typeparser.EffectMajorV4 {
+			syncToEffectMethod = syncToEffectMethodV4
+		} else {
+			syncToEffectMethod = syncToEffectMethodV3
+		}
+
+		var diags []*ast.Diagnostic
+
+		var walk ast.Visitor
+		walk = func(n *ast.Node) bool {
+			if n == nil {
+				return false
+			}
+
+			if n.Kind == ast.KindCallExpression {
+				if d := checkSchemaSyncInEffect(ctx, n, syncToEffectMethod); d != nil {
+					diags = append(diags, d)
+				}
+			}
+
+			n.ForEachChild(walk)
+			return false
+		}
+
+		walk(ctx.SourceFile.AsNode())
+		return diags
+	},
+}
+
+// checkSchemaSyncInEffect checks a single call expression for Schema sync methods inside an Effect generator.
+func checkSchemaSyncInEffect(ctx *rule.Context, node *ast.Node, syncToEffectMethod map[string]string) *ast.Diagnostic {
+	if node.Kind != ast.KindCallExpression {
+		return nil
+	}
+	call := node.AsCallExpression()
+
+	callee := call.Expression
+
+	// Check if the callee is one of the Schema sync methods (try both ParseResult and SchemaParser modules)
+	methodName := matchSchemaSyncMethod(ctx.TypeParser, ctx.Checker, callee, syncToEffectMethod)
+	if methodName == "" {
+		return nil
+	}
+
+	if ctx.TypeParser.GetEffectContextFlags(node)&typeparser.EffectContextFlagInEffect == 0 {
+		return nil
+	}
+
+	calleeText := scanner.GetSourceTextOfNodeFromSourceFile(ctx.SourceFile, callee, false)
+	effectMethodName := syncToEffectMethod[methodName]
+
+	return ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(callee), tsdiag.X_0_is_used_inside_an_Effect_generator_Schema_1_preserves_the_typed_Effect_error_channel_for_this_operation_without_throwing_effect_schemaSyncInEffect, nil, calleeText, effectMethodName)
+}
+
+// matchSchemaSyncMethod checks if the node references one of the Schema sync methods via
+// either the ParseResult module (V3) or the SchemaParser module (V4).
+func matchSchemaSyncMethod(tp *typeparser.TypeParser, _ *checker.Checker, node *ast.Node, syncToEffectMethod map[string]string) string {
+	for methodName := range syncToEffectMethod {
+		if tp.IsNodeReferenceToEffectParseResultModuleApi(node, methodName) {
+			return methodName
+		}
+		if tp.IsNodeReferenceToEffectSchemaParserModuleApi(node, methodName) {
+			return methodName
+		}
+	}
+	return ""
+}

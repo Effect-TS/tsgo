@@ -1,0 +1,110 @@
+=== Quick Fix Inventory ===
+
+[D1] (9:14-9:30) TS2322: Type 'Effect<number, ErrorA | ErrorB, never>' is not assignable to type 'Effect<number, never, never>'.
+  Type 'ErrorA | ErrorB' is not assignable to type 'never'.
+    Type 'ErrorA' is not assignable to type 'never'.
+  (no quick fixes)
+
+[D2] (9:14-9:30) TS377003: Missing errors ErrorA | ErrorB in the expected Effect type. effect(missingEffectError)
+  Fix 0: "Disable missingEffectError for this line"
+  Fix 1: "Disable missingEffectError for entire file"
+  Fix 2: "Catch all errors with Effect.catch"
+  Fix 3: "Catch unexpected errors with Effect.catchTag"
+
+[D3] (12:14-12:27) TS2322: Type 'Effect<number, ErrorA | ErrorB, never>' is not assignable to type 'Effect<number, ErrorA, never>'.
+  Type 'ErrorA | ErrorB' is not assignable to type 'ErrorA'.
+    Type 'ErrorB' is not assignable to type 'ErrorA'.
+      Types of property '_tag' are incompatible.
+        Type '"ErrorB"' is not assignable to type '"ErrorA"'.
+  (no quick fixes)
+
+[D4] (12:14-12:27) TS377003: Missing errors ErrorB in the expected Effect type. effect(missingEffectError)
+  Fix 0: "Disable missingEffectError for this line"
+  Fix 1: "Disable missingEffectError for entire file"
+  Fix 2: "Catch unexpected errors with Effect.catchTag"
+
+=== Quick Fix Application Results ===
+
+=== [D2] Fix 0: "Disable missingEffectError for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable missingEffectError for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Catch all errors with Effect.catch" ===
+
+--- file:///.src/missingEffectError.ts ---
+import { Effect, Data } from "effect"
+
+class ErrorA extends Data.TaggedError("ErrorA")<{ message: string }> {}
+class ErrorB extends Data.TaggedError("ErrorB")<{ code: number }> {}
+
+declare const effectWithErrors: Effect.Effect<number, ErrorA | ErrorB>
+
+// Should trigger missingEffectError - assigning Effect with errors to Effect<number> (no errors)
+export const missingAllErrors: Effect.Effect<number> = Effect.catch(effectWithErrors, () => Effect.dieMessage("TODO: catch not implemented"))
+
+// Should trigger missingEffectError - missing ErrorB
+export const missingErrorB: Effect.Effect<number, ErrorA> = effectWithErrors
+
+// Should NOT trigger - errors match
+export const errorsMatch: Effect.Effect<number, ErrorA | ErrorB> = effectWithErrors
+
+// Should NOT trigger - no errors in source
+declare const effectNoErrors: Effect.Effect<number>
+export const noSourceErrors: Effect.Effect<number> = effectNoErrors
+
+
+=== [D2] Fix 3: "Catch unexpected errors with Effect.catchTag" ===
+
+--- file:///.src/missingEffectError.ts ---
+import { Effect, Data } from "effect"
+
+class ErrorA extends Data.TaggedError("ErrorA")<{ message: string }> {}
+class ErrorB extends Data.TaggedError("ErrorB")<{ code: number }> {}
+
+declare const effectWithErrors: Effect.Effect<number, ErrorA | ErrorB>
+
+// Should trigger missingEffectError - assigning Effect with errors to Effect<number> (no errors)
+export const missingAllErrors: Effect.Effect<number> = Effect.catchTags(effectWithErrors, { "ErrorA": () => Effect.dieMessage("TODO: catchTags() not implemented for ErrorA"), "ErrorB": () => Effect.dieMessage("TODO: catchTags() not implemented for ErrorB") })
+
+// Should trigger missingEffectError - missing ErrorB
+export const missingErrorB: Effect.Effect<number, ErrorA> = effectWithErrors
+
+// Should NOT trigger - errors match
+export const errorsMatch: Effect.Effect<number, ErrorA | ErrorB> = effectWithErrors
+
+// Should NOT trigger - no errors in source
+declare const effectNoErrors: Effect.Effect<number>
+export const noSourceErrors: Effect.Effect<number> = effectNoErrors
+
+
+=== [D4] Fix 0: "Disable missingEffectError for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable missingEffectError for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Catch unexpected errors with Effect.catchTag" ===
+
+--- file:///.src/missingEffectError.ts ---
+import { Effect, Data } from "effect"
+
+class ErrorA extends Data.TaggedError("ErrorA")<{ message: string }> {}
+class ErrorB extends Data.TaggedError("ErrorB")<{ code: number }> {}
+
+declare const effectWithErrors: Effect.Effect<number, ErrorA | ErrorB>
+
+// Should trigger missingEffectError - assigning Effect with errors to Effect<number> (no errors)
+export const missingAllErrors: Effect.Effect<number> = effectWithErrors
+
+// Should trigger missingEffectError - missing ErrorB
+export const missingErrorB: Effect.Effect<number, ErrorA> = Effect.catchTags(effectWithErrors, { "ErrorB": () => Effect.dieMessage("TODO: catchTags() not implemented for ErrorB") })
+
+// Should NOT trigger - errors match
+export const errorsMatch: Effect.Effect<number, ErrorA | ErrorB> = effectWithErrors
+
+// Should NOT trigger - no errors in source
+declare const effectNoErrors: Effect.Effect<number>
+export const noSourceErrors: Effect.Effect<number> = effectNoErrors
+

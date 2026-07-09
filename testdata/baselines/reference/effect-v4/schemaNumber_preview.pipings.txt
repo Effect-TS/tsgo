@@ -1,0 +1,15 @@
+==== /.src/schemaNumber_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 6:20 - 9:3
+Node: Schema.Struct({\n  age: Schema.Number,\n  score: Schema.NumberFromString\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  age: Schema.Number,\n  score: Schema.NumberFromString\n}
+Subject Type: { age: Number; score: NumberFromString; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly age: Number; readonly score: NumberFromString; }>

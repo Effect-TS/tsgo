@@ -1,0 +1,17 @@
+=== Metadata ===
+Effect version: unknown
+
+/.src/unnecessaryArrowBlock_preview.ts(3,43): warning TS377084: This arrow function block only returns an expression and can use a concise body. effect(unnecessaryArrowBlock)
+
+
+==== /.src/unnecessaryArrowBlock_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics unnecessaryArrowBlock:warning
+    export const preview = (value: string) => {
+                                              ~
+    	return value.trim()
+    ~~~~~~~~~~~~~~~~~~~~
+    }
+    ~
+!!! warning TS377084: This arrow function block only returns an expression and can use a concise body. effect(unnecessaryArrowBlock)
+    

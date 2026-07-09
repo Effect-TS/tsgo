@@ -1,0 +1,112 @@
+=== Refactor Inventory ===
+
+[R1] selection: "15:18-15:26"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Generate Effect.Schema from type" (refactor.rewrite.effect.typeToEffectSchema)
+  Refactor 2: "Generate Schema.Class from type" (refactor.rewrite.effect.typeToEffectSchemaClass)
+  Refactor 3: "Refactor to Schema (Recursive Structural)" (refactor.rewrite.effect.structuralTypeToSchema)
+
+[R2] selection: "empty (0:0-0:0)"
+  (no refactors)
+
+=== Refactor Application Results ===
+
+=== [R1] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/structuralTypeToSchema_reuse.ts ---
+// refactor: 15:18-15:26
+// @effect-v3
+import * as Schema from "effect/Schema"
+
+type User = {
+  id: number
+  name: string
+}
+
+const MyUserSchema = Schema.Struct({
+  id: Schema.Number,
+  name: Schema.String
+})
+
+export interface pipe(AppState) {
+  users: User
+}
+
+
+=== [R1] Refactor 1: "Generate Effect.Schema from type" ===
+
+--- file:///.src/structuralTypeToSchema_reuse.ts ---
+// refactor: 15:18-15:26
+// @effect-v3
+import * as Schema from "effect/Schema"
+
+type User = {
+  id: number
+  name: string
+}
+
+const MyUserSchema = Schema.Struct({
+  id: Schema.Number,
+  name: Schema.String
+})
+
+export const AppState = Schema.Struct({
+    users: User
+});
+
+export interface AppState {
+  users: User
+}
+
+
+=== [R1] Refactor 2: "Generate Schema.Class from type" ===
+
+--- file:///.src/structuralTypeToSchema_reuse.ts ---
+// refactor: 15:18-15:26
+// @effect-v3
+import * as Schema from "effect/Schema"
+
+type User = {
+  id: number
+  name: string
+}
+
+const MyUserSchema = Schema.Struct({
+  id: Schema.Number,
+  name: Schema.String
+})
+
+export class AppState extends Schema.Class<AppState>("AppState")({
+    users: User
+}) {}
+
+export interface AppState {
+  users: User
+}
+
+
+=== [R1] Refactor 3: "Refactor to Schema (Recursive Structural)" ===
+
+--- file:///.src/structuralTypeToSchema_reuse.ts ---
+// refactor: 15:18-15:26
+// @effect-v3
+import * as Schema from "effect/Schema"
+
+type User = {
+  id: number
+  name: string
+}
+
+const MyUserSchema = Schema.Struct({
+  id: Schema.Number,
+  name: Schema.String
+})
+
+export class AppState extends Schema.Class<AppState>("AppState")({
+    users: MyUserSchema
+}) {}
+
+export interface AppState {
+  users: User
+}
+

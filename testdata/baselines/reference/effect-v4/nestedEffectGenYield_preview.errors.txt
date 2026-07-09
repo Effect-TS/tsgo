@@ -1,0 +1,21 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/nestedEffectGenYield_preview.ts(6,9): warning TS377083: This `yield*` is applied to a nested `Effect.gen(...)` that can be inlined in the parent Effect generator context. effect(nestedEffectGenYield)
+
+
+==== /.src/nestedEffectGenYield_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics nestedEffectGenYield:warning
+    import { Effect } from "effect"
+    
+    export const preview = Effect.gen(function*() {
+    	yield* Effect.gen(function*() {
+    	       ~~~~~~~~~~~~~~~~~~~~~~~~
+    		return 1
+    ~~~~~~~~~~
+    	})
+    ~~~
+!!! warning TS377083: This `yield*` is applied to a nested `Effect.gen(...)` that can be inlined in the parent Effect generator context. effect(nestedEffectGenYield)
+    })
+    

@@ -1,0 +1,32 @@
+=== Metadata ===
+Effect version: unknown
+
+/.src/extendsNativeError.ts(4,7): warning TS377055: This class extends the native `Error` type directly. Untagged native errors lose distinction in the Effect failure channel. effect(extendsNativeError)
+/.src/extendsNativeError.ts(8,7): warning TS377055: This class extends the native `Error` type directly. Untagged native errors lose distinction in the Effect failure channel. effect(extendsNativeError)
+/.src/extendsNativeError.ts(11,7): warning TS377055: This class extends the native `Error` type directly. Untagged native errors lose distinction in the Effect failure channel. effect(extendsNativeError)
+
+
+==== /.src/extendsNativeError.ts (3 errors) ====
+    // @effect-diagnostics extendsNativeError:warning
+    
+    // Flagged: direct extends Error
+    class MyError extends Error {}
+          ~~~~~~~
+!!! warning TS377055: This class extends the native `Error` type directly. Untagged native errors lose distinction in the Effect failure channel. effect(extendsNativeError)
+    
+    // Flagged: via alias
+    const E = Error
+    class MyError2 extends E {}
+          ~~~~~~~~
+!!! warning TS377055: This class extends the native `Error` type directly. Untagged native errors lose distinction in the Effect failure channel. effect(extendsNativeError)
+    
+    // Not flagged: indirect (extends a subclass of Error)
+    class Base extends Error {}
+          ~~~~
+!!! warning TS377055: This class extends the native `Error` type directly. Untagged native errors lose distinction in the Effect failure channel. effect(extendsNativeError)
+    class MyError3 extends Base {}
+    
+    // Not flagged: unrelated class
+    class Bar {}
+    class Foo extends Bar {}
+    

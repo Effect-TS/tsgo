@@ -1,0 +1,33 @@
+=== Quick Fix Inventory ===
+
+[D1] (34:14-34:29) TS377039: Service 'SampleService1' is required but not provided by dependencies. effect(missingEffectServiceDependency)
+  Fix 0: "Disable missingEffectServiceDependency for this line"
+  Fix 1: "Disable missingEffectServiceDependency for entire file"
+
+[D2] (45:14-45:29) TS377039: Service 'SampleService2' is required but not provided by dependencies. effect(missingEffectServiceDependency)
+  Fix 0: "Disable missingEffectServiceDependency for this line"
+  Fix 1: "Disable missingEffectServiceDependency for entire file"
+
+[D3] (72:14-72:29) TS377039: Service 'SampleService2' is required but not provided by dependencies. effect(missingEffectServiceDependency)
+  Fix 0: "Disable missingEffectServiceDependency for this line"
+  Fix 1: "Disable missingEffectServiceDependency for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable missingEffectServiceDependency for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable missingEffectServiceDependency for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable missingEffectServiceDependency for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable missingEffectServiceDependency for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable missingEffectServiceDependency for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable missingEffectServiceDependency for entire file" ===
+skipped by default

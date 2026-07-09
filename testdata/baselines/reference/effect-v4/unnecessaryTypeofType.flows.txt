@@ -1,0 +1,2 @@
+/.src/schemas.ts -> unnecessaryTypeofType.flows.schemas.mermaid
+/.src/test.ts -> unnecessaryTypeofType.flows.test.mermaid

@@ -1,0 +1,98 @@
+// Package rules contains all Effect diagnostic rule implementations.
+package rules
+
+import (
+	"github.com/effect-ts/tsgo/etscore"
+	"github.com/effect-ts/tsgo/internal/rule"
+	"github.com/effect-ts/tsgo/internal/typeparser"
+	"github.com/microsoft/typescript-go/shim/ast"
+	"github.com/microsoft/typescript-go/shim/checker"
+	"github.com/microsoft/typescript-go/shim/core"
+	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
+	"github.com/microsoft/typescript-go/shim/scanner"
+)
+
+// MissingReturnYieldStar suggests "return yield*" for Effects that never succeed.
+var MissingReturnYieldStar = rule.Rule{
+	Name:            "missingReturnYieldStar",
+	Group:           "correctness",
+	Description:     "Suggests using return yield* for Effects that never succeed",
+	DefaultSeverity: etscore.SeverityError,
+	SupportedEffect: []string{"v3", "v4"},
+	Codes:           []int32{tsdiag.This_Effect_never_succeeds_using_return_yield_Asterisk_preserves_a_definitive_generator_exit_point_for_type_narrowing_and_tooling_support_effect_missingReturnYieldStar.Code()},
+	Run: func(ctx *rule.Context) []*ast.Diagnostic {
+		matches := AnalyzeMissingReturnYieldStar(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
+		diags := make([]*ast.Diagnostic, len(matches))
+		for i, m := range matches {
+			diags[i] = ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.This_Effect_never_succeeds_using_return_yield_Asterisk_preserves_a_definitive_generator_exit_point_for_type_narrowing_and_tooling_support_effect_missingReturnYieldStar, nil)
+		}
+		return diags
+	},
+}
+
+// MissingReturnYieldStarMatch holds the AST nodes needed by both the diagnostic rule
+// and the quick-fix for the missingReturnYieldStar pattern.
+type MissingReturnYieldStarMatch struct {
+	SourceFile   *ast.SourceFile // The source file where the diagnostic should be reported
+	Location     core.TextRange  // The pre-computed error range for this match
+	YieldNode    *ast.Node       // The yield* expression node (for diagnostic location)
+	ExprStmtNode *ast.Node       // The expression statement node (for quickfix replacement)
+}
+
+// AnalyzeMissingReturnYieldStar finds all yield* expressions inside Effect generators
+// where the yielded Effect never succeeds, suggesting "return yield*" instead.
+func AnalyzeMissingReturnYieldStar(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []MissingReturnYieldStarMatch {
+	var matches []MissingReturnYieldStarMatch
+
+	var walk ast.Visitor
+	walk = func(n *ast.Node) bool {
+		if n == nil {
+			return false
+		}
+
+		if n.Kind == ast.KindExpressionStatement {
+			expr := n.Expression()
+			unwrapped := ast.SkipOuterExpressions(expr, ast.OEKAll)
+			if unwrapped != nil && unwrapped.Kind == ast.KindYieldExpression {
+				yield := unwrapped.AsYieldExpression()
+				if yield != nil && yield.AsteriskToken != nil && yield.Expression != nil {
+					if shouldReportMissingReturnYieldStar(tp, c, n, unwrapped, yield.Expression) {
+						matches = append(matches, MissingReturnYieldStarMatch{
+							SourceFile:   sf,
+							Location:     scanner.GetErrorRangeForNode(sf, unwrapped),
+							YieldNode:    unwrapped,
+							ExprStmtNode: n,
+						})
+					}
+				}
+			}
+		}
+
+		n.ForEachChild(walk)
+		return false
+	}
+
+	walk(sf.AsNode())
+
+	return matches
+}
+
+func shouldReportMissingReturnYieldStar(tp *typeparser.TypeParser, c *checker.Checker, exprStmtNode *ast.Node, yieldNode *ast.Node, expr *ast.Expression) bool {
+	if c == nil || exprStmtNode == nil || yieldNode == nil || expr == nil {
+		return false
+	}
+
+	if tp.GetEffectContextFlags(exprStmtNode)&typeparser.EffectContextFlagCanYieldEffect == 0 {
+		return false
+	}
+
+	t := tp.GetTypeAtLocation(expr)
+	if t == nil {
+		return false
+	}
+	effect := tp.EffectYieldableType(t, expr.AsNode())
+	if effect == nil || effect.A == nil {
+		return false
+	}
+	return effect.A.Flags()&checker.TypeFlagsNever != 0
+}

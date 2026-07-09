@@ -1,0 +1,15 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/catchToOrElseSucceed_preview.ts(4,3): suggestion TS377095: `Effect.orElseSucceed` expresses the same recovery more directly than `Effect.catch` followed by `Effect.succeed`. effect(catchToOrElseSucceed)
+
+
+==== /.src/catchToOrElseSucceed_preview.ts (1 errors) ====
+    import { Effect } from "effect"
+    
+    export const program = Effect.fail("error").pipe(
+      Effect.catch(() => Effect.succeed(42))
+      ~~~~~~~~~~~~
+!!! suggestion TS377095: `Effect.orElseSucceed` expresses the same recovery more directly than `Effect.catch` followed by `Effect.succeed`. effect(catchToOrElseSucceed)
+    )
+    

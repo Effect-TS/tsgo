@@ -1,0 +1,29 @@
+==== /.src/unusedDirective.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 3:23 - 6:3
+Node: Effect.gen(function*(){\n    // @effect-diagnostics-next-line floatingEffect:off\n   yield* Effect.log("hello")\n})
+Node Kind: KindCallExpression
+
+Subject: function*(){\n    // @effect-diagnostics-next-line floatingEffect:off\n   yield* Effect.log("hello")\n}
+Subject Type: () => Generator<Effect<void, never, never>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 5:10 - 5:30
+Node: Effect.log("hello")
+Node Kind: KindCallExpression
+
+Subject: "hello"
+Subject Type: "hello"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>

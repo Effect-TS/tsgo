@@ -1,0 +1,31 @@
+diff --git a/internal/tsoptions/tsconfigparsing.go b/internal/tsoptions/tsconfigparsing.go
+index b2d3d4093a..e1ba3214c4 100644
+--- a/internal/tsoptions/tsconfigparsing.go
++++ b/internal/tsoptions/tsconfigparsing.go
+@@ -1108,7 +1108,7 @@ func parseConfig(
+ 					result.compileOnSave = compileOnSave
+ 				}
+ 			}
+-			mergeCompilerOptions(result.options, extendedConfig.options, extendsRaw)
++			mergeCompilerOptions(result.options, extendedConfig.options, extendsRaw, extendedConfigPath, basePath)
+ 		}
+ 	}
+ 
+@@ -1142,7 +1142,7 @@ func parseConfig(
+ 				sourceFile.ExtendedSourceFiles = core.InsertSorted(sourceFile.ExtendedSourceFiles, extendedSourceFile, cmp.Compare)
+ 			}
+ 		}
+-		ownConfig.options = mergeCompilerOptions(result.options, ownConfig.options, ownConfig.raw)
++		ownConfig.options = mergeCompilerOptions(result.options, ownConfig.options, ownConfig.raw, configFileName, basePath)
+ 		// ownConfig.watchOptions = ownConfig.watchOptions && result.watchOptions ?
+ 		//     assignWatchOptions(result, ownConfig.watchOptions) :
+ 		//     ownConfig.watchOptions || result.watchOptions;
+@@ -1186,7 +1186,7 @@ func parseJsonConfigFileContentWorker(
+ 
+ 	var errors []*ast.Diagnostic
+ 	parsedConfig, errors := parseConfig(json, sourceFile, host, basePath, configFileName, resolutionStack, extendedConfigCache)
+-	mergeCompilerOptions(parsedConfig.options, existingOptions, existingOptionsRaw)
++	mergeCompilerOptions(parsedConfig.options, existingOptions, existingOptionsRaw, configFileName, basePath)
+ 	handleOptionConfigDirTemplateSubstitution(parsedConfig.options, basePathForFileNames)
+ 	rawConfig := parseJsonToStringKey(parsedConfig.raw)
+ 	if configFileName != "" && parsedConfig.options != nil {

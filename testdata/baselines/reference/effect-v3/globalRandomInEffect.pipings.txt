@@ -1,0 +1,43 @@
+==== /.src/globalRandomInEffect.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 5:31 - 8:3
+Node: Effect.gen(function*() {\n  const r = Math.random()\n  return r\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const r = Math.random()\n  return r\n}
+Subject Type: () => Generator<never, number, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 11:27 - 15:3
+Node: Effect.gen(function*() {\n  const MyMath = Math\n  const r = MyMath.random()\n  return r\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const MyMath = Math\n  const r = MyMath.random()\n  return r\n}
+Subject Type: () => Generator<never, number, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 24:32 - 27:3
+Node: Effect.gen(function*() {\n  const fn = () => Math.random()\n  return fn\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const fn = () => Math.random()\n  return fn\n}
+Subject Type: () => Generator<never, () => number, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<() => number, never, never>

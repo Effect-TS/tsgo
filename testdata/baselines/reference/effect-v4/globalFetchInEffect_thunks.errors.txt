@@ -1,0 +1,42 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/globalFetchInEffect_thunks.ts(6,40): warning TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
+/.src/globalFetchInEffect_thunks.ts(6,46): warning TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `effect/unstable/http`. effect(globalFetchInEffect)
+/.src/globalFetchInEffect_thunks.ts(9,14): warning TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `effect/unstable/http`. effect(globalFetchInEffect)
+/.src/globalFetchInEffect_thunks.ts(13,64): warning TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `effect/unstable/http`. effect(globalFetchInEffect)
+/.src/globalFetchInEffect_thunks.ts(16,20): warning TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `effect/unstable/http`. effect(globalFetchInEffect)
+
+
+==== /.src/globalFetchInEffect_thunks.ts (5 errors) ====
+    // @effect-diagnostics globalFetchInEffect:warning
+    import { Data, Effect } from "effect"
+    
+    class ExampleError extends Data.TaggedError("ExampleError")<{}> {}
+    
+    export const fetchInSync = Effect.sync(() => fetch("https://example.com/sync"))
+                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
+                                                 ~~~~~
+!!! warning TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `effect/unstable/http`. effect(globalFetchInEffect)
+    
+    export const fetchInTryObject = Effect.try({
+      try: () => fetch("https://example.com/try"),
+                 ~~~~~
+!!! warning TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `effect/unstable/http`. effect(globalFetchInEffect)
+      catch: () => new ExampleError()
+    })
+    
+    export const fetchInTryPromise = Effect.tryPromise(async () => fetch("https://example.com/try-promise"))
+                                                                   ~~~~~
+!!! warning TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `effect/unstable/http`. effect(globalFetchInEffect)
+    
+    export const fetchInTryPromiseObject = Effect.tryPromise({
+      try: async () => fetch("https://example.com/try-promise-object"),
+                       ~~~~~
+!!! warning TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `effect/unstable/http`. effect(globalFetchInEffect)
+      catch: () => new ExampleError()
+    })
+    
+    export const shouldNotTriggerReturnedFunction = Effect.sync(() => () => fetch("https://example.com/nested"))
+    

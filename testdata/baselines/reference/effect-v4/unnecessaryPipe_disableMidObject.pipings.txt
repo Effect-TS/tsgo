@@ -1,0 +1,43 @@
+==== /.src/unnecessaryPipe_disableMidObject.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 5:5 - 5:30
+Node: pipe(Effect.succeed(42))
+Node Kind: KindCallExpression
+
+Subject: 42
+Subject Type: 42
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 7:5 - 7:30
+Node: pipe(Effect.succeed(43))
+Node Kind: KindCallExpression
+
+Subject: 43
+Subject Type: 43
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 8:5 - 8:30
+Node: pipe(Effect.succeed(44))
+Node Kind: KindCallExpression
+
+Subject: 44
+Subject Type: 44
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>

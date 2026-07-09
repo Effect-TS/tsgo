@@ -1,0 +1,69 @@
+==== /.src/effectInVoidSuccess.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 4:49 - 4:84
+Node: Effect.succeed(Effect.succeed(42))
+Node Kind: KindCallExpression
+
+Subject: 42
+Subject Type: 42
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Effect<number, never, never>, never, never>
+
+=== Piping Flow ===
+Location: 6:29 - 15:3
+Node: Effect.suspend((): Effect.Effect<void> => {\n  return Stream.empty.pipe(\n    Stream.runCollect,\n    Effect.interruptible,\n    Effect.matchCause({\n      onSuccess: () => "success",\n      onFailure: () => Effect.fail("error")\n    })\n  )\n})
+Node Kind: KindCallExpression
+
+Subject: (): Effect.Effect<void> => {\n  return Stream.empty.pipe(\n    Stream.runCollect,\n    Effect.interruptible,\n    Effect.matchCause({\n      onSuccess: () => "success",\n      onFailure: () => Effect.fail("error")\n    })\n  )\n}
+Subject Type: () => Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.suspend
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 7:9 - 14:4
+Node: Stream.empty.pipe(\n    Stream.runCollect,\n    Effect.interruptible,\n    Effect.matchCause({\n      onSuccess: () => "success",\n      onFailure: () => Effect.fail("error")\n    })\n  )
+Node Kind: KindCallExpression
+
+Subject: Stream.empty
+Subject Type: Stream<never, never, never>
+
+Transformations (3):
+  [0] kind: pipeable
+      callee: Stream.runCollect
+      args: (constant)
+      outType: Effect<never[], never, never>
+  [1] kind: pipeable
+      callee: Effect.interruptible
+      args: (constant)
+      outType: Effect<never[], never, never>
+  [2] kind: pipeable
+      callee: Effect.matchCause
+      args: [{\n      onSuccess: () => "success",\n      onFailure: () => Effect.fail("error")\n    }]
+      outType: Effect<string | Effect<never, string, never>, never, never>
+
+=== Piping Flow ===
+Location: 12:23 - 12:44
+Node: Effect.fail("error")
+Node Kind: KindCallExpression
+
+Subject: "error"
+Subject Type: "error"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>

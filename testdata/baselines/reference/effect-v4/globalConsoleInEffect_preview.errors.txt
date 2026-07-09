@@ -1,0 +1,17 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/globalConsoleInEffect_preview.ts(6,3): warning TS377065: This Effect code uses `console.log`, logging in Effect code is represented through `Effect.log or Logger`. effect(globalConsoleInEffect)
+
+
+==== /.src/globalConsoleInEffect_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics globalConsoleInEffect:warning
+    import { Effect } from "effect"
+    
+    export const preview = Effect.gen(function*() {
+      console.log("hello")
+      ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377065: This Effect code uses `console.log`, logging in Effect code is represented through `Effect.log or Logger`. effect(globalConsoleInEffect)
+    })
+    

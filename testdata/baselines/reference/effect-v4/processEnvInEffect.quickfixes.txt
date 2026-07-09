@@ -1,0 +1,23 @@
+=== Quick Fix Inventory ===
+
+[D1] (7:10-7:28) TS377077: This Effect code reads from `process.env`, environment configuration in Effect code is represented through `Config` from Effect. effect(processEnvInEffect)
+  Fix 0: "Disable processEnvInEffect for this line"
+  Fix 1: "Disable processEnvInEffect for entire file"
+
+[D2] (12:10-12:32) TS377077: This Effect code reads from `process.env`, environment configuration in Effect code is represented through `Config` from Effect. effect(processEnvInEffect)
+  Fix 0: "Disable processEnvInEffect for this line"
+  Fix 1: "Disable processEnvInEffect for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable processEnvInEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable processEnvInEffect for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable processEnvInEffect for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable processEnvInEffect for entire file" ===
+skipped by default

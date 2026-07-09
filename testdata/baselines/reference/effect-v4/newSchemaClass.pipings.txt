@@ -1,0 +1,85 @@
+==== /.src/newSchemaClass.ts (6 flows) ====
+
+=== Piping Flow ===
+Location: 4:19 - 6:3
+Node: Schema.Class<User>("User")({\n  name: Schema.String\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  name: Schema.String\n}
+Subject Type: { name: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<User>("User")
+      args: (constant)
+      outType: Class<User, Struct<{ readonly name: String; }>, {}>
+
+=== Piping Flow ===
+Location: 8:20 - 10:3
+Node: Schema.Struct({\n  name: Schema.String\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  name: Schema.String\n}
+Subject Type: { name: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly name: String; }>
+
+=== Piping Flow ===
+Location: 14:31 - 16:3
+Node: Effect.gen(function*() {\n  return new User({ name: "Jane" })\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  return new User({ name: "Jane" })\n}
+Subject Type: () => Generator<never, User, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<User, never, never>
+
+=== Piping Flow ===
+Location: 18:30 - 21:3
+Node: Effect.gen(function*() {\n  const makeUser = () => new User({ name: "Nested" })\n  return makeUser\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const makeUser = () => new User({ name: "Nested" })\n  return makeUser\n}
+Subject Type: () => Generator<never, () => User, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<() => User, never, never>
+
+=== Piping Flow ===
+Location: 23:32 - 26:3
+Node: Effect.gen(function*() {\n  const user = PlainSchema.make({ name: "Struct" })\n  return user\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const user = PlainSchema.make({ name: "Struct" })\n  return user\n}
+Subject Type: () => Generator<never, { readonly name: string; }, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<{ readonly name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 24:15 - 24:52
+Node: PlainSchema.make({ name: "Struct" })
+Node Kind: KindCallExpression
+
+Subject: { name: "Struct" }
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: PlainSchema.make
+      args: (constant)
+      outType: { readonly name: string; }

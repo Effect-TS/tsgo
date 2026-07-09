@@ -1,0 +1,141 @@
+==== /.src/globalConsole.ts (10 flows) ====
+
+=== Piping Flow ===
+Location: 2:32 - 5:28
+Node: console.log("module level")
+Node Kind: KindCallExpression
+
+Subject: "module level"
+Subject Type: "module level"
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 8:27 - 9:26
+Node: console.warn("warning")
+Node Kind: KindCallExpression
+
+Subject: "warning"
+Subject Type: "warning"
+
+Transformations (1):
+  [0] kind: call
+      callee: console.warn
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 13:26 - 14:23
+Node: myConsole.info("info")
+Node Kind: KindCallExpression
+
+Subject: "info"
+Subject Type: "info"
+
+Transformations (1):
+  [0] kind: call
+      callee: myConsole.info
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 17:31 - 19:3
+Node: Effect.gen(function*() {\n  console.log("hello")\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  console.log("hello")\n}
+Subject Type: () => Generator<never, void, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 17:56 - 18:23
+Node: console.log("hello")
+Node Kind: KindCallExpression
+
+Subject: "hello"
+Subject Type: "hello"
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 22:31 - 24:3
+Node: Effect.fn("consoleWarnInFn")(function*() {\n  console.warn("warning")\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  console.warn("warning")\n}
+Subject Type: () => Generator<never, void, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn("consoleWarnInFn")
+      args: (constant)
+      outType: () => Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 22:74 - 23:26
+Node: console.warn("warning")
+Node Kind: KindCallExpression
+
+Subject: "warning"
+Subject Type: "warning"
+
+Transformations (1):
+  [0] kind: call
+      callee: console.warn
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 27:32 - 30:3
+Node: Effect.gen(function*() {\n  const fn = () => console.error("nested")\n  return fn\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const fn = () => console.error("nested")\n  return fn\n}
+Subject Type: () => Generator<never, () => void, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<() => void, never, never>
+
+=== Piping Flow ===
+Location: 28:19 - 28:43
+Node: console.error("nested")
+Node Kind: KindCallExpression
+
+Subject: "nested"
+Subject Type: "nested"
+
+Transformations (1):
+  [0] kind: call
+      callee: console.error
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 34:67 - 35:23
+Node: console.log("hello")
+Node Kind: KindCallExpression
+
+Subject: "hello"
+Subject Type: "hello"
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: undefined

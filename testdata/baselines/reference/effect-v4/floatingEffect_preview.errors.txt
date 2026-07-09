@@ -1,0 +1,15 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/floatingEffect_preview.ts(5,1): warning TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+
+
+==== /.src/floatingEffect_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics floatingEffect:warning
+    import * as Effect from "effect/Effect"
+    
+    Effect.log("forgotten")
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    

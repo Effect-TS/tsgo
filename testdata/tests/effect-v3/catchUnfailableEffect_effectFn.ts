@@ -1,0 +1,20 @@
+// @effect-v3
+// @effect-diagnostics catchToOrElseSucceed:off
+import * as Effect from "effect/Effect"
+
+// Effect.fn with pipe transformations
+export const shouldReportEffectFn = Effect.fn(function*() {
+  return yield* Effect.succeed(42)
+}, Effect.catchAll(() => Effect.void)) // <- should report here
+
+export const shouldNotReportEffectFn = Effect.fn(function*() {
+  return yield* Effect.fail("error")
+}, Effect.catchAll(() => Effect.succeed(42)))
+
+export const shouldReportEffectFnTraced = Effect.fn("traced")(function*() {
+  return yield* Effect.succeed(42)
+}, Effect.catchAll(() => Effect.void)) // <- should report here
+
+export const shouldReportEffectFnUntraced = Effect.fnUntraced(function*() {
+  return yield* Effect.succeed(42)
+}, Effect.catchAll(() => Effect.void)) // <- should report here

@@ -1,0 +1,24 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/redundantOrDie_preview.ts(8,35): warning TS377096: This generator applies `Effect.orDie` to every yielded effect. Hoist it once to the generator result: `Effect.gen(...).pipe(Effect.orDie)`, or `Effect.fn(function*(){ ... }, Effect.orDie)`. effect(redundantOrDie)
+
+
+==== /.src/redundantOrDie_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics redundantOrDie:warning
+    import { Effect } from "effect"
+    
+    declare const first: Effect.Effect<number, unknown>
+    declare const second: Effect.Effect<string, unknown>
+    
+    export const program = Effect.gen(function*() {
+                                      ~~~~~~~~~
+!!! warning TS377096: This generator applies `Effect.orDie` to every yielded effect. Hoist it once to the generator result: `Effect.gen(...).pipe(Effect.orDie)`, or `Effect.fn(function*(){ ... }, Effect.orDie)`. effect(redundantOrDie)
+!!! related TS377097 /.src/redundantOrDie_preview.ts(9,21): This repeated `Effect.orDie` site participates in the hoistable generator-wide `orDie`. effect(redundantOrDie)
+!!! related TS377097 /.src/redundantOrDie_preview.ts(11,29): This repeated `Effect.orDie` site participates in the hoistable generator-wide `orDie`. effect(redundantOrDie)
+      yield* first.pipe(Effect.orDie)
+    
+      return yield* second.pipe(Effect.orDie)
+    })
+    

@@ -1,0 +1,13 @@
+=== Quick Fix Inventory ===
+
+[D1] (7:14-7:18) TS377039: Service 'Db' is required but not provided by dependencies. effect(missingEffectServiceDependency)
+  Fix 0: "Disable missingEffectServiceDependency for this line"
+  Fix 1: "Disable missingEffectServiceDependency for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable missingEffectServiceDependency for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable missingEffectServiceDependency for entire file" ===
+skipped by default

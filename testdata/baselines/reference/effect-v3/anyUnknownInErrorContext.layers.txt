@@ -1,0 +1,69 @@
+==== /.src/anyUnknownInErrorContext.ts (1 layer exports) ====
+
+=== composedLayerUnknown ===
+
+--- output ---
+flowchart TD
+  0["layerUnknown<br/>provides: <br/>requires: unknown"]
+  1["Layer.provide#40;layerUnknown#41;<br/>provides: <br/>requires: unknown"]
+  2["Layer.empty<br/>provides: <br/>requires: "]
+  3["Layer.empty.pipe#40;Layer.provide#40;layerUnknown#41;#41;<br/>provides: <br/>requires: unknown"]
+  1 -->|"#123;#quot;relationship#quot;:#quot;call#quot;,#quot;argumentIndex#quot;:0#125;"| 0
+  1 -->|"#123;#quot;relationship#quot;:#quot;pipe#quot;#125;"| 2
+  3 -->|"#123;#quot;relationship#quot;:#quot;pipe#quot;#125;"| 1
+
+--- nested ---
+flowchart TB
+  subgraph 0 ["`layerUnknown<br/><small>_ln 40 col 67_</small>`"]
+    subgraph 0_wrap[" "]
+      subgraph 0_requires [Requires]
+        0_requires_0["unknown"]
+      end
+      style 0_requires stroke:none
+    end
+    style 0_wrap fill:transparent
+    style 0_wrap stroke:none
+  end
+  style 0 fill:transparent
+  subgraph 1 ["`Layer.provide(layerUnknown)<br/><small>_ln 40 col 53_</small>`"]
+    subgraph 1_wrap[" "]
+      subgraph 1_requires [Requires]
+        1_requires_0["unknown"]
+      end
+      style 1_requires stroke:none
+    end
+    style 1_wrap fill:transparent
+    style 1_wrap stroke:none
+  end
+  style 1 fill:transparent
+  subgraph 2 ["`Layer.empty<br/><small>_ln 40 col 36_</small>`"]
+    subgraph 2_wrap[" "]
+    end
+    style 2_wrap fill:transparent
+    style 2_wrap stroke:none
+  end
+  style 2 fill:transparent
+  subgraph 3 ["`composedLayerUnknown<br/><small>_ln 40 col 13_</small>`"]
+    subgraph 3_wrap[" "]
+      subgraph 3_requires [Requires]
+        3_requires_0["unknown"]
+      end
+      style 3_requires stroke:none
+    end
+    style 3_wrap fill:transparent
+    style 3_wrap stroke:none
+  end
+  style 3 fill:transparent
+  1_requires_0 -.-> 0_requires_0
+  1 -.-x 2
+  3_requires_0 -.-> 1_requires_0
+
+--- outline ---
+flowchart TD
+  0["layerUnknown"]
+  1["Layer.empty"]
+
+--- quickinfo ---
+/**
+ * - unknown required at ln 40 col 67 by `layerUnknown`
+ */

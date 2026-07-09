@@ -1,0 +1,390 @@
+=== Refactor Inventory ===
+
+[R1] selection: "18:14-18:27"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Toggle type annotation" (refactor.rewrite.effect.toggleTypeAnnotation)
+  Refactor 2: "Toggle lazy const" (refactor.rewrite.effect.toggleLazyConst)
+
+[R2] selection: "20:14-20:29"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Toggle type annotation" (refactor.rewrite.effect.toggleTypeAnnotation)
+  Refactor 2: "Toggle lazy const" (refactor.rewrite.effect.toggleLazyConst)
+  Refactor 3: "Prepare layers for automatic composition" (refactor.rewrite.effect.layerMagicPrepare)
+
+[R3] selection: "25:14-25:36"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Toggle type annotation" (refactor.rewrite.effect.toggleTypeAnnotation)
+  Refactor 2: "Toggle lazy const" (refactor.rewrite.effect.toggleLazyConst)
+  Refactor 3: "Prepare layers for automatic composition" (refactor.rewrite.effect.layerMagicPrepare)
+
+[R4] selection: "empty (0:0-0:0)"
+  (no refactors)
+
+=== Refactor Application Results ===
+
+=== [R1] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/layerMagic_prepare.ts ---
+// refactor: 18:14-18:27, 20:14-20:29, 25:14-25:36
+// @effect-v3
+import { Effect, Layer, pipe } from "effect"
+
+class DbConnection extends Effect.Service<DbConnection>()("DbConnection", {
+  succeed: {}
+}) {}
+class FileSystem extends Effect.Service<FileSystem>()("FileSystem", {
+  succeed: {}
+}) {}
+class Cache extends Effect.Service<Cache>()("Cache", {
+  effect: Effect.as(FileSystem, {})
+}) {}
+class UserRepository extends Effect.Service<UserRepository>()("UserRepository", {
+  effect: Effect.as(Effect.zipRight(DbConnection, Cache), {})
+}) {}
+
+export const pipe(prepareSimple) = UserRepository.Default
+
+export const prepareWithPipe = pipe(
+  UserRepository.Default,
+  Layer.provideMerge(Cache.Default)
+)
+
+export const prepareSomewhatComplex = pipe(
+  UserRepository.Default,
+  Layer.provideMerge(Cache.Default),
+  Layer.merge(DbConnection.Default)
+)
+
+
+=== [R1] Refactor 1: "Toggle type annotation" ===
+
+--- file:///.src/layerMagic_prepare.ts ---
+// refactor: 18:14-18:27, 20:14-20:29, 25:14-25:36
+// @effect-v3
+import { Effect, Layer, pipe } from "effect"
+
+class DbConnection extends Effect.Service<DbConnection>()("DbConnection", {
+  succeed: {}
+}) {}
+class FileSystem extends Effect.Service<FileSystem>()("FileSystem", {
+  succeed: {}
+}) {}
+class Cache extends Effect.Service<Cache>()("Cache", {
+  effect: Effect.as(FileSystem, {})
+}) {}
+class UserRepository extends Effect.Service<UserRepository>()("UserRepository", {
+  effect: Effect.as(Effect.zipRight(DbConnection, Cache), {})
+}) {}
+
+export const prepareSimple: Layer.Layer<UserRepository, never, Cache | DbConnection> = UserRepository.Default
+
+export const prepareWithPipe = pipe(
+  UserRepository.Default,
+  Layer.provideMerge(Cache.Default)
+)
+
+export const prepareSomewhatComplex = pipe(
+  UserRepository.Default,
+  Layer.provideMerge(Cache.Default),
+  Layer.merge(DbConnection.Default)
+)
+
+
+=== [R1] Refactor 2: "Toggle lazy const" ===
+
+--- file:///.src/layerMagic_prepare.ts ---
+// refactor: 18:14-18:27, 20:14-20:29, 25:14-25:36
+// @effect-v3
+import { Effect, Layer, pipe } from "effect"
+
+class DbConnection extends Effect.Service<DbConnection>()("DbConnection", {
+  succeed: {}
+}) {}
+class FileSystem extends Effect.Service<FileSystem>()("FileSystem", {
+  succeed: {}
+}) {}
+class Cache extends Effect.Service<Cache>()("Cache", {
+  effect: Effect.as(FileSystem, {})
+}) {}
+class UserRepository extends Effect.Service<UserRepository>()("UserRepository", {
+  effect: Effect.as(Effect.zipRight(DbConnection, Cache), {})
+}) {}
+
+export const prepareSimple = () => UserRepository.Default
+
+export const prepareWithPipe = pipe(
+  UserRepository.Default,
+  Layer.provideMerge(Cache.Default)
+)
+
+export const prepareSomewhatComplex = pipe(
+  UserRepository.Default,
+  Layer.provideMerge(Cache.Default),
+  Layer.merge(DbConnection.Default)
+)
+
+
+=== [R2] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/layerMagic_prepare.ts ---
+// refactor: 18:14-18:27, 20:14-20:29, 25:14-25:36
+// @effect-v3
+import { Effect, Layer, pipe } from "effect"
+
+class DbConnection extends Effect.Service<DbConnection>()("DbConnection", {
+  succeed: {}
+}) {}
+class FileSystem extends Effect.Service<FileSystem>()("FileSystem", {
+  succeed: {}
+}) {}
+class Cache extends Effect.Service<Cache>()("Cache", {
+  effect: Effect.as(FileSystem, {})
+}) {}
+class UserRepository extends Effect.Service<UserRepository>()("UserRepository", {
+  effect: Effect.as(Effect.zipRight(DbConnection, Cache), {})
+}) {}
+
+export const prepareSimple = UserRepository.Default
+
+export const pipe(prepareWithPipe) = pipe(
+  UserRepository.Default,
+  Layer.provideMerge(Cache.Default)
+)
+
+export const prepareSomewhatComplex = pipe(
+  UserRepository.Default,
+  Layer.provideMerge(Cache.Default),
+  Layer.merge(DbConnection.Default)
+)
+
+
+=== [R2] Refactor 1: "Toggle type annotation" ===
+
+--- file:///.src/layerMagic_prepare.ts ---
+// refactor: 18:14-18:27, 20:14-20:29, 25:14-25:36
+// @effect-v3
+import { Effect, Layer, pipe } from "effect"
+
+class DbConnection extends Effect.Service<DbConnection>()("DbConnection", {
+  succeed: {}
+}) {}
+class FileSystem extends Effect.Service<FileSystem>()("FileSystem", {
+  succeed: {}
+}) {}
+class Cache extends Effect.Service<Cache>()("Cache", {
+  effect: Effect.as(FileSystem, {})
+}) {}
+class UserRepository extends Effect.Service<UserRepository>()("UserRepository", {
+  effect: Effect.as(Effect.zipRight(DbConnection, Cache), {})
+}) {}
+
+export const prepareSimple = UserRepository.Default
+
+export const prepareWithPipe: Layer.Layer<Cache | UserRepository, never, DbConnection | FileSystem> = pipe(
+  UserRepository.Default,
+  Layer.provideMerge(Cache.Default)
+)
+
+export const prepareSomewhatComplex = pipe(
+  UserRepository.Default,
+  Layer.provideMerge(Cache.Default),
+  Layer.merge(DbConnection.Default)
+)
+
+
+=== [R2] Refactor 2: "Toggle lazy const" ===
+
+--- file:///.src/layerMagic_prepare.ts ---
+// refactor: 18:14-18:27, 20:14-20:29, 25:14-25:36
+// @effect-v3
+import { Effect, Layer, pipe } from "effect"
+
+class DbConnection extends Effect.Service<DbConnection>()("DbConnection", {
+  succeed: {}
+}) {}
+class FileSystem extends Effect.Service<FileSystem>()("FileSystem", {
+  succeed: {}
+}) {}
+class Cache extends Effect.Service<Cache>()("Cache", {
+  effect: Effect.as(FileSystem, {})
+}) {}
+class UserRepository extends Effect.Service<UserRepository>()("UserRepository", {
+  effect: Effect.as(Effect.zipRight(DbConnection, Cache), {})
+}) {}
+
+export const prepareSimple = UserRepository.Default
+
+export const prepareWithPipe = () => pipe(
+  UserRepository.Default,
+  Layer.provideMerge(Cache.Default)
+)
+
+export const prepareSomewhatComplex = pipe(
+  UserRepository.Default,
+  Layer.provideMerge(Cache.Default),
+  Layer.merge(DbConnection.Default)
+)
+
+
+=== [R2] Refactor 3: "Prepare layers for automatic composition" ===
+
+--- file:///.src/layerMagic_prepare.ts ---
+// refactor: 18:14-18:27, 20:14-20:29, 25:14-25:36
+// @effect-v3
+import { Effect, Layer, pipe } from "effect"
+
+class DbConnection extends Effect.Service<DbConnection>()("DbConnection", {
+  succeed: {}
+}) {}
+class FileSystem extends Effect.Service<FileSystem>()("FileSystem", {
+  succeed: {}
+}) {}
+class Cache extends Effect.Service<Cache>()("Cache", {
+  effect: Effect.as(FileSystem, {})
+}) {}
+class UserRepository extends Effect.Service<UserRepository>()("UserRepository", {
+  effect: Effect.as(Effect.zipRight(DbConnection, Cache), {})
+}) {}
+
+export const prepareSimple = UserRepository.Default
+
+export const prepareWithPipe = [UserRepository.Default, Cache.Default] as any as Layer.Layer<never /* Cache | UserRepository */>;
+
+export const prepareSomewhatComplex = pipe(
+  UserRepository.Default,
+  Layer.provideMerge(Cache.Default),
+  Layer.merge(DbConnection.Default)
+)
+
+
+=== [R3] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/layerMagic_prepare.ts ---
+// refactor: 18:14-18:27, 20:14-20:29, 25:14-25:36
+// @effect-v3
+import { Effect, Layer, pipe } from "effect"
+
+class DbConnection extends Effect.Service<DbConnection>()("DbConnection", {
+  succeed: {}
+}) {}
+class FileSystem extends Effect.Service<FileSystem>()("FileSystem", {
+  succeed: {}
+}) {}
+class Cache extends Effect.Service<Cache>()("Cache", {
+  effect: Effect.as(FileSystem, {})
+}) {}
+class UserRepository extends Effect.Service<UserRepository>()("UserRepository", {
+  effect: Effect.as(Effect.zipRight(DbConnection, Cache), {})
+}) {}
+
+export const prepareSimple = UserRepository.Default
+
+export const prepareWithPipe = pipe(
+  UserRepository.Default,
+  Layer.provideMerge(Cache.Default)
+)
+
+export const pipe(prepareSomewhatComplex) = pipe(
+  UserRepository.Default,
+  Layer.provideMerge(Cache.Default),
+  Layer.merge(DbConnection.Default)
+)
+
+
+=== [R3] Refactor 1: "Toggle type annotation" ===
+
+--- file:///.src/layerMagic_prepare.ts ---
+// refactor: 18:14-18:27, 20:14-20:29, 25:14-25:36
+// @effect-v3
+import { Effect, Layer, pipe } from "effect"
+
+class DbConnection extends Effect.Service<DbConnection>()("DbConnection", {
+  succeed: {}
+}) {}
+class FileSystem extends Effect.Service<FileSystem>()("FileSystem", {
+  succeed: {}
+}) {}
+class Cache extends Effect.Service<Cache>()("Cache", {
+  effect: Effect.as(FileSystem, {})
+}) {}
+class UserRepository extends Effect.Service<UserRepository>()("UserRepository", {
+  effect: Effect.as(Effect.zipRight(DbConnection, Cache), {})
+}) {}
+
+export const prepareSimple = UserRepository.Default
+
+export const prepareWithPipe = pipe(
+  UserRepository.Default,
+  Layer.provideMerge(Cache.Default)
+)
+
+export const prepareSomewhatComplex: Layer.Layer<Cache | DbConnection | UserRepository, never, DbConnection | FileSystem> = pipe(
+  UserRepository.Default,
+  Layer.provideMerge(Cache.Default),
+  Layer.merge(DbConnection.Default)
+)
+
+
+=== [R3] Refactor 2: "Toggle lazy const" ===
+
+--- file:///.src/layerMagic_prepare.ts ---
+// refactor: 18:14-18:27, 20:14-20:29, 25:14-25:36
+// @effect-v3
+import { Effect, Layer, pipe } from "effect"
+
+class DbConnection extends Effect.Service<DbConnection>()("DbConnection", {
+  succeed: {}
+}) {}
+class FileSystem extends Effect.Service<FileSystem>()("FileSystem", {
+  succeed: {}
+}) {}
+class Cache extends Effect.Service<Cache>()("Cache", {
+  effect: Effect.as(FileSystem, {})
+}) {}
+class UserRepository extends Effect.Service<UserRepository>()("UserRepository", {
+  effect: Effect.as(Effect.zipRight(DbConnection, Cache), {})
+}) {}
+
+export const prepareSimple = UserRepository.Default
+
+export const prepareWithPipe = pipe(
+  UserRepository.Default,
+  Layer.provideMerge(Cache.Default)
+)
+
+export const prepareSomewhatComplex = () => pipe(
+  UserRepository.Default,
+  Layer.provideMerge(Cache.Default),
+  Layer.merge(DbConnection.Default)
+)
+
+
+=== [R3] Refactor 3: "Prepare layers for automatic composition" ===
+
+--- file:///.src/layerMagic_prepare.ts ---
+// refactor: 18:14-18:27, 20:14-20:29, 25:14-25:36
+// @effect-v3
+import { Effect, Layer, pipe } from "effect"
+
+class DbConnection extends Effect.Service<DbConnection>()("DbConnection", {
+  succeed: {}
+}) {}
+class FileSystem extends Effect.Service<FileSystem>()("FileSystem", {
+  succeed: {}
+}) {}
+class Cache extends Effect.Service<Cache>()("Cache", {
+  effect: Effect.as(FileSystem, {})
+}) {}
+class UserRepository extends Effect.Service<UserRepository>()("UserRepository", {
+  effect: Effect.as(Effect.zipRight(DbConnection, Cache), {})
+}) {}
+
+export const prepareSimple = UserRepository.Default
+
+export const prepareWithPipe = pipe(
+  UserRepository.Default,
+  Layer.provideMerge(Cache.Default)
+)
+
+export const prepareSomewhatComplex = [UserRepository.Default, Cache.Default, DbConnection.Default] as any as Layer.Layer<never /* Cache | DbConnection | UserRepository */>;
+

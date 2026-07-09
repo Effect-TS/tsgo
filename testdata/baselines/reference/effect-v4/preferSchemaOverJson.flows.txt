@@ -1,0 +1,1 @@
+/.src/preferSchemaOverJson.ts -> preferSchemaOverJson.flows.preferSchemaOverJson.mermaid
