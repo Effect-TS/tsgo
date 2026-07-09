@@ -68,6 +68,7 @@ require (
 	github.com/microsoft/typescript-go/shim/modulespecifiers v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/packagejson v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/parser v0.0.0-00010101000000-000000000000
+	github.com/microsoft/typescript-go/shim/project v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/project/logging v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/scanner v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/sourcemap v0.0.0-00010101000000-000000000000
