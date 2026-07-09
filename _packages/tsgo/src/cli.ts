@@ -21,7 +21,7 @@ class NativeBackendNotInstalledError extends Data.TaggedError("NativeBackendNotI
   get message(): string {
     return (
       "No native TypeScript backend is installed. " +
-      "Install one of the following first: `@typescript/native-preview` or `typescript` (>= 7, e.g. `typescript@rc`)."
+      "Install one of the following first: `@typescript/native-preview` or `typescript` (>= 7, e.g. `typescript@latest` or `typescript@next`)."
     )
   }
 }
@@ -188,7 +188,7 @@ const getNativeBackendBinaryPath = Effect.gen(function*() {
 /**
  * Resolve the Effect-patched binary to copy over the native target. The
  * `@effect/tsgo-*` platform package ships separate `lib/tsgo` (built from
- * `main`) and `lib/tsc` (built from `generated/stable`) artifacts; `binaryName`
+ * `main`) and `lib/tsc` (built from `generated/latest`) artifacts; `binaryName`
  * selects the one matching the detected native backend so the correct build is
  * installed. Defaults to `tsgo` for the `get-exe-path` command.
  */

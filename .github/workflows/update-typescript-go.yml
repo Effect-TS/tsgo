@@ -68,20 +68,23 @@ jobs:
         id: before
         run: echo "sha=$(git -C typescript-go rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
-      - name: Resolve native preview metadata
-        id: native_preview
+      - name: Resolve TypeScript next metadata
+        id: typescript
+        env:
+          TYPESCRIPT_SPEC: typescript@next
         run: |
-          metadata="$(npm view @typescript/native-preview@latest version gitHead --json)"
+          metadata="$(npm view "${TYPESCRIPT_SPEC}" version gitHead --json)"
           version="$(node -e 'const m = JSON.parse(process.argv[1]); if (!m.version) process.exit(1); process.stdout.write(m.version)' "$metadata")"
           git_head="$(node -e 'const m = JSON.parse(process.argv[1]); if (!/^[0-9a-f]{40}$/.test(m.gitHead || "")) process.exit(1); process.stdout.write(m.gitHead)' "$metadata")"
 
+          echo "spec=${TYPESCRIPT_SPEC}" >> "$GITHUB_OUTPUT"
           echo "version=${version}" >> "$GITHUB_OUTPUT"
           echo "git_head=${git_head}" >> "$GITHUB_OUTPUT"
 
       - name: Update TypeScript-Go submodule
         run: |
-          git -C typescript-go fetch --depth 1 origin "${{ steps.native_preview.outputs.git_head }}"
-          git -C typescript-go checkout --detach "${{ steps.native_preview.outputs.git_head }}"
+          git -C typescript-go fetch --depth 1 origin "${{ steps.typescript.outputs.git_head }}"
+          git -C typescript-go checkout --detach "${{ steps.typescript.outputs.git_head }}"
           git -C typescript-go submodule sync --recursive
           git -C typescript-go submodule update --init --recursive --force
 
@@ -139,7 +142,7 @@ jobs:
           ---
 
           Update to \
-          [\`@typescript/native-preview@${{ steps.native_preview.outputs.version }}\`](https://www.npmjs.com/package/@typescript/native-preview/v/${{ steps.native_preview.outputs.version }}), \
+          [\`${{ steps.typescript.outputs.spec }}\`](https://www.npmjs.com/package/typescript/v/${{ steps.typescript.outputs.version }}), \
           which ships \
           [\`typescript-go\`](https://github.com/microsoft/typescript-go/commit/${{ steps.after.outputs.sha }}) \
           commit \`${{ steps.after.outputs.sha }}\`.
@@ -160,7 +163,8 @@ jobs:
 
             ## TypeScript-Go
 
-            - Native preview version: `@typescript/native-preview@${{ steps.native_preview.outputs.version }}`
+            - TypeScript package: `${{ steps.typescript.outputs.spec }}`
+            - TypeScript version: `${{ steps.typescript.outputs.version }}`
             - Previous commit: `${{ steps.before.outputs.sha }}`
             - Updated commit: `${{ steps.after.outputs.sha }}`
             - Compare: ${{ steps.changelog.outputs.compare_url }}

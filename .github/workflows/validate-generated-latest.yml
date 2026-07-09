@@ -1,24 +1,24 @@
-name: Validate Generated Stable
+name: Validate Generated Latest
 
 on:
   workflow_call:
     inputs:
       head_sha:
-        description: Generated stable PR head SHA to validate
+        description: Generated latest PR head SHA to validate
         required: true
         type: string
       pr_number:
-        description: Generated stable PR number
+        description: Generated latest PR number
         required: true
         type: string
   workflow_dispatch:
     inputs:
       head_sha:
-        description: Generated stable PR head SHA to validate
+        description: Generated latest PR head SHA to validate
         required: true
         type: string
       pr_number:
-        description: Generated stable PR number
+        description: Generated latest PR number
         required: true
         type: string
 
@@ -26,7 +26,7 @@ permissions: {}
 
 jobs:
   validate:
-    name: Validate generated stable
+    name: Validate generated latest
     if: github.repository_owner == 'Effect-TS'
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -46,18 +46,18 @@ jobs:
             const { data } = await github.rest.checks.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              name: 'Validate generated stable PR',
+              name: 'Validate generated latest PR',
               head_sha: process.env.HEAD_SHA,
               status: 'in_progress',
               output: {
                 title: `Validation started for PR #${process.env.PR_NUMBER}`,
-                summary: 'Generated stable PR validation is running.',
+                summary: 'Generated latest PR validation is running.',
               },
             })
 
             core.setOutput('check_run_id', String(data.id))
 
-      - name: Checkout generated stable PR branch
+      - name: Checkout generated latest PR branch
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -76,9 +76,9 @@ jobs:
           path: |
             ~/.cache/go-build
             ~/go/pkg/mod
-          key: go-build-validate-generated-stable-${{ runner.os }}-${{ hashFiles('**/go.sum') }}
+          key: go-build-validate-generated-latest-${{ runner.os }}-${{ hashFiles('**/go.sum') }}
           restore-keys: |
-            go-build-validate-generated-stable-${{ runner.os }}-
+            go-build-validate-generated-latest-${{ runner.os }}-
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -93,7 +93,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Setup generated stable repo
+      - name: Setup generated latest repo
         run: pnpm setup-repo --ci
 
       - name: Validate check
@@ -147,6 +147,6 @@ jobs:
               conclusion: success ? 'success' : 'failure',
               output: {
                 title: `Validation result for PR #${process.env.PR_NUMBER}`,
-                summary: success ? 'Generated stable PR validation passed.' : 'Generated stable PR validation failed.',
+                summary: success ? 'Generated latest PR validation passed.' : 'Generated latest PR validation failed.',
               },
             })
