@@ -1,5 +1,11 @@
 # @effect/tsgo
 
+## 0.18.0
+
+### Minor Changes
+
+- 308652f: Add `effect-tsgo patch --typescript-package <name>` and automatically fall back from `typescript` to `@typescript/native` when resolving the native TypeScript package to patch.
+
 ## 0.17.0
 
 ### Minor Changes
