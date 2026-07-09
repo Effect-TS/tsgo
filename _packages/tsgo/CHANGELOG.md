@@ -1,5 +1,11 @@
 # @effect/tsgo
 
+## 0.17.0
+
+### Minor Changes
+
+- 74a7ccb: Modernize release workflow publishing and GitHub Actions runtimes.
+
 ## 0.16.4
 
 ### Patch Changes
