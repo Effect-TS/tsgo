@@ -170,6 +170,31 @@ describe("computeChanges", () => {
     }))
   })
 
+  it("should assess @typescript/native after typescript as the native backend", () => {
+    const packageJsonText = JSON.stringify({
+      name: "test-project",
+      version: "1.0.0",
+      devDependencies: {
+        "@typescript/native": "npm:typescript@^7.0.2",
+        "typescript": "npm:@typescript/typescript6@^6.0.2"
+      }
+    }, null, 2)
+
+    const input: Assessment.Input = {
+      packageJson: { fileName: "/test/package.json", text: packageJsonText },
+      tsconfig: { fileName: "/test/tsconfig.json", text: "{}" },
+      vscodeSettings: Option.none()
+    }
+
+    const assessment = assess(input)
+
+    expect(assessment.packageJson.typescriptVersion).toEqual(Option.some({
+      dependencyType: "devDependencies",
+      version: "npm:typescript@^7.0.2",
+      packageName: "@typescript/native"
+    }))
+  })
+
   it("should not assess typescript < 7 as the native backend", () => {
     const packageJsonText = JSON.stringify({
       name: "test-project",
@@ -224,7 +249,7 @@ describe("computeChanges", () => {
         devDependencies: {}
       }, null, 2),
       lspVersion: { dependencyType: "devDependencies", version: "0.0.4" },
-      typescriptVersion: { dependencyType: "devDependencies", version: "^7.0.1-rc", packageName: "typescript" },
+      typescriptVersion: { dependencyType: "devDependencies", version: "npm:typescript@^7.0.2", packageName: "@typescript/native" },
       prepareScript: false,
       editors: []
     })
@@ -234,8 +259,8 @@ describe("computeChanges", () => {
       .find((change) => change.fileName === "/test/package.json")
 
     expect(packageJsonChange).toBeDefined()
-    expect(packageJsonChange?.textChanges.some((change) => change.newText.includes('"typescript"'))).toBe(true)
-    expect(result.codeActions[0]?.description).toContain("Add typescript@^7.0.1-rc to devDependencies")
+    expect(packageJsonChange?.textChanges.some((change) => change.newText.includes('"@typescript/native"'))).toBe(true)
+    expect(result.codeActions[0]?.description).toContain("Add @typescript/native@npm:typescript@^7.0.2 to devDependencies")
   })
 
   it("should not throw when updating an existing prepare script from the legacy command", () => {

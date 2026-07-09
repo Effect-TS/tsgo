@@ -7,9 +7,9 @@ import * as ts from "typescript"
 import { FileReadError, PackageJsonNotFoundError } from "./errors.js"
 import type { Assessment, FileInput, PackageDependency } from "./types.js"
 import {
+  defaultTypescriptPackageNames,
   LSP_PACKAGE_NAME,
   LSP_PLUGIN_NAME,
-  TYPESCRIPT_PACKAGE_NAME,
   isNativeTypescriptVersion,
   PATCH_COMMAND
 } from "./consts.js"
@@ -101,10 +101,14 @@ const assessPackageJson = (
   }
 
   const lspVersion = assessDependency(LSP_PACKAGE_NAME)
-  const typescriptDep = assessDependency(TYPESCRIPT_PACKAGE_NAME)
-  const typescriptVersion = Option.isSome(typescriptDep) && isNativeTypescriptVersion(typescriptDep.value.version)
-    ? Option.some({ ...typescriptDep.value, packageName: TYPESCRIPT_PACKAGE_NAME })
-    : Option.none<PackageDependency>()
+  let typescriptVersion = Option.none<PackageDependency>()
+  for (const packageName of defaultTypescriptPackageNames) {
+    const typescriptDep = assessDependency(packageName)
+    if (Option.isSome(typescriptDep) && isNativeTypescriptVersion(typescriptDep.value.version)) {
+      typescriptVersion = Option.some({ ...typescriptDep.value, packageName })
+      break
+    }
+  }
 
   // Check for prepare script
   const prepareScript = "prepare" in (parsed.scripts ?? {})
