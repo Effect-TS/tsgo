@@ -9,10 +9,10 @@ import * as ts from "typescript"
 import { renderCodeActions } from "./diff-renderer.js"
 import type { Assessment, PackageDependency, SetupCodeAction, Target } from "./types.js"
 import {
+  defaultTypescriptPackageNames,
   LSP_PACKAGE_NAME,
   LSP_PLUGIN_NAME,
   PATCH_COMMAND,
-  TYPESCRIPT_PACKAGE_NAME,
   TSCONFIG_SCHEMA_URL
 } from "./consts.js"
 import type { RuleSeverity } from "./rule-info.js"
@@ -243,12 +243,30 @@ const computePackageJsonChanges = (
         Option.isNone(current.typescriptVersion) &&
         target.typescriptVersion.value.dependencyType === dependencyType
 
+      const getTypescriptPackageName = (dependency: PackageDependency) =>
+        dependency.packageName ?? defaultTypescriptPackageNames[0]
+
+      const appendTypescriptDependencyProperty = (dependencyProperties: Array<ts.PropertyAssignment>) => {
+        const targetTypescript = target.typescriptVersion.pipe(Option.getOrUndefined)
+        if (!targetTypescript) {
+          return
+        }
+
+        dependencyProperties.push(
+          ts.factory.createPropertyAssignment(
+            ts.factory.createStringLiteral(getTypescriptPackageName(targetTypescript)),
+            ts.factory.createStringLiteral(targetTypescript.version)
+          )
+        )
+      }
+
       const ensureTypescriptDependency = () => {
         if (Option.isNone(target.typescriptVersion) || Option.isSome(current.typescriptVersion)) {
           return
         }
 
         const targetTypescript = target.typescriptVersion.value
+        const targetTypescriptPackageName = getTypescriptPackageName(targetTypescript)
         const typescriptDepsProperty = findDependencyCollectionProperty(rootObj, targetTypescript.dependencyType)
 
         if (
@@ -260,9 +278,9 @@ const computePackageJsonChanges = (
         }
 
         descriptions.push(
-          `Add ${TYPESCRIPT_PACKAGE_NAME}@${targetTypescript.version} to ${targetTypescript.dependencyType}`
+          `Add ${targetTypescriptPackageName}@${targetTypescript.version} to ${targetTypescript.dependencyType}`
         )
-        upsertDependency(tracker, current.sourceFile, rootObj, TYPESCRIPT_PACKAGE_NAME, targetTypescript)
+        upsertDependency(tracker, current.sourceFile, rootObj, targetTypescriptPackageName, targetTypescript)
       }
 
       // Handle @effect/tsgo dependency
@@ -299,15 +317,7 @@ const computePackageJsonChanges = (
               ]
 
               if (shouldAddTypescriptWithDependencyType(targetDepType)) {
-                const targetTypescript = target.typescriptVersion.pipe(Option.getOrUndefined)
-                if (targetTypescript) {
-                dependencyProperties.push(
-                  ts.factory.createPropertyAssignment(
-                    ts.factory.createStringLiteral(TYPESCRIPT_PACKAGE_NAME),
-                    ts.factory.createStringLiteral(targetTypescript.version)
-                  )
-                )
-                }
+                appendTypescriptDependencyProperty(dependencyProperties)
               }
 
               const newDepsProp = ts.factory.createPropertyAssignment(
@@ -357,15 +367,7 @@ const computePackageJsonChanges = (
             ]
 
             if (shouldAddTypescriptWithDependencyType(targetDepType)) {
-              const targetTypescript = target.typescriptVersion.pipe(Option.getOrUndefined)
-              if (targetTypescript) {
-              dependencyProperties.push(
-                ts.factory.createPropertyAssignment(
-                  ts.factory.createStringLiteral(TYPESCRIPT_PACKAGE_NAME),
-                  ts.factory.createStringLiteral(targetTypescript.version)
-                )
-              )
-              }
+              appendTypescriptDependencyProperty(dependencyProperties)
             }
 
             const newDepsProp = ts.factory.createPropertyAssignment(
