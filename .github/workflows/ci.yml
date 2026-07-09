@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - generated/stable
+      - generated/latest
   pull_request:
     branches: [main]
 

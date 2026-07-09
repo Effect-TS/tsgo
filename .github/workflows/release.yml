@@ -38,7 +38,7 @@ jobs:
           - name: tsgo
             ref: ${{ github.event.pull_request.merge_commit_sha }}
           - name: tsc
-            ref: generated/stable
+            ref: generated/latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4

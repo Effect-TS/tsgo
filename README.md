@@ -22,7 +22,7 @@ This will guide you through the installation process, which includes:
 4. Hinting at any additional editor configuration needed to ensure the LSP is active.
 
 > [!NOTE]
-> At the moment, you still need a native TypeScript install alongside `@effect/tsgo` — either `@typescript/native-preview` (nightlies) or `typescript` >= 7 (e.g. the 7.0 RC, `typescript@rc`). `effect-tsgo patch` and `effect-tsgo setup` detect and use whichever one is installed.
+> At the moment, you still need a native TypeScript install alongside `@effect/tsgo` — either `@typescript/native-preview` (legacy nightlies) or `typescript` >= 7 (e.g. `typescript@latest` or `typescript@next`). `effect-tsgo patch` and `effect-tsgo setup` detect and use whichever one is installed.
 
 ## Diagnostic Status
 
