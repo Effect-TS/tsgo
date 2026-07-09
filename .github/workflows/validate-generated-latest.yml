@@ -37,7 +37,7 @@ jobs:
     steps:
       - name: Create PR validation check
         id: create_check
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         env:
           HEAD_SHA: ${{ inputs.head_sha }}
           PR_NUMBER: ${{ inputs.pr_number }}
@@ -58,20 +58,20 @@ jobs:
             core.setOutput('check_run_id', String(data.id))
 
       - name: Checkout generated latest PR branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           ref: ${{ inputs.head_sha }}
           submodules: recursive
 
       - name: Setup Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version: "1.26"
           cache: false
 
       - name: Cache Go build
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             ~/.cache/go-build
@@ -81,12 +81,12 @@ jobs:
             go-build-validate-generated-latest-${{ runner.os }}-
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: "24"
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
         with:
           version: 9
 
@@ -114,7 +114,7 @@ jobs:
       - name: Validate lint
         id: validate_lint
         continue-on-error: true
-        uses: golangci/golangci-lint-action@v7
+        uses: golangci/golangci-lint-action@v9
         with:
           version: v2.9
           args: ./...
@@ -123,7 +123,7 @@ jobs:
 
       - name: Complete PR validation check
         if: always()
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         env:
           CHECK_RUN_ID: ${{ steps.create_check.outputs.check_run_id }}
           PR_NUMBER: ${{ inputs.pr_number }}
