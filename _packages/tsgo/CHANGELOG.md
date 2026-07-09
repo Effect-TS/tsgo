@@ -1,5 +1,11 @@
 # @effect/tsgo
 
+## 0.18.1
+
+### Patch Changes
+
+- d6cdab2: Allow `effect-tsgo patch` to skip TypeScript package aliases that do not include package metadata needed for native binary matching.
+
 ## 0.18.0
 
 ### Minor Changes
