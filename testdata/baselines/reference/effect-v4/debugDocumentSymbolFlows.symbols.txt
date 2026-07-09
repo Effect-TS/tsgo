@@ -1,0 +1,35 @@
+==== /test.ts ====
+
+-- hierarchical[0] --
+(Package) Effect range=1:1-1:1 selection=1:1-1:1
+  (Package) Flows range=1:1-1:1 selection=1:1-1:1
+    (Variable) Flow 0 range=5:21-8:2 selection=5:21-8:2
+      (Variable) start detail="Effect.Effect<number, never, never>" range=5:21-5:26 selection=5:21-5:26
+      (Function) 0: Effect.map detail="Effect.Effect<number, never, never>" range=6:3-6:27 selection=6:3-6:27
+      (Function) 1: Effect.flatMap detail="Effect.Effect<string, never, never>" range=7:3-7:51 selection=7:3-7:51
+    (Variable) Flow 1 range=7:25-7:50 selection=7:25-7:50
+      (Variable) n detail="number" range=7:47-7:48 selection=7:47-7:48
+      (Function) 0: String detail="string" range=7:40-7:49 selection=7:40-7:49
+      (Function) 1: Effect.succeed detail="Effect.Effect<string, never, never>" range=7:25-7:50 selection=7:25-7:50
+(Variable) Effect range=1:10-1:16 selection=1:10-1:16
+(Variable) start range=3:15-3:43 selection=3:15-3:20
+(Variable) flow range=5:14-8:2 selection=5:14-5:18
+  (Function) Effect.map() callback range=6:14-6:26 selection=6:14-6:14
+  (Function) Effect.flatMap() callback range=7:18-7:50 selection=7:18-7:18
+
+-- flat[0] --
+(Package) Effect container="" range=1:1-1:1
+(Package) Flows container="Effect" range=1:1-1:1
+(Variable) Flow 0 container="Flows" range=5:21-8:2
+(Variable) start container="Flow 0" range=5:21-5:26
+(Function) 0: Effect.map container="Flow 0" range=6:3-6:27
+(Function) 1: Effect.flatMap container="Flow 0" range=7:3-7:51
+(Variable) Flow 1 container="Flows" range=7:25-7:50
+(Variable) n container="Flow 1" range=7:47-7:48
+(Function) 0: String container="Flow 1" range=7:40-7:49
+(Function) 1: Effect.succeed container="Flow 1" range=7:25-7:50
+(Variable) Effect container="" range=1:10-1:16
+(Variable) start container="" range=3:15-3:43
+(Variable) flow container="" range=5:14-8:2
+(Function) Effect.map() callback container="flow" range=6:14-6:26
+(Function) Effect.flatMap() callback container="flow" range=7:18-7:50

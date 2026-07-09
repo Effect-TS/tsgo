@@ -1,0 +1,25 @@
+=== Quick Fix Inventory ===
+
+[D1] (5:3-5:18) TS377095: `Effect.orElseSucceed` expresses the same recovery more directly than `Effect.catchAll` followed by `Effect.succeed`. effect(catchToOrElseSucceed)
+  Fix 0: "Disable catchToOrElseSucceed for this line"
+  Fix 1: "Disable catchToOrElseSucceed for entire file"
+  Fix 2: "Replace with Effect.orElseSucceed"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable catchToOrElseSucceed for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable catchToOrElseSucceed for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.orElseSucceed" ===
+
+--- file:///.src/catchToOrElseSucceed_preview.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+export const program = Effect.fail("error").pipe(
+  Effect.orElseSucceed(() => 42)
+)
+

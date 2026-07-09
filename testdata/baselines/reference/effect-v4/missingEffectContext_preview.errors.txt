@@ -1,0 +1,18 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/missingEffectContext_preview.ts(8,14): warning TS377004: This Effect requires a service that is missing from the expected Effect context: `Db`. effect(missingEffectContext)
+
+
+==== /.src/missingEffectContext_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics missingEffectContext:warning
+    import { Effect, Context } from "effect"
+    
+    class Db extends Context.Service<Db>()("Db", { make: Effect.succeed({}) }) {}
+    
+    // @ts-expect-error
+    export const preview: Effect.Effect<void> = Db.pipe(Effect.asVoid)
+                 ~~~~~~~
+!!! warning TS377004: This Effect requires a service that is missing from the expected Effect context: `Db`. effect(missingEffectContext)
+    

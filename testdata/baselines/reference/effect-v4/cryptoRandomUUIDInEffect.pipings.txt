@@ -1,0 +1,43 @@
+==== /.src/cryptoRandomUUIDInEffect.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 5:25 - 7:3
+Node: Effect.gen(function*() {\n  return crypto.randomUUID()\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  return crypto.randomUUID()\n}
+Subject Type: () => Generator<never, `${string}-${string}-${string}-${string}-${string}`, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<`${string}-${string}-${string}-${string}-${string}`, never, never>
+
+=== Piping Flow ===
+Location: 10:29 - 13:3
+Node: Effect.gen(function*() {\n  const globalCrypto = crypto\n  return globalCrypto.randomUUID()\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const globalCrypto = crypto\n  return globalCrypto.randomUUID()\n}
+Subject Type: () => Generator<never, `${string}-${string}-${string}-${string}-${string}`, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<`${string}-${string}-${string}-${string}-${string}`, never, never>
+
+=== Piping Flow ===
+Location: 22:32 - 25:3
+Node: Effect.gen(function*() {\n  const fn = () => crypto.randomUUID()\n  return fn\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const fn = () => crypto.randomUUID()\n  return fn\n}
+Subject Type: () => Generator<never, () => `${string}-${string}-${string}-${string}-${string}`, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<() => `${string}-${string}-${string}-${string}-${string}`, never, never>

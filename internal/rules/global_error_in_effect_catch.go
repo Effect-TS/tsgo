@@ -1,0 +1,116 @@
+// Package rules contains all Effect diagnostic rule implementations.
+package rules
+
+import (
+	"github.com/effect-ts/tsgo/etscore"
+	"github.com/effect-ts/tsgo/internal/rule"
+	"github.com/effect-ts/tsgo/internal/typeparser"
+	"github.com/microsoft/typescript-go/shim/ast"
+	"github.com/microsoft/typescript-go/shim/checker"
+	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
+	"github.com/microsoft/typescript-go/shim/scanner"
+)
+
+// globalErrorCatchApis lists the Effect module APIs that have a catch callback parameter.
+var globalErrorCatchApis = []string{"tryPromise", "try", "tryMap", "tryMapPromise"}
+
+// GlobalErrorInEffectCatch detects when catch callbacks in Effect APIs return the global 'Error'
+// type instead of providing typed errors.
+var GlobalErrorInEffectCatch = rule.Rule{
+	Name:            "globalErrorInEffectCatch",
+	Group:           "antipattern",
+	Description:     "Warns when catch callbacks return global Error type instead of typed errors",
+	DefaultSeverity: etscore.SeverityWarning,
+	SupportedEffect: []string{"v3", "v4"},
+	Codes:           []int32{tsdiag.The_catch_callback_in_0_returns_the_global_Error_type_Untagged_errors_merge_together_in_the_Effect_error_channel_and_lose_type_level_distinction_a_tagged_error_preserves_that_distinction_and_can_wrap_the_original_error_in_a_cause_property_effect_globalErrorInEffectCatch.Code()},
+	Run: func(ctx *rule.Context) []*ast.Diagnostic {
+		var diags []*ast.Diagnostic
+
+		var walk ast.Visitor
+		walk = func(n *ast.Node) bool {
+			if n == nil {
+				return false
+			}
+
+			if n.Kind == ast.KindCallExpression {
+				if diag := checkGlobalErrorInEffectCatch(ctx, n); diag != nil {
+					diags = append(diags, diag)
+				}
+			}
+
+			n.ForEachChild(walk)
+			return false
+		}
+
+		walk(ctx.SourceFile.AsNode())
+
+		return diags
+	},
+}
+
+// checkGlobalErrorInEffectCatch checks a single call expression for the global-error-in-catch pattern.
+func checkGlobalErrorInEffectCatch(ctx *rule.Context, node *ast.Node) *ast.Diagnostic {
+	if node.Kind != ast.KindCallExpression {
+		return nil
+	}
+	call := node.AsCallExpression()
+
+	callee := call.Expression
+	if !isGlobalErrorCatchCallee(ctx.TypeParser, ctx.Checker, callee) {
+		return nil
+	}
+
+	sig := ctx.Checker.GetResolvedSignature(node)
+	if sig == nil {
+		return nil
+	}
+
+	params := sig.Parameters()
+	if len(params) == 0 {
+		return nil
+	}
+
+	paramType := ctx.Checker.GetTypeOfSymbolAtLocation(params[0], node)
+	if paramType == nil {
+		return nil
+	}
+
+	for _, objectType := range ctx.TypeParser.UnrollUnionMembers(paramType) {
+		catchSymbol := ctx.Checker.GetPropertyOfType(objectType, "catch")
+		if catchSymbol == nil {
+			continue
+		}
+
+		catchType := ctx.Checker.GetTypeOfSymbolAtLocation(catchSymbol, node)
+		if catchType == nil {
+			continue
+		}
+
+		signatures := ctx.Checker.GetSignaturesOfType(catchType, checker.SignatureKindCall)
+		if len(signatures) == 0 {
+			continue
+		}
+
+		returnType := ctx.Checker.GetReturnTypeOfSignature(signatures[0])
+		if returnType == nil {
+			continue
+		}
+
+		if ctx.TypeParser.IsGlobalErrorType(returnType) {
+			calleeText := scanner.GetSourceTextOfNodeFromSourceFile(ctx.SourceFile, callee, false)
+			return ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(callee), tsdiag.The_catch_callback_in_0_returns_the_global_Error_type_Untagged_errors_merge_together_in_the_Effect_error_channel_and_lose_type_level_distinction_a_tagged_error_preserves_that_distinction_and_can_wrap_the_original_error_in_a_cause_property_effect_globalErrorInEffectCatch, nil, calleeText)
+		}
+	}
+
+	return nil
+}
+
+// isGlobalErrorCatchCallee checks if a node references one of the Effect module catch APIs.
+func isGlobalErrorCatchCallee(tp *typeparser.TypeParser, _ *checker.Checker, node *ast.Node) bool {
+	for _, name := range globalErrorCatchApis {
+		if tp.IsNodeReferenceToEffectModuleApi(node, name) {
+			return true
+		}
+	}
+	return false
+}

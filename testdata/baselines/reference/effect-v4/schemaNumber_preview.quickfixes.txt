@@ -1,0 +1,53 @@
+=== Quick Fix Inventory ===
+
+[D1] (7:15-7:21) TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+  Fix 0: "Disable schemaNumber for this line"
+  Fix 1: "Disable schemaNumber for entire file"
+  Fix 2: "Replace with Schema.Finite"
+
+[D2] (8:17-8:33) TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.FiniteFromString` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+  Fix 0: "Disable schemaNumber for this line"
+  Fix 1: "Disable schemaNumber for entire file"
+  Fix 2: "Replace with Schema.FiniteFromString"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable schemaNumber for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable schemaNumber for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Schema.Finite" ===
+
+--- file:///.src/schemaNumber_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics schemaNumber:warning
+
+import { Schema } from "effect"
+
+export const User = Schema.Struct({
+  age: Schema.Finite,
+  score: Schema.NumberFromString
+})
+
+
+=== [D2] Fix 0: "Disable schemaNumber for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable schemaNumber for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Schema.FiniteFromString" ===
+
+--- file:///.src/schemaNumber_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics schemaNumber:warning
+
+import { Schema } from "effect"
+
+export const User = Schema.Struct({
+  age: Schema.Number,
+  score: Schema.FiniteFromString
+})
+

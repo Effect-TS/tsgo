@@ -1,0 +1,22 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config@3.1.1/schema.json",
+  "changelog": "@changesets/cli/changelog",
+  "commit": false,
+  "fixed": [
+    [
+      "@effect/tsgo",
+      "@effect/tsgo-darwin-arm64",
+      "@effect/tsgo-darwin-x64",
+      "@effect/tsgo-linux-arm",
+      "@effect/tsgo-linux-arm64",
+      "@effect/tsgo-linux-x64",
+      "@effect/tsgo-win32-arm64",
+      "@effect/tsgo-win32-x64"
+    ]
+  ],
+  "linked": [],
+  "access": "public",
+  "baseBranch": "main",
+  "updateInternalDependencies": "patch",
+  "ignore": []
+}

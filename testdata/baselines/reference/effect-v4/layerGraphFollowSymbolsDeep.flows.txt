@@ -1,0 +1,3 @@
+/.src/base.ts -> layerGraphFollowSymbolsDeep.flows.base.mermaid
+/.src/middle.ts -> layerGraphFollowSymbolsDeep.flows.middle.mermaid
+/.src/deep.ts -> layerGraphFollowSymbolsDeep.flows.deep.mermaid

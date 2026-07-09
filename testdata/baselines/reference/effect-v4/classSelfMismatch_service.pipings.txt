@@ -1,0 +1,29 @@
+==== /.src/classSelfMismatch_service.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 4:33 - 7:20
+Node: Context.Service<CorrectName, {\n  writeCache: (key: string) => Effect.Effect<void, never, FileSystem | Cache>\n  readCache: Effect.Effect<void, never, FileSystem | Cache>\n}>()("CorrectName")
+Node Kind: KindCallExpression
+
+Subject: "CorrectName"
+Subject Type: "CorrectName"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.Service<CorrectName, {\n  writeCache: (key: string) => Effect.Effect<void, never, FileSystem | Cache>\n  readCache: Effect.Effect<void, never, FileSystem | Cache>\n}>()
+      args: (constant)
+      outType: ServiceClass<CorrectName, "CorrectName", { writeCache: (key: string) => Effect<void, never, Cache | FileSystem>; readCache: Effect<void, never, Cache | FileSystem>; }>
+
+=== Piping Flow ===
+Location: 10:31 - 13:18
+Node: Context.Service<CorrectName, {\n  writeCache: (key: string) => Effect.Effect<void, never, FileSystem | Cache>\n  readCache: Effect.Effect<void, never, FileSystem | Cache>\n}>()("WrongName")
+Node Kind: KindCallExpression
+
+Subject: "WrongName"
+Subject Type: "WrongName"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.Service<CorrectName, {\n  writeCache: (key: string) => Effect.Effect<void, never, FileSystem | Cache>\n  readCache: Effect.Effect<void, never, FileSystem | Cache>\n}>()
+      args: (constant)
+      outType: ServiceClass<CorrectName, "WrongName", { writeCache: (key: string) => Effect<void, never, Cache | FileSystem>; readCache: Effect<void, never, Cache | FileSystem>; }>

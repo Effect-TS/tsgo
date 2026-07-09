@@ -1,0 +1,28 @@
+=== Refactor Inventory ===
+
+[R1] selection: "4:23-4:46"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Wrap with Effect.gen" (refactor.rewrite.effect.wrapWithEffectGen)
+
+[R2] selection: "empty (0:0-0:0)"
+  (no refactors)
+
+=== Refactor Application Results ===
+
+=== [R1] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/wrapWithPipe.ts ---
+// refactor: 4:23-4:46
+import * as Effect from "effect/Effect"
+
+export const result = pipe(Effect.succeed("hello"))
+
+
+=== [R1] Refactor 1: "Wrap with Effect.gen" ===
+
+--- file:///.src/wrapWithPipe.ts ---
+// refactor: 4:23-4:46
+import * as Effect from "effect/Effect"
+
+export const result = Effect.gen(function*() { return yield* Effect.succeed("hello") })
+

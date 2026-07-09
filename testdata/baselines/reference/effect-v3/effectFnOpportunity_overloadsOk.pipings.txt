@@ -1,0 +1,85 @@
+==== /.src/effectFnOpportunity_overloadsOk.ts (6 flows) ====
+
+=== Piping Flow ===
+Location: 13:9 - 15:5
+Node: Effect.gen(function*() {\n    return yield* Effect.succeed(a as any)\n  })
+Node Kind: KindCallExpression
+
+Subject: function*() {\n    return yield* Effect.succeed(a as any)\n  }
+Subject Type: () => Generator<YieldWrap<Effect<any, never, never>>, any, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<any, never, never>
+
+=== Piping Flow ===
+Location: 14:18 - 14:43
+Node: Effect.succeed(a as any)
+Node Kind: KindCallExpression
+
+Subject: a as any
+Subject Type: any
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<any, never, never>
+
+=== Piping Flow ===
+Location: 23:9 - 25:5
+Node: Effect.gen(function*() {\n    return yield* Effect.succeed(a as any)\n  })
+Node Kind: KindCallExpression
+
+Subject: function*() {\n    return yield* Effect.succeed(a as any)\n  }
+Subject Type: () => Generator<YieldWrap<Effect<any, never, never>>, any, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<any, never, never>
+
+=== Piping Flow ===
+Location: 24:18 - 24:43
+Node: Effect.succeed(a as any)
+Node Kind: KindCallExpression
+
+Subject: a as any
+Subject Type: any
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<any, never, never>
+
+=== Piping Flow ===
+Location: 38:9 - 38:34
+Node: Effect.succeed(a as any)
+Node Kind: KindCallExpression
+
+Subject: a as any
+Subject Type: any
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<any, never, never>
+
+=== Piping Flow ===
+Location: 51:9 - 51:34
+Node: Effect.succeed(a as any)
+Node Kind: KindCallExpression
+
+Subject: a as any
+Subject Type: any
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<any, never, never>

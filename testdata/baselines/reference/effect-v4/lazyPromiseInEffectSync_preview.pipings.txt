@@ -1,0 +1,29 @@
+==== /.src/lazyPromiseInEffectSync_preview.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 5:23 - 5:61
+Node: Effect.sync(() => Promise.resolve(1))
+Node Kind: KindCallExpression
+
+Subject: () => Promise.resolve(1)
+Subject Type: () => Promise<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 5:41 - 5:60
+Node: Promise.resolve(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.resolve
+      args: (constant)
+      outType: Promise<number>

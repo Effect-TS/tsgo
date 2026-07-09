@@ -1,0 +1,23 @@
+=== Quick Fix Inventory ===
+
+[D1] (18:63-18:72) TS377088: This generator applies the same inline `Effect.mapError(...)` to every yielded effect. Keep that `Effect.mapError(...)` inline and hoist it once to the generator result: `Effect.gen(...).pipe(Effect.mapError(...))`, or `Effect.fn(function*(){ ... }, Effect.mapError(...))`. effect(redundantMapError)
+  Fix 0: "Disable redundantMapError for this line"
+  Fix 1: "Disable redundantMapError for entire file"
+
+[D2] (62:51-62:60) TS377088: This generator applies the same inline `Effect.mapError(...)` to every yielded effect. Keep that `Effect.mapError(...)` inline and hoist it once to the generator result: `Effect.gen(...).pipe(Effect.mapError(...))`, or `Effect.fn(function*(){ ... }, Effect.mapError(...))`. effect(redundantMapError)
+  Fix 0: "Disable redundantMapError for this line"
+  Fix 1: "Disable redundantMapError for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable redundantMapError for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable redundantMapError for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable redundantMapError for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable redundantMapError for entire file" ===
+skipped by default

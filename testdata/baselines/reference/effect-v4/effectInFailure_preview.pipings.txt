@@ -1,0 +1,43 @@
+==== /.src/effectInFailure_preview.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 5:23 - 8:3
+Node: Effect.try({\n  try: () => JSON.parse("{"),\n  catch: (error) => Effect.logError(error)\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  try: () => JSON.parse("{"),\n  catch: (error) => Effect.logError(error)\n}
+Subject Type: { try: () => any; catch: (error: unknown) => Effect<void, never, never>; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<any, Effect<void, never, never>, never>
+
+=== Piping Flow ===
+Location: 6:13 - 6:29
+Node: JSON.parse("{")
+Node Kind: KindCallExpression
+
+Subject: "{"
+Subject Type: "{"
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 7:20 - 7:43
+Node: Effect.logError(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: unknown
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.logError
+      args: (constant)
+      outType: Effect<void, never, never>

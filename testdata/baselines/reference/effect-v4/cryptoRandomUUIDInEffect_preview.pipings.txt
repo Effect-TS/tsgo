@@ -1,0 +1,15 @@
+==== /.src/cryptoRandomUUIDInEffect_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 5:23 - 7:3
+Node: Effect.gen(function*() {\n  return crypto.randomUUID()\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  return crypto.randomUUID()\n}
+Subject Type: () => Generator<never, `${string}-${string}-${string}-${string}-${string}`, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<`${string}-${string}-${string}-${string}-${string}`, never, never>

@@ -1,0 +1,48 @@
+// @filename: tsconfig.json
+{
+  "compilerOptions": {
+    "plugins": [
+      {
+        "name": "@effect/language-service",
+        "effectFn": ["span", "suggested-span", "inferred-span", "no-span", "untraced"]
+      }
+    ]
+  }
+}
+
+// @filename: effectFnOpportunity_basic.ts
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+// These cases can be converted to Effect.fnUntraced because:
+// - There are no pipe arguments
+// - There is no withSpan for tracing
+// Converting to Effect.fnUntraced improves performance by not
+// reallocating the generator function on every call.
+
+export const arrowBlockGen = () => {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+}
+
+export const arrowExpressionGen = () =>
+  Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+
+export const functionExpressionGen = function() {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+}
+
+export function functionDeclarationGen() {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+}

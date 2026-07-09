@@ -1,0 +1,33 @@
+=== Quick Fix Inventory ===
+
+[D1] (10:40-10:49) TS377096: This generator applies `Effect.orDie` to every yielded effect. Hoist it once to the generator result: `Effect.gen(...).pipe(Effect.orDie)`, or `Effect.fn(function*(){ ... }, Effect.orDie)`. effect(redundantOrDie)
+  Fix 0: "Disable redundantOrDie for this line"
+  Fix 1: "Disable redundantOrDie for entire file"
+
+[D2] (17:65-17:74) TS377096: This generator applies `Effect.orDie` to every yielded effect. Hoist it once to the generator result: `Effect.gen(...).pipe(Effect.orDie)`, or `Effect.fn(function*(){ ... }, Effect.orDie)`. effect(redundantOrDie)
+  Fix 0: "Disable redundantOrDie for this line"
+  Fix 1: "Disable redundantOrDie for entire file"
+
+[D3] (24:51-24:60) TS377096: This generator applies `Effect.orDie` to every yielded effect. Hoist it once to the generator result: `Effect.gen(...).pipe(Effect.orDie)`, or `Effect.fn(function*(){ ... }, Effect.orDie)`. effect(redundantOrDie)
+  Fix 0: "Disable redundantOrDie for this line"
+  Fix 1: "Disable redundantOrDie for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable redundantOrDie for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable redundantOrDie for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable redundantOrDie for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable redundantOrDie for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable redundantOrDie for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable redundantOrDie for entire file" ===
+skipped by default

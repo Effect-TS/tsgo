@@ -1,0 +1,21 @@
+=== Refactor Inventory ===
+
+[R1] selection: "5:36-5:37"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+
+[R2] selection: "empty (0:0-0:0)"
+  (no refactors)
+
+=== Refactor Application Results ===
+
+=== [R1] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/wrapWithEffectGen_noclass.ts ---
+// refactor: 5:36-5:37
+// @effect-v3
+import { Effect } from "effect"
+
+export class Asd extends Effect.Serpipe(v)ice<Asd>()("Asd", {
+  succeed: {}
+}) {}
+

@@ -1,0 +1,15 @@
+diff --git a/internal/compiler/program.go b/internal/compiler/program.go
+--- a/internal/compiler/program.go
++++ b/internal/compiler/program.go
+@@ -1168,6 +1168,11 @@ func (p *Program) getDiagnosticsWithPrecedingDirectives(sourceFile *ast.SourceFi
+ 				break
+ 			}
+ 		}
++		// EFFECT: Never suppress Effect diagnostics (377xxx range) with @ts-expect-error/@ts-ignore.
++		// Effect has its own directive system (@effect-diagnostics) for suppression.
++		if ignoreDiagnostic && diagnostic.Code() >= 377000 && diagnostic.Code() < 378000 {
++			ignoreDiagnostic = false
++		}
+ 		if !ignoreDiagnostic {
+ 			filtered = append(filtered, diagnostic)
+ 		}

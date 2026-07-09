@@ -1,0 +1,309 @@
+==== /.src/effectFnIife.ts (22 flows) ====
+
+=== Piping Flow ===
+Location: 4:21 - 6:3
+Node: Effect.fn("test")(function*() {\n  yield* Effect.succeed(1)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  yield* Effect.succeed(1)\n}
+Subject Type: () => Generator<Effect<number, never, never>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn("test")
+      args: (constant)
+      outType: () => Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 5:9 - 5:27
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 9:21 - 12:3
+Node: Effect.fn("named")(function*() {\n  yield* Effect.succeed(1)\n  return 42\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  yield* Effect.succeed(1)\n  return 42\n}
+Subject Type: () => Generator<Effect<number, never, never>, number, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn("named")
+      args: (constant)
+      outType: () => Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 10:9 - 10:27
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 15:21 - 17:3
+Node: Effect.fnUntraced(function*() {\n  yield* Effect.succeed(1)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  yield* Effect.succeed(1)\n}
+Subject Type: () => Generator<Effect<number, never, never>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fnUntraced
+      args: (constant)
+      outType: () => Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 16:9 - 16:27
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 20:21 - 20:65
+Node: Effect.fn("arrow")(() => Effect.succeed(1))
+Node Kind: KindCallExpression
+
+Subject: () => Effect.succeed(1)
+Subject Type: () => Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn("arrow")
+      args: (constant)
+      outType: () => Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 20:46 - 20:64
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 23:21 - 25:3
+Node: Effect.fn("func")(function() {\n  return Effect.succeed(1)\n})
+Node Kind: KindCallExpression
+
+Subject: function() {\n  return Effect.succeed(1)\n}
+Subject Type: () => Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn("func")
+      args: (constant)
+      outType: () => Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 24:9 - 24:27
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 28:21 - 30:29
+Node: Effect.fn("piped")(function*() {\n  return yield* Effect.succeed(1)\n}, Effect.map((n) => n + 1))
+Node Kind: KindCallExpression
+
+Subject: Effect.fn("piped")(function*() {\n  return yield* Effect.succeed(1)\n}, Effect.map((n) => n + 1))
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: effectFn
+      callee: Effect.map
+      args: [(n) => n + 1]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 29:16 - 29:34
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 33:21 - 35:29
+Node: Effect.fnUntraced(function*() {\n  return yield* Effect.succeed(1)\n}, Effect.map((n) => n + 1))
+Node Kind: KindCallExpression
+
+Subject: Effect.fnUntraced(function*() {\n  return yield* Effect.succeed(1)\n}, Effect.map((n) => n + 1))
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: effectFnUntraced
+      callee: Effect.map
+      args: [(n) => n + 1]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 34:16 - 34:34
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 38:20 - 40:3
+Node: Effect.fn("myFn")(function*() {\n  yield* Effect.succeed(1)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  yield* Effect.succeed(1)\n}
+Subject Type: () => Generator<Effect<number, never, never>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn("myFn")
+      args: (constant)
+      outType: () => Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 39:9 - 39:27
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 43:21 - 43:65
+Node: Effect.fn("myFn2")(() => Effect.succeed(1))
+Node Kind: KindCallExpression
+
+Subject: () => Effect.succeed(1)
+Subject Type: () => Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn("myFn2")
+      args: (constant)
+      outType: () => Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 43:46 - 43:64
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 46:19 - 48:3
+Node: Effect.gen(function*() {\n  yield* Effect.succeed(1)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  yield* Effect.succeed(1)\n}
+Subject Type: () => Generator<Effect<number, never, never>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 47:9 - 47:27
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 51:40 - 51:58
+Node: Effect.succeed(n)
+Node Kind: KindCallExpression
+
+Subject: n
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 52:22 - 52:35
+Node: regularFn(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: regularFn
+      args: (constant)
+      outType: Effect<number, never, never>

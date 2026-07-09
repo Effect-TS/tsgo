@@ -1,0 +1,39 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/globalTimersInEffect_thunks.ts(6,48): warning TS377073: This Effect code uses `setTimeout`, the corresponding timer API in this context is `Effect.sleep or Schedule` from Effect. effect(globalTimersInEffect)
+/.src/globalTimersInEffect_thunks.ts(9,14): warning TS377073: This Effect code uses `setInterval`, the corresponding timer API in this context is `Schedule or Effect.repeat` from Effect. effect(globalTimersInEffect)
+/.src/globalTimersInEffect_thunks.ts(13,66): warning TS377073: This Effect code uses `setTimeout`, the corresponding timer API in this context is `Effect.sleep or Schedule` from Effect. effect(globalTimersInEffect)
+/.src/globalTimersInEffect_thunks.ts(16,20): warning TS377073: This Effect code uses `setInterval`, the corresponding timer API in this context is `Schedule or Effect.repeat` from Effect. effect(globalTimersInEffect)
+
+
+==== /.src/globalTimersInEffect_thunks.ts (4 errors) ====
+    // @effect-diagnostics globalTimersInEffect:warning
+    import { Data, Effect } from "effect"
+    
+    class ExampleError extends Data.TaggedError("ExampleError")<{}> {}
+    
+    export const timeoutInSync = Effect.sync(() => setTimeout(() => {}, 100))
+                                                   ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377073: This Effect code uses `setTimeout`, the corresponding timer API in this context is `Effect.sleep or Schedule` from Effect. effect(globalTimersInEffect)
+    
+    export const intervalInTryObject = Effect.try({
+      try: () => setInterval(() => {}, 100),
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377073: This Effect code uses `setInterval`, the corresponding timer API in this context is `Schedule or Effect.repeat` from Effect. effect(globalTimersInEffect)
+      catch: () => new ExampleError()
+    })
+    
+    export const timeoutInTryPromise = Effect.tryPromise(async () => setTimeout(() => {}, 100))
+                                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377073: This Effect code uses `setTimeout`, the corresponding timer API in this context is `Effect.sleep or Schedule` from Effect. effect(globalTimersInEffect)
+    
+    export const intervalInTryPromiseObject = Effect.tryPromise({
+      try: async () => setInterval(() => {}, 100),
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377073: This Effect code uses `setInterval`, the corresponding timer API in this context is `Schedule or Effect.repeat` from Effect. effect(globalTimersInEffect)
+      catch: () => new ExampleError()
+    })
+    
+    export const shouldNotTriggerReturnedFunction = Effect.sync(() => () => setTimeout(() => {}, 100))
+    

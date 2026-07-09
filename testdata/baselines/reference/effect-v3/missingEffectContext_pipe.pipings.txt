@@ -1,0 +1,19 @@
+==== /.src/missingEffectContext_pipe.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 7:6 - 10:69
+Node: pipe(ServiceA, Effect.flatMap(() => Effect.void), Effect.runPromise)
+Node Kind: KindCallExpression
+
+Subject: ServiceA
+Subject Type: typeof ServiceA
+
+Transformations (2):
+  [0] kind: pipe
+      callee: Effect.flatMap
+      args: [() => Effect.void]
+      outType: never
+  [1] kind: pipe
+      callee: Effect.runPromise
+      args: (constant)
+      outType: never

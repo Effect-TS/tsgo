@@ -1,0 +1,29 @@
+==== /.src/returnEffectInGen_preview.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 5:23 - 7:3
+Node: Effect.gen(function*() {\n  return Effect.succeed(1)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  return Effect.succeed(1)\n}
+Subject Type: () => Generator<never, Effect<number, never, never>, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<Effect<number, never, never>, never, never>
+
+=== Piping Flow ===
+Location: 6:9 - 6:27
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>

@@ -1,0 +1,13 @@
+=== Quick Fix Inventory ===
+
+[D1] (4:14-4:26) TS377055: This class extends the native `Error` type directly. Untagged native errors lose distinction in the Effect failure channel. effect(extendsNativeError)
+  Fix 0: "Disable extendsNativeError for this line"
+  Fix 1: "Disable extendsNativeError for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable extendsNativeError for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable extendsNativeError for entire file" ===
+skipped by default

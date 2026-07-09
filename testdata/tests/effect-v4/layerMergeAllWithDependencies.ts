@@ -1,0 +1,47 @@
+import { Effect, Layer, Context } from "effect"
+
+export class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+export class FileSystem extends Context.Service<FileSystem>()("FileSystem", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+export class Cache extends Context.Service<Cache>()("Cache", {
+  make: Effect.as(FileSystem, {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+export class UserRepository extends Context.Service<UserRepository>()("UserRepository", {
+  make: Effect.as(Effect.andThen(DbConnection, Cache), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+
+const cachePassthrough = Layer.effect(Cache, Cache)
+
+export const shouldNotWarn = Layer.mergeAll(
+  DbConnection.Default,
+  FileSystem.Default
+)
+
+export const shouldNotWarn2 = Layer.mergeAll(
+  UserRepository.Default,
+  cachePassthrough
+)
+
+export const shouldWarn = Layer.mergeAll(
+  DbConnection.Default,
+  FileSystem.Default,
+  Cache.Default // <- this requires a DbConnection
+)
+
+export const shouldWarn2 = Layer.mergeAll(
+  DbConnection.Default,
+  FileSystem.Default,
+  Cache.Default, // <- this requires a FileSystem,
+  UserRepository.Default // <- this requires a DbConnection
+)

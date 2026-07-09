@@ -1,0 +1,43 @@
+==== /.src/tsExpectErrorDoesNotSuppressEffectDiagnostics.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 11:71 - 15:27
+Node: Effect.succeed("floating")
+Node Kind: KindCallExpression
+
+Subject: "floating"
+Subject Type: "floating"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 15:27 - 19:26
+Node: Effect.succeed("ignored")
+Node Kind: KindCallExpression
+
+Subject: "ignored"
+Subject Type: "ignored"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 19:26 - 24:34
+Node: Effect.succeed("both suppressed")
+Node Kind: KindCallExpression
+
+Subject: "both suppressed"
+Subject Type: "both suppressed"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>

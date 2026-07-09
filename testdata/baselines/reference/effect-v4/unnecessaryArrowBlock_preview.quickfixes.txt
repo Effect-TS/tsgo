@@ -1,0 +1,22 @@
+=== Quick Fix Inventory ===
+
+[D1] (3:43-5:2) TS377084: This arrow function block only returns an expression and can use a concise body. effect(unnecessaryArrowBlock)
+  Fix 0: "Disable unnecessaryArrowBlock for this line"
+  Fix 1: "Disable unnecessaryArrowBlock for entire file"
+  Fix 2: "Use a concise arrow body"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable unnecessaryArrowBlock for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable unnecessaryArrowBlock for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Use a concise arrow body" ===
+
+--- file:///.src/unnecessaryArrowBlock_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics unnecessaryArrowBlock:warning
+export const preview = (value: string) =>(value.trim())
+

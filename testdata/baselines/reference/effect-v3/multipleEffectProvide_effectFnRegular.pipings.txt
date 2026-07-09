@@ -1,0 +1,59 @@
+==== /.src/multipleEffectProvide_effectFnRegular.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 17:43 - 21:2
+Node: Effect.fn(\n  () => Effect.void,\n  Effect.provide(MyService1.Default),\n  Effect.provide(MyService2.Default)\n)
+Node Kind: KindCallExpression
+
+Subject: Effect.fn(\n  () => Effect.void,\n  Effect.provide(MyService1.Default),\n  Effect.provide(MyService2.Default)\n)
+Subject Type: Effect<void, never, never>
+
+Transformations (2):
+  [0] kind: effectFn
+      callee: Effect.provide
+      args: [MyService1.Default]
+      outType: Effect<void, never, never>
+  [1] kind: effectFn
+      callee: Effect.provide
+      args: [MyService2.Default]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 23:49 - 27:2
+Node: Effect.fn("traced")(\n  () => Effect.void,\n  Effect.provide(MyService1.Default),\n  Effect.provide(MyService2.Default)\n)
+Node Kind: KindCallExpression
+
+Subject: Effect.fn("traced")(\n  () => Effect.void,\n  Effect.provide(MyService1.Default),\n  Effect.provide(MyService2.Default)\n)
+Subject Type: Effect<void, never, never>
+
+Transformations (2):
+  [0] kind: effectFn
+      callee: Effect.provide
+      args: [MyService1.Default]
+      outType: Effect<void, never, never>
+  [1] kind: effectFn
+      callee: Effect.provide
+      args: [MyService2.Default]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 29:48 - 34:2
+Node: Effect.fn(\n  () => Effect.void,\n  Effect.provide(MyService1.Default),\n  Effect.provide(MyService2.Default),\n  Effect.provide(MyService3.Default)\n)
+Node Kind: KindCallExpression
+
+Subject: Effect.fn(\n  () => Effect.void,\n  Effect.provide(MyService1.Default),\n  Effect.provide(MyService2.Default),\n  Effect.provide(MyService3.Default)\n)
+Subject Type: Effect<void, never, never>
+
+Transformations (3):
+  [0] kind: effectFn
+      callee: Effect.provide
+      args: [MyService1.Default]
+      outType: Effect<void, never, never>
+  [1] kind: effectFn
+      callee: Effect.provide
+      args: [MyService2.Default]
+      outType: Effect<void, never, never>
+  [2] kind: effectFn
+      callee: Effect.provide
+      args: [MyService3.Default]
+      outType: Effect<void, never, never>

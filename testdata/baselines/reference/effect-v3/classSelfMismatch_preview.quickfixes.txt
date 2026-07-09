@@ -1,0 +1,7 @@
+=== Quick Fix Inventory ===
+
+[D1] (8:18-8:21) TS2339: Property 'Tag' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+(no quick fixes to apply)

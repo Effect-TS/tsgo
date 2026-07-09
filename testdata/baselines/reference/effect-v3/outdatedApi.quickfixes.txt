@@ -1,0 +1,42 @@
+=== Quick Fix Inventory ===
+
+[D1] (8:11-8:18) TS6133: 'runtime' is declared but its value is never read.
+  (no quick fixes)
+
+[D2] (20:22-22:3) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+=== Quick Fix Application Results ===
+
+=== [D2] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/outdatedApi.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+// These are all v3 APIs — no diagnostics should be emitted for a v3 project
+
+// Removed in v4, but valid in v3
+export const p_runtime = Effect.gen(function*() {
+    const runtime = yield* Effect.runtime()
+})
+
+export const p_dieMessage = Effect.dieMessage("something went wrong")
+
+export const p_catchAll = Effect.catchAll(Effect.fail("err"), (_e) => Effect.succeed(0))
+
+export const p_fork = Effect.fork(Effect.succeed(1))
+
+// Unchanged — valid in both v3 and v4
+export const u_succeed = Effect.succeed(1)
+
+export const u_gen = Effect.succeed(1)
+

@@ -1,0 +1,7 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:7-6:14) TS6133: 'program' is declared but its value is never read.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+(no quick fixes to apply)

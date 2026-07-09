@@ -1,0 +1,11 @@
+{
+    "name": "effect-v3-tests",
+    "private": true,
+    "dependencies": {
+        "effect": "3.19.19",
+        "@standard-schema/spec": "^1.0.0",
+        "fast-check": "^3.23.1",
+        "pure-rand": "^6.1.0",
+        "@types/node": "^22.0.0"
+    }
+}

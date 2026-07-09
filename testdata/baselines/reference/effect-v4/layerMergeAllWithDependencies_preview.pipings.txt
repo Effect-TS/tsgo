@@ -1,0 +1,57 @@
+==== /.src/layerMergeAllWithDependencies_preview.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 5:50 - 5:69
+Node: Effect.succeed({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{}, never, never>
+
+=== Piping Flow ===
+Location: 6:19 - 6:49
+Node: Layer.effect(this, this.make)
+Node Kind: KindCallExpression
+
+Subject: this.make
+Subject Type: Effect<{}, never, never>
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.effect
+      args: [this]
+      outType: Layer<A, never, never>
+
+=== Piping Flow ===
+Location: 8:50 - 8:67
+Node: Effect.as(A, {})
+Node Kind: KindCallExpression
+
+Subject: A
+Subject Type: typeof A
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.as
+      args: [{}]
+      outType: Effect<{}, never, A>
+
+=== Piping Flow ===
+Location: 9:19 - 9:49
+Node: Layer.effect(this, this.make)
+Node Kind: KindCallExpression
+
+Subject: this.make
+Subject Type: Effect<{}, never, A>
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.effect
+      args: [this]
+      outType: Layer<B, never, A>

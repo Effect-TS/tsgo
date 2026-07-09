@@ -1,0 +1,54 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/missingReturnYieldStar.ts(4,30): suggestion TS377014: This generator returns an Effect-able value directly, which produces a nested `Effect<Effect<...>>`. If the intended result is the inner Effect value, `return yield*` represents that form. effect(returnEffectInGen)
+/.src/missingReturnYieldStar.ts(11,13): error TS377006: This Effect never succeeds; using `return yield*` preserves a definitive generator exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+/.src/missingReturnYieldStar.ts(18,9): error TS377006: This Effect never succeeds; using `return yield*` preserves a definitive generator exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+/.src/missingReturnYieldStar.ts(19,9): error TS377006: This Effect never succeeds; using `return yield*` preserves a definitive generator exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+
+
+==== /.src/missingReturnYieldStar.ts (4 errors) ====
+    import { Effect } from "effect"
+    
+    export const shouldNotComplain = Effect.gen(function*() {
+        if (Math.random() < 0.5) return Effect.succeed(42)
+                                 ~~~~~~
+!!! suggestion TS377014: This generator returns an Effect-able value directly, which produces a nested `Effect<Effect<...>>`. If the intended result is the inner Effect value, `return yield*` represents that form. effect(returnEffectInGen)
+        return yield* Effect.fail("no.")
+    })
+    
+    export const shouldComplain = (n: number) =>
+        Effect.gen(function*() {
+            if (n === 0) {
+                yield* Effect.fail("no zero!")
+                ~~~~~
+!!! error TS377006: This Effect never succeeds; using `return yield*` preserves a definitive generator exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+            }
+            return n / 1
+        })
+    
+    export const shouldComplainOther = (n: number) =>
+        Effect.gen(function*() {
+            yield* Effect.interrupt
+            ~~~~~
+!!! error TS377006: This Effect never succeeds; using `return yield*` preserves a definitive generator exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+            yield* Effect.die("lol")
+            ~~~~~
+!!! error TS377006: This Effect never succeeds; using `return yield*` preserves a definitive generator exit point for type narrowing and tooling support. effect(missingReturnYieldStar)
+            return n / 1
+        })
+    
+    export const shouldNotComplainThrows = Effect.gen(function*() {
+        throw yield* Effect.fail(42)
+        return 42
+    })
+    
+    export const shouldNotComplainEventually = Effect.eventually(
+        Effect.gen(function*() {
+            if (Math.random() < 0.5) {
+                return yield* Effect.fail("Not ready")
+            }
+            return 42
+        })
+    )
+    

@@ -1,0 +1,39 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/globalRandomInEffect_thunks.ts(6,47): warning TS377071: This Effect code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandomInEffect)
+/.src/globalRandomInEffect_thunks.ts(9,14): warning TS377071: This Effect code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandomInEffect)
+/.src/globalRandomInEffect_thunks.ts(13,65): warning TS377071: This Effect code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandomInEffect)
+/.src/globalRandomInEffect_thunks.ts(16,20): warning TS377071: This Effect code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandomInEffect)
+
+
+==== /.src/globalRandomInEffect_thunks.ts (4 errors) ====
+    // @effect-diagnostics globalRandomInEffect:warning
+    import { Data, Effect } from "effect"
+    
+    class ExampleError extends Data.TaggedError("ExampleError")<{}> {}
+    
+    export const randomInSync = Effect.sync(() => Math.random())
+                                                  ~~~~~~~~~~~~~
+!!! warning TS377071: This Effect code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandomInEffect)
+    
+    export const randomInTryObject = Effect.try({
+      try: () => Math.random(),
+                 ~~~~~~~~~~~~~
+!!! warning TS377071: This Effect code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandomInEffect)
+      catch: () => new ExampleError()
+    })
+    
+    export const randomInTryPromise = Effect.tryPromise(async () => Math.random())
+                                                                    ~~~~~~~~~~~~~
+!!! warning TS377071: This Effect code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandomInEffect)
+    
+    export const randomInTryPromiseObject = Effect.tryPromise({
+      try: async () => Math.random(),
+                       ~~~~~~~~~~~~~
+!!! warning TS377071: This Effect code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandomInEffect)
+      catch: () => new ExampleError()
+    })
+    
+    export const shouldNotTriggerReturnedFunction = Effect.sync(() => () => Math.random())
+    

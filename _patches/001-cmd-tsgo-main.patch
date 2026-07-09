@@ -1,0 +1,16 @@
+diff --git a/cmd/tsgo/main.go b/cmd/tsgo/main.go
+index 8d6816fa3d..49c6cbecba 100644
+--- a/cmd/tsgo/main.go
++++ b/cmd/tsgo/main.go
+@@ -6,6 +6,11 @@ import (
+ 	"os/signal"
+ 	"syscall"
+ 
++	// Import Effect hooks to register via init()
++	_ "github.com/effect-ts/tsgo/etsexecutehooks" // exit-code filtering hooks
++	_ "github.com/effect-ts/tsgo/etscheckerhooks" // checker diagnostics hooks
++	_ "github.com/effect-ts/tsgo/etslshooks"      // LS codefix hooks
++
+ 	"github.com/microsoft/typescript-go/internal/core"
+ 	"github.com/microsoft/typescript-go/internal/execute"
+ )

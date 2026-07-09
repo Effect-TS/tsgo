@@ -1,0 +1,41 @@
+// @filename: tsconfig.json
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "ESNext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext"
+  }
+}
+
+// @filename: schemaMutableKey_ts2322_pluginDisabled.ts
+import { Schema, Struct as Struct_, SchemaAST  } from "effect"
+
+
+interface optionalKeyLambda extends Struct_.Lambda {
+  <S extends Schema.Top>(self: S): Schema.optionalKey<S>
+  readonly "~lambda.out": this["~lambda.in"] extends Schema.Top ? Schema.optionalKey<this["~lambda.in"]> : never
+}
+
+/**
+ * Creates an exact optional key schema for struct fields. Unlike `optional`,
+ * this creates exact optional properties (not `| undefined`) that can be
+ * completely omitted from the object.
+ *
+ * **Example** (Creating a struct with optional key)
+ *
+ * ```ts
+ * import { Schema } from "effect"
+ *
+ * const schema = Schema.Struct({
+ *   name: Schema.String,
+ *   age: Schema.optionalKey(Schema.Number)
+ * })
+ *
+ * // Type: { readonly name: string; readonly age?: number }
+ * type Person = typeof schema["Type"]
+ * ```
+ *
+ * @since 4.0.0
+ */
+export const optionalKey = Struct_.lambda<optionalKeyLambda>((schema) => Schema.make(SchemaAST.optionalKey(schema.ast), { schema }))

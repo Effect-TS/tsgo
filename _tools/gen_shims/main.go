@@ -1,0 +1,516 @@
+package main
+
+import (
+	"bytes"
+	"fmt"
+	"go/types"
+	"log"
+	"maps"
+	"os"
+	"path"
+	"slices"
+	"strings"
+
+	"github.com/go-json-experiment/json"
+
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
+	"golang.org/x/tools/go/packages"
+)
+
+const tsgoInternalPrefix = "github.com/microsoft/typescript-go/internal/"
+
+func signatureHasUnexportedType(t types.Signature) bool {
+	if params := t.Params(); params != nil {
+		for i := range params.Len() {
+			ty := params.At(i).Type()
+
+			if ptrType, ok := ty.(*types.Pointer); ok {
+				ty = ptrType.Elem()
+			}
+			if named, ok := ty.(*types.Named); ok {
+				if !named.Obj().Exported() {
+					return true
+				}
+			}
+		}
+	}
+	return false
+}
+
+type ExtraShim struct {
+	ExtraFunctions  []string
+	ExtraMethods    map[string]([]string)
+	ExtraFields     map[string]([]string)
+	CompactFields   map[string]([]string)
+	IgnoreFunctions []string
+}
+
+func main() {
+	packagesToShim := []string{
+		"api",
+		"ast",
+		"astnav",
+		"bundled",
+		"checker",
+		"collections",
+		"compiler",
+		"core",
+		"diagnostics",
+		"execute/tsc",
+		"format",
+		"fourslash",
+		"ls",
+		"ls/autoimport",
+		"ls/change",
+		"ls/lsconv",
+		"ls/lsutil",
+		"lsp",
+		"lsp/lsproto",
+		"module",
+		"modulespecifiers",
+		"packagejson",
+		"parser",
+		"project",
+		"project/logging",
+		"repo",
+		"scanner",
+		"sourcemap",
+		"testrunner",
+		"testutil",
+		"testutil/lsptestutil",
+		"testutil/baseline",
+		"testutil/harnessutil",
+		"testutil/tsbaseline",
+		"tsoptions",
+		"tspath",
+		"vfs",
+		"vfs/cachedvfs",
+		"vfs/iovfs",
+		"vfs/vfsmatch",
+		"vfs/osvfs",
+	}
+
+	packagesToShimFullNames := make([]string, len(packagesToShim))
+	for i, pkg := range packagesToShim {
+		packagesToShimFullNames[i] = tsgoInternalPrefix + pkg
+	}
+
+	packages, err := packages.Load(&packages.Config{
+		// TODO: path relative to repo root
+		Dir:  "./shim/compiler",
+		Mode: packages.LoadSyntax,
+	}, packagesToShimFullNames...)
+	if err != nil {
+		log.Fatalf("Error loading package: %v", err)
+	}
+
+	var shimHeaderBuilder strings.Builder
+	var shimBuilder strings.Builder
+	var tempBuffer bytes.Buffer
+
+	for _, pkg := range packages {
+		shimDirPath := path.Join("./shim/", strings.TrimPrefix(pkg.PkgPath, tsgoInternalPrefix))
+		var extraShim ExtraShim
+		extraShimFilePath := path.Join(shimDirPath, "extra-shim.json")
+		if data, err := os.ReadFile(extraShimFilePath); err == nil {
+			if err := json.Unmarshal(data, &extraShim); err != nil {
+				fmt.Printf("error parsing %v: %v", extraShimFilePath, err)
+				return
+			}
+		}
+		if extraShim.ExtraMethods == nil {
+			extraShim.ExtraMethods = map[string][]string{}
+		}
+		if extraShim.ExtraFunctions == nil {
+			extraShim.ExtraFunctions = []string{}
+		}
+		if extraShim.ExtraFields == nil {
+			extraShim.ExtraFields = map[string]([]string){}
+		}
+		if extraShim.CompactFields == nil {
+			extraShim.CompactFields = map[string]([]string){}
+		}
+		if extraShim.IgnoreFunctions == nil {
+			extraShim.IgnoreFunctions = []string{}
+		}
+
+		// true if directly used, false otherwise
+		importedPackages := map[string]bool{}
+
+		importPackage := func(pkg string, directly bool) {
+			if directly {
+				importedPackages[pkg] = true
+			} else if _, ok := importedPackages[pkg]; !ok {
+				importedPackages[pkg] = false
+			}
+		}
+
+		var qualifierOnlyPackageName types.Qualifier = func(p *types.Package) string {
+			importPackage(p.Path(), true)
+			return p.Name()
+		}
+		var qualifierEmptyPackageName types.Qualifier = func(p *types.Package) string {
+			return ""
+		}
+		var fieldTypeString func(types.Type) string
+		fieldTypeString = func(t types.Type) string {
+			switch ty := t.(type) {
+			case *types.Named:
+				if !ty.Obj().Exported() {
+					return fieldTypeString(ty.Underlying())
+				}
+			case *types.Pointer:
+				return "*" + fieldTypeString(ty.Elem())
+			case *types.Slice:
+				return "[]" + fieldTypeString(ty.Elem())
+			case *types.Array:
+				return fmt.Sprintf("[%d]%s", ty.Len(), fieldTypeString(ty.Elem()))
+			case *types.Map:
+				return "map[" + fieldTypeString(ty.Key()) + "]" + fieldTypeString(ty.Elem())
+			}
+
+			return types.TypeString(t, qualifierOnlyPackageName)
+		}
+
+		emitGoLinknameDirective := func(localName string, fn *types.Func) {
+			// //go:linkname only allowed in Go files that import "unsafe"
+			importPackage("unsafe", false)
+			importPackage(pkg.Types.Path(), false)
+			shimBuilder.WriteString("//go:linkname ")
+			shimBuilder.WriteString(localName)
+			shimBuilder.WriteByte(' ')
+			shimBuilder.WriteString(fn.Pkg().Path())
+			shimBuilder.WriteByte('.')
+			if recv := fn.Signature().Recv(); recv != nil {
+				shimBuilder.WriteByte('(')
+				shimBuilder.WriteString(types.TypeString(recv.Type(), qualifierEmptyPackageName))
+				shimBuilder.WriteByte(')')
+				shimBuilder.WriteByte('.')
+			}
+			shimBuilder.WriteString(fn.Name())
+			shimBuilder.WriteByte('\n')
+		}
+
+		emitLinkedFunction := func(fn *types.Func) bool {
+			if fn.Signature().TypeParams() != nil {
+				// https://github.com/golang/go/issues/60425
+				// linking to functions with generics is not supported in go:linkname
+				return false
+			}
+			if signatureHasUnexportedType(*fn.Signature()) {
+				fmt.Fprintf(os.Stderr, "Skipping %s.%s: references unexported types\n", fn.Pkg().Name(), fn.Name())
+				return false
+			}
+			name := cases.Title(language.English, cases.NoLower).String(fn.Name())
+			emitGoLinknameDirective(name, fn)
+			shimBuilder.WriteString("func ")
+			shimBuilder.WriteString(name)
+			types.WriteSignature(&tempBuffer, fn.Signature(), qualifierOnlyPackageName)
+			shimBuilder.Write(tempBuffer.Bytes())
+			tempBuffer.Reset()
+			shimBuilder.WriteString("\n")
+			return true
+		}
+
+		matchedExtraFunctions := make(map[string]bool, len(extraShim.ExtraFunctions))
+		for _, name := range extraShim.ExtraFunctions {
+			matchedExtraFunctions[name] = false
+		}
+		matchedExtraMethods := make(map[string](map[string]bool), len(extraShim.ExtraMethods))
+		for name, methods := range extraShim.ExtraMethods {
+			matchedExtraMethods[name] = make(map[string]bool, len(methods))
+			for _, method := range methods {
+				matchedExtraMethods[name][method] = false
+			}
+		}
+		matchedExtraFields := make(map[string]bool, len(extraShim.ExtraFields))
+		for name := range extraShim.ExtraFields {
+			matchedExtraFields[name] = false
+		}
+		compactFieldNames := make(map[string]map[string]bool, len(extraShim.CompactFields))
+		for name, fields := range extraShim.CompactFields {
+			compactFieldNames[name] = make(map[string]bool, len(fields))
+			for _, field := range fields {
+				compactFieldNames[name][field] = true
+			}
+		}
+
+		scope := pkg.Types.Scope()
+		for _, name := range scope.Names() {
+			object := scope.Lookup(name)
+			if !object.Exported() {
+				fn, isFunc := object.(*types.Func)
+				if _, exists := matchedExtraFunctions[name]; isFunc && exists {
+					if emitLinkedFunction(fn) {
+						matchedExtraFunctions[name] = true
+					}
+				}
+				continue
+			}
+
+			printReexport := func(kind string) {
+				importPackage(pkg.Types.Path(), true)
+				shimBuilder.WriteString(kind)
+				shimBuilder.WriteString(" ")
+				shimBuilder.WriteString(name)
+				shimBuilder.WriteString(" = ")
+				shimBuilder.WriteString(pkg.Name)
+				shimBuilder.WriteString(".")
+				shimBuilder.WriteString(name)
+				shimBuilder.WriteString("\n")
+			}
+
+			switch object.(type) {
+			case *types.TypeName:
+				typeName := object.(*types.TypeName)
+				t := typeName.Type()
+				named, isNamed := t.(*types.Named)
+				if isNamed {
+					_, nameWithTypeParams, _ := strings.Cut(types.TypeString(named, qualifierOnlyPackageName), ".")
+					importPackage(pkg.Types.Path(), true)
+					shimBuilder.WriteString("type ")
+					shimBuilder.WriteString(nameWithTypeParams)
+					shimBuilder.WriteString(" = ")
+					shimBuilder.WriteString(pkg.Name)
+					shimBuilder.WriteString(".")
+					shimBuilder.WriteString(name)
+
+					typeParams := slices.Collect(named.TypeParams().TypeParams())
+					if len(typeParams) > 0 {
+						// (*typeWriter)typeList
+						shimBuilder.WriteByte('[')
+						for i, ty := range typeParams {
+							if i > 0 {
+								shimBuilder.WriteByte(',')
+							}
+							shimBuilder.WriteString(ty.String())
+						}
+						shimBuilder.WriteByte(']')
+					}
+
+					shimBuilder.WriteString("\n")
+				} else {
+					printReexport("type")
+				}
+
+				if extraMethods, ok := matchedExtraMethods[name]; isNamed && ok {
+					for method := range named.Methods() {
+						methodName := method.Name()
+						if _, exists := extraMethods[methodName]; !exists {
+							continue
+						}
+						extraMethods[methodName] = true
+						prefix := name + "_"
+						emitGoLinknameDirective(prefix+methodName, method)
+						funcDeclStr := types.ObjectString(method, qualifierOnlyPackageName)
+						recvStart := 0
+						recvEnd := 0
+						paramsStart := 0
+						for i, s := range funcDeclStr {
+							if s == '(' {
+								if recvStart == 0 {
+									recvStart = i + 1
+								}
+								if recvEnd != 0 {
+									paramsStart = i + 1
+									break
+								}
+							}
+							if s == ')' && recvEnd == 0 {
+								recvEnd = i
+							}
+						}
+						shimBuilder.WriteString("func ")
+						shimBuilder.WriteString(prefix)
+						shimBuilder.WriteString(funcDeclStr[recvEnd+2 : paramsStart])
+						shimBuilder.WriteString("recv ")
+						shimBuilder.WriteString(funcDeclStr[recvStart:recvEnd])
+						if method.Signature().Params() != nil {
+							shimBuilder.WriteString(", ")
+						}
+						shimBuilder.WriteString(funcDeclStr[paramsStart:])
+						shimBuilder.WriteString("\n")
+					}
+				}
+
+				if _, ok := matchedExtraFields[name]; isNamed && ok {
+					importPackage("unsafe", true)
+
+					matchedExtraFields[name] = true
+
+					var emitExtraStruct func(name string, s *types.Struct)
+					emitExtraStruct = func(name string, s *types.Struct) {
+						shimBuilder.WriteString("type extra_")
+						shimBuilder.WriteString(name)
+						shimBuilder.WriteString(" struct {")
+
+						dependencies := [](struct {
+							string
+							*types.Struct
+						}){}
+						for field := range s.Fields() {
+							shimBuilder.WriteString("\n  ")
+							if !field.Embedded() {
+								shimBuilder.WriteString(field.Name())
+								shimBuilder.WriteByte(' ')
+							}
+
+							ptrType, ok := field.Type().(*types.Pointer)
+							if ok {
+								named, ok := ptrType.Elem().(*types.Named)
+								if ok && !named.Obj().Exported() {
+									strct, ok := named.Underlying().(*types.Struct)
+									if ok {
+										n := named.Obj().Name()
+										dependencies = append(dependencies, struct {
+											string
+											*types.Struct
+										}{n, strct})
+										shimBuilder.WriteString("extra_")
+										shimBuilder.WriteString(n)
+										continue
+									}
+								}
+							}
+
+							shimBuilder.WriteString(fieldTypeString(field.Type()))
+						}
+						shimBuilder.WriteString("\n}\n")
+
+						for _, dep := range dependencies {
+							emitExtraStruct(dep.string, dep.Struct)
+						}
+					}
+
+					strct, ok := named.Underlying().(*types.Struct)
+					if !ok {
+						log.Fatalf("expected %v to be struct", name)
+					}
+
+					mappedFieldTypes := make(map[string]*types.Var, strct.NumFields())
+					mappedFieldIndexes := make(map[string]int, strct.NumFields())
+					for i := range strct.NumFields() {
+						field := strct.Field(i)
+						mappedFieldTypes[field.Name()] = field
+						mappedFieldIndexes[field.Name()] = i
+					}
+
+					needsFullMirror := false
+					for _, field := range extraShim.ExtraFields[name] {
+						idx, ok := mappedFieldIndexes[field]
+						if !ok {
+							log.Fatalf("expected struct %q to contain field %q", name, field)
+						}
+						if idx != 0 || !compactFieldNames[name][field] {
+							needsFullMirror = true
+							break
+						}
+					}
+
+					mirrorStructName := "extra_" + name
+					if needsFullMirror {
+						emitExtraStruct(name, strct)
+					}
+
+					for _, field := range extraShim.ExtraFields[name] {
+						fieldVar, ok := mappedFieldTypes[field]
+						if !ok {
+							log.Fatalf("expected struct %q to contain field %q", name, field)
+						}
+
+						accessorStructName := mirrorStructName
+						if mappedFieldIndexes[field] == 0 && compactFieldNames[name][field] {
+							accessorStructName = mirrorStructName + "_" + field
+							shimBuilder.WriteString("type ")
+							shimBuilder.WriteString(accessorStructName)
+							shimBuilder.WriteString(" struct {\n  ")
+							shimBuilder.WriteString(field)
+							shimBuilder.WriteByte(' ')
+							shimBuilder.WriteString(types.TypeString(fieldVar.Type(), qualifierOnlyPackageName))
+							shimBuilder.WriteString("\n}\n")
+						}
+
+						shimBuilder.WriteString("func ")
+						shimBuilder.WriteString(name)
+						shimBuilder.WriteByte('_')
+						shimBuilder.WriteString(field)
+						shimBuilder.WriteString("(v *")
+						shimBuilder.WriteString(pkg.Name)
+						shimBuilder.WriteByte('.')
+						shimBuilder.WriteString(name)
+						shimBuilder.WriteString(") ")
+						shimBuilder.WriteString(types.TypeString(fieldVar.Type(), qualifierOnlyPackageName))
+						shimBuilder.WriteString(" {\n")
+						shimBuilder.WriteString("  return ((*")
+						shimBuilder.WriteString(accessorStructName)
+						shimBuilder.WriteString(")(unsafe.Pointer(v))).")
+						shimBuilder.WriteString(field)
+						shimBuilder.WriteString("\n")
+						shimBuilder.WriteString("}\n")
+					}
+				}
+			case *types.Const:
+				printReexport("const")
+			case *types.Var:
+				printReexport("var")
+			case *types.Func:
+				if !slices.Contains(extraShim.IgnoreFunctions, name) {
+					funcType := object.(*types.Func)
+					emitLinkedFunction(funcType)
+				}
+			}
+		}
+
+		exit := false
+		for fnName, found := range matchedExtraFunctions {
+			if found {
+				continue
+			}
+			fmt.Printf("ERROR: couldn't find %v function\n", fnName)
+			exit = true
+		}
+		for name, methods := range matchedExtraMethods {
+			for methodName, found := range methods {
+				if found {
+					continue
+				}
+				fmt.Printf("ERROR: couldn't find %v.%v method\n", name, methodName)
+				exit = true
+			}
+		}
+		if exit {
+			os.Exit(1)
+		}
+
+		// https://pkg.go.dev/cmd/go#hdr-Generate_Go_files_by_processing_source
+		shimHeaderBuilder.WriteString("\n// Code generated by _tools/gen_shims. DO NOT EDIT.\n\n")
+		shimHeaderBuilder.WriteString("package ")
+		shimHeaderBuilder.WriteString(pkg.Name)
+		shimHeaderBuilder.WriteString("\n\n")
+		importsList := slices.Collect(maps.Keys(importedPackages))
+		slices.Sort(importsList)
+		for _, imported := range importsList {
+			shimHeaderBuilder.WriteString("import ")
+			if !importedPackages[imported] {
+				shimHeaderBuilder.WriteString("_ ")
+			}
+			shimHeaderBuilder.WriteString("\"")
+			shimHeaderBuilder.WriteString(imported)
+			shimHeaderBuilder.WriteString("\"\n")
+		}
+		shimHeaderBuilder.WriteString("\n")
+
+		shimGoPath := path.Join(shimDirPath, "shim.go")
+		file, err := os.Create(shimGoPath)
+		if err != nil {
+			log.Fatalf("error opening shim file for writing: %v", err)
+		}
+		file.WriteString(shimHeaderBuilder.String())
+		file.WriteString(shimBuilder.String())
+
+		shimHeaderBuilder.Reset()
+		shimBuilder.Reset()
+	}
+
+}

@@ -1,0 +1,1 @@
+/.src/effectFnRegular.ts -> effectFnRegular.flows.effectFnRegular.mermaid

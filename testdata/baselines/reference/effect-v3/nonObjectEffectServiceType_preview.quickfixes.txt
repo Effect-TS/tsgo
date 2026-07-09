@@ -1,0 +1,13 @@
+=== Quick Fix Inventory ===
+
+[D1] (8:3-8:10) TS377048: `Effect.Service` is declared with a primitive service type. `Effect.Service` models object-shaped services; primitive values use `Context.Tag` or `Effect.Tag` directly. effect(nonObjectEffectServiceType)
+  Fix 0: "Disable nonObjectEffectServiceType for this line"
+  Fix 1: "Disable nonObjectEffectServiceType for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable nonObjectEffectServiceType for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable nonObjectEffectServiceType for entire file" ===
+skipped by default

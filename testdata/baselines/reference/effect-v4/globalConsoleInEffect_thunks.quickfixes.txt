@@ -1,0 +1,43 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:48-6:67) TS377065: This Effect code uses `console.log`, logging in Effect code is represented through `Effect.log or Logger`. effect(globalConsoleInEffect)
+  Fix 0: "Disable globalConsoleInEffect for this line"
+  Fix 1: "Disable globalConsoleInEffect for entire file"
+
+[D2] (9:14-9:33) TS377065: This Effect code uses `console.warn`, logging in Effect code is represented through `Effect.logWarning or Logger`. effect(globalConsoleInEffect)
+  Fix 0: "Disable globalConsoleInEffect for this line"
+  Fix 1: "Disable globalConsoleInEffect for entire file"
+
+[D3] (13:66-13:92) TS377065: This Effect code uses `console.log`, logging in Effect code is represented through `Effect.log or Logger`. effect(globalConsoleInEffect)
+  Fix 0: "Disable globalConsoleInEffect for this line"
+  Fix 1: "Disable globalConsoleInEffect for entire file"
+
+[D4] (16:20-16:54) TS377065: This Effect code uses `console.warn`, logging in Effect code is represented through `Effect.logWarning or Logger`. effect(globalConsoleInEffect)
+  Fix 0: "Disable globalConsoleInEffect for this line"
+  Fix 1: "Disable globalConsoleInEffect for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable globalConsoleInEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable globalConsoleInEffect for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable globalConsoleInEffect for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable globalConsoleInEffect for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable globalConsoleInEffect for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable globalConsoleInEffect for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable globalConsoleInEffect for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable globalConsoleInEffect for entire file" ===
+skipped by default

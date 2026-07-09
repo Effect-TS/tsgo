@@ -1,0 +1,61 @@
+==== /.src/effectFnImplicitAny_noDiags.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 5:21 - 15:2
+Node: HttpRouter.use(\n  Effect.fnUntraced(function*(router) {\n    yield* router.add(\n      "GET",\n      "/",\n      Effect.fnUntraced(function*(request) {\n        return HttpServerResponse.empty()\n      })\n    )\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: function*(router) {\n    yield* router.add(\n      "GET",\n      "/",\n      Effect.fnUntraced(function*(request) {\n        return HttpServerResponse.empty()\n      })\n    )\n  }
+Subject Type: (this: unassigned, router: HttpRouter) => Generator<Effect<void, never, never>, void, any>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.fnUntraced
+      args: (constant)
+      outType: (router: HttpRouter) => Effect<void, never, never>
+  [1] kind: call
+      callee: HttpRouter.use
+      args: (constant)
+      outType: Layer<never, never, HttpRouter>
+
+=== Piping Flow ===
+Location: 9:11 - 12:9
+Node: Effect.fnUntraced(function*(request) {\n        return HttpServerResponse.empty()\n      })
+Node Kind: KindCallExpression
+
+Subject: function*(request) {\n        return HttpServerResponse.empty()\n      }
+Subject Type: (this: unassigned, request: HttpServerRequest) => Generator<never, HttpServerResponse, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fnUntraced
+      args: (constant)
+      outType: (request: HttpServerRequest) => Effect<HttpServerResponse, never, never>
+
+=== Piping Flow ===
+Location: 17:18 - 22:2
+Node: Effect.fn(\n  function*(s: string) {\n    return s.length\n  },\n  (effect, ...args) => effect.pipe(Effect.map((result) => [result, ...args]))\n)
+Node Kind: KindCallExpression
+
+Subject: Effect.fn(\n  function*(s: string) {\n    return s.length\n  },\n  (effect, ...args) => effect.pipe(Effect.map((result) => [result, ...args]))\n)
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: effectFn
+      callee: (effect, ...args) => effect.pipe(Effect.map((result) => [result, ...args]))
+      args: (constant)
+      outType: Effect<(string | number)[], never, never>
+
+=== Piping Flow ===
+Location: 21:23 - 21:78
+Node: effect.pipe(Effect.map((result) => [result, ...args]))
+Node Kind: KindCallExpression
+
+Subject: effect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [(result) => [result, ...args]]
+      outType: Effect<(string | number)[], never, never>

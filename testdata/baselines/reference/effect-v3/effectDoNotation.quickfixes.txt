@@ -1,0 +1,33 @@
+=== Quick Fix Inventory ===
+
+[D1] (4:23-4:32) TS377085: This uses the Effect do emulation. `Effect.gen` or `Effect.fn` achieve the same result with native JS scopes. effect(effectDoNotation)
+  Fix 0: "Disable effectDoNotation for this line"
+  Fix 1: "Disable effectDoNotation for entire file"
+
+[D2] (6:34-6:43) TS377085: This uses the Effect do emulation. `Effect.gen` or `Effect.fn` achieve the same result with native JS scopes. effect(effectDoNotation)
+  Fix 0: "Disable effectDoNotation for this line"
+  Fix 1: "Disable effectDoNotation for entire file"
+
+[D3] (9:24-9:32) TS377085: This uses the Effect do emulation. `Effect.gen` or `Effect.fn` achieve the same result with native JS scopes. effect(effectDoNotation)
+  Fix 0: "Disable effectDoNotation for this line"
+  Fix 1: "Disable effectDoNotation for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable effectDoNotation for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectDoNotation for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable effectDoNotation for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable effectDoNotation for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable effectDoNotation for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable effectDoNotation for entire file" ===
+skipped by default

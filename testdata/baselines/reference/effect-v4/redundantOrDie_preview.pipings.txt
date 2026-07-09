@@ -1,0 +1,43 @@
+==== /.src/redundantOrDie_preview.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 8:23 - 12:3
+Node: Effect.gen(function*() {\n  yield* first.pipe(Effect.orDie)\n\n  return yield* second.pipe(Effect.orDie)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  yield* first.pipe(Effect.orDie)\n\n  return yield* second.pipe(Effect.orDie)\n}
+Subject Type: () => Generator<Effect<string, never, never> | Effect<number, never, never>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 9:9 - 9:34
+Node: first.pipe(Effect.orDie)
+Node Kind: KindCallExpression
+
+Subject: first
+Subject Type: Effect<number, unknown, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.orDie
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 11:16 - 11:42
+Node: second.pipe(Effect.orDie)
+Node Kind: KindCallExpression
+
+Subject: second
+Subject Type: Effect<string, unknown, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.orDie
+      args: (constant)
+      outType: Effect<string, never, never>

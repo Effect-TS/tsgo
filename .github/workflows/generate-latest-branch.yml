@@ -1,0 +1,180 @@
+name: Generate Latest Branch
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: generate-latest-branch
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  generate:
+    name: Generate generated/latest
+    if: >-
+      github.repository_owner == 'Effect-TS' &&
+      (github.event_name != 'push' || !startsWith(github.event.head_commit.message, 'Version Packages'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    outputs:
+      has_changes: ${{ steps.changes.outputs.has_changes }}
+      pr_number: ${{ steps.pr.outputs.pr_number }}
+      head_sha: ${{ steps.changes.outputs.head_sha }}
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: main
+          submodules: recursive
+
+      - name: Track TypeScript-Go submodule updates in Git
+        run: git config submodule.typescript-go.ignore dirty
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.26"
+          cache: false
+
+      - name: Cache Go build
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: go-build-generate-latest-${{ runner.os }}-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            go-build-generate-latest-${{ runner.os }}-
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Resolve TypeScript metadata
+        id: typescript
+        env:
+          TYPESCRIPT_SPEC: typescript@latest
+        run: |
+          metadata="$(npm view "${TYPESCRIPT_SPEC}" version gitHead --json)"
+          version="$(node -e 'const m = JSON.parse(process.argv[1]); if (!m.version) process.exit(1); process.stdout.write(m.version)' "$metadata")"
+          git_head="$(node -e 'const m = JSON.parse(process.argv[1]); if (!/^[0-9a-f]{40}$/.test(m.gitHead || "")) process.exit(1); process.stdout.write(m.gitHead)' "$metadata")"
+
+          echo "spec=${TYPESCRIPT_SPEC}" >> "$GITHUB_OUTPUT"
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+          echo "git_head=${git_head}" >> "$GITHUB_OUTPUT"
+
+      - name: Pin TypeScript-Go to TypeScript commit
+        run: |
+          git -C typescript-go fetch --depth 1 origin "${{ steps.typescript.outputs.git_head }}"
+          git -C typescript-go checkout --detach "${{ steps.typescript.outputs.git_head }}"
+          git -C typescript-go submodule sync --recursive
+          git -C typescript-go submodule update --init --recursive --force
+
+      - name: Write upstream TypeScript metadata
+        env:
+          TS_VERSION: ${{ steps.typescript.outputs.version }}
+          TS_GIT_HEAD: ${{ steps.typescript.outputs.git_head }}
+        run: |
+          node -e 'const fs = require("node:fs"); fs.writeFileSync("_packages/tsgo/upstream.json", JSON.stringify({ tsVersion: process.env.TS_VERSION, tsGitHead: process.env.TS_GIT_HEAD }, null, 2) + "\n")'
+
+      - name: Regenerate shims and generated files
+        run: bash _tools/setup-repo.sh --ci
+
+      - name: Create generated latest commit
+        id: changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch --depth 1 origin generated/latest
+
+          git add -A
+          generated_tree="$(git write-tree)"
+          latest_tree="$(git rev-parse FETCH_HEAD^{tree})"
+
+          if [ "${generated_tree}" = "${latest_tree}" ]; then
+            echo "Generated latest branch is already up to date."
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          head_sha="$(git commit-tree "${generated_tree}" \
+            -p FETCH_HEAD \
+            -m "chore: generate latest TypeScript-Go branch" \
+            -m "TypeScript package: ${{ steps.typescript.outputs.spec }}" \
+            -m "TypeScript version: ${{ steps.typescript.outputs.version }}" \
+            -m "TypeScript-Go commit: ${{ steps.typescript.outputs.git_head }}")"
+          echo "has_changes=true" >> "$GITHUB_OUTPUT"
+          echo "head_sha=${head_sha}" >> "$GITHUB_OUTPUT"
+
+      - name: Push generated latest PR branch
+        if: steps.changes.outputs.has_changes == 'true'
+        run: git push --force origin "${{ steps.changes.outputs.head_sha }}:refs/heads/chore/generate-latest-branch"
+
+      - name: Create or update generated latest PR
+        id: pr
+        if: steps.changes.outputs.has_changes == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HEAD_BRANCH: chore/generate-latest-branch
+          BASE_BRANCH: generated/latest
+          TITLE: "chore: generate latest TypeScript-Go branch"
+          BODY: |
+            Automated update of the `generated/latest` branch.
+
+            ## TypeScript
+
+            - Package: `${{ steps.typescript.outputs.spec }}`
+            - Version: `${{ steps.typescript.outputs.version }}`
+            - TypeScript-Go commit: `${{ steps.typescript.outputs.git_head }}`
+            - Source commit: `${{ github.sha }}`
+
+            ---
+
+            *This PR was automatically generated by the latest branch generation workflow.*
+        run: |
+          pr_number="$(gh pr list \
+            --head "${HEAD_BRANCH}" \
+            --base "${BASE_BRANCH}" \
+            --state open \
+            --json number \
+            --jq '.[0].number // ""')"
+
+          if [ -z "${pr_number}" ]; then
+            pr_url="$(gh pr create \
+              --base "${BASE_BRANCH}" \
+              --head "${HEAD_BRANCH}" \
+              --title "${TITLE}" \
+              --body "${BODY}" \
+              --label automated)"
+            pr_number="${pr_url##*/}"
+          else
+            gh pr edit "${pr_number}" \
+              --title "${TITLE}" \
+              --body "${BODY}" \
+              --add-label automated
+          fi
+
+          echo "pr_number=${pr_number}" >> "$GITHUB_OUTPUT"
+
+  validate-pr:
+    name: Validate generated latest PR
+    needs: generate
+    if: needs.generate.outputs.has_changes == 'true' && needs.generate.outputs.head_sha != ''
+    permissions:
+      checks: write
+      contents: read
+    uses: ./.github/workflows/validate-generated-latest.yml
+    with:
+      head_sha: ${{ needs.generate.outputs.head_sha }}
+      pr_number: ${{ needs.generate.outputs.pr_number }}
+    secrets: inherit

@@ -1,0 +1,50 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/schemaNumber.ts(8,15): warning TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+/.src/schemaNumber.ts(9,17): warning TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.FiniteFromString` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+/.src/schemaNumber.ts(15,23): warning TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+/.src/schemaNumber.ts(16,23): warning TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.FiniteFromString` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+/.src/schemaNumber.ts(20,13): warning TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+/.src/schemaNumber.ts(21,11): warning TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.FiniteFromString` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+
+
+==== /.src/schemaNumber.ts (6 errors) ====
+    // @effect-diagnostics schemaNumber:warning
+    
+    import { Schema } from "effect"
+    import * as SchemaModule from "effect/Schema"
+    import { Number as NumberSchema, NumberFromString } from "effect/Schema"
+    
+    export const user = Schema.Struct({
+      age: Schema.Number,
+                  ~~~~~~
+!!! warning TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+      score: Schema.NumberFromString,
+                    ~~~~~~~~~~~~~~~~
+!!! warning TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.FiniteFromString` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+      height: Schema.Finite,
+      weight: Schema.FiniteFromString
+    })
+    
+    export const product = SchemaModule.Struct({
+      price: SchemaModule.Number,
+                          ~~~~~~
+!!! warning TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+      stock: SchemaModule.NumberFromString
+                          ~~~~~~~~~~~~~~~~
+!!! warning TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.FiniteFromString` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+    })
+    
+    export const direct = Schema.Struct({
+      quantity: NumberSchema,
+                ~~~~~~~~~~~~
+!!! warning TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+      amount: NumberFromString
+              ~~~~~~~~~~~~~~~~
+!!! warning TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.FiniteFromString` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+    })
+    
+    // @effect-diagnostics-next-line schemaNumber:off
+    export const intentionallyNonFinite = Schema.Number
+    

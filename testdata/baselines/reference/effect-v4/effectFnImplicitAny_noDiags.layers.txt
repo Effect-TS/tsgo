@@ -1,0 +1,30 @@
+==== /.src/effectFnImplicitAny_noDiags.ts (1 layer exports) ====
+
+=== Route ===
+
+--- output ---
+flowchart TD
+  0["HttpRouter.use#40;<br/>  Effect.fnUntraced#40;function*#40;router#41; #123;<br/>    yield* router.add#40;<br/>      #quot;GET#quot;,<br/>      #quot;/#quot;,<br/>      Effect.fnUntraced#40;function*#40;request#41; #123;<br/>        return HttpServerResponse.empty#40;#41;<br/>      #125;#41;<br/>    #41;<br/>  #125;#41;<br/>#41;<br/>provides: <br/>requires: HttpRouter"]
+
+--- nested ---
+flowchart TB
+  subgraph 0 ["`Route<br/><small>_ln 5 col 13_</small>`"]
+    subgraph 0_wrap[" "]
+      subgraph 0_requires [Requires]
+        0_requires_0["HttpRouter"]
+      end
+      style 0_requires stroke:none
+    end
+    style 0_wrap fill:transparent
+    style 0_wrap stroke:none
+  end
+  style 0 fill:transparent
+
+--- outline ---
+flowchart TD
+  0["Route"]
+
+--- quickinfo ---
+/**
+ * - HttpRouter required at ln 5 col 13 by `Route`
+ */

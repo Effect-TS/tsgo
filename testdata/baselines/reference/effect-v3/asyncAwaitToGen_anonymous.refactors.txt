@@ -1,0 +1,370 @@
+=== Refactor Inventory ===
+
+[R1] selection: "5:44-5:45"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Rewrite to Effect.gen" (refactor.rewrite.effect.asyncAwaitToGen)
+  Refactor 2: "Rewrite to Effect.gen with failures" (refactor.rewrite.effect.asyncAwaitToGenTryPromise)
+  Refactor 3: "Rewrite to Effect.fn" (refactor.rewrite.effect.asyncAwaitToFn)
+  Refactor 4: "Rewrite to Effect.fn with failures" (refactor.rewrite.effect.asyncAwaitToFnTryPromise)
+  Refactor 5: "Toggle return type annotation" (refactor.rewrite.effect.toggleReturnTypeAnnotation)
+
+[R2] selection: "14:41-14:42"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Rewrite to Effect.gen" (refactor.rewrite.effect.asyncAwaitToGen)
+  Refactor 2: "Rewrite to Effect.gen with failures" (refactor.rewrite.effect.asyncAwaitToGenTryPromise)
+  Refactor 3: "Rewrite to Effect.fn" (refactor.rewrite.effect.asyncAwaitToFn)
+  Refactor 4: "Rewrite to Effect.fn with failures" (refactor.rewrite.effect.asyncAwaitToFnTryPromise)
+  Refactor 5: "Toggle return type annotation" (refactor.rewrite.effect.toggleReturnTypeAnnotation)
+
+[R3] selection: "empty (0:0-0:0)"
+  (no refactors)
+
+=== Refactor Application Results ===
+
+=== [R1] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/asyncAwaitToGen_anonymous.ts ---
+// refactor: 5:44-5:45, 14:41-14:42
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+const asyncFunctionDeclaration = async funcpipe(t)ion() {
+  const response = await fetch("test")
+  if (response.ok) {
+    const y = await response.json()
+    return y
+  }
+  return null
+}
+
+const asyncArrowFunctionExpression = async () => {
+  const response = await fetch("test")
+  if (response.ok) {
+    const y = await response.json()
+    return y
+  }
+  return null
+}
+
+
+=== [R1] Refactor 1: "Rewrite to Effect.gen" ===
+
+--- file:///.src/asyncAwaitToGen_anonymous.ts ---
+// refactor: 5:44-5:45, 14:41-14:42
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+const asyncFunctionDeclaration = function () {
+    return Effect.gen(function* () {
+        const response = yield* Effect.promise(() => fetch("test"));
+        if (response.ok) {
+            const y = yield* Effect.promise(() => response.json());
+            return y;
+        }
+        return null;
+    });
+};
+
+const asyncArrowFunctionExpression = async () => {
+  const response = await fetch("test")
+  if (response.ok) {
+    const y = await response.json()
+    return y
+  }
+  return null
+}
+
+
+=== [R1] Refactor 2: "Rewrite to Effect.gen with failures" ===
+
+--- file:///.src/asyncAwaitToGen_anonymous.ts ---
+// refactor: 5:44-5:45, 14:41-14:42
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+class Error1 extends Data.TaggedError("Error1")<{
+    cause: unknown;
+}> {}
+
+class Error2 extends Data.TaggedError("Error2")<{
+    cause: unknown;
+}> {}
+
+const asyncFunctionDeclaration = function () {
+    return Effect.gen(function* () {
+        const response = yield* Effect.tryPromise({ try: () => fetch("test"), catch: cause => new Error1({ cause }) });
+        if (response.ok) {
+            const y = yield* Effect.tryPromise({ try: () => response.json(), catch: cause => new Error2({ cause }) });
+            return y;
+        }
+        return null;
+    });
+};
+
+const asyncArrowFunctionExpression = async () => {
+  const response = await fetch("test")
+  if (response.ok) {
+    const y = await response.json()
+    return y
+  }
+  return null
+}
+
+
+=== [R1] Refactor 3: "Rewrite to Effect.fn" ===
+
+--- file:///.src/asyncAwaitToGen_anonymous.ts ---
+// refactor: 5:44-5:45, 14:41-14:42
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+const asyncFunctionDeclaration = Effect.fn("asyncFunctionDeclaration")(function* () {
+    const response = yield* Effect.promise(() => fetch("test"));
+    if (response.ok) {
+        const y = yield* Effect.promise(() => response.json());
+        return y;
+    }
+    return null;
+});
+
+const asyncArrowFunctionExpression = async () => {
+  const response = await fetch("test")
+  if (response.ok) {
+    const y = await response.json()
+    return y
+  }
+  return null
+}
+
+
+=== [R1] Refactor 4: "Rewrite to Effect.fn with failures" ===
+
+--- file:///.src/asyncAwaitToGen_anonymous.ts ---
+// refactor: 5:44-5:45, 14:41-14:42
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+class Error1 extends Data.TaggedError("Error1")<{
+    cause: unknown;
+}> {}
+
+class Error2 extends Data.TaggedError("Error2")<{
+    cause: unknown;
+}> {}
+
+const asyncFunctionDeclaration = Effect.fn("asyncFunctionDeclaration")(function* () {
+    const response = yield* Effect.tryPromise({ try: () => fetch("test"), catch: cause => new Error1({ cause }) });
+    if (response.ok) {
+        const y = yield* Effect.tryPromise({ try: () => response.json(), catch: cause => new Error2({ cause }) });
+        return y;
+    }
+    return null;
+});
+
+const asyncArrowFunctionExpression = async () => {
+  const response = await fetch("test")
+  if (response.ok) {
+    const y = await response.json()
+    return y
+  }
+  return null
+}
+
+
+=== [R1] Refactor 5: "Toggle return type annotation" ===
+
+--- file:///.src/asyncAwaitToGen_anonymous.ts ---
+// refactor: 5:44-5:45, 14:41-14:42
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+const asyncFunctionDeclaration = async function(): Promise<any> {
+  const response = await fetch("test")
+  if (response.ok) {
+    const y = await response.json()
+    return y
+  }
+  return null
+}
+
+const asyncArrowFunctionExpression = async () => {
+  const response = await fetch("test")
+  if (response.ok) {
+    const y = await response.json()
+    return y
+  }
+  return null
+}
+
+
+=== [R2] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/asyncAwaitToGen_anonymous.ts ---
+// refactor: 5:44-5:45, 14:41-14:42
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+const asyncFunctionDeclaration = async function() {
+  const response = await fetch("test")
+  if (response.ok) {
+    const y = await response.json()
+    return y
+  }
+  return null
+}
+
+const asyncArrowFunctionExpression = asypipe(n)c () => {
+  const response = await fetch("test")
+  if (response.ok) {
+    const y = await response.json()
+    return y
+  }
+  return null
+}
+
+
+=== [R2] Refactor 1: "Rewrite to Effect.gen" ===
+
+--- file:///.src/asyncAwaitToGen_anonymous.ts ---
+// refactor: 5:44-5:45, 14:41-14:42
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+const asyncFunctionDeclaration = async function() {
+  const response = await fetch("test")
+  if (response.ok) {
+    const y = await response.json()
+    return y
+  }
+  return null
+}
+
+const asyncArrowFunctionExpression = () => Effect.gen(function* () {
+    const response = yield* Effect.promise(() => fetch("test"));
+    if (response.ok) {
+        const y = yield* Effect.promise(() => response.json());
+        return y;
+    }
+    return null;
+});
+
+
+=== [R2] Refactor 2: "Rewrite to Effect.gen with failures" ===
+
+--- file:///.src/asyncAwaitToGen_anonymous.ts ---
+// refactor: 5:44-5:45, 14:41-14:42
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+const asyncFunctionDeclaration = async function() {
+  const response = await fetch("test")
+  if (response.ok) {
+    const y = await response.json()
+    return y
+  }
+  return null
+}
+
+class Error1 extends Data.TaggedError("Error1")<{
+    cause: unknown;
+}> {}
+
+class Error2 extends Data.TaggedError("Error2")<{
+    cause: unknown;
+}> {}
+
+const asyncArrowFunctionExpression = () => Effect.gen(function* () {
+    const response = yield* Effect.tryPromise({ try: () => fetch("test"), catch: cause => new Error1({ cause }) });
+    if (response.ok) {
+        const y = yield* Effect.tryPromise({ try: () => response.json(), catch: cause => new Error2({ cause }) });
+        return y;
+    }
+    return null;
+});
+
+
+=== [R2] Refactor 3: "Rewrite to Effect.fn" ===
+
+--- file:///.src/asyncAwaitToGen_anonymous.ts ---
+// refactor: 5:44-5:45, 14:41-14:42
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+const asyncFunctionDeclaration = async function() {
+  const response = await fetch("test")
+  if (response.ok) {
+    const y = await response.json()
+    return y
+  }
+  return null
+}
+
+const asyncArrowFunctionExpression = Effect.fn("asyncArrowFunctionExpression")(function* () {
+    const response = yield* Effect.promise(() => fetch("test"));
+    if (response.ok) {
+        const y = yield* Effect.promise(() => response.json());
+        return y;
+    }
+    return null;
+});
+
+
+=== [R2] Refactor 4: "Rewrite to Effect.fn with failures" ===
+
+--- file:///.src/asyncAwaitToGen_anonymous.ts ---
+// refactor: 5:44-5:45, 14:41-14:42
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+const asyncFunctionDeclaration = async function() {
+  const response = await fetch("test")
+  if (response.ok) {
+    const y = await response.json()
+    return y
+  }
+  return null
+}
+
+class Error1 extends Data.TaggedError("Error1")<{
+    cause: unknown;
+}> {}
+
+class Error2 extends Data.TaggedError("Error2")<{
+    cause: unknown;
+}> {}
+
+const asyncArrowFunctionExpression = Effect.fn("asyncArrowFunctionExpression")(function* () {
+    const response = yield* Effect.tryPromise({ try: () => fetch("test"), catch: cause => new Error1({ cause }) });
+    if (response.ok) {
+        const y = yield* Effect.tryPromise({ try: () => response.json(), catch: cause => new Error2({ cause }) });
+        return y;
+    }
+    return null;
+});
+
+
+=== [R2] Refactor 5: "Toggle return type annotation" ===
+
+--- file:///.src/asyncAwaitToGen_anonymous.ts ---
+// refactor: 5:44-5:45, 14:41-14:42
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+const asyncFunctionDeclaration = async function() {
+  const response = await fetch("test")
+  if (response.ok) {
+    const y = await response.json()
+    return y
+  }
+  return null
+}
+
+const asyncArrowFunctionExpression = async (): Promise<any> => {
+  const response = await fetch("test")
+  if (response.ok) {
+    const y = await response.json()
+    return y
+  }
+  return null
+}
+

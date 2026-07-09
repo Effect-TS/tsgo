@@ -1,0 +1,10 @@
+=== Quick Fix Inventory ===
+
+[D1] (3:23-3:27) TS2688: Cannot find type definition file for 'node'.
+  (no quick fixes)
+
+[D2] (5:24-5:31) TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+(no quick fixes to apply)

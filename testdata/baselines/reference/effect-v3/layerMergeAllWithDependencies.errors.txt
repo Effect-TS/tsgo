@@ -1,0 +1,59 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/layerMergeAllWithDependencies.ts(31,3): warning TS377035: This layer provides FileSystem which is required by another layer in the same Layer.mergeAll call. Layer.mergeAll creates layers in parallel, so dependencies between layers will not be satisfied. Consider moving this layer into a Layer.provideMerge after the Layer.mergeAll. effect(layerMergeAllWithDependencies)
+/.src/layerMergeAllWithDependencies.ts(36,3): warning TS377035: This layer provides DbConnection which is required by another layer in the same Layer.mergeAll call. Layer.mergeAll creates layers in parallel, so dependencies between layers will not be satisfied. Consider moving this layer into a Layer.provideMerge after the Layer.mergeAll. effect(layerMergeAllWithDependencies)
+/.src/layerMergeAllWithDependencies.ts(37,3): warning TS377035: This layer provides FileSystem which is required by another layer in the same Layer.mergeAll call. Layer.mergeAll creates layers in parallel, so dependencies between layers will not be satisfied. Consider moving this layer into a Layer.provideMerge after the Layer.mergeAll. effect(layerMergeAllWithDependencies)
+/.src/layerMergeAllWithDependencies.ts(38,3): warning TS377035: This layer provides Cache which is required by another layer in the same Layer.mergeAll call. Layer.mergeAll creates layers in parallel, so dependencies between layers will not be satisfied. Consider moving this layer into a Layer.provideMerge after the Layer.mergeAll. effect(layerMergeAllWithDependencies)
+
+
+==== /.src/layerMergeAllWithDependencies.ts (4 errors) ====
+    // @effect-v3
+    import { Effect, Layer } from "effect"
+    
+    export class DbConnection extends Effect.Service<DbConnection>()("DbConnection", {
+      succeed: {}
+    }) {}
+    export class FileSystem extends Effect.Service<FileSystem>()("FileSystem", {
+      succeed: {}
+    }) {}
+    export class Cache extends Effect.Service<Cache>()("Cache", {
+      effect: Effect.as(FileSystem, {})
+    }) {}
+    export class UserRepository extends Effect.Service<UserRepository>()("UserRepository", {
+      effect: Effect.as(Effect.zipRight(DbConnection, Cache), {})
+    }) {}
+    
+    const cachePassthrough = Layer.effect(Cache, Cache)
+    
+    export const shouldNotWarn = Layer.mergeAll(
+      DbConnection.Default,
+      FileSystem.Default
+    )
+    
+    export const shouldNotWarn2 = Layer.mergeAll(
+      UserRepository.Default,
+      cachePassthrough
+    )
+    
+    export const shouldWarn = Layer.mergeAll(
+      DbConnection.Default,
+      FileSystem.Default,
+      ~~~~~~~~~~~~~~~~~~
+!!! warning TS377035: This layer provides FileSystem which is required by another layer in the same Layer.mergeAll call. Layer.mergeAll creates layers in parallel, so dependencies between layers will not be satisfied. Consider moving this layer into a Layer.provideMerge after the Layer.mergeAll. effect(layerMergeAllWithDependencies)
+      Cache.Default // <- this requires a DbConnection
+    )
+    
+    export const shouldWarn2 = Layer.mergeAll(
+      DbConnection.Default,
+      ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377035: This layer provides DbConnection which is required by another layer in the same Layer.mergeAll call. Layer.mergeAll creates layers in parallel, so dependencies between layers will not be satisfied. Consider moving this layer into a Layer.provideMerge after the Layer.mergeAll. effect(layerMergeAllWithDependencies)
+      FileSystem.Default,
+      ~~~~~~~~~~~~~~~~~~
+!!! warning TS377035: This layer provides FileSystem which is required by another layer in the same Layer.mergeAll call. Layer.mergeAll creates layers in parallel, so dependencies between layers will not be satisfied. Consider moving this layer into a Layer.provideMerge after the Layer.mergeAll. effect(layerMergeAllWithDependencies)
+      Cache.Default, // <- this requires a FileSystem,
+      ~~~~~~~~~~~~~
+!!! warning TS377035: This layer provides Cache which is required by another layer in the same Layer.mergeAll call. Layer.mergeAll creates layers in parallel, so dependencies between layers will not be satisfied. Consider moving this layer into a Layer.provideMerge after the Layer.mergeAll. effect(layerMergeAllWithDependencies)
+      UserRepository.Default // <- this requires a DbConnection
+    )
+    

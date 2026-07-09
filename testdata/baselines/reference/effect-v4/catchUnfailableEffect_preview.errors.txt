@@ -1,0 +1,17 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/catchUnfailableEffect_preview.ts(6,3): warning TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
+
+
+==== /.src/catchUnfailableEffect_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics catchUnfailableEffect:warning
+    import { Effect } from "effect"
+    
+    export const preview = Effect.succeed(1).pipe(
+      Effect.catch(() => Effect.succeed(0))
+      ~~~~~~~~~~~~
+!!! warning TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
+    )
+    

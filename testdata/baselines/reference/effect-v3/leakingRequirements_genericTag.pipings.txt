@@ -1,0 +1,29 @@
+==== /.src/leakingRequirements_genericTag.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 5:32 - 5:58
+Node: Context.Tag("FileSystem")
+Node Kind: KindCallExpression
+
+Subject: "FileSystem"
+Subject Type: "FileSystem"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.Tag
+      args: (constant)
+      outType: <Self, Shape>() => TagClass<Self, "FileSystem", Shape>
+
+=== Piping Flow ===
+Location: 14:26 - 14:79
+Node: Context.GenericTag<LeakingService>("LeakingService")
+Node Kind: KindCallExpression
+
+Subject: "LeakingService"
+Subject Type: "LeakingService"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.GenericTag
+      args: (constant)
+      outType: Tag<LeakingService, LeakingService>

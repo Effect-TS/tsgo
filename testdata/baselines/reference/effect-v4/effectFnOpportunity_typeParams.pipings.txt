@@ -1,0 +1,127 @@
+==== /.src/effectFnOpportunity_typeParams.ts (9 flows) ====
+
+=== Piping Flow ===
+Location: 12:9 - 14:5
+Node: Effect.gen(function*() {\n    return yield* Effect.succeed(value)\n  })
+Node Kind: KindCallExpression
+
+Subject: function*() {\n    return yield* Effect.succeed(value)\n  }
+Subject Type: () => Generator<Effect<T, never, never>, T, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<T, never, never>
+
+=== Piping Flow ===
+Location: 13:18 - 13:40
+Node: Effect.succeed(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: T
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<T, never, never>
+
+=== Piping Flow ===
+Location: 18:9 - 20:5
+Node: Effect.gen(function*() {\n    return yield* Effect.succeed(value)\n  })
+Node Kind: KindCallExpression
+
+Subject: function*() {\n    return yield* Effect.succeed(value)\n  }
+Subject Type: () => Generator<Effect<T, never, never>, T, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<T, never, never>
+
+=== Piping Flow ===
+Location: 19:18 - 19:40
+Node: Effect.succeed(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: T
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<T, never, never>
+
+=== Piping Flow ===
+Location: 24:9 - 26:5
+Node: Effect.gen(function*() {\n    return yield* Effect.succeed(value)\n  })
+Node Kind: KindCallExpression
+
+Subject: function*() {\n    return yield* Effect.succeed(value)\n  }
+Subject Type: () => Generator<Effect<T, never, never>, T, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<T, never, never>
+
+=== Piping Flow ===
+Location: 25:18 - 25:40
+Node: Effect.succeed(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: T
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<T, never, never>
+
+=== Piping Flow ===
+Location: 38:9 - 38:31
+Node: Effect.succeed(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: T
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<T, never, never>
+
+=== Piping Flow ===
+Location: 47:9 - 47:31
+Node: Effect.succeed(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: T
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<T, never, never>
+
+=== Piping Flow ===
+Location: 56:9 - 56:31
+Node: Effect.succeed(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: T
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<T, never, never>

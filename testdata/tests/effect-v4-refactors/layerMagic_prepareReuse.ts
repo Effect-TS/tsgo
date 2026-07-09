@@ -1,0 +1,35 @@
+// refactor: 25:14-25:38, 31:14-31:30
+import { Effect, Layer, pipe, Context } from "effect"
+
+class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class FileSystem extends Context.Service<FileSystem>()("FileSystem", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class Cache extends Context.Service<Cache>()("Cache", {
+  make: Effect.as(FileSystem, {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class UserRepository extends Context.Service<UserRepository>()("UserRepository", {
+  make: Effect.as(Effect.andThen(DbConnection, Cache), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+
+export const prepareUser_commentCache = pipe(
+  UserRepository.Default,
+  Layer.provide(Cache.Default),
+  Layer.provide(FileSystem.Default)
+)
+
+export const prepareUserCache = pipe(
+  UserRepository.Default,
+  Layer.provideMerge(Cache.Default),
+  Layer.provide(FileSystem.Default)
+)

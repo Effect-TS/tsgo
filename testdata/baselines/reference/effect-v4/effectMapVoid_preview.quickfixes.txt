@@ -1,0 +1,26 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:3-6:13) TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
+  Fix 0: "Disable effectMapVoid for this line"
+  Fix 1: "Disable effectMapVoid for entire file"
+  Fix 2: "Replace with Effect.asVoid"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable effectMapVoid for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectMapVoid for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.asVoid" ===
+
+--- file:///.src/effectMapVoid_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics effectMapVoid:warning
+import { Effect } from "effect"
+
+export const preview = Effect.succeed(1).pipe(
+  Effect.asVoid
+)
+

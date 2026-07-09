@@ -1,0 +1,43 @@
+==== /.src/floatingEffect.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 1:32 - 4:27
+Node: Effect.succeed("floating")
+Node Kind: KindCallExpression
+
+Subject: "floating"
+Subject Type: "floating"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 6:12 - 7:21
+Node: Effect.fail("error")
+Node Kind: KindCallExpression
+
+Subject: "error"
+Subject Type: "error"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>
+
+=== Piping Flow ===
+Location: 10:11 - 10:29
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>

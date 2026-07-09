@@ -1,0 +1,32 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/catchUnfailableEffect_effectFnRegular.ts(8,3): suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
+/.src/catchUnfailableEffect_effectFnRegular.ts(18,3): suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
+
+
+==== /.src/catchUnfailableEffect_effectFnRegular.ts (2 errors) ====
+    // @effect-v3
+    // @effect-diagnostics catchToOrElseSucceed:off
+    import * as Effect from "effect/Effect"
+    
+    // Effect.fn with regular (non-generator) function
+    export const shouldReportEffectFnRegular = Effect.fn(
+      () => Effect.succeed(42),
+      Effect.catchAll(() => Effect.void)
+      ~~~~~~~~~~~~~~~
+!!! suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
+    ) // <- should report here
+    
+    export const shouldNotReportEffectFnRegular = Effect.fn(
+      () => Effect.fail("error"),
+      Effect.catchAll(() => Effect.succeed(42))
+    )
+    
+    export const shouldReportEffectFnRegularTraced = Effect.fn("traced")(
+      () => Effect.succeed(42),
+      Effect.catchAll(() => Effect.void)
+      ~~~~~~~~~~~~~~~
+!!! suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
+    ) // <- should report here
+    

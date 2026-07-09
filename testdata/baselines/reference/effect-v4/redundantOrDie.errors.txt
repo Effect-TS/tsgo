@@ -1,0 +1,80 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/redundantOrDie.ts(9,40): warning TS377096: This generator applies `Effect.orDie` to every yielded effect. Hoist it once to the generator result: `Effect.gen(...).pipe(Effect.orDie)`, or `Effect.fn(function*(){ ... }, Effect.orDie)`. effect(redundantOrDie)
+/.src/redundantOrDie.ts(16,65): warning TS377096: This generator applies `Effect.orDie` to every yielded effect. Hoist it once to the generator result: `Effect.gen(...).pipe(Effect.orDie)`, or `Effect.fn(function*(){ ... }, Effect.orDie)`. effect(redundantOrDie)
+/.src/redundantOrDie.ts(23,51): warning TS377096: This generator applies `Effect.orDie` to every yielded effect. Hoist it once to the generator result: `Effect.gen(...).pipe(Effect.orDie)`, or `Effect.fn(function*(){ ... }, Effect.orDie)`. effect(redundantOrDie)
+
+
+==== /.src/redundantOrDie.ts (3 errors) ====
+    // @effect-diagnostics redundantOrDie:warning
+    // @effect-diagnostics unnecessaryEffectGen:off
+    import { Effect } from "effect"
+    
+    declare const first: Effect.Effect<number, unknown>
+    declare const second: Effect.Effect<string, unknown>
+    declare const third: Effect.Effect<boolean, unknown>
+    
+    export const shouldReport = Effect.gen(function*() {
+                                           ~~~~~~~~~
+!!! warning TS377096: This generator applies `Effect.orDie` to every yielded effect. Hoist it once to the generator result: `Effect.gen(...).pipe(Effect.orDie)`, or `Effect.fn(function*(){ ... }, Effect.orDie)`. effect(redundantOrDie)
+!!! related TS377097 /.src/redundantOrDie.ts(10,31): This repeated `Effect.orDie` site participates in the hoistable generator-wide `orDie`. effect(redundantOrDie)
+!!! related TS377097 /.src/redundantOrDie.ts(11,32): This repeated `Effect.orDie` site participates in the hoistable generator-wide `orDie`. effect(redundantOrDie)
+      const a = yield* first.pipe(Effect.orDie)
+      const b = yield* second.pipe(Effect.orDie)
+    
+      return [a, b] as const
+    })
+    
+    export const shouldReportEffectFn = Effect.fn("service.method")(function*() {
+                                                                    ~~~~~~~~~
+!!! warning TS377096: This generator applies `Effect.orDie` to every yielded effect. Hoist it once to the generator result: `Effect.gen(...).pipe(Effect.orDie)`, or `Effect.fn(function*(){ ... }, Effect.orDie)`. effect(redundantOrDie)
+!!! related TS377097 /.src/redundantOrDie.ts(17,31): This repeated `Effect.orDie` site participates in the hoistable generator-wide `orDie`. effect(redundantOrDie)
+!!! related TS377097 /.src/redundantOrDie.ts(18,32): This repeated `Effect.orDie` site participates in the hoistable generator-wide `orDie`. effect(redundantOrDie)
+      const a = yield* first.pipe(Effect.orDie)
+      const b = yield* second.pipe(Effect.orDie)
+    
+      return [a, b] as const
+    })
+    
+    export const shouldReportMixedStyles = Effect.gen(function*() {
+                                                      ~~~~~~~~~
+!!! warning TS377096: This generator applies `Effect.orDie` to every yielded effect. Hoist it once to the generator result: `Effect.gen(...).pipe(Effect.orDie)`, or `Effect.fn(function*(){ ... }, Effect.orDie)`. effect(redundantOrDie)
+!!! related TS377097 /.src/redundantOrDie.ts(24,31): This repeated `Effect.orDie` site participates in the hoistable generator-wide `orDie`. effect(redundantOrDie)
+!!! related TS377097 /.src/redundantOrDie.ts(25,20): This repeated `Effect.orDie` site participates in the hoistable generator-wide `orDie`. effect(redundantOrDie)
+      const a = yield* first.pipe(Effect.orDie)
+      const b = yield* Effect.orDie(second)
+    
+      return [a, b] as const
+    })
+    
+    export const shouldNotReportMissingOrDie = Effect.gen(function*() {
+      const a = yield* first.pipe(Effect.orDie)
+      const b = yield* second
+    
+      return [a, b] as const
+    })
+    
+    export const shouldNotReportOneYield = Effect.gen(function*() {
+      return yield* first.pipe(Effect.orDie)
+    })
+    
+    export const shouldNotReportNonTrailingOrDie = Effect.gen(function*() {
+      const a = yield* first.pipe(
+        Effect.orDie,
+        Effect.map((value) => value + 1)
+      )
+      const b = yield* second.pipe(Effect.orDie)
+    
+      return [a, b] as const
+    })
+    
+    export const shouldNotReportNestedMissingOrDie = Effect.gen(function*() {
+      yield* first.pipe(Effect.orDie)
+    
+      yield* Effect.gen(function*() {
+        yield* second.pipe(Effect.orDie)
+        yield* third
+      })
+    })
+    

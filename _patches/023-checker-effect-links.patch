@@ -1,0 +1,11 @@
+diff --git a/internal/checker/checker.go b/internal/checker/checker.go
+--- a/internal/checker/checker.go
++++ b/internal/checker/checker.go
+@@ -581,6 +581,7 @@ type Checker struct {
+ 	id                                          uint32
+ 	program                                     Program
+ 	compilerOptions                             *core.CompilerOptions
++	EffectLinks                                 any
+ 	files                                       []*ast.SourceFile
+ 	fileIndexMap                                map[*ast.SourceFile]int
+ 	compareSymbols                              func(*ast.Symbol, *ast.Symbol) int

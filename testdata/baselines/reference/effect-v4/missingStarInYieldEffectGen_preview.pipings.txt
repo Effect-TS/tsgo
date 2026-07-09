@@ -1,0 +1,29 @@
+==== /.src/missingStarInYieldEffectGen_preview.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 5:23 - 8:3
+Node: Effect.gen(function*() {\n  const value = yield Effect.succeed(1)\n  return value\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const value = yield Effect.succeed(1)\n  return value\n}
+Subject Type: () => Generator<Effect<number, never, never>, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 6:22 - 6:40
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>

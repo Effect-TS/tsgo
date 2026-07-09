@@ -1,0 +1,17 @@
+flowchart TB
+  0[["type: #lt;T#gt;#40;a: T, b: T#41; =#gt; T<br/>node: function combine#lt;T#gt;#40;a: T, b: T#41;: T #123; return a #125;"]]
+  1[/"type: T<br/>node: a"/]
+  2[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: run#40;#41;: Effect.Effect#lt;number#gt; #123;#92;n        return Effect.gen#40;#123; self: this #125;, function* #40;#41; #123;#92;n            return yield* Effect.gen#40;#123; self: this #125;, function* #40;#41; #123;#92;n                return combine#40;1, 2#41;#92;n            #125;#41;#92;n        #125;#41;#92;n    #125;"]]
+  3((("type: Effect#lt;1 #124; 2, never, never#gt;<br/>node: Effect.gen#40;#123; self: this #125;, function* #40;#41; #123;#92;n            return yield* Effect.gen#40;#123; self: this #125;, function* #40;#41; #123;#92;n                return combine#40;1, 2#41;#92;n            #125;#41;#92;n        #125;#41;")))
+  4[/"type: 1 #124; 2<br/>node: yield* Effect.gen#40;#123; self: this #125;, function* #40;#41; #123;#92;n                return combine#40;1, 2#41;#92;n            #125;#41;"/]
+  5((("type: Effect#lt;1 #124; 2, never, never#gt;<br/>node: Effect.gen#40;#123; self: this #125;, function* #40;#41; #123;#92;n                return combine#40;1, 2#41;#92;n            #125;#41;")))
+  6[/"type: 1 #124; 2<br/>node: combine#40;1, 2#41;"/]
+  1 -->|"kind: potentialReturn"| 0
+  1 -->|"kind: usedBy"| 0
+  6 -->|"kind: potentialReturn"| 5
+  6 -->|"kind: usedBy"| 5
+  5 -->|"kind: usedBy"| 4
+  4 -->|"kind: potentialReturn"| 3
+  5 -->|"kind: yieldable"| 3
+  3 -->|"kind: potentialReturn"| 2
+  3 -->|"kind: usedBy"| 2

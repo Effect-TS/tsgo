@@ -1,0 +1,43 @@
+==== /.src/effectFnOpportunity_overloadsNever.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 10:9 - 12:5
+Node: Effect.gen(function*() {\n    return yield* Effect.succeed(a as any)\n  })
+Node Kind: KindCallExpression
+
+Subject: function*() {\n    return yield* Effect.succeed(a as any)\n  }
+Subject Type: () => Generator<Effect<any, never, never>, any, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<any, never, never>
+
+=== Piping Flow ===
+Location: 11:18 - 11:43
+Node: Effect.succeed(a as any)
+Node Kind: KindCallExpression
+
+Subject: a as any
+Subject Type: any
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<any, never, never>
+
+=== Piping Flow ===
+Location: 23:9 - 23:34
+Node: Effect.succeed(a as any)
+Node Kind: KindCallExpression
+
+Subject: a as any
+Subject Type: any
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<any, never, never>

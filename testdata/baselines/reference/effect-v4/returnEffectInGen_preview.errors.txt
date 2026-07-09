@@ -1,0 +1,17 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/returnEffectInGen_preview.ts(6,3): warning TS377014: This generator returns an Effect-able value directly, which produces a nested `Effect<Effect<...>>`. If the intended result is the inner Effect value, `return yield*` represents that form. effect(returnEffectInGen)
+
+
+==== /.src/returnEffectInGen_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics returnEffectInGen:warning
+    import * as Effect from "effect/Effect"
+    
+    export const preview = Effect.gen(function*() {
+      return Effect.succeed(1)
+      ~~~~~~
+!!! warning TS377014: This generator returns an Effect-able value directly, which produces a nested `Effect<Effect<...>>`. If the intended result is the inner Effect value, `return yield*` represents that form. effect(returnEffectInGen)
+    })
+    

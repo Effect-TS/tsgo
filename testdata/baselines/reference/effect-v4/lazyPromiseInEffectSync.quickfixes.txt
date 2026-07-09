@@ -1,0 +1,23 @@
+=== Quick Fix Inventory ===
+
+[D1] (8:47-8:71) TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
+  Fix 0: "Disable lazyPromiseInEffectSync for this line"
+  Fix 1: "Disable lazyPromiseInEffectSync for entire file"
+
+[D2] (11:45-11:63) TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
+  Fix 0: "Disable lazyPromiseInEffectSync for this line"
+  Fix 1: "Disable lazyPromiseInEffectSync for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable lazyPromiseInEffectSync for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable lazyPromiseInEffectSync for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable lazyPromiseInEffectSync for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable lazyPromiseInEffectSync for entire file" ===
+skipped by default

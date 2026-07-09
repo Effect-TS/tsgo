@@ -1,0 +1,13 @@
+=== Quick Fix Inventory ===
+
+[D1] (10:48-10:49) TS377027: The adapter of Effect.gen is not required anymore, it is now just an alias of pipe. effect(effectGenUsesAdapter)
+  Fix 0: "Disable effectGenUsesAdapter for this line"
+  Fix 1: "Disable effectGenUsesAdapter for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable effectGenUsesAdapter for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectGenUsesAdapter for entire file" ===
+skipped by default

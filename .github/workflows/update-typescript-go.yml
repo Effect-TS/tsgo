@@ -1,0 +1,326 @@
+name: Update TypeScript-Go
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: update-typescript-go-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  update:
+    name: Update submodule
+    if: github.repository_owner == 'Effect-TS'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      has_changes: ${{ steps.changes.outputs.has_changes }}
+      pr_number: ${{ steps.cpr.outputs.pull-request-number }}
+      head_sha: ${{ steps.cpr.outputs.pull-request-head-sha }}
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          submodules: recursive
+
+      - name: Track TypeScript-Go submodule updates in Git
+        run: git config submodule.typescript-go.ignore dirty
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.26"
+          cache: false
+
+      - name: Cache Go build
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: go-build-update-typescript-go-${{ runner.os }}-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            go-build-update-typescript-go-${{ runner.os }}-
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Record current TypeScript-Go commit
+        id: before
+        run: echo "sha=$(git -C typescript-go rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Resolve TypeScript next metadata
+        id: typescript
+        env:
+          TYPESCRIPT_SPEC: typescript@next
+        run: |
+          metadata="$(npm view "${TYPESCRIPT_SPEC}" version gitHead --json)"
+          version="$(node -e 'const m = JSON.parse(process.argv[1]); if (!m.version) process.exit(1); process.stdout.write(m.version)' "$metadata")"
+          git_head="$(node -e 'const m = JSON.parse(process.argv[1]); if (!/^[0-9a-f]{40}$/.test(m.gitHead || "")) process.exit(1); process.stdout.write(m.gitHead)' "$metadata")"
+
+          echo "spec=${TYPESCRIPT_SPEC}" >> "$GITHUB_OUTPUT"
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+          echo "git_head=${git_head}" >> "$GITHUB_OUTPUT"
+
+      - name: Update TypeScript-Go submodule
+        run: |
+          git -C typescript-go fetch --depth 1 origin "${{ steps.typescript.outputs.git_head }}"
+          git -C typescript-go checkout --detach "${{ steps.typescript.outputs.git_head }}"
+          git -C typescript-go submodule sync --recursive
+          git -C typescript-go submodule update --init --recursive --force
+
+      - name: Write upstream TypeScript metadata
+        env:
+          TS_VERSION: ${{ steps.typescript.outputs.version }}
+          TS_GIT_HEAD: ${{ steps.typescript.outputs.git_head }}
+        run: |
+          node -e 'const fs = require("node:fs"); fs.writeFileSync("_packages/tsgo/upstream.json", JSON.stringify({ tsVersion: process.env.TS_VERSION, tsGitHead: process.env.TS_GIT_HEAD }, null, 2) + "\n")'
+
+      - name: Regenerate shims and generated files
+        run: pnpm setup-repo --ci
+
+      - name: Record updated TypeScript-Go commit
+        id: after
+        run: echo "sha=$(git -C typescript-go rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Stage TypeScript-Go metadata
+        run: git add typescript-go _packages/tsgo/upstream.json
+
+      - name: Build upstream changelog
+        id: changelog
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          before="${{ steps.before.outputs.sha }}"
+          after="${{ steps.after.outputs.sha }}"
+          compare_url="https://github.com/microsoft/typescript-go/compare/${before}...${after}"
+          commits="$(gh api \
+            repos/microsoft/typescript-go/compare/${before}...${after} \
+            --jq '.commits[] | "- [\(.sha[0:7])](https://github.com/microsoft/typescript-go/commit/\(.sha)) \(.commit.message | split("\n")[0])"')"
+
+          {
+            echo "compare_url=${compare_url}"
+            echo "commits<<EOF"
+            printf '%s\n' "$commits"
+            echo
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Check for changes
+        id: changes
+        run: |
+          if [ "${{ steps.before.outputs.sha }}" != "${{ steps.after.outputs.sha }}" ]; then
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if git diff --cached --quiet && git diff --quiet; then
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "has_changes=true" >> "$GITHUB_OUTPUT"
+
+      - name: Write changeset
+        if: steps.changes.outputs.has_changes == 'true'
+        run: |
+          cat > .changeset/update-typescript-go.md <<EOF
+          ---
+          "@effect/tsgo": patch
+          ---
+
+          Update to \
+          [\`${{ steps.typescript.outputs.spec }}\`](https://www.npmjs.com/package/typescript/v/${{ steps.typescript.outputs.version }}), \
+          which ships \
+          [\`typescript-go\`](https://github.com/microsoft/typescript-go/commit/${{ steps.after.outputs.sha }}) \
+          commit \`${{ steps.after.outputs.sha }}\`.
+          EOF
+
+      - name: Create Pull Request
+        id: cpr
+        if: steps.changes.outputs.has_changes == 'true'
+        uses: peter-evans/create-pull-request@v8
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: chore/update-typescript-go
+          delete-branch: true
+          commit-message: "chore: update typescript-go"
+          title: "chore: update typescript-go"
+          body: |
+            Automated update of the `typescript-go` submodule and regenerated shim/codegen output.
+
+            ## TypeScript-Go
+
+            - TypeScript package: `${{ steps.typescript.outputs.spec }}`
+            - TypeScript version: `${{ steps.typescript.outputs.version }}`
+            - Previous commit: `${{ steps.before.outputs.sha }}`
+            - Updated commit: `${{ steps.after.outputs.sha }}`
+            - Compare: ${{ steps.changelog.outputs.compare_url }}
+
+            ## Upstream commits
+
+            ${{ steps.changelog.outputs.commits }}
+
+            ---
+
+            *This PR was automatically generated by the TypeScript-Go update workflow.*
+          labels: automated
+
+  validate-pr:
+    name: Validate generated PR
+    needs: update
+    if: needs.update.outputs.has_changes == 'true' && needs.update.outputs.head_sha != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      checks: write
+      contents: read
+
+    steps:
+      - name: Create PR validation check
+        id: create_check
+        uses: actions/github-script@v7
+        env:
+          HEAD_SHA: ${{ needs.update.outputs.head_sha }}
+          PR_NUMBER: ${{ needs.update.outputs.pr_number }}
+        with:
+          script: |
+            const { data } = await github.rest.checks.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: 'Validate generated PR',
+              head_sha: process.env.HEAD_SHA,
+              status: 'in_progress',
+              output: {
+                title: `Validation started for PR #${process.env.PR_NUMBER}`,
+                summary: 'Generated PR validation is running.',
+              },
+            })
+
+            core.setOutput('check_run_id', String(data.id))
+
+      - name: Checkout generated PR branch
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ needs.update.outputs.head_sha }}
+          submodules: recursive
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.26"
+          cache: false
+
+      - name: Cache Go build
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: go-build-update-typescript-go-${{ runner.os }}-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            go-build-update-typescript-go-${{ runner.os }}-
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Install dependencies for generated PR
+        run: pnpm install --frozen-lockfile
+
+      - name: Setup generated PR repo
+        run: pnpm setup-repo --ci
+
+      - name: Validate check
+        id: validate_check
+        continue-on-error: true
+        run: pnpm check
+
+      - name: Validate build
+        id: validate_build
+        continue-on-error: true
+        run: pnpm build
+
+      - name: Validate test
+        id: validate_test
+        continue-on-error: true
+        run: pnpm test
+
+      - name: Validate lint
+        id: validate_lint
+        continue-on-error: true
+        uses: golangci/golangci-lint-action@v7
+        with:
+          version: v2.9
+          args: ./...
+        env:
+          CGO_ENABLED: "0"
+
+      - name: Complete PR validation check
+        if: always()
+        uses: actions/github-script@v7
+        env:
+          CHECK_RUN_ID: ${{ steps.create_check.outputs.check_run_id }}
+          PR_NUMBER: ${{ needs.update.outputs.pr_number }}
+          CHECK_OUTCOME: ${{ steps.validate_check.outcome }}
+          BUILD_OUTCOME: ${{ steps.validate_build.outcome }}
+          TEST_OUTCOME: ${{ steps.validate_test.outcome }}
+          LINT_OUTCOME: ${{ steps.validate_lint.outcome }}
+        with:
+          script: |
+            const success =
+              process.env.CHECK_OUTCOME === 'success' &&
+              process.env.BUILD_OUTCOME === 'success' &&
+              process.env.TEST_OUTCOME === 'success' &&
+              process.env.LINT_OUTCOME === 'success'
+
+            await github.rest.checks.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              check_run_id: Number(process.env.CHECK_RUN_ID),
+              status: 'completed',
+              conclusion: success ? 'success' : 'failure',
+              output: {
+                title: `Validation result for PR #${process.env.PR_NUMBER}`,
+                summary: success ? 'Generated PR validation passed.' : 'Generated PR validation failed.',
+              },
+            })
+
+  refresh-flake-hash:
+    name: Refresh flake hash
+    needs:
+      - update
+      - validate-pr
+    if: needs.update.outputs.has_changes == 'true' && needs.validate-pr.result == 'success'
+    permissions:
+      contents: write
+    uses: ./.github/workflows/refresh-flake-hash.yml
+    with:
+      target_ref: chore/update-typescript-go
+    secrets: inherit

@@ -1,0 +1,13 @@
+=== Quick Fix Inventory ===
+
+[D1] (7:3-7:17) TS377086: `Effect.map` + `Effect.flatten` is the same as `Effect.flatMap` that expresses the same steps more directly. effect(effectMapFlatten)
+  Fix 0: "Disable effectMapFlatten for this line"
+  Fix 1: "Disable effectMapFlatten for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable effectMapFlatten for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectMapFlatten for entire file" ===
+skipped by default

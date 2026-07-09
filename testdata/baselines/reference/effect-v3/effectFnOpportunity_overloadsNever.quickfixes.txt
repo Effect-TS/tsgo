@@ -1,0 +1,57 @@
+=== Quick Fix Inventory ===
+
+[D1] (11:10-13:5) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D2] (19:9-19:11) TS6133: '_a' is declared but its value is never read.
+  (no quick fixes)
+
+[D3] (20:9-20:11) TS6133: '_b' is declared but its value is never read.
+  (no quick fixes)
+
+[D4] (21:9-21:11) TS6133: '_c' is declared but its value is never read.
+  (no quick fixes)
+
+[D5] (22:9-22:11) TS6133: '_d' is declared but its value is never read.
+  (no quick fixes)
+
+[D6] (23:9-23:11) TS6133: '_e' is declared but its value is never read.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/effectFnOpportunity_overloadsNever.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+// The diagnostic will never trigger for function declarations with overload
+// signatures because we cannot safely convert them to Effect.fn while
+// preserving the overloads.
+
+export function overloadedDeclaration(a: number): Effect.Effect<number>
+export function overloadedDeclaration(a: string): Effect.Effect<string>
+export function overloadedDeclaration(a: number | string) {
+  return Effect.succeed(a as any)
+}
+
+export function overloadedDeclarationNoGen(a: number): Effect.Effect<number>
+export function overloadedDeclarationNoGen(a: string): Effect.Effect<string>
+export function overloadedDeclarationNoGen(a: number | string) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(a as any)
+}
+

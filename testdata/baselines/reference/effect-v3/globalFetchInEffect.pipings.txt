@@ -1,0 +1,113 @@
+==== /.src/globalFetchInEffect.ts (8 flows) ====
+
+=== Piping Flow ===
+Location: 6:26 - 8:3
+Node: Effect.gen(function*() {\n  fetch("https://example.com/in-gen")\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  fetch("https://example.com/in-gen")\n}
+Subject Type: () => Generator<never, void, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 6:51 - 7:38
+Node: fetch("https://example.com/in-gen")
+Node Kind: KindCallExpression
+
+Subject: "https://example.com/in-gen"
+Subject Type: "https://example.com/in-gen"
+
+Transformations (1):
+  [0] kind: call
+      callee: fetch
+      args: (constant)
+      outType: Promise<Response>
+
+=== Piping Flow ===
+Location: 11:25 - 13:3
+Node: Effect.fn("fetchInFn")(function*() {\n  fetch("https://example.com/in-fn")\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  fetch("https://example.com/in-fn")\n}
+Subject Type: () => Generator<never, void, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn("fetchInFn")
+      args: (constant)
+      outType: () => Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 11:62 - 12:37
+Node: fetch("https://example.com/in-fn")
+Node Kind: KindCallExpression
+
+Subject: "https://example.com/in-fn"
+Subject Type: "https://example.com/in-fn"
+
+Transformations (1):
+  [0] kind: call
+      callee: fetch
+      args: (constant)
+      outType: Promise<Response>
+
+=== Piping Flow ===
+Location: 16:21 - 16:57
+Node: fetch("https://example.com/module")
+Node Kind: KindCallExpression
+
+Subject: "https://example.com/module"
+Subject Type: "https://example.com/module"
+
+Transformations (1):
+  [0] kind: call
+      callee: fetch
+      args: (constant)
+      outType: Promise<Response>
+
+=== Piping Flow ===
+Location: 19:28 - 19:65
+Node: fetch("https://example.com/regular")
+Node Kind: KindCallExpression
+
+Subject: "https://example.com/regular"
+Subject Type: "https://example.com/regular"
+
+Transformations (1):
+  [0] kind: call
+      callee: fetch
+      args: (constant)
+      outType: Promise<Response>
+
+=== Piping Flow ===
+Location: 22:32 - 25:3
+Node: Effect.gen(function*() {\n  const fn = () => fetch("https://example.com/nested")\n  return fn\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const fn = () => fetch("https://example.com/nested")\n  return fn\n}
+Subject Type: () => Generator<never, () => Promise<Response>, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<() => Promise<Response>, never, never>
+
+=== Piping Flow ===
+Location: 23:19 - 23:55
+Node: fetch("https://example.com/nested")
+Node Kind: KindCallExpression
+
+Subject: "https://example.com/nested"
+Subject Type: "https://example.com/nested"
+
+Transformations (1):
+  [0] kind: call
+      callee: fetch
+      args: (constant)
+      outType: Promise<Response>

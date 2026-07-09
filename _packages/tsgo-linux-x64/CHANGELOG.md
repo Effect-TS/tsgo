@@ -1,0 +1,201 @@
+# @effect/tsgo-linux-x64
+
+## 0.16.3
+
+## 0.16.2
+
+## 0.16.1
+
+## 0.16.0
+
+## 0.15.0
+
+## 0.14.6
+
+## 0.14.5
+
+## 0.14.4
+
+## 0.14.3
+
+## 0.14.2
+
+## 0.14.1
+
+## 0.14.0
+
+## 0.13.2
+
+## 0.13.1
+
+## 0.13.0
+
+## 0.12.0
+
+## 0.11.5
+
+## 0.11.4
+
+## 0.11.3
+
+## 0.11.2
+
+## 0.11.1
+
+## 0.11.0
+
+## 0.10.0
+
+## 0.9.0
+
+## 0.8.0
+
+## 0.7.5
+
+## 0.7.4
+
+## 0.7.3
+
+## 0.7.2
+
+## 0.7.1
+
+## 0.7.0
+
+## 0.6.2
+
+## 0.6.1
+
+## 0.6.0
+
+## 0.5.4
+
+## 0.5.3
+
+## 0.5.2
+
+## 0.5.1
+
+## 0.5.0
+
+## 0.4.0
+
+## 0.3.1
+
+## 0.3.0
+
+## 0.2.1
+
+## 0.2.0
+
+## 0.1.1
+
+## 0.1.0
+
+## 0.0.20
+
+## 0.0.19
+
+## 0.0.18
+
+## 0.0.17
+
+### Patch Changes
+
+- cc49924: Add explicit ServiceMap coverage for the class self mismatch diagnostic.
+- 47cb4bf: Ship package-specific README files with every published `@effect/tsgo` package.
+- c7c86e1: Add back includeSuggestionsInTsc setting
+
+## 0.0.16
+
+### Patch Changes
+
+- 7a94f7e: Update typescript-go to 50a70608. Upstream changes include auto-import fixes, linked editing support, signature help trigger characters, JSON syntax validation, formatting rule fixes, and various bug fixes.
+
+## 0.0.15
+
+### Patch Changes
+
+- e1c3844: Prefer the property name for graphs and locations
+
+## 0.0.14
+
+### Patch Changes
+
+- 18c2262: Fix refactor trigger range
+
+## 0.0.13
+
+### Patch Changes
+
+- 5dfeba1: Add more info to missingEffectContext
+- 90b4919: Port severity selection
+
+## 0.0.12
+
+### Patch Changes
+
+- 931ef77: Add document symbols
+
+## 0.0.11
+
+### Patch Changes
+
+- 5d8164e: Skip typeatlocation for class ... implements .. X.Y.Z as well
+
+## 0.0.10
+
+### Patch Changes
+
+- 19b0677: Update typescript-go to 03b31eb
+
+## 0.0.9
+
+### Patch Changes
+
+- 8c7092a: Caching and perf allocations
+
+## 0.0.8
+
+### Patch Changes
+
+- 454cae6: Add caching inside Checker
+
+## 0.0.7
+
+### Patch Changes
+
+- 3f23d3d: Adjust layer links
+
+## 0.0.6
+
+### Patch Changes
+
+- 594ad7a: Added completions
+
+## 0.0.5
+
+### Patch Changes
+
+- f6da8fb: Fix issue caused by nested expression with type arguments in tsgo
+
+## 0.0.4
+
+### Patch Changes
+
+- d42c0d2: Cache test runs properly
+- e06f941: Align floatingEffect effect subtype behaviour
+
+## 0.0.3
+
+### Patch Changes
+
+- cc6d58c: Update tsgo upstream
+
+## 0.0.2
+
+### Patch Changes
+
+- 99ca88b: prepare oidc and trusted publishing setup
+
+## 0.0.1

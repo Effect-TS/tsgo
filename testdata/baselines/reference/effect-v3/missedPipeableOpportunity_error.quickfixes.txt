@@ -1,0 +1,16 @@
+=== Quick Fix Inventory ===
+
+[D1] (10:49-10:62) TS2551: Property 'decodeUnknown' does not exist on type 'typeof import("/node_modules/effect/dist/Schema")'. Did you mean 'decodeUnknownExit'?
+  (no quick fixes)
+
+[D2] (12:66-12:79) TS2551: Property 'decodeUnknown' does not exist on type 'typeof import("/node_modules/effect/dist/Schema")'. Did you mean 'decodeUnknownExit'?
+  (no quick fixes)
+
+[D3] (16:12-16:23) TS2339: Property 'whileOutput' does not exist on type 'typeof import("/node_modules/effect/dist/Schedule")'.
+  (no quick fixes)
+
+[D4] (16:33-16:50) TS2551: Property 'lessThanOrEqualTo' does not exist on type 'typeof import("/node_modules/effect/dist/Duration")'. Did you mean 'isLessThanOrEqualTo'?
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+(no quick fixes to apply)

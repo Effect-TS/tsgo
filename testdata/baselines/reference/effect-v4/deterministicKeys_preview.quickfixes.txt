@@ -1,0 +1,26 @@
+=== Quick Fix Inventory ===
+
+[D1] (7:49-7:67) TS377049: This key does not match the deterministic key for this declaration. The expected key is `effect-v4-tests/deterministicKeys_preview/RenamedService`. effect(deterministicKeys)
+  Fix 0: "Disable deterministicKeys for this line"
+  Fix 1: "Disable deterministicKeys for entire file"
+  Fix 2: "Replace 'CustomIdentifier' with 'effect-v4-tests/deterministicKeys_preview/RenamedService'"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable deterministicKeys for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable deterministicKeys for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace 'CustomIdentifier' with 'effect-v4-tests/deterministicKeys_preview/RenamedService'" ===
+
+--- file:///.src/deterministicKeys_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics deterministicKeys:warning
+// @test-config { "keyPatterns": [{ "target": "service", "pattern": "default" }] }
+import { Context } from "effect"
+
+export class RenamedService
+  extends Context.Service<RenamedService, {}>()("effect-v4-tests/deterministicKeys_preview/RenamedService") {}
+

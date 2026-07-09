@@ -1,0 +1,14 @@
+=== Quick Fix Inventory ===
+
+[D1] (3:35-3:43) TS2345: Argument of type '() => Generator<Option.Option<number>, number, any>' is not assignable to parameter of type '() => Generator<Effect<any, any, any>, number, never>'.
+  Type 'Generator<Option<number>, number, any>' is not assignable to type 'Generator<Effect<any, any, any>, number, never>'.
+    The types returned by 'next(...)' are incompatible between these types.
+      Type 'IteratorResult<Option<number>, number>' is not assignable to type 'IteratorResult<Effect<any, any, any>, number>'.
+        Type 'IteratorYieldResult<Option<number>>' is not assignable to type 'IteratorResult<Effect<any, any, any>, number>'.
+          Type 'IteratorYieldResult<Option<number>>' is not assignable to type 'IteratorYieldResult<Effect<any, any, any>>'.
+            Type 'Option<number>' is not assignable to type 'Effect<any, any, any>'.
+              Property '[TypeId]' is missing in type 'None<number>' but required in type 'Effect<any, any, any>'.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+(no quick fixes to apply)

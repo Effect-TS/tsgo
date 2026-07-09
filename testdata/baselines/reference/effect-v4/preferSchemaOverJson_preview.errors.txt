@@ -1,0 +1,18 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/preferSchemaOverJson_preview.ts(7,10): warning TS377026: This code uses `JSON.parse` or `JSON.stringify`. Use `Schema.UnknownFromJsonString` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(preferSchemaOverJson)
+
+
+==== /.src/preferSchemaOverJson_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferSchemaOverJson:warning
+    import { Effect } from "effect"
+    
+    export const preview = Effect.gen(function*() {
+      const text = yield* Effect.succeed('{"ok":true}')
+      return JSON.parse(text)
+             ~~~~~~~~~~~~~~~~
+!!! warning TS377026: This code uses `JSON.parse` or `JSON.stringify`. Use `Schema.UnknownFromJsonString` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(preferSchemaOverJson)
+    })
+    

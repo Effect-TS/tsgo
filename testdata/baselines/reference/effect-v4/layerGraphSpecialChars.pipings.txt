@@ -1,0 +1,29 @@
+==== /.src/layerGraphSpecialChars.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 11:32 - 11:48
+Node: Symbol.for("x")
+Node Kind: KindCallExpression
+
+Subject: "x"
+Subject Type: "x"
+
+Transformations (1):
+  [0] kind: call
+      callee: Symbol.for
+      args: (constant)
+      outType: symbol
+
+=== Piping Flow ===
+Location: 21:30 - 21:100
+Node: Layer.succeed(WithSpecialChars, { value: "WithSpecialChars" } as any)
+Node Kind: KindCallExpression
+
+Subject: { value: "WithSpecialChars" } as any
+Subject Type: any
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.succeed
+      args: [WithSpecialChars]
+      outType: Layer<IsGeneric<"With<Special>Chars#!">, never, never>

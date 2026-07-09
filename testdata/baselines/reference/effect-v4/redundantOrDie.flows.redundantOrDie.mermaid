@@ -1,0 +1,92 @@
+flowchart TB
+  0((("type: Effect#lt;readonly #91;number, string#93;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const a = yield* first.pipe#40;Effect.orDie#41;#92;n  const b = yield* second.pipe#40;Effect.orDie#41;#92;n#92;n  return #91;a, b#93; as const#92;n#125;#41;")))
+  1[/"type: readonly #91;number, string#93;<br/>node: #91;a, b#93; as const"/]
+  2[/"type: Effect#lt;number, unknown, never#gt;<br/>node: first"/]
+  3["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.orDie<br/>args: #91;#93;"]
+  4[/"type: Effect#lt;string, unknown, never#gt;<br/>node: second"/]
+  5["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.orDie<br/>args: #91;#93;"]
+  6((("type: Effect#lt;readonly #91;number, string#93;, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  const a = yield* first.pipe#40;Effect.orDie#41;#92;n  const b = yield* second.pipe#40;Effect.orDie#41;#92;n#92;n  return #91;a, b#93; as const#92;n#125;")))
+  7[/"type: Effect#lt;number, unknown, never#gt;<br/>node: first"/]
+  8["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.orDie<br/>args: #91;#93;"]
+  9[/"type: Effect#lt;string, unknown, never#gt;<br/>node: second"/]
+  10["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.orDie<br/>args: #91;#93;"]
+  11[/"type: readonly #91;number, string#93;<br/>node: #91;a, b#93; as const"/]
+  12[["type: #40;#41; =#gt; Effect#lt;readonly #91;number, string#93;, never, never#gt;<br/>node: Effect.fn#40;#quot;service.method#quot;#41;#40;function*#40;#41; #123;#92;n  const a = yield* first.pipe#40;Effect.orDie#41;#92;n  const b = yield* second.pipe#40;Effect.orDie#41;#92;n#92;n  return #91;a, b#93; as const#92;n#125;#41;"]]
+  13((("type: Effect#lt;readonly #91;number, string#93;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const a = yield* first.pipe#40;Effect.orDie#41;#92;n  const b = yield* Effect.orDie#40;second#41;#92;n#92;n  return #91;a, b#93; as const#92;n#125;#41;")))
+  14[/"type: readonly #91;number, string#93;<br/>node: #91;a, b#93; as const"/]
+  15[/"type: Effect#lt;number, unknown, never#gt;<br/>node: first"/]
+  16["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.orDie<br/>args: #91;#93;"]
+  17[/"type: Effect#lt;string, unknown, never#gt;<br/>node: second"/]
+  18["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.orDie<br/>args: #91;#93;"]
+  19[/"type: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, never, R#gt;<br/>node: Effect.orDie"/]
+  20((("type: Effect#lt;readonly #91;number, string#93;, unknown, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const a = yield* first.pipe#40;Effect.orDie#41;#92;n  const b = yield* second#92;n#92;n  return #91;a, b#93; as const#92;n#125;#41;")))
+  21[/"type: readonly #91;number, string#93;<br/>node: #91;a, b#93; as const"/]
+  22[/"type: Effect#lt;number, unknown, never#gt;<br/>node: first"/]
+  23["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.orDie<br/>args: #91;#93;"]
+  24[/"type: Effect#lt;string, unknown, never#gt;<br/>node: second"/]
+  25((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  return yield* first.pipe#40;Effect.orDie#41;#92;n#125;#41;")))
+  26[/"type: number<br/>node: yield* first.pipe#40;Effect.orDie#41;"/]
+  27[/"type: Effect#lt;number, unknown, never#gt;<br/>node: first"/]
+  28["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.orDie<br/>args: #91;#93;"]
+  29((("type: Effect#lt;readonly #91;number, string#93;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const a = yield* first.pipe#40;#92;n    Effect.orDie,#92;n    Effect.map#40;#40;value#41; =#gt; value + 1#41;#92;n  #41;#92;n  const b = yield* second.pipe#40;Effect.orDie#41;#92;n#92;n  return #91;a, b#93; as const#92;n#125;#41;")))
+  30[/"type: readonly #91;number, string#93;<br/>node: #91;a, b#93; as const"/]
+  31[/"type: Effect#lt;number, unknown, never#gt;<br/>node: first"/]
+  32["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.orDie<br/>args: #91;#93;"]
+  33["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;value#41; =#gt; value + 1#93;"]
+  34[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  35[["type: #40;value: number#41; =#gt; number<br/>node: #40;value#41; =#gt; value + 1"]]
+  36[/"type: number<br/>node: value + 1"/]
+  37[/"type: Effect#lt;string, unknown, never#gt;<br/>node: second"/]
+  38["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.orDie<br/>args: #91;#93;"]
+  39((("type: Effect#lt;void, unknown, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  yield* first.pipe#40;Effect.orDie#41;#92;n#92;n  yield* Effect.gen#40;function*#40;#41; #123;#92;n    yield* second.pipe#40;Effect.orDie#41;#92;n    yield* third#92;n  #125;#41;#92;n#125;#41;")))
+  40[/"type: Effect#lt;number, unknown, never#gt;<br/>node: first"/]
+  41["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.orDie<br/>args: #91;#93;"]
+  42((("type: Effect#lt;void, unknown, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n    yield* second.pipe#40;Effect.orDie#41;#92;n    yield* third#92;n  #125;#41;")))
+  43[/"type: Effect#lt;string, unknown, never#gt;<br/>node: second"/]
+  44["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.orDie<br/>args: #91;#93;"]
+  45[/"type: Effect#lt;boolean, unknown, never#gt;<br/>node: third"/]
+  1 -->|"kind: potentialReturn"| 0
+  2 -->|"kind: pipe"| 3
+  3 -->|"kind: yieldable"| 0
+  4 -->|"kind: pipe"| 5
+  5 -->|"kind: yieldable"| 0
+  1 -->|"kind: usedBy"| 0
+  7 -->|"kind: pipe"| 8
+  8 -->|"kind: yieldable"| 6
+  9 -->|"kind: pipe"| 10
+  10 -->|"kind: yieldable"| 6
+  11 -->|"kind: potentialReturn"| 6
+  11 -->|"kind: usedBy"| 6
+  6 -->|"kind: potentialReturn"| 12
+  14 -->|"kind: potentialReturn"| 13
+  15 -->|"kind: pipe"| 16
+  16 -->|"kind: yieldable"| 13
+  17 -->|"kind: pipe"| 18
+  19 -->|"kind: transformCallee"| 18
+  18 -->|"kind: yieldable"| 13
+  14 -->|"kind: usedBy"| 13
+  21 -->|"kind: potentialReturn"| 20
+  22 -->|"kind: pipe"| 23
+  23 -->|"kind: yieldable"| 20
+  24 -->|"kind: yieldable"| 20
+  21 -->|"kind: usedBy"| 20
+  27 -->|"kind: pipe"| 28
+  28 -->|"kind: usedBy"| 26
+  26 -->|"kind: potentialReturn"| 25
+  28 -->|"kind: yieldable"| 25
+  30 -->|"kind: potentialReturn"| 29
+  31 -->|"kind: pipe"| 32
+  34 -->|"kind: transformCallee"| 33
+  36 -->|"kind: potentialReturn"| 35
+  35 -->|"kind: transformArg"| 33
+  32 -->|"kind: pipe"| 33
+  33 -->|"kind: yieldable"| 29
+  37 -->|"kind: pipe"| 38
+  38 -->|"kind: yieldable"| 29
+  30 -->|"kind: usedBy"| 29
+  40 -->|"kind: pipe"| 41
+  41 -->|"kind: yieldable"| 39
+  43 -->|"kind: pipe"| 44
+  44 -->|"kind: yieldable"| 42
+  45 -->|"kind: yieldable"| 42
+  42 -->|"kind: yieldable"| 39

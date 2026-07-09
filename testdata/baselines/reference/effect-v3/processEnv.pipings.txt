@@ -1,0 +1,29 @@
+==== /.src/processEnv.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 12:24 - 14:3
+Node: Effect.gen(function*() {\n  return process.env.SECRET\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  return process.env.SECRET\n}
+Subject Type: () => Generator<never, string | undefined, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string | undefined, never, never>
+
+=== Piping Flow ===
+Location: 17:32 - 20:3
+Node: Effect.gen(function*() {\n  const fn = () => process.env.API_KEY\n  return fn\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const fn = () => process.env.API_KEY\n  return fn\n}
+Subject Type: () => Generator<never, () => string | undefined, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<() => string | undefined, never, never>

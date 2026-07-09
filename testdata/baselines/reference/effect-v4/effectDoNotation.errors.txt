@@ -1,0 +1,28 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/effectDoNotation.ts(4,23): warning TS377085: This uses the Effect do emulation. `Effect.gen` or `Effect.fn` achieve the same result with native JS scopes. effect(effectDoNotation)
+/.src/effectDoNotation.ts(6,34): warning TS377085: This uses the Effect do emulation. `Effect.gen` or `Effect.fn` achieve the same result with native JS scopes. effect(effectDoNotation)
+/.src/effectDoNotation.ts(9,24): warning TS377085: This uses the Effect do emulation. `Effect.gen` or `Effect.fn` achieve the same result with native JS scopes. effect(effectDoNotation)
+
+
+==== /.src/effectDoNotation.ts (3 errors) ====
+    // @effect-diagnostics effectDoNotation:warning
+    import { Effect } from "effect"
+    
+    export const direct = Effect.Do
+                          ~~~~~~~~~
+!!! warning TS377085: This uses the Effect do emulation. `Effect.gen` or `Effect.fn` achieve the same result with native JS scopes. effect(effectDoNotation)
+    
+    export const piped = Effect.bind(Effect.Do, "a", () => Effect.succeed(1))
+                                     ~~~~~~~~~
+!!! warning TS377085: This uses the Effect do emulation. `Effect.gen` or `Effect.fn` achieve the same result with native JS scopes. effect(effectDoNotation)
+    
+    const alias = Effect
+    export const aliased = alias.Do
+                           ~~~~~~~~
+!!! warning TS377085: This uses the Effect do emulation. `Effect.gen` or `Effect.fn` achieve the same result with native JS scopes. effect(effectDoNotation)
+    
+    const local = { Do: 1 }
+    export const shouldNotReport = local.Do
+    

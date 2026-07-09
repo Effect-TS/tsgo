@@ -1,0 +1,61 @@
+==== /.src/unnecessaryPipe.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 5:31 - 8:2
+Node: pipe(\n  Effect.succeed("Hello"),\n  Effect.map((x) => x + " World")\n)
+Node Kind: KindCallExpression
+
+Subject: "Hello"
+Subject Type: "Hello"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+  [1] kind: pipe
+      callee: Effect.map
+      args: [(x) => x + " World"]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 10:32 - 12:2
+Node: Effect.succeed("Hello").pipe(\n  Effect.map((x) => x + " World")\n)
+Node Kind: KindCallExpression
+
+Subject: "Hello"
+Subject Type: "Hello"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [(x) => x + " World"]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 14:28 - 14:37
+Node: pipe(32)
+Node Kind: KindCallExpression
+
+Subject: 32
+Subject Type: 32
+
+Transformations (0):
+
+=== Piping Flow ===
+Location: 16:34 - 16:60
+Node: Effect.succeed(32).pipe()
+Node Kind: KindCallExpression
+
+Subject: 32
+Subject Type: 32
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>

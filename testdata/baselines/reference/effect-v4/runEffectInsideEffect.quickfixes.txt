@@ -1,0 +1,56 @@
+=== Quick Fix Inventory ===
+
+[D1] (14:21-14:35) TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
+  Fix 0: "Disable runEffectInsideEffect for this line"
+  Fix 1: "Disable runEffectInsideEffect for entire file"
+
+[D2] (22:5-22:22) TS377074: `Effect.runPromise` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runPromiseWith`. effect(runEffectInsideEffect)
+  Fix 0: "Disable runEffectInsideEffect for this line"
+  Fix 1: "Disable runEffectInsideEffect for entire file"
+  Fix 2: "Use the current services to run the Effect"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable runEffectInsideEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable runEffectInsideEffect for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable runEffectInsideEffect for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable runEffectInsideEffect for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Use the current services to run the Effect" ===
+
+--- file:///.src/runEffectInsideEffect.ts ---
+import { Data, Effect } from "effect"
+
+class DebuggerError extends Data.TaggedError("DebuggerError")<{
+  cause: unknown
+}> {}
+
+export const program = Effect.gen(function*() {
+const effectContext = yield* Effect.context<never>();
+
+  const response = yield* Effect.tryPromise({
+    try: () => fetch("http://localhost:9229"),
+    catch: (e) => new DebuggerError({ cause: e })
+  })
+  const data = yield* Effect.promise(() => response.json())
+
+  const websocket = Effect.runSync(Effect.sync(() => new WebSocket(data.url)))
+  //                        ^- do not runSync in here
+
+  websocket.onmessage = (event) => {
+    const check = Effect.tryPromise({
+      try: () => fetch(event.data as string),
+      catch: (e) => new DebuggerError({ cause: e })
+    })
+    Effect.runPromiseWith(effectContext)(check)
+    //        ^- no runPromise, use the current services instead
+  }
+})
+

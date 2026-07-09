@@ -1,0 +1,91 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Code coverage profiles and other test artifacts
+*.out
+coverage.*
+*.coverprofile
+profile.cov
+
+# env file
+.env
+
+# Nix
+result
+
+# Project-specific
+node_modules/
+.pnpm-store/
+.repos/
+.cuggino/
+
+# Built binaries and build output
+
+/tsgo
+/gen_shims
+build/
+built/
+
+# Local test baselines
+testdata/baselines/local/*
+
+# Go compiled binaries and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.wasm
+
+# Go test and debug artifacts
+*.test
+__debug_bin*
+
+# Go coverage output
+*.out
+.tmp/
+
+# Go profiling files
+*.prof
+*.pb.gz
+
+# IDE and OS
+.DS_Store
+.idea
+
+# VSCode (ignore all except committed config)
+**/.vscode/*
+!**/.vscode/settings.json
+
+# Node/Tooling logs
+*.log
+npm-debug.log*
+.pnpm-debug.log*
+
+# npm pack output
+*.tgz
+
+# TypeScript build cache
+*.tsbuildinfo
+
+# Test coverage
+coverage/
+*.lcov
+
+# Build artifacts
+custom-gcl*
+
+# Docker image and development scripts
+Dockerfile
+_tools/docker-dev.sh
+_tools/.perf-out/
+
+.lalph
+scripts/worktree-setup.sh

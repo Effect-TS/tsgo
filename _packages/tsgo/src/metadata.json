@@ -1,0 +1,2043 @@
+{
+  "groups": [
+    {
+      "id": "correctness",
+      "name": "Correctness",
+      "description": "Wrong, unsafe, or structurally invalid code patterns."
+    },
+    {
+      "id": "antipattern",
+      "name": "Anti-pattern",
+      "description": "Discouraged patterns that often lead to bugs or confusing behavior."
+    },
+    {
+      "id": "effectNative",
+      "name": "Effect-native",
+      "description": "Prefer Effect-native APIs and abstractions when available."
+    },
+    {
+      "id": "style",
+      "name": "Style",
+      "description": "Cleanup, consistency, and idiomatic Effect code."
+    }
+  ],
+  "presets": [
+    {
+      "name": "effect-native",
+      "description": "Enable all Effect-native diagnostics at warning level.",
+      "diagnosticSeverity": {
+        "asyncFunction": "warning",
+        "cryptoRandomUUID": "warning",
+        "cryptoRandomUUIDInEffect": "warning",
+        "extendsNativeError": "warning",
+        "globalConsole": "warning",
+        "globalConsoleInEffect": "warning",
+        "globalDate": "warning",
+        "globalDateInEffect": "warning",
+        "globalFetch": "warning",
+        "globalFetchInEffect": "warning",
+        "globalRandom": "warning",
+        "globalRandomInEffect": "warning",
+        "globalTimers": "warning",
+        "globalTimersInEffect": "warning",
+        "instanceOfSchema": "warning",
+        "newPromise": "warning",
+        "nodeBuiltinImport": "warning",
+        "preferSchemaOverJson": "warning",
+        "processEnv": "warning",
+        "processEnvInEffect": "warning",
+        "unsafeEffectTypeAssertion": "warning"
+      }
+    }
+  ],
+  "rules": [
+    {
+      "name": "anyUnknownInErrorContext",
+      "group": "correctness",
+      "description": "Detects 'any' or 'unknown' types in Effect error or requirements channels",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377030
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.gen(function*() {\n  yield* Effect.context\u003cunknown\u003e()\n  return yield* Effect.fail\u003cany\u003e(\"boom\")\n})\n",
+        "diagnostics": [
+          {
+            "start": 46,
+            "end": 53,
+            "text": "This has unknown in the requirements channel and any in the error channel which is not recommended.\nOnly service identifiers should appear in the requirements channel.\nHaving an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)"
+          },
+          {
+            "start": 90,
+            "end": 115,
+            "text": "This has unknown in the requirements channel which is not recommended.\nOnly service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)"
+          },
+          {
+            "start": 132,
+            "end": 156,
+            "text": "This has any in the error channel which is not recommended.\nHaving an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "classSelfMismatch",
+      "group": "correctness",
+      "description": "Ensures Self type parameter matches the class name in Context/Service/Tag/Schema classes",
+      "defaultSeverity": "error",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377046
+      ],
+      "preview": {
+        "sourceText": "import * as Effect from \"effect/Effect\"\n\ninterface ServiceShape { value: number }\n\nexport class InvalidContextTag\n  extends Effect.Tag(\"ValidContextTag\")\u003cValidContextTag, ServiceShape\u003e() {}\n\ndeclare class ValidContextTag {}\n",
+        "diagnostics": [
+          {
+            "start": 154,
+            "end": 169,
+            "text": "The `Self` type parameter for this class should be `InvalidContextTag`. effect(classSelfMismatch)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "duplicatePackage",
+      "group": "correctness",
+      "description": "Warns when multiple versions of an Effect-related package are detected in the program",
+      "defaultSeverity": "warning",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377051
+      ],
+      "preview": {
+        "sourceText": "import * as Effect from \"effect/Effect\"\n\n// This preview only reports when the workspace resolves duplicated\n// Effect package versions.\nexport const preview = Effect.succeed(true)",
+        "diagnostics": []
+      }
+    },
+    {
+      "name": "effectFnImplicitAny",
+      "group": "correctness",
+      "description": "Mirrors noImplicitAny for unannotated Effect.fn, Effect.fnUntraced, and Effect.fnUntracedEager callback parameters when no outer contextual function type exists. Requires TS's noImplicitAny: true",
+      "defaultSeverity": "error",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377062
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.fn(\"preview\")((input) =\u003e Effect.succeed(input))\n",
+        "diagnostics": [
+          {
+            "start": 78,
+            "end": 83,
+            "text": "Parameter `input` implicitly has type `any` in `Effect.fn`, `Effect.fnUntraced`, or `Effect.fnUntracedEager`. No parameter type is available from an explicit annotation or contextual function type. effect(effectFnImplicitAny)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "floatingEffect",
+      "group": "correctness",
+      "description": "Detects Effect values that are neither yielded nor assigned",
+      "defaultSeverity": "error",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377001,
+        377058
+      ],
+      "preview": {
+        "sourceText": "import * as Effect from \"effect/Effect\"\n\nEffect.log(\"forgotten\")\n",
+        "diagnostics": [
+          {
+            "start": 41,
+            "end": 64,
+            "text": "This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "genericEffectServices",
+      "group": "correctness",
+      "description": "Prevents services with type parameters that cannot be discriminated at runtime",
+      "defaultSeverity": "warning",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377043
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport class Preview\u003c_A\u003e extends Effect.Service\u003cPreview\u003cany\u003e\u003e()(\"Preview\", {\n  succeed: {}\n}) {}\n",
+        "diagnostics": [
+          {
+            "start": 46,
+            "end": 53,
+            "text": "Effect Services with type parameters are not supported because they cannot be properly discriminated at runtime, which may cause unexpected behavior. effect(genericEffectServices)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "missingEffectContext",
+      "group": "correctness",
+      "description": "Detects Effect values with unhandled context requirements",
+      "defaultSeverity": "error",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377004
+      ],
+      "preview": {
+        "sourceText": "import { Effect, Context } from \"effect\"\n\nclass Db extends Context.Service\u003cDb\u003e()(\"Db\", { make: Effect.succeed({}) }) {}\n\n// @ts-expect-error\nexport const preview: Effect.Effect\u003cvoid\u003e = Db.pipe(Effect.asVoid)\n",
+        "diagnostics": [
+          {
+            "start": 154,
+            "end": 161,
+            "text": "This Effect requires a service that is missing from the expected Effect context: `Db`. effect(missingEffectContext)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "missingEffectError",
+      "group": "correctness",
+      "description": "Detects Effect values with unhandled error types",
+      "defaultSeverity": "error",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377003
+      ],
+      "preview": {
+        "sourceText": "import type * as Effect from \"effect/Effect\"\nimport { Data } from \"effect\"\n\nclass Boom extends Data.TaggedError(\"Boom\")\u003c{}\u003e {}\ndeclare const effect: Effect.Effect\u003cnumber, Boom\u003e\n\n// @ts-expect-error\nexport const preview: () =\u003e Effect.Effect\u003cnumber\u003e = () =\u003e effect\n",
+        "diagnostics": [
+          {
+            "start": 256,
+            "end": 262,
+            "text": "Missing errors Boom in the expected Effect type. effect(missingEffectError)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "missingLayerContext",
+      "group": "correctness",
+      "description": "Detects Layer values with unhandled context requirements",
+      "defaultSeverity": "error",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377034
+      ],
+      "preview": {
+        "sourceText": "import { Effect, Layer, Context } from \"effect\"\n\nclass A extends Context.Service\u003cA\u003e()(\"A\", { make: Effect.succeed({}) }) {\n  static Default = Layer.effect(this, this.make)\n}\ndeclare const layer: Layer.Layer\u003cA, never, A\u003e\n// @ts-expect-error\nexport const preview: Layer.Layer\u003cA\u003e = layer\n",
+        "diagnostics": [
+          {
+            "start": 253,
+            "end": 260,
+            "text": "Missing 'A' in the expected Layer context. effect(missingLayerContext)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "missingReturnYieldStar",
+      "group": "correctness",
+      "description": "Suggests using return yield* for Effects that never succeed",
+      "defaultSeverity": "error",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377006
+      ],
+      "preview": {
+        "sourceText": "import * as Effect from \"effect/Effect\"\n\nexport const preview = Effect.gen(function*() {\n  yield* Effect.log(\"before\")\n  yield* Effect.fail(\"boom\")\n})\n",
+        "diagnostics": [
+          {
+            "start": 121,
+            "end": 126,
+            "text": "This Effect never succeeds; using `return yield*` preserves a definitive generator exit point for type narrowing and tooling support. effect(missingReturnYieldStar)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "missingStarInYieldEffectGen",
+      "group": "correctness",
+      "description": "Detects bare yield (without *) inside Effect generator scopes",
+      "defaultSeverity": "error",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377007,
+        377008
+      ],
+      "preview": {
+        "sourceText": "import * as Effect from \"effect/Effect\"\n\nexport const preview = Effect.gen(function*() {\n  const value = yield Effect.succeed(1)\n  return value\n})\n",
+        "diagnostics": [
+          {
+            "start": 105,
+            "end": 110,
+            "text": "This uses `yield` for an `Effect` value. `yield*` is the Effect-aware form in this context. effect(missingStarInYieldEffectGen)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "nonObjectEffectServiceType",
+      "group": "correctness",
+      "description": "Ensures Effect.Service types are objects, not primitives",
+      "defaultSeverity": "error",
+      "fixable": false,
+      "supportedEffect": [
+        "v3"
+      ],
+      "codes": [
+        377048
+      ],
+      "preview": {
+        "sourceText": "import * as Effect from \"effect/Effect\"\n\nexport class BadService extends Effect.Service\u003cBadService\u003e()(\"BadService\", {\n  // @ts-expect-error\n  succeed: \"hello\" as const\n}) {}",
+        "diagnostics": [
+          {
+            "start": 142,
+            "end": 149,
+            "text": "`Effect.Service` is declared with a primitive service type. `Effect.Service` models object-shaped services; primitive values use `Context.Tag` or `Effect.Tag` directly. effect(nonObjectEffectServiceType)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "outdatedApi",
+      "group": "correctness",
+      "description": "Detects usage of APIs that have been removed or renamed in Effect v4",
+      "defaultSeverity": "warning",
+      "fixable": false,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377052,
+        377053
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.gen(function*() {\n  // @ts-expect-error\n  return yield* Effect.runtime()\n})\n",
+        "diagnostics": [
+          {
+            "start": 0,
+            "end": 0,
+            "text": "This project targets Effect v4, but this code uses Effect v3 APIs. The referenced API belongs to the v3 surface rather than the configured v4 surface. effect(outdatedApi)"
+          },
+          {
+            "start": 126,
+            "end": 133,
+            "text": "This project targets Effect v4, but this code uses the Effect v3 API `runtime`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Runtime has been removed in Effect v4. Use Effect.context to grab services and then run using Effect.runPromiseWith. effect(outdatedApi)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "overriddenSchemaConstructor",
+      "group": "correctness",
+      "description": "Prevents overriding constructors in Schema classes which breaks decoding behavior",
+      "defaultSeverity": "error",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377044
+      ],
+      "preview": {
+        "sourceText": "import * as Schema from \"effect/Schema\"\n\nexport class User extends Schema.Class\u003cUser\u003e(\"User\")({ name: Schema.String }) {\n  constructor(readonly input: { name: string }) { super(input) }\n}\n",
+        "diagnostics": [
+          {
+            "start": 123,
+            "end": 134,
+            "text": "This Schema subclass defines its own constructor. For Schema classes, constructor overrides break decoding behavior for the class shape. Custom construction can be expressed through a static `new` method instead. effect(overriddenSchemaConstructor)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "catchUnfailableEffect",
+      "group": "antipattern",
+      "description": "Warns when using error handling on Effects that never fail",
+      "defaultSeverity": "suggestion",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377009
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.succeed(1).pipe(\n  Effect.catch(() =\u003e Effect.succeed(0))\n)\n",
+        "diagnostics": [
+          {
+            "start": 82,
+            "end": 94,
+            "text": "The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "effectFnIife",
+      "group": "antipattern",
+      "description": "Effect.fn or Effect.fnUntraced is called as an IIFE; use Effect.gen instead",
+      "defaultSeverity": "warning",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377011
+      ],
+      "preview": {
+        "sourceText": "import * as Effect from \"effect/Effect\"\n\nexport const preview = Effect.fn(\"preview\")(function*() {\n  return yield* Effect.succeed(1)\n})()\n",
+        "diagnostics": [
+          {
+            "start": 64,
+            "end": 137,
+            "text": "`Effect.fn` returns a reusable function that can take arguments, but it is invoked immediately here. `Effect.gen` represents the immediate-use form for this pattern with Effect.withSpan(\"preview\") piped in the end to maintain tracing spans. effect(effectFnIife)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "effectGenUsesAdapter",
+      "group": "antipattern",
+      "description": "Warns when using the deprecated adapter parameter in Effect.gen",
+      "defaultSeverity": "warning",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377027
+      ],
+      "preview": {
+        "sourceText": "import * as Effect from \"effect/Effect\"\n\nexport const preview = Effect.gen(function*(_) {\n  return yield* Effect.succeed(1)\n})\n",
+        "diagnostics": [
+          {
+            "start": 85,
+            "end": 86,
+            "text": "The adapter of Effect.gen is not required anymore, it is now just an alias of pipe. effect(effectGenUsesAdapter)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "effectInFailure",
+      "group": "antipattern",
+      "description": "Warns when an Effect is used inside an Effect failure channel",
+      "defaultSeverity": "warning",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377054
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.try({\n  try: () =\u003e JSON.parse(\"{\"),\n  catch: (error) =\u003e Effect.logError(error)\n})\n",
+        "diagnostics": [
+          {
+            "start": 46,
+            "end": 53,
+            "text": "The error channel contains an Effect (Effect\u003cvoid, never, never\u003e). Putting Effect computations in the failure channel is not intended; keep only failure types there. effect(effectInFailure)"
+          },
+          {
+            "start": 56,
+            "end": 144,
+            "text": "The error channel contains an Effect (Effect\u003cvoid, never, never\u003e). Putting Effect computations in the failure channel is not intended; keep only failure types there. effect(effectInFailure)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "effectInVoidSuccess",
+      "group": "antipattern",
+      "description": "Detects nested Effects in void success channels that may cause unexecuted effects",
+      "defaultSeverity": "warning",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377020
+      ],
+      "preview": {
+        "sourceText": "import * as Effect from \"effect/Effect\"\n\nexport const preview: Effect.Effect\u003cvoid\u003e = Effect.succeed(\n  Effect.log(\"nested\")\n)\n",
+        "diagnostics": [
+          {
+            "start": 54,
+            "end": 61,
+            "text": "There is a nested 'Effect\u003cvoid, never, never\u003e' in the 'void' success channel, beware that this could lead to nested Effect\u003cEffect\u003c...\u003e\u003e that won't be executed. effect(effectInVoidSuccess)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "globalErrorInEffectCatch",
+      "group": "antipattern",
+      "description": "Warns when catch callbacks return global Error type instead of typed errors",
+      "defaultSeverity": "warning",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377022
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.tryPromise({\n  try: async () =\u003e 1,\n  catch: (error) =\u003e new Error(String(error))\n})\n",
+        "diagnostics": [
+          {
+            "start": 56,
+            "end": 73,
+            "text": "The `catch` callback in `Effect.tryPromise` returns the global `Error` type. Untagged errors merge together in the Effect error channel and lose type-level distinction; a tagged error preserves that distinction and can wrap the original error in a `cause` property. effect(globalErrorInEffectCatch)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "globalErrorInEffectFailure",
+      "group": "antipattern",
+      "description": "Warns when the global Error type is used in an Effect failure channel",
+      "defaultSeverity": "warning",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377023
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.fail(new Error(\"boom\"))\n",
+        "diagnostics": [
+          {
+            "start": 68,
+            "end": 85,
+            "text": "Global 'Error' loses type safety as untagged errors merge together in the Effect failure channel. Consider using a tagged error and optionally wrapping the original in a 'cause' property. effect(globalErrorInEffectFailure)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "layerMergeAllWithDependencies",
+      "group": "antipattern",
+      "description": "Detects interdependencies in Layer.mergeAll calls where one layer provides a service that another layer requires",
+      "defaultSeverity": "warning",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377035
+      ],
+      "preview": {
+        "sourceText": "import { Effect, Layer, Context } from \"effect\"\n\nclass A extends Context.Service\u003cA\u003e()(\"A\", { make: Effect.succeed({}) }) {\n  static Default = Layer.effect(this, this.make)\n}\nclass B extends Context.Service\u003cB\u003e()(\"B\", { make: Effect.as(A, {}) }) {\n  static Default = Layer.effect(this, this.make)\n}\nexport const preview = Layer.mergeAll(A.Default, B.Default)\n",
+        "diagnostics": [
+          {
+            "start": 335,
+            "end": 344,
+            "text": "This layer provides A which is required by another layer in the same Layer.mergeAll call. Layer.mergeAll creates layers in parallel, so dependencies between layers will not be satisfied. Consider moving this layer into a Layer.provideMerge after the Layer.mergeAll. effect(layerMergeAllWithDependencies)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "lazyEffect",
+      "group": "antipattern",
+      "description": "Suggests avoiding exported zero-argument functions and service members that lazily return Effect or Stream values",
+      "defaultSeverity": "suggestion",
+      "fixable": false,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377091
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport interface PreviewService {\n  preview: () =\u003e Effect.Effect\u003cvoid\u003e\n}\n",
+        "diagnostics": [
+          {
+            "start": 69,
+            "end": 76,
+            "text": "Interface 'PreviewService' member 'preview' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "lazyPromiseInEffectSync",
+      "group": "antipattern",
+      "description": "Warns when Effect.sync lazily returns a Promise instead of using an async Effect constructor",
+      "defaultSeverity": "warning",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377082
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.sync(() =\u003e Promise.resolve(1))\n",
+        "diagnostics": [
+          {
+            "start": 68,
+            "end": 92,
+            "text": "This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "leakingRequirements",
+      "group": "antipattern",
+      "description": "Detects implementation services leaked in service methods",
+      "defaultSeverity": "suggestion",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377041
+      ],
+      "preview": {
+        "sourceText": "import type { Effect } from \"effect\"\nimport { Context } from \"effect\"\n\nclass FileSystem extends Context.Service\u003cFileSystem, {\n  write: (s: string) =\u003e Effect.Effect\u003cvoid\u003e\n}\u003e()(\"FileSystem\") {}\n\nexport class Cache extends Context.Service\u003cCache, {\n  read: Effect.Effect\u003cstring, never, FileSystem\u003e\n  save: () =\u003e Effect.Effect\u003cvoid, never, FileSystem\u003e\n}\u003e()(\"Cache\") {}\n",
+        "diagnostics": [
+          {
+            "start": 206,
+            "end": 211,
+            "text": "Methods of this Service require `FileSystem` from every caller.\n\nThe requirement becomes part of the public service surface instead of remaining internal to Layer implementation.\n\nResolve these dependencies at Layer creation and provide them to each method, so the service's type reflects its purpose, not its implementation.\n\nTo suppress this diagnostic for specific dependency types that are intentionally passed through (e.g., HttpServerRequest), add `@effect-leakable-service` JSDoc to their interface declarations, or to this service by adding a `@effect-expect-leaking FileSystem` JSDoc.\n\nMore info and examples at https://effect.website/docs/requirements-management/layers/#avoiding-requirement-leakage effect(leakingRequirements)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "multipleEffectProvide",
+      "group": "antipattern",
+      "description": "Warns against chaining Effect.provide calls which can cause service lifecycle issues",
+      "defaultSeverity": "warning",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377033
+      ],
+      "preview": {
+        "sourceText": "import { Effect, Layer, Context } from \"effect\"\n\nclass A extends Context.Service\u003cA\u003e()(\"A\", { make: Effect.succeed({}) }) {\n  static Default = Layer.effect(this, this.make)\n}\nclass B extends Context.Service\u003cB\u003e()(\"B\", { make: Effect.succeed({}) }) {\n  static Default = Layer.effect(this, this.make)\n}\nexport const preview = Effect.void.pipe(Effect.provide(A.Default), Effect.provide(B.Default))\n",
+        "diagnostics": [
+          {
+            "start": 339,
+            "end": 364,
+            "text": "This expression chains multiple `Effect.provide` calls. Providing Layers in multiple calls in a chain can break service lifecycle behavior compared with a single combined provide with merged layers. effect(multipleEffectProvide)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "returnEffectInGen",
+      "group": "antipattern",
+      "description": "Warns when returning an Effect in a generator causes nested Effect\u003cEffect\u003c...\u003e\u003e",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377014
+      ],
+      "preview": {
+        "sourceText": "import * as Effect from \"effect/Effect\"\n\nexport const preview = Effect.gen(function*() {\n  return Effect.succeed(1)\n})\n",
+        "diagnostics": [
+          {
+            "start": 91,
+            "end": 97,
+            "text": "This generator returns an Effect-able value directly, which produces a nested `Effect\u003cEffect\u003c...\u003e\u003e`. If the intended result is the inner Effect value, `return yield*` represents that form. effect(returnEffectInGen)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "runEffectInsideEffect",
+      "group": "antipattern",
+      "description": "Suggests using Runtime or Effect.run*With methods instead of Effect.run* inside Effect contexts",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377024,
+        377025,
+        377074
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.gen(function*() {\n  const run = () =\u003e Effect.runSync(Effect.succeed(1))\n  return run()\n})\n",
+        "diagnostics": [
+          {
+            "start": 101,
+            "end": 115,
+            "text": "`Effect.runSync` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runSyncWith`. effect(runEffectInsideEffect)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "schemaSyncInEffect",
+      "group": "antipattern",
+      "description": "Suggests using Effect-based Schema methods instead of sync methods inside Effect generators",
+      "defaultSeverity": "suggestion",
+      "fixable": false,
+      "supportedEffect": [
+        "v3"
+      ],
+      "codes": [
+        377037
+      ],
+      "preview": {
+        "sourceText": "import * as Effect from \"effect/Effect\"\nimport * as Schema from \"effect/Schema\"\n\nconst Person = Schema.Struct({ name: Schema.String, age: Schema.Finite })\n\nexport const preview = Effect.gen(function*() {\n  const input = yield* Effect.succeed({ name: \"Ada\", age: 1 })\n  return Schema.decodeSync(Person)(input)\n})\n",
+        "diagnostics": [
+          {
+            "start": 276,
+            "end": 293,
+            "text": "`Schema.decodeSync` is used inside an Effect generator. `Schema.decode` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "scopeInLayerEffect",
+      "group": "antipattern",
+      "description": "Suggests using Layer.scoped instead of Layer.effect when Scope is in requirements",
+      "defaultSeverity": "warning",
+      "fixable": true,
+      "supportedEffect": [
+        "v3"
+      ],
+      "codes": [
+        377031
+      ],
+      "preview": {
+        "sourceText": "import * as Context from \"effect/Context\"\nimport * as Effect from \"effect/Effect\"\nimport * as Layer from \"effect/Layer\"\n\nclass Cache extends Context.Tag(\"Cache\")\u003cCache, { ok: true }\u003e() {}\nexport const preview = Layer.effect(Cache, Effect.gen(function*() {\n  yield* Effect.addFinalizer(() =\u003e Effect.void)\n  return { ok: true as const }\n}))\n",
+        "diagnostics": [
+          {
+            "start": 211,
+            "end": 338,
+            "text": "This layer construction leaves `Scope` in the requirement set. The scoped API removes `Scope` from the resulting requirements. effect(scopeInLayerEffect)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "strictEffectProvide",
+      "group": "antipattern",
+      "description": "Warns when using Effect.provide with layers outside of application entry points",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377032
+      ],
+      "preview": {
+        "sourceText": "import { Effect, Layer, Context } from \"effect\"\n\nclass Config extends Context.Service\u003cConfig\u003e()(\"Config\", { make: Effect.succeed({}) }) {\n  static Default = Layer.effect(this, this.make)\n}\nexport const preview = Effect.void.pipe(Effect.provide(Config.Default))\n",
+        "diagnostics": [
+          {
+            "start": 229,
+            "end": 259,
+            "text": "Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "tryCatchInEffectGen",
+      "group": "antipattern",
+      "description": "Discourages try/catch in Effect generators in favor of Effect error handling",
+      "defaultSeverity": "suggestion",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377012
+      ],
+      "preview": {
+        "sourceText": "import * as Effect from \"effect/Effect\"\n\nexport const preview = Effect.gen(function*() {\n  try { return yield* Effect.succeed(1) }\n  catch { return 0 }\n})\n",
+        "diagnostics": [
+          {
+            "start": 91,
+            "end": 151,
+            "text": "This Effect generator contains `try/catch`; in this context, error handling is expressed with Effect APIs such as Effect.try, Effect.tryPromise, Effect.catch, Effect.catchTag). effect(tryCatchInEffectGen)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "unknownInEffectCatch",
+      "group": "antipattern",
+      "description": "Warns when catch callbacks return unknown instead of typed errors",
+      "defaultSeverity": "warning",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377021
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.tryPromise({\n  try: async () =\u003e 1,\n  catch: (error) =\u003e error\n})\n",
+        "diagnostics": [
+          {
+            "start": 56,
+            "end": 73,
+            "text": "The `catch` callback in `Effect.tryPromise` returns `unknown`, so the Effect error type stays untyped. A specific typed error preserves error-channel information, for example by narrowing the value or wrapping it in `Data.TaggedError`. effect(unknownInEffectCatch)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "asyncFunction",
+      "group": "effectNative",
+      "description": "Warns when declaring async functions and suggests using Effect values and Effect.gen for async control flow",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377081
+      ],
+      "preview": {
+        "sourceText": "\nexport const preview = async () =\u003e {\n  await Promise.resolve(1)\n}\n",
+        "diagnostics": [
+          {
+            "start": 24,
+            "end": 37,
+            "text": "This code declares an async function, consider representing this async control flow with Effect values and `Effect.gen`. effect(asyncFunction)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "cryptoRandomUUID",
+      "group": "effectNative",
+      "description": "Warns when using crypto.randomUUID() outside Effect generators instead of the Effect Random module, which uses Effect-injected randomness rather than the crypto module behind the scenes",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377078
+      ],
+      "preview": {
+        "sourceText": "\nexport const preview = crypto.randomUUID()\n",
+        "diagnostics": [
+          {
+            "start": 24,
+            "end": 43,
+            "text": "This code uses `crypto.randomUUID()`, prefer the Effect `Random` module instead because it uses Effect-injected randomness rather than the `crypto` module behind the scenes. effect(cryptoRandomUUID)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "cryptoRandomUUIDInEffect",
+      "group": "effectNative",
+      "description": "Warns when using crypto.randomUUID() inside Effect generators instead of the Effect Random module, which uses Effect-injected randomness rather than the crypto module behind the scenes",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377079
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.gen(function*() {\n  return crypto.randomUUID()\n})\n",
+        "diagnostics": [
+          {
+            "start": 90,
+            "end": 109,
+            "text": "This Effect code uses `crypto.randomUUID()`, prefer the Effect `Random` module instead because it uses Effect-injected randomness rather than the `crypto` module behind the scenes. effect(cryptoRandomUUIDInEffect)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "extendsNativeError",
+      "group": "effectNative",
+      "description": "Warns when a class directly extends the native Error class",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377055
+      ],
+      "preview": {
+        "sourceText": "\nexport class PreviewError extends Error {}\n",
+        "diagnostics": [
+          {
+            "start": 14,
+            "end": 26,
+            "text": "This class extends the native `Error` type directly. Untagged native errors lose distinction in the Effect failure channel. effect(extendsNativeError)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "globalConsole",
+      "group": "effectNative",
+      "description": "Warns when using console methods outside Effect generators instead of Effect.log/Logger",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377064
+      ],
+      "preview": {
+        "sourceText": "\nconsole.log(\"preview\")\n",
+        "diagnostics": [
+          {
+            "start": 1,
+            "end": 23,
+            "text": "This code uses `console.log`, the corresponding Effect logging API is `Effect.log or Logger`. effect(globalConsole)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "globalConsoleInEffect",
+      "group": "effectNative",
+      "description": "Warns when using console methods inside Effect generators instead of Effect.log/Logger",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377065
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.gen(function*() {\n  console.log(\"hello\")\n})\n",
+        "diagnostics": [
+          {
+            "start": 83,
+            "end": 103,
+            "text": "This Effect code uses `console.log`, logging in Effect code is represented through `Effect.log or Logger`. effect(globalConsoleInEffect)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "globalDate",
+      "group": "effectNative",
+      "description": "Warns when using Date.now() or new Date() outside Effect generators instead of Clock/DateTime",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377066,
+        377068
+      ],
+      "preview": {
+        "sourceText": "\nexport const preview = Date.now()\n",
+        "diagnostics": [
+          {
+            "start": 24,
+            "end": 34,
+            "text": "This code uses `Date.now()`, time access is represented through `Clock` from Effect. effect(globalDate)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "globalDateInEffect",
+      "group": "effectNative",
+      "description": "Warns when using Date.now() or new Date() inside Effect generators instead of Clock/DateTime",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377067,
+        377069
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.gen(function*() {\n  const now = Date.now()\n  return now\n})\n",
+        "diagnostics": [
+          {
+            "start": 95,
+            "end": 105,
+            "text": "This Effect code uses `Date.now()`, time access in Effect code is represented through `Clock` from Effect. effect(globalDateInEffect)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "globalFetch",
+      "group": "effectNative",
+      "description": "Warns when using the global fetch function outside Effect generators instead of the Effect HTTP client",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377061
+      ],
+      "preview": {
+        "sourceText": "\nexport const preview = fetch(\"https://example.com\")\n",
+        "diagnostics": [
+          {
+            "start": 24,
+            "end": 29,
+            "text": "This code uses the global `fetch` function, HTTP requests are represented through `HttpClient` from `@effect/platform`. effect(globalFetch)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "globalFetchInEffect",
+      "group": "effectNative",
+      "description": "Warns when using the global fetch function inside Effect generators instead of the Effect HTTP client",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377063
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.gen(function*() {\n  return yield* Effect.promise(() =\u003e fetch(\"https://example.com\"))\n})\n",
+        "diagnostics": [
+          {
+            "start": 118,
+            "end": 123,
+            "text": "This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `effect/unstable/http`. effect(globalFetchInEffect)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "globalRandom",
+      "group": "effectNative",
+      "description": "Warns when using Math.random() outside Effect generators instead of the Random service",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377070
+      ],
+      "preview": {
+        "sourceText": "\nexport const preview = Math.random()\n",
+        "diagnostics": [
+          {
+            "start": 24,
+            "end": 37,
+            "text": "This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "globalRandomInEffect",
+      "group": "effectNative",
+      "description": "Warns when using Math.random() inside Effect generators instead of the Random service",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377071
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.gen(function*() {\n  const r = Math.random()\n  return r\n})\n",
+        "diagnostics": [
+          {
+            "start": 93,
+            "end": 106,
+            "text": "This Effect code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandomInEffect)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "globalTimers",
+      "group": "effectNative",
+      "description": "Warns when using setTimeout/setInterval outside Effect generators instead of Effect.sleep/Schedule",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377072
+      ],
+      "preview": {
+        "sourceText": "\nsetTimeout(() =\u003e {}, 100)\n",
+        "diagnostics": [
+          {
+            "start": 1,
+            "end": 26,
+            "text": "This code uses `setTimeout`, the corresponding Effect timer API is `Effect.sleep or Schedule` from Effect. effect(globalTimers)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "globalTimersInEffect",
+      "group": "effectNative",
+      "description": "Warns when using setTimeout/setInterval inside Effect generators instead of Effect.sleep/Schedule",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377073
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.gen(function*() {\n  setTimeout(() =\u003e {}, 100)\n})\n",
+        "diagnostics": [
+          {
+            "start": 83,
+            "end": 108,
+            "text": "This Effect code uses `setTimeout`, the corresponding timer API in this context is `Effect.sleep or Schedule` from Effect. effect(globalTimersInEffect)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "instanceOfSchema",
+      "group": "effectNative",
+      "description": "Suggests using Schema.is instead of instanceof for Effect Schema types",
+      "defaultSeverity": "off",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377042
+      ],
+      "preview": {
+        "sourceText": "import { Schema } from \"effect\"\n\nclass User extends Schema.Class\u003cUser\u003e(\"User\")({ name: Schema.String }) {}\ndeclare const value: unknown\nexport const preview = value instanceof User\n",
+        "diagnostics": [
+          {
+            "start": 159,
+            "end": 180,
+            "text": "This code uses `instanceof` with an Effect Schema type. `Schema.is` is the schema-aware runtime check for this case. effect(instanceOfSchema)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "newPromise",
+      "group": "effectNative",
+      "description": "Warns when constructing promises with new Promise instead of using Effect APIs",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377080
+      ],
+      "preview": {
+        "sourceText": "\nexport const preview = new Promise\u003cnumber\u003e((resolve) =\u003e resolve(1))\n",
+        "diagnostics": [
+          {
+            "start": 24,
+            "end": 68,
+            "text": "This code constructs `new Promise(...)`, prefer Effect APIs such as `Effect.async`, `Effect.promise`, or `Effect.tryPromise` instead of manual Promise construction. effect(newPromise)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "nodeBuiltinImport",
+      "group": "effectNative",
+      "description": "Warns when importing Node.js built-in modules that have Effect-native counterparts",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377057
+      ],
+      "preview": {
+        "sourceText": "import fs from \"node:fs\"\n\nexport const preview = fs.readFileSync\n",
+        "diagnostics": [
+          {
+            "start": 15,
+            "end": 24,
+            "text": "This module reference uses the `fs` module, the corresponding Effect API is `FileSystem` from `@effect/platform`. effect(nodeBuiltinImport)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "preferSchemaOverJson",
+      "group": "effectNative",
+      "description": "Suggests using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377026
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.gen(function*() {\n  const text = yield* Effect.succeed('{\"ok\":true}')\n  return JSON.parse(text)\n})\n",
+        "diagnostics": [
+          {
+            "start": 142,
+            "end": 158,
+            "text": "This code uses `JSON.parse` or `JSON.stringify`. Use `Schema.UnknownFromJsonString` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(preferSchemaOverJson)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "processEnv",
+      "group": "effectNative",
+      "description": "Warns when reading process.env outside Effect generators instead of using Effect Config",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377076
+      ],
+      "preview": {
+        "sourceText": "/// \u003creference types=\"node\" /\u003e\n\nexport const preview = process.env.PORT\n",
+        "diagnostics": [
+          {
+            "start": 55,
+            "end": 71,
+            "text": "This code reads from `process.env`, environment configuration is represented through `Config` from Effect. effect(processEnv)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "processEnvInEffect",
+      "group": "effectNative",
+      "description": "Warns when reading process.env inside Effect generators instead of using Effect Config",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377077
+      ],
+      "preview": {
+        "sourceText": "/// \u003creference types=\"node\" /\u003e\nimport { Effect } from \"effect\"\n\nexport const preview = Effect.gen(function*() {\n  return process.env.PORT\n})\n",
+        "diagnostics": [
+          {
+            "start": 121,
+            "end": 137,
+            "text": "This Effect code reads from `process.env`, environment configuration in Effect code is represented through `Config` from Effect. effect(processEnvInEffect)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "unsafeEffectTypeAssertion",
+      "group": "effectNative",
+      "description": "Detects unsafe type assertions that narrow Effect, Stream, or Layer error or requirements channels",
+      "defaultSeverity": "off",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377075
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const program: Effect.Effect\u003cstring, \"boom\", \"service\"\u003e\n\nexport const preview = program as Effect.Effect\u003cstring, never, never\u003e\n",
+        "diagnostics": [
+          {
+            "start": 121,
+            "end": 167,
+            "text": "This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "catchAllToMapError",
+      "group": "style",
+      "description": "Suggests using Effect.mapError instead of Effect.catch + Effect.fail",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377010
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nclass WrappedError {\n  constructor(readonly cause: unknown) {}\n}\n\nexport const preview = Effect.fail(\"boom\").pipe(\n  Effect.catch((cause) =\u003e Effect.fail(new WrappedError(cause)))\n)\n",
+        "diagnostics": [
+          {
+            "start": 150,
+            "end": 162,
+            "text": "`Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "catchToIgnore",
+      "group": "style",
+      "description": "Suggests using Effect.ignore or Effect.ignoreCause instead of Effect.catch/catchCause returning Effect.void",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377099
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const program: Effect.Effect\u003cvoid, string, never\u003e\n\nexport const recovered = program.pipe(\n  Effect.catch(() =\u003e Effect.void)\n)\n",
+        "diagnostics": [
+          {
+            "start": 133,
+            "end": 145,
+            "text": "`Effect.ignore` expresses ignored failure more directly than `Effect.catch` returning `Effect.void`. effect(catchToIgnore)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "catchToOrElseSucceed",
+      "group": "style",
+      "description": "Suggests using Effect.orElseSucceed instead of Effect.catch + Effect.succeed",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377095
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport const program = Effect.fail(\"error\").pipe(\n  Effect.catch(() =\u003e Effect.succeed(42))\n)\n",
+        "diagnostics": [
+          {
+            "start": 85,
+            "end": 97,
+            "text": "`Effect.orElseSucceed` expresses the same recovery more directly than `Effect.catch` followed by `Effect.succeed`. effect(catchToOrElseSucceed)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "deterministicKeys",
+      "group": "style",
+      "description": "Enforces deterministic naming for service/tag/error identifiers based on class names",
+      "defaultSeverity": "off",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377049
+      ],
+      "preview": {
+        "sourceText": "import { Context } from \"effect\"\n\nexport class RenamedService\n  extends Context.Service\u003cRenamedService, {}\u003e()(\"CustomIdentifier\") {}\n",
+        "diagnostics": [
+          {
+            "start": 110,
+            "end": 128,
+            "text": "This key does not match the deterministic key for this declaration. The expected key is `effect-v4-tests/preview/RenamedService`. effect(deterministicKeys)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "effectDoNotation",
+      "group": "style",
+      "description": "Suggests using Effect.gen or Effect.fn instead of the Effect.Do notation helpers",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377085
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\nimport { pipe } from \"effect/Function\"\n\nexport const preview = pipe(\n  Effect.Do,\n  Effect.bind(\"a\", () =\u003e Effect.succeed(1)),\n  Effect.let(\"b\", ({ a }) =\u003e a + 1),\n  Effect.bind(\"c\", ({ b }) =\u003e Effect.succeed(b.toString()))\n)\n",
+        "diagnostics": [
+          {
+            "start": 103,
+            "end": 112,
+            "text": "This uses the Effect do emulation. `Effect.gen` or `Effect.fn` achieve the same result with native JS scopes. effect(effectDoNotation)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "effectFnOpportunity",
+      "group": "style",
+      "description": "Suggests using Effect.fn for functions that return an Effect",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377047
+      ],
+      "preview": {
+        "sourceText": "import * as Effect from \"effect/Effect\"\n\nexport const preview = () =\u003e Effect.gen(function*() {\n  return yield* Effect.succeed(1)\n})\n",
+        "diagnostics": [
+          {
+            "start": 54,
+            "end": 61,
+            "text": "This expression can be rewritten in the reusable function form `Effect.fn(function*() { ... })`. effect(effectFnOpportunity)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "effectMapFlatten",
+      "group": "style",
+      "description": "Suggests using Effect.flatMap instead of Effect.map followed by Effect.flatten in piping flows",
+      "defaultSeverity": "suggestion",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377086
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.succeed(1).pipe(\n  Effect.map((n) =\u003e Effect.succeed(n + 1)),\n  Effect.flatten\n)\n",
+        "diagnostics": [
+          {
+            "start": 126,
+            "end": 140,
+            "text": "`Effect.map` + `Effect.flatten` is the same as `Effect.flatMap` that expresses the same steps more directly. effect(effectMapFlatten)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "effectMapVoid",
+      "group": "style",
+      "description": "Suggests using Effect.asVoid instead of Effect.map(() =\u003e void 0), Effect.map(() =\u003e undefined), or Effect.map(() =\u003e {})",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377018
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.succeed(1).pipe(\n  Effect.map(() =\u003e undefined)\n)\n",
+        "diagnostics": [
+          {
+            "start": 82,
+            "end": 92,
+            "text": "This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "effectSucceedWithVoid",
+      "group": "style",
+      "description": "Suggests using Effect.void instead of Effect.succeed(undefined) or Effect.succeed(void 0)",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377016
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.succeed(undefined)\n",
+        "diagnostics": [
+          {
+            "start": 56,
+            "end": 81,
+            "text": "`Effect.void` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithVoid)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "missedPipeableOpportunity",
+      "group": "style",
+      "description": "Suggests using .pipe() for nested function calls",
+      "defaultSeverity": "off",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377050
+      ],
+      "preview": {
+        "sourceText": "import { identity, Schema } from \"effect\"\n\nconst User = Schema.Struct({ id: Schema.Finite })\nexport const preview = identity(identity(Schema.decodeEffect(User)({ id: 1 })))\n",
+        "diagnostics": [
+          {
+            "start": 116,
+            "end": 172,
+            "text": "This nested call structure has a pipeable form. `Schema.decodeEffect(User)({ id: 1 }).pipe(...)` represents the same call sequence in pipe style and may be easier to read. effect(missedPipeableOpportunity)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "missingEffectServiceDependency",
+      "group": "style",
+      "description": "Checks that Effect.Service dependencies satisfy all required layer inputs",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3"
+      ],
+      "codes": [
+        377039,
+        377040
+      ],
+      "preview": {
+        "sourceText": "import * as Effect from \"effect/Effect\"\n\nclass Db extends Effect.Service\u003cDb\u003e()(\"Db\", { succeed: { ok: true } }) {}\nexport class Repo extends Effect.Service\u003cRepo\u003e()(\"Repo\", {\n  effect: Effect.gen(function*() {\n    yield* Db\n    return { all: Effect.succeed([] as Array\u003cnumber\u003e) }\n  })\n}) {}",
+        "diagnostics": [
+          {
+            "start": 128,
+            "end": 132,
+            "text": "Service 'Db' is required but not provided by dependencies. effect(missingEffectServiceDependency)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "multipleCatchTag",
+      "group": "style",
+      "description": "Suggests collapsing consecutive Effect.catchTag transformations into a single Effect.catchTags call when semantics stay equivalent",
+      "defaultSeverity": "suggestion",
+      "fixable": false,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377092
+      ],
+      "preview": {
+        "sourceText": "import { Data, Effect, pipe } from \"effect\"\n\nclass NotFound extends Data.TaggedError(\"NotFound\")\u003c{}\u003e {}\nclass Unauthorized extends Data.TaggedError(\"Unauthorized\")\u003c{}\u003e {}\n\ndeclare const program: Effect.Effect\u003cstring, NotFound | Unauthorized\u003e\n\nexport const preview = pipe(\n  program,\n  Effect.catchTag(\"NotFound\", () =\u003e Effect.succeed(\"missing\")),\n  Effect.catchTag(\"Unauthorized\", () =\u003e Effect.succeed(\"denied\"))\n)\n",
+        "diagnostics": [
+          {
+            "start": 285,
+            "end": 300,
+            "text": "These 2 consecutive `catchTag` transformations can be collapsed into a single `catchTags` call. effect(multipleCatchTag)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "nestedEffectGenYield",
+      "group": "style",
+      "description": "Warns when yielding a nested bare Effect.gen inside an existing Effect generator context",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377083
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.gen(function*() {\n\tyield* Effect.gen(function*() {\n\t\treturn 1\n\t})\n})\n",
+        "diagnostics": [
+          {
+            "start": 89,
+            "end": 128,
+            "text": "This `yield*` is applied to a nested `Effect.gen(...)` that can be inlined in the parent Effect generator context. effect(nestedEffectGenYield)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "newSchemaClass",
+      "group": "style",
+      "description": "Suggests using Schema make instead of new for Schema classes",
+      "defaultSeverity": "off",
+      "fixable": true,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377094
+      ],
+      "preview": {
+        "sourceText": "import { Schema } from \"effect\"\n\nclass User extends Schema.Class\u003cUser\u003e(\"User\")({ name: Schema.String }) {}\n\nexport const preview = new User({ name: \"John\" })\n",
+        "diagnostics": [
+          {
+            "start": 135,
+            "end": 139,
+            "text": "This Schema class is constructed with `new`. `User.make(...)` can be used to construct the Schema class instance. effect(newSchemaClass)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "redundantMapError",
+      "group": "style",
+      "description": "Suggests hoisting a repeated trailing Effect.mapError from every yield in an Effect generator",
+      "defaultSeverity": "suggestion",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377088,
+        377089
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const first: Effect.Effect\u003cnumber, unknown\u003e\ndeclare const second: Effect.Effect\u003cstring, unknown\u003e\n\nclass RepoError {\n  constructor(readonly args: { cause: unknown }) {}\n}\n\nexport const program = Effect.gen(function*() {\n  yield* first.pipe(\n    Effect.mapError((cause) =\u003e new RepoError({ cause }))\n  )\n\n  return yield* second.pipe(\n    Effect.mapError((cause) =\u003e new RepoError({ cause }))\n  )\n})\n",
+        "diagnostics": [
+          {
+            "start": 246,
+            "end": 255,
+            "text": "This generator applies the same inline `Effect.mapError(...)` to every yielded effect. Keep that `Effect.mapError(...)` inline and hoist it once to the generator result: `Effect.gen(...).pipe(Effect.mapError(...))`, or `Effect.fn(function*(){ ... }, Effect.mapError(...))`. effect(redundantMapError)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "redundantOrDie",
+      "group": "style",
+      "description": "Suggests hoisting a repeated trailing Effect.orDie from every yield in an Effect generator",
+      "defaultSeverity": "suggestion",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377096,
+        377097
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const first: Effect.Effect\u003cnumber, unknown\u003e\ndeclare const second: Effect.Effect\u003cstring, unknown\u003e\n\nexport const program = Effect.gen(function*() {\n  yield* first.pipe(Effect.orDie)\n\n  return yield* second.pipe(Effect.orDie)\n})\n",
+        "diagnostics": [
+          {
+            "start": 173,
+            "end": 182,
+            "text": "This generator applies `Effect.orDie` to every yielded effect. Hoist it once to the generator result: `Effect.gen(...).pipe(Effect.orDie)`, or `Effect.fn(function*(){ ... }, Effect.orDie)`. effect(redundantOrDie)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "redundantSchemaTagIdentifier",
+      "group": "style",
+      "description": "Suggests removing redundant identifier argument when it equals the tag value in Schema.TaggedClass/TaggedError/TaggedRequest",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377045
+      ],
+      "preview": {
+        "sourceText": "import * as Schema from \"effect/Schema\"\n\nexport class Preview\n  extends Schema.TaggedClass\u003cPreview\u003e(\"Preview\")(\"Preview\", {\n    value: Schema.String\n  }) {}\n",
+        "diagnostics": [
+          {
+            "start": 100,
+            "end": 109,
+            "text": "Identifier 'Preview' is redundant since it equals the _tag value. effect(redundantSchemaTagIdentifier)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "schemaNumber",
+      "group": "style",
+      "description": "Suggests Schema.Finite and Schema.FiniteFromString instead of Schema.Number APIs when describing domain numbers",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377098
+      ],
+      "preview": {
+        "sourceText": "\nimport { Schema } from \"effect\"\n\nexport const User = Schema.Struct({\n  age: Schema.Number,\n  score: Schema.NumberFromString\n})\n",
+        "diagnostics": [
+          {
+            "start": 84,
+            "end": 90,
+            "text": "This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)"
+          },
+          {
+            "start": 108,
+            "end": 124,
+            "text": "This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.FiniteFromString` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "schemaStructWithTag",
+      "group": "style",
+      "description": "Suggests using Schema.TaggedStruct instead of Schema.Struct with _tag field",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377036
+      ],
+      "preview": {
+        "sourceText": "import * as Schema from \"effect/Schema\"\n\nexport const preview = Schema.Struct({\n  _tag: Schema.Literal(\"User\"),\n  name: Schema.String\n})\n",
+        "diagnostics": [
+          {
+            "start": 64,
+            "end": 136,
+            "text": "This `Schema.Struct` includes a `_tag` field. `Schema.TaggedStruct` is the tagged-struct form for this pattern and makes the tag optional in the constructor. effect(schemaStructWithTag)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "schemaUnionOfLiterals",
+      "group": "style",
+      "description": "Suggests combining multiple Schema.Literal calls in Schema.Union into a single Schema.Literal",
+      "defaultSeverity": "off",
+      "fixable": true,
+      "supportedEffect": [
+        "v3"
+      ],
+      "codes": [
+        377038
+      ],
+      "preview": {
+        "sourceText": "import * as Schema from \"effect/Schema\"\n\nexport const preview = Schema.Union(Schema.Literal(\"a\"), Schema.Literal(\"b\"))",
+        "diagnostics": [
+          {
+            "start": 64,
+            "end": 118,
+            "text": "This `Schema.Union` contains multiple `Schema.Literal` members and can be simplified to a single `Schema.Literal` call. effect(schemaUnionOfLiterals)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "serviceNotAsClass",
+      "group": "style",
+      "description": "Warns when Context.Service is used as a variable instead of a class declaration",
+      "defaultSeverity": "off",
+      "fixable": true,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377056
+      ],
+      "preview": {
+        "sourceText": "import { Context } from \"effect\"\n\nexport const Preview = Context.Service\u003c{ port: number }\u003e(\"Preview\")\n",
+        "diagnostics": [
+          {
+            "start": 57,
+            "end": 101,
+            "text": "`Context.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `class Preview extends Context.Service\u003cPreview, { port: number }\u003e()(\"Preview\") {}`. effect(serviceNotAsClass)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "strictBooleanExpressions",
+      "group": "style",
+      "description": "Enforces boolean types in conditional expressions for type safety",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377029
+      ],
+      "preview": {
+        "sourceText": "\ndeclare const value: string | undefined\nexport const preview = value ? 1 : 0\n",
+        "diagnostics": [
+          {
+            "start": 64,
+            "end": 69,
+            "text": "Unexpected `string` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)"
+          },
+          {
+            "start": 64,
+            "end": 69,
+            "text": "Unexpected `undefined` type in condition, expected strictly a boolean instead. effect(strictBooleanExpressions)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "unnecessaryArrowBlock",
+      "group": "style",
+      "description": "Suggests using a concise arrow body when the block only returns an expression",
+      "defaultSeverity": "off",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377084
+      ],
+      "preview": {
+        "sourceText": "export const preview = (value: string) =\u003e {\n\treturn value.trim()\n}\n",
+        "diagnostics": [
+          {
+            "start": 42,
+            "end": 66,
+            "text": "This arrow function block only returns an expression and can use a concise body. effect(unnecessaryArrowBlock)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "unnecessaryEffectGen",
+      "group": "style",
+      "description": "Suggests removing Effect.gen when it contains only a single return statement",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377017
+      ],
+      "preview": {
+        "sourceText": "import * as Effect from \"effect/Effect\"\n\nexport const preview = Effect.gen(function*() {\n  return yield* Effect.succeed(1)\n})\n",
+        "diagnostics": [
+          {
+            "start": 64,
+            "end": 125,
+            "text": "This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "unnecessaryFailYieldableError",
+      "group": "style",
+      "description": "Suggests yielding yieldable errors directly instead of wrapping with Effect.fail",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377019
+      ],
+      "preview": {
+        "sourceText": "import * as Data from \"effect/Data\"\nimport * as Effect from \"effect/Effect\"\n\nclass Boom extends Data.TaggedError(\"Boom\")\u003c{}\u003e {}\nexport const preview = Effect.gen(function*() {\n  yield* Effect.fail(new Boom())\n})\n",
+        "diagnostics": [
+          {
+            "start": 178,
+            "end": 183,
+            "text": "This `yield* Effect.fail(...)` passes a yieldable error value. `yield*` represents that value directly without wrapping it in `Effect.fail`. effect(unnecessaryFailYieldableError)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "unnecessaryPipe",
+      "group": "style",
+      "description": "Removes pipe calls with no arguments",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377013
+      ],
+      "preview": {
+        "sourceText": "import { pipe } from \"effect/Function\"\n\nexport const preview = pipe(1)\n",
+        "diagnostics": [
+          {
+            "start": 63,
+            "end": 70,
+            "text": "This pipe call contains no arguments. effect(unnecessaryPipe)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "unnecessaryPipeChain",
+      "group": "style",
+      "description": "Simplifies chained pipe calls into a single pipe call",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377015
+      ],
+      "preview": {
+        "sourceText": "import * as Effect from \"effect/Effect\"\n\nexport const preview = Effect.succeed(1).pipe(Effect.asVoid).pipe(Effect.as(\"done\"))\n",
+        "diagnostics": [
+          {
+            "start": 64,
+            "end": 125,
+            "text": "This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "unnecessaryTypeofType",
+      "group": "style",
+      "description": "Suggests replacing typeof Schema.Type style annotations with the matching named type when available",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377090
+      ],
+      "preview": {
+        "sourceText": "import { Schema } from \"effect\"\n\nexport namespace UsersRepo {\n  export const User = Schema.Struct({ id: Schema.Finite })\n  export type User = typeof User.Type\n}\n\nexport const preview: typeof UsersRepo.User.Type = { id: 1 }\n",
+        "diagnostics": [
+          {
+            "start": 184,
+            "end": 210,
+            "text": "This `typeof ... .Type` query can be replaced with `UsersRepo.User`. effect(unnecessaryTypeofType)"
+          }
+        ]
+      }
+    }
+  ]
+}

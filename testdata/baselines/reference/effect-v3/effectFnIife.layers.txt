@@ -1,0 +1,1 @@
+==== /.src/effectFnIife.ts (0 layer exports) ====

@@ -1,0 +1,49 @@
+=== Quick Fix Inventory ===
+
+[D1] (5:1-5:28) TS377064: This code uses `console.log`, the corresponding Effect logging API is `Effect.log or Logger`. effect(globalConsole)
+  Fix 0: "Disable globalConsole for this line"
+  Fix 1: "Disable globalConsole for entire file"
+
+[D2] (8:7-8:17) TS6133: '_regularFn' is declared but its value is never read.
+  (no quick fixes)
+
+[D3] (9:3-9:26) TS377064: This code uses `console.warn`, the corresponding Effect logging API is `Effect.logWarning or Logger`. effect(globalConsole)
+  Fix 0: "Disable globalConsole for this line"
+  Fix 1: "Disable globalConsole for entire file"
+
+[D4] (14:1-14:23) TS377064: This code uses `console.info`, the corresponding Effect logging API is `Effect.logInfo or Logger`. effect(globalConsole)
+  Fix 0: "Disable globalConsole for this line"
+  Fix 1: "Disable globalConsole for entire file"
+
+[D5] (28:20-28:43) TS377064: This code uses `console.error`, the corresponding Effect logging API is `Effect.logError or Logger`. effect(globalConsole)
+  Fix 0: "Disable globalConsole for this line"
+  Fix 1: "Disable globalConsole for entire file"
+
+[D6] (33:7-33:23) TS6133: '_shadowedConsole' is declared but its value is never read.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable globalConsole for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable globalConsole for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable globalConsole for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable globalConsole for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable globalConsole for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable globalConsole for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable globalConsole for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable globalConsole for entire file" ===
+skipped by default

@@ -1,0 +1,85 @@
+==== /.src/missingReturnYieldStarFnUntraced.ts (6 flows) ====
+
+=== Piping Flow ===
+Location: 3:38 - 5:3
+Node: Effect.fnUntraced(function*(){\n    yield* Effect.fail("no") // <- should emit an error be return yield*\n})
+Node Kind: KindCallExpression
+
+Subject: function*(){\n    yield* Effect.fail("no") // <- should emit an error be return yield*\n}
+Subject Type: () => Generator<Effect<never, string, never>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fnUntraced
+      args: (constant)
+      outType: () => Effect<void, string, never>
+
+=== Piping Flow ===
+Location: 4:11 - 4:29
+Node: Effect.fail("no")
+Node Kind: KindCallExpression
+
+Subject: "no"
+Subject Type: "no"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>
+
+=== Piping Flow ===
+Location: 7:43 - 9:3
+Node: Effect.fnUntracedEager(function*(){\n    yield* Effect.fail("no") // <- should emit an error be return yield*\n})
+Node Kind: KindCallExpression
+
+Subject: function*(){\n    yield* Effect.fail("no") // <- should emit an error be return yield*\n}
+Subject Type: () => Generator<Effect<never, string, never>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fnUntracedEager
+      args: (constant)
+      outType: () => Effect<void, string, never>
+
+=== Piping Flow ===
+Location: 8:11 - 8:29
+Node: Effect.fail("no")
+Node Kind: KindCallExpression
+
+Subject: "no"
+Subject Type: "no"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>
+
+=== Piping Flow ===
+Location: 11:50 - 13:3
+Node: Effect.fnUntraced((a: string) => {\n    return Effect.fail(a)\n})
+Node Kind: KindCallExpression
+
+Subject: (a: string) => {\n    return Effect.fail(a)\n}
+Subject Type: (a: string) => Effect<never, string, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fnUntraced
+      args: (constant)
+      outType: (a: string) => Effect<unknown, any, any>
+
+=== Piping Flow ===
+Location: 12:11 - 12:26
+Node: Effect.fail(a)
+Node Kind: KindCallExpression
+
+Subject: a
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>

@@ -1,0 +1,15 @@
+==== /.src/catchToIgnore_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 5:25 - 7:2
+Node: program.pipe(\n  Effect.catch(() => Effect.void)\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<void, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [() => Effect.void]
+      outType: Effect<void, never, never>

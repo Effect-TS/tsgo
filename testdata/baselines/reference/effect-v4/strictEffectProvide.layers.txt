@@ -1,0 +1,59 @@
+==== /.src/strictEffectProvide.ts (1 layer exports) ====
+
+=== shouldNotReport2 ===
+
+--- output ---
+flowchart TD
+  0["MyService2.Default<br/>provides: MyService2<br/>requires: "]
+  1["MyService1.Default<br/>provides: MyService1<br/>requires: "]
+  2["Layer.provide#40;<br/>  MyService1.Default,<br/>  MyService2.Default<br/>#41;<br/>provides: MyService1<br/>requires: "]
+  2 -->|"#123;#quot;relationship#quot;:#quot;call#quot;,#quot;argumentIndex#quot;:0#125;"| 1
+  2 -->|"#123;#quot;relationship#quot;:#quot;call#quot;,#quot;argumentIndex#quot;:1#125;"| 0
+
+--- nested ---
+flowchart TB
+  subgraph 0 ["`MyService2.Default<br/><small>_ln 44 col 2_</small>`"]
+    subgraph 0_wrap[" "]
+      subgraph 0_provides [Provides]
+        0_provides_0["MyService2"]
+      end
+      style 0_provides stroke:none
+    end
+    style 0_wrap fill:transparent
+    style 0_wrap stroke:none
+  end
+  style 0 fill:transparent
+  subgraph 1 ["`MyService1.Default<br/><small>_ln 43 col 2_</small>`"]
+    subgraph 1_wrap[" "]
+      subgraph 1_provides [Provides]
+        1_provides_0["MyService1"]
+      end
+      style 1_provides stroke:none
+    end
+    style 1_wrap fill:transparent
+    style 1_wrap stroke:none
+  end
+  style 1 fill:transparent
+  subgraph 2 ["`shouldNotReport2<br/><small>_ln 42 col 13_</small>`"]
+    subgraph 2_wrap[" "]
+      subgraph 2_provides [Provides]
+        2_provides_0["MyService1"]
+      end
+      style 2_provides stroke:none
+    end
+    style 2_wrap fill:transparent
+    style 2_wrap stroke:none
+  end
+  style 2 fill:transparent
+  2_provides_0 -.-> 1_provides_0
+  2 -.-x 0
+
+--- outline ---
+flowchart TD
+  0["MyService2.Default"]
+  1["MyService1.Default"]
+
+--- quickinfo ---
+/**
+ * - MyService1 provided at ln 43 col 2 by `MyService1.Default`
+ */

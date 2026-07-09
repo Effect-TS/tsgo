@@ -1,0 +1,26 @@
+=== Quick Fix Inventory ===
+
+[D1] (7:24-7:45) TS377042: This code uses `instanceof` with an Effect Schema type. `Schema.is` is the schema-aware runtime check for this case. effect(instanceOfSchema)
+  Fix 0: "Disable instanceOfSchema for this line"
+  Fix 1: "Disable instanceOfSchema for entire file"
+  Fix 2: "Replace with Schema.is"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable instanceOfSchema for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable instanceOfSchema for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Schema.is" ===
+
+--- file:///.src/instanceOfSchema_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics instanceOfSchema:warning
+import { Schema } from "effect"
+
+class User extends Schema.Class<User>("User")({ name: Schema.String }) {}
+declare const value: unknown
+export const preview = Schema.is(User)(value)
+

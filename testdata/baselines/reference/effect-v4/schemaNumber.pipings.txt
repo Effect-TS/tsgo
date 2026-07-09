@@ -1,0 +1,43 @@
+==== /.src/schemaNumber.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 7:20 - 12:3
+Node: Schema.Struct({\n  age: Schema.Number,\n  score: Schema.NumberFromString,\n  height: Schema.Finite,\n  weight: Schema.FiniteFromString\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  age: Schema.Number,\n  score: Schema.NumberFromString,\n  height: Schema.Finite,\n  weight: Schema.FiniteFromString\n}
+Subject Type: { age: Number; score: NumberFromString; height: Finite; weight: FiniteFromString; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly age: Number; readonly score: NumberFromString; readonly height: Finite; readonly weight: FiniteFromString; }>
+
+=== Piping Flow ===
+Location: 14:23 - 17:3
+Node: SchemaModule.Struct({\n  price: SchemaModule.Number,\n  stock: SchemaModule.NumberFromString\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  price: SchemaModule.Number,\n  stock: SchemaModule.NumberFromString\n}
+Subject Type: { price: Number; stock: NumberFromString; }
+
+Transformations (1):
+  [0] kind: call
+      callee: SchemaModule.Struct
+      args: (constant)
+      outType: Struct<{ readonly price: Number; readonly stock: NumberFromString; }>
+
+=== Piping Flow ===
+Location: 19:22 - 22:3
+Node: Schema.Struct({\n  quantity: NumberSchema,\n  amount: NumberFromString\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  quantity: NumberSchema,\n  amount: NumberFromString\n}
+Subject Type: { quantity: Number; amount: NumberFromString; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly quantity: Number; readonly amount: NumberFromString; }>
