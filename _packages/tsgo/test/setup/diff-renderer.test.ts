@@ -81,7 +81,7 @@ function makeAssessmentState(opts?: {
       parsed: JSON.parse(pkgJsonText),
       text: pkgJsonText,
       lspVersion: Option.none(),
-      nativePreviewVersion: Option.none(),
+      typescriptVersion: Option.none(),
       prepareScript: Option.none()
     },
     tsconfig: {

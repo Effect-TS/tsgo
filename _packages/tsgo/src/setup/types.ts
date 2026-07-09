@@ -22,10 +22,7 @@ export interface PackageDependency {
   readonly dependencyType: "dependencies" | "devDependencies"
   readonly version: string
   /**
-   * The npm package name this dependency refers to. Used by the native
-   * backend logic to distinguish `@typescript/native-preview` from
-   * `typescript` >= 7. Defaults to `@typescript/native-preview` when absent,
-   * preserving the behavior expected by existing setup consumers.
+   * The npm package name this dependency refers to.
    */
   readonly packageName?: string
 }
@@ -43,7 +40,7 @@ export namespace Assessment {
     readonly parsed: Record<string, unknown>
     readonly text: string
     readonly lspVersion: Option.Option<PackageDependency>
-    readonly nativePreviewVersion: Option.Option<PackageDependency>
+    readonly typescriptVersion: Option.Option<PackageDependency>
     readonly prepareScript: Option.Option<{
       readonly script: string
       readonly hasPatch: boolean
@@ -77,7 +74,7 @@ export namespace Assessment {
 export namespace Target {
   export interface PackageJson {
     readonly lspVersion: Option.Option<PackageDependency>
-    readonly nativePreviewVersion: Option.Option<PackageDependency>
+    readonly typescriptVersion: Option.Option<PackageDependency>
     readonly prepareScript: boolean
   }
 

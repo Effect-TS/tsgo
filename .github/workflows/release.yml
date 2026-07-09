@@ -35,7 +35,7 @@ jobs:
           - linux-arm64
           - linux-arm
         binary:
-          - name: tsgo
+          - name: tsc-next
             ref: ${{ github.event.pull_request.merge_commit_sha }}
           - name: tsc
             ref: generated/latest
@@ -89,8 +89,10 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.binary.name }}-${{ matrix.npm_target }}
-          path: _packages/tsgo-${{ matrix.npm_target }}/lib/${{ matrix.binary.name }}${{ startsWith(matrix.npm_target, 'win32-') && '.exe' || '' }}
+          name: ${{ matrix.npm_target }}__${{ matrix.binary.name }}
+          path: |
+            _packages/tsgo-${{ matrix.npm_target }}/lib/${{ matrix.binary.name }}${{ startsWith(matrix.npm_target, 'win32-') && '.exe' || '' }}
+            _packages/tsgo-${{ matrix.npm_target }}/lib/${{ matrix.binary.name }}${{ startsWith(matrix.npm_target, 'win32-') && '.exe' || '' }}.json
 
   publish:
     if: >-
@@ -132,17 +134,19 @@ jobs:
 
       - name: Copy binaries into platform packages
         run: |
-          for artifact_dir in _release-artifacts/*-*; do
+          for artifact_dir in _release-artifacts/*__*; do
             artifact_name="${artifact_dir##*/}"
-            binary_name="${artifact_name%%-*}"
-            npm_target="${artifact_name#*-}"
+            npm_target="${artifact_name%%__*}"
+            binary_name="${artifact_name#*__}"
             package_dir="_packages/tsgo-${npm_target}/lib"
 
             mkdir -p "${package_dir}"
             if [ -f "${artifact_dir}/${binary_name}.exe" ]; then
               cp "${artifact_dir}/${binary_name}.exe" "${package_dir}/${binary_name}.exe"
+              cp "${artifact_dir}/${binary_name}.exe.json" "${package_dir}/${binary_name}.exe.json"
             else
               cp "${artifact_dir}/${binary_name}" "${package_dir}/${binary_name}"
+              cp "${artifact_dir}/${binary_name}.json" "${package_dir}/${binary_name}.json"
             fi
           done
 

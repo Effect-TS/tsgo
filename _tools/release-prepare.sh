@@ -15,6 +15,7 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 PACKAGES_DIR="${REPO_ROOT}/_packages"
+UPSTREAM_METADATA="${PACKAGES_DIR}/tsgo/upstream.json"
 
 # Unified target matrix: goos goarch goarm npm_platform npm_arch
 # Build order: Darwin first, then Windows, then Linux
@@ -73,6 +74,18 @@ done
 
 if [[ ! "${binary_name}" =~ ^[A-Za-z0-9._-]+$ ]]; then
   echo "ERROR: --binary-name must contain only letters, numbers, dots, underscores, and dashes."
+  exit 1
+fi
+
+if [ ! -s "${UPSTREAM_METADATA}" ]; then
+  echo "ERROR: Missing upstream metadata: ${UPSTREAM_METADATA}"
+  exit 1
+fi
+
+metadata_git_head="$(node -e 'const fs = require("node:fs"); const m = JSON.parse(fs.readFileSync(process.argv[1], "utf8")); if (!m.tsVersion || !/^[0-9a-f]{40}$/.test(m.tsGitHead || "")) process.exit(1); process.stdout.write(m.tsGitHead)' "${UPSTREAM_METADATA}")"
+submodule_git_head="$(git -C "${REPO_ROOT}/typescript-go" rev-parse HEAD)"
+if [ "${metadata_git_head}" != "${submodule_git_head}" ]; then
+  echo "ERROR: upstream metadata tsGitHead (${metadata_git_head}) does not match typescript-go HEAD (${submodule_git_head})."
   exit 1
 fi
 
@@ -140,6 +153,7 @@ for target in "${TARGETS[@]}"; do
     unset GOARM
   fi
   go build -ldflags="-s -w" -o "${dest}" ./typescript-go/cmd/tsgo
+  cp "${UPSTREAM_METADATA}" "${dest}.json"
 done
 
 echo "  Cross-compilation complete."
@@ -172,8 +186,12 @@ for target in "${TARGETS[@]}"; do
   fi
 
   bin_path="${PACKAGES_DIR}/tsgo-${npm_platform}-${npm_arch}/lib/${output_name}"
+  metadata_path="${bin_path}.json"
   if [ ! -s "${bin_path}" ]; then
     errors+=("Missing or empty binary: ${bin_path}")
+  fi
+  if [ ! -s "${metadata_path}" ]; then
+    errors+=("Missing or empty binary metadata: ${metadata_path}")
   fi
 done
 

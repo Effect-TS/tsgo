@@ -3,7 +3,7 @@ import * as Option from "effect/Option"
 import type * as Terminal from "effect/Terminal"
 import * as Prompt from "effect/unstable/cli/Prompt"
 import { applyPresetDiagnosticSeverities, type DiagnosticPresetName, isPresetEnabled } from "../presets.js"
-import { DEFAULT_NATIVE_PREVIEW_VERSION, NATIVE_PREVIEW_PACKAGE_NAME, nativeBackendTsdkPath } from "./consts.js"
+import { TYPESCRIPT_PACKAGE_NAME, nativeBackendTsdkPath } from "./consts.js"
 import type { Assessment } from "./types.js"
 import type { Editor, Target } from "./target.js"
 import { getAllPresets, getAllRules } from "./rule-info.js"
@@ -14,6 +14,7 @@ import { createRulePrompt } from "./rule-prompt.js"
  */
 export interface GatherTargetContext {
   readonly defaultLspVersion: string
+  readonly defaultTypescriptVersion: string
 }
 
 /**
@@ -59,7 +60,7 @@ export const gatherTargetState = (
       return {
         packageJson: {
           lspVersion: Option.none(),
-          nativePreviewVersion: assessment.packageJson.nativePreviewVersion,
+          typescriptVersion: assessment.packageJson.typescriptVersion,
           prepareScript: false
         },
         tsconfig: {
@@ -133,18 +134,11 @@ export const gatherTargetState = (
     })
 
     // Build target state
-    // The VS Code "TypeScript (Native Preview)" extension reads the native
-    // install from `typescript.native-preview.tsdk`. Point it at the detected
-    // backend's folder (node_modules/@typescript/native-preview or
-    // node_modules/typescript for the >= 7 RC/stable backend).
-    const nativeBackendPackage = Option.match(assessment.packageJson.nativePreviewVersion, {
-      onNone: () => NATIVE_PREVIEW_PACKAGE_NAME,
-      onSome: (dep) => dep.packageName ?? NATIVE_PREVIEW_PACKAGE_NAME
-    })
+    // Point the TypeScript 7 extension at the project TypeScript package.
     const vscodeSettings: Option.Option<Target.VSCodeSettings> = editors.includes("vscode")
       ? Option.some({
         settings: {
-          "typescript.native-preview.tsdk": nativeBackendTsdkPath(nativeBackendPackage),
+          "typescript.native-preview.tsdk": nativeBackendTsdkPath(TYPESCRIPT_PACKAGE_NAME),
           "typescript.experimental.useTsgo": true,
           "js/ts.experimental.useTsgo": true
         }
@@ -154,9 +148,13 @@ export const gatherTargetState = (
     return {
       packageJson: {
         lspVersion: Option.some({ dependencyType: lspDependencyType, version: context.defaultLspVersion }),
-        nativePreviewVersion: Option.orElse(
-          assessment.packageJson.nativePreviewVersion,
-          () => Option.some({ dependencyType: lspDependencyType, version: DEFAULT_NATIVE_PREVIEW_VERSION })
+        typescriptVersion: Option.orElse(
+          assessment.packageJson.typescriptVersion,
+          () => Option.some({
+            dependencyType: lspDependencyType,
+            version: context.defaultTypescriptVersion,
+            packageName: TYPESCRIPT_PACKAGE_NAME
+          })
         ),
         prepareScript: true
       },

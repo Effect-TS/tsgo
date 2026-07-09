@@ -9,7 +9,6 @@ import type { Assessment, FileInput, PackageDependency } from "./types.js"
 import {
   LSP_PACKAGE_NAME,
   LSP_PLUGIN_NAME,
-  NATIVE_PREVIEW_PACKAGE_NAME,
   TYPESCRIPT_PACKAGE_NAME,
   isNativeTypescriptVersion,
   PATCH_COMMAND
@@ -102,19 +101,10 @@ const assessPackageJson = (
   }
 
   const lspVersion = assessDependency(LSP_PACKAGE_NAME)
-  // The native backend is @typescript/native-preview when present; otherwise a
-  // `typescript` >= 7 install (e.g. the 7.0 RC) is recognised as the backend so
-  // that `setup` does not redundantly re-add @typescript/native-preview.
-  const nativePreviewVersion = Option.orElse(
-    assessDependency(NATIVE_PREVIEW_PACKAGE_NAME),
-    () => {
-      const typescriptDep = assessDependency(TYPESCRIPT_PACKAGE_NAME)
-      if (Option.isSome(typescriptDep) && isNativeTypescriptVersion(typescriptDep.value.version)) {
-        return Option.some({ ...typescriptDep.value, packageName: TYPESCRIPT_PACKAGE_NAME })
-      }
-      return Option.none<PackageDependency>()
-    }
-  )
+  const typescriptDep = assessDependency(TYPESCRIPT_PACKAGE_NAME)
+  const typescriptVersion = Option.isSome(typescriptDep) && isNativeTypescriptVersion(typescriptDep.value.version)
+    ? Option.some({ ...typescriptDep.value, packageName: TYPESCRIPT_PACKAGE_NAME })
+    : Option.none<PackageDependency>()
 
   // Check for prepare script
   const prepareScript = "prepare" in (parsed.scripts ?? {})
@@ -130,7 +120,7 @@ const assessPackageJson = (
     parsed,
     text: input.text,
     lspVersion,
-    nativePreviewVersion,
+    typescriptVersion,
     prepareScript
   }
 }

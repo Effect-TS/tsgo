@@ -16,8 +16,9 @@
   },
   "preferUnplugged": true,
   "files": [
-    "lib/tsgo.exe",
     "lib/tsc.exe",
+    "lib/tsc-next.exe",
+    "lib/*.json",
     "README.md"
   ],
   "os": [
