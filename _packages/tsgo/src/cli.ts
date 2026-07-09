@@ -48,6 +48,14 @@ class ParsePackageJsonError extends Data.TaggedError("ParsePackageJsonError")<{
   }
 }
 
+class MissingTypeScriptMetadataError extends Data.TaggedError("MissingTypeScriptMetadataError")<{
+  readonly packageName: string
+}> {
+  get message(): string {
+    return `Installed ${this.packageName} package.json does not contain a gitHead. Unable to select a compatible Effect binary.`
+  }
+}
+
 class BinaryMetadataNotFoundError extends Data.TaggedError("BinaryMetadataNotFoundError")<{
   readonly metadataPath: string
 }> {
@@ -163,6 +171,7 @@ type CliDomainError =
   | NativeBackendNotInstalledError
   | PackageNotFoundError
   | ParsePackageJsonError
+  | MissingTypeScriptMetadataError
   | BinaryMetadataNotFoundError
   | ParseBinaryMetadataError
   | UnsupportedPlatformPackageError
@@ -194,7 +203,7 @@ interface PackagedBinaryCandidate extends PackagedBinaryCandidateInfo {
 interface PackageJsonMetadata {
   readonly name: string
   readonly version: string
-  readonly gitHead: string
+  readonly gitHead?: string
 }
 
 interface ResolvedPackageJson extends PackageJsonMetadata {
@@ -209,14 +218,14 @@ interface OfficialTypeScriptBinary {
   readonly packageGitHead: string
   readonly platformPackageName: string
   readonly platformPackageJsonPath: string
-  readonly platformGitHead: string
+  readonly platformGitHead?: string
   readonly binaryPath: string
 }
 
 const PackageJsonMetadataSchema = Schema.Struct({
   name: Schema.String,
   version: Schema.String,
-  gitHead: Schema.String
+  gitHead: Schema.optionalKey(Schema.String)
 })
 const PackageJsonMetadataFromStringSchema = Schema.fromJsonString(PackageJsonMetadataSchema)
 
@@ -291,6 +300,11 @@ const readBinaryMetadata = (binaryPath: string) =>
 
 const resolveOfficialTypeScriptBinary = (typescriptPackage: ResolvedPackageJson) =>
   Effect.gen(function*() {
+    const packageGitHead = typescriptPackage.gitHead
+    if (packageGitHead === undefined) {
+      return yield* Effect.fail(new MissingTypeScriptMetadataError({ packageName: typescriptPackage.requestedPackageName }))
+    }
+
     const path = yield* Path.Path
     const platformPackageName = "@typescript/typescript-" + process.platform + "-" + process.arch
     const packageRequire = nodeModule.createRequire(typescriptPackage.packageJsonPath)
@@ -305,7 +319,7 @@ const resolveOfficialTypeScriptBinary = (typescriptPackage: ResolvedPackageJson)
       packageName: typescriptPackage.requestedPackageName,
       packageJsonPath: typescriptPackage.packageJsonPath,
       packageVersion: typescriptPackage.version,
-      packageGitHead: typescriptPackage.gitHead,
+      packageGitHead,
       platformPackageName,
       platformPackageJsonPath,
       platformGitHead: platformPackage.gitHead,
