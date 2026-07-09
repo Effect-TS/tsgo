@@ -11,8 +11,8 @@ import type { Assessment, PackageDependency, SetupCodeAction, Target } from "./t
 import {
   LSP_PACKAGE_NAME,
   LSP_PLUGIN_NAME,
-  NATIVE_PREVIEW_PACKAGE_NAME,
   PATCH_COMMAND,
+  TYPESCRIPT_PACKAGE_NAME,
   TSCONFIG_SCHEMA_URL
 } from "./consts.js"
 import type { RuleSeverity } from "./rule-info.js"
@@ -238,36 +238,31 @@ const computePackageJsonChanges = (
   const fileChanges = tsInternal.textChanges.ChangeTracker.with(
     ctx,
     (tracker: any) => {
-      const nativeBackendPackageName = Option.match(target.nativePreviewVersion, {
-        onNone: () => NATIVE_PREVIEW_PACKAGE_NAME,
-        onSome: (dep) => dep.packageName ?? NATIVE_PREVIEW_PACKAGE_NAME
-      })
+      const shouldAddTypescriptWithDependencyType = (dependencyType: "dependencies" | "devDependencies") =>
+        Option.isSome(target.typescriptVersion) &&
+        Option.isNone(current.typescriptVersion) &&
+        target.typescriptVersion.value.dependencyType === dependencyType
 
-      const shouldAddNativePreviewWithDependencyType = (dependencyType: "dependencies" | "devDependencies") =>
-        Option.isSome(target.nativePreviewVersion) &&
-        Option.isNone(current.nativePreviewVersion) &&
-        target.nativePreviewVersion.value.dependencyType === dependencyType
-
-      const ensureNativePreviewDependency = () => {
-        if (Option.isNone(target.nativePreviewVersion) || Option.isSome(current.nativePreviewVersion)) {
+      const ensureTypescriptDependency = () => {
+        if (Option.isNone(target.typescriptVersion) || Option.isSome(current.typescriptVersion)) {
           return
         }
 
-        const targetNativePreview = target.nativePreviewVersion.value
-        const nativePreviewDepsProperty = findDependencyCollectionProperty(rootObj, targetNativePreview.dependencyType)
+        const targetTypescript = target.typescriptVersion.value
+        const typescriptDepsProperty = findDependencyCollectionProperty(rootObj, targetTypescript.dependencyType)
 
         if (
-          !nativePreviewDepsProperty &&
+          !typescriptDepsProperty &&
           Option.isSome(target.lspVersion) &&
-          target.lspVersion.value.dependencyType === targetNativePreview.dependencyType
+          target.lspVersion.value.dependencyType === targetTypescript.dependencyType
         ) {
           return
         }
 
         descriptions.push(
-          `Add ${nativeBackendPackageName}@${targetNativePreview.version} to ${targetNativePreview.dependencyType}`
+          `Add ${TYPESCRIPT_PACKAGE_NAME}@${targetTypescript.version} to ${targetTypescript.dependencyType}`
         )
-        upsertDependency(tracker, current.sourceFile, rootObj, nativeBackendPackageName, targetNativePreview)
+        upsertDependency(tracker, current.sourceFile, rootObj, TYPESCRIPT_PACKAGE_NAME, targetTypescript)
       }
 
       // Handle @effect/tsgo dependency
@@ -303,13 +298,13 @@ const computePackageJsonChanges = (
                 )
               ]
 
-              if (shouldAddNativePreviewWithDependencyType(targetDepType)) {
-                const targetNativePreview = target.nativePreviewVersion.pipe(Option.getOrUndefined)
-                if (targetNativePreview) {
+              if (shouldAddTypescriptWithDependencyType(targetDepType)) {
+                const targetTypescript = target.typescriptVersion.pipe(Option.getOrUndefined)
+                if (targetTypescript) {
                 dependencyProperties.push(
                   ts.factory.createPropertyAssignment(
-                    ts.factory.createStringLiteral(nativeBackendPackageName),
-                    ts.factory.createStringLiteral(targetNativePreview.version)
+                    ts.factory.createStringLiteral(TYPESCRIPT_PACKAGE_NAME),
+                    ts.factory.createStringLiteral(targetTypescript.version)
                   )
                 )
                 }
@@ -361,13 +356,13 @@ const computePackageJsonChanges = (
               )
             ]
 
-            if (shouldAddNativePreviewWithDependencyType(targetDepType)) {
-              const targetNativePreview = target.nativePreviewVersion.pipe(Option.getOrUndefined)
-              if (targetNativePreview) {
+            if (shouldAddTypescriptWithDependencyType(targetDepType)) {
+              const targetTypescript = target.typescriptVersion.pipe(Option.getOrUndefined)
+              if (targetTypescript) {
               dependencyProperties.push(
                 ts.factory.createPropertyAssignment(
-                  ts.factory.createStringLiteral(nativeBackendPackageName),
-                  ts.factory.createStringLiteral(targetNativePreview.version)
+                  ts.factory.createStringLiteral(TYPESCRIPT_PACKAGE_NAME),
+                  ts.factory.createStringLiteral(targetTypescript.version)
                 )
               )
               }
@@ -391,7 +386,7 @@ const computePackageJsonChanges = (
           }
         }
 
-        ensureNativePreviewDependency()
+        ensureTypescriptDependency()
       } else if (Option.isSome(current.lspVersion)) {
         // User wants to remove LSP
         descriptions.push(`Remove ${LSP_PACKAGE_NAME} from dependencies`)
@@ -884,7 +879,7 @@ export const computeChanges = (
       messages = [
         ...messages,
         "VS Code / Cursor / VS Code-based editors:",
-        "  1. Install the @typescript/native-preview extension",
+        "  1. Install the TypeScript 7 extension",
         "  2. Open a TypeScript file and ensure the native TS server is active",
         "  3. The language service plugin will be loaded automatically",
         ""

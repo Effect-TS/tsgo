@@ -2,6 +2,6 @@
     "name": "cli-test",
     "private": true,
     "dependencies": {
-        "@typescript/native-preview": "latest"
+        "typescript": "next"
     }
 }

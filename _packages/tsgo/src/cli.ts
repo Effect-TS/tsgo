@@ -7,12 +7,12 @@ import * as Console from "effect/Console"
 import * as Data from "effect/Data"
 import * as Effect from "effect/Effect"
 import * as FileSystem from "effect/FileSystem"
-import * as Option from "effect/Option"
 import * as Path from "effect/Path"
 import * as Command from "effect/unstable/cli/Command"
+import * as Flag from "effect/unstable/cli/Flag"
 import { configCommand } from "./config.js"
 import { setupCommand } from "./setup/index.js"
-import { nativePreviewBackend, typescriptBackend, type NativeBackend } from "./setup/consts.js"
+import { typescriptBackend, type NativeBackend } from "./setup/consts.js"
 import * as pkgJson from "../package.json" with { type: "json" }
 
 class NativeBackendNotInstalledError extends Data.TaggedError("NativeBackendNotInstalledError")<{
@@ -21,8 +21,16 @@ class NativeBackendNotInstalledError extends Data.TaggedError("NativeBackendNotI
   get message(): string {
     return (
       "No native TypeScript backend is installed. " +
-      "Install one of the following first: `@typescript/native-preview` or `typescript` (>= 7, e.g. `typescript@latest` or `typescript@next`)."
+      "Install `typescript` >= 7 first (e.g. `typescript@latest` or `typescript@next`)."
     )
+  }
+}
+
+class MissingTypeScriptMetadataError extends Data.TaggedError("MissingTypeScriptMetadataError")<{
+  readonly packageName: string
+}> {
+  get message(): string {
+    return `Installed ${this.packageName} package.json does not contain a gitHead. Unable to select a compatible Effect binary.`
   }
 }
 
@@ -54,6 +62,32 @@ class ResolvePackagedBinaryError extends Data.TaggedError("ResolvePackagedBinary
 }> {
   get message(): string {
     return this.reason
+  }
+}
+
+class PackagedBinaryVersionMismatchError extends Data.TaggedError("PackagedBinaryVersionMismatchError")<{
+  readonly installedVersion: string
+  readonly installedGitHead: string
+  readonly candidates: ReadonlyArray<PackagedBinaryCandidateInfo>
+}> {
+  get message(): string {
+    const tried = this.candidates.length === 0
+      ? "  none"
+      : this.candidates.map((candidate) => {
+        if (candidate.tsVersion !== undefined && candidate.tsGitHead !== undefined) {
+          return `  ${candidate.binaryName}: TypeScript ${candidate.tsVersion}, gitHead ${candidate.tsGitHead}`
+        }
+        return `  ${candidate.binaryName}: ${candidate.reason ?? "metadata unavailable"}`
+      }).join("\n")
+
+    return [
+      `No packaged Effect TypeScript binary matches installed TypeScript ${this.installedVersion} gitHead ${this.installedGitHead}.`,
+      "",
+      "Tried:",
+      tried,
+      "",
+      "Install a matching @effect/tsgo release or a matching TypeScript version, or rerun with --force to use the newest packaged binary."
+    ].join("\n")
   }
 }
 
@@ -96,13 +130,39 @@ class VerificationFailedError extends Data.TaggedError("VerificationFailedError"
 
 type CliDomainError =
   | NativeBackendNotInstalledError
+  | MissingTypeScriptMetadataError
   | UnsupportedPlatformPackageError
   | MissingTargetBinaryError
   | ResolvePackagedBinaryError
+  | PackagedBinaryVersionMismatchError
   | BackupRestoreError
   | CopyBinaryError
   | ChmodBinaryError
   | VerificationFailedError
+
+interface PackagedBinaryMetadata {
+  readonly tsVersion: string
+  readonly tsGitHead: string
+}
+
+interface PackagedBinaryCandidateInfo {
+  readonly binaryName: string
+  readonly tsVersion?: string
+  readonly tsGitHead?: string
+  readonly reason?: string
+}
+
+interface PackagedBinaryCandidate extends PackagedBinaryCandidateInfo {
+  readonly path?: string
+  readonly metadata?: PackagedBinaryMetadata
+}
+
+interface InstalledTypeScriptMetadata {
+  readonly version: string
+  readonly gitHead: string
+}
+
+const packagedTypeScriptBinaryNames = ["tsc", "tsc-next"] as const
 
 
 /**
@@ -114,7 +174,7 @@ type CliDomainError =
  *   sub-package is missing; a concrete, actionable error.
  */
 type BackendProbe =
-  | { readonly _tag: "resolved"; readonly path: string; readonly binaryName: string }
+  | { readonly _tag: "resolved"; readonly path: string; readonly binaryName: string; readonly packageJson: { readonly version?: string; readonly gitHead?: string } }
   | { readonly _tag: "notInstalled" }
   | { readonly _tag: "unsupportedPlatform"; readonly packageName: string }
 
@@ -150,33 +210,30 @@ const probeBackend = (backend: NativeBackend, cwdRequire: NodeRequire, path: Pat
 
   const platformDir = path.dirname(platformPackageJsonPath)
   const binaryName = backend.binaryName + (isWin ? ".exe" : "")
-  return { _tag: "resolved", path: path.join(platformDir, "lib", binaryName), binaryName: backend.binaryName }
+  return { _tag: "resolved", path: path.join(platformDir, "lib", binaryName), binaryName: backend.binaryName, packageJson: mainPkg }
 }
 
 /**
- * Resolve the native TypeScript binary to patch. The `@typescript/native-preview`
- * backend is tried first (back-compat), then the `typescript` >= 7 package so
- * that the TypeScript 7 RC/stable release is supported out of the box.
- *
- * Returns the target binary path plus the backend's base binary name (`tsgo` or
- * `tsc`); the latter selects the matching Effect-patched artifact from
- * `@effect/tsgo-*` (which ships separate `lib/tsgo` and `lib/tsc` builds).
+ * Resolve the native TypeScript binary to patch. The supported upstream package
+ * is `typescript` >= 7, whose platform package exposes a `tsc` executable.
  */
 const getNativeBackendBinaryPath = Effect.gen(function*() {
   const path = yield* Path.Path
   const cwdRequire = nodeModule.createRequire(path.join(process.cwd(), "noop.js"))
 
-  const nativePreviewResult = probeBackend(nativePreviewBackend, cwdRequire, path)
-  if (nativePreviewResult._tag === "resolved") {
-    return { targetPath: nativePreviewResult.path, binaryName: nativePreviewResult.binaryName }
-  }
-  if (nativePreviewResult._tag === "unsupportedPlatform") {
-    return yield* Effect.fail(new UnsupportedPlatformPackageError({ packageName: nativePreviewResult.packageName }))
-  }
-
   const typescriptResult = probeBackend(typescriptBackend, cwdRequire, path)
   if (typescriptResult._tag === "resolved") {
-    return { targetPath: typescriptResult.path, binaryName: typescriptResult.binaryName }
+    const installedGitHead = typescriptResult.packageJson.gitHead
+    if (installedGitHead === undefined) {
+      return yield* Effect.fail(new MissingTypeScriptMetadataError({ packageName: typescriptBackend.packageName }))
+    }
+    return {
+      targetPath: typescriptResult.path,
+      installedTypeScript: {
+        version: typescriptResult.packageJson.version ?? "unknown",
+        gitHead: installedGitHead
+      }
+    }
   }
   if (typescriptResult._tag === "unsupportedPlatform") {
     return yield* Effect.fail(new UnsupportedPlatformPackageError({ packageName: typescriptResult.packageName }))
@@ -187,12 +244,11 @@ const getNativeBackendBinaryPath = Effect.gen(function*() {
 
 /**
  * Resolve the Effect-patched binary to copy over the native target. The
- * `@effect/tsgo-*` platform package ships separate `lib/tsgo` (built from
- * `main`) and `lib/tsc` (built from `generated/latest`) artifacts; `binaryName`
- * selects the one matching the detected native backend so the correct build is
- * installed. Defaults to `tsgo` for the `get-exe-path` command.
+ * `@effect/tsgo-*` platform package ships `lib/tsc` (built from
+ * `generated/latest`) and `lib/tsc-next` (built from `main`). The adjacent JSON
+ * metadata files identify the TypeScript gitHead each binary was built from.
  */
-const getPackagedBinaryPath = (binaryName: string = "tsgo") =>
+const getPackagedBinaryPath = (installedTypeScript: InstalledTypeScriptMetadata, force: boolean) =>
   Effect.gen(function*() {
     const fs = yield* FileSystem.FileSystem
     const path = yield* Path.Path
@@ -209,26 +265,79 @@ const getPackagedBinaryPath = (binaryName: string = "tsgo") =>
     })
 
     const packageDir = path.dirname(packageJsonPath)
-    const exeName = binaryName + (process.platform === "win32" ? ".exe" : "")
-    const exePath = path.join(packageDir, "lib", exeName)
-    const exists = yield* fs.exists(exePath)
-    if (!exists) {
+    const candidates: Array<PackagedBinaryCandidate> = []
+
+    for (const binaryName of packagedTypeScriptBinaryNames) {
+      const exeName = binaryName + (process.platform === "win32" ? ".exe" : "")
+      const exePath = path.join(packageDir, "lib", exeName)
+      const metadataPath = exePath + ".json"
+      const exists = yield* fs.exists(exePath)
+      if (!exists) {
+        candidates.push({ binaryName, reason: "binary not packaged" })
+        continue
+      }
+
+      const metadataExists = yield* fs.exists(metadataPath)
+      if (!metadataExists) {
+        candidates.push({ binaryName, path: exePath, reason: "metadata not packaged" })
+        continue
+      }
+
+      const metadata = yield* fs.readFileString(metadataPath).pipe(
+        Effect.flatMap((text) => Effect.try({
+          try: () => {
+            const parsed = JSON.parse(text) as Partial<PackagedBinaryMetadata>
+            if (typeof parsed.tsVersion !== "string" || typeof parsed.tsGitHead !== "string") {
+              throw new Error("invalid metadata")
+            }
+            return { tsVersion: parsed.tsVersion, tsGitHead: parsed.tsGitHead }
+          },
+          catch: () => new ResolvePackagedBinaryError({ reason: "Invalid binary metadata: " + metadataPath })
+        }))
+      )
+
+      const candidate = { binaryName, path: exePath, metadata, ...metadata }
+      if (metadata.tsGitHead === installedTypeScript.gitHead) {
+        return exePath
+      }
+      candidates.push(candidate)
+    }
+
+    if (force) {
+      const fallback = candidates.find((candidate) => candidate.binaryName === "tsc-next" && candidate.path !== undefined)
+        ?? candidates.find((candidate) => candidate.binaryName === "tsc" && candidate.path !== undefined)
+      if (fallback?.path !== undefined) {
+        yield* Console.warn(new PackagedBinaryVersionMismatchError({
+          installedVersion: installedTypeScript.version,
+          installedGitHead: installedTypeScript.gitHead,
+          candidates
+        }).message)
+        yield* Console.warn("Forcing patch with " + fallback.binaryName + ". This may be incompatible.")
+        return fallback.path
+      }
+    }
+
+    if (candidates.length === 0) {
       return yield* Effect.fail(
         new ResolvePackagedBinaryError({
-          reason: "Executable not found: " + exePath,
+          reason: "No packaged TypeScript binaries were found in " + path.join(packageDir, "lib"),
         })
       )
     }
 
-    return exePath
+    return yield* Effect.fail(new PackagedBinaryVersionMismatchError({
+      installedVersion: installedTypeScript.version,
+      installedGitHead: installedTypeScript.gitHead,
+      candidates
+    }))
   })
 
-const patch = Effect.gen(function*() {
+const patch = (force: boolean) => Effect.gen(function*() {
   const fs = yield* FileSystem.FileSystem
   const path = yield* Path.Path
-  const { targetPath, binaryName } = yield* getNativeBackendBinaryPath
+  const { targetPath, installedTypeScript } = yield* getNativeBackendBinaryPath
   const backupPath = path.join(path.dirname(targetPath), path.basename(targetPath) + ".original")
-  const ourBinaryPath = yield* getPackagedBinaryPath(binaryName)
+  const ourBinaryPath = yield* getPackagedBinaryPath(installedTypeScript, force)
 
   const targetExists = yield* fs.exists(targetPath)
   if (!targetExists) {
@@ -321,9 +430,9 @@ const unpatch = Effect.gen(function*() {
   yield* Console.log("Restored original binary at " + targetPath)
 })
 
-const patchCommand = Command.make("patch").pipe(
+const patchCommand = Command.make("patch", { force: Flag.boolean("force") }).pipe(
   Command.withDescription("Patch the Effect Language Service binary"),
-  Command.withHandler(() => patch)
+  Command.withHandler(({ force }) => patch(force))
 )
 
 const unpatchCommand = Command.make("unpatch").pipe(
@@ -333,7 +442,12 @@ const unpatchCommand = Command.make("unpatch").pipe(
 
 const getExePathCommand = Command.make("get-exe-path").pipe(
   Command.withDescription("Print the Effect Language Service executable path"),
-  Command.withHandler(() => getPackagedBinaryPath().pipe(Effect.flatMap((exePath) => Console.log(exePath))))
+  Command.withHandler(() =>
+    getNativeBackendBinaryPath.pipe(
+      Effect.flatMap(({ installedTypeScript }) => getPackagedBinaryPath(installedTypeScript, false)),
+      Effect.flatMap((exePath) => Console.log(exePath))
+    )
+  )
 )
 
 const rootCommand = Command.make("tsgo").pipe(

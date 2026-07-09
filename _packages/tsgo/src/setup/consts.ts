@@ -2,11 +2,8 @@ import * as pkgJson from "../../package.json"
 
 export const LSP_PACKAGE_NAME = pkgJson.name
 export const LSP_PLUGIN_NAME = "@effect/language-service"
-export const NATIVE_PREVIEW_PACKAGE_NAME = "@typescript/native-preview"
 export const TYPESCRIPT_PACKAGE_NAME = "typescript"
 export const PATCH_COMMAND = "effect-tsgo patch"
-export const DEFAULT_LSP_VERSION = pkgJson.version
-export const DEFAULT_NATIVE_PREVIEW_VERSION = "latest"
 export const TSCONFIG_SCHEMA_URL = "https://raw.githubusercontent.com/Effect-TS/tsgo/refs/heads/main/schema.json"
 
 /**
@@ -30,14 +27,7 @@ export interface NativeBackend {
   readonly versionCheck?: (pkgJson: { readonly version?: string }) => boolean
 }
 
-/** The `@typescript/native-preview` nightly backend (back-compat default). */
-export const nativePreviewBackend: NativeBackend = {
-  packageName: NATIVE_PREVIEW_PACKAGE_NAME,
-  platformPackagePrefix: "@typescript/native-preview",
-  binaryName: "tsgo"
-}
-
-/** The `typescript` >= 7 backend (stable/RC releases). */
+/** The `typescript` >= 7 backend. */
 export const typescriptBackend: NativeBackend = {
   packageName: TYPESCRIPT_PACKAGE_NAME,
   platformPackagePrefix: "@typescript/typescript",
@@ -46,10 +36,7 @@ export const typescriptBackend: NativeBackend = {
 }
 
 /**
- * Resolve the VS Code `typescript.native-preview.tsdk` folder for a backend.
- * The "TypeScript (Native Preview)" extension reads the native install from
- * this path; for `@typescript/native-preview` it is `node_modules/<pkg>`, and
- * for `typescript` >= 7 it is `node_modules/typescript`.
+ * Resolve the VS Code TypeScript 7 tsdk folder.
  */
 export const nativeBackendTsdkPath = (packageName: string): string =>
   "node_modules/" + packageName

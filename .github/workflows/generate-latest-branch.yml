@@ -80,6 +80,13 @@ jobs:
           git -C typescript-go submodule sync --recursive
           git -C typescript-go submodule update --init --recursive --force
 
+      - name: Write upstream TypeScript metadata
+        env:
+          TS_VERSION: ${{ steps.typescript.outputs.version }}
+          TS_GIT_HEAD: ${{ steps.typescript.outputs.git_head }}
+        run: |
+          node -e 'const fs = require("node:fs"); fs.writeFileSync("_packages/tsgo/upstream.json", JSON.stringify({ tsVersion: process.env.TS_VERSION, tsGitHead: process.env.TS_GIT_HEAD }, null, 2) + "\n")'
+
       - name: Regenerate shims and generated files
         run: bash _tools/setup-repo.sh --ci
 

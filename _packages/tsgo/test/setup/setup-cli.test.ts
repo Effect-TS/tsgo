@@ -138,11 +138,13 @@ function expectSetupChanges(
 
 const VSCODE_SETTINGS: Target.VSCodeSettings = {
   settings: {
-    "typescript.native-preview.tsdk": "node_modules/@typescript/native-preview",
+    "typescript.native-preview.tsdk": "node_modules/typescript",
     "typescript.experimental.useTsgo": true,
     "js/ts.experimental.useTsgo": true
   }
 }
+
+const TEST_TYPESCRIPT_VERSION = "7.1.0-dev.test"
 
 describe("Setup CLI", () => {
   it("should generate changes for adding LSP with defaults", () => {
@@ -163,7 +165,7 @@ describe("Setup CLI", () => {
     const targetState: Target.State = {
       packageJson: {
         lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
-        nativePreviewVersion: Option.some({ dependencyType: "devDependencies" as const, version: "latest" }),
+        typescriptVersion: Option.some({ dependencyType: "devDependencies" as const, version: TEST_TYPESCRIPT_VERSION, packageName: "typescript" }),
         prepareScript: false
       },
       tsconfig: { diagnosticSeverities: Option.none() },
@@ -202,7 +204,7 @@ describe("Setup CLI", () => {
     const targetState: Target.State = {
       packageJson: {
         lspVersion: Option.none(),
-        nativePreviewVersion: Option.none(),
+        typescriptVersion: Option.none(),
         prepareScript: false
       },
       tsconfig: { diagnosticSeverities: Option.none() },
@@ -232,7 +234,7 @@ describe("Setup CLI", () => {
     const targetState: Target.State = {
       packageJson: {
         lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
-        nativePreviewVersion: Option.some({ dependencyType: "devDependencies" as const, version: "latest" }),
+        typescriptVersion: Option.some({ dependencyType: "devDependencies" as const, version: TEST_TYPESCRIPT_VERSION, packageName: "typescript" }),
         prepareScript: false
       },
       tsconfig: {
@@ -272,7 +274,7 @@ describe("Setup CLI", () => {
     const targetState: Target.State = {
       packageJson: {
         lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
-        nativePreviewVersion: Option.some({ dependencyType: "devDependencies" as const, version: "latest" }),
+        typescriptVersion: Option.some({ dependencyType: "devDependencies" as const, version: TEST_TYPESCRIPT_VERSION, packageName: "typescript" }),
         prepareScript: false
       },
       tsconfig: { diagnosticSeverities: Option.none() },
@@ -301,7 +303,7 @@ describe("Setup CLI", () => {
     const targetState: Target.State = {
       packageJson: {
         lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
-        nativePreviewVersion: Option.some({ dependencyType: "devDependencies" as const, version: "latest" }),
+        typescriptVersion: Option.some({ dependencyType: "devDependencies" as const, version: TEST_TYPESCRIPT_VERSION, packageName: "typescript" }),
         prepareScript: true
       },
       tsconfig: { diagnosticSeverities: Option.none() },
@@ -341,7 +343,7 @@ describe("Setup CLI", () => {
     const targetState: Target.State = {
       packageJson: {
         lspVersion: Option.none(),
-        nativePreviewVersion: Option.none(),
+        typescriptVersion: Option.none(),
         prepareScript: false
       },
       tsconfig: {
@@ -384,7 +386,7 @@ describe("Setup CLI", () => {
     const targetState: Target.State = {
       packageJson: {
         lspVersion: Option.none(),
-        nativePreviewVersion: Option.none(),
+        typescriptVersion: Option.none(),
         prepareScript: false
       },
       tsconfig: { diagnosticSeverities: Option.none() },
@@ -424,7 +426,7 @@ describe("Setup CLI", () => {
     const targetState: Target.State = {
       packageJson: {
         lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
-        nativePreviewVersion: Option.some({ dependencyType: "devDependencies" as const, version: "latest" }),
+        typescriptVersion: Option.some({ dependencyType: "devDependencies" as const, version: TEST_TYPESCRIPT_VERSION, packageName: "typescript" }),
         prepareScript: false
       },
       tsconfig: {
@@ -460,7 +462,7 @@ describe("Setup CLI", () => {
     const targetState: Target.State = {
       packageJson: {
         lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
-        nativePreviewVersion: Option.some({ dependencyType: "devDependencies" as const, version: "latest" }),
+        typescriptVersion: Option.some({ dependencyType: "devDependencies" as const, version: TEST_TYPESCRIPT_VERSION, packageName: "typescript" }),
         prepareScript: false
       },
       tsconfig: { diagnosticSeverities: Option.none() },
@@ -501,7 +503,7 @@ describe("Setup CLI", () => {
     const targetState: Target.State = {
       packageJson: {
         lspVersion: Option.none(),
-        nativePreviewVersion: Option.none(),
+        typescriptVersion: Option.none(),
         prepareScript: false
       },
       tsconfig: { diagnosticSeverities: Option.none() },
@@ -531,7 +533,7 @@ describe("Setup CLI", () => {
     const targetState: Target.State = {
       packageJson: {
         lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
-        nativePreviewVersion: Option.some({ dependencyType: "devDependencies" as const, version: "latest" }),
+        typescriptVersion: Option.some({ dependencyType: "devDependencies" as const, version: TEST_TYPESCRIPT_VERSION, packageName: "typescript" }),
         prepareScript: false
       },
       tsconfig: { diagnosticSeverities: Option.none() },
@@ -565,7 +567,7 @@ describe("Setup CLI", () => {
     const targetState: Target.State = {
       packageJson: {
         lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
-        nativePreviewVersion: Option.some({ dependencyType: "devDependencies" as const, version: "latest" }),
+        typescriptVersion: Option.some({ dependencyType: "devDependencies" as const, version: TEST_TYPESCRIPT_VERSION, packageName: "typescript" }),
         prepareScript: false
       },
       tsconfig: { diagnosticSeverities: Option.none() },
@@ -611,7 +613,7 @@ describe("Setup CLI", () => {
     const targetState: Target.State = {
       packageJson: {
         lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
-        nativePreviewVersion: Option.some({ dependencyType: "devDependencies" as const, version: "latest" }),
+        typescriptVersion: Option.some({ dependencyType: "devDependencies" as const, version: TEST_TYPESCRIPT_VERSION, packageName: "typescript" }),
         prepareScript: false
       },
       tsconfig: { diagnosticSeverities: Option.none() },
@@ -640,7 +642,7 @@ describe("Setup CLI", () => {
     const targetState: Target.State = {
       packageJson: {
         lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
-        nativePreviewVersion: Option.some({ dependencyType: "devDependencies" as const, version: "latest" }),
+        typescriptVersion: Option.some({ dependencyType: "devDependencies" as const, version: TEST_TYPESCRIPT_VERSION, packageName: "typescript" }),
         prepareScript: false
       },
       tsconfig: {
@@ -693,7 +695,7 @@ describe("Setup CLI", () => {
     const targetState: Target.State = {
       packageJson: {
         lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
-        nativePreviewVersion: Option.some({ dependencyType: "devDependencies" as const, version: "latest" }),
+        typescriptVersion: Option.some({ dependencyType: "devDependencies" as const, version: TEST_TYPESCRIPT_VERSION, packageName: "typescript" }),
         prepareScript: true
       },
       tsconfig: {
@@ -736,7 +738,7 @@ describe("Setup CLI", () => {
     const targetState: Target.State = {
       packageJson: {
         lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
-        nativePreviewVersion: Option.some({ dependencyType: "devDependencies" as const, version: "latest" }),
+        typescriptVersion: Option.some({ dependencyType: "devDependencies" as const, version: TEST_TYPESCRIPT_VERSION, packageName: "typescript" }),
         prepareScript: false
       },
       tsconfig: {
@@ -779,7 +781,7 @@ describe("Setup CLI", () => {
     const targetState: Target.State = {
       packageJson: {
         lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
-        nativePreviewVersion: Option.some({ dependencyType: "devDependencies" as const, version: "latest" }),
+        typescriptVersion: Option.some({ dependencyType: "devDependencies" as const, version: TEST_TYPESCRIPT_VERSION, packageName: "typescript" }),
         prepareScript: false
       },
       tsconfig: {

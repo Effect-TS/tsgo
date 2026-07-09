@@ -11,7 +11,8 @@
     "composite": true,
     "declaration": true,
     "emitDeclarationOnly": true,
-    "declarationDir": "dist/types"
+    "declarationDir": "dist/types",
+    "types": ["node"]
   },
-  "include": ["src", "src/metadata.json", "package.json"]
+  "include": ["src", "src/metadata.json", "package.json", "upstream.json"]
 }

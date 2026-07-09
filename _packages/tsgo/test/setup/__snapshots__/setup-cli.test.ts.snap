@@ -24,7 +24,7 @@ exports[`Setup CLI > should add LSP plugin alongside existing plugins > package.
   "name": "test-project",
   "version": "1.0.0",
   "dependencies": {},
-"devDependencies": { "@effect/tsgo": "^0.0.5","@typescript/native-preview": "latest" }
+"devDependencies": { "@effect/tsgo": "^0.0.5","typescript": "7.1.0-dev.test" }
 }"
 `;
 
@@ -48,7 +48,7 @@ exports[`Setup CLI > should add LSP plugin alongside existing plugins > tsconfig
 
 exports[`Setup CLI > should add LSP with VS Code editor selected and create new settings file > .vscode/settings.json 1`] = `
 "{
-  "typescript.native-preview.tsdk": "node_modules/@typescript/native-preview",
+  "typescript.native-preview.tsdk": "node_modules/typescript",
   "typescript.experimental.useTsgo": true,
   "js/ts.experimental.useTsgo": true
 }
@@ -77,7 +77,7 @@ exports[`Setup CLI > should add LSP with VS Code editor selected and create new 
   "Run \`effect-tsgo patch\` to complete the installation.",
   "",
   "VS Code / Cursor / VS Code-based editors:",
-  "  1. Install the @typescript/native-preview extension",
+  "  1. Install the TypeScript 7 extension",
   "  2. Open a TypeScript file and ensure the native TS server is active",
   "  3. The language service plugin will be loaded automatically",
   "",
@@ -89,7 +89,7 @@ exports[`Setup CLI > should add LSP with VS Code editor selected and create new 
   "name": "test-project",
   "version": "1.0.0",
   "dependencies": {},
-"devDependencies": { "@effect/tsgo": "^0.0.5","@typescript/native-preview": "latest" }
+"devDependencies": { "@effect/tsgo": "^0.0.5","typescript": "7.1.0-dev.test" }
 }"
 `;
 
@@ -132,7 +132,7 @@ exports[`Setup CLI > should add LSP with custom diagnostic severities when no pl
   "name": "test-project",
   "version": "1.0.0",
   "dependencies": {},
-"devDependencies": { "@effect/tsgo": "^0.0.5","@typescript/native-preview": "latest" }
+"devDependencies": { "@effect/tsgo": "^0.0.5","typescript": "7.1.0-dev.test" }
 }"
 `;
 
@@ -158,7 +158,7 @@ exports[`Setup CLI > should add LSP with custom diagnostic severities when no pl
 exports[`Setup CLI > should add custom diagnostic severities when plugin exists without custom values > change summary 1`] = `
 [
   {
-    "description": "Add @typescript/native-preview@latest to devDependencies",
+    "description": "Add typescript@7.1.0-dev.test to devDependencies",
     "file": "package.json",
   },
   {
@@ -181,7 +181,7 @@ exports[`Setup CLI > should add custom diagnostic severities when plugin exists 
   "dependencies": {},
   "devDependencies": {
     "@effect/tsgo": "^0.0.5",
-"@typescript/native-preview": "latest"
+"typescript": "7.1.0-dev.test"
   }
 }"
 `;
@@ -208,7 +208,7 @@ exports[`Setup CLI > should add custom diagnostic severities when plugin exists 
 exports[`Setup CLI > should generate changes for Astro-style configs using the legacy prepare command > change summary 1`] = `
 [
   {
-    "description": "Add @effect/tsgo@^0.0.5 to devDependencies; Add @typescript/native-preview@latest to devDependencies; Update prepare script to include patch command",
+    "description": "Add @effect/tsgo@^0.0.5 to devDependencies; Add typescript@7.1.0-dev.test to devDependencies; Update prepare script to include patch command",
     "file": "package.json",
   },
   {
@@ -233,8 +233,7 @@ exports[`Setup CLI > should generate changes for Astro-style configs using the l
   "dependencies": {},
   "devDependencies": {
     "@effect/language-service": "^0.80.0",
-    "typescript": "^5.9.3",
-"@typescript/native-preview": "latest",
+    "typescript": "7.1.0-dev.test",
 "@effect/tsgo": "^0.0.5"
   }
 }"
@@ -297,7 +296,7 @@ exports[`Setup CLI > should generate changes for adding LSP with defaults > pack
   "name": "test-project",
   "version": "1.0.0",
   "dependencies": {},
-"devDependencies": { "@effect/tsgo": "^0.0.5","@typescript/native-preview": "latest" }
+"devDependencies": { "@effect/tsgo": "^0.0.5","typescript": "7.1.0-dev.test" }
 }"
 `;
 
@@ -341,7 +340,7 @@ exports[`Setup CLI > should generate changes for adding LSP with prepare script 
   "version": "1.0.0",
   "dependencies": {},
 "scripts": { "prepare": "effect-tsgo patch" },
-"devDependencies": { "@effect/tsgo": "^0.0.5","@typescript/native-preview": "latest" }
+"devDependencies": { "@effect/tsgo": "^0.0.5","typescript": "7.1.0-dev.test" }
 }"
 `;
 
@@ -467,7 +466,7 @@ exports[`Setup CLI > should not override existing plugins when adding LSP plugin
   "name": "test-project",
   "version": "1.0.0",
   "dependencies": {},
-"devDependencies": { "@effect/tsgo": "^0.0.5","@typescript/native-preview": "latest" }
+"devDependencies": { "@effect/tsgo": "^0.0.5","typescript": "7.1.0-dev.test" }
 }"
 `;
 
@@ -514,7 +513,7 @@ exports[`Setup CLI > should preserve all existing VS Code settings from a real r
   "files.insertFinalNewline": true,
 "js/ts.experimental.useTsgo": true,
 "typescript.experimental.useTsgo": true,
-"typescript.native-preview.tsdk": "node_modules/@typescript/native-preview"
+"typescript.native-preview.tsdk": "node_modules/typescript"
 }"
 `;
 
@@ -540,7 +539,7 @@ exports[`Setup CLI > should preserve all existing VS Code settings from a real r
   "Run \`effect-tsgo patch\` to complete the installation.",
   "",
   "VS Code / Cursor / VS Code-based editors:",
-  "  1. Install the @typescript/native-preview extension",
+  "  1. Install the TypeScript 7 extension",
   "  2. Open a TypeScript file and ensure the native TS server is active",
   "  3. The language service plugin will be loaded automatically",
   "",
@@ -552,7 +551,7 @@ exports[`Setup CLI > should preserve all existing VS Code settings from a real r
   "name": "test-project",
   "version": "1.0.0",
   "dependencies": {},
-"devDependencies": { "@effect/tsgo": "^0.0.5","@typescript/native-preview": "latest" }
+"devDependencies": { "@effect/tsgo": "^0.0.5","typescript": "7.1.0-dev.test" }
 }"
 `;
 
@@ -578,7 +577,7 @@ exports[`Setup CLI > should preserve existing VS Code settings when adding LSP-s
   "files.autoSave": "onFocusChange",
 "js/ts.experimental.useTsgo": true,
 "typescript.experimental.useTsgo": true,
-"typescript.native-preview.tsdk": "node_modules/@typescript/native-preview"
+"typescript.native-preview.tsdk": "node_modules/typescript"
 }"
 `;
 
@@ -604,7 +603,7 @@ exports[`Setup CLI > should preserve existing VS Code settings when adding LSP-s
   "Run \`effect-tsgo patch\` to complete the installation.",
   "",
   "VS Code / Cursor / VS Code-based editors:",
-  "  1. Install the @typescript/native-preview extension",
+  "  1. Install the TypeScript 7 extension",
   "  2. Open a TypeScript file and ensure the native TS server is active",
   "  3. The language service plugin will be loaded automatically",
   "",
@@ -616,7 +615,7 @@ exports[`Setup CLI > should preserve existing VS Code settings when adding LSP-s
   "name": "test-project",
   "version": "1.0.0",
   "dependencies": {},
-"devDependencies": { "@effect/tsgo": "^0.0.5","@typescript/native-preview": "latest" }
+"devDependencies": { "@effect/tsgo": "^0.0.5","typescript": "7.1.0-dev.test" }
 }"
 `;
 
@@ -748,7 +747,7 @@ exports[`Setup CLI > should replace existing tsconfig schema when adding LSP > p
   "name": "test-project",
   "version": "1.0.0",
   "dependencies": {},
-"devDependencies": { "@effect/tsgo": "^0.0.5","@typescript/native-preview": "latest" }
+"devDependencies": { "@effect/tsgo": "^0.0.5","typescript": "7.1.0-dev.test" }
 }"
 `;
 
@@ -770,7 +769,7 @@ exports[`Setup CLI > should replace existing tsconfig schema when adding LSP > t
 exports[`Setup CLI > should update LSP version when already installed with older version > change summary 1`] = `
 [
   {
-    "description": "Update @effect/tsgo from ^0.0.1 to ^0.0.5; Add @typescript/native-preview@latest to devDependencies",
+    "description": "Update @effect/tsgo from ^0.0.1 to ^0.0.5; Add typescript@7.1.0-dev.test to devDependencies",
     "file": "package.json",
   },
   {
@@ -793,8 +792,7 @@ exports[`Setup CLI > should update LSP version when already installed with older
   "dependencies": {},
   "devDependencies": {
     "@effect/tsgo": "^0.0.5",
-    "typescript": "^5.0.0",
-"@typescript/native-preview": "latest"
+    "typescript": "7.1.0-dev.test"
   }
 }"
 `;
@@ -817,7 +815,7 @@ exports[`Setup CLI > should update LSP version when already installed with older
 exports[`Setup CLI > should update custom diagnostic severities when plugin already has custom values > change summary 1`] = `
 [
   {
-    "description": "Add @typescript/native-preview@latest to devDependencies",
+    "description": "Add typescript@7.1.0-dev.test to devDependencies",
     "file": "package.json",
   },
   {
@@ -840,7 +838,7 @@ exports[`Setup CLI > should update custom diagnostic severities when plugin alre
   "dependencies": {},
   "devDependencies": {
     "@effect/tsgo": "^0.0.5",
-"@typescript/native-preview": "latest"
+"typescript": "7.1.0-dev.test"
   }
 }"
 `;
