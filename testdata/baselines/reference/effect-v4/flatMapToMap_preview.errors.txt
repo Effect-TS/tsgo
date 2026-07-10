@@ -1,0 +1,15 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/flatMapToMap_preview.ts(4,3): suggestion TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
+
+
+==== /.src/flatMapToMap_preview.ts (1 errors) ====
+    import { Effect } from "effect"
+    
+    const program = Effect.succeed(1).pipe(
+      Effect.flatMap((value) => Effect.succeed(value + 1))
+      ~~~~~~~~~~~~~~
+!!! suggestion TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
+    )
+    

@@ -12,6 +12,11 @@
   Fix 0: "Disable effectMapFlatten for this line"
   Fix 1: "Disable effectMapFlatten for entire file"
 
+[D4] (25:3-25:17) TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
+  Fix 0: "Disable flatMapToMap for this line"
+  Fix 1: "Disable flatMapToMap for entire file"
+  Fix 2: "Replace with Effect.map"
+
 === Quick Fix Application Results ===
 
 === [D1] Fix 0: "Disable effectMapFlatten for this line" ===
@@ -31,3 +36,52 @@ skipped by default
 
 === [D3] Fix 1: "Disable effectMapFlatten for entire file" ===
 skipped by default
+
+=== [D4] Fix 0: "Disable flatMapToMap for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable flatMapToMap for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.map" ===
+
+--- file:///.src/effectMapFlatten.ts ---
+import { Effect, pipe } from "effect"
+
+// Should trigger: pipeable style
+export const shouldTriggerPipeable = Effect.succeed(1).pipe(
+  Effect.map((n) => Effect.succeed(n + 1)),
+  Effect.flatten
+)
+
+// Should trigger: function pipe style
+export const shouldTriggerPipe = pipe(
+  Effect.succeed(1),
+  Effect.map((n) => Effect.succeed(n + 1)),
+  Effect.flatten
+)
+
+// Should trigger: preserve later steps in the flow
+export const shouldTriggerLongerFlow = Effect.succeed(1).pipe(
+  Effect.map((n) => Effect.succeed(n + 1)),
+  Effect.flatten,
+  Effect.map((n) => n * 2)
+)
+
+// Should NOT trigger: already using flatMap
+export const shouldNotTriggerFlatMap = Effect.succeed(1).pipe(
+  Effect.map((n) => n + 1)
+)
+
+// Should NOT trigger: flatten is not immediately after map
+export const shouldNotTriggerSeparated = Effect.succeed(1).pipe(
+  Effect.map((n) => Effect.succeed(n + 1)),
+  Effect.tap(() => Effect.void),
+  Effect.flatten
+)
+
+// Should NOT trigger: no flatten step
+export const shouldNotTriggerWithoutFlatten = Effect.succeed(1).pipe(
+  Effect.map((n) => Effect.succeed(n + 1))
+)
+

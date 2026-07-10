@@ -1,0 +1,27 @@
+=== Quick Fix Inventory ===
+
+[D1] (3:7-3:14) TS6133: 'program' is declared but its value is never read.
+  (no quick fixes)
+
+[D2] (4:3-4:17) TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
+  Fix 0: "Disable flatMapToMap for this line"
+  Fix 1: "Disable flatMapToMap for entire file"
+  Fix 2: "Replace with Effect.map"
+
+=== Quick Fix Application Results ===
+
+=== [D2] Fix 0: "Disable flatMapToMap for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable flatMapToMap for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.map" ===
+
+--- file:///.src/flatMapToMap_preview.ts ---
+import { Effect } from "effect"
+
+const program = Effect.succeed(1).pipe(
+  Effect.map((value) => value + 1)
+)
+

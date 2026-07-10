@@ -39,12 +39,13 @@ Effect version: 4.0.0
 /.src/outdatedApi.ts(59,32): error TS2339: Property 'either' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'.
 /.src/outdatedApi.ts(59,32): warning TS377052: This project targets Effect v4, but this code uses the Effect v3 API `either`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Renamed to result. Note: returns Result.Result<A, E> instead of Either<E, A>. Use the Result module to work with the result. effect(outdatedApi)
 /.src/outdatedApi.ts(70,22): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/outdatedApi.ts(75,26): suggestion TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
 /.src/outdatedApi.ts(84,45): error TS2345: Argument of type '(Effect<number, never, never> | Effect<never, string, never>)[]' is not assignable to parameter of type '(a: unknown, i: number) => Effect<unknown, unknown, unknown>'.
 /.src/outdatedApi.ts(87,92): error TS2365: Operator '>' cannot be applied to types 'Effect<number, never, never>' and 'number'.
 /.src/outdatedApi.ts(87,92): error TS2322: Type 'Effect<null, never, never> | Effect<Effect<number, never, never>, never, never>' is not assignable to type 'Result<unknown, unknown>'.
 
 
-==== /.src/outdatedApi.ts (41 errors) ====
+==== /.src/outdatedApi.ts (42 errors) ====
     import { Effect } from "effect"
     ~
 !!! warning TS377053: This project targets Effect v4, but this code uses Effect v3 APIs. The referenced API belongs to the v3 surface rather than the configured v4 surface. effect(outdatedApi)
@@ -201,6 +202,8 @@ Effect version: 4.0.0
     
     // Effect.flatMap
     export const u_flatMap = Effect.flatMap(Effect.succeed(1), (n) => Effect.succeed(n + 1))
+                             ~~~~~~~~~~~~~~
+!!! suggestion TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
     
     // Effect.Do (unchanged — post-fix state from commit 0154667)
     export const u_Do = Effect.Do

@@ -1,0 +1,313 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:3-6:17) TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
+  Fix 0: "Disable flatMapToMap for this line"
+  Fix 1: "Disable flatMapToMap for entire file"
+  Fix 2: "Replace with Effect.map"
+
+[D2] (12:3-12:17) TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
+  Fix 0: "Disable flatMapToMap for this line"
+  Fix 1: "Disable flatMapToMap for entire file"
+  Fix 2: "Replace with Effect.map"
+
+[D3] (18:71-18:85) TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
+  Fix 0: "Disable flatMapToMap for this line"
+  Fix 1: "Disable flatMapToMap for entire file"
+  Fix 2: "Replace with Effect.map"
+
+[D4] (23:39-23:53) TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
+  Fix 0: "Disable flatMapToMap for this line"
+  Fix 1: "Disable flatMapToMap for entire file"
+  Fix 2: "Replace with Effect.map"
+
+[D5] (26:38-26:52) TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
+  Fix 0: "Disable flatMapToMap for this line"
+  Fix 1: "Disable flatMapToMap for entire file"
+  Fix 2: "Replace with Effect.map"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable flatMapToMap for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable flatMapToMap for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.map" ===
+
+--- file:///.src/flatMapToMap.ts ---
+// @effect-v3
+import { Effect, pipe } from "effect"
+
+// Should trigger: pipeable style
+export const shouldTriggerPipeable = Effect.succeed(1).pipe(
+  Effect.map((n) => n + 1)
+)
+
+// Should trigger: pipe style with a block body
+export const shouldTriggerPipe = pipe(
+  Effect.succeed(1),
+  Effect.flatMap((n) => {
+    return Effect.succeed(n + 1)
+  })
+)
+
+// Should trigger: pipeable style with a function expression
+export const shouldTriggerFunctionExpression = Effect.succeed(1).pipe(Effect.flatMap(function(n) {
+  return Effect.succeed(n + 1)
+}))
+
+// Should trigger: data-first style
+export const shouldTriggerDataFirst = Effect.flatMap(Effect.succeed(1), (n) => Effect.succeed(n + 1))
+
+// Should trigger: data-last style
+export const shouldTriggerDataLast = Effect.flatMap((n: number) => Effect.succeed(n + 1))(Effect.succeed(1))
+
+// Should NOT trigger: callback returns another Effect operation
+export const shouldNotTriggerEffect = Effect.succeed(1).pipe(
+  Effect.flatMap((n) => Effect.log(n))
+)
+
+// Should NOT trigger: callback contains additional logic
+export const shouldNotTriggerLogic = Effect.succeed(1).pipe(
+  Effect.flatMap((n) => {
+    console.log(n)
+    return Effect.succeed(n + 1)
+  })
+)
+
+// Should NOT trigger: unrelated flatMap and succeed functions
+const unrelated = {
+  flatMap: <A, B>(value: A, f: (value: A) => B): B => f(value),
+  succeed: <A>(value: A): A => value
+}
+export const shouldNotTriggerUnrelated = unrelated.flatMap(1, (n) => unrelated.succeed(n + 1))
+
+
+=== [D2] Fix 0: "Disable flatMapToMap for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable flatMapToMap for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.map" ===
+
+--- file:///.src/flatMapToMap.ts ---
+// @effect-v3
+import { Effect, pipe } from "effect"
+
+// Should trigger: pipeable style
+export const shouldTriggerPipeable = Effect.succeed(1).pipe(
+  Effect.flatMap((n) => Effect.succeed(n + 1))
+)
+
+// Should trigger: pipe style with a block body
+export const shouldTriggerPipe = pipe(
+  Effect.succeed(1),
+  Effect.map((n) => {
+    return n + 1
+  })
+)
+
+// Should trigger: pipeable style with a function expression
+export const shouldTriggerFunctionExpression = Effect.succeed(1).pipe(Effect.flatMap(function(n) {
+  return Effect.succeed(n + 1)
+}))
+
+// Should trigger: data-first style
+export const shouldTriggerDataFirst = Effect.flatMap(Effect.succeed(1), (n) => Effect.succeed(n + 1))
+
+// Should trigger: data-last style
+export const shouldTriggerDataLast = Effect.flatMap((n: number) => Effect.succeed(n + 1))(Effect.succeed(1))
+
+// Should NOT trigger: callback returns another Effect operation
+export const shouldNotTriggerEffect = Effect.succeed(1).pipe(
+  Effect.flatMap((n) => Effect.log(n))
+)
+
+// Should NOT trigger: callback contains additional logic
+export const shouldNotTriggerLogic = Effect.succeed(1).pipe(
+  Effect.flatMap((n) => {
+    console.log(n)
+    return Effect.succeed(n + 1)
+  })
+)
+
+// Should NOT trigger: unrelated flatMap and succeed functions
+const unrelated = {
+  flatMap: <A, B>(value: A, f: (value: A) => B): B => f(value),
+  succeed: <A>(value: A): A => value
+}
+export const shouldNotTriggerUnrelated = unrelated.flatMap(1, (n) => unrelated.succeed(n + 1))
+
+
+=== [D3] Fix 0: "Disable flatMapToMap for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable flatMapToMap for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.map" ===
+
+--- file:///.src/flatMapToMap.ts ---
+// @effect-v3
+import { Effect, pipe } from "effect"
+
+// Should trigger: pipeable style
+export const shouldTriggerPipeable = Effect.succeed(1).pipe(
+  Effect.flatMap((n) => Effect.succeed(n + 1))
+)
+
+// Should trigger: pipe style with a block body
+export const shouldTriggerPipe = pipe(
+  Effect.succeed(1),
+  Effect.flatMap((n) => {
+    return Effect.succeed(n + 1)
+  })
+)
+
+// Should trigger: pipeable style with a function expression
+export const shouldTriggerFunctionExpression = Effect.succeed(1).pipe(Effect.map(function(n) {
+  return n + 1
+}))
+
+// Should trigger: data-first style
+export const shouldTriggerDataFirst = Effect.flatMap(Effect.succeed(1), (n) => Effect.succeed(n + 1))
+
+// Should trigger: data-last style
+export const shouldTriggerDataLast = Effect.flatMap((n: number) => Effect.succeed(n + 1))(Effect.succeed(1))
+
+// Should NOT trigger: callback returns another Effect operation
+export const shouldNotTriggerEffect = Effect.succeed(1).pipe(
+  Effect.flatMap((n) => Effect.log(n))
+)
+
+// Should NOT trigger: callback contains additional logic
+export const shouldNotTriggerLogic = Effect.succeed(1).pipe(
+  Effect.flatMap((n) => {
+    console.log(n)
+    return Effect.succeed(n + 1)
+  })
+)
+
+// Should NOT trigger: unrelated flatMap and succeed functions
+const unrelated = {
+  flatMap: <A, B>(value: A, f: (value: A) => B): B => f(value),
+  succeed: <A>(value: A): A => value
+}
+export const shouldNotTriggerUnrelated = unrelated.flatMap(1, (n) => unrelated.succeed(n + 1))
+
+
+=== [D4] Fix 0: "Disable flatMapToMap for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable flatMapToMap for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.map" ===
+
+--- file:///.src/flatMapToMap.ts ---
+// @effect-v3
+import { Effect, pipe } from "effect"
+
+// Should trigger: pipeable style
+export const shouldTriggerPipeable = Effect.succeed(1).pipe(
+  Effect.flatMap((n) => Effect.succeed(n + 1))
+)
+
+// Should trigger: pipe style with a block body
+export const shouldTriggerPipe = pipe(
+  Effect.succeed(1),
+  Effect.flatMap((n) => {
+    return Effect.succeed(n + 1)
+  })
+)
+
+// Should trigger: pipeable style with a function expression
+export const shouldTriggerFunctionExpression = Effect.succeed(1).pipe(Effect.flatMap(function(n) {
+  return Effect.succeed(n + 1)
+}))
+
+// Should trigger: data-first style
+export const shouldTriggerDataFirst = Effect.map(Effect.succeed(1), (n) => n + 1)
+
+// Should trigger: data-last style
+export const shouldTriggerDataLast = Effect.flatMap((n: number) => Effect.succeed(n + 1))(Effect.succeed(1))
+
+// Should NOT trigger: callback returns another Effect operation
+export const shouldNotTriggerEffect = Effect.succeed(1).pipe(
+  Effect.flatMap((n) => Effect.log(n))
+)
+
+// Should NOT trigger: callback contains additional logic
+export const shouldNotTriggerLogic = Effect.succeed(1).pipe(
+  Effect.flatMap((n) => {
+    console.log(n)
+    return Effect.succeed(n + 1)
+  })
+)
+
+// Should NOT trigger: unrelated flatMap and succeed functions
+const unrelated = {
+  flatMap: <A, B>(value: A, f: (value: A) => B): B => f(value),
+  succeed: <A>(value: A): A => value
+}
+export const shouldNotTriggerUnrelated = unrelated.flatMap(1, (n) => unrelated.succeed(n + 1))
+
+
+=== [D5] Fix 0: "Disable flatMapToMap for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable flatMapToMap for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Replace with Effect.map" ===
+
+--- file:///.src/flatMapToMap.ts ---
+// @effect-v3
+import { Effect, pipe } from "effect"
+
+// Should trigger: pipeable style
+export const shouldTriggerPipeable = Effect.succeed(1).pipe(
+  Effect.flatMap((n) => Effect.succeed(n + 1))
+)
+
+// Should trigger: pipe style with a block body
+export const shouldTriggerPipe = pipe(
+  Effect.succeed(1),
+  Effect.flatMap((n) => {
+    return Effect.succeed(n + 1)
+  })
+)
+
+// Should trigger: pipeable style with a function expression
+export const shouldTriggerFunctionExpression = Effect.succeed(1).pipe(Effect.flatMap(function(n) {
+  return Effect.succeed(n + 1)
+}))
+
+// Should trigger: data-first style
+export const shouldTriggerDataFirst = Effect.flatMap(Effect.succeed(1), (n) => Effect.succeed(n + 1))
+
+// Should trigger: data-last style
+export const shouldTriggerDataLast = Effect.map((n: number) => n + 1)(Effect.succeed(1))
+
+// Should NOT trigger: callback returns another Effect operation
+export const shouldNotTriggerEffect = Effect.succeed(1).pipe(
+  Effect.flatMap((n) => Effect.log(n))
+)
+
+// Should NOT trigger: callback contains additional logic
+export const shouldNotTriggerLogic = Effect.succeed(1).pipe(
+  Effect.flatMap((n) => {
+    console.log(n)
+    return Effect.succeed(n + 1)
+  })
+)
+
+// Should NOT trigger: unrelated flatMap and succeed functions
+const unrelated = {
+  flatMap: <A, B>(value: A, f: (value: A) => B): B => f(value),
+  succeed: <A>(value: A): A => value
+}
+export const shouldNotTriggerUnrelated = unrelated.flatMap(1, (n) => unrelated.succeed(n + 1))
+

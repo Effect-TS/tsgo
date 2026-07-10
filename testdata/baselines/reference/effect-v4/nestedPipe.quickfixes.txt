@@ -5,20 +5,35 @@
   Fix 1: "Disable unnecessaryPipeChain for entire file"
   Fix 2: "Rewrite as single pipe call"
 
-[D2] (11:24-16:2) TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
+[D2] (7:3-7:17) TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
+  Fix 0: "Disable flatMapToMap for this line"
+  Fix 1: "Disable flatMapToMap for entire file"
+  Fix 2: "Replace with Effect.map"
+
+[D3] (11:24-16:2) TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
   Fix 0: "Disable unnecessaryPipeChain for this line"
   Fix 1: "Disable unnecessaryPipeChain for entire file"
   Fix 2: "Rewrite as single pipe call"
 
-[D3] (19:24-22:2) TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
+[D4] (15:3-15:17) TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
+  Fix 0: "Disable flatMapToMap for this line"
+  Fix 1: "Disable flatMapToMap for entire file"
+  Fix 2: "Replace with Effect.map"
+
+[D5] (19:24-22:2) TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
   Fix 0: "Disable unnecessaryPipeChain for this line"
   Fix 1: "Disable unnecessaryPipeChain for entire file"
   Fix 2: "Rewrite as single pipe call"
 
-[D4] (20:3-20:76) TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
+[D6] (20:3-20:76) TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
   Fix 0: "Disable unnecessaryPipeChain for this line"
   Fix 1: "Disable unnecessaryPipeChain for entire file"
   Fix 2: "Rewrite as single pipe call"
+
+[D7] (21:3-21:17) TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
+  Fix 0: "Disable flatMapToMap for this line"
+  Fix 1: "Disable flatMapToMap for entire file"
+  Fix 2: "Replace with Effect.map"
 
 === Quick Fix Application Results ===
 
@@ -52,13 +67,13 @@ export const result3 = pipe(
 )
 
 
-=== [D2] Fix 0: "Disable unnecessaryPipeChain for this line" ===
+=== [D2] Fix 0: "Disable flatMapToMap for this line" ===
 skipped by default
 
-=== [D2] Fix 1: "Disable unnecessaryPipeChain for entire file" ===
+=== [D2] Fix 1: "Disable flatMapToMap for entire file" ===
 skipped by default
 
-=== [D2] Fix 2: "Rewrite as single pipe call" ===
+=== [D2] Fix 2: "Replace with Effect.map" ===
 
 --- file:///.src/nestedPipe.ts ---
 import * as Effect from "effect/Effect"
@@ -67,11 +82,16 @@ import { pipe } from "effect/Function"
 // Nested pipe calls - inner pipeable in outer pipe
 export const result1 = pipe(
   Effect.succeed(1).pipe(Effect.map((n) => n + 1)),
-  Effect.flatMap((n) => Effect.succeed(n * 2))
+  Effect.map((n) => n * 2)
 )
 
 // Nested pipe calls - inner pipe in outer pipeable
-export const result2 = pipe(Effect.succeed(1), Effect.map(n => n + 1), Effect.flatMap(n => Effect.succeed(n * 2)))
+export const result2 = pipe(
+  Effect.succeed(1),
+  Effect.map((n) => n + 1)
+).pipe(
+  Effect.flatMap((n) => Effect.succeed(n * 2))
+)
 
 // Triple nesting
 export const result3 = pipe(
@@ -99,24 +119,55 @@ export const result1 = pipe(
 )
 
 // Nested pipe calls - inner pipe in outer pipeable
+export const result2 = pipe(Effect.succeed(1), Effect.map(n => n + 1), Effect.flatMap(n => Effect.succeed(n * 2)))
+
+// Triple nesting
+export const result3 = pipe(
+  Effect.succeed(1).pipe(Effect.map((n) => n + 1)).pipe(Effect.delay(1000)),
+  Effect.flatMap((n) => Effect.succeed(n * 2))
+)
+
+
+=== [D4] Fix 0: "Disable flatMapToMap for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable flatMapToMap for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.map" ===
+
+--- file:///.src/nestedPipe.ts ---
+import * as Effect from "effect/Effect"
+import { pipe } from "effect/Function"
+
+// Nested pipe calls - inner pipeable in outer pipe
+export const result1 = pipe(
+  Effect.succeed(1).pipe(Effect.map((n) => n + 1)),
+  Effect.flatMap((n) => Effect.succeed(n * 2))
+)
+
+// Nested pipe calls - inner pipe in outer pipeable
 export const result2 = pipe(
   Effect.succeed(1),
   Effect.map((n) => n + 1)
 ).pipe(
-  Effect.flatMap((n) => Effect.succeed(n * 2))
+  Effect.map((n) => n * 2)
 )
 
 // Triple nesting
-export const result3 = Effect.succeed(1).pipe(Effect.map(n => n + 1)).pipe(Effect.delay(1000), Effect.flatMap(n => Effect.succeed(n * 2)))
+export const result3 = pipe(
+  Effect.succeed(1).pipe(Effect.map((n) => n + 1)).pipe(Effect.delay(1000)),
+  Effect.flatMap((n) => Effect.succeed(n * 2))
+)
 
 
-=== [D4] Fix 0: "Disable unnecessaryPipeChain for this line" ===
+=== [D5] Fix 0: "Disable unnecessaryPipeChain for this line" ===
 skipped by default
 
-=== [D4] Fix 1: "Disable unnecessaryPipeChain for entire file" ===
+=== [D5] Fix 1: "Disable unnecessaryPipeChain for entire file" ===
 skipped by default
 
-=== [D4] Fix 2: "Rewrite as single pipe call" ===
+=== [D5] Fix 2: "Rewrite as single pipe call" ===
 
 --- file:///.src/nestedPipe.ts ---
 import * as Effect from "effect/Effect"
@@ -138,4 +189,67 @@ export const result2 = pipe(
 
 // Triple nesting
 export const result3 = Effect.succeed(1).pipe(Effect.map(n => n + 1)).pipe(Effect.delay(1000), Effect.flatMap(n => Effect.succeed(n * 2)))
+
+
+=== [D6] Fix 0: "Disable unnecessaryPipeChain for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable unnecessaryPipeChain for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Rewrite as single pipe call" ===
+
+--- file:///.src/nestedPipe.ts ---
+import * as Effect from "effect/Effect"
+import { pipe } from "effect/Function"
+
+// Nested pipe calls - inner pipeable in outer pipe
+export const result1 = pipe(
+  Effect.succeed(1).pipe(Effect.map((n) => n + 1)),
+  Effect.flatMap((n) => Effect.succeed(n * 2))
+)
+
+// Nested pipe calls - inner pipe in outer pipeable
+export const result2 = pipe(
+  Effect.succeed(1),
+  Effect.map((n) => n + 1)
+).pipe(
+  Effect.flatMap((n) => Effect.succeed(n * 2))
+)
+
+// Triple nesting
+export const result3 = Effect.succeed(1).pipe(Effect.map(n => n + 1)).pipe(Effect.delay(1000), Effect.flatMap(n => Effect.succeed(n * 2)))
+
+
+=== [D7] Fix 0: "Disable flatMapToMap for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable flatMapToMap for entire file" ===
+skipped by default
+
+=== [D7] Fix 2: "Replace with Effect.map" ===
+
+--- file:///.src/nestedPipe.ts ---
+import * as Effect from "effect/Effect"
+import { pipe } from "effect/Function"
+
+// Nested pipe calls - inner pipeable in outer pipe
+export const result1 = pipe(
+  Effect.succeed(1).pipe(Effect.map((n) => n + 1)),
+  Effect.flatMap((n) => Effect.succeed(n * 2))
+)
+
+// Nested pipe calls - inner pipe in outer pipeable
+export const result2 = pipe(
+  Effect.succeed(1),
+  Effect.map((n) => n + 1)
+).pipe(
+  Effect.flatMap((n) => Effect.succeed(n * 2))
+)
+
+// Triple nesting
+export const result3 = pipe(
+  Effect.succeed(1).pipe(Effect.map((n) => n + 1)).pipe(Effect.delay(1000)),
+  Effect.map((n) => n * 2)
+)
 
