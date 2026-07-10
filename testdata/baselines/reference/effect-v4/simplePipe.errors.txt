@@ -1,9 +1,11 @@
 === Metadata ===
 Effect version: 4.0.0
 
+/.src/simplePipe.ts(8,3): suggestion TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
+/.src/simplePipe.ts(14,3): suggestion TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
 
 
-==== /.src/simplePipe.ts (0 errors) ====
+==== /.src/simplePipe.ts (2 errors) ====
     import * as Effect from "effect/Effect"
     import { pipe } from "effect/Function"
     
@@ -12,11 +14,15 @@ Effect version: 4.0.0
       Effect.succeed(1),
       Effect.map((n) => n + 1),
       Effect.flatMap((n) => Effect.succeed(n * 2))
+      ~~~~~~~~~~~~~~
+!!! suggestion TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
     )
     
     // Simple pipeable style
     export const result2 = Effect.succeed(1).pipe(
       Effect.map((n) => n + 1),
       Effect.flatMap((n) => Effect.succeed(n * 2))
+      ~~~~~~~~~~~~~~
+!!! suggestion TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
     )
     
