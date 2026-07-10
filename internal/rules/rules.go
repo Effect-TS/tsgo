@@ -85,6 +85,7 @@ var All = []rule.Rule{
 	DuplicatePackage,
 	EffectDoNotation,
 	EffectMapFlatten,
+	FlatMapToMap,
 	ExtendsNativeError,
 	NodeBuiltinImport,
 	NewPromise,

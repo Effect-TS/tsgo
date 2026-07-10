@@ -2,12 +2,15 @@
 Effect version: 4.0.0
 
 /.src/nestedPipe.ts(5,24): suggestion TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
+/.src/nestedPipe.ts(7,3): suggestion TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
 /.src/nestedPipe.ts(11,24): suggestion TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
+/.src/nestedPipe.ts(15,3): suggestion TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
 /.src/nestedPipe.ts(19,24): suggestion TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
 /.src/nestedPipe.ts(20,3): suggestion TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
+/.src/nestedPipe.ts(21,3): suggestion TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
 
 
-==== /.src/nestedPipe.ts (4 errors) ====
+==== /.src/nestedPipe.ts (7 errors) ====
     import * as Effect from "effect/Effect"
     import { pipe } from "effect/Function"
     
@@ -18,6 +21,8 @@ Effect version: 4.0.0
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       Effect.flatMap((n) => Effect.succeed(n * 2))
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      ~~~~~~~~~~~~~~
+!!! suggestion TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
     )
     ~
 !!! suggestion TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
@@ -33,6 +38,8 @@ Effect version: 4.0.0
     ~~~~~~~
       Effect.flatMap((n) => Effect.succeed(n * 2))
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      ~~~~~~~~~~~~~~
+!!! suggestion TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
     )
     ~
 !!! suggestion TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
@@ -46,6 +53,8 @@ Effect version: 4.0.0
 !!! suggestion TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
       Effect.flatMap((n) => Effect.succeed(n * 2))
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      ~~~~~~~~~~~~~~
+!!! suggestion TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
     )
     ~
 !!! suggestion TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
