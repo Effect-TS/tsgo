@@ -390,5 +390,9 @@
     "`Effect.{1}` expresses ignored failure more directly than `Effect.{0}` returning `Effect.void`. effect(catchToIgnore)": {
         "category": "Suggestion",
         "code": 377099
+    },
+    "`Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)": {
+        "category": "Suggestion",
+        "code": 377100
     }
 }

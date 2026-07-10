@@ -1774,6 +1774,11 @@
           "default": "off",
           "description": "Warns when a class directly extends the native Error class"
         },
+        "flatMapToMap": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests using Effect.map instead of Effect.flatMap when the callback only wraps its result with Effect.succeed"
+        },
         "floatingEffect": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "error",

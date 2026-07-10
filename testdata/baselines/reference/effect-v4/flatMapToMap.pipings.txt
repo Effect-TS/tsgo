@@ -1,0 +1,267 @@
+==== /.src/flatMapToMap.ts (17 flows) ====
+
+=== Piping Flow ===
+Location: 4:37 - 6:2
+Node: Effect.succeed(1).pipe(\n  Effect.flatMap((n) => Effect.succeed(n + 1))\n)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.flatMap
+      args: [(n) => Effect.succeed(n + 1)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 5:24 - 5:46
+Node: Effect.succeed(n + 1)
+Node Kind: KindCallExpression
+
+Subject: n + 1
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 9:33 - 14:2
+Node: pipe(\n  Effect.succeed(1),\n  Effect.flatMap((n) => {\n    return Effect.succeed(n + 1)\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipe
+      callee: Effect.flatMap
+      args: [(n) => {\n    return Effect.succeed(n + 1)\n  }]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 12:11 - 12:33
+Node: Effect.succeed(n + 1)
+Node Kind: KindCallExpression
+
+Subject: n + 1
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 17:47 - 19:4
+Node: Effect.succeed(1).pipe(Effect.flatMap(function(n) {\n  return Effect.succeed(n + 1)\n}))
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.flatMap
+      args: [function(n) {\n  return Effect.succeed(n + 1)\n}]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 18:9 - 18:31
+Node: Effect.succeed(n + 1)
+Node Kind: KindCallExpression
+
+Subject: n + 1
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 22:38 - 22:102
+Node: Effect.flatMap(Effect.succeed(1), (n) => Effect.succeed(n + 1))
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(n) => Effect.succeed(n + 1)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 22:79 - 22:101
+Node: Effect.succeed(n + 1)
+Node Kind: KindCallExpression
+
+Subject: n + 1
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 25:37 - 25:109
+Node: Effect.flatMap((n: number) => Effect.succeed(n + 1))(Effect.succeed(1))
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: call
+      callee: Effect.flatMap((n: number) => Effect.succeed(n + 1))
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 25:67 - 25:89
+Node: Effect.succeed(n + 1)
+Node Kind: KindCallExpression
+
+Subject: n + 1
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 28:38 - 30:2
+Node: Effect.succeed(1).pipe(\n  Effect.flatMap((n) => Effect.log(n))\n)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.flatMap
+      args: [(n) => Effect.log(n)]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 29:24 - 29:38
+Node: Effect.log(n)
+Node Kind: KindCallExpression
+
+Subject: n
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 33:37 - 38:2
+Node: Effect.succeed(1).pipe(\n  Effect.flatMap((n) => {\n    console.log(n)\n    return Effect.succeed(n + 1)\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.flatMap
+      args: [(n) => {\n    console.log(n)\n    return Effect.succeed(n + 1)\n  }]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 34:26 - 35:19
+Node: console.log(n)
+Node Kind: KindCallExpression
+
+Subject: n
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 36:11 - 36:33
+Node: Effect.succeed(n + 1)
+Node Kind: KindCallExpression
+
+Subject: n + 1
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 42:54 - 42:63
+Node: f(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: A
+
+Transformations (1):
+  [0] kind: call
+      callee: f
+      args: (constant)
+      outType: B
+
+=== Piping Flow ===
+Location: 45:69 - 45:94
+Node: unrelated.succeed(n + 1)
+Node Kind: KindCallExpression
+
+Subject: n + 1
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: unrelated.succeed
+      args: (constant)
+      outType: number
