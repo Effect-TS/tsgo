@@ -1,5 +1,11 @@
 # @effect/tsgo
 
+## 0.19.0
+
+### Minor Changes
+
+- 16a52e5: Add the `flatMapToMap` diagnostic and quick fix, which replaces `Effect.flatMap` callbacks that only wrap their result with `Effect.succeed` with `Effect.map`. The diagnostic supports pipe, pipeable, data-first, and data-last forms.
+
 ## 0.18.1
 
 ### Patch Changes
