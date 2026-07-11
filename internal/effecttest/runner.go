@@ -113,6 +113,7 @@ func parseTestUnits(content string, defaultFileName string) []*testUnit {
 // It enables the Effect language service plugin with default diagnostic severities.
 const DefaultTsConfig = `{
   "compilerOptions": {
+    "skipLibCheck": true,
     "plugins": [
       {
         "name": "@effect/language-service",
@@ -219,6 +220,7 @@ func RunEffectTest(t *testing.T, version bundledeffect.EffectVersion, testFile s
 	compilerOptions := &core.CompilerOptions{
 		NewLine:             core.NewLineKindLF,
 		SkipDefaultLibCheck: core.TSTrue,
+		SkipLibCheck:        core.TSTrue,
 		NoErrorTruncation:   core.TSTrue,
 		Target:              core.ScriptTargetESNext,
 		Module:              core.ModuleKindNodeNext,
@@ -257,6 +259,7 @@ func RunEffectTest(t *testing.T, version bundledeffect.EffectVersion, testFile s
 			// Merge with our defaults
 			parsedConfig.CompilerOptions().NewLine = core.NewLineKindLF
 			parsedConfig.CompilerOptions().SkipDefaultLibCheck = core.TSTrue
+			parsedConfig.CompilerOptions().SkipLibCheck = core.TSTrue
 			parsedConfig.CompilerOptions().NoErrorTruncation = core.TSTrue
 			if parsedConfig.CompilerOptions().Target == core.ScriptTargetNone {
 				parsedConfig.CompilerOptions().Target = core.ScriptTargetESNext

@@ -136,6 +136,7 @@ func collectDiagnosticStringsFromContent(t testing.TB, content string) []string 
 	compilerOptions := &core.CompilerOptions{
 		NewLine:                      core.NewLineKindLF,
 		SkipDefaultLibCheck:          core.TSTrue,
+		SkipLibCheck:                 core.TSTrue,
 		NoErrorTruncation:            core.TSTrue,
 		Target:                       core.ScriptTargetESNext,
 		Module:                       core.ModuleKindNodeNext,
@@ -162,6 +163,7 @@ func collectDiagnosticStringsFromContent(t testing.TB, content string) []string 
 		if parsedConfig.CompilerOptions() != nil {
 			parsedConfig.CompilerOptions().NewLine = core.NewLineKindLF
 			parsedConfig.CompilerOptions().SkipDefaultLibCheck = core.TSTrue
+			parsedConfig.CompilerOptions().SkipLibCheck = core.TSTrue
 			parsedConfig.CompilerOptions().NoErrorTruncation = core.TSTrue
 			if parsedConfig.CompilerOptions().Target == core.ScriptTargetNone {
 				parsedConfig.CompilerOptions().Target = core.ScriptTargetESNext
