@@ -15,9 +15,3 @@ export const isNativeTypescriptVersion = (version: string): boolean => {
   const match = /\d+/.exec(version.trim())
   return match !== null && Number(match[0]) >= 7
 }
-
-/**
- * Resolve the VS Code TypeScript 7 tsdk folder.
- */
-export const nativeBackendTsdkPath = (packageName: string): string =>
-  "node_modules/" + packageName
