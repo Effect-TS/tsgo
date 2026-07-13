@@ -48,9 +48,12 @@ exports[`Setup CLI > should add LSP plugin alongside existing plugins > tsconfig
 
 exports[`Setup CLI > should add LSP with VS Code editor selected and create new settings file > .vscode/settings.json 1`] = `
 "{
-  "typescript.native-preview.tsdk": "node_modules/typescript",
-  "typescript.experimental.useTsgo": true,
-  "js/ts.experimental.useTsgo": true
+  "js/ts.experimental.useTsgo": true,
+  "js/ts.tsdk.path": "./node_modules/typescript/bin",
+  "js/ts.tsdk.promptToUseWorkspaceVersion": true,
+  "js/ts.tsdk.additionalLocations": [
+    "./node_modules/typescript/bin"
+  ]
 }
 "
 `;
@@ -511,9 +514,10 @@ exports[`Setup CLI > should preserve all existing VS Code settings from a real r
   "editor.wordBasedSuggestions": "matchingDocuments",
   "editor.parameterHints.enabled": true,
   "files.insertFinalNewline": true,
-"js/ts.experimental.useTsgo": true,
-"typescript.experimental.useTsgo": true,
-"typescript.native-preview.tsdk": "node_modules/typescript"
+"js/ts.tsdk.additionalLocations": ["./node_modules/typescript/bin"],
+"js/ts.tsdk.promptToUseWorkspaceVersion": true,
+"js/ts.tsdk.path": "./node_modules/typescript/bin",
+"js/ts.experimental.useTsgo": true
 }"
 `;
 
@@ -528,7 +532,7 @@ exports[`Setup CLI > should preserve all existing VS Code settings from a real r
     "file": "tsconfig.json",
   },
   {
-    "description": "Add typescript.native-preview.tsdk setting; Add typescript.experimental.useTsgo setting; Add js/ts.experimental.useTsgo setting",
+    "description": "Add js/ts.experimental.useTsgo setting; Add js/ts.tsdk.path setting; Add js/ts.tsdk.promptToUseWorkspaceVersion setting; Add js/ts.tsdk.additionalLocations setting",
     "file": ".vscode/settings.json",
   },
 ]
@@ -575,9 +579,10 @@ exports[`Setup CLI > should preserve existing VS Code settings when adding LSP-s
   "editor.formatOnSave": true,
   "editor.tabSize": 2,
   "files.autoSave": "onFocusChange",
-"js/ts.experimental.useTsgo": true,
-"typescript.experimental.useTsgo": true,
-"typescript.native-preview.tsdk": "node_modules/typescript"
+"js/ts.tsdk.additionalLocations": ["./node_modules/typescript/bin"],
+"js/ts.tsdk.promptToUseWorkspaceVersion": true,
+"js/ts.tsdk.path": "./node_modules/typescript/bin",
+"js/ts.experimental.useTsgo": true
 }"
 `;
 
@@ -592,7 +597,7 @@ exports[`Setup CLI > should preserve existing VS Code settings when adding LSP-s
     "file": "tsconfig.json",
   },
   {
-    "description": "Add typescript.native-preview.tsdk setting; Add typescript.experimental.useTsgo setting; Add js/ts.experimental.useTsgo setting",
+    "description": "Add js/ts.experimental.useTsgo setting; Add js/ts.tsdk.path setting; Add js/ts.tsdk.promptToUseWorkspaceVersion setting; Add js/ts.tsdk.additionalLocations setting",
     "file": ".vscode/settings.json",
   },
 ]
