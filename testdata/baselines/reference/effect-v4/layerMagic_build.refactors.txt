@@ -35,7 +35,13 @@
   Refactor 2: "Toggle lazy const" (refactor.rewrite.effect.toggleLazyConst)
   Refactor 3: "Compose layers automatically with target output services" (refactor.rewrite.effect.layerMagicBuild)
 
-[R7] selection: "empty (0:0-0:0)"
+[R7] selection: "57:14-57:41"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Toggle type annotation" (refactor.rewrite.effect.toggleTypeAnnotation)
+  Refactor 2: "Toggle lazy const" (refactor.rewrite.effect.toggleLazyConst)
+  Refactor 3: "Compose layers automatically with target output services" (refactor.rewrite.effect.layerMagicBuild)
+
+[R8] selection: "empty (0:0-0:0)"
   (no refactors)
 
 === Refactor Application Results ===
@@ -43,7 +49,7 @@
 === [R1] Refactor 0: "Wrap with pipe" ===
 
 --- file:///.src/layerMagic_build.ts ---
-// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36, 57:14-57:41
 import { Effect, Layer, Context } from "effect"
 
 class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
@@ -95,11 +101,21 @@ export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
 
 export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
 
+const RequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const AlsoRequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const FileSystemWithExtrasLayer = Layer.mergeAll(FileSystem.Default, DbConnection.Default, Layer.succeed(Cache, {}))
+
+export const onlyFileSystemFromLastLayer = [
+  RequiresFileSystemLayer,
+  AlsoRequiresFileSystemLayer,
+  FileSystemWithExtrasLayer
+] as any as Layer.Layer<FileSystem>
+
 
 === [R1] Refactor 1: "Toggle type annotation" ===
 
 --- file:///.src/layerMagic_build.ts ---
-// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36, 57:14-57:41
 import { Effect, Layer, Context } from "effect"
 
 class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
@@ -151,11 +167,21 @@ export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
 
 export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
 
+const RequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const AlsoRequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const FileSystemWithExtrasLayer = Layer.mergeAll(FileSystem.Default, DbConnection.Default, Layer.succeed(Cache, {}))
+
+export const onlyFileSystemFromLastLayer = [
+  RequiresFileSystemLayer,
+  AlsoRequiresFileSystemLayer,
+  FileSystemWithExtrasLayer
+] as any as Layer.Layer<FileSystem>
+
 
 === [R1] Refactor 2: "Toggle lazy const" ===
 
 --- file:///.src/layerMagic_build.ts ---
-// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36, 57:14-57:41
 import { Effect, Layer, Context } from "effect"
 
 class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
@@ -207,11 +233,21 @@ export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
 
 export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
 
+const RequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const AlsoRequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const FileSystemWithExtrasLayer = Layer.mergeAll(FileSystem.Default, DbConnection.Default, Layer.succeed(Cache, {}))
+
+export const onlyFileSystemFromLastLayer = [
+  RequiresFileSystemLayer,
+  AlsoRequiresFileSystemLayer,
+  FileSystemWithExtrasLayer
+] as any as Layer.Layer<FileSystem>
+
 
 === [R1] Refactor 3: "Compose layers automatically with target output services" ===
 
 --- file:///.src/layerMagic_build.ts ---
-// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36, 57:14-57:41
 import { Effect, Layer, Context } from "effect"
 
 class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
@@ -236,7 +272,7 @@ class UserRepository extends Context.Service<UserRepository>()("UserRepository",
   static Default = Layer.effect(this, this.make)
 }
 
-export const expect_Cache_provideMergeFileSystem = Cache.Default.pipe(Layer.provideMerge(FileSystem.Default));
+export const expect_Cache_provideMergeFileSystem = Layer.empty.pipe(Layer.provide(Cache.Default), Layer.provideMerge(FileSystem.Default));
 
 export const prepareSomewhatComplex = [
   DbConnection.Default,
@@ -260,11 +296,21 @@ export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
 
 export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
 
+const RequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const AlsoRequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const FileSystemWithExtrasLayer = Layer.mergeAll(FileSystem.Default, DbConnection.Default, Layer.succeed(Cache, {}))
+
+export const onlyFileSystemFromLastLayer = [
+  RequiresFileSystemLayer,
+  AlsoRequiresFileSystemLayer,
+  FileSystemWithExtrasLayer
+] as any as Layer.Layer<FileSystem>
+
 
 === [R2] Refactor 0: "Wrap with pipe" ===
 
 --- file:///.src/layerMagic_build.ts ---
-// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36, 57:14-57:41
 import { Effect, Layer, Context } from "effect"
 
 class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
@@ -316,11 +362,21 @@ export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
 
 export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
 
+const RequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const AlsoRequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const FileSystemWithExtrasLayer = Layer.mergeAll(FileSystem.Default, DbConnection.Default, Layer.succeed(Cache, {}))
+
+export const onlyFileSystemFromLastLayer = [
+  RequiresFileSystemLayer,
+  AlsoRequiresFileSystemLayer,
+  FileSystemWithExtrasLayer
+] as any as Layer.Layer<FileSystem>
+
 
 === [R2] Refactor 1: "Toggle type annotation" ===
 
 --- file:///.src/layerMagic_build.ts ---
-// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36, 57:14-57:41
 import { Effect, Layer, Context } from "effect"
 
 class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
@@ -372,11 +428,21 @@ export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
 
 export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
 
+const RequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const AlsoRequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const FileSystemWithExtrasLayer = Layer.mergeAll(FileSystem.Default, DbConnection.Default, Layer.succeed(Cache, {}))
+
+export const onlyFileSystemFromLastLayer = [
+  RequiresFileSystemLayer,
+  AlsoRequiresFileSystemLayer,
+  FileSystemWithExtrasLayer
+] as any as Layer.Layer<FileSystem>
+
 
 === [R2] Refactor 2: "Toggle lazy const" ===
 
 --- file:///.src/layerMagic_build.ts ---
-// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36, 57:14-57:41
 import { Effect, Layer, Context } from "effect"
 
 class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
@@ -428,11 +494,21 @@ export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
 
 export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
 
+const RequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const AlsoRequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const FileSystemWithExtrasLayer = Layer.mergeAll(FileSystem.Default, DbConnection.Default, Layer.succeed(Cache, {}))
+
+export const onlyFileSystemFromLastLayer = [
+  RequiresFileSystemLayer,
+  AlsoRequiresFileSystemLayer,
+  FileSystemWithExtrasLayer
+] as any as Layer.Layer<FileSystem>
+
 
 === [R2] Refactor 3: "Compose layers automatically with target output services" ===
 
 --- file:///.src/layerMagic_build.ts ---
-// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36, 57:14-57:41
 import { Effect, Layer, Context } from "effect"
 
 class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
@@ -479,11 +555,21 @@ export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
 
 export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
 
+const RequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const AlsoRequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const FileSystemWithExtrasLayer = Layer.mergeAll(FileSystem.Default, DbConnection.Default, Layer.succeed(Cache, {}))
+
+export const onlyFileSystemFromLastLayer = [
+  RequiresFileSystemLayer,
+  AlsoRequiresFileSystemLayer,
+  FileSystemWithExtrasLayer
+] as any as Layer.Layer<FileSystem>
+
 
 === [R3] Refactor 0: "Wrap with pipe" ===
 
 --- file:///.src/layerMagic_build.ts ---
-// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36, 57:14-57:41
 import { Effect, Layer, Context } from "effect"
 
 class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
@@ -535,11 +621,21 @@ export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
 
 export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
 
+const RequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const AlsoRequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const FileSystemWithExtrasLayer = Layer.mergeAll(FileSystem.Default, DbConnection.Default, Layer.succeed(Cache, {}))
+
+export const onlyFileSystemFromLastLayer = [
+  RequiresFileSystemLayer,
+  AlsoRequiresFileSystemLayer,
+  FileSystemWithExtrasLayer
+] as any as Layer.Layer<FileSystem>
+
 
 === [R3] Refactor 1: "Toggle type annotation" ===
 
 --- file:///.src/layerMagic_build.ts ---
-// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36, 57:14-57:41
 import { Effect, Layer, Context } from "effect"
 
 class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
@@ -591,11 +687,21 @@ export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
 
 export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
 
+const RequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const AlsoRequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const FileSystemWithExtrasLayer = Layer.mergeAll(FileSystem.Default, DbConnection.Default, Layer.succeed(Cache, {}))
+
+export const onlyFileSystemFromLastLayer = [
+  RequiresFileSystemLayer,
+  AlsoRequiresFileSystemLayer,
+  FileSystemWithExtrasLayer
+] as any as Layer.Layer<FileSystem>
+
 
 === [R3] Refactor 2: "Toggle lazy const" ===
 
 --- file:///.src/layerMagic_build.ts ---
-// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36, 57:14-57:41
 import { Effect, Layer, Context } from "effect"
 
 class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
@@ -647,11 +753,21 @@ export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
 
 export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
 
+const RequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const AlsoRequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const FileSystemWithExtrasLayer = Layer.mergeAll(FileSystem.Default, DbConnection.Default, Layer.succeed(Cache, {}))
+
+export const onlyFileSystemFromLastLayer = [
+  RequiresFileSystemLayer,
+  AlsoRequiresFileSystemLayer,
+  FileSystemWithExtrasLayer
+] as any as Layer.Layer<FileSystem>
+
 
 === [R3] Refactor 3: "Compose layers automatically with target output services" ===
 
 --- file:///.src/layerMagic_build.ts ---
-// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36, 57:14-57:41
 import { Effect, Layer, Context } from "effect"
 
 class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
@@ -698,11 +814,21 @@ export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
 
 export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
 
+const RequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const AlsoRequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const FileSystemWithExtrasLayer = Layer.mergeAll(FileSystem.Default, DbConnection.Default, Layer.succeed(Cache, {}))
+
+export const onlyFileSystemFromLastLayer = [
+  RequiresFileSystemLayer,
+  AlsoRequiresFileSystemLayer,
+  FileSystemWithExtrasLayer
+] as any as Layer.Layer<FileSystem>
+
 
 === [R4] Refactor 0: "Wrap with pipe" ===
 
 --- file:///.src/layerMagic_build.ts ---
-// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36, 57:14-57:41
 import { Effect, Layer, Context } from "effect"
 
 class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
@@ -754,11 +880,21 @@ export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
 
 export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
 
+const RequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const AlsoRequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const FileSystemWithExtrasLayer = Layer.mergeAll(FileSystem.Default, DbConnection.Default, Layer.succeed(Cache, {}))
+
+export const onlyFileSystemFromLastLayer = [
+  RequiresFileSystemLayer,
+  AlsoRequiresFileSystemLayer,
+  FileSystemWithExtrasLayer
+] as any as Layer.Layer<FileSystem>
+
 
 === [R4] Refactor 1: "Toggle type annotation" ===
 
 --- file:///.src/layerMagic_build.ts ---
-// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36, 57:14-57:41
 import { Effect, Layer, Context } from "effect"
 
 class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
@@ -810,11 +946,21 @@ export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
 
 export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
 
+const RequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const AlsoRequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const FileSystemWithExtrasLayer = Layer.mergeAll(FileSystem.Default, DbConnection.Default, Layer.succeed(Cache, {}))
+
+export const onlyFileSystemFromLastLayer = [
+  RequiresFileSystemLayer,
+  AlsoRequiresFileSystemLayer,
+  FileSystemWithExtrasLayer
+] as any as Layer.Layer<FileSystem>
+
 
 === [R4] Refactor 2: "Toggle lazy const" ===
 
 --- file:///.src/layerMagic_build.ts ---
-// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36, 57:14-57:41
 import { Effect, Layer, Context } from "effect"
 
 class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
@@ -866,11 +1012,21 @@ export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
 
 export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
 
+const RequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const AlsoRequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const FileSystemWithExtrasLayer = Layer.mergeAll(FileSystem.Default, DbConnection.Default, Layer.succeed(Cache, {}))
+
+export const onlyFileSystemFromLastLayer = [
+  RequiresFileSystemLayer,
+  AlsoRequiresFileSystemLayer,
+  FileSystemWithExtrasLayer
+] as any as Layer.Layer<FileSystem>
+
 
 === [R4] Refactor 3: "Compose layers automatically with target output services" ===
 
 --- file:///.src/layerMagic_build.ts ---
-// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36, 57:14-57:41
 import { Effect, Layer, Context } from "effect"
 
 class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
@@ -920,11 +1076,21 @@ export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
 
 export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
 
+const RequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const AlsoRequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const FileSystemWithExtrasLayer = Layer.mergeAll(FileSystem.Default, DbConnection.Default, Layer.succeed(Cache, {}))
+
+export const onlyFileSystemFromLastLayer = [
+  RequiresFileSystemLayer,
+  AlsoRequiresFileSystemLayer,
+  FileSystemWithExtrasLayer
+] as any as Layer.Layer<FileSystem>
+
 
 === [R5] Refactor 0: "Wrap with pipe" ===
 
 --- file:///.src/layerMagic_build.ts ---
-// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36, 57:14-57:41
 import { Effect, Layer, Context } from "effect"
 
 class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
@@ -976,11 +1142,21 @@ export const pipe(tooLessOutput) = [Cache.Default] as any as Layer.Layer<Cache>
 
 export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
 
+const RequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const AlsoRequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const FileSystemWithExtrasLayer = Layer.mergeAll(FileSystem.Default, DbConnection.Default, Layer.succeed(Cache, {}))
+
+export const onlyFileSystemFromLastLayer = [
+  RequiresFileSystemLayer,
+  AlsoRequiresFileSystemLayer,
+  FileSystemWithExtrasLayer
+] as any as Layer.Layer<FileSystem>
+
 
 === [R5] Refactor 1: "Toggle type annotation" ===
 
 --- file:///.src/layerMagic_build.ts ---
-// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36, 57:14-57:41
 import { Effect, Layer, Context } from "effect"
 
 class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
@@ -1032,11 +1208,21 @@ export const tooLessOutput: Layer.Layer<Cache, never, never> = [Cache.Default] a
 
 export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
 
+const RequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const AlsoRequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const FileSystemWithExtrasLayer = Layer.mergeAll(FileSystem.Default, DbConnection.Default, Layer.succeed(Cache, {}))
+
+export const onlyFileSystemFromLastLayer = [
+  RequiresFileSystemLayer,
+  AlsoRequiresFileSystemLayer,
+  FileSystemWithExtrasLayer
+] as any as Layer.Layer<FileSystem>
+
 
 === [R5] Refactor 2: "Toggle lazy const" ===
 
 --- file:///.src/layerMagic_build.ts ---
-// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36, 57:14-57:41
 import { Effect, Layer, Context } from "effect"
 
 class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
@@ -1088,11 +1274,21 @@ export const tooLessOutput = () => [Cache.Default] as any as Layer.Layer<Cache>
 
 export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
 
+const RequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const AlsoRequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const FileSystemWithExtrasLayer = Layer.mergeAll(FileSystem.Default, DbConnection.Default, Layer.succeed(Cache, {}))
+
+export const onlyFileSystemFromLastLayer = [
+  RequiresFileSystemLayer,
+  AlsoRequiresFileSystemLayer,
+  FileSystemWithExtrasLayer
+] as any as Layer.Layer<FileSystem>
+
 
 === [R6] Refactor 0: "Wrap with pipe" ===
 
 --- file:///.src/layerMagic_build.ts ---
-// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36, 57:14-57:41
 import { Effect, Layer, Context } from "effect"
 
 class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
@@ -1144,11 +1340,21 @@ export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
 
 export const pipe(missingImplementations) = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
 
+const RequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const AlsoRequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const FileSystemWithExtrasLayer = Layer.mergeAll(FileSystem.Default, DbConnection.Default, Layer.succeed(Cache, {}))
+
+export const onlyFileSystemFromLastLayer = [
+  RequiresFileSystemLayer,
+  AlsoRequiresFileSystemLayer,
+  FileSystemWithExtrasLayer
+] as any as Layer.Layer<FileSystem>
+
 
 === [R6] Refactor 1: "Toggle type annotation" ===
 
 --- file:///.src/layerMagic_build.ts ---
-// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36, 57:14-57:41
 import { Effect, Layer, Context } from "effect"
 
 class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
@@ -1200,11 +1406,21 @@ export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
 
 export const missingImplementations: Layer.Layer<Cache, never, never> = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
 
+const RequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const AlsoRequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const FileSystemWithExtrasLayer = Layer.mergeAll(FileSystem.Default, DbConnection.Default, Layer.succeed(Cache, {}))
+
+export const onlyFileSystemFromLastLayer = [
+  RequiresFileSystemLayer,
+  AlsoRequiresFileSystemLayer,
+  FileSystemWithExtrasLayer
+] as any as Layer.Layer<FileSystem>
+
 
 === [R6] Refactor 2: "Toggle lazy const" ===
 
 --- file:///.src/layerMagic_build.ts ---
-// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36, 57:14-57:41
 import { Effect, Layer, Context } from "effect"
 
 class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
@@ -1256,11 +1472,21 @@ export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
 
 export const missingImplementations = () => [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
 
+const RequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const AlsoRequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const FileSystemWithExtrasLayer = Layer.mergeAll(FileSystem.Default, DbConnection.Default, Layer.succeed(Cache, {}))
+
+export const onlyFileSystemFromLastLayer = [
+  RequiresFileSystemLayer,
+  AlsoRequiresFileSystemLayer,
+  FileSystemWithExtrasLayer
+] as any as Layer.Layer<FileSystem>
+
 
 === [R6] Refactor 3: "Compose layers automatically with target output services" ===
 
 --- file:///.src/layerMagic_build.ts ---
-// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36, 57:14-57:41
 import { Effect, Layer, Context } from "effect"
 
 class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
@@ -1310,5 +1536,275 @@ export const provideRequireSame = [FileSystem.bothInAndOut, FileSystem.Default, 
 
 export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
 
-export const missingImplementations = UserRepository.Default.pipe(Layer.provide(FileSystem.Default)) /* Unable to find Cache in the provided layers. */;
+export const missingImplementations = Layer.empty.pipe(Layer.provide(UserRepository.Default), Layer.provide(FileSystem.Default)) /* Unable to find Cache in the provided layers. */;
+
+const RequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const AlsoRequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const FileSystemWithExtrasLayer = Layer.mergeAll(FileSystem.Default, DbConnection.Default, Layer.succeed(Cache, {}))
+
+export const onlyFileSystemFromLastLayer = [
+  RequiresFileSystemLayer,
+  AlsoRequiresFileSystemLayer,
+  FileSystemWithExtrasLayer
+] as any as Layer.Layer<FileSystem>
+
+
+=== [R7] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/layerMagic_build.ts ---
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36, 57:14-57:41
+import { Effect, Layer, Context } from "effect"
+
+class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class FileSystem extends Context.Service<FileSystem>()("FileSystem", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+  static bothInAndOut = Layer.effect(FileSystem, FileSystem)
+}
+class Cache extends Context.Service<Cache>()("Cache", {
+  make: Effect.as(FileSystem, {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class UserRepository extends Context.Service<UserRepository>()("UserRepository", {
+  make: Effect.as(Effect.andThen(DbConnection, Cache), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+
+export const expect_Cache_provideMergeFileSystem = [
+  FileSystem.Default,
+  Cache.Default
+] as any as Layer.Layer<FileSystem>
+
+export const prepareSomewhatComplex = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache>
+
+export const prepareSomewhatComplex2 = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache | FileSystem>
+
+export const provideRequireSame = [FileSystem.bothInAndOut, FileSystem.Default, Cache.Default] as any as Layer.Layer<
+  Cache | FileSystem
+>
+
+export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
+
+export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
+
+const RequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const AlsoRequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const FileSystemWithExtrasLayer = Layer.mergeAll(FileSystem.Default, DbConnection.Default, Layer.succeed(Cache, {}))
+
+export const pipe(onlyFileSystemFromLastLayer) = [
+  RequiresFileSystemLayer,
+  AlsoRequiresFileSystemLayer,
+  FileSystemWithExtrasLayer
+] as any as Layer.Layer<FileSystem>
+
+
+=== [R7] Refactor 1: "Toggle type annotation" ===
+
+--- file:///.src/layerMagic_build.ts ---
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36, 57:14-57:41
+import { Effect, Layer, Context } from "effect"
+
+class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class FileSystem extends Context.Service<FileSystem>()("FileSystem", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+  static bothInAndOut = Layer.effect(FileSystem, FileSystem)
+}
+class Cache extends Context.Service<Cache>()("Cache", {
+  make: Effect.as(FileSystem, {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class UserRepository extends Context.Service<UserRepository>()("UserRepository", {
+  make: Effect.as(Effect.andThen(DbConnection, Cache), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+
+export const expect_Cache_provideMergeFileSystem = [
+  FileSystem.Default,
+  Cache.Default
+] as any as Layer.Layer<FileSystem>
+
+export const prepareSomewhatComplex = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache>
+
+export const prepareSomewhatComplex2 = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache | FileSystem>
+
+export const provideRequireSame = [FileSystem.bothInAndOut, FileSystem.Default, Cache.Default] as any as Layer.Layer<
+  Cache | FileSystem
+>
+
+export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
+
+export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
+
+const RequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const AlsoRequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const FileSystemWithExtrasLayer = Layer.mergeAll(FileSystem.Default, DbConnection.Default, Layer.succeed(Cache, {}))
+
+export const onlyFileSystemFromLastLayer: Layer.Layer<FileSystem, never, never> = [
+  RequiresFileSystemLayer,
+  AlsoRequiresFileSystemLayer,
+  FileSystemWithExtrasLayer
+] as any as Layer.Layer<FileSystem>
+
+
+=== [R7] Refactor 2: "Toggle lazy const" ===
+
+--- file:///.src/layerMagic_build.ts ---
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36, 57:14-57:41
+import { Effect, Layer, Context } from "effect"
+
+class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class FileSystem extends Context.Service<FileSystem>()("FileSystem", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+  static bothInAndOut = Layer.effect(FileSystem, FileSystem)
+}
+class Cache extends Context.Service<Cache>()("Cache", {
+  make: Effect.as(FileSystem, {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class UserRepository extends Context.Service<UserRepository>()("UserRepository", {
+  make: Effect.as(Effect.andThen(DbConnection, Cache), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+
+export const expect_Cache_provideMergeFileSystem = [
+  FileSystem.Default,
+  Cache.Default
+] as any as Layer.Layer<FileSystem>
+
+export const prepareSomewhatComplex = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache>
+
+export const prepareSomewhatComplex2 = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache | FileSystem>
+
+export const provideRequireSame = [FileSystem.bothInAndOut, FileSystem.Default, Cache.Default] as any as Layer.Layer<
+  Cache | FileSystem
+>
+
+export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
+
+export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
+
+const RequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const AlsoRequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const FileSystemWithExtrasLayer = Layer.mergeAll(FileSystem.Default, DbConnection.Default, Layer.succeed(Cache, {}))
+
+export const onlyFileSystemFromLastLayer = () => [
+  RequiresFileSystemLayer,
+  AlsoRequiresFileSystemLayer,
+  FileSystemWithExtrasLayer
+] as any as Layer.Layer<FileSystem>
+
+
+=== [R7] Refactor 3: "Compose layers automatically with target output services" ===
+
+--- file:///.src/layerMagic_build.ts ---
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36, 57:14-57:41
+import { Effect, Layer, Context } from "effect"
+
+class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class FileSystem extends Context.Service<FileSystem>()("FileSystem", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+  static bothInAndOut = Layer.effect(FileSystem, FileSystem)
+}
+class Cache extends Context.Service<Cache>()("Cache", {
+  make: Effect.as(FileSystem, {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class UserRepository extends Context.Service<UserRepository>()("UserRepository", {
+  make: Effect.as(Effect.andThen(DbConnection, Cache), {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+
+export const expect_Cache_provideMergeFileSystem = [
+  FileSystem.Default,
+  Cache.Default
+] as any as Layer.Layer<FileSystem>
+
+export const prepareSomewhatComplex = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache>
+
+export const prepareSomewhatComplex2 = [
+  DbConnection.Default,
+  Cache.Default,
+  UserRepository.Default,
+  FileSystem.Default
+] as any as Layer.Layer<UserRepository | Cache | FileSystem>
+
+export const provideRequireSame = [FileSystem.bothInAndOut, FileSystem.Default, Cache.Default] as any as Layer.Layer<
+  Cache | FileSystem
+>
+
+export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
+
+export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
+
+const RequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const AlsoRequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const FileSystemWithExtrasLayer = Layer.mergeAll(FileSystem.Default, DbConnection.Default, Layer.succeed(Cache, {}))
+
+export const onlyFileSystemFromLastLayer = Layer.empty.pipe(Layer.provide(AlsoRequiresFileSystemLayer), Layer.provide(RequiresFileSystemLayer), Layer.provideMerge(FileSystemWithExtrasLayer));
 
