@@ -1,16 +1,22 @@
 diff --git a/cmd/tsgo/main.go b/cmd/tsgo/main.go
-index 8d6816fa3d..49c6cbecba 100644
+index 8d6816fa3d..c24db44dfa 100644
 --- a/cmd/tsgo/main.go
 +++ b/cmd/tsgo/main.go
-@@ -6,6 +6,11 @@ import (
- 	"os/signal"
- 	"syscall"
+@@ -8,2 +8,8 @@ import (
  
 +	// Import Effect hooks to register via init()
-+	_ "github.com/effect-ts/tsgo/etsexecutehooks" // exit-code filtering hooks
 +	_ "github.com/effect-ts/tsgo/etscheckerhooks" // checker diagnostics hooks
++	"github.com/effect-ts/tsgo/etsdiagnostics"
++	_ "github.com/effect-ts/tsgo/etsexecutehooks" // exit-code filtering hooks
 +	_ "github.com/effect-ts/tsgo/etslshooks"      // LS codefix hooks
 +
  	"github.com/microsoft/typescript-go/internal/core"
- 	"github.com/microsoft/typescript-go/internal/execute"
- )
+@@ -22,6 +28,8 @@ func runMain() int {
+ 		case "--lsp":
+ 			return runLSP(args[1:])
+ 		case "--api":
+ 			return runAPI(args[1:])
++		case "--effect-cli-diagnostics":
++			return etsdiagnostics.Run(context.Background(), args[1:], os.Stdout, os.Stderr)
+ 		}
+ 	}

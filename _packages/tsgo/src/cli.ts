@@ -13,6 +13,11 @@ import * as Schema from "effect/Schema"
 import * as Command from "effect/unstable/cli/Command"
 import * as Flag from "effect/unstable/cli/Flag"
 import { configCommand } from "./config.js"
+import {
+  type DiagnosticsOutputFormat,
+  propagateDiagnosticsExit,
+  runDiagnosticsBinary
+} from "./diagnostics.js"
 import { setupCommand } from "./setup/index.js"
 import { defaultTypescriptPackageNames, isNativeTypescriptVersion } from "./setup/consts.js"
 import * as pkgJson from "../package.json" with { type: "json" }
@@ -558,8 +563,62 @@ const getExePathCommand = Command.make("get-exe-path").pipe(
   )
 )
 
+const diagnosticsCommand = Command.make("diagnostics", {
+  file: Flag.file("file").pipe(
+    Flag.optional,
+    Flag.withDescription("The full path of the file to check for diagnostics")
+  ),
+  project: Flag.file("project").pipe(
+    Flag.optional,
+    Flag.withDescription("The full path of the project tsconfig.json file to check for diagnostics")
+  ),
+  format: Flag.choice(
+    "format",
+    ["json", "pretty", "text", "github-actions"] as ReadonlyArray<DiagnosticsOutputFormat>
+  ).pipe(
+    Flag.withDefault("pretty" as const),
+    Flag.withDescription(
+      "Output format: json (machine-readable), pretty (colored with context), text (plain text), github-actions (workflow commands)"
+    )
+  ),
+  strict: Flag.boolean("strict").pipe(
+    Flag.withDefault(false),
+    Flag.withDescription("Treat warnings as errors (affects exit code)")
+  ),
+  severity: Flag.string("severity").pipe(
+    Flag.optional,
+    Flag.withDescription("Filter by severity levels (comma-separated: error,warning,message)")
+  ),
+  progress: Flag.boolean("progress").pipe(
+    Flag.withDefault(false),
+    Flag.withDescription("Show progress as files are checked (outputs to stderr)")
+  ),
+  lspconfig: Flag.string("lspconfig").pipe(
+    Flag.optional,
+    Flag.withDescription("An optional inline JSON lsp config that replaces the current project lsp config")
+  )
+}).pipe(
+  Command.withDescription("Gets the Effect language service diagnostics on the given files or project"),
+  Command.withHandler(({ file, format, lspconfig, progress, project, severity, strict }) =>
+    Effect.gen(function*() {
+      const installedTypeScript = yield* resolveInstalledTypeScriptBinary(defaultTypescriptPackageNames)
+      const binaryPath = yield* getPackagedBinaryPath(installedTypeScript, false)
+      const result = runDiagnosticsBinary(binaryPath, {
+        cwd: process.cwd(),
+        file: Option.getOrUndefined(file),
+        project: Option.getOrUndefined(project),
+        format,
+        strict,
+        severity: Option.getOrUndefined(severity),
+        progress,
+        lspconfig: Option.getOrUndefined(lspconfig)
+      })
+      propagateDiagnosticsExit(result)
+    }))
+)
+
 const rootCommand = Command.make("tsgo").pipe(
-  Command.withSubcommands([patchCommand, unpatchCommand, getExePathCommand, setupCommand, configCommand])
+  Command.withSubcommands([patchCommand, unpatchCommand, getExePathCommand, diagnosticsCommand, setupCommand, configCommand])
 )
 
 
