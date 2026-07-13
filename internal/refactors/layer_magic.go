@@ -150,19 +150,27 @@ func tryBuildRefactor(ctx *refactor.Context, tp *typeparser.TypeParser, c *check
 	return []ls.CodeAction{*action}
 }
 
-// buildLayerMagicBuild generates: firstLayer.pipe(Layer.provideMerge(...), Layer.provide(...), ...)
+// buildLayerMagicBuild generates a pipe from the first requested output layer, or Layer.empty
+// when the first layer does not provide a requested output.
 func buildLayerMagicBuild(tracker *rewriter.Tracker, ctx *refactor.Context, c *checker.Checker, oldNode *ast.Node, magicResult *layergraph.LayerMagicResult, layerIdentifier string) {
 	nodes := magicResult.Nodes
 	if len(nodes) == 0 {
 		return
 	}
 
-	// Clone the first node's expression
-	firstExpr := tracker.DeepCloneNode(nodes[0].Node)
+	var receiver *ast.Node
+	firstPipeArg := 0
+	if nodes[0].Merges {
+		receiver = tracker.DeepCloneNode(nodes[0].Node)
+		firstPipeArg = 1
+	} else {
+		receiver = tracker.NewPropertyAccessExpression(
+			tracker.NewIdentifier(layerIdentifier), nil, tracker.NewIdentifier("empty"), ast.NodeFlagsNone,
+		)
+	}
 
-	// Build pipe arguments for remaining nodes
 	var pipeArgs []*ast.Node
-	for _, mn := range nodes[1:] {
+	for _, mn := range nodes[firstPipeArg:] {
 		// Determine combinator name
 		var combinatorName string
 		switch {
@@ -188,9 +196,8 @@ func buildLayerMagicBuild(tracker *rewriter.Tracker, ctx *refactor.Context, c *c
 		pipeArgs = append(pipeArgs, call)
 	}
 
-	// firstExpr.pipe(args...)
 	pipeAccess := tracker.NewPropertyAccessExpression(
-		firstExpr, nil, tracker.NewIdentifier("pipe"), ast.NodeFlagsNone,
+		receiver, nil, tracker.NewIdentifier("pipe"), ast.NodeFlagsNone,
 	)
 	newDeclaration := tracker.NewCallExpression(
 		pipeAccess, nil, nil,

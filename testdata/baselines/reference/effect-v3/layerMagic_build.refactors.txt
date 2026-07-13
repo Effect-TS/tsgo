@@ -212,7 +212,7 @@ class UserRepository extends Effect.Service<UserRepository>()("UserRepository", 
   effect: Effect.as(Effect.zipRight(DbConnection, Cache), {})
 }) {}
 
-export const expect_Cache_provideMergeFileSystem = Cache.Default.pipe(Layer.provideMerge(FileSystem.Default));
+export const expect_Cache_provideMergeFileSystem = Layer.empty.pipe(Layer.provide(Cache.Default), Layer.provideMerge(FileSystem.Default));
 
 export const prepareSomewhatComplex = [
   DbConnection.Default,
@@ -1172,5 +1172,5 @@ export const provideRequireSame = [FileSystem.bothInAndOut, FileSystem.Default, 
 
 export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
 
-export const missingImplementations = UserRepository.Default.pipe(Layer.provide(FileSystem.Default)) /* Unable to find Cache in the provided layers. */;
+export const missingImplementations = Layer.empty.pipe(Layer.provide(UserRepository.Default), Layer.provide(FileSystem.Default)) /* Unable to find Cache in the provided layers. */;
 
