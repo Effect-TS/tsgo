@@ -104,6 +104,7 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><code>flatMapToMap</code></td><td>💡</td><td>🔧</td><td>Suggests using Effect.map instead of Effect.flatMap when the callback only wraps its result with Effect.succeed</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>missedPipeableOpportunity</code></td><td>➖</td><td>🔧</td><td>Suggests using .pipe() for nested function calls</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>missingEffectServiceDependency</code></td><td>➖</td><td></td><td>Checks that Effect.Service dependencies satisfy all required layer inputs</td><td>✓</td><td></td></tr>
+    <tr><td><code>missingPipeableSignature</code></td><td>➖</td><td></td><td>Reports exported fixed-arity functions whose call signatures have no corresponding pipeable overload</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>multipleCatchTag</code></td><td>💡</td><td></td><td>Suggests collapsing consecutive Effect.catchTag transformations into a single Effect.catchTags call when semantics stay equivalent</td><td></td><td>✓</td></tr>
     <tr><td><code>nestedEffectGenYield</code></td><td>➖</td><td></td><td>Warns when yielding a nested bare Effect.gen inside an existing Effect generator context</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>newSchemaClass</code></td><td>➖</td><td>🔧</td><td>Suggests using Schema make instead of new for Schema classes</td><td></td><td>✓</td></tr>
