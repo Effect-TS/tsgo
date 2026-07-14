@@ -138,9 +138,10 @@ function expectSetupChanges(
 
 const VSCODE_SETTINGS: Target.VSCodeSettings = {
   settings: {
-    "typescript.native-preview.tsdk": "node_modules/typescript",
-    "typescript.experimental.useTsgo": true,
-    "js/ts.experimental.useTsgo": true
+    "js/ts.experimental.useTsgo": true,
+    "js/ts.tsdk.path": "./node_modules/typescript/bin",
+    "js/ts.tsdk.promptToUseWorkspaceVersion": true,
+    "js/ts.tsdk.additionalLocations": ["./node_modules/typescript/bin"]
   }
 }
 

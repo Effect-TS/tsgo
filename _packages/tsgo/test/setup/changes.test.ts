@@ -361,6 +361,21 @@ describe("computeChanges", () => {
         }
       }
     })
+
+    it("should serialize array settings when modifying existing vscode settings", () => {
+      const result = runComputeChanges({
+        vscodeSettingsText: JSON.stringify({ "editor.formatOnSave": true }, null, 2),
+        vscodeTargetSettings: {
+          "js/ts.tsdk.additionalLocations": ["./node_modules/typescript/bin"]
+        }
+      })
+
+      const vscodeChange = result.codeActions
+        .flatMap((action) => action.changes)
+        .find((change) => change.fileName.includes("settings.json"))
+
+      expect(vscodeChange?.textChanges[0]?.newText).toContain('["./node_modules/typescript/bin"]')
+    })
   })
 
   describe("new-file code action for .vscode/settings.json", () => {
