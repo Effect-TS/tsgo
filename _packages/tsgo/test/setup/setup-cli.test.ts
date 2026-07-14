@@ -2,8 +2,9 @@ import * as Option from "effect/Option"
 import { describe, expect, it } from "vitest"
 import { assess } from "../../src/setup/assessment.js"
 import { computeChanges } from "../../src/setup/changes.js"
-import { TSCONFIG_SCHEMA_URL } from "../../src/setup/consts.js"
-import type { Assessment, Target } from "../../src/setup/types.js"
+import type { Assessment, Editor, Target } from "../../src/setup/types.js"
+
+const TEST_SCHEMA_PATH = "./node_modules/@effect/tsgo/schema.json"
 
 /**
  * Create a test assessment input from plain objects
@@ -54,13 +55,28 @@ function applyTextChanges(
  */
 function expectSetupChanges(
   assessmentInput: Assessment.Input,
-  targetState: Target.State
+  targetState: {
+    readonly packageJson: Target.PackageJson
+    readonly tsconfig: {
+      readonly schemaPath?: Option.Option<string>
+      readonly diagnosticSeverities: Option.Option<Record<string, string>>
+    }
+    readonly vscodeSettings: Option.Option<Target.VSCodeSettings>
+    readonly editors: ReadonlyArray<string>
+  }
 ) {
   const normalizedTargetState: Target.State = {
     ...targetState,
+    editors: targetState.editors.filter((editor): editor is Editor =>
+      editor === "vscode" || editor === "nvim" || editor === "emacs"
+    ),
     tsconfig: {
       ...targetState.tsconfig,
-      diagnosticSeverities: targetState.tsconfig.diagnosticSeverities ?? Option.none()
+      schemaPath: targetState.tsconfig.schemaPath ?? Option.match(targetState.packageJson.lspVersion, {
+        onNone: () => Option.none(),
+        onSome: () => Option.some(TEST_SCHEMA_PATH)
+      }),
+      diagnosticSeverities: targetState.tsconfig.diagnosticSeverities as Target.TsConfig["diagnosticSeverities"]
     }
   }
 
@@ -163,7 +179,7 @@ describe("Setup CLI", () => {
       }
     )
 
-    const targetState: Target.State = {
+    const targetState = {
       packageJson: {
         lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
         typescriptVersion: Option.some({ dependencyType: "devDependencies" as const, version: TEST_TYPESCRIPT_VERSION, packageName: "typescript" }),
@@ -189,7 +205,7 @@ describe("Setup CLI", () => {
         }
       },
       {
-        $schema: TSCONFIG_SCHEMA_URL,
+        $schema: TEST_SCHEMA_PATH,
         compilerOptions: {
           strict: true,
           target: "ES2022",
@@ -202,7 +218,7 @@ describe("Setup CLI", () => {
       }
     )
 
-    const targetState: Target.State = {
+    const targetState = {
       packageJson: {
         lspVersion: Option.none(),
         typescriptVersion: Option.none(),
@@ -232,7 +248,7 @@ describe("Setup CLI", () => {
       }
     )
 
-    const targetState: Target.State = {
+    const targetState = {
       packageJson: {
         lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
         typescriptVersion: Option.some({ dependencyType: "devDependencies" as const, version: TEST_TYPESCRIPT_VERSION, packageName: "typescript" }),
@@ -272,7 +288,7 @@ describe("Setup CLI", () => {
       }
     )
 
-    const targetState: Target.State = {
+    const targetState = {
       packageJson: {
         lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
         typescriptVersion: Option.some({ dependencyType: "devDependencies" as const, version: TEST_TYPESCRIPT_VERSION, packageName: "typescript" }),
@@ -301,7 +317,7 @@ describe("Setup CLI", () => {
       }
     )
 
-    const targetState: Target.State = {
+    const targetState = {
       packageJson: {
         lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
         typescriptVersion: Option.some({ dependencyType: "devDependencies" as const, version: TEST_TYPESCRIPT_VERSION, packageName: "typescript" }),
@@ -341,7 +357,7 @@ describe("Setup CLI", () => {
       }
     )
 
-    const targetState: Target.State = {
+    const targetState = {
       packageJson: {
         lspVersion: Option.none(),
         typescriptVersion: Option.none(),
@@ -384,7 +400,7 @@ describe("Setup CLI", () => {
       }
     )
 
-    const targetState: Target.State = {
+    const targetState = {
       packageJson: {
         lspVersion: Option.none(),
         typescriptVersion: Option.none(),
@@ -424,7 +440,7 @@ describe("Setup CLI", () => {
       }
     )
 
-    const targetState: Target.State = {
+    const targetState = {
       packageJson: {
         lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
         typescriptVersion: Option.some({ dependencyType: "devDependencies" as const, version: TEST_TYPESCRIPT_VERSION, packageName: "typescript" }),
@@ -460,7 +476,7 @@ describe("Setup CLI", () => {
       }
     )
 
-    const targetState: Target.State = {
+    const targetState = {
       packageJson: {
         lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
         typescriptVersion: Option.some({ dependencyType: "devDependencies" as const, version: TEST_TYPESCRIPT_VERSION, packageName: "typescript" }),
@@ -501,7 +517,7 @@ describe("Setup CLI", () => {
       }
     )
 
-    const targetState: Target.State = {
+    const targetState = {
       packageJson: {
         lspVersion: Option.none(),
         typescriptVersion: Option.none(),
@@ -531,7 +547,7 @@ describe("Setup CLI", () => {
       // No vscodeSettings — file does not exist
     )
 
-    const targetState: Target.State = {
+    const targetState = {
       packageJson: {
         lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
         typescriptVersion: Option.some({ dependencyType: "devDependencies" as const, version: TEST_TYPESCRIPT_VERSION, packageName: "typescript" }),
@@ -565,7 +581,7 @@ describe("Setup CLI", () => {
       }
     )
 
-    const targetState: Target.State = {
+    const targetState = {
       packageJson: {
         lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
         typescriptVersion: Option.some({ dependencyType: "devDependencies" as const, version: TEST_TYPESCRIPT_VERSION, packageName: "typescript" }),
@@ -611,7 +627,7 @@ describe("Setup CLI", () => {
       }
     )
 
-    const targetState: Target.State = {
+    const targetState = {
       packageJson: {
         lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
         typescriptVersion: Option.some({ dependencyType: "devDependencies" as const, version: TEST_TYPESCRIPT_VERSION, packageName: "typescript" }),
@@ -640,7 +656,7 @@ describe("Setup CLI", () => {
       }
     )
 
-    const targetState: Target.State = {
+    const targetState = {
       packageJson: {
         lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
         typescriptVersion: Option.some({ dependencyType: "devDependencies" as const, version: TEST_TYPESCRIPT_VERSION, packageName: "typescript" }),
@@ -693,7 +709,7 @@ describe("Setup CLI", () => {
       }
     )
 
-    const targetState: Target.State = {
+    const targetState = {
       packageJson: {
         lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
         typescriptVersion: Option.some({ dependencyType: "devDependencies" as const, version: TEST_TYPESCRIPT_VERSION, packageName: "typescript" }),
@@ -736,7 +752,7 @@ describe("Setup CLI", () => {
       }
     )
 
-    const targetState: Target.State = {
+    const targetState = {
       packageJson: {
         lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
         typescriptVersion: Option.some({ dependencyType: "devDependencies" as const, version: TEST_TYPESCRIPT_VERSION, packageName: "typescript" }),
@@ -779,7 +795,7 @@ describe("Setup CLI", () => {
       }
     )
 
-    const targetState: Target.State = {
+    const targetState = {
       packageJson: {
         lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
         typescriptVersion: Option.some({ dependencyType: "devDependencies" as const, version: TEST_TYPESCRIPT_VERSION, packageName: "typescript" }),
