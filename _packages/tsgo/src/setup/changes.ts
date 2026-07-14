@@ -744,6 +744,15 @@ const computeVSCodeSettingsChanges = (
 
   const ctx = createTrackerContext()
 
+  const createSettingValue = (value: unknown): ts.Expression =>
+    typeof value === "string"
+      ? ts.factory.createStringLiteral(value)
+      : typeof value === "boolean"
+      ? value ? ts.factory.createTrue() : ts.factory.createFalse()
+      : Array.isArray(value) && value.every((item): item is string => typeof item === "string")
+      ? ts.factory.createArrayLiteralExpression(value.map((item) => ts.factory.createStringLiteral(item)))
+      : ts.factory.createNull()
+
   const fileChanges = tsInternal.textChanges.ChangeTracker.with(
     ctx,
     (tracker: any) => {
@@ -756,11 +765,7 @@ const computeVSCodeSettingsChanges = (
           newProperties.push(
             ts.factory.createPropertyAssignment(
               ts.factory.createStringLiteral(key),
-              typeof value === "string"
-                ? ts.factory.createStringLiteral(value)
-                : typeof value === "boolean"
-                ? value ? ts.factory.createTrue() : ts.factory.createFalse()
-                : ts.factory.createNull()
+              createSettingValue(value)
             )
           )
         }
@@ -777,11 +782,7 @@ const computeVSCodeSettingsChanges = (
 
             const newProp = ts.factory.createPropertyAssignment(
               ts.factory.createStringLiteral(key),
-              typeof value === "string"
-                ? ts.factory.createStringLiteral(value)
-                : typeof value === "boolean"
-                ? value ? ts.factory.createTrue() : ts.factory.createFalse()
-                : ts.factory.createNull()
+              createSettingValue(value)
             )
             insertNodeAtEndOfList(tracker, current.sourceFile, rootObj.properties, newProp)
           }

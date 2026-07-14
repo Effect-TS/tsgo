@@ -1,4 +1,4 @@
-// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36
+// refactor: 26:14-26:49, 31:14-31:36, 38:14-38:37, 45:14-45:32, 49:14-49:27, 51:14-51:36, 57:14-57:41
 import { Effect, Layer, Context } from "effect"
 
 class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
@@ -49,3 +49,13 @@ export const provideRequireSame = [FileSystem.bothInAndOut, FileSystem.Default, 
 export const tooLessOutput = [Cache.Default] as any as Layer.Layer<Cache>
 
 export const missingImplementations = [UserRepository.Default, FileSystem.Default] as any as Layer.Layer<Cache>
+
+const RequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const AlsoRequiresFileSystemLayer = Layer.effectDiscard(FileSystem)
+const FileSystemWithExtrasLayer = Layer.mergeAll(FileSystem.Default, DbConnection.Default, Layer.succeed(Cache, {}))
+
+export const onlyFileSystemFromLastLayer = [
+  RequiresFileSystemLayer,
+  AlsoRequiresFileSystemLayer,
+  FileSystemWithExtrasLayer
+] as any as Layer.Layer<FileSystem>

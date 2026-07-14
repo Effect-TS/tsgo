@@ -3,7 +3,7 @@ import * as Option from "effect/Option"
 import type * as Terminal from "effect/Terminal"
 import * as Prompt from "effect/unstable/cli/Prompt"
 import { applyPresetDiagnosticSeverities, type DiagnosticPresetName, isPresetEnabled } from "../presets.js"
-import { defaultTypescriptPackageNames, nativeBackendTsdkPath } from "./consts.js"
+import { defaultTypescriptPackageNames } from "./consts.js"
 import type { Assessment } from "./types.js"
 import type { Editor, Target } from "./target.js"
 import { getAllPresets, getAllRules } from "./rule-info.js"
@@ -134,14 +134,14 @@ export const gatherTargetState = (
     })
 
     // Build target state
-    // Point the TypeScript 7 extension at the project TypeScript package.
     const defaultTypescriptPackageName = defaultTypescriptPackageNames[0]
     const vscodeSettings: Option.Option<Target.VSCodeSettings> = editors.includes("vscode")
       ? Option.some({
         settings: {
-          "typescript.native-preview.tsdk": nativeBackendTsdkPath(defaultTypescriptPackageName),
-          "typescript.experimental.useTsgo": true,
-          "js/ts.experimental.useTsgo": true
+          "js/ts.experimental.useTsgo": true,
+          "js/ts.tsdk.path": "./node_modules/typescript/bin",
+          "js/ts.tsdk.promptToUseWorkspaceVersion": true,
+          "js/ts.tsdk.additionalLocations": ["./node_modules/typescript/bin"]
         }
       })
       : Option.none()
