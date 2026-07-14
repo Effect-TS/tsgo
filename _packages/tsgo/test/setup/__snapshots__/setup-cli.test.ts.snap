@@ -42,7 +42,7 @@ exports[`Setup CLI > should add LSP plugin alongside existing plugins > tsconfig
 }
     ]
   },
-"$schema": "https://raw.githubusercontent.com/Effect-TS/tsgo/refs/heads/main/schema.json"
+"$schema": "./node_modules/@effect/tsgo/schema.json"
 }"
 `;
 
@@ -107,7 +107,7 @@ exports[`Setup CLI > should add LSP with VS Code editor selected and create new 
 	}
 ]
   },
-"$schema": "https://raw.githubusercontent.com/Effect-TS/tsgo/refs/heads/main/schema.json"
+"$schema": "./node_modules/@effect/tsgo/schema.json"
 }"
 `;
 
@@ -154,7 +154,7 @@ exports[`Setup CLI > should add LSP with custom diagnostic severities when no pl
 	}
 ]
   },
-"$schema": "https://raw.githubusercontent.com/Effect-TS/tsgo/refs/heads/main/schema.json"
+"$schema": "./node_modules/@effect/tsgo/schema.json"
 }"
 `;
 
@@ -204,7 +204,7 @@ exports[`Setup CLI > should add custom diagnostic severities when plugin exists 
       }
     ]
   },
-"$schema": "https://raw.githubusercontent.com/Effect-TS/tsgo/refs/heads/main/schema.json"
+"$schema": "./node_modules/@effect/tsgo/schema.json"
 }"
 `;
 
@@ -271,7 +271,7 @@ exports[`Setup CLI > should generate changes for Astro-style configs using the l
       }
     ]
   },
-"$schema": "https://raw.githubusercontent.com/Effect-TS/tsgo/refs/heads/main/schema.json"
+"$schema": "./node_modules/@effect/tsgo/schema.json"
 }"
 `;
 
@@ -314,7 +314,7 @@ exports[`Setup CLI > should generate changes for adding LSP with defaults > tsco
 	}
 ]
   },
-"$schema": "https://raw.githubusercontent.com/Effect-TS/tsgo/refs/heads/main/schema.json"
+"$schema": "./node_modules/@effect/tsgo/schema.json"
 }"
 `;
 
@@ -358,7 +358,7 @@ exports[`Setup CLI > should generate changes for adding LSP with prepare script 
 	}
 ]
   },
-"$schema": "https://raw.githubusercontent.com/Effect-TS/tsgo/refs/heads/main/schema.json"
+"$schema": "./node_modules/@effect/tsgo/schema.json"
 }"
 `;
 
@@ -493,7 +493,7 @@ exports[`Setup CLI > should not override existing plugins when adding LSP plugin
 }
     ]
   },
-"$schema": "https://raw.githubusercontent.com/Effect-TS/tsgo/refs/heads/main/schema.json"
+"$schema": "./node_modules/@effect/tsgo/schema.json"
 }"
 `;
 
@@ -570,7 +570,7 @@ exports[`Setup CLI > should preserve all existing VS Code settings from a real r
 	}
 ]
   },
-"$schema": "https://raw.githubusercontent.com/Effect-TS/tsgo/refs/heads/main/schema.json"
+"$schema": "./node_modules/@effect/tsgo/schema.json"
 }"
 `;
 
@@ -635,7 +635,7 @@ exports[`Setup CLI > should preserve existing VS Code settings when adding LSP-s
 	}
 ]
   },
-"$schema": "https://raw.githubusercontent.com/Effect-TS/tsgo/refs/heads/main/schema.json"
+"$schema": "./node_modules/@effect/tsgo/schema.json"
 }"
 `;
 
@@ -758,7 +758,7 @@ exports[`Setup CLI > should replace existing tsconfig schema when adding LSP > p
 
 exports[`Setup CLI > should replace existing tsconfig schema when adding LSP > tsconfig.json 1`] = `
 "{
-  "$schema": "https://raw.githubusercontent.com/Effect-TS/tsgo/refs/heads/main/schema.json",
+  "$schema": "./node_modules/@effect/tsgo/schema.json",
   "compilerOptions": {
     "strict": true,
     "target": "ES2022",
@@ -813,7 +813,7 @@ exports[`Setup CLI > should update LSP version when already installed with older
       }
     ]
   },
-"$schema": "https://raw.githubusercontent.com/Effect-TS/tsgo/refs/heads/main/schema.json"
+"$schema": "./node_modules/@effect/tsgo/schema.json"
 }"
 `;
 
@@ -864,6 +864,6 @@ exports[`Setup CLI > should update custom diagnostic severities when plugin alre
       }
     ]
   },
-"$schema": "https://raw.githubusercontent.com/Effect-TS/tsgo/refs/heads/main/schema.json"
+"$schema": "./node_modules/@effect/tsgo/schema.json"
 }"
 `;

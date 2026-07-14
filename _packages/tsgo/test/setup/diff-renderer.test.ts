@@ -91,6 +91,7 @@ function makeAssessmentState(opts?: {
       text: tsconfigText,
       hasPlugins: false,
       hasLspPlugin: false,
+      currentSchemaPath: Option.none(),
       currentDiagnosticSeverities: Option.none()
     },
     vscodeSettings
@@ -165,6 +166,7 @@ describe("renderCodeActions", () => {
         text: existingText,
         hasPlugins: false,
         hasLspPlugin: false,
+        currentSchemaPath: Option.none(),
         currentDiagnosticSeverities: Option.none()
       }
     }

@@ -138,6 +138,7 @@ const assessTsConfig = (
   const sourceFile = ts.parseJsonText(input.fileName, input.text)
   const errors: Array<ts.Diagnostic> = []
   const parsed = ts.convertToObject(sourceFile, errors) as {
+    $schema?: unknown
     compilerOptions?: {
       plugins?: Array<{
         name?: string
@@ -149,6 +150,7 @@ const assessTsConfig = (
   const hasPlugins = parsed.compilerOptions?.plugins !== undefined
   const plugins = parsed.compilerOptions?.plugins ?? []
   const hasLspPlugin = plugins.some((plugin) => plugin.name === LSP_PLUGIN_NAME)
+  const currentSchemaPath = typeof parsed.$schema === "string" ? Option.some(parsed.$schema) : Option.none()
   const currentDiagnosticSeverities = getCurrentDiagnosticSeverities(plugins)
 
   return {
@@ -158,6 +160,7 @@ const assessTsConfig = (
     text: input.text,
     hasPlugins,
     hasLspPlugin,
+    currentSchemaPath,
     currentDiagnosticSeverities
   }
 }

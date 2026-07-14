@@ -12,8 +12,7 @@ import {
   defaultTypescriptPackageNames,
   LSP_PACKAGE_NAME,
   LSP_PLUGIN_NAME,
-  PATCH_COMMAND,
-  TSCONFIG_SCHEMA_URL
+  PATCH_COMMAND
 } from "./consts.js"
 import type { RuleSeverity } from "./rule-info.js"
 
@@ -537,9 +536,10 @@ const computeTsConfigChanges = (
       ctx,
       (tracker: any) => {
         const schemaProperty = findPropertyInObject(rootObj, "$schema")
-        const shouldAddSchema = !schemaProperty
-        const shouldUpdateSchema = !!schemaProperty && (
-          !ts.isStringLiteral(schemaProperty.initializer) || schemaProperty.initializer.text !== TSCONFIG_SCHEMA_URL
+        const shouldAddSchema = Option.isSome(target.schemaPath) && !schemaProperty
+        const shouldUpdateSchema = Option.isSome(target.schemaPath) && !!schemaProperty && (
+          !ts.isStringLiteral(schemaProperty.initializer) ||
+          schemaProperty.initializer.text !== target.schemaPath.value
         )
 
         if (shouldAddSchema) {
@@ -550,10 +550,11 @@ const computeTsConfigChanges = (
 
         descriptions.push(`Add compilerOptions with ${LSP_PLUGIN_NAME} plugin`)
 
-        const schemaPropertyAssignment = ts.factory.createPropertyAssignment(
-          ts.factory.createStringLiteral("$schema"),
-          ts.factory.createStringLiteral(TSCONFIG_SCHEMA_URL)
-        )
+        const schemaPropertyAssignment = Option.map(target.schemaPath, (schemaPath) =>
+          ts.factory.createPropertyAssignment(
+            ts.factory.createStringLiteral("$schema"),
+            ts.factory.createStringLiteral(schemaPath)
+          ))
 
         const compilerOptionsAssignment = ts.factory.createPropertyAssignment(
           ts.factory.createStringLiteral("compilerOptions"),
@@ -567,14 +568,14 @@ const computeTsConfigChanges = (
 
         // Rebuild the root object preserving existing properties, updating/adding $schema, appending compilerOptions
         const nextProperties: Array<ts.ObjectLiteralElementLike> = rootObj.properties.map((property) => {
-          if (schemaProperty && property === schemaProperty) {
-            return schemaPropertyAssignment
+          if (schemaProperty && property === schemaProperty && Option.isSome(schemaPropertyAssignment)) {
+            return schemaPropertyAssignment.value
           }
           return property
         })
 
-        if (shouldAddSchema) {
-          nextProperties.push(schemaPropertyAssignment)
+        if (shouldAddSchema && Option.isSome(schemaPropertyAssignment)) {
+          nextProperties.push(schemaPropertyAssignment.value)
         }
         nextProperties.push(compilerOptionsAssignment)
 
@@ -614,10 +615,11 @@ const computeTsConfigChanges = (
     (tracker: any) => {
       const schemaProperty = findPropertyInObject(rootObj, "$schema")
       const pluginsProperty = findPropertyInObject(compilerOptions, "plugins")
-      const schemaPropertyAssignment = ts.factory.createPropertyAssignment(
-        ts.factory.createStringLiteral("$schema"),
-        ts.factory.createStringLiteral(TSCONFIG_SCHEMA_URL)
-      )
+      const schemaPropertyAssignment = Option.map(target.schemaPath, (schemaPath) =>
+        ts.factory.createPropertyAssignment(
+          ts.factory.createStringLiteral("$schema"),
+          ts.factory.createStringLiteral(schemaPath)
+        ))
 
       if (Option.isNone(lspVersion)) {
         // User wants to remove LSP
@@ -646,15 +648,20 @@ const computeTsConfigChanges = (
         }
       } else {
         // User wants to add/keep LSP
-        if (!schemaProperty) {
+        if (!schemaProperty && Option.isSome(schemaPropertyAssignment)) {
           descriptions.push("Add $schema to tsconfig")
-          insertNodeAtEndOfList(tracker, current.sourceFile, rootObj.properties, schemaPropertyAssignment)
+          insertNodeAtEndOfList(tracker, current.sourceFile, rootObj.properties, schemaPropertyAssignment.value)
         } else if (
-          !ts.isStringLiteral(schemaProperty.initializer) ||
-          schemaProperty.initializer.text !== TSCONFIG_SCHEMA_URL
+          schemaProperty &&
+          Option.isSome(target.schemaPath) &&
+          (!ts.isStringLiteral(schemaProperty.initializer) || schemaProperty.initializer.text !== target.schemaPath.value)
         ) {
           descriptions.push("Update $schema in tsconfig")
-          tracker.replaceNode(current.sourceFile, schemaProperty.initializer, schemaPropertyAssignment.initializer)
+          tracker.replaceNode(
+            current.sourceFile,
+            schemaProperty.initializer,
+            Option.getOrThrow(schemaPropertyAssignment).initializer
+          )
         }
 
         const pluginObject = createLspPluginObject(target)
