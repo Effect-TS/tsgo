@@ -394,5 +394,9 @@
     "`Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)": {
         "category": "Suggestion",
         "code": 377100
+    },
+    "Exported function `{0}` has no pipeable overload corresponding to its signature `{1}`. effect(missingPipeableSignature)": {
+        "category": "Warning",
+        "code": 377101
     }
 }

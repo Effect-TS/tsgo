@@ -65,7 +65,7 @@ func (tp *TypeParser) DataFirstOrLastCall(node *ast.Node) *ParsedDataFirstOrLast
 	}
 
 	for _, subjectIndex := range subjectIndexes {
-		derived := derivePipeableSignatureFromDataFirst(c, resolved, subjectIndex)
+		derived := DerivePipeableSignatureFromDataFirst(c, resolved, subjectIndex)
 		if derived == nil {
 			continue
 		}
@@ -110,7 +110,9 @@ func (tp *TypeParser) DataFirstOrLastCall(node *ast.Node) *ParsedDataFirstOrLast
 	return nil
 }
 
-func derivePipeableSignatureFromDataFirst(c *checker.Checker, sig *checker.Signature, subjectIndex int) *checker.Signature {
+// DerivePipeableSignatureFromDataFirst removes the subject parameter from a
+// data-first signature and moves it to a unary function in the return type.
+func DerivePipeableSignatureFromDataFirst(c *checker.Checker, sig *checker.Signature, subjectIndex int) *checker.Signature {
 	if c == nil || sig == nil {
 		return nil
 	}
