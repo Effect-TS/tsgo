@@ -30,6 +30,9 @@ export default defineConfig({
 
       const readme = yield* fs.readFileString("../../README.md")
       yield* fs.writeFileString(path.join("README.md"), readme)
+
+      const schemaJson = yield* fs.readFileString("../../schema.json")
+      yield* fs.writeFileString(path.join("schema.json"), schemaJson)
     }).pipe(Effect.provide(Layer.merge(NodeFileSystem.layer, NodePath.layerPosix)))
 
     return Effect.runPromise(program)

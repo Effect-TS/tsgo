@@ -5,6 +5,7 @@ import { assess } from "../../src/setup/assessment.js"
 import type { Assessment } from "../../src/setup/types.js"
 
 const TEST_TYPESCRIPT_VERSION = "7.1.0-dev.test"
+const TEST_SCHEMA_PATH = "./node_modules/@effect/tsgo/schema.json"
 
 /**
  * Helper to create an Assessment.Input and run assess() + computeChanges()
@@ -70,6 +71,10 @@ function runComputeChanges(opts: {
       prepareScript: opts.prepareScript ?? true
     },
     tsconfig: {
+      schemaPath: Option.match(lspVersion, {
+        onNone: () => Option.none(),
+        onSome: () => Option.some(TEST_SCHEMA_PATH)
+      }),
       diagnosticSeverities: opts.diagnosticSeverities === undefined
         ? Option.none()
         : opts.diagnosticSeverities === null
@@ -558,7 +563,7 @@ describe("computeChanges", () => {
 
       const rendered = tsconfigAction!.changes.flatMap((c) => c.textChanges.map((tc) => tc.newText)).join("")
       expect(rendered).toContain("$schema")
-      expect(rendered).toContain("raw.githubusercontent.com")
+      expect(rendered).toContain(TEST_SCHEMA_PATH)
     })
 
     it("should update $schema when creating compilerOptions on a tsconfig with wrong $schema", () => {
@@ -576,7 +581,7 @@ describe("computeChanges", () => {
       expect(tsconfigAction!.description).toContain("Update $schema")
 
       const rendered = tsconfigAction!.changes.flatMap((c) => c.textChanges.map((tc) => tc.newText)).join("")
-      expect(rendered).toContain("raw.githubusercontent.com")
+      expect(rendered).toContain(TEST_SCHEMA_PATH)
       expect(rendered).not.toContain("example.com")
     })
 

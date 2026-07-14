@@ -27,7 +27,8 @@
   },
   "files": [
     "dist/",
-    "README.md"
+    "README.md",
+    "schema.json"
   ],
   "optionalDependencies": {
     "@effect/tsgo-win32-x64": "workspace:*",

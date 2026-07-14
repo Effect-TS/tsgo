@@ -1,5 +1,6 @@
 import * as Effect from "effect/Effect"
 import * as Option from "effect/Option"
+import * as Path from "effect/Path"
 import type * as Terminal from "effect/Terminal"
 import * as Prompt from "effect/unstable/cli/Prompt"
 import { applyPresetDiagnosticSeverities, type DiagnosticPresetName, isPresetEnabled } from "../presets.js"
@@ -15,6 +16,7 @@ import { createRulePrompt } from "./rule-prompt.js"
 export interface GatherTargetContext {
   readonly defaultLspVersion: string
   readonly defaultTypescriptVersion: string
+  readonly defaultSchemaPath: string
 }
 
 /**
@@ -23,8 +25,10 @@ export interface GatherTargetContext {
 export const gatherTargetState = (
   assessment: Assessment.State,
   context: GatherTargetContext
-): Effect.Effect<Target.State, Terminal.QuitError, Prompt.Environment> =>
+): Effect.Effect<Target.State, Terminal.QuitError, Prompt.Environment | Path.Path> =>
   Effect.gen(function*() {
+    const path = yield* Path.Path
+
     // Determine current LSP installation state
     const currentLspState = Option.match(assessment.packageJson.lspVersion, {
       onNone: () => "no" as const,
@@ -64,6 +68,7 @@ export const gatherTargetState = (
           prepareScript: false
         },
         tsconfig: {
+          schemaPath: Option.none(),
           diagnosticSeverities: Option.none()
         },
         vscodeSettings: Option.none(),
@@ -135,6 +140,9 @@ export const gatherTargetState = (
 
     // Build target state
     const defaultTypescriptPackageName = defaultTypescriptPackageNames[0]
+    const relativeSchemaPath = path
+      .relative(path.dirname(assessment.tsconfig.path), context.defaultSchemaPath)
+      .replaceAll("\\", "/")
     const vscodeSettings: Option.Option<Target.VSCodeSettings> = editors.includes("vscode")
       ? Option.some({
         settings: {
@@ -160,6 +168,7 @@ export const gatherTargetState = (
         prepareScript: true
       },
       tsconfig: {
+        schemaPath: Option.some(relativeSchemaPath.startsWith(".") ? relativeSchemaPath : `./${relativeSchemaPath}`),
         diagnosticSeverities
       },
       vscodeSettings,
