@@ -1,0 +1,15 @@
+==== /.src/missingPipeableSignature.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 33:58 - 33:74
+Node: values.join("")
+Node Kind: KindCallExpression
+
+Subject: ""
+Subject Type: ""
+
+Transformations (1):
+  [0] kind: call
+      callee: values.join
+      args: (constant)
+      outType: string

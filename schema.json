@@ -1899,6 +1899,11 @@
           "default": "error",
           "description": "Detects Layer values with unhandled context requirements"
         },
+        "missingPipeableSignature": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Reports exported fixed-arity functions whose call signatures have no corresponding pipeable overload"
+        },
         "missingReturnYieldStar": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "error",

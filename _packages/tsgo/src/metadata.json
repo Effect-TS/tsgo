@@ -1649,6 +1649,30 @@
       }
     },
     {
+      "name": "missingPipeableSignature",
+      "group": "style",
+      "description": "Reports exported fixed-arity functions whose call signatures have no corresponding pipeable overload",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377101
+      ],
+      "preview": {
+        "sourceText": "\nexport const getAt = (self: ReadonlyArray\u003cstring\u003e, index: number): string =\u003e self[index]\n",
+        "diagnostics": [
+          {
+            "start": 14,
+            "end": 19,
+            "text": "Exported function `getAt` has no pipeable overload corresponding to its signature `(self: ReadonlyArray\u003cstring\u003e, index: number) =\u003e string`. effect(missingPipeableSignature)"
+          }
+        ]
+      }
+    },
+    {
       "name": "multipleCatchTag",
       "group": "style",
       "description": "Suggests collapsing consecutive Effect.catchTag transformations into a single Effect.catchTags call when semantics stay equivalent",

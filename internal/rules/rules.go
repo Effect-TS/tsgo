@@ -82,6 +82,7 @@ var All = []rule.Rule{
 	NonObjectEffectServiceType,
 	DeterministicKeys,
 	MissedPipeableOpportunity,
+	MissingPipeableSignature,
 	DuplicatePackage,
 	EffectDoNotation,
 	EffectMapFlatten,
