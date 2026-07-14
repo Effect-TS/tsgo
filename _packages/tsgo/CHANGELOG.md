@@ -1,5 +1,19 @@
 # @effect/tsgo
 
+## 0.20.0
+
+### Minor Changes
+
+- e534733: Add an `effect-tsgo diagnostics` command for reporting Effect diagnostics from a file or TypeScript project. The command supports pretty, text, JSON, and GitHub Actions output, severity filtering, progress reporting, strict warning handling, and inline language-service configuration.
+
+### Patch Changes
+
+- 55d6cf8: Enable `skipLibCheck` in the Effect test harness to avoid type-checking bundled declaration files that are not under test.
+- 4f212fb: Start layer magic compositions from `Layer.empty` when the first layer does not provide a requested output service.
+- 79768a1: Ship the generated schema and configure `tsconfig.json` to use the installed local copy during setup, fixing #346.
+- 070a8ac: Update `effect-tsgo setup` to configure the current TypeScript Go VS Code settings, including the workspace TypeScript SDK path and additional SDK locations.
+- 228f6d5: Update to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260713.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/168e7015edf98244febc8f4ae450b673b5d195d7) commit `168e7015edf98244febc8f4ae450b673b5d195d7`.
+
 ## 0.19.0
 
 ### Minor Changes
