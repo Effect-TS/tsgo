@@ -1,0 +1,25 @@
+flowchart TB
+  0[["type: #40;self: readonly string#91;#93;, index: number#41; =#gt; string<br/>node: #40;self: ReadonlyArray#lt;string#gt;, index: number#41;: string =#gt; self#91;index#93;"]]
+  1[/"type: string<br/>node: self#91;index#93;"/]
+  2[["type: #40;index: number, self: readonly string#91;#93;#41; =#gt; string<br/>node: #40;index: number, self: ReadonlyArray#lt;string#gt;#41;: string =#gt; self#91;index#93;"]]
+  3[/"type: string<br/>node: self#91;index#93;"/]
+  4[/"type: any<br/>node: null as any"/]
+  5[/"type: any<br/>node: null as any"/]
+  6[/"type: any<br/>node: null as any"/]
+  7[/"type: any<br/>node: null as any"/]
+  8[["type: #40;...values: string#91;#93;#41; =#gt; string<br/>node: #40;...values: Array#lt;string#gt;#41;: string =#gt; values.join#40;#quot;#quot;#41;"]]
+  9[/"type: #quot;#quot;<br/>node: #quot;#quot;"/]
+  10["type: string<br/>callee: values.join<br/>args: #91;#93;"]
+  11[/"type: #40;separator?: string #124; undefined#41; =#gt; string<br/>node: values.join"/]
+  12[["type: #40;value: string#41; =#gt; string<br/>node: #40;value: string#41;: string =#gt; value"]]
+  13[/"type: string<br/>node: value"/]
+  14[/"type: 1<br/>node: 1"/]
+  15[["type: #40;self: readonly string#91;#93;, index: number#41; =#gt; string<br/>node: #40;self: ReadonlyArray#lt;string#gt;, index: number#41;: string =#gt; self#91;index#93;"]]
+  16[/"type: string<br/>node: self#91;index#93;"/]
+  1 -->|"kind: potentialReturn"| 0
+  3 -->|"kind: potentialReturn"| 2
+  9 -->|"kind: pipe"| 10
+  11 -->|"kind: transformCallee"| 10
+  10 -->|"kind: potentialReturn"| 8
+  13 -->|"kind: potentialReturn"| 12
+  16 -->|"kind: potentialReturn"| 15

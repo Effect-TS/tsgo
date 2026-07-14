@@ -189,7 +189,7 @@ func logDerivedPipeableSignatureComparison(t *testing.T, tp *TypeParser, node *a
 
 	t.Logf("data-first resolved return type: %s", c.TypeToString(c.GetReturnTypeOfSignature(resolved)))
 	for _, subjectIndex := range subjectIndexes {
-		derived := derivePipeableSignatureFromDataFirst(c, resolved, subjectIndex)
+		derived := DerivePipeableSignatureFromDataFirst(c, resolved, subjectIndex)
 		if derived == nil {
 			t.Logf("subjectIndex=%d derived=nil", subjectIndex)
 			continue
