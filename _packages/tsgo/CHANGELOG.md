@@ -1,5 +1,11 @@
 # @effect/tsgo
 
+## 0.21.0
+
+### Minor Changes
+
+- dc7e706: Add the off-by-default `missingPipeableSignature` diagnostic for auditing exported fixed-arity functions without corresponding pipeable overloads.
+
 ## 0.20.0
 
 ### Minor Changes
