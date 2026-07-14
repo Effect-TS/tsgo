@@ -54,6 +54,7 @@ export namespace Assessment {
     readonly text: string
     readonly hasPlugins: boolean
     readonly hasLspPlugin: boolean
+    readonly currentSchemaPath: Option.Option<string>
     readonly currentDiagnosticSeverities: Option.Option<Record<string, RuleSeverity>>
   }
 
@@ -79,6 +80,7 @@ export namespace Target {
   }
 
   export interface TsConfig {
+    readonly schemaPath: Option.Option<string>
     readonly diagnosticSeverities: Option.Option<Record<string, RuleSeverity>>
   }
 

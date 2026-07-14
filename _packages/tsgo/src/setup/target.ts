@@ -14,6 +14,7 @@ export const fromAssessment = (inputState: Assessment.State): Target.State => ({
     )
   },
   tsconfig: {
+    schemaPath: inputState.tsconfig.currentSchemaPath,
     diagnosticSeverities: inputState.tsconfig.currentDiagnosticSeverities
   },
   vscodeSettings: Option.map(inputState.vscodeSettings, (settings) => ({
