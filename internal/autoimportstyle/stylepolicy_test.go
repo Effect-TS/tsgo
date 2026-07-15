@@ -117,6 +117,7 @@ func TestApplyNamespaceRewriteFromAddToExisting(t *testing.T) {
 	result := sp.Apply(export, fix)
 	if result == nil {
 		t.Fatal("expected non-nil result")
+		return
 	}
 	if result.Kind != lsproto.AutoImportFixKindAddNew {
 		t.Errorf("expected rewrite to AddNew, got %v", result.Kind)

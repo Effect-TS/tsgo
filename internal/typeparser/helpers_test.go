@@ -383,6 +383,7 @@ const value = Bar`,
 	b := sourceFiles["/.src/b.ts"]
 	if a == nil || b == nil {
 		t.Fatal("expected both source files")
+		return
 	}
 
 	moduleSym := checker.Checker_getSymbolOfDeclaration(c, a.AsNode())
