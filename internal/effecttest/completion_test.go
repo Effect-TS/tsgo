@@ -124,6 +124,7 @@ class MyService extends Context./*1*/`
 	completions := f.GetCompletions(t, nil)
 	if completions == nil {
 		t.Fatal("completions is nil")
+		return
 	}
 	if findCompletionLabel(completions.Items, "Service<MyService, {}>") {
 		t.Error("did not expect Effect completion when completions=false")
