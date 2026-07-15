@@ -35,6 +35,7 @@ type GetCompletionsAtPositionParams = api.GetCompletionsAtPositionParams
 type GetContextualTypeParams = api.GetContextualTypeParams
 type GetDefaultProjectForFileParams = api.GetDefaultProjectForFileParams
 type GetDiagnosticsParams = api.GetDiagnosticsParams
+type GetImportAdderEditsParams = api.GetImportAdderEditsParams
 type GetIntrinsicTypeParams = api.GetIntrinsicTypeParams
 type GetMemberInModuleExportsParams = api.GetMemberInModuleExportsParams
 type GetNonNullableTypeParams = api.GetNonNullableTypeParams
@@ -65,6 +66,9 @@ type GetTypesAtPositionsParams = api.GetTypesAtPositionsParams
 type GetTypesOfSymbolsParams = api.GetTypesOfSymbolsParams
 type GetWidenedTypeParams = api.GetWidenedTypeParams
 type Handler = api.Handler
+type ImportAdderAction = api.ImportAdderAction
+type ImportAdderActionKind = api.ImportAdderActionKind
+const ImportAdderActionKindImportSymbol = api.ImportAdderActionKindImportSymbol
 type IndexInfoResponse = api.IndexInfoResponse
 type InitializeResponse = api.InitializeResponse
 type IsArrayLikeTypeParams = api.IsArrayLikeTypeParams
@@ -115,6 +119,7 @@ const MethodGetFalseTypeOfConditionalType = api.MethodGetFalseTypeOfConditionalT
 const MethodGetFreshTypeOfType = api.MethodGetFreshTypeOfType
 const MethodGetGlobalDiagnostics = api.MethodGetGlobalDiagnostics
 const MethodGetImmediateAliasedSymbol = api.MethodGetImmediateAliasedSymbol
+const MethodGetImportAdderEdits = api.MethodGetImportAdderEdits
 const MethodGetIndexInfosOfType = api.MethodGetIndexInfosOfType
 const MethodGetIndexTypeOfType = api.MethodGetIndexTypeOfType
 const MethodGetJSDocTags = api.MethodGetJSDocTags
@@ -257,6 +262,7 @@ func SymbolHandle(symbol *ast.Symbol) api.SymbolID
 type SymbolID = api.SymbolID
 type SymbolResponse = api.SymbolResponse
 type SyncConn = api.SyncConn
+type TextEdit = api.TextEdit
 type Transport = api.Transport
 //go:linkname TypeHandle github.com/microsoft/typescript-go/internal/api.TypeHandle
 func TypeHandle(t *checker.Type) api.TypeID
