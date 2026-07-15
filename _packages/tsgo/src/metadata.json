@@ -398,6 +398,34 @@
       }
     },
     {
+      "name": "schemaOpaqueInstanceMember",
+      "group": "correctness",
+      "description": "Disallows instance members in classes extending Schema.Opaque",
+      "defaultSeverity": "error",
+      "fixable": false,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377102
+      ],
+      "preview": {
+        "sourceText": "import { Schema } from \"effect\"\n\nclass User extends Schema.Opaque\u003cUser\u003e()(Schema.Struct({ name: Schema.String })) {\n  displayName = \"User\"\n  greet() {\n    return `Hello, ${this.displayName}`\n  }\n}\n",
+        "diagnostics": [
+          {
+            "start": 118,
+            "end": 129,
+            "text": "Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)"
+          },
+          {
+            "start": 141,
+            "end": 146,
+            "text": "Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)"
+          }
+        ]
+      }
+    },
+    {
       "name": "catchUnfailableEffect",
       "group": "antipattern",
       "description": "Warns when using error handling on Effects that never fail",

@@ -1,0 +1,23 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/schemaOpaqueInstanceMember_preview.ts(6,3): warning TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
+/.src/schemaOpaqueInstanceMember_preview.ts(7,3): warning TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
+
+
+==== /.src/schemaOpaqueInstanceMember_preview.ts (2 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics schemaOpaqueInstanceMember:warning
+    import { Schema } from "effect"
+    
+    class User extends Schema.Opaque<User>()(Schema.Struct({ name: Schema.String })) {
+      displayName = "User"
+      ~~~~~~~~~~~
+!!! warning TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
+      greet() {
+      ~~~~~
+!!! warning TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
+        return `Hello, ${this.displayName}`
+      }
+    }
+    

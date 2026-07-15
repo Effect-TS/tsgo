@@ -1,0 +1,15 @@
+flowchart TB
+  0[/"type: #123; name: String; #125;<br/>node: #123; name: Schema.String #125;"/]
+  1["type: Struct#lt;#123; readonly name: String; #125;#gt;<br/>callee: Schema.Struct<br/>args: #91;#93;"]
+  2[/"type: #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields#41; =#gt; Struct#lt;Fields#gt;<br/>node: Schema.Struct"/]
+  3["type: Opaque#lt;User, Struct#lt;#123; readonly name: String; #125;#gt;, #123;#125;#gt; #amp; Omit#lt;Struct#lt;#123; readonly name: String; #125;#gt;, keyof Top#gt;<br/>callee: Schema.Opaque<br/>args: #91;#93;"]
+  4[/"type: #lt;Self, Brand = #123;#125;#gt;#40;#41; =#gt; #lt;S extends Top#gt;#40;schema: S#41; =#gt; Opaque#lt;Self, S, Brand#gt; #amp; Omit#lt;S, keyof Top#gt;<br/>node: Schema.Opaque"/]
+  5[/"type: #quot;User#quot;<br/>node: #quot;User#quot;"/]
+  6[["type: #40;#41; =#gt; string<br/>node: greet#40;#41; #123;#92;n    return `Hello, $#123;this.displayName#125;`#92;n  #125;"]]
+  7[/"type: string<br/>node: `Hello, $#123;this.displayName#125;`"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1
+  1 -->|"kind: pipe"| 3
+  4 -->|"kind: transformCallee"| 3
+  7 -->|"kind: potentialReturn"| 6
+  7 -->|"kind: usedBy"| 6

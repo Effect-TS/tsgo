@@ -76,6 +76,7 @@ var All = []rule.Rule{
 	InstanceOfSchema,
 	GenericEffectServices,
 	OverriddenSchemaConstructor,
+	SchemaOpaqueInstanceMember,
 	RedundantSchemaTagIdentifier,
 	ClassSelfMismatch,
 	EffectFnOpportunity,

@@ -49,6 +49,7 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><code>nonObjectEffectServiceType</code></td><td>❌</td><td></td><td>Ensures Effect.Service types are objects, not primitives</td><td>✓</td><td></td></tr>
     <tr><td><code>outdatedApi</code></td><td>⚠️</td><td></td><td>Detects usage of APIs that have been removed or renamed in Effect v4</td><td></td><td>✓</td></tr>
     <tr><td><code>overriddenSchemaConstructor</code></td><td>❌</td><td>🔧</td><td>Prevents overriding constructors in Schema classes which breaks decoding behavior</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>schemaOpaqueInstanceMember</code></td><td>❌</td><td></td><td>Disallows instance members in classes extending Schema.Opaque</td><td></td><td>✓</td></tr>
     <tr><td colspan="6"><strong>Anti-pattern</strong> <em>Discouraged patterns that often lead to bugs or confusing behavior.</em></td></tr>
     <tr><td><code>catchUnfailableEffect</code></td><td>💡</td><td></td><td>Warns when using error handling on Effects that never fail</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>effectFnIife</code></td><td>⚠️</td><td>🔧</td><td>Effect.fn or Effect.fnUntraced is called as an IIFE; use Effect.gen instead</td><td>✓</td><td>✓</td></tr>

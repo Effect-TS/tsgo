@@ -1,0 +1,63 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/schemaOpaqueInstanceMember.ts(11,3): error TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
+/.src/schemaOpaqueInstanceMember.ts(12,3): error TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
+/.src/schemaOpaqueInstanceMember.ts(13,7): error TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
+/.src/schemaOpaqueInstanceMember.ts(16,7): error TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
+/.src/schemaOpaqueInstanceMember.ts(22,3): error TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
+/.src/schemaOpaqueInstanceMember.ts(26,3): error TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
+
+
+==== /.src/schemaOpaqueInstanceMember.ts (6 errors) ====
+    import { Schema } from "effect"
+    import { Opaque as SchemaOpaque } from "effect/Schema"
+    import * as S from "effect/Schema"
+    
+    class Valid extends S.Opaque<Valid>()(S.Struct({ value: S.String })) {
+      static value = "static"
+      static method() {}
+    }
+    
+    class Invalid extends Schema.Opaque<Invalid>()(Schema.Struct({ value: Schema.String })) {
+      value = "instance"
+      ~~~~~
+!!! error TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
+      method() {}
+      ~~~~~~
+!!! error TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
+      get computed() {
+          ~~~~~~~~
+!!! error TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
+        return this.value
+      }
+      set computed(value: string) {
+          ~~~~~~~~
+!!! error TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
+        this.value = value
+      }
+    }
+    
+    class Aliased extends SchemaOpaque<Aliased>()(Schema.Struct({})) {
+      field = true
+      ~~~~~
+!!! error TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
+    }
+    
+    const Expression = class extends S.Opaque<Invalid>()(S.Struct({})) {
+      expressionField = true
+      ~~~~~~~~~~~~~~~
+!!! error TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
+    }
+    
+    declare function Opaque<Self>(): (schema: unknown) => new() => object
+    class Unrelated extends Opaque<Unrelated>()({}) {
+      allowed = true
+    }
+    
+    class WrongShape extends S.Class<WrongShape>("WrongShape")({}) {
+      allowed = true
+    }
+    
+    void Expression
+    

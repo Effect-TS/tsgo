@@ -68,6 +68,7 @@ require (
 	github.com/microsoft/typescript-go/shim/modulespecifiers v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/packagejson v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/parser v0.0.0-00010101000000-000000000000
+	github.com/microsoft/typescript-go/shim/project v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/project/logging v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/scanner v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/sourcemap v0.0.0-00010101000000-000000000000
@@ -76,6 +77,7 @@ require (
 	github.com/microsoft/typescript-go/shim/tsoptions v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/tspath v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/vfs v0.0.0-00010101000000-000000000000
+	github.com/microsoft/typescript-go/shim/vfs/osvfs v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/vfs/vfstest v0.0.0-00010101000000-000000000000
 )
 
@@ -85,6 +87,7 @@ require (
 	github.com/go-json-experiment/json v0.0.0-20260214004413-d219187c3433 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.10 // indirect
+	github.com/mackerelio/go-osstat v0.2.7 // indirect
 	github.com/microsoft/typescript-go v0.0.0 // indirect
 	github.com/microsoft/typescript-go/shim/collections v0.0.0 // indirect
 	github.com/peter-evans/patience v0.3.0 // indirect

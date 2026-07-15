@@ -1,0 +1,19 @@
+==== /.src/schemaOpaqueInstanceMember_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 5:19 - 5:81
+Node: Schema.Opaque<User>()(Schema.Struct({ name: Schema.String }))
+Node Kind: KindCallExpression
+
+Subject: { name: Schema.String }
+Subject Type: { name: String; }
+
+Transformations (2):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly name: String; }>
+  [1] kind: call
+      callee: Schema.Opaque<User>()
+      args: (constant)
+      outType: Opaque<User, Struct<{ readonly name: String; }>, {}> & Omit<Struct<{ readonly name: String; }>, keyof Top>
