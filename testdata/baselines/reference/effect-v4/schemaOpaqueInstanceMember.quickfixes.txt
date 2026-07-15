@@ -1,0 +1,75 @@
+=== Quick Fix Inventory ===
+
+[D1] (5:7-5:12) TS6196: 'Valid' is declared but never used.
+  (no quick fixes)
+
+[D2] (11:3-11:8) TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
+  Fix 0: "Disable schemaOpaqueInstanceMember for this line"
+  Fix 1: "Disable schemaOpaqueInstanceMember for entire file"
+
+[D3] (12:3-12:9) TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
+  Fix 0: "Disable schemaOpaqueInstanceMember for this line"
+  Fix 1: "Disable schemaOpaqueInstanceMember for entire file"
+
+[D4] (13:7-13:15) TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
+  Fix 0: "Disable schemaOpaqueInstanceMember for this line"
+  Fix 1: "Disable schemaOpaqueInstanceMember for entire file"
+
+[D5] (16:7-16:15) TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
+  Fix 0: "Disable schemaOpaqueInstanceMember for this line"
+  Fix 1: "Disable schemaOpaqueInstanceMember for entire file"
+
+[D6] (21:7-21:14) TS6196: 'Aliased' is declared but never used.
+  (no quick fixes)
+
+[D7] (22:3-22:8) TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
+  Fix 0: "Disable schemaOpaqueInstanceMember for this line"
+  Fix 1: "Disable schemaOpaqueInstanceMember for entire file"
+
+[D8] (26:3-26:18) TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
+  Fix 0: "Disable schemaOpaqueInstanceMember for this line"
+  Fix 1: "Disable schemaOpaqueInstanceMember for entire file"
+
+[D9] (30:7-30:16) TS6196: 'Unrelated' is declared but never used.
+  (no quick fixes)
+
+[D10] (34:7-34:17) TS6196: 'WrongShape' is declared but never used.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+
+=== [D2] Fix 0: "Disable schemaOpaqueInstanceMember for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable schemaOpaqueInstanceMember for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable schemaOpaqueInstanceMember for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable schemaOpaqueInstanceMember for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable schemaOpaqueInstanceMember for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable schemaOpaqueInstanceMember for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable schemaOpaqueInstanceMember for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable schemaOpaqueInstanceMember for entire file" ===
+skipped by default
+
+=== [D7] Fix 0: "Disable schemaOpaqueInstanceMember for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable schemaOpaqueInstanceMember for entire file" ===
+skipped by default
+
+=== [D8] Fix 0: "Disable schemaOpaqueInstanceMember for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable schemaOpaqueInstanceMember for entire file" ===
+skipped by default

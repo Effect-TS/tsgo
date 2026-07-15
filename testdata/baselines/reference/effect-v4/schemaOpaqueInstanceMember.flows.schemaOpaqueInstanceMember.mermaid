@@ -1,0 +1,65 @@
+flowchart TB
+  0[/"type: #123; value: String; #125;<br/>node: #123; value: S.String #125;"/]
+  1["type: Struct#lt;#123; readonly value: String; #125;#gt;<br/>callee: S.Struct<br/>args: #91;#93;"]
+  2[/"type: #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields#41; =#gt; Struct#lt;Fields#gt;<br/>node: S.Struct"/]
+  3["type: Opaque#lt;Valid, Struct#lt;#123; readonly value: String; #125;#gt;, #123;#125;#gt; #amp; Omit#lt;Struct#lt;#123; readonly value: String; #125;#gt;, keyof Top#gt;<br/>callee: S.Opaque<br/>args: #91;#93;"]
+  4[/"type: #lt;Self, Brand = #123;#125;#gt;#40;#41; =#gt; #lt;S extends Top#gt;#40;schema: S#41; =#gt; Opaque#lt;Self, S, Brand#gt; #amp; Omit#lt;S, keyof Top#gt;<br/>node: S.Opaque"/]
+  5[/"type: #quot;static#quot;<br/>node: #quot;static#quot;"/]
+  6[["type: #40;#41; =#gt; void<br/>node: static method#40;#41; #123;#125;"]]
+  7[/"type: #123; value: String; #125;<br/>node: #123; value: Schema.String #125;"/]
+  8["type: Struct#lt;#123; readonly value: String; #125;#gt;<br/>callee: Schema.Struct<br/>args: #91;#93;"]
+  9[/"type: #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields#41; =#gt; Struct#lt;Fields#gt;<br/>node: Schema.Struct"/]
+  10["type: Opaque#lt;Invalid, Struct#lt;#123; readonly value: String; #125;#gt;, #123;#125;#gt; #amp; Omit#lt;Struct#lt;#123; readonly value: String; #125;#gt;, keyof Top#gt;<br/>callee: Schema.Opaque<br/>args: #91;#93;"]
+  11[/"type: #lt;Self, Brand = #123;#125;#gt;#40;#41; =#gt; #lt;S extends Top#gt;#40;schema: S#41; =#gt; Opaque#lt;Self, S, Brand#gt; #amp; Omit#lt;S, keyof Top#gt;<br/>node: Schema.Opaque"/]
+  12[/"type: #quot;instance#quot;<br/>node: #quot;instance#quot;"/]
+  13[["type: #40;#41; =#gt; void<br/>node: method#40;#41; #123;#125;"]]
+  14[["type: string<br/>node: get computed#40;#41; #123;#92;n    return this.value#92;n  #125;"]]
+  15[/"type: string<br/>node: this.value"/]
+  16[["type: string<br/>node: set computed#40;value: string#41; #123;#92;n    this.value = value#92;n  #125;"]]
+  17[/"type: #123;#125;<br/>node: #123;#125;"/]
+  18["type: Struct#lt;#123;#125;#gt;<br/>callee: Schema.Struct<br/>args: #91;#93;"]
+  19[/"type: #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields#41; =#gt; Struct#lt;Fields#gt;<br/>node: Schema.Struct"/]
+  20["type: Opaque#lt;Aliased, Struct#lt;#123;#125;#gt;, #123;#125;#gt; #amp; Omit#lt;Struct#lt;#123;#125;#gt;, keyof Top#gt;<br/>callee: SchemaOpaque<br/>args: #91;#93;"]
+  21[/"type: #lt;Self, Brand = #123;#125;#gt;#40;#41; =#gt; #lt;S extends Top#gt;#40;schema: S#41; =#gt; Opaque#lt;Self, S, Brand#gt; #amp; Omit#lt;S, keyof Top#gt;<br/>node: SchemaOpaque"/]
+  22[/"type: true<br/>node: true"/]
+  23[/"type: typeof Expression<br/>node: class extends S.Opaque#lt;Invalid#gt;#40;#41;#40;S.Struct#40;#123;#125;#41;#41; #123;#92;n  expressionField = true#92;n#125;"/]
+  24[/"type: #123;#125;<br/>node: #123;#125;"/]
+  25["type: Struct#lt;#123;#125;#gt;<br/>callee: S.Struct<br/>args: #91;#93;"]
+  26[/"type: #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields#41; =#gt; Struct#lt;Fields#gt;<br/>node: S.Struct"/]
+  27["type: Opaque#lt;Invalid, Struct#lt;#123;#125;#gt;, #123;#125;#gt; #amp; Omit#lt;Struct#lt;#123;#125;#gt;, keyof Top#gt;<br/>callee: S.Opaque<br/>args: #91;#93;"]
+  28[/"type: #lt;Self, Brand = #123;#125;#gt;#40;#41; =#gt; #lt;S extends Top#gt;#40;schema: S#41; =#gt; Opaque#lt;Self, S, Brand#gt; #amp; Omit#lt;S, keyof Top#gt;<br/>node: S.Opaque"/]
+  29[["type: #lt;Self#gt;#40;#41; =#gt; #40;schema: unknown#41; =#gt; new #40;#41; =#gt; object<br/>node: declare function Opaque#lt;Self#gt;#40;#41;: #40;schema: unknown#41; =#gt; new#40;#41; =#gt; object"]]
+  30[/"type: #123;#125;<br/>node: #123;#125;"/]
+  31["type: new #40;#41; =#gt; object<br/>callee: Opaque<br/>args: #91;#93;"]
+  32[/"type: #lt;Self#gt;#40;#41; =#gt; #40;schema: unknown#41; =#gt; new #40;#41; =#gt; object<br/>node: Opaque"/]
+  33[/"type: true<br/>node: true"/]
+  34[/"type: Class#lt;WrongShape, Struct#lt;#123;#125;#gt;, #123;#125;#gt;<br/>node: S.Class#lt;WrongShape#gt;#40;#quot;WrongShape#quot;#41;#40;#123;#125;#41;"/]
+  35[/"type: #quot;WrongShape#quot;<br/>node: #quot;WrongShape#quot;"/]
+  36["type: #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;WrongShape, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: Class#lt;WrongShape, Struct#lt;Fields#gt;, #123;#125;#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;WrongShape, readonly #91;S#93;#gt; #124; undefined#41;: Class#lt;WrongShape, S, #123;#125;#gt;; #125;<br/>callee: S.Class<br/>args: #91;#93;"]
+  37[/"type: #lt;Self = never, Brand = #123;#125;#gt;#40;identifier: string#41; =#gt; #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;Self, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.Class#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, Struct#lt;Fields#gt;, Brand#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;Self, readonly #91;S#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.Class#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, S, Brand#gt;; #125;<br/>node: S.Class"/]
+  38[/"type: true<br/>node: true"/]
+  39[/"type: undefined<br/>node: void Expression"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1
+  1 -->|"kind: pipe"| 3
+  4 -->|"kind: transformCallee"| 3
+  7 -->|"kind: pipe"| 8
+  9 -->|"kind: transformCallee"| 8
+  8 -->|"kind: pipe"| 10
+  11 -->|"kind: transformCallee"| 10
+  15 -->|"kind: potentialReturn"| 14
+  15 -->|"kind: usedBy"| 14
+  17 -->|"kind: pipe"| 18
+  19 -->|"kind: transformCallee"| 18
+  18 -->|"kind: pipe"| 20
+  21 -->|"kind: transformCallee"| 20
+  24 -->|"kind: pipe"| 25
+  26 -->|"kind: transformCallee"| 25
+  25 -->|"kind: pipe"| 27
+  28 -->|"kind: transformCallee"| 27
+  27 -->|"kind: usedBy"| 23
+  30 -->|"kind: pipe"| 31
+  32 -->|"kind: transformCallee"| 31
+  35 -->|"kind: pipe"| 36
+  37 -->|"kind: transformCallee"| 36
+  36 -->|"kind: usedBy"| 34
