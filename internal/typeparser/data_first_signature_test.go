@@ -33,6 +33,7 @@ const provided = Effect.provide(program, MyService.Default, { local: true })
 	result := tp.DataFirstOrLastCall(call.AsNode())
 	if result == nil {
 		t.Fatal("expected provide call to normalize via derived signature comparison")
+		return
 	}
 	if result.SubjectIndex != 0 {
 		t.Fatalf("expected provide subject index 0, got %d", result.SubjectIndex)
@@ -62,6 +63,7 @@ const live = Layer.succeed(Service, make)
 	result := tp.DataFirstOrLastCall(call.AsNode())
 	if result == nil {
 		t.Fatal("expected Layer.succeed call to normalize via derived signature comparison")
+		return
 	}
 	if result.SubjectIndex != 1 {
 		t.Fatalf("expected Layer.succeed subject index 1, got %d", result.SubjectIndex)
@@ -133,6 +135,7 @@ export const shouldReportDataFirst = Effect.catchAll(
 	result := tp.DataFirstOrLastCall(call.AsNode())
 	if result == nil {
 		t.Fatal("expected data-first catchAll to normalize")
+		return
 	}
 	if strings.TrimSpace(nodeText(sf, result.Subject)) != "Effect.never" {
 		t.Fatalf("subject = %q, want %q", strings.TrimSpace(nodeText(sf, result.Subject)), "Effect.never")
@@ -259,6 +262,7 @@ func assertSingleTransformation(t *testing.T, sf *ast.SourceFile, flow *PipingFl
 	t.Helper()
 	if flow == nil {
 		t.Fatal("flow is nil")
+		return
 	}
 	if len(flow.Transformations) != 1 {
 		t.Fatalf("transformation count = %d, want 1", len(flow.Transformations))
