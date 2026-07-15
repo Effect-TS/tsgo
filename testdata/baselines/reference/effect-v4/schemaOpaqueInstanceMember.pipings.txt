@@ -1,0 +1,101 @@
+==== /.src/schemaOpaqueInstanceMember.ts (6 flows) ====
+
+=== Piping Flow ===
+Location: 5:20 - 5:69
+Node: S.Opaque<Valid>()(S.Struct({ value: S.String }))
+Node Kind: KindCallExpression
+
+Subject: { value: S.String }
+Subject Type: { value: String; }
+
+Transformations (2):
+  [0] kind: call
+      callee: S.Struct
+      args: (constant)
+      outType: Struct<{ readonly value: String; }>
+  [1] kind: call
+      callee: S.Opaque<Valid>()
+      args: (constant)
+      outType: Opaque<Valid, Struct<{ readonly value: String; }>, {}> & Omit<Struct<{ readonly value: String; }>, keyof Top>
+
+=== Piping Flow ===
+Location: 10:22 - 10:88
+Node: Schema.Opaque<Invalid>()(Schema.Struct({ value: Schema.String }))
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (2):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly value: String; }>
+  [1] kind: call
+      callee: Schema.Opaque<Invalid>()
+      args: (constant)
+      outType: Opaque<Invalid, Struct<{ readonly value: String; }>, {}> & Omit<Struct<{ readonly value: String; }>, keyof Top>
+
+=== Piping Flow ===
+Location: 21:22 - 21:65
+Node: SchemaOpaque<Aliased>()(Schema.Struct({}))
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (2):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{}>
+  [1] kind: call
+      callee: SchemaOpaque<Aliased>()
+      args: (constant)
+      outType: Opaque<Aliased, Struct<{}>, {}> & Omit<Struct<{}>, keyof Top>
+
+=== Piping Flow ===
+Location: 25:33 - 25:67
+Node: S.Opaque<Invalid>()(S.Struct({}))
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (2):
+  [0] kind: call
+      callee: S.Struct
+      args: (constant)
+      outType: Struct<{}>
+  [1] kind: call
+      callee: S.Opaque<Invalid>()
+      args: (constant)
+      outType: Opaque<Invalid, Struct<{}>, {}> & Omit<Struct<{}>, keyof Top>
+
+=== Piping Flow ===
+Location: 30:24 - 30:48
+Node: Opaque<Unrelated>()({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Opaque<Unrelated>()
+      args: (constant)
+      outType: new () => object
+
+=== Piping Flow ===
+Location: 34:25 - 34:63
+Node: S.Class<WrongShape>("WrongShape")({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: S.Class<WrongShape>("WrongShape")
+      args: (constant)
+      outType: Class<WrongShape, Struct<{}>, {}>

@@ -398,5 +398,9 @@
     "Exported function `{0}` has no pipeable overload corresponding to its signature `{1}`. effect(missingPipeableSignature)": {
         "category": "Warning",
         "code": 377101
+    },
+    "Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)": {
+        "category": "Error",
+        "code": 377102
     }
 }

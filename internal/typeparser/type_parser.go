@@ -42,6 +42,7 @@ type EffectLinks struct {
 	ExtendsEffectService       core.LinkStore[*ast.Node, *EffectServiceResult]
 	ExtendsEffectTag           core.LinkStore[*ast.Node, *EffectTagResult]
 	ExtendsSchemaClass         core.LinkStore[*ast.Node, *SchemaClassResult]
+	ExtendsSchemaOpaque        core.LinkStore[*ast.Node, *SchemaOpaqueResult]
 	ExtendsSchemaRequestClass  core.LinkStore[*ast.Node, *SchemaClassResult]
 	ExtendsSchemaTaggedClass   core.LinkStore[*ast.Node, *SchemaTaggedResult]
 	ExtendsSchemaTaggedError   core.LinkStore[*ast.Node, *SchemaTaggedResult]
