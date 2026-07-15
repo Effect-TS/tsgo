@@ -29,6 +29,7 @@ export class UserRepo extends Context.Service<UserRepo, { readonly find: () => s
 	service := tp.ServiceType(classType, className)
 	if service == nil {
 		t.Fatal("expected v4 service type to parse")
+		return
 	}
 	if service.Identifier == nil {
 		t.Fatal("expected service identifier type")
@@ -62,6 +63,7 @@ export class Config extends Context.Tag("Config")<Config, { readonly port: numbe
 	contextTag := tp.ContextTag(classType, className)
 	if contextTag == nil {
 		t.Fatal("expected v3 Context.Tag type to parse")
+		return
 	}
 	if contextTag.Identifier == nil {
 		t.Fatal("expected context tag identifier type")
