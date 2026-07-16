@@ -1,5 +1,11 @@
 # @effect/tsgo
 
+## 0.24.0
+
+### Minor Changes
+
+- 7c6a940: Add the off-by-default `preferSchemaTypeProperty` diagnostic and quick fix for replacing `Schema.Schema.Type<typeof X>` with `typeof X.Type`.
+
 ## 0.23.0
 
 ### Minor Changes
