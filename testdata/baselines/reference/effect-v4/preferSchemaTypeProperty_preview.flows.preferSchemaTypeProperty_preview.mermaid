@@ -1,0 +1,7 @@
+flowchart TB
+  0[/"type: #123; name: String; #125;<br/>node: #123; name: Schema.String #125;"/]
+  1["type: Struct#lt;#123; readonly name: String; #125;#gt;<br/>callee: Schema.Struct<br/>args: #91;#93;"]
+  2[/"type: #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields#41; =#gt; Struct#lt;Fields#gt;<br/>node: Schema.Struct"/]
+  3[/"type: Struct#lt;#123; readonly name: String; #125;#gt;<br/>node: User"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1

@@ -73,6 +73,7 @@ var All = []rule.Rule{
 	RedundantOrDie,
 	UnnecessaryArrowBlock,
 	UnnecessaryTypeofType,
+	PreferSchemaTypeProperty,
 	InstanceOfSchema,
 	GenericEffectServices,
 	OverriddenSchemaConstructor,

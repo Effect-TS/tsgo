@@ -406,5 +406,9 @@
     "`Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)": {
         "category": "Suggestion",
         "code": 377103
+    },
+    "Do not use `Schema.Schema.Type<typeof X>` to extract a schema's type. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)": {
+        "category": "Error",
+        "code": 377104
     }
 }

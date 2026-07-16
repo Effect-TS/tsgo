@@ -1771,6 +1771,30 @@
       }
     },
     {
+      "name": "preferSchemaTypeProperty",
+      "group": "style",
+      "description": "Disallows Schema.Schema.Type\u003ctypeof X\u003e in favor of typeof X.Type",
+      "defaultSeverity": "off",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377104
+      ],
+      "preview": {
+        "sourceText": "import { Schema } from \"effect\"\n\nconst User = Schema.Struct({ name: Schema.String })\ntype User = Schema.Schema.Type\u003ctypeof User\u003e\n",
+        "diagnostics": [
+          {
+            "start": 97,
+            "end": 128,
+            "text": "Do not use `Schema.Schema.Type\u003ctypeof X\u003e` to extract a schema's type. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)"
+          }
+        ]
+      }
+    },
+    {
       "name": "redundantMapError",
       "group": "style",
       "description": "Suggests hoisting a repeated trailing Effect.mapError from every yield in an Effect generator",
