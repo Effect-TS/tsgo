@@ -3,9 +3,10 @@ Effect version: 4.0.0
 
 /.src/lazyPromiseInEffectSync.ts(8,47): warning TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
 /.src/lazyPromiseInEffectSync.ts(11,45): warning TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
+/.src/lazyPromiseInEffectSync.ts(14,26): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
 
 
-==== /.src/lazyPromiseInEffectSync.ts (2 errors) ====
+==== /.src/lazyPromiseInEffectSync.ts (3 errors) ====
     // @effect-diagnostics lazyPromiseInEffectSync:warning
     import { Effect } from "effect"
     
@@ -24,6 +25,8 @@ Effect version: 4.0.0
     
     // Should NOT trigger - sync value
     export const fromValue = Effect.sync(() => 1)
+                             ~~~~~~~~~~~
+!!! suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
     
     // Should NOT trigger - thenable but not Promise
     export const fromThenable = Effect.sync(() => thenableValue)
