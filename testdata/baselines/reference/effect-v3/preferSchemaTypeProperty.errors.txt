@@ -1,0 +1,41 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/test.ts(5,25): error TS377104: Do not use `Schema.Schema.Type<typeof X>` to extract a schema's type. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)
+/.src/test.ts(8,23): error TS377104: Do not use `Schema.Schema.Type<typeof X>` to extract a schema's type. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)
+/.src/test.ts(10,22): suggestion TS377090: This `typeof ... .Type` query can be replaced with `Address`. effect(unnecessaryTypeofType)
+/.src/test.ts(11,30): error TS2694: Namespace '"/node_modules/effect/dist/dts/Schema"' has no exported member 'Type'.
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@effect/language-service"
+          }
+        ]
+      }
+    }
+
+==== /.src/test.ts (4 errors) ====
+    // @effect-diagnostics preferSchemaTypeProperty:error
+    import { Schema, Schema as S } from "effect"
+    
+    export const AddressId = Schema.String
+    export type AddressId = Schema.Schema.Type<typeof AddressId>
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377104: Do not use `Schema.Schema.Type<typeof X>` to extract a schema's type. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)
+    
+    export const Address = Schema.Struct({ id: AddressId })
+    export type Address = S.Schema.Type<typeof Address>
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377104: Do not use `Schema.Schema.Type<typeof X>` to extract a schema's type. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)
+    
+    type GoodTypeQuery = typeof Address.Type
+                         ~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377090: This `typeof ... .Type` query can be replaced with `Address`. effect(unnecessaryTypeofType)
+    type GoodSchemaType = Schema.Type<typeof Address>
+                                 ~~~~
+!!! error TS2694: Namespace '"/node_modules/effect/dist/dts/Schema"' has no exported member 'Type'.
+    
