@@ -1,0 +1,15 @@
+==== /.src/test.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 7:23 - 7:56
+Node: Schema.Struct({ id: AddressId })
+Node Kind: KindCallExpression
+
+Subject: { id: AddressId }
+Subject Type: { id: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly id: String; }>

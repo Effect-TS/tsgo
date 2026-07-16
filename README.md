@@ -109,6 +109,7 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><code>multipleCatchTag</code></td><td>💡</td><td></td><td>Suggests collapsing consecutive Effect.catchTag transformations into a single Effect.catchTags call when semantics stay equivalent</td><td></td><td>✓</td></tr>
     <tr><td><code>nestedEffectGenYield</code></td><td>➖</td><td></td><td>Warns when yielding a nested bare Effect.gen inside an existing Effect generator context</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>newSchemaClass</code></td><td>➖</td><td>🔧</td><td>Suggests using Schema make instead of new for Schema classes</td><td></td><td>✓</td></tr>
+    <tr><td><code>preferSchemaTypeProperty</code></td><td>➖</td><td>🔧</td><td>Disallows Schema.Schema.Type&lt;typeof X&gt; in favor of typeof X.Type</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>redundantMapError</code></td><td>💡</td><td></td><td>Suggests hoisting a repeated trailing Effect.mapError from every yield in an Effect generator</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>redundantOrDie</code></td><td>💡</td><td></td><td>Suggests hoisting a repeated trailing Effect.orDie from every yield in an Effect generator</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>redundantSchemaTagIdentifier</code></td><td>💡</td><td>🔧</td><td>Suggests removing redundant identifier argument when it equals the tag value in Schema.TaggedClass/TaggedError/TaggedRequest</td><td>✓</td><td>✓</td></tr>

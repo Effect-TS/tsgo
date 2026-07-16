@@ -1,0 +1,174 @@
+=== Quick Fix Inventory ===
+
+[D1] (5:25-5:61) TS377104: Do not use `Schema.Schema.Type<typeof X>` to extract a schema's type. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)
+  Fix 0: "Disable preferSchemaTypeProperty for this line"
+  Fix 1: "Disable preferSchemaTypeProperty for entire file"
+  Fix 2: "Replace with 'typeof AddressId.Type'"
+
+[D2] (8:23-8:52) TS377104: Do not use `Schema.Schema.Type<typeof X>` to extract a schema's type. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)
+  Fix 0: "Disable preferSchemaTypeProperty for this line"
+  Fix 1: "Disable preferSchemaTypeProperty for entire file"
+  Fix 2: "Replace with 'typeof Address.Type'"
+
+[D3] (13:6-13:16) TS6196: 'BusinessId' is declared but never used.
+  (no quick fixes)
+
+[D4] (13:19-13:63) TS377104: Do not use `Schema.Schema.Type<typeof X>` to extract a schema's type. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)
+  Fix 0: "Disable preferSchemaTypeProperty for this line"
+  Fix 1: "Disable preferSchemaTypeProperty for entire file"
+  Fix 2: "Replace with 'typeof Models.BusinessId.Type'"
+
+[D5] (15:6-15:19) TS6196: 'GoodTypeQuery' is declared but never used.
+  (no quick fixes)
+
+[D6] (15:22-15:41) TS377090: This `typeof ... .Type` query can be replaced with `Address`. effect(unnecessaryTypeofType)
+  Fix 0: "Disable unnecessaryTypeofType for this line"
+  Fix 1: "Disable unnecessaryTypeofType for entire file"
+  Fix 2: "Replace with 'Address'"
+
+[D7] (16:6-16:20) TS6196: 'GoodSchemaType' is declared but never used.
+  (no quick fixes)
+
+[D8] (16:30-16:34) TS2694: Namespace '"/node_modules/effect/dist/Schema"' has no exported member 'Type'.
+  (no quick fixes)
+
+[D9] (23:6-23:15) TS6196: 'Unrelated' is declared but never used.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable preferSchemaTypeProperty for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable preferSchemaTypeProperty for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with 'typeof AddressId.Type'" ===
+
+--- file:///.src/test.ts ---
+// @effect-diagnostics preferSchemaTypeProperty:error
+import { Schema, Schema as S } from "effect"
+
+export const AddressId = Schema.String
+export type AddressId = typeof AddressId.Type
+
+export const Address = Schema.Struct({ id: AddressId })
+export type Address = S.Schema.Type<typeof Address>
+
+namespace Models {
+  export const BusinessId = Schema.String
+}
+type BusinessId = Schema.Schema.Type<typeof Models.BusinessId>
+
+type GoodTypeQuery = typeof Address.Type
+type GoodSchemaType = Schema.Type<typeof Address>
+
+declare namespace LocalSchema {
+  namespace Schema {
+    type Type<T> = T
+  }
+}
+type Unrelated = LocalSchema.Schema.Type<typeof Address>
+
+
+=== [D2] Fix 0: "Disable preferSchemaTypeProperty for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable preferSchemaTypeProperty for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with 'typeof Address.Type'" ===
+
+--- file:///.src/test.ts ---
+// @effect-diagnostics preferSchemaTypeProperty:error
+import { Schema, Schema as S } from "effect"
+
+export const AddressId = Schema.String
+export type AddressId = Schema.Schema.Type<typeof AddressId>
+
+export const Address = Schema.Struct({ id: AddressId })
+export type Address = typeof Address.Type
+
+namespace Models {
+  export const BusinessId = Schema.String
+}
+type BusinessId = Schema.Schema.Type<typeof Models.BusinessId>
+
+type GoodTypeQuery = typeof Address.Type
+type GoodSchemaType = Schema.Type<typeof Address>
+
+declare namespace LocalSchema {
+  namespace Schema {
+    type Type<T> = T
+  }
+}
+type Unrelated = LocalSchema.Schema.Type<typeof Address>
+
+
+=== [D4] Fix 0: "Disable preferSchemaTypeProperty for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable preferSchemaTypeProperty for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with 'typeof Models.BusinessId.Type'" ===
+
+--- file:///.src/test.ts ---
+// @effect-diagnostics preferSchemaTypeProperty:error
+import { Schema, Schema as S } from "effect"
+
+export const AddressId = Schema.String
+export type AddressId = Schema.Schema.Type<typeof AddressId>
+
+export const Address = Schema.Struct({ id: AddressId })
+export type Address = S.Schema.Type<typeof Address>
+
+namespace Models {
+  export const BusinessId = Schema.String
+}
+type BusinessId = typeof Models.BusinessId.Type
+
+type GoodTypeQuery = typeof Address.Type
+type GoodSchemaType = Schema.Type<typeof Address>
+
+declare namespace LocalSchema {
+  namespace Schema {
+    type Type<T> = T
+  }
+}
+type Unrelated = LocalSchema.Schema.Type<typeof Address>
+
+
+=== [D6] Fix 0: "Disable unnecessaryTypeofType for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable unnecessaryTypeofType for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace with 'Address'" ===
+
+--- file:///.src/test.ts ---
+// @effect-diagnostics preferSchemaTypeProperty:error
+import { Schema, Schema as S } from "effect"
+
+export const AddressId = Schema.String
+export type AddressId = Schema.Schema.Type<typeof AddressId>
+
+export const Address = Schema.Struct({ id: AddressId })
+export type Address = S.Schema.Type<typeof Address>
+
+namespace Models {
+  export const BusinessId = Schema.String
+}
+type BusinessId = Schema.Schema.Type<typeof Models.BusinessId>
+
+type GoodTypeQuery = Address
+type GoodSchemaType = Schema.Type<typeof Address>
+
+declare namespace LocalSchema {
+  namespace Schema {
+    type Type<T> = T
+  }
+}
+type Unrelated = LocalSchema.Schema.Type<typeof Address>
+

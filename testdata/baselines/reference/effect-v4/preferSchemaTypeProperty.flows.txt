@@ -1,0 +1,1 @@
+/.src/test.ts -> preferSchemaTypeProperty.flows.test.mermaid

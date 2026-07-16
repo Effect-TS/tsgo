@@ -1,0 +1,15 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/preferSchemaTypeProperty_preview.ts(5,13): error TS377104: Do not use `Schema.Schema.Type<typeof X>` to extract a schema's type. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)
+
+
+==== /.src/preferSchemaTypeProperty_preview.ts (1 errors) ====
+    // @effect-diagnostics preferSchemaTypeProperty:error
+    import { Schema } from "effect"
+    
+    const User = Schema.Struct({ name: Schema.String })
+    type User = Schema.Schema.Type<typeof User>
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377104: Do not use `Schema.Schema.Type<typeof X>` to extract a schema's type. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)
+    
