@@ -1,0 +1,1 @@
+/.src/preferSchemaTypeProperty_preview.ts -> preferSchemaTypeProperty_preview.flows.preferSchemaTypeProperty_preview.mermaid

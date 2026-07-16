@@ -1,0 +1,14 @@
+flowchart TB
+  0[/"type: String<br/>node: Schema.String"/]
+  1[/"type: String<br/>node: AddressId"/]
+  2[/"type: #123; id: String; #125;<br/>node: #123; id: AddressId #125;"/]
+  3["type: Struct#lt;#123; readonly id: String; #125;#gt;<br/>callee: Schema.Struct<br/>args: #91;#93;"]
+  4[/"type: #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields#41; =#gt; Struct#lt;Fields#gt;<br/>node: Schema.Struct"/]
+  5[/"type: Struct#lt;#123; readonly id: String; #125;#gt;<br/>node: Address"/]
+  6[/"type: String<br/>node: Schema.String"/]
+  7[/"type: <br/>node: Models.BusinessId"/]
+  8[/"type: <br/>node: Address.Type"/]
+  9[/"type: Struct#lt;#123; readonly id: String; #125;#gt;<br/>node: Address"/]
+  10[/"type: Struct#lt;#123; readonly id: String; #125;#gt;<br/>node: Address"/]
+  2 -->|"kind: pipe"| 3
+  4 -->|"kind: transformCallee"| 3
