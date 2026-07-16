@@ -40,6 +40,57 @@ func TestEffectInFailureCanTriggerPluginOnlyTS2589(t *testing.T) {
 	}
 }
 
+func TestIssue362RemedaChunkDoesNotReportExcessiveTypeDepth(t *testing.T) {
+	t.Parallel()
+
+	withPlugin := collectDiagnosticStringsFromContent(t, buildIssue362RemedaChunkCase(true))
+	withoutPlugin := collectDiagnosticStringsFromContent(t, buildIssue362RemedaChunkCase(false))
+
+	for _, prefix := range []string{"TS2321:", "TS2589:"} {
+		if hasDiagnosticCode(withoutPlugin, prefix) {
+			t.Fatalf("did not expect %s without plugin, got %v", prefix, withoutPlugin)
+		}
+		if hasDiagnosticCode(withPlugin, prefix) {
+			t.Fatalf("did not expect plugin to introduce %s, got %v", prefix, withPlugin)
+		}
+	}
+}
+
+func buildIssue362RemedaChunkCase(pluginEnabled bool) string {
+	pluginConfig := "{}"
+	if pluginEnabled {
+		pluginConfig = `{
+  "compilerOptions": {
+    "plugins": [
+      {
+        "name": "@effect/language-service"
+      }
+    ]
+  }
+}`
+	}
+
+	return `// @filename: tsconfig.json
+` + pluginConfig + `
+
+// @filename: test.ts
+type IsAny<T> = 0 extends 1 & NoInfer<T> ? true : false
+type IsNever<T> = [T] extends [never] ? true : false
+type If<Type extends boolean, Then, Else> = IsNever<Type> extends true ? Else : Type extends true ? Then : Else
+type IsNegative<T extends number> = T extends 0 ? false : ` + "`${T}`" + ` extends ` + "`-${string}`" + ` ? true : false
+type TupleOf<Length extends number, Fill = unknown> = If<IsAny<Length>, Fill[], If<IsNever<Length>, [], _TupleOf<If<IsNegative<Length>, 0, Length>, Fill, []>>>
+type _TupleOf<Length extends number, Fill, Accumulator extends readonly unknown[]> = number extends Length ? Fill[] : Length extends Accumulator["length"] ? Accumulator : _TupleOf<Length, Fill, [...Accumulator, Fill]>
+type IntRange<From extends number, To extends number, List extends unknown[] = TupleOf<From, never>, End extends unknown[] = TupleOf<To>> = List["length"] extends To ? Exclude<List[number], never> : IntRange<From, To, [...List, List["length"]], End>
+type IntRangeInclusive<From extends number, To extends number> = IntRange<From, To> | To
+type NTuple<T, N extends number, Result extends unknown[] = []> = Result["length"] extends N ? Result : NTuple<T, N, [...Result, T]>
+type Chunk<T extends readonly unknown[], N extends number> = T extends readonly [] ? [] : NTuple<T[number], N>[] | { [K in IntRangeInclusive<1, N>]: NTuple<T[number], K> }[IntRangeInclusive<1, N>]
+
+declare function chunk<T extends readonly unknown[], N extends number>(array: T, size: N): Chunk<T, N>
+declare const items: Array<string>
+const result = chunk(items, 2)
+`
+}
+
 func buildEffectInFailureTS2589Case(mode string) string {
 	pluginConfig := "{}"
 	switch mode {
