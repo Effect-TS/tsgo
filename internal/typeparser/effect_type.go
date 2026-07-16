@@ -128,18 +128,11 @@ func (tp *TypeParser) StrictEffectType(t *checker.Type, atLocation *ast.Node) *E
 		return nil
 	}
 	return Cached(&tp.links.StrictEffectType, t, func() *Effect {
-		result := tp.EffectType(t, atLocation)
-		if result == nil {
-			return nil
-		}
 		sym := t.Symbol()
-		if sym == nil {
+		if sym == nil || sym.Name != "Effect" {
 			return nil
 		}
-		if sym.Name != "Effect" {
-			return nil
-		}
-		return result
+		return tp.EffectType(t, atLocation)
 	})
 }
 
