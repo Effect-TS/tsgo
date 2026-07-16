@@ -25,6 +25,11 @@
   Fix 1: "Disable catchToIgnore for entire file"
   Fix 2: "Replace with Effect.ignore"
 
+[D6] (40:22-40:33) TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+  Fix 0: "Disable syncToSucceed for this line"
+  Fix 1: "Disable syncToSucceed for entire file"
+  Fix 2: "Replace with Effect.succeed"
+
 === Quick Fix Application Results ===
 
 === [D1] Fix 0: "Disable catchToIgnore for this line" ===
@@ -282,5 +287,57 @@ export const shouldNotTriggerValueSuccess = numberEffect.pipe(
 // Should NOT trigger: fallback is not exactly Effect.void
 export const shouldNotTriggerOtherFallback = voidEffect.pipe(
   Effect.catch(() => Effect.sync(() => undefined))
+)
+
+
+=== [D6] Fix 0: "Disable syncToSucceed for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable syncToSucceed for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace with Effect.succeed" ===
+
+--- file:///.src/catchToIgnore.ts ---
+import { Effect, pipe } from "effect"
+
+declare const voidEffect: Effect.Effect<void, string, never>
+declare const undefinedEffect: Effect.Effect<undefined, string, never>
+declare const numberEffect: Effect.Effect<number, string, never>
+
+// Should trigger: catch returning Effect.void on a void success channel
+export const shouldTriggerCatch = voidEffect.pipe(
+  Effect.catch(() => Effect.void)
+)
+
+// Should trigger: catchCause returning Effect.void on a void success channel
+export const shouldTriggerCatchCause = voidEffect.pipe(
+  Effect.catchCause((_cause) => Effect.void)
+)
+
+// Should trigger: pipe style
+export const shouldTriggerPipe = pipe(
+  Effect.fail("error"),
+  Effect.catch(() => Effect.void)
+)
+
+// Should trigger: block body
+export const shouldTriggerBlock = undefinedEffect.pipe(
+  Effect.catch(() => {
+    return Effect.void
+  })
+)
+
+// Should trigger: data-first style
+export const shouldTriggerDataFirst = Effect.catch(voidEffect, () => Effect.void)
+
+// Should NOT trigger: Effect.ignore would discard the number success value
+export const shouldNotTriggerValueSuccess = numberEffect.pipe(
+  Effect.catch(() => Effect.void)
+)
+
+// Should NOT trigger: fallback is not exactly Effect.void
+export const shouldNotTriggerOtherFallback = voidEffect.pipe(
+  Effect.catch(() => Effect.succeed(undefined))
 )
 

@@ -1,0 +1,521 @@
+=== Quick Fix Inventory ===
+
+[D1] (8:30-8:41) TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+  Fix 0: "Disable syncToSucceed for this line"
+  Fix 1: "Disable syncToSucceed for entire file"
+  Fix 2: "Replace with Effect.succeed"
+
+[D2] (9:30-9:41) TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+  Fix 0: "Disable syncToSucceed for this line"
+  Fix 1: "Disable syncToSucceed for entire file"
+  Fix 2: "Replace with Effect.succeed"
+
+[D3] (10:31-10:42) TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+  Fix 0: "Disable syncToSucceed for this line"
+  Fix 1: "Disable syncToSucceed for entire file"
+  Fix 2: "Replace with Effect.succeed"
+
+[D4] (11:28-11:39) TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+  Fix 0: "Disable syncToSucceed for this line"
+  Fix 1: "Disable syncToSucceed for entire file"
+  Fix 2: "Replace with Effect.succeed"
+
+[D5] (12:33-12:44) TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+  Fix 0: "Disable syncToSucceed for this line"
+  Fix 1: "Disable syncToSucceed for entire file"
+  Fix 2: "Replace with Effect.succeed"
+
+[D6] (13:32-13:43) TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+  Fix 0: "Disable syncToSucceed for this line"
+  Fix 1: "Disable syncToSucceed for entire file"
+  Fix 2: "Replace with Effect.succeed"
+
+[D7] (16:32-16:43) TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+  Fix 0: "Disable syncToSucceed for this line"
+  Fix 1: "Disable syncToSucceed for entire file"
+  Fix 2: "Replace with Effect.succeed"
+
+[D8] (17:26-17:37) TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+  Fix 0: "Disable syncToSucceed for this line"
+  Fix 1: "Disable syncToSucceed for entire file"
+  Fix 2: "Replace with Effect.succeed"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable syncToSucceed for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable syncToSucceed for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.succeed" ===
+
+--- file:///.src/syncToSucceed.ts ---
+import { Effect } from "effect"
+
+const constant = "constant"
+const objectConstant = { value: "constant" }
+let mutable = "constant"
+
+// Should trigger: primitive literals
+export const stringLiteral = Effect.succeed("value")
+export const numberLiteral = Effect.sync(() => 1)
+export const booleanLiteral = Effect.sync(() => true)
+export const nullLiteral = Effect.sync(() => null)
+export const undefinedLiteral = Effect.sync(() => undefined)
+export const templateLiteral = Effect.sync(() => `value`)
+
+// Should trigger: an initialized const binding
+export const constIdentifier = Effect.sync(() => constant)
+export const blockBody = Effect.sync(function() {
+  return constant
+})
+
+// Should NOT trigger: these expressions are evaluated or allocated per execution
+export const callExpression = Effect.sync(() => Date.now())
+export const objectLiteral = Effect.sync(() => ({ value: "constant" }))
+export const arrayLiteral = Effect.sync(() => [constant])
+export const propertyRead = Effect.sync(() => objectConstant.value)
+// @effect-diagnostics-next-line lazyPromiseInEffectSync:off
+export const asyncThunk = Effect.sync(async () => "value")
+export const generatorThunk = Effect.sync(function*() {
+  return "value"
+})
+
+// Should NOT trigger: mutable or not initialized before construction
+export const mutableIdentifier = Effect.sync(() => mutable)
+export const declaredLater = Effect.sync(() => later)
+const later = "later"
+
+export const switchCase = (value: number) => {
+  switch (value) {
+    case 0:
+      const caseConstant = "value"
+      return caseConstant
+    default:
+      return Effect.sync(() => caseConstant)
+  }
+}
+
+// Should NOT trigger: unrelated sync API
+const unrelated = { sync: <A>(thunk: () => A): A => thunk() }
+export const unrelatedSync = unrelated.sync(() => "value")
+
+
+=== [D2] Fix 0: "Disable syncToSucceed for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable syncToSucceed for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.succeed" ===
+
+--- file:///.src/syncToSucceed.ts ---
+import { Effect } from "effect"
+
+const constant = "constant"
+const objectConstant = { value: "constant" }
+let mutable = "constant"
+
+// Should trigger: primitive literals
+export const stringLiteral = Effect.sync(() => "value")
+export const numberLiteral = Effect.succeed(1)
+export const booleanLiteral = Effect.sync(() => true)
+export const nullLiteral = Effect.sync(() => null)
+export const undefinedLiteral = Effect.sync(() => undefined)
+export const templateLiteral = Effect.sync(() => `value`)
+
+// Should trigger: an initialized const binding
+export const constIdentifier = Effect.sync(() => constant)
+export const blockBody = Effect.sync(function() {
+  return constant
+})
+
+// Should NOT trigger: these expressions are evaluated or allocated per execution
+export const callExpression = Effect.sync(() => Date.now())
+export const objectLiteral = Effect.sync(() => ({ value: "constant" }))
+export const arrayLiteral = Effect.sync(() => [constant])
+export const propertyRead = Effect.sync(() => objectConstant.value)
+// @effect-diagnostics-next-line lazyPromiseInEffectSync:off
+export const asyncThunk = Effect.sync(async () => "value")
+export const generatorThunk = Effect.sync(function*() {
+  return "value"
+})
+
+// Should NOT trigger: mutable or not initialized before construction
+export const mutableIdentifier = Effect.sync(() => mutable)
+export const declaredLater = Effect.sync(() => later)
+const later = "later"
+
+export const switchCase = (value: number) => {
+  switch (value) {
+    case 0:
+      const caseConstant = "value"
+      return caseConstant
+    default:
+      return Effect.sync(() => caseConstant)
+  }
+}
+
+// Should NOT trigger: unrelated sync API
+const unrelated = { sync: <A>(thunk: () => A): A => thunk() }
+export const unrelatedSync = unrelated.sync(() => "value")
+
+
+=== [D3] Fix 0: "Disable syncToSucceed for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable syncToSucceed for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.succeed" ===
+
+--- file:///.src/syncToSucceed.ts ---
+import { Effect } from "effect"
+
+const constant = "constant"
+const objectConstant = { value: "constant" }
+let mutable = "constant"
+
+// Should trigger: primitive literals
+export const stringLiteral = Effect.sync(() => "value")
+export const numberLiteral = Effect.sync(() => 1)
+export const booleanLiteral = Effect.succeed(true)
+export const nullLiteral = Effect.sync(() => null)
+export const undefinedLiteral = Effect.sync(() => undefined)
+export const templateLiteral = Effect.sync(() => `value`)
+
+// Should trigger: an initialized const binding
+export const constIdentifier = Effect.sync(() => constant)
+export const blockBody = Effect.sync(function() {
+  return constant
+})
+
+// Should NOT trigger: these expressions are evaluated or allocated per execution
+export const callExpression = Effect.sync(() => Date.now())
+export const objectLiteral = Effect.sync(() => ({ value: "constant" }))
+export const arrayLiteral = Effect.sync(() => [constant])
+export const propertyRead = Effect.sync(() => objectConstant.value)
+// @effect-diagnostics-next-line lazyPromiseInEffectSync:off
+export const asyncThunk = Effect.sync(async () => "value")
+export const generatorThunk = Effect.sync(function*() {
+  return "value"
+})
+
+// Should NOT trigger: mutable or not initialized before construction
+export const mutableIdentifier = Effect.sync(() => mutable)
+export const declaredLater = Effect.sync(() => later)
+const later = "later"
+
+export const switchCase = (value: number) => {
+  switch (value) {
+    case 0:
+      const caseConstant = "value"
+      return caseConstant
+    default:
+      return Effect.sync(() => caseConstant)
+  }
+}
+
+// Should NOT trigger: unrelated sync API
+const unrelated = { sync: <A>(thunk: () => A): A => thunk() }
+export const unrelatedSync = unrelated.sync(() => "value")
+
+
+=== [D4] Fix 0: "Disable syncToSucceed for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable syncToSucceed for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.succeed" ===
+
+--- file:///.src/syncToSucceed.ts ---
+import { Effect } from "effect"
+
+const constant = "constant"
+const objectConstant = { value: "constant" }
+let mutable = "constant"
+
+// Should trigger: primitive literals
+export const stringLiteral = Effect.sync(() => "value")
+export const numberLiteral = Effect.sync(() => 1)
+export const booleanLiteral = Effect.sync(() => true)
+export const nullLiteral = Effect.succeed(null)
+export const undefinedLiteral = Effect.sync(() => undefined)
+export const templateLiteral = Effect.sync(() => `value`)
+
+// Should trigger: an initialized const binding
+export const constIdentifier = Effect.sync(() => constant)
+export const blockBody = Effect.sync(function() {
+  return constant
+})
+
+// Should NOT trigger: these expressions are evaluated or allocated per execution
+export const callExpression = Effect.sync(() => Date.now())
+export const objectLiteral = Effect.sync(() => ({ value: "constant" }))
+export const arrayLiteral = Effect.sync(() => [constant])
+export const propertyRead = Effect.sync(() => objectConstant.value)
+// @effect-diagnostics-next-line lazyPromiseInEffectSync:off
+export const asyncThunk = Effect.sync(async () => "value")
+export const generatorThunk = Effect.sync(function*() {
+  return "value"
+})
+
+// Should NOT trigger: mutable or not initialized before construction
+export const mutableIdentifier = Effect.sync(() => mutable)
+export const declaredLater = Effect.sync(() => later)
+const later = "later"
+
+export const switchCase = (value: number) => {
+  switch (value) {
+    case 0:
+      const caseConstant = "value"
+      return caseConstant
+    default:
+      return Effect.sync(() => caseConstant)
+  }
+}
+
+// Should NOT trigger: unrelated sync API
+const unrelated = { sync: <A>(thunk: () => A): A => thunk() }
+export const unrelatedSync = unrelated.sync(() => "value")
+
+
+=== [D5] Fix 0: "Disable syncToSucceed for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable syncToSucceed for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Replace with Effect.succeed" ===
+
+--- file:///.src/syncToSucceed.ts ---
+import { Effect } from "effect"
+
+const constant = "constant"
+const objectConstant = { value: "constant" }
+let mutable = "constant"
+
+// Should trigger: primitive literals
+export const stringLiteral = Effect.sync(() => "value")
+export const numberLiteral = Effect.sync(() => 1)
+export const booleanLiteral = Effect.sync(() => true)
+export const nullLiteral = Effect.sync(() => null)
+export const undefinedLiteral = Effect.succeed(undefined)
+export const templateLiteral = Effect.sync(() => `value`)
+
+// Should trigger: an initialized const binding
+export const constIdentifier = Effect.sync(() => constant)
+export const blockBody = Effect.sync(function() {
+  return constant
+})
+
+// Should NOT trigger: these expressions are evaluated or allocated per execution
+export const callExpression = Effect.sync(() => Date.now())
+export const objectLiteral = Effect.sync(() => ({ value: "constant" }))
+export const arrayLiteral = Effect.sync(() => [constant])
+export const propertyRead = Effect.sync(() => objectConstant.value)
+// @effect-diagnostics-next-line lazyPromiseInEffectSync:off
+export const asyncThunk = Effect.sync(async () => "value")
+export const generatorThunk = Effect.sync(function*() {
+  return "value"
+})
+
+// Should NOT trigger: mutable or not initialized before construction
+export const mutableIdentifier = Effect.sync(() => mutable)
+export const declaredLater = Effect.sync(() => later)
+const later = "later"
+
+export const switchCase = (value: number) => {
+  switch (value) {
+    case 0:
+      const caseConstant = "value"
+      return caseConstant
+    default:
+      return Effect.sync(() => caseConstant)
+  }
+}
+
+// Should NOT trigger: unrelated sync API
+const unrelated = { sync: <A>(thunk: () => A): A => thunk() }
+export const unrelatedSync = unrelated.sync(() => "value")
+
+
+=== [D6] Fix 0: "Disable syncToSucceed for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable syncToSucceed for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace with Effect.succeed" ===
+
+--- file:///.src/syncToSucceed.ts ---
+import { Effect } from "effect"
+
+const constant = "constant"
+const objectConstant = { value: "constant" }
+let mutable = "constant"
+
+// Should trigger: primitive literals
+export const stringLiteral = Effect.sync(() => "value")
+export const numberLiteral = Effect.sync(() => 1)
+export const booleanLiteral = Effect.sync(() => true)
+export const nullLiteral = Effect.sync(() => null)
+export const undefinedLiteral = Effect.sync(() => undefined)
+export const templateLiteral = Effect.succeed(`value`)
+
+// Should trigger: an initialized const binding
+export const constIdentifier = Effect.sync(() => constant)
+export const blockBody = Effect.sync(function() {
+  return constant
+})
+
+// Should NOT trigger: these expressions are evaluated or allocated per execution
+export const callExpression = Effect.sync(() => Date.now())
+export const objectLiteral = Effect.sync(() => ({ value: "constant" }))
+export const arrayLiteral = Effect.sync(() => [constant])
+export const propertyRead = Effect.sync(() => objectConstant.value)
+// @effect-diagnostics-next-line lazyPromiseInEffectSync:off
+export const asyncThunk = Effect.sync(async () => "value")
+export const generatorThunk = Effect.sync(function*() {
+  return "value"
+})
+
+// Should NOT trigger: mutable or not initialized before construction
+export const mutableIdentifier = Effect.sync(() => mutable)
+export const declaredLater = Effect.sync(() => later)
+const later = "later"
+
+export const switchCase = (value: number) => {
+  switch (value) {
+    case 0:
+      const caseConstant = "value"
+      return caseConstant
+    default:
+      return Effect.sync(() => caseConstant)
+  }
+}
+
+// Should NOT trigger: unrelated sync API
+const unrelated = { sync: <A>(thunk: () => A): A => thunk() }
+export const unrelatedSync = unrelated.sync(() => "value")
+
+
+=== [D7] Fix 0: "Disable syncToSucceed for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable syncToSucceed for entire file" ===
+skipped by default
+
+=== [D7] Fix 2: "Replace with Effect.succeed" ===
+
+--- file:///.src/syncToSucceed.ts ---
+import { Effect } from "effect"
+
+const constant = "constant"
+const objectConstant = { value: "constant" }
+let mutable = "constant"
+
+// Should trigger: primitive literals
+export const stringLiteral = Effect.sync(() => "value")
+export const numberLiteral = Effect.sync(() => 1)
+export const booleanLiteral = Effect.sync(() => true)
+export const nullLiteral = Effect.sync(() => null)
+export const undefinedLiteral = Effect.sync(() => undefined)
+export const templateLiteral = Effect.sync(() => `value`)
+
+// Should trigger: an initialized const binding
+export const constIdentifier = Effect.succeed(constant)
+export const blockBody = Effect.sync(function() {
+  return constant
+})
+
+// Should NOT trigger: these expressions are evaluated or allocated per execution
+export const callExpression = Effect.sync(() => Date.now())
+export const objectLiteral = Effect.sync(() => ({ value: "constant" }))
+export const arrayLiteral = Effect.sync(() => [constant])
+export const propertyRead = Effect.sync(() => objectConstant.value)
+// @effect-diagnostics-next-line lazyPromiseInEffectSync:off
+export const asyncThunk = Effect.sync(async () => "value")
+export const generatorThunk = Effect.sync(function*() {
+  return "value"
+})
+
+// Should NOT trigger: mutable or not initialized before construction
+export const mutableIdentifier = Effect.sync(() => mutable)
+export const declaredLater = Effect.sync(() => later)
+const later = "later"
+
+export const switchCase = (value: number) => {
+  switch (value) {
+    case 0:
+      const caseConstant = "value"
+      return caseConstant
+    default:
+      return Effect.sync(() => caseConstant)
+  }
+}
+
+// Should NOT trigger: unrelated sync API
+const unrelated = { sync: <A>(thunk: () => A): A => thunk() }
+export const unrelatedSync = unrelated.sync(() => "value")
+
+
+=== [D8] Fix 0: "Disable syncToSucceed for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable syncToSucceed for entire file" ===
+skipped by default
+
+=== [D8] Fix 2: "Replace with Effect.succeed" ===
+
+--- file:///.src/syncToSucceed.ts ---
+import { Effect } from "effect"
+
+const constant = "constant"
+const objectConstant = { value: "constant" }
+let mutable = "constant"
+
+// Should trigger: primitive literals
+export const stringLiteral = Effect.sync(() => "value")
+export const numberLiteral = Effect.sync(() => 1)
+export const booleanLiteral = Effect.sync(() => true)
+export const nullLiteral = Effect.sync(() => null)
+export const undefinedLiteral = Effect.sync(() => undefined)
+export const templateLiteral = Effect.sync(() => `value`)
+
+// Should trigger: an initialized const binding
+export const constIdentifier = Effect.sync(() => constant)
+export const blockBody = Effect.succeed(constant)
+
+// Should NOT trigger: these expressions are evaluated or allocated per execution
+export const callExpression = Effect.sync(() => Date.now())
+export const objectLiteral = Effect.sync(() => ({ value: "constant" }))
+export const arrayLiteral = Effect.sync(() => [constant])
+export const propertyRead = Effect.sync(() => objectConstant.value)
+// @effect-diagnostics-next-line lazyPromiseInEffectSync:off
+export const asyncThunk = Effect.sync(async () => "value")
+export const generatorThunk = Effect.sync(function*() {
+  return "value"
+})
+
+// Should NOT trigger: mutable or not initialized before construction
+export const mutableIdentifier = Effect.sync(() => mutable)
+export const declaredLater = Effect.sync(() => later)
+const later = "later"
+
+export const switchCase = (value: number) => {
+  switch (value) {
+    case 0:
+      const caseConstant = "value"
+      return caseConstant
+    default:
+      return Effect.sync(() => caseConstant)
+  }
+}
+
+// Should NOT trigger: unrelated sync API
+const unrelated = { sync: <A>(thunk: () => A): A => thunk() }
+export const unrelatedSync = unrelated.sync(() => "value")
+

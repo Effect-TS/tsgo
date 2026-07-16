@@ -1,0 +1,22 @@
+=== Quick Fix Inventory ===
+
+[D1] (3:24-3:35) TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+  Fix 0: "Disable syncToSucceed for this line"
+  Fix 1: "Disable syncToSucceed for entire file"
+  Fix 2: "Replace with Effect.succeed"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable syncToSucceed for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable syncToSucceed for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.succeed" ===
+
+--- file:///.src/syncToSucceed_preview.ts ---
+import { Effect } from "effect"
+
+export const preview = Effect.succeed("constant")
+

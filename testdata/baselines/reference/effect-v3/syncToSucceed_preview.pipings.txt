@@ -1,0 +1,15 @@
+==== /.src/syncToSucceed_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 3:23 - 3:53
+Node: Effect.sync(() => "constant")
+Node Kind: KindCallExpression
+
+Subject: () => "constant"
+Subject Type: () => string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<string, never, never>

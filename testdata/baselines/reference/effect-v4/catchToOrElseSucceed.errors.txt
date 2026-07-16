@@ -5,9 +5,10 @@ Effect version: 4.0.0
 /.src/catchToOrElseSucceed.ts(10,3): suggestion TS377095: `Effect.orElseSucceed` expresses the same recovery more directly than `Effect.catch` followed by `Effect.succeed`. effect(catchToOrElseSucceed)
 /.src/catchToOrElseSucceed.ts(18,3): suggestion TS377095: `Effect.orElseSucceed` expresses the same recovery more directly than `Effect.catch` followed by `Effect.succeed`. effect(catchToOrElseSucceed)
 /.src/catchToOrElseSucceed.ts(23,3): suggestion TS377095: `Effect.orElseSucceed` expresses the same recovery more directly than `Effect.catch` followed by `Effect.succeed`. effect(catchToOrElseSucceed)
+/.src/catchToOrElseSucceed.ts(35,22): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
 
 
-==== /.src/catchToOrElseSucceed.ts (4 errors) ====
+==== /.src/catchToOrElseSucceed.ts (5 errors) ====
     import { Effect, pipe } from "effect"
     
     // Should trigger: catch with arrow function returning Effect.succeed
@@ -51,6 +52,8 @@ Effect version: 4.0.0
     // Should NOT trigger: catch returning a different Effect constructor
     export const shouldNotTriggerOtherEffect = Effect.fail("error").pipe(
       Effect.catch(() => Effect.sync(() => "fallback"))
+                         ~~~~~~~~~~~
+!!! suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
     )
     
     // Should NOT trigger: catch with logic other than just Effect.succeed

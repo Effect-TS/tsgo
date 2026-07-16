@@ -1,0 +1,144 @@
+flowchart TB
+  0[/"type: #quot;constant#quot;<br/>node: #quot;constant#quot;"/]
+  1[/"type: #123; value: string; #125;<br/>node: #123; value: #quot;constant#quot; #125;"/]
+  2[/"type: #quot;constant#quot;<br/>node: #quot;constant#quot;"/]
+  3[["type: #40;#41; =#gt; string<br/>node: #40;#41; =#gt; #quot;value#quot;"]]
+  4[/"type: #quot;value#quot;<br/>node: #quot;value#quot;"/]
+  5["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
+  6[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
+  7[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; 1"]]
+  8[/"type: 1<br/>node: 1"/]
+  9["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
+  10[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
+  11[["type: #40;#41; =#gt; boolean<br/>node: #40;#41; =#gt; true"]]
+  12[/"type: true<br/>node: true"/]
+  13["type: Effect#lt;boolean, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
+  14[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
+  15[["type: #40;#41; =#gt; null<br/>node: #40;#41; =#gt; null"]]
+  16[/"type: null<br/>node: null"/]
+  17["type: Effect#lt;null, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
+  18[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
+  19[["type: #40;#41; =#gt; undefined<br/>node: #40;#41; =#gt; undefined"]]
+  20[/"type: undefined<br/>node: undefined"/]
+  21["type: Effect#lt;undefined, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
+  22[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
+  23[["type: #40;#41; =#gt; string<br/>node: #40;#41; =#gt; `value`"]]
+  24[/"type: #quot;value#quot;<br/>node: `value`"/]
+  25["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
+  26[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
+  27[["type: #40;#41; =#gt; string<br/>node: #40;#41; =#gt; constant"]]
+  28[/"type: #quot;constant#quot;<br/>node: constant"/]
+  29["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
+  30[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
+  31[["type: #40;#41; =#gt; string<br/>node: function#40;#41; #123;#92;n  return constant#92;n#125;"]]
+  32[/"type: #quot;constant#quot;<br/>node: constant"/]
+  33["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
+  34[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
+  35[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; Date.now#40;#41;"]]
+  36[/"type: number<br/>node: Date.now#40;#41;"/]
+  37["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
+  38[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
+  39[["type: #40;#41; =#gt; #123; value: string; #125;<br/>node: #40;#41; =#gt; #40;#123; value: #quot;constant#quot; #125;#41;"]]
+  40[/"type: #123; value: string; #125;<br/>node: #40;#123; value: #quot;constant#quot; #125;#41;"/]
+  41["type: Effect#lt;#123; value: string; #125;, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
+  42[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
+  43[["type: #40;#41; =#gt; string#91;#93;<br/>node: #40;#41; =#gt; #91;constant#93;"]]
+  44[/"type: string#91;#93;<br/>node: #91;constant#93;"/]
+  45["type: Effect#lt;string#91;#93;, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
+  46[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
+  47[["type: #40;#41; =#gt; string<br/>node: #40;#41; =#gt; objectConstant.value"]]
+  48[/"type: string<br/>node: objectConstant.value"/]
+  49["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
+  50[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
+  51[["type: #40;#41; =#gt; Promise#lt;string#gt;<br/>node: async #40;#41; =#gt; #quot;value#quot;"]]
+  52[/"type: #quot;value#quot;<br/>node: #quot;value#quot;"/]
+  53["type: Effect#lt;Promise#lt;string#gt;, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
+  54[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
+  55[["type: #40;#41; =#gt; Generator#lt;never, string, unknown#gt;<br/>node: function*#40;#41; #123;#92;n  return #quot;value#quot;#92;n#125;"]]
+  56[/"type: #quot;value#quot;<br/>node: #quot;value#quot;"/]
+  57["type: Effect#lt;Generator#lt;never, string, unknown#gt;, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
+  58[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
+  59[["type: #40;#41; =#gt; string<br/>node: #40;#41; =#gt; mutable"]]
+  60[/"type: string<br/>node: mutable"/]
+  61["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
+  62[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
+  63[["type: #40;#41; =#gt; string<br/>node: #40;#41; =#gt; later"]]
+  64[/"type: #quot;later#quot;<br/>node: later"/]
+  65["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
+  66[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
+  67[/"type: #quot;later#quot;<br/>node: #quot;later#quot;"/]
+  68[["type: #40;value: number#41; =#gt; #quot;value#quot; #124; Effect#lt;string, never, never#gt;<br/>node: #40;value: number#41; =#gt; #123;#92;n  switch #40;value#41; #123;#92;n    case 0:#92;n      const caseConstant = #quot;value#quot;#92;n      return caseConstant#92;n    default:#92;n      return Effect.sync#40;#40;#41; =#gt; caseConstant#41;#92;n  #125;#92;n#125;"]]
+  69[/"type: #quot;value#quot;<br/>node: caseConstant"/]
+  70[["type: #40;#41; =#gt; string<br/>node: #40;#41; =#gt; caseConstant"]]
+  71[/"type: #quot;value#quot;<br/>node: caseConstant"/]
+  72["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
+  73[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
+  74[/"type: #123; sync: #lt;A#gt;#40;thunk: #40;#41; =#gt; A#41; =#gt; A; #125;<br/>node: #123; sync: #lt;A#gt;#40;thunk: #40;#41; =#gt; A#41;: A =#gt; thunk#40;#41; #125;"/]
+  75[["type: #lt;A#gt;#40;thunk: #40;#41; =#gt; A#41; =#gt; A<br/>node: #lt;A#gt;#40;thunk: #40;#41; =#gt; A#41;: A =#gt; thunk#40;#41;"]]
+  76[/"type: A<br/>node: thunk#40;#41;"/]
+  77[["type: #40;#41; =#gt; string<br/>node: #40;#41; =#gt; #quot;value#quot;"]]
+  78[/"type: #quot;value#quot;<br/>node: #quot;value#quot;"/]
+  79["type: string<br/>callee: unrelated.sync<br/>args: #91;#93;"]
+  80[/"type: #lt;A#gt;#40;thunk: #40;#41; =#gt; A#41; =#gt; A<br/>node: unrelated.sync"/]
+  4 -->|"kind: potentialReturn"| 3
+  3 -->|"kind: pipe"| 5
+  6 -->|"kind: transformCallee"| 5
+  8 -->|"kind: potentialReturn"| 7
+  7 -->|"kind: pipe"| 9
+  10 -->|"kind: transformCallee"| 9
+  12 -->|"kind: potentialReturn"| 11
+  11 -->|"kind: pipe"| 13
+  14 -->|"kind: transformCallee"| 13
+  16 -->|"kind: potentialReturn"| 15
+  15 -->|"kind: pipe"| 17
+  18 -->|"kind: transformCallee"| 17
+  20 -->|"kind: potentialReturn"| 19
+  19 -->|"kind: pipe"| 21
+  22 -->|"kind: transformCallee"| 21
+  24 -->|"kind: potentialReturn"| 23
+  23 -->|"kind: pipe"| 25
+  26 -->|"kind: transformCallee"| 25
+  28 -->|"kind: potentialReturn"| 27
+  27 -->|"kind: pipe"| 29
+  30 -->|"kind: transformCallee"| 29
+  32 -->|"kind: potentialReturn"| 31
+  32 -->|"kind: usedBy"| 31
+  31 -->|"kind: pipe"| 33
+  34 -->|"kind: transformCallee"| 33
+  36 -->|"kind: potentialReturn"| 35
+  35 -->|"kind: pipe"| 37
+  38 -->|"kind: transformCallee"| 37
+  40 -->|"kind: potentialReturn"| 39
+  39 -->|"kind: pipe"| 41
+  42 -->|"kind: transformCallee"| 41
+  44 -->|"kind: potentialReturn"| 43
+  43 -->|"kind: pipe"| 45
+  46 -->|"kind: transformCallee"| 45
+  48 -->|"kind: potentialReturn"| 47
+  47 -->|"kind: pipe"| 49
+  50 -->|"kind: transformCallee"| 49
+  52 -->|"kind: potentialReturn"| 51
+  51 -->|"kind: pipe"| 53
+  54 -->|"kind: transformCallee"| 53
+  56 -->|"kind: potentialReturn"| 55
+  56 -->|"kind: usedBy"| 55
+  55 -->|"kind: pipe"| 57
+  58 -->|"kind: transformCallee"| 57
+  60 -->|"kind: potentialReturn"| 59
+  59 -->|"kind: pipe"| 61
+  62 -->|"kind: transformCallee"| 61
+  64 -->|"kind: potentialReturn"| 63
+  63 -->|"kind: pipe"| 65
+  66 -->|"kind: transformCallee"| 65
+  69 -->|"kind: potentialReturn"| 68
+  71 -->|"kind: potentialReturn"| 70
+  70 -->|"kind: pipe"| 72
+  73 -->|"kind: transformCallee"| 72
+  72 -->|"kind: potentialReturn"| 68
+  69 -->|"kind: usedBy"| 68
+  72 -->|"kind: usedBy"| 68
+  76 -->|"kind: potentialReturn"| 75
+  75 -->|"kind: usedBy"| 74
+  78 -->|"kind: potentialReturn"| 77
+  77 -->|"kind: pipe"| 79
+  80 -->|"kind: transformCallee"| 79
