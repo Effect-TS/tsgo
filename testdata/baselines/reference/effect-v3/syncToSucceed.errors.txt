@@ -1,0 +1,80 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/syncToSucceed.ts(8,30): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+/.src/syncToSucceed.ts(9,30): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+/.src/syncToSucceed.ts(10,31): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+/.src/syncToSucceed.ts(11,28): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+/.src/syncToSucceed.ts(12,33): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+/.src/syncToSucceed.ts(13,32): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+/.src/syncToSucceed.ts(16,32): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+/.src/syncToSucceed.ts(17,26): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+
+
+==== /.src/syncToSucceed.ts (8 errors) ====
+    import { Effect } from "effect"
+    
+    const constant = "constant"
+    const objectConstant = { value: "constant" }
+    let mutable = "constant"
+    
+    // Should trigger: primitive literals
+    export const stringLiteral = Effect.sync(() => "value")
+                                 ~~~~~~~~~~~
+!!! suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+    export const numberLiteral = Effect.sync(() => 1)
+                                 ~~~~~~~~~~~
+!!! suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+    export const booleanLiteral = Effect.sync(() => true)
+                                  ~~~~~~~~~~~
+!!! suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+    export const nullLiteral = Effect.sync(() => null)
+                               ~~~~~~~~~~~
+!!! suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+    export const undefinedLiteral = Effect.sync(() => undefined)
+                                    ~~~~~~~~~~~
+!!! suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+    export const templateLiteral = Effect.sync(() => `value`)
+                                   ~~~~~~~~~~~
+!!! suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+    
+    // Should trigger: an initialized const binding
+    export const constIdentifier = Effect.sync(() => constant)
+                                   ~~~~~~~~~~~
+!!! suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+    export const blockBody = Effect.sync(function() {
+                             ~~~~~~~~~~~
+!!! suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+      return constant
+    })
+    
+    // Should NOT trigger: these expressions are evaluated or allocated per execution
+    export const callExpression = Effect.sync(() => Date.now())
+    export const objectLiteral = Effect.sync(() => ({ value: "constant" }))
+    export const arrayLiteral = Effect.sync(() => [constant])
+    export const propertyRead = Effect.sync(() => objectConstant.value)
+    // @effect-diagnostics-next-line lazyPromiseInEffectSync:off
+    export const asyncThunk = Effect.sync(async () => "value")
+    export const generatorThunk = Effect.sync(function*() {
+      return "value"
+    })
+    
+    // Should NOT trigger: mutable or not initialized before construction
+    export const mutableIdentifier = Effect.sync(() => mutable)
+    export const declaredLater = Effect.sync(() => later)
+    const later = "later"
+    
+    export const switchCase = (value: number) => {
+      switch (value) {
+        case 0:
+          const caseConstant = "value"
+          return caseConstant
+        default:
+          return Effect.sync(() => caseConstant)
+      }
+    }
+    
+    // Should NOT trigger: unrelated sync API
+    const unrelated = { sync: <A>(thunk: () => A): A => thunk() }
+    export const unrelatedSync = unrelated.sync(() => "value")
+    

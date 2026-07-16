@@ -402,5 +402,9 @@
     "Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)": {
         "category": "Error",
         "code": 377102
+    },
+    "`Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)": {
+        "category": "Suggestion",
+        "code": 377103
     }
 }

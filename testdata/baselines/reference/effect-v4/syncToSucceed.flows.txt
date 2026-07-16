@@ -1,0 +1,1 @@
+/.src/syncToSucceed.ts -> syncToSucceed.flows.syncToSucceed.mermaid

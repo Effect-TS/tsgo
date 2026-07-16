@@ -2004,6 +2004,11 @@
           "default": "suggestion",
           "description": "Suggests Schema.Finite and Schema.FiniteFromString instead of Schema.Number APIs when describing domain numbers"
         },
+        "schemaOpaqueInstanceMember": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "error",
+          "description": "Disallows instance members in classes extending Schema.Opaque"
+        },
         "schemaStructWithTag": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
@@ -2038,6 +2043,11 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
           "description": "Warns when using Effect.provide with layers outside of application entry points"
+        },
+        "syncToSucceed": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests using Effect.succeed instead of Effect.sync when the thunk returns a constant value"
         },
         "tryCatchInEffectGen": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",

@@ -1,0 +1,13 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/syncToSucceed_preview.ts(3,24): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+
+
+==== /.src/syncToSucceed_preview.ts (1 errors) ====
+    import { Effect } from "effect"
+    
+    export const preview = Effect.sync(() => "constant")
+                           ~~~~~~~~~~~
+!!! suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+    

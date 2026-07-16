@@ -1,0 +1,253 @@
+==== /.src/syncToSucceed.ts (18 flows) ====
+
+=== Piping Flow ===
+Location: 8:29 - 8:56
+Node: Effect.sync(() => "value")
+Node Kind: KindCallExpression
+
+Subject: () => "value"
+Subject Type: () => string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 9:29 - 9:50
+Node: Effect.sync(() => 1)
+Node Kind: KindCallExpression
+
+Subject: () => 1
+Subject Type: () => number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 10:30 - 10:54
+Node: Effect.sync(() => true)
+Node Kind: KindCallExpression
+
+Subject: () => true
+Subject Type: () => boolean
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<boolean, never, never>
+
+=== Piping Flow ===
+Location: 11:27 - 11:51
+Node: Effect.sync(() => null)
+Node Kind: KindCallExpression
+
+Subject: () => null
+Subject Type: () => null
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<null, never, never>
+
+=== Piping Flow ===
+Location: 12:32 - 12:61
+Node: Effect.sync(() => undefined)
+Node Kind: KindCallExpression
+
+Subject: () => undefined
+Subject Type: () => undefined
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<undefined, never, never>
+
+=== Piping Flow ===
+Location: 13:31 - 13:58
+Node: Effect.sync(() => `value`)
+Node Kind: KindCallExpression
+
+Subject: () => `value`
+Subject Type: () => string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 16:31 - 16:59
+Node: Effect.sync(() => constant)
+Node Kind: KindCallExpression
+
+Subject: () => constant
+Subject Type: () => string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 17:25 - 19:3
+Node: Effect.sync(function() {\n  return constant\n})
+Node Kind: KindCallExpression
+
+Subject: function() {\n  return constant\n}
+Subject Type: () => string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 22:30 - 22:60
+Node: Effect.sync(() => Date.now())
+Node Kind: KindCallExpression
+
+Subject: () => Date.now()
+Subject Type: () => number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 23:29 - 23:72
+Node: Effect.sync(() => ({ value: "constant" }))
+Node Kind: KindCallExpression
+
+Subject: () => ({ value: "constant" })
+Subject Type: () => { value: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<{ value: string; }, never, never>
+
+=== Piping Flow ===
+Location: 24:28 - 24:58
+Node: Effect.sync(() => [constant])
+Node Kind: KindCallExpression
+
+Subject: () => [constant]
+Subject Type: () => string[]
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<string[], never, never>
+
+=== Piping Flow ===
+Location: 25:28 - 25:68
+Node: Effect.sync(() => objectConstant.value)
+Node Kind: KindCallExpression
+
+Subject: () => objectConstant.value
+Subject Type: () => string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 27:26 - 27:59
+Node: Effect.sync(async () => "value")
+Node Kind: KindCallExpression
+
+Subject: async () => "value"
+Subject Type: () => Promise<string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<Promise<string>, never, never>
+
+=== Piping Flow ===
+Location: 28:30 - 30:3
+Node: Effect.sync(function*() {\n  return "value"\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  return "value"\n}
+Subject Type: () => Generator<never, string, unknown>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<Generator<never, string, unknown>, never, never>
+
+=== Piping Flow ===
+Location: 33:33 - 33:60
+Node: Effect.sync(() => mutable)
+Node Kind: KindCallExpression
+
+Subject: () => mutable
+Subject Type: () => string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 34:29 - 34:54
+Node: Effect.sync(() => later)
+Node Kind: KindCallExpression
+
+Subject: () => later
+Subject Type: () => string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 43:13 - 43:45
+Node: Effect.sync(() => caseConstant)
+Node Kind: KindCallExpression
+
+Subject: () => caseConstant
+Subject Type: () => string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 49:29 - 49:59
+Node: unrelated.sync(() => "value")
+Node Kind: KindCallExpression
+
+Subject: () => "value"
+Subject Type: () => string
+
+Transformations (1):
+  [0] kind: call
+      callee: unrelated.sync
+      args: (constant)
+      outType: string

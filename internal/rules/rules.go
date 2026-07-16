@@ -88,6 +88,7 @@ var All = []rule.Rule{
 	EffectDoNotation,
 	EffectMapFlatten,
 	FlatMapToMap,
+	SyncToSucceed,
 	ExtendsNativeError,
 	NodeBuiltinImport,
 	NewPromise,
