@@ -1,5 +1,16 @@
 # @effect/tsgo
 
+## 0.23.0
+
+### Minor Changes
+
+- 3d62271: Add the `syncToSucceed` diagnostic and quick fix, which replaces `Effect.sync` thunks returning stable constant values with `Effect.succeed`.
+
+### Patch Changes
+
+- 8128a86: Avoid excessive type-depth diagnostics when checking complex non-Effect types such as the return type of Remeda's `chunk` function.
+- ee2ca99: Update to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260715.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/448614f8f409cbd8afb535b26c20f1a0020bc10d) commit `448614f8f409cbd8afb535b26c20f1a0020bc10d`.
+
 ## 0.22.0
 
 ### Minor Changes
