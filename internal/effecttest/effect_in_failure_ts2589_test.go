@@ -86,6 +86,7 @@ type NTuple<T, N extends number, Result extends unknown[] = []> = Result["length
 type Chunk<T extends readonly unknown[], N extends number> = T extends readonly [] ? [] : NTuple<T[number], N>[] | { [K in IntRangeInclusive<1, N>]: NTuple<T[number], K> }[IntRangeInclusive<1, N>]
 
 declare function chunk<T extends readonly unknown[], N extends number>(array: T, size: N): Chunk<T, N>
+declare function chunk<N extends number>(size: N): <T extends readonly unknown[]>(array: T) => Chunk<T, N>
 declare const items: Array<string>
 const result = chunk(items, 2)
 `

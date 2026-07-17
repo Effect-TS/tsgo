@@ -121,8 +121,6 @@ func Checker_isSymbolAssigned(recv *checker.Checker, symbol *ast.Symbol) bool
 func Checker_isPastLastAssignment(recv *checker.Checker, symbol *ast.Symbol, location *ast.Node) bool
 //go:linkname Checker_isTypeAssignableTo github.com/microsoft/typescript-go/internal/checker.(*Checker).isTypeAssignableTo
 func Checker_isTypeAssignableTo(recv *checker.Checker, source *checker.Type, target *checker.Type) bool
-//go:linkname Checker_isSignatureAssignableTo github.com/microsoft/typescript-go/internal/checker.(*Checker).isSignatureAssignableTo
-func Checker_isSignatureAssignableTo(recv *checker.Checker, source *checker.Signature, target *checker.Signature, ignoreReturnTypes bool) bool
 type extra_Checker struct {
   id uint32
   program checker.Program
