@@ -51,15 +51,11 @@ func checkMissingPipeableSignatures(ctx *rule.Context) []*ast.Diagnostic {
 			}
 			params := dataFirst.Parameters()
 			for _, subjectIndex := range []int{0, len(params) - 1} {
-				derived := typeparser.DerivePipeableSignatureFromDataFirst(ctx.Checker, dataFirst, subjectIndex)
-				if derived == nil {
-					continue
-				}
 				for _, candidate := range signatures {
-					if candidate == dataFirst || !returnsUnaryFunction(ctx.Checker, candidate) {
+					if candidate == dataFirst {
 						continue
 					}
-					if checker.Checker_isSignatureAssignableTo(ctx.Checker, candidate, derived, false) {
+					if typeparser.MatchesPipeableSignature(ctx.Checker, dataFirst, candidate, subjectIndex, nil) {
 						hasPipeableSignature[dataFirst] = true
 						pipeableTargets[candidate] = true
 					}
@@ -121,20 +117,4 @@ func localExportTarget(ctx *rule.Context, exportSymbol *ast.Symbol) (*ast.Symbol
 
 func isEligibleDataFirstSignature(signature *checker.Signature) bool {
 	return signature != nil && !signature.HasRestParameter() && len(signature.Parameters()) >= 2
-}
-
-func returnsUnaryFunction(c *checker.Checker, signature *checker.Signature) bool {
-	if c == nil || signature == nil {
-		return false
-	}
-	returnType := c.GetReturnTypeOfSignature(signature)
-	if returnType == nil {
-		return false
-	}
-	for _, returned := range c.GetSignaturesOfType(returnType, checker.SignatureKindCall) {
-		if returned != nil && !returned.HasRestParameter() && len(returned.Parameters()) == 1 {
-			return true
-		}
-	}
-	return false
 }
