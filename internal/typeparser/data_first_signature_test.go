@@ -158,6 +158,49 @@ export const shouldReportDataFirst = Effect.catchAll(
 	assertSingleTransformation(t, sf, flow, TransformationKindDataFirst, "Effect.catchAll", []string{"() => Effect.log(\"error\")"})
 }
 
+func TestDataFirstOrLastCallRejectsDifferentReturnOrigins(t *testing.T) {
+	t.Parallel()
+
+	source := `
+type DataFirstResult<T> = { readonly dataFirst: T }
+type DataLastResult<T> = { readonly dataLast: T }
+
+declare function operation<T>(self: T, size: number): DataFirstResult<T>
+declare function operation(size: number): <T>(self: T) => DataLastResult<T>
+
+const result = operation("value", 2)
+`
+
+	_, tp, sf, done := compileAndGetCheckerAndSourceFileInternal(t, source)
+	defer done()
+
+	call := findVariableInitializerCallByName(t, sf, "result")
+	if result := tp.DataFirstOrLastCall(call.AsNode()); result != nil {
+		t.Fatal("expected overloads with different return origins not to normalize")
+	}
+}
+
+func TestDataFirstOrLastCallRejectsIncompatibleSubject(t *testing.T) {
+	t.Parallel()
+
+	source := `
+type Result = { readonly value: string }
+
+declare function operation(self: string, size: number): Result
+declare function operation(size: number): (self: boolean) => Result
+
+const result = operation("value", 2)
+`
+
+	_, tp, sf, done := compileAndGetCheckerAndSourceFileInternal(t, source)
+	defer done()
+
+	call := findVariableInitializerCallByName(t, sf, "result")
+	if result := tp.DataFirstOrLastCall(call.AsNode()); result != nil {
+		t.Fatal("expected overloads with an incompatible subject not to normalize")
+	}
+}
+
 func logDerivedPipeableSignatureComparison(t *testing.T, tp *TypeParser, node *ast.Node) {
 	t.Helper()
 	if tp == nil || tp.checker == nil || node == nil {
@@ -226,15 +269,14 @@ func logDerivedPipeableSignatureComparison(t *testing.T, tp *TypeParser, node *a
 				}
 			}
 			t.Logf(
-				"derived=%s | candidate %d=%s | return=%s typeArgs=%d returnedArity=%v cand->derived=%v derived->cand=%v",
+				"derived=%s | candidate %d=%s | return=%s typeArgs=%d returnedArity=%v matches=%v",
 				signatureString(c, derived),
 				i,
 				signatureString(c, candidate),
 				c.TypeToString(candidateReturn),
 				len(candidate.TypeParameters()),
 				returnedArity,
-				checker.Checker_isSignatureAssignableTo(c, candidate, derived, false),
-				checker.Checker_isSignatureAssignableTo(c, derived, candidate, false),
+				MatchesPipeableSignature(c, resolved, candidate, subjectIndex, nil),
 			)
 		}
 	}
