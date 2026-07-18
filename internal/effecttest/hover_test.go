@@ -27,18 +27,20 @@ func TestEffectHoverYieldStar(t *testing.T) {
   }
 }
 // @Filename: /test.ts
-import { Effect } from "effect"
+import { Config, Effect } from "effect"
 const program = Effect.gen(function*() {
-  const result = /*1*/yield* Effect.succeed("hello")
+  const token = /*yield*/yield/*asterisk*/*/*space*/ Config.redacted("WEBHOOK_TOKEN")
 })`
 
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
 
-	f.VerifyQuickInfoAt(t, "1",
-		"(yield*) Effect<string, never, never>",
-		"```ts\n/* Effect Type Parameters */\ntype Success = string\ntype Failure = never\ntype Requirements = never\n```\n",
-	)
+	for _, marker := range []string{"yield", "asterisk", "space"} {
+		f.VerifyQuickInfoAt(t, marker,
+			"(yield*) Config<Redacted<string>>",
+			"```ts\n/* Effect Type Parameters */\ntype Success = Redacted<string>\ntype Failure = ConfigError\ntype Requirements = never\n```\n",
+		)
+	}
 }
 
 func TestEffectHoverTypeArgs(t *testing.T) {

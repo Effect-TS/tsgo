@@ -178,11 +178,20 @@ func afterQuickInfo(program checker.Program, c *checker.Checker, sf *ast.SourceF
 		return quickInfo, documentation, nil
 	}
 
-	// Yield* hover: detect yield keyword inside yield* expressions in Effect generator scopes
-	if node.Kind == ast.KindYieldKeyword && node.Parent != nil && node.Parent.Kind == ast.KindYieldExpression {
-		yield := node.Parent.AsYieldExpression()
+	// Yield* hover: normalize positions on yield, *, and the space before the operand.
+	var yieldNode *ast.Node
+	switch node.Kind {
+	case ast.KindYieldExpression:
+		yieldNode = node
+	case ast.KindYieldKeyword, ast.KindAsteriskToken:
+		if node.Parent != nil && node.Parent.Kind == ast.KindYieldExpression {
+			yieldNode = node.Parent
+		}
+	}
+	if yieldNode != nil {
+		yield := yieldNode.AsYieldExpression()
 		if yield.AsteriskToken != nil && yield.Expression != nil {
-			if tp.GetEffectContextFlags(node)&typeparser.EffectContextFlagCanYieldEffect != 0 {
+			if tp.GetEffectContextFlags(yieldNode)&typeparser.EffectContextFlagCanYieldEffect != 0 {
 				t := tp.GetTypeAtLocation(yield.Expression)
 				if t != nil {
 					effect := tp.EffectYieldableType(t, yield.Expression)
@@ -190,7 +199,7 @@ func afterQuickInfo(program checker.Program, c *checker.Checker, sf *ast.SourceF
 						typeStr := c.TypeToStringEx(t, nil, checker.TypeFormatFlagsNoTruncation, nil)
 						quickInfo = "(yield*) " + typeStr
 						documentation = formatEffectTypeParams(c, effect, "", isMarkdown)
-						return quickInfo, documentation, node.Parent
+						return quickInfo, documentation, yieldNode
 					}
 				}
 			}
