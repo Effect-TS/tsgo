@@ -21,11 +21,7 @@ index 401bfd7ac..9d1f81463 100644
  func (l *LanguageService) ProvideHover(ctx context.Context, params *lsproto.HoverParams) (lsproto.HoverResponse, error) {
  	caps := lsproto.GetClientCapabilities(ctx)
  	contentFormat := lsproto.PreferredMarkupKind(caps.TextDocument.Hover.ContentFormat)
-@@ -54,6 +66,17 @@ func (l *LanguageService) ProvideHover(ctx context.Context, params *lsproto.Hove
- 	}
- 
- 	quickInfo, documentation := l.getQuickInfoAndDocumentationForSymbol(c, symbol, rangeNode, contentFormat, vc)
-+
+@@ -59,3 +71,13 @@ func (l *LanguageService) ProvideHover(ctx context.Context, params *lsproto.Hove
 +	// EFFECT HOOK: Allow Effect to enrich hover responses
 +	if AfterQuickInfoCallback != nil {
 +		isMarkdown := contentFormat == lsproto.MarkupKindMarkdown
