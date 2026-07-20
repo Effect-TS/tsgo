@@ -1,5 +1,12 @@
 # @effect/tsgo
 
+## 0.24.2
+
+### Patch Changes
+
+- fb9e78b: Return enhanced Effect quickinfo when hovering the asterisk or trailing space in a `yield*` expression.
+- 9dd9de9: Update to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260719.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/61aabc2f45771d716e83af114154ae58b64a9705) commit `61aabc2f45771d716e83af114154ae58b64a9705`.
+
 ## 0.24.1
 
 ### Patch Changes
