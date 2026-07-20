@@ -51,16 +51,16 @@ index 2e1622418..66059cab4 100644
  	GetProjectReferenceFromOutputDts(path tspath.Path) *tsoptions.SourceOutputAndProjectReference
  	GetRedirectForResolution(file ast.HasFileName) *tsoptions.ParsedCommandLine
  	CommonSourceDirectory() string
-@@ -2145,6 +2179,8 @@ func (c *Checker) checkSourceFile(ctx context.Context, sourceFile *ast.SourceFil
- 	links := c.sourceFileLinks.Get(sourceFile)
- 	if !links.typeChecked {
- 		c.saveDeferredDiagnostics = true
-+		// Clear any stale relation errors before type checking.
-+		links.relationErrors = nil
+@@ -2186,6 +2220,8 @@ func (c *Checker) checkSourceFile(ctx context.Context, sourceFile *ast.SourceFil
  		if tr := c.tracer; tr != nil {
  			defer tr.Push(tracing.PhaseCheck, "checkSourceFile", map[string]any{"path": sourceFile.FileName()}, true)()
  		}
-@@ -2164,6 +2200,11 @@ func (c *Checker) checkSourceFile(ctx context.Context, sourceFile *ast.SourceFil
++		// Clear any stale relation errors before type checking.
++		links.relationErrors = nil
+ 		// Grammar checking
+ 		c.checkGrammarSourceFile(sourceFile)
+ 		c.renamedBindingElementsInTypes = nil
+@@ -2201,6 +2237,11 @@ func (c *Checker) checkSourceFile(ctx context.Context, sourceFile *ast.SourceFil
  		c.produceDeferredDiagnostics()
  		c.reportedUnreachableNodes.Clear()
  		links.typeChecked = true
