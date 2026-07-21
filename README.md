@@ -3,10 +3,6 @@
 A wrapper around [TypeScript-Go](https://github.com/microsoft/TypeScript-Go) that builds the Effect Language Service, providing Effect-TS diagnostics and quick fixes.
 This project targets **Effect V4** (codename: "smol") primarily and also Effect V3.
 
-## Currently in Alpha
-The TypeScript-Go version of the Effect LSP should be considered in Alpha. Expect breaking changes between releases and some missing features compared to previous version.
-Some of them are currently on hold due to not yet complete pipeline on the upstream TypeScript repository.
-
 ## Installation
 
 The setup of the TSGO version of the LSP can be performed via the command line interface:
@@ -23,6 +19,16 @@ This will guide you through the installation process, which includes:
 
 > [!NOTE]
 > At the moment, you still need a native TypeScript install alongside `@effect/tsgo`: `typescript` >= 7 (e.g. `typescript@latest` or `typescript@next`) or an alias such as `@typescript/native`. `effect-tsgo patch` tries `typescript`, then `@typescript/native`, and accepts `--typescript-package <name>` to try a custom package name first.
+
+## LSP-based linter
+
+The Effect LSP doubles as a tool to perform type-aware linting of Effect code.
+
+Linting can occur either during the `tsc` typecheck phase (with the benefit of running typechecking only once and caching the output), or via a dedicated `npx @effect/tsgo diagnostics --project tsconfig.json` command (with typechecking occurring again).
+
+When running in `tsc` mode, the Effect diagnostics are emitted as standard TypeScript diagnostics, and can be configured to affect the `tsc` exit code through the options `ignoreEffectSuggestionsInTscExitCode`, `ignoreEffectWarningsInTscExitCode`, and `ignoreEffectErrorsInTscExitCode`.
+
+When running in dedicated diagnostics mode, the Effect diagnostics can be emitted in structured formats, which can be further processed by other tools.
 
 ## Diagnostic Status
 
@@ -172,20 +178,6 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
 | `rpcMakeClasses` | ✅ | ➖ | `Rpc.make` constructor snippet in extends clauses (V3-only) |
 | `schemaBrand` | ✅ | ➖ | `brand("varName")` snippet when dot-accessing Schema in variable declarations (V3-only) |
 | `serviceMapSelfInClasses` | ✅ | ✅ | Service map self-type snippets in extends clauses |
-
-### Codegen Status
-
-| Codegen | V3 | V4 | Notes |
-|---------|----|----|-------|
-| `accessors` | ❌ | ❌ | Generate Service accessor methods from comment directive |
-| `annotate` | ❌ | ❌ | Generate type annotations from comment directive |
-| `typeToSchema` | ❌ | ❌ | Generate Schema from type alias comment directive |
-
-### Rename Status
-
-| Rename | V3 | V4 | Notes |
-|--------|----|----|-------|
-| `keyStrings` | ❌ | ❌ | Extend rename to include key string literals in Effect classes |
 
 ## Best Practices
 
