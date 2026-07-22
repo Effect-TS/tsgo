@@ -107,6 +107,7 @@ const MethodGetConstraintOfTypeParameter = api.MethodGetConstraintOfTypeParamete
 const MethodGetContextualType = api.MethodGetContextualType
 const MethodGetDeclarationDiagnostics = api.MethodGetDeclarationDiagnostics
 const MethodGetDeclaredTypeOfSymbol = api.MethodGetDeclaredTypeOfSymbol
+const MethodGetDefaultFromTypeParameter = api.MethodGetDefaultFromTypeParameter
 const MethodGetDefaultProjectForFile = api.MethodGetDefaultProjectForFile
 const MethodGetDocumentationComment = api.MethodGetDocumentationComment
 const MethodGetESSymbolType = api.MethodGetESSymbolType
