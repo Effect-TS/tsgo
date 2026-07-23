@@ -1,4 +1,4 @@
-==== /.src/multipleEffectProvide.ts (9 flows) ====
+==== /.src/multipleEffectProvide.ts (11 flows) ====
 
 === Piping Flow ===
 Location: 4:8 - 4:37
@@ -144,6 +144,46 @@ Transformations (3):
   [0] kind: pipeable
       callee: Effect.provide
       args: [MyService1.Default]
+      outType: Effect<void, never, never>
+  [1] kind: pipeable
+      callee: Effect.provide
+      args: [MyService2.Default]
+      outType: Effect<void, never, never>
+  [2] kind: pipeable
+      callee: Effect.provide
+      args: [MyService3.Default]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 40:43 - 43:2
+Node: Effect.void.pipe(\n  Effect.provide(MyService1.Default),\n  Effect.provide(MyService2.Default, { local: true })\n)
+Node Kind: KindCallExpression
+
+Subject: Effect.void
+Subject Type: Effect<void, never, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.provide
+      args: [MyService1.Default]
+      outType: Effect<void, never, never>
+  [1] kind: pipeable
+      callee: Effect.provide
+      args: [MyService2.Default, { local: true }]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 45:45 - 49:2
+Node: Effect.void.pipe(\n  Effect.provide(MyService1.Default, { local: true }),\n  Effect.provide(MyService2.Default),\n  Effect.provide(MyService3.Default)\n)
+Node Kind: KindCallExpression
+
+Subject: Effect.void
+Subject Type: Effect<void, never, never>
+
+Transformations (3):
+  [0] kind: pipeable
+      callee: Effect.provide
+      args: [MyService1.Default, { local: true }]
       outType: Effect<void, never, never>
   [1] kind: pipeable
       callee: Effect.provide

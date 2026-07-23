@@ -45,6 +45,7 @@ type MultipleEffectProvideMatch struct {
 // with Layer-typed arguments within piping flows.
 func AnalyzeMultipleEffectProvide(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile) []MultipleEffectProvideMatch {
 	var matches []MultipleEffectProvideMatch
+	isEffectV4 := tp.SupportedEffectVersion() == typeparser.EffectMajorV4
 
 	flows := tp.PipingFlows(sf, true)
 	for _, flow := range flows {
@@ -77,6 +78,28 @@ func AnalyzeMultipleEffectProvide(tp *typeparser.TypeParser, _ *checker.Checker,
 
 			// Must have arguments
 			if len(transformation.Args) == 0 {
+				finalizeChunk()
+				continue
+			}
+
+			isLocalProvide := false
+			if isEffectV4 && len(transformation.Args) > 1 {
+				options := transformation.Args[1]
+				if options != nil && options.Kind == ast.KindObjectLiteralExpression {
+					for _, property := range options.AsObjectLiteralExpression().Properties.Nodes {
+						if property == nil || property.Kind != ast.KindPropertyAssignment {
+							continue
+						}
+						assignment := property.AsPropertyAssignment()
+						name := assignment.Name()
+						if name != nil && name.Kind == ast.KindIdentifier && name.Text() == "local" && assignment.Initializer.Kind == ast.KindTrueKeyword {
+							isLocalProvide = true
+							break
+						}
+					}
+				}
+			}
+			if isLocalProvide {
 				finalizeChunk()
 				continue
 			}
