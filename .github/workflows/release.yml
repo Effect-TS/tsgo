@@ -144,6 +144,8 @@ jobs:
             else
               cp "${artifact_dir}/${binary_name}" "${package_dir}/${binary_name}"
               cp "${artifact_dir}/${binary_name}.json" "${package_dir}/${binary_name}.json"
+              chmod 0755 "${package_dir}/${binary_name}"
+              test -x "${package_dir}/${binary_name}"
             fi
           done
 

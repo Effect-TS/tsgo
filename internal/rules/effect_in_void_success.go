@@ -28,10 +28,13 @@ var EffectInVoidSuccess = rule.Rule{
 				continue
 			}
 
-			expectedEffect := ctx.TypeParser.EffectType(entry.ExpectedType, entry.Node)
 			realEffect := ctx.TypeParser.EffectType(entry.RealType, entry.ValueNode)
+			if realEffect == nil {
+				continue
+			}
 
-			if expectedEffect == nil || realEffect == nil {
+			expectedEffect := ctx.TypeParser.EffectType(entry.ExpectedType, entry.Node)
+			if expectedEffect == nil {
 				continue
 			}
 
