@@ -1,5 +1,15 @@
 # @effect/tsgo
 
+## 0.24.3
+
+### Patch Changes
+
+- bd05925: Preserve executable permissions on packaged Unix binaries so the diagnostics command can launch them after installation.
+- 6c171c9: Document using the Effect LSP for type-aware linting.
+- b91f3e8: Avoid `effectInVoidSuccess` introducing TS2589 for assignments with recursive expected types and non-Effect values.
+- 874bd2e: Ignore Effect v4 local `Effect.provide(..., { local: true })` calls when reporting chained provides with the `multipleEffectProvide` diagnostic.
+- edf29c9: Update to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260722.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/01cbcdd8643cfa17cc8156b60849559c56324601) commit `01cbcdd8643cfa17cc8156b60849559c56324601`.
+
 ## 0.24.2
 
 ### Patch Changes
