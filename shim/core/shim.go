@@ -102,6 +102,7 @@ func NewWorkGroup(singleThreaded bool) core.WorkGroup
 var NodeCoreModules = core.NodeCoreModules
 //go:linkname NonRelativeModuleNameForTypingCache github.com/microsoft/typescript-go/internal/core.NonRelativeModuleNameForTypingCache
 func NonRelativeModuleNameForTypingCache(moduleName string) string
+type PagedLinkStore[V any] = core.PagedLinkStore[V]
 type ParsedOptions = core.ParsedOptions
 type Pattern = core.Pattern
 type PollingKind = core.PollingKind

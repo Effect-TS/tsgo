@@ -212,7 +212,7 @@ type extra_Checker struct {
   factory ast.NodeFactory
   nodeLinks core.LinkStore[*ast.Node, checker.NodeLinks]
   signatureLinks core.LinkStore[*ast.Node, checker.SignatureLinks]
-  symbolNodeLinks core.LinkStore[*ast.Node, checker.SymbolNodeLinks]
+  symbolNodeLinks struct{store core.PagedLinkStore[checker.SymbolNodeLinks]}
   typeNodeLinks core.LinkStore[*ast.Node, checker.TypeNodeLinks]
   enumMemberLinks core.LinkStore[*ast.Node, checker.EnumMemberLinks]
   assertionLinks core.LinkStore[*ast.Node, checker.AssertionLinks]
@@ -221,7 +221,7 @@ type extra_Checker struct {
   jsxElementLinks core.LinkStore[*ast.Node, checker.JsxElementLinks]
   computedNameLinks core.LinkStore[*ast.Node, checker.ComputedNameNodeLinks]
   symbolReferenceLinks core.LinkStore[*ast.Symbol, checker.SymbolReferenceLinks]
-  valueSymbolLinks core.LinkStore[*ast.Symbol, checker.ValueSymbolLinks]
+  valueSymbolLinks struct{store core.PagedLinkStore[*checker.ValueSymbolLinks]; arena core.Arena[checker.ValueSymbolLinks]}
   mappedSymbolLinks core.LinkStore[*ast.Symbol, checker.MappedSymbolLinks]
   deferredSymbolLinks core.LinkStore[*ast.Symbol, checker.DeferredSymbolLinks]
   aliasSymbolLinks core.LinkStore[*ast.Symbol, checker.AliasSymbolLinks]
@@ -451,7 +451,7 @@ func Checker_emptyGenericType(v *checker.Checker) *checker.Type {
 func Checker_symbolReferenceLinks(v *checker.Checker) core.LinkStore[*ast.Symbol, checker.SymbolReferenceLinks] {
   return ((*extra_Checker)(unsafe.Pointer(v))).symbolReferenceLinks
 }
-func Checker_valueSymbolLinks(v *checker.Checker) core.LinkStore[*ast.Symbol, checker.ValueSymbolLinks] {
+func Checker_valueSymbolLinks(v *checker.Checker) checker.symbolArenaLinkStore[checker.ValueSymbolLinks] {
   return ((*extra_Checker)(unsafe.Pointer(v))).valueSymbolLinks
 }
 func Checker_aliasSymbolLinks(v *checker.Checker) core.LinkStore[*ast.Symbol, checker.AliasSymbolLinks] {
@@ -466,7 +466,7 @@ func Checker_typeAliasLinks(v *checker.Checker) core.LinkStore[*ast.Symbol, chec
 func Checker_declaredTypeLinks(v *checker.Checker) core.LinkStore[*ast.Symbol, checker.DeclaredTypeLinks] {
   return ((*extra_Checker)(unsafe.Pointer(v))).declaredTypeLinks
 }
-func Checker_symbolNodeLinks(v *checker.Checker) core.LinkStore[*ast.Node, checker.SymbolNodeLinks] {
+func Checker_symbolNodeLinks(v *checker.Checker) checker.nodeLinkStore[checker.SymbolNodeLinks] {
   return ((*extra_Checker)(unsafe.Pointer(v))).symbolNodeLinks
 }
 func Checker_typeNodeLinks(v *checker.Checker) core.LinkStore[*ast.Node, checker.TypeNodeLinks] {
