@@ -8,12 +8,10 @@
       "getGlobalPromiseTypeChecked",
       "emptyGenericType",
       "symbolReferenceLinks",
-      "valueSymbolLinks",
       "aliasSymbolLinks",
       "moduleSymbolLinks",
       "typeAliasLinks",
       "declaredTypeLinks",
-      "symbolNodeLinks",
       "typeNodeLinks"
     ],
     "IndexInfo": ["keyType", "valueType"],
