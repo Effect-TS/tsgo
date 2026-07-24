@@ -61,6 +61,48 @@ Effect.runPromiseExit();
 `}, preferences)
 }
 
+func TestAutoImportEffectStyleConsistency_namespaceReexport(t *testing.T) {
+	t.Parallel()
+	const content = `// @Filename: /tsconfig.json
+{
+  "compilerOptions": {
+    "plugins": [
+      {
+        "name": "@effect/language-service",
+        "namespaceImportPackages": ["effect"]
+      }
+    ]
+  }
+}
+// @effect-v4
+// @Filename: /mainCompletion.ts
+const completion = Effect/*completion*/;
+// @Filename: /mainFix.ts
+const fix = Effect/*fix*/;
+`
+
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+
+	preferences := &lsutil.UserPreferences{
+		IncludeCompletionsForModuleExports:    core.TSTrue,
+		IncludeCompletionsForImportStatements: core.TSTrue,
+	}
+	completion := "completion"
+
+	f.VerifyApplyCodeActionFromCompletion(t, &completion, &fourslash.ApplyCodeActionFromCompletionOptions{
+		Name:        "Effect",
+		Source:      "effect/Effect",
+		Description: "Add import from \"effect/Effect\"",
+		NewFileContent: new(`import * as Effect from "effect/Effect";
+
+const completion = Effect;`),
+		UserPreferences: preferences,
+	})
+
+	f.VerifyImportFixModuleSpecifiers(t, "fix", []string{"effect/Effect"}, preferences)
+}
+
 func TestAutoImportEffectStyleConsistency_barrel(t *testing.T) {
 	t.Parallel()
 	const content = `// @Filename: /tsconfig.json
