@@ -451,9 +451,6 @@ func Checker_emptyGenericType(v *checker.Checker) *checker.Type {
 func Checker_symbolReferenceLinks(v *checker.Checker) core.LinkStore[*ast.Symbol, checker.SymbolReferenceLinks] {
   return ((*extra_Checker)(unsafe.Pointer(v))).symbolReferenceLinks
 }
-func Checker_valueSymbolLinks(v *checker.Checker) core.LinkStore[*ast.Symbol, checker.ValueSymbolLinks] {
-  return ((*extra_Checker)(unsafe.Pointer(v))).valueSymbolLinks
-}
 func Checker_aliasSymbolLinks(v *checker.Checker) core.LinkStore[*ast.Symbol, checker.AliasSymbolLinks] {
   return ((*extra_Checker)(unsafe.Pointer(v))).aliasSymbolLinks
 }
@@ -465,9 +462,6 @@ func Checker_typeAliasLinks(v *checker.Checker) core.LinkStore[*ast.Symbol, chec
 }
 func Checker_declaredTypeLinks(v *checker.Checker) core.LinkStore[*ast.Symbol, checker.DeclaredTypeLinks] {
   return ((*extra_Checker)(unsafe.Pointer(v))).declaredTypeLinks
-}
-func Checker_symbolNodeLinks(v *checker.Checker) core.LinkStore[*ast.Node, checker.SymbolNodeLinks] {
-  return ((*extra_Checker)(unsafe.Pointer(v))).symbolNodeLinks
 }
 func Checker_typeNodeLinks(v *checker.Checker) core.LinkStore[*ast.Node, checker.TypeNodeLinks] {
   return ((*extra_Checker)(unsafe.Pointer(v))).typeNodeLinks
