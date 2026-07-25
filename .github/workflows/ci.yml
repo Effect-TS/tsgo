@@ -84,6 +84,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Check platform package publish permissions
+        run: bash _tools/check-platform-package-bins.sh
+
       - name: Setup repo (submodules, patches, generated files)
         run: pnpm setup-repo --ci
 

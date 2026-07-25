@@ -12,7 +12,11 @@
   "homepage": "https://github.com/Effect-TS/tsgo#readme",
   "publishConfig": {
     "access": "public",
-    "provenance": true
+    "provenance": true,
+    "bin": {
+      "effect-tsgo-tsc": "./lib/tsc",
+      "effect-tsgo-tsc-next": "./lib/tsc-next"
+    }
   },
   "preferUnplugged": true,
   "files": [
