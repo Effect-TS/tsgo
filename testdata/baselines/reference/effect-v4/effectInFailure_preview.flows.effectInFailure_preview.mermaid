@@ -7,7 +7,7 @@ flowchart TB
   5["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.logError<br/>args: #91;#93;"]
   6[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.logError"/]
   7["type: Effect#lt;any, Effect#lt;void, never, never#gt;, never#gt;<br/>callee: Effect.try<br/>args: #91;#93;"]
-  8[/"type: #lt;A, E#gt;#40;options: #123; try: LazyArg#lt;A#gt;; catch: #40;error: unknown#41; =#gt; E; #125;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.try"/]
+  8[/"type: #lt;A, E = UnknownError#gt;#40;options: LazyArg#lt;A#gt; #124; #123; readonly try: LazyArg#lt;A#gt;; readonly catch: #40;error: unknown#41; =#gt; E; #125;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.try"/]
   2 -->|"kind: potentialReturn"| 1
   1 -->|"kind: usedBy"| 0
   4 -->|"kind: pipe"| 5

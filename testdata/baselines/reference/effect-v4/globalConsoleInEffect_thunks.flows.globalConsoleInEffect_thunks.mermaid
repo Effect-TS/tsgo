@@ -16,7 +16,7 @@ flowchart TB
   14[["type: #40;#41; =#gt; ExampleError<br/>node: #40;#41; =#gt; new ExampleError#40;#41;"]]
   15[/"type: ExampleError<br/>node: new ExampleError#40;#41;"/]
   16["type: Effect#lt;void, ExampleError, never#gt;<br/>callee: Effect.try<br/>args: #91;#93;"]
-  17[/"type: #lt;A, E#gt;#40;options: #123; try: LazyArg#lt;A#gt;; catch: #40;error: unknown#41; =#gt; E; #125;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.try"/]
+  17[/"type: #lt;A, E = UnknownError#gt;#40;options: LazyArg#lt;A#gt; #124; #123; readonly try: LazyArg#lt;A#gt;; readonly catch: #40;error: unknown#41; =#gt; E; #125;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.try"/]
   18[["type: #40;#41; =#gt; Promise#lt;void#gt;<br/>node: async #40;#41; =#gt; console.log#40;#quot;try-promise#quot;#41;"]]
   19[/"type: #quot;try-promise#quot;<br/>node: #quot;try-promise#quot;"/]
   20["type: void<br/>callee: console.log<br/>args: #91;#93;"]
