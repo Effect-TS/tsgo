@@ -12,6 +12,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/bundledeffect"
 	"github.com/microsoft/typescript-go/shim/bundled"
 	"github.com/microsoft/typescript-go/shim/diagnostics"
+	"github.com/microsoft/typescript-go/shim/locale"
 	"github.com/microsoft/typescript-go/shim/ls/lsconv"
 	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
 	"github.com/microsoft/typescript-go/shim/project"
@@ -232,3 +233,7 @@ func (noopProjectClient) ProgressFinish(_ *diagnostics.Message, _ ...any) {}
 func (noopProjectClient) SendTelemetry(_ context.Context, _ lsproto.TelemetryEvent) error { return nil }
 
 func (noopProjectClient) IsActive() bool { return true }
+
+func (noopProjectClient) SetLocale(_ string) {}
+
+func (noopProjectClient) GetLocale() locale.Locale { return locale.Default }

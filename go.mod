@@ -16,6 +16,7 @@ replace (
 	github.com/microsoft/typescript-go/shim/execute/tsc => ./shim/execute/tsc
 	github.com/microsoft/typescript-go/shim/format => ./shim/format
 	github.com/microsoft/typescript-go/shim/fourslash => ./shim/fourslash
+	github.com/microsoft/typescript-go/shim/locale => ./shim/locale
 	github.com/microsoft/typescript-go/shim/ls => ./shim/ls
 	github.com/microsoft/typescript-go/shim/ls/autoimport => ./shim/ls/autoimport
 	github.com/microsoft/typescript-go/shim/ls/change => ./shim/ls/change
@@ -58,6 +59,7 @@ require (
 	github.com/microsoft/typescript-go/shim/diagnostics v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/execute/tsc v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/fourslash v0.0.0
+	github.com/microsoft/typescript-go/shim/locale v0.0.0
 	github.com/microsoft/typescript-go/shim/ls v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/ls/autoimport v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/ls/change v0.0.0-00010101000000-000000000000

@@ -7,6 +7,7 @@ import "github.com/microsoft/typescript-go/internal/api"
 import "github.com/microsoft/typescript-go/internal/ast"
 import "github.com/microsoft/typescript-go/internal/checker"
 import "github.com/microsoft/typescript-go/internal/project"
+import "github.com/microsoft/typescript-go/internal/tsoptions"
 import "io"
 import _ "unsafe"
 
@@ -24,6 +25,10 @@ type ConfigFileResponse = api.ConfigFileResponse
 type Conn = api.Conn
 type DiagnosticResponse = api.DiagnosticResponse
 type DocumentIdentifier = api.DocumentIdentifier
+type EmitOutputFile = api.EmitOutputFile
+type EmitOutputResponse = api.EmitOutputResponse
+type EmitParams = api.EmitParams
+type EmitResponse = api.EmitResponse
 var ErrClientError = api.ErrClientError
 var ErrConnClosed = api.ErrConnClosed
 var ErrInvalidRequest = api.ErrInvalidRequest
@@ -86,6 +91,8 @@ const MessageTypeRequest = api.MessageTypeRequest
 const MessageTypeResponse = api.MessageTypeResponse
 const MessageTypeUnknown = api.MessageTypeUnknown
 type Method = api.Method
+const MethodEmit = api.MethodEmit
+const MethodEmitToString = api.MethodEmitToString
 const MethodGetAliasSymbolOfType = api.MethodGetAliasSymbolOfType
 const MethodGetAliasTypeArgumentsOfType = api.MethodGetAliasTypeArgumentsOfType
 const MethodGetAliasedSymbol = api.MethodGetAliasedSymbol
@@ -101,12 +108,15 @@ const MethodGetBindDiagnostics = api.MethodGetBindDiagnostics
 const MethodGetBooleanType = api.MethodGetBooleanType
 const MethodGetCheckTypeOfType = api.MethodGetCheckTypeOfType
 const MethodGetCompletionsAtPosition = api.MethodGetCompletionsAtPosition
+const MethodGetConfigFileNames = api.MethodGetConfigFileNames
 const MethodGetConfigFileParsingDiagnostics = api.MethodGetConfigFileParsingDiagnostics
+const MethodGetConfigSourceFile = api.MethodGetConfigSourceFile
 const MethodGetConstantValue = api.MethodGetConstantValue
 const MethodGetConstraintOfType = api.MethodGetConstraintOfType
 const MethodGetConstraintOfTypeParameter = api.MethodGetConstraintOfTypeParameter
 const MethodGetContextualType = api.MethodGetContextualType
 const MethodGetDeclarationDiagnostics = api.MethodGetDeclarationDiagnostics
+const MethodGetDeclarationEmit = api.MethodGetDeclarationEmit
 const MethodGetDeclaredTypeOfSymbol = api.MethodGetDeclaredTypeOfSymbol
 const MethodGetDefaultFromTypeParameter = api.MethodGetDefaultFromTypeParameter
 const MethodGetDefaultProjectForFile = api.MethodGetDefaultProjectForFile
@@ -125,6 +135,7 @@ const MethodGetImportAdderEdits = api.MethodGetImportAdderEdits
 const MethodGetIndexInfosOfType = api.MethodGetIndexInfosOfType
 const MethodGetIndexTypeOfType = api.MethodGetIndexTypeOfType
 const MethodGetJSDocTags = api.MethodGetJSDocTags
+const MethodGetJavaScriptEmit = api.MethodGetJavaScriptEmit
 const MethodGetLocalTypeParametersOfType = api.MethodGetLocalTypeParametersOfType
 const MethodGetMemberInModuleExports = api.MethodGetMemberInModuleExports
 const MethodGetMembersOfSymbol = api.MethodGetMembersOfSymbol
@@ -210,6 +221,8 @@ const MethodUpdateTemporarySnapshot = api.MethodUpdateTemporarySnapshot
 func NewAsyncConn(rwc io.ReadWriteCloser, handler api.Handler) *api.AsyncConn
 //go:linkname NewAsyncConnWithProtocol github.com/microsoft/typescript-go/internal/api.NewAsyncConnWithProtocol
 func NewAsyncConnWithProtocol(rwc io.ReadWriteCloser, protocol api.Protocol, handler api.Handler) *api.AsyncConn
+//go:linkname NewConfigFileResponse github.com/microsoft/typescript-go/internal/api.NewConfigFileResponse
+func NewConfigFileResponse(parsedCommandLine *tsoptions.ParsedCommandLine) *api.ConfigFileResponse
 //go:linkname NewDiagnosticResponse github.com/microsoft/typescript-go/internal/api.NewDiagnosticResponse
 func NewDiagnosticResponse(d *ast.Diagnostic) *api.DiagnosticResponse
 //go:linkname NewDiagnosticResponses github.com/microsoft/typescript-go/internal/api.NewDiagnosticResponses
@@ -246,6 +259,7 @@ type RawBinary = api.RawBinary
 type ReferencedSymbolEntry = api.ReferencedSymbolEntry
 type ReleaseParams = api.ReleaseParams
 type ResolveNameParams = api.ResolveNameParams
+type SelectedFilesEmitParams = api.SelectedFilesEmitParams
 type Session = api.Session
 type SessionOptions = api.SessionOptions
 //go:linkname SignatureHandle github.com/microsoft/typescript-go/internal/api.SignatureHandle
