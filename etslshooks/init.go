@@ -47,7 +47,7 @@ func init() {
 	// Register the Effect completion enrichment callback
 	ls.RegisterAfterCompletionCallback(afterCompletion)
 	// Register the Effect auto-import style transformer factory
-	autoimport.RegisterAutoImportFixTransformer(func(_ modulespecifiers.UserPreferences, program *compiler.Program, importingFile *ast.SourceFile) autoimport.FixTransformer {
+	autoimport.RegisterAutoImportFixTransformer(func(preferences modulespecifiers.UserPreferences, program *compiler.Program, importingFile *ast.SourceFile) autoimport.FixTransformer {
 		var resolvedOptions *etscore.ResolvedEffectPluginOptions
 		if effectConfig := program.Options().Effect; effectConfig != nil {
 			resolvedOptions = pluginoptions.ResolveEffectPluginOptionsForSourceFile(
@@ -57,7 +57,27 @@ func init() {
 				program.UseCaseSensitiveFileNames(),
 			)
 		}
-		return autoimportstyle.NewFixTransformer(resolvedOptions)
+		return autoimportstyle.NewFixTransformer(resolvedOptions, func(export *autoimport.Export) (string, modulespecifiers.ResultKind) {
+			targetFileName := string(export.Target.ModuleID)
+			if targetFile := program.GetSourceFile(targetFileName); targetFile != nil {
+				targetFileName = targetFile.FileName()
+			}
+			specifiers, kind := modulespecifiers.GetModuleSpecifiersForFileWithInfo(
+				importingFile,
+				targetFileName,
+				program.Options(),
+				program,
+				preferences,
+				modulespecifiers.ModuleSpecifierOptions{},
+				true,
+			)
+			for _, specifier := range specifiers {
+				if !strings.Contains(specifier, "/node_modules/") {
+					return specifier, kind
+				}
+			}
+			return "", modulespecifiers.ResultKindNone
+		})
 	})
 }
 
