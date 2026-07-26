@@ -14,6 +14,7 @@ use (
 	./shim/diagnostics
 	./shim/format
 	./shim/fourslash
+	./shim/locale
 	./shim/ls
 	./shim/ls/autoimport
 	./shim/ls/change
