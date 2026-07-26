@@ -60,6 +60,7 @@ func main() {
 		"execute/tsc",
 		"format",
 		"fourslash",
+		"locale",
 		"ls",
 		"ls/autoimport",
 		"ls/change",
