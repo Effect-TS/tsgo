@@ -601,8 +601,12 @@ const diagnosticsCommand = Command.make("diagnostics", {
   Command.withDescription("Gets the Effect language service diagnostics on the given files or project"),
   Command.withHandler(({ file, format, lspconfig, progress, project, severity, strict }) =>
     Effect.gen(function*() {
+      const fs = yield* FileSystem.FileSystem
       const installedTypeScript = yield* resolveInstalledTypeScriptBinary(defaultTypescriptPackageNames)
       const binaryPath = yield* getPackagedBinaryPath(installedTypeScript, false)
+      yield* fs.chmod(binaryPath, 0o755).pipe(
+        Effect.mapError(() => new ChmodBinaryError({ targetPath: binaryPath }))
+      )
       const result = runDiagnosticsBinary(binaryPath, {
         cwd: process.cwd(),
         file: Option.getOrUndefined(file),
