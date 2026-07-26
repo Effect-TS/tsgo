@@ -1,11 +1,13 @@
 package autoimportstyle
 
 import (
-	"github.com/effect-ts/tsgo/etscore"
 	"testing"
 
+	"github.com/effect-ts/tsgo/etscore"
+	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/ls/autoimport"
 	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
+	"github.com/microsoft/typescript-go/shim/modulespecifiers"
 )
 
 func TestNewStylePolicy(t *testing.T) {
@@ -159,6 +161,48 @@ func TestApplyNamespaceRewriteWithAlias(t *testing.T) {
 	}
 }
 
+func TestApplyNamespaceReexport(t *testing.T) {
+	t.Parallel()
+	sp := newStylePolicy(&etscore.ResolvedEffectPluginOptions{
+		NamespaceImportPackages: []string{"effect"},
+	})
+	sp.resolveTarget = func(export *autoimport.Export) (string, modulespecifiers.ResultKind) {
+		if export.Target.ModuleID != "effect/Effect" {
+			t.Fatalf("unexpected target module: %q", export.Target.ModuleID)
+		}
+		return "effect/Effect", modulespecifiers.ResultKindNodeModules
+	}
+
+	export := makeExport("effect", "effect", "effect/Effect")
+	export.ExportName = "Effect"
+	export.Syntax = autoimport.ExportSyntaxModifier
+	export.Flags = ast.SymbolFlagsValueModule
+	fix := makeAddNewFix(lsproto.ImportKindNamed, "effect", "Effect")
+
+	result := sp.Apply(export, fix)
+	if result == nil {
+		t.Fatal("expected non-nil result")
+	}
+	if result.ImportKind != lsproto.ImportKindNamespace {
+		t.Errorf("expected ImportKindNamespace, got %v", result.ImportKind)
+	}
+	if result.ModuleSpecifier != "effect/Effect" {
+		t.Errorf("expected module specifier 'effect/Effect', got %q", result.ModuleSpecifier)
+	}
+	if result.Name != "Effect" {
+		t.Errorf("expected namespace name 'Effect', got %q", result.Name)
+	}
+	if result.NamespacePrefix != "" {
+		t.Errorf("expected no usage qualifier, got %q", result.NamespacePrefix)
+	}
+	if result.ModuleSpecifierKind != modulespecifiers.ResultKindNodeModules {
+		t.Errorf("expected node_modules specifier kind, got %v", result.ModuleSpecifierKind)
+	}
+	if result.IsReExport {
+		t.Error("expected rewritten direct import not to be marked as a reexport")
+	}
+}
+
 func TestApplyBarrelRewrite(t *testing.T) {
 	t.Parallel()
 	sp := newStylePolicy(&etscore.ResolvedEffectPluginOptions{
@@ -251,6 +295,7 @@ func TestApplyTopLevelReexportIgnore(t *testing.T) {
 
 	// Export is a reexport (target module differs from module)
 	export := makeExport("effect", "effect", "effect/Effect")
+	export.Syntax = autoimport.ExportSyntaxNamed
 	fix := makeAddNewFix(lsproto.ImportKindNamed, "effect", "succeed")
 
 	result := sp.Apply(export, fix)
@@ -276,6 +321,7 @@ func TestApplyTopLevelReexportFollow(t *testing.T) {
 
 	// Export is a reexport (target module differs from module)
 	export := makeExport("effect", "effect", "effect/Effect")
+	export.Syntax = autoimport.ExportSyntaxNamed
 	fix := makeAddNewFix(lsproto.ImportKindNamed, "effect", "succeed")
 
 	result := sp.Apply(export, fix)
@@ -406,7 +452,7 @@ func TestInferNamespaceName(t *testing.T) {
 
 func TestNewFixTransformerNilForEmptyPrefs(t *testing.T) {
 	t.Parallel()
-	transformer := NewFixTransformer(&etscore.ResolvedEffectPluginOptions{})
+	transformer := NewFixTransformer(&etscore.ResolvedEffectPluginOptions{}, nil)
 	if transformer != nil {
 		t.Error("expected nil transformer for empty preferences")
 	}
@@ -416,7 +462,7 @@ func TestNewFixTransformerAppliesPolicy(t *testing.T) {
 	t.Parallel()
 	transformer := NewFixTransformer(&etscore.ResolvedEffectPluginOptions{
 		NamespaceImportPackages: []string{"effect"},
-	})
+	}, nil)
 	if transformer == nil {
 		t.Fatal("expected non-nil transformer")
 	}
@@ -437,7 +483,7 @@ func TestNewFixTransformerPrefersExistingNamespaceUse(t *testing.T) {
 	t.Parallel()
 	transformer := NewFixTransformer(&etscore.ResolvedEffectPluginOptions{
 		NamespaceImportPackages: []string{"effect"},
-	})
+	}, nil)
 	if transformer == nil {
 		t.Fatal("expected non-nil transformer")
 	}
