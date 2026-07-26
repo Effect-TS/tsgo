@@ -12,7 +12,7 @@ flowchart TB
   10[["type: #40;#41; =#gt; ExampleError<br/>node: #40;#41; =#gt; new ExampleError#40;#41;"]]
   11[/"type: ExampleError<br/>node: new ExampleError#40;#41;"/]
   12["type: Effect#lt;Promise#lt;Response#gt;, ExampleError, never#gt;<br/>callee: Effect.try<br/>args: #91;#93;"]
-  13[/"type: #lt;A, E#gt;#40;options: #123; try: LazyArg#lt;A#gt;; catch: #40;error: unknown#41; =#gt; E; #125;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.try"/]
+  13[/"type: #lt;A, E = UnknownError#gt;#40;options: LazyArg#lt;A#gt; #124; #123; readonly try: LazyArg#lt;A#gt;; readonly catch: #40;error: unknown#41; =#gt; E; #125;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.try"/]
   14[["type: #40;#41; =#gt; Promise#lt;Response#gt;<br/>node: async #40;#41; =#gt; fetch#40;#quot;https://example.com/try-promise#quot;#41;"]]
   15[/"type: Promise#lt;Response#gt;<br/>node: fetch#40;#quot;https://example.com/try-promise#quot;#41;"/]
   16["type: Effect#lt;Response, UnknownError, never#gt;<br/>callee: Effect.tryPromise<br/>args: #91;#93;"]

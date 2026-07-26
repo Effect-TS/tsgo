@@ -15,7 +15,7 @@ flowchart TB
   13[["type: #40;#41; =#gt; ExampleError<br/>node: #40;#41; =#gt; new ExampleError#40;#41;"]]
   14[/"type: ExampleError<br/>node: new ExampleError#40;#41;"/]
   15["type: Effect#lt;#123; readonly name: string; readonly age: number; #125;, ExampleError, never#gt;<br/>callee: Effect.try<br/>args: #91;#93;"]
-  16[/"type: #lt;A, E#gt;#40;options: #123; try: LazyArg#lt;A#gt;; catch: #40;error: unknown#41; =#gt; E; #125;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.try"/]
+  16[/"type: #lt;A, E = UnknownError#gt;#40;options: LazyArg#lt;A#gt; #124; #123; readonly try: LazyArg#lt;A#gt;; readonly catch: #40;error: unknown#41; =#gt; E; #125;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Effect.try"/]
   17[["type: #40;#41; =#gt; Promise#lt;#123; readonly name: string; readonly age: number; #125;#gt;<br/>node: async #40;#41; =#gt; Schema.encodeSync#40;Person#41;#40;#123; name: #quot;Bob#quot;, age: 40 #125;#41;"]]
   18[/"type: #123; readonly name: string; readonly age: number; #125;<br/>node: Schema.encodeSync#40;Person#41;#40;#123; name: #quot;Bob#quot;, age: 40 #125;#41;"/]
   19["type: Effect#lt;#123; readonly name: string; readonly age: number; #125;, UnknownError, never#gt;<br/>callee: Effect.tryPromise<br/>args: #91;#93;"]
