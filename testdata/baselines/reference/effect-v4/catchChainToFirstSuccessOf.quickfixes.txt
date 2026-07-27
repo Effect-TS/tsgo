@@ -1,0 +1,43 @@
+=== Quick Fix Inventory ===
+
+[D1] (13:3-13:15) TS377107: Chained Effect.catch fallbacks that ignore the error can be written with Effect.firstSuccessOf. Wrap each lazy fallback with Effect.suspend to preserve when it is constructed. effect(catchChainToFirstSuccessOf)
+  Fix 0: "Disable catchChainToFirstSuccessOf for this line"
+  Fix 1: "Disable catchChainToFirstSuccessOf for entire file"
+
+[D2] (20:3-20:15) TS377107: Chained Effect.catch fallbacks that ignore the error can be written with Effect.firstSuccessOf. Wrap each lazy fallback with Effect.suspend to preserve when it is constructed. effect(catchChainToFirstSuccessOf)
+  Fix 0: "Disable catchChainToFirstSuccessOf for this line"
+  Fix 1: "Disable catchChainToFirstSuccessOf for entire file"
+
+[D3] (26:26-26:38) TS377107: Chained Effect.catch fallbacks that ignore the error can be written with Effect.firstSuccessOf. Wrap each lazy fallback with Effect.suspend to preserve when it is constructed. effect(catchChainToFirstSuccessOf)
+  Fix 0: "Disable catchChainToFirstSuccessOf for this line"
+  Fix 1: "Disable catchChainToFirstSuccessOf for entire file"
+
+[D4] (65:3-65:15) TS377107: Chained Effect.catch fallbacks that ignore the error can be written with Effect.firstSuccessOf. Wrap each lazy fallback with Effect.suspend to preserve when it is constructed. effect(catchChainToFirstSuccessOf)
+  Fix 0: "Disable catchChainToFirstSuccessOf for this line"
+  Fix 1: "Disable catchChainToFirstSuccessOf for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable catchChainToFirstSuccessOf for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable catchChainToFirstSuccessOf for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable catchChainToFirstSuccessOf for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable catchChainToFirstSuccessOf for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable catchChainToFirstSuccessOf for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable catchChainToFirstSuccessOf for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable catchChainToFirstSuccessOf for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable catchChainToFirstSuccessOf for entire file" ===
+skipped by default

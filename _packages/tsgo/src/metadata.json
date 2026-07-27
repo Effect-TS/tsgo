@@ -1461,6 +1461,29 @@
       }
     },
     {
+      "name": "catchChainToFirstSuccessOf",
+      "group": "style",
+      "description": "Suggests Effect.firstSuccessOf for consecutive error-independent Effect.catch fallbacks when the error type is preserved",
+      "defaultSeverity": "suggestion",
+      "fixable": false,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377107
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const primary: Effect.Effect\u003cstring, Error\u003e\ndeclare const secondary: Effect.Effect\u003cstring, Error\u003e\ndeclare const tertiary: Effect.Effect\u003cstring, Error\u003e\n\nexport const preview = primary.pipe(\n  Effect.catch(() =\u003e secondary),\n  Effect.catch(() =\u003e tertiary)\n)\n",
+        "diagnostics": [
+          {
+            "start": 265,
+            "end": 277,
+            "text": "Chained Effect.catch fallbacks that ignore the error can be written with Effect.firstSuccessOf. Wrap each lazy fallback with Effect.suspend to preserve when it is constructed. effect(catchChainToFirstSuccessOf)"
+          }
+        ]
+      }
+    },
+    {
       "name": "catchToIgnore",
       "group": "style",
       "description": "Suggests using Effect.ignore or Effect.ignoreCause instead of Effect.catch/catchCause returning Effect.void",
