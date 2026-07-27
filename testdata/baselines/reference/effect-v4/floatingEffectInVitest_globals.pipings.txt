@@ -1,0 +1,15 @@
+==== /.src/floatingEffectInVitest_globals.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 5:37 - 6:30
+Node: beforeEach(() => Effect.void)
+Node Kind: KindCallExpression
+
+Subject: () => Effect.void
+Subject Type: () => Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: beforeEach
+      args: (constant)
+      outType: void

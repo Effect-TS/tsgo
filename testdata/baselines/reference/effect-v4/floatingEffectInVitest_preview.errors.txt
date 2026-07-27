@@ -1,0 +1,16 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/floatingEffectInVitest_preview.ts(6,30): error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+
+
+==== /.src/floatingEffectInVitest_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics floatingEffectInVitest:error
+    import { it } from "@effect/vitest"
+    import { Effect } from "effect"
+    
+    it("does not execute", () => Effect.void)
+                                 ~~~~~~~~~~~
+!!! error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+    

@@ -286,6 +286,11 @@ func evaluatePreview(t *testing.T, version bundledeffect.EffectVersion, sourceTe
 	if err := bundledeffect.MountEffect(version, testfs); err != nil {
 		t.Fatalf("mount effect for preview: %v", err)
 	}
+	if strings.Contains(sourceText, "vitest") {
+		if err := bundledeffect.MountVitest(version, testfs); err != nil {
+			t.Fatalf("mount vitest for preview: %v", err)
+		}
+	}
 
 	currentDirectory := "/.src"
 

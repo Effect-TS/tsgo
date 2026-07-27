@@ -1,0 +1,56 @@
+flowchart TB
+  0[/"type: void<br/>node: it#40;#quot;direct#quot;, #40;#41; =#gt; Effect.void#41;"/]
+  1[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  2[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  3[/"type: void<br/>node: it.only#40;#quot;only#quot;, #40;#41; =#gt; Effect.void#41;"/]
+  4[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  5[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  6[/"type: void<br/>node: it.each#40;#91;1, 2#93;#41;#40;#quot;each %s#quot;, #40;#41; =#gt; Effect.void#41;"/]
+  7[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  8[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  9[/"type: void<br/>node: it.prop#40;#quot;property#quot;, #91;arbitrary#93;, #40;#41; =#gt; Effect.void#41;"/]
+  10[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  11[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  12[/"type: void<br/>node: test#40;#quot;test alias#quot;, #40;#41; =#gt; Effect.void#41;"/]
+  13[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  14[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  15[/"type: void<br/>node: beforeEach#40;#40;#41; =#gt; Effect.void#41;"/]
+  16[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  17[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  18[/"type: void<br/>node: it.effect#40;#quot;effect aware#quot;, #40;#41; =#gt; Effect.void#41;"/]
+  19[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  20[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  21[/"type: void<br/>node: it.live#40;#quot;live aware#quot;, #40;#41; =#gt; Effect.void#41;"/]
+  22[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  23[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  24[/"type: void<br/>node: it.scoped#40;#quot;scoped aware#quot;, #40;#41; =#gt; Effect.void#41;"/]
+  25[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  26[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  27[/"type: void<br/>node: it.scopedLive#40;#quot;scoped live aware#quot;, #40;#41; =#gt; Effect.void#41;"/]
+  28[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  29[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  30[/"type: void<br/>node: it#40;#quot;runPromise#quot;, #40;#41; =#gt; Effect.runPromise#40;Effect.void#41;#41;"/]
+  31[["type: #40;#41; =#gt; Promise#lt;void#gt;<br/>node: #40;#41; =#gt; Effect.runPromise#40;Effect.void#41;"]]
+  32[/"type: Promise#lt;void#gt;<br/>node: Effect.runPromise#40;Effect.void#41;"/]
+  2 -->|"kind: potentialReturn"| 1
+  1 -->|"kind: usedBy"| 0
+  5 -->|"kind: potentialReturn"| 4
+  4 -->|"kind: usedBy"| 3
+  8 -->|"kind: potentialReturn"| 7
+  7 -->|"kind: usedBy"| 6
+  11 -->|"kind: potentialReturn"| 10
+  10 -->|"kind: usedBy"| 9
+  14 -->|"kind: potentialReturn"| 13
+  13 -->|"kind: usedBy"| 12
+  17 -->|"kind: potentialReturn"| 16
+  16 -->|"kind: usedBy"| 15
+  20 -->|"kind: potentialReturn"| 19
+  19 -->|"kind: usedBy"| 18
+  23 -->|"kind: potentialReturn"| 22
+  22 -->|"kind: usedBy"| 21
+  26 -->|"kind: potentialReturn"| 25
+  25 -->|"kind: usedBy"| 24
+  29 -->|"kind: potentialReturn"| 28
+  28 -->|"kind: usedBy"| 27
+  32 -->|"kind: potentialReturn"| 31
+  31 -->|"kind: usedBy"| 30

@@ -2,10 +2,13 @@
     "name": "effect-v3-tests",
     "private": true,
     "dependencies": {
-        "effect": "3.19.19",
+        "@effect/vitest": "0.27.0",
         "@standard-schema/spec": "^1.0.0",
+        "@types/node": "^22.0.0",
+        "@vitest/runner": "3.2.4",
+        "effect": "3.19.19",
         "fast-check": "^3.23.1",
         "pure-rand": "^6.1.0",
-        "@types/node": "^22.0.0"
+        "vitest": "3.2.4"
     }
 }

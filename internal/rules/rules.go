@@ -9,6 +9,7 @@ import (
 // Add new rules here explicitly - no init() magic.
 var All = []rule.Rule{
 	FloatingEffect,
+	FloatingEffectInVitest,
 	MissingEffectError,
 	MissingEffectContext,
 	MissingReturnYieldStar,
@@ -62,6 +63,7 @@ var All = []rule.Rule{
 	SchemaStructWithTag,
 	SchemaSyncInEffect,
 	SchemaNumber,
+	SchemaLiteralNonFinite,
 	SchemaUnionOfLiterals,
 	NewSchemaClass,
 	MissingEffectServiceDependency,

@@ -95,6 +95,8 @@ const CheckModeSkipContextSensitive = checker.CheckModeSkipContextSensitive
 const CheckModeSkipGenericFunctions = checker.CheckModeSkipGenericFunctions
 const CheckModeTypeOnly = checker.CheckModeTypeOnly
 type Checker = checker.Checker
+//go:linkname Checker_isBlockScopedNameDeclaredBeforeUse github.com/microsoft/typescript-go/internal/checker.(*Checker).isBlockScopedNameDeclaredBeforeUse
+func Checker_isBlockScopedNameDeclaredBeforeUse(recv *checker.Checker, declaration *ast.Node, usage *ast.Node) bool
 //go:linkname Checker_isReferenceToType github.com/microsoft/typescript-go/internal/checker.(*Checker).isReferenceToType
 func Checker_isReferenceToType(recv *checker.Checker, t *checker.Type, target *checker.Type) bool
 //go:linkname Checker_getSymbolIfSameReference github.com/microsoft/typescript-go/internal/checker.(*Checker).getSymbolIfSameReference
@@ -109,6 +111,8 @@ func Checker_getTypeArguments(recv *checker.Checker, t *checker.Type) []*checker
 func Checker_isArrayType(recv *checker.Checker, t *checker.Type) bool
 //go:linkname Checker_isReadonlyArrayType github.com/microsoft/typescript-go/internal/checker.(*Checker).isReadonlyArrayType
 func Checker_isReadonlyArrayType(recv *checker.Checker, t *checker.Type) bool
+//go:linkname Checker_evaluateEntity github.com/microsoft/typescript-go/internal/checker.(*Checker).evaluateEntity
+func Checker_evaluateEntity(recv *checker.Checker, expr *ast.Node, location *ast.Node) evaluator.Result
 //go:linkname Checker_getLiteralTypeFromProperty github.com/microsoft/typescript-go/internal/checker.(*Checker).getLiteralTypeFromProperty
 func Checker_getLiteralTypeFromProperty(recv *checker.Checker, prop *ast.Symbol, include checker.TypeFlags, includeNonPublic bool) *checker.Type
 //go:linkname Checker_newFunctionType github.com/microsoft/typescript-go/internal/checker.(*Checker).newFunctionType
@@ -121,6 +125,8 @@ func Checker_isSymbolAssigned(recv *checker.Checker, symbol *ast.Symbol) bool
 func Checker_isPastLastAssignment(recv *checker.Checker, symbol *ast.Symbol, location *ast.Node) bool
 //go:linkname Checker_isTypeAssignableTo github.com/microsoft/typescript-go/internal/checker.(*Checker).isTypeAssignableTo
 func Checker_isTypeAssignableTo(recv *checker.Checker, source *checker.Type, target *checker.Type) bool
+//go:linkname Checker_isConstantVariable github.com/microsoft/typescript-go/internal/checker.(*Checker).isConstantVariable
+func Checker_isConstantVariable(recv *checker.Checker, symbol *ast.Symbol) bool
 type extra_Checker struct {
   id uint32
   program checker.Program
