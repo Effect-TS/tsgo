@@ -1679,6 +1679,11 @@
           "default": "suggestion",
           "description": "Suggests using Effect.mapError instead of Effect.catch + Effect.fail"
         },
+        "catchChainToFirstSuccessOf": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.firstSuccessOf for consecutive error-independent Effect.catch fallbacks when the error type is preserved"
+        },
         "catchToIgnore": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
