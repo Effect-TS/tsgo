@@ -556,10 +556,15 @@ const unpatchCommand = Command.make("unpatch").pipe(
 const getExePathCommand = Command.make("get-exe-path").pipe(
   Command.withDescription("Print the Effect Language Service executable path"),
   Command.withHandler(() =>
-    resolveInstalledTypeScriptBinary(defaultTypescriptPackageNames).pipe(
-      Effect.flatMap((installedTypeScript) => getPackagedBinaryPath(installedTypeScript, false)),
-      Effect.flatMap((exePath) => Console.log(exePath))
-    )
+    Effect.gen(function*() {
+      const fs = yield* FileSystem.FileSystem
+      const installedTypeScript = yield* resolveInstalledTypeScriptBinary(defaultTypescriptPackageNames)
+      const exePath = yield* getPackagedBinaryPath(installedTypeScript, false)
+      yield* fs.chmod(exePath, 0o755).pipe(
+        Effect.mapError(() => new ChmodBinaryError({ targetPath: exePath }))
+      )
+      yield* Console.log(exePath)
+    })
   )
 )
 
