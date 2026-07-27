@@ -1,0 +1,15 @@
+==== /.src/schemaLiteralNonFinite_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 6:29 - 6:58
+Node: Schema.Literals([0, 1, NaN])
+Node Kind: KindCallExpression
+
+Subject: [0, 1, NaN]
+Subject Type: [0, 1, number]
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Literals
+      args: (constant)
+      outType: Literals<readonly [0, 1, number]>

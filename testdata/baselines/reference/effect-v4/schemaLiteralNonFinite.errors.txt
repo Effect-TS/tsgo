@@ -1,0 +1,89 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/schemaLiteralNonFinite.ts(6,16): error TS377106: Schema literal values must be finite numbers; `Infinity` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+/.src/schemaLiteralNonFinite.ts(7,16): error TS377106: Schema literal values must be finite numbers; `-Infinity` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+/.src/schemaLiteralNonFinite.ts(8,16): error TS377106: Schema literal values must be finite numbers; `Number.POSITIVE_INFINITY` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+/.src/schemaLiteralNonFinite.ts(9,16): error TS377106: Schema literal values must be finite numbers; `Number.NEGATIVE_INFINITY` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+/.src/schemaLiteralNonFinite.ts(10,16): error TS377106: Schema literal values must be finite numbers; `Number.NaN` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+/.src/schemaLiteralNonFinite.ts(11,16): error TS377106: Schema literal values must be finite numbers; `-Number.POSITIVE_INFINITY` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+/.src/schemaLiteralNonFinite.ts(12,16): error TS377106: Schema literal values must be finite numbers; `Number.POSITIVE_INFINITY - Number.POSITIVE_INFINITY` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+/.src/schemaLiteralNonFinite.ts(13,16): error TS377106: Schema literal values must be finite numbers; `Number["NaN"]` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+/.src/schemaLiteralNonFinite.ts(14,16): error TS377106: Schema literal values must be finite numbers; `1e999` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+/.src/schemaLiteralNonFinite.ts(15,16): error TS377106: Schema literal values must be finite numbers; `1 / 0` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+/.src/schemaLiteralNonFinite.ts(16,16): error TS377106: Schema literal values must be finite numbers; `0 / 0` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+/.src/schemaLiteralNonFinite.ts(17,24): error TS377106: Schema literal values must be finite numbers; `NaN` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+/.src/schemaLiteralNonFinite.ts(18,18): error TS377106: Schema literal values must be finite numbers; `NaN` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+/.src/schemaLiteralNonFinite.ts(36,16): error TS377106: Schema literal values must be finite numbers; `constantNaN` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+/.src/schemaLiteralNonFinite.ts(37,16): error TS377106: Schema literal values must be finite numbers; `-constantInfinity` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+
+
+==== /.src/schemaLiteralNonFinite.ts (15 errors) ====
+    // @effect-diagnostics schemaLiteralNonFinite:error
+    
+    import { Schema } from "effect"
+    import * as SchemaModule from "effect/Schema"
+    
+    Schema.Literal(Infinity)
+                   ~~~~~~~~
+!!! error TS377106: Schema literal values must be finite numbers; `Infinity` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+    Schema.Literal(-Infinity)
+                   ~~~~~~~~~
+!!! error TS377106: Schema literal values must be finite numbers; `-Infinity` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+    Schema.Literal(Number.POSITIVE_INFINITY)
+                   ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377106: Schema literal values must be finite numbers; `Number.POSITIVE_INFINITY` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+    Schema.Literal(Number.NEGATIVE_INFINITY)
+                   ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377106: Schema literal values must be finite numbers; `Number.NEGATIVE_INFINITY` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+    Schema.Literal(Number.NaN)
+                   ~~~~~~~~~~
+!!! error TS377106: Schema literal values must be finite numbers; `Number.NaN` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+    Schema.Literal(-Number.POSITIVE_INFINITY)
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377106: Schema literal values must be finite numbers; `-Number.POSITIVE_INFINITY` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+    Schema.Literal(Number.POSITIVE_INFINITY - Number.POSITIVE_INFINITY)
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377106: Schema literal values must be finite numbers; `Number.POSITIVE_INFINITY - Number.POSITIVE_INFINITY` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+    Schema.Literal(Number["NaN"])
+                   ~~~~~~~~~~~~~
+!!! error TS377106: Schema literal values must be finite numbers; `Number["NaN"]` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+    Schema.Literal(1e999)
+                   ~~~~~
+!!! error TS377106: Schema literal values must be finite numbers; `1e999` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+    Schema.Literal(1 / 0)
+                   ~~~~~
+!!! error TS377106: Schema literal values must be finite numbers; `1 / 0` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+    Schema.Literal(0 / 0)
+                   ~~~~~
+!!! error TS377106: Schema literal values must be finite numbers; `0 / 0` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+    Schema.Literals([0, 1, NaN])
+                           ~~~
+!!! error TS377106: Schema literal values must be finite numbers; `NaN` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+    SchemaModule.tag(NaN)
+                     ~~~
+!!! error TS377106: Schema literal values must be finite numbers; `NaN` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+    
+    Schema.Literal(1)
+    Schema.Literal("Infinity")
+    Schema.Literals([0, 1, 2])
+    
+    function localValues(Infinity: number, NaN: number, Number: { readonly NaN: number }) {
+      Schema.Literal(Infinity)
+      Schema.Literal(NaN)
+      Schema.Literal(Number.NaN)
+    }
+    
+    let reassigned = Infinity
+    reassigned = 1
+    Schema.Literal(reassigned)
+    
+    const constantNaN = Number.NaN
+    const constantInfinity = Number.POSITIVE_INFINITY
+    Schema.Literal(constantNaN)
+                   ~~~~~~~~~~~
+!!! error TS377106: Schema literal values must be finite numbers; `constantNaN` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+    Schema.Literal(-constantInfinity)
+                   ~~~~~~~~~~~~~~~~~
+!!! error TS377106: Schema literal values must be finite numbers; `-constantInfinity` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+    

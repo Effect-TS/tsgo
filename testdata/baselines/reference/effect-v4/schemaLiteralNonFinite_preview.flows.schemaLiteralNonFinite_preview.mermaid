@@ -1,0 +1,6 @@
+flowchart TB
+  0[/"type: #91;0, 1, number#93;<br/>node: #91;0, 1, NaN#93;"/]
+  1["type: Literals#lt;readonly #91;0, 1, number#93;#gt;<br/>callee: Schema.Literals<br/>args: #91;#93;"]
+  2[/"type: #lt;const L extends ReadonlyArray#lt;SchemaAST.LiteralValue#gt;#gt;#40;literals: L#41; =#gt; Literals#lt;L#gt;<br/>node: Schema.Literals"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1

@@ -1,0 +1,156 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:16-6:24) TS377106: Schema literal values must be finite numbers; `Infinity` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+  Fix 0: "Disable schemaLiteralNonFinite for this line"
+  Fix 1: "Disable schemaLiteralNonFinite for entire file"
+
+[D2] (7:16-7:25) TS377106: Schema literal values must be finite numbers; `-Infinity` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+  Fix 0: "Disable schemaLiteralNonFinite for this line"
+  Fix 1: "Disable schemaLiteralNonFinite for entire file"
+
+[D3] (8:16-8:40) TS377106: Schema literal values must be finite numbers; `Number.POSITIVE_INFINITY` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+  Fix 0: "Disable schemaLiteralNonFinite for this line"
+  Fix 1: "Disable schemaLiteralNonFinite for entire file"
+
+[D4] (9:16-9:40) TS377106: Schema literal values must be finite numbers; `Number.NEGATIVE_INFINITY` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+  Fix 0: "Disable schemaLiteralNonFinite for this line"
+  Fix 1: "Disable schemaLiteralNonFinite for entire file"
+
+[D5] (10:16-10:26) TS377106: Schema literal values must be finite numbers; `Number.NaN` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+  Fix 0: "Disable schemaLiteralNonFinite for this line"
+  Fix 1: "Disable schemaLiteralNonFinite for entire file"
+
+[D6] (11:16-11:41) TS377106: Schema literal values must be finite numbers; `-Number.POSITIVE_INFINITY` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+  Fix 0: "Disable schemaLiteralNonFinite for this line"
+  Fix 1: "Disable schemaLiteralNonFinite for entire file"
+
+[D7] (12:16-12:67) TS377106: Schema literal values must be finite numbers; `Number.POSITIVE_INFINITY - Number.POSITIVE_INFINITY` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+  Fix 0: "Disable schemaLiteralNonFinite for this line"
+  Fix 1: "Disable schemaLiteralNonFinite for entire file"
+
+[D8] (13:16-13:29) TS377106: Schema literal values must be finite numbers; `Number["NaN"]` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+  Fix 0: "Disable schemaLiteralNonFinite for this line"
+  Fix 1: "Disable schemaLiteralNonFinite for entire file"
+
+[D9] (14:16-14:21) TS377106: Schema literal values must be finite numbers; `1e999` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+  Fix 0: "Disable schemaLiteralNonFinite for this line"
+  Fix 1: "Disable schemaLiteralNonFinite for entire file"
+
+[D10] (15:16-15:21) TS377106: Schema literal values must be finite numbers; `1 / 0` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+  Fix 0: "Disable schemaLiteralNonFinite for this line"
+  Fix 1: "Disable schemaLiteralNonFinite for entire file"
+
+[D11] (16:16-16:21) TS377106: Schema literal values must be finite numbers; `0 / 0` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+  Fix 0: "Disable schemaLiteralNonFinite for this line"
+  Fix 1: "Disable schemaLiteralNonFinite for entire file"
+
+[D12] (17:24-17:27) TS377106: Schema literal values must be finite numbers; `NaN` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+  Fix 0: "Disable schemaLiteralNonFinite for this line"
+  Fix 1: "Disable schemaLiteralNonFinite for entire file"
+
+[D13] (18:18-18:21) TS377106: Schema literal values must be finite numbers; `NaN` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+  Fix 0: "Disable schemaLiteralNonFinite for this line"
+  Fix 1: "Disable schemaLiteralNonFinite for entire file"
+
+[D14] (24:10-24:21) TS6133: 'localValues' is declared but its value is never read.
+  (no quick fixes)
+
+[D15] (36:16-36:27) TS377106: Schema literal values must be finite numbers; `constantNaN` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+  Fix 0: "Disable schemaLiteralNonFinite for this line"
+  Fix 1: "Disable schemaLiteralNonFinite for entire file"
+
+[D16] (37:16-37:33) TS377106: Schema literal values must be finite numbers; `-constantInfinity` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+  Fix 0: "Disable schemaLiteralNonFinite for this line"
+  Fix 1: "Disable schemaLiteralNonFinite for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable schemaLiteralNonFinite for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable schemaLiteralNonFinite for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable schemaLiteralNonFinite for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable schemaLiteralNonFinite for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable schemaLiteralNonFinite for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable schemaLiteralNonFinite for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable schemaLiteralNonFinite for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable schemaLiteralNonFinite for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable schemaLiteralNonFinite for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable schemaLiteralNonFinite for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable schemaLiteralNonFinite for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable schemaLiteralNonFinite for entire file" ===
+skipped by default
+
+=== [D7] Fix 0: "Disable schemaLiteralNonFinite for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable schemaLiteralNonFinite for entire file" ===
+skipped by default
+
+=== [D8] Fix 0: "Disable schemaLiteralNonFinite for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable schemaLiteralNonFinite for entire file" ===
+skipped by default
+
+=== [D9] Fix 0: "Disable schemaLiteralNonFinite for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable schemaLiteralNonFinite for entire file" ===
+skipped by default
+
+=== [D10] Fix 0: "Disable schemaLiteralNonFinite for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable schemaLiteralNonFinite for entire file" ===
+skipped by default
+
+=== [D11] Fix 0: "Disable schemaLiteralNonFinite for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable schemaLiteralNonFinite for entire file" ===
+skipped by default
+
+=== [D12] Fix 0: "Disable schemaLiteralNonFinite for this line" ===
+skipped by default
+
+=== [D12] Fix 1: "Disable schemaLiteralNonFinite for entire file" ===
+skipped by default
+
+=== [D13] Fix 0: "Disable schemaLiteralNonFinite for this line" ===
+skipped by default
+
+=== [D13] Fix 1: "Disable schemaLiteralNonFinite for entire file" ===
+skipped by default
+
+=== [D15] Fix 0: "Disable schemaLiteralNonFinite for this line" ===
+skipped by default
+
+=== [D15] Fix 1: "Disable schemaLiteralNonFinite for entire file" ===
+skipped by default
+
+=== [D16] Fix 0: "Disable schemaLiteralNonFinite for this line" ===
+skipped by default
+
+=== [D16] Fix 1: "Disable schemaLiteralNonFinite for entire file" ===
+skipped by default

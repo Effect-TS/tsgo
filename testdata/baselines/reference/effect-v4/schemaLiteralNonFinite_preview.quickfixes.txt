@@ -1,0 +1,13 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:53-6:56) TS377106: Schema literal values must be finite numbers; `NaN` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+  Fix 0: "Disable schemaLiteralNonFinite for this line"
+  Fix 1: "Disable schemaLiteralNonFinite for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable schemaLiteralNonFinite for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable schemaLiteralNonFinite for entire file" ===
+skipped by default

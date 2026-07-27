@@ -12,8 +12,10 @@ use (
 	./shim/compiler
 	./shim/core
 	./shim/diagnostics
+	./shim/evaluator
 	./shim/format
 	./shim/fourslash
+	./shim/jsnum
 	./shim/locale
 	./shim/ls
 	./shim/ls/autoimport

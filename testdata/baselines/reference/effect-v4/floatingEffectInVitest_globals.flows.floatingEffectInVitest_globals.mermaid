@@ -1,0 +1,11 @@
+flowchart TB
+  0[/"type: void<br/>node: it#40;#quot;global test#quot;, #40;#41; =#gt; Effect.void#41;"/]
+  1[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  2[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  3[/"type: void<br/>node: beforeEach#40;#40;#41; =#gt; Effect.void#41;"/]
+  4[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  5[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  2 -->|"kind: potentialReturn"| 1
+  1 -->|"kind: usedBy"| 0
+  5 -->|"kind: potentialReturn"| 4
+  4 -->|"kind: usedBy"| 3

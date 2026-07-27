@@ -1,0 +1,183 @@
+==== /.src/floatingEffectInVitest.ts (13 flows) ====
+
+=== Piping Flow ===
+Location: 12:35 - 13:16
+Node: it.each([1, 2])
+Node Kind: KindCallExpression
+
+Subject: [1, 2]
+Subject Type: number[]
+
+Transformations (1):
+  [0] kind: call
+      callee: it.each
+      args: (constant)
+      outType: EachFunctionReturn<number[]>
+
+=== Piping Flow ===
+Location: 13:46 - 14:15
+Node: it.for([1, 2])
+Node Kind: KindCallExpression
+
+Subject: [1, 2]
+Subject Type: number[]
+
+Transformations (1):
+  [0] kind: call
+      callee: it.for
+      args: (constant)
+      outType: TestForFunctionReturn<number, TestContext>
+
+=== Piping Flow ===
+Location: 14:44 - 15:17
+Node: it.skipIf(false)
+Node Kind: KindCallExpression
+
+Subject: false
+Subject Type: false
+
+Transformations (1):
+  [0] kind: call
+      callee: it.skipIf
+      args: (constant)
+      outType: ChainableTestAPI<{}>
+
+=== Piping Flow ===
+Location: 15:46 - 16:15
+Node: it.runIf(true)
+Node Kind: KindCallExpression
+
+Subject: true
+Subject Type: true
+
+Transformations (1):
+  [0] kind: call
+      callee: it.runIf
+      args: (constant)
+      outType: ChainableTestAPI<{}>
+
+=== Piping Flow ===
+Location: 24:30 - 24:59
+Node: Promise.resolve(Effect.void)
+Node Kind: KindCallExpression
+
+Subject: Effect.void
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.resolve
+      args: (constant)
+      outType: Promise<Effect<void, never, never>>
+
+=== Piping Flow ===
+Location: 29:58 - 31:29
+Node: beforeAll(() => Effect.void)
+Node Kind: KindCallExpression
+
+Subject: () => Effect.void
+Subject Type: () => Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: beforeAll
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 31:29 - 32:30
+Node: beforeEach(() => Effect.void)
+Node Kind: KindCallExpression
+
+Subject: () => Effect.void
+Subject Type: () => Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: beforeEach
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 32:30 - 33:28
+Node: afterAll(() => Effect.void)
+Node Kind: KindCallExpression
+
+Subject: () => Effect.void
+Subject Type: () => Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: afterAll
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 33:28 - 34:29
+Node: afterEach(() => Effect.void)
+Node Kind: KindCallExpression
+
+Subject: () => Effect.void
+Subject Type: () => Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: afterEach
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 34:29 - 35:33
+Node: it.beforeEach(() => Effect.void)
+Node Kind: KindCallExpression
+
+Subject: () => Effect.void
+Subject Type: () => Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: it.beforeEach
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 38:55 - 39:23
+Node: it.effect.each([1, 2])
+Node Kind: KindCallExpression
+
+Subject: [1, 2]
+Subject Type: number[]
+
+Transformations (1):
+  [0] kind: call
+      callee: it.effect.each
+      args: (constant)
+      outType: <A, E>(name: string, self: TestFunction<A, E, Scope, number[]>, timeout?: number | TestOptions | undefined) => void
+
+=== Piping Flow ===
+Location: 43:23 - 43:54
+Node: Effect.runPromise(Effect.void)
+Node Kind: KindCallExpression
+
+Subject: Effect.void
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<void>
+
+=== Piping Flow ===
+Location: 44:29 - 44:48
+Node: Promise.resolve(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.resolve
+      args: (constant)
+      outType: Promise<number>

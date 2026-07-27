@@ -146,6 +146,11 @@ func RunEffectTest(t *testing.T, version bundledeffect.EffectVersion, testFile s
 	if err := bundledeffect.MountEffect(version, testfs); err != nil {
 		t.Fatal("Failed to mount Effect:", err)
 	}
+	if strings.Contains(string(content), "vitest") {
+		if err := bundledeffect.MountVitest(version, testfs); err != nil {
+			t.Fatal("Failed to mount Vitest:", err)
+		}
+	}
 
 	// Current directory for the test
 	currentDirectory := "/.src"
