@@ -63,6 +63,7 @@ var All = []rule.Rule{
 	SchemaStructWithTag,
 	SchemaSyncInEffect,
 	SchemaNumber,
+	SchemaLiteralNonFinite,
 	SchemaUnionOfLiterals,
 	NewSchemaClass,
 	MissingEffectServiceDependency,

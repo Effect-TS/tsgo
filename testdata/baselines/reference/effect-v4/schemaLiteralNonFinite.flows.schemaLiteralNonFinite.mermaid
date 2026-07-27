@@ -1,0 +1,119 @@
+flowchart TB
+  0[/"type: number<br/>node: Infinity"/]
+  1["type: Literal#lt;number#gt;<br/>callee: Schema.Literal<br/>args: #91;#93;"]
+  2[/"type: #lt;L extends SchemaAST.LiteralValue#gt;#40;literal: L#41; =#gt; Literal#lt;L#gt;<br/>node: Schema.Literal"/]
+  3[/"type: number<br/>node: -Infinity"/]
+  4["type: Literal#lt;number#gt;<br/>callee: Schema.Literal<br/>args: #91;#93;"]
+  5[/"type: #lt;L extends SchemaAST.LiteralValue#gt;#40;literal: L#41; =#gt; Literal#lt;L#gt;<br/>node: Schema.Literal"/]
+  6[/"type: number<br/>node: Number.POSITIVE_INFINITY"/]
+  7["type: Literal#lt;number#gt;<br/>callee: Schema.Literal<br/>args: #91;#93;"]
+  8[/"type: #lt;L extends SchemaAST.LiteralValue#gt;#40;literal: L#41; =#gt; Literal#lt;L#gt;<br/>node: Schema.Literal"/]
+  9[/"type: number<br/>node: Number.NEGATIVE_INFINITY"/]
+  10["type: Literal#lt;number#gt;<br/>callee: Schema.Literal<br/>args: #91;#93;"]
+  11[/"type: #lt;L extends SchemaAST.LiteralValue#gt;#40;literal: L#41; =#gt; Literal#lt;L#gt;<br/>node: Schema.Literal"/]
+  12[/"type: number<br/>node: Number.NaN"/]
+  13["type: Literal#lt;number#gt;<br/>callee: Schema.Literal<br/>args: #91;#93;"]
+  14[/"type: #lt;L extends SchemaAST.LiteralValue#gt;#40;literal: L#41; =#gt; Literal#lt;L#gt;<br/>node: Schema.Literal"/]
+  15[/"type: number<br/>node: -Number.POSITIVE_INFINITY"/]
+  16["type: Literal#lt;number#gt;<br/>callee: Schema.Literal<br/>args: #91;#93;"]
+  17[/"type: #lt;L extends SchemaAST.LiteralValue#gt;#40;literal: L#41; =#gt; Literal#lt;L#gt;<br/>node: Schema.Literal"/]
+  18[/"type: number<br/>node: Number.POSITIVE_INFINITY - Number.POSITIVE_INFINITY"/]
+  19["type: Literal#lt;number#gt;<br/>callee: Schema.Literal<br/>args: #91;#93;"]
+  20[/"type: #lt;L extends SchemaAST.LiteralValue#gt;#40;literal: L#41; =#gt; Literal#lt;L#gt;<br/>node: Schema.Literal"/]
+  21[/"type: number<br/>node: Number#91;#quot;NaN#quot;#93;"/]
+  22["type: Literal#lt;number#gt;<br/>callee: Schema.Literal<br/>args: #91;#93;"]
+  23[/"type: #lt;L extends SchemaAST.LiteralValue#gt;#40;literal: L#41; =#gt; Literal#lt;L#gt;<br/>node: Schema.Literal"/]
+  24[/"type: Infinity<br/>node: 1e999"/]
+  25["type: Literal#lt;Infinity#gt;<br/>callee: Schema.Literal<br/>args: #91;#93;"]
+  26[/"type: #lt;L extends SchemaAST.LiteralValue#gt;#40;literal: L#41; =#gt; Literal#lt;L#gt;<br/>node: Schema.Literal"/]
+  27[/"type: number<br/>node: 1 / 0"/]
+  28["type: Literal#lt;number#gt;<br/>callee: Schema.Literal<br/>args: #91;#93;"]
+  29[/"type: #lt;L extends SchemaAST.LiteralValue#gt;#40;literal: L#41; =#gt; Literal#lt;L#gt;<br/>node: Schema.Literal"/]
+  30[/"type: number<br/>node: 0 / 0"/]
+  31["type: Literal#lt;number#gt;<br/>callee: Schema.Literal<br/>args: #91;#93;"]
+  32[/"type: #lt;L extends SchemaAST.LiteralValue#gt;#40;literal: L#41; =#gt; Literal#lt;L#gt;<br/>node: Schema.Literal"/]
+  33[/"type: #91;0, 1, number#93;<br/>node: #91;0, 1, NaN#93;"/]
+  34["type: Literals#lt;readonly #91;0, 1, number#93;#gt;<br/>callee: Schema.Literals<br/>args: #91;#93;"]
+  35[/"type: #lt;const L extends ReadonlyArray#lt;SchemaAST.LiteralValue#gt;#gt;#40;literals: L#41; =#gt; Literals#lt;L#gt;<br/>node: Schema.Literals"/]
+  36[/"type: number<br/>node: NaN"/]
+  37["type: tag#lt;number#gt;<br/>callee: SchemaModule.tag<br/>args: #91;#93;"]
+  38[/"type: #lt;Tag extends SchemaAST.LiteralValue#gt;#40;literal: Tag#41; =#gt; tag#lt;Tag#gt;<br/>node: SchemaModule.tag"/]
+  39[/"type: 1<br/>node: 1"/]
+  40["type: Literal#lt;1#gt;<br/>callee: Schema.Literal<br/>args: #91;#93;"]
+  41[/"type: #lt;L extends SchemaAST.LiteralValue#gt;#40;literal: L#41; =#gt; Literal#lt;L#gt;<br/>node: Schema.Literal"/]
+  42[/"type: #quot;Infinity#quot;<br/>node: #quot;Infinity#quot;"/]
+  43["type: Literal#lt;#quot;Infinity#quot;#gt;<br/>callee: Schema.Literal<br/>args: #91;#93;"]
+  44[/"type: #lt;L extends SchemaAST.LiteralValue#gt;#40;literal: L#41; =#gt; Literal#lt;L#gt;<br/>node: Schema.Literal"/]
+  45[/"type: #91;0, 1, 2#93;<br/>node: #91;0, 1, 2#93;"/]
+  46["type: Literals#lt;readonly #91;0, 1, 2#93;#gt;<br/>callee: Schema.Literals<br/>args: #91;#93;"]
+  47[/"type: #lt;const L extends ReadonlyArray#lt;SchemaAST.LiteralValue#gt;#gt;#40;literals: L#41; =#gt; Literals#lt;L#gt;<br/>node: Schema.Literals"/]
+  48[["type: #40;Infinity: number, NaN: number, Number: #123; readonly NaN: number; #125;#41; =#gt; void<br/>node: function localValues#40;Infinity: number, NaN: number, Number: #123; readonly NaN: number #125;#41; #123;#92;n  Schema.Literal#40;Infinity#41;#92;n  Schema.Literal#40;NaN#41;#92;n  Schema.Literal#40;Number.NaN#41;#92;n#125;"]]
+  49[/"type: number<br/>node: Infinity"/]
+  50["type: Literal#lt;number#gt;<br/>callee: Schema.Literal<br/>args: #91;#93;"]
+  51[/"type: #lt;L extends SchemaAST.LiteralValue#gt;#40;literal: L#41; =#gt; Literal#lt;L#gt;<br/>node: Schema.Literal"/]
+  52[/"type: number<br/>node: NaN"/]
+  53["type: Literal#lt;number#gt;<br/>callee: Schema.Literal<br/>args: #91;#93;"]
+  54[/"type: #lt;L extends SchemaAST.LiteralValue#gt;#40;literal: L#41; =#gt; Literal#lt;L#gt;<br/>node: Schema.Literal"/]
+  55[/"type: number<br/>node: Number.NaN"/]
+  56["type: Literal#lt;number#gt;<br/>callee: Schema.Literal<br/>args: #91;#93;"]
+  57[/"type: #lt;L extends SchemaAST.LiteralValue#gt;#40;literal: L#41; =#gt; Literal#lt;L#gt;<br/>node: Schema.Literal"/]
+  58[/"type: number<br/>node: Infinity"/]
+  59[/"type: 1<br/>node: reassigned = 1"/]
+  60[/"type: number<br/>node: reassigned"/]
+  61["type: Literal#lt;number#gt;<br/>callee: Schema.Literal<br/>args: #91;#93;"]
+  62[/"type: #lt;L extends SchemaAST.LiteralValue#gt;#40;literal: L#41; =#gt; Literal#lt;L#gt;<br/>node: Schema.Literal"/]
+  63[/"type: number<br/>node: Number.NaN"/]
+  64[/"type: number<br/>node: Number.POSITIVE_INFINITY"/]
+  65[/"type: number<br/>node: constantNaN"/]
+  66["type: Literal#lt;number#gt;<br/>callee: Schema.Literal<br/>args: #91;#93;"]
+  67[/"type: #lt;L extends SchemaAST.LiteralValue#gt;#40;literal: L#41; =#gt; Literal#lt;L#gt;<br/>node: Schema.Literal"/]
+  68[/"type: number<br/>node: -constantInfinity"/]
+  69["type: Literal#lt;number#gt;<br/>callee: Schema.Literal<br/>args: #91;#93;"]
+  70[/"type: #lt;L extends SchemaAST.LiteralValue#gt;#40;literal: L#41; =#gt; Literal#lt;L#gt;<br/>node: Schema.Literal"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1
+  3 -->|"kind: pipe"| 4
+  5 -->|"kind: transformCallee"| 4
+  6 -->|"kind: pipe"| 7
+  8 -->|"kind: transformCallee"| 7
+  9 -->|"kind: pipe"| 10
+  11 -->|"kind: transformCallee"| 10
+  12 -->|"kind: pipe"| 13
+  14 -->|"kind: transformCallee"| 13
+  15 -->|"kind: pipe"| 16
+  17 -->|"kind: transformCallee"| 16
+  18 -->|"kind: pipe"| 19
+  20 -->|"kind: transformCallee"| 19
+  21 -->|"kind: pipe"| 22
+  23 -->|"kind: transformCallee"| 22
+  24 -->|"kind: pipe"| 25
+  26 -->|"kind: transformCallee"| 25
+  27 -->|"kind: pipe"| 28
+  29 -->|"kind: transformCallee"| 28
+  30 -->|"kind: pipe"| 31
+  32 -->|"kind: transformCallee"| 31
+  33 -->|"kind: pipe"| 34
+  35 -->|"kind: transformCallee"| 34
+  36 -->|"kind: pipe"| 37
+  38 -->|"kind: transformCallee"| 37
+  39 -->|"kind: pipe"| 40
+  41 -->|"kind: transformCallee"| 40
+  42 -->|"kind: pipe"| 43
+  44 -->|"kind: transformCallee"| 43
+  45 -->|"kind: pipe"| 46
+  47 -->|"kind: transformCallee"| 46
+  49 -->|"kind: pipe"| 50
+  51 -->|"kind: transformCallee"| 50
+  50 -->|"kind: usedBy"| 48
+  52 -->|"kind: pipe"| 53
+  54 -->|"kind: transformCallee"| 53
+  53 -->|"kind: usedBy"| 48
+  55 -->|"kind: pipe"| 56
+  57 -->|"kind: transformCallee"| 56
+  56 -->|"kind: usedBy"| 48
+  60 -->|"kind: pipe"| 61
+  62 -->|"kind: transformCallee"| 61
+  65 -->|"kind: pipe"| 66
+  67 -->|"kind: transformCallee"| 66
+  68 -->|"kind: pipe"| 69
+  70 -->|"kind: transformCallee"| 69

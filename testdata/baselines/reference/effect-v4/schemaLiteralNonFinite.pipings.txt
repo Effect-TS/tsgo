@@ -1,0 +1,309 @@
+==== /.src/schemaLiteralNonFinite.ts (22 flows) ====
+
+=== Piping Flow ===
+Location: 4:46 - 6:25
+Node: Schema.Literal(Infinity)
+Node Kind: KindCallExpression
+
+Subject: Infinity
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Literal
+      args: (constant)
+      outType: Literal<number>
+
+=== Piping Flow ===
+Location: 6:25 - 7:26
+Node: Schema.Literal(-Infinity)
+Node Kind: KindCallExpression
+
+Subject: -Infinity
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Literal
+      args: (constant)
+      outType: Literal<number>
+
+=== Piping Flow ===
+Location: 7:26 - 8:41
+Node: Schema.Literal(Number.POSITIVE_INFINITY)
+Node Kind: KindCallExpression
+
+Subject: Number.POSITIVE_INFINITY
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Literal
+      args: (constant)
+      outType: Literal<number>
+
+=== Piping Flow ===
+Location: 8:41 - 9:41
+Node: Schema.Literal(Number.NEGATIVE_INFINITY)
+Node Kind: KindCallExpression
+
+Subject: Number.NEGATIVE_INFINITY
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Literal
+      args: (constant)
+      outType: Literal<number>
+
+=== Piping Flow ===
+Location: 9:41 - 10:27
+Node: Schema.Literal(Number.NaN)
+Node Kind: KindCallExpression
+
+Subject: Number.NaN
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Literal
+      args: (constant)
+      outType: Literal<number>
+
+=== Piping Flow ===
+Location: 10:27 - 11:42
+Node: Schema.Literal(-Number.POSITIVE_INFINITY)
+Node Kind: KindCallExpression
+
+Subject: -Number.POSITIVE_INFINITY
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Literal
+      args: (constant)
+      outType: Literal<number>
+
+=== Piping Flow ===
+Location: 11:42 - 12:68
+Node: Schema.Literal(Number.POSITIVE_INFINITY - Number.POSITIVE_INFINITY)
+Node Kind: KindCallExpression
+
+Subject: Number.POSITIVE_INFINITY - Number.POSITIVE_INFINITY
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Literal
+      args: (constant)
+      outType: Literal<number>
+
+=== Piping Flow ===
+Location: 12:68 - 13:30
+Node: Schema.Literal(Number["NaN"])
+Node Kind: KindCallExpression
+
+Subject: Number["NaN"]
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Literal
+      args: (constant)
+      outType: Literal<number>
+
+=== Piping Flow ===
+Location: 13:30 - 14:22
+Node: Schema.Literal(1e999)
+Node Kind: KindCallExpression
+
+Subject: 1e999
+Subject Type: Infinity
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Literal
+      args: (constant)
+      outType: Literal<Infinity>
+
+=== Piping Flow ===
+Location: 14:22 - 15:22
+Node: Schema.Literal(1 / 0)
+Node Kind: KindCallExpression
+
+Subject: 1 / 0
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Literal
+      args: (constant)
+      outType: Literal<number>
+
+=== Piping Flow ===
+Location: 15:22 - 16:22
+Node: Schema.Literal(0 / 0)
+Node Kind: KindCallExpression
+
+Subject: 0 / 0
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Literal
+      args: (constant)
+      outType: Literal<number>
+
+=== Piping Flow ===
+Location: 16:22 - 17:29
+Node: Schema.Literals([0, 1, NaN])
+Node Kind: KindCallExpression
+
+Subject: [0, 1, NaN]
+Subject Type: [0, 1, number]
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Literals
+      args: (constant)
+      outType: Literals<readonly [0, 1, number]>
+
+=== Piping Flow ===
+Location: 17:29 - 18:22
+Node: SchemaModule.tag(NaN)
+Node Kind: KindCallExpression
+
+Subject: NaN
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: SchemaModule.tag
+      args: (constant)
+      outType: tag<number>
+
+=== Piping Flow ===
+Location: 18:22 - 20:18
+Node: Schema.Literal(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Literal
+      args: (constant)
+      outType: Literal<1>
+
+=== Piping Flow ===
+Location: 20:18 - 21:27
+Node: Schema.Literal("Infinity")
+Node Kind: KindCallExpression
+
+Subject: "Infinity"
+Subject Type: "Infinity"
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Literal
+      args: (constant)
+      outType: Literal<"Infinity">
+
+=== Piping Flow ===
+Location: 21:27 - 22:27
+Node: Schema.Literals([0, 1, 2])
+Node Kind: KindCallExpression
+
+Subject: [0, 1, 2]
+Subject Type: [0, 1, 2]
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Literals
+      args: (constant)
+      outType: Literals<readonly [0, 1, 2]>
+
+=== Piping Flow ===
+Location: 24:88 - 25:27
+Node: Schema.Literal(Infinity)
+Node Kind: KindCallExpression
+
+Subject: Infinity
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Literal
+      args: (constant)
+      outType: Literal<number>
+
+=== Piping Flow ===
+Location: 25:27 - 26:22
+Node: Schema.Literal(NaN)
+Node Kind: KindCallExpression
+
+Subject: NaN
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Literal
+      args: (constant)
+      outType: Literal<number>
+
+=== Piping Flow ===
+Location: 26:22 - 27:29
+Node: Schema.Literal(Number.NaN)
+Node Kind: KindCallExpression
+
+Subject: Number.NaN
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Literal
+      args: (constant)
+      outType: Literal<number>
+
+=== Piping Flow ===
+Location: 31:15 - 32:27
+Node: Schema.Literal(reassigned)
+Node Kind: KindCallExpression
+
+Subject: reassigned
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Literal
+      args: (constant)
+      outType: Literal<number>
+
+=== Piping Flow ===
+Location: 35:50 - 36:28
+Node: Schema.Literal(constantNaN)
+Node Kind: KindCallExpression
+
+Subject: constantNaN
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Literal
+      args: (constant)
+      outType: Literal<number>
+
+=== Piping Flow ===
+Location: 36:28 - 37:34
+Node: Schema.Literal(-constantInfinity)
+Node Kind: KindCallExpression
+
+Subject: -constantInfinity
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Literal
+      args: (constant)
+      outType: Literal<number>
