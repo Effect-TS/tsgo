@@ -1,0 +1,43 @@
+==== /.src/floatingEffectInVitest.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 8:35 - 9:16
+Node: it.each([1, 2])
+Node Kind: KindCallExpression
+
+Subject: [1, 2]
+Subject Type: number[]
+
+Transformations (1):
+  [0] kind: call
+      callee: it.each
+      args: (constant)
+      outType: EachFunctionReturn<number[]>
+
+=== Piping Flow ===
+Location: 11:38 - 12:30
+Node: beforeEach(() => Effect.void)
+Node Kind: KindCallExpression
+
+Subject: () => Effect.void
+Subject Type: () => Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: beforeEach
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 18:23 - 18:54
+Node: Effect.runPromise(Effect.void)
+Node Kind: KindCallExpression
+
+Subject: Effect.void
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<void>

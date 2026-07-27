@@ -1,0 +1,184 @@
+flowchart TB
+  0[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  1[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  2[/"type: void<br/>node: it#40;#quot;direct#quot;, #40;#41; =#gt; Effect.void#41;"/]
+  3[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  4[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  5[/"type: void<br/>node: it.only#40;#quot;only#quot;, #40;#41; =#gt; Effect.void#41;"/]
+  6[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  7[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  8[/"type: void<br/>node: it.skip#40;#quot;skip#quot;, #40;#41; =#gt; Effect.void#41;"/]
+  9[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  10[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  11[/"type: void<br/>node: it.each#40;#91;1, 2#93;#41;#40;#quot;each %s#quot;, #40;#41; =#gt; Effect.void#41;"/]
+  12[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  13[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  14[/"type: void<br/>node: it.for#40;#91;1, 2#93;#41;#40;#quot;for %s#quot;, #40;#41; =#gt; Effect.void#41;"/]
+  15[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  16[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  17[/"type: void<br/>node: it.skipIf#40;false#41;#40;#quot;skipIf#quot;, #40;#41; =#gt; Effect.void#41;"/]
+  18[/"type: false<br/>node: false"/]
+  19["type: ChainableTestAPI#lt;#123;#125;#gt;<br/>callee: it.skipIf<br/>args: #91;#93;"]
+  20[/"type: #40;condition: any#41; =#gt; ChainableTestAPI#lt;#123;#125;#gt;<br/>node: it.skipIf"/]
+  21[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  22[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  23[/"type: void<br/>node: it.runIf#40;true#41;#40;#quot;runIf#quot;, #40;#41; =#gt; Effect.void#41;"/]
+  24[/"type: true<br/>node: true"/]
+  25["type: ChainableTestAPI#lt;#123;#125;#gt;<br/>callee: it.runIf<br/>args: #91;#93;"]
+  26[/"type: #40;condition: any#41; =#gt; ChainableTestAPI#lt;#123;#125;#gt;<br/>node: it.runIf"/]
+  27[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  28[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  29[/"type: void<br/>node: it#40;#quot;options first#quot;, #123; retry: 1 #125;, #40;#41; =#gt; Effect.void#41;"/]
+  30[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  31[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  32[/"type: void<br/>node: it.prop#40;#quot;property#quot;, #91;arbitrary#93;, #40;#41; =#gt; Effect.void#41;"/]
+  33[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  34[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  35[/"type: void<br/>node: it#40;#quot;named callback#quot;, effectCallback#41;"/]
+  36[/"type: void<br/>node: it#40;#quot;block callback#quot;, #40;#41; =#gt; #123;#92;n  return Effect.void#92;n#125;#41;"/]
+  37[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; #123;#92;n  return Effect.void#92;n#125;"]]
+  38[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  39[/"type: void<br/>node: it#40;#quot;conditional return#quot;, #40;ctx#41; =#gt; ctx.task.name === #quot;x#quot; ? Effect.void : undefined#41;"/]
+  40[["type: #40;ctx: TestContext#41; =#gt; Effect#lt;void, never, never#gt; #124; undefined<br/>node: #40;ctx#41; =#gt; ctx.task.name === #quot;x#quot; ? Effect.void : undefined"]]
+  41[/"type: Effect#lt;void, never, never#gt; #124; undefined<br/>node: ctx.task.name === #quot;x#quot; ? Effect.void : undefined"/]
+  42[/"type: void<br/>node: it#40;#quot;Promise of Effect#quot;, #40;#41; =#gt; Promise.resolve#40;Effect.void#41;#41;"/]
+  43[["type: #40;#41; =#gt; Promise#lt;Effect#lt;void, never, never#gt;#gt;<br/>node: #40;#41; =#gt; Promise.resolve#40;Effect.void#41;"]]
+  44[/"type: Promise#lt;Effect#lt;void, never, never#gt;#gt;<br/>node: Promise.resolve#40;Effect.void#41;"/]
+  45[/"type: void<br/>node: test#40;#quot;test alias#quot;, #40;#41; =#gt; Effect.void#41;"/]
+  46[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  47[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  48[/"type: void<br/>node: importedIt#40;#quot;named import#quot;, #40;#41; =#gt; Effect.void#41;"/]
+  49[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  50[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  51[/"type: void<br/>node: Vitest.it#40;#quot;namespace import#quot;, #40;#41; =#gt; Effect.void#41;"/]
+  52[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  53[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  54[/"type: void<br/>node: Vitest.test.only#40;#quot;namespace modifier#quot;, #40;#41; =#gt; Effect.void#41;"/]
+  55[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  56[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  57[/"type: void<br/>node: beforeAll#40;#40;#41; =#gt; Effect.void#41;"/]
+  58[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  59[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  60[/"type: void<br/>node: beforeEach#40;#40;#41; =#gt; Effect.void#41;"/]
+  61[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  62[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  63[/"type: void<br/>node: afterAll#40;#40;#41; =#gt; Effect.void#41;"/]
+  64[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  65[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  66[/"type: void<br/>node: afterEach#40;#40;#41; =#gt; Effect.void#41;"/]
+  67[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  68[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  69[/"type: void<br/>node: it.beforeEach#40;#40;#41; =#gt; Effect.void#41;"/]
+  70[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  71[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  72[/"type: void<br/>node: it.effect#40;#quot;effect aware#quot;, #40;#41; =#gt; Effect.void#41;"/]
+  73[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  74[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  75[/"type: void<br/>node: it.effect.only#40;#quot;effect aware only#quot;, #40;#41; =#gt; Effect.void#41;"/]
+  76[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  77[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  78[/"type: void<br/>node: it.effect.each#40;#91;1, 2#93;#41;#40;#quot;effect aware each %s#quot;, #40;#41; =#gt; Effect.void#41;"/]
+  79[/"type: number#91;#93;<br/>node: #91;1, 2#93;"/]
+  80["type: #lt;A, E#gt;#40;name: string, self: TestFunction#lt;A, E, Scope, number#91;#93;#gt;, timeout?: number #124; TestOptions #124; undefined#41; =#gt; void<br/>callee: it.effect.each<br/>args: #91;#93;"]
+  81[/"type: #lt;T#gt;#40;cases: readonly T#91;#93;#41; =#gt; #lt;A, E#gt;#40;name: string, self: TestFunction#lt;A, E, Scope, T#91;#93;#gt;, timeout?: number #124; TestOptions #124; undefined#41; =#gt; void<br/>node: it.effect.each"/]
+  82[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  83[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  84[/"type: void<br/>node: it.effect.prop#40;#quot;effect aware property#quot;, #91;arbitrary#93;, #40;#41; =#gt; Effect.void#41;"/]
+  85[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  86[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  87[/"type: void<br/>node: it.live#40;#quot;live aware#quot;, #40;#41; =#gt; Effect.void#41;"/]
+  88[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  89[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  90[/"type: void<br/>node: it#40;#quot;runPromise#quot;, #40;#41; =#gt; Effect.runPromise#40;Effect.void#41;#41;"/]
+  91[["type: #40;#41; =#gt; Promise#lt;void#gt;<br/>node: #40;#41; =#gt; Effect.runPromise#40;Effect.void#41;"]]
+  92[/"type: Promise#lt;void#gt;<br/>node: Effect.runPromise#40;Effect.void#41;"/]
+  93[/"type: void<br/>node: it#40;#quot;ordinary Promise#quot;, #40;#41; =#gt; Promise.resolve#40;1#41;#41;"/]
+  94[["type: #40;#41; =#gt; Promise#lt;number#gt;<br/>node: #40;#41; =#gt; Promise.resolve#40;1#41;"]]
+  95[/"type: Promise#lt;number#gt;<br/>node: Promise.resolve#40;1#41;"/]
+  96[/"type: void<br/>node: it#40;#quot;void#quot;, #40;#41; =#gt; undefined#41;"/]
+  97[["type: #40;#41; =#gt; undefined<br/>node: #40;#41; =#gt; undefined"]]
+  98[/"type: undefined<br/>node: undefined"/]
+  99[/"type: SuiteCollector#lt;object#gt;<br/>node: describe#40;#quot;suite omitted#quot;, #40;#41; =#gt; Effect.void#41;"/]
+  100[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  101[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  102[/"type: SuiteCollector#lt;object#gt;<br/>node: suite#40;#quot;suite alias omitted#quot;, #40;#41; =#gt; Effect.void#41;"/]
+  103[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  104[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  105[/"type: SuiteCollector#lt;#123;#125;#gt;<br/>node: it.describe#40;#quot;attached suite omitted#quot;, #40;#41; =#gt; Effect.void#41;"/]
+  106[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  107[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  1 -->|"kind: potentialReturn"| 0
+  4 -->|"kind: potentialReturn"| 3
+  3 -->|"kind: usedBy"| 2
+  7 -->|"kind: potentialReturn"| 6
+  6 -->|"kind: usedBy"| 5
+  10 -->|"kind: potentialReturn"| 9
+  9 -->|"kind: usedBy"| 8
+  13 -->|"kind: potentialReturn"| 12
+  12 -->|"kind: usedBy"| 11
+  16 -->|"kind: potentialReturn"| 15
+  15 -->|"kind: usedBy"| 14
+  18 -->|"kind: pipe"| 19
+  20 -->|"kind: transformCallee"| 19
+  19 -->|"kind: usedBy"| 17
+  22 -->|"kind: potentialReturn"| 21
+  21 -->|"kind: usedBy"| 17
+  24 -->|"kind: pipe"| 25
+  26 -->|"kind: transformCallee"| 25
+  25 -->|"kind: usedBy"| 23
+  28 -->|"kind: potentialReturn"| 27
+  27 -->|"kind: usedBy"| 23
+  31 -->|"kind: potentialReturn"| 30
+  30 -->|"kind: usedBy"| 29
+  34 -->|"kind: potentialReturn"| 33
+  33 -->|"kind: usedBy"| 32
+  38 -->|"kind: potentialReturn"| 37
+  38 -->|"kind: usedBy"| 37
+  37 -->|"kind: usedBy"| 36
+  41 -->|"kind: potentialReturn"| 40
+  40 -->|"kind: usedBy"| 39
+  44 -->|"kind: potentialReturn"| 43
+  43 -->|"kind: usedBy"| 42
+  47 -->|"kind: potentialReturn"| 46
+  46 -->|"kind: usedBy"| 45
+  50 -->|"kind: potentialReturn"| 49
+  49 -->|"kind: usedBy"| 48
+  53 -->|"kind: potentialReturn"| 52
+  52 -->|"kind: usedBy"| 51
+  56 -->|"kind: potentialReturn"| 55
+  55 -->|"kind: usedBy"| 54
+  59 -->|"kind: potentialReturn"| 58
+  58 -->|"kind: usedBy"| 57
+  62 -->|"kind: potentialReturn"| 61
+  61 -->|"kind: usedBy"| 60
+  65 -->|"kind: potentialReturn"| 64
+  64 -->|"kind: usedBy"| 63
+  68 -->|"kind: potentialReturn"| 67
+  67 -->|"kind: usedBy"| 66
+  71 -->|"kind: potentialReturn"| 70
+  70 -->|"kind: usedBy"| 69
+  74 -->|"kind: potentialReturn"| 73
+  73 -->|"kind: usedBy"| 72
+  77 -->|"kind: potentialReturn"| 76
+  76 -->|"kind: usedBy"| 75
+  79 -->|"kind: pipe"| 80
+  81 -->|"kind: transformCallee"| 80
+  80 -->|"kind: usedBy"| 78
+  83 -->|"kind: potentialReturn"| 82
+  82 -->|"kind: usedBy"| 78
+  86 -->|"kind: potentialReturn"| 85
+  85 -->|"kind: usedBy"| 84
+  89 -->|"kind: potentialReturn"| 88
+  88 -->|"kind: usedBy"| 87
+  92 -->|"kind: potentialReturn"| 91
+  91 -->|"kind: usedBy"| 90
+  95 -->|"kind: potentialReturn"| 94
+  94 -->|"kind: usedBy"| 93
+  98 -->|"kind: potentialReturn"| 97
+  97 -->|"kind: usedBy"| 96
+  101 -->|"kind: potentialReturn"| 100
+  100 -->|"kind: usedBy"| 99
+  104 -->|"kind: potentialReturn"| 103
+  103 -->|"kind: usedBy"| 102
+  107 -->|"kind: potentialReturn"| 106
+  106 -->|"kind: usedBy"| 105

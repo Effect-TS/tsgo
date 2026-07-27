@@ -103,3 +103,14 @@ func MountEffect(version EffectVersion, testfs map[string]any) error {
 	testfs["/.src/package.json"] = &fstest.MapFile{Data: packageJSON}
 	return nil
 }
+
+func MountVitest(version EffectVersion, testfs map[string]any) error {
+	packages := []string{"vitest", "@vitest/runner", "@effect/vitest"}
+	for _, packageName := range packages {
+		if err := EnsurePackageInstalled(version, packageName); err != nil {
+			return err
+		}
+		maps.Copy(testfs, packageFSCache(version, packageName)())
+	}
+	return nil
+}

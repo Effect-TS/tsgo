@@ -177,6 +177,30 @@
       }
     },
     {
+      "name": "floatingEffectInVitest",
+      "group": "correctness",
+      "description": "Detects Effects returned from non-Effect-aware Vitest callbacks",
+      "defaultSeverity": "error",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377105
+      ],
+      "preview": {
+        "sourceText": "import { it } from \"@effect/vitest\"\nimport { Effect } from \"effect\"\n\nit(\"does not execute\", () =\u003e Effect.void)\n",
+        "diagnostics": [
+          {
+            "start": 98,
+            "end": 109,
+            "text": "This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)"
+          }
+        ]
+      }
+    },
+    {
       "name": "genericEffectServices",
       "group": "correctness",
       "description": "Prevents services with type parameters that cannot be discriminated at runtime",

@@ -1,0 +1,13 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:30-6:41) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+  Fix 0: "Disable floatingEffectInVitest for this line"
+  Fix 1: "Disable floatingEffectInVitest for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable floatingEffectInVitest for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable floatingEffectInVitest for entire file" ===
+skipped by default

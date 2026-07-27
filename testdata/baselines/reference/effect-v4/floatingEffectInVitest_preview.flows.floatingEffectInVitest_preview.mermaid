@@ -1,0 +1,6 @@
+flowchart TB
+  0[/"type: void<br/>node: it#40;#quot;does not execute#quot;, #40;#41; =#gt; Effect.void#41;"/]
+  1[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  2[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  2 -->|"kind: potentialReturn"| 1
+  1 -->|"kind: usedBy"| 0
