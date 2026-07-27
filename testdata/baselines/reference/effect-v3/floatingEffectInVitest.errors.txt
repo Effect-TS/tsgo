@@ -1,0 +1,43 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/floatingEffectInVitest.ts(7,20): error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+/.src/floatingEffectInVitest.ts(8,23): error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+/.src/floatingEffectInVitest.ts(9,34): error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+/.src/floatingEffectInVitest.ts(10,40): error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+/.src/floatingEffectInVitest.ts(11,26): error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+/.src/floatingEffectInVitest.ts(12,18): error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+
+
+==== /.src/floatingEffectInVitest.ts (6 errors) ====
+    // @effect-v3
+    import { beforeEach, it, test } from "@effect/vitest"
+    import { Effect } from "effect"
+    
+    declare const arbitrary: any
+    
+    it("direct", () => Effect.void)
+                       ~~~~~~~~~~~
+!!! error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+    it.only("only", () => Effect.void)
+                          ~~~~~~~~~~~
+!!! error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+    it.each([1, 2])("each %s", () => Effect.void)
+                                     ~~~~~~~~~~~
+!!! error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+    it.prop("property", [arbitrary], () => Effect.void)
+                                           ~~~~~~~~~~~
+!!! error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+    test("test alias", () => Effect.void)
+                             ~~~~~~~~~~~
+!!! error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+    beforeEach(() => Effect.void)
+                     ~~~~~~~~~~~
+!!! error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+    
+    it.effect("effect aware", () => Effect.void)
+    it.live("live aware", () => Effect.void)
+    it.scoped("scoped aware", () => Effect.void)
+    it.scopedLive("scoped live aware", () => Effect.void)
+    it("runPromise", () => Effect.runPromise(Effect.void))
+    

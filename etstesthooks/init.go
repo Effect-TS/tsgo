@@ -15,6 +15,7 @@ func init() {
 // and mounts real Effect packages into the fourslash VFS.
 func prepareTestFS(testfs map[string]any) {
 	hasEffectImport := false
+	hasVitestImport := false
 	hasV3Marker := false
 	hasV4Marker := false
 	for _, v := range testfs {
@@ -25,6 +26,9 @@ func prepareTestFS(testfs map[string]any) {
 		if strings.Contains(content, `from "effect`) {
 			hasEffectImport = true
 		}
+		if strings.Contains(content, "vitest") {
+			hasVitestImport = true
+		}
 		if strings.HasPrefix(content, "// @effect-v3") || strings.Contains(content, "\n// @effect-v3") {
 			hasV3Marker = true
 		}
@@ -32,7 +36,7 @@ func prepareTestFS(testfs map[string]any) {
 			hasV4Marker = true
 		}
 	}
-	if !hasEffectImport && !hasV3Marker && !hasV4Marker {
+	if !hasEffectImport && !hasVitestImport && !hasV3Marker && !hasV4Marker {
 		return
 	}
 	version := bundledeffect.EffectV4
@@ -41,5 +45,10 @@ func prepareTestFS(testfs map[string]any) {
 	}
 	if err := bundledeffect.MountEffect(version, testfs); err != nil {
 		panic(err)
+	}
+	if hasVitestImport {
+		if err := bundledeffect.MountVitest(version, testfs); err != nil {
+			panic(err)
+		}
 	}
 }

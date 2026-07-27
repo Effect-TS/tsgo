@@ -9,6 +9,7 @@ import (
 // Add new rules here explicitly - no init() magic.
 var All = []rule.Rule{
 	FloatingEffect,
+	FloatingEffectInVitest,
 	MissingEffectError,
 	MissingEffectContext,
 	MissingReturnYieldStar,
