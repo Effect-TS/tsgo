@@ -1784,6 +1784,11 @@
           "default": "error",
           "description": "Detects Effect values that are neither yielded nor assigned"
         },
+        "floatingEffectInVitest": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "error",
+          "description": "Detects Effects returned from non-Effect-aware Vitest callbacks"
+        },
         "genericEffectServices": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "warning",
@@ -1964,6 +1969,11 @@
           "default": "off",
           "description": "Suggests using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify"
         },
+        "preferSchemaTypeProperty": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Disallows Schema.Schema.Type\u003ctypeof X\u003e in favor of typeof X.Type"
+        },
         "processEnv": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
@@ -1998,6 +2008,11 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
           "description": "Suggests using Runtime or Effect.run*With methods instead of Effect.run* inside Effect contexts"
+        },
+        "schemaLiteralNonFinite": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "error",
+          "description": "Reports statically known non-finite numbers passed to Schema literal constructors"
         },
         "schemaNumber": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",

@@ -1,0 +1,16 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/schemaLiteralNonFinite_preview.ts(6,53): error TS377106: Schema literal values must be finite numbers; `NaN` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+
+
+==== /.src/schemaLiteralNonFinite_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics schemaLiteralNonFinite:error
+    
+    import { Schema } from "effect"
+    
+    export const InvalidStatus = Schema.Literals([0, 1, NaN])
+                                                        ~~~
+!!! error TS377106: Schema literal values must be finite numbers; `NaN` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
+    

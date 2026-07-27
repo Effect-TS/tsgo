@@ -414,5 +414,9 @@
     "This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)": {
         "category": "Error",
         "code": 377105
+    },
+    "Schema literal values must be finite numbers; `{0}` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)": {
+        "category": "Error",
+        "code": 377106
     }
 }
