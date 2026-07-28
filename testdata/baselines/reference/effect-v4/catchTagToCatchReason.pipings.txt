@@ -1,4 +1,4 @@
-==== /.src/catchTagToCatchReason.ts (63 flows) ====
+==== /.src/catchTagToCatchReason.ts (56 flows) ====
 
 === Piping Flow ===
 Location: 30:28 - 39:2
@@ -239,63 +239,7 @@ Transformations (1):
       outType: Effect<never, OuterError, never>
 
 === Piping Flow ===
-Location: 85:33 - 90:2
-Node: program.pipe(\n  Fx.catchTag("OuterError", (error) => {\n    if (error.reason._tag === "ReasonA") return Fx.succeed(1)\n    return Fx.succeed(0)\n  })\n)
-Node Kind: KindCallExpression
-
-Subject: program
-Subject Type: Effect<number, OtherError | OuterError, never>
-
-Transformations (1):
-  [0] kind: pipeable
-      callee: Fx.catchTag
-      args: ["OuterError", (error) => {\n    if (error.reason._tag === "ReasonA") return Fx.succeed(1)\n    return Fx.succeed(0)\n  }]
-      outType: Effect<number, OtherError, never>
-
-=== Piping Flow ===
-Location: 87:48 - 87:62
-Node: Fx.succeed(1)
-Node Kind: KindCallExpression
-
-Subject: 1
-Subject Type: 1
-
-Transformations (1):
-  [0] kind: call
-      callee: Fx.succeed
-      args: (constant)
-      outType: Effect<number, never, never>
-
-=== Piping Flow ===
-Location: 88:11 - 88:25
-Node: Fx.succeed(0)
-Node Kind: KindCallExpression
-
-Subject: 0
-Subject Type: 0
-
-Transformations (1):
-  [0] kind: call
-      callee: Fx.succeed
-      args: (constant)
-      outType: Effect<number, never, never>
-
-=== Piping Flow ===
-Location: 93:30 - 98:2
-Node: program.pipe(\n  Fx.catchTag("OuterError", (error) => {\n    if (error.reason._tag === "ReasonA") return Fx.void\n    return Fx.void\n  })\n)
-Node Kind: KindCallExpression
-
-Subject: program
-Subject Type: Effect<number, OtherError | OuterError, never>
-
-Transformations (1):
-  [0] kind: pipeable
-      callee: Fx.catchTag
-      args: ["OuterError", (error) => {\n    if (error.reason._tag === "ReasonA") return Fx.void\n    return Fx.void\n  }]
-      outType: Effect<void | number, OtherError, never>
-
-=== Piping Flow ===
-Location: 101:29 - 113:2
+Location: 85:29 - 97:2
 Node: program.pipe(\n  Fx.catchTags({\n    OuterError: (error) => {\n      switch (error.reason._tag) {\n        case "ReasonA":\n          return Fx.succeed(1)\n        default:\n          return Fx.fail(error)\n      }\n    },\n    OtherError: () => Fx.succeed(2)\n  })\n)
 Node Kind: KindCallExpression
 
@@ -309,7 +253,7 @@ Transformations (1):
       outType: Effect<number, OuterError, never>
 
 === Piping Flow ===
-Location: 106:17 - 106:31
+Location: 90:17 - 90:31
 Node: Fx.succeed(1)
 Node Kind: KindCallExpression
 
@@ -323,7 +267,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 108:17 - 108:32
+Location: 92:17 - 92:32
 Node: Fx.fail(error)
 Node Kind: KindCallExpression
 
@@ -337,7 +281,7 @@ Transformations (1):
       outType: Effect<never, OuterError, never>
 
 === Piping Flow ===
-Location: 111:22 - 111:36
+Location: 95:22 - 95:36
 Node: Fx.succeed(2)
 Node Kind: KindCallExpression
 
@@ -351,7 +295,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 116:34 - 123:2
+Location: 100:34 - 107:2
 Node: program.pipe(\n  Fx.catchTags({\n    OuterError: (error) => {\n      if (error.reason._tag === "ReasonB") return Fx.succeed(error.reason.detail.length)\n      return Fx.fail(error)\n    }\n  })\n)
 Node Kind: KindCallExpression
 
@@ -365,7 +309,7 @@ Transformations (1):
       outType: Effect<number, OtherError | OuterError, never>
 
 === Piping Flow ===
-Location: 119:50 - 119:89
+Location: 103:50 - 103:89
 Node: Fx.succeed(error.reason.detail.length)
 Node Kind: KindCallExpression
 
@@ -379,7 +323,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 120:13 - 120:28
+Location: 104:13 - 104:28
 Node: Fx.fail(error)
 Node Kind: KindCallExpression
 
@@ -393,49 +337,7 @@ Transformations (1):
       outType: Effect<never, OuterError, never>
 
 === Piping Flow ===
-Location: 126:35 - 133:2
-Node: program.pipe(\n  Fx.catchTags({\n    OuterError: (error) => {\n      if (error.reason._tag === "ReasonA") return Fx.succeed(1)\n      return Fx.succeed(0)\n    }\n  })\n)
-Node Kind: KindCallExpression
-
-Subject: program
-Subject Type: Effect<number, OtherError | OuterError, never>
-
-Transformations (1):
-  [0] kind: pipeable
-      callee: Fx.catchTags
-      args: [{\n    OuterError: (error) => {\n      if (error.reason._tag === "ReasonA") return Fx.succeed(1)\n      return Fx.succeed(0)\n    }\n  }]
-      outType: Effect<number, OtherError, never>
-
-=== Piping Flow ===
-Location: 129:50 - 129:64
-Node: Fx.succeed(1)
-Node Kind: KindCallExpression
-
-Subject: 1
-Subject Type: 1
-
-Transformations (1):
-  [0] kind: call
-      callee: Fx.succeed
-      args: (constant)
-      outType: Effect<number, never, never>
-
-=== Piping Flow ===
-Location: 130:13 - 130:27
-Node: Fx.succeed(0)
-Node Kind: KindCallExpression
-
-Subject: 0
-Subject Type: 0
-
-Transformations (1):
-  [0] kind: call
-      callee: Fx.succeed
-      args: (constant)
-      outType: Effect<number, never, never>
-
-=== Piping Flow ===
-Location: 136:33 - 141:2
+Location: 110:33 - 115:2
 Node: program.pipe(\n  Fx.catchTag("OuterError", (error) => {\n    if (error.reason._tag === "ReasonA") return Fx.succeed(1)\n    return Fx.fail(new OuterError(error.reason, error.context))\n  })\n)
 Node Kind: KindCallExpression
 
@@ -449,7 +351,7 @@ Transformations (1):
       outType: Effect<number, OtherError | OuterError, never>
 
 === Piping Flow ===
-Location: 138:48 - 138:62
+Location: 112:48 - 112:62
 Node: Fx.succeed(1)
 Node Kind: KindCallExpression
 
@@ -463,7 +365,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 139:11 - 139:64
+Location: 113:11 - 113:64
 Node: Fx.fail(new OuterError(error.reason, error.context))
 Node Kind: KindCallExpression
 
@@ -477,7 +379,7 @@ Transformations (1):
       outType: Effect<never, OuterError, never>
 
 === Piping Flow ===
-Location: 144:26 - 150:2
+Location: 118:26 - 124:2
 Node: program.pipe(\n  Fx.catchTag("OuterError", (error) => {\n    console.log(error)\n    if (error.reason._tag === "ReasonA") return Fx.succeed(1)\n    return Fx.fail(error)\n  })\n)
 Node Kind: KindCallExpression
 
@@ -491,7 +393,7 @@ Transformations (1):
       outType: Effect<number, OtherError | OuterError, never>
 
 === Piping Flow ===
-Location: 145:41 - 146:23
+Location: 119:41 - 120:23
 Node: console.log(error)
 Node Kind: KindCallExpression
 
@@ -505,7 +407,7 @@ Transformations (1):
       outType: void
 
 === Piping Flow ===
-Location: 147:48 - 147:62
+Location: 121:48 - 121:62
 Node: Fx.succeed(1)
 Node Kind: KindCallExpression
 
@@ -519,7 +421,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 148:11 - 148:26
+Location: 122:11 - 122:26
 Node: Fx.fail(error)
 Node Kind: KindCallExpression
 
@@ -533,7 +435,7 @@ Transformations (1):
       outType: Effect<never, OuterError, never>
 
 === Piping Flow ===
-Location: 153:27 - 159:2
+Location: 127:27 - 133:2
 Node: program.pipe(\n  Fx.catchTag("OuterError", (error) => {\n    const reason = error.reason\n    if (reason._tag === "ReasonA") return Fx.succeed(1)\n    return Fx.fail(error)\n  })\n)
 Node Kind: KindCallExpression
 
@@ -547,7 +449,7 @@ Transformations (1):
       outType: Effect<number, OtherError | OuterError, never>
 
 === Piping Flow ===
-Location: 156:42 - 156:56
+Location: 130:42 - 130:56
 Node: Fx.succeed(1)
 Node Kind: KindCallExpression
 
@@ -561,7 +463,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 157:11 - 157:26
+Location: 131:11 - 131:26
 Node: Fx.fail(error)
 Node Kind: KindCallExpression
 
@@ -575,7 +477,7 @@ Transformations (1):
       outType: Effect<never, OuterError, never>
 
 === Piping Flow ===
-Location: 164:27 - 169:2
+Location: 138:27 - 143:2
 Node: program.pipe(\n  Fx.catchTag("OuterError", (error) => {\n    if (error.reason._tag === computedReasonTag) return Fx.succeed(1)\n    return Fx.fail(error)\n  })\n)
 Node Kind: KindCallExpression
 
@@ -589,7 +491,7 @@ Transformations (1):
       outType: Effect<number, OtherError | OuterError, never>
 
 === Piping Flow ===
-Location: 166:56 - 166:70
+Location: 140:56 - 140:70
 Node: Fx.succeed(1)
 Node Kind: KindCallExpression
 
@@ -603,7 +505,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 167:11 - 167:26
+Location: 141:11 - 141:26
 Node: Fx.fail(error)
 Node Kind: KindCallExpression
 
@@ -617,7 +519,7 @@ Transformations (1):
       outType: Effect<never, OuterError, never>
 
 === Piping Flow ===
-Location: 172:31 - 180:2
+Location: 146:31 - 154:2
 Node: program.pipe(\n  Fx.catchTag(\n    "OuterError",\n    // @ts-expect-error the handler can return undefined\n    (error) => {\n      if (error.reason._tag === "ReasonA") return Fx.succeed(1)\n    }\n  )\n)
 Node Kind: KindCallExpression
 
@@ -631,7 +533,7 @@ Transformations (1):
       outType: Effect<unknown, unknown, unknown>
 
 === Piping Flow ===
-Location: 177:50 - 177:64
+Location: 151:50 - 151:64
 Node: Fx.succeed(1)
 Node Kind: KindCallExpression
 
@@ -645,7 +547,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 183:30 - 188:2
+Location: 157:30 - 162:2
 Node: program.pipe(\n  Fx.catchTag("OuterError", (error) => {\n    if (error.reason._tag === "ReasonA") return Fx.succeed(1)\n    return Fx.die("fatal")\n  })\n)
 Node Kind: KindCallExpression
 
@@ -659,7 +561,7 @@ Transformations (1):
       outType: Effect<number, OtherError, never>
 
 === Piping Flow ===
-Location: 185:48 - 185:62
+Location: 159:48 - 159:62
 Node: Fx.succeed(1)
 Node Kind: KindCallExpression
 
@@ -673,7 +575,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 186:11 - 186:27
+Location: 160:11 - 160:27
 Node: Fx.die("fatal")
 Node Kind: KindCallExpression
 
@@ -687,7 +589,7 @@ Transformations (1):
       outType: Effect<never, never, never>
 
 === Piping Flow ===
-Location: 190:29 - 195:2
+Location: 164:29 - 169:2
 Node: program.pipe(\n  Fx.catchTag("OuterError", (error) => {\n    if (error.reason._tag === "ReasonA") return Fx.succeed(1)\n    return Fx.never\n  })\n)
 Node Kind: KindCallExpression
 
@@ -699,6 +601,76 @@ Transformations (1):
       callee: Fx.catchTag
       args: ["OuterError", (error) => {\n    if (error.reason._tag === "ReasonA") return Fx.succeed(1)\n    return Fx.never\n  }]
       outType: Effect<number, OtherError, never>
+
+=== Piping Flow ===
+Location: 166:48 - 166:62
+Node: Fx.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Fx.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 177:32 - 182:2
+Node: nonLiteralProgram.pipe(\n  Fx.catchTag("NonLiteralError", (error) => {\n    if (error.reason._tag === "ReasonA") return Fx.succeed(1)\n    return Fx.fail(error)\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: nonLiteralProgram
+Subject Type: Effect<number, { readonly _tag: "NonLiteralError"; readonly reason: { readonly _tag: string; }; }, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Fx.catchTag
+      args: ["NonLiteralError", (error) => {\n    if (error.reason._tag === "ReasonA") return Fx.succeed(1)\n    return Fx.fail(error)\n  }]
+      outType: Effect<number, { readonly _tag: "NonLiteralError"; readonly reason: { readonly _tag: string; }; }, never>
+
+=== Piping Flow ===
+Location: 179:48 - 179:62
+Node: Fx.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Fx.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 180:11 - 180:26
+Node: Fx.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: { readonly _tag: "NonLiteralError"; readonly reason: { readonly _tag: string; }; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Fx.fail
+      args: (constant)
+      outType: Effect<never, { readonly _tag: "NonLiteralError"; readonly reason: { readonly _tag: string; }; }, never>
+
+=== Piping Flow ===
+Location: 190:28 - 195:2
+Node: singleReasonProgram.pipe(\n  Fx.catchTag("SingleReasonError", (error) => {\n    if (error.reason._tag === "ReasonA") return Fx.succeed(1)\n    return Fx.fail(error)\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: singleReasonProgram
+Subject Type: Effect<number, { readonly _tag: "SingleReasonError"; readonly reason: ReasonA; }, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Fx.catchTag
+      args: ["SingleReasonError", (error) => {\n    if (error.reason._tag === "ReasonA") return Fx.succeed(1)\n    return Fx.fail(error)\n  }]
+      outType: Effect<number, { readonly _tag: "SingleReasonError"; readonly reason: ReasonA; }, never>
 
 === Piping Flow ===
 Location: 192:48 - 192:62
@@ -715,77 +687,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 203:32 - 208:2
-Node: nonLiteralProgram.pipe(\n  Fx.catchTag("NonLiteralError", (error) => {\n    if (error.reason._tag === "ReasonA") return Fx.succeed(1)\n    return Fx.fail(error)\n  })\n)
-Node Kind: KindCallExpression
-
-Subject: nonLiteralProgram
-Subject Type: Effect<number, { readonly _tag: "NonLiteralError"; readonly reason: { readonly _tag: string; }; }, never>
-
-Transformations (1):
-  [0] kind: pipeable
-      callee: Fx.catchTag
-      args: ["NonLiteralError", (error) => {\n    if (error.reason._tag === "ReasonA") return Fx.succeed(1)\n    return Fx.fail(error)\n  }]
-      outType: Effect<number, { readonly _tag: "NonLiteralError"; readonly reason: { readonly _tag: string; }; }, never>
-
-=== Piping Flow ===
-Location: 205:48 - 205:62
-Node: Fx.succeed(1)
-Node Kind: KindCallExpression
-
-Subject: 1
-Subject Type: 1
-
-Transformations (1):
-  [0] kind: call
-      callee: Fx.succeed
-      args: (constant)
-      outType: Effect<number, never, never>
-
-=== Piping Flow ===
-Location: 206:11 - 206:26
-Node: Fx.fail(error)
-Node Kind: KindCallExpression
-
-Subject: error
-Subject Type: { readonly _tag: "NonLiteralError"; readonly reason: { readonly _tag: string; }; }
-
-Transformations (1):
-  [0] kind: call
-      callee: Fx.fail
-      args: (constant)
-      outType: Effect<never, { readonly _tag: "NonLiteralError"; readonly reason: { readonly _tag: string; }; }, never>
-
-=== Piping Flow ===
-Location: 216:28 - 221:2
-Node: singleReasonProgram.pipe(\n  Fx.catchTag("SingleReasonError", (error) => {\n    if (error.reason._tag === "ReasonA") return Fx.succeed(1)\n    return Fx.fail(error)\n  })\n)
-Node Kind: KindCallExpression
-
-Subject: singleReasonProgram
-Subject Type: Effect<number, { readonly _tag: "SingleReasonError"; readonly reason: ReasonA; }, never>
-
-Transformations (1):
-  [0] kind: pipeable
-      callee: Fx.catchTag
-      args: ["SingleReasonError", (error) => {\n    if (error.reason._tag === "ReasonA") return Fx.succeed(1)\n    return Fx.fail(error)\n  }]
-      outType: Effect<number, { readonly _tag: "SingleReasonError"; readonly reason: ReasonA; }, never>
-
-=== Piping Flow ===
-Location: 218:48 - 218:62
-Node: Fx.succeed(1)
-Node Kind: KindCallExpression
-
-Subject: 1
-Subject Type: 1
-
-Transformations (1):
-  [0] kind: call
-      callee: Fx.succeed
-      args: (constant)
-      outType: Effect<number, never, never>
-
-=== Piping Flow ===
-Location: 219:11 - 219:26
+Location: 193:11 - 193:26
 Node: Fx.fail(error)
 Node Kind: KindCallExpression
 
@@ -799,7 +701,7 @@ Transformations (1):
       outType: Effect<never, { readonly _tag: "SingleReasonError"; readonly reason: ReasonA; }, never>
 
 === Piping Flow ===
-Location: 226:30 - 231:2
+Location: 200:30 - 205:2
 Node: stream.pipe(\n  Stream.catchTag("OuterError", (error) => {\n    if (error.reason._tag === "ReasonA") return Stream.succeed(1)\n    return Stream.fail(error)\n  })\n)
 Node Kind: KindCallExpression
 
@@ -813,7 +715,7 @@ Transformations (1):
       outType: Stream<number, OuterError, never>
 
 === Piping Flow ===
-Location: 228:48 - 228:66
+Location: 202:48 - 202:66
 Node: Stream.succeed(1)
 Node Kind: KindCallExpression
 
@@ -827,7 +729,7 @@ Transformations (1):
       outType: Stream<number, never, never>
 
 === Piping Flow ===
-Location: 229:11 - 229:30
+Location: 203:11 - 203:30
 Node: Stream.fail(error)
 Node Kind: KindCallExpression
 
@@ -841,7 +743,7 @@ Transformations (1):
       outType: Stream<never, OuterError, never>
 
 === Piping Flow ===
-Location: 236:31 - 241:2
+Location: 210:31 - 215:2
 Node: channel.pipe(\n  Channel.catchTag("OuterError", (error) => {\n    if (error.reason._tag === "ReasonA") return Channel.succeed(1)\n    return Channel.fail(error)\n  })\n)
 Node Kind: KindCallExpression
 
@@ -855,7 +757,7 @@ Transformations (1):
       outType: Channel<number, OuterError, void, unknown, unknown, unknown, never>
 
 === Piping Flow ===
-Location: 238:48 - 238:67
+Location: 212:48 - 212:67
 Node: Channel.succeed(1)
 Node Kind: KindCallExpression
 
@@ -869,7 +771,7 @@ Transformations (1):
       outType: Channel<number, never, void, unknown, unknown, unknown, never>
 
 === Piping Flow ===
-Location: 239:11 - 239:31
+Location: 213:11 - 213:31
 Node: Channel.fail(error)
 Node Kind: KindCallExpression
 

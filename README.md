@@ -104,7 +104,7 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td colspan="6"><strong>Style</strong> <em>Cleanup, consistency, and idiomatic Effect code.</em></td></tr>
     <tr><td><code>catchAllToMapError</code></td><td>💡</td><td>🔧</td><td>Suggests using Effect.mapError instead of Effect.catch + Effect.fail</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>catchChainToFirstSuccessOf</code></td><td>💡</td><td></td><td>Suggests Effect.firstSuccessOf for consecutive error-independent Effect.catch fallbacks when the error type is preserved</td><td></td><td>✓</td></tr>
-    <tr><td><code>catchTagToCatchReason</code></td><td>💡</td><td>🔧</td><td>Suggests Effect.catchReason or Effect.catchReasons instead of branching on reason._tag inside Effect.catchTag handlers</td><td></td><td>✓</td></tr>
+    <tr><td><code>catchTagToCatchReason</code></td><td>💡</td><td>🔧</td><td>Suggests Effect.catchReason or Effect.catchReasons for handlers that re-fail unmatched reason._tag branches</td><td></td><td>✓</td></tr>
     <tr><td><code>catchToIgnore</code></td><td>💡</td><td>🔧</td><td>Suggests using Effect.ignore or Effect.ignoreCause instead of Effect.catch/catchCause returning Effect.void</td><td></td><td>✓</td></tr>
     <tr><td><code>catchToOrElseSucceed</code></td><td>💡</td><td>🔧</td><td>Suggests using Effect.orElseSucceed instead of Effect.catch + Effect.succeed</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>deterministicKeys</code></td><td>➖</td><td>🔧</td><td>Enforces deterministic naming for service/tag/error identifiers based on class names</td><td>✓</td><td>✓</td></tr>

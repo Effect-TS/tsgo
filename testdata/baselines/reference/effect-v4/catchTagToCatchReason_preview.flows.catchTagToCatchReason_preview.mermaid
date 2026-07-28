@@ -14,17 +14,6 @@ flowchart TB
   12[/"type: AppError<br/>node: error"/]
   13["type: Effect#lt;never, AppError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
   14[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  15[/"type: Effect#lt;string, AppError, never#gt;<br/>node: program"/]
-  16["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;AppError#quot;, #40;error#41; =#gt; #123;#92;n    if #40;error.reason._tag === #quot;RetryReason#quot;#41; return Effect.succeed#40;#quot;retry#quot;#41;#92;n    return Effect.succeed#40;#quot;ignored#quot;#41;#92;n  #125;#93;"]
-  17[/"type: #123; #lt;const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, E, A1, E1, R1, A2 = unassigned, E2 = never, R2 = never#gt;#40;k: K, f: #40;e: ExtractTag#lt;NoInfer#lt;E#gt;, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A1 #124; Exclude#lt;A2, unassigned#gt;, E1 #124; E2 #124; #40;A2 extends unassigned ? ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt; : never#41;, R #124; R1 #124; R2#gt;; #lt;A, E, R, const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, R1, E1, A1, A2 = unassigned, E2 = never, R2 = never#gt;#40;self: Effect#lt;A, E, R#gt;, k: K, f: #40;e: ExtractTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: Effect#lt;A #124; A1 #124; Exclude#lt;A2, unassigned#gt;, E1 #124; E2 #124; #40;A2 extends unassigned ? ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt; : never#41;, R #124; R1 #124; R2#gt;; #125;<br/>node: Effect.catchTag"/]
-  18[/"type: #quot;AppError#quot;<br/>node: #quot;AppError#quot;"/]
-  19[["type: #40;error: AppError#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;error#41; =#gt; #123;#92;n    if #40;error.reason._tag === #quot;RetryReason#quot;#41; return Effect.succeed#40;#quot;retry#quot;#41;#92;n    return Effect.succeed#40;#quot;ignored#quot;#41;#92;n  #125;"]]
-  20[/"type: #quot;retry#quot;<br/>node: #quot;retry#quot;"/]
-  21["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  22[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  23[/"type: #quot;ignored#quot;<br/>node: #quot;ignored#quot;"/]
-  24["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  25[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
   6 -->|"kind: transformCallee"| 5
   7 -->|"kind: transformArg"| 5
   9 -->|"kind: pipe"| 10
@@ -37,15 +26,3 @@ flowchart TB
   13 -->|"kind: usedBy"| 8
   8 -->|"kind: transformArg"| 5
   4 -->|"kind: pipe"| 5
-  17 -->|"kind: transformCallee"| 16
-  18 -->|"kind: transformArg"| 16
-  20 -->|"kind: pipe"| 21
-  22 -->|"kind: transformCallee"| 21
-  21 -->|"kind: potentialReturn"| 19
-  23 -->|"kind: pipe"| 24
-  25 -->|"kind: transformCallee"| 24
-  24 -->|"kind: potentialReturn"| 19
-  21 -->|"kind: usedBy"| 19
-  24 -->|"kind: usedBy"| 19
-  19 -->|"kind: transformArg"| 16
-  15 -->|"kind: pipe"| 16

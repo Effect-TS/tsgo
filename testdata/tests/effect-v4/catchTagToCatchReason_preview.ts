@@ -23,10 +23,3 @@ export const fixable = program.pipe(
     return Effect.fail(error)
   })
 )
-
-export const diagnosticOnly = program.pipe(
-  Effect.catchTag("AppError", (error) => {
-    if (error.reason._tag === "RetryReason") return Effect.succeed("retry")
-    return Effect.succeed("ignored")
-  })
-)

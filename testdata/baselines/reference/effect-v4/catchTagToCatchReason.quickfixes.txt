@@ -23,23 +23,11 @@
   Fix 0: "Disable catchTagToCatchReason for this line"
   Fix 1: "Disable catchTagToCatchReason for entire file"
 
-[D6] (86:3-89:5) TS377110: Returning a successful Effect for unmatched `error.reason._tag` values inside `Effect.catchTag` silently swallows unrelated reasons; use `Effect.catchReason` or `Effect.catchReasons` to re-fail them automatically. effect(catchTagToCatchReason)
+[D6] (86:3-96:5) TS377109: Branching on `error.reason._tag` inside `Effect.catchTags` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
   Fix 0: "Disable catchTagToCatchReason for this line"
   Fix 1: "Disable catchTagToCatchReason for entire file"
 
-[D7] (94:3-97:5) TS377110: Returning a successful Effect for unmatched `error.reason._tag` values inside `Effect.catchTag` silently swallows unrelated reasons; use `Effect.catchReason` or `Effect.catchReasons` to re-fail them automatically. effect(catchTagToCatchReason)
-  Fix 0: "Disable catchTagToCatchReason for this line"
-  Fix 1: "Disable catchTagToCatchReason for entire file"
-
-[D8] (102:3-112:5) TS377109: Branching on `error.reason._tag` inside `Effect.catchTags` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
-  Fix 0: "Disable catchTagToCatchReason for this line"
-  Fix 1: "Disable catchTagToCatchReason for entire file"
-
-[D9] (117:3-122:5) TS377109: Branching on `error.reason._tag` inside `Effect.catchTags` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
-  Fix 0: "Disable catchTagToCatchReason for this line"
-  Fix 1: "Disable catchTagToCatchReason for entire file"
-
-[D10] (127:3-132:5) TS377110: Returning a successful Effect for unmatched `error.reason._tag` values inside `Effect.catchTags` silently swallows unrelated reasons; use `Effect.catchReason` or `Effect.catchReasons` to re-fail them automatically. effect(catchTagToCatchReason)
+[D7] (101:3-106:5) TS377109: Branching on `error.reason._tag` inside `Effect.catchTags` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
   Fix 0: "Disable catchTagToCatchReason for this line"
   Fix 1: "Disable catchTagToCatchReason for entire file"
 
@@ -130,22 +118,6 @@ export const reasonUseIsDiagnosticOnly = program.pipe(
   })
 )
 
-// Should use the stronger swallowing diagnostic and offer no fix.
-export const swallowingSuccess = program.pipe(
-  Fx.catchTag("OuterError", (error) => {
-    if (error.reason._tag === "ReasonA") return Fx.succeed(1)
-    return Fx.succeed(0)
-  })
-)
-
-// Effect.void is also a successful unmatched-reason fall-through.
-export const swallowingVoid = program.pipe(
-  Fx.catchTag("OuterError", (error) => {
-    if (error.reason._tag === "ReasonA") return Fx.void
-    return Fx.void
-  })
-)
-
 // Should trigger on the containing catchTags transformation, without a fix.
 export const catchTagsCase = program.pipe(
   Fx.catchTags({
@@ -167,16 +139,6 @@ export const catchTagsReasonUse = program.pipe(
     OuterError: (error) => {
       if (error.reason._tag === "ReasonB") return Fx.succeed(error.reason.detail.length)
       return Fx.fail(error)
-    }
-  })
-)
-
-// Should use the stronger diagnostic without a fix for catchTags as well.
-export const catchTagsSwallowing = program.pipe(
-  Fx.catchTags({
-    OuterError: (error) => {
-      if (error.reason._tag === "ReasonA") return Fx.succeed(1)
-      return Fx.succeed(0)
     }
   })
 )
@@ -378,22 +340,6 @@ export const reasonUseIsDiagnosticOnly = program.pipe(
   })
 )
 
-// Should use the stronger swallowing diagnostic and offer no fix.
-export const swallowingSuccess = program.pipe(
-  Fx.catchTag("OuterError", (error) => {
-    if (error.reason._tag === "ReasonA") return Fx.succeed(1)
-    return Fx.succeed(0)
-  })
-)
-
-// Effect.void is also a successful unmatched-reason fall-through.
-export const swallowingVoid = program.pipe(
-  Fx.catchTag("OuterError", (error) => {
-    if (error.reason._tag === "ReasonA") return Fx.void
-    return Fx.void
-  })
-)
-
 // Should trigger on the containing catchTags transformation, without a fix.
 export const catchTagsCase = program.pipe(
   Fx.catchTags({
@@ -415,16 +361,6 @@ export const catchTagsReasonUse = program.pipe(
     OuterError: (error) => {
       if (error.reason._tag === "ReasonB") return Fx.succeed(error.reason.detail.length)
       return Fx.fail(error)
-    }
-  })
-)
-
-// Should use the stronger diagnostic without a fix for catchTags as well.
-export const catchTagsSwallowing = program.pipe(
-  Fx.catchTags({
-    OuterError: (error) => {
-      if (error.reason._tag === "ReasonA") return Fx.succeed(1)
-      return Fx.succeed(0)
     }
   })
 )
@@ -622,22 +558,6 @@ export const reasonUseIsDiagnosticOnly = program.pipe(
   })
 )
 
-// Should use the stronger swallowing diagnostic and offer no fix.
-export const swallowingSuccess = program.pipe(
-  Fx.catchTag("OuterError", (error) => {
-    if (error.reason._tag === "ReasonA") return Fx.succeed(1)
-    return Fx.succeed(0)
-  })
-)
-
-// Effect.void is also a successful unmatched-reason fall-through.
-export const swallowingVoid = program.pipe(
-  Fx.catchTag("OuterError", (error) => {
-    if (error.reason._tag === "ReasonA") return Fx.void
-    return Fx.void
-  })
-)
-
 // Should trigger on the containing catchTags transformation, without a fix.
 export const catchTagsCase = program.pipe(
   Fx.catchTags({
@@ -659,16 +579,6 @@ export const catchTagsReasonUse = program.pipe(
     OuterError: (error) => {
       if (error.reason._tag === "ReasonB") return Fx.succeed(error.reason.detail.length)
       return Fx.fail(error)
-    }
-  })
-)
-
-// Should use the stronger diagnostic without a fix for catchTags as well.
-export const catchTagsSwallowing = program.pipe(
-  Fx.catchTags({
-    OuterError: (error) => {
-      if (error.reason._tag === "ReasonA") return Fx.succeed(1)
-      return Fx.succeed(0)
     }
   })
 )
@@ -804,22 +714,4 @@ skipped by default
 skipped by default
 
 === [D7] Fix 1: "Disable catchTagToCatchReason for entire file" ===
-skipped by default
-
-=== [D8] Fix 0: "Disable catchTagToCatchReason for this line" ===
-skipped by default
-
-=== [D8] Fix 1: "Disable catchTagToCatchReason for entire file" ===
-skipped by default
-
-=== [D9] Fix 0: "Disable catchTagToCatchReason for this line" ===
-skipped by default
-
-=== [D9] Fix 1: "Disable catchTagToCatchReason for entire file" ===
-skipped by default
-
-=== [D10] Fix 0: "Disable catchTagToCatchReason for this line" ===
-skipped by default
-
-=== [D10] Fix 1: "Disable catchTagToCatchReason for entire file" ===
 skipped by default

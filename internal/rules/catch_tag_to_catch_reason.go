@@ -14,22 +14,17 @@ import (
 var CatchTagToCatchReason = rule.Rule{
 	Name:            "catchTagToCatchReason",
 	Group:           "style",
-	Description:     "Suggests Effect.catchReason or Effect.catchReasons instead of branching on reason._tag inside Effect.catchTag handlers",
+	Description:     "Suggests Effect.catchReason or Effect.catchReasons for handlers that re-fail unmatched reason._tag branches",
 	DefaultSeverity: etscore.SeveritySuggestion,
 	SupportedEffect: []string{"v4"},
 	Codes: []int32{
 		tsdiag.Branching_on_0_reason_tag_inside_Effect_1_hand_rolls_reason_dispatch_use_Effect_catchReason_or_Effect_catchReasons_which_re_fail_unmatched_reasons_automatically_effect_catchTagToCatchReason.Code(),
-		tsdiag.Returning_a_successful_Effect_for_unmatched_0_reason_tag_values_inside_Effect_1_silently_swallows_unrelated_reasons_use_Effect_catchReason_or_Effect_catchReasons_to_re_fail_them_automatically_effect_catchTagToCatchReason.Code(),
 	},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzeCatchTagToCatchReason(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
 		diagnostics := make([]*ast.Diagnostic, len(matches))
 		for i, match := range matches {
-			message := tsdiag.Branching_on_0_reason_tag_inside_Effect_1_hand_rolls_reason_dispatch_use_Effect_catchReason_or_Effect_catchReasons_which_re_fail_unmatched_reasons_automatically_effect_catchTagToCatchReason
-			if match.SwallowsUnrelatedReasons {
-				message = tsdiag.Returning_a_successful_Effect_for_unmatched_0_reason_tag_values_inside_Effect_1_silently_swallows_unrelated_reasons_use_Effect_catchReason_or_Effect_catchReasons_to_re_fail_them_automatically_effect_catchTagToCatchReason
-			}
-			diagnostics[i] = ctx.NewDiagnostic(match.SourceFile, match.Location, message, nil, match.ParameterName, match.CatchMethodName)
+			diagnostics[i] = ctx.NewDiagnostic(match.SourceFile, match.Location, tsdiag.Branching_on_0_reason_tag_inside_Effect_1_hand_rolls_reason_dispatch_use_Effect_catchReason_or_Effect_catchReasons_which_re_fail_unmatched_reasons_automatically_effect_catchTagToCatchReason, nil, match.ParameterName, match.CatchMethodName)
 		}
 		return diagnostics
 	},
@@ -41,23 +36,21 @@ type CatchTagToCatchReasonBranch struct {
 }
 
 type CatchTagToCatchReasonMatch struct {
-	SourceFile               *ast.SourceFile
-	Location                 core.TextRange
-	CallNode                 *ast.Node
-	Callee                   *ast.Node
-	OuterTag                 *ast.Node
-	ParameterName            string
-	CatchMethodName          string
-	Branches                 []CatchTagToCatchReasonBranch
-	SwallowsUnrelatedReasons bool
-	CanFix                   bool
+	SourceFile      *ast.SourceFile
+	Location        core.TextRange
+	CallNode        *ast.Node
+	Callee          *ast.Node
+	OuterTag        *ast.Node
+	ParameterName   string
+	CatchMethodName string
+	Branches        []CatchTagToCatchReasonBranch
+	CanFix          bool
 }
 
 type catchTagToCatchReasonHandler struct {
-	parameterName            string
-	branches                 []CatchTagToCatchReasonBranch
-	swallowsUnrelatedReasons bool
-	canFix                   bool
+	parameterName string
+	branches      []CatchTagToCatchReasonBranch
+	canFix        bool
 }
 
 type catchTagToCatchReasonControlFlow struct {
@@ -128,16 +121,15 @@ func analyzeCatchTagTransformation(
 
 	canFix := handler.canFix && transformationCallHasExactArgs(transformation)
 	return CatchTagToCatchReasonMatch{
-		SourceFile:               sf,
-		Location:                 scanner.GetErrorRangeForNode(sf, transformation.Node),
-		CallNode:                 transformation.Node,
-		Callee:                   transformation.Callee,
-		OuterTag:                 outerTag,
-		ParameterName:            handler.parameterName,
-		CatchMethodName:          "catchTag",
-		Branches:                 handler.branches,
-		SwallowsUnrelatedReasons: handler.swallowsUnrelatedReasons,
-		CanFix:                   canFix,
+		SourceFile:      sf,
+		Location:        scanner.GetErrorRangeForNode(sf, transformation.Node),
+		CallNode:        transformation.Node,
+		Callee:          transformation.Callee,
+		OuterTag:        outerTag,
+		ParameterName:   handler.parameterName,
+		CatchMethodName: "catchTag",
+		Branches:        handler.branches,
+		CanFix:          canFix,
 	}, true
 }
 
@@ -178,24 +170,21 @@ func analyzeCatchTagsTransformation(
 			continue
 		}
 		candidate = &handler
-		if handler.swallowsUnrelatedReasons {
-			break
-		}
+		break
 	}
 	if candidate == nil {
 		return CatchTagToCatchReasonMatch{}, false
 	}
 
 	return CatchTagToCatchReasonMatch{
-		SourceFile:               sf,
-		Location:                 scanner.GetErrorRangeForNode(sf, transformation.Node),
-		CallNode:                 transformation.Node,
-		Callee:                   transformation.Callee,
-		ParameterName:            candidate.parameterName,
-		CatchMethodName:          "catchTags",
-		Branches:                 candidate.branches,
-		SwallowsUnrelatedReasons: candidate.swallowsUnrelatedReasons,
-		CanFix:                   false,
+		SourceFile:      sf,
+		Location:        scanner.GetErrorRangeForNode(sf, transformation.Node),
+		CallNode:        transformation.Node,
+		Callee:          transformation.Callee,
+		ParameterName:   candidate.parameterName,
+		CatchMethodName: "catchTags",
+		Branches:        candidate.branches,
+		CanFix:          false,
 	}, true
 }
 
@@ -228,7 +217,7 @@ func analyzeCatchTagToCatchReasonHandler(tp *typeparser.TypeParser, c *checker.C
 		return catchTagToCatchReasonHandler{}, false
 	}
 
-	swallows, fallbackParam, ok := classifyCatchTagFallback(tp, c, controlFlow.fallback, parameterSymbol)
+	fallbackParam, ok := catchTagReFailParameter(tp, c, controlFlow.fallback, parameterSymbol)
 	if !ok {
 		return catchTagToCatchReasonHandler{}, false
 	}
@@ -240,10 +229,9 @@ func analyzeCatchTagToCatchReasonHandler(tp *typeparser.TypeParser, c *checker.C
 	}
 
 	return catchTagToCatchReasonHandler{
-		parameterName:            parameter.Name().AsIdentifier().Text,
-		branches:                 controlFlow.branches,
-		swallowsUnrelatedReasons: swallows,
-		canFix:                   handlerNode.Kind == ast.KindArrowFunction && !swallows && !usesReason,
+		parameterName: parameter.Name().AsIdentifier().Text,
+		branches:      controlFlow.branches,
+		canFix:        handlerNode.Kind == ast.KindArrowFunction && !usesReason,
 	}, true
 }
 
@@ -526,10 +514,10 @@ func catchReasonTagReference(tp *typeparser.TypeParser, c *checker.Checker, node
 	return root, true
 }
 
-func classifyCatchTagFallback(tp *typeparser.TypeParser, c *checker.Checker, expression *ast.Node, parameterSymbol *ast.Symbol) (bool, *ast.Node, bool) {
+func catchTagReFailParameter(tp *typeparser.TypeParser, c *checker.Checker, expression *ast.Node, parameterSymbol *ast.Symbol) (*ast.Node, bool) {
 	expression = unwrapTransparentExpression(expression)
 	if expression == nil {
-		return false, nil, false
+		return nil, false
 	}
 	if expression.Kind == ast.KindCallExpression {
 		call := expression.AsCallExpression()
@@ -537,21 +525,11 @@ func classifyCatchTagFallback(tp *typeparser.TypeParser, c *checker.Checker, exp
 			tp.IsNodeReferenceToEffectModuleApi(call.Expression, "fail") {
 			argument := unwrapTransparentExpression(call.Arguments.Nodes[0])
 			if argument != nil && argument.Kind == ast.KindIdentifier && sameCatchReasonSymbol(tp, c, argument, parameterSymbol) {
-				return false, argument, true
+				return argument, true
 			}
 		}
 	}
-
-	if expression.Kind == ast.KindCallExpression {
-		call := expression.AsCallExpression()
-		if call != nil && call.Expression != nil && tp.IsNodeReferenceToEffectModuleApi(call.Expression, "succeed") {
-			return true, nil, true
-		}
-	}
-	if tp.IsNodeReferenceToEffectModuleApi(expression, "void") {
-		return true, nil, true
-	}
-	return false, nil, false
+	return nil, false
 }
 
 func validateCatchTagParameterUses(

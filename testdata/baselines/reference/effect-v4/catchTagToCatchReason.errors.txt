@@ -6,14 +6,11 @@ Effect version: 4.0.0
 /.src/catchTagToCatchReason.ts(53,3): suggestion TS377109: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
 /.src/catchTagToCatchReason.ts(66,3): suggestion TS377109: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
 /.src/catchTagToCatchReason.ts(74,3): suggestion TS377109: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
-/.src/catchTagToCatchReason.ts(86,3): suggestion TS377110: Returning a successful Effect for unmatched `error.reason._tag` values inside `Effect.catchTag` silently swallows unrelated reasons; use `Effect.catchReason` or `Effect.catchReasons` to re-fail them automatically. effect(catchTagToCatchReason)
-/.src/catchTagToCatchReason.ts(94,3): suggestion TS377110: Returning a successful Effect for unmatched `error.reason._tag` values inside `Effect.catchTag` silently swallows unrelated reasons; use `Effect.catchReason` or `Effect.catchReasons` to re-fail them automatically. effect(catchTagToCatchReason)
-/.src/catchTagToCatchReason.ts(102,3): suggestion TS377109: Branching on `error.reason._tag` inside `Effect.catchTags` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
-/.src/catchTagToCatchReason.ts(117,3): suggestion TS377109: Branching on `error.reason._tag` inside `Effect.catchTags` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
-/.src/catchTagToCatchReason.ts(127,3): suggestion TS377110: Returning a successful Effect for unmatched `error.reason._tag` values inside `Effect.catchTags` silently swallows unrelated reasons; use `Effect.catchReason` or `Effect.catchReasons` to re-fail them automatically. effect(catchTagToCatchReason)
+/.src/catchTagToCatchReason.ts(86,3): suggestion TS377109: Branching on `error.reason._tag` inside `Effect.catchTags` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+/.src/catchTagToCatchReason.ts(101,3): suggestion TS377109: Branching on `error.reason._tag` inside `Effect.catchTags` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
 
 
-==== /.src/catchTagToCatchReason.ts (10 errors) ====
+==== /.src/catchTagToCatchReason.ts (7 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics catchTagToCatchReason:suggestion
     import { Channel, Effect as Fx, pipe, Stream } from "effect"
@@ -136,32 +133,6 @@ Effect version: 4.0.0
 !!! suggestion TS377109: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
     )
     
-    // Should use the stronger swallowing diagnostic and offer no fix.
-    export const swallowingSuccess = program.pipe(
-      Fx.catchTag("OuterError", (error) => {
-      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        if (error.reason._tag === "ReasonA") return Fx.succeed(1)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        return Fx.succeed(0)
-    ~~~~~~~~~~~~~~~~~~~~~~~~
-      })
-    ~~~~
-!!! suggestion TS377110: Returning a successful Effect for unmatched `error.reason._tag` values inside `Effect.catchTag` silently swallows unrelated reasons; use `Effect.catchReason` or `Effect.catchReasons` to re-fail them automatically. effect(catchTagToCatchReason)
-    )
-    
-    // Effect.void is also a successful unmatched-reason fall-through.
-    export const swallowingVoid = program.pipe(
-      Fx.catchTag("OuterError", (error) => {
-      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        if (error.reason._tag === "ReasonA") return Fx.void
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        return Fx.void
-    ~~~~~~~~~~~~~~~~~~
-      })
-    ~~~~
-!!! suggestion TS377110: Returning a successful Effect for unmatched `error.reason._tag` values inside `Effect.catchTag` silently swallows unrelated reasons; use `Effect.catchReason` or `Effect.catchReasons` to re-fail them automatically. effect(catchTagToCatchReason)
-    )
-    
     // Should trigger on the containing catchTags transformation, without a fix.
     export const catchTagsCase = program.pipe(
       Fx.catchTags({
@@ -204,23 +175,6 @@ Effect version: 4.0.0
       })
     ~~~~
 !!! suggestion TS377109: Branching on `error.reason._tag` inside `Effect.catchTags` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
-    )
-    
-    // Should use the stronger diagnostic without a fix for catchTags as well.
-    export const catchTagsSwallowing = program.pipe(
-      Fx.catchTags({
-      ~~~~~~~~~~~~~~
-        OuterError: (error) => {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          if (error.reason._tag === "ReasonA") return Fx.succeed(1)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          return Fx.succeed(0)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~
-        }
-    ~~~~~
-      })
-    ~~~~
-!!! suggestion TS377110: Returning a successful Effect for unmatched `error.reason._tag` values inside `Effect.catchTags` silently swallows unrelated reasons; use `Effect.catchReason` or `Effect.catchReasons` to re-fail them automatically. effect(catchTagToCatchReason)
     )
     
     // Should NOT trigger: the wrapper parameter is used outside reason dispatch.

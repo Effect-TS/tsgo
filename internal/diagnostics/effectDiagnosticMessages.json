@@ -430,9 +430,5 @@
     "Branching on `{0}.reason._tag` inside `Effect.{1}` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)": {
         "category": "Suggestion",
         "code": 377109
-    },
-    "Returning a successful Effect for unmatched `{0}.reason._tag` values inside `Effect.{1}` silently swallows unrelated reasons; use `Effect.catchReason` or `Effect.catchReasons` to re-fail them automatically. effect(catchTagToCatchReason)": {
-        "category": "Suggestion",
-        "code": 377110
     }
 }

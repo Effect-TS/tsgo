@@ -81,22 +81,6 @@ export const reasonUseIsDiagnosticOnly = program.pipe(
   })
 )
 
-// Should use the stronger swallowing diagnostic and offer no fix.
-export const swallowingSuccess = program.pipe(
-  Fx.catchTag("OuterError", (error) => {
-    if (error.reason._tag === "ReasonA") return Fx.succeed(1)
-    return Fx.succeed(0)
-  })
-)
-
-// Effect.void is also a successful unmatched-reason fall-through.
-export const swallowingVoid = program.pipe(
-  Fx.catchTag("OuterError", (error) => {
-    if (error.reason._tag === "ReasonA") return Fx.void
-    return Fx.void
-  })
-)
-
 // Should trigger on the containing catchTags transformation, without a fix.
 export const catchTagsCase = program.pipe(
   Fx.catchTags({
@@ -118,16 +102,6 @@ export const catchTagsReasonUse = program.pipe(
     OuterError: (error) => {
       if (error.reason._tag === "ReasonB") return Fx.succeed(error.reason.detail.length)
       return Fx.fail(error)
-    }
-  })
-)
-
-// Should use the stronger diagnostic without a fix for catchTags as well.
-export const catchTagsSwallowing = program.pipe(
-  Fx.catchTags({
-    OuterError: (error) => {
-      if (error.reason._tag === "ReasonA") return Fx.succeed(1)
-      return Fx.succeed(0)
     }
   })
 )
