@@ -3,12 +3,13 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-TARGET_REPO="${1:-"$ROOT_DIR/.repos/effect-smol"}"
+TARGET_REPO="${1:-"$ROOT_DIR/.repos/effect-v3"}"
+UPSTREAM_METADATA="$ROOT_DIR/_packages/tsgo/upstream.json"
 OUTPUT_ROOT="${OUTPUT_ROOT:-"$ROOT_DIR/_tools/.perf-out"}"
 RUN_ID="${RUN_ID:-"$(date -u +%Y%m%dT%H%M%SZ)"}"
 RUN_DIR="$OUTPUT_ROOT/$RUN_ID"
 PATCHED_BIN="${PATCHED_BIN:-"$ROOT_DIR/tsgo"}"
-STOCK_BIN="${STOCK_BIN:-"$TARGET_REPO/node_modules/.bin/tsgo"}"
+STOCK_BIN="${STOCK_BIN:-}"
 CONFIG_PATH="${CONFIG_PATH:-tsconfig.json}"
 RUNS="${RUNS:-1}"
 DIAGNOSTICS_FLAG="${DIAGNOSTICS_FLAG:---diagnostics}"
@@ -22,11 +23,41 @@ require_cmd() {
   fi
 }
 
+read_stock_typescript_version() {
+  node -e '
+    const fs = require("node:fs")
+    const metadata = JSON.parse(fs.readFileSync(process.argv[1], "utf8"))
+    if (typeof metadata.tsVersion !== "string" || metadata.tsVersion.length === 0) process.exit(1)
+    process.stdout.write(metadata.tsVersion)
+  ' "$UPSTREAM_METADATA"
+}
+
+require_cmd node
 require_cmd pnpm
 
 if [[ ! -d "$TARGET_REPO" ]]; then
   echo "Target repo does not exist: $TARGET_REPO" >&2
   exit 1
+fi
+
+if [[ -n "$STOCK_BIN" ]]; then
+  if [[ ! -x "$STOCK_BIN" ]]; then
+    echo "Stock binary does not exist: $STOCK_BIN" >&2
+    exit 1
+  fi
+  STOCK_IDENTITY="$STOCK_BIN"
+  STOCK_COMMAND=("$STOCK_BIN")
+else
+  if [[ ! -f "$UPSTREAM_METADATA" ]]; then
+    echo "Upstream TypeScript metadata does not exist: $UPSTREAM_METADATA" >&2
+    exit 1
+  fi
+  if ! STOCK_TYPESCRIPT_VERSION="$(read_stock_typescript_version)"; then
+    echo "Unable to read tsVersion from $UPSTREAM_METADATA" >&2
+    exit 1
+  fi
+  STOCK_IDENTITY="pnpm --silent --package typescript@$STOCK_TYPESCRIPT_VERSION dlx tsc"
+  STOCK_COMMAND=(pnpm --silent --package "typescript@$STOCK_TYPESCRIPT_VERSION" dlx tsc)
 fi
 
 if [[ ! -x "$PATCHED_BIN" ]]; then
@@ -37,15 +68,25 @@ if [[ ! -x "$PATCHED_BIN" ]]; then
   )
 fi
 
-if [[ ! -x "$STOCK_BIN" ]]; then
-  echo "Stock binary does not exist: $STOCK_BIN" >&2
+STOCK_VERSION="$("${STOCK_COMMAND[@]}" --version)"
+PATCHED_VERSION="$("$PATCHED_BIN" --version)"
+
+if [[ "$STOCK_VERSION" == *"+effect-tsgo."* ]]; then
+  echo "Resolved stock binary is Effect-patched: $STOCK_IDENTITY ($STOCK_VERSION)" >&2
+  echo "Set STOCK_BIN to an unpatched TypeScript-Go binary." >&2
   exit 1
 fi
 
+echo "Stock compiler: $STOCK_IDENTITY ($STOCK_VERSION)"
+echo "Patched compiler: $PATCHED_BIN ($PATCHED_VERSION)"
+
 run_case() {
   local name="$1"
-  local bin="$2"
-  local run_number="$3"
+  local identity="$2"
+  local version="$3"
+  local run_number="$4"
+  shift 4
+  local -a command=("$@")
   local case_dir="$RUN_DIR/$name/run-$run_number"
   local pprof_dir="$case_dir/pprof"
   local clean_log="$case_dir/clean.log"
@@ -66,16 +107,17 @@ run_case() {
     echo "name=$name"
     echo "run=$run_number"
     echo "cwd=$TARGET_REPO"
-    echo "binary=$bin"
+    echo "binary=$identity"
+    echo "version=$version"
     echo "config=$CONFIG_PATH"
     echo "pprofDir=$pprof_dir"
     echo "diagnosticsFlag=$DIAGNOSTICS_FLAG"
   } >"$meta_log"
 
-  echo "[$name run $run_number] $bin -b $CONFIG_PATH $DIAGNOSTICS_FLAG --pprofDir $pprof_dir"
+  echo "[$name run $run_number] $identity -b $CONFIG_PATH $DIAGNOSTICS_FLAG --pprofDir $pprof_dir"
   if (
     cd "$TARGET_REPO"
-    "$bin" -b "$CONFIG_PATH" "$DIAGNOSTICS_FLAG" --pprofDir "$pprof_dir"
+    "${command[@]}" -b "$CONFIG_PATH" "$DIAGNOSTICS_FLAG" --pprofDir "$pprof_dir"
   ) >"$stdout_log" 2>"$stderr_log"; then
     echo "exit=0" >>"$meta_log"
   else
@@ -155,8 +197,8 @@ print_medians() {
 }
 
 for run_number in $(seq 1 "$RUNS"); do
-  run_case stock "$STOCK_BIN" "$run_number"
-  run_case patched "$PATCHED_BIN" "$run_number"
+  run_case stock "$STOCK_IDENTITY" "$STOCK_VERSION" "$run_number" "${STOCK_COMMAND[@]}"
+  run_case patched "$PATCHED_BIN" "$PATCHED_VERSION" "$run_number" "$PATCHED_BIN"
 done
 
 print_summary
