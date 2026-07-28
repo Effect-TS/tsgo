@@ -1,0 +1,753 @@
+=== Quick Fix Inventory ===
+
+[D1] (25:1-25:29) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D2] (25:1-25:29) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+  Fix 0: "Disable promiseInEffectSuccess for this line"
+  Fix 1: "Disable promiseInEffectSuccess for entire file"
+
+[D3] (26:1-26:32) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D4] (26:1-26:32) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+  Fix 0: "Disable promiseInEffectSuccess for this line"
+  Fix 1: "Disable promiseInEffectSuccess for entire file"
+
+[D5] (27:1-27:35) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D6] (27:1-27:35) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+  Fix 0: "Disable promiseInEffectSuccess for this line"
+  Fix 1: "Disable promiseInEffectSuccess for entire file"
+
+[D7] (29:1-29:35) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D8] (29:1-29:35) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+  Fix 0: "Disable promiseInEffectSuccess for this line"
+  Fix 1: "Disable promiseInEffectSuccess for entire file"
+
+[D9] (30:1-30:30) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D10] (30:1-30:30) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+  Fix 0: "Disable promiseInEffectSuccess for this line"
+  Fix 1: "Disable promiseInEffectSuccess for entire file"
+
+[D11] (32:1-32:39) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D12] (32:1-32:39) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+  Fix 0: "Disable promiseInEffectSuccess for this line"
+  Fix 1: "Disable promiseInEffectSuccess for entire file"
+
+[D13] (33:1-33:52) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D14] (33:1-33:52) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+  Fix 0: "Disable promiseInEffectSuccess for this line"
+  Fix 1: "Disable promiseInEffectSuccess for entire file"
+
+[D15] (34:1-34:32) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D16] (34:1-34:32) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+  Fix 0: "Disable promiseInEffectSuccess for this line"
+  Fix 1: "Disable promiseInEffectSuccess for entire file"
+
+[D17] (36:1-36:75) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D18] (36:1-36:75) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+  Fix 0: "Disable promiseInEffectSuccess for this line"
+  Fix 1: "Disable promiseInEffectSuccess for entire file"
+
+[D19] (37:1-37:97) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D20] (37:1-37:97) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+  Fix 0: "Disable promiseInEffectSuccess for this line"
+  Fix 1: "Disable promiseInEffectSuccess for entire file"
+
+[D21] (38:1-38:70) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D22] (38:1-38:70) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+  Fix 0: "Disable promiseInEffectSuccess for this line"
+  Fix 1: "Disable promiseInEffectSuccess for entire file"
+
+[D23] (39:1-39:78) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D24] (39:1-39:78) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+  Fix 0: "Disable promiseInEffectSuccess for this line"
+  Fix 1: "Disable promiseInEffectSuccess for entire file"
+
+[D25] (41:1-41:20) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D26] (41:1-41:20) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+  Fix 0: "Disable promiseInEffectSuccess for this line"
+  Fix 1: "Disable promiseInEffectSuccess for entire file"
+
+[D27] (42:1-42:20) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D28] (42:1-42:20) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+  Fix 0: "Disable promiseInEffectSuccess for this line"
+  Fix 1: "Disable promiseInEffectSuccess for entire file"
+
+[D29] (43:1-43:36) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D30] (43:16-43:35) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+  Fix 0: "Disable promiseInEffectSuccess for this line"
+  Fix 1: "Disable promiseInEffectSuccess for entire file"
+
+[D31] (44:1-44:32) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D32] (44:1-44:32) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+  Fix 0: "Disable promiseInEffectSuccess for this line"
+  Fix 1: "Disable promiseInEffectSuccess for entire file"
+
+[D33] (45:1-45:28) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D34] (45:21-45:28) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+  Fix 0: "Disable promiseInEffectSuccess for this line"
+  Fix 1: "Disable promiseInEffectSuccess for entire file"
+
+[D35] (46:1-46:18) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D36] (46:1-46:18) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+  Fix 0: "Disable promiseInEffectSuccess for this line"
+  Fix 1: "Disable promiseInEffectSuccess for entire file"
+
+[D37] (47:1-50:3) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D38] (47:1-50:3) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+  Fix 0: "Disable promiseInEffectSuccess for this line"
+  Fix 1: "Disable promiseInEffectSuccess for entire file"
+
+[D39] (48:3-48:48) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D40] (51:1-54:3) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D41] (51:1-54:3) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+  Fix 0: "Disable promiseInEffectSuccess for this line"
+  Fix 1: "Disable promiseInEffectSuccess for entire file"
+
+[D42] (52:3-52:34) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D43] (52:15-52:33) TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
+  Fix 0: "Disable lazyPromiseInEffectSync for this line"
+  Fix 1: "Disable lazyPromiseInEffectSync for entire file"
+
+[D44] (55:1-58:3) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D45] (55:1-58:3) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+  Fix 0: "Disable promiseInEffectSuccess for this line"
+  Fix 1: "Disable promiseInEffectSuccess for entire file"
+
+[D46] (56:3-56:22) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D47] (56:3-56:22) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+  Fix 0: "Disable promiseInEffectSuccess for this line"
+  Fix 1: "Disable promiseInEffectSuccess for entire file"
+
+[D48] (59:1-59:72) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D49] (59:1-59:72) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+  Fix 0: "Disable promiseInEffectSuccess for this line"
+  Fix 1: "Disable promiseInEffectSuccess for entire file"
+
+[D50] (61:1-61:18) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D51] (62:1-62:33) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D52] (63:1-63:30) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D53] (64:1-64:35) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D54] (65:1-65:32) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D55] (65:13-65:31) TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
+  Fix 0: "Disable lazyPromiseInEffectSync for this line"
+  Fix 1: "Disable lazyPromiseInEffectSync for entire file"
+
+[D56] (66:1-66:24) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D57] (67:1-67:44) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D58] (68:1-68:50) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D59] (68:1-68:50) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+  Fix 0: "Disable promiseInEffectSuccess for this line"
+  Fix 1: "Disable promiseInEffectSuccess for entire file"
+
+[D60] (69:1-69:71) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D61] (70:1-70:37) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D62] (72:1-72:46) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D63] (75:1-75:77) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D64] (75:1-75:77) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+  Fix 0: "Disable promiseInEffectSuccess for this line"
+  Fix 1: "Disable promiseInEffectSuccess for entire file"
+
+[D65] (76:1-76:77) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D66] (77:1-77:63) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D67] (78:30-78:39) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D68] (86:17-86:38) TS377091: Exported declaration 'intentionallyReturned' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+  Fix 0: "Disable lazyEffect for this line"
+  Fix 1: "Disable lazyEffect for entire file"
+
+[D69] (89:14-89:32) TS377091: Exported declaration 'intentionallyArrow' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+  Fix 0: "Disable lazyEffect for this line"
+  Fix 1: "Disable lazyEffect for entire file"
+
+[D70] (90:14-90:37) TS377091: Exported declaration 'intentionallyContextual' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+  Fix 0: "Disable lazyEffect for this line"
+  Fix 1: "Disable lazyEffect for entire file"
+
+[D71] (91:14-91:48) TS377091: Exported declaration 'intentionallyReturnedWithUnrelated' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+  Fix 0: "Disable lazyEffect for this line"
+  Fix 1: "Disable lazyEffect for entire file"
+
+[D72] (92:3-92:22) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D73] (92:3-92:22) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+  Fix 0: "Disable promiseInEffectSuccess for this line"
+  Fix 1: "Disable promiseInEffectSuccess for entire file"
+
+[D74] (96:14-96:28) TS377091: Exported declaration 'inferredReturn' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+  Fix 0: "Disable lazyEffect for this line"
+  Fix 1: "Disable lazyEffect for entire file"
+
+[D75] (96:37-96:65) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+  Fix 0: "Disable promiseInEffectSuccess for this line"
+  Fix 1: "Disable promiseInEffectSuccess for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable promiseInEffectSuccess for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable promiseInEffectSuccess for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable promiseInEffectSuccess for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
+skipped by default
+
+=== [D7] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D8] Fix 0: "Disable promiseInEffectSuccess for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
+skipped by default
+
+=== [D9] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D10] Fix 0: "Disable promiseInEffectSuccess for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
+skipped by default
+
+=== [D11] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D12] Fix 0: "Disable promiseInEffectSuccess for this line" ===
+skipped by default
+
+=== [D12] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
+skipped by default
+
+=== [D13] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D13] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D14] Fix 0: "Disable promiseInEffectSuccess for this line" ===
+skipped by default
+
+=== [D14] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
+skipped by default
+
+=== [D15] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D15] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D16] Fix 0: "Disable promiseInEffectSuccess for this line" ===
+skipped by default
+
+=== [D16] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
+skipped by default
+
+=== [D17] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D17] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D18] Fix 0: "Disable promiseInEffectSuccess for this line" ===
+skipped by default
+
+=== [D18] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
+skipped by default
+
+=== [D19] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D19] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D20] Fix 0: "Disable promiseInEffectSuccess for this line" ===
+skipped by default
+
+=== [D20] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
+skipped by default
+
+=== [D21] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D21] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D22] Fix 0: "Disable promiseInEffectSuccess for this line" ===
+skipped by default
+
+=== [D22] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
+skipped by default
+
+=== [D23] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D23] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D24] Fix 0: "Disable promiseInEffectSuccess for this line" ===
+skipped by default
+
+=== [D24] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
+skipped by default
+
+=== [D25] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D25] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D26] Fix 0: "Disable promiseInEffectSuccess for this line" ===
+skipped by default
+
+=== [D26] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
+skipped by default
+
+=== [D27] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D27] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D28] Fix 0: "Disable promiseInEffectSuccess for this line" ===
+skipped by default
+
+=== [D28] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
+skipped by default
+
+=== [D29] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D29] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D30] Fix 0: "Disable promiseInEffectSuccess for this line" ===
+skipped by default
+
+=== [D30] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
+skipped by default
+
+=== [D31] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D31] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D32] Fix 0: "Disable promiseInEffectSuccess for this line" ===
+skipped by default
+
+=== [D32] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
+skipped by default
+
+=== [D33] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D33] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D34] Fix 0: "Disable promiseInEffectSuccess for this line" ===
+skipped by default
+
+=== [D34] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
+skipped by default
+
+=== [D35] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D35] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D36] Fix 0: "Disable promiseInEffectSuccess for this line" ===
+skipped by default
+
+=== [D36] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
+skipped by default
+
+=== [D37] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D37] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D38] Fix 0: "Disable promiseInEffectSuccess for this line" ===
+skipped by default
+
+=== [D38] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
+skipped by default
+
+=== [D39] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D39] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D40] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D40] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D41] Fix 0: "Disable promiseInEffectSuccess for this line" ===
+skipped by default
+
+=== [D41] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
+skipped by default
+
+=== [D42] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D42] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D43] Fix 0: "Disable lazyPromiseInEffectSync for this line" ===
+skipped by default
+
+=== [D43] Fix 1: "Disable lazyPromiseInEffectSync for entire file" ===
+skipped by default
+
+=== [D44] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D44] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D45] Fix 0: "Disable promiseInEffectSuccess for this line" ===
+skipped by default
+
+=== [D45] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
+skipped by default
+
+=== [D46] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D46] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D47] Fix 0: "Disable promiseInEffectSuccess for this line" ===
+skipped by default
+
+=== [D47] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
+skipped by default
+
+=== [D48] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D48] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D49] Fix 0: "Disable promiseInEffectSuccess for this line" ===
+skipped by default
+
+=== [D49] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
+skipped by default
+
+=== [D50] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D50] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D51] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D51] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D52] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D52] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D53] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D53] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D54] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D54] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D55] Fix 0: "Disable lazyPromiseInEffectSync for this line" ===
+skipped by default
+
+=== [D55] Fix 1: "Disable lazyPromiseInEffectSync for entire file" ===
+skipped by default
+
+=== [D56] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D56] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D57] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D57] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D58] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D58] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D59] Fix 0: "Disable promiseInEffectSuccess for this line" ===
+skipped by default
+
+=== [D59] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
+skipped by default
+
+=== [D60] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D60] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D61] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D61] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D62] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D62] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D63] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D63] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D64] Fix 0: "Disable promiseInEffectSuccess for this line" ===
+skipped by default
+
+=== [D64] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
+skipped by default
+
+=== [D65] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D65] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D66] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D66] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D67] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D67] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D68] Fix 0: "Disable lazyEffect for this line" ===
+skipped by default
+
+=== [D68] Fix 1: "Disable lazyEffect for entire file" ===
+skipped by default
+
+=== [D69] Fix 0: "Disable lazyEffect for this line" ===
+skipped by default
+
+=== [D69] Fix 1: "Disable lazyEffect for entire file" ===
+skipped by default
+
+=== [D70] Fix 0: "Disable lazyEffect for this line" ===
+skipped by default
+
+=== [D70] Fix 1: "Disable lazyEffect for entire file" ===
+skipped by default
+
+=== [D71] Fix 0: "Disable lazyEffect for this line" ===
+skipped by default
+
+=== [D71] Fix 1: "Disable lazyEffect for entire file" ===
+skipped by default
+
+=== [D72] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D72] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D73] Fix 0: "Disable promiseInEffectSuccess for this line" ===
+skipped by default
+
+=== [D73] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
+skipped by default
+
+=== [D74] Fix 0: "Disable lazyEffect for this line" ===
+skipped by default
+
+=== [D74] Fix 1: "Disable lazyEffect for entire file" ===
+skipped by default
+
+=== [D75] Fix 0: "Disable promiseInEffectSuccess for this line" ===
+skipped by default
+
+=== [D75] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
+skipped by default

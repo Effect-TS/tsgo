@@ -56,6 +56,7 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><code>nonObjectEffectServiceType</code></td><td>❌</td><td></td><td>Ensures Effect.Service types are objects, not primitives</td><td>✓</td><td></td></tr>
     <tr><td><code>outdatedApi</code></td><td>⚠️</td><td></td><td>Detects usage of APIs that have been removed or renamed in Effect v4</td><td></td><td>✓</td></tr>
     <tr><td><code>overriddenSchemaConstructor</code></td><td>❌</td><td>🔧</td><td>Prevents overriding constructors in Schema classes which breaks decoding behavior</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>promiseInEffectSuccess</code></td><td>⚠️</td><td></td><td>Detects Promise types in Effect success channels where they are not awaited</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>schemaLiteralNonFinite</code></td><td>❌</td><td></td><td>Reports statically known non-finite numbers passed to Schema literal constructors</td><td></td><td>✓</td></tr>
     <tr><td><code>schemaOpaqueInstanceMember</code></td><td>❌</td><td></td><td>Disallows instance members in classes extending Schema.Opaque</td><td></td><td>✓</td></tr>
     <tr><td colspan="6"><strong>Anti-pattern</strong> <em>Discouraged patterns that often lead to bugs or confusing behavior.</em></td></tr>
