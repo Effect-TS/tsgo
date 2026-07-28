@@ -1,0 +1,60 @@
+flowchart TB
+  0[/"type: #quot;ReasonA#quot;<br/>node: #quot;ReasonA#quot;"/]
+  1[/"type: #quot;ReasonB#quot;<br/>node: #quot;ReasonB#quot;"/]
+  2[["type: any<br/>node: constructor#40;readonly detail: string#41; #123;#125;"]]
+  3[/"type: #quot;OuterError#quot;<br/>node: #quot;OuterError#quot;"/]
+  4[["type: any<br/>node: constructor#40;#92;n    readonly reason: ReasonA #124; ReasonB,#92;n    readonly context: string#92;n  #41; #123;#125;"]]
+  5[["type: #40;#41; =#gt; OuterError<br/>node: declare function loadOuterError#40;#41;: OuterError"]]
+  6[/"type: Effect#lt;number, OuterError, never#gt;<br/>node: program"/]
+  7["type: Effect#lt;number, OuterError, never#gt;<br/>callee: Fx.catchTag<br/>args: #91;#quot;OuterError#quot;, #40;error#41; =#gt; #123;#92;n    if #40;error.reason._tag === #quot;ReasonA#quot;#41; return Fx.succeed#40;1#41;#92;n    if #40;error._tag === #quot;OuterError#quot;#41; return Fx.succeed#40;2#41;#92;n    return Fx.fail#40;error#41;#92;n  #125;#93;"]
+  8[/"type: #123; #lt;const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, E, A1, E1, R1, A2 = unassigned, E2 = never, R2 = never#gt;#40;k: K, f: #40;e: ExtractTag#lt;NoInfer#lt;E#gt;, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A1 #124; Exclude#lt;A2, unassigned#gt;, E1 #124; E2 #124; #40;A2 extends unassigned ? ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt; : never#41;, R #124; R1 #124; R2#gt;; #lt;A, E, R, const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, R1, E1, A1, A2 = unassigned, E2 = never, R2 = never#gt;#40;self: Effect#lt;A, E, R#gt;, k: K, f: #40;e: ExtractTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: Effect#lt;A #124; A1 #124; Exclude#lt;A2, unassigned#gt;, E1 #124; E2 #124; #40;A2 extends unassigned ? ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt; : never#41;, R #124; R1 #124; R2#gt;; #125;<br/>node: Fx.catchTag"/]
+  9[/"type: #quot;OuterError#quot;<br/>node: #quot;OuterError#quot;"/]
+  10[["type: #40;error: OuterError#41; =#gt; Effect#lt;number, never, never#gt; #124; Effect#lt;never, OuterError, never#gt;<br/>node: #40;error#41; =#gt; #123;#92;n    if #40;error.reason._tag === #quot;ReasonA#quot;#41; return Fx.succeed#40;1#41;#92;n    if #40;error._tag === #quot;OuterError#quot;#41; return Fx.succeed#40;2#41;#92;n    return Fx.fail#40;error#41;#92;n  #125;"]]
+  11[/"type: 1<br/>node: 1"/]
+  12["type: Effect#lt;number, never, never#gt;<br/>callee: Fx.succeed<br/>args: #91;#93;"]
+  13[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Fx.succeed"/]
+  14[/"type: 2<br/>node: 2"/]
+  15["type: Effect#lt;number, never, never#gt;<br/>callee: Fx.succeed<br/>args: #91;#93;"]
+  16[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Fx.succeed"/]
+  17[/"type: OuterError<br/>node: error"/]
+  18["type: Effect#lt;never, OuterError, never#gt;<br/>callee: Fx.fail<br/>args: #91;#93;"]
+  19[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Fx.fail"/]
+  20[/"type: Effect#lt;number, OuterError, never#gt;<br/>node: program"/]
+  21["type: Effect#lt;number, OuterError, never#gt;<br/>callee: Fx.catchTag<br/>args: #91;#quot;OuterError#quot;, #40;error#41; =#gt; #123;#92;n    if #40;loadOuterError#40;#41;.reason._tag === #quot;ReasonA#quot;#41; return Fx.succeed#40;1#41;#92;n    return Fx.fail#40;error#41;#92;n  #125;#93;"]
+  22[/"type: #123; #lt;const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, E, A1, E1, R1, A2 = unassigned, E2 = never, R2 = never#gt;#40;k: K, f: #40;e: ExtractTag#lt;NoInfer#lt;E#gt;, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A1 #124; Exclude#lt;A2, unassigned#gt;, E1 #124; E2 #124; #40;A2 extends unassigned ? ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt; : never#41;, R #124; R1 #124; R2#gt;; #lt;A, E, R, const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, R1, E1, A1, A2 = unassigned, E2 = never, R2 = never#gt;#40;self: Effect#lt;A, E, R#gt;, k: K, f: #40;e: ExtractTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: Effect#lt;A #124; A1 #124; Exclude#lt;A2, unassigned#gt;, E1 #124; E2 #124; #40;A2 extends unassigned ? ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt; : never#41;, R #124; R1 #124; R2#gt;; #125;<br/>node: Fx.catchTag"/]
+  23[/"type: #quot;OuterError#quot;<br/>node: #quot;OuterError#quot;"/]
+  24[["type: #40;error: OuterError#41; =#gt; Effect#lt;number, never, never#gt; #124; Effect#lt;never, OuterError, never#gt;<br/>node: #40;error#41; =#gt; #123;#92;n    if #40;loadOuterError#40;#41;.reason._tag === #quot;ReasonA#quot;#41; return Fx.succeed#40;1#41;#92;n    return Fx.fail#40;error#41;#92;n  #125;"]]
+  25[/"type: 1<br/>node: 1"/]
+  26["type: Effect#lt;number, never, never#gt;<br/>callee: Fx.succeed<br/>args: #91;#93;"]
+  27[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Fx.succeed"/]
+  28[/"type: OuterError<br/>node: error"/]
+  29["type: Effect#lt;never, OuterError, never#gt;<br/>callee: Fx.fail<br/>args: #91;#93;"]
+  30[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Fx.fail"/]
+  8 -->|"kind: transformCallee"| 7
+  9 -->|"kind: transformArg"| 7
+  11 -->|"kind: pipe"| 12
+  13 -->|"kind: transformCallee"| 12
+  12 -->|"kind: potentialReturn"| 10
+  14 -->|"kind: pipe"| 15
+  16 -->|"kind: transformCallee"| 15
+  15 -->|"kind: potentialReturn"| 10
+  17 -->|"kind: pipe"| 18
+  19 -->|"kind: transformCallee"| 18
+  18 -->|"kind: potentialReturn"| 10
+  12 -->|"kind: usedBy"| 10
+  15 -->|"kind: usedBy"| 10
+  18 -->|"kind: usedBy"| 10
+  10 -->|"kind: transformArg"| 7
+  6 -->|"kind: pipe"| 7
+  22 -->|"kind: transformCallee"| 21
+  23 -->|"kind: transformArg"| 21
+  25 -->|"kind: pipe"| 26
+  27 -->|"kind: transformCallee"| 26
+  26 -->|"kind: potentialReturn"| 24
+  28 -->|"kind: pipe"| 29
+  30 -->|"kind: transformCallee"| 29
+  29 -->|"kind: potentialReturn"| 24
+  26 -->|"kind: usedBy"| 24
+  29 -->|"kind: usedBy"| 24
+  24 -->|"kind: transformArg"| 21
+  20 -->|"kind: pipe"| 21

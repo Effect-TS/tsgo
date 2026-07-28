@@ -1531,6 +1531,29 @@
       }
     },
     {
+      "name": "catchTagToCatchReason",
+      "group": "style",
+      "description": "Suggests Effect.catchReason or Effect.catchReasons for handlers that re-fail unmatched reason._tag branches",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377110
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nclass RetryReason {\n  readonly _tag = \"RetryReason\"\n}\n\nclass FatalReason {\n  readonly _tag = \"FatalReason\"\n}\n\nclass AppError {\n  readonly _tag = \"AppError\"\n  constructor(readonly reason: RetryReason | FatalReason) {}\n}\n\ndeclare const program: Effect.Effect\u003cstring, AppError\u003e\n\nexport const fixable = program.pipe(\n  Effect.catchTag(\"AppError\", (error) =\u003e {\n    if (error.reason._tag === \"RetryReason\") return Effect.succeed(\"retry\")\n    return Effect.fail(error)\n  })\n)\n",
+        "diagnostics": [
+          {
+            "start": 348,
+            "end": 499,
+            "text": "Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)"
+          }
+        ]
+      }
+    },
+    {
       "name": "catchToIgnore",
       "group": "style",
       "description": "Suggests using Effect.ignore or Effect.ignoreCause instead of Effect.catch/catchCause returning Effect.void",

@@ -1,0 +1,50 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+
+
+==== /.src/catchTagToCatchReasonRootChains.ts (0 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics catchTagToCatchReason:suggestion
+    import { Effect as Fx } from "effect"
+    
+    class ReasonA {
+      readonly _tag = "ReasonA"
+    }
+    
+    class ReasonB {
+      readonly _tag = "ReasonB"
+      constructor(readonly detail: string) {}
+    }
+    
+    class OuterError {
+      readonly _tag = "OuterError"
+      constructor(
+        readonly reason: ReasonA | ReasonB,
+        readonly context: string
+      ) {}
+    }
+    
+    declare const program: Fx.Effect<number, OuterError>
+    declare function loadOuterError(): OuterError
+    
+    // Should NOT trigger: the second branch dispatches on the wrapper's own _tag,
+    // so the branches do not share the exact error.reason._tag discriminant even
+    // though every access is rooted at the handler parameter.
+    export const mixedSameRootChains = program.pipe(
+      Fx.catchTag("OuterError", (error) => {
+        if (error.reason._tag === "ReasonA") return Fx.succeed(1)
+        if (error._tag === "OuterError") return Fx.succeed(2)
+        return Fx.fail(error)
+      })
+    )
+    
+    // Should NOT trigger: a call-rooted chain is not anchored to the handler
+    // parameter, even though the accessed type carries the same _tag union.
+    export const callRootedChain = program.pipe(
+      Fx.catchTag("OuterError", (error) => {
+        if (loadOuterError().reason._tag === "ReasonA") return Fx.succeed(1)
+        return Fx.fail(error)
+      })
+    )
+    
