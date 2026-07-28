@@ -35,6 +35,7 @@ var All = []rule.Rule{
 	UnknownInEffectCatch,
 	GlobalErrorInEffectCatch,
 	GlobalErrorInEffectFailure,
+	AbortControllerInEffect,
 	CryptoRandomUUID,
 	CryptoRandomUUIDInEffect,
 	GlobalFetch,

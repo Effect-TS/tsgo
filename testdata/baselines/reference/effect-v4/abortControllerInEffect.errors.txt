@@ -1,0 +1,74 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/abortControllerInEffect.ts(9,18): suggestion TS377111: `AbortController` is manually constructed inside Effect code. Use `Effect.abortSignal` for Effect-managed cancellation. effect(abortControllerInEffect)
+/.src/abortControllerInEffect.ts(10,19): suggestion TS377111: `AbortController` is manually constructed inside Effect code. Use `Effect.abortSignal` for Effect-managed cancellation. effect(abortControllerInEffect)
+/.src/abortControllerInEffect.ts(15,10): suggestion TS377111: `AbortController` is manually constructed inside Effect code. Use `Effect.abortSignal` for Effect-managed cancellation. effect(abortControllerInEffect)
+/.src/abortControllerInEffect.ts(19,22): suggestion TS377111: `AbortController` is manually constructed inside Effect code. Use `Effect.abortSignal` for Effect-managed cancellation. effect(abortControllerInEffect)
+
+
+==== /.src/abortControllerInEffect.ts (4 errors) ====
+    // @effect-diagnostics abortControllerInEffect:suggestion
+    import { Data, Effect } from "effect"
+    
+    class ExampleError extends Data.TaggedError("ExampleError")<{}> {}
+    
+    const Controller = AbortController
+    
+    export const controllerInGen = Effect.gen(function*() {
+      const direct = new AbortController()
+                     ~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377111: `AbortController` is manually constructed inside Effect code. Use `Effect.abortSignal` for Effect-managed cancellation. effect(abortControllerInEffect)
+      const aliased = new Controller()
+                      ~~~~~~~~~~~~~~~~
+!!! suggestion TS377111: `AbortController` is manually constructed inside Effect code. Use `Effect.abortSignal` for Effect-managed cancellation. effect(abortControllerInEffect)
+      return [direct, aliased]
+    })
+    
+    export const controllerInFn = Effect.fn("controllerInFn")(function*() {
+      return new AbortController()
+             ~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377111: `AbortController` is manually constructed inside Effect code. Use `Effect.abortSignal` for Effect-managed cancellation. effect(abortControllerInEffect)
+    })
+    
+    export const controllerWithFinalizer = Effect.gen(function*() {
+      const controller = new AbortController()
+                         ~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377111: `AbortController` is manually constructed inside Effect code. Use `Effect.abortSignal` for Effect-managed cancellation. effect(abortControllerInEffect)
+      yield* Effect.addFinalizer(() => Effect.sync(() => controller.abort()))
+      return controller.signal
+    })
+    
+    // Non-generator Effect thunks are outside this rule's scope.
+    export const controllerInSync = Effect.sync(() => new AbortController())
+    export const controllerInPromise = Effect.promise(async () => new AbortController())
+    export const controllerInCallback = Effect.callback<AbortController>((resume) => {
+      const controller = new AbortController()
+      resume(Effect.succeed(controller))
+    })
+    export const controllerInSuspend = Effect.suspend(() => Effect.succeed(new AbortController()))
+    export const controllerInTry = Effect.try(() => new AbortController())
+    export const controllerInTryObject = Effect.try({
+      try: () => new AbortController(),
+      catch: () => new ExampleError()
+    })
+    export const controllerInTryPromise = Effect.tryPromise(async () => new AbortController())
+    export const controllerInTryPromiseObject = Effect.tryPromise({
+      try: async () => new AbortController(),
+      catch: () => new ExampleError()
+    })
+    
+    new AbortController()
+    export const controllerOutsideEffect = () => new AbortController()
+    
+    export const controllerInNestedFunction = Effect.gen(function*() {
+      return () => new AbortController()
+    })
+    
+    export const shadowedController = Effect.gen(function*() {
+      class AbortController {
+        readonly signal = "local"
+      }
+      return new AbortController()
+    })
+    

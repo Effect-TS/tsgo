@@ -26,6 +26,7 @@
       "name": "effect-native",
       "description": "Enable all Effect-native diagnostics at warning level.",
       "diagnosticSeverity": {
+        "abortControllerInEffect": "warning",
         "asyncFunction": "warning",
         "cryptoRandomUUID": "warning",
         "cryptoRandomUUIDInEffect": "warning",
@@ -975,6 +976,29 @@
             "start": 56,
             "end": 73,
             "text": "The `catch` callback in `Effect.tryPromise` returns `unknown`, so the Effect error type stays untyped. A specific typed error preserves error-channel information, for example by narrowing the value or wrapping it in `Data.TaggedError`. effect(unknownInEffectCatch)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "abortControllerInEffect",
+      "group": "effectNative",
+      "description": "Warns when manually constructing AbortController inside Effect generators instead of using Effect.abortSignal",
+      "defaultSeverity": "suggestion",
+      "fixable": false,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377111
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.gen(function*() {\n  return new AbortController().signal\n})\n",
+        "diagnostics": [
+          {
+            "start": 90,
+            "end": 111,
+            "text": "`AbortController` is manually constructed inside Effect code. Use `Effect.abortSignal` for Effect-managed cancellation. effect(abortControllerInEffect)"
           }
         ]
       }

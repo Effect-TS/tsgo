@@ -1,0 +1,257 @@
+==== /.src/abortControllerInEffect.ts (18 flows) ====
+
+=== Piping Flow ===
+Location: 4:27 - 4:60
+Node: Data.TaggedError("ExampleError")
+Node Kind: KindCallExpression
+
+Subject: "ExampleError"
+Subject Type: "ExampleError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "ExampleError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 8:31 - 12:3
+Node: Effect.gen(function*() {\n  const direct = new AbortController()\n  const aliased = new Controller()\n  return [direct, aliased]\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const direct = new AbortController()\n  const aliased = new Controller()\n  return [direct, aliased]\n}
+Subject Type: () => Generator<never, AbortController[], never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<AbortController[], never, never>
+
+=== Piping Flow ===
+Location: 14:30 - 16:3
+Node: Effect.fn("controllerInFn")(function*() {\n  return new AbortController()\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  return new AbortController()\n}
+Subject Type: () => Generator<never, AbortController, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn("controllerInFn")
+      args: (constant)
+      outType: () => Effect<AbortController, never, never>
+
+=== Piping Flow ===
+Location: 18:39 - 22:3
+Node: Effect.gen(function*() {\n  const controller = new AbortController()\n  yield* Effect.addFinalizer(() => Effect.sync(() => controller.abort()))\n  return controller.signal\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const controller = new AbortController()\n  yield* Effect.addFinalizer(() => Effect.sync(() => controller.abort()))\n  return controller.signal\n}
+Subject Type: () => Generator<Effect<void, never, Scope>, AbortSignal, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<AbortSignal, never, Scope>
+
+=== Piping Flow ===
+Location: 20:9 - 20:74
+Node: Effect.addFinalizer(() => Effect.sync(() => controller.abort()))
+Node Kind: KindCallExpression
+
+Subject: () => Effect.sync(() => controller.abort())
+Subject Type: () => Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.addFinalizer
+      args: (constant)
+      outType: Effect<void, never, Scope>
+
+=== Piping Flow ===
+Location: 20:35 - 20:73
+Node: Effect.sync(() => controller.abort())
+Node Kind: KindCallExpression
+
+Subject: () => controller.abort()
+Subject Type: () => void
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 25:32 - 25:73
+Node: Effect.sync(() => new AbortController())
+Node Kind: KindCallExpression
+
+Subject: () => new AbortController()
+Subject Type: () => AbortController
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<AbortController, never, never>
+
+=== Piping Flow ===
+Location: 26:35 - 26:85
+Node: Effect.promise(async () => new AbortController())
+Node Kind: KindCallExpression
+
+Subject: async () => new AbortController()
+Subject Type: () => Promise<AbortController>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<AbortController, never, never>
+
+=== Piping Flow ===
+Location: 27:36 - 30:3
+Node: Effect.callback<AbortController>((resume) => {\n  const controller = new AbortController()\n  resume(Effect.succeed(controller))\n})
+Node Kind: KindCallExpression
+
+Subject: (resume) => {\n  const controller = new AbortController()\n  resume(Effect.succeed(controller))\n}
+Subject Type: (this: Scheduler, resume: (effect: Effect<AbortController, never, never>) => void) => void
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.callback
+      args: (constant)
+      outType: Effect<AbortController, never, never>
+
+=== Piping Flow ===
+Location: 28:43 - 29:37
+Node: resume(Effect.succeed(controller))
+Node Kind: KindCallExpression
+
+Subject: controller
+Subject Type: AbortController
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<AbortController, never, never>
+  [1] kind: call
+      callee: resume
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 31:35 - 31:95
+Node: Effect.suspend(() => Effect.succeed(new AbortController()))
+Node Kind: KindCallExpression
+
+Subject: () => Effect.succeed(new AbortController())
+Subject Type: () => Effect<AbortController, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.suspend
+      args: (constant)
+      outType: Effect<AbortController, never, never>
+
+=== Piping Flow ===
+Location: 31:56 - 31:94
+Node: Effect.succeed(new AbortController())
+Node Kind: KindCallExpression
+
+Subject: new AbortController()
+Subject Type: AbortController
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<AbortController, never, never>
+
+=== Piping Flow ===
+Location: 32:31 - 32:71
+Node: Effect.try(() => new AbortController())
+Node Kind: KindCallExpression
+
+Subject: () => new AbortController()
+Subject Type: () => AbortController
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<AbortController, UnknownError, never>
+
+=== Piping Flow ===
+Location: 33:37 - 36:3
+Node: Effect.try({\n  try: () => new AbortController(),\n  catch: () => new ExampleError()\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  try: () => new AbortController(),\n  catch: () => new ExampleError()\n}
+Subject Type: { try: () => AbortController; catch: () => ExampleError; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<AbortController, ExampleError, never>
+
+=== Piping Flow ===
+Location: 37:38 - 37:91
+Node: Effect.tryPromise(async () => new AbortController())
+Node Kind: KindCallExpression
+
+Subject: async () => new AbortController()
+Subject Type: () => Promise<AbortController>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<AbortController, UnknownError, never>
+
+=== Piping Flow ===
+Location: 38:44 - 41:3
+Node: Effect.tryPromise({\n  try: async () => new AbortController(),\n  catch: () => new ExampleError()\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  try: async () => new AbortController(),\n  catch: () => new ExampleError()\n}
+Subject Type: { try: () => Promise<AbortController>; catch: () => ExampleError; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<AbortController, ExampleError, never>
+
+=== Piping Flow ===
+Location: 46:42 - 48:3
+Node: Effect.gen(function*() {\n  return () => new AbortController()\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  return () => new AbortController()\n}
+Subject Type: () => Generator<never, () => AbortController, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<() => AbortController, never, never>
+
+=== Piping Flow ===
+Location: 50:34 - 55:3
+Node: Effect.gen(function*() {\n  class AbortController {\n    readonly signal = "local"\n  }\n  return new AbortController()\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  class AbortController {\n    readonly signal = "local"\n  }\n  return new AbortController()\n}
+Subject Type: () => Generator<never, AbortController, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<AbortController, never, never>
