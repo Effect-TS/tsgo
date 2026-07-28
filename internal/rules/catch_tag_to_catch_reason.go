@@ -31,8 +31,8 @@ var CatchTagToCatchReason = rule.Rule{
 }
 
 type CatchTagToCatchReasonBranch struct {
-	ReasonTag        string
-	ReturnExpression *ast.Node
+	ReasonTag string
+	Result    *ast.Node
 }
 
 type CatchTagToCatchReasonMatch struct {
@@ -51,13 +51,6 @@ type catchTagToCatchReasonHandler struct {
 	parameterName string
 	branches      []CatchTagToCatchReasonBranch
 	canFix        bool
-}
-
-type catchTagToCatchReasonControlFlow struct {
-	branches      []CatchTagToCatchReasonBranch
-	fallback      *ast.Node
-	fallbackParam *ast.Node
-	dispatchRefs  map[*ast.Node]struct{}
 }
 
 // AnalyzeCatchTagToCatchReason finds canonical reason-tag dispatch inside exact
@@ -196,7 +189,7 @@ func analyzeCatchTagToCatchReasonHandler(tp *typeparser.TypeParser, c *checker.C
 
 	parameters := typeparser.GetFunctionLikeParameters(handlerNode)
 	body := typeparser.GetFunctionLikeBody(handlerNode)
-	if parameters == nil || len(parameters.Nodes) != 1 || body == nil || body.Kind != ast.KindBlock {
+	if parameters == nil || len(parameters.Nodes) != 1 || body == nil {
 		return catchTagToCatchReasonHandler{}, false
 	}
 	parameter := parameters.Nodes[0]
@@ -212,25 +205,39 @@ func analyzeCatchTagToCatchReasonHandler(tp *typeparser.TypeParser, c *checker.C
 		return catchTagToCatchReasonHandler{}, false
 	}
 
-	controlFlow, ok := parseCatchTagToCatchReasonControlFlow(tp, c, body, parameterSymbol, reasonTags)
+	dispatchRefs := make(map[*ast.Node]struct{})
+	dispatch := tp.ParseTaggedDispatch(body, func(discriminant *ast.Node) bool {
+		root, ok := catchReasonTagReference(tp, c, discriminant, parameterSymbol)
+		if ok {
+			dispatchRefs[root] = struct{}{}
+		}
+		return ok
+	})
+	if dispatch == nil || len(dispatch.Branches) == 0 || dispatch.Fallback == nil {
+		return catchTagToCatchReasonHandler{}, false
+	}
+
+	branches := make([]CatchTagToCatchReasonBranch, len(dispatch.Branches))
+	for index, branch := range dispatch.Branches {
+		if _, exists := reasonTags[branch.Tag]; !exists || !isEffectExpression(tp, branch.Result) {
+			return catchTagToCatchReasonHandler{}, false
+		}
+		branches[index] = CatchTagToCatchReasonBranch{ReasonTag: branch.Tag, Result: branch.Result}
+	}
+
+	fallbackParam, ok := catchTagReFailParameter(tp, c, dispatch.Fallback, parameterSymbol)
 	if !ok {
 		return catchTagToCatchReasonHandler{}, false
 	}
 
-	fallbackParam, ok := catchTagReFailParameter(tp, c, controlFlow.fallback, parameterSymbol)
-	if !ok {
-		return catchTagToCatchReasonHandler{}, false
-	}
-	controlFlow.fallbackParam = fallbackParam
-
-	usesReason, validUses := validateCatchTagParameterUses(tp, c, body, parameterSymbol, controlFlow)
+	usesReason, validUses := validateCatchTagParameterUses(tp, c, body, parameterSymbol, branches, fallbackParam, dispatchRefs)
 	if !validUses {
 		return catchTagToCatchReasonHandler{}, false
 	}
 
 	return catchTagToCatchReasonHandler{
 		parameterName: parameter.Name().AsIdentifier().Text,
-		branches:      controlFlow.branches,
+		branches:      branches,
 		canFix:        handlerNode.Kind == ast.KindArrowFunction && !usesReason,
 	}, true
 }
@@ -270,224 +277,6 @@ func catchReasonLiteralTags(tp *typeparser.TypeParser, c *checker.Checker, param
 		tags[tag] = struct{}{}
 	}
 	return tags, len(tags) > 0
-}
-
-func parseCatchTagToCatchReasonControlFlow(
-	tp *typeparser.TypeParser,
-	c *checker.Checker,
-	body *ast.Node,
-	parameterSymbol *ast.Symbol,
-	reasonTags map[string]struct{},
-) (catchTagToCatchReasonControlFlow, bool) {
-	block := body.AsBlock()
-	if block == nil || block.Statements == nil || len(block.Statements.Nodes) == 0 {
-		return catchTagToCatchReasonControlFlow{}, false
-	}
-	statements := block.Statements.Nodes
-	if len(statements) == 1 && statements[0] != nil {
-		switch statements[0].Kind {
-		case ast.KindSwitchStatement:
-			return parseCatchReasonSwitch(tp, c, statements[0], parameterSymbol, reasonTags)
-		case ast.KindIfStatement:
-			return parseCatchReasonIfElse(tp, c, statements[0], parameterSymbol, reasonTags)
-		}
-	}
-	return parseCatchReasonSequentialIfs(tp, c, statements, parameterSymbol, reasonTags)
-}
-
-func parseCatchReasonSwitch(
-	tp *typeparser.TypeParser,
-	c *checker.Checker,
-	node *ast.Node,
-	parameterSymbol *ast.Symbol,
-	reasonTags map[string]struct{},
-) (catchTagToCatchReasonControlFlow, bool) {
-	statement := node.AsSwitchStatement()
-	if statement == nil || statement.Expression == nil || statement.CaseBlock == nil {
-		return catchTagToCatchReasonControlFlow{}, false
-	}
-	dispatchRef, ok := catchReasonTagReference(tp, c, statement.Expression, parameterSymbol)
-	if !ok {
-		return catchTagToCatchReasonControlFlow{}, false
-	}
-	if statement.CaseBlock.Kind != ast.KindCaseBlock {
-		return catchTagToCatchReasonControlFlow{}, false
-	}
-	caseBlock := statement.CaseBlock.AsCaseBlock()
-	if caseBlock == nil || caseBlock.Clauses == nil || len(caseBlock.Clauses.Nodes) < 2 {
-		return catchTagToCatchReasonControlFlow{}, false
-	}
-
-	flow := catchTagToCatchReasonControlFlow{dispatchRefs: map[*ast.Node]struct{}{dispatchRef: {}}}
-	seenTags := make(map[string]struct{})
-	for i, clauseNode := range caseBlock.Clauses.Nodes {
-		if clauseNode == nil || (clauseNode.Kind != ast.KindCaseClause && clauseNode.Kind != ast.KindDefaultClause) {
-			return catchTagToCatchReasonControlFlow{}, false
-		}
-		clause := clauseNode.AsCaseOrDefaultClause()
-		if clause == nil || clause.Statements == nil {
-			return catchTagToCatchReasonControlFlow{}, false
-		}
-		returned := singleCatchReasonReturnExpression(clause.Statements.Nodes)
-		if returned == nil {
-			return catchTagToCatchReasonControlFlow{}, false
-		}
-
-		if clauseNode.Kind == ast.KindDefaultClause {
-			if i != len(caseBlock.Clauses.Nodes)-1 {
-				return catchTagToCatchReasonControlFlow{}, false
-			}
-			flow.fallback = returned
-			continue
-		}
-		if clauseNode.Kind != ast.KindCaseClause || clause.Expression == nil || flow.fallback != nil {
-			return catchTagToCatchReasonControlFlow{}, false
-		}
-		tagNode := unwrapTransparentExpression(clause.Expression)
-		if tagNode == nil || !ast.IsStringLiteral(tagNode) {
-			return catchTagToCatchReasonControlFlow{}, false
-		}
-		tag := tagNode.AsStringLiteral().Text
-		if _, exists := reasonTags[tag]; !exists {
-			return catchTagToCatchReasonControlFlow{}, false
-		}
-		if _, duplicate := seenTags[tag]; duplicate || !isEffectExpression(tp, returned) {
-			return catchTagToCatchReasonControlFlow{}, false
-		}
-		seenTags[tag] = struct{}{}
-		flow.branches = append(flow.branches, CatchTagToCatchReasonBranch{ReasonTag: tag, ReturnExpression: returned})
-	}
-
-	if len(flow.branches) == 0 || flow.fallback == nil {
-		return catchTagToCatchReasonControlFlow{}, false
-	}
-	return flow, true
-}
-
-func parseCatchReasonIfElse(
-	tp *typeparser.TypeParser,
-	c *checker.Checker,
-	node *ast.Node,
-	parameterSymbol *ast.Symbol,
-	reasonTags map[string]struct{},
-) (catchTagToCatchReasonControlFlow, bool) {
-	flow := catchTagToCatchReasonControlFlow{dispatchRefs: make(map[*ast.Node]struct{})}
-	seenTags := make(map[string]struct{})
-	current := node
-	for current != nil && current.Kind == ast.KindIfStatement {
-		statement := current.AsIfStatement()
-		if statement == nil || statement.Expression == nil || statement.ThenStatement == nil {
-			return catchTagToCatchReasonControlFlow{}, false
-		}
-		tag, dispatchRef, ok := catchReasonIfCondition(tp, c, statement.Expression, parameterSymbol, reasonTags)
-		if !ok {
-			return catchTagToCatchReasonControlFlow{}, false
-		}
-		returned := singleCatchReasonEmbeddedReturn(statement.ThenStatement)
-		if returned == nil || !isEffectExpression(tp, returned) {
-			return catchTagToCatchReasonControlFlow{}, false
-		}
-		if _, duplicate := seenTags[tag]; duplicate {
-			return catchTagToCatchReasonControlFlow{}, false
-		}
-		seenTags[tag] = struct{}{}
-		flow.dispatchRefs[dispatchRef] = struct{}{}
-		flow.branches = append(flow.branches, CatchTagToCatchReasonBranch{ReasonTag: tag, ReturnExpression: returned})
-
-		if statement.ElseStatement == nil {
-			return catchTagToCatchReasonControlFlow{}, false
-		}
-		if statement.ElseStatement.Kind == ast.KindIfStatement {
-			current = statement.ElseStatement
-			continue
-		}
-		flow.fallback = singleCatchReasonEmbeddedReturn(statement.ElseStatement)
-		current = nil
-	}
-	if len(flow.branches) == 0 || flow.fallback == nil {
-		return catchTagToCatchReasonControlFlow{}, false
-	}
-	return flow, true
-}
-
-func parseCatchReasonSequentialIfs(
-	tp *typeparser.TypeParser,
-	c *checker.Checker,
-	statements []*ast.Node,
-	parameterSymbol *ast.Symbol,
-	reasonTags map[string]struct{},
-) (catchTagToCatchReasonControlFlow, bool) {
-	if len(statements) < 2 {
-		return catchTagToCatchReasonControlFlow{}, false
-	}
-	fallback := singleCatchReasonEmbeddedReturn(statements[len(statements)-1])
-	if fallback == nil {
-		return catchTagToCatchReasonControlFlow{}, false
-	}
-
-	flow := catchTagToCatchReasonControlFlow{fallback: fallback, dispatchRefs: make(map[*ast.Node]struct{})}
-	seenTags := make(map[string]struct{})
-	for _, node := range statements[:len(statements)-1] {
-		if node == nil || node.Kind != ast.KindIfStatement {
-			return catchTagToCatchReasonControlFlow{}, false
-		}
-		statement := node.AsIfStatement()
-		if statement == nil || statement.Expression == nil || statement.ThenStatement == nil || statement.ElseStatement != nil {
-			return catchTagToCatchReasonControlFlow{}, false
-		}
-		tag, dispatchRef, ok := catchReasonIfCondition(tp, c, statement.Expression, parameterSymbol, reasonTags)
-		if !ok {
-			return catchTagToCatchReasonControlFlow{}, false
-		}
-		returned := singleCatchReasonEmbeddedReturn(statement.ThenStatement)
-		if returned == nil || !isEffectExpression(tp, returned) {
-			return catchTagToCatchReasonControlFlow{}, false
-		}
-		if _, duplicate := seenTags[tag]; duplicate {
-			return catchTagToCatchReasonControlFlow{}, false
-		}
-		seenTags[tag] = struct{}{}
-		flow.dispatchRefs[dispatchRef] = struct{}{}
-		flow.branches = append(flow.branches, CatchTagToCatchReasonBranch{ReasonTag: tag, ReturnExpression: returned})
-	}
-	return flow, len(flow.branches) > 0
-}
-
-func catchReasonIfCondition(
-	tp *typeparser.TypeParser,
-	c *checker.Checker,
-	expression *ast.Node,
-	parameterSymbol *ast.Symbol,
-	reasonTags map[string]struct{},
-) (string, *ast.Node, bool) {
-	expression = unwrapTransparentExpression(expression)
-	if expression == nil || expression.Kind != ast.KindBinaryExpression {
-		return "", nil, false
-	}
-	binary := expression.AsBinaryExpression()
-	if binary == nil || binary.Left == nil || binary.Right == nil || binary.OperatorToken == nil ||
-		(binary.OperatorToken.Kind != ast.KindEqualsEqualsToken && binary.OperatorToken.Kind != ast.KindEqualsEqualsEqualsToken) {
-		return "", nil, false
-	}
-
-	left := unwrapTransparentExpression(binary.Left)
-	right := unwrapTransparentExpression(binary.Right)
-	var tagNode *ast.Node
-	var dispatchRef *ast.Node
-	var ok bool
-	if left != nil && ast.IsStringLiteral(left) {
-		tagNode = left
-		dispatchRef, ok = catchReasonTagReference(tp, c, right, parameterSymbol)
-	} else if right != nil && ast.IsStringLiteral(right) {
-		tagNode = right
-		dispatchRef, ok = catchReasonTagReference(tp, c, left, parameterSymbol)
-	}
-	if !ok || tagNode == nil {
-		return "", nil, false
-	}
-	tag := tagNode.AsStringLiteral().Text
-	_, exists := reasonTags[tag]
-	return tag, dispatchRef, exists
 }
 
 func catchReasonTagReference(tp *typeparser.TypeParser, c *checker.Checker, node *ast.Node, parameterSymbol *ast.Symbol) (*ast.Node, bool) {
@@ -537,14 +326,16 @@ func validateCatchTagParameterUses(
 	c *checker.Checker,
 	body *ast.Node,
 	parameterSymbol *ast.Symbol,
-	flow catchTagToCatchReasonControlFlow,
+	branches []CatchTagToCatchReasonBranch,
+	fallbackParam *ast.Node,
+	dispatchRefs map[*ast.Node]struct{},
 ) (bool, bool) {
-	allowed := make(map[*ast.Node]struct{}, len(flow.dispatchRefs)+1)
-	for node := range flow.dispatchRefs {
+	allowed := make(map[*ast.Node]struct{}, len(dispatchRefs)+1)
+	for node := range dispatchRefs {
 		allowed[node] = struct{}{}
 	}
-	if flow.fallbackParam != nil {
-		allowed[flow.fallbackParam] = struct{}{}
+	if fallbackParam != nil {
+		allowed[fallbackParam] = struct{}{}
 	}
 
 	usesReason := false
@@ -558,7 +349,7 @@ func validateCatchTagParameterUses(
 			if _, ok := allowed[node]; ok {
 				return false
 			}
-			if isCatchReasonRootReference(node) && isCatchReasonRecoveryReference(node, flow.branches) {
+			if isCatchReasonRootReference(node) && isCatchReasonRecoveryReference(node, branches) {
 				usesReason = true
 				return false
 			}
@@ -574,7 +365,7 @@ func validateCatchTagParameterUses(
 
 func isCatchReasonRecoveryReference(node *ast.Node, branches []CatchTagToCatchReasonBranch) bool {
 	for _, branch := range branches {
-		expression := branch.ReturnExpression
+		expression := branch.Result
 		if expression != nil && node.Pos() >= expression.Pos() && node.End() <= expression.End() {
 			return true
 		}
@@ -588,38 +379,6 @@ func isCatchReasonRootReference(node *ast.Node) bool {
 	}
 	access := node.Parent.AsPropertyAccessExpression()
 	return access != nil && access.Expression == node && access.Name() != nil && access.Name().Text() == "reason"
-}
-
-func singleCatchReasonEmbeddedReturn(statement *ast.Node) *ast.Node {
-	if statement == nil {
-		return nil
-	}
-	if statement.Kind == ast.KindReturnStatement {
-		returned := statement.AsReturnStatement()
-		if returned != nil {
-			return returned.Expression
-		}
-		return nil
-	}
-	if statement.Kind != ast.KindBlock {
-		return nil
-	}
-	block := statement.AsBlock()
-	if block == nil || block.Statements == nil {
-		return nil
-	}
-	return singleCatchReasonReturnExpression(block.Statements.Nodes)
-}
-
-func singleCatchReasonReturnExpression(statements []*ast.Node) *ast.Node {
-	if len(statements) != 1 || statements[0] == nil || statements[0].Kind != ast.KindReturnStatement {
-		return nil
-	}
-	returned := statements[0].AsReturnStatement()
-	if returned == nil {
-		return nil
-	}
-	return returned.Expression
 }
 
 func isEffectExpression(tp *typeparser.TypeParser, expression *ast.Node) bool {

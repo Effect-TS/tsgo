@@ -61,6 +61,13 @@ export const ifElseMultiple = program.pipe(
   })
 )
 
+// Should trigger and offer catchReason: conditional-expression dispatch.
+export const ternarySingle = program.pipe(
+  Fx.catchTag("OuterError", (error) =>
+    error.reason._tag === "ReasonA" ? Fx.succeed(1) : Fx.fail(error)
+  )
+)
+
 // Should trigger without a fix: extracting a function body could change arguments.
 export const functionArguments = program.pipe(
   Fx.catchTag("OuterError", function(error) {
