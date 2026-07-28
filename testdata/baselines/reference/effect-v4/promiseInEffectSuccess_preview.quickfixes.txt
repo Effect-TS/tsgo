@@ -1,0 +1,13 @@
+=== Quick Fix Inventory ===
+
+[D1] (8:24-8:64) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+  Fix 0: "Disable promiseInEffectSuccess for this line"
+  Fix 1: "Disable promiseInEffectSuccess for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable promiseInEffectSuccess for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
+skipped by default

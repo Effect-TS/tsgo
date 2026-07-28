@@ -1,0 +1,783 @@
+==== /.src/promiseInEffectSuccess.ts (55 flows) ====
+
+=== Piping Flow ===
+Location: 23:93 - 25:29
+Node: Effect.succeed(promiseValue)
+Node Kind: KindCallExpression
+
+Subject: promiseValue
+Subject Type: Promise<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 25:29 - 26:32
+Node: Effect.succeed(promiseOrNumber)
+Node Kind: KindCallExpression
+
+Subject: promiseOrNumber
+Subject Type: number | Promise<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number | Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 26:32 - 27:35
+Node: EffectModule.succeed(promiseValue)
+Node Kind: KindCallExpression
+
+Subject: promiseValue
+Subject Type: Promise<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: EffectModule.succeed
+      args: (constant)
+      outType: Effect<Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 27:35 - 29:35
+Node: base.pipe(Effect.as(promiseValue))
+Node Kind: KindCallExpression
+
+Subject: base
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.as
+      args: [promiseValue]
+      outType: Effect<Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 29:35 - 30:30
+Node: Effect.as(base, promiseValue)
+Node Kind: KindCallExpression
+
+Subject: base
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.as
+      args: [promiseValue]
+      outType: Effect<Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 30:30 - 32:39
+Node: base.pipe(Effect.map(promiseCallback))
+Node Kind: KindCallExpression
+
+Subject: base
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [promiseCallback]
+      outType: Effect<Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 32:39 - 33:52
+Node: Effect.map(base, (value) => Promise.resolve(value))
+Node Kind: KindCallExpression
+
+Subject: base
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(value) => Promise.resolve(value)]
+      outType: Effect<Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 33:28 - 33:51
+Node: Promise.resolve(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.resolve
+      args: (constant)
+      outType: Promise<number>
+
+=== Piping Flow ===
+Location: 33:52 - 34:32
+Node: Effect.map(base, unionCallback)
+Node Kind: KindCallExpression
+
+Subject: base
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [unionCallback]
+      outType: Effect<number | Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 34:32 - 36:75
+Node: base.pipe(Effect.zipWith(other, (_left, right) => Promise.resolve(right)))
+Node Kind: KindCallExpression
+
+Subject: base
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.zipWith
+      args: [other, (_left, right) => Promise.resolve(right)]
+      outType: Effect<Promise<string>, never, never>
+
+=== Piping Flow ===
+Location: 36:50 - 36:73
+Node: Promise.resolve(right)
+Node Kind: KindCallExpression
+
+Subject: right
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.resolve
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 36:75 - 37:97
+Node: base.pipe(Effect.zipWith(other, (_left, right) => Promise.resolve(right), { concurrent: true }))
+Node Kind: KindCallExpression
+
+Subject: base
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.zipWith
+      args: [other, (_left, right) => Promise.resolve(right), { concurrent: true }]
+      outType: Effect<Promise<string>, never, never>
+
+=== Piping Flow ===
+Location: 37:50 - 37:73
+Node: Promise.resolve(right)
+Node Kind: KindCallExpression
+
+Subject: right
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.resolve
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 38:46 - 38:69
+Node: Promise.resolve(right)
+Node Kind: KindCallExpression
+
+Subject: right
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.resolve
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 39:54 - 39:77
+Node: Promise.resolve(right)
+Node Kind: KindCallExpression
+
+Subject: right
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.resolve
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 42:20 - 43:36
+Node: preserveEffect(customPromiseEffect)
+Node Kind: KindCallExpression
+
+Subject: customPromiseEffect
+Subject Type: Effect<Promise<number>, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: preserveEffect
+      args: (constant)
+      outType: Effect<Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 43:36 - 44:32
+Node: genericPromiseEffect<number>(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: genericPromiseEffect
+      args: (constant)
+      outType: Effect<Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 46:18 - 50:3
+Node: Effect.map(base, () => {\n  Effect.succeed<Promise<number>>(promiseValue)\n  return Promise.resolve(1)\n})
+Node Kind: KindCallExpression
+
+Subject: base
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [() => {\n  Effect.succeed<Promise<number>>(promiseValue)\n  return Promise.resolve(1)\n}]
+      outType: Effect<Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 47:25 - 48:48
+Node: Effect.succeed<Promise<number>>(promiseValue)
+Node Kind: KindCallExpression
+
+Subject: promiseValue
+Subject Type: Promise<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 49:9 - 49:28
+Node: Promise.resolve(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.resolve
+      args: (constant)
+      outType: Promise<number>
+
+=== Piping Flow ===
+Location: 50:3 - 54:3
+Node: Effect.map(base, () => {\n  Effect.sync(() => promiseValue)\n  return Promise.resolve(1)\n})
+Node Kind: KindCallExpression
+
+Subject: base
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [() => {\n  Effect.sync(() => promiseValue)\n  return Promise.resolve(1)\n}]
+      outType: Effect<Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 51:25 - 52:34
+Node: Effect.sync(() => promiseValue)
+Node Kind: KindCallExpression
+
+Subject: () => promiseValue
+Subject Type: () => Promise<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 53:9 - 53:28
+Node: Promise.resolve(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.resolve
+      args: (constant)
+      outType: Promise<number>
+
+=== Piping Flow ===
+Location: 54:3 - 58:3
+Node: Effect.map(base, () => {\n  customPromiseEffect\n  return Promise.resolve(1)\n})
+Node Kind: KindCallExpression
+
+Subject: base
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [() => {\n  customPromiseEffect\n  return Promise.resolve(1)\n}]
+      outType: Effect<Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 57:9 - 57:28
+Node: Promise.resolve(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.resolve
+      args: (constant)
+      outType: Promise<number>
+
+=== Piping Flow ===
+Location: 58:3 - 59:72
+Node: independentPromiseEffect(Effect.succeed<Promise<number>>(promiseValue))
+Node Kind: KindCallExpression
+
+Subject: promiseValue
+Subject Type: Promise<number>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Promise<number>, never, never>
+  [1] kind: call
+      callee: independentPromiseEffect
+      args: (constant)
+      outType: Effect<Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 59:72 - 61:18
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 61:18 - 62:33
+Node: Effect.succeed(promiseLikeValue)
+Node Kind: KindCallExpression
+
+Subject: promiseLikeValue
+Subject Type: PromiseLike<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<PromiseLike<number>, never, never>
+
+=== Piping Flow ===
+Location: 62:33 - 63:30
+Node: Effect.succeed(thenableValue)
+Node Kind: KindCallExpression
+
+Subject: thenableValue
+Subject Type: { then: (onFulfilled: (value: number) => unknown) => unknown; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{ then: (onFulfilled: (value: number) => unknown) => unknown; }, never, never>
+
+=== Piping Flow ===
+Location: 63:30 - 64:35
+Node: Effect.promise(() => promiseValue)
+Node Kind: KindCallExpression
+
+Subject: () => promiseValue
+Subject Type: () => Promise<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 64:35 - 65:32
+Node: Effect.sync(() => promiseValue)
+Node Kind: KindCallExpression
+
+Subject: () => promiseValue
+Subject Type: () => Promise<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 65:32 - 66:24
+Node: base.pipe(Effect.as(1))
+Node Kind: KindCallExpression
+
+Subject: base
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.as
+      args: [1]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 66:24 - 67:44
+Node: base.pipe(Effect.map((value) => value + 1))
+Node Kind: KindCallExpression
+
+Subject: base
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [(value) => value + 1]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 67:44 - 68:50
+Node: base.pipe(Effect.map(async (value) => value + 1))
+Node Kind: KindCallExpression
+
+Subject: base
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [async (value) => value + 1]
+      outType: Effect<Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 68:50 - 69:71
+Node: base.pipe(Effect.zipWith(other, (left, right) => left + right.length))
+Node Kind: KindCallExpression
+
+Subject: base
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.zipWith
+      args: [other, (left, right) => left + right.length]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 69:71 - 70:37
+Node: Effect.map(base, overloadedCallback)
+Node Kind: KindCallExpression
+
+Subject: base
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [overloadedCallback]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 70:37 - 72:46
+Node: Effect.succeed<Promise<number>>(promiseValue)
+Node Kind: KindCallExpression
+
+Subject: promiseValue
+Subject Type: Promise<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 72:46 - 73:41
+Node: Effect.as<Promise<number>>(promiseValue)
+Node Kind: KindCallExpression
+
+Subject: promiseValue
+Subject Type: Promise<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.as
+      args: (constant)
+      outType: <A, E, R>(self: Effect<A, E, R>) => Effect<Promise<number>, E, R>
+
+=== Piping Flow ===
+Location: 73:41 - 74:53
+Node: Effect.map<number, Promise<number>>(promiseCallback)
+Node Kind: KindCallExpression
+
+Subject: promiseCallback
+Subject Type: (value: number) => Promise<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.map
+      args: (constant)
+      outType: <E, R>(self: Effect<number, E, R>) => Effect<Promise<number>, E, R>
+
+=== Piping Flow ===
+Location: 74:53 - 75:77
+Node: base.pipe(Effect.as<Promise<number>>(promiseValue), Effect.as(promiseValue))
+Node Kind: KindCallExpression
+
+Subject: base
+Subject Type: Effect<number, never, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.as
+      args: [promiseValue]
+      outType: Effect<Promise<number>, never, never>
+  [1] kind: pipeable
+      callee: Effect.as
+      args: [promiseValue]
+      outType: Effect<Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 75:77 - 76:77
+Node: base.pipe(Effect.as(promiseValue), Effect.as<Promise<number>>(promiseValue))
+Node Kind: KindCallExpression
+
+Subject: base
+Subject Type: Effect<number, never, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.as
+      args: [promiseValue]
+      outType: Effect<Promise<number>, never, never>
+  [1] kind: pipeable
+      callee: Effect.as
+      args: [promiseValue]
+      outType: Effect<Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 76:77 - 77:29
+Node: Effect.succeed(promiseValue)
+Node Kind: KindCallExpression
+
+Subject: promiseValue
+Subject Type: Promise<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 77:63 - 78:29
+Node: Effect.succeed(promiseValue)
+Node Kind: KindCallExpression
+
+Subject: promiseValue
+Subject Type: Promise<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 80:68 - 80:97
+Node: Effect.succeed(promiseValue)
+Node Kind: KindCallExpression
+
+Subject: promiseValue
+Subject Type: Promise<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 81:69 - 81:104
+Node: base.pipe(Effect.as(promiseValue))
+Node Kind: KindCallExpression
+
+Subject: base
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.as
+      args: [promiseValue]
+      outType: Effect<Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 82:67 - 82:106
+Node: base.pipe(Effect.map(promiseCallback))
+Node Kind: KindCallExpression
+
+Subject: base
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [promiseCallback]
+      outType: Effect<Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 83:69 - 85:2
+Node: base.pipe(\n  Effect.zipWith(other, (_left, right) => Promise.resolve(right))\n)
+Node Kind: KindCallExpression
+
+Subject: base
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.zipWith
+      args: [other, (_left, right) => Promise.resolve(right)]
+      outType: Effect<Promise<string>, never, never>
+
+=== Piping Flow ===
+Location: 84:42 - 84:65
+Node: Promise.resolve(right)
+Node Kind: KindCallExpression
+
+Subject: right
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Promise.resolve
+      args: (constant)
+      outType: Promise<string>
+
+=== Piping Flow ===
+Location: 87:9 - 87:38
+Node: Effect.succeed(promiseValue)
+Node Kind: KindCallExpression
+
+Subject: promiseValue
+Subject Type: Promise<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 89:72 - 89:101
+Node: Effect.succeed(promiseValue)
+Node Kind: KindCallExpression
+
+Subject: promiseValue
+Subject Type: Promise<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 90:83 - 90:112
+Node: Effect.succeed(promiseValue)
+Node Kind: KindCallExpression
+
+Subject: promiseValue
+Subject Type: Promise<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 93:9 - 93:38
+Node: Effect.succeed(promiseValue)
+Node Kind: KindCallExpression
+
+Subject: promiseValue
+Subject Type: Promise<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 96:36 - 96:65
+Node: Effect.succeed(promiseValue)
+Node Kind: KindCallExpression
+
+Subject: promiseValue
+Subject Type: Promise<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 100:48 - 100:58
+Node: f(_value)
+Node Kind: KindCallExpression
+
+Subject: _value
+Subject Type: A
+
+Transformations (1):
+  [0] kind: call
+      callee: f
+      args: (constant)
+      outType: B
+
+=== Piping Flow ===
+Location: 101:2 - 103:28
+Node: local.succeed(promiseValue)
+Node Kind: KindCallExpression
+
+Subject: promiseValue
+Subject Type: Promise<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: local.succeed
+      args: (constant)
+      outType: Promise<number>
