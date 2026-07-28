@@ -19,6 +19,8 @@ type TaggedDispatch struct {
 
 // ParseTaggedDispatch decodes conservative switch, conditional-expression, and
 // if/else-if dispatch over string-literal _tag comparisons rooted at rootSymbol.
+// Consumers that require one property chain must post-validate discriminant
+// chain equality; branches are only guaranteed to share rootSymbol.
 func (tp *TypeParser) ParseTaggedDispatch(node *ast.Node, rootSymbol *ast.Symbol) *TaggedDispatch {
 	if tp == nil || tp.checker == nil || node == nil || rootSymbol == nil {
 		return nil
