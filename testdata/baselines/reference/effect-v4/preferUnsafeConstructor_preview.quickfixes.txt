@@ -1,0 +1,24 @@
+=== Quick Fix Inventory ===
+
+[D1] (5:22-5:50) TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+  Fix 0: "Disable preferUnsafeConstructor for this line"
+  Fix 1: "Disable preferUnsafeConstructor for entire file"
+  Fix 2: "Replace with Scope.makeUnsafe"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable preferUnsafeConstructor for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable preferUnsafeConstructor for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Scope.makeUnsafe" ===
+
+--- file:///.src/preferUnsafeConstructor_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferUnsafeConstructor:warning
+import { Effect, Scope } from "effect"
+
+export const scope = Scope.makeUnsafe()
+
