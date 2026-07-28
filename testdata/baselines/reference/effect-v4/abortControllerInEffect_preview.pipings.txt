@@ -1,0 +1,15 @@
+==== /.src/abortControllerInEffect_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 5:23 - 7:3
+Node: Effect.gen(function*() {\n  return new AbortController().signal\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  return new AbortController().signal\n}
+Subject Type: () => Generator<never, AbortSignal, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<AbortSignal, never, never>

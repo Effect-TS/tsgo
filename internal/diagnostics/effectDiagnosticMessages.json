@@ -434,5 +434,9 @@
     "Branching on `{0}.reason._tag` inside `Effect.{1}` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)": {
         "category": "Suggestion",
         "code": 377110
+    },
+    "`AbortController` is manually constructed inside Effect code. Use `Effect.abortSignal` for Effect-managed cancellation. effect(abortControllerInEffect)": {
+        "category": "Suggestion",
+        "code": 377111
     }
 }

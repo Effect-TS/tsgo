@@ -81,6 +81,7 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><code>tryCatchInEffectGen</code></td><td>💡</td><td></td><td>Discourages try/catch in Effect generators in favor of Effect error handling</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>unknownInEffectCatch</code></td><td>⚠️</td><td></td><td>Warns when catch callbacks return unknown instead of typed errors</td><td>✓</td><td>✓</td></tr>
     <tr><td colspan="6"><strong>Effect-native</strong> <em>Prefer Effect-native APIs and abstractions when available.</em></td></tr>
+    <tr><td><code>abortControllerInEffect</code></td><td>💡</td><td></td><td>Warns when manually constructing AbortController inside Effect generators instead of using Effect.abortSignal</td><td></td><td>✓</td></tr>
     <tr><td><code>asyncFunction</code></td><td>➖</td><td></td><td>Warns when declaring async functions and suggests using Effect values and Effect.gen for async control flow</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>cryptoRandomUUID</code></td><td>➖</td><td></td><td>Warns when using crypto.randomUUID() outside Effect generators instead of the Effect Random module, which uses Effect-injected randomness rather than the crypto module behind the scenes</td><td></td><td>✓</td></tr>
     <tr><td><code>cryptoRandomUUIDInEffect</code></td><td>➖</td><td></td><td>Warns when using crypto.randomUUID() inside Effect generators instead of the Effect Random module, which uses Effect-injected randomness rather than the crypto module behind the scenes</td><td></td><td>✓</td></tr>
