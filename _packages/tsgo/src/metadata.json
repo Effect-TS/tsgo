@@ -789,6 +789,29 @@
       }
     },
     {
+      "name": "preferUnsafeConstructor",
+      "group": "antipattern",
+      "description": "Suggests replacing Effect.runSync of a pure effect constructor with the synchronous *Unsafe variant exported by the same module",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377109
+      ],
+      "preview": {
+        "sourceText": "import { Effect, Scope } from \"effect\"\n\nexport const scope = Effect.runSync(Scope.make())\n",
+        "diagnostics": [
+          {
+            "start": 61,
+            "end": 89,
+            "text": "`Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)"
+          }
+        ]
+      }
+    },
+    {
       "name": "returnEffectInGen",
       "group": "antipattern",
       "description": "Warns when returning an Effect in a generator causes nested Effect\u003cEffect\u003c...\u003e\u003e",

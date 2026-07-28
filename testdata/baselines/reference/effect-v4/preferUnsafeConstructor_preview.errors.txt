@@ -1,0 +1,15 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/preferUnsafeConstructor_preview.ts(5,22): warning TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+
+
+==== /.src/preferUnsafeConstructor_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferUnsafeConstructor:warning
+    import { Effect, Scope } from "effect"
+    
+    export const scope = Effect.runSync(Scope.make())
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+    

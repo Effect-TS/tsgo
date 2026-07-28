@@ -99,4 +99,5 @@ var All = []rule.Rule{
 	NewPromise,
 	OutdatedApi,
 	ServiceNotAsClass,
+	PreferUnsafeConstructor,
 }

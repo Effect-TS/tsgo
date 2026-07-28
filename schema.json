@@ -1979,6 +1979,11 @@
           "default": "off",
           "description": "Disallows Schema.Schema.Type\u003ctypeof X\u003e in favor of typeof X.Type"
         },
+        "preferUnsafeConstructor": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests replacing Effect.runSync of a pure effect constructor with the synchronous *Unsafe variant exported by the same module"
+        },
         "processEnv": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
