@@ -75,36 +75,26 @@ flowchart TB
   73[/"type: #40;value: string#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: NarrowCtor.make"/]
   74["type: string<br/>callee: Effect.runSync<br/>args: #91;#93;"]
   75[/"type: #lt;A, E#gt;#40;effect: Effect#lt;A, E, never#gt;#41; =#gt; A<br/>node: Effect.runSync"/]
-  76[/"type: #quot;x#quot;<br/>node: #quot;x#quot;"/]
-  77["type: Effect#lt;readonly string#91;#93;, never, never#gt;<br/>callee: GenCtor.make<br/>args: #91;#93;"]
-  78[/"type: #lt;A extends string#gt;#40;a: A#41; =#gt; Effect#lt;readonly string#91;#93;, never, never#gt;<br/>node: GenCtor.make"/]
-  79["type: readonly string#91;#93;<br/>callee: Effect.runSync<br/>args: #91;#93;"]
+  76[/"type: Chunk#lt;number#gt;<br/>node: chunk"/]
+  77["type: Effect#lt;TxChunk#lt;number#gt;, never, never#gt;<br/>callee: TxChunk.make<br/>args: #91;#93;"]
+  78[/"type: #lt;A#gt;#40;initial: Chunk#lt;A#gt;#41; =#gt; Effect#lt;TxChunk#lt;A#gt;, never, never#gt;<br/>node: TxChunk.make"/]
+  79["type: TxChunk#lt;number#gt;<br/>callee: Effect.runSync<br/>args: #91;#93;"]
   80[/"type: #lt;A, E#gt;#40;effect: Effect#lt;A, E, never#gt;#41; =#gt; A<br/>node: Effect.runSync"/]
-  81[/"type: 1<br/>node: 1"/]
-  82["type: Effect#lt;readonly number#91;#93;, never, never#gt;<br/>callee: ShapeCtor.make<br/>args: #91;#93;"]
-  83[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;readonly A#91;#93;, never, never#gt;<br/>node: ShapeCtor.make"/]
-  84["type: readonly number#91;#93;<br/>callee: Effect.runSync<br/>args: #91;#93;"]
+  81[/"type: Queue#lt;number, never#gt;<br/>node: queue"/]
+  82["type: Effect#lt;number, never, never#gt;<br/>callee: Queue.take<br/>args: #91;#93;"]
+  83[/"type: #lt;A, E#gt;#40;self: Dequeue#lt;A, E#gt;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Queue.take"/]
+  84["type: number<br/>callee: Effect.runSync<br/>args: #91;#93;"]
   85[/"type: #lt;A, E#gt;#40;effect: Effect#lt;A, E, never#gt;#41; =#gt; A<br/>node: Effect.runSync"/]
-  86[/"type: Chunk#lt;number#gt;<br/>node: chunk"/]
-  87["type: Effect#lt;TxChunk#lt;number#gt;, never, never#gt;<br/>callee: TxChunk.make<br/>args: #91;#93;"]
-  88[/"type: #lt;A#gt;#40;initial: Chunk#lt;A#gt;#41; =#gt; Effect#lt;TxChunk#lt;A#gt;, never, never#gt;<br/>node: TxChunk.make"/]
-  89["type: TxChunk#lt;number#gt;<br/>callee: Effect.runSync<br/>args: #91;#93;"]
-  90[/"type: #lt;A, E#gt;#40;effect: Effect#lt;A, E, never#gt;#41; =#gt; A<br/>node: Effect.runSync"/]
-  91[/"type: Queue#lt;number, never#gt;<br/>node: queue"/]
-  92["type: Effect#lt;number, never, never#gt;<br/>callee: Queue.take<br/>args: #91;#93;"]
-  93[/"type: #lt;A, E#gt;#40;self: Dequeue#lt;A, E#gt;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Queue.take"/]
+  86[/"type: #123; make: #40;#41; =#gt; Effect#lt;number, never, never#gt;; makeUnsafe: #40;#41; =#gt; number; #125;<br/>node: #123;#92;n  make: #40;#41;: Effect.Effect#lt;number#gt; =#gt; Effect.succeed#40;1#41;,#92;n  makeUnsafe: #40;#41;: number =#gt; 1,#92;n#125;"/]
+  87[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;#41;: Effect.Effect#lt;number#gt; =#gt; Effect.succeed#40;1#41;"]]
+  88[/"type: 1<br/>node: 1"/]
+  89["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  90[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  91[["type: #40;#41; =#gt; number<br/>node: #40;#41;: number =#gt; 1"]]
+  92[/"type: 1<br/>node: 1"/]
+  93[/"type: Effect#lt;number, never, never#gt;<br/>node: MyScope.make#40;#41;"/]
   94["type: number<br/>callee: Effect.runSync<br/>args: #91;#93;"]
   95[/"type: #lt;A, E#gt;#40;effect: Effect#lt;A, E, never#gt;#41; =#gt; A<br/>node: Effect.runSync"/]
-  96[/"type: #123; make: #40;#41; =#gt; Effect#lt;number, never, never#gt;; makeUnsafe: #40;#41; =#gt; number; #125;<br/>node: #123;#92;n  make: #40;#41;: Effect.Effect#lt;number#gt; =#gt; Effect.succeed#40;1#41;,#92;n  makeUnsafe: #40;#41;: number =#gt; 1,#92;n#125;"/]
-  97[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;#41;: Effect.Effect#lt;number#gt; =#gt; Effect.succeed#40;1#41;"]]
-  98[/"type: 1<br/>node: 1"/]
-  99["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  100[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  101[["type: #40;#41; =#gt; number<br/>node: #40;#41;: number =#gt; 1"]]
-  102[/"type: 1<br/>node: 1"/]
-  103[/"type: Effect#lt;number, never, never#gt;<br/>node: MyScope.make#40;#41;"/]
-  104["type: number<br/>callee: Effect.runSync<br/>args: #91;#93;"]
-  105[/"type: #lt;A, E#gt;#40;effect: Effect#lt;A, E, never#gt;#41; =#gt; A<br/>node: Effect.runSync"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
   3 -->|"kind: pipe"| 4
@@ -172,19 +162,11 @@ flowchart TB
   83 -->|"kind: transformCallee"| 82
   82 -->|"kind: pipe"| 84
   85 -->|"kind: transformCallee"| 84
-  86 -->|"kind: pipe"| 87
-  88 -->|"kind: transformCallee"| 87
-  87 -->|"kind: pipe"| 89
+  88 -->|"kind: pipe"| 89
   90 -->|"kind: transformCallee"| 89
-  91 -->|"kind: pipe"| 92
-  93 -->|"kind: transformCallee"| 92
-  92 -->|"kind: pipe"| 94
+  89 -->|"kind: potentialReturn"| 87
+  87 -->|"kind: usedBy"| 86
+  92 -->|"kind: potentialReturn"| 91
+  91 -->|"kind: usedBy"| 86
+  93 -->|"kind: pipe"| 94
   95 -->|"kind: transformCallee"| 94
-  98 -->|"kind: pipe"| 99
-  100 -->|"kind: transformCallee"| 99
-  99 -->|"kind: potentialReturn"| 97
-  97 -->|"kind: usedBy"| 96
-  102 -->|"kind: potentialReturn"| 101
-  101 -->|"kind: usedBy"| 96
-  103 -->|"kind: pipe"| 104
-  105 -->|"kind: transformCallee"| 104

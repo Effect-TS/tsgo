@@ -1,7 +1,7 @@
-==== /.src/preferUnsafeConstructor.ts (25 flows) ====
+==== /.src/preferUnsafeConstructor.ts (23 flows) ====
 
 === Piping Flow ===
-Location: 14:21 - 14:50
+Location: 12:21 - 12:50
 Node: Effect.runSync(Scope.make())
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: Closeable
 
 === Piping Flow ===
-Location: 16:29 - 16:68
+Location: 14:29 - 14:68
 Node: Effect.runSync(Scope.make("parallel"))
 Node Kind: KindCallExpression
 
@@ -33,7 +33,7 @@ Transformations (2):
       outType: Closeable
 
 === Piping Flow ===
-Location: 19:36 - 19:75
+Location: 17:36 - 17:75
 Node: Effect.runSync(Scope.make("parallel"))
 Node Kind: KindCallExpression
 
@@ -51,7 +51,7 @@ Transformations (2):
       outType: Closeable
 
 === Piping Flow ===
-Location: 22:19 - 22:47
+Location: 20:19 - 20:47
 Node: Effect.runSync(Ref.make(1))
 Node Kind: KindCallExpression
 
@@ -69,7 +69,7 @@ Transformations (2):
       outType: Ref<number>
 
 === Piping Flow ===
-Location: 24:24 - 24:64
+Location: 22:24 - 22:64
 Node: Effect.runSync(Deferred.make<string>())
 Node Kind: KindCallExpression
 
@@ -83,7 +83,7 @@ Transformations (1):
       outType: Deferred<string, never>
 
 === Piping Flow ===
-Location: 26:21 - 26:54
+Location: 24:21 - 24:54
 Node: Effect.runSync(Latch.make(true))
 Node Kind: KindCallExpression
 
@@ -101,7 +101,7 @@ Transformations (2):
       outType: Latch
 
 === Piping Flow ===
-Location: 28:31 - 28:62
+Location: 26:31 - 26:62
 Node: Effect.runSync(ScopeNs.make())
 Node Kind: KindCallExpression
 
@@ -115,7 +115,7 @@ Transformations (1):
       outType: Closeable
 
 === Piping Flow ===
-Location: 30:27 - 30:55
+Location: 28:27 - 28:55
 Node: Effect.runSync(makeScope())
 Node Kind: KindCallExpression
 
@@ -129,7 +129,7 @@ Transformations (1):
       outType: Closeable
 
 === Piping Flow ===
-Location: 32:30 - 32:52
+Location: 30:30 - 30:52
 Node: runSync(Scope.make())
 Node Kind: KindCallExpression
 
@@ -143,7 +143,7 @@ Transformations (1):
       outType: Closeable
 
 === Piping Flow ===
-Location: 34:29 - 34:60
+Location: 32:29 - 32:60
 Node: Effect.runSync((Scope.make()))
 Node Kind: KindCallExpression
 
@@ -157,7 +157,7 @@ Transformations (1):
       outType: Closeable
 
 === Piping Flow ===
-Location: 40:28 - 40:56
+Location: 38:28 - 38:56
 Node: Effect.runSync(scopeEffect)
 Node Kind: KindCallExpression
 
@@ -171,7 +171,7 @@ Transformations (1):
       outType: Closeable
 
 === Piping Flow ===
-Location: 43:21 - 43:77
+Location: 41:21 - 41:77
 Node: Effect.runSync(Scope.make().pipe(Effect.map((s) => s)))
 Node Kind: KindCallExpression
 
@@ -189,7 +189,7 @@ Transformations (2):
       outType: Closeable
 
 === Piping Flow ===
-Location: 46:23 - 48:4
+Location: 44:23 - 46:4
 Node: Effect.runSync(Effect.gen(function*() {\n  return yield* Ref.make(0)\n}))
 Node Kind: KindCallExpression
 
@@ -207,7 +207,7 @@ Transformations (2):
       outType: Ref<number>
 
 === Piping Flow ===
-Location: 47:16 - 47:28
+Location: 45:16 - 45:28
 Node: Ref.make(0)
 Node Kind: KindCallExpression
 
@@ -221,7 +221,7 @@ Transformations (1):
       outType: Effect<Ref<number>, never, never>
 
 === Piping Flow ===
-Location: 51:25 - 51:59
+Location: 49:25 - 49:59
 Node: Effect.runSync(Effect.succeed(1))
 Node Kind: KindCallExpression
 
@@ -239,7 +239,7 @@ Transformations (2):
       outType: number
 
 === Piping Flow ===
-Location: 59:25 - 62:3
+Location: 57:25 - 60:3
 Node: Effect.gen(function*() {\n  const scope = Effect.runSync(Scope.make())\n  return yield* Effect.succeed(scope)\n})
 Node Kind: KindCallExpression
 
@@ -253,7 +253,7 @@ Transformations (1):
       outType: Effect<Closeable, never, never>
 
 === Piping Flow ===
-Location: 60:16 - 60:45
+Location: 58:16 - 58:45
 Node: Effect.runSync(Scope.make())
 Node Kind: KindCallExpression
 
@@ -267,7 +267,7 @@ Transformations (1):
       outType: Closeable
 
 === Piping Flow ===
-Location: 61:16 - 61:38
+Location: 59:16 - 59:38
 Node: Effect.succeed(scope)
 Node Kind: KindCallExpression
 
@@ -281,7 +281,7 @@ Transformations (1):
       outType: Effect<Closeable, never, never>
 
 === Piping Flow ===
-Location: 66:30 - 66:71
+Location: 64:30 - 64:71
 Node: Effect.runSync(NarrowCtor.make("value"))
 Node Kind: KindCallExpression
 
@@ -299,43 +299,7 @@ Transformations (2):
       outType: string
 
 === Piping Flow ===
-Location: 70:32 - 70:66
-Node: Effect.runSync(GenCtor.make("x"))
-Node Kind: KindCallExpression
-
-Subject: "x"
-Subject Type: "x"
-
-Transformations (2):
-  [0] kind: call
-      callee: GenCtor.make
-      args: (constant)
-      outType: Effect<readonly string[], never, never>
-  [1] kind: call
-      callee: Effect.runSync
-      args: (constant)
-      outType: readonly string[]
-
-=== Piping Flow ===
-Location: 74:41 - 74:75
-Node: Effect.runSync(ShapeCtor.make(1))
-Node Kind: KindCallExpression
-
-Subject: 1
-Subject Type: 1
-
-Transformations (2):
-  [0] kind: call
-      callee: ShapeCtor.make
-      args: (constant)
-      outType: Effect<readonly number[], never, never>
-  [1] kind: call
-      callee: Effect.runSync
-      args: (constant)
-      outType: readonly number[]
-
-=== Piping Flow ===
-Location: 78:31 - 78:67
+Location: 68:31 - 68:67
 Node: Effect.runSync(TxChunk.make(chunk))
 Node Kind: KindCallExpression
 
@@ -353,7 +317,7 @@ Transformations (2):
       outType: TxChunk<number>
 
 === Piping Flow ===
-Location: 82:31 - 82:65
+Location: 72:31 - 72:65
 Node: Effect.runSync(Queue.take(queue))
 Node Kind: KindCallExpression
 
@@ -371,7 +335,7 @@ Transformations (2):
       outType: number
 
 === Piping Flow ===
-Location: 86:37 - 86:55
+Location: 76:37 - 76:55
 Node: Effect.succeed(1)
 Node Kind: KindCallExpression
 
@@ -385,7 +349,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 89:33 - 89:64
+Location: 79:33 - 79:64
 Node: Effect.runSync(MyScope.make())
 Node Kind: KindCallExpression
 

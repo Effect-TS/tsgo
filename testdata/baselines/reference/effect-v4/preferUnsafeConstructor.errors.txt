@@ -1,18 +1,18 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/preferUnsafeConstructor.ts(14,22): warning TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
-/.src/preferUnsafeConstructor.ts(16,30): warning TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
-/.src/preferUnsafeConstructor.ts(19,37): warning TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
-/.src/preferUnsafeConstructor.ts(22,20): warning TS377109: `Effect.runSync(Ref.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Ref.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
-/.src/preferUnsafeConstructor.ts(24,25): warning TS377109: `Effect.runSync(Deferred.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Deferred.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
-/.src/preferUnsafeConstructor.ts(26,22): warning TS377109: `Effect.runSync(Latch.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Latch.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
-/.src/preferUnsafeConstructor.ts(28,32): warning TS377109: `Effect.runSync(ScopeNs.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `ScopeNs.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
-/.src/preferUnsafeConstructor.ts(30,28): warning TS377109: `Effect.runSync(makeScope(...))` starts a fiber to run a pure constructor. Use the synchronous variant `makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
-/.src/preferUnsafeConstructor.ts(32,31): warning TS377109: `runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
-/.src/preferUnsafeConstructor.ts(34,30): warning TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
-/.src/preferUnsafeConstructor.ts(60,17): warning TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
-/.src/preferUnsafeConstructor.ts(60,17): warning TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+/.src/preferUnsafeConstructor.ts(12,22): warning TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+/.src/preferUnsafeConstructor.ts(14,30): warning TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+/.src/preferUnsafeConstructor.ts(17,37): warning TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+/.src/preferUnsafeConstructor.ts(20,20): warning TS377109: `Effect.runSync(Ref.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Ref.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+/.src/preferUnsafeConstructor.ts(22,25): warning TS377109: `Effect.runSync(Deferred.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Deferred.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+/.src/preferUnsafeConstructor.ts(24,22): warning TS377109: `Effect.runSync(Latch.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Latch.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+/.src/preferUnsafeConstructor.ts(26,32): warning TS377109: `Effect.runSync(ScopeNs.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `ScopeNs.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+/.src/preferUnsafeConstructor.ts(28,28): warning TS377109: `Effect.runSync(makeScope(...))` starts a fiber to run a pure constructor. Use the synchronous variant `makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+/.src/preferUnsafeConstructor.ts(30,31): warning TS377109: `runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+/.src/preferUnsafeConstructor.ts(32,30): warning TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+/.src/preferUnsafeConstructor.ts(58,17): warning TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
+/.src/preferUnsafeConstructor.ts(58,17): warning TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
 
 
 ==== /.src/preferUnsafeConstructor.ts (12 errors) ====
@@ -24,8 +24,6 @@ Effect version: 4.0.0
     import { make as makeScope, makeUnsafe as makeScopeUnsafe } from "effect/Scope"
     import * as ScopeNs from "effect/Scope"
     import * as NarrowCtor from "effect/NarrowCtor"
-    import * as GenCtor from "effect/GenCtor"
-    import * as ShapeCtor from "effect/ShapeCtor"
     
     // --- should report: direct constructor call with a matching *Unsafe sibling ---
     
@@ -106,14 +104,6 @@ Effect version: 4.0.0
     // makeUnsafe returns the narrower literal "narrow": assignable to the success
     // type `string` but not mutually, so the rewrite would change the inferred type.
     export const narrowerReturn = Effect.runSync(NarrowCtor.make("value"))
-    
-    // Same ReadonlyArray origin, but makeUnsafe("x") would narrow the result from
-    // ReadonlyArray<string> to ReadonlyArray<"x">.
-    export const genericContainer = Effect.runSync(GenCtor.make("x"))
-    
-    // makeUnsafe's type parameter is absent from its parameters, so the rewritten
-    // call site would infer ReadonlyArray<unknown> instead of ReadonlyArray<number>.
-    export const uninferrableTypeParameter = Effect.runSync(ShapeCtor.make(1))
     
     // TxChunk.makeUnsafe takes a TxRef, not the Chunk that TxChunk.make accepts.
     declare const chunk: Chunk.Chunk<number>

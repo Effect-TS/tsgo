@@ -1,59 +1,59 @@
 === Quick Fix Inventory ===
 
-[D1] (14:22-14:50) TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+[D1] (12:22-12:50) TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
   Fix 0: "Disable preferUnsafeConstructor for this line"
   Fix 1: "Disable preferUnsafeConstructor for entire file"
   Fix 2: "Replace with Scope.makeUnsafe"
 
-[D2] (16:30-16:68) TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+[D2] (14:30-14:68) TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
   Fix 0: "Disable preferUnsafeConstructor for this line"
   Fix 1: "Disable preferUnsafeConstructor for entire file"
   Fix 2: "Replace with Scope.makeUnsafe"
 
-[D3] (19:37-19:75) TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+[D3] (17:37-17:75) TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
   Fix 0: "Disable preferUnsafeConstructor for this line"
   Fix 1: "Disable preferUnsafeConstructor for entire file"
   Fix 2: "Replace with Scope.makeUnsafe"
 
-[D4] (22:20-22:47) TS377109: `Effect.runSync(Ref.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Ref.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+[D4] (20:20-20:47) TS377109: `Effect.runSync(Ref.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Ref.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
   Fix 0: "Disable preferUnsafeConstructor for this line"
   Fix 1: "Disable preferUnsafeConstructor for entire file"
   Fix 2: "Replace with Ref.makeUnsafe"
 
-[D5] (24:25-24:64) TS377109: `Effect.runSync(Deferred.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Deferred.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+[D5] (22:25-22:64) TS377109: `Effect.runSync(Deferred.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Deferred.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
   Fix 0: "Disable preferUnsafeConstructor for this line"
   Fix 1: "Disable preferUnsafeConstructor for entire file"
   Fix 2: "Replace with Deferred.makeUnsafe"
 
-[D6] (26:22-26:54) TS377109: `Effect.runSync(Latch.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Latch.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+[D6] (24:22-24:54) TS377109: `Effect.runSync(Latch.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Latch.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
   Fix 0: "Disable preferUnsafeConstructor for this line"
   Fix 1: "Disable preferUnsafeConstructor for entire file"
   Fix 2: "Replace with Latch.makeUnsafe"
 
-[D7] (28:32-28:62) TS377109: `Effect.runSync(ScopeNs.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `ScopeNs.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+[D7] (26:32-26:62) TS377109: `Effect.runSync(ScopeNs.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `ScopeNs.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
   Fix 0: "Disable preferUnsafeConstructor for this line"
   Fix 1: "Disable preferUnsafeConstructor for entire file"
   Fix 2: "Replace with ScopeNs.makeUnsafe"
 
-[D8] (30:28-30:55) TS377109: `Effect.runSync(makeScope(...))` starts a fiber to run a pure constructor. Use the synchronous variant `makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+[D8] (28:28-28:55) TS377109: `Effect.runSync(makeScope(...))` starts a fiber to run a pure constructor. Use the synchronous variant `makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
   Fix 0: "Disable preferUnsafeConstructor for this line"
   Fix 1: "Disable preferUnsafeConstructor for entire file"
 
-[D9] (32:31-32:52) TS377109: `runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
-  Fix 0: "Disable preferUnsafeConstructor for this line"
-  Fix 1: "Disable preferUnsafeConstructor for entire file"
-  Fix 2: "Replace with Scope.makeUnsafe"
-
-[D10] (34:30-34:60) TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+[D9] (30:31-30:52) TS377109: `runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
   Fix 0: "Disable preferUnsafeConstructor for this line"
   Fix 1: "Disable preferUnsafeConstructor for entire file"
   Fix 2: "Replace with Scope.makeUnsafe"
 
-[D11] (60:17-60:31) TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
+[D10] (32:30-32:60) TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+  Fix 0: "Disable preferUnsafeConstructor for this line"
+  Fix 1: "Disable preferUnsafeConstructor for entire file"
+  Fix 2: "Replace with Scope.makeUnsafe"
+
+[D11] (58:17-58:31) TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
 
-[D12] (60:17-60:45) TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+[D12] (58:17-58:45) TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
   Fix 0: "Disable preferUnsafeConstructor for this line"
   Fix 1: "Disable preferUnsafeConstructor for entire file"
   Fix 2: "Replace with Scope.makeUnsafe"
@@ -77,8 +77,6 @@ import { runSync } from "effect/Effect"
 import { make as makeScope, makeUnsafe as makeScopeUnsafe } from "effect/Scope"
 import * as ScopeNs from "effect/Scope"
 import * as NarrowCtor from "effect/NarrowCtor"
-import * as GenCtor from "effect/GenCtor"
-import * as ShapeCtor from "effect/ShapeCtor"
 
 // --- should report: direct constructor call with a matching *Unsafe sibling ---
 
@@ -136,14 +134,6 @@ export const insideGen = Effect.gen(function*() {
 // type `string` but not mutually, so the rewrite would change the inferred type.
 export const narrowerReturn = Effect.runSync(NarrowCtor.make("value"))
 
-// Same ReadonlyArray origin, but makeUnsafe("x") would narrow the result from
-// ReadonlyArray<string> to ReadonlyArray<"x">.
-export const genericContainer = Effect.runSync(GenCtor.make("x"))
-
-// makeUnsafe's type parameter is absent from its parameters, so the rewritten
-// call site would infer ReadonlyArray<unknown> instead of ReadonlyArray<number>.
-export const uninferrableTypeParameter = Effect.runSync(ShapeCtor.make(1))
-
 // TxChunk.makeUnsafe takes a TxRef, not the Chunk that TxChunk.make accepts.
 declare const chunk: Chunk.Chunk<number>
 export const differentParams = Effect.runSync(TxChunk.make(chunk))
@@ -177,8 +167,6 @@ import { runSync } from "effect/Effect"
 import { make as makeScope, makeUnsafe as makeScopeUnsafe } from "effect/Scope"
 import * as ScopeNs from "effect/Scope"
 import * as NarrowCtor from "effect/NarrowCtor"
-import * as GenCtor from "effect/GenCtor"
-import * as ShapeCtor from "effect/ShapeCtor"
 
 // --- should report: direct constructor call with a matching *Unsafe sibling ---
 
@@ -236,14 +224,6 @@ export const insideGen = Effect.gen(function*() {
 // type `string` but not mutually, so the rewrite would change the inferred type.
 export const narrowerReturn = Effect.runSync(NarrowCtor.make("value"))
 
-// Same ReadonlyArray origin, but makeUnsafe("x") would narrow the result from
-// ReadonlyArray<string> to ReadonlyArray<"x">.
-export const genericContainer = Effect.runSync(GenCtor.make("x"))
-
-// makeUnsafe's type parameter is absent from its parameters, so the rewritten
-// call site would infer ReadonlyArray<unknown> instead of ReadonlyArray<number>.
-export const uninferrableTypeParameter = Effect.runSync(ShapeCtor.make(1))
-
 // TxChunk.makeUnsafe takes a TxRef, not the Chunk that TxChunk.make accepts.
 declare const chunk: Chunk.Chunk<number>
 export const differentParams = Effect.runSync(TxChunk.make(chunk))
@@ -277,8 +257,6 @@ import { runSync } from "effect/Effect"
 import { make as makeScope, makeUnsafe as makeScopeUnsafe } from "effect/Scope"
 import * as ScopeNs from "effect/Scope"
 import * as NarrowCtor from "effect/NarrowCtor"
-import * as GenCtor from "effect/GenCtor"
-import * as ShapeCtor from "effect/ShapeCtor"
 
 // --- should report: direct constructor call with a matching *Unsafe sibling ---
 
@@ -336,14 +314,6 @@ export const insideGen = Effect.gen(function*() {
 // type `string` but not mutually, so the rewrite would change the inferred type.
 export const narrowerReturn = Effect.runSync(NarrowCtor.make("value"))
 
-// Same ReadonlyArray origin, but makeUnsafe("x") would narrow the result from
-// ReadonlyArray<string> to ReadonlyArray<"x">.
-export const genericContainer = Effect.runSync(GenCtor.make("x"))
-
-// makeUnsafe's type parameter is absent from its parameters, so the rewritten
-// call site would infer ReadonlyArray<unknown> instead of ReadonlyArray<number>.
-export const uninferrableTypeParameter = Effect.runSync(ShapeCtor.make(1))
-
 // TxChunk.makeUnsafe takes a TxRef, not the Chunk that TxChunk.make accepts.
 declare const chunk: Chunk.Chunk<number>
 export const differentParams = Effect.runSync(TxChunk.make(chunk))
@@ -377,8 +347,6 @@ import { runSync } from "effect/Effect"
 import { make as makeScope, makeUnsafe as makeScopeUnsafe } from "effect/Scope"
 import * as ScopeNs from "effect/Scope"
 import * as NarrowCtor from "effect/NarrowCtor"
-import * as GenCtor from "effect/GenCtor"
-import * as ShapeCtor from "effect/ShapeCtor"
 
 // --- should report: direct constructor call with a matching *Unsafe sibling ---
 
@@ -436,14 +404,6 @@ export const insideGen = Effect.gen(function*() {
 // type `string` but not mutually, so the rewrite would change the inferred type.
 export const narrowerReturn = Effect.runSync(NarrowCtor.make("value"))
 
-// Same ReadonlyArray origin, but makeUnsafe("x") would narrow the result from
-// ReadonlyArray<string> to ReadonlyArray<"x">.
-export const genericContainer = Effect.runSync(GenCtor.make("x"))
-
-// makeUnsafe's type parameter is absent from its parameters, so the rewritten
-// call site would infer ReadonlyArray<unknown> instead of ReadonlyArray<number>.
-export const uninferrableTypeParameter = Effect.runSync(ShapeCtor.make(1))
-
 // TxChunk.makeUnsafe takes a TxRef, not the Chunk that TxChunk.make accepts.
 declare const chunk: Chunk.Chunk<number>
 export const differentParams = Effect.runSync(TxChunk.make(chunk))
@@ -477,8 +437,6 @@ import { runSync } from "effect/Effect"
 import { make as makeScope, makeUnsafe as makeScopeUnsafe } from "effect/Scope"
 import * as ScopeNs from "effect/Scope"
 import * as NarrowCtor from "effect/NarrowCtor"
-import * as GenCtor from "effect/GenCtor"
-import * as ShapeCtor from "effect/ShapeCtor"
 
 // --- should report: direct constructor call with a matching *Unsafe sibling ---
 
@@ -536,14 +494,6 @@ export const insideGen = Effect.gen(function*() {
 // type `string` but not mutually, so the rewrite would change the inferred type.
 export const narrowerReturn = Effect.runSync(NarrowCtor.make("value"))
 
-// Same ReadonlyArray origin, but makeUnsafe("x") would narrow the result from
-// ReadonlyArray<string> to ReadonlyArray<"x">.
-export const genericContainer = Effect.runSync(GenCtor.make("x"))
-
-// makeUnsafe's type parameter is absent from its parameters, so the rewritten
-// call site would infer ReadonlyArray<unknown> instead of ReadonlyArray<number>.
-export const uninferrableTypeParameter = Effect.runSync(ShapeCtor.make(1))
-
 // TxChunk.makeUnsafe takes a TxRef, not the Chunk that TxChunk.make accepts.
 declare const chunk: Chunk.Chunk<number>
 export const differentParams = Effect.runSync(TxChunk.make(chunk))
@@ -577,8 +527,6 @@ import { runSync } from "effect/Effect"
 import { make as makeScope, makeUnsafe as makeScopeUnsafe } from "effect/Scope"
 import * as ScopeNs from "effect/Scope"
 import * as NarrowCtor from "effect/NarrowCtor"
-import * as GenCtor from "effect/GenCtor"
-import * as ShapeCtor from "effect/ShapeCtor"
 
 // --- should report: direct constructor call with a matching *Unsafe sibling ---
 
@@ -636,14 +584,6 @@ export const insideGen = Effect.gen(function*() {
 // type `string` but not mutually, so the rewrite would change the inferred type.
 export const narrowerReturn = Effect.runSync(NarrowCtor.make("value"))
 
-// Same ReadonlyArray origin, but makeUnsafe("x") would narrow the result from
-// ReadonlyArray<string> to ReadonlyArray<"x">.
-export const genericContainer = Effect.runSync(GenCtor.make("x"))
-
-// makeUnsafe's type parameter is absent from its parameters, so the rewritten
-// call site would infer ReadonlyArray<unknown> instead of ReadonlyArray<number>.
-export const uninferrableTypeParameter = Effect.runSync(ShapeCtor.make(1))
-
 // TxChunk.makeUnsafe takes a TxRef, not the Chunk that TxChunk.make accepts.
 declare const chunk: Chunk.Chunk<number>
 export const differentParams = Effect.runSync(TxChunk.make(chunk))
@@ -677,8 +617,6 @@ import { runSync } from "effect/Effect"
 import { make as makeScope, makeUnsafe as makeScopeUnsafe } from "effect/Scope"
 import * as ScopeNs from "effect/Scope"
 import * as NarrowCtor from "effect/NarrowCtor"
-import * as GenCtor from "effect/GenCtor"
-import * as ShapeCtor from "effect/ShapeCtor"
 
 // --- should report: direct constructor call with a matching *Unsafe sibling ---
 
@@ -736,14 +674,6 @@ export const insideGen = Effect.gen(function*() {
 // type `string` but not mutually, so the rewrite would change the inferred type.
 export const narrowerReturn = Effect.runSync(NarrowCtor.make("value"))
 
-// Same ReadonlyArray origin, but makeUnsafe("x") would narrow the result from
-// ReadonlyArray<string> to ReadonlyArray<"x">.
-export const genericContainer = Effect.runSync(GenCtor.make("x"))
-
-// makeUnsafe's type parameter is absent from its parameters, so the rewritten
-// call site would infer ReadonlyArray<unknown> instead of ReadonlyArray<number>.
-export const uninferrableTypeParameter = Effect.runSync(ShapeCtor.make(1))
-
 // TxChunk.makeUnsafe takes a TxRef, not the Chunk that TxChunk.make accepts.
 declare const chunk: Chunk.Chunk<number>
 export const differentParams = Effect.runSync(TxChunk.make(chunk))
@@ -783,8 +713,6 @@ import { runSync } from "effect/Effect"
 import { make as makeScope, makeUnsafe as makeScopeUnsafe } from "effect/Scope"
 import * as ScopeNs from "effect/Scope"
 import * as NarrowCtor from "effect/NarrowCtor"
-import * as GenCtor from "effect/GenCtor"
-import * as ShapeCtor from "effect/ShapeCtor"
 
 // --- should report: direct constructor call with a matching *Unsafe sibling ---
 
@@ -842,14 +770,6 @@ export const insideGen = Effect.gen(function*() {
 // type `string` but not mutually, so the rewrite would change the inferred type.
 export const narrowerReturn = Effect.runSync(NarrowCtor.make("value"))
 
-// Same ReadonlyArray origin, but makeUnsafe("x") would narrow the result from
-// ReadonlyArray<string> to ReadonlyArray<"x">.
-export const genericContainer = Effect.runSync(GenCtor.make("x"))
-
-// makeUnsafe's type parameter is absent from its parameters, so the rewritten
-// call site would infer ReadonlyArray<unknown> instead of ReadonlyArray<number>.
-export const uninferrableTypeParameter = Effect.runSync(ShapeCtor.make(1))
-
 // TxChunk.makeUnsafe takes a TxRef, not the Chunk that TxChunk.make accepts.
 declare const chunk: Chunk.Chunk<number>
 export const differentParams = Effect.runSync(TxChunk.make(chunk))
@@ -883,8 +803,6 @@ import { runSync } from "effect/Effect"
 import { make as makeScope, makeUnsafe as makeScopeUnsafe } from "effect/Scope"
 import * as ScopeNs from "effect/Scope"
 import * as NarrowCtor from "effect/NarrowCtor"
-import * as GenCtor from "effect/GenCtor"
-import * as ShapeCtor from "effect/ShapeCtor"
 
 // --- should report: direct constructor call with a matching *Unsafe sibling ---
 
@@ -942,14 +860,6 @@ export const insideGen = Effect.gen(function*() {
 // type `string` but not mutually, so the rewrite would change the inferred type.
 export const narrowerReturn = Effect.runSync(NarrowCtor.make("value"))
 
-// Same ReadonlyArray origin, but makeUnsafe("x") would narrow the result from
-// ReadonlyArray<string> to ReadonlyArray<"x">.
-export const genericContainer = Effect.runSync(GenCtor.make("x"))
-
-// makeUnsafe's type parameter is absent from its parameters, so the rewritten
-// call site would infer ReadonlyArray<unknown> instead of ReadonlyArray<number>.
-export const uninferrableTypeParameter = Effect.runSync(ShapeCtor.make(1))
-
 // TxChunk.makeUnsafe takes a TxRef, not the Chunk that TxChunk.make accepts.
 declare const chunk: Chunk.Chunk<number>
 export const differentParams = Effect.runSync(TxChunk.make(chunk))
@@ -989,8 +899,6 @@ import { runSync } from "effect/Effect"
 import { make as makeScope, makeUnsafe as makeScopeUnsafe } from "effect/Scope"
 import * as ScopeNs from "effect/Scope"
 import * as NarrowCtor from "effect/NarrowCtor"
-import * as GenCtor from "effect/GenCtor"
-import * as ShapeCtor from "effect/ShapeCtor"
 
 // --- should report: direct constructor call with a matching *Unsafe sibling ---
 
@@ -1047,14 +955,6 @@ export const insideGen = Effect.gen(function*() {
 // makeUnsafe returns the narrower literal "narrow": assignable to the success
 // type `string` but not mutually, so the rewrite would change the inferred type.
 export const narrowerReturn = Effect.runSync(NarrowCtor.make("value"))
-
-// Same ReadonlyArray origin, but makeUnsafe("x") would narrow the result from
-// ReadonlyArray<string> to ReadonlyArray<"x">.
-export const genericContainer = Effect.runSync(GenCtor.make("x"))
-
-// makeUnsafe's type parameter is absent from its parameters, so the rewritten
-// call site would infer ReadonlyArray<unknown> instead of ReadonlyArray<number>.
-export const uninferrableTypeParameter = Effect.runSync(ShapeCtor.make(1))
 
 // TxChunk.makeUnsafe takes a TxRef, not the Chunk that TxChunk.make accepts.
 declare const chunk: Chunk.Chunk<number>

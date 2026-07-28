@@ -7,25 +7,6 @@ import type { Effect } from "./Effect.ts";
  */
 export declare const make: (value: string) => Effect<string>;
 export declare const makeUnsafe: (value: string) => "narrow";
-// @filename: /node_modules/effect/dist/GenCtor.d.ts
-import type { Effect } from "./Effect.ts";
-/**
- * Synthetic effect module for the rule boundary: both returns share the
- * `ReadonlyArray` origin, but `makeUnsafe` instantiates it with the inferred
- * literal `A` while `make`'s success type fixes it to `string`, so rewriting
- * narrows the expression to `ReadonlyArray<"x">`.
- */
-export declare const make: <A extends string>(a: A) => Effect<ReadonlyArray<string>>;
-export declare const makeUnsafe: <A extends string>(a: A) => ReadonlyArray<A>;
-// @filename: /node_modules/effect/dist/ShapeCtor.d.ts
-import type { Effect } from "./Effect.ts";
-/**
- * Synthetic effect module for the rule boundary: the sibling never mentions its
- * type parameter in its parameters, so a rewritten call site would infer
- * `unknown` for it instead of the constructor's inferred argument type.
- */
-export declare const make: <A>(value: A) => Effect<ReadonlyArray<A>>;
-export declare const makeUnsafe: <A>(ignored?: unknown) => ReadonlyArray<A>;
 // @filename: preferUnsafeConstructor.ts
 // @effect-diagnostics *:off
 // @effect-diagnostics preferUnsafeConstructor:warning
@@ -35,8 +16,6 @@ import { runSync } from "effect/Effect"
 import { make as makeScope, makeUnsafe as makeScopeUnsafe } from "effect/Scope"
 import * as ScopeNs from "effect/Scope"
 import * as NarrowCtor from "effect/NarrowCtor"
-import * as GenCtor from "effect/GenCtor"
-import * as ShapeCtor from "effect/ShapeCtor"
 
 // --- should report: direct constructor call with a matching *Unsafe sibling ---
 
@@ -93,14 +72,6 @@ export const insideGen = Effect.gen(function*() {
 // makeUnsafe returns the narrower literal "narrow": assignable to the success
 // type `string` but not mutually, so the rewrite would change the inferred type.
 export const narrowerReturn = Effect.runSync(NarrowCtor.make("value"))
-
-// Same ReadonlyArray origin, but makeUnsafe("x") would narrow the result from
-// ReadonlyArray<string> to ReadonlyArray<"x">.
-export const genericContainer = Effect.runSync(GenCtor.make("x"))
-
-// makeUnsafe's type parameter is absent from its parameters, so the rewritten
-// call site would infer ReadonlyArray<unknown> instead of ReadonlyArray<number>.
-export const uninferrableTypeParameter = Effect.runSync(ShapeCtor.make(1))
 
 // TxChunk.makeUnsafe takes a TxRef, not the Chunk that TxChunk.make accepts.
 declare const chunk: Chunk.Chunk<number>

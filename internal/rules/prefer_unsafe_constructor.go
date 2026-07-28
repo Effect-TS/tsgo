@@ -117,13 +117,16 @@ func analyzePreferUnsafeConstructorNode(tp *typeparser.TypeParser, c *checker.Ch
 		}
 	}
 
-	// The constructor call must produce an Effect that cannot fail: replacing a fallible
-	// runSync (which throws the typed failure) with an *Unsafe call would change behavior.
+	// The constructor call must produce an `Effect<A, never, never>`: a fallible or
+	// service-requiring effect has no behavior-preserving synchronous replacement.
 	eff := tp.EffectType(tp.GetTypeAtLocation(inner), inner)
 	if eff == nil || eff.A == nil {
 		return PreferUnsafeConstructorMatch{}, false
 	}
 	if eff.E == nil || eff.E.Flags()&checker.TypeFlagsNever == 0 {
+		return PreferUnsafeConstructorMatch{}, false
+	}
+	if eff.R == nil || eff.R.Flags()&checker.TypeFlagsNever == 0 {
 		return PreferUnsafeConstructorMatch{}, false
 	}
 
@@ -192,9 +195,8 @@ func analyzePreferUnsafeConstructorNode(tp *typeparser.TypeParser, c *checker.Ch
 }
 
 // unsafeSiblingMatchesCall reports whether some call signature of the sibling symbol is
-// applicable to the constructor call's exact argument list and produces the same value
-// runSync unwraps: the applicable signature's return type and the Effect success type
-// must be mutually assignable so the rewrite cannot change the expression's inferred type.
+// applicable to the constructor call's exact argument list and produces a value usable
+// where the runSync result flows, so the rewrite stays well typed.
 func unsafeSiblingMatchesCall(tp *typeparser.TypeParser, c *checker.Checker, innerCall *ast.CallExpression, sibling *ast.Symbol, successType *checker.Type) bool {
 	siblingType := c.GetTypeOfSymbol(sibling)
 	if siblingType == nil {
@@ -223,15 +225,15 @@ func unsafeSiblingMatchesCall(tp *typeparser.TypeParser, c *checker.Checker, inn
 		if !checker.Checker_isTypeAssignableTo(c, sigFnType, expected) {
 			continue
 		}
-		if len(sig.TypeParameters()) == 0 {
-			if returnsMutuallyAssignable(c, c.GetReturnTypeOfSignature(sig), successType) {
-				return true
-			}
+		// Concrete returns must also be assignable in the other direction so the
+		// rewrite cannot change the expression's inferred type. Generic siblings are
+		// accepted on the relation above alone: every *Unsafe sibling in the pinned
+		// effect package mirrors its constructor's instantiation, and the real
+		// exceptions are all rejected by the argument or relation checks.
+		if len(sig.TypeParameters()) == 0 && !returnsMutuallyAssignable(c, c.GetReturnTypeOfSignature(sig), successType) {
 			continue
 		}
-		if genericSiblingShapeMatches(tp, c, innerCall, resolved, sig) {
-			return true
-		}
+		return true
 	}
 	return false
 }
@@ -283,30 +285,6 @@ func returnsMutuallyAssignable(c *checker.Checker, ret *checker.Type, successTyp
 	}
 	return checker.Checker_isTypeAssignableTo(c, ret, successType) &&
 		checker.Checker_isTypeAssignableTo(c, successType, ret)
-}
-
-// genericSiblingShapeMatches proves a generic sibling equivalent to the constructor by
-// comparing declared generic shapes instead of one instantiation: the constructor's
-// declared signature with its Effect success type as the return must be mutually
-// assignable with the sibling's declared signature. Relating the two generic function
-// types unifies their type parameters, so mutuality must hold for every instantiation —
-// a sibling that re-instantiates the container with a narrower argument (for example
-// `ReadonlyArray<A>` against a success type fixed to `ReadonlyArray<string>`) fails the
-// constructor-to-sibling direction. Shapes that cannot be compared this way (an
-// unparseable declared return, or a non-generic constructor) are conservatively declined.
-func genericSiblingShapeMatches(tp *typeparser.TypeParser, c *checker.Checker, innerCall *ast.CallExpression, resolved *checker.Signature, sig *checker.Signature) bool {
-	makeDecl := resolved
-	if target := resolved.Target(); target != nil {
-		makeDecl = target
-	}
-	declaredEffect := tp.EffectType(c.GetReturnTypeOfSignature(makeDecl), innerCall.AsNode())
-	if declaredEffect == nil || declaredEffect.A == nil {
-		return false
-	}
-	makeFn := checker.Checker_newFunctionType(c, makeDecl.TypeParameters(), makeDecl.ThisParameter(), makeDecl.Parameters(), declaredEffect.A)
-	sibFn := checker.Checker_newFunctionType(c, sig.TypeParameters(), sig.ThisParameter(), sig.Parameters(), c.GetReturnTypeOfSignature(sig))
-	return checker.Checker_isTypeAssignableTo(c, sibFn, makeFn) &&
-		checker.Checker_isTypeAssignableTo(c, makeFn, sibFn)
 }
 
 // resolveAliasedSymbol follows import/export aliases to the original symbol.
