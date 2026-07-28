@@ -422,6 +422,30 @@
       }
     },
     {
+      "name": "promiseInEffectSuccess",
+      "group": "correctness",
+      "description": "Detects Promise types in Effect success channels where they are not awaited",
+      "defaultSeverity": "warning",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377108
+      ],
+      "preview": {
+        "sourceText": "\nimport { Effect } from \"effect\"\n\ndeclare const save: (value: number) =\u003e Promise\u003cvoid\u003e\n\nexport const preview = Effect.succeed(1).pipe(Effect.map(save))\n",
+        "diagnostics": [
+          {
+            "start": 111,
+            "end": 151,
+            "text": "The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)"
+          }
+        ]
+      }
+    },
+    {
       "name": "schemaLiteralNonFinite",
       "group": "correctness",
       "description": "Reports statically known non-finite numbers passed to Schema literal constructors",

@@ -1,0 +1,18 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/promiseInEffectSuccess_preview.ts(8,24): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+
+
+==== /.src/promiseInEffectSuccess_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics promiseInEffectSuccess:warning
+    
+    import { Effect } from "effect"
+    
+    declare const save: (value: number) => Promise<void>
+    
+    export const preview = Effect.succeed(1).pipe(Effect.map(save))
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+    

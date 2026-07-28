@@ -1989,6 +1989,11 @@
           "default": "off",
           "description": "Warns when reading process.env inside Effect generators instead of using Effect Config"
         },
+        "promiseInEffectSuccess": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "warning",
+          "description": "Detects Promise types in Effect success channels where they are not awaited"
+        },
         "redundantMapError": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",

@@ -422,5 +422,9 @@
     "Chained Effect.catch fallbacks that ignore the error can be written with Effect.firstSuccessOf. Wrap each lazy fallback with Effect.suspend to preserve when it is constructed. effect(catchChainToFirstSuccessOf)": {
         "category": "Suggestion",
         "code": 377107
+    },
+    "The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)": {
+        "category": "Warning",
+        "code": 377108
     }
 }
