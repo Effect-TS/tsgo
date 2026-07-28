@@ -1,0 +1,399 @@
+==== /.src/preferUnsafeConstructor.ts (25 flows) ====
+
+=== Piping Flow ===
+Location: 13:21 - 13:50
+Node: Effect.runSync(Scope.make())
+Node Kind: KindCallExpression
+
+Subject: Scope.make()
+Subject Type: Effect<Closeable, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.runSync
+      args: (constant)
+      outType: Closeable
+
+=== Piping Flow ===
+Location: 15:29 - 15:68
+Node: Effect.runSync(Scope.make("parallel"))
+Node Kind: KindCallExpression
+
+Subject: "parallel"
+Subject Type: "parallel"
+
+Transformations (2):
+  [0] kind: call
+      callee: Scope.make
+      args: (constant)
+      outType: Effect<Closeable, never, never>
+  [1] kind: call
+      callee: Effect.runSync
+      args: (constant)
+      outType: Closeable
+
+=== Piping Flow ===
+Location: 18:36 - 18:75
+Node: Effect.runSync(Scope.make("parallel"))
+Node Kind: KindCallExpression
+
+Subject: "parallel"
+Subject Type: "parallel"
+
+Transformations (2):
+  [0] kind: call
+      callee: Scope.make
+      args: (constant)
+      outType: Effect<Closeable, never, never>
+  [1] kind: call
+      callee: Effect.runSync
+      args: (constant)
+      outType: Closeable
+
+=== Piping Flow ===
+Location: 21:19 - 21:47
+Node: Effect.runSync(Ref.make(1))
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Ref.make
+      args: (constant)
+      outType: Effect<Ref<number>, never, never>
+  [1] kind: call
+      callee: Effect.runSync
+      args: (constant)
+      outType: Ref<number>
+
+=== Piping Flow ===
+Location: 23:24 - 23:64
+Node: Effect.runSync(Deferred.make<string>())
+Node Kind: KindCallExpression
+
+Subject: Deferred.make<string>()
+Subject Type: Effect<Deferred<string, never>, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.runSync
+      args: (constant)
+      outType: Deferred<string, never>
+
+=== Piping Flow ===
+Location: 25:21 - 25:54
+Node: Effect.runSync(Latch.make(true))
+Node Kind: KindCallExpression
+
+Subject: true
+Subject Type: true
+
+Transformations (2):
+  [0] kind: call
+      callee: Latch.make
+      args: (constant)
+      outType: Effect<Latch, never, never>
+  [1] kind: call
+      callee: Effect.runSync
+      args: (constant)
+      outType: Latch
+
+=== Piping Flow ===
+Location: 27:31 - 27:62
+Node: Effect.runSync(ScopeNs.make())
+Node Kind: KindCallExpression
+
+Subject: ScopeNs.make()
+Subject Type: Effect<Closeable, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.runSync
+      args: (constant)
+      outType: Closeable
+
+=== Piping Flow ===
+Location: 29:27 - 29:55
+Node: Effect.runSync(makeScope())
+Node Kind: KindCallExpression
+
+Subject: makeScope()
+Subject Type: Effect<Closeable, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.runSync
+      args: (constant)
+      outType: Closeable
+
+=== Piping Flow ===
+Location: 31:30 - 31:52
+Node: runSync(Scope.make())
+Node Kind: KindCallExpression
+
+Subject: Scope.make()
+Subject Type: Effect<Closeable, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: runSync
+      args: (constant)
+      outType: Closeable
+
+=== Piping Flow ===
+Location: 33:29 - 33:60
+Node: Effect.runSync((Scope.make()))
+Node Kind: KindCallExpression
+
+Subject: (Scope.make())
+Subject Type: Effect<Closeable, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.runSync
+      args: (constant)
+      outType: Closeable
+
+=== Piping Flow ===
+Location: 39:28 - 39:56
+Node: Effect.runSync(scopeEffect)
+Node Kind: KindCallExpression
+
+Subject: scopeEffect
+Subject Type: Effect<Closeable, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.runSync
+      args: (constant)
+      outType: Closeable
+
+=== Piping Flow ===
+Location: 42:21 - 42:77
+Node: Effect.runSync(Scope.make().pipe(Effect.map((s) => s)))
+Node Kind: KindCallExpression
+
+Subject: Scope.make()
+Subject Type: Effect<Closeable, never, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [(s) => s]
+      outType: Effect<Closeable, never, never>
+  [1] kind: call
+      callee: Effect.runSync
+      args: (constant)
+      outType: Closeable
+
+=== Piping Flow ===
+Location: 45:23 - 47:4
+Node: Effect.runSync(Effect.gen(function*() {\n  return yield* Ref.make(0)\n}))
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  return yield* Ref.make(0)\n}
+Subject Type: () => Generator<Effect<Ref<number>, never, never>, Ref<number>, any>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<Ref<number>, never, never>
+  [1] kind: call
+      callee: Effect.runSync
+      args: (constant)
+      outType: Ref<number>
+
+=== Piping Flow ===
+Location: 46:16 - 46:28
+Node: Ref.make(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: Ref.make
+      args: (constant)
+      outType: Effect<Ref<number>, never, never>
+
+=== Piping Flow ===
+Location: 50:25 - 50:59
+Node: Effect.runSync(Effect.succeed(1))
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: call
+      callee: Effect.runSync
+      args: (constant)
+      outType: number
+
+=== Piping Flow ===
+Location: 57:25 - 60:3
+Node: Effect.gen(function*() {\n  const scope = Effect.runSync(Scope.make())\n  return yield* Effect.succeed(scope)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const scope = Effect.runSync(Scope.make())\n  return yield* Effect.succeed(scope)\n}
+Subject Type: () => Generator<Effect<Closeable, never, never>, Closeable, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<Closeable, never, never>
+
+=== Piping Flow ===
+Location: 58:16 - 58:45
+Node: Effect.runSync(Scope.make())
+Node Kind: KindCallExpression
+
+Subject: Scope.make()
+Subject Type: Effect<Closeable, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.runSync
+      args: (constant)
+      outType: Closeable
+
+=== Piping Flow ===
+Location: 59:16 - 59:38
+Node: Effect.succeed(scope)
+Node Kind: KindCallExpression
+
+Subject: scope
+Subject Type: Closeable
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Closeable, never, never>
+
+=== Piping Flow ===
+Location: 64:30 - 64:71
+Node: Effect.runSync(NarrowCtor.make("value"))
+Node Kind: KindCallExpression
+
+Subject: "value"
+Subject Type: "value"
+
+Transformations (2):
+  [0] kind: call
+      callee: NarrowCtor.make
+      args: (constant)
+      outType: Effect<string, never, never>
+  [1] kind: call
+      callee: Effect.runSync
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 68:32 - 68:66
+Node: Effect.runSync(GenCtor.make("x"))
+Node Kind: KindCallExpression
+
+Subject: "x"
+Subject Type: "x"
+
+Transformations (2):
+  [0] kind: call
+      callee: GenCtor.make
+      args: (constant)
+      outType: Effect<readonly string[], never, never>
+  [1] kind: call
+      callee: Effect.runSync
+      args: (constant)
+      outType: readonly string[]
+
+=== Piping Flow ===
+Location: 72:41 - 72:75
+Node: Effect.runSync(ShapeCtor.make(1))
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: ShapeCtor.make
+      args: (constant)
+      outType: Effect<readonly number[], never, never>
+  [1] kind: call
+      callee: Effect.runSync
+      args: (constant)
+      outType: readonly number[]
+
+=== Piping Flow ===
+Location: 76:31 - 76:67
+Node: Effect.runSync(TxChunk.make(chunk))
+Node Kind: KindCallExpression
+
+Subject: chunk
+Subject Type: Chunk<number>
+
+Transformations (2):
+  [0] kind: call
+      callee: TxChunk.make
+      args: (constant)
+      outType: Effect<TxChunk<number>, never, never>
+  [1] kind: call
+      callee: Effect.runSync
+      args: (constant)
+      outType: TxChunk<number>
+
+=== Piping Flow ===
+Location: 80:31 - 80:65
+Node: Effect.runSync(Queue.take(queue))
+Node Kind: KindCallExpression
+
+Subject: queue
+Subject Type: Queue<number, never>
+
+Transformations (2):
+  [0] kind: call
+      callee: Queue.take
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: call
+      callee: Effect.runSync
+      args: (constant)
+      outType: number
+
+=== Piping Flow ===
+Location: 84:37 - 84:55
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 87:33 - 87:64
+Node: Effect.runSync(MyScope.make())
+Node Kind: KindCallExpression
+
+Subject: MyScope.make()
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.runSync
+      args: (constant)
+      outType: number

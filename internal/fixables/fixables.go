@@ -48,6 +48,7 @@ var All = []fixable.Fixable{
 	MissedPipeableOpportunityFix,
 	NewSchemaClassFix,
 	ServiceNotAsClassFix,
+	PreferUnsafeConstructorFix,
 }
 
 // ByErrorCode finds all fixables that handle a given error code.

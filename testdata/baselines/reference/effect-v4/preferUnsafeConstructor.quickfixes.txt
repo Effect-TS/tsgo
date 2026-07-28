@@ -1,0 +1,940 @@
+=== Quick Fix Inventory ===
+
+[D1] (13:22-13:50) TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+  Fix 0: "Disable preferUnsafeConstructor for this line"
+  Fix 1: "Disable preferUnsafeConstructor for entire file"
+  Fix 2: "Replace with Scope.makeUnsafe"
+
+[D2] (15:30-15:68) TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+  Fix 0: "Disable preferUnsafeConstructor for this line"
+  Fix 1: "Disable preferUnsafeConstructor for entire file"
+  Fix 2: "Replace with Scope.makeUnsafe"
+
+[D3] (18:37-18:75) TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+  Fix 0: "Disable preferUnsafeConstructor for this line"
+  Fix 1: "Disable preferUnsafeConstructor for entire file"
+  Fix 2: "Replace with Scope.makeUnsafe"
+
+[D4] (21:20-21:47) TS377109: `Effect.runSync(Ref.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Ref.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+  Fix 0: "Disable preferUnsafeConstructor for this line"
+  Fix 1: "Disable preferUnsafeConstructor for entire file"
+  Fix 2: "Replace with Ref.makeUnsafe"
+
+[D5] (23:25-23:64) TS377109: `Effect.runSync(Deferred.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Deferred.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+  Fix 0: "Disable preferUnsafeConstructor for this line"
+  Fix 1: "Disable preferUnsafeConstructor for entire file"
+  Fix 2: "Replace with Deferred.makeUnsafe"
+
+[D6] (25:22-25:54) TS377109: `Effect.runSync(Latch.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Latch.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+  Fix 0: "Disable preferUnsafeConstructor for this line"
+  Fix 1: "Disable preferUnsafeConstructor for entire file"
+  Fix 2: "Replace with Latch.makeUnsafe"
+
+[D7] (27:32-27:62) TS377109: `Effect.runSync(ScopeNs.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `ScopeNs.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+  Fix 0: "Disable preferUnsafeConstructor for this line"
+  Fix 1: "Disable preferUnsafeConstructor for entire file"
+  Fix 2: "Replace with ScopeNs.makeUnsafe"
+
+[D8] (29:28-29:55) TS377109: `Effect.runSync(makeScope(...))` starts a fiber to run a pure constructor. Use the synchronous variant `makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+  Fix 0: "Disable preferUnsafeConstructor for this line"
+  Fix 1: "Disable preferUnsafeConstructor for entire file"
+
+[D9] (31:31-31:52) TS377109: `runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+  Fix 0: "Disable preferUnsafeConstructor for this line"
+  Fix 1: "Disable preferUnsafeConstructor for entire file"
+  Fix 2: "Replace with Scope.makeUnsafe"
+
+[D10] (33:30-33:60) TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+  Fix 0: "Disable preferUnsafeConstructor for this line"
+  Fix 1: "Disable preferUnsafeConstructor for entire file"
+  Fix 2: "Replace with Scope.makeUnsafe"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable preferUnsafeConstructor for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable preferUnsafeConstructor for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Scope.makeUnsafe" ===
+
+--- file:///.src/preferUnsafeConstructor.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferUnsafeConstructor:warning
+import { Chunk, Deferred, Effect, Latch, Queue, Ref, Scope, TxChunk } from "effect"
+import { runSync } from "effect/Effect"
+import { make as makeScope, makeUnsafe as makeScopeUnsafe } from "effect/Scope"
+import * as ScopeNs from "effect/Scope"
+import * as NarrowCtor from "effect/NarrowCtor"
+import * as GenCtor from "effect/GenCtor"
+import * as ShapeCtor from "effect/ShapeCtor"
+
+// --- should report: direct constructor call with a matching *Unsafe sibling ---
+
+export const scope = Scope.makeUnsafe()
+
+export const scopeParallel = Effect.runSync(Scope.make("parallel"))
+
+export class ResourceHolder {
+  readonly scope: Scope.Closeable = Effect.runSync(Scope.make("parallel"))
+}
+
+export const ref = Effect.runSync(Ref.make(1))
+
+export const deferred = Effect.runSync(Deferred.make<string>())
+
+export const latch = Effect.runSync(Latch.make(true))
+
+export const namespaceImport = Effect.runSync(ScopeNs.make())
+
+export const namedImport = Effect.runSync(makeScope())
+
+export const aliasedRunSync = runSync(Scope.make())
+
+export const parenthesized = Effect.runSync((Scope.make()))
+
+// --- must not report ---
+
+// Not a direct constructor call: variable reference.
+const scopeEffect = Scope.make()
+export const fromVariable = Effect.runSync(scopeEffect)
+
+// Not a direct constructor call: composed effect.
+export const piped = Effect.runSync(Scope.make().pipe(Effect.map((s) => s)))
+
+// Effect.gen has no genUnsafe sibling.
+export const fromGen = Effect.runSync(Effect.gen(function*() {
+  return yield* Ref.make(0)
+}))
+
+// Effect.succeed has no succeedUnsafe sibling.
+export const noSibling = Effect.runSync(Effect.succeed(1))
+
+// The *Unsafe variant itself must stay untouched.
+export const alreadyUnsafe = Scope.makeUnsafe()
+export const alreadyUnsafeNamed = makeScopeUnsafe()
+
+// Inside an Effect generator context, runEffectInsideEffect owns the report.
+export const insideGen = Effect.gen(function*() {
+  const scope = Effect.runSync(Scope.make())
+  return yield* Effect.succeed(scope)
+})
+
+// makeUnsafe returns the narrower literal "narrow": assignable to the success
+// type `string` but not mutually, so the rewrite would change the inferred type.
+export const narrowerReturn = Effect.runSync(NarrowCtor.make("value"))
+
+// Same ReadonlyArray origin, but makeUnsafe("x") would narrow the result from
+// ReadonlyArray<string> to ReadonlyArray<"x">.
+export const genericContainer = Effect.runSync(GenCtor.make("x"))
+
+// makeUnsafe's type parameter is absent from its parameters, so the rewritten
+// call site would infer ReadonlyArray<unknown> instead of ReadonlyArray<number>.
+export const uninferrableTypeParameter = Effect.runSync(ShapeCtor.make(1))
+
+// TxChunk.makeUnsafe takes a TxRef, not the Chunk that TxChunk.make accepts.
+declare const chunk: Chunk.Chunk<number>
+export const differentParams = Effect.runSync(TxChunk.make(chunk))
+
+// Queue.takeUnsafe returns `Exit<A, E> | undefined`, not the success type.
+declare const queue: Queue.Queue<number, never>
+export const differentReturn = Effect.runSync(Queue.take(queue))
+
+// A userland lookalike is not exported from the effect package.
+const MyScope = {
+  make: (): Effect.Effect<number> => Effect.succeed(1),
+  makeUnsafe: (): number => 1,
+}
+export const userlandLookalike = Effect.runSync(MyScope.make())
+
+
+=== [D2] Fix 0: "Disable preferUnsafeConstructor for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable preferUnsafeConstructor for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Scope.makeUnsafe" ===
+
+--- file:///.src/preferUnsafeConstructor.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferUnsafeConstructor:warning
+import { Chunk, Deferred, Effect, Latch, Queue, Ref, Scope, TxChunk } from "effect"
+import { runSync } from "effect/Effect"
+import { make as makeScope, makeUnsafe as makeScopeUnsafe } from "effect/Scope"
+import * as ScopeNs from "effect/Scope"
+import * as NarrowCtor from "effect/NarrowCtor"
+import * as GenCtor from "effect/GenCtor"
+import * as ShapeCtor from "effect/ShapeCtor"
+
+// --- should report: direct constructor call with a matching *Unsafe sibling ---
+
+export const scope = Effect.runSync(Scope.make())
+
+export const scopeParallel = Scope.makeUnsafe("parallel")
+
+export class ResourceHolder {
+  readonly scope: Scope.Closeable = Effect.runSync(Scope.make("parallel"))
+}
+
+export const ref = Effect.runSync(Ref.make(1))
+
+export const deferred = Effect.runSync(Deferred.make<string>())
+
+export const latch = Effect.runSync(Latch.make(true))
+
+export const namespaceImport = Effect.runSync(ScopeNs.make())
+
+export const namedImport = Effect.runSync(makeScope())
+
+export const aliasedRunSync = runSync(Scope.make())
+
+export const parenthesized = Effect.runSync((Scope.make()))
+
+// --- must not report ---
+
+// Not a direct constructor call: variable reference.
+const scopeEffect = Scope.make()
+export const fromVariable = Effect.runSync(scopeEffect)
+
+// Not a direct constructor call: composed effect.
+export const piped = Effect.runSync(Scope.make().pipe(Effect.map((s) => s)))
+
+// Effect.gen has no genUnsafe sibling.
+export const fromGen = Effect.runSync(Effect.gen(function*() {
+  return yield* Ref.make(0)
+}))
+
+// Effect.succeed has no succeedUnsafe sibling.
+export const noSibling = Effect.runSync(Effect.succeed(1))
+
+// The *Unsafe variant itself must stay untouched.
+export const alreadyUnsafe = Scope.makeUnsafe()
+export const alreadyUnsafeNamed = makeScopeUnsafe()
+
+// Inside an Effect generator context, runEffectInsideEffect owns the report.
+export const insideGen = Effect.gen(function*() {
+  const scope = Effect.runSync(Scope.make())
+  return yield* Effect.succeed(scope)
+})
+
+// makeUnsafe returns the narrower literal "narrow": assignable to the success
+// type `string` but not mutually, so the rewrite would change the inferred type.
+export const narrowerReturn = Effect.runSync(NarrowCtor.make("value"))
+
+// Same ReadonlyArray origin, but makeUnsafe("x") would narrow the result from
+// ReadonlyArray<string> to ReadonlyArray<"x">.
+export const genericContainer = Effect.runSync(GenCtor.make("x"))
+
+// makeUnsafe's type parameter is absent from its parameters, so the rewritten
+// call site would infer ReadonlyArray<unknown> instead of ReadonlyArray<number>.
+export const uninferrableTypeParameter = Effect.runSync(ShapeCtor.make(1))
+
+// TxChunk.makeUnsafe takes a TxRef, not the Chunk that TxChunk.make accepts.
+declare const chunk: Chunk.Chunk<number>
+export const differentParams = Effect.runSync(TxChunk.make(chunk))
+
+// Queue.takeUnsafe returns `Exit<A, E> | undefined`, not the success type.
+declare const queue: Queue.Queue<number, never>
+export const differentReturn = Effect.runSync(Queue.take(queue))
+
+// A userland lookalike is not exported from the effect package.
+const MyScope = {
+  make: (): Effect.Effect<number> => Effect.succeed(1),
+  makeUnsafe: (): number => 1,
+}
+export const userlandLookalike = Effect.runSync(MyScope.make())
+
+
+=== [D3] Fix 0: "Disable preferUnsafeConstructor for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable preferUnsafeConstructor for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Scope.makeUnsafe" ===
+
+--- file:///.src/preferUnsafeConstructor.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferUnsafeConstructor:warning
+import { Chunk, Deferred, Effect, Latch, Queue, Ref, Scope, TxChunk } from "effect"
+import { runSync } from "effect/Effect"
+import { make as makeScope, makeUnsafe as makeScopeUnsafe } from "effect/Scope"
+import * as ScopeNs from "effect/Scope"
+import * as NarrowCtor from "effect/NarrowCtor"
+import * as GenCtor from "effect/GenCtor"
+import * as ShapeCtor from "effect/ShapeCtor"
+
+// --- should report: direct constructor call with a matching *Unsafe sibling ---
+
+export const scope = Effect.runSync(Scope.make())
+
+export const scopeParallel = Effect.runSync(Scope.make("parallel"))
+
+export class ResourceHolder {
+  readonly scope: Scope.Closeable = Scope.makeUnsafe("parallel")
+}
+
+export const ref = Effect.runSync(Ref.make(1))
+
+export const deferred = Effect.runSync(Deferred.make<string>())
+
+export const latch = Effect.runSync(Latch.make(true))
+
+export const namespaceImport = Effect.runSync(ScopeNs.make())
+
+export const namedImport = Effect.runSync(makeScope())
+
+export const aliasedRunSync = runSync(Scope.make())
+
+export const parenthesized = Effect.runSync((Scope.make()))
+
+// --- must not report ---
+
+// Not a direct constructor call: variable reference.
+const scopeEffect = Scope.make()
+export const fromVariable = Effect.runSync(scopeEffect)
+
+// Not a direct constructor call: composed effect.
+export const piped = Effect.runSync(Scope.make().pipe(Effect.map((s) => s)))
+
+// Effect.gen has no genUnsafe sibling.
+export const fromGen = Effect.runSync(Effect.gen(function*() {
+  return yield* Ref.make(0)
+}))
+
+// Effect.succeed has no succeedUnsafe sibling.
+export const noSibling = Effect.runSync(Effect.succeed(1))
+
+// The *Unsafe variant itself must stay untouched.
+export const alreadyUnsafe = Scope.makeUnsafe()
+export const alreadyUnsafeNamed = makeScopeUnsafe()
+
+// Inside an Effect generator context, runEffectInsideEffect owns the report.
+export const insideGen = Effect.gen(function*() {
+  const scope = Effect.runSync(Scope.make())
+  return yield* Effect.succeed(scope)
+})
+
+// makeUnsafe returns the narrower literal "narrow": assignable to the success
+// type `string` but not mutually, so the rewrite would change the inferred type.
+export const narrowerReturn = Effect.runSync(NarrowCtor.make("value"))
+
+// Same ReadonlyArray origin, but makeUnsafe("x") would narrow the result from
+// ReadonlyArray<string> to ReadonlyArray<"x">.
+export const genericContainer = Effect.runSync(GenCtor.make("x"))
+
+// makeUnsafe's type parameter is absent from its parameters, so the rewritten
+// call site would infer ReadonlyArray<unknown> instead of ReadonlyArray<number>.
+export const uninferrableTypeParameter = Effect.runSync(ShapeCtor.make(1))
+
+// TxChunk.makeUnsafe takes a TxRef, not the Chunk that TxChunk.make accepts.
+declare const chunk: Chunk.Chunk<number>
+export const differentParams = Effect.runSync(TxChunk.make(chunk))
+
+// Queue.takeUnsafe returns `Exit<A, E> | undefined`, not the success type.
+declare const queue: Queue.Queue<number, never>
+export const differentReturn = Effect.runSync(Queue.take(queue))
+
+// A userland lookalike is not exported from the effect package.
+const MyScope = {
+  make: (): Effect.Effect<number> => Effect.succeed(1),
+  makeUnsafe: (): number => 1,
+}
+export const userlandLookalike = Effect.runSync(MyScope.make())
+
+
+=== [D4] Fix 0: "Disable preferUnsafeConstructor for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable preferUnsafeConstructor for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Ref.makeUnsafe" ===
+
+--- file:///.src/preferUnsafeConstructor.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferUnsafeConstructor:warning
+import { Chunk, Deferred, Effect, Latch, Queue, Ref, Scope, TxChunk } from "effect"
+import { runSync } from "effect/Effect"
+import { make as makeScope, makeUnsafe as makeScopeUnsafe } from "effect/Scope"
+import * as ScopeNs from "effect/Scope"
+import * as NarrowCtor from "effect/NarrowCtor"
+import * as GenCtor from "effect/GenCtor"
+import * as ShapeCtor from "effect/ShapeCtor"
+
+// --- should report: direct constructor call with a matching *Unsafe sibling ---
+
+export const scope = Effect.runSync(Scope.make())
+
+export const scopeParallel = Effect.runSync(Scope.make("parallel"))
+
+export class ResourceHolder {
+  readonly scope: Scope.Closeable = Effect.runSync(Scope.make("parallel"))
+}
+
+export const ref = Ref.makeUnsafe(1)
+
+export const deferred = Effect.runSync(Deferred.make<string>())
+
+export const latch = Effect.runSync(Latch.make(true))
+
+export const namespaceImport = Effect.runSync(ScopeNs.make())
+
+export const namedImport = Effect.runSync(makeScope())
+
+export const aliasedRunSync = runSync(Scope.make())
+
+export const parenthesized = Effect.runSync((Scope.make()))
+
+// --- must not report ---
+
+// Not a direct constructor call: variable reference.
+const scopeEffect = Scope.make()
+export const fromVariable = Effect.runSync(scopeEffect)
+
+// Not a direct constructor call: composed effect.
+export const piped = Effect.runSync(Scope.make().pipe(Effect.map((s) => s)))
+
+// Effect.gen has no genUnsafe sibling.
+export const fromGen = Effect.runSync(Effect.gen(function*() {
+  return yield* Ref.make(0)
+}))
+
+// Effect.succeed has no succeedUnsafe sibling.
+export const noSibling = Effect.runSync(Effect.succeed(1))
+
+// The *Unsafe variant itself must stay untouched.
+export const alreadyUnsafe = Scope.makeUnsafe()
+export const alreadyUnsafeNamed = makeScopeUnsafe()
+
+// Inside an Effect generator context, runEffectInsideEffect owns the report.
+export const insideGen = Effect.gen(function*() {
+  const scope = Effect.runSync(Scope.make())
+  return yield* Effect.succeed(scope)
+})
+
+// makeUnsafe returns the narrower literal "narrow": assignable to the success
+// type `string` but not mutually, so the rewrite would change the inferred type.
+export const narrowerReturn = Effect.runSync(NarrowCtor.make("value"))
+
+// Same ReadonlyArray origin, but makeUnsafe("x") would narrow the result from
+// ReadonlyArray<string> to ReadonlyArray<"x">.
+export const genericContainer = Effect.runSync(GenCtor.make("x"))
+
+// makeUnsafe's type parameter is absent from its parameters, so the rewritten
+// call site would infer ReadonlyArray<unknown> instead of ReadonlyArray<number>.
+export const uninferrableTypeParameter = Effect.runSync(ShapeCtor.make(1))
+
+// TxChunk.makeUnsafe takes a TxRef, not the Chunk that TxChunk.make accepts.
+declare const chunk: Chunk.Chunk<number>
+export const differentParams = Effect.runSync(TxChunk.make(chunk))
+
+// Queue.takeUnsafe returns `Exit<A, E> | undefined`, not the success type.
+declare const queue: Queue.Queue<number, never>
+export const differentReturn = Effect.runSync(Queue.take(queue))
+
+// A userland lookalike is not exported from the effect package.
+const MyScope = {
+  make: (): Effect.Effect<number> => Effect.succeed(1),
+  makeUnsafe: (): number => 1,
+}
+export const userlandLookalike = Effect.runSync(MyScope.make())
+
+
+=== [D5] Fix 0: "Disable preferUnsafeConstructor for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable preferUnsafeConstructor for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Replace with Deferred.makeUnsafe" ===
+
+--- file:///.src/preferUnsafeConstructor.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferUnsafeConstructor:warning
+import { Chunk, Deferred, Effect, Latch, Queue, Ref, Scope, TxChunk } from "effect"
+import { runSync } from "effect/Effect"
+import { make as makeScope, makeUnsafe as makeScopeUnsafe } from "effect/Scope"
+import * as ScopeNs from "effect/Scope"
+import * as NarrowCtor from "effect/NarrowCtor"
+import * as GenCtor from "effect/GenCtor"
+import * as ShapeCtor from "effect/ShapeCtor"
+
+// --- should report: direct constructor call with a matching *Unsafe sibling ---
+
+export const scope = Effect.runSync(Scope.make())
+
+export const scopeParallel = Effect.runSync(Scope.make("parallel"))
+
+export class ResourceHolder {
+  readonly scope: Scope.Closeable = Effect.runSync(Scope.make("parallel"))
+}
+
+export const ref = Effect.runSync(Ref.make(1))
+
+export const deferred = Deferred.makeUnsafe<string>()
+
+export const latch = Effect.runSync(Latch.make(true))
+
+export const namespaceImport = Effect.runSync(ScopeNs.make())
+
+export const namedImport = Effect.runSync(makeScope())
+
+export const aliasedRunSync = runSync(Scope.make())
+
+export const parenthesized = Effect.runSync((Scope.make()))
+
+// --- must not report ---
+
+// Not a direct constructor call: variable reference.
+const scopeEffect = Scope.make()
+export const fromVariable = Effect.runSync(scopeEffect)
+
+// Not a direct constructor call: composed effect.
+export const piped = Effect.runSync(Scope.make().pipe(Effect.map((s) => s)))
+
+// Effect.gen has no genUnsafe sibling.
+export const fromGen = Effect.runSync(Effect.gen(function*() {
+  return yield* Ref.make(0)
+}))
+
+// Effect.succeed has no succeedUnsafe sibling.
+export const noSibling = Effect.runSync(Effect.succeed(1))
+
+// The *Unsafe variant itself must stay untouched.
+export const alreadyUnsafe = Scope.makeUnsafe()
+export const alreadyUnsafeNamed = makeScopeUnsafe()
+
+// Inside an Effect generator context, runEffectInsideEffect owns the report.
+export const insideGen = Effect.gen(function*() {
+  const scope = Effect.runSync(Scope.make())
+  return yield* Effect.succeed(scope)
+})
+
+// makeUnsafe returns the narrower literal "narrow": assignable to the success
+// type `string` but not mutually, so the rewrite would change the inferred type.
+export const narrowerReturn = Effect.runSync(NarrowCtor.make("value"))
+
+// Same ReadonlyArray origin, but makeUnsafe("x") would narrow the result from
+// ReadonlyArray<string> to ReadonlyArray<"x">.
+export const genericContainer = Effect.runSync(GenCtor.make("x"))
+
+// makeUnsafe's type parameter is absent from its parameters, so the rewritten
+// call site would infer ReadonlyArray<unknown> instead of ReadonlyArray<number>.
+export const uninferrableTypeParameter = Effect.runSync(ShapeCtor.make(1))
+
+// TxChunk.makeUnsafe takes a TxRef, not the Chunk that TxChunk.make accepts.
+declare const chunk: Chunk.Chunk<number>
+export const differentParams = Effect.runSync(TxChunk.make(chunk))
+
+// Queue.takeUnsafe returns `Exit<A, E> | undefined`, not the success type.
+declare const queue: Queue.Queue<number, never>
+export const differentReturn = Effect.runSync(Queue.take(queue))
+
+// A userland lookalike is not exported from the effect package.
+const MyScope = {
+  make: (): Effect.Effect<number> => Effect.succeed(1),
+  makeUnsafe: (): number => 1,
+}
+export const userlandLookalike = Effect.runSync(MyScope.make())
+
+
+=== [D6] Fix 0: "Disable preferUnsafeConstructor for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable preferUnsafeConstructor for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace with Latch.makeUnsafe" ===
+
+--- file:///.src/preferUnsafeConstructor.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferUnsafeConstructor:warning
+import { Chunk, Deferred, Effect, Latch, Queue, Ref, Scope, TxChunk } from "effect"
+import { runSync } from "effect/Effect"
+import { make as makeScope, makeUnsafe as makeScopeUnsafe } from "effect/Scope"
+import * as ScopeNs from "effect/Scope"
+import * as NarrowCtor from "effect/NarrowCtor"
+import * as GenCtor from "effect/GenCtor"
+import * as ShapeCtor from "effect/ShapeCtor"
+
+// --- should report: direct constructor call with a matching *Unsafe sibling ---
+
+export const scope = Effect.runSync(Scope.make())
+
+export const scopeParallel = Effect.runSync(Scope.make("parallel"))
+
+export class ResourceHolder {
+  readonly scope: Scope.Closeable = Effect.runSync(Scope.make("parallel"))
+}
+
+export const ref = Effect.runSync(Ref.make(1))
+
+export const deferred = Effect.runSync(Deferred.make<string>())
+
+export const latch = Latch.makeUnsafe(true)
+
+export const namespaceImport = Effect.runSync(ScopeNs.make())
+
+export const namedImport = Effect.runSync(makeScope())
+
+export const aliasedRunSync = runSync(Scope.make())
+
+export const parenthesized = Effect.runSync((Scope.make()))
+
+// --- must not report ---
+
+// Not a direct constructor call: variable reference.
+const scopeEffect = Scope.make()
+export const fromVariable = Effect.runSync(scopeEffect)
+
+// Not a direct constructor call: composed effect.
+export const piped = Effect.runSync(Scope.make().pipe(Effect.map((s) => s)))
+
+// Effect.gen has no genUnsafe sibling.
+export const fromGen = Effect.runSync(Effect.gen(function*() {
+  return yield* Ref.make(0)
+}))
+
+// Effect.succeed has no succeedUnsafe sibling.
+export const noSibling = Effect.runSync(Effect.succeed(1))
+
+// The *Unsafe variant itself must stay untouched.
+export const alreadyUnsafe = Scope.makeUnsafe()
+export const alreadyUnsafeNamed = makeScopeUnsafe()
+
+// Inside an Effect generator context, runEffectInsideEffect owns the report.
+export const insideGen = Effect.gen(function*() {
+  const scope = Effect.runSync(Scope.make())
+  return yield* Effect.succeed(scope)
+})
+
+// makeUnsafe returns the narrower literal "narrow": assignable to the success
+// type `string` but not mutually, so the rewrite would change the inferred type.
+export const narrowerReturn = Effect.runSync(NarrowCtor.make("value"))
+
+// Same ReadonlyArray origin, but makeUnsafe("x") would narrow the result from
+// ReadonlyArray<string> to ReadonlyArray<"x">.
+export const genericContainer = Effect.runSync(GenCtor.make("x"))
+
+// makeUnsafe's type parameter is absent from its parameters, so the rewritten
+// call site would infer ReadonlyArray<unknown> instead of ReadonlyArray<number>.
+export const uninferrableTypeParameter = Effect.runSync(ShapeCtor.make(1))
+
+// TxChunk.makeUnsafe takes a TxRef, not the Chunk that TxChunk.make accepts.
+declare const chunk: Chunk.Chunk<number>
+export const differentParams = Effect.runSync(TxChunk.make(chunk))
+
+// Queue.takeUnsafe returns `Exit<A, E> | undefined`, not the success type.
+declare const queue: Queue.Queue<number, never>
+export const differentReturn = Effect.runSync(Queue.take(queue))
+
+// A userland lookalike is not exported from the effect package.
+const MyScope = {
+  make: (): Effect.Effect<number> => Effect.succeed(1),
+  makeUnsafe: (): number => 1,
+}
+export const userlandLookalike = Effect.runSync(MyScope.make())
+
+
+=== [D7] Fix 0: "Disable preferUnsafeConstructor for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable preferUnsafeConstructor for entire file" ===
+skipped by default
+
+=== [D7] Fix 2: "Replace with ScopeNs.makeUnsafe" ===
+
+--- file:///.src/preferUnsafeConstructor.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferUnsafeConstructor:warning
+import { Chunk, Deferred, Effect, Latch, Queue, Ref, Scope, TxChunk } from "effect"
+import { runSync } from "effect/Effect"
+import { make as makeScope, makeUnsafe as makeScopeUnsafe } from "effect/Scope"
+import * as ScopeNs from "effect/Scope"
+import * as NarrowCtor from "effect/NarrowCtor"
+import * as GenCtor from "effect/GenCtor"
+import * as ShapeCtor from "effect/ShapeCtor"
+
+// --- should report: direct constructor call with a matching *Unsafe sibling ---
+
+export const scope = Effect.runSync(Scope.make())
+
+export const scopeParallel = Effect.runSync(Scope.make("parallel"))
+
+export class ResourceHolder {
+  readonly scope: Scope.Closeable = Effect.runSync(Scope.make("parallel"))
+}
+
+export const ref = Effect.runSync(Ref.make(1))
+
+export const deferred = Effect.runSync(Deferred.make<string>())
+
+export const latch = Effect.runSync(Latch.make(true))
+
+export const namespaceImport = ScopeNs.makeUnsafe()
+
+export const namedImport = Effect.runSync(makeScope())
+
+export const aliasedRunSync = runSync(Scope.make())
+
+export const parenthesized = Effect.runSync((Scope.make()))
+
+// --- must not report ---
+
+// Not a direct constructor call: variable reference.
+const scopeEffect = Scope.make()
+export const fromVariable = Effect.runSync(scopeEffect)
+
+// Not a direct constructor call: composed effect.
+export const piped = Effect.runSync(Scope.make().pipe(Effect.map((s) => s)))
+
+// Effect.gen has no genUnsafe sibling.
+export const fromGen = Effect.runSync(Effect.gen(function*() {
+  return yield* Ref.make(0)
+}))
+
+// Effect.succeed has no succeedUnsafe sibling.
+export const noSibling = Effect.runSync(Effect.succeed(1))
+
+// The *Unsafe variant itself must stay untouched.
+export const alreadyUnsafe = Scope.makeUnsafe()
+export const alreadyUnsafeNamed = makeScopeUnsafe()
+
+// Inside an Effect generator context, runEffectInsideEffect owns the report.
+export const insideGen = Effect.gen(function*() {
+  const scope = Effect.runSync(Scope.make())
+  return yield* Effect.succeed(scope)
+})
+
+// makeUnsafe returns the narrower literal "narrow": assignable to the success
+// type `string` but not mutually, so the rewrite would change the inferred type.
+export const narrowerReturn = Effect.runSync(NarrowCtor.make("value"))
+
+// Same ReadonlyArray origin, but makeUnsafe("x") would narrow the result from
+// ReadonlyArray<string> to ReadonlyArray<"x">.
+export const genericContainer = Effect.runSync(GenCtor.make("x"))
+
+// makeUnsafe's type parameter is absent from its parameters, so the rewritten
+// call site would infer ReadonlyArray<unknown> instead of ReadonlyArray<number>.
+export const uninferrableTypeParameter = Effect.runSync(ShapeCtor.make(1))
+
+// TxChunk.makeUnsafe takes a TxRef, not the Chunk that TxChunk.make accepts.
+declare const chunk: Chunk.Chunk<number>
+export const differentParams = Effect.runSync(TxChunk.make(chunk))
+
+// Queue.takeUnsafe returns `Exit<A, E> | undefined`, not the success type.
+declare const queue: Queue.Queue<number, never>
+export const differentReturn = Effect.runSync(Queue.take(queue))
+
+// A userland lookalike is not exported from the effect package.
+const MyScope = {
+  make: (): Effect.Effect<number> => Effect.succeed(1),
+  makeUnsafe: (): number => 1,
+}
+export const userlandLookalike = Effect.runSync(MyScope.make())
+
+
+=== [D8] Fix 0: "Disable preferUnsafeConstructor for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable preferUnsafeConstructor for entire file" ===
+skipped by default
+
+=== [D9] Fix 0: "Disable preferUnsafeConstructor for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable preferUnsafeConstructor for entire file" ===
+skipped by default
+
+=== [D9] Fix 2: "Replace with Scope.makeUnsafe" ===
+
+--- file:///.src/preferUnsafeConstructor.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferUnsafeConstructor:warning
+import { Chunk, Deferred, Effect, Latch, Queue, Ref, Scope, TxChunk } from "effect"
+import { runSync } from "effect/Effect"
+import { make as makeScope, makeUnsafe as makeScopeUnsafe } from "effect/Scope"
+import * as ScopeNs from "effect/Scope"
+import * as NarrowCtor from "effect/NarrowCtor"
+import * as GenCtor from "effect/GenCtor"
+import * as ShapeCtor from "effect/ShapeCtor"
+
+// --- should report: direct constructor call with a matching *Unsafe sibling ---
+
+export const scope = Effect.runSync(Scope.make())
+
+export const scopeParallel = Effect.runSync(Scope.make("parallel"))
+
+export class ResourceHolder {
+  readonly scope: Scope.Closeable = Effect.runSync(Scope.make("parallel"))
+}
+
+export const ref = Effect.runSync(Ref.make(1))
+
+export const deferred = Effect.runSync(Deferred.make<string>())
+
+export const latch = Effect.runSync(Latch.make(true))
+
+export const namespaceImport = Effect.runSync(ScopeNs.make())
+
+export const namedImport = Effect.runSync(makeScope())
+
+export const aliasedRunSync = Scope.makeUnsafe()
+
+export const parenthesized = Effect.runSync((Scope.make()))
+
+// --- must not report ---
+
+// Not a direct constructor call: variable reference.
+const scopeEffect = Scope.make()
+export const fromVariable = Effect.runSync(scopeEffect)
+
+// Not a direct constructor call: composed effect.
+export const piped = Effect.runSync(Scope.make().pipe(Effect.map((s) => s)))
+
+// Effect.gen has no genUnsafe sibling.
+export const fromGen = Effect.runSync(Effect.gen(function*() {
+  return yield* Ref.make(0)
+}))
+
+// Effect.succeed has no succeedUnsafe sibling.
+export const noSibling = Effect.runSync(Effect.succeed(1))
+
+// The *Unsafe variant itself must stay untouched.
+export const alreadyUnsafe = Scope.makeUnsafe()
+export const alreadyUnsafeNamed = makeScopeUnsafe()
+
+// Inside an Effect generator context, runEffectInsideEffect owns the report.
+export const insideGen = Effect.gen(function*() {
+  const scope = Effect.runSync(Scope.make())
+  return yield* Effect.succeed(scope)
+})
+
+// makeUnsafe returns the narrower literal "narrow": assignable to the success
+// type `string` but not mutually, so the rewrite would change the inferred type.
+export const narrowerReturn = Effect.runSync(NarrowCtor.make("value"))
+
+// Same ReadonlyArray origin, but makeUnsafe("x") would narrow the result from
+// ReadonlyArray<string> to ReadonlyArray<"x">.
+export const genericContainer = Effect.runSync(GenCtor.make("x"))
+
+// makeUnsafe's type parameter is absent from its parameters, so the rewritten
+// call site would infer ReadonlyArray<unknown> instead of ReadonlyArray<number>.
+export const uninferrableTypeParameter = Effect.runSync(ShapeCtor.make(1))
+
+// TxChunk.makeUnsafe takes a TxRef, not the Chunk that TxChunk.make accepts.
+declare const chunk: Chunk.Chunk<number>
+export const differentParams = Effect.runSync(TxChunk.make(chunk))
+
+// Queue.takeUnsafe returns `Exit<A, E> | undefined`, not the success type.
+declare const queue: Queue.Queue<number, never>
+export const differentReturn = Effect.runSync(Queue.take(queue))
+
+// A userland lookalike is not exported from the effect package.
+const MyScope = {
+  make: (): Effect.Effect<number> => Effect.succeed(1),
+  makeUnsafe: (): number => 1,
+}
+export const userlandLookalike = Effect.runSync(MyScope.make())
+
+
+=== [D10] Fix 0: "Disable preferUnsafeConstructor for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable preferUnsafeConstructor for entire file" ===
+skipped by default
+
+=== [D10] Fix 2: "Replace with Scope.makeUnsafe" ===
+
+--- file:///.src/preferUnsafeConstructor.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferUnsafeConstructor:warning
+import { Chunk, Deferred, Effect, Latch, Queue, Ref, Scope, TxChunk } from "effect"
+import { runSync } from "effect/Effect"
+import { make as makeScope, makeUnsafe as makeScopeUnsafe } from "effect/Scope"
+import * as ScopeNs from "effect/Scope"
+import * as NarrowCtor from "effect/NarrowCtor"
+import * as GenCtor from "effect/GenCtor"
+import * as ShapeCtor from "effect/ShapeCtor"
+
+// --- should report: direct constructor call with a matching *Unsafe sibling ---
+
+export const scope = Effect.runSync(Scope.make())
+
+export const scopeParallel = Effect.runSync(Scope.make("parallel"))
+
+export class ResourceHolder {
+  readonly scope: Scope.Closeable = Effect.runSync(Scope.make("parallel"))
+}
+
+export const ref = Effect.runSync(Ref.make(1))
+
+export const deferred = Effect.runSync(Deferred.make<string>())
+
+export const latch = Effect.runSync(Latch.make(true))
+
+export const namespaceImport = Effect.runSync(ScopeNs.make())
+
+export const namedImport = Effect.runSync(makeScope())
+
+export const aliasedRunSync = runSync(Scope.make())
+
+export const parenthesized = Scope.makeUnsafe()
+
+// --- must not report ---
+
+// Not a direct constructor call: variable reference.
+const scopeEffect = Scope.make()
+export const fromVariable = Effect.runSync(scopeEffect)
+
+// Not a direct constructor call: composed effect.
+export const piped = Effect.runSync(Scope.make().pipe(Effect.map((s) => s)))
+
+// Effect.gen has no genUnsafe sibling.
+export const fromGen = Effect.runSync(Effect.gen(function*() {
+  return yield* Ref.make(0)
+}))
+
+// Effect.succeed has no succeedUnsafe sibling.
+export const noSibling = Effect.runSync(Effect.succeed(1))
+
+// The *Unsafe variant itself must stay untouched.
+export const alreadyUnsafe = Scope.makeUnsafe()
+export const alreadyUnsafeNamed = makeScopeUnsafe()
+
+// Inside an Effect generator context, runEffectInsideEffect owns the report.
+export const insideGen = Effect.gen(function*() {
+  const scope = Effect.runSync(Scope.make())
+  return yield* Effect.succeed(scope)
+})
+
+// makeUnsafe returns the narrower literal "narrow": assignable to the success
+// type `string` but not mutually, so the rewrite would change the inferred type.
+export const narrowerReturn = Effect.runSync(NarrowCtor.make("value"))
+
+// Same ReadonlyArray origin, but makeUnsafe("x") would narrow the result from
+// ReadonlyArray<string> to ReadonlyArray<"x">.
+export const genericContainer = Effect.runSync(GenCtor.make("x"))
+
+// makeUnsafe's type parameter is absent from its parameters, so the rewritten
+// call site would infer ReadonlyArray<unknown> instead of ReadonlyArray<number>.
+export const uninferrableTypeParameter = Effect.runSync(ShapeCtor.make(1))
+
+// TxChunk.makeUnsafe takes a TxRef, not the Chunk that TxChunk.make accepts.
+declare const chunk: Chunk.Chunk<number>
+export const differentParams = Effect.runSync(TxChunk.make(chunk))
+
+// Queue.takeUnsafe returns `Exit<A, E> | undefined`, not the success type.
+declare const queue: Queue.Queue<number, never>
+export const differentReturn = Effect.runSync(Queue.take(queue))
+
+// A userland lookalike is not exported from the effect package.
+const MyScope = {
+  make: (): Effect.Effect<number> => Effect.succeed(1),
+  makeUnsafe: (): number => 1,
+}
+export const userlandLookalike = Effect.runSync(MyScope.make())
+

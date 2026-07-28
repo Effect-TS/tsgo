@@ -426,5 +426,9 @@
     "The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)": {
         "category": "Warning",
         "code": 377108
+    },
+    "`{0}` starts a fiber to run a pure constructor. Use the synchronous variant `{1}` instead. effect(preferUnsafeConstructor)": {
+        "category": "Suggestion",
+        "code": 377109
     }
 }

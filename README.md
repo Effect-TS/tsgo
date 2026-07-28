@@ -72,6 +72,7 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><code>lazyPromiseInEffectSync</code></td><td>⚠️</td><td></td><td>Warns when Effect.sync lazily returns a Promise instead of using an async Effect constructor</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>leakingRequirements</code></td><td>💡</td><td></td><td>Detects implementation services leaked in service methods</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>multipleEffectProvide</code></td><td>⚠️</td><td>🔧</td><td>Warns against chaining Effect.provide calls which can cause service lifecycle issues</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>preferUnsafeConstructor</code></td><td>💡</td><td>🔧</td><td>Suggests replacing Effect.runSync of a pure effect constructor with the synchronous *Unsafe variant exported by the same module</td><td></td><td>✓</td></tr>
     <tr><td><code>returnEffectInGen</code></td><td>💡</td><td>🔧</td><td>Warns when returning an Effect in a generator causes nested Effect&lt;Effect&lt;...&gt;&gt;</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>runEffectInsideEffect</code></td><td>💡</td><td>🔧</td><td>Suggests using Runtime or Effect.run*With methods instead of Effect.run* inside Effect contexts</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>schemaSyncInEffect</code></td><td>💡</td><td></td><td>Suggests using Effect-based Schema methods instead of sync methods inside Effect generators</td><td>✓</td><td></td></tr>
