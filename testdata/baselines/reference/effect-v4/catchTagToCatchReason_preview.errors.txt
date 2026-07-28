@@ -1,0 +1,51 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/catchTagToCatchReason_preview.ts(21,3): warning TS377109: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+/.src/catchTagToCatchReason_preview.ts(28,3): warning TS377110: Returning a successful Effect for unmatched `error.reason._tag` values inside `Effect.catchTag` silently swallows unrelated reasons; use `Effect.catchReason` or `Effect.catchReasons` to re-fail them automatically. effect(catchTagToCatchReason)
+
+
+==== /.src/catchTagToCatchReason_preview.ts (2 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics catchTagToCatchReason:warning
+    import { Effect } from "effect"
+    
+    class RetryReason {
+      readonly _tag = "RetryReason"
+    }
+    
+    class FatalReason {
+      readonly _tag = "FatalReason"
+    }
+    
+    class AppError {
+      readonly _tag = "AppError"
+      constructor(readonly reason: RetryReason | FatalReason) {}
+    }
+    
+    declare const program: Effect.Effect<string, AppError>
+    
+    export const fixable = program.pipe(
+      Effect.catchTag("AppError", (error) => {
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        if (error.reason._tag === "RetryReason") return Effect.succeed("retry")
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        return Effect.fail(error)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      })
+    ~~~~
+!!! warning TS377109: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+    )
+    
+    export const diagnosticOnly = program.pipe(
+      Effect.catchTag("AppError", (error) => {
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        if (error.reason._tag === "RetryReason") return Effect.succeed("retry")
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        return Effect.succeed("ignored")
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      })
+    ~~~~
+!!! warning TS377110: Returning a successful Effect for unmatched `error.reason._tag` values inside `Effect.catchTag` silently swallows unrelated reasons; use `Effect.catchReason` or `Effect.catchReasons` to re-fail them automatically. effect(catchTagToCatchReason)
+    )
+    
