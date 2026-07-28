@@ -1,17 +1,18 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/catchTagToCatchReason.ts(31,3): suggestion TS377109: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
-/.src/catchTagToCatchReason.ts(44,3): suggestion TS377109: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
-/.src/catchTagToCatchReason.ts(53,3): suggestion TS377109: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
-/.src/catchTagToCatchReason.ts(66,3): suggestion TS377109: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
-/.src/catchTagToCatchReason.ts(73,3): suggestion TS377109: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
-/.src/catchTagToCatchReason.ts(81,3): suggestion TS377109: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
-/.src/catchTagToCatchReason.ts(93,3): suggestion TS377109: Branching on `error.reason._tag` inside `Effect.catchTags` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+/.src/catchTagToCatchReason.ts(35,3): suggestion TS377109: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+/.src/catchTagToCatchReason.ts(48,3): suggestion TS377109: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+/.src/catchTagToCatchReason.ts(57,3): suggestion TS377109: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+/.src/catchTagToCatchReason.ts(70,3): suggestion TS377109: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+/.src/catchTagToCatchReason.ts(77,3): suggestion TS377109: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+/.src/catchTagToCatchReason.ts(88,3): suggestion TS377109: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+/.src/catchTagToCatchReason.ts(96,3): suggestion TS377109: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
 /.src/catchTagToCatchReason.ts(108,3): suggestion TS377109: Branching on `error.reason._tag` inside `Effect.catchTags` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+/.src/catchTagToCatchReason.ts(123,3): suggestion TS377109: Branching on `error.reason._tag` inside `Effect.catchTags` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
 
 
-==== /.src/catchTagToCatchReason.ts (8 errors) ====
+==== /.src/catchTagToCatchReason.ts (9 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics catchTagToCatchReason:suggestion
     import { Channel, Effect as Fx, pipe, Stream } from "effect"
@@ -31,6 +32,9 @@ Effect version: 4.0.0
         readonly reason: ReasonA | ReasonB,
         readonly context: string
       ) {}
+      get alternateReason(): ReasonA | ReasonB {
+        return this.reason
+      }
     }
     
     class OtherError {
@@ -39,6 +43,7 @@ Effect version: 4.0.0
     }
     
     declare const program: Fx.Effect<number, OuterError | OtherError>
+    declare const otherOuterError: OuterError
     
     // Should trigger and offer catchReason: canonical switch with explicit re-fail.
     export const switchSingle = program.pipe(
@@ -106,6 +111,25 @@ Effect version: 4.0.0
       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         error.reason._tag === "ReasonA" ? Fx.succeed(1) : Fx.fail(error)
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      )
+    ~~~
+!!! suggestion TS377109: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+    )
+    
+    // Should trigger and offer catchReasons under conditional-expression narrowing.
+    export const ternaryMultiple = program.pipe(
+      Fx.catchTag("OuterError", (error) =>
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        error.reason._tag === "ReasonA"
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          ? Fx.succeed(1)
+    ~~~~~~~~~~~~~~~~~~~~~
+          : error.reason._tag === "ReasonB"
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            ? Fx.succeed(2)
+    ~~~~~~~~~~~~~~~~~~~~~~~
+            : Fx.fail(error)
+    ~~~~~~~~~~~~~~~~~~~~~~~~
       )
     ~~~
 !!! suggestion TS377109: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
@@ -211,6 +235,22 @@ Effect version: 4.0.0
       Fx.catchTag("OuterError", (error) => {
         const reason = error.reason
         if (reason._tag === "ReasonA") return Fx.succeed(1)
+        return Fx.fail(error)
+      })
+    )
+    
+    // Should NOT trigger: a different value with the same type is not the caught error.
+    export const differentRoot = program.pipe(
+      Fx.catchTag("OuterError", (error) => {
+        if (otherOuterError.reason._tag === "ReasonA") return Fx.succeed(1)
+        return Fx.fail(error)
+      })
+    )
+    
+    // Should NOT trigger: the catch rule requires the exact error.reason._tag chain.
+    export const alternateReasonChain = program.pipe(
+      Fx.catchTag("OuterError", (error) => {
+        if (error.alternateReason._tag === "ReasonA") return Fx.succeed(1)
         return Fx.fail(error)
       })
     )

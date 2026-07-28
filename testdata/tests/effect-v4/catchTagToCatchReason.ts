@@ -17,6 +17,9 @@ class OuterError {
     readonly reason: ReasonA | ReasonB,
     readonly context: string
   ) {}
+  get alternateReason(): ReasonA | ReasonB {
+    return this.reason
+  }
 }
 
 class OtherError {
@@ -25,6 +28,7 @@ class OtherError {
 }
 
 declare const program: Fx.Effect<number, OuterError | OtherError>
+declare const otherOuterError: OuterError
 
 // Should trigger and offer catchReason: canonical switch with explicit re-fail.
 export const switchSingle = program.pipe(
@@ -65,6 +69,17 @@ export const ifElseMultiple = program.pipe(
 export const ternarySingle = program.pipe(
   Fx.catchTag("OuterError", (error) =>
     error.reason._tag === "ReasonA" ? Fx.succeed(1) : Fx.fail(error)
+  )
+)
+
+// Should trigger and offer catchReasons under conditional-expression narrowing.
+export const ternaryMultiple = program.pipe(
+  Fx.catchTag("OuterError", (error) =>
+    error.reason._tag === "ReasonA"
+      ? Fx.succeed(1)
+      : error.reason._tag === "ReasonB"
+        ? Fx.succeed(2)
+        : Fx.fail(error)
   )
 )
 
@@ -135,6 +150,22 @@ export const reasonAlias = program.pipe(
   Fx.catchTag("OuterError", (error) => {
     const reason = error.reason
     if (reason._tag === "ReasonA") return Fx.succeed(1)
+    return Fx.fail(error)
+  })
+)
+
+// Should NOT trigger: a different value with the same type is not the caught error.
+export const differentRoot = program.pipe(
+  Fx.catchTag("OuterError", (error) => {
+    if (otherOuterError.reason._tag === "ReasonA") return Fx.succeed(1)
+    return Fx.fail(error)
+  })
+)
+
+// Should NOT trigger: the catch rule requires the exact error.reason._tag chain.
+export const alternateReasonChain = program.pipe(
+  Fx.catchTag("OuterError", (error) => {
+    if (error.alternateReason._tag === "ReasonA") return Fx.succeed(1)
     return Fx.fail(error)
   })
 )

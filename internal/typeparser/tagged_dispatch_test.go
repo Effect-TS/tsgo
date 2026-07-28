@@ -91,7 +91,7 @@ func TestParseTaggedDispatchAcceptedShapes(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			sf, body := parseTaggedDispatchTestBody(t, tt.body)
-			dispatch := (&TypeParser{}).ParseTaggedDispatch(body, acceptTaggedDispatchIdentifier("value"))
+			dispatch := parseTaggedDispatchSyntax(body)
 			if dispatch == nil {
 				t.Fatal("expected tagged dispatch")
 			}
@@ -169,10 +169,6 @@ func TestParseTaggedDispatchRejectedShapes(t *testing.T) {
 			body: `value._tag === "A" ? (value._tag === "B" ? first : second) : fallback`,
 		},
 		{
-			name: "every branch must use the accepted discriminant",
-			body: `value._tag === "A" ? first : other._tag === "B" ? second : fallback`,
-		},
-		{
 			name: "tag comparison must use a string literal",
 			body: `value._tag === tag ? result : fallback`,
 		},
@@ -191,27 +187,107 @@ func TestParseTaggedDispatchRejectedShapes(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			_, body := parseTaggedDispatchTestBody(t, tt.body)
-			if dispatch := (&TypeParser{}).ParseTaggedDispatch(body, acceptTaggedDispatchIdentifier("value")); dispatch != nil {
+			if dispatch := parseTaggedDispatchSyntax(body); dispatch != nil {
 				t.Fatalf("expected parse rejection, got %+v", dispatch)
 			}
 		})
 	}
 }
 
-func TestParseTaggedDispatchChecksEveryDiscriminant(t *testing.T) {
+func TestParseTaggedDispatchRootSymbolValidation(t *testing.T) {
 	t.Parallel()
-	_, body := parseTaggedDispatchTestBody(t, `value._tag === "A" ? first : value._tag === "B" ? second : fallback`)
-	calls := 0
-	dispatch := (&TypeParser{}).ParseTaggedDispatch(body, func(_ *ast.Node) bool {
-		calls++
-		return calls == 1
-	})
-	if dispatch != nil {
-		t.Fatal("expected the second discriminant rejection to fail the whole parse")
+	_, tp, sf, done := compileAndGetCheckerAndSourceFileInternal(t, `
+		class ReasonA { readonly _tag = "ReasonA" }
+		class ReasonB { readonly _tag = "ReasonB" }
+		class Wrapper {
+			constructor(
+				readonly reason: ReasonA | ReasonB,
+				readonly alternateReason: ReasonA | ReasonB
+			) {}
+		}
+		declare const other: Wrapper
+
+		function narrowedIf(error: Wrapper) {
+			if (error.reason._tag === "ReasonA") return 1
+			else if (error.reason._tag === "ReasonB") return 2
+			else return 0
+		}
+
+		function narrowedTernary(error: Wrapper) {
+			return error.reason._tag === "ReasonA" ? 1
+				: error.reason._tag === "ReasonB" ? 2
+				: 0
+		}
+
+		function differentValue(error: Wrapper) {
+			if (other.reason._tag === "ReasonA") return 1
+			return 0
+		}
+
+		function alternateChain(error: Wrapper) {
+			if (error.alternateReason._tag === "ReasonA") return 1
+			return 0
+		}
+	`)
+	defer done()
+
+	tests := []struct {
+		name string
+		tags []string
+		ok   bool
+	}{
+		{name: "narrowedIf", tags: []string{"ReasonA", "ReasonB"}, ok: true},
+		{name: "narrowedTernary", tags: []string{"ReasonA", "ReasonB"}, ok: true},
+		{name: "differentValue", ok: false},
+		{name: "alternateChain", tags: []string{"ReasonA"}, ok: true},
 	}
-	if calls != 2 {
-		t.Fatalf("predicate calls = %d, want 2", calls)
+	for _, tt := range tests {
+		function := findTaggedDispatchTestFunction(t, sf, tt.name)
+		parameters := GetFunctionLikeParameters(function)
+		body := GetFunctionLikeBody(function)
+		if parameters == nil || len(parameters.Nodes) != 1 || body == nil {
+			t.Fatalf("%s: expected one parameter and a function body", tt.name)
+		}
+		rootSymbol := tp.GetSymbolAtLocation(parameters.Nodes[0].Name())
+		dispatch := tp.ParseTaggedDispatch(body, rootSymbol)
+		if !tt.ok {
+			if dispatch != nil {
+				t.Fatalf("%s: expected parse rejection, got %+v", tt.name, dispatch)
+			}
+			continue
+		}
+		if dispatch == nil {
+			t.Fatalf("%s: expected tagged dispatch", tt.name)
+		}
+		tags := make([]string, len(dispatch.Branches))
+		for index, branch := range dispatch.Branches {
+			tags[index] = branch.Tag
+		}
+		if !slices.Equal(tags, tt.tags) {
+			t.Fatalf("%s: tags = %v, want %v", tt.name, tags, tt.tags)
+		}
 	}
+}
+
+func findTaggedDispatchTestFunction(t *testing.T, sf *ast.SourceFile, name string) *ast.Node {
+	t.Helper()
+	var found *ast.Node
+	var walk ast.Visitor
+	walk = func(node *ast.Node) bool {
+		if node == nil {
+			return false
+		}
+		if node.Kind == ast.KindFunctionDeclaration && node.Name() != nil && node.Name().Text() == name {
+			found = node
+			return true
+		}
+		return node.ForEachChild(walk)
+	}
+	walk(sf.AsNode())
+	if found == nil {
+		t.Fatalf("function %s not found", name)
+	}
+	return found
 }
 
 func parseTaggedDispatchTestBody(t *testing.T, bodySource string) (*ast.SourceFile, *ast.Node) {
@@ -237,17 +313,6 @@ func parseTaggedDispatchTestBody(t *testing.T, bodySource string) (*ast.SourceFi
 		t.Fatal("failed to parse arrow function body")
 	}
 	return sf, body
-}
-
-func acceptTaggedDispatchIdentifier(identifier string) TaggedDispatchDiscriminantPredicate {
-	return func(discriminant *ast.Node) bool {
-		if discriminant == nil || discriminant.Kind != ast.KindPropertyAccessExpression {
-			return false
-		}
-		access := discriminant.AsPropertyAccessExpression()
-		root := unwrapTaggedDispatchExpression(access.Expression)
-		return root != nil && root.Kind == ast.KindIdentifier && root.AsIdentifier().Text == identifier
-	}
 }
 
 func taggedDispatchNodeText(sf *ast.SourceFile, node *ast.Node) string {

@@ -17,42 +17,50 @@ type TaggedDispatch struct {
 	Fallback *ast.Node
 }
 
-// TaggedDispatchDiscriminantPredicate validates each candidate _tag access.
-// Callers own symbol and type semantics; the decoder only validates syntax.
-type TaggedDispatchDiscriminantPredicate func(discriminant *ast.Node) bool
-
 // ParseTaggedDispatch decodes conservative switch, conditional-expression, and
-// if/else-if dispatch over string-literal _tag comparisons.
-func (tp *TypeParser) ParseTaggedDispatch(node *ast.Node, accept TaggedDispatchDiscriminantPredicate) *TaggedDispatch {
-	if tp == nil || node == nil || accept == nil {
+// if/else-if dispatch over string-literal _tag comparisons rooted at rootSymbol.
+func (tp *TypeParser) ParseTaggedDispatch(node *ast.Node, rootSymbol *ast.Symbol) *TaggedDispatch {
+	if tp == nil || tp.checker == nil || node == nil || rootSymbol == nil {
 		return nil
 	}
+	dispatch := parseTaggedDispatchSyntax(node)
+	if dispatch == nil {
+		return nil
+	}
+	for _, branch := range dispatch.Branches {
+		if !tp.isTaggedDispatchDiscriminant(branch.Discriminant, rootSymbol) {
+			return nil
+		}
+	}
+	return dispatch
+}
 
+func parseTaggedDispatchSyntax(node *ast.Node) *TaggedDispatch {
 	node = unwrapTaggedDispatchExpression(node)
 	if node == nil {
 		return nil
 	}
 	switch node.Kind {
 	case ast.KindBlock:
-		return parseTaggedDispatchBlock(node, accept)
+		return parseTaggedDispatchBlock(node)
 	case ast.KindSwitchStatement:
-		return parseTaggedDispatchSwitch(node, accept)
+		return parseTaggedDispatchSwitch(node)
 	case ast.KindIfStatement:
-		return parseTaggedDispatchIfElse(node, accept)
+		return parseTaggedDispatchIfElse(node)
 	case ast.KindConditionalExpression:
-		return parseTaggedDispatchConditional(node, accept)
+		return parseTaggedDispatchConditional(node)
 	case ast.KindReturnStatement:
 		statement := node.AsReturnStatement()
 		if statement == nil || statement.Expression == nil {
 			return nil
 		}
-		return parseTaggedDispatchConditional(statement.Expression, accept)
+		return parseTaggedDispatchConditional(statement.Expression)
 	default:
 		return nil
 	}
 }
 
-func parseTaggedDispatchBlock(node *ast.Node, accept TaggedDispatchDiscriminantPredicate) *TaggedDispatch {
+func parseTaggedDispatchBlock(node *ast.Node) *TaggedDispatch {
 	if node == nil || node.Kind != ast.KindBlock {
 		return nil
 	}
@@ -64,21 +72,21 @@ func parseTaggedDispatchBlock(node *ast.Node, accept TaggedDispatchDiscriminantP
 	if len(statements) == 1 && statements[0] != nil {
 		switch statements[0].Kind {
 		case ast.KindSwitchStatement:
-			return parseTaggedDispatchSwitch(statements[0], accept)
+			return parseTaggedDispatchSwitch(statements[0])
 		case ast.KindIfStatement:
-			return parseTaggedDispatchIfElse(statements[0], accept)
+			return parseTaggedDispatchIfElse(statements[0])
 		case ast.KindReturnStatement:
 			statement := statements[0].AsReturnStatement()
 			if statement == nil || statement.Expression == nil {
 				return nil
 			}
-			return parseTaggedDispatchConditional(statement.Expression, accept)
+			return parseTaggedDispatchConditional(statement.Expression)
 		}
 	}
-	return parseTaggedDispatchSequentialIfs(statements, accept)
+	return parseTaggedDispatchSequentialIfs(statements)
 }
 
-func parseTaggedDispatchSwitch(node *ast.Node, accept TaggedDispatchDiscriminantPredicate) *TaggedDispatch {
+func parseTaggedDispatchSwitch(node *ast.Node) *TaggedDispatch {
 	if node == nil || node.Kind != ast.KindSwitchStatement {
 		return nil
 	}
@@ -86,7 +94,7 @@ func parseTaggedDispatchSwitch(node *ast.Node, accept TaggedDispatchDiscriminant
 	if statement == nil || statement.Expression == nil || statement.CaseBlock == nil || statement.CaseBlock.Kind != ast.KindCaseBlock {
 		return nil
 	}
-	discriminant, ok := acceptedTaggedDiscriminant(statement.Expression, accept)
+	discriminant, ok := taggedDispatchDiscriminant(statement.Expression)
 	if !ok {
 		return nil
 	}
@@ -139,7 +147,7 @@ func parseTaggedDispatchSwitch(node *ast.Node, accept TaggedDispatchDiscriminant
 	return dispatch
 }
 
-func parseTaggedDispatchConditional(node *ast.Node, accept TaggedDispatchDiscriminantPredicate) *TaggedDispatch {
+func parseTaggedDispatchConditional(node *ast.Node) *TaggedDispatch {
 	node = unwrapTaggedDispatchExpression(node)
 	if node == nil || node.Kind != ast.KindConditionalExpression {
 		return nil
@@ -153,7 +161,7 @@ func parseTaggedDispatchConditional(node *ast.Node, accept TaggedDispatchDiscrim
 		if conditional == nil || conditional.Condition == nil || conditional.WhenTrue == nil || conditional.WhenFalse == nil {
 			return nil
 		}
-		branch, ok := parseTaggedDispatchComparison(conditional.Condition, accept)
+		branch, ok := parseTaggedDispatchComparison(conditional.Condition)
 		whenTrue := unwrapTaggedDispatchExpression(conditional.WhenTrue)
 		if !ok || whenTrue == nil || whenTrue.Kind == ast.KindConditionalExpression {
 			return nil
@@ -177,7 +185,7 @@ func parseTaggedDispatchConditional(node *ast.Node, accept TaggedDispatchDiscrim
 	return dispatch
 }
 
-func parseTaggedDispatchIfElse(node *ast.Node, accept TaggedDispatchDiscriminantPredicate) *TaggedDispatch {
+func parseTaggedDispatchIfElse(node *ast.Node) *TaggedDispatch {
 	if node == nil || node.Kind != ast.KindIfStatement {
 		return nil
 	}
@@ -189,7 +197,7 @@ func parseTaggedDispatchIfElse(node *ast.Node, accept TaggedDispatchDiscriminant
 		if statement == nil || statement.Expression == nil || statement.ThenStatement == nil {
 			return nil
 		}
-		branch, ok := parseTaggedDispatchComparison(statement.Expression, accept)
+		branch, ok := parseTaggedDispatchComparison(statement.Expression)
 		if !ok {
 			return nil
 		}
@@ -218,7 +226,7 @@ func parseTaggedDispatchIfElse(node *ast.Node, accept TaggedDispatchDiscriminant
 	return dispatch
 }
 
-func parseTaggedDispatchSequentialIfs(statements []*ast.Node, accept TaggedDispatchDiscriminantPredicate) *TaggedDispatch {
+func parseTaggedDispatchSequentialIfs(statements []*ast.Node) *TaggedDispatch {
 	if len(statements) == 0 {
 		return nil
 	}
@@ -246,7 +254,7 @@ func parseTaggedDispatchSequentialIfs(statements []*ast.Node, accept TaggedDispa
 		if statement == nil || statement.Expression == nil || statement.ThenStatement == nil || statement.ElseStatement != nil {
 			return nil
 		}
-		branch, ok := parseTaggedDispatchComparison(statement.Expression, accept)
+		branch, ok := parseTaggedDispatchComparison(statement.Expression)
 		if !ok {
 			return nil
 		}
@@ -258,7 +266,7 @@ func parseTaggedDispatchSequentialIfs(statements []*ast.Node, accept TaggedDispa
 	return dispatch
 }
 
-func parseTaggedDispatchComparison(node *ast.Node, accept TaggedDispatchDiscriminantPredicate) (TaggedDispatchBranch, bool) {
+func parseTaggedDispatchComparison(node *ast.Node) (TaggedDispatchBranch, bool) {
 	node = unwrapTaggedDispatchExpression(node)
 	if node == nil || node.Kind != ast.KindBinaryExpression {
 		return TaggedDispatchBranch{}, false
@@ -276,10 +284,10 @@ func parseTaggedDispatchComparison(node *ast.Node, accept TaggedDispatchDiscrimi
 	var ok bool
 	if left != nil && ast.IsStringLiteral(left) {
 		tagNode = left
-		discriminant, ok = acceptedTaggedDiscriminant(right, accept)
+		discriminant, ok = taggedDispatchDiscriminant(right)
 	} else if right != nil && ast.IsStringLiteral(right) {
 		tagNode = right
-		discriminant, ok = acceptedTaggedDiscriminant(left, accept)
+		discriminant, ok = taggedDispatchDiscriminant(left)
 	}
 	if !ok || tagNode == nil {
 		return TaggedDispatchBranch{}, false
@@ -292,16 +300,55 @@ func parseTaggedDispatchComparison(node *ast.Node, accept TaggedDispatchDiscrimi
 	}, true
 }
 
-func acceptedTaggedDiscriminant(node *ast.Node, accept TaggedDispatchDiscriminantPredicate) (*ast.Node, bool) {
+func taggedDispatchDiscriminant(node *ast.Node) (*ast.Node, bool) {
 	node = unwrapTaggedDispatchExpression(node)
 	if node == nil || node.Kind != ast.KindPropertyAccessExpression {
 		return nil, false
 	}
 	access := node.AsPropertyAccessExpression()
-	if access == nil || access.Expression == nil || access.Name() == nil || access.Name().Text() != "_tag" || !accept(node) {
+	if access == nil || access.Expression == nil || access.Name() == nil || access.Name().Text() != "_tag" {
 		return nil, false
 	}
 	return node, true
+}
+
+func (tp *TypeParser) isTaggedDispatchDiscriminant(node *ast.Node, rootSymbol *ast.Symbol) bool {
+	node, ok := taggedDispatchDiscriminant(node)
+	if !ok || rootSymbol == nil {
+		return false
+	}
+	access := node.AsPropertyAccessExpression()
+	root := taggedDispatchAccessRoot(access.Expression)
+	if root == nil || !sameSymbolReference(tp.checker, tp.GetSymbolAtLocation(root), rootSymbol) {
+		return false
+	}
+
+	tagSymbol := tp.GetSymbolAtLocation(node)
+	ownerType := tp.GetTypeAtLocation(access.Expression)
+	if tagSymbol == nil || ownerType == nil {
+		return false
+	}
+	if sameSymbolReference(tp.checker, tagSymbol, tp.checker.GetPropertyOfType(ownerType, "_tag")) {
+		return true
+	}
+	for _, member := range tp.UnrollUnionMembers(ownerType) {
+		if member != nil && sameSymbolReference(tp.checker, tagSymbol, tp.checker.GetPropertyOfType(member, "_tag")) {
+			return true
+		}
+	}
+	return false
+}
+
+func taggedDispatchAccessRoot(node *ast.Node) *ast.Node {
+	node = unwrapTaggedDispatchExpression(node)
+	for node != nil && node.Kind == ast.KindPropertyAccessExpression {
+		access := node.AsPropertyAccessExpression()
+		if access == nil || access.Expression == nil {
+			return nil
+		}
+		node = unwrapTaggedDispatchExpression(access.Expression)
+	}
+	return node
 }
 
 func appendTaggedDispatchBranch(dispatch *TaggedDispatch, seen map[string]struct{}, branch TaggedDispatchBranch) bool {

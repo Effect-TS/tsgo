@@ -206,22 +206,18 @@ func analyzeCatchTagToCatchReasonHandler(tp *typeparser.TypeParser, c *checker.C
 	}
 
 	dispatchRefs := make(map[*ast.Node]struct{})
-	dispatch := tp.ParseTaggedDispatch(body, func(discriminant *ast.Node) bool {
-		root, ok := catchReasonTagReference(tp, c, discriminant, parameterSymbol)
-		if ok {
-			dispatchRefs[root] = struct{}{}
-		}
-		return ok
-	})
+	dispatch := tp.ParseTaggedDispatch(body, parameterSymbol)
 	if dispatch == nil || len(dispatch.Branches) == 0 || dispatch.Fallback == nil {
 		return catchTagToCatchReasonHandler{}, false
 	}
 
 	branches := make([]CatchTagToCatchReasonBranch, len(dispatch.Branches))
 	for index, branch := range dispatch.Branches {
-		if _, exists := reasonTags[branch.Tag]; !exists || !isEffectExpression(tp, branch.Result) {
+		root, exactReasonChain := catchReasonTagReference(tp, c, branch.Discriminant, parameterSymbol)
+		if _, exists := reasonTags[branch.Tag]; !exactReasonChain || !exists || !isEffectExpression(tp, branch.Result) {
 			return catchTagToCatchReasonHandler{}, false
 		}
+		dispatchRefs[root] = struct{}{}
 		branches[index] = CatchTagToCatchReasonBranch{ReasonTag: branch.Tag, Result: branch.Result}
 	}
 
