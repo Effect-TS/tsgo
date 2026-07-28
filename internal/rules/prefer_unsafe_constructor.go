@@ -87,13 +87,6 @@ func analyzePreferUnsafeConstructorNode(tp *typeparser.TypeParser, c *checker.Ch
 		return PreferUnsafeConstructorMatch{}, false
 	}
 
-	// Inside an Effect generator context runEffectInsideEffect already reports every
-	// Effect.run* call; suppress this rule there so the two never overlap. The lookup
-	// already walks the node's ancestors, so a single call covers nested scopes too.
-	if tp.GetEffectYieldGeneratorFunction(node) != nil {
-		return PreferUnsafeConstructorMatch{}, false
-	}
-
 	// The argument must itself be a direct constructor call, not a variable or composed effect.
 	inner := ast.SkipParentheses(call.Arguments.Nodes[0])
 	if inner == nil || inner.Kind != ast.KindCallExpression {

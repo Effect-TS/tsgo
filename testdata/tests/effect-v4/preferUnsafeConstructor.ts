@@ -29,6 +29,7 @@ export declare const makeUnsafe: <A>(ignored?: unknown) => ReadonlyArray<A>;
 // @filename: preferUnsafeConstructor.ts
 // @effect-diagnostics *:off
 // @effect-diagnostics preferUnsafeConstructor:warning
+// @effect-diagnostics runEffectInsideEffect:warning
 import { Chunk, Deferred, Effect, Latch, Queue, Ref, Scope, TxChunk } from "effect"
 import { runSync } from "effect/Effect"
 import { make as makeScope, makeUnsafe as makeScopeUnsafe } from "effect/Scope"
@@ -82,7 +83,8 @@ export const noSibling = Effect.runSync(Effect.succeed(1))
 export const alreadyUnsafe = Scope.makeUnsafe()
 export const alreadyUnsafeNamed = makeScopeUnsafe()
 
-// Inside an Effect generator context, runEffectInsideEffect owns the report.
+// Inside an Effect generator context, both diagnostics report: this rule flags
+// the constructor rewrite and runEffectInsideEffect flags the nested run call.
 export const insideGen = Effect.gen(function*() {
   const scope = Effect.runSync(Scope.make())
   return yield* Effect.succeed(scope)

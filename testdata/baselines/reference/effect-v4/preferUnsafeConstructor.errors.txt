@@ -1,21 +1,24 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/preferUnsafeConstructor.ts(13,22): warning TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
-/.src/preferUnsafeConstructor.ts(15,30): warning TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
-/.src/preferUnsafeConstructor.ts(18,37): warning TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
-/.src/preferUnsafeConstructor.ts(21,20): warning TS377109: `Effect.runSync(Ref.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Ref.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
-/.src/preferUnsafeConstructor.ts(23,25): warning TS377109: `Effect.runSync(Deferred.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Deferred.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
-/.src/preferUnsafeConstructor.ts(25,22): warning TS377109: `Effect.runSync(Latch.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Latch.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
-/.src/preferUnsafeConstructor.ts(27,32): warning TS377109: `Effect.runSync(ScopeNs.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `ScopeNs.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
-/.src/preferUnsafeConstructor.ts(29,28): warning TS377109: `Effect.runSync(makeScope(...))` starts a fiber to run a pure constructor. Use the synchronous variant `makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
-/.src/preferUnsafeConstructor.ts(31,31): warning TS377109: `runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
-/.src/preferUnsafeConstructor.ts(33,30): warning TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+/.src/preferUnsafeConstructor.ts(14,22): warning TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+/.src/preferUnsafeConstructor.ts(16,30): warning TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+/.src/preferUnsafeConstructor.ts(19,37): warning TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+/.src/preferUnsafeConstructor.ts(22,20): warning TS377109: `Effect.runSync(Ref.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Ref.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+/.src/preferUnsafeConstructor.ts(24,25): warning TS377109: `Effect.runSync(Deferred.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Deferred.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+/.src/preferUnsafeConstructor.ts(26,22): warning TS377109: `Effect.runSync(Latch.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Latch.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+/.src/preferUnsafeConstructor.ts(28,32): warning TS377109: `Effect.runSync(ScopeNs.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `ScopeNs.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+/.src/preferUnsafeConstructor.ts(30,28): warning TS377109: `Effect.runSync(makeScope(...))` starts a fiber to run a pure constructor. Use the synchronous variant `makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+/.src/preferUnsafeConstructor.ts(32,31): warning TS377109: `runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+/.src/preferUnsafeConstructor.ts(34,30): warning TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
+/.src/preferUnsafeConstructor.ts(60,17): warning TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
+/.src/preferUnsafeConstructor.ts(60,17): warning TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
 
 
-==== /.src/preferUnsafeConstructor.ts (10 errors) ====
+==== /.src/preferUnsafeConstructor.ts (12 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics preferUnsafeConstructor:warning
+    // @effect-diagnostics runEffectInsideEffect:warning
     import { Chunk, Deferred, Effect, Latch, Queue, Ref, Scope, TxChunk } from "effect"
     import { runSync } from "effect/Effect"
     import { make as makeScope, makeUnsafe as makeScopeUnsafe } from "effect/Scope"
@@ -89,9 +92,14 @@ Effect version: 4.0.0
     export const alreadyUnsafe = Scope.makeUnsafe()
     export const alreadyUnsafeNamed = makeScopeUnsafe()
     
-    // Inside an Effect generator context, runEffectInsideEffect owns the report.
+    // Inside an Effect generator context, both diagnostics report: this rule flags
+    // the constructor rewrite and runEffectInsideEffect flags the nested run call.
     export const insideGen = Effect.gen(function*() {
       const scope = Effect.runSync(Scope.make())
+                    ~~~~~~~~~~~~~~
+!!! warning TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377109: `Effect.runSync(Scope.make(...))` starts a fiber to run a pure constructor. Use the synchronous variant `Scope.makeUnsafe(...)` instead. effect(preferUnsafeConstructor)
       return yield* Effect.succeed(scope)
     })
     
