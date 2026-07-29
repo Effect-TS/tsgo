@@ -1,6 +1,7 @@
 {
   "name": "@effect/tsgo",
   "version": "0.25.0",
+  "type": "module",
   "description": "Effect Language Service for TypeScript-Go — Effect-specific diagnostics and hover features.",
   "license": "MIT",
   "repository": {
@@ -14,7 +15,7 @@
     "access": "public",
     "provenance": true,
     "bin": {
-      "effect-tsgo": "./dist/effect-tsgo.js"
+      "effect-tsgo": "./dist/effect-tsgo.cjs"
     }
   },
   "scripts": {
@@ -25,8 +26,16 @@
   "bin": {
     "effect-tsgo": "./src/cli.ts"
   },
+  "exports": {
+    "./package.json": "./package.json",
+    "./lib/getExePath": {
+      "types": "./lib/getExePath.d.ts",
+      "default": "./lib/getExePath.js"
+    }
+  },
   "files": [
     "dist/",
+    "lib/",
     "README.md",
     "schema.json"
   ],
