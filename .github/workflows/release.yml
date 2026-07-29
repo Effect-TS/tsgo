@@ -7,7 +7,7 @@ on:
       - main
 
 permissions:
-  contents: read
+  contents: write
   id-token: write
 
 concurrency:
@@ -150,7 +150,10 @@ jobs:
       - name: Build CLI bundle
         run: pnpm build:cli
 
-      - name: Publish packages
-        run: pnpm changeset:publish
+      - name: Publish packages and create releases
+        uses: changesets/action@v1
+        with:
+          publish: pnpm changeset:publish
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_CONFIG_PROVENANCE: "true"
