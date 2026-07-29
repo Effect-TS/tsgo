@@ -2,6 +2,7 @@ package typeparser
 
 import (
 	"context"
+	"strings"
 	"testing"
 	"testing/fstest"
 
@@ -15,14 +16,16 @@ import (
 	"github.com/microsoft/typescript-go/shim/vfs/vfstest"
 )
 
-func compileAndGetCheckerAndSourceFilesInternal(t *testing.T, sources map[string]string) (*checker.Checker, *TypeParser, map[string]*ast.SourceFile, func()) {
+func compileAndGetCheckerAndSourceFilesInternal(t testing.TB, sources map[string]string) (*checker.Checker, *TypeParser, map[string]*ast.SourceFile, func()) {
 	t.Helper()
 
 	testfs := make(map[string]any, len(sources))
 	fileNames := make([]string, 0, len(sources))
 	for path, source := range sources {
 		testfs[path] = &fstest.MapFile{Data: []byte(source)}
-		fileNames = append(fileNames, path)
+		if !strings.Contains(path, "/node_modules/") && strings.HasSuffix(path, ".ts") {
+			fileNames = append(fileNames, path)
+		}
 	}
 
 	fs := vfstest.FromMap(testfs, true)
@@ -168,7 +171,7 @@ func compileAndGetCheckerAndSourceFileWithEffectVersionInternal(t *testing.T, ve
 	return c, NewTypeParser(c.Program(), c), sf, done
 }
 
-func findIdentifierByText(t *testing.T, sf *ast.SourceFile, text string, occurrence int) *ast.Node {
+func findIdentifierByText(t testing.TB, sf *ast.SourceFile, text string, occurrence int) *ast.Node {
 	t.Helper()
 
 	count := 0
