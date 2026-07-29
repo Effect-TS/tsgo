@@ -5,10 +5,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/checker"
 )
 
-var effectModelPackageSourceFileDescriptor = PackageSourceFileDescriptor{
-	PackageName:       "effect",
-	MatchesSourceFile: isEffectModelTypeSourceFile,
-}
+var effectModelPackageSourceFileDescriptor = newPackageSourceFileDescriptor("effect", isEffectModelTypeSourceFile)
 
 // isEffectModelTypeSourceFile checks if a source file is the effect/unstable/schema Model module
 // by verifying it exports "Class", "Generated", and "FieldOption".

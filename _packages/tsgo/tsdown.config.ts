@@ -18,7 +18,7 @@ export default defineConfig({
   dts: false,
   clean: true,
   outExtensions: () => ({
-    js: ".js",
+    js: ".cjs",
   }),
   banner: {
     js: "#!/usr/bin/env node",

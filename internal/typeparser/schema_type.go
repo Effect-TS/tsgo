@@ -5,20 +5,11 @@ import (
 	"github.com/microsoft/typescript-go/shim/checker"
 )
 
-var effectSchemaModuleDescriptor = PackageSourceFileDescriptor{
-	PackageName:       "effect",
-	MatchesSourceFile: isSchemaTypeSourceFile,
-}
+var effectSchemaModuleDescriptor = newPackageSourceFileDescriptor("effect", isSchemaTypeSourceFile)
 
-var effectParseResultModuleDescriptor = PackageSourceFileDescriptor{
-	PackageName:       "effect",
-	MatchesSourceFile: isParseResultSourceFile,
-}
+var effectParseResultModuleDescriptor = newPackageSourceFileDescriptor("effect", isParseResultSourceFile)
 
-var effectSchemaParserModuleDescriptor = PackageSourceFileDescriptor{
-	PackageName:       "effect",
-	MatchesSourceFile: isSchemaParserSourceFile,
-}
+var effectSchemaParserModuleDescriptor = newPackageSourceFileDescriptor("effect", isSchemaParserSourceFile)
 
 // SchemaTypeId is the property key for Schema's variance struct.
 const SchemaTypeId = "~effect/Schema/Schema"

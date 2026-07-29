@@ -1,0 +1,41 @@
+=== Quick Fix Inventory ===
+
+[D1] (21:3-24:5) TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+  Fix 0: "Disable catchTagToCatchReason for this line"
+  Fix 1: "Disable catchTagToCatchReason for entire file"
+  Fix 2: "Replace with Effect.catchReason or Effect.catchReasons"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable catchTagToCatchReason for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable catchTagToCatchReason for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.catchReason or Effect.catchReasons" ===
+
+--- file:///.src/catchTagToCatchReason_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics catchTagToCatchReason:warning
+import { Effect } from "effect"
+
+class RetryReason {
+  readonly _tag = "RetryReason"
+}
+
+class FatalReason {
+  readonly _tag = "FatalReason"
+}
+
+class AppError {
+  readonly _tag = "AppError"
+  constructor(readonly reason: RetryReason | FatalReason) {}
+}
+
+declare const program: Effect.Effect<string, AppError>
+
+export const fixable = program.pipe(
+  Effect.catchReason("AppError", "RetryReason", () => Effect.succeed("retry"))
+)
+

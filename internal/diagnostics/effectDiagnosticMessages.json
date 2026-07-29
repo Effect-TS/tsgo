@@ -418,5 +418,25 @@
     "Schema literal values must be finite numbers; `{0}` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)": {
         "category": "Error",
         "code": 377106
+    },
+    "Chained Effect.catch fallbacks that ignore the error can be written with Effect.firstSuccessOf. Wrap each lazy fallback with Effect.suspend to preserve when it is constructed. effect(catchChainToFirstSuccessOf)": {
+        "category": "Suggestion",
+        "code": 377107
+    },
+    "The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)": {
+        "category": "Warning",
+        "code": 377108
+    },
+    "`{0}` starts a fiber to run a pure constructor. Use the synchronous variant `{1}` instead. effect(preferUnsafeConstructor)": {
+        "category": "Suggestion",
+        "code": 377109
+    },
+    "Branching on `{0}.reason._tag` inside `Effect.{1}` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)": {
+        "category": "Suggestion",
+        "code": 377110
+    },
+    "`AbortController` is manually constructed inside Effect code. Use `Effect.abortSignal` for Effect-managed cancellation. effect(abortControllerInEffect)": {
+        "category": "Suggestion",
+        "code": 377111
     }
 }

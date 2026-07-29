@@ -1,0 +1,43 @@
+==== /.src/catchTagToCatchReason.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 22:30 - 27:2
+Node: program.pipe(\n  Effect.catchTag("OuterError", (error) => {\n    if (error.reason._tag === "ReasonA") return Effect.succeed(1)\n    return Effect.fail(error)\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, OuterError, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catchTag
+      args: ["OuterError", (error) => {\n    if (error.reason._tag === "ReasonA") return Effect.succeed(1)\n    return Effect.fail(error)\n  }]
+      outType: Effect<number, OuterError, never>
+
+=== Piping Flow ===
+Location: 24:48 - 24:66
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 25:11 - 25:30
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: OuterError
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, OuterError, never>

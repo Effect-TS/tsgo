@@ -1,0 +1,22 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/catchChainToFirstSuccessOf_preview.ts(11,3): warning TS377107: Chained Effect.catch fallbacks that ignore the error can be written with Effect.firstSuccessOf. Wrap each lazy fallback with Effect.suspend to preserve when it is constructed. effect(catchChainToFirstSuccessOf)
+
+
+==== /.src/catchChainToFirstSuccessOf_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics catchChainToFirstSuccessOf:warning
+    import { Effect } from "effect"
+    
+    declare const primary: Effect.Effect<string, Error>
+    declare const secondary: Effect.Effect<string, Error>
+    declare const tertiary: Effect.Effect<string, Error>
+    
+    export const preview = primary.pipe(
+      Effect.catch(() => secondary),
+      Effect.catch(() => tertiary)
+      ~~~~~~~~~~~~
+!!! warning TS377107: Chained Effect.catch fallbacks that ignore the error can be written with Effect.firstSuccessOf. Wrap each lazy fallback with Effect.suspend to preserve when it is constructed. effect(catchChainToFirstSuccessOf)
+    )
+    

@@ -1,0 +1,19 @@
+==== /.src/catchChainToFirstSuccessOf_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 9:23 - 12:2
+Node: primary.pipe(\n  Effect.catch(() => secondary),\n  Effect.catch(() => tertiary)\n)
+Node Kind: KindCallExpression
+
+Subject: primary
+Subject Type: Effect<string, Error, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [() => secondary]
+      outType: Effect<string, Error, never>
+  [1] kind: pipeable
+      callee: Effect.catch
+      args: [() => tertiary]
+      outType: Effect<string, Error, never>

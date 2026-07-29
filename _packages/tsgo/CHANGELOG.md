@@ -1,5 +1,20 @@
 # @effect/tsgo
 
+## 0.25.0
+
+### Minor Changes
+
+- f52d65a: Add the `schemaLiteralNonFinite` diagnostic for statically known `NaN` and infinite values passed to Effect v4 Schema literal constructors.
+- 0062f79: Add the `floatingEffectInVitest` diagnostic for Effects returned from non-Effect-aware Vitest tests and hooks.
+
+### Patch Changes
+
+- c746cc7: Ensure the packaged diagnostics binary is executable immediately before launch instead of relying on file permissions preserved during publishing.
+- 53ca7a4: Ensure `get-exe-path` marks the Effect Language Service binary as executable before returning its path.
+- 88c37c4: Fix `namespaceImportPackages` completions for namespace reexports such as `Effect`, generating `import * as Effect from "effect/Effect"` instead of `import { Effect } from "effect"`.
+- b2f5040: Update Effect v4 package references and embedded test fixtures to `4.0.0-beta.101`.
+- f75c9b9: Update to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260726.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/8d29e62f3585c2fb5179e4412895aa3a8f40b9f5) commit `8d29e62f3585c2fb5179e4412895aa3a8f40b9f5`.
+
 ## 0.24.3
 
 ### Patch Changes
