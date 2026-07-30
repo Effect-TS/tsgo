@@ -9,11 +9,9 @@
 
 This repository uses local reference clones under `.repos/` for pattern and implementation research. These repositories are local-only working material and remain gitignored (`.repos/` is ignored by this repo) and bootstrapped by running `pnpm setup-repo`.
 
-For Effect V4, setup manages three canonical reference clones:
+Setup manages two canonical reference clones:
 
-- Local path: `.repos/effect-smol`
-- Canonical origin: `https://github.com/Effect-TS/effect-smol`
-- Local path: `.repos/effect-v3`
+- Local path: `.repos/effect`
 - Canonical origin: `https://github.com/Effect-TS/effect`
 - Local path: `.repos/effect-language-service`
 - Canonical origin: `https://github.com/Effect-TS/language-service`

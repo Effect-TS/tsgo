@@ -49,32 +49,8 @@ done
 echo "All patches applied successfully"
 
 if [ "$CI_MODE" = false ]; then
-  ensure_effect_smol_reference_repo() {
-    local repo_dir=".repos/effect-smol"
-    local repo_url="https://github.com/Effect-TS/effect-smol"
-
-    mkdir -p .repos
-
-    if [ -d "$repo_dir/.git" ]; then
-      echo "Updating reference repo: $repo_dir"
-      git -C "$repo_dir" remote set-url origin "$repo_url"
-      git -C "$repo_dir" fetch --prune origin
-      return
-    fi
-
-    if [ -e "$repo_dir" ]; then
-      echo "Error: $repo_dir exists but is not a git repository" >&2
-      exit 1
-    fi
-
-    echo "Cloning reference repo: $repo_url -> $repo_dir"
-    git clone --origin origin "$repo_url" "$repo_dir"
-  }
-
-  ensure_effect_smol_reference_repo
-
-  ensure_effect_v3_reference_repo() {
-    local repo_dir=".repos/effect-v3"
+  ensure_effect_reference_repo() {
+    local repo_dir=".repos/effect"
     local repo_url="https://github.com/Effect-TS/effect"
 
     mkdir -p .repos
@@ -93,7 +69,7 @@ if [ "$CI_MODE" = false ]; then
     git clone --origin origin "$repo_url" "$repo_dir"
   }
 
-  ensure_effect_v3_reference_repo
+  ensure_effect_reference_repo
 
   ensure_effect_language_service_reference_repo() {
     local repo_dir=".repos/effect-language-service"
