@@ -22,11 +22,19 @@ const lint = spawnSync(
   {
     cwd: root,
     env: { EFFECT_TSGO_BRIDGE_TRACE: "1", ...process.env },
-    stdio: "inherit",
+    encoding: "utf8",
   },
 )
 
-if (lint.status !== 1) process.exit(lint.status ?? 1)
+process.stdout.write(lint.stdout)
+process.stderr.write(lint.stderr)
+const lintOutput = lint.stdout + lint.stderr
+const floatingCount = lintOutput.match(/error effect\(floatingEffect\):/g)?.length ?? 0
+const quickfixCount = lintOutput.match(/warning effect\(missingStarInYieldEffectGen\):/g)?.length ?? 0
+if (lint.status !== 1 || floatingCount !== 5 || quickfixCount !== 1) {
+  console.error(`Prototype failed: expected 5 floating errors and 1 quick-fix warning, received ${floatingCount} and ${quickfixCount}`)
+  process.exit(lint.status ?? 1)
+}
 
 const quickfixSource = readFileSync(quickfixInput, "utf8")
 let quickfixFailure: string | undefined

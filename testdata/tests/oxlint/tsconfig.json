@@ -1,14 +1,6 @@
 {
   "compilerOptions": {
-    "skipLibCheck": true,
-    "plugins": [
-      {
-        "name": "@effect/language-service",
-        "diagnosticSeverity": {
-          "floatingEffect": "off"
-        }
-      }
-    ]
+    "skipLibCheck": true
   },
   "include": ["floatingEffect*.ts", "quickfix*.ts"]
 }

@@ -32,6 +32,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/ls/lsconv"
 	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
 	"github.com/microsoft/typescript-go/shim/project"
+	"github.com/microsoft/typescript-go/shim/scanner"
 	"github.com/microsoft/typescript-go/shim/vfs/osvfs"
 )
 
@@ -203,14 +204,12 @@ func (s *server) diagnostics(params diagnosticsParams) (*diagnosticsResult, erro
 	}
 
 	apiRequest := &project.APISnapshotRequest{}
-	updateBase := s.baseSnapshot == nil
 	openProject := ""
 	if params.Project != "" {
 		if _, opened := s.openedProjects[params.Project]; !opened {
 			apiRequest.OpenProjects = &collections.Set[string]{}
 			apiRequest.OpenProjects.Add(params.Project)
 			openProject = params.Project
-			updateBase = true
 		}
 	}
 	uri := lsconv.FileNameToDocumentURI(params.File)
@@ -219,23 +218,20 @@ func (s *server) diagnostics(params diagnosticsParams) (*diagnosticsResult, erro
 		apiRequest.OpenFiles = &collections.Set[lsproto.DocumentUri]{}
 		apiRequest.OpenFiles.Add(uri)
 		openFile = true
-		updateBase = true
 	}
-	if updateBase {
-		next, err := s.session.APIUpdate(s.ctx, project.FileChangeSummary{}, apiRequest)
-		if err != nil {
-			return nil, err
-		}
-		if s.baseSnapshot != nil {
-			s.baseSnapshot.Deref(s.session)
-		}
-		s.baseSnapshot = next
-		if openProject != "" {
-			s.openedProjects[openProject] = struct{}{}
-		}
-		if openFile {
-			s.openedFiles[params.File] = struct{}{}
-		}
+	next, err := s.session.APIUpdate(s.ctx, project.FileChangeSummary{}, apiRequest)
+	if err != nil {
+		return nil, err
+	}
+	if s.baseSnapshot != nil {
+		s.baseSnapshot.Deref(s.session)
+	}
+	s.baseSnapshot = next
+	if openProject != "" {
+		s.openedProjects[openProject] = struct{}{}
+	}
+	if openFile {
+		s.openedFiles[params.File] = struct{}{}
 	}
 
 	temporary, err := s.session.APIUpdateTemporary(s.ctx, s.baseSnapshot, uri, params.Text)
@@ -320,6 +316,10 @@ func formatCodeActions(
 		for _, change := range action.Changes {
 			startByte := int(converters.LineAndCharacterToPosition(sourceFile, change.Range.Start))
 			endByte := int(converters.LineAndCharacterToPosition(sourceFile, change.Range.End))
+			if !positionMatches(sourceFile, change.Range.Start, startByte) || !positionMatches(sourceFile, change.Range.End, endByte) {
+				valid = false
+				break
+			}
 			start := sourceFile.GetPositionMap().UTF8ToUTF16(startByte)
 			end := sourceFile.GetPositionMap().UTF8ToUTF16(endByte)
 			if start < 0 || end < start || end > utf16Length {
@@ -359,6 +359,11 @@ func formatCodeActions(
 		actions = append(actions, formatted)
 	}
 	return actions
+}
+
+func positionMatches(sourceFile *ast.SourceFile, position lsproto.Position, bytePosition int) bool {
+	line, character := scanner.GetECMALineAndUTF16CharacterOfPosition(sourceFile, bytePosition)
+	return uint32(line) == position.Line && uint32(character) == position.Character
 }
 
 func resolveEffectOptions(raw json.RawMessage, fallback *etscore.EffectPluginOptions) (*etscore.EffectPluginOptions, string, error) {
