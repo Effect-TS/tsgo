@@ -36,8 +36,6 @@ import (
 	"github.com/microsoft/typescript-go/shim/vfs/osvfs"
 )
 
-const protocolVersion = 2
-
 type request struct {
 	Version int             `json:"version"`
 	ID      int             `json:"id"`
@@ -54,41 +52,6 @@ type response struct {
 
 type wireError struct {
 	Message string `json:"message"`
-}
-
-type diagnosticsParams struct {
-	File          string          `json:"file"`
-	Text          string          `json:"text"`
-	Project       string          `json:"project,omitempty"`
-	Rules         []string        `json:"rules"`
-	EffectOptions json.RawMessage `json:"effectOptions,omitempty"`
-	IncludeFixes  bool            `json:"includeFixes,omitempty"`
-}
-
-type diagnosticsResult struct {
-	Diagnostics   []diagnostic `json:"diagnostics"`
-	OptionsSource string       `json:"optionsSource"`
-}
-
-type diagnostic struct {
-	File     string       `json:"file"`
-	Start    int          `json:"start"`
-	End      int          `json:"end"`
-	Code     int32        `json:"code"`
-	RuleName string       `json:"ruleName"`
-	Message  string       `json:"message"`
-	Actions  []codeAction `json:"actions,omitempty"`
-}
-
-type codeAction struct {
-	Title string     `json:"title"`
-	Edits []textEdit `json:"edits"`
-}
-
-type textEdit struct {
-	Start   int    `json:"start"`
-	End     int    `json:"end"`
-	NewText string `json:"newText"`
 }
 
 type server struct {
@@ -174,22 +137,22 @@ func Run(ctx context.Context, args []string, stdin io.ReadCloser, stdout io.Writ
 }
 
 func (s *server) handle(req request) response {
-	resp := response{Version: protocolVersion, ID: req.ID}
-	if req.Version != protocolVersion {
+	resp := response{Version: ProtocolVersion, ID: req.ID}
+	if req.Version != ProtocolVersion {
 		resp.Error = &wireError{Message: fmt.Sprintf("unsupported protocol version %d", req.Version)}
 		return resp
 	}
-	if req.Method != "diagnostics" {
+	if req.Method != runEffectDiagnosticsMethod.Name {
 		resp.Error = &wireError{Message: fmt.Sprintf("unsupported method %q", req.Method)}
 		return resp
 	}
 
-	var params diagnosticsParams
+	var params RunEffectDiagnosticsParams
 	if err := json.Unmarshal(req.Params, &params); err != nil {
 		resp.Error = &wireError{Message: err.Error()}
 		return resp
 	}
-	result, err := s.diagnostics(params)
+	result, err := s.runEffectDiagnostics(params)
 	if err != nil {
 		resp.Error = &wireError{Message: err.Error()}
 		return resp
@@ -198,26 +161,23 @@ func (s *server) handle(req request) response {
 	return resp
 }
 
-func (s *server) diagnostics(params diagnosticsParams) (*diagnosticsResult, error) {
-	if params.File == "" {
-		return nil, errors.New("diagnostics request is missing file")
-	}
-	if params.Rules == nil {
-		return nil, errors.New("diagnostics request is missing rules")
+func (s *server) runEffectDiagnostics(params RunEffectDiagnosticsParams) (*RunEffectDiagnosticsResult, error) {
+	if params.TargetFilePath == "" {
+		return nil, errors.New("runEffectDiagnostics request is missing targetFilePath")
 	}
 
 	apiRequest := &project.APISnapshotRequest{}
 	openProject := ""
-	if params.Project != "" {
-		if _, opened := s.openedProjects[params.Project]; !opened {
+	if params.ProjectFilePath != "" {
+		if _, opened := s.openedProjects[params.ProjectFilePath]; !opened {
 			apiRequest.OpenProjects = &collections.Set[string]{}
-			apiRequest.OpenProjects.Add(params.Project)
-			openProject = params.Project
+			apiRequest.OpenProjects.Add(params.ProjectFilePath)
+			openProject = params.ProjectFilePath
 		}
 	}
-	uri := lsconv.FileNameToDocumentURI(params.File)
+	uri := lsconv.FileNameToDocumentURI(params.TargetFilePath)
 	openFile := false
-	if _, opened := s.openedFiles[params.File]; !opened {
+	if _, opened := s.openedFiles[params.TargetFilePath]; !opened {
 		apiRequest.OpenFiles = &collections.Set[lsproto.DocumentUri]{}
 		apiRequest.OpenFiles.Add(uri)
 		openFile = true
@@ -237,50 +197,58 @@ func (s *server) diagnostics(params diagnosticsParams) (*diagnosticsResult, erro
 		s.openedProjects[openProject] = struct{}{}
 	}
 	if openFile {
-		s.openedFiles[params.File] = struct{}{}
+		s.openedFiles[params.TargetFilePath] = struct{}{}
 	}
 
-	temporary, err := s.session.APIUpdateTemporary(s.ctx, s.baseSnapshot, uri, params.Text)
-	if err != nil {
-		return nil, err
+	snapshot := s.baseSnapshot
+	if params.OverrideSourceText != nil {
+		temporary, err := s.session.APIUpdateTemporary(s.ctx, s.baseSnapshot, uri, *params.OverrideSourceText)
+		if err != nil {
+			return nil, err
+		}
+		defer temporary.Deref(s.session)
+		snapshot = temporary
 	}
-	defer temporary.Deref(s.session)
 
-	configuredProject := temporary.GetDefaultProject(uri)
+	configuredProject := snapshot.GetDefaultProject(uri)
 	if configuredProject == nil || configuredProject.GetProgram() == nil {
-		return nil, fmt.Errorf("no TypeScript project contains %s", params.File)
+		return nil, fmt.Errorf("no TypeScript project contains %s", params.TargetFilePath)
 	}
 	program := configuredProject.GetProgram()
-	sourceFile := program.GetSourceFile(params.File)
+	sourceFile := program.GetSourceFile(params.TargetFilePath)
 	if sourceFile == nil {
-		return nil, fmt.Errorf("TypeScript project did not load %s", params.File)
+		return nil, fmt.Errorf("TypeScript project did not load %s", params.TargetFilePath)
 	}
-	effectOptions, optionsSource, err := resolveEffectOptions(params.EffectOptions, program.Options().Effect)
+	effectOptions, optionsSource, err := resolveEffectOptions(params.OverrideEffectOptions, program.Options().Effect)
 	if err != nil {
 		return nil, err
 	}
-	effectOptions = normalizeSeverities(effectOptions, params.Rules)
+	var onlyRules []string
+	if params.OnlyRules != nil {
+		onlyRules = *params.OnlyRules
+		effectOptions = normalizeSeverities(effectOptions, onlyRules)
+	}
 
 	checker, done := program.GetTypeChecker(core.WithCheckerLifetime(s.ctx, core.CheckerLifetimeAPI))
 	defer done()
-	diagnostics, err := rulerunner.Run(s.ctx, program, checker, sourceFile, effectOptions, params.Rules)
+	diagnostics, err := rulerunner.Run(s.ctx, program, checker, sourceFile, effectOptions, onlyRules)
 	if err != nil {
 		return nil, err
 	}
 
-	result := &diagnosticsResult{
-		Diagnostics:   make([]diagnostic, 0, len(diagnostics)),
+	result := &RunEffectDiagnosticsResult{
+		Diagnostics:   make([]Diagnostic, 0, len(diagnostics)),
 		OptionsSource: optionsSource,
 	}
-	requestedRules := make(map[string]struct{}, len(params.Rules))
-	for _, ruleName := range params.Rules {
+	requestedRules := make(map[string]struct{}, len(onlyRules))
+	for _, ruleName := range onlyRules {
 		requestedRules[ruleName] = struct{}{}
 	}
 	var languageService *ls.LanguageService
 	var resolvedOptions *etscore.ResolvedEffectPluginOptions
 	var tp *typeparser.TypeParser
 	if params.IncludeFixes {
-		languageService = ls.NewLanguageService(configuredProject.ID(), program, temporary, params.File)
+		languageService = ls.NewLanguageService(configuredProject.ID(), program, snapshot, params.TargetFilePath)
 		resolvedOptions = pluginoptions.ResolveEffectPluginOptionsForSourceFile(
 			effectOptions,
 			sourceFile.FileName(),
@@ -291,8 +259,10 @@ func (s *server) diagnostics(params diagnosticsParams) (*diagnosticsResult, erro
 	}
 	for _, item := range diagnostics {
 		formatted := formatDiagnostic(item)
-		if _, requested := requestedRules[formatted.RuleName]; !requested {
-			continue
+		if params.OnlyRules != nil {
+			if _, requested := requestedRules[formatted.RuleName]; !requested {
+				continue
+			}
 		}
 		if params.IncludeFixes {
 			formatted.Actions = formatCodeActions(s.ctx, item, program, sourceFile, languageService, resolvedOptions, checker, tp)
@@ -311,7 +281,7 @@ func formatCodeActions(
 	options *etscore.ResolvedEffectPluginOptions,
 	checker *checker.Checker,
 	tp *typeparser.TypeParser,
-) []codeAction {
+) []CodeAction {
 	fixCtx := &ls.CodeFixContext{
 		SourceFile: sourceFile,
 		Span:       core.NewTextRange(diagnostic.Pos(), diagnostic.End()),
@@ -322,9 +292,9 @@ func formatCodeActions(
 	converters := ls.LanguageService_converters(languageService)
 	utf16Length := len(utf16.Encode([]rune(sourceFile.Text())))
 	seen := make(map[string]struct{})
-	var actions []codeAction
+	var actions []CodeAction
 	for _, action := range fixrunner.CollectActions(ctx, fixCtx, options, checker, tp, false) {
-		edits := make([]textEdit, 0, len(action.Changes))
+		edits := make([]TextEdit, 0, len(action.Changes))
 		valid := true
 		for _, change := range action.Changes {
 			startByte := int(converters.LineAndCharacterToPosition(sourceFile, change.Range.Start))
@@ -339,7 +309,7 @@ func formatCodeActions(
 				valid = false
 				break
 			}
-			edits = append(edits, textEdit{Start: start, End: end, NewText: change.NewText})
+			edits = append(edits, TextEdit{Start: start, End: end, NewText: change.NewText})
 		}
 		if !valid || len(edits) == 0 {
 			continue
@@ -359,7 +329,7 @@ func formatCodeActions(
 		if !valid {
 			continue
 		}
-		formatted := codeAction{Title: action.Description, Edits: edits}
+		formatted := CodeAction{Title: action.Description, Edits: edits}
 		keyBytes, err := json.Marshal(formatted)
 		if err != nil {
 			continue
@@ -379,22 +349,9 @@ func positionMatches(sourceFile *ast.SourceFile, position lsproto.Position, byte
 	return uint32(line) == position.Line && uint32(character) == position.Character
 }
 
-func resolveEffectOptions(raw json.RawMessage, fallback *etscore.EffectPluginOptions) (*etscore.EffectPluginOptions, string, error) {
-	if len(raw) != 0 {
-		var decoded any
-		if err := json.Unmarshal(raw, &decoded); err != nil {
-			return nil, "", fmt.Errorf("invalid effect-tsgo setting: %w", err)
-		}
-		config, ok := decoded.(map[string]any)
-		if !ok {
-			return nil, "", errors.New("context.settings[\"effect-tsgo\"] must be an object")
-		}
-		config["name"] = etscore.EffectPluginName
-		parsed := etscore.ParseFromPlugins([]any{config})
-		if parsed == nil {
-			return nil, "", errors.New("unable to parse context.settings[\"effect-tsgo\"]")
-		}
-		return parsed, "settings", nil
+func resolveEffectOptions(options *etscore.EffectPluginOptions, fallback *etscore.EffectPluginOptions) (*etscore.EffectPluginOptions, OptionsSource, error) {
+	if options != nil {
+		return options, OptionsSourceSettings, nil
 	}
 	if fallback == nil {
 		return nil, "", errors.New("TypeScript project does not enable @effect/language-service diagnostics and no effect-tsgo setting was provided")
@@ -403,7 +360,7 @@ func resolveEffectOptions(raw json.RawMessage, fallback *etscore.EffectPluginOpt
 	if err != nil {
 		return nil, "", err
 	}
-	return cloned, "tsconfig", nil
+	return cloned, OptionsSourceTSConfig, nil
 }
 
 func cloneEffectOptions(options *etscore.EffectPluginOptions) (*etscore.EffectPluginOptions, error) {
@@ -440,14 +397,14 @@ func (s *server) close() {
 	s.session.Close()
 }
 
-func formatDiagnostic(item *ast.Diagnostic) diagnostic {
+func formatDiagnostic(item *ast.Diagnostic) Diagnostic {
 	file := item.File()
 	start := file.GetPositionMap().UTF8ToUTF16(item.Pos())
 	end := file.GetPositionMap().UTF8ToUTF16(item.End())
 	ruleName := rule.CodeToRuleName(rules.All, item.Code())
 	message := flattenMessage(item, 0)
 	message = strings.TrimSuffix(message, " effect("+ruleName+")")
-	return diagnostic{
+	return Diagnostic{
 		File:     file.FileName(),
 		Start:    start,
 		End:      end,

@@ -26,6 +26,9 @@
   "bin": {
     "effect-tsgo": "./src/cli.ts"
   },
+  "imports": {
+    "#getExePath": "./lib/getExePath.js"
+  },
   "exports": {
     "./package.json": "./package.json",
     "./lib/getExePath": {

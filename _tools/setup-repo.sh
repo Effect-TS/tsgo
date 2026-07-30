@@ -127,3 +127,6 @@ echo "Generating diagnostics..."
 # Generate shims only; release version sync is handled by _tools/version-prepare.sh.
 echo "Generating shims..."
 go run ./_tools/gen_shims
+
+echo "Generating Effect JavaScript API types..."
+go run ./_tools/gen_etsjsapi
