@@ -14,6 +14,7 @@
         "build": "pnpm run build:go && pnpm run build:cli",
         "build:go": "CGO_ENABLED=0 go build -o tsgo ./typescript-go/cmd/tsgo",
         "build:cli": "pnpm --filter @effect/tsgo build",
+        "prototype:oxlint-bridge": "pnpm --filter effect-tsgo-oxlint-prototype test",
         "release:prepare": "bash _tools/release-prepare.sh"
     },
     "devDependencies": {

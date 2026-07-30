@@ -1,0 +1,16 @@
+{
+  "jsPlugins": ["../../../_packages/tsgo/src/experimental/oxlint/plugin.ts"],
+  "categories": {
+    "correctness": "off"
+  },
+  "settings": {
+    "effect-tsgo": {
+      "diagnosticSeverity": {
+        "floatingEffect": "off"
+      }
+    }
+  },
+  "rules": {
+    "effect/floatingEffect": "error"
+  }
+}
