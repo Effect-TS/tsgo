@@ -6,7 +6,7 @@
  *
  * The process, pipe, buffering, retry, and cleanup code intentionally tracks the
  * upstream implementation. The MessagePack RPC layer is replaced with the
- * Effect Oxlint protocol's Content-Length JSON framing.
+ * Effect JavaScript API protocol's Content-Length JSON framing.
  */
 
 import { type ChildProcess, spawn } from "node:child_process"
@@ -54,7 +54,7 @@ export class SyncChannel {
 
   constructor(executable: string, args: Array<string>) {
     if (process.platform === "win32") {
-      const pipePath = `\\\\.\\pipe\\effect-tsgo-oxlint-sync-${process.pid}-${Date.now()}`
+      const pipePath = `\\\\.\\pipe\\effect-tsgo-js-api-sync-${process.pid}-${Date.now()}`
       this.child = spawn(executable, [...args, "--pipe", pipePath], {
         stdio: ["ignore", "ignore", "inherit"],
       })
@@ -140,7 +140,7 @@ export class SyncChannel {
       header += String.fromCharCode(this.readByte())
     }
     const match = /(?:^|\r\n)Content-Length:\s*(\d+)\r\n/i.exec(header)
-    if (!match) throw new Error("Effect Oxlint response is missing Content-Length")
+    if (!match) throw new Error("Effect JavaScript API response is missing Content-Length")
     return this.readExact(Number(match[1]))
   }
 

@@ -1,6 +1,6 @@
-// Package etsapi exposes narrow public entry points for integrations that need
+// Package etsgoapi exposes narrow public entry points for Go integrations that need
 // stable access to tsgo functionality without importing internal packages.
-package etsapi
+package etsgoapi
 
 import (
 	"github.com/effect-ts/tsgo/internal/typeparser"

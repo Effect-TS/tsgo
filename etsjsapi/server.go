@@ -1,5 +1,5 @@
-// Package etsoxlint implements the persistent Effect diagnostics bridge for Oxlint.
-package etsoxlint
+// Package etsjsapi implements the persistent Effect diagnostics bridge for JavaScript consumers.
+package etsjsapi
 
 import (
 	"bufio"
@@ -47,7 +47,7 @@ type wireError struct {
 	Message string `json:"message"`
 }
 
-type lintParams struct {
+type diagnosticsParams struct {
 	File          string          `json:"file"`
 	Text          string          `json:"text"`
 	Project       string          `json:"project,omitempty"`
@@ -55,7 +55,7 @@ type lintParams struct {
 	EffectOptions json.RawMessage `json:"effectOptions,omitempty"`
 }
 
-type lintResult struct {
+type diagnosticsResult struct {
 	Diagnostics   []diagnostic `json:"diagnostics"`
 	OptionsSource string       `json:"optionsSource"`
 }
@@ -77,9 +77,9 @@ type server struct {
 	openedProjects map[string]struct{}
 }
 
-// Run serves synchronous Effect Oxlint requests until stdin closes.
+// Run serves synchronous Effect JavaScript API requests until stdin closes.
 func Run(ctx context.Context, args []string, stdin io.ReadCloser, stdout io.WriteCloser, stderr io.Writer) int {
-	flags := flag.NewFlagSet("effect-oxlint", flag.ContinueOnError)
+	flags := flag.NewFlagSet("effect-js-api", flag.ContinueOnError)
 	flags.SetOutput(stderr)
 	cwd := flags.String("cwd", "", "current working directory")
 	pipePath := flags.String("pipe", "", "use a named pipe or Unix domain socket instead of stdio")
@@ -87,7 +87,7 @@ func Run(ctx context.Context, args []string, stdin io.ReadCloser, stdout io.Writ
 		return 2
 	}
 	if *cwd == "" {
-		fmt.Fprintln(stderr, "--effect-oxlint requires --cwd")
+		fmt.Fprintln(stderr, "--effect-js-api requires --cwd")
 		return 2
 	}
 
@@ -157,17 +157,17 @@ func (s *server) handle(req request) response {
 		resp.Error = &wireError{Message: fmt.Sprintf("unsupported protocol version %d", req.Version)}
 		return resp
 	}
-	if req.Method != "lint" {
+	if req.Method != "diagnostics" {
 		resp.Error = &wireError{Message: fmt.Sprintf("unsupported method %q", req.Method)}
 		return resp
 	}
 
-	var params lintParams
+	var params diagnosticsParams
 	if err := json.Unmarshal(req.Params, &params); err != nil {
 		resp.Error = &wireError{Message: err.Error()}
 		return resp
 	}
-	result, err := s.lint(params)
+	result, err := s.diagnostics(params)
 	if err != nil {
 		resp.Error = &wireError{Message: err.Error()}
 		return resp
@@ -176,9 +176,9 @@ func (s *server) handle(req request) response {
 	return resp
 }
 
-func (s *server) lint(params lintParams) (*lintResult, error) {
+func (s *server) diagnostics(params diagnosticsParams) (*diagnosticsResult, error) {
 	if params.File == "" {
-		return nil, errors.New("lint request is missing file")
+		return nil, errors.New("diagnostics request is missing file")
 	}
 
 	apiRequest := &project.APISnapshotRequest{}
@@ -245,7 +245,7 @@ func (s *server) lint(params lintParams) (*lintResult, error) {
 		return nil, err
 	}
 
-	result := &lintResult{
+	result := &diagnosticsResult{
 		Diagnostics:   make([]diagnostic, 0, len(diagnostics)),
 		OptionsSource: optionsSource,
 	}

@@ -4,6 +4,8 @@
 
 This prototype answers whether synchronous Oxlint JavaScript visitors can share one persistent patched TypeScript-Go process, run the Effect semantic diagnostic pass once per file, and fan the result back out through one Oxlint rule per Effect rule.
 
+The API boundary is split by consumer: `etsgoapi` provides in-process APIs for Go integrations, while `etsjsapi` owns the cross-process protocol used by JavaScript integrations. The code under `_packages/tsgo/src/experimental/oxlint` is an Oxlint-specific adapter over `etsjsapi`.
+
 Run it from the repository root:
 
 ```sh
@@ -12,7 +14,7 @@ pnpm --filter effect-tsgo-oxlint-prototype test
 
 The command builds the patched `tsgo` executable, obtains the pinned Oxlint CLI with `pnpm dlx`, and lints the two local floating-Effect fixtures. Five `effect/floatingEffect` diagnostics are expected. Oxlint exits with status 1 when it finds them; the runner treats that as a successful prototype result.
 
-Set `EFFECT_TSGO_BRIDGE_TRACE=0` to hide broker state. The default trace shows one persistent client and one `lint` request per file, including cold and warm request timings.
+Set `EFFECT_TSGO_BRIDGE_TRACE=0` to hide broker state. The default trace shows one persistent client and one `diagnostics` request per file, including cold and warm request timings.
 
 ## Effect options
 
@@ -34,9 +36,9 @@ When the key is absent, the server falls back to the TypeScript project's `@effe
 
 The bridge copies and adapts TypeScript-Go's `SyncRpcChannel` transport under `_packages/tsgo/src/experimental/oxlint/sync-channel.ts`. The copied code retains its process cleanup, blocking pipe descriptors, read-ahead buffering, large-read path, retry behavior, and Windows named-pipe connection. The adapter replaces MessagePack with an Effect-owned, versioned Content-Length JSON protocol:
 
-- starts one long-lived `tsgo --effect-oxlint` child with normal `spawn`;
+- starts one long-lived `tsgo --effect-js-api` child with normal `spawn`;
 - synchronously writes and reads the child pipe file descriptors with `fs.writeSync` and `fs.readSync`;
-- uses stdio on POSIX and a uniquely named `effect-tsgo-oxlint-sync-*` Windows pipe;
+- uses stdio on POSIX and a uniquely named `effect-tsgo-js-api-sync-*` Windows pipe;
 - implements Content-Length JSON framing instead of TypeScript-Go's general API protocol; and
 - kills the child during explicit or process-exit cleanup.
 

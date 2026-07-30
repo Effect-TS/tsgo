@@ -1,4 +1,4 @@
-package etsapi
+package etsgoapi
 
 import (
 	"github.com/effect-ts/tsgo/internal/layergraph"

@@ -43,7 +43,7 @@ function getApi(): SyncApi {
 
 function computeResults(current: Frame): void {
   const start = performance.now()
-  const response = getApi().lint({
+  const response = getApi().diagnostics({
     file: current.file,
     text: current.text,
     rules: [...current.rules],
@@ -60,7 +60,7 @@ function computeResults(current: Frame): void {
     file: current.file,
     enabledRules: [...current.rules],
     optionsSource: response.optionsSource,
-    lintRequests: 1,
+    diagnosticsRequests: 1,
     effectDiagnostics: response.diagnostics.length,
     elapsedMs: Number((performance.now() - start).toFixed(2)),
   })

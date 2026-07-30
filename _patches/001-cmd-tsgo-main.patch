@@ -9,7 +9,7 @@ index 8d6816fa3d..c24db44dfa 100644
 +	"github.com/effect-ts/tsgo/etsdiagnostics"
 +	_ "github.com/effect-ts/tsgo/etsexecutehooks" // exit-code filtering hooks
 +	_ "github.com/effect-ts/tsgo/etslshooks"      // LS codefix hooks
-+	"github.com/effect-ts/tsgo/etsoxlint"
++	"github.com/effect-ts/tsgo/etsjsapi"
 +
  	"github.com/microsoft/typescript-go/internal/core"
 @@ -22,6 +29,10 @@ func runMain() int {
@@ -19,7 +19,7 @@ index 8d6816fa3d..c24db44dfa 100644
  			return runAPI(args[1:])
 +		case "--effect-cli-diagnostics":
 +			return etsdiagnostics.Run(context.Background(), args[1:], os.Stdout, os.Stderr)
-+		case "--effect-oxlint":
-+			return etsoxlint.Run(context.Background(), args[1:], os.Stdin, os.Stdout, os.Stderr)
++		case "--effect-js-api":
++			return etsjsapi.Run(context.Background(), args[1:], os.Stdin, os.Stdout, os.Stderr)
  		}
  	}

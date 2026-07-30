@@ -1,4 +1,4 @@
-package etsapi
+package etsgoapi
 
 import (
 	"context"
