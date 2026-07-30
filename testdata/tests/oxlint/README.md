@@ -7,7 +7,7 @@ This prototype answers whether synchronous Oxlint JavaScript visitors can share 
 Run it from the repository root:
 
 ```sh
-pnpm prototype:oxlint-bridge
+pnpm --filter effect-tsgo-oxlint-prototype test
 ```
 
 The command builds the patched `tsgo` executable, obtains the pinned Oxlint CLI with `pnpm dlx`, and lints the two local floating-Effect fixtures. Five `effect/floatingEffect` diagnostics are expected. Oxlint exits with status 1 when it finds them; the runner treats that as a successful prototype result.
