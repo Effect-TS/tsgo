@@ -202,6 +202,9 @@ func (s *server) diagnostics(params diagnosticsParams) (*diagnosticsResult, erro
 	if params.File == "" {
 		return nil, errors.New("diagnostics request is missing file")
 	}
+	if params.Rules == nil {
+		return nil, errors.New("diagnostics request is missing rules")
+	}
 
 	apiRequest := &project.APISnapshotRequest{}
 	openProject := ""
@@ -266,6 +269,10 @@ func (s *server) diagnostics(params diagnosticsParams) (*diagnosticsResult, erro
 		Diagnostics:   make([]diagnostic, 0, len(diagnostics)),
 		OptionsSource: optionsSource,
 	}
+	requestedRules := make(map[string]struct{}, len(params.Rules))
+	for _, ruleName := range params.Rules {
+		requestedRules[ruleName] = struct{}{}
+	}
 	var languageService *ls.LanguageService
 	var resolvedOptions *etscore.ResolvedEffectPluginOptions
 	var tp *typeparser.TypeParser
@@ -281,6 +288,9 @@ func (s *server) diagnostics(params diagnosticsParams) (*diagnosticsResult, erro
 	}
 	for _, item := range diagnostics {
 		formatted := formatDiagnostic(item)
+		if _, requested := requestedRules[formatted.RuleName]; !requested {
+			continue
+		}
 		if params.IncludeFixes {
 			formatted.Actions = formatCodeActions(s.ctx, item, program, sourceFile, languageService, resolvedOptions, checker, tp)
 		}

@@ -31,8 +31,12 @@ process.stderr.write(lint.stderr)
 const lintOutput = lint.stdout + lint.stderr
 const floatingCount = lintOutput.match(/error effect\(floatingEffect\):/g)?.length ?? 0
 const quickfixCount = lintOutput.match(/warning effect\(missingStarInYieldEffectGen\):/g)?.length ?? 0
-if (lint.status !== 1 || floatingCount !== 5 || quickfixCount !== 1) {
-  console.error(`Prototype failed: expected 5 floating errors and 1 quick-fix warning, received ${floatingCount} and ${quickfixCount}`)
+const clientCount = lintOutput.match(/client-started/g)?.length ?? 0
+const requestCount = lintOutput.match(/"diagnosticsRequests":1/g)?.length ?? 0
+if (lint.status !== 1 || floatingCount !== 5 || quickfixCount !== 1 || clientCount !== 1 || requestCount !== fixtures.length) {
+  console.error(
+    `Prototype failed: expected 5 floating errors, 1 quick-fix warning, 1 client, and ${fixtures.length} requests; received ${floatingCount}, ${quickfixCount}, ${clientCount}, and ${requestCount}`,
+  )
   process.exit(lint.status ?? 1)
 }
 
