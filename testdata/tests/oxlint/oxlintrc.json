@@ -1,5 +1,5 @@
 {
-  "jsPlugins": ["../../../_packages/tsgo/src/experimental/oxlint/plugin.ts"],
+  "jsPlugins": ["@effect/tsgo/experimental/oxlint"],
   "categories": {
     "correctness": "off"
   },

@@ -174,6 +174,14 @@ if [ "$skip_cli" != "true" ]; then
   if [ ! -s "${cli_bundle}" ]; then
     errors+=("Missing or empty CLI bundle: ${cli_bundle}")
   fi
+  oxlint_bundle="${PACKAGES_DIR}/tsgo/dist/experimental/oxlint/index.js"
+  if [ ! -s "${oxlint_bundle}" ]; then
+    errors+=("Missing or empty Oxlint bundle: ${oxlint_bundle}")
+  fi
+  oxlint_types="${PACKAGES_DIR}/tsgo/dist/experimental/oxlint/index.d.ts"
+  if [ ! -s "${oxlint_types}" ]; then
+    errors+=("Missing or empty Oxlint declarations: ${oxlint_types}")
+  fi
 fi
 
 # Check platform binaries

@@ -1,4 +1,4 @@
-import * as pkgJson from "../../package.json"
+import * as pkgJson from "../../../package.json"
 
 export const LSP_PACKAGE_NAME = pkgJson.name
 export const LSP_PLUGIN_NAME = "@effect/language-service"

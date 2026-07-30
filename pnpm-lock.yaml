@@ -182,6 +182,9 @@ importers:
 
   testdata/tests/oxlint:
     dependencies:
+      '@effect/tsgo':
+        specifier: workspace:*
+        version: link:../../../_packages/tsgo
       effect:
         specifier: 4.0.0-beta.101
         version: 4.0.0-beta.101

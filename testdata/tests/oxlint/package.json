@@ -6,6 +6,7 @@
     "test": "node --experimental-strip-types run.ts"
   },
   "dependencies": {
+    "@effect/tsgo": "workspace:*",
     "effect": "4.0.0-beta.101"
   }
 }

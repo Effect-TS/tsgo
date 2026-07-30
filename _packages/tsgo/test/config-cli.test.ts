@@ -1,9 +1,9 @@
 import * as Option from "effect/Option"
 import { describe, expect, it } from "vitest"
-import { assess } from "../src/setup/assessment.js"
-import { computeChanges } from "../src/setup/changes.js"
-import * as Target from "../src/setup/target.js"
-import type { Assessment } from "../src/setup/types.js"
+import { assess } from "../src/cli/setup/assessment.js"
+import { computeChanges } from "../src/cli/setup/changes.js"
+import * as Target from "../src/cli/setup/target.js"
+import type { Assessment } from "../src/cli/setup/types.js"
 
 function createAssessmentInput(
   packageJson: Record<string, unknown>,

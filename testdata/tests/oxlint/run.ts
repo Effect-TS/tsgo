@@ -18,7 +18,7 @@ const watchOutput = fileURLToPath(new URL("./quickfix-watch-output.ts", import.m
 const inferredWatchOutput = fileURLToPath(new URL("./watch-output.ts", import.meta.url))
 const quickfixSource = readFileSync(quickfixInput, "utf8")
 
-const build = spawnSync("pnpm", ["build:go"], { cwd: root, stdio: "inherit" })
+const build = spawnSync("pnpm", ["build"], { cwd: root, stdio: "inherit" })
 if (build.status !== 0) process.exit(build.status ?? 1)
 
 writeFileSync(watchOutput, quickfixSource)

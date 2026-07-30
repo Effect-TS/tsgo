@@ -20,7 +20,7 @@ import {
 } from "./diagnostics.js"
 import { setupCommand } from "./setup/index.js"
 import { defaultTypescriptPackageNames, isNativeTypescriptVersion } from "./setup/consts.js"
-import * as pkgJson from "../package.json" with { type: "json" }
+import * as pkgJson from "../../package.json" with { type: "json" }
 
 class NativeBackendNotInstalledError extends Data.TaggedError("NativeBackendNotInstalledError")<{
   readonly packageNames: ReadonlyArray<string>

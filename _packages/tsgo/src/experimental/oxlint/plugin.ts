@@ -1,6 +1,5 @@
 // PROTOTYPE: generated-shape Oxlint wrappers over shared Effect semantic diagnostics.
-import { readFileSync } from "node:fs"
-
+import metadataJson from "../../metadata.json" with { type: "json" }
 import { abort, finish, register, resultsFor } from "./bridge.ts"
 
 interface RuleMetadata {
@@ -14,6 +13,7 @@ interface OxlintFixer {
 }
 
 interface OxlintContext {
+  readonly cwd: string
   readonly filename: string
   readonly sourceCode: { readonly text: string }
   readonly settings: Readonly<Record<string, unknown>>
@@ -27,7 +27,7 @@ interface OxlintContext {
   }): void
 }
 
-const metadata = JSON.parse(readFileSync(new URL("../../metadata.json", import.meta.url), "utf8")) as {
+const metadata = metadataJson as {
   readonly rules: ReadonlyArray<RuleMetadata>
 }
 

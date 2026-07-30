@@ -1,4 +1,4 @@
-import metadataJson from "./metadata.json" with { type: "json" }
+import metadataJson from "../metadata.json" with { type: "json" }
 import type { RuleSeverity } from "./setup/rule-info.js"
 
 export interface DiagnosticPreset {

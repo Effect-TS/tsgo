@@ -1,4 +1,4 @@
-import metadataJson from "../metadata.json" with { type: "json" }
+import metadataJson from "../../metadata.json" with { type: "json" }
 
 export type RuleSeverity = "off" | "suggestion" | "message" | "warning" | "error"
 

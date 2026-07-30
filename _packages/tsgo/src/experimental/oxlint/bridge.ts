@@ -1,19 +1,17 @@
 // PROTOTYPE: synchronous broker for testing the Oxlint/TypeScript-Go integration seam.
-import { fileURLToPath } from "node:url"
-
 import getExePath from "#getExePath"
 
 import { type EffectDiagnostic, type RunEffectDiagnosticsParams, SyncApi } from "../api/sync-api.ts"
 
-const root = fileURLToPath(new URL("../../../../../", import.meta.url))
-
 interface OxlintContext {
+  readonly cwd: string
   readonly filename: string
   readonly sourceCode: { readonly text: string }
   readonly settings: Readonly<Record<string, unknown>>
 }
 
 interface Frame {
+  readonly cwd: string
   readonly file: string
   readonly text: string
   readonly rules: Set<string>
@@ -23,17 +21,20 @@ interface Frame {
 }
 
 let api: SyncApi | undefined
+let apiCwd: string | undefined
 let frame: Frame | undefined
 
-function getApi(): SyncApi {
-  if (!api) {
-    api = new SyncApi({ cwd: root, executable: getExePath() })
+function getApi(cwd: string): SyncApi {
+  if (apiCwd !== cwd) {
+    api?.close()
+    api = new SyncApi({ cwd, executable: getExePath() })
+    apiCwd = cwd
   }
-  return api
+  return api!
 }
 
 function computeResults(current: Frame): void {
-  const response = getApi().runEffectDiagnostics({
+  const response = getApi(current.cwd).runEffectDiagnostics({
     targetFilePath: current.file,
     overrideSourceText: current.text,
     onlyRules: [...current.rules],
@@ -53,6 +54,7 @@ export function register(ruleName: string, context: OxlintContext): void {
   const file = context.filename
   if (!frame) {
     frame = {
+      cwd: context.cwd,
       file,
       text: context.sourceCode.text,
       rules: new Set(),
@@ -88,6 +90,7 @@ export function abort(): void {
 export function close(): void {
   api?.close()
   api = undefined
+  apiCwd = undefined
 }
 
 process.once("exit", close)
