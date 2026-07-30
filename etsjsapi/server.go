@@ -224,6 +224,9 @@ func (s *server) diagnostics(params diagnosticsParams) (*diagnosticsResult, erro
 	}
 	next, err := s.session.APIUpdate(s.ctx, project.FileChangeSummary{}, apiRequest)
 	if err != nil {
+		if next != nil {
+			next.Deref(s.session)
+		}
 		return nil, err
 	}
 	if s.baseSnapshot != nil {
