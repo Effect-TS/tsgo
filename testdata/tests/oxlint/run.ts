@@ -3,6 +3,8 @@ import { spawnSync } from "node:child_process"
 import { readFileSync, unlinkSync, writeFileSync } from "node:fs"
 import { fileURLToPath } from "node:url"
 
+import { type DiagnosticsParams, SyncApi } from "../../../_packages/tsgo/src/experimental/oxlint/sync-api.ts"
+
 const root = fileURLToPath(new URL("../../../", import.meta.url))
 const config = fileURLToPath(new URL("./oxlintrc.json", import.meta.url))
 const fixtures = [
@@ -15,6 +17,37 @@ const quickfixOutput = fileURLToPath(new URL("./quickfix-output.ts", import.meta
 
 const build = spawnSync("pnpm", ["build:go"], { cwd: root, stdio: "inherit" })
 if (build.status !== 0) process.exit(build.status ?? 1)
+
+const protocol = new SyncApi({ cwd: root, executable: fileURLToPath(new URL("../../../tsgo", import.meta.url)) })
+const protocolParams = {
+  file: quickfixInput,
+  text: readFileSync(quickfixInput, "utf8"),
+  effectOptions: { diagnostics: true },
+}
+try {
+  let missingRulesRejected = false
+  try {
+    protocol.diagnostics(protocolParams as DiagnosticsParams)
+  } catch (error) {
+    missingRulesRejected = error instanceof Error && error.message.includes("missing rules")
+  }
+  if (!missingRulesRejected) throw new Error("protocol accepted a diagnostics request without rules")
+
+  const empty = protocol.diagnostics({ ...protocolParams, rules: [] })
+  if (empty.diagnostics.length !== 0) throw new Error("protocol returned diagnostics for an empty rule set")
+
+  const requestedRule = "missingStarInYieldEffectGen"
+  const filtered = protocol.diagnostics({
+    ...protocolParams,
+    text: `// @effect-diagnostics-next-line floatingEffect:off\nconst unusedDirectiveTarget = "unused"\n${protocolParams.text}`,
+    rules: [requestedRule],
+  })
+  if (filtered.diagnostics.length !== 1 || filtered.diagnostics.some((diagnostic) => diagnostic.ruleName !== requestedRule)) {
+    throw new Error("protocol returned a synthetic or unrequested diagnostic")
+  }
+} finally {
+  protocol.close()
+}
 
 const lint = spawnSync(
   "pnpm",

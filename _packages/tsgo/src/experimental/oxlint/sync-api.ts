@@ -49,6 +49,10 @@ export class SyncApi {
   readonly #channel: SyncChannel
   #nextID = 1
 
+  get requestCount(): number {
+    return this.#nextID - 1
+  }
+
   constructor(options: { readonly cwd: string; readonly executable: string }) {
     this.#channel = new SyncChannel(options.executable, ["--effect-js-api", "--cwd", options.cwd])
   }

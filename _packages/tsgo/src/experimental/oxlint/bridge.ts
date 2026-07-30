@@ -43,7 +43,9 @@ function getApi(): SyncApi {
 
 function computeResults(current: Frame): void {
   const start = performance.now()
-  const response = getApi().diagnostics({
+  const api = getApi()
+  const requestsBefore = api.requestCount
+  const response = api.diagnostics({
     file: current.file,
     text: current.text,
     rules: [...current.rules],
@@ -61,7 +63,7 @@ function computeResults(current: Frame): void {
     file: current.file,
     enabledRules: [...current.rules],
     optionsSource: response.optionsSource,
-    diagnosticsRequests: 1,
+    diagnosticsRequests: api.requestCount - requestsBefore,
     effectDiagnostics: response.diagnostics.length,
     elapsedMs: Number((performance.now() - start).toFixed(2)),
   })
