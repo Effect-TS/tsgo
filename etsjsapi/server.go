@@ -33,6 +33,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
 	"github.com/microsoft/typescript-go/shim/project"
 	"github.com/microsoft/typescript-go/shim/scanner"
+	"github.com/microsoft/typescript-go/shim/tspath"
 	"github.com/microsoft/typescript-go/shim/vfs/osvfs"
 )
 
@@ -55,11 +56,22 @@ type wireError struct {
 }
 
 type server struct {
-	ctx            context.Context
-	session        *project.Session
-	baseSnapshot   *project.Snapshot
-	openedFiles    map[string]struct{}
-	openedProjects map[string]struct{}
+	ctx                       context.Context
+	session                   *project.Session
+	watcher                   *localWatcherClient
+	baseSnapshot              *project.Snapshot
+	cachedOverride            *cachedOverride
+	currentDirectory          string
+	useCaseSensitiveFileNames bool
+	openedFiles               map[tspath.Path]struct{}
+	openedProjects            map[tspath.Path]struct{}
+}
+
+type cachedOverride struct {
+	uri         lsproto.DocumentUri
+	text        string
+	baseProgram *compiler.Program
+	snapshot    *project.Snapshot
 }
 
 // Run serves synchronous Effect JavaScript API requests until stdin closes.
@@ -77,19 +89,25 @@ func Run(ctx context.Context, args []string, stdin io.ReadCloser, stdout io.Writ
 	}
 
 	fs := bundled.WrapFS(osvfs.FS())
+	watcher := newLocalWatcherClient()
 	s := &server{
 		ctx: ctx,
 		session: project.NewSession(&project.SessionInit{
 			BackgroundCtx: ctx,
 			FS:            fs,
+			Client:        watcher,
 			Options: &project.SessionOptions{
 				CurrentDirectory:   *cwd,
 				DefaultLibraryPath: bundled.LibPath(),
 				PositionEncoding:   lsproto.PositionEncodingKindUTF16,
+				WatchEnabled:       true,
 			},
 		}),
-		openedFiles:    make(map[string]struct{}),
-		openedProjects: make(map[string]struct{}),
+		watcher:                   watcher,
+		currentDirectory:          *cwd,
+		useCaseSensitiveFileNames: fs.UseCaseSensitiveFileNames(),
+		openedFiles:               make(map[tspath.Path]struct{}),
+		openedProjects:            make(map[tspath.Path]struct{}),
 	}
 	defer s.close()
 
@@ -167,57 +185,99 @@ func (s *server) runEffectDiagnostics(params RunEffectDiagnosticsParams) (*RunEf
 	}
 
 	apiRequest := &project.APISnapshotRequest{}
-	openProject := ""
+	var openProject tspath.Path
 	if params.ProjectFilePath != "" {
-		if _, opened := s.openedProjects[params.ProjectFilePath]; !opened {
+		projectPath := tspath.ToPath(params.ProjectFilePath, s.currentDirectory, s.useCaseSensitiveFileNames)
+		if _, opened := s.openedProjects[projectPath]; !opened {
 			apiRequest.OpenProjects = &collections.Set[string]{}
 			apiRequest.OpenProjects.Add(params.ProjectFilePath)
-			openProject = params.ProjectFilePath
+			openProject = projectPath
 		}
 	}
 	uri := lsconv.FileNameToDocumentURI(params.TargetFilePath)
+	targetPath := uri.Path(s.useCaseSensitiveFileNames)
 	openFile := false
-	if _, opened := s.openedFiles[params.TargetFilePath]; !opened {
+	refreshInferred := false
+	if _, opened := s.openedFiles[targetPath]; !opened {
 		apiRequest.OpenFiles = &collections.Set[lsproto.DocumentUri]{}
 		apiRequest.OpenFiles.Add(uri)
 		openFile = true
-	}
-	next, err := s.session.APIUpdate(s.ctx, project.FileChangeSummary{}, apiRequest)
-	if err != nil {
-		if next != nil {
-			next.Deref(s.session)
+	} else if s.baseSnapshot != nil {
+		previousProject := s.baseSnapshot.GetDefaultProject(uri)
+		if previousProject != nil && previousProject.Kind == project.KindInferred {
+			apiRequest.CloseFiles = &collections.Set[tspath.Path]{}
+			apiRequest.CloseFiles.Add(targetPath)
+			apiRequest.OpenFiles = &collections.Set[lsproto.DocumentUri]{}
+			apiRequest.OpenFiles.Add(uri)
+			refreshInferred = true
 		}
+	}
+	if err := s.updateBaseSnapshot(apiRequest); err != nil {
 		return nil, err
 	}
-	if s.baseSnapshot != nil {
-		s.baseSnapshot.Deref(s.session)
+	if openProject != "" || openFile || refreshInferred {
+		s.session.WaitForBackgroundTasks()
 	}
-	s.baseSnapshot = next
 	if openProject != "" {
 		s.openedProjects[openProject] = struct{}{}
 	}
 	if openFile {
-		s.openedFiles[params.TargetFilePath] = struct{}{}
+		s.openedFiles[targetPath] = struct{}{}
 	}
 
 	snapshot := s.baseSnapshot
-	if params.OverrideSourceText != nil {
-		temporary, err := s.session.APIUpdateTemporary(s.ctx, s.baseSnapshot, uri, *params.OverrideSourceText)
-		if err != nil {
-			return nil, err
-		}
-		defer temporary.Deref(s.session)
-		snapshot = temporary
-	}
-
 	configuredProject := snapshot.GetDefaultProject(uri)
 	if configuredProject == nil || configuredProject.GetProgram() == nil {
 		return nil, fmt.Errorf("no TypeScript project contains %s", params.TargetFilePath)
+	}
+	if configuredProject.Kind == project.KindConfigured {
+		configFileName := configuredProject.ConfigFileName()
+		configFilePath := configuredProject.ConfigFilePath()
+		if _, opened := s.openedProjects[configFilePath]; !opened {
+			openConfiguredProject := &project.APISnapshotRequest{OpenProjects: &collections.Set[string]{}}
+			openConfiguredProject.OpenProjects.Add(configFileName)
+			if err := s.updateBaseSnapshot(openConfiguredProject); err != nil {
+				return nil, err
+			}
+			s.session.WaitForBackgroundTasks()
+			s.openedProjects[configFilePath] = struct{}{}
+			snapshot = s.baseSnapshot
+			configuredProject = snapshot.GetDefaultProject(uri)
+			if configuredProject == nil || configuredProject.GetProgram() == nil {
+				return nil, fmt.Errorf("no TypeScript project contains %s", params.TargetFilePath)
+			}
+		}
 	}
 	program := configuredProject.GetProgram()
 	sourceFile := program.GetSourceFile(params.TargetFilePath)
 	if sourceFile == nil {
 		return nil, fmt.Errorf("TypeScript project did not load %s", params.TargetFilePath)
+	}
+	if params.OverrideSourceText != nil && *params.OverrideSourceText != sourceFile.Text() {
+		if cached := s.cachedOverride; cached != nil && cached.uri == uri && cached.text == *params.OverrideSourceText && cached.baseProgram == program {
+			snapshot = cached.snapshot
+		} else {
+			temporary, err := s.session.APIUpdateTemporary(s.ctx, s.baseSnapshot, uri, *params.OverrideSourceText)
+			if err != nil {
+				return nil, err
+			}
+			s.replaceCachedOverride(&cachedOverride{
+				uri:         uri,
+				text:        *params.OverrideSourceText,
+				baseProgram: program,
+				snapshot:    temporary,
+			})
+			snapshot = temporary
+		}
+		configuredProject = snapshot.GetDefaultProject(uri)
+		if configuredProject == nil || configuredProject.GetProgram() == nil {
+			return nil, fmt.Errorf("no TypeScript project contains %s", params.TargetFilePath)
+		}
+		program = configuredProject.GetProgram()
+		sourceFile = program.GetSourceFile(params.TargetFilePath)
+		if sourceFile == nil {
+			return nil, fmt.Errorf("TypeScript project did not load %s", params.TargetFilePath)
+		}
 	}
 	effectOptions, optionsSource, err := resolveEffectOptions(params.OverrideEffectOptions, program.Options().Effect)
 	if err != nil {
@@ -270,6 +330,35 @@ func (s *server) runEffectDiagnostics(params RunEffectDiagnosticsParams) (*RunEf
 		result.Diagnostics = append(result.Diagnostics, formatted)
 	}
 	return result, nil
+}
+
+func (s *server) updateBaseSnapshot(apiRequest *project.APISnapshotRequest) error {
+	request := apiRequest
+	for {
+		changes, generation := s.watcher.drain()
+		next, err := s.session.APIUpdate(s.ctx, changes, request)
+		if err != nil {
+			if next != nil {
+				next.Deref(s.session)
+			}
+			return err
+		}
+		if s.baseSnapshot != nil {
+			s.baseSnapshot.Deref(s.session)
+		}
+		s.baseSnapshot = next
+		if s.watcher.currentGeneration() == generation {
+			return nil
+		}
+		request = &project.APISnapshotRequest{}
+	}
+}
+
+func (s *server) replaceCachedOverride(next *cachedOverride) {
+	if s.cachedOverride != nil {
+		s.cachedOverride.snapshot.Deref(s.session)
+	}
+	s.cachedOverride = next
 }
 
 func formatCodeActions(
@@ -391,6 +480,11 @@ func normalizeSeverities(options *etscore.EffectPluginOptions, requestedRules []
 }
 
 func (s *server) close() {
+	s.session.WaitForBackgroundTasks()
+	s.watcher.close()
+	if s.cachedOverride != nil {
+		s.cachedOverride.snapshot.Deref(s.session)
+	}
 	if s.baseSnapshot != nil {
 		s.baseSnapshot.Deref(s.session)
 	}

@@ -14,11 +14,15 @@ const fixtures = [
 ]
 const quickfixInput = fixtures[2]
 const quickfixOutput = fileURLToPath(new URL("./quickfix-output.ts", import.meta.url))
+const watchOutput = fileURLToPath(new URL("./quickfix-watch-output.ts", import.meta.url))
+const inferredWatchOutput = fileURLToPath(new URL("./watch-output.ts", import.meta.url))
 const quickfixSource = readFileSync(quickfixInput, "utf8")
 
 const build = spawnSync("pnpm", ["build:go"], { cwd: root, stdio: "inherit" })
 if (build.status !== 0) process.exit(build.status ?? 1)
 
+writeFileSync(watchOutput, quickfixSource)
+writeFileSync(inferredWatchOutput, quickfixSource)
 const protocol = new SyncApi({ cwd: root, executable: fileURLToPath(new URL("../../../tsgo", import.meta.url)) })
 const protocolParams = {
   targetFilePath: quickfixInput,
@@ -40,8 +44,44 @@ try {
   if (filtered.diagnostics.length !== 1 || filtered.diagnostics.some((diagnostic) => diagnostic.ruleName !== requestedRule)) {
     throw new Error("protocol returned a synthetic or unrequested diagnostic")
   }
+
+  const watchParams = {
+    ...protocolParams,
+    targetFilePath: watchOutput,
+    onlyRules: [requestedRule],
+  }
+  const beforeChange = protocol.runEffectDiagnostics(watchParams)
+  if (beforeChange.diagnostics.length !== 1) throw new Error("protocol did not diagnose the initial disk source")
+
+  writeFileSync(watchOutput, quickfixSource.replace("return yield Effect.succeed(1)", "return yield* Effect.succeed(1)"))
+  const deadline = Date.now() + 5_000
+  let afterChange = protocol.runEffectDiagnostics(watchParams)
+  while (afterChange.diagnostics.length !== 0 && Date.now() < deadline) {
+    Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 100)
+    afterChange = protocol.runEffectDiagnostics(watchParams)
+  }
+  if (afterChange.diagnostics.length !== 0) throw new Error("protocol reused a program after its disk source changed")
+
+  const inferredWatchParams = {
+    ...protocolParams,
+    targetFilePath: inferredWatchOutput,
+    onlyRules: [requestedRule],
+  }
+  const inferredBeforeChange = protocol.runEffectDiagnostics(inferredWatchParams)
+  if (inferredBeforeChange.diagnostics.length !== 1) throw new Error("protocol did not diagnose the initial inferred-project source")
+
+  writeFileSync(inferredWatchOutput, quickfixSource.replace("return yield Effect.succeed(1)", "return yield* Effect.succeed(1)"))
+  const inferredDeadline = Date.now() + 5_000
+  let inferredAfterChange = protocol.runEffectDiagnostics(inferredWatchParams)
+  while (inferredAfterChange.diagnostics.length !== 0 && Date.now() < inferredDeadline) {
+    Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 100)
+    inferredAfterChange = protocol.runEffectDiagnostics(inferredWatchParams)
+  }
+  if (inferredAfterChange.diagnostics.length !== 0) throw new Error("protocol reused an inferred program after its disk source changed")
 } finally {
   protocol.close()
+  unlinkSync(watchOutput)
+  unlinkSync(inferredWatchOutput)
 }
 
 const lint = spawnSync(
