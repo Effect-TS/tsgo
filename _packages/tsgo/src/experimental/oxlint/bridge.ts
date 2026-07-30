@@ -48,6 +48,7 @@ function computeResults(current: Frame): void {
     text: current.text,
     rules: [...current.rules],
     effectOptions: current.effectOptions,
+    includeFixes: true,
   })
   const byRule = new Map<string, Array<EffectDiagnostic>>()
   for (const diagnostic of response.diagnostics) {

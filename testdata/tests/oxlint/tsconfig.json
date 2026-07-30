@@ -10,5 +10,5 @@
       }
     ]
   },
-  "files": ["floatingEffect.ts", "floatingEffect_stream.ts"]
+  "include": ["floatingEffect*.ts", "quickfix*.ts"]
 }

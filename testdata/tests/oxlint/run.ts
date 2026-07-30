@@ -1,5 +1,6 @@
 // PROTOTYPE: one-command launcher for the real Oxlint integration.
 import { spawnSync } from "node:child_process"
+import { readFileSync, unlinkSync, writeFileSync } from "node:fs"
 import { fileURLToPath } from "node:url"
 
 const root = fileURLToPath(new URL("../../../", import.meta.url))
@@ -7,7 +8,10 @@ const config = fileURLToPath(new URL("./oxlintrc.json", import.meta.url))
 const fixtures = [
   fileURLToPath(new URL("./floatingEffect.ts", import.meta.url)),
   fileURLToPath(new URL("./floatingEffect_stream.ts", import.meta.url)),
+  fileURLToPath(new URL("./quickfix.ts", import.meta.url)),
 ]
+const quickfixInput = fixtures[2]
+const quickfixOutput = fileURLToPath(new URL("./quickfix-output.ts", import.meta.url))
 
 const build = spawnSync("pnpm", ["build:go"], { cwd: root, stdio: "inherit" })
 if (build.status !== 0) process.exit(build.status ?? 1)
@@ -22,8 +26,39 @@ const lint = spawnSync(
   },
 )
 
-if (lint.status === 1) {
-  console.log("\nPrototype completed: Oxlint reported the expected Effect diagnostics.")
-  process.exit(0)
+if (lint.status !== 1) process.exit(lint.status ?? 1)
+
+const quickfixSource = readFileSync(quickfixInput, "utf8")
+let quickfixFailure: string | undefined
+writeFileSync(quickfixOutput, quickfixSource)
+try {
+  const safeFix = spawnSync(
+    "pnpm",
+    ["dlx", "oxlint@1.75.0", "--fix", "--config", config, quickfixOutput],
+    { cwd: root, stdio: "inherit" },
+  )
+  if (safeFix.status !== 0 && safeFix.status !== 1) {
+    quickfixFailure = `plain --fix exited with status ${safeFix.status}`
+  } else if (readFileSync(quickfixOutput, "utf8") !== quickfixSource) {
+    quickfixFailure = "plain --fix unexpectedly applied an Effect suggestion"
+  }
+
+  const fixed = spawnSync(
+    "pnpm",
+    ["dlx", "oxlint@1.75.0", "--fix-suggestions", "--config", config, quickfixOutput],
+    { cwd: root, stdio: "inherit" },
+  )
+  if (fixed.status !== 0) {
+    quickfixFailure ??= `--fix-suggestions exited with status ${fixed.status}`
+  } else if (!readFileSync(quickfixOutput, "utf8").includes("return yield* Effect.succeed(1)")) {
+    quickfixFailure ??= "Oxlint did not apply the Effect suggestion"
+  }
+} finally {
+  unlinkSync(quickfixOutput)
 }
-process.exit(lint.status ?? 1)
+if (quickfixFailure) {
+  console.error(`Prototype failed: ${quickfixFailure}`)
+  process.exit(1)
+}
+
+console.log("\nPrototype completed: Oxlint reported diagnostics and applied the Effect suggestion.")

@@ -1,7 +1,7 @@
 // PROTOTYPE: typed adapter over the copied synchronous child-process channel.
 import { SyncChannel } from "./sync-channel.ts"
 
-const protocolVersion = 1
+const protocolVersion = 2
 
 interface WireResponse<T> {
   readonly version: number
@@ -17,6 +17,18 @@ export interface EffectDiagnostic {
   readonly code: number
   readonly ruleName: string
   readonly message: string
+  readonly actions?: ReadonlyArray<EffectCodeAction>
+}
+
+export interface EffectCodeAction {
+  readonly title: string
+  readonly edits: ReadonlyArray<EffectTextEdit>
+}
+
+export interface EffectTextEdit {
+  readonly start: number
+  readonly end: number
+  readonly newText: string
 }
 
 export interface DiagnosticsParams {
@@ -25,6 +37,7 @@ export interface DiagnosticsParams {
   readonly project?: string
   readonly rules: ReadonlyArray<string>
   readonly effectOptions?: unknown
+  readonly includeFixes?: boolean
 }
 
 export interface DiagnosticsResult {

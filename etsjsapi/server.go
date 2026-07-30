@@ -9,25 +9,33 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"sort"
 	"strconv"
 	"strings"
+	"unicode/utf16"
 
 	"github.com/effect-ts/tsgo/etscore"
+	"github.com/effect-ts/tsgo/internal/fixrunner"
+	"github.com/effect-ts/tsgo/internal/pluginoptions"
 	"github.com/effect-ts/tsgo/internal/rule"
 	"github.com/effect-ts/tsgo/internal/rulerunner"
 	"github.com/effect-ts/tsgo/internal/rules"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	tsapi "github.com/microsoft/typescript-go/shim/api"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/bundled"
+	"github.com/microsoft/typescript-go/shim/checker"
 	"github.com/microsoft/typescript-go/shim/collections"
+	"github.com/microsoft/typescript-go/shim/compiler"
 	"github.com/microsoft/typescript-go/shim/core"
+	"github.com/microsoft/typescript-go/shim/ls"
 	"github.com/microsoft/typescript-go/shim/ls/lsconv"
 	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
 	"github.com/microsoft/typescript-go/shim/project"
 	"github.com/microsoft/typescript-go/shim/vfs/osvfs"
 )
 
-const protocolVersion = 1
+const protocolVersion = 2
 
 type request struct {
 	Version int             `json:"version"`
@@ -53,6 +61,7 @@ type diagnosticsParams struct {
 	Project       string          `json:"project,omitempty"`
 	Rules         []string        `json:"rules"`
 	EffectOptions json.RawMessage `json:"effectOptions,omitempty"`
+	IncludeFixes  bool            `json:"includeFixes,omitempty"`
 }
 
 type diagnosticsResult struct {
@@ -61,12 +70,24 @@ type diagnosticsResult struct {
 }
 
 type diagnostic struct {
-	File     string `json:"file"`
-	Start    int    `json:"start"`
-	End      int    `json:"end"`
-	Code     int32  `json:"code"`
-	RuleName string `json:"ruleName"`
-	Message  string `json:"message"`
+	File     string       `json:"file"`
+	Start    int          `json:"start"`
+	End      int          `json:"end"`
+	Code     int32        `json:"code"`
+	RuleName string       `json:"ruleName"`
+	Message  string       `json:"message"`
+	Actions  []codeAction `json:"actions,omitempty"`
+}
+
+type codeAction struct {
+	Title string     `json:"title"`
+	Edits []textEdit `json:"edits"`
+}
+
+type textEdit struct {
+	Start   int    `json:"start"`
+	End     int    `json:"end"`
+	NewText string `json:"newText"`
 }
 
 type server struct {
@@ -100,7 +121,7 @@ func Run(ctx context.Context, args []string, stdin io.ReadCloser, stdout io.Writ
 			Options: &project.SessionOptions{
 				CurrentDirectory:   *cwd,
 				DefaultLibraryPath: bundled.LibPath(),
-				PositionEncoding:   lsproto.PositionEncodingKindUTF8,
+				PositionEncoding:   lsproto.PositionEncodingKindUTF16,
 			},
 		}),
 		openedFiles:    make(map[string]struct{}),
@@ -249,10 +270,95 @@ func (s *server) diagnostics(params diagnosticsParams) (*diagnosticsResult, erro
 		Diagnostics:   make([]diagnostic, 0, len(diagnostics)),
 		OptionsSource: optionsSource,
 	}
+	var languageService *ls.LanguageService
+	var resolvedOptions *etscore.ResolvedEffectPluginOptions
+	var tp *typeparser.TypeParser
+	if params.IncludeFixes {
+		languageService = ls.NewLanguageService(configuredProject.ID(), program, temporary, params.File)
+		resolvedOptions = pluginoptions.ResolveEffectPluginOptionsForSourceFile(
+			effectOptions,
+			sourceFile.FileName(),
+			program.Options().ConfigFilePath,
+			program.UseCaseSensitiveFileNames(),
+		)
+		tp = typeparser.NewTypeParser(program, checker)
+	}
 	for _, item := range diagnostics {
-		result.Diagnostics = append(result.Diagnostics, formatDiagnostic(item))
+		formatted := formatDiagnostic(item)
+		if params.IncludeFixes {
+			formatted.Actions = formatCodeActions(s.ctx, item, program, sourceFile, languageService, resolvedOptions, checker, tp)
+		}
+		result.Diagnostics = append(result.Diagnostics, formatted)
 	}
 	return result, nil
+}
+
+func formatCodeActions(
+	ctx context.Context,
+	diagnostic *ast.Diagnostic,
+	program *compiler.Program,
+	sourceFile *ast.SourceFile,
+	languageService *ls.LanguageService,
+	options *etscore.ResolvedEffectPluginOptions,
+	checker *checker.Checker,
+	tp *typeparser.TypeParser,
+) []codeAction {
+	fixCtx := &ls.CodeFixContext{
+		SourceFile: sourceFile,
+		Span:       core.NewTextRange(diagnostic.Pos(), diagnostic.End()),
+		ErrorCode:  diagnostic.Code(),
+		Program:    program,
+		LS:         languageService,
+	}
+	converters := ls.LanguageService_converters(languageService)
+	utf16Length := len(utf16.Encode([]rune(sourceFile.Text())))
+	seen := make(map[string]struct{})
+	var actions []codeAction
+	for _, action := range fixrunner.CollectActions(ctx, fixCtx, options, checker, tp, false) {
+		edits := make([]textEdit, 0, len(action.Changes))
+		valid := true
+		for _, change := range action.Changes {
+			startByte := int(converters.LineAndCharacterToPosition(sourceFile, change.Range.Start))
+			endByte := int(converters.LineAndCharacterToPosition(sourceFile, change.Range.End))
+			start := sourceFile.GetPositionMap().UTF8ToUTF16(startByte)
+			end := sourceFile.GetPositionMap().UTF8ToUTF16(endByte)
+			if start < 0 || end < start || end > utf16Length {
+				valid = false
+				break
+			}
+			edits = append(edits, textEdit{Start: start, End: end, NewText: change.NewText})
+		}
+		if !valid || len(edits) == 0 {
+			continue
+		}
+		sort.SliceStable(edits, func(i int, j int) bool {
+			if edits[i].Start != edits[j].Start {
+				return edits[i].Start < edits[j].Start
+			}
+			return edits[i].End < edits[j].End
+		})
+		for index := 1; index < len(edits); index++ {
+			if edits[index].Start < edits[index-1].End {
+				valid = false
+				break
+			}
+		}
+		if !valid {
+			continue
+		}
+		formatted := codeAction{Title: action.Description, Edits: edits}
+		keyBytes, err := json.Marshal(formatted)
+		if err != nil {
+			continue
+		}
+		key := string(keyBytes)
+		if _, exists := seen[key]; exists {
+			continue
+		}
+		seen[key] = struct{}{}
+		actions = append(actions, formatted)
+	}
+	return actions
 }
 
 func resolveEffectOptions(raw json.RawMessage, fallback *etscore.EffectPluginOptions) (*etscore.EffectPluginOptions, string, error) {

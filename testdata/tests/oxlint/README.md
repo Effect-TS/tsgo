@@ -12,7 +12,7 @@ Run it from the repository root:
 pnpm --filter effect-tsgo-oxlint-prototype test
 ```
 
-The command builds the patched `tsgo` executable, obtains the pinned Oxlint CLI with `pnpm dlx`, and lints the two local floating-Effect fixtures. Five `effect/floatingEffect` diagnostics are expected. Oxlint exits with status 1 when it finds them; the runner treats that as a successful prototype result.
+The command builds the patched `tsgo` executable, obtains the pinned Oxlint CLI with `pnpm dlx`, and lints the local fixtures. Five `effect/floatingEffect` diagnostics and one warning with an Effect suggestion are expected. It then runs `--fix-suggestions` against a temporary copy and verifies that Oxlint applies the returned `yield*` edit.
 
 Set `EFFECT_TSGO_BRIDGE_TRACE=0` to hide broker state. The default trace shows one persistent client and one `diagnostics` request per file, including cold and warm request timings.
 
@@ -31,6 +31,10 @@ Rules read shared Effect options from Oxlint settings when the `effect-tsgo` key
 ```
 
 When the key is absent, the server falls back to the TypeScript project's `@effect/language-service` options. In either case, the server replaces diagnostic severities before running rules: every registered Effect rule is `off`, and every wrapper enabled by Oxlint is `error`. The requested rule list also limits execution. This makes Oxlint the sole authority for the final reported severity while preserving non-severity Effect options and path-scoped overrides.
+
+## Quick fixes
+
+Protocol v2 can return non-disable Effect code actions with each diagnostic. The Oxlint adapter exposes every action as a suggestion, preserving all edits in the action as one group. Plain `--fix` does not apply these actions; users must opt in with `--fix-suggestions`. Automatic fixes are intentionally deferred until Effect actions carry explicit safety and preference metadata.
 
 ## Transport decision
 

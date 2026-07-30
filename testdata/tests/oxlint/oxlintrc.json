@@ -11,6 +11,7 @@
     }
   },
   "rules": {
-    "effect/floatingEffect": "error"
+    "effect/floatingEffect": "error",
+    "effect/missingStarInYieldEffectGen": "warn"
   }
 }

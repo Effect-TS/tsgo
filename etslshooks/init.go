@@ -16,8 +16,8 @@ import (
 	"github.com/effect-ts/tsgo/internal/autoimportstyle"
 	"github.com/effect-ts/tsgo/internal/completion"
 	"github.com/effect-ts/tsgo/internal/completions"
-	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/fixables"
+	"github.com/effect-ts/tsgo/internal/fixrunner"
 	"github.com/effect-ts/tsgo/internal/layergraph"
 	"github.com/effect-ts/tsgo/internal/pluginoptions"
 	"github.com/effect-ts/tsgo/internal/refactor"
@@ -113,20 +113,7 @@ func getEffectCodeActions(ctx context.Context, fixCtx *ls.CodeFixContext) ([]*ls
 			if ch != nil {
 				tp := typeparser.NewTypeParser(fixCtx.Program, ch)
 
-				// Create the fixable context that wraps the code-fix request
-				fCtx := fixable.NewContext(ctx, fixCtx, options, ch, tp)
-
-				// Collect actions from all applicable fixables
-				var actions []*ls.CodeAction
-				for _, f := range applicable {
-					results := f.Run(fCtx)
-					for i := range results {
-						action := results[i]
-						actions = append(actions, &action)
-					}
-				}
-
-				return actions, nil
+				return fixrunner.CollectActions(ctx, fixCtx, options, ch, tp, true), nil
 			}
 		}
 	}
