@@ -119,14 +119,14 @@ export const cloneSubmodules = Effect.fnUntraced(function*(repositoryRoot: strin
       initialized &&
       (yield* readGit(repositoryRoot, ["config", "-f", ".gitmodules", "--get", `submodule.${name}.url`])) === target.repository &&
       (yield* readGit(checkout, ["remote", "get-url", "origin"])) === target.repository
-    const revisionMatches = target !== undefined && initialized &&
-      (yield* readGit(checkout, ["rev-parse", "HEAD"])) === target.revision
-
-    if (target !== undefined && repositoryMatches && revisionMatches) {
-      yield* Console.log(`Resetting ${name} at ${target.revision}`)
-      yield* runGit(checkout, ["reset", "--hard", target.revision])
+    if (target !== undefined && repositoryMatches) {
+      yield* Console.log(`Reusing ${name} for ${target.revision}`)
+      yield* runGit(checkout, ["reset", "--hard"])
       yield* runGit(checkout, ["clean", "-fdx"])
       yield* runGit(checkout, ["stash", "clear"])
+      yield* checkoutRevision(checkout, target.revision)
+      yield* runGit(checkout, ["reset", "--hard", target.revision])
+      yield* runGit(checkout, ["clean", "-fdx"])
       reused.add(name)
       continue
     }
@@ -195,7 +195,7 @@ export const cloneSubmodules = Effect.fnUntraced(function*(repositoryRoot: strin
         target.repository
       ])
       yield* runGit(repositoryRoot, ["submodule", "sync", "--", target.name])
-      yield* runGit(repositoryRoot, ["submodule", "update", "--init", "--", target.name])
+      yield* runGit(repositoryRoot, ["submodule", "update", "--init", "--depth", "1", "--", target.name])
     } else {
       yield* runGit(repositoryRoot, [
         "submodule",
@@ -246,7 +246,15 @@ export const generateSubmoduleArtifacts = Effect.fnUntraced(function*(repository
   const path = yield* Path.Path
   const typescriptGo = path.join(repositoryRoot, "typescript-go")
   yield* runGit(typescriptGo, ["submodule", "sync", "--recursive"])
-  yield* runGit(typescriptGo, ["submodule", "update", "--init", "--force", "_submodules/TypeScript"])
+  yield* runGit(typescriptGo, [
+    "submodule",
+    "update",
+    "--init",
+    "--force",
+    "--depth",
+    "1",
+    "_submodules/TypeScript"
+  ])
   yield* Console.log("Generating diagnostics")
   yield* runCommand("go", path.join(typescriptGo, "internal", "diagnostics"), [
     "run",

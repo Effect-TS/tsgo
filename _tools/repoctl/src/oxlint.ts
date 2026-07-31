@@ -252,7 +252,15 @@ export const generateOxlint = Effect.fnUntraced(function*(repositoryRoot: string
   yield* runCommand("git", repositoryRoot, ["config", "-f", ".gitmodules", "submodule.oxlint.ignore", "dirty"])
   yield* runCommand("git", repositoryRoot, ["config", "-f", ".gitmodules", "submodule.tsgolint.ignore", "dirty"])
   yield* runCommand("git", typescriptGo, ["submodule", "sync", "--recursive"])
-  yield* runCommand("git", typescriptGo, ["submodule", "update", "--init", "--force", "_submodules/TypeScript"])
+  yield* runCommand("git", typescriptGo, [
+    "submodule",
+    "update",
+    "--init",
+    "--force",
+    "--depth",
+    "1",
+    "_submodules/TypeScript"
+  ])
   const typescriptRevision = yield* readGitlink(typescriptGo, profile.ts.gitHead, "_submodules/TypeScript")
   const actualTypeScript = (yield* runCommandString("git", path.join(typescriptGo, "_submodules", "TypeScript"), [
     "rev-parse",
