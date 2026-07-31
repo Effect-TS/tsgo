@@ -61,23 +61,6 @@ class MissingTypeScriptMetadataError extends Data.TaggedError("MissingTypeScript
   }
 }
 
-class BinaryMetadataNotFoundError extends Data.TaggedError("BinaryMetadataNotFoundError")<{
-  readonly metadataPath: string
-}> {
-  get message(): string {
-    return `Binary metadata not found at ${this.metadataPath}.`
-  }
-}
-
-class ParseBinaryMetadataError extends Data.TaggedError("ParseBinaryMetadataError")<{
-  readonly metadataPath: string
-  readonly reason: string
-}> {
-  get message(): string {
-    return `Unable to parse binary metadata at ${this.metadataPath}: ${this.reason}`
-  }
-}
-
 class UnsupportedPlatformPackageError extends Data.TaggedError("UnsupportedPlatformPackageError")<{
   readonly packageName: string
 }> {
@@ -177,8 +160,6 @@ type CliDomainError =
   | PackageNotFoundError
   | ParsePackageJsonError
   | MissingTypeScriptMetadataError
-  | BinaryMetadataNotFoundError
-  | ParseBinaryMetadataError
   | UnsupportedPlatformPackageError
   | MissingTargetBinaryError
   | ResolvePackagedBinaryError
@@ -234,13 +215,23 @@ const PackageJsonMetadataSchema = Schema.Struct({
 })
 const PackageJsonMetadataFromStringSchema = Schema.fromJsonString(PackageJsonMetadataSchema)
 
+const packagedTypeScriptBinaryNames = ["tsc", "tsc-next"] as const
+
 const BinaryMetadataSchema = Schema.Struct({
   tsVersion: Schema.String,
   tsGitHead: Schema.String
 })
-const BinaryMetadataFromStringSchema = Schema.fromJsonString(BinaryMetadataSchema)
-
-const packagedTypeScriptBinaryNames = ["tsc", "tsc-next"] as const
+const EffectPlatformPackageMetadataSchema = Schema.Struct({
+  name: Schema.String,
+  version: Schema.String,
+  effectTsgo: Schema.Struct({
+    binaries: Schema.Struct({
+      tsc: BinaryMetadataSchema,
+      "tsc-next": BinaryMetadataSchema
+    })
+  })
+})
+const EffectPlatformPackageMetadataFromStringSchema = Schema.fromJsonString(EffectPlatformPackageMetadataSchema)
 
 
 const decodePackageJsonText = (packageName: string, packageJsonPath: string, text: string) =>
@@ -266,6 +257,25 @@ const readPackageJsonFile = (packageName: string, packageJsonPath: string) =>
     return { requestedPackageName: packageName, packageJsonPath, ...metadata }
   })
 
+const readEffectPlatformPackageJsonFile = (packageName: string, packageJsonPath: string) =>
+  Effect.gen(function*() {
+    const fs = yield* FileSystem.FileSystem
+    const text = yield* fs.readFileString(packageJsonPath).pipe(
+      Effect.mapError((error) => new ParsePackageJsonError({
+        packageName,
+        packageJsonPath,
+        reason: error.message
+      }))
+    )
+    return yield* Schema.decodeUnknownEffect(EffectPlatformPackageMetadataFromStringSchema)(text).pipe(
+      Effect.mapError((error) => new ParsePackageJsonError({
+        packageName,
+        packageJsonPath,
+        reason: error.message
+      }))
+    )
+  })
+
 const resolvePackageJson = (cwd: string, packageName: string) =>
   Effect.gen(function*() {
     const path = yield* Path.Path
@@ -275,32 +285,6 @@ const resolvePackageJson = (cwd: string, packageName: string) =>
       catch: () => new PackageNotFoundError({ packageName })
     })
     return yield* readPackageJsonFile(packageName, packageJsonPath)
-  })
-
-const decodeBinaryMetadataText = (metadataPath: string, text: string) =>
-  Schema.decodeUnknownEffect(BinaryMetadataFromStringSchema)(text).pipe(
-    Effect.mapError((error) => new ParseBinaryMetadataError({
-      metadataPath,
-      reason: error.message
-    }))
-  )
-
-const readBinaryMetadata = (binaryPath: string) =>
-  Effect.gen(function*() {
-    const fs = yield* FileSystem.FileSystem
-    const metadataPath = binaryPath + ".json"
-    const exists = yield* fs.exists(metadataPath)
-    if (!exists) {
-      return yield* Effect.fail(new BinaryMetadataNotFoundError({ metadataPath }))
-    }
-
-    const text = yield* fs.readFileString(metadataPath).pipe(
-      Effect.mapError((error) => new ParseBinaryMetadataError({
-        metadataPath,
-        reason: error.message
-      }))
-    )
-    return yield* decodeBinaryMetadataText(metadataPath, text)
   })
 
 const resolveOfficialTypeScriptBinary = (typescriptPackage: ResolvedPackageJson) =>
@@ -356,9 +340,9 @@ const packageNamesWithPreferred = (preferredPackageName: Option.Option<string>):
 
 /**
  * Resolve the Effect-patched binary to copy over the native target. The
- * `@effect/tsgo-*` platform package ships `lib/tsc` (built from
- * `generated/latest`) and `lib/tsc-next` (built from `main`). The adjacent JSON
- * metadata files identify the TypeScript gitHead each binary was built from.
+ * `@effect/tsgo-*` platform package ships `lib/tsc` for the stable profile and
+ * `lib/tsc-next` for the next profile. The platform package.json identifies
+ * the TypeScript gitHead each binary was built from.
  */
 const getPackagedBinaryPath = (installedTypeScript: OfficialTypeScriptBinary, force: boolean) =>
   Effect.gen(function*() {
@@ -377,29 +361,18 @@ const getPackagedBinaryPath = (installedTypeScript: OfficialTypeScriptBinary, fo
     })
 
     const packageDir = path.dirname(packageJsonPath)
+    const platformPackage = yield* readEffectPlatformPackageJsonFile(packageName, packageJsonPath)
     const candidates: Array<PackagedBinaryCandidate> = []
 
     for (const binaryName of packagedTypeScriptBinaryNames) {
       const exeName = binaryName + (process.platform === "win32" ? ".exe" : "")
       const exePath = path.join(packageDir, "lib", exeName)
+      const metadata = platformPackage.effectTsgo.binaries[binaryName]
       const exists = yield* fs.exists(exePath)
       if (!exists) {
-        candidates.push({ binaryName, reason: "binary not packaged" })
+        candidates.push({ binaryName, metadata, ...metadata, reason: "binary not packaged" })
         continue
       }
-
-      const metadataResult = yield* readBinaryMetadata(exePath).pipe(
-        Effect.match({
-          onFailure: (error) => ({ _tag: "failure" as const, error }),
-          onSuccess: (metadata) => ({ _tag: "success" as const, metadata })
-        })
-      )
-      if (metadataResult._tag === "failure") {
-        candidates.push({ binaryName, path: exePath, reason: metadataResult.error.message })
-        continue
-      }
-
-      const metadata = metadataResult.metadata
 
       const candidate = { binaryName, path: exePath, metadata, ...metadata }
       if (metadata.tsGitHead === installedTypeScript.packageGitHead) {

@@ -1,4 +1,22 @@
 {
-  "tsVersion": "7.1.0-dev.20260730.1",
-  "tsGitHead": "37357ae666e7af11989d4ba416a763f2da590dee"
+  "schemaVersion": 1,
+  "next": {
+    "tsVersion": "7.1.0-dev.20260730.1",
+    "tsGitHead": "37357ae666e7af11989d4ba416a763f2da590dee"
+  },
+  "stable": {
+    "tsVersion": "7.0.2",
+    "tsGitHead": "2bd066d87f5bafd315be9f40889d0a60b9e58e0b"
+  },
+  "oxlint": {
+    "tsVersion": "7.0.2",
+    "tsGitHead": "2bd066d87f5bafd315be9f40889d0a60b9e58e0b",
+    "tsgolintVersion": "v7.0.2001-7-g16a224c",
+    "tsgolintHead": "16a224c6cc96e4111cc6edfeded8e3028c2b59ce",
+    "tsgolintRepository": "https://github.com/oxc-project/tsgolint.git",
+    "oxlintVersion": "1.42.0",
+    "oxlintHead": "2b9d11542bf96e68b25fc33dc12d4e169e0945d4",
+    "oxlintRepository": "https://github.com/oxc-project/oxc.git",
+    "oxlintTag": "apps_v1.42.0"
+  }
 }

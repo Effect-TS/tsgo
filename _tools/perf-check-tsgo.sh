@@ -5,6 +5,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TARGET_REPO="${1:-"$ROOT_DIR/.repos/effect"}"
 UPSTREAM_METADATA="$ROOT_DIR/_packages/tsgo/upstream.json"
+UPSTREAM_PROFILE="${UPSTREAM_PROFILE:-next}"
 OUTPUT_ROOT="${OUTPUT_ROOT:-"$ROOT_DIR/_tools/.perf-out"}"
 RUN_ID="${RUN_ID:-"$(date -u +%Y%m%dT%H%M%SZ)"}"
 RUN_DIR="$OUTPUT_ROOT/$RUN_ID"
@@ -24,12 +25,7 @@ require_cmd() {
 }
 
 read_stock_typescript_version() {
-  node -e '
-    const fs = require("node:fs")
-    const metadata = JSON.parse(fs.readFileSync(process.argv[1], "utf8"))
-    if (typeof metadata.tsVersion !== "string" || metadata.tsVersion.length === 0) process.exit(1)
-    process.stdout.write(metadata.tsVersion)
-  ' "$UPSTREAM_METADATA"
+  node "$ROOT_DIR/_tools/upstream.mjs" field "$UPSTREAM_PROFILE" tsVersion
 }
 
 require_cmd node
@@ -53,7 +49,7 @@ else
     exit 1
   fi
   if ! STOCK_TYPESCRIPT_VERSION="$(read_stock_typescript_version)"; then
-    echo "Unable to read tsVersion from $UPSTREAM_METADATA" >&2
+    echo "Unable to read $UPSTREAM_PROFILE tsVersion from $UPSTREAM_METADATA" >&2
     exit 1
   fi
   STOCK_IDENTITY="pnpm --silent --package typescript@$STOCK_TYPESCRIPT_VERSION dlx tsc"

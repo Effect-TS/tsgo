@@ -1,10 +1,77 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+export LC_ALL=C
+
 CI_MODE=false
-if [ "${1:-}" = "--ci" ]; then
-  CI_MODE=true
+PROFILE=next
+
+usage() {
+  cat <<'EOF'
+Usage: bash _tools/setup-repo.sh [--profile <next|stable|oxlint>] [--ci]
+
+Materialize one upstream profile from _packages/tsgo/upstream.json. The default
+profile is next. --stable and --oxlint are shortcuts for their profile names.
+
+  --profile  Select next, stable, or oxlint.
+  --stable   Select the stable profile.
+  --oxlint   Select the oxlint profile.
+  --ci       Skip local-only reference repository setup.
+  --help     Show this help.
+EOF
+}
+
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --ci)
+      CI_MODE=true
+      ;;
+    --profile)
+      [ "$#" -ge 2 ] || { echo "error: --profile requires a value" >&2; exit 1; }
+      PROFILE="$2"
+      shift
+      ;;
+    --stable)
+      PROFILE=stable
+      ;;
+    --oxlint)
+      PROFILE=oxlint
+      ;;
+    --help|-h)
+      usage
+      exit 0
+      ;;
+    *)
+      usage >&2
+      echo "error: unknown argument: $1" >&2
+      exit 1
+      ;;
+  esac
+  shift
+done
+
+case "$PROFILE" in
+  next|stable|oxlint) ;;
+  *)
+    echo "error: unknown upstream profile: $PROFILE" >&2
+    exit 1
+    ;;
+esac
+
+node _tools/upstream.mjs validate
+
+if [ "$PROFILE" = oxlint ]; then
+  oxlint_args=()
+  if [ "$CI_MODE" = true ]; then
+    oxlint_args+=(--ci)
+  fi
+  exec bash _tools/generate-oxlint-branch.sh "${oxlint_args[@]}"
 fi
+
+TS_VERSION="$(node _tools/upstream.mjs field "$PROFILE" tsVersion)"
+TSGO_REVISION="$(node _tools/upstream.mjs field "$PROFILE" tsGitHead)"
+
+echo "Setting up $PROFILE profile: TypeScript $TS_VERSION ($TSGO_REVISION)"
 
 if [ "$CI_MODE" = false ]; then
   # Keep submodule config in sync before updating.
@@ -14,34 +81,47 @@ if [ "$CI_MODE" = false ]; then
   rm -f .git/modules/typescript-go/modules/_submodules/TypeScript/index.lock
   rm -f typescript-go/.git/modules/_submodules/TypeScript/index.lock
 
-  # Attempt a full recursive update first.
-  if ! git submodule update --init --recursive --force; then
-    # Repair the nested TypeScript submodule if its pinned commit isn't present locally.
-    if [ -d typescript-go ]; then
-      git -C typescript-go submodule sync --recursive
-      git -C typescript-go submodule update --init --force _submodules/TypeScript || true
-
-      ts_commit="$(git -C typescript-go ls-tree HEAD _submodules/TypeScript | awk '{print $3}')"
-      if [ -n "$ts_commit" ]; then
-        git -C typescript-go/_submodules/TypeScript fetch --depth 1 origin "$ts_commit"
-        git -C typescript-go/_submodules/TypeScript checkout --detach "$ts_commit"
-        git -C typescript-go/_submodules/TypeScript reset --hard "$ts_commit"
-      fi
-    fi
-
-    # Retry after repairing.
-    git submodule update --init --recursive --force
-  fi
-
-  git submodule foreach --recursive 'git reset --hard HEAD && git clean -fdx'
+  git submodule update --init --force typescript-go
 fi
 
-# Apply patches in order (glob sorts alphabetically)
-# Using plain 'git apply' without --3way for non-interactive CI mode
-# --3way can invoke merge tools interactively on conflicts
+if [ ! -e typescript-go/.git ]; then
+  git submodule update --init typescript-go
+fi
+
+git -C typescript-go reset --hard
+git -C typescript-go clean -fdx
+
+if ! git -C typescript-go cat-file -e "$TSGO_REVISION^{commit}" 2>/dev/null; then
+  git -C typescript-go fetch --depth 1 origin "$TSGO_REVISION"
+fi
+git -C typescript-go checkout --detach "$TSGO_REVISION"
+git -C typescript-go reset --hard "$TSGO_REVISION"
+git -C typescript-go clean -fdx
+
+actual_typescript_revision="$(git -C typescript-go ls-tree "$TSGO_REVISION" _submodules/TypeScript | awk '{print $3}')"
+if [[ ! "$actual_typescript_revision" =~ ^[0-9a-f]{40}$ ]]; then
+  echo "error: unable to derive the TypeScript source commit for $PROFILE profile" >&2
+  exit 1
+fi
+TYPESCRIPT_REVISION="$actual_typescript_revision"
+
+git -C typescript-go submodule sync --recursive
+if ! git -C typescript-go submodule update --init --force _submodules/TypeScript; then
+  git -C typescript-go/_submodules/TypeScript fetch --depth 1 origin "$TYPESCRIPT_REVISION"
+  git -C typescript-go/_submodules/TypeScript checkout --detach "$TYPESCRIPT_REVISION"
+fi
+
+nested_typescript_revision="$(git -C typescript-go/_submodules/TypeScript rev-parse HEAD)"
+if [ "$nested_typescript_revision" != "$TYPESCRIPT_REVISION" ]; then
+  echo "error: TypeScript checkout $nested_typescript_revision does not match $PROFILE profile $TYPESCRIPT_REVISION" >&2
+  exit 1
+fi
+
+# Apply patches in bytewise filename order.
 for patch in _patches/*.patch; do
     if [ -f "$patch" ]; then
         echo "Applying patch: $patch"
+        git -C typescript-go apply --check "../$patch"
         git -C typescript-go apply "../$patch"
     fi
 done
@@ -103,6 +183,3 @@ echo "Generating diagnostics..."
 # Generate shims only; release version sync is handled by _tools/version-prepare.sh.
 echo "Generating shims..."
 go run ./_tools/gen_shims
-
-echo "Generating Effect JavaScript API types..."
-go run ./_tools/gen_etsjsapi

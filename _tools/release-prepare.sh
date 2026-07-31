@@ -3,7 +3,8 @@ set -euo pipefail
 
 # release-prepare.sh — Single entrypoint for preparing publish-ready workspace packages.
 #
-# Usage: release-prepare.sh [--target <platform-arch> ...] [--binary-name <name>] [--skip-cli]
+# Usage: release-prepare.sh [--profile <name>] [--target <platform-arch> ...] [--binary-name <name>] [--skip-cli]
+#   --profile      Select upstream profile metadata. Defaults to next.
 #   --target       Select specific platform targets (repeatable). Omit to build all.
 #   --binary-name  Set the output executable base name. Defaults to tsgo.
 #   --skip-cli     Skip the CLI bundle build and its validation. Used by matrix build jobs.
@@ -39,9 +40,18 @@ done
 # ── Argument parsing ──────────────────────────────────────────────────────────
 selected_ids=()
 binary_name="tsgo"
+profile="next"
 skip_cli=false
 while [ $# -gt 0 ]; do
   case "$1" in
+    --profile)
+      if [ $# -lt 2 ]; then
+        echo "ERROR: --profile requires a value (next, stable, or oxlint)."
+        exit 1
+      fi
+      profile="$2"
+      shift 2
+      ;;
     --target)
       if [ $# -lt 2 ]; then
         echo "ERROR: --target requires a value (e.g., --target linux-x64)."
@@ -65,7 +75,7 @@ while [ $# -gt 0 ]; do
       ;;
     *)
       echo "ERROR: Unknown flag '$1'."
-      echo "Usage: release-prepare.sh [--target <platform-arch> ...] [--binary-name <name>] [--skip-cli]"
+      echo "Usage: release-prepare.sh [--profile <name>] [--target <platform-arch> ...] [--binary-name <name>] [--skip-cli]"
       echo "Valid targets: ${valid_ids[*]}"
       exit 1
       ;;
@@ -82,7 +92,7 @@ if [ ! -s "${UPSTREAM_METADATA}" ]; then
   exit 1
 fi
 
-metadata_git_head="$(node -e 'const fs = require("node:fs"); const m = JSON.parse(fs.readFileSync(process.argv[1], "utf8")); if (!m.tsVersion || !/^[0-9a-f]{40}$/.test(m.tsGitHead || "")) process.exit(1); process.stdout.write(m.tsGitHead)' "${UPSTREAM_METADATA}")"
+metadata_git_head="$(node "${REPO_ROOT}/_tools/upstream.mjs" field "${profile}" tsGitHead)"
 submodule_git_head="$(git -C "${REPO_ROOT}/typescript-go" rev-parse HEAD)"
 if [ "${metadata_git_head}" != "${submodule_git_head}" ]; then
   echo "ERROR: upstream metadata tsGitHead (${metadata_git_head}) does not match typescript-go HEAD (${submodule_git_head})."
@@ -153,7 +163,6 @@ for target in "${TARGETS[@]}"; do
     unset GOARM
   fi
   go build -ldflags="-s -w" -o "${dest}" ./typescript-go/cmd/tsgo
-  cp "${UPSTREAM_METADATA}" "${dest}.json"
 done
 
 echo "  Cross-compilation complete."
@@ -174,14 +183,6 @@ if [ "$skip_cli" != "true" ]; then
   if [ ! -s "${cli_bundle}" ]; then
     errors+=("Missing or empty CLI bundle: ${cli_bundle}")
   fi
-  oxlint_bundle="${PACKAGES_DIR}/tsgo/dist/experimental/oxlint/index.js"
-  if [ ! -s "${oxlint_bundle}" ]; then
-    errors+=("Missing or empty Oxlint bundle: ${oxlint_bundle}")
-  fi
-  oxlint_types="${PACKAGES_DIR}/tsgo/dist/experimental/oxlint/index.d.ts"
-  if [ ! -s "${oxlint_types}" ]; then
-    errors+=("Missing or empty Oxlint declarations: ${oxlint_types}")
-  fi
 fi
 
 # Check platform binaries
@@ -194,12 +195,8 @@ for target in "${TARGETS[@]}"; do
   fi
 
   bin_path="${PACKAGES_DIR}/tsgo-${npm_platform}-${npm_arch}/lib/${output_name}"
-  metadata_path="${bin_path}.json"
   if [ ! -s "${bin_path}" ]; then
     errors+=("Missing or empty binary: ${bin_path}")
-  fi
-  if [ ! -s "${metadata_path}" ]; then
-    errors+=("Missing or empty binary metadata: ${metadata_path}")
   fi
 done
 

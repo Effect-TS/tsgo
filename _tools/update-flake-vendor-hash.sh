@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 #
-# Syncs flake.nix inputs with the git submodule commits (source of truth)
-# and refreshes the Go vendor hash.
+# Refreshes flake.lock from the upstream manifest and updates the Go vendor hash.
 #
 # Usage: ./_tools/update-flake-vendor-hash.sh
 
@@ -21,51 +20,43 @@ if [[ -n "${NIX_BUILD_ARGS:-}" ]]; then
   extra_args=(${NIX_BUILD_ARGS})
 fi
 
-# --- Step 1: Sync flake inputs with submodule commits ---
+# --- Step 1: Refresh locked inputs from upstream.json ---
 
-tsgo_commit="$(git ls-tree HEAD typescript-go | awk '{print $3}')"
-if [[ -z "$tsgo_commit" ]]; then
-  echo "error: cannot determine typescript-go submodule commit" >&2
+tsgo_commit="$(node _tools/upstream.mjs field next tsGitHead)"
+ts_commit="$(git -C typescript-go ls-tree "$tsgo_commit" _submodules/TypeScript | awk '{print $3}')"
+if [[ ! "$ts_commit" =~ ^[0-9a-f]{40}$ ]]; then
+  echo "error: cannot derive the TypeScript source commit from TypeScript-Go $tsgo_commit" >&2
   exit 1
 fi
 
-ts_commit="$(git -C typescript-go ls-tree HEAD _submodules/TypeScript | awk '{print $3}')"
-if [[ -z "$ts_commit" ]]; then
-  echo "error: cannot determine TypeScript submodule commit (is the submodule initialized?)" >&2
-  exit 1
-fi
+node --input-type=module - "$flake_file" "$tsgo_commit" "$ts_commit" <<'NODE'
+import { readFileSync, writeFileSync } from "node:fs"
 
-update_input_commit() {
-  local input_name="$1"
-  local new_commit="$2"
-  local repo_url="$3"
-  local suffix="${4:-}"
+const [flakePath, tsgoCommit, tsCommit] = process.argv.slice(2)
+let flake = readFileSync(flakePath, "utf8")
 
-  local current
-  current="$(REPO_URL="$repo_url" SUFFIX="$suffix" perl -ne '
-    my $pat = quotemeta("github:$ENV{REPO_URL}/");
-    my $suf = quotemeta($ENV{SUFFIX});
-    if (m{${pat}([a-f0-9]+)${suf}}) {
-      print "$1\n";
-      exit 0;
-    }
-  ' "$flake_file")"
-
-  if [[ "$current" == "$new_commit" ]]; then
-    echo "$input_name: already at $new_commit"
-  else
-    REPO_URL="$repo_url" OLD_COMMIT="$current" NEW_COMMIT="$new_commit" SUFFIX="$suffix" \
-      perl -pi -e '
-        my $old = quotemeta("github:$ENV{REPO_URL}/$ENV{OLD_COMMIT}$ENV{SUFFIX}");
-        my $new = "github:$ENV{REPO_URL}/$ENV{NEW_COMMIT}$ENV{SUFFIX}";
-        s/$old/$new/;
-      ' "$flake_file"
-    echo "$input_name: updated ${current:-unknown} -> $new_commit"
-  fi
+const replaceInput = (pattern, replacement, name) => {
+  if (!pattern.test(flake)) {
+    throw new Error(`Unable to find ${name} input in ${flakePath}`)
+  }
+  flake = flake.replace(pattern, replacement)
 }
 
-update_input_commit "typescript-go-src" "$tsgo_commit" "microsoft/typescript-go" '?submodules=1'
-update_input_commit "typescript-src" "$ts_commit" "microsoft/TypeScript"
+replaceInput(
+  /github:microsoft\/typescript-go\/[0-9a-f]{40}\?submodules=1/,
+  `github:microsoft/typescript-go/${tsgoCommit}?submodules=1`,
+  "typescript-go-src",
+)
+replaceInput(
+  /github:microsoft\/TypeScript\/[0-9a-f]{40}/,
+  `github:microsoft/TypeScript/${tsCommit}`,
+  "typescript-src",
+)
+
+writeFileSync(flakePath, flake)
+NODE
+
+nix flake lock
 
 # --- Step 2: Refresh vendor hash ---
 

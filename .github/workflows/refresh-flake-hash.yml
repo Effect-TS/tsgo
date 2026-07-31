@@ -13,11 +13,16 @@ on:
         description: Branch or ref to refresh
         required: true
         type: string
+    outputs:
+      head_sha:
+        description: Commit SHA after refreshing the flake
+        value: ${{ jobs.refresh.outputs.head_sha }}
   pull_request_target:
     types: [opened, reopened, synchronize]
     paths:
       - flake.nix
       - flake.lock
+      - _packages/tsgo/upstream.json
       - go.mod
       - go.sum
       - go.work
@@ -41,6 +46,8 @@ jobs:
     if: github.event_name != 'pull_request_target' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    outputs:
+      head_sha: ${{ steps.commit.outputs.head_sha }}
 
     steps:
       - name: Checkout PR branch
@@ -75,9 +82,13 @@ jobs:
         run: ./_tools/update-flake-vendor-hash.sh
 
       - name: Commit refreshed hash
+        id: commit
+        env:
+          BRANCH_REF: ${{ inputs.target_ref || github.event.pull_request.head.ref || github.ref_name }}
         run: |
           if git diff --quiet -- flake.nix flake.lock; then
             echo "flake hash already up to date"
+            echo "head_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
@@ -86,5 +97,5 @@ jobs:
           git add flake.nix flake.lock
           git commit -m "Refresh flake vendor hash"
 
-          branch_ref="${{ inputs.target_ref || github.event.pull_request.head.ref || github.ref_name }}"
-          git push origin "HEAD:${branch_ref}"
+          git push origin "HEAD:${BRANCH_REF}"
+          echo "head_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"

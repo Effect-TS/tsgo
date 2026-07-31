@@ -63,6 +63,12 @@ export default function getExePath() {
   }
 
   const exeDir = path.join(path.dirname(packageJson), "lib");
+  const platformPackage = readJson(packageJson);
+  const binaries = platformPackage.effectTsgo?.binaries;
+  if (typeof binaries !== "object" || binaries === null) {
+    throw new Error("Missing effectTsgo binary metadata in " + platformPackageName + "/package.json.");
+  }
+
   for (const binName of binNames) {
     let exe = path.join(exeDir, binName);
     if (process.platform === "win32") {
@@ -72,11 +78,14 @@ export default function getExePath() {
       }
     }
 
-    if (!fs.existsSync(exe) || !fs.existsSync(exe + ".json")) {
+    if (!fs.existsSync(exe)) {
       continue;
     }
 
-    const metadata = readJson(exe + ".json");
+    const metadata = binaries[binName];
+    if (typeof metadata?.tsVersion !== "string" || typeof metadata?.tsGitHead !== "string") {
+      throw new Error("Invalid " + binName + " metadata in " + platformPackageName + "/package.json.");
+    }
     if (metadata.tsGitHead === typescriptPackage.gitHead) {
       return exe;
     }

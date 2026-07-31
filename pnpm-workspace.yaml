@@ -4,5 +4,4 @@ packages:
   - "testdata/tests/effect-v4"
   - "testdata/tests/effect-v4-document-symbols"
   - "testdata/tests/effect-v4-refactors"
-  - "testdata/tests/oxlint"
   - "_packages/*"

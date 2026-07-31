@@ -18,7 +18,6 @@
   "files": [
     "lib/tsc.exe",
     "lib/tsc-next.exe",
-    "lib/*.json",
     "README.md"
   ],
   "os": [

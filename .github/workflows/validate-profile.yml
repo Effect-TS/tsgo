@@ -1,0 +1,101 @@
+name: Validate Profile
+
+on:
+  workflow_call:
+    inputs:
+      head_sha:
+        description: Commit SHA to validate
+        required: true
+        type: string
+      profile:
+        description: Upstream profile to materialize before validation
+        required: false
+        default: stable
+        type: string
+      require_clean:
+        description: Fail if setup changes the checked-out projection
+        required: false
+        default: false
+        type: boolean
+  workflow_dispatch:
+    inputs:
+      head_sha:
+        description: Commit SHA to validate
+        required: true
+        type: string
+      profile:
+        description: Upstream profile to materialize before validation
+        required: false
+        default: stable
+        type: choice
+        options:
+          - next
+          - stable
+          - oxlint
+      require_clean:
+        description: Fail if setup changes the checked-out projection
+        required: false
+        default: false
+        type: boolean
+
+permissions: {}
+
+jobs:
+  validate:
+    name: Validate ${{ inputs.profile }} profile
+    if: github.repository_owner == 'Effect-TS'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ inputs.head_sha }}
+          submodules: recursive
+
+      - name: Setup ${{ inputs.profile }} repo
+        uses: ./.github/actions/setup-repo
+        with:
+          profile: ${{ inputs.profile }}
+
+      - name: Verify materialized profile
+        env:
+          PROFILE: ${{ inputs.profile }}
+          REQUIRE_CLEAN: ${{ inputs.require_clean }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "${PROFILE} already matches the source commit."
+          elif [ "${REQUIRE_CLEAN}" = "true" ]; then
+            echo "The checked-out ${PROFILE} projection is not reproducible:" >&2
+            git diff --cached --stat >&2
+            exit 1
+          else
+            git commit --no-gpg-sign \
+              -m "test: materialize ${PROFILE} profile" \
+              -m "TypeScript version: $(node _tools/upstream.mjs field "${PROFILE}" tsVersion)" \
+              -m "TypeScript-Go commit: $(node _tools/upstream.mjs field "${PROFILE}" tsGitHead)"
+          fi
+
+      - name: Validate check
+        run: pnpm check
+
+      - name: Validate build
+        run: pnpm build
+
+      - name: Validate test
+        run: pnpm test
+
+      - name: Validate lint
+        uses: golangci/golangci-lint-action@v9
+        with:
+          version: v2.9
+          args: ./...
+        env:
+          CGO_ENABLED: "0"
