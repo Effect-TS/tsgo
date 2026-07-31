@@ -1,0 +1,27 @@
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics catchTagToCatchReason:suggestion
+import { Effect } from "effect"
+
+class ReasonA {
+  readonly _tag = "ReasonA"
+}
+
+class ReasonB {
+  readonly _tag = "ReasonB"
+}
+
+class OuterError {
+  readonly _tag = "OuterError"
+  constructor(readonly reason: ReasonA | ReasonB) {}
+}
+
+declare const program: Effect.Effect<number, OuterError>
+
+// Should NOT trigger: Effect v3 does not expose catchReason/catchReasons.
+export const preCatchReason = program.pipe(
+  Effect.catchTag("OuterError", (error) => {
+    if (error.reason._tag === "ReasonA") return Effect.succeed(1)
+    return Effect.fail(error)
+  })
+)

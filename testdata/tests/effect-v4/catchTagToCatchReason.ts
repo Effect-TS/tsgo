@@ -1,0 +1,253 @@
+// @effect-diagnostics *:off
+// @effect-diagnostics catchTagToCatchReason:suggestion
+import { Channel, Effect as Fx, pipe, Stream } from "effect"
+
+class ReasonA {
+  readonly _tag = "ReasonA"
+}
+
+class ReasonB {
+  readonly _tag = "ReasonB"
+  constructor(readonly detail: string) {}
+}
+
+class OuterError {
+  readonly _tag = "OuterError"
+  constructor(
+    readonly reason: ReasonA | ReasonB,
+    readonly context: string
+  ) {}
+  get alternateReason(): ReasonA | ReasonB {
+    return this.reason
+  }
+}
+
+class OtherError {
+  readonly _tag = "OtherError"
+  constructor(readonly reason: ReasonA | ReasonB) {}
+}
+
+declare const program: Fx.Effect<number, OuterError | OtherError>
+declare const otherOuterError: OuterError
+
+// Should trigger and offer catchReason: canonical switch with explicit re-fail.
+export const switchSingle = program.pipe(
+  Fx.catchTag("OuterError", (error) => {
+    switch (error.reason._tag) {
+      case "ReasonA":
+        return Fx.succeed(1)
+      default:
+        return Fx.fail(error)
+    }
+  })
+)
+
+// Should trigger and offer catchReasons: sequential ifs in pipe(...) style.
+export const ifMultiple = pipe(
+  program,
+  Fx.catchTag("OuterError", (error) => {
+    if (error.reason._tag === "ReasonA") return Fx.succeed(1)
+    if ("ReasonB" === error.reason._tag) return Fx.succeed(2)
+    return Fx.fail(error)
+  })
+)
+
+// Should trigger and offer catchReasons: an if/else-if chain.
+export const ifElseMultiple = program.pipe(
+  Fx.catchTag("OuterError", (error) => {
+    if (error.reason._tag === "ReasonA") {
+      return Fx.succeed(1)
+    } else if (error.reason._tag === "ReasonB") {
+      return Fx.succeed(2)
+    } else {
+      return Fx.fail(error)
+    }
+  })
+)
+
+// Should trigger and offer catchReason: conditional-expression dispatch.
+export const ternarySingle = program.pipe(
+  Fx.catchTag("OuterError", (error) =>
+    error.reason._tag === "ReasonA" ? Fx.succeed(1) : Fx.fail(error)
+  )
+)
+
+// Should trigger and offer catchReasons under conditional-expression narrowing.
+export const ternaryMultiple = program.pipe(
+  Fx.catchTag("OuterError", (error) =>
+    error.reason._tag === "ReasonA"
+      ? Fx.succeed(1)
+      : error.reason._tag === "ReasonB"
+        ? Fx.succeed(2)
+        : Fx.fail(error)
+  )
+)
+
+// Should trigger without a fix: extracting a function body could change arguments.
+export const functionArguments = program.pipe(
+  Fx.catchTag("OuterError", function(error) {
+    if (error.reason._tag === "ReasonA") return Fx.succeed(arguments.length)
+    return Fx.fail(error)
+  })
+)
+
+// Should trigger without a fix: the recovery needs the narrowed reason value.
+export const reasonUseIsDiagnosticOnly = program.pipe(
+  Fx.catchTag("OuterError", (error) => {
+    switch (error.reason._tag) {
+      case "ReasonB":
+        return Fx.succeed(error.reason.detail.length)
+      default:
+        return Fx.fail(error)
+    }
+  })
+)
+
+// Should trigger on the containing catchTags transformation, without a fix.
+export const catchTagsCase = program.pipe(
+  Fx.catchTags({
+    OuterError: (error) => {
+      switch (error.reason._tag) {
+        case "ReasonA":
+          return Fx.succeed(1)
+        default:
+          return Fx.fail(error)
+      }
+    },
+    OtherError: () => Fx.succeed(2)
+  })
+)
+
+// Should trigger without a fix: catchTags cases that need the narrowed reason.
+export const catchTagsReasonUse = program.pipe(
+  Fx.catchTags({
+    OuterError: (error) => {
+      if (error.reason._tag === "ReasonB") return Fx.succeed(error.reason.detail.length)
+      return Fx.fail(error)
+    }
+  })
+)
+
+// Should NOT trigger: the wrapper parameter is used outside reason dispatch.
+export const wrapperContextUse = program.pipe(
+  Fx.catchTag("OuterError", (error) => {
+    if (error.reason._tag === "ReasonA") return Fx.succeed(1)
+    return Fx.fail(new OuterError(error.reason, error.context))
+  })
+)
+
+// Should NOT trigger: logging the wrapper is outside pure reason dispatch.
+export const loggingUse = program.pipe(
+  Fx.catchTag("OuterError", (error) => {
+    console.log(error)
+    if (error.reason._tag === "ReasonA") return Fx.succeed(1)
+    return Fx.fail(error)
+  })
+)
+
+// Should NOT trigger: a nested alias obscures the canonical dispatch shape.
+export const reasonAlias = program.pipe(
+  Fx.catchTag("OuterError", (error) => {
+    const reason = error.reason
+    if (reason._tag === "ReasonA") return Fx.succeed(1)
+    return Fx.fail(error)
+  })
+)
+
+// Should NOT trigger: a different value with the same type is not the caught error.
+export const differentRoot = program.pipe(
+  Fx.catchTag("OuterError", (error) => {
+    if (otherOuterError.reason._tag === "ReasonA") return Fx.succeed(1)
+    return Fx.fail(error)
+  })
+)
+
+// Should NOT trigger: the catch rule requires the exact error.reason._tag chain.
+export const alternateReasonChain = program.pipe(
+  Fx.catchTag("OuterError", (error) => {
+    if (error.alternateReason._tag === "ReasonA") return Fx.succeed(1)
+    return Fx.fail(error)
+  })
+)
+
+// Should NOT trigger: the compared tag must be a string literal in the branch.
+const computedReasonTag = "ReasonA" as const
+
+export const computedTag = program.pipe(
+  Fx.catchTag("OuterError", (error) => {
+    if (error.reason._tag === computedReasonTag) return Fx.succeed(1)
+    return Fx.fail(error)
+  })
+)
+
+// Should NOT trigger: implicit falloff is already rejected by TypeScript.
+export const implicitFalloff = program.pipe(
+  Fx.catchTag(
+    "OuterError",
+    // @ts-expect-error the handler can return undefined
+    (error) => {
+      if (error.reason._tag === "ReasonA") return Fx.succeed(1)
+    }
+  )
+)
+
+// Should NOT trigger: a defect or non-terminating fallback is not a successful recovery.
+export const defectFallback = program.pipe(
+  Fx.catchTag("OuterError", (error) => {
+    if (error.reason._tag === "ReasonA") return Fx.succeed(1)
+    return Fx.die("fatal")
+  })
+)
+
+export const neverFallback = program.pipe(
+  Fx.catchTag("OuterError", (error) => {
+    if (error.reason._tag === "ReasonA") return Fx.succeed(1)
+    return Fx.never
+  })
+)
+
+// Should NOT trigger: non-literal reason tags are not a reason-class union.
+declare const nonLiteralProgram: Fx.Effect<number, {
+  readonly _tag: "NonLiteralError"
+  readonly reason: { readonly _tag: string }
+}>
+
+export const nonLiteralReason = nonLiteralProgram.pipe(
+  Fx.catchTag("NonLiteralError", (error) => {
+    if (error.reason._tag === "ReasonA") return Fx.succeed(1)
+    return Fx.fail(error)
+  })
+)
+
+// Should NOT trigger: the reason property must be an actual union.
+declare const singleReasonProgram: Fx.Effect<number, {
+  readonly _tag: "SingleReasonError"
+  readonly reason: ReasonA
+}>
+
+export const singleReason = singleReasonProgram.pipe(
+  Fx.catchTag("SingleReasonError", (error) => {
+    if (error.reason._tag === "ReasonA") return Fx.succeed(1)
+    return Fx.fail(error)
+  })
+)
+
+// Should NOT trigger: Stream.catchTag is outside the conservative Effect-only scope.
+declare const stream: Stream.Stream<number, OuterError>
+
+export const streamCatchTag = stream.pipe(
+  Stream.catchTag("OuterError", (error) => {
+    if (error.reason._tag === "ReasonA") return Stream.succeed(1)
+    return Stream.fail(error)
+  })
+)
+
+// Should NOT trigger: Channel.catchTag is also outside the Effect-only scope.
+declare const channel: Channel.Channel<number, OuterError>
+
+export const channelCatchTag = channel.pipe(
+  Channel.catchTag("OuterError", (error) => {
+    if (error.reason._tag === "ReasonA") return Channel.succeed(1)
+    return Channel.fail(error)
+  })
+)

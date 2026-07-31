@@ -1664,6 +1664,11 @@
       },
       "description": "Allows overriding the default severity for each Effect diagnostic across the project.",
       "properties": {
+        "abortControllerInEffect": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Warns when manually constructing AbortController inside Effect generators instead of using Effect.abortSignal"
+        },
         "anyUnknownInErrorContext": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
@@ -1678,6 +1683,16 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
           "description": "Suggests using Effect.mapError instead of Effect.catch + Effect.fail"
+        },
+        "catchChainToFirstSuccessOf": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.firstSuccessOf for consecutive error-independent Effect.catch fallbacks when the error type is preserved"
+        },
+        "catchTagToCatchReason": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.catchReason or Effect.catchReasons for handlers that re-fail unmatched reason._tag branches"
         },
         "catchToIgnore": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
@@ -1974,6 +1989,11 @@
           "default": "off",
           "description": "Disallows Schema.Schema.Type\u003ctypeof X\u003e in favor of typeof X.Type"
         },
+        "preferUnsafeConstructor": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests replacing Effect.runSync of a pure effect constructor with the synchronous *Unsafe variant exported by the same module"
+        },
         "processEnv": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
@@ -1983,6 +2003,11 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
           "description": "Warns when reading process.env inside Effect generators instead of using Effect Config"
+        },
+        "promiseInEffectSuccess": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "warning",
+          "description": "Detects Promise types in Effect success channels where they are not awaited"
         },
         "redundantMapError": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",

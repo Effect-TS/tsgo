@@ -1,0 +1,13 @@
+=== Quick Fix Inventory ===
+
+[D1] (11:3-11:15) TS377107: Chained Effect.catch fallbacks that ignore the error can be written with Effect.firstSuccessOf. Wrap each lazy fallback with Effect.suspend to preserve when it is constructed. effect(catchChainToFirstSuccessOf)
+  Fix 0: "Disable catchChainToFirstSuccessOf for this line"
+  Fix 1: "Disable catchChainToFirstSuccessOf for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable catchChainToFirstSuccessOf for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable catchChainToFirstSuccessOf for entire file" ===
+skipped by default

@@ -1,0 +1,17 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/abortControllerInEffect_preview.ts(6,10): suggestion TS377111: `AbortController` is manually constructed inside Effect code. Use `Effect.abortSignal` for Effect-managed cancellation. effect(abortControllerInEffect)
+
+
+==== /.src/abortControllerInEffect_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics abortControllerInEffect:suggestion
+    import { Effect } from "effect"
+    
+    export const preview = Effect.gen(function*() {
+      return new AbortController().signal
+             ~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377111: `AbortController` is manually constructed inside Effect code. Use `Effect.abortSignal` for Effect-managed cancellation. effect(abortControllerInEffect)
+    })
+    

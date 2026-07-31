@@ -56,6 +56,7 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><code>nonObjectEffectServiceType</code></td><td>❌</td><td></td><td>Ensures Effect.Service types are objects, not primitives</td><td>✓</td><td></td></tr>
     <tr><td><code>outdatedApi</code></td><td>⚠️</td><td></td><td>Detects usage of APIs that have been removed or renamed in Effect v4</td><td></td><td>✓</td></tr>
     <tr><td><code>overriddenSchemaConstructor</code></td><td>❌</td><td>🔧</td><td>Prevents overriding constructors in Schema classes which breaks decoding behavior</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>promiseInEffectSuccess</code></td><td>⚠️</td><td></td><td>Detects Promise types in Effect success channels where they are not awaited</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>schemaLiteralNonFinite</code></td><td>❌</td><td></td><td>Reports statically known non-finite numbers passed to Schema literal constructors</td><td></td><td>✓</td></tr>
     <tr><td><code>schemaOpaqueInstanceMember</code></td><td>❌</td><td></td><td>Disallows instance members in classes extending Schema.Opaque</td><td></td><td>✓</td></tr>
     <tr><td colspan="6"><strong>Anti-pattern</strong> <em>Discouraged patterns that often lead to bugs or confusing behavior.</em></td></tr>
@@ -71,6 +72,7 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><code>lazyPromiseInEffectSync</code></td><td>⚠️</td><td></td><td>Warns when Effect.sync lazily returns a Promise instead of using an async Effect constructor</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>leakingRequirements</code></td><td>💡</td><td></td><td>Detects implementation services leaked in service methods</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>multipleEffectProvide</code></td><td>⚠️</td><td>🔧</td><td>Warns against chaining Effect.provide calls which can cause service lifecycle issues</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>preferUnsafeConstructor</code></td><td>💡</td><td>🔧</td><td>Suggests replacing Effect.runSync of a pure effect constructor with the synchronous *Unsafe variant exported by the same module</td><td></td><td>✓</td></tr>
     <tr><td><code>returnEffectInGen</code></td><td>💡</td><td>🔧</td><td>Warns when returning an Effect in a generator causes nested Effect&lt;Effect&lt;...&gt;&gt;</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>runEffectInsideEffect</code></td><td>💡</td><td>🔧</td><td>Suggests using Runtime or Effect.run*With methods instead of Effect.run* inside Effect contexts</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>schemaSyncInEffect</code></td><td>💡</td><td></td><td>Suggests using Effect-based Schema methods instead of sync methods inside Effect generators</td><td>✓</td><td></td></tr>
@@ -79,6 +81,7 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><code>tryCatchInEffectGen</code></td><td>💡</td><td></td><td>Discourages try/catch in Effect generators in favor of Effect error handling</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>unknownInEffectCatch</code></td><td>⚠️</td><td></td><td>Warns when catch callbacks return unknown instead of typed errors</td><td>✓</td><td>✓</td></tr>
     <tr><td colspan="6"><strong>Effect-native</strong> <em>Prefer Effect-native APIs and abstractions when available.</em></td></tr>
+    <tr><td><code>abortControllerInEffect</code></td><td>💡</td><td></td><td>Warns when manually constructing AbortController inside Effect generators instead of using Effect.abortSignal</td><td></td><td>✓</td></tr>
     <tr><td><code>asyncFunction</code></td><td>➖</td><td></td><td>Warns when declaring async functions and suggests using Effect values and Effect.gen for async control flow</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>cryptoRandomUUID</code></td><td>➖</td><td></td><td>Warns when using crypto.randomUUID() outside Effect generators instead of the Effect Random module, which uses Effect-injected randomness rather than the crypto module behind the scenes</td><td></td><td>✓</td></tr>
     <tr><td><code>cryptoRandomUUIDInEffect</code></td><td>➖</td><td></td><td>Warns when using crypto.randomUUID() inside Effect generators instead of the Effect Random module, which uses Effect-injected randomness rather than the crypto module behind the scenes</td><td></td><td>✓</td></tr>
@@ -102,6 +105,8 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><code>unsafeEffectTypeAssertion</code></td><td>➖</td><td>🔧</td><td>Detects unsafe type assertions that narrow Effect, Stream, or Layer error or requirements channels</td><td>✓</td><td>✓</td></tr>
     <tr><td colspan="6"><strong>Style</strong> <em>Cleanup, consistency, and idiomatic Effect code.</em></td></tr>
     <tr><td><code>catchAllToMapError</code></td><td>💡</td><td>🔧</td><td>Suggests using Effect.mapError instead of Effect.catch + Effect.fail</td><td>✓</td><td>✓</td></tr>
+    <tr><td><code>catchChainToFirstSuccessOf</code></td><td>💡</td><td></td><td>Suggests Effect.firstSuccessOf for consecutive error-independent Effect.catch fallbacks when the error type is preserved</td><td></td><td>✓</td></tr>
+    <tr><td><code>catchTagToCatchReason</code></td><td>💡</td><td>🔧</td><td>Suggests Effect.catchReason or Effect.catchReasons for handlers that re-fail unmatched reason._tag branches</td><td></td><td>✓</td></tr>
     <tr><td><code>catchToIgnore</code></td><td>💡</td><td>🔧</td><td>Suggests using Effect.ignore or Effect.ignoreCause instead of Effect.catch/catchCause returning Effect.void</td><td></td><td>✓</td></tr>
     <tr><td><code>catchToOrElseSucceed</code></td><td>💡</td><td>🔧</td><td>Suggests using Effect.orElseSucceed instead of Effect.catch + Effect.succeed</td><td>✓</td><td>✓</td></tr>
     <tr><td><code>deterministicKeys</code></td><td>➖</td><td>🔧</td><td>Enforces deterministic naming for service/tag/error identifiers based on class names</td><td>✓</td><td>✓</td></tr>
@@ -191,7 +196,7 @@ Effect-tsgo is a **superset** of the official [TypeScript-Go](https://github.com
 
 ### Version Pinning
 
-Each release of `effect-tsgo` is built against a specific upstream `tsgo` commit. The pinned commit is recorded in `flake.nix` (`typescript-go-src`). When upstream `tsgo` releases new features or fixes, `effect-tsgo` will adopt them in a subsequent release after validating compatibility with the Effect diagnostics layer.
+Each release of `effect-tsgo` is built against the upstream profiles recorded in `_packages/tsgo/upstream.json`. The Nix flake consumes the `next` profile directly. When upstream `tsgo` releases new features or fixes, `effect-tsgo` will adopt them in a subsequent release after validating compatibility with the Effect diagnostics layer.
 
 ### When to Upgrade
 

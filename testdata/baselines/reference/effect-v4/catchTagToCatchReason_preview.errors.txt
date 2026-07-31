@@ -1,0 +1,38 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/catchTagToCatchReason_preview.ts(21,3): warning TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+
+
+==== /.src/catchTagToCatchReason_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics catchTagToCatchReason:warning
+    import { Effect } from "effect"
+    
+    class RetryReason {
+      readonly _tag = "RetryReason"
+    }
+    
+    class FatalReason {
+      readonly _tag = "FatalReason"
+    }
+    
+    class AppError {
+      readonly _tag = "AppError"
+      constructor(readonly reason: RetryReason | FatalReason) {}
+    }
+    
+    declare const program: Effect.Effect<string, AppError>
+    
+    export const fixable = program.pipe(
+      Effect.catchTag("AppError", (error) => {
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        if (error.reason._tag === "RetryReason") return Effect.succeed("retry")
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        return Effect.fail(error)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      })
+    ~~~~
+!!! warning TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+    )
+    

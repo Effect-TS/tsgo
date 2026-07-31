@@ -1,0 +1,103 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:24-6:44) TS377013: This pipe call contains no arguments. effect(unnecessaryPipe)
+  Fix 0: "Disable unnecessaryPipe for this line"
+  Fix 1: "Disable unnecessaryPipe for entire file"
+  Fix 2: "Remove the pipe call"
+
+[D2] (7:24-7:44) TS377013: This pipe call contains no arguments. effect(unnecessaryPipe)
+  Fix 0: "Disable unnecessaryPipe for this line"
+  Fix 1: "Disable unnecessaryPipe for entire file"
+  Fix 2: "Remove the pipe call"
+
+[D3] (8:26-8:48) TS377013: This pipe call contains no arguments. effect(unnecessaryPipe)
+  Fix 0: "Disable unnecessaryPipe for this line"
+  Fix 1: "Disable unnecessaryPipe for entire file"
+  Fix 2: "Remove the pipe call"
+
+[D4] (9:26-9:48) TS377013: This pipe call contains no arguments. effect(unnecessaryPipe)
+  Fix 0: "Disable unnecessaryPipe for this line"
+  Fix 1: "Disable unnecessaryPipe for entire file"
+  Fix 2: "Remove the pipe call"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable unnecessaryPipe for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable unnecessaryPipe for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Remove the pipe call" ===
+
+--- file:///.src/test.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics unnecessaryPipe:warning
+import * as RootFunction from "./barrel.js"
+import * as NestedFunction from "cache-wrapper"
+
+export const rootOne =1
+export const rootTwo = RootFunction.pipe(2)
+export const nestedOne = NestedFunction.pipe(3)
+export const nestedTwo = NestedFunction.pipe(4)
+
+
+=== [D2] Fix 0: "Disable unnecessaryPipe for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable unnecessaryPipe for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Remove the pipe call" ===
+
+--- file:///.src/test.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics unnecessaryPipe:warning
+import * as RootFunction from "./barrel.js"
+import * as NestedFunction from "cache-wrapper"
+
+export const rootOne = RootFunction.pipe(1)
+export const rootTwo =2
+export const nestedOne = NestedFunction.pipe(3)
+export const nestedTwo = NestedFunction.pipe(4)
+
+
+=== [D3] Fix 0: "Disable unnecessaryPipe for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable unnecessaryPipe for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Remove the pipe call" ===
+
+--- file:///.src/test.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics unnecessaryPipe:warning
+import * as RootFunction from "./barrel.js"
+import * as NestedFunction from "cache-wrapper"
+
+export const rootOne = RootFunction.pipe(1)
+export const rootTwo = RootFunction.pipe(2)
+export const nestedOne =3
+export const nestedTwo = NestedFunction.pipe(4)
+
+
+=== [D4] Fix 0: "Disable unnecessaryPipe for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable unnecessaryPipe for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Remove the pipe call" ===
+
+--- file:///.src/test.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics unnecessaryPipe:warning
+import * as RootFunction from "./barrel.js"
+import * as NestedFunction from "cache-wrapper"
+
+export const rootOne = RootFunction.pipe(1)
+export const rootTwo = RootFunction.pipe(2)
+export const nestedOne = NestedFunction.pipe(3)
+export const nestedTwo =4
+

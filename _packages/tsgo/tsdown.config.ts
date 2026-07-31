@@ -6,9 +6,24 @@ import * as Layer from "effect/Layer"
 import * as Path from "effect/Path"
 import { defineConfig } from "tsdown"
 
+const copyPackageFiles = () => {
+  const program = Effect.gen(function*() {
+    const fs = yield* FileSystem.FileSystem
+    const path = yield* Path.Path
+
+    const readme = yield* fs.readFileString("../../README.md")
+    yield* fs.writeFileString(path.join("README.md"), readme)
+
+    const schemaJson = yield* fs.readFileString("../../schema.json")
+    yield* fs.writeFileString(path.join("schema.json"), schemaJson)
+  }).pipe(Effect.provide(Layer.merge(NodeFileSystem.layer, NodePath.layerPosix)))
+
+  return Effect.runPromise(program)
+}
+
 export default defineConfig({
   entry: {
-    "effect-tsgo": "./src/cli.ts",
+    "effect-tsgo": "./src/cli/index.ts",
   },
   inlineOnly: false,
   outDir: "./dist",
@@ -18,23 +33,10 @@ export default defineConfig({
   dts: false,
   clean: true,
   outExtensions: () => ({
-    js: ".js",
+    js: ".cjs",
   }),
   banner: {
     js: "#!/usr/bin/env node",
   },
-  onSuccess() {
-    const program = Effect.gen(function*() {
-      const fs = yield* FileSystem.FileSystem
-      const path = yield* Path.Path
-
-      const readme = yield* fs.readFileString("../../README.md")
-      yield* fs.writeFileString(path.join("README.md"), readme)
-
-      const schemaJson = yield* fs.readFileString("../../schema.json")
-      yield* fs.writeFileString(path.join("schema.json"), schemaJson)
-    }).pipe(Effect.provide(Layer.merge(NodeFileSystem.layer, NodePath.layerPosix)))
-
-    return Effect.runPromise(program)
-  },
+  onSuccess: copyPackageFiles,
 })

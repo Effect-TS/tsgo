@@ -2,8 +2,9 @@
 description: Explain how to port an effect-language-service commit into tsgo
 ---
 
-Use `.repos/effect-language-service` as the source repository.
-Update it to the latest commit in the origin/main branch before analyzing the reference commit.
+Use `.repos/effect-language-service` as the source repository. If it does not exist, clone
+`https://github.com/Effect-TS/language-service` there. Otherwise, verify its origin URL.
+Fetch and prune origin, then update the checkout to `origin/main` before analyzing the reference commit.
 
 Reference commit: `$1`
 

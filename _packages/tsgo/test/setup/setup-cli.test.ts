@@ -1,8 +1,8 @@
 import * as Option from "effect/Option"
 import { describe, expect, it } from "vitest"
-import { assess } from "../../src/setup/assessment.js"
-import { computeChanges } from "../../src/setup/changes.js"
-import type { Assessment, Editor, Target } from "../../src/setup/types.js"
+import { assess } from "../../src/cli/setup/assessment.js"
+import { computeChanges } from "../../src/cli/setup/changes.js"
+import type { Assessment, Editor, Target } from "../../src/cli/setup/types.js"
 
 const TEST_SCHEMA_PATH = "./node_modules/@effect/tsgo/schema.json"
 

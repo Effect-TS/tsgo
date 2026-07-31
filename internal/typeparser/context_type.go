@@ -5,9 +5,9 @@ import (
 	"github.com/microsoft/typescript-go/shim/checker"
 )
 
-var effectContextPackageSourceFileDescriptor = PackageSourceFileDescriptor{
-	PackageName: "effect",
-	MatchesSourceFile: func(tp *TypeParser, c *checker.Checker, sf *ast.SourceFile) bool {
+var effectContextPackageSourceFileDescriptor = newPackageSourceFileDescriptor(
+	"effect",
+	func(tp *TypeParser, c *checker.Checker, sf *ast.SourceFile) bool {
 		if c == nil || sf == nil {
 			return false
 		}
@@ -31,7 +31,7 @@ var effectContextPackageSourceFileDescriptor = PackageSourceFileDescriptor{
 		tagSym := c.TryGetMemberInModuleExportsAndProperties("Tag", moduleSym)
 		return tagSym != nil
 	},
-}
+)
 
 func (tp *TypeParser) IsNodeReferenceToEffectContextModuleApi(node *ast.Node, memberName string) bool {
 	return tp.IsNodeReferenceToModuleExport(node, effectContextPackageSourceFileDescriptor, memberName)

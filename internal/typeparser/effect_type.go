@@ -8,14 +8,9 @@ import (
 	"github.com/microsoft/typescript-go/shim/checker"
 )
 
-var effectModuleDescriptor = PackageSourceFileDescriptor{
-	PackageName:       "effect",
-	MatchesSourceFile: isEffectTypeSourceFile,
-}
+var effectModuleDescriptor = newPackageSourceFileDescriptor("effect", isEffectTypeSourceFile)
 
-var effectPackageExportDescriptor = PackageSourceFileDescriptor{
-	PackageName: "effect",
-}
+var effectPackageExportDescriptor = newPackageSourceFileDescriptor("effect", nil)
 
 // EffectTypeId is the property key for Effect's variance struct.
 // Effect v4 (effect-smol) uses this pattern to encode type parameters.

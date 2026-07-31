@@ -78,14 +78,13 @@ func TestReadmeTable(t *testing.T) {
 		t.Fatalf("generate README: %v", err)
 	}
 
-	if err := os.MkdirAll(filepath.Dir(localPath), 0o755); err != nil {
-		t.Fatalf("create local baseline dir: %v", err)
-	}
-	if err := os.WriteFile(localPath, got, 0o644); err != nil {
-		t.Fatalf("write local baseline: %v", err)
-	}
-
 	if !bytes.Equal(got, committed) {
+		if err := os.MkdirAll(filepath.Dir(localPath), 0o755); err != nil {
+			t.Fatalf("create local baseline dir: %v", err)
+		}
+		if err := os.WriteFile(localPath, got, 0o644); err != nil {
+			t.Fatalf("write local baseline: %v", err)
+		}
 		t.Fatalf("README.md diagnostics table mismatch:\nlocal: %s\nreference: %s", localPath, referencePath)
 	}
 }
@@ -101,18 +100,17 @@ func TestMetadataJSON(t *testing.T) {
 		t.Fatalf("marshal metadata.json: %v", err)
 	}
 
-	if err := os.MkdirAll(filepath.Dir(localPath), 0o755); err != nil {
-		t.Fatalf("create local baseline dir: %v", err)
-	}
-	if err := os.WriteFile(localPath, got, 0o644); err != nil {
-		t.Fatalf("write local baseline: %v", err)
-	}
-
 	want, err := os.ReadFile(referencePath)
 	if err != nil {
 		t.Fatalf("read reference metadata.json at %s: %v", referencePath, err)
 	}
 	if !bytes.Equal(got, want) {
+		if err := os.MkdirAll(filepath.Dir(localPath), 0o755); err != nil {
+			t.Fatalf("create local baseline dir: %v", err)
+		}
+		if err := os.WriteFile(localPath, got, 0o644); err != nil {
+			t.Fatalf("write local baseline: %v", err)
+		}
 		t.Fatalf("metadata.json mismatch:\nlocal: %s\nreference: %s", localPath, referencePath)
 	}
 }

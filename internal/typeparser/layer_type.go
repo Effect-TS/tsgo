@@ -8,10 +8,7 @@ import (
 	"github.com/microsoft/typescript-go/shim/checker"
 )
 
-var effectLayerModuleDescriptor = PackageSourceFileDescriptor{
-	PackageName:       "effect",
-	MatchesSourceFile: isLayerTypeSourceFile,
-}
+var effectLayerModuleDescriptor = newPackageSourceFileDescriptor("effect", isLayerTypeSourceFile)
 
 // LayerTypeId is the property key for Layer's variance struct.
 const LayerTypeId = "~effect/Layer"

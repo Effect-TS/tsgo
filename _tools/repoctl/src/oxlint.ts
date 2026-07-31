@@ -1,0 +1,320 @@
+import * as Console from "effect/Console"
+import * as Data from "effect/Data"
+import * as Effect from "effect/Effect"
+import * as FileSystem from "effect/FileSystem"
+import * as Path from "effect/Path"
+import { runCommand, runCommandString } from "./process.ts"
+import { generateSubmoduleArtifacts } from "./submodules.ts"
+import { getProfile, readUpstream } from "./upstream.ts"
+
+export class OxlintGenerationError extends Data.TaggedError("OxlintGenerationError")<{
+  readonly reason: string
+}> {
+  get message(): string {
+    return `Unable to generate Oxlint integration: ${this.reason}`
+  }
+}
+
+const parseGitlink = (entry: string, expectedPath: string) => {
+  const [mode, , revision, path] = entry.trim().split(/\s+/)
+  if (mode !== "160000" || path !== expectedPath || !/^[0-9a-f]{40}$/.test(revision ?? "")) {
+    throw new OxlintGenerationError({ reason: `Invalid ${expectedPath} gitlink: ${entry.trim()}` })
+  }
+  return revision!
+}
+
+const readGitlink = Effect.fnUntraced(function*(checkout: string, revision: string, expectedPath: string) {
+  const entry = yield* runCommandString("git", checkout, ["ls-tree", revision, expectedPath])
+  return yield* Effect.try({
+    try: () => parseGitlink(entry, expectedPath),
+    catch: (error) => error instanceof OxlintGenerationError
+      ? error
+      : new OxlintGenerationError({ reason: String(error) })
+  })
+})
+
+const parseJson = <A>(text: string, source: string) => Effect.try({
+  try: () => JSON.parse(text) as A,
+  catch: (error) => new OxlintGenerationError({ reason: `Unable to parse ${source}: ${String(error)}` })
+})
+
+const applyPatchDirectory = Effect.fnUntraced(function*(checkout: string, directory: string, label: string) {
+  const fs = yield* FileSystem.FileSystem
+  if (!(yield* fs.exists(directory))) return
+  const patches = (yield* fs.readDirectory(directory))
+    .filter((file) => file.endsWith(".patch"))
+    .sort((left, right) => Buffer.compare(Buffer.from(left), Buffer.from(right)))
+  for (const patchName of patches) {
+    const patch = `${directory}/${patchName}`
+    yield* Console.log(`Applying ${label} patch: ${patch}`)
+    yield* runCommand("git", checkout, ["apply", "--check", patch], true)
+    yield* runCommand("git", checkout, ["apply", patch])
+  }
+})
+
+const collectFiles = Effect.fnUntraced(function*(root: string, include: (path: string) => boolean) {
+  const fs = yield* FileSystem.FileSystem
+  const path = yield* Path.Path
+  const files: Array<string> = []
+  const pending = [root]
+  while (pending.length > 0) {
+    const directory = pending.pop()!
+    if (!(yield* fs.exists(directory))) continue
+    for (const name of yield* fs.readDirectory(directory)) {
+      const entry = path.join(directory, name)
+      const info = yield* fs.stat(entry)
+      if (info.type === "Directory") pending.push(entry)
+      else if (info.type === "File" && include(entry)) files.push(entry)
+    }
+  }
+  return files.sort()
+})
+
+const sortedUnique = (left: ReadonlyArray<unknown> = [], right: ReadonlyArray<unknown> = []) =>
+  [...new Set([...left, ...right])].sort()
+
+const sortRecord = (value: Readonly<Record<string, unknown>>) =>
+  Object.fromEntries(Object.entries(value).sort(([left], [right]) => left < right ? -1 : left > right ? 1 : 0))
+
+const mergeShimRequirements = Effect.fnUntraced(function*(repositoryRoot: string, tsgolint: string) {
+  const fs = yield* FileSystem.FileSystem
+  const path = yield* Path.Path
+  const sourceRoot = path.join(tsgolint, "shim")
+  const targetRoot = path.join(repositoryRoot, "shim")
+  const sourceFiles = yield* collectFiles(sourceRoot, (file) => path.basename(file) === "extra-shim.json")
+
+  for (const sourceFile of sourceFiles) {
+    const targetFile = path.join(targetRoot, path.relative(sourceRoot, sourceFile))
+    const source = yield* parseJson<Record<string, unknown>>(yield* fs.readFileString(sourceFile), sourceFile)
+    const target = (yield* fs.exists(targetFile))
+      ? yield* parseJson<Record<string, unknown>>(yield* fs.readFileString(targetFile), targetFile)
+      : {}
+
+    for (const [key, value] of Object.entries(source)) {
+      if (Array.isArray(value)) {
+        target[key] = sortedUnique(Array.isArray(target[key]) ? target[key] : [], value)
+      } else if (value !== null && typeof value === "object") {
+        const merged = { ...((target[key] ?? {}) as Record<string, ReadonlyArray<unknown>>) }
+        for (const [name, entries] of Object.entries(value)) {
+          if (!Array.isArray(entries)) {
+            return yield* new OxlintGenerationError({ reason: `Unsupported ${key}.${name} value in ${sourceFile}` })
+          }
+          merged[name] = sortedUnique(merged[name], entries)
+        }
+        target[key] = sortRecord(merged)
+      } else {
+        return yield* new OxlintGenerationError({ reason: `Unsupported ${key} value in ${sourceFile}` })
+      }
+    }
+    yield* fs.makeDirectory(path.dirname(targetFile), { recursive: true })
+    yield* fs.writeFileString(targetFile, `${JSON.stringify(sortRecord(target), null, 2)}\n`)
+  }
+})
+
+const mergeShimHelpers = Effect.fnUntraced(function*(repositoryRoot: string, tsgolint: string) {
+  const fs = yield* FileSystem.FileSystem
+  const path = yield* Path.Path
+  const sourceRoot = path.join(tsgolint, "shim")
+  const targetRoot = path.join(repositoryRoot, "shim")
+  const helpers = yield* collectFiles(sourceRoot, (file) => file.endsWith(".go") && path.basename(file) !== "shim.go")
+  for (const helper of helpers) {
+    const target = path.join(targetRoot, path.relative(sourceRoot, helper))
+    const sourceText = yield* fs.readFileString(helper)
+    if ((yield* fs.exists(target)) && (yield* fs.readFileString(target)) !== sourceText) {
+      return yield* new OxlintGenerationError({
+        reason: `Conflicting handwritten shim helper: ${path.relative(repositoryRoot, target)}`
+      })
+    }
+    yield* fs.makeDirectory(path.dirname(target), { recursive: true })
+    yield* fs.writeFileString(target, sourceText)
+  }
+})
+
+const synchronizeCollections = Effect.fnUntraced(function*(typescriptGo: string, tsgolint: string) {
+  const fs = yield* FileSystem.FileSystem
+  const path = yield* Path.Path
+  const source = path.join(typescriptGo, "internal", "collections")
+  const target = path.join(tsgolint, "internal", "collections")
+  yield* fs.remove(target, { recursive: true, force: true })
+  yield* fs.makeDirectory(target, { recursive: true })
+  for (const name of yield* fs.readDirectory(source)) {
+    const file = path.join(source, name)
+    if (!name.endsWith("_test.go") && (yield* fs.stat(file)).type === "File") {
+      yield* fs.copyFile(file, path.join(target, name))
+    }
+  }
+})
+
+interface GoModEdit {
+  readonly Require?: ReadonlyArray<{ readonly Path: string; readonly Version: string }>
+  readonly Replace?: ReadonlyArray<{ readonly Old: { readonly Path: string } }>
+}
+
+const configureWorkspace = Effect.fnUntraced(function*(repositoryRoot: string, tsgolint: string) {
+  const fs = yield* FileSystem.FileSystem
+  const path = yield* Path.Path
+  yield* runCommand("go", repositoryRoot, ["work", "edit", "-use=./tsgolint"])
+  const module = yield* parseJson<GoModEdit>(
+    yield* runCommandString(
+      "go",
+      repositoryRoot,
+      ["mod", "edit", "-json", path.join(tsgolint, "go.mod")],
+      { GOWORK: "off" }
+    ),
+    path.join(tsgolint, "go.mod")
+  )
+  const versions = new Map((module.Require ?? []).map(({ Path, Version }) => [Path, Version]))
+  const prefix = "github.com/microsoft/typescript-go/shim/"
+  const replacements = (module.Replace ?? [])
+    .filter(({ Old }) => Old.Path.startsWith(prefix))
+    .map(({ Old }) => ({
+      module: `${Old.Path}@${versions.get(Old.Path) ?? "v0.0.0"}`,
+      shim: `./shim/${Old.Path.slice(prefix.length)}`,
+      shimPath: path.join(repositoryRoot, "shim", Old.Path.slice(prefix.length))
+    }))
+    .sort((left, right) => left.module < right.module ? -1 : left.module > right.module ? 1 : 0)
+
+  for (const replacement of replacements) {
+    if (!(yield* fs.exists(replacement.shimPath))) {
+      return yield* new OxlintGenerationError({ reason: `Shared shim path does not exist: ${replacement.shim}` })
+    }
+    yield* runCommand("go", repositoryRoot, [
+      "work",
+      "edit",
+      `-replace=${replacement.module}=${replacement.shim}`
+    ])
+  }
+
+  const resolvedTypeScriptGo = (yield* runCommandString("go", repositoryRoot, [
+    "list",
+    "-m",
+    "-f",
+    "{{.Dir}}",
+    "github.com/microsoft/typescript-go"
+  ], { GOWORK: path.join(repositoryRoot, "go.work") })).trim()
+  const resolvedChecker = (yield* runCommandString("go", repositoryRoot, [
+    "list",
+    "-m",
+    "-f",
+    "{{.Dir}}",
+    "github.com/microsoft/typescript-go/shim/checker"
+  ], { GOWORK: path.join(repositoryRoot, "go.work") })).trim()
+  if ((yield* fs.realPath(resolvedTypeScriptGo)) !== (yield* fs.realPath(path.join(repositoryRoot, "typescript-go")))) {
+    return yield* new OxlintGenerationError({ reason: "Go workspace does not resolve the shared TypeScript-Go checkout" })
+  }
+  if ((yield* fs.realPath(resolvedChecker)) !== (yield* fs.realPath(path.join(repositoryRoot, "shim", "checker")))) {
+    return yield* new OxlintGenerationError({ reason: "Go workspace does not resolve the shared checker shim" })
+  }
+})
+
+export const generateOxlint = Effect.fnUntraced(function*(repositoryRoot: string, build: boolean) {
+  const fs = yield* FileSystem.FileSystem
+  const path = yield* Path.Path
+  const upstream = yield* readUpstream(repositoryRoot)
+  const profile = yield* getProfile(upstream, "oxlint")
+  if (profile.kind !== "oxlint") {
+    return yield* new OxlintGenerationError({ reason: "The oxlint profile has an unexpected kind" })
+  }
+
+  const typescriptGo = path.join(repositoryRoot, "typescript-go")
+  const tsgolint = path.join(repositoryRoot, "tsgolint")
+  const oxlint = path.join(repositoryRoot, "oxlint")
+  const sourceRevision = (yield* runCommandString("git", repositoryRoot, ["rev-parse", "HEAD"])).trim()
+  const tsgolintTypeScriptGo = yield* readGitlink(tsgolint, profile.tsgolint.gitHead, "typescript-go")
+  if (tsgolintTypeScriptGo !== profile.ts.gitHead) {
+    return yield* new OxlintGenerationError({
+      reason: `tsgolint TypeScript-Go revision ${tsgolintTypeScriptGo} does not match profile ${profile.ts.gitHead}`
+    })
+  }
+
+  yield* runCommand("git", tsgolint, ["fetch", "--quiet", "--depth", "50", "--tags", "origin", profile.tsgolint.gitHead])
+  const tsgolintVersion = (yield* runCommandString("git", tsgolint, [
+    "describe",
+    "--tags",
+    "--always",
+    profile.tsgolint.gitHead
+  ])).trim()
+  if (tsgolintVersion !== profile.tsgolint.version) {
+    return yield* new OxlintGenerationError({
+      reason: `tsgolint version ${tsgolintVersion} does not match profile ${profile.tsgolint.version}`
+    })
+  }
+  const oxlintPackage = yield* parseJson<{ readonly version?: string }>(
+    yield* fs.readFileString(path.join(oxlint, "apps", "oxlint", "package.json")),
+    path.join(oxlint, "apps", "oxlint", "package.json")
+  )
+  if (oxlintPackage.version !== profile.oxlint.version) {
+    return yield* new OxlintGenerationError({
+      reason: `Oxlint version ${oxlintPackage.version} does not match profile ${profile.oxlint.version}`
+    })
+  }
+
+  yield* runCommand("git", repositoryRoot, ["config", "-f", ".gitmodules", "submodule.oxlint.ignore", "dirty"])
+  yield* runCommand("git", repositoryRoot, ["config", "-f", ".gitmodules", "submodule.tsgolint.ignore", "dirty"])
+  yield* runCommand("git", typescriptGo, ["submodule", "sync", "--recursive"])
+  yield* runCommand("git", typescriptGo, [
+    "submodule",
+    "update",
+    "--init",
+    "--force",
+    "--depth",
+    "1",
+    "_submodules/TypeScript"
+  ])
+  const typescriptRevision = yield* readGitlink(typescriptGo, profile.ts.gitHead, "_submodules/TypeScript")
+  const actualTypeScript = (yield* runCommandString("git", path.join(typescriptGo, "_submodules", "TypeScript"), [
+    "rev-parse",
+    "HEAD"
+  ])).trim()
+  if (actualTypeScript !== typescriptRevision) {
+    return yield* new OxlintGenerationError({
+      reason: `TypeScript checkout ${actualTypeScript} does not match gitlink ${typescriptRevision}`
+    })
+  }
+
+  yield* applyPatchDirectory(typescriptGo, path.join(tsgolint, "patches"), "tsgolint TypeScript-Go")
+  yield* applyPatchDirectory(typescriptGo, path.join(repositoryRoot, "_patches"), "Effect TypeScript-Go")
+  yield* applyPatchDirectory(tsgolint, path.join(repositoryRoot, "_patches", "tsgolint"), "Effect tsgolint")
+  yield* applyPatchDirectory(oxlint, path.join(repositoryRoot, "_patches", "oxlint"), "Effect Oxlint")
+  yield* synchronizeCollections(typescriptGo, tsgolint)
+  yield* mergeShimRequirements(repositoryRoot, tsgolint)
+  yield* mergeShimHelpers(repositoryRoot, tsgolint)
+  yield* generateSubmoduleArtifacts(repositoryRoot)
+  yield* configureWorkspace(repositoryRoot, tsgolint)
+
+  const metadataPath = path.join(repositoryRoot, "_generated", "oxlint", "metadata.json")
+  yield* fs.makeDirectory(path.dirname(metadataPath), { recursive: true })
+  yield* fs.writeFileString(metadataPath, `${JSON.stringify({
+    ...profile,
+    sourceRevision,
+    typescriptGo: { revision: profile.ts.gitHead },
+    typescript: { revision: typescriptRevision }
+  }, null, 2)}\n`)
+
+  if (build) {
+    const buildDirectory = path.join(repositoryRoot, "build", "oxlint-tsgolint")
+    yield* fs.makeDirectory(buildDirectory, { recursive: true })
+    yield* runCommand("go", repositoryRoot, [
+      "build",
+      "-trimpath",
+      "-ldflags=-s -w",
+      "-o",
+      path.join(buildDirectory, "tsgolint"),
+      "./tsgolint/cmd/tsgolint"
+    ], false, { GOWORK: path.join(repositoryRoot, "go.work"), CGO_ENABLED: "0" })
+    const ruleGenerator = path.join(repositoryRoot, "_tools", "gen-oxlint-effect-rules.mjs")
+    if (yield* fs.exists(ruleGenerator)) {
+      yield* runCommand("node", repositoryRoot, [
+        ruleGenerator,
+        oxlint,
+        path.join(repositoryRoot, "_packages", "tsgo", "src", "metadata.json")
+      ])
+    }
+    yield* runCommand("cargo", oxlint, ["lintgen"])
+    yield* runCommand("pnpm", oxlint, ["install", "--frozen-lockfile"])
+    yield* runCommand("pnpm", path.join(oxlint, "apps", "oxlint"), ["run", "build-napi-release"])
+  }
+
+  yield* runCommand("git", repositoryRoot, ["add", ".gitmodules", "oxlint", "tsgolint", "typescript-go"])
+  yield* Console.log(`Oxlint integration generated; metadata: ${metadataPath}`)
+})

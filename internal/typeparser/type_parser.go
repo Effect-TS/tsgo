@@ -18,23 +18,25 @@ type TypeParser struct {
 // EffectLinks holds per-checker cached type-parser results.
 // One instance is lazily created per Checker and cached on TypeParser.
 type EffectLinks struct {
-	TypeAtLocation       core.LinkStore[*ast.Node, *checker.Type]
-	EffectType           core.LinkStore[*checker.Type, *Effect]
-	StreamType           core.LinkStore[*checker.Type, *Effect]
-	StrictEffectType     core.LinkStore[*checker.Type, *Effect]
-	EffectSubtype        core.LinkStore[*checker.Type, *Effect]
-	FiberType            core.LinkStore[*checker.Type, *Effect]
-	EffectYieldableType  core.LinkStore[*checker.Type, *Effect]
-	HasEffectTypeId      core.LinkStore[*checker.Type, bool]
-	LayerType            core.LinkStore[*checker.Type, *Layer]
-	ServiceType          core.LinkStore[*checker.Type, *Service]
-	ContextTag           core.LinkStore[*checker.Type, *Service]
-	EffectSchemaTypes    core.LinkStore[*checker.Type, *SchemaTypes]
-	IsScopeType          core.LinkStore[*checker.Type, bool]
-	IsPipeableType       core.LinkStore[*checker.Type, bool]
-	PromiseType          core.LinkStore[*checker.Type, *checker.Type]
-	IsGlobalErrorType    core.LinkStore[*checker.Type, bool]
-	IsYieldableErrorType core.LinkStore[*checker.Type, bool]
+	TypeAtLocation        core.LinkStore[*ast.Node, *checker.Type]
+	EffectType            core.LinkStore[*checker.Type, *Effect]
+	StreamType            core.LinkStore[*checker.Type, *Effect]
+	StrictEffectType      core.LinkStore[*checker.Type, *Effect]
+	EffectSubtype         core.LinkStore[*checker.Type, *Effect]
+	FiberType             core.LinkStore[*checker.Type, *Effect]
+	EffectYieldableType   core.LinkStore[*checker.Type, *Effect]
+	HasEffectTypeId       core.LinkStore[*checker.Type, bool]
+	LayerType             core.LinkStore[*checker.Type, *Layer]
+	ServiceType           core.LinkStore[*checker.Type, *Service]
+	ContextTag            core.LinkStore[*checker.Type, *Service]
+	EffectSchemaTypes     core.LinkStore[*checker.Type, *SchemaTypes]
+	IsScopeType           core.LinkStore[*checker.Type, bool]
+	IsPipeableType        core.LinkStore[*checker.Type, bool]
+	PromiseType           core.LinkStore[*checker.Type, *checker.Type]
+	IsGlobalErrorType     core.LinkStore[*checker.Type, bool]
+	IsYieldableErrorType  core.LinkStore[*checker.Type, bool]
+	ReferenceSymbol       core.LinkStore[*ast.Node, *ast.Symbol]
+	ModuleExportReference core.LinkStore[moduleExportReferenceCacheKey, bool]
 
 	ExtendsContextTag          core.LinkStore[*ast.Node, *ContextTagResult]
 	ExtendsDataTaggedError     core.LinkStore[*ast.Node, *DataTaggedErrorResult]
@@ -73,8 +75,8 @@ type EffectLinks struct {
 // stores the result, and returns it. This correctly caches zero/nil values
 // as valid negative results.
 func Cached[K comparable, V any](store *core.LinkStore[K, V], key K, compute func() V) V {
-	if store.Has(key) {
-		return *store.TryGet(key)
+	if value := store.TryGet(key); value != nil {
+		return *value
 	}
 	value := compute()
 	*store.Get(key) = value
