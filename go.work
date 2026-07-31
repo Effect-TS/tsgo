@@ -3,6 +3,7 @@ go 1.26
 use (
 	.
 	./etscore
+	./typescript-go
 	./shim/api
 	./shim/ast
 	./shim/astnav
@@ -13,6 +14,7 @@ use (
 	./shim/core
 	./shim/diagnostics
 	./shim/evaluator
+	./shim/execute/tsc
 	./shim/format
 	./shim/fourslash
 	./shim/jsnum
@@ -46,5 +48,4 @@ use (
 	./shim/vfs/iovfs
 	./shim/vfs/osvfs
 	./shim/vfs/vfstest
-	./typescript-go
 )
