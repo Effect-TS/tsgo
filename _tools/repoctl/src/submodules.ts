@@ -222,7 +222,7 @@ export const patchSubmodules = Effect.fnUntraced(function*(repositoryRoot: strin
   const fs = yield* FileSystem.FileSystem
   const path = yield* Path.Path
   const targets = [
-    { name: "typescript-go", patches: path.join(repositoryRoot, "_patches") },
+    { name: "typescript-go", patches: path.join(repositoryRoot, "_patches", "typescript-go") },
     { name: "tsgolint", patches: path.join(repositoryRoot, "_patches", "tsgolint") },
     { name: "oxlint", patches: path.join(repositoryRoot, "_patches", "oxlint") }
   ] as const

@@ -195,7 +195,11 @@ export const generateOxlint = Effect.fnUntraced(function*(repositoryRoot: string
   }
 
   yield* applyPatchDirectory(typescriptGo, path.join(tsgolint, "patches"), "tsgolint TypeScript-Go")
-  yield* applyPatchDirectory(typescriptGo, path.join(repositoryRoot, "_patches"), "Effect TypeScript-Go")
+  yield* applyPatchDirectory(
+    typescriptGo,
+    path.join(repositoryRoot, "_patches", "typescript-go"),
+    "Effect TypeScript-Go"
+  )
   yield* applyPatchDirectory(tsgolint, path.join(repositoryRoot, "_patches", "tsgolint"), "Effect tsgolint")
   yield* applyPatchDirectory(oxlint, path.join(repositoryRoot, "_patches", "oxlint"), "Effect Oxlint")
   yield* synchronizeCollections(typescriptGo, tsgolint)
