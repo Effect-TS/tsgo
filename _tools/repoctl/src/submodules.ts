@@ -144,6 +144,10 @@ export const cloneSubmodules = Effect.fnUntraced(function*(repositoryRoot: strin
     yield* fs.remove(checkout, { recursive: true, force: true })
     yield* fs.remove(gitDirectory, { recursive: true, force: true })
 
+    if (name === "tsgolint" && target === undefined) {
+      yield* runCommand("go", repositoryRoot, ["work", "edit", "-dropuse=./tsgolint"])
+    }
+
     if (name !== "typescript-go" && (configured || tracked || locallyConfigured)) {
       configuredOptional.push({ name, hasGitmodulesConfig: configured })
     }
@@ -218,7 +222,7 @@ export const patchSubmodules = Effect.fnUntraced(function*(repositoryRoot: strin
   const fs = yield* FileSystem.FileSystem
   const path = yield* Path.Path
   const targets = [
-    { name: "typescript-go", patches: path.join(repositoryRoot, "_patches") },
+    { name: "typescript-go", patches: path.join(repositoryRoot, "_patches", "typescript-go") },
     { name: "tsgolint", patches: path.join(repositoryRoot, "_patches", "tsgolint") },
     { name: "oxlint", patches: path.join(repositoryRoot, "_patches", "oxlint") }
   ] as const
@@ -242,7 +246,10 @@ export const patchSubmodules = Effect.fnUntraced(function*(repositoryRoot: strin
   }
 })
 
-export const generateSubmoduleArtifacts = Effect.fnUntraced(function*(repositoryRoot: string) {
+export const generateSubmoduleArtifacts = Effect.fnUntraced(function*(
+  repositoryRoot: string,
+  shimOverlayRoots: ReadonlyArray<string> = []
+) {
   const path = yield* Path.Path
   const typescriptGo = path.join(repositoryRoot, "typescript-go")
   yield* runGit(typescriptGo, ["submodule", "sync", "--recursive"])
@@ -267,5 +274,11 @@ export const generateSubmoduleArtifacts = Effect.fnUntraced(function*(repository
     "./loc"
   ])
   yield* Console.log("Generating shims")
-  yield* runCommand("go", repositoryRoot, ["run", "./_tools/gen_shims"])
+  yield* runCommand("go", path.join(repositoryRoot, "_tools", "gen_shims"), [
+    "run",
+    ".",
+    "--repository-root",
+    repositoryRoot,
+    ...shimOverlayRoots.flatMap((root) => ["--extra-shim-root", root])
+  ], false, { GOWORK: "off" })
 })

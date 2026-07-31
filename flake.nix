@@ -54,7 +54,7 @@
         let
           root = toString ./.;
           pkgsUnstable = import nixpkgsUnstable { inherit system; };
-          patchEntries = builtins.readDir ./_patches;
+          patchEntries = builtins.readDir ./_patches/typescript-go;
           patchFiles = builtins.filter (
             name: patchEntries.${name} == "regular" && lib.hasSuffix ".patch" name
           ) (builtins.attrNames patchEntries);
@@ -84,7 +84,7 @@
           patchedTypescriptGo = pkgs.applyPatches {
             name = "patched-typescript-go-source";
             src = typescript-go-src;
-            patches = builtins.map (name: ./. + "/_patches/${name}") sortedPatchFiles;
+            patches = builtins.map (name: ./. + "/_patches/typescript-go/${name}") sortedPatchFiles;
           };
           src = pkgs.runCommandNoCC "effect-tsgo-source" { } ''
             mkdir source
