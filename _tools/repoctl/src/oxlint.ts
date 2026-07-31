@@ -52,84 +52,6 @@ const applyPatchDirectory = Effect.fnUntraced(function*(checkout: string, direct
   }
 })
 
-const collectFiles = Effect.fnUntraced(function*(root: string, include: (path: string) => boolean) {
-  const fs = yield* FileSystem.FileSystem
-  const path = yield* Path.Path
-  const files: Array<string> = []
-  const pending = [root]
-  while (pending.length > 0) {
-    const directory = pending.pop()!
-    if (!(yield* fs.exists(directory))) continue
-    for (const name of yield* fs.readDirectory(directory)) {
-      const entry = path.join(directory, name)
-      const info = yield* fs.stat(entry)
-      if (info.type === "Directory") pending.push(entry)
-      else if (info.type === "File" && include(entry)) files.push(entry)
-    }
-  }
-  return files.sort()
-})
-
-const sortedUnique = (left: ReadonlyArray<unknown> = [], right: ReadonlyArray<unknown> = []) =>
-  [...new Set([...left, ...right])].sort()
-
-const sortRecord = (value: Readonly<Record<string, unknown>>) =>
-  Object.fromEntries(Object.entries(value).sort(([left], [right]) => left < right ? -1 : left > right ? 1 : 0))
-
-const mergeShimRequirements = Effect.fnUntraced(function*(repositoryRoot: string, tsgolint: string) {
-  const fs = yield* FileSystem.FileSystem
-  const path = yield* Path.Path
-  const sourceRoot = path.join(tsgolint, "shim")
-  const targetRoot = path.join(repositoryRoot, "shim")
-  const sourceFiles = yield* collectFiles(sourceRoot, (file) => path.basename(file) === "extra-shim.json")
-
-  for (const sourceFile of sourceFiles) {
-    const targetFile = path.join(targetRoot, path.relative(sourceRoot, sourceFile))
-    const source = yield* parseJson<Record<string, unknown>>(yield* fs.readFileString(sourceFile), sourceFile)
-    const target = (yield* fs.exists(targetFile))
-      ? yield* parseJson<Record<string, unknown>>(yield* fs.readFileString(targetFile), targetFile)
-      : {}
-
-    for (const [key, value] of Object.entries(source)) {
-      if (Array.isArray(value)) {
-        target[key] = sortedUnique(Array.isArray(target[key]) ? target[key] : [], value)
-      } else if (value !== null && typeof value === "object") {
-        const merged = { ...((target[key] ?? {}) as Record<string, ReadonlyArray<unknown>>) }
-        for (const [name, entries] of Object.entries(value)) {
-          if (!Array.isArray(entries)) {
-            return yield* new OxlintGenerationError({ reason: `Unsupported ${key}.${name} value in ${sourceFile}` })
-          }
-          merged[name] = sortedUnique(merged[name], entries)
-        }
-        target[key] = sortRecord(merged)
-      } else {
-        return yield* new OxlintGenerationError({ reason: `Unsupported ${key} value in ${sourceFile}` })
-      }
-    }
-    yield* fs.makeDirectory(path.dirname(targetFile), { recursive: true })
-    yield* fs.writeFileString(targetFile, `${JSON.stringify(sortRecord(target), null, 2)}\n`)
-  }
-})
-
-const mergeShimHelpers = Effect.fnUntraced(function*(repositoryRoot: string, tsgolint: string) {
-  const fs = yield* FileSystem.FileSystem
-  const path = yield* Path.Path
-  const sourceRoot = path.join(tsgolint, "shim")
-  const targetRoot = path.join(repositoryRoot, "shim")
-  const helpers = yield* collectFiles(sourceRoot, (file) => file.endsWith(".go") && path.basename(file) !== "shim.go")
-  for (const helper of helpers) {
-    const target = path.join(targetRoot, path.relative(sourceRoot, helper))
-    const sourceText = yield* fs.readFileString(helper)
-    if ((yield* fs.exists(target)) && (yield* fs.readFileString(target)) !== sourceText) {
-      return yield* new OxlintGenerationError({
-        reason: `Conflicting handwritten shim helper: ${path.relative(repositoryRoot, target)}`
-      })
-    }
-    yield* fs.makeDirectory(path.dirname(target), { recursive: true })
-    yield* fs.writeFileString(target, sourceText)
-  }
-})
-
 const synchronizeCollections = Effect.fnUntraced(function*(typescriptGo: string, tsgolint: string) {
   const fs = yield* FileSystem.FileSystem
   const path = yield* Path.Path
@@ -277,9 +199,7 @@ export const generateOxlint = Effect.fnUntraced(function*(repositoryRoot: string
   yield* applyPatchDirectory(tsgolint, path.join(repositoryRoot, "_patches", "tsgolint"), "Effect tsgolint")
   yield* applyPatchDirectory(oxlint, path.join(repositoryRoot, "_patches", "oxlint"), "Effect Oxlint")
   yield* synchronizeCollections(typescriptGo, tsgolint)
-  yield* mergeShimRequirements(repositoryRoot, tsgolint)
-  yield* mergeShimHelpers(repositoryRoot, tsgolint)
-  yield* generateSubmoduleArtifacts(repositoryRoot)
+  yield* generateSubmoduleArtifacts(repositoryRoot, [path.join(tsgolint, "shim")])
   yield* configureWorkspace(repositoryRoot, tsgolint)
 
   const metadataPath = path.join(repositoryRoot, "_generated", "oxlint", "metadata.json")
