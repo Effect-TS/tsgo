@@ -1,0 +1,53 @@
+name: Setup repo
+description: Install repository toolchains and materialize an upstream profile
+
+inputs:
+  profile:
+    description: Upstream profile to materialize
+    required: false
+    default: next
+  materialize:
+    description: Whether to materialize the selected upstream profile
+    required: false
+    default: "true"
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Go
+      uses: actions/setup-go@v6
+      with:
+        go-version: "1.26"
+        cache: false
+
+    - name: Cache Go build
+      uses: actions/cache@v6
+      with:
+        path: |
+          ~/.cache/go-build
+          ~/go/pkg/mod
+        key: go-build-${{ inputs.profile }}-${{ runner.os }}-${{ hashFiles('**/go.sum') }}-${{ github.sha }}
+        restore-keys: |
+          go-build-${{ inputs.profile }}-${{ runner.os }}-${{ hashFiles('**/go.sum') }}-
+          go-build-${{ inputs.profile }}-${{ runner.os }}-
+
+    - name: Setup Node
+      uses: actions/setup-node@v6
+      with:
+        node-version: "24"
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v6
+      with:
+        version: 9
+
+    - name: Install dependencies
+      shell: bash
+      run: pnpm install --frozen-lockfile
+
+    - name: Materialize ${{ inputs.profile }} profile
+      if: inputs.materialize == 'true'
+      shell: bash
+      env:
+        PROFILE: ${{ inputs.profile }}
+      run: pnpm exec repoctl submodules setup --profile "$PROFILE"

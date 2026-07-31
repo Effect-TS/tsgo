@@ -4,14 +4,12 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
     nixpkgsUnstable.url = "github:NixOS/nixpkgs/nixos-unstable";
-    /* Source of truth: git submodule `typescript-go` commit.
-       Keep in sync via `_tools/update-flake-vendor-hash.sh`. */
+    /* Source of truth: the next profile in `_packages/tsgo/upstream.json`. */
     typescript-go-src = {
       url = "github:microsoft/typescript-go/37357ae666e7af11989d4ba416a763f2da590dee?submodules=1";
       flake = false;
     };
-    /* Source of truth: typescript-go's `_submodules/TypeScript` commit.
-       Keep in sync via `_tools/update-flake-vendor-hash.sh`. */
+    /* Derived from the selected TypeScript-Go revision and recorded in the manifest. */
     typescript-src = {
       url = "github:microsoft/TypeScript/4d4f005c8541e0255a9d8791205fdce326e462bc";
       flake = false;
@@ -43,7 +41,7 @@
        filesystems. The download cache uses `!` escaping for uppercase
        letters, making it deterministic across both.
 
-       Refresh: ./_tools/update-flake-vendor-hash.sh
+       Refresh: pnpm exec repoctl flake update
        Manual:  set to lib.fakeHash, build, copy the reported hash.
       */
       vendorHash = "sha256-tfmuo2BIN1Z8ArQMfeNdudngclWjWyIa3YtmOqrr3d8=";

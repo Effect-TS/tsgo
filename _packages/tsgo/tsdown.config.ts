@@ -21,42 +21,22 @@ const copyPackageFiles = () => {
   return Effect.runPromise(program)
 }
 
-export default defineConfig([
-  {
-    entry: {
-      "effect-tsgo": "./src/cli/index.ts",
-    },
-    inlineOnly: false,
-    outDir: "./dist",
-    format: ["cjs"],
-    platform: "node",
-    target: "node22",
-    dts: false,
-    clean: true,
-    outExtensions: () => ({
-      js: ".cjs",
-    }),
-    banner: {
-      js: "#!/usr/bin/env node",
-    },
-    onSuccess: copyPackageFiles,
+export default defineConfig({
+  entry: {
+    "effect-tsgo": "./src/cli/index.ts",
   },
-  {
-    entry: {
-      "experimental/oxlint/index": "./src/experimental/oxlint/plugin.ts",
-    },
-    inlineOnly: false,
-    outDir: "./dist",
-    format: ["esm"],
-    platform: "node",
-    target: "node22",
-    tsconfig: "./tsconfig.src.json",
-    dts: true,
-    clean: false,
-    external: ["#getExePath"],
-    outExtensions: () => ({
-      js: ".js",
-      dts: ".d.ts",
-    }),
+  inlineOnly: false,
+  outDir: "./dist",
+  format: ["cjs"],
+  platform: "node",
+  target: "node22",
+  dts: false,
+  clean: true,
+  outExtensions: () => ({
+    js: ".cjs",
+  }),
+  banner: {
+    js: "#!/usr/bin/env node",
   },
-])
+  onSuccess: copyPackageFiles,
+})

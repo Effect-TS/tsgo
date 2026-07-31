@@ -1,0 +1,67 @@
+name: Validate Latest Profile
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: validate-latest-profile-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  validate:
+    name: Validate latest profile
+    if: github.repository_owner == 'Effect-TS'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      checks: write
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v7
+
+      - name: Setup latest profile
+        uses: ./.github/actions/setup-repo
+        with:
+          profile: latest
+
+      - name: Open generated/latest pull request
+        id: generated
+        if: github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          pnpm exec repoctl github open-pr-if-changed \
+            --base generated/latest \
+            --head-prefix automation/update-generated-latest \
+            --title 'chore: update generated/latest' \
+            --body 'Generated latest profile projection from main commit `${{ github.sha }}`.' \
+            --commit-message 'chore: update generated/latest' \
+            --check check_id='Latest profile validation'
+
+      - name: Build latest profile
+        run: pnpm exec repoctl build local
+
+      - name: Test latest profile
+        run: pnpm exec repoctl test
+
+      - name: Publish generated validation result
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          pnpm exec repoctl github complete-check \
+            --check-id '${{ steps.generated.outputs.check_id }}' \
+            --result '${{ job.status }}' \
+            --success-message 'Latest profile validation passed' \
+            --failure-message 'Latest profile validation failed' \
+            --summary 'See the workflow run for build and test output.'

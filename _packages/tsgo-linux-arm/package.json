@@ -18,8 +18,8 @@
   "files": [
     "lib/tsc",
     "lib/tsc-next",
-    "lib/*.json",
-    "README.md"
+    "README.md",
+    "lib/upstream.json"
   ],
   "os": [
     "linux"
