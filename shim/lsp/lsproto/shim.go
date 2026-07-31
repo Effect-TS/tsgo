@@ -179,6 +179,8 @@ type ColorPresentationResponse = lsproto.ColorPresentationResponse
 type Command = lsproto.Command
 type CommandOrCodeAction = lsproto.CommandOrCodeAction
 type CommandOrCodeActionArrayOrNull = lsproto.CommandOrCodeActionArrayOrNull
+//go:linkname CompareDiagnostics github.com/microsoft/typescript-go/internal/lsp/lsproto.CompareDiagnostics
+func CompareDiagnostics(list1 []*lsproto.Diagnostic, list2 []*lsproto.Diagnostic) ([]*lsproto.Diagnostic, []*lsproto.Diagnostic)
 //go:linkname ComparePositions github.com/microsoft/typescript-go/internal/lsp/lsproto.ComparePositions
 func ComparePositions(pos lsproto.Position, other lsproto.Position) int
 //go:linkname CompareRanges github.com/microsoft/typescript-go/internal/lsp/lsproto.CompareRanges
@@ -269,6 +271,10 @@ type DeleteFilesParams = lsproto.DeleteFilesParams
 type Diagnostic = lsproto.Diagnostic
 type DiagnosticClientCapabilities = lsproto.DiagnosticClientCapabilities
 type DiagnosticData = lsproto.DiagnosticData
+type DiagnosticFlakeLogLevel = lsproto.DiagnosticFlakeLogLevel
+const DiagnosticFlakeLogLevelLog = lsproto.DiagnosticFlakeLogLevelLog
+const DiagnosticFlakeLogLevelOff = lsproto.DiagnosticFlakeLogLevelOff
+const DiagnosticFlakeLogLevelPanic = lsproto.DiagnosticFlakeLogLevelPanic
 type DiagnosticOptions = lsproto.DiagnosticOptions
 type DiagnosticOptionsOrRegistrationOptions = lsproto.DiagnosticOptionsOrRegistrationOptions
 type DiagnosticRefreshResponse = lsproto.DiagnosticRefreshResponse

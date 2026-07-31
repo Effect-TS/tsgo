@@ -7,7 +7,7 @@
     /* Source of truth: git submodule `typescript-go` commit.
        Keep in sync via `_tools/update-flake-vendor-hash.sh`. */
     typescript-go-src = {
-      url = "github:microsoft/typescript-go/70c2f5e51856a908b05ac98b5e954b4c685520dd?submodules=1";
+      url = "github:microsoft/typescript-go/37357ae666e7af11989d4ba416a763f2da590dee?submodules=1";
       flake = false;
     };
     /* Source of truth: typescript-go's `_submodules/TypeScript` commit.
