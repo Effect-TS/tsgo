@@ -41,7 +41,7 @@
        filesystems. The download cache uses `!` escaping for uppercase
        letters, making it deterministic across both.
 
-       Refresh: ./_tools/update-flake-vendor-hash.sh
+       Refresh: pnpm exec repoctl flake update
        Manual:  set to lib.fakeHash, build, copy the reported hash.
       */
       vendorHash = "sha256-tfmuo2BIN1Z8ArQMfeNdudngclWjWyIa3YtmOqrr3d8=";

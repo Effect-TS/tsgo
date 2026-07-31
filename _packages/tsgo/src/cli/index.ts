@@ -20,6 +20,7 @@ import {
 } from "./diagnostics.js"
 import { setupCommand } from "./setup/index.js"
 import { defaultTypescriptPackageNames, isNativeTypescriptVersion } from "./setup/consts.js"
+import { decodePackagedTypeScriptProfiles } from "./platformUpstream.js"
 import * as pkgJson from "../../package.json" with { type: "json" }
 
 class NativeBackendNotInstalledError extends Data.TaggedError("NativeBackendNotInstalledError")<{
@@ -50,6 +51,16 @@ class ParsePackageJsonError extends Data.TaggedError("ParsePackageJsonError")<{
 }> {
   get message(): string {
     return `Unable to parse ${this.packageName} package.json at ${this.packageJsonPath}: ${this.reason}`
+  }
+}
+
+class ParseUpstreamManifestError extends Data.TaggedError("ParseUpstreamManifestError")<{
+  readonly packageName: string
+  readonly upstreamPath: string
+  readonly reason: string
+}> {
+  get message(): string {
+    return `Unable to parse ${this.packageName} upstream.json at ${this.upstreamPath}: ${this.reason}`
   }
 }
 
@@ -159,6 +170,7 @@ type CliDomainError =
   | NativeBackendNotInstalledError
   | PackageNotFoundError
   | ParsePackageJsonError
+  | ParseUpstreamManifestError
   | MissingTypeScriptMetadataError
   | UnsupportedPlatformPackageError
   | MissingTargetBinaryError
@@ -215,25 +227,6 @@ const PackageJsonMetadataSchema = Schema.Struct({
 })
 const PackageJsonMetadataFromStringSchema = Schema.fromJsonString(PackageJsonMetadataSchema)
 
-const packagedTypeScriptBinaryNames = ["tsc", "tsc-next"] as const
-
-const BinaryMetadataSchema = Schema.Struct({
-  tsVersion: Schema.String,
-  tsGitHead: Schema.String
-})
-const EffectPlatformPackageMetadataSchema = Schema.Struct({
-  name: Schema.String,
-  version: Schema.String,
-  effectTsgo: Schema.Struct({
-    binaries: Schema.Struct({
-      tsc: BinaryMetadataSchema,
-      "tsc-next": BinaryMetadataSchema
-    })
-  })
-})
-const EffectPlatformPackageMetadataFromStringSchema = Schema.fromJsonString(EffectPlatformPackageMetadataSchema)
-
-
 const decodePackageJsonText = (packageName: string, packageJsonPath: string, text: string) =>
   Schema.decodeUnknownEffect(PackageJsonMetadataFromStringSchema)(text).pipe(
     Effect.mapError((error) => new ParsePackageJsonError({
@@ -257,20 +250,20 @@ const readPackageJsonFile = (packageName: string, packageJsonPath: string) =>
     return { requestedPackageName: packageName, packageJsonPath, ...metadata }
   })
 
-const readEffectPlatformPackageJsonFile = (packageName: string, packageJsonPath: string) =>
+const readEffectPlatformUpstreamFile = (packageName: string, upstreamPath: string) =>
   Effect.gen(function*() {
     const fs = yield* FileSystem.FileSystem
-    const text = yield* fs.readFileString(packageJsonPath).pipe(
-      Effect.mapError((error) => new ParsePackageJsonError({
+    const text = yield* fs.readFileString(upstreamPath).pipe(
+      Effect.mapError((error) => new ParseUpstreamManifestError({
         packageName,
-        packageJsonPath,
+        upstreamPath,
         reason: error.message
       }))
     )
-    return yield* Schema.decodeUnknownEffect(EffectPlatformPackageMetadataFromStringSchema)(text).pipe(
-      Effect.mapError((error) => new ParsePackageJsonError({
+    return yield* decodePackagedTypeScriptProfiles(text).pipe(
+      Effect.mapError((error) => new ParseUpstreamManifestError({
         packageName,
-        packageJsonPath,
+        upstreamPath,
         reason: error.message
       }))
     )
@@ -340,8 +333,8 @@ const packageNamesWithPreferred = (preferredPackageName: Option.Option<string>):
 
 /**
  * Resolve the Effect-patched binary to copy over the native target. The
- * `@effect/tsgo-*` platform package ships `lib/tsc` for the stable profile and
- * `lib/tsc-next` for the next profile. The platform package.json identifies
+ * `@effect/tsgo-*` platform package ships `lib/tsc` for the latest profile and
+ * `lib/tsc-next` for the next profile. The bundled upstream.json identifies
  * the TypeScript gitHead each binary was built from.
  */
 const getPackagedBinaryPath = (installedTypeScript: OfficialTypeScriptBinary, force: boolean) =>
@@ -361,13 +354,14 @@ const getPackagedBinaryPath = (installedTypeScript: OfficialTypeScriptBinary, fo
     })
 
     const packageDir = path.dirname(packageJsonPath)
-    const platformPackage = yield* readEffectPlatformPackageJsonFile(packageName, packageJsonPath)
+    const packagedProfiles = yield* readEffectPlatformUpstreamFile(packageName, path.join(packageDir, "lib", "upstream.json"))
     const candidates: Array<PackagedBinaryCandidate> = []
 
-    for (const binaryName of packagedTypeScriptBinaryNames) {
+    for (const profile of packagedProfiles) {
+      const binaryName = profile.binaryName
       const exeName = binaryName + (process.platform === "win32" ? ".exe" : "")
       const exePath = path.join(packageDir, "lib", exeName)
-      const metadata = platformPackage.effectTsgo.binaries[binaryName]
+      const metadata = { tsVersion: profile.tsVersion, tsGitHead: profile.tsGitHead }
       const exists = yield* fs.exists(exePath)
       if (!exists) {
         candidates.push({ binaryName, metadata, ...metadata, reason: "binary not packaged" })

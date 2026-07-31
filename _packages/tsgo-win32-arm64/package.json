@@ -18,7 +18,8 @@
   "files": [
     "lib/tsc.exe",
     "lib/tsc-next.exe",
-    "README.md"
+    "README.md",
+    "lib/upstream.json"
   ],
   "os": [
     "win32"

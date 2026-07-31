@@ -4,8 +4,6 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const typescriptPackageNames = ["typescript", "@typescript/native"];
-const binNames = ["tsc", "tsc-next"];
-
 function readJson(fileName) {
   return JSON.parse(fs.readFileSync(fileName, "utf8"));
 }
@@ -62,14 +60,21 @@ export default function getExePath() {
     throw new Error("Unable to resolve " + platformPackageName + ". Either your platform is unsupported, or you are missing the package on disk.");
   }
 
-  const exeDir = path.join(path.dirname(packageJson), "lib");
-  const platformPackage = readJson(packageJson);
-  const binaries = platformPackage.effectTsgo?.binaries;
-  if (typeof binaries !== "object" || binaries === null) {
-    throw new Error("Missing effectTsgo binary metadata in " + platformPackageName + "/package.json.");
+  const packageDir = path.dirname(packageJson);
+  const exeDir = path.join(packageDir, "lib");
+  const upstream = readJson(path.join(exeDir, "upstream.json"));
+  if (upstream.schemaVersion !== 2 || !Array.isArray(upstream.profiles)) {
+    throw new Error("Invalid " + platformPackageName + "/lib/upstream.json.");
   }
+  const profiles = upstream.profiles
+    .filter((profile) => profile?.kind === "ts")
+    .sort((left, right) => left.binName === "tsc" ? -1 : right.binName === "tsc" ? 1 : 0);
 
-  for (const binName of binNames) {
+  for (const profile of profiles) {
+    const binName = profile.binName;
+    if ((binName !== "tsc" && binName !== "tsc-next") || typeof profile.ts?.version !== "string" || typeof profile.ts?.gitHead !== "string") {
+      throw new Error("Invalid TypeScript profile metadata in " + platformPackageName + "/lib/upstream.json.");
+    }
     let exe = path.join(exeDir, binName);
     if (process.platform === "win32") {
       exe += ".exe";
@@ -82,11 +87,7 @@ export default function getExePath() {
       continue;
     }
 
-    const metadata = binaries[binName];
-    if (typeof metadata?.tsVersion !== "string" || typeof metadata?.tsGitHead !== "string") {
-      throw new Error("Invalid " + binName + " metadata in " + platformPackageName + "/package.json.");
-    }
-    if (metadata.tsGitHead === typescriptPackage.gitHead) {
+    if (profile.ts.gitHead === typescriptPackage.gitHead) {
       return exe;
     }
   }

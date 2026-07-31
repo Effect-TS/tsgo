@@ -11,6 +11,9 @@ importers:
       '@changesets/cli':
         specifier: ^2.30.0
         version: 2.30.0(@types/node@24.10.13)
+      '@effect/tsgo-repoctl':
+        specifier: workspace:*
+        version: link:_tools/repoctl
 
   _packages/tsgo:
     optionalDependencies:
@@ -71,6 +74,22 @@ importers:
   _packages/tsgo-win32-arm64: {}
 
   _packages/tsgo-win32-x64: {}
+
+  _tools/repoctl:
+    dependencies:
+      '@effect/platform-node':
+        specifier: ^4.0.0-beta.101
+        version: 4.0.0-beta.101(effect@4.0.0-beta.101)(ioredis@5.9.2)
+      effect:
+        specifier: ^4.0.0-beta.101
+        version: 4.0.0-beta.101
+    devDependencies:
+      '@types/node':
+        specifier: ^24.3.0
+        version: 24.10.13
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.3
 
   testdata/tests/effect-v3:
     dependencies:
