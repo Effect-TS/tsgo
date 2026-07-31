@@ -37,6 +37,19 @@ function resolveTypeScriptPackage() {
 
 export default function getExePath() {
   const __dirname = path.dirname(fileURLToPath(import.meta.url));
+  const normalizedDirname = __dirname.replace(/\\/g, "/");
+
+  if (normalizedDirname.endsWith("/_packages/tsgo/lib")) {
+    let exe = path.resolve(__dirname, "..", "..", "..", "tsgo");
+    if (process.platform === "win32") {
+      exe += ".exe";
+    }
+    if (!fs.existsSync(exe)) {
+      throw new Error("Executable not found: " + exe);
+    }
+    return exe;
+  }
+
   const typescriptPackage = resolveTypeScriptPackage();
   const platformPackageName = "@effect/tsgo-" + process.platform + "-" + process.arch;
   let packageJson;

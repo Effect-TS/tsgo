@@ -16,6 +16,7 @@ replace (
 	github.com/microsoft/typescript-go/shim/evaluator => ./shim/evaluator
 	github.com/microsoft/typescript-go/shim/execute/tsc => ./shim/execute/tsc
 	github.com/microsoft/typescript-go/shim/format => ./shim/format
+	github.com/microsoft/typescript-go/shim/fswatch => ./shim/fswatch
 	github.com/microsoft/typescript-go/shim/fourslash => ./shim/fourslash
 	github.com/microsoft/typescript-go/shim/jsnum => ./shim/jsnum
 	github.com/microsoft/typescript-go/shim/locale => ./shim/locale
@@ -61,6 +62,7 @@ require (
 	github.com/microsoft/typescript-go/shim/diagnostics v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/evaluator v0.0.0
 	github.com/microsoft/typescript-go/shim/execute/tsc v0.0.0-00010101000000-000000000000
+	github.com/microsoft/typescript-go/shim/fswatch v0.0.0-00010101000000-000000000000
 	github.com/microsoft/typescript-go/shim/fourslash v0.0.0
 	github.com/microsoft/typescript-go/shim/jsnum v0.0.0
 	github.com/microsoft/typescript-go/shim/locale v0.0.0

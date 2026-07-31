@@ -3,7 +3,7 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-TARGET_REPO="${1:-"$ROOT_DIR/.repos/effect-v3"}"
+TARGET_REPO="${1:-"$ROOT_DIR/.repos/effect"}"
 UPSTREAM_METADATA="$ROOT_DIR/_packages/tsgo/upstream.json"
 OUTPUT_ROOT="${OUTPUT_ROOT:-"$ROOT_DIR/_tools/.perf-out"}"
 RUN_ID="${RUN_ID:-"$(date -u +%Y%m%dT%H%M%SZ)"}"

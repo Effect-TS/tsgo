@@ -4,9 +4,9 @@ import * as Option from "effect/Option"
 import * as Console from "effect/Console"
 import * as Layer from "effect/Layer"
 import * as ts from "typescript"
-import { renderCodeActions } from "../../src/setup/diff-renderer.js"
-import type { ComputeChangesResult } from "../../src/setup/changes.js"
-import type { Assessment } from "../../src/setup/types.js"
+import { renderCodeActions } from "../../src/cli/setup/diff-renderer.js"
+import type { ComputeChangesResult } from "../../src/cli/setup/changes.js"
+import type { Assessment } from "../../src/cli/setup/types.js"
 
 /**
  * Run renderCodeActions and capture all console output lines

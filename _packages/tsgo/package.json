@@ -24,13 +24,21 @@
     "test": "vitest run"
   },
   "bin": {
-    "effect-tsgo": "./src/cli.ts"
+    "effect-tsgo": "./src/cli/index.ts"
+  },
+  "imports": {
+    "#getExePath": "./lib/getExePath.js"
   },
   "exports": {
     "./package.json": "./package.json",
     "./lib/getExePath": {
       "types": "./lib/getExePath.d.ts",
       "default": "./lib/getExePath.js"
+    },
+    "./experimental/oxlint": {
+      "types": "./dist/experimental/oxlint/index.d.ts",
+      "import": "./dist/experimental/oxlint/index.js",
+      "default": "./dist/experimental/oxlint/index.js"
     }
   },
   "files": [

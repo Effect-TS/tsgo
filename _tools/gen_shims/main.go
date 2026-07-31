@@ -60,6 +60,7 @@ func main() {
 		"evaluator",
 		"execute/tsc",
 		"format",
+		"fswatch",
 		"fourslash",
 		"jsnum",
 		"locale",
