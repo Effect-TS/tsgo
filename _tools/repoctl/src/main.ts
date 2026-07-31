@@ -11,6 +11,7 @@ import { fileURLToPath } from "node:url"
 import { buildBinary, buildCli, buildLocal, verifyReleaseArtifacts } from "./build.ts"
 import { runChecks } from "./checks.ts"
 import { addChangeset, publishChangeset, versionChangeset } from "./changesets.ts"
+import { ensureEffectFixtures } from "./fixtures.ts"
 import { updateFlake } from "./flake.ts"
 import { completeCheck, openPullRequestIfChanged } from "./github.ts"
 import { comparePerformance } from "./perf.ts"
@@ -36,6 +37,7 @@ const setup = Command.make("setup", {
     yield* patchSubmodules(repositoryRoot)
     yield* generateSubmoduleArtifacts(repositoryRoot)
   }
+  yield* ensureEffectFixtures(repositoryRoot)
 })).pipe(
   Command.withDescription("Set up the submodules required by an upstream profile")
 )

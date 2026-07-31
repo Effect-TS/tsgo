@@ -199,12 +199,12 @@ func TestRuleSweepUnknownEffectVersion(t *testing.T) {
 // with its version mangled so that DetectEffectVersion returns Unknown.
 func unknownVersionEffectPackageJSON(t *testing.T) string {
 	t.Helper()
-	raw, err := os.ReadFile(filepath.Join(bundledeffect.EffectTsGoRootPath(), "testdata", "tests", "effect-v4", "node_modules", "effect", "package.json"))
-	if err != nil {
-		t.Fatal(err)
+	raw, ok := bundledeffect.PackageFile(bundledeffect.EffectV4, "effect", "package.json")
+	if !ok {
+		t.Fatal("bundled effect v4 package.json not found")
 	}
-	patched := strings.Replace(string(raw), `"version": "4.`, `"version": "0.`, 1)
-	if patched == string(raw) {
+	patched := strings.Replace(raw, `"version": "4.`, `"version": "0.`, 1)
+	if patched == raw {
 		t.Fatal("failed to patch effect package.json version")
 	}
 	return patched

@@ -5,6 +5,7 @@ import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
 import { appendFile } from "node:fs/promises"
 import { join } from "node:path"
+import { ensureEffectFixtures } from "./fixtures.ts"
 import { runCommand, runCommandString } from "./process.ts"
 import { getProfile, readUpstream } from "./upstream.ts"
 
@@ -69,6 +70,7 @@ export const buildCli = Effect.fnUntraced(function*(repositoryRoot: string) {
 export const buildLocal = Effect.fnUntraced(function*(repositoryRoot: string) {
   const path = yield* Path.Path
   const binary = path.join(repositoryRoot, "tsgo")
+  yield* ensureEffectFixtures(repositoryRoot)
   yield* Console.log("Building local Go binary")
   yield* runCommand("go", repositoryRoot, [
     "build",
@@ -87,6 +89,7 @@ export const buildBinary = Effect.fnUntraced(function*(
 ) {
   const fs = yield* FileSystem.FileSystem
   const path = yield* Path.Path
+  yield* ensureEffectFixtures(repositoryRoot)
   const upstream = yield* readUpstream(repositoryRoot)
   const profile = yield* getProfile(upstream, profileName)
   if (profile.kind !== "ts") {

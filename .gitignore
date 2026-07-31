@@ -35,6 +35,7 @@ built/
 
 # Local test baselines
 testdata/baselines/local/*
+internal/bundledeffect/testfixtures.tar.gz
 
 # Go compiled binaries and plugins
 *.exe
