@@ -26,8 +26,9 @@ runs:
         path: |
           ~/.cache/go-build
           ~/go/pkg/mod
-        key: go-build-${{ inputs.profile }}-${{ runner.os }}-${{ hashFiles('**/go.sum') }}
+        key: go-build-${{ inputs.profile }}-${{ runner.os }}-${{ hashFiles('**/go.sum') }}-${{ github.sha }}
         restore-keys: |
+          go-build-${{ inputs.profile }}-${{ runner.os }}-${{ hashFiles('**/go.sum') }}-
           go-build-${{ inputs.profile }}-${{ runner.os }}-
 
     - name: Setup Node
