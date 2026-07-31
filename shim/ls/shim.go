@@ -6,6 +6,7 @@ package ls
 import "context"
 import "github.com/microsoft/typescript-go/internal/ast"
 import "github.com/microsoft/typescript-go/internal/checker"
+import "github.com/microsoft/typescript-go/internal/collections"
 import "github.com/microsoft/typescript-go/internal/compiler"
 import "github.com/microsoft/typescript-go/internal/core"
 import "github.com/microsoft/typescript-go/internal/ls"
@@ -153,4 +154,4 @@ type SymbolAndEntries = ls.SymbolAndEntries
 type SymbolAndEntriesData = ls.SymbolAndEntriesData
 var TriggerCharacters = ls.TriggerCharacters
 //go:linkname GetJSDocOrTag github.com/microsoft/typescript-go/internal/ls.getJSDocOrTag
-func GetJSDocOrTag(c *checker.Checker, node *ast.Node) *ast.Node
+func GetJSDocOrTag(c *checker.Checker, node *ast.Node, seenSymbols *collections.Set[*ast.Symbol]) *ast.Node
