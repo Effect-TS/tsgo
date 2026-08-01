@@ -23,6 +23,47 @@ export type BuildTarget = keyof typeof buildTargets
 export type BuildProfile = "next" | "latest"
 const buildProfiles: ReadonlyArray<BuildProfile> = ["next", "latest"]
 
+export const oxlintBuildTargets = {
+  "darwin-arm64": {
+    ...buildTargets["darwin-arm64"],
+    rustTarget: "aarch64-apple-darwin",
+    codeTarget: "darwin-arm64",
+    napiArgs: []
+  },
+  "darwin-x64": {
+    ...buildTargets["darwin-x64"],
+    rustTarget: "x86_64-apple-darwin",
+    codeTarget: "darwin-x64",
+    napiArgs: []
+  },
+  "win32-x64": {
+    ...buildTargets["win32-x64"],
+    rustTarget: "x86_64-pc-windows-msvc",
+    codeTarget: "win32-x64",
+    napiArgs: []
+  },
+  "win32-arm64": {
+    ...buildTargets["win32-arm64"],
+    rustTarget: "aarch64-pc-windows-msvc",
+    codeTarget: "win32-arm64",
+    napiArgs: []
+  },
+  "linux-x64": {
+    ...buildTargets["linux-x64"],
+    rustTarget: "x86_64-unknown-linux-gnu",
+    codeTarget: "linux-x64-gnu",
+    napiArgs: ["--use-napi-cross"]
+  },
+  "linux-arm64": {
+    ...buildTargets["linux-arm64"],
+    rustTarget: "aarch64-unknown-linux-gnu",
+    codeTarget: "linux-arm64-gnu",
+    napiArgs: ["--use-napi-cross"]
+  }
+} as const
+
+export type OxlintBuildTarget = keyof typeof oxlintBuildTargets
+
 export class BuildError extends Data.TaggedError("BuildError")<{
   readonly reason: string
 }> {
@@ -44,6 +85,20 @@ export const binaryArtifact = (
 }
 
 export const isBinaryName = (name: string) => /^[A-Za-z0-9._-]+$/.test(name)
+
+export const oxlintArtifacts = (repositoryRoot: string, targetName: OxlintBuildTarget) => {
+  const target = oxlintBuildTargets[targetName]
+  const packageDirectory = join(repositoryRoot, "_packages", `tsgo-${targetName}`, "lib")
+  const windows = targetName.startsWith("win32-")
+  const bindingName = `oxlint.${target.codeTarget}.node`
+  return {
+    packageDirectory,
+    bindingName,
+    bindingSourceName: `oxlint.${target.codeTarget}${windows ? "-msvc" : ""}.node`,
+    bindingPath: join(packageDirectory, bindingName),
+    tsgolintPath: join(packageDirectory, windows ? "tsgolint.exe" : "tsgolint")
+  }
+}
 
 const validateArtifact = Effect.fnUntraced(function*(artifact: string) {
   const fs = yield* FileSystem.FileSystem
@@ -82,7 +137,7 @@ export const buildLocal = Effect.fnUntraced(function*(repositoryRoot: string) {
   yield* buildCli(repositoryRoot)
 })
 
-export const buildOxlint = Effect.fnUntraced(function*(repositoryRoot: string) {
+export const buildOxlint = Effect.fnUntraced(function*(repositoryRoot: string, targetName: OxlintBuildTarget) {
   const fs = yield* FileSystem.FileSystem
   const path = yield* Path.Path
   const tsgolintSource = path.join(repositoryRoot, "tsgolint", "cmd", "tsgolint", "effect_rules_generated.go")
@@ -102,25 +157,51 @@ export const buildOxlint = Effect.fnUntraced(function*(repositoryRoot: string) {
     }
   }
 
-  const buildDirectory = path.join(repositoryRoot, "build", "oxlint-tsgolint")
-  const tsgolint = path.join(buildDirectory, "tsgolint")
+  const target = oxlintBuildTargets[targetName]
+  const artifacts = oxlintArtifacts(repositoryRoot, targetName)
   const oxlint = path.join(repositoryRoot, "oxlint")
-  yield* fs.makeDirectory(buildDirectory, { recursive: true })
-  yield* Console.log("Building tsgolint")
+  const oxlintApp = path.join(oxlint, "apps", "oxlint")
+  yield* fs.makeDirectory(artifacts.packageDirectory, { recursive: true })
+  yield* Console.log(`Building tsgolint for ${targetName}`)
   yield* runCommand("go", repositoryRoot, [
     "build",
     "-trimpath",
     "-ldflags=-s -w",
     "-o",
-    tsgolint,
+    artifacts.tsgolintPath,
     "./tsgolint/cmd/tsgolint"
-  ], false, { GOWORK: path.join(repositoryRoot, "go.work"), CGO_ENABLED: "0" })
-  yield* validateArtifact(tsgolint)
+  ], false, {
+    GOWORK: path.join(repositoryRoot, "go.work"),
+    CGO_ENABLED: "0",
+    GOOS: target.goos,
+    GOARCH: target.goarch
+  })
+  yield* validateArtifact(artifacts.tsgolintPath)
 
-  yield* Console.log("Building Oxlint N-API addon and Node launcher")
+  yield* Console.log(`Building Oxlint N-API addon for ${targetName}`)
   yield* runCommand("corepack", oxlint, ["pnpm", "install", "--frozen-lockfile"])
-  yield* runCommand("corepack", path.join(oxlint, "apps", "oxlint"), ["pnpm", "run", "build"])
-  yield* validateArtifact(path.join(oxlint, "apps", "oxlint", "dist", "cli.js"))
+  yield* runCommand("corepack", oxlintApp, [
+    "pnpm",
+    "run",
+    "build-napi-release",
+    "--target",
+    target.rustTarget,
+    ...target.napiArgs
+  ])
+  const bindingSource = path.join(oxlintApp, "src-js", artifacts.bindingSourceName)
+  yield* validateArtifact(bindingSource)
+  yield* fs.copyFile(bindingSource, artifacts.bindingPath)
+  yield* validateArtifact(artifacts.bindingPath)
+  yield* runCommand("corepack", oxlintApp, ["pnpm", "run", "build-js"])
+  yield* validateArtifact(path.join(oxlintApp, "dist", "cli.js"))
+
+  if (process.env.GITHUB_OUTPUT !== undefined) {
+    yield* Effect.tryPromise(() => appendFile(
+      process.env.GITHUB_OUTPUT!,
+      `artifact_path=${artifacts.packageDirectory}\n`
+    ))
+  }
+  return artifacts
 })
 
 export const buildBinary = Effect.fnUntraced(function*(
@@ -200,6 +281,11 @@ export const verifyReleaseArtifacts = Effect.fnUntraced(function*(repositoryRoot
     if (text !== sourceUpstream) {
       return yield* new BuildError({ reason: `Platform metadata does not match source: ${packagedUpstream}` })
     }
+  }
+  for (const target of Object.keys(oxlintBuildTargets) as Array<OxlintBuildTarget>) {
+    const artifacts = oxlintArtifacts(repositoryRoot, target)
+    yield* validateArtifact(artifacts.tsgolintPath)
+    yield* validateArtifact(artifacts.bindingPath)
   }
   yield* Console.log("Verified release binaries for all profiles and targets")
 })

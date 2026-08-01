@@ -18,6 +18,8 @@
   "files": [
     "lib/tsc.exe",
     "lib/tsc-next.exe",
+    "lib/tsgolint.exe",
+    "lib/oxlint.win32-arm64.node",
     "README.md",
     "lib/upstream.json"
   ],

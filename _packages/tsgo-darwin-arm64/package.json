@@ -18,6 +18,8 @@
   "files": [
     "lib/tsc",
     "lib/tsc-next",
+    "lib/tsgolint",
+    "lib/oxlint.darwin-arm64.node",
     "README.md",
     "lib/upstream.json"
   ],

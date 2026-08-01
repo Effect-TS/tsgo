@@ -82,8 +82,17 @@ const buildCliCommand = Command.make("cli", {}, () => buildCli(repositoryRoot)).
   Command.withDescription("Build the CLI package")
 )
 
-const buildOxlintCommand = Command.make("oxlint", {}, () => buildOxlint(repositoryRoot)).pipe(
-  Command.withDescription("Build the generated tsgolint binary and Oxlint N-API launcher")
+const buildOxlintCommand = Command.make("oxlint", {
+  target: Flag.choice("target", [
+    "darwin-arm64",
+    "darwin-x64",
+    "win32-x64",
+    "win32-arm64",
+    "linux-x64",
+    "linux-arm64"
+  ])
+}, ({ target }) => buildOxlint(repositoryRoot, target)).pipe(
+  Command.withDescription("Build packaged tsgolint and Oxlint N-API artifacts")
 )
 
 const buildBinaryCommand = Command.make("binary", {

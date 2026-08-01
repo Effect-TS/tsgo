@@ -10,7 +10,7 @@ const fixture = dirname(fileURLToPath(import.meta.url))
 const oxlint = join(repositoryRoot, "oxlint", "apps", "oxlint", "dist", "cli.js")
 const env = {
   ...process.env,
-  OXLINT_TSGOLINT_PATH: join(repositoryRoot, "build", "oxlint-tsgolint", "tsgolint")
+  OXLINT_TSGOLINT_PATH: join(repositoryRoot, "_packages", "tsgo-linux-x64", "lib", "tsgolint")
 }
 
 const run = (...args) => spawnSync(process.execPath, [oxlint, ...args], {

@@ -55,7 +55,7 @@ jobs:
           profile: oxlint
 
       - name: Build Oxlint profile
-        run: pnpm exec repoctl build oxlint
+        run: pnpm exec repoctl build oxlint --target linux-x64
 
       - name: Smoke test Oxlint profile
         run: node testdata/tests/oxlint/smoke.mjs "$GITHUB_WORKSPACE"
