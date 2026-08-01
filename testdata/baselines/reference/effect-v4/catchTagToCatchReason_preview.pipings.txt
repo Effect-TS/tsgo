@@ -1,0 +1,43 @@
+==== /.src/catchTagToCatchReason_preview.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 20:23 - 25:2
+Node: program.pipe(\n  Effect.catchTag("AppError", (error) => {\n    if (error.reason._tag === "RetryReason") return Effect.succeed("retry")\n    return Effect.fail(error)\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, AppError, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catchTag
+      args: ["AppError", (error) => {\n    if (error.reason._tag === "RetryReason") return Effect.succeed("retry")\n    return Effect.fail(error)\n  }]
+      outType: Effect<string, AppError, never>
+
+=== Piping Flow ===
+Location: 22:52 - 22:76
+Node: Effect.succeed("retry")
+Node Kind: KindCallExpression
+
+Subject: "retry"
+Subject Type: "retry"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 23:11 - 23:30
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: AppError
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, AppError, never>

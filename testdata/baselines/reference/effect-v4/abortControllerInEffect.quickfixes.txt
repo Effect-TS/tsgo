@@ -1,0 +1,43 @@
+=== Quick Fix Inventory ===
+
+[D1] (9:18-9:39) TS377111: `AbortController` is manually constructed inside Effect code. Use `Effect.abortSignal` for Effect-managed cancellation. effect(abortControllerInEffect)
+  Fix 0: "Disable abortControllerInEffect for this line"
+  Fix 1: "Disable abortControllerInEffect for entire file"
+
+[D2] (10:19-10:35) TS377111: `AbortController` is manually constructed inside Effect code. Use `Effect.abortSignal` for Effect-managed cancellation. effect(abortControllerInEffect)
+  Fix 0: "Disable abortControllerInEffect for this line"
+  Fix 1: "Disable abortControllerInEffect for entire file"
+
+[D3] (15:10-15:31) TS377111: `AbortController` is manually constructed inside Effect code. Use `Effect.abortSignal` for Effect-managed cancellation. effect(abortControllerInEffect)
+  Fix 0: "Disable abortControllerInEffect for this line"
+  Fix 1: "Disable abortControllerInEffect for entire file"
+
+[D4] (19:22-19:43) TS377111: `AbortController` is manually constructed inside Effect code. Use `Effect.abortSignal` for Effect-managed cancellation. effect(abortControllerInEffect)
+  Fix 0: "Disable abortControllerInEffect for this line"
+  Fix 1: "Disable abortControllerInEffect for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable abortControllerInEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable abortControllerInEffect for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable abortControllerInEffect for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable abortControllerInEffect for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable abortControllerInEffect for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable abortControllerInEffect for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable abortControllerInEffect for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable abortControllerInEffect for entire file" ===
+skipped by default

@@ -4,10 +4,11 @@ Effect version: 4.0.0
 /.src/newPromise.ts(5,30): warning TS377080: This code constructs `new Promise(...)`, prefer Effect APIs such as `Effect.async`, `Effect.promise`, or `Effect.tryPromise` instead of manual Promise construction. effect(newPromise)
 /.src/newPromise.ts(8,37): warning TS377080: This code constructs `new Promise(...)`, prefer Effect APIs such as `Effect.async`, `Effect.promise`, or `Effect.tryPromise` instead of manual Promise construction. effect(newPromise)
 /.src/newPromise.ts(12,31): warning TS377080: This code constructs `new Promise(...)`, prefer Effect APIs such as `Effect.async`, `Effect.promise`, or `Effect.tryPromise` instead of manual Promise construction. effect(newPromise)
+/.src/newPromise.ts(15,29): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
 /.src/newPromise.ts(16,10): warning TS377080: This code constructs `new Promise(...)`, prefer Effect APIs such as `Effect.async`, `Effect.promise`, or `Effect.tryPromise` instead of manual Promise construction. effect(newPromise)
 
 
-==== /.src/newPromise.ts (4 errors) ====
+==== /.src/newPromise.ts (5 errors) ====
     // @effect-diagnostics newPromise:warning
     import { Effect } from "effect"
     
@@ -29,10 +30,14 @@ Effect version: 4.0.0
     
     // Should trigger - new Promise inside Effect.gen
     export const promiseInGen = Effect.gen(function*() {
+                                ~~~~~~~~~~~~~~~~~~~~~~~~
       return new Promise<number>((resolve) => resolve(4))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! warning TS377080: This code constructs `new Promise(...)`, prefer Effect APIs such as `Effect.async`, `Effect.promise`, or `Effect.tryPromise` instead of manual Promise construction. effect(newPromise)
     })
+    ~~
+!!! warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
     
     // Should NOT trigger - shadowed Promise
     export const shadowedPromise = () => {

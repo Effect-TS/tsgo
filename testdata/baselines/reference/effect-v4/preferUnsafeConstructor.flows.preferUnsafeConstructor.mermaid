@@ -1,0 +1,172 @@
+flowchart TB
+  0[/"type: Effect#lt;Closeable, never, never#gt;<br/>node: Scope.make#40;#41;"/]
+  1["type: Closeable<br/>callee: Effect.runSync<br/>args: #91;#93;"]
+  2[/"type: #lt;A, E#gt;#40;effect: Effect#lt;A, E, never#gt;#41; =#gt; A<br/>node: Effect.runSync"/]
+  3[/"type: #quot;parallel#quot;<br/>node: #quot;parallel#quot;"/]
+  4["type: Effect#lt;Closeable, never, never#gt;<br/>callee: Scope.make<br/>args: #91;#93;"]
+  5[/"type: #40;finalizerStrategy?: #quot;parallel#quot; #124; #quot;sequential#quot; #124; undefined#41; =#gt; Effect#lt;Closeable, never, never#gt;<br/>node: Scope.make"/]
+  6["type: Closeable<br/>callee: Effect.runSync<br/>args: #91;#93;"]
+  7[/"type: #lt;A, E#gt;#40;effect: Effect#lt;A, E, never#gt;#41; =#gt; A<br/>node: Effect.runSync"/]
+  8[/"type: #quot;parallel#quot;<br/>node: #quot;parallel#quot;"/]
+  9["type: Effect#lt;Closeable, never, never#gt;<br/>callee: Scope.make<br/>args: #91;#93;"]
+  10[/"type: #40;finalizerStrategy?: #quot;parallel#quot; #124; #quot;sequential#quot; #124; undefined#41; =#gt; Effect#lt;Closeable, never, never#gt;<br/>node: Scope.make"/]
+  11["type: Closeable<br/>callee: Effect.runSync<br/>args: #91;#93;"]
+  12[/"type: #lt;A, E#gt;#40;effect: Effect#lt;A, E, never#gt;#41; =#gt; A<br/>node: Effect.runSync"/]
+  13[/"type: 1<br/>node: 1"/]
+  14["type: Effect#lt;Ref#lt;number#gt;, never, never#gt;<br/>callee: Ref.make<br/>args: #91;#93;"]
+  15[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;Ref#lt;A#gt;, never, never#gt;<br/>node: Ref.make"/]
+  16["type: Ref#lt;number#gt;<br/>callee: Effect.runSync<br/>args: #91;#93;"]
+  17[/"type: #lt;A, E#gt;#40;effect: Effect#lt;A, E, never#gt;#41; =#gt; A<br/>node: Effect.runSync"/]
+  18[/"type: Effect#lt;Deferred#lt;string, never#gt;, never, never#gt;<br/>node: Deferred.make#lt;string#gt;#40;#41;"/]
+  19["type: Deferred#lt;string, never#gt;<br/>callee: Effect.runSync<br/>args: #91;#93;"]
+  20[/"type: #lt;A, E#gt;#40;effect: Effect#lt;A, E, never#gt;#41; =#gt; A<br/>node: Effect.runSync"/]
+  21[/"type: true<br/>node: true"/]
+  22["type: Effect#lt;Latch, never, never#gt;<br/>callee: Latch.make<br/>args: #91;#93;"]
+  23[/"type: #40;open?: boolean #124; undefined#41; =#gt; Effect#lt;Latch, never, never#gt;<br/>node: Latch.make"/]
+  24["type: Latch<br/>callee: Effect.runSync<br/>args: #91;#93;"]
+  25[/"type: #lt;A, E#gt;#40;effect: Effect#lt;A, E, never#gt;#41; =#gt; A<br/>node: Effect.runSync"/]
+  26[/"type: Effect#lt;Closeable, never, never#gt;<br/>node: ScopeNs.make#40;#41;"/]
+  27["type: Closeable<br/>callee: Effect.runSync<br/>args: #91;#93;"]
+  28[/"type: #lt;A, E#gt;#40;effect: Effect#lt;A, E, never#gt;#41; =#gt; A<br/>node: Effect.runSync"/]
+  29[/"type: Effect#lt;Closeable, never, never#gt;<br/>node: makeScope#40;#41;"/]
+  30["type: Closeable<br/>callee: Effect.runSync<br/>args: #91;#93;"]
+  31[/"type: #lt;A, E#gt;#40;effect: Effect#lt;A, E, never#gt;#41; =#gt; A<br/>node: Effect.runSync"/]
+  32[/"type: Effect#lt;Closeable, never, never#gt;<br/>node: Scope.make#40;#41;"/]
+  33["type: Closeable<br/>callee: runSync<br/>args: #91;#93;"]
+  34[/"type: #lt;A, E#gt;#40;effect: Effect#lt;A, E, never#gt;#41; =#gt; A<br/>node: runSync"/]
+  35[/"type: Effect#lt;Closeable, never, never#gt;<br/>node: #40;Scope.make#40;#41;#41;"/]
+  36["type: Closeable<br/>callee: Effect.runSync<br/>args: #91;#93;"]
+  37[/"type: #lt;A, E#gt;#40;effect: Effect#lt;A, E, never#gt;#41; =#gt; A<br/>node: Effect.runSync"/]
+  38[/"type: Effect#lt;Closeable, never, never#gt;<br/>node: Scope.make#40;#41;"/]
+  39[/"type: Effect#lt;Closeable, never, never#gt;<br/>node: scopeEffect"/]
+  40["type: Closeable<br/>callee: Effect.runSync<br/>args: #91;#93;"]
+  41[/"type: #lt;A, E#gt;#40;effect: Effect#lt;A, E, never#gt;#41; =#gt; A<br/>node: Effect.runSync"/]
+  42[/"type: Effect#lt;Closeable, never, never#gt;<br/>node: Scope.make#40;#41;"/]
+  43["type: Effect#lt;Closeable, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;s#41; =#gt; s#93;"]
+  44[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  45[["type: #40;s: Closeable#41; =#gt; Closeable<br/>node: #40;s#41; =#gt; s"]]
+  46[/"type: Closeable<br/>node: s"/]
+  47["type: Closeable<br/>callee: Effect.runSync<br/>args: #91;#93;"]
+  48[/"type: #lt;A, E#gt;#40;effect: Effect#lt;A, E, never#gt;#41; =#gt; A<br/>node: Effect.runSync"/]
+  49((("type: Effect#lt;Ref#lt;number#gt;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  return yield* Ref.make#40;0#41;#92;n#125;#41;")))
+  50[/"type: Ref#lt;number#gt;<br/>node: yield* Ref.make#40;0#41;"/]
+  51[/"type: 0<br/>node: 0"/]
+  52["type: Effect#lt;Ref#lt;number#gt;, never, never#gt;<br/>callee: Ref.make<br/>args: #91;#93;"]
+  53[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;Ref#lt;A#gt;, never, never#gt;<br/>node: Ref.make"/]
+  54["type: Ref#lt;number#gt;<br/>callee: Effect.runSync<br/>args: #91;#93;"]
+  55[/"type: #lt;A, E#gt;#40;effect: Effect#lt;A, E, never#gt;#41; =#gt; A<br/>node: Effect.runSync"/]
+  56[/"type: 1<br/>node: 1"/]
+  57["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  58[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  59["type: number<br/>callee: Effect.runSync<br/>args: #91;#93;"]
+  60[/"type: #lt;A, E#gt;#40;effect: Effect#lt;A, E, never#gt;#41; =#gt; A<br/>node: Effect.runSync"/]
+  61[/"type: Closeable<br/>node: Scope.makeUnsafe#40;#41;"/]
+  62[/"type: Closeable<br/>node: makeScopeUnsafe#40;#41;"/]
+  63((("type: Effect#lt;Closeable, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const scope = Effect.runSync#40;Scope.make#40;#41;#41;#92;n  return yield* Effect.succeed#40;scope#41;#92;n#125;#41;")))
+  64[/"type: Closeable<br/>node: yield* Effect.succeed#40;scope#41;"/]
+  65[/"type: Closeable<br/>node: scope"/]
+  66["type: Effect#lt;Closeable, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  67[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  68[/"type: Effect#lt;Closeable, never, never#gt;<br/>node: Scope.make#40;#41;"/]
+  69["type: Closeable<br/>callee: Effect.runSync<br/>args: #91;#93;"]
+  70[/"type: #lt;A, E#gt;#40;effect: Effect#lt;A, E, never#gt;#41; =#gt; A<br/>node: Effect.runSync"/]
+  71[/"type: #quot;value#quot;<br/>node: #quot;value#quot;"/]
+  72["type: Effect#lt;string, never, never#gt;<br/>callee: NarrowCtor.make<br/>args: #91;#93;"]
+  73[/"type: #40;value: string#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: NarrowCtor.make"/]
+  74["type: string<br/>callee: Effect.runSync<br/>args: #91;#93;"]
+  75[/"type: #lt;A, E#gt;#40;effect: Effect#lt;A, E, never#gt;#41; =#gt; A<br/>node: Effect.runSync"/]
+  76[/"type: Chunk#lt;number#gt;<br/>node: chunk"/]
+  77["type: Effect#lt;TxChunk#lt;number#gt;, never, never#gt;<br/>callee: TxChunk.make<br/>args: #91;#93;"]
+  78[/"type: #lt;A#gt;#40;initial: Chunk#lt;A#gt;#41; =#gt; Effect#lt;TxChunk#lt;A#gt;, never, never#gt;<br/>node: TxChunk.make"/]
+  79["type: TxChunk#lt;number#gt;<br/>callee: Effect.runSync<br/>args: #91;#93;"]
+  80[/"type: #lt;A, E#gt;#40;effect: Effect#lt;A, E, never#gt;#41; =#gt; A<br/>node: Effect.runSync"/]
+  81[/"type: Queue#lt;number, never#gt;<br/>node: queue"/]
+  82["type: Effect#lt;number, never, never#gt;<br/>callee: Queue.take<br/>args: #91;#93;"]
+  83[/"type: #lt;A, E#gt;#40;self: Dequeue#lt;A, E#gt;#41; =#gt; Effect#lt;A, E, never#gt;<br/>node: Queue.take"/]
+  84["type: number<br/>callee: Effect.runSync<br/>args: #91;#93;"]
+  85[/"type: #lt;A, E#gt;#40;effect: Effect#lt;A, E, never#gt;#41; =#gt; A<br/>node: Effect.runSync"/]
+  86[/"type: #123; make: #40;#41; =#gt; Effect#lt;number, never, never#gt;; makeUnsafe: #40;#41; =#gt; number; #125;<br/>node: #123;#92;n  make: #40;#41;: Effect.Effect#lt;number#gt; =#gt; Effect.succeed#40;1#41;,#92;n  makeUnsafe: #40;#41;: number =#gt; 1,#92;n#125;"/]
+  87[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;#41;: Effect.Effect#lt;number#gt; =#gt; Effect.succeed#40;1#41;"]]
+  88[/"type: 1<br/>node: 1"/]
+  89["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  90[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  91[["type: #40;#41; =#gt; number<br/>node: #40;#41;: number =#gt; 1"]]
+  92[/"type: 1<br/>node: 1"/]
+  93[/"type: Effect#lt;number, never, never#gt;<br/>node: MyScope.make#40;#41;"/]
+  94["type: number<br/>callee: Effect.runSync<br/>args: #91;#93;"]
+  95[/"type: #lt;A, E#gt;#40;effect: Effect#lt;A, E, never#gt;#41; =#gt; A<br/>node: Effect.runSync"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1
+  3 -->|"kind: pipe"| 4
+  5 -->|"kind: transformCallee"| 4
+  4 -->|"kind: pipe"| 6
+  7 -->|"kind: transformCallee"| 6
+  8 -->|"kind: pipe"| 9
+  10 -->|"kind: transformCallee"| 9
+  9 -->|"kind: pipe"| 11
+  12 -->|"kind: transformCallee"| 11
+  13 -->|"kind: pipe"| 14
+  15 -->|"kind: transformCallee"| 14
+  14 -->|"kind: pipe"| 16
+  17 -->|"kind: transformCallee"| 16
+  18 -->|"kind: pipe"| 19
+  20 -->|"kind: transformCallee"| 19
+  21 -->|"kind: pipe"| 22
+  23 -->|"kind: transformCallee"| 22
+  22 -->|"kind: pipe"| 24
+  25 -->|"kind: transformCallee"| 24
+  26 -->|"kind: pipe"| 27
+  28 -->|"kind: transformCallee"| 27
+  29 -->|"kind: pipe"| 30
+  31 -->|"kind: transformCallee"| 30
+  32 -->|"kind: pipe"| 33
+  34 -->|"kind: transformCallee"| 33
+  35 -->|"kind: pipe"| 36
+  37 -->|"kind: transformCallee"| 36
+  39 -->|"kind: pipe"| 40
+  41 -->|"kind: transformCallee"| 40
+  44 -->|"kind: transformCallee"| 43
+  46 -->|"kind: potentialReturn"| 45
+  45 -->|"kind: transformArg"| 43
+  42 -->|"kind: pipe"| 43
+  43 -->|"kind: pipe"| 47
+  48 -->|"kind: transformCallee"| 47
+  51 -->|"kind: pipe"| 52
+  53 -->|"kind: transformCallee"| 52
+  52 -->|"kind: usedBy"| 50
+  50 -->|"kind: potentialReturn"| 49
+  52 -->|"kind: yieldable"| 49
+  49 -->|"kind: pipe"| 54
+  55 -->|"kind: transformCallee"| 54
+  56 -->|"kind: pipe"| 57
+  58 -->|"kind: transformCallee"| 57
+  57 -->|"kind: pipe"| 59
+  60 -->|"kind: transformCallee"| 59
+  65 -->|"kind: pipe"| 66
+  67 -->|"kind: transformCallee"| 66
+  66 -->|"kind: usedBy"| 64
+  64 -->|"kind: potentialReturn"| 63
+  66 -->|"kind: yieldable"| 63
+  68 -->|"kind: pipe"| 69
+  70 -->|"kind: transformCallee"| 69
+  69 -->|"kind: usedBy"| 63
+  71 -->|"kind: pipe"| 72
+  73 -->|"kind: transformCallee"| 72
+  72 -->|"kind: pipe"| 74
+  75 -->|"kind: transformCallee"| 74
+  76 -->|"kind: pipe"| 77
+  78 -->|"kind: transformCallee"| 77
+  77 -->|"kind: pipe"| 79
+  80 -->|"kind: transformCallee"| 79
+  81 -->|"kind: pipe"| 82
+  83 -->|"kind: transformCallee"| 82
+  82 -->|"kind: pipe"| 84
+  85 -->|"kind: transformCallee"| 84
+  88 -->|"kind: pipe"| 89
+  90 -->|"kind: transformCallee"| 89
+  89 -->|"kind: potentialReturn"| 87
+  87 -->|"kind: usedBy"| 86
+  92 -->|"kind: potentialReturn"| 91
+  91 -->|"kind: usedBy"| 86
+  93 -->|"kind: pipe"| 94
+  95 -->|"kind: transformCallee"| 94

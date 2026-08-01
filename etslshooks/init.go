@@ -91,12 +91,6 @@ var effectFixProvider = &ls.CodeFixProvider{
 
 // getEffectCodeActions finds applicable fixables and collects their code actions.
 func getEffectCodeActions(ctx context.Context, fixCtx *ls.CodeFixContext) ([]*ls.CodeAction, error) {
-	// Find all fixables that handle this error code
-	applicable := fixables.ByErrorCode(fixCtx.ErrorCode)
-	if len(applicable) == 0 {
-		return nil, nil
-	}
-
 	var options *etscore.ResolvedEffectPluginOptions
 	if fixCtx.Program != nil {
 		if parsedEffectConfig := fixCtx.Program.Options().Effect; parsedEffectConfig != nil {
@@ -112,20 +106,14 @@ func getEffectCodeActions(ctx context.Context, fixCtx *ls.CodeFixContext) ([]*ls
 
 			if ch != nil {
 				tp := typeparser.NewTypeParser(fixCtx.Program, ch)
-
-				// Create the fixable context that wraps the code-fix request
 				fCtx := fixable.NewContext(ctx, fixCtx, options, ch, tp)
-
-				// Collect actions from all applicable fixables
 				var actions []*ls.CodeAction
-				for _, f := range applicable {
-					results := f.Run(fCtx)
-					for i := range results {
-						action := results[i]
+				for _, provider := range fixables.ByErrorCode(fixCtx.ErrorCode) {
+					for _, result := range provider.Run(fCtx) {
+						action := result
 						actions = append(actions, &action)
 					}
 				}
-
 				return actions, nil
 			}
 		}

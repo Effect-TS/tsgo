@@ -1,0 +1,42 @@
+==== /.src/barrel.ts (0 flows) ====
+==== /.src/test.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 6:23 - 6:44
+Node: RootFunction.pipe(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (0):
+
+=== Piping Flow ===
+Location: 7:23 - 7:44
+Node: RootFunction.pipe(2)
+Node Kind: KindCallExpression
+
+Subject: 2
+Subject Type: 2
+
+Transformations (0):
+
+=== Piping Flow ===
+Location: 8:25 - 8:48
+Node: NestedFunction.pipe(3)
+Node Kind: KindCallExpression
+
+Subject: 3
+Subject Type: 3
+
+Transformations (0):
+
+=== Piping Flow ===
+Location: 9:25 - 9:48
+Node: NestedFunction.pipe(4)
+Node Kind: KindCallExpression
+
+Subject: 4
+Subject Type: 4
+
+Transformations (0):

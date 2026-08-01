@@ -12,7 +12,11 @@
   Fix 0: "Disable newPromise for this line"
   Fix 1: "Disable newPromise for entire file"
 
-[D4] (16:10-16:54) TS377080: This code constructs `new Promise(...)`, prefer Effect APIs such as `Effect.async`, `Effect.promise`, or `Effect.tryPromise` instead of manual Promise construction. effect(newPromise)
+[D4] (15:29-17:3) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+  Fix 0: "Disable promiseInEffectSuccess for this line"
+  Fix 1: "Disable promiseInEffectSuccess for entire file"
+
+[D5] (16:10-16:54) TS377080: This code constructs `new Promise(...)`, prefer Effect APIs such as `Effect.async`, `Effect.promise`, or `Effect.tryPromise` instead of manual Promise construction. effect(newPromise)
   Fix 0: "Disable newPromise for this line"
   Fix 1: "Disable newPromise for entire file"
 
@@ -36,8 +40,14 @@ skipped by default
 === [D3] Fix 1: "Disable newPromise for entire file" ===
 skipped by default
 
-=== [D4] Fix 0: "Disable newPromise for this line" ===
+=== [D4] Fix 0: "Disable promiseInEffectSuccess for this line" ===
 skipped by default
 
-=== [D4] Fix 1: "Disable newPromise for entire file" ===
+=== [D4] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable newPromise for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable newPromise for entire file" ===
 skipped by default

@@ -5,7 +5,7 @@ import {
   isPresetEnabled,
   mergePresetDiagnosticSeverities,
   presets
-} from "../src/presets.js"
+} from "../src/cli/presets.js"
 
 describe("diagnostic presets", () => {
   it("merges the selected preset severities", () => {

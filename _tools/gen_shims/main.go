@@ -2,23 +2,90 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
+	"errors"
+	"flag"
 	"fmt"
+	"go/parser"
+	"go/token"
 	"go/types"
+	"io"
+	"io/fs"
 	"log"
 	"maps"
 	"os"
-	"path"
+	"path/filepath"
 	"slices"
+	"strconv"
 	"strings"
 
-	"github.com/go-json-experiment/json"
-
+	"golang.org/x/mod/modfile"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 	"golang.org/x/tools/go/packages"
 )
 
 const tsgoInternalPrefix = "github.com/microsoft/typescript-go/internal/"
+
+const generatedMarker = ".generated-by-gen-shims"
+
+const shimModulePrefix = "github.com/microsoft/typescript-go/shim"
+
+var packagesToShim = []string{
+	"api",
+	"ast",
+	"astnav",
+	"bundled",
+	"checker",
+	"collections",
+	"compiler",
+	"core",
+	"diagnostics",
+	"evaluator",
+	"execute/tsc",
+	"format",
+	"fourslash",
+	"jsnum",
+	"locale",
+	"ls",
+	"ls/autoimport",
+	"ls/change",
+	"ls/lsconv",
+	"ls/lsutil",
+	"lsp",
+	"lsp/lsproto",
+	"module",
+	"modulespecifiers",
+	"packagejson",
+	"parser",
+	"project",
+	"project/logging",
+	"repo",
+	"scanner",
+	"sourcemap",
+	"testrunner",
+	"testutil",
+	"testutil/lsptestutil",
+	"testutil/baseline",
+	"testutil/harnessutil",
+	"testutil/tsbaseline",
+	"tsoptions",
+	"tspath",
+	"vfs",
+	"vfs/cachedvfs",
+	"vfs/iovfs",
+	"vfs/vfsmatch",
+	"vfs/osvfs",
+}
+
+type stringFlags []string
+
+func (f *stringFlags) String() string { return strings.Join(*f, ",") }
+
+func (f *stringFlags) Set(value string) error {
+	*f = append(*f, value)
+	return nil
+}
 
 func signatureHasUnexportedType(t types.Signature) bool {
 	if params := t.Params(); params != nil {
@@ -39,59 +106,334 @@ func signatureHasUnexportedType(t types.Signature) bool {
 }
 
 type ExtraShim struct {
-	ExtraFunctions  []string
-	ExtraMethods    map[string]([]string)
-	ExtraFields     map[string]([]string)
-	CompactFields   map[string]([]string)
-	IgnoreFunctions []string
+	ExtraFunctions  []string            `json:"ExtraFunctions,omitempty"`
+	ExtraMethods    map[string][]string `json:"ExtraMethods,omitempty"`
+	ExtraFields     map[string][]string `json:"ExtraFields,omitempty"`
+	CompactFields   map[string][]string `json:"CompactFields,omitempty"`
+	IgnoreFunctions []string            `json:"IgnoreFunctions,omitempty"`
+}
+
+type shimInputs struct {
+	extra   map[string]ExtraShim
+	helpers map[string][]byte
+}
+
+func normalizeStrings(values []string) []string {
+	result := slices.Compact(slices.Sorted(slices.Values(values)))
+	if len(result) == 0 {
+		return nil
+	}
+	return result
+}
+
+func mergeStringMap(base map[string][]string, overlay map[string][]string) map[string][]string {
+	if len(base) == 0 && len(overlay) == 0 {
+		return nil
+	}
+	result := make(map[string][]string, len(base)+len(overlay))
+	for name, values := range base {
+		result[name] = normalizeStrings(values)
+	}
+	for name, values := range overlay {
+		result[name] = normalizeStrings(slices.Concat(result[name], values))
+	}
+	return result
+}
+
+func mergeExtraShim(base, overlay ExtraShim) ExtraShim {
+	return ExtraShim{
+		ExtraFunctions:  normalizeStrings(slices.Concat(base.ExtraFunctions, overlay.ExtraFunctions)),
+		ExtraMethods:    mergeStringMap(base.ExtraMethods, overlay.ExtraMethods),
+		ExtraFields:     mergeStringMap(base.ExtraFields, overlay.ExtraFields),
+		CompactFields:   mergeStringMap(base.CompactFields, overlay.CompactFields),
+		IgnoreFunctions: normalizeStrings(slices.Concat(base.IgnoreFunctions, overlay.IgnoreFunctions)),
+	}
+}
+
+func parseExtraShim(data []byte, source string) (ExtraShim, error) {
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	var extra ExtraShim
+	if err := decoder.Decode(&extra); err != nil {
+		return ExtraShim{}, fmt.Errorf("parse %s: %w", source, err)
+	}
+	if err := decoder.Decode(&struct{}{}); !errors.Is(err, io.EOF) {
+		if err == nil {
+			return ExtraShim{}, fmt.Errorf("parse %s: unexpected trailing JSON value", source)
+		}
+		return ExtraShim{}, fmt.Errorf("parse %s: %w", source, err)
+	}
+	return extra, nil
+}
+
+func knownPackagePaths() map[string]bool {
+	known := make(map[string]bool, len(packagesToShim)+1)
+	for _, packagePath := range packagesToShim {
+		known[packagePath] = true
+	}
+	known["vfs/vfstest"] = true
+	return known
+}
+
+func loadShimInputs(configRoot string, overlayRoots []string) (shimInputs, error) {
+	inputs := shimInputs{extra: map[string]ExtraShim{}, helpers: map[string][]byte{}}
+	known := knownPackagePaths()
+	roots := append([]string{configRoot}, overlayRoots...)
+	for rootIndex, root := range roots {
+		info, err := os.Stat(root)
+		if err != nil {
+			return shimInputs{}, fmt.Errorf("read shim input root %s: %w", root, err)
+		}
+		if !info.IsDir() {
+			return shimInputs{}, fmt.Errorf("shim input root %s is not a directory", root)
+		}
+		err = filepath.WalkDir(root, func(filePath string, entry fs.DirEntry, walkErr error) error {
+			if walkErr != nil {
+				return walkErr
+			}
+			if entry.IsDir() {
+				return nil
+			}
+			relative, err := filepath.Rel(root, filePath)
+			if err != nil {
+				return err
+			}
+			packagePath := filepath.ToSlash(filepath.Dir(relative))
+			name := entry.Name()
+			isExtra := name == "extra-shim.json"
+			isHelper := filepath.Ext(name) == ".go" && (rootIndex == 0 || name != "shim.go")
+			if !isExtra && !isHelper {
+				return nil
+			}
+			if !known[packagePath] {
+				return fmt.Errorf("shim input %s targets unknown package path %q", filePath, packagePath)
+			}
+			data, err := os.ReadFile(filePath)
+			if err != nil {
+				return err
+			}
+			if isExtra {
+				extra, err := parseExtraShim(data, filePath)
+				if err != nil {
+					return err
+				}
+				if rootIndex == 0 {
+					inputs.extra[packagePath] = extra
+				} else {
+					inputs.extra[packagePath] = mergeExtraShim(inputs.extra[packagePath], extra)
+				}
+				return nil
+			}
+			if _, err := parser.ParseFile(token.NewFileSet(), filePath, data, parser.AllErrors); err != nil {
+				return fmt.Errorf("validate shim helper %s: %w", filePath, err)
+			}
+			relative = filepath.Clean(relative)
+			if existing, ok := inputs.helpers[relative]; ok && !bytes.Equal(existing, data) {
+				return fmt.Errorf("conflicting handwritten shim helper %s", relative)
+			}
+			inputs.helpers[relative] = data
+			return nil
+		})
+		if err != nil {
+			return shimInputs{}, fmt.Errorf("load shim inputs from %s: %w", root, err)
+		}
+	}
+	return inputs, nil
+}
+
+func modulePaths() []string {
+	modules := make([]string, 0, len(packagesToShim))
+	for _, packagePath := range packagesToShim {
+		if packagePath != "vfs/vfsmatch" {
+			modules = append(modules, packagePath)
+		}
+	}
+	modules = append(modules, "vfs/vfstest")
+	slices.Sort(modules)
+	return modules
+}
+
+func isShimWorkPath(repositoryRoot, path string) (bool, error) {
+	resolved := filepath.FromSlash(path)
+	if !filepath.IsAbs(resolved) {
+		resolved = filepath.Join(repositoryRoot, resolved)
+	}
+	relative, err := filepath.Rel(filepath.Join(repositoryRoot, "shim"), filepath.Clean(resolved))
+	if err != nil {
+		return false, err
+	}
+	return relative == "." || relative != ".." && !strings.HasPrefix(relative, ".."+string(filepath.Separator)) && !filepath.IsAbs(relative), nil
+}
+
+func updateGoWork(repositoryRoot string, content []byte, modules []string) ([]byte, error) {
+	workFile, err := modfile.ParseWork("go.work", content, nil)
+	if err != nil {
+		return nil, fmt.Errorf("parse go.work: %w", err)
+	}
+	for _, use := range slices.Clone(workFile.Use) {
+		isShim, err := isShimWorkPath(repositoryRoot, use.Path)
+		if err != nil {
+			return nil, fmt.Errorf("resolve go.work use %s: %w", use.Path, err)
+		}
+		if isShim {
+			if err := workFile.DropUse(use.Path); err != nil {
+				return nil, fmt.Errorf("drop go.work use %s: %w", use.Path, err)
+			}
+		}
+	}
+	for _, replacement := range slices.Clone(workFile.Replace) {
+		isShim, err := isShimWorkPath(repositoryRoot, replacement.New.Path)
+		if err != nil {
+			return nil, fmt.Errorf("resolve go.work replacement %s: %w", replacement.New.Path, err)
+		}
+		if isShim || replacement.Old.Path == shimModulePrefix || strings.HasPrefix(replacement.Old.Path, shimModulePrefix+"/") {
+			if err := workFile.DropReplace(replacement.Old.Path, replacement.Old.Version); err != nil {
+				return nil, fmt.Errorf("drop go.work replacement for %s: %w", replacement.Old.Path, err)
+			}
+		}
+	}
+	modules = slices.Clone(modules)
+	slices.Sort(modules)
+	for _, module := range modules {
+		if err := workFile.AddUse("./shim/"+filepath.ToSlash(module), ""); err != nil {
+			return nil, fmt.Errorf("add go.work use for %s: %w", module, err)
+		}
+	}
+	workFile.Cleanup()
+	return modfile.Format(workFile.Syntax), nil
+}
+
+func writeFile(filePath string, data []byte, mode fs.FileMode) error {
+	if err := os.MkdirAll(filepath.Dir(filePath), 0o755); err != nil {
+		return err
+	}
+	file, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, mode)
+	if err != nil {
+		return err
+	}
+	if _, err := file.Write(data); err != nil {
+		_ = file.Close()
+		return err
+	}
+	return file.Close()
+}
+
+func writeShimHelpers(root string, helpers map[string][]byte) error {
+	for relative, data := range helpers {
+		if err := writeFile(filepath.Join(root, relative), data, 0o644); err != nil {
+			return fmt.Errorf("write shim helper %s: %w", relative, err)
+		}
+	}
+	return nil
+}
+
+func preparePackageLoad(repositoryRoot string) ([]string, string, func(), error) {
+	temporaryRoot, err := os.MkdirTemp(repositoryRoot, ".gen-shims-load-")
+	if err != nil {
+		return nil, "", nil, err
+	}
+	cleanup := func() { _ = os.RemoveAll(temporaryRoot) }
+	etscoreRoot := filepath.Join(temporaryRoot, "etscore")
+	etscoreModule := []byte("module github.com/effect-ts/tsgo/etscore\n\ngo 1.26\n")
+	etscoreSource := []byte(`package etscore
+
+type EffectPluginOptions struct{}
+
+func ParseFromPlugins(any) *EffectPluginOptions { return nil }
+
+func EnterCommandLineMode() func() { return func() {} }
+`)
+	if err := writeFile(filepath.Join(etscoreRoot, "go.mod"), etscoreModule, 0o644); err != nil {
+		cleanup()
+		return nil, "", nil, err
+	}
+	if err := writeFile(filepath.Join(etscoreRoot, "etscore.go"), etscoreSource, 0o644); err != nil {
+		cleanup()
+		return nil, "", nil, err
+	}
+	typescriptGoMod, err := os.ReadFile(filepath.Join(repositoryRoot, "typescript-go", "go.mod"))
+	if err != nil {
+		cleanup()
+		return nil, "", nil, err
+	}
+	modFile := filepath.Join(temporaryRoot, "typescript-go.mod")
+	typescriptGoMod = append(typescriptGoMod, fmt.Sprintf(
+		"\nrequire github.com/effect-ts/tsgo/etscore v0.0.0\nreplace github.com/effect-ts/tsgo/etscore => %s\n",
+		strconv.Quote(etscoreRoot),
+	)...)
+	if err := writeFile(modFile, typescriptGoMod, 0o644); err != nil {
+		cleanup()
+		return nil, "", nil, err
+	}
+	typescriptGoSum, err := os.ReadFile(filepath.Join(repositoryRoot, "typescript-go", "go.sum"))
+	if err != nil {
+		cleanup()
+		return nil, "", nil, err
+	}
+	if err := writeFile(strings.TrimSuffix(modFile, ".mod")+".sum", typescriptGoSum, 0o644); err != nil {
+		cleanup()
+		return nil, "", nil, err
+	}
+	environment := slices.DeleteFunc(os.Environ(), func(value string) bool {
+		return strings.HasPrefix(value, "GOWORK=") || strings.HasPrefix(value, "GOFLAGS=") || strings.HasPrefix(value, "GO111MODULE=")
+	})
+	environment = append(environment, "GOWORK=off", "GO111MODULE=on")
+	return environment, modFile, cleanup, nil
+}
+
+func resetOutputRoot(root string) error {
+	if err := os.RemoveAll(root); err != nil {
+		return err
+	}
+	return os.MkdirAll(root, 0o755)
 }
 
 func main() {
-	packagesToShim := []string{
-		"api",
-		"ast",
-		"astnav",
-		"bundled",
-		"checker",
-		"collections",
-		"compiler",
-		"core",
-		"diagnostics",
-		"evaluator",
-		"execute/tsc",
-		"format",
-		"fourslash",
-		"jsnum",
-		"locale",
-		"ls",
-		"ls/autoimport",
-		"ls/change",
-		"ls/lsconv",
-		"ls/lsutil",
-		"lsp",
-		"lsp/lsproto",
-		"module",
-		"modulespecifiers",
-		"packagejson",
-		"parser",
-		"project",
-		"project/logging",
-		"repo",
-		"scanner",
-		"sourcemap",
-		"testrunner",
-		"testutil",
-		"testutil/lsptestutil",
-		"testutil/baseline",
-		"testutil/harnessutil",
-		"testutil/tsbaseline",
-		"tsoptions",
-		"tspath",
-		"vfs",
-		"vfs/cachedvfs",
-		"vfs/iovfs",
-		"vfs/vfsmatch",
-		"vfs/osvfs",
+	if err := run(); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func run() error {
+	var extraShimRoots stringFlags
+	var repositoryRoot string
+	flag.StringVar(&repositoryRoot, "repository-root", "", "path to the repository root")
+	flag.Var(&extraShimRoots, "extra-shim-root", "additional shim config/helper root (repeatable)")
+	flag.Parse()
+
+	workingDirectory, err := os.Getwd()
+	if err != nil {
+		return err
+	}
+	if repositoryRoot == "" {
+		repositoryRoot = workingDirectory
+		if filepath.Base(workingDirectory) == "gen_shims" && filepath.Base(filepath.Dir(workingDirectory)) == "_tools" {
+			repositoryRoot = filepath.Join(workingDirectory, "..", "..")
+		}
+	}
+	repositoryRoot, err = filepath.Abs(repositoryRoot)
+	if err != nil {
+		return fmt.Errorf("resolve repository root: %w", err)
+	}
+	shimPath := filepath.Join(repositoryRoot, "shim")
+	goWorkPath := filepath.Join(repositoryRoot, "go.work")
+	configRoot := filepath.Join(repositoryRoot, "_tools", "gen_shims", "config")
+	for index, root := range extraShimRoots {
+		if !filepath.IsAbs(root) {
+			extraShimRoots[index] = filepath.Join(repositoryRoot, root)
+		}
+	}
+	inputs, err := loadShimInputs(configRoot, extraShimRoots)
+	if err != nil {
+		return err
+	}
+	goWork, err := os.ReadFile(goWorkPath)
+	if err != nil {
+		return err
+	}
+	updatedGoWork, err := updateGoWork(repositoryRoot, goWork, modulePaths())
+	if err != nil {
+		return err
 	}
 
 	packagesToShimFullNames := make([]string, len(packagesToShim))
@@ -99,29 +441,39 @@ func main() {
 		packagesToShimFullNames[i] = tsgoInternalPrefix + pkg
 	}
 
-	packages, err := packages.Load(&packages.Config{
-		// TODO: path relative to repo root
-		Dir:  "./shim/compiler",
-		Mode: packages.LoadSyntax,
+	environment, modFile, cleanupPackageLoad, err := preparePackageLoad(repositoryRoot)
+	if err != nil {
+		return fmt.Errorf("prepare TypeScript-Go package loading: %w", err)
+	}
+	defer cleanupPackageLoad()
+	loadedPackages, err := packages.Load(&packages.Config{
+		Dir:        filepath.Join(repositoryRoot, "typescript-go"),
+		Env:        environment,
+		BuildFlags: []string{"-modfile=" + modFile},
+		Mode:       packages.LoadSyntax,
 	}, packagesToShimFullNames...)
 	if err != nil {
-		log.Fatalf("Error loading package: %v", err)
+		return fmt.Errorf("load TypeScript-Go packages: %w", err)
+	}
+	if packages.PrintErrors(loadedPackages) > 0 {
+		return errors.New("TypeScript-Go package loading failed")
+	}
+
+	if err := resetOutputRoot(shimPath); err != nil {
+		return fmt.Errorf("reset shim output: %w", err)
+	}
+	if err := writeShimHelpers(shimPath, inputs.helpers); err != nil {
+		return err
 	}
 
 	var shimHeaderBuilder strings.Builder
 	var shimBuilder strings.Builder
 	var tempBuffer bytes.Buffer
 
-	for _, pkg := range packages {
-		shimDirPath := path.Join("./shim/", strings.TrimPrefix(pkg.PkgPath, tsgoInternalPrefix))
-		var extraShim ExtraShim
-		extraShimFilePath := path.Join(shimDirPath, "extra-shim.json")
-		if data, err := os.ReadFile(extraShimFilePath); err == nil {
-			if err := json.Unmarshal(data, &extraShim); err != nil {
-				fmt.Printf("error parsing %v: %v", extraShimFilePath, err)
-				return
-			}
-		}
+	for _, pkg := range loadedPackages {
+		packagePath := strings.TrimPrefix(pkg.PkgPath, tsgoInternalPrefix)
+		shimDirPath := filepath.Join(shimPath, filepath.FromSlash(packagePath))
+		extraShim := inputs.extra[packagePath]
 		if extraShim.ExtraMethods == nil {
 			extraShim.ExtraMethods = map[string][]string{}
 		}
@@ -388,7 +740,7 @@ func main() {
 
 					strct, ok := named.Underlying().(*types.Struct)
 					if !ok {
-						log.Fatalf("expected %v to be struct", name)
+						return fmt.Errorf("expected %v to be struct", name)
 					}
 
 					mappedFieldTypes := make(map[string]*types.Var, strct.NumFields())
@@ -403,7 +755,7 @@ func main() {
 					for _, field := range extraShim.ExtraFields[name] {
 						idx, ok := mappedFieldIndexes[field]
 						if !ok {
-							log.Fatalf("expected struct %q to contain field %q", name, field)
+							return fmt.Errorf("expected struct %q to contain field %q", name, field)
 						}
 						if idx != 0 || !compactFieldNames[name][field] {
 							needsFullMirror = true
@@ -419,7 +771,7 @@ func main() {
 					for _, field := range extraShim.ExtraFields[name] {
 						fieldVar, ok := mappedFieldTypes[field]
 						if !ok {
-							log.Fatalf("expected struct %q to contain field %q", name, field)
+							return fmt.Errorf("expected struct %q to contain field %q", name, field)
 						}
 
 						accessorStructName := mirrorStructName
@@ -483,7 +835,7 @@ func main() {
 			}
 		}
 		if exit {
-			os.Exit(1)
+			return fmt.Errorf("extra shim declarations were not found in %s", packagePath)
 		}
 
 		// https://pkg.go.dev/cmd/go#hdr-Generate_Go_files_by_processing_source
@@ -504,16 +856,30 @@ func main() {
 		}
 		shimHeaderBuilder.WriteString("\n")
 
-		shimGoPath := path.Join(shimDirPath, "shim.go")
-		file, err := os.Create(shimGoPath)
-		if err != nil {
-			log.Fatalf("error opening shim file for writing: %v", err)
+		generatedSource := append([]byte(shimHeaderBuilder.String()), shimBuilder.String()...)
+		shimGoPath := filepath.Join(shimDirPath, "shim.go")
+		if _, err := parser.ParseFile(token.NewFileSet(), shimGoPath, generatedSource, parser.AllErrors); err != nil {
+			return fmt.Errorf("validate generated shim %s: %w", packagePath, err)
 		}
-		file.WriteString(shimHeaderBuilder.String())
-		file.WriteString(shimBuilder.String())
+		if err := writeFile(shimGoPath, generatedSource, 0o644); err != nil {
+			return fmt.Errorf("write generated shim %s: %w", packagePath, err)
+		}
 
 		shimHeaderBuilder.Reset()
 		shimBuilder.Reset()
 	}
 
+	for _, modulePath := range modulePaths() {
+		goMod := fmt.Sprintf("module github.com/microsoft/typescript-go/shim/%s\n\ngo 1.26\n\nrequire github.com/microsoft/typescript-go v0.0.0\n", filepath.ToSlash(modulePath))
+		if err := writeFile(filepath.Join(shimPath, filepath.FromSlash(modulePath), "go.mod"), []byte(goMod), 0o644); err != nil {
+			return fmt.Errorf("write go.mod for %s: %w", modulePath, err)
+		}
+	}
+	if err := writeFile(filepath.Join(shimPath, generatedMarker), []byte("Generated by _tools/gen_shims. DO NOT EDIT.\n"), 0o644); err != nil {
+		return err
+	}
+	if err := writeFile(goWorkPath, updatedGoWork, 0o644); err != nil {
+		return fmt.Errorf("update go.work: %w", err)
+	}
+	return nil
 }

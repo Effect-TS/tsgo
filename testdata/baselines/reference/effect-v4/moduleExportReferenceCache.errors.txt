@@ -1,0 +1,45 @@
+=== Metadata ===
+Effect version: unknown
+
+/.src/test.ts(6,24): warning TS377013: This pipe call contains no arguments. effect(unnecessaryPipe)
+/.src/test.ts(7,24): warning TS377013: This pipe call contains no arguments. effect(unnecessaryPipe)
+/.src/test.ts(8,26): warning TS377013: This pipe call contains no arguments. effect(unnecessaryPipe)
+/.src/test.ts(9,26): warning TS377013: This pipe call contains no arguments. effect(unnecessaryPipe)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@effect/language-service"
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/barrel.ts (0 errors) ====
+    // @effect-diagnostics *:off
+    export { pipe } from "effect/Function"
+    
+
+==== /.src/test.ts (4 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics unnecessaryPipe:warning
+    import * as RootFunction from "./barrel.js"
+    import * as NestedFunction from "cache-wrapper"
+    
+    export const rootOne = RootFunction.pipe(1)
+                           ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377013: This pipe call contains no arguments. effect(unnecessaryPipe)
+    export const rootTwo = RootFunction.pipe(2)
+                           ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377013: This pipe call contains no arguments. effect(unnecessaryPipe)
+    export const nestedOne = NestedFunction.pipe(3)
+                             ~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377013: This pipe call contains no arguments. effect(unnecessaryPipe)
+    export const nestedTwo = NestedFunction.pipe(4)
+                             ~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377013: This pipe call contains no arguments. effect(unnecessaryPipe)
+    

@@ -1,0 +1,237 @@
+==== /.src/catchChainToFirstSuccessOf.ts (14 flows) ====
+
+=== Piping Flow ===
+Location: 11:24 - 14:2
+Node: first.pipe(\n  Effect.catch(() => second),\n  Effect.catch(() => third)\n)
+Node Kind: KindCallExpression
+
+Subject: first
+Subject Type: Effect<string, Error, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [() => second]
+      outType: Effect<string | number, TypeError, never>
+  [1] kind: pipeable
+      callee: Effect.catch
+      args: [() => third]
+      outType: Effect<string | number | boolean, Error, never>
+
+=== Piping Flow ===
+Location: 17:24 - 23:2
+Node: pipe(\n  first,\n  Effect.catch(() => second),\n  Effect.catch(() => {\n    return third\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: first
+Subject Type: Effect<string, Error, never>
+
+Transformations (2):
+  [0] kind: pipe
+      callee: Effect.catch
+      args: [() => second]
+      outType: Effect<string | number, TypeError, never>
+  [1] kind: pipe
+      callee: Effect.catch
+      args: [() => {\n    return third\n  }]
+      outType: Effect<string | number | boolean, Error, never>
+
+=== Piping Flow ===
+Location: 26:25 - 29:2
+Node: Effect.catch(\n  Effect.catch(first, () => second),\n  () => third\n)
+Node Kind: KindCallExpression
+
+Subject: first
+Subject Type: Effect<string, Error, never>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.catch
+      args: [() => second]
+      outType: Effect<string | number, TypeError, never>
+  [1] kind: dataFirst
+      callee: Effect.catch
+      args: [() => third]
+      outType: Effect<string | number | boolean, Error, never>
+
+=== Piping Flow ===
+Location: 32:22 - 32:61
+Node: first.pipe(Effect.catch(() => second))
+Node Kind: KindCallExpression
+
+Subject: first
+Subject Type: Effect<string, Error, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [() => second]
+      outType: Effect<string | number, TypeError, never>
+
+=== Piping Flow ===
+Location: 35:25 - 38:2
+Node: first.pipe(\n  Effect.catch((error) => Effect.fail(error.message)),\n  Effect.catch(() => third)\n)
+Node Kind: KindCallExpression
+
+Subject: first
+Subject Type: Effect<string, Error, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [(error) => Effect.fail(error.message)]
+      outType: Effect<string, string, never>
+  [1] kind: pipeable
+      callee: Effect.catch
+      args: [() => third]
+      outType: Effect<string | boolean, Error, never>
+
+=== Piping Flow ===
+Location: 36:26 - 36:53
+Node: Effect.fail(error.message)
+Node Kind: KindCallExpression
+
+Subject: error.message
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>
+
+=== Piping Flow ===
+Location: 41:25 - 47:2
+Node: first.pipe(\n  Effect.catch(() => {\n    console.log("fallback")\n    return second\n  }),\n  Effect.catch(() => third)\n)
+Node Kind: KindCallExpression
+
+Subject: first
+Subject Type: Effect<string, Error, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [() => {\n    console.log("fallback")\n    return second\n  }]
+      outType: Effect<string | number, TypeError, never>
+  [1] kind: pipeable
+      callee: Effect.catch
+      args: [() => third]
+      outType: Effect<string | number | boolean, Error, never>
+
+=== Piping Flow ===
+Location: 42:23 - 43:28
+Node: console.log("fallback")
+Node Kind: KindCallExpression
+
+Subject: "fallback"
+Subject Type: "fallback"
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 51:27 - 54:2
+Node: first.pipe(\n  Effect.catch(() => second),\n  Effect.catch(() => Effect.fail("last" as const))\n)
+Node Kind: KindCallExpression
+
+Subject: first
+Subject Type: Effect<string, Error, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [() => second]
+      outType: Effect<string | number, TypeError, never>
+  [1] kind: pipeable
+      callee: Effect.catch
+      args: [() => Effect.fail("last" as const)]
+      outType: Effect<string | number, "last", never>
+
+=== Piping Flow ===
+Location: 53:21 - 53:50
+Node: Effect.fail("last" as const)
+Node Kind: KindCallExpression
+
+Subject: "last" as const
+Subject Type: "last"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, "last", never>
+
+=== Piping Flow ===
+Location: 57:31 - 60:2
+Node: anyError.pipe(\n  Effect.catch(() => second),\n  Effect.catch(() => Effect.fail("last" as const))\n)
+Node Kind: KindCallExpression
+
+Subject: anyError
+Subject Type: Effect<string, any, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [() => second]
+      outType: Effect<string | number, TypeError, never>
+  [1] kind: pipeable
+      callee: Effect.catch
+      args: [() => Effect.fail("last" as const)]
+      outType: Effect<string | number, "last", never>
+
+=== Piping Flow ===
+Location: 59:21 - 59:50
+Node: Effect.fail("last" as const)
+Node Kind: KindCallExpression
+
+Subject: "last" as const
+Subject Type: "last"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, "last", never>
+
+=== Piping Flow ===
+Location: 63:31 - 66:2
+Node: first.pipe(\n  Effect.catch((): Effect.Effect<number, Error> => second),\n  Effect.catch(() => third)\n)
+Node Kind: KindCallExpression
+
+Subject: first
+Subject Type: Effect<string, Error, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [(): Effect.Effect<number, Error> => second]
+      outType: Effect<string | number, Error, never>
+  [1] kind: pipeable
+      callee: Effect.catch
+      args: [() => third]
+      outType: Effect<string | number | boolean, Error, never>
+
+=== Piping Flow ===
+Location: 69:27 - 73:2
+Node: first.pipe(\n  Effect.catch(() => second),\n  Effect.map(String),\n  Effect.catch(() => third)\n)
+Node Kind: KindCallExpression
+
+Subject: first
+Subject Type: Effect<string, Error, never>
+
+Transformations (3):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [() => second]
+      outType: Effect<string | number, TypeError, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [String]
+      outType: Effect<string, TypeError, never>
+  [2] kind: pipeable
+      callee: Effect.catch
+      args: [() => third]
+      outType: Effect<string | boolean, Error, never>

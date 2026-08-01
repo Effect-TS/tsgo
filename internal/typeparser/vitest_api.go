@@ -2,17 +2,11 @@ package typeparser
 
 import "github.com/microsoft/typescript-go/shim/ast"
 
-var vitestRunnerPackageDescriptor = PackageSourceFileDescriptor{
-	PackageName: "@vitest/runner",
-}
+var vitestRunnerPackageDescriptor = newPackageSourceFileDescriptor("@vitest/runner", nil)
 
-var vitestPackageDescriptor = PackageSourceFileDescriptor{
-	PackageName: "vitest",
-}
+var vitestPackageDescriptor = newPackageSourceFileDescriptor("vitest", nil)
 
-var effectVitestPackageDescriptor = PackageSourceFileDescriptor{
-	PackageName: "@effect/vitest",
-}
+var effectVitestPackageDescriptor = newPackageSourceFileDescriptor("@effect/vitest", nil)
 
 // IsNodeReferenceToVitestApi reports whether node resolves to a Vitest API.
 // Vitest re-exports most test APIs from @vitest/runner, while global APIs are

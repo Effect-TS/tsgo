@@ -1,0 +1,15 @@
+==== /.src/preferUnsafeConstructor_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 5:21 - 5:50
+Node: Effect.runSync(Scope.make())
+Node Kind: KindCallExpression
+
+Subject: Scope.make()
+Subject Type: Effect<Closeable, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.runSync
+      args: (constant)
+      outType: Closeable

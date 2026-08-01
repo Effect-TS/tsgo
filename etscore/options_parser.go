@@ -447,7 +447,7 @@ func parseDiagnosticSeverityMap(value any) map[string]Severity {
 func parseKeyPatterns(arr []any) []KeyPattern {
 	var patterns []KeyPattern
 	for _, item := range arr {
-		m, ok := item.(*collections.OrderedMap[string, any])
+		getValue, ok := asStringAnyMap(item)
 		if !ok {
 			continue
 		}
@@ -458,19 +458,19 @@ func parseKeyPatterns(arr []any) []KeyPattern {
 			SkipLeadingPath: []string{"src/"},
 		}
 
-		if v, exists := m.Get("target"); exists {
+		if v, exists := getValue("target"); exists {
 			if s, ok := v.(string); ok {
 				kp.Target = s
 			}
 		}
 
-		if v, exists := m.Get("pattern"); exists {
+		if v, exists := getValue("pattern"); exists {
 			if s, ok := v.(string); ok {
 				kp.Pattern = s
 			}
 		}
 
-		if v, exists := m.Get("skipLeadingPath"); exists {
+		if v, exists := getValue("skipLeadingPath"); exists {
 			if arr, ok := v.([]any); ok {
 				paths := make([]string, 0, len(arr))
 				for _, p := range arr {

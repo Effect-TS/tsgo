@@ -5,3 +5,4 @@ packages:
   - "testdata/tests/effect-v4-document-symbols"
   - "testdata/tests/effect-v4-refactors"
   - "_packages/*"
+  - "_tools/repoctl"

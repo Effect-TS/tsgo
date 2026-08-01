@@ -15,6 +15,7 @@ var All = []fixable.Fixable{
 	MissingReturnYieldStarFix,
 	MissingStarInYieldEffectGenFix,
 	CatchAllToMapErrorFix,
+	CatchTagToCatchReasonFix,
 	FlatMapToMapFix,
 	SyncToSucceedFix,
 	CatchToOrElseSucceedFix,
@@ -48,6 +49,7 @@ var All = []fixable.Fixable{
 	MissedPipeableOpportunityFix,
 	NewSchemaClassFix,
 	ServiceNotAsClassFix,
+	PreferUnsafeConstructorFix,
 }
 
 // ByErrorCode finds all fixables that handle a given error code.

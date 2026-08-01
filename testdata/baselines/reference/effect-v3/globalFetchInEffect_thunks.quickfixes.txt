@@ -8,15 +8,19 @@
   Fix 0: "Disable globalFetchInEffect for this line"
   Fix 1: "Disable globalFetchInEffect for entire file"
 
-[D3] (10:14-10:19) TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `@effect/platform`. effect(globalFetchInEffect)
+[D3] (9:33-12:3) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+  Fix 0: "Disable promiseInEffectSuccess for this line"
+  Fix 1: "Disable promiseInEffectSuccess for entire file"
+
+[D4] (10:14-10:19) TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `@effect/platform`. effect(globalFetchInEffect)
   Fix 0: "Disable globalFetchInEffect for this line"
   Fix 1: "Disable globalFetchInEffect for entire file"
 
-[D4] (14:64-14:69) TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `@effect/platform`. effect(globalFetchInEffect)
+[D5] (14:64-14:69) TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `@effect/platform`. effect(globalFetchInEffect)
   Fix 0: "Disable globalFetchInEffect for this line"
   Fix 1: "Disable globalFetchInEffect for entire file"
 
-[D5] (17:20-17:25) TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `@effect/platform`. effect(globalFetchInEffect)
+[D6] (17:20-17:25) TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `@effect/platform`. effect(globalFetchInEffect)
   Fix 0: "Disable globalFetchInEffect for this line"
   Fix 1: "Disable globalFetchInEffect for entire file"
 
@@ -34,10 +38,10 @@ skipped by default
 === [D2] Fix 1: "Disable globalFetchInEffect for entire file" ===
 skipped by default
 
-=== [D3] Fix 0: "Disable globalFetchInEffect for this line" ===
+=== [D3] Fix 0: "Disable promiseInEffectSuccess for this line" ===
 skipped by default
 
-=== [D3] Fix 1: "Disable globalFetchInEffect for entire file" ===
+=== [D3] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
 skipped by default
 
 === [D4] Fix 0: "Disable globalFetchInEffect for this line" ===
@@ -50,4 +54,10 @@ skipped by default
 skipped by default
 
 === [D5] Fix 1: "Disable globalFetchInEffect for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable globalFetchInEffect for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable globalFetchInEffect for entire file" ===
 skipped by default

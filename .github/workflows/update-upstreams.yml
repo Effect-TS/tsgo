@@ -1,0 +1,119 @@
+name: Update Upstreams
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: update-upstreams-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  update:
+    name: Update upstream profiles
+    if: github.repository_owner == 'Effect-TS'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      checks: write
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup repository tools
+        uses: ./.github/actions/setup-repo
+        with:
+          materialize: "false"
+
+      - name: Update upstream profiles
+        id: upstream
+        run: pnpm exec repoctl upstream update
+
+      - name: Open metadata update pull request
+        id: generated
+        if: steps.upstream.outputs.has_changes == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          pnpm exec repoctl github open-pr-if-changed \
+            --base main \
+            --head update-upstreams \
+            --title 'chore: update upstreams' \
+            --body 'Automated update of the TypeScript-Go upstream profiles.' \
+            --commit-message 'chore: update upstream metadata' \
+            --check generation_check_id='Generate next profile'
+
+      - name: Setup next profile
+        if: steps.upstream.outputs.has_changes == 'true'
+        run: pnpm exec repoctl submodules setup --profile next
+
+      - name: Install Nix
+        if: steps.upstream.outputs.has_changes == 'true'
+        uses: DeterminateSystems/determinate-nix-action@v3
+
+      - name: Setup Nix cache
+        if: steps.upstream.outputs.has_changes == 'true'
+        uses: DeterminateSystems/flakehub-cache-action@e62e272c914d4ad8e4d1587a864e9c3ad2cba9de
+
+      - name: Update Nix flake
+        if: steps.upstream.outputs.has_changes == 'true'
+        run: pnpm exec repoctl flake update
+
+      - name: Write changeset
+        if: steps.upstream.outputs.has_changes == 'true'
+        run: |
+          pnpm exec repoctl changeset add \
+            --id update-upstreams \
+            'Update the next profile to [`${{ steps.upstream.outputs.next_spec }}`](https://www.npmjs.com/package/typescript/v/${{ steps.upstream.outputs.next_version }}), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/${{ steps.upstream.outputs.next_git_head }}) commit `${{ steps.upstream.outputs.next_git_head }}`, and update the latest profile to [`${{ steps.upstream.outputs.latest_spec }}`](https://www.npmjs.com/package/typescript/v/${{ steps.upstream.outputs.latest_version }}).'
+
+      - name: Update pull request with next profile
+        id: generated-profile
+        if: steps.upstream.outputs.has_changes == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          pnpm exec repoctl github open-pr-if-changed \
+            --base main \
+            --head update-upstreams \
+            --title 'chore: update upstreams' \
+            --body 'Automated update of upstream metadata, the generated next profile, and Nix inputs.' \
+            --commit-message 'chore: generate next profile' \
+            --check validation_check_id='Validate next profile'
+
+      - name: Publish generation result
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          pnpm exec repoctl github complete-check \
+            --check-id '${{ steps.generated.outputs.generation_check_id }}' \
+            --result '${{ job.status }}' \
+            --success-message 'Next profile generated' \
+            --failure-message 'Next profile generation failed' \
+            --summary 'See the workflow run for upstream setup and Nix output.'
+
+      - name: Build next profile
+        if: steps.upstream.outputs.has_changes == 'true'
+        run: pnpm exec repoctl build local
+
+      - name: Test next profile
+        if: steps.upstream.outputs.has_changes == 'true'
+        run: pnpm exec repoctl test
+
+      - name: Publish next profile validation result
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          pnpm exec repoctl github complete-check \
+            --check-id '${{ steps.generated-profile.outputs.validation_check_id }}' \
+            --result '${{ job.status }}' \
+            --success-message 'Upstream profile validation passed' \
+            --failure-message 'Upstream profile validation failed' \
+            --summary 'See the workflow run for setup, build, and test output.'

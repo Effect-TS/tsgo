@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest"
 import {
   defaultTypescriptPackageNames,
   isNativeTypescriptVersion
-} from "../../src/setup/consts.js"
+} from "../../src/cli/setup/consts.js"
 
 describe("isNativeTypescriptVersion", () => {
   it("accepts typescript >= 7 exact versions, prereleases and ranges", () => {

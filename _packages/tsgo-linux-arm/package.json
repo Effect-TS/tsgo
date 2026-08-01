@@ -1,6 +1,6 @@
 {
   "name": "@effect/tsgo-linux-arm",
-  "version": "0.24.3",
+  "version": "0.25.0",
   "description": "Effect Language Service for TypeScript-Go — Effect-specific diagnostics and hover features.",
   "license": "MIT",
   "repository": {
@@ -18,8 +18,8 @@
   "files": [
     "lib/tsc",
     "lib/tsc-next",
-    "lib/*.json",
-    "README.md"
+    "README.md",
+    "lib/upstream.json"
   ],
   "os": [
     "linux"

@@ -1,0 +1,18 @@
+flowchart TB
+  0[/"type: Effect#lt;string, Error, never#gt;<br/>node: primary"/]
+  1["type: Effect#lt;string, Error, never#gt;<br/>callee: Effect.catch<br/>args: #91;#40;#41; =#gt; secondary#93;"]
+  2[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  3[["type: #40;#41; =#gt; Effect#lt;string, Error, never#gt;<br/>node: #40;#41; =#gt; secondary"]]
+  4[/"type: Effect#lt;string, Error, never#gt;<br/>node: secondary"/]
+  5["type: Effect#lt;string, Error, never#gt;<br/>callee: Effect.catch<br/>args: #91;#40;#41; =#gt; tertiary#93;"]
+  6[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  7[["type: #40;#41; =#gt; Effect#lt;string, Error, never#gt;<br/>node: #40;#41; =#gt; tertiary"]]
+  8[/"type: Effect#lt;string, Error, never#gt;<br/>node: tertiary"/]
+  2 -->|"kind: transformCallee"| 1
+  4 -->|"kind: potentialReturn"| 3
+  3 -->|"kind: transformArg"| 1
+  0 -->|"kind: pipe"| 1
+  6 -->|"kind: transformCallee"| 5
+  8 -->|"kind: potentialReturn"| 7
+  7 -->|"kind: transformArg"| 5
+  1 -->|"kind: pipe"| 5

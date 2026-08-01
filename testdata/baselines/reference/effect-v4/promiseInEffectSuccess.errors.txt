@@ -1,0 +1,354 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/promiseInEffectSuccess.ts(25,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(25,1): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+/.src/promiseInEffectSuccess.ts(26,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(26,1): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+/.src/promiseInEffectSuccess.ts(27,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(27,1): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+/.src/promiseInEffectSuccess.ts(29,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(29,1): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+/.src/promiseInEffectSuccess.ts(30,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(30,1): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+/.src/promiseInEffectSuccess.ts(32,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(32,1): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+/.src/promiseInEffectSuccess.ts(33,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(33,1): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+/.src/promiseInEffectSuccess.ts(34,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(34,1): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+/.src/promiseInEffectSuccess.ts(36,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(36,1): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+/.src/promiseInEffectSuccess.ts(37,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(37,1): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+/.src/promiseInEffectSuccess.ts(38,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(38,1): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+/.src/promiseInEffectSuccess.ts(39,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(39,1): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+/.src/promiseInEffectSuccess.ts(41,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(41,1): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+/.src/promiseInEffectSuccess.ts(42,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(42,1): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+/.src/promiseInEffectSuccess.ts(43,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(43,16): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+/.src/promiseInEffectSuccess.ts(44,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(44,1): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+/.src/promiseInEffectSuccess.ts(45,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(45,21): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+/.src/promiseInEffectSuccess.ts(46,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(46,1): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+/.src/promiseInEffectSuccess.ts(47,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(47,1): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+/.src/promiseInEffectSuccess.ts(48,3): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(51,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(51,1): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+/.src/promiseInEffectSuccess.ts(52,3): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(52,15): warning TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
+/.src/promiseInEffectSuccess.ts(55,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(55,1): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+/.src/promiseInEffectSuccess.ts(56,3): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(56,3): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+/.src/promiseInEffectSuccess.ts(59,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(59,1): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+/.src/promiseInEffectSuccess.ts(61,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(62,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(63,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(64,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(65,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(65,13): warning TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
+/.src/promiseInEffectSuccess.ts(66,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(67,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(68,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(68,1): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+/.src/promiseInEffectSuccess.ts(69,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(70,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(72,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(75,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(75,1): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+/.src/promiseInEffectSuccess.ts(76,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(77,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(78,30): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(86,17): suggestion TS377091: Exported declaration 'intentionallyReturned' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+/.src/promiseInEffectSuccess.ts(89,14): suggestion TS377091: Exported declaration 'intentionallyArrow' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+/.src/promiseInEffectSuccess.ts(90,14): suggestion TS377091: Exported declaration 'intentionallyContextual' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+/.src/promiseInEffectSuccess.ts(91,14): suggestion TS377091: Exported declaration 'intentionallyReturnedWithUnrelated' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+/.src/promiseInEffectSuccess.ts(92,3): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(92,3): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+/.src/promiseInEffectSuccess.ts(96,14): suggestion TS377091: Exported declaration 'inferredReturn' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+/.src/promiseInEffectSuccess.ts(96,37): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+
+
+==== /.src/promiseInEffectSuccess.ts (75 errors) ====
+    // @effect-diagnostics promiseInEffectSuccess:warning
+    
+    import { Effect } from "effect"
+    import * as EffectModule from "effect/Effect"
+    
+    declare const base: Effect.Effect<number>
+    declare const other: Effect.Effect<string>
+    declare const callableOther: Effect.Effect<string> & (() => void)
+    declare const promiseValue: Promise<number>
+    declare const promiseOrNumber: Promise<number> | number
+    declare const promiseLikeValue: PromiseLike<number>
+    declare const thenableValue: { then: (onFulfilled: (value: number) => unknown) => unknown }
+    declare const promiseCallback: (value: number) => Promise<number>
+    declare const unionCallback: (value: number) => Promise<number> | number
+    declare function overloadedCallback(value: string): Promise<string>
+    declare function overloadedCallback(value: number): number
+    declare const customPromiseEffect: Effect.Effect<Promise<number>>
+    declare const makePromiseEffect: () => Effect.Effect<Promise<number>>
+    declare const preserveEffect: <A, E, R>(effect: Effect.Effect<A, E, R>) => Effect.Effect<A, E, R>
+    declare const genericPromiseEffect: <A>(value: A) => Effect.Effect<Promise<number>>
+    declare const promiseEffectHolder: { readonly current: Effect.Effect<Promise<number>> }
+    declare const promiseEffects: ReadonlyArray<Effect.Effect<Promise<number>>>
+    declare const independentPromiseEffect: (ignored: unknown) => Effect.Effect<Promise<number>>
+    
+    Effect.succeed(promiseValue)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+    Effect.succeed(promiseOrNumber)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+    EffectModule.succeed(promiseValue)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+    
+    base.pipe(Effect.as(promiseValue))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+    Effect.as(base, promiseValue)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+    
+    base.pipe(Effect.map(promiseCallback))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+    Effect.map(base, (value) => Promise.resolve(value))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+    Effect.map(base, unionCallback)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+    
+    base.pipe(Effect.zipWith(other, (_left, right) => Promise.resolve(right)))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+    base.pipe(Effect.zipWith(other, (_left, right) => Promise.resolve(right), { concurrent: true }))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+    Effect.zipWith(base, other, (_left, right) => Promise.resolve(right))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+    Effect.zipWith(base, callableOther, (_left, right) => Promise.resolve(right))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+    
+    customPromiseEffect
+    ~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    ~~~~~~~~~~~~~~~~~~~
+!!! warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+    makePromiseEffect()
+    ~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    ~~~~~~~~~~~~~~~~~~~
+!!! warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+    preserveEffect(customPromiseEffect)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+                   ~~~~~~~~~~~~~~~~~~~
+!!! warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+    genericPromiseEffect<number>(1)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+    promiseEffectHolder.current
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+                        ~~~~~~~
+!!! warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+    promiseEffects[0]
+    ~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    ~~~~~~~~~~~~~~~~~
+!!! warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+    Effect.map(base, () => {
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+      Effect.succeed<Promise<number>>(promiseValue)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+      return Promise.resolve(1)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    })
+    ~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    ~~
+!!! warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+    Effect.map(base, () => {
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+      Effect.sync(() => promiseValue)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+                  ~~~~~~~~~~~~~~~~~~
+!!! warning TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
+      return Promise.resolve(1)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    })
+    ~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    ~~
+!!! warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+    Effect.map(base, () => {
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+      customPromiseEffect
+    ~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~
+      ~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+      ~~~~~~~~~~~~~~~~~~~
+!!! warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+      return Promise.resolve(1)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    })
+    ~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    ~~
+!!! warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+    independentPromiseEffect(Effect.succeed<Promise<number>>(promiseValue))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+    
+    Effect.succeed(1)
+    ~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    Effect.succeed(promiseLikeValue)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    Effect.succeed(thenableValue)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    Effect.promise(() => promiseValue)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    Effect.sync(() => promiseValue)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+                ~~~~~~~~~~~~~~~~~~
+!!! warning TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
+    base.pipe(Effect.as(1))
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    base.pipe(Effect.map((value) => value + 1))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    base.pipe(Effect.map(async (value) => value + 1))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+    base.pipe(Effect.zipWith(other, (left, right) => left + right.length))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    Effect.map(base, overloadedCallback)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    
+    Effect.succeed<Promise<number>>(promiseValue)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    Effect.as<Promise<number>>(promiseValue)
+    Effect.map<number, Promise<number>>(promiseCallback)
+    base.pipe(Effect.as<Promise<number>>(promiseValue), Effect.as(promiseValue))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+    base.pipe(Effect.as(promiseValue), Effect.as<Promise<number>>(promiseValue))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    Effect.succeed(promiseValue) as Effect.Effect<Promise<number>>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    Effect.succeed(promiseValue) satisfies Effect.Effect<Promise<number>>
+                                 ~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    
+    export const intentionallyCarried: Effect.Effect<Promise<number>> = Effect.succeed(promiseValue)
+    export const intentionallyReplaced: Effect.Effect<Promise<number>> = base.pipe(Effect.as(promiseValue))
+    export const intentionallyMapped: Effect.Effect<Promise<number>> = base.pipe(Effect.map(promiseCallback))
+    export const intentionallyCombined: Effect.Effect<Promise<string>> = base.pipe(
+      Effect.zipWith(other, (_left, right) => Promise.resolve(right))
+    )
+    export function intentionallyReturned(): Effect.Effect<Promise<number>> {
+                    ~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377091: Exported declaration 'intentionallyReturned' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+      return Effect.succeed(promiseValue)
+    }
+    export const intentionallyArrow = (): Effect.Effect<Promise<number>> => Effect.succeed(promiseValue)
+                 ~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377091: Exported declaration 'intentionallyArrow' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+    export const intentionallyContextual: () => Effect.Effect<Promise<number>> = () => Effect.succeed(promiseValue)
+                 ~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377091: Exported declaration 'intentionallyContextual' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+    export const intentionallyReturnedWithUnrelated: () => Effect.Effect<Promise<number>> = () => {
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377091: Exported declaration 'intentionallyReturnedWithUnrelated' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+      customPromiseEffect
+      ~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+      ~~~~~~~~~~~~~~~~~~~
+!!! warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+      return Effect.succeed(promiseValue)
+    }
+    
+    export const inferredReturn = () => Effect.succeed(promiseValue)
+                 ~~~~~~~~~~~~~~
+!!! suggestion TS377091: Exported declaration 'inferredReturn' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+    
+    const local = {
+      succeed: <A>(value: A) => value,
+      map: <A, B>(_value: A, f: (value: A) => B) => f(_value)
+    }
+    
+    local.succeed(promiseValue)
+    local.map(1, promiseCallback)
+    
