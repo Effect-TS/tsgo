@@ -102,27 +102,29 @@ func newEffectRule(name string, effectName string) rule.Rule {
 \treturn rule.Rule{
 \t\tName: name,
 \t\tRun: func(ctx rule.RuleContext, _ any) rule.RuleListeners {
-\t\t\tdiagnostics, err := etsrulerunner.RunRule(
+\t\t\terr := etsrulerunner.RunRuleAndReport(
 \t\t\t\tcontext.Background(),
 \t\t\t\tctx.Program,
 \t\t\t\tctx.TypeChecker,
 \t\t\t\tctx.SourceFile,
 \t\t\t\tctx.Program.Options().Effect,
 \t\t\t\teffectName,
+\t\t\t\tetsrulerunner.DiagnosticAdapter{
+\t\t\t\t\tMessage: utils.GetDiagnosticMessage,
+\t\t\t\t\tReport: func(diagnostic etsrulerunner.ReportedDiagnostic) {
+\t\t\t\t\t\tctx.ReportDiagnostic(rule.RuleDiagnostic{
+\t\t\t\t\t\t\tRange:    diagnostic.Range,
+\t\t\t\t\t\t\tRuleName: name,
+\t\t\t\t\t\t\tMessage: rule.RuleMessage{
+\t\t\t\t\t\t\t\tId:          diagnostic.MessageID,
+\t\t\t\t\t\t\t\tDescription: diagnostic.Description,
+\t\t\t\t\t\t\t},
+\t\t\t\t\t\t})
+\t\t\t\t\t},
+\t\t\t\t},
 \t\t\t)
 \t\t\tif err != nil {
 \t\t\t\tpanic(fmt.Sprintf("running %s: %v", name, err))
-\t\t\t}
-
-\t\t\tfor _, diagnostic := range diagnostics {
-\t\t\t\tctx.ReportDiagnostic(rule.RuleDiagnostic{
-\t\t\t\t\tRange:    diagnostic.Loc(),
-\t\t\t\t\tRuleName: name,
-\t\t\t\t\tMessage: rule.RuleMessage{
-\t\t\t\t\t\tId:          fmt.Sprintf("TS%d", diagnostic.Code()),
-\t\t\t\t\t\tDescription: utils.GetDiagnosticMessage(diagnostic),
-\t\t\t\t\t},
-\t\t\t\t})
 \t\t\t}
 \t\t\treturn nil
 \t\t},
