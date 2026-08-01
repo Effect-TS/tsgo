@@ -69,7 +69,7 @@ export const renderTsgolintEffectRules = (metadata: Metadata): string => {
     }
     seenEffectNames.add(rule.name)
 
-    const qualifiedName = `effect/${toKebabCase(rule.name)}`
+    const qualifiedName = `effecttsgo/${toKebabCase(rule.name)}`
     if (seenQualifiedNames.has(qualifiedName)) {
       throw new TsgolintCodegenError({ reason: `duplicate tsgolint rule name ${qualifiedName}` })
     }
@@ -169,8 +169,8 @@ export const renderOxlintEffectRules = (metadata: Metadata): OxlintEffectRulesSo
     }
     seenEffectNames.add(rule.name)
 
-    const qualifiedName = `effect/${toKebabCase(rule.name)}`
-    const moduleName = qualifiedName.slice("effect/".length).replaceAll("-", "_")
+    const qualifiedName = `effecttsgo/${toKebabCase(rule.name)}`
+    const moduleName = qualifiedName.slice("effecttsgo/".length).replaceAll("-", "_")
     if (seenModuleNames.has(moduleName)) {
       throw new OxlintCodegenError({ reason: `duplicate Oxlint rule module ${moduleName}` })
     }
@@ -195,7 +195,7 @@ pub struct ${structName};
 declare_oxc_lint!(
     /// ${description}
     ${structName}(tsgolint),
-    effect,
+    effecttsgo,
     correctness,
     ${fix},
     version = "next",
@@ -208,7 +208,7 @@ impl Rule for ${structName} {}
 
   return {
     moduleBlock: `${effectRulesStart}
-pub(crate) mod effect {
+pub(crate) mod effecttsgo {
 ${rules.map(({ moduleName }) => `    pub mod ${moduleName};`).join("\n")}
 }
 ${effectRulesEnd}`,
@@ -266,7 +266,7 @@ export const generateOxlintEffectRules = Effect.fnUntraced(function*(repositoryR
     return yield* new OxlintCodegenError({ reason: `${rulesFile} does not contain Effect rule markers` })
   }
 
-  const rulesDirectory = path.join(oxlint, "crates", "oxc_linter", "src", "rules", "effect")
+  const rulesDirectory = path.join(oxlint, "crates", "oxc_linter", "src", "rules", "effecttsgo")
   yield* fs.remove(rulesDirectory, { recursive: true, force: true })
   yield* fs.makeDirectory(rulesDirectory, { recursive: true })
   for (const rule of generated.rules) {

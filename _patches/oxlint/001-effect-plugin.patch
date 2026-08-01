@@ -7,7 +7,7 @@ index 8d0610e4..d057b2f6 100644
          assert_eq!(config.plugins, Some(LintPlugins::TYPESCRIPT | LintPlugins::UNICORN));
          let config: Oxlintrc =
 -            serde_json::from_str(r#"{ "plugins": ["typescript", "unicorn", "react", "oxc", "import", "jsdoc", "jest", "vitest", "jsx-a11y", "nextjs", "react-perf", "promise", "node", "vue"] }"#).unwrap();
-+            serde_json::from_str(r#"{ "plugins": ["typescript", "unicorn", "react", "oxc", "import", "jsdoc", "jest", "vitest", "jsx-a11y", "nextjs", "react-perf", "promise", "node", "vue", "effect"] }"#).unwrap();
++            serde_json::from_str(r#"{ "plugins": ["typescript", "unicorn", "react", "oxc", "import", "jsdoc", "jest", "vitest", "jsx-a11y", "nextjs", "react-perf", "promise", "node", "vue", "effecttsgo"] }"#).unwrap();
          assert_eq!(config.plugins, Some(LintPlugins::all()));
  
          let config: Oxlintrc =
@@ -20,7 +20,7 @@ index 865b7cb3..5eacd25b 100644
          /// `eslint-plugin-vue`
          const VUE = 1 << 13;
 +        /// Effect semantic diagnostics implemented by tsgolint.
-+        const EFFECT = 1 << 14;
++        const EFFECT_TSGO = 1 << 14;
      }
  }
  
@@ -28,7 +28,7 @@ index 865b7cb3..5eacd25b 100644
              "promise" => Ok(LintPlugins::PROMISE),
              "node" => Ok(LintPlugins::NODE),
              "vue" => Ok(LintPlugins::VUE),
-+            "effect" => Ok(LintPlugins::EFFECT),
++            "effecttsgo" => Ok(LintPlugins::EFFECT_TSGO),
              // "eslint" is not really a plugin, so it's 'empty'. This has the added benefit of
              // making it the default value.
              "eslint" => Ok(LintPlugins::ESLINT),
@@ -36,7 +36,7 @@ index 865b7cb3..5eacd25b 100644
              LintPlugins::PROMISE => "promise",
              LintPlugins::NODE => "node",
              LintPlugins::VUE => "vue",
-+            LintPlugins::EFFECT => "effect",
++            LintPlugins::EFFECT_TSGO => "effecttsgo",
              _ => "",
          }
      }
@@ -44,7 +44,7 @@ index 865b7cb3..5eacd25b 100644
              Promise,
              Node,
              Vue,
-+            Effect,
++            EffectTsgo,
          }
  
          let enum_schema = r#gen.subschema_for::<LintPluginOptionsSchema>();
@@ -52,7 +52,7 @@ index 865b7cb3..5eacd25b 100644
          assert_eq!(LintPlugins::try_from("react"), Ok(LintPlugins::REACT));
          assert_eq!(LintPlugins::try_from("typescript-eslint"), Ok(LintPlugins::TYPESCRIPT));
          assert_eq!(LintPlugins::try_from("deepscan"), Ok(LintPlugins::OXC));
-+        assert_eq!(LintPlugins::try_from("effect"), Ok(LintPlugins::EFFECT));
++        assert_eq!(LintPlugins::try_from("effecttsgo"), Ok(LintPlugins::EFFECT_TSGO));
          assert_eq!(LintPlugins::try_from("unknown"), Err(()));
      }
  
@@ -60,7 +60,7 @@ index 865b7cb3..5eacd25b 100644
      fn test_plugin_to_str() {
          assert_eq!(<&'static str>::from(LintPlugins::REACT), "react");
          assert_eq!(<&'static str>::from(LintPlugins::JEST), "jest");
-+        assert_eq!(<&'static str>::from(LintPlugins::EFFECT), "effect");
++        assert_eq!(<&'static str>::from(LintPlugins::EFFECT_TSGO), "effecttsgo");
          assert_eq!(<&'static str>::from(LintPlugins::ESLINT), "");
      }
  
@@ -112,8 +112,8 @@ index 62e0a4f2..62efe500 100644
                      .filter_map(|(rule, status)| {
                          if status.is_warn_deny() && rule.is_tsgolint_rule() {
 -                            let rule_name = rule.name().to_string();
-+                            let rule_name = if rule.plugin_name() == "effect" {
-+                                format!("effect/{}", rule.name())
++                            let rule_name = if rule.plugin_name() == "effecttsgo" {
++                                format!("effecttsgo/{}", rule.name())
 +                            } else {
 +                                rule.name().to_string()
 +                            };
@@ -170,7 +170,7 @@ index 62e0a4f2..62efe500 100644
 +fn tsgolint_rule_matches(plugin_name: &str, rule_name: &str, diagnostic_rule: &str) -> bool {
 +    let (diagnostic_plugin_name, diagnostic_rule_name) = split_tsgolint_rule_name(diagnostic_rule);
 +    diagnostic_rule_name == rule_name
-+        && diagnostic_plugin_name.map_or(plugin_name != "effect", |name| name == plugin_name)
++        && diagnostic_plugin_name.map_or(plugin_name != "effecttsgo", |name| name == plugin_name)
 +}
 +
  /// Parses a single message from the binary tsgolint output.
@@ -188,7 +188,7 @@ index 62e0a4f2..62efe500 100644
      };
  
      #[test]
-@@ -1408,6 +1444,34 @@ mod test {
+@@ -1408,6 +1444,42 @@ mod test {
          assert!(message.fixes.is_empty());
      }
  
@@ -196,7 +196,7 @@ index 62e0a4f2..62efe500 100644
 +    fn test_message_from_qualified_tsgolint_diagnostic() {
 +        let diagnostic = TsGoLintRuleDiagnostic {
 +            span: Span::new(0, 10),
-+            rule: "effect/floating-effect".into(),
++            rule: "effecttsgo/floating-effect".into(),
 +            message: RuleMessage {
 +                id: "TS377001".into(),
 +                description: "Floating Effect".into(),
@@ -212,12 +212,20 @@ index 62e0a4f2..62efe500 100644
 +
 +        assert_eq!(
 +            message.error.code,
-+            OxcCode { scope: Some("effect".into()), number: Some("floating-effect".into()) }
++            OxcCode { scope: Some("effecttsgo".into()), number: Some("floating-effect".into()) }
 +        );
-+        assert!(tsgolint_rule_matches("effect", "floating-effect", "effect/floating-effect"));
-+        assert!(!tsgolint_rule_matches("typescript", "floating-effect", "effect/floating-effect"));
++        assert!(tsgolint_rule_matches(
++            "effecttsgo",
++            "floating-effect",
++            "effecttsgo/floating-effect"
++        ));
++        assert!(!tsgolint_rule_matches(
++            "typescript",
++            "floating-effect",
++            "effecttsgo/floating-effect"
++        ));
 +        assert!(tsgolint_rule_matches("typescript", "some_rule", "some_rule"));
-+        assert!(!tsgolint_rule_matches("effect", "some_rule", "some_rule"));
++        assert!(!tsgolint_rule_matches("effecttsgo", "some_rule", "some_rule"));
 +    }
 +
      #[test]

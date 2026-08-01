@@ -157,7 +157,7 @@ export const buildOxlint = Effect.fnUntraced(function*(repositoryRoot: string, t
     "oxc_linter",
     "src",
     "rules",
-    "effect",
+    "effecttsgo",
     "floating_effect.rs"
   )
   for (const generated of [tsgolintSource, oxlintSource]) {

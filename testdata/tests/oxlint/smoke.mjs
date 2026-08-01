@@ -22,14 +22,14 @@ const run = (...args) => spawnSync(process.execPath, [oxlint, ...args], {
 const rules = run("--rules", "--format", "json")
 assert.equal(rules.status, 0, rules.stderr)
 const registeredRules = JSON.parse(rules.stdout)
-assert.ok(registeredRules.some((rule) => rule.scope === "effect" && rule.value === "floating-effect"))
+assert.ok(registeredRules.some((rule) => rule.scope === "effecttsgo" && rule.value === "floating-effect"))
 
 const diagnostic = run("--type-aware", "--config", ".oxlintrc.json", "diagnostic.ts")
 assert.equal(diagnostic.status, 1, diagnostic.stderr)
-assert.match(`${diagnostic.stdout}\n${diagnostic.stderr}`, /effect\(floating-effect\)/)
+assert.match(`${diagnostic.stdout}\n${diagnostic.stderr}`, /effecttsgo\(floating-effect\)/)
 
 const disabled = run("--type-aware", "--config", ".oxlintrc.json", "disabled.ts")
 assert.equal(disabled.status, 0, disabled.stderr)
-assert.doesNotMatch(`${disabled.stdout}\n${disabled.stderr}`, /effect\(floating-effect\)/)
+assert.doesNotMatch(`${disabled.stdout}\n${disabled.stderr}`, /effecttsgo\(floating-effect\)/)
 
 console.log("Oxlint profile smoke test passed")
