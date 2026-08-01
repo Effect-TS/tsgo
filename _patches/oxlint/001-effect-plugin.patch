@@ -172,7 +172,7 @@ index 62e0a4f2..62efe500 100644
 +fn tsgolint_rule_matches(plugin_name: &str, rule_name: &str, diagnostic_rule: &str) -> bool {
 +    let (diagnostic_plugin_name, diagnostic_rule_name) = split_tsgolint_rule_name(diagnostic_rule);
 +    diagnostic_rule_name == rule_name
-+        && diagnostic_plugin_name.is_none_or(|name| name == plugin_name)
++        && diagnostic_plugin_name.map_or(plugin_name != "effect", |name| name == plugin_name)
 +}
 +
  /// Parses a single message from the binary tsgolint output.
@@ -189,7 +189,7 @@ index 62e0a4f2..62efe500 100644
      };
  
      #[test]
-@@ -1253,6 +1287,32 @@ mod test {
+@@ -1253,6 +1287,33 @@ mod test {
          assert!(message.fixes.is_empty());
      }
  
@@ -217,6 +217,7 @@ index 62e0a4f2..62efe500 100644
 +        assert!(tsgolint_rule_matches("effect", "floating-effect", "effect/floating-effect"));
 +        assert!(!tsgolint_rule_matches("typescript", "floating-effect", "effect/floating-effect"));
 +        assert!(tsgolint_rule_matches("typescript", "some_rule", "some_rule"));
++        assert!(!tsgolint_rule_matches("effect", "some_rule", "some_rule"));
 +    }
 +
      #[test]

@@ -169,6 +169,10 @@ jobs:
             cp "${artifact_dir}"/* "${package_dir}/"
           done
 
+          for tsgolint in _packages/tsgo-{darwin-*,linux-{x64,arm64}}/lib/tsgolint; do
+            chmod 755 "${tsgolint}"
+          done
+
       - name: Bundle upstream metadata
         run: pnpm exec repoctl packages bundle-upstream
 

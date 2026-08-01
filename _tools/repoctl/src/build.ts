@@ -3,7 +3,8 @@ import * as Data from "effect/Data"
 import * as Effect from "effect/Effect"
 import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
-import { appendFile } from "node:fs/promises"
+import { constants } from "node:fs"
+import { access, appendFile } from "node:fs/promises"
 import { join } from "node:path"
 import { ensureEffectFixtures } from "./fixtures.ts"
 import { runCommand, runCommandString } from "./process.ts"
@@ -108,6 +109,14 @@ const validateArtifact = Effect.fnUntraced(function*(artifact: string) {
   if (info.size === 0n) {
     return yield* new BuildError({ reason: `Artifact is empty: ${artifact}` })
   }
+})
+
+const validateExecutableArtifact = Effect.fnUntraced(function*(artifact: string) {
+  yield* validateArtifact(artifact)
+  yield* Effect.tryPromise({
+    try: () => access(artifact, constants.X_OK),
+    catch: () => new BuildError({ reason: `Artifact is not executable: ${artifact}` })
+  })
 })
 
 export const buildCli = Effect.fnUntraced(function*(repositoryRoot: string) {
@@ -284,7 +293,11 @@ export const verifyReleaseArtifacts = Effect.fnUntraced(function*(repositoryRoot
   }
   for (const target of Object.keys(oxlintBuildTargets) as Array<OxlintBuildTarget>) {
     const artifacts = oxlintArtifacts(repositoryRoot, target)
-    yield* validateArtifact(artifacts.tsgolintPath)
+    if (target.startsWith("win32-")) {
+      yield* validateArtifact(artifacts.tsgolintPath)
+    } else {
+      yield* validateExecutableArtifact(artifacts.tsgolintPath)
+    }
     yield* validateArtifact(artifacts.bindingPath)
   }
   yield* Console.log("Verified release binaries for all profiles and targets")
