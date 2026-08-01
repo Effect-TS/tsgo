@@ -19,9 +19,10 @@ const run = (...args) => spawnSync(process.execPath, [oxlint, ...args], {
   env
 })
 
-const rules = run("--rules")
+const rules = run("--rules", "--format", "json")
 assert.equal(rules.status, 0, rules.stderr)
-assert.match(rules.stdout, /floating-effect\s+\| effect/)
+const registeredRules = JSON.parse(rules.stdout)
+assert.ok(registeredRules.some((rule) => rule.scope === "effect" && rule.value === "floating-effect"))
 
 const diagnostic = run("--type-aware", "--config", ".oxlintrc.json", "diagnostic.ts")
 assert.equal(diagnostic.status, 1, diagnostic.stderr)
