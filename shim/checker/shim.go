@@ -192,6 +192,7 @@ type extra_Checker struct {
   reverseHomomorphicMappedCache map[checker.ReverseMappedTypeKey]*checker.Type
   iterationTypesCache map[checker.IterationTypesKey]checker.IterationTypes
   markerTypes collections.Set[*checker.Type]
+  resolvingExplicitTypeOfSymbol collections.Set[*ast.Symbol]
   undefinedSymbol *ast.Symbol
   argumentsSymbol *ast.Symbol
   requireSymbol *ast.Symbol
@@ -826,6 +827,8 @@ const ObjectFlagsIsGenericType = checker.ObjectFlagsIsGenericType
 const ObjectFlagsIsGenericTypeComputed = checker.ObjectFlagsIsGenericTypeComputed
 const ObjectFlagsIsNeverIntersection = checker.ObjectFlagsIsNeverIntersection
 const ObjectFlagsIsNeverIntersectionComputed = checker.ObjectFlagsIsNeverIntersectionComputed
+const ObjectFlagsIsUniformEnum = checker.ObjectFlagsIsUniformEnum
+const ObjectFlagsIsUniformEnumComputed = checker.ObjectFlagsIsUniformEnumComputed
 const ObjectFlagsIsUnknownLikeUnion = checker.ObjectFlagsIsUnknownLikeUnion
 const ObjectFlagsIsUnknownLikeUnionComputed = checker.ObjectFlagsIsUnknownLikeUnionComputed
 const ObjectFlagsJSLiteral = checker.ObjectFlagsJSLiteral
