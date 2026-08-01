@@ -196,6 +196,7 @@ declare_oxc_lint!(
     effect,
     correctness,
     ${fix},
+    version = "next",
 );
 
 impl Rule for ${structName} {}

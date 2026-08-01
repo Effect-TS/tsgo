@@ -43,6 +43,7 @@ test("generates sorted metadata-only Oxlint rules", () => {
   assert.match(output.rules[0]!.source, /pub struct CryptoRandomUuid;/)
   assert.match(output.rules[0]!.source, /CryptoRandomUuid\(tsgolint\)/)
   assert.match(output.rules[0]!.source, /pending,/)
+  assert.match(output.rules[0]!.source, /version = "next",/)
   assert.match(output.rules[1]!.source, /none,/)
 })
 
