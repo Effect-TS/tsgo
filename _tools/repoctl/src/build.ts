@@ -118,8 +118,8 @@ export const buildOxlint = Effect.fnUntraced(function*(repositoryRoot: string) {
   yield* validateArtifact(tsgolint)
 
   yield* Console.log("Building Oxlint N-API addon and Node launcher")
-  yield* runCommand("pnpm", oxlint, ["install", "--frozen-lockfile"])
-  yield* runCommand("pnpm", path.join(oxlint, "apps", "oxlint"), ["run", "build"])
+  yield* runCommand("corepack", oxlint, ["pnpm", "install", "--frozen-lockfile"])
+  yield* runCommand("corepack", path.join(oxlint, "apps", "oxlint"), ["pnpm", "run", "build"])
   yield* validateArtifact(path.join(oxlint, "apps", "oxlint", "dist", "cli.js"))
 })
 
