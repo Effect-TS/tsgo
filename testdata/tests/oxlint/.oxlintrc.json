@@ -1,0 +1,9 @@
+{
+  "plugins": ["effect"],
+  "categories": {
+    "correctness": "off"
+  },
+  "rules": {
+    "effect/floating-effect": "error"
+  }
+}

@@ -82,6 +82,47 @@ export const buildLocal = Effect.fnUntraced(function*(repositoryRoot: string) {
   yield* buildCli(repositoryRoot)
 })
 
+export const buildOxlint = Effect.fnUntraced(function*(repositoryRoot: string) {
+  const fs = yield* FileSystem.FileSystem
+  const path = yield* Path.Path
+  const tsgolintSource = path.join(repositoryRoot, "tsgolint", "cmd", "tsgolint", "effect_rules_generated.go")
+  const oxlintSource = path.join(
+    repositoryRoot,
+    "oxlint",
+    "crates",
+    "oxc_linter",
+    "src",
+    "rules",
+    "effect",
+    "floating_effect.rs"
+  )
+  for (const generated of [tsgolintSource, oxlintSource]) {
+    if (!(yield* fs.exists(generated))) {
+      return yield* new BuildError({ reason: `Missing generated source ${generated}; run profile codegen first` })
+    }
+  }
+
+  const buildDirectory = path.join(repositoryRoot, "build", "oxlint-tsgolint")
+  const tsgolint = path.join(buildDirectory, "tsgolint")
+  const oxlint = path.join(repositoryRoot, "oxlint")
+  yield* fs.makeDirectory(buildDirectory, { recursive: true })
+  yield* Console.log("Building tsgolint")
+  yield* runCommand("go", repositoryRoot, [
+    "build",
+    "-trimpath",
+    "-ldflags=-s -w",
+    "-o",
+    tsgolint,
+    "./tsgolint/cmd/tsgolint"
+  ], false, { GOWORK: path.join(repositoryRoot, "go.work"), CGO_ENABLED: "0" })
+  yield* validateArtifact(tsgolint)
+
+  yield* Console.log("Building Oxlint N-API addon and Node launcher")
+  yield* runCommand("pnpm", oxlint, ["install", "--frozen-lockfile"])
+  yield* runCommand("pnpm", path.join(oxlint, "apps", "oxlint"), ["run", "build"])
+  yield* validateArtifact(path.join(oxlint, "apps", "oxlint", "dist", "cli.js"))
+})
+
 export const buildBinary = Effect.fnUntraced(function*(
   repositoryRoot: string,
   profileName: BuildProfile,
