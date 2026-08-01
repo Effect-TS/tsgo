@@ -5,8 +5,8 @@
       "kind": "ts",
       "name": "next",
       "ts": {
-        "version": "7.1.0-dev.20260730.1",
-        "gitHead": "37357ae666e7af11989d4ba416a763f2da590dee"
+        "version": "7.1.0-dev.20260731.1",
+        "gitHead": "322fa1ecd5302dd851e5409f53eb5496917b1f27"
       },
       "binName": "tsc-next"
     },
