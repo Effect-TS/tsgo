@@ -49,13 +49,10 @@ jobs:
             oxlint-rust-${{ runner.os }}-${{ hashFiles('_packages/tsgo/upstream.json', '_patches/oxlint/**') }}-
             oxlint-rust-${{ runner.os }}-
 
-      - name: Setup repository toolchains
+      - name: Setup Oxlint profile
         uses: ./.github/actions/setup-repo
         with:
-          materialize: "false"
-
-      - name: Setup Oxlint profile
-        run: pnpm exec repoctl submodules setup --profile oxlint
+          profile: oxlint
 
       - name: Build Oxlint profile
         run: pnpm exec repoctl build oxlint
