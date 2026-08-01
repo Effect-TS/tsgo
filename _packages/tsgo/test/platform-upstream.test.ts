@@ -10,21 +10,21 @@ describe("platform upstream metadata", () => {
         {
           kind: "ts",
           name: "next",
-          ts: { version: "7.1.0-dev", gitHead: "next-head" },
+          ts: { npmVersion: "7.1.0-dev", gitHead: "next-head" },
           binName: "tsc-next"
         },
         {
           kind: "ts",
           name: "latest",
-          ts: { version: "7.0.0", gitHead: "latest-head" },
+          ts: { npmVersion: "7.0.0", gitHead: "latest-head" },
           binName: "tsc"
         },
         {
           kind: "oxlint",
           name: "oxlint",
-          ts: { version: "7.0.0", gitHead: "latest-head" },
-          tsgolint: { version: "1.0.0", gitHead: "tsgolint-head" },
-          oxlint: { version: "1.0.0", gitHead: "oxlint-head" }
+          ts: { npmVersion: "7.0.0", gitHead: "latest-head" },
+          tsgolint: { npmVersion: "1.0.0", gitHead: "tsgolint-head" },
+          oxlint: { npmVersion: "1.0.0", gitHead: "oxlint-head" }
         }
       ]
     })))

@@ -3,15 +3,17 @@ import * as Effect from "effect/Effect"
 import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
 import * as Schema from "effect/Schema"
-import { appendFile } from "node:fs/promises"
-import { runCommandString } from "./process.ts"
+import { appendFile, mkdtemp, rm } from "node:fs/promises"
+import { tmpdir } from "node:os"
+import { join } from "node:path"
+import { runCommand, runCommandString } from "./process.ts"
 
 export type ProfileName = "next" | "latest" | "oxlint"
 
 const NonEmptyString = Schema.String.check(Schema.isNonEmpty())
 const GitRevision = Schema.String.check(Schema.isPattern(/^[0-9a-f]{40}$/))
 const UpstreamIdentity = Schema.Struct({
-  version: NonEmptyString,
+  npmVersion: NonEmptyString,
   gitHead: GitRevision
 })
 const TypeScriptProfile = Schema.Struct({
@@ -109,15 +111,25 @@ const NpmMetadata = Schema.fromJsonString(Schema.Struct({
   gitHead: GitRevision
 }))
 
-type TypeScriptMetadata = typeof NpmMetadata.Type
+interface TypeScriptMetadata {
+  readonly npmVersion: string
+  readonly gitHead: string
+}
+
+interface OxlintMetadata {
+  readonly ts: TypeScriptMetadata
+  readonly tsgolint: TypeScriptMetadata
+  readonly oxlint: TypeScriptMetadata
+}
 
 const fetchTypeScriptMetadata = Effect.fnUntraced(function*(repositoryRoot: string, spec: string) {
   const output = yield* runCommandString("npm", repositoryRoot, ["view", spec, "version", "gitHead", "--json"])
-  return yield* Schema.decodeUnknownEffect(NpmMetadata)(output).pipe(
+  const metadata = yield* Schema.decodeUnknownEffect(NpmMetadata)(output).pipe(
     Effect.mapError((error) => new UpstreamManifestError({
       reason: `Unable to resolve ${spec}: ${error.message}`
     }))
   )
+  return { npmVersion: metadata.version, gitHead: metadata.gitHead }
 })
 
 export const updateTypeScriptProfiles = (
@@ -131,21 +143,138 @@ export const updateTypeScriptProfiles = (
       : profile)
 })
 
+export const updateOxlintProfile = (
+  upstream: typeof Upstream.Type,
+  update: OxlintMetadata
+) => ({
+  ...upstream,
+  profiles: upstream.profiles.map((profile) => profile.name === "oxlint" ? { ...profile, ...update } : profile)
+})
+
+export const findTypeScriptVersion = (
+  versions: Readonly<Record<string, { readonly gitHead?: unknown }>>,
+  gitHead: string
+) => Object.entries(versions).find(([, metadata]) => metadata.gitHead === gitHead)?.[0]
+
+const fetchJson = Effect.fnUntraced(function*(url: string) {
+  const response = yield* Effect.tryPromise({
+    try: () => fetch(url, { headers: { "User-Agent": "effect-tsgo-repoctl" } }),
+    catch: (error) => new UpstreamManifestError({ reason: `Unable to fetch ${url}: ${String(error)}` })
+  })
+  if (!response.ok) {
+    return yield* new UpstreamManifestError({ reason: `Unable to fetch ${url}: HTTP ${response.status}` })
+  }
+  return yield* Effect.tryPromise({
+    try: () => response.json(),
+    catch: (error) => new UpstreamManifestError({ reason: `Unable to parse ${url}: ${String(error)}` })
+  })
+})
+
+const resolveRemoteTag = Effect.fnUntraced(function*(repositoryRoot: string, repository: string, tag: string) {
+  const output = yield* runCommandString("git", repositoryRoot, [
+    "ls-remote",
+    repository,
+    `refs/tags/${tag}`,
+    `refs/tags/${tag}^{}`
+  ])
+  const revisions = new Map(output.trim().split("\n").filter(Boolean).map((line) => {
+    const [revision, ref] = line.split(/\s+/, 2)
+    return [ref, revision] as const
+  }))
+  const revision = revisions.get(`refs/tags/${tag}^{}`) ?? revisions.get(`refs/tags/${tag}`)
+  if (revision === undefined || !/^[0-9a-f]{40}$/.test(revision)) {
+    return yield* new UpstreamManifestError({ reason: `Unable to resolve ${repository} tag ${tag}` })
+  }
+  return revision
+})
+
+const readRemoteGitlink = (repository: string, revision: string, gitlink: string) => Effect.scoped(Effect.gen(function*() {
+  const directory = yield* Effect.acquireRelease(
+    Effect.tryPromise({
+      try: () => mkdtemp(join(tmpdir(), "effect-tsgo-upstream-")),
+      catch: (error) => new UpstreamManifestError({ reason: `Unable to create temporary repository: ${String(error)}` })
+    }),
+    (directory) => Effect.promise(() => rm(directory, { recursive: true, force: true }))
+  )
+  yield* runCommand("git", directory, ["init", "--quiet", "--bare"])
+  yield* runCommand("git", directory, ["fetch", "--quiet", "--depth", "1", repository, revision])
+  const output = (yield* runCommandString("git", directory, ["ls-tree", "FETCH_HEAD", gitlink])).trim()
+  const match = /^160000 commit ([0-9a-f]{40})\s/.exec(output)
+  if (match?.[1] === undefined) {
+    return yield* new UpstreamManifestError({ reason: `Unable to resolve ${gitlink} at ${revision}` })
+  }
+  return match[1]
+}))
+
+const fetchOxlintMetadata = Effect.fnUntraced(function*(repositoryRoot: string) {
+  const oxlintOutput = yield* runCommandString("npm", repositoryRoot, [
+    "view",
+    "oxlint@latest",
+    "version",
+    "peerDependencies",
+    "--json"
+  ])
+  const oxlintPackage = yield* Schema.decodeUnknownEffect(Schema.fromJsonString(Schema.Struct({
+    version: NonEmptyString,
+    peerDependencies: Schema.Struct({ "oxlint-tsgolint": NonEmptyString })
+  })))(oxlintOutput).pipe(
+    Effect.mapError((error) => new UpstreamManifestError({ reason: `Unable to resolve oxlint@latest: ${error.message}` }))
+  )
+  const tsgolintRange = oxlintPackage.peerDependencies["oxlint-tsgolint"]
+  const tsgolintOutput = yield* runCommandString("npm", repositoryRoot, [
+    "view",
+    `oxlint-tsgolint@${tsgolintRange}`,
+    "version",
+    "--json"
+  ])
+  const tsgolintVersion = yield* Schema.decodeUnknownEffect(Schema.fromJsonString(NonEmptyString))(tsgolintOutput).pipe(
+    Effect.mapError((error) => new UpstreamManifestError({
+      reason: `Unable to resolve oxlint-tsgolint@${tsgolintRange}: ${error.message}`
+    }))
+  )
+  const [oxlintGitHead, tsgolintGitHead] = yield* Effect.all([
+    resolveRemoteTag(repositoryRoot, "https://github.com/oxc-project/oxc.git", `apps_v${oxlintPackage.version}`),
+    resolveRemoteTag(repositoryRoot, "https://github.com/oxc-project/tsgolint.git", `v${tsgolintVersion}`)
+  ], { concurrency: "unbounded" })
+  const typescriptGitHead = yield* readRemoteGitlink(
+    "https://github.com/oxc-project/tsgolint.git",
+    tsgolintGitHead,
+    "typescript-go"
+  )
+  const packument = yield* fetchJson("https://registry.npmjs.org/typescript")
+  if (typeof packument !== "object" || packument === null || !("versions" in packument) ||
+    typeof packument.versions !== "object" || packument.versions === null) {
+    return yield* new UpstreamManifestError({ reason: "TypeScript npm metadata does not contain versions" })
+  }
+  const typescriptVersion = findTypeScriptVersion(
+    packument.versions as Record<string, { readonly gitHead?: unknown }>,
+    typescriptGitHead
+  )
+  if (typescriptVersion === undefined) {
+    return yield* new UpstreamManifestError({
+      reason: `No TypeScript npm version has git head ${typescriptGitHead}`
+    })
+  }
+  return {
+    oxlint: { npmVersion: oxlintPackage.version, gitHead: oxlintGitHead },
+    tsgolint: { npmVersion: tsgolintVersion, gitHead: tsgolintGitHead },
+    ts: { npmVersion: typescriptVersion, gitHead: typescriptGitHead }
+  }
+})
+
 export const updateUpstream = Effect.fnUntraced(function*(repositoryRoot: string) {
   const fs = yield* FileSystem.FileSystem
   const path = yield* Path.Path
   const upstream = yield* readUpstream(repositoryRoot)
   const nextBefore = yield* getProfile(upstream, "next")
   const latestBefore = yield* getProfile(upstream, "latest")
-  const [next, latest] = yield* Effect.all([
+  const [next, latest, oxlint] = yield* Effect.all([
     fetchTypeScriptMetadata(repositoryRoot, "typescript@next"),
-    fetchTypeScriptMetadata(repositoryRoot, "typescript@latest")
+    fetchTypeScriptMetadata(repositoryRoot, "typescript@latest"),
+    fetchOxlintMetadata(repositoryRoot)
   ], { concurrency: "unbounded" })
-  const updated = updateTypeScriptProfiles(upstream, { next, latest })
-  const hasChanges = nextBefore.ts.version !== next.version ||
-    nextBefore.ts.gitHead !== next.gitHead ||
-    latestBefore.ts.version !== latest.version ||
-    latestBefore.ts.gitHead !== latest.gitHead
+  const updated = updateOxlintProfile(updateTypeScriptProfiles(upstream, { next, latest }), oxlint)
+  const hasChanges = JSON.stringify(updated) !== JSON.stringify(upstream)
 
   if (hasChanges) {
     yield* fs.writeFileString(
@@ -157,14 +286,14 @@ export const updateUpstream = Effect.fnUntraced(function*(repositoryRoot: string
   const outputs = {
     has_changes: String(hasChanges),
     next_spec: "typescript@next",
-    next_previous_version: nextBefore.ts.version,
+    next_previous_version: nextBefore.ts.npmVersion,
     next_previous_git_head: nextBefore.ts.gitHead,
-    next_version: next.version,
+    next_version: next.npmVersion,
     next_git_head: next.gitHead,
     latest_spec: "typescript@latest",
-    latest_previous_version: latestBefore.ts.version,
+    latest_previous_version: latestBefore.ts.npmVersion,
     latest_previous_git_head: latestBefore.ts.gitHead,
-    latest_version: latest.version,
+    latest_version: latest.npmVersion,
     latest_git_head: latest.gitHead
   }
   if (process.env.GITHUB_OUTPUT !== undefined) {
@@ -173,6 +302,6 @@ export const updateUpstream = Effect.fnUntraced(function*(repositoryRoot: string
       Object.entries(outputs).map(([name, value]) => `${name}=${value}\n`).join("")
     ))
   }
-  yield* Effect.log(hasChanges ? "Updated upstream TypeScript profiles" : "Upstream TypeScript profiles are current")
+  yield* Effect.log(hasChanges ? "Updated upstream profiles" : "Upstream profiles are current")
   return outputs
 })

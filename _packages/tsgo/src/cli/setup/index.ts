@@ -26,7 +26,7 @@ export const setupCommand = Command.make("setup").pipe(
       const assessmentState = Assessment.assess(assessmentInput)
       const targetState = yield* gatherTargetState(assessmentState, {
         defaultLspVersion: pkgJson.version,
-        defaultTypescriptVersion: latestProfile.ts.version,
+        defaultTypescriptVersion: latestProfile.ts.npmVersion,
         defaultSchemaPath: path.resolve(currentDir, "node_modules", pkgJson.name, "schema.json")
       })
       const result = Changes.computeChanges(assessmentState, targetState)

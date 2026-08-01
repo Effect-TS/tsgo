@@ -2,7 +2,7 @@ diff --git a/crates/oxc_linter/src/config/oxlintrc.rs b/crates/oxc_linter/src/co
 index 8d0610e4..d057b2f6 100644
 --- a/crates/oxc_linter/src/config/oxlintrc.rs
 +++ b/crates/oxc_linter/src/config/oxlintrc.rs
-@@ -326,7 +326,7 @@ mod test {
+@@ -741,7 +741,7 @@ mod test {
              serde_json::from_str(r#"{ "plugins": ["typescript", "unicorn"] }"#).unwrap();
          assert_eq!(config.plugins, Some(LintPlugins::TYPESCRIPT | LintPlugins::UNICORN));
          let config: Oxlintrc =
@@ -15,7 +15,7 @@ diff --git a/crates/oxc_linter/src/config/plugins.rs b/crates/oxc_linter/src/con
 index 865b7cb3..5eacd25b 100644
 --- a/crates/oxc_linter/src/config/plugins.rs
 +++ b/crates/oxc_linter/src/config/plugins.rs
-@@ -94,6 +94,8 @@ bitflags! {
+@@ -110,6 +110,8 @@ bitflags! {
          const NODE = 1 << 12;
          /// `eslint-plugin-vue`
          const VUE = 1 << 13;
@@ -24,7 +24,7 @@ index 865b7cb3..5eacd25b 100644
      }
  }
  
-@@ -158,6 +160,7 @@ impl TryFrom<&str> for LintPlugins {
+@@ -175,6 +177,7 @@ impl TryFrom<&str> for LintPlugins {
              "promise" => Ok(LintPlugins::PROMISE),
              "node" => Ok(LintPlugins::NODE),
              "vue" => Ok(LintPlugins::VUE),
@@ -32,7 +32,7 @@ index 865b7cb3..5eacd25b 100644
              // "eslint" is not really a plugin, so it's 'empty'. This has the added benefit of
              // making it the default value.
              "eslint" => Ok(LintPlugins::ESLINT),
-@@ -183,6 +186,7 @@ impl From<LintPlugins> for &'static str {
+@@ -200,6 +203,7 @@ impl From<LintPlugins> for &'static str {
              LintPlugins::PROMISE => "promise",
              LintPlugins::NODE => "node",
              LintPlugins::VUE => "vue",
@@ -40,7 +40,7 @@ index 865b7cb3..5eacd25b 100644
              _ => "",
          }
      }
-@@ -254,6 +258,7 @@ impl JsonSchema for LintPlugins {
+@@ -271,6 +275,7 @@ impl JsonSchema for LintPlugins {
              Promise,
              Node,
              Vue,
@@ -48,7 +48,7 @@ index 865b7cb3..5eacd25b 100644
          }
  
          let enum_schema = r#gen.subschema_for::<LintPluginOptionsSchema>();
-@@ -295,6 +300,7 @@ mod tests {
+@@ -312,6 +317,7 @@ mod tests {
          assert_eq!(LintPlugins::try_from("react"), Ok(LintPlugins::REACT));
          assert_eq!(LintPlugins::try_from("typescript-eslint"), Ok(LintPlugins::TYPESCRIPT));
          assert_eq!(LintPlugins::try_from("deepscan"), Ok(LintPlugins::OXC));
@@ -56,7 +56,7 @@ index 865b7cb3..5eacd25b 100644
          assert_eq!(LintPlugins::try_from("unknown"), Err(()));
      }
  
-@@ -302,6 +308,7 @@ mod tests {
+@@ -319,6 +325,7 @@ mod tests {
      fn test_plugin_to_str() {
          assert_eq!(<&'static str>::from(LintPlugins::REACT), "react");
          assert_eq!(<&'static str>::from(LintPlugins::JEST), "jest");
@@ -68,9 +68,8 @@ diff --git a/crates/oxc_linter/src/rules.rs b/crates/oxc_linter/src/rules.rs
 index d073e852..2c293310 100644
 --- a/crates/oxc_linter/src/rules.rs
 +++ b/crates/oxc_linter/src/rules.rs
-@@ -710,6 +710,9 @@ pub(crate) mod vue {
-     pub mod valid_define_props;
- }
+@@ -912,5 +912,8 @@ pub(crate) mod vue {
+ pub(crate) mod shared;
  
 +// BEGIN GENERATED EFFECT RULES
 +// END GENERATED EFFECT RULES
@@ -82,7 +81,7 @@ diff --git a/crates/oxc_linter/src/tsgolint.rs b/crates/oxc_linter/src/tsgolint.
 index 62e0a4f2..62efe500 100644
 --- a/crates/oxc_linter/src/tsgolint.rs
 +++ b/crates/oxc_linter/src/tsgolint.rs
-@@ -165,7 +165,11 @@ impl TsGoLintState {
+@@ -194,7 +194,11 @@ impl TsGoLintState {
                                                      .rules
                                                      .iter()
                                                      .find(|(rule, _)| {
@@ -95,20 +94,20 @@ index 62e0a4f2..62efe500 100644
                                                      })
                                                      .map(|(_, status)| *status)
                                              })
-@@ -379,7 +383,11 @@ impl TsGoLintState {
+@@ -449,7 +453,11 @@ impl TsGoLintState {
  
-                                     let severity =
-                                         resolved_config.rules.iter().find_map(|(rule, status)| {
--                                            if rule.name() == tsgolint_diagnostic.rule {
-+                                            if tsgolint_rule_matches(
-+                                                rule.plugin_name(),
-+                                                rule.name(),
-+                                                &tsgolint_diagnostic.rule,
-+                                            ) {
-                                                 Some(*status)
-                                             } else {
-                                                 None
-@@ -508,7 +516,11 @@ impl TsGoLintState {
+                                 let severity =
+                                     resolved_config.rules.iter().find_map(|(rule, status)| {
+-                                        if rule.name() == tsgolint_diagnostic.rule {
++                                        if tsgolint_rule_matches(
++                                            rule.plugin_name(),
++                                            rule.name(),
++                                            &tsgolint_diagnostic.rule,
++                                        ) {
+                                             Some(*status)
+                                         } else {
+                                             None
+@@ -558,7 +566,11 @@ impl TsGoLintState {
                      .iter()
                      .filter_map(|(rule, status)| {
                          if status.is_warn_deny() && rule.is_tsgolint_rule() {
@@ -121,28 +120,27 @@ index 62e0a4f2..62efe500 100644
                              let options = match rule.to_configuration() {
                                  Some(Ok(config)) => Some(config),
                                  Some(Err(_)) | None => None,
-@@ -701,10 +713,15 @@ impl From<TsGoLintDiagnostic> for OxcDiagnostic {
+@@ -767,9 +779,15 @@ impl From<TsGoLintDiagnostic> for OxcDiagnostic {
  
  impl From<TsGoLintRuleDiagnostic> for OxcDiagnostic {
      fn from(val: TsGoLintRuleDiagnostic) -> Self {
 -        let mut d = OxcDiagnostic::warn(val.message.description)
--            .with_label(val.span)
 -            .with_url(format!("{}/{}/{}.html", WEBSITE_BASE_RULES_URL, "typescript", val.rule))
--            .with_error_code("typescript-eslint", val.rule);
+-            .with_error_code("typescript", val.rule);
 +        let (plugin_name, rule_name) = split_tsgolint_rule_name(&val.rule);
-+        let mut d = OxcDiagnostic::warn(val.message.description).with_label(val.span);
++        let mut d = OxcDiagnostic::warn(val.message.description);
 +        if let Some(plugin_name) = plugin_name {
 +            d = d.with_error_code(plugin_name.to_string(), rule_name.to_string());
 +        } else {
 +            d = d
 +                .with_url(format!("{}/{}/{}.html", WEBSITE_BASE_RULES_URL, "typescript", rule_name))
-+                .with_error_code("typescript-eslint", rule_name.to_string());
++                .with_error_code("typescript", rule_name.to_string());
 +        }
          if let Some(help) = val.message.help {
              d = d.with_help(help);
          }
-@@ -1058,10 +1075,14 @@ fn should_skip_diagnostic(
-     let span = tsgolint_diagnostic.span;
+@@ -1204,10 +1222,14 @@ fn should_skip_diagnostic(
+     };
  
      if let Some(directives) = disable_directives_map.get(path) {
 -        directives.contains(&tsgolint_diagnostic.rule, span)
@@ -160,7 +158,7 @@ index 62e0a4f2..62efe500 100644
      } else {
          debug_assert!(
              false,
-@@ -1071,6 +1092,17 @@ fn should_skip_diagnostic(
+@@ -1218,6 +1240,17 @@ fn should_skip_diagnostic(
      }
  }
  
@@ -178,18 +176,19 @@ index 62e0a4f2..62efe500 100644
  /// Parses a single message from the binary tsgolint output.
  // Messages are encoded as follows:
  // | Payload Size (uint32 LE) - 4 bytes | Message Type (uint8) - 1 byte | Payload |
-@@ -1219,7 +1251,9 @@ mod test {
+@@ -1373,7 +1406,10 @@ mod test {
  
      use crate::{
-         fixer::{Message, PossibleFixes},
--        tsgolint::{Fix, Range, RuleMessage, Suggestion, TsGoLintRuleDiagnostic},
+         fixer::{FixKind, Message, PossibleFixes},
+-        tsgolint::{Fix, LabeledRange, Range, RuleMessage, Suggestion, TsGoLintRuleDiagnostic},
 +        tsgolint::{
-+            Fix, Range, RuleMessage, Suggestion, TsGoLintRuleDiagnostic, tsgolint_rule_matches,
++            Fix, LabeledRange, Range, RuleMessage, Suggestion, TsGoLintRuleDiagnostic,
++            tsgolint_rule_matches,
 +        },
      };
  
      #[test]
-@@ -1253,6 +1287,33 @@ mod test {
+@@ -1408,6 +1444,34 @@ mod test {
          assert!(message.fixes.is_empty());
      }
  
@@ -205,6 +204,7 @@ index 62e0a4f2..62efe500 100644
 +            },
 +            fixes: vec![],
 +            suggestions: vec![],
++            labeled_ranges: vec![],
 +            file_path: "some/file/path".into(),
 +        };
 +
