@@ -2,12 +2,7 @@
   "compilerOptions": {
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "skipLibCheck": true,
-    "plugins": [
-      {
-        "name": "@effect/language-service"
-      }
-    ]
+    "skipLibCheck": true
   },
   "files": ["diagnostic.ts", "disabled.ts"]
 }

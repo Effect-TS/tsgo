@@ -79,10 +79,11 @@ export const experimentalOxlintTarget = (
 
   const packageTarget = `${platform}-${arch}`
   const codeTarget = platform === "linux" ? `${packageTarget}-gnu` : packageTarget
+  const oxlintTarget = platform === "win32" ? `${codeTarget}-msvc` : codeTarget
   return {
     codeTarget,
     effectPackage: `@effect/tsgo-${packageTarget}`,
-    oxlintPackage: `@oxlint/${codeTarget}`,
+    oxlintPackage: `@oxlint/binding-${oxlintTarget}`,
     tsgolintPackage: `@oxlint-tsgolint/${packageTarget}`,
     tsgolintExecutable: platform === "win32" ? "tsgolint.exe" : "tsgolint"
   }

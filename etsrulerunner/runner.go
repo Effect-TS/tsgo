@@ -37,7 +37,7 @@ func RunRule(
 	ruleName string,
 ) ([]*ast.Diagnostic, error) {
 	if options == nil {
-		return nil, nil
+		options = &etscore.EffectPluginOptions{}
 	}
 
 	normalized := *options

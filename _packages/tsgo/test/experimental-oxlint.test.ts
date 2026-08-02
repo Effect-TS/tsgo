@@ -27,14 +27,14 @@ describe("experimental Oxlint integration", () => {
     expect(experimentalOxlintTarget("linux", "x64", true)).toEqual({
       codeTarget: "linux-x64-gnu",
       effectPackage: "@effect/tsgo-linux-x64",
-      oxlintPackage: "@oxlint/linux-x64-gnu",
+      oxlintPackage: "@oxlint/binding-linux-x64-gnu",
       tsgolintPackage: "@oxlint-tsgolint/linux-x64",
       tsgolintExecutable: "tsgolint"
     })
     expect(experimentalOxlintTarget("win32", "arm64", false)).toEqual({
       codeTarget: "win32-arm64",
       effectPackage: "@effect/tsgo-win32-arm64",
-      oxlintPackage: "@oxlint/win32-arm64",
+      oxlintPackage: "@oxlint/binding-win32-arm64-msvc",
       tsgolintPackage: "@oxlint-tsgolint/win32-arm64",
       tsgolintExecutable: "tsgolint.exe"
     })
