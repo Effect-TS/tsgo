@@ -36,25 +36,55 @@ test("rejects colliding generated rule names", () => {
 test("generates sorted metadata-only Oxlint rules", () => {
   const output = renderOxlintEffectRules({
     rules: [
-      { name: "globalFetchInEffect", description: "Detects global fetch", fixable: false },
-      { name: "cryptoRandomUUID", description: "Detects random UUID usage", fixable: true }
+      {
+        name: "globalFetchInEffect",
+        description: "Detects global fetch",
+        fixable: false,
+        group: "effectNative"
+      },
+      {
+        name: "cryptoRandomUUID",
+        description: "Detects random UUID usage",
+        fixable: true,
+        group: "correctness"
+      },
+      { name: "effectFnIife", description: "Detects Effect.fn IIFEs", fixable: false, group: "antipattern" },
+      { name: "preferPipe", description: "Detects non-pipe style", fixable: false, group: "style" }
     ]
   })
 
-  assert.deepEqual(output.rules.map(({ moduleName }) => moduleName), ["crypto_random_uuid", "global_fetch_in_effect"])
+  assert.deepEqual(output.rules.map(({ moduleName }) => moduleName), [
+    "crypto_random_uuid",
+    "effect_fn_iife",
+    "global_fetch_in_effect",
+    "prefer_pipe"
+  ])
   assert.match(output.moduleBlock, /pub\(crate\) mod effecttsgo/)
   assert.match(output.moduleBlock, /pub mod crypto_random_uuid;/)
   assert.match(output.rules[0]!.source, /pub struct CryptoRandomUuid;/)
   assert.match(output.rules[0]!.source, /CryptoRandomUuid\(tsgolint\)/)
   assert.match(output.rules[0]!.source, /effecttsgo,/)
+  assert.match(output.rules[0]!.source, /correctness,/)
   assert.match(output.rules[0]!.source, /pending,/)
   assert.match(output.rules[0]!.source, /version = "next",/)
-  assert.match(output.rules[1]!.source, /none,/)
+  assert.match(output.rules[1]!.source, /suspicious,/)
+  assert.match(output.rules[2]!.source, /restriction,/)
+  assert.match(output.rules[3]!.source, /style,/)
+  assert.match(output.rules[3]!.source, /none,/)
 })
 
 test("rejects Oxlint rules without descriptions", () => {
   assert.throws(
     () => renderOxlintEffectRules({ rules: [{ name: "floatingEffect" }] }),
     (error) => error instanceof OxlintCodegenError && error.reason === "metadata.rules[0].description is invalid"
+  )
+})
+
+test("rejects Oxlint rules with unknown groups", () => {
+  assert.throws(
+    () => renderOxlintEffectRules({
+      rules: [{ name: "floatingEffect", description: "Detects floating Effects", fixable: false, group: "unknown" }]
+    }),
+    (error) => error instanceof OxlintCodegenError && error.reason === "metadata.rules[0].group is invalid"
   )
 })

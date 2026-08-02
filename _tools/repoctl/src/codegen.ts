@@ -10,6 +10,7 @@ import { generateSubmoduleArtifacts } from "./submodules.ts"
 interface RuleMetadata {
   readonly description?: unknown
   readonly fixable?: unknown
+  readonly group?: unknown
   readonly name?: unknown
 }
 
@@ -146,6 +147,13 @@ export interface OxlintEffectRulesSource {
 const effectRulesStart = "// BEGIN GENERATED EFFECT RULES"
 const effectRulesEnd = "// END GENERATED EFFECT RULES"
 
+const oxlintCategoryByEffectGroup = new Map([
+  ["correctness", "correctness"],
+  ["antipattern", "suspicious"],
+  ["effectNative", "restriction"],
+  ["style", "style"]
+])
+
 export const renderOxlintEffectRules = (metadata: Metadata): OxlintEffectRulesSource => {
   if (!Array.isArray(metadata.rules)) {
     throw new OxlintCodegenError({ reason: "metadata.rules must be an array" })
@@ -163,6 +171,10 @@ export const renderOxlintEffectRules = (metadata: Metadata): OxlintEffectRulesSo
     }
     if (typeof rule.fixable !== "boolean") {
       throw new OxlintCodegenError({ reason: `metadata.rules[${index}].fixable is invalid` })
+    }
+    const category = typeof rule.group === "string" ? oxlintCategoryByEffectGroup.get(rule.group) : undefined
+    if (category === undefined) {
+      throw new OxlintCodegenError({ reason: `metadata.rules[${index}].group is invalid` })
     }
     if (seenEffectNames.has(rule.name)) {
       throw new OxlintCodegenError({ reason: `duplicate Effect rule name ${rule.name}` })
@@ -196,7 +208,7 @@ declare_oxc_lint!(
     /// ${description}
     ${structName}(tsgolint),
     effecttsgo,
-    correctness,
+    ${category},
     ${fix},
     version = "next",
 );
