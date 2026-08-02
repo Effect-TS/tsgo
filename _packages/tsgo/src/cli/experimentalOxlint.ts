@@ -14,17 +14,27 @@ export interface ResolvedPatchTarget {
   readonly executable: boolean
 }
 
+export interface ResolvedUnpatchTarget {
+  readonly label: string
+  readonly targetPath: string
+}
+
+export interface PreparedPatchTarget extends ResolvedPatchTarget {
+  readonly backupPath: string
+}
+
 export class ExperimentalOxlintPatchError extends Data.TaggedError("ExperimentalOxlintPatchError")<{
   readonly reason: string
 }> {
   get message(): string {
-    return `Unable to patch the experimental Oxlint integration: ${this.reason}`
+    return `Unable to manage the experimental Oxlint integration: ${this.reason}`
   }
 }
 
 interface PackageMetadata {
   readonly packageJsonPath: string
   readonly version: string
+  readonly main?: string
 }
 
 const oxlintProfile = upstreamJson.profiles.find((profile) => profile.kind === "oxlint")
@@ -34,10 +44,8 @@ if (oxlintProfile === undefined || oxlintProfile.kind !== "oxlint") {
 const supportedOxlintVersion = oxlintProfile.oxlint!.npmVersion
 const supportedTsgolintVersion = oxlintProfile.tsgolint!.npmVersion
 
-const readPackageMetadata = (cwd: string, packageName: string) => Effect.gen(function*() {
+const readPackageMetadataFromRequire = (require: NodeJS.Require, packageName: string) => Effect.gen(function*() {
   const fs = yield* FileSystem.FileSystem
-  const path = yield* Path.Path
-  const require = nodeModule.createRequire(path.join(cwd, "noop.js"))
   const packageJsonPath = yield* Effect.try({
     try: () => require.resolve(`${packageName}/package.json`),
     catch: () => new ExperimentalOxlintPatchError({ reason: `Unable to resolve ${packageName}.` })
@@ -46,13 +54,22 @@ const readPackageMetadata = (cwd: string, packageName: string) => Effect.gen(fun
     Effect.mapError(() => new ExperimentalOxlintPatchError({ reason: `Unable to read ${packageJsonPath}.` }))
   )
   const metadata = yield* Effect.try({
-    try: () => JSON.parse(text) as { readonly version?: unknown },
+    try: () => JSON.parse(text) as { readonly main?: unknown; readonly version?: unknown },
     catch: () => new ExperimentalOxlintPatchError({ reason: `Unable to parse ${packageJsonPath}.` })
   })
   if (typeof metadata.version !== "string") {
     return yield* new ExperimentalOxlintPatchError({ reason: `${packageJsonPath} does not contain a version.` })
   }
-  return { packageJsonPath, version: metadata.version } satisfies PackageMetadata
+  return {
+    packageJsonPath,
+    version: metadata.version,
+    ...(typeof metadata.main === "string" ? { main: metadata.main } : {})
+  } satisfies PackageMetadata
+})
+
+const readPackageMetadata = (cwd: string, packageName: string) => Effect.gen(function*() {
+  const path = yield* Path.Path
+  return yield* readPackageMetadataFromRequire(nodeModule.createRequire(path.join(cwd, "noop.js")), packageName)
 })
 
 const isGlibc = () => {
@@ -102,9 +119,9 @@ const nextBackupPath = (targetPath: string) => Effect.gen(function*() {
   })
 })
 
-export const patchResolvedTargets = Effect.fnUntraced(function*(targets: ReadonlyArray<ResolvedPatchTarget>) {
+export const prepareResolvedTargets = Effect.fnUntraced(function*(targets: ReadonlyArray<ResolvedPatchTarget>) {
   const fs = yield* FileSystem.FileSystem
-  const plans: Array<ResolvedPatchTarget & { readonly backupPath: string }> = []
+  const plans: Array<PreparedPatchTarget> = []
   for (const target of targets) {
     if (!(yield* fs.exists(target.targetPath))) {
       return yield* new ExperimentalOxlintPatchError({ reason: `Target does not exist: ${target.targetPath}` })
@@ -114,8 +131,12 @@ export const patchResolvedTargets = Effect.fnUntraced(function*(targets: Readonl
     }
     plans.push({ ...target, backupPath: yield* nextBackupPath(target.targetPath) })
   }
+  return plans
+})
 
-  const applied: typeof plans = []
+export const patchPreparedTargets = Effect.fnUntraced(function*(plans: ReadonlyArray<PreparedPatchTarget>) {
+  const fs = yield* FileSystem.FileSystem
+  const applied: Array<PreparedPatchTarget> = []
   yield* Effect.gen(function*() {
     for (const plan of plans) {
       yield* fs.rename(plan.targetPath, plan.backupPath)
@@ -137,7 +158,11 @@ export const patchResolvedTargets = Effect.fnUntraced(function*(targets: Readonl
   )
 })
 
-export const unpatchResolvedTargets = Effect.fnUntraced(function*(targets: ReadonlyArray<ResolvedPatchTarget>) {
+export const patchResolvedTargets = Effect.fnUntraced(function*(targets: ReadonlyArray<ResolvedPatchTarget>) {
+  yield* patchPreparedTargets(yield* prepareResolvedTargets(targets))
+})
+
+export const unpatchResolvedTargets = Effect.fnUntraced(function*(targets: ReadonlyArray<ResolvedUnpatchTarget>) {
   const fs = yield* FileSystem.FileSystem
   for (const target of targets) {
     const backupPath = `${target.targetPath}.original`
@@ -157,53 +182,71 @@ export const unpatchResolvedTargets = Effect.fnUntraced(function*(targets: Reado
   }
 })
 
-export const resolveExperimentalOxlintTargets = (cwd: string) => Effect.gen(function*() {
-  const fs = yield* FileSystem.FileSystem
+const resolveInstalledExperimentalOxlint = (cwd: string) => Effect.gen(function*() {
   const path = yield* Path.Path
   const target = experimentalOxlintTarget(process.platform, process.arch, isGlibc())
   const installedOxlint = yield* readPackageMetadata(cwd, "oxlint")
   const installedTsgolint = yield* readPackageMetadata(cwd, "oxlint-tsgolint")
-  if (installedOxlint.version !== supportedOxlintVersion) {
-    return yield* new ExperimentalOxlintPatchError({
-      reason: `Installed oxlint ${installedOxlint.version} does not match supported ${supportedOxlintVersion}.`
-    })
-  }
-  if (installedTsgolint.version !== supportedTsgolintVersion) {
-    return yield* new ExperimentalOxlintPatchError({
-      reason: `Installed oxlint-tsgolint ${installedTsgolint.version} does not match supported ${supportedTsgolintVersion}.`
-    })
-  }
-
   const oxlintRequire = nodeModule.createRequire(installedOxlint.packageJsonPath)
   const tsgolintRequire = nodeModule.createRequire(installedTsgolint.packageJsonPath)
-  const selfRequire = nodeModule.createRequire(import.meta.url)
-  const oxlintBinding = yield* Effect.try({
-    try: () => oxlintRequire.resolve(target.oxlintPackage),
-    catch: () => new ExperimentalOxlintPatchError({ reason: `Unable to resolve ${target.oxlintPackage}.` })
-  })
+  const installedOxlintBinding = yield* readPackageMetadataFromRequire(oxlintRequire, target.oxlintPackage)
+  if (installedOxlintBinding.main === undefined) {
+    return yield* new ExperimentalOxlintPatchError({
+      reason: `${installedOxlintBinding.packageJsonPath} does not contain a main entrypoint.`
+    })
+  }
+  const oxlintBinding = path.join(path.dirname(installedOxlintBinding.packageJsonPath), installedOxlintBinding.main)
   const tsgolintPackageJson = yield* Effect.try({
     try: () => tsgolintRequire.resolve(`${target.tsgolintPackage}/package.json`),
     catch: () => new ExperimentalOxlintPatchError({ reason: `Unable to resolve ${target.tsgolintPackage}.` })
   })
+  return {
+    installedOxlint,
+    installedTsgolint,
+    target,
+    targets: [
+      {
+        label: "Oxlint binding",
+        targetPath: oxlintBinding,
+        replacementName: `oxlint.${target.codeTarget}.node`,
+        executable: false
+      },
+      {
+        label: "tsgolint",
+        targetPath: path.join(path.dirname(tsgolintPackageJson), target.tsgolintExecutable),
+        replacementName: target.tsgolintExecutable,
+        executable: true
+      }
+    ] as const
+  }
+})
+
+export const resolveExperimentalOxlintTargets = (cwd: string) => Effect.gen(function*() {
+  const fs = yield* FileSystem.FileSystem
+  const path = yield* Path.Path
+  const resolved = yield* resolveInstalledExperimentalOxlint(cwd)
+  if (resolved.installedOxlint.version !== supportedOxlintVersion) {
+    return yield* new ExperimentalOxlintPatchError({
+      reason: `Installed oxlint ${resolved.installedOxlint.version} does not match supported ${supportedOxlintVersion}.`
+    })
+  }
+  if (resolved.installedTsgolint.version !== supportedTsgolintVersion) {
+    return yield* new ExperimentalOxlintPatchError({
+      reason:
+        `Installed oxlint-tsgolint ${resolved.installedTsgolint.version} does not match supported ${supportedTsgolintVersion}.`
+    })
+  }
+
+  const selfRequire = nodeModule.createRequire(import.meta.url)
   const effectPackageJson = yield* Effect.try({
-    try: () => selfRequire.resolve(`${target.effectPackage}/package.json`),
-    catch: () => new ExperimentalOxlintPatchError({ reason: `Unable to resolve ${target.effectPackage}.` })
+    try: () => selfRequire.resolve(`${resolved.target.effectPackage}/package.json`),
+    catch: () => new ExperimentalOxlintPatchError({ reason: `Unable to resolve ${resolved.target.effectPackage}.` })
   })
   const effectLib = path.join(path.dirname(effectPackageJson), "lib")
-  const targets: ReadonlyArray<ResolvedPatchTarget> = [
-    {
-      label: "Oxlint binding",
-      targetPath: oxlintBinding,
-      replacementPath: path.join(effectLib, `oxlint.${target.codeTarget}.node`),
-      executable: false
-    },
-    {
-      label: "tsgolint",
-      targetPath: path.join(path.dirname(tsgolintPackageJson), target.tsgolintExecutable),
-      replacementPath: path.join(effectLib, target.tsgolintExecutable),
-      executable: true
-    }
-  ]
+  const targets: ReadonlyArray<ResolvedPatchTarget> = resolved.targets.map((target) => ({
+    ...target,
+    replacementPath: path.join(effectLib, target.replacementName)
+  }))
   for (const resolved of targets) {
     if (!(yield* fs.exists(resolved.replacementPath))) {
       return yield* new ExperimentalOxlintPatchError({ reason: `Missing packaged artifact ${resolved.replacementPath}.` })
@@ -212,12 +255,17 @@ export const resolveExperimentalOxlintTargets = (cwd: string) => Effect.gen(func
   return targets
 })
 
+export const resolveExperimentalOxlintUnpatchTargets = (cwd: string) =>
+  resolveInstalledExperimentalOxlint(cwd).pipe(
+    Effect.map(({ targets }) => targets.map(({ label, targetPath }) => ({ label, targetPath })))
+  )
+
 export const patchExperimentalOxlint = Effect.gen(function*() {
   const targets = yield* resolveExperimentalOxlintTargets(process.cwd())
   yield* patchResolvedTargets(targets)
 })
 
 export const unpatchExperimentalOxlint = Effect.gen(function*() {
-  const targets = yield* resolveExperimentalOxlintTargets(process.cwd())
+  const targets = yield* resolveExperimentalOxlintUnpatchTargets(process.cwd())
   yield* unpatchResolvedTargets(targets)
 })
