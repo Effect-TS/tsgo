@@ -1,5 +1,11 @@
 # @effect/tsgo
 
+## 0.26.6
+
+### Patch Changes
+
+- 23c0f3e: Migrate release automation to Changesets v3 and pnpm 10.
+
 ## 0.26.5
 
 ### Patch Changes
