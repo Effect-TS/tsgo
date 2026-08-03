@@ -18,6 +18,14 @@ import {
   propagateDiagnosticsExit,
   runDiagnosticsBinary
 } from "./diagnostics.js"
+import {
+  patchPreparedTargets,
+  prepareResolvedTargets,
+  resolveExperimentalOxlintTargets,
+  resolveExperimentalOxlintUnpatchTargets,
+  unpatchResolvedTargets
+} from "./experimentalOxlint.js"
+import { ensureIntegrationSelected, integrationFlags, IntegrationSelectionError } from "./integrationFlags.js"
 import { setupCommand } from "./setup/index.js"
 import { defaultTypescriptPackageNames, isNativeTypescriptVersion } from "./setup/consts.js"
 import { decodePackagedTypeScriptProfiles } from "./platformUpstream.js"
@@ -180,6 +188,7 @@ type CliDomainError =
   | CopyBinaryError
   | ChmodBinaryError
   | VerificationFailedError
+  | IntegrationSelectionError
 
 interface PackagedBinaryMetadata {
   readonly tsVersion: string
@@ -218,6 +227,12 @@ interface OfficialTypeScriptBinary {
   readonly platformPackageJsonPath: string
   readonly platformGitHead?: string
   readonly binaryPath: string
+}
+
+interface ResolvedTypeScriptPatchTarget {
+  readonly targetPath: string
+  readonly backupPath: string
+  readonly replacementPath: string
 }
 
 const PackageJsonMetadataSchema = Schema.Struct({
@@ -404,13 +419,13 @@ const getPackagedBinaryPath = (installedTypeScript: OfficialTypeScriptBinary, fo
     }))
   })
 
-const patch = (force: boolean, packageNames: ReadonlyArray<string>) => Effect.gen(function*() {
+const resolveTypeScriptPatchTarget = (force: boolean, packageNames: ReadonlyArray<string>) => Effect.gen(function*() {
   const fs = yield* FileSystem.FileSystem
   const path = yield* Path.Path
   const installedTypeScript = yield* resolveInstalledTypeScriptBinary(packageNames)
   const targetPath = installedTypeScript.binaryPath
   const backupPath = path.join(path.dirname(targetPath), path.basename(targetPath) + ".original")
-  const ourBinaryPath = yield* getPackagedBinaryPath(installedTypeScript, force)
+  const replacementPath = yield* getPackagedBinaryPath(installedTypeScript, force)
 
   const targetExists = yield* fs.exists(targetPath)
   if (!targetExists) {
@@ -429,33 +444,38 @@ const patch = (force: boolean, packageNames: ReadonlyArray<string>) => Effect.ge
     counter++
   }
 
-  yield* fs.rename(targetPath, actualBackupPath).pipe(
+  return { targetPath, backupPath: actualBackupPath, replacementPath } satisfies ResolvedTypeScriptPatchTarget
+})
+
+const patchResolvedTypeScriptTarget = (target: ResolvedTypeScriptPatchTarget) => Effect.gen(function*() {
+  const fs = yield* FileSystem.FileSystem
+  yield* fs.rename(target.targetPath, target.backupPath).pipe(
     Effect.mapError(() =>
       new BackupRestoreError({
-        reason: `Failed to back up original binary from ${targetPath} to ${actualBackupPath}.`,
+        reason: `Failed to back up original binary from ${target.targetPath} to ${target.backupPath}.`,
       })
     )
   )
-  yield* Console.log("Backed up original binary to " + actualBackupPath)
+  yield* Console.log("Backed up original binary to " + target.backupPath)
 
-  yield* fs.copyFile(ourBinaryPath, targetPath).pipe(
-    Effect.mapError(() => new CopyBinaryError({ sourcePath: ourBinaryPath, targetPath }))
+  yield* fs.copyFile(target.replacementPath, target.targetPath).pipe(
+    Effect.mapError(() => new CopyBinaryError({ sourcePath: target.replacementPath, targetPath: target.targetPath }))
   )
 
-  yield* fs.chmod(targetPath, 0o755).pipe(
-    Effect.mapError(() => new ChmodBinaryError({ targetPath }))
+  yield* fs.chmod(target.targetPath, 0o755).pipe(
+    Effect.mapError(() => new ChmodBinaryError({ targetPath: target.targetPath }))
   )
 
-  yield* Console.log("Patched Effect Language Service binary to " + targetPath)
+  yield* Console.log("Patched Effect Language Service binary to " + target.targetPath)
 
   const verify = Effect.try({
     try: () => {
-      childProcess.execFileSync(targetPath, ["--version"], {
+      childProcess.execFileSync(target.targetPath, ["--version"], {
         stdio: "pipe",
         timeout: 10000,
       })
     },
-    catch: () => new VerificationFailedError({ targetPath }),
+    catch: () => new VerificationFailedError({ targetPath: target.targetPath }),
   }).pipe(
     Effect.tap(() => Console.log("Verification succeeded.")),
     Effect.catchTag("VerificationFailedError", (error) => Console.warn(error.message))
@@ -504,6 +524,7 @@ const unpatch = Effect.gen(function*() {
 })
 
 const patchCommand = Command.make("patch", {
+  ...integrationFlags,
   force: Flag.boolean("force"),
   typescriptPackage: Flag.optional(
     Flag.string("typescript-package").pipe(
@@ -511,13 +532,41 @@ const patchCommand = Command.make("patch", {
     )
   )
 }).pipe(
-  Command.withDescription("Patch the Effect Language Service binary"),
-  Command.withHandler(({ force, typescriptPackage }) => patch(force, packageNamesWithPreferred(typescriptPackage)))
+  Command.withDescription("Patch the selected Effect integrations"),
+  Command.withHandler(({ force, oxlint, typescript, typescriptPackage }) =>
+    Effect.gen(function*() {
+      yield* ensureIntegrationSelected(typescript, oxlint)
+      if (!typescript && force) {
+        return yield* new IntegrationSelectionError({ reason: "--force requires the TypeScript integration." })
+      }
+      if (!typescript && Option.isSome(typescriptPackage)) {
+        return yield* new IntegrationSelectionError({
+          reason: "--typescript-package requires the TypeScript integration."
+        })
+      }
+
+      const typescriptTarget = typescript
+        ? yield* resolveTypeScriptPatchTarget(force, packageNamesWithPreferred(typescriptPackage))
+        : undefined
+      const oxlintTargets = oxlint ? yield* resolveExperimentalOxlintTargets(process.cwd()) : undefined
+      const preparedOxlintTargets = oxlintTargets === undefined
+        ? undefined
+        : yield* prepareResolvedTargets(oxlintTargets)
+
+      if (typescriptTarget !== undefined) yield* patchResolvedTypeScriptTarget(typescriptTarget)
+      if (preparedOxlintTargets !== undefined) yield* patchPreparedTargets(preparedOxlintTargets)
+    }))
 )
 
-const unpatchCommand = Command.make("unpatch").pipe(
-  Command.withDescription("Unpatch and restore the original TypeScript-Go binary"),
-  Command.withHandler(() => unpatch)
+const unpatchCommand = Command.make("unpatch", integrationFlags).pipe(
+  Command.withDescription("Unpatch and restore the selected integrations"),
+  Command.withHandler(({ oxlint, typescript }) =>
+    Effect.gen(function*() {
+      yield* ensureIntegrationSelected(typescript, oxlint)
+      const oxlintTargets = oxlint ? yield* resolveExperimentalOxlintUnpatchTargets(process.cwd()) : undefined
+      if (typescript) yield* unpatch
+      if (oxlintTargets !== undefined) yield* unpatchResolvedTargets(oxlintTargets)
+    }))
 )
 
 const getExePathCommand = Command.make("get-exe-path").pipe(

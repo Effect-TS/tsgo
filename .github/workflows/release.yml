@@ -59,6 +59,70 @@ jobs:
           name: ${{ matrix.npm_target }}__${{ matrix.profile }}
           path: ${{ steps.binary.outputs.binary_path }}
 
+  build-oxlint:
+    if: >-
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.merged == true &&
+      github.event.pull_request.head.ref == 'changeset-release/main' &&
+      github.repository_owner == 'Effect-TS'
+    name: Build oxlint ${{ matrix.npm_target }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      matrix:
+        include:
+          - npm_target: darwin-arm64
+            os: macos-latest
+            rust_target: aarch64-apple-darwin
+          - npm_target: darwin-x64
+            os: macos-latest
+            rust_target: x86_64-apple-darwin
+          - npm_target: win32-x64
+            os: windows-latest
+            rust_target: x86_64-pc-windows-msvc
+          - npm_target: win32-arm64
+            os: windows-latest
+            rust_target: aarch64-pc-windows-msvc
+          - npm_target: linux-x64
+            os: ubuntu-latest
+            rust_target: x86_64-unknown-linux-gnu
+          - npm_target: linux-arm64
+            os: ubuntu-latest
+            rust_target: aarch64-unknown-linux-gnu
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          submodules: recursive
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: "1.93.0"
+          components: rustfmt
+          targets: ${{ matrix.rust_target }}
+
+      - name: Setup oxlint repo
+        uses: ./.github/actions/setup-repo
+        with:
+          profile: oxlint
+
+      - name: Build oxlint ${{ matrix.npm_target }}
+        id: oxlint
+        env:
+          TARGET_CC: clang
+        run: pnpm exec repoctl build oxlint --target ${{ matrix.npm_target }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ matrix.npm_target }}__oxlint
+          path: ${{ steps.oxlint.outputs.artifact_path }}
+
   publish:
     if: >-
       github.event_name == 'pull_request' &&
@@ -67,7 +131,7 @@ jobs:
       github.repository_owner == 'Effect-TS'
     name: Publish Packages
     runs-on: ubuntu-latest
-    needs: [build]
+    needs: [build, build-oxlint]
     timeout-minutes: 30
     steps:
       - name: Checkout
@@ -103,6 +167,10 @@ jobs:
 
             mkdir -p "${package_dir}"
             cp "${artifact_dir}"/* "${package_dir}/"
+          done
+
+          for tsgolint in _packages/tsgo-{darwin-*,linux-{x64,arm64}}/lib/tsgolint; do
+            chmod 755 "${tsgolint}"
           done
 
       - name: Bundle upstream metadata

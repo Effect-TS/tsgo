@@ -1,0 +1,61 @@
+name: Validate Oxlint Profile
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: validate-oxlint-profile-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  validate:
+    name: Validate Oxlint profile
+    if: github.repository_owner == 'Effect-TS'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v7
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: "1.93.0"
+          components: rustfmt
+
+      - name: Install native build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes cmake
+
+      - name: Cache Rust build
+        uses: actions/cache@v6
+        with:
+          path: |
+            ~/.cargo/git
+            ~/.cargo/registry
+          key: oxlint-rust-${{ runner.os }}-${{ hashFiles('_packages/tsgo/upstream.json', '_patches/oxlint/**') }}-${{ github.sha }}
+          restore-keys: |
+            oxlint-rust-${{ runner.os }}-${{ hashFiles('_packages/tsgo/upstream.json', '_patches/oxlint/**') }}-
+            oxlint-rust-${{ runner.os }}-
+
+      - name: Setup Oxlint profile
+        uses: ./.github/actions/setup-repo
+        with:
+          profile: oxlint
+
+      - name: Build Oxlint profile
+        run: pnpm exec repoctl build oxlint --target linux-x64
+
+      - name: Smoke test Oxlint profile
+        run: node testdata/tests/oxlint/smoke.mjs "$GITHUB_WORKSPACE"

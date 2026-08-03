@@ -12,12 +12,19 @@
   "homepage": "https://github.com/Effect-TS/tsgo#readme",
   "publishConfig": {
     "access": "public",
-    "provenance": true
+    "provenance": true,
+    "executableFiles": [
+      "./lib/tsc.exe",
+      "./lib/tsc-next.exe",
+      "./lib/tsgolint.exe"
+    ]
   },
   "preferUnplugged": true,
   "files": [
     "lib/tsc.exe",
     "lib/tsc-next.exe",
+    "lib/tsgolint.exe",
+    "lib/oxlint.win32-arm64.node",
     "README.md",
     "lib/upstream.json"
   ],
