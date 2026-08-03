@@ -50,6 +50,9 @@ See the [Oxlint setup guide](../README.md#oxlint-setup) for installation and pat
 
 ```json
 {
+  "options": {
+    "typeAware": true
+  },
   "plugins": ["effecttsgo"],
   "rules": {
     "effecttsgo/schema-literal-non-finite": "warn"

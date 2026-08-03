@@ -93,6 +93,10 @@ jobs:
             os: ubuntu-latest
             rust_target: aarch64-unknown-linux-gnu
     steps:
+      - name: Enable long Git paths
+        if: runner.os == 'Windows'
+        run: git config --system core.longpaths true
+
       - name: Checkout
         uses: actions/checkout@v7
         with:

@@ -819,7 +819,7 @@ func generateRuleDocs(metadata metadataDocument) map[string]string {
 		}
 
 		fmt.Fprintf(&page, "\n## Language Service Configuration\n\nSee the [Language Service setup guide](../../README.md#installation) for installation instructions.\n\n```jsonc\n{\n  \"compilerOptions\": {\n    \"plugins\": [\n      {\n        \"name\": \"@effect/language-service\",\n        \"diagnosticSeverity\": {\n          \"%s\": \"warning\"\n        }\n      }\n    ]\n  }\n}\n```\n", current.Name)
-		fmt.Fprintf(&page, "\n## Oxlint Configuration\n\nSee the [Oxlint setup guide](../README.md#oxlint-setup) for installation and patching instructions.\n\n```json\n{\n  \"plugins\": [\"effecttsgo\"],\n  \"rules\": {\n    \"effecttsgo/%s\": \"warn\"\n  }\n}\n```\n", slug)
+		fmt.Fprintf(&page, "\n## Oxlint Configuration\n\nSee the [Oxlint setup guide](../README.md#oxlint-setup) for installation and patching instructions.\n\n```json\n{\n  \"options\": {\n    \"typeAware\": true\n  },\n  \"plugins\": [\"effecttsgo\"],\n  \"rules\": {\n    \"effecttsgo/%s\": \"warn\"\n  }\n}\n```\n", slug)
 		docs[slug+".md"] = page.String()
 	}
 	return docs

@@ -60,6 +60,9 @@ See the [Oxlint setup guide](../README.md#oxlint-setup) for installation and pat
 
 ```json
 {
+  "options": {
+    "typeAware": true
+  },
   "plugins": ["effecttsgo"],
   "rules": {
     "effecttsgo/nested-effect-gen-yield": "warn"
