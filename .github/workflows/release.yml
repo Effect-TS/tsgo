@@ -92,6 +92,11 @@ jobs:
         with:
           profile: ${{ matrix.profile }}
 
+      - name: Add Oxlint Rust target
+        if: matrix.profile == 'oxlint'
+        working-directory: oxlint
+        run: rustup target add ${{ matrix.rust_target }}
+
       - name: Build ${{ matrix.profile }} ${{ matrix.npm_target }}
         if: matrix.profile != 'oxlint'
         id: binary
