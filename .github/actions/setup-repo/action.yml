@@ -38,13 +38,6 @@ runs:
       shell: bash
       run: echo "CARGO_TARGET_DIR=${RUNNER_TEMP}/oxlint-target" >> "$GITHUB_ENV"
 
-    - name: Resolve Rust cache key
-      if: inputs.profile == 'oxlint'
-      id: rust-cache-key
-      shell: bash
-      run: |
-        node -e 'const upstream = require("./_packages/tsgo/upstream.json"); const profile = upstream.profiles.find(({ name }) => name === "oxlint"); if (!profile) process.exit(1); process.stdout.write(`revision=${profile.oxlint.gitHead}\n`)' >> "$GITHUB_OUTPUT"
-
     - name: Cache Rust build
       if: inputs.profile == 'oxlint'
       uses: actions/cache@v6
@@ -53,9 +46,8 @@ runs:
           ~/.cargo/git
           ~/.cargo/registry
           ${{ runner.temp }}/oxlint-target
-        key: rust-build-oxlint-1.93.0-${{ runner.os }}-${{ runner.arch }}-${{ inputs.rust-target || 'host' }}-${{ steps.rust-cache-key.outputs.revision }}-${{ hashFiles('_patches/oxlint/**') }}
+        key: rust-build-oxlint-1.93.0-${{ runner.os }}-${{ runner.arch }}-${{ inputs.rust-target || 'host' }}-${{ hashFiles('_packages/tsgo/upstream.json', '_patches/oxlint/**') }}
         restore-keys: |
-          rust-build-oxlint-1.93.0-${{ runner.os }}-${{ runner.arch }}-${{ inputs.rust-target || 'host' }}-${{ steps.rust-cache-key.outputs.revision }}-
           rust-build-oxlint-1.93.0-${{ runner.os }}-${{ runner.arch }}-${{ inputs.rust-target || 'host' }}-
 
     - name: Setup Go
