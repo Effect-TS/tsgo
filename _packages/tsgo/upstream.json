@@ -5,7 +5,7 @@
       "kind": "ts",
       "name": "next",
       "ts": {
-        "npmVersion": "7.1.0-dev.20260801.1",
+        "npmVersion": "7.1.0-dev.20260803.1",
         "gitHead": "5b1047d10d32e7d5b446be4de56b126ff42f82bb"
       },
       "binName": "tsc-next"
@@ -31,8 +31,8 @@
         "gitHead": "482dcf70bffce7ea56f63128c74beb67dec658a2"
       },
       "oxlint": {
-        "npmVersion": "1.76.0",
-        "gitHead": "65fe65d8429e1d1bdf86c517ff08bd119ee87660"
+        "npmVersion": "1.77.0",
+        "gitHead": "9a423f2f485b79c2353c49442c0c7f60f900261d"
       }
     }
   ]
