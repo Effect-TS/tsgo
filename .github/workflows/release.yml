@@ -43,7 +43,7 @@ jobs:
 
       - name: Select release mode
         id: select-mode
-        uses: changesets/action/select-mode@c47fa68bd43bb8ae0bae7e558622593deebf5955 # v2.0.0-next.3
+        uses: changesets/action/select-mode@2d9f7af6402422be60d377f151c7618011bba45a # v2.0.0-next.4
 
   version:
     name: Version Packages
@@ -73,11 +73,10 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Create or update release PR
-        uses: changesets/action/version@c47fa68bd43bb8ae0bae7e558622593deebf5955 # v2.0.0-next.3
+        uses: changesets/action/version@2d9f7af6402422be60d377f151c7618011bba45a # v2.0.0-next.4
         with:
           github-token: ${{ github.token }}
           script: pnpm exec repoctl changeset version
-          commit-mode: github-api
 
   build:
     name: Build ${{ matrix.profile }} ${{ matrix.npm_target }}
@@ -227,7 +226,7 @@ jobs:
 
       - name: Pack packages
         id: pack
-        uses: changesets/action/pack@c47fa68bd43bb8ae0bae7e558622593deebf5955 # v2.0.0-next.3
+        uses: changesets/action/pack@2d9f7af6402422be60d377f151c7618011bba45a # v2.0.0-next.4
         with:
           publish-plan-artifact-id: ${{ needs.select-mode.outputs.publish-plan-artifact-id }}
 
@@ -261,7 +260,7 @@ jobs:
 
       - name: Publish packages and create releases
         id: publish
-        uses: changesets/action/publish@c47fa68bd43bb8ae0bae7e558622593deebf5955 # v2.0.0-next.3
+        uses: changesets/action/publish@2d9f7af6402422be60d377f151c7618011bba45a # v2.0.0-next.4
         with:
           github-token: ${{ github.token }}
           pack-dir-artifact-id: ${{ needs.pack.outputs.pack-dir-artifact-id }}
