@@ -1,5 +1,11 @@
 # @effect/tsgo
 
+## 0.26.3
+
+### Patch Changes
+
+- c6dde57: Force patch files to use LF line endings so TypeScript-Go patches apply on Windows release runners.
+
 ## 0.26.2
 
 ### Patch Changes
