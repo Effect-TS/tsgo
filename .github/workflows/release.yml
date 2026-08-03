@@ -143,23 +143,11 @@ jobs:
           submodules: recursive
           persist-credentials: false
 
-      - name: Setup Rust
-        if: matrix.profile == 'oxlint'
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          toolchain: "1.93.0"
-          components: rustfmt
-          targets: ${{ matrix.rust_target }}
-
       - name: Setup ${{ matrix.profile }} repo
         uses: ./.github/actions/setup-repo
         with:
           profile: ${{ matrix.profile }}
-
-      - name: Add Oxlint Rust target
-        if: matrix.profile == 'oxlint'
-        working-directory: oxlint
-        run: rustup target add ${{ matrix.rust_target }}
+          rust-target: ${{ matrix.rust_target }}
 
       - name: Build tsc ${{ matrix.profile }} ${{ matrix.npm_target }}
         if: matrix.profile != 'oxlint'
