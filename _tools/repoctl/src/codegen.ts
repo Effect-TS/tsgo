@@ -113,9 +113,19 @@ func newEffectRule(name string, effectName string) rule.Rule {
 \t\t\t\tetsrulerunner.DiagnosticAdapter{
 \t\t\t\t\tMessage: utils.GetDiagnosticMessage,
 \t\t\t\t\tReport: func(diagnostic etsrulerunner.ReportedDiagnostic) {
+\t\t\t\t\t\tlabeledRanges := make([]rule.RuleLabeledRange, 0, len(diagnostic.RelatedInformation))
+\t\t\t\t\t\tfor _, related := range diagnostic.RelatedInformation {
+\t\t\t\t\t\t\tif related.FileName == ctx.SourceFile.FileName() {
+\t\t\t\t\t\t\t\tlabeledRanges = append(labeledRanges, rule.RuleLabeledRange{
+\t\t\t\t\t\t\t\t\tLabel: related.Description,
+\t\t\t\t\t\t\t\t\tRange: related.Range,
+\t\t\t\t\t\t\t\t})
+\t\t\t\t\t\t\t}
+\t\t\t\t\t\t}
 \t\t\t\t\t\tctx.ReportDiagnostic(rule.RuleDiagnostic{
-\t\t\t\t\t\t\tRange:    diagnostic.Range,
-\t\t\t\t\t\t\tRuleName: name,
+\t\t\t\t\t\t\tRange:         diagnostic.Range,
+\t\t\t\t\t\t\tRuleName:      name,
+\t\t\t\t\t\t\tLabeledRanges: labeledRanges,
 \t\t\t\t\t\t\tMessage: rule.RuleMessage{
 \t\t\t\t\t\t\t\tId:          diagnostic.MessageID,
 \t\t\t\t\t\t\t\tDescription: diagnostic.Description,

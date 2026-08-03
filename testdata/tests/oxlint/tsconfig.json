@@ -4,5 +4,5 @@
     "moduleResolution": "NodeNext",
     "skipLibCheck": true
   },
-  "files": ["diagnostic.ts", "disabled.ts"]
+  "files": ["diagnostic.ts", "disabled.ts", "related-diagnostic.ts"]
 }

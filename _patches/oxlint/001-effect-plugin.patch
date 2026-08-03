@@ -120,7 +120,7 @@ index 62e0a4f2..62efe500 100644
                              let options = match rule.to_configuration() {
                                  Some(Ok(config)) => Some(config),
                                  Some(Err(_)) | None => None,
-@@ -767,9 +779,15 @@ impl From<TsGoLintDiagnostic> for OxcDiagnostic {
+@@ -767,9 +779,20 @@ impl From<TsGoLintDiagnostic> for OxcDiagnostic {
  
  impl From<TsGoLintRuleDiagnostic> for OxcDiagnostic {
      fn from(val: TsGoLintRuleDiagnostic) -> Self {
@@ -130,6 +130,11 @@ index 62e0a4f2..62efe500 100644
 +        let (plugin_name, rule_name) = split_tsgolint_rule_name(&val.rule);
 +        let mut d = OxcDiagnostic::warn(val.message.description);
 +        if let Some(plugin_name) = plugin_name {
++            if plugin_name == "effecttsgo" {
++                d = d.with_url(format!(
++                    "https://github.com/Effect-TS/tsgo/blob/main/docs/rules/{rule_name}.md"
++                ));
++            }
 +            d = d.with_error_code(plugin_name.to_string(), rule_name.to_string());
 +        } else {
 +            d = d
@@ -139,7 +144,7 @@ index 62e0a4f2..62efe500 100644
          if let Some(help) = val.message.help {
              d = d.with_help(help);
          }
-@@ -1204,10 +1222,14 @@ fn should_skip_diagnostic(
+@@ -1204,10 +1227,14 @@ fn should_skip_diagnostic(
      };
  
      if let Some(directives) = disable_directives_map.get(path) {
@@ -158,7 +163,7 @@ index 62e0a4f2..62efe500 100644
      } else {
          debug_assert!(
              false,
-@@ -1218,6 +1240,17 @@ fn should_skip_diagnostic(
+@@ -1218,6 +1245,17 @@ fn should_skip_diagnostic(
      }
  }
  
@@ -176,7 +181,7 @@ index 62e0a4f2..62efe500 100644
  /// Parses a single message from the binary tsgolint output.
  // Messages are encoded as follows:
  // | Payload Size (uint32 LE) - 4 bytes | Message Type (uint8) - 1 byte | Payload |
-@@ -1373,7 +1406,10 @@ mod test {
+@@ -1373,7 +1411,10 @@ mod test {
  
      use crate::{
          fixer::{FixKind, Message, PossibleFixes},
@@ -188,7 +193,7 @@ index 62e0a4f2..62efe500 100644
      };
  
      #[test]
-@@ -1408,6 +1444,42 @@ mod test {
+@@ -1408,6 +1449,46 @@ mod test {
          assert!(message.fixes.is_empty());
      }
  
@@ -213,6 +218,10 @@ index 62e0a4f2..62efe500 100644
 +        assert_eq!(
 +            message.error.code,
 +            OxcCode { scope: Some("effecttsgo".into()), number: Some("floating-effect".into()) }
++        );
++        assert_eq!(
++            message.error.url.as_deref(),
++            Some("https://github.com/Effect-TS/tsgo/blob/main/docs/rules/floating-effect.md")
 +        );
 +        assert!(tsgolint_rule_matches(
 +            "effecttsgo",

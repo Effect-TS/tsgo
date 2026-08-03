@@ -28,6 +28,19 @@ const diagnostic = run("--type-aware", "--config", ".oxlintrc.json", "diagnostic
 assert.equal(diagnostic.status, 1, diagnostic.stderr)
 assert.match(`${diagnostic.stdout}\n${diagnostic.stderr}`, /effecttsgo\(floating-effect\)/)
 
+const relatedDiagnostic = run("--type-aware", "--format", "json", "--config", ".oxlintrc.json", "related-diagnostic.ts")
+assert.equal(relatedDiagnostic.status, 1, relatedDiagnostic.stderr)
+const relatedDiagnosticOutput = JSON.parse(relatedDiagnostic.stdout)
+const missingStarDiagnostic = relatedDiagnosticOutput.diagnostics.find(
+  (item) => item.code === "effecttsgo(missing-star-in-yield-effect-gen)"
+)
+assert.ok(missingStarDiagnostic, "missing-star-in-yield-effect-gen diagnostic was not reported")
+const relatedLabel = missingStarDiagnostic.labels.find(
+  (label) => label.label === "Inside this Effect generator."
+)
+assert.ok(relatedLabel, "related diagnostic was not converted to a labeled range")
+assert.deepEqual(relatedLabel.span, { offset: 67, length: 8, line: 3, column: 35 })
+
 const disabled = run("--type-aware", "--config", ".oxlintrc.json", "disabled.ts")
 assert.equal(disabled.status, 0, disabled.stderr)
 assert.doesNotMatch(`${disabled.stdout}\n${disabled.stderr}`, /effecttsgo\(floating-effect\)/)

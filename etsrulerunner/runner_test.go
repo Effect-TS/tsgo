@@ -4,9 +4,11 @@ import (
 	"context"
 	"testing"
 
+	"github.com/effect-ts/tsgo/etscore"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/core"
 	"github.com/microsoft/typescript-go/shim/diagnostics"
+	"github.com/microsoft/typescript-go/shim/parser"
 )
 
 func TestRunRuleAndReportRequiresAdapterCallbacks(t *testing.T) {
@@ -25,13 +27,61 @@ func TestRunRuleAndReportRequiresAdapterCallbacks(t *testing.T) {
 	}
 }
 
+func TestNormalizeOptionsUsesPluginDefaults(t *testing.T) {
+	t.Parallel()
+
+	options := normalizeOptions(nil, "floatingEffect")
+	if !options.Refactors || !options.Diagnostics || !options.IncludeSuggestionsInTsc ||
+		!options.Quickinfo || !options.Completions || !options.Goto || !options.Renames ||
+		!options.IgnoreEffectSuggestionsInTscExitCode {
+		t.Fatal("expected nil options to use the name-only plugin defaults")
+	}
+	if options.DiagnosticSeverity["floatingEffect"] != etscore.SeverityError {
+		t.Fatalf("unexpected rule severity: %s", options.DiagnosticSeverity["floatingEffect"])
+	}
+	if options.DiagnosticSeverity["unusedDirective"] != etscore.SeverityOff {
+		t.Fatalf("unexpected unusedDirective severity: %s", options.DiagnosticSeverity["unusedDirective"])
+	}
+}
+
+func TestNormalizeOptionsDoesNotMutateInput(t *testing.T) {
+	t.Parallel()
+
+	input := &etscore.EffectPluginOptions{
+		PipeableMinArgCount: 4,
+		DiagnosticSeverity: map[string]etscore.Severity{
+			"floatingEffect":  etscore.SeverityWarning,
+			"unusedDirective": etscore.SeverityWarning,
+		},
+	}
+	options := normalizeOptions(input, "floatingEffect")
+
+	if options.PipeableMinArgCount != 4 {
+		t.Fatalf("unexpected pipeable minimum: %d", options.PipeableMinArgCount)
+	}
+	if options.DiagnosticSeverity["floatingEffect"] != etscore.SeverityError {
+		t.Fatalf("unexpected normalized rule severity: %s", options.DiagnosticSeverity["floatingEffect"])
+	}
+	if options.DiagnosticSeverity["unusedDirective"] != etscore.SeverityOff {
+		t.Fatalf("unexpected normalized unusedDirective severity: %s", options.DiagnosticSeverity["unusedDirective"])
+	}
+	if input.DiagnosticSeverity["floatingEffect"] != etscore.SeverityWarning ||
+		input.DiagnosticSeverity["unusedDirective"] != etscore.SeverityWarning {
+		t.Fatal("input diagnostic severities were mutated")
+	}
+}
+
 func TestReportDiagnostics(t *testing.T) {
 	t.Parallel()
 
-	diagnostic := ast.NewDiagnosticFromSerialized(
-		nil,
-		core.NewTextRange(3, 7),
-		377001,
+	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
+		FileName: "/source.ts",
+		Path:     "/source.ts",
+	}, "const effect = 1", core.ScriptKindTS)
+	related := ast.NewDiagnosticFromSerialized(
+		sourceFile,
+		core.NewTextRange(9, 15),
+		377007,
 		diagnostics.CategoryError,
 		"",
 		nil,
@@ -41,10 +91,26 @@ func TestReportDiagnostics(t *testing.T) {
 		false,
 		false,
 	)
+	diagnostic := ast.NewDiagnosticFromSerialized(
+		sourceFile,
+		core.NewTextRange(3, 7),
+		377001,
+		diagnostics.CategoryError,
+		"",
+		nil,
+		nil,
+		[]*ast.Diagnostic{related},
+		false,
+		false,
+		false,
+	)
 
 	var reported []ReportedDiagnostic
 	reportDiagnostics([]*ast.Diagnostic{diagnostic}, "floatingEffect", DiagnosticAdapter{
-		Message: func(*ast.Diagnostic) string {
+		Message: func(diagnostic *ast.Diagnostic) string {
+			if diagnostic == related {
+				return "Inside this Effect generator. effect(floatingEffect)"
+			}
 			return "Effect values must be yielded or assigned effect(floatingEffect)"
 		},
 		Report: func(diagnostic ReportedDiagnostic) {
@@ -63,6 +129,19 @@ func TestReportDiagnostics(t *testing.T) {
 	}
 	if reported[0].Description != "Effect values must be yielded or assigned" {
 		t.Fatalf("unexpected description: %q", reported[0].Description)
+	}
+	if len(reported[0].RelatedInformation) != 1 {
+		t.Fatalf("expected one related diagnostic, got %d", len(reported[0].RelatedInformation))
+	}
+	reportedRelated := reported[0].RelatedInformation[0]
+	if reportedRelated.FileName != "/source.ts" {
+		t.Fatalf("unexpected related filename: %q", reportedRelated.FileName)
+	}
+	if reportedRelated.Range != core.NewTextRange(9, 15) {
+		t.Fatalf("unexpected related range: %v", reportedRelated.Range)
+	}
+	if reportedRelated.Description != "Inside this Effect generator." {
+		t.Fatalf("unexpected related description: %q", reportedRelated.Description)
 	}
 }
 
