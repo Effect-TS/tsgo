@@ -2,7 +2,15 @@ import * as NodeServices from "@effect/platform-node/NodeServices"
 import * as Effect from "effect/Effect"
 import assert from "node:assert/strict"
 import test from "node:test"
-import { runCommandString } from "../src/process.ts"
+import { resolveCommand, runCommandString } from "../src/process.ts"
+
+test("resolves Node command shims on Windows", () => {
+  assert.equal(resolveCommand("corepack", "win32"), "corepack.cmd")
+  assert.equal(resolveCommand("npm", "win32"), "npm.cmd")
+  assert.equal(resolveCommand("pnpm", "win32"), "pnpm.cmd")
+  assert.equal(resolveCommand("npm", "linux"), "npm")
+  assert.equal(resolveCommand("git", "win32"), "git")
+})
 
 test("captures successful command output", async() => {
   const output = await Effect.runPromise(

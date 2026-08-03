@@ -17,6 +17,11 @@ export class CommandError extends Data.TaggedError("CommandError")<{
   }
 }
 
+const windowsCommandShims = new Set(["corepack", "npm", "pnpm"])
+
+export const resolveCommand = (command: string, platform: NodeJS.Platform = process.platform): string =>
+  platform === "win32" && windowsCommandShims.has(command) ? `${command}.cmd` : command
+
 export const runCommand = Effect.fnUntraced(function*(
   command: string,
   cwd: string,
@@ -25,7 +30,7 @@ export const runCommand = Effect.fnUntraced(function*(
   env?: Readonly<Record<string, string>>
 ) {
   const spawner = yield* ChildProcessSpawner.ChildProcessSpawner
-  const exitCode = yield* spawner.exitCode(ChildProcess.make(command, args, {
+  const exitCode = yield* spawner.exitCode(ChildProcess.make(resolveCommand(command), args, {
     cwd,
     stdin: "inherit",
     stdout: quiet ? "ignore" : "inherit",
@@ -58,7 +63,7 @@ export const runCommandCapture = Effect.fnUntraced(function*(
 ) {
   const spawner = yield* ChildProcessSpawner.ChildProcessSpawner
   return yield* Effect.scoped(Effect.gen(function*() {
-    const handle = yield* spawner.spawn(ChildProcess.make(command, args, {
+    const handle = yield* spawner.spawn(ChildProcess.make(resolveCommand(command), args, {
       cwd,
       stdin: "inherit"
     }))
@@ -78,7 +83,7 @@ export const runCommandCaptureSplit = Effect.fnUntraced(function*(
 ) {
   const spawner = yield* ChildProcessSpawner.ChildProcessSpawner
   return yield* Effect.scoped(Effect.gen(function*() {
-    const handle = yield* spawner.spawn(ChildProcess.make(command, args, {
+    const handle = yield* spawner.spawn(ChildProcess.make(resolveCommand(command), args, {
       cwd,
       stdin: "inherit",
       env,
