@@ -1,5 +1,11 @@
 # @effect/tsgo
 
+## 0.26.5
+
+### Patch Changes
+
+- 0450ae7: Run Node command shims through the Windows shell so Oxlint release builds can install and build their dependencies.
+
 ## 0.26.4
 
 ### Patch Changes
