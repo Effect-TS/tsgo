@@ -1,5 +1,11 @@
 # @effect/tsgo
 
+## 0.27.1
+
+### Patch Changes
+
+- 421bda3: Install Oxlint cross-compilation targets for its pinned Rust toolchain.
+
 ## 0.27.0
 
 ### Minor Changes
