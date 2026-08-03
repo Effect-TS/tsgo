@@ -84,7 +84,7 @@ jobs:
     needs: select-mode
     if: needs.select-mode.outputs.mode == 'publish'
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 30
+    timeout-minutes: 45
     permissions:
       contents: read
     defaults:
