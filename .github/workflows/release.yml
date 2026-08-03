@@ -97,7 +97,7 @@ jobs:
         working-directory: oxlint
         run: rustup target add ${{ matrix.rust_target }}
 
-      - name: Build ${{ matrix.profile }} ${{ matrix.npm_target }}
+      - name: Build tsc ${{ matrix.profile }} ${{ matrix.npm_target }}
         if: matrix.profile != 'oxlint'
         id: binary
         run: pnpm exec repoctl build binary --profile ${{ matrix.profile }} --target ${{ matrix.npm_target }}
