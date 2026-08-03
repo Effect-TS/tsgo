@@ -1,5 +1,27 @@
 # @effect/tsgo
 
+## 0.26.0
+
+### Minor Changes
+
+- 701a607: Add the `abortControllerInEffect` diagnostic for global `AbortController` construction inside Effect generator contexts, suggesting `Effect.abortSignal` for Effect-managed cancellation.
+- 58d2eb9: Add the V4-only `catchTagToCatchReason` diagnostic and identity-preserving quick fixes for `Effect.catchTag` handlers that re-fail unmatched `reason._tag` branches.
+- bb09f28: Add the `catchChainToFirstSuccessOf` diagnostic for consecutive error-independent `Effect.catch` fallbacks whose error channel is preserved by `Effect.firstSuccessOf`.
+- 643022d: Expose `@effect/tsgo/lib/getExePath`, which resolves the packaged `tsc` or `tsc-next` executable matching the installed native TypeScript version.
+- 7bbafe4: Generate drift-checked documentation pages for every Effect diagnostic, including annotated previews, metadata, and Language Service and Oxlint configuration examples.
+- 41d08c6: Generate native tsgolint adapters and Oxlint registrations that expose Effect diagnostics as qualified `effecttsgo/*` rules, and package the supported tsgolint executables and Oxlint N-API bindings for release.
+- c048582: Add the `preferUnsafeConstructor` diagnostic and quickfix: `Effect.runSync` applied directly to a pure effect-package constructor call (e.g. `Effect.runSync(Scope.make())`) is reported when the same module exports a type-equivalent synchronous `*Unsafe` sibling, with a fix rewriting to `Scope.makeUnsafe()` while preserving arguments and type arguments.
+- 7af1a90: Add the `promiseInEffectSuccess` diagnostic for Promise types that enter Effect success channels instead of being awaited.
+- 087df5f: Rename the public Go integration package from `etsapi` to `etsgoapi`.
+- 087df5f: Centralize next, latest, and Oxlint upstream pins in one profile manifest, and bundle that manifest with each platform package for TypeScript binary compatibility.
+
+### Patch Changes
+
+- 1c7dc94: Improve diagnostic performance by caching module export identity checks.
+- c9b4499: Create package tags and GitHub Releases with changelog notes when publishing npm packages.
+- 4813687: Make shim generation reproducible from canonical configuration and optional overlays, and standardize the TypeScript-Go patch layout.
+- 5f4fd3e: Update to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260730.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/37357ae666e7af11989d4ba416a763f2da590dee) commit `37357ae666e7af11989d4ba416a763f2da590dee`.
+
 ## 0.25.0
 
 ### Minor Changes
