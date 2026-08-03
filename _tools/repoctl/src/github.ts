@@ -137,7 +137,19 @@ export const openPullRequestIfChanged = Effect.fnUntraced(function*(
       "-m",
       options.commitMessage
     ])
-    yield* runCommand("git", repositoryRoot, ["push", "origin", `${headSha}:refs/heads/${branch}`])
+    const remoteBranch = yield* commandString("git", repositoryRoot, [
+      "ls-remote",
+      "--heads",
+      "origin",
+      `refs/heads/${branch}`
+    ])
+    const remoteHeadSha = remoteBranch.split(/\s/, 1)[0]
+    yield* runCommand("git", repositoryRoot, [
+      "push",
+      `--force-with-lease=refs/heads/${branch}:${remoteHeadSha}`,
+      "origin",
+      `${headSha}:refs/heads/${branch}`
+    ])
   }
 
   if (existingNumber !== "") {
