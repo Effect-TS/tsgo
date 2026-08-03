@@ -1,5 +1,11 @@
 # @effect/tsgo
 
+## 0.26.7
+
+### Patch Changes
+
+- 452eca4: Increase the release profile build timeout to 45 minutes.
+
 ## 0.26.6
 
 ### Patch Changes
