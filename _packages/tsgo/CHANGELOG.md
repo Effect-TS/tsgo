@@ -1,5 +1,12 @@
 # @effect/tsgo
 
+## 0.26.2
+
+### Patch Changes
+
+- b131307: Enable long Git paths before Windows release builds check out recursive submodules.
+- af50d36: Fix Windows release builds that invoke Node package-manager command shims.
+
 ## 0.26.1
 
 ### Patch Changes
