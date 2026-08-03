@@ -39,8 +39,20 @@ runs:
       run: echo "CARGO_TARGET_DIR=${RUNNER_TEMP}/oxlint-target" >> "$GITHUB_ENV"
 
     - name: Cache Rust build
-      if: inputs.profile == 'oxlint'
+      if: inputs.profile == 'oxlint' && github.ref == 'refs/heads/main'
       uses: actions/cache@v6
+      with:
+        path: |
+          ~/.cargo/git
+          ~/.cargo/registry
+          ${{ runner.temp }}/oxlint-target
+        key: rust-build-oxlint-1.93.0-${{ runner.os }}-${{ runner.arch }}-${{ inputs.rust-target || 'host' }}-${{ hashFiles('_packages/tsgo/upstream.json', '_patches/oxlint/**') }}
+        restore-keys: |
+          rust-build-oxlint-1.93.0-${{ runner.os }}-${{ runner.arch }}-${{ inputs.rust-target || 'host' }}-
+
+    - name: Restore Rust build cache
+      if: inputs.profile == 'oxlint' && github.ref != 'refs/heads/main'
+      uses: actions/cache/restore@v6
       with:
         path: |
           ~/.cargo/git
@@ -64,7 +76,20 @@ runs:
         echo "modules=$(go env GOMODCACHE)" >> "$GITHUB_OUTPUT"
 
     - name: Cache Go build
+      if: github.ref == 'refs/heads/main'
       uses: actions/cache@v6
+      with:
+        path: |
+          ${{ steps.go-cache.outputs.build }}
+          ${{ steps.go-cache.outputs.modules }}
+        key: go-build-${{ inputs.profile }}-${{ runner.os }}-${{ hashFiles('**/go.sum') }}-${{ github.sha }}
+        restore-keys: |
+          go-build-${{ inputs.profile }}-${{ runner.os }}-${{ hashFiles('**/go.sum') }}-
+          go-build-${{ inputs.profile }}-${{ runner.os }}-
+
+    - name: Restore Go build cache
+      if: github.ref != 'refs/heads/main'
+      uses: actions/cache/restore@v6
       with:
         path: |
           ${{ steps.go-cache.outputs.build }}
