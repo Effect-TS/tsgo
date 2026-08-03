@@ -74,29 +74,39 @@ runs:
         echo "build=$(go env GOCACHE)" >> "$GITHUB_OUTPUT"
         echo "modules=$(go env GOMODCACHE)" >> "$GITHUB_OUTPUT"
 
-    - name: Cache Go build
+    - name: Cache Go modules
       if: github.ref == 'refs/heads/main'
       uses: actions/cache@v6
       with:
-        path: |
-          ${{ steps.go-cache.outputs.build }}
-          ${{ steps.go-cache.outputs.modules }}
-        key: go-build-${{ inputs.profile }}-${{ runner.os }}-${{ hashFiles('**/go.sum') }}-${{ github.sha }}
-        restore-keys: |
-          go-build-${{ inputs.profile }}-${{ runner.os }}-${{ hashFiles('**/go.sum') }}-
-          go-build-${{ inputs.profile }}-${{ runner.os }}-
+        path: ${{ steps.go-cache.outputs.modules }}/cache/download
+        key: go-modules-1.26-${{ inputs.profile }}-${{ runner.os }}-${{ hashFiles('**/go.mod', '**/go.sum', '_packages/tsgo/upstream.json', '_patches/**/*.patch') }}
 
-    - name: Restore Go build cache
+    - name: Restore Go modules
       if: github.ref != 'refs/heads/main'
       uses: actions/cache/restore@v6
       with:
-        path: |
-          ${{ steps.go-cache.outputs.build }}
-          ${{ steps.go-cache.outputs.modules }}
-        key: go-build-${{ inputs.profile }}-${{ runner.os }}-${{ hashFiles('**/go.sum') }}-${{ github.sha }}
+        path: ${{ steps.go-cache.outputs.modules }}/cache/download
+        key: go-modules-1.26-${{ inputs.profile }}-${{ runner.os }}-${{ hashFiles('**/go.mod', '**/go.sum', '_packages/tsgo/upstream.json', '_patches/**/*.patch') }}
+
+    - name: Cache Go build
+      if: runner.os == 'Linux' && github.ref == 'refs/heads/main'
+      uses: actions/cache@v6
+      with:
+        path: ${{ steps.go-cache.outputs.build }}
+        key: go-build-${{ inputs.profile }}-Linux-${{ hashFiles('**/go.mod', '**/go.sum', '_packages/tsgo/upstream.json', '_patches/**/*.patch') }}-${{ github.sha }}
         restore-keys: |
-          go-build-${{ inputs.profile }}-${{ runner.os }}-${{ hashFiles('**/go.sum') }}-
-          go-build-${{ inputs.profile }}-${{ runner.os }}-
+          go-build-${{ inputs.profile }}-Linux-${{ hashFiles('**/go.mod', '**/go.sum', '_packages/tsgo/upstream.json', '_patches/**/*.patch') }}-
+          go-build-${{ inputs.profile }}-Linux-
+
+    - name: Restore Go build cache
+      if: runner.os == 'Linux' && github.ref != 'refs/heads/main'
+      uses: actions/cache/restore@v6
+      with:
+        path: ${{ steps.go-cache.outputs.build }}
+        key: go-build-${{ inputs.profile }}-Linux-${{ hashFiles('**/go.mod', '**/go.sum', '_packages/tsgo/upstream.json', '_patches/**/*.patch') }}-${{ github.sha }}
+        restore-keys: |
+          go-build-${{ inputs.profile }}-Linux-${{ hashFiles('**/go.mod', '**/go.sum', '_packages/tsgo/upstream.json', '_patches/**/*.patch') }}-
+          go-build-${{ inputs.profile }}-Linux-
 
     - name: Setup Node
       uses: actions/setup-node@v6
