@@ -149,15 +149,6 @@ export const prepareOxlintProfile = Effect.fnUntraced(function*(repositoryRoot: 
   }
 
   yield* runCommand("git", tsgolint, ["fetch", "--quiet", "--depth", "50", "--tags", "origin", profile.tsgolint.gitHead])
-  const tsgolintPackage = yield* parseJson<{ readonly version?: string }>(
-    yield* runCommandString("npm", repositoryRoot, ["view", `oxlint-tsgolint@${profile.tsgolint.npmVersion}`, "--json"]),
-    "oxlint-tsgolint npm metadata"
-  )
-  if (tsgolintPackage.version !== profile.tsgolint.npmVersion) {
-    return yield* new OxlintGenerationError({
-      reason: `tsgolint npm version ${String(tsgolintPackage.version)} does not match profile ${profile.tsgolint.npmVersion}`
-    })
-  }
   const oxlintPackage = yield* parseJson<{ readonly version?: string }>(
     yield* fs.readFileString(path.join(oxlint, "apps", "oxlint", "package.json")),
     path.join(oxlint, "apps", "oxlint", "package.json")
