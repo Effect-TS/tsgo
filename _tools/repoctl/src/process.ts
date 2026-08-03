@@ -19,8 +19,11 @@ export class CommandError extends Data.TaggedError("CommandError")<{
 
 const windowsCommandShims = new Set(["corepack", "npm", "pnpm"])
 
+export const isWindowsCommandShim = (command: string, platform: NodeJS.Platform = process.platform): boolean =>
+  platform === "win32" && windowsCommandShims.has(command)
+
 export const resolveCommand = (command: string, platform: NodeJS.Platform = process.platform): string =>
-  platform === "win32" && windowsCommandShims.has(command) ? `${command}.cmd` : command
+  isWindowsCommandShim(command, platform) ? `${command}.cmd` : command
 
 export const runCommand = Effect.fnUntraced(function*(
   command: string,
@@ -36,7 +39,8 @@ export const runCommand = Effect.fnUntraced(function*(
     stdout: quiet ? "ignore" : "inherit",
     stderr: quiet ? "ignore" : "inherit",
     env,
-    extendEnv: true
+    extendEnv: true,
+    shell: isWindowsCommandShim(command)
   }))
   if (exitCode !== ChildProcessSpawner.ExitCode(0)) {
     return yield* new CommandError({ command, args, exitCode })
@@ -65,7 +69,8 @@ export const runCommandCapture = Effect.fnUntraced(function*(
   return yield* Effect.scoped(Effect.gen(function*() {
     const handle = yield* spawner.spawn(ChildProcess.make(resolveCommand(command), args, {
       cwd,
-      stdin: "inherit"
+      stdin: "inherit",
+      shell: isWindowsCommandShim(command)
     }))
     const [output, exitCode] = yield* Effect.all([
       Stream.mkString(Stream.decodeText(handle.all)),
@@ -87,7 +92,8 @@ export const runCommandCaptureSplit = Effect.fnUntraced(function*(
       cwd,
       stdin: "inherit",
       env,
-      extendEnv: true
+      extendEnv: true,
+      shell: isWindowsCommandShim(command)
     }))
     const [stdout, stderr, exitCode] = yield* Effect.all([
       Stream.mkString(Stream.decodeText(handle.stdout)),
