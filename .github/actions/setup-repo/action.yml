@@ -10,10 +10,54 @@ inputs:
     description: Whether to materialize the selected upstream profile
     required: false
     default: "true"
+  rust-target:
+    description: Rust target to install for Oxlint builds
+    required: false
+    default: ""
 
 runs:
   using: composite
   steps:
+    - name: Setup Rust
+      if: inputs.profile == 'oxlint'
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        toolchain: "1.93.0"
+        components: rustfmt
+        targets: ${{ inputs.rust-target }}
+
+    - name: Install native build tools
+      if: inputs.profile == 'oxlint' && runner.os == 'Linux'
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install --yes cmake
+
+    - name: Configure Rust build cache
+      if: inputs.profile == 'oxlint'
+      shell: bash
+      run: echo "CARGO_TARGET_DIR=${RUNNER_TEMP}/oxlint-target" >> "$GITHUB_ENV"
+
+    - name: Resolve Rust cache key
+      if: inputs.profile == 'oxlint'
+      id: rust-cache-key
+      shell: bash
+      run: |
+        node -e 'const upstream = require("./_packages/tsgo/upstream.json"); const profile = upstream.profiles.find(({ name }) => name === "oxlint"); if (!profile) process.exit(1); process.stdout.write(`revision=${profile.oxlint.gitHead}\n`)' >> "$GITHUB_OUTPUT"
+
+    - name: Cache Rust build
+      if: inputs.profile == 'oxlint'
+      uses: actions/cache@v6
+      with:
+        path: |
+          ~/.cargo/git
+          ~/.cargo/registry
+          ${{ runner.temp }}/oxlint-target
+        key: rust-build-oxlint-1.93.0-${{ runner.os }}-${{ runner.arch }}-${{ inputs.rust-target || 'host' }}-${{ steps.rust-cache-key.outputs.revision }}-${{ hashFiles('_patches/oxlint/**') }}
+        restore-keys: |
+          rust-build-oxlint-1.93.0-${{ runner.os }}-${{ runner.arch }}-${{ inputs.rust-target || 'host' }}-${{ steps.rust-cache-key.outputs.revision }}-
+          rust-build-oxlint-1.93.0-${{ runner.os }}-${{ runner.arch }}-${{ inputs.rust-target || 'host' }}-
+
     - name: Setup Go
       uses: actions/setup-go@v6
       with:
