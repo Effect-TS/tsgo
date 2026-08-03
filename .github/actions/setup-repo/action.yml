@@ -24,7 +24,6 @@ runs:
       with:
         toolchain: "1.93.0"
         components: rustfmt
-        targets: ${{ inputs.rust-target }}
 
     - name: Install native build tools
       if: inputs.profile == 'oxlint' && runner.os == 'Linux'
@@ -117,3 +116,11 @@ runs:
       env:
         PROFILE: ${{ inputs.profile }}
       run: pnpm exec repoctl submodules setup --profile "$PROFILE"
+
+    - name: Install Oxlint Rust target
+      if: inputs.profile == 'oxlint' && inputs.materialize == 'true' && inputs.rust-target != ''
+      shell: bash
+      working-directory: oxlint
+      env:
+        RUST_TARGET: ${{ inputs.rust-target }}
+      run: rustup target add "$RUST_TARGET"
