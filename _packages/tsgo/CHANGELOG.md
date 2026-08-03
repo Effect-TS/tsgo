@@ -1,5 +1,11 @@
 # @effect/tsgo
 
+## 0.26.1
+
+### Patch Changes
+
+- 0bf0586: Enable Oxlint type-aware mode in generated rule configuration examples.
+
 ## 0.26.0
 
 ### Minor Changes
