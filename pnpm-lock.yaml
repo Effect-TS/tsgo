@@ -199,6 +199,12 @@ importers:
         specifier: ^7.0.0
         version: 7.0.1
 
+  testdata/tests/oxlint:
+    dependencies:
+      effect:
+        specifier: 4.0.0-beta.101
+        version: 4.0.0-beta.101
+
 packages:
 
   '@babel/generator@8.0.0-rc.1':

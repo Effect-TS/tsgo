@@ -15,14 +15,14 @@ test("bundles upstream metadata in every platform package", async() => {
   const upstream = `${JSON.stringify({
     schemaVersion: 2,
     profiles: [
-      { kind: "ts", name: "next", ts: { version: "7.1.0", gitHead: revision }, binName: "tsc-next" },
-      { kind: "ts", name: "latest", ts: { version: "7.0.0", gitHead: revision }, binName: "tsc" },
+      { kind: "ts", name: "next", ts: { npmVersion: "7.1.0", gitHead: revision }, binName: "tsc-next" },
+      { kind: "ts", name: "latest", ts: { npmVersion: "7.0.0", gitHead: revision }, binName: "tsc" },
       {
         kind: "oxlint",
         name: "oxlint",
-        ts: { version: "7.0.0", gitHead: revision },
-        tsgolint: { version: "1.0.0", gitHead: revision },
-        oxlint: { version: "1.0.0", gitHead: revision }
+        ts: { npmVersion: "7.0.0", gitHead: revision },
+        tsgolint: { npmVersion: "1.0.0", gitHead: revision },
+        oxlint: { npmVersion: "1.0.0", gitHead: revision }
       }
     ]
   }, null, 2)}\n`

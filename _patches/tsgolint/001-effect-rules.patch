@@ -1,0 +1,42 @@
+diff --git a/cmd/tsgolint/main.go b/cmd/tsgolint/main.go
+index 4429b31..f3ecdef 100644
+--- a/cmd/tsgolint/main.go
++++ b/cmd/tsgolint/main.go
+@@ -159,7 +159,7 @@ func setupProfiling(opts *headlessOptions) (func(), error) {
+ 	}, nil
+ }
+ 
+-var allRules = []rule.Rule{
++var allRules = append([]rule.Rule{
+ 	await_thenable.AwaitThenableRule,
+ 	consistent_return.ConsistentReturnRule,
+ 	consistent_type_exports.ConsistentTypeExportsRule,
+@@ -219,7 +219,7 @@ var allRules = []rule.Rule{
+ 	switch_exhaustiveness_check.SwitchExhaustivenessCheckRule,
+ 	unbound_method.UnboundMethodRule,
+ 	use_unknown_in_catch_callback_variable.UseUnknownInCatchCallbackVariableRule,
+-}
++}, effectRules...)
+ 
+ var allRulesByName = make(map[string]rule.Rule, len(allRules))
+ 
+diff --git a/go.mod b/go.mod
+index 7eff05d..2cabaed 100644
+--- a/go.mod
++++ b/go.mod
+@@ -3,6 +3,7 @@ module github.com/typescript-eslint/tsgolint
+ go 1.26
+ 
+ replace (
++	github.com/effect-ts/tsgo => ..
+ 	github.com/microsoft/typescript-go/shim/ast => ./shim/ast
+ 	github.com/microsoft/typescript-go/shim/bundled => ./shim/bundled
+ 	github.com/microsoft/typescript-go/shim/checker => ./shim/checker
+@@ -21,6 +22,7 @@ replace (
+ )
+ 
+ require (
++	github.com/effect-ts/tsgo v0.0.0
+ 	github.com/microsoft/typescript-go/shim/ast v0.0.0
+ 	github.com/microsoft/typescript-go/shim/bundled v0.0.0
+ 	github.com/microsoft/typescript-go/shim/checker v0.0.0

@@ -43,17 +43,17 @@
     "typescript-go-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1785391120,
-        "narHash": "sha256-+sqRAf1EOtPQi523umDg0sz5mC+8FI2l6SfWWgdk5kg=",
+        "lastModified": 1785522428,
+        "narHash": "sha256-AftyRQ6LZsRVYyPMroGNkFML63mGtca3phI6oFhsVx8=",
         "owner": "microsoft",
         "repo": "typescript-go",
-        "rev": "37357ae666e7af11989d4ba416a763f2da590dee",
+        "rev": "5b1047d10d32e7d5b446be4de56b126ff42f82bb",
         "type": "github"
       },
       "original": {
         "owner": "microsoft",
         "repo": "typescript-go",
-        "rev": "37357ae666e7af11989d4ba416a763f2da590dee",
+        "rev": "5b1047d10d32e7d5b446be4de56b126ff42f82bb",
         "type": "github"
       }
     },

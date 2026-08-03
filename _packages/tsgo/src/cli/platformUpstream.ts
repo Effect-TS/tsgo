@@ -2,7 +2,7 @@ import * as Effect from "effect/Effect"
 import * as Schema from "effect/Schema"
 
 const TypeScriptIdentity = Schema.Struct({
-  version: Schema.String,
+  npmVersion: Schema.String,
   gitHead: Schema.String
 })
 
@@ -37,7 +37,7 @@ export const decodePackagedTypeScriptProfiles = (text: string) =>
       .filter((profile): profile is typeof TypeScriptProfile.Type => profile.kind === "ts")
       .map((profile) => ({
         binaryName: profile.binName,
-        tsVersion: profile.ts.version,
+        tsVersion: profile.ts.npmVersion,
         tsGitHead: profile.ts.gitHead
       }))
       .sort((left, right) => left.binaryName === "tsc" ? -1 : right.binaryName === "tsc" ? 1 : 0))

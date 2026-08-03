@@ -8,16 +8,21 @@ import * as Command from "effect/unstable/cli/Command"
 import * as Flag from "effect/unstable/cli/Flag"
 import * as Option from "effect/Option"
 import { fileURLToPath } from "node:url"
-import { buildBinary, buildCli, buildLocal, verifyReleaseArtifacts } from "./build.ts"
+import { buildBinary, buildCli, buildLocal, buildOxlint, verifyReleaseArtifacts } from "./build.ts"
 import { runChecks } from "./checks.ts"
 import { addChangeset, publishChangeset, versionChangeset } from "./changesets.ts"
+import {
+  generateOxlintEffectRules,
+  generateTsgolintIntegration,
+  generateTypeScriptGoIntegration
+} from "./codegen.ts"
 import { ensureEffectFixtures } from "./fixtures.ts"
 import { updateFlake } from "./flake.ts"
 import { completeCheck, openPullRequestIfChanged } from "./github.ts"
 import { comparePerformance } from "./perf.ts"
 import { bundleUpstream } from "./packages.ts"
-import { generateOxlint } from "./oxlint.ts"
-import { cloneSubmodules, generateSubmoduleArtifacts, patchSubmodules } from "./submodules.ts"
+import { prepareOxlintProfile } from "./oxlint.ts"
+import { cloneSubmodules, patchSubmodules } from "./submodules.ts"
 import { runTests } from "./tests.ts"
 import { updateUpstream } from "./upstream.ts"
 
@@ -27,24 +32,38 @@ const setup = Command.make("setup", {
   profile: Flag.choice("profile", ["next", "latest", "oxlint"]).pipe(
     Flag.withDefault("next"),
     Flag.withDescription("Upstream profile to set up")
-  ),
-  build: Flag.boolean("build").pipe(Flag.withDescription("Build Oxlint integration artifacts"))
-}, ({ build, profile }) => Effect.gen(function*() {
+  )
+}, ({ profile }) => Effect.gen(function*() {
   yield* cloneSubmodules(repositoryRoot, profile)
   if (profile === "oxlint") {
-    yield* generateOxlint(repositoryRoot, build)
+    yield* prepareOxlintProfile(repositoryRoot)
+    yield* generateTsgolintIntegration(repositoryRoot)
+    yield* generateOxlintEffectRules(repositoryRoot)
   } else {
     yield* patchSubmodules(repositoryRoot)
-    yield* generateSubmoduleArtifacts(repositoryRoot)
+    yield* generateTypeScriptGoIntegration(repositoryRoot)
   }
   yield* ensureEffectFixtures(repositoryRoot)
 })).pipe(
-  Command.withDescription("Set up the submodules required by an upstream profile")
+  Command.withDescription("Check out and patch the submodules required by an upstream profile")
 )
 
 const submodules = Command.make("submodules").pipe(
   Command.withDescription("Manage repository submodules"),
   Command.withSubcommands([setup])
+)
+
+const codegenTsgolint = Command.make("tsgolint", {}, () => generateTsgolintIntegration(repositoryRoot)).pipe(
+  Command.withDescription("Generate the shared Go workspace and native tsgolint Effect rules")
+)
+
+const codegenOxlint = Command.make("oxlint", {}, () => generateOxlintEffectRules(repositoryRoot)).pipe(
+  Command.withDescription("Generate and register built-in Oxlint Effect rules")
+)
+
+const codegen = Command.make("codegen").pipe(
+  Command.withDescription("Generate repository integration code"),
+  Command.withSubcommands([codegenOxlint, codegenTsgolint])
 )
 
 const test = Command.make("test", {}, () => runTests(repositoryRoot)).pipe(
@@ -61,6 +80,19 @@ const buildLocalCommand = Command.make("local", {}, () => buildLocal(repositoryR
 
 const buildCliCommand = Command.make("cli", {}, () => buildCli(repositoryRoot)).pipe(
   Command.withDescription("Build the CLI package")
+)
+
+const buildOxlintCommand = Command.make("oxlint", {
+  target: Flag.choice("target", [
+    "darwin-arm64",
+    "darwin-x64",
+    "win32-x64",
+    "win32-arm64",
+    "linux-x64",
+    "linux-arm64"
+  ])
+}, ({ target }) => buildOxlint(repositoryRoot, target)).pipe(
+  Command.withDescription("Build packaged tsgolint and Oxlint N-API artifacts")
 )
 
 const buildBinaryCommand = Command.make("binary", {
@@ -84,7 +116,13 @@ const verifyReleaseBuildCommand = Command.make("verify-release", {}, () => verif
 
 const build = Command.make("build").pipe(
   Command.withDescription("Build repository artifacts"),
-  Command.withSubcommands([buildBinaryCommand, buildCliCommand, buildLocalCommand, verifyReleaseBuildCommand])
+  Command.withSubcommands([
+    buildBinaryCommand,
+    buildCliCommand,
+    buildLocalCommand,
+    buildOxlintCommand,
+    verifyReleaseBuildCommand
+  ])
 )
 
 const changesetVersion = Command.make("version", {}, () => versionChangeset(repositoryRoot)).pipe(
@@ -212,7 +250,7 @@ const packages = Command.make("packages").pipe(
 
 Command.make("repoctl").pipe(
   Command.withDescription("Effect TypeScript-Go repository maintenance"),
-  Command.withSubcommands([submodules, build, changeset, check, flake, github, packages, perf, test, upstream]),
+  Command.withSubcommands([submodules, build, changeset, check, codegen, flake, github, packages, perf, test, upstream]),
   Command.run({ version: "0.0.0" }),
   Effect.provide(NodeServices.layer),
   NodeRuntime.runMain

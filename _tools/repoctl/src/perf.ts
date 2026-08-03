@@ -197,10 +197,10 @@ export const comparePerformance = Effect.fnUntraced(function*(repositoryRoot: st
   const profile = yield* getProfile(upstream, options.profile)
   const stockCommand = options.stockBin === undefined ? "pnpm" : path.resolve(options.stockBin)
   const stockArgs = options.stockBin === undefined
-    ? ["--silent", "--package", `typescript@${profile.ts.version}`, "dlx", "tsc"]
+    ? ["--silent", "--package", `typescript@${profile.ts.npmVersion}`, "dlx", "tsc"]
     : []
   const stockIdentity = options.stockBin === undefined
-    ? `pnpm --silent --package typescript@${profile.ts.version} dlx tsc`
+    ? `pnpm --silent --package typescript@${profile.ts.npmVersion} dlx tsc`
     : stockCommand
   const [stockVersionResult, patchedVersionResult] = yield* Effect.all([
     runCommandCaptureSplit(stockCommand, repositoryRoot, [...stockArgs, "--version"]),
