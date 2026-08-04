@@ -4,6 +4,8 @@ import test from "node:test"
 import {
   decodeUpstream,
   findTypeScriptVersion,
+  formatOxlintConfigurationSchema,
+  formatTSConfigSchema,
   getProfile,
   updateOxlintProfile,
   updateTypeScriptProfiles
@@ -145,4 +147,27 @@ test("finds a TypeScript npm version by its git head", () => {
     "7.0.1": { gitHead: revision },
     "7.0.2": { gitHead: "1123456789abcdef0123456789abcdef01234567" }
   }, "1123456789abcdef0123456789abcdef01234567"), "7.0.2")
+})
+
+test("formats a JSON Schema Store tsconfig schema", () => {
+  assert.equal(formatTSConfigSchema({ definitions: {}, title: "tsconfig" }), [
+    "{",
+    '  "definitions": {},',
+    '  "title": "tsconfig"',
+    "}",
+    ""
+  ].join("\n"))
+  assert.equal(formatTSConfigSchema({ title: "not a tsconfig schema" }), undefined)
+})
+
+test("formats an Oxlint configuration schema", () => {
+  assert.equal(formatOxlintConfigurationSchema({ definitions: {}, properties: {}, title: "Oxlintrc" }), [
+    "{",
+    '  "definitions": {},',
+    '  "properties": {},',
+    '  "title": "Oxlintrc"',
+    "}",
+    ""
+  ].join("\n"))
+  assert.equal(formatOxlintConfigurationSchema({ definitions: {} }), undefined)
 })

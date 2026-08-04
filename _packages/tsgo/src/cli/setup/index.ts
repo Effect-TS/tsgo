@@ -33,7 +33,8 @@ export const setupCommand = Command.make("setup").pipe(
         defaultTypescriptVersion: latestProfile.ts.npmVersion,
         defaultOxlintVersion: oxlintProfile.oxlint.npmVersion,
         defaultOxlintTsgolintVersion: oxlintProfile.tsgolint.npmVersion,
-        defaultSchemaPath: path.resolve(currentDir, "node_modules", pkgJson.name, "schema.json")
+        defaultSchemaPath: path.resolve(currentDir, "node_modules", pkgJson.name, "schema.json"),
+        defaultOxlintrcSchemaPath: path.resolve(currentDir, "node_modules", pkgJson.name, "oxlint-schema.json")
       })
       const result = Changes.computeChanges(assessmentState, targetState)
 

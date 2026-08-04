@@ -96,6 +96,7 @@ function makeAssessmentState(opts?: {
       currentSchemaPath: Option.none(),
       currentDiagnosticSeverities: Option.none()
     },
+    oxlintConfig: Option.none(),
     vscodeSettings
   }
 }
@@ -212,6 +213,39 @@ describe("renderCodeActions", () => {
     // Should NOT contain "(file will be modified)" since source file was found
     const hasFallback = output.some((line) => line.includes("(file will be modified)"))
     expect(hasFallback).toBe(false)
+  })
+
+  it("should render .oxlintrc.json modifications from the assessed source", () => {
+    const existingText = '{\n  "rules": {}\n}\n'
+    const state: Assessment.State = {
+      ...makeAssessmentState(),
+      oxlintConfig: Option.some({
+        path: "/test/.oxlintrc.json",
+        sourceFile: ts.parseJsonText("/test/.oxlintrc.json", existingText) as ts.JsonSourceFile,
+        parsed: JSON.parse(existingText),
+        text: existingText,
+        currentSchemaPath: Option.none()
+      })
+    }
+    const result: ComputeChangesResult = {
+      codeActions: [{
+        description: "Add $schema to .oxlintrc.json",
+        changes: [{
+          fileName: "/test/.oxlintrc.json",
+          isNewFile: false,
+          textChanges: [{
+            span: { start: 2, length: 0 },
+            newText: '"$schema": "./node_modules/@effect/tsgo/oxlint-schema.json",\n  '
+          }]
+        }]
+      }],
+      messages: []
+    }
+
+    const output = runAndCapture(result, state)
+    const allOutput = output.join("\n")
+    expect(allOutput).toContain("oxlint-schema.json")
+    expect(allOutput).not.toContain("(file will be modified)")
   })
 
   it("should render no changes message when codeActions is empty", () => {

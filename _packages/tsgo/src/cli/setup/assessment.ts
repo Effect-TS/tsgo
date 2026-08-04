@@ -48,6 +48,21 @@ export const createAssessmentInput = (
       text: packageJsonText
     }
 
+    // Read .oxlintrc.json (optional)
+    const oxlintConfigPath = path.join(currentDir, ".oxlintrc.json")
+    const oxlintConfigExists = yield* fs.exists(oxlintConfigPath)
+
+    let oxlintConfigInput = Option.none<FileInput>()
+    if (oxlintConfigExists) {
+      const oxlintConfigText = yield* fs.readFileString(oxlintConfigPath).pipe(
+        Effect.mapError((cause) => new FileReadError({ path: oxlintConfigPath, cause }))
+      )
+      oxlintConfigInput = Option.some({
+        fileName: oxlintConfigPath,
+        text: oxlintConfigText
+      })
+    }
+
     // Read .vscode/settings.json (optional)
     const vscodeSettingsPath = path.join(currentDir, ".vscode", "settings.json")
     const vscodeSettingsExists = yield* fs.exists(vscodeSettingsPath)
@@ -66,6 +81,7 @@ export const createAssessmentInput = (
     return {
       packageJson: packageJsonInput,
       tsconfig: tsconfigInput,
+      oxlintConfig: oxlintConfigInput,
       vscodeSettings: vscodeSettingsInput
     }
   })
@@ -216,6 +232,22 @@ const assessVSCodeSettings = (
   }
 }
 
+const assessOxlintConfig = (
+  input: FileInput
+): Assessment.OxlintConfig => {
+  const sourceFile = ts.parseJsonText(input.fileName, input.text)
+  const errors: Array<ts.Diagnostic> = []
+  const parsed = ts.convertToObject(sourceFile, errors) as Record<string, unknown>
+
+  return {
+    path: input.fileName,
+    sourceFile,
+    parsed,
+    text: input.text,
+    currentSchemaPath: typeof parsed.$schema === "string" ? Option.some(parsed.$schema) : Option.none()
+  }
+}
+
 /**
  * Perform assessment from input data
  */
@@ -225,6 +257,10 @@ export const assess = (
   const packageJson = assessPackageJson(input.packageJson)
   const tsconfig = assessTsConfig(input.tsconfig)
 
+  const oxlintConfig = Option.isSome(input.oxlintConfig)
+    ? Option.some(assessOxlintConfig(input.oxlintConfig.value))
+    : Option.none<Assessment.OxlintConfig>()
+
   const vscodeSettings = Option.isSome(input.vscodeSettings)
     ? Option.some(assessVSCodeSettings(input.vscodeSettings.value))
     : Option.none<Assessment.VSCodeSettings>()
@@ -232,6 +268,7 @@ export const assess = (
   return {
     packageJson,
     tsconfig,
+    oxlintConfig,
     vscodeSettings
   }
 }

@@ -60,6 +60,7 @@ See the [Language Service setup guide](../../README.md#installation) for install
 
 ```jsonc
 {
+  "$schema": "./node_modules/@effect/tsgo/schema.json",
   "compilerOptions": {
     "plugins": [
       {
@@ -79,6 +80,7 @@ See the [Oxlint setup guide](../README.md#oxlint-setup) for installation and pat
 
 ```json
 {
+  "$schema": "./node_modules/@effect/tsgo/oxlint-schema.json",
   "options": {
     "typeAware": true
   },

@@ -33,6 +33,10 @@ func TestGenerateTSConfigSchemaMatchesReference(t *testing.T) {
 	referencePath := filepath.Join(root, "schema.json")
 
 	writeIfChanged(t, localPath, actual)
+	if os.Getenv("UPDATE_TSCONFIG_SCHEMA") == "1" {
+		writeIfChanged(t, referencePath, actual)
+		return
+	}
 
 	expected, err := os.ReadFile(referencePath)
 	if err != nil {
