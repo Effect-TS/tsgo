@@ -9,13 +9,21 @@ export const fromAssessment = (inputState: Assessment.State): Target.State => ({
   packageJson: {
     lspVersion: inputState.packageJson.lspVersion,
     typescriptVersion: inputState.packageJson.typescriptVersion,
+    oxlintVersion: inputState.packageJson.oxlintVersion,
+    oxlintTsgolintVersion: inputState.packageJson.oxlintTsgolintVersion,
     prepareScript: Option.map(inputState.packageJson.prepareScript, (_) => _.hasPatch).pipe(
       Option.getOrElse(() => false)
-    )
+    ),
+    managePrepareScript: false,
+    integrations: Option.match(inputState.packageJson.prepareScript, {
+      onNone: () => Option.isSome(inputState.packageJson.lspVersion) ? ["typescript"] : [],
+      onSome: (_) => _.integrations
+    })
   },
   tsconfig: {
     schemaPath: inputState.tsconfig.currentSchemaPath,
-    diagnosticSeverities: inputState.tsconfig.currentDiagnosticSeverities
+    diagnosticSeverities: inputState.tsconfig.currentDiagnosticSeverities,
+    manageIntegration: false
   },
   vscodeSettings: Option.map(inputState.vscodeSettings, (settings) => ({
     settings: settings.parsed

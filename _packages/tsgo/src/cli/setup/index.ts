@@ -12,6 +12,10 @@ const latestProfile = upstreamJson.profiles.find((profile) => profile.name === "
 if (latestProfile === undefined) {
   throw new Error("Missing latest profile in upstream.json")
 }
+const oxlintProfile = upstreamJson.profiles.find((profile) => profile.kind === "oxlint")
+if (oxlintProfile?.oxlint === undefined || oxlintProfile.tsgolint === undefined) {
+  throw new Error("Missing oxlint profile in upstream.json")
+}
 
 export const setupCommand = Command.make("setup").pipe(
   Command.withDescription("Setup @effect/tsgo for the given project using an interactive CLI."),
@@ -27,6 +31,8 @@ export const setupCommand = Command.make("setup").pipe(
       const targetState = yield* gatherTargetState(assessmentState, {
         defaultLspVersion: pkgJson.version,
         defaultTypescriptVersion: latestProfile.ts.npmVersion,
+        defaultOxlintVersion: oxlintProfile.oxlint.npmVersion,
+        defaultOxlintTsgolintVersion: oxlintProfile.tsgolint.npmVersion,
         defaultSchemaPath: path.resolve(currentDir, "node_modules", pkgJson.name, "schema.json")
       })
       const result = Changes.computeChanges(assessmentState, targetState)

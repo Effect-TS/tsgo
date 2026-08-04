@@ -12,8 +12,10 @@ import {
   defaultTypescriptPackageNames,
   LSP_PACKAGE_NAME,
   LSP_PLUGIN_NAME,
-  PATCH_COMMAND
+  OXLINT_PACKAGE_NAME,
+  OXLINT_TSGOLINT_PACKAGE_NAME
 } from "./consts.js"
+import { getPatchCommand, updatePatchCommand } from "./patch-command.js"
 import type { RuleSeverity } from "./rule-info.js"
 
 interface ComputeFileChangesResult {
@@ -259,6 +261,31 @@ const computePackageJsonChanges = (
         )
       }
 
+      const appendNewOxlintDependencies = (
+        dependencyProperties: Array<ts.PropertyAssignment>,
+        dependencyType: "dependencies" | "devDependencies"
+      ) => {
+        for (const [packageName, currentDependency, targetDependency] of [
+          [OXLINT_PACKAGE_NAME, current.oxlintVersion, target.oxlintVersion],
+          [OXLINT_TSGOLINT_PACKAGE_NAME, current.oxlintTsgolintVersion, target.oxlintTsgolintVersion]
+        ] as const) {
+          if (
+            target.integrations.includes("oxlint") &&
+            Option.isNone(currentDependency) &&
+            Option.isSome(targetDependency) &&
+            targetDependency.value.dependencyType === dependencyType
+          ) {
+            descriptions.push(`Add ${packageName}@${targetDependency.value.version} in ${dependencyType}`)
+            dependencyProperties.push(
+              ts.factory.createPropertyAssignment(
+                ts.factory.createStringLiteral(packageName),
+                ts.factory.createStringLiteral(targetDependency.value.version)
+              )
+            )
+          }
+        }
+      }
+
       const ensureTypescriptDependency = () => {
         if (Option.isNone(target.typescriptVersion) || Option.isSome(current.typescriptVersion)) {
           return
@@ -280,6 +307,32 @@ const computePackageJsonChanges = (
           `Add ${targetTypescriptPackageName}@${targetTypescript.version} to ${targetTypescript.dependencyType}`
         )
         upsertDependency(tracker, current.sourceFile, rootObj, targetTypescriptPackageName, targetTypescript)
+      }
+
+      const ensurePinnedDependency = (
+        packageName: string,
+        currentDependency: Option.Option<PackageDependency>,
+        targetDependency: Option.Option<PackageDependency>
+      ) => {
+        if (Option.isNone(targetDependency)) return
+        if (
+          Option.isSome(currentDependency) &&
+          currentDependency.value.version === targetDependency.value.version &&
+          currentDependency.value.dependencyType === targetDependency.value.dependencyType
+        ) return
+        if (
+          Option.isNone(currentDependency) &&
+          !findDependencyCollectionProperty(rootObj, targetDependency.value.dependencyType) &&
+          Option.isSome(target.lspVersion) &&
+          target.lspVersion.value.dependencyType === targetDependency.value.dependencyType
+        ) return
+
+        descriptions.push(
+          `${Option.isSome(currentDependency) ? "Update" : "Add"} ${packageName}@${targetDependency.value.version} in ${
+            targetDependency.value.dependencyType
+          }`
+        )
+        upsertDependency(tracker, current.sourceFile, rootObj, packageName, targetDependency.value)
       }
 
       // Handle @effect/tsgo dependency
@@ -318,6 +371,7 @@ const computePackageJsonChanges = (
               if (shouldAddTypescriptWithDependencyType(targetDepType)) {
                 appendTypescriptDependencyProperty(dependencyProperties)
               }
+              appendNewOxlintDependencies(dependencyProperties, targetDepType)
 
               const newDepsProp = ts.factory.createPropertyAssignment(
                 ts.factory.createStringLiteral(targetDepType),
@@ -368,6 +422,7 @@ const computePackageJsonChanges = (
             if (shouldAddTypescriptWithDependencyType(targetDepType)) {
               appendTypescriptDependencyProperty(dependencyProperties)
             }
+            appendNewOxlintDependencies(dependencyProperties, targetDepType)
 
             const newDepsProp = ts.factory.createPropertyAssignment(
               ts.factory.createStringLiteral(targetDepType),
@@ -388,6 +443,14 @@ const computePackageJsonChanges = (
         }
 
         ensureTypescriptDependency()
+        if (target.integrations.includes("oxlint")) {
+          ensurePinnedDependency(OXLINT_PACKAGE_NAME, current.oxlintVersion, target.oxlintVersion)
+          ensurePinnedDependency(
+            OXLINT_TSGOLINT_PACKAGE_NAME,
+            current.oxlintTsgolintVersion,
+            target.oxlintTsgolintVersion
+          )
+        }
       } else if (Option.isSome(current.lspVersion)) {
         // User wants to remove LSP
         descriptions.push(`Remove ${LSP_PACKAGE_NAME} from dependencies`)
@@ -404,7 +467,12 @@ const computePackageJsonChanges = (
       }
 
       // Handle prepare script
-      if (target.prepareScript && Option.isSome(target.lspVersion)) {
+      const patchCommand = target.prepareScript && Option.isSome(target.lspVersion)
+        ? getPatchCommand(target.integrations)
+        : undefined
+      if (!target.managePrepareScript) {
+        return
+      } else if (patchCommand !== undefined) {
         const scriptsProperty = findPropertyInObject(rootObj, "scripts")
 
         if (!scriptsProperty) {
@@ -413,9 +481,9 @@ const computePackageJsonChanges = (
           const newScriptsProp = ts.factory.createPropertyAssignment(
             ts.factory.createStringLiteral("scripts"),
             ts.factory.createObjectLiteralExpression([
-              ts.factory.createPropertyAssignment(
-                ts.factory.createStringLiteral("prepare"),
-                ts.factory.createStringLiteral(PATCH_COMMAND)
+                ts.factory.createPropertyAssignment(
+                  ts.factory.createStringLiteral("prepare"),
+                  ts.factory.createStringLiteral(patchCommand)
               )
             ], false)
           )
@@ -428,7 +496,7 @@ const computePackageJsonChanges = (
 
             const newPrepareProp = ts.factory.createPropertyAssignment(
               ts.factory.createStringLiteral("prepare"),
-              ts.factory.createStringLiteral(PATCH_COMMAND)
+              ts.factory.createStringLiteral(patchCommand)
             )
             insertNodeAtEndOfList(tracker, current.sourceFile, scriptsProperty.initializer.properties, newPrepareProp)
           } else if (Option.isSome(current.prepareScript) && !current.prepareScript.value.hasPatch) {
@@ -436,49 +504,50 @@ const computePackageJsonChanges = (
             descriptions.push("Update prepare script to include patch command")
 
             const currentScript = current.prepareScript.value.script
-            const newScript = `${currentScript} && ${PATCH_COMMAND}`
+            const newScript = `${currentScript} && ${patchCommand}`
             tracker.replaceNode(
               current.sourceFile,
               prepareProperty.initializer,
               ts.factory.createStringLiteral(newScript)
             )
+          } else if (Option.isSome(current.prepareScript)) {
+            const currentScript = current.prepareScript.value.script
+            const updated = updatePatchCommand(currentScript, target.integrations)
+            if (updated.found && updated.script !== currentScript) {
+              descriptions.push("Update effect-tsgo patch integrations in prepare script")
+              tracker.replaceNode(
+                current.sourceFile,
+                prepareProperty.initializer,
+                ts.factory.createStringLiteral(updated.script)
+              )
+            }
           }
         }
       } else if (
-        Option.isNone(target.lspVersion) && Option.isSome(current.prepareScript) &&
+        Option.isSome(current.prepareScript) &&
         current.prepareScript.value.hasPatch
       ) {
-        // User wants to remove LSP and prepare script has patch command
         const scriptsProperty = findPropertyInObject(rootObj, "scripts")
         if (scriptsProperty && ts.isObjectLiteralExpression(scriptsProperty.initializer)) {
           const prepareProperty = findPropertyInObject(scriptsProperty.initializer, "prepare")
           if (prepareProperty && ts.isStringLiteral(prepareProperty.initializer)) {
             const currentScript = current.prepareScript.value.script
-            const hasMultipleCommands = currentScript.includes("&&") || currentScript.includes(";")
-
-            if (hasMultipleCommands) {
+            const updated = updatePatchCommand(currentScript, [])
+            if (updated.found && updated.script.length > 0) {
               descriptions.push("Remove effect-tsgo patch command from prepare script")
-              messages.push(
-                "WARNING: Your prepare script contained multiple commands. " +
-                  "I attempted to automatically remove only the 'effect-tsgo patch' command. " +
-                  "Please verify that the prepare script is correct after this change."
-              )
-
-              const newScript = currentScript
-                .replace(/\s*&&\s*effect-tsgo\s+patch/g, "")
-                .replace(/effect-tsgo\s+patch\s*&&\s*/g, "")
-                .replace(/\s*;\s*effect-tsgo\s+patch/g, "")
-                .replace(/effect-tsgo\s+patch\s*;\s*/g, "")
-                .trim()
-
               tracker.replaceNode(
                 current.sourceFile,
                 prepareProperty.initializer,
-                ts.factory.createStringLiteral(newScript)
+                ts.factory.createStringLiteral(updated.script)
               )
-            } else {
+            } else if (updated.found) {
               descriptions.push("Remove prepare script with patch command")
               deleteNodeFromList(tracker, current.sourceFile, scriptsProperty.initializer.properties, prepareProperty)
+            } else {
+              messages.push(
+                "WARNING: The prepare script uses shell control flow that cannot be safely rewritten. " +
+                  "Remove the effect-tsgo patch command manually."
+              )
             }
           }
         }
@@ -522,11 +591,38 @@ const computeTsConfigChanges = (
     return emptyFileChangesResult()
   }
 
+  const isEffectSchemaProperty = (property: ts.PropertyAssignment | undefined) =>
+    property !== undefined &&
+    ts.isStringLiteral(property.initializer) &&
+    property.initializer.text.replaceAll("\\", "/").endsWith("node_modules/@effect/tsgo/schema.json")
+
   const compilerOptionsProperty = findPropertyInObject(rootObj, "compilerOptions")
   if (!compilerOptionsProperty || !ts.isObjectLiteralExpression(compilerOptionsProperty.initializer)) {
-    // No compilerOptions — if we're removing LSP there's nothing to do
     if (Option.isNone(lspVersion)) {
-      return emptyFileChangesResult()
+      if (!target.manageIntegration) return emptyFileChangesResult()
+
+      const schemaProperty = findPropertyInObject(rootObj, "$schema")
+      if (!isEffectSchemaProperty(schemaProperty)) return emptyFileChangesResult()
+
+      const ctx = createTrackerContext()
+      const fileChanges = tsInternal.textChanges.ChangeTracker.with(ctx, (tracker: any) => {
+        descriptions.push("Remove $schema from tsconfig")
+        deleteNodeFromList(tracker, current.sourceFile, rootObj.properties, schemaProperty!)
+      })
+      const fileChange = fileChanges.find((fc: ts.FileTextChanges) => fc.fileName === current.sourceFile.fileName)
+      return {
+        codeActions: fileChange
+          ? [{
+            description: descriptions.join("; "),
+            changes: [{
+              fileName: current.sourceFile.fileName,
+              textChanges: fileChange.textChanges,
+              isNewFile: false
+            }]
+          }]
+          : [],
+        messages
+      }
     }
 
     // Create compilerOptions with the plugin entry
@@ -575,7 +671,7 @@ const computeTsConfigChanges = (
         })
 
         if (shouldAddSchema && Option.isSome(schemaPropertyAssignment)) {
-          nextProperties.push(schemaPropertyAssignment.value)
+          nextProperties.unshift(schemaPropertyAssignment.value)
         }
         nextProperties.push(compilerOptionsAssignment)
 
@@ -621,25 +717,56 @@ const computeTsConfigChanges = (
           ts.factory.createStringLiteral(schemaPath)
         ))
 
+      const updateDiagnosticSeverity = (lspPluginElement: ts.ObjectLiteralExpression) => {
+        const diagnosticSeverityProperty = findPropertyInObject(lspPluginElement, "diagnosticSeverity")
+        if (Option.isSome(target.diagnosticSeverities)) {
+          const newDiagnosticSeverityValue = createDiagnosticSeverityObject(target.diagnosticSeverities.value)
+          if (!diagnosticSeverityProperty) {
+            descriptions.push(`Add diagnosticSeverity to ${LSP_PLUGIN_NAME} plugin`)
+            insertNodeAtEndOfList(tracker, current.sourceFile, lspPluginElement.properties, ts.factory.createPropertyAssignment(
+              ts.factory.createStringLiteral("diagnosticSeverity"),
+              newDiagnosticSeverityValue
+            ))
+          } else {
+            descriptions.push(`Update diagnosticSeverity in ${LSP_PLUGIN_NAME} plugin`)
+            tracker.replaceNode(current.sourceFile, diagnosticSeverityProperty.initializer, newDiagnosticSeverityValue)
+          }
+        } else if (diagnosticSeverityProperty) {
+          descriptions.push(`Remove diagnosticSeverity from ${LSP_PLUGIN_NAME} plugin`)
+          deleteNodeFromList(tracker, current.sourceFile, lspPluginElement.properties, diagnosticSeverityProperty)
+        }
+      }
+
+      const findLspPlugin = () => {
+        if (!pluginsProperty || !ts.isArrayLiteralExpression(pluginsProperty.initializer)) return undefined
+        return pluginsProperty.initializer.elements.find((element): element is ts.ObjectLiteralExpression => {
+          if (!ts.isObjectLiteralExpression(element)) return false
+          const nameProperty = findPropertyInObject(element, "name")
+          return nameProperty !== undefined && ts.isStringLiteral(nameProperty.initializer) &&
+            nameProperty.initializer.text === LSP_PLUGIN_NAME
+        })
+      }
+
+      if (!target.manageIntegration) {
+        const lspPluginElement = findLspPlugin()
+        if (lspPluginElement) {
+          updateDiagnosticSeverity(lspPluginElement)
+          return
+        }
+        if (Option.isNone(lspVersion)) return
+      }
+
       if (Option.isNone(lspVersion)) {
         // User wants to remove LSP
-        if (schemaProperty) {
+        if (isEffectSchemaProperty(schemaProperty)) {
           descriptions.push("Remove $schema from tsconfig")
-          deleteNodeFromList(tracker, current.sourceFile, rootObj.properties, schemaProperty)
+          deleteNodeFromList(tracker, current.sourceFile, rootObj.properties, schemaProperty!)
         }
 
         if (pluginsProperty && ts.isArrayLiteralExpression(pluginsProperty.initializer)) {
           const pluginsArray = pluginsProperty.initializer
 
-          const lspPluginElement = pluginsArray.elements.find((element) => {
-            if (ts.isObjectLiteralExpression(element)) {
-              const nameProperty = findPropertyInObject(element, "name")
-              if (nameProperty && ts.isStringLiteral(nameProperty.initializer)) {
-                return nameProperty.initializer.text === LSP_PLUGIN_NAME
-              }
-            }
-            return false
-          })
+          const lspPluginElement = findLspPlugin()
 
           if (lspPluginElement) {
             descriptions.push(`Remove ${LSP_PLUGIN_NAME} plugin from tsconfig`)
@@ -650,7 +777,7 @@ const computeTsConfigChanges = (
         // User wants to add/keep LSP
         if (!schemaProperty && Option.isSome(schemaPropertyAssignment)) {
           descriptions.push("Add $schema to tsconfig")
-          insertNodeAtEndOfList(tracker, current.sourceFile, rootObj.properties, schemaPropertyAssignment.value)
+          tracker.insertNodeAtObjectStart(current.sourceFile, rootObj, schemaPropertyAssignment.value)
         } else if (
           schemaProperty &&
           Option.isSome(target.schemaPath) &&
@@ -677,37 +804,13 @@ const computeTsConfigChanges = (
         } else if (ts.isArrayLiteralExpression(pluginsProperty.initializer)) {
           const pluginsArray = pluginsProperty.initializer
 
-          const lspPluginElement = pluginsArray.elements.find((element) => {
-            if (ts.isObjectLiteralExpression(element)) {
-              const nameProperty = findPropertyInObject(element, "name")
-              if (nameProperty && ts.isStringLiteral(nameProperty.initializer)) {
-                return nameProperty.initializer.text === LSP_PLUGIN_NAME
-              }
-            }
-            return false
-          })
+          const lspPluginElement = findLspPlugin()
 
           if (!lspPluginElement) {
             descriptions.push(`Add ${LSP_PLUGIN_NAME} plugin to existing plugins array`)
             insertNodeAtEndOfList(tracker, current.sourceFile, pluginsArray.elements, pluginObject)
           } else if (ts.isObjectLiteralExpression(lspPluginElement)) {
-            const diagnosticSeverityProperty = findPropertyInObject(lspPluginElement, "diagnosticSeverity")
-            if (Option.isSome(target.diagnosticSeverities)) {
-              const newDiagnosticSeverityValue = createDiagnosticSeverityObject(target.diagnosticSeverities.value)
-              if (!diagnosticSeverityProperty) {
-                descriptions.push(`Add diagnosticSeverity to ${LSP_PLUGIN_NAME} plugin`)
-                insertNodeAtEndOfList(tracker, current.sourceFile, lspPluginElement.properties, ts.factory.createPropertyAssignment(
-                  ts.factory.createStringLiteral("diagnosticSeverity"),
-                  newDiagnosticSeverityValue
-                ))
-              } else if (ts.isPropertyAssignment(diagnosticSeverityProperty)) {
-                descriptions.push(`Update diagnosticSeverity in ${LSP_PLUGIN_NAME} plugin`)
-                tracker.replaceNode(current.sourceFile, diagnosticSeverityProperty.initializer, newDiagnosticSeverityValue)
-              }
-            } else if (diagnosticSeverityProperty) {
-              descriptions.push(`Remove diagnosticSeverity from ${LSP_PLUGIN_NAME} plugin`)
-              deleteNodeFromList(tracker, current.sourceFile, lspPluginElement.properties, diagnosticSeverityProperty)
-            }
+            updateDiagnosticSeverity(lspPluginElement)
           }
         }
       }
@@ -837,7 +940,9 @@ export const computeChanges = (
   const tsconfigResult = computeTsConfigChanges(
     assessment.tsconfig,
     target.tsconfig,
-    target.packageJson.lspVersion
+    target.packageJson.integrations.includes("typescript")
+      ? target.packageJson.lspVersion
+      : Option.none()
   )
   codeActions = [...codeActions, ...tsconfigResult.codeActions]
   messages = [...messages, ...tsconfigResult.messages]
@@ -870,14 +975,20 @@ export const computeChanges = (
 
   // Add post-apply next-step messages
   if (Option.isSome(target.packageJson.lspVersion) && codeActions.length > 0) {
+    const patchCommand = getPatchCommand(target.packageJson.integrations)
     messages = [
       ...messages,
-      "Run `effect-tsgo patch` to complete the installation."
+      `Run \`${patchCommand ?? "effect-tsgo patch"}\` to complete the installation.`
     ]
   } else if (Option.isNone(target.packageJson.lspVersion) && Option.isSome(assessment.packageJson.lspVersion)) {
+    const integrations = Option.match(assessment.packageJson.prepareScript, {
+      onNone: () => ["typescript" as const],
+      onSome: (_) => _.integrations
+    })
+    const unpatchCommand = getPatchCommand(integrations)?.replace(" patch ", " unpatch ") ?? "effect-tsgo unpatch"
     messages = [
       ...messages,
-      "Run `effect-tsgo unpatch` to restore the original TypeScript-Go binary."
+      `Run \`${unpatchCommand}\` to restore the original integrations.`
     ]
   }
 

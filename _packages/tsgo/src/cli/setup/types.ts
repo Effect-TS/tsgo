@@ -17,6 +17,7 @@ export interface FileInput {
 }
 
 export type Editor = "vscode" | "nvim" | "emacs"
+export type Integration = "typescript" | "oxlint"
 
 export interface PackageDependency {
   readonly dependencyType: "dependencies" | "devDependencies"
@@ -41,9 +42,12 @@ export namespace Assessment {
     readonly text: string
     readonly lspVersion: Option.Option<PackageDependency>
     readonly typescriptVersion: Option.Option<PackageDependency>
+    readonly oxlintVersion: Option.Option<PackageDependency>
+    readonly oxlintTsgolintVersion: Option.Option<PackageDependency>
     readonly prepareScript: Option.Option<{
       readonly script: string
       readonly hasPatch: boolean
+      readonly integrations: ReadonlyArray<Integration>
     }>
   }
 
@@ -76,12 +80,17 @@ export namespace Target {
   export interface PackageJson {
     readonly lspVersion: Option.Option<PackageDependency>
     readonly typescriptVersion: Option.Option<PackageDependency>
+    readonly oxlintVersion: Option.Option<PackageDependency>
+    readonly oxlintTsgolintVersion: Option.Option<PackageDependency>
     readonly prepareScript: boolean
+    readonly managePrepareScript: boolean
+    readonly integrations: ReadonlyArray<Integration>
   }
 
   export interface TsConfig {
     readonly schemaPath: Option.Option<string>
     readonly diagnosticSeverities: Option.Option<Record<string, RuleSeverity>>
+    readonly manageIntegration: boolean
   }
 
   export interface VSCodeSettings {
