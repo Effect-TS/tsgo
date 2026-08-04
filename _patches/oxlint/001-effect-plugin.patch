@@ -40,7 +40,7 @@ index 865b7cb3..5eacd25b 100644
              _ => "",
          }
      }
-@@ -271,6 +275,7 @@ impl JsonSchema for LintPlugins {
+@@ -271,6 +275,8 @@ impl JsonSchema for LintPlugins {
              Promise,
              Node,
              Vue,
@@ -49,7 +49,7 @@ index 865b7cb3..5eacd25b 100644
          }
  
          let enum_schema = r#gen.subschema_for::<LintPluginOptionsSchema>();
-@@ -312,6 +317,7 @@ mod tests {
+@@ -312,6 +318,7 @@ mod tests {
          assert_eq!(LintPlugins::try_from("react"), Ok(LintPlugins::REACT));
          assert_eq!(LintPlugins::try_from("typescript-eslint"), Ok(LintPlugins::TYPESCRIPT));
          assert_eq!(LintPlugins::try_from("deepscan"), Ok(LintPlugins::OXC));
@@ -57,7 +57,7 @@ index 865b7cb3..5eacd25b 100644
          assert_eq!(LintPlugins::try_from("unknown"), Err(()));
      }
  
-@@ -319,6 +325,7 @@ mod tests {
+@@ -319,6 +326,7 @@ mod tests {
      fn test_plugin_to_str() {
          assert_eq!(<&'static str>::from(LintPlugins::REACT), "react");
          assert_eq!(<&'static str>::from(LintPlugins::JEST), "jest");
