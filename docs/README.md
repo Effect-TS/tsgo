@@ -24,10 +24,22 @@ Run pnpm install to install the dependencies and run the prepare script to patch
 pnpm install
 ```
 
-Effect rules require Oxlint's type-aware mode:
+Effect rules require Oxlint's type-aware mode and the `effecttsgo` plugin. We recommend enabling both in `.oxlintrc.json` and using the schema shipped with `@effect/tsgo` for validation and completions:
+
+```json
+{
+  "$schema": "./node_modules/@effect/tsgo/oxlint-schema.json",
+  "options": {
+    "typeAware": true
+  },
+  "plugins": ["effecttsgo"]
+}
+```
+
+You can then run Oxlint normally:
 
 ```sh
-pnpm exec oxlint --type-aware .
+pnpm exec oxlint .
 ```
 
 The installed `oxlint` and `oxlint-tsgolint` versions must match the versions supported by the installed `@effect/tsgo` release. The patch command validates this before changing either integration.
@@ -42,4 +54,3 @@ pnpm exec effect-tsgo unpatch --no-typescript --oxlint
 ## Known limitations
 
 - All rules require Oxlint's type-aware mode, because they rely on type information to provide accurate diagnostics.
-- No fixes and suggestions are provided for effect rules at the moment, but this is planned for a future release.
