@@ -11,8 +11,10 @@ import {
   LSP_PACKAGE_NAME,
   LSP_PLUGIN_NAME,
   isNativeTypescriptVersion,
-  PATCH_COMMAND
+  OXLINT_PACKAGE_NAME,
+  OXLINT_TSGOLINT_PACKAGE_NAME
 } from "./consts.js"
+import { getPatchIntegrations, hasPatchCommand } from "./patch-command.js"
 import type { RuleSeverity } from "./rule-info.js"
 
 /**
@@ -101,6 +103,8 @@ const assessPackageJson = (
   }
 
   const lspVersion = assessDependency(LSP_PACKAGE_NAME)
+  const oxlintVersion = assessDependency(OXLINT_PACKAGE_NAME)
+  const oxlintTsgolintVersion = assessDependency(OXLINT_TSGOLINT_PACKAGE_NAME)
   let typescriptVersion = Option.none<PackageDependency>()
   for (const packageName of defaultTypescriptPackageNames) {
     const typescriptDep = assessDependency(packageName)
@@ -114,7 +118,8 @@ const assessPackageJson = (
   const prepareScript = "prepare" in (parsed.scripts ?? {})
     ? Option.some({
       script: parsed.scripts!.prepare,
-      hasPatch: parsed.scripts!.prepare.toLowerCase().includes(PATCH_COMMAND)
+      hasPatch: hasPatchCommand(parsed.scripts!.prepare),
+      integrations: getPatchIntegrations(parsed.scripts!.prepare)
     })
     : Option.none()
 
@@ -125,6 +130,8 @@ const assessPackageJson = (
     text: input.text,
     lspVersion,
     typescriptVersion,
+    oxlintVersion,
+    oxlintTsgolintVersion,
     prepareScript
   }
 }

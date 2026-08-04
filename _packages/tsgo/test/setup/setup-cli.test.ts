@@ -56,10 +56,17 @@ function applyTextChanges(
 function expectSetupChanges(
   assessmentInput: Assessment.Input,
   targetState: {
-    readonly packageJson: Target.PackageJson
+    readonly packageJson: Omit<
+      Target.PackageJson,
+      "oxlintVersion" | "oxlintTsgolintVersion" | "managePrepareScript" | "integrations"
+    > & Partial<Pick<
+      Target.PackageJson,
+      "oxlintVersion" | "oxlintTsgolintVersion" | "managePrepareScript" | "integrations"
+    >>
     readonly tsconfig: {
       readonly schemaPath?: Option.Option<string>
       readonly diagnosticSeverities: Option.Option<Record<string, string>>
+      readonly manageIntegration?: boolean
     }
     readonly vscodeSettings: Option.Option<Target.VSCodeSettings>
     readonly editors: ReadonlyArray<string>
@@ -67,6 +74,14 @@ function expectSetupChanges(
 ) {
   const normalizedTargetState: Target.State = {
     ...targetState,
+    packageJson: {
+      ...targetState.packageJson,
+      oxlintVersion: targetState.packageJson.oxlintVersion ?? Option.none(),
+      oxlintTsgolintVersion: targetState.packageJson.oxlintTsgolintVersion ?? Option.none(),
+      managePrepareScript: targetState.packageJson.managePrepareScript ?? true,
+      integrations: targetState.packageJson.integrations ??
+        (Option.isSome(targetState.packageJson.lspVersion) ? ["typescript"] : [])
+    },
     editors: targetState.editors.filter((editor): editor is Editor =>
       editor === "vscode" || editor === "nvim" || editor === "emacs"
     ),
@@ -76,7 +91,8 @@ function expectSetupChanges(
         onNone: () => Option.none(),
         onSome: () => Option.some(TEST_SCHEMA_PATH)
       }),
-      diagnosticSeverities: targetState.tsconfig.diagnosticSeverities as Target.TsConfig["diagnosticSeverities"]
+      diagnosticSeverities: targetState.tsconfig.diagnosticSeverities as Target.TsConfig["diagnosticSeverities"],
+      manageIntegration: targetState.tsconfig.manageIntegration ?? true
     }
   }
 

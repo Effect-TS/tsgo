@@ -4,6 +4,8 @@ export const LSP_PACKAGE_NAME = pkgJson.name
 export const LSP_PLUGIN_NAME = "@effect/language-service"
 export const defaultTypescriptPackageNames = ["typescript", "@typescript/native"] as const
 export const PATCH_COMMAND = "effect-tsgo patch"
+export const OXLINT_PACKAGE_NAME = "oxlint"
+export const OXLINT_TSGOLINT_PACKAGE_NAME = "oxlint-tsgolint"
 
 /**
  * `typescript` package versions >= 7 ship the native Go-ported binary that this
