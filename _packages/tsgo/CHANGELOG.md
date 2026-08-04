@@ -1,5 +1,11 @@
 # @effect/tsgo
 
+## 0.30.0
+
+### Minor Changes
+
+- f155e33: Ship an Effect-aware Oxlint configuration schema and configure existing `.oxlintrc.json` files to use it when enabling the Oxlint integration. Keep the bundled TypeScript and Oxlint base schemas synchronized through the upstream update workflow.
+
 ## 0.29.0
 
 ### Minor Changes

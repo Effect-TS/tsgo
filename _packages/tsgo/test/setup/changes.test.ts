@@ -6,6 +6,7 @@ import type { Assessment } from "../../src/cli/setup/types.js"
 
 const TEST_TYPESCRIPT_VERSION = "7.1.0-dev.test"
 const TEST_SCHEMA_PATH = "./node_modules/@effect/tsgo/schema.json"
+const TEST_OXLINT_SCHEMA_PATH = "./node_modules/@effect/tsgo/oxlint-schema.json"
 
 const applyTextChanges = (
   text: string,
@@ -24,6 +25,7 @@ const applyTextChanges = (
 function runComputeChanges(opts: {
   packageJsonText?: string
   tsconfigText?: string
+  oxlintConfigText?: string | null
   vscodeSettingsText?: string | null
   editors?: ReadonlyArray<"vscode" | "nvim" | "emacs">
   lspVersion?: { dependencyType: "dependencies" | "devDependencies"; version: string } | null
@@ -52,6 +54,9 @@ function runComputeChanges(opts: {
   const input: Assessment.Input = {
     packageJson: { fileName: "/test/package.json", text: packageJsonText },
     tsconfig: { fileName: "/test/tsconfig.json", text: tsconfigText },
+    oxlintConfig: opts.oxlintConfigText != null
+      ? Option.some({ fileName: "/test/.oxlintrc.json", text: opts.oxlintConfigText })
+      : Option.none(),
     vscodeSettings: opts.vscodeSettingsText != null
       ? Option.some({ fileName: "/test/.vscode/settings.json", text: opts.vscodeSettingsText })
       : Option.none()
@@ -104,6 +109,9 @@ function runComputeChanges(opts: {
         : Option.some(opts.diagnosticSeverities),
       manageIntegration: true
     },
+    oxlintrcSchemaPath: (opts.integrations ?? []).includes("oxlint") && Option.isSome(assessment.oxlintConfig)
+      ? Option.some(TEST_OXLINT_SCHEMA_PATH)
+      : Option.none(),
     vscodeSettings: vscodeTargetSettings,
     editors: opts.editors ?? ["vscode"]
   }
@@ -186,6 +194,7 @@ describe("computeChanges", () => {
     const input: Assessment.Input = {
       packageJson: { fileName: "/test/package.json", text: packageJsonText },
       tsconfig: { fileName: "/test/tsconfig.json", text: "{}" },
+      oxlintConfig: Option.none(),
       vscodeSettings: Option.none()
     }
 
@@ -211,6 +220,7 @@ describe("computeChanges", () => {
     const input: Assessment.Input = {
       packageJson: { fileName: "/test/package.json", text: packageJsonText },
       tsconfig: { fileName: "/test/tsconfig.json", text: "{}" },
+      oxlintConfig: Option.none(),
       vscodeSettings: Option.none()
     }
 
@@ -233,6 +243,7 @@ describe("computeChanges", () => {
         })
       },
       tsconfig: { fileName: "/test/tsconfig.json", text: "{}" },
+      oxlintConfig: Option.none(),
       vscodeSettings: Option.none()
     })
 
@@ -261,6 +272,60 @@ describe("computeChanges", () => {
     expect(insertedText).toContain('"oxlint": "1.77.0"')
     expect(insertedText).toContain('"oxlint-tsgolint": "7.0.2001"')
     expect(insertedText).toContain("effect-tsgo patch --no-typescript --oxlint")
+  })
+
+  it("should prepend the Effect Oxlint schema to an existing .oxlintrc.json", () => {
+    const oxlintConfigText = JSON.stringify({
+      plugins: ["typescript"],
+      rules: { "no-debugger": "error" }
+    }, null, 2)
+    const result = runComputeChanges({
+      oxlintConfigText,
+      integrations: ["oxlint"],
+      typescriptVersion: null,
+      oxlintVersion: { dependencyType: "devDependencies", version: "1.77.0" },
+      oxlintTsgolintVersion: { dependencyType: "devDependencies", version: "7.0.2001" }
+    })
+    const oxlintConfigChange = result.codeActions
+      .flatMap((action) => action.changes)
+      .find((change) => change.fileName === "/test/.oxlintrc.json")
+
+    expect(oxlintConfigChange).toBeDefined()
+    const updated = JSON.parse(applyTextChanges(oxlintConfigText, oxlintConfigChange!.textChanges))
+    expect(Object.keys(updated)[0]).toBe("$schema")
+    expect(updated.$schema).toBe(TEST_OXLINT_SCHEMA_PATH)
+    expect(updated.rules).toEqual({ "no-debugger": "error" })
+  })
+
+  it("should replace an existing .oxlintrc.json schema when enabling Oxlint", () => {
+    const oxlintConfigText = JSON.stringify({
+      $schema: "./node_modules/oxlint/configuration_schema.json",
+      rules: {}
+    }, null, 2)
+    const result = runComputeChanges({
+      oxlintConfigText,
+      integrations: ["oxlint"],
+      typescriptVersion: null,
+      oxlintVersion: { dependencyType: "devDependencies", version: "1.77.0" },
+      oxlintTsgolintVersion: { dependencyType: "devDependencies", version: "7.0.2001" }
+    })
+    const oxlintConfigChange = result.codeActions
+      .flatMap((action) => action.changes)
+      .find((change) => change.fileName === "/test/.oxlintrc.json")
+
+    expect(oxlintConfigChange).toBeDefined()
+    const updated = JSON.parse(applyTextChanges(oxlintConfigText, oxlintConfigChange!.textChanges))
+    expect(updated.$schema).toBe(TEST_OXLINT_SCHEMA_PATH)
+  })
+
+  it("should leave .oxlintrc.json unchanged when Oxlint is not selected", () => {
+    const result = runComputeChanges({
+      oxlintConfigText: JSON.stringify({ rules: {} }),
+      integrations: ["typescript"]
+    })
+
+    expect(result.codeActions.flatMap((action) => action.changes)
+      .some((change) => change.fileName === "/test/.oxlintrc.json")).toBe(false)
   })
 
   it("should remove TypeScript configuration for an Oxlint-only setup", () => {
@@ -354,6 +419,7 @@ describe("computeChanges", () => {
     const input: Assessment.Input = {
       packageJson: { fileName: "/test/package.json", text: packageJsonText },
       tsconfig: { fileName: "/test/tsconfig.json", text: "{}" },
+      oxlintConfig: Option.none(),
       vscodeSettings: Option.none()
     }
 

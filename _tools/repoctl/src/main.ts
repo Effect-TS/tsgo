@@ -201,11 +201,11 @@ const github = Command.make("github").pipe(
 )
 
 const updateUpstreamCommand = Command.make("update", {}, () => updateUpstream(repositoryRoot)).pipe(
-  Command.withDescription("Fetch and update moving upstream profile metadata")
+  Command.withDescription("Fetch and update moving upstream metadata and the tsconfig schema")
 )
 
 const upstream = Command.make("upstream").pipe(
-  Command.withDescription("Manage upstream profile metadata"),
+  Command.withDescription("Manage upstream metadata"),
   Command.withSubcommands([updateUpstreamCommand])
 )
 

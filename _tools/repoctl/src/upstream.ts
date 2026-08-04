@@ -156,6 +156,25 @@ export const findTypeScriptVersion = (
   gitHead: string
 ) => Object.entries(versions).find(([, metadata]) => metadata.gitHead === gitHead)?.[0]
 
+export const formatTSConfigSchema = (value: unknown): string | undefined => {
+  if (typeof value !== "object" || value === null || Array.isArray(value) ||
+    !("definitions" in value) || typeof value.definitions !== "object" || value.definitions === null ||
+    Array.isArray(value.definitions)) {
+    return undefined
+  }
+  return `${JSON.stringify(value, null, 2)}\n`
+}
+
+export const formatOxlintConfigurationSchema = (value: unknown): string | undefined => {
+  if (typeof value !== "object" || value === null || Array.isArray(value) ||
+    !("definitions" in value) || typeof value.definitions !== "object" || value.definitions === null ||
+    Array.isArray(value.definitions) || !("properties" in value) || typeof value.properties !== "object" ||
+    value.properties === null || Array.isArray(value.properties)) {
+    return undefined
+  }
+  return `${JSON.stringify(value, null, 2)}\n`
+}
+
 const fetchJson = Effect.fnUntraced(function*(url: string) {
   const response = yield* Effect.tryPromise({
     try: () => fetch(url, { headers: { "User-Agent": "effect-tsgo-repoctl" } }),
@@ -268,23 +287,60 @@ export const updateUpstream = Effect.fnUntraced(function*(repositoryRoot: string
   const upstream = yield* readUpstream(repositoryRoot)
   const nextBefore = yield* getProfile(upstream, "next")
   const latestBefore = yield* getProfile(upstream, "latest")
-  const [next, latest, oxlint] = yield* Effect.all([
+  const [next, latest, oxlint, remoteSchema] = yield* Effect.all([
     fetchTypeScriptMetadata(repositoryRoot, "typescript@next"),
     fetchTypeScriptMetadata(repositoryRoot, "typescript@latest"),
-    fetchOxlintMetadata(repositoryRoot)
+    fetchOxlintMetadata(repositoryRoot),
+    fetchJson("https://json.schemastore.org/tsconfig")
   ], { concurrency: "unbounded" })
+  const schema = formatTSConfigSchema(remoteSchema)
+  if (schema === undefined) {
+    return yield* new UpstreamManifestError({ reason: "The JSON Schema Store tsconfig schema is invalid" })
+  }
+  const remoteOxlintSchema = yield* fetchJson(
+    `https://unpkg.com/oxlint@${oxlint.oxlint.npmVersion}/configuration_schema.json`
+  )
+  const oxlintSchema = formatOxlintConfigurationSchema(remoteOxlintSchema)
+  if (oxlintSchema === undefined) {
+    return yield* new UpstreamManifestError({
+      reason: `The oxlint@${oxlint.oxlint.npmVersion} configuration schema is invalid`
+    })
+  }
   const updated = updateOxlintProfile(updateTypeScriptProfiles(upstream, { next, latest }), oxlint)
-  const hasChanges = JSON.stringify(updated) !== JSON.stringify(upstream)
+  const profilesChanged = JSON.stringify(updated) !== JSON.stringify(upstream)
+  const schemaPath = path.join(repositoryRoot, "_tools", "tsconfig-base-schema.json")
+  const currentSchema = yield* fs.readFileString(schemaPath).pipe(
+    Effect.mapError((error) => new UpstreamManifestError({ reason: error.message }))
+  )
+  const schemaChanged = schema !== currentSchema
+  const oxlintSchemaPath = path.join(repositoryRoot, "_tools", "oxlint-configuration-base-schema.json")
+  const currentOxlintSchema = yield* fs.readFileString(oxlintSchemaPath).pipe(
+    Effect.mapError((error) => new UpstreamManifestError({ reason: error.message }))
+  )
+  const oxlintSchemaChanged = oxlintSchema !== currentOxlintSchema
+  const hasChanges = profilesChanged || schemaChanged || oxlintSchemaChanged
 
-  if (hasChanges) {
+  if (profilesChanged) {
     yield* fs.writeFileString(
       path.join(repositoryRoot, "_packages", "tsgo", "upstream.json"),
       `${JSON.stringify(updated, null, 2)}\n`
     ).pipe(Effect.mapError((error) => new UpstreamManifestError({ reason: error.message })))
   }
+  if (schemaChanged) {
+    yield* fs.writeFileString(schemaPath, schema).pipe(
+      Effect.mapError((error) => new UpstreamManifestError({ reason: error.message }))
+    )
+  }
+  if (oxlintSchemaChanged) {
+    yield* fs.writeFileString(oxlintSchemaPath, oxlintSchema).pipe(
+      Effect.mapError((error) => new UpstreamManifestError({ reason: error.message }))
+    )
+  }
 
   const outputs = {
     has_changes: String(hasChanges),
+    schema_changed: String(schemaChanged),
+    oxlint_schema_changed: String(oxlintSchemaChanged),
     next_spec: "typescript@next",
     next_previous_version: nextBefore.ts.npmVersion,
     next_previous_git_head: nextBefore.ts.gitHead,
@@ -302,6 +358,6 @@ export const updateUpstream = Effect.fnUntraced(function*(repositoryRoot: string
       Object.entries(outputs).map(([name, value]) => `${name}=${value}\n`).join("")
     ))
   }
-  yield* Effect.log(hasChanges ? "Updated upstream profiles" : "Upstream profiles are current")
+  yield* Effect.log(hasChanges ? "Updated upstream metadata" : "Upstream metadata is current")
   return outputs
 })

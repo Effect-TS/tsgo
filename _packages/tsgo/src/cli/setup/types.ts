@@ -32,6 +32,7 @@ export namespace Assessment {
   export interface Input {
     readonly packageJson: FileInput
     readonly tsconfig: FileInput
+    readonly oxlintConfig: Option.Option<FileInput>
     readonly vscodeSettings: Option.Option<FileInput>
   }
 
@@ -69,9 +70,18 @@ export namespace Assessment {
     readonly text: string
   }
 
+  export interface OxlintConfig {
+    readonly path: string
+    readonly sourceFile: ts.JsonSourceFile
+    readonly parsed: Record<string, unknown>
+    readonly text: string
+    readonly currentSchemaPath: Option.Option<string>
+  }
+
   export interface State {
     readonly packageJson: PackageJson
     readonly tsconfig: TsConfig
+    readonly oxlintConfig: Option.Option<OxlintConfig>
     readonly vscodeSettings: Option.Option<VSCodeSettings>
   }
 }
@@ -100,6 +110,7 @@ export namespace Target {
   export interface State {
     readonly packageJson: PackageJson
     readonly tsconfig: TsConfig
+    readonly oxlintrcSchemaPath: Option.Option<string>
     readonly vscodeSettings: Option.Option<VSCodeSettings>
     readonly editors: ReadonlyArray<Editor>
   }

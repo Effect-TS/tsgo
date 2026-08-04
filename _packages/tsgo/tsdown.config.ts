@@ -16,6 +16,9 @@ const copyPackageFiles = () => {
 
     const schemaJson = yield* fs.readFileString("../../schema.json")
     yield* fs.writeFileString(path.join("schema.json"), schemaJson)
+
+    const oxlintSchemaJson = yield* fs.readFileString("../../oxlint-schema.json")
+    yield* fs.writeFileString(path.join("oxlint-schema.json"), oxlintSchemaJson)
   }).pipe(Effect.provide(Layer.merge(NodeFileSystem.layer, NodePath.layerPosix)))
 
   return Effect.runPromise(program)

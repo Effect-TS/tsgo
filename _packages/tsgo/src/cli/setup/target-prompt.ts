@@ -18,6 +18,7 @@ export interface GatherTargetContext {
   readonly defaultOxlintVersion: string
   readonly defaultOxlintTsgolintVersion: string
   readonly defaultSchemaPath: string
+  readonly defaultOxlintrcSchemaPath: string
 }
 
 /**
@@ -66,6 +67,7 @@ export const gatherTargetState = (
           diagnosticSeverities: Option.none(),
           manageIntegration: true
         },
+        oxlintrcSchemaPath: Option.none(),
         vscodeSettings: Option.none(),
         editors: []
       } satisfies Target.State
@@ -163,6 +165,14 @@ export const gatherTargetState = (
     const relativeSchemaPath = path
       .relative(path.dirname(assessment.tsconfig.path), context.defaultSchemaPath)
       .replaceAll("\\", "/")
+    const oxlintrcSchemaPath = useOxlint
+      ? Option.map(assessment.oxlintConfig, (config) => {
+        const relativePath = path
+          .relative(path.dirname(config.path), context.defaultOxlintrcSchemaPath)
+          .replaceAll("\\", "/")
+        return relativePath.startsWith(".") ? relativePath : `./${relativePath}`
+      })
+      : Option.none()
     const vscodeSettings: Option.Option<Target.VSCodeSettings> = editors.includes("vscode")
       ? Option.some({
         settings: {
@@ -213,6 +223,7 @@ export const gatherTargetState = (
         diagnosticSeverities,
         manageIntegration: true
       },
+      oxlintrcSchemaPath,
       vscodeSettings,
       editors
     } satisfies Target.State

@@ -25,6 +25,7 @@ export const fromAssessment = (inputState: Assessment.State): Target.State => ({
     diagnosticSeverities: inputState.tsconfig.currentDiagnosticSeverities,
     manageIntegration: false
   },
+  oxlintrcSchemaPath: Option.flatMap(inputState.oxlintConfig, (config) => config.currentSchemaPath),
   vscodeSettings: Option.map(inputState.vscodeSettings, (settings) => ({
     settings: settings.parsed
   })),
