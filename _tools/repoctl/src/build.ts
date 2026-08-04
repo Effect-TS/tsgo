@@ -146,30 +146,16 @@ export const buildLocal = Effect.fnUntraced(function*(repositoryRoot: string) {
   yield* buildCli(repositoryRoot)
 })
 
-export const buildOxlint = Effect.fnUntraced(function*(repositoryRoot: string, targetName: OxlintBuildTarget) {
+export const buildTsgolint = Effect.fnUntraced(function*(repositoryRoot: string, targetName: OxlintBuildTarget) {
   const fs = yield* FileSystem.FileSystem
   const path = yield* Path.Path
   const tsgolintSource = path.join(repositoryRoot, "tsgolint", "cmd", "tsgolint", "effect_rules_generated.go")
-  const oxlintSource = path.join(
-    repositoryRoot,
-    "oxlint",
-    "crates",
-    "oxc_linter",
-    "src",
-    "rules",
-    "effecttsgo",
-    "floating_effect.rs"
-  )
-  for (const generated of [tsgolintSource, oxlintSource]) {
-    if (!(yield* fs.exists(generated))) {
-      return yield* new BuildError({ reason: `Missing generated source ${generated}; run profile codegen first` })
-    }
+  if (!(yield* fs.exists(tsgolintSource))) {
+    return yield* new BuildError({ reason: `Missing generated source ${tsgolintSource}; run profile codegen first` })
   }
 
   const target = oxlintBuildTargets[targetName]
   const artifacts = oxlintArtifacts(repositoryRoot, targetName)
-  const oxlint = path.join(repositoryRoot, "oxlint")
-  const oxlintApp = path.join(oxlint, "apps", "oxlint")
   yield* fs.makeDirectory(artifacts.packageDirectory, { recursive: true })
   yield* Console.log(`Building tsgolint for ${targetName}`)
   yield* runCommand("go", repositoryRoot, [
@@ -187,6 +173,37 @@ export const buildOxlint = Effect.fnUntraced(function*(repositoryRoot: string, t
   })
   yield* validateArtifact(artifacts.tsgolintPath)
 
+  if (process.env.GITHUB_OUTPUT !== undefined) {
+    yield* Effect.tryPromise(() => appendFile(
+      process.env.GITHUB_OUTPUT!,
+      `artifact_path=${artifacts.tsgolintPath}\n`
+    ))
+  }
+  return artifacts.tsgolintPath
+})
+
+export const buildOxlintBinding = Effect.fnUntraced(function*(repositoryRoot: string, targetName: OxlintBuildTarget) {
+  const fs = yield* FileSystem.FileSystem
+  const path = yield* Path.Path
+  const oxlintSource = path.join(
+    repositoryRoot,
+    "oxlint",
+    "crates",
+    "oxc_linter",
+    "src",
+    "rules",
+    "effecttsgo",
+    "floating_effect.rs"
+  )
+  if (!(yield* fs.exists(oxlintSource))) {
+    return yield* new BuildError({ reason: `Missing generated source ${oxlintSource}; run profile codegen first` })
+  }
+
+  const target = oxlintBuildTargets[targetName]
+  const artifacts = oxlintArtifacts(repositoryRoot, targetName)
+  const oxlint = path.join(repositoryRoot, "oxlint")
+  const oxlintApp = path.join(oxlint, "apps", "oxlint")
+  yield* fs.makeDirectory(artifacts.packageDirectory, { recursive: true })
   yield* Console.log(`Building Oxlint N-API addon for ${targetName}`)
   yield* runCommand("corepack", oxlint, ["pnpm", "install", "--frozen-lockfile"])
   yield* runCommand("corepack", oxlintApp, [
@@ -207,13 +224,13 @@ export const buildOxlint = Effect.fnUntraced(function*(repositoryRoot: string, t
   if (process.env.GITHUB_OUTPUT !== undefined) {
     yield* Effect.tryPromise(() => appendFile(
       process.env.GITHUB_OUTPUT!,
-      `artifact_path=${artifacts.packageDirectory}\n`
+      `artifact_path=${artifacts.bindingPath}\n`
     ))
   }
-  return artifacts
+  return artifacts.bindingPath
 })
 
-export const buildBinary = Effect.fnUntraced(function*(
+export const buildTsc = Effect.fnUntraced(function*(
   repositoryRoot: string,
   profileName: BuildProfile,
   targetName: BuildTarget

@@ -33,8 +33,11 @@ jobs:
           profile: oxlint
           rust-target: x86_64-unknown-linux-gnu
 
-      - name: Build Oxlint profile
-        run: pnpm exec repoctl build oxlint --target linux-x64
+      - name: Build tsgolint
+        run: pnpm exec repoctl build tsgolint --target linux-x64
+
+      - name: Build Oxlint binding
+        run: pnpm exec repoctl build oxlint-binding --target linux-x64
 
       - name: Smoke test Oxlint profile
         run: node testdata/tests/oxlint/smoke.mjs "$GITHUB_WORKSPACE"
