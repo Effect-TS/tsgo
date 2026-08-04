@@ -11,7 +11,7 @@ var All = []fixable.Fixable{
 	EffectDisable,
 	// Add future fixables here:
 	// POCRuleFix,
-	// FloatingEffectYieldFix,
+	FloatingEffectYieldFix,
 	MissingReturnYieldStarFix,
 	MissingStarInYieldEffectGenFix,
 	CatchAllToMapErrorFix,

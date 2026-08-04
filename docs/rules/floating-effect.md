@@ -8,7 +8,7 @@ Detects Effect values that are neither yielded nor assigned
 | --- | --- |
 | Category | Correctness |
 | Default severity | `error` |
-| Fixable | No |
+| Fixable | Yes |
 | Effect versions | v3, v4 |
 | Diagnostic codes | `TS377001`, `TS377058` |
 | Language Service name | `floatingEffect` |

@@ -7,7 +7,9 @@ import (
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
+	"github.com/microsoft/typescript-go/shim/core"
 	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
+	"github.com/microsoft/typescript-go/shim/scanner"
 )
 
 // floatingEffectResult holds information about a detected floating Effect expression.
@@ -31,46 +33,55 @@ var FloatingEffect = rule.Rule{
 		tsdiag.This_Effect_able_0_value_is_neither_yielded_nor_assigned_to_a_variable_effect_floatingEffect.Code(),
 	},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
-		var diags []*ast.Diagnostic
-
-		// Walk the entire AST using ForEachChild
-		var walk ast.Visitor
-		walk = func(n *ast.Node) bool {
-			if n == nil {
-				return false
+		matches := AnalyzeFloatingEffect(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
+		diags := make([]*ast.Diagnostic, len(matches))
+		for i, match := range matches {
+			if match.isStrict {
+				diags[i] = ctx.NewDiagnostic(match.SourceFile, match.Location, tsdiag.This_Effect_value_is_neither_yielded_nor_used_in_an_assignment_effect_floatingEffect, nil)
+			} else {
+				typeName := ctx.Checker.TypeToString(match.exprType)
+				diags[i] = ctx.NewDiagnostic(match.SourceFile, match.Location, tsdiag.This_Effect_able_0_value_is_neither_yielded_nor_assigned_to_a_variable_effect_floatingEffect, nil, typeName)
 			}
+		}
+		return diags
+	},
+}
 
-			// Check if this node is a floating Effect expression statement
-			if result := detectFloatingEffect(ctx.TypeParser, ctx.Checker, n); result != nil {
-				// Use the expression's position if this is an expression statement
-				// to avoid including leading trivia in the span
-				expr := n
-				if n.Kind == ast.KindExpressionStatement {
-					exprStmt := n.AsExpressionStatement()
-					if exprStmt != nil && exprStmt.Expression != nil {
-						expr = exprStmt.Expression
-					}
-				}
+// FloatingEffectMatch holds the diagnostic location and expression needed by
+// both the diagnostic rule and its quick-fix.
+type FloatingEffectMatch struct {
+	SourceFile *ast.SourceFile
+	Location   core.TextRange
+	Expression *ast.Node
+	isStrict   bool
+	exprType   *checker.Type
+}
 
-				var diag *ast.Diagnostic
-				if result.isStrict {
-					diag = ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(expr), tsdiag.This_Effect_value_is_neither_yielded_nor_used_in_an_assignment_effect_floatingEffect, nil)
-				} else {
-					typeName := ctx.Checker.TypeToString(result.exprType)
-					diag = ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(expr), tsdiag.This_Effect_able_0_value_is_neither_yielded_nor_assigned_to_a_variable_effect_floatingEffect, nil, typeName)
-				}
-				diags = append(diags, diag)
-			}
-
-			// Recurse into all children
-			n.ForEachChild(walk)
+// AnalyzeFloatingEffect finds Effect values used as standalone expression statements.
+func AnalyzeFloatingEffect(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []FloatingEffectMatch {
+	var matches []FloatingEffectMatch
+	var walk ast.Visitor
+	walk = func(node *ast.Node) bool {
+		if node == nil {
 			return false
 		}
 
-		walk(ctx.SourceFile.AsNode())
+		if result := detectFloatingEffect(tp, c, node); result != nil {
+			expression := node.AsExpressionStatement().Expression
+			matches = append(matches, FloatingEffectMatch{
+				SourceFile: sf,
+				Location:   scanner.GetErrorRangeForNode(sf, expression),
+				Expression: expression,
+				isStrict:   result.isStrict,
+				exprType:   result.exprType,
+			})
+		}
 
-		return diags
-	},
+		node.ForEachChild(walk)
+		return false
+	}
+	walk(sf.AsNode())
+	return matches
 }
 
 // detectFloatingEffect checks if a node is an expression statement containing an Effect type

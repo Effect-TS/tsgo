@@ -66,7 +66,7 @@ func buildCatchTagToCatchReasonReplacement(tracker *rewriter.Tracker, match rule
 	arguments := []*ast.Node{tracker.DeepCloneNode(match.OuterTag)}
 	if len(match.Branches) == 1 {
 		branch := match.Branches[0]
-		arguments = append(arguments, tracker.NewStringLiteral(branch.ReasonTag, 0), newCatchReasonHandler(tracker, branch.Result))
+		arguments = append(arguments, tracker.NewStringLiteral(branch.ReasonTag, 0), newCatchReasonHandler(tracker, match.ParameterName, branch))
 	} else {
 		properties := make([]*ast.Node, 0, len(match.Branches))
 		for _, branch := range match.Branches {
@@ -75,7 +75,7 @@ func buildCatchTagToCatchReasonReplacement(tracker *rewriter.Tracker, match rule
 				tracker.NewStringLiteral(branch.ReasonTag, 0),
 				nil,
 				nil,
-				newCatchReasonHandler(tracker, branch.Result),
+				newCatchReasonHandler(tracker, match.ParameterName, branch),
 			))
 		}
 		arguments = append(arguments, tracker.NewObjectLiteralExpression(tracker.NewNodeList(properties), false))
@@ -84,14 +84,21 @@ func buildCatchTagToCatchReasonReplacement(tracker *rewriter.Tracker, match rule
 	return tracker.NewCallExpression(method, nil, nil, tracker.NewNodeList(arguments), ast.NodeFlagsNone)
 }
 
-func newCatchReasonHandler(tracker *rewriter.Tracker, expression *ast.Node) *ast.Node {
+func newCatchReasonHandler(tracker *rewriter.Tracker, parameterName string, branch rules.CatchTagToCatchReasonBranch) *ast.Node {
+	var parameters []*ast.Node
+	if branch.UsesParameter {
+		parameters = []*ast.Node{
+			tracker.NewParameterDeclaration(nil, nil, tracker.NewIdentifier(branch.ReasonParameterName), nil, nil, nil),
+			tracker.NewParameterDeclaration(nil, nil, tracker.NewIdentifier(parameterName), nil, nil, nil),
+		}
+	}
 	return tracker.NewArrowFunction(
 		nil,
 		nil,
-		tracker.NewNodeList([]*ast.Node{}),
+		tracker.NewNodeList(parameters),
 		nil,
 		nil,
 		tracker.NewToken(ast.KindEqualsGreaterThanToken),
-		tracker.DeepCloneNode(expression),
+		tracker.DeepCloneNode(branch.Result),
 	)
 }
