@@ -157,7 +157,7 @@
       "group": "correctness",
       "description": "Detects Effect values that are neither yielded nor assigned",
       "defaultSeverity": "error",
-      "fixable": false,
+      "fixable": true,
       "supportedEffect": [
         "v3",
         "v4"

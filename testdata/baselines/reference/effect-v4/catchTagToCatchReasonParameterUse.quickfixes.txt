@@ -1,0 +1,147 @@
+=== Quick Fix Inventory ===
+
+[D1] (27:3-34:5) TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+  Fix 0: "Disable catchTagToCatchReason for this line"
+  Fix 1: "Disable catchTagToCatchReason for entire file"
+  Fix 2: "Replace with Effect.catchReason or Effect.catchReasons"
+
+[D2] (38:3-45:5) TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+  Fix 0: "Disable catchTagToCatchReason for this line"
+  Fix 1: "Disable catchTagToCatchReason for entire file"
+
+[D3] (49:3-58:5) TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+  Fix 0: "Disable catchTagToCatchReason for this line"
+  Fix 1: "Disable catchTagToCatchReason for entire file"
+  Fix 2: "Replace with Effect.catchReason or Effect.catchReasons"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable catchTagToCatchReason for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable catchTagToCatchReason for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.catchReason or Effect.catchReasons" ===
+
+--- file:///.src/catchTagToCatchReasonParameterUse.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics catchTagToCatchReason:suggestion
+import { Effect } from "effect"
+
+class ReasonA {
+  readonly _tag = "ReasonA"
+  constructor(readonly detail: string) {}
+}
+
+class ReasonB {
+  readonly _tag = "ReasonB"
+}
+
+class OuterError {
+  readonly _tag = "OuterError"
+  constructor(
+    readonly reason: ReasonA | ReasonB,
+    readonly context: string
+  ) {}
+}
+
+declare const program: Effect.Effect<number, OuterError>
+declare const otherError: OuterError
+const _ = "outer"
+
+export const parameterUse = program.pipe(
+  Effect.catchReason("OuterError", "ReasonA", (_0, error) => Effect.succeed(`${_}: ${error.context}: ${error.reason.detail}`))
+)
+
+export const reassignedParameter = program.pipe(
+  Effect.catchTag("OuterError", (error) => {
+    switch (error.reason._tag) {
+      case "ReasonA":
+        return (error = otherError, Effect.succeed(1))
+      default:
+        return Effect.fail(error)
+    }
+  })
+)
+
+export const multipleBranches = program.pipe(
+  Effect.catchTag("OuterError", (error) => {
+    switch (error.reason._tag) {
+      case "ReasonA":
+        return Effect.succeed(error.reason.detail)
+      case "ReasonB":
+        return Effect.succeed("reason b")
+      default:
+        return Effect.fail(error)
+    }
+  })
+)
+
+
+=== [D2] Fix 0: "Disable catchTagToCatchReason for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable catchTagToCatchReason for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable catchTagToCatchReason for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable catchTagToCatchReason for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.catchReason or Effect.catchReasons" ===
+
+--- file:///.src/catchTagToCatchReasonParameterUse.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics catchTagToCatchReason:suggestion
+import { Effect } from "effect"
+
+class ReasonA {
+  readonly _tag = "ReasonA"
+  constructor(readonly detail: string) {}
+}
+
+class ReasonB {
+  readonly _tag = "ReasonB"
+}
+
+class OuterError {
+  readonly _tag = "OuterError"
+  constructor(
+    readonly reason: ReasonA | ReasonB,
+    readonly context: string
+  ) {}
+}
+
+declare const program: Effect.Effect<number, OuterError>
+declare const otherError: OuterError
+const _ = "outer"
+
+export const parameterUse = program.pipe(
+  Effect.catchTag("OuterError", (error) => {
+    switch (error.reason._tag) {
+      case "ReasonA":
+        return Effect.succeed(`${_}: ${error.context}: ${error.reason.detail}`)
+      default:
+        return Effect.fail(error)
+    }
+  })
+)
+
+export const reassignedParameter = program.pipe(
+  Effect.catchTag("OuterError", (error) => {
+    switch (error.reason._tag) {
+      case "ReasonA":
+        return (error = otherError, Effect.succeed(1))
+      default:
+        return Effect.fail(error)
+    }
+  })
+)
+
+export const multipleBranches = program.pipe(
+  Effect.catchReasons("OuterError", { "ReasonA": (_0, error) => Effect.succeed(error.reason.detail), "ReasonB": () => Effect.succeed("reason b") })
+)
+
