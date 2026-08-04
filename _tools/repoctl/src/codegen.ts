@@ -90,7 +90,7 @@ import (
 \t"context"
 \t"fmt"
 
-\t"github.com/effect-ts/tsgo/etsrulerunner"
+\t"github.com/effect-ts/tsgo/etsoxlintrunner"
 \t"github.com/typescript-eslint/tsgolint/internal/rule"
 \t"github.com/typescript-eslint/tsgolint/internal/utils"
 )
@@ -103,16 +103,16 @@ func newEffectRule(name string, effectName string) rule.Rule {
 \treturn rule.Rule{
 \t\tName: name,
 \t\tRun: func(ctx rule.RuleContext, _ any) rule.RuleListeners {
-\t\t\terr := etsrulerunner.RunRuleAndReport(
+\t\t\terr := etsoxlintrunner.RunRuleAndReport(
 \t\t\t\tcontext.Background(),
 \t\t\t\tctx.Program,
 \t\t\t\tctx.TypeChecker,
 \t\t\t\tctx.SourceFile,
 \t\t\t\tctx.Program.Options().Effect,
 \t\t\t\teffectName,
-\t\t\t\tetsrulerunner.DiagnosticAdapter{
+\t\t\t\tetsoxlintrunner.DiagnosticAdapter{
 \t\t\t\t\tMessage: utils.GetDiagnosticMessage,
-\t\t\t\t\tReport: func(diagnostic etsrulerunner.ReportedDiagnostic) {
+\t\t\t\t\tReport: func(diagnostic etsoxlintrunner.ReportedDiagnostic) {
 \t\t\t\t\t\tlabeledRanges := make([]rule.RuleLabeledRange, 0, len(diagnostic.RelatedInformation))
 \t\t\t\t\t\tfor _, related := range diagnostic.RelatedInformation {
 \t\t\t\t\t\t\tif related.FileName == ctx.SourceFile.FileName() {
@@ -122,7 +122,7 @@ func newEffectRule(name string, effectName string) rule.Rule {
 \t\t\t\t\t\t\t\t})
 \t\t\t\t\t\t\t}
 \t\t\t\t\t\t}
-\t\t\t\t\t\tctx.ReportDiagnostic(rule.RuleDiagnostic{
+\t\t\t\t\t\truleDiagnostic := rule.RuleDiagnostic{
 \t\t\t\t\t\t\tRange:         diagnostic.Range,
 \t\t\t\t\t\t\tRuleName:      name,
 \t\t\t\t\t\t\tLabeledRanges: labeledRanges,
@@ -130,6 +130,21 @@ func newEffectRule(name string, effectName string) rule.Rule {
 \t\t\t\t\t\t\t\tId:          diagnostic.MessageID,
 \t\t\t\t\t\t\t\tDescription: diagnostic.Description,
 \t\t\t\t\t\t\t},
+\t\t\t\t\t\t}
+\t\t\t\t\t\tctx.ReportDiagnosticWithSuggestions(ruleDiagnostic, func() []rule.RuleSuggestion {
+\t\t\t\t\t\t\treported := diagnostic.Suggestions()
+\t\t\t\t\t\t\tsuggestions := make([]rule.RuleSuggestion, 0, len(reported))
+\t\t\t\t\t\t\tfor _, suggestion := range reported {
+\t\t\t\t\t\t\t\tfixes := make([]rule.RuleFix, 0, len(suggestion.Edits))
+\t\t\t\t\t\t\t\tfor _, edit := range suggestion.Edits {
+\t\t\t\t\t\t\t\t\tfixes = append(fixes, rule.RuleFix{Range: edit.Range, Text: edit.Text})
+\t\t\t\t\t\t\t\t}
+\t\t\t\t\t\t\t\tsuggestions = append(suggestions, rule.RuleSuggestion{
+\t\t\t\t\t\t\t\t\tMessage: rule.RuleMessage{Description: suggestion.Description},
+\t\t\t\t\t\t\t\t\tFixesArr: fixes,
+\t\t\t\t\t\t\t\t})
+\t\t\t\t\t\t\t}
+\t\t\t\t\t\t\treturn suggestions
 \t\t\t\t\t\t})
 \t\t\t\t\t},
 \t\t\t\t},

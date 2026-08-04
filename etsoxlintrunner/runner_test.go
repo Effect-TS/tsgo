@@ -1,4 +1,4 @@
-package etsrulerunner
+package etsoxlintrunner
 
 import (
 	"context"
@@ -106,7 +106,7 @@ func TestReportDiagnostics(t *testing.T) {
 	)
 
 	var reported []ReportedDiagnostic
-	reportDiagnostics([]*ast.Diagnostic{diagnostic}, "floatingEffect", DiagnosticAdapter{
+	reportDiagnostics(context.Background(), []*ast.Diagnostic{diagnostic}, "floatingEffect", nil, nil, sourceFile, nil, DiagnosticAdapter{
 		Message: func(diagnostic *ast.Diagnostic) string {
 			if diagnostic == related {
 				return "Inside this Effect generator. effect(floatingEffect)"
@@ -129,6 +129,9 @@ func TestReportDiagnostics(t *testing.T) {
 	}
 	if reported[0].Description != "Effect values must be yielded or assigned" {
 		t.Fatalf("unexpected description: %q", reported[0].Description)
+	}
+	if reported[0].Suggestions == nil {
+		t.Fatal("expected lazy suggestions callback")
 	}
 	if len(reported[0].RelatedInformation) != 1 {
 		t.Fatalf("expected one related diagnostic, got %d", len(reported[0].RelatedInformation))
@@ -168,7 +171,7 @@ func TestReportDiagnosticsPreservesNonSuffixRuleText(t *testing.T) {
 		"message effect(floatingEffect) ",
 	} {
 		var description string
-		reportDiagnostics([]*ast.Diagnostic{diagnostic}, "floatingEffect", DiagnosticAdapter{
+		reportDiagnostics(context.Background(), []*ast.Diagnostic{diagnostic}, "floatingEffect", nil, nil, nil, nil, DiagnosticAdapter{
 			Message: func(*ast.Diagnostic) string { return message },
 			Report: func(diagnostic ReportedDiagnostic) {
 				description = diagnostic.Description
