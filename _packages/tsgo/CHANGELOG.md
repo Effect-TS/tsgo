@@ -1,5 +1,11 @@
 # @effect/tsgo
 
+## 0.28.0
+
+### Minor Changes
+
+- 0ee639c: Expose Effect code actions as lazy Oxlint suggestions through the renamed `etsoxlintrunner` integration.
+
 ## 0.27.1
 
 ### Patch Changes

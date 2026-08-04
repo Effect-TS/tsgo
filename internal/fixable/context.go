@@ -12,8 +12,9 @@ import (
 	"github.com/microsoft/typescript-go/shim/core"
 	"github.com/microsoft/typescript-go/shim/ls"
 	"github.com/microsoft/typescript-go/shim/ls/change"
+	"github.com/microsoft/typescript-go/shim/ls/lsconv"
+	"github.com/microsoft/typescript-go/shim/ls/lsutil"
 	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
-	"github.com/microsoft/typescript-go/shim/scanner"
 )
 
 // Context bundles the code-fix request data and provides helpers for fixable implementations.
@@ -29,7 +30,9 @@ type Context struct {
 	TypeParser *typeparser.TypeParser
 
 	Context context.Context
-	fixCtx  *ls.CodeFixContext
+
+	formatOptions lsutil.FormatCodeSettings
+	converters    *lsconv.Converters
 }
 
 // NewContext creates a fixable Context from the standard code-fix request parameters.
@@ -41,23 +44,68 @@ func NewContext(ctx context.Context, fixCtx *ls.CodeFixContext, options *etscore
 		panic("fixable.NewContext: nil checker")
 	}
 	return &Context{
-		SourceFile: fixCtx.SourceFile,
-		Span:       fixCtx.Span,
-		ErrorCode:  fixCtx.ErrorCode,
-		Options:    options,
-		Program:    fixCtx.Program,
-		Checker:    checker,
-		TypeParser: tp,
-		Context:    ctx,
-		fixCtx:     fixCtx,
+		SourceFile:    fixCtx.SourceFile,
+		Span:          fixCtx.Span,
+		ErrorCode:     fixCtx.ErrorCode,
+		Options:       options,
+		Program:       fixCtx.Program,
+		Checker:       checker,
+		TypeParser:    tp,
+		Context:       ctx,
+		formatOptions: fixCtx.LS.FormatOptions(),
+		converters:    ls.LanguageService_converters(fixCtx.LS),
 	}
 }
 
-// BytePosToLSPPosition converts a single byte offset in the context's SourceFile
-// to an lsproto.Position using ECMA line/character position.
+// NewStandaloneContext creates a fixable Context without a language service.
+func NewStandaloneContext(
+	ctx context.Context,
+	sourceFile *ast.SourceFile,
+	span core.TextRange,
+	errorCode int32,
+	options *etscore.ResolvedEffectPluginOptions,
+	program *compiler.Program,
+	c *checker.Checker,
+	tp *typeparser.TypeParser,
+) *Context {
+	if program == nil {
+		panic("fixable.NewStandaloneContext: nil program")
+	}
+	if c == nil {
+		panic("fixable.NewStandaloneContext: nil checker")
+	}
+	converters := newStandaloneConverters(sourceFile)
+	return &Context{
+		SourceFile:    sourceFile,
+		Span:          span,
+		ErrorCode:     errorCode,
+		Options:       options,
+		Program:       program,
+		Checker:       c,
+		TypeParser:    tp,
+		Context:       ctx,
+		formatOptions: lsutil.GetDefaultFormatCodeSettings(),
+		converters:    converters,
+	}
+}
+
+func newStandaloneConverters(sourceFile *ast.SourceFile) *lsconv.Converters {
+	return lsconv.NewConverters(lsproto.PositionEncodingKindUTF16, func(fileName string) *lsconv.LSPLineMap {
+		if fileName == sourceFile.FileName() {
+			return lsconv.ComputeLSPLineStarts(sourceFile.Text())
+		}
+		return nil
+	})
+}
+
+// BytePosToLSPPosition converts a byte offset using the context's LSP encoding.
 func (c *Context) BytePosToLSPPosition(pos int) lsproto.Position {
-	ln, ch := scanner.GetECMALineAndUTF16CharacterOfPosition(c.SourceFile, pos)
-	return lsproto.Position{Line: uint32(ln), Character: uint32(ch)}
+	return c.converters.PositionToLineAndCharacter(c.SourceFile, core.TextPos(pos))
+}
+
+// LSPRangeToTextRange converts a tracker edit range back to source byte offsets.
+func (c *Context) LSPRangeToTextRange(r lsproto.Range) core.TextRange {
+	return c.converters.FromLSPRange(c.SourceFile, r)
 }
 
 // FixAction describes a single code action that a fixable wants to produce.
@@ -73,8 +121,8 @@ func (c *Context) NewFixAction(action FixAction) *ls.CodeAction {
 	rawTracker := change.NewTracker(
 		c.Context,
 		c.Program.Options(),
-		c.fixCtx.LS.FormatOptions(),
-		ls.LanguageService_converters(c.fixCtx.LS),
+		c.formatOptions,
+		c.converters,
 	)
 	tracker := rewriter.NewTracker(rawTracker)
 	action.Run(tracker)
