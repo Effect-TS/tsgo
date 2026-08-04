@@ -1,5 +1,11 @@
 # @effect/tsgo
 
+## 0.31.0
+
+### Minor Changes
+
+- 9cfdd81: Add a `yield*` quick fix for floating Effects in yieldable Effect contexts, and preserve narrowed wrapper error references when converting hand-rolled reason dispatch to `Effect.catchReason` or `Effect.catchReasons`.
+
 ## 0.30.0
 
 ### Minor Changes
