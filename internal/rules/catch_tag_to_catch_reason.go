@@ -1,6 +1,8 @@
 package rules
 
 import (
+	"strconv"
+
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
 	"github.com/effect-ts/tsgo/internal/typeparser"
@@ -31,8 +33,10 @@ var CatchTagToCatchReason = rule.Rule{
 }
 
 type CatchTagToCatchReasonBranch struct {
-	ReasonTag string
-	Result    *ast.Node
+	ReasonTag           string
+	Result              *ast.Node
+	UsesParameter       bool
+	ReasonParameterName string
 }
 
 type CatchTagToCatchReasonMatch struct {
@@ -226,15 +230,21 @@ func analyzeCatchTagToCatchReasonHandler(tp *typeparser.TypeParser, c *checker.C
 		return catchTagToCatchReasonHandler{}, false
 	}
 
-	usesReason, validUses := validateCatchTagParameterUses(tp, c, body, parameterSymbol, branches, fallbackParam, dispatchRefs)
+	branchParameterUses, validUses := validateCatchTagParameterUses(tp, c, body, parameterSymbol, branches, fallbackParam, dispatchRefs)
 	if !validUses {
 		return catchTagToCatchReasonHandler{}, false
+	}
+	for i := range branches {
+		branches[i].UsesParameter = branchParameterUses[i]
+		if branches[i].UsesParameter {
+			branches[i].ReasonParameterName = uniqueCatchReasonParameterName(c, branches[i].Result)
+		}
 	}
 
 	return catchTagToCatchReasonHandler{
 		parameterName: parameter.Name().AsIdentifier().Text,
 		branches:      branches,
-		canFix:        handlerNode.Kind == ast.KindArrowFunction && !usesReason,
+		canFix:        handlerNode.Kind == ast.KindArrowFunction && !checker.Checker_isSymbolAssigned(c, parameterSymbol),
 	}, true
 }
 
@@ -325,7 +335,7 @@ func validateCatchTagParameterUses(
 	branches []CatchTagToCatchReasonBranch,
 	fallbackParam *ast.Node,
 	dispatchRefs map[*ast.Node]struct{},
-) (bool, bool) {
+) ([]bool, bool) {
 	allowed := make(map[*ast.Node]struct{}, len(dispatchRefs)+1)
 	for node := range dispatchRefs {
 		allowed[node] = struct{}{}
@@ -334,7 +344,7 @@ func validateCatchTagParameterUses(
 		allowed[fallbackParam] = struct{}{}
 	}
 
-	usesReason := false
+	branchUses := make([]bool, len(branches))
 	valid := true
 	var walkBody ast.Visitor
 	walkBody = func(node *ast.Node) bool {
@@ -345,8 +355,8 @@ func validateCatchTagParameterUses(
 			if _, ok := allowed[node]; ok {
 				return false
 			}
-			if isCatchReasonRootReference(node) && isCatchReasonRecoveryReference(node, branches) {
-				usesReason = true
+			if branchIndex := catchReasonRecoveryBranchIndex(node, branches); branchIndex >= 0 {
+				branchUses[branchIndex] = true
 				return false
 			}
 			valid = false
@@ -356,25 +366,33 @@ func validateCatchTagParameterUses(
 		return false
 	}
 	walkBody(body)
-	return usesReason, valid
+	return branchUses, valid
 }
 
-func isCatchReasonRecoveryReference(node *ast.Node, branches []CatchTagToCatchReasonBranch) bool {
-	for _, branch := range branches {
+func catchReasonRecoveryBranchIndex(node *ast.Node, branches []CatchTagToCatchReasonBranch) int {
+	for i, branch := range branches {
 		expression := branch.Result
 		if expression != nil && node.Pos() >= expression.Pos() && node.End() <= expression.End() {
-			return true
+			return i
 		}
 	}
-	return false
+	return -1
 }
 
-func isCatchReasonRootReference(node *ast.Node) bool {
-	if node == nil || node.Parent == nil || node.Parent.Kind != ast.KindPropertyAccessExpression {
-		return false
+func uniqueCatchReasonParameterName(c *checker.Checker, location *ast.Node) string {
+	used := make(map[string]struct{})
+	for _, symbol := range c.GetSymbolsInScope(location, ast.SymbolFlagsValue) {
+		used[c.SymbolToString(symbol)] = struct{}{}
 	}
-	access := node.Parent.AsPropertyAccessExpression()
-	return access != nil && access.Expression == node && access.Name() != nil && access.Name().Text() == "reason"
+	for i := -1; ; i++ {
+		name := "_"
+		if i >= 0 {
+			name = "_" + strconv.Itoa(i)
+		}
+		if _, exists := used[name]; !exists {
+			return name
+		}
+	}
 }
 
 func isEffectExpression(tp *typeparser.TypeParser, expression *ast.Node) bool {
