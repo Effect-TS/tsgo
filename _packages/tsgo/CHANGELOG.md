@@ -1,5 +1,12 @@
 # @effect/tsgo
 
+## 0.29.0
+
+### Minor Changes
+
+- 02035a1: Add TypeScript and Oxlint integration selection to `effect-tsgo setup`, including supported Oxlint dependency pinning and integration-aware prepare scripts.
+- 9e21c6c: Split release builds for TSC, tsgolint, and the Oxlint native binding so Go artifacts can be cross-compiled on Linux independently of the platform-specific Rust builds.
+
 ## 0.28.0
 
 ### Minor Changes
