@@ -8,7 +8,7 @@ import * as Command from "effect/unstable/cli/Command"
 import * as Flag from "effect/unstable/cli/Flag"
 import * as Option from "effect/Option"
 import { fileURLToPath } from "node:url"
-import { buildBinary, buildCli, buildLocal, buildOxlint, verifyReleaseArtifacts } from "./build.ts"
+import { buildCli, buildLocal, buildOxlintBinding, buildTsc, buildTsgolint, verifyReleaseArtifacts } from "./build.ts"
 import { runChecks } from "./checks.ts"
 import { addChangeset, publishChangeset, versionChangeset } from "./changesets.ts"
 import {
@@ -82,20 +82,28 @@ const buildCliCommand = Command.make("cli", {}, () => buildCli(repositoryRoot)).
   Command.withDescription("Build the CLI package")
 )
 
-const buildOxlintCommand = Command.make("oxlint", {
-  target: Flag.choice("target", [
-    "darwin-arm64",
-    "darwin-x64",
-    "win32-x64",
-    "win32-arm64",
-    "linux-x64",
-    "linux-arm64"
-  ])
-}, ({ target }) => buildOxlint(repositoryRoot, target)).pipe(
-  Command.withDescription("Build packaged tsgolint and Oxlint N-API artifacts")
+const oxlintTargets = [
+  "darwin-arm64",
+  "darwin-x64",
+  "win32-x64",
+  "win32-arm64",
+  "linux-x64",
+  "linux-arm64"
+] as const
+
+const buildTsgolintCommand = Command.make("tsgolint", {
+  target: Flag.choice("target", oxlintTargets)
+}, ({ target }) => buildTsgolint(repositoryRoot, target)).pipe(
+  Command.withDescription("Cross-compile packaged tsgolint")
 )
 
-const buildBinaryCommand = Command.make("binary", {
+const buildOxlintBindingCommand = Command.make("oxlint-binding", {
+  target: Flag.choice("target", oxlintTargets)
+}, ({ target }) => buildOxlintBinding(repositoryRoot, target)).pipe(
+  Command.withDescription("Build the packaged Oxlint N-API binding")
+)
+
+const buildTscCommand = Command.make("tsc", {
   profile: Flag.choice("profile", ["next", "latest"]),
   target: Flag.choice("target", [
     "darwin-arm64",
@@ -106,8 +114,8 @@ const buildBinaryCommand = Command.make("binary", {
     "linux-arm64",
     "linux-arm"
   ])
-}, ({ profile, target }) => buildBinary(repositoryRoot, profile, target)).pipe(
-  Command.withDescription("Cross-compile a profile binary into its platform package")
+}, ({ profile, target }) => buildTsc(repositoryRoot, profile, target)).pipe(
+  Command.withDescription("Cross-compile a TSC profile into its platform package")
 )
 
 const verifyReleaseBuildCommand = Command.make("verify-release", {}, () => verifyReleaseArtifacts(repositoryRoot)).pipe(
@@ -117,10 +125,11 @@ const verifyReleaseBuildCommand = Command.make("verify-release", {}, () => verif
 const build = Command.make("build").pipe(
   Command.withDescription("Build repository artifacts"),
   Command.withSubcommands([
-    buildBinaryCommand,
     buildCliCommand,
     buildLocalCommand,
-    buildOxlintCommand,
+    buildOxlintBindingCommand,
+    buildTscCommand,
+    buildTsgolintCommand,
     verifyReleaseBuildCommand
   ])
 )

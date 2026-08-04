@@ -78,11 +78,11 @@ jobs:
           github-token: ${{ github.token }}
           script: pnpm exec repoctl changeset version
 
-  build:
-    name: Build ${{ matrix.profile }} ${{ matrix.npm_target }}
+  build-tsc:
+    name: Build TSC ${{ matrix.profile }} ${{ matrix.npm_target }}
     needs: select-mode
     if: needs.select-mode.outputs.mode == 'publish'
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     timeout-minutes: 45
     permissions:
       contents: read
@@ -103,31 +103,106 @@ jobs:
         profile:
           - next
           - latest
-        os:
-          - ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          submodules: recursive
+          persist-credentials: false
+
+      - name: Setup ${{ matrix.profile }} repo
+        uses: ./.github/actions/setup-repo
+        with:
+          profile: ${{ matrix.profile }}
+
+      - name: Build TSC ${{ matrix.profile }} ${{ matrix.npm_target }}
+        id: tsc
+        run: pnpm exec repoctl build tsc --profile ${{ matrix.profile }} --target ${{ matrix.npm_target }}
+
+      - name: Upload TSC artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ matrix.npm_target }}__${{ matrix.profile }}
+          path: ${{ steps.tsc.outputs.binary_path }}
+          if-no-files-found: error
+
+  build-tsgolint:
+    name: Build tsgolint ${{ matrix.npm_target }}
+    needs: select-mode
+    if: needs.select-mode.outputs.mode == 'publish'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      fail-fast: true
+      matrix:
+        npm_target:
+          - darwin-arm64
+          - darwin-x64
+          - win32-x64
+          - win32-arm64
+          - linux-x64
+          - linux-arm64
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          submodules: recursive
+          persist-credentials: false
+
+      - name: Setup Oxlint repo
+        uses: ./.github/actions/setup-repo
+        with:
+          profile: oxlint
+
+      - name: Build tsgolint ${{ matrix.npm_target }}
+        id: tsgolint
+        run: pnpm exec repoctl build tsgolint --target ${{ matrix.npm_target }}
+
+      - name: Upload tsgolint artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ matrix.npm_target }}__tsgolint
+          path: ${{ steps.tsgolint.outputs.artifact_path }}
+          if-no-files-found: error
+
+  build-oxlint-binding:
+    name: Build Oxlint binding ${{ matrix.npm_target }}
+    needs: select-mode
+    if: needs.select-mode.outputs.mode == 'publish'
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+    permissions:
+      contents: read
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      fail-fast: true
+      matrix:
         include:
-          - profile: oxlint
-            npm_target: darwin-arm64
+          - npm_target: darwin-arm64
             os: macos-latest
             rust_target: aarch64-apple-darwin
-          - profile: oxlint
-            npm_target: darwin-x64
+          - npm_target: darwin-x64
             os: macos-latest
             rust_target: x86_64-apple-darwin
-          - profile: oxlint
-            npm_target: win32-x64
+          - npm_target: win32-x64
             os: windows-latest
             rust_target: x86_64-pc-windows-msvc
-          - profile: oxlint
-            npm_target: win32-arm64
+          - npm_target: win32-arm64
             os: windows-latest
             rust_target: aarch64-pc-windows-msvc
-          - profile: oxlint
-            npm_target: linux-x64
+          - npm_target: linux-x64
             os: ubuntu-latest
             rust_target: x86_64-unknown-linux-gnu
-          - profile: oxlint
-            npm_target: linux-arm64
+          - npm_target: linux-arm64
             os: ubuntu-latest
             rust_target: aarch64-unknown-linux-gnu
     steps:
@@ -142,34 +217,28 @@ jobs:
           submodules: recursive
           persist-credentials: false
 
-      - name: Setup ${{ matrix.profile }} repo
+      - name: Setup Oxlint repo
         uses: ./.github/actions/setup-repo
         with:
-          profile: ${{ matrix.profile }}
+          profile: oxlint
           rust-target: ${{ matrix.rust_target }}
 
-      - name: Build tsc ${{ matrix.profile }} ${{ matrix.npm_target }}
-        if: matrix.profile != 'oxlint'
-        id: binary
-        run: pnpm exec repoctl build binary --profile ${{ matrix.profile }} --target ${{ matrix.npm_target }}
-
-      - name: Build oxlint ${{ matrix.npm_target }}
-        if: matrix.profile == 'oxlint'
-        id: oxlint
+      - name: Build Oxlint binding ${{ matrix.npm_target }}
+        id: oxlint_binding
         env:
           TARGET_CC: clang
-        run: pnpm exec repoctl build oxlint --target ${{ matrix.npm_target }}
+        run: pnpm exec repoctl build oxlint-binding --target ${{ matrix.npm_target }}
 
-      - name: Upload artifact
+      - name: Upload Oxlint binding artifact
         uses: actions/upload-artifact@v7
         with:
-          name: ${{ matrix.npm_target }}__${{ matrix.profile }}
-          path: ${{ matrix.profile == 'oxlint' && steps.oxlint.outputs.artifact_path || steps.binary.outputs.binary_path }}
+          name: ${{ matrix.npm_target }}__oxlint-binding
+          path: ${{ steps.oxlint_binding.outputs.artifact_path }}
           if-no-files-found: error
 
   pack:
     name: Pack Packages
-    needs: [select-mode, build]
+    needs: [select-mode, build-tsc, build-tsgolint, build-oxlint-binding]
     if: needs.select-mode.outputs.mode == 'publish'
     runs-on: ubuntu-latest
     timeout-minutes: 30
