@@ -53,6 +53,14 @@ jobs:
         if: steps.upstream.outputs.has_changes == 'true'
         run: pnpm exec repoctl submodules setup --profile next
 
+      - name: Regenerate tsconfig schema
+        if: steps.upstream.outputs.schema_changed == 'true'
+        run: UPDATE_TSCONFIG_SCHEMA=1 go test ./etscore -run '^TestGenerateTSConfigSchemaMatchesReference$'
+
+      - name: Regenerate Oxlint configuration schema
+        if: steps.upstream.outputs.oxlint_schema_changed == 'true'
+        run: UPDATE_OXLINT_SCHEMA=1 go test ./etscore -run '^TestGenerateOxlintSchemaMatchesReference$'
+
       - name: Install Nix
         if: steps.upstream.outputs.has_changes == 'true'
         uses: DeterminateSystems/determinate-nix-action@v3
@@ -70,7 +78,7 @@ jobs:
         run: |
           pnpm exec repoctl changeset add \
             --id update-upstreams \
-            'Update the next profile to [`${{ steps.upstream.outputs.next_spec }}`](https://www.npmjs.com/package/typescript/v/${{ steps.upstream.outputs.next_version }}), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/${{ steps.upstream.outputs.next_git_head }}) commit `${{ steps.upstream.outputs.next_git_head }}`, and update the latest profile to [`${{ steps.upstream.outputs.latest_spec }}`](https://www.npmjs.com/package/typescript/v/${{ steps.upstream.outputs.latest_version }}).'
+            'Update the next profile to [`${{ steps.upstream.outputs.next_spec }}`](https://www.npmjs.com/package/typescript/v/${{ steps.upstream.outputs.next_version }}), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/${{ steps.upstream.outputs.next_git_head }}) commit `${{ steps.upstream.outputs.next_git_head }}`, and update the latest profile to [`${{ steps.upstream.outputs.latest_spec }}`](https://www.npmjs.com/package/typescript/v/${{ steps.upstream.outputs.latest_version }}).${{ steps.upstream.outputs.schema_changed == 'true' && ' Refresh the tsconfig schema from JSON Schema Store.' || '' }}${{ steps.upstream.outputs.oxlint_schema_changed == 'true' && ' Refresh the Oxlint configuration schema from the selected package.' || '' }}'
 
       - name: Update pull request with next profile
         id: generated-profile

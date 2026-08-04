@@ -44,6 +44,7 @@ index 865b7cb3..5eacd25b 100644
              Promise,
              Node,
              Vue,
++            #[serde(rename = "effecttsgo")]
 +            EffectTsgo,
          }
  

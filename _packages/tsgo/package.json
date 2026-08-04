@@ -37,6 +37,7 @@
     "dist/",
     "lib/",
     "README.md",
+    "oxlint-schema.json",
     "schema.json"
   ],
   "optionalDependencies": {

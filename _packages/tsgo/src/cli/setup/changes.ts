@@ -837,6 +837,49 @@ const computeTsConfigChanges = (
   }
 }
 
+const computeOxlintConfigChanges = (
+  current: Assessment.OxlintConfig,
+  schemaPath: Option.Option<string>
+): ComputeFileChangesResult => {
+  if (Option.isNone(schemaPath)) return emptyFileChangesResult()
+
+  const rootObj = getRootObject(current.sourceFile)
+  if (!rootObj) return emptyFileChangesResult()
+
+  const schemaProperty = findPropertyInObject(rootObj, "$schema")
+  if (schemaProperty && ts.isStringLiteral(schemaProperty.initializer) &&
+    schemaProperty.initializer.text === schemaPath.value) {
+    return emptyFileChangesResult()
+  }
+
+  const schemaPropertyAssignment = ts.factory.createPropertyAssignment(
+    ts.factory.createStringLiteral("$schema"),
+    ts.factory.createStringLiteral(schemaPath.value)
+  )
+  const ctx = createTrackerContext()
+  const fileChanges = tsInternal.textChanges.ChangeTracker.with(ctx, (tracker: any) => {
+    if (schemaProperty) {
+      tracker.replaceNode(current.sourceFile, schemaProperty.initializer, schemaPropertyAssignment.initializer)
+    } else {
+      tracker.insertNodeAtObjectStart(current.sourceFile, rootObj, schemaPropertyAssignment)
+    }
+  })
+  const fileChange = fileChanges.find((change: ts.FileTextChanges) => change.fileName === current.sourceFile.fileName)
+  if (!fileChange) return emptyFileChangesResult()
+
+  return {
+    codeActions: [{
+      description: schemaProperty ? "Update $schema in .oxlintrc.json" : "Add $schema to .oxlintrc.json",
+      changes: [{
+        fileName: current.path,
+        textChanges: fileChange.textChanges,
+        isNewFile: false
+      }]
+    }],
+    messages: []
+  }
+}
+
 /**
  * Compute .vscode/settings.json changes using ChangeTracker
  */
@@ -946,6 +989,15 @@ export const computeChanges = (
   )
   codeActions = [...codeActions, ...tsconfigResult.codeActions]
   messages = [...messages, ...tsconfigResult.messages]
+
+  if (Option.isSome(assessment.oxlintConfig)) {
+    const oxlintConfigResult = computeOxlintConfigChanges(
+      assessment.oxlintConfig.value,
+      target.oxlintrcSchemaPath
+    )
+    codeActions = [...codeActions, ...oxlintConfigResult.codeActions]
+    messages = [...messages, ...oxlintConfigResult.messages]
+  }
 
   // Compute VSCode settings changes if user selected VSCode editor
   if (target.editors.includes("vscode")) {
