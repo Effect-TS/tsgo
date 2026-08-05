@@ -11,13 +11,25 @@ export const buildTypeScriptTestMatrix = (upstream: typeof Upstream.Type) => ({
       return {
         name: channels.length === 0 ? version : channels.join("+"),
         version,
-        branch: upstream.typescript.latest === version ? "generated/latest" : "",
         repoctl: upstream.typescript.next === version
       }
     })
 })
 
+export const buildTypeScriptGeneratedMatrix = (upstream: typeof Upstream.Type) => ({
+  include: [{
+    name: "latest",
+    version: upstream.typescript.latest,
+    branch: "generated/latest"
+  }]
+})
+
 export const printTypeScriptTestMatrix = Effect.fnUntraced(function*(repositoryRoot: string) {
   const upstream = yield* readUpstream(repositoryRoot)
   yield* Console.log(JSON.stringify(buildTypeScriptTestMatrix(upstream)))
+})
+
+export const printTypeScriptGeneratedMatrix = Effect.fnUntraced(function*(repositoryRoot: string) {
+  const upstream = yield* readUpstream(repositoryRoot)
+  yield* Console.log(JSON.stringify(buildTypeScriptGeneratedMatrix(upstream)))
 })
