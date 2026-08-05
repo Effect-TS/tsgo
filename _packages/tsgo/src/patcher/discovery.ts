@@ -149,12 +149,24 @@ const discoverOxlint: (
     return discovered
   })
 
+const discoverVitePlusOxlint: (
+  cwdRequire: NodeJS.Require
+) => Effect.Effect<DiscoveredBinary[], DiscoveryError, FileSystem.FileSystem | Path.Path> = (cwdRequire) =>
+  Effect.gen(function*() {
+    const vitePlus = yield* optionally(readPackage(cwdRequire, "vite-plus"))
+    if (vitePlus === undefined) return []
+    return yield* discoverOxlint(nodeModule.createRequire(vitePlus.packageJsonPath))
+  })
+
 export const discoverBinaries = (cwd: string, preferredTypescriptPackage?: string) => Effect.gen(function*() {
   const path = yield* Path.Path
   const cwdRequire = nodeModule.createRequire(path.join(cwd, "noop.js"))
   const typescript = yield* discoverTypeScript(cwdRequire, preferredTypescriptPackage)
   const oxlint = yield* discoverOxlint(cwdRequire)
-  return [...typescript, ...oxlint]
+  const vitePlusOxlint = yield* discoverVitePlusOxlint(cwdRequire)
+  return [...new Map(
+    [...typescript, ...oxlint, ...vitePlusOxlint].map((binary) => [binary.binaryPath, binary])
+  ).values()]
 })
 
 export const selectComponents = (

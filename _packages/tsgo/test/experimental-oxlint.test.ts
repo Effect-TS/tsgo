@@ -89,4 +89,39 @@ describe("experimental Oxlint discovery", () => {
       binaryPath: join(platformDirectory, "lib", process.platform === "win32" ? "tsc.exe" : "tsc")
     })
   })
+
+  it("discovers Oxlint binaries installed as dependencies of vite-plus", async () => {
+    const directory = await makeTemporaryDirectory()
+    const platform = experimentalOxlintTarget(process.platform, process.arch, true)
+    const vitePlusDirectory = await writePackage(directory, "vite-plus", { version: "1.0.0" })
+    await writePackage(vitePlusDirectory, "oxlint", { version: "1.0.0" })
+    await writePackage(vitePlusDirectory, "oxlint-tsgolint", { version: "2.0.0" })
+    const bindingDirectory = await writePackage(vitePlusDirectory, platform.oxlintPackage, {
+      version: "1.0.1",
+      main: "oxlint.node"
+    })
+    const tsgolintDirectory = await writePackage(
+      vitePlusDirectory,
+      platform.tsgolintPackage,
+      { version: "2.0.1" }
+    )
+
+    const discovered = await Effect.runPromise(
+      discoverBinaries(directory).pipe(Effect.provide(NodeServices.layer))
+    )
+    expect(discovered).toEqual([
+      {
+        component: "oxlint",
+        packageName: platform.oxlintPackage,
+        packageVersion: "1.0.1",
+        binaryPath: join(bindingDirectory, "oxlint.node")
+      },
+      {
+        component: "oxlint-tsgolint",
+        packageName: platform.tsgolintPackage,
+        packageVersion: "2.0.1",
+        binaryPath: join(tsgolintDirectory, platform.tsgolintExecutable)
+      }
+    ])
+  })
 })
