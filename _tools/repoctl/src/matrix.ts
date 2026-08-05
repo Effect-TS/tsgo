@@ -16,9 +16,10 @@ export const buildTypeScriptTestMatrix = (upstream: typeof Upstream.Type) => ({
     })
 })
 
-export const buildTypeScriptGeneratedMatrix = (upstream: typeof Upstream.Type) => ({
+export const buildGeneratedMatrix = (upstream: typeof Upstream.Type) => ({
   include: [{
     name: "latest",
+    component: "typescript",
     version: upstream.typescript.latest,
     branch: "generated/latest"
   }]
@@ -29,7 +30,7 @@ export const printTypeScriptTestMatrix = Effect.fnUntraced(function*(repositoryR
   yield* Console.log(JSON.stringify(buildTypeScriptTestMatrix(upstream)))
 })
 
-export const printTypeScriptGeneratedMatrix = Effect.fnUntraced(function*(repositoryRoot: string) {
+export const printGeneratedMatrix = Effect.fnUntraced(function*(repositoryRoot: string) {
   const upstream = yield* readUpstream(repositoryRoot)
-  yield* Console.log(JSON.stringify(buildTypeScriptGeneratedMatrix(upstream)))
+  yield* Console.log(JSON.stringify(buildGeneratedMatrix(upstream)))
 })

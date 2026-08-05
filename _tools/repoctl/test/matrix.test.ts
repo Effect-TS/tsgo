@@ -1,6 +1,6 @@
 import assert from "node:assert/strict"
 import test from "node:test"
-import { buildTypeScriptGeneratedMatrix, buildTypeScriptTestMatrix } from "../src/matrix.ts"
+import { buildGeneratedMatrix, buildTypeScriptTestMatrix } from "../src/matrix.ts"
 import type { Upstream } from "../src/upstream.ts"
 
 const revision = "0123456789abcdef0123456789abcdef01234567"
@@ -47,7 +47,7 @@ test("combines channel labels when latest and next resolve to the same component
   })
 })
 
-test("builds a matrix containing only generated TypeScript branches", () => {
+test("builds a component-aware generated branch matrix", () => {
   const upstream: typeof Upstream.Type = {
     schemaVersion: 3,
     typescript: { latest: "7.0.2", next: "7.1.0-dev" },
@@ -62,7 +62,7 @@ test("builds a matrix containing only generated TypeScript branches", () => {
     profiles: []
   }
 
-  assert.deepEqual(buildTypeScriptGeneratedMatrix(upstream), {
-    include: [{ name: "latest", version: "7.0.2", branch: "generated/latest" }]
+  assert.deepEqual(buildGeneratedMatrix(upstream), {
+    include: [{ name: "latest", component: "typescript", version: "7.0.2", branch: "generated/latest" }]
   })
 })

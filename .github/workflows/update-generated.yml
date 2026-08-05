@@ -21,7 +21,7 @@ jobs:
     permissions:
       contents: read
     outputs:
-      typescript: ${{ steps.matrix.outputs.typescript }}
+      generated: ${{ steps.matrix.outputs.generated }}
 
     steps:
       - name: Checkout
@@ -38,9 +38,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Generate TypeScript branch matrix
+      - name: Generate branch matrix
         id: matrix
-        run: echo "typescript=$(pnpm --silent exec repoctl matrix typescript generated)" >> "$GITHUB_OUTPUT"
+        run: echo "generated=$(pnpm --silent exec repoctl matrix generated)" >> "$GITHUB_OUTPUT"
 
   update:
     name: Update ${{ matrix.branch }}
@@ -52,20 +52,21 @@ jobs:
       pull-requests: write
     strategy:
       fail-fast: false
-      matrix: ${{ fromJSON(needs.matrix.outputs.typescript) }}
+      matrix: ${{ fromJSON(needs.matrix.outputs.generated) }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Setup TypeScript ${{ matrix.version }}
+      - name: Setup ${{ matrix.component }} ${{ matrix.version }}
         uses: ./.github/actions/setup-repo
         with:
-          component: typescript
+          component: ${{ matrix.component }}
           version: ${{ matrix.version }}
 
       - name: Open generated branch pull request
         env:
+          COMPONENT: ${{ matrix.component }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GENERATED_BRANCH: ${{ matrix.branch }}
           GENERATED_NAME: ${{ matrix.name }}
@@ -75,5 +76,5 @@ jobs:
             --base "$GENERATED_BRANCH" \
             --head-prefix "automation/update-${generated_slug}" \
             --title "chore: update ${GENERATED_BRANCH}" \
-            --body "Generated ${GENERATED_NAME} TypeScript component from main commit ${{ github.sha }}." \
+            --body "Generated ${GENERATED_NAME} ${COMPONENT} component from main commit ${{ github.sha }}." \
             --commit-message "chore: update ${GENERATED_BRANCH}"
