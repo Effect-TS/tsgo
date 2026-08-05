@@ -1,5 +1,11 @@
 # @effect/tsgo
 
+## 0.32.1
+
+### Patch Changes
+
+- 479f268: Avoid installing redundant Oxlint dependencies when Vite+ is present and identify already-patched components in skip messages.
+
 ## 0.32.0
 
 ### Minor Changes
