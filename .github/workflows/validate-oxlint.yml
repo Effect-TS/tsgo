@@ -45,6 +45,7 @@ jobs:
           version: ${{ matrix.tsgolint.version }}
 
       - name: Build tsgolint
+        id: tsgolint
         run: >
           pnpm exec repoctl build artifact
           --component "${{ matrix.tsgolint.component }}"
@@ -68,4 +69,6 @@ jobs:
           --target linux-x64
 
       - name: Smoke test Oxlint runtime
-        run: node testdata/tests/oxlint/smoke.mjs "$GITHUB_WORKSPACE"
+        env:
+          TSGOLINT_PATH: ${{ steps.tsgolint.outputs.artifact_path }}
+        run: node testdata/tests/oxlint/smoke.mjs "$GITHUB_WORKSPACE" "$TSGOLINT_PATH"
