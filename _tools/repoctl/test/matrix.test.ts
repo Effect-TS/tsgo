@@ -106,12 +106,12 @@ test("builds a deduplicated matrix of compatible Oxlint component pairs", () => 
   assert.deepEqual(buildOxlintTestMatrix(upstream), {
     include: [
       {
-        name: "vite-plus+vite-plus-alias",
+        name: "oxlint (1.76.0) + oxlint-tsgolint (7.0.2001)",
         oxlint: { component: "oxlint", version: "1.76.0" },
         tsgolint: { component: "oxlint-tsgolint", version: "7.0.2001" }
       },
       {
-        name: "oxlint",
+        name: "oxlint (1.77.0) + oxlint-tsgolint (7.0.2001)",
         oxlint: { component: "oxlint", version: "1.77.0" },
         tsgolint: { component: "oxlint-tsgolint", version: "7.0.2001" }
       }

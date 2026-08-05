@@ -19,7 +19,6 @@ export const buildTypeScriptTestMatrix = (upstream: typeof Upstream.Type) => ({
 
 export const buildOxlintTestMatrix = (upstream: typeof Upstream.Type) => {
   const runtimes = new Map<string, {
-    readonly names: Array<string>
     readonly oxlintVersion: string
     readonly tsgolintVersion: string
   }>()
@@ -28,18 +27,15 @@ export const buildOxlintTestMatrix = (upstream: typeof Upstream.Type) => {
     const tsgolintVersion = profile.dependencies["oxlint-tsgolint"]
     if (oxlintVersion === undefined || tsgolintVersion === undefined) continue
     const key = `${oxlintVersion}\0${tsgolintVersion}`
-    const runtime = runtimes.get(key)
-    if (runtime === undefined) {
-      runtimes.set(key, { names: [profile.name], oxlintVersion, tsgolintVersion })
-    } else {
-      runtime.names.push(profile.name)
+    if (!runtimes.has(key)) {
+      runtimes.set(key, { oxlintVersion, tsgolintVersion })
     }
   }
   return {
     include: [...runtimes]
       .sort(([left], [right]) => Buffer.compare(Buffer.from(left), Buffer.from(right)))
       .map(([, runtime]) => ({
-        name: runtime.names.sort((left, right) => Buffer.compare(Buffer.from(left), Buffer.from(right))).join("+"),
+        name: `oxlint (${runtime.oxlintVersion}) + oxlint-tsgolint (${runtime.tsgolintVersion})`,
         oxlint: { component: "oxlint", version: runtime.oxlintVersion },
         tsgolint: { component: "oxlint-tsgolint", version: runtime.tsgolintVersion }
       }))

@@ -23,7 +23,7 @@ jobs:
       name: test-oxlint
 
   validate:
-    name: Validate Oxlint ${{ matrix.name }}
+    name: Validate ${{ matrix.name }}
     needs: matrix
     if: github.repository_owner == 'Effect-TS'
     runs-on: ubuntu-latest
