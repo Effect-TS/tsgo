@@ -133,6 +133,12 @@ const discoverOxlint: (
         packageVersion: binding.version,
         binaryPath: path.join(path.dirname(binding.packageJsonPath), binding.main)
       })
+      discovered.push({
+        component: "oxlint-dts",
+        packageName: "oxlint",
+        packageVersion: oxlint.version,
+        binaryPath: path.join(path.dirname(oxlint.packageJsonPath), "dist", "index.d.ts")
+      })
     }
     if (tsgolint !== undefined) {
       const nativePackage = yield* readPackage(
