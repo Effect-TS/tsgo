@@ -1,4 +1,4 @@
-name: Validate Oxlint Profile
+name: Validate Oxlint
 
 on:
   push:
@@ -9,40 +9,53 @@ on:
       - main
 
 concurrency:
-  group: validate-oxlint-profile-${{ github.event.pull_request.number || github.ref }}
+  group: validate-oxlint-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 permissions: {}
 
 jobs:
+  matrix:
+    uses: ./.github/workflows/repoctl-matrix.yml
+    permissions:
+      contents: read
+    with:
+      name: test-oxlint
+
   validate:
-    name: Validate Oxlint profile
+    name: Validate Oxlint ${{ matrix.name }}
+    needs: matrix
     if: github.repository_owner == 'Effect-TS'
     runs-on: ubuntu-latest
     timeout-minutes: 45
     permissions:
       contents: read
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.matrix.outputs.matrix) }}
 
     steps:
       - name: Checkout source
         uses: actions/checkout@v7
 
-      - name: Setup oxlint-tsgolint component
+      - name: Setup ${{ matrix.tsgolint.component }} ${{ matrix.tsgolint.version }}
         uses: ./.github/actions/setup-repo
         with:
-          profile: oxlint
+          component: ${{ matrix.tsgolint.component }}
+          version: ${{ matrix.tsgolint.version }}
 
       - name: Build tsgolint
         run: pnpm exec repoctl build tsgolint --target linux-x64
 
-      - name: Setup Oxlint component
+      - name: Setup ${{ matrix.oxlint.component }} ${{ matrix.oxlint.version }}
         uses: ./.github/actions/setup-repo
         with:
-          profile: oxlint
+          component: ${{ matrix.oxlint.component }}
+          version: ${{ matrix.oxlint.version }}
           rust-target: x86_64-unknown-linux-gnu
 
       - name: Build Oxlint binding
         run: pnpm exec repoctl build oxlint-binding --target linux-x64
 
-      - name: Smoke test Oxlint profile
+      - name: Smoke test Oxlint runtime
         run: node testdata/tests/oxlint/smoke.mjs "$GITHUB_WORKSPACE"

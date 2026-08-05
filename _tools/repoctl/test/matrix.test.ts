@@ -1,6 +1,6 @@
 import assert from "node:assert/strict"
 import test from "node:test"
-import { buildGeneratedMatrix, buildTypeScriptTestMatrix } from "../src/matrix.ts"
+import { buildGeneratedMatrix, buildOxlintTestMatrix, buildTypeScriptTestMatrix } from "../src/matrix.ts"
 import type { Upstream } from "../src/upstream.ts"
 
 const revision = "0123456789abcdef0123456789abcdef01234567"
@@ -64,5 +64,57 @@ test("builds a component-aware generated branch matrix", () => {
 
   assert.deepEqual(buildGeneratedMatrix(upstream), {
     include: [{ name: "latest", component: "typescript", version: "7.0.2", branch: "generated/latest" }]
+  })
+})
+
+test("builds a deduplicated matrix of compatible Oxlint component pairs", () => {
+  const upstream: typeof Upstream.Type = {
+    schemaVersion: 3,
+    typescript: { latest: "7.0.2", next: "7.1.0-dev" },
+    components: {
+      typescript: {
+        "7.0.2": { gitHead: revision },
+        "7.1.0-dev": { gitHead: revision }
+      },
+      "oxlint-tsgolint": {
+        "7.0.2001": { gitHead: revision, dependencies: { typescript: "7.0.2" } }
+      },
+      oxlint: {
+        "1.76.0": { gitHead: revision },
+        "1.77.0": { gitHead: revision }
+      }
+    },
+    profiles: [
+      {
+        name: "oxlint",
+        description: "Latest Oxlint",
+        dependencies: { oxlint: "1.77.0", "oxlint-tsgolint": "7.0.2001" }
+      },
+      {
+        name: "vite-plus",
+        description: "Vite+",
+        dependencies: { oxlint: "1.76.0", "oxlint-tsgolint": "7.0.2001" }
+      },
+      {
+        name: "vite-plus-alias",
+        description: "Vite+ alias",
+        dependencies: { oxlint: "1.76.0", "oxlint-tsgolint": "7.0.2001" }
+      }
+    ]
+  }
+
+  assert.deepEqual(buildOxlintTestMatrix(upstream), {
+    include: [
+      {
+        name: "vite-plus+vite-plus-alias",
+        oxlint: { component: "oxlint", version: "1.76.0" },
+        tsgolint: { component: "oxlint-tsgolint", version: "7.0.2001" }
+      },
+      {
+        name: "oxlint",
+        oxlint: { component: "oxlint", version: "1.77.0" },
+        tsgolint: { component: "oxlint-tsgolint", version: "7.0.2001" }
+      }
+    ]
   })
 })

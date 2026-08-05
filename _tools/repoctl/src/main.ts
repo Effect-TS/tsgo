@@ -19,7 +19,7 @@ import {
 import { ensureEffectFixtures } from "./fixtures.ts"
 import { updateFlake } from "./flake.ts"
 import { completeCheck, openPullRequestIfChanged } from "./github.ts"
-import { printGeneratedMatrix, printTypeScriptTestMatrix } from "./matrix.ts"
+import { printGeneratedMatrix, printOxlintTestMatrix, printTypeScriptTestMatrix } from "./matrix.ts"
 import { comparePerformance } from "./perf.ts"
 import { bundleUpstream } from "./packages.ts"
 import { prepareTsgolintComponent, validateOxlintComponent } from "./oxlint.ts"
@@ -275,13 +275,17 @@ const matrixTestTypeScript = Command.make("test-typescript", {}, () => printType
   Command.withDescription("Print the TypeScript component test matrix as JSON")
 )
 
+const matrixTestOxlint = Command.make("test-oxlint", {}, () => printOxlintTestMatrix(repositoryRoot)).pipe(
+  Command.withDescription("Print the Oxlint runtime test matrix as JSON")
+)
+
 const matrixGenerated = Command.make("generated", {}, () => printGeneratedMatrix(repositoryRoot)).pipe(
   Command.withDescription("Print the generated branch matrix as JSON")
 )
 
 const matrix = Command.make("matrix").pipe(
   Command.withDescription("Generate CI matrices"),
-  Command.withSubcommands([matrixGenerated, matrixTestTypeScript])
+  Command.withSubcommands([matrixGenerated, matrixTestOxlint, matrixTestTypeScript])
 )
 
 Command.make("repoctl").pipe(
