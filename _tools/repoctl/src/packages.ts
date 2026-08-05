@@ -86,7 +86,7 @@ export const preparePlatformPackages = Effect.fnUntraced(function*(repositoryRoo
   for (const target of Object.keys(buildTargets) as Array<keyof typeof buildTargets>) {
     const packageRoot = path.join(repositoryRoot, "_packages", `tsgo-${target}`)
     const windows = target.startsWith("win32-")
-    const latest = componentArtifact(repositoryRoot, target, "typescript", upstream.typescript.latest, "tsc").path
+    const latest = componentArtifact(repositoryRoot, target, "typescript", upstream.tags.typescript.latest, "tsc").path
     const alias = path.join(packageRoot, "lib", windows ? "tsc.exe" : "tsc")
     yield* fs.makeDirectory(path.dirname(alias), { recursive: true })
     yield* fs.copyFile(latest, alias)

@@ -5,8 +5,8 @@ import { decodePackagedTypeScriptProfiles } from "../src/cli/platformUpstream.js
 describe("platform upstream metadata", () => {
   it("derives TypeScript binaries and prefers the latest binary", async() => {
     const profiles = await Effect.runPromise(decodePackagedTypeScriptProfiles(JSON.stringify({
-      schemaVersion: 3,
-      typescript: { latest: "7.0.0", next: "7.1.0-dev" },
+      schemaVersion: 4,
+      tags: { typescript: { latest: "7.0.0", next: "7.1.0-dev" } },
       components: {
         typescript: {
           "7.1.0-dev": { gitHead: "next-head" },

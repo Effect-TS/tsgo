@@ -6,10 +6,12 @@ const Component = Schema.Struct({
 })
 
 const PlatformUpstream = Schema.Struct({
-  schemaVersion: Schema.Literal(3),
-  typescript: Schema.Struct({
-    latest: Schema.String,
-    next: Schema.String
+  schemaVersion: Schema.Literal(4),
+  tags: Schema.Struct({
+    typescript: Schema.Struct({
+      latest: Schema.String,
+      next: Schema.String
+    })
   }),
   components: Schema.Struct({
     typescript: Schema.Record(Schema.String, Component)
@@ -29,9 +31,9 @@ export const decodePackagedTypeScriptProfiles = (text: string) =>
   Schema.decodeUnknownEffect(PlatformUpstreamFromString)(text).pipe(
     Effect.map((upstream) => Object.entries(upstream.components.typescript)
       .map(([version, component]) => ({
-        binaryName: version === upstream.typescript.latest
+        binaryName: version === upstream.tags.typescript.latest
           ? "tsc"
-          : version === upstream.typescript.next ? "tsc-next" : `tsc-${version}`,
+          : version === upstream.tags.typescript.next ? "tsc-next" : `tsc-${version}`,
         artifactPath: `artifacts/typescript/${version}/tsc`,
         tsVersion: version,
         tsGitHead: component.gitHead

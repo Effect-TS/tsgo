@@ -15,8 +15,12 @@ const revision = "0123456789abcdef0123456789abcdef01234567"
 test("bundles upstream metadata in every platform package", async() => {
   const repository = mkdtempSync(join(tmpdir(), "repoctl-packages-"))
   const upstream = `${JSON.stringify({
-    schemaVersion: 3,
-    typescript: { latest: "7.0.0", next: "7.1.0" },
+    schemaVersion: 4,
+    tags: {
+      typescript: { latest: "7.0.0", next: "7.1.0" },
+      oxlint: { latest: "1.0.0" },
+      "oxlint-tsgolint": { latest: "1.0.0" }
+    },
     components: {
       typescript: {
         "7.0.0": { gitHead: revision },
@@ -28,11 +32,6 @@ test("bundles upstream metadata in every platform package", async() => {
       oxlint: { "1.0.0": { gitHead: revision } }
     },
     profiles: [
-      {
-        name: "oxlint",
-        description: "Latest Oxlint compatibility runtime",
-        dependencies: { oxlint: "1.0.0", "oxlint-tsgolint": "1.0.0" }
-      },
       {
         name: "vite-plus",
         description: "Vite+ 1.0.0 compatibility runtime",
@@ -61,8 +60,12 @@ test("bundles upstream metadata in every platform package", async() => {
 test("prepares versioned platform artifacts and executable manifests", async() => {
   const repository = mkdtempSync(join(tmpdir(), "repoctl-prepare-packages-"))
   const upstream = {
-    schemaVersion: 3,
-    typescript: { latest: "7.0.0", next: "7.1.0" },
+    schemaVersion: 4,
+    tags: {
+      typescript: { latest: "7.0.0", next: "7.1.0" },
+      oxlint: { latest: "1.0.0" },
+      "oxlint-tsgolint": { latest: "1.0.0" }
+    },
     components: {
       typescript: {
         "7.0.0": { gitHead: revision },
@@ -74,11 +77,6 @@ test("prepares versioned platform artifacts and executable manifests", async() =
       oxlint: { "1.0.0": { gitHead: revision } }
     },
     profiles: [
-      {
-        name: "oxlint",
-        description: "Latest Oxlint compatibility runtime",
-        dependencies: { oxlint: "1.0.0", "oxlint-tsgolint": "1.0.0" }
-      },
       {
         name: "vite-plus",
         description: "Vite+ 1.0.0 compatibility runtime",

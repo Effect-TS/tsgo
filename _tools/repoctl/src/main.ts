@@ -42,7 +42,7 @@ const setup = Command.make("setup", {
   ),
   version: Flag.string("version").pipe(
     Flag.optional,
-    Flag.withDescription("Component version; TypeScript defaults to the configured next version")
+    Flag.withDescription("Component version; TypeScript defaults to the configured next tag")
   )
 }, ({ component, version }) => Effect.gen(function*() {
   const selected = yield* cloneSubmodules(repositoryRoot, component, Option.getOrUndefined(version))
@@ -119,7 +119,7 @@ const buildArtifactCommand = Command.make("artifact", {
 )
 
 const verifyReleaseBuildCommand = Command.make("verify-release", {}, () => verifyReleaseArtifacts(repositoryRoot)).pipe(
-  Command.withDescription("Verify all release profile binaries in platform packages")
+  Command.withDescription("Verify all release component artifacts in platform packages")
 )
 
 const build = Command.make("build").pipe(
@@ -226,7 +226,7 @@ const upstream = Command.make("upstream").pipe(
 )
 
 const updateFlakeCommand = Command.make("update", {}, () => updateFlake(repositoryRoot)).pipe(
-  Command.withDescription("Synchronize Nix inputs and the Go vendor hash with the next profile")
+  Command.withDescription("Synchronize Nix inputs and the Go vendor hash with the TypeScript next tag")
 )
 
 const flake = Command.make("flake").pipe(

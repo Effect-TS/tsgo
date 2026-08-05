@@ -25,10 +25,14 @@ const RuntimeProfile = Schema.Struct({
   dependencies: ProfileDependencies
 })
 export const Upstream = Schema.Struct({
-  schemaVersion: Schema.Literal(3),
-  typescript: Schema.Struct({
-    latest: NonEmptyString,
-    next: NonEmptyString
+  schemaVersion: Schema.Literal(4),
+  tags: Schema.Struct({
+    typescript: Schema.Struct({
+      latest: NonEmptyString,
+      next: NonEmptyString
+    }),
+    oxlint: Schema.Struct({ latest: NonEmptyString }),
+    "oxlint-tsgolint": Schema.Struct({ latest: NonEmptyString })
   }),
   components: Schema.Struct({
     typescript: Schema.Record(Schema.String, Component),
@@ -55,10 +59,18 @@ const validateUpstream = (upstream: typeof Upstream.Type) => {
     }
     names.add(profile.name)
   }
-  for (const channel of ["latest", "next"] as const) {
-    if (upstream.components.typescript[upstream.typescript[channel]] === undefined) {
+  for (const tag of ["latest", "next"] as const) {
+    if (upstream.components.typescript[upstream.tags.typescript[tag]] === undefined) {
       return Effect.fail(new UpstreamManifestError({
-        reason: `TypeScript ${channel} references unknown version ${upstream.typescript[channel]}`
+        reason: `TypeScript ${tag} references unknown version ${upstream.tags.typescript[tag]}`
+      }))
+    }
+  }
+  for (const component of ["oxlint-tsgolint", "oxlint"] as const) {
+    const version = upstream.tags[component].latest
+    if (upstream.components[component][version] === undefined) {
+      return Effect.fail(new UpstreamManifestError({
+        reason: `${component} latest references unknown version ${version}`
       }))
     }
   }
@@ -79,7 +91,7 @@ const validateUpstream = (upstream: typeof Upstream.Type) => {
       }
     }
   }
-  for (const name of ["oxlint", "vite-plus"]) {
+  for (const name of ["vite-plus"]) {
     const profile = upstream.profiles.find((profile) => profile.name === name)
     if (profile === undefined) {
       return Effect.fail(new UpstreamManifestError({ reason: `Missing upstream profile: ${name}` }))
@@ -122,7 +134,7 @@ export const getComponent = Effect.fnUntraced(function*(
   name: ComponentName,
   requestedVersion?: string
 ) {
-  const version = requestedVersion ?? (name === "typescript" ? upstream.typescript.next : undefined)
+  const version = requestedVersion ?? (name === "typescript" ? upstream.tags.typescript.next : undefined)
   if (version === undefined) {
     return yield* new UpstreamManifestError({ reason: `A version is required for component ${name}` })
   }
@@ -134,7 +146,7 @@ export const getComponent = Effect.fnUntraced(function*(
   }
   const typescriptVersion = name === "oxlint-tsgolint"
     ? upstream.components["oxlint-tsgolint"][version]!.dependencies.typescript
-    : name === "typescript" ? version : upstream.typescript.next
+    : name === "typescript" ? version : upstream.tags.typescript.next
   const typescript = upstream.components.typescript[typescriptVersion]
   if (typescript === undefined) {
     return yield* new UpstreamManifestError({
@@ -149,37 +161,6 @@ export const getComponent = Effect.fnUntraced(function*(
       version: typescriptVersion,
       gitHead: typescript.gitHead
     }
-  }
-})
-
-export const getProfile = Effect.fnUntraced(function*(upstream: typeof Upstream.Type, name: string) {
-  if (name === "next" || name === "latest") {
-    const npmVersion = upstream.typescript[name]
-    return {
-      kind: "ts" as const,
-      name,
-      ts: { npmVersion, gitHead: upstream.components.typescript[npmVersion]!.gitHead },
-      binName: name === "latest" ? "tsc" as const : "tsc-next" as const
-    }
-  }
-
-  const profile = upstream.profiles.find((profile) => profile.name === name)
-  const oxlintVersion = profile?.dependencies.oxlint
-  const tsgolintVersion = profile?.dependencies["oxlint-tsgolint"]
-  const tsgolint = tsgolintVersion === undefined
-    ? undefined
-    : upstream.components["oxlint-tsgolint"][tsgolintVersion]
-  const typescriptVersion = tsgolint?.dependencies.typescript
-  if (profile === undefined || oxlintVersion === undefined || tsgolintVersion === undefined ||
-    tsgolint === undefined || typescriptVersion === undefined) {
-    return yield* new UpstreamManifestError({ reason: `Unknown upstream profile: ${name}` })
-  }
-  return {
-    kind: "oxlint" as const,
-    name,
-    ts: { npmVersion: typescriptVersion, gitHead: upstream.components.typescript[typescriptVersion]!.gitHead },
-    tsgolint: { npmVersion: tsgolintVersion, gitHead: tsgolint.gitHead },
-    oxlint: { npmVersion: oxlintVersion, gitHead: upstream.components.oxlint[oxlintVersion]!.gitHead }
   }
 })
 
@@ -277,10 +258,14 @@ export const buildUpstream = ({ latest, next, oxlint, vitePlus }: BuildUpstreamO
   }
 
   return {
-    schemaVersion: 3,
-    typescript: {
-      latest: latest.npmVersion,
-      next: next.npmVersion
+    schemaVersion: 4,
+    tags: {
+      typescript: {
+        latest: latest.npmVersion,
+        next: next.npmVersion
+      },
+      oxlint: { latest: oxlint.oxlint.npmVersion },
+      "oxlint-tsgolint": { latest: oxlint.tsgolint.npmVersion }
     },
     components: {
       typescript: sortedRecord([...typescript]),
@@ -288,14 +273,6 @@ export const buildUpstream = ({ latest, next, oxlint, vitePlus }: BuildUpstreamO
       oxlint: sortedRecord([...oxlintComponents])
     },
     profiles: [
-      {
-        name: "oxlint",
-        description: "Latest Oxlint compatibility runtime",
-        dependencies: {
-          oxlint: oxlint.oxlint.npmVersion,
-          "oxlint-tsgolint": oxlint.tsgolint.npmVersion
-        }
-      },
       {
         name: "vite-plus",
         description: `Vite+ ${vitePlus.vitePlusVersion} compatibility runtime`,
@@ -490,12 +467,12 @@ export const updateUpstream = Effect.fnUntraced(function*(repositoryRoot: string
   const path = yield* Path.Path
   const upstream = yield* readUpstream(repositoryRoot)
   const nextBefore = {
-    npmVersion: upstream.typescript.next,
-    gitHead: upstream.components.typescript[upstream.typescript.next]!.gitHead
+    npmVersion: upstream.tags.typescript.next,
+    gitHead: upstream.components.typescript[upstream.tags.typescript.next]!.gitHead
   }
   const latestBefore = {
-    npmVersion: upstream.typescript.latest,
-    gitHead: upstream.components.typescript[upstream.typescript.latest]!.gitHead
+    npmVersion: upstream.tags.typescript.latest,
+    gitHead: upstream.components.typescript[upstream.tags.typescript.latest]!.gitHead
   }
   const [next, latest, oxlintSelection, vitePlusSelection, remoteSchema, packument] = yield* Effect.all([
     fetchTypeScriptMetadata(repositoryRoot, "typescript@next"),
@@ -548,7 +525,7 @@ export const updateUpstream = Effect.fnUntraced(function*(repositoryRoot: string
     })
   }
   const updated = buildUpstream({ next, latest, oxlint, vitePlus })
-  const profilesChanged = JSON.stringify(updated) !== JSON.stringify(upstream)
+  const metadataChanged = JSON.stringify(updated) !== JSON.stringify(upstream)
   const schemaPath = path.join(repositoryRoot, "_tools", "tsconfig-base-schema.json")
   const currentSchema = yield* fs.readFileString(schemaPath).pipe(
     Effect.mapError((error) => new UpstreamManifestError({ reason: error.message }))
@@ -559,9 +536,9 @@ export const updateUpstream = Effect.fnUntraced(function*(repositoryRoot: string
     Effect.mapError((error) => new UpstreamManifestError({ reason: error.message }))
   )
   const oxlintSchemaChanged = oxlintSchema !== currentOxlintSchema
-  const hasChanges = profilesChanged || schemaChanged || oxlintSchemaChanged
+  const hasChanges = metadataChanged || schemaChanged || oxlintSchemaChanged
 
-  if (profilesChanged) {
+  if (metadataChanged) {
     yield* fs.writeFileString(
       path.join(repositoryRoot, "_packages", "tsgo", "upstream.json"),
       `${JSON.stringify(updated, null, 2)}\n`

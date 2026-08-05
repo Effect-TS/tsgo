@@ -37,12 +37,8 @@ interface PackageMetadata {
   readonly main?: string
 }
 
-const oxlintProfile = upstreamJson.profiles.find((profile) => profile.name === "oxlint")
-if (oxlintProfile === undefined) {
-  throw new Error("Missing Oxlint profile in upstream.json")
-}
-const supportedOxlintVersion = oxlintProfile.dependencies.oxlint
-const supportedTsgolintVersion = oxlintProfile.dependencies["oxlint-tsgolint"]
+const supportedOxlintVersion = upstreamJson.tags.oxlint.latest
+const supportedTsgolintVersion = upstreamJson.tags["oxlint-tsgolint"].latest
 
 const readPackageMetadataFromRequire = (require: NodeJS.Require, packageName: string) => Effect.gen(function*() {
   const fs = yield* FileSystem.FileSystem

@@ -198,7 +198,7 @@ export const comparePerformance = Effect.fnUntraced(function*(repositoryRoot: st
   }
 
   const upstream = yield* readUpstream(repositoryRoot)
-  const typescriptVersion = options.version ?? upstream.typescript[options.latest ? "latest" : "next"]
+  const typescriptVersion = options.version ?? upstream.tags.typescript[options.latest ? "latest" : "next"]
   if (upstream.components.typescript[typescriptVersion] === undefined) {
     return yield* new PerfError({ reason: `Unknown TypeScript component version: ${typescriptVersion}` })
   }

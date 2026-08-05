@@ -371,12 +371,12 @@ export const verifyReleaseArtifacts = Effect.fnUntraced(function*(repositoryRoot
     }
   }
   for (const target of Object.keys(buildTargets) as Array<BuildTarget>) {
-    const latest = componentArtifact(repositoryRoot, target, "typescript", upstream.typescript.latest, "tsc").path
+    const latest = componentArtifact(repositoryRoot, target, "typescript", upstream.tags.typescript.latest, "tsc").path
     const alias = join(repositoryRoot, "_packages", `tsgo-${target}`, "lib", target.startsWith("win32-") ? "tsc.exe" : "tsc")
     yield* validateArtifact(alias)
     if (!Buffer.from(yield* Effect.promise(() => readFile(latest))).equals(Buffer.from(yield* Effect.promise(() => readFile(alias))))) {
       return yield* new BuildError({ reason: `Latest TypeScript alias does not match ${latest}` })
     }
   }
-  yield* Console.log("Verified release binaries for all profiles and targets")
+  yield* Console.log("Verified release artifacts for all components and targets")
 })

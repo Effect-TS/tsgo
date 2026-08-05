@@ -17,10 +17,14 @@ const secondRevision = "1123456789abcdef0123456789abcdef01234567"
 const thirdRevision = "2123456789abcdef0123456789abcdef01234567"
 
 const manifest = () => ({
-  schemaVersion: 3,
-  typescript: {
-    latest: "7.0.0",
-    next: "7.1.0"
+  schemaVersion: 4,
+  tags: {
+    typescript: {
+      latest: "7.0.0",
+      next: "7.1.0"
+    },
+    oxlint: { latest: "1.1.0" },
+    "oxlint-tsgolint": { latest: "7.0.1000" }
   },
   components: {
     typescript: {
@@ -40,11 +44,6 @@ const manifest = () => ({
   },
   profiles: [
     {
-      name: "oxlint",
-      description: "Latest Oxlint compatibility runtime",
-      dependencies: { oxlint: "1.1.0", "oxlint-tsgolint": "7.0.1000" }
-    },
-    {
       name: "vite-plus",
       description: "Vite+ 1.0.0 compatibility runtime",
       dependencies: { oxlint: "1.0.0", "oxlint-tsgolint": "7.0.1000" }
@@ -54,13 +53,18 @@ const manifest = () => ({
 
 test("decodes normalized upstream metadata", async() => {
   const upstream = await Effect.runPromise(decodeUpstream(JSON.stringify(manifest())))
-  assert.equal(upstream.typescript.latest, "7.0.0")
-  assert.equal(upstream.profiles[1]?.description, "Vite+ 1.0.0 compatibility runtime")
+  assert.equal(upstream.tags.typescript.latest, "7.0.0")
+  assert.equal(upstream.profiles[0]?.description, "Vite+ 1.0.0 compatibility runtime")
 })
 
-test("rejects the deprecated profile-based format", async() => {
+test("rejects the deprecated pre-tag format", async() => {
   await assert.rejects(
-    Effect.runPromise(decodeUpstream(JSON.stringify({ schemaVersion: 2, profiles: [] }))),
+    Effect.runPromise(decodeUpstream(JSON.stringify({
+      schemaVersion: 3,
+      typescript: { latest: "7.0.0", next: "7.1.0" },
+      components: {},
+      profiles: []
+    }))),
     /schemaVersion/
   )
 })
@@ -70,7 +74,7 @@ test("rejects duplicate profile names", async() => {
   upstream.profiles.push({ ...upstream.profiles[0]! })
   await assert.rejects(
     Effect.runPromise(decodeUpstream(JSON.stringify(upstream))),
-    /Duplicate upstream profile: oxlint/
+    /Duplicate upstream profile: vite-plus/
   )
 })
 
@@ -83,9 +87,18 @@ test("rejects dangling component references", async() => {
   )
 })
 
+test("rejects dangling component tags", async() => {
+  const upstream = manifest()
+  upstream.tags.oxlint.latest = "missing"
+  await assert.rejects(
+    Effect.runPromise(decodeUpstream(JSON.stringify(upstream))),
+    /oxlint latest references unknown version missing/
+  )
+})
+
 test("requires runtime profiles to declare both patched components", async() => {
   const upstream = manifest()
-  delete (upstream.profiles[1]!.dependencies as Record<string, string>)["oxlint-tsgolint"]
+  delete (upstream.profiles[0]!.dependencies as Record<string, string>)["oxlint-tsgolint"]
   await assert.rejects(
     Effect.runPromise(decodeUpstream(JSON.stringify(upstream))),
     /Profile vite-plus must depend on oxlint-tsgolint/
@@ -174,12 +187,12 @@ test("builds deterministic normalized metadata and deduplicates components", () 
   assert.deepEqual(Object.keys(upstream.components.typescript), ["7.0.0", "7.1.0"])
   assert.deepEqual(Object.keys(upstream.components["oxlint-tsgolint"]), ["7.0.2001"])
   assert.deepEqual(Object.keys(upstream.components.oxlint), ["1.76.0", "1.77.0"])
+  assert.deepEqual(upstream.tags, {
+    typescript: { latest: "7.0.0", next: "7.1.0" },
+    oxlint: { latest: "1.77.0" },
+    "oxlint-tsgolint": { latest: "7.0.2001" }
+  })
   assert.deepEqual(upstream.profiles, [
-    {
-      name: "oxlint",
-      description: "Latest Oxlint compatibility runtime",
-      dependencies: { oxlint: "1.77.0", "oxlint-tsgolint": "7.0.2001" }
-    },
     {
       name: "vite-plus",
       description: "Vite+ 0.2.8 compatibility runtime",

@@ -7,7 +7,7 @@ inputs:
     required: false
     default: typescript
   version:
-    description: Component version; TypeScript defaults to the configured next version
+    description: Component version; TypeScript defaults to the configured next tag
     required: false
     default: ""
   materialize:

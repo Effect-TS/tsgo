@@ -13,7 +13,7 @@ permissions: {}
 
 jobs:
   update:
-    name: Update upstream profiles
+    name: Update upstream metadata
     if: github.repository_owner == 'Effect-TS'
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -31,7 +31,7 @@ jobs:
         with:
           materialize: "false"
 
-      - name: Update upstream profiles
+      - name: Update upstream metadata
         id: upstream
         run: pnpm exec repoctl upstream update
 
@@ -45,11 +45,11 @@ jobs:
             --base main \
             --head update-upstreams \
             --title 'chore: update upstreams' \
-            --body 'Automated update of the TypeScript-Go upstream profiles.' \
+            --body 'Automated update of TypeScript-Go upstream component tags.' \
             --commit-message 'chore: update upstream metadata' \
-            --check generation_check_id='Generate next profile'
+            --check generation_check_id='Generate TypeScript next tag'
 
-      - name: Setup next profile
+      - name: Setup TypeScript next tag
         if: steps.upstream.outputs.has_changes == 'true'
         run: pnpm exec repoctl submodules setup
 
@@ -78,10 +78,10 @@ jobs:
         run: |
           pnpm exec repoctl changeset add \
             --id update-upstreams \
-            'Update the next profile to [`${{ steps.upstream.outputs.next_spec }}`](https://www.npmjs.com/package/typescript/v/${{ steps.upstream.outputs.next_version }}), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/${{ steps.upstream.outputs.next_git_head }}) commit `${{ steps.upstream.outputs.next_git_head }}`, and update the latest profile to [`${{ steps.upstream.outputs.latest_spec }}`](https://www.npmjs.com/package/typescript/v/${{ steps.upstream.outputs.latest_version }}).${{ steps.upstream.outputs.schema_changed == 'true' && ' Refresh the tsconfig schema from JSON Schema Store.' || '' }}${{ steps.upstream.outputs.oxlint_schema_changed == 'true' && ' Refresh the Oxlint configuration schema from the selected package.' || '' }}'
+            'Update the TypeScript next tag to [`${{ steps.upstream.outputs.next_spec }}`](https://www.npmjs.com/package/typescript/v/${{ steps.upstream.outputs.next_version }}), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/${{ steps.upstream.outputs.next_git_head }}) commit `${{ steps.upstream.outputs.next_git_head }}`, and update the TypeScript latest tag to [`${{ steps.upstream.outputs.latest_spec }}`](https://www.npmjs.com/package/typescript/v/${{ steps.upstream.outputs.latest_version }}).${{ steps.upstream.outputs.schema_changed == 'true' && ' Refresh the tsconfig schema from JSON Schema Store.' || '' }}${{ steps.upstream.outputs.oxlint_schema_changed == 'true' && ' Refresh the Oxlint configuration schema from the selected package.' || '' }}'
 
-      - name: Update pull request with next profile
-        id: generated-profile
+      - name: Update pull request with TypeScript next tag
+        id: generated-tag
         if: steps.upstream.outputs.has_changes == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -90,9 +90,9 @@ jobs:
             --base main \
             --head update-upstreams \
             --title 'chore: update upstreams' \
-            --body 'Automated update of upstream metadata, the generated next profile, and Nix inputs.' \
-            --commit-message 'chore: generate next profile' \
-            --check validation_check_id='Validate next profile'
+            --body 'Automated update of upstream metadata, generated TypeScript next-tag sources, and Nix inputs.' \
+            --commit-message 'chore: generate TypeScript next tag' \
+            --check validation_check_id='Validate TypeScript next tag'
 
       - name: Publish generation result
         if: always()
@@ -102,26 +102,26 @@ jobs:
           pnpm exec repoctl github complete-check \
             --check-id '${{ steps.generated.outputs.generation_check_id }}' \
             --result '${{ job.status }}' \
-            --success-message 'Next profile generated' \
-            --failure-message 'Next profile generation failed' \
+            --success-message 'TypeScript next tag generated' \
+            --failure-message 'TypeScript next-tag generation failed' \
             --summary 'See the workflow run for upstream setup and Nix output.'
 
-      - name: Build next profile
+      - name: Build TypeScript next tag
         if: steps.upstream.outputs.has_changes == 'true'
         run: pnpm exec repoctl build local
 
-      - name: Test next profile
+      - name: Test TypeScript next tag
         if: steps.upstream.outputs.has_changes == 'true'
         run: pnpm exec repoctl test
 
-      - name: Publish next profile validation result
+      - name: Publish TypeScript next-tag validation result
         if: always()
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pnpm exec repoctl github complete-check \
-            --check-id '${{ steps.generated-profile.outputs.validation_check_id }}' \
+            --check-id '${{ steps.generated-tag.outputs.validation_check_id }}' \
             --result '${{ job.status }}' \
-            --success-message 'Upstream profile validation passed' \
-            --failure-message 'Upstream profile validation failed' \
+            --success-message 'TypeScript next-tag validation passed' \
+            --failure-message 'TypeScript next-tag validation failed' \
             --summary 'See the workflow run for setup, build, and test output.'

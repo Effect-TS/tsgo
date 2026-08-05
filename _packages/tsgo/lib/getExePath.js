@@ -62,7 +62,7 @@ export default function getExePath() {
 
   const packageDir = path.dirname(packageJson);
   const upstream = readJson(path.join(packageDir, "lib", "upstream.json"));
-  if (upstream.schemaVersion !== 3 || typeof upstream.components?.typescript !== "object") {
+  if (upstream.schemaVersion !== 4 || typeof upstream.components?.typescript !== "object") {
     throw new Error("Invalid " + platformPackageName + "/lib/upstream.json.");
   }
 

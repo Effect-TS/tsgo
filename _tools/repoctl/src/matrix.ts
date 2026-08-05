@@ -8,12 +8,12 @@ export const buildTypeScriptTestMatrix = (upstream: typeof Upstream.Type) => ({
     .sort((left, right) => Buffer.compare(Buffer.from(left), Buffer.from(right)))
     .map((version) => {
       const channels = (["latest", "next"] as const)
-        .filter((channel) => upstream.typescript[channel] === version)
+        .filter((channel) => upstream.tags.typescript[channel] === version)
       return {
         name: channels.length === 0 ? version : channels.join("+"),
         component: "typescript",
         version,
-        repoctl: upstream.typescript.next === version
+        repoctl: upstream.tags.typescript.next === version
       }
     })
 })
@@ -23,6 +23,11 @@ export const buildOxlintTestMatrix = (upstream: typeof Upstream.Type) => {
     readonly oxlintVersion: string
     readonly tsgolintVersion: string
   }>()
+  const defaultRuntime = {
+    oxlintVersion: upstream.tags.oxlint.latest,
+    tsgolintVersion: upstream.tags["oxlint-tsgolint"].latest
+  }
+  runtimes.set(`${defaultRuntime.oxlintVersion}\0${defaultRuntime.tsgolintVersion}`, defaultRuntime)
   for (const profile of upstream.profiles) {
     const oxlintVersion = profile.dependencies.oxlint
     const tsgolintVersion = profile.dependencies["oxlint-tsgolint"]
@@ -47,7 +52,7 @@ export const buildGeneratedMatrix = (upstream: typeof Upstream.Type) => ({
   include: [{
     name: "latest",
     component: "typescript",
-    version: upstream.typescript.latest,
+    version: upstream.tags.typescript.latest,
     branch: "generated/latest"
   }]
 })

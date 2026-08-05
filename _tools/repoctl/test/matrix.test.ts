@@ -12,8 +12,12 @@ const revision = "0123456789abcdef0123456789abcdef01234567"
 
 test("builds a deterministic matrix for every unique TypeScript component", () => {
   const upstream: typeof Upstream.Type = {
-    schemaVersion: 3,
-    typescript: { latest: "7.0.2", next: "7.1.0-dev" },
+    schemaVersion: 4,
+    tags: {
+      typescript: { latest: "7.0.2", next: "7.1.0-dev" },
+      "oxlint-tsgolint": { latest: "unused" },
+      oxlint: { latest: "unused" }
+    },
     components: {
       typescript: {
         "7.1.0-dev": { gitHead: revision },
@@ -37,8 +41,12 @@ test("builds a deterministic matrix for every unique TypeScript component", () =
 
 test("combines channel labels when latest and next resolve to the same component", () => {
   const upstream: typeof Upstream.Type = {
-    schemaVersion: 3,
-    typescript: { latest: "7.0.2", next: "7.0.2" },
+    schemaVersion: 4,
+    tags: {
+      typescript: { latest: "7.0.2", next: "7.0.2" },
+      "oxlint-tsgolint": { latest: "unused" },
+      oxlint: { latest: "unused" }
+    },
     components: {
       typescript: { "7.0.2": { gitHead: revision } },
       "oxlint-tsgolint": {},
@@ -54,8 +62,12 @@ test("combines channel labels when latest and next resolve to the same component
 
 test("builds a component-aware generated branch matrix", () => {
   const upstream: typeof Upstream.Type = {
-    schemaVersion: 3,
-    typescript: { latest: "7.0.2", next: "7.1.0-dev" },
+    schemaVersion: 4,
+    tags: {
+      typescript: { latest: "7.0.2", next: "7.1.0-dev" },
+      "oxlint-tsgolint": { latest: "unused" },
+      oxlint: { latest: "unused" }
+    },
     components: {
       typescript: {
         "7.0.2": { gitHead: revision },
@@ -74,8 +86,12 @@ test("builds a component-aware generated branch matrix", () => {
 
 test("builds a deduplicated matrix of compatible Oxlint component pairs", () => {
   const upstream: typeof Upstream.Type = {
-    schemaVersion: 3,
-    typescript: { latest: "7.0.2", next: "7.1.0-dev" },
+    schemaVersion: 4,
+    tags: {
+      typescript: { latest: "7.0.2", next: "7.1.0-dev" },
+      "oxlint-tsgolint": { latest: "7.0.2001" },
+      oxlint: { latest: "1.77.0" }
+    },
     components: {
       typescript: {
         "7.0.2": { gitHead: revision },
@@ -90,11 +106,6 @@ test("builds a deduplicated matrix of compatible Oxlint component pairs", () => 
       }
     },
     profiles: [
-      {
-        name: "oxlint",
-        description: "Latest Oxlint",
-        dependencies: { oxlint: "1.77.0", "oxlint-tsgolint": "7.0.2001" }
-      },
       {
         name: "vite-plus",
         description: "Vite+",
