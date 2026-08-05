@@ -83,10 +83,16 @@ importers:
       effect:
         specifier: ^4.0.0-beta.101
         version: 4.0.0-beta.101
+      semver:
+        specifier: ^7.7.2
+        version: 7.8.5
     devDependencies:
       '@types/node':
         specifier: ^24.3.0
         version: 24.10.13
+      '@types/semver':
+        specifier: ^7.7.1
+        version: 7.8.0
       typescript:
         specifier: ^5.9.2
         version: 5.9.3
@@ -803,6 +809,9 @@ packages:
 
   '@types/node@24.10.13':
     resolution: {integrity: sha512-oH72nZRfDv9lADUBSo104Aq7gPHpQZc4BTx38r9xf9pg5LfP6EzSyH2n7qFmmxRQXh7YlUXODcYsg6PuTDSxGg==}
+
+  '@types/semver@7.8.0':
+    resolution: {integrity: sha512-1mAINjtQCXXeLkJ9ehXkwOcBpqtLxiVtKhpUf83DdRNdQKV0iXZpaHYqRr7nj+wvxuJzoAmAwXI+sCNMv1CzLQ==}
 
   '@types/ws@8.18.1':
     resolution: {integrity: sha512-ThVF6DCVhA8kUGy+aazFQ4kXQ7E1Ty7A3ypFOe0IcJV8O/M511G99AW24irKrW56Wt44yG9+ij8FaqoBGkuBXg==}
@@ -1918,6 +1927,8 @@ snapshots:
   '@types/node@24.10.13':
     dependencies:
       undici-types: 7.16.0
+
+  '@types/semver@7.8.0': {}
 
   '@types/ws@8.18.1':
     dependencies:

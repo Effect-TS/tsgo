@@ -1,16 +1,20 @@
 import assert from "node:assert/strict"
 import { spawnSync } from "node:child_process"
+import { existsSync } from "node:fs"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
 
 const repositoryRoot = process.argv[2]
 assert.ok(repositoryRoot, "repository root argument is required")
+const tsgolint = process.argv[3]
+assert.ok(tsgolint, "tsgolint path argument is required")
+assert.ok(existsSync(tsgolint), `tsgolint executable does not exist: ${tsgolint}`)
 
 const fixture = dirname(fileURLToPath(import.meta.url))
 const oxlint = join(repositoryRoot, "oxlint", "apps", "oxlint", "dist", "cli.js")
 const env = {
   ...process.env,
-  OXLINT_TSGOLINT_PATH: join(repositoryRoot, "_packages", "tsgo-linux-x64", "lib", "tsgolint")
+  OXLINT_TSGOLINT_PATH: tsgolint
 }
 
 const run = (...args) => spawnSync(process.execPath, [oxlint, ...args], {

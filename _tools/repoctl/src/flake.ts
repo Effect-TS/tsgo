@@ -3,7 +3,7 @@ import * as Effect from "effect/Effect"
 import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
 import { runCommand, runCommandCapture, runCommandString } from "./process.ts"
-import { getProfile, readUpstream } from "./upstream.ts"
+import { readUpstream } from "./upstream.ts"
 
 const gitRevisionPattern = /^[0-9a-f]{40}$/
 const vendorHashPattern = /vendorHash = (?:("[^"]+")|lib\.fakeHash);/
@@ -63,18 +63,18 @@ export const updateFlake = Effect.fnUntraced(function*(repositoryRoot: string) {
   const fs = yield* FileSystem.FileSystem
   const path = yield* Path.Path
   const upstream = yield* readUpstream(repositoryRoot)
-  const next = yield* getProfile(upstream, "next")
+  const next = upstream.components.typescript[upstream.tags.typescript.next]!
   const tree = yield* runCommandString("git", repositoryRoot, [
     "-C",
     "typescript-go",
     "ls-tree",
-    next.ts.gitHead,
+    next.gitHead,
     "_submodules/TypeScript"
   ])
   const typescriptRevision = tree.trim().split(/\s+/)[2]
   if (typescriptRevision === undefined || !gitRevisionPattern.test(typescriptRevision)) {
     return yield* new FlakeUpdateError({
-      reason: `Cannot derive the TypeScript revision from TypeScript-Go ${next.ts.gitHead}`
+      reason: `Cannot derive the TypeScript revision from TypeScript-Go ${next.gitHead}`
     })
   }
 
@@ -83,7 +83,7 @@ export const updateFlake = Effect.fnUntraced(function*(repositoryRoot: string) {
     Effect.mapError((error) => new FlakeUpdateError({ reason: error.message }))
   )
   const updatedInputs = yield* Effect.try({
-    try: () => updateFlakeInputs(flake, next.ts.gitHead, typescriptRevision),
+    try: () => updateFlakeInputs(flake, next.gitHead, typescriptRevision),
     catch: (error) => error instanceof FlakeUpdateError
       ? error
       : new FlakeUpdateError({ reason: String(error) })

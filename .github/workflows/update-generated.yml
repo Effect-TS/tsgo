@@ -1,0 +1,59 @@
+name: Update Generated Branches
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: update-generated-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  matrix:
+    if: github.repository_owner == 'Effect-TS'
+    uses: ./.github/workflows/repoctl-matrix.yml
+    permissions:
+      contents: read
+    with:
+      name: generated
+
+  update:
+    name: Update ${{ matrix.branch }}
+    needs: matrix
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      pull-requests: write
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.matrix.outputs.matrix) }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup ${{ matrix.component }} ${{ matrix.version }}
+        uses: ./.github/actions/setup-repo
+        with:
+          component: ${{ matrix.component }}
+          version: ${{ matrix.version }}
+
+      - name: Open generated branch pull request
+        env:
+          COMPONENT: ${{ matrix.component }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GENERATED_BRANCH: ${{ matrix.branch }}
+          GENERATED_NAME: ${{ matrix.name }}
+        run: |
+          generated_slug="${GENERATED_BRANCH//\//-}"
+          pnpm exec repoctl github open-pr-if-changed \
+            --base "$GENERATED_BRANCH" \
+            --head-prefix "automation/update-${generated_slug}" \
+            --title "chore: update ${GENERATED_BRANCH}" \
+            --body "Generated ${GENERATED_NAME} ${COMPONENT} component from main commit ${{ github.sha }}." \
+            --commit-message "chore: update ${GENERATED_BRANCH}"
