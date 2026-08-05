@@ -48,7 +48,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
-      checks: write
       contents: write
       pull-requests: write
     strategy:
@@ -66,7 +65,6 @@ jobs:
           version: ${{ matrix.version }}
 
       - name: Open generated branch pull request
-        id: generated
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GENERATED_BRANCH: ${{ matrix.branch }}
@@ -78,18 +76,4 @@ jobs:
             --head-prefix "automation/update-${generated_slug}" \
             --title "chore: update ${GENERATED_BRANCH}" \
             --body "Generated ${GENERATED_NAME} TypeScript component from main commit ${{ github.sha }}." \
-            --commit-message "chore: update ${GENERATED_BRANCH}" \
-            --check "check_id=Generated ${GENERATED_BRANCH} update"
-
-      - name: Publish generated update result
-        if: always()
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GENERATED_BRANCH: ${{ matrix.branch }}
-        run: |
-          pnpm exec repoctl github complete-check \
-            --check-id '${{ steps.generated.outputs.check_id }}' \
-            --result '${{ job.status }}' \
-            --success-message "Generated ${GENERATED_BRANCH} updated" \
-            --failure-message "Generated ${GENERATED_BRANCH} update failed" \
-            --summary "See the workflow run for ${GENERATED_BRANCH} output."
+            --commit-message "chore: update ${GENERATED_BRANCH}"
