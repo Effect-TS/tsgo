@@ -1,5 +1,12 @@
 # @effect/tsgo
 
+## 0.32.0
+
+### Minor Changes
+
+- 52ec481: Normalize upstream metadata into versioned TypeScript, Oxlint, and oxlint-tsgolint components, including the versions required by Vite+. Repository setup and validation now operate on unique component versions instead of named upstream profiles.
+- 7447a69: Patch Oxlint's TypeScript declarations with the `effecttsgo` plugin and rule names.
+
 ## 0.31.0
 
 ### Minor Changes
