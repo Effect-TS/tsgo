@@ -15,27 +15,116 @@ concurrency:
 permissions: {}
 
 jobs:
-  validate:
-    name: Validate next profile
+  matrix:
+    name: Plan TypeScript validation
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 10
     permissions:
       contents: read
+    outputs:
+      typescript: ${{ steps.matrix.outputs.typescript }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Setup next profile
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate TypeScript test matrix
+        id: matrix
+        run: echo "typescript=$(pnpm --silent exec repoctl matrix typescript test)" >> "$GITHUB_OUTPUT"
+
+  validate:
+    name: Validate TypeScript ${{ matrix.name }} (${{ matrix.version }})
+    needs: matrix
+    if: github.repository_owner == 'Effect-TS'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.matrix.outputs.typescript) }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup TypeScript ${{ matrix.version }}
         uses: ./.github/actions/setup-repo
         with:
-          profile: next
+          component: typescript
+          version: ${{ matrix.version }}
 
       - name: Build
         run: pnpm exec repoctl build local
 
       - name: Validate repoctl
+        if: matrix.repoctl
         run: pnpm run check:repoctl && pnpm run test:repoctl
 
       - name: Test
         run: pnpm exec repoctl test
+
+
+  generated:
+    name: Update ${{ matrix.branch || matrix.name }}
+    needs: [matrix, validate]
+    if: github.event_name == 'push' && github.repository_owner == 'Effect-TS'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      checks: write
+      contents: write
+      pull-requests: write
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.matrix.outputs.typescript) }}
+
+    steps:
+      - name: Checkout
+        if: matrix.branch != ''
+        uses: actions/checkout@v7
+
+      - name: Setup TypeScript ${{ matrix.version }}
+        if: matrix.branch != ''
+        uses: ./.github/actions/setup-repo
+        with:
+          component: typescript
+          version: ${{ matrix.version }}
+
+      - name: Open generated branch pull request
+        id: generated
+        if: matrix.branch != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GENERATED_BRANCH: ${{ matrix.branch }}
+        run: |
+          pnpm exec repoctl github open-pr-if-changed \
+            --base "$GENERATED_BRANCH" \
+            --head-prefix automation/update-generated-latest \
+            --title 'chore: update generated/latest' \
+            --body 'Generated latest TypeScript component from main commit `${{ github.sha }}`.' \
+            --commit-message 'chore: update generated/latest' \
+            --check check_id='Latest TypeScript validation'
+
+      - name: Publish generated validation result
+        if: always() && matrix.branch != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          pnpm exec repoctl github complete-check \
+            --check-id '${{ steps.generated.outputs.check_id }}' \
+            --result '${{ job.status }}' \
+            --success-message 'Latest TypeScript validation passed' \
+            --failure-message 'Latest TypeScript validation failed' \
+            --summary 'See the workflow run for generated branch output.'

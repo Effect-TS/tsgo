@@ -13,16 +13,28 @@ const revision = "0123456789abcdef0123456789abcdef01234567"
 test("bundles upstream metadata in every platform package", async() => {
   const repository = mkdtempSync(join(tmpdir(), "repoctl-packages-"))
   const upstream = `${JSON.stringify({
-    schemaVersion: 2,
+    schemaVersion: 3,
+    typescript: { latest: "7.0.0", next: "7.1.0" },
+    components: {
+      typescript: {
+        "7.0.0": { gitHead: revision },
+        "7.1.0": { gitHead: revision }
+      },
+      "oxlint-tsgolint": {
+        "1.0.0": { gitHead: revision, dependencies: { typescript: "7.0.0" } }
+      },
+      oxlint: { "1.0.0": { gitHead: revision } }
+    },
     profiles: [
-      { kind: "ts", name: "next", ts: { npmVersion: "7.1.0", gitHead: revision }, binName: "tsc-next" },
-      { kind: "ts", name: "latest", ts: { npmVersion: "7.0.0", gitHead: revision }, binName: "tsc" },
       {
-        kind: "oxlint",
         name: "oxlint",
-        ts: { npmVersion: "7.0.0", gitHead: revision },
-        tsgolint: { npmVersion: "1.0.0", gitHead: revision },
-        oxlint: { npmVersion: "1.0.0", gitHead: revision }
+        description: "Latest Oxlint compatibility runtime",
+        dependencies: { oxlint: "1.0.0", "oxlint-tsgolint": "1.0.0" }
+      },
+      {
+        name: "vite-plus",
+        description: "Vite+ 1.0.0 compatibility runtime",
+        dependencies: { oxlint: "1.0.0", "oxlint-tsgolint": "1.0.0" }
       }
     ]
   }, null, 2)}\n`

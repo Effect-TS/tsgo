@@ -19,9 +19,10 @@ import {
 import { ensureEffectFixtures } from "./fixtures.ts"
 import { updateFlake } from "./flake.ts"
 import { completeCheck, openPullRequestIfChanged } from "./github.ts"
+import { printTypeScriptTestMatrix } from "./matrix.ts"
 import { comparePerformance } from "./perf.ts"
 import { bundleUpstream } from "./packages.ts"
-import { prepareOxlintProfile } from "./oxlint.ts"
+import { prepareTsgolintComponent, validateOxlintComponent } from "./oxlint.ts"
 import { cloneSubmodules, patchSubmodules } from "./submodules.ts"
 import { runTests } from "./tests.ts"
 import { updateUpstream } from "./upstream.ts"
@@ -29,23 +30,36 @@ import { updateUpstream } from "./upstream.ts"
 const repositoryRoot = fileURLToPath(new URL("../../..", import.meta.url))
 
 const setup = Command.make("setup", {
-  profile: Flag.choice("profile", ["next", "latest", "oxlint"]).pipe(
-    Flag.withDefault("next"),
-    Flag.withDescription("Upstream profile to set up")
+  component: Flag.choice("component", ["typescript", "oxlint-tsgolint", "oxlint"]).pipe(
+    Flag.withDefault("typescript"),
+    Flag.withDescription("Upstream component to set up")
+  ),
+  version: Flag.string("version").pipe(
+    Flag.optional,
+    Flag.withDescription("Component version; TypeScript defaults to the configured next version")
   )
-}, ({ profile }) => Effect.gen(function*() {
-  yield* cloneSubmodules(repositoryRoot, profile)
-  if (profile === "oxlint") {
-    yield* prepareOxlintProfile(repositoryRoot)
+}, ({ component, version }) => Effect.gen(function*() {
+  const selected = yield* cloneSubmodules(repositoryRoot, component, Option.getOrUndefined(version))
+  if (selected.name === "oxlint-tsgolint") {
+    yield* prepareTsgolintComponent(repositoryRoot, {
+      version: selected.version,
+      gitHead: selected.gitHead,
+      typescriptGitHead: selected.typescript.gitHead
+    })
     yield* generateTsgolintIntegration(repositoryRoot)
-    yield* generateOxlintEffectRules(repositoryRoot)
   } else {
+    if (selected.name === "oxlint") {
+      yield* validateOxlintComponent(repositoryRoot, selected.version)
+    }
     yield* patchSubmodules(repositoryRoot)
     yield* generateTypeScriptGoIntegration(repositoryRoot)
+    if (selected.name === "oxlint") {
+      yield* generateOxlintEffectRules(repositoryRoot)
+    }
   }
   yield* ensureEffectFixtures(repositoryRoot)
 })).pipe(
-  Command.withDescription("Check out and patch the submodules required by an upstream profile")
+  Command.withDescription("Check out and patch the submodules required by an upstream component")
 )
 
 const submodules = Command.make("submodules").pipe(
@@ -257,9 +271,36 @@ const packages = Command.make("packages").pipe(
   Command.withSubcommands([bundlePackageUpstream])
 )
 
+const matrixTypeScriptTest = Command.make("test", {}, () => printTypeScriptTestMatrix(repositoryRoot)).pipe(
+  Command.withDescription("Print the TypeScript component test matrix as JSON")
+)
+
+const matrixTypeScript = Command.make("typescript").pipe(
+  Command.withDescription("Generate TypeScript component matrices"),
+  Command.withSubcommands([matrixTypeScriptTest])
+)
+
+const matrix = Command.make("matrix").pipe(
+  Command.withDescription("Generate CI matrices"),
+  Command.withSubcommands([matrixTypeScript])
+)
+
 Command.make("repoctl").pipe(
   Command.withDescription("Effect TypeScript-Go repository maintenance"),
-  Command.withSubcommands([submodules, build, changeset, check, codegen, flake, github, packages, perf, test, upstream]),
+  Command.withSubcommands([
+    submodules,
+    build,
+    changeset,
+    check,
+    codegen,
+    flake,
+    github,
+    matrix,
+    packages,
+    perf,
+    test,
+    upstream
+  ]),
   Command.run({ version: "0.0.0" }),
   Effect.provide(NodeServices.layer),
   NodeRuntime.runMain
