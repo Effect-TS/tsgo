@@ -45,6 +45,7 @@ export namespace Assessment {
     readonly typescriptVersion: Option.Option<PackageDependency>
     readonly oxlintVersion: Option.Option<PackageDependency>
     readonly oxlintTsgolintVersion: Option.Option<PackageDependency>
+    readonly vitePlusVersion: Option.Option<PackageDependency>
     readonly prepareScript: Option.Option<{
       readonly script: string
       readonly hasPatch: boolean

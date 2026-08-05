@@ -6,6 +6,7 @@ export const defaultTypescriptPackageNames = ["typescript", "@typescript/native"
 export const PATCH_COMMAND = "effect-tsgo patch"
 export const OXLINT_PACKAGE_NAME = "oxlint"
 export const OXLINT_TSGOLINT_PACKAGE_NAME = "oxlint-tsgolint"
+export const VITE_PLUS_PACKAGE_NAME = "vite-plus"
 
 /**
  * `typescript` package versions >= 7 ship the native Go-ported binary that this

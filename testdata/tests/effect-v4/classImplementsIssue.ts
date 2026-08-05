@@ -4,6 +4,8 @@ export class ReplayWindowImpl<A> implements PubSub.PubSub.ReplayWindow<A> {
     index: number = 1
     remaining: number = 1
 
+    close() {
+    }
     fastForward() {
     }
     take(): A | undefined {

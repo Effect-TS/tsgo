@@ -128,8 +128,8 @@ describe("patcher", () => {
     await writeFile(`${targetPath}.original`, "original")
     await writeFile(replacementPath, "replacement")
     const target: DiscoveredBinary = {
-      component: "oxlint",
-      packageName: "oxlint",
+      component: "oxlint-tsgolint",
+      packageName: "oxlint-tsgolint",
       packageVersion: "1",
       binaryPath: targetPath
     }
@@ -139,6 +139,9 @@ describe("patcher", () => {
     }))
     expect(plan.operations).toEqual([])
     expect(plan.skipped[0]?.reason).toBe("already-patched")
+    expect(plan.skipped[0]?.message).toBe(
+      `oxlint-tsgolint skipped because backup already exists at ${targetPath}.original.`
+    )
     await expect(access(`${targetPath}.original.1`)).rejects.toThrow()
   })
 
