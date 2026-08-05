@@ -2,6 +2,7 @@ import * as NodeServices from "@effect/platform-node/NodeServices"
 import * as Effect from "effect/Effect"
 import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
+import * as Scope from "effect/Scope"
 import { access, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
@@ -12,7 +13,9 @@ import {
   PatcherError,
   preparePatch,
   prepareUnpatch,
-  ReplacementUnavailableError
+  renderOxlintDeclarations,
+  ReplacementUnavailableError,
+  resolveReplacement
 } from "../src/patcher/index.js"
 
 const temporaryDirectories: Array<string> = []
@@ -23,8 +26,8 @@ const makeTemporaryDirectory = async () => {
   return directory
 }
 
-const run = <A, E>(effect: Effect.Effect<A, E, FileSystem.FileSystem | Path.Path>) =>
-  Effect.runPromise(effect.pipe(Effect.provide(NodeServices.layer)))
+const run = <A, E>(effect: Effect.Effect<A, E, FileSystem.FileSystem | Path.Path | Scope.Scope>) =>
+  Effect.runPromise(Effect.scoped(effect).pipe(Effect.provide(NodeServices.layer)))
 
 afterEach(async () => {
   await Promise.all(temporaryDirectories.splice(0).map((directory) => rm(directory, { recursive: true, force: true })))
@@ -33,7 +36,7 @@ afterEach(async () => {
 describe("patcher", () => {
   it("prepares ordered rename and copy operations for every target", async () => {
     const directory = await makeTemporaryDirectory()
-    const first = join(directory, "first.node")
+    const first = join(directory, "first.d.ts")
     const second = join(directory, "second")
     const firstReplacement = join(directory, "first-effect")
     const secondReplacement = join(directory, "second-effect")
@@ -44,14 +47,14 @@ describe("patcher", () => {
       writeFile(secondReplacement, "second-effect")
     ])
     const targets: ReadonlyArray<DiscoveredBinary> = [
-      { component: "oxlint", packageName: "oxlint", packageVersion: "1", binaryPath: first },
+      { component: "oxlint-dts", packageName: "oxlint", packageVersion: "1", binaryPath: first },
       { component: "oxlint-tsgolint", packageName: "oxlint-tsgolint", packageVersion: "2", binaryPath: second }
     ]
 
     const plan = await run(preparePatch(targets, {
       skipMissing: false,
       resolveReplacement: (target) => Effect.succeed({
-        path: target.component === "oxlint" ? firstReplacement : secondReplacement
+        path: target.component === "oxlint-dts" ? firstReplacement : secondReplacement
       })
     }))
     expect(plan.operations).toEqual([
@@ -61,6 +64,44 @@ describe("patcher", () => {
       { _tag: "Copy", sourcePath: secondReplacement, destinationPath: second },
       { _tag: "Chmod", path: second, mode: 0o755 }
     ])
+  })
+
+  it("generates an Oxlint declaration replacement in the temporary directory", async () => {
+    const directory = await makeTemporaryDirectory()
+    const declarationPath = join(directory, "index.d.ts")
+    await writeFile(declarationPath, [
+      'type LintPluginOptionsSchema = "eslint" | "typescript";',
+      "type RuleNoConfig = unknown;",
+      "interface DummyRuleMap {",
+      '  "eslint/no-unused-vars"?: RuleNoConfig;',
+      "}",
+      ""
+    ].join("\n"))
+    const target: DiscoveredBinary = {
+      component: "oxlint-dts",
+      packageName: "oxlint",
+      packageVersion: "1.0.0",
+      binaryPath: declarationPath
+    }
+
+    const replacement = await run(Effect.gen(function*() {
+      const fs = yield* FileSystem.FileSystem
+      const resolved = yield* resolveReplacement(target)
+      return { path: resolved.path, source: yield* fs.readFileString(resolved.path) }
+    }))
+    expect(replacement.path).not.toBe(declarationPath)
+    expect(replacement.source).toContain(
+      'type LintPluginOptionsSchema = "effecttsgo" | "eslint" | "typescript";'
+    )
+    expect(replacement.source).toContain('"effecttsgo/floating-effect"?: RuleNoConfig;')
+    expect(replacement.source).toContain('"eslint/no-unused-vars"?: RuleNoConfig;')
+    await expect(access(replacement.path)).rejects.toThrow()
+  })
+
+  it("rejects declarations whose expected anchors changed", () => {
+    expect(() => renderOxlintDeclarations("interface OtherRuleMap {}\n")).toThrow(
+      "Unable to locate the Oxlint plugin declaration."
+    )
   })
 
   it("preflights the whole plan without mutation", async () => {

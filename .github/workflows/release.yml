@@ -83,6 +83,8 @@ jobs:
     needs: select-mode
     if: needs.select-mode.outputs.mode == 'publish'
     uses: ./.github/workflows/repoctl-matrix.yml
+    permissions:
+      contents: read
     with:
       name: release
 

@@ -73,7 +73,7 @@ const patchCommand = Command.make("patch", {
   typescriptPackage: typescriptPackageFlag
 }).pipe(
   Command.withDescription("Patch the selected Effect integrations"),
-  Command.withHandler(({ oxlint, skipMissing, typescript, typescriptPackage }) => Effect.gen(function*() {
+  Command.withHandler(({ oxlint, skipMissing, typescript, typescriptPackage }) => Effect.scoped(Effect.gen(function*() {
     yield* ensureIntegrationSelected(typescript, oxlint)
     if (!typescript && Option.isSome(typescriptPackage)) {
       return yield* new IntegrationSelectionError({
@@ -93,7 +93,7 @@ const patchCommand = Command.make("patch", {
       (target) => Console.log(`Patched ${target.component} at ${target.binaryPath}`),
       { discard: true }
     )
-  }))
+  })))
 )
 
 const unpatchCommand = Command.make("unpatch", {
@@ -123,11 +123,11 @@ const unpatchCommand = Command.make("unpatch", {
   }))
 )
 
-const resolveTypeScriptExecutable = Effect.gen(function*() {
+const resolveTypeScriptExecutable = Effect.scoped(Effect.gen(function*() {
   const components = new Set<Component>(["typescript"])
   const targets = yield* discoverSelected(components, defaultTypescriptPackageNames[0])
   return yield* resolveReplacement(targets[0]!)
-})
+}))
 
 const getExePathCommand = Command.make("get-exe-path").pipe(
   Command.withDescription("Print the Effect Language Service executable path"),
