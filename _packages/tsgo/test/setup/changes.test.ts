@@ -257,6 +257,26 @@ describe("computeChanges", () => {
     }))
   })
 
+  it.each(["dependencies", "devDependencies"] as const)(
+    "should assess vite-plus from %s",
+    (dependencyType) => {
+      const assessment = assess({
+        packageJson: {
+          fileName: "/test/package.json",
+          text: JSON.stringify({ [dependencyType]: { "vite-plus": "^0.2.8" } })
+        },
+        tsconfig: { fileName: "/test/tsconfig.json", text: "{}" },
+        oxlintConfig: Option.none(),
+        vscodeSettings: Option.none()
+      })
+
+      expect(assessment.packageJson.vitePlusVersion).toEqual(Option.some({
+        dependencyType,
+        version: "^0.2.8"
+      }))
+    }
+  )
+
   it("should pin both Oxlint dependencies when enabling the integration", () => {
     const result = runComputeChanges({
       integrations: ["oxlint"],
@@ -272,6 +292,62 @@ describe("computeChanges", () => {
     expect(insertedText).toContain('"oxlint": "1.77.0"')
     expect(insertedText).toContain('"oxlint-tsgolint": "7.0.2001"')
     expect(insertedText).toContain("effect-tsgo patch --no-typescript --oxlint")
+  })
+
+  it.each(["dependencies", "devDependencies"] as const)(
+    "should not add Oxlint dependencies when vite-plus is in %s",
+    (dependencyType) => {
+      const packageJsonText = JSON.stringify({
+        name: "test-project",
+        [dependencyType]: {
+          "vite-plus": "^0.2.8"
+        }
+      }, null, 2)
+      const result = runComputeChanges({
+        packageJsonText,
+        integrations: ["oxlint"],
+        typescriptVersion: null,
+        oxlintVersion: { dependencyType, version: "1.77.0" },
+        oxlintTsgolintVersion: { dependencyType, version: "7.0.2001" }
+      })
+      const packageJsonChange = result.codeActions
+        .flatMap((action) => action.changes)
+        .find((change) => change.fileName === "/test/package.json")
+      const updated = applyTextChanges(packageJsonText, packageJsonChange?.textChanges ?? [])
+
+      const parsed = JSON.parse(updated)
+      expect(parsed[dependencyType]["vite-plus"]).toBe("^0.2.8")
+      expect(parsed.dependencies?.oxlint).toBeUndefined()
+      expect(parsed.dependencies?.["oxlint-tsgolint"]).toBeUndefined()
+      expect(parsed.devDependencies?.oxlint).toBeUndefined()
+      expect(parsed.devDependencies?.["oxlint-tsgolint"]).toBeUndefined()
+      expect(updated).toContain("effect-tsgo patch --no-typescript --oxlint")
+    }
+  )
+
+  it("should continue to pin explicit Oxlint dependencies alongside vite-plus", () => {
+    const packageJsonText = JSON.stringify({
+      name: "test-project",
+      devDependencies: {
+        "vite-plus": "^0.2.8",
+        "oxlint": "1.76.0",
+        "oxlint-tsgolint": "7.0.2000"
+      }
+    }, null, 2)
+    const result = runComputeChanges({
+      packageJsonText,
+      integrations: ["oxlint"],
+      typescriptVersion: null,
+      oxlintVersion: { dependencyType: "devDependencies", version: "1.77.0" },
+      oxlintTsgolintVersion: { dependencyType: "devDependencies", version: "7.0.2001" }
+    })
+    const packageJsonChange = result.codeActions
+      .flatMap((action) => action.changes)
+      .find((change) => change.fileName === "/test/package.json")
+    const updated = JSON.parse(applyTextChanges(packageJsonText, packageJsonChange?.textChanges ?? []))
+
+    expect(updated.devDependencies.oxlint).toBe("1.77.0")
+    expect(updated.devDependencies["oxlint-tsgolint"]).toBe("7.0.2001")
   })
 
   it("should prepend the Effect Oxlint schema to an existing .oxlintrc.json", () => {

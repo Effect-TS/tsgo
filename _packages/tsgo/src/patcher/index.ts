@@ -183,7 +183,7 @@ export const preparePatch = (
       skipped.push({
         target,
         reason: "already-patched",
-        message: `Backup already exists at ${backupPath}; ${target.component} is already patched.`
+        message: `${target.component} skipped because backup already exists at ${backupPath}.`
       })
       continue
     }

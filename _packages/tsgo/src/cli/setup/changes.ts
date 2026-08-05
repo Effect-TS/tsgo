@@ -271,6 +271,7 @@ const computePackageJsonChanges = (
         ] as const) {
           if (
             target.integrations.includes("oxlint") &&
+            Option.isNone(current.vitePlusVersion) &&
             Option.isNone(currentDependency) &&
             Option.isSome(targetDependency) &&
             targetDependency.value.dependencyType === dependencyType
@@ -315,6 +316,7 @@ const computePackageJsonChanges = (
         targetDependency: Option.Option<PackageDependency>
       ) => {
         if (Option.isNone(targetDependency)) return
+        if (Option.isNone(currentDependency) && Option.isSome(current.vitePlusVersion)) return
         if (
           Option.isSome(currentDependency) &&
           currentDependency.value.version === targetDependency.value.version &&
