@@ -271,13 +271,8 @@ const packages = Command.make("packages").pipe(
   Command.withSubcommands([bundlePackageUpstream])
 )
 
-const matrixTypeScriptTest = Command.make("test", {}, () => printTypeScriptTestMatrix(repositoryRoot)).pipe(
+const matrixTestTypeScript = Command.make("test-typescript", {}, () => printTypeScriptTestMatrix(repositoryRoot)).pipe(
   Command.withDescription("Print the TypeScript component test matrix as JSON")
-)
-
-const matrixTypeScript = Command.make("typescript").pipe(
-  Command.withDescription("Generate TypeScript component matrices"),
-  Command.withSubcommands([matrixTypeScriptTest])
 )
 
 const matrixGenerated = Command.make("generated", {}, () => printGeneratedMatrix(repositoryRoot)).pipe(
@@ -286,7 +281,7 @@ const matrixGenerated = Command.make("generated", {}, () => printGeneratedMatrix
 
 const matrix = Command.make("matrix").pipe(
   Command.withDescription("Generate CI matrices"),
-  Command.withSubcommands([matrixGenerated, matrixTypeScript])
+  Command.withSubcommands([matrixGenerated, matrixTestTypeScript])
 )
 
 Command.make("repoctl").pipe(

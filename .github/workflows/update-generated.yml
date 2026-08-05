@@ -14,33 +14,12 @@ permissions: {}
 
 jobs:
   matrix:
-    name: Plan generated branches
     if: github.repository_owner == 'Effect-TS'
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
+    uses: ./.github/workflows/repoctl-matrix.yml
     permissions:
       contents: read
-    outputs:
-      generated: ${{ steps.matrix.outputs.generated }}
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-
-      - name: Setup Node
-        uses: actions/setup-node@v6
-        with:
-          node-version: "24"
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Generate branch matrix
-        id: matrix
-        run: echo "generated=$(pnpm --silent exec repoctl matrix generated)" >> "$GITHUB_OUTPUT"
+    with:
+      name: generated
 
   update:
     name: Update ${{ matrix.branch }}
@@ -52,7 +31,7 @@ jobs:
       pull-requests: write
     strategy:
       fail-fast: false
-      matrix: ${{ fromJSON(needs.matrix.outputs.generated) }}
+      matrix: ${{ fromJSON(needs.matrix.outputs.matrix) }}
 
     steps:
       - name: Checkout

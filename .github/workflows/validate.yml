@@ -16,32 +16,11 @@ permissions: {}
 
 jobs:
   matrix:
-    name: Plan TypeScript validation
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
+    uses: ./.github/workflows/repoctl-matrix.yml
     permissions:
       contents: read
-    outputs:
-      typescript: ${{ steps.matrix.outputs.typescript }}
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-
-      - name: Setup Node
-        uses: actions/setup-node@v6
-        with:
-          node-version: "24"
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Generate TypeScript test matrix
-        id: matrix
-        run: echo "typescript=$(pnpm --silent exec repoctl matrix typescript test)" >> "$GITHUB_OUTPUT"
+    with:
+      name: test-typescript
 
   validate:
     name: Validate TypeScript ${{ matrix.name }} (${{ matrix.version }})
@@ -53,7 +32,7 @@ jobs:
       contents: read
     strategy:
       fail-fast: false
-      matrix: ${{ fromJSON(needs.matrix.outputs.typescript) }}
+      matrix: ${{ fromJSON(needs.matrix.outputs.matrix) }}
 
     steps:
       - name: Checkout
