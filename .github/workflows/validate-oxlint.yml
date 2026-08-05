@@ -45,17 +45,27 @@ jobs:
           version: ${{ matrix.tsgolint.version }}
 
       - name: Build tsgolint
-        run: pnpm exec repoctl build tsgolint --target linux-x64
+        run: >
+          pnpm exec repoctl build artifact
+          --component "${{ matrix.tsgolint.component }}"
+          --version "${{ matrix.tsgolint.version }}"
+          --target linux-x64
 
       - name: Setup ${{ matrix.oxlint.component }} ${{ matrix.oxlint.version }}
         uses: ./.github/actions/setup-repo
         with:
           component: ${{ matrix.oxlint.component }}
           version: ${{ matrix.oxlint.version }}
-          rust-target: x86_64-unknown-linux-gnu
+          target: linux-x64
 
       - name: Build Oxlint binding
-        run: pnpm exec repoctl build oxlint-binding --target linux-x64
+        env:
+          TARGET_CC: clang
+        run: >
+          pnpm exec repoctl build artifact
+          --component "${{ matrix.oxlint.component }}"
+          --version "${{ matrix.oxlint.version }}"
+          --target linux-x64
 
       - name: Smoke test Oxlint runtime
         run: node testdata/tests/oxlint/smoke.mjs "$GITHUB_WORKSPACE"

@@ -1,6 +1,11 @@
 import assert from "node:assert/strict"
 import test from "node:test"
-import { buildGeneratedMatrix, buildOxlintTestMatrix, buildTypeScriptTestMatrix } from "../src/matrix.ts"
+import {
+  buildGeneratedMatrix,
+  buildOxlintTestMatrix,
+  buildReleaseMatrix,
+  buildTypeScriptTestMatrix
+} from "../src/matrix.ts"
 import type { Upstream } from "../src/upstream.ts"
 
 const revision = "0123456789abcdef0123456789abcdef01234567"
@@ -116,5 +121,26 @@ test("builds a deduplicated matrix of compatible Oxlint component pairs", () => 
         tsgolint: { component: "oxlint-tsgolint", version: "7.0.2001" }
       }
     ]
+  })
+
+  const release = buildReleaseMatrix(upstream)
+  assert.equal(release.include.length, 32)
+  assert.deepEqual(release.include[0], {
+    component: "typescript",
+    version: "7.0.2",
+    target: "darwin-arm64",
+    runner: "ubuntu-latest",
+    artifactName: "darwin-arm64__typescript__7.0.2",
+    fileName: "tsc",
+    destination: "_packages/tsgo-darwin-arm64/artifacts/typescript/7.0.2/tsc"
+  })
+  assert.deepEqual(release.include.at(-1), {
+    component: "oxlint",
+    version: "1.77.0",
+    target: "linux-arm64",
+    runner: "ubuntu-latest",
+    artifactName: "linux-arm64__oxlint__1.77.0",
+    fileName: "oxlint.node",
+    destination: "_packages/tsgo-linux-arm64/artifacts/oxlint/1.77.0/oxlint.node"
   })
 })

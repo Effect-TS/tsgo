@@ -37,12 +37,12 @@ interface PackageMetadata {
   readonly main?: string
 }
 
-const oxlintProfile = upstreamJson.profiles.find((profile) => profile.kind === "oxlint")
-if (oxlintProfile === undefined || oxlintProfile.kind !== "oxlint") {
+const oxlintProfile = upstreamJson.profiles.find((profile) => profile.name === "oxlint")
+if (oxlintProfile === undefined) {
   throw new Error("Missing Oxlint profile in upstream.json")
 }
-const supportedOxlintVersion = oxlintProfile.oxlint!.npmVersion
-const supportedTsgolintVersion = oxlintProfile.tsgolint!.npmVersion
+const supportedOxlintVersion = oxlintProfile.dependencies.oxlint
+const supportedTsgolintVersion = oxlintProfile.dependencies["oxlint-tsgolint"]
 
 const readPackageMetadataFromRequire = (require: NodeJS.Require, packageName: string) => Effect.gen(function*() {
   const fs = yield* FileSystem.FileSystem
@@ -208,13 +208,14 @@ const resolveInstalledExperimentalOxlint = (cwd: string) => Effect.gen(function*
       {
         label: "Oxlint binding",
         targetPath: oxlintBinding,
-        replacementName: `oxlint.${target.codeTarget}.node`,
+        replacementPath: `artifacts/oxlint/${supportedOxlintVersion}/oxlint.node`,
         executable: false
       },
       {
         label: "tsgolint",
         targetPath: path.join(path.dirname(tsgolintPackageJson), target.tsgolintExecutable),
-        replacementName: target.tsgolintExecutable,
+        replacementPath:
+          `artifacts/oxlint-tsgolint/${supportedTsgolintVersion}/${target.tsgolintExecutable}`,
         executable: true
       }
     ] as const
@@ -242,10 +243,10 @@ export const resolveExperimentalOxlintTargets = (cwd: string) => Effect.gen(func
     try: () => selfRequire.resolve(`${resolved.target.effectPackage}/package.json`),
     catch: () => new ExperimentalOxlintPatchError({ reason: `Unable to resolve ${resolved.target.effectPackage}.` })
   })
-  const effectLib = path.join(path.dirname(effectPackageJson), "lib")
+  const effectPackage = path.dirname(effectPackageJson)
   const targets: ReadonlyArray<ResolvedPatchTarget> = resolved.targets.map((target) => ({
     ...target,
-    replacementPath: path.join(effectLib, target.replacementName)
+    replacementPath: path.join(effectPackage, target.replacementPath)
   }))
   for (const resolved of targets) {
     if (!(yield* fs.exists(resolved.replacementPath))) {

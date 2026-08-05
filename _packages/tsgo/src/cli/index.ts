@@ -348,9 +348,9 @@ const packageNamesWithPreferred = (preferredPackageName: Option.Option<string>):
 
 /**
  * Resolve the Effect-patched binary to copy over the native target. The
- * `@effect/tsgo-*` platform package ships `lib/tsc` for the latest profile and
- * `lib/tsc-next` for the next profile. The bundled upstream.json identifies
- * the TypeScript gitHead each binary was built from.
+ * `@effect/tsgo-*` platform package ships each TypeScript component under its
+ * versioned artifact path. The bundled upstream.json identifies the TypeScript
+ * gitHead each binary was built from.
  */
 const getPackagedBinaryPath = (installedTypeScript: OfficialTypeScriptBinary, force: boolean) =>
   Effect.gen(function*() {
@@ -374,8 +374,7 @@ const getPackagedBinaryPath = (installedTypeScript: OfficialTypeScriptBinary, fo
 
     for (const profile of packagedProfiles) {
       const binaryName = profile.binaryName
-      const exeName = binaryName + (process.platform === "win32" ? ".exe" : "")
-      const exePath = path.join(packageDir, "lib", exeName)
+      const exePath = path.join(packageDir, profile.artifactPath + (process.platform === "win32" ? ".exe" : ""))
       const metadata = { tsVersion: profile.tsVersion, tsGitHead: profile.tsGitHead }
       const exists = yield* fs.exists(exePath)
       if (!exists) {

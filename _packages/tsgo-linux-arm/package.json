@@ -20,8 +20,8 @@
   },
   "preferUnplugged": true,
   "files": [
+    "artifacts/",
     "lib/tsc",
-    "lib/tsc-next",
     "README.md",
     "lib/upstream.json"
   ],

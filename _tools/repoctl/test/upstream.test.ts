@@ -10,6 +10,7 @@ import {
   formatTSConfigSchema,
   getComponent
 } from "../src/upstream.ts"
+import { resolveUpstreamInfo } from "../src/upstreamResolve.ts"
 
 const revision = "0123456789abcdef0123456789abcdef01234567"
 const secondRevision = "1123456789abcdef0123456789abcdef01234567"
@@ -115,6 +116,25 @@ test("resolves component checkouts and defaults to TypeScript next", async() => 
   await assert.rejects(
     Effect.runPromise(getComponent(upstream, "oxlint")),
     /A version is required for component oxlint/
+  )
+})
+
+test("resolves platform build metadata for setup actions", async() => {
+  const upstream = await Effect.runPromise(decodeUpstream(JSON.stringify(manifest())))
+
+  assert.deepEqual(await Effect.runPromise(resolveUpstreamInfo(upstream, "typescript")), {
+    component: "typescript",
+    version: "7.1.0"
+  })
+  assert.deepEqual(await Effect.runPromise(resolveUpstreamInfo(upstream, "oxlint", "1.1.0", "linux-x64")), {
+    component: "oxlint",
+    version: "1.1.0",
+    target: "linux-x64",
+    rustTarget: "x86_64-unknown-linux-gnu"
+  })
+  await assert.rejects(
+    Effect.runPromise(resolveUpstreamInfo(upstream, "oxlint", "1.1.0", "linux-arm")),
+    /oxlint does not support target linux-arm/
   )
 })
 

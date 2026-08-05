@@ -8,12 +8,10 @@ import { selectTsConfigFile } from "./tsconfig-prompt.js"
 import * as upstreamJson from "../../../upstream.json" with { type: "json" }
 import * as pkgJson from "../../../package.json" with { type: "json" }
 
-const latestProfile = upstreamJson.profiles.find((profile) => profile.name === "latest")
-if (latestProfile === undefined) {
-  throw new Error("Missing latest profile in upstream.json")
-}
-const oxlintProfile = upstreamJson.profiles.find((profile) => profile.kind === "oxlint")
-if (oxlintProfile?.oxlint === undefined || oxlintProfile.tsgolint === undefined) {
+const oxlintProfile = upstreamJson.profiles.find((profile) => profile.name === "oxlint")
+const oxlintVersion = oxlintProfile?.dependencies.oxlint
+const tsgolintVersion = oxlintProfile?.dependencies["oxlint-tsgolint"]
+if (oxlintVersion === undefined || tsgolintVersion === undefined) {
   throw new Error("Missing oxlint profile in upstream.json")
 }
 
@@ -30,9 +28,9 @@ export const setupCommand = Command.make("setup").pipe(
       const assessmentState = Assessment.assess(assessmentInput)
       const targetState = yield* gatherTargetState(assessmentState, {
         defaultLspVersion: pkgJson.version,
-        defaultTypescriptVersion: latestProfile.ts.npmVersion,
-        defaultOxlintVersion: oxlintProfile.oxlint.npmVersion,
-        defaultOxlintTsgolintVersion: oxlintProfile.tsgolint.npmVersion,
+        defaultTypescriptVersion: upstreamJson.typescript.latest,
+        defaultOxlintVersion: oxlintVersion,
+        defaultOxlintTsgolintVersion: tsgolintVersion,
         defaultSchemaPath: path.resolve(currentDir, "node_modules", pkgJson.name, "schema.json"),
         defaultOxlintrcSchemaPath: path.resolve(currentDir, "node_modules", pkgJson.name, "oxlint-schema.json")
       })

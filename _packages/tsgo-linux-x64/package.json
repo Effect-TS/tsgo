@@ -21,10 +21,8 @@
   },
   "preferUnplugged": true,
   "files": [
+    "artifacts/",
     "lib/tsc",
-    "lib/tsc-next",
-    "lib/tsgolint",
-    "lib/oxlint.linux-x64-gnu.node",
     "README.md",
     "lib/upstream.json"
   ],

@@ -9,7 +9,6 @@ import { join } from "node:path"
 import { maxSatisfying } from "semver"
 import { runCommand, runCommandString } from "./process.ts"
 
-export type ProfileName = "next" | "latest" | "oxlint"
 export type ComponentName = "typescript" | "oxlint-tsgolint" | "oxlint"
 
 const NonEmptyString = Schema.String.check(Schema.isNonEmpty())

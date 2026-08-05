@@ -2,10 +2,6 @@ name: Setup repo
 description: Install repository toolchains and materialize an upstream component
 
 inputs:
-  profile:
-    description: Compatibility profile selector; prefer component and version
-    required: false
-    default: ""
   component:
     description: Upstream component to materialize
     required: false
@@ -18,45 +14,42 @@ inputs:
     description: Whether to materialize the selected upstream component
     required: false
     default: "true"
-  rust-target:
-    description: Rust target to install for Oxlint builds
+  target:
+    description: Platform package target; used to derive native toolchain targets
     required: false
     default: ""
 
 runs:
   using: composite
   steps:
+    - name: Setup Node
+      uses: actions/setup-node@v6
+      with:
+        node-version: "24"
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v6
+
+    - name: Install dependencies
+      shell: bash
+      run: pnpm install --frozen-lockfile
+
     - name: Resolve upstream component
       id: upstream-component
       shell: bash
       env:
         COMPONENT: ${{ inputs.component }}
-        PROFILE: ${{ inputs.profile }}
-        RUST_TARGET: ${{ inputs.rust-target }}
+        TARGET: ${{ inputs.target }}
         VERSION: ${{ inputs.version }}
       run: |
-        node --input-type=module -e '
-          import { appendFileSync, readFileSync } from "node:fs";
-          const upstream = JSON.parse(readFileSync("_packages/tsgo/upstream.json", "utf8"));
-          let component = process.env.COMPONENT;
-          let version = process.env.VERSION;
-          const profileName = process.env.PROFILE;
-          if (profileName === "next" || profileName === "latest") {
-            component = "typescript";
-            version = upstream.typescript[profileName];
-          } else if (profileName === "oxlint") {
-            component = process.env.RUST_TARGET === "" ? "oxlint-tsgolint" : "oxlint";
-            const profile = upstream.profiles.find((candidate) => candidate.name === profileName);
-            version = profile?.dependencies?.[component];
-          } else if (profileName !== "") {
-            throw new Error(`Unknown compatibility profile: ${profileName}`);
-          }
-          if (version === "" && component === "typescript") version = upstream.typescript.next;
-          if (typeof version !== "string" || version === "") {
-            throw new Error(`A version is required for component ${component}`);
-          }
-          appendFileSync(process.env.GITHUB_OUTPUT, `component=${component}\nversion=${version}\n`);
-        '
+        args=(upstream resolve --component "$COMPONENT")
+        if [ -n "$VERSION" ]; then
+          args+=(--version "$VERSION")
+        fi
+        if [ -n "$TARGET" ]; then
+          args+=(--target "$TARGET")
+        fi
+        pnpm exec repoctl "${args[@]}"
 
     - name: Setup Rust
       if: steps.upstream-component.outputs.component == 'oxlint'
@@ -85,9 +78,9 @@ runs:
           ~/.cargo/git
           ~/.cargo/registry
           ${{ runner.temp }}/oxlint-target
-        key: rust-build-oxlint-1.93.0-${{ runner.os }}-${{ runner.arch }}-${{ inputs.rust-target || 'host' }}-${{ hashFiles('_packages/tsgo/upstream.json', '_patches/oxlint/**') }}
+        key: rust-build-oxlint-1.93.0-${{ runner.os }}-${{ runner.arch }}-${{ steps.upstream-component.outputs.rust-target }}-${{ hashFiles('_packages/tsgo/upstream.json', '_patches/oxlint/**') }}
         restore-keys: |
-          rust-build-oxlint-1.93.0-${{ runner.os }}-${{ runner.arch }}-${{ inputs.rust-target || 'host' }}-
+          rust-build-oxlint-1.93.0-${{ runner.os }}-${{ runner.arch }}-${{ steps.upstream-component.outputs.rust-target }}-
 
     - name: Restore Rust build cache
       if: steps.upstream-component.outputs.component == 'oxlint' && github.ref != 'refs/heads/main'
@@ -97,9 +90,9 @@ runs:
           ~/.cargo/git
           ~/.cargo/registry
           ${{ runner.temp }}/oxlint-target
-        key: rust-build-oxlint-1.93.0-${{ runner.os }}-${{ runner.arch }}-${{ inputs.rust-target || 'host' }}-${{ hashFiles('_packages/tsgo/upstream.json', '_patches/oxlint/**') }}
+        key: rust-build-oxlint-1.93.0-${{ runner.os }}-${{ runner.arch }}-${{ steps.upstream-component.outputs.rust-target }}-${{ hashFiles('_packages/tsgo/upstream.json', '_patches/oxlint/**') }}
         restore-keys: |
-          rust-build-oxlint-1.93.0-${{ runner.os }}-${{ runner.arch }}-${{ inputs.rust-target || 'host' }}-
+          rust-build-oxlint-1.93.0-${{ runner.os }}-${{ runner.arch }}-${{ steps.upstream-component.outputs.rust-target }}-
 
     - name: Setup Go
       uses: actions/setup-go@v6
@@ -148,18 +141,6 @@ runs:
           go-build-${{ steps.upstream-component.outputs.component }}-${{ steps.upstream-component.outputs.version }}-Linux-${{ hashFiles('**/go.mod', '**/go.sum', '_packages/tsgo/upstream.json', '_patches/**/*.patch') }}-
           go-build-${{ steps.upstream-component.outputs.component }}-${{ steps.upstream-component.outputs.version }}-Linux-
 
-    - name: Setup Node
-      uses: actions/setup-node@v6
-      with:
-        node-version: "24"
-
-    - name: Setup pnpm
-      uses: pnpm/action-setup@v6
-
-    - name: Install dependencies
-      shell: bash
-      run: pnpm install --frozen-lockfile
-
     - name: Materialize upstream component
       if: inputs.materialize == 'true'
       shell: bash
@@ -169,9 +150,9 @@ runs:
       run: pnpm exec repoctl submodules setup --component "$COMPONENT" --version "$VERSION"
 
     - name: Install Oxlint Rust target
-      if: steps.upstream-component.outputs.component == 'oxlint' && inputs.materialize == 'true' && inputs.rust-target != ''
+      if: steps.upstream-component.outputs.component == 'oxlint' && inputs.materialize == 'true'
       shell: bash
       working-directory: oxlint
       env:
-        RUST_TARGET: ${{ inputs.rust-target }}
+        RUST_TARGET: ${{ steps.upstream-component.outputs.rust-target }}
       run: rustup target add "$RUST_TARGET"

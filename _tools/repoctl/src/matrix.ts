@@ -1,5 +1,6 @@
 import * as Console from "effect/Console"
 import * as Effect from "effect/Effect"
+import { buildReleasePlan } from "./releasePlan.ts"
 import { readUpstream, type Upstream } from "./upstream.ts"
 
 export const buildTypeScriptTestMatrix = (upstream: typeof Upstream.Type) => ({
@@ -51,6 +52,10 @@ export const buildGeneratedMatrix = (upstream: typeof Upstream.Type) => ({
   }]
 })
 
+export const buildReleaseMatrix = (upstream: typeof Upstream.Type) => ({
+  include: buildReleasePlan(upstream)
+})
+
 export const printTypeScriptTestMatrix = Effect.fnUntraced(function*(repositoryRoot: string) {
   const upstream = yield* readUpstream(repositoryRoot)
   yield* Console.log(JSON.stringify(buildTypeScriptTestMatrix(upstream)))
@@ -64,4 +69,9 @@ export const printOxlintTestMatrix = Effect.fnUntraced(function*(repositoryRoot:
 export const printGeneratedMatrix = Effect.fnUntraced(function*(repositoryRoot: string) {
   const upstream = yield* readUpstream(repositoryRoot)
   yield* Console.log(JSON.stringify(buildGeneratedMatrix(upstream)))
+})
+
+export const printReleaseMatrix = Effect.fnUntraced(function*(repositoryRoot: string) {
+  const upstream = yield* readUpstream(repositoryRoot)
+  yield* Console.log(JSON.stringify(buildReleaseMatrix(upstream)))
 })

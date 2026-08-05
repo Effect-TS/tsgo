@@ -1,44 +1,40 @@
 import * as Effect from "effect/Effect"
 import * as Schema from "effect/Schema"
 
-const TypeScriptIdentity = Schema.Struct({
-  npmVersion: Schema.String,
+const Component = Schema.Struct({
   gitHead: Schema.String
 })
 
-const TypeScriptProfile = Schema.Struct({
-  kind: Schema.Literal("ts"),
-  name: Schema.String,
-  ts: TypeScriptIdentity,
-  binName: Schema.Literals(["tsc", "tsc-next"])
-})
-
-const OtherProfile = Schema.Struct({
-  kind: Schema.Literal("oxlint"),
-  name: Schema.String
-})
-
 const PlatformUpstream = Schema.Struct({
-  schemaVersion: Schema.Literal(2),
-  profiles: Schema.Array(Schema.Union([TypeScriptProfile, OtherProfile]))
+  schemaVersion: Schema.Literal(3),
+  typescript: Schema.Struct({
+    latest: Schema.String,
+    next: Schema.String
+  }),
+  components: Schema.Struct({
+    typescript: Schema.Record(Schema.String, Component)
+  })
 })
 
 const PlatformUpstreamFromString = Schema.fromJsonString(PlatformUpstream)
 
 export interface PackagedTypeScriptProfile {
   readonly binaryName: string
+  readonly artifactPath: string
   readonly tsVersion: string
   readonly tsGitHead: string
 }
 
 export const decodePackagedTypeScriptProfiles = (text: string) =>
   Schema.decodeUnknownEffect(PlatformUpstreamFromString)(text).pipe(
-    Effect.map((upstream) => upstream.profiles
-      .filter((profile): profile is typeof TypeScriptProfile.Type => profile.kind === "ts")
-      .map((profile) => ({
-        binaryName: profile.binName,
-        tsVersion: profile.ts.npmVersion,
-        tsGitHead: profile.ts.gitHead
+    Effect.map((upstream) => Object.entries(upstream.components.typescript)
+      .map(([version, component]) => ({
+        binaryName: version === upstream.typescript.latest
+          ? "tsc"
+          : version === upstream.typescript.next ? "tsc-next" : `tsc-${version}`,
+        artifactPath: `artifacts/typescript/${version}/tsc`,
+        tsVersion: version,
+        tsGitHead: component.gitHead
       }))
       .sort((left, right) => left.binaryName === "tsc" ? -1 : right.binaryName === "tsc" ? 1 : 0))
   )

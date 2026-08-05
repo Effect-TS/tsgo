@@ -4,11 +4,12 @@ import * as Effect from "effect/Effect"
 import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
 import { runCommand, runCommandCaptureSplit } from "./process.ts"
-import { getProfile, readUpstream, type ProfileName } from "./upstream.ts"
+import { readUpstream } from "./upstream.ts"
 
 export interface PerfOptions {
   readonly target: string
-  readonly profile: ProfileName
+  readonly version?: string
+  readonly latest: boolean
   readonly output?: string
   readonly runId?: string
   readonly patchedBin?: string
@@ -169,6 +170,9 @@ export const comparePerformance = Effect.fnUntraced(function*(repositoryRoot: st
   if (!Number.isInteger(options.runs) || options.runs < 1) {
     return yield* new PerfError({ reason: "--runs must be a positive integer" })
   }
+  if (options.latest && options.version !== undefined) {
+    return yield* new PerfError({ reason: "--latest and --version cannot be used together" })
+  }
 
   const fs = yield* FileSystem.FileSystem
   const path = yield* Path.Path
@@ -194,13 +198,16 @@ export const comparePerformance = Effect.fnUntraced(function*(repositoryRoot: st
   }
 
   const upstream = yield* readUpstream(repositoryRoot)
-  const profile = yield* getProfile(upstream, options.profile)
+  const typescriptVersion = options.version ?? upstream.typescript[options.latest ? "latest" : "next"]
+  if (upstream.components.typescript[typescriptVersion] === undefined) {
+    return yield* new PerfError({ reason: `Unknown TypeScript component version: ${typescriptVersion}` })
+  }
   const stockCommand = options.stockBin === undefined ? "pnpm" : path.resolve(options.stockBin)
   const stockArgs = options.stockBin === undefined
-    ? ["--silent", "--package", `typescript@${profile.ts.npmVersion}`, "dlx", "tsc"]
+    ? ["--silent", "--package", `typescript@${typescriptVersion}`, "dlx", "tsc"]
     : []
   const stockIdentity = options.stockBin === undefined
-    ? `pnpm --silent --package typescript@${profile.ts.npmVersion} dlx tsc`
+    ? `pnpm --silent --package typescript@${typescriptVersion} dlx tsc`
     : stockCommand
   const [stockVersionResult, patchedVersionResult] = yield* Effect.all([
     runCommandCaptureSplit(stockCommand, repositoryRoot, [...stockArgs, "--version"]),
@@ -273,7 +280,7 @@ export const comparePerformance = Effect.fnUntraced(function*(repositoryRoot: st
     fs.writeFileString(path.join(runDirectory, "summary.txt"), `${summaryLines.join("\n")}\n`),
     fs.writeFileString(path.join(runDirectory, "summary.json"), `${JSON.stringify({
       target,
-      profile: options.profile,
+      typescriptVersion,
       compilers,
       runs: results,
       medians: summaries
