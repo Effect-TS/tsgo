@@ -112,6 +112,11 @@ func (sp *stylePolicy) Apply(export *autoimport.Export, fix *autoimport.Fix) *au
 	if pkgName == "" {
 		return fix
 	}
+	if pkgName == "effect" &&
+		(sp.namespacePackages[pkgName] || sp.barrelPackages[pkgName]) &&
+		strings.HasPrefix(fix.ModuleSpecifier, "effect/internal/") {
+		return nil
+	}
 
 	// Check namespace-import packages
 	if sp.namespacePackages[pkgName] {

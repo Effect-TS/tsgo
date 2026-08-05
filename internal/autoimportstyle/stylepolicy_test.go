@@ -106,6 +106,20 @@ func TestApplyNamespaceRewrite(t *testing.T) {
 	}
 }
 
+func TestApplySuppressesEffectInternalImport(t *testing.T) {
+	t.Parallel()
+	sp := newStylePolicy(&etscore.ResolvedEffectPluginOptions{
+		NamespaceImportPackages: []string{"effect"},
+	})
+
+	export := makeExport("effect", "effect/internal/schema/parser", "")
+	fix := makeAddNewFix(lsproto.ImportKindNamed, "effect/internal/schema/parser", "succeed")
+
+	if result := sp.Apply(export, fix); result != nil {
+		t.Errorf("expected blocked Effect internal import to be suppressed, got %#v", result)
+	}
+}
+
 func TestApplyNamespaceRewriteFromAddToExisting(t *testing.T) {
 	t.Parallel()
 	sp := newStylePolicy(&etscore.ResolvedEffectPluginOptions{
