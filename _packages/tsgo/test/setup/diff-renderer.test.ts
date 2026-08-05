@@ -84,6 +84,7 @@ function makeAssessmentState(opts?: {
       typescriptVersion: Option.none(),
       oxlintVersion: Option.none(),
       oxlintTsgolintVersion: Option.none(),
+      vitePlusVersion: Option.none(),
       prepareScript: Option.none()
     },
     tsconfig: {

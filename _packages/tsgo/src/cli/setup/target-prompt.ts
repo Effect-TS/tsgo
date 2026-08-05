@@ -43,7 +43,8 @@ export const gatherTargetState = (
           title: "Oxlint type-aware rules",
           value: "oxlint" as Integration,
           selected: Option.isSome(assessment.packageJson.oxlintVersion) ||
-            Option.isSome(assessment.packageJson.oxlintTsgolintVersion)
+            Option.isSome(assessment.packageJson.oxlintTsgolintVersion) ||
+            Option.isSome(assessment.packageJson.vitePlusVersion)
         }
       ]
     })
@@ -194,7 +195,10 @@ export const gatherTargetState = (
             packageName: defaultTypescriptPackageName
           }))
           : assessment.packageJson.typescriptVersion,
-        oxlintVersion: useOxlint
+        oxlintVersion: useOxlint && (
+            Option.isSome(assessment.packageJson.oxlintVersion) ||
+            Option.isNone(assessment.packageJson.vitePlusVersion)
+          )
           ? Option.some({
             dependencyType: Option.match(assessment.packageJson.oxlintVersion, {
               onNone: () => lspDependencyType,
@@ -203,7 +207,10 @@ export const gatherTargetState = (
             version: context.defaultOxlintVersion
           })
           : assessment.packageJson.oxlintVersion,
-        oxlintTsgolintVersion: useOxlint
+        oxlintTsgolintVersion: useOxlint && (
+            Option.isSome(assessment.packageJson.oxlintTsgolintVersion) ||
+            Option.isNone(assessment.packageJson.vitePlusVersion)
+          )
           ? Option.some({
             dependencyType: Option.match(assessment.packageJson.oxlintTsgolintVersion, {
               onNone: () => lspDependencyType,
