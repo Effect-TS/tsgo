@@ -10,6 +10,8 @@ Effect version: 4.0.0
         index: number = 1
         remaining: number = 1
     
+        close() {
+        }
         fastForward() {
         }
         take(): A | undefined {

@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (12:11-12:12) TS6133: 'n' is declared but its value is never read.
+[D1] (14:11-14:12) TS6133: 'n' is declared but its value is never read.
   (no quick fixes)
 
 === Quick Fix Application Results ===
