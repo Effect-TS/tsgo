@@ -23,9 +23,9 @@ test("builds a deterministic matrix for every unique TypeScript component", () =
 
   assert.deepEqual(buildTypeScriptTestMatrix(upstream), {
     include: [
-      { name: "6.9.0", version: "6.9.0", repoctl: false },
-      { name: "latest", version: "7.0.2", repoctl: false },
-      { name: "next", version: "7.1.0-dev", repoctl: true }
+      { name: "6.9.0", component: "typescript", version: "6.9.0", repoctl: false },
+      { name: "latest", component: "typescript", version: "7.0.2", repoctl: false },
+      { name: "next", component: "typescript", version: "7.1.0-dev", repoctl: true }
     ]
   })
 })
@@ -43,7 +43,7 @@ test("combines channel labels when latest and next resolve to the same component
   }
 
   assert.deepEqual(buildTypeScriptTestMatrix(upstream), {
-    include: [{ name: "latest+next", version: "7.0.2", repoctl: true }]
+    include: [{ name: "latest+next", component: "typescript", version: "7.0.2", repoctl: true }]
   })
 })
 

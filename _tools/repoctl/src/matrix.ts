@@ -10,6 +10,7 @@ export const buildTypeScriptTestMatrix = (upstream: typeof Upstream.Type) => ({
         .filter((channel) => upstream.typescript[channel] === version)
       return {
         name: channels.length === 0 ? version : channels.join("+"),
+        component: "typescript",
         version,
         repoctl: upstream.typescript.next === version
       }
