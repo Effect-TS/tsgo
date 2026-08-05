@@ -1,4 +1,4 @@
-import { buildTargets, oxlintBuildTargets, type BuildTarget } from "./build.ts"
+import { buildTargets, oxlintBindingName, oxlintBuildTargets, type BuildTarget } from "./build.ts"
 import type { ComponentName, Upstream } from "./upstream.ts"
 
 export interface ReleaseArtifactPlan {
@@ -15,7 +15,7 @@ const sortedVersions = (components: Readonly<Record<string, unknown>>) =>
   Object.keys(components).sort((left, right) => Buffer.compare(Buffer.from(left), Buffer.from(right)))
 
 const artifactFileName = (component: ComponentName, target: BuildTarget) => {
-  if (component === "oxlint") return "oxlint.node"
+  if (component === "oxlint") return oxlintBindingName(target as keyof typeof oxlintBuildTargets)
   const name = component === "typescript" ? "tsc" : "tsgolint"
   return target.startsWith("win32-") ? `${name}.exe` : name
 }

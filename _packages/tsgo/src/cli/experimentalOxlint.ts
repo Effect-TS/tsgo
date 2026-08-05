@@ -204,7 +204,7 @@ const resolveInstalledExperimentalOxlint = (cwd: string) => Effect.gen(function*
       {
         label: "Oxlint binding",
         targetPath: oxlintBinding,
-        replacementPath: `artifacts/oxlint/${supportedOxlintVersion}/oxlint.node`,
+        replacementPath: `artifacts/oxlint/${supportedOxlintVersion}/${path.basename(oxlintBinding)}`,
         executable: false
       },
       {

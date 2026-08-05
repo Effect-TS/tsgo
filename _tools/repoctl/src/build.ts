@@ -63,6 +63,9 @@ export const oxlintBuildTargets = {
 
 export type OxlintBuildTarget = keyof typeof oxlintBuildTargets
 
+export const oxlintBindingName = (target: OxlintBuildTarget) =>
+  `oxlint.${oxlintBuildTargets[target].codeTarget}${target.startsWith("win32-") ? "-msvc" : ""}.node`
+
 export class BuildError extends Data.TaggedError("BuildError")<{
   readonly reason: string
 }> {
@@ -91,14 +94,13 @@ export const oxlintArtifacts = (
   oxlintVersion: string,
   tsgolintVersion: string
 ) => {
-  const target = oxlintBuildTargets[targetName]
   const packageDirectory = join(repositoryRoot, "_packages", `tsgo-${targetName}`, "artifacts")
   const windows = targetName.startsWith("win32-")
-  const bindingName = "oxlint.node"
+  const bindingName = oxlintBindingName(targetName)
   return {
     packageDirectory,
     bindingName,
-    bindingSourceName: `oxlint.${target.codeTarget}${windows ? "-msvc" : ""}.node`,
+    bindingSourceName: bindingName,
     bindingPath: join(packageDirectory, "oxlint", oxlintVersion, bindingName),
     tsgolintPath: join(
       packageDirectory,
@@ -236,8 +238,8 @@ const buildOxlintBinding = Effect.fnUntraced(function*(
     return yield* new BuildError({ reason: `oxlint ${version} expects checkout ${component.gitHead}, found ${gitHead}` })
   }
   const target = oxlintBuildTargets[targetName]
-  const artifact = componentArtifact(repositoryRoot, targetName, "oxlint", version, "oxlint.node")
-  const bindingSourceName = `oxlint.${target.codeTarget}${targetName.startsWith("win32-") ? "-msvc" : ""}.node`
+  const artifact = componentArtifact(repositoryRoot, targetName, "oxlint", version, oxlintBindingName(targetName))
+  const bindingSourceName = oxlintBindingName(targetName)
   const oxlint = path.join(repositoryRoot, "oxlint")
   const oxlintApp = path.join(oxlint, "apps", "oxlint")
   yield* fs.makeDirectory(path.dirname(artifact.path), { recursive: true })
@@ -367,7 +369,9 @@ export const verifyReleaseArtifacts = Effect.fnUntraced(function*(repositoryRoot
       }
     }
     for (const version of Object.keys(upstream.components.oxlint)) {
-      yield* validateArtifact(componentArtifact(repositoryRoot, target, "oxlint", version, "oxlint.node").path)
+      yield* validateArtifact(
+        componentArtifact(repositoryRoot, target, "oxlint", version, oxlintBindingName(target)).path
+      )
     }
   }
   for (const target of Object.keys(buildTargets) as Array<BuildTarget>) {

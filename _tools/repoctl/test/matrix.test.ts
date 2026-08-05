@@ -151,7 +151,7 @@ test("builds a deduplicated matrix of compatible Oxlint component pairs", () => 
     target: "linux-arm64",
     runner: "ubuntu-latest",
     artifactName: "linux-arm64__oxlint__1.77.0",
-    fileName: "oxlint.node",
-    destination: "_packages/tsgo-linux-arm64/artifacts/oxlint/1.77.0/oxlint.node"
+    fileName: "oxlint.linux-arm64-gnu.node",
+    destination: "_packages/tsgo-linux-arm64/artifacts/oxlint/1.77.0/oxlint.linux-arm64-gnu.node"
   })
 })
