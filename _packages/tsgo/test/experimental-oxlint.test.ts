@@ -46,7 +46,7 @@ describe("experimental Oxlint discovery", () => {
   it("returns normalized binaries without resolving Effect artifacts", async () => {
     const directory = await makeTemporaryDirectory()
     const platform = experimentalOxlintTarget(process.platform, process.arch, true)
-    await writePackage(directory, "oxlint", { version: "1.0.0" })
+    const oxlintDirectory = await writePackage(directory, "oxlint", { version: "1.0.0" })
     await writePackage(directory, "oxlint-tsgolint", { version: "2.0.0" })
     const bindingDirectory = await writePackage(directory, platform.oxlintPackage, {
       version: "1.0.1",
@@ -63,6 +63,12 @@ describe("experimental Oxlint discovery", () => {
         packageName: platform.oxlintPackage,
         packageVersion: "1.0.1",
         binaryPath: join(bindingDirectory, "oxlint.node")
+      },
+      {
+        component: "oxlint-dts",
+        packageName: "oxlint",
+        packageVersion: "1.0.0",
+        binaryPath: join(oxlintDirectory, "dist", "index.d.ts")
       },
       {
         component: "oxlint-tsgolint",
@@ -94,7 +100,7 @@ describe("experimental Oxlint discovery", () => {
     const directory = await makeTemporaryDirectory()
     const platform = experimentalOxlintTarget(process.platform, process.arch, true)
     const vitePlusDirectory = await writePackage(directory, "vite-plus", { version: "1.0.0" })
-    await writePackage(vitePlusDirectory, "oxlint", { version: "1.0.0" })
+    const oxlintDirectory = await writePackage(vitePlusDirectory, "oxlint", { version: "1.0.0" })
     await writePackage(vitePlusDirectory, "oxlint-tsgolint", { version: "2.0.0" })
     const bindingDirectory = await writePackage(vitePlusDirectory, platform.oxlintPackage, {
       version: "1.0.1",
@@ -115,6 +121,12 @@ describe("experimental Oxlint discovery", () => {
         packageName: platform.oxlintPackage,
         packageVersion: "1.0.1",
         binaryPath: join(bindingDirectory, "oxlint.node")
+      },
+      {
+        component: "oxlint-dts",
+        packageName: "oxlint",
+        packageVersion: "1.0.0",
+        binaryPath: join(oxlintDirectory, "dist", "index.d.ts")
       },
       {
         component: "oxlint-tsgolint",

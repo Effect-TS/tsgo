@@ -4,6 +4,8 @@ import * as Data from "effect/Data"
 import * as Effect from "effect/Effect"
 import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
+import * as Scope from "effect/Scope"
+import metadataJson from "../metadata.json" with { type: "json" }
 import { discoverBinaries, requireComponents, selectComponents } from "./discovery.js"
 import type {
   Component,
@@ -42,7 +44,81 @@ export interface ResolvedReplacement {
 
 export type ReplacementResolver = (
   target: DiscoveredBinary
-) => Effect.Effect<ResolvedReplacement, PatcherError | ReplacementUnavailableError, FileSystem.FileSystem | Path.Path>
+) => Effect.Effect<
+  ResolvedReplacement,
+  PatcherError | ReplacementUnavailableError,
+  FileSystem.FileSystem | Path.Path | Scope.Scope
+>
+
+const toKebabCase = (value: string): string => {
+  let result = ""
+  const characters = [...value]
+  for (let index = 0; index < characters.length; index++) {
+    const current = characters[index]!
+    if (current >= "A" && current <= "Z") {
+      const previous = characters[index - 1]
+      const next = characters[index + 1]
+      const previousIsLower = previous !== undefined && previous >= "a" && previous <= "z"
+      const nextIsLower = next !== undefined && next >= "a" && next <= "z"
+      if (index > 0 && (previousIsLower || nextIsLower)) result += "-"
+      result += current.toLowerCase()
+    } else {
+      result += current
+    }
+  }
+  return result
+}
+
+export const renderOxlintDeclarations = (source: string): string => {
+  const pluginDeclaration = /^type LintPluginOptionsSchema = ([^;\n]+);$/m
+  const pluginMatches = source.match(new RegExp(pluginDeclaration.source, "gm"))
+  if (pluginMatches?.length !== 1) {
+    throw new PatcherError({ reason: "Unable to locate the Oxlint plugin declaration." })
+  }
+  if (pluginMatches[0]!.includes('"effecttsgo"')) {
+    throw new PatcherError({ reason: "The Oxlint declaration already contains the effecttsgo plugin." })
+  }
+
+  const ruleMapMarker = "interface DummyRuleMap {\n"
+  if (source.split(ruleMapMarker).length !== 2) {
+    throw new PatcherError({ reason: "Unable to locate the Oxlint rule map declaration." })
+  }
+  const effectRules = metadataJson.rules
+    .map(({ name }) => `  "effecttsgo/${toKebabCase(name)}"?: RuleNoConfig;`)
+    .sort()
+    .join("\n")
+
+  return source
+    .replace(pluginDeclaration, 'type LintPluginOptionsSchema = "effecttsgo" | $1;')
+    .replace(ruleMapMarker, `${ruleMapMarker}${effectRules}\n`)
+}
+
+const resolveOxlintDeclarations = (target: DiscoveredBinary) => Effect.gen(function*() {
+  const fs = yield* FileSystem.FileSystem
+  const path = yield* Path.Path
+  const source = yield* fs.readFileString(target.binaryPath).pipe(
+    Effect.mapError((error) => new PatcherError({
+      reason: `Unable to read Oxlint declarations at ${target.binaryPath}: ${error.message}`
+    }))
+  )
+  const replacement = yield* Effect.try({
+    try: () => renderOxlintDeclarations(source),
+    catch: (error) => error instanceof PatcherError
+      ? error
+      : new PatcherError({ reason: `Unable to generate Oxlint declarations: ${String(error)}` })
+  })
+  const replacementPath = yield* fs.makeTempFileScoped({ prefix: "effect-tsgo-oxlint-", suffix: ".d.ts" }).pipe(
+    Effect.mapError((error) => new PatcherError({
+      reason: `Unable to create a temporary Oxlint declaration file: ${error.message}`
+    }))
+  )
+  yield* fs.writeFileString(replacementPath, replacement).pipe(
+    Effect.mapError((error) => new PatcherError({
+      reason: `Unable to write generated Oxlint declarations at ${replacementPath}: ${error.message}`
+    }))
+  )
+  return { path: replacementPath }
+})
 
 const resolvePlatformPackage = (target: DiscoveredBinary) => Effect.gen(function*() {
   const path = yield* Path.Path
@@ -61,6 +137,7 @@ const resolvePlatformPackage = (target: DiscoveredBinary) => Effect.gen(function
 export const resolveReplacement: ReplacementResolver = (target) => Effect.gen(function*() {
   const fs = yield* FileSystem.FileSystem
   const path = yield* Path.Path
+  if (target.component === "oxlint-dts") return yield* resolveOxlintDeclarations(target)
   const platform = yield* resolvePlatformPackage(target)
   const replacementPath = path.join(
     platform.packageDir,
@@ -129,7 +206,7 @@ export const preparePatch = (
       sourcePath: replacementPath,
       destinationPath: target.binaryPath
     })
-    if (!target.binaryPath.endsWith(".node")) {
+    if (!target.binaryPath.endsWith(".node") && target.component !== "oxlint-dts") {
       operations.push({ _tag: "Chmod", path: target.binaryPath, mode: 0o755 })
     }
   }
@@ -271,7 +348,9 @@ const discoverSelected = (
   preferredTypescriptPackage?: string
 ) => Effect.gen(function*() {
   const discovered = yield* discoverBinaries(cwd, preferredTypescriptPackage)
-  return yield* requireComponents(selectComponents(discovered, components), components)
+  const selectedComponents = new Set(components)
+  if (selectedComponents.has("oxlint")) selectedComponents.add("oxlint-dts")
+  return yield* requireComponents(selectComponents(discovered, selectedComponents), selectedComponents)
 })
 
 const changedTargets = (targets: ReadonlyArray<DiscoveredBinary>, skipped: ReadonlyArray<SkippedTarget>) => {
