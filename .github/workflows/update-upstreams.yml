@@ -51,7 +51,7 @@ jobs:
 
       - name: Setup next profile
         if: steps.upstream.outputs.has_changes == 'true'
-        run: pnpm exec repoctl submodules setup --profile next
+        run: pnpm exec repoctl submodules setup
 
       - name: Regenerate tsconfig schema
         if: steps.upstream.outputs.schema_changed == 'true'

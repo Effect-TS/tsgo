@@ -3,7 +3,7 @@ description: Install repository toolchains and materialize an upstream component
 
 inputs:
   profile:
-    description: Deprecated; use component and version
+    description: Compatibility profile selector; prefer component and version
     required: false
     default: ""
   component:
@@ -26,34 +26,59 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Reject deprecated profile input
-      if: inputs.profile != ''
+    - name: Resolve upstream component
+      id: upstream-component
       shell: bash
+      env:
+        COMPONENT: ${{ inputs.component }}
+        PROFILE: ${{ inputs.profile }}
+        RUST_TARGET: ${{ inputs.rust-target }}
+        VERSION: ${{ inputs.version }}
       run: |
-        echo "The profile input is no longer supported; use component and version." >&2
-        exit 1
+        node --input-type=module -e '
+          import { appendFileSync, readFileSync } from "node:fs";
+          const upstream = JSON.parse(readFileSync("_packages/tsgo/upstream.json", "utf8"));
+          let component = process.env.COMPONENT;
+          let version = process.env.VERSION;
+          const profileName = process.env.PROFILE;
+          if (profileName === "next" || profileName === "latest") {
+            component = "typescript";
+            version = upstream.typescript[profileName];
+          } else if (profileName === "oxlint") {
+            component = process.env.RUST_TARGET === "" ? "oxlint-tsgolint" : "oxlint";
+            const profile = upstream.profiles.find((candidate) => candidate.name === profileName);
+            version = profile?.dependencies?.[component];
+          } else if (profileName !== "") {
+            throw new Error(`Unknown compatibility profile: ${profileName}`);
+          }
+          if (version === "" && component === "typescript") version = upstream.typescript.next;
+          if (typeof version !== "string" || version === "") {
+            throw new Error(`A version is required for component ${component}`);
+          }
+          appendFileSync(process.env.GITHUB_OUTPUT, `component=${component}\nversion=${version}\n`);
+        '
 
     - name: Setup Rust
-      if: inputs.component == 'oxlint'
+      if: steps.upstream-component.outputs.component == 'oxlint'
       uses: dtolnay/rust-toolchain@stable
       with:
         toolchain: "1.93.0"
         components: rustfmt
 
     - name: Install native build tools
-      if: inputs.component == 'oxlint' && runner.os == 'Linux'
+      if: steps.upstream-component.outputs.component == 'oxlint' && runner.os == 'Linux'
       shell: bash
       run: |
         sudo apt-get update
         sudo apt-get install --yes cmake
 
     - name: Configure Rust build cache
-      if: inputs.component == 'oxlint'
+      if: steps.upstream-component.outputs.component == 'oxlint'
       shell: bash
       run: echo "CARGO_TARGET_DIR=${RUNNER_TEMP}/oxlint-target" >> "$GITHUB_ENV"
 
     - name: Cache Rust build
-      if: inputs.component == 'oxlint' && github.ref == 'refs/heads/main'
+      if: steps.upstream-component.outputs.component == 'oxlint' && github.ref == 'refs/heads/main'
       uses: actions/cache@v6
       with:
         path: |
@@ -65,7 +90,7 @@ runs:
           rust-build-oxlint-1.93.0-${{ runner.os }}-${{ runner.arch }}-${{ inputs.rust-target || 'host' }}-
 
     - name: Restore Rust build cache
-      if: inputs.component == 'oxlint' && github.ref != 'refs/heads/main'
+      if: steps.upstream-component.outputs.component == 'oxlint' && github.ref != 'refs/heads/main'
       uses: actions/cache/restore@v6
       with:
         path: |
@@ -94,34 +119,34 @@ runs:
       uses: actions/cache@v6
       with:
         path: ${{ steps.go-cache.outputs.modules }}/cache/download
-        key: go-modules-1.26-${{ inputs.component }}-${{ inputs.version || 'default' }}-${{ runner.os }}-${{ hashFiles('**/go.mod', '**/go.sum', '_packages/tsgo/upstream.json', '_patches/**/*.patch') }}
+        key: go-modules-1.26-${{ steps.upstream-component.outputs.component }}-${{ steps.upstream-component.outputs.version }}-${{ runner.os }}-${{ hashFiles('**/go.mod', '**/go.sum', '_packages/tsgo/upstream.json', '_patches/**/*.patch') }}
 
     - name: Restore Go modules
       if: github.ref != 'refs/heads/main'
       uses: actions/cache/restore@v6
       with:
         path: ${{ steps.go-cache.outputs.modules }}/cache/download
-        key: go-modules-1.26-${{ inputs.component }}-${{ inputs.version || 'default' }}-${{ runner.os }}-${{ hashFiles('**/go.mod', '**/go.sum', '_packages/tsgo/upstream.json', '_patches/**/*.patch') }}
+        key: go-modules-1.26-${{ steps.upstream-component.outputs.component }}-${{ steps.upstream-component.outputs.version }}-${{ runner.os }}-${{ hashFiles('**/go.mod', '**/go.sum', '_packages/tsgo/upstream.json', '_patches/**/*.patch') }}
 
     - name: Cache Go build
       if: runner.os == 'Linux' && github.ref == 'refs/heads/main'
       uses: actions/cache@v6
       with:
         path: ${{ steps.go-cache.outputs.build }}
-        key: go-build-${{ inputs.component }}-${{ inputs.version || 'default' }}-Linux-${{ hashFiles('**/go.mod', '**/go.sum', '_packages/tsgo/upstream.json', '_patches/**/*.patch') }}-${{ github.sha }}
+        key: go-build-${{ steps.upstream-component.outputs.component }}-${{ steps.upstream-component.outputs.version }}-Linux-${{ hashFiles('**/go.mod', '**/go.sum', '_packages/tsgo/upstream.json', '_patches/**/*.patch') }}-${{ github.sha }}
         restore-keys: |
-          go-build-${{ inputs.component }}-${{ inputs.version || 'default' }}-Linux-${{ hashFiles('**/go.mod', '**/go.sum', '_packages/tsgo/upstream.json', '_patches/**/*.patch') }}-
-          go-build-${{ inputs.component }}-${{ inputs.version || 'default' }}-Linux-
+          go-build-${{ steps.upstream-component.outputs.component }}-${{ steps.upstream-component.outputs.version }}-Linux-${{ hashFiles('**/go.mod', '**/go.sum', '_packages/tsgo/upstream.json', '_patches/**/*.patch') }}-
+          go-build-${{ steps.upstream-component.outputs.component }}-${{ steps.upstream-component.outputs.version }}-Linux-
 
     - name: Restore Go build cache
       if: runner.os == 'Linux' && github.ref != 'refs/heads/main'
       uses: actions/cache/restore@v6
       with:
         path: ${{ steps.go-cache.outputs.build }}
-        key: go-build-${{ inputs.component }}-${{ inputs.version || 'default' }}-Linux-${{ hashFiles('**/go.mod', '**/go.sum', '_packages/tsgo/upstream.json', '_patches/**/*.patch') }}-${{ github.sha }}
+        key: go-build-${{ steps.upstream-component.outputs.component }}-${{ steps.upstream-component.outputs.version }}-Linux-${{ hashFiles('**/go.mod', '**/go.sum', '_packages/tsgo/upstream.json', '_patches/**/*.patch') }}-${{ github.sha }}
         restore-keys: |
-          go-build-${{ inputs.component }}-${{ inputs.version || 'default' }}-Linux-${{ hashFiles('**/go.mod', '**/go.sum', '_packages/tsgo/upstream.json', '_patches/**/*.patch') }}-
-          go-build-${{ inputs.component }}-${{ inputs.version || 'default' }}-Linux-
+          go-build-${{ steps.upstream-component.outputs.component }}-${{ steps.upstream-component.outputs.version }}-Linux-${{ hashFiles('**/go.mod', '**/go.sum', '_packages/tsgo/upstream.json', '_patches/**/*.patch') }}-
+          go-build-${{ steps.upstream-component.outputs.component }}-${{ steps.upstream-component.outputs.version }}-Linux-
 
     - name: Setup Node
       uses: actions/setup-node@v6
@@ -135,21 +160,16 @@ runs:
       shell: bash
       run: pnpm install --frozen-lockfile
 
-    - name: Materialize ${{ inputs.component }} component
+    - name: Materialize upstream component
       if: inputs.materialize == 'true'
       shell: bash
       env:
-        COMPONENT: ${{ inputs.component }}
-        VERSION: ${{ inputs.version }}
-      run: |
-        args=(--component "$COMPONENT")
-        if [ -n "$VERSION" ]; then
-          args+=(--version "$VERSION")
-        fi
-        pnpm exec repoctl submodules setup "${args[@]}"
+        COMPONENT: ${{ steps.upstream-component.outputs.component }}
+        VERSION: ${{ steps.upstream-component.outputs.version }}
+      run: pnpm exec repoctl submodules setup --component "$COMPONENT" --version "$VERSION"
 
     - name: Install Oxlint Rust target
-      if: inputs.component == 'oxlint' && inputs.materialize == 'true' && inputs.rust-target != ''
+      if: steps.upstream-component.outputs.component == 'oxlint' && inputs.materialize == 'true' && inputs.rust-target != ''
       shell: bash
       working-directory: oxlint
       env:
