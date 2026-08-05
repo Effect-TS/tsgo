@@ -8,7 +8,7 @@ import * as Command from "effect/unstable/cli/Command"
 import * as Flag from "effect/unstable/cli/Flag"
 import * as Option from "effect/Option"
 import { fileURLToPath } from "node:url"
-import { buildCli, buildLocal, buildOxlintBinding, buildTsc, buildTsgolint, verifyReleaseArtifacts } from "./build.ts"
+import { buildArtifact, buildCli, buildLocal, verifyReleaseArtifacts } from "./build.ts"
 import { runChecks } from "./checks.ts"
 import { addChangeset, publishChangeset, versionChangeset } from "./changesets.ts"
 import {
@@ -19,33 +19,53 @@ import {
 import { ensureEffectFixtures } from "./fixtures.ts"
 import { updateFlake } from "./flake.ts"
 import { completeCheck, openPullRequestIfChanged } from "./github.ts"
+import {
+  printGeneratedMatrix,
+  printOxlintTestMatrix,
+  printReleaseMatrix,
+  printTypeScriptTestMatrix
+} from "./matrix.ts"
 import { comparePerformance } from "./perf.ts"
-import { bundleUpstream } from "./packages.ts"
-import { prepareOxlintProfile } from "./oxlint.ts"
+import { assembleReleaseArtifacts, bundleUpstream, preparePlatformPackages } from "./packages.ts"
+import { prepareTsgolintComponent, validateOxlintComponent } from "./oxlint.ts"
 import { cloneSubmodules, patchSubmodules } from "./submodules.ts"
 import { runTests } from "./tests.ts"
 import { updateUpstream } from "./upstream.ts"
+import { printUpstreamInfo } from "./upstreamResolve.ts"
 
 const repositoryRoot = fileURLToPath(new URL("../../..", import.meta.url))
 
 const setup = Command.make("setup", {
-  profile: Flag.choice("profile", ["next", "latest", "oxlint"]).pipe(
-    Flag.withDefault("next"),
-    Flag.withDescription("Upstream profile to set up")
+  component: Flag.choice("component", ["typescript", "oxlint-tsgolint", "oxlint"]).pipe(
+    Flag.withDefault("typescript"),
+    Flag.withDescription("Upstream component to set up")
+  ),
+  version: Flag.string("version").pipe(
+    Flag.optional,
+    Flag.withDescription("Component version; TypeScript defaults to the configured next tag")
   )
-}, ({ profile }) => Effect.gen(function*() {
-  yield* cloneSubmodules(repositoryRoot, profile)
-  if (profile === "oxlint") {
-    yield* prepareOxlintProfile(repositoryRoot)
+}, ({ component, version }) => Effect.gen(function*() {
+  const selected = yield* cloneSubmodules(repositoryRoot, component, Option.getOrUndefined(version))
+  if (selected.name === "oxlint-tsgolint") {
+    yield* prepareTsgolintComponent(repositoryRoot, {
+      version: selected.version,
+      gitHead: selected.gitHead,
+      typescriptGitHead: selected.typescript.gitHead
+    })
     yield* generateTsgolintIntegration(repositoryRoot)
-    yield* generateOxlintEffectRules(repositoryRoot)
   } else {
+    if (selected.name === "oxlint") {
+      yield* validateOxlintComponent(repositoryRoot, selected.version)
+    }
     yield* patchSubmodules(repositoryRoot)
     yield* generateTypeScriptGoIntegration(repositoryRoot)
+    if (selected.name === "oxlint") {
+      yield* generateOxlintEffectRules(repositoryRoot)
+    }
   }
   yield* ensureEffectFixtures(repositoryRoot)
 })).pipe(
-  Command.withDescription("Check out and patch the submodules required by an upstream profile")
+  Command.withDescription("Check out and patch the submodules required by an upstream component")
 )
 
 const submodules = Command.make("submodules").pipe(
@@ -82,29 +102,9 @@ const buildCliCommand = Command.make("cli", {}, () => buildCli(repositoryRoot)).
   Command.withDescription("Build the CLI package")
 )
 
-const oxlintTargets = [
-  "darwin-arm64",
-  "darwin-x64",
-  "win32-x64",
-  "win32-arm64",
-  "linux-x64",
-  "linux-arm64"
-] as const
-
-const buildTsgolintCommand = Command.make("tsgolint", {
-  target: Flag.choice("target", oxlintTargets)
-}, ({ target }) => buildTsgolint(repositoryRoot, target)).pipe(
-  Command.withDescription("Cross-compile packaged tsgolint")
-)
-
-const buildOxlintBindingCommand = Command.make("oxlint-binding", {
-  target: Flag.choice("target", oxlintTargets)
-}, ({ target }) => buildOxlintBinding(repositoryRoot, target)).pipe(
-  Command.withDescription("Build the packaged Oxlint N-API binding")
-)
-
-const buildTscCommand = Command.make("tsc", {
-  profile: Flag.choice("profile", ["next", "latest"]),
+const buildArtifactCommand = Command.make("artifact", {
+  component: Flag.choice("component", ["typescript", "oxlint-tsgolint", "oxlint"]),
+  version: Flag.string("version"),
   target: Flag.choice("target", [
     "darwin-arm64",
     "darwin-x64",
@@ -114,24 +114,17 @@ const buildTscCommand = Command.make("tsc", {
     "linux-arm64",
     "linux-arm"
   ])
-}, ({ profile, target }) => buildTsc(repositoryRoot, profile, target)).pipe(
-  Command.withDescription("Cross-compile a TSC profile into its platform package")
+}, ({ component, target, version }) => buildArtifact(repositoryRoot, component, version, target)).pipe(
+  Command.withDescription("Build a versioned component artifact for a platform package")
 )
 
 const verifyReleaseBuildCommand = Command.make("verify-release", {}, () => verifyReleaseArtifacts(repositoryRoot)).pipe(
-  Command.withDescription("Verify all release profile binaries in platform packages")
+  Command.withDescription("Verify all release component artifacts in platform packages")
 )
 
 const build = Command.make("build").pipe(
   Command.withDescription("Build repository artifacts"),
-  Command.withSubcommands([
-    buildCliCommand,
-    buildLocalCommand,
-    buildOxlintBindingCommand,
-    buildTscCommand,
-    buildTsgolintCommand,
-    verifyReleaseBuildCommand
-  ])
+  Command.withSubcommands([buildArtifactCommand, buildCliCommand, buildLocalCommand, verifyReleaseBuildCommand])
 )
 
 const changesetVersion = Command.make("version", {}, () => versionChangeset(repositoryRoot)).pipe(
@@ -204,13 +197,36 @@ const updateUpstreamCommand = Command.make("update", {}, () => updateUpstream(re
   Command.withDescription("Fetch and update moving upstream metadata and the tsconfig schema")
 )
 
+const resolveUpstreamCommand = Command.make("resolve", {
+  component: Flag.choice("component", ["typescript", "oxlint-tsgolint", "oxlint"]).pipe(
+    Flag.withDefault("typescript")
+  ),
+  version: Flag.string("version").pipe(Flag.optional),
+  target: Flag.choice("target", [
+    "darwin-arm64",
+    "darwin-x64",
+    "win32-x64",
+    "win32-arm64",
+    "linux-x64",
+    "linux-arm64",
+    "linux-arm"
+  ]).pipe(Flag.optional)
+}, ({ component, target, version }) => printUpstreamInfo(
+  repositoryRoot,
+  component,
+  Option.getOrUndefined(version),
+  Option.getOrUndefined(target)
+)).pipe(
+  Command.withDescription("Resolve an upstream component and its platform build metadata")
+)
+
 const upstream = Command.make("upstream").pipe(
   Command.withDescription("Manage upstream metadata"),
-  Command.withSubcommands([updateUpstreamCommand])
+  Command.withSubcommands([resolveUpstreamCommand, updateUpstreamCommand])
 )
 
 const updateFlakeCommand = Command.make("update", {}, () => updateFlake(repositoryRoot)).pipe(
-  Command.withDescription("Synchronize Nix inputs and the Go vendor hash with the next profile")
+  Command.withDescription("Synchronize Nix inputs and the Go vendor hash with the TypeScript next tag")
 )
 
 const flake = Command.make("flake").pipe(
@@ -220,7 +236,8 @@ const flake = Command.make("flake").pipe(
 
 const perfCompare = Command.make("compare", {
   target: Argument.string("target"),
-  profile: Flag.choice("profile", ["next", "latest", "oxlint"]).pipe(Flag.withDefault("next")),
+  version: Flag.string("version").pipe(Flag.optional),
+  latest: Flag.boolean("latest"),
   output: Flag.string("output").pipe(Flag.optional),
   runId: Flag.string("run-id").pipe(Flag.optional),
   patchedBin: Flag.string("patched-bin").pipe(Flag.optional),
@@ -228,13 +245,14 @@ const perfCompare = Command.make("compare", {
   config: Flag.string("config").pipe(Flag.withDefault("tsconfig.json")),
   runs: Flag.integer("runs").pipe(Flag.withDefault(1)),
   diagnosticsFlag: Flag.string("diagnostics-flag").pipe(Flag.withDefault("--diagnostics"))
-}, ({ config, diagnosticsFlag, output, patchedBin, profile, runId, runs, stockBin, target }) =>
+}, ({ config, diagnosticsFlag, latest, output, patchedBin, runId, runs, stockBin, target, version }) =>
   comparePerformance(repositoryRoot, {
     config,
     diagnosticsFlag,
     output: Option.getOrUndefined(output),
     patchedBin: Option.getOrUndefined(patchedBin),
-    profile,
+    version: Option.getOrUndefined(version),
+    latest,
     runId: Option.getOrUndefined(runId),
     runs,
     stockBin: Option.getOrUndefined(stockBin),
@@ -252,14 +270,58 @@ const bundlePackageUpstream = Command.make("bundle-upstream", {}, () => bundleUp
   Command.withDescription("Copy upstream metadata into platform packages")
 )
 
+const preparePackages = Command.make("prepare", {}, () => preparePlatformPackages(repositoryRoot)).pipe(
+  Command.withDescription("Prepare platform aliases and package manifests for publishing")
+)
+
+const assemblePackages = Command.make("assemble", {
+  artifacts: Flag.string("artifacts").pipe(Flag.withDefault("_release-artifacts"))
+}, ({ artifacts }) => assembleReleaseArtifacts(repositoryRoot, artifacts)).pipe(
+  Command.withDescription("Assemble downloaded release artifacts into platform packages")
+)
+
 const packages = Command.make("packages").pipe(
   Command.withDescription("Prepare platform packages"),
-  Command.withSubcommands([bundlePackageUpstream])
+  Command.withSubcommands([assemblePackages, bundlePackageUpstream, preparePackages])
+)
+
+const matrixTestTypeScript = Command.make("test-typescript", {}, () => printTypeScriptTestMatrix(repositoryRoot)).pipe(
+  Command.withDescription("Print the TypeScript component test matrix as JSON")
+)
+
+const matrixTestOxlint = Command.make("test-oxlint", {}, () => printOxlintTestMatrix(repositoryRoot)).pipe(
+  Command.withDescription("Print the Oxlint runtime test matrix as JSON")
+)
+
+const matrixGenerated = Command.make("generated", {}, () => printGeneratedMatrix(repositoryRoot)).pipe(
+  Command.withDescription("Print the generated branch matrix as JSON")
+)
+
+const matrixRelease = Command.make("release", {}, () => printReleaseMatrix(repositoryRoot)).pipe(
+  Command.withDescription("Print the platform release build matrix as JSON")
+)
+
+const matrix = Command.make("matrix").pipe(
+  Command.withDescription("Generate CI matrices"),
+  Command.withSubcommands([matrixGenerated, matrixRelease, matrixTestOxlint, matrixTestTypeScript])
 )
 
 Command.make("repoctl").pipe(
   Command.withDescription("Effect TypeScript-Go repository maintenance"),
-  Command.withSubcommands([submodules, build, changeset, check, codegen, flake, github, packages, perf, test, upstream]),
+  Command.withSubcommands([
+    submodules,
+    build,
+    changeset,
+    check,
+    codegen,
+    flake,
+    github,
+    matrix,
+    packages,
+    perf,
+    test,
+    upstream
+  ]),
   Command.run({ version: "0.0.0" }),
   Effect.provide(NodeServices.layer),
   NodeRuntime.runMain

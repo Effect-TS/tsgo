@@ -1,6 +1,14 @@
+import * as NodeServices from "@effect/platform-node/NodeServices"
+import * as Effect from "effect/Effect"
 import assert from "node:assert/strict"
 import test from "node:test"
-import { binaryArtifact, buildTargets, isBinaryName, oxlintArtifacts, oxlintBuildTargets } from "../src/build.ts"
+import {
+  buildArtifact,
+  buildTargets,
+  componentArtifact,
+  oxlintArtifacts,
+  oxlintBuildTargets
+} from "../src/build.ts"
 
 test("maps release targets to Go platforms", () => {
   assert.deepEqual(buildTargets["darwin-x64"], { goos: "darwin", goarch: "amd64" })
@@ -9,21 +17,14 @@ test("maps release targets to Go platforms", () => {
 })
 
 test("derives platform package artifact paths", () => {
-  assert.deepEqual(binaryArtifact("/repo", "linux-x64", "tsc-next"), {
-    binaryName: "tsc-next",
-    path: "/repo/_packages/tsgo-linux-x64/lib/tsc-next"
-  })
-  assert.deepEqual(binaryArtifact("/repo", "win32-x64", "tsc"), {
+  assert.deepEqual(componentArtifact("/repo", "linux-x64", "typescript", "7.1.0", "tsc"), {
     binaryName: "tsc",
-    path: "/repo/_packages/tsgo-win32-x64/lib/tsc.exe"
+    path: "/repo/_packages/tsgo-linux-x64/artifacts/typescript/7.1.0/tsc"
   })
-})
-
-test("validates release binary names", () => {
-  assert.equal(isBinaryName("tsc-next"), true)
-  assert.equal(isBinaryName("tsc.exe"), true)
-  assert.equal(isBinaryName("../tsc"), false)
-  assert.equal(isBinaryName("nested/tsc"), false)
+  assert.deepEqual(componentArtifact("/repo", "win32-x64", "typescript", "7.0.0", "tsc"), {
+    binaryName: "tsc",
+    path: "/repo/_packages/tsgo-win32-x64/artifacts/typescript/7.0.0/tsc.exe"
+  })
 })
 
 test("maps supported Oxlint release targets", () => {
@@ -37,19 +38,28 @@ test("maps supported Oxlint release targets", () => {
   assert.equal("linux-arm" in oxlintBuildTargets, false)
 })
 
+test("rejects unsupported component release targets", async() => {
+  await assert.rejects(
+    Effect.runPromise(
+      buildArtifact("/repo", "oxlint", "1.0.0", "linux-arm").pipe(Effect.provide(NodeServices.layer))
+    ),
+    /oxlint does not support target linux-arm/
+  )
+})
+
 test("derives packaged Oxlint artifact paths", () => {
-  assert.deepEqual(oxlintArtifacts("/repo", "linux-x64"), {
-    packageDirectory: "/repo/_packages/tsgo-linux-x64/lib",
+  assert.deepEqual(oxlintArtifacts("/repo", "linux-x64", "1.77.0", "7.0.2001"), {
+    packageDirectory: "/repo/_packages/tsgo-linux-x64/artifacts",
     bindingName: "oxlint.linux-x64-gnu.node",
     bindingSourceName: "oxlint.linux-x64-gnu.node",
-    bindingPath: "/repo/_packages/tsgo-linux-x64/lib/oxlint.linux-x64-gnu.node",
-    tsgolintPath: "/repo/_packages/tsgo-linux-x64/lib/tsgolint"
+    bindingPath: "/repo/_packages/tsgo-linux-x64/artifacts/oxlint/1.77.0/oxlint.linux-x64-gnu.node",
+    tsgolintPath: "/repo/_packages/tsgo-linux-x64/artifacts/oxlint-tsgolint/7.0.2001/tsgolint"
   })
-  assert.deepEqual(oxlintArtifacts("/repo", "win32-arm64"), {
-    packageDirectory: "/repo/_packages/tsgo-win32-arm64/lib",
-    bindingName: "oxlint.win32-arm64.node",
+  assert.deepEqual(oxlintArtifacts("/repo", "win32-arm64", "1.77.0", "7.0.2001"), {
+    packageDirectory: "/repo/_packages/tsgo-win32-arm64/artifacts",
+    bindingName: "oxlint.win32-arm64-msvc.node",
     bindingSourceName: "oxlint.win32-arm64-msvc.node",
-    bindingPath: "/repo/_packages/tsgo-win32-arm64/lib/oxlint.win32-arm64.node",
-    tsgolintPath: "/repo/_packages/tsgo-win32-arm64/lib/tsgolint.exe"
+    bindingPath: "/repo/_packages/tsgo-win32-arm64/artifacts/oxlint/1.77.0/oxlint.win32-arm64-msvc.node",
+    tsgolintPath: "/repo/_packages/tsgo-win32-arm64/artifacts/oxlint-tsgolint/7.0.2001/tsgolint.exe"
   })
 })

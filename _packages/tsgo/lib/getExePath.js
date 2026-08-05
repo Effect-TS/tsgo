@@ -61,21 +61,16 @@ export default function getExePath() {
   }
 
   const packageDir = path.dirname(packageJson);
-  const exeDir = path.join(packageDir, "lib");
-  const upstream = readJson(path.join(exeDir, "upstream.json"));
-  if (upstream.schemaVersion !== 2 || !Array.isArray(upstream.profiles)) {
+  const upstream = readJson(path.join(packageDir, "lib", "upstream.json"));
+  if (upstream.schemaVersion !== 4 || typeof upstream.components?.typescript !== "object") {
     throw new Error("Invalid " + platformPackageName + "/lib/upstream.json.");
   }
-  const profiles = upstream.profiles
-    .filter((profile) => profile?.kind === "ts")
-    .sort((left, right) => left.binName === "tsc" ? -1 : right.binName === "tsc" ? 1 : 0);
 
-  for (const profile of profiles) {
-    const binName = profile.binName;
-    if ((binName !== "tsc" && binName !== "tsc-next") || typeof profile.ts?.version !== "string" || typeof profile.ts?.gitHead !== "string") {
-      throw new Error("Invalid TypeScript profile metadata in " + platformPackageName + "/lib/upstream.json.");
+  for (const [version, component] of Object.entries(upstream.components.typescript)) {
+    if (typeof component?.gitHead !== "string") {
+      throw new Error("Invalid TypeScript component metadata in " + platformPackageName + "/lib/upstream.json.");
     }
-    let exe = path.join(exeDir, binName);
+    let exe = path.join(packageDir, "artifacts", "typescript", version, "tsc");
     if (process.platform === "win32") {
       exe += ".exe";
       if (exe.length >= 248) {
@@ -87,7 +82,7 @@ export default function getExePath() {
       continue;
     }
 
-    if (profile.ts.gitHead === typescriptPackage.gitHead) {
+    if (component.gitHead === typescriptPackage.gitHead) {
       return exe;
     }
   }

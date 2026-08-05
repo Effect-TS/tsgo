@@ -1,38 +1,50 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 4,
+  "tags": {
+    "typescript": {
+      "latest": "7.0.2",
+      "next": "7.1.0-dev.20260804.1"
+    },
+    "oxlint": {
+      "latest": "1.77.0"
+    },
+    "oxlint-tsgolint": {
+      "latest": "7.0.2001"
+    }
+  },
+  "components": {
+    "typescript": {
+      "7.0.2": {
+        "gitHead": "2bd066d87f5bafd315be9f40889d0a60b9e58e0b"
+      },
+      "7.1.0-dev.20260804.1": {
+        "gitHead": "12318e599d21f516defea3b20e5d44b9369da723"
+      }
+    },
+    "oxlint-tsgolint": {
+      "7.0.2001": {
+        "gitHead": "482dcf70bffce7ea56f63128c74beb67dec658a2",
+        "dependencies": {
+          "typescript": "7.0.2"
+        }
+      }
+    },
+    "oxlint": {
+      "1.76.0": {
+        "gitHead": "65fe65d8429e1d1bdf86c517ff08bd119ee87660"
+      },
+      "1.77.0": {
+        "gitHead": "9a423f2f485b79c2353c49442c0c7f60f900261d"
+      }
+    }
+  },
   "profiles": [
     {
-      "kind": "ts",
-      "name": "next",
-      "ts": {
-        "npmVersion": "7.1.0-dev.20260803.1",
-        "gitHead": "5b1047d10d32e7d5b446be4de56b126ff42f82bb"
-      },
-      "binName": "tsc-next"
-    },
-    {
-      "kind": "ts",
-      "name": "latest",
-      "ts": {
-        "npmVersion": "7.0.2",
-        "gitHead": "2bd066d87f5bafd315be9f40889d0a60b9e58e0b"
-      },
-      "binName": "tsc"
-    },
-    {
-      "kind": "oxlint",
-      "name": "oxlint",
-      "ts": {
-        "npmVersion": "7.0.2",
-        "gitHead": "2bd066d87f5bafd315be9f40889d0a60b9e58e0b"
-      },
-      "tsgolint": {
-        "npmVersion": "7.0.2001",
-        "gitHead": "482dcf70bffce7ea56f63128c74beb67dec658a2"
-      },
-      "oxlint": {
-        "npmVersion": "1.77.0",
-        "gitHead": "9a423f2f485b79c2353c49442c0c7f60f900261d"
+      "name": "vite-plus",
+      "description": "Vite+ 0.2.8 compatibility runtime",
+      "dependencies": {
+        "oxlint": "1.76.0",
+        "oxlint-tsgolint": "7.0.2001"
       }
     }
   ]

@@ -78,11 +78,19 @@ jobs:
           github-token: ${{ github.token }}
           script: pnpm exec repoctl changeset version
 
-  build-tsc:
-    name: Build TSC ${{ matrix.profile }} ${{ matrix.npm_target }}
+  release-matrix:
+    name: Generate Release Matrix
     needs: select-mode
     if: needs.select-mode.outputs.mode == 'publish'
-    runs-on: ubuntu-latest
+    uses: ./.github/workflows/repoctl-matrix.yml
+    with:
+      name: release
+
+  build-release-artifacts:
+    name: Build ${{ matrix.component }} ${{ matrix.version }} for ${{ matrix.target }}
+    needs: [select-mode, release-matrix]
+    if: needs.select-mode.outputs.mode == 'publish'
+    runs-on: ${{ matrix.runner }}
     timeout-minutes: 45
     permissions:
       contents: read
@@ -91,120 +99,7 @@ jobs:
         shell: bash
     strategy:
       fail-fast: true
-      matrix:
-        npm_target:
-          - darwin-arm64
-          - darwin-x64
-          - win32-x64
-          - win32-arm64
-          - linux-x64
-          - linux-arm64
-          - linux-arm
-        profile:
-          - next
-          - latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-        with:
-          ref: ${{ github.sha }}
-          submodules: recursive
-          persist-credentials: false
-
-      - name: Setup ${{ matrix.profile }} repo
-        uses: ./.github/actions/setup-repo
-        with:
-          profile: ${{ matrix.profile }}
-
-      - name: Build TSC ${{ matrix.profile }} ${{ matrix.npm_target }}
-        id: tsc
-        run: pnpm exec repoctl build tsc --profile ${{ matrix.profile }} --target ${{ matrix.npm_target }}
-
-      - name: Upload TSC artifact
-        uses: actions/upload-artifact@v7
-        with:
-          name: ${{ matrix.npm_target }}__${{ matrix.profile }}
-          path: ${{ steps.tsc.outputs.binary_path }}
-          if-no-files-found: error
-
-  build-tsgolint:
-    name: Build tsgolint ${{ matrix.npm_target }}
-    needs: select-mode
-    if: needs.select-mode.outputs.mode == 'publish'
-    runs-on: ubuntu-latest
-    timeout-minutes: 45
-    permissions:
-      contents: read
-    defaults:
-      run:
-        shell: bash
-    strategy:
-      fail-fast: true
-      matrix:
-        npm_target:
-          - darwin-arm64
-          - darwin-x64
-          - win32-x64
-          - win32-arm64
-          - linux-x64
-          - linux-arm64
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-        with:
-          ref: ${{ github.sha }}
-          submodules: recursive
-          persist-credentials: false
-
-      - name: Setup Oxlint repo
-        uses: ./.github/actions/setup-repo
-        with:
-          profile: oxlint
-
-      - name: Build tsgolint ${{ matrix.npm_target }}
-        id: tsgolint
-        run: pnpm exec repoctl build tsgolint --target ${{ matrix.npm_target }}
-
-      - name: Upload tsgolint artifact
-        uses: actions/upload-artifact@v7
-        with:
-          name: ${{ matrix.npm_target }}__tsgolint
-          path: ${{ steps.tsgolint.outputs.artifact_path }}
-          if-no-files-found: error
-
-  build-oxlint-binding:
-    name: Build Oxlint binding ${{ matrix.npm_target }}
-    needs: select-mode
-    if: needs.select-mode.outputs.mode == 'publish'
-    runs-on: ${{ matrix.os }}
-    timeout-minutes: 45
-    permissions:
-      contents: read
-    defaults:
-      run:
-        shell: bash
-    strategy:
-      fail-fast: true
-      matrix:
-        include:
-          - npm_target: darwin-arm64
-            os: macos-latest
-            rust_target: aarch64-apple-darwin
-          - npm_target: darwin-x64
-            os: macos-latest
-            rust_target: x86_64-apple-darwin
-          - npm_target: win32-x64
-            os: windows-latest
-            rust_target: x86_64-pc-windows-msvc
-          - npm_target: win32-arm64
-            os: windows-latest
-            rust_target: aarch64-pc-windows-msvc
-          - npm_target: linux-x64
-            os: ubuntu-latest
-            rust_target: x86_64-unknown-linux-gnu
-          - npm_target: linux-arm64
-            os: ubuntu-latest
-            rust_target: aarch64-unknown-linux-gnu
+      matrix: ${{ fromJSON(needs.release-matrix.outputs.matrix) }}
     steps:
       - name: Enable long Git paths
         if: runner.os == 'Windows'
@@ -217,28 +112,33 @@ jobs:
           submodules: recursive
           persist-credentials: false
 
-      - name: Setup Oxlint repo
+      - name: Setup ${{ matrix.component }} ${{ matrix.version }}
         uses: ./.github/actions/setup-repo
         with:
-          profile: oxlint
-          rust-target: ${{ matrix.rust_target }}
+          component: ${{ matrix.component }}
+          version: ${{ matrix.version }}
+          target: ${{ matrix.target }}
 
-      - name: Build Oxlint binding ${{ matrix.npm_target }}
-        id: oxlint_binding
+      - name: Build release artifact
+        id: build
         env:
           TARGET_CC: clang
-        run: pnpm exec repoctl build oxlint-binding --target ${{ matrix.npm_target }}
+        run: >
+          pnpm exec repoctl build artifact
+          --component "${{ matrix.component }}"
+          --version "${{ matrix.version }}"
+          --target "${{ matrix.target }}"
 
-      - name: Upload Oxlint binding artifact
+      - name: Upload release artifact
         uses: actions/upload-artifact@v7
         with:
-          name: ${{ matrix.npm_target }}__oxlint-binding
-          path: ${{ steps.oxlint_binding.outputs.artifact_path }}
+          name: ${{ matrix.artifactName }}
+          path: ${{ steps.build.outputs.artifact_path }}
           if-no-files-found: error
 
   pack:
     name: Pack Packages
-    needs: [select-mode, build-tsc, build-tsgolint, build-oxlint-binding]
+    needs: [select-mode, build-release-artifacts]
     if: needs.select-mode.outputs.mode == 'publish'
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -267,25 +167,14 @@ jobs:
       - name: Download platform binaries
         uses: actions/download-artifact@v8
         with:
+          pattern: "*__*"
           path: _release-artifacts
 
-      - name: Copy binaries into platform packages
-        run: |
-          for artifact_dir in _release-artifacts/*__*; do
-            artifact_name="${artifact_dir##*/}"
-            npm_target="${artifact_name%%__*}"
-            package_dir="_packages/tsgo-${npm_target}/lib"
+      - name: Assemble platform packages
+        run: pnpm exec repoctl packages assemble --artifacts _release-artifacts
 
-            mkdir -p "${package_dir}"
-            cp "${artifact_dir}"/* "${package_dir}/"
-          done
-
-          for tsgolint in _packages/tsgo-{darwin-*,linux-{x64,arm64}}/lib/tsgolint; do
-            chmod 755 "${tsgolint}"
-          done
-
-      - name: Bundle upstream metadata
-        run: pnpm exec repoctl packages bundle-upstream
+      - name: Prepare platform packages
+        run: pnpm exec repoctl packages prepare
 
       - name: Verify platform binaries
         run: pnpm exec repoctl build verify-release
@@ -328,7 +217,6 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Publish packages and create releases
-        id: publish
         uses: changesets/action/publish@2d9f7af6402422be60d377f151c7618011bba45a # v2.0.0-next.4
         with:
           github-token: ${{ github.token }}
@@ -337,64 +225,3 @@ jobs:
           create-github-releases: true
         env:
           NPM_CONFIG_PROVENANCE: "true"
-
-      - name: Verify published packages
-        env:
-          PUBLISHED: ${{ steps.publish.outputs.published }}
-          PUBLISHED_PACKAGES: ${{ steps.publish.outputs.published-packages }}
-        run: |
-          node <<'NODE'
-          const expected = [
-            "@effect/tsgo",
-            "@effect/tsgo-darwin-arm64",
-            "@effect/tsgo-darwin-x64",
-            "@effect/tsgo-linux-arm",
-            "@effect/tsgo-linux-arm64",
-            "@effect/tsgo-linux-x64",
-            "@effect/tsgo-win32-arm64",
-            "@effect/tsgo-win32-x64"
-          ]
-          const published = JSON.parse(process.env.PUBLISHED_PACKAGES || "[]")
-          const names = published.map(({ name }) => name)
-          const versions = new Set(published.map(({ version }) => version))
-          const packageVersion = require("./_packages/tsgo/package.json").version
-
-          if (process.env.PUBLISHED !== "true") {
-            throw new Error("Changesets did not report a publication")
-          }
-          if (names.length === 0 || new Set(names).size !== names.length || names.some((name) => !expected.includes(name))) {
-            throw new Error(`Unexpected published packages: ${JSON.stringify(published)}`)
-          }
-          if (versions.size !== 1 || !versions.has(packageVersion)) {
-            throw new Error(`Published packages have unexpected versions: ${JSON.stringify(published)}`)
-          }
-          NODE
-
-          version=$(node -p "require('./_packages/tsgo/package.json').version")
-          for package in \
-            @effect/tsgo \
-            @effect/tsgo-darwin-arm64 \
-            @effect/tsgo-darwin-x64 \
-            @effect/tsgo-linux-arm \
-            @effect/tsgo-linux-arm64 \
-            @effect/tsgo-linux-x64 \
-            @effect/tsgo-win32-arm64 \
-            @effect/tsgo-win32-x64; do
-            published_version=""
-            for _ in 1 2 3 4 5; do
-              published_version=$(npm view "${package}@${version}" version 2>/dev/null) && break
-              sleep 5
-            done
-            if [ "${published_version}" != "${version}" ]; then
-              echo "Expected ${package}@${version} in npm, found ${published_version:-nothing}" >&2
-              exit 1
-            fi
-            tag_result=$(git ls-remote --exit-code --tags \
-              "https://github.com/${GITHUB_REPOSITORY}.git" \
-              "refs/tags/${package}@${version}")
-            tag_sha=${tag_result%%$'\t'*}
-            if [ "${tag_sha}" != "${GITHUB_SHA}" ]; then
-              echo "Expected ${package}@${version} to point to ${GITHUB_SHA}, found ${tag_sha}" >&2
-              exit 1
-            fi
-          done

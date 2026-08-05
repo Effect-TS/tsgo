@@ -1,6 +1,3 @@
-import * as childProcess from "node:child_process"
-import * as crypto from "node:crypto"
-import * as nodeModule from "node:module"
 import * as NodeRuntime from "@effect/platform-node/NodeRuntime"
 import * as NodeServices from "@effect/platform-node/NodeServices"
 import * as Console from "effect/Console"
@@ -8,580 +5,140 @@ import * as Data from "effect/Data"
 import * as Effect from "effect/Effect"
 import * as FileSystem from "effect/FileSystem"
 import * as Option from "effect/Option"
-import * as Path from "effect/Path"
-import * as Schema from "effect/Schema"
 import * as Command from "effect/unstable/cli/Command"
 import * as Flag from "effect/unstable/cli/Flag"
+import {
+  type Component,
+  defaultTypescriptPackageNames,
+  discoverBinaries,
+  patch,
+  requireComponents,
+  resolveReplacement,
+  selectComponents,
+  unpatch
+} from "../patcher/index.js"
 import { configCommand } from "./config.js"
 import {
   type DiagnosticsOutputFormat,
   propagateDiagnosticsExit,
   runDiagnosticsBinary
 } from "./diagnostics.js"
-import {
-  patchPreparedTargets,
-  prepareResolvedTargets,
-  resolveExperimentalOxlintTargets,
-  resolveExperimentalOxlintUnpatchTargets,
-  unpatchResolvedTargets
-} from "./experimentalOxlint.js"
 import { ensureIntegrationSelected, integrationFlags, IntegrationSelectionError } from "./integrationFlags.js"
 import { setupCommand } from "./setup/index.js"
-import { defaultTypescriptPackageNames, isNativeTypescriptVersion } from "./setup/consts.js"
-import { decodePackagedTypeScriptProfiles } from "./platformUpstream.js"
 import * as pkgJson from "../../package.json" with { type: "json" }
 
-class NativeBackendNotInstalledError extends Data.TaggedError("NativeBackendNotInstalledError")<{
-  readonly packageNames: ReadonlyArray<string>
-}> {
-  get message(): string {
-    return (
-      "No native TypeScript backend is installed. " +
-      "Install `typescript` >= 7 first (e.g. `typescript@latest` or `typescript@next`) " +
-      "or `@typescript/native` (e.g. `@typescript/native@npm:typescript@latest`). " +
-      "Tried: " + this.packageNames.join(", ") + "."
-    )
-  }
-}
-
-class PackageNotFoundError extends Data.TaggedError("PackageNotFoundError")<{
-  readonly packageName: string
-}> {
-  get message(): string {
-    return `Unable to resolve ${this.packageName}.`
-  }
-}
-
-class ParsePackageJsonError extends Data.TaggedError("ParsePackageJsonError")<{
-  readonly packageName: string
-  readonly packageJsonPath: string
-  readonly reason: string
-}> {
-  get message(): string {
-    return `Unable to parse ${this.packageName} package.json at ${this.packageJsonPath}: ${this.reason}`
-  }
-}
-
-class ParseUpstreamManifestError extends Data.TaggedError("ParseUpstreamManifestError")<{
-  readonly packageName: string
-  readonly upstreamPath: string
-  readonly reason: string
-}> {
-  get message(): string {
-    return `Unable to parse ${this.packageName} upstream.json at ${this.upstreamPath}: ${this.reason}`
-  }
-}
-
-class MissingTypeScriptMetadataError extends Data.TaggedError("MissingTypeScriptMetadataError")<{
-  readonly packageName: string
-}> {
-  get message(): string {
-    return `Installed ${this.packageName} package.json does not contain a gitHead. Unable to select a compatible Effect binary.`
-  }
-}
-
-class UnsupportedPlatformPackageError extends Data.TaggedError("UnsupportedPlatformPackageError")<{
-  readonly packageName: string
-}> {
-  get message(): string {
-    return (
-      `Unable to resolve ${this.packageName}. ` +
-      "Your platform may not be supported by the installed native TypeScript backend."
-    )
-  }
-}
-
-class MissingTargetBinaryError extends Data.TaggedError("MissingTargetBinaryError")<{
-  readonly targetPath: string
-}> {
-  get message(): string {
-    return (
-      "Native TypeScript binary not found at " +
-      this.targetPath +
-      ". Is the native TypeScript backend installed correctly?"
-    )
-  }
-}
-
-class ResolvePackagedBinaryError extends Data.TaggedError("ResolvePackagedBinaryError")<{
-  readonly reason: string
-}> {
-  get message(): string {
-    return this.reason
-  }
-}
-
-class PackagedBinaryVersionMismatchError extends Data.TaggedError("PackagedBinaryVersionMismatchError")<{
-  readonly installedVersion: string
-  readonly installedGitHead: string
-  readonly candidates: ReadonlyArray<PackagedBinaryCandidateInfo>
-}> {
-  get message(): string {
-    const tried = this.candidates.length === 0
-      ? "  none"
-      : this.candidates.map((candidate) => {
-        if (candidate.tsVersion !== undefined && candidate.tsGitHead !== undefined) {
-          return `  ${candidate.binaryName}: TypeScript ${candidate.tsVersion}, gitHead ${candidate.tsGitHead}`
-        }
-        return `  ${candidate.binaryName}: ${candidate.reason ?? "metadata unavailable"}`
-      }).join("\n")
-
-    return [
-      `No packaged Effect TypeScript binary matches installed TypeScript ${this.installedVersion} gitHead ${this.installedGitHead}.`,
-      "",
-      "Tried:",
-      tried,
-      "",
-      "Install a matching @effect/tsgo release or a matching TypeScript version, or rerun with --force to use the newest packaged binary."
-    ].join("\n")
-  }
-}
-
-class BackupRestoreError extends Data.TaggedError("BackupRestoreError")<{
-  readonly reason: string
-}> {
-  get message(): string {
-    return this.reason
-  }
-}
-
-class CopyBinaryError extends Data.TaggedError("CopyBinaryError")<{
-  readonly sourcePath: string
-  readonly targetPath: string
-}> {
-  get message(): string {
-    return `Failed to copy binary from ${this.sourcePath} to ${this.targetPath}.`
-  }
-}
-
-class ChmodBinaryError extends Data.TaggedError("ChmodBinaryError")<{
-  readonly targetPath: string
-}> {
+class ChmodBinaryError extends Data.TaggedError("ChmodBinaryError")<{ readonly targetPath: string }> {
   get message(): string {
     return `Failed to set executable permissions on ${this.targetPath}.`
   }
 }
 
-class VerificationFailedError extends Data.TaggedError("VerificationFailedError")<{
-  readonly targetPath: string
-}> {
-  get message(): string {
-    return (
-      "Warning: verification failed for " +
-      this.targetPath +
-      ", but binary was patched. The binary may still work correctly."
-    )
+const selectedComponents = (typescript: boolean, oxlint: boolean): ReadonlySet<Component> => {
+  const components = new Set<Component>()
+  if (typescript) components.add("typescript")
+  if (oxlint) {
+    components.add("oxlint")
+    components.add("oxlint-tsgolint")
   }
+  return components
 }
 
-type CliDomainError =
-  | NativeBackendNotInstalledError
-  | PackageNotFoundError
-  | ParsePackageJsonError
-  | ParseUpstreamManifestError
-  | MissingTypeScriptMetadataError
-  | UnsupportedPlatformPackageError
-  | MissingTargetBinaryError
-  | ResolvePackagedBinaryError
-  | PackagedBinaryVersionMismatchError
-  | BackupRestoreError
-  | CopyBinaryError
-  | ChmodBinaryError
-  | VerificationFailedError
-  | IntegrationSelectionError
-
-interface PackagedBinaryMetadata {
-  readonly tsVersion: string
-  readonly tsGitHead: string
-}
-
-interface PackagedBinaryCandidateInfo {
-  readonly binaryName: string
-  readonly tsVersion?: string
-  readonly tsGitHead?: string
-  readonly reason?: string
-}
-
-interface PackagedBinaryCandidate extends PackagedBinaryCandidateInfo {
-  readonly path?: string
-  readonly metadata?: PackagedBinaryMetadata
-}
-
-interface PackageJsonMetadata {
-  readonly name: string
-  readonly version: string
-  readonly gitHead?: string
-}
-
-interface ResolvedPackageJson extends PackageJsonMetadata {
-  readonly requestedPackageName: string
-  readonly packageJsonPath: string
-}
-
-interface OfficialTypeScriptBinary {
-  readonly packageName: string
-  readonly packageJsonPath: string
-  readonly packageVersion: string
-  readonly packageGitHead: string
-  readonly platformPackageName: string
-  readonly platformPackageJsonPath: string
-  readonly platformGitHead?: string
-  readonly binaryPath: string
-}
-
-interface ResolvedTypeScriptPatchTarget {
-  readonly targetPath: string
-  readonly backupPath: string
-  readonly replacementPath: string
-}
-
-const PackageJsonMetadataSchema = Schema.Struct({
-  name: Schema.String,
-  version: Schema.String,
-  gitHead: Schema.optionalKey(Schema.String)
-})
-const PackageJsonMetadataFromStringSchema = Schema.fromJsonString(PackageJsonMetadataSchema)
-
-const decodePackageJsonText = (packageName: string, packageJsonPath: string, text: string) =>
-  Schema.decodeUnknownEffect(PackageJsonMetadataFromStringSchema)(text).pipe(
-    Effect.mapError((error) => new ParsePackageJsonError({
-      packageName,
-      packageJsonPath,
-      reason: error.message
-    }))
-  )
-
-const readPackageJsonFile = (packageName: string, packageJsonPath: string) =>
-  Effect.gen(function*() {
-    const fs = yield* FileSystem.FileSystem
-    const text = yield* fs.readFileString(packageJsonPath).pipe(
-      Effect.mapError((error) => new ParsePackageJsonError({
-        packageName,
-        packageJsonPath,
-        reason: error.message
-      }))
-    )
-    const metadata = yield* decodePackageJsonText(packageName, packageJsonPath, text)
-    return { requestedPackageName: packageName, packageJsonPath, ...metadata }
-  })
-
-const readEffectPlatformUpstreamFile = (packageName: string, upstreamPath: string) =>
-  Effect.gen(function*() {
-    const fs = yield* FileSystem.FileSystem
-    const text = yield* fs.readFileString(upstreamPath).pipe(
-      Effect.mapError((error) => new ParseUpstreamManifestError({
-        packageName,
-        upstreamPath,
-        reason: error.message
-      }))
-    )
-    return yield* decodePackagedTypeScriptProfiles(text).pipe(
-      Effect.mapError((error) => new ParseUpstreamManifestError({
-        packageName,
-        upstreamPath,
-        reason: error.message
-      }))
-    )
-  })
-
-const resolvePackageJson = (cwd: string, packageName: string) =>
-  Effect.gen(function*() {
-    const path = yield* Path.Path
-    const cwdRequire = nodeModule.createRequire(path.join(cwd, "noop.js"))
-    const packageJsonPath = yield* Effect.try({
-      try: () => cwdRequire.resolve(packageName + "/package.json"),
-      catch: () => new PackageNotFoundError({ packageName })
-    })
-    return yield* readPackageJsonFile(packageName, packageJsonPath)
-  })
-
-const resolveOfficialTypeScriptBinary = (typescriptPackage: ResolvedPackageJson) =>
-  Effect.gen(function*() {
-    const packageGitHead = typescriptPackage.gitHead
-    if (packageGitHead === undefined) {
-      return yield* Effect.fail(new MissingTypeScriptMetadataError({ packageName: typescriptPackage.requestedPackageName }))
-    }
-
-    const path = yield* Path.Path
-    const platformPackageName = "@typescript/typescript-" + process.platform + "-" + process.arch
-    const packageRequire = nodeModule.createRequire(typescriptPackage.packageJsonPath)
-    const platformPackageJsonPath = yield* Effect.try({
-      try: () => packageRequire.resolve(platformPackageName + "/package.json"),
-      catch: () => new UnsupportedPlatformPackageError({ packageName: platformPackageName })
-    })
-    const platformPackage = yield* readPackageJsonFile(platformPackageName, platformPackageJsonPath)
-    const binaryName = "tsc" + (process.platform === "win32" ? ".exe" : "")
-
-    return {
-      packageName: typescriptPackage.requestedPackageName,
-      packageJsonPath: typescriptPackage.packageJsonPath,
-      packageVersion: typescriptPackage.version,
-      packageGitHead,
-      platformPackageName,
-      platformPackageJsonPath,
-      platformGitHead: platformPackage.gitHead,
-      binaryPath: path.join(path.dirname(platformPackageJsonPath), "lib", binaryName)
-    } satisfies OfficialTypeScriptBinary
-  })
-
-const resolveInstalledTypeScriptBinary = (packageNames: ReadonlyArray<string>) =>
-  Effect.gen(function*() {
-    for (const packageName of packageNames) {
-      const packageResult = yield* resolvePackageJson(process.cwd(), packageName).pipe(
-        Effect.catchTag("PackageNotFoundError", () => Effect.succeed(undefined))
-      )
-      if (packageResult === undefined || !isNativeTypescriptVersion(packageResult.version)) {
-        continue
-      }
-      return yield* resolveOfficialTypeScriptBinary(packageResult)
-    }
-
-    return yield* Effect.fail(new NativeBackendNotInstalledError({ packageNames }))
-  })
-
-const packageNamesWithPreferred = (preferredPackageName: Option.Option<string>): ReadonlyArray<string> => {
-  const preferred = Option.getOrUndefined(preferredPackageName)
-  return preferred === undefined || preferred === ""
-    ? defaultTypescriptPackageNames
-    : Array.from(new Set([preferred, ...defaultTypescriptPackageNames]))
-}
-
-/**
- * Resolve the Effect-patched binary to copy over the native target. The
- * `@effect/tsgo-*` platform package ships `lib/tsc` for the latest profile and
- * `lib/tsc-next` for the next profile. The bundled upstream.json identifies
- * the TypeScript gitHead each binary was built from.
- */
-const getPackagedBinaryPath = (installedTypeScript: OfficialTypeScriptBinary, force: boolean) =>
-  Effect.gen(function*() {
-    const fs = yield* FileSystem.FileSystem
-    const path = yield* Path.Path
-    const packageName = "@effect/tsgo-" + process.platform + "-" + process.arch
-    const selfRequire = nodeModule.createRequire(import.meta.url)
-    const packageJsonPath: string = yield* Effect.try({
-      try: () => selfRequire.resolve(packageName + "/package.json"),
-      catch: () =>
-        new ResolvePackagedBinaryError({
-          reason:
-            `Unable to resolve ${packageName}. ` +
-            "Either your platform is unsupported, or the platform package is not installed.",
-        }),
-    })
-
-    const packageDir = path.dirname(packageJsonPath)
-    const packagedProfiles = yield* readEffectPlatformUpstreamFile(packageName, path.join(packageDir, "lib", "upstream.json"))
-    const candidates: Array<PackagedBinaryCandidate> = []
-
-    for (const profile of packagedProfiles) {
-      const binaryName = profile.binaryName
-      const exeName = binaryName + (process.platform === "win32" ? ".exe" : "")
-      const exePath = path.join(packageDir, "lib", exeName)
-      const metadata = { tsVersion: profile.tsVersion, tsGitHead: profile.tsGitHead }
-      const exists = yield* fs.exists(exePath)
-      if (!exists) {
-        candidates.push({ binaryName, metadata, ...metadata, reason: "binary not packaged" })
-        continue
-      }
-
-      const candidate = { binaryName, path: exePath, metadata, ...metadata }
-      if (metadata.tsGitHead === installedTypeScript.packageGitHead) {
-        return exePath
-      }
-      candidates.push(candidate)
-    }
-
-    if (force) {
-      const fallback = candidates.find((candidate) => candidate.binaryName === "tsc-next" && candidate.path !== undefined)
-        ?? candidates.find((candidate) => candidate.binaryName === "tsc" && candidate.path !== undefined)
-      if (fallback?.path !== undefined) {
-        yield* Console.warn(new PackagedBinaryVersionMismatchError({
-          installedVersion: installedTypeScript.packageVersion,
-          installedGitHead: installedTypeScript.packageGitHead,
-          candidates
-        }).message)
-        yield* Console.warn("Forcing patch with " + fallback.binaryName + ". This may be incompatible.")
-        return fallback.path
-      }
-    }
-
-    if (candidates.length === 0) {
-      return yield* Effect.fail(
-        new ResolvePackagedBinaryError({
-          reason: "No packaged TypeScript binaries were found in " + path.join(packageDir, "lib"),
-        })
-      )
-    }
-
-    return yield* Effect.fail(new PackagedBinaryVersionMismatchError({
-      installedVersion: installedTypeScript.packageVersion,
-      installedGitHead: installedTypeScript.packageGitHead,
-      candidates
-    }))
-  })
-
-const resolveTypeScriptPatchTarget = (force: boolean, packageNames: ReadonlyArray<string>) => Effect.gen(function*() {
-  const fs = yield* FileSystem.FileSystem
-  const path = yield* Path.Path
-  const installedTypeScript = yield* resolveInstalledTypeScriptBinary(packageNames)
-  const targetPath = installedTypeScript.binaryPath
-  const backupPath = path.join(path.dirname(targetPath), path.basename(targetPath) + ".original")
-  const replacementPath = yield* getPackagedBinaryPath(installedTypeScript, force)
-
-  const targetExists = yield* fs.exists(targetPath)
-  if (!targetExists) {
-    return yield* Effect.fail(new MissingTargetBinaryError({ targetPath }))
-  }
-
-  let actualBackupPath = backupPath
-  let counter = 1
-  while (yield* fs.exists(actualBackupPath)) {
-    if (counter > 100) {
-      return yield* Effect.fail(new BackupRestoreError({
-        reason: `Too many backup files exist (over 100). Please clean up old backups in ${path.dirname(targetPath)}.`,
-      }))
-    }
-    actualBackupPath = backupPath + "." + counter
-    counter++
-  }
-
-  return { targetPath, backupPath: actualBackupPath, replacementPath } satisfies ResolvedTypeScriptPatchTarget
+const discoverSelected = (
+  components: ReadonlySet<Component>,
+  preferredTypescriptPackage?: string
+) => Effect.gen(function*() {
+  const discovered = yield* discoverBinaries(process.cwd(), preferredTypescriptPackage)
+  const selected = selectComponents(discovered, components)
+  return yield* requireComponents(selected, components)
 })
 
-const patchResolvedTypeScriptTarget = (target: ResolvedTypeScriptPatchTarget) => Effect.gen(function*() {
-  const fs = yield* FileSystem.FileSystem
-  yield* fs.rename(target.targetPath, target.backupPath).pipe(
-    Effect.mapError(() =>
-      new BackupRestoreError({
-        reason: `Failed to back up original binary from ${target.targetPath} to ${target.backupPath}.`,
-      })
-    )
+const renderSkipped = (skipped: ReadonlyArray<{ readonly message: string }>) =>
+  Effect.forEach(skipped, ({ message }) => Console.error(message), { discard: true })
+
+const typescriptPackageFlag = Flag.optional(
+  Flag.string("typescript-package").pipe(
+    Flag.withDescription("Native TypeScript package name to try before the default package names")
   )
-  yield* Console.log("Backed up original binary to " + target.backupPath)
-
-  yield* fs.copyFile(target.replacementPath, target.targetPath).pipe(
-    Effect.mapError(() => new CopyBinaryError({ sourcePath: target.replacementPath, targetPath: target.targetPath }))
-  )
-
-  yield* fs.chmod(target.targetPath, 0o755).pipe(
-    Effect.mapError(() => new ChmodBinaryError({ targetPath: target.targetPath }))
-  )
-
-  yield* Console.log("Patched Effect Language Service binary to " + target.targetPath)
-
-  const verify = Effect.try({
-    try: () => {
-      childProcess.execFileSync(target.targetPath, ["--version"], {
-        stdio: "pipe",
-        timeout: 10000,
-      })
-    },
-    catch: () => new VerificationFailedError({ targetPath: target.targetPath }),
-  }).pipe(
-    Effect.tap(() => Console.log("Verification succeeded.")),
-    Effect.catchTag("VerificationFailedError", (error) => Console.warn(error.message))
-  )
-
-  yield* verify
-})
-
-const unpatch = Effect.gen(function*() {
-  const fs = yield* FileSystem.FileSystem
-  const path = yield* Path.Path
-  const { binaryPath: targetPath } = yield* resolveInstalledTypeScriptBinary(defaultTypescriptPackageNames)
-  const backupPath = path.join(path.dirname(targetPath), path.basename(targetPath) + ".original")
-
-  const backupExists = yield* fs.exists(backupPath)
-  if (!backupExists) {
-    yield* Console.error("No backup found at " + backupPath + ". Nothing to restore.")
-    return
-  }
-
-  const targetExists = yield* fs.exists(targetPath)
-  if (targetExists) {
-    const dir = path.dirname(targetPath)
-    const basename = path.basename(targetPath)
-    const uid = crypto.randomUUID()
-    const renamedPath = path.join(dir, basename + "." + uid + ".patched")
-    yield* fs.rename(targetPath, renamedPath).pipe(
-      Effect.mapError(() =>
-        new BackupRestoreError({
-          reason: `Failed to rename patched binary at ${targetPath} to ${renamedPath}.`,
-        })
-      )
-    )
-    yield* Console.log("Renamed patched binary to " + renamedPath)
-  }
-
-  yield* fs.rename(backupPath, targetPath).pipe(
-    Effect.mapError(() =>
-      new BackupRestoreError({
-        reason: `Failed to restore backup from ${backupPath} to ${targetPath}.`,
-      })
-    )
-  )
-
-  yield* Console.log("Restored original binary at " + targetPath)
-})
+)
 
 const patchCommand = Command.make("patch", {
   ...integrationFlags,
-  force: Flag.boolean("force"),
-  typescriptPackage: Flag.optional(
-    Flag.string("typescript-package").pipe(
-      Flag.withDescription("Native TypeScript package name to try before the default package names")
-    )
-  )
+  force: Flag.boolean("force").pipe(
+    Flag.withDescription("Deprecated compatibility flag; replacements are selected by package version")
+  ),
+  skipMissing: Flag.boolean("skip-missing").pipe(
+    Flag.withDefault(false),
+    Flag.withDescription("Skip selected integrations without a matching packaged replacement")
+  ),
+  typescriptPackage: typescriptPackageFlag
 }).pipe(
   Command.withDescription("Patch the selected Effect integrations"),
-  Command.withHandler(({ force, oxlint, typescript, typescriptPackage }) =>
-    Effect.gen(function*() {
-      yield* ensureIntegrationSelected(typescript, oxlint)
-      if (!typescript && force) {
-        return yield* new IntegrationSelectionError({ reason: "--force requires the TypeScript integration." })
-      }
-      if (!typescript && Option.isSome(typescriptPackage)) {
-        return yield* new IntegrationSelectionError({
-          reason: "--typescript-package requires the TypeScript integration."
-        })
-      }
-
-      const typescriptTarget = typescript
-        ? yield* resolveTypeScriptPatchTarget(force, packageNamesWithPreferred(typescriptPackage))
-        : undefined
-      const oxlintTargets = oxlint ? yield* resolveExperimentalOxlintTargets(process.cwd()) : undefined
-      const preparedOxlintTargets = oxlintTargets === undefined
-        ? undefined
-        : yield* prepareResolvedTargets(oxlintTargets)
-
-      if (typescriptTarget !== undefined) yield* patchResolvedTypeScriptTarget(typescriptTarget)
-      if (preparedOxlintTargets !== undefined) yield* patchPreparedTargets(preparedOxlintTargets)
-    }))
+  Command.withHandler(({ oxlint, skipMissing, typescript, typescriptPackage }) => Effect.gen(function*() {
+    yield* ensureIntegrationSelected(typescript, oxlint)
+    if (!typescript && Option.isSome(typescriptPackage)) {
+      return yield* new IntegrationSelectionError({
+        reason: "--typescript-package requires the TypeScript integration."
+      })
+    }
+    const components = selectedComponents(typescript, oxlint)
+    const result = yield* patch({
+      cwd: process.cwd(),
+      components,
+      preferredTypescriptPackage: Option.getOrUndefined(typescriptPackage),
+      skipMissing
+    })
+    yield* renderSkipped(result.skipped)
+    yield* Effect.forEach(
+      result.changed,
+      (target) => Console.log(`Patched ${target.component} at ${target.binaryPath}`),
+      { discard: true }
+    )
+  }))
 )
 
-const unpatchCommand = Command.make("unpatch", integrationFlags).pipe(
+const unpatchCommand = Command.make("unpatch", {
+  ...integrationFlags,
+  typescriptPackage: typescriptPackageFlag
+}).pipe(
   Command.withDescription("Unpatch and restore the selected integrations"),
-  Command.withHandler(({ oxlint, typescript }) =>
-    Effect.gen(function*() {
-      yield* ensureIntegrationSelected(typescript, oxlint)
-      const oxlintTargets = oxlint ? yield* resolveExperimentalOxlintUnpatchTargets(process.cwd()) : undefined
-      if (typescript) yield* unpatch
-      if (oxlintTargets !== undefined) yield* unpatchResolvedTargets(oxlintTargets)
-    }))
+  Command.withHandler(({ oxlint, typescript, typescriptPackage }) => Effect.gen(function*() {
+    yield* ensureIntegrationSelected(typescript, oxlint)
+    if (!typescript && Option.isSome(typescriptPackage)) {
+      return yield* new IntegrationSelectionError({
+        reason: "--typescript-package requires the TypeScript integration."
+      })
+    }
+    const components = selectedComponents(typescript, oxlint)
+    const result = yield* unpatch({
+      cwd: process.cwd(),
+      components,
+      preferredTypescriptPackage: Option.getOrUndefined(typescriptPackage)
+    })
+    yield* renderSkipped(result.skipped)
+    yield* Effect.forEach(
+      result.changed,
+      (target) => Console.log(`Restored original ${target.component} at ${target.binaryPath}`),
+      { discard: true }
+    )
+  }))
 )
+
+const resolveTypeScriptExecutable = Effect.gen(function*() {
+  const components = new Set<Component>(["typescript"])
+  const targets = yield* discoverSelected(components, defaultTypescriptPackageNames[0])
+  return yield* resolveReplacement(targets[0]!)
+})
 
 const getExePathCommand = Command.make("get-exe-path").pipe(
   Command.withDescription("Print the Effect Language Service executable path"),
-  Command.withHandler(() =>
-    Effect.gen(function*() {
-      const fs = yield* FileSystem.FileSystem
-      const installedTypeScript = yield* resolveInstalledTypeScriptBinary(defaultTypescriptPackageNames)
-      const exePath = yield* getPackagedBinaryPath(installedTypeScript, false)
-      yield* fs.chmod(exePath, 0o755).pipe(
-        Effect.mapError(() => new ChmodBinaryError({ targetPath: exePath }))
-      )
-      yield* Console.log(exePath)
-    })
-  )
+  Command.withHandler(() => Effect.gen(function*() {
+    const fs = yield* FileSystem.FileSystem
+    const replacement = yield* resolveTypeScriptExecutable
+    yield* fs.chmod(replacement.path, 0o755).pipe(
+      Effect.mapError(() => new ChmodBinaryError({ targetPath: replacement.path }))
+    )
+    yield* Console.log(replacement.path)
+  }))
 )
 
 const diagnosticsCommand = Command.make("diagnostics", {
@@ -620,32 +177,29 @@ const diagnosticsCommand = Command.make("diagnostics", {
   )
 }).pipe(
   Command.withDescription("Gets the Effect language service diagnostics on the given files or project"),
-  Command.withHandler(({ file, format, lspconfig, progress, project, severity, strict }) =>
-    Effect.gen(function*() {
-      const fs = yield* FileSystem.FileSystem
-      const installedTypeScript = yield* resolveInstalledTypeScriptBinary(defaultTypescriptPackageNames)
-      const binaryPath = yield* getPackagedBinaryPath(installedTypeScript, false)
-      yield* fs.chmod(binaryPath, 0o755).pipe(
-        Effect.mapError(() => new ChmodBinaryError({ targetPath: binaryPath }))
-      )
-      const result = runDiagnosticsBinary(binaryPath, {
-        cwd: process.cwd(),
-        file: Option.getOrUndefined(file),
-        project: Option.getOrUndefined(project),
-        format,
-        strict,
-        severity: Option.getOrUndefined(severity),
-        progress,
-        lspconfig: Option.getOrUndefined(lspconfig)
-      })
-      propagateDiagnosticsExit(result)
-    }))
+  Command.withHandler(({ file, format, lspconfig, progress, project, severity, strict }) => Effect.gen(function*() {
+    const fs = yield* FileSystem.FileSystem
+    const replacement = yield* resolveTypeScriptExecutable
+    yield* fs.chmod(replacement.path, 0o755).pipe(
+      Effect.mapError(() => new ChmodBinaryError({ targetPath: replacement.path }))
+    )
+    const result = runDiagnosticsBinary(replacement.path, {
+      cwd: process.cwd(),
+      file: Option.getOrUndefined(file),
+      project: Option.getOrUndefined(project),
+      format,
+      strict,
+      severity: Option.getOrUndefined(severity),
+      progress,
+      lspconfig: Option.getOrUndefined(lspconfig)
+    })
+    propagateDiagnosticsExit(result)
+  }))
 )
 
 const rootCommand = Command.make("tsgo").pipe(
   Command.withSubcommands([patchCommand, unpatchCommand, getExePathCommand, diagnosticsCommand, setupCommand, configCommand])
 )
-
 
 rootCommand.pipe(
   Command.run({ version: pkgJson.version }),
