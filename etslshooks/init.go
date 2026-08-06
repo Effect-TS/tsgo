@@ -325,18 +325,6 @@ func formatLayerHover(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.Sou
 	return b.String()
 }
 
-// formatLayerTypeParams formats Layer type parameters (Provides, Error, Requires).
-func formatLayerTypeParams(c *checker.Checker, layer *typeparser.Layer, isMarkdown bool) string {
-	rOutStr := c.TypeToStringEx(layer.ROut, nil, checker.TypeFormatFlagsNoTruncation, nil)
-	eStr := c.TypeToStringEx(layer.E, nil, checker.TypeFormatFlagsNoTruncation, nil)
-	rInStr := c.TypeToStringEx(layer.RIn, nil, checker.TypeFormatFlagsNoTruncation, nil)
-
-	if isMarkdown {
-		return fmt.Sprintf("```ts\n/* Layer Type Parameters */\ntype Provides = %s\ntype Error = %s\ntype Requires = %s\n```\n", rOutStr, eStr, rInStr)
-	}
-	return fmt.Sprintf("Layer Type Parameters:\n  Provides = %s\n  Error = %s\n  Requires = %s\n", rOutStr, eStr, rInStr)
-}
-
 // isDeclarationName checks whether the given node is the name node of a variable or property declaration.
 // This is used to restrict layer hover enrichment to the declaration name only,
 // not to arbitrary nodes within the initializer expression.
