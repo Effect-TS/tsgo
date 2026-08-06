@@ -11,7 +11,7 @@
     "test": "node --test test/*.test.ts"
   },
   "dependencies": {
-    "@effect/platform-node": "^4.0.0-beta.103",
+    "@effect/platform-node": "^4.0.0-beta.104",
     "effect": "^4.0.0-beta.104",
     "semver": "^7.7.2"
   },

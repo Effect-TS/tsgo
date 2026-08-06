@@ -18,8 +18,8 @@ importers:
   _packages/tsgo:
     devDependencies:
       '@effect/platform-node':
-        specifier: ^4.0.0-beta.103
-        version: 4.0.0-beta.103(effect@4.0.0-beta.104)(ioredis@5.9.2)
+        specifier: ^4.0.0-beta.104
+        version: 4.0.0-beta.104(effect@4.0.0-beta.104)(ioredis@5.9.2)
       '@effect/platform-node-shared':
         specifier: ^4.0.0-beta.104
         version: 4.0.0-beta.104(effect@4.0.0-beta.104)
@@ -78,8 +78,8 @@ importers:
   _tools/repoctl:
     dependencies:
       '@effect/platform-node':
-        specifier: ^4.0.0-beta.103
-        version: 4.0.0-beta.103(effect@4.0.0-beta.104)(ioredis@5.9.2)
+        specifier: ^4.0.0-beta.104
+        version: 4.0.0-beta.104(effect@4.0.0-beta.104)(ioredis@5.9.2)
       effect:
         specifier: ^4.0.0-beta.104
         version: 4.0.0-beta.104
@@ -309,11 +309,11 @@ packages:
     peerDependencies:
       effect: ^4.0.0-beta.104
 
-  '@effect/platform-node@4.0.0-beta.103':
-    resolution: {integrity: sha512-VD8fbpendwFokMwzC7/MxazjhEVDihPC5NZtomYEyZwGaA1LXMvwP1y8pfXwfshUkG56TN4EMQqzu72c0B9FhA==}
+  '@effect/platform-node@4.0.0-beta.104':
+    resolution: {integrity: sha512-edqD0sRzL3Qow26TnD+RuHNVolFB7c1M/xWGzW0TRc7PzXpRWQawM1haMXOrB8W1UXpg8T8jF5MU56vFhPGJyw==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
-      effect: ^4.0.0-beta.103
+      effect: ^4.0.0-beta.104
       ioredis: ^5.7.0
 
   '@effect/vitest@0.27.0':
@@ -1591,7 +1591,7 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  '@effect/platform-node@4.0.0-beta.103(effect@4.0.0-beta.104)(ioredis@5.9.2)':
+  '@effect/platform-node@4.0.0-beta.104(effect@4.0.0-beta.104)(ioredis@5.9.2)':
     dependencies:
       '@effect/platform-node-shared': 4.0.0-beta.104(effect@4.0.0-beta.104)
       effect: 4.0.0-beta.104
