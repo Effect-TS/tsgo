@@ -769,6 +769,35 @@ describe("computeChanges", () => {
   })
 
   describe("post-apply messages", () => {
+    const installMessage = "`package.json` changed. Run your package manager's install command " +
+      "(for example, `pnpm install`, `npm install`, `yarn install`, or `bun install`)."
+
+    it("should recommend installing when package.json changes", () => {
+      const result = runComputeChanges({})
+
+      expect(result.messages).toContain(installMessage)
+    })
+
+    it("should not recommend installing when package.json is unchanged", () => {
+      const packageJsonText = JSON.stringify({
+        name: "test-project",
+        version: "1.0.0",
+        devDependencies: {
+          "@effect/tsgo": "0.0.4",
+          "typescript": TEST_TYPESCRIPT_VERSION
+        },
+        scripts: {
+          prepare: "effect-tsgo patch --typescript --no-oxlint"
+        }
+      }, null, 2)
+      const result = runComputeChanges({ packageJsonText })
+
+      expect(result.codeActions.some((action) =>
+        action.changes.some((change) => change.fileName === "/test/package.json")
+      )).toBe(false)
+      expect(result.messages).not.toContain(installMessage)
+    })
+
     it("should include patch message when installing", () => {
       const result = runComputeChanges({})
 

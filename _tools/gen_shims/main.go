@@ -15,7 +15,9 @@ import (
 	"log"
 	"maps"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"runtime"
 	"slices"
 	"strconv"
 	"strings"
@@ -32,6 +34,10 @@ const tsgoInternalPrefix = "github.com/microsoft/typescript-go/internal/"
 const generatedMarker = ".generated-by-gen-shims"
 
 const shimModulePrefix = "github.com/microsoft/typescript-go/shim"
+
+const shimCacheEnvironment = "TSGO_SHIM_CACHE_DIR"
+
+const shimCacheVersion = "v1"
 
 var packagesToShim = []string{
 	"api",
@@ -118,6 +124,12 @@ type ExtraShim struct {
 type shimInputs struct {
 	extra   map[string]ExtraShim
 	helpers map[string][]byte
+}
+
+type gitInput struct {
+	root       string
+	paths      []string
+	extensions []string
 }
 
 func normalizeStrings(values []string) []string {
@@ -226,6 +238,7 @@ func loadShimInputs(configRoot string, overlayRoots []string) (shimInputs, error
 				}
 				return nil
 			}
+			data = bytes.ReplaceAll(data, []byte("\r\n"), []byte("\n"))
 			if _, err := parser.ParseFile(token.NewFileSet(), filePath, data, parser.AllErrors); err != nil {
 				return fmt.Errorf("validate shim helper %s: %w", filePath, err)
 			}
@@ -329,6 +342,232 @@ func writeShimHelpers(root string, helpers map[string][]byte) error {
 	return nil
 }
 
+func writeHashValue(writer io.Writer, value string) error {
+	if _, err := io.WriteString(writer, strconv.Itoa(len(value))+":"); err != nil {
+		return err
+	}
+	_, err := io.WriteString(writer, value)
+	return err
+}
+
+func runGitToWriter(writer io.Writer, root string, arguments ...string) error {
+	command := exec.Command("git", append([]string{"-C", root}, arguments...)...)
+	command.Stdout = writer
+	var stderr bytes.Buffer
+	command.Stderr = &stderr
+	if err := command.Run(); err != nil {
+		return fmt.Errorf("git %s in %s: %w: %s", strings.Join(arguments, " "), root, err, strings.TrimSpace(stderr.String()))
+	}
+	return nil
+}
+
+func gitOutput(root string, arguments ...string) ([]byte, error) {
+	var output bytes.Buffer
+	if err := runGitToWriter(&output, root, arguments...); err != nil {
+		return nil, err
+	}
+	return output.Bytes(), nil
+}
+
+func gitInputDigest(inputs []gitInput) (string, error) {
+	digest := sha256.New()
+	for _, value := range []string{shimCacheVersion, runtime.Version()} {
+		if err := writeHashValue(digest, value); err != nil {
+			return "", err
+		}
+	}
+	for _, input := range inputs {
+		if err := writeHashValue(digest, "repository"); err != nil {
+			return "", err
+		}
+		for _, path := range input.paths {
+			if err := writeHashValue(digest, filepath.ToSlash(path)); err != nil {
+				return "", err
+			}
+		}
+		treeArguments := []string{"ls-tree", "HEAD", "--"}
+		treeArguments = append(treeArguments, input.paths...)
+		if err := runGitToWriter(digest, input.root, treeArguments...); err != nil {
+			return "", err
+		}
+		diffArguments := []string{"diff", "--no-ext-diff", "--binary", "HEAD", "--"}
+		diffArguments = append(diffArguments, input.paths...)
+		if err := runGitToWriter(digest, input.root, diffArguments...); err != nil {
+			return "", err
+		}
+		untracked := []string{}
+		for _, arguments := range [][]string{
+			{"ls-files", "--others", "--exclude-standard", "-z", "--"},
+			{"ls-files", "--others", "--ignored", "--exclude-standard", "-z", "--"},
+		} {
+			arguments = append(arguments, input.paths...)
+			output, err := gitOutput(input.root, arguments...)
+			if err != nil {
+				return "", err
+			}
+			for path := range strings.SplitSeq(string(output), "\x00") {
+				if path == "" || len(input.extensions) > 0 && !slices.ContainsFunc(input.extensions, func(extension string) bool {
+					return strings.HasSuffix(path, extension)
+				}) {
+					continue
+				}
+				untracked = append(untracked, path)
+			}
+		}
+		slices.Sort(untracked)
+		for _, path := range slices.Compact(untracked) {
+			if err := writeHashValue(digest, filepath.ToSlash(path)); err != nil {
+				return "", err
+			}
+			file, err := os.Open(filepath.Join(input.root, filepath.FromSlash(path)))
+			if err != nil {
+				return "", err
+			}
+			info, err := file.Stat()
+			if err != nil {
+				_ = file.Close()
+				return "", err
+			}
+			if err := writeHashValue(digest, strconv.FormatInt(info.Size(), 10)); err != nil {
+				_ = file.Close()
+				return "", err
+			}
+			_, copyErr := io.Copy(digest, file)
+			closeErr := file.Close()
+			if copyErr != nil {
+				return "", copyErr
+			}
+			if closeErr != nil {
+				return "", closeErr
+			}
+		}
+	}
+	return fmt.Sprintf("%x", digest.Sum(nil)), nil
+}
+
+func shimInputDigest(repositoryRoot string, inputs shimInputs) (string, error) {
+	gitDigest, err := gitInputDigest([]gitInput{
+		{root: repositoryRoot, paths: []string{"_tools/gen_shims"}},
+		{root: filepath.Join(repositoryRoot, "typescript-go"), paths: []string{"."}, extensions: []string{".go", ".mod", ".sum"}},
+	})
+	if err != nil {
+		return "", err
+	}
+	digest := sha256.New()
+	if err := writeHashValue(digest, gitDigest); err != nil {
+		return "", err
+	}
+	for _, packagePath := range slices.Sorted(maps.Keys(inputs.extra)) {
+		data, err := json.Marshal(inputs.extra[packagePath])
+		if err != nil {
+			return "", err
+		}
+		if err := writeHashValue(digest, packagePath); err != nil {
+			return "", err
+		}
+		if err := writeHashValue(digest, string(data)); err != nil {
+			return "", err
+		}
+	}
+	for _, relative := range slices.Sorted(maps.Keys(inputs.helpers)) {
+		if err := writeHashValue(digest, filepath.ToSlash(relative)); err != nil {
+			return "", err
+		}
+		if err := writeHashValue(digest, string(inputs.helpers[relative])); err != nil {
+			return "", err
+		}
+	}
+	return fmt.Sprintf("%x", digest.Sum(nil)), nil
+}
+
+func copyDirectory(source, target string) error {
+	return filepath.WalkDir(source, func(path string, entry fs.DirEntry, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
+		relative, err := filepath.Rel(source, path)
+		if err != nil {
+			return err
+		}
+		if relative == "." {
+			return os.MkdirAll(target, 0o755)
+		}
+		targetPath := filepath.Join(target, relative)
+		info, err := entry.Info()
+		if err != nil {
+			return err
+		}
+		if entry.IsDir() {
+			return os.MkdirAll(targetPath, info.Mode().Perm())
+		}
+		if !info.Mode().IsRegular() {
+			return fmt.Errorf("unsupported cached shim file %s", path)
+		}
+		data, err := os.ReadFile(path)
+		if err != nil {
+			return err
+		}
+		return writeFile(targetPath, data, info.Mode().Perm())
+	})
+}
+
+func shimCacheEntry(cacheRoot, digest string) string {
+	return filepath.Join(cacheRoot, shimCacheVersion, digest)
+}
+
+func restoreShimCache(cacheRoot, digest, outputRoot string) (bool, error) {
+	entry := shimCacheEntry(cacheRoot, digest)
+	if _, err := os.Stat(filepath.Join(entry, ".complete")); errors.Is(err, os.ErrNotExist) {
+		return false, nil
+	} else if err != nil {
+		return false, err
+	}
+	source := filepath.Join(entry, "shim")
+	if _, err := os.Stat(filepath.Join(source, generatedMarker)); err != nil {
+		return false, nil
+	}
+	if err := resetOutputRoot(outputRoot); err != nil {
+		return false, err
+	}
+	if err := copyDirectory(source, outputRoot); err != nil {
+		return false, err
+	}
+	return true, nil
+}
+
+func storeShimCache(cacheRoot, digest, outputRoot string) error {
+	entry := shimCacheEntry(cacheRoot, digest)
+	if _, err := os.Stat(filepath.Join(entry, ".complete")); err == nil {
+		return nil
+	} else if !errors.Is(err, os.ErrNotExist) {
+		return err
+	}
+	if _, err := os.Stat(filepath.Join(outputRoot, generatedMarker)); err != nil {
+		return fmt.Errorf("cache generated shims: %w", err)
+	}
+	parent := filepath.Dir(entry)
+	if err := os.MkdirAll(parent, 0o755); err != nil {
+		return err
+	}
+	staging, err := os.MkdirTemp(parent, ".shim-cache-")
+	if err != nil {
+		return err
+	}
+	defer func() { _ = os.RemoveAll(staging) }()
+	if err := copyDirectory(outputRoot, filepath.Join(staging, "shim")); err != nil {
+		return err
+	}
+	if err := writeFile(filepath.Join(staging, ".complete"), []byte(digest+"\n"), 0o644); err != nil {
+		return err
+	}
+	if err := os.Rename(staging, entry); err != nil {
+		if _, markerErr := os.Stat(filepath.Join(entry, ".complete")); markerErr != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func preparePackageLoad(repositoryRoot string) ([]string, string, error) {
 	etscoreModule := []byte("module github.com/effect-ts/tsgo/etscore\n\ngo 1.26\n")
 	etscoreSource := []byte(`package etscore
@@ -419,9 +658,11 @@ func main() {
 func run() error {
 	started := time.Now()
 	var extraShimRoots stringFlags
+	var disableCache bool
 	var repositoryRoot string
 	flag.StringVar(&repositoryRoot, "repository-root", "", "path to the repository root")
 	flag.Var(&extraShimRoots, "extra-shim-root", "additional shim config/helper root (repeatable)")
+	flag.BoolVar(&disableCache, "no-cache", false, "disable the generated shim cache")
 	flag.Parse()
 
 	workingDirectory, err := os.Getwd()
@@ -462,6 +703,26 @@ func run() error {
 	packagesToShimFullNames := make([]string, len(packagesToShim))
 	for i, pkg := range packagesToShim {
 		packagesToShimFullNames[i] = tsgoInternalPrefix + pkg
+	}
+	cacheRoot := os.Getenv(shimCacheEnvironment)
+	if cacheRoot == "" {
+		cacheRoot = filepath.Join(repositoryRoot, ".tmp", "gen-shims-cache")
+	}
+	cacheDigest := ""
+	if !disableCache {
+		cacheDigest, err = shimInputDigest(repositoryRoot, inputs)
+		if err != nil {
+			fmt.Printf("Unable to compute shim cache key; generating shims: %v\n", err)
+			cacheDigest = ""
+		} else if hit, restoreErr := restoreShimCache(cacheRoot, cacheDigest, shimPath); restoreErr != nil {
+			fmt.Printf("Unable to restore shim cache entry %s; generating shims: %v\n", cacheDigest, restoreErr)
+		} else if hit {
+			if err := writeFile(goWorkPath, updatedGoWork, 0o644); err != nil {
+				return fmt.Errorf("update go.work: %w", err)
+			}
+			fmt.Printf("Restored %d shim packages from cache %s in %s\n", len(packagesToShimFullNames), cacheDigest, time.Since(started).Round(time.Millisecond))
+			return nil
+		}
 	}
 
 	environment, modFile, err := preparePackageLoad(repositoryRoot)
@@ -905,6 +1166,13 @@ func run() error {
 	}
 	if err := writeFile(goWorkPath, updatedGoWork, 0o644); err != nil {
 		return fmt.Errorf("update go.work: %w", err)
+	}
+	if cacheDigest != "" {
+		if err := storeShimCache(cacheRoot, cacheDigest, shimPath); err != nil {
+			fmt.Printf("Unable to store shim cache entry %s: %v\n", cacheDigest, err)
+		} else {
+			fmt.Printf("Stored shim cache entry %s\n", cacheDigest)
+		}
 	}
 	fmt.Printf("Generated %d shim packages in %s (total %s)\n", len(loadedPackages), time.Since(generateStarted).Round(time.Millisecond), time.Since(started).Round(time.Millisecond))
 	return nil

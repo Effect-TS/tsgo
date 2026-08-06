@@ -15,6 +15,7 @@ exports[`Setup CLI > should add LSP plugin alongside existing plugins > change s
 
 exports[`Setup CLI > should add LSP plugin alongside existing plugins > messages 1`] = `
 [
+  "\`package.json\` changed. Run your package manager's install command (for example, \`pnpm install\`, \`npm install\`, \`yarn install\`, or \`bun install\`).",
   "Run \`effect-tsgo patch --typescript --no-oxlint\` to complete the installation.",
 ]
 `;
@@ -77,6 +78,7 @@ exports[`Setup CLI > should add LSP with VS Code editor selected and create new 
 
 exports[`Setup CLI > should add LSP with VS Code editor selected and create new settings file > messages 1`] = `
 [
+  "\`package.json\` changed. Run your package manager's install command (for example, \`pnpm install\`, \`npm install\`, \`yarn install\`, or \`bun install\`).",
   "Run \`effect-tsgo patch --typescript --no-oxlint\` to complete the installation.",
   "",
   "VS Code / Cursor / VS Code-based editors:",
@@ -126,6 +128,7 @@ exports[`Setup CLI > should add LSP with custom diagnostic severities when no pl
 
 exports[`Setup CLI > should add LSP with custom diagnostic severities when no plugin exists > messages 1`] = `
 [
+  "\`package.json\` changed. Run your package manager's install command (for example, \`pnpm install\`, \`npm install\`, \`yarn install\`, or \`bun install\`).",
   "Run \`effect-tsgo patch --typescript --no-oxlint\` to complete the installation.",
 ]
 `;
@@ -173,6 +176,7 @@ exports[`Setup CLI > should add custom diagnostic severities when plugin exists 
 
 exports[`Setup CLI > should add custom diagnostic severities when plugin exists without custom values > messages 1`] = `
 [
+  "\`package.json\` changed. Run your package manager's install command (for example, \`pnpm install\`, \`npm install\`, \`yarn install\`, or \`bun install\`).",
   "Run \`effect-tsgo patch --typescript --no-oxlint\` to complete the installation.",
 ]
 `;
@@ -223,6 +227,7 @@ exports[`Setup CLI > should generate changes for Astro-style configs using the l
 
 exports[`Setup CLI > should generate changes for Astro-style configs using the legacy prepare command > messages 1`] = `
 [
+  "\`package.json\` changed. Run your package manager's install command (for example, \`pnpm install\`, \`npm install\`, \`yarn install\`, or \`bun install\`).",
   "Run \`effect-tsgo patch --typescript --no-oxlint\` to complete the installation.",
 ]
 `;
@@ -290,6 +295,7 @@ exports[`Setup CLI > should generate changes for adding LSP with defaults > chan
 
 exports[`Setup CLI > should generate changes for adding LSP with defaults > messages 1`] = `
 [
+  "\`package.json\` changed. Run your package manager's install command (for example, \`pnpm install\`, \`npm install\`, \`yarn install\`, or \`bun install\`).",
   "Run \`effect-tsgo patch --typescript --no-oxlint\` to complete the installation.",
 ]
 `;
@@ -333,6 +339,7 @@ exports[`Setup CLI > should generate changes for adding LSP with prepare script 
 
 exports[`Setup CLI > should generate changes for adding LSP with prepare script > messages 1`] = `
 [
+  "\`package.json\` changed. Run your package manager's install command (for example, \`pnpm install\`, \`npm install\`, \`yarn install\`, or \`bun install\`).",
   "Run \`effect-tsgo patch --typescript --no-oxlint\` to complete the installation.",
 ]
 `;
@@ -377,6 +384,7 @@ exports[`Setup CLI > should generate changes for removing LSP and prepare script
 
 exports[`Setup CLI > should generate changes for removing LSP and prepare script > messages 1`] = `
 [
+  "\`package.json\` changed. Run your package manager's install command (for example, \`pnpm install\`, \`npm install\`, \`yarn install\`, or \`bun install\`).",
   "Run \`effect-tsgo unpatch --typescript --no-oxlint\` to restore the original integrations.",
 ]
 `;
@@ -419,6 +427,7 @@ exports[`Setup CLI > should generate changes for removing LSP when already insta
 
 exports[`Setup CLI > should generate changes for removing LSP when already installed > messages 1`] = `
 [
+  "\`package.json\` changed. Run your package manager's install command (for example, \`pnpm install\`, \`npm install\`, \`yarn install\`, or \`bun install\`).",
   "Run \`effect-tsgo unpatch --typescript --no-oxlint\` to restore the original integrations.",
 ]
 `;
@@ -460,6 +469,7 @@ exports[`Setup CLI > should not override existing plugins when adding LSP plugin
 
 exports[`Setup CLI > should not override existing plugins when adding LSP plugin > messages 1`] = `
 [
+  "\`package.json\` changed. Run your package manager's install command (for example, \`pnpm install\`, \`npm install\`, \`yarn install\`, or \`bun install\`).",
   "Run \`effect-tsgo patch --typescript --no-oxlint\` to complete the installation.",
 ]
 `;
@@ -540,6 +550,7 @@ exports[`Setup CLI > should preserve all existing VS Code settings from a real r
 
 exports[`Setup CLI > should preserve all existing VS Code settings from a real repository config > messages 1`] = `
 [
+  "\`package.json\` changed. Run your package manager's install command (for example, \`pnpm install\`, \`npm install\`, \`yarn install\`, or \`bun install\`).",
   "Run \`effect-tsgo patch --typescript --no-oxlint\` to complete the installation.",
   "",
   "VS Code / Cursor / VS Code-based editors:",
@@ -605,6 +616,7 @@ exports[`Setup CLI > should preserve existing VS Code settings when adding LSP-s
 
 exports[`Setup CLI > should preserve existing VS Code settings when adding LSP-specific settings > messages 1`] = `
 [
+  "\`package.json\` changed. Run your package manager's install command (for example, \`pnpm install\`, \`npm install\`, \`yarn install\`, or \`bun install\`).",
   "Run \`effect-tsgo patch --typescript --no-oxlint\` to complete the installation.",
   "",
   "VS Code / Cursor / VS Code-based editors:",
@@ -654,6 +666,7 @@ exports[`Setup CLI > should remove only LSP patch command from prepare script wi
 
 exports[`Setup CLI > should remove only LSP patch command from prepare script with multiple commands > messages 1`] = `
 [
+  "\`package.json\` changed. Run your package manager's install command (for example, \`pnpm install\`, \`npm install\`, \`yarn install\`, or \`bun install\`).",
   "Run \`effect-tsgo unpatch --typescript --no-oxlint\` to restore the original integrations.",
 ]
 `;
@@ -698,6 +711,7 @@ exports[`Setup CLI > should remove only LSP plugin while preserving other plugin
 
 exports[`Setup CLI > should remove only LSP plugin while preserving other plugins > messages 1`] = `
 [
+  "\`package.json\` changed. Run your package manager's install command (for example, \`pnpm install\`, \`npm install\`, \`yarn install\`, or \`bun install\`).",
   "Run \`effect-tsgo unpatch --typescript --no-oxlint\` to restore the original integrations.",
 ]
 `;
@@ -742,6 +756,7 @@ exports[`Setup CLI > should replace existing tsconfig schema when adding LSP > c
 
 exports[`Setup CLI > should replace existing tsconfig schema when adding LSP > messages 1`] = `
 [
+  "\`package.json\` changed. Run your package manager's install command (for example, \`pnpm install\`, \`npm install\`, \`yarn install\`, or \`bun install\`).",
   "Run \`effect-tsgo patch --typescript --no-oxlint\` to complete the installation.",
 ]
 `;
@@ -785,6 +800,7 @@ exports[`Setup CLI > should update LSP version when already installed with older
 
 exports[`Setup CLI > should update LSP version when already installed with older version > messages 1`] = `
 [
+  "\`package.json\` changed. Run your package manager's install command (for example, \`pnpm install\`, \`npm install\`, \`yarn install\`, or \`bun install\`).",
   "Run \`effect-tsgo patch --typescript --no-oxlint\` to complete the installation.",
 ]
 `;
@@ -831,6 +847,7 @@ exports[`Setup CLI > should update custom diagnostic severities when plugin alre
 
 exports[`Setup CLI > should update custom diagnostic severities when plugin already has custom values > messages 1`] = `
 [
+  "\`package.json\` changed. Run your package manager's install command (for example, \`pnpm install\`, \`npm install\`, \`yarn install\`, or \`bun install\`).",
   "Run \`effect-tsgo patch --typescript --no-oxlint\` to complete the installation.",
 ]
 `;
