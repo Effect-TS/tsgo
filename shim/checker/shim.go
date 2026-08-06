@@ -99,6 +99,8 @@ type Checker = checker.Checker
 func Checker_isBlockScopedNameDeclaredBeforeUse(recv *checker.Checker, declaration *ast.Node, usage *ast.Node) bool
 //go:linkname Checker_isReferenceToType github.com/microsoft/typescript-go/internal/checker.(*Checker).isReferenceToType
 func Checker_isReferenceToType(recv *checker.Checker, t *checker.Type, target *checker.Type) bool
+//go:linkname Checker_checkExpressionWithContextualType github.com/microsoft/typescript-go/internal/checker.(*Checker).checkExpressionWithContextualType
+func Checker_checkExpressionWithContextualType(recv *checker.Checker, node *ast.Node, contextualType *checker.Type, inferenceContext *checker.InferenceContext, checkMode checker.CheckMode) *checker.Type
 //go:linkname Checker_getSymbolIfSameReference github.com/microsoft/typescript-go/internal/checker.(*Checker).getSymbolIfSameReference
 func Checker_getSymbolIfSameReference(recv *checker.Checker, s1 *ast.Symbol, s2 *ast.Symbol) *ast.Symbol
 //go:linkname Checker_getSymbolOfDeclaration github.com/microsoft/typescript-go/internal/checker.(*Checker).getSymbolOfDeclaration

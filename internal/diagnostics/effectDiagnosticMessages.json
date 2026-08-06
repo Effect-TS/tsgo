@@ -438,5 +438,9 @@
     "`AbortController` is manually constructed inside Effect code. Use `Effect.abortSignal` for Effect-managed cancellation. effect(abortControllerInEffect)": {
         "category": "Suggestion",
         "code": 377111
+    },
+    "This input is already assignable to the schema's Encoded type. Use `{0}` to preserve compile-time type checking instead of discarding the input type through `{1}`. effect(preferTypedSchemaDecoder)": {
+        "category": "Suggestion",
+        "code": 377112
     }
 }

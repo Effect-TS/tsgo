@@ -1,0 +1,27 @@
+=== Quick Fix Inventory ===
+
+[D1] (8:30-8:47) TS377112: This input is already assignable to the schema's Encoded type. Use `decodeSync` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownSync`. effect(preferTypedSchemaDecoder)
+  Fix 0: "Disable preferTypedSchemaDecoder for this line"
+  Fix 1: "Disable preferTypedSchemaDecoder for entire file"
+  Fix 2: "Replace with decodeSync"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable preferTypedSchemaDecoder for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable preferTypedSchemaDecoder for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with decodeSync" ===
+
+--- file:///.src/preferTypedSchemaDecoder_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferTypedSchemaDecoder:warning
+
+import { Schema } from "effect"
+
+const Person = Schema.Struct({ name: Schema.String })
+
+export const person = Schema.decodeSync(Person)({ name: "Ada" })
+

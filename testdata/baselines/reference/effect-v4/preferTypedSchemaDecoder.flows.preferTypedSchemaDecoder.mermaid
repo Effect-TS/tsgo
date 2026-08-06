@@ -1,0 +1,54 @@
+flowchart TB
+  0[/"type: #123; name: String; coordinates: Tuple#lt;readonly #91;Number, Number#93;#gt;; #125;<br/>node: #123;#92;n  name: Schema.String,#92;n  coordinates: Schema.Tuple#40;#91;Schema.Number, Schema.Number#93;#41;#92;n#125;"/]
+  1[/"type: #91;Number, Number#93;<br/>node: #91;Schema.Number, Schema.Number#93;"/]
+  2["type: Tuple#lt;readonly #91;Number, Number#93;#gt;<br/>callee: Schema.Tuple<br/>args: #91;#93;"]
+  3[/"type: #lt;const Elements extends ReadonlyArray#lt;Constraint#gt;#gt;#40;elements: Elements#41; =#gt; Tuple#lt;Elements#gt;<br/>node: Schema.Tuple"/]
+  4["type: Struct#lt;#123; readonly name: String; readonly coordinates: Tuple#lt;readonly #91;Number, Number#93;#gt;; #125;#gt;<br/>callee: Schema.Struct<br/>args: #91;#93;"]
+  5[/"type: #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields#41; =#gt; Struct#lt;Fields#gt;<br/>node: Schema.Struct"/]
+  6[/"type: #123; name: string; coordinates: #91;number, number#93;; #125;<br/>node: #123;#92;n  name: #quot;Ada#quot;,#92;n  coordinates: #91;1, 2#93; as #91;number, number#93;#92;n#125;"/]
+  7[/"type: #123; readonly name: string; readonly coordinates: readonly #91;number, number#93;; #125;<br/>node: Schema.decodeUnknownSync#40;Person#41;#40;person#41;"/]
+  8[/"type: #123; readonly name: string; readonly coordinates: readonly #91;number, number#93;; #125;<br/>node: Schema.decodeUnknownSync#40;Person#41;#40;#123; name: #quot;Ada#quot;, coordinates: #91;1, 2#93; #125;#41;"/]
+  9[/"type: Effect#lt;#123; readonly name: string; readonly coordinates: readonly #91;number, number#93;; #125;, SchemaError, never#gt;<br/>node: Schema.decodeUnknownEffect#40;Person#41;#40;person#41;"/]
+  10[/"type: Exit#lt;#123; readonly name: string; readonly coordinates: readonly #91;number, number#93;; #125;, SchemaError#gt;<br/>node: Schema.decodeUnknownExit#40;Person#41;#40;person#41;"/]
+  11[/"type: Option#lt;#123; readonly name: string; readonly coordinates: readonly #91;number, number#93;; #125;#gt;<br/>node: Schema.decodeUnknownOption#40;Person#41;#40;person#41;"/]
+  12[/"type: Result#lt;#123; readonly name: string; readonly coordinates: readonly #91;number, number#93;; #125;, SchemaError#gt;<br/>node: Schema.decodeUnknownResult#40;Person#41;#40;person#41;"/]
+  13[/"type: Promise#lt;#123; readonly name: string; readonly coordinates: readonly #91;number, number#93;; #125;#gt;<br/>node: Schema.decodeUnknownPromise#40;Person#41;#40;person#41;"/]
+  14[/"type: #123; readonly name: string; readonly coordinates: readonly #91;number, number#93;; #125;<br/>node: SchemaParser.decodeUnknownSync#40;Person#41;#40;person#41;"/]
+  15[/"type: #123; name: string; coordinates: #91;number, number#93;; #125;<br/>node: person"/]
+  16["type: #123; readonly name: string; readonly coordinates: readonly #91;number, number#93;; #125;<br/>callee: Schema.decodeUnknownSync<br/>args: #91;Person#93;"]
+  17[/"type: #lt;S extends ConstraintDecoder#lt;unknown#gt;#gt;#40;schema: S, options?: ParseOptions #124; undefined#41; =#gt; #40;input: unknown, options?: ParseOptions #124; undefined#41; =#gt; S#91;#quot;Type#quot;#93;<br/>node: Schema.decodeUnknownSync"/]
+  18[/"type: Struct#lt;#123; readonly name: String; readonly coordinates: Tuple#lt;readonly #91;Number, Number#93;#gt;; #125;#gt;<br/>node: Person"/]
+  19[/"type: #123; readonly name: string; readonly coordinates: readonly #91;number, number#93;; #125;<br/>node: decodeUnknownSync#40;Person#41;#40;person#41;"/]
+  20[/"type: #123; readonly name: string; readonly coordinates: readonly #91;number, number#93;; #125;<br/>node: Schema.decodeUnknownSync#40;Person#41;#40;#123; name: #quot;Ada#quot;, coordinates: #91;1, 2#93; #125;, #123; errors: #quot;all#quot; #125;#41;"/]
+  21[/"type: #123; readonly name: string; readonly coordinates: readonly #91;number, number#93;; #125;<br/>node: Schema.decodeUnknownSync#40;Person#41;#40;unknownInput#41;"/]
+  22[/"type: #123; readonly name: string; readonly coordinates: readonly #91;number, number#93;; #125;<br/>node: Schema.decodeUnknownSync#40;Person#41;#40;anyInput#41;"/]
+  23[/"type: #123; readonly name: string; readonly coordinates: readonly #91;number, number#93;; #125;<br/>node: Schema.decodeUnknownSync#40;Person#41;#40;wrongInput#41;"/]
+  24[/"type: #123; readonly name: string; readonly coordinates: readonly #91;number, number#93;; #125;<br/>node: Schema.decodeUnknownSync#40;Person#41;#40;#123; name: 1, coordinates: #91;1, 2#93; #125;#41;"/]
+  25[/"type: #123; readonly name: string; readonly coordinates: readonly #91;number, number#93;; #125;<br/>node: Schema.decodeUnknownSync#40;Person#41;#40;#123; name: #quot;Ada#quot; #125;#41;"/]
+  26[/"type: #123; readonly name: string; readonly coordinates: readonly #91;number, number#93;; #125;<br/>node: Schema.decodeUnknownSync#40;Person#41;#40;#123; name: #quot;Ada#quot;, coordinates: #91;1#93; #125;#41;"/]
+  27[["type: #lt;T#gt;#40;input: T#41; =#gt; #123; readonly name: string; readonly coordinates: readonly #91;number, number#93;; #125;<br/>node: function decodeGeneric#lt;T#gt;#40;input: T#41; #123;#92;n  return Schema.decodeUnknownSync#40;Person#41;#40;input#41;#92;n#125;"]]
+  28[/"type: #123; readonly name: string; readonly coordinates: readonly #91;number, number#93;; #125;<br/>node: Schema.decodeUnknownSync#40;Person#41;#40;input#41;"/]
+  29[["type: #lt;T extends string#gt;#40;input: #123; readonly name: T; readonly coordinates: #91;number, number#93;; #125;#41; =#gt; #123; readonly name: string; readonly coordinates: readonly #91;number, number#93;; #125;<br/>node: function decodeNestedGeneric#lt;T extends string#gt;#40;input: #123; readonly name: T; readonly coordinates: #91;number, number#93; #125;#41; #123;#92;n  return Schema.decodeUnknownSync#40;Person#41;#40;input#41;#92;n#125;"]]
+  30[/"type: #123; readonly name: string; readonly coordinates: readonly #91;number, number#93;; #125;<br/>node: Schema.decodeUnknownSync#40;Person#41;#40;input#41;"/]
+  31[/"type: #123; name: string; coordinates: #91;number, number#93;; #125;<br/>node: person"/]
+  32["type: #123; readonly name: string; readonly coordinates: readonly #91;number, number#93;; #125;<br/>callee: decodeGeneric<br/>args: #91;#93;"]
+  33[/"type: #lt;T#gt;#40;input: T#41; =#gt; #123; readonly name: string; readonly coordinates: readonly #91;number, number#93;; #125;<br/>node: decodeGeneric"/]
+  34[/"type: #123; name: string; coordinates: #91;number, number#93;; #125;<br/>node: person"/]
+  35["type: #123; readonly name: string; readonly coordinates: readonly #91;number, number#93;; #125;<br/>callee: decodeNestedGeneric<br/>args: #91;#93;"]
+  36[/"type: #lt;T extends string#gt;#40;input: #123; readonly name: T; readonly coordinates: #91;number, number#93;; #125;#41; =#gt; #123; readonly name: string; readonly coordinates: readonly #91;number, number#93;; #125;<br/>node: decodeNestedGeneric"/]
+  1 -->|"kind: pipe"| 2
+  3 -->|"kind: transformCallee"| 2
+  2 -->|"kind: usedBy"| 0
+  0 -->|"kind: pipe"| 4
+  5 -->|"kind: transformCallee"| 4
+  17 -->|"kind: transformCallee"| 16
+  18 -->|"kind: transformArg"| 16
+  15 -->|"kind: pipe"| 16
+  28 -->|"kind: potentialReturn"| 27
+  28 -->|"kind: usedBy"| 27
+  30 -->|"kind: potentialReturn"| 29
+  30 -->|"kind: usedBy"| 29
+  31 -->|"kind: pipe"| 32
+  33 -->|"kind: transformCallee"| 32
+  34 -->|"kind: pipe"| 35
+  36 -->|"kind: transformCallee"| 35
