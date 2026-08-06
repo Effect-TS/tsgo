@@ -1,5 +1,17 @@
 # @effect/tsgo
 
+## 0.34.0
+
+### Minor Changes
+
+- 974513e: Add a non-interactive `setup` workflow with explicit project, integration, diagnostic, editor, preview, and apply options. Setup now also recommends running the package manager install command whenever it changes `package.json`.
+
+### Patch Changes
+
+- ba4ec9a: Cache generated TypeScript-Go shims by their effective inputs during local repository setup and CI runs.
+- 6d0ffda: Remove unused internal helpers and add dead-code analysis to the repository lint workflow.
+- 892021a: Use absolute GitHub URLs for links in the published README so documentation links remain clickable on npm.
+
 ## 0.33.0
 
 ### Minor Changes
