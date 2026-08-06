@@ -6,7 +6,7 @@ import * as Path from "effect/Path"
 import * as ChildProcess from "effect/unstable/process/ChildProcess"
 import * as ChildProcessSpawner from "effect/unstable/process/ChildProcessSpawner"
 import { runCommand } from "./process.ts"
-import { getProfile, readUpstream, type ProfileName } from "./upstream.ts"
+import { type ComponentName, getComponent, readUpstream } from "./upstream.ts"
 
 const repositories = {
   tsgolint: "https://github.com/oxc-project/tsgolint.git",
@@ -53,12 +53,16 @@ const checkoutRevision = Effect.fnUntraced(function*(checkout: string, revision:
   yield* runGit(checkout, ["checkout", "--detach", revision])
 })
 
-export const cloneSubmodules = Effect.fnUntraced(function*(repositoryRoot: string, profile: ProfileName) {
+export const cloneSubmodules = Effect.fnUntraced(function*(
+  repositoryRoot: string,
+  componentName: ComponentName,
+  version?: string
+) {
   const fs = yield* FileSystem.FileSystem
   const path = yield* Path.Path
   const spawner = yield* ChildProcessSpawner.ChildProcessSpawner
   const upstream = yield* readUpstream(repositoryRoot)
-  const selected = yield* getProfile(upstream, profile)
+  const selected = yield* getComponent(upstream, componentName, version)
   const typescriptGoRepository = yield* readGit(repositoryRoot, [
     "config",
     "--blob",
@@ -67,11 +71,13 @@ export const cloneSubmodules = Effect.fnUntraced(function*(repositoryRoot: strin
     "submodule.typescript-go.url"
   ])
   const required = [
-    { name: "typescript-go", repository: typescriptGoRepository, revision: selected.ts.gitHead },
-    ...(selected.kind === "oxlint" ? [
-      { name: "tsgolint", repository: repositories.tsgolint, revision: selected.tsgolint.gitHead },
-      { name: "oxlint", repository: repositories.oxlint, revision: selected.oxlint.gitHead }
-    ] as const : [])
+    { name: "typescript-go", repository: typescriptGoRepository, revision: selected.typescript.gitHead },
+    ...(selected.name === "oxlint-tsgolint"
+      ? [{ name: "tsgolint", repository: repositories.tsgolint, revision: selected.gitHead }] as const
+      : []),
+    ...(selected.name === "oxlint"
+      ? [{ name: "oxlint", repository: repositories.oxlint, revision: selected.gitHead }] as const
+      : [])
   ] as const
   const reused = new Set<string>()
   const configuredOptional: Array<{
@@ -189,7 +195,7 @@ export const cloneSubmodules = Effect.fnUntraced(function*(repositoryRoot: strin
       continue
     }
 
-    yield* Console.log(`Cloning ${target.name} ${target.revision} for the ${profile} profile`)
+    yield* Console.log(`Cloning ${target.name} ${target.revision} for ${selected.name} ${selected.version}`)
     if (target.name === "typescript-go") {
       yield* runGit(repositoryRoot, [
         "config",
@@ -216,6 +222,7 @@ export const cloneSubmodules = Effect.fnUntraced(function*(repositoryRoot: strin
   }
 
   yield* runGit(repositoryRoot, ["add", ".gitmodules", ...required.map((target) => target.name)])
+  return selected
 })
 
 export const patchSubmodules = Effect.fnUntraced(function*(repositoryRoot: string) {

@@ -11,8 +11,11 @@ import {
   LSP_PACKAGE_NAME,
   LSP_PLUGIN_NAME,
   isNativeTypescriptVersion,
-  PATCH_COMMAND
+  OXLINT_PACKAGE_NAME,
+  OXLINT_TSGOLINT_PACKAGE_NAME,
+  VITE_PLUS_PACKAGE_NAME
 } from "./consts.js"
+import { getPatchIntegrations, hasPatchCommand } from "./patch-command.js"
 import type { RuleSeverity } from "./rule-info.js"
 
 /**
@@ -46,6 +49,21 @@ export const createAssessmentInput = (
       text: packageJsonText
     }
 
+    // Read .oxlintrc.json (optional)
+    const oxlintConfigPath = path.join(currentDir, ".oxlintrc.json")
+    const oxlintConfigExists = yield* fs.exists(oxlintConfigPath)
+
+    let oxlintConfigInput = Option.none<FileInput>()
+    if (oxlintConfigExists) {
+      const oxlintConfigText = yield* fs.readFileString(oxlintConfigPath).pipe(
+        Effect.mapError((cause) => new FileReadError({ path: oxlintConfigPath, cause }))
+      )
+      oxlintConfigInput = Option.some({
+        fileName: oxlintConfigPath,
+        text: oxlintConfigText
+      })
+    }
+
     // Read .vscode/settings.json (optional)
     const vscodeSettingsPath = path.join(currentDir, ".vscode", "settings.json")
     const vscodeSettingsExists = yield* fs.exists(vscodeSettingsPath)
@@ -64,6 +82,7 @@ export const createAssessmentInput = (
     return {
       packageJson: packageJsonInput,
       tsconfig: tsconfigInput,
+      oxlintConfig: oxlintConfigInput,
       vscodeSettings: vscodeSettingsInput
     }
   })
@@ -101,6 +120,9 @@ const assessPackageJson = (
   }
 
   const lspVersion = assessDependency(LSP_PACKAGE_NAME)
+  const oxlintVersion = assessDependency(OXLINT_PACKAGE_NAME)
+  const oxlintTsgolintVersion = assessDependency(OXLINT_TSGOLINT_PACKAGE_NAME)
+  const vitePlusVersion = assessDependency(VITE_PLUS_PACKAGE_NAME)
   let typescriptVersion = Option.none<PackageDependency>()
   for (const packageName of defaultTypescriptPackageNames) {
     const typescriptDep = assessDependency(packageName)
@@ -114,7 +136,8 @@ const assessPackageJson = (
   const prepareScript = "prepare" in (parsed.scripts ?? {})
     ? Option.some({
       script: parsed.scripts!.prepare,
-      hasPatch: parsed.scripts!.prepare.toLowerCase().includes(PATCH_COMMAND)
+      hasPatch: hasPatchCommand(parsed.scripts!.prepare),
+      integrations: getPatchIntegrations(parsed.scripts!.prepare)
     })
     : Option.none()
 
@@ -125,6 +148,9 @@ const assessPackageJson = (
     text: input.text,
     lspVersion,
     typescriptVersion,
+    oxlintVersion,
+    oxlintTsgolintVersion,
+    vitePlusVersion,
     prepareScript
   }
 }
@@ -209,6 +235,22 @@ const assessVSCodeSettings = (
   }
 }
 
+const assessOxlintConfig = (
+  input: FileInput
+): Assessment.OxlintConfig => {
+  const sourceFile = ts.parseJsonText(input.fileName, input.text)
+  const errors: Array<ts.Diagnostic> = []
+  const parsed = ts.convertToObject(sourceFile, errors) as Record<string, unknown>
+
+  return {
+    path: input.fileName,
+    sourceFile,
+    parsed,
+    text: input.text,
+    currentSchemaPath: typeof parsed.$schema === "string" ? Option.some(parsed.$schema) : Option.none()
+  }
+}
+
 /**
  * Perform assessment from input data
  */
@@ -218,6 +260,10 @@ export const assess = (
   const packageJson = assessPackageJson(input.packageJson)
   const tsconfig = assessTsConfig(input.tsconfig)
 
+  const oxlintConfig = Option.isSome(input.oxlintConfig)
+    ? Option.some(assessOxlintConfig(input.oxlintConfig.value))
+    : Option.none<Assessment.OxlintConfig>()
+
   const vscodeSettings = Option.isSome(input.vscodeSettings)
     ? Option.some(assessVSCodeSettings(input.vscodeSettings.value))
     : Option.none<Assessment.VSCodeSettings>()
@@ -225,6 +271,7 @@ export const assess = (
   return {
     packageJson,
     tsconfig,
+    oxlintConfig,
     vscodeSettings
   }
 }

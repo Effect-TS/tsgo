@@ -1,79 +1,210 @@
 name: Release
 
 on:
-  pull_request:
-    types: [closed]
+  push:
     branches:
       - main
 
-permissions:
-  contents: write
-  id-token: write
-
 concurrency:
-  group: release-${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
-  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+  queue: max
+
+permissions: {}
 
 jobs:
-  build:
-    if: >-
-      github.event_name == 'pull_request' &&
-      github.event.pull_request.merged == true &&
-      github.event.pull_request.head.ref == 'changeset-release/main' &&
-      github.repository_owner == 'Effect-TS'
-    name: Build ${{ matrix.profile }} ${{ matrix.npm_target }}
+  select-mode:
+    name: Select Mode
+    if: github.repository_owner == 'Effect-TS'
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-    strategy:
-      matrix:
-        npm_target:
-          - darwin-arm64
-          - darwin-x64
-          - win32-x64
-          - win32-arm64
-          - linux-x64
-          - linux-arm64
-          - linux-arm
-        profile:
-          - next
-          - latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    outputs:
+      mode: ${{ steps.select-mode.outputs.mode }}
+      publish-plan-artifact-id: ${{ steps.select-mode.outputs.publish-plan-artifact-id }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
         with:
-          ref: ${{ github.event.pull_request.merge_commit_sha }}
-          submodules: recursive
+          fetch-depth: 0
+          persist-credentials: false
 
-      - name: Setup ${{ matrix.profile }} repo
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Select release mode
+        id: select-mode
+        uses: changesets/action/select-mode@2d9f7af6402422be60d377f151c7618011bba45a # v2.0.0-next.4
+
+  version:
+    name: Version Packages
+    needs: select-mode
+    if: needs.select-mode.outputs.mode == 'version'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Create or update release PR
+        uses: changesets/action/version@2d9f7af6402422be60d377f151c7618011bba45a # v2.0.0-next.4
+        with:
+          github-token: ${{ github.token }}
+          script: pnpm exec repoctl changeset version
+
+  release-matrix:
+    name: Generate Release Matrix
+    needs: select-mode
+    if: needs.select-mode.outputs.mode == 'publish'
+    uses: ./.github/workflows/repoctl-matrix.yml
+    permissions:
+      contents: read
+    with:
+      name: release
+
+  build-release-artifacts:
+    name: Build ${{ matrix.component }} ${{ matrix.version }} for ${{ matrix.target }}
+    needs: [select-mode, release-matrix]
+    if: needs.select-mode.outputs.mode == 'publish'
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 45
+    permissions:
+      contents: read
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      fail-fast: true
+      matrix: ${{ fromJSON(needs.release-matrix.outputs.matrix) }}
+    steps:
+      - name: Enable long Git paths
+        if: runner.os == 'Windows'
+        run: git config --system core.longpaths true
+
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          submodules: recursive
+          persist-credentials: false
+
+      - name: Setup ${{ matrix.component }} ${{ matrix.version }}
         uses: ./.github/actions/setup-repo
         with:
-          profile: ${{ matrix.profile }}
+          component: ${{ matrix.component }}
+          version: ${{ matrix.version }}
+          target: ${{ matrix.target }}
 
-      - name: Build ${{ matrix.profile }} ${{ matrix.npm_target }}
-        id: binary
-        run: pnpm exec repoctl build binary --profile ${{ matrix.profile }} --target ${{ matrix.npm_target }}
+      - name: Build release artifact
+        id: build
+        env:
+          TARGET_CC: clang
+        run: >
+          pnpm exec repoctl build artifact
+          --component "${{ matrix.component }}"
+          --version "${{ matrix.version }}"
+          --target "${{ matrix.target }}"
 
-      - name: Upload artifact
+      - name: Upload release artifact
         uses: actions/upload-artifact@v7
         with:
-          name: ${{ matrix.npm_target }}__${{ matrix.profile }}
-          path: ${{ steps.binary.outputs.binary_path }}
+          name: ${{ matrix.artifactName }}
+          path: ${{ steps.build.outputs.artifact_path }}
+          if-no-files-found: error
 
-  publish:
-    if: >-
-      github.event_name == 'pull_request' &&
-      github.event.pull_request.merged == true &&
-      github.event.pull_request.head.ref == 'changeset-release/main' &&
-      github.repository_owner == 'Effect-TS'
-    name: Publish Packages
+  pack:
+    name: Pack Packages
+    needs: [select-mode, build-release-artifacts]
+    if: needs.select-mode.outputs.mode == 'publish'
     runs-on: ubuntu-latest
-    needs: [build]
     timeout-minutes: 30
+    permissions:
+      contents: read
+    outputs:
+      pack-dir-artifact-id: ${{ steps.pack.outputs.pack-dir-artifact-id }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
         with:
-          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Download platform binaries
+        uses: actions/download-artifact@v8
+        with:
+          pattern: "*__*"
+          path: _release-artifacts
+
+      - name: Assemble platform packages
+        run: pnpm exec repoctl packages assemble --artifacts _release-artifacts
+
+      - name: Prepare platform packages
+        run: pnpm exec repoctl packages prepare
+
+      - name: Verify platform binaries
+        run: pnpm exec repoctl build verify-release
+
+      - name: Build CLI bundle
+        run: pnpm exec repoctl build cli
+
+      - name: Pack packages
+        id: pack
+        uses: changesets/action/pack@2d9f7af6402422be60d377f151c7618011bba45a # v2.0.0-next.4
+        with:
+          publish-plan-artifact-id: ${{ needs.select-mode.outputs.publish-plan-artifact-id }}
+
+  publish:
+    name: Publish Packages
+    needs: [select-mode, pack]
+    if: needs.select-mode.outputs.mode == 'publish'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
 
       - name: Setup Node
         uses: actions/setup-node@v6
@@ -83,41 +214,16 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v6
-        with:
-          version: 9
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Download platform binaries
-        uses: actions/download-artifact@v8
-        with:
-          path: _release-artifacts
-
-      - name: Copy binaries into platform packages
-        run: |
-          for artifact_dir in _release-artifacts/*__*; do
-            artifact_name="${artifact_dir##*/}"
-            npm_target="${artifact_name%%__*}"
-            package_dir="_packages/tsgo-${npm_target}/lib"
-
-            mkdir -p "${package_dir}"
-            cp "${artifact_dir}"/* "${package_dir}/"
-          done
-
-      - name: Bundle upstream metadata
-        run: pnpm exec repoctl packages bundle-upstream
-
-      - name: Verify platform binaries
-        run: pnpm exec repoctl build verify-release
-
-      - name: Build CLI bundle
-        run: pnpm exec repoctl build cli
-
       - name: Publish packages and create releases
-        uses: changesets/action@v1
+        uses: changesets/action/publish@2d9f7af6402422be60d377f151c7618011bba45a # v2.0.0-next.4
         with:
-          publish: pnpm exec repoctl changeset publish
+          github-token: ${{ github.token }}
+          pack-dir-artifact-id: ${{ needs.pack.outputs.pack-dir-artifact-id }}
+          push-git-tags: true
+          create-github-releases: true
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_CONFIG_PROVENANCE: "true"

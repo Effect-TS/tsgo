@@ -102,4 +102,5 @@ var All = []rule.Rule{
 	OutdatedApi,
 	ServiceNotAsClass,
 	PreferUnsafeConstructor,
+	PreferTypedSchemaDecoder,
 }

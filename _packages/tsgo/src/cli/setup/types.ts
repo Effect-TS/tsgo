@@ -17,6 +17,7 @@ export interface FileInput {
 }
 
 export type Editor = "vscode" | "nvim" | "emacs"
+export type Integration = "typescript" | "oxlint"
 
 export interface PackageDependency {
   readonly dependencyType: "dependencies" | "devDependencies"
@@ -31,6 +32,7 @@ export namespace Assessment {
   export interface Input {
     readonly packageJson: FileInput
     readonly tsconfig: FileInput
+    readonly oxlintConfig: Option.Option<FileInput>
     readonly vscodeSettings: Option.Option<FileInput>
   }
 
@@ -41,9 +43,13 @@ export namespace Assessment {
     readonly text: string
     readonly lspVersion: Option.Option<PackageDependency>
     readonly typescriptVersion: Option.Option<PackageDependency>
+    readonly oxlintVersion: Option.Option<PackageDependency>
+    readonly oxlintTsgolintVersion: Option.Option<PackageDependency>
+    readonly vitePlusVersion: Option.Option<PackageDependency>
     readonly prepareScript: Option.Option<{
       readonly script: string
       readonly hasPatch: boolean
+      readonly integrations: ReadonlyArray<Integration>
     }>
   }
 
@@ -65,9 +71,18 @@ export namespace Assessment {
     readonly text: string
   }
 
+  export interface OxlintConfig {
+    readonly path: string
+    readonly sourceFile: ts.JsonSourceFile
+    readonly parsed: Record<string, unknown>
+    readonly text: string
+    readonly currentSchemaPath: Option.Option<string>
+  }
+
   export interface State {
     readonly packageJson: PackageJson
     readonly tsconfig: TsConfig
+    readonly oxlintConfig: Option.Option<OxlintConfig>
     readonly vscodeSettings: Option.Option<VSCodeSettings>
   }
 }
@@ -76,12 +91,17 @@ export namespace Target {
   export interface PackageJson {
     readonly lspVersion: Option.Option<PackageDependency>
     readonly typescriptVersion: Option.Option<PackageDependency>
+    readonly oxlintVersion: Option.Option<PackageDependency>
+    readonly oxlintTsgolintVersion: Option.Option<PackageDependency>
     readonly prepareScript: boolean
+    readonly managePrepareScript: boolean
+    readonly integrations: ReadonlyArray<Integration>
   }
 
   export interface TsConfig {
     readonly schemaPath: Option.Option<string>
     readonly diagnosticSeverities: Option.Option<Record<string, RuleSeverity>>
+    readonly manageIntegration: boolean
   }
 
   export interface VSCodeSettings {
@@ -91,6 +111,7 @@ export namespace Target {
   export interface State {
     readonly packageJson: PackageJson
     readonly tsconfig: TsConfig
+    readonly oxlintrcSchemaPath: Option.Option<string>
     readonly vscodeSettings: Option.Option<VSCodeSettings>
     readonly editors: ReadonlyArray<Editor>
   }

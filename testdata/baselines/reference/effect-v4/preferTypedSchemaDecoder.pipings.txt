@@ -1,0 +1,323 @@
+==== /.src/preferTypedSchemaDecoder.ts (23 flows) ====
+
+=== Piping Flow ===
+Location: 8:15 - 11:3
+Node: Schema.Struct({\n  name: Schema.String,\n  coordinates: Schema.Tuple([Schema.Number, Schema.Number])\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  name: Schema.String,\n  coordinates: Schema.Tuple([Schema.Number, Schema.Number])\n}
+Subject Type: { name: String; coordinates: Tuple<readonly [Number, Number]>; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly name: String; readonly coordinates: Tuple<readonly [Number, Number]>; }>
+
+=== Piping Flow ===
+Location: 10:15 - 10:60
+Node: Schema.Tuple([Schema.Number, Schema.Number])
+Node Kind: KindCallExpression
+
+Subject: [Schema.Number, Schema.Number]
+Subject Type: [Number, Number]
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Tuple
+      args: (constant)
+      outType: Tuple<readonly [Number, Number]>
+
+=== Piping Flow ===
+Location: 19:20 - 19:61
+Node: Schema.decodeUnknownSync(Person)(person)
+Node Kind: KindCallExpression
+
+Subject: person
+Subject Type: { name: string; coordinates: [number, number]; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeUnknownSync(Person)
+      args: (constant)
+      outType: { readonly name: string; readonly coordinates: readonly [number, number]; }
+
+=== Piping Flow ===
+Location: 20:23 - 20:94
+Node: Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1, 2] })
+Node Kind: KindCallExpression
+
+Subject: { name: "Ada", coordinates: [1, 2] }
+Subject Type: { name: string; coordinates: number[]; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeUnknownSync(Person)
+      args: (constant)
+      outType: { readonly name: string; readonly coordinates: readonly [number, number]; }
+
+=== Piping Flow ===
+Location: 21:22 - 21:65
+Node: Schema.decodeUnknownEffect(Person)(person)
+Node Kind: KindCallExpression
+
+Subject: person
+Subject Type: { name: string; coordinates: [number, number]; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeUnknownEffect(Person)
+      args: (constant)
+      outType: Effect<{ readonly name: string; readonly coordinates: readonly [number, number]; }, SchemaError, never>
+
+=== Piping Flow ===
+Location: 22:20 - 22:61
+Node: Schema.decodeUnknownExit(Person)(person)
+Node Kind: KindCallExpression
+
+Subject: person
+Subject Type: { name: string; coordinates: [number, number]; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeUnknownExit(Person)
+      args: (constant)
+      outType: Exit<{ readonly name: string; readonly coordinates: readonly [number, number]; }, SchemaError>
+
+=== Piping Flow ===
+Location: 23:22 - 23:65
+Node: Schema.decodeUnknownOption(Person)(person)
+Node Kind: KindCallExpression
+
+Subject: person
+Subject Type: { name: string; coordinates: [number, number]; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeUnknownOption(Person)
+      args: (constant)
+      outType: Option<{ readonly name: string; readonly coordinates: readonly [number, number]; }>
+
+=== Piping Flow ===
+Location: 24:22 - 24:65
+Node: Schema.decodeUnknownResult(Person)(person)
+Node Kind: KindCallExpression
+
+Subject: person
+Subject Type: { name: string; coordinates: [number, number]; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeUnknownResult(Person)
+      args: (constant)
+      outType: Result<{ readonly name: string; readonly coordinates: readonly [number, number]; }, SchemaError>
+
+=== Piping Flow ===
+Location: 25:23 - 25:67
+Node: Schema.decodeUnknownPromise(Person)(person)
+Node Kind: KindCallExpression
+
+Subject: person
+Subject Type: { name: string; coordinates: [number, number]; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeUnknownPromise(Person)
+      args: (constant)
+      outType: Promise<{ readonly name: string; readonly coordinates: readonly [number, number]; }>
+
+=== Piping Flow ===
+Location: 28:22 - 28:69
+Node: SchemaParser.decodeUnknownSync(Person)(person)
+Node Kind: KindCallExpression
+
+Subject: person
+Subject Type: { name: string; coordinates: [number, number]; }
+
+Transformations (1):
+  [0] kind: call
+      callee: SchemaParser.decodeUnknownSync(Person)
+      args: (constant)
+      outType: { readonly name: string; readonly coordinates: readonly [number, number]; }
+
+=== Piping Flow ===
+Location: 29:21 - 29:68
+Node: pipe(person, Schema.decodeUnknownSync(Person))
+Node Kind: KindCallExpression
+
+Subject: person
+Subject Type: { name: string; coordinates: [number, number]; }
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Schema.decodeUnknownSync
+      args: [Person]
+      outType: { readonly name: string; readonly coordinates: readonly [number, number]; }
+
+=== Piping Flow ===
+Location: 30:21 - 30:55
+Node: decodeUnknownSync(Person)(person)
+Node Kind: KindCallExpression
+
+Subject: person
+Subject Type: { name: string; coordinates: [number, number]; }
+
+Transformations (1):
+  [0] kind: call
+      callee: decodeUnknownSync(Person)
+      args: (constant)
+      outType: { readonly name: string; readonly coordinates: readonly [number, number]; }
+
+=== Piping Flow ===
+Location: 33:27 - 33:60
+Node: Schema.decodeUnknownSync(Person)
+Node Kind: KindCallExpression
+
+Subject: Person
+Subject Type: Struct<{ readonly name: String; readonly coordinates: Tuple<readonly [Number, Number]>; }>
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeUnknownSync
+      args: (constant)
+      outType: (input: unknown, options?: ParseOptions | undefined) => { readonly name: string; readonly coordinates: readonly [number, number]; }
+
+=== Piping Flow ===
+Location: 37:52 - 40:47
+Node: Schema.decodeUnknownSync(Person)(unknownInput)
+Node Kind: KindCallExpression
+
+Subject: unknownInput
+Subject Type: unknown
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeUnknownSync(Person)
+      args: (constant)
+      outType: { readonly name: string; readonly coordinates: readonly [number, number]; }
+
+=== Piping Flow ===
+Location: 40:47 - 41:43
+Node: Schema.decodeUnknownSync(Person)(anyInput)
+Node Kind: KindCallExpression
+
+Subject: anyInput
+Subject Type: any
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeUnknownSync(Person)
+      args: (constant)
+      outType: { readonly name: string; readonly coordinates: readonly [number, number]; }
+
+=== Piping Flow ===
+Location: 41:43 - 42:45
+Node: Schema.decodeUnknownSync(Person)(wrongInput)
+Node Kind: KindCallExpression
+
+Subject: wrongInput
+Subject Type: { readonly name: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeUnknownSync(Person)
+      args: (constant)
+      outType: { readonly name: string; readonly coordinates: readonly [number, number]; }
+
+=== Piping Flow ===
+Location: 42:45 - 43:67
+Node: Schema.decodeUnknownSync(Person)({ name: 1, coordinates: [1, 2] })
+Node Kind: KindCallExpression
+
+Subject: { name: 1, coordinates: [1, 2] }
+Subject Type: { name: number; coordinates: number[]; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeUnknownSync(Person)
+      args: (constant)
+      outType: { readonly name: string; readonly coordinates: readonly [number, number]; }
+
+=== Piping Flow ===
+Location: 43:67 - 44:50
+Node: Schema.decodeUnknownSync(Person)({ name: "Ada" })
+Node Kind: KindCallExpression
+
+Subject: { name: "Ada" }
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeUnknownSync(Person)
+      args: (constant)
+      outType: { readonly name: string; readonly coordinates: readonly [number, number]; }
+
+=== Piping Flow ===
+Location: 44:50 - 45:68
+Node: Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1] })
+Node Kind: KindCallExpression
+
+Subject: { name: "Ada", coordinates: [1] }
+Subject Type: { name: string; coordinates: number[]; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeUnknownSync(Person)
+      args: (constant)
+      outType: { readonly name: string; readonly coordinates: readonly [number, number]; }
+
+=== Piping Flow ===
+Location: 48:9 - 48:49
+Node: Schema.decodeUnknownSync(Person)(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: T
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeUnknownSync(Person)
+      args: (constant)
+      outType: { readonly name: string; readonly coordinates: readonly [number, number]; }
+
+=== Piping Flow ===
+Location: 52:9 - 52:49
+Node: Schema.decodeUnknownSync(Person)(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: { readonly name: T; readonly coordinates: [number, number]; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeUnknownSync(Person)
+      args: (constant)
+      outType: { readonly name: string; readonly coordinates: readonly [number, number]; }
+
+=== Piping Flow ===
+Location: 53:2 - 55:22
+Node: decodeGeneric(person)
+Node Kind: KindCallExpression
+
+Subject: person
+Subject Type: { name: string; coordinates: [number, number]; }
+
+Transformations (1):
+  [0] kind: call
+      callee: decodeGeneric
+      args: (constant)
+      outType: { readonly name: string; readonly coordinates: readonly [number, number]; }
+
+=== Piping Flow ===
+Location: 55:22 - 56:28
+Node: decodeNestedGeneric(person)
+Node Kind: KindCallExpression
+
+Subject: person
+Subject Type: { name: string; coordinates: [number, number]; }
+
+Transformations (1):
+  [0] kind: call
+      callee: decodeNestedGeneric
+      args: (constant)
+      outType: { readonly name: string; readonly coordinates: readonly [number, number]; }

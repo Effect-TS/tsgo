@@ -1,0 +1,29 @@
+==== /.src/preferTypedSchemaDecoder_preview.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 6:15 - 6:54
+Node: Schema.Struct({ name: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { name: Schema.String }
+Subject Type: { name: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly name: String; }>
+
+=== Piping Flow ===
+Location: 8:22 - 8:72
+Node: Schema.decodeUnknownSync(Person)({ name: "Ada" })
+Node Kind: KindCallExpression
+
+Subject: { name: "Ada" }
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeUnknownSync(Person)
+      args: (constant)
+      outType: { readonly name: string; }

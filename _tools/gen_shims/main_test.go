@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"reflect"
 	"strings"
+	"sync"
 	"testing"
 
 	"golang.org/x/mod/modfile"
@@ -184,6 +185,45 @@ func TestResetOutputRootRemovesStaleHelpers(t *testing.T) {
 	}
 	if info, err := os.Stat(root); err != nil || !info.IsDir() {
 		t.Fatalf("output root was not recreated: info=%v err=%v", info, err)
+	}
+}
+
+func TestPreparePackageLoadUsesStablePaths(t *testing.T) {
+	repositoryRoot := t.TempDir()
+	typescriptGoRoot := filepath.Join(repositoryRoot, "typescript-go")
+	writeTestFile(t, filepath.Join(typescriptGoRoot, "go.mod"), []byte("module github.com/microsoft/typescript-go\n\ngo 1.26\n"))
+	writeTestFile(t, filepath.Join(typescriptGoRoot, "go.sum"), nil)
+
+	modFiles := make([]string, 8)
+	errors := make([]error, len(modFiles))
+	start := make(chan struct{})
+	var group sync.WaitGroup
+	for index := range modFiles {
+		group.Add(1)
+		go func() {
+			defer group.Done()
+			<-start
+			_, modFiles[index], errors[index] = preparePackageLoad(repositoryRoot)
+		}()
+	}
+	close(start)
+	group.Wait()
+	for index, err := range errors {
+		if err != nil {
+			t.Fatalf("preparePackageLoad call %d failed: %v", index, err)
+		}
+		if modFiles[index] != modFiles[0] {
+			t.Fatalf("modfile paths differ between runs: %q and %q", modFiles[0], modFiles[index])
+		}
+	}
+	if matched, err := filepath.Match(filepath.Join(repositoryRoot, ".tmp", "gen-shims-load-*", "typescript-go.mod"), modFiles[0]); err != nil || !matched {
+		t.Fatalf("modfile path %q is not content-addressed: matched=%v err=%v", modFiles[0], matched, err)
+	}
+	loadRoot := filepath.Dir(modFiles[0])
+	for _, relative := range []string{".complete", "typescript-go.mod", "typescript-go.sum", filepath.Join("etscore", "go.mod"), filepath.Join("etscore", "etscore.go")} {
+		if _, err := os.Stat(filepath.Join(loadRoot, relative)); err != nil {
+			t.Fatalf("stable load file %s does not exist: %v", relative, err)
+		}
 	}
 }
 

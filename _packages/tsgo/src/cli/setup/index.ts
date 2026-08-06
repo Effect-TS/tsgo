@@ -8,11 +8,6 @@ import { selectTsConfigFile } from "./tsconfig-prompt.js"
 import * as upstreamJson from "../../../upstream.json" with { type: "json" }
 import * as pkgJson from "../../../package.json" with { type: "json" }
 
-const latestProfile = upstreamJson.profiles.find((profile) => profile.name === "latest")
-if (latestProfile === undefined) {
-  throw new Error("Missing latest profile in upstream.json")
-}
-
 export const setupCommand = Command.make("setup").pipe(
   Command.withDescription("Setup @effect/tsgo for the given project using an interactive CLI."),
   Command.withHandler(() =>
@@ -26,8 +21,11 @@ export const setupCommand = Command.make("setup").pipe(
       const assessmentState = Assessment.assess(assessmentInput)
       const targetState = yield* gatherTargetState(assessmentState, {
         defaultLspVersion: pkgJson.version,
-        defaultTypescriptVersion: latestProfile.ts.version,
-        defaultSchemaPath: path.resolve(currentDir, "node_modules", pkgJson.name, "schema.json")
+        defaultTypescriptVersion: upstreamJson.tags.typescript.latest,
+        defaultOxlintVersion: upstreamJson.tags.oxlint.latest,
+        defaultOxlintTsgolintVersion: upstreamJson.tags["oxlint-tsgolint"].latest,
+        defaultSchemaPath: path.resolve(currentDir, "node_modules", pkgJson.name, "schema.json"),
+        defaultOxlintrcSchemaPath: path.resolve(currentDir, "node_modules", pkgJson.name, "oxlint-schema.json")
       })
       const result = Changes.computeChanges(assessmentState, targetState)
 

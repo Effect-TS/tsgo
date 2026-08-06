@@ -11,7 +11,7 @@ var All = []fixable.Fixable{
 	EffectDisable,
 	// Add future fixables here:
 	// POCRuleFix,
-	// FloatingEffectYieldFix,
+	FloatingEffectYieldFix,
 	MissingReturnYieldStarFix,
 	MissingStarInYieldEffectGenFix,
 	CatchAllToMapErrorFix,
@@ -50,6 +50,7 @@ var All = []fixable.Fixable{
 	NewSchemaClassFix,
 	ServiceNotAsClassFix,
 	PreferUnsafeConstructorFix,
+	PreferTypedSchemaDecoderFix,
 }
 
 // ByErrorCode finds all fixables that handle a given error code.

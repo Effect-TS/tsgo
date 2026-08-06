@@ -1,0 +1,46 @@
+name: Generate repoctl Matrix
+
+on:
+  workflow_call:
+    inputs:
+      name:
+        description: repoctl matrix name
+        required: true
+        type: string
+    outputs:
+      matrix:
+        description: Generated JSON matrix
+        value: ${{ jobs.matrix.outputs.matrix }}
+
+permissions: {}
+
+jobs:
+  matrix:
+    name: Generate ${{ inputs.name }} matrix
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate matrix
+        id: matrix
+        env:
+          MATRIX_NAME: ${{ inputs.name }}
+        run: echo "matrix=$(pnpm --silent exec repoctl matrix "$MATRIX_NAME")" >> "$GITHUB_OUTPUT"

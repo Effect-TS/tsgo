@@ -5,7 +5,6 @@ import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
 import { runCommand, runCommandString } from "./process.ts"
 import { generateSubmoduleArtifacts } from "./submodules.ts"
-import { getProfile, readUpstream } from "./upstream.ts"
 
 export class OxlintGenerationError extends Data.TaggedError("OxlintGenerationError")<{
   readonly reason: string
@@ -129,49 +128,27 @@ const configureWorkspace = Effect.fnUntraced(function*(repositoryRoot: string, t
   }
 })
 
-export const generateOxlint = Effect.fnUntraced(function*(repositoryRoot: string, build: boolean) {
-  const fs = yield* FileSystem.FileSystem
-  const path = yield* Path.Path
-  const upstream = yield* readUpstream(repositoryRoot)
-  const profile = yield* getProfile(upstream, "oxlint")
-  if (profile.kind !== "oxlint") {
-    return yield* new OxlintGenerationError({ reason: "The oxlint profile has an unexpected kind" })
+export const prepareTsgolintComponent = Effect.fnUntraced(function*(
+  repositoryRoot: string,
+  component: {
+    readonly version: string
+    readonly gitHead: string
+    readonly typescriptGitHead: string
   }
+) {
+  const path = yield* Path.Path
 
   const typescriptGo = path.join(repositoryRoot, "typescript-go")
   const tsgolint = path.join(repositoryRoot, "tsgolint")
-  const oxlint = path.join(repositoryRoot, "oxlint")
-  const sourceRevision = (yield* runCommandString("git", repositoryRoot, ["rev-parse", "HEAD"])).trim()
-  const tsgolintTypeScriptGo = yield* readGitlink(tsgolint, profile.tsgolint.gitHead, "typescript-go")
-  if (tsgolintTypeScriptGo !== profile.ts.gitHead) {
+  const tsgolintTypeScriptGo = yield* readGitlink(tsgolint, component.gitHead, "typescript-go")
+  if (tsgolintTypeScriptGo !== component.typescriptGitHead) {
     return yield* new OxlintGenerationError({
-      reason: `tsgolint TypeScript-Go revision ${tsgolintTypeScriptGo} does not match profile ${profile.ts.gitHead}`
+      reason:
+        `tsgolint TypeScript-Go revision ${tsgolintTypeScriptGo} does not match component ${component.typescriptGitHead}`
     })
   }
 
-  yield* runCommand("git", tsgolint, ["fetch", "--quiet", "--depth", "50", "--tags", "origin", profile.tsgolint.gitHead])
-  const tsgolintVersion = (yield* runCommandString("git", tsgolint, [
-    "describe",
-    "--tags",
-    "--always",
-    profile.tsgolint.gitHead
-  ])).trim()
-  if (tsgolintVersion !== profile.tsgolint.version) {
-    return yield* new OxlintGenerationError({
-      reason: `tsgolint version ${tsgolintVersion} does not match profile ${profile.tsgolint.version}`
-    })
-  }
-  const oxlintPackage = yield* parseJson<{ readonly version?: string }>(
-    yield* fs.readFileString(path.join(oxlint, "apps", "oxlint", "package.json")),
-    path.join(oxlint, "apps", "oxlint", "package.json")
-  )
-  if (oxlintPackage.version !== profile.oxlint.version) {
-    return yield* new OxlintGenerationError({
-      reason: `Oxlint version ${oxlintPackage.version} does not match profile ${profile.oxlint.version}`
-    })
-  }
-
-  yield* runCommand("git", repositoryRoot, ["config", "-f", ".gitmodules", "submodule.oxlint.ignore", "dirty"])
+  yield* runCommand("git", tsgolint, ["fetch", "--quiet", "--depth", "50", "--tags", "origin", component.gitHead])
   yield* runCommand("git", repositoryRoot, ["config", "-f", ".gitmodules", "submodule.tsgolint.ignore", "dirty"])
   yield* runCommand("git", typescriptGo, ["submodule", "sync", "--recursive"])
   yield* runCommand("git", typescriptGo, [
@@ -183,7 +160,7 @@ export const generateOxlint = Effect.fnUntraced(function*(repositoryRoot: string
     "1",
     "_submodules/TypeScript"
   ])
-  const typescriptRevision = yield* readGitlink(typescriptGo, profile.ts.gitHead, "_submodules/TypeScript")
+  const typescriptRevision = yield* readGitlink(typescriptGo, component.typescriptGitHead, "_submodules/TypeScript")
   const actualTypeScript = (yield* runCommandString("git", path.join(typescriptGo, "_submodules", "TypeScript"), [
     "rev-parse",
     "HEAD"
@@ -201,44 +178,32 @@ export const generateOxlint = Effect.fnUntraced(function*(repositoryRoot: string
     "Effect TypeScript-Go"
   )
   yield* applyPatchDirectory(tsgolint, path.join(repositoryRoot, "_patches", "tsgolint"), "Effect tsgolint")
-  yield* applyPatchDirectory(oxlint, path.join(repositoryRoot, "_patches", "oxlint"), "Effect Oxlint")
+  yield* runCommand("git", repositoryRoot, ["add", ".gitmodules", "tsgolint", "typescript-go"])
+  yield* Console.log(`oxlint-tsgolint ${component.version} prepared`)
+})
+
+export const validateOxlintComponent = Effect.fnUntraced(function*(repositoryRoot: string, version: string) {
+  const fs = yield* FileSystem.FileSystem
+  const path = yield* Path.Path
+  const oxlint = path.join(repositoryRoot, "oxlint")
+  const packageJson = path.join(oxlint, "apps", "oxlint", "package.json")
+  const oxlintPackage = yield* parseJson<{ readonly version?: string }>(
+    yield* fs.readFileString(packageJson),
+    packageJson
+  )
+  if (oxlintPackage.version !== version) {
+    return yield* new OxlintGenerationError({
+      reason: `Oxlint version ${oxlintPackage.version} does not match component ${version}`
+    })
+  }
+  yield* runCommand("git", repositoryRoot, ["config", "-f", ".gitmodules", "submodule.oxlint.ignore", "dirty"])
+})
+
+export const generateTsgolintWorkspace = Effect.fnUntraced(function*(repositoryRoot: string) {
+  const path = yield* Path.Path
+  const typescriptGo = path.join(repositoryRoot, "typescript-go")
+  const tsgolint = path.join(repositoryRoot, "tsgolint")
   yield* synchronizeCollections(typescriptGo, tsgolint)
   yield* generateSubmoduleArtifacts(repositoryRoot, [path.join(tsgolint, "shim")])
   yield* configureWorkspace(repositoryRoot, tsgolint)
-
-  const metadataPath = path.join(repositoryRoot, "_generated", "oxlint", "metadata.json")
-  yield* fs.makeDirectory(path.dirname(metadataPath), { recursive: true })
-  yield* fs.writeFileString(metadataPath, `${JSON.stringify({
-    ...profile,
-    sourceRevision,
-    typescriptGo: { revision: profile.ts.gitHead },
-    typescript: { revision: typescriptRevision }
-  }, null, 2)}\n`)
-
-  if (build) {
-    const buildDirectory = path.join(repositoryRoot, "build", "oxlint-tsgolint")
-    yield* fs.makeDirectory(buildDirectory, { recursive: true })
-    yield* runCommand("go", repositoryRoot, [
-      "build",
-      "-trimpath",
-      "-ldflags=-s -w",
-      "-o",
-      path.join(buildDirectory, "tsgolint"),
-      "./tsgolint/cmd/tsgolint"
-    ], false, { GOWORK: path.join(repositoryRoot, "go.work"), CGO_ENABLED: "0" })
-    const ruleGenerator = path.join(repositoryRoot, "_tools", "gen-oxlint-effect-rules.mjs")
-    if (yield* fs.exists(ruleGenerator)) {
-      yield* runCommand("node", repositoryRoot, [
-        ruleGenerator,
-        oxlint,
-        path.join(repositoryRoot, "_packages", "tsgo", "src", "metadata.json")
-      ])
-    }
-    yield* runCommand("cargo", oxlint, ["lintgen"])
-    yield* runCommand("pnpm", oxlint, ["install", "--frozen-lockfile"])
-    yield* runCommand("pnpm", path.join(oxlint, "apps", "oxlint"), ["run", "build-napi-release"])
-  }
-
-  yield* runCommand("git", repositoryRoot, ["add", ".gitmodules", "oxlint", "tsgolint", "typescript-go"])
-  yield* Console.log(`Oxlint integration generated; metadata: ${metadataPath}`)
 })

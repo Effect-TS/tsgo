@@ -12,7 +12,8 @@ const TEST_SCHEMA_PATH = "./node_modules/@effect/tsgo/schema.json"
 function createTestAssessmentInput(
   packageJson: Record<string, unknown>,
   tsconfig: Record<string, unknown>,
-  vscodeSettings?: Record<string, unknown>
+  vscodeSettings?: Record<string, unknown>,
+  oxlintConfig?: Record<string, unknown>
 ): Assessment.Input {
   return {
     packageJson: {
@@ -23,6 +24,12 @@ function createTestAssessmentInput(
       fileName: "tsconfig.json",
       text: JSON.stringify(tsconfig, null, 2)
     },
+    oxlintConfig: oxlintConfig !== undefined
+      ? Option.some({
+        fileName: ".oxlintrc.json",
+        text: JSON.stringify(oxlintConfig, null, 2)
+      })
+      : Option.none(),
     vscodeSettings: vscodeSettings !== undefined
       ? Option.some({
         fileName: ".vscode/settings.json",
@@ -56,17 +63,34 @@ function applyTextChanges(
 function expectSetupChanges(
   assessmentInput: Assessment.Input,
   targetState: {
-    readonly packageJson: Target.PackageJson
+    readonly packageJson: Omit<
+      Target.PackageJson,
+      "oxlintVersion" | "oxlintTsgolintVersion" | "managePrepareScript" | "integrations"
+    > & Partial<Pick<
+      Target.PackageJson,
+      "oxlintVersion" | "oxlintTsgolintVersion" | "managePrepareScript" | "integrations"
+    >>
     readonly tsconfig: {
       readonly schemaPath?: Option.Option<string>
       readonly diagnosticSeverities: Option.Option<Record<string, string>>
+      readonly manageIntegration?: boolean
     }
+    readonly oxlintrcSchemaPath?: Option.Option<string>
     readonly vscodeSettings: Option.Option<Target.VSCodeSettings>
     readonly editors: ReadonlyArray<string>
   }
 ) {
+  const integrations = targetState.packageJson.integrations ??
+    (Option.isSome(targetState.packageJson.lspVersion) ? ["typescript" as const] : [])
   const normalizedTargetState: Target.State = {
     ...targetState,
+    packageJson: {
+      ...targetState.packageJson,
+      oxlintVersion: targetState.packageJson.oxlintVersion ?? Option.none(),
+      oxlintTsgolintVersion: targetState.packageJson.oxlintTsgolintVersion ?? Option.none(),
+      managePrepareScript: targetState.packageJson.managePrepareScript ?? true,
+      integrations
+    },
     editors: targetState.editors.filter((editor): editor is Editor =>
       editor === "vscode" || editor === "nvim" || editor === "emacs"
     ),
@@ -76,8 +100,13 @@ function expectSetupChanges(
         onNone: () => Option.none(),
         onSome: () => Option.some(TEST_SCHEMA_PATH)
       }),
-      diagnosticSeverities: targetState.tsconfig.diagnosticSeverities as Target.TsConfig["diagnosticSeverities"]
-    }
+      diagnosticSeverities: targetState.tsconfig.diagnosticSeverities as Target.TsConfig["diagnosticSeverities"],
+      manageIntegration: targetState.tsconfig.manageIntegration ?? true
+    },
+    oxlintrcSchemaPath: targetState.oxlintrcSchemaPath ??
+      (integrations.includes("oxlint") && Option.isSome(assessmentInput.oxlintConfig)
+        ? Option.some("./node_modules/@effect/tsgo/oxlint-schema.json")
+        : Option.none())
   }
 
   // Run assessment (synchronous in tsgo)

@@ -132,6 +132,111 @@ func TestUpdateMetadataJSON(t *testing.T) {
 	t.Logf("metadata.json updated")
 }
 
+func TestRuleDocs(t *testing.T) {
+	t.Parallel()
+	root := repoRoot(t)
+	docsPath := filepath.Join(root, "docs", "rules")
+	metadata := readMetadataDocument(t, root)
+	generated := generateRuleDocs(metadata)
+
+	entries, err := os.ReadDir(docsPath)
+	if err != nil {
+		t.Fatalf("read generated rule docs: %v", err)
+	}
+	for name, want := range generated {
+		got, err := os.ReadFile(filepath.Join(docsPath, name))
+		if err != nil {
+			t.Fatalf("read generated rule doc %s: %v", name, err)
+		}
+		if string(got) != want {
+			t.Fatalf("generated rule doc %s is out of date; run UPDATE_RULE_DOCS=1 go test ./internal/rules -run TestUpdateRuleDocs", name)
+		}
+	}
+	for _, entry := range entries {
+		if entry.IsDir() || filepath.Ext(entry.Name()) != ".md" {
+			continue
+		}
+		if _, ok := generated[entry.Name()]; !ok {
+			t.Fatalf("stale generated rule doc %s", entry.Name())
+		}
+	}
+	for _, guide := range []struct {
+		path    string
+		heading string
+	}{
+		{path: filepath.Join(root, "README.md"), heading: "## Installation"},
+		{path: filepath.Join(root, "docs", "README.md"), heading: "# Oxlint Setup"},
+	} {
+		content, err := os.ReadFile(guide.path)
+		if err != nil {
+			t.Fatalf("read rule docs guide %s: %v", guide.path, err)
+		}
+		if !strings.Contains(string(content), guide.heading) {
+			t.Fatalf("rule docs guide %s is missing heading %q", guide.path, guide.heading)
+		}
+	}
+}
+
+func TestAnnotatePreview(t *testing.T) {
+	t.Parallel()
+	got := annotatePreview("const value = bad\n", []previewDiagnostic{{
+		Start: 14,
+		End:   17,
+		Text:  "This value is not allowed. effect(exampleRule)",
+	}}, "exampleRule")
+	want := "const value = bad\n/**\n              ^^^ effecttsgo(example-rule): This value is not allowed.\n*/"
+	if got != want {
+		t.Fatalf("annotated preview mismatch\ngot:\n%s\nwant:\n%s", got, want)
+	}
+
+	got = annotatePreview("é bad(\n  value\n)", []previewDiagnostic{{
+		Start: 2,
+		End:   14,
+		Text:  "This spans lines. effect(exampleRule)",
+	}}, "exampleRule")
+	want = "é bad(\n/**\n  ^^^^ effecttsgo(example-rule): This spans lines.\n*/\n  value\n/**\n^^^^^^^\n*/\n)"
+	if got != want {
+		t.Fatalf("multiline annotated preview mismatch\ngot:\n%s\nwant:\n%s", got, want)
+	}
+}
+
+func TestMarkdownCodeFence(t *testing.T) {
+	t.Parallel()
+	if got, want := markdownCodeFence("const value = \"```\""), "````"; got != want {
+		t.Fatalf("markdown fence mismatch: got %q, want %q", got, want)
+	}
+}
+
+func TestUpdateRuleDocs(t *testing.T) { //nolint:paralleltest // Updates shared generated files.
+	if os.Getenv("UPDATE_RULE_DOCS") == "" {
+		t.Skip("set UPDATE_RULE_DOCS=1 to regenerate docs/rules")
+	}
+	root := repoRoot(t)
+	docsPath := filepath.Join(root, "docs", "rules")
+	if err := os.MkdirAll(docsPath, 0o755); err != nil {
+		t.Fatalf("create rule docs directory: %v", err)
+	}
+	generated := generateRuleDocs(generateMetadataDocument(t))
+	entries, err := os.ReadDir(docsPath)
+	if err != nil {
+		t.Fatalf("read rule docs directory: %v", err)
+	}
+	for _, entry := range entries {
+		if !entry.IsDir() && filepath.Ext(entry.Name()) == ".md" {
+			if err := os.Remove(filepath.Join(docsPath, entry.Name())); err != nil {
+				t.Fatalf("remove stale rule doc %s: %v", entry.Name(), err)
+			}
+		}
+	}
+	names := slices.Sorted(maps.Keys(generated))
+	for _, name := range names {
+		if err := os.WriteFile(filepath.Join(docsPath, name), []byte(generated[name]), 0o644); err != nil {
+			t.Fatalf("write generated rule doc %s: %v", name, err)
+		}
+	}
+	t.Logf("updated %d rule docs", len(generated))
+}
+
 func repoRoot(t *testing.T) string {
 	t.Helper()
 	_, file, _, ok := runtime.Caller(0)
@@ -401,7 +506,7 @@ func evaluatePreview(t *testing.T, version bundledeffect.EffectVersion, sourceTe
 	c, done := program.GetTypeChecker(ctx)
 	defer done()
 
-	var ruleDiags []*ast.Diagnostic
+	var ruleDiags []previewDiagnostic
 	for _, fileName := range programFileNames {
 		sf := program.GetSourceFile(fileName)
 		if sf == nil || sf.IsDeclarationFile {
@@ -418,22 +523,30 @@ func evaluatePreview(t *testing.T, version bundledeffect.EffectVersion, sourceTe
 		}
 		ruleCtx := rule.NewContext(context.Background(), program, c, typeparser.NewTypeParser(program, c), sf, options, r.DefaultSeverity)
 		diags := r.Run(ruleCtx)
-		ruleDiags = append(ruleDiags, diags...)
+		positionMap := sf.GetPositionMap()
+		for _, diagnostic := range diags {
+			ruleDiags = append(ruleDiags, previewDiagnostic{
+				Start: positionMap.UTF8ToUTF16(diagnostic.Loc().Pos()),
+				End:   positionMap.UTF8ToUTF16(diagnostic.Loc().End()),
+				Text:  diagnostic.String(),
+			})
+		}
 	}
 
 	// Sort by start position
 	sort.Slice(ruleDiags, func(i, j int) bool {
-		return ruleDiags[i].Loc().Pos() < ruleDiags[j].Loc().Pos()
+		return ruleDiags[i].Start < ruleDiags[j].Start
 	})
 
 	// Trim leading directives from source text
 	trimmedSource, removedChars := trimLeadingDirectives(sourceText)
+	removedUnits := utf16Length(sourceText[:removedChars])
 
 	// Build preview diagnostics with adjusted offsets
 	prevDiags := make([]previewDiagnostic, 0, len(ruleDiags))
 	for _, d := range ruleDiags {
-		start := d.Loc().Pos() - removedChars
-		end := d.Loc().End() - removedChars
+		start := d.Start - removedUnits
+		end := d.End - removedUnits
 		if start < 0 {
 			start = 0
 		}
@@ -443,7 +556,7 @@ func evaluatePreview(t *testing.T, version bundledeffect.EffectVersion, sourceTe
 		prevDiags = append(prevDiags, previewDiagnostic{
 			Start: start,
 			End:   end,
-			Text:  d.String(),
+			Text:  d.Text,
 		})
 	}
 
@@ -577,52 +690,21 @@ func marshalMetadataJSON(t *testing.T) ([]byte, error) {
 	return append(data, '\n'), nil
 }
 
-func severityIcon(s etscore.Severity) string {
-	switch s {
-	case etscore.SeverityOff:
-		return "➖"
-	case etscore.SeverityError:
-		return "❌"
-	case etscore.SeverityWarning:
-		return "⚠️"
-	case etscore.SeverityMessage:
-		return "💬"
-	case etscore.SeveritySuggestion:
-		return "💡"
-	default:
-		return "➖"
-	}
-}
-
-func containsEffect(supported []string, version string) bool {
-	return slices.Contains(supported, version)
-}
-
 func generateReadmeTable() string {
 	groups := rules.MetadataGroups()
 
-	fixableCodes := buildFixableCodes()
-
 	type ruleEntry struct {
-		name            string
-		group           string
-		description     string
-		defaultSeverity etscore.Severity
-		fixable         bool
-		supportedEffect []string
+		name        string
+		group       string
+		description string
 	}
 
 	allRules := make([]ruleEntry, 0, len(rules.All))
 	for _, r := range rules.All {
-		codes := slices.Clone(r.Codes)
-		slices.Sort(codes)
 		allRules = append(allRules, ruleEntry{
-			name:            r.Name,
-			group:           r.Group,
-			description:     r.Description,
-			defaultSeverity: r.DefaultSeverity,
-			fixable:         isRuleFixable(codes, fixableCodes),
-			supportedEffect: r.SupportedEffect,
+			name:        r.Name,
+			group:       r.Group,
+			description: r.Description,
 		})
 	}
 	groupOrder := make(map[string]int, len(groups))
@@ -639,10 +721,9 @@ func generateReadmeTable() string {
 	var lines []string
 	lines = append(lines, "<table>")
 	lines = append(lines, "  <thead>")
-	lines = append(lines, `    <tr><th>Diagnostic</th><th>Sev</th><th>Fix</th><th>Description</th><th>v3</th><th>v4</th></tr>`)
+	lines = append(lines, "    <tr><th>Rule</th><th>Description</th></tr>")
 	lines = append(lines, "  </thead>")
 	lines = append(lines, "  <tbody>")
-
 	for _, group := range groups {
 		var groupRules []ruleEntry
 		for _, r := range allRules {
@@ -653,36 +734,246 @@ func generateReadmeTable() string {
 		if len(groupRules) == 0 {
 			continue
 		}
-		lines = append(lines, fmt.Sprintf(`    <tr><td colspan="6"><strong>%s</strong> <em>%s</em></td></tr>`,
+		lines = append(lines, fmt.Sprintf("    <tr><td colspan=\"2\"><strong>%s</strong> <em>%s</em></td></tr>",
 			html.EscapeString(group.Name), html.EscapeString(group.Description)))
 		for _, r := range groupRules {
-			fix := ""
-			if r.fixable {
-				fix = "🔧"
-			}
-			v3 := ""
-			if containsEffect(r.supportedEffect, "v3") {
-				v3 = "✓"
-			}
-			v4 := ""
-			if containsEffect(r.supportedEffect, "v4") {
-				v4 = "✓"
-			}
-			lines = append(lines, fmt.Sprintf(`    <tr><td><code>%s</code></td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>`,
-				html.EscapeString(r.name),
-				severityIcon(r.defaultSeverity),
-				fix,
-				html.EscapeString(r.description),
-				v3, v4))
+			lines = append(lines, fmt.Sprintf("    <tr><td><a href=\"docs/rules/%s.md\"><code>%s</code></a></td><td>%s</td></tr>",
+				kebabCase(r.name), html.EscapeString(r.name), html.EscapeString(r.description)))
 		}
 	}
-
 	lines = append(lines, "  </tbody>")
 	lines = append(lines, "</table>")
-	lines = append(lines, "")
-	lines = append(lines, "`➖` off by default, `❌` error, `⚠️` warning, `💬` message, `💡` suggestion, `🔧` quick fix available")
-
 	return strings.Join(lines, "\n")
+}
+
+func readMetadataDocument(t *testing.T, root string) metadataDocument {
+	t.Helper()
+	path := filepath.Join(root, "_packages", "tsgo", "src", "metadata.json")
+	data, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatalf("read metadata.json: %v", err)
+	}
+	var metadata metadataDocument
+	if err := json.Unmarshal(data, &metadata); err != nil {
+		t.Fatalf("decode metadata.json: %v", err)
+	}
+	return metadata
+}
+
+func generateMetadataDocument(t *testing.T) metadataDocument {
+	t.Helper()
+	data, err := marshalMetadataJSON(t)
+	if err != nil {
+		t.Fatalf("generate metadata.json: %v", err)
+	}
+	var metadata metadataDocument
+	if err := json.Unmarshal(data, &metadata); err != nil {
+		t.Fatalf("decode generated metadata.json: %v", err)
+	}
+	return metadata
+}
+
+func generateRuleDocs(metadata metadataDocument) map[string]string {
+	groupNames := make(map[string]string, len(metadata.Groups))
+	for _, group := range metadata.Groups {
+		groupNames[group.ID] = group.Name
+	}
+	docs := make(map[string]string, len(metadata.Rules))
+	for _, current := range metadata.Rules {
+		slug := kebabCase(current.Name)
+		var codes []string
+		for _, code := range current.Codes {
+			codes = append(codes, fmt.Sprintf("`TS%d`", code))
+		}
+		fixable := "No"
+		if current.Fixable {
+			fixable = "Yes"
+		}
+		var page strings.Builder
+		fmt.Fprintf(&page, "<!-- This file is generated by internal/rules/rules_json_test.go. Do not edit it manually. -->\n\n")
+		fmt.Fprintf(&page, "# `%s`\n\n%s\n\n", current.Name, current.Description)
+		page.WriteString("| Property | Value |\n| --- | --- |\n")
+		fmt.Fprintf(&page, "| Category | %s |\n", markdownTableCell(groupNames[current.Group]))
+		fmt.Fprintf(&page, "| Default severity | `%s` |\n", current.DefaultSeverity)
+		fmt.Fprintf(&page, "| Fixable | %s |\n", fixable)
+		fmt.Fprintf(&page, "| Effect versions | %s |\n", strings.Join(current.SupportedEffect, ", "))
+		fmt.Fprintf(&page, "| Diagnostic codes | %s |\n", strings.Join(codes, ", "))
+		fmt.Fprintf(&page, "| Language Service name | `%s` |\n", current.Name)
+		fmt.Fprintf(&page, "| Oxlint name | `effecttsgo/%s` |\n", slug)
+
+		page.WriteString("\n## Preview\n\n")
+		if current.Preview == nil {
+			page.WriteString("No preview is available.\n")
+		} else {
+			annotated := annotatePreview(
+				current.Preview.SourceText,
+				current.Preview.Diagnostics,
+				current.Name,
+			)
+			fence := markdownCodeFence(annotated)
+			fmt.Fprintf(&page, "%sts\n%s\n%s\n", fence, annotated, fence)
+			if len(current.Preview.Diagnostics) == 0 {
+				page.WriteString("\n")
+				page.WriteString("This rule depends on project context and does not emit a diagnostic in the standalone preview.\n")
+			}
+		}
+
+		fmt.Fprintf(&page, "\n## Language Service Configuration\n\nSee the [Language Service setup guide](../../README.md#installation) for installation instructions.\n\n```jsonc\n{\n  \"$schema\": \"./node_modules/@effect/tsgo/schema.json\",\n  \"compilerOptions\": {\n    \"plugins\": [\n      {\n        \"name\": \"@effect/language-service\",\n        \"diagnosticSeverity\": {\n          \"%s\": \"warning\"\n        }\n      }\n    ]\n  }\n}\n```\n", current.Name)
+		fmt.Fprintf(&page, "\n## Oxlint Configuration\n\nSee the [Oxlint setup guide](../README.md#oxlint-setup) for installation and patching instructions.\n\n```json\n{\n  \"$schema\": \"./node_modules/@effect/tsgo/oxlint-schema.json\",\n  \"options\": {\n    \"typeAware\": true\n  },\n  \"plugins\": [\"effecttsgo\"],\n  \"rules\": {\n    \"effecttsgo/%s\": \"warn\"\n  }\n}\n```\n", slug)
+		docs[slug+".md"] = page.String()
+	}
+	return docs
+}
+
+func kebabCase(value string) string {
+	var result strings.Builder
+	for index := range len(value) {
+		current := value[index]
+		if current >= 'A' && current <= 'Z' {
+			previousIsLower := index > 0 && value[index-1] >= 'a' && value[index-1] <= 'z'
+			nextIsLower := index+1 < len(value) && value[index+1] >= 'a' && value[index+1] <= 'z'
+			if index > 0 && (previousIsLower || nextIsLower) {
+				result.WriteByte('-')
+			}
+			result.WriteByte(current + ('a' - 'A'))
+		} else {
+			result.WriteByte(current)
+		}
+	}
+	return result.String()
+}
+
+func markdownTableCell(value string) string {
+	return strings.ReplaceAll(strings.ReplaceAll(value, "\n", " "), "|", "\\|")
+}
+
+func annotatePreview(sourceText string, diagnostics []previewDiagnostic, ruleName string) string {
+	type annotation struct {
+		padding string
+		width   int
+		text    string
+	}
+	lines := strings.Split(sourceText, "\n")
+	lineStarts := make([]int, len(lines))
+	offset := 0
+	for index, line := range lines {
+		lineStarts[index] = offset
+		offset += len(line) + 1
+	}
+	annotations := make(map[int][]annotation)
+	seen := make(map[string]bool)
+	seenMessages := make(map[string]bool)
+	sortedDiagnostics := slices.Clone(diagnostics)
+	slices.SortFunc(sortedDiagnostics, func(left, right previewDiagnostic) int {
+		if left.Start != right.Start {
+			return left.Start - right.Start
+		}
+		return left.End - right.End
+	})
+	for _, diagnostic := range sortedDiagnostics {
+		start := utf16OffsetToByteIndex(sourceText, max(0, diagnostic.Start))
+		end := utf16OffsetToByteIndex(sourceText, max(diagnostic.Start+1, diagnostic.End))
+		text := strings.TrimSuffix(diagnostic.Text, " effect("+ruleName+")")
+		text = strings.Join(strings.Fields(text), " ")
+		messagePending := !seenMessages[text]
+		seenMessages[text] = true
+		for lineIndex, line := range lines {
+			line = strings.TrimSuffix(line, "\r")
+			lineStart := lineStarts[lineIndex]
+			lineEnd := lineStart + len(line)
+			segmentStart := max(start, lineStart)
+			segmentEnd := min(end, lineEnd)
+			if segmentEnd <= segmentStart {
+				continue
+			}
+			byteColumn := segmentStart - lineStart
+			padding := annotationPadding(line[:byteColumn])
+			width := max(1, len([]rune(line[byteColumn:segmentEnd-lineStart])))
+			annotationText := ""
+			if messagePending {
+				annotationText = text
+				messagePending = false
+			}
+			key := fmt.Sprintf("%d:%s:%d:%s", lineIndex, padding, width, annotationText)
+			if seen[key] {
+				continue
+			}
+			seen[key] = true
+			annotations[lineIndex] = append(annotations[lineIndex], annotation{
+				padding: padding,
+				width:   width,
+				text:    annotationText,
+			})
+		}
+	}
+	var result strings.Builder
+	for index, line := range lines {
+		if index > 0 {
+			result.WriteByte('\n')
+		}
+		result.WriteString(line)
+		for _, current := range annotations[index] {
+			result.WriteString("\n/**\n")
+			result.WriteString(current.padding)
+			result.WriteString(strings.Repeat("^", current.width))
+			if current.text != "" {
+				fmt.Fprintf(&result, " effecttsgo(%s): %s", kebabCase(ruleName), current.text)
+			}
+			result.WriteString("\n*/")
+		}
+	}
+	return strings.Trim(result.String(), "\r\n")
+}
+
+func annotationPadding(value string) string {
+	var padding strings.Builder
+	for _, current := range value {
+		if current == '\t' {
+			padding.WriteByte('\t')
+		} else {
+			padding.WriteByte(' ')
+		}
+	}
+	return padding.String()
+}
+
+func utf16OffsetToByteIndex(value string, offset int) int {
+	units := 0
+	for index, current := range value {
+		if units >= offset {
+			return index
+		}
+		units++
+		if current > 0xffff {
+			units++
+		}
+	}
+	return len(value)
+}
+
+func utf16Length(value string) int {
+	units := 0
+	for _, current := range value {
+		units++
+		if current > 0xffff {
+			units++
+		}
+	}
+	return units
+}
+
+func markdownCodeFence(value string) string {
+	longest := 0
+	current := 0
+	for _, character := range value {
+		if character == '`' {
+			current++
+			longest = max(longest, current)
+		} else {
+			current = 0
+		}
+	}
+	return strings.Repeat("`", max(3, longest+1))
 }
 
 func generateReadmeExampleConfig() string {

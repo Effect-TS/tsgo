@@ -1,7 +1,7 @@
 {
   "ExtraFunctions": ["forEachYieldExpression"],
   "ExtraMethods": {
-    "Checker": ["isTypeAssignableTo", "isArrayType", "isReadonlyArrayType", "getIndexInfosOfType", "getTypeArguments", "getLiteralTypeFromProperty", "getSymbolIfSameReference", "getSymbolOfDeclaration", "isReferenceToType", "newFunctionType", "newCallSignature", "isSymbolAssigned", "isPastLastAssignment", "evaluateEntity", "isConstantVariable", "isBlockScopedNameDeclaredBeforeUse"]
+    "Checker": ["isTypeAssignableTo", "isArrayType", "isReadonlyArrayType", "getIndexInfosOfType", "getTypeArguments", "getLiteralTypeFromProperty", "getSymbolIfSameReference", "getSymbolOfDeclaration", "isReferenceToType", "newFunctionType", "newCallSignature", "isSymbolAssigned", "isPastLastAssignment", "evaluateEntity", "isConstantVariable", "isBlockScopedNameDeclaredBeforeUse", "checkExpressionWithContextualType"]
   },
   "ExtraFields": {
     "Checker": [

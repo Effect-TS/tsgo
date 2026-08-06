@@ -2,11 +2,11 @@
     "name": "effect-v4-tests",
     "private": true,
     "dependencies": {
-        "@effect/vitest": "4.0.0-beta.101",
+        "@effect/vitest": "4.0.0-beta.104",
         "@standard-schema/spec": "^1.1.0",
         "@types/node": "^22.0.0",
         "@vitest/runner": "4.1.10",
-        "effect": "4.0.0-beta.101",
+        "effect": "4.0.0-beta.104",
         "fast-check": "^4.4.0",
         "pure-rand": "^7.0.0",
         "vitest": "4.1.10"

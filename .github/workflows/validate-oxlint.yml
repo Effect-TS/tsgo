@@ -1,0 +1,74 @@
+name: Validate Oxlint
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: validate-oxlint-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  matrix:
+    uses: ./.github/workflows/repoctl-matrix.yml
+    permissions:
+      contents: read
+    with:
+      name: test-oxlint
+
+  validate:
+    name: Validate ${{ matrix.name }}
+    needs: matrix
+    if: github.repository_owner == 'Effect-TS'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.matrix.outputs.matrix) }}
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v7
+
+      - name: Setup ${{ matrix.tsgolint.component }} ${{ matrix.tsgolint.version }}
+        uses: ./.github/actions/setup-repo
+        with:
+          component: ${{ matrix.tsgolint.component }}
+          version: ${{ matrix.tsgolint.version }}
+
+      - name: Build tsgolint
+        id: tsgolint
+        run: >
+          pnpm exec repoctl build artifact
+          --component "${{ matrix.tsgolint.component }}"
+          --version "${{ matrix.tsgolint.version }}"
+          --target linux-x64
+
+      - name: Setup ${{ matrix.oxlint.component }} ${{ matrix.oxlint.version }}
+        uses: ./.github/actions/setup-repo
+        with:
+          component: ${{ matrix.oxlint.component }}
+          version: ${{ matrix.oxlint.version }}
+          target: linux-x64
+
+      - name: Build Oxlint binding
+        env:
+          TARGET_CC: clang
+        run: >
+          pnpm exec repoctl build artifact
+          --component "${{ matrix.oxlint.component }}"
+          --version "${{ matrix.oxlint.version }}"
+          --target linux-x64
+
+      - name: Smoke test Oxlint runtime
+        env:
+          TSGOLINT_PATH: ${{ steps.tsgolint.outputs.artifact_path }}
+        run: node testdata/tests/oxlint/smoke.mjs "$GITHUB_WORKSPACE" "$TSGOLINT_PATH"

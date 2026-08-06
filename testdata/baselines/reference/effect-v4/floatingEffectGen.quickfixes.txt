@@ -3,6 +3,7 @@
 [D1] (4:4-4:23) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
   Fix 0: "Disable floatingEffect for this line"
   Fix 1: "Disable floatingEffect for entire file"
+  Fix 2: "Add yield* statement"
 
 === Quick Fix Application Results ===
 
@@ -11,3 +12,12 @@ skipped by default
 
 === [D1] Fix 1: "Disable floatingEffect for entire file" ===
 skipped by default
+
+=== [D1] Fix 2: "Add yield* statement" ===
+
+--- file:///.src/floatingEffectGen.ts ---
+import { Effect } from "effect"
+
+export const program = Effect.gen(function*(){
+   yield* Effect.log("hello") // <- this should be yielded instead
+})

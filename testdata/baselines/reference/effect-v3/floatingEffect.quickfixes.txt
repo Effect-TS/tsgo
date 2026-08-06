@@ -17,6 +17,7 @@
 [D5] (12:3-12:15) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
   Fix 0: "Disable floatingEffect for this line"
   Fix 1: "Disable floatingEffect for entire file"
+  Fix 2: "Add yield* statement"
 
 [D6] (15:19-18:3) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
   Fix 0: "Disable unnecessaryEffectGen for this line"
@@ -50,6 +51,39 @@ skipped by default
 
 === [D5] Fix 1: "Disable floatingEffect for entire file" ===
 skipped by default
+
+=== [D5] Fix 2: "Add yield* statement" ===
+
+--- file:///.src/floatingEffect.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+const noError = Effect.succeed(1)
+
+Effect.succeed("floating")
+
+Effect.never
+
+Effect.runPromise(Effect.gen(function*() {
+  const thisIsFine = Effect.succeed(1)
+  yield* Effect.never
+}))
+
+Effect.runPromise(Effect.gen(function*() {
+  yield* Effect.succeed(1).pipe(Effect.fork)
+  // ^- This is fine, returns a fiber runtime
+}))
+
+export function constructorFunction(this: { boot: Effect.Effect<void> }) {
+  this.boot = Effect.void
+  // ^- This is fine, its another way to perform an assignment
+}
+
+const main = Effect.gen(function*() {
+  yield* Effect.exit(Effect.void)
+  // ^- This is fine, returns an exit
+})
+
 
 === [D6] Fix 0: "Disable unnecessaryEffectGen for this line" ===
 skipped by default

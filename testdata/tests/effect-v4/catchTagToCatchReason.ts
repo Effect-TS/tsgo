@@ -91,8 +91,8 @@ export const functionArguments = program.pipe(
   })
 )
 
-// Should trigger without a fix: the recovery needs the narrowed reason value.
-export const reasonUseIsDiagnosticOnly = program.pipe(
+// Should trigger and preserve wrapper uses through catchReason's second parameter.
+export const reasonUsePreservesWrapper = program.pipe(
   Fx.catchTag("OuterError", (error) => {
     switch (error.reason._tag) {
       case "ReasonB":

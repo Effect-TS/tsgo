@@ -1,0 +1,243 @@
+diff --git a/crates/oxc_linter/src/config/oxlintrc.rs b/crates/oxc_linter/src/config/oxlintrc.rs
+index 8d0610e4..d057b2f6 100644
+--- a/crates/oxc_linter/src/config/oxlintrc.rs
++++ b/crates/oxc_linter/src/config/oxlintrc.rs
+@@ -741,7 +741,7 @@ mod test {
+             serde_json::from_str(r#"{ "plugins": ["typescript", "unicorn"] }"#).unwrap();
+         assert_eq!(config.plugins, Some(LintPlugins::TYPESCRIPT | LintPlugins::UNICORN));
+         let config: Oxlintrc =
+-            serde_json::from_str(r#"{ "plugins": ["typescript", "unicorn", "react", "oxc", "import", "jsdoc", "jest", "vitest", "jsx-a11y", "nextjs", "react-perf", "promise", "node", "vue"] }"#).unwrap();
++            serde_json::from_str(r#"{ "plugins": ["typescript", "unicorn", "react", "oxc", "import", "jsdoc", "jest", "vitest", "jsx-a11y", "nextjs", "react-perf", "promise", "node", "vue", "effecttsgo"] }"#).unwrap();
+         assert_eq!(config.plugins, Some(LintPlugins::all()));
+ 
+         let config: Oxlintrc =
+diff --git a/crates/oxc_linter/src/config/plugins.rs b/crates/oxc_linter/src/config/plugins.rs
+index 865b7cb3..5eacd25b 100644
+--- a/crates/oxc_linter/src/config/plugins.rs
++++ b/crates/oxc_linter/src/config/plugins.rs
+@@ -110,6 +110,8 @@ bitflags! {
+         const NODE = 1 << 12;
+         /// `eslint-plugin-vue`
+         const VUE = 1 << 13;
++        /// Effect semantic diagnostics implemented by tsgolint.
++        const EFFECT_TSGO = 1 << 14;
+     }
+ }
+ 
+@@ -175,6 +177,7 @@ impl TryFrom<&str> for LintPlugins {
+             "promise" => Ok(LintPlugins::PROMISE),
+             "node" => Ok(LintPlugins::NODE),
+             "vue" => Ok(LintPlugins::VUE),
++            "effecttsgo" => Ok(LintPlugins::EFFECT_TSGO),
+             // "eslint" is not really a plugin, so it's 'empty'. This has the added benefit of
+             // making it the default value.
+             "eslint" => Ok(LintPlugins::ESLINT),
+@@ -200,6 +203,7 @@ impl From<LintPlugins> for &'static str {
+             LintPlugins::PROMISE => "promise",
+             LintPlugins::NODE => "node",
+             LintPlugins::VUE => "vue",
++            LintPlugins::EFFECT_TSGO => "effecttsgo",
+             _ => "",
+         }
+     }
+@@ -271,6 +275,8 @@ impl JsonSchema for LintPlugins {
+             Promise,
+             Node,
+             Vue,
++            #[serde(rename = "effecttsgo")]
++            EffectTsgo,
+         }
+ 
+         let enum_schema = r#gen.subschema_for::<LintPluginOptionsSchema>();
+@@ -312,6 +318,7 @@ mod tests {
+         assert_eq!(LintPlugins::try_from("react"), Ok(LintPlugins::REACT));
+         assert_eq!(LintPlugins::try_from("typescript-eslint"), Ok(LintPlugins::TYPESCRIPT));
+         assert_eq!(LintPlugins::try_from("deepscan"), Ok(LintPlugins::OXC));
++        assert_eq!(LintPlugins::try_from("effecttsgo"), Ok(LintPlugins::EFFECT_TSGO));
+         assert_eq!(LintPlugins::try_from("unknown"), Err(()));
+     }
+ 
+@@ -319,6 +326,7 @@ mod tests {
+     fn test_plugin_to_str() {
+         assert_eq!(<&'static str>::from(LintPlugins::REACT), "react");
+         assert_eq!(<&'static str>::from(LintPlugins::JEST), "jest");
++        assert_eq!(<&'static str>::from(LintPlugins::EFFECT_TSGO), "effecttsgo");
+         assert_eq!(<&'static str>::from(LintPlugins::ESLINT), "");
+     }
+ 
+diff --git a/crates/oxc_linter/src/rules.rs b/crates/oxc_linter/src/rules.rs
+index d073e852..2c293310 100644
+--- a/crates/oxc_linter/src/rules.rs
++++ b/crates/oxc_linter/src/rules.rs
+@@ -912,5 +912,8 @@ pub(crate) mod vue {
+ pub(crate) mod shared;
+ 
++// BEGIN GENERATED EFFECT RULES
++// END GENERATED EFFECT RULES
++
+ // Re-export RuleEnum, RULES, and all rule type aliases from generated code
+ pub use crate::generated::rules_enum::*;
+ 
+diff --git a/crates/oxc_linter/src/tsgolint.rs b/crates/oxc_linter/src/tsgolint.rs
+index 62e0a4f2..62efe500 100644
+--- a/crates/oxc_linter/src/tsgolint.rs
++++ b/crates/oxc_linter/src/tsgolint.rs
+@@ -194,7 +194,11 @@ impl TsGoLintState {
+                                                     .rules
+                                                     .iter()
+                                                     .find(|(rule, _)| {
+-                                                        rule.name() == tsgolint_diagnostic.rule
++                                                        tsgolint_rule_matches(
++                                                            rule.plugin_name(),
++                                                            rule.name(),
++                                                            &tsgolint_diagnostic.rule,
++                                                        )
+                                                     })
+                                                     .map(|(_, status)| *status)
+                                             })
+@@ -449,7 +453,11 @@ impl TsGoLintState {
+ 
+                                 let severity =
+                                     resolved_config.rules.iter().find_map(|(rule, status)| {
+-                                        if rule.name() == tsgolint_diagnostic.rule {
++                                        if tsgolint_rule_matches(
++                                            rule.plugin_name(),
++                                            rule.name(),
++                                            &tsgolint_diagnostic.rule,
++                                        ) {
+                                             Some(*status)
+                                         } else {
+                                             None
+@@ -558,7 +566,11 @@ impl TsGoLintState {
+                     .iter()
+                     .filter_map(|(rule, status)| {
+                         if status.is_warn_deny() && rule.is_tsgolint_rule() {
+-                            let rule_name = rule.name().to_string();
++                            let rule_name = if rule.plugin_name() == "effecttsgo" {
++                                format!("effecttsgo/{}", rule.name())
++                            } else {
++                                rule.name().to_string()
++                            };
+                             let options = match rule.to_configuration() {
+                                 Some(Ok(config)) => Some(config),
+                                 Some(Err(_)) | None => None,
+@@ -767,9 +779,20 @@ impl From<TsGoLintDiagnostic> for OxcDiagnostic {
+ 
+ impl From<TsGoLintRuleDiagnostic> for OxcDiagnostic {
+     fn from(val: TsGoLintRuleDiagnostic) -> Self {
+-        let mut d = OxcDiagnostic::warn(val.message.description)
+-            .with_url(format!("{}/{}/{}.html", WEBSITE_BASE_RULES_URL, "typescript", val.rule))
+-            .with_error_code("typescript", val.rule);
++        let (plugin_name, rule_name) = split_tsgolint_rule_name(&val.rule);
++        let mut d = OxcDiagnostic::warn(val.message.description);
++        if let Some(plugin_name) = plugin_name {
++            if plugin_name == "effecttsgo" {
++                d = d.with_url(format!(
++                    "https://github.com/Effect-TS/tsgo/blob/main/docs/rules/{rule_name}.md"
++                ));
++            }
++            d = d.with_error_code(plugin_name.to_string(), rule_name.to_string());
++        } else {
++            d = d
++                .with_url(format!("{}/{}/{}.html", WEBSITE_BASE_RULES_URL, "typescript", rule_name))
++                .with_error_code("typescript", rule_name.to_string());
++        }
+         if let Some(help) = val.message.help {
+             d = d.with_help(help);
+         }
+@@ -1204,10 +1227,14 @@ fn should_skip_diagnostic(
+     };
+ 
+     if let Some(directives) = disable_directives_map.get(path) {
+-        directives.contains(&tsgolint_diagnostic.rule, span)
+-            || directives.contains(&format!("typescript-eslint/{}", tsgolint_diagnostic.rule), span)
+-            || directives
+-                .contains(&format!("@typescript-eslint/{}", tsgolint_diagnostic.rule), span)
++        let (plugin_name, rule_name) = split_tsgolint_rule_name(&tsgolint_diagnostic.rule);
++        if plugin_name.is_some() {
++            directives.contains(&tsgolint_diagnostic.rule, span)
++        } else {
++            directives.contains(rule_name, span)
++                || directives.contains(&format!("typescript-eslint/{rule_name}"), span)
++                || directives.contains(&format!("@typescript-eslint/{rule_name}"), span)
++        }
+     } else {
+         debug_assert!(
+             false,
+@@ -1218,6 +1245,17 @@ fn should_skip_diagnostic(
+     }
+ }
+ 
++fn split_tsgolint_rule_name(rule: &str) -> (Option<&str>, &str) {
++    rule.split_once('/')
++        .map_or((None, rule), |(plugin_name, rule_name)| (Some(plugin_name), rule_name))
++}
++
++fn tsgolint_rule_matches(plugin_name: &str, rule_name: &str, diagnostic_rule: &str) -> bool {
++    let (diagnostic_plugin_name, diagnostic_rule_name) = split_tsgolint_rule_name(diagnostic_rule);
++    diagnostic_rule_name == rule_name
++        && diagnostic_plugin_name.map_or(plugin_name != "effecttsgo", |name| name == plugin_name)
++}
++
+ /// Parses a single message from the binary tsgolint output.
+ // Messages are encoded as follows:
+ // | Payload Size (uint32 LE) - 4 bytes | Message Type (uint8) - 1 byte | Payload |
+@@ -1373,7 +1411,10 @@ mod test {
+ 
+     use crate::{
+         fixer::{FixKind, Message, PossibleFixes},
+-        tsgolint::{Fix, LabeledRange, Range, RuleMessage, Suggestion, TsGoLintRuleDiagnostic},
++        tsgolint::{
++            Fix, LabeledRange, Range, RuleMessage, Suggestion, TsGoLintRuleDiagnostic,
++            tsgolint_rule_matches,
++        },
+     };
+ 
+     #[test]
+@@ -1408,6 +1449,46 @@ mod test {
+         assert!(message.fixes.is_empty());
+     }
+ 
++    #[test]
++    fn test_message_from_qualified_tsgolint_diagnostic() {
++        let diagnostic = TsGoLintRuleDiagnostic {
++            span: Span::new(0, 10),
++            rule: "effecttsgo/floating-effect".into(),
++            message: RuleMessage {
++                id: "TS377001".into(),
++                description: "Floating Effect".into(),
++                help: None,
++            },
++            fixes: vec![],
++            suggestions: vec![],
++            labeled_ranges: vec![],
++            file_path: "some/file/path".into(),
++        };
++
++        let message = Message::from_tsgo_lint_diagnostic(diagnostic, "Some text over 10 bytes.");
++
++        assert_eq!(
++            message.error.code,
++            OxcCode { scope: Some("effecttsgo".into()), number: Some("floating-effect".into()) }
++        );
++        assert_eq!(
++            message.error.url.as_deref(),
++            Some("https://github.com/Effect-TS/tsgo/blob/main/docs/rules/floating-effect.md")
++        );
++        assert!(tsgolint_rule_matches(
++            "effecttsgo",
++            "floating-effect",
++            "effecttsgo/floating-effect"
++        ));
++        assert!(!tsgolint_rule_matches(
++            "typescript",
++            "floating-effect",
++            "effecttsgo/floating-effect"
++        ));
++        assert!(tsgolint_rule_matches("typescript", "some_rule", "some_rule"));
++        assert!(!tsgolint_rule_matches("effecttsgo", "some_rule", "some_rule"));
++    }
++
+     #[test]
+     fn test_message_from_tsgo_lint_diagnostic_with_fixes() {
+         let diagnostic = TsGoLintRuleDiagnostic {

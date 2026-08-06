@@ -1,0 +1,141 @@
+==== /.src/catchTagToCatchReasonParameterUse.ts (10 flows) ====
+
+=== Piping Flow ===
+Location: 26:28 - 35:2
+Node: program.pipe(\n  Effect.catchTag("OuterError", (error) => {\n    switch (error.reason._tag) {\n      case "ReasonA":\n        return Effect.succeed(`${_}: ${error.context}: ${error.reason.detail}`)\n      default:\n        return Effect.fail(error)\n    }\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, OuterError, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catchTag
+      args: ["OuterError", (error) => {\n    switch (error.reason._tag) {\n      case "ReasonA":\n        return Effect.succeed(`${_}: ${error.context}: ${error.reason.detail}`)\n      default:\n        return Effect.fail(error)\n    }\n  }]
+      outType: Effect<string | number, OuterError, never>
+
+=== Piping Flow ===
+Location: 30:15 - 30:80
+Node: Effect.succeed(`${_}: ${error.context}: ${error.reason.detail}`)
+Node Kind: KindCallExpression
+
+Subject: `${_}: ${error.context}: ${error.reason.detail}`
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 32:15 - 32:34
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: OuterError
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, OuterError, never>
+
+=== Piping Flow ===
+Location: 37:35 - 46:2
+Node: program.pipe(\n  Effect.catchTag("OuterError", (error) => {\n    switch (error.reason._tag) {\n      case "ReasonA":\n        return (error = otherError, Effect.succeed(1))\n      default:\n        return Effect.fail(error)\n    }\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, OuterError, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catchTag
+      args: ["OuterError", (error) => {\n    switch (error.reason._tag) {\n      case "ReasonA":\n        return (error = otherError, Effect.succeed(1))\n      default:\n        return Effect.fail(error)\n    }\n  }]
+      outType: Effect<number, OuterError, never>
+
+=== Piping Flow ===
+Location: 41:36 - 41:54
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 43:15 - 43:34
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: OuterError
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, OuterError, never>
+
+=== Piping Flow ===
+Location: 48:32 - 59:2
+Node: program.pipe(\n  Effect.catchTag("OuterError", (error) => {\n    switch (error.reason._tag) {\n      case "ReasonA":\n        return Effect.succeed(error.reason.detail)\n      case "ReasonB":\n        return Effect.succeed("reason b")\n      default:\n        return Effect.fail(error)\n    }\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, OuterError, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catchTag
+      args: ["OuterError", (error) => {\n    switch (error.reason._tag) {\n      case "ReasonA":\n        return Effect.succeed(error.reason.detail)\n      case "ReasonB":\n        return Effect.succeed("reason b")\n      default:\n        return Effect.fail(error)\n    }\n  }]
+      outType: Effect<string | number, OuterError, never>
+
+=== Piping Flow ===
+Location: 52:15 - 52:51
+Node: Effect.succeed(error.reason.detail)
+Node Kind: KindCallExpression
+
+Subject: error.reason.detail
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 54:15 - 54:42
+Node: Effect.succeed("reason b")
+Node Kind: KindCallExpression
+
+Subject: "reason b"
+Subject Type: "reason b"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 56:15 - 56:34
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: OuterError
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, OuterError, never>

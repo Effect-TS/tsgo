@@ -1,5 +1,139 @@
 # @effect/tsgo
 
+## 0.33.0
+
+### Minor Changes
+
+- ae0d537: Add the `preferTypedSchemaDecoder` style suggestion, which recommends typed Schema decoder APIs when an input is assignable to the schema's encoded type.
+
+### Patch Changes
+
+- 42534d2: Reuse Go build cache entries across shim generation by preparing package-loading inputs at stable, content-addressed paths.
+- cfea036: Update Effect v4 dependencies and embedded test fixtures to `4.0.0-beta.104`, update Schema class completions for the `Error` and `TaggedError` renames, and suppress auto-imports from blocked Effect internal modules.
+- ec0b11f: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260805.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/12318e599d21f516defea3b20e5d44b9369da723) commit `12318e599d21f516defea3b20e5d44b9369da723`, and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
+## 0.32.1
+
+### Patch Changes
+
+- 479f268: Avoid installing redundant Oxlint dependencies when Vite+ is present and identify already-patched components in skip messages.
+
+## 0.32.0
+
+### Minor Changes
+
+- 52ec481: Normalize upstream metadata into versioned TypeScript, Oxlint, and oxlint-tsgolint components, including the versions required by Vite+. Repository setup and validation now operate on unique component versions instead of named upstream profiles.
+- 7447a69: Patch Oxlint's TypeScript declarations with the `effecttsgo` plugin and rule names.
+
+## 0.31.0
+
+### Minor Changes
+
+- 9cfdd81: Add a `yield*` quick fix for floating Effects in yieldable Effect contexts, and preserve narrowed wrapper error references when converting hand-rolled reason dispatch to `Effect.catchReason` or `Effect.catchReasons`.
+
+## 0.30.0
+
+### Minor Changes
+
+- f155e33: Ship an Effect-aware Oxlint configuration schema and configure existing `.oxlintrc.json` files to use it when enabling the Oxlint integration. Keep the bundled TypeScript and Oxlint base schemas synchronized through the upstream update workflow.
+
+## 0.29.0
+
+### Minor Changes
+
+- 02035a1: Add TypeScript and Oxlint integration selection to `effect-tsgo setup`, including supported Oxlint dependency pinning and integration-aware prepare scripts.
+- 9e21c6c: Split release builds for TSC, tsgolint, and the Oxlint native binding so Go artifacts can be cross-compiled on Linux independently of the platform-specific Rust builds.
+
+## 0.28.0
+
+### Minor Changes
+
+- 0ee639c: Expose Effect code actions as lazy Oxlint suggestions through the renamed `etsoxlintrunner` integration.
+
+## 0.27.1
+
+### Patch Changes
+
+- 421bda3: Install Oxlint cross-compilation targets for its pinned Rust toolchain.
+
+## 0.27.0
+
+### Minor Changes
+
+- 8d18239: Render related Effect diagnostics as labeled Oxlint source ranges and link Oxlint diagnostics to the corresponding Effect rule documentation.
+
+### Patch Changes
+
+- 7c504fe: Cache compiled Rust artifacts across Oxlint validation and release builds.
+- 0fc7aa9: Allow the automated version pull request to stay synchronized with main.
+- 7ef9550: Safely replace stale automation pull request branches with force-with-lease.
+- c026ccf: Update the next profile to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260803.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/5b1047d10d32e7d5b446be4de56b126ff42f82bb) commit `5b1047d10d32e7d5b446be4de56b126ff42f82bb`, and update the latest profile to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
+## 0.26.7
+
+### Patch Changes
+
+- 452eca4: Increase the release profile build timeout to 45 minutes.
+
+## 0.26.6
+
+### Patch Changes
+
+- 23c0f3e: Migrate release automation to Changesets v3 and pnpm 10.
+
+## 0.26.5
+
+### Patch Changes
+
+- 0450ae7: Run Node command shims through the Windows shell so Oxlint release builds can install and build their dependencies.
+
+## 0.26.4
+
+### Patch Changes
+
+- ce6cc3c: Install cross-compilation targets for the Rust toolchain pinned by Oxlint during release builds.
+
+## 0.26.3
+
+### Patch Changes
+
+- c6dde57: Force patch files to use LF line endings so TypeScript-Go patches apply on Windows release runners.
+
+## 0.26.2
+
+### Patch Changes
+
+- b131307: Enable long Git paths before Windows release builds check out recursive submodules.
+- af50d36: Fix Windows release builds that invoke Node package-manager command shims.
+
+## 0.26.1
+
+### Patch Changes
+
+- 0bf0586: Enable Oxlint type-aware mode in generated rule configuration examples.
+
+## 0.26.0
+
+### Minor Changes
+
+- 701a607: Add the `abortControllerInEffect` diagnostic for global `AbortController` construction inside Effect generator contexts, suggesting `Effect.abortSignal` for Effect-managed cancellation.
+- 58d2eb9: Add the V4-only `catchTagToCatchReason` diagnostic and identity-preserving quick fixes for `Effect.catchTag` handlers that re-fail unmatched `reason._tag` branches.
+- bb09f28: Add the `catchChainToFirstSuccessOf` diagnostic for consecutive error-independent `Effect.catch` fallbacks whose error channel is preserved by `Effect.firstSuccessOf`.
+- 643022d: Expose `@effect/tsgo/lib/getExePath`, which resolves the packaged `tsc` or `tsc-next` executable matching the installed native TypeScript version.
+- 7bbafe4: Generate drift-checked documentation pages for every Effect diagnostic, including annotated previews, metadata, and Language Service and Oxlint configuration examples.
+- 41d08c6: Generate native tsgolint adapters and Oxlint registrations that expose Effect diagnostics as qualified `effecttsgo/*` rules, and package the supported tsgolint executables and Oxlint N-API bindings for release.
+- c048582: Add the `preferUnsafeConstructor` diagnostic and quickfix: `Effect.runSync` applied directly to a pure effect-package constructor call (e.g. `Effect.runSync(Scope.make())`) is reported when the same module exports a type-equivalent synchronous `*Unsafe` sibling, with a fix rewriting to `Scope.makeUnsafe()` while preserving arguments and type arguments.
+- 7af1a90: Add the `promiseInEffectSuccess` diagnostic for Promise types that enter Effect success channels instead of being awaited.
+- 087df5f: Rename the public Go integration package from `etsapi` to `etsgoapi`.
+- 087df5f: Centralize next, latest, and Oxlint upstream pins in one profile manifest, and bundle that manifest with each platform package for TypeScript binary compatibility.
+
+### Patch Changes
+
+- 1c7dc94: Improve diagnostic performance by caching module export identity checks.
+- c9b4499: Create package tags and GitHub Releases with changelog notes when publishing npm packages.
+- 4813687: Make shim generation reproducible from canonical configuration and optional overlays, and standardize the TypeScript-Go patch layout.
+- 5f4fd3e: Update to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260730.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/37357ae666e7af11989d4ba416a763f2da590dee) commit `37357ae666e7af11989d4ba416a763f2da590dee`.
+
 ## 0.25.0
 
 ### Minor Changes

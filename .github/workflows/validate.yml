@@ -15,26 +15,40 @@ concurrency:
 permissions: {}
 
 jobs:
+  matrix:
+    uses: ./.github/workflows/repoctl-matrix.yml
+    permissions:
+      contents: read
+    with:
+      name: test-typescript
+
   validate:
-    name: Validate next profile
+    name: Validate ${{ matrix.component }} ${{ matrix.name }} (${{ matrix.version }})
+    needs: matrix
+    if: github.repository_owner == 'Effect-TS'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
       contents: read
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.matrix.outputs.matrix) }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Setup next profile
+      - name: Setup ${{ matrix.component }} ${{ matrix.version }}
         uses: ./.github/actions/setup-repo
         with:
-          profile: next
+          component: ${{ matrix.component }}
+          version: ${{ matrix.version }}
 
       - name: Build
         run: pnpm exec repoctl build local
 
       - name: Validate repoctl
+        if: matrix.repoctl
         run: pnpm run check:repoctl && pnpm run test:repoctl
 
       - name: Test

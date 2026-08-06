@@ -1,0 +1,82 @@
+import * as Console from "effect/Console"
+import * as Effect from "effect/Effect"
+import { buildReleasePlan } from "./releasePlan.ts"
+import { readUpstream, type Upstream } from "./upstream.ts"
+
+export const buildTypeScriptTestMatrix = (upstream: typeof Upstream.Type) => ({
+  include: Object.keys(upstream.components.typescript)
+    .sort((left, right) => Buffer.compare(Buffer.from(left), Buffer.from(right)))
+    .map((version) => {
+      const channels = (["latest", "next"] as const)
+        .filter((channel) => upstream.tags.typescript[channel] === version)
+      return {
+        name: channels.length === 0 ? version : channels.join("+"),
+        component: "typescript",
+        version,
+        repoctl: upstream.tags.typescript.next === version
+      }
+    })
+})
+
+export const buildOxlintTestMatrix = (upstream: typeof Upstream.Type) => {
+  const runtimes = new Map<string, {
+    readonly oxlintVersion: string
+    readonly tsgolintVersion: string
+  }>()
+  const defaultRuntime = {
+    oxlintVersion: upstream.tags.oxlint.latest,
+    tsgolintVersion: upstream.tags["oxlint-tsgolint"].latest
+  }
+  runtimes.set(`${defaultRuntime.oxlintVersion}\0${defaultRuntime.tsgolintVersion}`, defaultRuntime)
+  for (const profile of upstream.profiles) {
+    const oxlintVersion = profile.dependencies.oxlint
+    const tsgolintVersion = profile.dependencies["oxlint-tsgolint"]
+    if (oxlintVersion === undefined || tsgolintVersion === undefined) continue
+    const key = `${oxlintVersion}\0${tsgolintVersion}`
+    if (!runtimes.has(key)) {
+      runtimes.set(key, { oxlintVersion, tsgolintVersion })
+    }
+  }
+  return {
+    include: [...runtimes]
+      .sort(([left], [right]) => Buffer.compare(Buffer.from(left), Buffer.from(right)))
+      .map(([, runtime]) => ({
+        name: `oxlint (${runtime.oxlintVersion}) + oxlint-tsgolint (${runtime.tsgolintVersion})`,
+        oxlint: { component: "oxlint", version: runtime.oxlintVersion },
+        tsgolint: { component: "oxlint-tsgolint", version: runtime.tsgolintVersion }
+      }))
+  }
+}
+
+export const buildGeneratedMatrix = (upstream: typeof Upstream.Type) => ({
+  include: [{
+    name: "latest",
+    component: "typescript",
+    version: upstream.tags.typescript.latest,
+    branch: "generated/latest"
+  }]
+})
+
+export const buildReleaseMatrix = (upstream: typeof Upstream.Type) => ({
+  include: buildReleasePlan(upstream)
+})
+
+export const printTypeScriptTestMatrix = Effect.fnUntraced(function*(repositoryRoot: string) {
+  const upstream = yield* readUpstream(repositoryRoot)
+  yield* Console.log(JSON.stringify(buildTypeScriptTestMatrix(upstream)))
+})
+
+export const printOxlintTestMatrix = Effect.fnUntraced(function*(repositoryRoot: string) {
+  const upstream = yield* readUpstream(repositoryRoot)
+  yield* Console.log(JSON.stringify(buildOxlintTestMatrix(upstream)))
+})
+
+export const printGeneratedMatrix = Effect.fnUntraced(function*(repositoryRoot: string) {
+  const upstream = yield* readUpstream(repositoryRoot)
+  yield* Console.log(JSON.stringify(buildGeneratedMatrix(upstream)))
+})
+
+export const printReleaseMatrix = Effect.fnUntraced(function*(repositoryRoot: string) {
+  const upstream = yield* readUpstream(repositoryRoot)
+  yield* Console.log(JSON.stringify(buildReleaseMatrix(upstream)))
+})

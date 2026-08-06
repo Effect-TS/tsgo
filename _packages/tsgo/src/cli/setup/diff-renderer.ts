@@ -240,6 +240,7 @@ export const renderCodeActions = (
       assessmentState.packageJson.sourceFile,
       assessmentState.tsconfig.sourceFile
     ]
+    if (Option.isSome(assessmentState.oxlintConfig)) sourceFiles.push(assessmentState.oxlintConfig.value.sourceFile)
     if (Option.isSome(assessmentState.vscodeSettings)) {
       sourceFiles.push(assessmentState.vscodeSettings.value.sourceFile)
     }
