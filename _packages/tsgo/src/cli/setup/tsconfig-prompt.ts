@@ -75,19 +75,27 @@ export const selectTsConfigFile = (
       }
     }
 
-    selectedTsconfigPath = path.resolve(selectedTsconfigPath)
+    return yield* readTsConfigFile(selectedTsconfigPath)
+  })
 
-    const tsconfigExists = yield* fs.exists(selectedTsconfigPath)
-    if (!tsconfigExists) {
-      return yield* new TsConfigNotFoundError({ path: selectedTsconfigPath })
+export const readTsConfigFile = (
+  tsconfigPath: string
+): Effect.Effect<
+  FileInput,
+  PlatformError.PlatformError | TsConfigNotFoundError | FileReadError,
+  FileSystem.FileSystem | Path.Path
+> =>
+  Effect.gen(function*() {
+    const fs = yield* FileSystem.FileSystem
+    const path = yield* Path.Path
+    const resolvedPath = path.resolve(tsconfigPath)
+
+    if (!(yield* fs.exists(resolvedPath))) {
+      return yield* new TsConfigNotFoundError({ path: resolvedPath })
     }
 
-    const tsconfigText = yield* fs.readFileString(selectedTsconfigPath).pipe(
-      Effect.mapError((cause) => new FileReadError({ path: selectedTsconfigPath, cause }))
+    const text = yield* fs.readFileString(resolvedPath).pipe(
+      Effect.mapError((cause) => new FileReadError({ path: resolvedPath, cause }))
     )
-
-    return {
-      fileName: selectedTsconfigPath,
-      text: tsconfigText
-    }
+    return { fileName: resolvedPath, text }
   })
