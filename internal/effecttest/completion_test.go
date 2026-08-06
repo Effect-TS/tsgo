@@ -92,6 +92,12 @@ class Foo extends Schema./*1*/`
 		if !findCompletionLabel(completions.Items, "TaggedClass<Foo>") {
 			t.Error("expected 'TaggedClass<Foo>' completion")
 		}
+		if !findCompletionLabel(completions.Items, "TaggedError<Foo>") {
+			t.Error("expected 'TaggedError<Foo>' completion")
+		}
+		if !findCompletionLabel(completions.Items, "Error<Foo>") {
+			t.Error("expected 'Error<Foo>' completion")
+		}
 	}
 }
 

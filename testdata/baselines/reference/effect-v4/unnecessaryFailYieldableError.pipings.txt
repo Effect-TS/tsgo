@@ -16,7 +16,7 @@ Transformations (1):
 
 === Piping Flow ===
 Location: 12:26 - 14:3
-Node: Schema.ErrorClass<SchemaError>("SchemaError")({\n  _tag: Schema.tag("SchemaError")\n})
+Node: Schema.Error<SchemaError>("SchemaError")({\n  _tag: Schema.tag("SchemaError")\n})
 Node Kind: KindCallExpression
 
 Subject: {\n  _tag: Schema.tag("SchemaError")\n}
@@ -24,7 +24,7 @@ Subject Type: { _tag: tag<"SchemaError">; }
 
 Transformations (1):
   [0] kind: call
-      callee: Schema.ErrorClass<SchemaError>("SchemaError")
+      callee: Schema.Error<SchemaError>("SchemaError")
       args: (constant)
       outType: Class<SchemaError, Struct<{ readonly _tag: tag<"SchemaError">; }>, YieldableError>
 
