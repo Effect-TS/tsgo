@@ -980,6 +980,13 @@ export const computeChanges = (
   const packageJsonResult = computePackageJsonChanges(assessment.packageJson, target.packageJson)
   codeActions = [...codeActions, ...packageJsonResult.codeActions]
   messages = [...messages, ...packageJsonResult.messages]
+  if (packageJsonResult.codeActions.length > 0) {
+    messages = [
+      ...messages,
+      "`package.json` changed. Run your package manager's install command " +
+        "(for example, `pnpm install`, `npm install`, `yarn install`, or `bun install`)."
+    ]
+  }
 
   // Compute tsconfig changes
   const tsconfigResult = computeTsConfigChanges(
@@ -1090,6 +1097,24 @@ export const reviewAndApplyChanges = (
 
     if (!shouldProceed) {
       yield* Console.log(options?.cancelMessage ?? "No changes were made.")
+      return
+    }
+
+    yield* applyChanges(result, options)
+  })
+
+export const previewChanges = (result: ComputeChangesResult, assessmentState: Assessment.State) =>
+  renderCodeActions(result, assessmentState)
+
+export const applyChanges = (
+  result: ComputeChangesResult,
+  options?: {
+    readonly applyMessage?: string
+    readonly successMessage?: string
+  }
+) =>
+  Effect.gen(function*() {
+    if (result.codeActions.length === 0) {
       return
     }
 
