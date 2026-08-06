@@ -1,9 +1,11 @@
 package main
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"reflect"
 	"strings"
@@ -146,7 +148,7 @@ func TestLoadShimInputsCopiesOverlayHelpersAndIgnoresGeneratedFiles(t *testing.T
 	base := t.TempDir()
 	overlay := t.TempDir()
 	helper := []byte("package checker\n\nconst overlayHelper = true\n")
-	writeTestFile(t, filepath.Join(overlay, "checker", "helper.go"), helper)
+	writeTestFile(t, filepath.Join(overlay, "checker", "helper.go"), bytes.ReplaceAll(helper, []byte("\n"), []byte("\r\n")))
 	writeTestFile(t, filepath.Join(overlay, "checker", "shim.go"), []byte("package checker\n"))
 	writeTestFile(t, filepath.Join(overlay, "checker", "go.mod"), []byte("ignored"))
 	writeTestFile(t, filepath.Join(overlay, "checker", "go.sum"), []byte("ignored"))
@@ -224,6 +226,110 @@ func TestPreparePackageLoadUsesStablePaths(t *testing.T) {
 		if _, err := os.Stat(filepath.Join(loadRoot, relative)); err != nil {
 			t.Fatalf("stable load file %s does not exist: %v", relative, err)
 		}
+	}
+}
+
+func TestGitInputDigestTracksRelevantRepositoryState(t *testing.T) {
+	repositoryRoot := t.TempDir()
+	runGitTest(t, repositoryRoot, "init")
+	runGitTest(t, repositoryRoot, "config", "user.email", "test@example.com")
+	runGitTest(t, repositoryRoot, "config", "user.name", "Test")
+	writeTestFile(t, filepath.Join(repositoryRoot, "main.go"), []byte("package main\n"))
+	writeTestFile(t, filepath.Join(repositoryRoot, "config", "extra-shim.json"), []byte("{}\n"))
+	writeTestFile(t, filepath.Join(repositoryRoot, ".gitignore"), []byte("config/ignored.go\n"))
+	writeTestFile(t, filepath.Join(repositoryRoot, "unrelated.txt"), []byte("initial\n"))
+	runGitTest(t, repositoryRoot, "add", ".")
+	runGitTest(t, repositoryRoot, "commit", "-m", "initial")
+
+	inputs := []gitInput{{root: repositoryRoot, paths: []string{"main.go", "config"}}}
+	initial, err := gitInputDigest(inputs)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	writeTestFile(t, filepath.Join(repositoryRoot, "unrelated.txt"), []byte("changed\n"))
+	unrelated, err := gitInputDigest(inputs)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if unrelated != initial {
+		t.Fatalf("unrelated change altered digest: %s != %s", unrelated, initial)
+	}
+
+	writeTestFile(t, filepath.Join(repositoryRoot, "main.go"), []byte("package main\n\nconst changed = true\n"))
+	tracked, err := gitInputDigest(inputs)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if tracked == initial {
+		t.Fatal("tracked input change did not alter digest")
+	}
+
+	writeTestFile(t, filepath.Join(repositoryRoot, "config", "helper.go"), []byte("package config\n"))
+	untracked, err := gitInputDigest(inputs)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if untracked == tracked {
+		t.Fatal("untracked input change did not alter digest")
+	}
+
+	writeTestFile(t, filepath.Join(repositoryRoot, "config", "ignored.go"), []byte("package config\n"))
+	ignored, err := gitInputDigest(inputs)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if ignored == untracked {
+		t.Fatal("ignored input change did not alter digest")
+	}
+}
+
+func TestShimCacheStoresAndRestoresCompleteOutput(t *testing.T) {
+	cacheRoot := filepath.Join(t.TempDir(), "cache")
+	outputRoot := filepath.Join(t.TempDir(), "shim")
+	writeTestFile(t, filepath.Join(outputRoot, generatedMarker), []byte("generated\n"))
+	writeTestFile(t, filepath.Join(outputRoot, "checker", "shim.go"), []byte("package checker\n"))
+
+	if err := storeShimCache(cacheRoot, "digest", outputRoot); err != nil {
+		t.Fatal(err)
+	}
+	writeTestFile(t, filepath.Join(outputRoot, "checker", "shim.go"), []byte("corrupted\n"))
+	writeTestFile(t, filepath.Join(outputRoot, "stale.go"), []byte("stale\n"))
+
+	hit, err := restoreShimCache(cacheRoot, "digest", outputRoot)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !hit {
+		t.Fatal("restoreShimCache() missed stored entry")
+	}
+	if data, err := os.ReadFile(filepath.Join(outputRoot, "checker", "shim.go")); err != nil || string(data) != "package checker\n" {
+		t.Fatalf("restored shim = %q, err %v", data, err)
+	}
+	if _, err := os.Stat(filepath.Join(outputRoot, "stale.go")); !errors.Is(err, os.ErrNotExist) {
+		t.Fatalf("stale output survived restore: %v", err)
+	}
+}
+
+func TestShimCacheIgnoresIncompleteEntry(t *testing.T) {
+	cacheRoot := t.TempDir()
+	outputRoot := filepath.Join(t.TempDir(), "shim")
+	writeTestFile(t, filepath.Join(cacheRoot, shimCacheVersion, "digest", "shim", "checker", "shim.go"), []byte("package checker\n"))
+
+	hit, err := restoreShimCache(cacheRoot, "digest", outputRoot)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if hit {
+		t.Fatal("restoreShimCache() hit incomplete entry")
+	}
+}
+
+func runGitTest(t *testing.T, directory string, arguments ...string) {
+	t.Helper()
+	command := exec.Command("git", append([]string{"-C", directory}, arguments...)...)
+	if output, err := command.CombinedOutput(); err != nil {
+		t.Fatalf("git %s failed: %v\n%s", strings.Join(arguments, " "), err, output)
 	}
 }
 
