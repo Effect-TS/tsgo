@@ -1,0 +1,7 @@
+# Entries ending in / match finding path prefixes; other entries match exact function names.
+
+# Public Go API consumed by integrations outside the tsgo executable.
+etsgoapi/
+
+# Public adapter consumed by the generated Oxlint integration.
+etsoxlintrunner/

@@ -11,10 +11,10 @@ import (
 	"maps"
 	"regexp"
 
+	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
 	"github.com/microsoft/typescript-go/shim/checker"
-	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 // StructuralSchemaGen holds the context for converting resolved types to Schema expressions.
@@ -694,10 +694,5 @@ func (g *StructuralSchemaGen) Process(typeMap map[string]*checker.Type, scope *a
 		ast.SetParentInChildren(stmt)
 	}
 
-	return g.schemaStatements
-}
-
-// Statements returns the accumulated schema statements.
-func (g *StructuralSchemaGen) Statements() []*ast.Node {
 	return g.schemaStatements
 }
