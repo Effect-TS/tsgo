@@ -1,5 +1,17 @@
 # @effect/tsgo
 
+## 0.33.0
+
+### Minor Changes
+
+- ae0d537: Add the `preferTypedSchemaDecoder` style suggestion, which recommends typed Schema decoder APIs when an input is assignable to the schema's encoded type.
+
+### Patch Changes
+
+- 42534d2: Reuse Go build cache entries across shim generation by preparing package-loading inputs at stable, content-addressed paths.
+- cfea036: Update Effect v4 dependencies and embedded test fixtures to `4.0.0-beta.104`, update Schema class completions for the `Error` and `TaggedError` renames, and suppress auto-imports from blocked Effect internal modules.
+- ec0b11f: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260805.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/12318e599d21f516defea3b20e5d44b9369da723) commit `12318e599d21f516defea3b20e5d44b9369da723`, and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
 ## 0.32.1
 
 ### Patch Changes
