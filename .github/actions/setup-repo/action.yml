@@ -95,6 +95,7 @@ runs:
           rust-build-oxlint-1.93.0-${{ runner.os }}-${{ runner.arch }}-${{ steps.upstream-component.outputs.rust-target }}-
 
     - name: Setup Go
+      id: go
       uses: actions/setup-go@v6
       with:
         go-version: "1.26"
@@ -140,6 +141,26 @@ runs:
         restore-keys: |
           go-build-${{ steps.upstream-component.outputs.component }}-${{ steps.upstream-component.outputs.version }}-Linux-${{ hashFiles('**/go.mod', '**/go.sum', '_packages/tsgo/upstream.json', '_patches/**/*.patch') }}-
           go-build-${{ steps.upstream-component.outputs.component }}-${{ steps.upstream-component.outputs.version }}-Linux-
+
+    - name: Configure generated shim cache
+      shell: bash
+      run: echo "TSGO_SHIM_CACHE_DIR=${RUNNER_TEMP}/gen-shims-cache" >> "$GITHUB_ENV"
+
+    - name: Cache generated shims
+      if: github.ref == 'refs/heads/main'
+      uses: actions/cache@v6
+      with:
+        path: ${{ runner.temp }}/gen-shims-cache
+        key: generated-shims-v1-${{ steps.go.outputs.go-version }}-${{ steps.upstream-component.outputs.component }}-${{ steps.upstream-component.outputs.version }}-${{ hashFiles('_tools/gen_shims/**', '_tools/repoctl/src/**', '_packages/tsgo/upstream.json', '_patches/typescript-go/**', '_patches/tsgolint/**') }}
+        enableCrossOsArchive: true
+
+    - name: Restore generated shim cache
+      if: github.ref != 'refs/heads/main'
+      uses: actions/cache/restore@v6
+      with:
+        path: ${{ runner.temp }}/gen-shims-cache
+        key: generated-shims-v1-${{ steps.go.outputs.go-version }}-${{ steps.upstream-component.outputs.component }}-${{ steps.upstream-component.outputs.version }}-${{ hashFiles('_tools/gen_shims/**', '_tools/repoctl/src/**', '_packages/tsgo/upstream.json', '_patches/typescript-go/**', '_patches/tsgolint/**') }}
+        enableCrossOsArchive: true
 
     - name: Materialize upstream component
       if: inputs.materialize == 'true'
