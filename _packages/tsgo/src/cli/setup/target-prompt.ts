@@ -1,36 +1,25 @@
 import * as Effect from "effect/Effect"
 import * as Option from "effect/Option"
-import * as Path from "effect/Path"
 import type * as Terminal from "effect/Terminal"
 import * as Prompt from "effect/unstable/cli/Prompt"
 import { applyPresetDiagnosticSeverities, type DiagnosticPresetName, isPresetEnabled } from "../presets.js"
-import { defaultTypescriptPackageNames } from "./consts.js"
-import type { Assessment, Editor, Integration, Target } from "./types.js"
+import * as Target from "./target.js"
+import type { Assessment, Editor, Integration } from "./types.js"
 import { getAllPresets, getAllRules } from "./rule-info.js"
 import { createRulePrompt } from "./rule-prompt.js"
 
 /**
  * Context input for gathering target state
  */
-export interface GatherTargetContext {
-  readonly defaultLspVersion: string
-  readonly defaultTypescriptVersion: string
-  readonly defaultOxlintVersion: string
-  readonly defaultOxlintTsgolintVersion: string
-  readonly defaultSchemaPath: string
-  readonly defaultOxlintrcSchemaPath: string
-}
+export type GatherTargetContext = Target.Context
 
 /**
  * Gather target state from user based on current assessment
  */
-export const gatherTargetState = (
-  assessment: Assessment.State,
-  context: GatherTargetContext
-): Effect.Effect<Target.State, Terminal.QuitError, Prompt.Environment | Path.Path> =>
+export const gatherTargetOptions = (
+  assessment: Assessment.State
+): Effect.Effect<Target.Options, Terminal.QuitError, Prompt.Environment> =>
   Effect.gen(function*() {
-    const path = yield* Path.Path
-
     const integrations = yield* Prompt.multiSelect({
       message: "Which integrations would you like to configure?",
       choices: [
@@ -54,24 +43,11 @@ export const gatherTargetState = (
 
     if (integrations.length === 0) {
       return {
-        packageJson: {
-          lspVersion: Option.none(),
-          typescriptVersion: assessment.packageJson.typescriptVersion,
-          oxlintVersion: assessment.packageJson.oxlintVersion,
-          oxlintTsgolintVersion: assessment.packageJson.oxlintTsgolintVersion,
-          prepareScript: false,
-          managePrepareScript: true,
-          integrations
-        },
-        tsconfig: {
-          schemaPath: Option.none(),
-          diagnosticSeverities: Option.none(),
-          manageIntegration: true
-        },
-        oxlintrcSchemaPath: Option.none(),
-        vscodeSettings: Option.none(),
+        integrations,
+        dependencyType: "devDependencies",
+        diagnosticSeverities: {},
         editors: []
-      } satisfies Target.State
+      }
     }
 
     // Determine current LSP installation state
@@ -134,10 +110,6 @@ export const gatherTargetState = (
       )
       : initialSeverities
 
-    const diagnosticSeverities = Object.keys(diagnosticSeveritiesRecord).length > 0
-      ? Option.some(diagnosticSeveritiesRecord)
-      : Option.none()
-
     // Editor Selection - Using multi-select
     // Pre-select VSCode if .vscode/settings.json exists
     const hasVscodeSettings = Option.isSome(assessment.vscodeSettings)
@@ -161,77 +133,15 @@ export const gatherTargetState = (
       ]
     }) : []
 
-    // Build target state
-    const defaultTypescriptPackageName = defaultTypescriptPackageNames[0]
-    const relativeSchemaPath = path
-      .relative(path.dirname(assessment.tsconfig.path), context.defaultSchemaPath)
-      .replaceAll("\\", "/")
-    const oxlintrcSchemaPath = useOxlint
-      ? Option.map(assessment.oxlintConfig, (config) => {
-        const relativePath = path
-          .relative(path.dirname(config.path), context.defaultOxlintrcSchemaPath)
-          .replaceAll("\\", "/")
-        return relativePath.startsWith(".") ? relativePath : `./${relativePath}`
-      })
-      : Option.none()
-    const vscodeSettings: Option.Option<Target.VSCodeSettings> = editors.includes("vscode")
-      ? Option.some({
-        settings: {
-          "js/ts.experimental.useTsgo": true,
-          "js/ts.tsdk.path": "./node_modules/typescript/bin",
-          "js/ts.tsdk.promptToUseWorkspaceVersion": true,
-          "js/ts.tsdk.additionalLocations": ["./node_modules/typescript/bin"]
-        }
-      })
-      : Option.none()
-
     return {
-      packageJson: {
-        lspVersion: Option.some({ dependencyType: lspDependencyType, version: context.defaultLspVersion }),
-        typescriptVersion: useTypescript
-          ? Option.orElse(assessment.packageJson.typescriptVersion, () => Option.some({
-            dependencyType: lspDependencyType,
-            version: context.defaultTypescriptVersion,
-            packageName: defaultTypescriptPackageName
-          }))
-          : assessment.packageJson.typescriptVersion,
-        oxlintVersion: useOxlint && (
-            Option.isSome(assessment.packageJson.oxlintVersion) ||
-            Option.isNone(assessment.packageJson.vitePlusVersion)
-          )
-          ? Option.some({
-            dependencyType: Option.match(assessment.packageJson.oxlintVersion, {
-              onNone: () => lspDependencyType,
-              onSome: (dependency) => dependency.dependencyType
-            }),
-            version: context.defaultOxlintVersion
-          })
-          : assessment.packageJson.oxlintVersion,
-        oxlintTsgolintVersion: useOxlint && (
-            Option.isSome(assessment.packageJson.oxlintTsgolintVersion) ||
-            Option.isNone(assessment.packageJson.vitePlusVersion)
-          )
-          ? Option.some({
-            dependencyType: Option.match(assessment.packageJson.oxlintTsgolintVersion, {
-              onNone: () => lspDependencyType,
-              onSome: (dependency) => dependency.dependencyType
-            }),
-            version: context.defaultOxlintTsgolintVersion
-          })
-          : assessment.packageJson.oxlintTsgolintVersion,
-        prepareScript: true,
-        managePrepareScript: true,
-        integrations
-      },
-      tsconfig: {
-        schemaPath: useTypescript
-          ? Option.some(relativeSchemaPath.startsWith(".") ? relativeSchemaPath : `./${relativeSchemaPath}`)
-          : Option.none(),
-        diagnosticSeverities,
-        manageIntegration: true
-      },
-      oxlintrcSchemaPath,
-      vscodeSettings,
+      integrations,
+      dependencyType: lspDependencyType,
+      diagnosticSeverities: diagnosticSeveritiesRecord,
       editors
-    } satisfies Target.State
+    } satisfies Target.Options
   })
+
+export const gatherTargetState = (
+  assessment: Assessment.State,
+  context: GatherTargetContext
+) => gatherTargetOptions(assessment).pipe(Effect.flatMap((options) => Target.create(assessment, context, options)))

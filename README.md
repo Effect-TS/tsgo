@@ -8,7 +8,10 @@ This project targets **Effect V4** (codename: "smol") primarily and also Effect 
 The setup of the TSGO version of the LSP can be performed via the command line interface:
 
 ```bash
+# Interactive and guided setup for human friends
 npx @effect/tsgo setup
+# Non-interactive, for LLM friends
+npx @effect/tsgo setup --help
 ```
 
 This will guide you through the installation process, which includes:
