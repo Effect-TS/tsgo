@@ -9,13 +9,3 @@ type Codegen struct {
 	// Description explains what the codegen does.
 	Description string
 }
-
-// ByName finds a codegen by name in a slice. Returns nil if not found.
-func ByName(codegens []Codegen, name string) *Codegen {
-	for i := range codegens {
-		if codegens[i].Name == name {
-			return &codegens[i]
-		}
-	}
-	return nil
-}

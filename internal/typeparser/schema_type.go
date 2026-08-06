@@ -14,20 +14,6 @@ var effectSchemaParserModuleDescriptor = newPackageSourceFileDescriptor("effect"
 // SchemaTypeId is the property key for Schema's variance struct.
 const SchemaTypeId = "~effect/Schema/Schema"
 
-// parseSchemaVarianceStruct checks if a type is a Schema variance struct (has _A, _I, _R).
-func (tp *TypeParser) parseSchemaVarianceStruct(t *checker.Type) bool {
-	a := tp.extractInvariantType(t, "_A")
-	if a == nil {
-		return false
-	}
-	i := tp.extractInvariantType(t, "_I")
-	if i == nil {
-		return false
-	}
-	r := tp.extractCovariantType(t, "_R")
-	return r != nil
-}
-
 // IsSchemaType returns true if the type is a Schema type (v4 or v3).
 func (tp *TypeParser) IsSchemaType(t *checker.Type, atLocation *ast.Node) bool {
 	if tp == nil {

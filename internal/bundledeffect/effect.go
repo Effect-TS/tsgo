@@ -47,12 +47,6 @@ func EnsurePackageInstalled(version EffectVersion, packageName string) error {
 	return nil
 }
 
-func PackageFile(version EffectVersion, packageName string, file string) (string, bool) {
-	path := pathpkg.Join(string(version), "node_modules", packageName, file)
-	content, ok := fixtures().files[path]
-	return string(content), ok
-}
-
 type fixtureProfileManifest struct {
 	Requested map[string]string `json:"requested"`
 	Resolved  map[string]string `json:"resolved"`

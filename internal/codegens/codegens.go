@@ -20,8 +20,3 @@ var All = []codegen.Codegen{
 		Description: "Generate Schemas from types",
 	},
 }
-
-// ByName finds a codegen by name. Returns nil if not found.
-func ByName(name string) *codegen.Codegen {
-	return codegen.ByName(All, name)
-}
