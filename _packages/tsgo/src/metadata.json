@@ -1959,6 +1959,29 @@
       }
     },
     {
+      "name": "preferTypedSchemaDecoder",
+      "group": "style",
+      "description": "Suggests typed Schema decoders when the input is assignable to the schema's Encoded type",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377112
+      ],
+      "preview": {
+        "sourceText": "\nimport { Schema } from \"effect\"\n\nconst Person = Schema.Struct({ name: Schema.String })\n\nexport const person = Schema.decodeUnknownSync(Person)({ name: \"Ada\" })\n",
+        "diagnostics": [
+          {
+            "start": 118,
+            "end": 135,
+            "text": "This input is already assignable to the schema's Encoded type. Use `decodeSync` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownSync`. effect(preferTypedSchemaDecoder)"
+          }
+        ]
+      }
+    },
+    {
       "name": "redundantMapError",
       "group": "style",
       "description": "Suggests hoisting a repeated trailing Effect.mapError from every yield in an Effect generator",
