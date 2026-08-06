@@ -51,11 +51,11 @@
   },
   "devDependencies": {
     "@effect/platform-node": "^4.0.0-beta.103",
-    "@effect/platform-node-shared": "^4.0.0-beta.103",
+    "@effect/platform-node-shared": "^4.0.0-beta.104",
     "@types/node": "^24.3.0",
     "tsdown": "^0.20.1",
     "typescript": "^5.9.2",
-    "effect": "^4.0.0-beta.103",
+    "effect": "^4.0.0-beta.104",
     "vitest": "^3.2.1"
   }
 }

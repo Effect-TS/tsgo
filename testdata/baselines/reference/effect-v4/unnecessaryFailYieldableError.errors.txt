@@ -17,7 +17,7 @@ Effect version: 4.0.0
     
     class DataTaggedError extends Data.TaggedError("DataTaggedError")<{}> {}
     
-    class SchemaError extends Schema.ErrorClass<SchemaError>("SchemaError")({
+    class SchemaError extends Schema.Error<SchemaError>("SchemaError")({
       _tag: Schema.tag("SchemaError")
     }) {}
     

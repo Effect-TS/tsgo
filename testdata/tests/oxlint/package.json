@@ -2,6 +2,6 @@
   "name": "oxlint-profile-tests",
   "private": true,
   "dependencies": {
-    "effect": "4.0.0-beta.103"
+    "effect": "4.0.0-beta.104"
   }
 }
