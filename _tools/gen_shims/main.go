@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"crypto/sha256"
 	"encoding/json"
 	"errors"
 	"flag"
@@ -18,6 +19,7 @@ import (
 	"slices"
 	"strconv"
 	"strings"
+	"time"
 
 	"golang.org/x/mod/modfile"
 	"golang.org/x/text/cases"
@@ -327,13 +329,7 @@ func writeShimHelpers(root string, helpers map[string][]byte) error {
 	return nil
 }
 
-func preparePackageLoad(repositoryRoot string) ([]string, string, func(), error) {
-	temporaryRoot, err := os.MkdirTemp(repositoryRoot, ".gen-shims-load-")
-	if err != nil {
-		return nil, "", nil, err
-	}
-	cleanup := func() { _ = os.RemoveAll(temporaryRoot) }
-	etscoreRoot := filepath.Join(temporaryRoot, "etscore")
+func preparePackageLoad(repositoryRoot string) ([]string, string, error) {
 	etscoreModule := []byte("module github.com/effect-ts/tsgo/etscore\n\ngo 1.26\n")
 	etscoreSource := []byte(`package etscore
 
@@ -343,42 +339,68 @@ func ParseFromPlugins(any) *EffectPluginOptions { return nil }
 
 func EnterCommandLineMode() func() { return func() {} }
 `)
-	if err := writeFile(filepath.Join(etscoreRoot, "go.mod"), etscoreModule, 0o644); err != nil {
-		cleanup()
-		return nil, "", nil, err
-	}
-	if err := writeFile(filepath.Join(etscoreRoot, "etscore.go"), etscoreSource, 0o644); err != nil {
-		cleanup()
-		return nil, "", nil, err
-	}
 	typescriptGoMod, err := os.ReadFile(filepath.Join(repositoryRoot, "typescript-go", "go.mod"))
 	if err != nil {
-		cleanup()
-		return nil, "", nil, err
-	}
-	modFile := filepath.Join(temporaryRoot, "typescript-go.mod")
-	typescriptGoMod = append(typescriptGoMod, fmt.Sprintf(
-		"\nrequire github.com/effect-ts/tsgo/etscore v0.0.0\nreplace github.com/effect-ts/tsgo/etscore => %s\n",
-		strconv.Quote(etscoreRoot),
-	)...)
-	if err := writeFile(modFile, typescriptGoMod, 0o644); err != nil {
-		cleanup()
-		return nil, "", nil, err
+		return nil, "", err
 	}
 	typescriptGoSum, err := os.ReadFile(filepath.Join(repositoryRoot, "typescript-go", "go.sum"))
 	if err != nil {
-		cleanup()
-		return nil, "", nil, err
+		return nil, "", err
 	}
-	if err := writeFile(strings.TrimSuffix(modFile, ".mod")+".sum", typescriptGoSum, 0o644); err != nil {
-		cleanup()
-		return nil, "", nil, err
+	loadHash := sha256.Sum256(bytes.Join([][]byte{[]byte(repositoryRoot), typescriptGoMod, typescriptGoSum, etscoreModule, etscoreSource}, []byte{0}))
+	loadRoot := filepath.Join(repositoryRoot, ".tmp", fmt.Sprintf("gen-shims-load-%x", loadHash[:8]))
+	etscoreRoot := filepath.Join(loadRoot, "etscore")
+	typescriptGoMod = append(slices.Clone(typescriptGoMod), fmt.Sprintf(
+		"\nrequire github.com/effect-ts/tsgo/etscore v0.0.0\nreplace github.com/effect-ts/tsgo/etscore => %s\n",
+		strconv.Quote(etscoreRoot),
+	)...)
+	completeMarker := filepath.Join(loadRoot, ".complete")
+	if _, err := os.Stat(completeMarker); errors.Is(err, os.ErrNotExist) {
+		temporaryParent := filepath.Dir(loadRoot)
+		if err := os.MkdirAll(temporaryParent, 0o755); err != nil {
+			return nil, "", err
+		}
+		stagingRoot, err := os.MkdirTemp(temporaryParent, ".gen-shims-load-")
+		if err != nil {
+			return nil, "", err
+		}
+		removeStaging := true
+		defer func() {
+			if removeStaging {
+				_ = os.RemoveAll(stagingRoot)
+			}
+		}()
+		files := []struct {
+			path string
+			data []byte
+		}{
+			{filepath.Join("etscore", "go.mod"), etscoreModule},
+			{filepath.Join("etscore", "etscore.go"), etscoreSource},
+			{"typescript-go.mod", typescriptGoMod},
+			{"typescript-go.sum", typescriptGoSum},
+			{".complete", nil},
+		}
+		for _, file := range files {
+			if err := writeFile(filepath.Join(stagingRoot, file.path), file.data, 0o644); err != nil {
+				return nil, "", err
+			}
+		}
+		if err := os.Rename(stagingRoot, loadRoot); err != nil {
+			if _, markerErr := os.Stat(completeMarker); markerErr != nil {
+				return nil, "", err
+			}
+		} else {
+			removeStaging = false
+		}
+	} else if err != nil {
+		return nil, "", err
 	}
+	modFile := filepath.Join(loadRoot, "typescript-go.mod")
 	environment := slices.DeleteFunc(os.Environ(), func(value string) bool {
 		return strings.HasPrefix(value, "GOWORK=") || strings.HasPrefix(value, "GOFLAGS=") || strings.HasPrefix(value, "GO111MODULE=")
 	})
 	environment = append(environment, "GOWORK=off", "GO111MODULE=on")
-	return environment, modFile, cleanup, nil
+	return environment, modFile, nil
 }
 
 func resetOutputRoot(root string) error {
@@ -395,6 +417,7 @@ func main() {
 }
 
 func run() error {
+	started := time.Now()
 	var extraShimRoots stringFlags
 	var repositoryRoot string
 	flag.StringVar(&repositoryRoot, "repository-root", "", "path to the repository root")
@@ -441,11 +464,11 @@ func run() error {
 		packagesToShimFullNames[i] = tsgoInternalPrefix + pkg
 	}
 
-	environment, modFile, cleanupPackageLoad, err := preparePackageLoad(repositoryRoot)
+	environment, modFile, err := preparePackageLoad(repositoryRoot)
 	if err != nil {
 		return fmt.Errorf("prepare TypeScript-Go package loading: %w", err)
 	}
-	defer cleanupPackageLoad()
+	loadStarted := time.Now()
 	loadedPackages, err := packages.Load(&packages.Config{
 		Dir:        filepath.Join(repositoryRoot, "typescript-go"),
 		Env:        environment,
@@ -458,7 +481,9 @@ func run() error {
 	if packages.PrintErrors(loadedPackages) > 0 {
 		return errors.New("TypeScript-Go package loading failed")
 	}
+	fmt.Printf("Loaded %d TypeScript-Go packages in %s\n", len(loadedPackages), time.Since(loadStarted).Round(time.Millisecond))
 
+	generateStarted := time.Now()
 	if err := resetOutputRoot(shimPath); err != nil {
 		return fmt.Errorf("reset shim output: %w", err)
 	}
@@ -881,5 +906,6 @@ func run() error {
 	if err := writeFile(goWorkPath, updatedGoWork, 0o644); err != nil {
 		return fmt.Errorf("update go.work: %w", err)
 	}
+	fmt.Printf("Generated %d shim packages in %s (total %s)\n", len(loadedPackages), time.Since(generateStarted).Round(time.Millisecond), time.Since(started).Round(time.Millisecond))
 	return nil
 }
