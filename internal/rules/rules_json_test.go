@@ -89,6 +89,27 @@ func TestReadmeTable(t *testing.T) {
 	}
 }
 
+func TestReadmeLinksAreAbsolute(t *testing.T) {
+	t.Parallel()
+	readmePath := filepath.Join(repoRoot(t), "README.md")
+	content, err := os.ReadFile(readmePath)
+	if err != nil {
+		t.Fatalf("read README.md: %v", err)
+	}
+
+	patterns := []*regexp.Regexp{
+		regexp.MustCompile(`href="([^"]+)"`),
+		regexp.MustCompile(`\[[^\]]+\]\(([^)]+)\)`),
+	}
+	for _, pattern := range patterns {
+		for _, match := range pattern.FindAllStringSubmatch(string(content), -1) {
+			if !strings.HasPrefix(match[1], "https://") && !strings.HasPrefix(match[1], "http://") {
+				t.Errorf("README.md contains non-absolute link %q", match[1])
+			}
+		}
+	}
+}
+
 func TestMetadataJSON(t *testing.T) {
 	t.Parallel()
 	root := repoRoot(t)
@@ -737,7 +758,7 @@ func generateReadmeTable() string {
 		lines = append(lines, fmt.Sprintf("    <tr><td colspan=\"2\"><strong>%s</strong> <em>%s</em></td></tr>",
 			html.EscapeString(group.Name), html.EscapeString(group.Description)))
 		for _, r := range groupRules {
-			lines = append(lines, fmt.Sprintf("    <tr><td><a href=\"docs/rules/%s.md\"><code>%s</code></a></td><td>%s</td></tr>",
+			lines = append(lines, fmt.Sprintf("    <tr><td><a href=\"https://github.com/Effect-TS/tsgo/blob/main/docs/rules/%s.md\"><code>%s</code></a></td><td>%s</td></tr>",
 				kebabCase(r.name), html.EscapeString(r.name), html.EscapeString(r.description)))
 		}
 	}
