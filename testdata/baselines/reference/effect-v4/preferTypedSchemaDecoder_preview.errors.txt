@@ -1,0 +1,18 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/preferTypedSchemaDecoder_preview.ts(8,30): warning TS377112: This input is already assignable to the schema's Encoded type. Use `decodeSync` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownSync`. effect(preferTypedSchemaDecoder)
+
+
+==== /.src/preferTypedSchemaDecoder_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferTypedSchemaDecoder:warning
+    
+    import { Schema } from "effect"
+    
+    const Person = Schema.Struct({ name: Schema.String })
+    
+    export const person = Schema.decodeUnknownSync(Person)({ name: "Ada" })
+                                 ~~~~~~~~~~~~~~~~~
+!!! warning TS377112: This input is already assignable to the schema's Encoded type. Use `decodeSync` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownSync`. effect(preferTypedSchemaDecoder)
+    

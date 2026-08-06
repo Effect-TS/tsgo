@@ -1,0 +1,733 @@
+=== Quick Fix Inventory ===
+
+[D1] (19:28-19:45) TS377112: This input is already assignable to the schema's Encoded type. Use `decodeSync` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownSync`. effect(preferTypedSchemaDecoder)
+  Fix 0: "Disable preferTypedSchemaDecoder for this line"
+  Fix 1: "Disable preferTypedSchemaDecoder for entire file"
+  Fix 2: "Replace with decodeSync"
+
+[D2] (20:31-20:48) TS377112: This input is already assignable to the schema's Encoded type. Use `decodeSync` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownSync`. effect(preferTypedSchemaDecoder)
+  Fix 0: "Disable preferTypedSchemaDecoder for this line"
+  Fix 1: "Disable preferTypedSchemaDecoder for entire file"
+  Fix 2: "Replace with decodeSync"
+
+[D3] (21:30-21:49) TS377112: This input is already assignable to the schema's Encoded type. Use `decodeEffect` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownEffect`. effect(preferTypedSchemaDecoder)
+  Fix 0: "Disable preferTypedSchemaDecoder for this line"
+  Fix 1: "Disable preferTypedSchemaDecoder for entire file"
+  Fix 2: "Replace with decodeEffect"
+
+[D4] (22:28-22:45) TS377112: This input is already assignable to the schema's Encoded type. Use `decodeExit` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownExit`. effect(preferTypedSchemaDecoder)
+  Fix 0: "Disable preferTypedSchemaDecoder for this line"
+  Fix 1: "Disable preferTypedSchemaDecoder for entire file"
+  Fix 2: "Replace with decodeExit"
+
+[D5] (23:30-23:49) TS377112: This input is already assignable to the schema's Encoded type. Use `decodeOption` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownOption`. effect(preferTypedSchemaDecoder)
+  Fix 0: "Disable preferTypedSchemaDecoder for this line"
+  Fix 1: "Disable preferTypedSchemaDecoder for entire file"
+  Fix 2: "Replace with decodeOption"
+
+[D6] (24:30-24:49) TS377112: This input is already assignable to the schema's Encoded type. Use `decodeResult` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownResult`. effect(preferTypedSchemaDecoder)
+  Fix 0: "Disable preferTypedSchemaDecoder for this line"
+  Fix 1: "Disable preferTypedSchemaDecoder for entire file"
+  Fix 2: "Replace with decodeResult"
+
+[D7] (25:31-25:51) TS377112: This input is already assignable to the schema's Encoded type. Use `decodePromise` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownPromise`. effect(preferTypedSchemaDecoder)
+  Fix 0: "Disable preferTypedSchemaDecoder for this line"
+  Fix 1: "Disable preferTypedSchemaDecoder for entire file"
+  Fix 2: "Replace with decodePromise"
+
+[D8] (28:36-28:53) TS377112: This input is already assignable to the schema's Encoded type. Use `decodeSync` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownSync`. effect(preferTypedSchemaDecoder)
+  Fix 0: "Disable preferTypedSchemaDecoder for this line"
+  Fix 1: "Disable preferTypedSchemaDecoder for entire file"
+  Fix 2: "Replace with decodeSync"
+
+[D9] (29:42-29:59) TS377112: This input is already assignable to the schema's Encoded type. Use `decodeSync` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownSync`. effect(preferTypedSchemaDecoder)
+  Fix 0: "Disable preferTypedSchemaDecoder for this line"
+  Fix 1: "Disable preferTypedSchemaDecoder for entire file"
+  Fix 2: "Replace with decodeSync"
+
+[D10] (30:22-30:39) TS377112: This input is already assignable to the schema's Encoded type. Use `decodeSync` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownSync`. effect(preferTypedSchemaDecoder)
+  Fix 0: "Disable preferTypedSchemaDecoder for this line"
+  Fix 1: "Disable preferTypedSchemaDecoder for entire file"
+
+[D11] (33:35-33:52) TS377112: This input is already assignable to the schema's Encoded type. Use `decodeSync` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownSync`. effect(preferTypedSchemaDecoder)
+  Fix 0: "Disable preferTypedSchemaDecoder for this line"
+  Fix 1: "Disable preferTypedSchemaDecoder for entire file"
+  Fix 2: "Replace with decodeSync"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable preferTypedSchemaDecoder for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable preferTypedSchemaDecoder for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with decodeSync" ===
+
+--- file:///.src/preferTypedSchemaDecoder.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferTypedSchemaDecoder:warning
+
+import { pipe, Schema } from "effect"
+import { decodeUnknownSync } from "effect/Schema"
+import * as SchemaParser from "effect/SchemaParser"
+
+const Person = Schema.Struct({
+  name: Schema.String,
+  coordinates: Schema.Tuple([Schema.Number, Schema.Number])
+})
+
+const person = {
+  name: "Ada",
+  coordinates: [1, 2] as [number, number]
+}
+
+// Typed variables and contextually typed literals are reported.
+export const sync = Schema.decodeSync(Person)(person)
+export const literal = Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1, 2] })
+export const effect = Schema.decodeUnknownEffect(Person)(person)
+export const exit = Schema.decodeUnknownExit(Person)(person)
+export const option = Schema.decodeUnknownOption(Person)(person)
+export const result = Schema.decodeUnknownResult(Person)(person)
+export const promise = Schema.decodeUnknownPromise(Person)(person)
+
+// SchemaParser APIs and piping forms are normalized through piping flows.
+export const parser = SchemaParser.decodeUnknownSync(Person)(person)
+export const piped = pipe(person, Schema.decodeUnknownSync(Person))
+export const named = decodeUnknownSync(Person)(person)
+
+// Application options do not prevent recognizing the decoder application.
+export const withOptions = Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1, 2] }, { errors: "all" })
+
+declare const unknownInput: unknown
+declare const anyInput: any
+declare const wrongInput: { readonly name: number }
+
+// Unknown, any, incompatible, and unresolved generic inputs are valid uses.
+Schema.decodeUnknownSync(Person)(unknownInput)
+Schema.decodeUnknownSync(Person)(anyInput)
+Schema.decodeUnknownSync(Person)(wrongInput)
+Schema.decodeUnknownSync(Person)({ name: 1, coordinates: [1, 2] })
+Schema.decodeUnknownSync(Person)({ name: "Ada" })
+Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1] })
+
+function decodeGeneric<T>(input: T) {
+  return Schema.decodeUnknownSync(Person)(input)
+}
+
+function decodeNestedGeneric<T extends string>(input: { readonly name: T; readonly coordinates: [number, number] }) {
+  return Schema.decodeUnknownSync(Person)(input)
+}
+
+decodeGeneric(person)
+decodeNestedGeneric(person)
+
+
+=== [D2] Fix 0: "Disable preferTypedSchemaDecoder for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable preferTypedSchemaDecoder for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with decodeSync" ===
+
+--- file:///.src/preferTypedSchemaDecoder.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferTypedSchemaDecoder:warning
+
+import { pipe, Schema } from "effect"
+import { decodeUnknownSync } from "effect/Schema"
+import * as SchemaParser from "effect/SchemaParser"
+
+const Person = Schema.Struct({
+  name: Schema.String,
+  coordinates: Schema.Tuple([Schema.Number, Schema.Number])
+})
+
+const person = {
+  name: "Ada",
+  coordinates: [1, 2] as [number, number]
+}
+
+// Typed variables and contextually typed literals are reported.
+export const sync = Schema.decodeUnknownSync(Person)(person)
+export const literal = Schema.decodeSync(Person)({ name: "Ada", coordinates: [1, 2] })
+export const effect = Schema.decodeUnknownEffect(Person)(person)
+export const exit = Schema.decodeUnknownExit(Person)(person)
+export const option = Schema.decodeUnknownOption(Person)(person)
+export const result = Schema.decodeUnknownResult(Person)(person)
+export const promise = Schema.decodeUnknownPromise(Person)(person)
+
+// SchemaParser APIs and piping forms are normalized through piping flows.
+export const parser = SchemaParser.decodeUnknownSync(Person)(person)
+export const piped = pipe(person, Schema.decodeUnknownSync(Person))
+export const named = decodeUnknownSync(Person)(person)
+
+// Application options do not prevent recognizing the decoder application.
+export const withOptions = Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1, 2] }, { errors: "all" })
+
+declare const unknownInput: unknown
+declare const anyInput: any
+declare const wrongInput: { readonly name: number }
+
+// Unknown, any, incompatible, and unresolved generic inputs are valid uses.
+Schema.decodeUnknownSync(Person)(unknownInput)
+Schema.decodeUnknownSync(Person)(anyInput)
+Schema.decodeUnknownSync(Person)(wrongInput)
+Schema.decodeUnknownSync(Person)({ name: 1, coordinates: [1, 2] })
+Schema.decodeUnknownSync(Person)({ name: "Ada" })
+Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1] })
+
+function decodeGeneric<T>(input: T) {
+  return Schema.decodeUnknownSync(Person)(input)
+}
+
+function decodeNestedGeneric<T extends string>(input: { readonly name: T; readonly coordinates: [number, number] }) {
+  return Schema.decodeUnknownSync(Person)(input)
+}
+
+decodeGeneric(person)
+decodeNestedGeneric(person)
+
+
+=== [D3] Fix 0: "Disable preferTypedSchemaDecoder for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable preferTypedSchemaDecoder for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with decodeEffect" ===
+
+--- file:///.src/preferTypedSchemaDecoder.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferTypedSchemaDecoder:warning
+
+import { pipe, Schema } from "effect"
+import { decodeUnknownSync } from "effect/Schema"
+import * as SchemaParser from "effect/SchemaParser"
+
+const Person = Schema.Struct({
+  name: Schema.String,
+  coordinates: Schema.Tuple([Schema.Number, Schema.Number])
+})
+
+const person = {
+  name: "Ada",
+  coordinates: [1, 2] as [number, number]
+}
+
+// Typed variables and contextually typed literals are reported.
+export const sync = Schema.decodeUnknownSync(Person)(person)
+export const literal = Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1, 2] })
+export const effect = Schema.decodeEffect(Person)(person)
+export const exit = Schema.decodeUnknownExit(Person)(person)
+export const option = Schema.decodeUnknownOption(Person)(person)
+export const result = Schema.decodeUnknownResult(Person)(person)
+export const promise = Schema.decodeUnknownPromise(Person)(person)
+
+// SchemaParser APIs and piping forms are normalized through piping flows.
+export const parser = SchemaParser.decodeUnknownSync(Person)(person)
+export const piped = pipe(person, Schema.decodeUnknownSync(Person))
+export const named = decodeUnknownSync(Person)(person)
+
+// Application options do not prevent recognizing the decoder application.
+export const withOptions = Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1, 2] }, { errors: "all" })
+
+declare const unknownInput: unknown
+declare const anyInput: any
+declare const wrongInput: { readonly name: number }
+
+// Unknown, any, incompatible, and unresolved generic inputs are valid uses.
+Schema.decodeUnknownSync(Person)(unknownInput)
+Schema.decodeUnknownSync(Person)(anyInput)
+Schema.decodeUnknownSync(Person)(wrongInput)
+Schema.decodeUnknownSync(Person)({ name: 1, coordinates: [1, 2] })
+Schema.decodeUnknownSync(Person)({ name: "Ada" })
+Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1] })
+
+function decodeGeneric<T>(input: T) {
+  return Schema.decodeUnknownSync(Person)(input)
+}
+
+function decodeNestedGeneric<T extends string>(input: { readonly name: T; readonly coordinates: [number, number] }) {
+  return Schema.decodeUnknownSync(Person)(input)
+}
+
+decodeGeneric(person)
+decodeNestedGeneric(person)
+
+
+=== [D4] Fix 0: "Disable preferTypedSchemaDecoder for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable preferTypedSchemaDecoder for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with decodeExit" ===
+
+--- file:///.src/preferTypedSchemaDecoder.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferTypedSchemaDecoder:warning
+
+import { pipe, Schema } from "effect"
+import { decodeUnknownSync } from "effect/Schema"
+import * as SchemaParser from "effect/SchemaParser"
+
+const Person = Schema.Struct({
+  name: Schema.String,
+  coordinates: Schema.Tuple([Schema.Number, Schema.Number])
+})
+
+const person = {
+  name: "Ada",
+  coordinates: [1, 2] as [number, number]
+}
+
+// Typed variables and contextually typed literals are reported.
+export const sync = Schema.decodeUnknownSync(Person)(person)
+export const literal = Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1, 2] })
+export const effect = Schema.decodeUnknownEffect(Person)(person)
+export const exit = Schema.decodeExit(Person)(person)
+export const option = Schema.decodeUnknownOption(Person)(person)
+export const result = Schema.decodeUnknownResult(Person)(person)
+export const promise = Schema.decodeUnknownPromise(Person)(person)
+
+// SchemaParser APIs and piping forms are normalized through piping flows.
+export const parser = SchemaParser.decodeUnknownSync(Person)(person)
+export const piped = pipe(person, Schema.decodeUnknownSync(Person))
+export const named = decodeUnknownSync(Person)(person)
+
+// Application options do not prevent recognizing the decoder application.
+export const withOptions = Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1, 2] }, { errors: "all" })
+
+declare const unknownInput: unknown
+declare const anyInput: any
+declare const wrongInput: { readonly name: number }
+
+// Unknown, any, incompatible, and unresolved generic inputs are valid uses.
+Schema.decodeUnknownSync(Person)(unknownInput)
+Schema.decodeUnknownSync(Person)(anyInput)
+Schema.decodeUnknownSync(Person)(wrongInput)
+Schema.decodeUnknownSync(Person)({ name: 1, coordinates: [1, 2] })
+Schema.decodeUnknownSync(Person)({ name: "Ada" })
+Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1] })
+
+function decodeGeneric<T>(input: T) {
+  return Schema.decodeUnknownSync(Person)(input)
+}
+
+function decodeNestedGeneric<T extends string>(input: { readonly name: T; readonly coordinates: [number, number] }) {
+  return Schema.decodeUnknownSync(Person)(input)
+}
+
+decodeGeneric(person)
+decodeNestedGeneric(person)
+
+
+=== [D5] Fix 0: "Disable preferTypedSchemaDecoder for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable preferTypedSchemaDecoder for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Replace with decodeOption" ===
+
+--- file:///.src/preferTypedSchemaDecoder.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferTypedSchemaDecoder:warning
+
+import { pipe, Schema } from "effect"
+import { decodeUnknownSync } from "effect/Schema"
+import * as SchemaParser from "effect/SchemaParser"
+
+const Person = Schema.Struct({
+  name: Schema.String,
+  coordinates: Schema.Tuple([Schema.Number, Schema.Number])
+})
+
+const person = {
+  name: "Ada",
+  coordinates: [1, 2] as [number, number]
+}
+
+// Typed variables and contextually typed literals are reported.
+export const sync = Schema.decodeUnknownSync(Person)(person)
+export const literal = Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1, 2] })
+export const effect = Schema.decodeUnknownEffect(Person)(person)
+export const exit = Schema.decodeUnknownExit(Person)(person)
+export const option = Schema.decodeOption(Person)(person)
+export const result = Schema.decodeUnknownResult(Person)(person)
+export const promise = Schema.decodeUnknownPromise(Person)(person)
+
+// SchemaParser APIs and piping forms are normalized through piping flows.
+export const parser = SchemaParser.decodeUnknownSync(Person)(person)
+export const piped = pipe(person, Schema.decodeUnknownSync(Person))
+export const named = decodeUnknownSync(Person)(person)
+
+// Application options do not prevent recognizing the decoder application.
+export const withOptions = Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1, 2] }, { errors: "all" })
+
+declare const unknownInput: unknown
+declare const anyInput: any
+declare const wrongInput: { readonly name: number }
+
+// Unknown, any, incompatible, and unresolved generic inputs are valid uses.
+Schema.decodeUnknownSync(Person)(unknownInput)
+Schema.decodeUnknownSync(Person)(anyInput)
+Schema.decodeUnknownSync(Person)(wrongInput)
+Schema.decodeUnknownSync(Person)({ name: 1, coordinates: [1, 2] })
+Schema.decodeUnknownSync(Person)({ name: "Ada" })
+Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1] })
+
+function decodeGeneric<T>(input: T) {
+  return Schema.decodeUnknownSync(Person)(input)
+}
+
+function decodeNestedGeneric<T extends string>(input: { readonly name: T; readonly coordinates: [number, number] }) {
+  return Schema.decodeUnknownSync(Person)(input)
+}
+
+decodeGeneric(person)
+decodeNestedGeneric(person)
+
+
+=== [D6] Fix 0: "Disable preferTypedSchemaDecoder for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable preferTypedSchemaDecoder for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace with decodeResult" ===
+
+--- file:///.src/preferTypedSchemaDecoder.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferTypedSchemaDecoder:warning
+
+import { pipe, Schema } from "effect"
+import { decodeUnknownSync } from "effect/Schema"
+import * as SchemaParser from "effect/SchemaParser"
+
+const Person = Schema.Struct({
+  name: Schema.String,
+  coordinates: Schema.Tuple([Schema.Number, Schema.Number])
+})
+
+const person = {
+  name: "Ada",
+  coordinates: [1, 2] as [number, number]
+}
+
+// Typed variables and contextually typed literals are reported.
+export const sync = Schema.decodeUnknownSync(Person)(person)
+export const literal = Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1, 2] })
+export const effect = Schema.decodeUnknownEffect(Person)(person)
+export const exit = Schema.decodeUnknownExit(Person)(person)
+export const option = Schema.decodeUnknownOption(Person)(person)
+export const result = Schema.decodeResult(Person)(person)
+export const promise = Schema.decodeUnknownPromise(Person)(person)
+
+// SchemaParser APIs and piping forms are normalized through piping flows.
+export const parser = SchemaParser.decodeUnknownSync(Person)(person)
+export const piped = pipe(person, Schema.decodeUnknownSync(Person))
+export const named = decodeUnknownSync(Person)(person)
+
+// Application options do not prevent recognizing the decoder application.
+export const withOptions = Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1, 2] }, { errors: "all" })
+
+declare const unknownInput: unknown
+declare const anyInput: any
+declare const wrongInput: { readonly name: number }
+
+// Unknown, any, incompatible, and unresolved generic inputs are valid uses.
+Schema.decodeUnknownSync(Person)(unknownInput)
+Schema.decodeUnknownSync(Person)(anyInput)
+Schema.decodeUnknownSync(Person)(wrongInput)
+Schema.decodeUnknownSync(Person)({ name: 1, coordinates: [1, 2] })
+Schema.decodeUnknownSync(Person)({ name: "Ada" })
+Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1] })
+
+function decodeGeneric<T>(input: T) {
+  return Schema.decodeUnknownSync(Person)(input)
+}
+
+function decodeNestedGeneric<T extends string>(input: { readonly name: T; readonly coordinates: [number, number] }) {
+  return Schema.decodeUnknownSync(Person)(input)
+}
+
+decodeGeneric(person)
+decodeNestedGeneric(person)
+
+
+=== [D7] Fix 0: "Disable preferTypedSchemaDecoder for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable preferTypedSchemaDecoder for entire file" ===
+skipped by default
+
+=== [D7] Fix 2: "Replace with decodePromise" ===
+
+--- file:///.src/preferTypedSchemaDecoder.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferTypedSchemaDecoder:warning
+
+import { pipe, Schema } from "effect"
+import { decodeUnknownSync } from "effect/Schema"
+import * as SchemaParser from "effect/SchemaParser"
+
+const Person = Schema.Struct({
+  name: Schema.String,
+  coordinates: Schema.Tuple([Schema.Number, Schema.Number])
+})
+
+const person = {
+  name: "Ada",
+  coordinates: [1, 2] as [number, number]
+}
+
+// Typed variables and contextually typed literals are reported.
+export const sync = Schema.decodeUnknownSync(Person)(person)
+export const literal = Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1, 2] })
+export const effect = Schema.decodeUnknownEffect(Person)(person)
+export const exit = Schema.decodeUnknownExit(Person)(person)
+export const option = Schema.decodeUnknownOption(Person)(person)
+export const result = Schema.decodeUnknownResult(Person)(person)
+export const promise = Schema.decodePromise(Person)(person)
+
+// SchemaParser APIs and piping forms are normalized through piping flows.
+export const parser = SchemaParser.decodeUnknownSync(Person)(person)
+export const piped = pipe(person, Schema.decodeUnknownSync(Person))
+export const named = decodeUnknownSync(Person)(person)
+
+// Application options do not prevent recognizing the decoder application.
+export const withOptions = Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1, 2] }, { errors: "all" })
+
+declare const unknownInput: unknown
+declare const anyInput: any
+declare const wrongInput: { readonly name: number }
+
+// Unknown, any, incompatible, and unresolved generic inputs are valid uses.
+Schema.decodeUnknownSync(Person)(unknownInput)
+Schema.decodeUnknownSync(Person)(anyInput)
+Schema.decodeUnknownSync(Person)(wrongInput)
+Schema.decodeUnknownSync(Person)({ name: 1, coordinates: [1, 2] })
+Schema.decodeUnknownSync(Person)({ name: "Ada" })
+Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1] })
+
+function decodeGeneric<T>(input: T) {
+  return Schema.decodeUnknownSync(Person)(input)
+}
+
+function decodeNestedGeneric<T extends string>(input: { readonly name: T; readonly coordinates: [number, number] }) {
+  return Schema.decodeUnknownSync(Person)(input)
+}
+
+decodeGeneric(person)
+decodeNestedGeneric(person)
+
+
+=== [D8] Fix 0: "Disable preferTypedSchemaDecoder for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable preferTypedSchemaDecoder for entire file" ===
+skipped by default
+
+=== [D8] Fix 2: "Replace with decodeSync" ===
+
+--- file:///.src/preferTypedSchemaDecoder.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferTypedSchemaDecoder:warning
+
+import { pipe, Schema } from "effect"
+import { decodeUnknownSync } from "effect/Schema"
+import * as SchemaParser from "effect/SchemaParser"
+
+const Person = Schema.Struct({
+  name: Schema.String,
+  coordinates: Schema.Tuple([Schema.Number, Schema.Number])
+})
+
+const person = {
+  name: "Ada",
+  coordinates: [1, 2] as [number, number]
+}
+
+// Typed variables and contextually typed literals are reported.
+export const sync = Schema.decodeUnknownSync(Person)(person)
+export const literal = Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1, 2] })
+export const effect = Schema.decodeUnknownEffect(Person)(person)
+export const exit = Schema.decodeUnknownExit(Person)(person)
+export const option = Schema.decodeUnknownOption(Person)(person)
+export const result = Schema.decodeUnknownResult(Person)(person)
+export const promise = Schema.decodeUnknownPromise(Person)(person)
+
+// SchemaParser APIs and piping forms are normalized through piping flows.
+export const parser = SchemaParser.decodeSync(Person)(person)
+export const piped = pipe(person, Schema.decodeUnknownSync(Person))
+export const named = decodeUnknownSync(Person)(person)
+
+// Application options do not prevent recognizing the decoder application.
+export const withOptions = Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1, 2] }, { errors: "all" })
+
+declare const unknownInput: unknown
+declare const anyInput: any
+declare const wrongInput: { readonly name: number }
+
+// Unknown, any, incompatible, and unresolved generic inputs are valid uses.
+Schema.decodeUnknownSync(Person)(unknownInput)
+Schema.decodeUnknownSync(Person)(anyInput)
+Schema.decodeUnknownSync(Person)(wrongInput)
+Schema.decodeUnknownSync(Person)({ name: 1, coordinates: [1, 2] })
+Schema.decodeUnknownSync(Person)({ name: "Ada" })
+Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1] })
+
+function decodeGeneric<T>(input: T) {
+  return Schema.decodeUnknownSync(Person)(input)
+}
+
+function decodeNestedGeneric<T extends string>(input: { readonly name: T; readonly coordinates: [number, number] }) {
+  return Schema.decodeUnknownSync(Person)(input)
+}
+
+decodeGeneric(person)
+decodeNestedGeneric(person)
+
+
+=== [D9] Fix 0: "Disable preferTypedSchemaDecoder for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable preferTypedSchemaDecoder for entire file" ===
+skipped by default
+
+=== [D9] Fix 2: "Replace with decodeSync" ===
+
+--- file:///.src/preferTypedSchemaDecoder.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferTypedSchemaDecoder:warning
+
+import { pipe, Schema } from "effect"
+import { decodeUnknownSync } from "effect/Schema"
+import * as SchemaParser from "effect/SchemaParser"
+
+const Person = Schema.Struct({
+  name: Schema.String,
+  coordinates: Schema.Tuple([Schema.Number, Schema.Number])
+})
+
+const person = {
+  name: "Ada",
+  coordinates: [1, 2] as [number, number]
+}
+
+// Typed variables and contextually typed literals are reported.
+export const sync = Schema.decodeUnknownSync(Person)(person)
+export const literal = Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1, 2] })
+export const effect = Schema.decodeUnknownEffect(Person)(person)
+export const exit = Schema.decodeUnknownExit(Person)(person)
+export const option = Schema.decodeUnknownOption(Person)(person)
+export const result = Schema.decodeUnknownResult(Person)(person)
+export const promise = Schema.decodeUnknownPromise(Person)(person)
+
+// SchemaParser APIs and piping forms are normalized through piping flows.
+export const parser = SchemaParser.decodeUnknownSync(Person)(person)
+export const piped = pipe(person, Schema.decodeSync(Person))
+export const named = decodeUnknownSync(Person)(person)
+
+// Application options do not prevent recognizing the decoder application.
+export const withOptions = Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1, 2] }, { errors: "all" })
+
+declare const unknownInput: unknown
+declare const anyInput: any
+declare const wrongInput: { readonly name: number }
+
+// Unknown, any, incompatible, and unresolved generic inputs are valid uses.
+Schema.decodeUnknownSync(Person)(unknownInput)
+Schema.decodeUnknownSync(Person)(anyInput)
+Schema.decodeUnknownSync(Person)(wrongInput)
+Schema.decodeUnknownSync(Person)({ name: 1, coordinates: [1, 2] })
+Schema.decodeUnknownSync(Person)({ name: "Ada" })
+Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1] })
+
+function decodeGeneric<T>(input: T) {
+  return Schema.decodeUnknownSync(Person)(input)
+}
+
+function decodeNestedGeneric<T extends string>(input: { readonly name: T; readonly coordinates: [number, number] }) {
+  return Schema.decodeUnknownSync(Person)(input)
+}
+
+decodeGeneric(person)
+decodeNestedGeneric(person)
+
+
+=== [D10] Fix 0: "Disable preferTypedSchemaDecoder for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable preferTypedSchemaDecoder for entire file" ===
+skipped by default
+
+=== [D11] Fix 0: "Disable preferTypedSchemaDecoder for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable preferTypedSchemaDecoder for entire file" ===
+skipped by default
+
+=== [D11] Fix 2: "Replace with decodeSync" ===
+
+--- file:///.src/preferTypedSchemaDecoder.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferTypedSchemaDecoder:warning
+
+import { pipe, Schema } from "effect"
+import { decodeUnknownSync } from "effect/Schema"
+import * as SchemaParser from "effect/SchemaParser"
+
+const Person = Schema.Struct({
+  name: Schema.String,
+  coordinates: Schema.Tuple([Schema.Number, Schema.Number])
+})
+
+const person = {
+  name: "Ada",
+  coordinates: [1, 2] as [number, number]
+}
+
+// Typed variables and contextually typed literals are reported.
+export const sync = Schema.decodeUnknownSync(Person)(person)
+export const literal = Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1, 2] })
+export const effect = Schema.decodeUnknownEffect(Person)(person)
+export const exit = Schema.decodeUnknownExit(Person)(person)
+export const option = Schema.decodeUnknownOption(Person)(person)
+export const result = Schema.decodeUnknownResult(Person)(person)
+export const promise = Schema.decodeUnknownPromise(Person)(person)
+
+// SchemaParser APIs and piping forms are normalized through piping flows.
+export const parser = SchemaParser.decodeUnknownSync(Person)(person)
+export const piped = pipe(person, Schema.decodeUnknownSync(Person))
+export const named = decodeUnknownSync(Person)(person)
+
+// Application options do not prevent recognizing the decoder application.
+export const withOptions = Schema.decodeSync(Person)({ name: "Ada", coordinates: [1, 2] }, { errors: "all" })
+
+declare const unknownInput: unknown
+declare const anyInput: any
+declare const wrongInput: { readonly name: number }
+
+// Unknown, any, incompatible, and unresolved generic inputs are valid uses.
+Schema.decodeUnknownSync(Person)(unknownInput)
+Schema.decodeUnknownSync(Person)(anyInput)
+Schema.decodeUnknownSync(Person)(wrongInput)
+Schema.decodeUnknownSync(Person)({ name: 1, coordinates: [1, 2] })
+Schema.decodeUnknownSync(Person)({ name: "Ada" })
+Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1] })
+
+function decodeGeneric<T>(input: T) {
+  return Schema.decodeUnknownSync(Person)(input)
+}
+
+function decodeNestedGeneric<T extends string>(input: { readonly name: T; readonly coordinates: [number, number] }) {
+  return Schema.decodeUnknownSync(Person)(input)
+}
+
+decodeGeneric(person)
+decodeNestedGeneric(person)
+

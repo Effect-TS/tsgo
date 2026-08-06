@@ -1,0 +1,96 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/preferTypedSchemaDecoder.ts(19,28): warning TS377112: This input is already assignable to the schema's Encoded type. Use `decodeSync` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownSync`. effect(preferTypedSchemaDecoder)
+/.src/preferTypedSchemaDecoder.ts(20,31): warning TS377112: This input is already assignable to the schema's Encoded type. Use `decodeSync` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownSync`. effect(preferTypedSchemaDecoder)
+/.src/preferTypedSchemaDecoder.ts(21,30): warning TS377112: This input is already assignable to the schema's Encoded type. Use `decodeEffect` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownEffect`. effect(preferTypedSchemaDecoder)
+/.src/preferTypedSchemaDecoder.ts(22,28): warning TS377112: This input is already assignable to the schema's Encoded type. Use `decodeExit` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownExit`. effect(preferTypedSchemaDecoder)
+/.src/preferTypedSchemaDecoder.ts(23,30): warning TS377112: This input is already assignable to the schema's Encoded type. Use `decodeOption` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownOption`. effect(preferTypedSchemaDecoder)
+/.src/preferTypedSchemaDecoder.ts(24,30): warning TS377112: This input is already assignable to the schema's Encoded type. Use `decodeResult` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownResult`. effect(preferTypedSchemaDecoder)
+/.src/preferTypedSchemaDecoder.ts(25,31): warning TS377112: This input is already assignable to the schema's Encoded type. Use `decodePromise` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownPromise`. effect(preferTypedSchemaDecoder)
+/.src/preferTypedSchemaDecoder.ts(28,36): warning TS377112: This input is already assignable to the schema's Encoded type. Use `decodeSync` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownSync`. effect(preferTypedSchemaDecoder)
+/.src/preferTypedSchemaDecoder.ts(29,42): warning TS377112: This input is already assignable to the schema's Encoded type. Use `decodeSync` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownSync`. effect(preferTypedSchemaDecoder)
+/.src/preferTypedSchemaDecoder.ts(30,22): warning TS377112: This input is already assignable to the schema's Encoded type. Use `decodeSync` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownSync`. effect(preferTypedSchemaDecoder)
+/.src/preferTypedSchemaDecoder.ts(33,35): warning TS377112: This input is already assignable to the schema's Encoded type. Use `decodeSync` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownSync`. effect(preferTypedSchemaDecoder)
+
+
+==== /.src/preferTypedSchemaDecoder.ts (11 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferTypedSchemaDecoder:warning
+    
+    import { pipe, Schema } from "effect"
+    import { decodeUnknownSync } from "effect/Schema"
+    import * as SchemaParser from "effect/SchemaParser"
+    
+    const Person = Schema.Struct({
+      name: Schema.String,
+      coordinates: Schema.Tuple([Schema.Number, Schema.Number])
+    })
+    
+    const person = {
+      name: "Ada",
+      coordinates: [1, 2] as [number, number]
+    }
+    
+    // Typed variables and contextually typed literals are reported.
+    export const sync = Schema.decodeUnknownSync(Person)(person)
+                               ~~~~~~~~~~~~~~~~~
+!!! warning TS377112: This input is already assignable to the schema's Encoded type. Use `decodeSync` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownSync`. effect(preferTypedSchemaDecoder)
+    export const literal = Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1, 2] })
+                                  ~~~~~~~~~~~~~~~~~
+!!! warning TS377112: This input is already assignable to the schema's Encoded type. Use `decodeSync` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownSync`. effect(preferTypedSchemaDecoder)
+    export const effect = Schema.decodeUnknownEffect(Person)(person)
+                                 ~~~~~~~~~~~~~~~~~~~
+!!! warning TS377112: This input is already assignable to the schema's Encoded type. Use `decodeEffect` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownEffect`. effect(preferTypedSchemaDecoder)
+    export const exit = Schema.decodeUnknownExit(Person)(person)
+                               ~~~~~~~~~~~~~~~~~
+!!! warning TS377112: This input is already assignable to the schema's Encoded type. Use `decodeExit` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownExit`. effect(preferTypedSchemaDecoder)
+    export const option = Schema.decodeUnknownOption(Person)(person)
+                                 ~~~~~~~~~~~~~~~~~~~
+!!! warning TS377112: This input is already assignable to the schema's Encoded type. Use `decodeOption` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownOption`. effect(preferTypedSchemaDecoder)
+    export const result = Schema.decodeUnknownResult(Person)(person)
+                                 ~~~~~~~~~~~~~~~~~~~
+!!! warning TS377112: This input is already assignable to the schema's Encoded type. Use `decodeResult` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownResult`. effect(preferTypedSchemaDecoder)
+    export const promise = Schema.decodeUnknownPromise(Person)(person)
+                                  ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377112: This input is already assignable to the schema's Encoded type. Use `decodePromise` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownPromise`. effect(preferTypedSchemaDecoder)
+    
+    // SchemaParser APIs and piping forms are normalized through piping flows.
+    export const parser = SchemaParser.decodeUnknownSync(Person)(person)
+                                       ~~~~~~~~~~~~~~~~~
+!!! warning TS377112: This input is already assignable to the schema's Encoded type. Use `decodeSync` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownSync`. effect(preferTypedSchemaDecoder)
+    export const piped = pipe(person, Schema.decodeUnknownSync(Person))
+                                             ~~~~~~~~~~~~~~~~~
+!!! warning TS377112: This input is already assignable to the schema's Encoded type. Use `decodeSync` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownSync`. effect(preferTypedSchemaDecoder)
+    export const named = decodeUnknownSync(Person)(person)
+                         ~~~~~~~~~~~~~~~~~
+!!! warning TS377112: This input is already assignable to the schema's Encoded type. Use `decodeSync` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownSync`. effect(preferTypedSchemaDecoder)
+    
+    // Application options do not prevent recognizing the decoder application.
+    export const withOptions = Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1, 2] }, { errors: "all" })
+                                      ~~~~~~~~~~~~~~~~~
+!!! warning TS377112: This input is already assignable to the schema's Encoded type. Use `decodeSync` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownSync`. effect(preferTypedSchemaDecoder)
+    
+    declare const unknownInput: unknown
+    declare const anyInput: any
+    declare const wrongInput: { readonly name: number }
+    
+    // Unknown, any, incompatible, and unresolved generic inputs are valid uses.
+    Schema.decodeUnknownSync(Person)(unknownInput)
+    Schema.decodeUnknownSync(Person)(anyInput)
+    Schema.decodeUnknownSync(Person)(wrongInput)
+    Schema.decodeUnknownSync(Person)({ name: 1, coordinates: [1, 2] })
+    Schema.decodeUnknownSync(Person)({ name: "Ada" })
+    Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1] })
+    
+    function decodeGeneric<T>(input: T) {
+      return Schema.decodeUnknownSync(Person)(input)
+    }
+    
+    function decodeNestedGeneric<T extends string>(input: { readonly name: T; readonly coordinates: [number, number] }) {
+      return Schema.decodeUnknownSync(Person)(input)
+    }
+    
+    decodeGeneric(person)
+    decodeNestedGeneric(person)
+    
