@@ -53,36 +53,18 @@ func runEffectSchemaSelfInClasses(ctx *completion.Context) []*lsproto.Completion
 		))
 	}
 
-	// Schema.TaggedError (v3 only)
-	if version == typeparser.EffectMajorV3 {
-		if isFullyQualified || tp.IsNodeReferenceToEffectSchemaModuleApi(data.AccessedObject, "TaggedError") {
-			var insertText string
-			if isFullyQualified {
-				insertText = fmt.Sprintf(`%s.TaggedError<%s>()("%s", {${0}}){}`, schemaIdentifier, className, className)
-			} else {
-				insertText = fmt.Sprintf(`TaggedError<%s>()("%s", {${0}}){}`, className, className)
-			}
-			items = append(items, makeExtendsCompletionItem(accessedText,
-				fmt.Sprintf("TaggedError<%s>", className),
-				insertText, sortText, replacementRange,
-			))
+	// Schema.TaggedError (both v3 and v4)
+	if isFullyQualified || tp.IsNodeReferenceToEffectSchemaModuleApi(data.AccessedObject, "TaggedError") {
+		var insertText string
+		if isFullyQualified {
+			insertText = fmt.Sprintf(`%s.TaggedError<%s>()("%s", {${0}}){}`, schemaIdentifier, className, className)
+		} else {
+			insertText = fmt.Sprintf(`TaggedError<%s>()("%s", {${0}}){}`, className, className)
 		}
-	}
-
-	// Schema.TaggedErrorClass (v4 only)
-	if version == typeparser.EffectMajorV4 {
-		if isFullyQualified || tp.IsNodeReferenceToEffectSchemaModuleApi(data.AccessedObject, "TaggedErrorClass") {
-			var insertText string
-			if isFullyQualified {
-				insertText = fmt.Sprintf(`%s.TaggedErrorClass<%s>()("%s", {${0}}){}`, schemaIdentifier, className, className)
-			} else {
-				insertText = fmt.Sprintf(`TaggedErrorClass<%s>()("%s", {${0}}){}`, className, className)
-			}
-			items = append(items, makeExtendsCompletionItem(accessedText,
-				fmt.Sprintf("TaggedErrorClass<%s>", className),
-				insertText, sortText, replacementRange,
-			))
-		}
+		items = append(items, makeExtendsCompletionItem(accessedText,
+			fmt.Sprintf("TaggedError<%s>", className),
+			insertText, sortText, replacementRange,
+		))
 	}
 
 	// Schema.TaggedClass (both v3 and v4)
@@ -115,17 +97,17 @@ func runEffectSchemaSelfInClasses(ctx *completion.Context) []*lsproto.Completion
 		}
 	}
 
-	// Schema.ErrorClass (v4 only)
+	// Schema.Error (v4 only)
 	if version == typeparser.EffectMajorV4 {
-		if isFullyQualified || tp.IsNodeReferenceToEffectSchemaModuleApi(data.AccessedObject, "ErrorClass") {
+		if isFullyQualified || tp.IsNodeReferenceToEffectSchemaModuleApi(data.AccessedObject, "Error") {
 			var insertText string
 			if isFullyQualified {
-				insertText = fmt.Sprintf(`%s.ErrorClass<%s>("%s")({${0}}){}`, schemaIdentifier, className, className)
+				insertText = fmt.Sprintf(`%s.Error<%s>("%s")({${0}}){}`, schemaIdentifier, className, className)
 			} else {
-				insertText = fmt.Sprintf(`ErrorClass<%s>("%s")({${0}}){}`, className, className)
+				insertText = fmt.Sprintf(`Error<%s>("%s")({${0}}){}`, className, className)
 			}
 			items = append(items, makeExtendsCompletionItem(accessedText,
-				fmt.Sprintf("ErrorClass<%s>", className),
+				fmt.Sprintf("Error<%s>", className),
 				insertText, sortText, replacementRange,
 			))
 		}
