@@ -18,25 +18,19 @@ index 61ae063d4..47da02331 100644
  	ReferencedMap              []*BuildInfoReferenceMapEntry        `json:"referencedMap,omitzero"`
  	SemanticDiagnosticsPerFile []*BuildInfoSemanticDiagnostic       `json:"semanticDiagnosticsPerFile,omitzero"`
  	EmitDiagnosticsPerFile     []*BuildInfoDiagnosticsOfFile        `json:"emitDiagnosticsPerFile,omitzero"`
-@@ -526,6 +528,7 @@ func (b *BuildInfo) GetCompilerOptions(buildInfoDirectory string) *core.Compiler
- 		}
- 
- 	}
+@@ -529,1 +531,2 @@
 +	options.Effect = b.Effect
  	return options
- }
- 
+
 diff --git a/internal/execute/incremental/snapshottobuildinfo.go b/internal/execute/incremental/snapshottobuildinfo.go
 index 909fab087..6595cd86c 100644
 --- a/internal/execute/incremental/snapshottobuildinfo.go
 +++ b/internal/execute/incremental/snapshottobuildinfo.go
-@@ -17,5 +17,6 @@ func snapshotToBuildInfo(snapshot *snapshot, program *compiler.Program, buildInfo
+@@ -19,3 +19,4 @@ func snapshotToBuildInfo(snapshot *snapshot, program *compiler.Program, buildInfo
  	buildInfo := &BuildInfo{
  		Version: core.Version(),
 +		Effect:  snapshot.options.Effect,
  	}
- 	to := &toBuildInfo{
- 		snapshot:          snapshot,
 diff --git a/internal/tsoptions/declscompiler.go b/internal/tsoptions/declscompiler.go
 index c6a70ff9e..fd1672ea7 100644
 --- a/internal/tsoptions/declscompiler.go
