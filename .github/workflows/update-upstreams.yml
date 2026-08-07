@@ -33,6 +33,8 @@ jobs:
 
       - name: Update upstream metadata
         id: upstream
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: pnpm exec repoctl upstream update
 
       - name: Open metadata update pull request
@@ -40,12 +42,13 @@ jobs:
         if: steps.upstream.outputs.has_changes == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_BODY: ${{ steps.upstream.outputs.description }}
         run: |
           pnpm exec repoctl github open-pr-if-changed \
             --base main \
             --head update-upstreams \
             --title 'chore: update upstreams' \
-            --body 'Automated update of TypeScript-Go upstream component tags.' \
+            --body "$PR_BODY" \
             --commit-message 'chore: update upstream metadata' \
             --check generation_check_id='Generate TypeScript next tag'
 
@@ -85,12 +88,13 @@ jobs:
         if: steps.upstream.outputs.has_changes == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_BODY: ${{ steps.upstream.outputs.description }}
         run: |
           pnpm exec repoctl github open-pr-if-changed \
             --base main \
             --head update-upstreams \
             --title 'chore: update upstreams' \
-            --body 'Automated update of upstream metadata, generated TypeScript next-tag sources, and Nix inputs.' \
+            --body "$PR_BODY" \
             --commit-message 'chore: generate TypeScript next tag' \
             --check validation_check_id='Validate TypeScript next tag'
 
