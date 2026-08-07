@@ -174,6 +174,11 @@ interface TypeScriptMetadata {
   readonly gitHead: string
 }
 
+interface TypeScriptGoCommit {
+  readonly sha: string
+  readonly message: string
+}
+
 interface OxlintSelection {
   readonly oxlintVersion: string
   readonly tsgolintVersion: string
@@ -309,9 +314,15 @@ export const formatOxlintConfigurationSchema = (value: unknown): string | undefi
   return `${JSON.stringify(value, null, 2)}\n`
 }
 
-const fetchJson = Effect.fnUntraced(function*(url: string) {
+const fetchJson = Effect.fnUntraced(function*(url: string, authenticate = false) {
+  const token = authenticate ? process.env.GH_TOKEN ?? process.env.GITHUB_TOKEN : undefined
   const response = yield* Effect.tryPromise({
-    try: () => fetch(url, { headers: { "User-Agent": "effect-tsgo-repoctl" } }),
+    try: () => fetch(url, {
+      headers: {
+        "User-Agent": "effect-tsgo-repoctl",
+        ...(token === undefined ? {} : { Authorization: `Bearer ${token}` })
+      }
+    }),
     catch: (error) => new UpstreamManifestError({ reason: `Unable to fetch ${url}: ${String(error)}` })
   })
   if (!response.ok) {
@@ -322,6 +333,169 @@ const fetchJson = Effect.fnUntraced(function*(url: string) {
     catch: (error) => new UpstreamManifestError({ reason: `Unable to parse ${url}: ${String(error)}` })
   })
 })
+
+const GitHubComparison = Schema.Struct({
+  total_commits: Schema.Number,
+  commits: Schema.Array(Schema.Struct({
+    sha: GitRevision,
+    commit: Schema.Struct({ message: NonEmptyString })
+  }))
+})
+
+const fetchTypeScriptGoCommits = Effect.fnUntraced(function*(before: string, after: string) {
+  if (before === after) {
+    return []
+  }
+  const commits: Array<TypeScriptGoCommit> = []
+  let page = 1
+  let totalCommits = 0
+  do {
+    const url = [
+      `https://api.github.com/repos/microsoft/typescript-go/compare/${before}...${after}`,
+      `?per_page=100&page=${page}`
+    ].join("")
+    const comparison = yield* fetchJson(url, true)
+    const decoded = yield* Schema.decodeUnknownEffect(GitHubComparison)(comparison).pipe(
+      Effect.mapError((error) => new UpstreamManifestError({
+        reason: `Unable to read TypeScript-Go comparison: ${error.message}`
+      }))
+    )
+    totalCommits = decoded.total_commits
+    if (decoded.commits.length === 0 && commits.length < totalCommits) {
+      return yield* new UpstreamManifestError({ reason: "TypeScript-Go comparison ended before all commits were read" })
+    }
+    commits.push(...decoded.commits.map(({ commit, sha }) => ({
+      sha,
+      message: commit.message.split(/[\r\n]/, 1)[0]!
+    })))
+    page++
+  } while (commits.length < totalCommits)
+  return commits
+})
+
+export interface UpstreamUpdateDescriptionOptions {
+  readonly before: typeof Upstream.Type
+  readonly after: typeof Upstream.Type
+  readonly nextCommits: ReadonlyArray<TypeScriptGoCommit>
+  readonly schemaChanged: boolean
+  readonly oxlintSchemaChanged: boolean
+}
+
+export const formatUpstreamUpdateDescription = ({
+  after,
+  before,
+  nextCommits,
+  oxlintSchemaChanged,
+  schemaChanged
+}: UpstreamUpdateDescriptionOptions): string => {
+  const beforeVitePlus = before.profiles.find(({ name }) => name === "vite-plus")!
+  const afterVitePlus = after.profiles.find(({ name }) => name === "vite-plus")!
+  const beforeVitePlusVersion = /^Vite\+ (.+) compatibility runtime$/.exec(beforeVitePlus.description)?.[1]
+  const afterVitePlusVersion = /^Vite\+ (.+) compatibility runtime$/.exec(afterVitePlus.description)?.[1]
+  const versionUpdates = [
+    {
+      label: "TypeScript next",
+      packageName: "typescript",
+      spec: "typescript@next",
+      previous: before.tags.typescript.next,
+      updated: after.tags.typescript.next
+    },
+    {
+      label: "TypeScript latest",
+      packageName: "typescript",
+      spec: "typescript@latest",
+      previous: before.tags.typescript.latest,
+      updated: after.tags.typescript.latest
+    },
+    {
+      label: "Oxlint",
+      packageName: "oxlint",
+      spec: "oxlint@latest",
+      previous: before.tags.oxlint.latest,
+      updated: after.tags.oxlint.latest
+    },
+    {
+      label: "Oxlint TypeScript-Go lint plugin",
+      packageName: "oxlint-tsgolint",
+      spec: "oxlint-tsgolint@latest",
+      previous: before.tags["oxlint-tsgolint"].latest,
+      updated: after.tags["oxlint-tsgolint"].latest
+    },
+    {
+      label: "Vite+",
+      packageName: "vite-plus",
+      spec: "vite-plus@latest",
+      previous: beforeVitePlusVersion,
+      updated: afterVitePlusVersion
+    },
+    {
+      label: "Vite+ Oxlint runtime",
+      packageName: "oxlint",
+      spec: "oxlint",
+      previous: beforeVitePlus.dependencies.oxlint,
+      updated: afterVitePlus.dependencies.oxlint
+    },
+    {
+      label: "Vite+ TypeScript-Go lint runtime",
+      packageName: "oxlint-tsgolint",
+      spec: "oxlint-tsgolint",
+      previous: beforeVitePlus.dependencies["oxlint-tsgolint"],
+      updated: afterVitePlus.dependencies["oxlint-tsgolint"]
+    }
+  ].filter((update): update is typeof update & { readonly previous: string; readonly updated: string } =>
+    update.previous !== undefined && update.updated !== undefined && update.previous !== update.updated)
+  const previousNext = before.components.typescript[before.tags.typescript.next]!.gitHead
+  const updatedNext = after.components.typescript[after.tags.typescript.next]!.gitHead
+  const sections = ["Automated update of upstream metadata, generated TypeScript next-tag sources, and Nix inputs."]
+
+  if (versionUpdates.length > 0) {
+    sections.push([
+      "## Version updates",
+      "",
+      ...versionUpdates.map(({ label, packageName, previous, spec, updated }) =>
+        `- ${label}: [\`${spec}\`](https://www.npmjs.com/package/${packageName}/v/${updated}) \`${previous}\` -> \`${updated}\``)
+    ].join("\n"))
+  }
+  if (previousNext !== updatedNext) {
+    sections.push([
+      "## TypeScript-Go",
+      "",
+      `- Previous commit: [\`${previousNext}\`](https://github.com/microsoft/typescript-go/commit/${previousNext})`,
+      `- Updated commit: [\`${updatedNext}\`](https://github.com/microsoft/typescript-go/commit/${updatedNext})`,
+      `- Compare: https://github.com/microsoft/typescript-go/compare/${previousNext}...${updatedNext}`
+    ].join("\n"))
+  }
+  if (nextCommits.length > 0) {
+    sections.push([
+      "## Upstream commits",
+      "",
+      ...nextCommits.map(({ message, sha }) =>
+        `- [${sha.slice(0, 7)}](https://github.com/microsoft/typescript-go/commit/${sha}) ${message}`)
+    ].join("\n"))
+  }
+  const otherUpdates = [
+    ...(schemaChanged ? ["- Refreshed the tsconfig schema from JSON Schema Store."] : []),
+    ...(oxlintSchemaChanged ? ["- Refreshed the Oxlint configuration schema from the selected package."] : [])
+  ]
+  if (otherUpdates.length > 0) {
+    sections.push(["## Other updates", "", ...otherUpdates].join("\n"))
+  }
+  return sections.join("\n\n")
+}
+
+export const formatGitHubOutputs = (outputs: Readonly<Record<string, string>>) =>
+  Object.entries(outputs).map(([name, value]) => {
+    const normalizedValue = value.replace(/\r\n?/g, "\n")
+    if (!normalizedValue.includes("\n")) {
+      return `${name}=${normalizedValue}\n`
+    }
+    let delimiter = `repoctl_${name}`
+    const lines = new Set(normalizedValue.split("\n"))
+    while (lines.has(delimiter)) {
+      delimiter += "_"
+    }
+    return `${name}<<${delimiter}\n${normalizedValue}\n${delimiter}\n`
+  }).join("")
 
 const resolveRemoteTag = Effect.fnUntraced(function*(repositoryRoot: string, repository: string, tag: string) {
   const output = yield* runCommandString("git", repositoryRoot, [
@@ -538,6 +712,15 @@ export const updateUpstream = Effect.fnUntraced(function*(repositoryRoot: string
   const oxlintSchemaChanged = oxlintSchema !== currentOxlintSchema
   const hasChanges = metadataChanged || schemaChanged || oxlintSchemaChanged
 
+  const nextCommits = yield* fetchTypeScriptGoCommits(nextBefore.gitHead, next.gitHead)
+  const description = formatUpstreamUpdateDescription({
+    before: upstream,
+    after: updated,
+    nextCommits,
+    schemaChanged,
+    oxlintSchemaChanged
+  })
+
   if (metadataChanged) {
     yield* fs.writeFileString(
       path.join(repositoryRoot, "_packages", "tsgo", "upstream.json"),
@@ -568,12 +751,13 @@ export const updateUpstream = Effect.fnUntraced(function*(repositoryRoot: string
     latest_previous_version: latestBefore.npmVersion,
     latest_previous_git_head: latestBefore.gitHead,
     latest_version: latest.npmVersion,
-    latest_git_head: latest.gitHead
+    latest_git_head: latest.gitHead,
+    description
   }
   if (process.env.GITHUB_OUTPUT !== undefined) {
     yield* Effect.tryPromise(() => appendFile(
       process.env.GITHUB_OUTPUT!,
-      Object.entries(outputs).map(([name, value]) => `${name}=${value}\n`).join("")
+      formatGitHubOutputs(outputs)
     ))
   }
   yield* Effect.log(hasChanges ? "Updated upstream metadata" : "Upstream metadata is current")
