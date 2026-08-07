@@ -340,7 +340,7 @@ type extra_Checker struct {
   typeofType *checker.Type
   typeResolutions []checker.TypeResolution
   resolutionStart int
-  inVarianceComputation bool
+  varianceStack []checker.VarianceStackEntry
   apparentArgumentCount *int
   lastGetCombinedNodeFlagsNode *ast.Node
   lastGetCombinedNodeFlagsResult ast.NodeFlags
@@ -1256,6 +1256,7 @@ const VarianceFlagsUnmeasurable = checker.VarianceFlagsUnmeasurable
 const VarianceFlagsUnreliable = checker.VarianceFlagsUnreliable
 const VarianceFlagsVarianceMask = checker.VarianceFlagsVarianceMask
 type VarianceLinks = checker.VarianceLinks
+type VarianceStackEntry = checker.VarianceStackEntry
 type VerbosityContext = checker.VerbosityContext
 type WideningContext = checker.WideningContext
 type WideningKind = checker.WideningKind
