@@ -1,5 +1,18 @@
 # @effect/tsgo
 
+## 0.35.0
+
+### Minor Changes
+
+- f25821b: Generate detailed upstream update pull request descriptions with explicit version changes and the TypeScript-Go commits introduced by the update.
+
+### Patch Changes
+
+- 3fe06c8: Avoid false positive TS2731 diagnostics for symbol-valued interpolations in tagged template literals when Effect diagnostic rules traverse the template expression.
+- 989964b: Prevent `preferTypedSchemaDecoder` from panicking when a decoder input is produced by a preceding call or pipe transformation.
+- 86c30b1: Persist Effect plugin options in TypeScript build information so incremental builds recheck semantic diagnostics when extended tsconfig plugin settings change.
+- b8e7314: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260806.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/86cc4767d4ebadb9b7845d0ab8eb2b05785c3fee) commit `86cc4767d4ebadb9b7845d0ab8eb2b05785c3fee`, and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
 ## 0.34.0
 
 ### Minor Changes
