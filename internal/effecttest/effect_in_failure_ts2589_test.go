@@ -45,6 +45,8 @@ func TestTaggedTemplateSymbolInterpolationDoesNotReportTS2731(t *testing.T) {
 
 	for _, rule := range []string{"anyUnknownInErrorContext", "effectInFailure"} {
 		t.Run(rule, func(t *testing.T) {
+			t.Parallel()
+
 			diagnostics := collectDiagnosticStringsFromContent(t, buildTaggedTemplateSymbolCase(rule))
 			if hasDiagnosticCode(diagnostics, "TS2731:") {
 				t.Fatalf("did not expect TS2731 with %s enabled, got %v", rule, diagnostics)

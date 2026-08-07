@@ -54,3 +54,14 @@ function decodeNestedGeneric<T extends string>(input: { readonly name: T; readon
 
 decodeGeneric(person)
 decodeNestedGeneric(person)
+
+// Regression test for https://github.com/Effect-TS/tsgo/issues/572.
+const NamedPerson = Schema.Struct({ name: Schema.String })
+
+function makeFields(name: string): { readonly name: string } {
+  return { name }
+}
+
+export const decoded = Schema.decodeUnknownEffect(NamedPerson)(makeFields("Ada"))
+
+export const pipedCallExpression = pipe("Ada", makeFields, Schema.decodeUnknownEffect(NamedPerson))
