@@ -146,8 +146,10 @@ func analyzeTypedSchemaDecoderApplication(tp *typeparser.TypeParser, c *checker.
 	}
 
 	assignableType := inputType
-	if literal := ast.SkipParentheses(inputNode); literal != nil && (literal.Kind == ast.KindObjectLiteralExpression || literal.Kind == ast.KindArrayLiteralExpression) {
-		assignableType = checker.Checker_checkExpressionWithContextualType(c, literal, schemaType.E, nil, checker.CheckModeTypeOnly)
+	if inputNode != nil {
+		if literal := ast.SkipParentheses(inputNode); literal != nil && (literal.Kind == ast.KindObjectLiteralExpression || literal.Kind == ast.KindArrayLiteralExpression) {
+			assignableType = checker.Checker_checkExpressionWithContextualType(c, literal, schemaType.E, nil, checker.CheckModeTypeOnly)
+		}
 	}
 	if assignableType == nil || !checker.Checker_isTypeAssignableTo(c, assignableType, schemaType.E) {
 		return nil
