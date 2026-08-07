@@ -49,6 +49,14 @@ func (tp TypeParser) getTypeAtLocationUncached(node *ast.Node) (result *checker.
 		return nil
 	}
 
+	// Tagged templates pass interpolation values directly to the tag function;
+	// they do not stringify them. Asking the checker for the type of the inner
+	// TemplateExpression forces a normally unreachable checking path that can
+	// emit TS2731 for symbol-typed interpolations as a side effect.
+	if node.Kind == ast.KindTemplateExpression && node.Parent != nil && ast.IsTaggedTemplateExpression(node.Parent) {
+		return nil
+	}
+
 	// A meta property used as a call callee (import.defer(...)) has no type of
 	// its own and the checker debug-asserts when asked (checkMetaProperty); the
 	// enclosing call expression carries the meaningful type.
