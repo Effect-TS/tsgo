@@ -1,0 +1,6 @@
+{
+  "extends": ["../../../oxlint-presets/recommended.json"],
+  "rules": {
+    "effecttsgo/global-date": "off"
+  }
+}

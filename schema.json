@@ -2135,6 +2135,11 @@
           "default": "off",
           "description": "Disallows Schema.Schema.Type\u003ctypeof X\u003e in favor of typeof X.Type"
         },
+        "preferTypedSchemaDecoder": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests typed Schema decoders when the input is assignable to the schema's Encoded type"
+        },
         "preferUnsafeConstructor": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",

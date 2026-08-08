@@ -12,6 +12,7 @@ assert.ok(existsSync(tsgolint), `tsgolint executable does not exist: ${tsgolint}
 
 const fixture = dirname(fileURLToPath(import.meta.url))
 const oxlint = join(repositoryRoot, "oxlint", "apps", "oxlint", "dist", "cli.js")
+const packageDirectory = join(repositoryRoot, "_packages", "tsgo")
 const env = {
   ...process.env,
   OXLINT_TSGOLINT_PATH: tsgolint
@@ -22,6 +23,18 @@ const run = (...args) => spawnSync(process.execPath, [oxlint, ...args], {
   encoding: "utf8",
   env
 })
+
+const packagePreset = spawnSync(process.execPath, [
+  "--input-type=module",
+  "--eval",
+  `import { recommended } from "@effect/tsgo/oxlint-presets";
+   import recommendedJson from "@effect/tsgo/oxlint-presets/recommended.json" with { type: "json" };
+   if (recommended.rules["effecttsgo/global-date"] !== "warn" || recommendedJson.rules["effecttsgo/global-date"] !== "warn") process.exit(1);`
+], {
+  cwd: packageDirectory,
+  encoding: "utf8"
+})
+assert.equal(packagePreset.status, 0, packagePreset.stderr)
 
 const rules = run("--rules", "--format", "json")
 assert.equal(rules.status, 0, rules.stderr)
@@ -48,5 +61,13 @@ assert.deepEqual(relatedLabel.span, { offset: 67, length: 8, line: 3, column: 35
 const disabled = run("--type-aware", "--config", ".oxlintrc.json", "disabled.ts")
 assert.equal(disabled.status, 0, disabled.stderr)
 assert.doesNotMatch(`${disabled.stdout}\n${disabled.stderr}`, /effecttsgo\(floating-effect\)/)
+
+const recommended = run("--config", ".oxlintrc-recommended.json", "global-date.ts")
+assert.equal(recommended.status, 0, recommended.stderr)
+assert.match(`${recommended.stdout}\n${recommended.stderr}`, /effecttsgo\(global-date\)/)
+
+const recommendedOverride = run("--config", ".oxlintrc-recommended-override.json", "global-date.ts")
+assert.equal(recommendedOverride.status, 0, recommendedOverride.stderr)
+assert.doesNotMatch(`${recommendedOverride.stdout}\n${recommendedOverride.stderr}`, /effecttsgo\(global-date\)/)
 
 console.log("Oxlint profile smoke test passed")
