@@ -51,5 +51,13 @@ jobs:
         if: matrix.repoctl
         run: pnpm run check:repoctl && pnpm run test:repoctl
 
+      - name: Install golangci-lint
+        if: matrix.repoctl
+        run: go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.9.0
+
+      - name: Lint
+        if: matrix.repoctl
+        run: pnpm lint
+
       - name: Test
         run: pnpm exec repoctl test

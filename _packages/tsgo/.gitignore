@@ -2,4 +2,5 @@ dist/
 node_modules/
 README.md
 oxlint-schema.json
+oxlint-presets/
 schema.json

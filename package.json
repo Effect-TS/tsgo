@@ -5,7 +5,7 @@
         "check": "repoctl check",
         "check:repoctl": "pnpm --filter @effect/tsgo-repoctl check",
         "changeset": "changeset",
-        "lint": "CGO_ENABLED=0 golangci-lint run ./...",
+        "lint": "repoctl lint",
         "test": "repoctl test",
         "test:repoctl": "pnpm --filter @effect/tsgo-repoctl test",
         "build": "repoctl build local"

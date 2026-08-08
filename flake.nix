@@ -6,7 +6,7 @@
     nixpkgsUnstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     /* Source of truth: the next profile in `_packages/tsgo/upstream.json`. */
     typescript-go-src = {
-      url = "github:microsoft/typescript-go/12318e599d21f516defea3b20e5d44b9369da723?submodules=1";
+      url = "github:microsoft/typescript-go/86cc4767d4ebadb9b7845d0ab8eb2b05785c3fee?submodules=1";
       flake = false;
     };
     /* Derived from the selected TypeScript-Go revision and recorded in the manifest. */

@@ -19,6 +19,7 @@ import {
 import { ensureEffectFixtures } from "./fixtures.ts"
 import { updateFlake } from "./flake.ts"
 import { completeCheck, openPullRequestIfChanged } from "./github.ts"
+import { runLint } from "./lint.ts"
 import {
   printGeneratedMatrix,
   printOxlintTestMatrix,
@@ -92,6 +93,10 @@ const test = Command.make("test", {}, () => runTests(repositoryRoot)).pipe(
 
 const check = Command.make("check", {}, () => runChecks(repositoryRoot)).pipe(
   Command.withDescription("Check Go packages followed by the CLI package")
+)
+
+const lint = Command.make("lint", {}, () => runLint(repositoryRoot)).pipe(
+  Command.withDescription("Run Go linters and dead-code analysis")
 )
 
 const buildLocalCommand = Command.make("local", {}, () => buildLocal(repositoryRoot)).pipe(
@@ -316,6 +321,7 @@ Command.make("repoctl").pipe(
     codegen,
     flake,
     github,
+    lint,
     matrix,
     packages,
     perf,

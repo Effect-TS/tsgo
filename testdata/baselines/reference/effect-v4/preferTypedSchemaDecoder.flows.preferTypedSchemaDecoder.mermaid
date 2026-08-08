@@ -36,6 +36,20 @@ flowchart TB
   34[/"type: #123; name: string; coordinates: #91;number, number#93;; #125;<br/>node: person"/]
   35["type: #123; readonly name: string; readonly coordinates: readonly #91;number, number#93;; #125;<br/>callee: decodeNestedGeneric<br/>args: #91;#93;"]
   36[/"type: #lt;T extends string#gt;#40;input: #123; readonly name: T; readonly coordinates: #91;number, number#93;; #125;#41; =#gt; #123; readonly name: string; readonly coordinates: readonly #91;number, number#93;; #125;<br/>node: decodeNestedGeneric"/]
+  37[/"type: #123; name: String; #125;<br/>node: #123; name: Schema.String #125;"/]
+  38["type: Struct#lt;#123; readonly name: String; #125;#gt;<br/>callee: Schema.Struct<br/>args: #91;#93;"]
+  39[/"type: #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields#41; =#gt; Struct#lt;Fields#gt;<br/>node: Schema.Struct"/]
+  40[["type: #40;name: string#41; =#gt; #123; readonly name: string; #125;<br/>node: function makeFields#40;name: string#41;: #123; readonly name: string #125; #123;#92;n  return #123; name #125;#92;n#125;"]]
+  41[/"type: #123; name: string; #125;<br/>node: #123; name #125;"/]
+  42[/"type: Effect#lt;#123; readonly name: string; #125;, SchemaError, never#gt;<br/>node: Schema.decodeUnknownEffect#40;NamedPerson#41;#40;makeFields#40;#quot;Ada#quot;#41;#41;"/]
+  43[/"type: #quot;Ada#quot;<br/>node: #quot;Ada#quot;"/]
+  44["type: #123; readonly name: string; #125;<br/>callee: makeFields<br/>args: #91;#93;"]
+  45[/"type: #40;name: string#41; =#gt; #123; readonly name: string; #125;<br/>node: makeFields"/]
+  46[/"type: #quot;Ada#quot;<br/>node: #quot;Ada#quot;"/]
+  47["type: #123; readonly name: string; #125;<br/>callee: makeFields<br/>args: #91;#93;"]
+  48["type: Effect#lt;#123; readonly name: string; #125;, SchemaError, never#gt;<br/>callee: Schema.decodeUnknownEffect<br/>args: #91;NamedPerson#93;"]
+  49[/"type: #lt;S extends Constraint#gt;#40;schema: S, options?: ParseOptions #124; undefined#41; =#gt; #40;input: unknown, options?: ParseOptions #124; undefined#41; =#gt; Effect#lt;S#91;#quot;Type#quot;#93;, SchemaError, S#91;#quot;DecodingServices#quot;#93;#gt;<br/>node: Schema.decodeUnknownEffect"/]
+  50[/"type: Struct#lt;#123; readonly name: String; #125;#gt;<br/>node: NamedPerson"/]
   1 -->|"kind: pipe"| 2
   3 -->|"kind: transformCallee"| 2
   2 -->|"kind: usedBy"| 0
@@ -52,3 +66,14 @@ flowchart TB
   33 -->|"kind: transformCallee"| 32
   34 -->|"kind: pipe"| 35
   36 -->|"kind: transformCallee"| 35
+  37 -->|"kind: pipe"| 38
+  39 -->|"kind: transformCallee"| 38
+  41 -->|"kind: potentialReturn"| 40
+  41 -->|"kind: usedBy"| 40
+  43 -->|"kind: pipe"| 44
+  45 -->|"kind: transformCallee"| 44
+  44 -->|"kind: usedBy"| 42
+  46 -->|"kind: pipe"| 47
+  49 -->|"kind: transformCallee"| 48
+  50 -->|"kind: transformArg"| 48
+  47 -->|"kind: pipe"| 48

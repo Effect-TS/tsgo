@@ -1,5 +1,36 @@
 # @effect/tsgo
 
+## 0.36.0
+
+### Minor Changes
+
+- 8423f68: Add recommended and category-specific shared configurations for Oxlint.
+
+## 0.35.0
+
+### Minor Changes
+
+- f25821b: Generate detailed upstream update pull request descriptions with explicit version changes and the TypeScript-Go commits introduced by the update.
+
+### Patch Changes
+
+- 3fe06c8: Avoid false positive TS2731 diagnostics for symbol-valued interpolations in tagged template literals when Effect diagnostic rules traverse the template expression.
+- 989964b: Prevent `preferTypedSchemaDecoder` from panicking when a decoder input is produced by a preceding call or pipe transformation.
+- 86c30b1: Persist Effect plugin options in TypeScript build information so incremental builds recheck semantic diagnostics when extended tsconfig plugin settings change.
+- b8e7314: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260806.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/86cc4767d4ebadb9b7845d0ab8eb2b05785c3fee) commit `86cc4767d4ebadb9b7845d0ab8eb2b05785c3fee`, and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
+## 0.34.0
+
+### Minor Changes
+
+- 974513e: Add a non-interactive `setup` workflow with explicit project, integration, diagnostic, editor, preview, and apply options. Setup now also recommends running the package manager install command whenever it changes `package.json`.
+
+### Patch Changes
+
+- ba4ec9a: Cache generated TypeScript-Go shims by their effective inputs during local repository setup and CI runs.
+- 6d0ffda: Remove unused internal helpers and add dead-code analysis to the repository lint workflow.
+- 892021a: Use absolute GitHub URLs for links in the published README so documentation links remain clickable on npm.
+
 ## 0.33.0
 
 ### Minor Changes
