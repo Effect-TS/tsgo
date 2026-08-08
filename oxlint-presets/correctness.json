@@ -1,0 +1,28 @@
+{
+  "options": {
+    "typeAware": true
+  },
+  "plugins": [
+    "effecttsgo"
+  ],
+  "rules": {
+    "effecttsgo/any-unknown-in-error-context": "warn",
+    "effecttsgo/class-self-mismatch": "warn",
+    "effecttsgo/duplicate-package": "warn",
+    "effecttsgo/effect-fn-implicit-any": "warn",
+    "effecttsgo/floating-effect": "warn",
+    "effecttsgo/floating-effect-in-vitest": "warn",
+    "effecttsgo/generic-effect-services": "warn",
+    "effecttsgo/missing-effect-context": "warn",
+    "effecttsgo/missing-effect-error": "warn",
+    "effecttsgo/missing-layer-context": "warn",
+    "effecttsgo/missing-return-yield-star": "warn",
+    "effecttsgo/missing-star-in-yield-effect-gen": "warn",
+    "effecttsgo/non-object-effect-service-type": "warn",
+    "effecttsgo/outdated-api": "warn",
+    "effecttsgo/overridden-schema-constructor": "warn",
+    "effecttsgo/promise-in-effect-success": "warn",
+    "effecttsgo/schema-literal-non-finite": "warn",
+    "effecttsgo/schema-opaque-instance-member": "warn"
+  }
+}
