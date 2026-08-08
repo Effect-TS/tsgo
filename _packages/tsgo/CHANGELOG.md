@@ -1,5 +1,11 @@
 # @effect/tsgo
 
+## 0.36.0
+
+### Minor Changes
+
+- 8423f68: Add recommended and category-specific shared configurations for Oxlint.
+
 ## 0.35.0
 
 ### Minor Changes
