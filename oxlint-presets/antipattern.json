@@ -1,0 +1,30 @@
+{
+  "options": {
+    "typeAware": true
+  },
+  "plugins": [
+    "effecttsgo"
+  ],
+  "rules": {
+    "effecttsgo/catch-unfailable-effect": "warn",
+    "effecttsgo/effect-fn-iife": "warn",
+    "effecttsgo/effect-gen-uses-adapter": "warn",
+    "effecttsgo/effect-in-failure": "warn",
+    "effecttsgo/effect-in-void-success": "warn",
+    "effecttsgo/global-error-in-effect-catch": "warn",
+    "effecttsgo/global-error-in-effect-failure": "warn",
+    "effecttsgo/layer-merge-all-with-dependencies": "warn",
+    "effecttsgo/lazy-effect": "warn",
+    "effecttsgo/lazy-promise-in-effect-sync": "warn",
+    "effecttsgo/leaking-requirements": "warn",
+    "effecttsgo/multiple-effect-provide": "warn",
+    "effecttsgo/prefer-unsafe-constructor": "warn",
+    "effecttsgo/return-effect-in-gen": "warn",
+    "effecttsgo/run-effect-inside-effect": "warn",
+    "effecttsgo/schema-sync-in-effect": "warn",
+    "effecttsgo/scope-in-layer-effect": "warn",
+    "effecttsgo/strict-effect-provide": "warn",
+    "effecttsgo/try-catch-in-effect-gen": "warn",
+    "effecttsgo/unknown-in-effect-catch": "warn"
+  }
+}

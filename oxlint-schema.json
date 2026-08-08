@@ -2410,6 +2410,9 @@
         "effecttsgo/prefer-schema-type-property": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/prefer-typed-schema-decoder": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/prefer-unsafe-constructor": {
           "$ref": "#/definitions/RuleNoConfig"
         },
