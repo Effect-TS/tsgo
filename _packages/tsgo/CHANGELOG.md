@@ -1,5 +1,19 @@
 # @effect/tsgo
 
+## 0.36.2
+
+### Patch Changes
+
+- 8362acc: Extend the walker-rule prefilter to call expressions.
+  
+  A call expression's type is its resolved signature's return type, and both the signature and that return type are already cached from the main check phase. `NodeCouldBeStrictEffect` now consults them for call nodes and skips the expensive flow-analysis re-check when the declared return type conclusively cannot be a strict Effect. Signature-less calls, optional chains, and every inconclusive return type stay conservative, and `promiseInEffectSuccess` no longer computes a location type for calls only to discard it. Emitted diagnostics are unchanged; on a large Effect monorepo build this removes a further ~4.6% of wall time on top of the reference-node prefilter, bringing the total Effect diagnostics overhead versus a pristine tsgo build of the same commit down to ~17%.
+- 9020153: Skip diagnostic rules below the minimum visible severity before executing them.
+  
+  In `tsc` CLI mode without `includeSuggestionsInTsc`, suggestion- and message-severity diagnostics are dropped from the output after rules run. The rule runner now receives the minimum severity the caller can surface and skips such rules up front, avoiding their type-checker queries entirely. A rule below the threshold still runs when any directive in the file references it (for example `// @effect-diagnostics ruleName:error` or a wildcard), since directives can raise its severity and must be tracked for `unusedDirective` reporting. Emitted diagnostics are unchanged; on a large Effect monorepo build this removes roughly 1–2s of check time.
+- 257af25: Skip flow-analysis type queries for references that conclusively cannot be an Effect.
+  
+  The `effectInFailure` and `promiseInEffectSuccess` rules walk every node of a file and query its flow type just to test whether it is a strict Effect type. The new `TypeParser.NodeCouldBeStrictEffect` prefilter inspects the referenced symbol's declared type first — flow narrowing can only refine the declared type, so a declared type that conclusively contains no possibly-Effect constituent (primitives, plain objects with a different type name, unions thereof) can never produce a strict Effect flow type, and the expensive query is skipped. The predicate is conservative: `any`/`unknown`, type parameters, conditionals, symbol-less types, and deep unions always fall through to the full query. Emitted diagnostics are unchanged; on a large Effect monorepo build this removes ~10% of build wall time (~2.7s of ~26.8s).
+
 ## 0.36.1
 
 ### Patch Changes
