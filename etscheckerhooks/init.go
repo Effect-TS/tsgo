@@ -32,7 +32,8 @@ func getEffectConfig(p checker.Program) *etscore.EffectPluginOptions {
 // afterCheckSourceFile is called after type checking each source file.
 // It runs Effect diagnostics if the plugin is enabled.
 func afterCheckSourceFile(ctx context.Context, program checker.Program, c *checker.Checker, sf *ast.SourceFile) {
-	diagnostics, err := rulerunner.Run(ctx, program, c, sf, getEffectConfig(program), nil)
+	effectConfig := getEffectConfig(program)
+	diagnostics, err := rulerunner.Run(ctx, program, c, sf, effectConfig, nil, rulerunner.MinVisibleSeverity(effectConfig))
 	if err != nil {
 		return
 	}
