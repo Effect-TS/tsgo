@@ -924,3 +924,73 @@ Effect.succeed(1)`
 		t.Errorf("HasEnablingDirective(\"floatingEffect\") = %v, want false (wildcard off should not enable)", result)
 	}
 }
+
+func TestHasAnyDirectiveForRule(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name     string
+		source   string
+		ruleName string
+		expected bool
+	}{
+		{
+			name:     "no directives",
+			source:   "Effect.succeed(1)",
+			ruleName: "floatingEffect",
+			expected: false,
+		},
+		{
+			name:     "section directive mentions rule by name",
+			source:   "// @effect-diagnostics floatingEffect:error\nEffect.succeed(1)",
+			ruleName: "floatingEffect",
+			expected: true,
+		},
+		{
+			name:     "section directive mentions other rule only",
+			source:   "// @effect-diagnostics pocRule:error\nEffect.succeed(1)",
+			ruleName: "floatingEffect",
+			expected: false,
+		},
+		{
+			name:     "wildcard section directive mentions every rule",
+			source:   "// @effect-diagnostics *:error\nEffect.succeed(1)",
+			ruleName: "floatingEffect",
+			expected: true,
+		},
+		{
+			name:     "lowering directive still counts as a mention",
+			source:   "// @effect-diagnostics floatingEffect:off\nEffect.succeed(1)",
+			ruleName: "floatingEffect",
+			expected: true,
+		},
+		{
+			name:     "next-line directive counts as a mention",
+			source:   "// @effect-diagnostics-next-line floatingEffect:off\nEffect.log(\"x\")",
+			ruleName: "floatingEffect",
+			expected: true,
+		},
+		{
+			name:     "skip-file directive counts as a mention",
+			source:   "// @effect-diagnostics floatingEffect:skip-file",
+			ruleName: "floatingEffect",
+			expected: true,
+		},
+		{
+			name:     "rule name matching is case-insensitive",
+			source:   "// @effect-diagnostics FLOATINGeffect:error\nEffect.succeed(1)",
+			ruleName: "floatingEffect",
+			expected: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			ds := BuildDirectiveSet(CollectEffectDirectives(tt.source))
+			if got := ds.HasAnyDirectiveForRule(tt.ruleName); got != tt.expected {
+				t.Errorf("HasAnyDirectiveForRule(%q) = %v, want %v", tt.ruleName, got, tt.expected)
+			}
+		})
+	}
+}
