@@ -65,7 +65,7 @@ func RunRule(
 ) ([]*ast.Diagnostic, error) {
 	normalized := normalizeOptions(options, ruleName)
 
-	return rulerunner.Run(ctx, program, c, sf, &normalized, []string{ruleName})
+	return rulerunner.Run(ctx, program, c, sf, &normalized, []string{ruleName}, rulerunner.MinVisibleSeverity(&normalized))
 }
 
 func normalizeOptions(options *etscore.EffectPluginOptions, ruleName string) etscore.EffectPluginOptions {
@@ -103,7 +103,7 @@ func RunRuleAndReport(
 		return errors.New("diagnostic adapter Report callback is required")
 	}
 	normalized := normalizeOptions(options, ruleName)
-	diagnostics, err := rulerunner.Run(ctx, program, c, sf, &normalized, []string{ruleName})
+	diagnostics, err := rulerunner.Run(ctx, program, c, sf, &normalized, []string{ruleName}, rulerunner.MinVisibleSeverity(&normalized))
 	if err != nil {
 		return err
 	}

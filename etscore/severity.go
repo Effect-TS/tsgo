@@ -63,6 +63,32 @@ func (s Severity) IsOff() bool {
 	return s == SeverityOff || s == SeveritySkipFile
 }
 
+// visibilityRank orders severities by how prominently they surface in output:
+// error > warning > suggestion > message > off/skip-file. This is distinct
+// from the declaration order of the constants, which is not a visibility
+// ordering.
+func (s Severity) visibilityRank() int {
+	switch s {
+	case SeverityError:
+		return 4
+	case SeverityWarning:
+		return 3
+	case SeveritySuggestion:
+		return 2
+	case SeverityMessage:
+		return 1
+	default:
+		return 0
+	}
+}
+
+// AtLeastAsVisibleAs reports whether s surfaces at least as prominently as
+// min. Off and skip-file severities are never at least as visible as any
+// enabled severity.
+func (s Severity) AtLeastAsVisibleAs(min Severity) bool {
+	return s.visibilityRank() >= min.visibilityRank()
+}
+
 // MarshalJSON implements json.Marshaler for Severity.
 // Serializes as the string representation (e.g., "error", "warning").
 func (s Severity) MarshalJSON() ([]byte, error) {
