@@ -28,6 +28,9 @@ func (tp *TypeParser) NodeCouldBeStrictEffect(node *ast.Node) bool {
 	if tp == nil || tp.checker == nil || node == nil {
 		return true
 	}
+	if node.Kind == ast.KindCallExpression {
+		return tp.callCouldReturnStrictEffect(node)
+	}
 	if node.Kind != ast.KindIdentifier && node.Kind != ast.KindPropertyAccessExpression {
 		return true
 	}
@@ -36,6 +39,27 @@ func (tp *TypeParser) NodeCouldBeStrictEffect(node *ast.Node) bool {
 		return true
 	}
 	return tp.SymbolCouldBeStrictEffect(sym)
+}
+
+// callCouldReturnStrictEffect reports whether a call expression's type could
+// possibly be a strict Effect type, based on the return type of its resolved
+// signature. The signature and its return type are cached from the main check
+// phase, so consulting them is cheap compared to re-checking the call via
+// GetTypeAtLocation. A call expression's type is its resolved signature's
+// return type (union-widened with undefined for optional chains, which the
+// conservative union walk handles), so a conclusively non-Effect declared
+// return type rules the node out.
+func (tp *TypeParser) callCouldReturnStrictEffect(node *ast.Node) (result bool) {
+	defer func() {
+		if r := recover(); r != nil {
+			result = true
+		}
+	}()
+	signature := tp.checker.GetResolvedSignature(node)
+	if signature == nil {
+		return true
+	}
+	return couldBeNamed(tp.checker.GetReturnTypeOfSignature(signature), strictEffectTypeNames, 0)
 }
 
 // SymbolCouldBeStrictEffect reports whether a reference to sym could possibly

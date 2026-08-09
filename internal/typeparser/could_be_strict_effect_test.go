@@ -6,6 +6,7 @@ import (
 
 	"github.com/effect-ts/tsgo/internal/bundledeffect"
 	"github.com/microsoft/typescript-go/shim/ast"
+	"github.com/microsoft/typescript-go/shim/scanner"
 )
 
 // findIdentifierByName returns the first identifier node with the given text
@@ -97,26 +98,27 @@ export function inner<T>(param: T) { return [param] }
 		}
 	}
 
-	// Non-reference node kinds are never ruled out.
-	var call *ast.Node
+	// Other non-reference node kinds (e.g. binary expressions) are never
+	// ruled out.
+	var binary *ast.Node
 	var visit func(node *ast.Node) bool
 	visit = func(node *ast.Node) bool {
-		if call != nil {
+		if binary != nil {
 			return true
 		}
-		if node.Kind == ast.KindCallExpression {
-			call = node
+		if node.Kind == ast.KindArrayLiteralExpression {
+			binary = node
 			return true
 		}
 		node.ForEachChild(visit)
 		return false
 	}
 	sf.AsNode().ForEachChild(visit)
-	if call == nil {
-		t.Fatal("no call expression found")
+	if binary == nil {
+		t.Fatal("no array literal expression found")
 	}
-	if !tp.NodeCouldBeStrictEffect(call) {
-		t.Error("call expressions must not be ruled out by the reference prefilter")
+	if !tp.NodeCouldBeStrictEffect(binary) {
+		t.Error("non-reference, non-call node kinds must not be ruled out")
 	}
 
 	// Nil receiver and nil node stay conservative.
@@ -155,5 +157,86 @@ export const use = [deepValue]
 	// primitive union is provably safe.
 	if tp.NodeCouldBeStrictEffect(node) {
 		t.Error("flat primitive literal union should be conclusively non-Effect")
+	}
+}
+
+// findCallByCalleeName returns the first call expression whose callee text
+// contains the given substring.
+func findCallByCalleeName(t *testing.T, sf *ast.SourceFile, callee string) *ast.Node {
+	t.Helper()
+	var found *ast.Node
+	var visit func(node *ast.Node) bool
+	visit = func(node *ast.Node) bool {
+		if found != nil {
+			return true
+		}
+		if node.Kind == ast.KindCallExpression {
+			expr := node.AsCallExpression().Expression
+			if expr != nil && strings.Contains(scanner.GetTextOfNode(expr), callee) {
+				found = node
+				return true
+			}
+		}
+		node.ForEachChild(visit)
+		return false
+	}
+	sf.AsNode().ForEachChild(visit)
+	if found == nil {
+		t.Fatalf("call to %q not found in source", callee)
+	}
+	return found
+}
+
+func TestCallCouldReturnStrictEffect(t *testing.T) {
+	t.Parallel()
+	if err := bundledeffect.EnsurePackageInstalled(bundledeffect.EffectV4, "effect"); err != nil {
+		t.Skip("Effect v4 not installed:", err)
+	}
+
+	source := `
+import { Effect } from "effect"
+
+declare function makesEffect(): Effect.Effect<number>
+declare function makesString(): string
+declare function makesUnion(flag: boolean): Effect.Effect<number> | undefined
+declare function makesAny(): any
+declare function generic<T>(value: T): T
+declare const maybe: { makesEffect(): Effect.Effect<number> } | undefined
+
+export const uses = [
+	makesEffect(),
+	makesString(),
+	makesUnion(true),
+	makesAny(),
+	generic("x"),
+	maybe?.makesEffect(),
+]
+`
+	_, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectV4Internal(t, source)
+	defer done()
+
+	// Subtests deliberately avoided: all cases share one checker, which is
+	// not safe for the parallel subtests the tparallel linter would require.
+	tests := []struct {
+		callee   string
+		expected bool
+	}{
+		// Conclusive negative: the declared return type can never be Effect.
+		{"makesString", false},
+		// Effect-returning calls and every inconclusive case stay true.
+		{"makesEffect", true},
+		{"makesUnion", true}, // union containing Effect
+		{"makesAny", true},   // any return
+		// The resolved signature is instantiated, so generic("x") conclusively
+		// returns the primitive literal "x" and is ruled out.
+		{"generic", false},
+		{"maybe?.makesEffect", true}, // optional chain: Effect | undefined union
+	}
+
+	for _, tt := range tests {
+		call := findCallByCalleeName(t, sf, tt.callee)
+		if got := tp.NodeCouldBeStrictEffect(call); got != tt.expected {
+			t.Errorf("NodeCouldBeStrictEffect(call %s) = %v, want %v", tt.callee, got, tt.expected)
+		}
 	}
 }
