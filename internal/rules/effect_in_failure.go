@@ -60,6 +60,14 @@ var EffectInFailure = rule.Rule{
 				continue
 			}
 
+			// Declared-type prefilter: skip the expensive flow-analysis query
+			// for reference nodes that conclusively cannot have a strict
+			// Effect flow type. Skipped nodes can never match, so no
+			// shouldSkip bookkeeping is needed.
+			if !ctx.TypeParser.NodeCouldBeStrictEffect(node) {
+				continue
+			}
+
 			nodeType := ctx.TypeParser.GetTypeAtLocation(node)
 			if nodeType == nil {
 				continue

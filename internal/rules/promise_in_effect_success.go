@@ -61,6 +61,16 @@ var PromiseInEffectSuccess = rule.Rule{
 				continue
 			}
 
+			// Declared-type prefilter: a diagnostic requires a strict Effect
+			// flow type on the node, which reference nodes with a
+			// conclusively non-Effect declared type can never have. Skipped
+			// nodes can never match, so no matched-map bookkeeping is needed.
+			// Call expressions are unaffected: the prefilter only rules out
+			// identifiers and property accesses.
+			if !ctx.TypeParser.NodeCouldBeStrictEffect(node) {
+				continue
+			}
+
 			t := ctx.TypeParser.GetTypeAtLocation(node)
 			if node.Kind == ast.KindCallExpression {
 				if signature := ctx.Checker.GetResolvedSignature(node); signature != nil {
