@@ -1,6 +1,6 @@
 {
   "name": "@effect/tsgo",
-  "version": "0.35.0",
+  "version": "0.36.0",
   "type": "module",
   "description": "Effect Language Service for TypeScript-Go — Effect-specific diagnostics and hover features.",
   "license": "MIT",
@@ -31,12 +31,20 @@
     "./lib/getExePath": {
       "types": "./lib/getExePath.d.ts",
       "default": "./lib/getExePath.js"
+    },
+    "./oxlint-presets": {
+      "types": "./oxlint-presets/index.d.ts",
+      "default": "./oxlint-presets/index.js"
+    },
+    "./oxlint-presets/*.json": {
+      "default": "./oxlint-presets/*.json"
     }
   },
   "files": [
     "dist/",
     "lib/",
     "README.md",
+    "oxlint-presets/",
     "oxlint-schema.json",
     "schema.json"
   ],

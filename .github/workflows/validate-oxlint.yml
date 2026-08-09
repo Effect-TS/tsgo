@@ -68,6 +68,9 @@ jobs:
           --version "${{ matrix.oxlint.version }}"
           --target linux-x64
 
+      - name: Build @effect/tsgo package
+        run: pnpm --filter @effect/tsgo build
+
       - name: Smoke test Oxlint runtime
         env:
           TSGOLINT_PATH: ${{ steps.tsgolint.outputs.artifact_path }}

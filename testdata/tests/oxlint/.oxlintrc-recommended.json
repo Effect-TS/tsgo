@@ -1,0 +1,3 @@
+{
+  "extends": ["../../../oxlint-presets/recommended.json"]
+}
