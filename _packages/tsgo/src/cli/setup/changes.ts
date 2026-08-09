@@ -90,6 +90,8 @@ function deleteNodeFromList<T extends ts.Node>(
   }
 }
 
+const emptyListInsertions = new WeakMap<object, WeakSet<object>>()
+
 /**
  * Insert a node at the end of a list (array or object properties), handling commas properly
  */
@@ -99,12 +101,57 @@ function insertNodeAtEndOfList<T extends ts.Node>(
   nodeArray: ts.NodeArray<T>,
   newNode: T
 ) {
+  const formatOptions = getFormatOptions(sourceFile)
   if (nodeArray.length === 0) {
-    tracker.insertNodeAt(sourceFile, nodeArray.pos + 1, newNode, { suffix: "\n" })
+    const insertedLists = emptyListInsertions.get(tracker) ?? new WeakSet<object>()
+    const hasPreviousInsertion = insertedLists.has(nodeArray)
+    insertedLists.add(nodeArray)
+    emptyListInsertions.set(tracker, insertedLists)
+    const closingIndentation = getIndentationAtPosition(sourceFile, nodeArray.pos, formatOptions.tabSize)
+    const hasFollowingLineBreak = /^[ \t]*\r?\n/.test(sourceFile.text.slice(nodeArray.pos))
+    tracker.insertNodeAt(sourceFile, nodeArray.pos, newNode, {
+      indentation: closingIndentation.column + formatOptions.indentSize,
+      prefix: formatOptions.newLineCharacter,
+      suffix: hasPreviousInsertion
+        ? ","
+        : hasFollowingLineBreak ? "" : `${formatOptions.newLineCharacter}${closingIndentation.text}`
+    })
   } else {
     const lastElement = nodeArray[nodeArray.length - 1]
-    tracker.insertNodeAt(sourceFile, lastElement.end, newNode, { prefix: ",\n" })
+    const indentation = getIndentationAtPosition(
+      sourceFile,
+      lastElement.getStart(sourceFile),
+      formatOptions.tabSize
+    )
+    tracker.insertNodeAt(sourceFile, lastElement.end, newNode, {
+      indentation: indentation.column,
+      prefix: `,${formatOptions.newLineCharacter}`
+    })
   }
+}
+
+function getFormatOptions(sourceFile: ts.SourceFile) {
+  const indentation = sourceFile.text.match(/^([ \t]+)\S/m)?.[1]
+  const indentSize = indentation?.includes("\t") ? 2 : indentation?.length ?? 2
+  const newLineCharacter = sourceFile.text.includes("\r\n") ? "\r\n" : "\n"
+  return {
+    ...ts.getDefaultFormatCodeSettings(newLineCharacter),
+    indentSize,
+    tabSize: indentSize,
+    convertTabsToSpaces: !indentation?.includes("\t"),
+    newLineCharacter
+  }
+}
+
+function getIndentationAtPosition(sourceFile: ts.SourceFile, position: number, tabSize: number) {
+  const { line } = sourceFile.getLineAndCharacterOfPosition(position)
+  const lineStart = sourceFile.getPositionOfLineAndCharacter(line, 0)
+  const text = sourceFile.text.slice(lineStart, position).match(/^[ \t]*/)?.[0] ?? ""
+  const column = [...text].reduce(
+    (column, character) => character === "\t" ? column + tabSize - (column % tabSize) : column + 1,
+    0
+  )
+  return { column, text }
 }
 
 function findDependencyCollectionProperty(
@@ -211,9 +258,9 @@ const tsInternal = ts as any
 /**
  * Create a ChangeTracker context
  */
-function createTrackerContext() {
+function createTrackerContext(sourceFile: ts.SourceFile) {
   const host = createMinimalHost()
-  const formatOptions = { indentSize: 2, tabSize: 2 } as ts.EditorSettings
+  const formatOptions = getFormatOptions(sourceFile)
   const formatContext = tsInternal.formatting.getFormatContext(formatOptions, host)
   const preferences = {} as ts.UserPreferences
   return { host, formatContext, preferences }
@@ -234,7 +281,7 @@ const computePackageJsonChanges = (
     return emptyFileChangesResult()
   }
 
-  const ctx = createTrackerContext()
+  const ctx = createTrackerContext(current.sourceFile)
 
   const fileChanges = tsInternal.textChanges.ChangeTracker.with(
     ctx,
@@ -606,7 +653,7 @@ const computeTsConfigChanges = (
       const schemaProperty = findPropertyInObject(rootObj, "$schema")
       if (!isEffectSchemaProperty(schemaProperty)) return emptyFileChangesResult()
 
-      const ctx = createTrackerContext()
+      const ctx = createTrackerContext(current.sourceFile)
       const fileChanges = tsInternal.textChanges.ChangeTracker.with(ctx, (tracker: any) => {
         descriptions.push("Remove $schema from tsconfig")
         deleteNodeFromList(tracker, current.sourceFile, rootObj.properties, schemaProperty!)
@@ -628,7 +675,7 @@ const computeTsConfigChanges = (
     }
 
     // Create compilerOptions with the plugin entry
-    const ctx = createTrackerContext()
+    const ctx = createTrackerContext(current.sourceFile)
 
     const fileChanges = tsInternal.textChanges.ChangeTracker.with(
       ctx,
@@ -706,7 +753,7 @@ const computeTsConfigChanges = (
 
   const compilerOptions = compilerOptionsProperty.initializer
 
-  const ctx = createTrackerContext()
+  const ctx = createTrackerContext(current.sourceFile)
 
   const fileChanges = tsInternal.textChanges.ChangeTracker.with(
     ctx,
@@ -858,7 +905,7 @@ const computeOxlintConfigChanges = (
     ts.factory.createStringLiteral("$schema"),
     ts.factory.createStringLiteral(schemaPath.value)
   )
-  const ctx = createTrackerContext()
+  const ctx = createTrackerContext(current.sourceFile)
   const fileChanges = tsInternal.textChanges.ChangeTracker.with(ctx, (tracker: any) => {
     if (schemaProperty) {
       tracker.replaceNode(current.sourceFile, schemaProperty.initializer, schemaPropertyAssignment.initializer)
@@ -897,7 +944,7 @@ const computeVSCodeSettingsChanges = (
     return emptyFileChangesResult()
   }
 
-  const ctx = createTrackerContext()
+  const ctx = createTrackerContext(current.sourceFile)
 
   const createSettingValue = (value: unknown): ts.Expression =>
     typeof value === "string"
