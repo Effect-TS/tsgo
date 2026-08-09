@@ -200,3 +200,6 @@ func SyntaxRequiresTrailingModuleBlockOrSemicolonOrASI(kind ast.Kind) bool
 //go:linkname SyntaxRequiresTrailingSemicolonOrASI github.com/microsoft/typescript-go/internal/ls/lsutil.SyntaxRequiresTrailingSemicolonOrASI
 func SyntaxRequiresTrailingSemicolonOrASI(kind ast.Kind) bool
 type UserPreferences = lsutil.UserPreferences
+type WorkspaceSymbolsScope = lsutil.WorkspaceSymbolsScope
+const WorkspaceSymbolsScopeAllOpenProjects = lsutil.WorkspaceSymbolsScopeAllOpenProjects
+const WorkspaceSymbolsScopeCurrentProject = lsutil.WorkspaceSymbolsScopeCurrentProject
