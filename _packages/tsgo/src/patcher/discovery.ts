@@ -3,6 +3,7 @@ import * as Data from "effect/Data"
 import * as Effect from "effect/Effect"
 import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
+import { hashFile } from "./fileHash.js"
 import type { Component, DiscoveredBinary } from "./types.js"
 
 export const defaultTypescriptPackageNames = ["typescript", "@typescript/native"] as const
@@ -18,6 +19,8 @@ interface PackageMetadata {
   readonly version: string
   readonly main?: string
 }
+
+type DiscoveredBinaryLocation = Omit<DiscoveredBinary, "fileHash">
 
 const isNativeTypescriptVersion = (version: string) => {
   const match = /\d+/.exec(version.trim())
@@ -82,7 +85,7 @@ export const experimentalOxlintTarget = (platform: NodeJS.Platform, arch: string
 const discoverTypeScript: (
   cwdRequire: NodeJS.Require,
   preferredPackage?: string
-) => Effect.Effect<DiscoveredBinary[], DiscoveryError, FileSystem.FileSystem | Path.Path> = (
+) => Effect.Effect<DiscoveredBinaryLocation[], DiscoveryError, FileSystem.FileSystem | Path.Path> = (
   cwdRequire,
   preferredPackage
 ) => Effect.gen(function*() {
@@ -102,14 +105,14 @@ const discoverTypeScript: (
       packageName: platformPackageName,
       packageVersion: platformPackage.version,
       binaryPath: path.join(path.dirname(platformPackage.packageJsonPath), "lib", binaryName)
-    } satisfies DiscoveredBinary]
+    } satisfies DiscoveredBinaryLocation]
   }
   return []
 })
 
 const discoverOxlint: (
   cwdRequire: NodeJS.Require
-) => Effect.Effect<DiscoveredBinary[], DiscoveryError, FileSystem.FileSystem | Path.Path> = (cwdRequire) =>
+) => Effect.Effect<DiscoveredBinaryLocation[], DiscoveryError, FileSystem.FileSystem | Path.Path> = (cwdRequire) =>
   Effect.gen(function*() {
     const path = yield* Path.Path
     const oxlint = yield* optionally(readPackage(cwdRequire, "oxlint"))
@@ -121,7 +124,7 @@ const discoverOxlint: (
         ? error
         : new DiscoveryError({ reason: "Unable to determine the Oxlint platform target." })
     })
-    const discovered: Array<DiscoveredBinary> = []
+    const discovered: Array<DiscoveredBinaryLocation> = []
     if (oxlint !== undefined) {
       const binding = yield* readPackage(nodeModule.createRequire(oxlint.packageJsonPath), target.oxlintPackage)
       if (binding.main === undefined) {
@@ -157,7 +160,7 @@ const discoverOxlint: (
 
 const discoverVitePlusOxlint: (
   cwdRequire: NodeJS.Require
-) => Effect.Effect<DiscoveredBinary[], DiscoveryError, FileSystem.FileSystem | Path.Path> = (cwdRequire) =>
+) => Effect.Effect<DiscoveredBinaryLocation[], DiscoveryError, FileSystem.FileSystem | Path.Path> = (cwdRequire) =>
   Effect.gen(function*() {
     const vitePlus = yield* optionally(readPackage(cwdRequire, "vite-plus"))
     if (vitePlus === undefined) return []
@@ -170,9 +173,13 @@ export const discoverBinaries = (cwd: string, preferredTypescriptPackage?: strin
   const typescript = yield* discoverTypeScript(cwdRequire, preferredTypescriptPackage)
   const oxlint = yield* discoverOxlint(cwdRequire)
   const vitePlusOxlint = yield* discoverVitePlusOxlint(cwdRequire)
-  return [...new Map(
+  const discovered = [...new Map(
     [...typescript, ...oxlint, ...vitePlusOxlint].map((binary) => [binary.binaryPath, binary])
   ).values()]
+  return yield* Effect.forEach(discovered, (binary) => hashFile(binary.binaryPath).pipe(
+    Effect.map((fileHash) => ({ ...binary, fileHash })),
+    Effect.mapError(() => new DiscoveryError({ reason: `Unable to read discovered binary ${binary.binaryPath}.` }))
+  ))
 })
 
 export const selectComponents = (

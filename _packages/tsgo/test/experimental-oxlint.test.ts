@@ -1,12 +1,15 @@
 import * as NodeServices from "@effect/platform-node/NodeServices"
 import * as Effect from "effect/Effect"
+import { createHash } from "node:crypto"
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises"
 import { tmpdir } from "node:os"
-import { join } from "node:path"
+import { dirname, join } from "node:path"
 import { afterEach, describe, expect, it } from "vitest"
 import { discoverBinaries, experimentalOxlintTarget } from "../src/patcher/index.js"
 
 const temporaryDirectories: Array<string> = []
+
+const hash = (value: string) => createHash("sha256").update(value).digest("hex")
 
 const makeTemporaryDirectory = async () => {
   const directory = await mkdtemp(join(tmpdir(), "effect-tsgo-oxlint-"))
@@ -19,6 +22,11 @@ const writePackage = async (directory: string, packageName: string, packageJson:
   await mkdir(packageDirectory, { recursive: true })
   await writeFile(join(packageDirectory, "package.json"), JSON.stringify(packageJson))
   return packageDirectory
+}
+
+const writeBinary = async (filePath: string, contents: string) => {
+  await mkdir(dirname(filePath), { recursive: true })
+  await writeFile(filePath, contents)
 }
 
 afterEach(async () => {
@@ -53,6 +61,11 @@ describe("experimental Oxlint discovery", () => {
       main: "oxlint.node"
     })
     const tsgolintDirectory = await writePackage(directory, platform.tsgolintPackage, { version: "2.0.1" })
+    await Promise.all([
+      writeBinary(join(bindingDirectory, "oxlint.node"), "oxlint"),
+      writeBinary(join(oxlintDirectory, "dist", "index.d.ts"), "declarations"),
+      writeBinary(join(tsgolintDirectory, platform.tsgolintExecutable), "tsgolint")
+    ])
 
     const discovered = await Effect.runPromise(
       discoverBinaries(directory).pipe(Effect.provide(NodeServices.layer))
@@ -62,19 +75,22 @@ describe("experimental Oxlint discovery", () => {
         component: "oxlint",
         packageName: platform.oxlintPackage,
         packageVersion: "1.0.1",
-        binaryPath: join(bindingDirectory, "oxlint.node")
+        binaryPath: join(bindingDirectory, "oxlint.node"),
+        fileHash: hash("oxlint")
       },
       {
         component: "oxlint-dts",
         packageName: "oxlint",
         packageVersion: "1.0.0",
-        binaryPath: join(oxlintDirectory, "dist", "index.d.ts")
+        binaryPath: join(oxlintDirectory, "dist", "index.d.ts"),
+        fileHash: hash("declarations")
       },
       {
         component: "oxlint-tsgolint",
         packageName: platform.tsgolintPackage,
         packageVersion: "2.0.1",
-        binaryPath: join(tsgolintDirectory, platform.tsgolintExecutable)
+        binaryPath: join(tsgolintDirectory, platform.tsgolintExecutable),
+        fileHash: hash("tsgolint")
       }
     ])
   })
@@ -84,6 +100,8 @@ describe("experimental Oxlint discovery", () => {
     await writePackage(directory, "typescript", { version: "7.0.0" })
     const platformPackage = `@typescript/typescript-${process.platform}-${process.arch}`
     const platformDirectory = await writePackage(directory, platformPackage, { version: "7.0.1" })
+    const binaryPath = join(platformDirectory, "lib", process.platform === "win32" ? "tsc.exe" : "tsc")
+    await writeBinary(binaryPath, "typescript")
 
     const discovered = await Effect.runPromise(
       discoverBinaries(directory).pipe(Effect.provide(NodeServices.layer))
@@ -92,7 +110,8 @@ describe("experimental Oxlint discovery", () => {
       component: "typescript",
       packageName: platformPackage,
       packageVersion: "7.0.1",
-      binaryPath: join(platformDirectory, "lib", process.platform === "win32" ? "tsc.exe" : "tsc")
+      binaryPath,
+      fileHash: hash("typescript")
     })
   })
 
@@ -111,6 +130,11 @@ describe("experimental Oxlint discovery", () => {
       platform.tsgolintPackage,
       { version: "2.0.1" }
     )
+    await Promise.all([
+      writeBinary(join(bindingDirectory, "oxlint.node"), "oxlint"),
+      writeBinary(join(oxlintDirectory, "dist", "index.d.ts"), "declarations"),
+      writeBinary(join(tsgolintDirectory, platform.tsgolintExecutable), "tsgolint")
+    ])
 
     const discovered = await Effect.runPromise(
       discoverBinaries(directory).pipe(Effect.provide(NodeServices.layer))
@@ -120,19 +144,22 @@ describe("experimental Oxlint discovery", () => {
         component: "oxlint",
         packageName: platform.oxlintPackage,
         packageVersion: "1.0.1",
-        binaryPath: join(bindingDirectory, "oxlint.node")
+        binaryPath: join(bindingDirectory, "oxlint.node"),
+        fileHash: hash("oxlint")
       },
       {
         component: "oxlint-dts",
         packageName: "oxlint",
         packageVersion: "1.0.0",
-        binaryPath: join(oxlintDirectory, "dist", "index.d.ts")
+        binaryPath: join(oxlintDirectory, "dist", "index.d.ts"),
+        fileHash: hash("declarations")
       },
       {
         component: "oxlint-tsgolint",
         packageName: platform.tsgolintPackage,
         packageVersion: "2.0.1",
-        binaryPath: join(tsgolintDirectory, platform.tsgolintExecutable)
+        binaryPath: join(tsgolintDirectory, platform.tsgolintExecutable),
+        fileHash: hash("tsgolint")
       }
     ])
   })
