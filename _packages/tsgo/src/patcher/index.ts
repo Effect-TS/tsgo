@@ -7,6 +7,7 @@ import * as Path from "effect/Path"
 import * as Scope from "effect/Scope"
 import metadataJson from "../metadata.json" with { type: "json" }
 import { discoverBinaries, requireComponents, selectComponents } from "./discovery.js"
+import { hashBytes, hashFile } from "./fileHash.js"
 import type {
   Component,
   DiscoveredBinary,
@@ -40,6 +41,7 @@ const exists = (fs: FileSystem.FileSystem, filePath: string) => fs.exists(filePa
 
 export interface ResolvedReplacement {
   readonly path: string
+  readonly fileHash: string
 }
 
 export type ReplacementResolver = (
@@ -96,9 +98,11 @@ export const renderOxlintDeclarations = (source: string): string => {
 const resolveOxlintDeclarations = (target: DiscoveredBinary) => Effect.gen(function*() {
   const fs = yield* FileSystem.FileSystem
   const path = yield* Path.Path
-  const source = yield* fs.readFileString(target.binaryPath).pipe(
+  const backupPath = `${target.binaryPath}.original`
+  const sourcePath = (yield* exists(fs, backupPath)) ? backupPath : target.binaryPath
+  const source = yield* fs.readFileString(sourcePath).pipe(
     Effect.mapError((error) => new PatcherError({
-      reason: `Unable to read Oxlint declarations at ${target.binaryPath}: ${error.message}`
+      reason: `Unable to read Oxlint declarations at ${sourcePath}: ${error.message}`
     }))
   )
   const replacement = yield* Effect.try({
@@ -117,7 +121,7 @@ const resolveOxlintDeclarations = (target: DiscoveredBinary) => Effect.gen(funct
       reason: `Unable to write generated Oxlint declarations at ${replacementPath}: ${error.message}`
     }))
   )
-  return { path: replacementPath }
+  return { path: replacementPath, fileHash: hashBytes(replacement) }
 })
 
 const resolvePlatformPackage = (target: DiscoveredBinary) => Effect.gen(function*() {
@@ -152,7 +156,12 @@ export const resolveReplacement: ReplacementResolver = (target) => Effect.gen(fu
       reason: `Missing packaged artifact ${replacementPath}.`
     })
   }
-  return { path: replacementPath }
+  const fileHash = yield* hashFile(replacementPath).pipe(
+    Effect.mapError((error) => new PatcherError({
+      reason: `Unable to hash packaged artifact ${replacementPath}: ${error.message}`
+    }))
+  )
+  return { path: replacementPath, fileHash }
 })
 
 export interface PreparePatchOptions {
@@ -169,8 +178,13 @@ export const preparePatch = (
   const fs = yield* FileSystem.FileSystem
   const resolver = options.resolveReplacement ?? resolveReplacement
   const operations: Array<FileSystemOperation> = []
+  const cleanup: Array<RemoveOperation> = []
   const skipped: Array<SkippedTarget> = []
-  const available: Array<{ readonly target: DiscoveredBinary; readonly replacementPath: string }> = []
+  const available: Array<{
+    readonly target: DiscoveredBinary
+    readonly replacementPath: string
+    readonly backupExists: boolean
+  }> = []
 
   for (const target of targets) {
     const backupPath = `${target.binaryPath}.original`
@@ -178,14 +192,6 @@ export const preparePatch = (
     const backupExists = yield* exists(fs, backupPath)
     if (!targetExists) {
       return yield* new PatcherError({ reason: `Installed binary does not exist: ${target.binaryPath}` })
-    }
-    if (backupExists) {
-      skipped.push({
-        target,
-        reason: "already-patched",
-        message: `${target.component} skipped because backup already exists at ${backupPath}.`
-      })
-      continue
     }
     const replacement = yield* resolver(target).pipe(
       Effect.catchTag("ReplacementUnavailableError", (error) => {
@@ -195,12 +201,26 @@ export const preparePatch = (
       })
     )
     if (replacement === undefined) continue
-    available.push({ target, replacementPath: replacement.path })
+    if (backupExists && target.fileHash === replacement.fileHash) {
+      skipped.push({
+        target,
+        reason: "already-patched",
+        message: `${target.component} skipped because its hash matches the replacement.`
+      })
+      continue
+    }
+    available.push({ target, replacementPath: replacement.path, backupExists })
   }
 
-  for (const { replacementPath, target } of available) {
+  for (const { backupExists, replacementPath, target } of available) {
     const backupPath = `${target.binaryPath}.original`
-    operations.push({ _tag: "Rename", sourcePath: target.binaryPath, destinationPath: backupPath })
+    if (backupExists) {
+      const quarantinePath = `${target.binaryPath}.${randomUUID()}.patched`
+      operations.push({ _tag: "Rename", sourcePath: target.binaryPath, destinationPath: quarantinePath })
+      cleanup.push({ _tag: "Remove", path: quarantinePath })
+    } else {
+      operations.push({ _tag: "Rename", sourcePath: target.binaryPath, destinationPath: backupPath })
+    }
     operations.push({
       _tag: "Copy",
       sourcePath: replacementPath,
@@ -211,7 +231,7 @@ export const preparePatch = (
     }
   }
 
-  return { operations, cleanup: [], skipped } satisfies PreparedPatch
+  return { operations, cleanup, skipped } satisfies PreparedPatch
 })
 
 export const prepareUnpatch = (targets: ReadonlyArray<DiscoveredBinary>) => Effect.gen(function*() {
