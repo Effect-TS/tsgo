@@ -1,5 +1,11 @@
 # @effect/tsgo
 
+## 0.36.4
+
+### Patch Changes
+
+- 7a616ec: Allow declaration emit with `noEmitOnError` when all diagnostics are ignored Effect diagnostics.
+
 ## 0.36.3
 
 ### Patch Changes
