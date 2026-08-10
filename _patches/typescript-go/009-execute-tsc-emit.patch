@@ -70,9 +70,11 @@ index 3a1e3de69..8cb7c24c0 100644
 diff --git a/internal/compiler/program.go b/internal/compiler/program.go
 --- a/internal/compiler/program.go
 +++ b/internal/compiler/program.go
-@@ -1762,6 +1762,16 @@ type ProgramLike interface {
- 	Program() *Program
- }
+@@ -30,6 +30,16 @@ import (
+ 	"github.com/microsoft/typescript-go/internal/tracing"
+ 	"github.com/microsoft/typescript-go/internal/tsoptions"
+ 	"github.com/microsoft/typescript-go/internal/tspath"
+ )
  
 +// FilterDiagnosticsForNoEmitOnErrorCallback is invoked before diagnostics
 +// suppress emit when noEmitOnError is enabled.
@@ -84,10 +86,8 @@ diff --git a/internal/compiler/program.go b/internal/compiler/program.go
 +	FilterDiagnosticsForNoEmitOnErrorCallback = cb
 +}
 +
- func HandleNoEmitOnError(ctx context.Context, program ProgramLike, files []*ast.SourceFile) *EmitResult {
- 	if !program.Options().NoEmitOnError.IsTrue() {
- 		return nil // No emit on error is not set, so we can proceed with emitting
-@@ -1775,6 +1786,9 @@ func HandleNoEmitOnError(ctx context.Context, program ProgramLike, files []*ast.
+ type ProgramOptions struct {
+@@ -1743,6 +1753,9 @@ func HandleNoEmitOnError(ctx context.Context, program ProgramLike, file *ast.Sou
  		program.GetBindDiagnostics,
  		program.GetSemanticDiagnostics,
  	)
