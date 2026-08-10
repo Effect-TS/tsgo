@@ -4,6 +4,7 @@ import (
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
 	"github.com/microsoft/typescript-go/shim/ast"
+	"github.com/microsoft/typescript-go/shim/compiler"
 	"github.com/microsoft/typescript-go/shim/core"
 	"github.com/microsoft/typescript-go/shim/diagnostics"
 	"github.com/microsoft/typescript-go/shim/execute/tsc"
@@ -11,6 +12,7 @@ import (
 
 func init() {
 	tsc.RegisterFilterDiagnosticsForExitCodeCallback(filterDiagnosticsForExitCode)
+	compiler.RegisterFilterDiagnosticsForNoEmitOnErrorCallback(filterDiagnosticsForExitCode)
 }
 
 // filterDiagnosticsForExitCode is the callback registered with the tsc package.
