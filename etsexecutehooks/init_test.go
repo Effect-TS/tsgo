@@ -1,13 +1,47 @@
 package etsexecutehooks
 
 import (
+	"context"
 	"testing"
 
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/microsoft/typescript-go/shim/ast"
+	"github.com/microsoft/typescript-go/shim/compiler"
 	"github.com/microsoft/typescript-go/shim/core"
 	"github.com/microsoft/typescript-go/shim/diagnostics"
+	"github.com/microsoft/typescript-go/shim/tspath"
 )
+
+type noEmitProgram struct {
+	opts        *core.CompilerOptions
+	diagnostics []*ast.Diagnostic
+}
+
+func (p *noEmitProgram) Options() *core.CompilerOptions                     { return p.opts }
+func (p *noEmitProgram) GetSourceFile(string) *ast.SourceFile               { return nil }
+func (p *noEmitProgram) GetSourceFiles() []*ast.SourceFile                  { return nil }
+func (p *noEmitProgram) GetConfigFileParsingDiagnostics() []*ast.Diagnostic { return p.diagnostics }
+func (p *noEmitProgram) GetSyntacticDiagnostics(context.Context, *ast.SourceFile) []*ast.Diagnostic {
+	return nil
+}
+func (p *noEmitProgram) GetBindDiagnostics(context.Context, *ast.SourceFile) []*ast.Diagnostic {
+	return nil
+}
+func (p *noEmitProgram) GetProgramDiagnostics() []*ast.Diagnostic               { return nil }
+func (p *noEmitProgram) GetGlobalDiagnostics(context.Context) []*ast.Diagnostic { return nil }
+func (p *noEmitProgram) GetSemanticDiagnostics(context.Context, *ast.SourceFile) []*ast.Diagnostic {
+	return nil
+}
+func (p *noEmitProgram) GetDeclarationDiagnostics(context.Context, *ast.SourceFile) []*ast.Diagnostic {
+	return nil
+}
+func (p *noEmitProgram) GetSuggestionDiagnostics(context.Context, *ast.SourceFile) []*ast.Diagnostic {
+	return nil
+}
+func (p *noEmitProgram) Emit(context.Context, compiler.EmitOptions) *compiler.EmitResult { return nil }
+func (p *noEmitProgram) CommonSourceDirectory() string                                   { return "" }
+func (p *noEmitProgram) IsSourceFileDefaultLibrary(tspath.Path) bool                     { return false }
+func (p *noEmitProgram) Program() *compiler.Program                                      { return nil }
 
 // makeDiag creates a minimal diagnostic with the given code and category.
 func makeDiag(code int32, category diagnostics.Category) *ast.Diagnostic {
@@ -109,6 +143,29 @@ func TestFilterDiagnosticsForExitCode_IgnoreWarnings(t *testing.T) {
 	}
 	if result[2].Code() != 2304 {
 		t.Errorf("expected code 2304, got %d", result[2].Code())
+	}
+}
+
+func TestNoEmitOnError_IgnoresConfiguredEffectWarnings(t *testing.T) {
+	t.Parallel()
+	opts := &core.CompilerOptions{
+		NoEmitOnError: core.BoolToTristate(true),
+		Effect: &etscore.EffectPluginOptions{
+			IgnoreEffectWarningsInTscExitCode: true,
+		},
+	}
+	program := &noEmitProgram{
+		opts:        opts,
+		diagnostics: []*ast.Diagnostic{makeDiag(377011, diagnostics.CategoryWarning)},
+	}
+
+	if result := compiler.HandleNoEmitOnError(context.Background(), program, nil); result != nil {
+		t.Fatal("expected ignored Effect warning not to suppress emit")
+	}
+
+	program.diagnostics = []*ast.Diagnostic{makeDiag(1002, diagnostics.CategoryError)}
+	if result := compiler.HandleNoEmitOnError(context.Background(), program, nil); result == nil || !result.EmitSkipped {
+		t.Fatal("expected TypeScript error to suppress emit")
 	}
 }
 
