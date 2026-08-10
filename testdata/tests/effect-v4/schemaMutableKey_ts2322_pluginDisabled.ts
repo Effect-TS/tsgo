@@ -9,7 +9,10 @@
 }
 
 // @filename: schemaMutableKey_ts2322_pluginDisabled.ts
-import { Schema, Struct as Struct_, SchemaAST  } from "effect"
+import { Schema, Struct as Struct_, SchemaAST } from "effect"
+declare module "effect/SchemaAST" {
+  export function optionalKey<A extends SchemaAST.AST>(ast: A): A
+}
 
 
 interface optionalKeyLambda extends Struct_.Lambda {
