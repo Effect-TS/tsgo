@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto"
 import * as nodeModule from "node:module"
+import * as Crypto from "effect/Crypto"
 import * as Data from "effect/Data"
 import * as Effect from "effect/Effect"
 import * as FileSystem from "effect/FileSystem"
@@ -49,7 +50,7 @@ export type ReplacementResolver = (
 ) => Effect.Effect<
   ResolvedReplacement,
   PatcherError | ReplacementUnavailableError,
-  FileSystem.FileSystem | Path.Path | Scope.Scope
+  Crypto.Crypto | FileSystem.FileSystem | Path.Path | Scope.Scope
 >
 
 const toKebabCase = (value: string): string => {
@@ -121,7 +122,12 @@ const resolveOxlintDeclarations = (target: DiscoveredBinary) => Effect.gen(funct
       reason: `Unable to write generated Oxlint declarations at ${replacementPath}: ${error.message}`
     }))
   )
-  return { path: replacementPath, fileHash: hashBytes(replacement) }
+  const fileHash = yield* hashBytes(replacement).pipe(
+    Effect.mapError((error) => new PatcherError({
+      reason: `Unable to hash generated Oxlint declarations: ${error.message}`
+    }))
+  )
+  return { path: replacementPath, fileHash }
 })
 
 const resolvePlatformPackage = (target: DiscoveredBinary) => Effect.gen(function*() {
