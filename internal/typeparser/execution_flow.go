@@ -178,7 +178,7 @@ func (ec *executionCollector) visitEachChildWithUsageTarget(node *ast.Node, targ
 
 func (ec *executionCollector) visitExpressionNode(node *ast.Expression, parentExpression *GraphSlice) *GraphSlice {
 	rootExpr := parentExpression
-	if parentExpression == nil && ast.IsExpressionNode(node) {
+	if parentExpression == nil && ast.IsExpressionNode(node) && !isInsideTypeOnlyHeritageExpression(node) {
 		rootExpr = ec.buildValueNode(node)
 	}
 	ec.visitEachChildWithUsageTarget(node, rootExpr)
