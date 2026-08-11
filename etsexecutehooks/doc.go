@@ -1,7 +1,7 @@
-// Package etsexecutehooks provides exit-code filtering for Effect diagnostics.
+// Package etsexecutehooks provides command-line filtering for Effect diagnostics.
 //
 // This package registers a FilterDiagnosticsForExitCodeCallback that filters out
-// Effect diagnostics from exit-code determination based on the
+// Effect diagnostics from exit-code and noEmitOnError determination based on the
 // IgnoreEffectSuggestionsInTscExitCode and IgnoreEffectWarningsInTscExitCode
 // configuration options.
 //

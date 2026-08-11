@@ -15,7 +15,10 @@ Effect version: 4.0.0
     
 
 ==== /.src/schemaMutableKey_ts2322_pluginDisabled.ts (0 errors) ====
-    import { Schema, Struct as Struct_, SchemaAST  } from "effect"
+    import { Schema, Struct as Struct_, SchemaAST } from "effect"
+    declare module "effect/SchemaAST" {
+      export function optionalKey<A extends SchemaAST.AST>(ast: A): A
+    }
     
     
     interface optionalKeyLambda extends Struct_.Lambda {

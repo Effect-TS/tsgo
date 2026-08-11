@@ -1,8 +1,10 @@
 import * as NodeServices from "@effect/platform-node/NodeServices"
+import * as Crypto from "effect/Crypto"
 import * as Effect from "effect/Effect"
 import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
 import * as Scope from "effect/Scope"
+import { createHash } from "node:crypto"
 import { access, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
@@ -20,13 +22,15 @@ import {
 
 const temporaryDirectories: Array<string> = []
 
+const hash = (value: string) => createHash("sha256").update(value).digest("hex")
+
 const makeTemporaryDirectory = async () => {
   const directory = await mkdtemp(join(tmpdir(), "effect-tsgo-patcher-"))
   temporaryDirectories.push(directory)
   return directory
 }
 
-const run = <A, E>(effect: Effect.Effect<A, E, FileSystem.FileSystem | Path.Path | Scope.Scope>) =>
+const run = <A, E>(effect: Effect.Effect<A, E, Crypto.Crypto | FileSystem.FileSystem | Path.Path | Scope.Scope>) =>
   Effect.runPromise(Effect.scoped(effect).pipe(Effect.provide(NodeServices.layer)))
 
 afterEach(async () => {
@@ -47,14 +51,27 @@ describe("patcher", () => {
       writeFile(secondReplacement, "second-effect")
     ])
     const targets: ReadonlyArray<DiscoveredBinary> = [
-      { component: "oxlint-dts", packageName: "oxlint", packageVersion: "1", binaryPath: first },
-      { component: "oxlint-tsgolint", packageName: "oxlint-tsgolint", packageVersion: "2", binaryPath: second }
+      {
+        component: "oxlint-dts",
+        packageName: "oxlint",
+        packageVersion: "1",
+        binaryPath: first,
+        fileHash: hash("first")
+      },
+      {
+        component: "oxlint-tsgolint",
+        packageName: "oxlint-tsgolint",
+        packageVersion: "2",
+        binaryPath: second,
+        fileHash: hash("second")
+      }
     ]
 
     const plan = await run(preparePatch(targets, {
       skipMissing: false,
       resolveReplacement: (target) => Effect.succeed({
-        path: target.component === "oxlint-dts" ? firstReplacement : secondReplacement
+        path: target.component === "oxlint-dts" ? firstReplacement : secondReplacement,
+        fileHash: hash(target.component === "oxlint-dts" ? "first-effect" : "second-effect")
       })
     }))
     expect(plan.operations).toEqual([
@@ -69,19 +86,21 @@ describe("patcher", () => {
   it("generates an Oxlint declaration replacement in the temporary directory", async () => {
     const directory = await makeTemporaryDirectory()
     const declarationPath = join(directory, "index.d.ts")
-    await writeFile(declarationPath, [
+    const declarations = [
       'type LintPluginOptionsSchema = "eslint" | "typescript";',
       "type RuleNoConfig = unknown;",
       "interface DummyRuleMap {",
       '  "eslint/no-unused-vars"?: RuleNoConfig;',
       "}",
       ""
-    ].join("\n"))
+    ].join("\n")
+    await writeFile(declarationPath, declarations)
     const target: DiscoveredBinary = {
       component: "oxlint-dts",
       packageName: "oxlint",
       packageVersion: "1.0.0",
-      binaryPath: declarationPath
+      binaryPath: declarationPath,
+      fileHash: hash(await readFile(declarationPath, "utf8"))
     }
 
     const replacement = await run(Effect.gen(function*() {
@@ -96,6 +115,15 @@ describe("patcher", () => {
     expect(replacement.source).toContain('"effecttsgo/floating-effect"?: RuleNoConfig;')
     expect(replacement.source).toContain('"eslint/no-unused-vars"?: RuleNoConfig;')
     await expect(access(replacement.path)).rejects.toThrow()
+
+    await writeFile(`${declarationPath}.original`, declarations)
+    await writeFile(declarationPath, replacement.source)
+    const refreshed = await run(Effect.gen(function*() {
+      const fs = yield* FileSystem.FileSystem
+      const resolved = yield* resolveReplacement(target)
+      return yield* fs.readFileString(resolved.path)
+    }))
+    expect(refreshed).toBe(replacement.source)
   })
 
   it("rejects declarations whose expected anchors changed", () => {
@@ -120,7 +148,7 @@ describe("patcher", () => {
     await expect(access(`${target}.original`)).rejects.toThrow()
   })
 
-  it("treats the persisted original backup as already patched", async () => {
+  it("refreshes a stale patch while preserving the original backup", async () => {
     const directory = await makeTemporaryDirectory()
     const targetPath = join(directory, "binary")
     const replacementPath = join(directory, "replacement")
@@ -131,18 +159,45 @@ describe("patcher", () => {
       component: "oxlint-tsgolint",
       packageName: "oxlint-tsgolint",
       packageVersion: "1",
-      binaryPath: targetPath
+      binaryPath: targetPath,
+      fileHash: hash("patched")
     }
     const plan = await run(preparePatch([target], {
       skipMissing: false,
-      resolveReplacement: () => Effect.succeed({ path: replacementPath })
+      resolveReplacement: () => Effect.succeed({ path: replacementPath, fileHash: hash("replacement") })
+    }))
+    expect(plan.operations.map(({ _tag }) => _tag)).toEqual(["Rename", "Copy", "Chmod"])
+    expect(plan.cleanup).toHaveLength(1)
+    expect(plan.skipped).toEqual([])
+    await run(applyPlan(plan))
+    expect(await readFile(targetPath, "utf8")).toBe("replacement")
+    expect(await readFile(`${targetPath}.original`, "utf8")).toBe("original")
+    expect((await readdir(directory)).filter((name) => name.endsWith(".patched"))).toEqual([])
+  })
+
+  it("skips a patch whose target already matches the replacement", async () => {
+    const directory = await makeTemporaryDirectory()
+    const targetPath = join(directory, "binary")
+    const replacementPath = join(directory, "replacement")
+    await writeFile(targetPath, "replacement")
+    await writeFile(`${targetPath}.original`, "original")
+    await writeFile(replacementPath, "replacement")
+    const target: DiscoveredBinary = {
+      component: "oxlint-tsgolint",
+      packageName: "oxlint-tsgolint",
+      packageVersion: "1",
+      binaryPath: targetPath,
+      fileHash: hash("replacement")
+    }
+    const plan = await run(preparePatch([target], {
+      skipMissing: false,
+      resolveReplacement: () => Effect.succeed({ path: replacementPath, fileHash: hash("replacement") })
     }))
     expect(plan.operations).toEqual([])
     expect(plan.skipped[0]?.reason).toBe("already-patched")
     expect(plan.skipped[0]?.message).toBe(
-      `oxlint-tsgolint skipped because backup already exists at ${targetPath}.original.`
+      `oxlint-tsgolint skipped because its hash matches the replacement.`
     )
-    await expect(access(`${targetPath}.original.1`)).rejects.toThrow()
   })
 
   it("rolls back prior reversible operations when mutation fails", async () => {
@@ -170,7 +225,8 @@ describe("patcher", () => {
       component: "typescript",
       packageName: "typescript",
       packageVersion: "7.0.0",
-      binaryPath: targetPath
+      binaryPath: targetPath,
+      fileHash: hash("patched")
     }
     await writeFile(targetPath, "patched")
     await writeFile(`${targetPath}.original`, "original")
@@ -190,7 +246,8 @@ describe("patcher", () => {
       component: "oxlint",
       packageName: "oxlint",
       packageVersion: "missing",
-      binaryPath: targetPath
+      binaryPath: targetPath,
+      fileHash: hash("original")
     }
     const unavailable = () => Effect.fail(new ReplacementUnavailableError({ target, reason: "not packaged" }))
     const plan = await run(preparePatch([target], {

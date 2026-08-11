@@ -1,6 +1,6 @@
 {
   "name": "@effect/tsgo",
-  "version": "0.36.2",
+  "version": "0.36.4",
   "type": "module",
   "description": "Effect Language Service for TypeScript-Go — Effect-specific diagnostics and hover features.",
   "license": "MIT",
@@ -58,12 +58,12 @@
     "@effect/tsgo-darwin-arm64": "workspace:*"
   },
   "devDependencies": {
-    "@effect/platform-node": "^4.0.0-beta.104",
-    "@effect/platform-node-shared": "^4.0.0-beta.104",
+    "@effect/platform-node": "^4.0.0-beta.107",
+    "@effect/platform-node-shared": "^4.0.0-beta.107",
     "@types/node": "^24.3.0",
     "tsdown": "^0.20.1",
     "typescript": "^5.9.2",
-    "effect": "^4.0.0-beta.104",
+    "effect": "^4.0.0-beta.107",
     "vitest": "^3.2.1"
   }
 }

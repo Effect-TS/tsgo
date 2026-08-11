@@ -1,5 +1,18 @@
 # @effect/tsgo
 
+## 0.36.4
+
+### Patch Changes
+
+- 7a616ec: Allow declaration emit with `noEmitOnError` when all diagnostics are ignored Effect diagnostics.
+
+## 0.36.3
+
+### Patch Changes
+
+- 73f7f28: Refresh patched binaries when an updated `@effect/tsgo` package provides a different replacement artifact.
+- 9190801: Update Effect v4 dependencies and embedded test fixtures to `4.0.0-beta.107`.
+
 ## 0.36.2
 
 ### Patch Changes
