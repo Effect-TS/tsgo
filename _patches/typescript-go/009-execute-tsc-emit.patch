@@ -24,14 +24,12 @@ diff --git a/internal/execute/tsc/emit.go b/internal/execute/tsc/emit.go
 index 3a1e3de69..8cb7c24c0 100644
 --- a/internal/execute/tsc/emit.go
 +++ b/internal/execute/tsc/emit.go
-@@ -10,6 +10,7 @@ import (
+@@ -10,4 +10,5 @@ import (
  	"github.com/microsoft/typescript-go/internal/ast"
  	"github.com/microsoft/typescript-go/internal/collections"
  	"github.com/microsoft/typescript-go/internal/compiler"
 +	"github.com/microsoft/typescript-go/internal/core"
  	"github.com/microsoft/typescript-go/internal/diagnostics"
- 	"github.com/microsoft/typescript-go/internal/locale"
- 	"github.com/microsoft/typescript-go/internal/tracing"
 @@ -17,6 +18,17 @@ import (
  	"github.com/microsoft/typescript-go/internal/tspath"
  )
