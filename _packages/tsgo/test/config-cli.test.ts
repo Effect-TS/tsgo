@@ -9,7 +9,8 @@ function createAssessmentInput(
   packageJson: Record<string, unknown>,
   tsconfig: Record<string, unknown>,
   vscodeSettings?: Record<string, unknown>,
-  oxlintConfig?: Record<string, unknown>
+  oxlintConfig?: Record<string, unknown>,
+  zedSettings?: Record<string, unknown>
 ): Assessment.Input {
   return {
     packageJson: {
@@ -30,6 +31,12 @@ function createAssessmentInput(
       ? Option.some({
         fileName: ".vscode/settings.json",
         text: JSON.stringify(vscodeSettings, null, 2)
+      })
+      : Option.none(),
+    zedSettings: zedSettings
+      ? Option.some({
+        fileName: ".zed/settings.json",
+        text: JSON.stringify(zedSettings, null, 2)
       })
       : Option.none()
   }
@@ -74,6 +81,14 @@ describe("Config CLI", () => {
       },
       {
         "editor.formatOnSave": true
+      },
+      undefined,
+      {
+        languages: {
+          TypeScript: {
+            language_servers: ["vtsls", "..."]
+          }
+        }
       }
     )
 
@@ -91,6 +106,9 @@ describe("Config CLI", () => {
     expect(targetState.vscodeSettings).toEqual(Option.map(assessmentState.vscodeSettings, (settings) => ({
       settings: settings.parsed
     })))
+    expect(targetState.zedSettings).toEqual(Option.map(assessmentState.zedSettings, (settings) => ({
+      settings: settings.parsed
+    })))
 
     const result = computeChanges(assessmentState, targetState)
 
@@ -100,6 +118,9 @@ describe("Config CLI", () => {
       .toBe(false)
     expect(
       result.codeActions.some((action) => action.changes.some((change) => change.fileName === ".vscode/settings.json"))
+    ).toBe(false)
+    expect(
+      result.codeActions.some((action) => action.changes.some((change) => change.fileName === ".zed/settings.json"))
     ).toBe(false)
   })
 
