@@ -6,7 +6,7 @@
     nixpkgsUnstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     /* Source of truth: the next profile in `_packages/tsgo/upstream.json`. */
     typescript-go-src = {
-      url = "github:microsoft/typescript-go/24fabe95acba758c05fcb349bf427a3a0c8ad676?submodules=1";
+      url = "github:microsoft/typescript-go/ffdcc67b1568ef5f7fc192c3b88c296a6c836a36?submodules=1";
       flake = false;
     };
     /* Derived from the selected TypeScript-Go revision and recorded in the manifest. */
@@ -44,7 +44,7 @@
        Refresh: pnpm exec repoctl flake update
        Manual:  set to lib.fakeHash, build, copy the reported hash.
       */
-      vendorHash = "sha256-tfmuo2BIN1Z8ArQMfeNdudngclWjWyIa3YtmOqrr3d8=";
+      vendorHash = "sha256-wm9mss5lyJ2BGBjnD/hB1UxC9ZUohlNRL7AA7FtEEH4=";
       forAllSystems =
         f: lib.genAttrs supportedSystems (system: f system (import nixpkgs { inherit system; }));
     in
