@@ -42,6 +42,9 @@ export const updateFlakeInputs = (flake: string, typescriptGoRevision: string, t
 export const updateVendorHash = (flake: string, hash: string) =>
   replaceRequired(flake, vendorHashPattern, `vendorHash = ${JSON.stringify(hash)};`, "vendorHash")
 
+export const invalidateVendorHash = (flake: string) =>
+  replaceRequired(flake, vendorHashPattern, "vendorHash = lib.fakeHash;", "vendorHash")
+
 const replacementVendorHash = (output: string) => {
   const messageHash = output.match(/To correct the hash mismatch[^\n]*use "([^"]+)"/)?.[1]
   const reportedHash = output.match(/got:\s+(sha256-[^\s]+)/)?.[1]
@@ -88,7 +91,13 @@ export const updateFlake = Effect.fnUntraced(function*(repositoryRoot: string) {
       ? error
       : new FlakeUpdateError({ reason: String(error) })
   })
-  yield* fs.writeFileString(flakePath, updatedInputs).pipe(
+  const flakeWithFakeHash = yield* Effect.try({
+    try: () => invalidateVendorHash(updatedInputs),
+    catch: (error) => error instanceof FlakeUpdateError
+      ? error
+      : new FlakeUpdateError({ reason: String(error) })
+  })
+  yield* fs.writeFileString(flakePath, flakeWithFakeHash).pipe(
     Effect.mapError((error) => new FlakeUpdateError({ reason: error.message }))
   )
   yield* runCommand("nix", repositoryRoot, ["flake", "lock"])
