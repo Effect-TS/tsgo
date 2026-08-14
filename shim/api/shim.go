@@ -213,6 +213,10 @@ const MethodSaveHeapProfile = api.MethodSaveHeapProfile
 const MethodSignatureToSignatureDeclaration = api.MethodSignatureToSignatureDeclaration
 const MethodStartCPUProfile = api.MethodStartCPUProfile
 const MethodStopCPUProfile = api.MethodStopCPUProfile
+const MethodTranspileDeclaration = api.MethodTranspileDeclaration
+const MethodTranspileDeclarationFromFile = api.MethodTranspileDeclarationFromFile
+const MethodTranspileModule = api.MethodTranspileModule
+const MethodTranspileModuleFromFile = api.MethodTranspileModuleFromFile
 const MethodTypeToString = api.MethodTypeToString
 const MethodTypeToTypeNode = api.MethodTypeToTypeNode
 const MethodUpdateSnapshot = api.MethodUpdateSnapshot
@@ -281,6 +285,10 @@ type SymbolID = api.SymbolID
 type SymbolResponse = api.SymbolResponse
 type SyncConn = api.SyncConn
 type TextEdit = api.TextEdit
+type TranspileFromFileParams = api.TranspileFromFileParams
+type TranspileOptions = api.TranspileOptions
+type TranspileOutputResponse = api.TranspileOutputResponse
+type TranspileParams = api.TranspileParams
 type Transport = api.Transport
 //go:linkname TypeHandle github.com/microsoft/typescript-go/internal/api.TypeHandle
 func TypeHandle(t *checker.Type) api.TypeID
