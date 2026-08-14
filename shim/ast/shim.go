@@ -359,10 +359,8 @@ func GetEnclosingBlockScopeContainer(node *ast.Node) *ast.Node
 func GetExports(symbol *ast.Symbol) ast.SymbolTable
 //go:linkname GetExpressionPrecedence github.com/microsoft/typescript-go/internal/ast.GetExpressionPrecedence
 func GetExpressionPrecedence(expression *ast.Expression) ast.OperatorPrecedence
-//go:linkname GetExtendsHeritageClauseElement github.com/microsoft/typescript-go/internal/ast.GetExtendsHeritageClauseElement
-func GetExtendsHeritageClauseElement(node *ast.Node) *ast.ExpressionWithTypeArgumentsNode
 //go:linkname GetExtendsHeritageClauseElements github.com/microsoft/typescript-go/internal/ast.GetExtendsHeritageClauseElements
-func GetExtendsHeritageClauseElements(node *ast.Node) []*ast.ExpressionWithTypeArgumentsNode
+func GetExtendsHeritageClauseElements(node *ast.Node) []*ast.HeritageClauseElement
 //go:linkname GetExternalModuleImportEqualsDeclarationExpression github.com/microsoft/typescript-go/internal/ast.GetExternalModuleImportEqualsDeclarationExpression
 func GetExternalModuleImportEqualsDeclarationExpression(node *ast.Node) *ast.Node
 //go:linkname GetExternalModuleIndicatorOptions github.com/microsoft/typescript-go/internal/ast.GetExternalModuleIndicatorOptions
@@ -377,16 +375,16 @@ func GetFirstIdentifier(node *ast.Node) *ast.Node
 func GetFunctionFlags(node *ast.Node) ast.FunctionFlags
 //go:linkname GetHeritageClause github.com/microsoft/typescript-go/internal/ast.GetHeritageClause
 func GetHeritageClause(node *ast.Node, kind ast.Kind) *ast.Node
+//go:linkname GetHeritageClauseElementName github.com/microsoft/typescript-go/internal/ast.GetHeritageClauseElementName
+func GetHeritageClauseElementName(node *ast.HeritageClauseElement) *ast.Node
 //go:linkname GetHeritageElements github.com/microsoft/typescript-go/internal/ast.GetHeritageElements
-func GetHeritageElements(node *ast.Node, kind ast.Kind) []*ast.Node
+func GetHeritageElements(node *ast.Node, kind ast.Kind) []*ast.HeritageClauseElement
 //go:linkname GetHostSignatureFromJSDoc github.com/microsoft/typescript-go/internal/ast.GetHostSignatureFromJSDoc
 func GetHostSignatureFromJSDoc(node *ast.Node) *ast.Node
 //go:linkname GetImmediatelyInvokedFunctionExpression github.com/microsoft/typescript-go/internal/ast.GetImmediatelyInvokedFunctionExpression
 func GetImmediatelyInvokedFunctionExpression(fn *ast.Node) *ast.Node
 //go:linkname GetImplementsHeritageClauseElements github.com/microsoft/typescript-go/internal/ast.GetImplementsHeritageClauseElements
-func GetImplementsHeritageClauseElements(node *ast.Node) []*ast.ExpressionWithTypeArgumentsNode
-//go:linkname GetImplementsTypeNodes github.com/microsoft/typescript-go/internal/ast.GetImplementsTypeNodes
-func GetImplementsTypeNodes(node *ast.Node) []*ast.ExpressionWithTypeArgumentsNode
+func GetImplementsHeritageClauseElements(node *ast.Node) []*ast.HeritageClauseElement
 //go:linkname GetImpliedNodeFormatForEmitWorker github.com/microsoft/typescript-go/internal/ast.GetImpliedNodeFormatForEmitWorker
 func GetImpliedNodeFormatForEmitWorker(fileName string, emitModuleKind core.ModuleKind, sourceFileMetaData ast.SourceFileMetaData) core.ResolutionMode
 //go:linkname GetImpliedNodeFormatForFile github.com/microsoft/typescript-go/internal/ast.GetImpliedNodeFormatForFile
@@ -511,6 +509,8 @@ func HasSyntacticModifier(node *ast.Node, flags ast.ModifierFlags) bool
 //go:linkname HasTypeArguments github.com/microsoft/typescript-go/internal/ast.HasTypeArguments
 func HasTypeArguments(node *ast.Node) bool
 type HeritageClause = ast.HeritageClause
+type HeritageClauseElement = ast.HeritageClauseElement
+type HeritageClauseElementList = ast.HeritageClauseElementList
 type HeritageClauseList = ast.HeritageClauseList
 type HeritageClauseNode = ast.HeritageClauseNode
 type Identifier = ast.Identifier
@@ -1176,6 +1176,8 @@ func IsModuleWithStringLiteralName(node *ast.Node) bool
 func IsMultiplicativeOperator(kind ast.Kind) bool
 //go:linkname IsMultiplicativeOperatorOrHigher github.com/microsoft/typescript-go/internal/ast.IsMultiplicativeOperatorOrHigher
 func IsMultiplicativeOperatorOrHigher(kind ast.Kind) bool
+//go:linkname IsNameOfHeritageClauseTypeReference github.com/microsoft/typescript-go/internal/ast.IsNameOfHeritageClauseTypeReference
+func IsNameOfHeritageClauseTypeReference(node *ast.Node) bool
 //go:linkname IsNamedEvaluationSource github.com/microsoft/typescript-go/internal/ast.IsNamedEvaluationSource
 func IsNamedEvaluationSource(node *ast.Node) bool
 //go:linkname IsNamedExports github.com/microsoft/typescript-go/internal/ast.IsNamedExports
@@ -2645,8 +2647,8 @@ type TriviaSyntaxKind = ast.TriviaSyntaxKind
 type TrueLiteral = ast.TrueLiteral
 //go:linkname TryGetClassExtendingExpressionWithTypeArguments github.com/microsoft/typescript-go/internal/ast.TryGetClassExtendingExpressionWithTypeArguments
 func TryGetClassExtendingExpressionWithTypeArguments(node *ast.Node) *ast.ClassLikeDeclaration
-//go:linkname TryGetClassImplementingOrExtendingExpressionWithTypeArguments github.com/microsoft/typescript-go/internal/ast.TryGetClassImplementingOrExtendingExpressionWithTypeArguments
-func TryGetClassImplementingOrExtendingExpressionWithTypeArguments(node *ast.Node) (class *ast.ClassLikeDeclaration, isImplements bool)
+//go:linkname TryGetClassImplementingOrExtendingHeritageClauseElement github.com/microsoft/typescript-go/internal/ast.TryGetClassImplementingOrExtendingHeritageClauseElement
+func TryGetClassImplementingOrExtendingHeritageClauseElement(node *ast.Node) (class *ast.ClassLikeDeclaration, isImplements bool)
 //go:linkname TryGetImportFromModuleSpecifier github.com/microsoft/typescript-go/internal/ast.TryGetImportFromModuleSpecifier
 func TryGetImportFromModuleSpecifier(node *ast.StringLiteralLike) *ast.Node
 //go:linkname TryGetPropertyNameOfBindingOrAssignmentElement github.com/microsoft/typescript-go/internal/ast.TryGetPropertyNameOfBindingOrAssignmentElement

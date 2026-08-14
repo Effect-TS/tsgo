@@ -34,6 +34,8 @@ func ComputeECMALineStarts(text string) core.ECMALineStarts
 func ComputeECMALineStartsSeq(text string) iter.Seq[core.TextPos]
 type ECMALineStarts = core.ECMALineStarts
 var EmptyCompilerOptions = core.EmptyCompilerOptions
+//go:linkname EnsureScriptKindFromFileName github.com/microsoft/typescript-go/internal/core.EnsureScriptKindFromFileName
+func EnsureScriptKindFromFileName(fileName string) core.ScriptKind
 var ExclusivelyPrefixedNodeCoreModules = core.ExclusivelyPrefixedNodeCoreModules
 //go:linkname GetCheckerLifetime github.com/microsoft/typescript-go/internal/core.GetCheckerLifetime
 func GetCheckerLifetime(ctx context.Context) core.CheckerLifetime
