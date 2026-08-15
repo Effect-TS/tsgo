@@ -9,6 +9,7 @@ import { access, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:f
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { afterEach, describe, expect, it } from "vitest"
+import * as pkgJson from "../package.json" with { type: "json" }
 import {
   applyPlan,
   type DiscoveredBinary,
@@ -17,7 +18,8 @@ import {
   prepareUnpatch,
   renderOxlintDeclarations,
   ReplacementUnavailableError,
-  resolveReplacement
+  resolveReplacement,
+  UnsupportedTargetPackageVersionError
 } from "../src/patcher/index.js"
 
 const temporaryDirectories: Array<string> = []
@@ -130,6 +132,37 @@ describe("patcher", () => {
     expect(() => renderOxlintDeclarations("interface OtherRuleMap {}\n")).toThrow(
       "Unable to locate the Oxlint plugin declaration."
     )
+  })
+
+  it("explains how to resolve an unsupported package version", () => {
+    const target: DiscoveredBinary = {
+      component: "typescript",
+      packageName: "@typescript/typescript-linux-x64",
+      packageVersion: "7.2.0",
+      binaryPath: "/typescript/lib/tsc",
+      fileHash: hash("typescript")
+    }
+    const error = new UnsupportedTargetPackageVersionError({
+      target,
+      supportedVersions: ["7.0.2", "7.1.0-dev.20260812.1"]
+    })
+    expect(error._tag).toBe("UnsupportedTargetPackageVersionError")
+    expect(error.message).toBe(
+      `Package @typescript/typescript-linux-x64 version 7.2.0 is not supported by @effect/tsgo version ${pkgJson.version}. `
+      + "Either change @effect/tsgo to a compatible version or set @typescript/typescript-linux-x64 to one of the "
+      + "supported versions: 7.0.2, 7.1.0-dev.20260812.1."
+    )
+  })
+
+  it("rejects unsupported target package versions with a distinct error", async () => {
+    const target: DiscoveredBinary = {
+      component: "typescript",
+      packageName: "@typescript/typescript-linux-x64",
+      packageVersion: "unsupported",
+      binaryPath: "/typescript/lib/tsc",
+      fileHash: hash("typescript")
+    }
+    await expect(run(resolveReplacement(target))).rejects.toBeInstanceOf(UnsupportedTargetPackageVersionError)
   })
 
   it("preflights the whole plan without mutation", async () => {
@@ -263,6 +296,17 @@ describe("patcher", () => {
       skipMissing: false,
       resolveReplacement: unavailable
     }))).rejects.toThrow("not packaged")
+
+    const unsupported = () => Effect.fail(new UnsupportedTargetPackageVersionError({
+      target,
+      supportedVersions: ["1", "2"]
+    }))
+    const unsupportedPlan = await run(preparePatch([target], {
+      skipMissing: true,
+      resolveReplacement: unsupported
+    }))
+    expect(unsupportedPlan.skipped[0]?.message).toContain("is not supported by @effect/tsgo")
+
     await expect(run(preparePatch([{ ...target, binaryPath: join(directory, "absent") }], {
       skipMissing: true,
       resolveReplacement: () => Effect.fail(new PatcherError({ reason: "must not be reached" }))
