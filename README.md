@@ -35,6 +35,18 @@ When running in `tsc` mode, the Effect diagnostics are emitted as standard TypeS
 
 When running in dedicated diagnostics mode, the Effect diagnostics can be emitted in structured formats, which can be further processed by other tools.
 
+<!-- supported-components:start -->
+## Supported Package Versions
+
+The following target package versions are supported by `@effect/tsgo@0.36.4`:
+
+| Component | Supported versions |
+|---|---|
+| TypeScript | `7.0.2`, `7.1.0-dev.20260808.1` |
+| Oxlint | `1.76.0`, `1.77.0` |
+| oxlint-tsgolint | `7.0.2001` |
+<!-- supported-components:end -->
+
 ## Diagnostic Status
 
 Some diagnostics are off by default or have a default severity of suggestion, but you can always enable them or change their default severity in the plugin options.

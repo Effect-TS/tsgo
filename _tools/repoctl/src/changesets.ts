@@ -3,7 +3,9 @@ import * as Effect from "effect/Effect"
 import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
 import * as Schema from "effect/Schema"
+import { compare } from "semver"
 import { runCommand } from "./process.ts"
+import { readUpstream } from "./upstream.ts"
 
 const PackageJson = Schema.fromJsonString(Schema.Struct({
   version: Schema.String.check(Schema.isNonEmpty())
@@ -14,6 +16,14 @@ export class PackageVersionError extends Data.TaggedError("PackageVersionError")
 }> {
   get message(): string {
     return `Unable to generate etscore/version_generated.go: ${this.reason}`
+  }
+}
+
+export class SupportedComponentsReadmeError extends Data.TaggedError("SupportedComponentsReadmeError")<{
+  readonly reason: string
+}> {
+  get message(): string {
+    return `Unable to generate the supported package versions README section: ${this.reason}`
   }
 }
 
@@ -78,9 +88,63 @@ export const writeGeneratedVersion = Effect.fnUntraced(function*(repositoryRoot:
   )
 })
 
+const supportedComponentsStart = "<!-- supported-components:start -->"
+const supportedComponentsEnd = "<!-- supported-components:end -->"
+
+export const writeSupportedComponentsReadme = Effect.fnUntraced(function*(repositoryRoot: string) {
+  const fs = yield* FileSystem.FileSystem
+  const path = yield* Path.Path
+  const packageJsonPath = path.join(repositoryRoot, "_packages", "tsgo", "package.json")
+  const packageJsonText = yield* fs.readFileString(packageJsonPath).pipe(
+    Effect.mapError((error) => new SupportedComponentsReadmeError({ reason: error.message }))
+  )
+  const { version } = yield* Schema.decodeUnknownEffect(PackageJson)(packageJsonText).pipe(
+    Effect.mapError((error) => new SupportedComponentsReadmeError({ reason: error.message }))
+  )
+  const upstream = yield* readUpstream(repositoryRoot).pipe(
+    Effect.mapError((error) => new SupportedComponentsReadmeError({ reason: error.message }))
+  )
+  const readmePath = path.join(repositoryRoot, "README.md")
+  const readme = yield* fs.readFileString(readmePath).pipe(
+    Effect.mapError((error) => new SupportedComponentsReadmeError({ reason: error.message }))
+  )
+  const lines = readme.split("\n")
+  if (lines.filter((line) => line === supportedComponentsStart).length !== 1 ||
+    lines.filter((line) => line === supportedComponentsEnd).length !== 1) {
+    return yield* new SupportedComponentsReadmeError({ reason: "Generated section markers are missing or invalid" })
+  }
+  const start = readme.indexOf(supportedComponentsStart)
+  const end = readme.indexOf(supportedComponentsEnd)
+  if (end < start) {
+    return yield* new SupportedComponentsReadmeError({ reason: "Generated section markers are missing or invalid" })
+  }
+  const rows = [
+    ["TypeScript", Object.keys(upstream.components.typescript)],
+    ["Oxlint", Object.keys(upstream.components.oxlint)],
+    ["oxlint-tsgolint", Object.keys(upstream.components["oxlint-tsgolint"])]
+  ] as const
+  const section = [
+    supportedComponentsStart,
+    "## Supported Package Versions",
+    "",
+    `The following target package versions are supported by \`@effect/tsgo@${version}\`:`,
+    "",
+    "| Component | Supported versions |",
+    "|---|---|",
+    ...rows.map(([component, versions]) =>
+      `| ${component} | ${versions.sort(compare).map((version) => `\`${version}\``).join(", ")} |`),
+    supportedComponentsEnd
+  ].join("\n")
+  const updated = readme.slice(0, start) + section + readme.slice(end + supportedComponentsEnd.length)
+  yield* fs.writeFileString(readmePath, updated).pipe(
+    Effect.mapError((error) => new SupportedComponentsReadmeError({ reason: error.message }))
+  )
+})
+
 export const versionChangeset = Effect.fnUntraced(function*(repositoryRoot: string) {
   yield* runCommand("pnpm", repositoryRoot, ["exec", "changeset", "version"])
   yield* writeGeneratedVersion(repositoryRoot)
+  yield* writeSupportedComponentsReadme(repositoryRoot)
 })
 
 export const publishChangeset = (repositoryRoot: string) =>
