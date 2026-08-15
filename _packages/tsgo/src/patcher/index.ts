@@ -6,7 +6,9 @@ import * as Effect from "effect/Effect"
 import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
 import * as Scope from "effect/Scope"
+import * as pkgJson from "../../package.json" with { type: "json" }
 import metadataJson from "../metadata.json" with { type: "json" }
+import upstreamJson from "../../upstream.json" with { type: "json" }
 import { discoverBinaries, requireComponents, selectComponents } from "./discovery.js"
 import { hashBytes, hashFile } from "./fileHash.js"
 import type {
@@ -36,6 +38,18 @@ export class ReplacementUnavailableError extends Data.TaggedError("ReplacementUn
   }
 }
 
+export class UnsupportedTargetPackageVersionError extends Data.TaggedError("UnsupportedTargetPackageVersionError")<{
+  readonly target: DiscoveredBinary
+  readonly supportedVersions: ReadonlyArray<string>
+}> {
+  get message(): string {
+    return `Package ${this.target.packageName} version ${this.target.packageVersion} is not supported by @effect/tsgo version ${pkgJson.version}. `
+      + `Either change @effect/tsgo to a compatible version or set ${this.target.packageName} to one of the supported versions: ${
+        this.supportedVersions.join(", ")
+      }.`
+  }
+}
+
 const exists = (fs: FileSystem.FileSystem, filePath: string) => fs.exists(filePath).pipe(
   Effect.mapError((error) => new PatcherError({ reason: `Unable to inspect ${filePath}: ${error.message}` }))
 )
@@ -49,9 +63,12 @@ export type ReplacementResolver = (
   target: DiscoveredBinary
 ) => Effect.Effect<
   ResolvedReplacement,
-  PatcherError | ReplacementUnavailableError,
+  PatcherError | ReplacementUnavailableError | UnsupportedTargetPackageVersionError,
   Crypto.Crypto | FileSystem.FileSystem | Path.Path | Scope.Scope
 >
+
+const supportedVersions = (component: Exclude<Component, "oxlint-dts">): ReadonlyArray<string> =>
+  Object.keys(upstreamJson.components[component]).sort()
 
 const toKebabCase = (value: string): string => {
   let result = ""
@@ -157,10 +174,11 @@ export const resolveReplacement: ReplacementResolver = (target) => Effect.gen(fu
     path.basename(target.binaryPath)
   )
   if (!(yield* exists(fs, replacementPath))) {
-    return yield* new ReplacementUnavailableError({
-      target,
-      reason: `Missing packaged artifact ${replacementPath}.`
-    })
+    const versions = supportedVersions(target.component)
+    if (!versions.includes(target.packageVersion)) {
+      return yield* new UnsupportedTargetPackageVersionError({ target, supportedVersions: versions })
+    }
+    return yield* new ReplacementUnavailableError({ target, reason: `Missing packaged artifact ${replacementPath}.` })
   }
   const fileHash = yield* hashFile(replacementPath).pipe(
     Effect.mapError((error) => new PatcherError({
@@ -199,11 +217,15 @@ export const preparePatch = (
     if (!targetExists) {
       return yield* new PatcherError({ reason: `Installed binary does not exist: ${target.binaryPath}` })
     }
+    const onUnavailable = (error: ReplacementUnavailableError | UnsupportedTargetPackageVersionError) => {
+      if (!options.skipMissing) return Effect.fail(error)
+      skipped.push({ target, reason: "replacement-unavailable", message: error.message })
+      return Effect.succeed(undefined)
+    }
     const replacement = yield* resolver(target).pipe(
-      Effect.catchTag("ReplacementUnavailableError", (error) => {
-        if (!options.skipMissing) return Effect.fail(error)
-        skipped.push({ target, reason: "replacement-unavailable", message: error.message })
-        return Effect.succeed(undefined)
+      Effect.catchTags({
+        ReplacementUnavailableError: onUnavailable,
+        UnsupportedTargetPackageVersionError: onUnavailable
       })
     )
     if (replacement === undefined) continue
