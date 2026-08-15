@@ -1,5 +1,14 @@
 # @effect/tsgo
 
+## 0.36.5
+
+### Patch Changes
+
+- 9ddab5d: Report unsupported target package versions with the current `@effect/tsgo` version and the supported alternatives.
+- 922903b: Document the target package versions supported by each published release.
+- ca311a5: Exclude type-only heritage nodes from execution flow graphs across supported TypeScript versions.
+- 7c54018: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260813.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/34ffe2a2531a226da0046d213899ae0b721229b0) commit `34ffe2a2531a226da0046d213899ae0b721229b0`, and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
 ## 0.36.4
 
 ### Patch Changes
