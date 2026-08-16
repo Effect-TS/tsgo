@@ -31,8 +31,8 @@ var FilterDiagnosticsForNoEmitOnErrorCallback = compiler.FilterDiagnosticsForNoE
 func FilterNoEmitSemanticDiagnostics(diagnostics []*ast.Diagnostic, options *core.CompilerOptions) []*ast.Diagnostic
 //go:linkname GetDiagnosticsOfAnyProgram github.com/microsoft/typescript-go/internal/compiler.GetDiagnosticsOfAnyProgram
 func GetDiagnosticsOfAnyProgram(ctx context.Context, program compiler.ProgramLike, files []*ast.SourceFile, skipNoEmitCheckForDtsDiagnostics bool, getBindDiagnostics func(context.Context, *ast.SourceFile) []*ast.Diagnostic, getSemanticDiagnostics func(context.Context, *ast.SourceFile) []*ast.Diagnostic) []*ast.Diagnostic
-//go:linkname HandleNoEmitOnError github.com/microsoft/typescript-go/internal/compiler.HandleNoEmitOnError
-func HandleNoEmitOnError(ctx context.Context, program compiler.ProgramLike, files []*ast.SourceFile) *compiler.EmitResult
+//go:linkname HandleNoEmitOptions github.com/microsoft/typescript-go/internal/compiler.HandleNoEmitOptions
+func HandleNoEmitOptions(ctx context.Context, program compiler.ProgramLike, files []*ast.SourceFile, emitBuildInfo func() *compiler.EmitResult) *compiler.EmitResult
 type LibFile = compiler.LibFile
 //go:linkname NewCachedFSCompilerHost github.com/microsoft/typescript-go/internal/compiler.NewCachedFSCompilerHost
 func NewCachedFSCompilerHost(currentDirectory string, fs vfs.FS, defaultLibraryPath string, extendedConfigCache tsoptions.ExtendedConfigCache, trace func(msg *diagnostics.Message, args ...any)) compiler.CompilerHost

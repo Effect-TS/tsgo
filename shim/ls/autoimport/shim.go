@@ -10,6 +10,7 @@ import "github.com/microsoft/typescript-go/internal/compiler"
 import "github.com/microsoft/typescript-go/internal/ls/autoimport"
 import "github.com/microsoft/typescript-go/internal/ls/lsconv"
 import "github.com/microsoft/typescript-go/internal/ls/lsutil"
+import "github.com/microsoft/typescript-go/internal/lsp/lsproto"
 import "github.com/microsoft/typescript-go/internal/modulespecifiers"
 import "github.com/microsoft/typescript-go/internal/tspath"
 import _ "unsafe"
@@ -33,6 +34,8 @@ const ExportSyntaxUMD = autoimport.ExportSyntaxUMD
 type Fix = autoimport.Fix
 type FixAndExport = autoimport.FixAndExport
 type FixTransformer = autoimport.FixTransformer
+//go:linkname GetImportKindForImportStatement github.com/microsoft/typescript-go/internal/ls/autoimport.GetImportKindForImportStatement
+func GetImportKindForImportStatement(importingFile *ast.SourceFile, export *autoimport.Export, program *compiler.Program) lsproto.ImportKind
 type ImportAdder = autoimport.ImportAdder
 type Index[T autoimport.Named] = autoimport.Index[T]
 type ModuleID = autoimport.ModuleID

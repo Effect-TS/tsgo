@@ -62,6 +62,10 @@ const ExportKindModule = ls.ExportKindModule
 const ExportKindNamed = ls.ExportKindNamed
 const ExportKindUMD = ls.ExportKindUMD
 var FixClassIncorrectlyImplementsInterfaceProvider = ls.FixClassIncorrectlyImplementsInterfaceProvider
+//go:linkname GetSymbolDocumentationComment github.com/microsoft/typescript-go/internal/ls.GetSymbolDocumentationComment
+func GetSymbolDocumentationComment(c *checker.Checker, symbol *ast.Symbol) string
+//go:linkname GetSymbolJSDocTags github.com/microsoft/typescript-go/internal/ls.GetSymbolJSDocTags
+func GetSymbolJSDocTags(symbol *ast.Symbol) []ls.JSDocTagInfo
 type Host = ls.Host
 type ImpExpKind = ls.ImpExpKind
 const ImpExpKindExport = ls.ImpExpKindExport
@@ -110,6 +114,8 @@ const ModuleReferenceKindReference = ls.ModuleReferenceKindReference
 func NewLanguageService(projectPath tspath.Path, program *compiler.Program, host ls.Host, activeFile string) *ls.LanguageService
 //go:linkname NewSymbolAndEntries github.com/microsoft/typescript-go/internal/ls.NewSymbolAndEntries
 func NewSymbolAndEntries(kind ls.DefinitionKind, node *ast.Node, symbol *ast.Symbol, references []*ls.ReferenceEntry) *ls.SymbolAndEntries
+//go:linkname ObjectLiteralPropertySortText github.com/microsoft/typescript-go/internal/ls.ObjectLiteralPropertySortText
+func ObjectLiteralPropertySortText(presetSortText ls.SortText, symbolDisplayName string) ls.SortText
 type PossibleTypeArgumentInfo = ls.PossibleTypeArgumentInfo
 type Project = ls.Project
 //go:linkname ProvideWorkspaceSymbols github.com/microsoft/typescript-go/internal/ls.ProvideWorkspaceSymbols
@@ -134,6 +140,8 @@ type RenameInfo = ls.RenameInfo
 //go:linkname SemanticTokensLegend github.com/microsoft/typescript-go/internal/ls.SemanticTokensLegend
 func SemanticTokensLegend(clientCapabilities lsproto.ResolvedSemanticTokensClientCapabilities) *lsproto.SemanticTokensLegend
 type SignatureUsage = ls.SignatureUsage
+//go:linkname SortBelow github.com/microsoft/typescript-go/internal/ls.SortBelow
+func SortBelow(original ls.SortText) ls.SortText
 type SortText = ls.SortText
 const SortTextAutoImportSuggestions = ls.SortTextAutoImportSuggestions
 const SortTextClassMemberSnippets = ls.SortTextClassMemberSnippets

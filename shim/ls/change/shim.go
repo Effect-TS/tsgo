@@ -11,6 +11,8 @@ import "github.com/microsoft/typescript-go/internal/ls/lsconv"
 import "github.com/microsoft/typescript-go/internal/ls/lsutil"
 import _ "unsafe"
 
+//go:linkname GetFormatCodeSettingsForWriting github.com/microsoft/typescript-go/internal/ls/change.GetFormatCodeSettingsForWriting
+func GetFormatCodeSettingsForWriting(options lsutil.FormatCodeSettings, sourceFile *ast.SourceFile) lsutil.FormatCodeSettings
 type LeadingTriviaOption = change.LeadingTriviaOption
 const LeadingTriviaOptionExclude = change.LeadingTriviaOptionExclude
 const LeadingTriviaOptionIncludeAll = change.LeadingTriviaOptionIncludeAll
