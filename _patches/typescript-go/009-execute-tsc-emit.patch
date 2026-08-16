@@ -80,13 +80,11 @@ diff --git a/internal/compiler/program.go b/internal/compiler/program.go
 +}
 +
  type ProgramOptions struct {
-@@ -1743,6 +1753,9 @@ func HandleNoEmitOnError(ctx context.Context, program ProgramLike, file *ast.Sou
- 		program.GetBindDiagnostics,
- 		program.GetSemanticDiagnostics,
- 	)
-+	if FilterDiagnosticsForNoEmitOnErrorCallback != nil {
-+		diagnostics = FilterDiagnosticsForNoEmitOnErrorCallback(program.Options(), diagnostics)
-+	}
- 	if len(diagnostics) == 0 {
- 		return nil // No diagnostics, so we can proceed with emitting
+@@ -1787,4 +1797,7 @@ func GetDiagnosticsOfAnyProgram(
+ 		}
  	}
++	if skipNoEmitCheckForDtsDiagnostics && FilterDiagnosticsForNoEmitOnErrorCallback != nil {
++		allDiagnostics = FilterDiagnosticsForNoEmitOnErrorCallback(program.Options(), allDiagnostics)
++	}
+ 	return allDiagnostics
+ }

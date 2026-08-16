@@ -13,6 +13,7 @@ var AnyTextEdits = fourslash.AnyTextEdits
 type AppliedQuickFixResult = fourslash.AppliedQuickFixResult
 type AppliedRefactorResult = fourslash.AppliedRefactorResult
 type ApplyCodeActionFromCompletionOptions = fourslash.ApplyCodeActionFromCompletionOptions
+type ClientCapabilitiesOptions = fourslash.ClientCapabilitiesOptions
 type CompletionsExpectedCodeAction = fourslash.CompletionsExpectedCodeAction
 type CompletionsExpectedItem = fourslash.CompletionsExpectedItem
 type CompletionsExpectedItemDefaults = fourslash.CompletionsExpectedItemDefaults
@@ -31,6 +32,8 @@ func FourslashTest_client(v *fourslash.FourslashTest) *lsptestutil.LSPClient {
 }
 //go:linkname GetDefaultCapabilities github.com/microsoft/typescript-go/internal/fourslash.GetDefaultCapabilities
 func GetDefaultCapabilities() *lsproto.ClientCapabilities
+//go:linkname GetDefaultCapabilitiesWithOptions github.com/microsoft/typescript-go/internal/fourslash.GetDefaultCapabilitiesWithOptions
+func GetDefaultCapabilitiesWithOptions(options *fourslash.ClientCapabilitiesOptions) *lsproto.ClientCapabilities
 type Ignored = fourslash.Ignored
 type Marker = fourslash.Marker
 type MarkerInput = fourslash.MarkerInput
@@ -38,6 +41,7 @@ type MarkerOrRange = fourslash.MarkerOrRange
 type MarkerOrRangeOrName = fourslash.MarkerOrRangeOrName
 //go:linkname NewFourslash github.com/microsoft/typescript-go/internal/fourslash.NewFourslash
 func NewFourslash(t *testing.T, capabilities *lsproto.ClientCapabilities, content string) (*fourslash.FourslashTest, func())
+var NoTextEdits = fourslash.NoTextEdits
 //go:linkname ParseTestData github.com/microsoft/typescript-go/internal/fourslash.ParseTestData
 func ParseTestData(t *testing.T, contents string, fileName string) fourslash.TestData
 var PrepareTestFSCallback = fourslash.PrepareTestFSCallback
