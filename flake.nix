@@ -6,12 +6,12 @@
     nixpkgsUnstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     /* Source of truth: the next profile in `_packages/tsgo/upstream.json`. */
     typescript-go-src = {
-      url = "github:microsoft/typescript-go/34ffe2a2531a226da0046d213899ae0b721229b0?submodules=1";
+      url = "github:microsoft/typescript-go/1bcfa18d79a3be41772223d5c05dfe4480e614ff?submodules=1";
       flake = false;
     };
     /* Derived from the selected TypeScript-Go revision and recorded in the manifest. */
     typescript-src = {
-      url = "github:microsoft/TypeScript/4d4f005c8541e0255a9d8791205fdce326e462bc";
+      url = "github:microsoft/TypeScript/5848bc5157b22ff7f4e3369f4645a514a433b15f";
       flake = false;
     };
   };
