@@ -3,10 +3,10 @@
   "tags": {
     "typescript": {
       "latest": "7.0.2",
-      "next": "7.1.0-dev.20260817.1"
+      "next": "7.1.0-dev.20260818.1"
     },
     "oxlint": {
-      "latest": "1.78.0"
+      "latest": "1.79.0"
     },
     "oxlint-tsgolint": {
       "latest": "7.0.2001"
@@ -17,8 +17,8 @@
       "7.0.2": {
         "gitHead": "2bd066d87f5bafd315be9f40889d0a60b9e58e0b"
       },
-      "7.1.0-dev.20260817.1": {
-        "gitHead": "1bcfa18d79a3be41772223d5c05dfe4480e614ff"
+      "7.1.0-dev.20260818.1": {
+        "gitHead": "ad56f89f97e0128c952676c1b669830f17f4dd41"
       }
     },
     "oxlint-tsgolint": {
@@ -33,8 +33,8 @@
       "1.77.0": {
         "gitHead": "9a423f2f485b79c2353c49442c0c7f60f900261d"
       },
-      "1.78.0": {
-        "gitHead": "c42d6397eab5b2d5bb2bd6746c57bc2a9cad21bd"
+      "1.79.0": {
+        "gitHead": "0db127cc16d28b97d84bac4ebeb302caf1a78c7e"
       }
     }
   },
