@@ -50,6 +50,131 @@ flowchart TB
   48[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
   49[["type: #40;x: number#41; =#gt; number<br/>node: #40;x#41; =#gt; x + 2"]]
   50[/"type: number<br/>node: x + 2"/]
+  51[/"type: #lt;E, R#gt;#40;self: Effect#lt;number, E, R#gt;#41; =#gt; Effect#lt;number, E, R#gt;<br/>node: Effect.map#40;#40;x: number#41; =#gt; x + 1#41;"/]
+  52[["type: #40;x: number#41; =#gt; number<br/>node: #40;x: number#41; =#gt; x + 1"]]
+  53[/"type: number<br/>node: x + 1"/]
+  54[/"type: 0<br/>node: 0"/]
+  55["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  56[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  57["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  58["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  59["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  60["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  61["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  62["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  63["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  64["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  65["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  66["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  67["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  68["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  69["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  70["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  71["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  72["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  73["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  74["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  75["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  76["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  77[/"type: 0<br/>node: 0"/]
+  78["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  79[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  80["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  81["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  82["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  83["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  84["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  85["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  86["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  87["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  88["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  89["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  90["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  91["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  92["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  93["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  94["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  95["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  96["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  97["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  98["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  99["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  100["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  101[/"type: 0<br/>node: 0"/]
+  102["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  103[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  104["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  105["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  106["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  107["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  108["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  109["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  110["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  111["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  112["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  113["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  114["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  115["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  116["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  117["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  118["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  119["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  120["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  121["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  122["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  123[/"type: 0<br/>node: 0"/]
+  124["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  125[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  126["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  127["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  128["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  129["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  130["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  131["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  132["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  133["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  134["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  135["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  136["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  137["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  138["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  139["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  140["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  141["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  142["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  143["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  144["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  145["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  146[/"type: 0<br/>node: 0"/]
+  147["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  148[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  149["type: Effect#lt;number, never, never#gt;<br/>callee: ...#40;#91;#92;n    bump, bump, bump, bump, bump,#92;n    bump, bump, bump, bump, bump,#92;n    bump, bump, bump, bump, bump,#92;n    bump, bump, bump, bump, bump#92;n  #93; as const#41;<br/>args: #91;#93;"]
+  150["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  151[/"type: 0<br/>node: 0"/]
+  152["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  153[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  154["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  155["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  156["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  157["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  158["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  159["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  160["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  161["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  162["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  163["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  164["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  165["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  166["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  167["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  168["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  169["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  170["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  171["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  172["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  173["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  174["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
+  175["type: Effect#lt;number, never, never#gt;<br/>callee: bump<br/>args: #91;#93;"]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
   4 -->|"kind: transformCallee"| 3
@@ -96,3 +221,121 @@ flowchart TB
   50 -->|"kind: potentialReturn"| 49
   49 -->|"kind: transformArg"| 47
   45 -->|"kind: pipe"| 47
+  53 -->|"kind: potentialReturn"| 52
+  52 -->|"kind: usedBy"| 51
+  54 -->|"kind: pipe"| 55
+  56 -->|"kind: transformCallee"| 55
+  55 -->|"kind: pipe"| 57
+  57 -->|"kind: pipe"| 58
+  58 -->|"kind: pipe"| 59
+  59 -->|"kind: pipe"| 60
+  60 -->|"kind: pipe"| 61
+  61 -->|"kind: pipe"| 62
+  62 -->|"kind: pipe"| 63
+  63 -->|"kind: pipe"| 64
+  64 -->|"kind: pipe"| 65
+  65 -->|"kind: pipe"| 66
+  66 -->|"kind: pipe"| 67
+  67 -->|"kind: pipe"| 68
+  68 -->|"kind: pipe"| 69
+  69 -->|"kind: pipe"| 70
+  70 -->|"kind: pipe"| 71
+  71 -->|"kind: pipe"| 72
+  72 -->|"kind: pipe"| 73
+  73 -->|"kind: pipe"| 74
+  74 -->|"kind: pipe"| 75
+  75 -->|"kind: pipe"| 76
+  77 -->|"kind: pipe"| 78
+  79 -->|"kind: transformCallee"| 78
+  78 -->|"kind: pipe"| 80
+  80 -->|"kind: pipe"| 81
+  81 -->|"kind: pipe"| 82
+  82 -->|"kind: pipe"| 83
+  83 -->|"kind: pipe"| 84
+  84 -->|"kind: pipe"| 85
+  85 -->|"kind: pipe"| 86
+  86 -->|"kind: pipe"| 87
+  87 -->|"kind: pipe"| 88
+  88 -->|"kind: pipe"| 89
+  89 -->|"kind: pipe"| 90
+  90 -->|"kind: pipe"| 91
+  91 -->|"kind: pipe"| 92
+  92 -->|"kind: pipe"| 93
+  93 -->|"kind: pipe"| 94
+  94 -->|"kind: pipe"| 95
+  95 -->|"kind: pipe"| 96
+  96 -->|"kind: pipe"| 97
+  97 -->|"kind: pipe"| 98
+  98 -->|"kind: pipe"| 99
+  99 -->|"kind: pipe"| 100
+  101 -->|"kind: pipe"| 102
+  103 -->|"kind: transformCallee"| 102
+  102 -->|"kind: pipe"| 104
+  104 -->|"kind: pipe"| 105
+  105 -->|"kind: pipe"| 106
+  106 -->|"kind: pipe"| 107
+  107 -->|"kind: pipe"| 108
+  108 -->|"kind: pipe"| 109
+  109 -->|"kind: pipe"| 110
+  110 -->|"kind: pipe"| 111
+  111 -->|"kind: pipe"| 112
+  112 -->|"kind: pipe"| 113
+  113 -->|"kind: pipe"| 114
+  114 -->|"kind: pipe"| 115
+  115 -->|"kind: pipe"| 116
+  116 -->|"kind: pipe"| 117
+  117 -->|"kind: pipe"| 118
+  118 -->|"kind: pipe"| 119
+  119 -->|"kind: pipe"| 120
+  120 -->|"kind: pipe"| 121
+  121 -->|"kind: pipe"| 122
+  123 -->|"kind: pipe"| 124
+  125 -->|"kind: transformCallee"| 124
+  124 -->|"kind: pipe"| 126
+  126 -->|"kind: pipe"| 127
+  127 -->|"kind: pipe"| 128
+  128 -->|"kind: pipe"| 129
+  129 -->|"kind: pipe"| 130
+  130 -->|"kind: pipe"| 131
+  131 -->|"kind: pipe"| 132
+  132 -->|"kind: pipe"| 133
+  133 -->|"kind: pipe"| 134
+  134 -->|"kind: pipe"| 135
+  135 -->|"kind: pipe"| 136
+  136 -->|"kind: pipe"| 137
+  137 -->|"kind: pipe"| 138
+  138 -->|"kind: pipe"| 139
+  139 -->|"kind: pipe"| 140
+  140 -->|"kind: pipe"| 141
+  141 -->|"kind: pipe"| 142
+  142 -->|"kind: pipe"| 143
+  143 -->|"kind: pipe"| 144
+  144 -->|"kind: pipe"| 145
+  146 -->|"kind: pipe"| 147
+  148 -->|"kind: transformCallee"| 147
+  147 -->|"kind: pipe"| 149
+  149 -->|"kind: pipe"| 150
+  151 -->|"kind: pipe"| 152
+  153 -->|"kind: transformCallee"| 152
+  152 -->|"kind: pipe"| 154
+  154 -->|"kind: pipe"| 155
+  155 -->|"kind: pipe"| 156
+  156 -->|"kind: pipe"| 157
+  157 -->|"kind: pipe"| 158
+  158 -->|"kind: pipe"| 159
+  159 -->|"kind: pipe"| 160
+  160 -->|"kind: pipe"| 161
+  161 -->|"kind: pipe"| 162
+  162 -->|"kind: pipe"| 163
+  163 -->|"kind: pipe"| 164
+  164 -->|"kind: pipe"| 165
+  165 -->|"kind: pipe"| 166
+  166 -->|"kind: pipe"| 167
+  167 -->|"kind: pipe"| 168
+  168 -->|"kind: pipe"| 169
+  169 -->|"kind: pipe"| 170
+  170 -->|"kind: pipe"| 171
+  171 -->|"kind: pipe"| 172
+  172 -->|"kind: pipe"| 173
+  173 -->|"kind: pipe"| 174
+  174 -->|"kind: pipe"| 175
