@@ -1,4 +1,4 @@
-==== /.src/unnecessaryPipeChain.ts (5 flows) ====
+==== /.src/unnecessaryPipeChain.ts (12 flows) ====
 
 === Piping Flow ===
 Location: 5:26 - 5:106
@@ -104,4 +104,518 @@ Transformations (2):
   [1] kind: pipe
       callee: Effect.map
       args: [(x) => x + 2]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 19:13 - 19:46
+Node: Effect.map((x: number) => x + 1)
+Node Kind: KindCallExpression
+
+Subject: (x: number) => x + 1
+Subject Type: (x: number) => number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.map
+      args: (constant)
+      outType: <E, R>(self: Effect<number, E, R>) => Effect<number, E, R>
+
+=== Piping Flow ===
+Location: 22:37 - 27:13
+Node: Effect.succeed(0).pipe(\n  bump, bump, bump, bump, bump,\n  bump, bump, bump, bump, bump,\n  bump, bump, bump, bump, bump,\n  bump, bump, bump, bump\n).pipe(bump)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (21):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [2] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [3] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [4] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [5] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [6] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [7] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [8] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [9] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [10] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [11] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [12] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [13] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [14] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [15] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [16] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [17] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [18] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [19] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [20] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 30:39 - 35:13
+Node: Effect.succeed(0).pipe(\n  bump, bump, bump, bump, bump,\n  bump, bump, bump, bump, bump,\n  bump, bump, bump, bump, bump,\n  bump, bump, bump, bump, bump\n).pipe(bump)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (22):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [2] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [3] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [4] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [5] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [6] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [7] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [8] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [9] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [10] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [11] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [12] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [13] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [14] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [15] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [16] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [17] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [18] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [19] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [20] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [21] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 38:39 - 46:2
+Node: pipe(\n  pipe(\n    Effect.succeed(0),\n    bump, bump, bump, bump, bump,\n    bump, bump, bump, bump\n  ),\n  bump, bump, bump, bump, bump,\n  bump, bump, bump, bump, bump\n)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (20):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [2] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [3] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [4] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [5] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [6] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [7] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [8] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [9] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [10] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [11] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [12] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [13] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [14] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [15] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [16] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [17] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [18] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [19] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 49:41 - 57:2
+Node: pipe(\n  pipe(\n    Effect.succeed(0),\n    bump, bump, bump, bump, bump,\n    bump, bump, bump, bump, bump\n  ),\n  bump, bump, bump, bump, bump,\n  bump, bump, bump, bump, bump\n)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (21):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [2] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [3] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [4] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [5] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [6] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [7] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [8] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [9] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [10] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [11] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [12] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [13] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [14] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [15] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [16] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [17] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [18] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [19] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [20] kind: pipe
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 60:34 - 67:13
+Node: Effect.succeed(0).pipe(\n  ...([\n    bump, bump, bump, bump, bump,\n    bump, bump, bump, bump, bump,\n    bump, bump, bump, bump, bump,\n    bump, bump, bump, bump, bump\n  ] as const)\n).pipe(bump)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (3):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: ...([\n    bump, bump, bump, bump, bump,\n    bump, bump, bump, bump, bump,\n    bump, bump, bump, bump, bump,\n    bump, bump, bump, bump, bump\n  ] as const)
+      args: (constant)
+      outType: Effect<number, never, never>
+  [2] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 70:40 - 78:4
+Node: Effect.succeed(0)\n  .pipe(bump)\n  .pipe(bump)\n  .pipe(\n    bump, bump, bump, bump, bump,\n    bump, bump, bump, bump, bump,\n    bump, bump, bump, bump, bump,\n    bump, bump, bump, bump, bump\n  )
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (23):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [2] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [3] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [4] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [5] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [6] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [7] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [8] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [9] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [10] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [11] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [12] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [13] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [14] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [15] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [16] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [17] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [18] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [19] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [20] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [21] kind: pipeable
+      callee: bump
+      args: (constant)
+      outType: Effect<number, never, never>
+  [22] kind: pipeable
+      callee: bump
+      args: (constant)
       outType: Effect<number, never, never>
