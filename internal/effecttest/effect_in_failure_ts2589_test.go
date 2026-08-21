@@ -40,6 +40,45 @@ func TestEffectInFailureCanTriggerPluginOnlyTS2589(t *testing.T) {
 	}
 }
 
+func TestTaggedTemplateSymbolInterpolationDoesNotReportTS2731(t *testing.T) {
+	t.Parallel()
+
+	for _, rule := range []string{"anyUnknownInErrorContext", "effectInFailure"} {
+		t.Run(rule, func(t *testing.T) {
+			t.Parallel()
+
+			diagnostics := collectDiagnosticStringsFromContent(t, buildTaggedTemplateSymbolCase(rule))
+			if hasDiagnosticCode(diagnostics, "TS2731:") {
+				t.Fatalf("did not expect TS2731 with %s enabled, got %v", rule, diagnostics)
+			}
+		})
+	}
+}
+
+func buildTaggedTemplateSymbolCase(rule string) string {
+	return `// @filename: tsconfig.json
+{
+  "compilerOptions": {
+    "plugins": [
+      {
+        "name": "@effect/language-service",
+        "diagnosticSeverity": {
+          "` + rule + `": "error"
+        }
+      }
+    ]
+  }
+}
+
+// @filename: test.ts
+const self: unique symbol = Symbol("self")
+function sql(strings: TemplateStringsArray, ...args: Array<unknown>): string {
+  return strings.join("?") + args.length
+}
+export const q = sql` + "`(${self}) < 1`" + `
+`
+}
+
 func TestIssue362RemedaChunkDoesNotReportExcessiveTypeDepth(t *testing.T) {
 	t.Parallel()
 

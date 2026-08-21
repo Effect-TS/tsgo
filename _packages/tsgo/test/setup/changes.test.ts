@@ -985,4 +985,98 @@ describe("computeChanges", () => {
       expect(rendered).not.toContain("diagnosticSeverity")
     })
   })
+
+  describe("JSON indentation", () => {
+    it.each([
+      ["two spaces", "  ", "\n"],
+      ["four spaces", "    ", "\n"],
+      ["tabs", "\t", "\n"],
+      ["CRLF newlines", "  ", "\r\n"]
+    ])("should preserve %s in package.json", (_, indentation, newLine) => {
+      const packageJsonText = [
+        "{",
+        `${indentation}"name": "test-project",`,
+        `${indentation}"devDependencies": {`,
+        `${indentation.repeat(2)}"typescript": "${TEST_TYPESCRIPT_VERSION}"`,
+        `${indentation}}`,
+        "}"
+      ].join(newLine)
+      const result = runComputeChanges({
+        packageJsonText,
+        typescriptVersion: null,
+        prepareScript: false,
+        editors: [],
+        vscodeTargetSettings: null
+      })
+      const change = result.codeActions
+        .flatMap((action) => action.changes)
+        .find((change) => change.fileName === "/test/package.json")
+      const updated = applyTextChanges(packageJsonText, change?.textChanges ?? [])
+
+      expect(updated).toContain(`${newLine}${indentation.repeat(2)}"@effect/tsgo": "0.0.4"`)
+      expect(() => JSON.parse(updated)).not.toThrow()
+    })
+
+    it.each([
+      ["two spaces", "  "],
+      ["four spaces", "    "],
+      ["tabs", "\t"]
+    ])("should preserve %s in tsconfig.json", (_, indentation) => {
+      const tsconfigText = [
+        "{",
+        `${indentation}"compilerOptions": {`,
+        `${indentation.repeat(2)}"strict": true`,
+        `${indentation}}`,
+        "}"
+      ].join("\n")
+      const result = runComputeChanges({
+        tsconfigText,
+        prepareScript: false,
+        editors: [],
+        vscodeTargetSettings: null
+      })
+      const change = result.codeActions
+        .flatMap((action) => action.changes)
+        .find((change) => change.fileName === "/test/tsconfig.json")
+      const updated = applyTextChanges(tsconfigText, change?.textChanges ?? [])
+
+      expect(updated).toContain(`\n${indentation}"$schema"`)
+      expect(updated).toContain(`\n${indentation.repeat(2)}"plugins"`)
+      expect(updated).toContain(`\n${indentation.repeat(4)}"name": "@effect/language-service"`)
+      expect(() => JSON.parse(updated)).not.toThrow()
+    })
+
+    it.each([
+      { layout: "inline", lines: ["  \"devDependencies\": {}"] },
+      { layout: "multiline", lines: ["  \"devDependencies\": {", "  }"] }
+    ])("should indent properties added to an $layout empty object", ({ lines }) => {
+      const packageJsonText = [
+        "{",
+        "  \"name\": \"test-project\",",
+        ...lines,
+        "}"
+      ].join("\n")
+      const result = runComputeChanges({
+        packageJsonText,
+        prepareScript: false,
+        editors: [],
+        vscodeTargetSettings: null
+      })
+      const change = result.codeActions
+        .flatMap((action) => action.changes)
+        .find((change) => change.fileName === "/test/package.json")
+      const updated = applyTextChanges(packageJsonText, change?.textChanges ?? [])
+
+      expect(updated).toBe([
+        "{",
+        "  \"name\": \"test-project\",",
+        "  \"devDependencies\": {",
+        `    "typescript": "${TEST_TYPESCRIPT_VERSION}",`,
+        "    \"@effect/tsgo\": \"0.0.4\"",
+        "  }",
+        "}"
+      ].join("\n"))
+      expect(() => JSON.parse(updated)).not.toThrow()
+    })
+  })
 })

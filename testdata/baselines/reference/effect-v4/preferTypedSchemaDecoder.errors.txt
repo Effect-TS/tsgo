@@ -12,9 +12,11 @@ Effect version: 4.0.0
 /.src/preferTypedSchemaDecoder.ts(29,42): warning TS377112: This input is already assignable to the schema's Encoded type. Use `decodeSync` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownSync`. effect(preferTypedSchemaDecoder)
 /.src/preferTypedSchemaDecoder.ts(30,22): warning TS377112: This input is already assignable to the schema's Encoded type. Use `decodeSync` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownSync`. effect(preferTypedSchemaDecoder)
 /.src/preferTypedSchemaDecoder.ts(33,35): warning TS377112: This input is already assignable to the schema's Encoded type. Use `decodeSync` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownSync`. effect(preferTypedSchemaDecoder)
+/.src/preferTypedSchemaDecoder.ts(65,31): warning TS377112: This input is already assignable to the schema's Encoded type. Use `decodeEffect` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownEffect`. effect(preferTypedSchemaDecoder)
+/.src/preferTypedSchemaDecoder.ts(67,67): warning TS377112: This input is already assignable to the schema's Encoded type. Use `decodeEffect` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownEffect`. effect(preferTypedSchemaDecoder)
 
 
-==== /.src/preferTypedSchemaDecoder.ts (11 errors) ====
+==== /.src/preferTypedSchemaDecoder.ts (13 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics preferTypedSchemaDecoder:warning
     
@@ -93,4 +95,19 @@ Effect version: 4.0.0
     
     decodeGeneric(person)
     decodeNestedGeneric(person)
+    
+    // Regression test for https://github.com/Effect-TS/tsgo/issues/572.
+    const NamedPerson = Schema.Struct({ name: Schema.String })
+    
+    function makeFields(name: string): { readonly name: string } {
+      return { name }
+    }
+    
+    export const decoded = Schema.decodeUnknownEffect(NamedPerson)(makeFields("Ada"))
+                                  ~~~~~~~~~~~~~~~~~~~
+!!! warning TS377112: This input is already assignable to the schema's Encoded type. Use `decodeEffect` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownEffect`. effect(preferTypedSchemaDecoder)
+    
+    export const pipedCallExpression = pipe("Ada", makeFields, Schema.decodeUnknownEffect(NamedPerson))
+                                                                      ~~~~~~~~~~~~~~~~~~~
+!!! warning TS377112: This input is already assignable to the schema's Encoded type. Use `decodeEffect` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownEffect`. effect(preferTypedSchemaDecoder)
     

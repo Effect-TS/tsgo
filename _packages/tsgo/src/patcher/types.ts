@@ -5,6 +5,7 @@ export interface DiscoveredBinary {
   readonly packageName: string
   readonly packageVersion: string
   readonly binaryPath: string
+  readonly fileHash: string
 }
 
 export type FileSystemOperation = RenameOperation | CopyOperation | ChmodOperation | RemoveOperation

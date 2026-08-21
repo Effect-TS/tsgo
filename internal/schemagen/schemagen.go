@@ -8,9 +8,9 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/microsoft/typescript-go/shim/scanner"
 )
 
@@ -677,16 +677,6 @@ func (g *SchemaGen) createExportSchemaClassDeclaration(name string, properties [
 		g.Tracker.NewNodeList([]*ast.Node{heritageClause}),
 		g.Tracker.NewNodeList([]*ast.Node{}), // empty members
 	)
-}
-
-// ProcessNode is the public entry point for processing a single type node.
-// On error, returns a comment node describing the error.
-func (g *SchemaGen) ProcessNode(node *ast.Node) *ast.Node {
-	result, err := g.processNode(node)
-	if err != nil {
-		return g.Tracker.NewIdentifier(fmt.Sprintf("undefined /* %s */", err.Error()))
-	}
-	return result
 }
 
 // Process converts an interface or type alias declaration into a schema statement.

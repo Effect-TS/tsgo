@@ -112,6 +112,23 @@ func TestFilterDiagnosticsForExitCode_IgnoreWarnings(t *testing.T) {
 	}
 }
 
+func TestNoEmitOnErrorHookFiltersCompilerOptions(t *testing.T) {
+	t.Parallel()
+	opts := &core.CompilerOptions{
+		NoEmitOnError: core.BoolToTristate(true),
+		Effect: &etscore.EffectPluginOptions{
+			IgnoreEffectWarningsInTscExitCode: true,
+		},
+	}
+	if result := filterDiagnosticsForExitCode(opts, []*ast.Diagnostic{makeDiag(377011, diagnostics.CategoryWarning)}); len(result) != 0 {
+		t.Fatal("expected ignored Effect warning to be filtered")
+	}
+
+	if result := filterDiagnosticsForExitCode(opts, []*ast.Diagnostic{makeDiag(1002, diagnostics.CategoryError)}); len(result) != 1 {
+		t.Fatal("expected TypeScript error to be retained")
+	}
+}
+
 func TestFilterDiagnosticsForExitCode_ErrorsNotFilteredByDefault(t *testing.T) {
 	t.Parallel()
 	// With suggestion+warning ignore set but error ignore NOT set, errors are kept

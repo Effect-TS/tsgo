@@ -78,7 +78,7 @@ index 991bea0db..42a0745ae 100644
  		}
  		return nil
  	}
-@@ -559,7 +565,7 @@ func (v *View) GetFixes(ctx context.Context, export *Export, forJSX bool, isVali
+@@ -559,17 +565,17 @@ func (v *View) GetFixes(ctx context.Context, export *Export, forJSX bool, isVali
  	importedSymbolHasValueMeaning := export.Flags&ast.SymbolFlagsValue != 0 || export.IsUnresolvedAlias()
  	if !importedSymbolHasValueMeaning && isJs && usagePosition != nil {
  		// For pure types in JS files, use JSDoc import type syntax
@@ -87,15 +87,17 @@ index 991bea0db..42a0745ae 100644
  			{
  				AutoImportFix: &lsproto.AutoImportFix{
  					Kind:            lsproto.AutoImportFixKindJsdocTypeImport,
-@@ -571,7 +577,7 @@ func (v *View) GetFixes(ctx context.Context, export *Export, forJSX bool, isVali
+ 					ModuleSpecifier: moduleSpecifier,
+ 					Name:            export.Name(),
+ 					UsagePosition:   usagePosition,
+ 				},
+ 				ModuleSpecifierKind: moduleSpecifierKind,
  				IsReExport:          export.Target.ModuleID != export.ModuleID,
  				ModuleFileName:      export.ModuleFileName,
  			},
 -		}
 +		})
  	}
- 
- 	importKind := getImportKind(v.importingFile, export, v.program)
 @@ -587,7 +593,7 @@ func (v *View) GetFixes(ctx context.Context, export *Export, forJSX bool, isVali
  		}
  	}
