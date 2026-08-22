@@ -53,6 +53,7 @@ export const create = (
         },
         oxlintrcSchemaPath: Option.none(),
         vscodeSettings: Option.none(),
+        zedSettings: Option.none(),
         editors: []
       } satisfies Target.State
     }
@@ -79,6 +80,31 @@ export const create = (
           "js/ts.tsdk.path": "./node_modules/typescript/bin",
           "js/ts.tsdk.promptToUseWorkspaceVersion": true,
           "js/ts.tsdk.additionalLocations": ["./node_modules/typescript/bin"]
+        }
+      })
+      : Option.none()
+    const zedSettings: Option.Option<Target.ZedSettings> = editors.includes("zed")
+      ? Option.some({
+        settings: {
+          lsp: {
+            "typescript-ls": {
+              binary: {
+                path:
+                  `./node_modules/@typescript/typescript-${process.platform}-${process.arch}/lib/${
+                    process.platform === "win32" ? "tsc.exe" : "tsc"
+                  }`,
+                arguments: ["--lsp", "--stdio"]
+              }
+            }
+          },
+          languages: {
+            TypeScript: {
+              language_servers: ["typescript-ls", "!typescript-language-server", "!vtsls", "..."]
+            },
+            TSX: {
+              language_servers: ["typescript-ls", "!typescript-language-server", "!vtsls", "..."]
+            }
+          }
         }
       })
       : Option.none()
@@ -130,6 +156,7 @@ export const create = (
       },
       oxlintrcSchemaPath,
       vscodeSettings,
+      zedSettings,
       editors
     } satisfies Target.State
   })
@@ -156,6 +183,9 @@ export const fromAssessment = (inputState: Assessment.State): Target.State => ({
   },
   oxlintrcSchemaPath: Option.flatMap(inputState.oxlintConfig, (config) => config.currentSchemaPath),
   vscodeSettings: Option.map(inputState.vscodeSettings, (settings) => ({
+    settings: settings.parsed
+  })),
+  zedSettings: Option.map(inputState.zedSettings, (settings) => ({
     settings: settings.parsed
   })),
   editors: []
