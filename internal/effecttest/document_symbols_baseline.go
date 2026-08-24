@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/shim/lsp/lsproto"
 )
 
 // DoDocumentSymbolsBaseline generates a .symbols.txt baseline for Effect tests.

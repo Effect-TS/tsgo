@@ -7,9 +7,9 @@ import (
 	"sync"
 
 	"github.com/effect-ts/tsgo/internal/bundledeffect"
-	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/bundled"
-	"github.com/microsoft/typescript-go/shim/compiler"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/bundled"
+	"github.com/microsoft/TypeScript/tsc/shim/compiler"
 )
 
 // programSemaphore limits the number of concurrent TypeScript program

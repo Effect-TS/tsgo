@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/effect-ts/tsgo/internal/bundledeffect"
-	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/scanner"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/scanner"
 )
 
 // findIdentifierByName returns the first identifier node with the given text

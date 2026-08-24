@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/effect-ts/tsgo/etscore"
-	"github.com/microsoft/typescript-go/shim/tspath"
+	"github.com/microsoft/TypeScript/tsc/shim/tspath"
 )
 
 // Cyrb53 computes a fast non-cryptographic hash of the input string,

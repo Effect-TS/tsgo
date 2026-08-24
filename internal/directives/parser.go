@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/effect-ts/tsgo/etscore"
-	"github.com/microsoft/typescript-go/shim/diagnostics"
+	"github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 )
 
 // ToCategory converts a Severity to the corresponding diagnostics.Category for diagnostic reporting.

@@ -6,7 +6,7 @@ import * as Path from "effect/Path"
 import * as ChildProcess from "effect/unstable/process/ChildProcess"
 import * as ChildProcessSpawner from "effect/unstable/process/ChildProcessSpawner"
 import { runCommand } from "./process.ts"
-import { type ComponentName, getComponent, readUpstream } from "./upstream.ts"
+import { type ComponentName, getComponent, readUpstream, type TypeScriptSource } from "./upstream.ts"
 
 const repositories = {
   tsgolint: "https://github.com/oxc-project/tsgolint.git",
@@ -63,15 +63,9 @@ export const cloneSubmodules = Effect.fnUntraced(function*(
   const spawner = yield* ChildProcessSpawner.ChildProcessSpawner
   const upstream = yield* readUpstream(repositoryRoot)
   const selected = yield* getComponent(upstream, componentName, version)
-  const typescriptGoRepository = yield* readGit(repositoryRoot, [
-    "config",
-    "--blob",
-    "HEAD:.gitmodules",
-    "--get",
-    "submodule.typescript-go.url"
-  ])
+  const compiler = selected.typescript.source
   const required = [
-    { name: "typescript-go", repository: typescriptGoRepository, revision: selected.typescript.gitHead },
+    { name: compiler.checkoutDir, repository: compiler.repository, revision: selected.typescript.gitHead },
     ...(selected.name === "oxlint-tsgolint"
       ? [{ name: "tsgolint", repository: repositories.tsgolint, revision: selected.gitHead }] as const
       : []),
@@ -80,12 +74,12 @@ export const cloneSubmodules = Effect.fnUntraced(function*(
       : [])
   ] as const
   const reused = new Set<string>()
-  const configuredOptional: Array<{
-    readonly name: "tsgolint" | "oxlint"
+  const configuredUnused: Array<{
+    readonly name: "typescript-go" | "typescript" | "tsgolint" | "oxlint"
     readonly hasGitmodulesConfig: boolean
   }> = []
 
-  for (const name of ["typescript-go", "tsgolint", "oxlint"] as const) {
+  for (const name of ["typescript-go", "typescript", "tsgolint", "oxlint"] as const) {
     const target = required.find((target) => target.name === name)
     const configuredExitCode = yield* spawner.exitCode(ChildProcess.make(
       "git",
@@ -121,9 +115,14 @@ export const cloneSubmodules = Effect.fnUntraced(function*(
       }
       continue
     }
-    const repositoryMatches = target !== undefined && configured &&
-      initialized &&
-      (yield* readGit(repositoryRoot, ["config", "-f", ".gitmodules", "--get", `submodule.${name}.url`])) === target.repository &&
+    const configuredRepositoryMatches = target !== undefined && configured &&
+      (yield* readGit(repositoryRoot, ["config", "-f", ".gitmodules", "--get", `submodule.${name}.url`])) ===
+        target.repository
+    if (configuredRepositoryMatches && !initialized) {
+      yield* runGit(repositoryRoot, ["submodule", "sync", "--", name])
+      yield* runGit(repositoryRoot, ["submodule", "update", "--init", "--depth", "1", "--", name])
+    }
+    const repositoryMatches = configuredRepositoryMatches &&
       (yield* readGit(checkout, ["remote", "get-url", "origin"])) === target.repository
     if (target !== undefined && repositoryMatches) {
       yield* Console.log(`Reusing ${name} for ${target.revision}`)
@@ -154,21 +153,21 @@ export const cloneSubmodules = Effect.fnUntraced(function*(
       yield* runCommand("go", repositoryRoot, ["work", "edit", "-dropuse=./tsgolint"])
     }
 
-    if (name !== "typescript-go" && (configured || tracked || locallyConfigured)) {
-      configuredOptional.push({ name, hasGitmodulesConfig: configured })
+    if (configured || tracked || locallyConfigured) {
+      configuredUnused.push({ name, hasGitmodulesConfig: configured })
     }
   }
 
-  if (configuredOptional.length > 0) {
+  if (configuredUnused.length > 0) {
     yield* runGit(repositoryRoot, [
       "rm",
       "--cached",
       "--force",
       "--ignore-unmatch",
       "--",
-      ...configuredOptional.map(({ name }) => name)
+      ...configuredUnused.map(({ name }) => name)
     ])
-    for (const optional of configuredOptional) {
+    for (const optional of configuredUnused) {
       if (optional.hasGitmodulesConfig) {
         yield* runGit(repositoryRoot, [
           "config",
@@ -196,40 +195,35 @@ export const cloneSubmodules = Effect.fnUntraced(function*(
     }
 
     yield* Console.log(`Cloning ${target.name} ${target.revision} for ${selected.name} ${selected.version}`)
-    if (target.name === "typescript-go") {
-      yield* runGit(repositoryRoot, [
-        "config",
-        "-f",
-        ".gitmodules",
-        "submodule.typescript-go.url",
-        target.repository
-      ])
-      yield* runGit(repositoryRoot, ["submodule", "sync", "--", target.name])
-      yield* runGit(repositoryRoot, ["submodule", "update", "--init", "--depth", "1", "--", target.name])
-    } else {
-      yield* runGit(repositoryRoot, [
-        "submodule",
-        "add",
-        "--name",
-        target.name,
-        "--depth",
-        "1",
-        target.repository,
-        target.name
-      ])
-    }
+    yield* runGit(repositoryRoot, [
+      "submodule",
+      "add",
+      "--name",
+      target.name,
+      "--depth",
+      "1",
+      target.repository,
+      target.name
+    ])
     yield* checkoutRevision(path.join(repositoryRoot, target.name), target.revision)
   }
 
+  yield* runGit(repositoryRoot, [
+    "config",
+    "-f",
+    ".gitmodules",
+    `submodule.${compiler.checkoutDir}.ignore`,
+    "dirty"
+  ])
   yield* runGit(repositoryRoot, ["add", ".gitmodules", ...required.map((target) => target.name)])
   return selected
 })
 
-export const patchSubmodules = Effect.fnUntraced(function*(repositoryRoot: string) {
+export const patchSubmodules = Effect.fnUntraced(function*(repositoryRoot: string, compiler: TypeScriptSource) {
   const fs = yield* FileSystem.FileSystem
   const path = yield* Path.Path
   const targets = [
-    { name: "typescript-go", patches: path.join(repositoryRoot, "_patches", "typescript-go") },
+    { name: compiler.checkoutDir, patches: path.join(repositoryRoot, compiler.patchDir) },
     { name: "tsgolint", patches: path.join(repositoryRoot, "_patches", "tsgolint") },
     { name: "oxlint", patches: path.join(repositoryRoot, "_patches", "oxlint") }
   ] as const
@@ -255,22 +249,27 @@ export const patchSubmodules = Effect.fnUntraced(function*(repositoryRoot: strin
 
 export const generateSubmoduleArtifacts = Effect.fnUntraced(function*(
   repositoryRoot: string,
+  compiler: TypeScriptSource,
   shimOverlayRoots: ReadonlyArray<string> = []
 ) {
   const path = yield* Path.Path
-  const typescriptGo = path.join(repositoryRoot, "typescript-go")
-  yield* runGit(typescriptGo, ["submodule", "sync", "--recursive"])
-  yield* runGit(typescriptGo, [
-    "submodule",
-    "update",
-    "--init",
-    "--force",
-    "--depth",
-    "1",
-    "_submodules/TypeScript"
-  ])
+  const checkout = path.join(repositoryRoot, compiler.checkoutDir)
+  const moduleRoot = path.join(checkout, compiler.moduleDir)
+  const providerShimOverlay = path.join(repositoryRoot, compiler.shimOverlayDir)
+  if (compiler.provider === "typescript-go") {
+    yield* runGit(checkout, ["submodule", "sync", "--recursive"])
+    yield* runGit(checkout, [
+      "submodule",
+      "update",
+      "--init",
+      "--force",
+      "--depth",
+      "1",
+      "_submodules/TypeScript"
+    ])
+  }
   yield* Console.log("Generating diagnostics")
-  yield* runCommand("go", path.join(typescriptGo, "internal", "diagnostics"), [
+  yield* runCommand("go", path.join(moduleRoot, "internal", "diagnostics"), [
     "run",
     "generate.go",
     "-diagnostics",
@@ -279,13 +278,19 @@ export const generateSubmoduleArtifacts = Effect.fnUntraced(function*(
     "./loc_generated.go",
     "-locdir",
     "./loc"
-  ])
+  ], false, { GOWORK: "off" })
   yield* Console.log("Generating shims")
   yield* runCommand("go", path.join(repositoryRoot, "_tools", "gen_shims"), [
     "run",
     ".",
     "--repository-root",
     repositoryRoot,
-    ...shimOverlayRoots.flatMap((root) => ["--extra-shim-root", root])
+    "--source-root",
+    moduleRoot,
+    "--module-prefix",
+    compiler.modulePrefix,
+    "--provider-shim-prefix",
+    compiler.providerShimPrefix,
+    ...[providerShimOverlay, ...shimOverlayRoots].flatMap((root) => ["--extra-shim-root", root])
   ], false, { GOWORK: "off" })
 })

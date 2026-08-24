@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/effect-ts/tsgo/etscore"
-	"github.com/microsoft/typescript-go/shim/diagnostics"
+	"github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 )
 
 func TestEtscoreParseSeverity(t *testing.T) {

@@ -3,49 +3,303 @@ go 1.26
 use (
 	.
 	./etscore
-	./typescript-go
 	./shim/api
+	./shim/_backport/api
 	./shim/ast
+	./shim/_backport/ast
 	./shim/astnav
+	./shim/_backport/astnav
 	./shim/bundled
+	./shim/_backport/bundled
 	./shim/checker
+	./shim/_backport/checker
 	./shim/collections
+	./shim/_backport/collections
 	./shim/compiler
+	./shim/_backport/compiler
 	./shim/core
+	./shim/_backport/core
 	./shim/diagnostics
+	./shim/_backport/diagnostics
 	./shim/evaluator
+	./shim/_backport/evaluator
 	./shim/execute/tsc
+	./shim/_backport/execute/tsc
 	./shim/format
+	./shim/_backport/format
 	./shim/fourslash
+	./shim/_backport/fourslash
 	./shim/jsnum
+	./shim/_backport/jsnum
+	./shim/jsonrpc
+	./shim/_backport/jsonrpc
 	./shim/locale
+	./shim/_backport/locale
 	./shim/ls
+	./shim/_backport/ls
 	./shim/ls/autoimport
+	./shim/_backport/ls/autoimport
 	./shim/ls/change
+	./shim/_backport/ls/change
 	./shim/ls/lsconv
+	./shim/_backport/ls/lsconv
 	./shim/ls/lsutil
+	./shim/_backport/ls/lsutil
 	./shim/lsp
+	./shim/_backport/lsp
 	./shim/lsp/lsproto
+	./shim/_backport/lsp/lsproto
 	./shim/module
+	./shim/_backport/module
 	./shim/modulespecifiers
+	./shim/_backport/modulespecifiers
+	./shim/nodebuilder
+	./shim/_backport/nodebuilder
 	./shim/packagejson
+	./shim/_backport/packagejson
 	./shim/parser
+	./shim/_backport/parser
+	./shim/printer
+	./shim/_backport/printer
 	./shim/project
+	./shim/_backport/project
+	./shim/project/dirty
+	./shim/_backport/project/dirty
 	./shim/project/logging
+	./shim/_backport/project/logging
 	./shim/repo
+	./shim/_backport/repo
 	./shim/scanner
+	./shim/_backport/scanner
 	./shim/sourcemap
+	./shim/_backport/sourcemap
 	./shim/testrunner
+	./shim/_backport/testrunner
 	./shim/testutil
+	./shim/_backport/testutil
 	./shim/testutil/baseline
+	./shim/_backport/testutil/baseline
 	./shim/testutil/harnessutil
+	./shim/_backport/testutil/harnessutil
 	./shim/testutil/lsptestutil
+	./shim/_backport/testutil/lsptestutil
 	./shim/testutil/tsbaseline
+	./shim/_backport/testutil/tsbaseline
+	./shim/tracing
+	./shim/_backport/tracing
 	./shim/tsoptions
+	./shim/_backport/tsoptions
 	./shim/tspath
+	./shim/_backport/tspath
 	./shim/vfs
+	./shim/_backport/vfs
 	./shim/vfs/cachedvfs
+	./shim/_backport/vfs/cachedvfs
 	./shim/vfs/iovfs
+	./shim/_backport/vfs/iovfs
 	./shim/vfs/osvfs
+	./shim/_backport/vfs/osvfs
 	./shim/vfs/vfstest
+	./shim/_backport/vfs/vfstest
+	./typescript-go
 )
+
+replace github.com/microsoft/TypeScript/tsc v0.0.0 => ./typescript/tsc
+
+replace github.com/microsoft/typescript-go v0.0.0 => ./typescript-go
+
+replace github.com/microsoft/typescript-go/shim/api v0.0.0 => ./shim/api
+
+replace github.com/microsoft/TypeScript/tsc/shim/api v0.0.0 => ./shim/_backport/api
+
+replace github.com/microsoft/typescript-go/shim/ast v0.0.0 => ./shim/ast
+
+replace github.com/microsoft/TypeScript/tsc/shim/ast v0.0.0 => ./shim/_backport/ast
+
+replace github.com/microsoft/typescript-go/shim/astnav v0.0.0 => ./shim/astnav
+
+replace github.com/microsoft/TypeScript/tsc/shim/astnav v0.0.0 => ./shim/_backport/astnav
+
+replace github.com/microsoft/typescript-go/shim/bundled v0.0.0 => ./shim/bundled
+
+replace github.com/microsoft/TypeScript/tsc/shim/bundled v0.0.0 => ./shim/_backport/bundled
+
+replace github.com/microsoft/typescript-go/shim/checker v0.0.0 => ./shim/checker
+
+replace github.com/microsoft/TypeScript/tsc/shim/checker v0.0.0 => ./shim/_backport/checker
+
+replace github.com/microsoft/typescript-go/shim/collections v0.0.0 => ./shim/collections
+
+replace github.com/microsoft/TypeScript/tsc/shim/collections v0.0.0 => ./shim/_backport/collections
+
+replace github.com/microsoft/typescript-go/shim/compiler v0.0.0 => ./shim/compiler
+
+replace github.com/microsoft/TypeScript/tsc/shim/compiler v0.0.0 => ./shim/_backport/compiler
+
+replace github.com/microsoft/typescript-go/shim/core v0.0.0 => ./shim/core
+
+replace github.com/microsoft/TypeScript/tsc/shim/core v0.0.0 => ./shim/_backport/core
+
+replace github.com/microsoft/typescript-go/shim/diagnostics v0.0.0 => ./shim/diagnostics
+
+replace github.com/microsoft/TypeScript/tsc/shim/diagnostics v0.0.0 => ./shim/_backport/diagnostics
+
+replace github.com/microsoft/typescript-go/shim/evaluator v0.0.0 => ./shim/evaluator
+
+replace github.com/microsoft/TypeScript/tsc/shim/evaluator v0.0.0 => ./shim/_backport/evaluator
+
+replace github.com/microsoft/typescript-go/shim/execute/tsc v0.0.0 => ./shim/execute/tsc
+
+replace github.com/microsoft/TypeScript/tsc/shim/execute/tsc v0.0.0 => ./shim/_backport/execute/tsc
+
+replace github.com/microsoft/typescript-go/shim/format v0.0.0 => ./shim/format
+
+replace github.com/microsoft/TypeScript/tsc/shim/format v0.0.0 => ./shim/_backport/format
+
+replace github.com/microsoft/typescript-go/shim/fourslash v0.0.0 => ./shim/fourslash
+
+replace github.com/microsoft/TypeScript/tsc/shim/fourslash v0.0.0 => ./shim/_backport/fourslash
+
+replace github.com/microsoft/typescript-go/shim/jsnum v0.0.0 => ./shim/jsnum
+
+replace github.com/microsoft/TypeScript/tsc/shim/jsnum v0.0.0 => ./shim/_backport/jsnum
+
+replace github.com/microsoft/typescript-go/shim/jsonrpc v0.0.0 => ./shim/jsonrpc
+
+replace github.com/microsoft/TypeScript/tsc/shim/jsonrpc v0.0.0 => ./shim/_backport/jsonrpc
+
+replace github.com/microsoft/typescript-go/shim/locale v0.0.0 => ./shim/locale
+
+replace github.com/microsoft/TypeScript/tsc/shim/locale v0.0.0 => ./shim/_backport/locale
+
+replace github.com/microsoft/typescript-go/shim/ls v0.0.0 => ./shim/ls
+
+replace github.com/microsoft/TypeScript/tsc/shim/ls v0.0.0 => ./shim/_backport/ls
+
+replace github.com/microsoft/typescript-go/shim/ls/autoimport v0.0.0 => ./shim/ls/autoimport
+
+replace github.com/microsoft/TypeScript/tsc/shim/ls/autoimport v0.0.0 => ./shim/_backport/ls/autoimport
+
+replace github.com/microsoft/typescript-go/shim/ls/change v0.0.0 => ./shim/ls/change
+
+replace github.com/microsoft/TypeScript/tsc/shim/ls/change v0.0.0 => ./shim/_backport/ls/change
+
+replace github.com/microsoft/typescript-go/shim/ls/lsconv v0.0.0 => ./shim/ls/lsconv
+
+replace github.com/microsoft/TypeScript/tsc/shim/ls/lsconv v0.0.0 => ./shim/_backport/ls/lsconv
+
+replace github.com/microsoft/typescript-go/shim/ls/lsutil v0.0.0 => ./shim/ls/lsutil
+
+replace github.com/microsoft/TypeScript/tsc/shim/ls/lsutil v0.0.0 => ./shim/_backport/ls/lsutil
+
+replace github.com/microsoft/typescript-go/shim/lsp v0.0.0 => ./shim/lsp
+
+replace github.com/microsoft/TypeScript/tsc/shim/lsp v0.0.0 => ./shim/_backport/lsp
+
+replace github.com/microsoft/typescript-go/shim/lsp/lsproto v0.0.0 => ./shim/lsp/lsproto
+
+replace github.com/microsoft/TypeScript/tsc/shim/lsp/lsproto v0.0.0 => ./shim/_backport/lsp/lsproto
+
+replace github.com/microsoft/typescript-go/shim/module v0.0.0 => ./shim/module
+
+replace github.com/microsoft/TypeScript/tsc/shim/module v0.0.0 => ./shim/_backport/module
+
+replace github.com/microsoft/typescript-go/shim/modulespecifiers v0.0.0 => ./shim/modulespecifiers
+
+replace github.com/microsoft/TypeScript/tsc/shim/modulespecifiers v0.0.0 => ./shim/_backport/modulespecifiers
+
+replace github.com/microsoft/typescript-go/shim/nodebuilder v0.0.0 => ./shim/nodebuilder
+
+replace github.com/microsoft/TypeScript/tsc/shim/nodebuilder v0.0.0 => ./shim/_backport/nodebuilder
+
+replace github.com/microsoft/typescript-go/shim/packagejson v0.0.0 => ./shim/packagejson
+
+replace github.com/microsoft/TypeScript/tsc/shim/packagejson v0.0.0 => ./shim/_backport/packagejson
+
+replace github.com/microsoft/typescript-go/shim/parser v0.0.0 => ./shim/parser
+
+replace github.com/microsoft/TypeScript/tsc/shim/parser v0.0.0 => ./shim/_backport/parser
+
+replace github.com/microsoft/typescript-go/shim/printer v0.0.0 => ./shim/printer
+
+replace github.com/microsoft/TypeScript/tsc/shim/printer v0.0.0 => ./shim/_backport/printer
+
+replace github.com/microsoft/typescript-go/shim/project v0.0.0 => ./shim/project
+
+replace github.com/microsoft/TypeScript/tsc/shim/project v0.0.0 => ./shim/_backport/project
+
+replace github.com/microsoft/typescript-go/shim/project/dirty v0.0.0 => ./shim/project/dirty
+
+replace github.com/microsoft/TypeScript/tsc/shim/project/dirty v0.0.0 => ./shim/_backport/project/dirty
+
+replace github.com/microsoft/typescript-go/shim/project/logging v0.0.0 => ./shim/project/logging
+
+replace github.com/microsoft/TypeScript/tsc/shim/project/logging v0.0.0 => ./shim/_backport/project/logging
+
+replace github.com/microsoft/typescript-go/shim/repo v0.0.0 => ./shim/repo
+
+replace github.com/microsoft/TypeScript/tsc/shim/repo v0.0.0 => ./shim/_backport/repo
+
+replace github.com/microsoft/typescript-go/shim/scanner v0.0.0 => ./shim/scanner
+
+replace github.com/microsoft/TypeScript/tsc/shim/scanner v0.0.0 => ./shim/_backport/scanner
+
+replace github.com/microsoft/typescript-go/shim/sourcemap v0.0.0 => ./shim/sourcemap
+
+replace github.com/microsoft/TypeScript/tsc/shim/sourcemap v0.0.0 => ./shim/_backport/sourcemap
+
+replace github.com/microsoft/typescript-go/shim/testrunner v0.0.0 => ./shim/testrunner
+
+replace github.com/microsoft/TypeScript/tsc/shim/testrunner v0.0.0 => ./shim/_backport/testrunner
+
+replace github.com/microsoft/typescript-go/shim/testutil v0.0.0 => ./shim/testutil
+
+replace github.com/microsoft/TypeScript/tsc/shim/testutil v0.0.0 => ./shim/_backport/testutil
+
+replace github.com/microsoft/typescript-go/shim/testutil/baseline v0.0.0 => ./shim/testutil/baseline
+
+replace github.com/microsoft/TypeScript/tsc/shim/testutil/baseline v0.0.0 => ./shim/_backport/testutil/baseline
+
+replace github.com/microsoft/typescript-go/shim/testutil/harnessutil v0.0.0 => ./shim/testutil/harnessutil
+
+replace github.com/microsoft/TypeScript/tsc/shim/testutil/harnessutil v0.0.0 => ./shim/_backport/testutil/harnessutil
+
+replace github.com/microsoft/typescript-go/shim/testutil/lsptestutil v0.0.0 => ./shim/testutil/lsptestutil
+
+replace github.com/microsoft/TypeScript/tsc/shim/testutil/lsptestutil v0.0.0 => ./shim/_backport/testutil/lsptestutil
+
+replace github.com/microsoft/typescript-go/shim/testutil/tsbaseline v0.0.0 => ./shim/testutil/tsbaseline
+
+replace github.com/microsoft/TypeScript/tsc/shim/testutil/tsbaseline v0.0.0 => ./shim/_backport/testutil/tsbaseline
+
+replace github.com/microsoft/typescript-go/shim/tracing v0.0.0 => ./shim/tracing
+
+replace github.com/microsoft/TypeScript/tsc/shim/tracing v0.0.0 => ./shim/_backport/tracing
+
+replace github.com/microsoft/typescript-go/shim/tsoptions v0.0.0 => ./shim/tsoptions
+
+replace github.com/microsoft/TypeScript/tsc/shim/tsoptions v0.0.0 => ./shim/_backport/tsoptions
+
+replace github.com/microsoft/typescript-go/shim/tspath v0.0.0 => ./shim/tspath
+
+replace github.com/microsoft/TypeScript/tsc/shim/tspath v0.0.0 => ./shim/_backport/tspath
+
+replace github.com/microsoft/typescript-go/shim/vfs v0.0.0 => ./shim/vfs
+
+replace github.com/microsoft/TypeScript/tsc/shim/vfs v0.0.0 => ./shim/_backport/vfs
+
+replace github.com/microsoft/typescript-go/shim/vfs/cachedvfs v0.0.0 => ./shim/vfs/cachedvfs
+
+replace github.com/microsoft/TypeScript/tsc/shim/vfs/cachedvfs v0.0.0 => ./shim/_backport/vfs/cachedvfs
+
+replace github.com/microsoft/typescript-go/shim/vfs/iovfs v0.0.0 => ./shim/vfs/iovfs
+
+replace github.com/microsoft/TypeScript/tsc/shim/vfs/iovfs v0.0.0 => ./shim/_backport/vfs/iovfs
+
+replace github.com/microsoft/typescript-go/shim/vfs/osvfs v0.0.0 => ./shim/vfs/osvfs
+
+replace github.com/microsoft/TypeScript/tsc/shim/vfs/osvfs v0.0.0 => ./shim/_backport/vfs/osvfs
+
+replace github.com/microsoft/typescript-go/shim/vfs/vfstest v0.0.0 => ./shim/vfs/vfstest
+
+replace github.com/microsoft/TypeScript/tsc/shim/vfs/vfstest v0.0.0 => ./shim/_backport/vfs/vfstest

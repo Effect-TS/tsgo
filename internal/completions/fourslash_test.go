@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/microsoft/typescript-go/shim/fourslash"
-	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/shim/fourslash"
+	"github.com/microsoft/TypeScript/tsc/shim/lsp/lsproto"
 
 	_ "github.com/effect-ts/tsgo/etslshooks"
 	_ "github.com/effect-ts/tsgo/etstesthooks"

@@ -5,8 +5,8 @@ import (
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
 	"github.com/effect-ts/tsgo/internal/typeparser"
-	"github.com/microsoft/typescript-go/shim/ast"
-	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 )
 
 // TryCatchInEffectGen detects try/catch statements inside Effect generators

@@ -4,7 +4,7 @@
 package completion
 
 import (
-	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/shim/lsp/lsproto"
 )
 
 // Completion defines a custom completion provider.

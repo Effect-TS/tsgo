@@ -3,7 +3,7 @@ package typeparser
 import (
 	"testing"
 
-	"github.com/microsoft/typescript-go/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
 )
 
 // Import clauses without a default binding declare no symbol; before the

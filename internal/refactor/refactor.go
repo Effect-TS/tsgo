@@ -4,7 +4,7 @@
 package refactor
 
 import (
-	"github.com/microsoft/typescript-go/shim/ls"
+	"github.com/microsoft/TypeScript/tsc/shim/ls"
 )
 
 // Refactor defines a selection-based refactoring action.

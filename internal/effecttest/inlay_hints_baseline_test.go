@@ -10,12 +10,12 @@ import (
 	"unicode/utf8"
 
 	effecttest "github.com/effect-ts/tsgo/internal/effecttest"
-	"github.com/microsoft/typescript-go/shim/core"
-	"github.com/microsoft/typescript-go/shim/fourslash"
-	"github.com/microsoft/typescript-go/shim/ls/lsconv"
-	"github.com/microsoft/typescript-go/shim/ls/lsutil"
-	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
-	"github.com/microsoft/typescript-go/shim/testutil/baseline"
+	"github.com/microsoft/TypeScript/tsc/shim/core"
+	"github.com/microsoft/TypeScript/tsc/shim/fourslash"
+	"github.com/microsoft/TypeScript/tsc/shim/ls/lsconv"
+	"github.com/microsoft/TypeScript/tsc/shim/ls/lsutil"
+	"github.com/microsoft/TypeScript/tsc/shim/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/shim/testutil/baseline"
 )
 
 func verifyLocalBaselineInlayHints(t *testing.T, f *fourslash.FourslashTest, testContent string, fileName string, preferences *lsutil.UserPreferences) {

@@ -1,0 +1,36 @@
+diff --git a/tsc/internal/ls/lsconv/converters.go b/tsc/internal/ls/lsconv/converters.go
+index 23eb9036..839cf9ff 100644
+--- a/tsc/internal/ls/lsconv/converters.go
++++ b/tsc/internal/ls/lsconv/converters.go
+@@ -91,6 +91,18 @@ func (c *Converters) ToLSPPosition(script Script, position core.TextPos) (lsprot
+ 	return c.positionToLineAndCharacter(script, position), fidelity
+ }
+ 
++// PositionToLineAndCharacter preserves the pre-content-mapper converter interface
++// for integrations that only need the mapped LSP position.
++func (c *Converters) PositionToLineAndCharacter(script Script, position core.TextPos) lsproto.Position {
++	result, _ := c.ToLSPPosition(script, position)
++	return result
++}
++
++// LineAndCharacterToPosition preserves the pre-content-mapper converter interface.
++func (c *Converters) LineAndCharacterToPosition(script Script, position lsproto.Position) core.TextPos {
++	return c.lineAndCharacterToPosition(script, position)
++}
++
+ // ToLSPPositionForFeature is [Converters.ToLSPPosition] for an LS feature. For a content-mapped file, it returns
+ // FidelityNone when the virtual position is not in a segment that participates in feature; the
+ // returned position is still the best-effort mapped position. For normal files, it behaves like
+@@ -231,6 +238,12 @@ func FromLSPRangeToOriginal(c *Converters, script Script, textRange lsproto.Rang
+ 	)
+ }
+ 
++// FromLSPRange preserves the pre-content-mapper converter interface for
++// integrations that expect one original-text range.
++func (c *Converters) FromLSPRange(script Script, textRange lsproto.Range) core.TextRange {
++	return FromLSPRangeToOriginal(c, script, textRange)
++}
++
+ func sourceFileProjections(file *ast.SourceFile) []*ast.SourceFile {
+ 	supplemental := file.SupplementalSourceFiles()
+ 	files := make([]*ast.SourceFile, 1, 1+len(supplemental))

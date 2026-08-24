@@ -1,6 +1,6 @@
 package typeparser
 
-import "github.com/microsoft/typescript-go/shim/ast"
+import "github.com/microsoft/TypeScript/tsc/shim/ast"
 
 // IsExpressionValueStableAtLocation reports whether evaluating expression at
 // location produces the same value as evaluating it at its original site.

@@ -6,9 +6,9 @@ import (
 	"strings"
 
 	"github.com/effect-ts/tsgo/internal/graph"
-	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
-	"github.com/microsoft/typescript-go/shim/scanner"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/checker"
+	"github.com/microsoft/TypeScript/tsc/shim/scanner"
 )
 
 // mermaidEntityEncode replaces Mermaid-special characters with Mermaid HTML entity codes.

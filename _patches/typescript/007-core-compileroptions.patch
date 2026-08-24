@@ -1,0 +1,23 @@
+diff --git a/tsc/internal/core/compileroptions.go b/tsc/internal/core/compileroptions.go
+index 55401a49..8795a89a 100644
+--- a/tsc/internal/core/compileroptions.go
++++ b/tsc/internal/core/compileroptions.go
+@@ -5,6 +5,7 @@ import (
+ 	"slices"
+ 	"strings"
+ 
++	"github.com/effect-ts/tsgo/etscore"
+ 	"github.com/microsoft/TypeScript/tsc/internal/collections"
+ 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+ )
+@@ -158,6 +159,10 @@ type CompilerOptions struct {
+ 	SingleThreaded Tristate `json:"singleThreaded,omitzero" internal:"true"`
+ 	Quiet          Tristate `json:"quiet,omitzero" internal:"true"`
+ 	Checkers       *int     `json:"checkers,omitzero" internal:"true"`
++
++	// Effect holds the parsed @effect/language-service plugin configuration.
++	// This field is populated from the plugins array in tsconfig.json during config parsing.
++	Effect *etscore.EffectPluginOptions
+ }
+ 
+ // noCopy may be embedded into structs which must not be copied

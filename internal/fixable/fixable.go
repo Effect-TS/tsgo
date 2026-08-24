@@ -6,7 +6,7 @@ package fixable
 import (
 	"slices"
 
-	"github.com/microsoft/typescript-go/shim/ls"
+	"github.com/microsoft/TypeScript/tsc/shim/ls"
 )
 
 // Fixable defines a code fix provider for a set of diagnostic codes.

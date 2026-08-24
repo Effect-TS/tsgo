@@ -5,7 +5,7 @@ import (
 
 	"github.com/effect-ts/tsgo/internal/completion"
 	"github.com/effect-ts/tsgo/internal/typeparser"
-	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/shim/lsp/lsproto"
 )
 
 // effectDataClasses provides completion items for Data.TaggedError and Data.TaggedClass

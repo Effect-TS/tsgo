@@ -1,0 +1,54 @@
+diff --git a/tsc/internal/execute/incremental/buildInfo.go b/tsc/internal/execute/incremental/buildInfo.go
+index e83bc86b..6c1389de 100644
+--- a/tsc/internal/execute/incremental/buildInfo.go
++++ b/tsc/internal/execute/incremental/buildInfo.go
+@@ -5,6 +5,7 @@ import (
+ 	"iter"
+ 	"slices"
+ 
++	"github.com/effect-ts/tsgo/etscore"
+ 	"github.com/microsoft/TypeScript/tsc/internal/ast"
+ 	"github.com/microsoft/TypeScript/tsc/internal/collections"
+ 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
+@@ -479,6 +480,7 @@ type BuildInfo struct {
+ 	FileInfos                  []*BuildInfoFileInfo                 `json:"fileInfos,omitzero"`
+ 	FileIdsList                [][]BuildInfoFileId                  `json:"fileIdsList,omitzero"`
+ 	Options                    *collections.OrderedMap[string, any] `json:"options,omitzero"`
++	Effect                     *etscore.EffectPluginOptions         `json:"effect,omitzero"`
+ 	ReferencedMap              []*BuildInfoReferenceMapEntry        `json:"referencedMap,omitzero"`
+ 	SemanticDiagnosticsPerFile []*BuildInfoSemanticDiagnostic       `json:"semanticDiagnosticsPerFile,omitzero"`
+ 	EmitDiagnosticsPerFile     []*BuildInfoDiagnosticsOfFile        `json:"emitDiagnosticsPerFile,omitzero"`
+@@ -546,6 +548,7 @@ func (b *BuildInfo) GetCompilerOptions(buildInfoDirectory string) *core.Compiler
+ 		tsoptions.ParseCompilerOptions(option, value, options)
+ 
+ 	}
++	options.Effect = b.Effect
+ 	return options
+ }
+ 
+diff --git a/tsc/internal/execute/incremental/snapshottobuildinfo.go b/tsc/internal/execute/incremental/snapshottobuildinfo.go
+index 78eea136..9c1063b5 100644
+--- a/tsc/internal/execute/incremental/snapshottobuildinfo.go
++++ b/tsc/internal/execute/incremental/snapshottobuildinfo.go
+@@ -23,6 +23,7 @@ func snapshotToBuildInfo(snapshot *snapshot, program *compiler.Program, buildInf
+ 	buildInfo := &BuildInfo{
+ 		Version:                 core.Version(),
+ 		ContentMapperIdentities: contentMapperIdentities,
++		Effect:                  snapshot.options.Effect,
+ 	}
+ 	to := &toBuildInfo{
+ 		snapshot:           snapshot,
+diff --git a/tsc/internal/tsoptions/declscompiler.go b/tsc/internal/tsoptions/declscompiler.go
+index 46fb42fa..4a1d3911 100644
+--- a/tsc/internal/tsoptions/declscompiler.go
++++ b/tsc/internal/tsoptions/declscompiler.go
+@@ -1251,6 +1251,9 @@ func CompilerOptionsAffectSemanticDiagnostics(
+ 	oldOptions *core.CompilerOptions,
+ 	newOptions *core.CompilerOptions,
+ ) bool {
++	if !reflect.DeepEqual(oldOptions.Effect, newOptions.Effect) {
++		return true
++	}
+ 	return optionsHaveChanges(oldOptions, newOptions, func(option *CommandLineOption) bool {
+ 		return option.AffectsSemanticDiagnostics
+ 	})

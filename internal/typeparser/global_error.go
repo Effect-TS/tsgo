@@ -1,8 +1,8 @@
 package typeparser
 
 import (
-	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
 
 // IsGlobalErrorType reports whether the given type is exactly the global Error type.

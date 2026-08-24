@@ -8,7 +8,7 @@ import (
 
 	"github.com/effect-ts/tsgo/internal/completion"
 	"github.com/effect-ts/tsgo/internal/rules"
-	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/shim/lsp/lsproto"
 )
 
 // effectDiagnosticsComment provides completions for @effect-diagnostics and

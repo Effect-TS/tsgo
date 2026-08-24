@@ -5,10 +5,10 @@ import (
 	"strings"
 
 	"github.com/effect-ts/tsgo/etscore"
-	"github.com/microsoft/typescript-go/shim/collections"
-	"github.com/microsoft/typescript-go/shim/core"
-	"github.com/microsoft/typescript-go/shim/tsoptions"
-	"github.com/microsoft/typescript-go/shim/tspath"
+	"github.com/microsoft/TypeScript/tsc/shim/collections"
+	"github.com/microsoft/TypeScript/tsc/shim/core"
+	"github.com/microsoft/TypeScript/tsc/shim/tsoptions"
+	"github.com/microsoft/TypeScript/tsc/shim/tspath"
 )
 
 // Register wires Effect-specific tsconfig merge hooks into TypeScript-Go.

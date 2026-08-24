@@ -2,7 +2,7 @@
 package typeparser
 
 import (
-	"github.com/microsoft/typescript-go/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
 )
 
 // EffectGenCallResult represents a parsed Effect.gen(...) call.

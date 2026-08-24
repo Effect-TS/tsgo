@@ -4,8 +4,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
 
 var effectModuleDescriptor = newPackageSourceFileDescriptor("effect", isEffectTypeSourceFile)

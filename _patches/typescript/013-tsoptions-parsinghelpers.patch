@@ -1,0 +1,69 @@
+diff --git a/tsc/internal/tsoptions/parsinghelpers.go b/tsc/internal/tsoptions/parsinghelpers.go
+index fa7491b1..c02dbdca 100644
+--- a/tsc/internal/tsoptions/parsinghelpers.go
++++ b/tsc/internal/tsoptions/parsinghelpers.go
+@@ -4,6 +4,7 @@ import (
+ 	"reflect"
+ 	"strings"
+ 
++	"github.com/effect-ts/tsgo/etscore"
+ 	"github.com/microsoft/TypeScript/tsc/internal/ast"
+ 	"github.com/microsoft/TypeScript/tsc/internal/collections"
+ 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
+@@ -13,6 +14,16 @@ import (
+ 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+ )
+ 
++// MergeCompilerOptionsCallback is invoked after the standard compiler option
++// merge, allowing external integrations to customize merging for custom fields.
++var MergeCompilerOptionsCallback func(targetOptions, sourceOptions *core.CompilerOptions, rawSource any, sourceConfigPath string, basePath string)
++
++// RegisterMergeCompilerOptionsCallback registers a callback invoked after
++// standard compiler option merging.
++func RegisterMergeCompilerOptionsCallback(cb func(targetOptions, sourceOptions *core.CompilerOptions, rawSource any, sourceConfigPath string, basePath string)) {
++	MergeCompilerOptionsCallback = cb
++}
++
+ func ParseTristate(value any) core.Tristate {
+ 	if value == nil {
+ 		return core.TSUnknown
+@@ -548,6 +559,9 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
+ 		allOptions.Quiet = ParseTristate(value)
+ 	case "checkers":
+ 		allOptions.Checkers = parseNumber(value)
++	case "plugins":
++		// Parse @effect/language-service plugin configuration.
++		allOptions.Effect = etscore.ParseFromPlugins(value)
+ 	case "runExternalCode":
+ 		allOptions.RunExternalCode = ParseTristate(value)
+ 	default:
+@@ -645,7 +659,7 @@ func ParseBuildOptions(key string, value any, allOptions *core.BuildOptions) []*
+ // with optional awareness of explicitly set null values in the raw JSON.
+ // Fields in the source options will overwrite the corresponding fields in the target options,
+ // including when they are explicitly set to null in the raw configuration (if rawSource is provided).
+-func mergeCompilerOptions(targetOptions, sourceOptions *core.CompilerOptions, rawSource any) *core.CompilerOptions {
++func mergeCompilerOptions(targetOptions, sourceOptions *core.CompilerOptions, rawSource any, sourceConfigPath string, basePath string) *core.CompilerOptions {
+ 	if sourceOptions == nil {
+ 		return targetOptions
+ 	}
+@@ -675,6 +689,9 @@ func mergeCompilerOptions(targetOptions, sourceOptions *core.CompilerOptions, ra
+ 	for i := range targetValue.NumField() {
+ 		targetField := targetValue.Field(i)
+ 		sourceField := sourceValue.Field(i)
++		if targetType.Field(i).Name == "Effect" {
++			continue
++		}
+ 
+ 		// Get the JSON field name for this struct field and check if it's explicitly null
+ 		if jsonTag := targetType.Field(i).Tag.Get("json"); jsonTag != "" {
+@@ -690,6 +707,10 @@ func mergeCompilerOptions(targetOptions, sourceOptions *core.CompilerOptions, ra
+ 		}
+ 	}
+ 
++	if MergeCompilerOptionsCallback != nil {
++		MergeCompilerOptionsCallback(targetOptions, sourceOptions, rawSource, sourceConfigPath, basePath)
++	}
++
+ 	return targetOptions
+ }
+ 
