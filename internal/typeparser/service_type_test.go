@@ -4,8 +4,8 @@ import (
 	"testing"
 
 	"github.com/effect-ts/tsgo/internal/bundledeffect"
-	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
 
 func TestServiceType_V4ServiceShape(t *testing.T) {

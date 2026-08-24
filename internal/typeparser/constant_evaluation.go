@@ -1,10 +1,10 @@
 package typeparser
 
 import (
-	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
-	"github.com/microsoft/typescript-go/shim/evaluator"
-	"github.com/microsoft/typescript-go/shim/jsnum"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/checker"
+	"github.com/microsoft/TypeScript/tsc/shim/evaluator"
+	"github.com/microsoft/TypeScript/tsc/shim/jsnum"
 )
 
 // EvaluateConstantExpression evaluates the subset of JavaScript expressions

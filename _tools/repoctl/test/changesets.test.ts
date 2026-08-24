@@ -64,7 +64,7 @@ test("generates the supported package versions README section", async() => {
     mkdirSync(join(repository, "_packages", "tsgo"), { recursive: true })
     writeFileSync(join(repository, "_packages", "tsgo", "package.json"), JSON.stringify({ version: "1.2.3" }))
     writeFileSync(join(repository, "_packages", "tsgo", "upstream.json"), JSON.stringify({
-      schemaVersion: 4,
+      schemaVersion: 5,
       tags: {
         typescript: { latest: "7.0.2", next: "7.1.0-dev.10" },
         oxlint: { latest: "1.10.0" },
@@ -72,9 +72,9 @@ test("generates the supported package versions README section", async() => {
       },
       components: {
         typescript: {
-          "7.1.0-dev.10": { gitHead: "2222222222222222222222222222222222222222" },
-          "7.1.0-dev.2": { gitHead: "6666666666666666666666666666666666666666" },
-          "7.0.2": { gitHead: "1111111111111111111111111111111111111111" }
+          "7.1.0-dev.10": { gitHead: "2222222222222222222222222222222222222222", provider: "typescript" },
+          "7.1.0-dev.2": { gitHead: "6666666666666666666666666666666666666666", provider: "typescript" },
+          "7.0.2": { gitHead: "1111111111111111111111111111111111111111", provider: "typescript-go" }
         },
         oxlint: {
           "1.10.0": { gitHead: "4444444444444444444444444444444444444444" },

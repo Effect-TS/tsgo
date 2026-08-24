@@ -4,14 +4,14 @@
 package locale
 
 import "context"
-import "github.com/microsoft/typescript-go/internal/locale"
+import "github.com/microsoft/TypeScript/tsc/internal/locale"
 import _ "unsafe"
 
 var Default = locale.Default
-//go:linkname FromContext github.com/microsoft/typescript-go/internal/locale.FromContext
+//go:linkname FromContext github.com/microsoft/TypeScript/tsc/internal/locale.FromContext
 func FromContext(ctx context.Context) locale.Locale
 type Locale = locale.Locale
-//go:linkname Parse github.com/microsoft/typescript-go/internal/locale.Parse
+//go:linkname Parse github.com/microsoft/TypeScript/tsc/internal/locale.Parse
 func Parse(localeStr string) (locale locale.Locale, ok bool)
-//go:linkname WithLocale github.com/microsoft/typescript-go/internal/locale.WithLocale
+//go:linkname WithLocale github.com/microsoft/TypeScript/tsc/internal/locale.WithLocale
 func WithLocale(ctx context.Context, locale locale.Locale) context.Context

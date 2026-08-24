@@ -1,6 +1,6 @@
 package typeparser
 
-import "github.com/microsoft/typescript-go/shim/ast"
+import "github.com/microsoft/TypeScript/tsc/shim/ast"
 
 var vitestRunnerPackageDescriptor = newPackageSourceFileDescriptor("@vitest/runner", nil)
 

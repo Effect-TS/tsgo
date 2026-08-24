@@ -3,13 +3,15 @@
 
 package tsc
 
-import "github.com/microsoft/typescript-go/internal/ast"
-import "github.com/microsoft/typescript-go/internal/collections"
-import "github.com/microsoft/typescript-go/internal/core"
-import "github.com/microsoft/typescript-go/internal/diagnostics"
-import "github.com/microsoft/typescript-go/internal/execute/tsc"
-import "github.com/microsoft/typescript-go/internal/locale"
-import "github.com/microsoft/typescript-go/internal/tsoptions"
+import "context"
+import "github.com/microsoft/TypeScript/tsc/internal/ast"
+import "github.com/microsoft/TypeScript/tsc/internal/collections"
+import "github.com/microsoft/TypeScript/tsc/internal/contentmapper"
+import "github.com/microsoft/TypeScript/tsc/internal/core"
+import "github.com/microsoft/TypeScript/tsc/internal/diagnostics"
+import "github.com/microsoft/TypeScript/tsc/internal/execute/tsc"
+import "github.com/microsoft/TypeScript/tsc/internal/locale"
+import "github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 import "io"
 import _ "unsafe"
 
@@ -17,19 +19,19 @@ type CommandLineResult = tsc.CommandLineResult
 type CommandLineTesting = tsc.CommandLineTesting
 type CompileAndEmitResult = tsc.CompileAndEmitResult
 type CompileTimes = tsc.CompileTimes
-//go:linkname CreateBuilderStatusReporter github.com/microsoft/typescript-go/internal/execute/tsc.CreateBuilderStatusReporter
+//go:linkname CreateBuilderStatusReporter github.com/microsoft/TypeScript/tsc/internal/execute/tsc.CreateBuilderStatusReporter
 func CreateBuilderStatusReporter(sys tsc.System, w io.Writer, locale locale.Locale, options *core.CompilerOptions, testing tsc.CommandLineTesting) tsc.DiagnosticReporter
-//go:linkname CreateDiagnosticReporter github.com/microsoft/typescript-go/internal/execute/tsc.CreateDiagnosticReporter
+//go:linkname CreateDiagnosticReporter github.com/microsoft/TypeScript/tsc/internal/execute/tsc.CreateDiagnosticReporter
 func CreateDiagnosticReporter(sys tsc.System, w io.Writer, locale locale.Locale, options *core.CompilerOptions) tsc.DiagnosticReporter
-//go:linkname CreateReportErrorSummary github.com/microsoft/typescript-go/internal/execute/tsc.CreateReportErrorSummary
+//go:linkname CreateReportErrorSummary github.com/microsoft/TypeScript/tsc/internal/execute/tsc.CreateReportErrorSummary
 func CreateReportErrorSummary(sys tsc.System, locale locale.Locale, options *core.CompilerOptions) tsc.DiagnosticsReporter
-//go:linkname CreateWatchStatusReporter github.com/microsoft/typescript-go/internal/execute/tsc.CreateWatchStatusReporter
+//go:linkname CreateWatchStatusReporter github.com/microsoft/TypeScript/tsc/internal/execute/tsc.CreateWatchStatusReporter
 func CreateWatchStatusReporter(sys tsc.System, locale locale.Locale, options *core.CompilerOptions, testing tsc.CommandLineTesting) tsc.DiagnosticReporter
 type DiagnosticReporter = tsc.DiagnosticReporter
 type DiagnosticsReporter = tsc.DiagnosticsReporter
-//go:linkname EmitAndReportStatistics github.com/microsoft/typescript-go/internal/execute/tsc.EmitAndReportStatistics
+//go:linkname EmitAndReportStatistics github.com/microsoft/TypeScript/tsc/internal/execute/tsc.EmitAndReportStatistics
 func EmitAndReportStatistics(input tsc.EmitInput) (tsc.CompileAndEmitResult, *tsc.Statistics)
-//go:linkname EmitFilesAndReportErrors github.com/microsoft/typescript-go/internal/execute/tsc.EmitFilesAndReportErrors
+//go:linkname EmitFilesAndReportErrors github.com/microsoft/TypeScript/tsc/internal/execute/tsc.EmitFilesAndReportErrors
 func EmitFilesAndReportErrors(input tsc.EmitInput) (result tsc.CompileAndEmitResult)
 type EmitInput = tsc.EmitInput
 type ExitStatus = tsc.ExitStatus
@@ -41,22 +43,24 @@ const ExitStatusProjectReferenceCycle_OutputsSkipped = tsc.ExitStatusProjectRefe
 const ExitStatusSuccess = tsc.ExitStatusSuccess
 type ExtendedConfigCache = tsc.ExtendedConfigCache
 var FilterDiagnosticsForExitCodeCallback = tsc.FilterDiagnosticsForExitCodeCallback
-//go:linkname GetTraceWithWriterFromSys github.com/microsoft/typescript-go/internal/execute/tsc.GetTraceWithWriterFromSys
+//go:linkname GetTraceWithWriterFromSys github.com/microsoft/TypeScript/tsc/internal/execute/tsc.GetTraceWithWriterFromSys
 func GetTraceWithWriterFromSys(w io.Writer, locale locale.Locale, testing tsc.CommandLineTesting) func(msg *diagnostics.Message, args ...any)
-//go:linkname PrintBuildHelp github.com/microsoft/typescript-go/internal/execute/tsc.PrintBuildHelp
+//go:linkname NewContentMapperHost github.com/microsoft/TypeScript/tsc/internal/execute/tsc.NewContentMapperHost
+func NewContentMapperHost(ctx context.Context, sys tsc.System, options *core.CompilerOptions) contentmapper.Host
+//go:linkname PrintBuildHelp github.com/microsoft/TypeScript/tsc/internal/execute/tsc.PrintBuildHelp
 func PrintBuildHelp(sys tsc.System, locale locale.Locale, buildOptions []*tsoptions.CommandLineOption)
-//go:linkname PrintHelp github.com/microsoft/typescript-go/internal/execute/tsc.PrintHelp
+//go:linkname PrintHelp github.com/microsoft/TypeScript/tsc/internal/execute/tsc.PrintHelp
 func PrintHelp(sys tsc.System, locale locale.Locale, commandLine *tsoptions.ParsedCommandLine)
-//go:linkname PrintVersion github.com/microsoft/typescript-go/internal/execute/tsc.PrintVersion
+//go:linkname PrintVersion github.com/microsoft/TypeScript/tsc/internal/execute/tsc.PrintVersion
 func PrintVersion(sys tsc.System, locale locale.Locale)
-//go:linkname QuietDiagnosticReporter github.com/microsoft/typescript-go/internal/execute/tsc.QuietDiagnosticReporter
+//go:linkname QuietDiagnosticReporter github.com/microsoft/TypeScript/tsc/internal/execute/tsc.QuietDiagnosticReporter
 func QuietDiagnosticReporter(diagnostic *ast.Diagnostic)
-//go:linkname QuietDiagnosticsReporter github.com/microsoft/typescript-go/internal/execute/tsc.QuietDiagnosticsReporter
+//go:linkname QuietDiagnosticsReporter github.com/microsoft/TypeScript/tsc/internal/execute/tsc.QuietDiagnosticsReporter
 func QuietDiagnosticsReporter(diagnostics []*ast.Diagnostic)
-//go:linkname RegisterFilterDiagnosticsForExitCodeCallback github.com/microsoft/typescript-go/internal/execute/tsc.RegisterFilterDiagnosticsForExitCodeCallback
+//go:linkname RegisterFilterDiagnosticsForExitCodeCallback github.com/microsoft/TypeScript/tsc/internal/execute/tsc.RegisterFilterDiagnosticsForExitCodeCallback
 func RegisterFilterDiagnosticsForExitCodeCallback(cb func(*core.CompilerOptions, []*ast.Diagnostic) []*ast.Diagnostic)
 type Statistics = tsc.Statistics
 type System = tsc.System
 type Watcher = tsc.Watcher
-//go:linkname WriteConfigFile github.com/microsoft/typescript-go/internal/execute/tsc.WriteConfigFile
+//go:linkname WriteConfigFile github.com/microsoft/TypeScript/tsc/internal/execute/tsc.WriteConfigFile
 func WriteConfigFile(sys tsc.System, locale locale.Locale, reportDiagnostic tsc.DiagnosticReporter, options *collections.OrderedMap[string, any])

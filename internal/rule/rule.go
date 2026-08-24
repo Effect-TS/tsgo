@@ -5,7 +5,7 @@ import (
 	"slices"
 
 	"github.com/effect-ts/tsgo/etscore"
-	"github.com/microsoft/typescript-go/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
 )
 
 // Rule defines a diagnostic rule with its metadata and check function.

@@ -3,13 +3,13 @@
 
 package testutil
 
-import _ "github.com/microsoft/typescript-go/internal/testutil"
+import _ "github.com/microsoft/TypeScript/tsc/internal/testutil"
 import "testing"
 import _ "unsafe"
 
-//go:linkname AssertPanics github.com/microsoft/typescript-go/internal/testutil.AssertPanics
+//go:linkname AssertPanics github.com/microsoft/TypeScript/tsc/internal/testutil.AssertPanics
 func AssertPanics(tb testing.TB, fn func(), expected any, msgAndArgs ...any)
-//go:linkname RecoverAndFail github.com/microsoft/typescript-go/internal/testutil.RecoverAndFail
+//go:linkname RecoverAndFail github.com/microsoft/TypeScript/tsc/internal/testutil.RecoverAndFail
 func RecoverAndFail(t *testing.T, msg string)
-//go:linkname TestProgramIsSingleThreaded github.com/microsoft/typescript-go/internal/testutil.TestProgramIsSingleThreaded
+//go:linkname TestProgramIsSingleThreaded github.com/microsoft/TypeScript/tsc/internal/testutil.TestProgramIsSingleThreaded
 func TestProgramIsSingleThreaded() bool

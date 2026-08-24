@@ -31,7 +31,7 @@ import { assembleReleaseArtifacts, bundleUpstream, preparePlatformPackages } fro
 import { prepareTsgolintComponent, validateOxlintComponent } from "./oxlint.ts"
 import { cloneSubmodules, patchSubmodules } from "./submodules.ts"
 import { runTests } from "./tests.ts"
-import { updateUpstream } from "./upstream.ts"
+import { getComponent, readUpstream, updateUpstream } from "./upstream.ts"
 import { printUpstreamInfo } from "./upstreamResolve.ts"
 
 const repositoryRoot = fileURLToPath(new URL("../../..", import.meta.url))
@@ -51,15 +51,16 @@ const setup = Command.make("setup", {
     yield* prepareTsgolintComponent(repositoryRoot, {
       version: selected.version,
       gitHead: selected.gitHead,
-      typescriptGitHead: selected.typescript.gitHead
+      typescriptGitHead: selected.typescript.gitHead,
+      compiler: selected.typescript.source
     })
-    yield* generateTsgolintIntegration(repositoryRoot)
+    yield* generateTsgolintIntegration(repositoryRoot, selected.typescript.source)
   } else {
     if (selected.name === "oxlint") {
       yield* validateOxlintComponent(repositoryRoot, selected.version)
     }
-    yield* patchSubmodules(repositoryRoot)
-    yield* generateTypeScriptGoIntegration(repositoryRoot)
+    yield* patchSubmodules(repositoryRoot, selected.typescript.source)
+    yield* generateTypeScriptGoIntegration(repositoryRoot, selected.typescript.source)
     if (selected.name === "oxlint") {
       yield* generateOxlintEffectRules(repositoryRoot)
     }
@@ -74,7 +75,11 @@ const submodules = Command.make("submodules").pipe(
   Command.withSubcommands([setup])
 )
 
-const codegenTsgolint = Command.make("tsgolint", {}, () => generateTsgolintIntegration(repositoryRoot)).pipe(
+const codegenTsgolint = Command.make("tsgolint", {}, () => Effect.gen(function*() {
+  const upstream = yield* readUpstream(repositoryRoot)
+  const selected = yield* getComponent(upstream, "oxlint-tsgolint", upstream.tags["oxlint-tsgolint"].latest)
+  yield* generateTsgolintIntegration(repositoryRoot, selected.typescript.source)
+})).pipe(
   Command.withDescription("Generate the shared Go workspace and native tsgolint Effect rules")
 )
 

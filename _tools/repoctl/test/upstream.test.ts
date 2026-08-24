@@ -19,7 +19,7 @@ const secondRevision = "1123456789abcdef0123456789abcdef01234567"
 const thirdRevision = "2123456789abcdef0123456789abcdef01234567"
 
 const manifest = () => ({
-  schemaVersion: 4 as const,
+  schemaVersion: 5 as const,
   tags: {
     typescript: {
       latest: "7.0.0",
@@ -30,8 +30,8 @@ const manifest = () => ({
   },
   components: {
     typescript: {
-      "7.0.0": { gitHead: revision },
-      "7.1.0": { gitHead: secondRevision }
+      "7.0.0": { gitHead: revision, provider: "typescript-go" as const },
+      "7.1.0": { gitHead: secondRevision, provider: "typescript" as const }
     },
     "oxlint-tsgolint": {
       "7.0.1000": {
@@ -114,19 +114,67 @@ test("resolves component checkouts and defaults to TypeScript next", async() => 
     name: "typescript",
     version: "7.1.0",
     gitHead: secondRevision,
-    typescript: { version: "7.1.0", gitHead: secondRevision }
+    typescript: {
+      version: "7.1.0",
+      gitHead: secondRevision,
+      source: {
+        provider: "typescript",
+        repository: "https://github.com/microsoft/TypeScript.git",
+        repositorySlug: "microsoft/TypeScript",
+        checkoutDir: "typescript",
+        moduleDir: "tsc",
+        modulePrefix: "github.com/microsoft/TypeScript/tsc",
+        providerShimPrefix: "github.com/microsoft/TypeScript/tsc/shim",
+        shimOverlayDir: "_tools/gen_shims/providers/typescript",
+        patchDir: "_patches/typescript",
+        commandPath: "cmd/tsc",
+        tsgolintGitlink: "typescript"
+      }
+    }
   })
   assert.deepEqual(await Effect.runPromise(getComponent(upstream, "oxlint-tsgolint", "7.0.1000")), {
     name: "oxlint-tsgolint",
     version: "7.0.1000",
     gitHead: revision,
-    typescript: { version: "7.0.0", gitHead: revision }
+    typescript: {
+      version: "7.0.0",
+      gitHead: revision,
+      source: {
+        provider: "typescript-go",
+        repository: "https://github.com/microsoft/typescript-go.git",
+        repositorySlug: "microsoft/typescript-go",
+        checkoutDir: "typescript-go",
+        moduleDir: ".",
+        modulePrefix: "github.com/microsoft/typescript-go",
+        providerShimPrefix: "github.com/microsoft/typescript-go/shim",
+        shimOverlayDir: "_tools/gen_shims/providers/typescript-go",
+        patchDir: "_patches/typescript-go",
+        commandPath: "cmd/tsgo",
+        tsgolintGitlink: "typescript-go"
+      }
+    }
   })
   assert.deepEqual(await Effect.runPromise(getComponent(upstream, "oxlint", "1.0.0")), {
     name: "oxlint",
     version: "1.0.0",
     gitHead: revision,
-    typescript: { version: "7.1.0", gitHead: secondRevision }
+    typescript: {
+      version: "7.1.0",
+      gitHead: secondRevision,
+      source: {
+        provider: "typescript",
+        repository: "https://github.com/microsoft/TypeScript.git",
+        repositorySlug: "microsoft/TypeScript",
+        checkoutDir: "typescript",
+        moduleDir: "tsc",
+        modulePrefix: "github.com/microsoft/TypeScript/tsc",
+        providerShimPrefix: "github.com/microsoft/TypeScript/tsc/shim",
+        shimOverlayDir: "_tools/gen_shims/providers/typescript",
+        patchDir: "_patches/typescript",
+        commandPath: "cmd/tsc",
+        tsgolintGitlink: "typescript"
+      }
+    }
   })
   await assert.rejects(
     Effect.runPromise(getComponent(upstream, "oxlint")),
@@ -171,18 +219,18 @@ test("selects the latest npm version matching a dependency spec regardless of re
 
 test("builds deterministic normalized metadata and deduplicates components", () => {
   const upstream = buildUpstream({
-    next: { npmVersion: "7.1.0", gitHead: secondRevision },
-    latest: { npmVersion: "7.0.0", gitHead: revision },
+    next: { npmVersion: "7.1.0", gitHead: secondRevision, provider: "typescript" },
+    latest: { npmVersion: "7.0.0", gitHead: revision, provider: "typescript-go" },
     oxlint: {
       oxlint: { npmVersion: "1.77.0", gitHead: thirdRevision },
       tsgolint: { npmVersion: "7.0.2001", gitHead: secondRevision },
-      ts: { npmVersion: "7.0.0", gitHead: revision }
+      ts: { npmVersion: "7.0.0", gitHead: revision, provider: "typescript-go" }
     },
     vitePlus: {
       vitePlusVersion: "0.2.8",
       oxlint: { npmVersion: "1.76.0", gitHead: secondRevision },
       tsgolint: { npmVersion: "7.0.2001", gitHead: secondRevision },
-      ts: { npmVersion: "7.0.0", gitHead: revision }
+      ts: { npmVersion: "7.0.0", gitHead: revision, provider: "typescript-go" }
     }
   })
 
@@ -213,10 +261,13 @@ test("finds a TypeScript npm version by its git head", () => {
 test("describes upstream version and TypeScript-Go commit updates", () => {
   const before = manifest()
   const after = manifest()
-  const afterTypeScript = after.components.typescript as Record<string, { gitHead: string }>
+  const afterTypeScript = after.components.typescript as Record<string, {
+    gitHead: string
+    provider: "typescript-go" | "typescript"
+  }>
   const afterOxlint = after.components.oxlint as Record<string, { gitHead: string }>
   after.tags.typescript.next = "7.2.0"
-  afterTypeScript["7.2.0"] = { gitHead: thirdRevision }
+  afterTypeScript["7.2.0"] = { gitHead: thirdRevision, provider: "typescript" }
   after.tags.oxlint.latest = "1.2.0"
   afterOxlint["1.2.0"] = { gitHead: thirdRevision }
   after.profiles[0]!.description = "Vite+ 1.1.0 compatibility runtime"
@@ -238,15 +289,15 @@ test("describes upstream version and TypeScript-Go commit updates", () => {
     "- Vite+: [`vite-plus@latest`](https://www.npmjs.com/package/vite-plus/v/1.1.0) `1.0.0` -> `1.1.0`",
     "- Vite+ Oxlint runtime: [`oxlint`](https://www.npmjs.com/package/oxlint/v/1.2.0) `1.0.0` -> `1.2.0`",
     "",
-    "## TypeScript-Go",
+    "## TypeScript compiler",
     "",
-    `- Previous commit: [\`${secondRevision}\`](https://github.com/microsoft/typescript-go/commit/${secondRevision})`,
-    `- Updated commit: [\`${thirdRevision}\`](https://github.com/microsoft/typescript-go/commit/${thirdRevision})`,
-    `- Compare: https://github.com/microsoft/typescript-go/compare/${secondRevision}...${thirdRevision}`,
+    `- Previous commit: [\`${secondRevision}\`](https://github.com/microsoft/TypeScript/commit/${secondRevision})`,
+    `- Updated commit: [\`${thirdRevision}\`](https://github.com/microsoft/TypeScript/commit/${thirdRevision})`,
+    `- Compare: https://github.com/microsoft/TypeScript/compare/${secondRevision}...${thirdRevision}`,
     "",
     "## Upstream commits",
     "",
-    `- [${thirdRevision.slice(0, 7)}](https://github.com/microsoft/typescript-go/commit/${thirdRevision}) Add a useful feature`,
+    `- [${thirdRevision.slice(0, 7)}](https://github.com/microsoft/TypeScript/commit/${thirdRevision}) Add a useful feature`,
     "",
     "## Other updates",
     "",

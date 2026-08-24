@@ -5,12 +5,12 @@ import (
 
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/schemagen"
-	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
-	"github.com/microsoft/typescript-go/shim/ls/change"
-	"github.com/microsoft/typescript-go/shim/ls/lsconv"
-	"github.com/microsoft/typescript-go/shim/ls/lsutil"
-	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/checker"
+	"github.com/microsoft/TypeScript/tsc/shim/ls/change"
+	"github.com/microsoft/TypeScript/tsc/shim/ls/lsconv"
+	"github.com/microsoft/TypeScript/tsc/shim/ls/lsutil"
+	"github.com/microsoft/TypeScript/tsc/shim/lsp/lsproto"
 )
 
 // RenderStructuralSchemaStatements converts a resolved TypeScript type into

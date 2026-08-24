@@ -5,6 +5,7 @@ import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
 import * as ChildProcessSpawner from "effect/unstable/process/ChildProcessSpawner"
 import { CommandError, runCommand, runCommandCaptureSplit } from "./process.ts"
+import { getComponent, readUpstream } from "./upstream.ts"
 
 const deadcodeVersion = "v0.48.0"
 
@@ -47,12 +48,17 @@ export const runDeadCode = Effect.fnUntraced(function*(repositoryRoot: string) {
   const allowlist = parseDeadCodeAllowlist(
     yield* fs.readFileString(path.join(repositoryRoot, "_tools", "deadcode-allow.txt"))
   )
+  const upstream = yield* readUpstream(repositoryRoot)
+  const compiler = (yield* getComponent(upstream, "typescript")).typescript.source
+  const entrypoint = [".", compiler.checkoutDir, compiler.moduleDir, compiler.commandPath]
+    .filter((part) => part !== ".")
+    .join("/")
   const args = [
     "run",
     `golang.org/x/tools/cmd/deadcode@${deadcodeVersion}`,
     "-test",
     "-filter=^github.com/effect-ts/tsgo($|/)",
-    "./typescript-go/cmd/tsgo",
+    `./${entrypoint}`,
     "./..."
   ]
   const result = yield* runCommandCaptureSplit("go", repositoryRoot, args, { CGO_ENABLED: "0" })

@@ -6,7 +6,7 @@ import (
 
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/pluginoptions"
-	"github.com/microsoft/typescript-go/shim/collections"
+	"github.com/microsoft/TypeScript/tsc/shim/collections"
 )
 
 // makePluginMap creates an *OrderedMap for testing with the given key-value pairs.

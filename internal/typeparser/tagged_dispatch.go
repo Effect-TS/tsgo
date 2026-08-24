@@ -1,6 +1,6 @@
 package typeparser
 
-import "github.com/microsoft/typescript-go/shim/ast"
+import "github.com/microsoft/TypeScript/tsc/shim/ast"
 
 // TaggedDispatchBranch is one string-literal branch in a decoded _tag dispatch.
 type TaggedDispatchBranch struct {

@@ -3,20 +3,20 @@
 
 package sourcemap
 
-import "github.com/microsoft/typescript-go/internal/core"
-import "github.com/microsoft/typescript-go/internal/sourcemap"
-import "github.com/microsoft/typescript-go/internal/tspath"
+import "github.com/microsoft/TypeScript/tsc/internal/core"
+import "github.com/microsoft/TypeScript/tsc/internal/sourcemap"
+import "github.com/microsoft/TypeScript/tsc/internal/tspath"
 import _ "unsafe"
 
-//go:linkname CreateECMALineInfo github.com/microsoft/typescript-go/internal/sourcemap.CreateECMALineInfo
+//go:linkname CreateECMALineInfo github.com/microsoft/TypeScript/tsc/internal/sourcemap.CreateECMALineInfo
 func CreateECMALineInfo(text string, lineStarts core.ECMALineStarts) *sourcemap.ECMALineInfo
-//go:linkname DecodeMappings github.com/microsoft/typescript-go/internal/sourcemap.DecodeMappings
+//go:linkname DecodeMappings github.com/microsoft/TypeScript/tsc/internal/sourcemap.DecodeMappings
 func DecodeMappings(mappings string) *sourcemap.MappingsDecoder
 type DocumentPosition = sourcemap.DocumentPosition
 type DocumentPositionMapper = sourcemap.DocumentPositionMapper
 type ECMALineInfo = sourcemap.ECMALineInfo
 type Generator = sourcemap.Generator
-//go:linkname GetDocumentPositionMapper github.com/microsoft/typescript-go/internal/sourcemap.GetDocumentPositionMapper
+//go:linkname GetDocumentPositionMapper github.com/microsoft/TypeScript/tsc/internal/sourcemap.GetDocumentPositionMapper
 func GetDocumentPositionMapper(host sourcemap.Host, generatedFileName string) *sourcemap.DocumentPositionMapper
 type Host = sourcemap.Host
 type MappedPosition = sourcemap.MappedPosition
@@ -27,11 +27,11 @@ const MissingName = sourcemap.MissingName
 const MissingSource = sourcemap.MissingSource
 const MissingUTF16Column = sourcemap.MissingUTF16Column
 type NameIndex = sourcemap.NameIndex
-//go:linkname NewGenerator github.com/microsoft/typescript-go/internal/sourcemap.NewGenerator
+//go:linkname NewGenerator github.com/microsoft/TypeScript/tsc/internal/sourcemap.NewGenerator
 func NewGenerator(file string, sourceRoot string, sourcesDirectoryPath string, options tspath.ComparePathsOptions) *sourcemap.Generator
 type RawSourceMap = sourcemap.RawSourceMap
 type Source = sourcemap.Source
 type SourceIndex = sourcemap.SourceIndex
 type SourceMappedPosition = sourcemap.SourceMappedPosition
-//go:linkname TryGetSourceMappingURL github.com/microsoft/typescript-go/internal/sourcemap.TryGetSourceMappingURL
+//go:linkname TryGetSourceMappingURL github.com/microsoft/TypeScript/tsc/internal/sourcemap.TryGetSourceMappingURL
 func TryGetSourceMappingURL(lineInfo *sourcemap.ECMALineInfo) string

@@ -3,13 +3,15 @@
 
 package project
 
-import "github.com/microsoft/typescript-go/internal/ast"
-import "github.com/microsoft/typescript-go/internal/core"
-import "github.com/microsoft/typescript-go/internal/ls/autoimport"
-import "github.com/microsoft/typescript-go/internal/ls/lsutil"
-import "github.com/microsoft/typescript-go/internal/project"
-import "github.com/microsoft/typescript-go/internal/project/logging"
-import "github.com/microsoft/typescript-go/internal/tspath"
+import "github.com/microsoft/TypeScript/tsc/internal/ast"
+import "github.com/microsoft/TypeScript/tsc/internal/contentmapper"
+import "github.com/microsoft/TypeScript/tsc/internal/core"
+import "github.com/microsoft/TypeScript/tsc/internal/ls/autoimport"
+import "github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
+import "github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+import "github.com/microsoft/TypeScript/tsc/internal/project"
+import "github.com/microsoft/TypeScript/tsc/internal/project/logging"
+import "github.com/microsoft/TypeScript/tsc/internal/tspath"
 import "github.com/zeebo/xxh3"
 import _ "unsafe"
 
@@ -19,7 +21,11 @@ type ATAStateChange = project.ATAStateChange
 type CheckerPoolOptions = project.CheckerPoolOptions
 type Client = project.Client
 type ConfigFileRegistry = project.ConfigFileRegistry
+type ContentMappedParseCache = project.ContentMappedParseCache
+type ContentMappedParseCacheKey = project.ContentMappedParseCacheKey
+type ContentMapperContributions = project.ContentMapperContributions
 type CreateProgramResult = project.CreateProgramResult
+var ErrNoProjectForUnknownScriptKind = project.ErrNoProjectForUnknownScriptKind
 type ExtendedConfigCache = project.ExtendedConfigCache
 type ExtendedConfigCacheEntry = project.ExtendedConfigCacheEntry
 type ExtendedConfigParseArgs = project.ExtendedConfigParseArgs
@@ -39,22 +45,26 @@ type FileSource = project.FileSource
 type Kind = project.Kind
 const KindConfigured = project.KindConfigured
 const KindInferred = project.KindInferred
-//go:linkname NewConfiguredProject github.com/microsoft/typescript-go/internal/project.NewConfiguredProject
+//go:linkname NewConfiguredProject github.com/microsoft/TypeScript/tsc/internal/project.NewConfiguredProject
 func NewConfiguredProject(configFileName string, configFilePath tspath.Path, builder *project.ProjectCollectionBuilder, logger *logging.LogTree) *project.Project
-//go:linkname NewExtendedConfigCache github.com/microsoft/typescript-go/internal/project.NewExtendedConfigCache
+//go:linkname NewContentMappedParseCache github.com/microsoft/TypeScript/tsc/internal/project.NewContentMappedParseCache
+func NewContentMappedParseCache(options project.RefCountCacheOptions) *project.ContentMappedParseCache
+//go:linkname NewExtendedConfigCache github.com/microsoft/TypeScript/tsc/internal/project.NewExtendedConfigCache
 func NewExtendedConfigCache() *project.ExtendedConfigCache
-//go:linkname NewInferredProject github.com/microsoft/typescript-go/internal/project.NewInferredProject
-func NewInferredProject(currentDirectory string, compilerOptions *core.CompilerOptions, rootFileNames []string, builder *project.ProjectCollectionBuilder, logger *logging.LogTree) *project.Project
-//go:linkname NewParseCache github.com/microsoft/typescript-go/internal/project.NewParseCache
+//go:linkname NewInferredProject github.com/microsoft/TypeScript/tsc/internal/project.NewInferredProject
+func NewInferredProject(currentDirectory string, compilerOptions *core.CompilerOptions, rootFileNames []string, contentMappers []*contentmapper.Mapper, builder *project.ProjectCollectionBuilder, logger *logging.LogTree) *project.Project
+//go:linkname NewParseCache github.com/microsoft/TypeScript/tsc/internal/project.NewParseCache
 func NewParseCache(options project.RefCountCacheOptions) *project.ParseCache
-//go:linkname NewParseCacheKey github.com/microsoft/typescript-go/internal/project.NewParseCacheKey
+//go:linkname NewParseCacheKey github.com/microsoft/TypeScript/tsc/internal/project.NewParseCacheKey
 func NewParseCacheKey(options ast.SourceFileParseOptions, hash xxh3.Uint128, scriptKind core.ScriptKind) project.ParseCacheKey
-//go:linkname NewProject github.com/microsoft/typescript-go/internal/project.NewProject
+//go:linkname NewProject github.com/microsoft/TypeScript/tsc/internal/project.NewProject
 func NewProject(configFileName string, kind project.Kind, currentDirectory string, builder *project.ProjectCollectionBuilder, logger *logging.LogTree) *project.Project
-//go:linkname NewSession github.com/microsoft/typescript-go/internal/project.NewSession
+//go:linkname NewSession github.com/microsoft/TypeScript/tsc/internal/project.NewSession
 func NewSession(init *project.SessionInit) *project.Session
-//go:linkname NewSnapshot github.com/microsoft/typescript-go/internal/project.NewSnapshot
+//go:linkname NewSnapshot github.com/microsoft/TypeScript/tsc/internal/project.NewSnapshot
 func NewSnapshot(id uint64, fs *project.SnapshotFS, sessionOptions *project.SessionOptions, configFileRegistry *project.ConfigFileRegistry, compilerOptionsForInferredProjects *core.CompilerOptions, userPreferences lsutil.UserPreferences, autoImports *autoimport.Registry, autoImportsWatch *project.WatchedFiles[map[tspath.Path]string], toPath func(fileName string) tspath.Path) *project.Snapshot
+//go:linkname NewWatchedFilesForPaths github.com/microsoft/TypeScript/tsc/internal/project.NewWatchedFilesForPaths
+func NewWatchedFilesForPaths(name string, watchKind lsproto.WatchKind, hasRelativePatternCapability bool, workspaceDirectory string, currentDirectory string, useCaseSensitiveFileNames bool) *project.WatchedFiles[[]string]
 type Overlay = project.Overlay
 type OwnerCache[K comparable, V, LoadArgs any] = project.OwnerCache[K,V,LoadArgs]
 type ParseCache = project.ParseCache
@@ -87,6 +97,7 @@ type TestConfigFileNamesEntry = project.TestConfigFileNamesEntry
 type UpdateReason = project.UpdateReason
 const UpdateReasonDidChangeCompilerOptionsForInferredProjects = project.UpdateReasonDidChangeCompilerOptionsForInferredProjects
 const UpdateReasonDidChangeConfigFile = project.UpdateReasonDidChangeConfigFile
+const UpdateReasonDidChangeContentMapperContributions = project.UpdateReasonDidChangeContentMapperContributions
 const UpdateReasonDidCloseFile = project.UpdateReasonDidCloseFile
 const UpdateReasonDidOpenFile = project.UpdateReasonDidOpenFile
 const UpdateReasonIdleCleanDiskCache = project.UpdateReasonIdleCleanDiskCache

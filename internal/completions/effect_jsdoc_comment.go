@@ -2,7 +2,7 @@ package completions
 
 import (
 	"github.com/effect-ts/tsgo/internal/completion"
-	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/shim/lsp/lsproto"
 )
 
 // effectJsdocComment provides completion for @effect-identifier

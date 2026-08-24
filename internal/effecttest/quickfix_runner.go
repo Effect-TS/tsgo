@@ -7,9 +7,9 @@ import (
 	"testing"
 
 	"github.com/effect-ts/tsgo/internal/bundledeffect"
-	"github.com/microsoft/typescript-go/shim/fourslash"
-	"github.com/microsoft/typescript-go/shim/ls/lsconv"
-	"github.com/microsoft/typescript-go/shim/tspath"
+	"github.com/microsoft/TypeScript/tsc/shim/fourslash"
+	"github.com/microsoft/TypeScript/tsc/shim/ls/lsconv"
+	"github.com/microsoft/TypeScript/tsc/shim/tspath"
 )
 
 // isDisableStyleFix returns true if the fix title matches the disable-style pattern:

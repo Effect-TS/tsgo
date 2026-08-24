@@ -5,8 +5,8 @@ import (
 
 	"github.com/effect-ts/tsgo/internal/graph"
 	"github.com/effect-ts/tsgo/internal/typeparser"
-	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
 
 // ExtractOutlineGraph builds a simplified dependency graph from the full layer graph.

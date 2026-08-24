@@ -7,6 +7,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"go/format"
 	"go/parser"
 	"go/token"
 	"go/types"
@@ -29,15 +30,17 @@ import (
 	"golang.org/x/tools/go/packages"
 )
 
-const tsgoInternalPrefix = "github.com/microsoft/typescript-go/internal/"
+var tsgoInternalPrefix = "github.com/microsoft/typescript-go/internal/"
 
 const generatedMarker = ".generated-by-gen-shims"
 
-const shimModulePrefix = "github.com/microsoft/typescript-go/shim"
+const canonicalShimModulePrefix = "github.com/microsoft/TypeScript/tsc/shim"
+
+var providerShimModulePrefix = "github.com/microsoft/typescript-go/shim"
 
 const shimCacheEnvironment = "TSGO_SHIM_CACHE_DIR"
 
-const shimCacheVersion = "v1"
+const shimCacheVersion = "v3"
 
 var packagesToShim = []string{
 	"api",
@@ -84,6 +87,24 @@ var packagesToShim = []string{
 	"vfs/iovfs",
 	"vfs/vfsmatch",
 	"vfs/osvfs",
+}
+
+var modernProviderDependencies = []string{
+	"contentmapper",
+	"jsonrpc",
+	"nodebuilder",
+	"printer",
+	"project/dirty",
+	"spanmap",
+	"tracing",
+}
+
+var legacyBackportDependencies = []string{
+	"jsonrpc",
+	"nodebuilder",
+	"printer",
+	"project/dirty",
+	"tracing",
 }
 
 type stringFlags []string
@@ -280,7 +301,11 @@ func isShimWorkPath(repositoryRoot, path string) (bool, error) {
 	return relative == "." || relative != ".." && !strings.HasPrefix(relative, ".."+string(filepath.Separator)) && !filepath.IsAbs(relative), nil
 }
 
-func updateGoWork(repositoryRoot string, content []byte, modules []string) ([]byte, error) {
+func updateGoWork(
+	repositoryRoot, sourceRoot, modulePrefix, providerShimPrefix string,
+	content []byte,
+	modules []string,
+) ([]byte, error) {
 	workFile, err := modfile.ParseWork("go.work", content, nil)
 	if err != nil {
 		return nil, fmt.Errorf("parse go.work: %w", err)
@@ -290,7 +315,14 @@ func updateGoWork(repositoryRoot string, content []byte, modules []string) ([]by
 		if err != nil {
 			return nil, fmt.Errorf("resolve go.work use %s: %w", use.Path, err)
 		}
-		if isShim {
+		resolvedUse := use.Path
+		if !filepath.IsAbs(resolvedUse) {
+			resolvedUse = filepath.Join(repositoryRoot, resolvedUse)
+		}
+		resolvedUse = filepath.Clean(resolvedUse)
+		legacyCompiler := filepath.Join(repositoryRoot, "typescript-go")
+		modernCompiler := filepath.Join(repositoryRoot, "typescript", "tsc")
+		if isShim || resolvedUse == legacyCompiler || resolvedUse == modernCompiler {
 			if err := workFile.DropUse(use.Path); err != nil {
 				return nil, fmt.Errorf("drop go.work use %s: %w", use.Path, err)
 			}
@@ -301,7 +333,9 @@ func updateGoWork(repositoryRoot string, content []byte, modules []string) ([]by
 		if err != nil {
 			return nil, fmt.Errorf("resolve go.work replacement %s: %w", replacement.New.Path, err)
 		}
-		if isShim || replacement.Old.Path == shimModulePrefix || strings.HasPrefix(replacement.Old.Path, shimModulePrefix+"/") {
+		if isShim || replacement.Old.Path == modulePrefix ||
+			replacement.Old.Path == canonicalShimModulePrefix || strings.HasPrefix(replacement.Old.Path, canonicalShimModulePrefix+"/") ||
+			replacement.Old.Path == providerShimPrefix || strings.HasPrefix(replacement.Old.Path, providerShimPrefix+"/") {
 			if err := workFile.DropReplace(replacement.Old.Path, replacement.Old.Version); err != nil {
 				return nil, fmt.Errorf("drop go.work replacement for %s: %w", replacement.Old.Path, err)
 			}
@@ -312,6 +346,42 @@ func updateGoWork(repositoryRoot string, content []byte, modules []string) ([]by
 	for _, module := range modules {
 		if err := workFile.AddUse("./shim/"+filepath.ToSlash(module), ""); err != nil {
 			return nil, fmt.Errorf("add go.work use for %s: %w", module, err)
+		}
+		if providerShimPrefix != canonicalShimModulePrefix {
+			if err := workFile.AddUse("./shim/_backport/"+filepath.ToSlash(module), ""); err != nil {
+				return nil, fmt.Errorf("add backport go.work use for %s: %w", module, err)
+			}
+		}
+	}
+	relativeSource, err := filepath.Rel(repositoryRoot, sourceRoot)
+	if err != nil {
+		return nil, fmt.Errorf("resolve compiler module path: %w", err)
+	}
+	if err := workFile.AddUse("./"+filepath.ToSlash(relativeSource), ""); err != nil {
+		return nil, fmt.Errorf("add compiler module to go.work: %w", err)
+	}
+	if err := workFile.AddReplace(modulePrefix, "v0.0.0", "./"+filepath.ToSlash(relativeSource), ""); err != nil {
+		return nil, fmt.Errorf("replace compiler module in go.work: %w", err)
+	}
+	for _, module := range modules {
+		module = filepath.ToSlash(module)
+		if err := workFile.AddReplace(
+			providerShimPrefix+"/"+module,
+			"v0.0.0",
+			"./shim/"+module,
+			"",
+		); err != nil {
+			return nil, fmt.Errorf("replace provider shim module %s in go.work: %w", module, err)
+		}
+		if providerShimPrefix != canonicalShimModulePrefix {
+			if err := workFile.AddReplace(
+				canonicalShimModulePrefix+"/"+module,
+				"v0.0.0",
+				"./shim/_backport/"+module,
+				"",
+			); err != nil {
+				return nil, fmt.Errorf("replace backport shim module %s in go.work: %w", module, err)
+			}
 		}
 	}
 	workFile.Cleanup()
@@ -445,10 +515,10 @@ func gitInputDigest(inputs []gitInput) (string, error) {
 	return fmt.Sprintf("%x", digest.Sum(nil)), nil
 }
 
-func shimInputDigest(repositoryRoot string, inputs shimInputs) (string, error) {
+func shimInputDigest(repositoryRoot, sourceRoot, modulePrefix, providerShimPrefix string, inputs shimInputs) (string, error) {
 	gitDigest, err := gitInputDigest([]gitInput{
 		{root: repositoryRoot, paths: []string{"_tools/gen_shims"}},
-		{root: filepath.Join(repositoryRoot, "typescript-go"), paths: []string{"."}, extensions: []string{".go", ".mod", ".sum"}},
+		{root: sourceRoot, paths: []string{"."}, extensions: []string{".go", ".mod", ".sum"}},
 	})
 	if err != nil {
 		return "", err
@@ -456,6 +526,11 @@ func shimInputDigest(repositoryRoot string, inputs shimInputs) (string, error) {
 	digest := sha256.New()
 	if err := writeHashValue(digest, gitDigest); err != nil {
 		return "", err
+	}
+	for _, value := range []string{modulePrefix, providerShimPrefix} {
+		if err := writeHashValue(digest, value); err != nil {
+			return "", err
+		}
 	}
 	for _, packagePath := range slices.Sorted(maps.Keys(inputs.extra)) {
 		data, err := json.Marshal(inputs.extra[packagePath])
@@ -568,7 +643,7 @@ func storeShimCache(cacheRoot, digest, outputRoot string) error {
 	return nil
 }
 
-func preparePackageLoad(repositoryRoot string) ([]string, string, error) {
+func preparePackageLoad(repositoryRoot, sourceRoot string) ([]string, string, error) {
 	etscoreModule := []byte("module github.com/effect-ts/tsgo/etscore\n\ngo 1.26\n")
 	etscoreSource := []byte(`package etscore
 
@@ -578,11 +653,11 @@ func ParseFromPlugins(any) *EffectPluginOptions { return nil }
 
 func EnterCommandLineMode() func() { return func() {} }
 `)
-	typescriptGoMod, err := os.ReadFile(filepath.Join(repositoryRoot, "typescript-go", "go.mod"))
+	typescriptGoMod, err := os.ReadFile(filepath.Join(sourceRoot, "go.mod"))
 	if err != nil {
 		return nil, "", err
 	}
-	typescriptGoSum, err := os.ReadFile(filepath.Join(repositoryRoot, "typescript-go", "go.sum"))
+	typescriptGoSum, err := os.ReadFile(filepath.Join(sourceRoot, "go.sum"))
 	if err != nil {
 		return nil, "", err
 	}
@@ -649,6 +724,73 @@ func resetOutputRoot(root string) error {
 	return os.MkdirAll(root, 0o755)
 }
 
+func rewriteImportPrefix(source []byte, fromPrefix, toPrefix string) ([]byte, error) {
+	fileSet := token.NewFileSet()
+	file, err := parser.ParseFile(fileSet, "shim.go", source, parser.ParseComments)
+	if err != nil {
+		return nil, err
+	}
+	for _, spec := range file.Imports {
+		path, err := strconv.Unquote(spec.Path.Value)
+		if err != nil {
+			return nil, err
+		}
+		if strings.HasPrefix(path, fromPrefix) {
+			spec.Path.Value = strconv.Quote(toPrefix + strings.TrimPrefix(path, fromPrefix))
+		}
+	}
+	var output bytes.Buffer
+	if err := format.Node(&output, fileSet, file); err != nil {
+		return nil, err
+	}
+	return output.Bytes(), nil
+}
+
+func generateBackport(providerRoot, backportRoot, providerInternalPrefix, providerShimPrefix string) error {
+	if err := filepath.WalkDir(providerRoot, func(path string, entry fs.DirEntry, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
+		if entry.IsDir() && path == backportRoot {
+			return filepath.SkipDir
+		}
+		if entry.IsDir() || filepath.Ext(entry.Name()) != ".go" {
+			return nil
+		}
+		relative, err := filepath.Rel(providerRoot, path)
+		if err != nil {
+			return err
+		}
+		source, err := os.ReadFile(path)
+		if err != nil {
+			return err
+		}
+		normalized, err := rewriteImportPrefix(source, providerInternalPrefix, providerShimPrefix+"/")
+		if err != nil {
+			return fmt.Errorf("normalize facade imports in %s: %w", relative, err)
+		}
+		if err := writeFile(filepath.Join(backportRoot, relative), normalized, 0o644); err != nil {
+			return err
+		}
+		return nil
+	}); err != nil {
+		return err
+	}
+	for _, modulePath := range modulePaths() {
+		goMod := fmt.Sprintf(
+			"module %s/%s\n\ngo 1.26\n\nrequire %s/%s v0.0.0\n",
+			canonicalShimModulePrefix,
+			filepath.ToSlash(modulePath),
+			providerShimPrefix,
+			filepath.ToSlash(modulePath),
+		)
+		if err := writeFile(filepath.Join(backportRoot, filepath.FromSlash(modulePath), "go.mod"), []byte(goMod), 0o644); err != nil {
+			return fmt.Errorf("write backport go.mod for %s: %w", modulePath, err)
+		}
+	}
+	return nil
+}
+
 func main() {
 	if err := run(); err != nil {
 		log.Fatal(err)
@@ -659,8 +801,14 @@ func run() error {
 	started := time.Now()
 	var extraShimRoots stringFlags
 	var disableCache bool
+	var modulePrefix string
+	var providerShimPrefix string
 	var repositoryRoot string
+	var sourceRoot string
 	flag.StringVar(&repositoryRoot, "repository-root", "", "path to the repository root")
+	flag.StringVar(&sourceRoot, "source-root", "", "path to the selected TypeScript Go module")
+	flag.StringVar(&modulePrefix, "module-prefix", "github.com/microsoft/typescript-go", "selected compiler module path")
+	flag.StringVar(&providerShimPrefix, "provider-shim-prefix", "github.com/microsoft/typescript-go/shim", "selected provider shim module prefix")
 	flag.Var(&extraShimRoots, "extra-shim-root", "additional shim config/helper root (repeatable)")
 	flag.BoolVar(&disableCache, "no-cache", false, "disable the generated shim cache")
 	flag.Parse()
@@ -679,7 +827,27 @@ func run() error {
 	if err != nil {
 		return fmt.Errorf("resolve repository root: %w", err)
 	}
+	if sourceRoot == "" {
+		sourceRoot = filepath.Join(repositoryRoot, "typescript-go")
+	} else if !filepath.IsAbs(sourceRoot) {
+		sourceRoot = filepath.Join(repositoryRoot, sourceRoot)
+	}
+	sourceRoot, err = filepath.Abs(sourceRoot)
+	if err != nil {
+		return fmt.Errorf("resolve compiler source root: %w", err)
+	}
+	modulePrefix = strings.TrimSuffix(modulePrefix, "/")
+	providerShimPrefix = strings.TrimSuffix(providerShimPrefix, "/")
+	if providerShimPrefix == canonicalShimModulePrefix {
+		packagesToShim = normalizeStrings(append(packagesToShim, modernProviderDependencies...))
+	} else {
+		packagesToShim = normalizeStrings(append(packagesToShim, legacyBackportDependencies...))
+	}
+	tsgoInternalPrefix = modulePrefix + "/internal/"
+	providerShimModulePrefix = providerShimPrefix
 	shimPath := filepath.Join(repositoryRoot, "shim")
+	providerPath := shimPath
+	backportPath := filepath.Join(shimPath, "_backport")
 	goWorkPath := filepath.Join(repositoryRoot, "go.work")
 	configRoot := filepath.Join(repositoryRoot, "_tools", "gen_shims", "config")
 	for index, root := range extraShimRoots {
@@ -695,7 +863,14 @@ func run() error {
 	if err != nil {
 		return err
 	}
-	updatedGoWork, err := updateGoWork(repositoryRoot, goWork, modulePaths())
+	updatedGoWork, err := updateGoWork(
+		repositoryRoot,
+		sourceRoot,
+		modulePrefix,
+		providerShimPrefix,
+		goWork,
+		modulePaths(),
+	)
 	if err != nil {
 		return err
 	}
@@ -710,7 +885,7 @@ func run() error {
 	}
 	cacheDigest := ""
 	if !disableCache {
-		cacheDigest, err = shimInputDigest(repositoryRoot, inputs)
+		cacheDigest, err = shimInputDigest(repositoryRoot, sourceRoot, modulePrefix, providerShimPrefix, inputs)
 		if err != nil {
 			fmt.Printf("Unable to compute shim cache key; generating shims: %v\n", err)
 			cacheDigest = ""
@@ -725,13 +900,13 @@ func run() error {
 		}
 	}
 
-	environment, modFile, err := preparePackageLoad(repositoryRoot)
+	environment, modFile, err := preparePackageLoad(repositoryRoot, sourceRoot)
 	if err != nil {
 		return fmt.Errorf("prepare TypeScript-Go package loading: %w", err)
 	}
 	loadStarted := time.Now()
 	loadedPackages, err := packages.Load(&packages.Config{
-		Dir:        filepath.Join(repositoryRoot, "typescript-go"),
+		Dir:        sourceRoot,
 		Env:        environment,
 		BuildFlags: []string{"-modfile=" + modFile},
 		Mode:       packages.LoadSyntax,
@@ -748,7 +923,19 @@ func run() error {
 	if err := resetOutputRoot(shimPath); err != nil {
 		return fmt.Errorf("reset shim output: %w", err)
 	}
-	if err := writeShimHelpers(shimPath, inputs.helpers); err != nil {
+	providerHelpers := make(map[string][]byte, len(inputs.helpers))
+	for relative, source := range inputs.helpers {
+		normalized, err := rewriteImportPrefix(
+			source,
+			"github.com/microsoft/typescript-go/internal/",
+			tsgoInternalPrefix,
+		)
+		if err != nil {
+			return fmt.Errorf("normalize provider helper %s: %w", relative, err)
+		}
+		providerHelpers[relative] = normalized
+	}
+	if err := writeShimHelpers(providerPath, providerHelpers); err != nil {
 		return err
 	}
 
@@ -758,7 +945,7 @@ func run() error {
 
 	for _, pkg := range loadedPackages {
 		packagePath := strings.TrimPrefix(pkg.PkgPath, tsgoInternalPrefix)
-		shimDirPath := filepath.Join(shimPath, filepath.FromSlash(packagePath))
+		shimDirPath := filepath.Join(providerPath, filepath.FromSlash(packagePath))
 		extraShim := inputs.extra[packagePath]
 		if extraShim.ExtraMethods == nil {
 			extraShim.ExtraMethods = map[string][]string{}
@@ -1156,9 +1343,14 @@ func run() error {
 	}
 
 	for _, modulePath := range modulePaths() {
-		goMod := fmt.Sprintf("module github.com/microsoft/typescript-go/shim/%s\n\ngo 1.26\n\nrequire github.com/microsoft/typescript-go v0.0.0\n", filepath.ToSlash(modulePath))
-		if err := writeFile(filepath.Join(shimPath, filepath.FromSlash(modulePath), "go.mod"), []byte(goMod), 0o644); err != nil {
+		goMod := fmt.Sprintf("module %s/%s\n\ngo 1.26\n\nrequire %s v0.0.0\n", providerShimModulePrefix, filepath.ToSlash(modulePath), modulePrefix)
+		if err := writeFile(filepath.Join(providerPath, filepath.FromSlash(modulePath), "go.mod"), []byte(goMod), 0o644); err != nil {
 			return fmt.Errorf("write go.mod for %s: %w", modulePath, err)
+		}
+	}
+	if providerShimPrefix != canonicalShimModulePrefix {
+		if err := generateBackport(providerPath, backportPath, tsgoInternalPrefix, providerShimPrefix); err != nil {
+			return fmt.Errorf("generate backport shim facade: %w", err)
 		}
 	}
 	if err := writeFile(filepath.Join(shimPath, generatedMarker), []byte("Generated by _tools/gen_shims. DO NOT EDIT.\n"), 0o644); err != nil {

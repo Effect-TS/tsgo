@@ -4,16 +4,17 @@
 package compiler
 
 import "context"
-import "github.com/microsoft/typescript-go/internal/ast"
-import "github.com/microsoft/typescript-go/internal/compiler"
-import "github.com/microsoft/typescript-go/internal/core"
-import "github.com/microsoft/typescript-go/internal/diagnostics"
-import "github.com/microsoft/typescript-go/internal/tsoptions"
-import "github.com/microsoft/typescript-go/internal/vfs"
+import "github.com/microsoft/TypeScript/tsc/internal/ast"
+import "github.com/microsoft/TypeScript/tsc/internal/compiler"
+import "github.com/microsoft/TypeScript/tsc/internal/contentmapper"
+import "github.com/microsoft/TypeScript/tsc/internal/core"
+import "github.com/microsoft/TypeScript/tsc/internal/diagnostics"
+import "github.com/microsoft/TypeScript/tsc/internal/tsoptions"
+import "github.com/microsoft/TypeScript/tsc/internal/vfs"
 import _ "unsafe"
 
 type CheckerPool = compiler.CheckerPool
-//go:linkname CombineEmitResults github.com/microsoft/typescript-go/internal/compiler.CombineEmitResults
+//go:linkname CombineEmitResults github.com/microsoft/TypeScript/tsc/internal/compiler.CombineEmitResults
 func CombineEmitResults(results []*compiler.EmitResult) *compiler.EmitResult
 type CompilerHost = compiler.CompilerHost
 type DuplicateSourceFile = compiler.DuplicateSourceFile
@@ -27,25 +28,23 @@ type EmitOptions = compiler.EmitOptions
 type EmitResult = compiler.EmitResult
 type FileIncludeReason = compiler.FileIncludeReason
 var FilterDiagnosticsForNoEmitOnErrorCallback = compiler.FilterDiagnosticsForNoEmitOnErrorCallback
-//go:linkname FilterNoEmitSemanticDiagnostics github.com/microsoft/typescript-go/internal/compiler.FilterNoEmitSemanticDiagnostics
+//go:linkname FilterNoEmitSemanticDiagnostics github.com/microsoft/TypeScript/tsc/internal/compiler.FilterNoEmitSemanticDiagnostics
 func FilterNoEmitSemanticDiagnostics(diagnostics []*ast.Diagnostic, options *core.CompilerOptions) []*ast.Diagnostic
-//go:linkname GetDiagnosticsOfAnyProgram github.com/microsoft/typescript-go/internal/compiler.GetDiagnosticsOfAnyProgram
+//go:linkname GetDiagnosticsOfAnyProgram github.com/microsoft/TypeScript/tsc/internal/compiler.GetDiagnosticsOfAnyProgram
 func GetDiagnosticsOfAnyProgram(ctx context.Context, program compiler.ProgramLike, files []*ast.SourceFile, skipNoEmitCheckForDtsDiagnostics bool, getBindDiagnostics func(context.Context, *ast.SourceFile) []*ast.Diagnostic, getSemanticDiagnostics func(context.Context, *ast.SourceFile) []*ast.Diagnostic) []*ast.Diagnostic
-//go:linkname HandleNoEmitOptions github.com/microsoft/typescript-go/internal/compiler.HandleNoEmitOptions
+//go:linkname HandleNoEmitOptions github.com/microsoft/TypeScript/tsc/internal/compiler.HandleNoEmitOptions
 func HandleNoEmitOptions(ctx context.Context, program compiler.ProgramLike, files []*ast.SourceFile, emitBuildInfo func() *compiler.EmitResult) *compiler.EmitResult
 type LibFile = compiler.LibFile
-//go:linkname NewCachedFSCompilerHost github.com/microsoft/typescript-go/internal/compiler.NewCachedFSCompilerHost
-func NewCachedFSCompilerHost(currentDirectory string, fs vfs.FS, defaultLibraryPath string, extendedConfigCache tsoptions.ExtendedConfigCache, trace func(msg *diagnostics.Message, args ...any)) compiler.CompilerHost
-//go:linkname NewCompilerHost github.com/microsoft/typescript-go/internal/compiler.NewCompilerHost
-func NewCompilerHost(currentDirectory string, fs vfs.FS, defaultLibraryPath string, extendedConfigCache tsoptions.ExtendedConfigCache, trace func(msg *diagnostics.Message, args ...any)) compiler.CompilerHost
-//go:linkname NewProgram github.com/microsoft/typescript-go/internal/compiler.NewProgram
+//go:linkname NewCachedFSCompilerHost github.com/microsoft/TypeScript/tsc/internal/compiler.NewCachedFSCompilerHost
+func NewCachedFSCompilerHost(currentDirectory string, fs vfs.FS, defaultLibraryPath string, extendedConfigCache tsoptions.ExtendedConfigCache, trace func(msg *diagnostics.Message, args ...any), contentMapperProject contentmapper.Project) compiler.CompilerHost
+//go:linkname NewProgram github.com/microsoft/TypeScript/tsc/internal/compiler.NewProgram
 func NewProgram(opts compiler.ProgramOptions) *compiler.Program
 type Program = compiler.Program
 type ProgramLike = compiler.ProgramLike
 type ProgramOptions = compiler.ProgramOptions
-//go:linkname RegisterFilterDiagnosticsForNoEmitOnErrorCallback github.com/microsoft/typescript-go/internal/compiler.RegisterFilterDiagnosticsForNoEmitOnErrorCallback
+//go:linkname RegisterFilterDiagnosticsForNoEmitOnErrorCallback github.com/microsoft/TypeScript/tsc/internal/compiler.RegisterFilterDiagnosticsForNoEmitOnErrorCallback
 func RegisterFilterDiagnosticsForNoEmitOnErrorCallback(cb func(*core.CompilerOptions, []*ast.Diagnostic) []*ast.Diagnostic)
-//go:linkname SortAndDeduplicateDiagnostics github.com/microsoft/typescript-go/internal/compiler.SortAndDeduplicateDiagnostics
+//go:linkname SortAndDeduplicateDiagnostics github.com/microsoft/TypeScript/tsc/internal/compiler.SortAndDeduplicateDiagnostics
 func SortAndDeduplicateDiagnostics(diagnostics []*ast.Diagnostic) []*ast.Diagnostic
 type SourceFileMayBeEmittedHost = compiler.SourceFileMayBeEmittedHost
 type SourceMapEmitResult = compiler.SourceMapEmitResult

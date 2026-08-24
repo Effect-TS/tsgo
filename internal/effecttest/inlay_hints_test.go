@@ -3,9 +3,9 @@ package effecttest_test
 import (
 	"testing"
 
-	"github.com/microsoft/typescript-go/shim/core"
-	"github.com/microsoft/typescript-go/shim/fourslash"
-	"github.com/microsoft/typescript-go/shim/ls/lsutil"
+	"github.com/microsoft/TypeScript/tsc/shim/core"
+	"github.com/microsoft/TypeScript/tsc/shim/fourslash"
+	"github.com/microsoft/TypeScript/tsc/shim/ls/lsutil"
 
 	_ "github.com/effect-ts/tsgo/etslshooks"
 	_ "github.com/effect-ts/tsgo/etstesthooks"

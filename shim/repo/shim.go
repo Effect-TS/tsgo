@@ -3,17 +3,10 @@
 
 package repo
 
-import "github.com/microsoft/typescript-go/internal/repo"
+import _ "github.com/microsoft/TypeScript/tsc/internal/repo"
 import _ "unsafe"
 
-//go:linkname RootPath github.com/microsoft/typescript-go/internal/repo.RootPath
+//go:linkname RootPath github.com/microsoft/TypeScript/tsc/internal/repo.RootPath
 func RootPath() string
-//go:linkname SkipIfNoTypeScriptSubmodule github.com/microsoft/typescript-go/internal/repo.SkipIfNoTypeScriptSubmodule
-func SkipIfNoTypeScriptSubmodule(t repo.SkippableTest)
-type SkippableTest = repo.SkippableTest
-//go:linkname TestDataPath github.com/microsoft/typescript-go/internal/repo.TestDataPath
+//go:linkname TestDataPath github.com/microsoft/TypeScript/tsc/internal/repo.TestDataPath
 func TestDataPath() string
-//go:linkname TypeScriptSubmoduleExists github.com/microsoft/typescript-go/internal/repo.TypeScriptSubmoduleExists
-func TypeScriptSubmoduleExists() bool
-//go:linkname TypeScriptSubmodulePath github.com/microsoft/typescript-go/internal/repo.TypeScriptSubmodulePath
-func TypeScriptSubmodulePath() string

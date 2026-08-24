@@ -4,8 +4,8 @@
 package lsproto
 
 import "context"
-import "github.com/microsoft/typescript-go/internal/jsonrpc"
-import "github.com/microsoft/typescript-go/internal/lsp/lsproto"
+import "github.com/microsoft/TypeScript/tsc/internal/jsonrpc"
+import "github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 import "io"
 import _ "unsafe"
 
@@ -179,11 +179,11 @@ type ColorPresentationResponse = lsproto.ColorPresentationResponse
 type Command = lsproto.Command
 type CommandOrCodeAction = lsproto.CommandOrCodeAction
 type CommandOrCodeActionArrayOrNull = lsproto.CommandOrCodeActionArrayOrNull
-//go:linkname CompareDiagnostics github.com/microsoft/typescript-go/internal/lsp/lsproto.CompareDiagnostics
+//go:linkname CompareDiagnostics github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto.CompareDiagnostics
 func CompareDiagnostics(list1 []*lsproto.Diagnostic, list2 []*lsproto.Diagnostic) ([]*lsproto.Diagnostic, []*lsproto.Diagnostic)
-//go:linkname ComparePositions github.com/microsoft/typescript-go/internal/lsp/lsproto.ComparePositions
+//go:linkname ComparePositions github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto.ComparePositions
 func ComparePositions(pos lsproto.Position, other lsproto.Position) int
-//go:linkname CompareRanges github.com/microsoft/typescript-go/internal/lsp/lsproto.CompareRanges
+//go:linkname CompareRanges github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto.CompareRanges
 func CompareRanges(lsRange lsproto.Range, other lsproto.Range) int
 type CompletionClientCapabilities = lsproto.CompletionClientCapabilities
 type CompletionContext = lsproto.CompletionContext
@@ -238,6 +238,8 @@ const CompletionTriggerKindTriggerForIncompleteCompletions = lsproto.CompletionT
 type ConfigurationItem = lsproto.ConfigurationItem
 type ConfigurationParams = lsproto.ConfigurationParams
 type ConfigurationResponse = lsproto.ConfigurationResponse
+type ContentMapperContribution = lsproto.ContentMapperContribution
+type ContentMapperManifest = lsproto.ContentMapperManifest
 type CreateFile = lsproto.CreateFile
 type CreateFileOptions = lsproto.CreateFileOptions
 type CreateFilesParams = lsproto.CreateFilesParams
@@ -249,6 +251,8 @@ type CustomProjectInfoResponse = lsproto.CustomProjectInfoResponse
 var CustomRunGCInfo = lsproto.CustomRunGCInfo
 var CustomSaveAllocProfileInfo = lsproto.CustomSaveAllocProfileInfo
 var CustomSaveHeapProfileInfo = lsproto.CustomSaveHeapProfileInfo
+var CustomSetContentMapperContributionsInfo = lsproto.CustomSetContentMapperContributionsInfo
+type CustomSetContentMapperContributionsResponse = lsproto.CustomSetContentMapperContributionsResponse
 var CustomSetLogVerbosityInfo = lsproto.CustomSetLogVerbosityInfo
 var CustomStartCPUProfileInfo = lsproto.CustomStartCPUProfileInfo
 var CustomStopCPUProfileInfo = lsproto.CustomStopCPUProfileInfo
@@ -421,7 +425,7 @@ type FormattingOptions = lsproto.FormattingOptions
 type FullDocumentDiagnosticReport = lsproto.FullDocumentDiagnosticReport
 type FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport = lsproto.FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport
 type GeneralClientCapabilities = lsproto.GeneralClientCapabilities
-//go:linkname GetClientCapabilities github.com/microsoft/typescript-go/internal/lsp/lsproto.GetClientCapabilities
+//go:linkname GetClientCapabilities github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto.GetClientCapabilities
 func GetClientCapabilities(ctx context.Context) *lsproto.ResolvedClientCapabilities
 type HasLocation = lsproto.HasLocation
 type HasLocations = lsproto.HasLocations
@@ -444,6 +448,7 @@ const ImportKindCommonJS = lsproto.ImportKindCommonJS
 const ImportKindDefault = lsproto.ImportKindDefault
 const ImportKindNamed = lsproto.ImportKindNamed
 const ImportKindNamespace = lsproto.ImportKindNamespace
+type InferredProjectContentMapperContribution = lsproto.InferredProjectContentMapperContribution
 type InitializationOptions = lsproto.InitializationOptions
 type InitializationOptionsOrNull = lsproto.InitializationOptionsOrNull
 type InitializeAPISessionParams = lsproto.InitializeAPISessionParams
@@ -623,6 +628,7 @@ const MethodCustomProjectInfo = lsproto.MethodCustomProjectInfo
 const MethodCustomRunGC = lsproto.MethodCustomRunGC
 const MethodCustomSaveAllocProfile = lsproto.MethodCustomSaveAllocProfile
 const MethodCustomSaveHeapProfile = lsproto.MethodCustomSaveHeapProfile
+const MethodCustomSetContentMapperContributions = lsproto.MethodCustomSetContentMapperContributions
 const MethodCustomSetLogVerbosity = lsproto.MethodCustomSetLogVerbosity
 const MethodCustomStartCPUProfile = lsproto.MethodCustomStartCPUProfile
 const MethodCustomStopCPUProfile = lsproto.MethodCustomStopCPUProfile
@@ -728,11 +734,11 @@ type MonikersOrNull = lsproto.MonikersOrNull
 type MultiDocumentHighlight = lsproto.MultiDocumentHighlight
 type MultiDocumentHighlightParams = lsproto.MultiDocumentHighlightParams
 type MultiDocumentHighlightsOrNull = lsproto.MultiDocumentHighlightsOrNull
-//go:linkname NewBaseReader github.com/microsoft/typescript-go/internal/lsp/lsproto.NewBaseReader
+//go:linkname NewBaseReader github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto.NewBaseReader
 func NewBaseReader(r io.Reader) *lsproto.BaseReader
-//go:linkname NewBaseWriter github.com/microsoft/typescript-go/internal/lsp/lsproto.NewBaseWriter
+//go:linkname NewBaseWriter github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto.NewBaseWriter
 func NewBaseWriter(w io.Writer) *lsproto.BaseWriter
-//go:linkname NewID github.com/microsoft/typescript-go/internal/lsp/lsproto.NewID
+//go:linkname NewID github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto.NewID
 func NewID(rawValue lsproto.IntegerOrString) *jsonrpc.ID
 type NoParams = lsproto.NoParams
 type NotificationInfo[Params any] = lsproto.NotificationInfo[Params]
@@ -748,7 +754,7 @@ type PositionEncodingKind = lsproto.PositionEncodingKind
 const PositionEncodingKindUTF16 = lsproto.PositionEncodingKindUTF16
 const PositionEncodingKindUTF32 = lsproto.PositionEncodingKindUTF32
 const PositionEncodingKindUTF8 = lsproto.PositionEncodingKindUTF8
-//go:linkname PreferredMarkupKind github.com/microsoft/typescript-go/internal/lsp/lsproto.PreferredMarkupKind
+//go:linkname PreferredMarkupKind github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto.PreferredMarkupKind
 func PreferredMarkupKind(formats []lsproto.MarkupKind) lsproto.MarkupKind
 type PrepareRenameDefaultBehavior = lsproto.PrepareRenameDefaultBehavior
 type PrepareRenameParams = lsproto.PrepareRenameParams
@@ -955,6 +961,7 @@ type SemanticTokensWorkspaceClientCapabilities = lsproto.SemanticTokensWorkspace
 type ServerCapabilities = lsproto.ServerCapabilities
 type ServerCompletionItemOptions = lsproto.ServerCompletionItemOptions
 type ServerInfo = lsproto.ServerInfo
+type SetContentMapperContributionsParams = lsproto.SetContentMapperContributionsParams
 type SetLogVerbosityParams = lsproto.SetLogVerbosityParams
 var SetTraceInfo = lsproto.SetTraceInfo
 type SetTraceParams = lsproto.SetTraceParams
@@ -1222,7 +1229,7 @@ var WindowShowMessageInfo = lsproto.WindowShowMessageInfo
 var WindowShowMessageRequestInfo = lsproto.WindowShowMessageRequestInfo
 var WindowWorkDoneProgressCancelInfo = lsproto.WindowWorkDoneProgressCancelInfo
 var WindowWorkDoneProgressCreateInfo = lsproto.WindowWorkDoneProgressCreateInfo
-//go:linkname WithClientCapabilities github.com/microsoft/typescript-go/internal/lsp/lsproto.WithClientCapabilities
+//go:linkname WithClientCapabilities github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto.WithClientCapabilities
 func WithClientCapabilities(ctx context.Context, caps *lsproto.ResolvedClientCapabilities) context.Context
 type WorkDoneProgressBegin = lsproto.WorkDoneProgressBegin
 type WorkDoneProgressBeginOrReportOrEnd = lsproto.WorkDoneProgressBeginOrReportOrEnd

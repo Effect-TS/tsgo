@@ -2,8 +2,8 @@ package etsgoapi
 
 import (
 	"github.com/effect-ts/tsgo/internal/layergraph"
-	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
 
 // LayerMagicNode represents a layer expression annotated with the combinator

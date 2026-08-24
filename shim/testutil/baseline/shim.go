@@ -3,17 +3,15 @@
 
 package baseline
 
-import "github.com/microsoft/typescript-go/internal/testutil/baseline"
+import "github.com/microsoft/TypeScript/tsc/internal/testutil/baseline"
 import "testing"
 import _ "unsafe"
 
-//go:linkname DiffText github.com/microsoft/typescript-go/internal/testutil/baseline.DiffText
+//go:linkname DiffText github.com/microsoft/TypeScript/tsc/internal/testutil/baseline.DiffText
 func DiffText(oldName string, newName string, expected string, actual string) string
 const NoContent = baseline.NoContent
 type Options = baseline.Options
-//go:linkname Run github.com/microsoft/typescript-go/internal/testutil/baseline.Run
+//go:linkname Run github.com/microsoft/TypeScript/tsc/internal/testutil/baseline.Run
 func Run(t *testing.T, fileName string, actual string, opts baseline.Options)
-//go:linkname RunAgainstSubmodule github.com/microsoft/typescript-go/internal/testutil/baseline.RunAgainstSubmodule
-func RunAgainstSubmodule(t *testing.T, fileName string, actual string, opts baseline.Options)
-//go:linkname Track github.com/microsoft/typescript-go/internal/testutil/baseline.Track
+//go:linkname Track github.com/microsoft/TypeScript/tsc/internal/testutil/baseline.Track
 func Track() func()

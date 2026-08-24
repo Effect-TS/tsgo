@@ -4,14 +4,14 @@
 package change
 
 import "context"
-import "github.com/microsoft/typescript-go/internal/ast"
-import "github.com/microsoft/typescript-go/internal/core"
-import "github.com/microsoft/typescript-go/internal/ls/change"
-import "github.com/microsoft/typescript-go/internal/ls/lsconv"
-import "github.com/microsoft/typescript-go/internal/ls/lsutil"
+import "github.com/microsoft/TypeScript/tsc/internal/ast"
+import "github.com/microsoft/TypeScript/tsc/internal/core"
+import "github.com/microsoft/TypeScript/tsc/internal/ls/change"
+import "github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
+import "github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 import _ "unsafe"
 
-//go:linkname GetFormatCodeSettingsForWriting github.com/microsoft/typescript-go/internal/ls/change.GetFormatCodeSettingsForWriting
+//go:linkname GetFormatCodeSettingsForWriting github.com/microsoft/TypeScript/tsc/internal/ls/change.GetFormatCodeSettingsForWriting
 func GetFormatCodeSettingsForWriting(options lsutil.FormatCodeSettings, sourceFile *ast.SourceFile) lsutil.FormatCodeSettings
 type LeadingTriviaOption = change.LeadingTriviaOption
 const LeadingTriviaOptionExclude = change.LeadingTriviaOptionExclude
@@ -19,11 +19,11 @@ const LeadingTriviaOptionIncludeAll = change.LeadingTriviaOptionIncludeAll
 const LeadingTriviaOptionJSDoc = change.LeadingTriviaOptionJSDoc
 const LeadingTriviaOptionNone = change.LeadingTriviaOptionNone
 const LeadingTriviaOptionStartLine = change.LeadingTriviaOptionStartLine
-//go:linkname NewTracker github.com/microsoft/typescript-go/internal/ls/change.NewTracker
+//go:linkname NewTracker github.com/microsoft/TypeScript/tsc/internal/ls/change.NewTracker
 func NewTracker(ctx context.Context, compilerOptions *core.CompilerOptions, formatOptions lsutil.FormatCodeSettings, converters *lsconv.Converters) *change.Tracker
 type NodeOptions = change.NodeOptions
 type Tracker = change.Tracker
-//go:linkname Tracker_getNonformattedText github.com/microsoft/typescript-go/internal/ls/change.(*Tracker).getNonformattedText
+//go:linkname Tracker_getNonformattedText github.com/microsoft/TypeScript/tsc/internal/ls/change.(*Tracker).getNonformattedText
 func Tracker_getNonformattedText(recv *change.Tracker, node *ast.Node, sourceFile *ast.SourceFile) (string, *ast.Node)
 type TrailingTriviaOption = change.TrailingTriviaOption
 const TrailingTriviaOptionExclude = change.TrailingTriviaOptionExclude
