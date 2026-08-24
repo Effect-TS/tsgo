@@ -5,13 +5,8 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
     nixpkgsUnstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     /* Source of truth: the next profile in `_packages/tsgo/upstream.json`. */
-    typescript-go-src = {
-      url = "github:microsoft/typescript-go/1bcfa18d79a3be41772223d5c05dfe4480e614ff?submodules=1";
-      flake = false;
-    };
-    /* Derived from the selected TypeScript-Go revision and recorded in the manifest. */
     typescript-src = {
-      url = "github:microsoft/TypeScript/5848bc5157b22ff7f4e3369f4645a514a433b15f";
+      url = "github:microsoft/TypeScript/d6c4afddb2c55f4a9dea7b59293a99a8fdea1799";
       flake = false;
     };
   };
@@ -22,7 +17,6 @@
       nixpkgs,
       nixpkgsUnstable,
       typescript-src,
-      typescript-go-src,
     }:
     let
       lib = nixpkgs.lib;
@@ -36,7 +30,7 @@
        Go module vendor hash for buildGoModule (proxyVendor mode).
        proxyVendor is required because this project has deps with
        mixed-case module paths (Microsoft/go-winio vs microsoft/
-       typescript-go) — `go work vendor` produces different directory
+       TypeScript/tsc) — `go work vendor` produces different directory
        layouts on case-sensitive (Linux) vs case-insensitive (macOS)
        filesystems. The download cache uses `!` escaping for uppercase
        letters, making it deterministic across both.
@@ -44,7 +38,7 @@
        Refresh: pnpm exec repoctl flake update
        Manual:  set to lib.fakeHash, build, copy the reported hash.
       */
-      vendorHash = "sha256-wm9mss5lyJ2BGBjnD/hB1UxC9ZUohlNRL7AA7FtEEH4=";
+      vendorHash = "sha256-TJ7UC5SFk3kcWjKyEkAzOfvWwfK1C7BpA5WR/2dy3+Q=";
       forAllSystems =
         f: lib.genAttrs supportedSystems (system: f system (import nixpkgs { inherit system; }));
     in
@@ -54,7 +48,7 @@
         let
           root = toString ./.;
           pkgsUnstable = import nixpkgsUnstable { inherit system; };
-          patchEntries = builtins.readDir ./_patches/typescript-go;
+          patchEntries = builtins.readDir ./_patches/typescript;
           patchFiles = builtins.filter (
             name: patchEntries.${name} == "regular" && lib.hasSuffix ".patch" name
           ) (builtins.attrNames patchEntries);
@@ -78,25 +72,21 @@
                 "coverage"
                 "node_modules"
                 "tmp"
+                "typescript"
                 "typescript-go"
               ];
           };
-          patchedTypescriptGo = pkgs.applyPatches {
-            name = "patched-typescript-go-source";
-            src = typescript-go-src;
-            patches = builtins.map (name: ./. + "/_patches/typescript-go/${name}") sortedPatchFiles;
+          patchedTypeScript = pkgs.applyPatches {
+            name = "patched-typescript-source";
+            src = typescript-src;
+            patches = builtins.map (name: ./. + "/_patches/typescript/${name}") sortedPatchFiles;
           };
           src = pkgs.runCommandNoCC "effect-tsgo-source" { } ''
             mkdir source
             cp -R ${rootSrc}/. source/
             chmod -R u+w source
-            cp -R ${patchedTypescriptGo} source/typescript-go
-            chmod -R u+w source/typescript-go
-            mkdir -p source/typescript-go/_submodules
-            if [ -d source/typescript-go/_submodules/TypeScript ]; then
-              rmdir source/typescript-go/_submodules/TypeScript
-            fi
-            ln -s ${typescript-src} source/typescript-go/_submodules/TypeScript
+            cp -R ${patchedTypeScript} source/typescript
+            chmod -R u+w source/typescript
             cp -R source $out
             chmod -R a-w $out
           '';
@@ -121,12 +111,16 @@
               _saved_goflags="$GOFLAGS"
               export GOFLAGS="''${GOFLAGS//-trimpath/}"
               (
-                cd typescript-go/internal/diagnostics
+                cd typescript/tsc/internal/diagnostics
+                export GOWORK=off
                 go run generate.go -diagnostics ./diagnostics_generated.go -loc ./loc_generated.go -locdir ./loc
               )
               export GOFLAGS="$_saved_goflags"
             '';
-            subPackages = [ "typescript-go/cmd/tsgo" ];
+            subPackages = [ "typescript/tsc/cmd/tsc" ];
+            postInstall = ''
+              mv $out/bin/tsc $out/bin/tsgo
+            '';
             ldflags = [
               "-s"
               "-w"
