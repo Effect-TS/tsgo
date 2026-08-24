@@ -3,9 +3,9 @@ package rewriter
 import (
 	"strings"
 
-	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/ls/change"
-	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/ls/change"
+	"github.com/microsoft/TypeScript/tsc/shim/lsp/lsproto"
 )
 
 type NodeOptions = change.NodeOptions
@@ -41,7 +41,7 @@ func NewTracker(raw *change.Tracker) *Tracker {
 
 func (t *Tracker) GetChanges() map[string][]*lsproto.TextEdit {
 	t.flushPendingBefore()
-	return t.Tracker.GetChanges()
+	return change.GetChanges(t.Tracker)
 }
 
 func (t *Tracker) ReplaceNode(sourceFile *ast.SourceFile, oldNode *ast.Node, newNode *ast.Node, options *change.NodeOptions) {

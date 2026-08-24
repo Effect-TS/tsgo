@@ -3,12 +3,12 @@
 
 package harnessutil
 
-import "github.com/microsoft/typescript-go/internal/ast"
-import "github.com/microsoft/typescript-go/internal/core"
-import "github.com/microsoft/typescript-go/internal/testutil/harnessutil"
-import "github.com/microsoft/typescript-go/internal/tsoptions"
-import "github.com/microsoft/typescript-go/internal/tspath"
-import "github.com/microsoft/typescript-go/internal/vfs"
+import "github.com/microsoft/TypeScript/tsc/internal/ast"
+import "github.com/microsoft/TypeScript/tsc/internal/core"
+import "github.com/microsoft/TypeScript/tsc/internal/testutil/harnessutil"
+import "github.com/microsoft/TypeScript/tsc/internal/tsoptions"
+import "github.com/microsoft/TypeScript/tsc/internal/tspath"
+import "github.com/microsoft/TypeScript/tsc/internal/vfs"
 import "regexp"
 import "strings"
 import "testing"
@@ -16,29 +16,29 @@ import _ "unsafe"
 
 type CompilationOutput = harnessutil.CompilationOutput
 type CompilationResult = harnessutil.CompilationResult
-//go:linkname CompileFiles github.com/microsoft/typescript-go/internal/testutil/harnessutil.CompileFiles
+//go:linkname CompileFiles github.com/microsoft/TypeScript/tsc/internal/testutil/harnessutil.CompileFiles
 func CompileFiles(t *testing.T, inputFiles []*harnessutil.TestFile, otherFiles []*harnessutil.TestFile, testConfig harnessutil.TestConfiguration, tsconfig *tsoptions.ParsedCommandLine, currentDirectory string, symlinks map[string]string) *harnessutil.CompilationResult
-//go:linkname CompileFilesEx github.com/microsoft/typescript-go/internal/testutil/harnessutil.CompileFilesEx
+//go:linkname CompileFilesEx github.com/microsoft/TypeScript/tsc/internal/testutil/harnessutil.CompileFilesEx
 func CompileFilesEx(t *testing.T, inputFiles []*harnessutil.TestFile, otherFiles []*harnessutil.TestFile, harnessOptions *harnessutil.HarnessOptions, compilerOptions *core.CompilerOptions, currentDirectory string, symlinks map[string]string, tsconfig *tsoptions.ParsedCommandLine) *harnessutil.CompilationResult
-//go:linkname EnumerateFiles github.com/microsoft/typescript-go/internal/testutil/harnessutil.EnumerateFiles
+//go:linkname EnumerateFiles github.com/microsoft/TypeScript/tsc/internal/testutil/harnessutil.EnumerateFiles
 func EnumerateFiles(folder string, testRegex *regexp.Regexp, recursive bool) ([]string, error)
 const FakeTSVersion = harnessutil.FakeTSVersion
-//go:linkname GetConfigNameFromFileName github.com/microsoft/typescript-go/internal/testutil/harnessutil.GetConfigNameFromFileName
+//go:linkname GetConfigNameFromFileName github.com/microsoft/TypeScript/tsc/internal/testutil/harnessutil.GetConfigNameFromFileName
 func GetConfigNameFromFileName(filename string) string
-//go:linkname GetFileBasedTestConfigurations github.com/microsoft/typescript-go/internal/testutil/harnessutil.GetFileBasedTestConfigurations
+//go:linkname GetFileBasedTestConfigurations github.com/microsoft/TypeScript/tsc/internal/testutil/harnessutil.GetFileBasedTestConfigurations
 func GetFileBasedTestConfigurations(t *testing.T, settings map[string]string, varyByOptions map[string]struct{}) []*harnessutil.NamedTestConfiguration
-//go:linkname GetSourceFileCacheKey github.com/microsoft/typescript-go/internal/testutil/harnessutil.GetSourceFileCacheKey
+//go:linkname GetSourceFileCacheKey github.com/microsoft/TypeScript/tsc/internal/testutil/harnessutil.GetSourceFileCacheKey
 func GetSourceFileCacheKey(opts ast.SourceFileParseOptions, text string, scriptKind core.ScriptKind) harnessutil.SourceFileCacheKey
 type HarnessOptions = harnessutil.HarnessOptions
 type NamedTestConfiguration = harnessutil.NamedTestConfiguration
-//go:linkname NewOutputRecorderFS github.com/microsoft/typescript-go/internal/testutil/harnessutil.NewOutputRecorderFS
+//go:linkname NewOutputRecorderFS github.com/microsoft/TypeScript/tsc/internal/testutil/harnessutil.NewOutputRecorderFS
 func NewOutputRecorderFS(fs vfs.FS) vfs.FS
-//go:linkname NewTracerForBaselining github.com/microsoft/typescript-go/internal/testutil/harnessutil.NewTracerForBaselining
+//go:linkname NewTracerForBaselining github.com/microsoft/TypeScript/tsc/internal/testutil/harnessutil.NewTracerForBaselining
 func NewTracerForBaselining(opts tspath.ComparePathsOptions, builder *strings.Builder) *harnessutil.TracerForBaselining
 type OutputRecorderFS = harnessutil.OutputRecorderFS
-//go:linkname SetOptionsFromTestConfig github.com/microsoft/typescript-go/internal/testutil/harnessutil.SetOptionsFromTestConfig
+//go:linkname SetOptionsFromTestConfig github.com/microsoft/TypeScript/tsc/internal/testutil/harnessutil.SetOptionsFromTestConfig
 func SetOptionsFromTestConfig(t *testing.T, testConfig harnessutil.TestConfiguration, compilerOptions *core.CompilerOptions, harnessOptions *harnessutil.HarnessOptions, currentDirectory string, allowUnknownOptions bool)
-//go:linkname SkipUnsupportedCompilerOptions github.com/microsoft/typescript-go/internal/testutil/harnessutil.SkipUnsupportedCompilerOptions
+//go:linkname SkipUnsupportedCompilerOptions github.com/microsoft/TypeScript/tsc/internal/testutil/harnessutil.SkipUnsupportedCompilerOptions
 func SkipUnsupportedCompilerOptions(t *testing.T, options *core.CompilerOptions)
 type SourceFileCacheKey = harnessutil.SourceFileCacheKey
 type TestConfiguration = harnessutil.TestConfiguration

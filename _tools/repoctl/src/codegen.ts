@@ -6,6 +6,7 @@ import * as Path from "effect/Path"
 import { generateTsgolintWorkspace } from "./oxlint.ts"
 import { runCommand } from "./process.ts"
 import { generateSubmoduleArtifacts } from "./submodules.ts"
+import type { TypeScriptSource } from "./upstream.ts"
 
 interface RuleMetadata {
   readonly description?: unknown
@@ -271,13 +272,19 @@ export const generateTsgolintEffectRules = Effect.fnUntraced(function*(repositor
   yield* Console.log(`Generated tsgolint Effect rules: ${path.relative(repositoryRoot, outputPath)}`)
 })
 
-export const generateTsgolintIntegration = Effect.fnUntraced(function*(repositoryRoot: string) {
-  yield* generateTsgolintWorkspace(repositoryRoot)
+export const generateTsgolintIntegration = Effect.fnUntraced(function*(
+  repositoryRoot: string,
+  compiler: TypeScriptSource
+) {
+  yield* generateTsgolintWorkspace(repositoryRoot, compiler)
   yield* generateTsgolintEffectRules(repositoryRoot)
 })
 
-export const generateTypeScriptGoIntegration = Effect.fnUntraced(function*(repositoryRoot: string) {
-  yield* generateSubmoduleArtifacts(repositoryRoot)
+export const generateTypeScriptGoIntegration = Effect.fnUntraced(function*(
+  repositoryRoot: string,
+  compiler: TypeScriptSource
+) {
+  yield* generateSubmoduleArtifacts(repositoryRoot, compiler)
 })
 
 export const generateOxlintEffectRules = Effect.fnUntraced(function*(repositoryRoot: string) {

@@ -1,6 +1,6 @@
 package typeparser
 
-import "github.com/microsoft/typescript-go/shim/ast"
+import "github.com/microsoft/TypeScript/tsc/shim/ast"
 
 // SchemaOpaqueResult holds the type argument from a class extending Schema.Opaque.
 type SchemaOpaqueResult struct {

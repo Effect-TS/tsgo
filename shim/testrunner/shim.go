@@ -3,18 +3,18 @@
 
 package testrunner
 
-import "github.com/microsoft/typescript-go/internal/testrunner"
+import "github.com/microsoft/TypeScript/tsc/internal/testrunner"
 import "testing"
 import _ "unsafe"
 
 type CompilerBaselineRunner = testrunner.CompilerBaselineRunner
 type CompilerTestType = testrunner.CompilerTestType
-//go:linkname NewCompilerBaselineRunner github.com/microsoft/typescript-go/internal/testrunner.NewCompilerBaselineRunner
-func NewCompilerBaselineRunner(testType testrunner.CompilerTestType, isSubmodule bool) *testrunner.CompilerBaselineRunner
-//go:linkname NewTranspileBaselineRunner github.com/microsoft/typescript-go/internal/testrunner.NewTranspileBaselineRunner
+//go:linkname NewCompilerBaselineRunner github.com/microsoft/TypeScript/tsc/internal/testrunner.NewCompilerBaselineRunner
+func NewCompilerBaselineRunner(testType testrunner.CompilerTestType) *testrunner.CompilerBaselineRunner
+//go:linkname NewTranspileBaselineRunner github.com/microsoft/TypeScript/tsc/internal/testrunner.NewTranspileBaselineRunner
 func NewTranspileBaselineRunner() *testrunner.TranspileBaselineRunner
 type ParseTestFilesOptions = testrunner.ParseTestFilesOptions
-//go:linkname RunTranspileTests github.com/microsoft/typescript-go/internal/testrunner.RunTranspileTests
+//go:linkname RunTranspileTests github.com/microsoft/TypeScript/tsc/internal/testrunner.RunTranspileTests
 func RunTranspileTests(t *testing.T)
 type Runner = testrunner.Runner
 const TestTypeConformance = testrunner.TestTypeConformance

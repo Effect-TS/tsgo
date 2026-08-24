@@ -4,7 +4,7 @@ package typeparser
 import (
 	"strings"
 
-	"github.com/microsoft/typescript-go/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
 )
 
 // nodeText extracts the source text of a node from the source file.

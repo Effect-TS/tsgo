@@ -3,17 +3,17 @@
 
 package lsp
 
-import "github.com/microsoft/typescript-go/internal/lsp"
+import "github.com/microsoft/TypeScript/tsc/internal/lsp"
 import "io"
 import _ "unsafe"
 
-//go:linkname NewServer github.com/microsoft/typescript-go/internal/lsp.NewServer
+//go:linkname NewServer github.com/microsoft/TypeScript/tsc/internal/lsp.NewServer
 func NewServer(opts *lsp.ServerOptions) *lsp.Server
 type Reader = lsp.Reader
 type Server = lsp.Server
 type ServerOptions = lsp.ServerOptions
-//go:linkname ToReader github.com/microsoft/typescript-go/internal/lsp.ToReader
+//go:linkname ToReader github.com/microsoft/TypeScript/tsc/internal/lsp.ToReader
 func ToReader(r io.Reader) lsp.Reader
-//go:linkname ToWriter github.com/microsoft/typescript-go/internal/lsp.ToWriter
+//go:linkname ToWriter github.com/microsoft/TypeScript/tsc/internal/lsp.ToWriter
 func ToWriter(w io.Writer) lsp.Writer
 type Writer = lsp.Writer

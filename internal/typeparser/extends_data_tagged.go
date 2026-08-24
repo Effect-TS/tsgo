@@ -1,7 +1,7 @@
 package typeparser
 
 import (
-	"github.com/microsoft/typescript-go/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
 )
 
 // DataTaggedErrorResult holds the parsed result of a class extending Data.TaggedError.

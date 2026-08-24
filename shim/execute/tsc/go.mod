@@ -1,5 +1,5 @@
-module github.com/microsoft/typescript-go/shim/execute/tsc
+module github.com/microsoft/TypeScript/tsc/shim/execute/tsc
 
 go 1.26
 
-require github.com/microsoft/typescript-go v0.0.0
+require github.com/microsoft/TypeScript/tsc v0.0.0

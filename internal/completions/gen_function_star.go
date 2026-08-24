@@ -2,8 +2,8 @@ package completions
 
 import (
 	"github.com/effect-ts/tsgo/internal/completion"
-	"github.com/microsoft/typescript-go/shim/checker"
-	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/shim/checker"
+	"github.com/microsoft/TypeScript/tsc/shim/lsp/lsproto"
 )
 
 // genFunctionStar provides a completion for `gen(function*(){})` when dot-accessing

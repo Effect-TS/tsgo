@@ -1,7 +1,7 @@
 package typeparser
 
 import (
-	"github.com/microsoft/typescript-go/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
 )
 
 // GetFunctionLikeName returns the name string from a function-like node.

@@ -3,9 +3,9 @@
 
 package fourslash
 
-import "github.com/microsoft/typescript-go/internal/fourslash"
-import "github.com/microsoft/typescript-go/internal/lsp/lsproto"
-import "github.com/microsoft/typescript-go/internal/testutil/lsptestutil"
+import "github.com/microsoft/TypeScript/tsc/internal/fourslash"
+import "github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+import "github.com/microsoft/TypeScript/tsc/internal/testutil/lsptestutil"
 import "testing"
 import "unsafe"
 
@@ -23,6 +23,7 @@ type EditRange = fourslash.EditRange
 type ExpectedCompletionEditRange = fourslash.ExpectedCompletionEditRange
 type FileChange = fourslash.FileChange
 type FoldingRangeLineExpected = fourslash.FoldingRangeLineExpected
+type FourslashOptions = fourslash.FourslashOptions
 type FourslashTest = fourslash.FourslashTest
 type extra_FourslashTest_client struct {
   client *lsptestutil.LSPClient
@@ -30,30 +31,30 @@ type extra_FourslashTest_client struct {
 func FourslashTest_client(v *fourslash.FourslashTest) *lsptestutil.LSPClient {
   return ((*extra_FourslashTest_client)(unsafe.Pointer(v))).client
 }
-//go:linkname GetDefaultCapabilities github.com/microsoft/typescript-go/internal/fourslash.GetDefaultCapabilities
+//go:linkname GetDefaultCapabilities github.com/microsoft/TypeScript/tsc/internal/fourslash.GetDefaultCapabilities
 func GetDefaultCapabilities() *lsproto.ClientCapabilities
-//go:linkname GetDefaultCapabilitiesWithOptions github.com/microsoft/typescript-go/internal/fourslash.GetDefaultCapabilitiesWithOptions
+//go:linkname GetDefaultCapabilitiesWithOptions github.com/microsoft/TypeScript/tsc/internal/fourslash.GetDefaultCapabilitiesWithOptions
 func GetDefaultCapabilitiesWithOptions(options *fourslash.ClientCapabilitiesOptions) *lsproto.ClientCapabilities
 type Ignored = fourslash.Ignored
 type Marker = fourslash.Marker
 type MarkerInput = fourslash.MarkerInput
 type MarkerOrRange = fourslash.MarkerOrRange
 type MarkerOrRangeOrName = fourslash.MarkerOrRangeOrName
-//go:linkname NewFourslash github.com/microsoft/typescript-go/internal/fourslash.NewFourslash
+//go:linkname NewFourslash github.com/microsoft/TypeScript/tsc/internal/fourslash.NewFourslash
 func NewFourslash(t *testing.T, capabilities *lsproto.ClientCapabilities, content string) (*fourslash.FourslashTest, func())
+//go:linkname NewFourslashWithOptions github.com/microsoft/TypeScript/tsc/internal/fourslash.NewFourslashWithOptions
+func NewFourslashWithOptions(t *testing.T, content string, options *fourslash.FourslashOptions) (*fourslash.FourslashTest, func())
 var NoTextEdits = fourslash.NoTextEdits
-//go:linkname ParseTestData github.com/microsoft/typescript-go/internal/fourslash.ParseTestData
+//go:linkname ParseTestData github.com/microsoft/TypeScript/tsc/internal/fourslash.ParseTestData
 func ParseTestData(t *testing.T, contents string, fileName string) fourslash.TestData
 var PrepareTestFSCallback = fourslash.PrepareTestFSCallback
 type QuickFixInfo = fourslash.QuickFixInfo
 type RangeMarker = fourslash.RangeMarker
 type RefactorActionInfo = fourslash.RefactorActionInfo
-//go:linkname RegisterPrepareTestFSCallback github.com/microsoft/typescript-go/internal/fourslash.RegisterPrepareTestFSCallback
+//go:linkname RegisterPrepareTestFSCallback github.com/microsoft/TypeScript/tsc/internal/fourslash.RegisterPrepareTestFSCallback
 func RegisterPrepareTestFSCallback(cb func(testfs map[string]any))
 type SemanticToken = fourslash.SemanticToken
 type SignatureHelpCase = fourslash.SignatureHelpCase
-//go:linkname SkipIfFailing github.com/microsoft/typescript-go/internal/fourslash.SkipIfFailing
-func SkipIfFailing(t *testing.T)
 type TestData = fourslash.TestData
 type TestFileInfo = fourslash.TestFileInfo
 type VerifyCodeFixAllOptions = fourslash.VerifyCodeFixAllOptions

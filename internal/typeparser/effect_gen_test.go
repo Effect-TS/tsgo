@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/effect-ts/tsgo/internal/bundledeffect"
-	"github.com/microsoft/typescript-go/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
 )
 
 func findFirstEffectGenCall(t *testing.T, tp *TypeParser, sf *ast.SourceFile) *EffectGenCallResult {

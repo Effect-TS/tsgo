@@ -3,9 +3,10 @@
 
 package packagejson
 
-import "github.com/microsoft/typescript-go/internal/packagejson"
+import "github.com/microsoft/TypeScript/tsc/internal/packagejson"
 import _ "unsafe"
 
+type ContentMapperFields = packagejson.ContentMapperFields
 type DependencyFields = packagejson.DependencyFields
 type Expected[T any] = packagejson.Expected[T]
 type ExportsOrImports = packagejson.ExportsOrImports
@@ -22,10 +23,10 @@ const JSONValueTypeNull = packagejson.JSONValueTypeNull
 const JSONValueTypeNumber = packagejson.JSONValueTypeNumber
 const JSONValueTypeObject = packagejson.JSONValueTypeObject
 const JSONValueTypeString = packagejson.JSONValueTypeString
-//go:linkname NewInfoCache github.com/microsoft/typescript-go/internal/packagejson.NewInfoCache
+//go:linkname NewInfoCache github.com/microsoft/TypeScript/tsc/internal/packagejson.NewInfoCache
 func NewInfoCache(currentDirectory string, useCaseSensitiveFileNames bool) *packagejson.InfoCache
 type PackageJson = packagejson.PackageJson
-//go:linkname Parse github.com/microsoft/typescript-go/internal/packagejson.Parse
+//go:linkname Parse github.com/microsoft/TypeScript/tsc/internal/packagejson.Parse
 func Parse(data []byte) (packagejson.Fields, error)
 type PathFields = packagejson.PathFields
 type TypeValidatedField = packagejson.TypeValidatedField

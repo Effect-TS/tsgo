@@ -7,7 +7,7 @@ import (
 
 	"github.com/effect-ts/tsgo/internal/codegens"
 	"github.com/effect-ts/tsgo/internal/completion"
-	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/shim/lsp/lsproto"
 )
 
 // effectCodegensComment provides completions for @effect-codegens directives

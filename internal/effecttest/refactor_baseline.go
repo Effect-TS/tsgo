@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/microsoft/typescript-go/shim/fourslash"
+	"github.com/microsoft/TypeScript/tsc/shim/fourslash"
 )
 
 // RefactorInventoryEntry represents one selection range with its available refactor actions.

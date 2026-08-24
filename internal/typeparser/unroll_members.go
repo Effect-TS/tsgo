@@ -1,6 +1,6 @@
 package typeparser
 
-import "github.com/microsoft/typescript-go/shim/checker"
+import "github.com/microsoft/TypeScript/tsc/shim/checker"
 
 // UnrollUnionMembers returns the constituent types of a union type,
 // or a single-element slice containing the type itself if it's not a union.

@@ -5,6 +5,7 @@ import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
 import { runCommand, runCommandString } from "./process.ts"
 import { generateSubmoduleArtifacts } from "./submodules.ts"
+import type { TypeScriptSource } from "./upstream.ts"
 
 export class OxlintGenerationError extends Data.TaggedError("OxlintGenerationError")<{
   readonly reason: string
@@ -51,10 +52,10 @@ const applyPatchDirectory = Effect.fnUntraced(function*(checkout: string, direct
   }
 })
 
-const synchronizeCollections = Effect.fnUntraced(function*(typescriptGo: string, tsgolint: string) {
+const synchronizeCollections = Effect.fnUntraced(function*(compilerRoot: string, tsgolint: string) {
   const fs = yield* FileSystem.FileSystem
   const path = yield* Path.Path
-  const source = path.join(typescriptGo, "internal", "collections")
+  const source = path.join(compilerRoot, "internal", "collections")
   const target = path.join(tsgolint, "internal", "collections")
   yield* fs.remove(target, { recursive: true, force: true })
   yield* fs.makeDirectory(target, { recursive: true })
@@ -71,7 +72,11 @@ interface GoModEdit {
   readonly Replace?: ReadonlyArray<{ readonly Old: { readonly Path: string } }>
 }
 
-const configureWorkspace = Effect.fnUntraced(function*(repositoryRoot: string, tsgolint: string) {
+const configureWorkspace = Effect.fnUntraced(function*(
+  repositoryRoot: string,
+  tsgolint: string,
+  compiler: TypeScriptSource
+) {
   const fs = yield* FileSystem.FileSystem
   const path = yield* Path.Path
   yield* runCommand("go", repositoryRoot, ["work", "edit", "-use=./tsgolint"])
@@ -85,13 +90,14 @@ const configureWorkspace = Effect.fnUntraced(function*(repositoryRoot: string, t
     path.join(tsgolint, "go.mod")
   )
   const versions = new Map((module.Require ?? []).map(({ Path, Version }) => [Path, Version]))
-  const prefix = "github.com/microsoft/typescript-go/shim/"
+  const prefix = `${compiler.providerShimPrefix}/`
+  const sharedShimRoot = path.join(repositoryRoot, "shim")
   const replacements = (module.Replace ?? [])
     .filter(({ Old }) => Old.Path.startsWith(prefix))
     .map(({ Old }) => ({
       module: `${Old.Path}@${versions.get(Old.Path) ?? "v0.0.0"}`,
       shim: `./shim/${Old.Path.slice(prefix.length)}`,
-      shimPath: path.join(repositoryRoot, "shim", Old.Path.slice(prefix.length))
+      shimPath: path.join(sharedShimRoot, Old.Path.slice(prefix.length))
     }))
     .sort((left, right) => left.module < right.module ? -1 : left.module > right.module ? 1 : 0)
 
@@ -106,24 +112,25 @@ const configureWorkspace = Effect.fnUntraced(function*(repositoryRoot: string, t
     ])
   }
 
-  const resolvedTypeScriptGo = (yield* runCommandString("go", repositoryRoot, [
+  const resolvedCompiler = (yield* runCommandString("go", repositoryRoot, [
     "list",
     "-m",
     "-f",
     "{{.Dir}}",
-    "github.com/microsoft/typescript-go"
+    compiler.modulePrefix
   ], { GOWORK: path.join(repositoryRoot, "go.work") })).trim()
   const resolvedChecker = (yield* runCommandString("go", repositoryRoot, [
     "list",
     "-m",
     "-f",
     "{{.Dir}}",
-    "github.com/microsoft/typescript-go/shim/checker"
+    `${compiler.providerShimPrefix}/checker`
   ], { GOWORK: path.join(repositoryRoot, "go.work") })).trim()
-  if ((yield* fs.realPath(resolvedTypeScriptGo)) !== (yield* fs.realPath(path.join(repositoryRoot, "typescript-go")))) {
-    return yield* new OxlintGenerationError({ reason: "Go workspace does not resolve the shared TypeScript-Go checkout" })
+  const compilerRoot = path.join(repositoryRoot, compiler.checkoutDir, compiler.moduleDir)
+  if ((yield* fs.realPath(resolvedCompiler)) !== (yield* fs.realPath(compilerRoot))) {
+    return yield* new OxlintGenerationError({ reason: "Go workspace does not resolve the shared TypeScript compiler checkout" })
   }
-  if ((yield* fs.realPath(resolvedChecker)) !== (yield* fs.realPath(path.join(repositoryRoot, "shim", "checker")))) {
+  if ((yield* fs.realPath(resolvedChecker)) !== (yield* fs.realPath(path.join(sharedShimRoot, "checker")))) {
     return yield* new OxlintGenerationError({ reason: "Go workspace does not resolve the shared checker shim" })
   }
 })
@@ -134,51 +141,59 @@ export const prepareTsgolintComponent = Effect.fnUntraced(function*(
     readonly version: string
     readonly gitHead: string
     readonly typescriptGitHead: string
+    readonly compiler: TypeScriptSource
   }
 ) {
   const path = yield* Path.Path
 
-  const typescriptGo = path.join(repositoryRoot, "typescript-go")
+  const compilerCheckout = path.join(repositoryRoot, component.compiler.checkoutDir)
   const tsgolint = path.join(repositoryRoot, "tsgolint")
-  const tsgolintTypeScriptGo = yield* readGitlink(tsgolint, component.gitHead, "typescript-go")
-  if (tsgolintTypeScriptGo !== component.typescriptGitHead) {
+  const tsgolintTypeScript = yield* readGitlink(tsgolint, component.gitHead, component.compiler.tsgolintGitlink)
+  if (tsgolintTypeScript !== component.typescriptGitHead) {
     return yield* new OxlintGenerationError({
       reason:
-        `tsgolint TypeScript-Go revision ${tsgolintTypeScriptGo} does not match component ${component.typescriptGitHead}`
+        `tsgolint TypeScript revision ${tsgolintTypeScript} does not match component ${component.typescriptGitHead}`
     })
   }
 
   yield* runCommand("git", tsgolint, ["fetch", "--quiet", "--depth", "50", "--tags", "origin", component.gitHead])
   yield* runCommand("git", repositoryRoot, ["config", "-f", ".gitmodules", "submodule.tsgolint.ignore", "dirty"])
-  yield* runCommand("git", typescriptGo, ["submodule", "sync", "--recursive"])
-  yield* runCommand("git", typescriptGo, [
-    "submodule",
-    "update",
-    "--init",
-    "--force",
-    "--depth",
-    "1",
-    "_submodules/TypeScript"
-  ])
-  const typescriptRevision = yield* readGitlink(typescriptGo, component.typescriptGitHead, "_submodules/TypeScript")
-  const actualTypeScript = (yield* runCommandString("git", path.join(typescriptGo, "_submodules", "TypeScript"), [
-    "rev-parse",
-    "HEAD"
-  ])).trim()
-  if (actualTypeScript !== typescriptRevision) {
-    return yield* new OxlintGenerationError({
-      reason: `TypeScript checkout ${actualTypeScript} does not match gitlink ${typescriptRevision}`
-    })
+  if (component.compiler.provider === "typescript-go") {
+    yield* runCommand("git", compilerCheckout, ["submodule", "sync", "--recursive"])
+    yield* runCommand("git", compilerCheckout, [
+      "submodule",
+      "update",
+      "--init",
+      "--force",
+      "--depth",
+      "1",
+      "_submodules/TypeScript"
+    ])
+    const typescriptRevision = yield* readGitlink(
+      compilerCheckout,
+      component.typescriptGitHead,
+      "_submodules/TypeScript"
+    )
+    const actualTypeScript = (yield* runCommandString(
+      "git",
+      path.join(compilerCheckout, "_submodules", "TypeScript"),
+      ["rev-parse", "HEAD"]
+    )).trim()
+    if (actualTypeScript !== typescriptRevision) {
+      return yield* new OxlintGenerationError({
+        reason: `TypeScript checkout ${actualTypeScript} does not match gitlink ${typescriptRevision}`
+      })
+    }
   }
 
-  yield* applyPatchDirectory(typescriptGo, path.join(tsgolint, "patches"), "tsgolint TypeScript-Go")
+  yield* applyPatchDirectory(compilerCheckout, path.join(tsgolint, "patches"), "tsgolint TypeScript")
   yield* applyPatchDirectory(
-    typescriptGo,
-    path.join(repositoryRoot, "_patches", "typescript-go"),
-    "Effect TypeScript-Go"
+    compilerCheckout,
+    path.join(repositoryRoot, component.compiler.patchDir),
+    "Effect TypeScript"
   )
   yield* applyPatchDirectory(tsgolint, path.join(repositoryRoot, "_patches", "tsgolint"), "Effect tsgolint")
-  yield* runCommand("git", repositoryRoot, ["add", ".gitmodules", "tsgolint", "typescript-go"])
+  yield* runCommand("git", repositoryRoot, ["add", ".gitmodules", "tsgolint", component.compiler.checkoutDir])
   yield* Console.log(`oxlint-tsgolint ${component.version} prepared`)
 })
 
@@ -199,11 +214,14 @@ export const validateOxlintComponent = Effect.fnUntraced(function*(repositoryRoo
   yield* runCommand("git", repositoryRoot, ["config", "-f", ".gitmodules", "submodule.oxlint.ignore", "dirty"])
 })
 
-export const generateTsgolintWorkspace = Effect.fnUntraced(function*(repositoryRoot: string) {
+export const generateTsgolintWorkspace = Effect.fnUntraced(function*(
+  repositoryRoot: string,
+  compiler: TypeScriptSource
+) {
   const path = yield* Path.Path
-  const typescriptGo = path.join(repositoryRoot, "typescript-go")
+  const compilerRoot = path.join(repositoryRoot, compiler.checkoutDir, compiler.moduleDir)
   const tsgolint = path.join(repositoryRoot, "tsgolint")
-  yield* synchronizeCollections(typescriptGo, tsgolint)
-  yield* generateSubmoduleArtifacts(repositoryRoot, [path.join(tsgolint, "shim")])
-  yield* configureWorkspace(repositoryRoot, tsgolint)
+  yield* synchronizeCollections(compilerRoot, tsgolint)
+  yield* generateSubmoduleArtifacts(repositoryRoot, compiler, [path.join(tsgolint, "shim")])
+  yield* configureWorkspace(repositoryRoot, tsgolint, compiler)
 })

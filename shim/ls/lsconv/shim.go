@@ -4,25 +4,36 @@
 package lsconv
 
 import "context"
-import "github.com/microsoft/typescript-go/internal/ast"
-import "github.com/microsoft/typescript-go/internal/core"
-import "github.com/microsoft/typescript-go/internal/ls/lsconv"
-import "github.com/microsoft/typescript-go/internal/lsp/lsproto"
+import "github.com/microsoft/TypeScript/tsc/internal/ast"
+import "github.com/microsoft/TypeScript/tsc/internal/core"
+import "github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
+import "github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+import "github.com/microsoft/TypeScript/tsc/internal/spanmap"
 import _ "unsafe"
 
-//go:linkname ComputeLSPLineStarts github.com/microsoft/typescript-go/internal/ls/lsconv.ComputeLSPLineStarts
+//go:linkname ComputeLSPLineStarts github.com/microsoft/TypeScript/tsc/internal/ls/lsconv.ComputeLSPLineStarts
 func ComputeLSPLineStarts(text string) *lsconv.LSPLineMap
 type Converters = lsconv.Converters
-//go:linkname DiagnosticToLSPPull github.com/microsoft/typescript-go/internal/ls/lsconv.DiagnosticToLSPPull
+//go:linkname DiagnosticToLSPPull github.com/microsoft/TypeScript/tsc/internal/ls/lsconv.DiagnosticToLSPPull
 func DiagnosticToLSPPull(ctx context.Context, converters *lsconv.Converters, diagnostic *ast.Diagnostic, reportStyleChecksAsWarnings bool) *lsproto.Diagnostic
-//go:linkname DiagnosticToLSPPush github.com/microsoft/typescript-go/internal/ls/lsconv.DiagnosticToLSPPush
+//go:linkname DiagnosticToLSPPush github.com/microsoft/TypeScript/tsc/internal/ls/lsconv.DiagnosticToLSPPush
 func DiagnosticToLSPPush(ctx context.Context, converters *lsconv.Converters, diagnostic *ast.Diagnostic) *lsproto.Diagnostic
-//go:linkname FileNameToDocumentURI github.com/microsoft/typescript-go/internal/ls/lsconv.FileNameToDocumentURI
+//go:linkname FileNameToDocumentURI github.com/microsoft/TypeScript/tsc/internal/ls/lsconv.FileNameToDocumentURI
 func FileNameToDocumentURI(fileName string) lsproto.DocumentUri
+//go:linkname FromLSPPositionForSourceFile github.com/microsoft/TypeScript/tsc/internal/ls/lsconv.FromLSPPositionForSourceFile
+func FromLSPPositionForSourceFile(c *lsconv.Converters, file *ast.SourceFile, position lsproto.Position, feature spanmap.Feature) []lsconv.MappedPosition[*ast.SourceFile]
+//go:linkname FromLSPRangeForSourceFile github.com/microsoft/TypeScript/tsc/internal/ls/lsconv.FromLSPRangeForSourceFile
+func FromLSPRangeForSourceFile(c *lsconv.Converters, file *ast.SourceFile, textRange lsproto.Range, feature spanmap.Feature) []lsconv.MappedSpan[*ast.SourceFile]
+//go:linkname FromLSPRangeIntersectingForSourceFile github.com/microsoft/TypeScript/tsc/internal/ls/lsconv.FromLSPRangeIntersectingForSourceFile
+func FromLSPRangeIntersectingForSourceFile(c *lsconv.Converters, file *ast.SourceFile, textRange lsproto.Range, feature spanmap.Feature) []lsconv.MappedSpan[*ast.SourceFile]
+//go:linkname FromLSPRangeToOriginal github.com/microsoft/TypeScript/tsc/internal/ls/lsconv.FromLSPRangeToOriginal
+func FromLSPRangeToOriginal(c *lsconv.Converters, script lsconv.Script, textRange lsproto.Range) core.TextRange
 type LSPLineMap = lsconv.LSPLineMap
 type LSPLineStarts = lsconv.LSPLineStarts
-//go:linkname LanguageKindToScriptKind github.com/microsoft/typescript-go/internal/ls/lsconv.LanguageKindToScriptKind
+//go:linkname LanguageKindToScriptKind github.com/microsoft/TypeScript/tsc/internal/ls/lsconv.LanguageKindToScriptKind
 func LanguageKindToScriptKind(languageID lsproto.LanguageKind) core.ScriptKind
-//go:linkname NewConverters github.com/microsoft/typescript-go/internal/ls/lsconv.NewConverters
+type MappedPosition[T lsconv.Script] = lsconv.MappedPosition[T]
+type MappedSpan[T lsconv.Script] = lsconv.MappedSpan[T]
+//go:linkname NewConverters github.com/microsoft/TypeScript/tsc/internal/ls/lsconv.NewConverters
 func NewConverters(positionEncoding lsproto.PositionEncodingKind, getLineMap func(fileName string) *lsconv.LSPLineMap) *lsconv.Converters
 type Script = lsconv.Script

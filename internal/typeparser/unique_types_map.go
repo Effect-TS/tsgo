@@ -3,7 +3,7 @@ package typeparser
 import (
 	"fmt"
 
-	"github.com/microsoft/typescript-go/shim/checker"
+	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
 
 // UniqueTypesResult holds the result of AppendToUniqueTypesMap.

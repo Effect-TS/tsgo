@@ -1,8 +1,8 @@
 package vfstest
 
 import (
-	"github.com/microsoft/typescript-go/internal/vfs"
-	"github.com/microsoft/typescript-go/internal/vfs/vfstest"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs"
+	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfstest"
 )
 
 // FromMap creates a new vfs.FS from a map of paths to file contents.

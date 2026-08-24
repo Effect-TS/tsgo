@@ -13,7 +13,7 @@ import (
 
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rules"
-	"github.com/microsoft/typescript-go/shim/testutil/baseline"
+	"github.com/microsoft/TypeScript/tsc/shim/testutil/baseline"
 )
 
 type diagnosticRuleSchema struct {

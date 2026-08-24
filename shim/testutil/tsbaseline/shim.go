@@ -3,24 +3,26 @@
 
 package tsbaseline
 
-import "github.com/microsoft/typescript-go/internal/ast"
-import "github.com/microsoft/typescript-go/internal/compiler"
-import "github.com/microsoft/typescript-go/internal/core"
-import "github.com/microsoft/typescript-go/internal/testutil/baseline"
-import "github.com/microsoft/typescript-go/internal/testutil/harnessutil"
-import _ "github.com/microsoft/typescript-go/internal/testutil/tsbaseline"
+import "github.com/microsoft/TypeScript/tsc/internal/ast"
+import "github.com/microsoft/TypeScript/tsc/internal/compiler"
+import "github.com/microsoft/TypeScript/tsc/internal/core"
+import "github.com/microsoft/TypeScript/tsc/internal/testutil/baseline"
+import "github.com/microsoft/TypeScript/tsc/internal/testutil/harnessutil"
+import _ "github.com/microsoft/TypeScript/tsc/internal/testutil/tsbaseline"
 import "testing"
 import _ "unsafe"
 
-//go:linkname DoErrorBaseline github.com/microsoft/typescript-go/internal/testutil/tsbaseline.DoErrorBaseline
+//go:linkname DoContentMapperBaseline github.com/microsoft/TypeScript/tsc/internal/testutil/tsbaseline.DoContentMapperBaseline
+func DoContentMapperBaseline(t *testing.T, baselinePath string, program compiler.ProgramLike, diagnostics []*ast.Diagnostic, opts baseline.Options)
+//go:linkname DoErrorBaseline github.com/microsoft/TypeScript/tsc/internal/testutil/tsbaseline.DoErrorBaseline
 func DoErrorBaseline(t *testing.T, baselinePath string, inputFiles []*harnessutil.TestFile, errors []*ast.Diagnostic, pretty bool, opts baseline.Options)
-//go:linkname DoJSEmitBaseline github.com/microsoft/typescript-go/internal/testutil/tsbaseline.DoJSEmitBaseline
+//go:linkname DoJSEmitBaseline github.com/microsoft/TypeScript/tsc/internal/testutil/tsbaseline.DoJSEmitBaseline
 func DoJSEmitBaseline(t *testing.T, baselinePath string, header string, options *core.CompilerOptions, result *harnessutil.CompilationResult, tsConfigFiles []*harnessutil.TestFile, toBeCompiled []*harnessutil.TestFile, otherFiles []*harnessutil.TestFile, harnessSettings *harnessutil.HarnessOptions, opts baseline.Options)
-//go:linkname DoModuleResolutionBaseline github.com/microsoft/typescript-go/internal/testutil/tsbaseline.DoModuleResolutionBaseline
+//go:linkname DoModuleResolutionBaseline github.com/microsoft/TypeScript/tsc/internal/testutil/tsbaseline.DoModuleResolutionBaseline
 func DoModuleResolutionBaseline(t *testing.T, baselinePath string, trace string, opts baseline.Options)
-//go:linkname DoSourcemapBaseline github.com/microsoft/typescript-go/internal/testutil/tsbaseline.DoSourcemapBaseline
+//go:linkname DoSourcemapBaseline github.com/microsoft/TypeScript/tsc/internal/testutil/tsbaseline.DoSourcemapBaseline
 func DoSourcemapBaseline(t *testing.T, baselinePath string, header string, options *core.CompilerOptions, result *harnessutil.CompilationResult, harnessSettings *harnessutil.HarnessOptions, opts baseline.Options)
-//go:linkname DoSourcemapRecordBaseline github.com/microsoft/typescript-go/internal/testutil/tsbaseline.DoSourcemapRecordBaseline
+//go:linkname DoSourcemapRecordBaseline github.com/microsoft/TypeScript/tsc/internal/testutil/tsbaseline.DoSourcemapRecordBaseline
 func DoSourcemapRecordBaseline(t *testing.T, baselinePath string, header string, options *core.CompilerOptions, result *harnessutil.CompilationResult, harnessSettings *harnessutil.HarnessOptions, opts baseline.Options)
-//go:linkname DoTypeAndSymbolBaseline github.com/microsoft/typescript-go/internal/testutil/tsbaseline.DoTypeAndSymbolBaseline
+//go:linkname DoTypeAndSymbolBaseline github.com/microsoft/TypeScript/tsc/internal/testutil/tsbaseline.DoTypeAndSymbolBaseline
 func DoTypeAndSymbolBaseline(t *testing.T, baselinePath string, header string, program compiler.ProgramLike, allFiles []*harnessutil.TestFile, opts baseline.Options, skipTypeBaselines bool, skipSymbolBaselines bool, hasErrorBaseline bool)

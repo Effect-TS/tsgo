@@ -3,25 +3,25 @@
 
 package astnav
 
-import "github.com/microsoft/typescript-go/internal/ast"
-import _ "github.com/microsoft/typescript-go/internal/astnav"
+import "github.com/microsoft/TypeScript/tsc/internal/ast"
+import _ "github.com/microsoft/TypeScript/tsc/internal/astnav"
 import _ "unsafe"
 
-//go:linkname FindChildOfKind github.com/microsoft/typescript-go/internal/astnav.FindChildOfKind
+//go:linkname FindChildOfKind github.com/microsoft/TypeScript/tsc/internal/astnav.FindChildOfKind
 func FindChildOfKind(containingNode *ast.Node, kind ast.Kind, sourceFile *ast.SourceFile) *ast.Node
-//go:linkname FindNextToken github.com/microsoft/typescript-go/internal/astnav.FindNextToken
+//go:linkname FindNextToken github.com/microsoft/TypeScript/tsc/internal/astnav.FindNextToken
 func FindNextToken(previousToken *ast.Node, parent *ast.Node, file *ast.SourceFile) *ast.Node
-//go:linkname FindPrecedingToken github.com/microsoft/typescript-go/internal/astnav.FindPrecedingToken
+//go:linkname FindPrecedingToken github.com/microsoft/TypeScript/tsc/internal/astnav.FindPrecedingToken
 func FindPrecedingToken(sourceFile *ast.SourceFile, position int) *ast.Node
-//go:linkname FindPrecedingTokenEx github.com/microsoft/typescript-go/internal/astnav.FindPrecedingTokenEx
+//go:linkname FindPrecedingTokenEx github.com/microsoft/TypeScript/tsc/internal/astnav.FindPrecedingTokenEx
 func FindPrecedingTokenEx(sourceFile *ast.SourceFile, position int, startNode *ast.Node, excludeJSDoc bool) *ast.Node
-//go:linkname GetStartOfNode github.com/microsoft/typescript-go/internal/astnav.GetStartOfNode
+//go:linkname GetStartOfNode github.com/microsoft/TypeScript/tsc/internal/astnav.GetStartOfNode
 func GetStartOfNode(node *ast.Node, file *ast.SourceFile, includeJSDoc bool) int
-//go:linkname GetTokenAtPosition github.com/microsoft/typescript-go/internal/astnav.GetTokenAtPosition
+//go:linkname GetTokenAtPosition github.com/microsoft/TypeScript/tsc/internal/astnav.GetTokenAtPosition
 func GetTokenAtPosition(sourceFile *ast.SourceFile, position int) *ast.Node
-//go:linkname GetTouchingPropertyName github.com/microsoft/typescript-go/internal/astnav.GetTouchingPropertyName
+//go:linkname GetTouchingPropertyName github.com/microsoft/TypeScript/tsc/internal/astnav.GetTouchingPropertyName
 func GetTouchingPropertyName(sourceFile *ast.SourceFile, position int) *ast.Node
-//go:linkname GetTouchingToken github.com/microsoft/typescript-go/internal/astnav.GetTouchingToken
+//go:linkname GetTouchingToken github.com/microsoft/TypeScript/tsc/internal/astnav.GetTouchingToken
 func GetTouchingToken(sourceFile *ast.SourceFile, position int) *ast.Node
-//go:linkname VisitEachChildAndJSDoc github.com/microsoft/typescript-go/internal/astnav.VisitEachChildAndJSDoc
+//go:linkname VisitEachChildAndJSDoc github.com/microsoft/TypeScript/tsc/internal/astnav.VisitEachChildAndJSDoc
 func VisitEachChildAndJSDoc(node *ast.Node, sourceFile *ast.SourceFile, visitNode func(*ast.Node, *ast.NodeVisitor) *ast.Node, visitNodes func(*ast.NodeList, *ast.NodeVisitor) *ast.NodeList)

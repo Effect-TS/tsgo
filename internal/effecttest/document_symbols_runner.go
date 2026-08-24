@@ -10,15 +10,15 @@ import (
 	"testing/fstest"
 
 	"github.com/effect-ts/tsgo/internal/bundledeffect"
-	"github.com/microsoft/typescript-go/shim/bundled"
-	"github.com/microsoft/typescript-go/shim/diagnostics"
-	"github.com/microsoft/typescript-go/shim/locale"
-	"github.com/microsoft/typescript-go/shim/ls/lsconv"
-	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
-	"github.com/microsoft/typescript-go/shim/project"
-	"github.com/microsoft/typescript-go/shim/project/logging"
-	"github.com/microsoft/typescript-go/shim/tspath"
-	"github.com/microsoft/typescript-go/shim/vfs/vfstest"
+	"github.com/microsoft/TypeScript/tsc/shim/bundled"
+	"github.com/microsoft/TypeScript/tsc/shim/diagnostics"
+	"github.com/microsoft/TypeScript/tsc/shim/locale"
+	"github.com/microsoft/TypeScript/tsc/shim/ls/lsconv"
+	"github.com/microsoft/TypeScript/tsc/shim/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/shim/project"
+	"github.com/microsoft/TypeScript/tsc/shim/project/logging"
+	"github.com/microsoft/TypeScript/tsc/shim/tspath"
+	"github.com/microsoft/TypeScript/tsc/shim/vfs/vfstest"
 )
 
 // DocumentSymbolTestCasesDir returns the path to the Effect document-symbol test cases directory.
@@ -215,6 +215,10 @@ func (noopProjectClient) WatchFiles(_ context.Context, _ project.WatcherID, _ []
 }
 
 func (noopProjectClient) UnwatchFiles(_ context.Context, _ project.WatcherID) error { return nil }
+
+func (noopProjectClient) RegisterContentMapperExtensions(_ context.Context, _ []string) error {
+	return nil
+}
 
 func (noopProjectClient) RefreshDiagnostics(_ context.Context) error { return nil }
 
