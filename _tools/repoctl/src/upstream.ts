@@ -60,6 +60,37 @@ export type TypeScriptSource = (typeof typeScriptSources)[TypeScriptProvider]
 export const getTypeScriptSource = (provider: TypeScriptProvider): TypeScriptSource =>
   typeScriptSources[provider]
 
+export const typeScriptSourceEntrypoint = (source: TypeScriptSource) =>
+  `./${[
+    source.checkoutDir,
+    ...(source.moduleDir === "." ? [] : [source.moduleDir]),
+    source.commandPath
+  ].join("/")}`
+
+export class MaterializedTypeScriptSourceError extends Data.TaggedError("MaterializedTypeScriptSourceError")<{
+  readonly reason: string
+}> {
+  get message(): string {
+    return `Unable to resolve materialized TypeScript source: ${this.reason}`
+  }
+}
+
+export const resolveMaterializedTypeScriptSource = Effect.fnUntraced(function*(repositoryRoot: string) {
+  const fs = yield* FileSystem.FileSystem
+  const path = yield* Path.Path
+  for (const source of [typeScriptSources.typescript, typeScriptSources["typescript-go"]] as const) {
+    const entrypoint = path.join(repositoryRoot, source.checkoutDir, source.moduleDir, source.commandPath)
+    if (yield* fs.exists(entrypoint)) {
+      return source
+    }
+  }
+  return yield* new MaterializedTypeScriptSourceError({
+    reason: `neither ${typeScriptSourceEntrypoint(typeScriptSources.typescript)} nor ${
+      typeScriptSourceEntrypoint(typeScriptSources["typescript-go"])
+    } exists`
+  })
+})
+
 const NonEmptyString = Schema.String.check(Schema.isNonEmpty())
 const GitRevision = Schema.String.check(Schema.isPattern(/^[0-9a-f]{40}$/))
 const Component = Schema.Struct({ gitHead: GitRevision })

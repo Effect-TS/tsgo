@@ -1,5 +1,9 @@
+import * as NodeServices from "@effect/platform-node/NodeServices"
 import * as Effect from "effect/Effect"
 import assert from "node:assert/strict"
+import { mkdirSync, mkdtempSync, rmSync } from "node:fs"
+import { tmpdir } from "node:os"
+import { join } from "node:path"
 import test from "node:test"
 import {
   buildUpstream,
@@ -10,13 +14,40 @@ import {
   formatOxlintConfigurationSchema,
   formatTSConfigSchema,
   formatUpstreamUpdateDescription,
-  getComponent
+  getComponent,
+  resolveMaterializedTypeScriptSource,
+  typeScriptSourceEntrypoint
 } from "../src/upstream.ts"
 import { resolveUpstreamInfo } from "../src/upstreamResolve.ts"
 
 const revision = "0123456789abcdef0123456789abcdef01234567"
 const secondRevision = "1123456789abcdef0123456789abcdef01234567"
 const thirdRevision = "2123456789abcdef0123456789abcdef01234567"
+
+test("prefers a materialized TSC entrypoint and falls back to TypeScript-Go", async() => {
+  const repository = mkdtempSync(join(tmpdir(), "repoctl-typescript-source-"))
+  const resolve = () => Effect.runPromise(
+    resolveMaterializedTypeScriptSource(repository).pipe(Effect.provide(NodeServices.layer))
+  )
+  try {
+    mkdirSync(join(repository, "typescript", "tsc", "cmd", "tsc"), { recursive: true })
+    mkdirSync(join(repository, "typescript-go", "cmd", "tsgo"), { recursive: true })
+
+    const modern = await resolve()
+    assert.equal(modern.provider, "typescript")
+    assert.equal(typeScriptSourceEntrypoint(modern), "./typescript/tsc/cmd/tsc")
+
+    rmSync(join(repository, "typescript"), { recursive: true, force: true })
+    const legacy = await resolve()
+    assert.equal(legacy.provider, "typescript-go")
+    assert.equal(typeScriptSourceEntrypoint(legacy), "./typescript-go/cmd/tsgo")
+
+    rmSync(join(repository, "typescript-go"), { recursive: true, force: true })
+    await assert.rejects(resolve(), /neither \.\/typescript\/tsc\/cmd\/tsc nor \.\/typescript-go\/cmd\/tsgo exists/)
+  } finally {
+    rmSync(repository, { recursive: true, force: true })
+  }
+})
 
 const manifest = () => ({
   schemaVersion: 5 as const,
