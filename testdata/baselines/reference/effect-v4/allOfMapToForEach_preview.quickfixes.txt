@@ -1,0 +1,26 @@
+=== Quick Fix Inventory ===
+
+[D1] (7:24-7:34) TS377113: `Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)
+  Fix 0: "Disable allOfMapToForEach for this line"
+  Fix 1: "Disable allOfMapToForEach for entire file"
+  Fix 2: "Replace with Effect.forEach"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable allOfMapToForEach for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable allOfMapToForEach for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.forEach" ===
+
+--- file:///.src/allOfMapToForEach_preview.ts ---
+// @effect-v4
+// @effect-diagnostics allOfMapToForEach:warning
+import { Effect } from "effect"
+
+declare const values: ReadonlyArray<number>
+
+export const program = Effect.forEach(values, value => Effect.succeed(value + 1))
+

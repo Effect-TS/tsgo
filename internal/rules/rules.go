@@ -94,6 +94,7 @@ var All = []rule.Rule{
 	DuplicatePackage,
 	EffectDoNotation,
 	EffectMapFlatten,
+	AllOfMapToForEach,
 	FlatMapToMap,
 	SyncToSucceed,
 	ExtendsNativeError,

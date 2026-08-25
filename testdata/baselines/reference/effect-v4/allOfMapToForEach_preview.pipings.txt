@@ -1,0 +1,33 @@
+==== /.src/allOfMapToForEach_preview.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 7:23 - 9:2
+Node: Effect.all(\n  values.map((value) => Effect.succeed(value + 1))\n)
+Node Kind: KindCallExpression
+
+Subject: (value) => Effect.succeed(value + 1)
+Subject Type: (value: number) => Effect<number, never, never>
+
+Transformations (2):
+  [0] kind: call
+      callee: values.map
+      args: (constant)
+      outType: Effect<number, never, never>[]
+  [1] kind: call
+      callee: Effect.all
+      args: (constant)
+      outType: Effect<number[], never, never>
+
+=== Piping Flow ===
+Location: 8:24 - 8:50
+Node: Effect.succeed(value + 1)
+Node Kind: KindCallExpression
+
+Subject: value + 1
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>

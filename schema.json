@@ -1815,6 +1815,11 @@
           "default": "suggestion",
           "description": "Warns when manually constructing AbortController inside Effect generators instead of using Effect.abortSignal"
         },
+        "allOfMapToForEach": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests using Effect.forEach instead of Effect.all over an effectful Array#map"
+        },
         "anyUnknownInErrorContext": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
