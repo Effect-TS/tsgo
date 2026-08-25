@@ -2236,6 +2236,9 @@
         "effecttsgo/abort-controller-in-effect": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/all-of-map-to-for-each": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/any-unknown-in-error-context": {
           "$ref": "#/definitions/RuleNoConfig"
         },

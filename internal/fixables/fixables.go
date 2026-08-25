@@ -16,6 +16,7 @@ var All = []fixable.Fixable{
 	MissingStarInYieldEffectGenFix,
 	CatchAllToMapErrorFix,
 	CatchTagToCatchReasonFix,
+	AllOfMapToForEachFix,
 	FlatMapToMapFix,
 	SyncToSucceedFix,
 	CatchToOrElseSucceedFix,
