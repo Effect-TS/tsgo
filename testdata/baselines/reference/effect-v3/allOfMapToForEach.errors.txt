@@ -3,11 +3,10 @@ Effect version: 3.19.19
 
 /.src/allOfMapToForEach.ts(8,23): suggestion TS377113: `Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)
 /.src/allOfMapToForEach.ts(11,28): suggestion TS377113: `Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)
-/.src/allOfMapToForEach.ts(24,24): suggestion TS377113: `Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)
-/.src/allOfMapToForEach.ts(27,35): suggestion TS377113: `Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)
+/.src/allOfMapToForEach.ts(26,35): suggestion TS377113: `Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)
 
 
-==== /.src/allOfMapToForEach.ts (4 errors) ====
+==== /.src/allOfMapToForEach.ts (3 errors) ====
     // @effect-v3
     import { Effect } from "effect"
     
@@ -27,17 +26,14 @@ Effect version: 3.19.19
       { concurrency: 2, discard: true }
     )
     
-    interface IndexedValues {
-      readonly [index: number]: number
-      map<B>(f: (value: number, index: number) => B): ReadonlyArray<B>
-    }
-    declare const indexedValues: IndexedValues
-    
-    // Should trigger for a custom array-like type with a numeric index signature,
-    // but should not offer a fix because the type is not necessarily iterable.
-    export const indexed = Effect.all(indexedValues.map(effectful))
-                           ~~~~~~~~~~
-!!! suggestion TS377113: `Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)
+    // The suggested replacements must type-check with the same receiver, callback,
+    // index parameter, and options.
+    export const expectedDirect = Effect.forEach(values, effectful)
+    export const expectedWithOptions = Effect.forEach(
+      values,
+      (value, index) => Effect.succeed(`${index}:${value}`),
+      { concurrency: 2, discard: true }
+    )
     
     // Should trigger, but should not offer an unsafe fix that drops the map generic.
     export const explicitMapGeneric = Effect.all(
@@ -53,6 +49,7 @@ Effect version: 3.19.19
     
     // Should not trigger for a non-array receiver with a map method.
     declare const recordMapper: {
+      readonly [index: number]: number
       map<B>(f: (value: number) => B): ReadonlyArray<B>
     }
     export const record = Effect.all(recordMapper.map((value) => Effect.succeed(value)))

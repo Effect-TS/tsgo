@@ -27,7 +27,7 @@ func runAllOfMapToForEachFix(ctx *fixable.Context) []ls.CodeAction {
 		// The generic parameter lists of Array#map, Effect.all, and Effect.forEach
 		// differ, so an explicit type argument cannot be moved safely. A bare
 		// imported `all` also cannot be renamed without changing its import.
-		if match.HasTypeArguments || !match.CanFixReceiver || match.EffectModule == nil {
+		if match.HasTypeArguments || match.EffectModule == nil {
 			return nil
 		}
 

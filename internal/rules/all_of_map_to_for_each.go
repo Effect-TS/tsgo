@@ -47,7 +47,6 @@ type AllOfMapToForEachMatch struct {
 	Callback         *ast.Node
 	Options          *ast.Node
 	HasTypeArguments bool
-	CanFixReceiver   bool
 }
 
 // AnalyzeAllOfMapToForEach finds Effect.all(xs.map(f), options?) calls whose
@@ -99,7 +98,7 @@ func analyzeAllOfMapToForEachCall(tp *typeparser.TypeParser, c *checker.Checker,
 
 	receiverType := tp.GetTypeAtLocation(mapAccess.Expression)
 	isArrayReceiver := receiverType != nil && (checker.Checker_isArrayType(c, receiverType) || checker.Checker_isReadonlyArrayType(c, receiverType))
-	if receiverType == nil || (!isArrayReceiver && c.GetNumberIndexType(receiverType) == nil) {
+	if !isArrayReceiver {
 		return AllOfMapToForEachMatch{}, false
 	}
 
@@ -132,7 +131,6 @@ func analyzeAllOfMapToForEachCall(tp *typeparser.TypeParser, c *checker.Checker,
 		Callback:         callback,
 		Options:          options,
 		HasTypeArguments: hasCallTypeArguments(allCall) || hasCallTypeArguments(mapCall),
-		CanFixReceiver:   isArrayReceiver,
 	}, true
 }
 func containsSpreadElement(nodes []*ast.Node) bool {

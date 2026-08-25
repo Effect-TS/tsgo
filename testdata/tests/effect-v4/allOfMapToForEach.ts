@@ -13,15 +13,14 @@ export const withOptions = Effect.all(
   { concurrency: 2, discard: true }
 )
 
-interface IndexedValues {
-  readonly [index: number]: number
-  map<B>(f: (value: number, index: number) => B): ReadonlyArray<B>
-}
-declare const indexedValues: IndexedValues
-
-// Should trigger for a custom array-like type with a numeric index signature,
-// but should not offer a fix because the type is not necessarily iterable.
-export const indexed = Effect.all(indexedValues.map(effectful))
+// The suggested replacements must type-check with the same receiver, callback,
+// index parameter, and options.
+export const expectedDirect = Effect.forEach(values, effectful)
+export const expectedWithOptions = Effect.forEach(
+  values,
+  (value, index) => Effect.succeed(`${index}:${value}`),
+  { concurrency: 2, discard: true }
+)
 
 // Should trigger, but should not offer an unsafe fix that drops the map generic.
 export const explicitMapGeneric = Effect.all(
@@ -35,6 +34,7 @@ export const resultModeFromOptions = Effect.all(values.map(effectful), resultOpt
 
 // Should not trigger for a non-array receiver with a map method.
 declare const recordMapper: {
+  readonly [index: number]: number
   map<B>(f: (value: number) => B): ReadonlyArray<B>
 }
 export const record = Effect.all(recordMapper.map((value) => Effect.succeed(value)))
