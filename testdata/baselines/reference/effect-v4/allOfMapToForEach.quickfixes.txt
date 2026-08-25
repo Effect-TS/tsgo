@@ -1,0 +1,146 @@
+=== Quick Fix Inventory ===
+
+[D1] (8:23-8:33) TS377113: `Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)
+  Fix 0: "Disable allOfMapToForEach for this line"
+  Fix 1: "Disable allOfMapToForEach for entire file"
+  Fix 2: "Replace with Effect.forEach"
+
+[D2] (11:28-11:38) TS377113: `Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)
+  Fix 0: "Disable allOfMapToForEach for this line"
+  Fix 1: "Disable allOfMapToForEach for entire file"
+  Fix 2: "Replace with Effect.forEach"
+
+[D3] (24:24-24:34) TS377113: `Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)
+  Fix 0: "Disable allOfMapToForEach for this line"
+  Fix 1: "Disable allOfMapToForEach for entire file"
+
+[D4] (27:35-27:45) TS377113: `Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)
+  Fix 0: "Disable allOfMapToForEach for this line"
+  Fix 1: "Disable allOfMapToForEach for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable allOfMapToForEach for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable allOfMapToForEach for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.forEach" ===
+
+--- file:///.src/allOfMapToForEach.ts ---
+// @effect-v4
+import { Effect } from "effect"
+
+declare const values: ReadonlyArray<number>
+declare const effectful: (value: number, index: number) => Effect.Effect<string>
+
+// Should trigger without options.
+export const direct = Effect.forEach(values, effectful)
+
+// Should trigger and carry compatible options through to Effect.forEach.
+export const withOptions = Effect.all(
+  values.map((value, index) => Effect.succeed(`${index}:${value}`)),
+  { concurrency: 2, discard: true }
+)
+
+interface IndexedValues {
+  readonly [index: number]: number
+  map<B>(f: (value: number, index: number) => B): ReadonlyArray<B>
+}
+declare const indexedValues: IndexedValues
+
+// Should trigger for a custom array-like type with a numeric index signature,
+// but should not offer a fix because the type is not necessarily iterable.
+export const indexed = Effect.all(indexedValues.map(effectful))
+
+// Should trigger, but should not offer an unsafe fix that drops the map generic.
+export const explicitMapGeneric = Effect.all(
+  values.map<Effect.Effect<string>>((value) => Effect.succeed(String(value)))
+)
+
+// Should not trigger when Effect.all mode changes the result semantics.
+export const resultMode = Effect.all(values.map(effectful), { mode: "result" })
+const resultOptions = { mode: "result" as const, concurrency: 2 }
+export const resultModeFromOptions = Effect.all(values.map(effectful), resultOptions)
+
+// Should not trigger for a non-array receiver with a map method.
+declare const recordMapper: {
+  map<B>(f: (value: number) => B): ReadonlyArray<B>
+}
+export const record = Effect.all(recordMapper.map((value) => Effect.succeed(value)))
+
+// Should not trigger when the callback does not return an Effect.
+// @ts-expect-error Effect.all requires Effect values
+export const plainValues = Effect.all(values.map((value) => value + 1))
+
+// Should not trigger for legitimate Effect.all inputs.
+export const tuple = Effect.all([Effect.succeed(1), Effect.succeed("two")] as const)
+
+
+=== [D2] Fix 0: "Disable allOfMapToForEach for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable allOfMapToForEach for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.forEach" ===
+
+--- file:///.src/allOfMapToForEach.ts ---
+// @effect-v4
+import { Effect } from "effect"
+
+declare const values: ReadonlyArray<number>
+declare const effectful: (value: number, index: number) => Effect.Effect<string>
+
+// Should trigger without options.
+export const direct = Effect.all(values.map(effectful))
+
+// Should trigger and carry compatible options through to Effect.forEach.
+export const withOptions = Effect.forEach(values, (value, index) => Effect.succeed(`${index}:${value}`), { concurrency: 2, discard: true })
+
+interface IndexedValues {
+  readonly [index: number]: number
+  map<B>(f: (value: number, index: number) => B): ReadonlyArray<B>
+}
+declare const indexedValues: IndexedValues
+
+// Should trigger for a custom array-like type with a numeric index signature,
+// but should not offer a fix because the type is not necessarily iterable.
+export const indexed = Effect.all(indexedValues.map(effectful))
+
+// Should trigger, but should not offer an unsafe fix that drops the map generic.
+export const explicitMapGeneric = Effect.all(
+  values.map<Effect.Effect<string>>((value) => Effect.succeed(String(value)))
+)
+
+// Should not trigger when Effect.all mode changes the result semantics.
+export const resultMode = Effect.all(values.map(effectful), { mode: "result" })
+const resultOptions = { mode: "result" as const, concurrency: 2 }
+export const resultModeFromOptions = Effect.all(values.map(effectful), resultOptions)
+
+// Should not trigger for a non-array receiver with a map method.
+declare const recordMapper: {
+  map<B>(f: (value: number) => B): ReadonlyArray<B>
+}
+export const record = Effect.all(recordMapper.map((value) => Effect.succeed(value)))
+
+// Should not trigger when the callback does not return an Effect.
+// @ts-expect-error Effect.all requires Effect values
+export const plainValues = Effect.all(values.map((value) => value + 1))
+
+// Should not trigger for legitimate Effect.all inputs.
+export const tuple = Effect.all([Effect.succeed(1), Effect.succeed("two")] as const)
+
+
+=== [D3] Fix 0: "Disable allOfMapToForEach for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable allOfMapToForEach for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable allOfMapToForEach for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable allOfMapToForEach for entire file" ===
+skipped by default

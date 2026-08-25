@@ -1,0 +1,19 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/allOfMapToForEach_preview.ts(7,24): warning TS377113: `Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)
+
+
+==== /.src/allOfMapToForEach_preview.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics allOfMapToForEach:warning
+    import { Effect } from "effect"
+    
+    declare const values: ReadonlyArray<number>
+    
+    export const program = Effect.all(
+                           ~~~~~~~~~~
+!!! warning TS377113: `Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)
+      values.map((value) => Effect.succeed(value + 1))
+    )
+    
