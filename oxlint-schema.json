@@ -520,6 +520,21 @@
       },
       "type": "object"
     },
+    "AnchorHasContentConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "components": {
+          "default": [],
+          "description": "Additional custom component names to treat as anchor elements.",
+          "items": {
+            "type": "string"
+          },
+          "markdownDescription": "Additional custom component names to treat as anchor elements.",
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "AnchorIsValidAspect": {
       "enum": [
         "noHref",
@@ -1882,6 +1897,15 @@
       },
       "type": "object"
     },
+    "DescriptionFormatConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "descriptionFormat": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "Destructure": {
       "oneOf": [
         {
@@ -1939,13 +1963,7 @@
           "$ref": "#/definitions/RequireDescription"
         },
         {
-          "additionalProperties": false,
-          "properties": {
-            "descriptionFormat": {
-              "type": "string"
-            }
-          },
-          "type": "object"
+          "$ref": "#/definitions/DescriptionFormatConfig"
         }
       ]
     },
@@ -2683,12 +2701,9 @@
               "items": [
                 {
                   "$ref": "#/definitions/AllowWarnDeny"
-                },
-                {
-                  "type": "string"
                 }
               ],
-              "minItems": 2,
+              "minItems": 1,
               "type": "array",
               "uniqueItems": true
             }
@@ -3699,6 +3714,26 @@
         "jsdoc/implements-on-classes": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "jsdoc/no-blank-blocks": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/RuleNoConfig"
+            },
+            {
+              "items": [
+                {
+                  "$ref": "#/definitions/AllowWarnDeny"
+                },
+                {
+                  "$ref": "#/definitions/NoBlankBlocks"
+                }
+              ],
+              "maxItems": 2,
+              "minItems": 2,
+              "type": "array"
+            }
+          ]
+        },
         "jsdoc/no-defaults": {
           "anyOf": [
             {
@@ -3893,7 +3928,24 @@
           ]
         },
         "jsx-a11y/anchor-has-content": {
-          "$ref": "#/definitions/RuleNoConfig"
+          "anyOf": [
+            {
+              "$ref": "#/definitions/RuleNoConfig"
+            },
+            {
+              "items": [
+                {
+                  "$ref": "#/definitions/AllowWarnDeny"
+                },
+                {
+                  "$ref": "#/definitions/AnchorHasContentConfig"
+                }
+              ],
+              "maxItems": 2,
+              "minItems": 2,
+              "type": "array"
+            }
+          ]
         },
         "jsx-a11y/anchor-is-valid": {
           "anyOf": [
@@ -5302,12 +5354,9 @@
               "items": [
                 {
                   "$ref": "#/definitions/AllowWarnDeny"
-                },
-                {
-                  "$ref": "#/definitions/NoRestrictedGlobalsConfigEnum"
                 }
               ],
-              "minItems": 2
+              "minItems": 1
             }
           ]
         },
@@ -5323,12 +5372,9 @@
               "items": [
                 {
                   "$ref": "#/definitions/AllowWarnDeny"
-                },
-                {
-                  "$ref": "#/definitions/NoRestrictedImportsConfigEnum"
                 }
               ],
-              "minItems": 2
+              "minItems": 1
             }
           ]
         },
@@ -5344,12 +5390,9 @@
               "items": [
                 {
                   "$ref": "#/definitions/AllowWarnDeny"
-                },
-                {
-                  "$ref": "#/definitions/PropertyDetails"
                 }
               ],
-              "minItems": 2
+              "minItems": 1
             }
           ]
         },
@@ -5981,6 +6024,26 @@
                 }
               ],
               "maxItems": 3,
+              "minItems": 2,
+              "type": "array"
+            }
+          ]
+        },
+        "one-var": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/RuleNoConfig"
+            },
+            {
+              "items": [
+                {
+                  "$ref": "#/definitions/AllowWarnDeny"
+                },
+                {
+                  "$ref": "#/definitions/OneVar"
+                }
+              ],
+              "maxItems": 2,
               "minItems": 2,
               "type": "array"
             }
@@ -6623,6 +6686,9 @@
             }
           ]
         },
+        "react/capitalized-calls": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "react/checked-requires-onchange-or-readonly": {
           "anyOf": [
             {
@@ -6663,6 +6729,9 @@
             }
           ]
         },
+        "react/error-boundaries": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "react/exhaustive-deps": {
           "anyOf": [
             {
@@ -6682,6 +6751,9 @@
               "type": "array"
             }
           ]
+        },
+        "react/exhaustive-effect-dependencies": {
+          "$ref": "#/definitions/RuleNoConfig"
         },
         "react/forbid-component-props": {
           "anyOf": [
@@ -6766,6 +6838,9 @@
             }
           ]
         },
+        "react/globals": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "react/hook-use-state": {
           "anyOf": [
             {
@@ -6786,7 +6861,19 @@
             }
           ]
         },
+        "react/hooks": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "react/iframe-missing-sandbox": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "react/immutability": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "react/incompatible-library": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "react/invariant": {
           "$ref": "#/definitions/RuleNoConfig"
         },
         "react/jsx-boolean-value": {
@@ -7090,6 +7177,9 @@
             }
           ]
         },
+        "react/memo-dependencies": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "react/no-array-index-key": {
           "$ref": "#/definitions/RuleNoConfig"
         },
@@ -7103,6 +7193,9 @@
           "$ref": "#/definitions/RuleNoConfig"
         },
         "react/no-danger-with-children": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "react/no-deriving-state-in-effects": {
           "$ref": "#/definitions/RuleNoConfig"
         },
         "react/no-did-mount-set-state": {
@@ -7358,30 +7451,22 @@
             }
           ]
         },
-        "react/react-compiler": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/RuleNoConfig"
-            },
-            {
-              "items": [
-                {
-                  "$ref": "#/definitions/AllowWarnDeny"
-                },
-                {
-                  "$ref": "#/definitions/ReactCompilerConfig"
-                }
-              ],
-              "maxItems": 2,
-              "minItems": 2,
-              "type": "array"
-            }
-          ]
+        "react/preserve-manual-memoization": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "react/purity": {
+          "$ref": "#/definitions/RuleNoConfig"
         },
         "react/react-in-jsx-scope": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "react/refs": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "react/require-render-return": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "react/rule-suppression": {
           "$ref": "#/definitions/RuleNoConfig"
         },
         "react/rules-of-hooks": {
@@ -7407,6 +7492,12 @@
             }
           ]
         },
+        "react/set-state-in-effect": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "react/set-state-in-render": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "react/state-in-constructor": {
           "anyOf": [
             {
@@ -7426,6 +7517,9 @@
               "type": "array"
             }
           ]
+        },
+        "react/static-components": {
+          "$ref": "#/definitions/RuleNoConfig"
         },
         "react/style-prop-object": {
           "anyOf": [
@@ -7447,7 +7541,22 @@
             }
           ]
         },
+        "react/syntax": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "react/todo": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "react/unsupported-syntax": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "react/use-memo": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "react/void-dom-elements-no-children": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "react/void-use-memo": {
           "$ref": "#/definitions/RuleNoConfig"
         },
         "require-await": {
@@ -13849,6 +13958,18 @@
       },
       "type": "object"
     },
+    "NoBlankBlocks": {
+      "additionalProperties": false,
+      "properties": {
+        "enableFixer": {
+          "default": false,
+          "description": "Whether to automatically remove blank JSDoc blocks.",
+          "markdownDescription": "Whether to automatically remove blank JSDoc blocks.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "NoCallbackInPromiseConfig": {
       "additionalProperties": false,
       "properties": {
@@ -14263,7 +14384,7 @@
       "additionalProperties": false,
       "properties": {
         "allowIndirect": {
-          "default": true,
+          "default": false,
           "description": "This `allowIndirect` option allows indirect `eval()` calls.\n\nIndirect calls to `eval`(e.g., `window['eval']`) are less dangerous\nthan direct calls because they cannot dynamically change the scope.\nIndirect `eval()` calls also typically have less impact on performance\ncompared to direct calls, as they do not invoke JavaScript's scope chain.",
           "markdownDescription": "This `allowIndirect` option allows indirect `eval()` calls.\n\nIndirect calls to `eval`(e.g., `window['eval']`) are less dangerous\nthan direct calls because they cannot dynamically change the scope.\nIndirect `eval()` calls also typically have less impact on performance\ncompared to direct calls, as they do not invoke JavaScript's scope chain.",
           "type": "boolean"
@@ -14694,7 +14815,7 @@
       "additionalProperties": false,
       "properties": {
         "skipComments": {
-          "default": true,
+          "default": false,
           "description": "Whether to skip irregular whitespace in comments.",
           "markdownDescription": "Whether to skip irregular whitespace in comments.",
           "type": "boolean"
@@ -14755,12 +14876,12 @@
             "type": "array"
           },
           "default": {},
-          "description": "A map of snapshot file paths to arrays of snapshot names that are allowed to exceed the size limit.\nSnapshot names can be specified as regular expressions.",
-          "markdownDescription": "A map of snapshot file paths to arrays of snapshot names that are allowed to exceed the size limit.\nSnapshot names can be specified as regular expressions.",
+          "description": "A map of snapshot file paths to arrays of snapshot names that are allowed to exceed the size limit.\nEach snapshot name is interpreted as a Rust regular expression. If it is not a valid regular\nexpression, it is matched as an exact literal string instead.",
+          "markdownDescription": "A map of snapshot file paths to arrays of snapshot names that are allowed to exceed the size limit.\nEach snapshot name is interpreted as a Rust regular expression. If it is not a valid regular\nexpression, it is matched as an exact literal string instead.",
           "type": "object"
         },
         "inlineMaxSize": {
-          "default": 50,
+          "default": null,
           "description": "Maximum number of lines allowed for inline snapshots.",
           "format": "uint32",
           "markdownDescription": "Maximum number of lines allowed for inline snapshots.",
@@ -16180,8 +16301,8 @@
               "$ref": "#/definitions/IgnorePattern_for_String"
             }
           ],
-          "description": "Specifies exceptions to this rule for unused arguments. Arguments whose\nnames match this pattern will be ignored.\n\nBy default, this pattern is `^_` unless options are configured with an\nobject. In this case it will default to [`None`]. Note that this\nbehavior deviates from both ESLint and TypeScript-ESLint, which never\nprovide a default pattern.\n\n#### Example\n\nExamples of **correct** code for this option when the pattern is `^_`:\n\n```javascript\nfunction foo(_a, b) {\nconsole.log(b);\n}\nfoo(1, 2);\n```",
-          "markdownDescription": "Specifies exceptions to this rule for unused arguments. Arguments whose\nnames match this pattern will be ignored.\n\nBy default, this pattern is `^_` unless options are configured with an\nobject. In this case it will default to [`None`]. Note that this\nbehavior deviates from both ESLint and TypeScript-ESLint, which never\nprovide a default pattern.\n\n#### Example\n\nExamples of **correct** code for this option when the pattern is `^_`:\n\n```javascript\nfunction foo(_a, b) {\nconsole.log(b);\n}\nfoo(1, 2);\n```"
+          "description": "Specifies exceptions to this rule for unused arguments. Arguments whose\nnames match this pattern will be ignored.\n\nBy default, names starting with `_` are ignored, except for the bare `_`\nparameter. If options are configured with an object, this will default\nto [`None`]. Note that this behavior deviates from both ESLint and\nTypeScript-ESLint, which never provide a default pattern.\n\n#### Example\n\nExamples of **correct** code for this option when the pattern is `^_`:\n\n```javascript\nfunction foo(_a, b) {\nconsole.log(b);\n}\nfoo(1, 2);\n```",
+          "markdownDescription": "Specifies exceptions to this rule for unused arguments. Arguments whose\nnames match this pattern will be ignored.\n\nBy default, names starting with `_` are ignored, except for the bare `_`\nparameter. If options are configured with an object, this will default\nto [`None`]. Note that this behavior deviates from both ESLint and\nTypeScript-ESLint, which never provide a default pattern.\n\n#### Example\n\nExamples of **correct** code for this option when the pattern is `^_`:\n\n```javascript\nfunction foo(_a, b) {\nconsole.log(b);\n}\nfoo(1, 2);\n```"
         },
         "caughtErrors": {
           "allOf": [
@@ -16717,6 +16838,153 @@
           "type": "array"
         }
       ]
+    },
+    "OneVar": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/OneVarConfig"
+        }
+      ],
+      "description": "Enforces consistent grouping of variable declarations.",
+      "markdownDescription": "Enforces consistent grouping of variable declarations."
+    },
+    "OneVarConfig": {
+      "anyOf": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/definitions/OneVarMode"
+            }
+          ],
+          "description": "Applies one grouping mode to every declaration kind and initialization state.",
+          "markdownDescription": "Applies one grouping mode to every declaration kind and initialization state."
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/definitions/OneVarOptions"
+            }
+          ],
+          "description": "Configures grouping by declaration kind or initialization state.",
+          "markdownDescription": "Configures grouping by declaration kind or initialization state."
+        }
+      ],
+      "description": "Configuration accepted by the `one-var` rule.",
+      "markdownDescription": "Configuration accepted by the `one-var` rule."
+    },
+    "OneVarMode": {
+      "description": "Controls how variable declarators are grouped into declarations.",
+      "markdownDescription": "Controls how variable declarators are grouped into declarations.",
+      "oneOf": [
+        {
+          "description": "Requires one declaration per variable kind in each applicable scope.",
+          "enum": [
+            "always"
+          ],
+          "markdownDescription": "Requires one declaration per variable kind in each applicable scope.",
+          "type": "string"
+        },
+        {
+          "description": "Requires each declarator to have its own declaration statement.",
+          "enum": [
+            "never"
+          ],
+          "markdownDescription": "Requires each declarator to have its own declaration statement.",
+          "type": "string"
+        },
+        {
+          "description": "Requires adjacent declarations of the same kind to be combined.",
+          "enum": [
+            "consecutive"
+          ],
+          "markdownDescription": "Requires adjacent declarations of the same kind to be combined.",
+          "type": "string"
+        }
+      ]
+    },
+    "OneVarOptions": {
+      "additionalProperties": false,
+      "description": "Options for configuring declaration grouping by kind or initialization state.\n\n`initialized` and `uninitialized` take precedence over the per-kind option for the\ncorresponding declarators.",
+      "markdownDescription": "Options for configuring declaration grouping by kind or initialization state.\n\n`initialized` and `uninitialized` take precedence over the per-kind option for the\ncorresponding declarators.",
+      "properties": {
+        "awaitUsing": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/OneVarMode"
+            }
+          ],
+          "default": null,
+          "description": "Controls grouping for `await using` declarations.",
+          "markdownDescription": "Controls grouping for `await using` declarations."
+        },
+        "const": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/OneVarMode"
+            }
+          ],
+          "default": null,
+          "description": "Controls grouping for `const` declarations.",
+          "markdownDescription": "Controls grouping for `const` declarations."
+        },
+        "initialized": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/OneVarMode"
+            }
+          ],
+          "default": null,
+          "description": "Controls grouping for initialized declarators, overriding per-kind options.",
+          "markdownDescription": "Controls grouping for initialized declarators, overriding per-kind options."
+        },
+        "let": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/OneVarMode"
+            }
+          ],
+          "default": null,
+          "description": "Controls grouping for `let` declarations.",
+          "markdownDescription": "Controls grouping for `let` declarations."
+        },
+        "separateRequires": {
+          "default": false,
+          "description": "Keeps direct `require(...)` initializers separate from other initialized declarations.",
+          "markdownDescription": "Keeps direct `require(...)` initializers separate from other initialized declarations.",
+          "type": "boolean"
+        },
+        "uninitialized": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/OneVarMode"
+            }
+          ],
+          "default": null,
+          "description": "Controls grouping for uninitialized declarators, overriding per-kind options.",
+          "markdownDescription": "Controls grouping for uninitialized declarators, overriding per-kind options."
+        },
+        "using": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/OneVarMode"
+            }
+          ],
+          "default": null,
+          "description": "Controls grouping for `using` declarations.",
+          "markdownDescription": "Controls grouping for `using` declarations."
+        },
+        "var": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/OneVarMode"
+            }
+          ],
+          "default": null,
+          "description": "Controls grouping for `var` declarations.",
+          "markdownDescription": "Controls grouping for `var` declarations."
+        }
+      },
+      "type": "object"
     },
     "OnlyExportComponentsConfig": {
       "additionalProperties": false,
@@ -18123,18 +18391,6 @@
           "type": "string"
         }
       ]
-    },
-    "ReactCompilerConfig": {
-      "additionalProperties": false,
-      "properties": {
-        "reportAllBailouts": {
-          "default": false,
-          "description": "Also report compiler bail-outs — places where React Compiler skipped a\ncomponent or hook (for example because of unsupported syntax) without\nfinding a rule violation. These do not indicate incorrect code, only\ncode that the compiler declined to optimize.",
-          "markdownDescription": "Also report compiler bail-outs — places where React Compiler skipped a\ncomponent or hook (for example because of unsupported syntax) without\nfinding a rule violation. These do not indicate incorrect code, only\ncode that the compiler declined to optimize.",
-          "type": "boolean"
-        }
-      },
-      "type": "object"
     },
     "ReactPerfConfig": {
       "additionalProperties": false,
