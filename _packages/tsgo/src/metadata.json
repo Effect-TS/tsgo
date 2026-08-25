@@ -1508,6 +1508,30 @@
       }
     },
     {
+      "name": "allOfMapToForEach",
+      "group": "style",
+      "description": "Suggests using Effect.forEach instead of Effect.all over an effectful Array#map",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377113
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const values: ReadonlyArray\u003cnumber\u003e\n\nexport const program = Effect.all(\n  values.map((value) =\u003e Effect.succeed(value + 1))\n)\n",
+        "diagnostics": [
+          {
+            "start": 101,
+            "end": 111,
+            "text": "`Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)"
+          }
+        ]
+      }
+    },
+    {
       "name": "catchAllToMapError",
       "group": "style",
       "description": "Suggests using Effect.mapError instead of Effect.catch + Effect.fail",

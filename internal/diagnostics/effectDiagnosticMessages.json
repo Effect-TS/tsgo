@@ -442,5 +442,9 @@
     "This input is already assignable to the schema's Encoded type. Use `{0}` to preserve compile-time type checking instead of discarding the input type through `{1}`. effect(preferTypedSchemaDecoder)": {
         "category": "Suggestion",
         "code": 377112
+    },
+    "`Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)": {
+        "category": "Suggestion",
+        "code": 377113
     }
 }
