@@ -1817,6 +1817,40 @@
       }
     },
     {
+      "name": "mapSomeToAsSome",
+      "group": "style",
+      "description": "Suggests using Effect.asSome instead of Effect.map when the mapper only wraps the success value with Option.some",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377114
+      ],
+      "preview": {
+        "sourceText": "import { Effect, Option } from \"effect\"\n\nconst numberEffect = Effect.succeed(1)\n\nexport const pipeable = numberEffect.pipe(\n  Effect.map(Option.some)\n)\n\nexport const etaExpanded = numberEffect.pipe(\n  Effect.map((value) =\u003e Option.some(value))\n)\n\nexport const dataFirst = Effect.map(numberEffect, Option.some)\n\n",
+        "diagnostics": [
+          {
+            "start": 126,
+            "end": 136,
+            "text": "`Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)"
+          },
+          {
+            "start": 201,
+            "end": 211,
+            "text": "`Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)"
+          },
+          {
+            "start": 271,
+            "end": 281,
+            "text": "`Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)"
+          }
+        ]
+      }
+    },
+    {
       "name": "missedPipeableOpportunity",
       "group": "style",
       "description": "Suggests using .pipe() for nested function calls",

@@ -1,0 +1,32 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/mapSomeToAsSome_preview.ts(8,3): warning TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+/.src/mapSomeToAsSome_preview.ts(12,3): warning TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+/.src/mapSomeToAsSome_preview.ts(15,26): warning TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+
+
+==== /.src/mapSomeToAsSome_preview.ts (3 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics mapSomeToAsSome:warning
+    import { Effect, Option } from "effect"
+    
+    const numberEffect = Effect.succeed(1)
+    
+    export const pipeable = numberEffect.pipe(
+      Effect.map(Option.some)
+      ~~~~~~~~~~
+!!! warning TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+    )
+    
+    export const etaExpanded = numberEffect.pipe(
+      Effect.map((value) => Option.some(value))
+      ~~~~~~~~~~
+!!! warning TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+    )
+    
+    export const dataFirst = Effect.map(numberEffect, Option.some)
+                             ~~~~~~~~~~
+!!! warning TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+    
+    

@@ -2045,6 +2045,11 @@
           "default": "suggestion",
           "description": "Detects implementation services leaked in service methods"
         },
+        "mapSomeToAsSome": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests using Effect.asSome instead of Effect.map when the mapper only wraps the success value with Option.some"
+        },
         "missedPipeableOpportunity": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",

@@ -446,5 +446,9 @@
     "`Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)": {
         "category": "Suggestion",
         "code": 377113
+    },
+    "`Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)": {
+        "category": "Suggestion",
+        "code": 377114
     }
 }
