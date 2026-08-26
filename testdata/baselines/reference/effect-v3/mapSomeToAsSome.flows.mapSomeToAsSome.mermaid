@@ -88,6 +88,13 @@ flowchart TB
   86[/"type: number<br/>node: value"/]
   87["type: Option#lt;number#gt;<br/>callee: Option.some<br/>args: #91;#93;"]
   88[/"type: #lt;A#gt;#40;value: A#41; =#gt; Option#lt;A#gt;<br/>node: Option.some"/]
+  89[/"type: Effect#lt;number, never, never#gt;<br/>node: numberEffect"/]
+  90["type: Effect#lt;Option#lt;number#gt;, never, never#gt;<br/>callee: Effect.map<br/>args: #91;function #40;value#41; #123;#92;n    return Option.some#40;value#41;#92;n  #125;#93;"]
+  91[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  92[["type: #40;value: number#41; =#gt; Option#lt;number#gt;<br/>node: function #40;value#41; #123;#92;n    return Option.some#40;value#41;#92;n  #125;"]]
+  93[/"type: number<br/>node: value"/]
+  94["type: Option#lt;number#gt;<br/>callee: Option.some<br/>args: #91;#93;"]
+  95[/"type: #lt;A#gt;#40;value: A#41; =#gt; Option#lt;A#gt;<br/>node: Option.some"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
   5 -->|"kind: transformCallee"| 4
@@ -162,3 +169,10 @@ flowchart TB
   87 -->|"kind: usedBy"| 85
   85 -->|"kind: transformArg"| 83
   82 -->|"kind: pipe"| 83
+  91 -->|"kind: transformCallee"| 90
+  93 -->|"kind: pipe"| 94
+  95 -->|"kind: transformCallee"| 94
+  94 -->|"kind: potentialReturn"| 92
+  94 -->|"kind: usedBy"| 92
+  92 -->|"kind: transformArg"| 90
+  89 -->|"kind: pipe"| 90

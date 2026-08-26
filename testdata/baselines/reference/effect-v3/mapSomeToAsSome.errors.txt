@@ -7,9 +7,10 @@ Effect version: 3.19.19
 /.src/mapSomeToAsSome.ts(29,3): suggestion TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
 /.src/mapSomeToAsSome.ts(34,3): suggestion TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
 /.src/mapSomeToAsSome.ts(79,3): suggestion TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+/.src/mapSomeToAsSome.ts(86,3): suggestion TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
 
 
-==== /.src/mapSomeToAsSome.ts (6 errors) ====
+==== /.src/mapSomeToAsSome.ts (7 errors) ====
     import {
       Effect,
       Effect as Fx,
@@ -99,6 +100,15 @@ Effect version: 3.19.19
     // Should trigger: ParseLazyExpression normalizes a single-return block body
     export const shouldTriggerBlockBody = numberEffect.pipe(
       Effect.map((value) => {
+      ~~~~~~~~~~
+!!! suggestion TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+        return Option.some(value)
+      })
+    )
+    
+    // Should trigger: function expressions forward the value unchanged too
+    export const shouldTriggerFunctionExpression = numberEffect.pipe(
+      Effect.map(function (value) {
       ~~~~~~~~~~
 !!! suggestion TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
         return Option.some(value)

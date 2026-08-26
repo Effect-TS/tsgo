@@ -47,8 +47,8 @@ type MapSomeToAsSomeMatch struct {
 }
 
 // AnalyzeMapSomeToAsSome finds data-last and data-first Effect.map calls whose
-// mapper is Option.some or the exact eta-expansion value => Option.some(value).
-func AnalyzeMapSomeToAsSome(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []MapSomeToAsSomeMatch {
+// mapper is Option.some or an identity forwarder such as value => Option.some(value).
+func AnalyzeMapSomeToAsSome(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile) []MapSomeToAsSomeMatch {
 	var matches []MapSomeToAsSomeMatch
 	seen := make(map[*ast.Node]struct{})
 	for _, flow := range tp.PipingFlows(sf, true) {
@@ -61,7 +61,7 @@ func AnalyzeMapSomeToAsSome(tp *typeparser.TypeParser, c *checker.Checker, sf *a
 
 			call := transformation.Node.AsCallExpression()
 			if call == nil || call.TypeArguments != nil && len(call.TypeArguments.Nodes) > 0 ||
-				!isOptionSomeMapper(tp, c, transformation.Args[0]) {
+				!isOptionSomeMapper(tp, transformation.Args[0]) {
 				continue
 			}
 			if _, ok := seen[transformation.Node]; ok {
@@ -91,47 +91,16 @@ func AnalyzeMapSomeToAsSome(tp *typeparser.TypeParser, c *checker.Checker, sf *a
 	return matches
 }
 
-func isOptionSomeMapper(tp *typeparser.TypeParser, c *checker.Checker, node *ast.Node) bool {
-	node = ast.SkipParentheses(node)
-	if node == nil {
+func isOptionSomeMapper(tp *typeparser.TypeParser, node *ast.Node) bool {
+	mapper, typeArguments, parameter := tp.UnwrapIdentityForwarder(node)
+	if typeArguments != nil && len(typeArguments.Nodes) > 0 {
 		return false
 	}
-	if tp.IsNodeReferenceToEffectOptionModuleApi(node, "some") {
-		return true
+	if parameter != nil {
+		parameterDeclaration := parameter.AsParameterDeclaration()
+		if parameterDeclaration == nil || parameterDeclaration.QuestionToken != nil || parameterDeclaration.Type != nil {
+			return false
+		}
 	}
-	lazy := typeparser.ParseLazyExpression(node, false)
-	if lazy == nil || lazy.Node.Kind != ast.KindArrowFunction || ast.GetCombinedModifierFlags(lazy.Node)&ast.ModifierFlagsAsync != 0 ||
-		len(lazy.Params) != 1 {
-		return false
-	}
-	parameter := lazy.Params[0]
-	if parameter == nil || parameter.Name() == nil || parameter.Name().Kind != ast.KindIdentifier {
-		return false
-	}
-	parameterDeclaration := parameter.AsParameterDeclaration()
-	if parameterDeclaration == nil || parameterDeclaration.DotDotDotToken != nil || parameterDeclaration.QuestionToken != nil ||
-		parameterDeclaration.Type != nil || parameterDeclaration.Initializer != nil {
-		return false
-	}
-
-	body := ast.SkipParentheses(lazy.Expression)
-	if body == nil || body.Kind != ast.KindCallExpression {
-		return false
-	}
-	someCall := body.AsCallExpression()
-	if someCall == nil || someCall.Expression == nil ||
-		someCall.TypeArguments != nil && len(someCall.TypeArguments.Nodes) > 0 ||
-		someCall.Arguments == nil || len(someCall.Arguments.Nodes) != 1 ||
-		!tp.IsNodeReferenceToEffectOptionModuleApi(someCall.Expression, "some") {
-		return false
-	}
-
-	argument := ast.SkipParentheses(someCall.Arguments.Nodes[0])
-	if argument == nil || argument.Kind != ast.KindIdentifier {
-		return false
-	}
-	parameterSymbol := tp.GetSymbolAtLocation(parameter.Name())
-	argumentSymbol := tp.GetSymbolAtLocation(argument)
-	return parameterSymbol != nil && argumentSymbol != nil &&
-		checker.Checker_getSymbolIfSameReference(c, parameterSymbol, argumentSymbol) != nil
+	return tp.IsNodeReferenceToEffectOptionModuleApi(mapper, "some")
 }

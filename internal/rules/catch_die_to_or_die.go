@@ -67,7 +67,7 @@ func AnalyzeCatchDieToOrDie(tp *typeparser.TypeParser, _ *checker.Checker, sf *a
 			callee, args, isCurriedApplication := catchDieTransformationCall(transformation)
 			methodName, effectModule, ok := catchDieMethod(tp, callee)
 			if ok && len(args) == 1 {
-				handler, _ := tp.UnwrapIdentityForwarder(args[0])
+				handler, _, _ := tp.UnwrapIdentityForwarder(args[0])
 				if tp.IsNodeReferenceToEffectModuleApi(handler, "die") {
 					inputEffect := tp.StrictEffectType(inputType, callee)
 					if inputEffect != nil && inputEffect.E != nil && inputEffect.E.Flags()&checker.TypeFlagsNever == 0 {
