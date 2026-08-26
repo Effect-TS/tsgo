@@ -1,0 +1,71 @@
+==== /.src/mapSomeToAsSome_preview.ts (5 flows) ====
+
+=== Piping Flow ===
+Location: 5:21 - 5:39
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 7:24 - 9:2
+Node: numberEffect.pipe(\n  Effect.map(Option.some)\n)
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [Option.some]
+      outType: Effect<Option<number>, never, never>
+
+=== Piping Flow ===
+Location: 11:27 - 13:2
+Node: numberEffect.pipe(\n  Effect.map((value) => Option.some(value))\n)
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [(value) => Option.some(value)]
+      outType: Effect<Option<number>, never, never>
+
+=== Piping Flow ===
+Location: 12:24 - 12:43
+Node: Option.some(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Option.some
+      args: (constant)
+      outType: Option<number>
+
+=== Piping Flow ===
+Location: 15:25 - 15:63
+Node: Effect.map(numberEffect, Option.some)
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [Option.some]
+      outType: Effect<Option<number>, never, never>

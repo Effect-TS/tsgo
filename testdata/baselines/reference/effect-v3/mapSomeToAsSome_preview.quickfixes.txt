@@ -1,0 +1,99 @@
+=== Quick Fix Inventory ===
+
+[D1] (8:3-8:13) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+  Fix 0: "Disable mapSomeToAsSome for this line"
+  Fix 1: "Disable mapSomeToAsSome for entire file"
+  Fix 2: "Replace with Effect.asSome"
+
+[D2] (12:3-12:13) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+  Fix 0: "Disable mapSomeToAsSome for this line"
+  Fix 1: "Disable mapSomeToAsSome for entire file"
+  Fix 2: "Replace with Effect.asSome"
+
+[D3] (15:26-15:36) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+  Fix 0: "Disable mapSomeToAsSome for this line"
+  Fix 1: "Disable mapSomeToAsSome for entire file"
+  Fix 2: "Replace with Effect.asSome"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable mapSomeToAsSome for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable mapSomeToAsSome for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.asSome" ===
+
+--- file:///.src/mapSomeToAsSome_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics mapSomeToAsSome:warning
+import { Effect, Option } from "effect"
+
+const numberEffect = Effect.succeed(1)
+
+export const pipeable = numberEffect.pipe(
+  Effect.asSome
+)
+
+export const etaExpanded = numberEffect.pipe(
+  Effect.map((value) => Option.some(value))
+)
+
+export const dataFirst = Effect.map(numberEffect, Option.some)
+
+
+
+=== [D2] Fix 0: "Disable mapSomeToAsSome for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable mapSomeToAsSome for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.asSome" ===
+
+--- file:///.src/mapSomeToAsSome_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics mapSomeToAsSome:warning
+import { Effect, Option } from "effect"
+
+const numberEffect = Effect.succeed(1)
+
+export const pipeable = numberEffect.pipe(
+  Effect.map(Option.some)
+)
+
+export const etaExpanded = numberEffect.pipe(
+  Effect.asSome
+)
+
+export const dataFirst = Effect.map(numberEffect, Option.some)
+
+
+
+=== [D3] Fix 0: "Disable mapSomeToAsSome for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable mapSomeToAsSome for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.asSome" ===
+
+--- file:///.src/mapSomeToAsSome_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics mapSomeToAsSome:warning
+import { Effect, Option } from "effect"
+
+const numberEffect = Effect.succeed(1)
+
+export const pipeable = numberEffect.pipe(
+  Effect.map(Option.some)
+)
+
+export const etaExpanded = numberEffect.pipe(
+  Effect.map((value) => Option.some(value))
+)
+
+export const dataFirst = Effect.asSome(numberEffect)
+
+

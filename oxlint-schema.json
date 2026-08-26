@@ -2374,6 +2374,9 @@
         "effecttsgo/leaking-requirements": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/map-some-to-as-some": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/missed-pipeable-opportunity": {
           "$ref": "#/definitions/RuleNoConfig"
         },

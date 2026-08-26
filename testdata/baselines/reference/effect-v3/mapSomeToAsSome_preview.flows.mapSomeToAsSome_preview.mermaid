@@ -1,0 +1,33 @@
+flowchart TB
+  0[/"type: 1<br/>node: 1"/]
+  1["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  2[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  3[/"type: Effect#lt;number, never, never#gt;<br/>node: numberEffect"/]
+  4["type: Effect#lt;Option#lt;number#gt;, never, never#gt;<br/>callee: Effect.map<br/>args: #91;Option.some#93;"]
+  5[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  6[/"type: #lt;A#gt;#40;value: A#41; =#gt; Option#lt;A#gt;<br/>node: Option.some"/]
+  7[/"type: Effect#lt;number, never, never#gt;<br/>node: numberEffect"/]
+  8["type: Effect#lt;Option#lt;number#gt;, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;value#41; =#gt; Option.some#40;value#41;#93;"]
+  9[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  10[["type: #40;value: number#41; =#gt; Option#lt;number#gt;<br/>node: #40;value#41; =#gt; Option.some#40;value#41;"]]
+  11[/"type: number<br/>node: value"/]
+  12["type: Option#lt;number#gt;<br/>callee: Option.some<br/>args: #91;#93;"]
+  13[/"type: #lt;A#gt;#40;value: A#41; =#gt; Option#lt;A#gt;<br/>node: Option.some"/]
+  14[/"type: Effect#lt;number, never, never#gt;<br/>node: numberEffect"/]
+  15["type: Effect#lt;Option#lt;number#gt;, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  16[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  17[/"type: #lt;A#gt;#40;value: A#41; =#gt; Option#lt;A#gt;<br/>node: Option.some"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1
+  5 -->|"kind: transformCallee"| 4
+  6 -->|"kind: transformArg"| 4
+  3 -->|"kind: pipe"| 4
+  9 -->|"kind: transformCallee"| 8
+  11 -->|"kind: pipe"| 12
+  13 -->|"kind: transformCallee"| 12
+  12 -->|"kind: potentialReturn"| 10
+  10 -->|"kind: transformArg"| 8
+  7 -->|"kind: pipe"| 8
+  14 -->|"kind: pipe"| 15
+  16 -->|"kind: transformCallee"| 14
+  17 -->|"kind: transformArg"| 14
