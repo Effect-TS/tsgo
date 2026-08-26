@@ -37,15 +37,19 @@ func (tp *TypeParser) DataFirstOrLastCall(node *ast.Node) *ParsedDataFirstOrLast
 
 	c := tp.checker
 	resolved := c.GetResolvedSignature(node)
-	if resolved == nil || resolved.Declaration() == nil {
+	if resolved == nil {
 		return nil
 	}
 	if len(resolved.Parameters()) != len(call.Arguments.Nodes) {
 		return nil
 	}
 
-	resolvedSymbol := checker.Checker_getSymbolOfDeclaration(c, resolved.Declaration())
-	if resolvedSymbol == nil {
+	resolvedDeclaration := rawSignature(resolved).Declaration()
+	var resolvedSymbol *ast.Symbol
+	if resolvedDeclaration != nil {
+		resolvedSymbol = checker.Checker_getSymbolOfDeclaration(c, resolvedDeclaration)
+	}
+	if resolvedDeclaration != nil && resolvedSymbol == nil {
 		return nil
 	}
 	calleeType := tp.GetTypeAtLocation(call.Expression)
@@ -82,12 +86,18 @@ func (tp *TypeParser) DataFirstOrLastCall(node *ast.Node) *ParsedDataFirstOrLast
 		witness := &PipeableSignatureWitness{ArgumentTypes: argumentTypes, SubjectType: subjectType}
 
 		for _, candidate := range candidates {
-			if candidate == nil || candidate.Declaration() == nil {
+			if candidate == nil {
 				continue
 			}
-			candidateSymbol := checker.Checker_getSymbolOfDeclaration(c, candidate.Declaration())
-			if candidateSymbol == nil || checker.Checker_getSymbolIfSameReference(c, resolvedSymbol, candidateSymbol) == nil {
-				continue
+			if resolvedSymbol != nil {
+				candidateDeclaration := rawSignature(candidate).Declaration()
+				if candidateDeclaration == nil {
+					continue
+				}
+				candidateSymbol := checker.Checker_getSymbolOfDeclaration(c, candidateDeclaration)
+				if candidateSymbol == nil || checker.Checker_getSymbolIfSameReference(c, resolvedSymbol, candidateSymbol) == nil {
+					continue
+				}
 			}
 			if !MatchesPipeableSignature(c, resolved, candidate, subjectIndex, witness) {
 				continue

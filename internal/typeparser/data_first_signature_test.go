@@ -179,6 +179,13 @@ declare function reordered<B, A, C = B>(options: {
 declare function moved<A>(self: Box<A>, index: number): A
 declare function moved(index: number): <Value>(self: Box<Value>) => Value
 
+declare function mapped<A extends object, N extends string, B>(self: A, name: N, value: B): {
+  [K in N | keyof A]: K extends keyof A ? A[K] : B
+}
+declare function mapped<N extends string, A extends object, B>(name: N, value: B): (self: A) => {
+  [K in N | keyof A]: K extends keyof A ? A[K] : B
+}
+
 declare function distinctRoles<A, B>(self: Box<A>, f: (value: A) => B): Pair<A, B>
 declare function distinctRoles<A, B>(f: (value: B) => A): (self: Box<A>) => Pair<A, B>
 
@@ -201,12 +208,14 @@ declare function optionalSubject(size: number): <A>(self?: Box<A>) => A
 
 declare const box: Box<number>
 declare const left: Left.Same<number>
+declare const object: { readonly a: number }
 
 export const reorderedResult = reordered(box, {
   onEmpty: () => "empty",
   onValue: (value) => value
 })
 export const movedResult = moved(box, 0)
+export const mappedResult = mapped(object, "b", true)
 export const distinctRolesResult = distinctRoles(box, String)
 export const differentBindersResult = differentBinders(box, (value) => value)
 export const differentSymbolsResult = differentSymbols(left, 1)
@@ -218,7 +227,7 @@ export const optionalSubjectResult = optionalSubject(box, 1)
 	_, tp, sf, done := compileAndGetCheckerAndSourceFileInternal(t, source)
 	defer done()
 
-	for _, name := range []string{"reorderedResult", "movedResult"} {
+	for _, name := range []string{"reorderedResult", "movedResult", "mappedResult"} {
 		call := findVariableInitializerCallByName(t, sf, name)
 		result := tp.DataFirstOrLastCall(call.AsNode())
 		if result == nil {
@@ -245,6 +254,87 @@ export const optionalSubjectResult = optionalSubject(box, 1)
 	}
 }
 
+func TestDataFirstOrLastCall_CallableAlias(t *testing.T) {
+	t.Parallel()
+
+	source := `
+type Pipeable = (self: string) => number
+
+declare function operation(self: string, size: number): number
+declare function operation(size: number): Pipeable
+
+export const result = operation("value", 1)
+`
+
+	_, tp, sf, done := compileAndGetCheckerAndSourceFileInternal(t, source)
+	defer done()
+
+	call := findVariableInitializerCallByName(t, sf, "result")
+	result := tp.DataFirstOrLastCall(call.AsNode())
+	if result == nil {
+		t.Fatal("expected a pipeable overload returned through a callable alias to normalize")
+	}
+	if result.SubjectIndex != 0 {
+		t.Fatalf("subject index = %d, want 0", result.SubjectIndex)
+	}
+}
+
+func TestDataFirstOrLastCall_InferredParameterTypes(t *testing.T) {
+	t.Parallel()
+
+	source := `
+declare function operation(self: string, size): number
+declare function operation(size): (self: string) => number
+
+export const result = operation("value", 1)
+`
+
+	_, tp, sf, done := compileAndGetCheckerAndSourceFileInternal(t, source)
+	defer done()
+
+	call := findVariableInitializerCallByName(t, sf, "result")
+	if result := tp.DataFirstOrLastCall(call.AsNode()); result == nil || result.SubjectIndex != 0 {
+		t.Fatal("expected overloads with inferred any parameter types to normalize")
+	}
+}
+
+func TestPipeableSignatureShapeWithoutExplicitDeclarations(t *testing.T) {
+	t.Parallel()
+
+	source := `
+declare function operation(self: string, size: number): number
+declare function operation(size: number): (self: string) => number
+
+export const result = operation("value", 1)
+`
+
+	c, tp, sf, done := compileAndGetCheckerAndSourceFileInternal(t, source)
+	defer done()
+	call := findVariableInitializerCallByName(t, sf, "result")
+	resolved := rawSignature(c.GetResolvedSignature(call.AsNode()))
+	candidates := c.GetSignaturesOfType(tp.GetTypeAtLocation(call.Expression), checker.SignatureKindCall)
+	if resolved == nil || len(candidates) != 2 {
+		t.Fatal("expected both overload signatures")
+	}
+	pipeable := rawSignature(candidates[0])
+	if len(pipeable.Parameters()) != 1 {
+		pipeable = rawSignature(candidates[1])
+	}
+
+	syntheticDataFirst := checker.Checker_newCallSignature(
+		c, resolved.TypeParameters(), resolved.ThisParameter(), resolved.Parameters(), c.GetReturnTypeOfSignature(resolved),
+	)
+	syntheticPipeable := checker.Checker_newCallSignature(
+		c, pipeable.TypeParameters(), pipeable.ThisParameter(), pipeable.Parameters(), c.GetReturnTypeOfSignature(pipeable),
+	)
+	if !ast.NodeIsSynthesized(syntheticDataFirst.Declaration()) || !ast.NodeIsSynthesized(syntheticPipeable.Declaration()) {
+		t.Fatal("expected signatures with no source declaration site")
+	}
+	if !MatchesPipeableSignature(c, syntheticDataFirst, syntheticPipeable, 0, nil) {
+		t.Fatal("expected raw signature structures to match without declaration nodes")
+	}
+}
+
 func TestPipeableSignatureShapeDoesNotInstantiateTypes(t *testing.T) {
 	t.Parallel()
 
@@ -264,8 +354,7 @@ export const result = operation(box, String)
 	var pipeable *checker.Signature
 	for _, candidate := range candidates {
 		raw := rawSignature(candidate)
-		if raw != nil && raw.Declaration() != nil && raw.Declaration().Type() != nil &&
-			unwrapParenthesizedType(raw.Declaration().Type()).Kind == ast.KindFunctionType {
+		if raw != nil && len(raw.Parameters()) == 1 {
 			pipeable = candidate
 			break
 		}
@@ -281,8 +370,8 @@ export const result = operation(box, String)
 	}
 	before := c.TotalInstantiationCount
 	for range 100 {
-		if !comparePipeableSignatureSyntax(c, rawSignature(resolved), rawSignature(pipeable), 0) {
-			t.Fatal("expected repeated raw syntax comparison to match")
+		if !comparePipeableSignatureTypes(c, rawSignature(resolved), rawSignature(pipeable), 0) {
+			t.Fatal("expected repeated raw type comparison to match")
 		}
 		if !pipeableSignatureShapesMatch(c, resolved, pipeable, 0) {
 			t.Fatal("expected cached signature comparison to match")
@@ -301,10 +390,9 @@ func TestPipeableSignatureShapeFailsClosedAtDepthBudget(t *testing.T) {
 
 	deepType := "number"
 	for range pipeableShapeMaxDepth + 2 {
-		deepType = "Box<" + deepType + ">"
+		deepType = "{ readonly value: " + deepType + " }"
 	}
 	source := `
-interface Box<A> { readonly value: A }
 declare function operation(self: ` + deepType + `, size: number): number
 declare function operation(size: number): (self: ` + deepType + `) => number
 declare const value: ` + deepType + `

@@ -2,6 +2,8 @@ package typeparser
 
 import (
 	"maps"
+	"reflect"
+	"slices"
 
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
@@ -17,6 +19,11 @@ type pipeableSignatureShapeCacheKey struct {
 	dataFirst    *checker.Signature
 	candidate    *checker.Signature
 	subjectIndex int
+}
+
+type pipeableTypePair struct {
+	left  *checker.Type
+	right *checker.Type
 }
 
 func rawSignature(signature *checker.Signature) *checker.Signature {
@@ -35,143 +42,126 @@ func pipeableSignatureShapesMatch(c *checker.Checker, dataFirst *checker.Signatu
 	key := pipeableSignatureShapeCacheKey{dataFirst: dataFirst, candidate: candidate, subjectIndex: subjectIndex}
 	if links, ok := c.EffectLinks.(*EffectLinks); ok && links != nil {
 		return Cached(&links.PipeableSignatureShape, key, func() bool {
-			return comparePipeableSignatureSyntax(c, dataFirst, candidate, subjectIndex)
+			return comparePipeableSignatureTypes(c, dataFirst, candidate, subjectIndex)
 		})
 	}
-	return comparePipeableSignatureSyntax(c, dataFirst, candidate, subjectIndex)
+	return comparePipeableSignatureTypes(c, dataFirst, candidate, subjectIndex)
 }
 
-// signatureSyntaxMatcher compares declaration syntax instead of asking the
-// checker to relate or instantiate signatures. Type parameter declarations are
-// paired by structural occurrence, so declaration order and binder names do not
-// affect the result.
-type signatureSyntaxMatcher struct {
+// signatureTypeMatcher zips existing, uninstantiated compiler type graphs. It
+// never asks the checker to relate two signatures and never creates a mapper.
+// Generic binders are paired by structural occurrence rather than declaration
+// order, with maps in both directions to preserve binder identity.
+type signatureTypeMatcher struct {
 	checker      *checker.Checker
-	leftToRight  map[*ast.Symbol]*ast.Symbol
-	rightToLeft  map[*ast.Symbol]*ast.Symbol
-	leftBinders  map[*ast.Symbol]*ast.Node
-	rightBinders map[*ast.Symbol]*ast.Node
+	leftToRight  map[*checker.Type]*checker.Type
+	rightToLeft  map[*checker.Type]*checker.Type
+	leftBinders  map[*checker.Type]struct{}
+	rightBinders map[*checker.Type]struct{}
+	active       map[pipeableTypePair]struct{}
 	work         *int
 	unionSearch  *int
 }
 
-func comparePipeableSignatureSyntax(c *checker.Checker, dataFirst *checker.Signature, candidate *checker.Signature, subjectIndex int) bool {
-	left := dataFirst.Declaration()
-	right := candidate.Declaration()
-	if left == nil || right == nil || left.Type() == nil || right.Type() == nil {
+func comparePipeableSignatureTypes(c *checker.Checker, dataFirst *checker.Signature, candidate *checker.Signature, subjectIndex int) bool {
+	if c == nil || dataFirst == nil || candidate == nil {
 		return false
 	}
-	leftParameters := left.Parameters()
+	leftParameters := dataFirst.Parameters()
 	if subjectIndex < 0 || subjectIndex >= len(leftParameters) {
 		return false
 	}
-	rightReturn := unwrapParenthesizedType(right.Type())
-	if rightReturn == nil || rightReturn.Kind != ast.KindFunctionType {
+
+	candidateReturn := c.GetReturnTypeOfSignature(candidate)
+	if candidateReturn == nil {
 		return false
 	}
-	innerParameters := rightReturn.Parameters()
-	if len(innerParameters) != 1 || parameterIsRest(innerParameters[0]) {
+	returnedSignatures := c.GetSignaturesOfType(candidateReturn, checker.SignatureKindCall)
+	if len(returnedSignatures) != 1 || returnedSignatures[0] == nil || returnedSignatures[0].Target() != nil {
+		// A target here means that discovering the callable shape instantiated a
+		// generic alias. Dropping its mapper would compare the wrong raw graph.
+		return false
+	}
+	returned := returnedSignatures[0]
+	if len(returned.Parameters()) != 1 || returned.HasRestParameter() {
 		return false
 	}
 
 	work, unionSearch := 0, 0
-	m := &signatureSyntaxMatcher{
+	m := &signatureTypeMatcher{
 		checker:      c,
-		leftToRight:  make(map[*ast.Symbol]*ast.Symbol),
-		rightToLeft:  make(map[*ast.Symbol]*ast.Symbol),
-		leftBinders:  make(map[*ast.Symbol]*ast.Node),
-		rightBinders: make(map[*ast.Symbol]*ast.Node),
+		leftToRight:  make(map[*checker.Type]*checker.Type),
+		rightToLeft:  make(map[*checker.Type]*checker.Type),
+		leftBinders:  make(map[*checker.Type]struct{}),
+		rightBinders: make(map[*checker.Type]struct{}),
+		active:       make(map[pipeableTypePair]struct{}),
 		work:         &work,
 		unionSearch:  &unionSearch,
 	}
-	if !m.registerBinders(left.TypeParameters(), right.TypeParameters()) {
-		return false
-	}
-	if !m.registerOneSideBinders(rightReturn.TypeParameters(), false) {
-		return false
-	}
+	m.registerBinders(dataFirst.TypeParameters(), true)
+	m.registerBinders(candidate.TypeParameters(), false)
+	m.registerBinders(returned.TypeParameters(), false)
 	if len(m.leftBinders) != len(m.rightBinders) {
 		return false
 	}
 
-	rightParameters := right.Parameters()
+	rightParameters := candidate.Parameters()
 	if len(rightParameters) != len(leftParameters)-1 {
 		return false
 	}
 	rightIndex := 0
-	for leftIndex, parameter := range leftParameters {
+	for leftIndex, leftParameter := range leftParameters {
 		if leftIndex == subjectIndex {
 			continue
 		}
-		if !m.compareParameter(parameter, rightParameters[rightIndex], 0) {
+		if !m.compareParameter(
+			leftParameter,
+			leftIndex == len(leftParameters)-1 && dataFirst.HasRestParameter(),
+			rightParameters[rightIndex],
+			rightIndex == len(rightParameters)-1 && candidate.HasRestParameter(),
+			0,
+		) {
 			return false
 		}
 		rightIndex++
 	}
-	if !m.compareParameter(leftParameters[subjectIndex], innerParameters[0], 0) {
+	if !m.compareParameter(leftParameters[subjectIndex], false, returned.Parameters()[0], false, 0) {
 		return false
 	}
-	if !m.compareType(left.Type(), rightReturn.Type(), 0) {
+	if !m.compareType(c.GetReturnTypeOfSignature(dataFirst), c.GetReturnTypeOfSignature(returned), 0) {
 		return false
 	}
 	return m.validateBinders()
 }
 
-func (m *signatureSyntaxMatcher) registerBinders(left []*ast.Node, right []*ast.Node) bool {
-	return m.registerOneSideBinders(left, true) && m.registerOneSideBinders(right, false)
-}
-
-func (m *signatureSyntaxMatcher) registerOneSideBinders(nodes []*ast.Node, left bool) bool {
-	for _, node := range nodes {
-		if node == nil || node.Kind != ast.KindTypeParameter {
-			return false
-		}
-		symbol := node.Symbol()
-		if symbol == nil {
-			symbol = m.checker.GetSymbolAtLocation(node.Name())
-		}
-		if symbol == nil {
-			return false
+func (m *signatureTypeMatcher) registerBinders(types []*checker.Type, left bool) {
+	for _, t := range types {
+		if t == nil || t.Flags()&checker.TypeFlagsTypeParameter == 0 {
+			continue
 		}
 		if left {
-			m.leftBinders[symbol] = node
+			m.leftBinders[t] = struct{}{}
 		} else {
-			m.rightBinders[symbol] = node
+			m.rightBinders[t] = struct{}{}
 		}
 	}
-	return true
 }
 
-func (m *signatureSyntaxMatcher) compareParameter(left *ast.Node, right *ast.Node, depth int) bool {
-	if left == nil || right == nil || left.Kind != ast.KindParameter || right.Kind != ast.KindParameter {
+func (m *signatureTypeMatcher) compareParameter(left *ast.Symbol, leftRest bool, right *ast.Symbol, rightRest bool, depth int) bool {
+	if left == nil || right == nil || leftRest != rightRest || symbolIsOptional(left) != symbolIsOptional(right) {
 		return false
 	}
-	if parameterIsOptional(left) != parameterIsOptional(right) || parameterIsRest(left) != parameterIsRest(right) {
-		return false
+	return m.compareType(m.checker.GetTypeOfSymbol(left), m.checker.GetTypeOfSymbol(right), depth+1)
+}
+
+func symbolIsOptional(symbol *ast.Symbol) bool {
+	return symbol != nil && symbol.Flags&ast.SymbolFlagsOptional != 0
+}
+
+func (m *signatureTypeMatcher) compareType(left *checker.Type, right *checker.Type, depth int) bool {
+	if left == right {
+		return left != nil
 	}
-	return m.compareType(left.Type(), right.Type(), depth+1)
-}
-
-func parameterIsOptional(parameter *ast.Node) bool {
-	if parameter == nil || parameter.Kind != ast.KindParameter {
-		return false
-	}
-	p := parameter.AsParameterDeclaration()
-	return p.QuestionToken != nil || p.Initializer != nil
-}
-
-func parameterIsRest(parameter *ast.Node) bool {
-	return parameter != nil && parameter.Kind == ast.KindParameter && parameter.AsParameterDeclaration().DotDotDotToken != nil
-}
-
-func unwrapParenthesizedType(node *ast.Node) *ast.Node {
-	for node != nil && node.Kind == ast.KindParenthesizedType {
-		node = node.Type()
-	}
-	return node
-}
-
-func (m *signatureSyntaxMatcher) compareType(left *ast.Node, right *ast.Node, depth int) bool {
 	if left == nil || right == nil || depth > pipeableShapeMaxDepth {
 		return false
 	}
@@ -179,139 +169,244 @@ func (m *signatureSyntaxMatcher) compareType(left *ast.Node, right *ast.Node, de
 	if *m.work > pipeableShapeMaxWork {
 		return false
 	}
-	left = unwrapParenthesizedType(left)
-	right = unwrapParenthesizedType(right)
-	if left == nil || right == nil {
-		return false
+
+	if base := noInferBaseType(m.checker, left); base != nil {
+		return m.compareType(base, right, depth+1)
 	}
-	if m.isNoInferReference(left) {
-		return m.compareType(left.AsTypeReferenceNode().TypeArguments.Nodes[0], right, depth+1)
+	if base := noInferBaseType(m.checker, right); base != nil {
+		return m.compareType(left, base, depth+1)
 	}
-	if m.isNoInferReference(right) {
-		return m.compareType(left, right.AsTypeReferenceNode().TypeArguments.Nodes[0], depth+1)
+
+	pair := pipeableTypePair{left: left, right: right}
+	if _, ok := m.active[pair]; ok {
+		return true
 	}
-	if left.Kind != right.Kind {
+	m.active[pair] = struct{}{}
+	defer delete(m.active, pair)
+
+	leftAlias, rightAlias := left.Alias(), right.Alias()
+	if leftAlias != nil || rightAlias != nil {
+		return leftAlias != nil && rightAlias != nil &&
+			sameSymbolReference(m.checker, leftAlias.Symbol(), rightAlias.Symbol()) &&
+			m.compareTypeList(leftAlias.TypeArguments(), rightAlias.TypeArguments(), depth+1)
+	}
+
+	leftIsBinder := left.Flags()&checker.TypeFlagsTypeParameter != 0
+	rightIsBinder := right.Flags()&checker.TypeFlagsTypeParameter != 0
+	if leftIsBinder || rightIsBinder {
+		return leftIsBinder && rightIsBinder && m.compareTypeParameter(left, right)
+	}
+	if left.Flags() != right.Flags() {
 		return false
 	}
 
-	switch left.Kind {
-	case ast.KindAnyKeyword, ast.KindBigIntKeyword, ast.KindBooleanKeyword, ast.KindIntrinsicKeyword,
-		ast.KindNeverKeyword, ast.KindNumberKeyword, ast.KindObjectKeyword, ast.KindStringKeyword,
-		ast.KindSymbolKeyword, ast.KindUndefinedKeyword, ast.KindUnknownKeyword, ast.KindVoidKeyword,
-		ast.KindThisType:
+	switch {
+	case left.Flags()&checker.TypeFlagsUnion != 0:
+		return m.compareUnion(left.Types(), right.Types(), depth+1)
+	case left.Flags()&checker.TypeFlagsIntersection != 0:
+		// Preserve compiler order for intersections; unlike unions, their order
+		// can affect overloaded callable behavior.
+		return m.compareTypeList(left.Types(), right.Types(), depth+1)
+	case left.Flags()&checker.TypeFlagsConditional != 0:
+		leftConditional, rightConditional := left.AsConditionalType(), right.AsConditionalType()
+		return m.compareType(leftConditional.CheckType(), rightConditional.CheckType(), depth+1) &&
+			m.compareType(leftConditional.ExtendsType(), rightConditional.ExtendsType(), depth+1) &&
+			m.compareType(m.checker.GetTrueTypeOfConditionalType(left), m.checker.GetTrueTypeOfConditionalType(right), depth+1) &&
+			m.compareType(m.checker.GetFalseTypeOfConditionalType(left), m.checker.GetFalseTypeOfConditionalType(right), depth+1)
+	case left.Flags()&checker.TypeFlagsIndexedAccess != 0:
+		leftIndexed, rightIndexed := left.AsIndexedAccessType(), right.AsIndexedAccessType()
+		return m.compareType(leftIndexed.ObjectType(), rightIndexed.ObjectType(), depth+1) &&
+			m.compareType(leftIndexed.IndexType(), rightIndexed.IndexType(), depth+1)
+	case left.Flags()&checker.TypeFlagsIndex != 0:
+		return m.compareType(left.AsIndexType().Target(), right.AsIndexType().Target(), depth+1)
+	case left.Flags()&checker.TypeFlagsTemplateLiteral != 0:
+		return slices.Equal(left.AsTemplateLiteralType().Texts(), right.AsTemplateLiteralType().Texts()) &&
+			m.compareTypeList(left.AsTemplateLiteralType().Types(), right.AsTemplateLiteralType().Types(), depth+1)
+	case left.Flags()&checker.TypeFlagsStringMapping != 0:
+		return sameSymbolReference(m.checker, left.Symbol(), right.Symbol()) &&
+			m.compareType(left.AsStringMappingType().Target(), right.AsStringMappingType().Target(), depth+1)
+	case left.Flags()&checker.TypeFlagsSubstitution != 0:
+		leftSubstitution, rightSubstitution := left.AsSubstitutionType(), right.AsSubstitutionType()
+		return m.compareType(leftSubstitution.BaseType(), rightSubstitution.BaseType(), depth+1) &&
+			m.compareType(leftSubstitution.SubstConstraint(), rightSubstitution.SubstConstraint(), depth+1)
+	case left.Flags()&checker.TypeFlagsObject != 0:
+		return m.compareObject(left, right, depth+1)
+	case left.Flags()&checker.TypeFlagsLiteral != 0:
+		return reflect.DeepEqual(left.AsLiteralType().Value(), right.AsLiteralType().Value()) &&
+			sameOptionalSymbol(m.checker, left.Symbol(), right.Symbol())
+	case left.Flags()&checker.TypeFlagsUniqueESSymbol != 0,
+		left.Flags()&checker.TypeFlagsEnum != 0:
+		return sameSymbolReference(m.checker, left.Symbol(), right.Symbol())
+	case left.Flags()&checker.TypeFlagsSingleton != 0:
 		return true
-	case ast.KindTypeReference:
-		return m.compareTypeReference(left, right, depth+1)
-	case ast.KindUnionType:
-		return m.compareUnion(left.AsUnionTypeNode().Types.Nodes, right.AsUnionTypeNode().Types.Nodes, depth+1)
-	case ast.KindIntersectionType:
-		return m.compareTypeLists(left.AsIntersectionTypeNode().Types.Nodes, right.AsIntersectionTypeNode().Types.Nodes, depth+1)
-	case ast.KindConditionalType:
-		leftConditional, rightConditional := left.AsConditionalTypeNode(), right.AsConditionalTypeNode()
-		return m.compareType(leftConditional.CheckType, rightConditional.CheckType, depth+1) &&
-			m.compareType(leftConditional.ExtendsType, rightConditional.ExtendsType, depth+1) &&
-			m.compareType(leftConditional.TrueType, rightConditional.TrueType, depth+1) &&
-			m.compareType(leftConditional.FalseType, rightConditional.FalseType, depth+1)
-	case ast.KindMappedType:
-		return m.compareMappedType(left, right, depth+1)
-	case ast.KindIndexedAccessType:
-		leftIndexed, rightIndexed := left.AsIndexedAccessTypeNode(), right.AsIndexedAccessTypeNode()
-		return m.compareType(leftIndexed.ObjectType, rightIndexed.ObjectType, depth+1) &&
-			m.compareType(leftIndexed.IndexType, rightIndexed.IndexType, depth+1)
-	case ast.KindFunctionType:
-		return m.compareFunctionLike(left, right, depth+1)
-	case ast.KindTypeLiteral:
-		return m.compareTypeLiteral(left, right, depth+1)
-	case ast.KindArrayType:
-		return m.compareType(left.AsArrayTypeNode().ElementType, right.AsArrayTypeNode().ElementType, depth+1)
-	case ast.KindTupleType:
-		return m.compareTypeLists(left.AsTupleTypeNode().Elements.Nodes, right.AsTupleTypeNode().Elements.Nodes, depth+1)
-	case ast.KindOptionalType, ast.KindRestType:
-		return m.compareType(left.Type(), right.Type(), depth+1)
-	case ast.KindNamedTupleMember:
-		return left.QuestionToken() != nil == (right.QuestionToken() != nil) &&
-			(left.AsNamedTupleMember().DotDotDotToken != nil) == (right.AsNamedTupleMember().DotDotDotToken != nil) &&
-			m.compareType(left.Type(), right.Type(), depth+1)
-	case ast.KindTypeOperator:
-		return left.AsTypeOperatorNode().Operator == right.AsTypeOperatorNode().Operator &&
-			m.compareType(left.Type(), right.Type(), depth+1)
-	case ast.KindLiteralType:
-		return sameLiteralType(left.AsLiteralTypeNode().Literal, right.AsLiteralTypeNode().Literal)
 	default:
 		return false
 	}
 }
 
-func (m *signatureSyntaxMatcher) compareMappedType(left *ast.Node, right *ast.Node, depth int) bool {
-	leftMapped, rightMapped := left.AsMappedTypeNode(), right.AsMappedTypeNode()
-	if !sameOptionalTokenKind(leftMapped.ReadonlyToken, rightMapped.ReadonlyToken) ||
-		!sameOptionalTokenKind(leftMapped.QuestionToken, rightMapped.QuestionToken) ||
-		!m.registerBinders([]*ast.Node{leftMapped.TypeParameter}, []*ast.Node{rightMapped.TypeParameter}) {
-		return false
-	}
-	if !m.compareOptionalType(leftMapped.NameType, rightMapped.NameType, depth+1) ||
-		!m.compareOptionalType(leftMapped.Type, rightMapped.Type, depth+1) {
-		return false
-	}
-	leftMembers, rightMembers := typeListNodes(leftMapped.Members), typeListNodes(rightMapped.Members)
-	return m.compareTypeLists(leftMembers, rightMembers, depth+1)
-}
-
-func (m *signatureSyntaxMatcher) compareOptionalType(left *ast.Node, right *ast.Node, depth int) bool {
-	if left == nil || right == nil {
-		return left == right
-	}
-	return m.compareType(left, right, depth+1)
-}
-
-func sameOptionalTokenKind(left *ast.Node, right *ast.Node) bool {
-	if left == nil || right == nil {
-		return left == right
-	}
-	return left.Kind == right.Kind
-}
-
-func typeListNodes(list *ast.NodeList) []*ast.Node {
-	if list == nil {
-		return nil
-	}
-	return list.Nodes
-}
-
-func (m *signatureSyntaxMatcher) compareTypeReference(left *ast.Node, right *ast.Node, depth int) bool {
-	leftRef, rightRef := left.AsTypeReferenceNode(), right.AsTypeReferenceNode()
-	leftSymbol := m.checker.GetSymbolAtLocation(leftRef.TypeName)
-	rightSymbol := m.checker.GetSymbolAtLocation(rightRef.TypeName)
-	if leftBinder, ok := m.leftBinders[leftSymbol]; ok && leftBinder != nil {
-		if _, ok := m.rightBinders[rightSymbol]; !ok || !m.bind(leftSymbol, rightSymbol) {
+func (m *signatureTypeMatcher) compareTypeParameter(left *checker.Type, right *checker.Type) bool {
+	_, leftLocal := m.leftBinders[left]
+	_, rightLocal := m.rightBinders[right]
+	if leftLocal || rightLocal {
+		if !leftLocal || !rightLocal {
 			return false
 		}
-	} else if _, rightIsBinder := m.rightBinders[rightSymbol]; rightIsBinder || !sameSymbolReference(m.checker, leftSymbol, rightSymbol) {
+		if mapped, ok := m.leftToRight[left]; ok {
+			return mapped == right
+		}
+		if mapped, ok := m.rightToLeft[right]; ok {
+			return mapped == left
+		}
+		m.leftToRight[left] = right
+		m.rightToLeft[right] = left
+		return true
+	}
+	return left == right || sameSymbolReference(m.checker, left.Symbol(), right.Symbol())
+}
+
+func (m *signatureTypeMatcher) compareObject(left *checker.Type, right *checker.Type, depth int) bool {
+	leftFlags, rightFlags := left.ObjectFlags(), right.ObjectFlags()
+	leftMapped := leftFlags&checker.ObjectFlagsMapped != 0
+	rightMapped := rightFlags&checker.ObjectFlagsMapped != 0
+	if leftMapped || rightMapped {
+		return leftMapped && rightMapped && m.compareMappedType(left, right, depth+1)
+	}
+	if leftFlags&checker.ObjectFlagsReverseMapped != 0 || rightFlags&checker.ObjectFlagsReverseMapped != 0 ||
+		leftFlags&checker.ObjectFlagsEvolvingArray != 0 || rightFlags&checker.ObjectFlagsEvolvingArray != 0 ||
+		leftFlags&checker.ObjectFlagsInstantiationExpressionType != 0 || rightFlags&checker.ObjectFlagsInstantiationExpressionType != 0 {
 		return false
 	}
-	return m.compareTypeLists(typeArgumentNodes(leftRef.TypeArguments), typeArgumentNodes(rightRef.TypeArguments), depth+1)
+
+	leftReference := leftFlags&checker.ObjectFlagsReference != 0
+	rightReference := rightFlags&checker.ObjectFlagsReference != 0
+	if leftReference || rightReference {
+		if !leftReference || !rightReference {
+			return false
+		}
+		leftTarget, rightTarget := left.Target(), right.Target()
+		return (leftTarget == rightTarget || sameSymbolReference(m.checker, leftTarget.Symbol(), rightTarget.Symbol())) &&
+			m.compareTypeList(m.checker.GetTypeArguments(left), m.checker.GetTypeArguments(right), depth+1)
+	}
+
+	leftAnonymous := leftFlags&checker.ObjectFlagsAnonymous != 0
+	rightAnonymous := rightFlags&checker.ObjectFlagsAnonymous != 0
+	if !leftAnonymous || !rightAnonymous {
+		return !leftAnonymous && !rightAnonymous && sameSymbolReference(m.checker, left.Symbol(), right.Symbol())
+	}
+	return m.compareAnonymousObject(left, right, depth+1)
 }
 
-func typeArgumentNodes(list *ast.TypeList) []*ast.Node {
-	if list == nil {
-		return nil
+func (m *signatureTypeMatcher) compareMappedType(left *checker.Type, right *checker.Type, depth int) bool {
+	leftBinder := checker.Checker_getTypeParameterFromMappedType(m.checker, left)
+	rightBinder := checker.Checker_getTypeParameterFromMappedType(m.checker, right)
+	if leftBinder == nil || rightBinder == nil || checker.GetMappedTypeModifiers(left) != checker.GetMappedTypeModifiers(right) {
+		return false
 	}
-	return list.Nodes
+	m.registerBinders([]*checker.Type{leftBinder}, true)
+	m.registerBinders([]*checker.Type{rightBinder}, false)
+	return m.compareType(leftBinder, rightBinder, depth+1) &&
+		m.compareType(
+			checker.Checker_getConstraintTypeFromMappedType(m.checker, left),
+			checker.Checker_getConstraintTypeFromMappedType(m.checker, right),
+			depth+1,
+		) &&
+		m.compareOptionalTypeAt(
+			checker.Checker_getNameTypeFromMappedType(m.checker, left),
+			checker.Checker_getNameTypeFromMappedType(m.checker, right),
+			depth+1,
+		) &&
+		m.compareType(
+			checker.Checker_getTemplateTypeFromMappedType(m.checker, left),
+			checker.Checker_getTemplateTypeFromMappedType(m.checker, right),
+			depth+1,
+		)
 }
 
-func (m *signatureSyntaxMatcher) bind(left *ast.Symbol, right *ast.Symbol) bool {
-	if mapped, ok := m.leftToRight[left]; ok {
-		return mapped == right
+func (m *signatureTypeMatcher) compareAnonymousObject(left *checker.Type, right *checker.Type, depth int) bool {
+	leftProperties := m.checker.GetPropertiesOfType(left)
+	rightProperties := m.checker.GetPropertiesOfType(right)
+	if len(leftProperties) != len(rightProperties) {
+		return false
 	}
-	if mapped, ok := m.rightToLeft[right]; ok {
-		return mapped == left
+	rightByName := make(map[string]*ast.Symbol, len(rightProperties))
+	for _, property := range rightProperties {
+		if property == nil || rightByName[property.Name] != nil {
+			return false
+		}
+		rightByName[property.Name] = property
 	}
-	m.leftToRight[left] = right
-	m.rightToLeft[right] = left
+	for _, leftProperty := range leftProperties {
+		if leftProperty == nil {
+			return false
+		}
+		rightProperty := rightByName[leftProperty.Name]
+		if rightProperty == nil || symbolIsOptional(leftProperty) != symbolIsOptional(rightProperty) ||
+			checker.Checker_isReadonlySymbol(m.checker, leftProperty) != checker.Checker_isReadonlySymbol(m.checker, rightProperty) ||
+			!m.compareType(m.checker.GetTypeOfSymbol(leftProperty), m.checker.GetTypeOfSymbol(rightProperty), depth+1) {
+			return false
+		}
+	}
+
+	leftIndexes, rightIndexes := m.checker.GetIndexInfosOfType(left), m.checker.GetIndexInfosOfType(right)
+	if len(leftIndexes) != len(rightIndexes) {
+		return false
+	}
+	for i := range leftIndexes {
+		if leftIndexes[i].IsReadonly() != rightIndexes[i].IsReadonly() ||
+			!m.compareType(leftIndexes[i].KeyType(), rightIndexes[i].KeyType(), depth+1) ||
+			!m.compareType(leftIndexes[i].ValueType(), rightIndexes[i].ValueType(), depth+1) {
+			return false
+		}
+	}
+
+	if len(m.checker.GetSignaturesOfType(left, checker.SignatureKindConstruct)) != 0 ||
+		len(m.checker.GetSignaturesOfType(right, checker.SignatureKindConstruct)) != 0 {
+		return false
+	}
+	leftCalls := m.checker.GetSignaturesOfType(left, checker.SignatureKindCall)
+	rightCalls := m.checker.GetSignaturesOfType(right, checker.SignatureKindCall)
+	if len(leftCalls) != len(rightCalls) {
+		return false
+	}
+	for i := range leftCalls {
+		if leftCalls[i].Target() != nil || rightCalls[i].Target() != nil || !m.compareSignature(leftCalls[i], rightCalls[i], depth+1) {
+			return false
+		}
+	}
 	return true
 }
 
-func (m *signatureSyntaxMatcher) compareTypeLists(left []*ast.Node, right []*ast.Node, depth int) bool {
+func (m *signatureTypeMatcher) compareSignature(left *checker.Signature, right *checker.Signature, depth int) bool {
+	if left == nil || right == nil || left.HasRestParameter() != right.HasRestParameter() ||
+		left.MinArgumentCount() != right.MinArgumentCount() ||
+		(m.checker.GetTypePredicateOfSignature(left) != nil || m.checker.GetTypePredicateOfSignature(right) != nil) {
+		return false
+	}
+	m.registerBinders(left.TypeParameters(), true)
+	m.registerBinders(right.TypeParameters(), false)
+	leftParameters, rightParameters := left.Parameters(), right.Parameters()
+	if len(leftParameters) != len(rightParameters) {
+		return false
+	}
+	if (left.ThisParameter() == nil) != (right.ThisParameter() == nil) {
+		return false
+	}
+	if left.ThisParameter() != nil && !m.compareParameter(left.ThisParameter(), false, right.ThisParameter(), false, depth+1) {
+		return false
+	}
+	for i := range leftParameters {
+		if !m.compareParameter(
+			leftParameters[i], i == len(leftParameters)-1 && left.HasRestParameter(),
+			rightParameters[i], i == len(rightParameters)-1 && right.HasRestParameter(),
+			depth+1,
+		) {
+			return false
+		}
+	}
+	return m.compareType(m.checker.GetReturnTypeOfSignature(left), m.checker.GetReturnTypeOfSignature(right), depth+1)
+}
+
+func (m *signatureTypeMatcher) compareTypeList(left []*checker.Type, right []*checker.Type, depth int) bool {
 	if len(left) != len(right) {
 		return false
 	}
@@ -323,93 +418,14 @@ func (m *signatureSyntaxMatcher) compareTypeLists(left []*ast.Node, right []*ast
 	return true
 }
 
-func (m *signatureSyntaxMatcher) compareFunctionLike(left *ast.Node, right *ast.Node, depth int) bool {
-	if len(left.TypeParameters()) != len(right.TypeParameters()) || !m.registerBinders(left.TypeParameters(), right.TypeParameters()) {
-		return false
-	}
-	leftParameters, rightParameters := left.Parameters(), right.Parameters()
-	if len(leftParameters) != len(rightParameters) {
-		return false
-	}
-	for i := range leftParameters {
-		if !m.compareParameter(leftParameters[i], rightParameters[i], depth+1) {
-			return false
-		}
-	}
-	return m.compareType(left.Type(), right.Type(), depth+1)
-}
-
-func (m *signatureSyntaxMatcher) compareTypeLiteral(left *ast.Node, right *ast.Node, depth int) bool {
-	leftMembers, rightMembers := left.Members(), right.Members()
-	if len(leftMembers) != len(rightMembers) {
-		return false
-	}
-	rightByName := make(map[string]*ast.Node, len(rightMembers))
-	for _, member := range rightMembers {
-		name, ok := typeMemberKey(member)
-		if !ok || rightByName[name] != nil {
-			return false
-		}
-		rightByName[name] = member
-	}
-	for _, leftMember := range leftMembers {
-		name, ok := typeMemberKey(leftMember)
-		if !ok {
-			return false
-		}
-		rightMember := rightByName[name]
-		if rightMember == nil || !m.compareTypeMember(leftMember, rightMember, depth+1) {
-			return false
-		}
-	}
-	return true
-}
-
-func typeMemberKey(member *ast.Node) (string, bool) {
-	if member == nil {
-		return "", false
-	}
-	if member.Kind == ast.KindCallSignature {
-		return "\xfe.call", true
-	}
-	name := member.Name()
-	if name == nil {
-		return "", false
-	}
-	switch name.Kind {
-	case ast.KindIdentifier, ast.KindPrivateIdentifier, ast.KindStringLiteral, ast.KindNumericLiteral:
-		return name.Text(), true
-	default:
-		return "", false
-	}
-}
-
-func (m *signatureSyntaxMatcher) compareTypeMember(left *ast.Node, right *ast.Node, depth int) bool {
-	if left.Kind != right.Kind || left.QuestionToken() != nil != (right.QuestionToken() != nil) {
-		return false
-	}
-	const relevantModifiers = ast.ModifierFlagsReadonly
-	if left.ModifierFlags()&relevantModifiers != right.ModifierFlags()&relevantModifiers {
-		return false
-	}
-	switch left.Kind {
-	case ast.KindPropertySignature:
-		return m.compareType(left.Type(), right.Type(), depth+1)
-	case ast.KindMethodSignature, ast.KindCallSignature:
-		return m.compareFunctionLike(left, right, depth+1)
-	default:
-		return false
-	}
-}
-
-func (m *signatureSyntaxMatcher) compareUnion(left []*ast.Node, right []*ast.Node, depth int) bool {
+func (m *signatureTypeMatcher) compareUnion(left []*checker.Type, right []*checker.Type, depth int) bool {
 	if len(left) != len(right) {
 		return false
 	}
 	return m.compareUnionAt(left, right, make([]bool, len(right)), 0, depth+1)
 }
 
-func (m *signatureSyntaxMatcher) compareUnionAt(left []*ast.Node, right []*ast.Node, used []bool, index int, depth int) bool {
+func (m *signatureTypeMatcher) compareUnionAt(left []*checker.Type, right []*checker.Type, used []bool, index int, depth int) bool {
 	if index == len(left) {
 		return true
 	}
@@ -435,103 +451,84 @@ func (m *signatureSyntaxMatcher) compareUnionAt(left []*ast.Node, right []*ast.N
 	return false
 }
 
-func (m *signatureSyntaxMatcher) clone() *signatureSyntaxMatcher {
+func (m *signatureTypeMatcher) clone() *signatureTypeMatcher {
 	clone := *m
-	clone.leftToRight = cloneSymbolMap(m.leftToRight)
-	clone.rightToLeft = cloneSymbolMap(m.rightToLeft)
-	clone.leftBinders = cloneNodeMap(m.leftBinders)
-	clone.rightBinders = cloneNodeMap(m.rightBinders)
+	clone.leftToRight = maps.Clone(m.leftToRight)
+	clone.rightToLeft = maps.Clone(m.rightToLeft)
+	clone.leftBinders = maps.Clone(m.leftBinders)
+	clone.rightBinders = maps.Clone(m.rightBinders)
+	clone.active = maps.Clone(m.active)
 	return &clone
 }
 
-func (m *signatureSyntaxMatcher) commit(branch *signatureSyntaxMatcher) {
+func (m *signatureTypeMatcher) commit(branch *signatureTypeMatcher) {
 	m.leftToRight = branch.leftToRight
 	m.rightToLeft = branch.rightToLeft
 	m.leftBinders = branch.leftBinders
 	m.rightBinders = branch.rightBinders
 }
 
-func cloneSymbolMap(source map[*ast.Symbol]*ast.Symbol) map[*ast.Symbol]*ast.Symbol {
-	result := make(map[*ast.Symbol]*ast.Symbol, len(source))
-	maps.Copy(result, source)
-	return result
-}
-
-func cloneNodeMap(source map[*ast.Symbol]*ast.Node) map[*ast.Symbol]*ast.Node {
-	result := make(map[*ast.Symbol]*ast.Node, len(source))
-	maps.Copy(result, source)
-	return result
-}
-
-func (m *signatureSyntaxMatcher) validateBinders() bool {
+func (m *signatureTypeMatcher) validateBinders() bool {
 	if len(m.leftBinders) != len(m.rightBinders) || len(m.leftToRight) != len(m.leftBinders) {
 		return false
 	}
-	for leftSymbol, leftDeclaration := range m.leftBinders {
-		rightSymbol := m.leftToRight[leftSymbol]
-		rightDeclaration := m.rightBinders[rightSymbol]
-		if rightDeclaration == nil || !m.compareTypeParameterDeclaration(leftDeclaration, rightDeclaration) {
+	for left, right := range m.leftToRight {
+		if checker.Checker_getTypeParameterModifiers(m.checker, left) != checker.Checker_getTypeParameterModifiers(m.checker, right) {
+			return false
+		}
+		leftConstraint, rightConstraint := m.checker.GetConstraintOfTypeParameter(left), m.checker.GetConstraintOfTypeParameter(right)
+		if !m.compareOptionalType(leftConstraint, rightConstraint) {
+			return false
+		}
+		leftDefault, rightDefault := m.checker.GetDefaultFromTypeParameter(left), m.checker.GetDefaultFromTypeParameter(right)
+		if !m.compareOptionalType(leftDefault, rightDefault) {
 			return false
 		}
 	}
 	return true
 }
 
-func (m *signatureSyntaxMatcher) compareTypeParameterDeclaration(left *ast.Node, right *ast.Node) bool {
-	leftParameter, rightParameter := left.AsTypeParameterDeclaration(), right.AsTypeParameterDeclaration()
-	const relevantModifiers = ast.ModifierFlagsConst | ast.ModifierFlagsIn | ast.ModifierFlagsOut
-	if left.ModifierFlags()&relevantModifiers != right.ModifierFlags()&relevantModifiers {
-		return false
-	}
-	if (leftParameter.Constraint == nil) != (rightParameter.Constraint == nil) ||
-		(leftParameter.DefaultType == nil) != (rightParameter.DefaultType == nil) {
-		return false
-	}
-	if leftParameter.Constraint != nil && !m.compareType(leftParameter.Constraint, rightParameter.Constraint, 0) {
-		return false
-	}
-	return leftParameter.DefaultType == nil || m.compareType(leftParameter.DefaultType, rightParameter.DefaultType, 0)
+func (m *signatureTypeMatcher) compareOptionalType(left *checker.Type, right *checker.Type) bool {
+	return m.compareOptionalTypeAt(left, right, 0)
 }
 
-func (m *signatureSyntaxMatcher) isNoInferReference(node *ast.Node) bool {
-	if node == nil || node.Kind != ast.KindTypeReference {
-		return false
+func (m *signatureTypeMatcher) compareOptionalTypeAt(left *checker.Type, right *checker.Type, depth int) bool {
+	if left == nil || right == nil {
+		return left == right
 	}
-	reference := node.AsTypeReferenceNode()
-	if reference.TypeName == nil || reference.TypeArguments == nil || len(reference.TypeArguments.Nodes) != 1 {
-		return false
+	return m.compareType(left, right, depth+1)
+}
+
+func sameOptionalSymbol(c *checker.Checker, left *ast.Symbol, right *ast.Symbol) bool {
+	if left == nil || right == nil {
+		return left == right
 	}
-	var hasNoInferName bool
-	switch reference.TypeName.Kind {
-	case ast.KindIdentifier:
-		hasNoInferName = reference.TypeName.Text() == "NoInfer"
-	case ast.KindQualifiedName:
-		hasNoInferName = reference.TypeName.AsQualifiedName().Right.Text() == "NoInfer"
-	default:
-		return false
+	return sameSymbolReference(c, left, right)
+}
+
+func noInferBaseType(c *checker.Checker, t *checker.Type) *checker.Type {
+	if c == nil || t == nil {
+		return nil
 	}
-	if !hasNoInferName {
-		return false
+	if checker.Checker_isNoInferType(c, t) {
+		return t.AsSubstitutionType().BaseType()
 	}
-	symbol := m.checker.GetSymbolAtLocation(reference.TypeName)
-	if symbol == nil {
-		return false
+	alias := t.Alias()
+	if alias == nil || len(alias.TypeArguments()) != 1 || alias.Symbol() == nil {
+		return nil
 	}
-	if symbol.Flags&ast.SymbolFlagsAlias != 0 {
-		symbol = checker.SkipAlias(symbol, m.checker)
-	}
-	if symbol == nil {
-		return false
-	}
-	for _, declaration := range symbol.Declarations {
-		if isNoInferDeclaration(m.checker, declaration) {
-			return true
+	for _, declaration := range alias.Symbol().Declarations {
+		if isNoInferAliasDeclaration(c, declaration) {
+			return alias.TypeArguments()[0]
 		}
 	}
-	return false
+	return nil
 }
 
-func isNoInferDeclaration(c *checker.Checker, declaration *ast.Node) bool {
+// Effect supported NoInfer before it became a TypeScript intrinsic with the
+// standard tuple/indexed-access encoding. Recognize only those two exact
+// declarations so an unrelated alias named NoInfer is not made transparent.
+func isNoInferAliasDeclaration(c *checker.Checker, declaration *ast.Node) bool {
 	if declaration == nil || declaration.Kind != ast.KindTypeAliasDeclaration || len(declaration.TypeParameters()) != 1 {
 		return false
 	}
@@ -557,14 +554,14 @@ func isNoInferDeclaration(c *checker.Checker, declaration *ast.Node) bool {
 	}
 	conditional := indexed.IndexType.AsConditionalTypeNode()
 	return binder != nil &&
-		isTypeParameterReference(c, indexed.ObjectType.AsTupleTypeNode().Elements.Nodes[0], binder) &&
-		isTypeParameterReference(c, conditional.CheckType, binder) &&
+		isTypeParameterTypeNode(c, indexed.ObjectType.AsTupleTypeNode().Elements.Nodes[0], binder) &&
+		isTypeParameterTypeNode(c, conditional.CheckType, binder) &&
 		conditional.ExtendsType != nil && conditional.ExtendsType.Kind == ast.KindAnyKeyword &&
-		isNumericLiteralType(conditional.TrueType, "0") &&
+		isNumericLiteralTypeNode(conditional.TrueType, "0") &&
 		conditional.FalseType != nil && conditional.FalseType.Kind == ast.KindNeverKeyword
 }
 
-func isTypeParameterReference(c *checker.Checker, node *ast.Node, binder *ast.Symbol) bool {
+func isTypeParameterTypeNode(c *checker.Checker, node *ast.Node, binder *ast.Symbol) bool {
 	if node == nil || node.Kind != ast.KindTypeReference {
 		return false
 	}
@@ -572,22 +569,8 @@ func isTypeParameterReference(c *checker.Checker, node *ast.Node, binder *ast.Sy
 	return reference.TypeArguments == nil && sameSymbolReference(c, c.GetSymbolAtLocation(reference.TypeName), binder)
 }
 
-func isNumericLiteralType(node *ast.Node, value string) bool {
+func isNumericLiteralTypeNode(node *ast.Node, value string) bool {
 	return node != nil && node.Kind == ast.KindLiteralType &&
 		node.AsLiteralTypeNode().Literal != nil && node.AsLiteralTypeNode().Literal.Kind == ast.KindNumericLiteral &&
 		node.AsLiteralTypeNode().Literal.Text() == value
-}
-
-func sameLiteralType(left *ast.Node, right *ast.Node) bool {
-	if left == nil || right == nil || left.Kind != right.Kind {
-		return false
-	}
-	switch left.Kind {
-	case ast.KindStringLiteral, ast.KindNumericLiteral, ast.KindBigIntLiteral, ast.KindNoSubstitutionTemplateLiteral:
-		return left.Text() == right.Text()
-	case ast.KindTrueKeyword, ast.KindFalseKeyword, ast.KindNullKeyword:
-		return true
-	default:
-		return false
-	}
 }
