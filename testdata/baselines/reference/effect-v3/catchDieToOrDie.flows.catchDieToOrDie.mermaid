@@ -73,6 +73,20 @@ flowchart TB
   71["type: Effect#lt;number, Error, never#gt;<br/>callee: LocalEffect.catchAll<br/>args: #91;LocalEffect.die#93;"]
   72[/"type: #40;_handler: #40;error: Error#41; =#gt; Effect#lt;never, never, never#gt;#41; =#gt; #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R#gt;<br/>node: LocalEffect.catchAll"/]
   73[/"type: #40;defect: unknown#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: LocalEffect.die"/]
+  74[/"type: #40;defect: unknown#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: Effect.die"/]
+  75[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catchAll"/]
+  76[/"type: Effect#lt;number, Error, never#gt;<br/>node: failable"/]
+  77["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.catchAll<br/>args: #91;dieAlias#93;"]
+  78[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catchAll"/]
+  79[/"type: #40;defect: unknown#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: dieAlias"/]
+  80[/"type: Effect#lt;number, Error, never#gt;<br/>node: failable"/]
+  81["type: Effect#lt;number, never, never#gt;<br/>callee: catchAlias<br/>args: #91;Effect.die#93;"]
+  82[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: catchAlias"/]
+  83[/"type: #40;defect: unknown#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: Effect.die"/]
+  84[/"type: Effect#lt;number, Error, never#gt;<br/>node: failable"/]
+  85["type: Effect#lt;number, never, never#gt;<br/>callee: catchAlias<br/>args: #91;dieAlias#93;"]
+  86[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: catchAlias"/]
+  87[/"type: #40;defect: unknown#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: dieAlias"/]
   2 -->|"kind: transformCallee"| 1
   3 -->|"kind: transformArg"| 1
   0 -->|"kind: pipe"| 1
@@ -136,3 +150,12 @@ flowchart TB
   72 -->|"kind: transformCallee"| 71
   73 -->|"kind: transformArg"| 71
   70 -->|"kind: pipe"| 71
+  78 -->|"kind: transformCallee"| 77
+  79 -->|"kind: transformArg"| 77
+  76 -->|"kind: pipe"| 77
+  82 -->|"kind: transformCallee"| 81
+  83 -->|"kind: transformArg"| 81
+  80 -->|"kind: pipe"| 81
+  86 -->|"kind: transformCallee"| 85
+  87 -->|"kind: transformArg"| 85
+  84 -->|"kind: pipe"| 85

@@ -1,4 +1,4 @@
-==== /.src/catchDieToOrDie.ts (19 flows) ====
+==== /.src/catchDieToOrDie.ts (22 flows) ====
 
 === Piping Flow ===
 Location: 9:26 - 9:66
@@ -269,3 +269,45 @@ Transformations (1):
       callee: LocalEffect.catch
       args: [LocalEffect.die]
       outType: Effect<number, Error, never>
+
+=== Piping Flow ===
+Location: 71:26 - 71:64
+Node: failable.pipe(Effect.catch(dieAlias))
+Node Kind: KindCallExpression
+
+Subject: failable
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [dieAlias]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 72:28 - 72:66
+Node: failable.pipe(catchAlias(Effect.die))
+Node Kind: KindCallExpression
+
+Subject: failable
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: catchAlias
+      args: [Effect.die]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 73:27 - 73:63
+Node: failable.pipe(catchAlias(dieAlias))
+Node Kind: KindCallExpression
+
+Subject: failable
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: catchAlias
+      args: [dieAlias]
+      outType: Effect<number, never, never>

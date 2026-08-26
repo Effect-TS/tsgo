@@ -56,3 +56,10 @@ const LocalEffect = {
   die: Effect.die
 }
 export const localApi = failable.pipe(LocalEffect.catchAll(LocalEffect.die))
+
+// Should trigger: constant aliases retain the underlying Effect API identity.
+const dieAlias = Effect.die
+const catchAlias = Effect.catchAll
+export const aliasedDie = failable.pipe(Effect.catchAll(dieAlias))
+export const aliasedCatch = failable.pipe(catchAlias(Effect.die))
+export const aliasedBoth = failable.pipe(catchAlias(dieAlias))

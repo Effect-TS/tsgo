@@ -9,9 +9,12 @@ Effect version: 4.0.0
 /.src/catchDieToOrDie.ts(28,26): warning TS377115: `Effect.orDie` expresses escalating every typed failure into a defect more directly than `Effect.catch` with an identity-forwarding `Effect.die` handler. effect(catchDieToOrDie)
 /.src/catchDieToOrDie.ts(29,25): warning TS377115: `Effect.orDie` expresses escalating every typed failure into a defect more directly than `Effect.catch` with an identity-forwarding `Effect.die` handler. effect(catchDieToOrDie)
 /.src/catchDieToOrDie.ts(34,4): warning TS377115: `Effect.orDie` expresses escalating every typed failure into a defect more directly than `Effect.catch` with an identity-forwarding `Effect.die` handler. effect(catchDieToOrDie)
+/.src/catchDieToOrDie.ts(71,41): warning TS377115: `Effect.orDie` expresses escalating every typed failure into a defect more directly than `Effect.catch` with an identity-forwarding `Effect.die` handler. effect(catchDieToOrDie)
+/.src/catchDieToOrDie.ts(72,43): warning TS377115: `Effect.orDie` expresses escalating every typed failure into a defect more directly than `Effect.catch` with an identity-forwarding `Effect.die` handler. effect(catchDieToOrDie)
+/.src/catchDieToOrDie.ts(73,42): warning TS377115: `Effect.orDie` expresses escalating every typed failure into a defect more directly than `Effect.catch` with an identity-forwarding `Effect.die` handler. effect(catchDieToOrDie)
 
 
-==== /.src/catchDieToOrDie.ts (8 errors) ====
+==== /.src/catchDieToOrDie.ts (11 errors) ====
     // @effect-v4
     // @effect-diagnostics *:off
     // @effect-diagnostics catchDieToOrDie:warning
@@ -94,4 +97,17 @@ Effect version: 4.0.0
       die: Effect.die
     }
     export const localApi = failable.pipe(LocalEffect.catch(LocalEffect.die))
+    
+    // Should trigger: constant aliases retain the underlying Effect API identity.
+    const dieAlias = Effect.die
+    const catchAlias = Effect.catch
+    export const aliasedDie = failable.pipe(Effect.catch(dieAlias))
+                                            ~~~~~~~~~~~~
+!!! warning TS377115: `Effect.orDie` expresses escalating every typed failure into a defect more directly than `Effect.catch` with an identity-forwarding `Effect.die` handler. effect(catchDieToOrDie)
+    export const aliasedCatch = failable.pipe(catchAlias(Effect.die))
+                                              ~~~~~~~~~~
+!!! warning TS377115: `Effect.orDie` expresses escalating every typed failure into a defect more directly than `Effect.catch` with an identity-forwarding `Effect.die` handler. effect(catchDieToOrDie)
+    export const aliasedBoth = failable.pipe(catchAlias(dieAlias))
+                                             ~~~~~~~~~~
+!!! warning TS377115: `Effect.orDie` expresses escalating every typed failure into a defect more directly than `Effect.catch` with an identity-forwarding `Effect.die` handler. effect(catchDieToOrDie)
     

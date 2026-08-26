@@ -66,23 +66,26 @@ func AnalyzeCatchDieToOrDie(tp *typeparser.TypeParser, _ *checker.Checker, sf *a
 			transformation := &flow.Transformations[i]
 			callee, args, isCurriedApplication := catchDieTransformationCall(transformation)
 			methodName, effectModule, ok := catchDieMethod(tp, callee)
-			if ok && len(args) == 1 && tp.IsNodeReferenceToEffectModuleApi(tp.UnwrapIdentityForwarder(args[0]), "die") {
-				inputEffect := tp.StrictEffectType(inputType, callee)
-				if inputEffect != nil && inputEffect.E != nil && inputEffect.E.Flags()&checker.TypeFlagsNever == 0 {
-					if _, duplicate := seen[transformation.Node]; !duplicate {
-						seen[transformation.Node] = struct{}{}
-						isDataApplication := transformation.Kind == typeparser.TransformationKindDataFirst ||
-							transformation.Kind == typeparser.TransformationKindDataLast || isCurriedApplication
-						matches = append(matches, CatchDieToOrDieMatch{
-							SourceFile:        sf,
-							Location:          scanner.GetErrorRangeForNode(sf, callee),
-							Transformation:    transformation.Node,
-							EffectModule:      effectModule,
-							Input:             inputNode,
-							CatchMethodName:   methodName,
-							IsDataApplication: isDataApplication,
-							HasTypeArguments:  catchDieHasTypeArguments(transformation),
-						})
+			if ok && len(args) == 1 {
+				handler, _ := tp.UnwrapIdentityForwarder(args[0])
+				if tp.IsNodeReferenceToEffectModuleApi(handler, "die") {
+					inputEffect := tp.StrictEffectType(inputType, callee)
+					if inputEffect != nil && inputEffect.E != nil && inputEffect.E.Flags()&checker.TypeFlagsNever == 0 {
+						if _, duplicate := seen[transformation.Node]; !duplicate {
+							seen[transformation.Node] = struct{}{}
+							isDataApplication := transformation.Kind == typeparser.TransformationKindDataFirst ||
+								transformation.Kind == typeparser.TransformationKindDataLast || isCurriedApplication
+							matches = append(matches, CatchDieToOrDieMatch{
+								SourceFile:        sf,
+								Location:          scanner.GetErrorRangeForNode(sf, callee),
+								Transformation:    transformation.Node,
+								EffectModule:      effectModule,
+								Input:             inputNode,
+								CatchMethodName:   methodName,
+								IsDataApplication: isDataApplication,
+								HasTypeArguments:  catchDieHasTypeArguments(transformation),
+							})
+						}
 					}
 				}
 			}
@@ -124,14 +127,13 @@ func catchDieMethod(tp *typeparser.TypeParser, callee *ast.Node) (name string, e
 		return "", nil, false
 	}
 
-	if callee.Kind != ast.KindPropertyAccessExpression {
-		return "", nil, false
+	if callee.Kind == ast.KindPropertyAccessExpression {
+		access := callee.AsPropertyAccessExpression()
+		if access != nil {
+			effectModule = access.Expression
+		}
 	}
-	access := callee.AsPropertyAccessExpression()
-	if access == nil || access.Expression == nil {
-		return "", nil, false
-	}
-	return name, access.Expression, true
+	return name, effectModule, true
 }
 
 func catchDieHasTypeArguments(transformation *typeparser.PipingFlowTransformation) bool {

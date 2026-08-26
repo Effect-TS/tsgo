@@ -13,6 +13,7 @@ func TestUnwrapIdentityForwarder(t *testing.T) {
 	source := `
 declare const call: (value: unknown) => unknown
 declare const other: (value: unknown) => unknown
+declare const genericCall: <A>(value: unknown) => A
 
 const direct = call
 const arrow = (value: unknown) => call(value)
@@ -20,6 +21,7 @@ const arrowBlock = (value: unknown) => { return call(value) }
 const functionExpression = function(value: unknown) { return call(value) }
 const parenthesized = (value: unknown) => (call)((value))
 const differentCallee = (value: unknown) => other(value)
+const typeArguments = (value: unknown) => genericCall<string>(value)
 
 const wrapped = (value: unknown) => call(String(value))
 const differentValue = (value: unknown) => call(undefined)
@@ -36,9 +38,10 @@ const notACall = (value: unknown) => value
 	t.Cleanup(done)
 
 	tests := []struct {
-		name       string
-		wantTarget string
-		wantUnwrap bool
+		name              string
+		wantTarget        string
+		wantUnwrap        bool
+		wantTypeArguments int
 	}{
 		{name: "direct", wantTarget: "call"},
 		{name: "arrow", wantTarget: "call", wantUnwrap: true},
@@ -46,6 +49,7 @@ const notACall = (value: unknown) => value
 		{name: "functionExpression", wantTarget: "call", wantUnwrap: true},
 		{name: "parenthesized", wantTarget: "call", wantUnwrap: true},
 		{name: "differentCallee", wantTarget: "other", wantUnwrap: true},
+		{name: "typeArguments", wantTarget: "genericCall", wantUnwrap: true, wantTypeArguments: 1},
 		{name: "wrapped"},
 		{name: "differentValue"},
 		{name: "shadowed"},
@@ -60,7 +64,14 @@ const notACall = (value: unknown) => value
 	for _, test := range tests {
 		initializer := findVariableInitializer(t, sf, test.name)
 		original := ast.SkipParentheses(initializer)
-		got := tp.UnwrapIdentityForwarder(initializer)
+		got, typeArguments := tp.UnwrapIdentityForwarder(initializer)
+		gotTypeArguments := 0
+		if typeArguments != nil {
+			gotTypeArguments = len(typeArguments.Nodes)
+		}
+		if gotTypeArguments != test.wantTypeArguments {
+			t.Fatalf("UnwrapIdentityForwarder(%s) returned %d type arguments, want %d", test.name, gotTypeArguments, test.wantTypeArguments)
+		}
 		if test.wantUnwrap {
 			if got == original {
 				t.Fatalf("UnwrapIdentityForwarder(%s) did not unwrap", test.name)
