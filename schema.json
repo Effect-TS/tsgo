@@ -1845,6 +1845,11 @@
           "default": "suggestion",
           "description": "Suggests Effect.firstSuccessOf for consecutive error-independent Effect.catch fallbacks when the error type is preserved"
         },
+        "catchConditionalRefailToCatchIf": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.catchIf, Effect.catchCauseIf, or Effect.catchTag for conditional catch handlers that re-fail their untouched input"
+        },
         "catchTagToCatchReason": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",

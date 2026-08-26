@@ -1,0 +1,93 @@
+=== Quick Fix Inventory ===
+
+[D1] (16:3-16:15) TS377116: `Effect.catchIf` expresses selective recovery more directly than `Effect.catch` with a conditional `Effect.fail` passthrough. effect(catchConditionalRefailToCatchIf)
+  Fix 0: "Disable catchConditionalRefailToCatchIf for this line"
+  Fix 1: "Disable catchConditionalRefailToCatchIf for entire file"
+
+[D2] (21:3-21:15) TS377116: `Effect.catchIf` expresses selective recovery more directly than `Effect.catch` with a conditional `Effect.fail` passthrough. effect(catchConditionalRefailToCatchIf)
+  Fix 0: "Disable catchConditionalRefailToCatchIf for this line"
+  Fix 1: "Disable catchConditionalRefailToCatchIf for entire file"
+
+[D3] (26:3-26:15) TS377116: `Effect.catchIf` expresses selective recovery more directly than `Effect.catch` with a conditional `Effect.fail` passthrough. effect(catchConditionalRefailToCatchIf)
+  Fix 0: "Disable catchConditionalRefailToCatchIf for this line"
+  Fix 1: "Disable catchConditionalRefailToCatchIf for entire file"
+
+[D4] (37:3-37:15) TS377116: `Effect.catchIf` expresses selective recovery more directly than `Effect.catch` with a conditional `Effect.fail` passthrough. effect(catchConditionalRefailToCatchIf)
+  Fix 0: "Disable catchConditionalRefailToCatchIf for this line"
+  Fix 1: "Disable catchConditionalRefailToCatchIf for entire file"
+
+[D5] (45:3-45:15) TS377116: `Effect.catchIf` expresses selective recovery more directly than `Effect.catch` with a conditional `Effect.fail` passthrough. effect(catchConditionalRefailToCatchIf)
+  Fix 0: "Disable catchConditionalRefailToCatchIf for this line"
+  Fix 1: "Disable catchConditionalRefailToCatchIf for entire file"
+
+[D6] (51:26-51:38) TS377116: `Effect.catchIf` expresses selective recovery more directly than `Effect.catch` with a conditional `Effect.fail` passthrough. effect(catchConditionalRefailToCatchIf)
+  Fix 0: "Disable catchConditionalRefailToCatchIf for this line"
+  Fix 1: "Disable catchConditionalRefailToCatchIf for entire file"
+
+[D7] (58:3-58:15) TS377116: `Effect.catchTag` expresses selective recovery more directly than `Effect.catch` with a conditional `Effect.fail` passthrough. effect(catchConditionalRefailToCatchIf)
+  Fix 0: "Disable catchConditionalRefailToCatchIf for this line"
+  Fix 1: "Disable catchConditionalRefailToCatchIf for entire file"
+
+[D8] (63:3-63:15) TS377116: `Effect.catchTag` expresses selective recovery more directly than `Effect.catch` with a conditional `Effect.fail` passthrough. effect(catchConditionalRefailToCatchIf)
+  Fix 0: "Disable catchConditionalRefailToCatchIf for this line"
+  Fix 1: "Disable catchConditionalRefailToCatchIf for entire file"
+
+[D9] (77:3-77:20) TS377116: `Effect.catchCauseIf` expresses selective recovery more directly than `Effect.catchCause` with a conditional `Effect.failCause` passthrough. effect(catchConditionalRefailToCatchIf)
+  Fix 0: "Disable catchConditionalRefailToCatchIf for this line"
+  Fix 1: "Disable catchConditionalRefailToCatchIf for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable catchConditionalRefailToCatchIf for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable catchConditionalRefailToCatchIf for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable catchConditionalRefailToCatchIf for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable catchConditionalRefailToCatchIf for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable catchConditionalRefailToCatchIf for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable catchConditionalRefailToCatchIf for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable catchConditionalRefailToCatchIf for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable catchConditionalRefailToCatchIf for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable catchConditionalRefailToCatchIf for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable catchConditionalRefailToCatchIf for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable catchConditionalRefailToCatchIf for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable catchConditionalRefailToCatchIf for entire file" ===
+skipped by default
+
+=== [D7] Fix 0: "Disable catchConditionalRefailToCatchIf for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable catchConditionalRefailToCatchIf for entire file" ===
+skipped by default
+
+=== [D8] Fix 0: "Disable catchConditionalRefailToCatchIf for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable catchConditionalRefailToCatchIf for entire file" ===
+skipped by default
+
+=== [D9] Fix 0: "Disable catchConditionalRefailToCatchIf for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable catchConditionalRefailToCatchIf for entire file" ===
+skipped by default

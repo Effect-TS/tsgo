@@ -1,0 +1,841 @@
+==== /.src/catchConditionalRefailToCatchIf.ts (60 flows) ====
+
+=== Piping Flow ===
+Location: 5:23 - 5:52
+Node: Data.TaggedError("NotFound")
+Node Kind: KindCallExpression
+
+Subject: "NotFound"
+Subject Type: "NotFound"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "NotFound"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 6:28 - 6:62
+Node: Data.TaggedError("DatabaseError")
+Node Kind: KindCallExpression
+
+Subject: "DatabaseError"
+Subject Type: "DatabaseError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "DatabaseError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 15:32 - 17:2
+Node: program.pipe(\n  Effect.catch((error) => isNotFound(error) ? Effect.succeed("guest") : Effect.fail(error))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, DatabaseError | NotFound, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [(error) => isNotFound(error) ? Effect.succeed("guest") : Effect.fail(error)]
+      outType: Effect<string, DatabaseError | NotFound, never>
+
+=== Piping Flow ===
+Location: 16:26 - 16:44
+Node: isNotFound(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: DatabaseError | NotFound
+
+Transformations (1):
+  [0] kind: call
+      callee: isNotFound
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 16:46 - 16:70
+Node: Effect.succeed("guest")
+Node Kind: KindCallExpression
+
+Subject: "guest"
+Subject Type: "guest"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 16:72 - 16:91
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: DatabaseError | NotFound
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, DatabaseError | NotFound, never>
+
+=== Piping Flow ===
+Location: 20:31 - 22:2
+Node: program.pipe(\n  Effect.catch((error) => error instanceof DatabaseError ? Effect.fail(error) : Effect.succeed("guest"))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, DatabaseError | NotFound, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [(error) => error instanceof DatabaseError ? Effect.fail(error) : Effect.succeed("guest")]
+      outType: Effect<string, DatabaseError, never>
+
+=== Piping Flow ===
+Location: 21:59 - 21:78
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: DatabaseError
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, DatabaseError, never>
+
+=== Piping Flow ===
+Location: 21:80 - 21:104
+Node: Effect.succeed("guest")
+Node Kind: KindCallExpression
+
+Subject: "guest"
+Subject Type: "guest"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 25:22 - 33:2
+Node: program.pipe(\n  Effect.catch(function(error) {\n    if ("_tag" in error) {\n      return Effect.succeed("guest")\n    } else {\n      return Effect.fail(error)\n    }\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, DatabaseError | NotFound, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [function(error) {\n    if ("_tag" in error) {\n      return Effect.succeed("guest")\n    } else {\n      return Effect.fail(error)\n    }\n  }]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 28:13 - 28:37
+Node: Effect.succeed("guest")
+Node Kind: KindCallExpression
+
+Subject: "guest"
+Subject Type: "guest"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 30:13 - 30:32
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: never
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 36:28 - 41:2
+Node: program.pipe(\n  Effect.catch((error) => {\n    if (isNotFound(error)) return Effect.succeed("guest")\n    return Effect.fail(error)\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, DatabaseError | NotFound, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [(error) => {\n    if (isNotFound(error)) return Effect.succeed("guest")\n    return Effect.fail(error)\n  }]
+      outType: Effect<string, DatabaseError | NotFound, never>
+
+=== Piping Flow ===
+Location: 38:9 - 38:26
+Node: isNotFound(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: DatabaseError | NotFound
+
+Transformations (1):
+  [0] kind: call
+      callee: isNotFound
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 38:34 - 38:58
+Node: Effect.succeed("guest")
+Node Kind: KindCallExpression
+
+Subject: "guest"
+Subject Type: "guest"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 39:11 - 39:30
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: DatabaseError | NotFound
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, DatabaseError | NotFound, never>
+
+=== Piping Flow ===
+Location: 44:31 - 48:2
+Node: program.pipe(\n  Effect.catch((error) => {\n    return isNotFound(error) ? Effect.succeed("guest") : Effect.fail(error)\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, DatabaseError | NotFound, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [(error) => {\n    return isNotFound(error) ? Effect.succeed("guest") : Effect.fail(error)\n  }]
+      outType: Effect<string, DatabaseError | NotFound, never>
+
+=== Piping Flow ===
+Location: 46:11 - 46:29
+Node: isNotFound(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: DatabaseError | NotFound
+
+Transformations (1):
+  [0] kind: call
+      callee: isNotFound
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 46:31 - 46:55
+Node: Effect.succeed("guest")
+Node Kind: KindCallExpression
+
+Subject: "guest"
+Subject Type: "guest"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 46:57 - 46:76
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: DatabaseError | NotFound
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, DatabaseError | NotFound, never>
+
+=== Piping Flow ===
+Location: 51:25 - 54:2
+Node: Effect.catch(\n  program,\n  (error) => typeof error === "object" ? Effect.succeed("guest") : Effect.fail(error)\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, DatabaseError | NotFound, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.catch
+      args: [(error) => typeof error === "object" ? Effect.succeed("guest") : Effect.fail(error)]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 53:41 - 53:65
+Node: Effect.succeed("guest")
+Node Kind: KindCallExpression
+
+Subject: "guest"
+Subject Type: "guest"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 53:67 - 53:86
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: never
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 57:25 - 59:2
+Node: program.pipe(\n  Effect.catch((error) => error._tag === "NotFound" ? Effect.succeed("guest") : Effect.fail(error))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, DatabaseError | NotFound, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [(error) => error._tag === "NotFound" ? Effect.succeed("guest") : Effect.fail(error)]
+      outType: Effect<string, DatabaseError, never>
+
+=== Piping Flow ===
+Location: 58:54 - 58:78
+Node: Effect.succeed("guest")
+Node Kind: KindCallExpression
+
+Subject: "guest"
+Subject Type: "guest"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 58:80 - 58:99
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: DatabaseError
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, DatabaseError, never>
+
+=== Piping Flow ===
+Location: 62:25 - 71:2
+Node: program.pipe(\n  Effect.catch((error) => {\n    switch (error._tag) {\n      case "NotFound":\n        return Effect.succeed("guest")\n      default:\n        return Effect.fail(error)\n    }\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, DatabaseError | NotFound, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [(error) => {\n    switch (error._tag) {\n      case "NotFound":\n        return Effect.succeed("guest")\n      default:\n        return Effect.fail(error)\n    }\n  }]
+      outType: Effect<string, DatabaseError, never>
+
+=== Piping Flow ===
+Location: 66:15 - 66:39
+Node: Effect.succeed("guest")
+Node Kind: KindCallExpression
+
+Subject: "guest"
+Subject Type: "guest"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 68:15 - 68:34
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: DatabaseError
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, DatabaseError, never>
+
+=== Piping Flow ===
+Location: 76:21 - 78:2
+Node: causeProgram.pipe(\n  Effect.catchCause((cause) => Cause.hasFails(cause) ? Effect.succeed("guest") : Effect.failCause(cause))\n)
+Node Kind: KindCallExpression
+
+Subject: causeProgram
+Subject Type: Effect<string, DatabaseError, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catchCause
+      args: [(cause) => Cause.hasFails(cause) ? Effect.succeed("guest") : Effect.failCause(cause)]
+      outType: Effect<string, DatabaseError, never>
+
+=== Piping Flow ===
+Location: 77:31 - 77:53
+Node: Cause.hasFails(cause)
+Node Kind: KindCallExpression
+
+Subject: cause
+Subject Type: Cause<DatabaseError>
+
+Transformations (1):
+  [0] kind: call
+      callee: Cause.hasFails
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 77:55 - 77:79
+Node: Effect.succeed("guest")
+Node Kind: KindCallExpression
+
+Subject: "guest"
+Subject Type: "guest"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 77:81 - 77:105
+Node: Effect.failCause(cause)
+Node Kind: KindCallExpression
+
+Subject: cause
+Subject Type: Cause<DatabaseError>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.failCause
+      args: (constant)
+      outType: Effect<never, DatabaseError, never>
+
+=== Piping Flow ===
+Location: 81:28 - 83:2
+Node: program.pipe(\n  Effect.catch((error) => isNotFound(error) ? Effect.succeed("guest") : Effect.fail(otherError))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, DatabaseError | NotFound, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [(error) => isNotFound(error) ? Effect.succeed("guest") : Effect.fail(otherError)]
+      outType: Effect<string, DatabaseError | NotFound, never>
+
+=== Piping Flow ===
+Location: 82:26 - 82:44
+Node: isNotFound(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: DatabaseError | NotFound
+
+Transformations (1):
+  [0] kind: call
+      callee: isNotFound
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 82:46 - 82:70
+Node: Effect.succeed("guest")
+Node Kind: KindCallExpression
+
+Subject: "guest"
+Subject Type: "guest"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 82:72 - 82:96
+Node: Effect.fail(otherError)
+Node Kind: KindCallExpression
+
+Subject: otherError
+Subject Type: DatabaseError | NotFound
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, DatabaseError | NotFound, never>
+
+=== Piping Flow ===
+Location: 86:34 - 88:2
+Node: program.pipe(\n  Effect.catch((error) => enabled ? Effect.succeed("guest") : Effect.fail(error))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, DatabaseError | NotFound, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [(error) => enabled ? Effect.succeed("guest") : Effect.fail(error)]
+      outType: Effect<string, DatabaseError | NotFound, never>
+
+=== Piping Flow ===
+Location: 87:36 - 87:60
+Node: Effect.succeed("guest")
+Node Kind: KindCallExpression
+
+Subject: "guest"
+Subject Type: "guest"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 87:62 - 87:81
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: DatabaseError | NotFound
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, DatabaseError | NotFound, never>
+
+=== Piping Flow ===
+Location: 91:27 - 97:2
+Node: program.pipe(\n  Effect.catch((error) => isNotFound(error)\n    ? Effect.succeed("guest")\n    : error instanceof DatabaseError\n      ? Effect.succeed("database")\n      : Effect.fail(error))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, DatabaseError | NotFound, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [(error) => isNotFound(error)\n    ? Effect.succeed("guest")\n    : error instanceof DatabaseError\n      ? Effect.succeed("database")\n      : Effect.fail(error)]
+      outType: Effect<string, NotFound, never>
+
+=== Piping Flow ===
+Location: 92:26 - 92:44
+Node: isNotFound(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: DatabaseError | NotFound
+
+Transformations (1):
+  [0] kind: call
+      callee: isNotFound
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 93:6 - 93:30
+Node: Effect.succeed("guest")
+Node Kind: KindCallExpression
+
+Subject: "guest"
+Subject Type: "guest"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 95:8 - 95:35
+Node: Effect.succeed("database")
+Node Kind: KindCallExpression
+
+Subject: "database"
+Subject Type: "database"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 96:8 - 96:27
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: NotFound
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, NotFound, never>
+
+=== Piping Flow ===
+Location: 100:31 - 102:2
+Node: program.pipe(\n  Effect.catchTag("NotFound", (error) => enabled ? Effect.succeed("guest") : Effect.fail(error))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, DatabaseError | NotFound, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catchTag
+      args: ["NotFound", (error) => enabled ? Effect.succeed("guest") : Effect.fail(error)]
+      outType: Effect<string, DatabaseError | NotFound, never>
+
+=== Piping Flow ===
+Location: 101:51 - 101:75
+Node: Effect.succeed("guest")
+Node Kind: KindCallExpression
+
+Subject: "guest"
+Subject Type: "guest"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 101:77 - 101:96
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: NotFound
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, NotFound, never>
+
+=== Piping Flow ===
+Location: 105:32 - 107:2
+Node: causeProgram.pipe(\n  Effect.catchCause((cause) => Cause.hasFails(cause) ? Effect.succeed("guest") : Effect.fail(cause))\n)
+Node Kind: KindCallExpression
+
+Subject: causeProgram
+Subject Type: Effect<string, DatabaseError, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catchCause
+      args: [(cause) => Cause.hasFails(cause) ? Effect.succeed("guest") : Effect.fail(cause)]
+      outType: Effect<string, Cause<DatabaseError>, never>
+
+=== Piping Flow ===
+Location: 106:31 - 106:53
+Node: Cause.hasFails(cause)
+Node Kind: KindCallExpression
+
+Subject: cause
+Subject Type: Cause<DatabaseError>
+
+Transformations (1):
+  [0] kind: call
+      callee: Cause.hasFails
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 106:55 - 106:79
+Node: Effect.succeed("guest")
+Node Kind: KindCallExpression
+
+Subject: "guest"
+Subject Type: "guest"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 106:81 - 106:100
+Node: Effect.fail(cause)
+Node Kind: KindCallExpression
+
+Subject: cause
+Subject Type: Cause<DatabaseError>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, Cause<DatabaseError>, never>
+
+=== Piping Flow ===
+Location: 110:26 - 116:2
+Node: program.pipe(\n  Effect.catch((error) => {\n    error = otherError\n    if (isNotFound(error)) return Effect.succeed("guest")\n    return Effect.fail(error)\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, DatabaseError | NotFound, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [(error) => {\n    error = otherError\n    if (isNotFound(error)) return Effect.succeed("guest")\n    return Effect.fail(error)\n  }]
+      outType: Effect<string, DatabaseError | NotFound, never>
+
+=== Piping Flow ===
+Location: 113:9 - 113:26
+Node: isNotFound(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: DatabaseError | NotFound
+
+Transformations (1):
+  [0] kind: call
+      callee: isNotFound
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 113:34 - 113:58
+Node: Effect.succeed("guest")
+Node Kind: KindCallExpression
+
+Subject: "guest"
+Subject Type: "guest"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 114:11 - 114:30
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: DatabaseError | NotFound
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, DatabaseError | NotFound, never>
+
+=== Piping Flow ===
+Location: 119:25 - 121:2
+Node: program.pipe(\n  Effect.catch((error = otherError) => isNotFound(error) ? Effect.succeed("guest") : Effect.fail(error))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, DatabaseError | NotFound, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [(error = otherError) => isNotFound(error) ? Effect.succeed("guest") : Effect.fail(error)]
+      outType: Effect<string, DatabaseError | NotFound, never>
+
+=== Piping Flow ===
+Location: 120:39 - 120:57
+Node: isNotFound(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: DatabaseError | NotFound
+
+Transformations (1):
+  [0] kind: call
+      callee: isNotFound
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 120:59 - 120:83
+Node: Effect.succeed("guest")
+Node Kind: KindCallExpression
+
+Subject: "guest"
+Subject Type: "guest"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 120:85 - 120:104
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: DatabaseError | NotFound
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, DatabaseError | NotFound, never>
