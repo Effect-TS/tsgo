@@ -1,0 +1,24 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/catchConditionalRefailToCatchIf_preview.ts(11,3): warning TS377116: `Effect.catchTag` expresses selective recovery more directly than `Effect.catch` with a conditional `Effect.fail` passthrough. effect(catchConditionalRefailToCatchIf)
+
+
+==== /.src/catchConditionalRefailToCatchIf_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics catchConditionalRefailToCatchIf:warning
+    import { Data, Effect } from "effect"
+    
+    class NotFound extends Data.TaggedError("NotFound")<{}> {}
+    class DatabaseError extends Data.TaggedError("DatabaseError")<{}> {}
+    
+    declare const program: Effect.Effect<string, NotFound | DatabaseError>
+    
+    export const recovered = program.pipe(
+      Effect.catch((error) =>
+      ~~~~~~~~~~~~
+!!! warning TS377116: `Effect.catchTag` expresses selective recovery more directly than `Effect.catch` with a conditional `Effect.fail` passthrough. effect(catchConditionalRefailToCatchIf)
+        error._tag === "NotFound" ? Effect.succeed("guest") : Effect.fail(error)
+      )
+    )
+    

@@ -2254,6 +2254,9 @@
         "effecttsgo/catch-chain-to-first-success-of": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/catch-conditional-refail-to-catch-if": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/catch-tag-to-catch-reason": {
           "$ref": "#/definitions/RuleNoConfig"
         },

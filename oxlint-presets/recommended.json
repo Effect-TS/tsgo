@@ -10,6 +10,7 @@
     "effecttsgo/async-function": "warn",
     "effecttsgo/catch-all-to-map-error": "warn",
     "effecttsgo/catch-chain-to-first-success-of": "warn",
+    "effecttsgo/catch-conditional-refail-to-catch-if": "warn",
     "effecttsgo/catch-tag-to-catch-reason": "warn",
     "effecttsgo/catch-to-ignore": "warn",
     "effecttsgo/catch-to-or-else-succeed": "warn",
