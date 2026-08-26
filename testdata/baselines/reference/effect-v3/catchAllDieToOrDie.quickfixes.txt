@@ -1,0 +1,591 @@
+=== Quick Fix Inventory ===
+
+[D1] (10:41-10:56) TS377115: `Effect.orDie` expresses escalating every typed failure into a defect more directly than `Effect.catchAll` with an identity-forwarding `Effect.die` handler. effect(catchAllDieToOrDie)
+  Fix 0: "Disable catchAllDieToOrDie for this line"
+  Fix 1: "Disable catchAllDieToOrDie for entire file"
+  Fix 2: "Replace with Effect.orDie"
+
+[D2] (14:3-14:18) TS377115: `Effect.orDie` expresses escalating every typed failure into a defect more directly than `Effect.catchAll` with an identity-forwarding `Effect.die` handler. effect(catchAllDieToOrDie)
+  Fix 0: "Disable catchAllDieToOrDie for this line"
+  Fix 1: "Disable catchAllDieToOrDie for entire file"
+  Fix 2: "Replace with Effect.orDie"
+
+[D3] (17:3-17:18) TS377115: `Effect.orDie` expresses escalating every typed failure into a defect more directly than `Effect.catchAll` with an identity-forwarding `Effect.die` handler. effect(catchAllDieToOrDie)
+  Fix 0: "Disable catchAllDieToOrDie for this line"
+  Fix 1: "Disable catchAllDieToOrDie for entire file"
+  Fix 2: "Replace with Effect.orDie"
+
+[D4] (22:3-22:18) TS377115: `Effect.orDie` expresses escalating every typed failure into a defect more directly than `Effect.catchAll` with an identity-forwarding `Effect.die` handler. effect(catchAllDieToOrDie)
+  Fix 0: "Disable catchAllDieToOrDie for this line"
+  Fix 1: "Disable catchAllDieToOrDie for entire file"
+  Fix 2: "Replace with Effect.orDie"
+
+[D5] (28:44-28:59) TS377115: `Effect.orDie` expresses escalating every typed failure into a defect more directly than `Effect.catchAll` with an identity-forwarding `Effect.die` handler. effect(catchAllDieToOrDie)
+  Fix 0: "Disable catchAllDieToOrDie for this line"
+  Fix 1: "Disable catchAllDieToOrDie for entire file"
+  Fix 2: "Replace with Effect.orDie"
+
+[D6] (29:26-29:41) TS377115: `Effect.orDie` expresses escalating every typed failure into a defect more directly than `Effect.catchAll` with an identity-forwarding `Effect.die` handler. effect(catchAllDieToOrDie)
+  Fix 0: "Disable catchAllDieToOrDie for this line"
+  Fix 1: "Disable catchAllDieToOrDie for entire file"
+  Fix 2: "Replace with Effect.orDie"
+
+[D7] (30:25-30:40) TS377115: `Effect.orDie` expresses escalating every typed failure into a defect more directly than `Effect.catchAll` with an identity-forwarding `Effect.die` handler. effect(catchAllDieToOrDie)
+  Fix 0: "Disable catchAllDieToOrDie for this line"
+  Fix 1: "Disable catchAllDieToOrDie for entire file"
+  Fix 2: "Replace with Effect.orDie"
+
+[D8] (35:4-35:19) TS377115: `Effect.orDie` expresses escalating every typed failure into a defect more directly than `Effect.catchAll` with an identity-forwarding `Effect.die` handler. effect(catchAllDieToOrDie)
+  Fix 0: "Disable catchAllDieToOrDie for this line"
+  Fix 1: "Disable catchAllDieToOrDie for entire file"
+  Fix 2: "Replace with Effect.orDie"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable catchAllDieToOrDie for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable catchAllDieToOrDie for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.orDie" ===
+
+--- file:///.src/catchAllDieToOrDie.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics catchAllDieToOrDie:warning
+import * as Effect from "effect/Effect"
+import { pipe } from "effect/Function"
+
+declare const failable: Effect.Effect<number, Error>
+
+// Should trigger: direct API reference.
+export const pipeDirect = failable.pipe(Effect.orDie)
+
+// Should trigger: concise and block identity-forwarding functions.
+export const pipeArrow = failable.pipe(
+  Effect.catchAll((error) => Effect.die(error))
+)
+export const pipeArrowBlock = failable.pipe(
+  Effect.catchAll((error) => {
+    return Effect.die(error)
+  })
+)
+export const pipeFunction = failable.pipe(
+  Effect.catchAll(function(error) {
+    return Effect.die(error)
+  })
+)
+
+// Should trigger: Function.pipe and both dual application forms.
+export const functionPipe = pipe(failable, Effect.catchAll(Effect.die))
+export const dataFirst = Effect.catchAll(failable, Effect.die)
+export const dataLast = Effect.catchAll(Effect.die)(failable)
+
+// Should trigger: Effect.fn trailing transformations are piping flows too.
+export const effectFn = Effect.fn(function*() {
+  return yield* failable
+}, Effect.catchAll(Effect.die))
+
+// Should not trigger: the failure is transformed before becoming a defect.
+export const wrapped = failable.pipe(
+  Effect.catchAll((error) => Effect.die(new Error(String(error))))
+)
+
+// Should not trigger: this is not identity forwarding.
+export const differentValue = failable.pipe(
+  Effect.catchAll((_error) => Effect.die("different"))
+)
+
+// Should not trigger: Effect.orDie would itself be redundant.
+export const unfailable = Effect.succeed(1).pipe(
+  Effect.catchAll(Effect.die)
+)
+
+// Should not trigger: a local API with the same member names.
+const LocalEffect = {
+  catchAll: (_handler: (error: Error) => Effect.Effect<never>) =>
+    <A, E, R>(self: Effect.Effect<A, E, R>) => self,
+  die: Effect.die
+}
+export const localApi = failable.pipe(LocalEffect.catchAll(LocalEffect.die))
+
+
+=== [D2] Fix 0: "Disable catchAllDieToOrDie for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable catchAllDieToOrDie for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.orDie" ===
+
+--- file:///.src/catchAllDieToOrDie.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics catchAllDieToOrDie:warning
+import * as Effect from "effect/Effect"
+import { pipe } from "effect/Function"
+
+declare const failable: Effect.Effect<number, Error>
+
+// Should trigger: direct API reference.
+export const pipeDirect = failable.pipe(Effect.catchAll(Effect.die))
+
+// Should trigger: concise and block identity-forwarding functions.
+export const pipeArrow = failable.pipe(
+  Effect.orDie
+)
+export const pipeArrowBlock = failable.pipe(
+  Effect.catchAll((error) => {
+    return Effect.die(error)
+  })
+)
+export const pipeFunction = failable.pipe(
+  Effect.catchAll(function(error) {
+    return Effect.die(error)
+  })
+)
+
+// Should trigger: Function.pipe and both dual application forms.
+export const functionPipe = pipe(failable, Effect.catchAll(Effect.die))
+export const dataFirst = Effect.catchAll(failable, Effect.die)
+export const dataLast = Effect.catchAll(Effect.die)(failable)
+
+// Should trigger: Effect.fn trailing transformations are piping flows too.
+export const effectFn = Effect.fn(function*() {
+  return yield* failable
+}, Effect.catchAll(Effect.die))
+
+// Should not trigger: the failure is transformed before becoming a defect.
+export const wrapped = failable.pipe(
+  Effect.catchAll((error) => Effect.die(new Error(String(error))))
+)
+
+// Should not trigger: this is not identity forwarding.
+export const differentValue = failable.pipe(
+  Effect.catchAll((_error) => Effect.die("different"))
+)
+
+// Should not trigger: Effect.orDie would itself be redundant.
+export const unfailable = Effect.succeed(1).pipe(
+  Effect.catchAll(Effect.die)
+)
+
+// Should not trigger: a local API with the same member names.
+const LocalEffect = {
+  catchAll: (_handler: (error: Error) => Effect.Effect<never>) =>
+    <A, E, R>(self: Effect.Effect<A, E, R>) => self,
+  die: Effect.die
+}
+export const localApi = failable.pipe(LocalEffect.catchAll(LocalEffect.die))
+
+
+=== [D3] Fix 0: "Disable catchAllDieToOrDie for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable catchAllDieToOrDie for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.orDie" ===
+
+--- file:///.src/catchAllDieToOrDie.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics catchAllDieToOrDie:warning
+import * as Effect from "effect/Effect"
+import { pipe } from "effect/Function"
+
+declare const failable: Effect.Effect<number, Error>
+
+// Should trigger: direct API reference.
+export const pipeDirect = failable.pipe(Effect.catchAll(Effect.die))
+
+// Should trigger: concise and block identity-forwarding functions.
+export const pipeArrow = failable.pipe(
+  Effect.catchAll((error) => Effect.die(error))
+)
+export const pipeArrowBlock = failable.pipe(
+  Effect.orDie
+)
+export const pipeFunction = failable.pipe(
+  Effect.catchAll(function(error) {
+    return Effect.die(error)
+  })
+)
+
+// Should trigger: Function.pipe and both dual application forms.
+export const functionPipe = pipe(failable, Effect.catchAll(Effect.die))
+export const dataFirst = Effect.catchAll(failable, Effect.die)
+export const dataLast = Effect.catchAll(Effect.die)(failable)
+
+// Should trigger: Effect.fn trailing transformations are piping flows too.
+export const effectFn = Effect.fn(function*() {
+  return yield* failable
+}, Effect.catchAll(Effect.die))
+
+// Should not trigger: the failure is transformed before becoming a defect.
+export const wrapped = failable.pipe(
+  Effect.catchAll((error) => Effect.die(new Error(String(error))))
+)
+
+// Should not trigger: this is not identity forwarding.
+export const differentValue = failable.pipe(
+  Effect.catchAll((_error) => Effect.die("different"))
+)
+
+// Should not trigger: Effect.orDie would itself be redundant.
+export const unfailable = Effect.succeed(1).pipe(
+  Effect.catchAll(Effect.die)
+)
+
+// Should not trigger: a local API with the same member names.
+const LocalEffect = {
+  catchAll: (_handler: (error: Error) => Effect.Effect<never>) =>
+    <A, E, R>(self: Effect.Effect<A, E, R>) => self,
+  die: Effect.die
+}
+export const localApi = failable.pipe(LocalEffect.catchAll(LocalEffect.die))
+
+
+=== [D4] Fix 0: "Disable catchAllDieToOrDie for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable catchAllDieToOrDie for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.orDie" ===
+
+--- file:///.src/catchAllDieToOrDie.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics catchAllDieToOrDie:warning
+import * as Effect from "effect/Effect"
+import { pipe } from "effect/Function"
+
+declare const failable: Effect.Effect<number, Error>
+
+// Should trigger: direct API reference.
+export const pipeDirect = failable.pipe(Effect.catchAll(Effect.die))
+
+// Should trigger: concise and block identity-forwarding functions.
+export const pipeArrow = failable.pipe(
+  Effect.catchAll((error) => Effect.die(error))
+)
+export const pipeArrowBlock = failable.pipe(
+  Effect.catchAll((error) => {
+    return Effect.die(error)
+  })
+)
+export const pipeFunction = failable.pipe(
+  Effect.orDie
+)
+
+// Should trigger: Function.pipe and both dual application forms.
+export const functionPipe = pipe(failable, Effect.catchAll(Effect.die))
+export const dataFirst = Effect.catchAll(failable, Effect.die)
+export const dataLast = Effect.catchAll(Effect.die)(failable)
+
+// Should trigger: Effect.fn trailing transformations are piping flows too.
+export const effectFn = Effect.fn(function*() {
+  return yield* failable
+}, Effect.catchAll(Effect.die))
+
+// Should not trigger: the failure is transformed before becoming a defect.
+export const wrapped = failable.pipe(
+  Effect.catchAll((error) => Effect.die(new Error(String(error))))
+)
+
+// Should not trigger: this is not identity forwarding.
+export const differentValue = failable.pipe(
+  Effect.catchAll((_error) => Effect.die("different"))
+)
+
+// Should not trigger: Effect.orDie would itself be redundant.
+export const unfailable = Effect.succeed(1).pipe(
+  Effect.catchAll(Effect.die)
+)
+
+// Should not trigger: a local API with the same member names.
+const LocalEffect = {
+  catchAll: (_handler: (error: Error) => Effect.Effect<never>) =>
+    <A, E, R>(self: Effect.Effect<A, E, R>) => self,
+  die: Effect.die
+}
+export const localApi = failable.pipe(LocalEffect.catchAll(LocalEffect.die))
+
+
+=== [D5] Fix 0: "Disable catchAllDieToOrDie for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable catchAllDieToOrDie for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Replace with Effect.orDie" ===
+
+--- file:///.src/catchAllDieToOrDie.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics catchAllDieToOrDie:warning
+import * as Effect from "effect/Effect"
+import { pipe } from "effect/Function"
+
+declare const failable: Effect.Effect<number, Error>
+
+// Should trigger: direct API reference.
+export const pipeDirect = failable.pipe(Effect.catchAll(Effect.die))
+
+// Should trigger: concise and block identity-forwarding functions.
+export const pipeArrow = failable.pipe(
+  Effect.catchAll((error) => Effect.die(error))
+)
+export const pipeArrowBlock = failable.pipe(
+  Effect.catchAll((error) => {
+    return Effect.die(error)
+  })
+)
+export const pipeFunction = failable.pipe(
+  Effect.catchAll(function(error) {
+    return Effect.die(error)
+  })
+)
+
+// Should trigger: Function.pipe and both dual application forms.
+export const functionPipe = pipe(failable, Effect.orDie)
+export const dataFirst = Effect.catchAll(failable, Effect.die)
+export const dataLast = Effect.catchAll(Effect.die)(failable)
+
+// Should trigger: Effect.fn trailing transformations are piping flows too.
+export const effectFn = Effect.fn(function*() {
+  return yield* failable
+}, Effect.catchAll(Effect.die))
+
+// Should not trigger: the failure is transformed before becoming a defect.
+export const wrapped = failable.pipe(
+  Effect.catchAll((error) => Effect.die(new Error(String(error))))
+)
+
+// Should not trigger: this is not identity forwarding.
+export const differentValue = failable.pipe(
+  Effect.catchAll((_error) => Effect.die("different"))
+)
+
+// Should not trigger: Effect.orDie would itself be redundant.
+export const unfailable = Effect.succeed(1).pipe(
+  Effect.catchAll(Effect.die)
+)
+
+// Should not trigger: a local API with the same member names.
+const LocalEffect = {
+  catchAll: (_handler: (error: Error) => Effect.Effect<never>) =>
+    <A, E, R>(self: Effect.Effect<A, E, R>) => self,
+  die: Effect.die
+}
+export const localApi = failable.pipe(LocalEffect.catchAll(LocalEffect.die))
+
+
+=== [D6] Fix 0: "Disable catchAllDieToOrDie for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable catchAllDieToOrDie for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace with Effect.orDie" ===
+
+--- file:///.src/catchAllDieToOrDie.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics catchAllDieToOrDie:warning
+import * as Effect from "effect/Effect"
+import { pipe } from "effect/Function"
+
+declare const failable: Effect.Effect<number, Error>
+
+// Should trigger: direct API reference.
+export const pipeDirect = failable.pipe(Effect.catchAll(Effect.die))
+
+// Should trigger: concise and block identity-forwarding functions.
+export const pipeArrow = failable.pipe(
+  Effect.catchAll((error) => Effect.die(error))
+)
+export const pipeArrowBlock = failable.pipe(
+  Effect.catchAll((error) => {
+    return Effect.die(error)
+  })
+)
+export const pipeFunction = failable.pipe(
+  Effect.catchAll(function(error) {
+    return Effect.die(error)
+  })
+)
+
+// Should trigger: Function.pipe and both dual application forms.
+export const functionPipe = pipe(failable, Effect.catchAll(Effect.die))
+export const dataFirst = Effect.orDie(failable)
+export const dataLast = Effect.catchAll(Effect.die)(failable)
+
+// Should trigger: Effect.fn trailing transformations are piping flows too.
+export const effectFn = Effect.fn(function*() {
+  return yield* failable
+}, Effect.catchAll(Effect.die))
+
+// Should not trigger: the failure is transformed before becoming a defect.
+export const wrapped = failable.pipe(
+  Effect.catchAll((error) => Effect.die(new Error(String(error))))
+)
+
+// Should not trigger: this is not identity forwarding.
+export const differentValue = failable.pipe(
+  Effect.catchAll((_error) => Effect.die("different"))
+)
+
+// Should not trigger: Effect.orDie would itself be redundant.
+export const unfailable = Effect.succeed(1).pipe(
+  Effect.catchAll(Effect.die)
+)
+
+// Should not trigger: a local API with the same member names.
+const LocalEffect = {
+  catchAll: (_handler: (error: Error) => Effect.Effect<never>) =>
+    <A, E, R>(self: Effect.Effect<A, E, R>) => self,
+  die: Effect.die
+}
+export const localApi = failable.pipe(LocalEffect.catchAll(LocalEffect.die))
+
+
+=== [D7] Fix 0: "Disable catchAllDieToOrDie for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable catchAllDieToOrDie for entire file" ===
+skipped by default
+
+=== [D7] Fix 2: "Replace with Effect.orDie" ===
+
+--- file:///.src/catchAllDieToOrDie.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics catchAllDieToOrDie:warning
+import * as Effect from "effect/Effect"
+import { pipe } from "effect/Function"
+
+declare const failable: Effect.Effect<number, Error>
+
+// Should trigger: direct API reference.
+export const pipeDirect = failable.pipe(Effect.catchAll(Effect.die))
+
+// Should trigger: concise and block identity-forwarding functions.
+export const pipeArrow = failable.pipe(
+  Effect.catchAll((error) => Effect.die(error))
+)
+export const pipeArrowBlock = failable.pipe(
+  Effect.catchAll((error) => {
+    return Effect.die(error)
+  })
+)
+export const pipeFunction = failable.pipe(
+  Effect.catchAll(function(error) {
+    return Effect.die(error)
+  })
+)
+
+// Should trigger: Function.pipe and both dual application forms.
+export const functionPipe = pipe(failable, Effect.catchAll(Effect.die))
+export const dataFirst = Effect.catchAll(failable, Effect.die)
+export const dataLast = Effect.orDie(failable)
+
+// Should trigger: Effect.fn trailing transformations are piping flows too.
+export const effectFn = Effect.fn(function*() {
+  return yield* failable
+}, Effect.catchAll(Effect.die))
+
+// Should not trigger: the failure is transformed before becoming a defect.
+export const wrapped = failable.pipe(
+  Effect.catchAll((error) => Effect.die(new Error(String(error))))
+)
+
+// Should not trigger: this is not identity forwarding.
+export const differentValue = failable.pipe(
+  Effect.catchAll((_error) => Effect.die("different"))
+)
+
+// Should not trigger: Effect.orDie would itself be redundant.
+export const unfailable = Effect.succeed(1).pipe(
+  Effect.catchAll(Effect.die)
+)
+
+// Should not trigger: a local API with the same member names.
+const LocalEffect = {
+  catchAll: (_handler: (error: Error) => Effect.Effect<never>) =>
+    <A, E, R>(self: Effect.Effect<A, E, R>) => self,
+  die: Effect.die
+}
+export const localApi = failable.pipe(LocalEffect.catchAll(LocalEffect.die))
+
+
+=== [D8] Fix 0: "Disable catchAllDieToOrDie for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable catchAllDieToOrDie for entire file" ===
+skipped by default
+
+=== [D8] Fix 2: "Replace with Effect.orDie" ===
+
+--- file:///.src/catchAllDieToOrDie.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics catchAllDieToOrDie:warning
+import * as Effect from "effect/Effect"
+import { pipe } from "effect/Function"
+
+declare const failable: Effect.Effect<number, Error>
+
+// Should trigger: direct API reference.
+export const pipeDirect = failable.pipe(Effect.catchAll(Effect.die))
+
+// Should trigger: concise and block identity-forwarding functions.
+export const pipeArrow = failable.pipe(
+  Effect.catchAll((error) => Effect.die(error))
+)
+export const pipeArrowBlock = failable.pipe(
+  Effect.catchAll((error) => {
+    return Effect.die(error)
+  })
+)
+export const pipeFunction = failable.pipe(
+  Effect.catchAll(function(error) {
+    return Effect.die(error)
+  })
+)
+
+// Should trigger: Function.pipe and both dual application forms.
+export const functionPipe = pipe(failable, Effect.catchAll(Effect.die))
+export const dataFirst = Effect.catchAll(failable, Effect.die)
+export const dataLast = Effect.catchAll(Effect.die)(failable)
+
+// Should trigger: Effect.fn trailing transformations are piping flows too.
+export const effectFn = Effect.fn(function*() {
+  return yield* failable
+}, Effect.orDie)
+
+// Should not trigger: the failure is transformed before becoming a defect.
+export const wrapped = failable.pipe(
+  Effect.catchAll((error) => Effect.die(new Error(String(error))))
+)
+
+// Should not trigger: this is not identity forwarding.
+export const differentValue = failable.pipe(
+  Effect.catchAll((_error) => Effect.die("different"))
+)
+
+// Should not trigger: Effect.orDie would itself be redundant.
+export const unfailable = Effect.succeed(1).pipe(
+  Effect.catchAll(Effect.die)
+)
+
+// Should not trigger: a local API with the same member names.
+const LocalEffect = {
+  catchAll: (_handler: (error: Error) => Effect.Effect<never>) =>
+    <A, E, R>(self: Effect.Effect<A, E, R>) => self,
+  die: Effect.die
+}
+export const localApi = failable.pipe(LocalEffect.catchAll(LocalEffect.die))
+

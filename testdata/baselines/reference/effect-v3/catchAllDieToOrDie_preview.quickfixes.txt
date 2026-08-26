@@ -1,0 +1,29 @@
+=== Quick Fix Inventory ===
+
+[D1] (9:3-9:18) TS377115: `Effect.orDie` expresses escalating every typed failure into a defect more directly than `Effect.catchAll` with an identity-forwarding `Effect.die` handler. effect(catchAllDieToOrDie)
+  Fix 0: "Disable catchAllDieToOrDie for this line"
+  Fix 1: "Disable catchAllDieToOrDie for entire file"
+  Fix 2: "Replace with Effect.orDie"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable catchAllDieToOrDie for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable catchAllDieToOrDie for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.orDie" ===
+
+--- file:///.src/catchAllDieToOrDie_preview.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics catchAllDieToOrDie:warning
+import * as Effect from "effect/Effect"
+
+declare const readConfig: Effect.Effect<string, Error>
+
+export const program = readConfig.pipe(
+  Effect.orDie
+)
+

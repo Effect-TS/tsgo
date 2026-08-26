@@ -1,0 +1,29 @@
+==== /.src/catchAllDieToOrDie_preview.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 8:23 - 10:2
+Node: readConfig.pipe(\n  Effect.catch((error) => Effect.die(error))\n)
+Node Kind: KindCallExpression
+
+Subject: readConfig
+Subject Type: Effect<string, Error, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [(error) => Effect.die(error)]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 9:26 - 9:44
+Node: Effect.die(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.die
+      args: (constant)
+      outType: Effect<never, never, never>

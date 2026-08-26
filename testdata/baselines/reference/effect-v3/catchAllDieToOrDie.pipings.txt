@@ -1,0 +1,257 @@
+==== /.src/catchAllDieToOrDie.ts (18 flows) ====
+
+=== Piping Flow ===
+Location: 10:26 - 10:69
+Node: failable.pipe(Effect.catchAll(Effect.die))
+Node Kind: KindCallExpression
+
+Subject: failable
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catchAll
+      args: [Effect.die]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 13:25 - 15:2
+Node: failable.pipe(\n  Effect.catchAll((error) => Effect.die(error))\n)
+Node Kind: KindCallExpression
+
+Subject: failable
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catchAll
+      args: [(error) => Effect.die(error)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 14:29 - 14:47
+Node: Effect.die(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.die
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 16:30 - 20:2
+Node: failable.pipe(\n  Effect.catchAll((error) => {\n    return Effect.die(error)\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: failable
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catchAll
+      args: [(error) => {\n    return Effect.die(error)\n  }]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 18:11 - 18:29
+Node: Effect.die(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.die
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 21:28 - 25:2
+Node: failable.pipe(\n  Effect.catchAll(function(error) {\n    return Effect.die(error)\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: failable
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catchAll
+      args: [function(error) {\n    return Effect.die(error)\n  }]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 23:11 - 23:29
+Node: Effect.die(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.die
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 28:28 - 28:72
+Node: pipe(failable, Effect.catchAll(Effect.die))
+Node Kind: KindCallExpression
+
+Subject: failable
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.catchAll
+      args: [Effect.die]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 29:25 - 29:63
+Node: Effect.catchAll(failable, Effect.die)
+Node Kind: KindCallExpression
+
+Subject: failable
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.catchAll
+      args: [Effect.die]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 30:24 - 30:62
+Node: Effect.catchAll(Effect.die)(failable)
+Node Kind: KindCallExpression
+
+Subject: failable
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.catchAll(Effect.die)
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 33:24 - 35:32
+Node: Effect.fn(function*() {\n  return yield* failable\n}, Effect.catchAll(Effect.die))
+Node Kind: KindCallExpression
+
+Subject: Effect.fn(function*() {\n  return yield* failable\n}, Effect.catchAll(Effect.die))
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: effectFn
+      callee: Effect.catchAll
+      args: [Effect.die]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 38:23 - 40:2
+Node: failable.pipe(\n  Effect.catchAll((error) => Effect.die(new Error(String(error))))\n)
+Node Kind: KindCallExpression
+
+Subject: failable
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catchAll
+      args: [(error) => Effect.die(new Error(String(error)))]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 39:29 - 39:66
+Node: Effect.die(new Error(String(error)))
+Node Kind: KindCallExpression
+
+Subject: new Error(String(error))
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.die
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 39:51 - 39:64
+Node: String(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: String
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 43:30 - 45:2
+Node: failable.pipe(\n  Effect.catchAll((_error) => Effect.die("different"))\n)
+Node Kind: KindCallExpression
+
+Subject: failable
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catchAll
+      args: [(_error) => Effect.die("different")]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 44:30 - 44:54
+Node: Effect.die("different")
+Node Kind: KindCallExpression
+
+Subject: "different"
+Subject Type: "different"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.die
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 48:26 - 50:2
+Node: Effect.succeed(1).pipe(\n  Effect.catchAll(Effect.die)\n)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.catchAll
+      args: [Effect.die]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 58:24 - 58:77
+Node: failable.pipe(LocalEffect.catchAll(LocalEffect.die))
+Node Kind: KindCallExpression
+
+Subject: failable
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: LocalEffect.catchAll
+      args: [LocalEffect.die]
+      outType: Effect<number, Error, never>

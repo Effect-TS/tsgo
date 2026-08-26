@@ -1532,6 +1532,30 @@
       }
     },
     {
+      "name": "catchAllDieToOrDie",
+      "group": "style",
+      "description": "Suggests using Effect.orDie instead of Effect.catch or Effect.catchAll with an identity-forwarding Effect.die handler",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377115
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const readConfig: Effect.Effect\u003cstring, Error\u003e\n\nexport const program = readConfig.pipe(\n  Effect.catch((error) =\u003e Effect.die(error))\n)\n",
+        "diagnostics": [
+          {
+            "start": 131,
+            "end": 143,
+            "text": "`Effect.orDie` expresses escalating every typed failure into a defect more directly than `Effect.catch` with an identity-forwarding `Effect.die` handler. effect(catchAllDieToOrDie)"
+          }
+        ]
+      }
+    },
+    {
       "name": "catchAllToMapError",
       "group": "style",
       "description": "Suggests using Effect.mapError instead of Effect.catch + Effect.fail",
