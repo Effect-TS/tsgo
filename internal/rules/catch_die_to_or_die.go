@@ -64,8 +64,8 @@ func AnalyzeCatchDieToOrDie(tp *typeparser.TypeParser, _ *checker.Checker, sf *a
 		inputType := flow.Subject.OutType
 		for i := range flow.Transformations {
 			transformation := &flow.Transformations[i]
-			callee, args, isCurriedApplication := catchAllDieTransformationCall(transformation)
-			methodName, effectModule, ok := catchAllDieMethod(tp, callee)
+			callee, args, isCurriedApplication := catchDieTransformationCall(transformation)
+			methodName, effectModule, ok := catchDieMethod(tp, callee)
 			if ok && len(args) == 1 && tp.IsNodeReferenceToEffectModuleApi(tp.UnwrapIdentityForwarder(args[0]), "die") {
 				inputEffect := tp.StrictEffectType(inputType, callee)
 				if inputEffect != nil && inputEffect.E != nil && inputEffect.E.Flags()&checker.TypeFlagsNever == 0 {
@@ -81,7 +81,7 @@ func AnalyzeCatchDieToOrDie(tp *typeparser.TypeParser, _ *checker.Checker, sf *a
 							Input:             inputNode,
 							CatchMethodName:   methodName,
 							IsDataApplication: isDataApplication,
-							HasTypeArguments:  catchAllDieHasTypeArguments(transformation),
+							HasTypeArguments:  catchDieHasTypeArguments(transformation),
 						})
 					}
 				}
@@ -95,7 +95,7 @@ func AnalyzeCatchDieToOrDie(tp *typeparser.TypeParser, _ *checker.Checker, sf *a
 	return matches
 }
 
-func catchAllDieTransformationCall(transformation *typeparser.PipingFlowTransformation) (callee *ast.Node, args []*ast.Node, isCurriedApplication bool) {
+func catchDieTransformationCall(transformation *typeparser.PipingFlowTransformation) (callee *ast.Node, args []*ast.Node, isCurriedApplication bool) {
 	if transformation == nil {
 		return nil, nil, false
 	}
@@ -111,26 +111,30 @@ func catchAllDieTransformationCall(transformation *typeparser.PipingFlowTransfor
 	return call.Expression, call.Arguments.Nodes, true
 }
 
-func catchAllDieMethod(tp *typeparser.TypeParser, callee *ast.Node) (name string, effectModule *ast.Node, ok bool) {
-	if callee == nil || callee.Kind != ast.KindPropertyAccessExpression {
-		return "", nil, false
-	}
-	access := callee.AsPropertyAccessExpression()
-	if access == nil || access.Name() == nil || access.Expression == nil {
+func catchDieMethod(tp *typeparser.TypeParser, callee *ast.Node) (name string, effectModule *ast.Node, ok bool) {
+	if tp == nil || callee == nil {
 		return "", nil, false
 	}
 
-	name = access.Name().Text()
-	if name != "catch" && name != "catchAll" {
-		return "", nil, false
+	name = "catchAll"
+	if tp.SupportedEffectVersion() == typeparser.EffectMajorV4 {
+		name = "catch"
 	}
 	if !tp.IsNodeReferenceToEffectModuleApi(callee, name) {
+		return "", nil, false
+	}
+
+	if callee.Kind != ast.KindPropertyAccessExpression {
+		return "", nil, false
+	}
+	access := callee.AsPropertyAccessExpression()
+	if access == nil || access.Expression == nil {
 		return "", nil, false
 	}
 	return name, access.Expression, true
 }
 
-func catchAllDieHasTypeArguments(transformation *typeparser.PipingFlowTransformation) bool {
+func catchDieHasTypeArguments(transformation *typeparser.PipingFlowTransformation) bool {
 	if transformation == nil {
 		return false
 	}
