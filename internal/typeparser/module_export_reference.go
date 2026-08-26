@@ -45,8 +45,40 @@ func (tp *TypeParser) ReferenceSymbolAtNode(node *ast.Node) *ast.Symbol {
 			}
 		}
 
-		return tp.resolveAliasedSymbol(sym)
+		sym = tp.resolveAliasedSymbol(sym)
+		if node.Kind == ast.KindIdentifier && !ast.IsDeclarationName(node) {
+			return tp.resolveConstantAliasSymbol(sym)
+		}
+		return sym
 	})
+}
+
+func (tp *TypeParser) resolveConstantAliasSymbol(sym *ast.Symbol) *ast.Symbol {
+	seen := make(map[*ast.Symbol]struct{})
+	for sym != nil {
+		if _, ok := seen[sym]; ok {
+			return sym
+		}
+		seen[sym] = struct{}{}
+
+		declarationNode := sym.ValueDeclaration
+		if declarationNode == nil || declarationNode.Kind != ast.KindVariableDeclaration ||
+			declarationNode.Parent == nil || declarationNode.Parent.Kind != ast.KindVariableDeclarationList ||
+			declarationNode.Parent.Flags&ast.NodeFlagsConst == 0 {
+			return sym
+		}
+		declaration := declarationNode.AsVariableDeclaration()
+		if declaration == nil || declaration.Initializer == nil {
+			return sym
+		}
+
+		next := tp.GetSymbolAtLocation(ast.SkipParentheses(declaration.Initializer))
+		if next == nil {
+			return sym
+		}
+		sym = tp.resolveAliasedSymbol(next)
+	}
+	return nil
 }
 
 func (tp *TypeParser) IsSourceFileInPackage(sf *ast.SourceFile, packageName string) bool {

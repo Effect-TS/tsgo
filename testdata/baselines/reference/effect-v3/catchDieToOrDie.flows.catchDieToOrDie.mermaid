@@ -1,0 +1,161 @@
+flowchart TB
+  0[/"type: Effect#lt;number, Error, never#gt;<br/>node: failable"/]
+  1["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.catchAll<br/>args: #91;Effect.die#93;"]
+  2[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catchAll"/]
+  3[/"type: #40;defect: unknown#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: Effect.die"/]
+  4[/"type: Effect#lt;number, Error, never#gt;<br/>node: failable"/]
+  5["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.catchAll<br/>args: #91;#40;error#41; =#gt; Effect.die#40;error#41;#93;"]
+  6[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catchAll"/]
+  7[["type: #40;error: Error#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: #40;error#41; =#gt; Effect.die#40;error#41;"]]
+  8[/"type: Error<br/>node: error"/]
+  9["type: Effect#lt;never, never, never#gt;<br/>callee: Effect.die<br/>args: #91;#93;"]
+  10[/"type: #40;defect: unknown#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: Effect.die"/]
+  11[/"type: Effect#lt;number, Error, never#gt;<br/>node: failable"/]
+  12["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.catchAll<br/>args: #91;#40;error#41; =#gt; #123;#92;n    return Effect.die#40;error#41;#92;n  #125;#93;"]
+  13[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catchAll"/]
+  14[["type: #40;error: Error#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: #40;error#41; =#gt; #123;#92;n    return Effect.die#40;error#41;#92;n  #125;"]]
+  15[/"type: Error<br/>node: error"/]
+  16["type: Effect#lt;never, never, never#gt;<br/>callee: Effect.die<br/>args: #91;#93;"]
+  17[/"type: #40;defect: unknown#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: Effect.die"/]
+  18[/"type: Effect#lt;number, Error, never#gt;<br/>node: failable"/]
+  19["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.catchAll<br/>args: #91;function#40;error#41; #123;#92;n    return Effect.die#40;error#41;#92;n  #125;#93;"]
+  20[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catchAll"/]
+  21[["type: #40;error: Error#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: function#40;error#41; #123;#92;n    return Effect.die#40;error#41;#92;n  #125;"]]
+  22[/"type: Error<br/>node: error"/]
+  23["type: Effect#lt;never, never, never#gt;<br/>callee: Effect.die<br/>args: #91;#93;"]
+  24[/"type: #40;defect: unknown#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: Effect.die"/]
+  25[/"type: Effect#lt;number, Error, never#gt;<br/>node: failable"/]
+  26["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.catchAll<br/>args: #91;Effect.die#93;"]
+  27[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catchAll"/]
+  28[/"type: #40;defect: unknown#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: Effect.die"/]
+  29[/"type: Effect#lt;number, Error, never#gt;<br/>node: failable"/]
+  30["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  31[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catchAll"/]
+  32[/"type: #40;defect: unknown#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: Effect.die"/]
+  33[/"type: Effect#lt;number, Error, never#gt;<br/>node: failable"/]
+  34["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.catchAll<br/>args: #91;Effect.die#93;"]
+  35[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catchAll"/]
+  36[/"type: #40;defect: unknown#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: Effect.die"/]
+  37((("type: Effect#lt;number, Error, never#gt;<br/>node: function*#40;#41; #123;#92;n  return yield* failable#92;n#125;")))
+  38["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.catchAll<br/>args: #91;Effect.die#93;"]
+  39[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catchAll"/]
+  40[/"type: #40;defect: unknown#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: Effect.die"/]
+  41[/"type: Effect#lt;number, Error, never#gt;<br/>node: failable"/]
+  42[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: Effect.fn#40;function*#40;#41; #123;#92;n  return yield* failable#92;n#125;, Effect.catchAll#40;Effect.die#41;#41;"]]
+  43[/"type: Effect#lt;number, Error, never#gt;<br/>node: failable"/]
+  44["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.catchAll<br/>args: #91;#40;error#41; =#gt; Effect.die#40;new Error#40;String#40;error#41;#41;#41;#93;"]
+  45[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catchAll"/]
+  46[["type: #40;error: Error#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: #40;error#41; =#gt; Effect.die#40;new Error#40;String#40;error#41;#41;#41;"]]
+  47[/"type: Error<br/>node: new Error#40;String#40;error#41;#41;"/]
+  48[/"type: Error<br/>node: error"/]
+  49["type: string<br/>callee: String<br/>args: #91;#93;"]
+  50[/"type: StringConstructor<br/>node: String"/]
+  51["type: Effect#lt;never, never, never#gt;<br/>callee: Effect.die<br/>args: #91;#93;"]
+  52[/"type: #40;defect: unknown#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: Effect.die"/]
+  53[/"type: Effect#lt;number, Error, never#gt;<br/>node: failable"/]
+  54["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.catchAll<br/>args: #91;#40;_error#41; =#gt; Effect.die#40;#quot;different#quot;#41;#93;"]
+  55[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catchAll"/]
+  56[["type: #40;_error: Error#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: #40;_error#41; =#gt; Effect.die#40;#quot;different#quot;#41;"]]
+  57[/"type: #quot;different#quot;<br/>node: #quot;different#quot;"/]
+  58["type: Effect#lt;never, never, never#gt;<br/>callee: Effect.die<br/>args: #91;#93;"]
+  59[/"type: #40;defect: unknown#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: Effect.die"/]
+  60[/"type: 1<br/>node: 1"/]
+  61["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  62[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  63["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.catchAll<br/>args: #91;Effect.die#93;"]
+  64[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catchAll"/]
+  65[/"type: #40;defect: unknown#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: Effect.die"/]
+  66[/"type: #123; catchAll: #40;_handler: #40;error: Error#41; =#gt; Effect#lt;never, never, never#gt;#41; =#gt; #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R#gt;; die: #40;defect: unknown#41; =#gt; Effect#lt;never, never, never#gt;; #125;<br/>node: #123;#92;n  catchAll: #40;_handler: #40;error: Error#41; =#gt; Effect.Effect#lt;never#gt;#41; =#gt;#92;n    #lt;A, E, R#gt;#40;self: Effect.Effect#lt;A, E, R#gt;#41; =#gt; self,#92;n  die: Effect.die#92;n#125;"/]
+  67[["type: #40;_handler: #40;error: Error#41; =#gt; Effect#lt;never, never, never#gt;#41; =#gt; #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R#gt;<br/>node: #40;_handler: #40;error: Error#41; =#gt; Effect.Effect#lt;never#gt;#41; =#gt;#92;n    #lt;A, E, R#gt;#40;self: Effect.Effect#lt;A, E, R#gt;#41; =#gt; self"]]
+  68[["type: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R#gt;<br/>node: #lt;A, E, R#gt;#40;self: Effect.Effect#lt;A, E, R#gt;#41; =#gt; self"]]
+  69[/"type: Effect#lt;A, E, R#gt;<br/>node: self"/]
+  70[/"type: Effect#lt;number, Error, never#gt;<br/>node: failable"/]
+  71["type: Effect#lt;number, Error, never#gt;<br/>callee: LocalEffect.catchAll<br/>args: #91;LocalEffect.die#93;"]
+  72[/"type: #40;_handler: #40;error: Error#41; =#gt; Effect#lt;never, never, never#gt;#41; =#gt; #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R#gt;<br/>node: LocalEffect.catchAll"/]
+  73[/"type: #40;defect: unknown#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: LocalEffect.die"/]
+  74[/"type: #40;defect: unknown#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: Effect.die"/]
+  75[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catchAll"/]
+  76[/"type: Effect#lt;number, Error, never#gt;<br/>node: failable"/]
+  77["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.catchAll<br/>args: #91;dieAlias#93;"]
+  78[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catchAll"/]
+  79[/"type: #40;defect: unknown#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: dieAlias"/]
+  80[/"type: Effect#lt;number, Error, never#gt;<br/>node: failable"/]
+  81["type: Effect#lt;number, never, never#gt;<br/>callee: catchAlias<br/>args: #91;Effect.die#93;"]
+  82[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: catchAlias"/]
+  83[/"type: #40;defect: unknown#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: Effect.die"/]
+  84[/"type: Effect#lt;number, Error, never#gt;<br/>node: failable"/]
+  85["type: Effect#lt;number, never, never#gt;<br/>callee: catchAlias<br/>args: #91;dieAlias#93;"]
+  86[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: catchAlias"/]
+  87[/"type: #40;defect: unknown#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: dieAlias"/]
+  2 -->|"kind: transformCallee"| 1
+  3 -->|"kind: transformArg"| 1
+  0 -->|"kind: pipe"| 1
+  6 -->|"kind: transformCallee"| 5
+  8 -->|"kind: pipe"| 9
+  10 -->|"kind: transformCallee"| 9
+  9 -->|"kind: potentialReturn"| 7
+  7 -->|"kind: transformArg"| 5
+  4 -->|"kind: pipe"| 5
+  13 -->|"kind: transformCallee"| 12
+  15 -->|"kind: pipe"| 16
+  17 -->|"kind: transformCallee"| 16
+  16 -->|"kind: potentialReturn"| 14
+  16 -->|"kind: usedBy"| 14
+  14 -->|"kind: transformArg"| 12
+  11 -->|"kind: pipe"| 12
+  20 -->|"kind: transformCallee"| 19
+  22 -->|"kind: pipe"| 23
+  24 -->|"kind: transformCallee"| 23
+  23 -->|"kind: potentialReturn"| 21
+  23 -->|"kind: usedBy"| 21
+  21 -->|"kind: transformArg"| 19
+  18 -->|"kind: pipe"| 19
+  27 -->|"kind: transformCallee"| 26
+  28 -->|"kind: transformArg"| 26
+  25 -->|"kind: pipe"| 26
+  29 -->|"kind: pipe"| 30
+  31 -->|"kind: transformCallee"| 29
+  32 -->|"kind: transformArg"| 29
+  33 -->|"kind: pipe"| 34
+  35 -->|"kind: transformCallee"| 34
+  36 -->|"kind: transformArg"| 34
+  39 -->|"kind: transformCallee"| 38
+  40 -->|"kind: transformArg"| 38
+  37 -->|"kind: pipe"| 38
+  41 -->|"kind: yieldable"| 37
+  38 -->|"kind: potentialReturn"| 42
+  45 -->|"kind: transformCallee"| 44
+  48 -->|"kind: pipe"| 49
+  50 -->|"kind: transformCallee"| 49
+  49 -->|"kind: usedBy"| 47
+  47 -->|"kind: pipe"| 51
+  52 -->|"kind: transformCallee"| 51
+  51 -->|"kind: potentialReturn"| 46
+  46 -->|"kind: transformArg"| 44
+  43 -->|"kind: pipe"| 44
+  55 -->|"kind: transformCallee"| 54
+  57 -->|"kind: pipe"| 58
+  59 -->|"kind: transformCallee"| 58
+  58 -->|"kind: potentialReturn"| 56
+  56 -->|"kind: transformArg"| 54
+  53 -->|"kind: pipe"| 54
+  60 -->|"kind: pipe"| 61
+  62 -->|"kind: transformCallee"| 61
+  64 -->|"kind: transformCallee"| 63
+  65 -->|"kind: transformArg"| 63
+  61 -->|"kind: pipe"| 63
+  69 -->|"kind: potentialReturn"| 68
+  68 -->|"kind: potentialReturn"| 67
+  67 -->|"kind: usedBy"| 66
+  72 -->|"kind: transformCallee"| 71
+  73 -->|"kind: transformArg"| 71
+  70 -->|"kind: pipe"| 71
+  78 -->|"kind: transformCallee"| 77
+  79 -->|"kind: transformArg"| 77
+  76 -->|"kind: pipe"| 77
+  82 -->|"kind: transformCallee"| 81
+  83 -->|"kind: transformArg"| 81
+  80 -->|"kind: pipe"| 81
+  86 -->|"kind: transformCallee"| 85
+  87 -->|"kind: transformArg"| 85
+  84 -->|"kind: pipe"| 85

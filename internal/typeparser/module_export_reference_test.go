@@ -20,7 +20,13 @@ func moduleExportReferenceSources() map[string]string {
 		"/.src/main.ts": `import { Foo as RootFoo, Bar } from "cache-fixture"
 const rootFoo1 = RootFoo
 const rootFoo2 = RootFoo
-const rootBar = Bar`,
+const rootBar = Bar
+const rootFooAlias = RootFoo
+const rootFooAlias2 = rootFooAlias
+const rootFooAliasUse = rootFooAlias2
+let mutableFooAlias = RootFoo
+mutableFooAlias = Bar
+const mutableFooAliasUse = mutableFooAlias`,
 		"/packages/consumer/main.ts": `import { Foo as NestedFoo } from "cache-fixture"
 const nestedFoo = NestedFoo`,
 		"/node_modules/cache-fixture/package.json": moduleExportReferencePackageJSON,
@@ -30,6 +36,29 @@ export declare const Bar: unique symbol`,
 		"/packages/consumer/node_modules/cache-fixture/package.json": strings.Replace(moduleExportReferencePackageJSON, "1.0.0", "2.0.0", 1),
 		"/packages/consumer/node_modules/cache-fixture/index.d.ts":   `export { Foo } from "./source.js"`,
 		"/packages/consumer/node_modules/cache-fixture/source.d.ts":  `export declare const Foo: unique symbol`,
+	}
+}
+
+func TestIsNodeReferenceToModuleExport_ConstantAliases(t *testing.T) {
+	t.Parallel()
+
+	tp, sourceFiles, done := moduleExportReferenceFixture(t)
+	defer done()
+
+	desc := newPackageSourceFileDescriptor("cache-fixture", sourceFileNameMatcher("/source.d.ts", nil))
+	main := sourceFiles["/.src/main.ts"]
+	constantAliasDeclaration := findIdentifierByText(t, main, "rootFooAlias2", 0)
+	constantAlias := findIdentifierByText(t, main, "rootFooAlias2", 1)
+	mutableAlias := findIdentifierByText(t, main, "mutableFooAlias", 2)
+
+	if tp.IsNodeReferenceToModuleExport(constantAliasDeclaration, desc, "Foo") {
+		t.Fatal("expected a constant alias declaration name not to match the Foo export")
+	}
+	if !tp.IsNodeReferenceToModuleExport(constantAlias, desc, "Foo") {
+		t.Fatal("expected a constant alias chain to match the Foo export")
+	}
+	if tp.IsNodeReferenceToModuleExport(mutableAlias, desc, "Foo") {
+		t.Fatal("expected a mutable alias not to match the Foo export")
 	}
 }
 
