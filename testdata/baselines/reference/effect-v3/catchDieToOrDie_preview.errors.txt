@@ -1,0 +1,20 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/catchDieToOrDie_preview.ts(9,3): warning TS377115: `Effect.orDie` expresses escalating every typed failure into a defect more directly than `Effect.catchAll` with an identity-forwarding `Effect.die` handler. effect(catchDieToOrDie)
+
+
+==== /.src/catchDieToOrDie_preview.ts (1 errors) ====
+    // @effect-v3
+    // @effect-diagnostics *:off
+    // @effect-diagnostics catchDieToOrDie:warning
+    import * as Effect from "effect/Effect"
+    
+    declare const readConfig: Effect.Effect<string, Error>
+    
+    export const program = readConfig.pipe(
+      Effect.catchAll((error) => Effect.die(error))
+      ~~~~~~~~~~~~~~~
+!!! warning TS377115: `Effect.orDie` expresses escalating every typed failure into a defect more directly than `Effect.catchAll` with an identity-forwarding `Effect.die` handler. effect(catchDieToOrDie)
+    )
+    

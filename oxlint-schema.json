@@ -2245,7 +2245,7 @@
         "effecttsgo/async-function": {
           "$ref": "#/definitions/RuleNoConfig"
         },
-        "effecttsgo/catch-all-die-to-or-die": {
+        "effecttsgo/catch-die-to-or-die": {
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/catch-all-to-map-error": {

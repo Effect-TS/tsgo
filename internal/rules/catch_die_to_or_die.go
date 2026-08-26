@@ -11,25 +11,25 @@ import (
 	"github.com/microsoft/TypeScript/tsc/shim/scanner"
 )
 
-// CatchAllDieToOrDie suggests using Effect.orDie instead of a catch-all
+// CatchDieToOrDie suggests using Effect.orDie instead of a catch-all
 // handler that forwards the typed failure unchanged to Effect.die.
-var CatchAllDieToOrDie = rule.Rule{
-	Name:            "catchAllDieToOrDie",
+var CatchDieToOrDie = rule.Rule{
+	Name:            "catchDieToOrDie",
 	Group:           "style",
 	Description:     "Suggests using Effect.orDie instead of Effect.catch or Effect.catchAll with an identity-forwarding Effect.die handler",
 	DefaultSeverity: etscore.SeveritySuggestion,
 	SupportedEffect: []string{"v3", "v4"},
 	Codes: []int32{
-		tsdiag.Effect_orDie_expresses_escalating_every_typed_failure_into_a_defect_more_directly_than_Effect_0_with_an_identity_forwarding_Effect_die_handler_effect_catchAllDieToOrDie.Code(),
+		tsdiag.Effect_orDie_expresses_escalating_every_typed_failure_into_a_defect_more_directly_than_Effect_0_with_an_identity_forwarding_Effect_die_handler_effect_catchDieToOrDie.Code(),
 	},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
-		matches := AnalyzeCatchAllDieToOrDie(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
+		matches := AnalyzeCatchDieToOrDie(ctx.TypeParser, ctx.Checker, ctx.SourceFile)
 		diagnostics := make([]*ast.Diagnostic, len(matches))
 		for i, match := range matches {
 			diagnostics[i] = ctx.NewDiagnostic(
 				match.SourceFile,
 				match.Location,
-				tsdiag.Effect_orDie_expresses_escalating_every_typed_failure_into_a_defect_more_directly_than_Effect_0_with_an_identity_forwarding_Effect_die_handler_effect_catchAllDieToOrDie,
+				tsdiag.Effect_orDie_expresses_escalating_every_typed_failure_into_a_defect_more_directly_than_Effect_0_with_an_identity_forwarding_Effect_die_handler_effect_catchDieToOrDie,
 				nil,
 				match.CatchMethodName,
 			)
@@ -38,8 +38,8 @@ var CatchAllDieToOrDie = rule.Rule{
 	},
 }
 
-// CatchAllDieToOrDieMatch holds the nodes needed by the diagnostic and fix.
-type CatchAllDieToOrDieMatch struct {
+// CatchDieToOrDieMatch holds the nodes needed by the diagnostic and fix.
+type CatchDieToOrDieMatch struct {
 	SourceFile        *ast.SourceFile
 	Location          core.TextRange
 	Transformation    *ast.Node
@@ -50,14 +50,14 @@ type CatchAllDieToOrDieMatch struct {
 	HasTypeArguments  bool
 }
 
-// AnalyzeCatchAllDieToOrDie finds Effect.catch/catchAll transformations whose
+// AnalyzeCatchDieToOrDie finds Effect.catch/catchAll transformations whose
 // handler is Effect.die or forwards its sole argument unchanged to Effect.die.
-func AnalyzeCatchAllDieToOrDie(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile) []CatchAllDieToOrDieMatch {
+func AnalyzeCatchDieToOrDie(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile) []CatchDieToOrDieMatch {
 	if tp == nil || sf == nil {
 		return nil
 	}
 
-	var matches []CatchAllDieToOrDieMatch
+	var matches []CatchDieToOrDieMatch
 	seen := make(map[*ast.Node]struct{})
 	for _, flow := range tp.PipingFlows(sf, true) {
 		inputNode := flow.Subject.Node
@@ -73,7 +73,7 @@ func AnalyzeCatchAllDieToOrDie(tp *typeparser.TypeParser, _ *checker.Checker, sf
 						seen[transformation.Node] = struct{}{}
 						isDataApplication := transformation.Kind == typeparser.TransformationKindDataFirst ||
 							transformation.Kind == typeparser.TransformationKindDataLast || isCurriedApplication
-						matches = append(matches, CatchAllDieToOrDieMatch{
+						matches = append(matches, CatchDieToOrDieMatch{
 							SourceFile:        sf,
 							Location:          scanner.GetErrorRangeForNode(sf, callee),
 							Transformation:    transformation.Node,

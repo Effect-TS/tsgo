@@ -1,6 +1,6 @@
 // @effect-v4
 // @effect-diagnostics *:off
-// @effect-diagnostics catchAllDieToOrDie:warning
+// @effect-diagnostics catchDieToOrDie:warning
 import { Effect } from "effect"
 
 declare const readConfig: Effect.Effect<string, Error>

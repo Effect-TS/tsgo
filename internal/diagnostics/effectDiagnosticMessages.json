@@ -451,7 +451,7 @@
         "category": "Suggestion",
         "code": 377114
     },
-    "`Effect.orDie` expresses escalating every typed failure into a defect more directly than `Effect.{0}` with an identity-forwarding `Effect.die` handler. effect(catchAllDieToOrDie)": {
+    "`Effect.orDie` expresses escalating every typed failure into a defect more directly than `Effect.{0}` with an identity-forwarding `Effect.die` handler. effect(catchDieToOrDie)": {
         "category": "Suggestion",
         "code": 377115
     }

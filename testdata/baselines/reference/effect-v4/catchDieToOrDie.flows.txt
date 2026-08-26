@@ -1,0 +1,1 @@
+/.src/catchDieToOrDie.ts -> catchDieToOrDie.flows.catchDieToOrDie.mermaid

@@ -9,18 +9,18 @@ import (
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
 )
 
-var CatchAllDieToOrDieFix = fixable.Fixable{
-	Name:        "catchAllDieToOrDie",
+var CatchDieToOrDieFix = fixable.Fixable{
+	Name:        "catchDieToOrDie",
 	Description: "Replace the catch-all Effect.die handler with Effect.orDie",
 	ErrorCodes: []int32{
-		tsdiag.Effect_orDie_expresses_escalating_every_typed_failure_into_a_defect_more_directly_than_Effect_0_with_an_identity_forwarding_Effect_die_handler_effect_catchAllDieToOrDie.Code(),
+		tsdiag.Effect_orDie_expresses_escalating_every_typed_failure_into_a_defect_more_directly_than_Effect_0_with_an_identity_forwarding_Effect_die_handler_effect_catchDieToOrDie.Code(),
 	},
-	FixIDs: []string{"catchAllDieToOrDie_fix"},
-	Run:    runCatchAllDieToOrDieFix,
+	FixIDs: []string{"catchDieToOrDie_fix"},
+	Run:    runCatchDieToOrDieFix,
 }
 
-func runCatchAllDieToOrDieFix(ctx *fixable.Context) []ls.CodeAction {
-	for _, match := range rules.AnalyzeCatchAllDieToOrDie(ctx.TypeParser, ctx.Checker, ctx.SourceFile) {
+func runCatchDieToOrDieFix(ctx *fixable.Context) []ls.CodeAction {
+	for _, match := range rules.AnalyzeCatchDieToOrDie(ctx.TypeParser, ctx.Checker, ctx.SourceFile) {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue
 		}

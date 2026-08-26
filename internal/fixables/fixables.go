@@ -14,7 +14,7 @@ var All = []fixable.Fixable{
 	FloatingEffectYieldFix,
 	MissingReturnYieldStarFix,
 	MissingStarInYieldEffectGenFix,
-	CatchAllDieToOrDieFix,
+	CatchDieToOrDieFix,
 	CatchAllToMapErrorFix,
 	CatchTagToCatchReasonFix,
 	AllOfMapToForEachFix,

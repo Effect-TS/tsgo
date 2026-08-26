@@ -1830,7 +1830,7 @@
           "default": "off",
           "description": "Warns when declaring async functions and suggests using Effect values and Effect.gen for async control flow"
         },
-        "catchAllDieToOrDie": {
+        "catchDieToOrDie": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
           "description": "Suggests using Effect.orDie instead of Effect.catch or Effect.catchAll with an identity-forwarding Effect.die handler"
