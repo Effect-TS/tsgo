@@ -1,0 +1,14 @@
+flowchart TB
+  0[/"type: Effect#lt;string, Error, never#gt;<br/>node: readConfig"/]
+  1["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.catch<br/>args: #91;#40;error#41; =#gt; Effect.die#40;error#41;#93;"]
+  2[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  3[["type: #40;error: Error#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: #40;error#41; =#gt; Effect.die#40;error#41;"]]
+  4[/"type: Error<br/>node: error"/]
+  5["type: Effect#lt;never, never, never#gt;<br/>callee: Effect.die<br/>args: #91;#93;"]
+  6[/"type: #40;defect: unknown#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: Effect.die"/]
+  2 -->|"kind: transformCallee"| 1
+  4 -->|"kind: pipe"| 5
+  6 -->|"kind: transformCallee"| 5
+  5 -->|"kind: potentialReturn"| 3
+  3 -->|"kind: transformArg"| 1
+  0 -->|"kind: pipe"| 1

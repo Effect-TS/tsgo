@@ -450,5 +450,9 @@
     "`Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)": {
         "category": "Suggestion",
         "code": 377114
+    },
+    "`Effect.orDie` expresses escalating every typed failure into a defect more directly than `Effect.{0}` with an identity-forwarding `Effect.die` handler. effect(catchDieToOrDie)": {
+        "category": "Suggestion",
+        "code": 377115
     }
 }
