@@ -80,3 +80,10 @@ export const shouldTriggerBlockBody = numberEffect.pipe(
     return Option.some(value)
   })
 )
+
+// Should trigger: function expressions forward the value unchanged too
+export const shouldTriggerFunctionExpression = numberEffect.pipe(
+  Effect.map(function (value) {
+    return Option.some(value)
+  })
+)

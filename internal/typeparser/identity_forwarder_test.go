@@ -64,7 +64,10 @@ const notACall = (value: unknown) => value
 	for _, test := range tests {
 		initializer := findVariableInitializer(t, sf, test.name)
 		original := ast.SkipParentheses(initializer)
-		got, typeArguments := tp.UnwrapIdentityForwarder(initializer)
+		got, typeArguments, parameter := tp.UnwrapIdentityForwarder(initializer)
+		if test.wantUnwrap != (parameter != nil) {
+			t.Fatalf("UnwrapIdentityForwarder(%s) returned parameter %v, want returned = %v", test.name, parameter, test.wantUnwrap)
+		}
 		gotTypeArguments := 0
 		if typeArguments != nil {
 			gotTypeArguments = len(typeArguments.Nodes)

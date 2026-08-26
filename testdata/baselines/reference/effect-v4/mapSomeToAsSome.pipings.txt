@@ -1,4 +1,4 @@
-==== /.src/mapSomeToAsSome.ts (22 flows) ====
+==== /.src/mapSomeToAsSome.ts (24 flows) ====
 
 === Piping Flow ===
 Location: 11:44 - 11:62
@@ -316,6 +316,34 @@ Transformations (1):
 
 === Piping Flow ===
 Location: 80:11 - 80:30
+Node: Option.some(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Option.some
+      args: (constant)
+      outType: Option<number>
+
+=== Piping Flow ===
+Location: 85:47 - 89:2
+Node: numberEffect.pipe(\n  Effect.map(function (value) {\n    return Option.some(value)\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [function (value) {\n    return Option.some(value)\n  }]
+      outType: Effect<Option<number>, never, never>
+
+=== Piping Flow ===
+Location: 87:11 - 87:30
 Node: Option.some(value)
 Node Kind: KindCallExpression
 
