@@ -115,6 +115,9 @@ func Checker_isReferenceToType(recv *checker.Checker, t *checker.Type, target *c
 //go:linkname Checker_checkExpressionWithContextualType github.com/microsoft/typescript-go/internal/checker.(*Checker).checkExpressionWithContextualType
 func Checker_checkExpressionWithContextualType(recv *checker.Checker, node *ast.Node, contextualType *checker.Type, inferenceContext *checker.InferenceContext, checkMode checker.CheckMode) *checker.Type
 
+//go:linkname Checker_isReadonlySymbol github.com/microsoft/typescript-go/internal/checker.(*Checker).isReadonlySymbol
+func Checker_isReadonlySymbol(recv *checker.Checker, symbol *ast.Symbol) bool
+
 //go:linkname Checker_getSymbolIfSameReference github.com/microsoft/typescript-go/internal/checker.(*Checker).getSymbolIfSameReference
 func Checker_getSymbolIfSameReference(recv *checker.Checker, s1 *ast.Symbol, s2 *ast.Symbol) *ast.Symbol
 
@@ -127,6 +130,18 @@ func Checker_getIndexInfosOfType(recv *checker.Checker, t *checker.Type) []*chec
 //go:linkname Checker_getTypeArguments github.com/microsoft/typescript-go/internal/checker.(*Checker).getTypeArguments
 func Checker_getTypeArguments(recv *checker.Checker, t *checker.Type) []*checker.Type
 
+//go:linkname Checker_getTypeParameterFromMappedType github.com/microsoft/typescript-go/internal/checker.(*Checker).getTypeParameterFromMappedType
+func Checker_getTypeParameterFromMappedType(recv *checker.Checker, t *checker.Type) *checker.Type
+
+//go:linkname Checker_getConstraintTypeFromMappedType github.com/microsoft/typescript-go/internal/checker.(*Checker).getConstraintTypeFromMappedType
+func Checker_getConstraintTypeFromMappedType(recv *checker.Checker, t *checker.Type) *checker.Type
+
+//go:linkname Checker_getNameTypeFromMappedType github.com/microsoft/typescript-go/internal/checker.(*Checker).getNameTypeFromMappedType
+func Checker_getNameTypeFromMappedType(recv *checker.Checker, t *checker.Type) *checker.Type
+
+//go:linkname Checker_getTemplateTypeFromMappedType github.com/microsoft/typescript-go/internal/checker.(*Checker).getTemplateTypeFromMappedType
+func Checker_getTemplateTypeFromMappedType(recv *checker.Checker, t *checker.Type) *checker.Type
+
 //go:linkname Checker_isArrayType github.com/microsoft/typescript-go/internal/checker.(*Checker).isArrayType
 func Checker_isArrayType(recv *checker.Checker, t *checker.Type) bool
 
@@ -138,6 +153,9 @@ func Checker_evaluateEntity(recv *checker.Checker, expr *ast.Node, location *ast
 
 //go:linkname Checker_getLiteralTypeFromProperty github.com/microsoft/typescript-go/internal/checker.(*Checker).getLiteralTypeFromProperty
 func Checker_getLiteralTypeFromProperty(recv *checker.Checker, prop *ast.Symbol, include checker.TypeFlags, includeNonPublic bool) *checker.Type
+
+//go:linkname Checker_isNoInferType github.com/microsoft/typescript-go/internal/checker.(*Checker).isNoInferType
+func Checker_isNoInferType(recv *checker.Checker, t *checker.Type) bool
 
 //go:linkname Checker_newFunctionType github.com/microsoft/typescript-go/internal/checker.(*Checker).newFunctionType
 func Checker_newFunctionType(recv *checker.Checker, typeParameters []*checker.Type, thisParameter *ast.Symbol, parameters []*ast.Symbol, returnType *checker.Type) *checker.Type
@@ -153,6 +171,9 @@ func Checker_isPastLastAssignment(recv *checker.Checker, symbol *ast.Symbol, loc
 
 //go:linkname Checker_isTypeAssignableTo github.com/microsoft/typescript-go/internal/checker.(*Checker).isTypeAssignableTo
 func Checker_isTypeAssignableTo(recv *checker.Checker, source *checker.Type, target *checker.Type) bool
+
+//go:linkname Checker_getTypeParameterModifiers github.com/microsoft/typescript-go/internal/checker.(*Checker).getTypeParameterModifiers
+func Checker_getTypeParameterModifiers(recv *checker.Checker, tp *checker.Type) ast.ModifierFlags
 
 //go:linkname Checker_isConstantVariable github.com/microsoft/typescript-go/internal/checker.(*Checker).isConstantVariable
 func Checker_isConstantVariable(recv *checker.Checker, symbol *ast.Symbol) bool
@@ -1434,3 +1455,6 @@ const WideningKindNormal = checker.WideningKindNormal
 
 //go:linkname ForEachYieldExpression github.com/microsoft/typescript-go/internal/checker.forEachYieldExpression
 func ForEachYieldExpression(body *ast.Node, visitor func(expr *ast.Node) bool) bool
+
+//go:linkname GetMappedTypeModifiers github.com/microsoft/typescript-go/internal/checker.getMappedTypeModifiers
+func GetMappedTypeModifiers(t *checker.Type) checker.MappedTypeModifiers
