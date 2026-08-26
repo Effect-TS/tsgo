@@ -13,11 +13,11 @@ import (
 	"github.com/effect-ts/tsgo/internal/pluginoptions"
 	"github.com/effect-ts/tsgo/internal/rulerunner"
 	"github.com/effect-ts/tsgo/internal/typeparser"
-	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
-	"github.com/microsoft/typescript-go/shim/compiler"
-	"github.com/microsoft/typescript-go/shim/core"
-	"github.com/microsoft/typescript-go/shim/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/checker"
+	"github.com/microsoft/TypeScript/tsc/shim/compiler"
+	"github.com/microsoft/TypeScript/tsc/shim/core"
+	"github.com/microsoft/TypeScript/tsc/shim/lsp/lsproto"
 )
 
 // ReportedDiagnostic is a runner-neutral diagnostic ready for an external integration.
@@ -65,7 +65,7 @@ func RunRule(
 ) ([]*ast.Diagnostic, error) {
 	normalized := normalizeOptions(options, ruleName)
 
-	return rulerunner.Run(ctx, program, c, sf, &normalized, []string{ruleName})
+	return rulerunner.Run(ctx, program, c, sf, &normalized, []string{ruleName}, rulerunner.MinVisibleSeverity(&normalized))
 }
 
 func normalizeOptions(options *etscore.EffectPluginOptions, ruleName string) etscore.EffectPluginOptions {
@@ -103,7 +103,7 @@ func RunRuleAndReport(
 		return errors.New("diagnostic adapter Report callback is required")
 	}
 	normalized := normalizeOptions(options, ruleName)
-	diagnostics, err := rulerunner.Run(ctx, program, c, sf, &normalized, []string{ruleName})
+	diagnostics, err := rulerunner.Run(ctx, program, c, sf, &normalized, []string{ruleName}, rulerunner.MinVisibleSeverity(&normalized))
 	if err != nil {
 		return err
 	}

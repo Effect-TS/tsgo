@@ -6,11 +6,11 @@ import (
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
 	"github.com/effect-ts/tsgo/internal/typeparser"
-	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
-	"github.com/microsoft/typescript-go/shim/core"
-	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
-	"github.com/microsoft/typescript-go/shim/scanner"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/checker"
+	"github.com/microsoft/TypeScript/tsc/shim/core"
+	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
+	"github.com/microsoft/TypeScript/tsc/shim/scanner"
 )
 
 var typedSchemaDecoders = map[string]string{
@@ -146,8 +146,10 @@ func analyzeTypedSchemaDecoderApplication(tp *typeparser.TypeParser, c *checker.
 	}
 
 	assignableType := inputType
-	if literal := ast.SkipParentheses(inputNode); literal != nil && (literal.Kind == ast.KindObjectLiteralExpression || literal.Kind == ast.KindArrayLiteralExpression) {
-		assignableType = checker.Checker_checkExpressionWithContextualType(c, literal, schemaType.E, nil, checker.CheckModeTypeOnly)
+	if inputNode != nil {
+		if literal := ast.SkipParentheses(inputNode); literal != nil && (literal.Kind == ast.KindObjectLiteralExpression || literal.Kind == ast.KindArrayLiteralExpression) {
+			assignableType = checker.Checker_checkExpressionWithContextualType(c, literal, schemaType.E, nil, checker.CheckModeTypeOnly)
+		}
 	}
 	if assignableType == nil || !checker.Checker_isTypeAssignableTo(c, assignableType, schemaType.E) {
 		return nil

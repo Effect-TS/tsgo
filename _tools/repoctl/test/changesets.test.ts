@@ -5,7 +5,7 @@ import { tmpdir } from "node:os"
 import { join } from "node:path"
 import assert from "node:assert/strict"
 import test from "node:test"
-import { addChangeset, writeGeneratedVersion } from "../src/changesets.ts"
+import { addChangeset, writeGeneratedVersion, writeSupportedComponentsReadme } from "../src/changesets.ts"
 
 test("generates the Go version from the CLI package", async() => {
   const repository = mkdtempSync(join(tmpdir(), "repoctl-version-"))
@@ -52,6 +52,83 @@ test("adds a changeset", async() => {
       "Update upstream metadata.",
       ""
     ].join("\n"))
+  } finally {
+    rmSync(repository, { recursive: true, force: true })
+  }
+})
+
+test("generates the supported package versions README section", async() => {
+  const repository = mkdtempSync(join(tmpdir(), "repoctl-supported-components-"))
+
+  try {
+    mkdirSync(join(repository, "_packages", "tsgo"), { recursive: true })
+    writeFileSync(join(repository, "_packages", "tsgo", "package.json"), JSON.stringify({ version: "1.2.3" }))
+    writeFileSync(join(repository, "_packages", "tsgo", "upstream.json"), JSON.stringify({
+      schemaVersion: 5,
+      tags: {
+        typescript: { latest: "7.0.2", next: "7.1.0-dev.10" },
+        oxlint: { latest: "1.10.0" },
+        "oxlint-tsgolint": { latest: "7.0.2001" }
+      },
+      components: {
+        typescript: {
+          "7.1.0-dev.10": { gitHead: "2222222222222222222222222222222222222222", provider: "typescript" },
+          "7.1.0-dev.2": { gitHead: "6666666666666666666666666666666666666666", provider: "typescript" },
+          "7.0.2": { gitHead: "1111111111111111111111111111111111111111", provider: "typescript-go" }
+        },
+        oxlint: {
+          "1.10.0": { gitHead: "4444444444444444444444444444444444444444" },
+          "1.9.0": { gitHead: "3333333333333333333333333333333333333333" }
+        },
+        "oxlint-tsgolint": {
+          "7.0.2001": {
+            gitHead: "5555555555555555555555555555555555555555",
+            dependencies: { typescript: "7.0.2" }
+          }
+        }
+      },
+      profiles: [{
+        name: "vite-plus",
+        description: "Vite+ compatibility runtime",
+        dependencies: { oxlint: "1.9.0", "oxlint-tsgolint": "7.0.2001" }
+      }]
+    }))
+    writeFileSync(join(repository, "README.md"), [
+      "Before",
+      "<!-- supported-components:start -->",
+      "stale",
+      "<!-- supported-components:end -->",
+      "After",
+      ""
+    ].join("\n"))
+
+    await Effect.runPromise(
+      writeSupportedComponentsReadme(repository).pipe(Effect.provide(NodeServices.layer))
+    )
+
+    const generated = [
+      "Before",
+      "<!-- supported-components:start -->",
+      "## Supported Package Versions",
+      "",
+      "The following target package versions are supported by `@effect/tsgo@1.2.3`:",
+      "",
+      "| Component | Supported versions |",
+      "|---|---|",
+      "| TypeScript | `7.0.2`, `7.1.0-dev.2`, `7.1.0-dev.10` |",
+      "| Oxlint | `1.9.0`, `1.10.0` |",
+      "| oxlint-tsgolint | `7.0.2001` |",
+      "<!-- supported-components:end -->",
+      "After",
+      ""
+    ].join("\n")
+    assert.equal(readFileSync(join(repository, "README.md"), "utf8"), generated)
+
+    writeFileSync(join(repository, "README.md"), `${generated}<!-- supported-components:end -->\n`)
+    await assert.rejects(
+      Effect.runPromise(writeSupportedComponentsReadme(repository).pipe(Effect.provide(NodeServices.layer))),
+      /Generated section markers are missing or invalid/
+    )
   } finally {
     rmSync(repository, { recursive: true, force: true })
   }

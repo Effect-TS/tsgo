@@ -12,7 +12,7 @@ const revision = "0123456789abcdef0123456789abcdef01234567"
 
 test("builds a deterministic matrix for every unique TypeScript component", () => {
   const upstream: typeof Upstream.Type = {
-    schemaVersion: 4,
+    schemaVersion: 5,
     tags: {
       typescript: { latest: "7.0.2", next: "7.1.0-dev" },
       "oxlint-tsgolint": { latest: "unused" },
@@ -20,9 +20,9 @@ test("builds a deterministic matrix for every unique TypeScript component", () =
     },
     components: {
       typescript: {
-        "7.1.0-dev": { gitHead: revision },
-        "6.9.0": { gitHead: revision },
-        "7.0.2": { gitHead: revision }
+        "7.1.0-dev": { gitHead: revision, provider: "typescript" },
+        "6.9.0": { gitHead: revision, provider: "typescript-go" },
+        "7.0.2": { gitHead: revision, provider: "typescript-go" }
       },
       "oxlint-tsgolint": {},
       oxlint: {}
@@ -41,14 +41,14 @@ test("builds a deterministic matrix for every unique TypeScript component", () =
 
 test("combines channel labels when latest and next resolve to the same component", () => {
   const upstream: typeof Upstream.Type = {
-    schemaVersion: 4,
+    schemaVersion: 5,
     tags: {
       typescript: { latest: "7.0.2", next: "7.0.2" },
       "oxlint-tsgolint": { latest: "unused" },
       oxlint: { latest: "unused" }
     },
     components: {
-      typescript: { "7.0.2": { gitHead: revision } },
+      typescript: { "7.0.2": { gitHead: revision, provider: "typescript-go" } },
       "oxlint-tsgolint": {},
       oxlint: {}
     },
@@ -62,7 +62,7 @@ test("combines channel labels when latest and next resolve to the same component
 
 test("builds a component-aware generated branch matrix", () => {
   const upstream: typeof Upstream.Type = {
-    schemaVersion: 4,
+    schemaVersion: 5,
     tags: {
       typescript: { latest: "7.0.2", next: "7.1.0-dev" },
       "oxlint-tsgolint": { latest: "unused" },
@@ -70,8 +70,8 @@ test("builds a component-aware generated branch matrix", () => {
     },
     components: {
       typescript: {
-        "7.0.2": { gitHead: revision },
-        "7.1.0-dev": { gitHead: revision }
+        "7.0.2": { gitHead: revision, provider: "typescript-go" },
+        "7.1.0-dev": { gitHead: revision, provider: "typescript" }
       },
       "oxlint-tsgolint": {},
       oxlint: {}
@@ -86,7 +86,7 @@ test("builds a component-aware generated branch matrix", () => {
 
 test("builds a deduplicated matrix of compatible Oxlint component pairs", () => {
   const upstream: typeof Upstream.Type = {
-    schemaVersion: 4,
+    schemaVersion: 5,
     tags: {
       typescript: { latest: "7.0.2", next: "7.1.0-dev" },
       "oxlint-tsgolint": { latest: "7.0.2001" },
@@ -94,8 +94,8 @@ test("builds a deduplicated matrix of compatible Oxlint component pairs", () => 
     },
     components: {
       typescript: {
-        "7.0.2": { gitHead: revision },
-        "7.1.0-dev": { gitHead: revision }
+        "7.0.2": { gitHead: revision, provider: "typescript-go" },
+        "7.1.0-dev": { gitHead: revision, provider: "typescript" }
       },
       "oxlint-tsgolint": {
         "7.0.2001": { gitHead: revision, dependencies: { typescript: "7.0.2" } }

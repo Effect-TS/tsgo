@@ -1,0 +1,313 @@
+==== /.src/catchDieToOrDie.ts (22 flows) ====
+
+=== Piping Flow ===
+Location: 9:26 - 9:66
+Node: failable.pipe(Effect.catch(Effect.die))
+Node Kind: KindCallExpression
+
+Subject: failable
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [Effect.die]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 12:25 - 14:2
+Node: failable.pipe(\n  Effect.catch((error) => Effect.die(error))\n)
+Node Kind: KindCallExpression
+
+Subject: failable
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [(error) => Effect.die(error)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 13:26 - 13:44
+Node: Effect.die(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.die
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 15:30 - 19:2
+Node: failable.pipe(\n  Effect.catch((error) => {\n    return Effect.die(error)\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: failable
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [(error) => {\n    return Effect.die(error)\n  }]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 17:11 - 17:29
+Node: Effect.die(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.die
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 20:28 - 24:2
+Node: failable.pipe(\n  Effect.catch(function(error) {\n    return Effect.die(error)\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: failable
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [function(error) {\n    return Effect.die(error)\n  }]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 22:11 - 22:29
+Node: Effect.die(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.die
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 27:28 - 27:69
+Node: pipe(failable, Effect.catch(Effect.die))
+Node Kind: KindCallExpression
+
+Subject: failable
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.catch
+      args: [Effect.die]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 28:25 - 28:60
+Node: Effect.catch(failable, Effect.die)
+Node Kind: KindCallExpression
+
+Subject: failable
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.catch
+      args: [Effect.die]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 29:24 - 29:59
+Node: Effect.catch(Effect.die)(failable)
+Node Kind: KindCallExpression
+
+Subject: failable
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.catch(Effect.die)
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 32:24 - 34:29
+Node: Effect.fn(function*() {\n  return yield* failable\n}, Effect.catch(Effect.die))
+Node Kind: KindCallExpression
+
+Subject: Effect.fn(function*() {\n  return yield* failable\n}, Effect.catch(Effect.die))
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: effectFn
+      callee: Effect.catch
+      args: [Effect.die]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 37:23 - 39:2
+Node: failable.pipe(\n  Effect.catch((error) => Effect.die(new Error(String(error))))\n)
+Node Kind: KindCallExpression
+
+Subject: failable
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [(error) => Effect.die(new Error(String(error)))]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 38:26 - 38:63
+Node: Effect.die(new Error(String(error)))
+Node Kind: KindCallExpression
+
+Subject: new Error(String(error))
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.die
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 38:48 - 38:61
+Node: String(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: String
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 42:30 - 44:2
+Node: failable.pipe(\n  Effect.catch((_error) => Effect.die("different"))\n)
+Node Kind: KindCallExpression
+
+Subject: failable
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [(_error) => Effect.die("different")]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 43:27 - 43:51
+Node: Effect.die("different")
+Node Kind: KindCallExpression
+
+Subject: "different"
+Subject Type: "different"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.die
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 47:26 - 49:2
+Node: Effect.succeed(1).pipe(\n  Effect.catch(Effect.die)\n)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.catch
+      args: [Effect.die]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 56:23 - 58:2
+Node: tagged.pipe(\n  Effect.catchTag("TaggedError", Effect.die)\n)
+Node Kind: KindCallExpression
+
+Subject: tagged
+Subject Type: Effect<number, TaggedError, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catchTag
+      args: ["TaggedError", Effect.die]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 66:24 - 66:74
+Node: failable.pipe(LocalEffect.catch(LocalEffect.die))
+Node Kind: KindCallExpression
+
+Subject: failable
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: LocalEffect.catch
+      args: [LocalEffect.die]
+      outType: Effect<number, Error, never>
+
+=== Piping Flow ===
+Location: 71:26 - 71:64
+Node: failable.pipe(Effect.catch(dieAlias))
+Node Kind: KindCallExpression
+
+Subject: failable
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [dieAlias]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 72:28 - 72:66
+Node: failable.pipe(catchAlias(Effect.die))
+Node Kind: KindCallExpression
+
+Subject: failable
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: catchAlias
+      args: [Effect.die]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 73:27 - 73:63
+Node: failable.pipe(catchAlias(dieAlias))
+Node Kind: KindCallExpression
+
+Subject: failable
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: catchAlias
+      args: [dieAlias]
+      outType: Effect<number, never, never>

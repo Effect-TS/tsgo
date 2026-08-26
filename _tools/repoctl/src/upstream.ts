@@ -11,9 +11,93 @@ import { runCommand, runCommandString } from "./process.ts"
 
 export type ComponentName = "typescript" | "oxlint-tsgolint" | "oxlint"
 
+export const TypeScriptProvider = Schema.Literals(["typescript-go", "typescript"])
+export type TypeScriptProvider = typeof TypeScriptProvider.Type
+
+export const typeScriptSources = {
+  "typescript-go": {
+    provider: "typescript-go",
+    repository: "https://github.com/microsoft/typescript-go.git",
+    repositorySlug: "microsoft/typescript-go",
+    checkoutDir: "typescript-go",
+    moduleDir: ".",
+    modulePrefix: "github.com/microsoft/typescript-go",
+    providerShimPrefix: "github.com/microsoft/typescript-go/shim",
+    shimOverlayDir: "_tools/gen_shims/providers/typescript-go",
+    patchDir: "_patches/typescript-go",
+    commandPath: "cmd/tsgo",
+    tsgolintGitlink: "typescript-go"
+  },
+  typescript: {
+    provider: "typescript",
+    repository: "https://github.com/microsoft/TypeScript.git",
+    repositorySlug: "microsoft/TypeScript",
+    checkoutDir: "typescript",
+    moduleDir: "tsc",
+    modulePrefix: "github.com/microsoft/TypeScript/tsc",
+    providerShimPrefix: "github.com/microsoft/TypeScript/tsc/shim",
+    shimOverlayDir: "_tools/gen_shims/providers/typescript",
+    patchDir: "_patches/typescript",
+    commandPath: "cmd/tsc",
+    tsgolintGitlink: "typescript"
+  }
+} as const satisfies Record<TypeScriptProvider, {
+  readonly provider: TypeScriptProvider
+  readonly repository: string
+  readonly repositorySlug: string
+  readonly checkoutDir: string
+  readonly moduleDir: string
+  readonly modulePrefix: string
+  readonly providerShimPrefix: string
+  readonly shimOverlayDir: string
+  readonly patchDir: string
+  readonly commandPath: string
+  readonly tsgolintGitlink: string
+}>
+
+export type TypeScriptSource = (typeof typeScriptSources)[TypeScriptProvider]
+
+export const getTypeScriptSource = (provider: TypeScriptProvider): TypeScriptSource =>
+  typeScriptSources[provider]
+
+export const typeScriptSourceEntrypoint = (source: TypeScriptSource) =>
+  `./${[
+    source.checkoutDir,
+    ...(source.moduleDir === "." ? [] : [source.moduleDir]),
+    source.commandPath
+  ].join("/")}`
+
+export class MaterializedTypeScriptSourceError extends Data.TaggedError("MaterializedTypeScriptSourceError")<{
+  readonly reason: string
+}> {
+  get message(): string {
+    return `Unable to resolve materialized TypeScript source: ${this.reason}`
+  }
+}
+
+export const resolveMaterializedTypeScriptSource = Effect.fnUntraced(function*(repositoryRoot: string) {
+  const fs = yield* FileSystem.FileSystem
+  const path = yield* Path.Path
+  for (const source of [typeScriptSources.typescript, typeScriptSources["typescript-go"]] as const) {
+    const entrypoint = path.join(repositoryRoot, source.checkoutDir, source.moduleDir, source.commandPath)
+    if (yield* fs.exists(entrypoint)) {
+      return source
+    }
+  }
+  return yield* new MaterializedTypeScriptSourceError({
+    reason: `neither ${typeScriptSourceEntrypoint(typeScriptSources.typescript)} nor ${
+      typeScriptSourceEntrypoint(typeScriptSources["typescript-go"])
+    } exists`
+  })
+})
+
 const NonEmptyString = Schema.String.check(Schema.isNonEmpty())
 const GitRevision = Schema.String.check(Schema.isPattern(/^[0-9a-f]{40}$/))
 const Component = Schema.Struct({ gitHead: GitRevision })
+const TypeScriptComponent = Schema.Struct({
+  gitHead: GitRevision,
+  provider: TypeScriptProvider
+})
 const TsgolintComponent = Schema.Struct({
   gitHead: GitRevision,
   dependencies: Schema.Struct({ typescript: NonEmptyString })
@@ -25,7 +109,7 @@ const RuntimeProfile = Schema.Struct({
   dependencies: ProfileDependencies
 })
 export const Upstream = Schema.Struct({
-  schemaVersion: Schema.Literal(4),
+  schemaVersion: Schema.Literal(5),
   tags: Schema.Struct({
     typescript: Schema.Struct({
       latest: NonEmptyString,
@@ -35,7 +119,7 @@ export const Upstream = Schema.Struct({
     "oxlint-tsgolint": Schema.Struct({ latest: NonEmptyString })
   }),
   components: Schema.Struct({
-    typescript: Schema.Record(Schema.String, Component),
+    typescript: Schema.Record(Schema.String, TypeScriptComponent),
     "oxlint-tsgolint": Schema.Record(Schema.String, TsgolintComponent),
     oxlint: Schema.Record(Schema.String, Component)
   }),
@@ -159,7 +243,8 @@ export const getComponent = Effect.fnUntraced(function*(
     gitHead: component.gitHead,
     typescript: {
       version: typescriptVersion,
-      gitHead: typescript.gitHead
+      gitHead: typescript.gitHead,
+      source: getTypeScriptSource(typescript.provider)
     }
   }
 })
@@ -169,9 +254,18 @@ const NpmMetadata = Schema.fromJsonString(Schema.Struct({
   gitHead: GitRevision
 }))
 
-interface TypeScriptMetadata {
+interface ComponentMetadata {
   readonly npmVersion: string
   readonly gitHead: string
+}
+
+interface TypeScriptMetadata extends ComponentMetadata {
+  readonly provider: TypeScriptProvider
+}
+
+interface TypeScriptGoCommit {
+  readonly sha: string
+  readonly message: string
 }
 
 interface OxlintSelection {
@@ -183,6 +277,40 @@ interface VitePlusSelection extends OxlintSelection {
   readonly vitePlusVersion: string
 }
 
+const commitExists = (repository: string, revision: string) => Effect.tryPromise({
+  try: async() => {
+    const token = process.env.GH_TOKEN ?? process.env.GITHUB_TOKEN
+    const response = await fetch(`https://api.github.com/repos/${repository}/commits/${revision}`, {
+      method: "HEAD",
+      headers: {
+        "User-Agent": "effect-tsgo-repoctl",
+        ...(token === undefined ? {} : { Authorization: `Bearer ${token}` })
+      }
+    })
+    if (response.status === 404 || response.status === 422) return false
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`)
+    }
+    return true
+  },
+  catch: (error) => new UpstreamManifestError({
+    reason: `Unable to locate TypeScript commit ${revision}: ${String(error)}`
+  })
+})
+
+export const resolveTypeScriptProvider = Effect.fnUntraced(function*(revision: string) {
+  const providers = Object.values(typeScriptSources)
+  const matches = yield* Effect.filter(providers, (source) => commitExists(source.repositorySlug, revision), {
+    concurrency: "unbounded"
+  })
+  if (matches.length !== 1) {
+    return yield* new UpstreamManifestError({
+      reason: `TypeScript commit ${revision} matched ${matches.length} supported repositories`
+    })
+  }
+  return matches[0]!.provider
+})
+
 const fetchTypeScriptMetadata = Effect.fnUntraced(function*(repositoryRoot: string, spec: string) {
   const output = yield* runCommandString("npm", repositoryRoot, ["view", spec, "version", "gitHead", "--json"])
   const metadata = yield* Schema.decodeUnknownEffect(NpmMetadata)(output).pipe(
@@ -190,7 +318,11 @@ const fetchTypeScriptMetadata = Effect.fnUntraced(function*(repositoryRoot: stri
       reason: `Unable to resolve ${spec}: ${error.message}`
     }))
   )
-  return { npmVersion: metadata.version, gitHead: metadata.gitHead }
+  return {
+    npmVersion: metadata.version,
+    gitHead: metadata.gitHead,
+    provider: yield* resolveTypeScriptProvider(metadata.gitHead)
+  }
 })
 
 const NpmVersionResult = Schema.fromJsonString(Schema.Union([
@@ -223,8 +355,8 @@ const resolveLatestMatchingVersion = Effect.fnUntraced(function*(
 })
 
 interface ResolvedRuntime {
-  readonly oxlint: TypeScriptMetadata
-  readonly tsgolint: TypeScriptMetadata
+  readonly oxlint: ComponentMetadata
+  readonly tsgolint: ComponentMetadata
   readonly ts: TypeScriptMetadata
 }
 
@@ -239,7 +371,7 @@ const sortedRecord = <A>(entries: ReadonlyArray<readonly [string, A]>): Record<s
   Object.fromEntries([...entries].sort(([left], [right]) => Buffer.compare(Buffer.from(left), Buffer.from(right))))
 
 export const buildUpstream = ({ latest, next, oxlint, vitePlus }: BuildUpstreamOptions): typeof Upstream.Type => {
-  const typescript = new Map<string, { readonly gitHead: string }>()
+  const typescript = new Map<string, { readonly gitHead: string; readonly provider: TypeScriptProvider }>()
   const tsgolint = new Map<string, {
     readonly gitHead: string
     readonly dependencies: { readonly typescript: string }
@@ -247,7 +379,7 @@ export const buildUpstream = ({ latest, next, oxlint, vitePlus }: BuildUpstreamO
   const oxlintComponents = new Map<string, { readonly gitHead: string }>()
 
   for (const metadata of [latest, next, oxlint.ts, vitePlus.ts]) {
-    typescript.set(metadata.npmVersion, { gitHead: metadata.gitHead })
+    typescript.set(metadata.npmVersion, { gitHead: metadata.gitHead, provider: metadata.provider })
   }
   for (const runtime of [oxlint, vitePlus]) {
     tsgolint.set(runtime.tsgolint.npmVersion, {
@@ -258,7 +390,7 @@ export const buildUpstream = ({ latest, next, oxlint, vitePlus }: BuildUpstreamO
   }
 
   return {
-    schemaVersion: 4,
+    schemaVersion: 5,
     tags: {
       typescript: {
         latest: latest.npmVersion,
@@ -309,9 +441,15 @@ export const formatOxlintConfigurationSchema = (value: unknown): string | undefi
   return `${JSON.stringify(value, null, 2)}\n`
 }
 
-const fetchJson = Effect.fnUntraced(function*(url: string) {
+const fetchJson = Effect.fnUntraced(function*(url: string, authenticate = false) {
+  const token = authenticate ? process.env.GH_TOKEN ?? process.env.GITHUB_TOKEN : undefined
   const response = yield* Effect.tryPromise({
-    try: () => fetch(url, { headers: { "User-Agent": "effect-tsgo-repoctl" } }),
+    try: () => fetch(url, {
+      headers: {
+        "User-Agent": "effect-tsgo-repoctl",
+        ...(token === undefined ? {} : { Authorization: `Bearer ${token}` })
+      }
+    }),
     catch: (error) => new UpstreamManifestError({ reason: `Unable to fetch ${url}: ${String(error)}` })
   })
   if (!response.ok) {
@@ -322,6 +460,179 @@ const fetchJson = Effect.fnUntraced(function*(url: string) {
     catch: (error) => new UpstreamManifestError({ reason: `Unable to parse ${url}: ${String(error)}` })
   })
 })
+
+const GitHubComparison = Schema.Struct({
+  total_commits: Schema.Number,
+  commits: Schema.Array(Schema.Struct({
+    sha: GitRevision,
+    commit: Schema.Struct({ message: NonEmptyString })
+  }))
+})
+
+const fetchTypeScriptCommits = Effect.fnUntraced(function*(before: TypeScriptMetadata, after: TypeScriptMetadata) {
+  if (before.gitHead === after.gitHead || before.provider !== after.provider) {
+    return []
+  }
+  const source = getTypeScriptSource(after.provider)
+  const commits: Array<TypeScriptGoCommit> = []
+  let page = 1
+  let totalCommits = 0
+  do {
+    const url = [
+      `https://api.github.com/repos/${source.repositorySlug}/compare/${before.gitHead}...${after.gitHead}`,
+      `?per_page=100&page=${page}`
+    ].join("")
+    const comparison = yield* fetchJson(url, true)
+    const decoded = yield* Schema.decodeUnknownEffect(GitHubComparison)(comparison).pipe(
+      Effect.mapError((error) => new UpstreamManifestError({
+        reason: `Unable to read TypeScript-Go comparison: ${error.message}`
+      }))
+    )
+    totalCommits = decoded.total_commits
+    if (decoded.commits.length === 0 && commits.length < totalCommits) {
+      return yield* new UpstreamManifestError({ reason: "TypeScript-Go comparison ended before all commits were read" })
+    }
+    commits.push(...decoded.commits.map(({ commit, sha }) => ({
+      sha,
+      message: commit.message.split(/[\r\n]/, 1)[0]!
+    })))
+    page++
+  } while (commits.length < totalCommits)
+  return commits
+})
+
+export interface UpstreamUpdateDescriptionOptions {
+  readonly before: typeof Upstream.Type
+  readonly after: typeof Upstream.Type
+  readonly nextCommits: ReadonlyArray<TypeScriptGoCommit>
+  readonly schemaChanged: boolean
+  readonly oxlintSchemaChanged: boolean
+}
+
+export const formatUpstreamUpdateDescription = ({
+  after,
+  before,
+  nextCommits,
+  oxlintSchemaChanged,
+  schemaChanged
+}: UpstreamUpdateDescriptionOptions): string => {
+  const beforeVitePlus = before.profiles.find(({ name }) => name === "vite-plus")!
+  const afterVitePlus = after.profiles.find(({ name }) => name === "vite-plus")!
+  const beforeVitePlusVersion = /^Vite\+ (.+) compatibility runtime$/.exec(beforeVitePlus.description)?.[1]
+  const afterVitePlusVersion = /^Vite\+ (.+) compatibility runtime$/.exec(afterVitePlus.description)?.[1]
+  const versionUpdates = [
+    {
+      label: "TypeScript next",
+      packageName: "typescript",
+      spec: "typescript@next",
+      previous: before.tags.typescript.next,
+      updated: after.tags.typescript.next
+    },
+    {
+      label: "TypeScript latest",
+      packageName: "typescript",
+      spec: "typescript@latest",
+      previous: before.tags.typescript.latest,
+      updated: after.tags.typescript.latest
+    },
+    {
+      label: "Oxlint",
+      packageName: "oxlint",
+      spec: "oxlint@latest",
+      previous: before.tags.oxlint.latest,
+      updated: after.tags.oxlint.latest
+    },
+    {
+      label: "Oxlint TypeScript-Go lint plugin",
+      packageName: "oxlint-tsgolint",
+      spec: "oxlint-tsgolint@latest",
+      previous: before.tags["oxlint-tsgolint"].latest,
+      updated: after.tags["oxlint-tsgolint"].latest
+    },
+    {
+      label: "Vite+",
+      packageName: "vite-plus",
+      spec: "vite-plus@latest",
+      previous: beforeVitePlusVersion,
+      updated: afterVitePlusVersion
+    },
+    {
+      label: "Vite+ Oxlint runtime",
+      packageName: "oxlint",
+      spec: "oxlint",
+      previous: beforeVitePlus.dependencies.oxlint,
+      updated: afterVitePlus.dependencies.oxlint
+    },
+    {
+      label: "Vite+ TypeScript-Go lint runtime",
+      packageName: "oxlint-tsgolint",
+      spec: "oxlint-tsgolint",
+      previous: beforeVitePlus.dependencies["oxlint-tsgolint"],
+      updated: afterVitePlus.dependencies["oxlint-tsgolint"]
+    }
+  ].filter((update): update is typeof update & { readonly previous: string; readonly updated: string } =>
+    update.previous !== undefined && update.updated !== undefined && update.previous !== update.updated)
+  const previousNextComponent = before.components.typescript[before.tags.typescript.next]!
+  const updatedNextComponent = after.components.typescript[after.tags.typescript.next]!
+  const previousNext = previousNextComponent.gitHead
+  const updatedNext = updatedNextComponent.gitHead
+  const sections = ["Automated update of upstream metadata, generated TypeScript next-tag sources, and Nix inputs."]
+
+  if (versionUpdates.length > 0) {
+    sections.push([
+      "## Version updates",
+      "",
+      ...versionUpdates.map(({ label, packageName, previous, spec, updated }) =>
+        `- ${label}: [\`${spec}\`](https://www.npmjs.com/package/${packageName}/v/${updated}) \`${previous}\` -> \`${updated}\``)
+    ].join("\n"))
+  }
+  if (previousNext !== updatedNext) {
+    const previousSource = getTypeScriptSource(previousNextComponent.provider)
+    const updatedSource = getTypeScriptSource(updatedNextComponent.provider)
+    const lines = [
+      "## TypeScript compiler",
+      "",
+      `- Previous commit: [\`${previousNext}\`](https://github.com/${previousSource.repositorySlug}/commit/${previousNext})`,
+      `- Updated commit: [\`${updatedNext}\`](https://github.com/${updatedSource.repositorySlug}/commit/${updatedNext})`
+    ]
+    if (previousSource.provider === updatedSource.provider) {
+      lines.push(`- Compare: https://github.com/${updatedSource.repositorySlug}/compare/${previousNext}...${updatedNext}`)
+    } else {
+      lines.push(`- Source migration: \`${previousSource.repositorySlug}\` -> \`${updatedSource.repositorySlug}\``)
+    }
+    sections.push(lines.join("\n"))
+  }
+  if (nextCommits.length > 0) {
+    sections.push([
+      "## Upstream commits",
+      "",
+      ...nextCommits.map(({ message, sha }) =>
+        `- [${sha.slice(0, 7)}](https://github.com/${getTypeScriptSource(updatedNextComponent.provider).repositorySlug}/commit/${sha}) ${message}`)
+    ].join("\n"))
+  }
+  const otherUpdates = [
+    ...(schemaChanged ? ["- Refreshed the tsconfig schema from JSON Schema Store."] : []),
+    ...(oxlintSchemaChanged ? ["- Refreshed the Oxlint configuration schema from the selected package."] : [])
+  ]
+  if (otherUpdates.length > 0) {
+    sections.push(["## Other updates", "", ...otherUpdates].join("\n"))
+  }
+  return sections.join("\n\n")
+}
+
+export const formatGitHubOutputs = (outputs: Readonly<Record<string, string>>) =>
+  Object.entries(outputs).map(([name, value]) => {
+    const normalizedValue = value.replace(/\r\n?/g, "\n")
+    if (!normalizedValue.includes("\n")) {
+      return `${name}=${normalizedValue}\n`
+    }
+    let delimiter = `repoctl_${name}`
+    const lines = new Set(normalizedValue.split("\n"))
+    while (lines.has(delimiter)) {
+      delimiter += "_"
+    }
+    return `${name}<<${delimiter}\n${normalizedValue}\n${delimiter}\n`
+  }).join("")
 
 const resolveRemoteTag = Effect.fnUntraced(function*(repositoryRoot: string, repository: string, tag: string) {
   const output = yield* runCommandString("git", repositoryRoot, [
@@ -358,6 +669,21 @@ const readRemoteGitlink = (repository: string, revision: string, gitlink: string
   }
   return match[1]
 }))
+
+const readRemoteTypeScriptGitlink = Effect.fnUntraced(function*(repository: string, revision: string) {
+  const entries = yield* Effect.forEach(Object.values(typeScriptSources), (source) =>
+    readRemoteGitlink(repository, revision, source.tsgolintGitlink).pipe(
+      Effect.map((gitHead) => ({ gitHead, source })),
+      Effect.option
+    ), { concurrency: "unbounded" })
+  const matches = entries.flatMap((entry) => entry._tag === "Some" ? [entry.value] : [])
+  if (matches.length !== 1) {
+    return yield* new UpstreamManifestError({
+      reason: `Unable to resolve a unique TypeScript gitlink at ${revision}`
+    })
+  }
+  return matches[0]!
+})
 
 const fetchLatestOxlintSelection = Effect.fnUntraced(function*(repositoryRoot: string) {
   const oxlintOutput = yield* runCommandString("npm", repositoryRoot, [
@@ -428,31 +754,34 @@ const resolveTsgolintComponent = Effect.fnUntraced(function*(
     "https://github.com/oxc-project/tsgolint.git",
     `v${npmVersion}`
   )
-  const typescriptGitHead = yield* readRemoteGitlink(
+  const typescriptGitlink = yield* readRemoteTypeScriptGitlink(
     "https://github.com/oxc-project/tsgolint.git",
-    gitHead,
-    "typescript-go"
+    gitHead
   )
   const typescriptVersion = findTypeScriptVersion(
     typescriptVersions,
-    typescriptGitHead
+    typescriptGitlink.gitHead
   )
   if (typescriptVersion === undefined) {
     return yield* new UpstreamManifestError({
-      reason: `No TypeScript npm version has git head ${typescriptGitHead}`
+      reason: `No TypeScript npm version has git head ${typescriptGitlink.gitHead}`
     })
   }
   return {
     npmVersion,
     gitHead,
-    ts: { npmVersion: typescriptVersion, gitHead: typescriptGitHead }
+    ts: {
+      npmVersion: typescriptVersion,
+      gitHead: typescriptGitlink.gitHead,
+      provider: typescriptGitlink.source.provider
+    }
   }
 })
 
 const resolveRuntime = Effect.fnUntraced(function*(
   selection: OxlintSelection,
-  oxlint: ReadonlyMap<string, TypeScriptMetadata>,
-  tsgolint: ReadonlyMap<string, TypeScriptMetadata & { readonly ts: TypeScriptMetadata }>
+  oxlint: ReadonlyMap<string, ComponentMetadata>,
+  tsgolint: ReadonlyMap<string, ComponentMetadata & { readonly ts: TypeScriptMetadata }>
 ) {
   const resolvedOxlint = oxlint.get(selection.oxlintVersion)
   const resolvedTsgolint = tsgolint.get(selection.tsgolintVersion)
@@ -468,11 +797,11 @@ export const updateUpstream = Effect.fnUntraced(function*(repositoryRoot: string
   const upstream = yield* readUpstream(repositoryRoot)
   const nextBefore = {
     npmVersion: upstream.tags.typescript.next,
-    gitHead: upstream.components.typescript[upstream.tags.typescript.next]!.gitHead
+    ...upstream.components.typescript[upstream.tags.typescript.next]!
   }
   const latestBefore = {
     npmVersion: upstream.tags.typescript.latest,
-    gitHead: upstream.components.typescript[upstream.tags.typescript.latest]!.gitHead
+    ...upstream.components.typescript[upstream.tags.typescript.latest]!
   }
   const [next, latest, oxlintSelection, vitePlusSelection, remoteSchema, packument] = yield* Effect.all([
     fetchTypeScriptMetadata(repositoryRoot, "typescript@next"),
@@ -538,6 +867,15 @@ export const updateUpstream = Effect.fnUntraced(function*(repositoryRoot: string
   const oxlintSchemaChanged = oxlintSchema !== currentOxlintSchema
   const hasChanges = metadataChanged || schemaChanged || oxlintSchemaChanged
 
+  const nextCommits = yield* fetchTypeScriptCommits(nextBefore, next)
+  const description = formatUpstreamUpdateDescription({
+    before: upstream,
+    after: updated,
+    nextCommits,
+    schemaChanged,
+    oxlintSchemaChanged
+  })
+
   if (metadataChanged) {
     yield* fs.writeFileString(
       path.join(repositoryRoot, "_packages", "tsgo", "upstream.json"),
@@ -568,12 +906,13 @@ export const updateUpstream = Effect.fnUntraced(function*(repositoryRoot: string
     latest_previous_version: latestBefore.npmVersion,
     latest_previous_git_head: latestBefore.gitHead,
     latest_version: latest.npmVersion,
-    latest_git_head: latest.gitHead
+    latest_git_head: latest.gitHead,
+    description
   }
   if (process.env.GITHUB_OUTPUT !== undefined) {
     yield* Effect.tryPromise(() => appendFile(
       process.env.GITHUB_OUTPUT!,
-      Object.entries(outputs).map(([name, value]) => `${name}=${value}\n`).join("")
+      formatGitHubOutputs(outputs)
     ))
   }
   yield* Effect.log(hasChanges ? "Updated upstream metadata" : "Upstream metadata is current")

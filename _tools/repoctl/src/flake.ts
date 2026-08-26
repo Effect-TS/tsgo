@@ -2,10 +2,9 @@ import * as Data from "effect/Data"
 import * as Effect from "effect/Effect"
 import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
-import { runCommand, runCommandCapture, runCommandString } from "./process.ts"
+import { runCommand, runCommandCapture } from "./process.ts"
 import { readUpstream } from "./upstream.ts"
 
-const gitRevisionPattern = /^[0-9a-f]{40}$/
 const vendorHashPattern = /vendorHash = (?:("[^"]+")|lib\.fakeHash);/
 
 export class FlakeUpdateError extends Data.TaggedError("FlakeUpdateError")<{
@@ -23,24 +22,19 @@ const replaceRequired = (text: string, pattern: RegExp, replacement: string, nam
   return text.replace(pattern, replacement)
 }
 
-export const updateFlakeInputs = (flake: string, typescriptGoRevision: string, typescriptRevision: string) => {
-  let updated = replaceRequired(
+export const updateFlakeInputs = (flake: string, typescriptRevision: string) =>
+  replaceRequired(
     flake,
-    /github:microsoft\/typescript-go\/[0-9a-f]{40}\?submodules=1/,
-    `github:microsoft/typescript-go/${typescriptGoRevision}?submodules=1`,
-    "typescript-go-src"
-  )
-  updated = replaceRequired(
-    updated,
     /github:microsoft\/TypeScript\/[0-9a-f]{40}/,
     `github:microsoft/TypeScript/${typescriptRevision}`,
     "typescript-src"
   )
-  return updated
-}
 
 export const updateVendorHash = (flake: string, hash: string) =>
   replaceRequired(flake, vendorHashPattern, `vendorHash = ${JSON.stringify(hash)};`, "vendorHash")
+
+export const invalidateVendorHash = (flake: string) =>
+  replaceRequired(flake, vendorHashPattern, "vendorHash = lib.fakeHash;", "vendorHash")
 
 const replacementVendorHash = (output: string) => {
   const messageHash = output.match(/To correct the hash mismatch[^\n]*use "([^"]+)"/)?.[1]
@@ -64,17 +58,9 @@ export const updateFlake = Effect.fnUntraced(function*(repositoryRoot: string) {
   const path = yield* Path.Path
   const upstream = yield* readUpstream(repositoryRoot)
   const next = upstream.components.typescript[upstream.tags.typescript.next]!
-  const tree = yield* runCommandString("git", repositoryRoot, [
-    "-C",
-    "typescript-go",
-    "ls-tree",
-    next.gitHead,
-    "_submodules/TypeScript"
-  ])
-  const typescriptRevision = tree.trim().split(/\s+/)[2]
-  if (typescriptRevision === undefined || !gitRevisionPattern.test(typescriptRevision)) {
+  if (next.provider !== "typescript") {
     return yield* new FlakeUpdateError({
-      reason: `Cannot derive the TypeScript revision from TypeScript-Go ${next.gitHead}`
+      reason: `The Nix flake requires the TypeScript provider, but ${upstream.tags.typescript.next} uses ${next.provider}`
     })
   }
 
@@ -83,12 +69,18 @@ export const updateFlake = Effect.fnUntraced(function*(repositoryRoot: string) {
     Effect.mapError((error) => new FlakeUpdateError({ reason: error.message }))
   )
   const updatedInputs = yield* Effect.try({
-    try: () => updateFlakeInputs(flake, next.gitHead, typescriptRevision),
+    try: () => updateFlakeInputs(flake, next.gitHead),
     catch: (error) => error instanceof FlakeUpdateError
       ? error
       : new FlakeUpdateError({ reason: String(error) })
   })
-  yield* fs.writeFileString(flakePath, updatedInputs).pipe(
+  const flakeWithFakeHash = yield* Effect.try({
+    try: () => invalidateVendorHash(updatedInputs),
+    catch: (error) => error instanceof FlakeUpdateError
+      ? error
+      : new FlakeUpdateError({ reason: String(error) })
+  })
+  yield* fs.writeFileString(flakePath, flakeWithFakeHash).pipe(
     Effect.mapError((error) => new FlakeUpdateError({ reason: error.message }))
   )
   yield* runCommand("nix", repositoryRoot, ["flake", "lock"])

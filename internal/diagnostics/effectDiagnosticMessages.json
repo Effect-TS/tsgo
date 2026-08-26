@@ -442,5 +442,21 @@
     "This input is already assignable to the schema's Encoded type. Use `{0}` to preserve compile-time type checking instead of discarding the input type through `{1}`. effect(preferTypedSchemaDecoder)": {
         "category": "Suggestion",
         "code": 377112
+    },
+    "`Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)": {
+        "category": "Suggestion",
+        "code": 377113
+    },
+    "`Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)": {
+        "category": "Suggestion",
+        "code": 377114
+    },
+    "`Effect.orDie` expresses escalating every typed failure into a defect more directly than `Effect.{0}` with an identity-forwarding `Effect.die` handler. effect(catchDieToOrDie)": {
+        "category": "Suggestion",
+        "code": 377115
+    },
+    "`Effect.{2}` expresses selective recovery more directly than `Effect.{0}` with a conditional `Effect.{1}` passthrough. effect(catchConditionalRefailToCatchIf)": {
+        "category": "Suggestion",
+        "code": 377116
     }
 }

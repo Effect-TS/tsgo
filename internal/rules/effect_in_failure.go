@@ -4,8 +4,8 @@ package rules
 import (
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
-	"github.com/microsoft/typescript-go/shim/ast"
-	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 )
 
 // EffectInFailure detects when an Effect type appears in the failure (E) channel
@@ -57,6 +57,14 @@ var EffectInFailure = rule.Rule{
 				if node.Parent != nil {
 					shouldSkip[node.Parent] = true
 				}
+				continue
+			}
+
+			// Declared-type prefilter: skip the expensive flow-analysis query
+			// for reference nodes that conclusively cannot have a strict
+			// Effect flow type. Skipped nodes can never match, so no
+			// shouldSkip bookkeeping is needed.
+			if !ctx.TypeParser.NodeCouldBeStrictEffect(node) {
 				continue
 			}
 

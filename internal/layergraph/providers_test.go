@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/effect-ts/tsgo/internal/graph"
-	"github.com/microsoft/typescript-go/shim/checker"
+	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
 
 // makeNodeInfo creates a minimal LayerGraphNodeInfo for testing walkLeavesMatching.

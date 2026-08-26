@@ -4,7 +4,11 @@ import * as Effect from "effect/Effect"
 import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
 import { runCommand, runCommandCaptureSplit } from "./process.ts"
-import { readUpstream } from "./upstream.ts"
+import {
+  readUpstream,
+  resolveMaterializedTypeScriptSource,
+  typeScriptSourceEntrypoint
+} from "./upstream.ts"
 
 export interface PerfOptions {
   readonly target: string
@@ -187,21 +191,23 @@ export const comparePerformance = Effect.fnUntraced(function*(repositoryRoot: st
   }
   yield* fs.makeDirectory(runDirectory, { recursive: true })
 
-  if (!(yield* fs.exists(patchedBin))) {
-    yield* Console.log(`Patched binary missing, building ${patchedBin}`)
-    yield* runCommand("go", repositoryRoot, [
-      "build",
-      "-o",
-      patchedBin,
-      "./typescript-go/cmd/tsgo"
-    ], false, { CGO_ENABLED: "0" })
-  }
-
   const upstream = yield* readUpstream(repositoryRoot)
   const typescriptVersion = options.version ?? upstream.tags.typescript[options.latest ? "latest" : "next"]
   if (upstream.components.typescript[typescriptVersion] === undefined) {
     return yield* new PerfError({ reason: `Unknown TypeScript component version: ${typescriptVersion}` })
   }
+
+  if (!(yield* fs.exists(patchedBin))) {
+    const compiler = yield* resolveMaterializedTypeScriptSource(repositoryRoot)
+    yield* Console.log(`Patched binary missing, building ${patchedBin}`)
+    yield* runCommand("go", repositoryRoot, [
+      "build",
+      "-o",
+      patchedBin,
+      typeScriptSourceEntrypoint(compiler)
+    ], false, { CGO_ENABLED: "0" })
+  }
+
   const stockCommand = options.stockBin === undefined ? "pnpm" : path.resolve(options.stockBin)
   const stockArgs = options.stockBin === undefined
     ? ["--silent", "--package", `typescript@${typescriptVersion}`, "dlx", "tsc"]

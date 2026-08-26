@@ -4,8 +4,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
 
 // ContextTag parses a v3 Context.Tag type and extracts Identifier, Shape parameters.

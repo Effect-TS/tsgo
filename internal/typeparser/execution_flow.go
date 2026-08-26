@@ -3,9 +3,9 @@ package typeparser
 
 import (
 	"github.com/effect-ts/tsgo/internal/graph"
-	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
-	"github.com/microsoft/typescript-go/shim/core"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/checker"
+	"github.com/microsoft/TypeScript/tsc/shim/core"
 )
 
 type ExecutionNodeKind string
@@ -178,7 +178,7 @@ func (ec *executionCollector) visitEachChildWithUsageTarget(node *ast.Node, targ
 
 func (ec *executionCollector) visitExpressionNode(node *ast.Expression, parentExpression *GraphSlice) *GraphSlice {
 	rootExpr := parentExpression
-	if parentExpression == nil && ast.IsExpressionNode(node) {
+	if parentExpression == nil && ast.IsExpressionNode(node) && !isInsideTypeOnlyHeritageExpression(node) {
 		rootExpr = ec.buildValueNode(node)
 	}
 	ec.visitEachChildWithUsageTarget(node, rootExpr)

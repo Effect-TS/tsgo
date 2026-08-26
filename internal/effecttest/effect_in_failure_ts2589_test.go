@@ -9,14 +9,14 @@ import (
 
 	_ "github.com/effect-ts/tsgo/etscheckerhooks"
 	"github.com/effect-ts/tsgo/internal/bundledeffect"
-	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/bundled"
-	"github.com/microsoft/typescript-go/shim/compiler"
-	"github.com/microsoft/typescript-go/shim/core"
-	"github.com/microsoft/typescript-go/shim/parser"
-	"github.com/microsoft/typescript-go/shim/tsoptions"
-	"github.com/microsoft/typescript-go/shim/tspath"
-	"github.com/microsoft/typescript-go/shim/vfs/vfstest"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/bundled"
+	"github.com/microsoft/TypeScript/tsc/shim/compiler"
+	"github.com/microsoft/TypeScript/tsc/shim/core"
+	"github.com/microsoft/TypeScript/tsc/shim/parser"
+	"github.com/microsoft/TypeScript/tsc/shim/tsoptions"
+	"github.com/microsoft/TypeScript/tsc/shim/tspath"
+	"github.com/microsoft/TypeScript/tsc/shim/vfs/vfstest"
 )
 
 func TestEffectInFailureCanTriggerPluginOnlyTS2589(t *testing.T) {
@@ -38,6 +38,45 @@ func TestEffectInFailureCanTriggerPluginOnlyTS2589(t *testing.T) {
 	if hasDiagnosticCode(withoutPlugin, "TS2589:") {
 		t.Fatalf("did not expect TS2589 with plugin disabled, got %v", withoutPlugin)
 	}
+}
+
+func TestTaggedTemplateSymbolInterpolationDoesNotReportTS2731(t *testing.T) {
+	t.Parallel()
+
+	for _, rule := range []string{"anyUnknownInErrorContext", "effectInFailure"} {
+		t.Run(rule, func(t *testing.T) {
+			t.Parallel()
+
+			diagnostics := collectDiagnosticStringsFromContent(t, buildTaggedTemplateSymbolCase(rule))
+			if hasDiagnosticCode(diagnostics, "TS2731:") {
+				t.Fatalf("did not expect TS2731 with %s enabled, got %v", rule, diagnostics)
+			}
+		})
+	}
+}
+
+func buildTaggedTemplateSymbolCase(rule string) string {
+	return `// @filename: tsconfig.json
+{
+  "compilerOptions": {
+    "plugins": [
+      {
+        "name": "@effect/language-service",
+        "diagnosticSeverity": {
+          "` + rule + `": "error"
+        }
+      }
+    ]
+  }
+}
+
+// @filename: test.ts
+const self: unique symbol = Symbol("self")
+function sql(strings: TemplateStringsArray, ...args: Array<unknown>): string {
+  return strings.join("?") + args.length
+}
+export const q = sql` + "`(${self}) < 1`" + `
+`
 }
 
 func TestIssue362RemedaChunkDoesNotReportExcessiveTypeDepth(t *testing.T) {

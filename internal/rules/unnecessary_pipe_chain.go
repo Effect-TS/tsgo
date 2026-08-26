@@ -5,11 +5,11 @@ import (
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
 	"github.com/effect-ts/tsgo/internal/typeparser"
-	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
-	"github.com/microsoft/typescript-go/shim/core"
-	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
-	"github.com/microsoft/typescript-go/shim/scanner"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/checker"
+	"github.com/microsoft/TypeScript/tsc/shim/core"
+	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
+	"github.com/microsoft/TypeScript/tsc/shim/scanner"
 )
 
 // UnnecessaryPipeChain detects chained pipe() and .pipe() calls that can
@@ -43,7 +43,7 @@ type UnnecessaryPipeChainMatch struct {
 // AnalyzeUnnecessaryPipeChain finds all chained pipe() and .pipe() calls
 // (outer pipe whose subject is also a pipe call), returning matches with
 // the diagnostic and both parsed results.
-func AnalyzeUnnecessaryPipeChain(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile) []UnnecessaryPipeChainMatch {
+func AnalyzeUnnecessaryPipeChain(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []UnnecessaryPipeChainMatch {
 	var matches []UnnecessaryPipeChainMatch
 
 	var walk ast.Visitor
@@ -55,12 +55,14 @@ func AnalyzeUnnecessaryPipeChain(tp *typeparser.TypeParser, _ *checker.Checker, 
 		if n.Kind == ast.KindCallExpression {
 			if result := tp.ParsePipeCall(n); result != nil {
 				if inner := tp.ParsePipeCall(result.Subject); inner != nil {
-					matches = append(matches, UnnecessaryPipeChainMatch{
-						SourceFile: sf,
-						Location:   scanner.GetErrorRangeForNode(sf, result.Node.AsNode()),
-						Outer:      result,
-						Inner:      inner,
-					})
+					if pipeMergeSupportsArity(tp, c, inner, result) {
+						matches = append(matches, UnnecessaryPipeChainMatch{
+							SourceFile: sf,
+							Location:   scanner.GetErrorRangeForNode(sf, result.Node.AsNode()),
+							Outer:      result,
+							Inner:      inner,
+						})
+					}
 				}
 			}
 		}
@@ -71,4 +73,35 @@ func AnalyzeUnnecessaryPipeChain(tp *typeparser.TypeParser, _ *checker.Checker, 
 
 	walk(sf.AsNode())
 	return matches
+}
+
+func pipeMergeSupportsArity(tp *typeparser.TypeParser, c *checker.Checker, inner, outer *typeparser.ParsedPipeCallResult) bool {
+	if containsSpreadArgument(inner.Args) || containsSpreadArgument(outer.Args) {
+		return false
+	}
+
+	argumentCount := len(inner.Args) + len(outer.Args)
+	if inner.Kind == typeparser.TransformationKindPipe {
+		argumentCount++ // Standalone pipe retains its subject as the first argument.
+	}
+
+	calleeType := tp.GetTypeAtLocation(inner.Node.Expression)
+	for _, signature := range c.GetSignaturesOfType(calleeType, checker.SignatureKindCall) {
+		if argumentCount < signature.MinArgumentCount() {
+			continue
+		}
+		if signature.HasRestParameter() || argumentCount <= len(signature.Parameters()) {
+			return true
+		}
+	}
+	return false
+}
+
+func containsSpreadArgument(args []*ast.Node) bool {
+	for _, arg := range args {
+		if arg != nil && arg.Kind == ast.KindSpreadElement {
+			return true
+		}
+	}
+	return false
 }

@@ -4,8 +4,8 @@ import (
 	"testing"
 
 	"github.com/effect-ts/tsgo/internal/graph"
-	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
 
 func TestCompareNodesByOrder(t *testing.T) {

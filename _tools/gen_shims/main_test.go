@@ -86,7 +86,14 @@ replace github.com/microsoft/typescript-go/shim => ../external-shims
 replace example.com/unrelated => ../unrelated
 `, absoluteShim, absoluteShim))
 
-	got, err := updateGoWork(repositoryRoot, input, []string{"ls/change", "api"})
+	got, err := updateGoWork(
+		repositoryRoot,
+		filepath.Join(repositoryRoot, "typescript-go"),
+		"github.com/microsoft/typescript-go",
+		"github.com/microsoft/typescript-go/shim",
+		input,
+		[]string{"ls/change", "api"},
+	)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -98,12 +105,34 @@ replace example.com/unrelated => ../unrelated
 	for index, use := range workFile.Use {
 		uses[index] = use.Path
 	}
-	wantUses := []string{".", "./etscore", "../shim", "./tsgolint", "./typescript-go", "./shim/api", "./shim/ls/change"}
+	wantUses := []string{
+		".",
+		"./etscore",
+		"../shim",
+		"./tsgolint",
+		"./shim/api",
+		"./shim/_backport/api",
+		"./shim/ls/change",
+		"./shim/_backport/ls/change",
+		"./typescript-go",
+	}
 	if !reflect.DeepEqual(uses, wantUses) {
 		t.Fatalf("go.work uses = %v, want %v", uses, wantUses)
 	}
-	if len(workFile.Replace) != 2 || workFile.Replace[0].Old.Path != "example.com/sibling-shim" || workFile.Replace[0].New.Path != "../shim" || workFile.Replace[1].Old.Path != "example.com/unrelated" || workFile.Replace[1].New.Path != "../unrelated" {
-		t.Fatalf("go.work replacements = %#v, want sibling and unrelated replacements", workFile.Replace)
+	if len(workFile.Replace) != 7 ||
+		workFile.Replace[0].Old.Path != "example.com/sibling-shim" || workFile.Replace[0].New.Path != "../shim" ||
+		workFile.Replace[1].Old.Path != "example.com/unrelated" || workFile.Replace[1].New.Path != "../unrelated" ||
+		workFile.Replace[2].Old.Path != "github.com/microsoft/typescript-go" ||
+		workFile.Replace[2].Old.Version != "v0.0.0" || workFile.Replace[2].New.Path != "./typescript-go" ||
+		workFile.Replace[3].Old.Path != "github.com/microsoft/typescript-go/shim/api" ||
+		workFile.Replace[3].New.Path != "./shim/api" ||
+		workFile.Replace[4].Old.Path != "github.com/microsoft/TypeScript/tsc/shim/api" ||
+		workFile.Replace[4].New.Path != "./shim/_backport/api" ||
+		workFile.Replace[5].Old.Path != "github.com/microsoft/typescript-go/shim/ls/change" ||
+		workFile.Replace[5].New.Path != "./shim/ls/change" ||
+		workFile.Replace[6].Old.Path != "github.com/microsoft/TypeScript/tsc/shim/ls/change" ||
+		workFile.Replace[6].New.Path != "./shim/_backport/ls/change" {
+		t.Fatalf("go.work replacements = %#v, want preserved, provider, and backport replacements", workFile.Replace)
 	}
 }
 
@@ -205,7 +234,7 @@ func TestPreparePackageLoadUsesStablePaths(t *testing.T) {
 		go func() {
 			defer group.Done()
 			<-start
-			_, modFiles[index], errors[index] = preparePackageLoad(repositoryRoot)
+			_, modFiles[index], errors[index] = preparePackageLoad(repositoryRoot, typescriptGoRoot)
 		}()
 	}
 	close(start)
@@ -226,6 +255,125 @@ func TestPreparePackageLoadUsesStablePaths(t *testing.T) {
 		if _, err := os.Stat(filepath.Join(loadRoot, relative)); err != nil {
 			t.Fatalf("stable load file %s does not exist: %v", relative, err)
 		}
+	}
+}
+
+func TestRewriteImportPrefixPreservesLinknameTargets(t *testing.T) {
+	source := []byte(`package ast
+
+import "github.com/microsoft/TypeScript/tsc/internal/ast"
+import _ "unsafe"
+
+type Node = ast.Node
+
+//go:linkname CanHaveDecorators github.com/microsoft/TypeScript/tsc/internal/ast.CanHaveDecorators
+func CanHaveDecorators(node *ast.Node) bool
+`)
+
+	got, err := rewriteImportPrefix(
+		source,
+		"github.com/microsoft/TypeScript/tsc/internal/",
+		"github.com/microsoft/TypeScript/tsc/shim/",
+	)
+	if err != nil {
+		t.Fatal(err)
+	}
+	text := string(got)
+	if !strings.Contains(text, `"github.com/microsoft/TypeScript/tsc/shim/ast"`) {
+		t.Fatalf("rewritten source does not import provider shim:\n%s", text)
+	}
+	if !strings.Contains(text, "//go:linkname CanHaveDecorators github.com/microsoft/TypeScript/tsc/internal/ast.CanHaveDecorators") {
+		t.Fatalf("rewritten source changed linkname target:\n%s", text)
+	}
+}
+
+func TestGenerateBackportReexportsProviderShims(t *testing.T) {
+	providerRoot := filepath.Join(t.TempDir(), "shim")
+	backportRoot := filepath.Join(providerRoot, "_backport")
+	writeTestFile(t, filepath.Join(providerRoot, "ast", "shim.go"), []byte(`package ast
+
+import "github.com/microsoft/typescript-go/internal/ast"
+import _ "unsafe"
+
+type Node = ast.Node
+
+//go:linkname CanHaveDecorators github.com/microsoft/typescript-go/internal/ast.CanHaveDecorators
+func CanHaveDecorators(node *ast.Node) bool
+`))
+
+	if err := generateBackport(
+		providerRoot,
+		backportRoot,
+		"github.com/microsoft/typescript-go/internal/",
+		"github.com/microsoft/typescript-go/shim",
+	); err != nil {
+		t.Fatal(err)
+	}
+	shim, err := os.ReadFile(filepath.Join(backportRoot, "ast", "shim.go"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	text := string(shim)
+	if !strings.Contains(text, `"github.com/microsoft/typescript-go/shim/ast"`) {
+		t.Fatalf("backport does not import the provider shim:\n%s", text)
+	}
+	if !strings.Contains(text, "//go:linkname CanHaveDecorators github.com/microsoft/typescript-go/internal/ast.CanHaveDecorators") {
+		t.Fatalf("backport changed the linkname target:\n%s", text)
+	}
+	goMod, err := os.ReadFile(filepath.Join(backportRoot, "ast", "go.mod"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(goMod), "module github.com/microsoft/TypeScript/tsc/shim/ast") ||
+		!strings.Contains(string(goMod), "require github.com/microsoft/typescript-go/shim/ast v0.0.0") {
+		t.Fatalf("unexpected backport go.mod:\n%s", goMod)
+	}
+	if _, err := os.Stat(filepath.Join(backportRoot, "_backport")); !errors.Is(err, os.ErrNotExist) {
+		t.Fatalf("backport recursively copied itself: %v", err)
+	}
+}
+
+func TestUpdateGoWorkUsesProviderModulesDirectlyForModernCompiler(t *testing.T) {
+	repositoryRoot := t.TempDir()
+	input := []byte(`go 1.26
+
+use (
+	.
+	./etscore
+	./typescript-go
+	./shim/stale
+)
+`)
+
+	got, err := updateGoWork(
+		repositoryRoot,
+		filepath.Join(repositoryRoot, "typescript", "tsc"),
+		"github.com/microsoft/TypeScript/tsc",
+		"github.com/microsoft/TypeScript/tsc/shim",
+		input,
+		[]string{"ast"},
+	)
+	if err != nil {
+		t.Fatal(err)
+	}
+	workFile, err := modfile.ParseWork("go.work", got, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	uses := make([]string, len(workFile.Use))
+	for index, use := range workFile.Use {
+		uses[index] = use.Path
+	}
+	want := []string{".", "./etscore", "./shim/ast", "./typescript/tsc"}
+	if !reflect.DeepEqual(uses, want) {
+		t.Fatalf("go.work uses = %v, want %v", uses, want)
+	}
+	if len(workFile.Replace) != 2 ||
+		workFile.Replace[0].Old.Path != "github.com/microsoft/TypeScript/tsc" ||
+		workFile.Replace[0].Old.Version != "v0.0.0" || workFile.Replace[0].New.Path != "./typescript/tsc" ||
+		workFile.Replace[1].Old.Path != "github.com/microsoft/TypeScript/tsc/shim/ast" ||
+		workFile.Replace[1].Old.Version != "v0.0.0" || workFile.Replace[1].New.Path != "./shim/ast" {
+		t.Fatalf("go.work replacements = %#v, want compiler and provider shim replacements", workFile.Replace)
 	}
 }
 

@@ -1,5 +1,93 @@
 # @effect/tsgo
 
+## 0.37.0
+
+### Minor Changes
+
+- afb17ac: Support both the legacy `microsoft/typescript-go` compiler and the migrated
+  `microsoft/TypeScript/tsc` compiler behind the canonical TypeScript shim
+  namespace.
+
+### Patch Changes
+
+- a3af171: Build the Nix package from the migrated TypeScript monorepo source and update the pinned compiler revision correctly.
+- eba879b: Suppress the `unnecessaryPipeChain` diagnostic when merging chained pipe calls would exceed the available overload arity.
+- 83b8e2a: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260824.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/e9e477458d7b975ed5e43117fb85f6bc87363a6a) commit `e9e477458d7b975ed5e43117fb85f6bc87363a6a`, and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2). Refresh the Oxlint configuration schema from the selected package.
+
+## 0.36.5
+
+### Patch Changes
+
+- 9ddab5d: Report unsupported target package versions with the current `@effect/tsgo` version and the supported alternatives.
+- 922903b: Document the target package versions supported by each published release.
+- ca311a5: Exclude type-only heritage nodes from execution flow graphs across supported TypeScript versions.
+- 7c54018: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260813.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/34ffe2a2531a226da0046d213899ae0b721229b0) commit `34ffe2a2531a226da0046d213899ae0b721229b0`, and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
+## 0.36.4
+
+### Patch Changes
+
+- 7a616ec: Allow declaration emit with `noEmitOnError` when all diagnostics are ignored Effect diagnostics.
+
+## 0.36.3
+
+### Patch Changes
+
+- 73f7f28: Refresh patched binaries when an updated `@effect/tsgo` package provides a different replacement artifact.
+- 9190801: Update Effect v4 dependencies and embedded test fixtures to `4.0.0-beta.107`.
+
+## 0.36.2
+
+### Patch Changes
+
+- 8362acc: Extend the walker-rule prefilter to call expressions.
+  
+  A call expression's type is its resolved signature's return type, and both the signature and that return type are already cached from the main check phase. `NodeCouldBeStrictEffect` now consults them for call nodes and skips the expensive flow-analysis re-check when the declared return type conclusively cannot be a strict Effect. Signature-less calls, optional chains, and every inconclusive return type stay conservative, and `promiseInEffectSuccess` no longer computes a location type for calls only to discard it. Emitted diagnostics are unchanged; on a large Effect monorepo build this removes a further ~4.6% of wall time on top of the reference-node prefilter, bringing the total Effect diagnostics overhead versus a pristine tsgo build of the same commit down to ~17%.
+- 9020153: Skip diagnostic rules below the minimum visible severity before executing them.
+  
+  In `tsc` CLI mode without `includeSuggestionsInTsc`, suggestion- and message-severity diagnostics are dropped from the output after rules run. The rule runner now receives the minimum severity the caller can surface and skips such rules up front, avoiding their type-checker queries entirely. A rule below the threshold still runs when any directive in the file references it (for example `// @effect-diagnostics ruleName:error` or a wildcard), since directives can raise its severity and must be tracked for `unusedDirective` reporting. Emitted diagnostics are unchanged; on a large Effect monorepo build this removes roughly 1–2s of check time.
+- 257af25: Skip flow-analysis type queries for references that conclusively cannot be an Effect.
+  
+  The `effectInFailure` and `promiseInEffectSuccess` rules walk every node of a file and query its flow type just to test whether it is a strict Effect type. The new `TypeParser.NodeCouldBeStrictEffect` prefilter inspects the referenced symbol's declared type first — flow narrowing can only refine the declared type, so a declared type that conclusively contains no possibly-Effect constituent (primitives, plain objects with a different type name, unions thereof) can never produce a strict Effect flow type, and the expensive query is skipped. The predicate is conservative: `any`/`unknown`, type parameters, conditionals, symbol-less types, and deep unions always fall through to the full query. Emitted diagnostics are unchanged; on a large Effect monorepo build this removes ~10% of build wall time (~2.7s of ~26.8s).
+
+## 0.36.1
+
+### Patch Changes
+
+- 4db1d4b: Preserve existing indentation and newline styles when setup updates JSON configuration files.
+- c154a04: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260808.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/24fabe95acba758c05fcb349bf427a3a0c8ad676) commit `24fabe95acba758c05fcb349bf427a3a0c8ad676`, and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
+## 0.36.0
+
+### Minor Changes
+
+- 8423f68: Add recommended and category-specific shared configurations for Oxlint.
+
+## 0.35.0
+
+### Minor Changes
+
+- f25821b: Generate detailed upstream update pull request descriptions with explicit version changes and the TypeScript-Go commits introduced by the update.
+
+### Patch Changes
+
+- 3fe06c8: Avoid false positive TS2731 diagnostics for symbol-valued interpolations in tagged template literals when Effect diagnostic rules traverse the template expression.
+- 989964b: Prevent `preferTypedSchemaDecoder` from panicking when a decoder input is produced by a preceding call or pipe transformation.
+- 86c30b1: Persist Effect plugin options in TypeScript build information so incremental builds recheck semantic diagnostics when extended tsconfig plugin settings change.
+- b8e7314: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260806.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/86cc4767d4ebadb9b7845d0ab8eb2b05785c3fee) commit `86cc4767d4ebadb9b7845d0ab8eb2b05785c3fee`, and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
+## 0.34.0
+
+### Minor Changes
+
+- 974513e: Add a non-interactive `setup` workflow with explicit project, integration, diagnostic, editor, preview, and apply options. Setup now also recommends running the package manager install command whenever it changes `package.json`.
+
+### Patch Changes
+
+- ba4ec9a: Cache generated TypeScript-Go shims by their effective inputs during local repository setup and CI runs.
+- 6d0ffda: Remove unused internal helpers and add dead-code analysis to the repository lint workflow.
+- 892021a: Use absolute GitHub URLs for links in the published README so documentation links remain clickable on npm.
+
 ## 0.33.0
 
 ### Minor Changes

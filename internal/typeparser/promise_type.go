@@ -1,7 +1,7 @@
 package typeparser
 
 import (
-	"github.com/microsoft/typescript-go/shim/checker"
+	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
 
 // PromiseType returns t when it is the global Promise type or a reference to it.

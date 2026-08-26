@@ -4,9 +4,9 @@ import (
 	"testing"
 
 	"github.com/effect-ts/tsgo/etscore"
-	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/core"
-	"github.com/microsoft/typescript-go/shim/diagnostics"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/core"
+	"github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 )
 
 // makeDiag creates a minimal diagnostic with the given code and category.
@@ -109,6 +109,23 @@ func TestFilterDiagnosticsForExitCode_IgnoreWarnings(t *testing.T) {
 	}
 	if result[2].Code() != 2304 {
 		t.Errorf("expected code 2304, got %d", result[2].Code())
+	}
+}
+
+func TestNoEmitOnErrorHookFiltersCompilerOptions(t *testing.T) {
+	t.Parallel()
+	opts := &core.CompilerOptions{
+		NoEmitOnError: core.BoolToTristate(true),
+		Effect: &etscore.EffectPluginOptions{
+			IgnoreEffectWarningsInTscExitCode: true,
+		},
+	}
+	if result := filterDiagnosticsForExitCode(opts, []*ast.Diagnostic{makeDiag(377011, diagnostics.CategoryWarning)}); len(result) != 0 {
+		t.Fatal("expected ignored Effect warning to be filtered")
+	}
+
+	if result := filterDiagnosticsForExitCode(opts, []*ast.Diagnostic{makeDiag(1002, diagnostics.CategoryError)}); len(result) != 1 {
+		t.Fatal("expected TypeScript error to be retained")
 	}
 }
 

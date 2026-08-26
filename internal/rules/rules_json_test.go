@@ -27,15 +27,15 @@ import (
 	"github.com/effect-ts/tsgo/internal/rule"
 	"github.com/effect-ts/tsgo/internal/rules"
 	"github.com/effect-ts/tsgo/internal/typeparser"
-	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/bundled"
-	"github.com/microsoft/typescript-go/shim/compiler"
-	"github.com/microsoft/typescript-go/shim/core"
-	"github.com/microsoft/typescript-go/shim/parser"
-	"github.com/microsoft/typescript-go/shim/tsoptions"
-	"github.com/microsoft/typescript-go/shim/tspath"
-	"github.com/microsoft/typescript-go/shim/vfs"
-	"github.com/microsoft/typescript-go/shim/vfs/vfstest"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/bundled"
+	"github.com/microsoft/TypeScript/tsc/shim/compiler"
+	"github.com/microsoft/TypeScript/tsc/shim/core"
+	"github.com/microsoft/TypeScript/tsc/shim/parser"
+	"github.com/microsoft/TypeScript/tsc/shim/tsoptions"
+	"github.com/microsoft/TypeScript/tsc/shim/tspath"
+	"github.com/microsoft/TypeScript/tsc/shim/vfs"
+	"github.com/microsoft/TypeScript/tsc/shim/vfs/vfstest"
 
 	// Import etscheckerhooks to register Effect diagnostic callbacks
 	_ "github.com/effect-ts/tsgo/etscheckerhooks"
@@ -86,6 +86,27 @@ func TestReadmeTable(t *testing.T) {
 			t.Fatalf("write local baseline: %v", err)
 		}
 		t.Fatalf("README.md diagnostics table mismatch:\nlocal: %s\nreference: %s", localPath, referencePath)
+	}
+}
+
+func TestReadmeLinksAreAbsolute(t *testing.T) {
+	t.Parallel()
+	readmePath := filepath.Join(repoRoot(t), "README.md")
+	content, err := os.ReadFile(readmePath)
+	if err != nil {
+		t.Fatalf("read README.md: %v", err)
+	}
+
+	patterns := []*regexp.Regexp{
+		regexp.MustCompile(`href="([^"]+)"`),
+		regexp.MustCompile(`\[[^\]]+\]\(([^)]+)\)`),
+	}
+	for _, pattern := range patterns {
+		for _, match := range pattern.FindAllStringSubmatch(string(content), -1) {
+			if !strings.HasPrefix(match[1], "https://") && !strings.HasPrefix(match[1], "http://") {
+				t.Errorf("README.md contains non-absolute link %q", match[1])
+			}
+		}
 	}
 }
 
@@ -737,7 +758,7 @@ func generateReadmeTable() string {
 		lines = append(lines, fmt.Sprintf("    <tr><td colspan=\"2\"><strong>%s</strong> <em>%s</em></td></tr>",
 			html.EscapeString(group.Name), html.EscapeString(group.Description)))
 		for _, r := range groupRules {
-			lines = append(lines, fmt.Sprintf("    <tr><td><a href=\"docs/rules/%s.md\"><code>%s</code></a></td><td>%s</td></tr>",
+			lines = append(lines, fmt.Sprintf("    <tr><td><a href=\"https://github.com/Effect-TS/tsgo/blob/main/docs/rules/%s.md\"><code>%s</code></a></td><td>%s</td></tr>",
 				kebabCase(r.name), html.EscapeString(r.name), html.EscapeString(r.description)))
 		}
 	}

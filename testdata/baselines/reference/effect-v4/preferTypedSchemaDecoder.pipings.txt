@@ -1,4 +1,4 @@
-==== /.src/preferTypedSchemaDecoder.ts (23 flows) ====
+==== /.src/preferTypedSchemaDecoder.ts (26 flows) ====
 
 === Piping Flow ===
 Location: 8:15 - 11:3
@@ -321,3 +321,53 @@ Transformations (1):
       callee: decodeNestedGeneric
       args: (constant)
       outType: { readonly name: string; readonly coordinates: readonly [number, number]; }
+
+=== Piping Flow ===
+Location: 59:20 - 59:59
+Node: Schema.Struct({ name: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { name: Schema.String }
+Subject Type: { name: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly name: String; }>
+
+=== Piping Flow ===
+Location: 65:23 - 65:82
+Node: Schema.decodeUnknownEffect(NamedPerson)(makeFields("Ada"))
+Node Kind: KindCallExpression
+
+Subject: "Ada"
+Subject Type: "Ada"
+
+Transformations (2):
+  [0] kind: call
+      callee: makeFields
+      args: (constant)
+      outType: { readonly name: string; }
+  [1] kind: call
+      callee: Schema.decodeUnknownEffect(NamedPerson)
+      args: (constant)
+      outType: Effect<{ readonly name: string; }, SchemaError, never>
+
+=== Piping Flow ===
+Location: 67:35 - 67:100
+Node: pipe("Ada", makeFields, Schema.decodeUnknownEffect(NamedPerson))
+Node Kind: KindCallExpression
+
+Subject: "Ada"
+Subject Type: "Ada"
+
+Transformations (2):
+  [0] kind: pipe
+      callee: makeFields
+      args: (constant)
+      outType: { readonly name: string; }
+  [1] kind: pipe
+      callee: Schema.decodeUnknownEffect
+      args: [NamedPerson]
+      outType: Effect<{ readonly name: string; }, SchemaError, never>

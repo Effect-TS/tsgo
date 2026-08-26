@@ -36,41 +36,23 @@
       "inputs": {
         "nixpkgs": "nixpkgs",
         "nixpkgsUnstable": "nixpkgsUnstable",
-        "typescript-go-src": "typescript-go-src",
         "typescript-src": "typescript-src"
-      }
-    },
-    "typescript-go-src": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1785807459,
-        "narHash": "sha256-aW/VXTodfPOfAszo3WQ+yyX2H3uPw9Jd6x24hhSKOe0=",
-        "owner": "microsoft",
-        "repo": "typescript-go",
-        "rev": "12318e599d21f516defea3b20e5d44b9369da723",
-        "type": "github"
-      },
-      "original": {
-        "owner": "microsoft",
-        "repo": "typescript-go",
-        "rev": "12318e599d21f516defea3b20e5d44b9369da723",
-        "type": "github"
       }
     },
     "typescript-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1782773256,
-        "narHash": "sha256-Rvbrpg266yNkJImCGiWRB01W7QP6cECB16Cm6HtYWis=",
+        "lastModified": 1787611291,
+        "narHash": "sha256-QHOkXvBmLrV6oQ5QZx564I1dqK1crURbzFqUWgVNDo8=",
         "owner": "microsoft",
         "repo": "TypeScript",
-        "rev": "4d4f005c8541e0255a9d8791205fdce326e462bc",
+        "rev": "8ac035a394c79e693a3a7d74cb170448503ee894",
         "type": "github"
       },
       "original": {
         "owner": "microsoft",
         "repo": "TypeScript",
-        "rev": "4d4f005c8541e0255a9d8791205fdce326e462bc",
+        "rev": "8ac035a394c79e693a3a7d74cb170448503ee894",
         "type": "github"
       }
     }

@@ -26,6 +26,7 @@ const EmitOnlyJs = compiler.EmitOnlyJs
 type EmitOptions = compiler.EmitOptions
 type EmitResult = compiler.EmitResult
 type FileIncludeReason = compiler.FileIncludeReason
+var FilterDiagnosticsForNoEmitOnErrorCallback = compiler.FilterDiagnosticsForNoEmitOnErrorCallback
 //go:linkname FilterNoEmitSemanticDiagnostics github.com/microsoft/typescript-go/internal/compiler.FilterNoEmitSemanticDiagnostics
 func FilterNoEmitSemanticDiagnostics(diagnostics []*ast.Diagnostic, options *core.CompilerOptions) []*ast.Diagnostic
 //go:linkname GetDiagnosticsOfAnyProgram github.com/microsoft/typescript-go/internal/compiler.GetDiagnosticsOfAnyProgram
@@ -35,13 +36,13 @@ func HandleNoEmitOnError(ctx context.Context, program compiler.ProgramLike, file
 type LibFile = compiler.LibFile
 //go:linkname NewCachedFSCompilerHost github.com/microsoft/typescript-go/internal/compiler.NewCachedFSCompilerHost
 func NewCachedFSCompilerHost(currentDirectory string, fs vfs.FS, defaultLibraryPath string, extendedConfigCache tsoptions.ExtendedConfigCache, trace func(msg *diagnostics.Message, args ...any)) compiler.CompilerHost
-//go:linkname NewCompilerHost github.com/microsoft/typescript-go/internal/compiler.NewCompilerHost
-func NewCompilerHost(currentDirectory string, fs vfs.FS, defaultLibraryPath string, extendedConfigCache tsoptions.ExtendedConfigCache, trace func(msg *diagnostics.Message, args ...any)) compiler.CompilerHost
 //go:linkname NewProgram github.com/microsoft/typescript-go/internal/compiler.NewProgram
 func NewProgram(opts compiler.ProgramOptions) *compiler.Program
 type Program = compiler.Program
 type ProgramLike = compiler.ProgramLike
 type ProgramOptions = compiler.ProgramOptions
+//go:linkname RegisterFilterDiagnosticsForNoEmitOnErrorCallback github.com/microsoft/typescript-go/internal/compiler.RegisterFilterDiagnosticsForNoEmitOnErrorCallback
+func RegisterFilterDiagnosticsForNoEmitOnErrorCallback(cb func(*core.CompilerOptions, []*ast.Diagnostic) []*ast.Diagnostic)
 //go:linkname SortAndDeduplicateDiagnostics github.com/microsoft/typescript-go/internal/compiler.SortAndDeduplicateDiagnostics
 func SortAndDeduplicateDiagnostics(diagnostics []*ast.Diagnostic) []*ast.Diagnostic
 type SourceFileMayBeEmittedHost = compiler.SourceFileMayBeEmittedHost

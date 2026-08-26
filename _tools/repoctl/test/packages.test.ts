@@ -15,7 +15,7 @@ const revision = "0123456789abcdef0123456789abcdef01234567"
 test("bundles upstream metadata in every platform package", async() => {
   const repository = mkdtempSync(join(tmpdir(), "repoctl-packages-"))
   const upstream = `${JSON.stringify({
-    schemaVersion: 4,
+    schemaVersion: 5,
     tags: {
       typescript: { latest: "7.0.0", next: "7.1.0" },
       oxlint: { latest: "1.0.0" },
@@ -23,8 +23,8 @@ test("bundles upstream metadata in every platform package", async() => {
     },
     components: {
       typescript: {
-        "7.0.0": { gitHead: revision },
-        "7.1.0": { gitHead: revision }
+        "7.0.0": { gitHead: revision, provider: "typescript-go" },
+        "7.1.0": { gitHead: revision, provider: "typescript" }
       },
       "oxlint-tsgolint": {
         "1.0.0": { gitHead: revision, dependencies: { typescript: "7.0.0" } }
@@ -60,7 +60,7 @@ test("bundles upstream metadata in every platform package", async() => {
 test("prepares versioned platform artifacts and executable manifests", async() => {
   const repository = mkdtempSync(join(tmpdir(), "repoctl-prepare-packages-"))
   const upstream = {
-    schemaVersion: 4,
+    schemaVersion: 5,
     tags: {
       typescript: { latest: "7.0.0", next: "7.1.0" },
       oxlint: { latest: "1.0.0" },
@@ -68,8 +68,8 @@ test("prepares versioned platform artifacts and executable manifests", async() =
     },
     components: {
       typescript: {
-        "7.0.0": { gitHead: revision },
-        "7.1.0": { gitHead: revision }
+        "7.0.0": { gitHead: revision, provider: "typescript-go" },
+        "7.1.0": { gitHead: revision, provider: "typescript" }
       },
       "oxlint-tsgolint": {
         "1.0.0": { gitHead: revision, dependencies: { typescript: "7.0.0" } }

@@ -4,8 +4,8 @@ import (
 	"maps"
 
 	"github.com/effect-ts/tsgo/etscore"
-	"github.com/microsoft/typescript-go/shim/tspath"
-	"github.com/microsoft/typescript-go/shim/vfs/vfsmatch"
+	"github.com/microsoft/TypeScript/tsc/shim/tspath"
+	"github.com/microsoft/TypeScript/tsc/shim/vfs/vfsmatch"
 )
 
 // ResolveEffectPluginOptionsForSourceFile resolves ordered path-scoped diagnostic overrides for a file.

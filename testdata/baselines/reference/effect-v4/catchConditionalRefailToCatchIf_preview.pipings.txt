@@ -1,0 +1,71 @@
+==== /.src/catchConditionalRefailToCatchIf_preview.ts (5 flows) ====
+
+=== Piping Flow ===
+Location: 5:23 - 5:52
+Node: Data.TaggedError("NotFound")
+Node Kind: KindCallExpression
+
+Subject: "NotFound"
+Subject Type: "NotFound"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "NotFound"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 6:28 - 6:62
+Node: Data.TaggedError("DatabaseError")
+Node Kind: KindCallExpression
+
+Subject: "DatabaseError"
+Subject Type: "DatabaseError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "DatabaseError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 10:25 - 14:2
+Node: program.pipe(\n  Effect.catch((error) =>\n    error._tag === "NotFound" ? Effect.succeed("guest") : Effect.fail(error)\n  )\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, DatabaseError | NotFound, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [(error) =>\n    error._tag === "NotFound" ? Effect.succeed("guest") : Effect.fail(error)]
+      outType: Effect<string, DatabaseError, never>
+
+=== Piping Flow ===
+Location: 12:32 - 12:56
+Node: Effect.succeed("guest")
+Node Kind: KindCallExpression
+
+Subject: "guest"
+Subject Type: "guest"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 12:58 - 12:77
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: DatabaseError
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, DatabaseError, never>

@@ -1,0 +1,47 @@
+diff --git a/internal/execute/incremental/buildInfo.go b/internal/execute/incremental/buildInfo.go
+index 61ae063d4..47da02331 100644
+--- a/internal/execute/incremental/buildInfo.go
++++ b/internal/execute/incremental/buildInfo.go
+@@ -4,6 +4,7 @@ import (
+ 	"fmt"
+ 	"iter"
+ 
++	"github.com/effect-ts/tsgo/etscore"
+ 	"github.com/microsoft/typescript-go/internal/ast"
+ 	"github.com/microsoft/typescript-go/internal/collections"
+ 	"github.com/microsoft/typescript-go/internal/core"
+@@ -476,6 +477,7 @@ type BuildInfo struct {
+ 	FileInfos                  []*BuildInfoFileInfo                 `json:"fileInfos,omitzero"`
+ 	FileIdsList                [][]BuildInfoFileId                  `json:"fileIdsList,omitzero"`
+ 	Options                    *collections.OrderedMap[string, any] `json:"options,omitzero"`
++	Effect                     *etscore.EffectPluginOptions         `json:"effect,omitzero"`
+ 	ReferencedMap              []*BuildInfoReferenceMapEntry        `json:"referencedMap,omitzero"`
+ 	SemanticDiagnosticsPerFile []*BuildInfoSemanticDiagnostic       `json:"semanticDiagnosticsPerFile,omitzero"`
+ 	EmitDiagnosticsPerFile     []*BuildInfoDiagnosticsOfFile        `json:"emitDiagnosticsPerFile,omitzero"`
+@@ -529,1 +531,2 @@
++	options.Effect = b.Effect
+ 	return options
+
+diff --git a/internal/execute/incremental/snapshottobuildinfo.go b/internal/execute/incremental/snapshottobuildinfo.go
+index 909fab087..6595cd86c 100644
+--- a/internal/execute/incremental/snapshottobuildinfo.go
++++ b/internal/execute/incremental/snapshottobuildinfo.go
+@@ -19,3 +19,4 @@ func snapshotToBuildInfo(snapshot *snapshot, program *compiler.Program, buildInfo
+ 	buildInfo := &BuildInfo{
+ 		Version: core.Version(),
++		Effect:  snapshot.options.Effect,
+ 	}
+diff --git a/internal/tsoptions/declscompiler.go b/internal/tsoptions/declscompiler.go
+index c6a70ff9e..fd1672ea7 100644
+--- a/internal/tsoptions/declscompiler.go
++++ b/internal/tsoptions/declscompiler.go
+@@ -1243,6 +1243,9 @@ func CompilerOptionsAffectSemanticDiagnostics(
+ 	oldOptions *core.CompilerOptions,
+ 	newOptions *core.CompilerOptions,
+ ) bool {
++	if !reflect.DeepEqual(oldOptions.Effect, newOptions.Effect) {
++		return true
++	}
+ 	return optionsHaveChanges(oldOptions, newOptions, func(option *CommandLineOption) bool {
+ 		return option.AffectsSemanticDiagnostics
+ 	})

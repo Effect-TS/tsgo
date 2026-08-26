@@ -1,0 +1,46 @@
+{
+  "options": {
+    "typeAware": true
+  },
+  "plugins": [
+    "effecttsgo"
+  ],
+  "rules": {
+    "effecttsgo/catch-all-to-map-error": "warn",
+    "effecttsgo/catch-chain-to-first-success-of": "warn",
+    "effecttsgo/catch-conditional-refail-to-catch-if": "warn",
+    "effecttsgo/catch-tag-to-catch-reason": "warn",
+    "effecttsgo/catch-to-ignore": "warn",
+    "effecttsgo/catch-to-or-else-succeed": "warn",
+    "effecttsgo/deterministic-keys": "warn",
+    "effecttsgo/effect-do-notation": "warn",
+    "effecttsgo/effect-fn-opportunity": "warn",
+    "effecttsgo/effect-map-flatten": "warn",
+    "effecttsgo/effect-map-void": "warn",
+    "effecttsgo/effect-succeed-with-void": "warn",
+    "effecttsgo/flat-map-to-map": "warn",
+    "effecttsgo/missed-pipeable-opportunity": "warn",
+    "effecttsgo/missing-effect-service-dependency": "warn",
+    "effecttsgo/missing-pipeable-signature": "warn",
+    "effecttsgo/multiple-catch-tag": "warn",
+    "effecttsgo/nested-effect-gen-yield": "warn",
+    "effecttsgo/new-schema-class": "warn",
+    "effecttsgo/prefer-schema-type-property": "warn",
+    "effecttsgo/prefer-typed-schema-decoder": "warn",
+    "effecttsgo/redundant-map-error": "warn",
+    "effecttsgo/redundant-or-die": "warn",
+    "effecttsgo/redundant-schema-tag-identifier": "warn",
+    "effecttsgo/schema-number": "warn",
+    "effecttsgo/schema-struct-with-tag": "warn",
+    "effecttsgo/schema-union-of-literals": "warn",
+    "effecttsgo/service-not-as-class": "warn",
+    "effecttsgo/strict-boolean-expressions": "warn",
+    "effecttsgo/sync-to-succeed": "warn",
+    "effecttsgo/unnecessary-arrow-block": "warn",
+    "effecttsgo/unnecessary-effect-gen": "warn",
+    "effecttsgo/unnecessary-fail-yieldable-error": "warn",
+    "effecttsgo/unnecessary-pipe": "warn",
+    "effecttsgo/unnecessary-pipe-chain": "warn",
+    "effecttsgo/unnecessary-typeof-type": "warn"
+  }
+}

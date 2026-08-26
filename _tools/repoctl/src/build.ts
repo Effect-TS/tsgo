@@ -8,7 +8,12 @@ import { access, appendFile, readFile } from "node:fs/promises"
 import { join } from "node:path"
 import { ensureEffectFixtures } from "./fixtures.ts"
 import { runCommand, runCommandString } from "./process.ts"
-import { readUpstream, type ComponentName } from "./upstream.ts"
+import {
+  readUpstream,
+  resolveMaterializedTypeScriptSource,
+  type ComponentName,
+  typeScriptSourceEntrypoint
+} from "./upstream.ts"
 
 export const buildTargets = {
   "darwin-arm64": { goos: "darwin", goarch: "arm64" },
@@ -144,13 +149,14 @@ export const buildCli = Effect.fnUntraced(function*(repositoryRoot: string) {
 export const buildLocal = Effect.fnUntraced(function*(repositoryRoot: string) {
   const path = yield* Path.Path
   const binary = path.join(repositoryRoot, "tsgo")
+  const compiler = yield* resolveMaterializedTypeScriptSource(repositoryRoot)
   yield* ensureEffectFixtures(repositoryRoot)
   yield* Console.log("Building local Go binary")
   yield* runCommand("go", repositoryRoot, [
     "build",
     "-o",
     binary,
-    "./typescript-go/cmd/tsgo"
+    typeScriptSourceEntrypoint(compiler)
   ], false, { CGO_ENABLED: "0" })
   yield* validateArtifact(binary)
   yield* buildCli(repositoryRoot)
@@ -282,15 +288,16 @@ const buildTsc = Effect.fnUntraced(function*(
   if (component === undefined) {
     return yield* new BuildError({ reason: `Unknown TypeScript component version ${version}` })
   }
+  const compiler = yield* resolveMaterializedTypeScriptSource(repositoryRoot)
   const checkoutRevision = (yield* runCommandString("git", repositoryRoot, [
     "-C",
-    "typescript-go",
+    compiler.checkoutDir,
     "rev-parse",
     "HEAD"
   ])).trim()
   if (checkoutRevision !== component.gitHead) {
     return yield* new BuildError({
-      reason: `TypeScript ${version} expects TypeScript-Go ${component.gitHead}, found ${checkoutRevision}`
+      reason: `TypeScript ${version} expects ${compiler.repositorySlug} ${component.gitHead}, found ${checkoutRevision}`
     })
   }
 
@@ -303,7 +310,7 @@ const buildTsc = Effect.fnUntraced(function*(
     "-ldflags=-s -w",
     "-o",
     artifact.path,
-    "./typescript-go/cmd/tsgo"
+    typeScriptSourceEntrypoint(compiler)
   ], false, {
     CGO_ENABLED: "0",
     GOOS: target.goos,

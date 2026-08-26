@@ -3,8 +3,8 @@ package effecttest_test
 import (
 	"testing"
 
-	"github.com/microsoft/typescript-go/shim/fourslash"
-	"github.com/microsoft/typescript-go/shim/ls/lsconv"
+	"github.com/microsoft/TypeScript/tsc/shim/fourslash"
+	"github.com/microsoft/TypeScript/tsc/shim/ls/lsconv"
 
 	_ "github.com/effect-ts/tsgo/etscheckerhooks"
 	_ "github.com/effect-ts/tsgo/etslshooks"

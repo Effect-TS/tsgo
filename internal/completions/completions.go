@@ -21,13 +21,3 @@ var All = []completion.Completion{
 	rpcMakeClasses,
 	schemaBrand,
 }
-
-// ByName finds a completion by its unique name.
-func ByName(name string) *completion.Completion {
-	for i := range All {
-		if All[i].Name == name {
-			return &All[i]
-		}
-	}
-	return nil
-}

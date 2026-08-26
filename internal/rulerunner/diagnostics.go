@@ -11,11 +11,11 @@ import (
 	"github.com/effect-ts/tsgo/internal/rule"
 	"github.com/effect-ts/tsgo/internal/rules"
 	"github.com/effect-ts/tsgo/internal/typeparser"
-	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
-	"github.com/microsoft/typescript-go/shim/core"
-	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
-	"github.com/microsoft/typescript-go/shim/scanner"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/checker"
+	"github.com/microsoft/TypeScript/tsc/shim/core"
+	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
+	"github.com/microsoft/TypeScript/tsc/shim/scanner"
 )
 
 // RuleDiagnostic pairs a diagnostic with its rule for directive processing.
@@ -25,8 +25,22 @@ type RuleDiagnostic struct {
 	Diagnostic *ast.Diagnostic
 }
 
+// MinVisibleSeverity returns the least visible severity that can surface in
+// the current execution mode: in CLI (tsc) mode without includeSuggestionsInTsc
+// only warnings and errors are printed, so SeverityWarning; everywhere else
+// (LSP, tests) every severity surfaces, so SeverityMessage.
+func MinVisibleSeverity(effectConfig *etscore.EffectPluginOptions) etscore.Severity {
+	if etscore.IsCommandLineMode() && !effectConfig.GetIncludeSuggestionsInTsc() {
+		return etscore.SeverityWarning
+	}
+	return etscore.SeverityMessage
+}
+
 // Run executes Effect diagnostics for a source file and returns diagnostics without emitting them.
-func Run(ctx context.Context, program checker.Program, c *checker.Checker, sf *ast.SourceFile, effectConfig *etscore.EffectPluginOptions, ruleNames []string) ([]*ast.Diagnostic, error) {
+// minSeverity is the least visible severity the caller can surface (see
+// MinVisibleSeverity); rules whose configured severity is below it are skipped
+// pre-execution unless a directive in the file references them.
+func Run(ctx context.Context, program checker.Program, c *checker.Checker, sf *ast.SourceFile, effectConfig *etscore.EffectPluginOptions, ruleNames []string, minSeverity etscore.Severity) ([]*ast.Diagnostic, error) {
 	if sf.IsDeclarationFile || program.IsSourceFileFromExternalLibrary(sf) {
 		return nil, nil
 	}
@@ -70,8 +84,8 @@ func Run(ctx context.Context, program checker.Program, c *checker.Checker, sf *a
 		return nil, nil
 	}
 
-	allDiagnostics := collectDiagnostics(ctx, program, c, tp, sf, effectConfig, effectiveConfig, resolvedSeverity, directiveSet, selectedRules)
-	finalDiagnostics := transformDiagnostics(allDiagnostics, sf, directiveSet, effectConfig, resolvedSeverity)
+	allDiagnostics := collectDiagnostics(ctx, program, c, tp, sf, effectConfig, effectiveConfig, resolvedSeverity, directiveSet, selectedRules, minSeverity)
+	finalDiagnostics := transformDiagnostics(allDiagnostics, sf, directiveSet, resolvedSeverity, minSeverity)
 	finalDiagnostics = append(finalDiagnostics, unusedDirectiveDiagnostics(sf, effectDirectives, directiveSet, resolvedSeverity)...)
 
 	return finalDiagnostics, nil
@@ -113,6 +127,7 @@ func collectDiagnostics(
 	resolvedSeverity map[string]etscore.Severity,
 	directiveSet *directives.DirectiveSet,
 	selectedRules []*rule.Rule,
+	minSeverity etscore.Severity,
 ) []*RuleDiagnostic {
 	var results []*RuleDiagnostic
 
@@ -122,6 +137,15 @@ func collectDiagnostics(
 			configSeverity = r.DefaultSeverity
 		}
 		if !globalConfig.SkipDisabledOptimization && configSeverity.IsOff() && !directiveSet.HasEnablingDirective(r.Name) {
+			continue
+		}
+		// A rule below the minimum visible severity can only surface if a
+		// directive raises it, and it must still run when any directive
+		// references it so the directive is marked used for unusedDirective
+		// tracking.
+		if !globalConfig.SkipDisabledOptimization &&
+			!configSeverity.AtLeastAsVisibleAs(minSeverity) &&
+			!directiveSet.HasAnyDirectiveForRule(r.Name) {
 			continue
 		}
 
@@ -148,8 +172,8 @@ func transformDiagnostics(
 	diags []*RuleDiagnostic,
 	sf *ast.SourceFile,
 	directiveSet *directives.DirectiveSet,
-	globalConfig *etscore.EffectPluginOptions,
 	resolvedSeverity map[string]etscore.Severity,
+	minSeverity etscore.Severity,
 ) []*ast.Diagnostic {
 	var results []*ast.Diagnostic
 	lineMap := sf.ECMALineMap()
@@ -171,15 +195,12 @@ func transformDiagnostics(
 		if effectiveSeverity.IsOff() {
 			continue
 		}
+		if !effectiveSeverity.AtLeastAsVisibleAs(minSeverity) {
+			continue
+		}
 
 		originalCategory := rd.Diagnostic.Category()
 		newCategory := directives.ToCategory(effectiveSeverity)
-
-		if etscore.IsCommandLineMode() && !globalConfig.GetIncludeSuggestionsInTsc() {
-			if newCategory == tsdiag.CategorySuggestion || newCategory == tsdiag.CategoryMessage {
-				continue
-			}
-		}
 
 		if originalCategory != newCategory {
 			results = append(results, createTransformedDiagnostic(rd.Diagnostic, newCategory))

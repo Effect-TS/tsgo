@@ -3,7 +3,7 @@ package etscore
 import (
 	"strings"
 
-	"github.com/microsoft/typescript-go/shim/collections"
+	"github.com/microsoft/TypeScript/tsc/shim/collections"
 )
 
 // ParseFromPlugins parses the @effect/language-service plugin config from the plugins array.

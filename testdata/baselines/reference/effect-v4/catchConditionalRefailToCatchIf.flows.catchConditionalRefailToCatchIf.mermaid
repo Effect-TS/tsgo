@@ -1,0 +1,414 @@
+flowchart TB
+  0[/"type: #quot;NotFound#quot;<br/>node: #quot;NotFound#quot;"/]
+  1["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;NotFound#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  2[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  3[/"type: #quot;DatabaseError#quot;<br/>node: #quot;DatabaseError#quot;"/]
+  4["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;DatabaseError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  5[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  6[["type: #40;error: DatabaseError #124; NotFound#41; =#gt; boolean<br/>node: #40;error: NotFound #124; DatabaseError#41;: boolean =#gt; error._tag === #quot;NotFound#quot;"]]
+  7[/"type: boolean<br/>node: error._tag === #quot;NotFound#quot;"/]
+  8[/"type: Effect#lt;string, DatabaseError #124; NotFound, never#gt;<br/>node: program"/]
+  9["type: Effect#lt;string, DatabaseError #124; NotFound, never#gt;<br/>callee: Effect.catch<br/>args: #91;#40;error#41; =#gt; isNotFound#40;error#41; ? Effect.succeed#40;#quot;guest#quot;#41; : Effect.fail#40;error#41;#93;"]
+  10[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  11[["type: #40;error: DatabaseError #124; NotFound#41; =#gt; Effect#lt;string, never, never#gt; #124; Effect#lt;never, DatabaseError #124; NotFound, never#gt;<br/>node: #40;error#41; =#gt; isNotFound#40;error#41; ? Effect.succeed#40;#quot;guest#quot;#41; : Effect.fail#40;error#41;"]]
+  12[/"type: Effect#lt;string, never, never#gt; #124; Effect#lt;never, DatabaseError #124; NotFound, never#gt;<br/>node: isNotFound#40;error#41; ? Effect.succeed#40;#quot;guest#quot;#41; : Effect.fail#40;error#41;"/]
+  13[/"type: DatabaseError #124; NotFound<br/>node: error"/]
+  14["type: boolean<br/>callee: isNotFound<br/>args: #91;#93;"]
+  15[/"type: #40;error: DatabaseError #124; NotFound#41; =#gt; boolean<br/>node: isNotFound"/]
+  16[/"type: #quot;guest#quot;<br/>node: #quot;guest#quot;"/]
+  17["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  18[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  19[/"type: DatabaseError #124; NotFound<br/>node: error"/]
+  20["type: Effect#lt;never, DatabaseError #124; NotFound, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  21[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  22[/"type: Effect#lt;string, DatabaseError #124; NotFound, never#gt;<br/>node: program"/]
+  23["type: Effect#lt;string, DatabaseError, never#gt;<br/>callee: Effect.catch<br/>args: #91;#40;error#41; =#gt; error instanceof DatabaseError ? Effect.fail#40;error#41; : Effect.succeed#40;#quot;guest#quot;#41;#93;"]
+  24[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  25[["type: #40;error: DatabaseError #124; NotFound#41; =#gt; Effect#lt;string, never, never#gt; #124; Effect#lt;never, DatabaseError, never#gt;<br/>node: #40;error#41; =#gt; error instanceof DatabaseError ? Effect.fail#40;error#41; : Effect.succeed#40;#quot;guest#quot;#41;"]]
+  26[/"type: Effect#lt;string, never, never#gt; #124; Effect#lt;never, DatabaseError, never#gt;<br/>node: error instanceof DatabaseError ? Effect.fail#40;error#41; : Effect.succeed#40;#quot;guest#quot;#41;"/]
+  27[/"type: DatabaseError<br/>node: error"/]
+  28["type: Effect#lt;never, DatabaseError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  29[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  30[/"type: #quot;guest#quot;<br/>node: #quot;guest#quot;"/]
+  31["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  32[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  33[/"type: Effect#lt;string, DatabaseError #124; NotFound, never#gt;<br/>node: program"/]
+  34["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.catch<br/>args: #91;function#40;error#41; #123;#92;n    if #40;#quot;_tag#quot; in error#41; #123;#92;n      return Effect.succeed#40;#quot;guest#quot;#41;#92;n    #125; else #123;#92;n      return Effect.fail#40;error#41;#92;n    #125;#92;n  #125;#93;"]
+  35[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  36[["type: #40;error: DatabaseError #124; NotFound#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: function#40;error#41; #123;#92;n    if #40;#quot;_tag#quot; in error#41; #123;#92;n      return Effect.succeed#40;#quot;guest#quot;#41;#92;n    #125; else #123;#92;n      return Effect.fail#40;error#41;#92;n    #125;#92;n  #125;"]]
+  37[/"type: #quot;guest#quot;<br/>node: #quot;guest#quot;"/]
+  38["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  39[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  40[/"type: never<br/>node: error"/]
+  41["type: Effect#lt;never, never, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  42[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  43[/"type: Effect#lt;string, DatabaseError #124; NotFound, never#gt;<br/>node: program"/]
+  44["type: Effect#lt;string, DatabaseError #124; NotFound, never#gt;<br/>callee: Effect.catch<br/>args: #91;#40;error#41; =#gt; #123;#92;n    if #40;isNotFound#40;error#41;#41; return Effect.succeed#40;#quot;guest#quot;#41;#92;n    return Effect.fail#40;error#41;#92;n  #125;#93;"]
+  45[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  46[["type: #40;error: DatabaseError #124; NotFound#41; =#gt; Effect#lt;string, never, never#gt; #124; Effect#lt;never, DatabaseError #124; NotFound, never#gt;<br/>node: #40;error#41; =#gt; #123;#92;n    if #40;isNotFound#40;error#41;#41; return Effect.succeed#40;#quot;guest#quot;#41;#92;n    return Effect.fail#40;error#41;#92;n  #125;"]]
+  47[/"type: #quot;guest#quot;<br/>node: #quot;guest#quot;"/]
+  48["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  49[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  50[/"type: DatabaseError #124; NotFound<br/>node: error"/]
+  51["type: Effect#lt;never, DatabaseError #124; NotFound, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  52[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  53[/"type: DatabaseError #124; NotFound<br/>node: error"/]
+  54["type: boolean<br/>callee: isNotFound<br/>args: #91;#93;"]
+  55[/"type: #40;error: DatabaseError #124; NotFound#41; =#gt; boolean<br/>node: isNotFound"/]
+  56[/"type: Effect#lt;string, DatabaseError #124; NotFound, never#gt;<br/>node: program"/]
+  57["type: Effect#lt;string, DatabaseError #124; NotFound, never#gt;<br/>callee: Effect.catch<br/>args: #91;#40;error#41; =#gt; #123;#92;n    return isNotFound#40;error#41; ? Effect.succeed#40;#quot;guest#quot;#41; : Effect.fail#40;error#41;#92;n  #125;#93;"]
+  58[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  59[["type: #40;error: DatabaseError #124; NotFound#41; =#gt; Effect#lt;string, never, never#gt; #124; Effect#lt;never, DatabaseError #124; NotFound, never#gt;<br/>node: #40;error#41; =#gt; #123;#92;n    return isNotFound#40;error#41; ? Effect.succeed#40;#quot;guest#quot;#41; : Effect.fail#40;error#41;#92;n  #125;"]]
+  60[/"type: Effect#lt;string, never, never#gt; #124; Effect#lt;never, DatabaseError #124; NotFound, never#gt;<br/>node: isNotFound#40;error#41; ? Effect.succeed#40;#quot;guest#quot;#41; : Effect.fail#40;error#41;"/]
+  61[/"type: DatabaseError #124; NotFound<br/>node: error"/]
+  62["type: boolean<br/>callee: isNotFound<br/>args: #91;#93;"]
+  63[/"type: #40;error: DatabaseError #124; NotFound#41; =#gt; boolean<br/>node: isNotFound"/]
+  64[/"type: #quot;guest#quot;<br/>node: #quot;guest#quot;"/]
+  65["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  66[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  67[/"type: DatabaseError #124; NotFound<br/>node: error"/]
+  68["type: Effect#lt;never, DatabaseError #124; NotFound, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  69[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  70[/"type: Effect#lt;string, DatabaseError #124; NotFound, never#gt;<br/>node: program"/]
+  71["type: Effect#lt;string, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  72[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  73[["type: #40;error: DatabaseError #124; NotFound#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;error#41; =#gt; typeof error === #quot;object#quot; ? Effect.succeed#40;#quot;guest#quot;#41; : Effect.fail#40;error#41;"]]
+  74[/"type: Effect#lt;string, never, never#gt;<br/>node: typeof error === #quot;object#quot; ? Effect.succeed#40;#quot;guest#quot;#41; : Effect.fail#40;error#41;"/]
+  75[/"type: #quot;guest#quot;<br/>node: #quot;guest#quot;"/]
+  76["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  77[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  78[/"type: never<br/>node: error"/]
+  79["type: Effect#lt;never, never, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  80[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  81[/"type: Effect#lt;string, DatabaseError #124; NotFound, never#gt;<br/>node: program"/]
+  82["type: Effect#lt;string, DatabaseError, never#gt;<br/>callee: Effect.catch<br/>args: #91;#40;error#41; =#gt; error._tag === #quot;NotFound#quot; ? Effect.succeed#40;#quot;guest#quot;#41; : Effect.fail#40;error#41;#93;"]
+  83[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  84[["type: #40;error: DatabaseError #124; NotFound#41; =#gt; Effect#lt;string, never, never#gt; #124; Effect#lt;never, DatabaseError, never#gt;<br/>node: #40;error#41; =#gt; error._tag === #quot;NotFound#quot; ? Effect.succeed#40;#quot;guest#quot;#41; : Effect.fail#40;error#41;"]]
+  85[/"type: Effect#lt;string, never, never#gt; #124; Effect#lt;never, DatabaseError, never#gt;<br/>node: error._tag === #quot;NotFound#quot; ? Effect.succeed#40;#quot;guest#quot;#41; : Effect.fail#40;error#41;"/]
+  86[/"type: #quot;guest#quot;<br/>node: #quot;guest#quot;"/]
+  87["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  88[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  89[/"type: DatabaseError<br/>node: error"/]
+  90["type: Effect#lt;never, DatabaseError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  91[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  92[/"type: Effect#lt;string, DatabaseError #124; NotFound, never#gt;<br/>node: program"/]
+  93["type: Effect#lt;string, DatabaseError, never#gt;<br/>callee: Effect.catch<br/>args: #91;#40;error#41; =#gt; #123;#92;n    switch #40;error._tag#41; #123;#92;n      case #quot;NotFound#quot;:#92;n        return Effect.succeed#40;#quot;guest#quot;#41;#92;n      default:#92;n        return Effect.fail#40;error#41;#92;n    #125;#92;n  #125;#93;"]
+  94[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  95[["type: #40;error: DatabaseError #124; NotFound#41; =#gt; Effect#lt;string, never, never#gt; #124; Effect#lt;never, DatabaseError, never#gt;<br/>node: #40;error#41; =#gt; #123;#92;n    switch #40;error._tag#41; #123;#92;n      case #quot;NotFound#quot;:#92;n        return Effect.succeed#40;#quot;guest#quot;#41;#92;n      default:#92;n        return Effect.fail#40;error#41;#92;n    #125;#92;n  #125;"]]
+  96[/"type: #quot;guest#quot;<br/>node: #quot;guest#quot;"/]
+  97["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  98[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  99[/"type: DatabaseError<br/>node: error"/]
+  100["type: Effect#lt;never, DatabaseError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  101[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  102[/"type: Effect#lt;string, DatabaseError, never#gt;<br/>node: causeProgram"/]
+  103["type: Effect#lt;string, DatabaseError, never#gt;<br/>callee: Effect.catchCause<br/>args: #91;#40;cause#41; =#gt; Cause.hasFails#40;cause#41; ? Effect.succeed#40;#quot;guest#quot;#41; : Effect.failCause#40;cause#41;#93;"]
+  104[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;cause: Cause#lt;E#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;cause: Cause#lt;E#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catchCause"/]
+  105[["type: #40;cause: Cause#lt;DatabaseError#gt;#41; =#gt; Effect#lt;string, never, never#gt; #124; Effect#lt;never, DatabaseError, never#gt;<br/>node: #40;cause#41; =#gt; Cause.hasFails#40;cause#41; ? Effect.succeed#40;#quot;guest#quot;#41; : Effect.failCause#40;cause#41;"]]
+  106[/"type: Effect#lt;string, never, never#gt; #124; Effect#lt;never, DatabaseError, never#gt;<br/>node: Cause.hasFails#40;cause#41; ? Effect.succeed#40;#quot;guest#quot;#41; : Effect.failCause#40;cause#41;"/]
+  107[/"type: Cause#lt;DatabaseError#gt;<br/>node: cause"/]
+  108["type: boolean<br/>callee: Cause.hasFails<br/>args: #91;#93;"]
+  109[/"type: #lt;E#gt;#40;self: Cause#lt;E#gt;#41; =#gt; boolean<br/>node: Cause.hasFails"/]
+  110[/"type: #quot;guest#quot;<br/>node: #quot;guest#quot;"/]
+  111["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  112[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  113[/"type: Cause#lt;DatabaseError#gt;<br/>node: cause"/]
+  114["type: Effect#lt;never, DatabaseError, never#gt;<br/>callee: Effect.failCause<br/>args: #91;#93;"]
+  115[/"type: #lt;E#gt;#40;cause: Cause#lt;E#gt;#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.failCause"/]
+  116[/"type: Effect#lt;string, DatabaseError #124; NotFound, never#gt;<br/>node: program"/]
+  117["type: Effect#lt;string, DatabaseError #124; NotFound, never#gt;<br/>callee: Effect.catch<br/>args: #91;#40;error#41; =#gt; isNotFound#40;error#41; ? Effect.succeed#40;#quot;guest#quot;#41; : Effect.fail#40;otherError#41;#93;"]
+  118[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  119[["type: #40;error: DatabaseError #124; NotFound#41; =#gt; Effect#lt;string, never, never#gt; #124; Effect#lt;never, DatabaseError #124; NotFound, never#gt;<br/>node: #40;error#41; =#gt; isNotFound#40;error#41; ? Effect.succeed#40;#quot;guest#quot;#41; : Effect.fail#40;otherError#41;"]]
+  120[/"type: Effect#lt;string, never, never#gt; #124; Effect#lt;never, DatabaseError #124; NotFound, never#gt;<br/>node: isNotFound#40;error#41; ? Effect.succeed#40;#quot;guest#quot;#41; : Effect.fail#40;otherError#41;"/]
+  121[/"type: DatabaseError #124; NotFound<br/>node: error"/]
+  122["type: boolean<br/>callee: isNotFound<br/>args: #91;#93;"]
+  123[/"type: #40;error: DatabaseError #124; NotFound#41; =#gt; boolean<br/>node: isNotFound"/]
+  124[/"type: #quot;guest#quot;<br/>node: #quot;guest#quot;"/]
+  125["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  126[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  127[/"type: DatabaseError #124; NotFound<br/>node: otherError"/]
+  128["type: Effect#lt;never, DatabaseError #124; NotFound, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  129[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  130[/"type: Effect#lt;string, DatabaseError #124; NotFound, never#gt;<br/>node: program"/]
+  131["type: Effect#lt;string, DatabaseError #124; NotFound, never#gt;<br/>callee: Effect.catch<br/>args: #91;#40;error#41; =#gt; enabled ? Effect.succeed#40;#quot;guest#quot;#41; : Effect.fail#40;error#41;#93;"]
+  132[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  133[["type: #40;error: DatabaseError #124; NotFound#41; =#gt; Effect#lt;string, never, never#gt; #124; Effect#lt;never, DatabaseError #124; NotFound, never#gt;<br/>node: #40;error#41; =#gt; enabled ? Effect.succeed#40;#quot;guest#quot;#41; : Effect.fail#40;error#41;"]]
+  134[/"type: Effect#lt;string, never, never#gt; #124; Effect#lt;never, DatabaseError #124; NotFound, never#gt;<br/>node: enabled ? Effect.succeed#40;#quot;guest#quot;#41; : Effect.fail#40;error#41;"/]
+  135[/"type: #quot;guest#quot;<br/>node: #quot;guest#quot;"/]
+  136["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  137[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  138[/"type: DatabaseError #124; NotFound<br/>node: error"/]
+  139["type: Effect#lt;never, DatabaseError #124; NotFound, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  140[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  141[/"type: Effect#lt;string, DatabaseError #124; NotFound, never#gt;<br/>node: program"/]
+  142["type: Effect#lt;string, NotFound, never#gt;<br/>callee: Effect.catch<br/>args: #91;#40;error#41; =#gt; isNotFound#40;error#41;#92;n    ? Effect.succeed#40;#quot;guest#quot;#41;#92;n    : error instanceof DatabaseError#92;n      ? Effect.succeed#40;#quot;database#quot;#41;#92;n      : Effect.fail#40;error#41;#93;"]
+  143[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  144[["type: #40;error: DatabaseError #124; NotFound#41; =#gt; Effect#lt;string, never, never#gt; #124; Effect#lt;never, NotFound, never#gt;<br/>node: #40;error#41; =#gt; isNotFound#40;error#41;#92;n    ? Effect.succeed#40;#quot;guest#quot;#41;#92;n    : error instanceof DatabaseError#92;n      ? Effect.succeed#40;#quot;database#quot;#41;#92;n      : Effect.fail#40;error#41;"]]
+  145[/"type: Effect#lt;string, never, never#gt; #124; Effect#lt;never, NotFound, never#gt;<br/>node: isNotFound#40;error#41;#92;n    ? Effect.succeed#40;#quot;guest#quot;#41;#92;n    : error instanceof DatabaseError#92;n      ? Effect.succeed#40;#quot;database#quot;#41;#92;n      : Effect.fail#40;error#41;"/]
+  146[/"type: DatabaseError #124; NotFound<br/>node: error"/]
+  147["type: boolean<br/>callee: isNotFound<br/>args: #91;#93;"]
+  148[/"type: #40;error: DatabaseError #124; NotFound#41; =#gt; boolean<br/>node: isNotFound"/]
+  149[/"type: #quot;guest#quot;<br/>node: #quot;guest#quot;"/]
+  150["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  151[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  152[/"type: #quot;database#quot;<br/>node: #quot;database#quot;"/]
+  153["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  154[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  155[/"type: NotFound<br/>node: error"/]
+  156["type: Effect#lt;never, NotFound, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  157[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  158[/"type: Effect#lt;string, DatabaseError #124; NotFound, never#gt;<br/>node: program"/]
+  159["type: Effect#lt;string, DatabaseError #124; NotFound, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;NotFound#quot;, #40;error#41; =#gt; enabled ? Effect.succeed#40;#quot;guest#quot;#41; : Effect.fail#40;error#41;#93;"]
+  160[/"type: #123; #lt;const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, E, A1, E1, R1, A2 = unassigned, E2 = never, R2 = never#gt;#40;k: K, f: #40;e: ExtractTag#lt;NoInfer#lt;E#gt;, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A1 #124; Exclude#lt;A2, unassigned#gt;, E1 #124; E2 #124; #40;A2 extends unassigned ? ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt; : never#41;, R #124; R1 #124; R2#gt;; #lt;A, E, R, const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, R1, E1, A1, A2 = unassigned, E2 = never, R2 = never#gt;#40;self: Effect#lt;A, E, R#gt;, k: K, f: #40;e: ExtractTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: Effect#lt;A #124; A1 #124; Exclude#lt;A2, unassigned#gt;, E1 #124; E2 #124; #40;A2 extends unassigned ? ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt; : never#41;, R #124; R1 #124; R2#gt;; #125;<br/>node: Effect.catchTag"/]
+  161[/"type: #quot;NotFound#quot;<br/>node: #quot;NotFound#quot;"/]
+  162[["type: #40;error: NotFound#41; =#gt; Effect#lt;string, never, never#gt; #124; Effect#lt;never, NotFound, never#gt;<br/>node: #40;error#41; =#gt; enabled ? Effect.succeed#40;#quot;guest#quot;#41; : Effect.fail#40;error#41;"]]
+  163[/"type: Effect#lt;string, never, never#gt; #124; Effect#lt;never, NotFound, never#gt;<br/>node: enabled ? Effect.succeed#40;#quot;guest#quot;#41; : Effect.fail#40;error#41;"/]
+  164[/"type: #quot;guest#quot;<br/>node: #quot;guest#quot;"/]
+  165["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  166[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  167[/"type: NotFound<br/>node: error"/]
+  168["type: Effect#lt;never, NotFound, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  169[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  170[/"type: Effect#lt;string, DatabaseError, never#gt;<br/>node: causeProgram"/]
+  171["type: Effect#lt;string, Cause#lt;DatabaseError#gt;, never#gt;<br/>callee: Effect.catchCause<br/>args: #91;#40;cause#41; =#gt; Cause.hasFails#40;cause#41; ? Effect.succeed#40;#quot;guest#quot;#41; : Effect.fail#40;cause#41;#93;"]
+  172[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;cause: Cause#lt;E#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;cause: Cause#lt;E#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catchCause"/]
+  173[["type: #40;cause: Cause#lt;DatabaseError#gt;#41; =#gt; Effect#lt;string, never, never#gt; #124; Effect#lt;never, Cause#lt;DatabaseError#gt;, never#gt;<br/>node: #40;cause#41; =#gt; Cause.hasFails#40;cause#41; ? Effect.succeed#40;#quot;guest#quot;#41; : Effect.fail#40;cause#41;"]]
+  174[/"type: Effect#lt;string, never, never#gt; #124; Effect#lt;never, Cause#lt;DatabaseError#gt;, never#gt;<br/>node: Cause.hasFails#40;cause#41; ? Effect.succeed#40;#quot;guest#quot;#41; : Effect.fail#40;cause#41;"/]
+  175[/"type: Cause#lt;DatabaseError#gt;<br/>node: cause"/]
+  176["type: boolean<br/>callee: Cause.hasFails<br/>args: #91;#93;"]
+  177[/"type: #lt;E#gt;#40;self: Cause#lt;E#gt;#41; =#gt; boolean<br/>node: Cause.hasFails"/]
+  178[/"type: #quot;guest#quot;<br/>node: #quot;guest#quot;"/]
+  179["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  180[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  181[/"type: Cause#lt;DatabaseError#gt;<br/>node: cause"/]
+  182["type: Effect#lt;never, Cause#lt;DatabaseError#gt;, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  183[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  184[/"type: Effect#lt;string, DatabaseError #124; NotFound, never#gt;<br/>node: program"/]
+  185["type: Effect#lt;string, DatabaseError #124; NotFound, never#gt;<br/>callee: Effect.catch<br/>args: #91;#40;error#41; =#gt; #123;#92;n    error = otherError#92;n    if #40;isNotFound#40;error#41;#41; return Effect.succeed#40;#quot;guest#quot;#41;#92;n    return Effect.fail#40;error#41;#92;n  #125;#93;"]
+  186[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  187[["type: #40;error: DatabaseError #124; NotFound#41; =#gt; Effect#lt;string, never, never#gt; #124; Effect#lt;never, DatabaseError #124; NotFound, never#gt;<br/>node: #40;error#41; =#gt; #123;#92;n    error = otherError#92;n    if #40;isNotFound#40;error#41;#41; return Effect.succeed#40;#quot;guest#quot;#41;#92;n    return Effect.fail#40;error#41;#92;n  #125;"]]
+  188[/"type: #quot;guest#quot;<br/>node: #quot;guest#quot;"/]
+  189["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  190[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  191[/"type: DatabaseError #124; NotFound<br/>node: error"/]
+  192["type: Effect#lt;never, DatabaseError #124; NotFound, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  193[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  194[/"type: DatabaseError #124; NotFound<br/>node: error"/]
+  195["type: boolean<br/>callee: isNotFound<br/>args: #91;#93;"]
+  196[/"type: #40;error: DatabaseError #124; NotFound#41; =#gt; boolean<br/>node: isNotFound"/]
+  197[/"type: Effect#lt;string, DatabaseError #124; NotFound, never#gt;<br/>node: program"/]
+  198["type: Effect#lt;string, DatabaseError #124; NotFound, never#gt;<br/>callee: Effect.catch<br/>args: #91;#40;error = otherError#41; =#gt; isNotFound#40;error#41; ? Effect.succeed#40;#quot;guest#quot;#41; : Effect.fail#40;error#41;#93;"]
+  199[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  200[["type: #40;error?: DatabaseError #124; NotFound#41; =#gt; Effect#lt;string, never, never#gt; #124; Effect#lt;never, DatabaseError #124; NotFound, never#gt;<br/>node: #40;error = otherError#41; =#gt; isNotFound#40;error#41; ? Effect.succeed#40;#quot;guest#quot;#41; : Effect.fail#40;error#41;"]]
+  201[/"type: DatabaseError #124; NotFound<br/>node: otherError"/]
+  202[/"type: Effect#lt;string, never, never#gt; #124; Effect#lt;never, DatabaseError #124; NotFound, never#gt;<br/>node: isNotFound#40;error#41; ? Effect.succeed#40;#quot;guest#quot;#41; : Effect.fail#40;error#41;"/]
+  203[/"type: DatabaseError #124; NotFound<br/>node: error"/]
+  204["type: boolean<br/>callee: isNotFound<br/>args: #91;#93;"]
+  205[/"type: #40;error: DatabaseError #124; NotFound#41; =#gt; boolean<br/>node: isNotFound"/]
+  206[/"type: #quot;guest#quot;<br/>node: #quot;guest#quot;"/]
+  207["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  208[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  209[/"type: DatabaseError #124; NotFound<br/>node: error"/]
+  210["type: Effect#lt;never, DatabaseError #124; NotFound, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  211[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1
+  3 -->|"kind: pipe"| 4
+  5 -->|"kind: transformCallee"| 4
+  7 -->|"kind: potentialReturn"| 6
+  10 -->|"kind: transformCallee"| 9
+  13 -->|"kind: pipe"| 14
+  15 -->|"kind: transformCallee"| 14
+  14 -->|"kind: usedBy"| 12
+  16 -->|"kind: pipe"| 17
+  18 -->|"kind: transformCallee"| 17
+  17 -->|"kind: usedBy"| 12
+  19 -->|"kind: pipe"| 20
+  21 -->|"kind: transformCallee"| 20
+  20 -->|"kind: usedBy"| 12
+  12 -->|"kind: potentialReturn"| 11
+  11 -->|"kind: transformArg"| 9
+  8 -->|"kind: pipe"| 9
+  24 -->|"kind: transformCallee"| 23
+  27 -->|"kind: pipe"| 28
+  29 -->|"kind: transformCallee"| 28
+  28 -->|"kind: usedBy"| 26
+  30 -->|"kind: pipe"| 31
+  32 -->|"kind: transformCallee"| 31
+  31 -->|"kind: usedBy"| 26
+  26 -->|"kind: potentialReturn"| 25
+  25 -->|"kind: transformArg"| 23
+  22 -->|"kind: pipe"| 23
+  35 -->|"kind: transformCallee"| 34
+  37 -->|"kind: pipe"| 38
+  39 -->|"kind: transformCallee"| 38
+  38 -->|"kind: potentialReturn"| 36
+  40 -->|"kind: pipe"| 41
+  42 -->|"kind: transformCallee"| 41
+  41 -->|"kind: potentialReturn"| 36
+  38 -->|"kind: usedBy"| 36
+  41 -->|"kind: usedBy"| 36
+  36 -->|"kind: transformArg"| 34
+  33 -->|"kind: pipe"| 34
+  45 -->|"kind: transformCallee"| 44
+  47 -->|"kind: pipe"| 48
+  49 -->|"kind: transformCallee"| 48
+  48 -->|"kind: potentialReturn"| 46
+  50 -->|"kind: pipe"| 51
+  52 -->|"kind: transformCallee"| 51
+  51 -->|"kind: potentialReturn"| 46
+  53 -->|"kind: pipe"| 54
+  55 -->|"kind: transformCallee"| 54
+  54 -->|"kind: usedBy"| 46
+  48 -->|"kind: usedBy"| 46
+  51 -->|"kind: usedBy"| 46
+  46 -->|"kind: transformArg"| 44
+  43 -->|"kind: pipe"| 44
+  58 -->|"kind: transformCallee"| 57
+  61 -->|"kind: pipe"| 62
+  63 -->|"kind: transformCallee"| 62
+  62 -->|"kind: usedBy"| 60
+  64 -->|"kind: pipe"| 65
+  66 -->|"kind: transformCallee"| 65
+  65 -->|"kind: usedBy"| 60
+  67 -->|"kind: pipe"| 68
+  69 -->|"kind: transformCallee"| 68
+  68 -->|"kind: usedBy"| 60
+  60 -->|"kind: potentialReturn"| 59
+  60 -->|"kind: usedBy"| 59
+  59 -->|"kind: transformArg"| 57
+  56 -->|"kind: pipe"| 57
+  70 -->|"kind: pipe"| 71
+  72 -->|"kind: transformCallee"| 70
+  75 -->|"kind: pipe"| 76
+  77 -->|"kind: transformCallee"| 76
+  76 -->|"kind: usedBy"| 74
+  78 -->|"kind: pipe"| 79
+  80 -->|"kind: transformCallee"| 79
+  79 -->|"kind: usedBy"| 74
+  74 -->|"kind: potentialReturn"| 73
+  73 -->|"kind: transformArg"| 70
+  83 -->|"kind: transformCallee"| 82
+  86 -->|"kind: pipe"| 87
+  88 -->|"kind: transformCallee"| 87
+  87 -->|"kind: usedBy"| 85
+  89 -->|"kind: pipe"| 90
+  91 -->|"kind: transformCallee"| 90
+  90 -->|"kind: usedBy"| 85
+  85 -->|"kind: potentialReturn"| 84
+  84 -->|"kind: transformArg"| 82
+  81 -->|"kind: pipe"| 82
+  94 -->|"kind: transformCallee"| 93
+  96 -->|"kind: pipe"| 97
+  98 -->|"kind: transformCallee"| 97
+  97 -->|"kind: potentialReturn"| 95
+  99 -->|"kind: pipe"| 100
+  101 -->|"kind: transformCallee"| 100
+  100 -->|"kind: potentialReturn"| 95
+  97 -->|"kind: usedBy"| 95
+  100 -->|"kind: usedBy"| 95
+  95 -->|"kind: transformArg"| 93
+  92 -->|"kind: pipe"| 93
+  104 -->|"kind: transformCallee"| 103
+  107 -->|"kind: pipe"| 108
+  109 -->|"kind: transformCallee"| 108
+  108 -->|"kind: usedBy"| 106
+  110 -->|"kind: pipe"| 111
+  112 -->|"kind: transformCallee"| 111
+  111 -->|"kind: usedBy"| 106
+  113 -->|"kind: pipe"| 114
+  115 -->|"kind: transformCallee"| 114
+  114 -->|"kind: usedBy"| 106
+  106 -->|"kind: potentialReturn"| 105
+  105 -->|"kind: transformArg"| 103
+  102 -->|"kind: pipe"| 103
+  118 -->|"kind: transformCallee"| 117
+  121 -->|"kind: pipe"| 122
+  123 -->|"kind: transformCallee"| 122
+  122 -->|"kind: usedBy"| 120
+  124 -->|"kind: pipe"| 125
+  126 -->|"kind: transformCallee"| 125
+  125 -->|"kind: usedBy"| 120
+  127 -->|"kind: pipe"| 128
+  129 -->|"kind: transformCallee"| 128
+  128 -->|"kind: usedBy"| 120
+  120 -->|"kind: potentialReturn"| 119
+  119 -->|"kind: transformArg"| 117
+  116 -->|"kind: pipe"| 117
+  132 -->|"kind: transformCallee"| 131
+  135 -->|"kind: pipe"| 136
+  137 -->|"kind: transformCallee"| 136
+  136 -->|"kind: usedBy"| 134
+  138 -->|"kind: pipe"| 139
+  140 -->|"kind: transformCallee"| 139
+  139 -->|"kind: usedBy"| 134
+  134 -->|"kind: potentialReturn"| 133
+  133 -->|"kind: transformArg"| 131
+  130 -->|"kind: pipe"| 131
+  143 -->|"kind: transformCallee"| 142
+  146 -->|"kind: pipe"| 147
+  148 -->|"kind: transformCallee"| 147
+  147 -->|"kind: usedBy"| 145
+  149 -->|"kind: pipe"| 150
+  151 -->|"kind: transformCallee"| 150
+  150 -->|"kind: usedBy"| 145
+  152 -->|"kind: pipe"| 153
+  154 -->|"kind: transformCallee"| 153
+  153 -->|"kind: usedBy"| 145
+  155 -->|"kind: pipe"| 156
+  157 -->|"kind: transformCallee"| 156
+  156 -->|"kind: usedBy"| 145
+  145 -->|"kind: potentialReturn"| 144
+  144 -->|"kind: transformArg"| 142
+  141 -->|"kind: pipe"| 142
+  160 -->|"kind: transformCallee"| 159
+  161 -->|"kind: transformArg"| 159
+  164 -->|"kind: pipe"| 165
+  166 -->|"kind: transformCallee"| 165
+  165 -->|"kind: usedBy"| 163
+  167 -->|"kind: pipe"| 168
+  169 -->|"kind: transformCallee"| 168
+  168 -->|"kind: usedBy"| 163
+  163 -->|"kind: potentialReturn"| 162
+  162 -->|"kind: transformArg"| 159
+  158 -->|"kind: pipe"| 159
+  172 -->|"kind: transformCallee"| 171
+  175 -->|"kind: pipe"| 176
+  177 -->|"kind: transformCallee"| 176
+  176 -->|"kind: usedBy"| 174
+  178 -->|"kind: pipe"| 179
+  180 -->|"kind: transformCallee"| 179
+  179 -->|"kind: usedBy"| 174
+  181 -->|"kind: pipe"| 182
+  183 -->|"kind: transformCallee"| 182
+  182 -->|"kind: usedBy"| 174
+  174 -->|"kind: potentialReturn"| 173
+  173 -->|"kind: transformArg"| 171
+  170 -->|"kind: pipe"| 171
+  186 -->|"kind: transformCallee"| 185
+  188 -->|"kind: pipe"| 189
+  190 -->|"kind: transformCallee"| 189
+  189 -->|"kind: potentialReturn"| 187
+  191 -->|"kind: pipe"| 192
+  193 -->|"kind: transformCallee"| 192
+  192 -->|"kind: potentialReturn"| 187
+  194 -->|"kind: pipe"| 195
+  196 -->|"kind: transformCallee"| 195
+  195 -->|"kind: usedBy"| 187
+  189 -->|"kind: usedBy"| 187
+  192 -->|"kind: usedBy"| 187
+  187 -->|"kind: transformArg"| 185
+  184 -->|"kind: pipe"| 185
+  199 -->|"kind: transformCallee"| 198
+  203 -->|"kind: pipe"| 204
+  205 -->|"kind: transformCallee"| 204
+  204 -->|"kind: usedBy"| 202
+  206 -->|"kind: pipe"| 207
+  208 -->|"kind: transformCallee"| 207
+  207 -->|"kind: usedBy"| 202
+  209 -->|"kind: pipe"| 210
+  211 -->|"kind: transformCallee"| 210
+  210 -->|"kind: usedBy"| 202
+  202 -->|"kind: potentialReturn"| 200
+  200 -->|"kind: transformArg"| 198
+  197 -->|"kind: pipe"| 198

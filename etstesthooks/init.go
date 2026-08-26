@@ -4,7 +4,7 @@ import (
 	"strings"
 
 	"github.com/effect-ts/tsgo/internal/bundledeffect"
-	"github.com/microsoft/typescript-go/shim/fourslash"
+	"github.com/microsoft/TypeScript/tsc/shim/fourslash"
 )
 
 func init() {

@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/effect-ts/tsgo/etscore"
-	"github.com/microsoft/typescript-go/shim/diagnostics"
+	"github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 )
 
 // ToCategory converts a Severity to the corresponding diagnostics.Category for diagnostic reporting.
@@ -317,6 +317,44 @@ func (ds *DirectiveSet) HasEnablingDirective(ruleName string) bool {
 		}
 	}
 
+	return false
+}
+
+// HasAnyDirectiveForRule returns true if any directive in the file references
+// the given rule, either by name or via a wildcard, regardless of the severity
+// it assigns. This includes file-level, section, and next-line directives. It
+// is used to decide whether a rule below the minimum visible severity can be
+// safely skipped pre-execution: when a directive mentions the rule, running it
+// may be required either to honor a severity override or to mark the directive
+// as used for unusedDirective tracking.
+func (ds *DirectiveSet) HasAnyDirectiveForRule(ruleName string) bool {
+	ruleLower := strings.ToLower(ruleName)
+
+	matches := func(rules []RuleSeverity) bool {
+		for _, rs := range rules {
+			ruleNameLower := strings.ToLower(rs.Rule)
+			if ruleNameLower == ruleLower || ruleNameLower == "*" {
+				return true
+			}
+		}
+		return false
+	}
+
+	if matches(ds.fileLevel) {
+		return true
+	}
+	for _, sd := range ds.sectionDirectives {
+		if matches(sd.Rules) {
+			return true
+		}
+	}
+	for _, directives := range ds.byLine {
+		for _, d := range directives {
+			if matches(d.Rules) {
+				return true
+			}
+		}
+	}
 	return false
 }
 

@@ -2,7 +2,7 @@ package refactors
 
 import (
 	"github.com/effect-ts/tsgo/internal/refactor"
-	"github.com/microsoft/typescript-go/shim/ls"
+	"github.com/microsoft/TypeScript/tsc/shim/ls"
 	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 

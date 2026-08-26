@@ -1,8 +1,8 @@
 package typeparser
 
 import (
-	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
 
 // GetTypeAtLocation wraps checker.GetTypeAtLocation with node-kind and JSX safety guards.
@@ -46,6 +46,14 @@ func (tp TypeParser) getTypeAtLocationUncached(node *ast.Node) (result *checker.
 	// nil symbol. The clause type is never useful to rules: its bindings are
 	// visited as separate nodes and carry the actual types.
 	if node.Kind == ast.KindImportClause {
+		return nil
+	}
+
+	// Tagged templates pass interpolation values directly to the tag function;
+	// they do not stringify them. Asking the checker for the type of the inner
+	// TemplateExpression forces a normally unreachable checking path that can
+	// emit TS2731 for symbol-typed interpolations as a side effect.
+	if node.Kind == ast.KindTemplateExpression && node.Parent != nil && ast.IsTaggedTemplateExpression(node.Parent) {
 		return nil
 	}
 

@@ -1,14 +1,22 @@
+import * as NodeServices from "@effect/platform-node/NodeServices"
 import * as Effect from "effect/Effect"
 import assert from "node:assert/strict"
+import { mkdirSync, mkdtempSync, rmSync } from "node:fs"
+import { tmpdir } from "node:os"
+import { join } from "node:path"
 import test from "node:test"
 import {
   buildUpstream,
   decodeLatestNpmVersion,
   decodeUpstream,
   findTypeScriptVersion,
+  formatGitHubOutputs,
   formatOxlintConfigurationSchema,
   formatTSConfigSchema,
-  getComponent
+  formatUpstreamUpdateDescription,
+  getComponent,
+  resolveMaterializedTypeScriptSource,
+  typeScriptSourceEntrypoint
 } from "../src/upstream.ts"
 import { resolveUpstreamInfo } from "../src/upstreamResolve.ts"
 
@@ -16,8 +24,33 @@ const revision = "0123456789abcdef0123456789abcdef01234567"
 const secondRevision = "1123456789abcdef0123456789abcdef01234567"
 const thirdRevision = "2123456789abcdef0123456789abcdef01234567"
 
+test("prefers a materialized TSC entrypoint and falls back to TypeScript-Go", async() => {
+  const repository = mkdtempSync(join(tmpdir(), "repoctl-typescript-source-"))
+  const resolve = () => Effect.runPromise(
+    resolveMaterializedTypeScriptSource(repository).pipe(Effect.provide(NodeServices.layer))
+  )
+  try {
+    mkdirSync(join(repository, "typescript", "tsc", "cmd", "tsc"), { recursive: true })
+    mkdirSync(join(repository, "typescript-go", "cmd", "tsgo"), { recursive: true })
+
+    const modern = await resolve()
+    assert.equal(modern.provider, "typescript")
+    assert.equal(typeScriptSourceEntrypoint(modern), "./typescript/tsc/cmd/tsc")
+
+    rmSync(join(repository, "typescript"), { recursive: true, force: true })
+    const legacy = await resolve()
+    assert.equal(legacy.provider, "typescript-go")
+    assert.equal(typeScriptSourceEntrypoint(legacy), "./typescript-go/cmd/tsgo")
+
+    rmSync(join(repository, "typescript-go"), { recursive: true, force: true })
+    await assert.rejects(resolve(), /neither \.\/typescript\/tsc\/cmd\/tsc nor \.\/typescript-go\/cmd\/tsgo exists/)
+  } finally {
+    rmSync(repository, { recursive: true, force: true })
+  }
+})
+
 const manifest = () => ({
-  schemaVersion: 4,
+  schemaVersion: 5 as const,
   tags: {
     typescript: {
       latest: "7.0.0",
@@ -28,8 +61,8 @@ const manifest = () => ({
   },
   components: {
     typescript: {
-      "7.0.0": { gitHead: revision },
-      "7.1.0": { gitHead: secondRevision }
+      "7.0.0": { gitHead: revision, provider: "typescript-go" as const },
+      "7.1.0": { gitHead: secondRevision, provider: "typescript" as const }
     },
     "oxlint-tsgolint": {
       "7.0.1000": {
@@ -112,19 +145,67 @@ test("resolves component checkouts and defaults to TypeScript next", async() => 
     name: "typescript",
     version: "7.1.0",
     gitHead: secondRevision,
-    typescript: { version: "7.1.0", gitHead: secondRevision }
+    typescript: {
+      version: "7.1.0",
+      gitHead: secondRevision,
+      source: {
+        provider: "typescript",
+        repository: "https://github.com/microsoft/TypeScript.git",
+        repositorySlug: "microsoft/TypeScript",
+        checkoutDir: "typescript",
+        moduleDir: "tsc",
+        modulePrefix: "github.com/microsoft/TypeScript/tsc",
+        providerShimPrefix: "github.com/microsoft/TypeScript/tsc/shim",
+        shimOverlayDir: "_tools/gen_shims/providers/typescript",
+        patchDir: "_patches/typescript",
+        commandPath: "cmd/tsc",
+        tsgolintGitlink: "typescript"
+      }
+    }
   })
   assert.deepEqual(await Effect.runPromise(getComponent(upstream, "oxlint-tsgolint", "7.0.1000")), {
     name: "oxlint-tsgolint",
     version: "7.0.1000",
     gitHead: revision,
-    typescript: { version: "7.0.0", gitHead: revision }
+    typescript: {
+      version: "7.0.0",
+      gitHead: revision,
+      source: {
+        provider: "typescript-go",
+        repository: "https://github.com/microsoft/typescript-go.git",
+        repositorySlug: "microsoft/typescript-go",
+        checkoutDir: "typescript-go",
+        moduleDir: ".",
+        modulePrefix: "github.com/microsoft/typescript-go",
+        providerShimPrefix: "github.com/microsoft/typescript-go/shim",
+        shimOverlayDir: "_tools/gen_shims/providers/typescript-go",
+        patchDir: "_patches/typescript-go",
+        commandPath: "cmd/tsgo",
+        tsgolintGitlink: "typescript-go"
+      }
+    }
   })
   assert.deepEqual(await Effect.runPromise(getComponent(upstream, "oxlint", "1.0.0")), {
     name: "oxlint",
     version: "1.0.0",
     gitHead: revision,
-    typescript: { version: "7.1.0", gitHead: secondRevision }
+    typescript: {
+      version: "7.1.0",
+      gitHead: secondRevision,
+      source: {
+        provider: "typescript",
+        repository: "https://github.com/microsoft/TypeScript.git",
+        repositorySlug: "microsoft/TypeScript",
+        checkoutDir: "typescript",
+        moduleDir: "tsc",
+        modulePrefix: "github.com/microsoft/TypeScript/tsc",
+        providerShimPrefix: "github.com/microsoft/TypeScript/tsc/shim",
+        shimOverlayDir: "_tools/gen_shims/providers/typescript",
+        patchDir: "_patches/typescript",
+        commandPath: "cmd/tsc",
+        tsgolintGitlink: "typescript"
+      }
+    }
   })
   await assert.rejects(
     Effect.runPromise(getComponent(upstream, "oxlint")),
@@ -169,18 +250,18 @@ test("selects the latest npm version matching a dependency spec regardless of re
 
 test("builds deterministic normalized metadata and deduplicates components", () => {
   const upstream = buildUpstream({
-    next: { npmVersion: "7.1.0", gitHead: secondRevision },
-    latest: { npmVersion: "7.0.0", gitHead: revision },
+    next: { npmVersion: "7.1.0", gitHead: secondRevision, provider: "typescript" },
+    latest: { npmVersion: "7.0.0", gitHead: revision, provider: "typescript-go" },
     oxlint: {
       oxlint: { npmVersion: "1.77.0", gitHead: thirdRevision },
       tsgolint: { npmVersion: "7.0.2001", gitHead: secondRevision },
-      ts: { npmVersion: "7.0.0", gitHead: revision }
+      ts: { npmVersion: "7.0.0", gitHead: revision, provider: "typescript-go" }
     },
     vitePlus: {
       vitePlusVersion: "0.2.8",
       oxlint: { npmVersion: "1.76.0", gitHead: secondRevision },
       tsgolint: { npmVersion: "7.0.2001", gitHead: secondRevision },
-      ts: { npmVersion: "7.0.0", gitHead: revision }
+      ts: { npmVersion: "7.0.0", gitHead: revision, provider: "typescript-go" }
     }
   })
 
@@ -206,6 +287,78 @@ test("finds a TypeScript npm version by its git head", () => {
     "7.0.1": { gitHead: revision },
     "7.0.2": { gitHead: secondRevision }
   }, secondRevision), "7.0.2")
+})
+
+test("describes upstream version and TypeScript-Go commit updates", () => {
+  const before = manifest()
+  const after = manifest()
+  const afterTypeScript = after.components.typescript as Record<string, {
+    gitHead: string
+    provider: "typescript-go" | "typescript"
+  }>
+  const afterOxlint = after.components.oxlint as Record<string, { gitHead: string }>
+  after.tags.typescript.next = "7.2.0"
+  afterTypeScript["7.2.0"] = { gitHead: thirdRevision, provider: "typescript" }
+  after.tags.oxlint.latest = "1.2.0"
+  afterOxlint["1.2.0"] = { gitHead: thirdRevision }
+  after.profiles[0]!.description = "Vite+ 1.1.0 compatibility runtime"
+  after.profiles[0]!.dependencies.oxlint = "1.2.0"
+
+  assert.equal(formatUpstreamUpdateDescription({
+    before,
+    after,
+    nextCommits: [{ sha: thirdRevision, message: "Add a useful feature" }],
+    schemaChanged: true,
+    oxlintSchemaChanged: false
+  }), [
+    "Automated update of upstream metadata, generated TypeScript next-tag sources, and Nix inputs.",
+    "",
+    "## Version updates",
+    "",
+    "- TypeScript next: [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.2.0) `7.1.0` -> `7.2.0`",
+    "- Oxlint: [`oxlint@latest`](https://www.npmjs.com/package/oxlint/v/1.2.0) `1.1.0` -> `1.2.0`",
+    "- Vite+: [`vite-plus@latest`](https://www.npmjs.com/package/vite-plus/v/1.1.0) `1.0.0` -> `1.1.0`",
+    "- Vite+ Oxlint runtime: [`oxlint`](https://www.npmjs.com/package/oxlint/v/1.2.0) `1.0.0` -> `1.2.0`",
+    "",
+    "## TypeScript compiler",
+    "",
+    `- Previous commit: [\`${secondRevision}\`](https://github.com/microsoft/TypeScript/commit/${secondRevision})`,
+    `- Updated commit: [\`${thirdRevision}\`](https://github.com/microsoft/TypeScript/commit/${thirdRevision})`,
+    `- Compare: https://github.com/microsoft/TypeScript/compare/${secondRevision}...${thirdRevision}`,
+    "",
+    "## Upstream commits",
+    "",
+    `- [${thirdRevision.slice(0, 7)}](https://github.com/microsoft/TypeScript/commit/${thirdRevision}) Add a useful feature`,
+    "",
+    "## Other updates",
+    "",
+    "- Refreshed the tsconfig schema from JSON Schema Store."
+  ].join("\n"))
+})
+
+test("writes multiline descriptions as GitHub step outputs", () => {
+  assert.equal(formatGitHubOutputs({ has_changes: "true", description: "first\nsecond" }), [
+    "has_changes=true",
+    "description<<repoctl_description",
+    "first",
+    "second",
+    "repoctl_description",
+    ""
+  ].join("\n"))
+  assert.equal(formatGitHubOutputs({ description: "repoctl_description\nbody" }), [
+    "description<<repoctl_description_",
+    "repoctl_description",
+    "body",
+    "repoctl_description_",
+    ""
+  ].join("\n"))
+  assert.equal(formatGitHubOutputs({ description: "first\rsecond" }), [
+    "description<<repoctl_description",
+    "first",
+    "second",
+    "repoctl_description",
+    ""
+  ].join("\n"))
 })
 
 test("formats a JSON Schema Store tsconfig schema", () => {

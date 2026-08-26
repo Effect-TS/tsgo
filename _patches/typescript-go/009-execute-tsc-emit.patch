@@ -24,14 +24,12 @@ diff --git a/internal/execute/tsc/emit.go b/internal/execute/tsc/emit.go
 index 3a1e3de69..8cb7c24c0 100644
 --- a/internal/execute/tsc/emit.go
 +++ b/internal/execute/tsc/emit.go
-@@ -10,6 +10,7 @@ import (
+@@ -10,4 +10,5 @@ import (
  	"github.com/microsoft/typescript-go/internal/ast"
  	"github.com/microsoft/typescript-go/internal/collections"
  	"github.com/microsoft/typescript-go/internal/compiler"
 +	"github.com/microsoft/typescript-go/internal/core"
  	"github.com/microsoft/typescript-go/internal/diagnostics"
- 	"github.com/microsoft/typescript-go/internal/locale"
- 	"github.com/microsoft/typescript-go/internal/tracing"
 @@ -17,6 +18,17 @@ import (
  	"github.com/microsoft/typescript-go/internal/tspath"
  )
@@ -67,3 +65,26 @@ index 3a1e3de69..8cb7c24c0 100644
  		result.Status = ExitStatusDiagnosticsPresent_OutputsGenerated
  	}
  	return result, statistics
+diff --git a/internal/compiler/program.go b/internal/compiler/program.go
+--- a/internal/compiler/program.go
++++ b/internal/compiler/program.go
+@@ -35,1 +35,11 @@ import (
++// FilterDiagnosticsForNoEmitOnErrorCallback is invoked before diagnostics
++// suppress emit when noEmitOnError is enabled.
++var FilterDiagnosticsForNoEmitOnErrorCallback func(*core.CompilerOptions, []*ast.Diagnostic) []*ast.Diagnostic
++
++// RegisterFilterDiagnosticsForNoEmitOnErrorCallback registers a callback to
++// filter diagnostics used by noEmitOnError.
++func RegisterFilterDiagnosticsForNoEmitOnErrorCallback(cb func(*core.CompilerOptions, []*ast.Diagnostic) []*ast.Diagnostic) {
++	FilterDiagnosticsForNoEmitOnErrorCallback = cb
++}
++
+ type ProgramOptions struct {
+@@ -1787,4 +1797,7 @@ func GetDiagnosticsOfAnyProgram(
+ 		}
+ 	}
++	if skipNoEmitCheckForDtsDiagnostics && FilterDiagnosticsForNoEmitOnErrorCallback != nil {
++		allDiagnostics = FilterDiagnosticsForNoEmitOnErrorCallback(program.Options(), allDiagnostics)
++	}
+ 	return allDiagnostics
+ }

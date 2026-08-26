@@ -1508,6 +1508,30 @@
       }
     },
     {
+      "name": "allOfMapToForEach",
+      "group": "style",
+      "description": "Suggests using Effect.forEach instead of Effect.all over an effectful Array#map",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377113
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const values: ReadonlyArray\u003cnumber\u003e\n\nexport const program = Effect.all(\n  values.map((value) =\u003e Effect.succeed(value + 1))\n)\n",
+        "diagnostics": [
+          {
+            "start": 101,
+            "end": 111,
+            "text": "`Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)"
+          }
+        ]
+      }
+    },
+    {
       "name": "catchAllToMapError",
       "group": "style",
       "description": "Suggests using Effect.mapError instead of Effect.catch + Effect.fail",
@@ -1550,6 +1574,53 @@
             "start": 265,
             "end": 277,
             "text": "Chained Effect.catch fallbacks that ignore the error can be written with Effect.firstSuccessOf. Wrap each lazy fallback with Effect.suspend to preserve when it is constructed. effect(catchChainToFirstSuccessOf)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "catchConditionalRefailToCatchIf",
+      "group": "style",
+      "description": "Suggests Effect.catchIf, Effect.catchCauseIf, or Effect.catchTag for conditional catch handlers that re-fail their untouched input",
+      "defaultSeverity": "suggestion",
+      "fixable": false,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377116
+      ],
+      "preview": {
+        "sourceText": "import { Data, Effect } from \"effect\"\n\nclass NotFound extends Data.TaggedError(\"NotFound\")\u003c{}\u003e {}\nclass DatabaseError extends Data.TaggedError(\"DatabaseError\")\u003c{}\u003e {}\n\ndeclare const program: Effect.Effect\u003cstring, NotFound | DatabaseError\u003e\n\nexport const recovered = program.pipe(\n  Effect.catch((error) =\u003e\n    error._tag === \"NotFound\" ? Effect.succeed(\"guest\") : Effect.fail(error)\n  )\n)\n",
+        "diagnostics": [
+          {
+            "start": 281,
+            "end": 293,
+            "text": "`Effect.catchTag` expresses selective recovery more directly than `Effect.catch` with a conditional `Effect.fail` passthrough. effect(catchConditionalRefailToCatchIf)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "catchDieToOrDie",
+      "group": "style",
+      "description": "Suggests using Effect.orDie instead of Effect.catch or Effect.catchAll with an identity-forwarding Effect.die handler",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377115
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const readConfig: Effect.Effect\u003cstring, Error\u003e\n\nexport const program = readConfig.pipe(\n  Effect.catch((error) =\u003e Effect.die(error))\n)\n",
+        "diagnostics": [
+          {
+            "start": 131,
+            "end": 143,
+            "text": "`Effect.orDie` expresses escalating every typed failure into a defect more directly than `Effect.catch` with an identity-forwarding `Effect.die` handler. effect(catchDieToOrDie)"
           }
         ]
       }
@@ -1788,6 +1859,40 @@
             "start": 75,
             "end": 89,
             "text": "`Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "mapSomeToAsSome",
+      "group": "style",
+      "description": "Suggests using Effect.asSome instead of Effect.map when the mapper only wraps the success value with Option.some",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377114
+      ],
+      "preview": {
+        "sourceText": "import { Effect, Option } from \"effect\"\n\nconst numberEffect = Effect.succeed(1)\n\nexport const pipeable = numberEffect.pipe(\n  Effect.map(Option.some)\n)\n\nexport const etaExpanded = numberEffect.pipe(\n  Effect.map((value) =\u003e Option.some(value))\n)\n\nexport const dataFirst = Effect.map(numberEffect, Option.some)\n\n",
+        "diagnostics": [
+          {
+            "start": 126,
+            "end": 136,
+            "text": "`Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)"
+          },
+          {
+            "start": 201,
+            "end": 211,
+            "text": "`Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)"
+          },
+          {
+            "start": 271,
+            "end": 281,
+            "text": "`Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)"
           }
         ]
       }

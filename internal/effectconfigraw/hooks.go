@@ -5,10 +5,10 @@ import (
 	"strings"
 
 	"github.com/effect-ts/tsgo/etscore"
-	"github.com/microsoft/typescript-go/shim/collections"
-	"github.com/microsoft/typescript-go/shim/core"
-	"github.com/microsoft/typescript-go/shim/tsoptions"
-	"github.com/microsoft/typescript-go/shim/tspath"
+	"github.com/microsoft/TypeScript/tsc/shim/collections"
+	"github.com/microsoft/TypeScript/tsc/shim/core"
+	"github.com/microsoft/TypeScript/tsc/shim/tsoptions"
+	"github.com/microsoft/TypeScript/tsc/shim/tspath"
 )
 
 // Register wires Effect-specific tsconfig merge hooks into TypeScript-Go.
@@ -197,25 +197,6 @@ func findEffectPluginRaw(plugins []any) (*collections.OrderedMap[string, any], i
 		}
 	}
 	return nil, -1
-}
-
-func cloneRawJSON(value any) any {
-	switch value := value.(type) {
-	case *collections.OrderedMap[string, any]:
-		cloned := new(collections.OrderedMap[string, any])
-		for key, entryValue := range value.Entries() {
-			cloned.Set(key, cloneRawJSON(entryValue))
-		}
-		return cloned
-	case []any:
-		cloned := make([]any, len(value))
-		for i, entryValue := range value {
-			cloned[i] = cloneRawJSON(entryValue)
-		}
-		return cloned
-	default:
-		return value
-	}
 }
 
 func cloneEffectOptions(source *etscore.EffectPluginOptions) *etscore.EffectPluginOptions {

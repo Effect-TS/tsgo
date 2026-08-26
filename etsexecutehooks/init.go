@@ -3,14 +3,16 @@ package etsexecutehooks
 import (
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
-	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/core"
-	"github.com/microsoft/typescript-go/shim/diagnostics"
-	"github.com/microsoft/typescript-go/shim/execute/tsc"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/compiler"
+	"github.com/microsoft/TypeScript/tsc/shim/core"
+	"github.com/microsoft/TypeScript/tsc/shim/diagnostics"
+	"github.com/microsoft/TypeScript/tsc/shim/execute/tsc"
 )
 
 func init() {
 	tsc.RegisterFilterDiagnosticsForExitCodeCallback(filterDiagnosticsForExitCode)
+	compiler.RegisterFilterDiagnosticsForNoEmitOnErrorCallback(filterDiagnosticsForExitCode)
 }
 
 // filterDiagnosticsForExitCode is the callback registered with the tsc package.

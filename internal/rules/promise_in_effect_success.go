@@ -4,10 +4,10 @@ import (
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
 	"github.com/effect-ts/tsgo/internal/typeparser"
-	"github.com/microsoft/typescript-go/shim/ast"
-	"github.com/microsoft/typescript-go/shim/checker"
-	tsdiag "github.com/microsoft/typescript-go/shim/diagnostics"
-	"github.com/microsoft/typescript-go/shim/scanner"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/checker"
+	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
+	"github.com/microsoft/TypeScript/tsc/shim/scanner"
 )
 
 var PromiseInEffectSuccess = rule.Rule{
@@ -61,11 +61,24 @@ var PromiseInEffectSuccess = rule.Rule{
 				continue
 			}
 
-			t := ctx.TypeParser.GetTypeAtLocation(node)
+			// Declared-type prefilter: a diagnostic requires a strict Effect
+			// flow type on the node, which reference nodes with a
+			// conclusively non-Effect declared type — and calls whose
+			// resolved signature conclusively cannot return one — can never
+			// have. Skipped nodes can never match, so no matched-map
+			// bookkeeping is needed.
+			if !ctx.TypeParser.NodeCouldBeStrictEffect(node) {
+				continue
+			}
+
+			var t *checker.Type
 			if node.Kind == ast.KindCallExpression {
 				if signature := ctx.Checker.GetResolvedSignature(node); signature != nil {
 					t = ctx.Checker.GetReturnTypeOfSignature(signature)
 				}
+			}
+			if t == nil {
+				t = ctx.TypeParser.GetTypeAtLocation(node)
 			}
 			effect := ctx.TypeParser.StrictEffectType(t, node)
 			if effect == nil || !typeContainsPromise(ctx.TypeParser, effect.A) {

@@ -1815,6 +1815,11 @@
           "default": "suggestion",
           "description": "Warns when manually constructing AbortController inside Effect generators instead of using Effect.abortSignal"
         },
+        "allOfMapToForEach": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests using Effect.forEach instead of Effect.all over an effectful Array#map"
+        },
         "anyUnknownInErrorContext": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
@@ -1825,6 +1830,11 @@
           "default": "off",
           "description": "Warns when declaring async functions and suggests using Effect values and Effect.gen for async control flow"
         },
+        "catchDieToOrDie": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests using Effect.orDie instead of Effect.catch or Effect.catchAll with an identity-forwarding Effect.die handler"
+        },
         "catchAllToMapError": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
@@ -1834,6 +1844,11 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
           "description": "Suggests Effect.firstSuccessOf for consecutive error-independent Effect.catch fallbacks when the error type is preserved"
+        },
+        "catchConditionalRefailToCatchIf": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.catchIf, Effect.catchCauseIf, or Effect.catchTag for conditional catch handlers that re-fail their untouched input"
         },
         "catchTagToCatchReason": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
@@ -2040,6 +2055,11 @@
           "default": "suggestion",
           "description": "Detects implementation services leaked in service methods"
         },
+        "mapSomeToAsSome": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests using Effect.asSome instead of Effect.map when the mapper only wraps the success value with Option.some"
+        },
         "missedPipeableOpportunity": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
@@ -2134,6 +2154,11 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
           "description": "Disallows Schema.Schema.Type\u003ctypeof X\u003e in favor of typeof X.Type"
+        },
+        "preferTypedSchemaDecoder": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests typed Schema decoders when the input is assignable to the schema's Encoded type"
         },
         "preferUnsafeConstructor": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
