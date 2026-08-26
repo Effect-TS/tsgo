@@ -186,17 +186,13 @@ func analyzeCatchTagsTransformation(
 }
 
 func analyzeCatchTagToCatchReasonHandler(tp *typeparser.TypeParser, c *checker.Checker, handlerNode *ast.Node) (catchTagToCatchReasonHandler, bool) {
-	handlerNode = unwrapTransparentExpression(handlerNode)
-	if handlerNode == nil || (handlerNode.Kind != ast.KindArrowFunction && handlerNode.Kind != ast.KindFunctionExpression) {
+	returning := typeparser.ParseReturningDispatch(handlerNode)
+	if returning == nil || len(returning.Params) != 1 {
 		return catchTagToCatchReasonHandler{}, false
 	}
-
-	parameters := typeparser.GetFunctionLikeParameters(handlerNode)
-	body := typeparser.GetFunctionLikeBody(handlerNode)
-	if parameters == nil || len(parameters.Nodes) != 1 || body == nil {
-		return catchTagToCatchReasonHandler{}, false
-	}
-	parameter := parameters.Nodes[0]
+	handlerNode = returning.Node
+	body := returning.Body
+	parameter := returning.Params[0]
 	if parameter == nil || parameter.Name() == nil || parameter.Name().Kind != ast.KindIdentifier {
 		return catchTagToCatchReasonHandler{}, false
 	}
@@ -210,7 +206,7 @@ func analyzeCatchTagToCatchReasonHandler(tp *typeparser.TypeParser, c *checker.C
 	}
 
 	dispatchRefs := make(map[*ast.Node]struct{})
-	dispatch := tp.ParseTaggedDispatch(body, parameterSymbol)
+	dispatch := tp.ParseTaggedDispatch(handlerNode, parameterSymbol)
 	if dispatch == nil || len(dispatch.Branches) == 0 || dispatch.Fallback == nil {
 		return catchTagToCatchReasonHandler{}, false
 	}

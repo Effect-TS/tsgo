@@ -90,8 +90,8 @@ func TestParseTaggedDispatchAcceptedShapes(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			sf, body := parseTaggedDispatchTestBody(t, tt.body)
-			dispatch := parseTaggedDispatchSyntax(body)
+			sf, function := parseTaggedDispatchTestFunction(t, tt.body)
+			dispatch := parseTaggedDispatchSyntax(function)
 			if dispatch == nil {
 				t.Fatal("expected tagged dispatch")
 			}
@@ -186,8 +186,8 @@ func TestParseTaggedDispatchRejectedShapes(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			_, body := parseTaggedDispatchTestBody(t, tt.body)
-			if dispatch := parseTaggedDispatchSyntax(body); dispatch != nil {
+			_, function := parseTaggedDispatchTestFunction(t, tt.body)
+			if dispatch := parseTaggedDispatchSyntax(function); dispatch != nil {
 				t.Fatalf("expected parse rejection, got %+v", dispatch)
 			}
 		})
@@ -207,24 +207,24 @@ func TestParseTaggedDispatchRootSymbolValidation(t *testing.T) {
 		}
 		declare const other: Wrapper
 
-		function narrowedIf(error: Wrapper) {
+		const narrowedIf = (error: Wrapper) => {
 			if (error.reason._tag === "ReasonA") return 1
 			else if (error.reason._tag === "ReasonB") return 2
 			else return 0
 		}
 
-		function narrowedTernary(error: Wrapper) {
+		const narrowedTernary = (error: Wrapper) => {
 			return error.reason._tag === "ReasonA" ? 1
 				: error.reason._tag === "ReasonB" ? 2
 				: 0
 		}
 
-		function differentValue(error: Wrapper) {
+		const differentValue = (error: Wrapper) => {
 			if (other.reason._tag === "ReasonA") return 1
 			return 0
 		}
 
-		function alternateChain(error: Wrapper) {
+		const alternateChain = (error: Wrapper) => {
 			if (error.alternateReason._tag === "ReasonA") return 1
 			return 0
 		}
@@ -244,12 +244,11 @@ func TestParseTaggedDispatchRootSymbolValidation(t *testing.T) {
 	for _, tt := range tests {
 		function := findTaggedDispatchTestFunction(t, sf, tt.name)
 		parameters := GetFunctionLikeParameters(function)
-		body := GetFunctionLikeBody(function)
-		if parameters == nil || len(parameters.Nodes) != 1 || body == nil {
+		if parameters == nil || len(parameters.Nodes) != 1 {
 			t.Fatalf("%s: expected one parameter and a function body", tt.name)
 		}
 		rootSymbol := tp.GetSymbolAtLocation(parameters.Nodes[0].Name())
-		dispatch := tp.ParseTaggedDispatch(body, rootSymbol)
+		dispatch := tp.ParseTaggedDispatch(function, rootSymbol)
 		if !tt.ok {
 			if dispatch != nil {
 				t.Fatalf("%s: expected parse rejection, got %+v", tt.name, dispatch)
@@ -277,7 +276,7 @@ func findTaggedDispatchTestFunction(t *testing.T, sf *ast.SourceFile, name strin
 		if node == nil {
 			return false
 		}
-		if node.Kind == ast.KindFunctionDeclaration && node.Name() != nil && node.Name().Text() == name {
+		if (node.Kind == ast.KindArrowFunction || node.Kind == ast.KindFunctionExpression) && GetFunctionLikeName(node) == name {
 			found = node
 			return true
 		}
@@ -290,29 +289,26 @@ func findTaggedDispatchTestFunction(t *testing.T, sf *ast.SourceFile, name strin
 	return found
 }
 
-func parseTaggedDispatchTestBody(t *testing.T, bodySource string) (*ast.SourceFile, *ast.Node) {
+func parseTaggedDispatchTestFunction(t *testing.T, bodySource string) (*ast.SourceFile, *ast.Node) {
 	t.Helper()
 	sf := parseSource("const decode = () => " + bodySource)
-	var body *ast.Node
+	var functionNode *ast.Node
 	var walk ast.Visitor
 	walk = func(node *ast.Node) bool {
 		if node == nil {
 			return false
 		}
 		if node.Kind == ast.KindArrowFunction {
-			function := node.AsArrowFunction()
-			if function != nil {
-				body = function.Body
-			}
+			functionNode = node
 			return true
 		}
 		return node.ForEachChild(walk)
 	}
 	walk(sf.AsNode())
-	if body == nil {
-		t.Fatal("failed to parse arrow function body")
+	if functionNode == nil {
+		t.Fatal("failed to parse arrow function")
 	}
-	return sf, body
+	return sf, functionNode
 }
 
 func taggedDispatchNodeText(sf *ast.SourceFile, node *ast.Node) string {
