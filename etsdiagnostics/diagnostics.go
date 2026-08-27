@@ -12,6 +12,7 @@ import (
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
 	"github.com/effect-ts/tsgo/internal/rules"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/bundled"
 	"github.com/microsoft/TypeScript/tsc/shim/collections"
@@ -36,6 +37,7 @@ type request struct {
 	Severity  string  `json:"severity,omitempty"`
 	Progress  bool    `json:"progress"`
 	LSPConfig *string `json:"lspconfig,omitempty"`
+	ListFiles bool    `json:"listFiles,omitempty"`
 }
 
 type severity string
@@ -69,8 +71,15 @@ type summary struct {
 	Messages     int `json:"messages"`
 }
 
+type fileEffectVersion struct {
+	File            string `json:"file"`
+	DetectedEffect  string `json:"detectedEffect"`
+	SupportedEffect string `json:"supportedEffect"`
+}
+
 type jsonOutput struct {
 	Diagnostics []formattedDiagnostic `json:"diagnostics"`
+	Files       []fileEffectVersion   `json:"files,omitempty"`
 	Summary     summary               `json:"summary"`
 }
 
@@ -104,12 +113,12 @@ func Run(ctx context.Context, args []string, stdout io.Writer, stderr io.Writer)
 		return 1
 	}
 
-	diagnostics, resultSummary, err := collect(ctx, req, override, overrideProvided, stderr)
+	diagnostics, files, resultSummary, err := collect(ctx, req, override, overrideProvided, stderr)
 	if err != nil {
 		fmt.Fprintln(stderr, err)
 		return 1
 	}
-	if err := writeOutput(stdout, req.Format, diagnostics, resultSummary); err != nil {
+	if err := writeOutput(stdout, req.Format, diagnostics, files, resultSummary); err != nil {
 		fmt.Fprintf(stderr, "unable to write diagnostics: %v\n", err)
 		return 2
 	}
@@ -135,7 +144,7 @@ func parseLSPConfig(value *string) (*etscore.EffectPluginOptions, bool, error) {
 	return etscore.ParseFromPlugins([]any{config}), true, nil
 }
 
-func collect(ctx context.Context, req request, override *etscore.EffectPluginOptions, overrideProvided bool, stderr io.Writer) ([]formattedDiagnostic, summary, error) {
+func collect(ctx context.Context, req request, override *etscore.EffectPluginOptions, overrideProvided bool, stderr io.Writer) ([]formattedDiagnostic, []fileEffectVersion, summary, error) {
 	fs := bundled.WrapFS(osvfs.FS())
 	session := project.NewSession(&project.SessionInit{
 		BackgroundCtx: ctx,
@@ -167,7 +176,7 @@ func collect(ctx context.Context, req request, override *etscore.EffectPluginOpt
 		openProjects := &collections.Set[string]{}
 		openProjects.Add(projectName)
 		if err := updateSession(ctx, session, &project.APISnapshotRequest{OpenProjects: openProjects}); err != nil {
-			return nil, summary{}, err
+			return nil, nil, summary{}, err
 		}
 
 		session.WithSnapshotLoadingProjectTree(ctx, nil, func(snapshot *project.Snapshot) {
@@ -188,18 +197,28 @@ func collect(ctx context.Context, req request, override *etscore.EffectPluginOpt
 		openFiles := &collections.Set[lsproto.DocumentUri]{}
 		openFiles.Add(uri)
 		if err := updateSession(ctx, session, &project.APISnapshotRequest{OpenFiles: openFiles}); err != nil {
-			return nil, summary{}, err
+			return nil, nil, summary{}, err
 		}
 		addTarget(fileName)
 	}
 
 	resultSummary := summary{TotalFiles: len(targets)}
 	if len(targets) == 0 {
-		return nil, resultSummary, fmt.Errorf("%s", noFilesMessage)
+		return nil, nil, resultSummary, fmt.Errorf("%s", noFilesMessage)
 	}
 
 	severityFilter := parseSeverityFilter(req.Severity)
 	results := make([]formattedDiagnostic, 0)
+	var files []fileEffectVersion
+	type versionRecord struct {
+		detected  string
+		supported string
+	}
+	var versionCache map[any]versionRecord
+	if req.ListFiles {
+		files = make([]fileEffectVersion, 0, len(targets))
+		versionCache = make(map[any]versionRecord)
+	}
 	ctx = core.WithCheckerLifetime(ctx, core.CheckerLifetimeDiagnostics)
 	if req.Progress {
 		fmt.Fprintf(stderr, "Starting diagnostics for %d files...\n", len(targets))
@@ -226,6 +245,25 @@ func collect(ctx context.Context, req request, override *etscore.EffectPluginOpt
 			}
 			if program.Options().Effect == nil {
 				continue
+			}
+
+			if req.ListFiles {
+				record, cached := versionCache[configuredProject]
+				if !cached {
+					c, done := program.GetTypeChecker(ctx)
+					tp := typeparser.NewTypeParser(program, c)
+					record = versionRecord{
+						detected:  tp.DetectEffectVersion().String(),
+						supported: tp.SupportedEffectVersion().String(),
+					}
+					done()
+					versionCache[configuredProject] = record
+				}
+				files = append(files, fileEffectVersion{
+					File:            fileName,
+					DetectedEffect:  record.detected,
+					SupportedEffect: record.supported,
+				})
 			}
 
 			for _, diagnostic := range program.GetSemanticDiagnostics(ctx, sourceFile) {
@@ -259,9 +297,9 @@ func collect(ctx context.Context, req request, override *etscore.EffectPluginOpt
 		fmt.Fprintln(stderr)
 	}
 	if collectErr != nil {
-		return nil, resultSummary, collectErr
+		return nil, nil, resultSummary, collectErr
 	}
-	return results, resultSummary, nil
+	return results, files, resultSummary, nil
 }
 
 func updateSession(ctx context.Context, session *project.Session, request *project.APISnapshotRequest) error {
@@ -339,12 +377,12 @@ func categoryToSeverity(category tsdiag.Category) severity {
 	}
 }
 
-func writeOutput(output io.Writer, format string, diagnostics []formattedDiagnostic, resultSummary summary) error {
+func writeOutput(output io.Writer, format string, diagnostics []formattedDiagnostic, files []fileEffectVersion, resultSummary summary) error {
 	switch format {
 	case "json":
 		encoder := json.NewEncoder(output)
 		encoder.SetIndent("", "  ")
-		return encoder.Encode(jsonOutput{Diagnostics: diagnostics, Summary: resultSummary})
+		return encoder.Encode(jsonOutput{Diagnostics: diagnostics, Files: files, Summary: resultSummary})
 	case "github-actions":
 		for _, diagnostic := range diagnostics {
 			command := string(diagnostic.Severity)
@@ -363,6 +401,12 @@ func writeOutput(output io.Writer, format string, diagnostics []formattedDiagnos
 	case "pretty":
 		for _, diagnostic := range diagnostics {
 			writePrettyDiagnostic(output, diagnostic)
+		}
+	}
+	if len(files) > 0 {
+		fmt.Fprintln(output, "Effect version per file:")
+		for _, file := range files {
+			fmt.Fprintf(output, "  %s: detected=%s, supported=%s\n", file.File, file.DetectedEffect, file.SupportedEffect)
 		}
 	}
 	_, err := fmt.Fprintf(output, "Checked %d files out of %d files. \n%d errors, %d warnings and %d messages.\n",

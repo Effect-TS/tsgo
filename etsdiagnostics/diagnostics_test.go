@@ -55,7 +55,7 @@ func TestWriteJSONOutput(t *testing.T) {
 	}}
 	wantSummary := summary{FilesChecked: 1, TotalFiles: 1, Errors: 1}
 	var output bytes.Buffer
-	if err := writeOutput(&output, "json", diagnostics, wantSummary); err != nil {
+	if err := writeOutput(&output, "json", diagnostics, nil, wantSummary); err != nil {
 		t.Fatal(err)
 	}
 	for _, expected := range []string{
@@ -78,12 +78,27 @@ func TestWriteGitHubActionsOutput(t *testing.T) {
 		Severity: severityMessage, Name: "floatingEffect", Message: "first%\nsecond",
 	}}
 	var output bytes.Buffer
-	if err := writeOutput(&output, "github-actions", diagnostics, summary{FilesChecked: 1, TotalFiles: 1, Messages: 1}); err != nil {
+	if err := writeOutput(&output, "github-actions", diagnostics, nil, summary{FilesChecked: 1, TotalFiles: 1, Messages: 1}); err != nil {
 		t.Fatal(err)
 	}
 	want := "::notice file=/workspace/main.ts,line=2,col=3,endLine=2,endColumn=8,title=floatingEffect::first%25%0Asecond\n"
 	if !strings.HasPrefix(output.String(), want) {
 		t.Fatalf("unexpected output:\n%s", output.String())
+	}
+}
+
+func TestWriteFilesBlock(t *testing.T) {
+	t.Parallel()
+
+	files := []fileEffectVersion{
+		{File: "/workspace/main.ts", DetectedEffect: "unknown", SupportedEffect: "v3"},
+	}
+	var output bytes.Buffer
+	if err := writeOutput(&output, "text", nil, files, summary{TotalFiles: 1, FilesChecked: 1}); err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(output.String(), "/workspace/main.ts: detected=unknown, supported=v3") {
+		t.Fatalf("output missing per-file version block:\n%s", output.String())
 	}
 }
 
@@ -118,5 +133,46 @@ func TestRunProjectJSON(t *testing.T) {
 	}
 	if strings.Contains(diagnostic.Message, "effect(asyncFunction)") {
 		t.Fatalf("message includes redundant rule name: %q", diagnostic.Message)
+	}
+	if output.Files != nil {
+		t.Fatalf("expected no files list without listFiles: %#v", output.Files)
+	}
+}
+
+func TestRunProjectJSONListFiles(t *testing.T) {
+	t.Parallel()
+
+	cwd, err := filepath.Abs("testdata/native-diagnostics")
+	if err != nil {
+		t.Fatal(err)
+	}
+	request, err := json.Marshal(request{
+		CWD: cwd, Project: "tsconfig.json", Format: "json", ListFiles: true,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	var stdout bytes.Buffer
+	var stderr bytes.Buffer
+	if status := Run(context.Background(), []string{string(request)}, &stdout, &stderr); status != 1 {
+		t.Fatalf("unexpected status %d; stderr:\n%s", status, stderr.String())
+	}
+	var output jsonOutput
+	if err := json.Unmarshal(stdout.Bytes(), &output); err != nil {
+		t.Fatalf("invalid JSON output: %v\n%s", err, stdout.String())
+	}
+	if len(output.Files) == 0 {
+		t.Fatalf("expected at least one file entry:\n%s", stdout.String())
+	}
+	for _, entry := range output.Files {
+		if entry.File == "" {
+			t.Fatalf("empty file name in entry: %#v", entry)
+		}
+		if entry.SupportedEffect != "v3" && entry.SupportedEffect != "v4" {
+			t.Fatalf("unexpected supported version %q for %s", entry.SupportedEffect, entry.File)
+		}
+		if entry.DetectedEffect == "" {
+			t.Fatalf("empty detected version for %s", entry.File)
+		}
 	}
 }
