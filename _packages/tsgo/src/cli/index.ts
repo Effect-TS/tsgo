@@ -174,27 +174,35 @@ const diagnosticsCommand = Command.make("diagnostics", {
   lspconfig: Flag.string("lspconfig").pipe(
     Flag.optional,
     Flag.withDescription("An optional inline JSON lsp config that replaces the current project lsp config")
+  ),
+  listFiles: Flag.boolean("list-files").pipe(
+    Flag.withDefault(false),
+    Flag.withDescription(
+      "Also emit, per checked file, the detected and supported Effect major versions"
+    )
   )
 }).pipe(
   Command.withDescription("Gets the Effect language service diagnostics on the given files or project"),
-  Command.withHandler(({ file, format, lspconfig, progress, project, severity, strict }) => Effect.gen(function*() {
-    const fs = yield* FileSystem.FileSystem
-    const replacement = yield* resolveTypeScriptExecutable
-    yield* fs.chmod(replacement.path, 0o755).pipe(
-      Effect.mapError(() => new ChmodBinaryError({ targetPath: replacement.path }))
-    )
-    const result = runDiagnosticsBinary(replacement.path, {
-      cwd: process.cwd(),
-      file: Option.getOrUndefined(file),
-      project: Option.getOrUndefined(project),
-      format,
-      strict,
-      severity: Option.getOrUndefined(severity),
-      progress,
-      lspconfig: Option.getOrUndefined(lspconfig)
-    })
-    propagateDiagnosticsExit(result)
-  }))
+  Command.withHandler(({ file, format, listFiles, lspconfig, progress, project, severity, strict }) =>
+    Effect.gen(function*() {
+      const fs = yield* FileSystem.FileSystem
+      const replacement = yield* resolveTypeScriptExecutable
+      yield* fs.chmod(replacement.path, 0o755).pipe(
+        Effect.mapError(() => new ChmodBinaryError({ targetPath: replacement.path }))
+      )
+      const result = runDiagnosticsBinary(replacement.path, {
+        cwd: process.cwd(),
+        file: Option.getOrUndefined(file),
+        project: Option.getOrUndefined(project),
+        format,
+        strict,
+        severity: Option.getOrUndefined(severity),
+        progress,
+        lspconfig: Option.getOrUndefined(lspconfig),
+        listFiles
+      })
+      propagateDiagnosticsExit(result)
+    }))
 )
 
 const rootCommand = Command.make("tsgo").pipe(
