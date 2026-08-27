@@ -36,7 +36,16 @@ export const resolveUpstreamInfo = Effect.fnUntraced(function*(
     ...(target === undefined ? {} : { target }),
     ...(component === "oxlint"
       ? { rustTarget: oxlintBuildTargets[target as keyof typeof oxlintBuildTargets].rustTarget }
-      : {})
+      : {
+        // Go builds are cached under the TypeScript dependency identity so that
+        // oxlint-tsgolint restores the compiler objects already cached by the
+        // typescript validation jobs; only typescript itself persists the cache.
+        goCache: {
+          component: "typescript" as const,
+          version: selected.typescript.version,
+          save: component === "typescript"
+        }
+      })
   }
 })
 
@@ -49,9 +58,11 @@ export const printUpstreamInfo = Effect.fnUntraced(function*(
   const info = yield* resolveUpstreamInfo(yield* readUpstream(repositoryRoot), component, version, target)
   yield* Console.log(JSON.stringify(info))
   if (process.env.GITHUB_OUTPUT !== undefined) {
+    const goCache = "goCache" in info ? info.goCache : undefined
     yield* Effect.tryPromise(() => appendFile(
       process.env.GITHUB_OUTPUT!,
-      `component=${info.component}\nversion=${info.version}\nrust-target=${"rustTarget" in info ? info.rustTarget : ""}\n`
+      `component=${info.component}\nversion=${info.version}\nrust-target=${"rustTarget" in info ? info.rustTarget : ""}\n` +
+        `go-cache-component=${goCache?.component ?? ""}\ngo-cache-version=${goCache?.version ?? ""}\ngo-cache-save=${goCache?.save === true}\n`
     ))
   }
   return info
