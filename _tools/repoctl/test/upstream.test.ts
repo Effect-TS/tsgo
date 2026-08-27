@@ -218,7 +218,13 @@ test("resolves platform build metadata for setup actions", async() => {
 
   assert.deepEqual(await Effect.runPromise(resolveUpstreamInfo(upstream, "typescript")), {
     component: "typescript",
-    version: "7.1.0"
+    version: "7.1.0",
+    goCache: { component: "typescript", version: "7.1.0", save: true }
+  })
+  assert.deepEqual(await Effect.runPromise(resolveUpstreamInfo(upstream, "oxlint-tsgolint", "7.0.1000")), {
+    component: "oxlint-tsgolint",
+    version: "7.0.1000",
+    goCache: { component: "typescript", version: "7.0.0", save: false }
   })
   assert.deepEqual(await Effect.runPromise(resolveUpstreamInfo(upstream, "oxlint", "1.1.0", "linux-x64")), {
     component: "oxlint",
