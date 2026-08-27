@@ -208,8 +208,7 @@
       "defaultSeverity": "warning",
       "fixable": false,
       "supportedEffect": [
-        "v3",
-        "v4"
+        "v3"
       ],
       "codes": [
         377043
@@ -869,7 +868,8 @@
       "defaultSeverity": "suggestion",
       "fixable": false,
       "supportedEffect": [
-        "v3"
+        "v3",
+        "v4"
       ],
       "codes": [
         377037
