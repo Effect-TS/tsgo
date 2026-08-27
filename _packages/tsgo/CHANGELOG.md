@@ -1,5 +1,72 @@
 # @effect/tsgo
 
+## 0.38.0
+
+### Minor Changes
+
+- 773b245: Add the `allOfMapToForEach` style diagnostic, which suggests replacing
+  `Effect.all(values.map(callback), options)` with the equivalent
+  `Effect.forEach(values, callback, options)` form.
+- fe7a29e: Add the `catchAllDieToOrDie` style diagnostic, which suggests replacing
+  `Effect.catch` or `Effect.catchAll` with `Effect.orDie` when the catch-all
+  handler forwards its typed failure unchanged to `Effect.die`.
+- 32c575a: Add the `catchConditionalRefailToCatchIf` diagnostic for conditional `Effect.catch` and `Effect.catchCause` handlers that re-fail their untouched input, suggesting `Effect.catchIf`, `Effect.catchCauseIf`, or `Effect.catchTag` as appropriate.
+- 41ec458: Detect the data-first form of `effectMapVoid` by driving detection off piping flows.
+  
+  `effectMapVoid` previously matched only the data-last / pipeable form of the pattern, so a data-first `Effect.map(self, () => {})` was missed. Detection now runs over the piping-flow transformations, which normalize the subject away, so both forms are reported uniformly and the quick fix rewrites each one correctly.
+  
+  For example, the data-first call:
+  
+  ```ts
+  Effect.map(Effect.succeed(1), () => {})
+  ```
+  
+  is now flagged and fixed to:
+  
+  ```ts
+  Effect.asVoid(Effect.succeed(1))
+  ```
+  
+  while the existing data-last form (`pipe(self, Effect.map(() => {}))`) continues to be fixed to a bare `Effect.asVoid`.
+- 1ab4380: Improve dual function detection by matching alpha-equivalent data-first and pipeable overload declarations without instantiating their generic signatures.
+  
+  For example, data-first calls such as `Option.match(value, handlers)` now normalize to the same piping-flow representation as `value.pipe(Option.match(handlers))`, even when the overloads reorder generic parameters or return a generic union.
+- 2ae20c4: Refactor the `mapSomeToAsSome` mapper detection onto the shared `UnwrapIdentityForwarder` helper. The diagnostic and quick fix now also recognize identity-forwarding function expressions:
+  
+  ```ts
+  // now triggers, alongside Effect.map(Option.some) and Effect.map((v) => Option.some(v))
+  numberEffect.pipe(
+    Effect.map(function (value) {
+      return Option.some(value)
+    })
+  )
+  ```
+  
+  Annotated or optional mapper parameters and explicit type arguments on the inner `Option.some` call still do not trigger, since they can intentionally widen the resulting `Option` type.
+- 2a02aae: Add the `mapSomeToAsSome` diagnostic and quick fix, which replaces `Effect.map(Option.some)` and its exact eta-expanded form with `Effect.asSome` in pipeable and data-first flows.
+
+### Patch Changes
+
+- 68a603e: Bound CI Go caches with a resolved cache identity
+  
+  `repoctl upstream resolve` now emits a Go cache identity derived from `upstream.json`: the `typescript` component owns and saves its Go caches, `oxlint-tsgolint` restores the compiler objects already cached by the typescript jobs under its TypeScript dependency version (Go's build cache is content-addressed, so the shared compiler packages hit directly), and the Rust-based `oxlint` component skips Go caching entirely instead of saving a duplicate GOCACHE snapshot.
+  
+  The go-build cache key no longer includes the commit SHA, so a multi-GB cache entry is written once per dependency state instead of on every push to main, and non-materialized setups are restore-only. Previously each push saved ~15GB of duplicate GOCACHE snapshots, evicting every other cache in the repository (GitHub caps repository caches at 10GB) and forcing all validation jobs to run cold.
+  
+  The generated shim cache key now also hashes `_patches/typescript/**`, so patch changes for the migrated TypeScript compiler repository invalidate cached shims correctly.
+- e30bbdb: Fix `supportedEffect` metadata for two rules whose declaration disagreed with their actual behavior:
+  
+  - `genericEffectServices` declared `["v3", "v4"]` but is gated to run only on Effect v3 projects. It now declares `["v3"]`, so v4 users no longer enable a rule that can never fire.
+  - `schemaSyncInEffect` declared `["v3"]` but fully supports Effect v4 (suggesting `decodeEffect`/`encodeEffect` variants). It now declares `["v3", "v4"]`.
+  
+  `metadata.json` and the generated rule docs were regenerated accordingly. No diagnostic behavior changed.
+- 24cbb0d: Fix `repoctl upstream update` failing when a TypeScript commit is reachable from both supported provider repositories.
+  
+  Previously, `resolveTypeScriptProvider` and `readRemoteTypeScriptGitlink` in `_tools/repoctl/src/upstream.ts` errored out with `TypeScript commit <sha> matched 2 supported repositories` whenever a single revision existed in both `microsoft/TypeScript` (the canonical upstream) and the legacy `microsoft/typescript-go` fork. This blocked the daily "Update Upstreams" workflow for revisions shared between the two.
+  
+  Both functions now prefer `microsoft/TypeScript` when it matches and fall back to `microsoft/typescript-go` otherwise. A "no supported repository matched" error is still raised when neither matches.
+- 7a07115: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260826.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/5739027c9a7df24e27123f453a50c011b37717b6) commit `5739027c9a7df24e27123f453a50c011b37717b6`, and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
 ## 0.37.0
 
 ### Minor Changes
