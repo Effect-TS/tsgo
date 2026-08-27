@@ -37,6 +37,7 @@ type EffectMapVoidMatch struct {
 	Location         core.TextRange  // The pre-computed error range for this match
 	CallNode         *ast.Node       // The Effect.map(...) call expression (replacement target)
 	EffectModuleNode *ast.Node       // The Effect module identifier (e.g., "Effect" in Effect.map)
+	SubjectNode      *ast.Node       // The data-first subject (e.g. self in Effect.map(self, () => {})); nil for data-last/pipeable forms
 }
 
 // isVoidCallback checks if a callback argument is a "void callback":
@@ -83,41 +84,52 @@ func isVoidCallback(node *ast.Node) bool {
 	return false
 }
 
-// AnalyzeEffectMapVoid finds all Effect.map calls with void callbacks
-// that can be replaced with Effect.asVoid.
+// AnalyzeEffectMapVoid finds data-last and data-first Effect.map calls with void
+// callbacks that can be replaced with Effect.asVoid. Driving detection off the
+// piping-flow transformations (rather than a raw AST walk) normalizes the subject
+// away, so both pipe(self, Effect.map(cb)) / self.pipe(Effect.map(cb)) and the
+// data-first Effect.map(self, cb) are matched uniformly.
 func AnalyzeEffectMapVoid(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile) []EffectMapVoidMatch {
 	var matches []EffectMapVoidMatch
+	seen := make(map[*ast.Node]struct{})
 
-	var walk ast.Visitor
-	walk = func(n *ast.Node) bool {
-		if n == nil {
-			return false
-		}
-
-		if n.Kind == ast.KindCallExpression {
-			call := n.AsCallExpression()
-			if call.Expression != nil && call.Expression.Kind == ast.KindPropertyAccessExpression {
-				if tp.IsNodeReferenceToEffectModuleApi(call.Expression, "map") {
-					if call.Arguments != nil && len(call.Arguments.Nodes) >= 1 {
-						arg := call.Arguments.Nodes[0]
-						if isVoidCallback(arg) {
-							propAccess := call.Expression.AsPropertyAccessExpression()
-							matches = append(matches, EffectMapVoidMatch{
-								SourceFile:       sf,
-								Location:         scanner.GetErrorRangeForNode(sf, call.Expression),
-								CallNode:         n,
-								EffectModuleNode: propAccess.Expression,
-							})
-						}
-					}
-				}
+	for _, flow := range tp.PipingFlows(sf, true) {
+		for _, transformation := range flow.Transformations {
+			if len(transformation.Args) != 1 || transformation.Node == nil || transformation.Node.Kind != ast.KindCallExpression ||
+				transformation.Callee == nil || transformation.Callee.Kind != ast.KindPropertyAccessExpression ||
+				!tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "map") {
+				continue
 			}
-		}
+			if !isVoidCallback(transformation.Args[0]) {
+				continue
+			}
+			if _, ok := seen[transformation.Node]; ok {
+				continue
+			}
 
-		n.ForEachChild(walk)
-		return false
+			// For the data-first form the subject is a real argument that the
+			// quick-fix must preserve as Effect.asVoid(self); data-last/pipeable
+			// forms carry no subject argument.
+			var subject *ast.Node
+			if transformation.Kind == typeparser.TransformationKindDataFirst || transformation.Kind == typeparser.TransformationKindDataLast {
+				parsed := tp.DataFirstOrLastCall(transformation.Node)
+				if parsed == nil {
+					continue
+				}
+				subject = parsed.Subject
+			}
+
+			propAccess := transformation.Callee.AsPropertyAccessExpression()
+			seen[transformation.Node] = struct{}{}
+			matches = append(matches, EffectMapVoidMatch{
+				SourceFile:       sf,
+				Location:         scanner.GetErrorRangeForNode(sf, transformation.Callee),
+				CallNode:         transformation.Node,
+				EffectModuleNode: propAccess.Expression,
+				SubjectNode:      subject,
+			})
+		}
 	}
 
-	walk(sf.AsNode())
 	return matches
 }

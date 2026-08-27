@@ -2,12 +2,11 @@ package fixables
 
 import (
 	"github.com/effect-ts/tsgo/internal/fixable"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
-	"github.com/effect-ts/tsgo/internal/rewriter"
-	"github.com/microsoft/TypeScript/tsc/shim/scanner"
 )
 
 var EffectMapVoidFix = fixable.Fixable{
@@ -19,32 +18,38 @@ var EffectMapVoidFix = fixable.Fixable{
 }
 
 func runEffectMapVoidFix(ctx *fixable.Context) []ls.CodeAction {
-
-	c := ctx.Checker
-
 	sf := ctx.SourceFile
 
-	matches := rules.AnalyzeEffectMapVoid(ctx.TypeParser, c, sf)
+	matches := rules.AnalyzeEffectMapVoid(ctx.TypeParser, ctx.Checker, sf)
 	for _, match := range matches {
 		diagRange := match.Location
 		if !diagRange.Intersects(ctx.Span) && !ctx.Span.ContainedBy(diagRange) {
 			continue
 		}
 
-		// Extract the Effect module name, preserving the import alias
-		effectModuleName := "Effect"
-		if match.EffectModuleNode != nil && match.EffectModuleNode.Kind == ast.KindIdentifier {
-			effectModuleName = scanner.GetTextOfNode(match.EffectModuleNode)
-		}
-
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.asVoid",
 			Run: func(tracker *rewriter.Tracker) {
-				// Build Effect.asVoid as a PropertyAccessExpression
-				effectModuleId := tracker.NewIdentifier(effectModuleName)
-				replacementNode := tracker.NewPropertyAccessExpression(effectModuleId, nil, tracker.NewIdentifier("asVoid"), ast.NodeFlagsNone)
-				ast.SetParentInChildren(replacementNode)
-				tracker.ReplaceNode(sf, match.CallNode, replacementNode, nil)
+				// Build Effect.asVoid, preserving the original module reference (and any alias).
+				asVoid := tracker.NewPropertyAccessExpression(
+					tracker.DeepCloneNode(match.EffectModuleNode),
+					nil,
+					tracker.NewIdentifier("asVoid"),
+					ast.NodeFlagsNone,
+				)
+				// Data-last/pipeable forms drop to a bare Effect.asVoid reference; the
+				// data-first form must keep its subject as Effect.asVoid(self).
+				var replacement = asVoid
+				if match.SubjectNode != nil {
+					replacement = tracker.NewCallExpression(
+						asVoid,
+						nil,
+						nil,
+						tracker.NewNodeList([]*ast.Node{tracker.DeepCloneNode(match.SubjectNode)}),
+						ast.NodeFlagsNone,
+					)
+				}
+				tracker.ReplaceNode(sf, match.CallNode, replacement, nil)
 			},
 		}); action != nil {
 			return []ls.CodeAction{*action}

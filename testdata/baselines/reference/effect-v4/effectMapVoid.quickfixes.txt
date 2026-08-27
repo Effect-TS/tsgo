@@ -30,6 +30,16 @@
   Fix 1: "Disable effectMapVoid for entire file"
   Fix 2: "Replace with Effect.asVoid"
 
+[D7] (54:49-54:59) TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
+  Fix 0: "Disable effectMapVoid for this line"
+  Fix 1: "Disable effectMapVoid for entire file"
+  Fix 2: "Replace with Effect.asVoid"
+
+[D8] (57:44-57:54) TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
+  Fix 0: "Disable effectMapVoid for this line"
+  Fix 1: "Disable effectMapVoid for entire file"
+  Fix 2: "Replace with Effect.asVoid"
+
 === Quick Fix Application Results ===
 
 === [D1] Fix 0: "Disable effectMapVoid for this line" ===
@@ -93,6 +103,15 @@ export const shouldNotTriggerAsVoid = Effect.succeed(1).pipe(
   Effect.asVoid
 )
 
+// Should trigger: data-first Effect.map(self, () => {})
+export const shouldTriggerDataFirstEmptyBlock = Effect.map(Effect.succeed(1), () => {})
+
+// Should trigger: data-first Effect.map(self, () => void 0)
+export const shouldTriggerDataFirstVoid0 = Effect.map(Effect.succeed(1), () => void 0)
+
+// Should NOT trigger: data-first Effect.map with a real transformation
+export const shouldNotTriggerDataFirstTransform = Effect.map(Effect.succeed(1), (n) => n * 2)
+
 
 === [D2] Fix 0: "Disable effectMapVoid for this line" ===
 skipped by default
@@ -154,6 +173,15 @@ export const shouldNotTriggerString = Effect.succeed(1).pipe(
 export const shouldNotTriggerAsVoid = Effect.succeed(1).pipe(
   Effect.asVoid
 )
+
+// Should trigger: data-first Effect.map(self, () => {})
+export const shouldTriggerDataFirstEmptyBlock = Effect.map(Effect.succeed(1), () => {})
+
+// Should trigger: data-first Effect.map(self, () => void 0)
+export const shouldTriggerDataFirstVoid0 = Effect.map(Effect.succeed(1), () => void 0)
+
+// Should NOT trigger: data-first Effect.map with a real transformation
+export const shouldNotTriggerDataFirstTransform = Effect.map(Effect.succeed(1), (n) => n * 2)
 
 
 === [D3] Fix 0: "Disable effectMapVoid for this line" ===
@@ -217,6 +245,15 @@ export const shouldNotTriggerAsVoid = Effect.succeed(1).pipe(
   Effect.asVoid
 )
 
+// Should trigger: data-first Effect.map(self, () => {})
+export const shouldTriggerDataFirstEmptyBlock = Effect.map(Effect.succeed(1), () => {})
+
+// Should trigger: data-first Effect.map(self, () => void 0)
+export const shouldTriggerDataFirstVoid0 = Effect.map(Effect.succeed(1), () => void 0)
+
+// Should NOT trigger: data-first Effect.map with a real transformation
+export const shouldNotTriggerDataFirstTransform = Effect.map(Effect.succeed(1), (n) => n * 2)
+
 
 === [D4] Fix 0: "Disable effectMapVoid for this line" ===
 skipped by default
@@ -278,6 +315,15 @@ export const shouldNotTriggerString = Effect.succeed(1).pipe(
 export const shouldNotTriggerAsVoid = Effect.succeed(1).pipe(
   Effect.asVoid
 )
+
+// Should trigger: data-first Effect.map(self, () => {})
+export const shouldTriggerDataFirstEmptyBlock = Effect.map(Effect.succeed(1), () => {})
+
+// Should trigger: data-first Effect.map(self, () => void 0)
+export const shouldTriggerDataFirstVoid0 = Effect.map(Effect.succeed(1), () => void 0)
+
+// Should NOT trigger: data-first Effect.map with a real transformation
+export const shouldNotTriggerDataFirstTransform = Effect.map(Effect.succeed(1), (n) => n * 2)
 
 
 === [D5] Fix 0: "Disable effectMapVoid for this line" ===
@@ -341,6 +387,15 @@ export const shouldNotTriggerAsVoid = Effect.succeed(1).pipe(
   Effect.asVoid
 )
 
+// Should trigger: data-first Effect.map(self, () => {})
+export const shouldTriggerDataFirstEmptyBlock = Effect.map(Effect.succeed(1), () => {})
+
+// Should trigger: data-first Effect.map(self, () => void 0)
+export const shouldTriggerDataFirstVoid0 = Effect.map(Effect.succeed(1), () => void 0)
+
+// Should NOT trigger: data-first Effect.map with a real transformation
+export const shouldNotTriggerDataFirstTransform = Effect.map(Effect.succeed(1), (n) => n * 2)
+
 
 === [D6] Fix 0: "Disable effectMapVoid for this line" ===
 skipped by default
@@ -402,4 +457,155 @@ export const shouldNotTriggerString = Effect.succeed(1).pipe(
 export const shouldNotTriggerAsVoid = Effect.succeed(1).pipe(
   Effect.asVoid
 )
+
+// Should trigger: data-first Effect.map(self, () => {})
+export const shouldTriggerDataFirstEmptyBlock = Effect.map(Effect.succeed(1), () => {})
+
+// Should trigger: data-first Effect.map(self, () => void 0)
+export const shouldTriggerDataFirstVoid0 = Effect.map(Effect.succeed(1), () => void 0)
+
+// Should NOT trigger: data-first Effect.map with a real transformation
+export const shouldNotTriggerDataFirstTransform = Effect.map(Effect.succeed(1), (n) => n * 2)
+
+
+=== [D7] Fix 0: "Disable effectMapVoid for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable effectMapVoid for entire file" ===
+skipped by default
+
+=== [D7] Fix 2: "Replace with Effect.asVoid" ===
+
+--- file:///.src/effectMapVoid.ts ---
+import { Effect } from "effect"
+
+// Should trigger: Effect.map(() => void 0)
+export const shouldTriggerVoid0 = Effect.succeed(1).pipe(
+  Effect.map(() => void 0)
+)
+
+// Should trigger: Effect.map(() => undefined)
+export const shouldTriggerUndefined = Effect.succeed(1).pipe(
+  Effect.map(() => undefined)
+)
+
+// Should trigger: Effect.map(() => {})
+export const shouldTriggerEmptyBlock = Effect.succeed(1).pipe(
+  Effect.map(() => {})
+)
+
+// Should trigger: Effect.map(() => (undefined)) - parenthesized
+export const shouldTriggerParenthesizedUndefined = Effect.succeed(1).pipe(
+  Effect.map(() => (undefined))
+)
+
+// Should trigger: Effect.map(() => (void 0)) - parenthesized
+export const shouldTriggerParenthesizedVoid0 = Effect.succeed(1).pipe(
+  Effect.map(() => (void 0))
+)
+
+// Should trigger: Effect.map(() => ((undefined))) - double parenthesized
+export const shouldTriggerDoubleParenthesizedUndefined = Effect.succeed(1).pipe(
+  Effect.map(() => ((undefined)))
+)
+
+// Should NOT trigger: Effect.map with actual transformation
+export const shouldNotTriggerTransform = Effect.succeed(1).pipe(
+  Effect.map((n) => n * 2)
+)
+
+// Should NOT trigger: Effect.map with non-void return
+export const shouldNotTriggerNonVoid = Effect.succeed(1).pipe(
+  Effect.map(() => 42)
+)
+
+// Should NOT trigger: Effect.map with string return
+export const shouldNotTriggerString = Effect.succeed(1).pipe(
+  Effect.map(() => "hello")
+)
+
+// Should NOT trigger: already using asVoid
+export const shouldNotTriggerAsVoid = Effect.succeed(1).pipe(
+  Effect.asVoid
+)
+
+// Should trigger: data-first Effect.map(self, () => {})
+export const shouldTriggerDataFirstEmptyBlock = Effect.asVoid(Effect.succeed(1))
+
+// Should trigger: data-first Effect.map(self, () => void 0)
+export const shouldTriggerDataFirstVoid0 = Effect.map(Effect.succeed(1), () => void 0)
+
+// Should NOT trigger: data-first Effect.map with a real transformation
+export const shouldNotTriggerDataFirstTransform = Effect.map(Effect.succeed(1), (n) => n * 2)
+
+
+=== [D8] Fix 0: "Disable effectMapVoid for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable effectMapVoid for entire file" ===
+skipped by default
+
+=== [D8] Fix 2: "Replace with Effect.asVoid" ===
+
+--- file:///.src/effectMapVoid.ts ---
+import { Effect } from "effect"
+
+// Should trigger: Effect.map(() => void 0)
+export const shouldTriggerVoid0 = Effect.succeed(1).pipe(
+  Effect.map(() => void 0)
+)
+
+// Should trigger: Effect.map(() => undefined)
+export const shouldTriggerUndefined = Effect.succeed(1).pipe(
+  Effect.map(() => undefined)
+)
+
+// Should trigger: Effect.map(() => {})
+export const shouldTriggerEmptyBlock = Effect.succeed(1).pipe(
+  Effect.map(() => {})
+)
+
+// Should trigger: Effect.map(() => (undefined)) - parenthesized
+export const shouldTriggerParenthesizedUndefined = Effect.succeed(1).pipe(
+  Effect.map(() => (undefined))
+)
+
+// Should trigger: Effect.map(() => (void 0)) - parenthesized
+export const shouldTriggerParenthesizedVoid0 = Effect.succeed(1).pipe(
+  Effect.map(() => (void 0))
+)
+
+// Should trigger: Effect.map(() => ((undefined))) - double parenthesized
+export const shouldTriggerDoubleParenthesizedUndefined = Effect.succeed(1).pipe(
+  Effect.map(() => ((undefined)))
+)
+
+// Should NOT trigger: Effect.map with actual transformation
+export const shouldNotTriggerTransform = Effect.succeed(1).pipe(
+  Effect.map((n) => n * 2)
+)
+
+// Should NOT trigger: Effect.map with non-void return
+export const shouldNotTriggerNonVoid = Effect.succeed(1).pipe(
+  Effect.map(() => 42)
+)
+
+// Should NOT trigger: Effect.map with string return
+export const shouldNotTriggerString = Effect.succeed(1).pipe(
+  Effect.map(() => "hello")
+)
+
+// Should NOT trigger: already using asVoid
+export const shouldNotTriggerAsVoid = Effect.succeed(1).pipe(
+  Effect.asVoid
+)
+
+// Should trigger: data-first Effect.map(self, () => {})
+export const shouldTriggerDataFirstEmptyBlock = Effect.map(Effect.succeed(1), () => {})
+
+// Should trigger: data-first Effect.map(self, () => void 0)
+export const shouldTriggerDataFirstVoid0 = Effect.asVoid(Effect.succeed(1))
+
+// Should NOT trigger: data-first Effect.map with a real transformation
+export const shouldNotTriggerDataFirstTransform = Effect.map(Effect.succeed(1), (n) => n * 2)
 
