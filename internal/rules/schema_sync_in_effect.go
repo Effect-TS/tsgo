@@ -33,7 +33,7 @@ var SchemaSyncInEffect = rule.Rule{
 	Group:           "antipattern",
 	Description:     "Suggests using Effect-based Schema methods instead of sync methods inside Effect generators",
 	DefaultSeverity: etscore.SeveritySuggestion,
-	SupportedEffect: []string{"v3"},
+	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.X_0_is_used_inside_an_Effect_generator_Schema_1_preserves_the_typed_Effect_error_channel_for_this_operation_without_throwing_effect_schemaSyncInEffect.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		version := ctx.TypeParser.SupportedEffectVersion()
