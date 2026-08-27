@@ -7,9 +7,11 @@ Effect version: 4.0.0
 /.src/effectMapVoid.ts(20,3): suggestion TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
 /.src/effectMapVoid.ts(25,3): suggestion TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
 /.src/effectMapVoid.ts(30,3): suggestion TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
+/.src/effectMapVoid.ts(54,49): suggestion TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
+/.src/effectMapVoid.ts(57,44): suggestion TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
 
 
-==== /.src/effectMapVoid.ts (6 errors) ====
+==== /.src/effectMapVoid.ts (8 errors) ====
     import { Effect } from "effect"
     
     // Should trigger: Effect.map(() => void 0)
@@ -73,4 +75,17 @@ Effect version: 4.0.0
     export const shouldNotTriggerAsVoid = Effect.succeed(1).pipe(
       Effect.asVoid
     )
+    
+    // Should trigger: data-first Effect.map(self, () => {})
+    export const shouldTriggerDataFirstEmptyBlock = Effect.map(Effect.succeed(1), () => {})
+                                                    ~~~~~~~~~~
+!!! suggestion TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
+    
+    // Should trigger: data-first Effect.map(self, () => void 0)
+    export const shouldTriggerDataFirstVoid0 = Effect.map(Effect.succeed(1), () => void 0)
+                                               ~~~~~~~~~~
+!!! suggestion TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
+    
+    // Should NOT trigger: data-first Effect.map with a real transformation
+    export const shouldNotTriggerDataFirstTransform = Effect.map(Effect.succeed(1), (n) => n * 2)
     
