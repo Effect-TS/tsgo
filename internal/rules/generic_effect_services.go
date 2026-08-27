@@ -16,7 +16,7 @@ var GenericEffectServices = rule.Rule{
 	Group:           "correctness",
 	Description:     "Prevents services with type parameters that cannot be discriminated at runtime",
 	DefaultSeverity: etscore.SeverityWarning,
-	SupportedEffect: []string{"v3", "v4"},
+	SupportedEffect: []string{"v3"},
 	Codes:           []int32{tsdiag.Effect_Services_with_type_parameters_are_not_supported_because_they_cannot_be_properly_discriminated_at_runtime_which_may_cause_unexpected_behavior_effect_genericEffectServices.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		// V3-only rule
