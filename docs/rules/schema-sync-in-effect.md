@@ -9,7 +9,7 @@ Suggests using Effect-based Schema methods instead of sync methods inside Effect
 | Category | Anti-pattern |
 | Default severity | `suggestion` |
 | Fixable | No |
-| Effect versions | v3 |
+| Effect versions | v3, v4 |
 | Diagnostic codes | `TS377037` |
 | Language Service name | `schemaSyncInEffect` |
 | Oxlint name | `effecttsgo/schema-sync-in-effect` |
