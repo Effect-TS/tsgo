@@ -2064,6 +2064,35 @@
       }
     },
     {
+      "name": "preferSucceedSomeOrNone",
+      "group": "style",
+      "description": "Suggests using Effect.succeedNone or Effect.succeedSome instead of wrapping Option.none or Option.some with Effect.succeed",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377117
+      ],
+      "preview": {
+        "sourceText": "import { Effect, Option } from \"effect\"\n\nexport const none = Effect.succeed(Option.none())\nexport const some = Effect.succeed(Option.some(1))\n",
+        "diagnostics": [
+          {
+            "start": 61,
+            "end": 75,
+            "text": "`Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)"
+          },
+          {
+            "start": 111,
+            "end": 125,
+            "text": "`Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)"
+          }
+        ]
+      }
+    },
+    {
       "name": "preferTypedSchemaDecoder",
       "group": "style",
       "description": "Suggests typed Schema decoders when the input is assignable to the schema's Encoded type",

@@ -1,0 +1,19 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/preferSucceedSomeOrNone_preview.ts(5,21): warning TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+/.src/preferSucceedSomeOrNone_preview.ts(6,21): warning TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+
+
+==== /.src/preferSucceedSomeOrNone_preview.ts (2 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferSucceedSomeOrNone:warning
+    import { Effect, Option } from "effect"
+    
+    export const none = Effect.succeed(Option.none())
+                        ~~~~~~~~~~~~~~
+!!! warning TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+    export const some = Effect.succeed(Option.some(1))
+                        ~~~~~~~~~~~~~~
+!!! warning TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+    

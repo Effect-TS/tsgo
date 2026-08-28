@@ -139,7 +139,7 @@ Location: 50:19 - 58:6
 Node: (yield* HttpClient.HttpClient).pipe(\n      HttpClient.mapRequest(\n        flow(\n          HttpClientRequest.prependUrl(config.baseUrl),\n          HttpClientRequest.acceptJson\n        )\n      ),\n      HttpClient.filterStatusOk\n    )
 Node Kind: KindCallExpression
 
-Subject: (yield* HttpClient.HttpClient)
+Subject: yield* HttpClient.HttpClient
 Subject Type: HttpClient
 
 Transformations (2):

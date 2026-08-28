@@ -1,0 +1,47 @@
+=== Quick Fix Inventory ===
+
+[D1] (5:21-5:35) TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+  Fix 0: "Disable preferSucceedSomeOrNone for this line"
+  Fix 1: "Disable preferSucceedSomeOrNone for entire file"
+  Fix 2: "Replace with Effect.succeedNone"
+
+[D2] (6:21-6:35) TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+  Fix 0: "Disable preferSucceedSomeOrNone for this line"
+  Fix 1: "Disable preferSucceedSomeOrNone for entire file"
+  Fix 2: "Replace with Effect.succeedSome"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable preferSucceedSomeOrNone for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable preferSucceedSomeOrNone for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.succeedNone" ===
+
+--- file:///.src/preferSucceedSomeOrNone_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferSucceedSomeOrNone:warning
+import { Effect, Option } from "effect"
+
+export const none = Effect.succeedNone
+export const some = Effect.succeed(Option.some(1))
+
+
+=== [D2] Fix 0: "Disable preferSucceedSomeOrNone for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable preferSucceedSomeOrNone for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.succeedSome" ===
+
+--- file:///.src/preferSucceedSomeOrNone_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferSucceedSomeOrNone:warning
+import { Effect, Option } from "effect"
+
+export const none = Effect.succeed(Option.none())
+export const some = Effect.succeedSome(1)
+

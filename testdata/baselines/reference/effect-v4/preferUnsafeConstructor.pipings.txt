@@ -147,7 +147,7 @@ Location: 32:29 - 32:60
 Node: Effect.runSync((Scope.make()))
 Node Kind: KindCallExpression
 
-Subject: (Scope.make())
+Subject: Scope.make()
 Subject Type: Effect<Closeable, never, never>
 
 Transformations (1):
