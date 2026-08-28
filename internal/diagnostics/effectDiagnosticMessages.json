@@ -462,5 +462,9 @@
     "`Effect.{0}` expresses this Option success value directly. effect(preferSucceedSomeOrNone)": {
         "category": "Suggestion",
         "code": 377117
+    },
+    "`Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)": {
+        "category": "Suggestion",
+        "code": 377118
     }
 }

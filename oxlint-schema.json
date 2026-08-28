@@ -2428,6 +2428,9 @@
         "effecttsgo/non-object-effect-service-type": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/option-match-to-from-option": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/outdated-api": {
           "$ref": "#/definitions/RuleNoConfig"
         },

@@ -20,6 +20,7 @@ var All = []fixable.Fixable{
 	AllOfMapToForEachFix,
 	FlatMapToMapFix,
 	MapSomeToAsSomeFix,
+	OptionMatchToFromOptionFix,
 	SyncToSucceedFix,
 	CatchToOrElseSucceedFix,
 	CatchToIgnoreFix,

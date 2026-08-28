@@ -2135,6 +2135,11 @@
           "default": "error",
           "description": "Ensures Effect.Service types are objects, not primitives"
         },
+        "optionMatchToFromOption": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.fromOption when Option.match or an Option tag conditional only converts Some to Effect.succeed and None to Effect.fail"
+        },
         "outdatedApi": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "warning",
