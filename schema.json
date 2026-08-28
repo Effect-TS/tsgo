@@ -1815,6 +1815,11 @@
           "default": "suggestion",
           "description": "Warns when manually constructing AbortController inside Effect generators instead of using Effect.abortSignal"
         },
+        "acquireReleaseDisposable": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.acquireDisposable when Effect.acquireRelease only invokes the acquired resource's disposal protocol"
+        },
         "allOfMapToForEach": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",

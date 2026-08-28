@@ -28,6 +28,7 @@
     "effecttsgo/multiple-catch-tag": "warn",
     "effecttsgo/nested-effect-gen-yield": "warn",
     "effecttsgo/new-schema-class": "warn",
+    "effecttsgo/option-match-to-from-option": "warn",
     "effecttsgo/prefer-schema-type-property": "warn",
     "effecttsgo/prefer-succeed-some-or-none": "warn",
     "effecttsgo/prefer-typed-schema-decoder": "warn",

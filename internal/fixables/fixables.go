@@ -56,6 +56,7 @@ var All = []fixable.Fixable{
 	ServiceNotAsClassFix,
 	PreferUnsafeConstructorFix,
 	PreferTypedSchemaDecoderFix,
+	AcquireReleaseDisposableFix,
 }
 
 // ByErrorCode finds all fixables that handle a given error code.

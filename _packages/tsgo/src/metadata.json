@@ -27,6 +27,7 @@
       "description": "Enable all Effect-native diagnostics at warning level.",
       "diagnosticSeverity": {
         "abortControllerInEffect": "warning",
+        "acquireReleaseDisposable": "warning",
         "asyncFunction": "warning",
         "cryptoRandomUUID": "warning",
         "cryptoRandomUUIDInEffect": "warning",
@@ -999,6 +1000,29 @@
             "start": 90,
             "end": 111,
             "text": "`AbortController` is manually constructed inside Effect code. Use `Effect.abortSignal` for Effect-managed cancellation. effect(abortControllerInEffect)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "acquireReleaseDisposable",
+      "group": "effectNative",
+      "description": "Suggests Effect.acquireDisposable when Effect.acquireRelease only invokes the acquired resource's disposal protocol",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377119
+      ],
+      "preview": {
+        "sourceText": "/// \u003creference lib=\"esnext.disposable\" /\u003e\nimport { Effect } from \"effect\"\n\ndeclare const acquire: Effect.Effect\u003cAsyncDisposable\u003e\n\nexport const resource = Effect.acquireRelease(\n  acquire,\n  (resource) =\u003e Effect.promise(() =\u003e resource[Symbol.asyncDispose]())\n)\n",
+        "diagnostics": [
+          {
+            "start": 154,
+            "end": 175,
+            "text": "`Effect.acquireDisposable` expresses this disposable resource acquisition more directly than `Effect.acquireRelease` with a manual disposal finalizer. effect(acquireReleaseDisposable)"
           }
         ]
       }

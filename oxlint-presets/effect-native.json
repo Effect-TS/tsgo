@@ -7,6 +7,7 @@
   ],
   "rules": {
     "effecttsgo/abort-controller-in-effect": "warn",
+    "effecttsgo/acquire-release-disposable": "warn",
     "effecttsgo/async-function": "warn",
     "effecttsgo/crypto-random-uuid": "warn",
     "effecttsgo/crypto-random-uuid-in-effect": "warn",

@@ -1,0 +1,15 @@
+==== /.src/acquireReleaseDisposable_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 11:16 - 11:70
+Node: Effect.promise(() => resource[Symbol.asyncDispose]())
+Node Kind: KindCallExpression
+
+Subject: () => resource[Symbol.asyncDispose]()
+Subject Type: () => PromiseLike<void>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<void, never, never>
