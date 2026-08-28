@@ -1830,11 +1830,6 @@
           "default": "off",
           "description": "Warns when declaring async functions and suggests using Effect values and Effect.gen for async control flow"
         },
-        "catchDieToOrDie": {
-          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
-          "default": "suggestion",
-          "description": "Suggests using Effect.orDie instead of Effect.catch or Effect.catchAll with an identity-forwarding Effect.die handler"
-        },
         "catchAllToMapError": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
@@ -1849,6 +1844,11 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
           "description": "Suggests Effect.catchIf, Effect.catchCauseIf, or Effect.catchTag for conditional catch handlers that re-fail their untouched input"
+        },
+        "catchDieToOrDie": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests using Effect.orDie instead of Effect.catch or Effect.catchAll with an identity-forwarding Effect.die handler"
         },
         "catchTagToCatchReason": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
@@ -2154,6 +2154,11 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
           "description": "Disallows Schema.Schema.Type\u003ctypeof X\u003e in favor of typeof X.Type"
+        },
+        "preferSucceedSomeOrNone": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests using Effect.succeedNone or Effect.succeedSome instead of wrapping Option.none or Option.some with Effect.succeed"
         },
         "preferTypedSchemaDecoder": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",

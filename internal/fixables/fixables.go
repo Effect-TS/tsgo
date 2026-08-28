@@ -28,6 +28,7 @@ var All = []fixable.Fixable{
 	UnnecessaryPipeChainFix,
 	ReturnEffectInGenFix,
 	EffectSucceedWithVoidFix,
+	PreferSucceedSomeOrNoneFix,
 	UnnecessaryEffectGenFix,
 	UnnecessaryArrowBlockFix,
 	UnnecessaryTypeofTypeFix,

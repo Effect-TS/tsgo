@@ -33,7 +33,7 @@ Location: 11:51 - 11:79
 Node: Effect.succeed((undefined))
 Node Kind: KindCallExpression
 
-Subject: (undefined)
+Subject: undefined
 Subject Type: undefined
 
 Transformations (1):
@@ -47,7 +47,7 @@ Location: 14:47 - 14:72
 Node: Effect.succeed((void 0))
 Node Kind: KindCallExpression
 
-Subject: (void 0)
+Subject: void 0
 Subject Type: undefined
 
 Transformations (1):
@@ -61,7 +61,7 @@ Location: 17:57 - 17:87
 Node: Effect.succeed(((undefined)))
 Node Kind: KindCallExpression
 
-Subject: ((undefined))
+Subject: undefined
 Subject Type: undefined
 
 Transformations (1):

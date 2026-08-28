@@ -29,6 +29,7 @@ var All = []rule.Rule{
 	ReturnEffectInGen,
 	UnnecessaryPipeChain,
 	EffectSucceedWithVoid,
+	PreferSucceedSomeOrNone,
 	UnnecessaryEffectGen,
 	EffectMapVoid,
 	UnnecessaryFailYieldableError,
