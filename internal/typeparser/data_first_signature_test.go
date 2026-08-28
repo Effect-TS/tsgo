@@ -115,6 +115,42 @@ export const live = Layer.succeed(MyService, make)
 	}
 }
 
+func TestPipingFlows_SkipsParentheses(t *testing.T) {
+	t.Parallel()
+
+	source := `
+import { Effect, Option } from "effect"
+
+export const some = Effect.succeed(((Option.some(1))))
+export const none = Effect.succeed(((Option.none())))
+`
+
+	_, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectV4Internal(t, source)
+	defer done()
+
+	someCall := findVariableInitializerCallByName(t, sf, "some")
+	someFlow := findFlowByNode(t, sf, tp.PipingFlows(sf, false), someCall.AsNode())
+	if got := strings.TrimSpace(nodeText(sf, someFlow.Subject.Node)); got != "1" {
+		t.Fatalf("some subject = %q, want %q", got, "1")
+	}
+	if len(someFlow.Transformations) != 2 {
+		t.Fatalf("some transformation count = %d, want 2", len(someFlow.Transformations))
+	}
+	if got := strings.TrimSpace(nodeText(sf, someFlow.Transformations[0].Callee)); got != "Option.some" {
+		t.Fatalf("first some transformation = %q, want %q", got, "Option.some")
+	}
+	if got := strings.TrimSpace(nodeText(sf, someFlow.Transformations[1].Callee)); got != "Effect.succeed" {
+		t.Fatalf("second some transformation = %q, want %q", got, "Effect.succeed")
+	}
+
+	noneCall := findVariableInitializerCallByName(t, sf, "none")
+	noneFlow := findFlowByNode(t, sf, tp.PipingFlows(sf, false), noneCall.AsNode())
+	if got := strings.TrimSpace(nodeText(sf, noneFlow.Subject.Node)); got != "Option.none()" {
+		t.Fatalf("none subject = %q, want %q", got, "Option.none()")
+	}
+	assertSingleTransformation(t, sf, noneFlow, TransformationKindCall, "Effect.succeed", nil)
+}
+
 func TestDataFirstOrLastCall_OptionMatchV4(t *testing.T) {
 	t.Parallel()
 

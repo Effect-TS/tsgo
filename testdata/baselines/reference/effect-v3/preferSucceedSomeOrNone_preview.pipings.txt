@@ -1,0 +1,33 @@
+==== /.src/preferSucceedSomeOrNone_preview.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 5:20 - 5:50
+Node: Effect.succeed(Option.none())
+Node Kind: KindCallExpression
+
+Subject: Option.none()
+Subject Type: Option<never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Option<never>, never, never>
+
+=== Piping Flow ===
+Location: 6:20 - 6:51
+Node: Effect.succeed(Option.some(1))
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Option.some
+      args: (constant)
+      outType: Option<number>
+  [1] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Option<number>, never, never>

@@ -1,0 +1,345 @@
+==== /.src/preferSucceedSomeOrNone.ts (22 flows) ====
+
+=== Piping Flow ===
+Location: 5:33 - 5:63
+Node: Effect.succeed(Option.none())
+Node Kind: KindCallExpression
+
+Subject: Option.none()
+Subject Type: Option<never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Option<never>, never, never>
+
+=== Piping Flow ===
+Location: 8:33 - 8:64
+Node: Effect.succeed(Option.some(1))
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Option.some
+      args: (constant)
+      outType: Option<number>
+  [1] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Option<number>, never, never>
+
+=== Piping Flow ===
+Location: 11:36 - 11:64
+Node: Fx.succeed(O.some("value"))
+Node Kind: KindCallExpression
+
+Subject: "value"
+Subject Type: "value"
+
+Transformations (2):
+  [0] kind: call
+      callee: O.some
+      args: (constant)
+      outType: Option<string>
+  [1] kind: call
+      callee: Fx.succeed
+      args: (constant)
+      outType: Effect<Option<string>, never, never>
+
+=== Piping Flow ===
+Location: 14:38 - 14:67
+Node: Effect.succeed(optionNone())
+Node Kind: KindCallExpression
+
+Subject: optionNone()
+Subject Type: Option<never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Option<never>, never, never>
+
+=== Piping Flow ===
+Location: 15:38 - 15:68
+Node: Effect.succeed(optionSome(1))
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: optionSome
+      args: (constant)
+      outType: Option<number>
+  [1] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Option<number>, never, never>
+
+=== Piping Flow ===
+Location: 18:42 - 18:75
+Node: Effect.succeed((Option.some(1)))
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Option.some
+      args: (constant)
+      outType: Option<number>
+  [1] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Option<number>, never, never>
+
+=== Piping Flow ===
+Location: 21:45 - 21:84
+Node: Effect.succeed(Option.some<number>(1))
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Option.some
+      args: (constant)
+      outType: Option<number>
+  [1] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Option<number>, never, never>
+
+=== Piping Flow ===
+Location: 24:37 - 24:72
+Node: Option.none().pipe(Effect.succeed)
+Node Kind: KindCallExpression
+
+Subject: Option.none()
+Subject Type: Option<never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Option<never>, never, never>
+
+=== Piping Flow ===
+Location: 25:37 - 25:73
+Node: Option.some(1).pipe(Effect.succeed)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Option.some
+      args: (constant)
+      outType: Option<number>
+  [1] kind: pipeable
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Option<number>, never, never>
+
+=== Piping Flow ===
+Location: 28:45 - 28:81
+Node: pipe(Option.none(), Effect.succeed)
+Node Kind: KindCallExpression
+
+Subject: Option.none()
+Subject Type: Option<never>
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Option<never>, never, never>
+
+=== Piping Flow ===
+Location: 29:45 - 29:82
+Node: pipe(Option.some(1), Effect.succeed)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Option.some
+      args: (constant)
+      outType: Option<number>
+  [1] kind: pipe
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Option<number>, never, never>
+
+=== Piping Flow ===
+Location: 32:47 - 32:84
+Node: pipe(1, Option.some, Effect.succeed)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: pipe
+      callee: Option.some
+      args: (constant)
+      outType: Option<number>
+  [1] kind: pipe
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Option<number>, never, never>
+
+=== Piping Flow ===
+Location: 35:48 - 35:86
+Node: Effect.succeed(Option.none<number>())
+Node Kind: KindCallExpression
+
+Subject: Option.none<number>()
+Subject Type: Option<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Option<number>, never, never>
+
+=== Piping Flow ===
+Location: 38:49 - 38:102
+Node: Effect.succeed<Option.Option<number>>(Option.none())
+Node Kind: KindCallExpression
+
+Subject: Option.none()
+Subject Type: Option<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Option<number>, never, never>
+
+=== Piping Flow ===
+Location: 42:43 - 42:65
+Node: Effect.succeedSome(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeedSome
+      args: (constant)
+      outType: Effect<Option<number>, never, never>
+
+=== Piping Flow ===
+Location: 45:44 - 45:72
+Node: Effect.succeed(Option.none)
+Node Kind: KindCallExpression
+
+Subject: Option.none
+Subject Type: <A = never>() => Option<A>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<<A = never>() => Option<A>, never, never>
+
+=== Piping Flow ===
+Location: 46:44 - 46:72
+Node: Effect.succeed(Option.some)
+Node Kind: KindCallExpression
+
+Subject: Option.some
+Subject Type: <A>(value: A) => Option<A>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<<A>(value: A) => Option<A>, never, never>
+
+=== Piping Flow ===
+Location: 49:28 - 49:50
+Node: Effect.succeed(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: A
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<A, never, never>
+
+=== Piping Flow ===
+Location: 53:25 - 53:44
+Node: Option.some(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: A
+
+Transformations (1):
+  [0] kind: call
+      callee: Option.some
+      args: (constant)
+      outType: Option<A>
+
+=== Piping Flow ===
+Location: 57:43 - 57:78
+Node: LocalEffect.succeed(Option.none())
+Node Kind: KindCallExpression
+
+Subject: Option.none()
+Subject Type: Option<never>
+
+Transformations (1):
+  [0] kind: call
+      callee: LocalEffect.succeed
+      args: (constant)
+      outType: Effect<Option<never>, never, never>
+
+=== Piping Flow ===
+Location: 58:47 - 58:82
+Node: Effect.succeed(LocalOption.none())
+Node Kind: KindCallExpression
+
+Subject: LocalOption.none()
+Subject Type: Option<never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Option<never>, never, never>
+
+=== Piping Flow ===
+Location: 59:47 - 59:83
+Node: Effect.succeed(LocalOption.some(1))
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: LocalOption.some
+      args: (constant)
+      outType: Option<number>
+  [1] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Option<number>, never, never>

@@ -458,5 +458,9 @@
     "`Effect.{2}` expresses selective recovery more directly than `Effect.{0}` with a conditional `Effect.{1}` passthrough. effect(catchConditionalRefailToCatchIf)": {
         "category": "Suggestion",
         "code": 377116
+    },
+    "`Effect.{0}` expresses this Option success value directly. effect(preferSucceedSomeOrNone)": {
+        "category": "Suggestion",
+        "code": 377117
     }
 }

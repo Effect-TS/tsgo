@@ -2245,9 +2245,6 @@
         "effecttsgo/async-function": {
           "$ref": "#/definitions/RuleNoConfig"
         },
-        "effecttsgo/catch-die-to-or-die": {
-          "$ref": "#/definitions/RuleNoConfig"
-        },
         "effecttsgo/catch-all-to-map-error": {
           "$ref": "#/definitions/RuleNoConfig"
         },
@@ -2255,6 +2252,9 @@
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/catch-conditional-refail-to-catch-if": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "effecttsgo/catch-die-to-or-die": {
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/catch-tag-to-catch-reason": {
@@ -2438,6 +2438,9 @@
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/prefer-schema-type-property": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "effecttsgo/prefer-succeed-some-or-none": {
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/prefer-typed-schema-decoder": {
