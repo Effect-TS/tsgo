@@ -184,6 +184,7 @@ const MethodGetSymbolsOfSourceFiles = api.MethodGetSymbolsOfSourceFiles
 const MethodGetSyntacticDiagnostics = api.MethodGetSyntacticDiagnostics
 const MethodGetTargetOfSignature = api.MethodGetTargetOfSignature
 const MethodGetTargetOfType = api.MethodGetTargetOfType
+const MethodGetTargetSymbol = api.MethodGetTargetSymbol
 const MethodGetThisParameterOfSignature = api.MethodGetThisParameterOfSignature
 const MethodGetTrueTypeOfConditionalType = api.MethodGetTrueTypeOfConditionalType
 const MethodGetTypeArguments = api.MethodGetTypeArguments
