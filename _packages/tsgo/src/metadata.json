@@ -2040,6 +2040,29 @@
       }
     },
     {
+      "name": "optionMatchToFromOption",
+      "group": "style",
+      "description": "Suggests Effect.fromOption when Option.match or an Option tag conditional only converts Some to Effect.succeed and None to Effect.fail",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377118
+      ],
+      "preview": {
+        "sourceText": "import { Data, Effect, Option } from \"effect\"\n\nclass UserNotFound extends Data.TaggedError(\"UserNotFound\")\u003c{\n  readonly id: string\n}\u003e {}\n\ndeclare const findUser: (id: string) =\u003e Option.Option\u003c{ readonly name: string }\u003e\n\nexport const getUser = (id: string) =\u003e\n  Option.match(findUser(id), {\n    onNone: () =\u003e Effect.fail(new UserNotFound({ id })),\n    onSome: (user) =\u003e Effect.succeed(user)\n  })\n",
+        "diagnostics": [
+          {
+            "start": 261,
+            "end": 273,
+            "text": "`Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)"
+          }
+        ]
+      }
+    },
+    {
       "name": "preferSchemaTypeProperty",
       "group": "style",
       "description": "Disallows Schema.Schema.Type\u003ctypeof X\u003e in favor of typeof X.Type",

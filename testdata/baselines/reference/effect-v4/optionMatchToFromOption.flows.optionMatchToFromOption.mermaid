@@ -1,0 +1,270 @@
+flowchart TB
+  0[/"type: #quot;MissingValue#quot;<br/>node: #quot;MissingValue#quot;"/]
+  1[["type: any<br/>node: constructor#40;readonly message: string#41; #123;#125;"]]
+  2[/"type: Option#lt;number#gt;<br/>node: option"/]
+  3["type: Effect#lt;number, never, never#gt; #124; Effect#lt;never, MissingValue, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  4[/"type: #123; #lt;B, A, C = B#gt;#40;options: #123; readonly onNone: LazyArg#lt;B#gt;; readonly onSome: #40;a: A#41; =#gt; C; #125;#41;: #40;self: Option#lt;A#gt;#41; =#gt; B #124; C; #lt;A, B, C = B#gt;#40;self: Option#lt;A#gt;, options: #123; readonly onNone: LazyArg#lt;B#gt;; readonly onSome: #40;a: A#41; =#gt; C; #125;#41;: B #124; C; #125;<br/>node: Option.match"/]
+  5[/"type: #123; onNone: #40;#41; =#gt; Effect#lt;never, MissingValue, never#gt;; onSome: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;; #125;<br/>node: #123;#92;n  onNone: #40;#41; =#gt; Effect.fail#40;new MissingValue#40;#quot;data-first#quot;#41;#41;,#92;n  onSome: Effect.succeed#92;n#125;"/]
+  6[["type: #40;#41; =#gt; Effect#lt;never, MissingValue, never#gt;<br/>node: #40;#41; =#gt; Effect.fail#40;new MissingValue#40;#quot;data-first#quot;#41;#41;"]]
+  7[/"type: MissingValue<br/>node: new MissingValue#40;#quot;data-first#quot;#41;"/]
+  8["type: Effect#lt;never, MissingValue, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  9[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  10[/"type: Option#lt;number#gt;<br/>node: option"/]
+  11["type: Effect#lt;number, never, never#gt; #124; Effect#lt;never, MissingValue, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  12[/"type: #123; #lt;B, A, C = B#gt;#40;options: #123; readonly onNone: LazyArg#lt;B#gt;; readonly onSome: #40;a: A#41; =#gt; C; #125;#41;: #40;self: Option#lt;A#gt;#41; =#gt; B #124; C; #lt;A, B, C = B#gt;#40;self: Option#lt;A#gt;, options: #123; readonly onNone: LazyArg#lt;B#gt;; readonly onSome: #40;a: A#41; =#gt; C; #125;#41;: B #124; C; #125;<br/>node: O.match"/]
+  13[/"type: #123; onSome: #40;value: number#41; =#gt; Effect#lt;number, never, never#gt;; onNone: #40;#41; =#gt; Effect#lt;never, MissingValue, never#gt;; #125;<br/>node: #123;#92;n  onSome: #40;value#41; =#gt; Fx.succeed#40;value#41;,#92;n  onNone: #40;#41; =#gt; Fx.fail#40;new MissingValue#40;#quot;identity#quot;#41;#41;#92;n#125;"/]
+  14[["type: #40;value: number#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;value#41; =#gt; Fx.succeed#40;value#41;"]]
+  15[/"type: number<br/>node: value"/]
+  16["type: Effect#lt;number, never, never#gt;<br/>callee: Fx.succeed<br/>args: #91;#93;"]
+  17[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Fx.succeed"/]
+  18[["type: #40;#41; =#gt; Effect#lt;never, MissingValue, never#gt;<br/>node: #40;#41; =#gt; Fx.fail#40;new MissingValue#40;#quot;identity#quot;#41;#41;"]]
+  19[/"type: MissingValue<br/>node: new MissingValue#40;#quot;identity#quot;#41;"/]
+  20["type: Effect#lt;never, MissingValue, never#gt;<br/>callee: Fx.fail<br/>args: #91;#93;"]
+  21[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Fx.fail"/]
+  22[/"type: Option#lt;number#gt;<br/>node: option"/]
+  23["type: Effect#lt;number, never, never#gt; #124; Effect#lt;never, MissingValue, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  24[/"type: #123; #lt;B, A, C = B#gt;#40;options: #123; readonly onNone: LazyArg#lt;B#gt;; readonly onSome: #40;a: A#41; =#gt; C; #125;#41;: #40;self: Option#lt;A#gt;#41; =#gt; B #124; C; #lt;A, B, C = B#gt;#40;self: Option#lt;A#gt;, options: #123; readonly onNone: LazyArg#lt;B#gt;; readonly onSome: #40;a: A#41; =#gt; C; #125;#41;: B #124; C; #125;<br/>node: Option.match"/]
+  25[/"type: #123; onNone: #40;#41; =#gt; Effect#lt;never, MissingValue, never#gt;; onSome: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;; #125;<br/>node: #123;#92;n  onNone: function#40;#41; #123;#92;n    return Effect.fail#40;new MissingValue#40;String#40;arguments.length#41;#41;#41;#92;n  #125;,#92;n  onSome: Effect.succeed#92;n#125;"/]
+  26[["type: #40;#41; =#gt; Effect#lt;never, MissingValue, never#gt;<br/>node: function#40;#41; #123;#92;n    return Effect.fail#40;new MissingValue#40;String#40;arguments.length#41;#41;#41;#92;n  #125;"]]
+  27[/"type: MissingValue<br/>node: new MissingValue#40;String#40;arguments.length#41;#41;"/]
+  28[/"type: number<br/>node: arguments.length"/]
+  29["type: string<br/>callee: String<br/>args: #91;#93;"]
+  30[/"type: StringConstructor<br/>node: String"/]
+  31["type: Effect#lt;never, MissingValue, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  32[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  33[/"type: Option#lt;number#gt;<br/>node: option"/]
+  34["type: Effect#lt;number, never, never#gt; #124; Effect#lt;never, MissingValue, never#gt;<br/>callee: Option.match<br/>args: #91;#123;#92;n    onNone: #40;#41; =#gt; Effect.fail#40;new MissingValue#40;#quot;pipeable#quot;#41;#41;,#92;n    onSome: Effect.succeed#92;n  #125;#93;"]
+  35[/"type: #123; #lt;B, A, C = B#gt;#40;options: #123; readonly onNone: LazyArg#lt;B#gt;; readonly onSome: #40;a: A#41; =#gt; C; #125;#41;: #40;self: Option#lt;A#gt;#41; =#gt; B #124; C; #lt;A, B, C = B#gt;#40;self: Option#lt;A#gt;, options: #123; readonly onNone: LazyArg#lt;B#gt;; readonly onSome: #40;a: A#41; =#gt; C; #125;#41;: B #124; C; #125;<br/>node: Option.match"/]
+  36[/"type: #123; onNone: #40;#41; =#gt; Effect#lt;never, MissingValue, never#gt;; onSome: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;; #125;<br/>node: #123;#92;n    onNone: #40;#41; =#gt; Effect.fail#40;new MissingValue#40;#quot;pipeable#quot;#41;#41;,#92;n    onSome: Effect.succeed#92;n  #125;"/]
+  37[["type: #40;#41; =#gt; Effect#lt;never, MissingValue, never#gt;<br/>node: #40;#41; =#gt; Effect.fail#40;new MissingValue#40;#quot;pipeable#quot;#41;#41;"]]
+  38[/"type: MissingValue<br/>node: new MissingValue#40;#quot;pipeable#quot;#41;"/]
+  39["type: Effect#lt;never, MissingValue, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  40[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  41[/"type: Option#lt;number#gt;<br/>node: option"/]
+  42["type: Effect#lt;number, never, never#gt; #124; Effect#lt;never, MissingValue, never#gt;<br/>callee: Option.match<br/>args: #91;#123;#92;n    onNone: #40;#41; =#gt; Effect.fail#40;new MissingValue#40;#quot;pipe#quot;#41;#41;,#92;n    onSome: Effect.succeed#92;n  #125;#93;"]
+  43[/"type: #123; #lt;B, A, C = B#gt;#40;options: #123; readonly onNone: LazyArg#lt;B#gt;; readonly onSome: #40;a: A#41; =#gt; C; #125;#41;: #40;self: Option#lt;A#gt;#41; =#gt; B #124; C; #lt;A, B, C = B#gt;#40;self: Option#lt;A#gt;, options: #123; readonly onNone: LazyArg#lt;B#gt;; readonly onSome: #40;a: A#41; =#gt; C; #125;#41;: B #124; C; #125;<br/>node: Option.match"/]
+  44[/"type: #123; onNone: #40;#41; =#gt; Effect#lt;never, MissingValue, never#gt;; onSome: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;; #125;<br/>node: #123;#92;n    onNone: #40;#41; =#gt; Effect.fail#40;new MissingValue#40;#quot;pipe#quot;#41;#41;,#92;n    onSome: Effect.succeed#92;n  #125;"/]
+  45[["type: #40;#41; =#gt; Effect#lt;never, MissingValue, never#gt;<br/>node: #40;#41; =#gt; Effect.fail#40;new MissingValue#40;#quot;pipe#quot;#41;#41;"]]
+  46[/"type: MissingValue<br/>node: new MissingValue#40;#quot;pipe#quot;#41;"/]
+  47["type: Effect#lt;never, MissingValue, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  48[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  49[/"type: Option#lt;number#gt;<br/>node: option"/]
+  50["type: Effect#lt;number, never, never#gt; #124; Effect#lt;never, MissingValue, never#gt;<br/>callee: Option.match<br/>args: #91;#123;#92;n  onNone: #40;#41; =#gt; Effect.fail#40;new MissingValue#40;#quot;data-last#quot;#41;#41;,#92;n  onSome: Effect.succeed#92;n#125;#93;"]
+  51[/"type: #123; #lt;B, A, C = B#gt;#40;options: #123; readonly onNone: LazyArg#lt;B#gt;; readonly onSome: #40;a: A#41; =#gt; C; #125;#41;: #40;self: Option#lt;A#gt;#41; =#gt; B #124; C; #lt;A, B, C = B#gt;#40;self: Option#lt;A#gt;, options: #123; readonly onNone: LazyArg#lt;B#gt;; readonly onSome: #40;a: A#41; =#gt; C; #125;#41;: B #124; C; #125;<br/>node: Option.match"/]
+  52[/"type: #123; onNone: #40;#41; =#gt; Effect#lt;never, MissingValue, never#gt;; onSome: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;; #125;<br/>node: #123;#92;n  onNone: #40;#41; =#gt; Effect.fail#40;new MissingValue#40;#quot;data-last#quot;#41;#41;,#92;n  onSome: Effect.succeed#92;n#125;"/]
+  53[["type: #40;#41; =#gt; Effect#lt;never, MissingValue, never#gt;<br/>node: #40;#41; =#gt; Effect.fail#40;new MissingValue#40;#quot;data-last#quot;#41;#41;"]]
+  54[/"type: MissingValue<br/>node: new MissingValue#40;#quot;data-last#quot;#41;"/]
+  55["type: Effect#lt;never, MissingValue, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  56[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  57[/"type: Option#lt;number#gt;<br/>node: option"/]
+  58["type: Effect#lt;number, never, never#gt; #124; Effect#lt;never, NoSuchElementError, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  59[/"type: #123; #lt;B, A, C = B#gt;#40;options: #123; readonly onNone: LazyArg#lt;B#gt;; readonly onSome: #40;a: A#41; =#gt; C; #125;#41;: #40;self: Option#lt;A#gt;#41; =#gt; B #124; C; #lt;A, B, C = B#gt;#40;self: Option#lt;A#gt;, options: #123; readonly onNone: LazyArg#lt;B#gt;; readonly onSome: #40;a: A#41; =#gt; C; #125;#41;: B #124; C; #125;<br/>node: Option.match"/]
+  60[/"type: #123; onNone: #40;#41; =#gt; Effect#lt;never, NoSuchElementError, never#gt;; onSome: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;; #125;<br/>node: #123;#92;n  onNone: #40;#41; =#gt; Effect.fail#40;new Cause.NoSuchElementError#40;#41;#41;,#92;n  onSome: Effect.succeed#92;n#125;"/]
+  61[["type: #40;#41; =#gt; Effect#lt;never, NoSuchElementError, never#gt;<br/>node: #40;#41; =#gt; Effect.fail#40;new Cause.NoSuchElementError#40;#41;#41;"]]
+  62[/"type: NoSuchElementError<br/>node: new Cause.NoSuchElementError#40;#41;"/]
+  63["type: Effect#lt;never, NoSuchElementError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  64[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  65[/"type: Effect#lt;number, never, never#gt; #124; Effect#lt;never, MissingValue, never#gt;<br/>node: Option.isSome#40;option#41;#92;n  ? Effect.succeed#40;option.value#41;#92;n  : Effect.fail#40;new MissingValue#40;#quot;isSome#quot;#41;#41;"/]
+  66[/"type: Option#lt;number#gt;<br/>node: option"/]
+  67["type: boolean<br/>callee: Option.isSome<br/>args: #91;#93;"]
+  68[/"type: #lt;A#gt;#40;self: Option#lt;A#gt;#41; =#gt; self is Some#lt;A#gt;<br/>node: Option.isSome"/]
+  69[/"type: number<br/>node: option.value"/]
+  70["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  71[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  72[/"type: MissingValue<br/>node: new MissingValue#40;#quot;isSome#quot;#41;"/]
+  73["type: Effect#lt;never, MissingValue, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  74[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  75[/"type: Effect#lt;number, never, never#gt; #124; Effect#lt;never, NoSuchElementError, never#gt;<br/>node: O.isNone#40;option#41;#92;n  ? Fx.fail#40;new Cause.NoSuchElementError#40;#41;#41;#92;n  : Fx.succeed#40;option.value#41;"/]
+  76[/"type: Option#lt;number#gt;<br/>node: option"/]
+  77["type: boolean<br/>callee: O.isNone<br/>args: #91;#93;"]
+  78[/"type: #lt;A#gt;#40;self: Option#lt;A#gt;#41; =#gt; self is None#lt;A#gt;<br/>node: O.isNone"/]
+  79[/"type: NoSuchElementError<br/>node: new Cause.NoSuchElementError#40;#41;"/]
+  80["type: Effect#lt;never, NoSuchElementError, never#gt;<br/>callee: Fx.fail<br/>args: #91;#93;"]
+  81[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Fx.fail"/]
+  82[/"type: number<br/>node: option.value"/]
+  83["type: Effect#lt;number, never, never#gt;<br/>callee: Fx.succeed<br/>args: #91;#93;"]
+  84[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Fx.succeed"/]
+  85[/"type: Option#lt;number#gt;<br/>node: option"/]
+  86["type: Effect#lt;number, never, never#gt; #124; Effect#lt;never, MissingValue, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  87[/"type: #123; #lt;B, A, C = B#gt;#40;options: #123; readonly onNone: LazyArg#lt;B#gt;; readonly onSome: #40;a: A#41; =#gt; C; #125;#41;: #40;self: Option#lt;A#gt;#41; =#gt; B #124; C; #lt;A, B, C = B#gt;#40;self: Option#lt;A#gt;, options: #123; readonly onNone: LazyArg#lt;B#gt;; readonly onSome: #40;a: A#41; =#gt; C; #125;#41;: B #124; C; #125;<br/>node: Option.match"/]
+  88[/"type: #123; onNone: #40;#41; =#gt; Effect#lt;never, MissingValue, never#gt;; onSome: #40;value: number#41; =#gt; Effect#lt;number, never, never#gt;; #125;<br/>node: #123;#92;n  onNone: #40;#41; =#gt; Effect.fail#40;new MissingValue#40;#quot;transformed#quot;#41;#41;,#92;n  onSome: #40;value#41; =#gt; Effect.succeed#40;value + 1#41;#92;n#125;"/]
+  89[["type: #40;#41; =#gt; Effect#lt;never, MissingValue, never#gt;<br/>node: #40;#41; =#gt; Effect.fail#40;new MissingValue#40;#quot;transformed#quot;#41;#41;"]]
+  90[/"type: MissingValue<br/>node: new MissingValue#40;#quot;transformed#quot;#41;"/]
+  91["type: Effect#lt;never, MissingValue, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  92[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  93[["type: #40;value: number#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;value#41; =#gt; Effect.succeed#40;value + 1#41;"]]
+  94[/"type: number<br/>node: value + 1"/]
+  95["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  96[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  97[/"type: Option#lt;number#gt;<br/>node: option"/]
+  98["type: Effect#lt;number, never, never#gt; #124; Effect#lt;never, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  99[/"type: #123; #lt;B, A, C = B#gt;#40;options: #123; readonly onNone: LazyArg#lt;B#gt;; readonly onSome: #40;a: A#41; =#gt; C; #125;#41;: #40;self: Option#lt;A#gt;#41; =#gt; B #124; C; #lt;A, B, C = B#gt;#40;self: Option#lt;A#gt;, options: #123; readonly onNone: LazyArg#lt;B#gt;; readonly onSome: #40;a: A#41; =#gt; C; #125;#41;: B #124; C; #125;<br/>node: Option.match"/]
+  100[/"type: #123; onNone: #40;#41; =#gt; Effect#lt;never, never, never#gt;; onSome: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;; #125;<br/>node: #123;#92;n  onNone: #40;#41; =#gt; Effect.die#40;#quot;missing#quot;#41;,#92;n  onSome: Effect.succeed#92;n#125;"/]
+  101[["type: #40;#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: #40;#41; =#gt; Effect.die#40;#quot;missing#quot;#41;"]]
+  102[/"type: #quot;missing#quot;<br/>node: #quot;missing#quot;"/]
+  103["type: Effect#lt;never, never, never#gt;<br/>callee: Effect.die<br/>args: #91;#93;"]
+  104[/"type: #40;defect: unknown#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: Effect.die"/]
+  105[/"type: Option#lt;number#gt;<br/>node: option"/]
+  106["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  107[/"type: #123; #lt;B, A, C = B#gt;#40;options: #123; readonly onNone: LazyArg#lt;B#gt;; readonly onSome: #40;a: A#41; =#gt; C; #125;#41;: #40;self: Option#lt;A#gt;#41; =#gt; B #124; C; #lt;A, B, C = B#gt;#40;self: Option#lt;A#gt;, options: #123; readonly onNone: LazyArg#lt;B#gt;; readonly onSome: #40;a: A#41; =#gt; C; #125;#41;: B #124; C; #125;<br/>node: Option.match"/]
+  108[/"type: #123; onNone: #40;#41; =#gt; Effect#lt;number, never, never#gt;; onSome: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;; #125;<br/>node: #123;#92;n  onNone: #40;#41; =#gt; Effect.succeed#40;0#41;,#92;n  onSome: Effect.succeed#92;n#125;"/]
+  109[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;0#41;"]]
+  110[/"type: 0<br/>node: 0"/]
+  111["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  112[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  113[/"type: Effect#lt;number, never, never#gt; #124; Effect#lt;never, MissingValue, never#gt;<br/>node: Option.isSome#40;option#41;#92;n  ? Effect.succeed#40;otherSome.value#41;#92;n  : Effect.fail#40;new MissingValue#40;#quot;mismatch#quot;#41;#41;"/]
+  114[/"type: Option#lt;number#gt;<br/>node: option"/]
+  115["type: boolean<br/>callee: Option.isSome<br/>args: #91;#93;"]
+  116[/"type: #lt;A#gt;#40;self: Option#lt;A#gt;#41; =#gt; self is Some#lt;A#gt;<br/>node: Option.isSome"/]
+  117[/"type: number<br/>node: otherSome.value"/]
+  118["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  119[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  120[/"type: MissingValue<br/>node: new MissingValue#40;#quot;mismatch#quot;#41;"/]
+  121["type: Effect#lt;never, MissingValue, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  122[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  123[/"type: Effect#lt;number, never, never#gt; #124; Effect#lt;never, MissingValue, never#gt;<br/>node: Option.isSome#40;option#41;#92;n  ? Effect.succeed#40;option.value + 1#41;#92;n  : Effect.fail#40;new MissingValue#40;#quot;transformed#quot;#41;#41;"/]
+  124[/"type: Option#lt;number#gt;<br/>node: option"/]
+  125["type: boolean<br/>callee: Option.isSome<br/>args: #91;#93;"]
+  126[/"type: #lt;A#gt;#40;self: Option#lt;A#gt;#41; =#gt; self is Some#lt;A#gt;<br/>node: Option.isSome"/]
+  127[/"type: number<br/>node: option.value + 1"/]
+  128["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  129[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  130[/"type: MissingValue<br/>node: new MissingValue#40;#quot;transformed#quot;#41;"/]
+  131["type: Effect#lt;never, MissingValue, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  132[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  133[/"type: #123; isSome: #lt;A#gt;#40;self: Option#lt;A#gt;#41; =#gt; self is Some#lt;A#gt;; match: #lt;A, B, C#gt;#40;value: A, handlers: #123; onNone: #40;#41; =#gt; B; onSome: #40;value: A#41; =#gt; C; #125;#41; =#gt; B #124; C; #125;<br/>node: #123;#92;n  isSome: Option.isSome,#92;n  match: #lt;A, B, C#gt;#40;value: A, handlers: #123; onNone: #40;#41; =#gt; B; onSome: #40;value: A#41; =#gt; C #125;#41;: B #124; C =#gt;#92;n    handlers.onSome#40;value#41;#92;n#125;"/]
+  134[["type: #lt;A, B, C#gt;#40;value: A, handlers: #123; onNone: #40;#41; =#gt; B; onSome: #40;value: A#41; =#gt; C; #125;#41; =#gt; B #124; C<br/>node: #lt;A, B, C#gt;#40;value: A, handlers: #123; onNone: #40;#41; =#gt; B; onSome: #40;value: A#41; =#gt; C #125;#41;: B #124; C =#gt;#92;n    handlers.onSome#40;value#41;"]]
+  135[/"type: A<br/>node: value"/]
+  136["type: C<br/>callee: handlers.onSome<br/>args: #91;#93;"]
+  137[/"type: #40;value: A#41; =#gt; C<br/>node: handlers.onSome"/]
+  138[/"type: Effect#lt;number, never, never#gt; #124; Effect#lt;never, MissingValue, never#gt;<br/>node: local.match#40;1, #123;#92;n  onNone: #40;#41; =#gt; Effect.fail#40;new MissingValue#40;#quot;unrelated#quot;#41;#41;,#92;n  onSome: Effect.succeed#92;n#125;#41;"/]
+  139[["type: #40;#41; =#gt; Effect#lt;never, MissingValue, never#gt;<br/>node: #40;#41; =#gt; Effect.fail#40;new MissingValue#40;#quot;unrelated#quot;#41;#41;"]]
+  140[/"type: MissingValue<br/>node: new MissingValue#40;#quot;unrelated#quot;#41;"/]
+  141["type: Effect#lt;never, MissingValue, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  142[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  2 -->|"kind: pipe"| 3
+  4 -->|"kind: transformCallee"| 2
+  7 -->|"kind: pipe"| 8
+  9 -->|"kind: transformCallee"| 8
+  8 -->|"kind: potentialReturn"| 6
+  6 -->|"kind: usedBy"| 5
+  5 -->|"kind: transformArg"| 2
+  10 -->|"kind: pipe"| 11
+  12 -->|"kind: transformCallee"| 10
+  15 -->|"kind: pipe"| 16
+  17 -->|"kind: transformCallee"| 16
+  16 -->|"kind: potentialReturn"| 14
+  14 -->|"kind: usedBy"| 13
+  19 -->|"kind: pipe"| 20
+  21 -->|"kind: transformCallee"| 20
+  20 -->|"kind: potentialReturn"| 18
+  18 -->|"kind: usedBy"| 13
+  13 -->|"kind: transformArg"| 10
+  22 -->|"kind: pipe"| 23
+  24 -->|"kind: transformCallee"| 22
+  28 -->|"kind: pipe"| 29
+  30 -->|"kind: transformCallee"| 29
+  29 -->|"kind: usedBy"| 27
+  27 -->|"kind: pipe"| 31
+  32 -->|"kind: transformCallee"| 31
+  31 -->|"kind: potentialReturn"| 26
+  31 -->|"kind: usedBy"| 26
+  26 -->|"kind: usedBy"| 25
+  25 -->|"kind: transformArg"| 22
+  35 -->|"kind: transformCallee"| 34
+  38 -->|"kind: pipe"| 39
+  40 -->|"kind: transformCallee"| 39
+  39 -->|"kind: potentialReturn"| 37
+  37 -->|"kind: usedBy"| 36
+  36 -->|"kind: transformArg"| 34
+  33 -->|"kind: pipe"| 34
+  43 -->|"kind: transformCallee"| 42
+  46 -->|"kind: pipe"| 47
+  48 -->|"kind: transformCallee"| 47
+  47 -->|"kind: potentialReturn"| 45
+  45 -->|"kind: usedBy"| 44
+  44 -->|"kind: transformArg"| 42
+  41 -->|"kind: pipe"| 42
+  49 -->|"kind: pipe"| 50
+  51 -->|"kind: transformCallee"| 50
+  54 -->|"kind: pipe"| 55
+  56 -->|"kind: transformCallee"| 55
+  55 -->|"kind: potentialReturn"| 53
+  53 -->|"kind: usedBy"| 52
+  52 -->|"kind: transformArg"| 50
+  57 -->|"kind: pipe"| 58
+  59 -->|"kind: transformCallee"| 57
+  62 -->|"kind: pipe"| 63
+  64 -->|"kind: transformCallee"| 63
+  63 -->|"kind: potentialReturn"| 61
+  61 -->|"kind: usedBy"| 60
+  60 -->|"kind: transformArg"| 57
+  66 -->|"kind: pipe"| 67
+  68 -->|"kind: transformCallee"| 67
+  67 -->|"kind: usedBy"| 65
+  69 -->|"kind: pipe"| 70
+  71 -->|"kind: transformCallee"| 70
+  70 -->|"kind: usedBy"| 65
+  72 -->|"kind: pipe"| 73
+  74 -->|"kind: transformCallee"| 73
+  73 -->|"kind: usedBy"| 65
+  76 -->|"kind: pipe"| 77
+  78 -->|"kind: transformCallee"| 77
+  77 -->|"kind: usedBy"| 75
+  79 -->|"kind: pipe"| 80
+  81 -->|"kind: transformCallee"| 80
+  80 -->|"kind: usedBy"| 75
+  82 -->|"kind: pipe"| 83
+  84 -->|"kind: transformCallee"| 83
+  83 -->|"kind: usedBy"| 75
+  85 -->|"kind: pipe"| 86
+  87 -->|"kind: transformCallee"| 85
+  90 -->|"kind: pipe"| 91
+  92 -->|"kind: transformCallee"| 91
+  91 -->|"kind: potentialReturn"| 89
+  89 -->|"kind: usedBy"| 88
+  94 -->|"kind: pipe"| 95
+  96 -->|"kind: transformCallee"| 95
+  95 -->|"kind: potentialReturn"| 93
+  93 -->|"kind: usedBy"| 88
+  88 -->|"kind: transformArg"| 85
+  97 -->|"kind: pipe"| 98
+  99 -->|"kind: transformCallee"| 97
+  102 -->|"kind: pipe"| 103
+  104 -->|"kind: transformCallee"| 103
+  103 -->|"kind: potentialReturn"| 101
+  101 -->|"kind: usedBy"| 100
+  100 -->|"kind: transformArg"| 97
+  105 -->|"kind: pipe"| 106
+  107 -->|"kind: transformCallee"| 105
+  110 -->|"kind: pipe"| 111
+  112 -->|"kind: transformCallee"| 111
+  111 -->|"kind: potentialReturn"| 109
+  109 -->|"kind: usedBy"| 108
+  108 -->|"kind: transformArg"| 105
+  114 -->|"kind: pipe"| 115
+  116 -->|"kind: transformCallee"| 115
+  115 -->|"kind: usedBy"| 113
+  117 -->|"kind: pipe"| 118
+  119 -->|"kind: transformCallee"| 118
+  118 -->|"kind: usedBy"| 113
+  120 -->|"kind: pipe"| 121
+  122 -->|"kind: transformCallee"| 121
+  121 -->|"kind: usedBy"| 113
+  124 -->|"kind: pipe"| 125
+  126 -->|"kind: transformCallee"| 125
+  125 -->|"kind: usedBy"| 123
+  127 -->|"kind: pipe"| 128
+  129 -->|"kind: transformCallee"| 128
+  128 -->|"kind: usedBy"| 123
+  130 -->|"kind: pipe"| 131
+  132 -->|"kind: transformCallee"| 131
+  131 -->|"kind: usedBy"| 123
+  135 -->|"kind: pipe"| 136
+  137 -->|"kind: transformCallee"| 136
+  136 -->|"kind: potentialReturn"| 134
+  134 -->|"kind: usedBy"| 133
+  140 -->|"kind: pipe"| 141
+  142 -->|"kind: transformCallee"| 141
+  141 -->|"kind: potentialReturn"| 139
+  139 -->|"kind: usedBy"| 138

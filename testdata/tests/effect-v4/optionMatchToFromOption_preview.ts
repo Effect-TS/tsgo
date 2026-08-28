@@ -1,0 +1,14 @@
+// @effect-diagnostics *:off
+import { Data, Effect, Option } from "effect"
+
+class UserNotFound extends Data.TaggedError("UserNotFound")<{
+  readonly id: string
+}> {}
+
+declare const findUser: (id: string) => Option.Option<{ readonly name: string }>
+
+export const getUser = (id: string) =>
+  Option.match(findUser(id), {
+    onNone: () => Effect.fail(new UserNotFound({ id })),
+    onSome: (user) => Effect.succeed(user)
+  })
