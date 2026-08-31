@@ -1,0 +1,189 @@
+=== Quick Fix Inventory ===
+
+[D1] (10:3-10:17) TS377120: `Effect.filterOrFail` expresses this conditional validation more directly than `Effect.flatMap` with an identity `Effect.succeed` branch. effect(flatMapConditionalToFilterOrFail)
+  Fix 0: "Disable flatMapConditionalToFilterOrFail for this line"
+  Fix 1: "Disable flatMapConditionalToFilterOrFail for entire file"
+  Fix 2: "Replace with Effect.filterOrFail"
+
+[D2] (15:3-15:17) TS377120: `Effect.filterOrElse` expresses this conditional validation more directly than `Effect.flatMap` with an identity `Effect.succeed` branch. effect(flatMapConditionalToFilterOrFail)
+  Fix 0: "Disable flatMapConditionalToFilterOrFail for this line"
+  Fix 1: "Disable flatMapConditionalToFilterOrFail for entire file"
+  Fix 2: "Replace with Effect.filterOrElse"
+
+[D3] (19:3-19:17) TS377120: `Effect.filterOrFail` expresses this conditional validation more directly than `Effect.flatMap` with an identity `Effect.succeed` branch. effect(flatMapConditionalToFilterOrFail)
+  Fix 0: "Disable flatMapConditionalToFilterOrFail for this line"
+  Fix 1: "Disable flatMapConditionalToFilterOrFail for entire file"
+  Fix 2: "Replace with Effect.filterOrFail"
+
+[D4] (25:26-25:40) TS377120: `Effect.filterOrElse` expresses this conditional validation more directly than `Effect.flatMap` with an identity `Effect.succeed` branch. effect(flatMapConditionalToFilterOrFail)
+  Fix 0: "Disable flatMapConditionalToFilterOrFail for this line"
+  Fix 1: "Disable flatMapConditionalToFilterOrFail for entire file"
+  Fix 2: "Replace with Effect.filterOrElse"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable flatMapConditionalToFilterOrFail for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable flatMapConditionalToFilterOrFail for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.filterOrFail" ===
+
+--- file:///.src/flatMapConditionalToFilterOrFail.ts ---
+// @effect-v3
+import { Data, Effect, pipe } from "effect"
+
+class InvalidValue extends Data.TaggedError("InvalidValue")<{ readonly value: number }> {}
+
+declare const source: Effect.Effect<number>
+declare const fallback: (value: number) => Effect.Effect<number, InvalidValue>
+
+export const pipeableFail = source.pipe(
+  Effect.filterOrFail(value => value > 0, value => new InvalidValue({ value }))
+)
+
+export const invertedElse = pipe(
+  source,
+  Effect.flatMap((value) => value <= 0 ? fallback(value) : Effect.succeed(value))
+)
+
+export const blockFail = source.pipe(
+  Effect.flatMap(function(value) {
+    if (value > 0) return Effect.succeed(value)
+    return Effect.fail(new InvalidValue({ value }))
+  })
+)
+
+export const dataFirst = Effect.flatMap(
+  source,
+  (value) => value > 0 ? Effect.succeed(value) : Effect.die("invalid")
+)
+
+export const transformedSuccess = source.pipe(
+  Effect.flatMap((value) => value > 0 ? Effect.succeed(value + 1) : Effect.fail(new InvalidValue({ value })))
+)
+
+
+=== [D2] Fix 0: "Disable flatMapConditionalToFilterOrFail for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable flatMapConditionalToFilterOrFail for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.filterOrElse" ===
+
+--- file:///.src/flatMapConditionalToFilterOrFail.ts ---
+// @effect-v3
+import { Data, Effect, pipe } from "effect"
+
+class InvalidValue extends Data.TaggedError("InvalidValue")<{ readonly value: number }> {}
+
+declare const source: Effect.Effect<number>
+declare const fallback: (value: number) => Effect.Effect<number, InvalidValue>
+
+export const pipeableFail = source.pipe(
+  Effect.flatMap((value) => value > 0 ? Effect.succeed(value) : Effect.fail(new InvalidValue({ value })))
+)
+
+export const invertedElse = pipe(
+  source,
+  Effect.filterOrElse(value => !(value <= 0), value => fallback(value))
+)
+
+export const blockFail = source.pipe(
+  Effect.flatMap(function(value) {
+    if (value > 0) return Effect.succeed(value)
+    return Effect.fail(new InvalidValue({ value }))
+  })
+)
+
+export const dataFirst = Effect.flatMap(
+  source,
+  (value) => value > 0 ? Effect.succeed(value) : Effect.die("invalid")
+)
+
+export const transformedSuccess = source.pipe(
+  Effect.flatMap((value) => value > 0 ? Effect.succeed(value + 1) : Effect.fail(new InvalidValue({ value })))
+)
+
+
+=== [D3] Fix 0: "Disable flatMapConditionalToFilterOrFail for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable flatMapConditionalToFilterOrFail for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.filterOrFail" ===
+
+--- file:///.src/flatMapConditionalToFilterOrFail.ts ---
+// @effect-v3
+import { Data, Effect, pipe } from "effect"
+
+class InvalidValue extends Data.TaggedError("InvalidValue")<{ readonly value: number }> {}
+
+declare const source: Effect.Effect<number>
+declare const fallback: (value: number) => Effect.Effect<number, InvalidValue>
+
+export const pipeableFail = source.pipe(
+  Effect.flatMap((value) => value > 0 ? Effect.succeed(value) : Effect.fail(new InvalidValue({ value })))
+)
+
+export const invertedElse = pipe(
+  source,
+  Effect.flatMap((value) => value <= 0 ? fallback(value) : Effect.succeed(value))
+)
+
+export const blockFail = source.pipe(
+  Effect.filterOrFail(value => value > 0, value => new InvalidValue({ value }))
+)
+
+export const dataFirst = Effect.flatMap(
+  source,
+  (value) => value > 0 ? Effect.succeed(value) : Effect.die("invalid")
+)
+
+export const transformedSuccess = source.pipe(
+  Effect.flatMap((value) => value > 0 ? Effect.succeed(value + 1) : Effect.fail(new InvalidValue({ value })))
+)
+
+
+=== [D4] Fix 0: "Disable flatMapConditionalToFilterOrFail for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable flatMapConditionalToFilterOrFail for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.filterOrElse" ===
+
+--- file:///.src/flatMapConditionalToFilterOrFail.ts ---
+// @effect-v3
+import { Data, Effect, pipe } from "effect"
+
+class InvalidValue extends Data.TaggedError("InvalidValue")<{ readonly value: number }> {}
+
+declare const source: Effect.Effect<number>
+declare const fallback: (value: number) => Effect.Effect<number, InvalidValue>
+
+export const pipeableFail = source.pipe(
+  Effect.flatMap((value) => value > 0 ? Effect.succeed(value) : Effect.fail(new InvalidValue({ value })))
+)
+
+export const invertedElse = pipe(
+  source,
+  Effect.flatMap((value) => value <= 0 ? fallback(value) : Effect.succeed(value))
+)
+
+export const blockFail = source.pipe(
+  Effect.flatMap(function(value) {
+    if (value > 0) return Effect.succeed(value)
+    return Effect.fail(new InvalidValue({ value }))
+  })
+)
+
+export const dataFirst = Effect.filterOrElse(source, value => value > 0, value => Effect.die("invalid"))
+
+export const transformedSuccess = source.pipe(
+  Effect.flatMap((value) => value > 0 ? Effect.succeed(value + 1) : Effect.fail(new InvalidValue({ value })))
+)
+

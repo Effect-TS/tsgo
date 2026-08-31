@@ -1,0 +1,225 @@
+==== /.src/flatMapConditionalToFilterOrFail.ts (16 flows) ====
+
+=== Piping Flow ===
+Location: 4:27 - 4:60
+Node: Data.TaggedError("InvalidValue")
+Node Kind: KindCallExpression
+
+Subject: "InvalidValue"
+Subject Type: "InvalidValue"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "InvalidValue"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 9:28 - 11:2
+Node: source.pipe(\n  Effect.flatMap((value) => value > 0 ? Effect.succeed(value) : Effect.fail(new InvalidValue({ value })))\n)
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(value) => value > 0 ? Effect.succeed(value) : Effect.fail(new InvalidValue({ value }))]
+      outType: Effect<number, InvalidValue, never>
+
+=== Piping Flow ===
+Location: 10:40 - 10:62
+Node: Effect.succeed(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 10:64 - 10:105
+Node: Effect.fail(new InvalidValue({ value }))
+Node Kind: KindCallExpression
+
+Subject: new InvalidValue({ value })
+Subject Type: InvalidValue
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, InvalidValue, never>
+
+=== Piping Flow ===
+Location: 13:28 - 16:2
+Node: pipe(\n  source,\n  Effect.flatMap((value) => value <= 0 ? fallback(value) : Effect.succeed(value))\n)
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.flatMap
+      args: [(value) => value <= 0 ? fallback(value) : Effect.succeed(value)]
+      outType: Effect<number, InvalidValue, never>
+
+=== Piping Flow ===
+Location: 15:41 - 15:57
+Node: fallback(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: fallback
+      args: (constant)
+      outType: Effect<number, InvalidValue, never>
+
+=== Piping Flow ===
+Location: 15:59 - 15:81
+Node: Effect.succeed(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 18:25 - 23:2
+Node: source.pipe(\n  Effect.flatMap(function(value) {\n    if (value > 0) return Effect.succeed(value)\n    return Effect.fail(new InvalidValue({ value }))\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [function(value) {\n    if (value > 0) return Effect.succeed(value)\n    return Effect.fail(new InvalidValue({ value }))\n  }]
+      outType: Effect<number, InvalidValue, never>
+
+=== Piping Flow ===
+Location: 20:26 - 20:48
+Node: Effect.succeed(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 21:11 - 21:52
+Node: Effect.fail(new InvalidValue({ value }))
+Node Kind: KindCallExpression
+
+Subject: new InvalidValue({ value })
+Subject Type: InvalidValue
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, InvalidValue, never>
+
+=== Piping Flow ===
+Location: 25:25 - 28:2
+Node: Effect.flatMap(\n  source,\n  (value) => value > 0 ? Effect.succeed(value) : Effect.die("invalid")\n)
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(value) => value > 0 ? Effect.succeed(value) : Effect.die("invalid")]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 27:25 - 27:47
+Node: Effect.succeed(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 27:49 - 27:71
+Node: Effect.die("invalid")
+Node Kind: KindCallExpression
+
+Subject: "invalid"
+Subject Type: "invalid"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.die
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 30:34 - 32:2
+Node: source.pipe(\n  Effect.flatMap((value) => value > 0 ? Effect.succeed(value + 1) : Effect.fail(new InvalidValue({ value })))\n)
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(value) => value > 0 ? Effect.succeed(value + 1) : Effect.fail(new InvalidValue({ value }))]
+      outType: Effect<number, InvalidValue, never>
+
+=== Piping Flow ===
+Location: 31:40 - 31:66
+Node: Effect.succeed(value + 1)
+Node Kind: KindCallExpression
+
+Subject: value + 1
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 31:68 - 31:109
+Node: Effect.fail(new InvalidValue({ value }))
+Node Kind: KindCallExpression
+
+Subject: new InvalidValue({ value })
+Subject Type: InvalidValue
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, InvalidValue, never>

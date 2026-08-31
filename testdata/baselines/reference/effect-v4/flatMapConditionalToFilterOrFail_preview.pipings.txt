@@ -1,0 +1,43 @@
+==== /.src/flatMapConditionalToFilterOrFail_preview.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 3:45 - 9:2
+Node: program.pipe(\n  Effect.flatMap((value) =>\n    value > 0 ? Effect.succeed(value) : Effect.fail("non-positive")\n  )\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(value) =>\n    value > 0 ? Effect.succeed(value) : Effect.fail("non-positive")]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 7:16 - 7:38
+Node: Effect.succeed(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 7:40 - 7:68
+Node: Effect.fail("non-positive")
+Node Kind: KindCallExpression
+
+Subject: "non-positive"
+Subject Type: "non-positive"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>

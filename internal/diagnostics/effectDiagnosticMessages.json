@@ -470,5 +470,9 @@
     "`Effect.acquireDisposable` expresses this disposable resource acquisition more directly than `Effect.acquireRelease` with a manual disposal finalizer. effect(acquireReleaseDisposable)": {
         "category": "Suggestion",
         "code": 377119
+    },
+    "`Effect.{0}` expresses this conditional validation more directly than `Effect.flatMap` with an identity `Effect.succeed` branch. effect(flatMapConditionalToFilterOrFail)": {
+        "category": "Suggestion",
+        "code": 377120
     }
 }
