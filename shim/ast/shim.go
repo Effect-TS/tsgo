@@ -2164,6 +2164,8 @@ func NewDiagnostic(file *ast.SourceFile, loc core.TextRange, message *diagnostic
 func NewDiagnosticChain(chain *ast.Diagnostic, message *diagnostics.Message, args ...any) *ast.Diagnostic
 //go:linkname NewDiagnosticFromSerialized github.com/microsoft/TypeScript/tsc/internal/ast.NewDiagnosticFromSerialized
 func NewDiagnosticFromSerialized(file *ast.SourceFile, loc core.TextRange, code int32, category diagnostics.Category, messageKey diagnostics.Key, messageArgs []string, messageChain []*ast.Diagnostic, relatedInformation []*ast.Diagnostic, reportsUnnecessary bool, reportsDeprecated bool, skippedOnNoEmit bool) *ast.Diagnostic
+//go:linkname NewDiagnosticFromText github.com/microsoft/TypeScript/tsc/internal/ast.NewDiagnosticFromText
+func NewDiagnosticFromText(file *ast.SourceFile, loc core.TextRange, code int32, category diagnostics.Category, text string, messageChain []*ast.Diagnostic, relatedInformation []*ast.Diagnostic, reportsUnnecessary bool, reportsDeprecated bool) *ast.Diagnostic
 type NewExpression = ast.NewExpression
 type NewExpressionNode = ast.NewExpressionNode
 //go:linkname NewExternalDiagnostic github.com/microsoft/TypeScript/tsc/internal/ast.NewExternalDiagnostic
