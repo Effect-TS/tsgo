@@ -1,0 +1,28 @@
+=== Quick Fix Inventory ===
+
+[D1] (9:25-9:46) TS377119: `Effect.acquireDisposable` expresses this disposable resource acquisition more directly than `Effect.acquireRelease` with a manual disposal finalizer. effect(acquireReleaseDisposable)
+  Fix 0: "Disable acquireReleaseDisposable for this line"
+  Fix 1: "Disable acquireReleaseDisposable for entire file"
+  Fix 2: "Replace with Effect.acquireDisposable"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable acquireReleaseDisposable for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable acquireReleaseDisposable for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.acquireDisposable" ===
+
+--- file:///.src/acquireReleaseDisposable_preview.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics acquireReleaseDisposable:warning
+/// <reference lib="esnext.disposable" />
+import { Effect } from "effect"
+
+declare const acquire: Effect.Effect<AsyncDisposable>
+
+export const resource = Effect.acquireDisposable(acquire)
+

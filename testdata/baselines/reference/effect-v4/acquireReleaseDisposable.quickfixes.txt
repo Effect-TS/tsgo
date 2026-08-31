@@ -1,0 +1,489 @@
+=== Quick Fix Inventory ===
+
+[D1] (10:31-10:52) TS377119: `Effect.acquireDisposable` expresses this disposable resource acquisition more directly than `Effect.acquireRelease` with a manual disposal finalizer. effect(acquireReleaseDisposable)
+  Fix 0: "Disable acquireReleaseDisposable for this line"
+  Fix 1: "Disable acquireReleaseDisposable for entire file"
+  Fix 2: "Replace with Effect.acquireDisposable"
+
+[D2] (16:32-16:53) TS377119: `Effect.acquireDisposable` expresses this disposable resource acquisition more directly than `Effect.acquireRelease` with a manual disposal finalizer. effect(acquireReleaseDisposable)
+  Fix 0: "Disable acquireReleaseDisposable for this line"
+  Fix 1: "Disable acquireReleaseDisposable for entire file"
+  Fix 2: "Replace with Effect.acquireDisposable"
+
+[D3] (27:30-27:47) TS377119: `Effect.acquireDisposable` expresses this disposable resource acquisition more directly than `Effect.acquireRelease` with a manual disposal finalizer. effect(acquireReleaseDisposable)
+  Fix 0: "Disable acquireReleaseDisposable for this line"
+  Fix 1: "Disable acquireReleaseDisposable for entire file"
+  Fix 2: "Replace with Effect.acquireDisposable"
+
+[D4] (33:28-33:42) TS377119: `Effect.acquireDisposable` expresses this disposable resource acquisition more directly than `Effect.acquireRelease` with a manual disposal finalizer. effect(acquireReleaseDisposable)
+  Fix 0: "Disable acquireReleaseDisposable for this line"
+  Fix 1: "Disable acquireReleaseDisposable for entire file"
+
+[D5] (39:32-39:53) TS377119: `Effect.acquireDisposable` expresses this disposable resource acquisition more directly than `Effect.acquireRelease` with a manual disposal finalizer. effect(acquireReleaseDisposable)
+  Fix 0: "Disable acquireReleaseDisposable for this line"
+  Fix 1: "Disable acquireReleaseDisposable for entire file"
+  Fix 2: "Replace with Effect.acquireDisposable"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable acquireReleaseDisposable for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable acquireReleaseDisposable for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.acquireDisposable" ===
+
+--- file:///.src/acquireReleaseDisposable.ts ---
+// @effect-v4
+/// <reference lib="esnext.disposable" />
+import { Effect } from "effect"
+import { acquireRelease } from "effect/Effect"
+
+declare const acquireSync: Effect.Effect<Disposable>
+declare const acquireAsync: Effect.Effect<AsyncDisposable>
+
+// Should trigger for the synchronous disposal protocol.
+export const syncDisposable = Effect.acquireDisposable(acquireSync)
+
+// Should trigger for the asynchronous disposal protocol with an unused exit.
+export const asyncDisposable = Effect.acquireRelease(
+  acquireAsync,
+  function(resource, _exit) {
+    return Effect.promise(function() {
+      return resource[Symbol.asyncDispose]()
+    })
+  }
+)
+
+// Should trigger through an Effect namespace alias.
+const Fx = Effect
+export const aliasedModule = Fx.acquireRelease(
+  acquireSync,
+  (resource) => Fx.sync(() => resource[Symbol.dispose]())
+)
+
+// Should diagnose a named import, but the quick fix cannot safely rewrite its import.
+export const namedImport = acquireRelease(
+  acquireAsync,
+  (resource) => Effect.promise(async () => resource[Symbol.asyncDispose]())
+)
+
+declare const acquireBoth: Effect.Effect<Disposable | (Disposable & AsyncDisposable)>
+export const disposableUnion = Effect.acquireRelease(
+  acquireBoth,
+  (resource) => Effect.sync(() => resource[Symbol.dispose]())
+)
+
+// Should not trigger when a named method happens to implement the protocol.
+interface ManagedLike extends AsyncDisposable {
+  dispose(): Promise<void>
+}
+declare const acquireManaged: Effect.Effect<ManagedLike>
+export const namedDispose = Effect.acquireRelease(
+  acquireManaged,
+  (resource) => Effect.promise(() => resource.dispose())
+)
+
+// Should not trigger for a named cleanup method without a disposal protocol.
+declare const acquireCloseable: Effect.Effect<{ close(): void }>
+export const namedClose = Effect.acquireRelease(
+  acquireCloseable,
+  (resource) => Effect.sync(() => resource.close())
+)
+
+// Should not trigger when the release contains extra behavior.
+export const extraCleanup = Effect.acquireRelease(
+  acquireSync,
+  (resource) => Effect.sync(() => {
+    resource[Symbol.dispose]()
+    console.log("disposed")
+  })
+)
+
+// Should not trigger when the release depends on the exit.
+export const exitAware = Effect.acquireRelease(
+  acquireSync,
+  (resource, exit) => Effect.sync(() => {
+    console.log(exit)
+    resource[Symbol.dispose]()
+  })
+)
+
+// Should not trigger when the wrappers do not implement the protocol correctly.
+export const unawaitedAsyncDispose = Effect.acquireRelease(
+  acquireAsync,
+  (resource) => Effect.sync(() => resource[Symbol.asyncDispose]())
+)
+
+// Should not trigger when acquireRelease options carry extra semantics.
+export const interruptible = Effect.acquireRelease(
+  acquireSync,
+  (resource) => Effect.sync(() => resource[Symbol.dispose]()),
+  { interruptible: true }
+)
+
+// Should not trigger for imprecise success types.
+declare const acquireAny: Effect.Effect<any>
+export const imprecise = Effect.acquireRelease(
+  acquireAny,
+  (resource) => Effect.sync(() => resource[Symbol.dispose]())
+)
+
+// Should not trigger for an unrelated API with the same shape.
+const unrelated = {
+  acquireRelease: <A>(acquire: Effect.Effect<A>, release: (value: A) => Effect.Effect<unknown>) =>
+    Effect.acquireRelease(acquire, release)
+}
+export const unrelatedCall = unrelated.acquireRelease(
+  acquireSync,
+  (resource) => Effect.sync(() => resource[Symbol.dispose]())
+)
+
+
+=== [D2] Fix 0: "Disable acquireReleaseDisposable for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable acquireReleaseDisposable for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.acquireDisposable" ===
+
+--- file:///.src/acquireReleaseDisposable.ts ---
+// @effect-v4
+/// <reference lib="esnext.disposable" />
+import { Effect } from "effect"
+import { acquireRelease } from "effect/Effect"
+
+declare const acquireSync: Effect.Effect<Disposable>
+declare const acquireAsync: Effect.Effect<AsyncDisposable>
+
+// Should trigger for the synchronous disposal protocol.
+export const syncDisposable = Effect.acquireRelease(
+  acquireSync,
+  (resource) => Effect.sync(() => resource[Symbol.dispose]())
+)
+
+// Should trigger for the asynchronous disposal protocol with an unused exit.
+export const asyncDisposable = Effect.acquireDisposable(acquireAsync)
+
+// Should trigger through an Effect namespace alias.
+const Fx = Effect
+export const aliasedModule = Fx.acquireRelease(
+  acquireSync,
+  (resource) => Fx.sync(() => resource[Symbol.dispose]())
+)
+
+// Should diagnose a named import, but the quick fix cannot safely rewrite its import.
+export const namedImport = acquireRelease(
+  acquireAsync,
+  (resource) => Effect.promise(async () => resource[Symbol.asyncDispose]())
+)
+
+declare const acquireBoth: Effect.Effect<Disposable | (Disposable & AsyncDisposable)>
+export const disposableUnion = Effect.acquireRelease(
+  acquireBoth,
+  (resource) => Effect.sync(() => resource[Symbol.dispose]())
+)
+
+// Should not trigger when a named method happens to implement the protocol.
+interface ManagedLike extends AsyncDisposable {
+  dispose(): Promise<void>
+}
+declare const acquireManaged: Effect.Effect<ManagedLike>
+export const namedDispose = Effect.acquireRelease(
+  acquireManaged,
+  (resource) => Effect.promise(() => resource.dispose())
+)
+
+// Should not trigger for a named cleanup method without a disposal protocol.
+declare const acquireCloseable: Effect.Effect<{ close(): void }>
+export const namedClose = Effect.acquireRelease(
+  acquireCloseable,
+  (resource) => Effect.sync(() => resource.close())
+)
+
+// Should not trigger when the release contains extra behavior.
+export const extraCleanup = Effect.acquireRelease(
+  acquireSync,
+  (resource) => Effect.sync(() => {
+    resource[Symbol.dispose]()
+    console.log("disposed")
+  })
+)
+
+// Should not trigger when the release depends on the exit.
+export const exitAware = Effect.acquireRelease(
+  acquireSync,
+  (resource, exit) => Effect.sync(() => {
+    console.log(exit)
+    resource[Symbol.dispose]()
+  })
+)
+
+// Should not trigger when the wrappers do not implement the protocol correctly.
+export const unawaitedAsyncDispose = Effect.acquireRelease(
+  acquireAsync,
+  (resource) => Effect.sync(() => resource[Symbol.asyncDispose]())
+)
+
+// Should not trigger when acquireRelease options carry extra semantics.
+export const interruptible = Effect.acquireRelease(
+  acquireSync,
+  (resource) => Effect.sync(() => resource[Symbol.dispose]()),
+  { interruptible: true }
+)
+
+// Should not trigger for imprecise success types.
+declare const acquireAny: Effect.Effect<any>
+export const imprecise = Effect.acquireRelease(
+  acquireAny,
+  (resource) => Effect.sync(() => resource[Symbol.dispose]())
+)
+
+// Should not trigger for an unrelated API with the same shape.
+const unrelated = {
+  acquireRelease: <A>(acquire: Effect.Effect<A>, release: (value: A) => Effect.Effect<unknown>) =>
+    Effect.acquireRelease(acquire, release)
+}
+export const unrelatedCall = unrelated.acquireRelease(
+  acquireSync,
+  (resource) => Effect.sync(() => resource[Symbol.dispose]())
+)
+
+
+=== [D3] Fix 0: "Disable acquireReleaseDisposable for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable acquireReleaseDisposable for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.acquireDisposable" ===
+
+--- file:///.src/acquireReleaseDisposable.ts ---
+// @effect-v4
+/// <reference lib="esnext.disposable" />
+import { Effect } from "effect"
+import { acquireRelease } from "effect/Effect"
+
+declare const acquireSync: Effect.Effect<Disposable>
+declare const acquireAsync: Effect.Effect<AsyncDisposable>
+
+// Should trigger for the synchronous disposal protocol.
+export const syncDisposable = Effect.acquireRelease(
+  acquireSync,
+  (resource) => Effect.sync(() => resource[Symbol.dispose]())
+)
+
+// Should trigger for the asynchronous disposal protocol with an unused exit.
+export const asyncDisposable = Effect.acquireRelease(
+  acquireAsync,
+  function(resource, _exit) {
+    return Effect.promise(function() {
+      return resource[Symbol.asyncDispose]()
+    })
+  }
+)
+
+// Should trigger through an Effect namespace alias.
+const Fx = Effect
+export const aliasedModule = Fx.acquireDisposable(acquireSync)
+
+// Should diagnose a named import, but the quick fix cannot safely rewrite its import.
+export const namedImport = acquireRelease(
+  acquireAsync,
+  (resource) => Effect.promise(async () => resource[Symbol.asyncDispose]())
+)
+
+declare const acquireBoth: Effect.Effect<Disposable | (Disposable & AsyncDisposable)>
+export const disposableUnion = Effect.acquireRelease(
+  acquireBoth,
+  (resource) => Effect.sync(() => resource[Symbol.dispose]())
+)
+
+// Should not trigger when a named method happens to implement the protocol.
+interface ManagedLike extends AsyncDisposable {
+  dispose(): Promise<void>
+}
+declare const acquireManaged: Effect.Effect<ManagedLike>
+export const namedDispose = Effect.acquireRelease(
+  acquireManaged,
+  (resource) => Effect.promise(() => resource.dispose())
+)
+
+// Should not trigger for a named cleanup method without a disposal protocol.
+declare const acquireCloseable: Effect.Effect<{ close(): void }>
+export const namedClose = Effect.acquireRelease(
+  acquireCloseable,
+  (resource) => Effect.sync(() => resource.close())
+)
+
+// Should not trigger when the release contains extra behavior.
+export const extraCleanup = Effect.acquireRelease(
+  acquireSync,
+  (resource) => Effect.sync(() => {
+    resource[Symbol.dispose]()
+    console.log("disposed")
+  })
+)
+
+// Should not trigger when the release depends on the exit.
+export const exitAware = Effect.acquireRelease(
+  acquireSync,
+  (resource, exit) => Effect.sync(() => {
+    console.log(exit)
+    resource[Symbol.dispose]()
+  })
+)
+
+// Should not trigger when the wrappers do not implement the protocol correctly.
+export const unawaitedAsyncDispose = Effect.acquireRelease(
+  acquireAsync,
+  (resource) => Effect.sync(() => resource[Symbol.asyncDispose]())
+)
+
+// Should not trigger when acquireRelease options carry extra semantics.
+export const interruptible = Effect.acquireRelease(
+  acquireSync,
+  (resource) => Effect.sync(() => resource[Symbol.dispose]()),
+  { interruptible: true }
+)
+
+// Should not trigger for imprecise success types.
+declare const acquireAny: Effect.Effect<any>
+export const imprecise = Effect.acquireRelease(
+  acquireAny,
+  (resource) => Effect.sync(() => resource[Symbol.dispose]())
+)
+
+// Should not trigger for an unrelated API with the same shape.
+const unrelated = {
+  acquireRelease: <A>(acquire: Effect.Effect<A>, release: (value: A) => Effect.Effect<unknown>) =>
+    Effect.acquireRelease(acquire, release)
+}
+export const unrelatedCall = unrelated.acquireRelease(
+  acquireSync,
+  (resource) => Effect.sync(() => resource[Symbol.dispose]())
+)
+
+
+=== [D4] Fix 0: "Disable acquireReleaseDisposable for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable acquireReleaseDisposable for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable acquireReleaseDisposable for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable acquireReleaseDisposable for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Replace with Effect.acquireDisposable" ===
+
+--- file:///.src/acquireReleaseDisposable.ts ---
+// @effect-v4
+/// <reference lib="esnext.disposable" />
+import { Effect } from "effect"
+import { acquireRelease } from "effect/Effect"
+
+declare const acquireSync: Effect.Effect<Disposable>
+declare const acquireAsync: Effect.Effect<AsyncDisposable>
+
+// Should trigger for the synchronous disposal protocol.
+export const syncDisposable = Effect.acquireRelease(
+  acquireSync,
+  (resource) => Effect.sync(() => resource[Symbol.dispose]())
+)
+
+// Should trigger for the asynchronous disposal protocol with an unused exit.
+export const asyncDisposable = Effect.acquireRelease(
+  acquireAsync,
+  function(resource, _exit) {
+    return Effect.promise(function() {
+      return resource[Symbol.asyncDispose]()
+    })
+  }
+)
+
+// Should trigger through an Effect namespace alias.
+const Fx = Effect
+export const aliasedModule = Fx.acquireRelease(
+  acquireSync,
+  (resource) => Fx.sync(() => resource[Symbol.dispose]())
+)
+
+// Should diagnose a named import, but the quick fix cannot safely rewrite its import.
+export const namedImport = acquireRelease(
+  acquireAsync,
+  (resource) => Effect.promise(async () => resource[Symbol.asyncDispose]())
+)
+
+declare const acquireBoth: Effect.Effect<Disposable | (Disposable & AsyncDisposable)>
+export const disposableUnion = Effect.acquireDisposable(acquireBoth)
+
+// Should not trigger when a named method happens to implement the protocol.
+interface ManagedLike extends AsyncDisposable {
+  dispose(): Promise<void>
+}
+declare const acquireManaged: Effect.Effect<ManagedLike>
+export const namedDispose = Effect.acquireRelease(
+  acquireManaged,
+  (resource) => Effect.promise(() => resource.dispose())
+)
+
+// Should not trigger for a named cleanup method without a disposal protocol.
+declare const acquireCloseable: Effect.Effect<{ close(): void }>
+export const namedClose = Effect.acquireRelease(
+  acquireCloseable,
+  (resource) => Effect.sync(() => resource.close())
+)
+
+// Should not trigger when the release contains extra behavior.
+export const extraCleanup = Effect.acquireRelease(
+  acquireSync,
+  (resource) => Effect.sync(() => {
+    resource[Symbol.dispose]()
+    console.log("disposed")
+  })
+)
+
+// Should not trigger when the release depends on the exit.
+export const exitAware = Effect.acquireRelease(
+  acquireSync,
+  (resource, exit) => Effect.sync(() => {
+    console.log(exit)
+    resource[Symbol.dispose]()
+  })
+)
+
+// Should not trigger when the wrappers do not implement the protocol correctly.
+export const unawaitedAsyncDispose = Effect.acquireRelease(
+  acquireAsync,
+  (resource) => Effect.sync(() => resource[Symbol.asyncDispose]())
+)
+
+// Should not trigger when acquireRelease options carry extra semantics.
+export const interruptible = Effect.acquireRelease(
+  acquireSync,
+  (resource) => Effect.sync(() => resource[Symbol.dispose]()),
+  { interruptible: true }
+)
+
+// Should not trigger for imprecise success types.
+declare const acquireAny: Effect.Effect<any>
+export const imprecise = Effect.acquireRelease(
+  acquireAny,
+  (resource) => Effect.sync(() => resource[Symbol.dispose]())
+)
+
+// Should not trigger for an unrelated API with the same shape.
+const unrelated = {
+  acquireRelease: <A>(acquire: Effect.Effect<A>, release: (value: A) => Effect.Effect<unknown>) =>
+    Effect.acquireRelease(acquire, release)
+}
+export const unrelatedCall = unrelated.acquireRelease(
+  acquireSync,
+  (resource) => Effect.sync(() => resource[Symbol.dispose]())
+)
+
