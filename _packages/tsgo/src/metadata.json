@@ -27,6 +27,7 @@
       "description": "Enable all Effect-native diagnostics at warning level.",
       "diagnosticSeverity": {
         "abortControllerInEffect": "warning",
+        "acquireReleaseDisposable": "warning",
         "asyncFunction": "warning",
         "cryptoRandomUUID": "warning",
         "cryptoRandomUUIDInEffect": "warning",
@@ -1004,6 +1005,29 @@
       }
     },
     {
+      "name": "acquireReleaseDisposable",
+      "group": "effectNative",
+      "description": "Suggests Effect.acquireDisposable when Effect.acquireRelease only invokes the acquired resource's disposal protocol",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377119
+      ],
+      "preview": {
+        "sourceText": "/// \u003creference lib=\"esnext.disposable\" /\u003e\nimport { Effect } from \"effect\"\n\ndeclare const acquire: Effect.Effect\u003cAsyncDisposable\u003e\n\nexport const resource = Effect.acquireRelease(\n  acquire,\n  (resource) =\u003e Effect.promise(() =\u003e resource[Symbol.asyncDispose]())\n)\n",
+        "diagnostics": [
+          {
+            "start": 154,
+            "end": 175,
+            "text": "`Effect.acquireDisposable` expresses this disposable resource acquisition more directly than `Effect.acquireRelease` with a manual disposal finalizer. effect(acquireReleaseDisposable)"
+          }
+        ]
+      }
+    },
+    {
       "name": "asyncFunction",
       "group": "effectNative",
       "description": "Warns when declaring async functions and suggests using Effect values and Effect.gen for async control flow",
@@ -1850,7 +1874,7 @@
         "v4"
       ],
       "codes": [
-        377119
+        377120
       ],
       "preview": {
         "sourceText": "import { Effect } from \"effect\"\n\ndeclare const program: Effect.Effect\u003cnumber\u003e\n\nprogram.pipe(\n  Effect.flatMap((value) =\u003e\n    value \u003e 0 ? Effect.succeed(value) : Effect.fail(\"non-positive\")\n  )\n)\n",

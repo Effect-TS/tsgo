@@ -7,6 +7,7 @@
   ],
   "rules": {
     "effecttsgo/abort-controller-in-effect": "warn",
+    "effecttsgo/acquire-release-disposable": "warn",
     "effecttsgo/all-of-map-to-for-each": "warn",
     "effecttsgo/async-function": "warn",
     "effecttsgo/catch-all-to-map-error": "warn",
@@ -63,6 +64,7 @@
     "effecttsgo/new-promise": "warn",
     "effecttsgo/node-builtin-import": "warn",
     "effecttsgo/non-object-effect-service-type": "error",
+    "effecttsgo/option-match-to-from-option": "warn",
     "effecttsgo/outdated-api": "warn",
     "effecttsgo/overridden-schema-constructor": "error",
     "effecttsgo/prefer-schema-over-json": "warn",

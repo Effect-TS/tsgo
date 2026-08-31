@@ -110,4 +110,5 @@ var All = []rule.Rule{
 	ServiceNotAsClass,
 	PreferUnsafeConstructor,
 	PreferTypedSchemaDecoder,
+	AcquireReleaseDisposable,
 }

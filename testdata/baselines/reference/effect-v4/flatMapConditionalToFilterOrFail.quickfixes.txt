@@ -1,36 +1,36 @@
 === Quick Fix Inventory ===
 
-[D1] (10:3-10:17) TS377119: `Effect.filterOrFail` expresses this conditional validation more directly than `Effect.flatMap` with an identity `Effect.succeed` branch. effect(flatMapConditionalToFilterOrFail)
+[D1] (10:3-10:17) TS377120: `Effect.filterOrFail` expresses this conditional validation more directly than `Effect.flatMap` with an identity `Effect.succeed` branch. effect(flatMapConditionalToFilterOrFail)
   Fix 0: "Disable flatMapConditionalToFilterOrFail for this line"
   Fix 1: "Disable flatMapConditionalToFilterOrFail for entire file"
   Fix 2: "Replace with Effect.filterOrFail"
 
-[D2] (16:3-16:17) TS377119: `Effect.filterOrElse` expresses this conditional validation more directly than `Effect.flatMap` with an identity `Effect.succeed` branch. effect(flatMapConditionalToFilterOrFail)
+[D2] (16:3-16:17) TS377120: `Effect.filterOrElse` expresses this conditional validation more directly than `Effect.flatMap` with an identity `Effect.succeed` branch. effect(flatMapConditionalToFilterOrFail)
   Fix 0: "Disable flatMapConditionalToFilterOrFail for this line"
   Fix 1: "Disable flatMapConditionalToFilterOrFail for entire file"
   Fix 2: "Replace with Effect.filterOrElse"
 
-[D3] (21:3-21:17) TS377119: `Effect.filterOrFail` expresses this conditional validation more directly than `Effect.flatMap` with an identity `Effect.succeed` branch. effect(flatMapConditionalToFilterOrFail)
+[D3] (21:3-21:17) TS377120: `Effect.filterOrFail` expresses this conditional validation more directly than `Effect.flatMap` with an identity `Effect.succeed` branch. effect(flatMapConditionalToFilterOrFail)
   Fix 0: "Disable flatMapConditionalToFilterOrFail for this line"
   Fix 1: "Disable flatMapConditionalToFilterOrFail for entire file"
   Fix 2: "Replace with Effect.filterOrFail"
 
-[D4] (31:26-31:40) TS377119: `Effect.filterOrElse` expresses this conditional validation more directly than `Effect.flatMap` with an identity `Effect.succeed` branch. effect(flatMapConditionalToFilterOrFail)
+[D4] (31:26-31:40) TS377120: `Effect.filterOrElse` expresses this conditional validation more directly than `Effect.flatMap` with an identity `Effect.succeed` branch. effect(flatMapConditionalToFilterOrFail)
   Fix 0: "Disable flatMapConditionalToFilterOrFail for this line"
   Fix 1: "Disable flatMapConditionalToFilterOrFail for entire file"
   Fix 2: "Replace with Effect.filterOrElse"
 
-[D5] (38:3-38:17) TS377119: `Effect.filterOrElse` expresses this conditional validation more directly than `Effect.flatMap` with an identity `Effect.succeed` branch. effect(flatMapConditionalToFilterOrFail)
+[D5] (38:3-38:17) TS377120: `Effect.filterOrElse` expresses this conditional validation more directly than `Effect.flatMap` with an identity `Effect.succeed` branch. effect(flatMapConditionalToFilterOrFail)
   Fix 0: "Disable flatMapConditionalToFilterOrFail for this line"
   Fix 1: "Disable flatMapConditionalToFilterOrFail for entire file"
   Fix 2: "Replace with Effect.filterOrElse"
 
-[D6] (42:25-42:39) TS377119: `Effect.filterOrFail` expresses this conditional validation more directly than `Effect.flatMap` with an identity `Effect.succeed` branch. effect(flatMapConditionalToFilterOrFail)
+[D6] (42:25-42:39) TS377120: `Effect.filterOrFail` expresses this conditional validation more directly than `Effect.flatMap` with an identity `Effect.succeed` branch. effect(flatMapConditionalToFilterOrFail)
   Fix 0: "Disable flatMapConditionalToFilterOrFail for this line"
   Fix 1: "Disable flatMapConditionalToFilterOrFail for entire file"
   Fix 2: "Replace with Effect.filterOrFail"
 
-[D7] (50:3-50:15) TS377119: `Effect.filterOrFail` expresses this conditional validation more directly than `Effect.flatMap` with an identity `Effect.succeed` branch. effect(flatMapConditionalToFilterOrFail)
+[D7] (50:3-50:15) TS377120: `Effect.filterOrFail` expresses this conditional validation more directly than `Effect.flatMap` with an identity `Effect.succeed` branch. effect(flatMapConditionalToFilterOrFail)
   Fix 0: "Disable flatMapConditionalToFilterOrFail for this line"
   Fix 1: "Disable flatMapConditionalToFilterOrFail for entire file"
 
