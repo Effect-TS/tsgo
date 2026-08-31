@@ -701,6 +701,8 @@ func IsKnownSymbol(symbol *ast.Symbol) bool
 func IsPrivateIdentifierSymbol(symbol *ast.Symbol) bool
 //go:linkname IsTupleType github.com/microsoft/TypeScript/tsc/internal/checker.IsTupleType
 func IsTupleType(t *checker.Type) bool
+//go:linkname IsTupleTypeTarget github.com/microsoft/TypeScript/tsc/internal/checker.IsTupleTypeTarget
+func IsTupleTypeTarget(t *checker.Type) bool
 //go:linkname IsTypeAny github.com/microsoft/TypeScript/tsc/internal/checker.IsTypeAny
 func IsTypeAny(t *checker.Type) bool
 //go:linkname IsTypeUsableAsPropertyName github.com/microsoft/TypeScript/tsc/internal/checker.IsTypeUsableAsPropertyName
