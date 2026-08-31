@@ -19,6 +19,7 @@ var All = []fixable.Fixable{
 	CatchTagToCatchReasonFix,
 	AllOfMapToForEachFix,
 	FlatMapToMapFix,
+	FlatMapConditionalToFilterOrFailFix,
 	MapSomeToAsSomeFix,
 	OptionMatchToFromOptionFix,
 	SyncToSucceedFix,

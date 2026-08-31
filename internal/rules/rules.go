@@ -100,6 +100,7 @@ var All = []rule.Rule{
 	AllOfMapToForEach,
 	MapSomeToAsSome,
 	FlatMapToMap,
+	FlatMapConditionalToFilterOrFail,
 	OptionMatchToFromOption,
 	SyncToSucceed,
 	ExtendsNativeError,

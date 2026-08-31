@@ -1,0 +1,267 @@
+flowchart TB
+  0[/"type: #quot;InvalidValue#quot;<br/>node: #quot;InvalidValue#quot;"/]
+  1["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;InvalidValue#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  2[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  3[/"type: Effect#lt;number, never, never#gt;<br/>node: source"/]
+  4["type: Effect#lt;number, InvalidValue, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;value#41; =#gt; value #gt; 0 ? Effect.succeed#40;value#41; : Effect.fail#40;new InvalidValue#40;#123; value #125;#41;#41;#93;"]
+  5[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  6[["type: #40;value: number#41; =#gt; Effect#lt;number, never, never#gt; #124; Effect#lt;never, InvalidValue, never#gt;<br/>node: #40;value#41; =#gt; value #gt; 0 ? Effect.succeed#40;value#41; : Effect.fail#40;new InvalidValue#40;#123; value #125;#41;#41;"]]
+  7[/"type: Effect#lt;number, never, never#gt; #124; Effect#lt;never, InvalidValue, never#gt;<br/>node: value #gt; 0 ? Effect.succeed#40;value#41; : Effect.fail#40;new InvalidValue#40;#123; value #125;#41;#41;"/]
+  8[/"type: number<br/>node: value"/]
+  9["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  10[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  11[/"type: InvalidValue<br/>node: new InvalidValue#40;#123; value #125;#41;"/]
+  12["type: Effect#lt;never, InvalidValue, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  13[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  14[/"type: Effect#lt;number, never, never#gt;<br/>node: source"/]
+  15["type: Effect#lt;number, InvalidValue, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;value#41; =#gt; value #lt;= 0 ? fallback#40;value#41; : Effect.succeed#40;value#41;#93;"]
+  16[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  17[["type: #40;value: number#41; =#gt; Effect#lt;number, InvalidValue, never#gt;<br/>node: #40;value#41; =#gt; value #lt;= 0 ? fallback#40;value#41; : Effect.succeed#40;value#41;"]]
+  18[/"type: Effect#lt;number, InvalidValue, never#gt;<br/>node: value #lt;= 0 ? fallback#40;value#41; : Effect.succeed#40;value#41;"/]
+  19[/"type: number<br/>node: value"/]
+  20["type: Effect#lt;number, InvalidValue, never#gt;<br/>callee: fallback<br/>args: #91;#93;"]
+  21[/"type: #40;value: number#41; =#gt; Effect#lt;number, InvalidValue, never#gt;<br/>node: fallback"/]
+  22[/"type: number<br/>node: value"/]
+  23["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  24[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  25[/"type: Effect#lt;number, never, never#gt;<br/>node: source"/]
+  26["type: Effect#lt;number, InvalidValue, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;function#40;value#41; #123;#92;n    if #40;value #gt; 0#41; #123;#92;n      return Effect.succeed#40;value#41;#92;n    #125; else #123;#92;n      return Effect.fail#40;new InvalidValue#40;#123; value #125;#41;#41;#92;n    #125;#92;n  #125;#93;"]
+  27[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  28[["type: #40;value: number#41; =#gt; Effect#lt;number, never, never#gt; #124; Effect#lt;never, InvalidValue, never#gt;<br/>node: function#40;value#41; #123;#92;n    if #40;value #gt; 0#41; #123;#92;n      return Effect.succeed#40;value#41;#92;n    #125; else #123;#92;n      return Effect.fail#40;new InvalidValue#40;#123; value #125;#41;#41;#92;n    #125;#92;n  #125;"]]
+  29[/"type: number<br/>node: value"/]
+  30["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  31[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  32[/"type: InvalidValue<br/>node: new InvalidValue#40;#123; value #125;#41;"/]
+  33["type: Effect#lt;never, InvalidValue, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  34[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  35[/"type: Effect#lt;number, never, never#gt;<br/>node: source"/]
+  36["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  37[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  38[["type: #40;value: number#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;value#41; =#gt; value #gt; 0 ? Effect.succeed#40;value#41; : Effect.die#40;#quot;invalid#quot;#41;"]]
+  39[/"type: Effect#lt;number, never, never#gt;<br/>node: value #gt; 0 ? Effect.succeed#40;value#41; : Effect.die#40;#quot;invalid#quot;#41;"/]
+  40[/"type: number<br/>node: value"/]
+  41["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  42[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  43[/"type: #quot;invalid#quot;<br/>node: #quot;invalid#quot;"/]
+  44["type: Effect#lt;never, never, never#gt;<br/>callee: Effect.die<br/>args: #91;#93;"]
+  45[/"type: #40;defect: unknown#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: Effect.die"/]
+  46[/"type: Effect#lt;number, never, never#gt;<br/>node: source"/]
+  47["type: Effect#lt;number, InvalidValue, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;value#41; =#gt; value #gt; 0 ? Effect.succeed#40;value#41; : new InvalidValue#40;#123; value #125;#41;#93;"]
+  48[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  49[["type: #40;value: number#41; =#gt; Effect#lt;number, never, never#gt; #124; InvalidValue<br/>node: #40;value#41; =#gt; value #gt; 0 ? Effect.succeed#40;value#41; : new InvalidValue#40;#123; value #125;#41;"]]
+  50[/"type: Effect#lt;number, never, never#gt; #124; InvalidValue<br/>node: value #gt; 0 ? Effect.succeed#40;value#41; : new InvalidValue#40;#123; value #125;#41;"/]
+  51[/"type: number<br/>node: value"/]
+  52["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  53[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  54[/"type: Effect#lt;number, never, never#gt;<br/>node: source"/]
+  55["type: Effect#lt;number, InvalidValue, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;value: number#41; =#gt; value #gt; 0 ? Effect.succeed#40;value#41; : Effect.fail#40;new InvalidValue#40;#123; value #125;#41;#41;#93;"]
+  56[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  57[["type: #40;value: number#41; =#gt; Effect#lt;number, never, never#gt; #124; Effect#lt;never, InvalidValue, never#gt;<br/>node: #40;value: number#41; =#gt; value #gt; 0 ? Effect.succeed#40;value#41; : Effect.fail#40;new InvalidValue#40;#123; value #125;#41;#41;"]]
+  58[/"type: Effect#lt;number, never, never#gt; #124; Effect#lt;never, InvalidValue, never#gt;<br/>node: value #gt; 0 ? Effect.succeed#40;value#41; : Effect.fail#40;new InvalidValue#40;#123; value #125;#41;#41;"/]
+  59[/"type: number<br/>node: value"/]
+  60["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  61[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  62[/"type: InvalidValue<br/>node: new InvalidValue#40;#123; value #125;#41;"/]
+  63["type: Effect#lt;never, InvalidValue, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  64[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  65[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  66[/"type: Effect#lt;number, never, never#gt;<br/>node: source"/]
+  67["type: Effect#lt;number, InvalidValue, never#gt;<br/>callee: flatMapAlias<br/>args: #91;#40;value#41; =#gt; value #gt; 0 ? Effect.succeed#40;value#41; : Effect.fail#40;new InvalidValue#40;#123; value #125;#41;#41;#93;"]
+  68[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: flatMapAlias"/]
+  69[["type: #40;value: number#41; =#gt; Effect#lt;number, never, never#gt; #124; Effect#lt;never, InvalidValue, never#gt;<br/>node: #40;value#41; =#gt; value #gt; 0 ? Effect.succeed#40;value#41; : Effect.fail#40;new InvalidValue#40;#123; value #125;#41;#41;"]]
+  70[/"type: Effect#lt;number, never, never#gt; #124; Effect#lt;never, InvalidValue, never#gt;<br/>node: value #gt; 0 ? Effect.succeed#40;value#41; : Effect.fail#40;new InvalidValue#40;#123; value #125;#41;#41;"/]
+  71[/"type: number<br/>node: value"/]
+  72["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  73[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  74[/"type: InvalidValue<br/>node: new InvalidValue#40;#123; value #125;#41;"/]
+  75["type: Effect#lt;never, InvalidValue, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  76[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  77[/"type: Effect#lt;number, never, never#gt;<br/>node: source"/]
+  78["type: Effect#lt;number, InvalidValue, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;value#41; =#gt; value #gt; 0 ? Effect.succeed#40;value + 1#41; : Effect.fail#40;new InvalidValue#40;#123; value #125;#41;#41;#93;"]
+  79[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  80[["type: #40;value: number#41; =#gt; Effect#lt;number, never, never#gt; #124; Effect#lt;never, InvalidValue, never#gt;<br/>node: #40;value#41; =#gt; value #gt; 0 ? Effect.succeed#40;value + 1#41; : Effect.fail#40;new InvalidValue#40;#123; value #125;#41;#41;"]]
+  81[/"type: Effect#lt;number, never, never#gt; #124; Effect#lt;never, InvalidValue, never#gt;<br/>node: value #gt; 0 ? Effect.succeed#40;value + 1#41; : Effect.fail#40;new InvalidValue#40;#123; value #125;#41;#41;"/]
+  82[/"type: number<br/>node: value + 1"/]
+  83["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  84[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  85[/"type: InvalidValue<br/>node: new InvalidValue#40;#123; value #125;#41;"/]
+  86["type: Effect#lt;never, InvalidValue, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  87[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  88[/"type: 1<br/>node: 1"/]
+  89[/"type: Effect#lt;number, never, never#gt;<br/>node: source"/]
+  90["type: Effect#lt;number, InvalidValue, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;value#41; =#gt; value #gt; 0 ? Effect.succeed#40;other#41; : Effect.fail#40;new InvalidValue#40;#123; value #125;#41;#41;#93;"]
+  91[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  92[["type: #40;value: number#41; =#gt; Effect#lt;number, never, never#gt; #124; Effect#lt;never, InvalidValue, never#gt;<br/>node: #40;value#41; =#gt; value #gt; 0 ? Effect.succeed#40;other#41; : Effect.fail#40;new InvalidValue#40;#123; value #125;#41;#41;"]]
+  93[/"type: Effect#lt;number, never, never#gt; #124; Effect#lt;never, InvalidValue, never#gt;<br/>node: value #gt; 0 ? Effect.succeed#40;other#41; : Effect.fail#40;new InvalidValue#40;#123; value #125;#41;#41;"/]
+  94[/"type: 1<br/>node: other"/]
+  95["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  96[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  97[/"type: InvalidValue<br/>node: new InvalidValue#40;#123; value #125;#41;"/]
+  98["type: Effect#lt;never, InvalidValue, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  99[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  100[/"type: Effect#lt;number, never, never#gt;<br/>node: source"/]
+  101["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;value#41; =#gt; value #gt; 0 ? Effect.succeed#40;value#41; : Effect.succeed#40;value#41;#93;"]
+  102[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  103[["type: #40;value: number#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;value#41; =#gt; value #gt; 0 ? Effect.succeed#40;value#41; : Effect.succeed#40;value#41;"]]
+  104[/"type: Effect#lt;number, never, never#gt;<br/>node: value #gt; 0 ? Effect.succeed#40;value#41; : Effect.succeed#40;value#41;"/]
+  105[/"type: number<br/>node: value"/]
+  106["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  107[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  108[/"type: number<br/>node: value"/]
+  109["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  110[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  111[/"type: Effect#lt;number, never, never#gt;<br/>node: source"/]
+  112["type: Effect#lt;unknown, unknown, unknown#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;value#41; =#gt; value #gt; 0 ? Effect.succeed#40;value#41; : unknownFallback#40;value#41;#93;"]
+  113[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  114[["type: #40;value: number#41; =#gt; any<br/>node: #40;value#41; =#gt; value #gt; 0 ? Effect.succeed#40;value#41; : unknownFallback#40;value#41;"]]
+  115[/"type: any<br/>node: value #gt; 0 ? Effect.succeed#40;value#41; : unknownFallback#40;value#41;"/]
+  116[/"type: number<br/>node: value"/]
+  117["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  118[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  119[/"type: number<br/>node: value"/]
+  120["type: any<br/>callee: unknownFallback<br/>args: #91;#93;"]
+  121[/"type: #40;value: number#41; =#gt; any<br/>node: unknownFallback"/]
+  122[/"type: #123; flatMap: #lt;A, B#gt;#40;self: A, f: #40;value: A#41; =#gt; B#41; =#gt; B; succeed: #lt;A#gt;#40;value: A#41; =#gt; A; fail: #lt;E#gt;#40;error: E#41; =#gt; E; #125;<br/>node: #123;#92;n  flatMap: #lt;A, B#gt;#40;self: A, f: #40;value: A#41; =#gt; B#41;: B =#gt; f#40;self#41;,#92;n  succeed: #lt;A#gt;#40;value: A#41;: A =#gt; value,#92;n  fail: #lt;E#gt;#40;error: E#41;: E =#gt; error#92;n#125;"/]
+  123[["type: #lt;A, B#gt;#40;self: A, f: #40;value: A#41; =#gt; B#41; =#gt; B<br/>node: #lt;A, B#gt;#40;self: A, f: #40;value: A#41; =#gt; B#41;: B =#gt; f#40;self#41;"]]
+  124[/"type: A<br/>node: self"/]
+  125["type: B<br/>callee: f<br/>args: #91;#93;"]
+  126[/"type: #40;value: A#41; =#gt; B<br/>node: f"/]
+  127[["type: #lt;A#gt;#40;value: A#41; =#gt; A<br/>node: #lt;A#gt;#40;value: A#41;: A =#gt; value"]]
+  128[/"type: A<br/>node: value"/]
+  129[["type: #lt;E#gt;#40;error: E#41; =#gt; E<br/>node: #lt;E#gt;#40;error: E#41;: E =#gt; error"]]
+  130[/"type: E<br/>node: error"/]
+  131[/"type: number #124; #quot;invalid#quot;<br/>node: unrelated.flatMap#40;1, #40;value#41; =#gt;#92;n  value #gt; 0 ? unrelated.succeed#40;value#41; : unrelated.fail#40;#quot;invalid#quot;#41;#92;n#41;"/]
+  132[["type: #40;value: number#41; =#gt; number #124; #quot;invalid#quot;<br/>node: #40;value#41; =#gt;#92;n  value #gt; 0 ? unrelated.succeed#40;value#41; : unrelated.fail#40;#quot;invalid#quot;#41;"]]
+  133[/"type: number #124; #quot;invalid#quot;<br/>node: value #gt; 0 ? unrelated.succeed#40;value#41; : unrelated.fail#40;#quot;invalid#quot;#41;"/]
+  134[/"type: number<br/>node: value"/]
+  135["type: number<br/>callee: unrelated.succeed<br/>args: #91;#93;"]
+  136[/"type: #lt;A#gt;#40;value: A#41; =#gt; A<br/>node: unrelated.succeed"/]
+  137[/"type: #quot;invalid#quot;<br/>node: #quot;invalid#quot;"/]
+  138["type: #quot;invalid#quot;<br/>callee: unrelated.fail<br/>args: #91;#93;"]
+  139[/"type: #lt;E#gt;#40;error: E#41; =#gt; E<br/>node: unrelated.fail"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1
+  5 -->|"kind: transformCallee"| 4
+  8 -->|"kind: pipe"| 9
+  10 -->|"kind: transformCallee"| 9
+  9 -->|"kind: usedBy"| 7
+  11 -->|"kind: pipe"| 12
+  13 -->|"kind: transformCallee"| 12
+  12 -->|"kind: usedBy"| 7
+  7 -->|"kind: potentialReturn"| 6
+  6 -->|"kind: transformArg"| 4
+  3 -->|"kind: pipe"| 4
+  16 -->|"kind: transformCallee"| 15
+  19 -->|"kind: pipe"| 20
+  21 -->|"kind: transformCallee"| 20
+  20 -->|"kind: usedBy"| 18
+  22 -->|"kind: pipe"| 23
+  24 -->|"kind: transformCallee"| 23
+  23 -->|"kind: usedBy"| 18
+  18 -->|"kind: potentialReturn"| 17
+  17 -->|"kind: transformArg"| 15
+  14 -->|"kind: pipe"| 15
+  27 -->|"kind: transformCallee"| 26
+  29 -->|"kind: pipe"| 30
+  31 -->|"kind: transformCallee"| 30
+  30 -->|"kind: potentialReturn"| 28
+  32 -->|"kind: pipe"| 33
+  34 -->|"kind: transformCallee"| 33
+  33 -->|"kind: potentialReturn"| 28
+  30 -->|"kind: usedBy"| 28
+  33 -->|"kind: usedBy"| 28
+  28 -->|"kind: transformArg"| 26
+  25 -->|"kind: pipe"| 26
+  35 -->|"kind: pipe"| 36
+  37 -->|"kind: transformCallee"| 35
+  40 -->|"kind: pipe"| 41
+  42 -->|"kind: transformCallee"| 41
+  41 -->|"kind: usedBy"| 39
+  43 -->|"kind: pipe"| 44
+  45 -->|"kind: transformCallee"| 44
+  44 -->|"kind: usedBy"| 39
+  39 -->|"kind: potentialReturn"| 38
+  38 -->|"kind: transformArg"| 35
+  48 -->|"kind: transformCallee"| 47
+  51 -->|"kind: pipe"| 52
+  53 -->|"kind: transformCallee"| 52
+  52 -->|"kind: usedBy"| 50
+  50 -->|"kind: potentialReturn"| 49
+  49 -->|"kind: transformArg"| 47
+  46 -->|"kind: pipe"| 47
+  54 -->|"kind: pipe"| 55
+  56 -->|"kind: transformCallee"| 55
+  59 -->|"kind: pipe"| 60
+  61 -->|"kind: transformCallee"| 60
+  60 -->|"kind: usedBy"| 58
+  62 -->|"kind: pipe"| 63
+  64 -->|"kind: transformCallee"| 63
+  63 -->|"kind: usedBy"| 58
+  58 -->|"kind: potentialReturn"| 57
+  57 -->|"kind: transformArg"| 55
+  68 -->|"kind: transformCallee"| 67
+  71 -->|"kind: pipe"| 72
+  73 -->|"kind: transformCallee"| 72
+  72 -->|"kind: usedBy"| 70
+  74 -->|"kind: pipe"| 75
+  76 -->|"kind: transformCallee"| 75
+  75 -->|"kind: usedBy"| 70
+  70 -->|"kind: potentialReturn"| 69
+  69 -->|"kind: transformArg"| 67
+  66 -->|"kind: pipe"| 67
+  79 -->|"kind: transformCallee"| 78
+  82 -->|"kind: pipe"| 83
+  84 -->|"kind: transformCallee"| 83
+  83 -->|"kind: usedBy"| 81
+  85 -->|"kind: pipe"| 86
+  87 -->|"kind: transformCallee"| 86
+  86 -->|"kind: usedBy"| 81
+  81 -->|"kind: potentialReturn"| 80
+  80 -->|"kind: transformArg"| 78
+  77 -->|"kind: pipe"| 78
+  91 -->|"kind: transformCallee"| 90
+  94 -->|"kind: pipe"| 95
+  96 -->|"kind: transformCallee"| 95
+  95 -->|"kind: usedBy"| 93
+  97 -->|"kind: pipe"| 98
+  99 -->|"kind: transformCallee"| 98
+  98 -->|"kind: usedBy"| 93
+  93 -->|"kind: potentialReturn"| 92
+  92 -->|"kind: transformArg"| 90
+  89 -->|"kind: pipe"| 90
+  102 -->|"kind: transformCallee"| 101
+  105 -->|"kind: pipe"| 106
+  107 -->|"kind: transformCallee"| 106
+  106 -->|"kind: usedBy"| 104
+  108 -->|"kind: pipe"| 109
+  110 -->|"kind: transformCallee"| 109
+  109 -->|"kind: usedBy"| 104
+  104 -->|"kind: potentialReturn"| 103
+  103 -->|"kind: transformArg"| 101
+  100 -->|"kind: pipe"| 101
+  113 -->|"kind: transformCallee"| 112
+  116 -->|"kind: pipe"| 117
+  118 -->|"kind: transformCallee"| 117
+  117 -->|"kind: usedBy"| 115
+  119 -->|"kind: pipe"| 120
+  121 -->|"kind: transformCallee"| 120
+  120 -->|"kind: usedBy"| 115
+  115 -->|"kind: potentialReturn"| 114
+  114 -->|"kind: transformArg"| 112
+  111 -->|"kind: pipe"| 112
+  124 -->|"kind: pipe"| 125
+  126 -->|"kind: transformCallee"| 125
+  125 -->|"kind: potentialReturn"| 123
+  123 -->|"kind: usedBy"| 122
+  128 -->|"kind: potentialReturn"| 127
+  127 -->|"kind: usedBy"| 122
+  130 -->|"kind: potentialReturn"| 129
+  129 -->|"kind: usedBy"| 122
+  134 -->|"kind: pipe"| 135
+  136 -->|"kind: transformCallee"| 135
+  135 -->|"kind: usedBy"| 133
+  137 -->|"kind: pipe"| 138
+  139 -->|"kind: transformCallee"| 138
+  138 -->|"kind: usedBy"| 133
+  133 -->|"kind: potentialReturn"| 132
+  132 -->|"kind: usedBy"| 131
