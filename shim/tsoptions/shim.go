@@ -79,7 +79,7 @@ var Libs = tsoptions.Libs
 var MergeCompilerOptionsCallback = tsoptions.MergeCompilerOptionsCallback
 type NameMap = tsoptions.NameMap
 //go:linkname NewParsedCommandLine github.com/microsoft/TypeScript/tsc/internal/tsoptions.NewParsedCommandLine
-func NewParsedCommandLine(compilerOptions *core.CompilerOptions, rootFileNames []string, comparePathsOptions tspath.ComparePathsOptions) *tsoptions.ParsedCommandLine
+func NewParsedCommandLine(compilerOptions *core.CompilerOptions, rootFileNames []string, projectReferences []*core.ProjectReference, comparePathsOptions tspath.ComparePathsOptions) *tsoptions.ParsedCommandLine
 //go:linkname NewTsconfigSourceFileFromFilePath github.com/microsoft/TypeScript/tsc/internal/tsoptions.NewTsconfigSourceFileFromFilePath
 func NewTsconfigSourceFileFromFilePath(configFileName string, configPath tspath.Path, configSourceText string) *tsoptions.TsConfigSourceFile
 var OptionsDeclarations = tsoptions.OptionsDeclarations

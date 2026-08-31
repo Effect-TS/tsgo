@@ -52,7 +52,7 @@ func NewContentMappedParseCache(options project.RefCountCacheOptions) *project.C
 //go:linkname NewExtendedConfigCache github.com/microsoft/TypeScript/tsc/internal/project.NewExtendedConfigCache
 func NewExtendedConfigCache() *project.ExtendedConfigCache
 //go:linkname NewInferredProject github.com/microsoft/TypeScript/tsc/internal/project.NewInferredProject
-func NewInferredProject(currentDirectory string, compilerOptions *core.CompilerOptions, rootFileNames []string, contentMappers []*contentmapper.Mapper, builder *project.ProjectCollectionBuilder, logger *logging.LogTree) *project.Project
+func NewInferredProject(currentDirectory string, compilerOptions *core.CompilerOptions, rootFileNames []string, projectReferences []*core.ProjectReference, contentMappers []*contentmapper.Mapper, builder *project.ProjectCollectionBuilder, logger *logging.LogTree) *project.Project
 //go:linkname NewParseCache github.com/microsoft/TypeScript/tsc/internal/project.NewParseCache
 func NewParseCache(options project.RefCountCacheOptions) *project.ParseCache
 //go:linkname NewParseCacheKey github.com/microsoft/TypeScript/tsc/internal/project.NewParseCacheKey
