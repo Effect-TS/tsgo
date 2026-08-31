@@ -466,5 +466,9 @@
     "`Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)": {
         "category": "Suggestion",
         "code": 377118
+    },
+    "`Effect.{0}` expresses this conditional validation more directly than `Effect.flatMap` with an identity `Effect.succeed` branch. effect(flatMapConditionalToFilterOrFail)": {
+        "category": "Suggestion",
+        "code": 377119
     }
 }

@@ -1,0 +1,51 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/flatMapConditionalToFilterOrFail.ts(10,3): suggestion TS377119: `Effect.filterOrFail` expresses this conditional validation more directly than `Effect.flatMap` with an identity `Effect.succeed` branch. effect(flatMapConditionalToFilterOrFail)
+/.src/flatMapConditionalToFilterOrFail.ts(15,3): suggestion TS377119: `Effect.filterOrElse` expresses this conditional validation more directly than `Effect.flatMap` with an identity `Effect.succeed` branch. effect(flatMapConditionalToFilterOrFail)
+/.src/flatMapConditionalToFilterOrFail.ts(19,3): suggestion TS377119: `Effect.filterOrFail` expresses this conditional validation more directly than `Effect.flatMap` with an identity `Effect.succeed` branch. effect(flatMapConditionalToFilterOrFail)
+/.src/flatMapConditionalToFilterOrFail.ts(25,26): suggestion TS377119: `Effect.filterOrElse` expresses this conditional validation more directly than `Effect.flatMap` with an identity `Effect.succeed` branch. effect(flatMapConditionalToFilterOrFail)
+
+
+==== /.src/flatMapConditionalToFilterOrFail.ts (4 errors) ====
+    // @effect-v3
+    import { Data, Effect, pipe } from "effect"
+    
+    class InvalidValue extends Data.TaggedError("InvalidValue")<{ readonly value: number }> {}
+    
+    declare const source: Effect.Effect<number>
+    declare const fallback: (value: number) => Effect.Effect<number, InvalidValue>
+    
+    export const pipeableFail = source.pipe(
+      Effect.flatMap((value) => value > 0 ? Effect.succeed(value) : Effect.fail(new InvalidValue({ value })))
+      ~~~~~~~~~~~~~~
+!!! suggestion TS377119: `Effect.filterOrFail` expresses this conditional validation more directly than `Effect.flatMap` with an identity `Effect.succeed` branch. effect(flatMapConditionalToFilterOrFail)
+    )
+    
+    export const invertedElse = pipe(
+      source,
+      Effect.flatMap((value) => value <= 0 ? fallback(value) : Effect.succeed(value))
+      ~~~~~~~~~~~~~~
+!!! suggestion TS377119: `Effect.filterOrElse` expresses this conditional validation more directly than `Effect.flatMap` with an identity `Effect.succeed` branch. effect(flatMapConditionalToFilterOrFail)
+    )
+    
+    export const blockFail = source.pipe(
+      Effect.flatMap(function(value) {
+      ~~~~~~~~~~~~~~
+!!! suggestion TS377119: `Effect.filterOrFail` expresses this conditional validation more directly than `Effect.flatMap` with an identity `Effect.succeed` branch. effect(flatMapConditionalToFilterOrFail)
+        if (value > 0) return Effect.succeed(value)
+        return Effect.fail(new InvalidValue({ value }))
+      })
+    )
+    
+    export const dataFirst = Effect.flatMap(
+                             ~~~~~~~~~~~~~~
+!!! suggestion TS377119: `Effect.filterOrElse` expresses this conditional validation more directly than `Effect.flatMap` with an identity `Effect.succeed` branch. effect(flatMapConditionalToFilterOrFail)
+      source,
+      (value) => value > 0 ? Effect.succeed(value) : Effect.die("invalid")
+    )
+    
+    export const transformedSuccess = source.pipe(
+      Effect.flatMap((value) => value > 0 ? Effect.succeed(value + 1) : Effect.fail(new InvalidValue({ value })))
+    )
+    

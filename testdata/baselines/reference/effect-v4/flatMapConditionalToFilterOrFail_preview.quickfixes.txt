@@ -1,0 +1,36 @@
+=== Quick Fix Inventory ===
+
+[D1] (5:1-9:2) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D2] (6:3-6:17) TS377119: `Effect.filterOrFail` expresses this conditional validation more directly than `Effect.flatMap` with an identity `Effect.succeed` branch. effect(flatMapConditionalToFilterOrFail)
+  Fix 0: "Disable flatMapConditionalToFilterOrFail for this line"
+  Fix 1: "Disable flatMapConditionalToFilterOrFail for entire file"
+  Fix 2: "Replace with Effect.filterOrFail"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable floatingEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable floatingEffect for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable flatMapConditionalToFilterOrFail for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable flatMapConditionalToFilterOrFail for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.filterOrFail" ===
+
+--- file:///.src/flatMapConditionalToFilterOrFail_preview.ts ---
+import { Effect } from "effect"
+
+declare const program: Effect.Effect<number>
+
+program.pipe(
+  Effect.filterOrFail(value => value > 0, value => "non-positive")
+)
+
