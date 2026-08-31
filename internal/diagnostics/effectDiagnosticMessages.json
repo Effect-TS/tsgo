@@ -466,5 +466,9 @@
     "`Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)": {
         "category": "Suggestion",
         "code": 377118
+    },
+    "`Effect.acquireDisposable` expresses this disposable resource acquisition more directly than `Effect.acquireRelease` with a manual disposal finalizer. effect(acquireReleaseDisposable)": {
+        "category": "Suggestion",
+        "code": 377119
     }
 }

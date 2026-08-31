@@ -1,0 +1,211 @@
+==== /.src/acquireReleaseDisposable.ts (15 flows) ====
+
+=== Piping Flow ===
+Location: 12:16 - 12:62
+Node: Effect.sync(() => resource[Symbol.dispose]())
+Node Kind: KindCallExpression
+
+Subject: () => resource[Symbol.dispose]()
+Subject Type: () => void
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 19:11 - 21:7
+Node: Effect.promise(function() {\n      return resource[Symbol.asyncDispose]()\n    })
+Node Kind: KindCallExpression
+
+Subject: function() {\n      return resource[Symbol.asyncDispose]()\n    }
+Subject Type: () => PromiseLike<void>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 29:16 - 29:58
+Node: Fx.sync(() => resource[Symbol.dispose]())
+Node Kind: KindCallExpression
+
+Subject: () => resource[Symbol.dispose]()
+Subject Type: () => void
+
+Transformations (1):
+  [0] kind: call
+      callee: Fx.sync
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 35:16 - 35:76
+Node: Effect.promise(async () => resource[Symbol.asyncDispose]())
+Node Kind: KindCallExpression
+
+Subject: async () => resource[Symbol.asyncDispose]()
+Subject Type: () => Promise<void>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 41:16 - 41:62
+Node: Effect.sync(() => resource[Symbol.dispose]())
+Node Kind: KindCallExpression
+
+Subject: () => resource[Symbol.dispose]()
+Subject Type: () => void
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 51:16 - 51:57
+Node: Effect.promise(() => resource.dispose())
+Node Kind: KindCallExpression
+
+Subject: () => resource.dispose()
+Subject Type: () => Promise<void>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.promise
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 58:16 - 58:52
+Node: Effect.sync(() => resource.close())
+Node Kind: KindCallExpression
+
+Subject: () => resource.close()
+Subject Type: () => void
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 64:16 - 67:5
+Node: Effect.sync(() => {\n    resource[Symbol.dispose]()\n    console.log("disposed")\n  })
+Node Kind: KindCallExpression
+
+Subject: () => {\n    resource[Symbol.dispose]()\n    console.log("disposed")\n  }
+Subject Type: () => void
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 65:31 - 66:28
+Node: console.log("disposed")
+Node Kind: KindCallExpression
+
+Subject: "disposed"
+Subject Type: "disposed"
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 73:22 - 76:5
+Node: Effect.sync(() => {\n    console.log(exit)\n    resource[Symbol.dispose]()\n  })
+Node Kind: KindCallExpression
+
+Subject: () => {\n    console.log(exit)\n    resource[Symbol.dispose]()\n  }
+Subject Type: () => void
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 73:42 - 74:22
+Node: console.log(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<unknown, unknown>
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 82:16 - 82:67
+Node: Effect.sync(() => resource[Symbol.asyncDispose]())
+Node Kind: KindCallExpression
+
+Subject: () => resource[Symbol.asyncDispose]()
+Subject Type: () => PromiseLike<void>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<PromiseLike<void>, never, never>
+
+=== Piping Flow ===
+Location: 88:16 - 88:62
+Node: Effect.sync(() => resource[Symbol.dispose]())
+Node Kind: KindCallExpression
+
+Subject: () => resource[Symbol.dispose]()
+Subject Type: () => void
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 96:16 - 96:62
+Node: Effect.sync(() => resource[Symbol.dispose]())
+Node Kind: KindCallExpression
+
+Subject: () => resource[Symbol.dispose]()
+Subject Type: () => any
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<any, never, never>
+
+=== Piping Flow ===
+Location: 106:16 - 106:62
+Node: Effect.sync(() => resource[Symbol.dispose]())
+Node Kind: KindCallExpression
+
+Subject: () => resource[Symbol.dispose]()
+Subject Type: () => void
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<void, never, never>
