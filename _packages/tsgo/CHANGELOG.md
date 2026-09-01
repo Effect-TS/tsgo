@@ -1,5 +1,37 @@
 # @effect/tsgo
 
+## 0.39.0
+
+### Minor Changes
+
+- 7e30dc9: Add the `acquireReleaseDisposable` rule to replace manual disposal finalizers passed to `Effect.acquireRelease` with `Effect.acquireDisposable`.
+- f134c31: Add the `optionMatchToFromOption` diagnostic and quick fix for Option-to-Effect conversions that can use `Effect.fromOption`.
+  
+  The rule recognizes supported `Option.match` call styles and `Option.isSome` / `Option.isNone` conditional expressions whose branches only wrap the value with `Effect.succeed` or produce `Effect.fail`. It suggests the one-argument `Effect.fromOption` form for the default `Cause.NoSuchElementError`, and preserves custom failures in a lazy callback.
+- 90c884e: Expose piping-flow extraction through the `etsgoapi` Go API.
+  
+  The type parser already understands "piping flows" — a subject expression followed by an ordered list of transformations, unifying the `pipe(...)`, pipeable `.pipe(...)`, data-first, data-last and `Effect.fn` forms — but that analysis was only reachable from internal packages. `etsgoapi.TypeParser` now surfaces it so external Go integrations can consume it without importing `internal/...`.
+  
+  ```go
+  tp := etsgoapi.NewTypeParser(program, checker)
+  for _, flow := range tp.PipingFlows(sourceFile, true /* includeEffectFn */) {
+  	// flow.Subject.Node / flow.Subject.OutType — the starting expression and its type
+  	for _, step := range flow.Transformations {
+  		// step.Kind (pipe | pipeable | dataFirst | dataLast | call | effectFn | effectFnUntraced)
+  		// step.Callee / step.Args / step.OutType
+  	}
+  }
+  ```
+  
+  Adds the public `PipingFlow`, `PipingFlowSubject`, `PipingFlowTransformation` and `TransformationKind` types alongside the new `(*TypeParser).PipingFlows` method.
+- 804c2a9: Add the `flatMapConditionalToFilterOrFail` diagnostic and quick fix, which replaces identity-succeed `Effect.flatMap` conditionals with `Effect.filterOrFail` or `Effect.filterOrElse`.
+- 4e14641: Add the `preferSucceedSomeOrNone` diagnostic and autofix for replacing `Effect.succeed(Option.none())` and `Effect.succeed(Option.some(value))`, including equivalent pipe forms, with `Effect.succeedNone` and `Effect.succeedSome(value)`.
+
+### Patch Changes
+
+- fcc641e: Keep the Nix TypeScript source pin synchronized with the TypeScript next metadata so Nix builds compile generated shims against the matching compiler revision.
+- 36f2524: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260831.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/9a8581c393a38961489cc8409ae4dfbe97fc25ec) commit `9a8581c393a38961489cc8409ae4dfbe97fc25ec`, and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
 ## 0.38.0
 
 ### Minor Changes
