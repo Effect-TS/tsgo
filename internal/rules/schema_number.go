@@ -66,7 +66,16 @@ func AnalyzeSchemaNumber(tp *typeparser.TypeParser, sf *ast.SourceFile) []Schema
 	}
 
 	walk(sf.AsNode())
-	return matches
+
+	flows := tp.PipingFlows(sf, false)
+	filtered := matches[:0]
+	for _, match := range matches {
+		if schemaNumberHasFiniteMethodCheck(tp, match.ReferenceNode) || schemaNumberHasFinitePipingCheck(tp, match.ReferenceNode, flows) {
+			continue
+		}
+		filtered = append(filtered, match)
+	}
+	return filtered
 }
 
 func analyzeSchemaNumberReference(tp *typeparser.TypeParser, sf *ast.SourceFile, node *ast.Node) *SchemaNumberMatch {
@@ -83,6 +92,78 @@ func analyzeSchemaNumberReference(tp *typeparser.TypeParser, sf *ast.SourceFile,
 		}
 	}
 	return nil
+}
+
+func schemaNumberHasFiniteMethodCheck(tp *typeparser.TypeParser, node *ast.Node) bool {
+	schemaExpression := node
+	if node.Kind == ast.KindIdentifier && node.Parent != nil && node.Parent.Kind == ast.KindPropertyAccessExpression {
+		access := node.Parent.AsPropertyAccessExpression()
+		if access.Name() == node {
+			schemaExpression = node.Parent
+		}
+	}
+	for schemaExpression.Parent != nil && schemaExpression.Parent.Kind == ast.KindPropertyAccessExpression {
+		accessNode := schemaExpression.Parent
+		access := accessNode.AsPropertyAccessExpression()
+		if access.Expression != schemaExpression || access.Name() == nil || accessNode.Parent == nil || accessNode.Parent.Kind != ast.KindCallExpression {
+			return false
+		}
+
+		call := accessNode.Parent.AsCallExpression()
+		if call.Expression != accessNode {
+			return false
+		}
+		switch access.Name().Text() {
+		case "annotate":
+			schemaExpression = accessNode.Parent
+		case "check":
+			if call.Arguments == nil {
+				return false
+			}
+			return schemaNumberHasFinitePredicate(tp, call.Arguments.Nodes)
+		default:
+			return false
+		}
+	}
+	return false
+}
+
+func schemaNumberHasFinitePipingCheck(tp *typeparser.TypeParser, reference *ast.Node, flows []*typeparser.PipingFlow) bool {
+	for _, flow := range flows {
+		if flow.Subject.Node == nil || !schemaNumberNodeContains(flow.Subject.Node, reference) {
+			continue
+		}
+		for _, transformation := range flow.Transformations {
+			if transformation.Callee != nil &&
+				tp.IsNodeReferenceToEffectSchemaModuleApi(transformation.Callee, "check") &&
+				schemaNumberHasFinitePredicate(tp, transformation.Args) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func schemaNumberHasFinitePredicate(tp *typeparser.TypeParser, arguments []*ast.Node) bool {
+	for _, argument := range arguments {
+		argument = ast.SkipParentheses(argument)
+		if argument.Kind != ast.KindCallExpression {
+			continue
+		}
+		predicateCall := argument.AsCallExpression()
+		if predicateCall.Expression == nil {
+			continue
+		}
+		if tp.IsNodeReferenceToEffectSchemaModuleApi(predicateCall.Expression, "isFinite") ||
+			tp.IsNodeReferenceToEffectSchemaModuleApi(predicateCall.Expression, "isInt") {
+			return true
+		}
+	}
+	return false
+}
+
+func schemaNumberNodeContains(ancestor *ast.Node, target *ast.Node) bool {
+	return ancestor != nil && target != nil && ancestor.Pos() <= target.Pos() && target.End() <= ancestor.End()
 }
 
 type schemaNumberApi struct {
