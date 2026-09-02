@@ -44,6 +44,15 @@ func (t *Tracker) GetChanges() map[string][]*lsproto.TextEdit {
 	return change.GetChanges(t.Tracker)
 }
 
+func (t *Tracker) NewModuleDeclaration(
+	modifiers *ast.ModifierList,
+	keyword ast.Kind,
+	name *ast.ModuleName,
+	body *ast.ModuleBody,
+) *ast.Node {
+	return change.NewModuleDeclaration(t.Tracker, modifiers, keyword, name, body)
+}
+
 func (t *Tracker) ReplaceNode(sourceFile *ast.SourceFile, oldNode *ast.Node, newNode *ast.Node, options *change.NodeOptions) {
 	if oldNode == nil || newNode == nil {
 		return
