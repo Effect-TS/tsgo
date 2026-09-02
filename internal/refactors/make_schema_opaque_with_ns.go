@@ -2,11 +2,11 @@ package refactors
 
 import (
 	"github.com/effect-ts/tsgo/internal/refactor"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
-	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var MakeSchemaOpaqueWithNs = refactor.Refactor{
@@ -89,6 +89,7 @@ func runMakeSchemaOpaqueWithNs(ctx *refactor.Context) []ls.CodeAction {
 				opaqueExportModifiers(tracker),
 				ast.KindNamespaceKeyword,
 				tracker.NewIdentifier(origName),
+				nil,
 				nsBlock,
 			)
 			ast.SetParentInChildren(nsDecl)

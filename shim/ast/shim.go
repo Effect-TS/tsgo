@@ -494,6 +494,8 @@ func HasDecorators(node *ast.Node) bool
 //go:linkname HasDynamicName github.com/microsoft/TypeScript/tsc/internal/ast.HasDynamicName
 func HasDynamicName(declaration *ast.Node) bool
 type HasFileName = ast.HasFileName
+//go:linkname HasImportAttributes github.com/microsoft/TypeScript/tsc/internal/ast.HasImportAttributes
+func HasImportAttributes(node *ast.Node) bool
 //go:linkname HasInferredType github.com/microsoft/TypeScript/tsc/internal/ast.HasInferredType
 func HasInferredType(node *ast.Node) bool
 //go:linkname HasInitializer github.com/microsoft/TypeScript/tsc/internal/ast.HasInitializer
@@ -1260,8 +1262,6 @@ func IsParenthesizedExpression(node *ast.Node) bool
 func IsParenthesizedTypeNode(node *ast.Node) bool
 //go:linkname IsParseTreeNode github.com/microsoft/TypeScript/tsc/internal/ast.IsParseTreeNode
 func IsParseTreeNode(node *ast.Node) bool
-//go:linkname IsPartOfExclusivelyTypeOnlyImportOrExportDeclaration github.com/microsoft/TypeScript/tsc/internal/ast.IsPartOfExclusivelyTypeOnlyImportOrExportDeclaration
-func IsPartOfExclusivelyTypeOnlyImportOrExportDeclaration(node *ast.Node) bool
 //go:linkname IsPartOfParameterDeclaration github.com/microsoft/TypeScript/tsc/internal/ast.IsPartOfParameterDeclaration
 func IsPartOfParameterDeclaration(node *ast.Node) bool
 //go:linkname IsPartOfTypeNode github.com/microsoft/TypeScript/tsc/internal/ast.IsPartOfTypeNode
@@ -1374,6 +1374,8 @@ func IsStatic(node *ast.Node) bool
 func IsStringLiteral(node *ast.Node) bool
 //go:linkname IsStringLiteralLike github.com/microsoft/TypeScript/tsc/internal/ast.IsStringLiteralLike
 func IsStringLiteralLike(node *ast.Node) bool
+//go:linkname IsStringLiteralLikeType github.com/microsoft/TypeScript/tsc/internal/ast.IsStringLiteralLikeType
+func IsStringLiteralLikeType(node *ast.Node) bool
 //go:linkname IsStringOrNumericLiteralLike github.com/microsoft/TypeScript/tsc/internal/ast.IsStringOrNumericLiteralLike
 func IsStringOrNumericLiteralLike(node *ast.Node) bool
 //go:linkname IsStringTextContainingNode github.com/microsoft/TypeScript/tsc/internal/ast.IsStringTextContainingNode
@@ -2657,6 +2659,8 @@ type TokenNode = ast.TokenNode
 type TokenSyntaxKind = ast.TokenSyntaxKind
 type TriviaSyntaxKind = ast.TriviaSyntaxKind
 type TrueLiteral = ast.TrueLiteral
+//go:linkname TryGetAmbientModuleNameFromSymbolName github.com/microsoft/TypeScript/tsc/internal/ast.TryGetAmbientModuleNameFromSymbolName
+func TryGetAmbientModuleNameFromSymbolName(s string) (string, bool)
 //go:linkname TryGetClassExtendingExpressionWithTypeArguments github.com/microsoft/TypeScript/tsc/internal/ast.TryGetClassExtendingExpressionWithTypeArguments
 func TryGetClassExtendingExpressionWithTypeArguments(node *ast.Node) *ast.ClassLikeDeclaration
 //go:linkname TryGetClassImplementingOrExtendingHeritageClauseElement github.com/microsoft/TypeScript/tsc/internal/ast.TryGetClassImplementingOrExtendingHeritageClauseElement

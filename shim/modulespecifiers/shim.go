@@ -23,11 +23,11 @@ func GetJSExtensionForDeclarationFileExtension(ext string) string
 //go:linkname GetModuleSpecifier github.com/microsoft/TypeScript/tsc/internal/modulespecifiers.GetModuleSpecifier
 func GetModuleSpecifier(compilerOptions *core.CompilerOptions, host modulespecifiers.ModuleSpecifierGenerationHost, importingSourceFile *ast.SourceFile, importingSourceFileName string, oldImportSpecifier string, toFileName string, options modulespecifiers.ModuleSpecifierOptions) string
 //go:linkname GetModuleSpecifiers github.com/microsoft/TypeScript/tsc/internal/modulespecifiers.GetModuleSpecifiers
-func GetModuleSpecifiers(moduleSymbol *ast.Symbol, checker modulespecifiers.CheckerShape, compilerOptions *core.CompilerOptions, importingSourceFile modulespecifiers.SourceFileForSpecifierGeneration, host modulespecifiers.ModuleSpecifierGenerationHost, userPreferences modulespecifiers.UserPreferences, options modulespecifiers.ModuleSpecifierOptions, forAutoImports bool) []string
+func GetModuleSpecifiers(moduleSymbol *ast.Symbol, checker modulespecifiers.CheckerShape, compilerOptions *core.CompilerOptions, importingSourceFile modulespecifiers.SourceFileForSpecifierGeneration, host modulespecifiers.ModuleSpecifierGenerationHost, userPreferences modulespecifiers.UserPreferences, options modulespecifiers.ModuleSpecifierOptions, forAutoImports bool) modulespecifiers.ModuleSpecifiersResult
 //go:linkname GetModuleSpecifiersForFileWithInfo github.com/microsoft/TypeScript/tsc/internal/modulespecifiers.GetModuleSpecifiersForFileWithInfo
 func GetModuleSpecifiersForFileWithInfo(importingSourceFile modulespecifiers.SourceFileForSpecifierGeneration, moduleFileName string, compilerOptions *core.CompilerOptions, host modulespecifiers.ModuleSpecifierGenerationHost, userPreferences modulespecifiers.UserPreferences, options modulespecifiers.ModuleSpecifierOptions, forAutoImports bool) ([]string, modulespecifiers.ResultKind)
 //go:linkname GetModuleSpecifiersWithInfo github.com/microsoft/TypeScript/tsc/internal/modulespecifiers.GetModuleSpecifiersWithInfo
-func GetModuleSpecifiersWithInfo(moduleSymbol *ast.Symbol, checker modulespecifiers.CheckerShape, compilerOptions *core.CompilerOptions, importingSourceFile modulespecifiers.SourceFileForSpecifierGeneration, host modulespecifiers.ModuleSpecifierGenerationHost, userPreferences modulespecifiers.UserPreferences, options modulespecifiers.ModuleSpecifierOptions, forAutoImports bool) ([]string, modulespecifiers.ResultKind)
+func GetModuleSpecifiersWithInfo(moduleSymbol *ast.Symbol, checker modulespecifiers.CheckerShape, compilerOptions *core.CompilerOptions, importingSourceFile modulespecifiers.SourceFileForSpecifierGeneration, host modulespecifiers.ModuleSpecifierGenerationHost, userPreferences modulespecifiers.UserPreferences, options modulespecifiers.ModuleSpecifierOptions, forAutoImports bool) modulespecifiers.ModuleSpecifiersResult
 //go:linkname GetNodeModulePathParts github.com/microsoft/TypeScript/tsc/internal/modulespecifiers.GetNodeModulePathParts
 func GetNodeModulePathParts(fullPath string) *modulespecifiers.NodeModulePathParts
 //go:linkname GetNodeModulesPackageName github.com/microsoft/TypeScript/tsc/internal/modulespecifiers.GetNodeModulesPackageName
@@ -62,6 +62,7 @@ const ModuleSpecifierEndingTsExtension = modulespecifiers.ModuleSpecifierEndingT
 type ModuleSpecifierGenerationHost = modulespecifiers.ModuleSpecifierGenerationHost
 type ModuleSpecifierOptions = modulespecifiers.ModuleSpecifierOptions
 type ModuleSpecifierPreferences = modulespecifiers.ModuleSpecifierPreferences
+type ModuleSpecifiersResult = modulespecifiers.ModuleSpecifiersResult
 type NodeModulePathParts = modulespecifiers.NodeModulePathParts
 //go:linkname PathIsBareSpecifier github.com/microsoft/TypeScript/tsc/internal/modulespecifiers.PathIsBareSpecifier
 func PathIsBareSpecifier(path string) bool

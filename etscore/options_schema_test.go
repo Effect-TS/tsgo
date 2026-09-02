@@ -97,23 +97,28 @@ func generateTSConfigSchema() ([]byte, error) {
 	if !ok {
 		return nil, fmt.Errorf("compilerOptionsDefinition not found in base schema")
 	}
-	compilerOptionsProperties, err := nestedObject(
+	compilerOptions, err := nestedObject(
 		compilerOptionsDefinition,
 		"properties",
 		"compilerOptions",
-		"properties",
 	)
 	if err != nil {
 		return nil, err
 	}
+	compilerOptionsVariant, err := schemaVariantWithObjectField(compilerOptions, "properties")
+	if err != nil {
+		return nil, fmt.Errorf("compilerOptions: %w", err)
+	}
+	compilerOptionsProperties := compilerOptionsVariant["properties"].(map[string]any)
 	plugins, ok := compilerOptionsProperties["plugins"].(map[string]any)
 	if !ok {
 		return nil, fmt.Errorf("compilerOptions.plugins not found in base schema")
 	}
-	pluginItems, ok := plugins["items"].(map[string]any)
-	if !ok {
-		return nil, fmt.Errorf("compilerOptions.plugins.items not found in base schema")
+	pluginsVariant, err := schemaVariantWithObjectField(plugins, "items")
+	if err != nil {
+		return nil, fmt.Errorf("compilerOptions.plugins: %w", err)
 	}
+	pluginItems := pluginsVariant["items"].(map[string]any)
 
 	definitions["effectLanguageServicePluginOptionsDefinition"] = effectLanguageServicePluginOptionsSchema()
 	definitions["effectLanguageServicePluginDiagnosticSeverityDefinition"] = diagnosticSeveritySchema()
@@ -122,7 +127,7 @@ func generateTSConfigSchema() ([]byte, error) {
 	definitions["effectLanguageServicePluginOverrideDefinition"] = effectLanguageServicePluginOverrideSchema()
 	definitions["effectLanguageServicePluginOverrideOptionsDefinition"] = effectLanguageServicePluginOverrideOptionsSchema()
 
-	plugins["items"] = map[string]any{
+	pluginsVariant["items"] = map[string]any{
 		"anyOf": []any{
 			effectLanguageServicePluginSchema(),
 			otherPluginSchema(pluginItems),
@@ -406,6 +411,62 @@ func nestedObject(root map[string]any, keys ...string) (map[string]any, error) {
 		current = next
 	}
 	return current, nil
+}
+
+func schemaVariantWithObjectField(root map[string]any, field string) (map[string]any, error) {
+	if _, ok := root[field].(map[string]any); ok {
+		return root, nil
+	}
+	if variants, ok := root["anyOf"].([]any); ok {
+		for _, value := range variants {
+			variant, ok := value.(map[string]any)
+			if !ok {
+				continue
+			}
+			if _, ok := variant[field].(map[string]any); ok {
+				return variant, nil
+			}
+		}
+	}
+	return nil, fmt.Errorf("object field %q not found", field)
+}
+
+func TestSchemaVariantWithObjectField(t *testing.T) {
+	t.Run("direct field", func(t *testing.T) {
+		field := map[string]any{"value": true}
+		variant, err := schemaVariantWithObjectField(map[string]any{"properties": field}, "properties")
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !reflect.DeepEqual(variant["properties"], field) {
+			t.Fatalf("properties = %#v, want %#v", variant["properties"], field)
+		}
+	})
+
+	t.Run("anyOf field", func(t *testing.T) {
+		field := map[string]any{"value": true}
+		variant, err := schemaVariantWithObjectField(map[string]any{
+			"anyOf": []any{
+				map[string]any{"type": "null"},
+				map[string]any{"type": "object", "properties": field},
+			},
+		}, "properties")
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !reflect.DeepEqual(variant["properties"], field) {
+			t.Fatalf("properties = %#v, want %#v", variant["properties"], field)
+		}
+	})
+
+	t.Run("missing field", func(t *testing.T) {
+		_, err := schemaVariantWithObjectField(map[string]any{
+			"anyOf": []any{map[string]any{"type": "null"}},
+		}, "properties")
+		if err == nil {
+			t.Fatal("expected an error")
+		}
+	})
 }
 
 func writeIfChanged(t *testing.T, path string, content []byte) {
