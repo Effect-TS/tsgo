@@ -1,4 +1,4 @@
-==== /.src/schemaNumber.ts (3 flows) ====
+==== /.src/schemaNumber.ts (11 flows) ====
 
 === Piping Flow ===
 Location: 7:20 - 12:3
@@ -41,3 +41,115 @@ Transformations (1):
       callee: Schema.Struct
       args: (constant)
       outType: Struct<{ readonly quantity: Number; readonly amount: NumberFromString; }>
+
+=== Piping Flow ===
+Location: 24:27 - 32:3
+Node: Schema.Struct({\n  finite: Schema.Number.check(Schema.isFinite()),\n  integer: Schema.Number.check(Schema.isInt()),\n  importedFinite: Schema.Number.check(isFinite()),\n  importedInteger: Schema.Number.check(integer()),\n  pipedFinite: Schema.Number.pipe(Schema.check(Schema.isFinite())),\n  pipedInteger: Schema.Number.pipe(Schema.check(Schema.isInt())),\n  pipedImported: Schema.Number.pipe(refine(integer()))\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  finite: Schema.Number.check(Schema.isFinite()),\n  integer: Schema.Number.check(Schema.isInt()),\n  importedFinite: Schema.Number.check(isFinite()),\n  importedInteger: Schema.Number.check(integer()),\n  pipedFinite: Schema.Number.pipe(Schema.check(Schema.isFinite())),\n  pipedInteger: Schema.Number.pipe(Schema.check(Schema.isInt())),\n  pipedImported: Schema.Number.pipe(refine(integer()))\n}
+Subject Type: { finite: Number; integer: Number; importedFinite: Number; importedInteger: Number; pipedFinite: Number; pipedInteger: Number; pipedImported: Number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly finite: Number; readonly integer: Number; readonly importedFinite: Number; readonly importedInteger: Number; readonly pipedFinite: Number; readonly pipedInteger: Number; readonly pipedImported: Number; }>
+
+=== Piping Flow ===
+Location: 25:10 - 25:49
+Node: Schema.Number.check(Schema.isFinite())
+Node Kind: KindCallExpression
+
+Subject: Schema.isFinite()
+Subject Type: Filter<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Number.check
+      args: (constant)
+      outType: Number
+
+=== Piping Flow ===
+Location: 26:11 - 26:47
+Node: Schema.Number.check(Schema.isInt())
+Node Kind: KindCallExpression
+
+Subject: Schema.isInt()
+Subject Type: Filter<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Number.check
+      args: (constant)
+      outType: Number
+
+=== Piping Flow ===
+Location: 27:18 - 27:50
+Node: Schema.Number.check(isFinite())
+Node Kind: KindCallExpression
+
+Subject: isFinite()
+Subject Type: Filter<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Number.check
+      args: (constant)
+      outType: Number
+
+=== Piping Flow ===
+Location: 28:19 - 28:50
+Node: Schema.Number.check(integer())
+Node Kind: KindCallExpression
+
+Subject: integer()
+Subject Type: Filter<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Number.check
+      args: (constant)
+      outType: Number
+
+=== Piping Flow ===
+Location: 29:15 - 29:67
+Node: Schema.Number.pipe(Schema.check(Schema.isFinite()))
+Node Kind: KindCallExpression
+
+Subject: Schema.Number
+Subject Type: Number
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Schema.check
+      args: [Schema.isFinite()]
+      outType: Number
+
+=== Piping Flow ===
+Location: 30:16 - 30:65
+Node: Schema.Number.pipe(Schema.check(Schema.isInt()))
+Node Kind: KindCallExpression
+
+Subject: Schema.Number
+Subject Type: Number
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Schema.check
+      args: [Schema.isInt()]
+      outType: Number
+
+=== Piping Flow ===
+Location: 31:17 - 31:55
+Node: Schema.Number.pipe(refine(integer()))
+Node Kind: KindCallExpression
+
+Subject: Schema.Number
+Subject Type: Number
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: refine
+      args: [integer()]
+      outType: Number

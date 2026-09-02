@@ -2,7 +2,7 @@
 
 import { Schema } from "effect"
 import * as SchemaModule from "effect/Schema"
-import { Number as NumberSchema, NumberFromString } from "effect/Schema"
+import { check as refine, isFinite, isInt as integer, Number as NumberSchema, NumberFromString } from "effect/Schema"
 
 export const user = Schema.Struct({
   age: Schema.Number,
@@ -21,5 +21,14 @@ export const direct = Schema.Struct({
   amount: NumberFromString
 })
 
+export const refinements = Schema.Struct({
+  finite: Schema.Number.check(Schema.isFinite()),
+  integer: Schema.Number.check(Schema.isInt()),
+  importedFinite: Schema.Number.check(isFinite()),
+  importedInteger: Schema.Number.check(integer()),
+  pipedFinite: Schema.Number.pipe(Schema.check(Schema.isFinite())),
+  pipedInteger: Schema.Number.pipe(Schema.check(Schema.isInt())),
+  pipedImported: Schema.Number.pipe(refine(integer()))
+})
 // @effect-diagnostics-next-line schemaNumber:off
 export const intentionallyNonFinite = Schema.Number

@@ -8,10 +8,63 @@ flowchart TB
   6[/"type: #123; quantity: Number; amount: NumberFromString; #125;<br/>node: #123;#92;n  quantity: NumberSchema,#92;n  amount: NumberFromString#92;n#125;"/]
   7["type: Struct#lt;#123; readonly quantity: Number; readonly amount: NumberFromString; #125;#gt;<br/>callee: Schema.Struct<br/>args: #91;#93;"]
   8[/"type: #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields#41; =#gt; Struct#lt;Fields#gt;<br/>node: Schema.Struct"/]
-  9[/"type: Number<br/>node: Schema.Number"/]
+  9[/"type: #123; finite: Number; integer: Number; importedFinite: Number; importedInteger: Number; pipedFinite: Number; pipedInteger: Number; pipedImported: Number; #125;<br/>node: #123;#92;n  finite: Schema.Number.check#40;Schema.isFinite#40;#41;#41;,#92;n  integer: Schema.Number.check#40;Schema.isInt#40;#41;#41;,#92;n  importedFinite: Schema.Number.check#40;isFinite#40;#41;#41;,#92;n  importedInteger: Schema.Number.check#40;integer#40;#41;#41;,#92;n  pipedFinite: Schema.Number.pipe#40;Schema.check#40;Schema.isFinite#40;#41;#41;#41;,#92;n  pipedInteger: Schema.Number.pipe#40;Schema.check#40;Schema.isInt#40;#41;#41;#41;,#92;n  pipedImported: Schema.Number.pipe#40;refine#40;integer#40;#41;#41;#41;#92;n#125;"/]
+  10[/"type: Filter#lt;number#gt;<br/>node: Schema.isFinite#40;#41;"/]
+  11["type: Number<br/>callee: Schema.Number.check<br/>args: #91;#93;"]
+  12[/"type: #40;checks_0: Check#lt;number#gt;, ...checks: Check#lt;number#gt;#91;#93;#41; =#gt; Number<br/>node: Schema.Number.check"/]
+  13[/"type: Filter#lt;number#gt;<br/>node: Schema.isInt#40;#41;"/]
+  14["type: Number<br/>callee: Schema.Number.check<br/>args: #91;#93;"]
+  15[/"type: #40;checks_0: Check#lt;number#gt;, ...checks: Check#lt;number#gt;#91;#93;#41; =#gt; Number<br/>node: Schema.Number.check"/]
+  16[/"type: Filter#lt;number#gt;<br/>node: isFinite#40;#41;"/]
+  17["type: Number<br/>callee: Schema.Number.check<br/>args: #91;#93;"]
+  18[/"type: #40;checks_0: Check#lt;number#gt;, ...checks: Check#lt;number#gt;#91;#93;#41; =#gt; Number<br/>node: Schema.Number.check"/]
+  19[/"type: Filter#lt;number#gt;<br/>node: integer#40;#41;"/]
+  20["type: Number<br/>callee: Schema.Number.check<br/>args: #91;#93;"]
+  21[/"type: #40;checks_0: Check#lt;number#gt;, ...checks: Check#lt;number#gt;#91;#93;#41; =#gt; Number<br/>node: Schema.Number.check"/]
+  22[/"type: Number<br/>node: Schema.Number"/]
+  23["type: Number<br/>callee: Schema.check<br/>args: #91;Schema.isFinite#40;#41;#93;"]
+  24[/"type: #lt;S extends Top#gt;#40;checks_0: Check#lt;S#91;#quot;Type#quot;#93;#gt;, ...checks: Check#lt;S#91;#quot;Type#quot;#93;#gt;#91;#93;#41; =#gt; #40;self: S#41; =#gt; S#91;#quot;Rebuild#quot;#93;<br/>node: Schema.check"/]
+  25[/"type: Filter#lt;number#gt;<br/>node: Schema.isFinite#40;#41;"/]
+  26[/"type: Number<br/>node: Schema.Number"/]
+  27["type: Number<br/>callee: Schema.check<br/>args: #91;Schema.isInt#40;#41;#93;"]
+  28[/"type: #lt;S extends Top#gt;#40;checks_0: Check#lt;S#91;#quot;Type#quot;#93;#gt;, ...checks: Check#lt;S#91;#quot;Type#quot;#93;#gt;#91;#93;#41; =#gt; #40;self: S#41; =#gt; S#91;#quot;Rebuild#quot;#93;<br/>node: Schema.check"/]
+  29[/"type: Filter#lt;number#gt;<br/>node: Schema.isInt#40;#41;"/]
+  30[/"type: Number<br/>node: Schema.Number"/]
+  31["type: Number<br/>callee: refine<br/>args: #91;integer#40;#41;#93;"]
+  32[/"type: #lt;S extends Top#gt;#40;checks_0: Check#lt;S#91;#quot;Type#quot;#93;#gt;, ...checks: Check#lt;S#91;#quot;Type#quot;#93;#gt;#91;#93;#41; =#gt; #40;self: S#41; =#gt; S#91;#quot;Rebuild#quot;#93;<br/>node: refine"/]
+  33[/"type: Filter#lt;number#gt;<br/>node: integer#40;#41;"/]
+  34["type: Struct#lt;#123; readonly finite: Number; readonly integer: Number; readonly importedFinite: Number; readonly importedInteger: Number; readonly pipedFinite: Number; readonly pipedInteger: Number; readonly pipedImported: Number; #125;#gt;<br/>callee: Schema.Struct<br/>args: #91;#93;"]
+  35[/"type: #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields#41; =#gt; Struct#lt;Fields#gt;<br/>node: Schema.Struct"/]
+  36[/"type: Number<br/>node: Schema.Number"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
   3 -->|"kind: pipe"| 4
   5 -->|"kind: transformCallee"| 4
   6 -->|"kind: pipe"| 7
   8 -->|"kind: transformCallee"| 7
+  10 -->|"kind: pipe"| 11
+  12 -->|"kind: transformCallee"| 11
+  11 -->|"kind: usedBy"| 9
+  13 -->|"kind: pipe"| 14
+  15 -->|"kind: transformCallee"| 14
+  14 -->|"kind: usedBy"| 9
+  16 -->|"kind: pipe"| 17
+  18 -->|"kind: transformCallee"| 17
+  17 -->|"kind: usedBy"| 9
+  19 -->|"kind: pipe"| 20
+  21 -->|"kind: transformCallee"| 20
+  20 -->|"kind: usedBy"| 9
+  24 -->|"kind: transformCallee"| 23
+  25 -->|"kind: transformArg"| 23
+  22 -->|"kind: pipe"| 23
+  23 -->|"kind: usedBy"| 9
+  28 -->|"kind: transformCallee"| 27
+  29 -->|"kind: transformArg"| 27
+  26 -->|"kind: pipe"| 27
+  27 -->|"kind: usedBy"| 9
+  32 -->|"kind: transformCallee"| 31
+  33 -->|"kind: transformArg"| 31
+  30 -->|"kind: pipe"| 31
+  31 -->|"kind: usedBy"| 9
+  9 -->|"kind: pipe"| 34
+  35 -->|"kind: transformCallee"| 34
