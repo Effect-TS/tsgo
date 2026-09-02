@@ -102,24 +102,30 @@ func schemaNumberHasFiniteMethodCheck(tp *typeparser.TypeParser, node *ast.Node)
 			schemaExpression = node.Parent
 		}
 	}
-	if schemaExpression.Parent == nil || schemaExpression.Parent.Kind != ast.KindPropertyAccessExpression {
-		return false
-	}
+	for schemaExpression.Parent != nil && schemaExpression.Parent.Kind == ast.KindPropertyAccessExpression {
+		accessNode := schemaExpression.Parent
+		access := accessNode.AsPropertyAccessExpression()
+		if access.Expression != schemaExpression || access.Name() == nil || accessNode.Parent == nil || accessNode.Parent.Kind != ast.KindCallExpression {
+			return false
+		}
 
-	checkAccessNode := schemaExpression.Parent
-	checkAccess := checkAccessNode.AsPropertyAccessExpression()
-	if checkAccess.Expression != schemaExpression || checkAccess.Name() == nil || checkAccess.Name().Text() != "check" {
-		return false
+		call := accessNode.Parent.AsCallExpression()
+		if call.Expression != accessNode {
+			return false
+		}
+		switch access.Name().Text() {
+		case "annotate":
+			schemaExpression = accessNode.Parent
+		case "check":
+			if call.Arguments == nil {
+				return false
+			}
+			return schemaNumberHasFinitePredicate(tp, call.Arguments.Nodes)
+		default:
+			return false
+		}
 	}
-	if checkAccessNode.Parent == nil || checkAccessNode.Parent.Kind != ast.KindCallExpression {
-		return false
-	}
-
-	checkCall := checkAccessNode.Parent.AsCallExpression()
-	if checkCall.Expression != checkAccessNode || checkCall.Arguments == nil {
-		return false
-	}
-	return schemaNumberHasFinitePredicate(tp, checkCall.Arguments.Nodes)
+	return false
 }
 
 func schemaNumberHasFinitePipingCheck(tp *typeparser.TypeParser, reference *ast.Node, flows []*typeparser.PipingFlow) bool {
