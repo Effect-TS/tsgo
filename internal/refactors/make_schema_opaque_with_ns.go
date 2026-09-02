@@ -89,7 +89,6 @@ func runMakeSchemaOpaqueWithNs(ctx *refactor.Context) []ls.CodeAction {
 				opaqueExportModifiers(tracker),
 				ast.KindNamespaceKeyword,
 				tracker.NewIdentifier(origName),
-				nil,
 				nsBlock,
 			)
 			ast.SetParentInChildren(nsDecl)
