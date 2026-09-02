@@ -1,0 +1,519 @@
+==== /.src/optionMatchToFromOption.ts (37 flows) ====
+
+=== Piping Flow ===
+Location: 14:25 - 17:3
+Node: Option.match(option, {\n  onNone: () => Effect.fail(new MissingValue("data-first")),\n  onSome: Effect.succeed\n})
+Node Kind: KindCallExpression
+
+Subject: option
+Subject Type: Option<number>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Option.match
+      args: [{\n  onNone: () => Effect.fail(new MissingValue("data-first")),\n  onSome: Effect.succeed\n}]
+      outType: Effect<number, never, never> | Effect<never, MissingValue, never>
+
+=== Piping Flow ===
+Location: 15:16 - 15:60
+Node: Effect.fail(new MissingValue("data-first"))
+Node Kind: KindCallExpression
+
+Subject: new MissingValue("data-first")
+Subject Type: MissingValue
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, MissingValue, never>
+
+=== Piping Flow ===
+Location: 20:29 - 23:3
+Node: O.match(option, {\n  onSome: (value) => Fx.succeed(value),\n  onNone: () => Fx.fail(new MissingValue("identity"))\n})
+Node Kind: KindCallExpression
+
+Subject: option
+Subject Type: Option<number>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: O.match
+      args: [{\n  onSome: (value) => Fx.succeed(value),\n  onNone: () => Fx.fail(new MissingValue("identity"))\n}]
+      outType: Effect<number, never, never> | Effect<never, MissingValue, never>
+
+=== Piping Flow ===
+Location: 21:21 - 21:39
+Node: Fx.succeed(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Fx.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 22:16 - 22:54
+Node: Fx.fail(new MissingValue("identity"))
+Node Kind: KindCallExpression
+
+Subject: new MissingValue("identity")
+Subject Type: MissingValue
+
+Transformations (1):
+  [0] kind: call
+      callee: Fx.fail
+      args: (constant)
+      outType: Effect<never, MissingValue, never>
+
+=== Piping Flow ===
+Location: 27:30 - 32:3
+Node: Option.match(option, {\n  onNone: function() {\n    return Effect.fail(new MissingValue(String(arguments.length)))\n  },\n  onSome: Effect.succeed\n})
+Node Kind: KindCallExpression
+
+Subject: option
+Subject Type: Option<number>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Option.match
+      args: [{\n  onNone: function() {\n    return Effect.fail(new MissingValue(String(arguments.length)))\n  },\n  onSome: Effect.succeed\n}]
+      outType: Effect<number, never, never> | Effect<never, MissingValue, never>
+
+=== Piping Flow ===
+Location: 29:11 - 29:67
+Node: Effect.fail(new MissingValue(String(arguments.length)))
+Node Kind: KindCallExpression
+
+Subject: new MissingValue(String(arguments.length))
+Subject Type: MissingValue
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, MissingValue, never>
+
+=== Piping Flow ===
+Location: 29:41 - 29:65
+Node: String(arguments.length)
+Node Kind: KindCallExpression
+
+Subject: arguments.length
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: String
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 35:24 - 40:2
+Node: option.pipe(\n  Option.match({\n    onNone: () => Effect.fail(new MissingValue("pipeable")),\n    onSome: Effect.succeed\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: option
+Subject Type: Option<number>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Option.match
+      args: [{\n    onNone: () => Effect.fail(new MissingValue("pipeable")),\n    onSome: Effect.succeed\n  }]
+      outType: Effect<number, never, never> | Effect<never, MissingValue, never>
+
+=== Piping Flow ===
+Location: 37:18 - 37:60
+Node: Effect.fail(new MissingValue("pipeable"))
+Node Kind: KindCallExpression
+
+Subject: new MissingValue("pipeable")
+Subject Type: MissingValue
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, MissingValue, never>
+
+=== Piping Flow ===
+Location: 43:28 - 49:2
+Node: pipe(\n  option,\n  Option.match({\n    onNone: () => Effect.fail(new MissingValue("pipe")),\n    onSome: Effect.succeed\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: option
+Subject Type: Option<number>
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Option.match
+      args: [{\n    onNone: () => Effect.fail(new MissingValue("pipe")),\n    onSome: Effect.succeed\n  }]
+      outType: Effect<number, never, never> | Effect<never, MissingValue, never>
+
+=== Piping Flow ===
+Location: 46:18 - 46:56
+Node: Effect.fail(new MissingValue("pipe"))
+Node Kind: KindCallExpression
+
+Subject: new MissingValue("pipe")
+Subject Type: MissingValue
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, MissingValue, never>
+
+=== Piping Flow ===
+Location: 52:24 - 55:11
+Node: Option.match({\n  onNone: () => Effect.fail(new MissingValue("data-last")),\n  onSome: Effect.succeed\n})(option)
+Node Kind: KindCallExpression
+
+Subject: option
+Subject Type: Option<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Option.match({\n  onNone: () => Effect.fail(new MissingValue("data-last")),\n  onSome: Effect.succeed\n})
+      args: (constant)
+      outType: Effect<number, never, never> | Effect<never, MissingValue, never>
+
+=== Piping Flow ===
+Location: 53:16 - 53:59
+Node: Effect.fail(new MissingValue("data-last"))
+Node Kind: KindCallExpression
+
+Subject: new MissingValue("data-last")
+Subject Type: MissingValue
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, MissingValue, never>
+
+=== Piping Flow ===
+Location: 58:30 - 61:3
+Node: Option.match(option, {\n  onNone: () => Effect.fail(new Cause.NoSuchElementError()),\n  onSome: Effect.succeed\n})
+Node Kind: KindCallExpression
+
+Subject: option
+Subject Type: Option<number>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Option.match
+      args: [{\n  onNone: () => Effect.fail(new Cause.NoSuchElementError()),\n  onSome: Effect.succeed\n}]
+      outType: Effect<number, never, never> | Effect<never, NoSuchElementError, never>
+
+=== Piping Flow ===
+Location: 59:16 - 59:60
+Node: Effect.fail(new Cause.NoSuchElementError())
+Node Kind: KindCallExpression
+
+Subject: new Cause.NoSuchElementError()
+Subject Type: NoSuchElementError
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, NoSuchElementError, never>
+
+=== Piping Flow ===
+Location: 64:29 - 64:51
+Node: Option.isSome(option)
+Node Kind: KindCallExpression
+
+Subject: option
+Subject Type: Option<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Option.isSome
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 65:4 - 65:33
+Node: Effect.succeed(option.value)
+Node Kind: KindCallExpression
+
+Subject: option.value
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 66:4 - 66:44
+Node: Effect.fail(new MissingValue("isSome"))
+Node Kind: KindCallExpression
+
+Subject: new MissingValue("isSome")
+Subject Type: MissingValue
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, MissingValue, never>
+
+=== Piping Flow ===
+Location: 69:29 - 69:46
+Node: O.isNone(option)
+Node Kind: KindCallExpression
+
+Subject: option
+Subject Type: Option<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: O.isNone
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 70:4 - 70:44
+Node: Fx.fail(new Cause.NoSuchElementError())
+Node Kind: KindCallExpression
+
+Subject: new Cause.NoSuchElementError()
+Subject Type: NoSuchElementError
+
+Transformations (1):
+  [0] kind: call
+      callee: Fx.fail
+      args: (constant)
+      outType: Effect<never, NoSuchElementError, never>
+
+=== Piping Flow ===
+Location: 71:4 - 71:29
+Node: Fx.succeed(option.value)
+Node Kind: KindCallExpression
+
+Subject: option.value
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Fx.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 74:31 - 77:3
+Node: Option.match(option, {\n  onNone: () => Effect.fail(new MissingValue("transformed")),\n  onSome: (value) => Effect.succeed(value + 1)\n})
+Node Kind: KindCallExpression
+
+Subject: option
+Subject Type: Option<number>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Option.match
+      args: [{\n  onNone: () => Effect.fail(new MissingValue("transformed")),\n  onSome: (value) => Effect.succeed(value + 1)\n}]
+      outType: Effect<number, never, never> | Effect<never, MissingValue, never>
+
+=== Piping Flow ===
+Location: 75:16 - 75:61
+Node: Effect.fail(new MissingValue("transformed"))
+Node Kind: KindCallExpression
+
+Subject: new MissingValue("transformed")
+Subject Type: MissingValue
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, MissingValue, never>
+
+=== Piping Flow ===
+Location: 76:21 - 76:47
+Node: Effect.succeed(value + 1)
+Node Kind: KindCallExpression
+
+Subject: value + 1
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 80:26 - 83:3
+Node: Option.match(option, {\n  onNone: () => Effect.die("missing"),\n  onSome: Effect.succeed\n})
+Node Kind: KindCallExpression
+
+Subject: option
+Subject Type: Option<number>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Option.match
+      args: [{\n  onNone: () => Effect.die("missing"),\n  onSome: Effect.succeed\n}]
+      outType: Effect<number, never, never> | Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 81:16 - 81:38
+Node: Effect.die("missing")
+Node Kind: KindCallExpression
+
+Subject: "missing"
+Subject Type: "missing"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.die
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 86:30 - 89:3
+Node: Option.match(option, {\n  onNone: () => Effect.succeed(0),\n  onSome: Effect.succeed\n})
+Node Kind: KindCallExpression
+
+Subject: option
+Subject Type: Option<number>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Option.match
+      args: [{\n  onNone: () => Effect.succeed(0),\n  onSome: Effect.succeed\n}]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 87:16 - 87:34
+Node: Effect.succeed(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 92:32 - 92:54
+Node: Option.isSome(option)
+Node Kind: KindCallExpression
+
+Subject: option
+Subject Type: Option<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Option.isSome
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 93:4 - 93:36
+Node: Effect.succeed(otherSome.value)
+Node Kind: KindCallExpression
+
+Subject: otherSome.value
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 94:4 - 94:46
+Node: Effect.fail(new MissingValue("mismatch"))
+Node Kind: KindCallExpression
+
+Subject: new MissingValue("mismatch")
+Subject Type: MissingValue
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, MissingValue, never>
+
+=== Piping Flow ===
+Location: 97:34 - 97:56
+Node: Option.isSome(option)
+Node Kind: KindCallExpression
+
+Subject: option
+Subject Type: Option<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Option.isSome
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 98:4 - 98:37
+Node: Effect.succeed(option.value + 1)
+Node Kind: KindCallExpression
+
+Subject: option.value + 1
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 99:4 - 99:49
+Node: Effect.fail(new MissingValue("transformed"))
+Node Kind: KindCallExpression
+
+Subject: new MissingValue("transformed")
+Subject Type: MissingValue
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, MissingValue, never>
+
+=== Piping Flow ===
+Location: 103:95 - 104:27
+Node: handlers.onSome(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: A
+
+Transformations (1):
+  [0] kind: call
+      callee: handlers.onSome
+      args: (constant)
+      outType: C
+
+=== Piping Flow ===
+Location: 109:16 - 109:59
+Node: Effect.fail(new MissingValue("unrelated"))
+Node Kind: KindCallExpression
+
+Subject: new MissingValue("unrelated")
+Subject Type: MissingValue
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, MissingValue, never>

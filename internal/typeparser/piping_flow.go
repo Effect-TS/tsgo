@@ -265,6 +265,10 @@ func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) []*P
 			if node == nil {
 				continue
 			}
+			if unwrapped := ast.SkipParentheses(node); unwrapped != node {
+				queue = append(queue, workItem{node: unwrapped, parentFlow: item.parentFlow})
+				continue
+			}
 
 			if node.Kind == ast.KindCallExpression {
 				// Try Effect.fn call first (must be before pipe and singleArg)

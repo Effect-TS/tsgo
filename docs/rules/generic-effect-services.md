@@ -9,7 +9,7 @@ Prevents services with type parameters that cannot be discriminated at runtime
 | Category | Correctness |
 | Default severity | `warning` |
 | Fixable | No |
-| Effect versions | v3, v4 |
+| Effect versions | v3 |
 | Diagnostic codes | `TS377043` |
 | Language Service name | `genericEffectServices` |
 | Oxlint name | `effecttsgo/generic-effect-services` |

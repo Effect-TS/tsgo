@@ -1,0 +1,145 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/optionMatchToFromOption.ts(14,26): suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+/.src/optionMatchToFromOption.ts(20,30): suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+/.src/optionMatchToFromOption.ts(27,31): suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+/.src/optionMatchToFromOption.ts(36,3): suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+/.src/optionMatchToFromOption.ts(45,3): suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+/.src/optionMatchToFromOption.ts(52,25): suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+/.src/optionMatchToFromOption.ts(58,31): suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+/.src/optionMatchToFromOption.ts(64,30): suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+/.src/optionMatchToFromOption.ts(69,30): suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+
+
+==== /.src/optionMatchToFromOption.ts (9 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics optionMatchToFromOption:suggestion
+    import { Cause, Effect, Effect as Fx, Option, Option as O, pipe } from "effect"
+    
+    class MissingValue {
+      readonly _tag = "MissingValue"
+      constructor(readonly message: string) {}
+    }
+    
+    declare const option: Option.Option<number>
+    declare const otherSome: Option.Some<number>
+    
+    // Should trigger: data-first Option.match with a point-free success handler.
+    export const dataFirst = Option.match(option, {
+                             ~~~~~~~~~~~~
+!!! suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+      onNone: () => Effect.fail(new MissingValue("data-first")),
+      onSome: Effect.succeed
+    })
+    
+    // Should trigger: handler order is irrelevant and an exact identity arrow is accepted.
+    export const identityArrow = O.match(option, {
+                                 ~~~~~~~
+!!! suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+      onSome: (value) => Fx.succeed(value),
+      onNone: () => Fx.fail(new MissingValue("identity"))
+    })
+    
+    // Should trigger without a fix: replacing a function expression with an arrow
+    // could change the meaning of arguments or this inside the failure expression.
+    export const functionOnNone = Option.match(option, {
+                                  ~~~~~~~~~~~~
+!!! suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+      onNone: function() {
+        return Effect.fail(new MissingValue(String(arguments.length)))
+      },
+      onSome: Effect.succeed
+    })
+    
+    // Should trigger: pipeable Option.match rewrites to pipeable Effect.fromOption.
+    export const pipeable = option.pipe(
+      Option.match({
+      ~~~~~~~~~~~~
+!!! suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+        onNone: () => Effect.fail(new MissingValue("pipeable")),
+        onSome: Effect.succeed
+      })
+    )
+    
+    // Should trigger: the function-pipe form is normalized the same way.
+    export const functionPipe = pipe(
+      option,
+      Option.match({
+      ~~~~~~~~~~~~
+!!! suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+        onNone: () => Effect.fail(new MissingValue("pipe")),
+        onSome: Effect.succeed
+      })
+    )
+    
+    // Should trigger: direct data-last application is also supported.
+    export const dataLast = Option.match({
+                            ~~~~~~~~~~~~
+!!! suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+      onNone: () => Effect.fail(new MissingValue("data-last")),
+      onSome: Effect.succeed
+    })(option)
+    
+    // Should trigger and use the one-argument Effect.fromOption form.
+    export const defaultFailure = Option.match(option, {
+                                  ~~~~~~~~~~~~
+!!! suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+      onNone: () => Effect.fail(new Cause.NoSuchElementError()),
+      onSome: Effect.succeed
+    })
+    
+    // Should trigger: isSome puts the success branch first.
+    export const isSomeTernary = Option.isSome(option)
+                                 ~~~~~~~~~~~~~
+!!! suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+      ? Effect.succeed(option.value)
+      : Effect.fail(new MissingValue("isSome"))
+    
+    // Should trigger: isNone reverses the two branch roles.
+    export const isNoneTernary = O.isNone(option)
+                                 ~~~~~~~~
+!!! suggestion TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+      ? Fx.fail(new Cause.NoSuchElementError())
+      : Fx.succeed(option.value)
+    
+    // Should NOT trigger: onSome transforms the value.
+    export const transformedSome = Option.match(option, {
+      onNone: () => Effect.fail(new MissingValue("transformed")),
+      onSome: (value) => Effect.succeed(value + 1)
+    })
+    
+    // Should NOT trigger: onNone is not Effect.fail.
+    export const diesOnNone = Option.match(option, {
+      onNone: () => Effect.die("missing"),
+      onSome: Effect.succeed
+    })
+    
+    // Should NOT trigger: a default success is a legitimate Option.match use.
+    export const defaultSuccess = Option.match(option, {
+      onNone: () => Effect.succeed(0),
+      onSome: Effect.succeed
+    })
+    
+    // Should NOT trigger: the succeed branch reads a different option.
+    export const mismatchedOption = Option.isSome(option)
+      ? Effect.succeed(otherSome.value)
+      : Effect.fail(new MissingValue("mismatch"))
+    
+    // Should NOT trigger: the succeed branch transforms the unwrapped value.
+    export const transformedTernary = Option.isSome(option)
+      ? Effect.succeed(option.value + 1)
+      : Effect.fail(new MissingValue("transformed"))
+    
+    const local = {
+      isSome: Option.isSome,
+      match: <A, B, C>(value: A, handlers: { onNone: () => B; onSome: (value: A) => C }): B | C =>
+        handlers.onSome(value)
+    }
+    
+    // Should NOT trigger: an unrelated function with the same surface shape.
+    export const unrelated = local.match(1, {
+      onNone: () => Effect.fail(new MissingValue("unrelated")),
+      onSome: Effect.succeed
+    })
+    

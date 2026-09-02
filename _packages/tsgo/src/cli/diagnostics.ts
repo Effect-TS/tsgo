@@ -11,6 +11,7 @@ export interface DiagnosticsRequest {
   readonly severity?: string
   readonly progress: boolean
   readonly lspconfig?: string
+  readonly listFiles: boolean
 }
 
 export interface DiagnosticsProcessResult {

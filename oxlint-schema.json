@@ -2236,6 +2236,9 @@
         "effecttsgo/abort-controller-in-effect": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/acquire-release-disposable": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/all-of-map-to-for-each": {
           "$ref": "#/definitions/RuleNoConfig"
         },
@@ -2245,9 +2248,6 @@
         "effecttsgo/async-function": {
           "$ref": "#/definitions/RuleNoConfig"
         },
-        "effecttsgo/catch-die-to-or-die": {
-          "$ref": "#/definitions/RuleNoConfig"
-        },
         "effecttsgo/catch-all-to-map-error": {
           "$ref": "#/definitions/RuleNoConfig"
         },
@@ -2255,6 +2255,9 @@
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/catch-conditional-refail-to-catch-if": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "effecttsgo/catch-die-to-or-die": {
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/catch-tag-to-catch-reason": {
@@ -2428,6 +2431,9 @@
         "effecttsgo/non-object-effect-service-type": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/option-match-to-from-option": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/outdated-api": {
           "$ref": "#/definitions/RuleNoConfig"
         },
@@ -2438,6 +2444,9 @@
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/prefer-schema-type-property": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "effecttsgo/prefer-succeed-some-or-none": {
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/prefer-typed-schema-decoder": {

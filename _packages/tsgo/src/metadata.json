@@ -27,6 +27,7 @@
       "description": "Enable all Effect-native diagnostics at warning level.",
       "diagnosticSeverity": {
         "abortControllerInEffect": "warning",
+        "acquireReleaseDisposable": "warning",
         "asyncFunction": "warning",
         "cryptoRandomUUID": "warning",
         "cryptoRandomUUIDInEffect": "warning",
@@ -208,8 +209,7 @@
       "defaultSeverity": "warning",
       "fixable": false,
       "supportedEffect": [
-        "v3",
-        "v4"
+        "v3"
       ],
       "codes": [
         377043
@@ -869,7 +869,8 @@
       "defaultSeverity": "suggestion",
       "fixable": false,
       "supportedEffect": [
-        "v3"
+        "v3",
+        "v4"
       ],
       "codes": [
         377037
@@ -999,6 +1000,29 @@
             "start": 90,
             "end": 111,
             "text": "`AbortController` is manually constructed inside Effect code. Use `Effect.abortSignal` for Effect-managed cancellation. effect(abortControllerInEffect)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "acquireReleaseDisposable",
+      "group": "effectNative",
+      "description": "Suggests Effect.acquireDisposable when Effect.acquireRelease only invokes the acquired resource's disposal protocol",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377119
+      ],
+      "preview": {
+        "sourceText": "/// \u003creference lib=\"esnext.disposable\" /\u003e\nimport { Effect } from \"effect\"\n\ndeclare const acquire: Effect.Effect\u003cAsyncDisposable\u003e\n\nexport const resource = Effect.acquireRelease(\n  acquire,\n  (resource) =\u003e Effect.promise(() =\u003e resource[Symbol.asyncDispose]())\n)\n",
+        "diagnostics": [
+          {
+            "start": 154,
+            "end": 175,
+            "text": "`Effect.acquireDisposable` expresses this disposable resource acquisition more directly than `Effect.acquireRelease` with a manual disposal finalizer. effect(acquireReleaseDisposable)"
           }
         ]
       }
@@ -1840,6 +1864,30 @@
       }
     },
     {
+      "name": "flatMapConditionalToFilterOrFail",
+      "group": "style",
+      "description": "Suggests Effect.filterOrFail or Effect.filterOrElse when Effect.flatMap conditionally passes its input through with Effect.succeed",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377120
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const program: Effect.Effect\u003cnumber\u003e\n\nprogram.pipe(\n  Effect.flatMap((value) =\u003e\n    value \u003e 0 ? Effect.succeed(value) : Effect.fail(\"non-positive\")\n  )\n)\n",
+        "diagnostics": [
+          {
+            "start": 95,
+            "end": 109,
+            "text": "`Effect.filterOrFail` expresses this conditional validation more directly than `Effect.flatMap` with an identity `Effect.succeed` branch. effect(flatMapConditionalToFilterOrFail)"
+          }
+        ]
+      }
+    },
+    {
       "name": "flatMapToMap",
       "group": "style",
       "description": "Suggests using Effect.map instead of Effect.flatMap when the callback only wraps its result with Effect.succeed",
@@ -2040,6 +2088,29 @@
       }
     },
     {
+      "name": "optionMatchToFromOption",
+      "group": "style",
+      "description": "Suggests Effect.fromOption when Option.match or an Option tag conditional only converts Some to Effect.succeed and None to Effect.fail",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377118
+      ],
+      "preview": {
+        "sourceText": "import { Data, Effect, Option } from \"effect\"\n\nclass UserNotFound extends Data.TaggedError(\"UserNotFound\")\u003c{\n  readonly id: string\n}\u003e {}\n\ndeclare const findUser: (id: string) =\u003e Option.Option\u003c{ readonly name: string }\u003e\n\nexport const getUser = (id: string) =\u003e\n  Option.match(findUser(id), {\n    onNone: () =\u003e Effect.fail(new UserNotFound({ id })),\n    onSome: (user) =\u003e Effect.succeed(user)\n  })\n",
+        "diagnostics": [
+          {
+            "start": 261,
+            "end": 273,
+            "text": "`Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)"
+          }
+        ]
+      }
+    },
+    {
       "name": "preferSchemaTypeProperty",
       "group": "style",
       "description": "Disallows Schema.Schema.Type\u003ctypeof X\u003e in favor of typeof X.Type",
@@ -2059,6 +2130,35 @@
             "start": 97,
             "end": 128,
             "text": "Do not use `Schema.Schema.Type\u003ctypeof X\u003e` to extract a schema's type. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "preferSucceedSomeOrNone",
+      "group": "style",
+      "description": "Suggests using Effect.succeedNone or Effect.succeedSome instead of wrapping Option.none or Option.some with Effect.succeed",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377117
+      ],
+      "preview": {
+        "sourceText": "import { Effect, Option } from \"effect\"\n\nexport const none = Effect.succeed(Option.none())\nexport const some = Effect.succeed(Option.some(1))\n",
+        "diagnostics": [
+          {
+            "start": 61,
+            "end": 75,
+            "text": "`Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)"
+          },
+          {
+            "start": 111,
+            "end": 125,
+            "text": "`Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)"
           }
         ]
       }

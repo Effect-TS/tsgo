@@ -19,7 +19,9 @@ var All = []fixable.Fixable{
 	CatchTagToCatchReasonFix,
 	AllOfMapToForEachFix,
 	FlatMapToMapFix,
+	FlatMapConditionalToFilterOrFailFix,
 	MapSomeToAsSomeFix,
+	OptionMatchToFromOptionFix,
 	SyncToSucceedFix,
 	CatchToOrElseSucceedFix,
 	CatchToIgnoreFix,
@@ -28,6 +30,7 @@ var All = []fixable.Fixable{
 	UnnecessaryPipeChainFix,
 	ReturnEffectInGenFix,
 	EffectSucceedWithVoidFix,
+	PreferSucceedSomeOrNoneFix,
 	UnnecessaryEffectGenFix,
 	UnnecessaryArrowBlockFix,
 	UnnecessaryTypeofTypeFix,
@@ -54,6 +57,7 @@ var All = []fixable.Fixable{
 	ServiceNotAsClassFix,
 	PreferUnsafeConstructorFix,
 	PreferTypedSchemaDecoderFix,
+	AcquireReleaseDisposableFix,
 }
 
 // ByErrorCode finds all fixables that handle a given error code.

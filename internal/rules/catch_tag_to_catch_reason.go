@@ -206,19 +206,28 @@ func analyzeCatchTagToCatchReasonHandler(tp *typeparser.TypeParser, c *checker.C
 	}
 
 	dispatchRefs := make(map[*ast.Node]struct{})
-	dispatch := tp.ParseTaggedDispatch(handlerNode, parameterSymbol)
+	dispatch := returning.Dispatch
 	if dispatch == nil || len(dispatch.Branches) == 0 || dispatch.Fallback == nil {
+		return catchTagToCatchReasonHandler{}, false
+	}
+	tagSubject := dispatch.CommonTagSubject(tp)
+	if tagSubject == nil || !isResultDispatchTagReference(tp, c, tagSubject, parameterSymbol) {
 		return catchTagToCatchReasonHandler{}, false
 	}
 
 	branches := make([]CatchTagToCatchReasonBranch, len(dispatch.Branches))
+	seenTags := make(map[string]struct{}, len(dispatch.Branches))
 	for index, branch := range dispatch.Branches {
-		root, exactReasonChain := catchReasonTagReference(tp, c, branch.Discriminant, parameterSymbol)
-		if _, exists := reasonTags[branch.Tag]; !exactReasonChain || !exists || !isEffectExpression(tp, branch.Result) {
+		tag, tagged := resultDispatchTagValue(branch.Condition)
+		root, exactReasonChain := catchReasonTagReference(tp, c, branch.Condition.TagSubject, parameterSymbol)
+		_, validReasonTag := reasonTags[tag]
+		_, duplicateTag := seenTags[tag]
+		if !tagged || !exactReasonChain || !validReasonTag || duplicateTag || !isEffectExpression(tp, branch.Result) {
 			return catchTagToCatchReasonHandler{}, false
 		}
+		seenTags[tag] = struct{}{}
 		dispatchRefs[root] = struct{}{}
-		branches[index] = CatchTagToCatchReasonBranch{ReasonTag: branch.Tag, Result: branch.Result}
+		branches[index] = CatchTagToCatchReasonBranch{ReasonTag: tag, Result: branch.Result}
 	}
 
 	fallbackParam, ok := catchTagReFailParameter(tp, c, dispatch.Fallback, parameterSymbol)
@@ -286,15 +295,7 @@ func catchReasonTagReference(tp *typeparser.TypeParser, c *checker.Checker, node
 	if node == nil || node.Kind != ast.KindPropertyAccessExpression {
 		return nil, false
 	}
-	tagAccess := node.AsPropertyAccessExpression()
-	if tagAccess == nil || tagAccess.Expression == nil || tagAccess.Name() == nil || tagAccess.Name().Text() != "_tag" {
-		return nil, false
-	}
-	reasonNode := unwrapTransparentExpression(tagAccess.Expression)
-	if reasonNode == nil || reasonNode.Kind != ast.KindPropertyAccessExpression {
-		return nil, false
-	}
-	reasonAccess := reasonNode.AsPropertyAccessExpression()
+	reasonAccess := node.AsPropertyAccessExpression()
 	if reasonAccess == nil || reasonAccess.Expression == nil || reasonAccess.Name() == nil || reasonAccess.Name().Text() != "reason" {
 		return nil, false
 	}

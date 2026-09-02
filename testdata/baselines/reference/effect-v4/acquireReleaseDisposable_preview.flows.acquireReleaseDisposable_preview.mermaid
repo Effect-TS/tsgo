@@ -1,0 +1,12 @@
+flowchart TB
+  0[/"type: Effect#lt;AsyncDisposable, never, Scope#gt;<br/>node: Effect.acquireRelease#40;#92;n  acquire,#92;n  #40;resource#41; =#gt; Effect.promise#40;#40;#41; =#gt; resource#91;Symbol.asyncDispose#93;#40;#41;#41;#92;n#41;"/]
+  1[["type: #40;resource: AsyncDisposable#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;resource#41; =#gt; Effect.promise#40;#40;#41; =#gt; resource#91;Symbol.asyncDispose#93;#40;#41;#41;"]]
+  2[["type: #40;#41; =#gt; PromiseLike#lt;void#gt;<br/>node: #40;#41; =#gt; resource#91;Symbol.asyncDispose#93;#40;#41;"]]
+  3[/"type: PromiseLike#lt;void#gt;<br/>node: resource#91;Symbol.asyncDispose#93;#40;#41;"/]
+  4["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.promise<br/>args: #91;#93;"]
+  5[/"type: #lt;A#gt;#40;evaluate: #40;signal: AbortSignal#41; =#gt; PromiseLike#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.promise"/]
+  3 -->|"kind: potentialReturn"| 2
+  2 -->|"kind: pipe"| 4
+  5 -->|"kind: transformCallee"| 4
+  4 -->|"kind: potentialReturn"| 1
+  1 -->|"kind: usedBy"| 0

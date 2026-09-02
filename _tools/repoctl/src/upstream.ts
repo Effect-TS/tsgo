@@ -303,12 +303,13 @@ export const resolveTypeScriptProvider = Effect.fnUntraced(function*(revision: s
   const matches = yield* Effect.filter(providers, (source) => commitExists(source.repositorySlug, revision), {
     concurrency: "unbounded"
   })
-  if (matches.length !== 1) {
+  if (matches.length === 0) {
     return yield* new UpstreamManifestError({
-      reason: `TypeScript commit ${revision} matched ${matches.length} supported repositories`
+      reason: `TypeScript commit ${revision} did not match any supported repository`
     })
   }
-  return matches[0]!.provider
+  const preferred = matches.find((source) => source.provider === "typescript") ?? matches[0]!
+  return preferred.provider
 })
 
 const fetchTypeScriptMetadata = Effect.fnUntraced(function*(repositoryRoot: string, spec: string) {
@@ -677,12 +678,13 @@ const readRemoteTypeScriptGitlink = Effect.fnUntraced(function*(repository: stri
       Effect.option
     ), { concurrency: "unbounded" })
   const matches = entries.flatMap((entry) => entry._tag === "Some" ? [entry.value] : [])
-  if (matches.length !== 1) {
+  if (matches.length === 0) {
     return yield* new UpstreamManifestError({
-      reason: `Unable to resolve a unique TypeScript gitlink at ${revision}`
+      reason: `Unable to resolve a TypeScript gitlink at ${revision}`
     })
   }
-  return matches[0]!
+  const preferred = matches.find((entry) => entry.source.provider === "typescript") ?? matches[0]!
+  return preferred
 })
 
 const fetchLatestOxlintSelection = Effect.fnUntraced(function*(repositoryRoot: string) {

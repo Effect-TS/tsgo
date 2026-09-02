@@ -133,7 +133,8 @@ func analyzeConditionalRefailHandler(
 	methods conditionalRefailCatchMethods,
 ) (string, bool) {
 	dispatch := typeparser.ParseReturningDispatch(handlerNode)
-	if dispatch == nil || len(dispatch.Params) != 1 || len(dispatch.Branches) != 1 || dispatch.Fallback == nil {
+	if dispatch == nil || len(dispatch.Params) != 1 || dispatch.Dispatch == nil ||
+		len(dispatch.Dispatch.Branches) != 1 || dispatch.Dispatch.Fallback == nil {
 		return "", false
 	}
 	parameter := dispatch.Params[0]
@@ -149,20 +150,21 @@ func analyzeConditionalRefailHandler(
 		return "", false
 	}
 
-	// Reuse the shared tagged-dispatch parser for exact `_tag` equality and
-	// switch shapes. A recovered tag maps more precisely to catchTag; an
-	// inverted tag branch still maps to catchIf.
-	if tagged := tp.ParseTaggedDispatch(handlerNode, parameterSymbol); tagged != nil && len(tagged.Branches) == 1 && tagged.Fallback != nil {
-		branch := tagged.Branches[0]
+	// A recovered tag maps more precisely to catchTag; an inverted tag branch
+	// still maps to catchIf.
+	branch := dispatch.Dispatch.Branches[0]
+	tagSubject := dispatch.Dispatch.CommonTagSubject(tp)
+	if _, ok := resultDispatchTagValue(branch.Condition); tagSubject != nil && ok &&
+		isResultDispatchTagReference(tp, c, tagSubject, parameterSymbol) {
 		branchRefails := isConditionalRefailExpression(tp, c, branch.Result, parameterSymbol, methods.failMethodName)
-		fallbackRefails := isConditionalRefailExpression(tp, c, tagged.Fallback, parameterSymbol, methods.failMethodName)
+		fallbackRefails := isConditionalRefailExpression(tp, c, dispatch.Dispatch.Fallback, parameterSymbol, methods.failMethodName)
 		if branchRefails == fallbackRefails {
 			return "", false
 		}
 		recovery := branch.Result
 		preferred := methods.preferredMethodName
 		if branchRefails {
-			recovery = tagged.Fallback
+			recovery = dispatch.Dispatch.Fallback
 		} else if methods.catchMethodName == "catch" {
 			preferred = "catchTag"
 		}
@@ -172,24 +174,20 @@ func analyzeConditionalRefailHandler(
 		return preferred, true
 	}
 
-	branch := dispatch.Branches[0]
-	condition := branch.Test
-	if branch.Discriminant != nil {
-		condition = branch.Discriminant
-	}
+	condition := branch.Condition.Subject
 	if !isConditionalRefailPredicate(tp, c, condition, parameterSymbol) {
 		return "", false
 	}
 
 	trueRefails := isConditionalRefailExpression(tp, c, branch.Result, parameterSymbol, methods.failMethodName)
-	falseRefails := isConditionalRefailExpression(tp, c, dispatch.Fallback, parameterSymbol, methods.failMethodName)
+	falseRefails := isConditionalRefailExpression(tp, c, dispatch.Dispatch.Fallback, parameterSymbol, methods.failMethodName)
 	if trueRefails == falseRefails {
 		return "", false
 	}
 
 	recovery := branch.Result
 	if trueRefails {
-		recovery = dispatch.Fallback
+		recovery = dispatch.Dispatch.Fallback
 	}
 	if !isEffectExpression(tp, recovery) {
 		return "", false

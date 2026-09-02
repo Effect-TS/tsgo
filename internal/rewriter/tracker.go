@@ -44,6 +44,15 @@ func (t *Tracker) GetChanges() map[string][]*lsproto.TextEdit {
 	return change.GetChanges(t.Tracker)
 }
 
+func (t *Tracker) NewModuleDeclaration(
+	modifiers *ast.ModifierList,
+	keyword ast.Kind,
+	name *ast.ModuleName,
+	body *ast.ModuleBody,
+) *ast.Node {
+	return change.NewModuleDeclaration(t.Tracker, modifiers, keyword, name, body)
+}
+
 func (t *Tracker) ReplaceNode(sourceFile *ast.SourceFile, oldNode *ast.Node, newNode *ast.Node, options *change.NodeOptions) {
 	if oldNode == nil || newNode == nil {
 		return
@@ -61,8 +70,15 @@ func (t *Tracker) ReplaceNode(sourceFile *ast.SourceFile, oldNode *ast.Node, new
 	if options.Suffix != "" {
 		text += options.Suffix
 	}
-	rng := t.GetAdjustedRange(sourceFile, oldNode, oldNode, options.LeadingTriviaOption, options.TrailingTriviaOption)
-	t.ReplaceRangeWithText(sourceFile, rng, text)
+	change.ReplaceAdjustedRangeWithText(
+		t.Tracker,
+		sourceFile,
+		oldNode,
+		oldNode,
+		options.LeadingTriviaOption,
+		options.TrailingTriviaOption,
+		text,
+	)
 }
 
 func (t *Tracker) InsertNodeBefore(sourceFile *ast.SourceFile, before *ast.Node, newNode *ast.Node, blankLineBetween bool, leadingTriviaOption change.LeadingTriviaOption) {
@@ -83,8 +99,15 @@ func (t *Tracker) flushPendingBefore() {
 		if edit.before == nil || edit.sourceFile == nil || edit.text == "" {
 			continue
 		}
-		start := t.GetAdjustedRange(edit.sourceFile, edit.before, edit.before, edit.leading, change.TrailingTriviaOptionNone).Start
-		t.ReplaceRangeWithText(edit.sourceFile, lsproto.Range{Start: start, End: start}, edit.text)
+		change.InsertTextAtAdjustedRangeStart(
+			t.Tracker,
+			edit.sourceFile,
+			edit.before,
+			edit.before,
+			edit.leading,
+			change.TrailingTriviaOptionNone,
+			edit.text,
+		)
 	}
 	t.pendingBefore = nil
 }

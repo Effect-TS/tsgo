@@ -1,5 +1,110 @@
 # @effect/tsgo
 
+## 0.39.1
+
+### Patch Changes
+
+- c2e4353: Update the TypeScript next tag to [`7.1.0-dev.20260901.1`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260901.1), update Oxlint to `1.81.0`, and refresh the generated configuration schemas. Support SchemaStore's draft-07 nullable schema representation when injecting the Effect language-service plugin schema.
+
+## 0.39.0
+
+### Minor Changes
+
+- 7e30dc9: Add the `acquireReleaseDisposable` rule to replace manual disposal finalizers passed to `Effect.acquireRelease` with `Effect.acquireDisposable`.
+- f134c31: Add the `optionMatchToFromOption` diagnostic and quick fix for Option-to-Effect conversions that can use `Effect.fromOption`.
+  
+  The rule recognizes supported `Option.match` call styles and `Option.isSome` / `Option.isNone` conditional expressions whose branches only wrap the value with `Effect.succeed` or produce `Effect.fail`. It suggests the one-argument `Effect.fromOption` form for the default `Cause.NoSuchElementError`, and preserves custom failures in a lazy callback.
+- 90c884e: Expose piping-flow extraction through the `etsgoapi` Go API.
+  
+  The type parser already understands "piping flows" — a subject expression followed by an ordered list of transformations, unifying the `pipe(...)`, pipeable `.pipe(...)`, data-first, data-last and `Effect.fn` forms — but that analysis was only reachable from internal packages. `etsgoapi.TypeParser` now surfaces it so external Go integrations can consume it without importing `internal/...`.
+  
+  ```go
+  tp := etsgoapi.NewTypeParser(program, checker)
+  for _, flow := range tp.PipingFlows(sourceFile, true /* includeEffectFn */) {
+  	// flow.Subject.Node / flow.Subject.OutType — the starting expression and its type
+  	for _, step := range flow.Transformations {
+  		// step.Kind (pipe | pipeable | dataFirst | dataLast | call | effectFn | effectFnUntraced)
+  		// step.Callee / step.Args / step.OutType
+  	}
+  }
+  ```
+  
+  Adds the public `PipingFlow`, `PipingFlowSubject`, `PipingFlowTransformation` and `TransformationKind` types alongside the new `(*TypeParser).PipingFlows` method.
+- 804c2a9: Add the `flatMapConditionalToFilterOrFail` diagnostic and quick fix, which replaces identity-succeed `Effect.flatMap` conditionals with `Effect.filterOrFail` or `Effect.filterOrElse`.
+- 4e14641: Add the `preferSucceedSomeOrNone` diagnostic and autofix for replacing `Effect.succeed(Option.none())` and `Effect.succeed(Option.some(value))`, including equivalent pipe forms, with `Effect.succeedNone` and `Effect.succeedSome(value)`.
+
+### Patch Changes
+
+- fcc641e: Keep the Nix TypeScript source pin synchronized with the TypeScript next metadata so Nix builds compile generated shims against the matching compiler revision.
+- 36f2524: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260831.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/9a8581c393a38961489cc8409ae4dfbe97fc25ec) commit `9a8581c393a38961489cc8409ae4dfbe97fc25ec`, and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
+## 0.38.0
+
+### Minor Changes
+
+- 773b245: Add the `allOfMapToForEach` style diagnostic, which suggests replacing
+  `Effect.all(values.map(callback), options)` with the equivalent
+  `Effect.forEach(values, callback, options)` form.
+- fe7a29e: Add the `catchAllDieToOrDie` style diagnostic, which suggests replacing
+  `Effect.catch` or `Effect.catchAll` with `Effect.orDie` when the catch-all
+  handler forwards its typed failure unchanged to `Effect.die`.
+- 32c575a: Add the `catchConditionalRefailToCatchIf` diagnostic for conditional `Effect.catch` and `Effect.catchCause` handlers that re-fail their untouched input, suggesting `Effect.catchIf`, `Effect.catchCauseIf`, or `Effect.catchTag` as appropriate.
+- 41ec458: Detect the data-first form of `effectMapVoid` by driving detection off piping flows.
+  
+  `effectMapVoid` previously matched only the data-last / pipeable form of the pattern, so a data-first `Effect.map(self, () => {})` was missed. Detection now runs over the piping-flow transformations, which normalize the subject away, so both forms are reported uniformly and the quick fix rewrites each one correctly.
+  
+  For example, the data-first call:
+  
+  ```ts
+  Effect.map(Effect.succeed(1), () => {})
+  ```
+  
+  is now flagged and fixed to:
+  
+  ```ts
+  Effect.asVoid(Effect.succeed(1))
+  ```
+  
+  while the existing data-last form (`pipe(self, Effect.map(() => {}))`) continues to be fixed to a bare `Effect.asVoid`.
+- 1ab4380: Improve dual function detection by matching alpha-equivalent data-first and pipeable overload declarations without instantiating their generic signatures.
+  
+  For example, data-first calls such as `Option.match(value, handlers)` now normalize to the same piping-flow representation as `value.pipe(Option.match(handlers))`, even when the overloads reorder generic parameters or return a generic union.
+- 2ae20c4: Refactor the `mapSomeToAsSome` mapper detection onto the shared `UnwrapIdentityForwarder` helper. The diagnostic and quick fix now also recognize identity-forwarding function expressions:
+  
+  ```ts
+  // now triggers, alongside Effect.map(Option.some) and Effect.map((v) => Option.some(v))
+  numberEffect.pipe(
+    Effect.map(function (value) {
+      return Option.some(value)
+    })
+  )
+  ```
+  
+  Annotated or optional mapper parameters and explicit type arguments on the inner `Option.some` call still do not trigger, since they can intentionally widen the resulting `Option` type.
+- 2a02aae: Add the `mapSomeToAsSome` diagnostic and quick fix, which replaces `Effect.map(Option.some)` and its exact eta-expanded form with `Effect.asSome` in pipeable and data-first flows.
+
+### Patch Changes
+
+- 68a603e: Bound CI Go caches with a resolved cache identity
+  
+  `repoctl upstream resolve` now emits a Go cache identity derived from `upstream.json`: the `typescript` component owns and saves its Go caches, `oxlint-tsgolint` restores the compiler objects already cached by the typescript jobs under its TypeScript dependency version (Go's build cache is content-addressed, so the shared compiler packages hit directly), and the Rust-based `oxlint` component skips Go caching entirely instead of saving a duplicate GOCACHE snapshot.
+  
+  The go-build cache key no longer includes the commit SHA, so a multi-GB cache entry is written once per dependency state instead of on every push to main, and non-materialized setups are restore-only. Previously each push saved ~15GB of duplicate GOCACHE snapshots, evicting every other cache in the repository (GitHub caps repository caches at 10GB) and forcing all validation jobs to run cold.
+  
+  The generated shim cache key now also hashes `_patches/typescript/**`, so patch changes for the migrated TypeScript compiler repository invalidate cached shims correctly.
+- e30bbdb: Fix `supportedEffect` metadata for two rules whose declaration disagreed with their actual behavior:
+  
+  - `genericEffectServices` declared `["v3", "v4"]` but is gated to run only on Effect v3 projects. It now declares `["v3"]`, so v4 users no longer enable a rule that can never fire.
+  - `schemaSyncInEffect` declared `["v3"]` but fully supports Effect v4 (suggesting `decodeEffect`/`encodeEffect` variants). It now declares `["v3", "v4"]`.
+  
+  `metadata.json` and the generated rule docs were regenerated accordingly. No diagnostic behavior changed.
+- 24cbb0d: Fix `repoctl upstream update` failing when a TypeScript commit is reachable from both supported provider repositories.
+  
+  Previously, `resolveTypeScriptProvider` and `readRemoteTypeScriptGitlink` in `_tools/repoctl/src/upstream.ts` errored out with `TypeScript commit <sha> matched 2 supported repositories` whenever a single revision existed in both `microsoft/TypeScript` (the canonical upstream) and the legacy `microsoft/typescript-go` fork. This blocked the daily "Update Upstreams" workflow for revisions shared between the two.
+  
+  Both functions now prefer `microsoft/TypeScript` when it matches and fall back to `microsoft/typescript-go` otherwise. A "no supported repository matched" error is still raised when neither matches.
+- 7a07115: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260826.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/5739027c9a7df24e27123f453a50c011b37717b6) commit `5739027c9a7df24e27123f453a50c011b37717b6`, and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
 ## 0.37.0
 
 ### Minor Changes

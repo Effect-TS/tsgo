@@ -29,6 +29,7 @@ var All = []rule.Rule{
 	ReturnEffectInGen,
 	UnnecessaryPipeChain,
 	EffectSucceedWithVoid,
+	PreferSucceedSomeOrNone,
 	UnnecessaryEffectGen,
 	EffectMapVoid,
 	UnnecessaryFailYieldableError,
@@ -99,6 +100,8 @@ var All = []rule.Rule{
 	AllOfMapToForEach,
 	MapSomeToAsSome,
 	FlatMapToMap,
+	FlatMapConditionalToFilterOrFail,
+	OptionMatchToFromOption,
 	SyncToSucceed,
 	ExtendsNativeError,
 	NodeBuiltinImport,
@@ -107,4 +110,5 @@ var All = []rule.Rule{
 	ServiceNotAsClass,
 	PreferUnsafeConstructor,
 	PreferTypedSchemaDecoder,
+	AcquireReleaseDisposable,
 }
