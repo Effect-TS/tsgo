@@ -12,6 +12,16 @@ func GetChanges(tracker *change.Tracker) map[string][]*lsproto.TextEdit {
 	return changes
 }
 
+func NewModuleDeclaration(
+	tracker *change.Tracker,
+	modifiers *ast.ModifierList,
+	keyword ast.Kind,
+	name *ast.ModuleName,
+	body *ast.ModuleBody,
+) *ast.Node {
+	return tracker.NewModuleDeclaration(modifiers, keyword, name, nil, body)
+}
+
 func ReplaceAdjustedRangeWithText(
 	tracker *change.Tracker,
 	sourceFile *ast.SourceFile,

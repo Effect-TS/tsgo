@@ -332,6 +332,8 @@ type extra_Checker struct {
   anyBaseTypeIndexInfo *checker.IndexInfo
   patternAmbientModules []*ast.PatternAmbientModule
   patternAmbientModuleAugmentations ast.SymbolTable
+  patternAmbientModuleAugmentationTargets ast.SymbolTable
+  moduleImportAttributesTypes map[*ast.Symbol]*checker.Type
   globalObjectType *checker.Type
   globalFunctionType *checker.Type
   globalCallableFunctionType *checker.Type
