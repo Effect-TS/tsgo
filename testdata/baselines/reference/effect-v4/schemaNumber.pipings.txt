@@ -1,4 +1,4 @@
-==== /.src/schemaNumber.ts (3 flows) ====
+==== /.src/schemaNumber.ts (15 flows) ====
 
 === Piping Flow ===
 Location: 7:20 - 12:3
@@ -41,3 +41,179 @@ Transformations (1):
       callee: Schema.Struct
       args: (constant)
       outType: Struct<{ readonly quantity: Number; readonly amount: NumberFromString; }>
+
+=== Piping Flow ===
+Location: 24:27 - 38:3
+Node: Schema.Struct({\n  finite: Schema.Number.check(Schema.isFinite()),\n  integer: Schema.Number.check(Schema.isInt()),\n  importedFinite: Schema.Number.check(isFinite()),\n  importedInteger: Schema.Number.check(integer()),\n  annotated: Schema.Number.annotate({ description: "a" }).check(Schema.isFinite()),\n  annotatedPredicate: Schema.Number.check(Schema.isFinite({ description: "a" })),\n  pipedFinite: Schema.Number.pipe(Schema.check(Schema.isFinite())),\n  pipedInteger: Schema.Number.pipe(Schema.check(Schema.isInt())),\n  pipedImported: Schema.Number.pipe(refine(integer())),\n  pipedAnnotated: Schema.Number.pipe(\n    Schema.annotate({ description: "a" }),\n    Schema.check(Schema.isFinite())\n  )\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  finite: Schema.Number.check(Schema.isFinite()),\n  integer: Schema.Number.check(Schema.isInt()),\n  importedFinite: Schema.Number.check(isFinite()),\n  importedInteger: Schema.Number.check(integer()),\n  annotated: Schema.Number.annotate({ description: "a" }).check(Schema.isFinite()),\n  annotatedPredicate: Schema.Number.check(Schema.isFinite({ description: "a" })),\n  pipedFinite: Schema.Number.pipe(Schema.check(Schema.isFinite())),\n  pipedInteger: Schema.Number.pipe(Schema.check(Schema.isInt())),\n  pipedImported: Schema.Number.pipe(refine(integer())),\n  pipedAnnotated: Schema.Number.pipe(\n    Schema.annotate({ description: "a" }),\n    Schema.check(Schema.isFinite())\n  )\n}
+Subject Type: { finite: Number; integer: Number; importedFinite: Number; importedInteger: Number; annotated: Number; annotatedPredicate: Number; pipedFinite: Number; pipedInteger: Number; pipedImported: Number; pipedAnnotated: Number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly finite: Number; readonly integer: Number; readonly importedFinite: Number; readonly importedInteger: Number; readonly annotated: Number; readonly annotatedPredicate: Number; readonly pipedFinite: Number; readonly pipedInteger: Number; readonly pipedImported: Number; readonly pipedAnnotated: Number; }>
+
+=== Piping Flow ===
+Location: 25:10 - 25:49
+Node: Schema.Number.check(Schema.isFinite())
+Node Kind: KindCallExpression
+
+Subject: Schema.isFinite()
+Subject Type: Filter<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Number.check
+      args: (constant)
+      outType: Number
+
+=== Piping Flow ===
+Location: 26:11 - 26:47
+Node: Schema.Number.check(Schema.isInt())
+Node Kind: KindCallExpression
+
+Subject: Schema.isInt()
+Subject Type: Filter<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Number.check
+      args: (constant)
+      outType: Number
+
+=== Piping Flow ===
+Location: 27:18 - 27:50
+Node: Schema.Number.check(isFinite())
+Node Kind: KindCallExpression
+
+Subject: isFinite()
+Subject Type: Filter<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Number.check
+      args: (constant)
+      outType: Number
+
+=== Piping Flow ===
+Location: 28:19 - 28:50
+Node: Schema.Number.check(integer())
+Node Kind: KindCallExpression
+
+Subject: integer()
+Subject Type: Filter<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Number.check
+      args: (constant)
+      outType: Number
+
+=== Piping Flow ===
+Location: 29:13 - 29:58
+Node: Schema.Number.annotate({ description: "a" })
+Node Kind: KindCallExpression
+
+Subject: { description: "a" }
+Subject Type: { description: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Number.annotate
+      args: (constant)
+      outType: Number
+
+=== Piping Flow ===
+Location: 29:13 - 29:83
+Node: Schema.Number.annotate({ description: "a" }).check(Schema.isFinite())
+Node Kind: KindCallExpression
+
+Subject: Schema.isFinite()
+Subject Type: Filter<number>
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Number.annotate({ description: "a" }).check
+      args: (constant)
+      outType: Number
+
+=== Piping Flow ===
+Location: 30:22 - 30:81
+Node: Schema.Number.check(Schema.isFinite({ description: "a" }))
+Node Kind: KindCallExpression
+
+Subject: { description: "a" }
+Subject Type: { description: string; }
+
+Transformations (2):
+  [0] kind: call
+      callee: Schema.isFinite
+      args: (constant)
+      outType: Filter<number>
+  [1] kind: call
+      callee: Schema.Number.check
+      args: (constant)
+      outType: Number
+
+=== Piping Flow ===
+Location: 31:15 - 31:67
+Node: Schema.Number.pipe(Schema.check(Schema.isFinite()))
+Node Kind: KindCallExpression
+
+Subject: Schema.Number
+Subject Type: Number
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Schema.check
+      args: [Schema.isFinite()]
+      outType: Number
+
+=== Piping Flow ===
+Location: 32:16 - 32:65
+Node: Schema.Number.pipe(Schema.check(Schema.isInt()))
+Node Kind: KindCallExpression
+
+Subject: Schema.Number
+Subject Type: Number
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Schema.check
+      args: [Schema.isInt()]
+      outType: Number
+
+=== Piping Flow ===
+Location: 33:17 - 33:55
+Node: Schema.Number.pipe(refine(integer()))
+Node Kind: KindCallExpression
+
+Subject: Schema.Number
+Subject Type: Number
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: refine
+      args: [integer()]
+      outType: Number
+
+=== Piping Flow ===
+Location: 34:18 - 37:4
+Node: Schema.Number.pipe(\n    Schema.annotate({ description: "a" }),\n    Schema.check(Schema.isFinite())\n  )
+Node Kind: KindCallExpression
+
+Subject: Schema.Number
+Subject Type: Number
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Schema.annotate
+      args: [{ description: "a" }]
+      outType: Number
+  [1] kind: pipeable
+      callee: Schema.check
+      args: [Schema.isFinite()]
+      outType: Number

@@ -2273,7 +2273,7 @@
         377098
       ],
       "preview": {
-        "sourceText": "\nimport { Schema } from \"effect\"\n\nexport const User = Schema.Struct({\n  age: Schema.Number,\n  score: Schema.NumberFromString\n})\n",
+        "sourceText": "\nimport { Schema } from \"effect\"\n\nexport const User = Schema.Struct({\n  age: Schema.Number,\n  score: Schema.NumberFromString,\n  integer: Schema.Number.check(Schema.isInt()),\n  pipedFinite: Schema.Number.pipe(Schema.check(Schema.isFinite()))\n})\n",
         "diagnostics": [
           {
             "start": 84,
