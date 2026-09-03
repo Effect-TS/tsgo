@@ -64,17 +64,12 @@ func AnalyzeCatchConditionalRefailToCatchIf(tp *typeparser.TypeParser, c *checke
 	}
 
 	var matches []CatchConditionalRefailToCatchIfMatch
-	seen := make(map[*ast.Node]struct{})
 	for _, flow := range tp.PipingFlows(sf, true) {
 		for index := range flow.Transformations {
 			transformation := &flow.Transformations[index]
 			if transformation.Node == nil || transformation.Callee == nil {
 				continue
 			}
-			if _, duplicate := seen[transformation.Node]; duplicate {
-				continue
-			}
-
 			methods, ok := conditionalRefailMethods(tp, transformation.Callee)
 			if !ok || len(transformation.Args) != 1 {
 				continue
@@ -93,7 +88,6 @@ func AnalyzeCatchConditionalRefailToCatchIf(tp *typeparser.TypeParser, c *checke
 				continue
 			}
 
-			seen[transformation.Node] = struct{}{}
 			matches = append(matches, CatchConditionalRefailToCatchIfMatch{
 				SourceFile:          sf,
 				Location:            scanner.GetErrorRangeForNode(sf, transformation.Callee),

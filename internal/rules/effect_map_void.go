@@ -91,7 +91,6 @@ func isVoidCallback(node *ast.Node) bool {
 // data-first Effect.map(self, cb) are matched uniformly.
 func AnalyzeEffectMapVoid(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile) []EffectMapVoidMatch {
 	var matches []EffectMapVoidMatch
-	seen := make(map[*ast.Node]struct{})
 
 	for _, flow := range tp.PipingFlows(sf, true) {
 		for _, transformation := range flow.Transformations {
@@ -103,10 +102,6 @@ func AnalyzeEffectMapVoid(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast
 			if !isVoidCallback(transformation.Args[0]) {
 				continue
 			}
-			if _, ok := seen[transformation.Node]; ok {
-				continue
-			}
-
 			// For the data-first form the subject is a real argument that the
 			// quick-fix must preserve as Effect.asVoid(self); data-last/pipeable
 			// forms carry no subject argument.
@@ -120,7 +115,6 @@ func AnalyzeEffectMapVoid(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast
 			}
 
 			propAccess := transformation.Callee.AsPropertyAccessExpression()
-			seen[transformation.Node] = struct{}{}
 			matches = append(matches, EffectMapVoidMatch{
 				SourceFile:       sf,
 				Location:         scanner.GetErrorRangeForNode(sf, transformation.Callee),

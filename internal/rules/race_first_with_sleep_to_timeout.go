@@ -50,7 +50,6 @@ func AnalyzeRaceFirstWithSleepToTimeout(tp *typeparser.TypeParser, c *checker.Ch
 	}
 
 	var matches []RaceFirstWithSleepToTimeoutMatch
-	seen := make(map[*ast.Node]struct{})
 	for _, flow := range tp.PipingFlows(sf, true) {
 		for i := range flow.Transformations {
 			transformation := &flow.Transformations[i]
@@ -94,10 +93,6 @@ func AnalyzeRaceFirstWithSleepToTimeout(tp *typeparser.TypeParser, c *checker.Ch
 			if isRaceFirstTimerFlow(tp, left) == isRaceFirstTimerFlow(tp, right) {
 				continue
 			}
-			if _, duplicate := seen[transformation.Node]; duplicate {
-				continue
-			}
-			seen[transformation.Node] = struct{}{}
 			matches = append(matches, RaceFirstWithSleepToTimeoutMatch{
 				SourceFile: sf,
 				Location:   scanner.GetErrorRangeForNode(sf, transformation.Callee),

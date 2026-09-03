@@ -58,7 +58,6 @@ func AnalyzeCatchDieToOrDie(tp *typeparser.TypeParser, _ *checker.Checker, sf *a
 	}
 
 	var matches []CatchDieToOrDieMatch
-	seen := make(map[*ast.Node]struct{})
 	for _, flow := range tp.PipingFlows(sf, true) {
 		inputNode := flow.Subject.Node
 		inputType := flow.Subject.OutType
@@ -71,21 +70,18 @@ func AnalyzeCatchDieToOrDie(tp *typeparser.TypeParser, _ *checker.Checker, sf *a
 				if tp.IsNodeReferenceToEffectModuleApi(handler, "die") {
 					inputEffect := tp.StrictEffectType(inputType)
 					if inputEffect != nil && inputEffect.E != nil && inputEffect.E.Flags()&checker.TypeFlagsNever == 0 {
-						if _, duplicate := seen[transformation.Node]; !duplicate {
-							seen[transformation.Node] = struct{}{}
-							isDataApplication := transformation.Kind == typeparser.TransformationKindDataFirst ||
-								transformation.Kind == typeparser.TransformationKindDataLast || isCurriedApplication
-							matches = append(matches, CatchDieToOrDieMatch{
-								SourceFile:        sf,
-								Location:          scanner.GetErrorRangeForNode(sf, callee),
-								Transformation:    transformation.Node,
-								EffectModule:      effectModule,
-								Input:             inputNode,
-								CatchMethodName:   methodName,
-								IsDataApplication: isDataApplication,
-								HasTypeArguments:  catchDieHasTypeArguments(transformation),
-							})
-						}
+						isDataApplication := transformation.Kind == typeparser.TransformationKindDataFirst ||
+							transformation.Kind == typeparser.TransformationKindDataLast || isCurriedApplication
+						matches = append(matches, CatchDieToOrDieMatch{
+							SourceFile:        sf,
+							Location:          scanner.GetErrorRangeForNode(sf, callee),
+							Transformation:    transformation.Node,
+							EffectModule:      effectModule,
+							Input:             inputNode,
+							CatchMethodName:   methodName,
+							IsDataApplication: isDataApplication,
+							HasTypeArguments:  catchDieHasTypeArguments(transformation),
+						})
 					}
 				}
 			}

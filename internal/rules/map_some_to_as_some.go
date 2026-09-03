@@ -50,7 +50,6 @@ type MapSomeToAsSomeMatch struct {
 // mapper is Option.some or an identity forwarder such as value => Option.some(value).
 func AnalyzeMapSomeToAsSome(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile) []MapSomeToAsSomeMatch {
 	var matches []MapSomeToAsSomeMatch
-	seen := make(map[*ast.Node]struct{})
 	for _, flow := range tp.PipingFlows(sf, true) {
 		for _, transformation := range flow.Transformations {
 			if len(transformation.Args) != 1 || transformation.Node == nil || transformation.Node.Kind != ast.KindCallExpression ||
@@ -63,10 +62,6 @@ func AnalyzeMapSomeToAsSome(tp *typeparser.TypeParser, _ *checker.Checker, sf *a
 				!isOptionSomeMapper(tp, transformation.Args[0]) {
 				continue
 			}
-			if _, ok := seen[transformation.Node]; ok {
-				continue
-			}
-
 			var subject *ast.Node
 			if transformation.Kind == typeparser.TransformationKindDataFirst || transformation.Kind == typeparser.TransformationKindDataLast {
 				parsed := tp.DataFirstOrLastCall(transformation.Node)
@@ -77,7 +72,6 @@ func AnalyzeMapSomeToAsSome(tp *typeparser.TypeParser, _ *checker.Checker, sf *a
 			}
 
 			propertyAccess := transformation.Callee.AsPropertyAccessExpression()
-			seen[transformation.Node] = struct{}{}
 			matches = append(matches, MapSomeToAsSomeMatch{
 				SourceFile:       sf,
 				Location:         scanner.GetErrorRangeForNode(sf, transformation.Callee),

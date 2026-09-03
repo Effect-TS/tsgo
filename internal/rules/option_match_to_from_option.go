@@ -66,7 +66,6 @@ func AnalyzeOptionMatchToFromOption(tp *typeparser.TypeParser, c *checker.Checke
 
 func analyzeOptionMatchCalls(tp *typeparser.TypeParser, sf *ast.SourceFile) []OptionMatchToFromOptionMatch {
 	var matches []OptionMatchToFromOptionMatch
-	seen := make(map[*ast.Node]struct{})
 
 	for _, flow := range tp.PipingFlows(sf, true) {
 		for index := range flow.Transformations {
@@ -125,10 +124,6 @@ func analyzeOptionMatchCalls(tp *typeparser.TypeParser, sf *ast.SourceFile) []Op
 				continue
 			}
 
-			if _, duplicate := seen[match.ReplacementNode]; duplicate {
-				continue
-			}
-			seen[match.ReplacementNode] = struct{}{}
 			matches = append(matches, match)
 		}
 	}

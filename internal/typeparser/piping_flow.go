@@ -263,6 +263,7 @@ type workItem struct {
 }
 
 // PipingFlows returns all piping flows found in a source file, sorted by source position.
+// Each source transformation occurrence belongs to at most one returned flow.
 func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) []*PipingFlow {
 	if tp == nil || tp.checker == nil || sf == nil {
 		return nil

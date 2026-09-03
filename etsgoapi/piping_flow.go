@@ -43,6 +43,7 @@ type PipingFlow struct {
 }
 
 // PipingFlows returns all piping flows found in a source file, sorted by source position.
+// Each source transformation occurrence belongs to at most one returned flow.
 // When includeEffectFn is true, Effect.fn / Effect.fnUntraced calls carrying trailing
 // transformation arguments are surfaced as flows as well.
 func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) []*PipingFlow {

@@ -63,7 +63,6 @@ func AnalyzeFlatMapConditionalToFilterOrFail(tp *typeparser.TypeParser, c *check
 	}
 
 	var matches []FlatMapConditionalToFilterOrFailMatch
-	seen := make(map[*ast.Node]struct{})
 	for _, flow := range tp.PipingFlows(sf, true) {
 		for index := range flow.Transformations {
 			transformation := &flow.Transformations[index]
@@ -71,10 +70,6 @@ func AnalyzeFlatMapConditionalToFilterOrFail(tp *typeparser.TypeParser, c *check
 			if callee == nil || replacementNode == nil || len(args) != 1 || !tp.IsNodeReferenceToEffectModuleApi(callee, "flatMap") {
 				continue
 			}
-			if _, duplicate := seen[replacementNode]; duplicate {
-				continue
-			}
-
 			parsed := typeparser.ParseReturningDispatch(args[0])
 			if parsed == nil || parsed.Dispatch == nil || len(parsed.Params) != 1 ||
 				len(parsed.Dispatch.Branches) != 1 || parsed.Dispatch.Fallback == nil ||
@@ -145,7 +140,6 @@ func AnalyzeFlatMapConditionalToFilterOrFail(tp *typeparser.TypeParser, c *check
 				match.SubjectNode = nil
 			}
 
-			seen[replacementNode] = struct{}{}
 			matches = append(matches, match)
 		}
 	}

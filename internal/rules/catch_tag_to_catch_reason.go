@@ -65,28 +65,21 @@ func AnalyzeCatchTagToCatchReason(tp *typeparser.TypeParser, c *checker.Checker,
 	}
 
 	var matches []CatchTagToCatchReasonMatch
-	seen := make(map[*ast.Node]struct{})
 	for _, flow := range tp.PipingFlows(sf, true) {
 		for i := range flow.Transformations {
 			transformation := &flow.Transformations[i]
 			if transformation.Node == nil || transformation.Callee == nil {
 				continue
 			}
-			if _, ok := seen[transformation.Node]; ok {
-				continue
-			}
-
 			switch {
 			case tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "catchTag"):
 				match, ok := analyzeCatchTagTransformation(tp, c, sf, transformation)
 				if ok {
-					seen[transformation.Node] = struct{}{}
 					matches = append(matches, match)
 				}
 			case tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "catchTags"):
 				match, ok := analyzeCatchTagsTransformation(tp, c, sf, transformation)
 				if ok {
-					seen[transformation.Node] = struct{}{}
 					matches = append(matches, match)
 				}
 			}

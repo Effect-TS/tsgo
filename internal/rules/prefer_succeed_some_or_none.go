@@ -64,7 +64,6 @@ func AnalyzePreferSucceedSomeOrNone(tp *typeparser.TypeParser, _ *checker.Checke
 	}
 
 	var matches []PreferSucceedSomeOrNoneMatch
-	seen := make(map[*ast.Node]struct{})
 	for _, flow := range tp.PipingFlows(sf, true) {
 		for index := range flow.Transformations {
 			transformation := &flow.Transformations[index]
@@ -73,10 +72,6 @@ func AnalyzePreferSucceedSomeOrNone(tp *typeparser.TypeParser, _ *checker.Checke
 				!tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "succeed") {
 				continue
 			}
-			if _, ok := seen[transformation.Node]; ok {
-				continue
-			}
-
 			if transformation.TypeArguments != nil && len(transformation.TypeArguments.Nodes) > 0 {
 				continue
 			}
@@ -106,7 +101,6 @@ func AnalyzePreferSucceedSomeOrNone(tp *typeparser.TypeParser, _ *checker.Checke
 				match.ReplacementTarget = flow.Node
 			}
 
-			seen[transformation.Node] = struct{}{}
 			matches = append(matches, match)
 		}
 	}

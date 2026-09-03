@@ -163,6 +163,50 @@ export const called = identity<string>("value")
 	}
 }
 
+func TestPipingFlows_TransformationOccurrencesAreUnique(t *testing.T) {
+	t.Parallel()
+
+	source := `
+import { Effect, pipe } from "effect"
+
+declare const base: Effect.Effect<number, string>
+
+export const piped = pipe(
+  base,
+  Effect.map((value) => value + 1),
+  Effect.flatMap((value) => Effect.succeed(value * 2))
+)
+
+export const nested = Effect.map(Effect.succeed(1), (value) => value + 1)
+
+export const effectFn = Effect.fn(
+  function*() {
+    return 1
+  },
+  Effect.map((value) => value + 1),
+  Effect.catch(() => Effect.succeed(0))
+)
+`
+
+	_, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectV4Internal(t, source)
+	defer done()
+
+	seen := make(map[*ast.Node]int)
+	for flowIndex, flow := range tp.PipingFlows(sf, true) {
+		for _, transformation := range flow.Transformations {
+			if previousFlowIndex, duplicate := seen[transformation.Node]; duplicate {
+				t.Fatalf(
+					"transformation %q occurs in flows %d and %d",
+					nodeText(sf, transformation.Node),
+					previousFlowIndex,
+					flowIndex,
+				)
+			}
+			seen[transformation.Node] = flowIndex
+		}
+	}
+}
+
 func TestPipingFlows_SkipsParentheses(t *testing.T) {
 	t.Parallel()
 
