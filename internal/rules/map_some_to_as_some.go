@@ -59,8 +59,7 @@ func AnalyzeMapSomeToAsSome(tp *typeparser.TypeParser, _ *checker.Checker, sf *a
 				continue
 			}
 
-			call := transformation.Node.AsCallExpression()
-			if call == nil || call.TypeArguments != nil && len(call.TypeArguments.Nodes) > 0 ||
+			if transformation.TypeArguments != nil && len(transformation.TypeArguments.Nodes) > 0 ||
 				!isOptionSomeMapper(tp, transformation.Args[0]) {
 				continue
 			}

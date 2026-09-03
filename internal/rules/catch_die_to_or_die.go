@@ -137,17 +137,5 @@ func catchDieMethod(tp *typeparser.TypeParser, callee *ast.Node) (name string, e
 }
 
 func catchDieHasTypeArguments(transformation *typeparser.PipingFlowTransformation) bool {
-	if transformation == nil {
-		return false
-	}
-	for _, node := range []*ast.Node{transformation.Node, transformation.Callee} {
-		if node == nil || node.Kind != ast.KindCallExpression {
-			continue
-		}
-		call := node.AsCallExpression()
-		if call != nil && call.TypeArguments != nil && len(call.TypeArguments.Nodes) > 0 {
-			return true
-		}
-	}
-	return false
+	return transformation != nil && transformation.TypeArguments != nil && len(transformation.TypeArguments.Nodes) > 0
 }

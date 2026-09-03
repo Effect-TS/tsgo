@@ -21,11 +21,12 @@ const (
 
 // PipingFlowTransformation represents a single transformation step in a piping flow.
 type PipingFlowTransformation struct {
-	Kind    TransformationKind // How the transformation was expressed
-	Node    *ast.Node          // The full transformation node (call expression or bare callee)
-	Callee  *ast.Node          // The function being applied (e.g., Effect.map)
-	Args    []*ast.Node        // Arguments to the transformation, or nil for constants/single-arg calls
-	OutType *checker.Type      // The resulting type after this transformation (may be nil)
+	Kind          TransformationKind // How the transformation was expressed
+	Node          *ast.Node          // The full transformation node (call expression or bare callee)
+	Callee        *ast.Node          // The function being applied (e.g., Effect.map)
+	TypeArguments *ast.NodeList      // Explicit type arguments to the transformation call, if any
+	Args          []*ast.Node        // Arguments to the transformation, or nil for constants/single-arg calls
+	OutType       *checker.Type      // The resulting type after this transformation (may be nil)
 }
 
 // PipingFlowSubject is the starting expression of a piping flow.
@@ -81,11 +82,12 @@ func pipingFlowFromInternal(flow *typeparser.PipingFlow) *PipingFlow {
 	transformations := make([]PipingFlowTransformation, 0, len(flow.Transformations))
 	for _, transformation := range flow.Transformations {
 		transformations = append(transformations, PipingFlowTransformation{
-			Kind:    TransformationKind(transformation.Kind),
-			Node:    transformation.Node,
-			Callee:  transformation.Callee,
-			Args:    transformation.Args,
-			OutType: transformation.OutType,
+			Kind:          TransformationKind(transformation.Kind),
+			Node:          transformation.Node,
+			Callee:        transformation.Callee,
+			TypeArguments: transformation.TypeArguments,
+			Args:          transformation.Args,
+			OutType:       transformation.OutType,
 		})
 	}
 

@@ -116,6 +116,53 @@ export const live = Layer.succeed(MyService, make)
 	}
 }
 
+func TestPipingFlows_TypeArguments(t *testing.T) {
+	t.Parallel()
+
+	source := `
+import { pipe } from "effect"
+
+declare function transform<A, B>(self: A, f: (value: A) => B): B
+declare function transform<A, B>(f: (value: A) => B): (self: A) => B
+declare function identity<A>(value: A): A
+
+export const piped = pipe("value", transform<string, number>((value) => value.length))
+export const dataFirst = transform<string, number>("value", (value) => value.length)
+export const curried = transform<string, number>((value) => value.length)("value")
+export const called = identity<string>("value")
+`
+
+	_, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectV4Internal(t, source)
+	defer done()
+
+	for _, test := range []struct {
+		name string
+		want []string
+	}{
+		{name: "piped", want: []string{"string", "number"}},
+		{name: "dataFirst", want: []string{"string", "number"}},
+		{name: "curried", want: []string{"string", "number"}},
+		{name: "called", want: []string{"string"}},
+	} {
+		call := findVariableInitializerCallByName(t, sf, test.name)
+		flow := findFlowByNode(t, sf, tp.PipingFlows(sf, false), call.AsNode())
+		if len(flow.Transformations) == 0 {
+			t.Fatalf("%s transformation count = 0, want at least 1", test.name)
+		}
+		transformation := flow.Transformations[len(flow.Transformations)-1]
+		if transformation.TypeArguments == nil {
+			t.Fatalf("%s type arguments are nil", test.name)
+		}
+		got := make([]string, 0, len(transformation.TypeArguments.Nodes))
+		for _, typeArgument := range transformation.TypeArguments.Nodes {
+			got = append(got, strings.TrimSpace(nodeText(sf, typeArgument)))
+		}
+		if !slices.Equal(got, test.want) {
+			t.Fatalf("%s type arguments = %v, want %v", test.name, got, test.want)
+		}
+	}
+}
+
 func TestPipingFlows_SkipsParentheses(t *testing.T) {
 	t.Parallel()
 

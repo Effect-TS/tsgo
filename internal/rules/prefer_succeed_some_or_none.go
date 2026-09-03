@@ -77,12 +77,8 @@ func AnalyzePreferSucceedSomeOrNone(tp *typeparser.TypeParser, _ *checker.Checke
 				continue
 			}
 
-			if transformation.Node != nil && transformation.Node.Kind == ast.KindCallExpression {
-				call := transformation.Node.AsCallExpression()
-				if call != nil &&
-					call.TypeArguments != nil && len(call.TypeArguments.Nodes) > 0 {
-					continue
-				}
+			if transformation.TypeArguments != nil && len(transformation.TypeArguments.Nodes) > 0 {
+				continue
 			}
 
 			optionInput := matchNormalizedOptionInput(tp, flow, index)
