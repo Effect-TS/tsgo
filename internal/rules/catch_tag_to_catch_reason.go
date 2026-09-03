@@ -393,7 +393,7 @@ func uniqueCatchReasonParameterName(c *checker.Checker, location *ast.Node) stri
 }
 
 func isEffectExpression(tp *typeparser.TypeParser, expression *ast.Node) bool {
-	return expression != nil && tp.EffectType(tp.GetTypeAtLocation(expression), expression) != nil
+	return expression != nil && tp.EffectType(tp.GetTypeAtLocation(expression)) != nil
 }
 
 func hasCatchReasonApi(tp *typeparser.TypeParser, c *checker.Checker, callee *ast.Node, branchCount int) bool {

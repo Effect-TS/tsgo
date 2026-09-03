@@ -55,51 +55,51 @@ func (tp *TypeParser) GetTypeAtLocation(node *ast.Node) *checker.Type {
 }
 
 // EffectType parses an Effect type and extracts A, E, R parameters.
-func (tp *TypeParser) EffectType(t *checker.Type, atLocation *ast.Node) *Effect {
+func (tp *TypeParser) EffectType(t *checker.Type) *Effect {
 	if tp == nil || tp.inner == nil {
 		return nil
 	}
-	return effectFromInternal(tp.inner.EffectType(t, atLocation))
+	return effectFromInternal(tp.inner.EffectType(t))
 }
 
 // LayerType parses a Layer type and extracts ROut, E, RIn parameters.
-func (tp *TypeParser) LayerType(t *checker.Type, atLocation *ast.Node) *Layer {
+func (tp *TypeParser) LayerType(t *checker.Type) *Layer {
 	if tp == nil || tp.inner == nil {
 		return nil
 	}
-	return layerFromInternal(tp.inner.LayerType(t, atLocation))
+	return layerFromInternal(tp.inner.LayerType(t))
 }
 
 // ServiceType parses a v4 service type and extracts Identifier and Shape parameters.
-func (tp *TypeParser) ServiceType(t *checker.Type, atLocation *ast.Node) *Service {
+func (tp *TypeParser) ServiceType(t *checker.Type) *Service {
 	if tp == nil || tp.inner == nil {
 		return nil
 	}
-	return serviceFromInternal(tp.inner.ServiceType(t, atLocation))
+	return serviceFromInternal(tp.inner.ServiceType(t))
 }
 
 // ContextTag parses a v3 Context.Tag type and extracts Identifier and Shape parameters.
-func (tp *TypeParser) ContextTag(t *checker.Type, atLocation *ast.Node) *Service {
+func (tp *TypeParser) ContextTag(t *checker.Type) *Service {
 	if tp == nil || tp.inner == nil {
 		return nil
 	}
-	return serviceFromInternal(tp.inner.ContextTag(t, atLocation))
+	return serviceFromInternal(tp.inner.ContextTag(t))
 }
 
 // EffectSchemaTypes extracts the type and encoded type from a Schema type.
-func (tp *TypeParser) EffectSchemaTypes(t *checker.Type, atLocation *ast.Node) *SchemaTypes {
+func (tp *TypeParser) EffectSchemaTypes(t *checker.Type) *SchemaTypes {
 	if tp == nil || tp.inner == nil {
 		return nil
 	}
-	return schemaTypesFromInternal(tp.inner.EffectSchemaTypes(t, atLocation))
+	return schemaTypesFromInternal(tp.inner.EffectSchemaTypes(t))
 }
 
 // StreamType parses a Stream type and extracts A, E, R parameters.
-func (tp *TypeParser) StreamType(t *checker.Type, atLocation *ast.Node) *Effect {
+func (tp *TypeParser) StreamType(t *checker.Type) *Effect {
 	if tp == nil || tp.inner == nil {
 		return nil
 	}
-	return effectFromInternal(tp.inner.StreamType(t, atLocation))
+	return effectFromInternal(tp.inner.StreamType(t))
 }
 
 // UnrollUnionMembers returns the constituent types of a union type,

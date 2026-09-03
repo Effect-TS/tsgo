@@ -80,7 +80,7 @@ var PromiseInEffectSuccess = rule.Rule{
 			if t == nil {
 				t = ctx.TypeParser.GetTypeAtLocation(node)
 			}
-			effect := ctx.TypeParser.StrictEffectType(t, node)
+			effect := ctx.TypeParser.StrictEffectType(t)
 			if effect == nil || !typeContainsPromise(ctx.TypeParser, effect.A) {
 				continue
 			}
@@ -114,9 +114,9 @@ func hasExplicitPromiseEffectContext(tp *typeparser.TypeParser, c *checker.Check
 	for current := node; current != nil; current = current.Parent {
 		switch current.Kind {
 		case ast.KindVariableDeclaration, ast.KindPropertyDeclaration, ast.KindParameter:
-			return isExplicitPromiseEffectType(tp, current.Type(), current)
+			return isExplicitPromiseEffectType(tp, current.Type())
 		case ast.KindAsExpression, ast.KindSatisfiesExpression:
-			if isExplicitPromiseEffectType(tp, current.Type(), current) {
+			if isExplicitPromiseEffectType(tp, current.Type()) {
 				return true
 			}
 		case ast.KindArrowFunction, ast.KindFunctionExpression, ast.KindFunctionDeclaration, ast.KindMethodDeclaration:
@@ -132,16 +132,16 @@ func hasExplicitPromiseEffectContext(tp *typeparser.TypeParser, c *checker.Check
 	return false
 }
 
-func isExplicitPromiseEffectType(tp *typeparser.TypeParser, typeNode *ast.Node, atLocation *ast.Node) bool {
+func isExplicitPromiseEffectType(tp *typeparser.TypeParser, typeNode *ast.Node) bool {
 	if typeNode == nil {
 		return false
 	}
-	effect := tp.StrictEffectType(tp.GetTypeAtLocation(typeNode), atLocation)
+	effect := tp.StrictEffectType(tp.GetTypeAtLocation(typeNode))
 	return effect != nil && typeContainsPromise(tp, effect.A)
 }
 
 func hasExplicitPromiseEffectReturn(tp *typeparser.TypeParser, c *checker.Checker, function *ast.Node) bool {
-	if isExplicitPromiseEffectType(tp, function.Type(), function) {
+	if isExplicitPromiseEffectType(tp, function.Type()) {
 		return true
 	}
 	parent := function.Parent
@@ -158,7 +158,7 @@ func hasExplicitPromiseEffectReturn(tp *typeparser.TypeParser, c *checker.Checke
 	t := tp.GetTypeAtLocation(typeNode)
 	for _, member := range tp.UnrollUnionMembers(t) {
 		for _, signature := range c.GetSignaturesOfType(member, checker.SignatureKindCall) {
-			result := tp.StrictEffectType(c.GetReturnTypeOfSignature(signature), function)
+			result := tp.StrictEffectType(c.GetReturnTypeOfSignature(signature))
 			if result != nil && typeContainsPromise(tp, result.A) {
 				return true
 			}
