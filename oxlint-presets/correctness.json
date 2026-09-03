@@ -23,6 +23,7 @@
     "effecttsgo/overridden-schema-constructor": "warn",
     "effecttsgo/promise-in-effect-success": "warn",
     "effecttsgo/schema-literal-non-finite": "warn",
-    "effecttsgo/schema-opaque-instance-member": "warn"
+    "effecttsgo/schema-opaque-instance-member": "warn",
+    "effecttsgo/unsafe-effect-type-assertion": "warn"
   }
 }

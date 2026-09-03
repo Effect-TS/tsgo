@@ -474,5 +474,9 @@
     "`Effect.{0}` expresses this conditional validation more directly than `Effect.flatMap` with an identity `Effect.succeed` branch. effect(flatMapConditionalToFilterOrFail)": {
         "category": "Suggestion",
         "code": 377120
+    },
+    "This Effect first-completion race has exactly one sleep- or delay-based timer arm. `Effect.timeoutOrElse` expresses the timeout and fallback directly. effect(raceFirstWithSleepToTimeout)": {
+        "category": "Suggestion",
+        "code": 377121
     }
 }

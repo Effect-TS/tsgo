@@ -111,4 +111,5 @@ var All = []rule.Rule{
 	PreferUnsafeConstructor,
 	PreferTypedSchemaDecoder,
 	AcquireReleaseDisposable,
+	RaceFirstWithSleepToTimeout,
 }

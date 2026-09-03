@@ -19,11 +19,15 @@ Location: 14:10 - 14:62
 Node: Effect.as(Effect.zipRight(DbConnection, Cache), {})
 Node Kind: KindCallExpression
 
-Subject: Effect.zipRight(DbConnection, Cache)
-Subject Type: Effect<Cache, never, Cache | DbConnection>
+Subject: DbConnection
+Subject Type: typeof DbConnection
 
-Transformations (1):
+Transformations (2):
   [0] kind: dataFirst
+      callee: Effect.zipRight
+      args: [Cache]
+      outType: Effect<Cache, never, Cache | DbConnection>
+  [1] kind: dataFirst
       callee: Effect.as
       args: [{}]
       outType: Effect<{}, never, Cache | DbConnection>

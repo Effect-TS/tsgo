@@ -32,6 +32,7 @@
     "effecttsgo/effect-map-void": "warn",
     "effecttsgo/effect-succeed-with-void": "warn",
     "effecttsgo/extends-native-error": "warn",
+    "effecttsgo/flat-map-conditional-to-filter-or-fail": "warn",
     "effecttsgo/flat-map-to-map": "warn",
     "effecttsgo/floating-effect": "error",
     "effecttsgo/floating-effect-in-vitest": "error",
@@ -74,6 +75,7 @@
     "effecttsgo/process-env": "warn",
     "effecttsgo/process-env-in-effect": "warn",
     "effecttsgo/promise-in-effect-success": "warn",
+    "effecttsgo/race-first-with-sleep-to-timeout": "warn",
     "effecttsgo/redundant-map-error": "warn",
     "effecttsgo/redundant-or-die": "warn",
     "effecttsgo/redundant-schema-tag-identifier": "warn",
@@ -92,7 +94,6 @@
     "effecttsgo/unnecessary-fail-yieldable-error": "warn",
     "effecttsgo/unnecessary-pipe": "warn",
     "effecttsgo/unnecessary-pipe-chain": "warn",
-    "effecttsgo/unnecessary-typeof-type": "warn",
-    "effecttsgo/unsafe-effect-type-assertion": "warn"
+    "effecttsgo/unnecessary-typeof-type": "warn"
   }
 }
