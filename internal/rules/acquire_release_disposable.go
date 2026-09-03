@@ -16,7 +16,7 @@ import (
 // disposal protocol.
 var AcquireReleaseDisposable = rule.Rule{
 	Name:            "acquireReleaseDisposable",
-	Group:           "effectNative",
+	Group:           "style",
 	Description:     "Suggests Effect.acquireDisposable when Effect.acquireRelease only invokes the acquired resource's disposal protocol",
 	DefaultSeverity: etscore.SeveritySuggestion,
 	SupportedEffect: []string{"v4"},

@@ -51,6 +51,15 @@ func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) []*P
 	return pipingFlowsFromInternal(tp.inner.PipingFlows(sf, includeEffectFn))
 }
 
+// LongestPipingFlowAt returns the longest normalized piping flow rooted at node,
+// without returning a larger flow that merely encloses node.
+func (tp *TypeParser) LongestPipingFlowAt(node *ast.Node, includeEffectFn bool) *PipingFlow {
+	if tp == nil || tp.inner == nil {
+		return nil
+	}
+	return pipingFlowFromInternal(tp.inner.LongestPipingFlowAt(node, includeEffectFn))
+}
+
 func pipingFlowsFromInternal(flows []*typeparser.PipingFlow) []*PipingFlow {
 	if flows == nil {
 		return nil

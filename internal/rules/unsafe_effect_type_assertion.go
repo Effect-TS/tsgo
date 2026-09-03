@@ -13,7 +13,7 @@ import (
 
 var UnsafeEffectTypeAssertion = rule.Rule{
 	Name:            "unsafeEffectTypeAssertion",
-	Group:           "effectNative",
+	Group:           "correctness",
 	Description:     "Detects unsafe type assertions that narrow Effect, Stream, or Layer error or requirements channels",
 	DefaultSeverity: etscore.SeverityOff,
 	SupportedEffect: []string{"v3", "v4"},

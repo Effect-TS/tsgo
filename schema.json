@@ -2677,6 +2677,11 @@
           "default": "warning",
           "description": "Detects Promise types in Effect success channels where they are not awaited"
         },
+        "raceFirstWithSleepToTimeout": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.timeoutOrElse when Effect.raceFirst has exactly one sleep- or delay-based timer arm"
+        },
         "redundantMapError": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",

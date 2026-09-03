@@ -1,6 +1,7 @@
 package typeparser
 
 import (
+	"slices"
 	"strings"
 	"testing"
 
@@ -149,6 +150,102 @@ export const none = Effect.succeed(((Option.none())))
 		t.Fatalf("none subject = %q, want %q", got, "Option.none()")
 	}
 	assertSingleTransformation(t, sf, noneFlow, TransformationKindCall, "Effect.succeed", nil)
+}
+
+func TestLongestPipingFlowAt_ReturnsLongestNestedFlow(t *testing.T) {
+	t.Parallel()
+
+	source := `
+import { Effect } from "effect"
+
+declare const work: Effect.Effect<string>
+
+export const dataFirst = Effect.raceFirst(
+  Effect.flatMap(Effect.sleep("1 second"), () => Effect.fail("timeout")),
+  work
+)
+
+export const pipeable = Effect.raceFirst(
+  work,
+  ((Effect.sleep("2 seconds").pipe(
+    Effect.andThen(Effect.succeed("fallback"))
+  )))
+)
+`
+
+	_, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectV4Internal(t, source)
+	defer done()
+
+	dataFirstRace := findVariableInitializerCallByName(t, sf, "dataFirst")
+	if parsed := tp.DataFirstOrLastCall(dataFirstRace.AsNode()); parsed == nil || parsed.SubjectIndex != 0 {
+		t.Fatal("expected data-first Effect.raceFirst with omitted options to normalize around self")
+	}
+	dataFirstTimer := dataFirstRace.Arguments.Nodes[0]
+	dataFirstFlow := tp.LongestPipingFlowAt(dataFirstTimer, false)
+	if dataFirstFlow == nil {
+		t.Fatal("expected data-first timer sub-flow")
+	}
+	if dataFirstFlow.Node != dataFirstTimer {
+		t.Fatal("data-first sub-flow should be rooted at the requested node")
+	}
+	if got := transformationCallees(sf, dataFirstFlow); !slices.Equal(got, []string{"Effect.sleep", "Effect.flatMap"}) {
+		t.Fatalf("data-first transformations = %v", got)
+	}
+
+	pipeableRace := findVariableInitializerCallByName(t, sf, "pipeable")
+	pipeableTimer := pipeableRace.Arguments.Nodes[1]
+	pipeableFlow := tp.LongestPipingFlowAt(pipeableTimer, false)
+	if pipeableFlow == nil {
+		t.Fatal("expected parenthesized pipeable timer sub-flow")
+	}
+	if got := transformationCallees(sf, pipeableFlow); !slices.Equal(got, []string{"Effect.sleep", "Effect.andThen"}) {
+		t.Fatalf("pipeable transformations = %v", got)
+	}
+
+	outerFlow := tp.LongestPipingFlowAt(dataFirstRace.AsNode(), false)
+	if outerFlow == nil {
+		t.Fatal("expected complete outer flow")
+	}
+	if got := transformationCallees(sf, outerFlow); !slices.Equal(got, []string{"Effect.sleep", "Effect.flatMap", "Effect.raceFirst"}) {
+		t.Fatalf("outer transformations = %v", got)
+	}
+
+	prefix := outerFlow.CopyPrefix(2)
+	if prefix == nil {
+		t.Fatal("expected a two-transformation prefix")
+	}
+	if prefix.Subject != outerFlow.Subject {
+		t.Fatal("prefix should preserve the flow subject")
+	}
+	if len(prefix.Transformations) != 2 {
+		t.Fatalf("prefix transformation count = %d, want 2", len(prefix.Transformations))
+	}
+	if got := strings.TrimSpace(nodeText(sf, prefix.Transformations[1].Callee)); got != "Effect.flatMap" {
+		t.Fatalf("last prefix transformation = %q, want Effect.flatMap", got)
+	}
+	originalKind := outerFlow.Transformations[0].Kind
+	prefix.Transformations[0].Kind = TransformationKind("test")
+	if outerFlow.Transformations[0].Kind != originalKind {
+		t.Fatal("prefix transformations should have an independent backing slice")
+	}
+	if empty := outerFlow.CopyPrefix(0); empty == nil || len(empty.Transformations) != 0 {
+		t.Fatal("expected an empty prefix rooted at the flow subject")
+	}
+	if outerFlow.CopyPrefix(-1) != nil || outerFlow.CopyPrefix(len(outerFlow.Transformations)+1) != nil {
+		t.Fatal("out-of-bounds prefixes should return nil")
+	}
+	var nilFlow *PipingFlow
+	if nilFlow.CopyPrefix(0) != nil {
+		t.Fatal("a nil complete flow should return a nil prefix")
+	}
+}
+
+func transformationCallees(sf *ast.SourceFile, flow *PipingFlow) []string {
+	result := make([]string, 0, len(flow.Transformations))
+	for i := range flow.Transformations {
+		result = append(result, strings.TrimSpace(nodeText(sf, flow.Transformations[i].Callee)))
+	}
+	return result
 }
 
 func TestDataFirstOrLastCall_OptionMatchV4(t *testing.T) {
