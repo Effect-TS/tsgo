@@ -20,6 +20,7 @@
     "effecttsgo/effect-map-flatten": "warn",
     "effecttsgo/effect-map-void": "warn",
     "effecttsgo/effect-succeed-with-void": "warn",
+    "effecttsgo/flat-map-conditional-to-filter-or-fail": "warn",
     "effecttsgo/flat-map-to-map": "warn",
     "effecttsgo/map-some-to-as-some": "warn",
     "effecttsgo/missed-pipeable-opportunity": "warn",

@@ -1,4 +1,4 @@
-==== /.src/strictEffectProvide.ts (12 flows) ====
+==== /.src/strictEffectProvide.ts (13 flows) ====
 
 === Piping Flow ===
 Location: 5:8 - 5:37
@@ -66,6 +66,20 @@ Subject Type: Effect<void, never, never>
 
 Transformations (1):
   [0] kind: pipeable
+      callee: Effect.provide
+      args: [MyService1.Default]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 22:29 - 22:77
+Node: Effect.provide(Effect.void, MyService1.Default)
+Node Kind: KindCallExpression
+
+Subject: Effect.void
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
       callee: Effect.provide
       args: [MyService1.Default]
       outType: Effect<void, never, never>

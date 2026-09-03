@@ -1,4 +1,4 @@
-==== /.src/promiseInEffectSuccess.ts (55 flows) ====
+==== /.src/promiseInEffectSuccess.ts (56 flows) ====
 
 === Piping Flow ===
 Location: 23:93 - 25:29
@@ -181,6 +181,20 @@ Transformations (1):
       callee: Promise.resolve
       args: (constant)
       outType: Promise<string>
+
+=== Piping Flow ===
+Location: 37:97 - 38:70
+Node: Effect.zipWith(base, other, (_left, right) => Promise.resolve(right))
+Node Kind: KindCallExpression
+
+Subject: base
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.zipWith
+      args: [other, (_left, right) => Promise.resolve(right)]
+      outType: Effect<Promise<string>, never, never>
 
 === Piping Flow ===
 Location: 38:46 - 38:69

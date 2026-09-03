@@ -28,6 +28,7 @@
     "effecttsgo/prefer-schema-over-json": "warn",
     "effecttsgo/process-env": "warn",
     "effecttsgo/process-env-in-effect": "warn",
+    "effecttsgo/race-first-with-sleep-to-timeout": "warn",
     "effecttsgo/unsafe-effect-type-assertion": "warn"
   }
 }

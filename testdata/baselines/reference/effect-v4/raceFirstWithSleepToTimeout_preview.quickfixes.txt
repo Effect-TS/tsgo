@@ -1,0 +1,13 @@
+=== Quick Fix Inventory ===
+
+[D1] (8:23-8:39) TS377121: This Effect first-completion race has exactly one sleep- or delay-based timer arm. `Effect.timeoutOrElse` expresses the timeout and fallback directly. effect(raceFirstWithSleepToTimeout)
+  Fix 0: "Disable raceFirstWithSleepToTimeout for this line"
+  Fix 1: "Disable raceFirstWithSleepToTimeout for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable raceFirstWithSleepToTimeout for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable raceFirstWithSleepToTimeout for entire file" ===
+skipped by default
