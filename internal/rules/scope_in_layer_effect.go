@@ -1,6 +1,7 @@
 package rules
 
 import (
+	"slices"
 	"strings"
 
 	"github.com/effect-ts/tsgo/etscore"
@@ -64,7 +65,7 @@ func AnalyzeScopeInLayerEffect(tp *typeparser.TypeParser, c *checker.Checker, sf
 
 		// Pattern 1: Layer.effect*() calls
 		if node.Kind == ast.KindCallExpression {
-			if m := matchLayerEffectCall(tp, c, sf, node); m != nil {
+			if m := matchLayerEffectCall(tp, sf, node); m != nil {
 				matches = append(matches, *m)
 				continue // skip children
 			}
@@ -86,7 +87,7 @@ func AnalyzeScopeInLayerEffect(tp *typeparser.TypeParser, c *checker.Checker, sf
 }
 
 // matchLayerEffectCall checks if a call expression is Layer.effect*() with Scope in RIn.
-func matchLayerEffectCall(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile, node *ast.Node) *ScopeInLayerEffectMatch {
+func matchLayerEffectCall(tp *typeparser.TypeParser, sf *ast.SourceFile, node *ast.Node) *ScopeInLayerEffectMatch {
 	if node.Kind != ast.KindCallExpression {
 		return nil
 	}
@@ -118,13 +119,13 @@ func matchLayerEffectCall(tp *typeparser.TypeParser, c *checker.Checker, sf *ast
 	}
 
 	// Parse as Layer type
-	layer := tp.LayerType(t, node)
+	layer := tp.LayerType(t)
 	if layer == nil {
 		return nil
 	}
 
 	// Check if RIn contains a Scope type
-	if !hasScope(tp, c, layer.RIn, node) {
+	if !hasScope(tp, layer.RIn) {
 		return nil
 	}
 
@@ -172,13 +173,13 @@ func matchClassWithDefaultLayer(tp *typeparser.TypeParser, c *checker.Checker, s
 	}
 
 	// Parse as Layer type
-	layer := tp.LayerType(defaultType, node)
+	layer := tp.LayerType(defaultType)
 	if layer == nil {
 		return nil
 	}
 
 	// Check if RIn contains a Scope type
-	if !hasScope(tp, c, layer.RIn, node) {
+	if !hasScope(tp, layer.RIn) {
 		return nil
 	}
 
@@ -190,12 +191,7 @@ func matchClassWithDefaultLayer(tp *typeparser.TypeParser, c *checker.Checker, s
 }
 
 // hasScope checks if any union member of the given type is a Scope type.
-func hasScope(tp *typeparser.TypeParser, _ *checker.Checker, t *checker.Type, atLocation *ast.Node) bool {
+func hasScope(tp *typeparser.TypeParser, t *checker.Type) bool {
 	members := tp.UnrollUnionMembers(t)
-	for _, member := range members {
-		if tp.IsScopeType(member, atLocation) {
-			return true
-		}
-	}
-	return false
+	return slices.ContainsFunc(members, tp.IsScopeType)
 }

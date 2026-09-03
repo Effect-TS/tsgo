@@ -221,7 +221,7 @@ func vitestCallbackReturnsEffect(c *checker.Checker, tp *typeparser.TypeParser, 
 
 func vitestReturnTypeContainsEffect(c *checker.Checker, tp *typeparser.TypeParser, returnType *checker.Type, atLocation *ast.Node, depth int) bool {
 	for _, member := range tp.UnrollUnionMembers(returnType) {
-		if tp.StrictIsEffectType(member, atLocation) {
+		if tp.StrictIsEffectType(member) {
 			return true
 		}
 		if depth == 0 && tp.PromiseType(member) != nil {

@@ -15,11 +15,11 @@ var effectSchemaParserModuleDescriptor = newPackageSourceFileDescriptor("effect"
 const SchemaTypeId = "~effect/Schema/Schema"
 
 // IsSchemaType returns true if the type is a Schema type (v4 or v3).
-func (tp *TypeParser) IsSchemaType(t *checker.Type, atLocation *ast.Node) bool {
+func (tp *TypeParser) IsSchemaType(t *checker.Type) bool {
 	if tp == nil {
 		return false
 	}
-	return tp.EffectSchemaTypes(t, atLocation) != nil
+	return tp.EffectSchemaTypes(t) != nil
 }
 
 // SchemaTypes holds the A (Type) and E (Encoded) types extracted from a Schema type.
@@ -30,7 +30,7 @@ type SchemaTypes struct {
 
 // EffectSchemaTypes extracts the A (Type) and E (Encoded) types from a Schema type.
 // Returns nil if the type is not a recognized Schema type or types cannot be extracted.
-func (tp *TypeParser) EffectSchemaTypes(t *checker.Type, atLocation *ast.Node) *SchemaTypes {
+func (tp *TypeParser) EffectSchemaTypes(t *checker.Type) *SchemaTypes {
 	if tp == nil || tp.checker == nil || t == nil {
 		return nil
 	}
@@ -42,8 +42,8 @@ func (tp *TypeParser) EffectSchemaTypes(t *checker.Type, atLocation *ast.Node) *
 				return nil
 			}
 			// V4: get Type and Encoded properties directly
-			aType := tp.getPropertyType(t, atLocation, "Type")
-			eType := tp.getPropertyType(t, atLocation, "Encoded")
+			aType := tp.GetTypeOfPropertyByName(t, "Type")
+			eType := tp.GetTypeOfPropertyByName(t, "Encoded")
 			if aType == nil || eType == nil {
 				return nil
 			}
@@ -61,7 +61,7 @@ func (tp *TypeParser) EffectSchemaTypes(t *checker.Type, atLocation *ast.Node) *
 			if prop == nil || prop.Flags&ast.SymbolFlagsProperty == 0 || prop.Flags&ast.SymbolFlagsOptional != 0 || prop.ValueDeclaration == nil {
 				continue
 			}
-			propType := c.GetTypeOfSymbolAtLocation(prop, atLocation)
+			propType := c.GetTypeOfSymbolAtLocation(prop, nil)
 			a := tp.extractInvariantType(propType, "_A")
 			if a == nil {
 				continue
@@ -79,16 +79,6 @@ func (tp *TypeParser) EffectSchemaTypes(t *checker.Type, atLocation *ast.Node) *
 
 		return nil
 	})
-}
-
-// getPropertyType extracts the type of a named property from a type.
-func (tp *TypeParser) getPropertyType(t *checker.Type, atLocation *ast.Node, propName string) *checker.Type {
-	c := tp.checker
-	sym := c.GetPropertyOfType(t, propName)
-	if sym == nil {
-		return nil
-	}
-	return c.GetTypeOfSymbolAtLocation(sym, atLocation)
 }
 
 func isSchemaTypeSourceFile(tp *TypeParser, c *checker.Checker, sf *ast.SourceFile) bool {
@@ -111,7 +101,7 @@ func isSchemaTypeSourceFile(tp *TypeParser, c *checker.Checker, sf *ast.SourceFi
 		return false
 	}
 
-	return tp.IsSchemaType(schemaType, sf.AsNode())
+	return tp.IsSchemaType(schemaType)
 }
 
 // IsNodeReferenceToEffectSchemaModuleApi reports whether node resolves to a member

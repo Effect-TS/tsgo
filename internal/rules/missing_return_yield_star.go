@@ -90,7 +90,7 @@ func shouldReportMissingReturnYieldStar(tp *typeparser.TypeParser, c *checker.Ch
 	if t == nil {
 		return false
 	}
-	effect := tp.EffectYieldableType(t, expr.AsNode())
+	effect := tp.EffectYieldableType(t)
 	if effect == nil || effect.A == nil {
 		return false
 	}

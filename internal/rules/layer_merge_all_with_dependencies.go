@@ -114,7 +114,7 @@ func analyzeLayerMergeAllCall(tp *typeparser.TypeParser, c *checker.Checker, sf 
 			continue
 		}
 
-		layer := tp.LayerType(argType, arg)
+		layer := tp.LayerType(argType)
 		if layer == nil {
 			continue
 		}

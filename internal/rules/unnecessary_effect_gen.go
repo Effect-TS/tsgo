@@ -124,7 +124,7 @@ func analyzeUnnecessaryEffectGenNode(tp *typeparser.TypeParser, _ *checker.Check
 	successIsVoid := false
 	t := tp.GetTypeAtLocation(yieldedExpr)
 	if t != nil {
-		effect := tp.EffectType(t, yieldedExpr)
+		effect := tp.EffectType(t)
 		if effect != nil && effect.A != nil {
 			successIsVoid = effect.A.Flags()&checker.TypeFlagsVoidLike != 0
 		}

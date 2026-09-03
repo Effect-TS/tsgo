@@ -104,7 +104,7 @@ func analyzeAllOfMapToForEachCall(tp *typeparser.TypeParser, c *checker.Checker,
 
 	callback := mapCall.Arguments.Nodes[0]
 	mapResultType := tp.GetTypeAtLocation(mapNode)
-	if mapResultType == nil || tp.EffectType(c.GetNumberIndexType(mapResultType), callback) == nil {
+	if mapResultType == nil || tp.EffectType(c.GetNumberIndexType(mapResultType)) == nil {
 		return AllOfMapToForEachMatch{}, false
 	}
 

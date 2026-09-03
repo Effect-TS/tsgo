@@ -61,7 +61,7 @@ func AnalyzeInstanceOfSchema(tp *typeparser.TypeParser, _ *checker.Checker, sf *
 			binExpr := node.AsBinaryExpression()
 			rightExpr := binExpr.Right
 			rightType := tp.GetTypeAtLocation(rightExpr)
-			if rightType != nil && tp.IsSchemaType(rightType, rightExpr) {
+			if rightType != nil && tp.IsSchemaType(rightType) {
 				matches = append(matches, InstanceOfSchemaMatch{
 					SourceFile:     sf,
 					Location:       scanner.GetErrorRangeForNode(sf, node),

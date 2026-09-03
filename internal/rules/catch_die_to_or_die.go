@@ -69,7 +69,7 @@ func AnalyzeCatchDieToOrDie(tp *typeparser.TypeParser, _ *checker.Checker, sf *a
 			if ok && len(args) == 1 {
 				handler, _, _ := tp.UnwrapIdentityForwarder(args[0])
 				if tp.IsNodeReferenceToEffectModuleApi(handler, "die") {
-					inputEffect := tp.StrictEffectType(inputType, callee)
+					inputEffect := tp.StrictEffectType(inputType)
 					if inputEffect != nil && inputEffect.E != nil && inputEffect.E.Flags()&checker.TypeFlagsNever == 0 {
 						if _, duplicate := seen[transformation.Node]; !duplicate {
 							seen[transformation.Node] = struct{}{}
