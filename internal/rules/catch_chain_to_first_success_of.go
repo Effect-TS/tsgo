@@ -84,7 +84,7 @@ func AnalyzeCatchChainToFirstSuccessOf(tp *typeparser.TypeParser, c *checker.Che
 				if i > 0 {
 					inputType = flow.Transformations[i-1].OutType
 				}
-				inputEffect := tp.StrictEffectType(inputType, transformation.Callee)
+				inputEffect := tp.StrictEffectType(inputType)
 				if inputEffect == nil || inputEffect.E == nil {
 					flush()
 					continue
@@ -92,7 +92,7 @@ func AnalyzeCatchChainToFirstSuccessOf(tp *typeparser.TypeParser, c *checker.Che
 				initialError = inputEffect.E
 			}
 
-			outputEffect := tp.StrictEffectType(transformation.OutType, transformation.Callee)
+			outputEffect := tp.StrictEffectType(transformation.OutType)
 			if outputEffect == nil || outputEffect.E == nil {
 				flush()
 				continue
@@ -127,7 +127,7 @@ func analyzeCatchChainToFirstSuccessOfCandidate(tp *typeparser.TypeParser, c *ch
 		return catchChainToFirstSuccessOfCandidate{}, false
 	}
 
-	fallbackType := tp.StrictEffectType(c.GetReturnTypeOfSignature(signatures[0]), lazy.Expression)
+	fallbackType := tp.StrictEffectType(c.GetReturnTypeOfSignature(signatures[0]))
 	if fallbackType == nil || fallbackType.E == nil {
 		return catchChainToFirstSuccessOfCandidate{}, false
 	}

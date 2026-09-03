@@ -1,9 +1,6 @@
 package typeparser
 
-import (
-	"github.com/microsoft/TypeScript/tsc/shim/ast"
-	"github.com/microsoft/TypeScript/tsc/shim/checker"
-)
+import "github.com/microsoft/TypeScript/tsc/shim/checker"
 
 // ServiceTypeId is the property key for the newer Context.Service variance struct.
 const ServiceTypeId = "~effect/Context/Service"
@@ -31,7 +28,7 @@ func (tp *TypeParser) parseServiceVarianceStruct(t *checker.Type) *Service {
 
 // ServiceType parses a v4 service type and extracts Identifier, Shape parameters.
 // Returns nil if the type is not a v4 service.
-func (tp *TypeParser) ServiceType(t *checker.Type, atLocation *ast.Node) *Service {
+func (tp *TypeParser) ServiceType(t *checker.Type) *Service {
 	if tp == nil || tp.checker == nil || t == nil {
 		return nil
 	}
@@ -39,7 +36,7 @@ func (tp *TypeParser) ServiceType(t *checker.Type, atLocation *ast.Node) *Servic
 		if tp.DetectEffectVersion() != EffectMajorV4 {
 			return nil
 		}
-		if !tp.IsPipeableType(t, atLocation) {
+		if !tp.IsPipeableType(t) {
 			return nil
 		}
 
@@ -61,6 +58,6 @@ func (tp *TypeParser) ServiceType(t *checker.Type, atLocation *ast.Node) *Servic
 }
 
 // IsServiceType returns true if the type has the Service variance struct.
-func (tp *TypeParser) IsServiceType(t *checker.Type, atLocation *ast.Node) bool {
-	return tp.ServiceType(t, atLocation) != nil
+func (tp *TypeParser) IsServiceType(t *checker.Type) bool {
+	return tp.ServiceType(t) != nil
 }

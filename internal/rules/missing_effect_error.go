@@ -52,8 +52,8 @@ func AnalyzeMissingEffectError(tp *typeparser.TypeParser, c *checker.Checker, sf
 
 	for _, re := range c.GetRelationErrors(sf) {
 		// Parse both types as Effects
-		srcEffect := tp.EffectType(re.Source, re.ErrorNode)
-		tgtEffect := tp.EffectType(re.Target, re.ErrorNode)
+		srcEffect := tp.EffectType(re.Source)
+		tgtEffect := tp.EffectType(re.Target)
 
 		// Both must be Effect types
 		if srcEffect == nil || tgtEffect == nil {

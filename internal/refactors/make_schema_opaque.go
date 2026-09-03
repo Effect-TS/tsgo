@@ -2,12 +2,12 @@ package refactors
 
 import (
 	"github.com/effect-ts/tsgo/internal/refactor"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/astnav"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
-	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var MakeSchemaOpaque = refactor.Refactor{
@@ -75,7 +75,7 @@ func findSchemaVariableDeclaration(ctx *refactor.Context, _ *checker.Checker) *s
 			continue
 		}
 
-		schemaTypes := ctx.TypeParser.EffectSchemaTypes(initType, varDecl.Initializer)
+		schemaTypes := ctx.TypeParser.EffectSchemaTypes(initType)
 		if schemaTypes == nil {
 			continue
 		}

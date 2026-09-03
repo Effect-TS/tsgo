@@ -68,7 +68,7 @@ func AnalyzeCatchToIgnore(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast
 				continue
 			}
 
-			effect := tp.StrictEffectType(transformation.OutType, transformation.Node)
+			effect := tp.StrictEffectType(transformation.OutType)
 			if effect == nil || !isVoidLikeEffectSuccess(effect.A) {
 				continue
 			}

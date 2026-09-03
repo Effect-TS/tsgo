@@ -134,7 +134,7 @@ func analyzeTypedSchemaDecoderApplication(tp *typeparser.TypeParser, c *checker.
 		return nil
 	}
 
-	schemaType := tp.EffectSchemaTypes(tp.GetTypeAtLocation(schema), schema)
+	schemaType := tp.EffectSchemaTypes(tp.GetTypeAtLocation(schema))
 	if schemaType == nil || schemaType.E == nil {
 		return nil
 	}

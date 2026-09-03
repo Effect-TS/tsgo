@@ -113,7 +113,7 @@ func collectServiceDocumentSymbols(tp *typeparser.TypeParser, c *checker.Checker
 				return false
 			}
 			t := tp.GetTypeAtLocation(current)
-			if tp.IsLayerType(t, current) {
+			if tp.IsLayerType(t) {
 				return false
 			}
 		}
@@ -342,7 +342,7 @@ func debugFlowTransformationText(sf *ast.SourceFile, transformation *typeparser.
 func layerSymbolDetail(tp *typeparser.TypeParser, c *checker.Checker, node *ast.Node) *string {
 	typeCheckNode, types := classificationTypes(tp, c, node)
 	for _, t := range types {
-		layer := tp.LayerType(t, typeCheckNode)
+		layer := tp.LayerType(t)
 		if layer == nil {
 			continue
 		}
@@ -416,22 +416,17 @@ func classificationTypes(tp *typeparser.TypeParser, c *checker.Checker, node *as
 }
 
 func isLayerDeclaration(tp *typeparser.TypeParser, c *checker.Checker, node *ast.Node) bool {
-	typeCheckNode, types := classificationTypes(tp, c, node)
-	for _, t := range types {
-		if tp.IsLayerType(t, typeCheckNode) {
-			return true
-		}
-	}
-	return false
+	_, types := classificationTypes(tp, c, node)
+	return slices.ContainsFunc(types, tp.IsLayerType)
 }
 
 func isServiceDeclaration(tp *typeparser.TypeParser, c *checker.Checker, node *ast.Node) bool {
 	if node == nil {
 		return false
 	}
-	typeCheckNode, types := classificationTypes(tp, c, node)
+	_, types := classificationTypes(tp, c, node)
 	for _, t := range types {
-		if tp.IsServiceType(t, typeCheckNode) || tp.IsContextTag(t, typeCheckNode) {
+		if tp.IsServiceType(t) || tp.IsContextTag(t) {
 			return true
 		}
 	}
@@ -460,13 +455,8 @@ func isSchemaDeclaration(tp *typeparser.TypeParser, c *checker.Checker, node *as
 	default:
 		return false
 	}
-	typeCheckNode, types := classificationTypes(tp, c, node)
-	for _, t := range types {
-		if tp.IsSchemaType(t, typeCheckNode) {
-			return true
-		}
-	}
-	return false
+	_, types := classificationTypes(tp, c, node)
+	return slices.ContainsFunc(types, tp.IsSchemaType)
 }
 
 func resolveErrorDisplayNode(node *ast.Node) *ast.Node {

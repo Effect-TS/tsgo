@@ -31,8 +31,8 @@ var MissingEffectContext = rule.Rule{
 
 		for _, re := range ctx.Checker.GetRelationErrors(ctx.SourceFile) {
 			// Parse both types as Effects
-			srcEffect := ctx.TypeParser.EffectType(re.Source, re.ErrorNode)
-			tgtEffect := ctx.TypeParser.EffectType(re.Target, re.ErrorNode)
+			srcEffect := ctx.TypeParser.EffectType(re.Source)
+			tgtEffect := ctx.TypeParser.EffectType(re.Target)
 
 			// Both must be Effect types
 			if srcEffect == nil || tgtEffect == nil {
@@ -212,7 +212,7 @@ func rootLayerProvidesTypes(tp *typeparser.TypeParser, c *checker.Checker, layer
 	if c == nil || layerNode == nil {
 		return nil
 	}
-	layerType := tp.LayerType(tp.GetTypeAtLocation(layerNode), layerNode)
+	layerType := tp.LayerType(tp.GetTypeAtLocation(layerNode))
 	if layerType == nil {
 		return nil
 	}
