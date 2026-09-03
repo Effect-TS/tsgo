@@ -94,7 +94,6 @@
     "effecttsgo/unnecessary-fail-yieldable-error": "warn",
     "effecttsgo/unnecessary-pipe": "warn",
     "effecttsgo/unnecessary-pipe-chain": "warn",
-    "effecttsgo/unnecessary-typeof-type": "warn",
-    "effecttsgo/unsafe-effect-type-assertion": "warn"
+    "effecttsgo/unnecessary-typeof-type": "warn"
   }
 }

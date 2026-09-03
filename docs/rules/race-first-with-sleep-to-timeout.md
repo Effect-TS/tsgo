@@ -6,7 +6,7 @@ Suggests Effect.timeoutOrElse when Effect.raceFirst has exactly one sleep- or de
 
 | Property | Value |
 | --- | --- |
-| Category | Effect-native |
+| Category | Style |
 | Default severity | `suggestion` |
 | Fixable | No |
 | Effect versions | v4 |

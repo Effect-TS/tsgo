@@ -15,7 +15,7 @@ import (
 // Effect first-completion race is a hand-rolled timer arm.
 var RaceFirstWithSleepToTimeout = rule.Rule{
 	Name:            "raceFirstWithSleepToTimeout",
-	Group:           "effectNative",
+	Group:           "style",
 	Description:     "Suggests Effect.timeoutOrElse when Effect.raceFirst has exactly one sleep- or delay-based timer arm",
 	DefaultSeverity: etscore.SeveritySuggestion,
 	SupportedEffect: []string{"v4"},
