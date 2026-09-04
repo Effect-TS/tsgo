@@ -65,7 +65,8 @@ func AnalyzeFlatMapConditionalToFilterOrFail(tp *typeparser.TypeParser, c *check
 	for _, flow := range tp.PipingFlows(sf, true) {
 		for index := range flow.Transformations {
 			transformation := &flow.Transformations[index]
-			callee, args := flatMapConditionalTransformation(transformation)
+			callee := transformation.Callee
+			args := transformation.Args
 			if callee == nil || len(args) != 1 || !tp.IsNodeReferenceToEffectModuleApi(callee, "flatMap") {
 				continue
 			}
@@ -131,23 +132,6 @@ func AnalyzeFlatMapConditionalToFilterOrFail(tp *typeparser.TypeParser, c *check
 		}
 	}
 	return matches
-}
-
-func flatMapConditionalTransformation(transformation *typeparser.PipingFlowTransformation) (callee *ast.Node, args []*ast.Node) {
-	if transformation == nil || transformation.Callee == nil {
-		return nil, nil
-	}
-	callee = transformation.Callee
-	args = transformation.Args
-	if len(args) == 0 && callee.Kind == ast.KindCallExpression {
-		call := callee.AsCallExpression()
-		if call == nil || call.Expression == nil || call.Arguments == nil {
-			return nil, nil
-		}
-		callee = call.Expression
-		args = call.Arguments.Nodes
-	}
-	return callee, args
 }
 
 func isIdentitySucceed(tp *typeparser.TypeParser, c *checker.Checker, expression *ast.Node, parameterSymbol *ast.Symbol) bool {

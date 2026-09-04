@@ -2248,6 +2248,9 @@
         "effecttsgo/async-function": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/catch-all-tag-dispatch-to-catch-tag": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/catch-all-to-map-error": {
           "$ref": "#/definitions/RuleNoConfig"
         },
@@ -2483,6 +2486,9 @@
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/run-effect-inside-effect": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "effecttsgo/run-of-exit-to-run-exit": {
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/schema-literal-non-finite": {

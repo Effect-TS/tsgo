@@ -14,6 +14,14 @@
   Fix 0: "Disable allOfMapToForEach for this line"
   Fix 1: "Disable allOfMapToForEach for entire file"
 
+[D4] (48:57-48:67) TS377113: `Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)
+  Fix 0: "Disable allOfMapToForEach for this line"
+  Fix 1: "Disable allOfMapToForEach for entire file"
+
+[D5] (49:63-49:73) TS377113: `Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)
+  Fix 0: "Disable allOfMapToForEach for this line"
+  Fix 1: "Disable allOfMapToForEach for entire file"
+
 === Quick Fix Application Results ===
 
 === [D1] Fix 0: "Disable allOfMapToForEach for this line" ===
@@ -26,7 +34,7 @@ skipped by default
 
 --- file:///.src/allOfMapToForEach.ts ---
 // @effect-v3
-import { Effect } from "effect"
+import { Effect, pipe } from "effect"
 
 declare const values: ReadonlyArray<number>
 declare const effectful: (value: number, index: number) => Effect.Effect<string>
@@ -70,6 +78,11 @@ export const record = Effect.all(recordMapper.map((value) => Effect.succeed(valu
 // @ts-expect-error Effect.all requires Effect values
 export const plainValues = Effect.all(values.map((value) => value + 1))
 
+// Should trigger for data-last Effect.all references in piping flows, but the
+// diagnostic alone cannot offer the data-first quick fix.
+export const pipeDataLast = pipe(values.map(effectful), Effect.all)
+export const pipeDataLastAsVoid = pipe(values.map(effectful), Effect.all, Effect.asVoid)
+
 // Should not trigger for legitimate Effect.all inputs.
 export const tuple = Effect.all([Effect.succeed(1), Effect.succeed("two")] as const)
 
@@ -84,7 +97,7 @@ skipped by default
 
 --- file:///.src/allOfMapToForEach.ts ---
 // @effect-v3
-import { Effect } from "effect"
+import { Effect, pipe } from "effect"
 
 declare const values: ReadonlyArray<number>
 declare const effectful: (value: number, index: number) => Effect.Effect<string>
@@ -125,6 +138,11 @@ export const record = Effect.all(recordMapper.map((value) => Effect.succeed(valu
 // @ts-expect-error Effect.all requires Effect values
 export const plainValues = Effect.all(values.map((value) => value + 1))
 
+// Should trigger for data-last Effect.all references in piping flows, but the
+// diagnostic alone cannot offer the data-first quick fix.
+export const pipeDataLast = pipe(values.map(effectful), Effect.all)
+export const pipeDataLastAsVoid = pipe(values.map(effectful), Effect.all, Effect.asVoid)
+
 // Should not trigger for legitimate Effect.all inputs.
 export const tuple = Effect.all([Effect.succeed(1), Effect.succeed("two")] as const)
 
@@ -133,4 +151,16 @@ export const tuple = Effect.all([Effect.succeed(1), Effect.succeed("two")] as co
 skipped by default
 
 === [D3] Fix 1: "Disable allOfMapToForEach for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable allOfMapToForEach for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable allOfMapToForEach for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable allOfMapToForEach for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable allOfMapToForEach for entire file" ===
 skipped by default

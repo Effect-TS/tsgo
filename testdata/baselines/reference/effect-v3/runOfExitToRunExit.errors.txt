@@ -1,0 +1,38 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/runOfExitToRunExit.ts(6,30): suggestion TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+/.src/runOfExitToRunExit.ts(7,27): suggestion TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+/.src/runOfExitToRunExit.ts(8,29): suggestion TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+/.src/runOfExitToRunExit.ts(9,60): suggestion TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+
+
+==== /.src/runOfExitToRunExit.ts (4 errors) ====
+    import { Effect, pipe } from "effect"
+    
+    declare const program: Effect.Effect<number, Error>
+    declare const signal: AbortSignal
+    
+    export const directPromise = Effect.runPromise(Effect.exit(program), { signal })
+                                 ~~~~~~~~~~~~~~~~~
+!!! suggestion TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+    export const methodPipe = Effect.runPromise(program.pipe(Effect.exit))
+                              ~~~~~~~~~~~~~~~~~
+!!! suggestion TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+    export const functionPipe = Effect.runPromise(pipe(program, Effect.exit))
+                                ~~~~~~~~~~~~~~~~~
+!!! suggestion TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+    export const sameFunctionPipe = pipe(program, Effect.exit, Effect.runPromise)
+                                                               ~~~~~~~~~~~~~~~~~
+!!! suggestion TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+    
+    export const transformedExit = Effect.runPromise(
+      program.pipe(Effect.exit, Effect.map((exit) => exit))
+    )
+    const computedExit = Effect.exit(program)
+    export const referencedExit = Effect.runPromise(computedExit)
+    
+    // Not equivalent when the input performs asynchronous work.
+    export const directSync = Effect.runSync(Effect.exit(program))
+    export const functionPipeSync = Effect.runSync(pipe(program, Effect.exit))
+    

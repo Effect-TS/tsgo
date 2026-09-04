@@ -142,8 +142,8 @@ Transformations (2):
       args: (constant)
       outType: Effect<number, never, never>
   [1] kind: call
-      callee: Effect.flatMap((n: number) => Effect.succeed(n + 1))
-      args: (constant)
+      callee: Effect.flatMap
+      args: [(n: number) => Effect.succeed(n + 1)]
       outType: Effect<number, never, never>
 
 === Piping Flow ===

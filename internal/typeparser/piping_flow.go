@@ -66,7 +66,13 @@ func (flow *PartialPipingFlow) TransformationInputNode(index int) *ast.Node {
 		return nil
 	}
 	transformation := &flow.Transformations[index]
-	if call := pipingFlowTransformationCall(transformation); call != nil && call.Arguments != nil {
+	call := pipingFlowTransformationCall(transformation)
+	if transformation.Kind == TransformationKindCall {
+		// Curried factories decompose into a factory call and a trailing
+		// application; the input feeds the outermost applied call.
+		call = appliedCallOf(call)
+	}
+	if call != nil && call.Arguments != nil {
 		switch transformation.Kind {
 		case TransformationKindCall:
 			if len(call.Arguments.Nodes) == 1 {
@@ -86,6 +92,26 @@ func (flow *PartialPipingFlow) TransformationInputNode(index int) *ast.Node {
 		return flow.Subject.Node
 	}
 	return nil
+}
+
+// appliedCallOf walks out of callee positions, returning the outermost call
+// that applies the given call's result to its subject.
+func appliedCallOf(call *ast.CallExpression) *ast.CallExpression {
+	if call == nil {
+		return nil
+	}
+	current := call.AsNode()
+	for current != nil && current.Parent != nil && ast.IsCallExpression(current.Parent) {
+		parent := current.Parent.AsCallExpression()
+		if parent == nil || parent.Expression != current {
+			break
+		}
+		current = parent.AsNode()
+	}
+	if current == nil {
+		return nil
+	}
+	return current.AsCallExpression()
 }
 
 func pipingFlowTransformationCall(transformation *PipingFlowTransformation) *ast.CallExpression {
@@ -136,9 +162,11 @@ type ParsedPipeCallResult struct {
 
 // parsedSingleArgCallResult is the internal result of parsing a single-argument call.
 type parsedSingleArgCallResult struct {
-	node    *ast.CallExpression
-	callee  *ast.Node
-	subject *ast.Node
+	node             *ast.CallExpression // the applied call
+	callee           *ast.Node           // the applied function, decomposed for curried factories
+	args             []*ast.Node         // curried factory arguments, or nil
+	typeArgumentsSrc *ast.Node           // the node carrying the transformation type arguments
+	subject          *ast.Node
 }
 
 // ParsePipeCall detects pipe() and .pipe() call patterns.
@@ -241,7 +269,7 @@ func (tp *TypeParser) buildParsedPipeCallResult(
 
 // parseSingleArgCall detects single-argument call patterns like f(arg).
 // Returns nil when the node is not a single-argument call.
-func parseSingleArgCall(node *ast.Node) *parsedSingleArgCallResult {
+func (tp *TypeParser) parseSingleArgCall(node *ast.Node) *parsedSingleArgCallResult {
 	if node == nil || node.Kind != ast.KindCallExpression {
 		return nil
 	}
@@ -260,10 +288,77 @@ func parseSingleArgCall(node *ast.Node) *parsedSingleArgCallResult {
 		return nil
 	}
 
-	return &parsedSingleArgCallResult{
-		node:    call,
-		callee:  call.Expression,
-		subject: call.Arguments.Nodes[0],
+	result := &parsedSingleArgCallResult{
+		node:             call,
+		callee:           call.Expression,
+		typeArgumentsSrc: call.AsNode(),
+		subject:          call.Arguments.Nodes[0],
+	}
+	tp.decomposeCurriedPipeable(result)
+	return result
+}
+
+// decomposeCurriedPipeable exposes the factory arguments only when the inner
+// call is the pipeable counterpart of a data-first overload of the same symbol.
+func (tp *TypeParser) decomposeCurriedPipeable(result *parsedSingleArgCallResult) {
+	if tp == nil || tp.checker == nil || result == nil || result.node == nil {
+		return
+	}
+	factory := ast.SkipParentheses(result.node.Expression)
+	if factory == nil || factory.Kind != ast.KindCallExpression {
+		return
+	}
+	factoryCall := factory.AsCallExpression()
+	if factoryCall == nil || factoryCall.Expression == nil || factoryCall.Arguments == nil || len(factoryCall.Arguments.Nodes) == 0 {
+		return
+	}
+
+	c := tp.checker
+	pipeable := c.GetResolvedSignature(factory)
+	if pipeable == nil {
+		return
+	}
+	pipeableDeclaration := rawSignature(pipeable).Declaration()
+	if pipeableDeclaration == nil {
+		return
+	}
+	pipeableSymbol := checker.Checker_getSymbolOfDeclaration(c, pipeableDeclaration)
+	if pipeableSymbol == nil {
+		return
+	}
+
+	calleeType := tp.GetTypeAtLocation(factoryCall.Expression)
+	subjectType := tp.GetTypeAtLocation(result.subject)
+	if calleeType == nil || subjectType == nil {
+		return
+	}
+	argumentTypes := make([]*checker.Type, 0, len(factoryCall.Arguments.Nodes))
+	for _, argument := range factoryCall.Arguments.Nodes {
+		argumentTypes = append(argumentTypes, tp.GetTypeAtLocation(argument))
+	}
+	witness := &PipeableSignatureWitness{ArgumentTypes: argumentTypes, SubjectType: subjectType}
+
+	for _, dataFirst := range c.GetSignaturesOfType(calleeType, checker.SignatureKindCall) {
+		if dataFirst == nil || dataFirst == pipeable {
+			continue
+		}
+		declaration := rawSignature(dataFirst).Declaration()
+		if declaration == nil {
+			continue
+		}
+		symbol := checker.Checker_getSymbolOfDeclaration(c, declaration)
+		if symbol == nil || checker.Checker_getSymbolIfSameReference(c, pipeableSymbol, symbol) == nil {
+			continue
+		}
+		parameters := dataFirst.Parameters()
+		for _, subjectIndex := range []int{0, len(parameters) - 1} {
+			if MatchesPipeableSignature(c, dataFirst, pipeable, subjectIndex, witness) {
+				result.callee = factoryCall.Expression
+				result.args = factoryCall.Arguments.Nodes
+				result.typeArgumentsSrc = factory
+				return
+			}
+		}
 	}
 }
 
@@ -462,7 +557,7 @@ func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) []*P
 				}
 
 				// Try single-arg call
-				if singleResult := parseSingleArgCall(node); singleResult != nil {
+				if singleResult := tp.parseSingleArgCall(node); singleResult != nil {
 					var callOutType *checker.Type
 					if callSig := c.GetResolvedSignature(node); callSig != nil {
 						callOutType = c.GetReturnTypeOfSignature(callSig)
@@ -470,8 +565,8 @@ func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) []*P
 					transformation := PipingFlowTransformation{
 						Kind:          TransformationKindCall,
 						Callee:        singleResult.callee,
-						TypeArguments: pipingFlowTypeArguments(node, singleResult.callee),
-						Args:          nil,
+						TypeArguments: pipingFlowTypeArguments(singleResult.typeArgumentsSrc, singleResult.callee),
+						Args:          singleResult.args,
 						OutType:       callOutType,
 					}
 
@@ -495,7 +590,18 @@ func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) []*P
 					}
 
 					// Queue callee children for independent inner flow traversal
-					singleResult.callee.ForEachChild(enqueueChild)
+					if len(singleResult.args) > 0 {
+						// Curried factory: the applied function and the factory
+						// arguments belong to this transformation's subtree.
+						enqueueChild(singleResult.callee)
+						for _, arg := range singleResult.args {
+							if arg != nil {
+								enqueueChild(arg)
+							}
+						}
+					} else {
+						singleResult.callee.ForEachChild(enqueueChild)
+					}
 					continue
 				}
 			}
@@ -572,7 +678,7 @@ func (tp *TypeParser) LongestPipingFlowAt(node *ast.Node, includeEffectFn bool) 
 		return flow
 	}
 
-	if result := parseSingleArgCall(node); result != nil {
+	if result := tp.parseSingleArgCall(node); result != nil {
 		flow := tp.pipingFlowSubjectAt(result.subject, includeEffectFn)
 		var outType *checker.Type
 		if signature := tp.checker.GetResolvedSignature(node); signature != nil {
@@ -582,7 +688,8 @@ func (tp *TypeParser) LongestPipingFlowAt(node *ast.Node, includeEffectFn bool) 
 		flow.Transformations = append(flow.Transformations, PipingFlowTransformation{
 			Kind:          TransformationKindCall,
 			Callee:        result.callee,
-			TypeArguments: pipingFlowTypeArguments(node, result.callee),
+			TypeArguments: pipingFlowTypeArguments(result.typeArgumentsSrc, result.callee),
+			Args:          result.args,
 			OutType:       outType,
 		})
 		return flow
@@ -714,6 +821,9 @@ func (tp *TypeParser) buildEffectFnTransformations(result *parsedEffectFnCallRes
 }
 
 func callTypeArguments(node *ast.Node) *ast.NodeList {
+	// Parenthesized call arguments (e.g. pipe(x, (Effect.as<...>(v)))) keep the
+	// type arguments of the wrapped call.
+	node = ast.SkipParentheses(node)
 	if node == nil || node.Kind != ast.KindCallExpression {
 		return nil
 	}

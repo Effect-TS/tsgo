@@ -1,0 +1,155 @@
+==== /.src/runOfExitToRunExit.ts (9 flows) ====
+
+=== Piping Flow ===
+Location: 6:48 - 6:68
+Node: Effect.exit(program)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.exit
+      args: (constant)
+      outType: Effect<Exit<number, Error>, never, never>
+
+=== Piping Flow ===
+Location: 7:26 - 7:71
+Node: Effect.runPromise(program.pipe(Effect.exit))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, Error, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.exit
+      args: (constant)
+      outType: Effect<Exit<number, Error>, never, never>
+  [1] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<Exit<number, Error>>
+
+=== Piping Flow ===
+Location: 8:28 - 8:74
+Node: Effect.runPromise(pipe(program, Effect.exit))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, Error, never>
+
+Transformations (2):
+  [0] kind: pipe
+      callee: Effect.exit
+      args: (constant)
+      outType: Effect<Exit<number, Error>, never, never>
+  [1] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<Exit<number, Error>>
+
+=== Piping Flow ===
+Location: 9:32 - 9:78
+Node: pipe(program, Effect.exit, Effect.runPromise)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, Error, never>
+
+Transformations (2):
+  [0] kind: pipe
+      callee: Effect.exit
+      args: (constant)
+      outType: Effect<Exit<number, Error>, never, never>
+  [1] kind: pipe
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<Exit<number, Error>>
+
+=== Piping Flow ===
+Location: 11:31 - 13:2
+Node: Effect.runPromise(\n  program.pipe(Effect.exit, Effect.map((exit) => exit))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, Error, never>
+
+Transformations (3):
+  [0] kind: pipeable
+      callee: Effect.exit
+      args: (constant)
+      outType: Effect<Exit<number, Error>, never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [(exit) => exit]
+      outType: Effect<Exit<number, Error>, never, never>
+  [2] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<Exit<number, Error>>
+
+=== Piping Flow ===
+Location: 14:21 - 14:42
+Node: Effect.exit(program)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.exit
+      args: (constant)
+      outType: Effect<Exit<number, Error>, never, never>
+
+=== Piping Flow ===
+Location: 15:30 - 15:62
+Node: Effect.runPromise(computedExit)
+Node Kind: KindCallExpression
+
+Subject: computedExit
+Subject Type: Effect<Exit<number, Error>, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<Exit<number, Error>>
+
+=== Piping Flow ===
+Location: 18:26 - 18:63
+Node: Effect.runSync(Effect.exit(program))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, Error, never>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.exit
+      args: (constant)
+      outType: Effect<Exit<number, Error>, never, never>
+  [1] kind: call
+      callee: Effect.runSync
+      args: (constant)
+      outType: Exit<number, Error>
+
+=== Piping Flow ===
+Location: 19:32 - 19:75
+Node: Effect.runSync(pipe(program, Effect.exit))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, Error, never>
+
+Transformations (2):
+  [0] kind: pipe
+      callee: Effect.exit
+      args: (constant)
+      outType: Effect<Exit<number, Error>, never, never>
+  [1] kind: call
+      callee: Effect.runSync
+      args: (constant)
+      outType: Exit<number, Error>

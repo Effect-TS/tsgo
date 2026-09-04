@@ -2312,6 +2312,11 @@
           "default": "off",
           "description": "Warns when declaring async functions and suggests using Effect values and Effect.gen for async control flow"
         },
+        "catchAllTagDispatchToCatchTag": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.catchTag or Effect.catchTags for catch-all handlers that re-fail unmatched tagged errors"
+        },
         "catchAllToMapError": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
@@ -2706,6 +2711,11 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
           "description": "Suggests using Runtime or Effect.run*With methods instead of Effect.run* inside Effect contexts"
+        },
+        "runOfExitToRunExit": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests using Effect.runPromiseExit instead of passing Effect.exit to Effect.runPromise"
         },
         "schemaLiteralNonFinite": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",

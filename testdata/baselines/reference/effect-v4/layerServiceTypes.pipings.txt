@@ -38,8 +38,8 @@ Subject Type: { query: (sql: string) => Effect<string, never, never>; }
 
 Transformations (1):
   [0] kind: call
-      callee: Layer.succeed(Database)
-      args: (constant)
+      callee: Layer.succeed
+      args: [Database]
       outType: Layer<Database, never, never>
 
 === Piping Flow ===
@@ -66,8 +66,8 @@ Subject Type: { log: (message: string) => Effect<void, never, never>; }
 
 Transformations (1):
   [0] kind: call
-      callee: Layer.succeed(Logger)
-      args: (constant)
+      callee: Layer.succeed
+      args: [Logger]
       outType: Layer<Logger, never, never>
 
 === Piping Flow ===
@@ -98,8 +98,8 @@ Transformations (2):
       args: (constant)
       outType: Effect<{ query: (sql: string) => Effect<string, never, never>; }, never, never>
   [1] kind: call
-      callee: Layer.effect(Database)
-      args: (constant)
+      callee: Layer.effect
+      args: [Database]
       outType: Layer<Database, never, never>
 
 === Piping Flow ===
@@ -144,8 +144,8 @@ Transformations (2):
       args: (constant)
       outType: Effect<{ getUser: (id: string) => Effect<string, never, never>; }, never, Database>
   [1] kind: call
-      callee: Layer.effect(UserRepo)
-      args: (constant)
+      callee: Layer.effect
+      args: [UserRepo]
       outType: Layer<UserRepo, never, Database>
 
 === Piping Flow ===
