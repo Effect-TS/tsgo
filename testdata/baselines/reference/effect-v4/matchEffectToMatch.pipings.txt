@@ -1,7 +1,7 @@
 ==== /.src/matchEffectToMatch.ts (20 flows) ====
 
 === Piping Flow ===
-Location: 7:25 - 10:3
+Location: 8:25 - 11:3
 Node: Effect.matchEffect(effect, {\n  onFailure: (error) => Effect.succeed(error.length),\n  onSuccess: (value) => Effect.succeed(value + 1)\n})
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 8:24 - 8:53
+Location: 9:24 - 9:53
 Node: Effect.succeed(error.length)
 Node Kind: KindCallExpression
 
@@ -29,7 +29,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 9:24 - 9:50
+Location: 10:24 - 10:50
 Node: Effect.succeed(value + 1)
 Node Kind: KindCallExpression
 
@@ -43,7 +43,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 12:24 - 15:4
+Location: 13:24 - 16:4
 Node: effect.pipe(Effect.matchCauseEffect({\n  onFailure: (cause) => Effect.succeed(String(cause)),\n  onSuccess: (value) => pipe(value + 1, Effect.succeed)\n}))
 Node Kind: KindCallExpression
 
@@ -57,7 +57,7 @@ Transformations (1):
       outType: Effect<string | number, never, never>
 
 === Piping Flow ===
-Location: 13:24 - 13:54
+Location: 14:24 - 14:54
 Node: Effect.succeed(String(cause))
 Node Kind: KindCallExpression
 
@@ -75,7 +75,7 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 14:24 - 14:56
+Location: 15:24 - 15:56
 Node: pipe(value + 1, Effect.succeed)
 Node Kind: KindCallExpression
 
@@ -89,7 +89,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 17:32 - 20:4
+Location: 18:32 - 21:4
 Node: effect.pipe(Effect.matchEffect({\n  "onFailure": (error) => Effect.succeed(error.length),\n  "onSuccess": (value) => Effect.succeed(value + 1)\n}))
 Node Kind: KindCallExpression
 
@@ -103,7 +103,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 18:26 - 18:55
+Location: 19:26 - 19:55
 Node: Effect.succeed(error.length)
 Node Kind: KindCallExpression
 
@@ -117,7 +117,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 19:26 - 19:52
+Location: 20:26 - 20:52
 Node: Effect.succeed(value + 1)
 Node Kind: KindCallExpression
 
@@ -131,7 +131,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 22:25 - 25:4
+Location: 23:25 - 26:4
 Node: effect.pipe(Effect.matchEffect({\n  onFailure: (error) => Effect.fail(error),\n  onSuccess: (value) => Effect.succeed(value + 1)\n}))
 Node Kind: KindCallExpression
 
@@ -145,7 +145,7 @@ Transformations (1):
       outType: Effect<number, string, never>
 
 === Piping Flow ===
-Location: 23:24 - 23:43
+Location: 24:24 - 24:43
 Node: Effect.fail(error)
 Node Kind: KindCallExpression
 
@@ -159,7 +159,7 @@ Transformations (1):
       outType: Effect<never, string, never>
 
 === Piping Flow ===
-Location: 24:24 - 24:50
+Location: 25:24 - 25:50
 Node: Effect.succeed(value + 1)
 Node Kind: KindCallExpression
 
@@ -173,7 +173,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 27:26 - 33:4
+Location: 28:26 - 34:4
 Node: effect.pipe(Effect.matchEffect({\n  onFailure: (error) => {\n    console.log(error)\n    return Effect.succeed(error.length)\n  },\n  onSuccess: (value) => Effect.succeed(value + 1)\n}))
 Node Kind: KindCallExpression
 
@@ -187,7 +187,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 28:26 - 29:23
+Location: 29:26 - 30:23
 Node: console.log(error)
 Node Kind: KindCallExpression
 
@@ -201,7 +201,7 @@ Transformations (1):
       outType: void
 
 === Piping Flow ===
-Location: 30:11 - 30:40
+Location: 31:11 - 31:40
 Node: Effect.succeed(error.length)
 Node Kind: KindCallExpression
 
@@ -215,7 +215,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 32:24 - 32:50
+Location: 33:24 - 33:50
 Node: Effect.succeed(value + 1)
 Node Kind: KindCallExpression
 
@@ -229,7 +229,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 35:46 - 35:68
+Location: 36:46 - 36:68
 Node: Effect.succeed(value)
 Node Kind: KindCallExpression
 
@@ -243,7 +243,7 @@ Transformations (1):
       outType: Effect<A, never, never>
 
 === Piping Flow ===
-Location: 36:32 - 39:4
+Location: 37:32 - 40:4
 Node: effect.pipe(Effect.matchEffect({\n  onFailure: (error) => unrelated.succeed(error.length),\n  onSuccess: (value) => unrelated.succeed(value + 1)\n}))
 Node Kind: KindCallExpression
 
@@ -257,7 +257,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 37:24 - 37:56
+Location: 38:24 - 38:56
 Node: unrelated.succeed(error.length)
 Node Kind: KindCallExpression
 
@@ -271,7 +271,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 38:24 - 38:53
+Location: 39:24 - 39:53
 Node: unrelated.succeed(value + 1)
 Node Kind: KindCallExpression
 

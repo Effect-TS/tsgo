@@ -1,0 +1,20 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/matchEffectToMapBoth.ts(7,37): suggestion TS377126: `Effect.mapBoth` expresses these failure and success transformations more directly than `Effect.matchEffect`. effect(matchEffectToMapBoth)
+
+
+==== /.src/matchEffectToMapBoth.ts (1 errors) ====
+    // @effect-diagnostics matchEffectToMapBoth:suggestion
+    // @effect-diagnostics-in-tsgo false
+    import { Effect } from "effect"
+    
+    declare const effect: Effect.Effect<number, string>
+    
+    export const pipeable = effect.pipe(Effect.matchEffect({
+                                        ~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377126: `Effect.mapBoth` expresses these failure and success transformations more directly than `Effect.matchEffect`. effect(matchEffectToMapBoth)
+      onFailure: (error) => Effect.fail(error.length),
+      onSuccess: (value) => Effect.succeed(value + 1)
+    }))
+    
