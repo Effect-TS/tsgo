@@ -144,8 +144,9 @@ func analyzeConditionalRefailHandler(
 		return "", false
 	}
 
-	// A recovered tag maps more precisely to catchTag; an inverted tag branch
-	// still maps to catchIf.
+	// Bare _tag dispatch is handled by catchAllTagDispatchToCatchTag. Keep the
+	// generic conditional rule for inverted tag checks, which cannot be
+	// represented by catchTag, and for non-tag predicates.
 	branch := dispatch.Dispatch.Branches[0]
 	tagSubject := dispatch.Dispatch.CommonTagSubject(tp)
 	if _, ok := resultDispatchTagValue(branch.Condition); tagSubject != nil && ok &&
@@ -156,16 +157,15 @@ func analyzeConditionalRefailHandler(
 			return "", false
 		}
 		recovery := branch.Result
-		preferred := methods.preferredMethodName
 		if branchRefails {
 			recovery = dispatch.Dispatch.Fallback
-		} else if methods.catchMethodName == "catch" {
-			preferred = "catchTag"
+		} else if methods.catchMethodName == "catch" && isBareParameterTagReference(tp, c, tagSubject, parameterSymbol) {
+			return "", false
 		}
 		if !isEffectExpression(tp, recovery) {
 			return "", false
 		}
-		return preferred, true
+		return methods.preferredMethodName, true
 	}
 
 	condition := branch.Condition.Subject

@@ -1,0 +1,112 @@
+// @effect-diagnostics *:off
+// @effect-diagnostics catchAllTagDispatchToCatchTag:suggestion
+import { Effect as Fx, pipe } from "effect"
+
+class NotFoundError {
+  readonly _tag = "NotFoundError"
+  constructor(readonly id: string) {}
+}
+
+class TimeoutError {
+  readonly _tag = "TimeoutError"
+  constructor(readonly ms: number) {}
+}
+
+class AuthError {
+  readonly _tag = "AuthError"
+}
+
+class DashedError {
+  readonly _tag = "dashed-error"
+}
+
+declare const program: Fx.Effect<string, NotFoundError | TimeoutError | AuthError>
+declare const dashedProgram: Fx.Effect<string, NotFoundError | DashedError | AuthError>
+
+// Should trigger and offer catchTag.
+export const ternary = program.pipe(
+  Fx.catch((error) =>
+    error._tag === "NotFoundError"
+      ? Fx.succeed(error.id)
+      : Fx.fail(error)
+  )
+)
+
+// Should trigger and offer catchTags in data-first form.
+export const switchMultiple = Fx.catch(program, (error) => {
+  switch (error._tag) {
+    case "NotFoundError":
+      return Fx.succeed(error.id)
+    case "TimeoutError":
+      return Fx.succeed(String(error.ms))
+    default:
+      return Fx.fail(error)
+  }
+})
+
+// Should trigger in pipe(...) style.
+export const sequentialIf = pipe(
+  program,
+  Fx.catch((error) => {
+    if (error._tag === "NotFoundError") return Fx.succeed("missing")
+    if ("TimeoutError" === error._tag) return Fx.succeed("timeout")
+    return Fx.fail(error)
+  })
+)
+
+// Should preserve quotes when a tag is not a valid identifier property name.
+export const nonIdentifierTag = dashedProgram.pipe(
+  Fx.catch((error) => {
+    switch (error._tag) {
+      case "NotFoundError":
+        return Fx.succeed("missing")
+      case "dashed-error":
+        return Fx.succeed("dashed")
+      default:
+        return Fx.fail(error)
+    }
+  })
+)
+
+// Should NOT trigger: compound conditions do more than tag dispatch.
+export const compound = program.pipe(
+  Fx.catch((error) =>
+    error._tag === "NotFoundError" && error.id === "special"
+      ? Fx.succeed("special")
+      : Fx.fail(error)
+  )
+)
+
+// Should NOT trigger: the fallback changes the error.
+export const wrappedFallback = program.pipe(
+  Fx.catch((error) =>
+    error._tag === "NotFoundError"
+      ? Fx.succeed("missing")
+      : Fx.fail(new AuthError())
+  )
+)
+
+// Should NOT trigger: dispatch on a nested tag belongs to another rule.
+declare const nested: Fx.Effect<string, {
+  readonly _tag: "OuterError"
+  readonly reason: NotFoundError | TimeoutError
+}>
+
+export const nestedTag = nested.pipe(
+  Fx.catch((error) =>
+    error.reason._tag === "NotFoundError"
+      ? Fx.succeed("missing")
+      : Fx.fail(error)
+  )
+)
+
+// Should NOT trigger: every union member must have a literal _tag.
+declare const untagged: Fx.Effect<string, NotFoundError | Error>
+
+export const mixedUnion = untagged.pipe(
+  Fx.catch((error) =>
+    "_tag" in error && error._tag === "NotFoundError"
+      ? Fx.succeed("missing")
+      : Fx.fail(error)
+  )
+)

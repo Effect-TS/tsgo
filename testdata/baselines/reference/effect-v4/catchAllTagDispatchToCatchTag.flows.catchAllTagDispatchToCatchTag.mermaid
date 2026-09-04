@@ -1,0 +1,200 @@
+flowchart TB
+  0[/"type: #quot;NotFoundError#quot;<br/>node: #quot;NotFoundError#quot;"/]
+  1[["type: any<br/>node: constructor#40;readonly id: string#41; #123;#125;"]]
+  2[/"type: #quot;TimeoutError#quot;<br/>node: #quot;TimeoutError#quot;"/]
+  3[["type: any<br/>node: constructor#40;readonly ms: number#41; #123;#125;"]]
+  4[/"type: #quot;AuthError#quot;<br/>node: #quot;AuthError#quot;"/]
+  5[/"type: #quot;dashed-error#quot;<br/>node: #quot;dashed-error#quot;"/]
+  6[/"type: Effect#lt;string, AuthError #124; NotFoundError #124; TimeoutError, never#gt;<br/>node: program"/]
+  7["type: Effect#lt;string, AuthError #124; TimeoutError, never#gt;<br/>callee: Fx.catch<br/>args: #91;#40;error#41; =#gt;#92;n    error._tag === #quot;NotFoundError#quot;#92;n      ? Fx.succeed#40;error.id#41;#92;n      : Fx.fail#40;error#41;#93;"]
+  8[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Fx.catch"/]
+  9[["type: #40;error: AuthError #124; NotFoundError #124; TimeoutError#41; =#gt; Effect#lt;string, never, never#gt; #124; Effect#lt;never, AuthError #124; TimeoutError, never#gt;<br/>node: #40;error#41; =#gt;#92;n    error._tag === #quot;NotFoundError#quot;#92;n      ? Fx.succeed#40;error.id#41;#92;n      : Fx.fail#40;error#41;"]]
+  10[/"type: Effect#lt;string, never, never#gt; #124; Effect#lt;never, AuthError #124; TimeoutError, never#gt;<br/>node: error._tag === #quot;NotFoundError#quot;#92;n      ? Fx.succeed#40;error.id#41;#92;n      : Fx.fail#40;error#41;"/]
+  11[/"type: string<br/>node: error.id"/]
+  12["type: Effect#lt;string, never, never#gt;<br/>callee: Fx.succeed<br/>args: #91;#93;"]
+  13[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Fx.succeed"/]
+  14[/"type: AuthError #124; TimeoutError<br/>node: error"/]
+  15["type: Effect#lt;never, AuthError #124; TimeoutError, never#gt;<br/>callee: Fx.fail<br/>args: #91;#93;"]
+  16[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Fx.fail"/]
+  17[/"type: Effect#lt;string, AuthError #124; NotFoundError #124; TimeoutError, never#gt;<br/>node: program"/]
+  18["type: Effect#lt;string, AuthError, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  19[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Fx.catch"/]
+  20[["type: #40;error: AuthError #124; NotFoundError #124; TimeoutError#41; =#gt; Effect#lt;string, never, never#gt; #124; Effect#lt;never, AuthError, never#gt;<br/>node: #40;error#41; =#gt; #123;#92;n  switch #40;error._tag#41; #123;#92;n    case #quot;NotFoundError#quot;:#92;n      return Fx.succeed#40;error.id#41;#92;n    case #quot;TimeoutError#quot;:#92;n      return Fx.succeed#40;String#40;error.ms#41;#41;#92;n    default:#92;n      return Fx.fail#40;error#41;#92;n  #125;#92;n#125;"]]
+  21[/"type: string<br/>node: error.id"/]
+  22["type: Effect#lt;string, never, never#gt;<br/>callee: Fx.succeed<br/>args: #91;#93;"]
+  23[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Fx.succeed"/]
+  24[/"type: number<br/>node: error.ms"/]
+  25["type: string<br/>callee: String<br/>args: #91;#93;"]
+  26[/"type: StringConstructor<br/>node: String"/]
+  27["type: Effect#lt;string, never, never#gt;<br/>callee: Fx.succeed<br/>args: #91;#93;"]
+  28[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Fx.succeed"/]
+  29[/"type: AuthError<br/>node: error"/]
+  30["type: Effect#lt;never, AuthError, never#gt;<br/>callee: Fx.fail<br/>args: #91;#93;"]
+  31[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Fx.fail"/]
+  32[/"type: Effect#lt;string, AuthError #124; NotFoundError #124; TimeoutError, never#gt;<br/>node: program"/]
+  33["type: Effect#lt;string, AuthError, never#gt;<br/>callee: Fx.catch<br/>args: #91;#40;error#41; =#gt; #123;#92;n    if #40;error._tag === #quot;NotFoundError#quot;#41; return Fx.succeed#40;#quot;missing#quot;#41;#92;n    if #40;#quot;TimeoutError#quot; === error._tag#41; return Fx.succeed#40;#quot;timeout#quot;#41;#92;n    return Fx.fail#40;error#41;#92;n  #125;#93;"]
+  34[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Fx.catch"/]
+  35[["type: #40;error: AuthError #124; NotFoundError #124; TimeoutError#41; =#gt; Effect#lt;string, never, never#gt; #124; Effect#lt;never, AuthError, never#gt;<br/>node: #40;error#41; =#gt; #123;#92;n    if #40;error._tag === #quot;NotFoundError#quot;#41; return Fx.succeed#40;#quot;missing#quot;#41;#92;n    if #40;#quot;TimeoutError#quot; === error._tag#41; return Fx.succeed#40;#quot;timeout#quot;#41;#92;n    return Fx.fail#40;error#41;#92;n  #125;"]]
+  36[/"type: #quot;missing#quot;<br/>node: #quot;missing#quot;"/]
+  37["type: Effect#lt;string, never, never#gt;<br/>callee: Fx.succeed<br/>args: #91;#93;"]
+  38[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Fx.succeed"/]
+  39[/"type: #quot;timeout#quot;<br/>node: #quot;timeout#quot;"/]
+  40["type: Effect#lt;string, never, never#gt;<br/>callee: Fx.succeed<br/>args: #91;#93;"]
+  41[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Fx.succeed"/]
+  42[/"type: AuthError<br/>node: error"/]
+  43["type: Effect#lt;never, AuthError, never#gt;<br/>callee: Fx.fail<br/>args: #91;#93;"]
+  44[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Fx.fail"/]
+  45[/"type: Effect#lt;string, AuthError #124; DashedError #124; NotFoundError, never#gt;<br/>node: dashedProgram"/]
+  46["type: Effect#lt;string, AuthError, never#gt;<br/>callee: Fx.catch<br/>args: #91;#40;error#41; =#gt; #123;#92;n    switch #40;error._tag#41; #123;#92;n      case #quot;NotFoundError#quot;:#92;n        return Fx.succeed#40;#quot;missing#quot;#41;#92;n      case #quot;dashed-error#quot;:#92;n        return Fx.succeed#40;#quot;dashed#quot;#41;#92;n      default:#92;n        return Fx.fail#40;error#41;#92;n    #125;#92;n  #125;#93;"]
+  47[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Fx.catch"/]
+  48[["type: #40;error: AuthError #124; DashedError #124; NotFoundError#41; =#gt; Effect#lt;string, never, never#gt; #124; Effect#lt;never, AuthError, never#gt;<br/>node: #40;error#41; =#gt; #123;#92;n    switch #40;error._tag#41; #123;#92;n      case #quot;NotFoundError#quot;:#92;n        return Fx.succeed#40;#quot;missing#quot;#41;#92;n      case #quot;dashed-error#quot;:#92;n        return Fx.succeed#40;#quot;dashed#quot;#41;#92;n      default:#92;n        return Fx.fail#40;error#41;#92;n    #125;#92;n  #125;"]]
+  49[/"type: #quot;missing#quot;<br/>node: #quot;missing#quot;"/]
+  50["type: Effect#lt;string, never, never#gt;<br/>callee: Fx.succeed<br/>args: #91;#93;"]
+  51[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Fx.succeed"/]
+  52[/"type: #quot;dashed#quot;<br/>node: #quot;dashed#quot;"/]
+  53["type: Effect#lt;string, never, never#gt;<br/>callee: Fx.succeed<br/>args: #91;#93;"]
+  54[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Fx.succeed"/]
+  55[/"type: AuthError<br/>node: error"/]
+  56["type: Effect#lt;never, AuthError, never#gt;<br/>callee: Fx.fail<br/>args: #91;#93;"]
+  57[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Fx.fail"/]
+  58[/"type: Effect#lt;string, AuthError #124; NotFoundError #124; TimeoutError, never#gt;<br/>node: program"/]
+  59["type: Effect#lt;string, AuthError #124; NotFoundError #124; TimeoutError, never#gt;<br/>callee: Fx.catch<br/>args: #91;#40;error#41; =#gt;#92;n    error._tag === #quot;NotFoundError#quot; #amp;#amp; error.id === #quot;special#quot;#92;n      ? Fx.succeed#40;#quot;special#quot;#41;#92;n      : Fx.fail#40;error#41;#93;"]
+  60[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Fx.catch"/]
+  61[["type: #40;error: AuthError #124; NotFoundError #124; TimeoutError#41; =#gt; Effect#lt;string, never, never#gt; #124; Effect#lt;never, AuthError #124; NotFoundError #124; TimeoutError, never#gt;<br/>node: #40;error#41; =#gt;#92;n    error._tag === #quot;NotFoundError#quot; #amp;#amp; error.id === #quot;special#quot;#92;n      ? Fx.succeed#40;#quot;special#quot;#41;#92;n      : Fx.fail#40;error#41;"]]
+  62[/"type: Effect#lt;string, never, never#gt; #124; Effect#lt;never, AuthError #124; NotFoundError #124; TimeoutError, never#gt;<br/>node: error._tag === #quot;NotFoundError#quot; #amp;#amp; error.id === #quot;special#quot;#92;n      ? Fx.succeed#40;#quot;special#quot;#41;#92;n      : Fx.fail#40;error#41;"/]
+  63[/"type: #quot;special#quot;<br/>node: #quot;special#quot;"/]
+  64["type: Effect#lt;string, never, never#gt;<br/>callee: Fx.succeed<br/>args: #91;#93;"]
+  65[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Fx.succeed"/]
+  66[/"type: AuthError #124; NotFoundError #124; TimeoutError<br/>node: error"/]
+  67["type: Effect#lt;never, AuthError #124; NotFoundError #124; TimeoutError, never#gt;<br/>callee: Fx.fail<br/>args: #91;#93;"]
+  68[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Fx.fail"/]
+  69[/"type: Effect#lt;string, AuthError #124; NotFoundError #124; TimeoutError, never#gt;<br/>node: program"/]
+  70["type: Effect#lt;string, AuthError, never#gt;<br/>callee: Fx.catch<br/>args: #91;#40;error#41; =#gt;#92;n    error._tag === #quot;NotFoundError#quot;#92;n      ? Fx.succeed#40;#quot;missing#quot;#41;#92;n      : Fx.fail#40;new AuthError#40;#41;#41;#93;"]
+  71[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Fx.catch"/]
+  72[["type: #40;error: AuthError #124; NotFoundError #124; TimeoutError#41; =#gt; Effect#lt;string, never, never#gt; #124; Effect#lt;never, AuthError, never#gt;<br/>node: #40;error#41; =#gt;#92;n    error._tag === #quot;NotFoundError#quot;#92;n      ? Fx.succeed#40;#quot;missing#quot;#41;#92;n      : Fx.fail#40;new AuthError#40;#41;#41;"]]
+  73[/"type: Effect#lt;string, never, never#gt; #124; Effect#lt;never, AuthError, never#gt;<br/>node: error._tag === #quot;NotFoundError#quot;#92;n      ? Fx.succeed#40;#quot;missing#quot;#41;#92;n      : Fx.fail#40;new AuthError#40;#41;#41;"/]
+  74[/"type: #quot;missing#quot;<br/>node: #quot;missing#quot;"/]
+  75["type: Effect#lt;string, never, never#gt;<br/>callee: Fx.succeed<br/>args: #91;#93;"]
+  76[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Fx.succeed"/]
+  77[/"type: AuthError<br/>node: new AuthError#40;#41;"/]
+  78["type: Effect#lt;never, AuthError, never#gt;<br/>callee: Fx.fail<br/>args: #91;#93;"]
+  79[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Fx.fail"/]
+  80[/"type: Effect#lt;string, #123; readonly _tag: #quot;OuterError#quot;; readonly reason: NotFoundError #124; TimeoutError; #125;, never#gt;<br/>node: nested"/]
+  81["type: Effect#lt;string, #123; readonly _tag: #quot;OuterError#quot;; readonly reason: NotFoundError #124; TimeoutError; #125;, never#gt;<br/>callee: Fx.catch<br/>args: #91;#40;error#41; =#gt;#92;n    error.reason._tag === #quot;NotFoundError#quot;#92;n      ? Fx.succeed#40;#quot;missing#quot;#41;#92;n      : Fx.fail#40;error#41;#93;"]
+  82[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Fx.catch"/]
+  83[["type: #40;error: #123; readonly _tag: #quot;OuterError#quot;; readonly reason: NotFoundError #124; TimeoutError; #125;#41; =#gt; Effect#lt;string, never, never#gt; #124; Effect#lt;never, #123; readonly _tag: #quot;OuterError#quot;; readonly reason: NotFoundError #124; TimeoutError; #125;, never#gt;<br/>node: #40;error#41; =#gt;#92;n    error.reason._tag === #quot;NotFoundError#quot;#92;n      ? Fx.succeed#40;#quot;missing#quot;#41;#92;n      : Fx.fail#40;error#41;"]]
+  84[/"type: Effect#lt;string, never, never#gt; #124; Effect#lt;never, #123; readonly _tag: #quot;OuterError#quot;; readonly reason: NotFoundError #124; TimeoutError; #125;, never#gt;<br/>node: error.reason._tag === #quot;NotFoundError#quot;#92;n      ? Fx.succeed#40;#quot;missing#quot;#41;#92;n      : Fx.fail#40;error#41;"/]
+  85[/"type: #quot;missing#quot;<br/>node: #quot;missing#quot;"/]
+  86["type: Effect#lt;string, never, never#gt;<br/>callee: Fx.succeed<br/>args: #91;#93;"]
+  87[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Fx.succeed"/]
+  88[/"type: #123; readonly _tag: #quot;OuterError#quot;; readonly reason: NotFoundError #124; TimeoutError; #125;<br/>node: error"/]
+  89["type: Effect#lt;never, #123; readonly _tag: #quot;OuterError#quot;; readonly reason: NotFoundError #124; TimeoutError; #125;, never#gt;<br/>callee: Fx.fail<br/>args: #91;#93;"]
+  90[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Fx.fail"/]
+  91[/"type: Effect#lt;string, Error #124; NotFoundError, never#gt;<br/>node: untagged"/]
+  92["type: Effect#lt;string, Error #124; NotFoundError, never#gt;<br/>callee: Fx.catch<br/>args: #91;#40;error#41; =#gt;#92;n    #quot;_tag#quot; in error #amp;#amp; error._tag === #quot;NotFoundError#quot;#92;n      ? Fx.succeed#40;#quot;missing#quot;#41;#92;n      : Fx.fail#40;error#41;#93;"]
+  93[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Fx.catch"/]
+  94[["type: #40;error: Error #124; NotFoundError#41; =#gt; Effect#lt;string, never, never#gt; #124; Effect#lt;never, Error #124; NotFoundError, never#gt;<br/>node: #40;error#41; =#gt;#92;n    #quot;_tag#quot; in error #amp;#amp; error._tag === #quot;NotFoundError#quot;#92;n      ? Fx.succeed#40;#quot;missing#quot;#41;#92;n      : Fx.fail#40;error#41;"]]
+  95[/"type: Effect#lt;string, never, never#gt; #124; Effect#lt;never, Error #124; NotFoundError, never#gt;<br/>node: #quot;_tag#quot; in error #amp;#amp; error._tag === #quot;NotFoundError#quot;#92;n      ? Fx.succeed#40;#quot;missing#quot;#41;#92;n      : Fx.fail#40;error#41;"/]
+  96[/"type: #quot;missing#quot;<br/>node: #quot;missing#quot;"/]
+  97["type: Effect#lt;string, never, never#gt;<br/>callee: Fx.succeed<br/>args: #91;#93;"]
+  98[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Fx.succeed"/]
+  99[/"type: Error #124; NotFoundError<br/>node: error"/]
+  100["type: Effect#lt;never, Error #124; NotFoundError, never#gt;<br/>callee: Fx.fail<br/>args: #91;#93;"]
+  101[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Fx.fail"/]
+  8 -->|"kind: transformCallee"| 7
+  11 -->|"kind: pipe"| 12
+  13 -->|"kind: transformCallee"| 12
+  12 -->|"kind: usedBy"| 10
+  14 -->|"kind: pipe"| 15
+  16 -->|"kind: transformCallee"| 15
+  15 -->|"kind: usedBy"| 10
+  10 -->|"kind: potentialReturn"| 9
+  9 -->|"kind: transformArg"| 7
+  6 -->|"kind: pipe"| 7
+  17 -->|"kind: pipe"| 18
+  19 -->|"kind: transformCallee"| 17
+  21 -->|"kind: pipe"| 22
+  23 -->|"kind: transformCallee"| 22
+  22 -->|"kind: potentialReturn"| 20
+  24 -->|"kind: pipe"| 25
+  26 -->|"kind: transformCallee"| 25
+  25 -->|"kind: pipe"| 27
+  28 -->|"kind: transformCallee"| 27
+  27 -->|"kind: potentialReturn"| 20
+  29 -->|"kind: pipe"| 30
+  31 -->|"kind: transformCallee"| 30
+  30 -->|"kind: potentialReturn"| 20
+  22 -->|"kind: usedBy"| 20
+  27 -->|"kind: usedBy"| 20
+  30 -->|"kind: usedBy"| 20
+  20 -->|"kind: transformArg"| 17
+  34 -->|"kind: transformCallee"| 33
+  36 -->|"kind: pipe"| 37
+  38 -->|"kind: transformCallee"| 37
+  37 -->|"kind: potentialReturn"| 35
+  39 -->|"kind: pipe"| 40
+  41 -->|"kind: transformCallee"| 40
+  40 -->|"kind: potentialReturn"| 35
+  42 -->|"kind: pipe"| 43
+  44 -->|"kind: transformCallee"| 43
+  43 -->|"kind: potentialReturn"| 35
+  37 -->|"kind: usedBy"| 35
+  40 -->|"kind: usedBy"| 35
+  43 -->|"kind: usedBy"| 35
+  35 -->|"kind: transformArg"| 33
+  32 -->|"kind: pipe"| 33
+  47 -->|"kind: transformCallee"| 46
+  49 -->|"kind: pipe"| 50
+  51 -->|"kind: transformCallee"| 50
+  50 -->|"kind: potentialReturn"| 48
+  52 -->|"kind: pipe"| 53
+  54 -->|"kind: transformCallee"| 53
+  53 -->|"kind: potentialReturn"| 48
+  55 -->|"kind: pipe"| 56
+  57 -->|"kind: transformCallee"| 56
+  56 -->|"kind: potentialReturn"| 48
+  50 -->|"kind: usedBy"| 48
+  53 -->|"kind: usedBy"| 48
+  56 -->|"kind: usedBy"| 48
+  48 -->|"kind: transformArg"| 46
+  45 -->|"kind: pipe"| 46
+  60 -->|"kind: transformCallee"| 59
+  63 -->|"kind: pipe"| 64
+  65 -->|"kind: transformCallee"| 64
+  64 -->|"kind: usedBy"| 62
+  66 -->|"kind: pipe"| 67
+  68 -->|"kind: transformCallee"| 67
+  67 -->|"kind: usedBy"| 62
+  62 -->|"kind: potentialReturn"| 61
+  61 -->|"kind: transformArg"| 59
+  58 -->|"kind: pipe"| 59
+  71 -->|"kind: transformCallee"| 70
+  74 -->|"kind: pipe"| 75
+  76 -->|"kind: transformCallee"| 75
+  75 -->|"kind: usedBy"| 73
+  77 -->|"kind: pipe"| 78
+  79 -->|"kind: transformCallee"| 78
+  78 -->|"kind: usedBy"| 73
+  73 -->|"kind: potentialReturn"| 72
+  72 -->|"kind: transformArg"| 70
+  69 -->|"kind: pipe"| 70
+  82 -->|"kind: transformCallee"| 81
+  85 -->|"kind: pipe"| 86
+  87 -->|"kind: transformCallee"| 86
+  86 -->|"kind: usedBy"| 84
+  88 -->|"kind: pipe"| 89
+  90 -->|"kind: transformCallee"| 89
+  89 -->|"kind: usedBy"| 84
+  84 -->|"kind: potentialReturn"| 83
+  83 -->|"kind: transformArg"| 81
+  80 -->|"kind: pipe"| 81
+  93 -->|"kind: transformCallee"| 92
+  96 -->|"kind: pipe"| 97
+  98 -->|"kind: transformCallee"| 97
+  97 -->|"kind: usedBy"| 95
+  99 -->|"kind: pipe"| 100
+  101 -->|"kind: transformCallee"| 100
+  100 -->|"kind: usedBy"| 95
+  95 -->|"kind: potentialReturn"| 94
+  94 -->|"kind: transformArg"| 92
+  91 -->|"kind: pipe"| 92
