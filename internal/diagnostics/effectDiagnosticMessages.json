@@ -486,5 +486,9 @@
     "`Effect.{0}` of `Effect.exit` re-implements `Effect.{1}`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)": {
         "category": "Suggestion",
         "code": 377123
+    },
+    "`Effect.{0}` provides this inline single-service layer directly. effect(provideLayerSucceedToProvideService)": {
+        "category": "Suggestion",
+        "code": 377124
     }
 }

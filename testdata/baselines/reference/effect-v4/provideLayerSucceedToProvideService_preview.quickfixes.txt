@@ -1,0 +1,29 @@
+=== Quick Fix Inventory ===
+
+[D1] (5:7-5:14) TS6133: 'program' is declared but its value is never read.
+  (no quick fixes)
+
+[D2] (6:3-6:17) TS377124: `Effect.provideService` provides this inline single-service layer directly. effect(provideLayerSucceedToProvideService)
+  Fix 0: "Disable provideLayerSucceedToProvideService for this line"
+  Fix 1: "Disable provideLayerSucceedToProvideService for entire file"
+  Fix 2: "Replace with Effect.provideService"
+
+=== Quick Fix Application Results ===
+
+=== [D2] Fix 0: "Disable provideLayerSucceedToProvideService for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable provideLayerSucceedToProvideService for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.provideService" ===
+
+--- file:///.src/provideLayerSucceedToProvideService_preview.ts ---
+import { Context, Effect, Layer } from "effect"
+
+class Service extends Context.Service<Service, { readonly value: number }>()("Service") {}
+
+const program = Service.use((service) => Effect.succeed(service.value)).pipe(
+  Effect.provideService(Service, { value: 1 })
+)
+
