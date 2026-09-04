@@ -27,9 +27,9 @@ declare const program: Effect.Effect<string, NotFound | DatabaseError>
 export const recovered = program.pipe(
   Effect.catch((error) =>
 /**
-  ^^^^^^^^^^^^ effecttsgo(catch-conditional-refail-to-catch-if): `Effect.catchTag` expresses selective recovery more directly than `Effect.catch` with a conditional `Effect.fail` passthrough.
+  ^^^^^^^^^^^^ effecttsgo(catch-conditional-refail-to-catch-if): `Effect.catchIf` expresses selective recovery more directly than `Effect.catch` with a conditional `Effect.fail` passthrough.
 */
-    error._tag === "NotFound" ? Effect.succeed("guest") : Effect.fail(error)
+    error instanceof NotFound ? Effect.succeed("guest") : Effect.fail(error)
   )
 )
 ```

@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (11:3-11:15) TS377116: `Effect.catchTag` expresses selective recovery more directly than `Effect.catch` with a conditional `Effect.fail` passthrough. effect(catchConditionalRefailToCatchIf)
+[D1] (11:3-11:15) TS377116: `Effect.catchIf` expresses selective recovery more directly than `Effect.catch` with a conditional `Effect.fail` passthrough. effect(catchConditionalRefailToCatchIf)
   Fix 0: "Disable catchConditionalRefailToCatchIf for this line"
   Fix 1: "Disable catchConditionalRefailToCatchIf for entire file"
 
