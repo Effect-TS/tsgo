@@ -105,10 +105,6 @@ var PromiseInEffectSuccess = rule.Rule{
 	},
 }
 
-func hasExplicitTypeArguments(call *ast.CallExpression) bool {
-	return call != nil && call.TypeArguments != nil && len(call.TypeArguments.Nodes) > 0
-}
-
 func hasExplicitPromiseEffectContext(tp *typeparser.TypeParser, c *checker.Checker, node *ast.Node) bool {
 	for current := node; current != nil; current = current.Parent {
 		switch current.Kind {
@@ -187,16 +183,6 @@ var explicitPromiseSuccessApis = []string{"succeed", "as", "map", "zipWith"}
 // explicit annotation passed as an argument to an unrelated constructor still
 // reports.
 func hasExplicitPromiseSuccessTypeArguments(tp *typeparser.TypeParser, node *ast.Node) bool {
-	if node == nil || node.Kind != ast.KindCallExpression {
-		return false
-	}
-	call := node.AsCallExpression()
-	if isExplicitPromiseSuccessCall(tp, call) {
-		return true
-	}
-	if expression := ast.SkipParentheses(call.Expression); expression != nil && expression.Kind == ast.KindCallExpression && isExplicitPromiseSuccessCall(tp, expression.AsCallExpression()) {
-		return true
-	}
 	flow := tp.LongestPipingFlowAt(node, true)
 	if flow == nil || len(flow.Transformations) == 0 {
 		return false
@@ -239,13 +225,6 @@ func isExplicitPromiseSuccessApi(tp *typeparser.TypeParser, node *ast.Node) bool
 		}
 	}
 	return false
-}
-
-func isExplicitPromiseSuccessCall(tp *typeparser.TypeParser, call *ast.CallExpression) bool {
-	if !hasExplicitTypeArguments(call) {
-		return false
-	}
-	return isExplicitPromiseSuccessApi(tp, call.Expression)
 }
 
 func isEffectSyncCall(tp *typeparser.TypeParser, node *ast.Node) bool {
