@@ -27,6 +27,6 @@ class Unauthorized extends Data.TaggedError("Unauthorized")<{}> {}
 declare const program: Effect.Effect<string, NotFound | Timeout | Unauthorized>
 
 export const recovered = program.pipe(
-  Effect.catchTags({ "NotFound": () => Effect.succeed("guest"), "Timeout": () => Effect.succeed("retrying") })
+  Effect.catchTags({ NotFound: () => Effect.succeed("guest"), Timeout: () => Effect.succeed("retrying") })
 )
 
