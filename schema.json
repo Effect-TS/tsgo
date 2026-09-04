@@ -2682,6 +2682,11 @@
           "default": "warning",
           "description": "Detects Promise types in Effect success channels where they are not awaited"
         },
+        "provideLayerSucceedToProvideService": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests providing inline Layer.succeed and Layer.effect services directly"
+        },
         "raceFirstWithSleepToTimeout": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",

@@ -65,6 +65,7 @@ var All = []rule.Rule{
 	StrictEffectProvide,
 	UnsafeEffectTypeAssertion,
 	MultipleEffectProvide,
+	ProvideLayerSucceedToProvideService,
 	MissingLayerContext,
 	LayerMergeAllWithDependencies,
 	SchemaStructWithTag,

@@ -2209,6 +2209,29 @@
       }
     },
     {
+      "name": "provideLayerSucceedToProvideService",
+      "group": "style",
+      "description": "Suggests providing inline Layer.succeed and Layer.effect services directly",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377124
+      ],
+      "preview": {
+        "sourceText": "import { Context, Effect, Layer } from \"effect\"\n\nclass Service extends Context.Service\u003cService, { readonly value: number }\u003e()(\"Service\") {}\n\nconst program = Service.use((service) =\u003e Effect.succeed(service.value)).pipe(\n  Effect.provide(Layer.succeed(Service, { value: 1 }))\n)\n",
+        "diagnostics": [
+          {
+            "start": 221,
+            "end": 235,
+            "text": "`Effect.provideService` provides this inline single-service layer directly. effect(provideLayerSucceedToProvideService)"
+          }
+        ]
+      }
+    },
+    {
       "name": "raceFirstWithSleepToTimeout",
       "group": "style",
       "description": "Suggests Effect.timeoutOrElse when Effect.raceFirst has exactly one sleep- or delay-based timer arm",
