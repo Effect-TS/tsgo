@@ -103,6 +103,7 @@ var All = []rule.Rule{
 	MapSomeToAsSome,
 	FlatMapToMap,
 	MatchEffectToMatch,
+	MatchEffectToMapBoth,
 	FlatMapConditionalToFilterOrFail,
 	OptionMatchToFromOption,
 	SyncToSucceed,

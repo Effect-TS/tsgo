@@ -70,11 +70,11 @@ func AnalyzeMatchEffectToMatch(tp *typeparser.TypeParser, _ *checker.Checker, sf
 			if onFailure == nil || onSuccess == nil {
 				continue
 			}
-			failureResult, failureArgument, ok := matchSucceedHandler(tp, onFailure)
+			failureResult, failureArgument, ok := matchEffectConstructorHandler(tp, onFailure, "succeed")
 			if !ok {
 				continue
 			}
-			successResult, successArgument, ok := matchSucceedHandler(tp, onSuccess)
+			successResult, successArgument, ok := matchEffectConstructorHandler(tp, onSuccess, "succeed")
 			if !ok {
 				continue
 			}
@@ -92,7 +92,7 @@ func AnalyzeMatchEffectToMatch(tp *typeparser.TypeParser, _ *checker.Checker, sf
 	return matches
 }
 
-func matchSucceedHandler(tp *typeparser.TypeParser, node *ast.Node) (result *ast.Node, argument *ast.Node, ok bool) {
+func matchEffectConstructorHandler(tp *typeparser.TypeParser, node *ast.Node, constructorName string) (result *ast.Node, argument *ast.Node, ok bool) {
 	lazy := typeparser.ParseLazyExpression(node, typeparser.LazyExpressionNone)
 	if lazy == nil || lazy.Expression == nil {
 		return nil, nil, false
@@ -103,7 +103,7 @@ func matchSucceedHandler(tp *typeparser.TypeParser, node *ast.Node) (result *ast
 	}
 	last := len(flow.Transformations) - 1
 	transformation := &flow.Transformations[last]
-	if !tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "succeed") {
+	if !tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, constructorName) {
 		return nil, nil, false
 	}
 	argument = flow.TransformationInputNode(last)

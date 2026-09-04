@@ -1,16 +1,16 @@
 === Quick Fix Inventory ===
 
-[D1] (7:26-7:44) TS377125: `Effect.match` expresses this non-effectful fold more directly than `Effect.matchEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
+[D1] (8:26-8:44) TS377125: `Effect.match` expresses this non-effectful fold more directly than `Effect.matchEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
   Fix 0: "Disable matchEffectToMatch for this line"
   Fix 1: "Disable matchEffectToMatch for entire file"
   Fix 2: "Replace with Effect.match"
 
-[D2] (12:37-12:60) TS377125: `Effect.matchCause` expresses this non-effectful fold more directly than `Effect.matchCauseEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
+[D2] (13:37-13:60) TS377125: `Effect.matchCause` expresses this non-effectful fold more directly than `Effect.matchCauseEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
   Fix 0: "Disable matchEffectToMatch for this line"
   Fix 1: "Disable matchEffectToMatch for entire file"
   Fix 2: "Replace with Effect.matchCause"
 
-[D3] (17:45-17:63) TS377125: `Effect.match` expresses this non-effectful fold more directly than `Effect.matchEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
+[D3] (18:45-18:63) TS377125: `Effect.match` expresses this non-effectful fold more directly than `Effect.matchEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
   Fix 0: "Disable matchEffectToMatch for this line"
   Fix 1: "Disable matchEffectToMatch for entire file"
   Fix 2: "Replace with Effect.match"
@@ -27,6 +27,7 @@ skipped by default
 
 --- file:///.src/matchEffectToMatch.ts ---
 // @effect-diagnostics matchEffectToMatch:suggestion
+// @effect-diagnostics matchEffectToMapBoth:off
 // @effect-diagnostics-in-tsgo false
 import { Effect, pipe } from "effect"
 
@@ -77,6 +78,7 @@ skipped by default
 
 --- file:///.src/matchEffectToMatch.ts ---
 // @effect-diagnostics matchEffectToMatch:suggestion
+// @effect-diagnostics matchEffectToMapBoth:off
 // @effect-diagnostics-in-tsgo false
 import { Effect, pipe } from "effect"
 
@@ -127,6 +129,7 @@ skipped by default
 
 --- file:///.src/matchEffectToMatch.ts ---
 // @effect-diagnostics matchEffectToMatch:suggestion
+// @effect-diagnostics matchEffectToMapBoth:off
 // @effect-diagnostics-in-tsgo false
 import { Effect, pipe } from "effect"
 

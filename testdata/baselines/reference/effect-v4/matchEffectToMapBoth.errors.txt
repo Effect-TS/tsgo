@@ -1,0 +1,47 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/matchEffectToMapBoth.ts(7,26): suggestion TS377126: `Effect.mapBoth` expresses these failure and success transformations more directly than `Effect.matchEffect`. effect(matchEffectToMapBoth)
+/.src/matchEffectToMapBoth.ts(12,37): suggestion TS377126: `Effect.mapBoth` expresses these failure and success transformations more directly than `Effect.matchEffect`. effect(matchEffectToMapBoth)
+
+
+==== /.src/matchEffectToMapBoth.ts (2 errors) ====
+    // @effect-diagnostics matchEffectToMapBoth:suggestion
+    // @effect-diagnostics-in-tsgo false
+    import { Effect, pipe } from "effect"
+    
+    declare const effect: Effect.Effect<number, string>
+    
+    export const dataFirst = Effect.matchEffect(effect, {
+                             ~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377126: `Effect.mapBoth` expresses these failure and success transformations more directly than `Effect.matchEffect`. effect(matchEffectToMapBoth)
+      onFailure: (error) => Effect.fail(error.length),
+      onSuccess: (value) => Effect.succeed(value + 1)
+    })
+    
+    export const pipeable = effect.pipe(Effect.matchEffect({
+                                        ~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377126: `Effect.mapBoth` expresses these failure and success transformations more directly than `Effect.matchEffect`. effect(matchEffectToMapBoth)
+      "onFailure": (error) => pipe(error.length, Effect.fail),
+      "onSuccess": (value) => pipe(value + 1, Effect.succeed)
+    }))
+    
+    export const cause = effect.pipe(Effect.matchCauseEffect({
+      onFailure: (cause) => Effect.fail(cause),
+      onSuccess: (value) => Effect.succeed(value + 1)
+    }))
+    
+    export const extraLogic = effect.pipe(Effect.matchEffect({
+      onFailure: (error) => {
+        console.log(error)
+        return Effect.fail(error.length)
+      },
+      onSuccess: (value) => Effect.succeed(value + 1)
+    }))
+    
+    const unrelated = { fail: <E>(error: E) => Effect.fail(error) }
+    export const unrelatedFail = effect.pipe(Effect.matchEffect({
+      onFailure: (error) => unrelated.fail(error.length),
+      onSuccess: (value) => Effect.succeed(value + 1)
+    }))
+    

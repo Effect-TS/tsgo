@@ -1,4 +1,5 @@
 // @effect-diagnostics matchEffectToMatch:suggestion
+// @effect-diagnostics matchEffectToMapBoth:off
 // @effect-diagnostics-in-tsgo false
 import { Effect, pipe } from "effect"
 
