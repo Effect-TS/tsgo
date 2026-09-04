@@ -44,9 +44,8 @@ var FlatMapConditionalToFilterOrFail = rule.Rule{
 type FlatMapConditionalToFilterOrFailMatch struct {
 	SourceFile          *ast.SourceFile
 	Location            core.TextRange
-	ReplacementNode     *ast.Node
+	Transformation      *typeparser.PipingFlowTransformation
 	EffectModuleNode    *ast.Node
-	SubjectNode         *ast.Node
 	ParameterNode       *ast.Node
 	PredicateNode       *ast.Node
 	FallbackNode        *ast.Node
@@ -63,18 +62,13 @@ func AnalyzeFlatMapConditionalToFilterOrFail(tp *typeparser.TypeParser, c *check
 	}
 
 	var matches []FlatMapConditionalToFilterOrFailMatch
-	seen := make(map[*ast.Node]struct{})
 	for _, flow := range tp.PipingFlows(sf, true) {
 		for index := range flow.Transformations {
 			transformation := &flow.Transformations[index]
-			callee, args, replacementNode, curried := flatMapConditionalTransformation(transformation)
-			if callee == nil || replacementNode == nil || len(args) != 1 || !tp.IsNodeReferenceToEffectModuleApi(callee, "flatMap") {
+			callee, args := flatMapConditionalTransformation(transformation)
+			if callee == nil || len(args) != 1 || !tp.IsNodeReferenceToEffectModuleApi(callee, "flatMap") {
 				continue
 			}
-			if _, duplicate := seen[replacementNode]; duplicate {
-				continue
-			}
-
 			parsed := typeparser.ParseReturningDispatch(args[0])
 			if parsed == nil || parsed.Dispatch == nil || len(parsed.Params) != 1 ||
 				len(parsed.Dispatch.Branches) != 1 || parsed.Dispatch.Fallback == nil ||
@@ -123,7 +117,7 @@ func AnalyzeFlatMapConditionalToFilterOrFail(tp *typeparser.TypeParser, c *check
 			match := FlatMapConditionalToFilterOrFailMatch{
 				SourceFile:          sf,
 				Location:            scanner.GetErrorRangeForNode(sf, callee),
-				ReplacementNode:     replacementNode,
+				Transformation:      transformation,
 				EffectModuleNode:    effectModule,
 				ParameterNode:       parameter,
 				PredicateNode:       branch.Condition.Subject,
@@ -133,43 +127,27 @@ func AnalyzeFlatMapConditionalToFilterOrFail(tp *typeparser.TypeParser, c *check
 				CanFix:              effectModule != nil,
 			}
 
-			if transformation.Kind == typeparser.TransformationKindDataFirst || transformation.Kind == typeparser.TransformationKindDataLast {
-				dataCall := tp.DataFirstOrLastCall(transformation.Node)
-				if dataCall == nil {
-					continue
-				}
-				match.SubjectNode = dataCall.Subject
-			} else if curried {
-				// The replacement is the inner operator call, so the outer subject
-				// application remains untouched.
-				match.SubjectNode = nil
-			}
-
-			seen[replacementNode] = struct{}{}
 			matches = append(matches, match)
 		}
 	}
 	return matches
 }
 
-func flatMapConditionalTransformation(transformation *typeparser.PipingFlowTransformation) (callee *ast.Node, args []*ast.Node, replacement *ast.Node, curried bool) {
-	if transformation == nil || transformation.Node == nil || transformation.Callee == nil {
-		return nil, nil, nil, false
+func flatMapConditionalTransformation(transformation *typeparser.PipingFlowTransformation) (callee *ast.Node, args []*ast.Node) {
+	if transformation == nil || transformation.Callee == nil {
+		return nil, nil
 	}
 	callee = transformation.Callee
 	args = transformation.Args
-	replacement = transformation.Node
 	if len(args) == 0 && callee.Kind == ast.KindCallExpression {
 		call := callee.AsCallExpression()
 		if call == nil || call.Expression == nil || call.Arguments == nil {
-			return nil, nil, nil, false
+			return nil, nil
 		}
 		callee = call.Expression
 		args = call.Arguments.Nodes
-		replacement = call.AsNode()
-		curried = true
 	}
-	return callee, args, replacement, curried
+	return callee, args
 }
 
 func isIdentitySucceed(tp *typeparser.TypeParser, c *checker.Checker, expression *ast.Node, parameterSymbol *ast.Symbol) bool {

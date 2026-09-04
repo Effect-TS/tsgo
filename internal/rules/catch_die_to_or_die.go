@@ -40,14 +40,12 @@ var CatchDieToOrDie = rule.Rule{
 
 // CatchDieToOrDieMatch holds the nodes needed by the diagnostic and fix.
 type CatchDieToOrDieMatch struct {
-	SourceFile        *ast.SourceFile
-	Location          core.TextRange
-	Transformation    *ast.Node
-	EffectModule      *ast.Node
-	Input             *ast.Node
-	CatchMethodName   string
-	IsDataApplication bool
-	HasTypeArguments  bool
+	SourceFile       *ast.SourceFile
+	Location         core.TextRange
+	Transformation   *typeparser.PipingFlowTransformation
+	EffectModule     *ast.Node
+	CatchMethodName  string
+	HasTypeArguments bool
 }
 
 // AnalyzeCatchDieToOrDie finds Effect.catch/catchAll transformations whose
@@ -58,39 +56,29 @@ func AnalyzeCatchDieToOrDie(tp *typeparser.TypeParser, _ *checker.Checker, sf *a
 	}
 
 	var matches []CatchDieToOrDieMatch
-	seen := make(map[*ast.Node]struct{})
 	for _, flow := range tp.PipingFlows(sf, true) {
-		inputNode := flow.Subject.Node
 		inputType := flow.Subject.OutType
 		for i := range flow.Transformations {
 			transformation := &flow.Transformations[i]
-			callee, args, isCurriedApplication := catchDieTransformationCall(transformation)
+			callee, args := catchDieTransformationCall(transformation)
 			methodName, effectModule, ok := catchDieMethod(tp, callee)
 			if ok && len(args) == 1 {
 				handler, _, _ := tp.UnwrapIdentityForwarder(args[0])
 				if tp.IsNodeReferenceToEffectModuleApi(handler, "die") {
 					inputEffect := tp.StrictEffectType(inputType)
 					if inputEffect != nil && inputEffect.E != nil && inputEffect.E.Flags()&checker.TypeFlagsNever == 0 {
-						if _, duplicate := seen[transformation.Node]; !duplicate {
-							seen[transformation.Node] = struct{}{}
-							isDataApplication := transformation.Kind == typeparser.TransformationKindDataFirst ||
-								transformation.Kind == typeparser.TransformationKindDataLast || isCurriedApplication
-							matches = append(matches, CatchDieToOrDieMatch{
-								SourceFile:        sf,
-								Location:          scanner.GetErrorRangeForNode(sf, callee),
-								Transformation:    transformation.Node,
-								EffectModule:      effectModule,
-								Input:             inputNode,
-								CatchMethodName:   methodName,
-								IsDataApplication: isDataApplication,
-								HasTypeArguments:  catchDieHasTypeArguments(transformation),
-							})
-						}
+						matches = append(matches, CatchDieToOrDieMatch{
+							SourceFile:       sf,
+							Location:         scanner.GetErrorRangeForNode(sf, callee),
+							Transformation:   transformation,
+							EffectModule:     effectModule,
+							CatchMethodName:  methodName,
+							HasTypeArguments: catchDieHasTypeArguments(transformation),
+						})
 					}
 				}
 			}
 
-			inputNode = transformation.Node
 			inputType = transformation.OutType
 		}
 	}
@@ -98,20 +86,20 @@ func AnalyzeCatchDieToOrDie(tp *typeparser.TypeParser, _ *checker.Checker, sf *a
 	return matches
 }
 
-func catchDieTransformationCall(transformation *typeparser.PipingFlowTransformation) (callee *ast.Node, args []*ast.Node, isCurriedApplication bool) {
+func catchDieTransformationCall(transformation *typeparser.PipingFlowTransformation) (callee *ast.Node, args []*ast.Node) {
 	if transformation == nil {
-		return nil, nil, false
+		return nil, nil
 	}
 	callee = transformation.Callee
 	args = transformation.Args
 	if len(args) != 0 || callee == nil || callee.Kind != ast.KindCallExpression {
-		return callee, args, false
+		return callee, args
 	}
 	call := callee.AsCallExpression()
 	if call == nil || call.Expression == nil || call.Arguments == nil {
-		return callee, args, false
+		return callee, args
 	}
-	return call.Expression, call.Arguments.Nodes, true
+	return call.Expression, call.Arguments.Nodes
 }
 
 func catchDieMethod(tp *typeparser.TypeParser, callee *ast.Node) (name string, effectModule *ast.Node, ok bool) {
@@ -137,17 +125,5 @@ func catchDieMethod(tp *typeparser.TypeParser, callee *ast.Node) (name string, e
 }
 
 func catchDieHasTypeArguments(transformation *typeparser.PipingFlowTransformation) bool {
-	if transformation == nil {
-		return false
-	}
-	for _, node := range []*ast.Node{transformation.Node, transformation.Callee} {
-		if node == nil || node.Kind != ast.KindCallExpression {
-			continue
-		}
-		call := node.AsCallExpression()
-		if call != nil && call.TypeArguments != nil && len(call.TypeArguments.Nodes) > 0 {
-			return true
-		}
-	}
-	return false
+	return transformation != nil && transformation.TypeArguments != nil && len(transformation.TypeArguments.Nodes) > 0
 }

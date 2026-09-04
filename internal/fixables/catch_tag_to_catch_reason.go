@@ -25,16 +25,21 @@ func runCatchTagToCatchReasonFix(ctx *fixable.Context) []ls.CodeAction {
 		if !match.CanFix || (!match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location)) {
 			continue
 		}
+		if match.Transformation == nil {
+			return nil
+		}
 
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.catchReason or Effect.catchReasons",
 			Run: func(tracker *rewriter.Tracker) {
-				replacement := buildCatchTagToCatchReasonReplacement(tracker, match)
-				if replacement == nil {
+				callee, arguments := buildCatchTagToCatchReasonReplacement(tracker, match)
+				if callee == nil || arguments == nil {
 					return
 				}
-				ast.SetParentInChildren(replacement)
-				tracker.ReplaceNode(ctx.SourceFile, match.CallNode, replacement, nil)
+				tracker.ReplacePipingFlowTransformation(ctx.SourceFile, match.Transformation, rewriter.PipingFlowTransformationReplacement{
+					Callee:    callee,
+					Arguments: arguments,
+				})
 			},
 		}); action != nil {
 			return []ls.CodeAction{*action}
@@ -44,13 +49,13 @@ func runCatchTagToCatchReasonFix(ctx *fixable.Context) []ls.CodeAction {
 	return nil
 }
 
-func buildCatchTagToCatchReasonReplacement(tracker *rewriter.Tracker, match rules.CatchTagToCatchReasonMatch) *ast.Node {
+func buildCatchTagToCatchReasonReplacement(tracker *rewriter.Tracker, match rules.CatchTagToCatchReasonMatch) (*ast.Node, *ast.NodeList) {
 	if tracker == nil || match.Callee == nil || match.Callee.Kind != ast.KindPropertyAccessExpression || match.OuterTag == nil || len(match.Branches) == 0 {
-		return nil
+		return nil, nil
 	}
 	callee := match.Callee.AsPropertyAccessExpression()
 	if callee == nil || callee.Expression == nil {
-		return nil
+		return nil, nil
 	}
 
 	methodName := "catchReason"
@@ -81,7 +86,7 @@ func buildCatchTagToCatchReasonReplacement(tracker *rewriter.Tracker, match rule
 		arguments = append(arguments, tracker.NewObjectLiteralExpression(tracker.NewNodeList(properties), false))
 	}
 
-	return tracker.NewCallExpression(method, nil, nil, tracker.NewNodeList(arguments), ast.NodeFlagsNone)
+	return method, tracker.NewNodeList(arguments)
 }
 
 func newCatchReasonHandler(tracker *rewriter.Tracker, parameterName string, branch rules.CatchTagToCatchReasonBranch) *ast.Node {

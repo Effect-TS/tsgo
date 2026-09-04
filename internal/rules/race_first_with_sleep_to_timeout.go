@@ -50,11 +50,10 @@ func AnalyzeRaceFirstWithSleepToTimeout(tp *typeparser.TypeParser, c *checker.Ch
 	}
 
 	var matches []RaceFirstWithSleepToTimeoutMatch
-	seen := make(map[*ast.Node]struct{})
 	for _, flow := range tp.PipingFlows(sf, true) {
 		for i := range flow.Transformations {
 			transformation := &flow.Transformations[i]
-			if transformation.Callee == nil || transformation.Node == nil {
+			if transformation.Callee == nil {
 				continue
 			}
 
@@ -72,11 +71,11 @@ func AnalyzeRaceFirstWithSleepToTimeout(tp *typeparser.TypeParser, c *checker.Ch
 				}
 
 			case tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "raceAllFirst"):
-				call := transformation.Node.AsCallExpression()
-				if call == nil || call.Arguments == nil || len(call.Arguments.Nodes) != 1 {
+				input := flow.CopyPrefix(i)
+				if input == nil || input.Subject.Node == nil {
 					continue
 				}
-				array := ast.SkipParentheses(call.Arguments.Nodes[0])
+				array := ast.SkipParentheses(input.Subject.Node)
 				if array == nil || array.Kind != ast.KindArrayLiteralExpression || len(array.AsArrayLiteralExpression().Elements.Nodes) != 2 {
 					continue
 				}
@@ -94,10 +93,6 @@ func AnalyzeRaceFirstWithSleepToTimeout(tp *typeparser.TypeParser, c *checker.Ch
 			if isRaceFirstTimerFlow(tp, left) == isRaceFirstTimerFlow(tp, right) {
 				continue
 			}
-			if _, duplicate := seen[transformation.Node]; duplicate {
-				continue
-			}
-			seen[transformation.Node] = struct{}{}
 			matches = append(matches, RaceFirstWithSleepToTimeoutMatch{
 				SourceFile: sf,
 				Location:   scanner.GetErrorRangeForNode(sf, transformation.Callee),

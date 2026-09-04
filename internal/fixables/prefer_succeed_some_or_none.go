@@ -24,7 +24,7 @@ func runPreferSucceedSomeOrNoneFix(ctx *fixable.Context) []ls.CodeAction {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue
 		}
-		if match.ReplacementTarget == nil || match.ReplacementName == "succeedSome" && match.ValueNode == nil {
+		if match.Flow == nil || match.TransformationCount <= 0 || match.ReplacementName == "succeedSome" && match.ValueNode == nil {
 			return nil
 		}
 
@@ -56,7 +56,7 @@ func runPreferSucceedSomeOrNoneFix(ctx *fixable.Context) []ls.CodeAction {
 						ast.NodeFlagsNone,
 					)
 				}
-				tracker.ReplaceNode(ctx.SourceFile, match.ReplacementTarget, replacement, nil)
+				tracker.ReplacePipingFlowPrefix(ctx.SourceFile, match.Flow, match.TransformationCount, replacement)
 			},
 		}); action != nil {
 			return []ls.CodeAction{*action}
