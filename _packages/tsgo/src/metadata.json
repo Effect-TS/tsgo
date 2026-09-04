@@ -1968,6 +1968,30 @@
       }
     },
     {
+      "name": "matchEffectToMatch",
+      "group": "style",
+      "description": "Suggests Effect.match or Effect.matchCause when both Effect.matchEffect handlers only return Effect.succeed",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377125
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const program: Effect.Effect\u003cnumber, string\u003e\n\nprogram.pipe(Effect.matchEffect({\n  onFailure: (error) =\u003e Effect.succeed(error.length),\n  onSuccess: (value) =\u003e Effect.succeed(value + 1)\n}))\n",
+        "diagnostics": [
+          {
+            "start": 100,
+            "end": 118,
+            "text": "`Effect.match` expresses this non-effectful fold more directly than `Effect.matchEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)"
+          }
+        ]
+      }
+    },
+    {
       "name": "missedPipeableOpportunity",
       "group": "style",
       "description": "Suggests using .pipe() for nested function calls",

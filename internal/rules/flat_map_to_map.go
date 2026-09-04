@@ -65,7 +65,7 @@ func AnalyzeFlatMapToMap(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.
 				continue
 			}
 
-			callback := typeparser.ParseLazyExpression(args[0], false)
+			callback := typeparser.ParseLazyExpression(args[0], typeparser.LazyExpressionNone)
 			if callback == nil || callback.Expression == nil || callback.Expression.Kind != ast.KindCallExpression {
 				continue
 			}

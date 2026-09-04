@@ -490,5 +490,9 @@
     "`Effect.{0}` provides this inline single-service layer directly. effect(provideLayerSucceedToProvideService)": {
         "category": "Suggestion",
         "code": 377124
+    },
+    "`Effect.{0}` expresses this non-effectful fold more directly than `Effect.{1}` with `Effect.succeed` handlers. effect(matchEffectToMatch)": {
+        "category": "Suggestion",
+        "code": 377125
     }
 }

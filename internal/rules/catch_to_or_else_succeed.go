@@ -58,7 +58,7 @@ func AnalyzeCatchToOrElseSucceed(tp *typeparser.TypeParser, _ *checker.Checker, 
 				continue
 			}
 
-			lazy := typeparser.ParseLazyExpression(transformation.Args[0], true)
+			lazy := typeparser.ParseLazyExpression(transformation.Args[0], typeparser.LazyExpressionThunk)
 			if lazy == nil {
 				continue
 			}

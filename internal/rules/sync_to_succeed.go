@@ -60,8 +60,8 @@ func AnalyzeSyncToSucceed(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast
 			call := node.AsCallExpression()
 			if call != nil && call.Expression != nil && call.Expression.Kind == ast.KindPropertyAccessExpression &&
 				tp.IsNodeReferenceToEffectModuleApi(call.Expression, "sync") && call.Arguments != nil && len(call.Arguments.Nodes) == 1 {
-				lazy := typeparser.ParseLazyExpression(call.Arguments.Nodes[0], true)
-				if lazy != nil && isSynchronousNonGeneratorFunction(lazy.Node) && tp.IsExpressionValueStableAtLocation(lazy.Expression, node) {
+				lazy := typeparser.ParseLazyExpression(call.Arguments.Nodes[0], typeparser.LazyExpressionThunk)
+				if lazy != nil && tp.IsExpressionValueStableAtLocation(lazy.Expression, node) {
 					calleeName := call.Expression.AsPropertyAccessExpression().Name()
 					if calleeName != nil {
 						matches = append(matches, SyncToSucceedMatch{
@@ -82,15 +82,4 @@ func AnalyzeSyncToSucceed(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast
 
 	walk(sf.AsNode())
 	return matches
-}
-
-func isSynchronousNonGeneratorFunction(node *ast.Node) bool {
-	if node == nil || ast.GetCombinedModifierFlags(node)&ast.ModifierFlagsAsync != 0 {
-		return false
-	}
-	if node.Kind == ast.KindFunctionExpression {
-		fn := node.AsFunctionExpression()
-		return fn != nil && fn.AsteriskToken == nil
-	}
-	return node.Kind == ast.KindArrowFunction
 }

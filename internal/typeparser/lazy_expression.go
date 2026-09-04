@@ -13,11 +13,27 @@ type ParsedLazyExpression struct {
 	Expression *ast.Node   // The inner expression (return value)
 }
 
+// LazyExpressionFlags controls which function shapes ParseLazyExpression accepts.
+type LazyExpressionFlags uint8
+
+const (
+	LazyExpressionNone LazyExpressionFlags = 0
+	// LazyExpressionThunk requires a function with no parameters.
+	LazyExpressionThunk LazyExpressionFlags = 1 << iota
+	// LazyExpressionAllowAsync additionally accepts async functions.
+	LazyExpressionAllowAsync
+	// LazyExpressionAllowGenerator additionally accepts generator functions.
+	LazyExpressionAllowGenerator
+)
+
 // ParseLazyExpression parses an arrow function or function expression, extracting its inner expression.
-// When thunk is true, the function must have zero parameters.
+// By default, only synchronous, non-generator functions are accepted.
 // Returns nil if the node is not a valid lazy expression.
-func ParseLazyExpression(node *ast.Node, thunk bool) *ParsedLazyExpression {
+func ParseLazyExpression(node *ast.Node, flags LazyExpressionFlags) *ParsedLazyExpression {
 	if node == nil {
+		return nil
+	}
+	if flags&LazyExpressionAllowAsync == 0 && ast.GetCombinedModifierFlags(node)&ast.ModifierFlagsAsync != 0 {
 		return nil
 	}
 
@@ -33,6 +49,9 @@ func ParseLazyExpression(node *ast.Node, thunk bool) *ParsedLazyExpression {
 		body = fn.Body
 	case ast.KindFunctionExpression:
 		fn := node.AsFunctionExpression()
+		if fn.AsteriskToken != nil && flags&LazyExpressionAllowGenerator == 0 {
+			return nil
+		}
 		typeParams = fn.TypeParameters
 		params = fn.Parameters
 		body = fn.Body
@@ -45,8 +64,8 @@ func ParseLazyExpression(node *ast.Node, thunk bool) *ParsedLazyExpression {
 		return nil
 	}
 
-	// When thunk=true, reject functions with any parameters
-	if thunk && params != nil && len(params.Nodes) > 0 {
+	// Thunks must not declare parameters.
+	if flags&LazyExpressionThunk != 0 && params != nil && len(params.Nodes) > 0 {
 		return nil
 	}
 

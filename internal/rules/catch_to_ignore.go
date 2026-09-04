@@ -63,7 +63,7 @@ func AnalyzeCatchToIgnore(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast
 				continue
 			}
 
-			lazy := typeparser.ParseLazyExpression(transformation.Args[0], false)
+			lazy := typeparser.ParseLazyExpression(transformation.Args[0], typeparser.LazyExpressionNone)
 			if lazy == nil || !isEffectVoidReference(tp, lazy.Expression) {
 				continue
 			}
