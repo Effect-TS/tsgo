@@ -1968,6 +1968,30 @@
       }
     },
     {
+      "name": "matchEffectToMapBoth",
+      "group": "style",
+      "description": "Suggests Effect.mapBoth when Effect.matchEffect only transforms the failure and success channels",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377126
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const program: Effect.Effect\u003cnumber, string\u003e\n\nprogram.pipe(Effect.matchEffect({\n  onFailure: (error) =\u003e Effect.fail(error.length),\n  onSuccess: (value) =\u003e Effect.succeed(value + 1)\n}))\n",
+        "diagnostics": [
+          {
+            "start": 100,
+            "end": 118,
+            "text": "`Effect.mapBoth` expresses these failure and success transformations more directly than `Effect.matchEffect`. effect(matchEffectToMapBoth)"
+          }
+        ]
+      }
+    },
+    {
       "name": "matchEffectToMatch",
       "group": "style",
       "description": "Suggests Effect.match or Effect.matchCause when both Effect.matchEffect handlers only return Effect.succeed",

@@ -494,5 +494,9 @@
     "`Effect.{0}` expresses this non-effectful fold more directly than `Effect.{1}` with `Effect.succeed` handlers. effect(matchEffectToMatch)": {
         "category": "Suggestion",
         "code": 377125
+    },
+    "`Effect.mapBoth` expresses these failure and success transformations more directly than `Effect.matchEffect`. effect(matchEffectToMapBoth)": {
+        "category": "Suggestion",
+        "code": 377126
     }
 }

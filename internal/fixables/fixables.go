@@ -21,6 +21,7 @@ var All = []fixable.Fixable{
 	AllOfMapToForEachFix,
 	FlatMapToMapFix,
 	MatchEffectToMatchFix,
+	MatchEffectToMapBothFix,
 	FlatMapConditionalToFilterOrFailFix,
 	MapSomeToAsSomeFix,
 	OptionMatchToFromOptionFix,

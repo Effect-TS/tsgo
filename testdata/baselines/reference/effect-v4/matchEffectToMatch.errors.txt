@@ -1,13 +1,14 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/matchEffectToMatch.ts(7,26): suggestion TS377125: `Effect.match` expresses this non-effectful fold more directly than `Effect.matchEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
-/.src/matchEffectToMatch.ts(12,37): suggestion TS377125: `Effect.matchCause` expresses this non-effectful fold more directly than `Effect.matchCauseEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
-/.src/matchEffectToMatch.ts(17,45): suggestion TS377125: `Effect.match` expresses this non-effectful fold more directly than `Effect.matchEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
+/.src/matchEffectToMatch.ts(8,26): suggestion TS377125: `Effect.match` expresses this non-effectful fold more directly than `Effect.matchEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
+/.src/matchEffectToMatch.ts(13,37): suggestion TS377125: `Effect.matchCause` expresses this non-effectful fold more directly than `Effect.matchCauseEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
+/.src/matchEffectToMatch.ts(18,45): suggestion TS377125: `Effect.match` expresses this non-effectful fold more directly than `Effect.matchEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
 
 
 ==== /.src/matchEffectToMatch.ts (3 errors) ====
     // @effect-diagnostics matchEffectToMatch:suggestion
+    // @effect-diagnostics matchEffectToMapBoth:off
     // @effect-diagnostics-in-tsgo false
     import { Effect, pipe } from "effect"
     
