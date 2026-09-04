@@ -1,0 +1,143 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:30-6:47) TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+  Fix 0: "Disable runOfExitToRunExit for this line"
+  Fix 1: "Disable runOfExitToRunExit for entire file"
+  Fix 2: "Replace with Effect.runPromiseExit"
+
+[D2] (7:27-7:44) TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+  Fix 0: "Disable runOfExitToRunExit for this line"
+  Fix 1: "Disable runOfExitToRunExit for entire file"
+  Fix 2: "Replace with Effect.runPromiseExit"
+
+[D3] (8:29-8:46) TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+  Fix 0: "Disable runOfExitToRunExit for this line"
+  Fix 1: "Disable runOfExitToRunExit for entire file"
+  Fix 2: "Replace with Effect.runPromiseExit"
+
+[D4] (9:60-9:77) TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+  Fix 0: "Disable runOfExitToRunExit for this line"
+  Fix 1: "Disable runOfExitToRunExit for entire file"
+  Fix 2: "Replace with Effect.runPromiseExit"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable runOfExitToRunExit for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable runOfExitToRunExit for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.runPromiseExit" ===
+
+--- file:///.src/runOfExitToRunExit.ts ---
+import { Effect, pipe } from "effect"
+
+declare const program: Effect.Effect<number, Error>
+declare const signal: AbortSignal
+
+export const directPromise = Effect.runPromiseExit(program, { signal })
+export const methodPipe = Effect.runPromise(program.pipe(Effect.exit))
+export const functionPipe = Effect.runPromise(pipe(program, Effect.exit))
+export const sameFunctionPipe = pipe(program, Effect.exit, Effect.runPromise)
+
+export const transformedExit = Effect.runPromise(
+  program.pipe(Effect.exit, Effect.map((exit) => exit))
+)
+const computedExit = Effect.exit(program)
+export const referencedExit = Effect.runPromise(computedExit)
+
+// Not equivalent when the input performs asynchronous work.
+export const directSync = Effect.runSync(Effect.exit(program))
+export const functionPipeSync = Effect.runSync(pipe(program, Effect.exit))
+
+
+=== [D2] Fix 0: "Disable runOfExitToRunExit for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable runOfExitToRunExit for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.runPromiseExit" ===
+
+--- file:///.src/runOfExitToRunExit.ts ---
+import { Effect, pipe } from "effect"
+
+declare const program: Effect.Effect<number, Error>
+declare const signal: AbortSignal
+
+export const directPromise = Effect.runPromise(Effect.exit(program), { signal })
+export const methodPipe = Effect.runPromiseExit(program)
+export const functionPipe = Effect.runPromise(pipe(program, Effect.exit))
+export const sameFunctionPipe = pipe(program, Effect.exit, Effect.runPromise)
+
+export const transformedExit = Effect.runPromise(
+  program.pipe(Effect.exit, Effect.map((exit) => exit))
+)
+const computedExit = Effect.exit(program)
+export const referencedExit = Effect.runPromise(computedExit)
+
+// Not equivalent when the input performs asynchronous work.
+export const directSync = Effect.runSync(Effect.exit(program))
+export const functionPipeSync = Effect.runSync(pipe(program, Effect.exit))
+
+
+=== [D3] Fix 0: "Disable runOfExitToRunExit for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable runOfExitToRunExit for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.runPromiseExit" ===
+
+--- file:///.src/runOfExitToRunExit.ts ---
+import { Effect, pipe } from "effect"
+
+declare const program: Effect.Effect<number, Error>
+declare const signal: AbortSignal
+
+export const directPromise = Effect.runPromise(Effect.exit(program), { signal })
+export const methodPipe = Effect.runPromise(program.pipe(Effect.exit))
+export const functionPipe = Effect.runPromiseExit(program)
+export const sameFunctionPipe = pipe(program, Effect.exit, Effect.runPromise)
+
+export const transformedExit = Effect.runPromise(
+  program.pipe(Effect.exit, Effect.map((exit) => exit))
+)
+const computedExit = Effect.exit(program)
+export const referencedExit = Effect.runPromise(computedExit)
+
+// Not equivalent when the input performs asynchronous work.
+export const directSync = Effect.runSync(Effect.exit(program))
+export const functionPipeSync = Effect.runSync(pipe(program, Effect.exit))
+
+
+=== [D4] Fix 0: "Disable runOfExitToRunExit for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable runOfExitToRunExit for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.runPromiseExit" ===
+
+--- file:///.src/runOfExitToRunExit.ts ---
+import { Effect, pipe } from "effect"
+
+declare const program: Effect.Effect<number, Error>
+declare const signal: AbortSignal
+
+export const directPromise = Effect.runPromise(Effect.exit(program), { signal })
+export const methodPipe = Effect.runPromise(program.pipe(Effect.exit))
+export const functionPipe = Effect.runPromise(pipe(program, Effect.exit))
+export const sameFunctionPipe = pipe(program, Effect.runPromiseExit)
+
+export const transformedExit = Effect.runPromise(
+  program.pipe(Effect.exit, Effect.map((exit) => exit))
+)
+const computedExit = Effect.exit(program)
+export const referencedExit = Effect.runPromise(computedExit)
+
+// Not equivalent when the input performs asynchronous work.
+export const directSync = Effect.runSync(Effect.exit(program))
+export const functionPipeSync = Effect.runSync(pipe(program, Effect.exit))
+

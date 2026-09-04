@@ -59,6 +59,7 @@ var All = []fixable.Fixable{
 	PreferUnsafeConstructorFix,
 	PreferTypedSchemaDecoderFix,
 	AcquireReleaseDisposableFix,
+	RunOfExitToRunExitFix,
 }
 
 // ByErrorCode finds all fixables that handle a given error code.

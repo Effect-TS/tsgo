@@ -482,5 +482,9 @@
     "Branching on `{0}._tag` inside `Effect.{1}` hand-rolls tagged error dispatch; use `Effect.catchTag` or `Effect.catchTags`, which re-fail unmatched errors automatically. effect(catchAllTagDispatchToCatchTag)": {
         "category": "Suggestion",
         "code": 377122
+    },
+    "`Effect.{0}` of `Effect.exit` re-implements `Effect.{1}`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)": {
+        "category": "Suggestion",
+        "code": 377123
     }
 }

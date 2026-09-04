@@ -113,4 +113,5 @@ var All = []rule.Rule{
 	PreferTypedSchemaDecoder,
 	AcquireReleaseDisposable,
 	RaceFirstWithSleepToTimeout,
+	RunOfExitToRunExit,
 }

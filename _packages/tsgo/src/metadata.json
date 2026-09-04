@@ -2306,6 +2306,30 @@
       }
     },
     {
+      "name": "runOfExitToRunExit",
+      "group": "style",
+      "description": "Suggests using Effect.runPromiseExit instead of passing Effect.exit to Effect.runPromise",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377123
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const program: Effect.Effect\u003cnumber, Error\u003e\n\nexport const exit = Effect.runPromise(Effect.exit(program))\n",
+        "diagnostics": [
+          {
+            "start": 106,
+            "end": 123,
+            "text": "`Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)"
+          }
+        ]
+      }
+    },
+    {
       "name": "schemaNumber",
       "group": "style",
       "description": "Suggests Schema.Finite and Schema.FiniteFromString instead of Schema.Number APIs when describing domain numbers",

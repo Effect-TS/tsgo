@@ -8,6 +8,7 @@
   "rules": {
     "effecttsgo/acquire-release-disposable": "warn",
     "effecttsgo/all-of-map-to-for-each": "warn",
+    "effecttsgo/catch-all-tag-dispatch-to-catch-tag": "warn",
     "effecttsgo/catch-all-to-map-error": "warn",
     "effecttsgo/catch-chain-to-first-success-of": "warn",
     "effecttsgo/catch-conditional-refail-to-catch-if": "warn",
@@ -38,6 +39,7 @@
     "effecttsgo/redundant-map-error": "warn",
     "effecttsgo/redundant-or-die": "warn",
     "effecttsgo/redundant-schema-tag-identifier": "warn",
+    "effecttsgo/run-of-exit-to-run-exit": "warn",
     "effecttsgo/schema-number": "warn",
     "effecttsgo/schema-struct-with-tag": "warn",
     "effecttsgo/schema-union-of-literals": "warn",
