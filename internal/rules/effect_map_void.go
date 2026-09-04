@@ -44,7 +44,7 @@ type EffectMapVoidMatch struct {
 // (zero-param function returning void 0, undefined, or parenthesized versions).
 func isVoidCallback(node *ast.Node) bool {
 	// First try parsing as a lazy expression (thunk=true, requiring zero params)
-	lazy := typeparser.ParseLazyExpression(node, true)
+	lazy := typeparser.ParseLazyExpression(node, typeparser.LazyExpressionThunk)
 	if lazy != nil {
 		// ParseLazyExpression succeeded — check if the expression is a void expression
 		return isVoidExpression(lazy.Expression)

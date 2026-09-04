@@ -113,7 +113,7 @@ func analyzeCatchChainToFirstSuccessOfCandidate(tp *typeparser.TypeParser, c *ch
 		return catchChainToFirstSuccessOfCandidate{}, false
 	}
 
-	lazy := typeparser.ParseLazyExpression(transformation.Args[0], true)
+	lazy := typeparser.ParseLazyExpression(transformation.Args[0], typeparser.LazyExpressionThunk)
 	if lazy == nil || lazy.Expression == nil {
 		return catchChainToFirstSuccessOfCandidate{}, false
 	}

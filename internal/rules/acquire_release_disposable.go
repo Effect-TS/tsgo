@@ -159,12 +159,8 @@ func isDefinitelyDisposable(tp *typeparser.TypeParser, c *checker.Checker, succe
 }
 
 func isDisposalRelease(tp *typeparser.TypeParser, c *checker.Checker, node *ast.Node, globalSymbol *ast.Symbol) bool {
-	release := typeparser.ParseLazyExpression(ast.SkipParentheses(node), false)
-	if release == nil || len(release.Params) < 1 || len(release.Params) > 2 ||
-		ast.GetCombinedModifierFlags(release.Node)&ast.ModifierFlagsAsync != 0 {
-		return false
-	}
-	if release.Node.Kind == ast.KindFunctionExpression && release.Node.AsFunctionExpression().AsteriskToken != nil {
+	release := typeparser.ParseLazyExpression(node, typeparser.LazyExpressionNone)
+	if release == nil || len(release.Params) < 1 || len(release.Params) > 2 {
 		return false
 	}
 
@@ -200,14 +196,12 @@ func isDisposalRelease(tp *typeparser.TypeParser, c *checker.Checker, node *ast.
 		return false
 	}
 
-	thunk := typeparser.ParseLazyExpression(ast.SkipParentheses(wrapper.Arguments.Nodes[0]), true)
+	flags := typeparser.LazyExpressionThunk
+	if wrapperName == "promise" {
+		flags |= typeparser.LazyExpressionAllowAsync
+	}
+	thunk := typeparser.ParseLazyExpression(wrapper.Arguments.Nodes[0], flags)
 	if thunk == nil || thunk.Expression == nil {
-		return false
-	}
-	if wrapperName == "sync" && ast.GetCombinedModifierFlags(thunk.Node)&ast.ModifierFlagsAsync != 0 {
-		return false
-	}
-	if thunk.Node.Kind == ast.KindFunctionExpression && thunk.Node.AsFunctionExpression().AsteriskToken != nil {
 		return false
 	}
 
