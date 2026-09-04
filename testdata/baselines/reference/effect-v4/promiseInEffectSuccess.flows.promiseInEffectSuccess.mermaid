@@ -150,62 +150,73 @@ flowchart TB
   148["type: Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>callee: Effect.as<br/>args: #91;promiseValue#93;"]
   149[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
   150[/"type: Promise#lt;number#gt;<br/>node: promiseValue"/]
-  151[/"type: Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>node: Effect.succeed#40;promiseValue#41; as Effect.Effect#lt;Promise#lt;number#gt;#gt;"/]
-  152[/"type: Promise#lt;number#gt;<br/>node: promiseValue"/]
-  153["type: Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  154[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  155[/"type: Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>node: Effect.succeed#40;promiseValue#41; satisfies Effect.Effect#lt;Promise#lt;number#gt;#gt;"/]
-  156[/"type: Promise#lt;number#gt;<br/>node: promiseValue"/]
-  157["type: Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  158[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  159[/"type: Promise#lt;number#gt;<br/>node: promiseValue"/]
-  160["type: Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  161[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  162[/"type: Effect#lt;number, never, never#gt;<br/>node: base"/]
-  163["type: Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>callee: Effect.as<br/>args: #91;promiseValue#93;"]
-  164[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
-  165[/"type: Promise#lt;number#gt;<br/>node: promiseValue"/]
-  166[/"type: Effect#lt;number, never, never#gt;<br/>node: base"/]
-  167["type: Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>callee: Effect.map<br/>args: #91;promiseCallback#93;"]
-  168[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
-  169[/"type: #40;value: number#41; =#gt; Promise#lt;number#gt;<br/>node: promiseCallback"/]
-  170[/"type: Effect#lt;number, never, never#gt;<br/>node: base"/]
-  171["type: Effect#lt;Promise#lt;string#gt;, never, never#gt;<br/>callee: Effect.zipWith<br/>args: #91;other, #40;_left, right#41; =#gt; Promise.resolve#40;right#41;#93;"]
-  172[/"type: #123; #lt;A2, E2, R2, A, B#gt;#40;that: Effect#lt;A2, E2, R2#gt;, f: #40;a: A, b: A2#41; =#gt; B, options?: #123; readonly concurrent?: boolean #124; undefined; #125; #124; undefined#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2, B#gt;#40;self: Effect#lt;A, E, R#gt;, that: Effect#lt;A2, E2, R2#gt;, f: #40;a: A, b: A2#41; =#gt; B, options?: #123; readonly concurrent?: boolean #124; undefined; #125; #124; undefined#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.zipWith"/]
-  173[/"type: Effect#lt;string, never, never#gt;<br/>node: other"/]
-  174[["type: #40;_left: number, right: string#41; =#gt; Promise#lt;string#gt;<br/>node: #40;_left, right#41; =#gt; Promise.resolve#40;right#41;"]]
-  175[/"type: Promise#lt;string#gt;<br/>node: Promise.resolve#40;right#41;"/]
-  176[["type: #40;#41; =#gt; Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>node: export function intentionallyReturned#40;#41;: Effect.Effect#lt;Promise#lt;number#gt;#gt; #123;#92;n  return Effect.succeed#40;promiseValue#41;#92;n#125;"]]
-  177[/"type: Promise#lt;number#gt;<br/>node: promiseValue"/]
-  178["type: Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  179[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  180[["type: #40;#41; =#gt; Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>node: #40;#41;: Effect.Effect#lt;Promise#lt;number#gt;#gt; =#gt; Effect.succeed#40;promiseValue#41;"]]
-  181[/"type: Promise#lt;number#gt;<br/>node: promiseValue"/]
-  182["type: Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  183[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  184[["type: #40;#41; =#gt; Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;promiseValue#41;"]]
-  185[/"type: Promise#lt;number#gt;<br/>node: promiseValue"/]
-  186["type: Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  187[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  188[["type: #40;#41; =#gt; Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>node: #40;#41; =#gt; #123;#92;n  customPromiseEffect#92;n  return Effect.succeed#40;promiseValue#41;#92;n#125;"]]
-  189[/"type: Promise#lt;number#gt;<br/>node: promiseValue"/]
-  190["type: Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  191[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  192[["type: #40;#41; =#gt; Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;promiseValue#41;"]]
-  193[/"type: Promise#lt;number#gt;<br/>node: promiseValue"/]
-  194["type: Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  195[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  196[/"type: #123; succeed: #lt;A#gt;#40;value: A#41; =#gt; A; map: #lt;A, B#gt;#40;_value: A, f: #40;value: A#41; =#gt; B#41; =#gt; B; #125;<br/>node: #123;#92;n  succeed: #lt;A#gt;#40;value: A#41; =#gt; value,#92;n  map: #lt;A, B#gt;#40;_value: A, f: #40;value: A#41; =#gt; B#41; =#gt; f#40;_value#41;#92;n#125;"/]
-  197[["type: #lt;A#gt;#40;value: A#41; =#gt; A<br/>node: #lt;A#gt;#40;value: A#41; =#gt; value"]]
-  198[/"type: A<br/>node: value"/]
-  199[["type: #lt;A, B#gt;#40;_value: A, f: #40;value: A#41; =#gt; B#41; =#gt; B<br/>node: #lt;A, B#gt;#40;_value: A, f: #40;value: A#41; =#gt; B#41; =#gt; f#40;_value#41;"]]
-  200[/"type: A<br/>node: _value"/]
-  201["type: B<br/>callee: f<br/>args: #91;#93;"]
-  202[/"type: #40;value: A#41; =#gt; B<br/>node: f"/]
-  203[/"type: Promise#lt;number#gt;<br/>node: promiseValue"/]
-  204["type: Promise#lt;number#gt;<br/>callee: local.succeed<br/>args: #91;#93;"]
-  205[/"type: #lt;A#gt;#40;value: A#41; =#gt; A<br/>node: local.succeed"/]
-  206[/"type: Promise#lt;number#gt;<br/>node: local.map#40;1, promiseCallback#41;"/]
+  151[/"type: Promise#lt;number#gt;<br/>node: promiseValue"/]
+  152["type: Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  153[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  154["type: Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;x#41; =#gt; x#93;"]
+  155[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  156[["type: #40;x: Promise#lt;number#gt;#41; =#gt; Promise#lt;number#gt;<br/>node: #40;x#41; =#gt; x"]]
+  157[/"type: Promise#lt;number#gt;<br/>node: x"/]
+  158[/"type: Effect#lt;number, never, never#gt;<br/>node: base"/]
+  159["type: Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>callee: Effect.as<br/>args: #91;promiseValue#93;"]
+  160[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  161[/"type: Promise#lt;number#gt;<br/>node: promiseValue"/]
+  162[/"type: Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>node: Effect.succeed#40;promiseValue#41; as Effect.Effect#lt;Promise#lt;number#gt;#gt;"/]
+  163[/"type: Promise#lt;number#gt;<br/>node: promiseValue"/]
+  164["type: Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  165[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  166[/"type: Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>node: Effect.succeed#40;promiseValue#41; satisfies Effect.Effect#lt;Promise#lt;number#gt;#gt;"/]
+  167[/"type: Promise#lt;number#gt;<br/>node: promiseValue"/]
+  168["type: Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  169[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  170[/"type: Promise#lt;number#gt;<br/>node: promiseValue"/]
+  171["type: Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  172[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  173[/"type: Effect#lt;number, never, never#gt;<br/>node: base"/]
+  174["type: Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>callee: Effect.as<br/>args: #91;promiseValue#93;"]
+  175[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  176[/"type: Promise#lt;number#gt;<br/>node: promiseValue"/]
+  177[/"type: Effect#lt;number, never, never#gt;<br/>node: base"/]
+  178["type: Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>callee: Effect.map<br/>args: #91;promiseCallback#93;"]
+  179[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  180[/"type: #40;value: number#41; =#gt; Promise#lt;number#gt;<br/>node: promiseCallback"/]
+  181[/"type: Effect#lt;number, never, never#gt;<br/>node: base"/]
+  182["type: Effect#lt;Promise#lt;string#gt;, never, never#gt;<br/>callee: Effect.zipWith<br/>args: #91;other, #40;_left, right#41; =#gt; Promise.resolve#40;right#41;#93;"]
+  183[/"type: #123; #lt;A2, E2, R2, A, B#gt;#40;that: Effect#lt;A2, E2, R2#gt;, f: #40;a: A, b: A2#41; =#gt; B, options?: #123; readonly concurrent?: boolean #124; undefined; #125; #124; undefined#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2, B#gt;#40;self: Effect#lt;A, E, R#gt;, that: Effect#lt;A2, E2, R2#gt;, f: #40;a: A, b: A2#41; =#gt; B, options?: #123; readonly concurrent?: boolean #124; undefined; #125; #124; undefined#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.zipWith"/]
+  184[/"type: Effect#lt;string, never, never#gt;<br/>node: other"/]
+  185[["type: #40;_left: number, right: string#41; =#gt; Promise#lt;string#gt;<br/>node: #40;_left, right#41; =#gt; Promise.resolve#40;right#41;"]]
+  186[/"type: Promise#lt;string#gt;<br/>node: Promise.resolve#40;right#41;"/]
+  187[["type: #40;#41; =#gt; Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>node: export function intentionallyReturned#40;#41;: Effect.Effect#lt;Promise#lt;number#gt;#gt; #123;#92;n  return Effect.succeed#40;promiseValue#41;#92;n#125;"]]
+  188[/"type: Promise#lt;number#gt;<br/>node: promiseValue"/]
+  189["type: Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  190[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  191[["type: #40;#41; =#gt; Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>node: #40;#41;: Effect.Effect#lt;Promise#lt;number#gt;#gt; =#gt; Effect.succeed#40;promiseValue#41;"]]
+  192[/"type: Promise#lt;number#gt;<br/>node: promiseValue"/]
+  193["type: Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  194[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  195[["type: #40;#41; =#gt; Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;promiseValue#41;"]]
+  196[/"type: Promise#lt;number#gt;<br/>node: promiseValue"/]
+  197["type: Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  198[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  199[["type: #40;#41; =#gt; Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>node: #40;#41; =#gt; #123;#92;n  customPromiseEffect#92;n  return Effect.succeed#40;promiseValue#41;#92;n#125;"]]
+  200[/"type: Promise#lt;number#gt;<br/>node: promiseValue"/]
+  201["type: Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  202[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  203[["type: #40;#41; =#gt; Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;promiseValue#41;"]]
+  204[/"type: Promise#lt;number#gt;<br/>node: promiseValue"/]
+  205["type: Effect#lt;Promise#lt;number#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  206[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  207[/"type: #123; succeed: #lt;A#gt;#40;value: A#41; =#gt; A; map: #lt;A, B#gt;#40;_value: A, f: #40;value: A#41; =#gt; B#41; =#gt; B; #125;<br/>node: #123;#92;n  succeed: #lt;A#gt;#40;value: A#41; =#gt; value,#92;n  map: #lt;A, B#gt;#40;_value: A, f: #40;value: A#41; =#gt; B#41; =#gt; f#40;_value#41;#92;n#125;"/]
+  208[["type: #lt;A#gt;#40;value: A#41; =#gt; A<br/>node: #lt;A#gt;#40;value: A#41; =#gt; value"]]
+  209[/"type: A<br/>node: value"/]
+  210[["type: #lt;A, B#gt;#40;_value: A, f: #40;value: A#41; =#gt; B#41; =#gt; B<br/>node: #lt;A, B#gt;#40;_value: A, f: #40;value: A#41; =#gt; B#41; =#gt; f#40;_value#41;"]]
+  211[/"type: A<br/>node: _value"/]
+  212["type: B<br/>callee: f<br/>args: #91;#93;"]
+  213[/"type: #40;value: A#41; =#gt; B<br/>node: f"/]
+  214[/"type: Promise#lt;number#gt;<br/>node: promiseValue"/]
+  215["type: Promise#lt;number#gt;<br/>callee: local.succeed<br/>args: #91;#93;"]
+  216[/"type: #lt;A#gt;#40;value: A#41; =#gt; A<br/>node: local.succeed"/]
+  217[/"type: Promise#lt;number#gt;<br/>node: local.map#40;1, promiseCallback#41;"/]
   2 -->|"kind: pipe"| 3
   4 -->|"kind: transformCallee"| 3
   5 -->|"kind: pipe"| 6
@@ -321,47 +332,56 @@ flowchart TB
   149 -->|"kind: transformCallee"| 148
   150 -->|"kind: transformArg"| 148
   145 -->|"kind: pipe"| 148
-  152 -->|"kind: pipe"| 153
-  154 -->|"kind: transformCallee"| 153
-  153 -->|"kind: usedBy"| 151
-  156 -->|"kind: pipe"| 157
-  158 -->|"kind: transformCallee"| 157
-  157 -->|"kind: usedBy"| 155
-  159 -->|"kind: pipe"| 160
-  161 -->|"kind: transformCallee"| 160
-  164 -->|"kind: transformCallee"| 163
-  165 -->|"kind: transformArg"| 163
-  162 -->|"kind: pipe"| 163
-  168 -->|"kind: transformCallee"| 167
-  169 -->|"kind: transformArg"| 167
-  166 -->|"kind: pipe"| 167
-  172 -->|"kind: transformCallee"| 171
-  173 -->|"kind: transformArg"| 171
-  175 -->|"kind: potentialReturn"| 174
-  174 -->|"kind: transformArg"| 171
+  151 -->|"kind: pipe"| 152
+  153 -->|"kind: transformCallee"| 152
+  155 -->|"kind: transformCallee"| 154
+  157 -->|"kind: potentialReturn"| 156
+  156 -->|"kind: transformArg"| 154
+  152 -->|"kind: pipe"| 154
+  160 -->|"kind: transformCallee"| 159
+  161 -->|"kind: transformArg"| 159
+  158 -->|"kind: pipe"| 159
+  163 -->|"kind: pipe"| 164
+  165 -->|"kind: transformCallee"| 164
+  164 -->|"kind: usedBy"| 162
+  167 -->|"kind: pipe"| 168
+  169 -->|"kind: transformCallee"| 168
+  168 -->|"kind: usedBy"| 166
   170 -->|"kind: pipe"| 171
-  177 -->|"kind: pipe"| 178
+  172 -->|"kind: transformCallee"| 171
+  175 -->|"kind: transformCallee"| 174
+  176 -->|"kind: transformArg"| 174
+  173 -->|"kind: pipe"| 174
   179 -->|"kind: transformCallee"| 178
-  178 -->|"kind: potentialReturn"| 176
-  178 -->|"kind: usedBy"| 176
-  181 -->|"kind: pipe"| 182
+  180 -->|"kind: transformArg"| 178
+  177 -->|"kind: pipe"| 178
   183 -->|"kind: transformCallee"| 182
-  182 -->|"kind: potentialReturn"| 180
-  185 -->|"kind: pipe"| 186
-  187 -->|"kind: transformCallee"| 186
-  186 -->|"kind: potentialReturn"| 184
-  189 -->|"kind: pipe"| 190
-  191 -->|"kind: transformCallee"| 190
-  190 -->|"kind: potentialReturn"| 188
-  190 -->|"kind: usedBy"| 188
-  193 -->|"kind: pipe"| 194
-  195 -->|"kind: transformCallee"| 194
-  194 -->|"kind: potentialReturn"| 192
-  198 -->|"kind: potentialReturn"| 197
-  197 -->|"kind: usedBy"| 196
+  184 -->|"kind: transformArg"| 182
+  186 -->|"kind: potentialReturn"| 185
+  185 -->|"kind: transformArg"| 182
+  181 -->|"kind: pipe"| 182
+  188 -->|"kind: pipe"| 189
+  190 -->|"kind: transformCallee"| 189
+  189 -->|"kind: potentialReturn"| 187
+  189 -->|"kind: usedBy"| 187
+  192 -->|"kind: pipe"| 193
+  194 -->|"kind: transformCallee"| 193
+  193 -->|"kind: potentialReturn"| 191
+  196 -->|"kind: pipe"| 197
+  198 -->|"kind: transformCallee"| 197
+  197 -->|"kind: potentialReturn"| 195
   200 -->|"kind: pipe"| 201
   202 -->|"kind: transformCallee"| 201
   201 -->|"kind: potentialReturn"| 199
-  199 -->|"kind: usedBy"| 196
-  203 -->|"kind: pipe"| 204
-  205 -->|"kind: transformCallee"| 204
+  201 -->|"kind: usedBy"| 199
+  204 -->|"kind: pipe"| 205
+  206 -->|"kind: transformCallee"| 205
+  205 -->|"kind: potentialReturn"| 203
+  209 -->|"kind: potentialReturn"| 208
+  208 -->|"kind: usedBy"| 207
+  211 -->|"kind: pipe"| 212
+  213 -->|"kind: transformCallee"| 212
+  212 -->|"kind: potentialReturn"| 210
+  210 -->|"kind: usedBy"| 207
+  214 -->|"kind: pipe"| 215
+  216 -->|"kind: transformCallee"| 215

@@ -70,20 +70,8 @@ func analyzeOptionMatchCalls(tp *typeparser.TypeParser, sf *ast.SourceFile) []Op
 	for _, flow := range tp.PipingFlows(sf, true) {
 		for index := range flow.Transformations {
 			transformation := &flow.Transformations[index]
-			if transformation.Callee == nil {
-				continue
-			}
-
 			callee := transformation.Callee
 			args := transformation.Args
-			if callee.Kind == ast.KindCallExpression {
-				call := callee.AsCallExpression()
-				if call == nil || call.Expression == nil || call.Arguments == nil {
-					continue
-				}
-				callee = call.Expression
-				args = call.Arguments.Nodes
-			}
 			if len(args) != 1 || !tp.IsNodeReferenceToEffectOptionModuleApi(callee, "match") {
 				continue
 			}

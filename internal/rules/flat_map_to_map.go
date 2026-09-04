@@ -57,13 +57,6 @@ func AnalyzeFlatMapToMap(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.
 		for _, transformation := range flow.Transformations {
 			callee := transformation.Callee
 			args := transformation.Args
-			if len(args) == 0 && callee != nil && callee.Kind == ast.KindCallExpression {
-				call := callee.AsCallExpression()
-				if call != nil && call.Arguments != nil {
-					callee = call.Expression
-					args = call.Arguments.Nodes
-				}
-			}
 
 			if len(args) == 0 || callee == nil || callee.Kind != ast.KindPropertyAccessExpression {
 				continue

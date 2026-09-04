@@ -130,7 +130,13 @@ func pipingFlowTransformationNode(transformation *typeparser.PipingFlowTransform
 	if transformation == nil || transformation.Callee == nil {
 		return nil
 	}
-	if call := callExpressionForCallee(transformation.Callee); call != nil {
+	call := callExpressionForCallee(transformation.Callee)
+	if transformation.Kind == typeparser.TransformationKindCall {
+		// Curried factories decompose into a factory call and a trailing
+		// application; the replaced node is the outermost applied call.
+		call = appliedCallExpression(call)
+	}
+	if call != nil {
 		return call.AsNode()
 	}
 	return transformation.Callee
@@ -145,6 +151,23 @@ func callExpressionForCallee(callee *ast.Node) *ast.CallExpression {
 		return nil
 	}
 	return call
+}
+
+// appliedCallExpression walks out of callee positions, returning the outermost
+// call that applies the given call's result to its subject.
+func appliedCallExpression(call *ast.CallExpression) *ast.CallExpression {
+	if call == nil {
+		return nil
+	}
+	current := call.AsNode()
+	for current != nil && current.Parent != nil && ast.IsCallExpression(current.Parent) {
+		parent := current.Parent.AsCallExpression()
+		if parent == nil || parent.Expression != current {
+			break
+		}
+		current = parent.AsNode()
+	}
+	return current.AsCallExpression()
 }
 
 // ReplacePipingFlowTransformation replaces a transformation while preserving

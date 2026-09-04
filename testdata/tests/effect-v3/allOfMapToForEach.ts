@@ -1,5 +1,5 @@
 // @effect-v3
-import { Effect } from "effect"
+import { Effect, pipe } from "effect"
 
 declare const values: ReadonlyArray<number>
 declare const effectful: (value: number, index: number) => Effect.Effect<string>
@@ -42,6 +42,11 @@ export const record = Effect.all(recordMapper.map((value) => Effect.succeed(valu
 // Should not trigger when the callback does not return an Effect.
 // @ts-expect-error Effect.all requires Effect values
 export const plainValues = Effect.all(values.map((value) => value + 1))
+
+// Should trigger for data-last Effect.all references in piping flows, but the
+// diagnostic alone cannot offer the data-first quick fix.
+export const pipeDataLast = pipe(values.map(effectful), Effect.all)
+export const pipeDataLastAsVoid = pipe(values.map(effectful), Effect.all, Effect.asVoid)
 
 // Should not trigger for legitimate Effect.all inputs.
 export const tuple = Effect.all([Effect.succeed(1), Effect.succeed("two")] as const)

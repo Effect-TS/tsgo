@@ -60,7 +60,8 @@ func AnalyzeCatchDieToOrDie(tp *typeparser.TypeParser, _ *checker.Checker, sf *a
 		inputType := flow.Subject.OutType
 		for i := range flow.Transformations {
 			transformation := &flow.Transformations[i]
-			callee, args := catchDieTransformationCall(transformation)
+			callee := transformation.Callee
+			args := transformation.Args
 			methodName, effectModule, ok := catchDieMethod(tp, callee)
 			if ok && len(args) == 1 {
 				handler, _, _ := tp.UnwrapIdentityForwarder(args[0])
@@ -84,22 +85,6 @@ func AnalyzeCatchDieToOrDie(tp *typeparser.TypeParser, _ *checker.Checker, sf *a
 	}
 
 	return matches
-}
-
-func catchDieTransformationCall(transformation *typeparser.PipingFlowTransformation) (callee *ast.Node, args []*ast.Node) {
-	if transformation == nil {
-		return nil, nil
-	}
-	callee = transformation.Callee
-	args = transformation.Args
-	if len(args) != 0 || callee == nil || callee.Kind != ast.KindCallExpression {
-		return callee, args
-	}
-	call := callee.AsCallExpression()
-	if call == nil || call.Expression == nil || call.Arguments == nil {
-		return callee, args
-	}
-	return call.Expression, call.Arguments.Nodes
 }
 
 func catchDieMethod(tp *typeparser.TypeParser, callee *ast.Node) (name string, effectModule *ast.Node, ok bool) {

@@ -178,8 +178,8 @@ Subject Type: Option<number>
 
 Transformations (1):
   [0] kind: call
-      callee: Option.match({\n  onNone: () => Effect.fail(new MissingValue("data-last")),\n  onSome: Effect.succeed\n})
-      args: (constant)
+      callee: Option.match
+      args: [{\n  onNone: () => Effect.fail(new MissingValue("data-last")),\n  onSome: Effect.succeed\n}]
       outType: Effect<number, never, never> | Effect<never, MissingValue, never>
 
 === Piping Flow ===

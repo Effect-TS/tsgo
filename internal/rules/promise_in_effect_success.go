@@ -7,7 +7,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
-	"github.com/microsoft/TypeScript/tsc/shim/scanner"
 )
 
 var PromiseInEffectSuccess = rule.Rule{
@@ -106,10 +105,6 @@ var PromiseInEffectSuccess = rule.Rule{
 	},
 }
 
-func hasExplicitTypeArguments(call *ast.CallExpression) bool {
-	return call != nil && call.TypeArguments != nil && len(call.TypeArguments.Nodes) > 0
-}
-
 func hasExplicitPromiseEffectContext(tp *typeparser.TypeParser, c *checker.Checker, node *ast.Node) bool {
 	for current := node; current != nil; current = current.Parent {
 		switch current.Kind {
@@ -176,44 +171,56 @@ func typeContainsPromise(tp *typeparser.TypeParser, t *checker.Type) bool {
 	return false
 }
 
+// explicitPromiseSuccessApis lists the Effect APIs whose explicit type
+// arguments annotate the success channel directly.
+var explicitPromiseSuccessApis = []string{"succeed", "as", "map", "zipWith"}
+
+// hasExplicitPromiseSuccessTypeArguments reports whether the promise in the
+// success channel was written explicitly through type arguments on the node
+// itself or on a transformation of the piping flow rooted at the node.
+// Flow transformations count at any position when the flow is rooted at a
+// pipe call; otherwise only the node's own final transformation counts, so an
+// explicit annotation passed as an argument to an unrelated constructor still
+// reports.
 func hasExplicitPromiseSuccessTypeArguments(tp *typeparser.TypeParser, node *ast.Node) bool {
-	if node == nil || node.Kind != ast.KindCallExpression {
+	flow := tp.LongestPipingFlowAt(node, true)
+	if flow == nil || len(flow.Transformations) == 0 {
 		return false
 	}
-	call := node.AsCallExpression()
-	if isExplicitPromiseSuccessCall(tp, call) {
-		return true
-	}
-	if expression := ast.SkipParentheses(call.Expression); expression != nil && expression.Kind == ast.KindCallExpression && isExplicitPromiseSuccessCall(tp, expression.AsCallExpression()) {
-		return true
-	}
-	if isPipeCall(tp, call) && call.Arguments != nil && len(call.Arguments.Nodes) > 0 {
-		argument := ast.SkipParentheses(call.Arguments.Nodes[len(call.Arguments.Nodes)-1])
-		return argument != nil && argument.Kind == ast.KindCallExpression && isExplicitPromiseSuccessCall(tp, argument.AsCallExpression())
+	last := len(flow.Transformations) - 1
+	finalKind := flow.Transformations[last].Kind
+	pipeRooted := finalKind == typeparser.TransformationKindPipe || finalKind == typeparser.TransformationKindPipeable
+	for i := range flow.Transformations {
+		if !isExplicitPromiseSuccessTransformation(tp, &flow.Transformations[i]) {
+			continue
+		}
+		if pipeRooted || i == last {
+			return true
+		}
 	}
 	return false
 }
 
-func isPipeCall(tp *typeparser.TypeParser, call *ast.CallExpression) bool {
-	if call == nil || call.Expression == nil {
+// isExplicitPromiseSuccessTransformation reports whether a piping transformation
+// applies one of the explicit promise-success APIs with explicit type arguments.
+// Callees may be wrapped in parentheses or curried (e.g. Effect.as<...>(value)).
+func isExplicitPromiseSuccessTransformation(tp *typeparser.TypeParser, transformation *typeparser.PipingFlowTransformation) bool {
+	if transformation == nil || transformation.TypeArguments == nil || len(transformation.TypeArguments.Nodes) == 0 {
 		return false
 	}
-	if tp.IsNodeReferenceToEffectPackageExport(call.Expression, "pipe") {
-		return true
+	callee := ast.SkipParentheses(transformation.Callee)
+	if callee == nil {
+		return false
 	}
-	if call.Expression.Kind == ast.KindPropertyAccessExpression {
-		name := call.Expression.AsPropertyAccessExpression().Name()
-		return name != nil && scanner.GetTextOfNode(name) == "pipe"
+	if callee.Kind == ast.KindCallExpression {
+		callee = callee.AsCallExpression().Expression
 	}
-	return false
+	return isExplicitPromiseSuccessApi(tp, callee)
 }
 
-func isExplicitPromiseSuccessCall(tp *typeparser.TypeParser, call *ast.CallExpression) bool {
-	if !hasExplicitTypeArguments(call) {
-		return false
-	}
-	for _, name := range []string{"succeed", "as", "map", "zipWith"} {
-		if tp.IsNodeReferenceToEffectModuleApi(call.Expression, name) {
+func isExplicitPromiseSuccessApi(tp *typeparser.TypeParser, node *ast.Node) bool {
+	for _, name := range explicitPromiseSuccessApis {
+		if tp.IsNodeReferenceToEffectModuleApi(node, name) {
 			return true
 		}
 	}
