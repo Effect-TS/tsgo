@@ -30,6 +30,7 @@ const (
 // By default, only synchronous, non-generator functions are accepted.
 // Returns nil if the node is not a valid lazy expression.
 func ParseLazyExpression(node *ast.Node, flags LazyExpressionFlags) *ParsedLazyExpression {
+	node = ast.SkipParentheses(node)
 	if node == nil {
 		return nil
 	}

@@ -159,7 +159,7 @@ func isDefinitelyDisposable(tp *typeparser.TypeParser, c *checker.Checker, succe
 }
 
 func isDisposalRelease(tp *typeparser.TypeParser, c *checker.Checker, node *ast.Node, globalSymbol *ast.Symbol) bool {
-	release := typeparser.ParseLazyExpression(ast.SkipParentheses(node), typeparser.LazyExpressionNone)
+	release := typeparser.ParseLazyExpression(node, typeparser.LazyExpressionNone)
 	if release == nil || len(release.Params) < 1 || len(release.Params) > 2 {
 		return false
 	}
@@ -200,7 +200,7 @@ func isDisposalRelease(tp *typeparser.TypeParser, c *checker.Checker, node *ast.
 	if wrapperName == "promise" {
 		flags |= typeparser.LazyExpressionAllowAsync
 	}
-	thunk := typeparser.ParseLazyExpression(ast.SkipParentheses(wrapper.Arguments.Nodes[0]), flags)
+	thunk := typeparser.ParseLazyExpression(wrapper.Arguments.Nodes[0], flags)
 	if thunk == nil || thunk.Expression == nil {
 		return false
 	}

@@ -93,7 +93,7 @@ func AnalyzeMatchEffectToMatch(tp *typeparser.TypeParser, _ *checker.Checker, sf
 }
 
 func matchSucceedHandler(tp *typeparser.TypeParser, node *ast.Node) (result *ast.Node, argument *ast.Node, ok bool) {
-	lazy := typeparser.ParseLazyExpression(ast.SkipParentheses(node), typeparser.LazyExpressionNone)
+	lazy := typeparser.ParseLazyExpression(node, typeparser.LazyExpressionNone)
 	if lazy == nil || lazy.Expression == nil {
 		return nil, nil, false
 	}
