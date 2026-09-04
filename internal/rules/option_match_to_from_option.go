@@ -166,8 +166,8 @@ func analyzeEffectSucceedHandler(tp *typeparser.TypeParser, node *ast.Node) (*as
 }
 
 func analyzeEffectFailHandler(tp *typeparser.TypeParser, node *ast.Node) (*ast.Node, *ast.Node, bool, bool) {
-	lazy := typeparser.ParseLazyExpression(ast.SkipParentheses(node), true)
-	if lazy == nil || !isSynchronousFunction(lazy.Node) {
+	lazy := typeparser.ParseLazyExpression(node, typeparser.LazyExpressionThunk)
+	if lazy == nil {
 		return nil, nil, false, false
 	}
 	expression := ast.SkipParentheses(lazy.Expression)

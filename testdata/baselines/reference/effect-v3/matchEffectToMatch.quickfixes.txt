@@ -1,0 +1,29 @@
+=== Quick Fix Inventory ===
+
+[D1] (7:37-7:55) TS377125: `Effect.match` expresses this non-effectful fold more directly than `Effect.matchEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
+  Fix 0: "Disable matchEffectToMatch for this line"
+  Fix 1: "Disable matchEffectToMatch for entire file"
+  Fix 2: "Replace with Effect.match"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable matchEffectToMatch for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable matchEffectToMatch for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.match" ===
+
+--- file:///.src/matchEffectToMatch.ts ---
+// @effect-diagnostics matchEffectToMatch:suggestion
+// @effect-diagnostics-in-tsgo false
+import { Effect } from "effect"
+
+declare const effect: Effect.Effect<number, string>
+
+export const pipeable = effect.pipe(Effect.match({
+  onFailure: (error) => error.length,
+  onSuccess: (value) => value + 1
+}))
+
