@@ -89,7 +89,7 @@ func analyzeRedundantOrDieFlowCandidate(tp *typeparser.TypeParser, sf *ast.Sourc
 	}
 
 	lastTransform := flow.Transformations[len(flow.Transformations)-1]
-	if lastTransform.Node == nil || lastTransform.Callee == nil {
+	if lastTransform.Callee == nil {
 		return redundantOrDieCandidate{}, nil, nil, false
 	}
 	if !tp.IsNodeReferenceToEffectModuleApi(lastTransform.Callee, "orDie") {
@@ -116,7 +116,7 @@ func analyzeRedundantOrDieFlowCandidate(tp *typeparser.TypeParser, sf *ast.Sourc
 
 	return redundantOrDieCandidate{
 		yieldExpression: yieldExpr.AsNode(),
-		orDieNode:       lastTransform.Node,
+		orDieNode:       lastTransform.Callee,
 	}, genFn, genCallNode, true
 }
 

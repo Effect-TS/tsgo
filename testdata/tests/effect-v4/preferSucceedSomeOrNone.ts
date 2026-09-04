@@ -31,6 +31,19 @@ export const shouldTriggerSomeFunctionPipe = pipe(Option.some(1), Effect.succeed
 // Should trigger: adjacent transformations in an existing flow
 export const shouldTriggerTransformationPair = pipe(1, Option.some, Effect.succeed)
 
+// Should trigger: replacing a Function.pipe prefix retains later transformations
+export const shouldTriggerFunctionPipePrefix = pipe(1, Option.some, Effect.succeed, Effect.asVoid)
+
+// Should trigger: replacing pipe prefixes retains later transformations
+export const shouldTriggerNoneFunctionPipePrefix = pipe(Option.none(), Effect.succeed, Effect.asVoid)
+export const shouldTriggerSomeMethodPipePrefix = Option.some(1).pipe(Effect.succeed, Effect.asVoid)
+export const shouldTriggerNoneMethodPipePrefix = Option.none().pipe(Effect.succeed, Effect.asVoid)
+
+// Should trigger: nested pipe styles can be mixed around the replaced prefix
+export const shouldTriggerFunctionThenMethodPipe = pipe(Option.some(1), Effect.succeed).pipe(Effect.asVoid)
+export const shouldTriggerMethodThenFunctionPipe = pipe(Option.some(1).pipe(Effect.succeed), Effect.asVoid)
+export const shouldTriggerNestedPrefixAcrossPipeStyles = pipe(1, Option.some).pipe(Effect.succeed, Effect.asVoid)
+
 // Should NOT trigger: an explicit None type argument cannot be preserved by Effect.succeedNone
 export const shouldNotTriggerNoneTypeArgument = Effect.succeed(Option.none<number>())
 

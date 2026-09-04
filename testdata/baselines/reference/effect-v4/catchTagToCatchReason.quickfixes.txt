@@ -1,44 +1,44 @@
 === Quick Fix Inventory ===
 
-[D1] (35:3-42:5) TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+[D1] (35:3-35:14) TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
   Fix 0: "Disable catchTagToCatchReason for this line"
   Fix 1: "Disable catchTagToCatchReason for entire file"
   Fix 2: "Replace with Effect.catchReason or Effect.catchReasons"
 
-[D2] (48:3-52:5) TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+[D2] (48:3-48:14) TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
   Fix 0: "Disable catchTagToCatchReason for this line"
   Fix 1: "Disable catchTagToCatchReason for entire file"
   Fix 2: "Replace with Effect.catchReason or Effect.catchReasons"
 
-[D3] (57:3-65:5) TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+[D3] (57:3-57:14) TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
   Fix 0: "Disable catchTagToCatchReason for this line"
   Fix 1: "Disable catchTagToCatchReason for entire file"
   Fix 2: "Replace with Effect.catchReason or Effect.catchReasons"
 
-[D4] (70:3-72:4) TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+[D4] (70:3-70:14) TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
   Fix 0: "Disable catchTagToCatchReason for this line"
   Fix 1: "Disable catchTagToCatchReason for entire file"
   Fix 2: "Replace with Effect.catchReason or Effect.catchReasons"
 
-[D5] (77:3-83:4) TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+[D5] (77:3-77:14) TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
   Fix 0: "Disable catchTagToCatchReason for this line"
   Fix 1: "Disable catchTagToCatchReason for entire file"
   Fix 2: "Replace with Effect.catchReason or Effect.catchReasons"
 
-[D6] (88:3-91:5) TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+[D6] (88:3-88:14) TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
   Fix 0: "Disable catchTagToCatchReason for this line"
   Fix 1: "Disable catchTagToCatchReason for entire file"
 
-[D7] (96:3-103:5) TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+[D7] (96:3-96:14) TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
   Fix 0: "Disable catchTagToCatchReason for this line"
   Fix 1: "Disable catchTagToCatchReason for entire file"
   Fix 2: "Replace with Effect.catchReason or Effect.catchReasons"
 
-[D8] (108:3-118:5) TS377110: Branching on `error.reason._tag` inside `Effect.catchTags` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+[D8] (108:3-108:15) TS377110: Branching on `error.reason._tag` inside `Effect.catchTags` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
   Fix 0: "Disable catchTagToCatchReason for this line"
   Fix 1: "Disable catchTagToCatchReason for entire file"
 
-[D9] (123:3-128:5) TS377110: Branching on `error.reason._tag` inside `Effect.catchTags` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+[D9] (123:3-123:15) TS377110: Branching on `error.reason._tag` inside `Effect.catchTags` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
   Fix 0: "Disable catchTagToCatchReason for this line"
   Fix 1: "Disable catchTagToCatchReason for entire file"
 

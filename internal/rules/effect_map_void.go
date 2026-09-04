@@ -35,9 +35,8 @@ var EffectMapVoid = rule.Rule{
 type EffectMapVoidMatch struct {
 	SourceFile       *ast.SourceFile // The source file where the diagnostic should be reported
 	Location         core.TextRange  // The pre-computed error range for this match
-	CallNode         *ast.Node       // The Effect.map(...) call expression (replacement target)
-	EffectModuleNode *ast.Node       // The Effect module identifier (e.g., "Effect" in Effect.map)
-	SubjectNode      *ast.Node       // The data-first subject (e.g. self in Effect.map(self, () => {})); nil for data-last/pipeable forms
+	Transformation   *typeparser.PipingFlowTransformation
+	EffectModuleNode *ast.Node // The Effect module identifier (e.g., "Effect" in Effect.map)
 }
 
 // isVoidCallback checks if a callback argument is a "void callback":
@@ -93,8 +92,9 @@ func AnalyzeEffectMapVoid(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast
 	var matches []EffectMapVoidMatch
 
 	for _, flow := range tp.PipingFlows(sf, true) {
-		for _, transformation := range flow.Transformations {
-			if len(transformation.Args) != 1 || transformation.Node == nil || transformation.Node.Kind != ast.KindCallExpression ||
+		for index := range flow.Transformations {
+			transformation := &flow.Transformations[index]
+			if len(transformation.Args) != 1 ||
 				transformation.Callee == nil || transformation.Callee.Kind != ast.KindPropertyAccessExpression ||
 				!tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "map") {
 				continue
@@ -102,25 +102,12 @@ func AnalyzeEffectMapVoid(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast
 			if !isVoidCallback(transformation.Args[0]) {
 				continue
 			}
-			// For the data-first form the subject is a real argument that the
-			// quick-fix must preserve as Effect.asVoid(self); data-last/pipeable
-			// forms carry no subject argument.
-			var subject *ast.Node
-			if transformation.Kind == typeparser.TransformationKindDataFirst || transformation.Kind == typeparser.TransformationKindDataLast {
-				parsed := tp.DataFirstOrLastCall(transformation.Node)
-				if parsed == nil {
-					continue
-				}
-				subject = parsed.Subject
-			}
-
 			propAccess := transformation.Callee.AsPropertyAccessExpression()
 			matches = append(matches, EffectMapVoidMatch{
 				SourceFile:       sf,
 				Location:         scanner.GetErrorRangeForNode(sf, transformation.Callee),
-				CallNode:         transformation.Node,
+				Transformation:   transformation,
 				EffectModuleNode: propAccess.Expression,
-				SubjectNode:      subject,
 			})
 		}
 	}

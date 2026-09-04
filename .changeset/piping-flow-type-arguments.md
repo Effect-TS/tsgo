@@ -2,4 +2,4 @@
 "@effect/tsgo": minor
 ---
 
-Expose explicit type arguments on piping-flow transformations. Rules can now inspect `PipingFlowTransformation.TypeArguments` directly without recovering them from the transformation's syntax node.
+Normalize piping-flow transformations around their callee, arguments, and explicit type arguments without exposing a representation-dependent transformation node. Add shared rewriter operations for replacing transformations and flow prefixes while preserving data-first, data-last, `pipe(...)`, and `.pipe(...)` source forms.

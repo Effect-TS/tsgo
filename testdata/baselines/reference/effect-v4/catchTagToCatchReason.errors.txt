@@ -48,169 +48,117 @@ Effect version: 4.0.0
     // Should trigger and offer catchReason: canonical switch with explicit re-fail.
     export const switchSingle = program.pipe(
       Fx.catchTag("OuterError", (error) => {
-      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        switch (error.reason._tag) {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          case "ReasonA":
-    ~~~~~~~~~~~~~~~~~~~~~
-            return Fx.succeed(1)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          default:
-    ~~~~~~~~~~~~~~
-            return Fx.fail(error)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        }
-    ~~~~~
-      })
-    ~~~~
+      ~~~~~~~~~~~
 !!! suggestion TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+        switch (error.reason._tag) {
+          case "ReasonA":
+            return Fx.succeed(1)
+          default:
+            return Fx.fail(error)
+        }
+      })
     )
     
     // Should trigger and offer catchReasons: sequential ifs in pipe(...) style.
     export const ifMultiple = pipe(
       program,
       Fx.catchTag("OuterError", (error) => {
-      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        if (error.reason._tag === "ReasonA") return Fx.succeed(1)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        if ("ReasonB" === error.reason._tag) return Fx.succeed(2)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        return Fx.fail(error)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~
-      })
-    ~~~~
+      ~~~~~~~~~~~
 !!! suggestion TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+        if (error.reason._tag === "ReasonA") return Fx.succeed(1)
+        if ("ReasonB" === error.reason._tag) return Fx.succeed(2)
+        return Fx.fail(error)
+      })
     )
     
     // Should trigger and offer catchReasons: an if/else-if chain.
     export const ifElseMultiple = program.pipe(
       Fx.catchTag("OuterError", (error) => {
-      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        if (error.reason._tag === "ReasonA") {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          return Fx.succeed(1)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~
-        } else if (error.reason._tag === "ReasonB") {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          return Fx.succeed(2)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~
-        } else {
-    ~~~~~~~~~~~~
-          return Fx.fail(error)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        }
-    ~~~~~
-      })
-    ~~~~
+      ~~~~~~~~~~~
 !!! suggestion TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+        if (error.reason._tag === "ReasonA") {
+          return Fx.succeed(1)
+        } else if (error.reason._tag === "ReasonB") {
+          return Fx.succeed(2)
+        } else {
+          return Fx.fail(error)
+        }
+      })
     )
     
     // Should trigger and offer catchReason: conditional-expression dispatch.
     export const ternarySingle = program.pipe(
       Fx.catchTag("OuterError", (error) =>
-      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        error.reason._tag === "ReasonA" ? Fx.succeed(1) : Fx.fail(error)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      )
-    ~~~
+      ~~~~~~~~~~~
 !!! suggestion TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+        error.reason._tag === "ReasonA" ? Fx.succeed(1) : Fx.fail(error)
+      )
     )
     
     // Should trigger and offer catchReasons under conditional-expression narrowing.
     export const ternaryMultiple = program.pipe(
       Fx.catchTag("OuterError", (error) =>
-      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        error.reason._tag === "ReasonA"
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          ? Fx.succeed(1)
-    ~~~~~~~~~~~~~~~~~~~~~
-          : error.reason._tag === "ReasonB"
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            ? Fx.succeed(2)
-    ~~~~~~~~~~~~~~~~~~~~~~~
-            : Fx.fail(error)
-    ~~~~~~~~~~~~~~~~~~~~~~~~
-      )
-    ~~~
+      ~~~~~~~~~~~
 !!! suggestion TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+        error.reason._tag === "ReasonA"
+          ? Fx.succeed(1)
+          : error.reason._tag === "ReasonB"
+            ? Fx.succeed(2)
+            : Fx.fail(error)
+      )
     )
     
     // Should trigger without a fix: extracting a function body could change arguments.
     export const functionArguments = program.pipe(
       Fx.catchTag("OuterError", function(error) {
-      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        if (error.reason._tag === "ReasonA") return Fx.succeed(arguments.length)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        return Fx.fail(error)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~
-      })
-    ~~~~
+      ~~~~~~~~~~~
 !!! suggestion TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+        if (error.reason._tag === "ReasonA") return Fx.succeed(arguments.length)
+        return Fx.fail(error)
+      })
     )
     
     // Should trigger and preserve wrapper uses through catchReason's second parameter.
     export const reasonUsePreservesWrapper = program.pipe(
       Fx.catchTag("OuterError", (error) => {
-      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        switch (error.reason._tag) {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          case "ReasonB":
-    ~~~~~~~~~~~~~~~~~~~~~
-            return Fx.succeed(error.reason.detail.length)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          default:
-    ~~~~~~~~~~~~~~
-            return Fx.fail(error)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        }
-    ~~~~~
-      })
-    ~~~~
+      ~~~~~~~~~~~
 !!! suggestion TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+        switch (error.reason._tag) {
+          case "ReasonB":
+            return Fx.succeed(error.reason.detail.length)
+          default:
+            return Fx.fail(error)
+        }
+      })
     )
     
     // Should trigger on the containing catchTags transformation, without a fix.
     export const catchTagsCase = program.pipe(
       Fx.catchTags({
-      ~~~~~~~~~~~~~~
-        OuterError: (error) => {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          switch (error.reason._tag) {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            case "ReasonA":
-    ~~~~~~~~~~~~~~~~~~~~~~~
-              return Fx.succeed(1)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            default:
-    ~~~~~~~~~~~~~~~~
-              return Fx.fail(error)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          }
-    ~~~~~~~
-        },
-    ~~~~~~
-        OtherError: () => Fx.succeed(2)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      })
-    ~~~~
+      ~~~~~~~~~~~~
 !!! suggestion TS377110: Branching on `error.reason._tag` inside `Effect.catchTags` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+        OuterError: (error) => {
+          switch (error.reason._tag) {
+            case "ReasonA":
+              return Fx.succeed(1)
+            default:
+              return Fx.fail(error)
+          }
+        },
+        OtherError: () => Fx.succeed(2)
+      })
     )
     
     // Should trigger without a fix: catchTags cases that need the narrowed reason.
     export const catchTagsReasonUse = program.pipe(
       Fx.catchTags({
-      ~~~~~~~~~~~~~~
-        OuterError: (error) => {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          if (error.reason._tag === "ReasonB") return Fx.succeed(error.reason.detail.length)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          return Fx.fail(error)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        }
-    ~~~~~
-      })
-    ~~~~
+      ~~~~~~~~~~~~
 !!! suggestion TS377110: Branching on `error.reason._tag` inside `Effect.catchTags` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+        OuterError: (error) => {
+          if (error.reason._tag === "ReasonB") return Fx.succeed(error.reason.detail.length)
+          return Fx.fail(error)
+        }
+      })
     )
     
     // Should NOT trigger: the wrapper parameter is used outside reason dispatch.

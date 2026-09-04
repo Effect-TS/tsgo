@@ -26,6 +26,9 @@ func runEffectMapVoidFix(ctx *fixable.Context) []ls.CodeAction {
 		if !diagRange.Intersects(ctx.Span) && !ctx.Span.ContainedBy(diagRange) {
 			continue
 		}
+		if match.Transformation == nil || match.EffectModuleNode == nil {
+			return nil
+		}
 
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.asVoid",
@@ -37,19 +40,9 @@ func runEffectMapVoidFix(ctx *fixable.Context) []ls.CodeAction {
 					tracker.NewIdentifier("asVoid"),
 					ast.NodeFlagsNone,
 				)
-				// Data-last/pipeable forms drop to a bare Effect.asVoid reference; the
-				// data-first form must keep its subject as Effect.asVoid(self).
-				var replacement = asVoid
-				if match.SubjectNode != nil {
-					replacement = tracker.NewCallExpression(
-						asVoid,
-						nil,
-						nil,
-						tracker.NewNodeList([]*ast.Node{tracker.DeepCloneNode(match.SubjectNode)}),
-						ast.NodeFlagsNone,
-					)
-				}
-				tracker.ReplaceNode(sf, match.CallNode, replacement, nil)
+				tracker.ReplacePipingFlowTransformation(sf, match.Transformation, rewriter.PipingFlowTransformationReplacement{
+					Callee: asVoid,
+				})
 			},
 		}); action != nil {
 			return []ls.CodeAction{*action}

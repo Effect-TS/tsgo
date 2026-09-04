@@ -24,7 +24,7 @@ func runFlatMapConditionalToFilterOrFailFix(ctx *fixable.Context) []ls.CodeActio
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue
 		}
-		if !match.CanFix || match.ReplacementNode == nil || match.EffectModuleNode == nil ||
+		if !match.CanFix || match.Transformation == nil || match.EffectModuleNode == nil ||
 			match.ParameterNode == nil || match.PredicateNode == nil || match.FallbackNode == nil {
 			return nil
 		}
@@ -32,12 +32,18 @@ func runFlatMapConditionalToFilterOrFailFix(ctx *fixable.Context) []ls.CodeActio
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect." + match.PreferredMethodName,
 			Run: func(tracker *rewriter.Tracker) {
-				replacement := buildFlatMapConditionalFilterReplacement(tracker, match)
-				if replacement == nil {
+				callee, arguments := buildFlatMapConditionalFilterReplacement(tracker, match)
+				if callee == nil || arguments == nil {
 					return
 				}
-				ast.SetParentInChildren(replacement)
-				tracker.ReplaceNode(ctx.SourceFile, match.ReplacementNode, replacement, nil)
+				tracker.ReplacePipingFlowTransformation(
+					ctx.SourceFile,
+					match.Transformation,
+					rewriter.PipingFlowTransformationReplacement{
+						Callee:    callee,
+						Arguments: arguments,
+					},
+				)
 			},
 		}); action != nil {
 			return []ls.CodeAction{*action}
@@ -46,8 +52,8 @@ func runFlatMapConditionalToFilterOrFailFix(ctx *fixable.Context) []ls.CodeActio
 	return nil
 }
 
-func buildFlatMapConditionalFilterReplacement(tracker *rewriter.Tracker, match rules.FlatMapConditionalToFilterOrFailMatch) *ast.Node {
-	method := tracker.NewPropertyAccessExpression(
+func buildFlatMapConditionalFilterReplacement(tracker *rewriter.Tracker, match rules.FlatMapConditionalToFilterOrFailMatch) (*ast.Node, *ast.NodeList) {
+	callee := tracker.NewPropertyAccessExpression(
 		tracker.DeepCloneNode(match.EffectModuleNode),
 		nil,
 		tracker.NewIdentifier(match.PreferredMethodName),
@@ -76,9 +82,5 @@ func buildFlatMapConditionalFilterReplacement(tracker *rewriter.Tracker, match r
 		tracker.NewToken(ast.KindEqualsGreaterThanToken),
 		tracker.DeepCloneNode(match.FallbackNode),
 	)
-	arguments := []*ast.Node{predicate, fallback}
-	if match.SubjectNode != nil {
-		arguments = append([]*ast.Node{tracker.DeepCloneNode(match.SubjectNode)}, arguments...)
-	}
-	return tracker.NewCallExpression(method, nil, nil, tracker.NewNodeList(arguments), ast.NodeFlagsNone)
+	return callee, tracker.NewNodeList([]*ast.Node{predicate, fallback})
 }

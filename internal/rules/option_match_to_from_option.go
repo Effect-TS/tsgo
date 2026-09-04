@@ -43,11 +43,11 @@ var OptionMatchToFromOption = rule.Rule{
 type OptionMatchToFromOptionMatch struct {
 	SourceFile       *ast.SourceFile
 	Location         core.TextRange
+	Transformation   *typeparser.PipingFlowTransformation
 	ReplacementNode  *ast.Node
 	EffectModuleNode *ast.Node
 	OptionNode       *ast.Node
 	FailureNode      *ast.Node
-	Pipeable         bool
 	DefaultFailure   bool
 	CanFix           bool
 }
@@ -70,7 +70,7 @@ func analyzeOptionMatchCalls(tp *typeparser.TypeParser, sf *ast.SourceFile) []Op
 	for _, flow := range tp.PipingFlows(sf, true) {
 		for index := range flow.Transformations {
 			transformation := &flow.Transformations[index]
-			if transformation.Node == nil || transformation.Callee == nil {
+			if transformation.Callee == nil {
 				continue
 			}
 
@@ -96,7 +96,7 @@ func analyzeOptionMatchCalls(tp *typeparser.TypeParser, sf *ast.SourceFile) []Op
 			match := OptionMatchToFromOptionMatch{
 				SourceFile:       sf,
 				Location:         scanner.GetErrorRangeForNode(sf, callee),
-				ReplacementNode:  transformation.Node,
+				Transformation:   transformation,
 				EffectModuleNode: effectModule,
 				FailureNode:      failure,
 				DefaultFailure:   isDefaultNoSuchElementError(tp, failure),
@@ -104,22 +104,11 @@ func analyzeOptionMatchCalls(tp *typeparser.TypeParser, sf *ast.SourceFile) []Op
 			}
 
 			switch transformation.Kind {
-			case typeparser.TransformationKindPipe, typeparser.TransformationKindPipeable:
-				match.Pipeable = true
-			case typeparser.TransformationKindDataFirst, typeparser.TransformationKindDataLast:
-				parsed := tp.DataFirstOrLastCall(transformation.Node)
-				if parsed == nil {
-					continue
-				}
-				match.OptionNode = parsed.Subject
-			case typeparser.TransformationKindCall:
-				// A direct data-last call has the shape Option.match(handlers)(option).
-				// It is only safe to rebuild from the flow subject when this is the
-				// first transformation in the flow.
-				if index != 0 || flow.Subject.Node == nil {
-					continue
-				}
-				match.OptionNode = flow.Subject.Node
+			case typeparser.TransformationKindPipe,
+				typeparser.TransformationKindPipeable,
+				typeparser.TransformationKindDataFirst,
+				typeparser.TransformationKindDataLast,
+				typeparser.TransformationKindCall:
 			default:
 				continue
 			}

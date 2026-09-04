@@ -26,19 +26,17 @@ func runCatchToIgnoreFix(ctx *fixable.Context) []ls.CodeAction {
 		if !diagRange.Intersects(ctx.Span) && !ctx.Span.ContainedBy(diagRange) {
 			continue
 		}
+		if match.Transformation == nil {
+			return nil
+		}
 
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect." + match.IgnoreMethodName,
 			Run: func(tracker *rewriter.Tracker) {
 				ignoreAccess := catchToIgnoreReplacementAccess(tracker, match)
-				if match.DataCallSubject != nil {
-					ignoreCall := tracker.NewCallExpression(ignoreAccess, nil, nil, tracker.NewNodeList([]*ast.Node{tracker.DeepCloneNode(match.DataCallSubject)}), ast.NodeFlagsNone)
-					ast.SetParentInChildren(ignoreCall)
-					tracker.ReplaceNode(sf, match.TransformationNode, ignoreCall, nil)
-					return
-				}
-
-				tracker.ReplaceNode(sf, match.TransformationNode, ignoreAccess, nil)
+				tracker.ReplacePipingFlowTransformation(sf, match.Transformation, rewriter.PipingFlowTransformationReplacement{
+					Callee: ignoreAccess,
+				})
 			},
 		}); action != nil {
 			return []ls.CodeAction{*action}

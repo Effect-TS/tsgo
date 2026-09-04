@@ -42,7 +42,7 @@ type CatchTagToCatchReasonBranch struct {
 type CatchTagToCatchReasonMatch struct {
 	SourceFile      *ast.SourceFile
 	Location        core.TextRange
-	CallNode        *ast.Node
+	Transformation  *typeparser.PipingFlowTransformation
 	Callee          *ast.Node
 	OuterTag        *ast.Node
 	ParameterName   string
@@ -68,7 +68,7 @@ func AnalyzeCatchTagToCatchReason(tp *typeparser.TypeParser, c *checker.Checker,
 	for _, flow := range tp.PipingFlows(sf, true) {
 		for i := range flow.Transformations {
 			transformation := &flow.Transformations[i]
-			if transformation.Node == nil || transformation.Callee == nil {
+			if transformation.Callee == nil {
 				continue
 			}
 			switch {
@@ -109,17 +109,16 @@ func analyzeCatchTagTransformation(
 		return CatchTagToCatchReasonMatch{}, false
 	}
 
-	canFix := handler.canFix && transformationCallHasExactArgs(transformation)
 	return CatchTagToCatchReasonMatch{
 		SourceFile:      sf,
-		Location:        scanner.GetErrorRangeForNode(sf, transformation.Node),
-		CallNode:        transformation.Node,
+		Location:        scanner.GetErrorRangeForNode(sf, transformation.Callee),
+		Transformation:  transformation,
 		Callee:          transformation.Callee,
 		OuterTag:        outerTag,
 		ParameterName:   handler.parameterName,
 		CatchMethodName: "catchTag",
 		Branches:        handler.branches,
-		CanFix:          canFix,
+		CanFix:          handler.canFix,
 	}, true
 }
 
@@ -168,8 +167,8 @@ func analyzeCatchTagsTransformation(
 
 	return CatchTagToCatchReasonMatch{
 		SourceFile:      sf,
-		Location:        scanner.GetErrorRangeForNode(sf, transformation.Node),
-		CallNode:        transformation.Node,
+		Location:        scanner.GetErrorRangeForNode(sf, transformation.Callee),
+		Transformation:  transformation,
 		Callee:          transformation.Callee,
 		ParameterName:   candidate.parameterName,
 		CatchMethodName: "catchTags",
@@ -407,22 +406,6 @@ func hasCatchReasonApi(tp *typeparser.TypeParser, c *checker.Checker, callee *as
 		apiName = "catchReasons"
 	}
 	return c.GetPropertyOfType(receiverType, apiName) != nil
-}
-
-func transformationCallHasExactArgs(transformation *typeparser.PipingFlowTransformation) bool {
-	if transformation == nil || transformation.Node == nil || transformation.Node.Kind != ast.KindCallExpression {
-		return false
-	}
-	call := transformation.Node.AsCallExpression()
-	if call == nil || call.Arguments == nil || len(call.Arguments.Nodes) != len(transformation.Args) {
-		return false
-	}
-	for i, argument := range call.Arguments.Nodes {
-		if argument != transformation.Args[i] {
-			return false
-		}
-	}
-	return true
 }
 
 func catchTagsPropertyName(name *ast.Node) (string, bool) {

@@ -67,7 +67,7 @@ func AnalyzeCatchConditionalRefailToCatchIf(tp *typeparser.TypeParser, c *checke
 	for _, flow := range tp.PipingFlows(sf, true) {
 		for index := range flow.Transformations {
 			transformation := &flow.Transformations[index]
-			if transformation.Node == nil || transformation.Callee == nil {
+			if transformation.Callee == nil {
 				continue
 			}
 			methods, ok := conditionalRefailMethods(tp, transformation.Callee)

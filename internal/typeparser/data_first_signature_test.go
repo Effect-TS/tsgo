@@ -194,15 +194,15 @@ export const effectFn = Effect.fn(
 	seen := make(map[*ast.Node]int)
 	for flowIndex, flow := range tp.PipingFlows(sf, true) {
 		for _, transformation := range flow.Transformations {
-			if previousFlowIndex, duplicate := seen[transformation.Node]; duplicate {
+			if previousFlowIndex, duplicate := seen[transformation.Callee]; duplicate {
 				t.Fatalf(
 					"transformation %q occurs in flows %d and %d",
-					nodeText(sf, transformation.Node),
+					nodeText(sf, transformation.Callee),
 					previousFlowIndex,
 					flowIndex,
 				)
 			}
-			seen[transformation.Node] = flowIndex
+			seen[transformation.Callee] = flowIndex
 		}
 	}
 }

@@ -588,7 +588,7 @@ export const functionPipe = pipe(
 )
 
 // Should trigger: direct data-last application is also supported.
-export const dataLast = Effect.fromOption(option, () => new MissingValue("data-last"))
+export const dataLast = Effect.fromOption(() => new MissingValue("data-last"))(option)
 
 // Should trigger and use the one-argument Effect.fromOption form.
 export const defaultFailure = Option.match(option, {

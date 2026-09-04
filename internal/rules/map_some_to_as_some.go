@@ -41,9 +41,8 @@ var MapSomeToAsSome = rule.Rule{
 type MapSomeToAsSomeMatch struct {
 	SourceFile       *ast.SourceFile
 	Location         core.TextRange
-	CallNode         *ast.Node
+	Transformation   *typeparser.PipingFlowTransformation
 	EffectModuleNode *ast.Node
-	SubjectNode      *ast.Node
 }
 
 // AnalyzeMapSomeToAsSome finds data-last and data-first Effect.map calls whose
@@ -51,8 +50,9 @@ type MapSomeToAsSomeMatch struct {
 func AnalyzeMapSomeToAsSome(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile) []MapSomeToAsSomeMatch {
 	var matches []MapSomeToAsSomeMatch
 	for _, flow := range tp.PipingFlows(sf, true) {
-		for _, transformation := range flow.Transformations {
-			if len(transformation.Args) != 1 || transformation.Node == nil || transformation.Node.Kind != ast.KindCallExpression ||
+		for index := range flow.Transformations {
+			transformation := &flow.Transformations[index]
+			if len(transformation.Args) != 1 ||
 				transformation.Callee == nil || transformation.Callee.Kind != ast.KindPropertyAccessExpression ||
 				!tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "map") {
 				continue
@@ -62,22 +62,12 @@ func AnalyzeMapSomeToAsSome(tp *typeparser.TypeParser, _ *checker.Checker, sf *a
 				!isOptionSomeMapper(tp, transformation.Args[0]) {
 				continue
 			}
-			var subject *ast.Node
-			if transformation.Kind == typeparser.TransformationKindDataFirst || transformation.Kind == typeparser.TransformationKindDataLast {
-				parsed := tp.DataFirstOrLastCall(transformation.Node)
-				if parsed == nil {
-					continue
-				}
-				subject = parsed.Subject
-			}
-
 			propertyAccess := transformation.Callee.AsPropertyAccessExpression()
 			matches = append(matches, MapSomeToAsSomeMatch{
 				SourceFile:       sf,
 				Location:         scanner.GetErrorRangeForNode(sf, transformation.Callee),
-				CallNode:         transformation.Node,
+				Transformation:   transformation,
 				EffectModuleNode: propertyAccess.Expression,
-				SubjectNode:      subject,
 			})
 		}
 	}
