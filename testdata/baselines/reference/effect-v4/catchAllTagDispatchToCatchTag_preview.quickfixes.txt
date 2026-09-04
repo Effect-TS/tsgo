@@ -1,0 +1,32 @@
+=== Quick Fix Inventory ===
+
+[D1] (12:3-12:15) TS377122: Branching on `error._tag` inside `Effect.catch` hand-rolls tagged error dispatch; use `Effect.catchTag` or `Effect.catchTags`, which re-fail unmatched errors automatically. effect(catchAllTagDispatchToCatchTag)
+  Fix 0: "Disable catchAllTagDispatchToCatchTag for this line"
+  Fix 1: "Disable catchAllTagDispatchToCatchTag for entire file"
+  Fix 2: "Replace with Effect.catchTag or Effect.catchTags"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable catchAllTagDispatchToCatchTag for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable catchAllTagDispatchToCatchTag for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.catchTag or Effect.catchTags" ===
+
+--- file:///.src/catchAllTagDispatchToCatchTag_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics catchAllTagDispatchToCatchTag:suggestion
+import { Data, Effect } from "effect"
+
+class NotFound extends Data.TaggedError("NotFound")<{}> {}
+class Timeout extends Data.TaggedError("Timeout")<{}> {}
+class Unauthorized extends Data.TaggedError("Unauthorized")<{}> {}
+
+declare const program: Effect.Effect<string, NotFound | Timeout | Unauthorized>
+
+export const recovered = program.pipe(
+  Effect.catchTags({ "NotFound": () => Effect.succeed("guest"), "Timeout": () => Effect.succeed("retrying") })
+)
+

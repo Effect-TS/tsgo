@@ -1,0 +1,24 @@
+flowchart TB
+  0[/"type: #quot;NotFoundError#quot;<br/>node: #quot;NotFoundError#quot;"/]
+  1[/"type: #quot;TimeoutError#quot;<br/>node: #quot;TimeoutError#quot;"/]
+  2[/"type: Effect#lt;string, NotFoundError #124; TimeoutError, never#gt;<br/>node: program"/]
+  3["type: Effect#lt;string, TimeoutError, never#gt;<br/>callee: Effect.catchAll<br/>args: #91;#40;error#41; =#gt;#92;n    error._tag === #quot;NotFoundError#quot;#92;n      ? Effect.succeed#40;#quot;missing#quot;#41;#92;n      : Effect.fail#40;error#41;#93;"]
+  4[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catchAll"/]
+  5[["type: #40;error: NotFoundError #124; TimeoutError#41; =#gt; Effect#lt;string, never, never#gt; #124; Effect#lt;never, TimeoutError, never#gt;<br/>node: #40;error#41; =#gt;#92;n    error._tag === #quot;NotFoundError#quot;#92;n      ? Effect.succeed#40;#quot;missing#quot;#41;#92;n      : Effect.fail#40;error#41;"]]
+  6[/"type: Effect#lt;string, never, never#gt; #124; Effect#lt;never, TimeoutError, never#gt;<br/>node: error._tag === #quot;NotFoundError#quot;#92;n      ? Effect.succeed#40;#quot;missing#quot;#41;#92;n      : Effect.fail#40;error#41;"/]
+  7[/"type: #quot;missing#quot;<br/>node: #quot;missing#quot;"/]
+  8["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  9[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  10[/"type: TimeoutError<br/>node: error"/]
+  11["type: Effect#lt;never, TimeoutError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  12[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  4 -->|"kind: transformCallee"| 3
+  7 -->|"kind: pipe"| 8
+  9 -->|"kind: transformCallee"| 8
+  8 -->|"kind: usedBy"| 6
+  10 -->|"kind: pipe"| 11
+  12 -->|"kind: transformCallee"| 11
+  11 -->|"kind: usedBy"| 6
+  6 -->|"kind: potentialReturn"| 5
+  5 -->|"kind: transformArg"| 3
+  2 -->|"kind: pipe"| 3

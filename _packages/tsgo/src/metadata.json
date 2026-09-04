@@ -1554,6 +1554,30 @@
       }
     },
     {
+      "name": "catchAllTagDispatchToCatchTag",
+      "group": "style",
+      "description": "Suggests Effect.catchTag or Effect.catchTags for catch-all handlers that re-fail unmatched tagged errors",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377122
+      ],
+      "preview": {
+        "sourceText": "import { Data, Effect } from \"effect\"\n\nclass NotFound extends Data.TaggedError(\"NotFound\")\u003c{}\u003e {}\nclass Timeout extends Data.TaggedError(\"Timeout\")\u003c{}\u003e {}\nclass Unauthorized extends Data.TaggedError(\"Unauthorized\")\u003c{}\u003e {}\n\ndeclare const program: Effect.Effect\u003cstring, NotFound | Timeout | Unauthorized\u003e\n\nexport const recovered = program.pipe(\n  Effect.catch((error) =\u003e {\n    switch (error._tag) {\n      case \"NotFound\":\n        return Effect.succeed(\"guest\")\n      case \"Timeout\":\n        return Effect.succeed(\"retrying\")\n      default:\n        return Effect.fail(error)\n    }\n  })\n)\n",
+        "diagnostics": [
+          {
+            "start": 345,
+            "end": 357,
+            "text": "Branching on `error._tag` inside `Effect.catch` hand-rolls tagged error dispatch; use `Effect.catchTag` or `Effect.catchTags`, which re-fail unmatched errors automatically. effect(catchAllTagDispatchToCatchTag)"
+          }
+        ]
+      }
+    },
+    {
       "name": "catchAllToMapError",
       "group": "style",
       "description": "Suggests using Effect.mapError instead of Effect.catch + Effect.fail",
@@ -1613,12 +1637,12 @@
         377116
       ],
       "preview": {
-        "sourceText": "import { Data, Effect } from \"effect\"\n\nclass NotFound extends Data.TaggedError(\"NotFound\")\u003c{}\u003e {}\nclass DatabaseError extends Data.TaggedError(\"DatabaseError\")\u003c{}\u003e {}\n\ndeclare const program: Effect.Effect\u003cstring, NotFound | DatabaseError\u003e\n\nexport const recovered = program.pipe(\n  Effect.catch((error) =\u003e\n    error._tag === \"NotFound\" ? Effect.succeed(\"guest\") : Effect.fail(error)\n  )\n)\n",
+        "sourceText": "import { Data, Effect } from \"effect\"\n\nclass NotFound extends Data.TaggedError(\"NotFound\")\u003c{}\u003e {}\nclass DatabaseError extends Data.TaggedError(\"DatabaseError\")\u003c{}\u003e {}\n\ndeclare const program: Effect.Effect\u003cstring, NotFound | DatabaseError\u003e\n\nexport const recovered = program.pipe(\n  Effect.catch((error) =\u003e\n    error instanceof NotFound ? Effect.succeed(\"guest\") : Effect.fail(error)\n  )\n)\n",
         "diagnostics": [
           {
             "start": 281,
             "end": 293,
-            "text": "`Effect.catchTag` expresses selective recovery more directly than `Effect.catch` with a conditional `Effect.fail` passthrough. effect(catchConditionalRefailToCatchIf)"
+            "text": "`Effect.catchIf` expresses selective recovery more directly than `Effect.catch` with a conditional `Effect.fail` passthrough. effect(catchConditionalRefailToCatchIf)"
           }
         ]
       }

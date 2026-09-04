@@ -1,0 +1,99 @@
+==== /.src/catchAllTagDispatchToCatchTag_preview.ts (7 flows) ====
+
+=== Piping Flow ===
+Location: 5:23 - 5:52
+Node: Data.TaggedError("NotFound")
+Node Kind: KindCallExpression
+
+Subject: "NotFound"
+Subject Type: "NotFound"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "NotFound"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 6:22 - 6:50
+Node: Data.TaggedError("Timeout")
+Node Kind: KindCallExpression
+
+Subject: "Timeout"
+Subject Type: "Timeout"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "Timeout"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 7:27 - 7:60
+Node: Data.TaggedError("Unauthorized")
+Node Kind: KindCallExpression
+
+Subject: "Unauthorized"
+Subject Type: "Unauthorized"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "Unauthorized"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 11:25 - 22:2
+Node: program.pipe(\n  Effect.catch((error) => {\n    switch (error._tag) {\n      case "NotFound":\n        return Effect.succeed("guest")\n      case "Timeout":\n        return Effect.succeed("retrying")\n      default:\n        return Effect.fail(error)\n    }\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, NotFound | Timeout | Unauthorized, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [(error) => {\n    switch (error._tag) {\n      case "NotFound":\n        return Effect.succeed("guest")\n      case "Timeout":\n        return Effect.succeed("retrying")\n      default:\n        return Effect.fail(error)\n    }\n  }]
+      outType: Effect<string, Unauthorized, never>
+
+=== Piping Flow ===
+Location: 15:15 - 15:39
+Node: Effect.succeed("guest")
+Node Kind: KindCallExpression
+
+Subject: "guest"
+Subject Type: "guest"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 17:15 - 17:42
+Node: Effect.succeed("retrying")
+Node Kind: KindCallExpression
+
+Subject: "retrying"
+Subject Type: "retrying"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 19:15 - 19:34
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Unauthorized
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, Unauthorized, never>
