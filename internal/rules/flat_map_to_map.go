@@ -55,15 +55,7 @@ func AnalyzeFlatMapToMap(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.
 	flows := tp.PipingFlows(sf, true)
 	for _, flow := range flows {
 		for _, transformation := range flow.Transformations {
-			callee := transformation.Callee
-			args := transformation.Args
-			if len(args) == 0 && callee != nil && callee.Kind == ast.KindCallExpression {
-				call := callee.AsCallExpression()
-				if call != nil && call.Arguments != nil {
-					callee = call.Expression
-					args = call.Arguments.Nodes
-				}
-			}
+			callee, args := transformation.AppliedCalleeAndArgs()
 
 			if len(args) == 0 || callee == nil || callee.Kind != ast.KindPropertyAccessExpression {
 				continue

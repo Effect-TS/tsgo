@@ -124,6 +124,26 @@ func (flow *PipingFlow) TransformationInputNode(index int) *ast.Node {
 	return flow.PartialPipingFlow.TransformationInputNode(index)
 }
 
+// AppliedCalleeAndArgs returns the function node and argument nodes a
+// transformation applies. Transformations expressed as curried pipeable
+// factories (for example Effect.catch(handler) applied to a subject) surface
+// with the factory call as Callee and no Args; for those the factory function
+// and the factory arguments are returned instead. Transformations that cannot
+// be decomposed into an applied call return nil nodes.
+func (t *PipingFlowTransformation) AppliedCalleeAndArgs() (*ast.Node, []*ast.Node) {
+	if t == nil {
+		return nil, nil
+	}
+	if len(t.Args) != 0 || t.Callee == nil || t.Callee.Kind != ast.KindCallExpression {
+		return t.Callee, t.Args
+	}
+	call := t.Callee.AsCallExpression()
+	if call == nil || call.Expression == nil || call.Arguments == nil {
+		return nil, nil
+	}
+	return call.Expression, call.Arguments.Nodes
+}
+
 // ParsedPipeCallResult is the result of parsing a pipe or pipeable call.
 type ParsedPipeCallResult struct {
 	Node        *ast.CallExpression

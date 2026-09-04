@@ -115,15 +115,7 @@ func AnalyzePreferTypedSchemaDecoder(tp *typeparser.TypeParser, c *checker.Check
 }
 
 func schemaDecoderTransformation(transformation typeparser.PipingFlowTransformation) (callee *ast.Node, schema *ast.Node) {
-	callee = transformation.Callee
-	args := transformation.Args
-	if len(args) == 0 && callee != nil && callee.Kind == ast.KindCallExpression {
-		call := callee.AsCallExpression()
-		callee = call.Expression
-		if call.Arguments != nil {
-			args = call.Arguments.Nodes
-		}
-	}
+	callee, args := transformation.AppliedCalleeAndArgs()
 	if callee == nil || len(args) == 0 {
 		return nil, nil
 	}
