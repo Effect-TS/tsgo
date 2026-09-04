@@ -714,6 +714,9 @@ func (tp *TypeParser) buildEffectFnTransformations(result *parsedEffectFnCallRes
 }
 
 func callTypeArguments(node *ast.Node) *ast.NodeList {
+	// Parenthesized call arguments (e.g. pipe(x, (Effect.as<...>(v)))) keep the
+	// type arguments of the wrapped call.
+	node = ast.SkipParentheses(node)
 	if node == nil || node.Kind != ast.KindCallExpression {
 		return nil
 	}

@@ -21,6 +21,9 @@ var AllOfMapToForEachFix = fixable.Fixable{
 
 func runAllOfMapToForEachFix(ctx *fixable.Context) []ls.CodeAction {
 	for _, match := range rules.AnalyzeAllOfMapToForEach(ctx.TypeParser, ctx.Checker, ctx.SourceFile) {
+		if !match.CanFix {
+			continue
+		}
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue
 		}
