@@ -1,5 +1,16 @@
 # @effect/tsgo
 
+## 0.41.0
+
+### Minor Changes
+
+- d095234: Normalize piping-flow transformations around their callee, arguments, and explicit type arguments without exposing a representation-dependent transformation node. Add shared rewriter operations for replacing transformations and flow prefixes while preserving data-first, data-last, `pipe(...)`, and `.pipe(...)` source forms.
+- d3efa70: Remove the AST location parameter from type-only `TypeParser` operations. Effect, Layer, Stream, Schema, service, Context.Tag, Scope, and related type predicates now derive instantiated property types directly from the supplied checker type.
+
+### Patch Changes
+
+- 1d0dfb8: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260903.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/cf7b9361a33fa0c8e1afa3cf45fde29c9ab23ec0) commit `cf7b9361a33fa0c8e1afa3cf45fde29c9ab23ec0`, and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
 ## 0.40.0
 
 ### Minor Changes
