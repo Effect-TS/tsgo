@@ -40,13 +40,14 @@ var PreferSucceedSomeOrNone = rule.Rule{
 
 // PreferSucceedSomeOrNoneMatch holds the nodes needed by the diagnostic and quick fix.
 type PreferSucceedSomeOrNoneMatch struct {
-	SourceFile         *ast.SourceFile
-	Location           core.TextRange
-	ReplacementTarget  *ast.Node
-	EffectModuleNode   *ast.Node
-	ReplacementName    string
-	ValueNode          *ast.Node
-	ValueTypeArguments *ast.NodeList
+	SourceFile          *ast.SourceFile
+	Location            core.TextRange
+	Flow                *typeparser.PipingFlow
+	TransformationCount int
+	EffectModuleNode    *ast.Node
+	ReplacementName     string
+	ValueNode           *ast.Node
+	ValueTypeArguments  *ast.NodeList
 }
 
 type normalizedOptionInput struct {
@@ -64,7 +65,6 @@ func AnalyzePreferSucceedSomeOrNone(tp *typeparser.TypeParser, _ *checker.Checke
 	}
 
 	var matches []PreferSucceedSomeOrNoneMatch
-	seen := make(map[*ast.Node]struct{})
 	for _, flow := range tp.PipingFlows(sf, true) {
 		for index := range flow.Transformations {
 			transformation := &flow.Transformations[index]
@@ -73,16 +73,8 @@ func AnalyzePreferSucceedSomeOrNone(tp *typeparser.TypeParser, _ *checker.Checke
 				!tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "succeed") {
 				continue
 			}
-			if _, ok := seen[transformation.Node]; ok {
+			if transformation.TypeArguments != nil && len(transformation.TypeArguments.Nodes) > 0 {
 				continue
-			}
-
-			if transformation.Node != nil && transformation.Node.Kind == ast.KindCallExpression {
-				call := transformation.Node.AsCallExpression()
-				if call != nil &&
-					call.TypeArguments != nil && len(call.TypeArguments.Nodes) > 0 {
-					continue
-				}
 			}
 
 			optionInput := matchNormalizedOptionInput(tp, flow, index)
@@ -99,18 +91,13 @@ func AnalyzePreferSucceedSomeOrNone(tp *typeparser.TypeParser, _ *checker.Checke
 				ValueTypeArguments: optionInput.ValueTypeArguments,
 			}
 
-			// A direct Effect.succeed(...) call can be replaced in place even when
-			// more transformations follow. A pipe spelling is safely auto-fixable
-			// when the matched Option -> succeed pair is the complete flow.
-			if transformation.Node != nil && transformation.Node.Kind == ast.KindCallExpression {
-				match.ReplacementTarget = transformation.Node
-			} else if index == len(flow.Transformations)-1 &&
-				(match.ReplacementName == "succeedNone" && index == 0 ||
-					match.ReplacementName == "succeedSome" && index == 1) {
-				match.ReplacementTarget = flow.Node
+			if transformation.Kind == typeparser.TransformationKindCall ||
+				transformation.Kind == typeparser.TransformationKindPipe ||
+				transformation.Kind == typeparser.TransformationKindPipeable {
+				match.Flow = flow
+				match.TransformationCount = index + 1
 			}
 
-			seen[transformation.Node] = struct{}{}
 			matches = append(matches, match)
 		}
 	}
@@ -138,16 +125,10 @@ func matchNormalizedOptionInput(tp *typeparser.TypeParser, flow *typeparser.Pipi
 		return nil
 	}
 
-	input := &normalizedOptionInput{ReplacementName: "succeedSome"}
-	if previous.Node != nil && previous.Node.Kind == ast.KindCallExpression {
-		call := previous.Node.AsCallExpression()
-		if call == nil || call.Arguments == nil || len(call.Arguments.Nodes) != 1 {
-			return nil
-		}
-		input.ValueNode = call.Arguments.Nodes[0]
-		input.ValueTypeArguments = call.TypeArguments
-	} else if succeedIndex == 1 {
-		input.ValueNode = flow.Subject.Node
+	input := &normalizedOptionInput{
+		ReplacementName:    "succeedSome",
+		ValueNode:          flow.TransformationInputNode(succeedIndex - 1),
+		ValueTypeArguments: previous.TypeArguments,
 	}
 	return input
 }

@@ -116,6 +116,97 @@ export const live = Layer.succeed(MyService, make)
 	}
 }
 
+func TestPipingFlows_TypeArguments(t *testing.T) {
+	t.Parallel()
+
+	source := `
+import { pipe } from "effect"
+
+declare function transform<A, B>(self: A, f: (value: A) => B): B
+declare function transform<A, B>(f: (value: A) => B): (self: A) => B
+declare function identity<A>(value: A): A
+
+export const piped = pipe("value", transform<string, number>((value) => value.length))
+export const dataFirst = transform<string, number>("value", (value) => value.length)
+export const curried = transform<string, number>((value) => value.length)("value")
+export const called = identity<string>("value")
+`
+
+	_, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectV4Internal(t, source)
+	defer done()
+
+	for _, test := range []struct {
+		name string
+		want []string
+	}{
+		{name: "piped", want: []string{"string", "number"}},
+		{name: "dataFirst", want: []string{"string", "number"}},
+		{name: "curried", want: []string{"string", "number"}},
+		{name: "called", want: []string{"string"}},
+	} {
+		call := findVariableInitializerCallByName(t, sf, test.name)
+		flow := findFlowByNode(t, sf, tp.PipingFlows(sf, false), call.AsNode())
+		if len(flow.Transformations) == 0 {
+			t.Fatalf("%s transformation count = 0, want at least 1", test.name)
+		}
+		transformation := flow.Transformations[len(flow.Transformations)-1]
+		if transformation.TypeArguments == nil {
+			t.Fatalf("%s type arguments are nil", test.name)
+		}
+		got := make([]string, 0, len(transformation.TypeArguments.Nodes))
+		for _, typeArgument := range transformation.TypeArguments.Nodes {
+			got = append(got, strings.TrimSpace(nodeText(sf, typeArgument)))
+		}
+		if !slices.Equal(got, test.want) {
+			t.Fatalf("%s type arguments = %v, want %v", test.name, got, test.want)
+		}
+	}
+}
+
+func TestPipingFlows_TransformationOccurrencesAreUnique(t *testing.T) {
+	t.Parallel()
+
+	source := `
+import { Effect, pipe } from "effect"
+
+declare const base: Effect.Effect<number, string>
+
+export const piped = pipe(
+  base,
+  Effect.map((value) => value + 1),
+  Effect.flatMap((value) => Effect.succeed(value * 2))
+)
+
+export const nested = Effect.map(Effect.succeed(1), (value) => value + 1)
+
+export const effectFn = Effect.fn(
+  function*() {
+    return 1
+  },
+  Effect.map((value) => value + 1),
+  Effect.catch(() => Effect.succeed(0))
+)
+`
+
+	_, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectV4Internal(t, source)
+	defer done()
+
+	seen := make(map[*ast.Node]int)
+	for flowIndex, flow := range tp.PipingFlows(sf, true) {
+		for _, transformation := range flow.Transformations {
+			if previousFlowIndex, duplicate := seen[transformation.Callee]; duplicate {
+				t.Fatalf(
+					"transformation %q occurs in flows %d and %d",
+					nodeText(sf, transformation.Callee),
+					previousFlowIndex,
+					flowIndex,
+				)
+			}
+			seen[transformation.Callee] = flowIndex
+		}
+	}
+}
+
 func TestPipingFlows_SkipsParentheses(t *testing.T) {
 	t.Parallel()
 

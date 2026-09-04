@@ -93,7 +93,7 @@ func formatContextTypes(c *checker.Checker, types []*checker.Type) string {
 
 func missingEffectContextRelatedInformation(c *checker.Checker, ctx *rule.Context, errorNode *ast.Node, missingTypes []*checker.Type) []*ast.Diagnostic {
 	provideLocation := findRelatedProvideLocation(ctx.TypeParser, c, ctx.SourceFile, errorNode)
-	if provideLocation.Node == nil || provideLocation.LayerNode == nil {
+	if provideLocation.LayerNode == nil {
 		return nil
 	}
 	layerDiagnostics := findRelatedLayerProviderDiagnostics(c, ctx, provideLocation.LayerNode, missingTypes)
@@ -113,7 +113,6 @@ func missingEffectContextRelatedInformation(c *checker.Checker, ctx *rule.Contex
 }
 
 type provideLocation struct {
-	Node      *ast.Node
 	LayerNode *ast.Node
 	Location  core.TextRange
 }
@@ -139,14 +138,9 @@ func findRelatedProvideLocation(tp *typeparser.TypeParser, c *checker.Checker, s
 			if !tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "provide") {
 				continue
 			}
-			callNode := transformation.Node
-			if callNode == nil {
-				callNode = transformation.Callee
-			}
 			return provideLocation{
-				Node:      callNode,
 				LayerNode: firstNode(transformation.Args),
-				Location:  scanner.GetErrorRangeForNode(sf, callNode),
+				Location:  scanner.GetErrorRangeForNode(sf, transformation.Callee),
 			}
 		}
 	}
@@ -256,9 +250,11 @@ func findTransformationIndexContainingNode(flow *typeparser.PipingFlow, target *
 	if flow == nil || target == nil {
 		return -1
 	}
+	target = ast.SkipParentheses(target)
 	for i := range flow.Transformations {
 		transformation := flow.Transformations[i]
-		if transformation.Node == target || transformation.Callee == target {
+		callee := ast.SkipParentheses(transformation.Callee)
+		if callee == target || callee != nil && callee.Pos() == target.Pos() && target.End() >= callee.End() {
 			return i
 		}
 	}

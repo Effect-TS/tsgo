@@ -24,6 +24,9 @@ func runMapSomeToAsSomeFix(ctx *fixable.Context) []ls.CodeAction {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue
 		}
+		if match.Transformation == nil || match.EffectModuleNode == nil {
+			return nil
+		}
 
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.asSome",
@@ -34,17 +37,9 @@ func runMapSomeToAsSomeFix(ctx *fixable.Context) []ls.CodeAction {
 					tracker.NewIdentifier("asSome"),
 					ast.NodeFlagsNone,
 				)
-				var replacement = asSome
-				if match.SubjectNode != nil {
-					replacement = tracker.NewCallExpression(
-						asSome,
-						nil,
-						nil,
-						tracker.NewNodeList([]*ast.Node{tracker.DeepCloneNode(match.SubjectNode)}),
-						ast.NodeFlagsNone,
-					)
-				}
-				tracker.ReplaceNode(ctx.SourceFile, match.CallNode, replacement, nil)
+				tracker.ReplacePipingFlowTransformation(ctx.SourceFile, match.Transformation, rewriter.PipingFlowTransformationReplacement{
+					Callee: asSome,
+				})
 			},
 		}); action != nil {
 			return []ls.CodeAction{*action}

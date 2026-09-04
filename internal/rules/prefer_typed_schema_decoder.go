@@ -66,17 +66,17 @@ func AnalyzePreferTypedSchemaDecoder(tp *typeparser.TypeParser, c *checker.Check
 	}
 
 	var matches []PreferTypedSchemaDecoderMatch
-	seen := make(map[*ast.Node]bool)
+	handledDecoderNames := make(map[*ast.Node]struct{})
 
 	for _, flow := range tp.PipingFlows(sf, false) {
 		inputNode := flow.Subject.Node
 		inputType := flow.Subject.OutType
 		for _, transformation := range flow.Transformations {
 			callee, schema := schemaDecoderTransformation(transformation)
-			if callee != nil && schema != nil && !seen[transformation.Node] {
+			if callee != nil && schema != nil {
 				if match := analyzeTypedSchemaDecoderApplication(tp, c, sf, callee, schema, inputNode, inputType); match != nil {
 					matches = append(matches, *match)
-					seen[transformation.Node] = true
+					handledDecoderNames[match.DecoderName] = struct{}{}
 				}
 			}
 			inputNode = nil
@@ -89,14 +89,16 @@ func AnalyzePreferTypedSchemaDecoder(tp *typeparser.TypeParser, c *checker.Check
 		if node == nil {
 			return false
 		}
-		if node.Kind == ast.KindCallExpression && !seen[node] {
+		if node.Kind == ast.KindCallExpression {
 			call := node.AsCallExpression()
 			if call.Arguments != nil && len(call.Arguments.Nodes) > 0 && call.Expression != nil && call.Expression.Kind == ast.KindCallExpression {
 				factory := call.Expression.AsCallExpression()
 				if factory.Arguments != nil && len(factory.Arguments.Nodes) > 0 {
 					if match := analyzeTypedSchemaDecoderApplication(tp, c, sf, factory.Expression, factory.Arguments.Nodes[0], call.Arguments.Nodes[0], nil); match != nil {
-						matches = append(matches, *match)
-						seen[node] = true
+						if _, handled := handledDecoderNames[match.DecoderName]; !handled {
+							matches = append(matches, *match)
+							handledDecoderNames[match.DecoderName] = struct{}{}
+						}
 					}
 				}
 			}

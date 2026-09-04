@@ -26,13 +26,10 @@ Effect version: 4.0.0
     
     export const fixable = program.pipe(
       Effect.catchTag("AppError", (error) => {
-      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        if (error.reason._tag === "RetryReason") return Effect.succeed("retry")
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        return Effect.fail(error)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      })
-    ~~~~
+      ~~~~~~~~~~~~~~~
 !!! warning TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+        if (error.reason._tag === "RetryReason") return Effect.succeed("retry")
+        return Effect.fail(error)
+      })
     )
     

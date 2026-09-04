@@ -24,8 +24,7 @@ func runCatchDieToOrDieFix(ctx *fixable.Context) []ls.CodeAction {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue
 		}
-		if match.EffectModule == nil || match.Transformation == nil || match.HasTypeArguments ||
-			(match.IsDataApplication && match.Input == nil) {
+		if match.Transformation == nil || match.EffectModule == nil || match.HasTypeArguments {
 			return nil
 		}
 
@@ -38,18 +37,9 @@ func runCatchDieToOrDieFix(ctx *fixable.Context) []ls.CodeAction {
 					tracker.NewIdentifier("orDie"),
 					ast.NodeFlagsNone,
 				)
-				replacement := orDie
-				if match.IsDataApplication {
-					replacement = tracker.NewCallExpression(
-						orDie,
-						nil,
-						nil,
-						tracker.NewNodeList([]*ast.Node{tracker.DeepCloneNode(match.Input)}),
-						ast.NodeFlagsNone,
-					)
-				}
-				ast.SetParentInChildren(replacement)
-				tracker.ReplaceNode(ctx.SourceFile, match.Transformation, replacement, nil)
+				tracker.ReplacePipingFlowTransformation(ctx.SourceFile, match.Transformation, rewriter.PipingFlowTransformationReplacement{
+					Callee: orDie,
+				})
 			},
 		}); action != nil {
 			return []ls.CodeAction{*action}

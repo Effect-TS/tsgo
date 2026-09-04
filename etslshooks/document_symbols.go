@@ -198,15 +198,15 @@ func collectFlowDocumentSymbols(tp *typeparser.TypeParser, c *checker.Checker, s
 			))
 		}
 		for j, transformation := range flow.Transformations {
-			if transformation.Node == nil {
+			if transformation.Callee == nil {
 				continue
 			}
 			children = append(children, newNamedDocumentSymbol(
 				sf,
 				langService,
-				transformation.Node,
+				transformation.Callee,
 				strconv.Itoa(j)+": "+debugFlowTransformationText(sf, &transformation),
-				typeToDetail(c, transformation.OutType, transformation.Node),
+				typeToDetail(c, transformation.OutType, transformation.Callee),
 				lsproto.SymbolKindFunction,
 			))
 		}
@@ -330,13 +330,10 @@ func debugFlowNodeText(sf *ast.SourceFile, node *ast.Node) string {
 }
 
 func debugFlowTransformationText(sf *ast.SourceFile, transformation *typeparser.PipingFlowTransformation) string {
-	if transformation == nil {
+	if transformation == nil || transformation.Callee == nil {
 		return "<unknown>"
 	}
-	if transformation.Callee != nil {
-		return debugFlowNodeText(sf, transformation.Callee)
-	}
-	return debugFlowNodeText(sf, transformation.Node)
+	return debugFlowNodeText(sf, transformation.Callee)
 }
 
 func layerSymbolDetail(tp *typeparser.TypeParser, c *checker.Checker, node *ast.Node) *string {

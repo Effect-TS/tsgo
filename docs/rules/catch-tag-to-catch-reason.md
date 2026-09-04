@@ -37,20 +37,11 @@ declare const program: Effect.Effect<string, AppError>
 export const fixable = program.pipe(
   Effect.catchTag("AppError", (error) => {
 /**
-  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ effecttsgo(catch-tag-to-catch-reason): Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically.
+  ^^^^^^^^^^^^^^^ effecttsgo(catch-tag-to-catch-reason): Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically.
 */
     if (error.reason._tag === "RetryReason") return Effect.succeed("retry")
-/**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-*/
     return Effect.fail(error)
-/**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-*/
   })
-/**
-^^^^
-*/
 )
 ```
 
