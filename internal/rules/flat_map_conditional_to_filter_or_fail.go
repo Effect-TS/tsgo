@@ -65,7 +65,8 @@ func AnalyzeFlatMapConditionalToFilterOrFail(tp *typeparser.TypeParser, c *check
 	for _, flow := range tp.PipingFlows(sf, true) {
 		for index := range flow.Transformations {
 			transformation := &flow.Transformations[index]
-			callee, args := transformation.AppliedCalleeAndArgs()
+			callee := transformation.Callee
+			args := transformation.Args
 			if callee == nil || len(args) != 1 || !tp.IsNodeReferenceToEffectModuleApi(callee, "flatMap") {
 				continue
 			}

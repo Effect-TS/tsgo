@@ -92,8 +92,8 @@ Subject Type: Duration
 
 Transformations (1):
   [0] kind: call
-      callee: Duration.isLessThanOrEqualTo(Duration.seconds(10))
-      args: (constant)
+      callee: Duration.isLessThanOrEqualTo
+      args: [Duration.seconds(10)]
       outType: boolean
 
 === Piping Flow ===

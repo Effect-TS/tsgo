@@ -163,6 +163,41 @@ export const called = identity<string>("value")
 	}
 }
 
+func TestPipingFlows_DecomposesOnlyCurriedPipeableOverloads(t *testing.T) {
+	t.Parallel()
+
+	source := `
+import { Effect } from "effect"
+
+declare const program: Effect.Effect<number, string>
+
+export const caught = Effect.catch(() => Effect.succeed(0))(program)
+export const named = Effect.fn("named")(function*() {
+  return 1
+})
+`
+
+	_, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectV4Internal(t, source)
+	defer done()
+
+	caughtCall := findVariableInitializerCallByName(t, sf, "caught")
+	caughtFlow := tp.LongestPipingFlowAt(caughtCall.AsNode(), false)
+	if caughtFlow == nil {
+		t.Fatal("expected curried catch flow")
+	}
+	if got := strings.TrimSpace(nodeText(sf, caughtFlow.Subject.Node)); got != "program" {
+		t.Fatalf("caught subject = %q, want program", got)
+	}
+	assertSingleTransformation(t, sf, caughtFlow, TransformationKindCall, "Effect.catch", []string{"() => Effect.succeed(0)"})
+
+	namedCall := findVariableInitializerCallByName(t, sf, "named")
+	namedFlow := tp.LongestPipingFlowAt(namedCall.AsNode(), false)
+	if namedFlow == nil {
+		t.Fatal("expected named Effect.fn call flow")
+	}
+	assertSingleTransformation(t, sf, namedFlow, TransformationKindCall, `Effect.fn("named")`, nil)
+}
+
 func TestPipingFlows_TransformationOccurrencesAreUnique(t *testing.T) {
 	t.Parallel()
 

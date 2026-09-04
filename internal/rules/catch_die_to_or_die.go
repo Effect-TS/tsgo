@@ -60,7 +60,8 @@ func AnalyzeCatchDieToOrDie(tp *typeparser.TypeParser, _ *checker.Checker, sf *a
 		inputType := flow.Subject.OutType
 		for i := range flow.Transformations {
 			transformation := &flow.Transformations[i]
-			callee, args := transformation.AppliedCalleeAndArgs()
+			callee := transformation.Callee
+			args := transformation.Args
 			methodName, effectModule, ok := catchDieMethod(tp, callee)
 			if ok && len(args) == 1 {
 				handler, _, _ := tp.UnwrapIdentityForwarder(args[0])

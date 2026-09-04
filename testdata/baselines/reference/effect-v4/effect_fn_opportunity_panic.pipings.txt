@@ -94,8 +94,8 @@ Subject Type: { baseUrl: string; }
 
 Transformations (1):
   [0] kind: call
-      callee: Layer.succeed(ApiConfig)
-      args: (constant)
+      callee: Layer.succeed
+      args: [ApiConfig]
       outType: Layer<ApiConfig, never, never>
 
 === Piping Flow ===
@@ -126,8 +126,8 @@ Transformations (3):
       args: (constant)
       outType: Effect<{ getTodo: (id: number) => Effect<Todo, DecodeError | InvalidStatusError | RequestError, never>; getUser: (id: number) => Effect<User, DecodeError | InvalidStatusError | RequestError, never>; }, never, ApiConfig | HttpClient>
   [1] kind: call
-      callee: Layer.effect(JsonPlaceholder)
-      args: (constant)
+      callee: Layer.effect
+      args: [JsonPlaceholder]
       outType: Layer<JsonPlaceholder, never, ApiConfig | HttpClient>
   [2] kind: pipeable
       callee: Layer.provide
