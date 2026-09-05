@@ -28,12 +28,12 @@ var EffectInVoidSuccess = rule.Rule{
 				continue
 			}
 
-			realEffect := ctx.TypeParser.EffectType(entry.RealType, entry.ValueNode)
+			realEffect := ctx.TypeParser.EffectType(entry.RealType)
 			if realEffect == nil {
 				continue
 			}
 
-			expectedEffect := ctx.TypeParser.EffectType(entry.ExpectedType, entry.Node)
+			expectedEffect := ctx.TypeParser.EffectType(entry.ExpectedType)
 			if expectedEffect == nil {
 				continue
 			}
@@ -46,7 +46,7 @@ var EffectInVoidSuccess = rule.Rule{
 			// Unroll the real Effect's success type into union members
 			// and check if any member is strictly an Effect type
 			members := ctx.TypeParser.UnrollUnionMembers(realEffect.A)
-			voidedEffect := findFirstStrictEffect(ctx.TypeParser, ctx.Checker, members, entry.Node)
+			voidedEffect := findFirstStrictEffect(ctx.TypeParser, ctx.Checker, members)
 			if voidedEffect != nil {
 				diag := ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(entry.Node), tsdiag.There_is_a_nested_0_in_the_void_success_channel_beware_that_this_could_lead_to_nested_Effect_Effect_that_won_t_be_executed_effect_effectInVoidSuccess, nil, ctx.Checker.TypeToString(voidedEffect))
 				diags = append(diags, diag)
@@ -59,9 +59,9 @@ var EffectInVoidSuccess = rule.Rule{
 
 // findFirstStrictEffect returns the first type in the slice that is strictly an Effect type,
 // or nil if none are found. This mirrors the Nano.firstSuccessOf pattern in the TS reference.
-func findFirstStrictEffect(tp *typeparser.TypeParser, _ *checker.Checker, types []*checker.Type, atLocation *ast.Node) *checker.Type {
+func findFirstStrictEffect(tp *typeparser.TypeParser, _ *checker.Checker, types []*checker.Type) *checker.Type {
 	for _, t := range types {
-		if tp.StrictIsEffectType(t, atLocation) {
+		if tp.StrictIsEffectType(t) {
 			return t
 		}
 	}

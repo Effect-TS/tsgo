@@ -44,7 +44,7 @@ var CatchUnfailableEffect = rule.Rule{
 				}
 
 				// Parse input type as an Effect
-				effect := ctx.TypeParser.EffectType(inputType, transformation.Callee)
+				effect := ctx.TypeParser.EffectType(inputType)
 				if effect == nil {
 					continue
 				}

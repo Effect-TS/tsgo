@@ -4,13 +4,13 @@ import (
 	"strings"
 
 	"github.com/effect-ts/tsgo/internal/refactor"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/astnav"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 	"github.com/microsoft/TypeScript/tsc/shim/core"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
-	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/microsoft/TypeScript/tsc/shim/scanner"
 )
 
@@ -84,7 +84,7 @@ func runWriteTagClassAccessors(ctx *refactor.Context) []ls.CodeAction {
 		return nil
 	}
 
-	contextTag := ctx.TypeParser.ContextTag(classType, classNode)
+	contextTag := ctx.TypeParser.ContextTag(classType)
 	if contextTag == nil || contextTag.Shape == nil {
 		return nil
 	}
@@ -334,7 +334,7 @@ func buildWrappedReturnTypeText(
 	effectIdentifier string,
 ) string {
 	// Try to parse as Effect type
-	effect := tp.EffectType(returnType, classNode)
+	effect := tp.EffectType(returnType)
 	if effect != nil {
 		aStr := c.TypeToStringEx(effect.A, classNode, checker.TypeFormatFlagsNoTruncation, nil)
 		eStr := c.TypeToStringEx(effect.E, classNode, checker.TypeFormatFlagsNoTruncation, nil)

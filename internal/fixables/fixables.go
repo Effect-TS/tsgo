@@ -16,9 +16,12 @@ var All = []fixable.Fixable{
 	MissingStarInYieldEffectGenFix,
 	CatchDieToOrDieFix,
 	CatchAllToMapErrorFix,
+	CatchAllTagDispatchToCatchTagFix,
 	CatchTagToCatchReasonFix,
 	AllOfMapToForEachFix,
 	FlatMapToMapFix,
+	MatchEffectToMatchFix,
+	MatchEffectToMapBothFix,
 	FlatMapConditionalToFilterOrFailFix,
 	MapSomeToAsSomeFix,
 	OptionMatchToFromOptionFix,
@@ -47,6 +50,7 @@ var All = []fixable.Fixable{
 	UnsafeEffectTypeAssertionFix,
 	MissingEffectErrorCatchFix,
 	MultipleEffectProvideFix,
+	ProvideLayerSucceedToProvideServiceFix,
 	SchemaStructWithTagFix,
 	SchemaNumberFix,
 	RedundantSchemaTagIdentifierRemoveIdentifierFix,
@@ -58,6 +62,7 @@ var All = []fixable.Fixable{
 	PreferUnsafeConstructorFix,
 	PreferTypedSchemaDecoderFix,
 	AcquireReleaseDisposableFix,
+	RunOfExitToRunExitFix,
 }
 
 // ByErrorCode finds all fixables that handle a given error code.

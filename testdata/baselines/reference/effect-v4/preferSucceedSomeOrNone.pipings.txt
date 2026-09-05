@@ -1,4 +1,4 @@
-==== /.src/preferSucceedSomeOrNone.ts (22 flows) ====
+==== /.src/preferSucceedSomeOrNone.ts (29 flows) ====
 
 === Piping Flow ===
 Location: 5:33 - 5:63
@@ -201,7 +201,153 @@ Transformations (2):
       outType: Effect<Option<number>, never, never>
 
 === Piping Flow ===
-Location: 35:48 - 35:86
+Location: 35:47 - 35:99
+Node: pipe(1, Option.some, Effect.succeed, Effect.asVoid)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (3):
+  [0] kind: pipe
+      callee: Option.some
+      args: (constant)
+      outType: Option<number>
+  [1] kind: pipe
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Option<number>, never, never>
+  [2] kind: pipe
+      callee: Effect.asVoid
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 38:51 - 38:102
+Node: pipe(Option.none(), Effect.succeed, Effect.asVoid)
+Node Kind: KindCallExpression
+
+Subject: Option.none()
+Subject Type: Option<never>
+
+Transformations (2):
+  [0] kind: pipe
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Option<never>, never, never>
+  [1] kind: pipe
+      callee: Effect.asVoid
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 39:49 - 39:100
+Node: Option.some(1).pipe(Effect.succeed, Effect.asVoid)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (3):
+  [0] kind: call
+      callee: Option.some
+      args: (constant)
+      outType: Option<number>
+  [1] kind: pipeable
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Option<number>, never, never>
+  [2] kind: pipeable
+      callee: Effect.asVoid
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 40:49 - 40:99
+Node: Option.none().pipe(Effect.succeed, Effect.asVoid)
+Node Kind: KindCallExpression
+
+Subject: Option.none()
+Subject Type: Option<never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Option<never>, never, never>
+  [1] kind: pipeable
+      callee: Effect.asVoid
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 43:51 - 43:108
+Node: pipe(Option.some(1), Effect.succeed).pipe(Effect.asVoid)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (3):
+  [0] kind: call
+      callee: Option.some
+      args: (constant)
+      outType: Option<number>
+  [1] kind: pipe
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Option<number>, never, never>
+  [2] kind: pipeable
+      callee: Effect.asVoid
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 44:51 - 44:108
+Node: pipe(Option.some(1).pipe(Effect.succeed), Effect.asVoid)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (3):
+  [0] kind: call
+      callee: Option.some
+      args: (constant)
+      outType: Option<number>
+  [1] kind: pipeable
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Option<number>, never, never>
+  [2] kind: pipe
+      callee: Effect.asVoid
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 45:57 - 45:114
+Node: pipe(1, Option.some).pipe(Effect.succeed, Effect.asVoid)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (3):
+  [0] kind: pipe
+      callee: Option.some
+      args: (constant)
+      outType: Option<number>
+  [1] kind: pipeable
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Option<number>, never, never>
+  [2] kind: pipeable
+      callee: Effect.asVoid
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 48:48 - 48:86
 Node: Effect.succeed(Option.none<number>())
 Node Kind: KindCallExpression
 
@@ -215,7 +361,7 @@ Transformations (1):
       outType: Effect<Option<number>, never, never>
 
 === Piping Flow ===
-Location: 38:49 - 38:102
+Location: 51:49 - 51:102
 Node: Effect.succeed<Option.Option<number>>(Option.none())
 Node Kind: KindCallExpression
 
@@ -229,7 +375,7 @@ Transformations (1):
       outType: Effect<Option<number>, never, never>
 
 === Piping Flow ===
-Location: 42:43 - 42:65
+Location: 55:43 - 55:65
 Node: Effect.succeedSome(1)
 Node Kind: KindCallExpression
 
@@ -243,7 +389,7 @@ Transformations (1):
       outType: Effect<Option<number>, never, never>
 
 === Piping Flow ===
-Location: 45:44 - 45:72
+Location: 58:44 - 58:72
 Node: Effect.succeed(Option.none)
 Node Kind: KindCallExpression
 
@@ -257,7 +403,7 @@ Transformations (1):
       outType: Effect<<A = never>() => Option<A>, never, never>
 
 === Piping Flow ===
-Location: 46:44 - 46:72
+Location: 59:44 - 59:72
 Node: Effect.succeed(Option.some)
 Node Kind: KindCallExpression
 
@@ -271,7 +417,7 @@ Transformations (1):
       outType: Effect<<A>(value: A) => Option<A>, never, never>
 
 === Piping Flow ===
-Location: 49:28 - 49:50
+Location: 62:28 - 62:50
 Node: Effect.succeed(value)
 Node Kind: KindCallExpression
 
@@ -285,7 +431,7 @@ Transformations (1):
       outType: Effect<A, never, never>
 
 === Piping Flow ===
-Location: 53:25 - 53:44
+Location: 66:25 - 66:44
 Node: Option.some(value)
 Node Kind: KindCallExpression
 
@@ -299,7 +445,7 @@ Transformations (1):
       outType: Option<A>
 
 === Piping Flow ===
-Location: 57:43 - 57:78
+Location: 70:43 - 70:78
 Node: LocalEffect.succeed(Option.none())
 Node Kind: KindCallExpression
 
@@ -313,7 +459,7 @@ Transformations (1):
       outType: Effect<Option<never>, never, never>
 
 === Piping Flow ===
-Location: 58:47 - 58:82
+Location: 71:47 - 71:82
 Node: Effect.succeed(LocalOption.none())
 Node Kind: KindCallExpression
 
@@ -327,7 +473,7 @@ Transformations (1):
       outType: Effect<Option<never>, never, never>
 
 === Piping Flow ===
-Location: 59:47 - 59:83
+Location: 72:47 - 72:83
 Node: Effect.succeed(LocalOption.some(1))
 Node Kind: KindCallExpression
 

@@ -46,45 +46,74 @@ flowchart TB
   44[/"type: 1<br/>node: 1"/]
   45["type: Option#lt;number#gt;<br/>callee: Option.some<br/>args: #91;#93;"]
   46["type: Effect#lt;Option#lt;number#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  47[/"type: Option#lt;number#gt;<br/>node: Option.none#lt;number#gt;#40;#41;"/]
-  48["type: Effect#lt;Option#lt;number#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  49[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  50[/"type: Option#lt;number#gt;<br/>node: Option.none#40;#41;"/]
-  51["type: Effect#lt;Option#lt;number#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  52[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  53[/"type: Effect#lt;Option#lt;never#gt;, never, never#gt;<br/>node: Effect.succeedNone"/]
+  47[/"type: 1<br/>node: 1"/]
+  48["type: Option#lt;number#gt;<br/>callee: Option.some<br/>args: #91;#93;"]
+  49["type: Effect#lt;Option#lt;number#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  50["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.asVoid<br/>args: #91;#93;"]
+  51[/"type: Option#lt;never#gt;<br/>node: Option.none#40;#41;"/]
+  52["type: Effect#lt;Option#lt;never#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  53["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.asVoid<br/>args: #91;#93;"]
   54[/"type: 1<br/>node: 1"/]
-  55["type: Effect#lt;Option#lt;number#gt;, never, never#gt;<br/>callee: Effect.succeedSome<br/>args: #91;#93;"]
-  56[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;Option#lt;A#gt;, never, never#gt;<br/>node: Effect.succeedSome"/]
-  57[/"type: #lt;A = never#gt;#40;#41; =#gt; Option#lt;A#gt;<br/>node: Option.none"/]
-  58["type: Effect#lt;#lt;A = never#gt;#40;#41; =#gt; Option#lt;A#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  59[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  60[/"type: #lt;A#gt;#40;value: A#41; =#gt; Option#lt;A#gt;<br/>node: Option.some"/]
-  61["type: Effect#lt;#lt;A#gt;#40;value: A#41; =#gt; Option#lt;A#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  62[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  63[/"type: #123; succeed: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;; #125;<br/>node: #123;#92;n  succeed: #lt;A#gt;#40;value: A#41; =#gt; Effect.succeed#40;value#41;#92;n#125;"/]
-  64[["type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: #lt;A#gt;#40;value: A#41; =#gt; Effect.succeed#40;value#41;"]]
-  65[/"type: A<br/>node: value"/]
-  66["type: Effect#lt;A, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  67[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  68[/"type: #123; none: #40;#41; =#gt; Option#lt;never#gt;; some: #lt;A#gt;#40;value: A#41; =#gt; Option#lt;A#gt;; #125;<br/>node: #123;#92;n  none: #40;#41; =#gt; Option.none#40;#41;,#92;n  some: #lt;A#gt;#40;value: A#41; =#gt; Option.some#40;value#41;#92;n#125;"/]
-  69[["type: #40;#41; =#gt; Option#lt;never#gt;<br/>node: #40;#41; =#gt; Option.none#40;#41;"]]
-  70[/"type: Option#lt;never#gt;<br/>node: Option.none#40;#41;"/]
-  71[["type: #lt;A#gt;#40;value: A#41; =#gt; Option#lt;A#gt;<br/>node: #lt;A#gt;#40;value: A#41; =#gt; Option.some#40;value#41;"]]
-  72[/"type: A<br/>node: value"/]
-  73["type: Option#lt;A#gt;<br/>callee: Option.some<br/>args: #91;#93;"]
-  74[/"type: #lt;A#gt;#40;value: A#41; =#gt; Option#lt;A#gt;<br/>node: Option.some"/]
-  75[/"type: Option#lt;never#gt;<br/>node: Option.none#40;#41;"/]
-  76["type: Effect#lt;Option#lt;never#gt;, never, never#gt;<br/>callee: LocalEffect.succeed<br/>args: #91;#93;"]
-  77[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: LocalEffect.succeed"/]
-  78[/"type: Option#lt;never#gt;<br/>node: LocalOption.none#40;#41;"/]
-  79["type: Effect#lt;Option#lt;never#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  80[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  81[/"type: 1<br/>node: 1"/]
-  82["type: Option#lt;number#gt;<br/>callee: LocalOption.some<br/>args: #91;#93;"]
-  83[/"type: #lt;A#gt;#40;value: A#41; =#gt; Option#lt;A#gt;<br/>node: LocalOption.some"/]
-  84["type: Effect#lt;Option#lt;number#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  85[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  55["type: Option#lt;number#gt;<br/>callee: Option.some<br/>args: #91;#93;"]
+  56[/"type: #lt;A#gt;#40;value: A#41; =#gt; Option#lt;A#gt;<br/>node: Option.some"/]
+  57["type: Effect#lt;Option#lt;number#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  58["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.asVoid<br/>args: #91;#93;"]
+  59[/"type: Option#lt;never#gt;<br/>node: Option.none#40;#41;"/]
+  60["type: Effect#lt;Option#lt;never#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  61["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.asVoid<br/>args: #91;#93;"]
+  62[/"type: 1<br/>node: 1"/]
+  63["type: Option#lt;number#gt;<br/>callee: Option.some<br/>args: #91;#93;"]
+  64[/"type: #lt;A#gt;#40;value: A#41; =#gt; Option#lt;A#gt;<br/>node: Option.some"/]
+  65["type: Effect#lt;Option#lt;number#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  66["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.asVoid<br/>args: #91;#93;"]
+  67[/"type: 1<br/>node: 1"/]
+  68["type: Option#lt;number#gt;<br/>callee: Option.some<br/>args: #91;#93;"]
+  69[/"type: #lt;A#gt;#40;value: A#41; =#gt; Option#lt;A#gt;<br/>node: Option.some"/]
+  70["type: Effect#lt;Option#lt;number#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  71["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.asVoid<br/>args: #91;#93;"]
+  72[/"type: 1<br/>node: 1"/]
+  73["type: Option#lt;number#gt;<br/>callee: Option.some<br/>args: #91;#93;"]
+  74["type: Effect#lt;Option#lt;number#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  75["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.asVoid<br/>args: #91;#93;"]
+  76[/"type: Option#lt;number#gt;<br/>node: Option.none#lt;number#gt;#40;#41;"/]
+  77["type: Effect#lt;Option#lt;number#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  78[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  79[/"type: Option#lt;number#gt;<br/>node: Option.none#40;#41;"/]
+  80["type: Effect#lt;Option#lt;number#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  81[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  82[/"type: Effect#lt;Option#lt;never#gt;, never, never#gt;<br/>node: Effect.succeedNone"/]
+  83[/"type: 1<br/>node: 1"/]
+  84["type: Effect#lt;Option#lt;number#gt;, never, never#gt;<br/>callee: Effect.succeedSome<br/>args: #91;#93;"]
+  85[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;Option#lt;A#gt;, never, never#gt;<br/>node: Effect.succeedSome"/]
+  86[/"type: #lt;A = never#gt;#40;#41; =#gt; Option#lt;A#gt;<br/>node: Option.none"/]
+  87["type: Effect#lt;#lt;A = never#gt;#40;#41; =#gt; Option#lt;A#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  88[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  89[/"type: #lt;A#gt;#40;value: A#41; =#gt; Option#lt;A#gt;<br/>node: Option.some"/]
+  90["type: Effect#lt;#lt;A#gt;#40;value: A#41; =#gt; Option#lt;A#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  91[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  92[/"type: #123; succeed: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;; #125;<br/>node: #123;#92;n  succeed: #lt;A#gt;#40;value: A#41; =#gt; Effect.succeed#40;value#41;#92;n#125;"/]
+  93[["type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: #lt;A#gt;#40;value: A#41; =#gt; Effect.succeed#40;value#41;"]]
+  94[/"type: A<br/>node: value"/]
+  95["type: Effect#lt;A, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  96[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  97[/"type: #123; none: #40;#41; =#gt; Option#lt;never#gt;; some: #lt;A#gt;#40;value: A#41; =#gt; Option#lt;A#gt;; #125;<br/>node: #123;#92;n  none: #40;#41; =#gt; Option.none#40;#41;,#92;n  some: #lt;A#gt;#40;value: A#41; =#gt; Option.some#40;value#41;#92;n#125;"/]
+  98[["type: #40;#41; =#gt; Option#lt;never#gt;<br/>node: #40;#41; =#gt; Option.none#40;#41;"]]
+  99[/"type: Option#lt;never#gt;<br/>node: Option.none#40;#41;"/]
+  100[["type: #lt;A#gt;#40;value: A#41; =#gt; Option#lt;A#gt;<br/>node: #lt;A#gt;#40;value: A#41; =#gt; Option.some#40;value#41;"]]
+  101[/"type: A<br/>node: value"/]
+  102["type: Option#lt;A#gt;<br/>callee: Option.some<br/>args: #91;#93;"]
+  103[/"type: #lt;A#gt;#40;value: A#41; =#gt; Option#lt;A#gt;<br/>node: Option.some"/]
+  104[/"type: Option#lt;never#gt;<br/>node: Option.none#40;#41;"/]
+  105["type: Effect#lt;Option#lt;never#gt;, never, never#gt;<br/>callee: LocalEffect.succeed<br/>args: #91;#93;"]
+  106[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: LocalEffect.succeed"/]
+  107[/"type: Option#lt;never#gt;<br/>node: LocalOption.none#40;#41;"/]
+  108["type: Effect#lt;Option#lt;never#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  109[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  110[/"type: 1<br/>node: 1"/]
+  111["type: Option#lt;number#gt;<br/>callee: LocalOption.some<br/>args: #91;#93;"]
+  112[/"type: #lt;A#gt;#40;value: A#41; =#gt; Option#lt;A#gt;<br/>node: LocalOption.some"/]
+  113["type: Effect#lt;Option#lt;number#gt;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  114[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
   3 -->|"kind: pipe"| 4
@@ -121,30 +150,52 @@ flowchart TB
   44 -->|"kind: pipe"| 45
   45 -->|"kind: pipe"| 46
   47 -->|"kind: pipe"| 48
-  49 -->|"kind: transformCallee"| 48
-  50 -->|"kind: pipe"| 51
-  52 -->|"kind: transformCallee"| 51
+  48 -->|"kind: pipe"| 49
+  49 -->|"kind: pipe"| 50
+  51 -->|"kind: pipe"| 52
+  52 -->|"kind: pipe"| 53
   54 -->|"kind: pipe"| 55
   56 -->|"kind: transformCallee"| 55
+  55 -->|"kind: pipe"| 57
   57 -->|"kind: pipe"| 58
-  59 -->|"kind: transformCallee"| 58
+  59 -->|"kind: pipe"| 60
   60 -->|"kind: pipe"| 61
-  62 -->|"kind: transformCallee"| 61
+  62 -->|"kind: pipe"| 63
+  64 -->|"kind: transformCallee"| 63
+  63 -->|"kind: pipe"| 65
   65 -->|"kind: pipe"| 66
-  67 -->|"kind: transformCallee"| 66
-  66 -->|"kind: potentialReturn"| 64
-  64 -->|"kind: usedBy"| 63
-  70 -->|"kind: potentialReturn"| 69
-  69 -->|"kind: usedBy"| 68
+  67 -->|"kind: pipe"| 68
+  69 -->|"kind: transformCallee"| 68
+  68 -->|"kind: pipe"| 70
+  70 -->|"kind: pipe"| 71
   72 -->|"kind: pipe"| 73
-  74 -->|"kind: transformCallee"| 73
-  73 -->|"kind: potentialReturn"| 71
-  71 -->|"kind: usedBy"| 68
-  75 -->|"kind: pipe"| 76
-  77 -->|"kind: transformCallee"| 76
-  78 -->|"kind: pipe"| 79
-  80 -->|"kind: transformCallee"| 79
-  81 -->|"kind: pipe"| 82
-  83 -->|"kind: transformCallee"| 82
-  82 -->|"kind: pipe"| 84
+  73 -->|"kind: pipe"| 74
+  74 -->|"kind: pipe"| 75
+  76 -->|"kind: pipe"| 77
+  78 -->|"kind: transformCallee"| 77
+  79 -->|"kind: pipe"| 80
+  81 -->|"kind: transformCallee"| 80
+  83 -->|"kind: pipe"| 84
   85 -->|"kind: transformCallee"| 84
+  86 -->|"kind: pipe"| 87
+  88 -->|"kind: transformCallee"| 87
+  89 -->|"kind: pipe"| 90
+  91 -->|"kind: transformCallee"| 90
+  94 -->|"kind: pipe"| 95
+  96 -->|"kind: transformCallee"| 95
+  95 -->|"kind: potentialReturn"| 93
+  93 -->|"kind: usedBy"| 92
+  99 -->|"kind: potentialReturn"| 98
+  98 -->|"kind: usedBy"| 97
+  101 -->|"kind: pipe"| 102
+  103 -->|"kind: transformCallee"| 102
+  102 -->|"kind: potentialReturn"| 100
+  100 -->|"kind: usedBy"| 97
+  104 -->|"kind: pipe"| 105
+  106 -->|"kind: transformCallee"| 105
+  107 -->|"kind: pipe"| 108
+  109 -->|"kind: transformCallee"| 108
+  110 -->|"kind: pipe"| 111
+  112 -->|"kind: transformCallee"| 111
+  111 -->|"kind: pipe"| 113
+  114 -->|"kind: transformCallee"| 113

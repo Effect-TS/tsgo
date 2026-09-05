@@ -13,9 +13,19 @@ Effect version: 3.19.19
 /.src/preferSucceedSomeOrNone.ts(28,66): suggestion TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
 /.src/preferSucceedSomeOrNone.ts(29,67): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
 /.src/preferSucceedSomeOrNone.ts(32,69): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+/.src/preferSucceedSomeOrNone.ts(35,73): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+/.src/preferSucceedSomeOrNone.ts(36,72): suggestion TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+/.src/preferSucceedSomeOrNone.ts(37,70): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+/.src/preferSucceedSomeOrNone.ts(38,69): suggestion TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+/.src/preferSucceedSomeOrNone.ts(41,52): suggestion TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
+/.src/preferSucceedSomeOrNone.ts(41,73): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+/.src/preferSucceedSomeOrNone.ts(42,52): suggestion TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
+/.src/preferSucceedSomeOrNone.ts(42,77): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+/.src/preferSucceedSomeOrNone.ts(43,58): suggestion TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
+/.src/preferSucceedSomeOrNone.ts(43,84): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
 
 
-==== /.src/preferSucceedSomeOrNone.ts (12 errors) ====
+==== /.src/preferSucceedSomeOrNone.ts (22 errors) ====
     import { Effect, Effect as Fx, Option, Option as O, pipe } from "effect"
     import { none as optionNone, some as optionSome } from "effect/Option"
     
@@ -71,6 +81,37 @@ Effect version: 3.19.19
     // Should trigger: adjacent transformations in an existing flow
     export const shouldTriggerTransformationPair = pipe(1, Option.some, Effect.succeed)
                                                                         ~~~~~~~~~~~~~~
+!!! suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+    
+    // Should trigger: replacing pipe prefixes retains later transformations
+    export const shouldTriggerSomeFunctionPipePrefix = pipe(1, Option.some, Effect.succeed, Effect.asVoid)
+                                                                            ~~~~~~~~~~~~~~
+!!! suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+    export const shouldTriggerNoneFunctionPipePrefix = pipe(Option.none(), Effect.succeed, Effect.asVoid)
+                                                                           ~~~~~~~~~~~~~~
+!!! suggestion TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+    export const shouldTriggerSomeMethodPipePrefix = Option.some(1).pipe(Effect.succeed, Effect.asVoid)
+                                                                         ~~~~~~~~~~~~~~
+!!! suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+    export const shouldTriggerNoneMethodPipePrefix = Option.none().pipe(Effect.succeed, Effect.asVoid)
+                                                                        ~~~~~~~~~~~~~~
+!!! suggestion TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+    
+    // Should trigger: nested pipe styles can be mixed around the replaced prefix
+    export const shouldTriggerFunctionThenMethodPipe = pipe(Option.some(1), Effect.succeed).pipe(Effect.asVoid)
+                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
+                                                                            ~~~~~~~~~~~~~~
+!!! suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+    export const shouldTriggerMethodThenFunctionPipe = pipe(Option.some(1).pipe(Effect.succeed), Effect.asVoid)
+                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
+                                                                                ~~~~~~~~~~~~~~
+!!! suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+    export const shouldTriggerNestedPrefixAcrossPipeStyles = pipe(1, Option.some).pipe(Effect.succeed, Effect.asVoid)
+                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
+                                                                                       ~~~~~~~~~~~~~~
 !!! suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
     
     // Should NOT trigger: an explicit None type argument cannot be preserved by Effect.succeedNone

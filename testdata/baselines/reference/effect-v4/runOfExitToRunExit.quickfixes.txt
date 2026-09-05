@@ -1,0 +1,667 @@
+=== Quick Fix Inventory ===
+
+[D1] (8:30-8:47) TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+  Fix 0: "Disable runOfExitToRunExit for this line"
+  Fix 1: "Disable runOfExitToRunExit for entire file"
+  Fix 2: "Replace with Effect.runPromiseExit"
+
+[D2] (9:37-9:54) TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+  Fix 0: "Disable runOfExitToRunExit for this line"
+  Fix 1: "Disable runOfExitToRunExit for entire file"
+  Fix 2: "Replace with Effect.runPromiseExit"
+
+[D3] (12:35-12:52) TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+  Fix 0: "Disable runOfExitToRunExit for this line"
+  Fix 1: "Disable runOfExitToRunExit for entire file"
+  Fix 2: "Replace with Effect.runPromiseExit"
+
+[D4] (16:37-16:54) TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+  Fix 0: "Disable runOfExitToRunExit for this line"
+  Fix 1: "Disable runOfExitToRunExit for entire file"
+  Fix 2: "Replace with Effect.runPromiseExit"
+
+[D5] (23:57-23:74) TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+  Fix 0: "Disable runOfExitToRunExit for this line"
+  Fix 1: "Disable runOfExitToRunExit for entire file"
+  Fix 2: "Replace with Effect.runPromiseExit"
+
+[D6] (24:60-24:77) TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+  Fix 0: "Disable runOfExitToRunExit for this line"
+  Fix 1: "Disable runOfExitToRunExit for entire file"
+  Fix 2: "Replace with Effect.runPromiseExit"
+
+[D7] (27:28-27:49) TS377123: `Effect.runPromiseWith` of `Effect.exit` re-implements `Effect.runPromiseExitWith`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+  Fix 0: "Disable runOfExitToRunExit for this line"
+  Fix 1: "Disable runOfExitToRunExit for entire file"
+  Fix 2: "Replace with Effect.runPromiseExitWith"
+
+[D8] (28:58-28:79) TS377123: `Effect.runPromiseWith` of `Effect.exit` re-implements `Effect.runPromiseExitWith`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+  Fix 0: "Disable runOfExitToRunExit for this line"
+  Fix 1: "Disable runOfExitToRunExit for entire file"
+  Fix 2: "Replace with Effect.runPromiseExitWith"
+
+[D9] (31:22-31:35) TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+  Fix 0: "Disable runOfExitToRunExit for this line"
+  Fix 1: "Disable runOfExitToRunExit for entire file"
+  Fix 2: "Replace with Effect.runPromiseExit"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable runOfExitToRunExit for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable runOfExitToRunExit for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.runPromiseExit" ===
+
+--- file:///.src/runOfExitToRunExit.ts ---
+import { Context, Effect, Effect as Fx, pipe } from "effect"
+
+declare const program: Effect.Effect<number, Error>
+declare const context: Context.Context<never>
+declare const signal: AbortSignal
+
+// Direct calls, including RunOptions.
+export const directPromise = Effect.runPromiseExit(program)
+export const directPromiseOptions = Effect.runPromise(Effect.exit(program), { signal })
+
+// The final transformation of the runner's effect argument is Effect.exit.
+export const methodPipeArgument = Effect.runPromise(program.pipe(
+  Effect.map((value) => value + 1),
+  Effect.exit
+))
+export const functionPipeArgument = Effect.runPromise(pipe(
+  program,
+  Effect.map((value) => value + 1),
+  Effect.exit
+))
+
+// The runner itself may also be used as a pipe transformation.
+export const sameMethodPipe = program.pipe(Effect.exit, Effect.runPromise)
+export const sameFunctionPipe = pipe(program, Effect.exit, Effect.runPromise)
+
+// Effect v4 context-bound runners have the same fusion.
+export const promiseWith = Effect.runPromiseWith(context)(Effect.exit(program), { signal })
+export const promiseWithPipe = program.pipe(Effect.exit, Effect.runPromiseWith(context))
+
+// Namespace aliases remain fixable.
+export const alias = Fx.runPromise((Fx.exit(program)))
+
+// Effect.exit is not the runner input in these cases.
+export const transformedExit = Effect.runPromise(
+  program.pipe(Effect.exit, Effect.map((exit) => exit))
+)
+const computedExit = Effect.exit(program)
+export const referencedExit = Effect.runPromise(computedExit)
+
+// Dedicated runners and ordinary runs are already good.
+export const alreadyPromiseExit = Effect.runPromiseExit(program)
+export const alreadySyncExit = Effect.runSyncExit(program)
+export const ordinaryRun = Effect.runPromise(program)
+
+// The sync rewrite is not equivalent for asynchronous effects: runSync throws
+// AsyncFiberError before Effect.exit completes, while runSyncExit returns it in
+// an Exit.Failure. Without a static synchrony guarantee these must not trigger.
+export const directSync = Effect.runSync(Effect.exit(program))
+export const sameFunctionPipeSync = pipe(program, Effect.exit, Effect.runSync)
+export const syncWith = Effect.runSyncWith(context)(program.pipe(Effect.exit))
+
+// Symbol verification excludes look-alike APIs.
+const LocalEffect = {
+  exit: <A, E>(effect: Effect.Effect<A, E>) => Effect.exit(effect),
+  runPromise: <A>(effect: Effect.Effect<A>) => Effect.runPromise(effect)
+}
+export const localExit = Effect.runPromise(LocalEffect.exit(Effect.succeed(1)))
+export const localRunner = LocalEffect.runPromise(Effect.exit(Effect.succeed(1)))
+
+
+=== [D2] Fix 0: "Disable runOfExitToRunExit for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable runOfExitToRunExit for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.runPromiseExit" ===
+
+--- file:///.src/runOfExitToRunExit.ts ---
+import { Context, Effect, Effect as Fx, pipe } from "effect"
+
+declare const program: Effect.Effect<number, Error>
+declare const context: Context.Context<never>
+declare const signal: AbortSignal
+
+// Direct calls, including RunOptions.
+export const directPromise = Effect.runPromise(Effect.exit(program))
+export const directPromiseOptions = Effect.runPromiseExit(program, { signal })
+
+// The final transformation of the runner's effect argument is Effect.exit.
+export const methodPipeArgument = Effect.runPromise(program.pipe(
+  Effect.map((value) => value + 1),
+  Effect.exit
+))
+export const functionPipeArgument = Effect.runPromise(pipe(
+  program,
+  Effect.map((value) => value + 1),
+  Effect.exit
+))
+
+// The runner itself may also be used as a pipe transformation.
+export const sameMethodPipe = program.pipe(Effect.exit, Effect.runPromise)
+export const sameFunctionPipe = pipe(program, Effect.exit, Effect.runPromise)
+
+// Effect v4 context-bound runners have the same fusion.
+export const promiseWith = Effect.runPromiseWith(context)(Effect.exit(program), { signal })
+export const promiseWithPipe = program.pipe(Effect.exit, Effect.runPromiseWith(context))
+
+// Namespace aliases remain fixable.
+export const alias = Fx.runPromise((Fx.exit(program)))
+
+// Effect.exit is not the runner input in these cases.
+export const transformedExit = Effect.runPromise(
+  program.pipe(Effect.exit, Effect.map((exit) => exit))
+)
+const computedExit = Effect.exit(program)
+export const referencedExit = Effect.runPromise(computedExit)
+
+// Dedicated runners and ordinary runs are already good.
+export const alreadyPromiseExit = Effect.runPromiseExit(program)
+export const alreadySyncExit = Effect.runSyncExit(program)
+export const ordinaryRun = Effect.runPromise(program)
+
+// The sync rewrite is not equivalent for asynchronous effects: runSync throws
+// AsyncFiberError before Effect.exit completes, while runSyncExit returns it in
+// an Exit.Failure. Without a static synchrony guarantee these must not trigger.
+export const directSync = Effect.runSync(Effect.exit(program))
+export const sameFunctionPipeSync = pipe(program, Effect.exit, Effect.runSync)
+export const syncWith = Effect.runSyncWith(context)(program.pipe(Effect.exit))
+
+// Symbol verification excludes look-alike APIs.
+const LocalEffect = {
+  exit: <A, E>(effect: Effect.Effect<A, E>) => Effect.exit(effect),
+  runPromise: <A>(effect: Effect.Effect<A>) => Effect.runPromise(effect)
+}
+export const localExit = Effect.runPromise(LocalEffect.exit(Effect.succeed(1)))
+export const localRunner = LocalEffect.runPromise(Effect.exit(Effect.succeed(1)))
+
+
+=== [D3] Fix 0: "Disable runOfExitToRunExit for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable runOfExitToRunExit for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.runPromiseExit" ===
+
+--- file:///.src/runOfExitToRunExit.ts ---
+import { Context, Effect, Effect as Fx, pipe } from "effect"
+
+declare const program: Effect.Effect<number, Error>
+declare const context: Context.Context<never>
+declare const signal: AbortSignal
+
+// Direct calls, including RunOptions.
+export const directPromise = Effect.runPromise(Effect.exit(program))
+export const directPromiseOptions = Effect.runPromise(Effect.exit(program), { signal })
+
+// The final transformation of the runner's effect argument is Effect.exit.
+export const methodPipeArgument = Effect.runPromiseExit(program.pipe(
+  Effect.map((value) => value + 1)
+))
+export const functionPipeArgument = Effect.runPromise(pipe(
+  program,
+  Effect.map((value) => value + 1),
+  Effect.exit
+))
+
+// The runner itself may also be used as a pipe transformation.
+export const sameMethodPipe = program.pipe(Effect.exit, Effect.runPromise)
+export const sameFunctionPipe = pipe(program, Effect.exit, Effect.runPromise)
+
+// Effect v4 context-bound runners have the same fusion.
+export const promiseWith = Effect.runPromiseWith(context)(Effect.exit(program), { signal })
+export const promiseWithPipe = program.pipe(Effect.exit, Effect.runPromiseWith(context))
+
+// Namespace aliases remain fixable.
+export const alias = Fx.runPromise((Fx.exit(program)))
+
+// Effect.exit is not the runner input in these cases.
+export const transformedExit = Effect.runPromise(
+  program.pipe(Effect.exit, Effect.map((exit) => exit))
+)
+const computedExit = Effect.exit(program)
+export const referencedExit = Effect.runPromise(computedExit)
+
+// Dedicated runners and ordinary runs are already good.
+export const alreadyPromiseExit = Effect.runPromiseExit(program)
+export const alreadySyncExit = Effect.runSyncExit(program)
+export const ordinaryRun = Effect.runPromise(program)
+
+// The sync rewrite is not equivalent for asynchronous effects: runSync throws
+// AsyncFiberError before Effect.exit completes, while runSyncExit returns it in
+// an Exit.Failure. Without a static synchrony guarantee these must not trigger.
+export const directSync = Effect.runSync(Effect.exit(program))
+export const sameFunctionPipeSync = pipe(program, Effect.exit, Effect.runSync)
+export const syncWith = Effect.runSyncWith(context)(program.pipe(Effect.exit))
+
+// Symbol verification excludes look-alike APIs.
+const LocalEffect = {
+  exit: <A, E>(effect: Effect.Effect<A, E>) => Effect.exit(effect),
+  runPromise: <A>(effect: Effect.Effect<A>) => Effect.runPromise(effect)
+}
+export const localExit = Effect.runPromise(LocalEffect.exit(Effect.succeed(1)))
+export const localRunner = LocalEffect.runPromise(Effect.exit(Effect.succeed(1)))
+
+
+=== [D4] Fix 0: "Disable runOfExitToRunExit for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable runOfExitToRunExit for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.runPromiseExit" ===
+
+--- file:///.src/runOfExitToRunExit.ts ---
+import { Context, Effect, Effect as Fx, pipe } from "effect"
+
+declare const program: Effect.Effect<number, Error>
+declare const context: Context.Context<never>
+declare const signal: AbortSignal
+
+// Direct calls, including RunOptions.
+export const directPromise = Effect.runPromise(Effect.exit(program))
+export const directPromiseOptions = Effect.runPromise(Effect.exit(program), { signal })
+
+// The final transformation of the runner's effect argument is Effect.exit.
+export const methodPipeArgument = Effect.runPromise(program.pipe(
+  Effect.map((value) => value + 1),
+  Effect.exit
+))
+export const functionPipeArgument = Effect.runPromiseExit(pipe(
+  program,
+  Effect.map((value) => value + 1)
+))
+
+// The runner itself may also be used as a pipe transformation.
+export const sameMethodPipe = program.pipe(Effect.exit, Effect.runPromise)
+export const sameFunctionPipe = pipe(program, Effect.exit, Effect.runPromise)
+
+// Effect v4 context-bound runners have the same fusion.
+export const promiseWith = Effect.runPromiseWith(context)(Effect.exit(program), { signal })
+export const promiseWithPipe = program.pipe(Effect.exit, Effect.runPromiseWith(context))
+
+// Namespace aliases remain fixable.
+export const alias = Fx.runPromise((Fx.exit(program)))
+
+// Effect.exit is not the runner input in these cases.
+export const transformedExit = Effect.runPromise(
+  program.pipe(Effect.exit, Effect.map((exit) => exit))
+)
+const computedExit = Effect.exit(program)
+export const referencedExit = Effect.runPromise(computedExit)
+
+// Dedicated runners and ordinary runs are already good.
+export const alreadyPromiseExit = Effect.runPromiseExit(program)
+export const alreadySyncExit = Effect.runSyncExit(program)
+export const ordinaryRun = Effect.runPromise(program)
+
+// The sync rewrite is not equivalent for asynchronous effects: runSync throws
+// AsyncFiberError before Effect.exit completes, while runSyncExit returns it in
+// an Exit.Failure. Without a static synchrony guarantee these must not trigger.
+export const directSync = Effect.runSync(Effect.exit(program))
+export const sameFunctionPipeSync = pipe(program, Effect.exit, Effect.runSync)
+export const syncWith = Effect.runSyncWith(context)(program.pipe(Effect.exit))
+
+// Symbol verification excludes look-alike APIs.
+const LocalEffect = {
+  exit: <A, E>(effect: Effect.Effect<A, E>) => Effect.exit(effect),
+  runPromise: <A>(effect: Effect.Effect<A>) => Effect.runPromise(effect)
+}
+export const localExit = Effect.runPromise(LocalEffect.exit(Effect.succeed(1)))
+export const localRunner = LocalEffect.runPromise(Effect.exit(Effect.succeed(1)))
+
+
+=== [D5] Fix 0: "Disable runOfExitToRunExit for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable runOfExitToRunExit for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Replace with Effect.runPromiseExit" ===
+
+--- file:///.src/runOfExitToRunExit.ts ---
+import { Context, Effect, Effect as Fx, pipe } from "effect"
+
+declare const program: Effect.Effect<number, Error>
+declare const context: Context.Context<never>
+declare const signal: AbortSignal
+
+// Direct calls, including RunOptions.
+export const directPromise = Effect.runPromise(Effect.exit(program))
+export const directPromiseOptions = Effect.runPromise(Effect.exit(program), { signal })
+
+// The final transformation of the runner's effect argument is Effect.exit.
+export const methodPipeArgument = Effect.runPromise(program.pipe(
+  Effect.map((value) => value + 1),
+  Effect.exit
+))
+export const functionPipeArgument = Effect.runPromise(pipe(
+  program,
+  Effect.map((value) => value + 1),
+  Effect.exit
+))
+
+// The runner itself may also be used as a pipe transformation.
+export const sameMethodPipe = program.pipe(Effect.runPromiseExit)
+export const sameFunctionPipe = pipe(program, Effect.exit, Effect.runPromise)
+
+// Effect v4 context-bound runners have the same fusion.
+export const promiseWith = Effect.runPromiseWith(context)(Effect.exit(program), { signal })
+export const promiseWithPipe = program.pipe(Effect.exit, Effect.runPromiseWith(context))
+
+// Namespace aliases remain fixable.
+export const alias = Fx.runPromise((Fx.exit(program)))
+
+// Effect.exit is not the runner input in these cases.
+export const transformedExit = Effect.runPromise(
+  program.pipe(Effect.exit, Effect.map((exit) => exit))
+)
+const computedExit = Effect.exit(program)
+export const referencedExit = Effect.runPromise(computedExit)
+
+// Dedicated runners and ordinary runs are already good.
+export const alreadyPromiseExit = Effect.runPromiseExit(program)
+export const alreadySyncExit = Effect.runSyncExit(program)
+export const ordinaryRun = Effect.runPromise(program)
+
+// The sync rewrite is not equivalent for asynchronous effects: runSync throws
+// AsyncFiberError before Effect.exit completes, while runSyncExit returns it in
+// an Exit.Failure. Without a static synchrony guarantee these must not trigger.
+export const directSync = Effect.runSync(Effect.exit(program))
+export const sameFunctionPipeSync = pipe(program, Effect.exit, Effect.runSync)
+export const syncWith = Effect.runSyncWith(context)(program.pipe(Effect.exit))
+
+// Symbol verification excludes look-alike APIs.
+const LocalEffect = {
+  exit: <A, E>(effect: Effect.Effect<A, E>) => Effect.exit(effect),
+  runPromise: <A>(effect: Effect.Effect<A>) => Effect.runPromise(effect)
+}
+export const localExit = Effect.runPromise(LocalEffect.exit(Effect.succeed(1)))
+export const localRunner = LocalEffect.runPromise(Effect.exit(Effect.succeed(1)))
+
+
+=== [D6] Fix 0: "Disable runOfExitToRunExit for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable runOfExitToRunExit for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace with Effect.runPromiseExit" ===
+
+--- file:///.src/runOfExitToRunExit.ts ---
+import { Context, Effect, Effect as Fx, pipe } from "effect"
+
+declare const program: Effect.Effect<number, Error>
+declare const context: Context.Context<never>
+declare const signal: AbortSignal
+
+// Direct calls, including RunOptions.
+export const directPromise = Effect.runPromise(Effect.exit(program))
+export const directPromiseOptions = Effect.runPromise(Effect.exit(program), { signal })
+
+// The final transformation of the runner's effect argument is Effect.exit.
+export const methodPipeArgument = Effect.runPromise(program.pipe(
+  Effect.map((value) => value + 1),
+  Effect.exit
+))
+export const functionPipeArgument = Effect.runPromise(pipe(
+  program,
+  Effect.map((value) => value + 1),
+  Effect.exit
+))
+
+// The runner itself may also be used as a pipe transformation.
+export const sameMethodPipe = program.pipe(Effect.exit, Effect.runPromise)
+export const sameFunctionPipe = pipe(program, Effect.runPromiseExit)
+
+// Effect v4 context-bound runners have the same fusion.
+export const promiseWith = Effect.runPromiseWith(context)(Effect.exit(program), { signal })
+export const promiseWithPipe = program.pipe(Effect.exit, Effect.runPromiseWith(context))
+
+// Namespace aliases remain fixable.
+export const alias = Fx.runPromise((Fx.exit(program)))
+
+// Effect.exit is not the runner input in these cases.
+export const transformedExit = Effect.runPromise(
+  program.pipe(Effect.exit, Effect.map((exit) => exit))
+)
+const computedExit = Effect.exit(program)
+export const referencedExit = Effect.runPromise(computedExit)
+
+// Dedicated runners and ordinary runs are already good.
+export const alreadyPromiseExit = Effect.runPromiseExit(program)
+export const alreadySyncExit = Effect.runSyncExit(program)
+export const ordinaryRun = Effect.runPromise(program)
+
+// The sync rewrite is not equivalent for asynchronous effects: runSync throws
+// AsyncFiberError before Effect.exit completes, while runSyncExit returns it in
+// an Exit.Failure. Without a static synchrony guarantee these must not trigger.
+export const directSync = Effect.runSync(Effect.exit(program))
+export const sameFunctionPipeSync = pipe(program, Effect.exit, Effect.runSync)
+export const syncWith = Effect.runSyncWith(context)(program.pipe(Effect.exit))
+
+// Symbol verification excludes look-alike APIs.
+const LocalEffect = {
+  exit: <A, E>(effect: Effect.Effect<A, E>) => Effect.exit(effect),
+  runPromise: <A>(effect: Effect.Effect<A>) => Effect.runPromise(effect)
+}
+export const localExit = Effect.runPromise(LocalEffect.exit(Effect.succeed(1)))
+export const localRunner = LocalEffect.runPromise(Effect.exit(Effect.succeed(1)))
+
+
+=== [D7] Fix 0: "Disable runOfExitToRunExit for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable runOfExitToRunExit for entire file" ===
+skipped by default
+
+=== [D7] Fix 2: "Replace with Effect.runPromiseExitWith" ===
+
+--- file:///.src/runOfExitToRunExit.ts ---
+import { Context, Effect, Effect as Fx, pipe } from "effect"
+
+declare const program: Effect.Effect<number, Error>
+declare const context: Context.Context<never>
+declare const signal: AbortSignal
+
+// Direct calls, including RunOptions.
+export const directPromise = Effect.runPromise(Effect.exit(program))
+export const directPromiseOptions = Effect.runPromise(Effect.exit(program), { signal })
+
+// The final transformation of the runner's effect argument is Effect.exit.
+export const methodPipeArgument = Effect.runPromise(program.pipe(
+  Effect.map((value) => value + 1),
+  Effect.exit
+))
+export const functionPipeArgument = Effect.runPromise(pipe(
+  program,
+  Effect.map((value) => value + 1),
+  Effect.exit
+))
+
+// The runner itself may also be used as a pipe transformation.
+export const sameMethodPipe = program.pipe(Effect.exit, Effect.runPromise)
+export const sameFunctionPipe = pipe(program, Effect.exit, Effect.runPromise)
+
+// Effect v4 context-bound runners have the same fusion.
+export const promiseWith = Effect.runPromiseExitWith(context)(program, { signal })
+export const promiseWithPipe = program.pipe(Effect.exit, Effect.runPromiseWith(context))
+
+// Namespace aliases remain fixable.
+export const alias = Fx.runPromise((Fx.exit(program)))
+
+// Effect.exit is not the runner input in these cases.
+export const transformedExit = Effect.runPromise(
+  program.pipe(Effect.exit, Effect.map((exit) => exit))
+)
+const computedExit = Effect.exit(program)
+export const referencedExit = Effect.runPromise(computedExit)
+
+// Dedicated runners and ordinary runs are already good.
+export const alreadyPromiseExit = Effect.runPromiseExit(program)
+export const alreadySyncExit = Effect.runSyncExit(program)
+export const ordinaryRun = Effect.runPromise(program)
+
+// The sync rewrite is not equivalent for asynchronous effects: runSync throws
+// AsyncFiberError before Effect.exit completes, while runSyncExit returns it in
+// an Exit.Failure. Without a static synchrony guarantee these must not trigger.
+export const directSync = Effect.runSync(Effect.exit(program))
+export const sameFunctionPipeSync = pipe(program, Effect.exit, Effect.runSync)
+export const syncWith = Effect.runSyncWith(context)(program.pipe(Effect.exit))
+
+// Symbol verification excludes look-alike APIs.
+const LocalEffect = {
+  exit: <A, E>(effect: Effect.Effect<A, E>) => Effect.exit(effect),
+  runPromise: <A>(effect: Effect.Effect<A>) => Effect.runPromise(effect)
+}
+export const localExit = Effect.runPromise(LocalEffect.exit(Effect.succeed(1)))
+export const localRunner = LocalEffect.runPromise(Effect.exit(Effect.succeed(1)))
+
+
+=== [D8] Fix 0: "Disable runOfExitToRunExit for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable runOfExitToRunExit for entire file" ===
+skipped by default
+
+=== [D8] Fix 2: "Replace with Effect.runPromiseExitWith" ===
+
+--- file:///.src/runOfExitToRunExit.ts ---
+import { Context, Effect, Effect as Fx, pipe } from "effect"
+
+declare const program: Effect.Effect<number, Error>
+declare const context: Context.Context<never>
+declare const signal: AbortSignal
+
+// Direct calls, including RunOptions.
+export const directPromise = Effect.runPromise(Effect.exit(program))
+export const directPromiseOptions = Effect.runPromise(Effect.exit(program), { signal })
+
+// The final transformation of the runner's effect argument is Effect.exit.
+export const methodPipeArgument = Effect.runPromise(program.pipe(
+  Effect.map((value) => value + 1),
+  Effect.exit
+))
+export const functionPipeArgument = Effect.runPromise(pipe(
+  program,
+  Effect.map((value) => value + 1),
+  Effect.exit
+))
+
+// The runner itself may also be used as a pipe transformation.
+export const sameMethodPipe = program.pipe(Effect.exit, Effect.runPromise)
+export const sameFunctionPipe = pipe(program, Effect.exit, Effect.runPromise)
+
+// Effect v4 context-bound runners have the same fusion.
+export const promiseWith = Effect.runPromiseWith(context)(Effect.exit(program), { signal })
+export const promiseWithPipe = program.pipe(Effect.runPromiseExitWith(context))
+
+// Namespace aliases remain fixable.
+export const alias = Fx.runPromise((Fx.exit(program)))
+
+// Effect.exit is not the runner input in these cases.
+export const transformedExit = Effect.runPromise(
+  program.pipe(Effect.exit, Effect.map((exit) => exit))
+)
+const computedExit = Effect.exit(program)
+export const referencedExit = Effect.runPromise(computedExit)
+
+// Dedicated runners and ordinary runs are already good.
+export const alreadyPromiseExit = Effect.runPromiseExit(program)
+export const alreadySyncExit = Effect.runSyncExit(program)
+export const ordinaryRun = Effect.runPromise(program)
+
+// The sync rewrite is not equivalent for asynchronous effects: runSync throws
+// AsyncFiberError before Effect.exit completes, while runSyncExit returns it in
+// an Exit.Failure. Without a static synchrony guarantee these must not trigger.
+export const directSync = Effect.runSync(Effect.exit(program))
+export const sameFunctionPipeSync = pipe(program, Effect.exit, Effect.runSync)
+export const syncWith = Effect.runSyncWith(context)(program.pipe(Effect.exit))
+
+// Symbol verification excludes look-alike APIs.
+const LocalEffect = {
+  exit: <A, E>(effect: Effect.Effect<A, E>) => Effect.exit(effect),
+  runPromise: <A>(effect: Effect.Effect<A>) => Effect.runPromise(effect)
+}
+export const localExit = Effect.runPromise(LocalEffect.exit(Effect.succeed(1)))
+export const localRunner = LocalEffect.runPromise(Effect.exit(Effect.succeed(1)))
+
+
+=== [D9] Fix 0: "Disable runOfExitToRunExit for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable runOfExitToRunExit for entire file" ===
+skipped by default
+
+=== [D9] Fix 2: "Replace with Effect.runPromiseExit" ===
+
+--- file:///.src/runOfExitToRunExit.ts ---
+import { Context, Effect, Effect as Fx, pipe } from "effect"
+
+declare const program: Effect.Effect<number, Error>
+declare const context: Context.Context<never>
+declare const signal: AbortSignal
+
+// Direct calls, including RunOptions.
+export const directPromise = Effect.runPromise(Effect.exit(program))
+export const directPromiseOptions = Effect.runPromise(Effect.exit(program), { signal })
+
+// The final transformation of the runner's effect argument is Effect.exit.
+export const methodPipeArgument = Effect.runPromise(program.pipe(
+  Effect.map((value) => value + 1),
+  Effect.exit
+))
+export const functionPipeArgument = Effect.runPromise(pipe(
+  program,
+  Effect.map((value) => value + 1),
+  Effect.exit
+))
+
+// The runner itself may also be used as a pipe transformation.
+export const sameMethodPipe = program.pipe(Effect.exit, Effect.runPromise)
+export const sameFunctionPipe = pipe(program, Effect.exit, Effect.runPromise)
+
+// Effect v4 context-bound runners have the same fusion.
+export const promiseWith = Effect.runPromiseWith(context)(Effect.exit(program), { signal })
+export const promiseWithPipe = program.pipe(Effect.exit, Effect.runPromiseWith(context))
+
+// Namespace aliases remain fixable.
+export const alias = Fx.runPromiseExit((program))
+
+// Effect.exit is not the runner input in these cases.
+export const transformedExit = Effect.runPromise(
+  program.pipe(Effect.exit, Effect.map((exit) => exit))
+)
+const computedExit = Effect.exit(program)
+export const referencedExit = Effect.runPromise(computedExit)
+
+// Dedicated runners and ordinary runs are already good.
+export const alreadyPromiseExit = Effect.runPromiseExit(program)
+export const alreadySyncExit = Effect.runSyncExit(program)
+export const ordinaryRun = Effect.runPromise(program)
+
+// The sync rewrite is not equivalent for asynchronous effects: runSync throws
+// AsyncFiberError before Effect.exit completes, while runSyncExit returns it in
+// an Exit.Failure. Without a static synchrony guarantee these must not trigger.
+export const directSync = Effect.runSync(Effect.exit(program))
+export const sameFunctionPipeSync = pipe(program, Effect.exit, Effect.runSync)
+export const syncWith = Effect.runSyncWith(context)(program.pipe(Effect.exit))
+
+// Symbol verification excludes look-alike APIs.
+const LocalEffect = {
+  exit: <A, E>(effect: Effect.Effect<A, E>) => Effect.exit(effect),
+  runPromise: <A>(effect: Effect.Effect<A>) => Effect.runPromise(effect)
+}
+export const localExit = Effect.runPromise(LocalEffect.exit(Effect.succeed(1)))
+export const localRunner = LocalEffect.runPromise(Effect.exit(Effect.succeed(1)))
+

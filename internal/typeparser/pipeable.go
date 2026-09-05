@@ -7,18 +7,16 @@ import (
 
 // IsPipeableType returns true if the type has a callable "pipe" property,
 // indicating it supports the pipeable pattern (e.g., value.pipe(f1, f2, ...)).
-func (tp *TypeParser) IsPipeableType(t *checker.Type, atLocation *ast.Node) bool {
+func (tp *TypeParser) IsPipeableType(t *checker.Type) bool {
 	if tp == nil || tp.checker == nil || t == nil {
 		return false
 	}
 	c := tp.checker
 	return Cached(&tp.links.IsPipeableType, t, func() bool {
-		pipeSymbol := c.GetPropertyOfType(t, "pipe")
-		if pipeSymbol == nil {
+		pipeType := tp.GetTypeOfPropertyByName(t, "pipe")
+		if pipeType == nil {
 			return false
 		}
-
-		pipeType := c.GetTypeOfSymbolAtLocation(pipeSymbol, atLocation)
 		signatures := c.GetSignaturesOfType(pipeType, checker.SignatureKindCall)
 		return len(signatures) > 0
 	})

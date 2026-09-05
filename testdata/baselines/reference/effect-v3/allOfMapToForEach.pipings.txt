@@ -1,4 +1,4 @@
-==== /.src/allOfMapToForEach.ts (15 flows) ====
+==== /.src/allOfMapToForEach.ts (18 flows) ====
 
 === Piping Flow ===
 Location: 8:22 - 8:56
@@ -45,6 +45,20 @@ Transformations (1):
       callee: Effect.succeed
       args: (constant)
       outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 18:30 - 18:64
+Node: Effect.forEach(values, effectful)
+Node Kind: KindCallExpression
+
+Subject: values
+Subject Type: readonly number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.forEach
+      args: [effectful]
+      outType: Effect<string[], never, never>
 
 === Piping Flow ===
 Location: 19:35 - 23:2
@@ -189,7 +203,47 @@ Transformations (2):
       outType: never
 
 === Piping Flow ===
-Location: 47:21 - 47:85
+Location: 48:28 - 48:68
+Node: pipe(values.map(effectful), Effect.all)
+Node Kind: KindCallExpression
+
+Subject: effectful
+Subject Type: (value: number, index: number) => Effect<string, never, never>
+
+Transformations (2):
+  [0] kind: call
+      callee: values.map
+      args: (constant)
+      outType: Effect<string, never, never>[]
+  [1] kind: pipe
+      callee: Effect.all
+      args: (constant)
+      outType: Effect<string[], never, never>
+
+=== Piping Flow ===
+Location: 49:34 - 49:89
+Node: pipe(values.map(effectful), Effect.all, Effect.asVoid)
+Node Kind: KindCallExpression
+
+Subject: effectful
+Subject Type: (value: number, index: number) => Effect<string, never, never>
+
+Transformations (3):
+  [0] kind: call
+      callee: values.map
+      args: (constant)
+      outType: Effect<string, never, never>[]
+  [1] kind: pipe
+      callee: Effect.all
+      args: (constant)
+      outType: Effect<string[], never, never>
+  [2] kind: pipe
+      callee: Effect.asVoid
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 52:21 - 52:85
 Node: Effect.all([Effect.succeed(1), Effect.succeed("two")] as const)
 Node Kind: KindCallExpression
 
@@ -203,7 +257,7 @@ Transformations (1):
       outType: Effect<[number, string], never, never>
 
 === Piping Flow ===
-Location: 47:34 - 47:51
+Location: 52:34 - 52:51
 Node: Effect.succeed(1)
 Node Kind: KindCallExpression
 
@@ -217,7 +271,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 47:52 - 47:74
+Location: 52:52 - 52:74
 Node: Effect.succeed("two")
 Node Kind: KindCallExpression
 

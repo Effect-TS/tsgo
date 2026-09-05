@@ -152,14 +152,14 @@ func isPipeableAtIndex(tp *typeparser.TypeParser, flow *typeparser.PipingFlow, i
 		if subjectType == nil {
 			return false
 		}
-		return tp.IsPipeableType(subjectType, flow.Subject.Node)
+		return tp.IsPipeableType(subjectType)
 	}
 
 	t := flow.Transformations[index-1]
 	if t.OutType == nil {
 		return false
 	}
-	return tp.IsPipeableType(t.OutType, flow.Node)
+	return tp.IsPipeableType(t.OutType)
 }
 
 // getSubjectText extracts the subject text for the diagnostic message.

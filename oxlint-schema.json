@@ -2248,6 +2248,9 @@
         "effecttsgo/async-function": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/catch-all-tag-dispatch-to-catch-tag": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/catch-all-to-map-error": {
           "$ref": "#/definitions/RuleNoConfig"
         },
@@ -2318,6 +2321,9 @@
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/extends-native-error": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "effecttsgo/flat-map-conditional-to-filter-or-fail": {
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/flat-map-to-map": {
@@ -2464,6 +2470,9 @@
         "effecttsgo/promise-in-effect-success": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/race-first-with-sleep-to-timeout": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/redundant-map-error": {
           "$ref": "#/definitions/RuleNoConfig"
         },
@@ -2477,6 +2486,9 @@
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/run-effect-inside-effect": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "effecttsgo/run-of-exit-to-run-exit": {
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/schema-literal-non-finite": {
@@ -19402,8 +19414,8 @@
           "type": "boolean"
         },
         "defaultCaseCommentPattern": {
-          "description": "Regular expression pattern that when matched in a default case comment,\nwill suppress the exhaustiveness check.\nExample: `\"@skip-exhaustive-check\"` to allow `default: // @skip-exhaustive-check`",
-          "markdownDescription": "Regular expression pattern that when matched in a default case comment,\nwill suppress the exhaustiveness check.\nExample: `\"@skip-exhaustive-check\"` to allow `default: // @skip-exhaustive-check`",
+          "description": "Regular expression pattern for a comment that acts as an omitted `default` case.\nThe comment must appear after the final case and the switch must not have a `default` case.\nFor union types, it suppresses the exhaustiveness check only when\n`considerDefaultExhaustiveForUnions` is enabled.\nExample: `\"^skip default$\"` to allow a switch ending in `// skip default`.",
+          "markdownDescription": "Regular expression pattern for a comment that acts as an omitted `default` case.\nThe comment must appear after the final case and the switch must not have a `default` case.\nFor union types, it suppresses the exhaustiveness check only when\n`considerDefaultExhaustiveForUnions` is enabled.\nExample: `\"^skip default$\"` to allow a switch ending in `// skip default`.",
           "type": "string"
         },
         "requireDefaultForNonUnion": {

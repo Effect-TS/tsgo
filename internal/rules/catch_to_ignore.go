@@ -33,13 +33,12 @@ var CatchToIgnore = rule.Rule{
 // CatchToIgnoreMatch holds the AST nodes needed by both the diagnostic rule
 // and the quick-fix for the catchToIgnore pattern.
 type CatchToIgnoreMatch struct {
-	SourceFile         *ast.SourceFile
-	Location           core.TextRange
-	TransformationNode *ast.Node
-	EffectModuleNode   *ast.Node
-	CatchMethodName    string
-	IgnoreMethodName   string
-	DataCallSubject    *ast.Node
+	SourceFile       *ast.SourceFile
+	Location         core.TextRange
+	Transformation   *typeparser.PipingFlowTransformation
+	EffectModuleNode *ast.Node
+	CatchMethodName  string
+	IgnoreMethodName string
 }
 
 // AnalyzeCatchToIgnore finds Effect.catch/catchCause callbacks that return Effect.void
@@ -53,7 +52,8 @@ func AnalyzeCatchToIgnore(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast
 
 	flows := tp.PipingFlows(sf, true)
 	for _, flow := range flows {
-		for _, transformation := range flow.Transformations {
+		for index := range flow.Transformations {
+			transformation := &flow.Transformations[index]
 			catchMethodName, ignoreMethodName, effectModuleNode, ok := catchToIgnoreMethods(tp, transformation.Callee)
 			if !ok {
 				continue
@@ -63,24 +63,23 @@ func AnalyzeCatchToIgnore(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast
 				continue
 			}
 
-			lazy := typeparser.ParseLazyExpression(transformation.Args[0], false)
+			lazy := typeparser.ParseLazyExpression(transformation.Args[0], typeparser.LazyExpressionNone)
 			if lazy == nil || !isEffectVoidReference(tp, lazy.Expression) {
 				continue
 			}
 
-			effect := tp.StrictEffectType(transformation.OutType, transformation.Node)
+			effect := tp.StrictEffectType(transformation.OutType)
 			if effect == nil || !isVoidLikeEffectSuccess(effect.A) {
 				continue
 			}
 
 			matches = append(matches, CatchToIgnoreMatch{
-				SourceFile:         sf,
-				Location:           scanner.GetErrorRangeForNode(sf, transformation.Callee),
-				TransformationNode: transformation.Node,
-				EffectModuleNode:   effectModuleNode,
-				CatchMethodName:    catchMethodName,
-				IgnoreMethodName:   ignoreMethodName,
-				DataCallSubject:    catchToIgnoreDataCallSubject(transformation.Node, transformation.Args[0]),
+				SourceFile:       sf,
+				Location:         scanner.GetErrorRangeForNode(sf, transformation.Callee),
+				Transformation:   transformation,
+				EffectModuleNode: effectModuleNode,
+				CatchMethodName:  catchMethodName,
+				IgnoreMethodName: ignoreMethodName,
 			})
 		}
 	}
@@ -142,21 +141,4 @@ func isVoidLikeEffectSuccess(t *checker.Type) bool {
 		}
 	}
 	return true
-}
-
-func catchToIgnoreDataCallSubject(node *ast.Node, callback *ast.Node) *ast.Node {
-	if node == nil || callback == nil || node.Kind != ast.KindCallExpression {
-		return nil
-	}
-	call := node.AsCallExpression()
-	if call == nil || call.Arguments == nil || len(call.Arguments.Nodes) != 2 {
-		return nil
-	}
-	if call.Arguments.Nodes[0] == callback {
-		return call.Arguments.Nodes[1]
-	}
-	if call.Arguments.Nodes[1] == callback {
-		return call.Arguments.Nodes[0]
-	}
-	return nil
 }

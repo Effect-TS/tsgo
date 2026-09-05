@@ -1,0 +1,56 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/matchEffectToMatch.ts(8,26): suggestion TS377125: `Effect.match` expresses this non-effectful fold more directly than `Effect.matchEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
+/.src/matchEffectToMatch.ts(13,37): suggestion TS377125: `Effect.matchCause` expresses this non-effectful fold more directly than `Effect.matchCauseEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
+/.src/matchEffectToMatch.ts(18,45): suggestion TS377125: `Effect.match` expresses this non-effectful fold more directly than `Effect.matchEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
+
+
+==== /.src/matchEffectToMatch.ts (3 errors) ====
+    // @effect-diagnostics matchEffectToMatch:suggestion
+    // @effect-diagnostics matchEffectToMapBoth:off
+    // @effect-diagnostics-in-tsgo false
+    import { Effect, pipe } from "effect"
+    
+    declare const effect: Effect.Effect<number, string>
+    
+    export const dataFirst = Effect.matchEffect(effect, {
+                             ~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377125: `Effect.match` expresses this non-effectful fold more directly than `Effect.matchEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
+      onFailure: (error) => Effect.succeed(error.length),
+      onSuccess: (value) => Effect.succeed(value + 1)
+    })
+    
+    export const pipeable = effect.pipe(Effect.matchCauseEffect({
+                                        ~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377125: `Effect.matchCause` expresses this non-effectful fold more directly than `Effect.matchCauseEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
+      onFailure: (cause) => Effect.succeed(String(cause)),
+      onSuccess: (value) => pipe(value + 1, Effect.succeed)
+    }))
+    
+    export const quotedProperties = effect.pipe(Effect.matchEffect({
+                                                ~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377125: `Effect.match` expresses this non-effectful fold more directly than `Effect.matchEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
+      "onFailure": (error) => Effect.succeed(error.length),
+      "onSuccess": (value) => Effect.succeed(value + 1)
+    }))
+    
+    export const effectful = effect.pipe(Effect.matchEffect({
+      onFailure: (error) => Effect.fail(error),
+      onSuccess: (value) => Effect.succeed(value + 1)
+    }))
+    
+    export const extraLogic = effect.pipe(Effect.matchEffect({
+      onFailure: (error) => {
+        console.log(error)
+        return Effect.succeed(error.length)
+      },
+      onSuccess: (value) => Effect.succeed(value + 1)
+    }))
+    
+    const unrelated = { succeed: <A>(value: A) => Effect.succeed(value) }
+    export const unrelatedSucceed = effect.pipe(Effect.matchEffect({
+      onFailure: (error) => unrelated.succeed(error.length),
+      onSuccess: (value) => unrelated.succeed(value + 1)
+    }))
+    

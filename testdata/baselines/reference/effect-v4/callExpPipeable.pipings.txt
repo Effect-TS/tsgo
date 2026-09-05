@@ -28,8 +28,8 @@ Transformations (2):
       args: (constant)
       outType: Effect<void, never, never>
   [1] kind: call
-      callee: Effect.as(42)
-      args: (constant)
+      callee: Effect.as
+      args: [42]
       outType: Effect<number, never, never>
 
 === Piping Flow ===
@@ -46,10 +46,10 @@ Transformations (3):
       args: (constant)
       outType: Effect<string, never, never>
   [1] kind: call
-      callee: Effect.map((x: string) => x.length)
-      args: (constant)
+      callee: Effect.map
+      args: [(x: string) => x.length]
       outType: Effect<number, never, never>
   [2] kind: call
-      callee: Effect.as(42)
-      args: (constant)
+      callee: Effect.as
+      args: [42]
       outType: Effect<number, never, never>

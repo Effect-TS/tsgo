@@ -38,11 +38,11 @@ When running in dedicated diagnostics mode, the Effect diagnostics can be emitte
 <!-- supported-components:start -->
 ## Supported Package Versions
 
-The following target package versions are supported by `@effect/tsgo@0.39.1`:
+The following target package versions are supported by `@effect/tsgo@0.41.0`:
 
 | Component | Supported versions |
 |---|---|
-| TypeScript | `7.0.2`, `7.1.0-dev.20260901.1` |
+| TypeScript | `7.0.2`, `7.1.0-dev.20260903.1` |
 | Oxlint | `1.79.0`, `1.81.0` |
 | oxlint-tsgolint | `7.0.2001` |
 <!-- supported-components:end -->
@@ -76,6 +76,7 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/promise-in-effect-success.md"><code>promiseInEffectSuccess</code></a></td><td>Detects Promise types in Effect success channels where they are not awaited</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/schema-literal-non-finite.md"><code>schemaLiteralNonFinite</code></a></td><td>Reports statically known non-finite numbers passed to Schema literal constructors</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/schema-opaque-instance-member.md"><code>schemaOpaqueInstanceMember</code></a></td><td>Disallows instance members in classes extending Schema.Opaque</td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/unsafe-effect-type-assertion.md"><code>unsafeEffectTypeAssertion</code></a></td><td>Detects unsafe type assertions that narrow Effect, Stream, or Layer error or requirements channels</td></tr>
     <tr><td colspan="2"><strong>Anti-pattern</strong> <em>Discouraged patterns that often lead to bugs or confusing behavior.</em></td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/catch-unfailable-effect.md"><code>catchUnfailableEffect</code></a></td><td>Warns when using error handling on Effects that never fail</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/effect-fn-iife.md"><code>effectFnIife</code></a></td><td>Effect.fn or Effect.fnUntraced is called as an IIFE; use Effect.gen instead</td></tr>
@@ -99,7 +100,6 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/unknown-in-effect-catch.md"><code>unknownInEffectCatch</code></a></td><td>Warns when catch callbacks return unknown instead of typed errors</td></tr>
     <tr><td colspan="2"><strong>Effect-native</strong> <em>Prefer Effect-native APIs and abstractions when available.</em></td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/abort-controller-in-effect.md"><code>abortControllerInEffect</code></a></td><td>Warns when manually constructing AbortController inside Effect generators instead of using Effect.abortSignal</td></tr>
-    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/acquire-release-disposable.md"><code>acquireReleaseDisposable</code></a></td><td>Suggests Effect.acquireDisposable when Effect.acquireRelease only invokes the acquired resource&#39;s disposal protocol</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/async-function.md"><code>asyncFunction</code></a></td><td>Warns when declaring async functions and suggests using Effect values and Effect.gen for async control flow</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/crypto-random-uuid.md"><code>cryptoRandomUUID</code></a></td><td>Warns when using crypto.randomUUID() outside Effect generators instead of the Effect Random module, which uses Effect-injected randomness rather than the crypto module behind the scenes</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/crypto-random-uuid-in-effect.md"><code>cryptoRandomUUIDInEffect</code></a></td><td>Warns when using crypto.randomUUID() inside Effect generators instead of the Effect Random module, which uses Effect-injected randomness rather than the crypto module behind the scenes</td></tr>
@@ -120,9 +120,10 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/prefer-schema-over-json.md"><code>preferSchemaOverJson</code></a></td><td>Suggests using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/process-env.md"><code>processEnv</code></a></td><td>Warns when reading process.env outside Effect generators instead of using Effect Config</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/process-env-in-effect.md"><code>processEnvInEffect</code></a></td><td>Warns when reading process.env inside Effect generators instead of using Effect Config</td></tr>
-    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/unsafe-effect-type-assertion.md"><code>unsafeEffectTypeAssertion</code></a></td><td>Detects unsafe type assertions that narrow Effect, Stream, or Layer error or requirements channels</td></tr>
     <tr><td colspan="2"><strong>Style</strong> <em>Cleanup, consistency, and idiomatic Effect code.</em></td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/acquire-release-disposable.md"><code>acquireReleaseDisposable</code></a></td><td>Suggests Effect.acquireDisposable when Effect.acquireRelease only invokes the acquired resource&#39;s disposal protocol</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/all-of-map-to-for-each.md"><code>allOfMapToForEach</code></a></td><td>Suggests using Effect.forEach instead of Effect.all over an effectful Array#map</td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/catch-all-tag-dispatch-to-catch-tag.md"><code>catchAllTagDispatchToCatchTag</code></a></td><td>Suggests Effect.catchTag or Effect.catchTags for catch-all handlers that re-fail unmatched tagged errors</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/catch-all-to-map-error.md"><code>catchAllToMapError</code></a></td><td>Suggests using Effect.mapError instead of Effect.catch + Effect.fail</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/catch-chain-to-first-success-of.md"><code>catchChainToFirstSuccessOf</code></a></td><td>Suggests Effect.firstSuccessOf for consecutive error-independent Effect.catch fallbacks when the error type is preserved</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/catch-conditional-refail-to-catch-if.md"><code>catchConditionalRefailToCatchIf</code></a></td><td>Suggests Effect.catchIf, Effect.catchCauseIf, or Effect.catchTag for conditional catch handlers that re-fail their untouched input</td></tr>
@@ -139,6 +140,8 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/flat-map-conditional-to-filter-or-fail.md"><code>flatMapConditionalToFilterOrFail</code></a></td><td>Suggests Effect.filterOrFail or Effect.filterOrElse when Effect.flatMap conditionally passes its input through with Effect.succeed</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/flat-map-to-map.md"><code>flatMapToMap</code></a></td><td>Suggests using Effect.map instead of Effect.flatMap when the callback only wraps its result with Effect.succeed</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/map-some-to-as-some.md"><code>mapSomeToAsSome</code></a></td><td>Suggests using Effect.asSome instead of Effect.map when the mapper only wraps the success value with Option.some</td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/match-effect-to-map-both.md"><code>matchEffectToMapBoth</code></a></td><td>Suggests Effect.mapBoth when Effect.matchEffect only transforms the failure and success channels</td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/match-effect-to-match.md"><code>matchEffectToMatch</code></a></td><td>Suggests Effect.match or Effect.matchCause when both Effect.matchEffect handlers only return Effect.succeed</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/missed-pipeable-opportunity.md"><code>missedPipeableOpportunity</code></a></td><td>Suggests using .pipe() for nested function calls</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/missing-effect-service-dependency.md"><code>missingEffectServiceDependency</code></a></td><td>Checks that Effect.Service dependencies satisfy all required layer inputs</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/missing-pipeable-signature.md"><code>missingPipeableSignature</code></a></td><td>Reports exported fixed-arity functions whose call signatures have no corresponding pipeable overload</td></tr>
@@ -149,9 +152,12 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/prefer-schema-type-property.md"><code>preferSchemaTypeProperty</code></a></td><td>Disallows Schema.Schema.Type&lt;typeof X&gt; in favor of typeof X.Type</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/prefer-succeed-some-or-none.md"><code>preferSucceedSomeOrNone</code></a></td><td>Suggests using Effect.succeedNone or Effect.succeedSome instead of wrapping Option.none or Option.some with Effect.succeed</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/prefer-typed-schema-decoder.md"><code>preferTypedSchemaDecoder</code></a></td><td>Suggests typed Schema decoders when the input is assignable to the schema&#39;s Encoded type</td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/provide-layer-succeed-to-provide-service.md"><code>provideLayerSucceedToProvideService</code></a></td><td>Suggests providing inline Layer.succeed and Layer.effect services directly</td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/race-first-with-sleep-to-timeout.md"><code>raceFirstWithSleepToTimeout</code></a></td><td>Suggests Effect.timeoutOrElse when Effect.raceFirst has exactly one sleep- or delay-based timer arm</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/redundant-map-error.md"><code>redundantMapError</code></a></td><td>Suggests hoisting a repeated trailing Effect.mapError from every yield in an Effect generator</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/redundant-or-die.md"><code>redundantOrDie</code></a></td><td>Suggests hoisting a repeated trailing Effect.orDie from every yield in an Effect generator</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/redundant-schema-tag-identifier.md"><code>redundantSchemaTagIdentifier</code></a></td><td>Suggests removing redundant identifier argument when it equals the tag value in Schema.TaggedClass/TaggedError/TaggedRequest</td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/run-of-exit-to-run-exit.md"><code>runOfExitToRunExit</code></a></td><td>Suggests using Effect.runPromiseExit instead of passing Effect.exit to Effect.runPromise</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/schema-number.md"><code>schemaNumber</code></a></td><td>Suggests Schema.Finite and Schema.FiniteFromString instead of Schema.Number APIs when describing domain numbers</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/schema-struct-with-tag.md"><code>schemaStructWithTag</code></a></td><td>Suggests using Schema.TaggedStruct instead of Schema.Struct with _tag field</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/schema-union-of-literals.md"><code>schemaUnionOfLiterals</code></a></td><td>Suggests combining multiple Schema.Literal calls in Schema.Union into a single Schema.Literal</td></tr>

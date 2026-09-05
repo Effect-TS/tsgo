@@ -1,5 +1,29 @@
 # @effect/tsgo
 
+## 0.41.0
+
+### Minor Changes
+
+- d095234: Normalize piping-flow transformations around their callee, arguments, and explicit type arguments without exposing a representation-dependent transformation node. Add shared rewriter operations for replacing transformations and flow prefixes while preserving data-first, data-last, `pipe(...)`, and `.pipe(...)` source forms.
+- d3efa70: Remove the AST location parameter from type-only `TypeParser` operations. Effect, Layer, Stream, Schema, service, Context.Tag, Scope, and related type predicates now derive instantiated property types directly from the supplied checker type.
+
+### Patch Changes
+
+- 1d0dfb8: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260903.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/cf7b9361a33fa0c8e1afa3cf45fde29c9ab23ec0) commit `cf7b9361a33fa0c8e1afa3cf45fde29c9ab23ec0`, and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
+## 0.40.0
+
+### Minor Changes
+
+- 815273c: Add the Effect v4 `raceFirstWithSleepToTimeout` style diagnostic, which suggests `Effect.timeoutOrElse` when a first-completion race has exactly one `Effect.sleep`- or `Effect.delay`-based timer arm.
+  
+  Reclassify `acquireReleaseDisposable` as style and `unsafeEffectTypeAssertion` as correctness.
+
+### Patch Changes
+
+- c1ac8e5: Avoid reporting the `schemaNumber` diagnostic when `Schema.Number` is refined with the built-in `isFinite` or `isInt` checks, including pipe-style refinements.
+- 0fba9d1: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260902.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/43a90f4c105bc9db7cb7aa299beddafbabe1d23e) commit `43a90f4c105bc9db7cb7aa299beddafbabe1d23e`, and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
 ## 0.39.1
 
 ### Patch Changes

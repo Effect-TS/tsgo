@@ -1,0 +1,43 @@
+==== /.src/catchAllTagDispatchToCatchTag.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 16:22 - 22:2
+Node: program.pipe(\n  Effect.catchAll((error) =>\n    error._tag === "NotFoundError"\n      ? Effect.succeed("missing")\n      : Effect.fail(error)\n  )\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, NotFoundError | TimeoutError, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catchAll
+      args: [(error) =>\n    error._tag === "NotFoundError"\n      ? Effect.succeed("missing")\n      : Effect.fail(error)]
+      outType: Effect<string, TimeoutError, never>
+
+=== Piping Flow ===
+Location: 19:8 - 19:34
+Node: Effect.succeed("missing")
+Node Kind: KindCallExpression
+
+Subject: "missing"
+Subject Type: "missing"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 20:8 - 20:27
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: TimeoutError
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, TimeoutError, never>

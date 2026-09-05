@@ -1,0 +1,29 @@
+=== Quick Fix Inventory ===
+
+[D1] (7:37-7:55) TS377126: `Effect.mapBoth` expresses these failure and success transformations more directly than `Effect.matchEffect`. effect(matchEffectToMapBoth)
+  Fix 0: "Disable matchEffectToMapBoth for this line"
+  Fix 1: "Disable matchEffectToMapBoth for entire file"
+  Fix 2: "Replace with Effect.mapBoth"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable matchEffectToMapBoth for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable matchEffectToMapBoth for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.mapBoth" ===
+
+--- file:///.src/matchEffectToMapBoth.ts ---
+// @effect-diagnostics matchEffectToMapBoth:suggestion
+// @effect-diagnostics-in-tsgo false
+import { Effect } from "effect"
+
+declare const effect: Effect.Effect<number, string>
+
+export const pipeable = effect.pipe(Effect.mapBoth({
+  onFailure: (error) => error.length,
+  onSuccess: (value) => value + 1
+}))
+

@@ -1,0 +1,43 @@
+==== /.src/matchEffectToMatch_preview.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 4:53 - 9:4
+Node: program.pipe(Effect.matchEffect({\n  onFailure: (error) => Effect.succeed(error.length),\n  onSuccess: (value) => Effect.succeed(value + 1)\n}))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.matchEffect
+      args: [{\n  onFailure: (error) => Effect.succeed(error.length),\n  onSuccess: (value) => Effect.succeed(value + 1)\n}]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 7:24 - 7:53
+Node: Effect.succeed(error.length)
+Node Kind: KindCallExpression
+
+Subject: error.length
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 8:24 - 8:50
+Node: Effect.succeed(value + 1)
+Node Kind: KindCallExpression
+
+Subject: value + 1
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>

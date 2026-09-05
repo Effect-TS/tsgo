@@ -474,5 +474,29 @@
     "`Effect.{0}` expresses this conditional validation more directly than `Effect.flatMap` with an identity `Effect.succeed` branch. effect(flatMapConditionalToFilterOrFail)": {
         "category": "Suggestion",
         "code": 377120
+    },
+    "This Effect first-completion race has exactly one sleep- or delay-based timer arm. `Effect.timeoutOrElse` expresses the timeout and fallback directly. effect(raceFirstWithSleepToTimeout)": {
+        "category": "Suggestion",
+        "code": 377121
+    },
+    "Branching on `{0}._tag` inside `Effect.{1}` hand-rolls tagged error dispatch; use `Effect.catchTag` or `Effect.catchTags`, which re-fail unmatched errors automatically. effect(catchAllTagDispatchToCatchTag)": {
+        "category": "Suggestion",
+        "code": 377122
+    },
+    "`Effect.{0}` of `Effect.exit` re-implements `Effect.{1}`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)": {
+        "category": "Suggestion",
+        "code": 377123
+    },
+    "`Effect.{0}` provides this inline single-service layer directly. effect(provideLayerSucceedToProvideService)": {
+        "category": "Suggestion",
+        "code": 377124
+    },
+    "`Effect.{0}` expresses this non-effectful fold more directly than `Effect.{1}` with `Effect.succeed` handlers. effect(matchEffectToMatch)": {
+        "category": "Suggestion",
+        "code": 377125
+    },
+    "`Effect.mapBoth` expresses these failure and success transformations more directly than `Effect.matchEffect`. effect(matchEffectToMapBoth)": {
+        "category": "Suggestion",
+        "code": 377126
     }
 }

@@ -5,70 +5,84 @@ flowchart TB
   3[/"type: string<br/>node: `$#123;index#125;:$#123;value#125;`"/]
   4["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
   5[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  6[/"type: Effect#lt;string#91;#93;, never, never#gt;<br/>node: Effect.forEach#40;values, effectful#41;"/]
-  7[/"type: readonly number#91;#93;<br/>node: values"/]
-  8["type: Effect#lt;void, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
-  9[/"type: #123; #lt;B, E, R, S extends Iterable#lt;any#gt;, const Discard extends boolean = false#gt;#40;f: #40;a: Infer#lt;S#gt;, i: number#41; =#gt; Effect#lt;B, E, R#gt;, options?: #123; readonly concurrency?: Concurrency #124; undefined; readonly discard?: Discard #124; undefined; #125; #124; undefined#41;: #40;self: S#41; =#gt; Effect#lt;Discard extends false ? With#lt;S, B#gt; : void, E, R#gt;; #lt;B, E, R, S extends Iterable#lt;any#gt;, const Discard extends boolean = false#gt;#40;self: S, f: #40;a: Infer#lt;S#gt;, i: number#41; =#gt; Effect#lt;B, E, R#gt;, options?: #123; readonly concurrency?: Concurrency #124; undefined; readonly discard?: Discard #124; undefined; #125; #124; undefined#41;: Effect#lt;Discard extends false ? With#lt;S, B#gt; : void, E, R#gt;; #125;<br/>node: Effect.forEach"/]
-  10[["type: #40;value: number, index: number#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;value, index#41; =#gt; Effect.succeed#40;`$#123;index#125;:$#123;value#125;`#41;"]]
-  11[/"type: string<br/>node: `$#123;index#125;:$#123;value#125;`"/]
-  12["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  13[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  14[/"type: #123; concurrency: number; discard: true; #125;<br/>node: #123; concurrency: 2, discard: true #125;"/]
-  15[/"type: Effect#lt;string#91;#93;, never, never#gt;<br/>node: Effect.all#40;#92;n  values.map#lt;Effect.Effect#lt;string#gt;#gt;#40;#40;value#41; =#gt; Effect.succeed#40;String#40;value#41;#41;#41;#92;n#41;"/]
-  16[["type: #40;value: number#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;value#41; =#gt; Effect.succeed#40;String#40;value#41;#41;"]]
-  17[/"type: number<br/>node: value"/]
-  18["type: string<br/>callee: String<br/>args: #91;#93;"]
-  19[/"type: StringConstructor<br/>node: String"/]
-  20["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  21[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  22[/"type: Effect#lt;Result#lt;string, never#gt;#91;#93;, never, never#gt;<br/>node: Effect.all#40;values.map#40;effectful#41;, #123; mode: #quot;result#quot; #125;#41;"/]
-  23[/"type: #123; mode: #quot;result#quot;; concurrency: number; #125;<br/>node: #123; mode: #quot;result#quot; as const, concurrency: 2 #125;"/]
-  24[/"type: Effect#lt;Result#lt;string, never#gt;#91;#93;, never, never#gt;<br/>node: Effect.all#40;values.map#40;effectful#41;, resultOptions#41;"/]
-  25[/"type: Effect#lt;number#91;#93;, never, never#gt;<br/>node: Effect.all#40;recordMapper.map#40;#40;value#41; =#gt; Effect.succeed#40;value#41;#41;#41;"/]
-  26[["type: #40;value: number#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;value#41; =#gt; Effect.succeed#40;value#41;"]]
-  27[/"type: number<br/>node: value"/]
-  28["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  29[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  30["type: readonly Effect#lt;number, never, never#gt;#91;#93;<br/>callee: recordMapper.map<br/>args: #91;#93;"]
-  31[/"type: #lt;B#gt;#40;f: #40;value: number#41; =#gt; B#41; =#gt; readonly B#91;#93;<br/>node: recordMapper.map"/]
-  32[/"type: never<br/>node: Effect.all#40;values.map#40;#40;value#41; =#gt; value + 1#41;#41;"/]
-  33[["type: #40;value: number#41; =#gt; number<br/>node: #40;value#41; =#gt; value + 1"]]
-  34[/"type: number<br/>node: value + 1"/]
-  35[/"type: Effect#lt;#91;number, string#93;, never, never#gt;<br/>node: Effect.all#40;#91;Effect.succeed#40;1#41;, Effect.succeed#40;#quot;two#quot;#41;#93; as const#41;"/]
-  36[/"type: 1<br/>node: 1"/]
-  37["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  38[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
-  39[/"type: #quot;two#quot;<br/>node: #quot;two#quot;"/]
-  40["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
-  41[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  6[/"type: readonly number#91;#93;<br/>node: values"/]
+  7["type: Effect#lt;string#91;#93;, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  8[/"type: #123; #lt;B, E, R, S extends Iterable#lt;any#gt;, const Discard extends boolean = false#gt;#40;f: #40;a: Infer#lt;S#gt;, i: number#41; =#gt; Effect#lt;B, E, R#gt;, options?: #123; readonly concurrency?: Concurrency #124; undefined; readonly discard?: Discard #124; undefined; #125; #124; undefined#41;: #40;self: S#41; =#gt; Effect#lt;Discard extends false ? With#lt;S, B#gt; : void, E, R#gt;; #lt;B, E, R, S extends Iterable#lt;any#gt;, const Discard extends boolean = false#gt;#40;self: S, f: #40;a: Infer#lt;S#gt;, i: number#41; =#gt; Effect#lt;B, E, R#gt;, options?: #123; readonly concurrency?: Concurrency #124; undefined; readonly discard?: Discard #124; undefined; #125; #124; undefined#41;: Effect#lt;Discard extends false ? With#lt;S, B#gt; : void, E, R#gt;; #125;<br/>node: Effect.forEach"/]
+  9[/"type: #40;value: number, index: number#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: effectful"/]
+  10[/"type: readonly number#91;#93;<br/>node: values"/]
+  11["type: Effect#lt;void, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  12[/"type: #123; #lt;B, E, R, S extends Iterable#lt;any#gt;, const Discard extends boolean = false#gt;#40;f: #40;a: Infer#lt;S#gt;, i: number#41; =#gt; Effect#lt;B, E, R#gt;, options?: #123; readonly concurrency?: Concurrency #124; undefined; readonly discard?: Discard #124; undefined; #125; #124; undefined#41;: #40;self: S#41; =#gt; Effect#lt;Discard extends false ? With#lt;S, B#gt; : void, E, R#gt;; #lt;B, E, R, S extends Iterable#lt;any#gt;, const Discard extends boolean = false#gt;#40;self: S, f: #40;a: Infer#lt;S#gt;, i: number#41; =#gt; Effect#lt;B, E, R#gt;, options?: #123; readonly concurrency?: Concurrency #124; undefined; readonly discard?: Discard #124; undefined; #125; #124; undefined#41;: Effect#lt;Discard extends false ? With#lt;S, B#gt; : void, E, R#gt;; #125;<br/>node: Effect.forEach"/]
+  13[["type: #40;value: number, index: number#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;value, index#41; =#gt; Effect.succeed#40;`$#123;index#125;:$#123;value#125;`#41;"]]
+  14[/"type: string<br/>node: `$#123;index#125;:$#123;value#125;`"/]
+  15["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  16[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  17[/"type: #123; concurrency: number; discard: true; #125;<br/>node: #123; concurrency: 2, discard: true #125;"/]
+  18[/"type: Effect#lt;string#91;#93;, never, never#gt;<br/>node: Effect.all#40;#92;n  values.map#lt;Effect.Effect#lt;string#gt;#gt;#40;#40;value#41; =#gt; Effect.succeed#40;String#40;value#41;#41;#41;#92;n#41;"/]
+  19[["type: #40;value: number#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;value#41; =#gt; Effect.succeed#40;String#40;value#41;#41;"]]
+  20[/"type: number<br/>node: value"/]
+  21["type: string<br/>callee: String<br/>args: #91;#93;"]
+  22[/"type: StringConstructor<br/>node: String"/]
+  23["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  24[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  25[/"type: Effect#lt;Result#lt;string, never#gt;#91;#93;, never, never#gt;<br/>node: Effect.all#40;values.map#40;effectful#41;, #123; mode: #quot;result#quot; #125;#41;"/]
+  26[/"type: #123; mode: #quot;result#quot;; concurrency: number; #125;<br/>node: #123; mode: #quot;result#quot; as const, concurrency: 2 #125;"/]
+  27[/"type: Effect#lt;Result#lt;string, never#gt;#91;#93;, never, never#gt;<br/>node: Effect.all#40;values.map#40;effectful#41;, resultOptions#41;"/]
+  28[/"type: Effect#lt;number#91;#93;, never, never#gt;<br/>node: Effect.all#40;recordMapper.map#40;#40;value#41; =#gt; Effect.succeed#40;value#41;#41;#41;"/]
+  29[["type: #40;value: number#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;value#41; =#gt; Effect.succeed#40;value#41;"]]
+  30[/"type: number<br/>node: value"/]
+  31["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  32[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  33["type: readonly Effect#lt;number, never, never#gt;#91;#93;<br/>callee: recordMapper.map<br/>args: #91;#93;"]
+  34[/"type: #lt;B#gt;#40;f: #40;value: number#41; =#gt; B#41; =#gt; readonly B#91;#93;<br/>node: recordMapper.map"/]
+  35[/"type: never<br/>node: Effect.all#40;values.map#40;#40;value#41; =#gt; value + 1#41;#41;"/]
+  36[["type: #40;value: number#41; =#gt; number<br/>node: #40;value#41; =#gt; value + 1"]]
+  37[/"type: number<br/>node: value + 1"/]
+  38[/"type: Effect#lt;string, never, never#gt;#91;#93;<br/>node: values.map#40;effectful#41;"/]
+  39["type: Effect#lt;string#91;#93;, never, never#gt;<br/>callee: Effect.all<br/>args: #91;#93;"]
+  40[/"type: Effect#lt;string, never, never#gt;#91;#93;<br/>node: values.map#40;effectful#41;"/]
+  41["type: Effect#lt;string#91;#93;, never, never#gt;<br/>callee: Effect.all<br/>args: #91;#93;"]
+  42["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.asVoid<br/>args: #91;#93;"]
+  43[/"type: Effect#lt;#91;number, string#93;, never, never#gt;<br/>node: Effect.all#40;#91;Effect.succeed#40;1#41;, Effect.succeed#40;#quot;two#quot;#41;#93; as const#41;"/]
+  44[/"type: 1<br/>node: 1"/]
+  45["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  46[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  47[/"type: #quot;two#quot;<br/>node: #quot;two#quot;"/]
+  48["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  49[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
   3 -->|"kind: pipe"| 4
   5 -->|"kind: transformCallee"| 4
   4 -->|"kind: potentialReturn"| 2
   2 -->|"kind: usedBy"| 1
-  7 -->|"kind: pipe"| 8
-  9 -->|"kind: transformCallee"| 7
-  11 -->|"kind: pipe"| 12
-  13 -->|"kind: transformCallee"| 12
-  12 -->|"kind: potentialReturn"| 10
-  10 -->|"kind: transformArg"| 7
-  14 -->|"kind: transformArg"| 7
-  17 -->|"kind: pipe"| 18
-  19 -->|"kind: transformCallee"| 18
-  18 -->|"kind: pipe"| 20
-  21 -->|"kind: transformCallee"| 20
-  20 -->|"kind: potentialReturn"| 16
-  16 -->|"kind: usedBy"| 15
-  27 -->|"kind: pipe"| 28
-  29 -->|"kind: transformCallee"| 28
-  28 -->|"kind: potentialReturn"| 26
-  26 -->|"kind: pipe"| 30
-  31 -->|"kind: transformCallee"| 30
-  30 -->|"kind: usedBy"| 25
-  34 -->|"kind: potentialReturn"| 33
-  33 -->|"kind: usedBy"| 32
-  36 -->|"kind: pipe"| 37
-  38 -->|"kind: transformCallee"| 37
-  37 -->|"kind: usedBy"| 35
-  39 -->|"kind: pipe"| 40
-  41 -->|"kind: transformCallee"| 40
-  40 -->|"kind: usedBy"| 35
+  6 -->|"kind: pipe"| 7
+  8 -->|"kind: transformCallee"| 6
+  9 -->|"kind: transformArg"| 6
+  10 -->|"kind: pipe"| 11
+  12 -->|"kind: transformCallee"| 10
+  14 -->|"kind: pipe"| 15
+  16 -->|"kind: transformCallee"| 15
+  15 -->|"kind: potentialReturn"| 13
+  13 -->|"kind: transformArg"| 10
+  17 -->|"kind: transformArg"| 10
+  20 -->|"kind: pipe"| 21
+  22 -->|"kind: transformCallee"| 21
+  21 -->|"kind: pipe"| 23
+  24 -->|"kind: transformCallee"| 23
+  23 -->|"kind: potentialReturn"| 19
+  19 -->|"kind: usedBy"| 18
+  30 -->|"kind: pipe"| 31
+  32 -->|"kind: transformCallee"| 31
+  31 -->|"kind: potentialReturn"| 29
+  29 -->|"kind: pipe"| 33
+  34 -->|"kind: transformCallee"| 33
+  33 -->|"kind: usedBy"| 28
+  37 -->|"kind: potentialReturn"| 36
+  36 -->|"kind: usedBy"| 35
+  38 -->|"kind: pipe"| 39
+  40 -->|"kind: pipe"| 41
+  41 -->|"kind: pipe"| 42
+  44 -->|"kind: pipe"| 45
+  46 -->|"kind: transformCallee"| 45
+  45 -->|"kind: usedBy"| 43
+  47 -->|"kind: pipe"| 48
+  49 -->|"kind: transformCallee"| 48
+  48 -->|"kind: usedBy"| 43

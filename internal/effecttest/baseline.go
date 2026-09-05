@@ -534,7 +534,7 @@ func generateLayerGraphBaseline(
 					continue
 				}
 				t := tp.GetTypeAtLocation(vd.Initializer)
-				if !tp.IsLayerType(t, vd.Initializer) {
+				if !tp.IsLayerType(t) {
 					continue
 				}
 				exports = append(exports, layerExport{

@@ -10,6 +10,7 @@
     "effecttsgo/acquire-release-disposable": "warn",
     "effecttsgo/all-of-map-to-for-each": "warn",
     "effecttsgo/async-function": "warn",
+    "effecttsgo/catch-all-tag-dispatch-to-catch-tag": "warn",
     "effecttsgo/catch-all-to-map-error": "warn",
     "effecttsgo/catch-chain-to-first-success-of": "warn",
     "effecttsgo/catch-conditional-refail-to-catch-if": "warn",
@@ -32,6 +33,7 @@
     "effecttsgo/effect-map-void": "warn",
     "effecttsgo/effect-succeed-with-void": "warn",
     "effecttsgo/extends-native-error": "warn",
+    "effecttsgo/flat-map-conditional-to-filter-or-fail": "warn",
     "effecttsgo/flat-map-to-map": "warn",
     "effecttsgo/floating-effect": "error",
     "effecttsgo/floating-effect-in-vitest": "error",
@@ -74,11 +76,13 @@
     "effecttsgo/process-env": "warn",
     "effecttsgo/process-env-in-effect": "warn",
     "effecttsgo/promise-in-effect-success": "warn",
+    "effecttsgo/race-first-with-sleep-to-timeout": "warn",
     "effecttsgo/redundant-map-error": "warn",
     "effecttsgo/redundant-or-die": "warn",
     "effecttsgo/redundant-schema-tag-identifier": "warn",
     "effecttsgo/return-effect-in-gen": "warn",
     "effecttsgo/run-effect-inside-effect": "warn",
+    "effecttsgo/run-of-exit-to-run-exit": "warn",
     "effecttsgo/schema-literal-non-finite": "error",
     "effecttsgo/schema-number": "warn",
     "effecttsgo/schema-opaque-instance-member": "error",
@@ -92,7 +96,6 @@
     "effecttsgo/unnecessary-fail-yieldable-error": "warn",
     "effecttsgo/unnecessary-pipe": "warn",
     "effecttsgo/unnecessary-pipe-chain": "warn",
-    "effecttsgo/unnecessary-typeof-type": "warn",
-    "effecttsgo/unsafe-effect-type-assertion": "warn"
+    "effecttsgo/unnecessary-typeof-type": "warn"
   }
 }

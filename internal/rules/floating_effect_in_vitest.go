@@ -72,7 +72,7 @@ var FloatingEffectInVitest = rule.Rule{
 			if node.Kind == ast.KindCallExpression {
 				if callback := floatingEffectVitestCallback(ctx, node.AsCallExpression()); callback != nil {
 					rangeNode := callback
-					if lazy := typeparser.ParseLazyExpression(callback, false); lazy != nil && lazy.Expression != nil {
+					if lazy := typeparser.ParseLazyExpression(callback, typeparser.LazyExpressionAllowAsync); lazy != nil && lazy.Expression != nil {
 						rangeNode = lazy.Expression
 					}
 					diags = append(diags, ctx.NewDiagnostic(
@@ -213,7 +213,7 @@ func vitestCallbackReturnsEffect(c *checker.Checker, tp *typeparser.TypeParser, 
 			}
 		}
 	}
-	if lazy := typeparser.ParseLazyExpression(callback, false); lazy != nil && lazy.Expression != nil {
+	if lazy := typeparser.ParseLazyExpression(callback, typeparser.LazyExpressionAllowAsync); lazy != nil && lazy.Expression != nil {
 		return vitestReturnTypeContainsEffect(c, tp, tp.GetTypeAtLocation(lazy.Expression), lazy.Expression, 0)
 	}
 	return false
@@ -221,7 +221,7 @@ func vitestCallbackReturnsEffect(c *checker.Checker, tp *typeparser.TypeParser, 
 
 func vitestReturnTypeContainsEffect(c *checker.Checker, tp *typeparser.TypeParser, returnType *checker.Type, atLocation *ast.Node, depth int) bool {
 	for _, member := range tp.UnrollUnionMembers(returnType) {
-		if tp.StrictIsEffectType(member, atLocation) {
+		if tp.StrictIsEffectType(member) {
 			return true
 		}
 		if depth == 0 && tp.PromiseType(member) != nil {

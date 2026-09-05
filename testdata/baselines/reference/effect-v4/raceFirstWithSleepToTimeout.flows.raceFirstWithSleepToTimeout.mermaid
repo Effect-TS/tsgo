@@ -1,0 +1,244 @@
+flowchart TB
+  0[/"type: #quot;1 second#quot;<br/>node: #quot;1 second#quot;"/]
+  1["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.sleep<br/>args: #91;#93;"]
+  2[/"type: #40;duration: Input#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.sleep"/]
+  3["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;#41; =#gt; Effect.fail#40;#quot;timeout#quot;#41;#93;"]
+  4[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  5[["type: #40;#41; =#gt; Effect#lt;never, string, never#gt;<br/>node: #40;#41; =#gt; Effect.fail#40;#quot;timeout#quot;#41;"]]
+  6[/"type: #quot;timeout#quot;<br/>node: #quot;timeout#quot;"/]
+  7["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  8[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  9["type: Effect#lt;string, string #124; Error, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  10[/"type: #123; #lt;A2, E2, R2#gt;#40;that: Effect#lt;A2, E2, R2#gt;, options?: #123; readonly onWinner?: #40;#40;options: #123; readonly fiber: Fiber#lt;any, any#gt;; readonly index: number; readonly parentFiber: Fiber#lt;any, any#gt;; #125;#41; =#gt; void#41; #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E #124; E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, that: Effect#lt;A2, E2, R2#gt;, options?: #123; readonly onWinner?: #40;#40;options: #123; readonly fiber: Fiber#lt;any, any#gt;; readonly index: number; readonly parentFiber: Fiber#lt;any, any#gt;; #125;#41; =#gt; void#41; #124; undefined; #125; #124; undefined#41;: Effect#lt;A #124; A2, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.raceFirst"/]
+  11[/"type: Effect#lt;string, Error, never#gt;<br/>node: work"/]
+  12[/"type: Effect#lt;string, Error, never#gt;<br/>node: work"/]
+  13["type: Effect#lt;string, Error, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  14[/"type: #123; #lt;A2, E2, R2#gt;#40;that: Effect#lt;A2, E2, R2#gt;, options?: #123; readonly onWinner?: #40;#40;options: #123; readonly fiber: Fiber#lt;any, any#gt;; readonly index: number; readonly parentFiber: Fiber#lt;any, any#gt;; #125;#41; =#gt; void#41; #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E #124; E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, that: Effect#lt;A2, E2, R2#gt;, options?: #123; readonly onWinner?: #40;#40;options: #123; readonly fiber: Fiber#lt;any, any#gt;; readonly index: number; readonly parentFiber: Fiber#lt;any, any#gt;; #125;#41; =#gt; void#41; #124; undefined; #125; #124; undefined#41;: Effect#lt;A #124; A2, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.raceFirst"/]
+  15[/"type: #quot;2 seconds#quot;<br/>node: #quot;2 seconds#quot;"/]
+  16["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.sleep<br/>args: #91;#93;"]
+  17[/"type: #40;duration: Input#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.sleep"/]
+  18["type: Effect#lt;string, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  19[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  20[["type: #40;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;#quot;fallback#quot;#41;"]]
+  21[/"type: #quot;fallback#quot;<br/>node: #quot;fallback#quot;"/]
+  22["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  23[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  24[/"type: Effect#lt;string, Error, never#gt;<br/>node: work"/]
+  25["type: Effect#lt;string, Error, never#gt;<br/>callee: Effect.raceFirst<br/>args: #91;Effect.sleep#40;#quot;3 seconds#quot;#41;.pipe#40;Effect.as#40;#quot;fallback#quot;#41;#41;#93;"]
+  26[/"type: #123; #lt;A2, E2, R2#gt;#40;that: Effect#lt;A2, E2, R2#gt;, options?: #123; readonly onWinner?: #40;#40;options: #123; readonly fiber: Fiber#lt;any, any#gt;; readonly index: number; readonly parentFiber: Fiber#lt;any, any#gt;; #125;#41; =#gt; void#41; #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E #124; E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, that: Effect#lt;A2, E2, R2#gt;, options?: #123; readonly onWinner?: #40;#40;options: #123; readonly fiber: Fiber#lt;any, any#gt;; readonly index: number; readonly parentFiber: Fiber#lt;any, any#gt;; #125;#41; =#gt; void#41; #124; undefined; #125; #124; undefined#41;: Effect#lt;A #124; A2, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.raceFirst"/]
+  27[/"type: #quot;3 seconds#quot;<br/>node: #quot;3 seconds#quot;"/]
+  28["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.sleep<br/>args: #91;#93;"]
+  29[/"type: #40;duration: Input#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.sleep"/]
+  30["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.as<br/>args: #91;#quot;fallback#quot;#93;"]
+  31[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  32[/"type: #quot;fallback#quot;<br/>node: #quot;fallback#quot;"/]
+  33[/"type: #quot;4 seconds#quot;<br/>node: #quot;4 seconds#quot;"/]
+  34["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.sleep<br/>args: #91;#93;"]
+  35[/"type: #40;duration: Input#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.sleep"/]
+  36["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.andThen<br/>args: #91;Effect.fail#40;#quot;timeout#quot;#41;#93;"]
+  37[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  38[/"type: #quot;timeout#quot;<br/>node: #quot;timeout#quot;"/]
+  39["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  40[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  41["type: Effect#lt;string, string #124; Error, never#gt;<br/>callee: Effect.raceFirst<br/>args: #91;work#93;"]
+  42[/"type: #123; #lt;A2, E2, R2#gt;#40;that: Effect#lt;A2, E2, R2#gt;, options?: #123; readonly onWinner?: #40;#40;options: #123; readonly fiber: Fiber#lt;any, any#gt;; readonly index: number; readonly parentFiber: Fiber#lt;any, any#gt;; #125;#41; =#gt; void#41; #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E #124; E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, that: Effect#lt;A2, E2, R2#gt;, options?: #123; readonly onWinner?: #40;#40;options: #123; readonly fiber: Fiber#lt;any, any#gt;; readonly index: number; readonly parentFiber: Fiber#lt;any, any#gt;; #125;#41; =#gt; void#41; #124; undefined; #125; #124; undefined#41;: Effect#lt;A #124; A2, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.raceFirst"/]
+  43[/"type: Effect#lt;string, Error, never#gt;<br/>node: work"/]
+  44[/"type: Effect#lt;string, Error, never#gt;<br/>node: work"/]
+  45["type: Effect#lt;string, Error, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  46[/"type: #123; #lt;A2, E2, R2#gt;#40;that: Effect#lt;A2, E2, R2#gt;, options?: #123; readonly onWinner?: #40;#40;options: #123; readonly fiber: Fiber#lt;any, any#gt;; readonly index: number; readonly parentFiber: Fiber#lt;any, any#gt;; #125;#41; =#gt; void#41; #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E #124; E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, that: Effect#lt;A2, E2, R2#gt;, options?: #123; readonly onWinner?: #40;#40;options: #123; readonly fiber: Fiber#lt;any, any#gt;; readonly index: number; readonly parentFiber: Fiber#lt;any, any#gt;; #125;#41; =#gt; void#41; #124; undefined; #125; #124; undefined#41;: Effect#lt;A #124; A2, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.raceFirst"/]
+  47[/"type: #quot;fallback#quot;<br/>node: #quot;fallback#quot;"/]
+  48["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  49[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  50["type: Effect#lt;string, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  51[/"type: #123; #40;duration: Input#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R#gt;; #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;, duration: Input#41;: Effect#lt;A, E, R#gt;; #125;<br/>node: Effect.delay"/]
+  52[/"type: #quot;5 seconds#quot;<br/>node: #quot;5 seconds#quot;"/]
+  53[/"type: Effect#lt;string, Error, never#gt;<br/>node: Effect.raceAllFirst#40;#91;#92;n  work,#92;n  Effect.sleep#40;#quot;6 seconds#quot;#41;.pipe#40;Effect.map#40;#40;#41; =#gt; #quot;fallback#quot;#41;#41;#92;n#93;#41;"/]
+  54[/"type: #quot;6 seconds#quot;<br/>node: #quot;6 seconds#quot;"/]
+  55["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.sleep<br/>args: #91;#93;"]
+  56[/"type: #40;duration: Input#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.sleep"/]
+  57["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;#41; =#gt; #quot;fallback#quot;#93;"]
+  58[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  59[["type: #40;#41; =#gt; string<br/>node: #40;#41; =#gt; #quot;fallback#quot;"]]
+  60[/"type: #quot;fallback#quot;<br/>node: #quot;fallback#quot;"/]
+  61[/"type: Effect#lt;string, Error, never#gt;<br/>node: work"/]
+  62["type: Effect#lt;string #124; number, Error #124; TypeError, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  63[/"type: #123; #lt;A2, E2, R2#gt;#40;that: Effect#lt;A2, E2, R2#gt;, options?: #123; readonly onWinner?: #40;#40;options: #123; readonly fiber: Fiber#lt;any, any#gt;; readonly index: number; readonly parentFiber: Fiber#lt;any, any#gt;; #125;#41; =#gt; void#41; #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E #124; E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, that: Effect#lt;A2, E2, R2#gt;, options?: #123; readonly onWinner?: #40;#40;options: #123; readonly fiber: Fiber#lt;any, any#gt;; readonly index: number; readonly parentFiber: Fiber#lt;any, any#gt;; #125;#41; =#gt; void#41; #124; undefined; #125; #124; undefined#41;: Effect#lt;A #124; A2, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.raceFirst"/]
+  64[/"type: Effect#lt;number, TypeError, never#gt;<br/>node: other"/]
+  65[/"type: #quot;1 second#quot;<br/>node: #quot;1 second#quot;"/]
+  66["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.sleep<br/>args: #91;#93;"]
+  67[/"type: #40;duration: Input#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.sleep"/]
+  68["type: Effect#lt;void #124; string, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  69[/"type: #123; #lt;A2, E2, R2#gt;#40;that: Effect#lt;A2, E2, R2#gt;, options?: #123; readonly onWinner?: #40;#40;options: #123; readonly fiber: Fiber#lt;any, any#gt;; readonly index: number; readonly parentFiber: Fiber#lt;any, any#gt;; #125;#41; =#gt; void#41; #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E #124; E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, that: Effect#lt;A2, E2, R2#gt;, options?: #123; readonly onWinner?: #40;#40;options: #123; readonly fiber: Fiber#lt;any, any#gt;; readonly index: number; readonly parentFiber: Fiber#lt;any, any#gt;; #125;#41; =#gt; void#41; #124; undefined; #125; #124; undefined#41;: Effect#lt;A #124; A2, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.raceFirst"/]
+  70[/"type: #quot;fallback#quot;<br/>node: #quot;fallback#quot;"/]
+  71["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  72[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  73["type: Effect#lt;string, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  74[/"type: #123; #40;duration: Input#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R#gt;; #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;, duration: Input#41;: Effect#lt;A, E, R#gt;; #125;<br/>node: Effect.delay"/]
+  75[/"type: #quot;2 seconds#quot;<br/>node: #quot;2 seconds#quot;"/]
+  76[/"type: Effect#lt;string, Error, never#gt;<br/>node: work"/]
+  77["type: Effect#lt;string, string #124; Error, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  78[/"type: #123; #lt;A2, E2, R2#gt;#40;that: Effect#lt;A2, E2, R2#gt;, options?: #123; readonly onWinner?: #40;#40;options: #123; readonly fiber: Fiber#lt;any, any#gt;; readonly index: number; readonly parentFiber: Fiber#lt;any, any#gt;; #125;#41; =#gt; void#41; #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E #124; E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, that: Effect#lt;A2, E2, R2#gt;, options?: #123; readonly onWinner?: #40;#40;options: #123; readonly fiber: Fiber#lt;any, any#gt;; readonly index: number; readonly parentFiber: Fiber#lt;any, any#gt;; #125;#41; =#gt; void#41; #124; undefined; #125; #124; undefined#41;: Effect#lt;A #124; A2, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.race"/]
+  79[/"type: #quot;1 second#quot;<br/>node: #quot;1 second#quot;"/]
+  80["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.sleep<br/>args: #91;#93;"]
+  81[/"type: #40;duration: Input#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.sleep"/]
+  82["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.andThen<br/>args: #91;Effect.fail#40;#quot;timeout#quot;#41;#93;"]
+  83[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  84[/"type: #quot;timeout#quot;<br/>node: #quot;timeout#quot;"/]
+  85["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  86[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  87[/"type: Effect#lt;string, Error, never#gt;<br/>node: Effect.raceAll#40;#91;#92;n  work,#92;n  Effect.sleep#40;#quot;1 second#quot;#41;.pipe#40;Effect.as#40;#quot;fallback#quot;#41;#41;#92;n#93;#41;"/]
+  88[/"type: #quot;1 second#quot;<br/>node: #quot;1 second#quot;"/]
+  89["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.sleep<br/>args: #91;#93;"]
+  90[/"type: #40;duration: Input#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.sleep"/]
+  91["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.as<br/>args: #91;#quot;fallback#quot;#93;"]
+  92[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  93[/"type: #quot;fallback#quot;<br/>node: #quot;fallback#quot;"/]
+  94[/"type: Effect#lt;string, Error, never#gt;<br/>node: work"/]
+  95["type: Effect#lt;void #124; string, Error, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  96[/"type: #123; #lt;A2, E2, R2#gt;#40;that: Effect#lt;A2, E2, R2#gt;, options?: #123; readonly onWinner?: #40;#40;options: #123; readonly fiber: Fiber#lt;any, any#gt;; readonly index: number; readonly parentFiber: Fiber#lt;any, any#gt;; #125;#41; =#gt; void#41; #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E #124; E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, that: Effect#lt;A2, E2, R2#gt;, options?: #123; readonly onWinner?: #40;#40;options: #123; readonly fiber: Fiber#lt;any, any#gt;; readonly index: number; readonly parentFiber: Fiber#lt;any, any#gt;; #125;#41; =#gt; void#41; #124; undefined; #125; #124; undefined#41;: Effect#lt;A #124; A2, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.raceFirst"/]
+  97[/"type: #quot;1 second#quot;<br/>node: #quot;1 second#quot;"/]
+  98["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.sleep<br/>args: #91;#93;"]
+  99[/"type: #40;duration: Input#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.sleep"/]
+  100[/"type: #123; onWinner: #40;#41; =#gt; void; #125;<br/>node: #123;#92;n  onWinner: #40;#41; =#gt; #123;#125;#92;n#125;"/]
+  101[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#125;"]]
+  102[/"type: Effect#lt;string, Error, never#gt;<br/>node: work"/]
+  103["type: Effect#lt;void, Error, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;#41; =#gt; Effect.sleep#40;#quot;1 second#quot;#41;#93;"]
+  104[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  105[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.sleep#40;#quot;1 second#quot;#41;"]]
+  106[/"type: #quot;1 second#quot;<br/>node: #quot;1 second#quot;"/]
+  107["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.sleep<br/>args: #91;#93;"]
+  108[/"type: #40;duration: Input#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.sleep"/]
+  109["type: Effect#lt;void #124; number, Error #124; TypeError, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  110[/"type: #123; #lt;A2, E2, R2#gt;#40;that: Effect#lt;A2, E2, R2#gt;, options?: #123; readonly onWinner?: #40;#40;options: #123; readonly fiber: Fiber#lt;any, any#gt;; readonly index: number; readonly parentFiber: Fiber#lt;any, any#gt;; #125;#41; =#gt; void#41; #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E #124; E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, that: Effect#lt;A2, E2, R2#gt;, options?: #123; readonly onWinner?: #40;#40;options: #123; readonly fiber: Fiber#lt;any, any#gt;; readonly index: number; readonly parentFiber: Fiber#lt;any, any#gt;; #125;#41; =#gt; void#41; #124; undefined; #125; #124; undefined#41;: Effect#lt;A #124; A2, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.raceFirst"/]
+  111[/"type: Effect#lt;number, TypeError, never#gt;<br/>node: other"/]
+  112[/"type: Effect#lt;string, Error, never#gt;<br/>node: work"/]
+  113["type: Effect#lt;void #124; string, Error, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  114[/"type: #123; #lt;A2, E2, R2#gt;#40;that: Effect#lt;A2, E2, R2#gt;, options?: #123; readonly onWinner?: #40;#40;options: #123; readonly fiber: Fiber#lt;any, any#gt;; readonly index: number; readonly parentFiber: Fiber#lt;any, any#gt;; #125;#41; =#gt; void#41; #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E #124; E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, that: Effect#lt;A2, E2, R2#gt;, options?: #123; readonly onWinner?: #40;#40;options: #123; readonly fiber: Fiber#lt;any, any#gt;; readonly index: number; readonly parentFiber: Fiber#lt;any, any#gt;; #125;#41; =#gt; void#41; #124; undefined; #125; #124; undefined#41;: Effect#lt;A #124; A2, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.raceFirst"/]
+  115[/"type: #quot;1 second#quot;<br/>node: #quot;1 second#quot;"/]
+  116["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.sleep<br/>args: #91;#93;"]
+  117[/"type: #40;duration: Input#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.sleep"/]
+  118["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.tap<br/>args: #91;#40;#41; =#gt; Effect.log#40;#quot;awake#quot;#41;#93;"]
+  119[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: NoInfer#lt;A#gt;#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: NoInfer#lt;A#gt;#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;A, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;A, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.tap"/]
+  120[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.log#40;#quot;awake#quot;#41;"]]
+  121[/"type: #quot;awake#quot;<br/>node: #quot;awake#quot;"/]
+  122["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  123[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  124[/"type: Effect#lt;string, Error, never#gt;<br/>node: Effect.raceAllFirst#40;arms#41;"/]
+  125[/"type: Effect#lt;void #124; string #124; number, Error #124; TypeError, never#gt;<br/>node: Effect.raceAllFirst#40;#91;#92;n  work,#92;n  other,#92;n  Effect.sleep#40;#quot;1 second#quot;#41;#92;n#93;#41;"/]
+  126[/"type: #quot;1 second#quot;<br/>node: #quot;1 second#quot;"/]
+  127["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.sleep<br/>args: #91;#93;"]
+  128[/"type: #40;duration: Input#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.sleep"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1
+  4 -->|"kind: transformCallee"| 3
+  6 -->|"kind: pipe"| 7
+  8 -->|"kind: transformCallee"| 7
+  7 -->|"kind: potentialReturn"| 5
+  5 -->|"kind: transformArg"| 3
+  1 -->|"kind: pipe"| 3
+  3 -->|"kind: pipe"| 9
+  10 -->|"kind: transformCallee"| 0
+  11 -->|"kind: transformArg"| 0
+  12 -->|"kind: pipe"| 13
+  14 -->|"kind: transformCallee"| 12
+  15 -->|"kind: pipe"| 16
+  17 -->|"kind: transformCallee"| 16
+  16 -->|"kind: pipe"| 18
+  19 -->|"kind: transformCallee"| 15
+  21 -->|"kind: pipe"| 22
+  23 -->|"kind: transformCallee"| 22
+  22 -->|"kind: potentialReturn"| 20
+  20 -->|"kind: transformArg"| 15
+  18 -->|"kind: transformArg"| 12
+  26 -->|"kind: transformCallee"| 25
+  27 -->|"kind: pipe"| 28
+  29 -->|"kind: transformCallee"| 28
+  31 -->|"kind: transformCallee"| 30
+  32 -->|"kind: transformArg"| 30
+  28 -->|"kind: pipe"| 30
+  30 -->|"kind: transformArg"| 25
+  24 -->|"kind: pipe"| 25
+  33 -->|"kind: pipe"| 34
+  35 -->|"kind: transformCallee"| 34
+  37 -->|"kind: transformCallee"| 36
+  38 -->|"kind: pipe"| 39
+  40 -->|"kind: transformCallee"| 39
+  39 -->|"kind: transformArg"| 36
+  34 -->|"kind: pipe"| 36
+  42 -->|"kind: transformCallee"| 41
+  43 -->|"kind: transformArg"| 41
+  36 -->|"kind: pipe"| 41
+  44 -->|"kind: pipe"| 45
+  46 -->|"kind: transformCallee"| 44
+  47 -->|"kind: pipe"| 48
+  49 -->|"kind: transformCallee"| 48
+  48 -->|"kind: pipe"| 50
+  51 -->|"kind: transformCallee"| 47
+  52 -->|"kind: transformArg"| 47
+  50 -->|"kind: transformArg"| 44
+  54 -->|"kind: pipe"| 55
+  56 -->|"kind: transformCallee"| 55
+  58 -->|"kind: transformCallee"| 57
+  60 -->|"kind: potentialReturn"| 59
+  59 -->|"kind: transformArg"| 57
+  55 -->|"kind: pipe"| 57
+  57 -->|"kind: usedBy"| 53
+  61 -->|"kind: pipe"| 62
+  63 -->|"kind: transformCallee"| 61
+  64 -->|"kind: transformArg"| 61
+  65 -->|"kind: pipe"| 66
+  67 -->|"kind: transformCallee"| 66
+  66 -->|"kind: pipe"| 68
+  69 -->|"kind: transformCallee"| 65
+  70 -->|"kind: pipe"| 71
+  72 -->|"kind: transformCallee"| 71
+  71 -->|"kind: pipe"| 73
+  74 -->|"kind: transformCallee"| 70
+  75 -->|"kind: transformArg"| 70
+  73 -->|"kind: transformArg"| 65
+  76 -->|"kind: pipe"| 77
+  78 -->|"kind: transformCallee"| 76
+  79 -->|"kind: pipe"| 80
+  81 -->|"kind: transformCallee"| 80
+  83 -->|"kind: transformCallee"| 82
+  84 -->|"kind: pipe"| 85
+  86 -->|"kind: transformCallee"| 85
+  85 -->|"kind: transformArg"| 82
+  80 -->|"kind: pipe"| 82
+  82 -->|"kind: transformArg"| 76
+  88 -->|"kind: pipe"| 89
+  90 -->|"kind: transformCallee"| 89
+  92 -->|"kind: transformCallee"| 91
+  93 -->|"kind: transformArg"| 91
+  89 -->|"kind: pipe"| 91
+  91 -->|"kind: usedBy"| 87
+  94 -->|"kind: pipe"| 95
+  96 -->|"kind: transformCallee"| 94
+  97 -->|"kind: pipe"| 98
+  99 -->|"kind: transformCallee"| 98
+  98 -->|"kind: transformArg"| 94
+  101 -->|"kind: usedBy"| 100
+  100 -->|"kind: transformArg"| 94
+  104 -->|"kind: transformCallee"| 103
+  106 -->|"kind: pipe"| 107
+  108 -->|"kind: transformCallee"| 107
+  107 -->|"kind: potentialReturn"| 105
+  105 -->|"kind: transformArg"| 103
+  102 -->|"kind: pipe"| 103
+  103 -->|"kind: pipe"| 109
+  110 -->|"kind: transformCallee"| 102
+  111 -->|"kind: transformArg"| 102
+  112 -->|"kind: pipe"| 113
+  114 -->|"kind: transformCallee"| 112
+  115 -->|"kind: pipe"| 116
+  117 -->|"kind: transformCallee"| 116
+  119 -->|"kind: transformCallee"| 118
+  121 -->|"kind: pipe"| 122
+  123 -->|"kind: transformCallee"| 122
+  122 -->|"kind: potentialReturn"| 120
+  120 -->|"kind: transformArg"| 118
+  116 -->|"kind: pipe"| 118
+  118 -->|"kind: transformArg"| 112
+  126 -->|"kind: pipe"| 127
+  128 -->|"kind: transformCallee"| 127
+  127 -->|"kind: usedBy"| 125

@@ -27,7 +27,6 @@
       "description": "Enable all Effect-native diagnostics at warning level.",
       "diagnosticSeverity": {
         "abortControllerInEffect": "warning",
-        "acquireReleaseDisposable": "warning",
         "asyncFunction": "warning",
         "cryptoRandomUUID": "warning",
         "cryptoRandomUUIDInEffect": "warning",
@@ -47,8 +46,7 @@
         "nodeBuiltinImport": "warning",
         "preferSchemaOverJson": "warning",
         "processEnv": "warning",
-        "processEnvInEffect": "warning",
-        "unsafeEffectTypeAssertion": "warning"
+        "processEnvInEffect": "warning"
       }
     }
   ],
@@ -493,6 +491,30 @@
             "start": 141,
             "end": 146,
             "text": "Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "unsafeEffectTypeAssertion",
+      "group": "correctness",
+      "description": "Detects unsafe type assertions that narrow Effect, Stream, or Layer error or requirements channels",
+      "defaultSeverity": "off",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377075
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const program: Effect.Effect\u003cstring, \"boom\", \"service\"\u003e\n\nexport const preview = program as Effect.Effect\u003cstring, never, never\u003e\n",
+        "diagnostics": [
+          {
+            "start": 121,
+            "end": 167,
+            "text": "This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)"
           }
         ]
       }
@@ -1005,29 +1027,6 @@
       }
     },
     {
-      "name": "acquireReleaseDisposable",
-      "group": "effectNative",
-      "description": "Suggests Effect.acquireDisposable when Effect.acquireRelease only invokes the acquired resource's disposal protocol",
-      "defaultSeverity": "suggestion",
-      "fixable": true,
-      "supportedEffect": [
-        "v4"
-      ],
-      "codes": [
-        377119
-      ],
-      "preview": {
-        "sourceText": "/// \u003creference lib=\"esnext.disposable\" /\u003e\nimport { Effect } from \"effect\"\n\ndeclare const acquire: Effect.Effect\u003cAsyncDisposable\u003e\n\nexport const resource = Effect.acquireRelease(\n  acquire,\n  (resource) =\u003e Effect.promise(() =\u003e resource[Symbol.asyncDispose]())\n)\n",
-        "diagnostics": [
-          {
-            "start": 154,
-            "end": 175,
-            "text": "`Effect.acquireDisposable` expresses this disposable resource acquisition more directly than `Effect.acquireRelease` with a manual disposal finalizer. effect(acquireReleaseDisposable)"
-          }
-        ]
-      }
-    },
-    {
       "name": "asyncFunction",
       "group": "effectNative",
       "description": "Warns when declaring async functions and suggests using Effect values and Effect.gen for async control flow",
@@ -1508,25 +1507,24 @@
       }
     },
     {
-      "name": "unsafeEffectTypeAssertion",
-      "group": "effectNative",
-      "description": "Detects unsafe type assertions that narrow Effect, Stream, or Layer error or requirements channels",
-      "defaultSeverity": "off",
+      "name": "acquireReleaseDisposable",
+      "group": "style",
+      "description": "Suggests Effect.acquireDisposable when Effect.acquireRelease only invokes the acquired resource's disposal protocol",
+      "defaultSeverity": "suggestion",
       "fixable": true,
       "supportedEffect": [
-        "v3",
         "v4"
       ],
       "codes": [
-        377075
+        377119
       ],
       "preview": {
-        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const program: Effect.Effect\u003cstring, \"boom\", \"service\"\u003e\n\nexport const preview = program as Effect.Effect\u003cstring, never, never\u003e\n",
+        "sourceText": "/// \u003creference lib=\"esnext.disposable\" /\u003e\nimport { Effect } from \"effect\"\n\ndeclare const acquire: Effect.Effect\u003cAsyncDisposable\u003e\n\nexport const resource = Effect.acquireRelease(\n  acquire,\n  (resource) =\u003e Effect.promise(() =\u003e resource[Symbol.asyncDispose]())\n)\n",
         "diagnostics": [
           {
-            "start": 121,
-            "end": 167,
-            "text": "This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)"
+            "start": 154,
+            "end": 175,
+            "text": "`Effect.acquireDisposable` expresses this disposable resource acquisition more directly than `Effect.acquireRelease` with a manual disposal finalizer. effect(acquireReleaseDisposable)"
           }
         ]
       }
@@ -1551,6 +1549,30 @@
             "start": 101,
             "end": 111,
             "text": "`Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "catchAllTagDispatchToCatchTag",
+      "group": "style",
+      "description": "Suggests Effect.catchTag or Effect.catchTags for catch-all handlers that re-fail unmatched tagged errors",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377122
+      ],
+      "preview": {
+        "sourceText": "import { Data, Effect } from \"effect\"\n\nclass NotFound extends Data.TaggedError(\"NotFound\")\u003c{}\u003e {}\nclass Timeout extends Data.TaggedError(\"Timeout\")\u003c{}\u003e {}\nclass Unauthorized extends Data.TaggedError(\"Unauthorized\")\u003c{}\u003e {}\n\ndeclare const program: Effect.Effect\u003cstring, NotFound | Timeout | Unauthorized\u003e\n\nexport const recovered = program.pipe(\n  Effect.catch((error) =\u003e {\n    switch (error._tag) {\n      case \"NotFound\":\n        return Effect.succeed(\"guest\")\n      case \"Timeout\":\n        return Effect.succeed(\"retrying\")\n      default:\n        return Effect.fail(error)\n    }\n  })\n)\n",
+        "diagnostics": [
+          {
+            "start": 345,
+            "end": 357,
+            "text": "Branching on `error._tag` inside `Effect.catch` hand-rolls tagged error dispatch; use `Effect.catchTag` or `Effect.catchTags`, which re-fail unmatched errors automatically. effect(catchAllTagDispatchToCatchTag)"
           }
         ]
       }
@@ -1615,12 +1637,12 @@
         377116
       ],
       "preview": {
-        "sourceText": "import { Data, Effect } from \"effect\"\n\nclass NotFound extends Data.TaggedError(\"NotFound\")\u003c{}\u003e {}\nclass DatabaseError extends Data.TaggedError(\"DatabaseError\")\u003c{}\u003e {}\n\ndeclare const program: Effect.Effect\u003cstring, NotFound | DatabaseError\u003e\n\nexport const recovered = program.pipe(\n  Effect.catch((error) =\u003e\n    error._tag === \"NotFound\" ? Effect.succeed(\"guest\") : Effect.fail(error)\n  )\n)\n",
+        "sourceText": "import { Data, Effect } from \"effect\"\n\nclass NotFound extends Data.TaggedError(\"NotFound\")\u003c{}\u003e {}\nclass DatabaseError extends Data.TaggedError(\"DatabaseError\")\u003c{}\u003e {}\n\ndeclare const program: Effect.Effect\u003cstring, NotFound | DatabaseError\u003e\n\nexport const recovered = program.pipe(\n  Effect.catch((error) =\u003e\n    error instanceof NotFound ? Effect.succeed(\"guest\") : Effect.fail(error)\n  )\n)\n",
         "diagnostics": [
           {
             "start": 281,
             "end": 293,
-            "text": "`Effect.catchTag` expresses selective recovery more directly than `Effect.catch` with a conditional `Effect.fail` passthrough. effect(catchConditionalRefailToCatchIf)"
+            "text": "`Effect.catchIf` expresses selective recovery more directly than `Effect.catch` with a conditional `Effect.fail` passthrough. effect(catchConditionalRefailToCatchIf)"
           }
         ]
       }
@@ -1666,7 +1688,7 @@
         "diagnostics": [
           {
             "start": 348,
-            "end": 499,
+            "end": 363,
             "text": "Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)"
           }
         ]
@@ -1946,6 +1968,54 @@
       }
     },
     {
+      "name": "matchEffectToMapBoth",
+      "group": "style",
+      "description": "Suggests Effect.mapBoth when Effect.matchEffect only transforms the failure and success channels",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377126
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const program: Effect.Effect\u003cnumber, string\u003e\n\nprogram.pipe(Effect.matchEffect({\n  onFailure: (error) =\u003e Effect.fail(error.length),\n  onSuccess: (value) =\u003e Effect.succeed(value + 1)\n}))\n",
+        "diagnostics": [
+          {
+            "start": 100,
+            "end": 118,
+            "text": "`Effect.mapBoth` expresses these failure and success transformations more directly than `Effect.matchEffect`. effect(matchEffectToMapBoth)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "matchEffectToMatch",
+      "group": "style",
+      "description": "Suggests Effect.match or Effect.matchCause when both Effect.matchEffect handlers only return Effect.succeed",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377125
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const program: Effect.Effect\u003cnumber, string\u003e\n\nprogram.pipe(Effect.matchEffect({\n  onFailure: (error) =\u003e Effect.succeed(error.length),\n  onSuccess: (value) =\u003e Effect.succeed(value + 1)\n}))\n",
+        "diagnostics": [
+          {
+            "start": 100,
+            "end": 118,
+            "text": "`Effect.match` expresses this non-effectful fold more directly than `Effect.matchEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)"
+          }
+        ]
+      }
+    },
+    {
       "name": "missedPipeableOpportunity",
       "group": "style",
       "description": "Suggests using .pipe() for nested function calls",
@@ -2187,6 +2257,52 @@
       }
     },
     {
+      "name": "provideLayerSucceedToProvideService",
+      "group": "style",
+      "description": "Suggests providing inline Layer.succeed and Layer.effect services directly",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377124
+      ],
+      "preview": {
+        "sourceText": "import { Context, Effect, Layer } from \"effect\"\n\nclass Service extends Context.Service\u003cService, { readonly value: number }\u003e()(\"Service\") {}\n\nconst program = Service.use((service) =\u003e Effect.succeed(service.value)).pipe(\n  Effect.provide(Layer.succeed(Service, { value: 1 }))\n)\n",
+        "diagnostics": [
+          {
+            "start": 221,
+            "end": 235,
+            "text": "`Effect.provideService` provides this inline single-service layer directly. effect(provideLayerSucceedToProvideService)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "raceFirstWithSleepToTimeout",
+      "group": "style",
+      "description": "Suggests Effect.timeoutOrElse when Effect.raceFirst has exactly one sleep- or delay-based timer arm",
+      "defaultSeverity": "suggestion",
+      "fixable": false,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377121
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const request: Effect.Effect\u003cstring, Error\u003e\n\nexport const result = Effect.raceFirst(\n  request,\n  Effect.sleep(\"5 seconds\").pipe(\n    Effect.andThen(Effect.fail(new Error(\"request timed out\")))\n  )\n)\n",
+        "diagnostics": [
+          {
+            "start": 108,
+            "end": 124,
+            "text": "This Effect first-completion race has exactly one sleep- or delay-based timer arm. `Effect.timeoutOrElse` expresses the timeout and fallback directly. effect(raceFirstWithSleepToTimeout)"
+          }
+        ]
+      }
+    },
+    {
       "name": "redundantMapError",
       "group": "style",
       "description": "Suggests hoisting a repeated trailing Effect.mapError from every yield in an Effect generator",
@@ -2261,6 +2377,30 @@
       }
     },
     {
+      "name": "runOfExitToRunExit",
+      "group": "style",
+      "description": "Suggests using Effect.runPromiseExit instead of passing Effect.exit to Effect.runPromise",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377123
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const program: Effect.Effect\u003cnumber, Error\u003e\n\nexport const exit = Effect.runPromise(Effect.exit(program))\n",
+        "diagnostics": [
+          {
+            "start": 106,
+            "end": 123,
+            "text": "`Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)"
+          }
+        ]
+      }
+    },
+    {
       "name": "schemaNumber",
       "group": "style",
       "description": "Suggests Schema.Finite and Schema.FiniteFromString instead of Schema.Number APIs when describing domain numbers",
@@ -2273,7 +2413,7 @@
         377098
       ],
       "preview": {
-        "sourceText": "\nimport { Schema } from \"effect\"\n\nexport const User = Schema.Struct({\n  age: Schema.Number,\n  score: Schema.NumberFromString\n})\n",
+        "sourceText": "\nimport { Schema } from \"effect\"\n\nexport const User = Schema.Struct({\n  age: Schema.Number,\n  score: Schema.NumberFromString,\n  integer: Schema.Number.check(Schema.isInt()),\n  pipedFinite: Schema.Number.pipe(Schema.check(Schema.isFinite()))\n})\n",
         "diagnostics": [
           {
             "start": 84,

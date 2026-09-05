@@ -43,11 +43,11 @@ var OptionMatchToFromOption = rule.Rule{
 type OptionMatchToFromOptionMatch struct {
 	SourceFile       *ast.SourceFile
 	Location         core.TextRange
+	Transformation   *typeparser.PipingFlowTransformation
 	ReplacementNode  *ast.Node
 	EffectModuleNode *ast.Node
 	OptionNode       *ast.Node
 	FailureNode      *ast.Node
-	Pipeable         bool
 	DefaultFailure   bool
 	CanFix           bool
 }
@@ -66,25 +66,12 @@ func AnalyzeOptionMatchToFromOption(tp *typeparser.TypeParser, c *checker.Checke
 
 func analyzeOptionMatchCalls(tp *typeparser.TypeParser, sf *ast.SourceFile) []OptionMatchToFromOptionMatch {
 	var matches []OptionMatchToFromOptionMatch
-	seen := make(map[*ast.Node]struct{})
 
 	for _, flow := range tp.PipingFlows(sf, true) {
 		for index := range flow.Transformations {
 			transformation := &flow.Transformations[index]
-			if transformation.Node == nil || transformation.Callee == nil {
-				continue
-			}
-
 			callee := transformation.Callee
 			args := transformation.Args
-			if callee.Kind == ast.KindCallExpression {
-				call := callee.AsCallExpression()
-				if call == nil || call.Expression == nil || call.Arguments == nil {
-					continue
-				}
-				callee = call.Expression
-				args = call.Arguments.Nodes
-			}
 			if len(args) != 1 || !tp.IsNodeReferenceToEffectOptionModuleApi(callee, "match") {
 				continue
 			}
@@ -97,7 +84,7 @@ func analyzeOptionMatchCalls(tp *typeparser.TypeParser, sf *ast.SourceFile) []Op
 			match := OptionMatchToFromOptionMatch{
 				SourceFile:       sf,
 				Location:         scanner.GetErrorRangeForNode(sf, callee),
-				ReplacementNode:  transformation.Node,
+				Transformation:   transformation,
 				EffectModuleNode: effectModule,
 				FailureNode:      failure,
 				DefaultFailure:   isDefaultNoSuchElementError(tp, failure),
@@ -105,30 +92,15 @@ func analyzeOptionMatchCalls(tp *typeparser.TypeParser, sf *ast.SourceFile) []Op
 			}
 
 			switch transformation.Kind {
-			case typeparser.TransformationKindPipe, typeparser.TransformationKindPipeable:
-				match.Pipeable = true
-			case typeparser.TransformationKindDataFirst, typeparser.TransformationKindDataLast:
-				parsed := tp.DataFirstOrLastCall(transformation.Node)
-				if parsed == nil {
-					continue
-				}
-				match.OptionNode = parsed.Subject
-			case typeparser.TransformationKindCall:
-				// A direct data-last call has the shape Option.match(handlers)(option).
-				// It is only safe to rebuild from the flow subject when this is the
-				// first transformation in the flow.
-				if index != 0 || flow.Subject.Node == nil {
-					continue
-				}
-				match.OptionNode = flow.Subject.Node
+			case typeparser.TransformationKindPipe,
+				typeparser.TransformationKindPipeable,
+				typeparser.TransformationKindDataFirst,
+				typeparser.TransformationKindDataLast,
+				typeparser.TransformationKindCall:
 			default:
 				continue
 			}
 
-			if _, duplicate := seen[match.ReplacementNode]; duplicate {
-				continue
-			}
-			seen[match.ReplacementNode] = struct{}{}
 			matches = append(matches, match)
 		}
 	}
@@ -194,8 +166,8 @@ func analyzeEffectSucceedHandler(tp *typeparser.TypeParser, node *ast.Node) (*as
 }
 
 func analyzeEffectFailHandler(tp *typeparser.TypeParser, node *ast.Node) (*ast.Node, *ast.Node, bool, bool) {
-	lazy := typeparser.ParseLazyExpression(ast.SkipParentheses(node), true)
-	if lazy == nil || !isSynchronousFunction(lazy.Node) {
+	lazy := typeparser.ParseLazyExpression(node, typeparser.LazyExpressionThunk)
+	if lazy == nil {
 		return nil, nil, false, false
 	}
 	expression := ast.SkipParentheses(lazy.Expression)

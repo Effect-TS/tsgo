@@ -4,11 +4,13 @@ Effect version: 3.19.19
 /.src/allOfMapToForEach.ts(8,23): suggestion TS377113: `Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)
 /.src/allOfMapToForEach.ts(11,28): suggestion TS377113: `Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)
 /.src/allOfMapToForEach.ts(26,35): suggestion TS377113: `Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)
+/.src/allOfMapToForEach.ts(48,57): suggestion TS377113: `Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)
+/.src/allOfMapToForEach.ts(49,63): suggestion TS377113: `Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)
 
 
-==== /.src/allOfMapToForEach.ts (3 errors) ====
+==== /.src/allOfMapToForEach.ts (5 errors) ====
     // @effect-v3
-    import { Effect } from "effect"
+    import { Effect, pipe } from "effect"
     
     declare const values: ReadonlyArray<number>
     declare const effectful: (value: number, index: number) => Effect.Effect<string>
@@ -57,6 +59,15 @@ Effect version: 3.19.19
     // Should not trigger when the callback does not return an Effect.
     // @ts-expect-error Effect.all requires Effect values
     export const plainValues = Effect.all(values.map((value) => value + 1))
+    
+    // Should trigger for data-last Effect.all references in piping flows, but the
+    // diagnostic alone cannot offer the data-first quick fix.
+    export const pipeDataLast = pipe(values.map(effectful), Effect.all)
+                                                            ~~~~~~~~~~
+!!! suggestion TS377113: `Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)
+    export const pipeDataLastAsVoid = pipe(values.map(effectful), Effect.all, Effect.asVoid)
+                                                                  ~~~~~~~~~~
+!!! suggestion TS377113: `Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)
     
     // Should not trigger for legitimate Effect.all inputs.
     export const tuple = Effect.all([Effect.succeed(1), Effect.succeed("two")] as const)

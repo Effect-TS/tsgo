@@ -1,0 +1,171 @@
+=== Quick Fix Inventory ===
+
+[D1] (8:26-8:44) TS377125: `Effect.match` expresses this non-effectful fold more directly than `Effect.matchEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
+  Fix 0: "Disable matchEffectToMatch for this line"
+  Fix 1: "Disable matchEffectToMatch for entire file"
+  Fix 2: "Replace with Effect.match"
+
+[D2] (13:37-13:60) TS377125: `Effect.matchCause` expresses this non-effectful fold more directly than `Effect.matchCauseEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
+  Fix 0: "Disable matchEffectToMatch for this line"
+  Fix 1: "Disable matchEffectToMatch for entire file"
+  Fix 2: "Replace with Effect.matchCause"
+
+[D3] (18:45-18:63) TS377125: `Effect.match` expresses this non-effectful fold more directly than `Effect.matchEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
+  Fix 0: "Disable matchEffectToMatch for this line"
+  Fix 1: "Disable matchEffectToMatch for entire file"
+  Fix 2: "Replace with Effect.match"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable matchEffectToMatch for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable matchEffectToMatch for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.match" ===
+
+--- file:///.src/matchEffectToMatch.ts ---
+// @effect-diagnostics matchEffectToMatch:suggestion
+// @effect-diagnostics matchEffectToMapBoth:off
+// @effect-diagnostics-in-tsgo false
+import { Effect, pipe } from "effect"
+
+declare const effect: Effect.Effect<number, string>
+
+export const dataFirst = Effect.match(effect, {
+  onFailure: (error) => error.length,
+  onSuccess: (value) => value + 1
+})
+
+export const pipeable = effect.pipe(Effect.matchCauseEffect({
+  onFailure: (cause) => Effect.succeed(String(cause)),
+  onSuccess: (value) => pipe(value + 1, Effect.succeed)
+}))
+
+export const quotedProperties = effect.pipe(Effect.matchEffect({
+  "onFailure": (error) => Effect.succeed(error.length),
+  "onSuccess": (value) => Effect.succeed(value + 1)
+}))
+
+export const effectful = effect.pipe(Effect.matchEffect({
+  onFailure: (error) => Effect.fail(error),
+  onSuccess: (value) => Effect.succeed(value + 1)
+}))
+
+export const extraLogic = effect.pipe(Effect.matchEffect({
+  onFailure: (error) => {
+    console.log(error)
+    return Effect.succeed(error.length)
+  },
+  onSuccess: (value) => Effect.succeed(value + 1)
+}))
+
+const unrelated = { succeed: <A>(value: A) => Effect.succeed(value) }
+export const unrelatedSucceed = effect.pipe(Effect.matchEffect({
+  onFailure: (error) => unrelated.succeed(error.length),
+  onSuccess: (value) => unrelated.succeed(value + 1)
+}))
+
+
+=== [D2] Fix 0: "Disable matchEffectToMatch for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable matchEffectToMatch for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.matchCause" ===
+
+--- file:///.src/matchEffectToMatch.ts ---
+// @effect-diagnostics matchEffectToMatch:suggestion
+// @effect-diagnostics matchEffectToMapBoth:off
+// @effect-diagnostics-in-tsgo false
+import { Effect, pipe } from "effect"
+
+declare const effect: Effect.Effect<number, string>
+
+export const dataFirst = Effect.matchEffect(effect, {
+  onFailure: (error) => Effect.succeed(error.length),
+  onSuccess: (value) => Effect.succeed(value + 1)
+})
+
+export const pipeable = effect.pipe(Effect.matchCause({
+  onFailure: (cause) => String(cause),
+  onSuccess: (value) => value + 1
+}))
+
+export const quotedProperties = effect.pipe(Effect.matchEffect({
+  "onFailure": (error) => Effect.succeed(error.length),
+  "onSuccess": (value) => Effect.succeed(value + 1)
+}))
+
+export const effectful = effect.pipe(Effect.matchEffect({
+  onFailure: (error) => Effect.fail(error),
+  onSuccess: (value) => Effect.succeed(value + 1)
+}))
+
+export const extraLogic = effect.pipe(Effect.matchEffect({
+  onFailure: (error) => {
+    console.log(error)
+    return Effect.succeed(error.length)
+  },
+  onSuccess: (value) => Effect.succeed(value + 1)
+}))
+
+const unrelated = { succeed: <A>(value: A) => Effect.succeed(value) }
+export const unrelatedSucceed = effect.pipe(Effect.matchEffect({
+  onFailure: (error) => unrelated.succeed(error.length),
+  onSuccess: (value) => unrelated.succeed(value + 1)
+}))
+
+
+=== [D3] Fix 0: "Disable matchEffectToMatch for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable matchEffectToMatch for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.match" ===
+
+--- file:///.src/matchEffectToMatch.ts ---
+// @effect-diagnostics matchEffectToMatch:suggestion
+// @effect-diagnostics matchEffectToMapBoth:off
+// @effect-diagnostics-in-tsgo false
+import { Effect, pipe } from "effect"
+
+declare const effect: Effect.Effect<number, string>
+
+export const dataFirst = Effect.matchEffect(effect, {
+  onFailure: (error) => Effect.succeed(error.length),
+  onSuccess: (value) => Effect.succeed(value + 1)
+})
+
+export const pipeable = effect.pipe(Effect.matchCauseEffect({
+  onFailure: (cause) => Effect.succeed(String(cause)),
+  onSuccess: (value) => pipe(value + 1, Effect.succeed)
+}))
+
+export const quotedProperties = effect.pipe(Effect.match({
+  "onFailure": (error) => error.length,
+  "onSuccess": (value) => value + 1
+}))
+
+export const effectful = effect.pipe(Effect.matchEffect({
+  onFailure: (error) => Effect.fail(error),
+  onSuccess: (value) => Effect.succeed(value + 1)
+}))
+
+export const extraLogic = effect.pipe(Effect.matchEffect({
+  onFailure: (error) => {
+    console.log(error)
+    return Effect.succeed(error.length)
+  },
+  onSuccess: (value) => Effect.succeed(value + 1)
+}))
+
+const unrelated = { succeed: <A>(value: A) => Effect.succeed(value) }
+export const unrelatedSucceed = effect.pipe(Effect.matchEffect({
+  onFailure: (error) => unrelated.succeed(error.length),
+  onSuccess: (value) => unrelated.succeed(value + 1)
+}))
+

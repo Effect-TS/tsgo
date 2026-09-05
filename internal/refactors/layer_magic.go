@@ -104,7 +104,7 @@ func tryBuildRefactor(ctx *refactor.Context, tp *typeparser.TypeParser, c *check
 	if outerType == nil {
 		return nil
 	}
-	layer := tp.LayerType(outerType, outerAs.Type)
+	layer := tp.LayerType(outerType)
 	if layer == nil {
 		return nil
 	}
@@ -284,7 +284,7 @@ func tryPrepareRefactor(ctx *refactor.Context, tp *typeparser.TypeParser, c *che
 	exprType := tp.GetTypeAtLocation(atLocation)
 	var previouslyProvided *checker.Type
 	if exprType != nil {
-		parsedLayer := tp.LayerType(exprType, atLocation)
+		parsedLayer := tp.LayerType(exprType)
 		if parsedLayer != nil {
 			previouslyProvided = parsedLayer.ROut
 		}

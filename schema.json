@@ -2312,6 +2312,11 @@
           "default": "off",
           "description": "Warns when declaring async functions and suggests using Effect values and Effect.gen for async control flow"
         },
+        "catchAllTagDispatchToCatchTag": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.catchTag or Effect.catchTags for catch-all handlers that re-fail unmatched tagged errors"
+        },
         "catchAllToMapError": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
@@ -2677,6 +2682,16 @@
           "default": "warning",
           "description": "Detects Promise types in Effect success channels where they are not awaited"
         },
+        "provideLayerSucceedToProvideService": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests providing inline Layer.succeed and Layer.effect services directly"
+        },
+        "raceFirstWithSleepToTimeout": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.timeoutOrElse when Effect.raceFirst has exactly one sleep- or delay-based timer arm"
+        },
         "redundantMapError": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
@@ -2701,6 +2716,11 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
           "description": "Suggests using Runtime or Effect.run*With methods instead of Effect.run* inside Effect contexts"
+        },
+        "runOfExitToRunExit": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests using Effect.runPromiseExit instead of passing Effect.exit to Effect.runPromise"
         },
         "schemaLiteralNonFinite": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
