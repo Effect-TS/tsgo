@@ -1,5 +1,27 @@
 # @effect/tsgo
 
+## 0.42.0
+
+### Minor Changes
+
+- 7565750: Add the `matchEffectToMapBoth` style diagnostic and quick fix for replacing `Effect.matchEffect` handlers that return `Effect.fail` and `Effect.succeed` with `Effect.mapBoth`.
+- a09feae: Add the `catchAllTagDispatchToCatchTag` style diagnostic and quick fix for replacing manual tagged-error dispatch with `Effect.catchTag` or `Effect.catchTags`.
+- 2d501a2: Add the `provideLayerSucceedToProvideService` diagnostic and quick fix for replacing inline `Layer.succeed` and `Layer.effect` provision with direct service provision.
+- 46c6e68: Add the `matchEffectToMatch` style diagnostic and quick fix for replacing `Effect.matchEffect` or `Effect.matchCauseEffect` whose handlers only return `Effect.succeed` with their non-effectful counterparts.
+  
+  Make lazy-expression parsing synchronous and non-generator by default, with flags for callers that explicitly accept thunks, async functions, or generators.
+- 59c5fff: Adopt the piping flow parser in more diagnostics.
+  
+  - `promiseInEffectSuccess`: an explicit promise-success annotation (type arguments on `Effect.succeed`/`as`/`map`/`zipWith`) now suppresses the diagnostic from any position in the surrounding pipe, not only the last argument. `base.pipe(Effect.as<Promise<number>>(promiseValue), Effect.as(promiseValue))` no longer reports, matching the reversed order that was already accepted.
+  - `allOfMapToForEach`: now also detects the data-last form expressed through piping flows, e.g. `pipe(values.map(effectful), Effect.all)` and `pipe(values.map(effectful), Effect.all, Effect.asVoid)`, which were previously invisible to the call-expression walk. These matches are diagnostic-only: the existing quick fix remains limited to the standalone `Effect.all(xs.map(f), options?)` call it can safely rewrite.
+  - The piping flow parser now keeps the type arguments of parenthesized pipe arguments, e.g. `pipe(x, (Effect.as<...>(v)))`.
+  - The piping flow parser now normalizes curried pipeable applications, so `Effect.catch(handler)(effect)` has `effect` as its subject, `Effect.catch` as its callee, and `handler` as its transformation argument. The normalization is limited to calls whose signatures verify that they are the pipeable counterpart of a data-first overload of the same combinator, leaving unrelated curried APIs such as `Effect.fn("name")(body)` unchanged.
+- db28a74: Add the `runOfExitToRunExit` diagnostic, which replaces `Effect.runPromise` applied to `Effect.exit` with the dedicated `Effect.runPromiseExit` runner.
+
+### Patch Changes
+
+- 928506b: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260904.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/e73c923cb58e9ea8cd75ba41c51b8d8886af3076) commit `e73c923cb58e9ea8cd75ba41c51b8d8886af3076`, and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
 ## 0.41.0
 
 ### Minor Changes
