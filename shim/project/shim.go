@@ -6,8 +6,6 @@ package project
 import "github.com/microsoft/TypeScript/tsc/internal/ast"
 import "github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 import "github.com/microsoft/TypeScript/tsc/internal/core"
-import "github.com/microsoft/TypeScript/tsc/internal/ls/autoimport"
-import "github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 import "github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 import "github.com/microsoft/TypeScript/tsc/internal/project"
 import "github.com/microsoft/TypeScript/tsc/internal/project/logging"
@@ -61,8 +59,8 @@ func NewParseCacheKey(options ast.SourceFileParseOptions, hash xxh3.Uint128, scr
 func NewProject(configFileName string, kind project.Kind, currentDirectory string, builder *project.ProjectCollectionBuilder, logger *logging.LogTree) *project.Project
 //go:linkname NewSession github.com/microsoft/TypeScript/tsc/internal/project.NewSession
 func NewSession(init *project.SessionInit) *project.Session
-//go:linkname NewSnapshot github.com/microsoft/TypeScript/tsc/internal/project.NewSnapshot
-func NewSnapshot(id uint64, fs *project.SnapshotFS, sessionOptions *project.SessionOptions, configFileRegistry *project.ConfigFileRegistry, compilerOptionsForInferredProjects *core.CompilerOptions, userPreferences lsutil.UserPreferences, autoImports *autoimport.Registry, autoImportsWatch *project.WatchedFiles[map[tspath.Path]string], toPath func(fileName string) tspath.Path) *project.Snapshot
+//go:linkname NewSnapshotHost github.com/microsoft/TypeScript/tsc/internal/project.NewSnapshotHost
+func NewSnapshotHost(init *project.SessionInit) *project.SnapshotHost
 //go:linkname NewWatchedFilesForPaths github.com/microsoft/TypeScript/tsc/internal/project.NewWatchedFilesForPaths
 func NewWatchedFilesForPaths(name string, watchKind lsproto.WatchKind, hasRelativePatternCapability bool, workspaceDirectory string, currentDirectory string, useCaseSensitiveFileNames bool) *project.WatchedFiles[[]string]
 type Overlay = project.Overlay
@@ -92,6 +90,7 @@ type SessionOptions = project.SessionOptions
 type Snapshot = project.Snapshot
 type SnapshotChange = project.SnapshotChange
 type SnapshotFS = project.SnapshotFS
+type SnapshotHost = project.SnapshotHost
 type TestConfigEntry = project.TestConfigEntry
 type TestConfigFileNamesEntry = project.TestConfigFileNamesEntry
 type UpdateReason = project.UpdateReason
