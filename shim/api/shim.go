@@ -29,6 +29,7 @@ type CreateProgramOldProgramParams = api.CreateProgramOldProgramParams
 type CreateProgramOptions = api.CreateProgramOptions
 type CreateProgramParams = api.CreateProgramParams
 type CreateProgramResponse = api.CreateProgramResponse
+const DefaultMaxResponseBytesPerPage = api.DefaultMaxResponseBytesPerPage
 type DiagnosticPositionResponse = api.DiagnosticPositionResponse
 type DiagnosticResponse = api.DiagnosticResponse
 type DiagnosticSourceLineResponse = api.DiagnosticSourceLineResponse
@@ -244,12 +245,14 @@ func NewConfigFileResponse(parsedCommandLine *tsoptions.ParsedCommandLine) *api.
 func NewDiagnosticResponse(d *ast.Diagnostic) *api.DiagnosticResponse
 //go:linkname NewDiagnosticResponses github.com/microsoft/TypeScript/tsc/internal/api.NewDiagnosticResponses
 func NewDiagnosticResponses(diags []*ast.Diagnostic) []*api.DiagnosticResponse
+//go:linkname NewLSPSession github.com/microsoft/TypeScript/tsc/internal/api.NewLSPSession
+func NewLSPSession(projectSession *project.Session, options *api.SessionOptions) *api.Session
 //go:linkname NewMessagePackProtocol github.com/microsoft/TypeScript/tsc/internal/api.NewMessagePackProtocol
 func NewMessagePackProtocol(rw io.ReadWriter) *api.MessagePackProtocol
 //go:linkname NewProjectResponse github.com/microsoft/TypeScript/tsc/internal/api.NewProjectResponse
 func NewProjectResponse(p *project.Project) *api.ProjectResponse
-//go:linkname NewSession github.com/microsoft/TypeScript/tsc/internal/api.NewSession
-func NewSession(projectSession *project.Session, options *api.SessionOptions) *api.Session
+//go:linkname NewStandaloneSession github.com/microsoft/TypeScript/tsc/internal/api.NewStandaloneSession
+func NewStandaloneSession(init *project.SessionInit, options *api.SessionOptions) *api.Session
 //go:linkname NewStdioServer github.com/microsoft/TypeScript/tsc/internal/api.NewStdioServer
 func NewStdioServer(options *api.StdioServerOptions) *api.StdioServer
 type NodeHandle = api.NodeHandle

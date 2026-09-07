@@ -10,6 +10,8 @@ import _ "unsafe"
 var Default = locale.Default
 //go:linkname FromContext github.com/microsoft/TypeScript/tsc/internal/locale.FromContext
 func FromContext(ctx context.Context) locale.Locale
+//go:linkname HasLocale github.com/microsoft/TypeScript/tsc/internal/locale.HasLocale
+func HasLocale(ctx context.Context) bool
 type Locale = locale.Locale
 //go:linkname Parse github.com/microsoft/TypeScript/tsc/internal/locale.Parse
 func Parse(localeStr string) (locale locale.Locale, ok bool)
