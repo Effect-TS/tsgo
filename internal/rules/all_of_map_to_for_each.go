@@ -82,18 +82,17 @@ func AnalyzeAllOfMapToForEach(tp *typeparser.TypeParser, c *checker.Checker, sf 
 	// Data-last Effect.all references inside piping flows. A bare reference is
 	// invisible to the call walk above because it never appears as a call.
 	for _, flow := range tp.PipingFlows(sf, true) {
-		for i := range flow.Transformations {
-			transformation := &flow.Transformations[i]
-			if len(transformation.Args) != 0 ||
-				(transformation.Kind != typeparser.TransformationKindPipe && transformation.Kind != typeparser.TransformationKindPipeable) ||
-				transformation.Callee == nil ||
-				!tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "all") {
-				continue
-			}
-			if i == 0 {
-				continue
-			}
-			mapNode := transformationApplicationNode(&flow.Transformations[i-1])
+		sequences := flow.FindTransformationSequences(
+			func(*typeparser.PipingFlowTransformation) bool { return true },
+			func(transformation *typeparser.PipingFlowTransformation) bool {
+				return len(transformation.Args) == 0 &&
+					(transformation.Kind == typeparser.TransformationKindPipe || transformation.Kind == typeparser.TransformationKindPipeable) &&
+					transformation.Callee != nil && tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "all")
+			},
+		)
+		for _, sequence := range sequences {
+			transformation := &flow.Transformations[sequence.Start+1]
+			mapNode := transformationApplicationNode(&flow.Transformations[sequence.Start])
 			if match, ok := analyzeAllOfMapToForEachReceiver(tp, c, sf, transformation.Callee, mapNode, nil, false); ok {
 				matches = append(matches, match)
 			}

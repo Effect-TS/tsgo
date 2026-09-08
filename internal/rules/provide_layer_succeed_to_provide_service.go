@@ -86,14 +86,16 @@ func AnalyzeProvideLayerSucceedToProvideService(tp *typeparser.TypeParser, _ *ch
 func inlineSingleServiceLayer(tp *typeparser.TypeParser, node *ast.Node) (*ast.Node, *ast.Node, string, bool) {
 	node = ast.SkipParentheses(node)
 	flow := tp.LongestPipingFlowAt(node, false)
-	if flow == nil || flow.Node != node || len(flow.Transformations) != 1 || flow.Subject.Node == nil {
+	if flow == nil || flow.Node != node || !flow.MatchesExactly(
+		func(subject *typeparser.PipingFlowSubject) bool { return subject.Node != nil },
+		func(transformation *typeparser.PipingFlowTransformation) bool {
+			return transformation.Callee != nil && len(transformation.Args) == 1 &&
+				(transformation.TypeArguments == nil || len(transformation.TypeArguments.Nodes) == 0)
+		},
+	) {
 		return nil, nil, "", false
 	}
 	transformation := &flow.Transformations[0]
-	if transformation.Callee == nil || len(transformation.Args) != 1 ||
-		transformation.TypeArguments != nil && len(transformation.TypeArguments.Nodes) > 0 {
-		return nil, nil, "", false
-	}
 	replacement := ""
 	switch {
 	case tp.IsNodeReferenceToEffectLayerModuleApi(transformation.Callee, "succeed"):
