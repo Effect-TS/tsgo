@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: unknown
 
-/.src/cryptoRandomUUID_preview.ts(4,24): warning TS377078: This code uses `crypto.randomUUID()`, prefer the Effect `Random` module instead because it uses Effect-injected randomness rather than the `crypto` module behind the scenes. effect(cryptoRandomUUID)
+/.src/cryptoRandomUUID_preview.ts(4,24): warning TS377078: This code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUID)
 
 
 ==== /.src/cryptoRandomUUID_preview.ts (1 errors) ====
@@ -10,5 +10,5 @@ Effect version: unknown
     
     export const preview = crypto.randomUUID()
                            ~~~~~~~~~~~~~~~~~~~
-!!! warning TS377078: This code uses `crypto.randomUUID()`, prefer the Effect `Random` module instead because it uses Effect-injected randomness rather than the `crypto` module behind the scenes. effect(cryptoRandomUUID)
+!!! warning TS377078: This code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUID)
     
