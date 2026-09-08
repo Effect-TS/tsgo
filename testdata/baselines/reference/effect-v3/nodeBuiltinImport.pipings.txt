@@ -1,12 +1,82 @@
-==== /.src/nodeBuiltinImport.ts (1 flows) ====
+==== /.src/nodeBuiltinImport.ts (6 flows) ====
 
 === Piping Flow ===
-Location: 25:12 - 25:31
+Location: 37:12 - 37:31
 Node: require("node:fs")
 Node Kind: KindCallExpression
 
 Subject: "node:fs"
 Subject Type: "node:fs"
+
+Transformations (1):
+  [0] kind: call
+      callee: require
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 38:22 - 38:41
+Node: require("console")
+Node Kind: KindCallExpression
+
+Subject: "console"
+Subject Type: "console"
+
+Transformations (1):
+  [0] kind: call
+      callee: require
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 39:21 - 39:53
+Node: require("node:timers/promises")
+Node Kind: KindCallExpression
+
+Subject: "node:timers/promises"
+Subject Type: "node:timers/promises"
+
+Transformations (1):
+  [0] kind: call
+      callee: require
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 40:21 - 40:43
+Node: require("stream/web")
+Node Kind: KindCallExpression
+
+Subject: "stream/web"
+Subject Type: "stream/web"
+
+Transformations (1):
+  [0] kind: call
+      callee: require
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 45:21 - 45:44
+Node: require("node:crypto")
+Node Kind: KindCallExpression
+
+Subject: "node:crypto"
+Subject Type: "node:crypto"
+
+Transformations (1):
+  [0] kind: call
+      callee: require
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 49:29 - 49:62
+Node: require("timers/promises/extra")
+Node Kind: KindCallExpression
+
+Subject: "timers/promises/extra"
+Subject Type: "timers/promises/extra"
 
 Transformations (1):
   [0] kind: call
