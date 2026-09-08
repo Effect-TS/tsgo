@@ -1,0 +1,13 @@
+=== Quick Fix Inventory ===
+
+[D1] (5:20-5:43) TS377128: This module reference imports `@effect/schema/Schema`, which is obsolete in Effect v4. In Effect v4, Schema is provided directly by `Schema` from `effect` (or `effect/Schema`). effect(obsoleteSchemaImport)
+  Fix 0: "Disable obsoleteSchemaImport for this line"
+  Fix 1: "Disable obsoleteSchemaImport for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable obsoleteSchemaImport for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable obsoleteSchemaImport for entire file" ===
+skipped by default

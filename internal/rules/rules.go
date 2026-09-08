@@ -110,6 +110,7 @@ var All = []rule.Rule{
 	SyncToSucceed,
 	ExtendsNativeError,
 	NodeBuiltinImport,
+	ObsoleteSchemaImport,
 	NewPromise,
 	OutdatedApi,
 	ServiceNotAsClass,

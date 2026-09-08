@@ -1,0 +1,43 @@
+==== /.src/obsoleteSchemaImport.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 16:28 - 16:61
+Node: require("@effect/schema/Schema")
+Node Kind: KindCallExpression
+
+Subject: "@effect/schema/Schema"
+Subject Type: "@effect/schema/Schema"
+
+Transformations (1):
+  [0] kind: call
+      callee: require
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 31:23 - 39:4
+Node: Effect.sync(() => ({\n  val: Schema.Struct({ a: Schema.String }),\n  s1: S1,\n  s2: S2,\n  ast: AST,\n  fromEffect: SchemaFromEffect,\n  schemaAst: SchemaAST,\n  other: Other\n}))
+Node Kind: KindCallExpression
+
+Subject: () => ({\n  val: Schema.Struct({ a: Schema.String }),\n  s1: S1,\n  s2: S2,\n  ast: AST,\n  fromEffect: SchemaFromEffect,\n  schemaAst: SchemaAST,\n  other: Other\n})
+Subject Type: () => { val: Struct<{ readonly a: String; }>; s1: any; s2: any; ast: any; fromEffect: typeof import("/node_modules/effect/dist/Schema"); schemaAst: typeof import("/node_modules/effect/dist/SchemaAST"); other: any; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<{ val: Struct<{ readonly a: String; }>; s1: any; s2: any; ast: any; fromEffect: typeof import("/node_modules/effect/dist/Schema"); schemaAst: typeof import("/node_modules/effect/dist/SchemaAST"); other: any; }, never, never>
+
+=== Piping Flow ===
+Location: 32:7 - 32:43
+Node: Schema.Struct({ a: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { a: Schema.String }
+Subject Type: { a: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly a: String; }>
