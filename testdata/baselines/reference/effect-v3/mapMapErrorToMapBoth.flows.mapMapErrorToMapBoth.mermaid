@@ -1,0 +1,198 @@
+flowchart TB
+  0[/"type: #quot;TaskError#quot;<br/>node: #quot;TaskError#quot;"/]
+  1["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;TaskError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  2[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  3[/"type: Effect#lt;number, string, never#gt;<br/>node: fetchCount"/]
+  4["type: Effect#lt;boolean, string, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n #gt; 0#93;"]
+  5[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  6[["type: #40;n: number#41; =#gt; boolean<br/>node: #40;n#41; =#gt; n #gt; 0"]]
+  7[/"type: boolean<br/>node: n #gt; 0"/]
+  8["type: Effect#lt;boolean, TaskError, never#gt;<br/>callee: Effect.mapError<br/>args: #91;#40;message#41; =#gt; new TaskError#40;#123; message #125;#41;#93;"]
+  9[/"type: #123; #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E2, R#gt;; #lt;A, E, R, E2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; E2#41;: Effect#lt;A, E2, R#gt;; #125;<br/>node: Effect.mapError"/]
+  10[["type: #40;message: string#41; =#gt; TaskError<br/>node: #40;message#41; =#gt; new TaskError#40;#123; message #125;#41;"]]
+  11[/"type: TaskError<br/>node: new TaskError#40;#123; message #125;#41;"/]
+  12[/"type: Effect#lt;number, string, never#gt;<br/>node: fetchCount"/]
+  13["type: Effect#lt;number, TaskError, never#gt;<br/>callee: Effect.mapError<br/>args: #91;#40;message#41; =#gt; new TaskError#40;#123; message #125;#41;#93;"]
+  14[/"type: #123; #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E2, R#gt;; #lt;A, E, R, E2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; E2#41;: Effect#lt;A, E2, R#gt;; #125;<br/>node: Effect.mapError"/]
+  15[["type: #40;message: string#41; =#gt; TaskError<br/>node: #40;message#41; =#gt; new TaskError#40;#123; message #125;#41;"]]
+  16[/"type: TaskError<br/>node: new TaskError#40;#123; message #125;#41;"/]
+  17["type: Effect#lt;boolean, TaskError, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n #gt; 0#93;"]
+  18[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  19[["type: #40;n: number#41; =#gt; boolean<br/>node: #40;n#41; =#gt; n #gt; 0"]]
+  20[/"type: boolean<br/>node: n #gt; 0"/]
+  21[/"type: Effect#lt;number, string, never#gt;<br/>node: fetchCount"/]
+  22["type: Effect#lt;boolean, string, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n #gt; 0#93;"]
+  23[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  24[["type: #40;n: number#41; =#gt; boolean<br/>node: #40;n#41; =#gt; n #gt; 0"]]
+  25[/"type: boolean<br/>node: n #gt; 0"/]
+  26["type: Effect#lt;boolean, TaskError, never#gt;<br/>callee: Effect.mapError<br/>args: #91;#40;message#41; =#gt; new TaskError#40;#123; message #125;#41;#93;"]
+  27[/"type: #123; #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E2, R#gt;; #lt;A, E, R, E2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; E2#41;: Effect#lt;A, E2, R#gt;; #125;<br/>node: Effect.mapError"/]
+  28[["type: #40;message: string#41; =#gt; TaskError<br/>node: #40;message#41; =#gt; new TaskError#40;#123; message #125;#41;"]]
+  29[/"type: TaskError<br/>node: new TaskError#40;#123; message #125;#41;"/]
+  30[/"type: Effect#lt;number, string, never#gt;<br/>node: fetchCount"/]
+  31["type: Effect#lt;number, TaskError, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  32[/"type: #123; #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E2, R#gt;; #lt;A, E, R, E2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; E2#41;: Effect#lt;A, E2, R#gt;; #125;<br/>node: Effect.mapError"/]
+  33[["type: #40;message: string#41; =#gt; TaskError<br/>node: #40;message#41; =#gt; new TaskError#40;#123; message #125;#41;"]]
+  34[/"type: TaskError<br/>node: new TaskError#40;#123; message #125;#41;"/]
+  35["type: Effect#lt;boolean, TaskError, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  36[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  37[["type: #40;n: number#41; =#gt; boolean<br/>node: #40;n#41; =#gt; n #gt; 0"]]
+  38[/"type: boolean<br/>node: n #gt; 0"/]
+  39[/"type: Effect#lt;number, string, never#gt;<br/>node: fetchCount"/]
+  40["type: Effect#lt;boolean, string, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  41[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  42[["type: #40;n: number#41; =#gt; boolean<br/>node: #40;n#41; =#gt; n #gt; 0"]]
+  43[/"type: boolean<br/>node: n #gt; 0"/]
+  44["type: Effect#lt;boolean, TaskError, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  45[/"type: #123; #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E2, R#gt;; #lt;A, E, R, E2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; E2#41;: Effect#lt;A, E2, R#gt;; #125;<br/>node: Effect.mapError"/]
+  46[["type: #40;message: string#41; =#gt; TaskError<br/>node: #40;message#41; =#gt; new TaskError#40;#123; message #125;#41;"]]
+  47[/"type: TaskError<br/>node: new TaskError#40;#123; message #125;#41;"/]
+  48[/"type: Effect#lt;number, string, never#gt;<br/>node: fetchCount"/]
+  49["type: Effect#lt;boolean, string, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n #gt; 0#93;"]
+  50[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  51[["type: #40;n: number#41; =#gt; boolean<br/>node: #40;n#41; =#gt; n #gt; 0"]]
+  52[/"type: boolean<br/>node: n #gt; 0"/]
+  53["type: Effect#lt;boolean, string, never#gt;<br/>callee: Effect.tap<br/>args: #91;#40;b#41; =#gt; Effect.log#40;String#40;b#41;#41;#93;"]
+  54[/"type: #123; #lt;A, X#gt;#40;f: #40;a: NoInfer#lt;A#gt;#41; =#gt; X#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; #91;X#93; extends #91;Effect#lt;infer _A1, infer E1, infer R1#gt;#93; ? Effect#lt;A, E #124; E1, R #124; R1#gt; : #91;X#93; extends #91;PromiseLike#lt;infer _A1#gt;#93; ? Effect#lt;A, E #124; UnknownException, R#gt; : Effect#lt;A, E, R#gt;; #lt;A, X, E1, R1#gt;#40;f: #40;a: NoInfer#lt;A#gt;#41; =#gt; Effect#lt;X, E1, R1#gt;, options: #123; onlyEffect: true; #125;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E1, R #124; R1#gt;; #lt;X#gt;#40;f: NotFunction#lt;X#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; #91;X#93; extends #91;Effect#lt;infer _A1, infer E1, infer R1#gt;#93; ? Effect#lt;A, E #124; E1, R #124; R1#gt; : #91;X#93; extends #91;PromiseLike#lt;infer _A1#gt;#93; ? Effect#lt;A, E #124; UnknownException, R#gt; : Effect#lt;A, E, R#gt;; #lt;X, E1, R1#gt;#40;f: Effect#lt;X, E1, R1#gt;, options: #123; onlyEffect: true; #125;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E1, R #124; R1#gt;; #lt;A, E, R, X#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: NoInfer#lt;A#gt;#41; =#gt; X#41;: #91;X#93; extends #91;Effect#lt;infer _A1, infer E1, infer R1#gt;#93; ? Effect#lt;A, E #124; E1, R #124; R1#gt; : #91;X#93; extends #91;PromiseLike#lt;infer _A1#gt;#93; ? Effect#lt;A, E #124; UnknownException, R#gt; : Effect#lt;A, E, R#gt;; #lt;A, E, R, X, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: NoInfer#lt;A#gt;#41; =#gt; Effect#lt;X, E1, R1#gt;, options: #123; onlyEffect: true; #125;#41;: Effect#lt;A, E #124; E1, R #124; R1#gt;; #lt;A, E, R, X#gt;#40;self: Effect#lt;A, E, R#gt;, f: NotFunction#lt;X#gt;#41;: #91;X#93; extends #91;Effect#lt;infer _A1, infer E1, infer R1#gt;#93; ? Effect#lt;A, E #124; E1, R #124; R1#gt; : #91;X#93; extends #91;PromiseLike#lt;infer _A1#gt;#93; ? Effect#lt;A, E #124; UnknownException, R#gt; : Effect#lt;A, E, R#gt;; #lt;A, E, R, X, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;X, E1, R1#gt;, options: #123; onlyEffect: true; #125;#41;: Effect#lt;A, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.tap"/]
+  55[["type: #40;b: boolean#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;b#41; =#gt; Effect.log#40;String#40;b#41;#41;"]]
+  56[/"type: boolean<br/>node: b"/]
+  57["type: string<br/>callee: String<br/>args: #91;#93;"]
+  58[/"type: StringConstructor<br/>node: String"/]
+  59["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  60[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  61["type: Effect#lt;boolean, TaskError, never#gt;<br/>callee: Effect.mapError<br/>args: #91;#40;message#41; =#gt; new TaskError#40;#123; message #125;#41;#93;"]
+  62[/"type: #123; #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E2, R#gt;; #lt;A, E, R, E2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; E2#41;: Effect#lt;A, E2, R#gt;; #125;<br/>node: Effect.mapError"/]
+  63[["type: #40;message: string#41; =#gt; TaskError<br/>node: #40;message#41; =#gt; new TaskError#40;#123; message #125;#41;"]]
+  64[/"type: TaskError<br/>node: new TaskError#40;#123; message #125;#41;"/]
+  65[/"type: Effect#lt;number, string, never#gt;<br/>node: fetchCount"/]
+  66["type: Effect#lt;boolean, TaskError, never#gt;<br/>callee: Effect.mapBoth<br/>args: #91;#123;#92;n    onSuccess: #40;n#41; =#gt; n #gt; 0,#92;n    onFailure: #40;message#41; =#gt; new TaskError#40;#123; message #125;#41;#92;n  #125;#93;"]
+  67[/"type: #123; #lt;E, E2, A, A2#gt;#40;options: #123; readonly onFailure: #40;e: E#41; =#gt; E2; readonly onSuccess: #40;a: A#41; =#gt; A2; #125;#41;: #lt;R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A2, E2, R#gt;; #lt;A, E, R, E2, A2#gt;#40;self: Effect#lt;A, E, R#gt;, options: #123; readonly onFailure: #40;e: E#41; =#gt; E2; readonly onSuccess: #40;a: A#41; =#gt; A2; #125;#41;: Effect#lt;A2, E2, R#gt;; #125;<br/>node: Effect.mapBoth"/]
+  68[/"type: #123; onSuccess: #40;n: number#41; =#gt; boolean; onFailure: #40;message: string#41; =#gt; TaskError; #125;<br/>node: #123;#92;n    onSuccess: #40;n#41; =#gt; n #gt; 0,#92;n    onFailure: #40;message#41; =#gt; new TaskError#40;#123; message #125;#41;#92;n  #125;"/]
+  69[["type: #40;n: number#41; =#gt; boolean<br/>node: #40;n#41; =#gt; n #gt; 0"]]
+  70[/"type: boolean<br/>node: n #gt; 0"/]
+  71[["type: #40;message: string#41; =#gt; TaskError<br/>node: #40;message#41; =#gt; new TaskError#40;#123; message #125;#41;"]]
+  72[/"type: TaskError<br/>node: new TaskError#40;#123; message #125;#41;"/]
+  73[/"type: #123; map: #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41; =#gt; #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; mapError: #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41; =#gt; #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E2, R#gt;; #125;<br/>node: #123;#92;n  map: #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41; =#gt; #lt;E, R#gt;#40;self: Effect.Effect#lt;A, E, R#gt;#41; =#gt; Effect.map#40;self, f#41;,#92;n  mapError: #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41; =#gt; #lt;A, R#gt;#40;self: Effect.Effect#lt;A, E, R#gt;#41; =#gt; Effect.mapError#40;self, f#41;#92;n#125;"/]
+  74[["type: #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41; =#gt; #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;<br/>node: #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41; =#gt; #lt;E, R#gt;#40;self: Effect.Effect#lt;A, E, R#gt;#41; =#gt; Effect.map#40;self, f#41;"]]
+  75[["type: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;<br/>node: #lt;E, R#gt;#40;self: Effect.Effect#lt;A, E, R#gt;#41; =#gt; Effect.map#40;self, f#41;"]]
+  76[/"type: Effect#lt;A, E, R#gt;<br/>node: self"/]
+  77["type: Effect#lt;B, E, R#gt;<br/>callee: <br/>args: #91;#93;"]
+  78[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  79[/"type: #40;a: A#41; =#gt; B<br/>node: f"/]
+  80[["type: #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41; =#gt; #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E2, R#gt;<br/>node: #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41; =#gt; #lt;A, R#gt;#40;self: Effect.Effect#lt;A, E, R#gt;#41; =#gt; Effect.mapError#40;self, f#41;"]]
+  81[["type: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E2, R#gt;<br/>node: #lt;A, R#gt;#40;self: Effect.Effect#lt;A, E, R#gt;#41; =#gt; Effect.mapError#40;self, f#41;"]]
+  82[/"type: Effect#lt;A, E, R#gt;<br/>node: self"/]
+  83["type: Effect#lt;A, E2, R#gt;<br/>callee: <br/>args: #91;#93;"]
+  84[/"type: #123; #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E2, R#gt;; #lt;A, E, R, E2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; E2#41;: Effect#lt;A, E2, R#gt;; #125;<br/>node: Effect.mapError"/]
+  85[/"type: #40;e: E#41; =#gt; E2<br/>node: f"/]
+  86[/"type: Effect#lt;number, string, never#gt;<br/>node: fetchCount"/]
+  87["type: Effect#lt;boolean, string, never#gt;<br/>callee: unrelated.map<br/>args: #91;#40;n#41; =#gt; n #gt; 0#93;"]
+  88[/"type: #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41; =#gt; #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;<br/>node: unrelated.map"/]
+  89[["type: #40;n: number#41; =#gt; boolean<br/>node: #40;n#41; =#gt; n #gt; 0"]]
+  90[/"type: boolean<br/>node: n #gt; 0"/]
+  91["type: Effect#lt;boolean, TaskError, never#gt;<br/>callee: Effect.mapError<br/>args: #91;#40;message#41; =#gt; new TaskError#40;#123; message #125;#41;#93;"]
+  92[/"type: #123; #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E2, R#gt;; #lt;A, E, R, E2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; E2#41;: Effect#lt;A, E2, R#gt;; #125;<br/>node: Effect.mapError"/]
+  93[["type: #40;message: string#41; =#gt; TaskError<br/>node: #40;message#41; =#gt; new TaskError#40;#123; message #125;#41;"]]
+  94[/"type: TaskError<br/>node: new TaskError#40;#123; message #125;#41;"/]
+  95[/"type: Effect#lt;number, string, never#gt;<br/>node: fetchCount"/]
+  96["type: Effect#lt;boolean, string, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n #gt; 0#93;"]
+  97[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  98[["type: #40;n: number#41; =#gt; boolean<br/>node: #40;n#41; =#gt; n #gt; 0"]]
+  99[/"type: boolean<br/>node: n #gt; 0"/]
+  100["type: Effect#lt;boolean, TaskError, never#gt;<br/>callee: unrelated.mapError<br/>args: #91;#40;message#41; =#gt; new TaskError#40;#123; message #125;#41;#93;"]
+  101[/"type: #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41; =#gt; #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E2, R#gt;<br/>node: unrelated.mapError"/]
+  102[["type: #40;message: string#41; =#gt; TaskError<br/>node: #40;message#41; =#gt; new TaskError#40;#123; message #125;#41;"]]
+  103[/"type: TaskError<br/>node: new TaskError#40;#123; message #125;#41;"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1
+  5 -->|"kind: transformCallee"| 4
+  7 -->|"kind: potentialReturn"| 6
+  6 -->|"kind: transformArg"| 4
+  3 -->|"kind: pipe"| 4
+  9 -->|"kind: transformCallee"| 8
+  11 -->|"kind: potentialReturn"| 10
+  10 -->|"kind: transformArg"| 8
+  4 -->|"kind: pipe"| 8
+  14 -->|"kind: transformCallee"| 13
+  16 -->|"kind: potentialReturn"| 15
+  15 -->|"kind: transformArg"| 13
+  12 -->|"kind: pipe"| 13
+  18 -->|"kind: transformCallee"| 17
+  20 -->|"kind: potentialReturn"| 19
+  19 -->|"kind: transformArg"| 17
+  13 -->|"kind: pipe"| 17
+  23 -->|"kind: transformCallee"| 22
+  25 -->|"kind: potentialReturn"| 24
+  24 -->|"kind: transformArg"| 22
+  21 -->|"kind: pipe"| 22
+  27 -->|"kind: transformCallee"| 26
+  29 -->|"kind: potentialReturn"| 28
+  28 -->|"kind: transformArg"| 26
+  22 -->|"kind: pipe"| 26
+  30 -->|"kind: pipe"| 31
+  32 -->|"kind: transformCallee"| 30
+  34 -->|"kind: potentialReturn"| 33
+  33 -->|"kind: transformArg"| 30
+  31 -->|"kind: pipe"| 35
+  36 -->|"kind: transformCallee"| 30
+  38 -->|"kind: potentialReturn"| 37
+  37 -->|"kind: transformArg"| 30
+  39 -->|"kind: pipe"| 40
+  41 -->|"kind: transformCallee"| 39
+  43 -->|"kind: potentialReturn"| 42
+  42 -->|"kind: transformArg"| 39
+  40 -->|"kind: pipe"| 44
+  45 -->|"kind: transformCallee"| 39
+  47 -->|"kind: potentialReturn"| 46
+  46 -->|"kind: transformArg"| 39
+  50 -->|"kind: transformCallee"| 49
+  52 -->|"kind: potentialReturn"| 51
+  51 -->|"kind: transformArg"| 49
+  48 -->|"kind: pipe"| 49
+  54 -->|"kind: transformCallee"| 53
+  56 -->|"kind: pipe"| 57
+  58 -->|"kind: transformCallee"| 57
+  57 -->|"kind: pipe"| 59
+  60 -->|"kind: transformCallee"| 59
+  59 -->|"kind: potentialReturn"| 55
+  55 -->|"kind: transformArg"| 53
+  49 -->|"kind: pipe"| 53
+  62 -->|"kind: transformCallee"| 61
+  64 -->|"kind: potentialReturn"| 63
+  63 -->|"kind: transformArg"| 61
+  53 -->|"kind: pipe"| 61
+  67 -->|"kind: transformCallee"| 66
+  70 -->|"kind: potentialReturn"| 69
+  69 -->|"kind: usedBy"| 68
+  72 -->|"kind: potentialReturn"| 71
+  71 -->|"kind: usedBy"| 68
+  68 -->|"kind: transformArg"| 66
+  65 -->|"kind: pipe"| 66
+  76 -->|"kind: pipe"| 77
+  78 -->|"kind: transformCallee"| 76
+  79 -->|"kind: transformArg"| 76
+  77 -->|"kind: potentialReturn"| 75
+  75 -->|"kind: potentialReturn"| 74
+  74 -->|"kind: usedBy"| 73
+  82 -->|"kind: pipe"| 83
+  84 -->|"kind: transformCallee"| 82
+  85 -->|"kind: transformArg"| 82
+  83 -->|"kind: potentialReturn"| 81
+  81 -->|"kind: potentialReturn"| 80
+  80 -->|"kind: usedBy"| 73
+  88 -->|"kind: transformCallee"| 87
+  90 -->|"kind: potentialReturn"| 89
+  89 -->|"kind: transformArg"| 87
+  86 -->|"kind: pipe"| 87
+  92 -->|"kind: transformCallee"| 91
+  94 -->|"kind: potentialReturn"| 93
+  93 -->|"kind: transformArg"| 91
+  87 -->|"kind: pipe"| 91
+  97 -->|"kind: transformCallee"| 96
+  99 -->|"kind: potentialReturn"| 98
+  98 -->|"kind: transformArg"| 96
+  95 -->|"kind: pipe"| 96
+  101 -->|"kind: transformCallee"| 100
+  103 -->|"kind: potentialReturn"| 102
+  102 -->|"kind: transformArg"| 100
+  96 -->|"kind: pipe"| 100

@@ -1962,6 +1962,30 @@
       }
     },
     {
+      "name": "mapMapErrorToMapBoth",
+      "group": "style",
+      "description": "Suggests using Effect.mapBoth instead of directly adjacent Effect.map and Effect.mapError",
+      "defaultSeverity": "suggestion",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377132
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const fetchCount: Effect.Effect\u003cnumber, string\u003e\n\nexport const preview = fetchCount.pipe(\n  Effect.map((n) =\u003e n \u003e 0),\n  Effect.mapError((s) =\u003e s.length)\n)\n",
+        "diagnostics": [
+          {
+            "start": 160,
+            "end": 175,
+            "text": "`Effect.mapBoth` expresses these failure and success transformations more directly than adjacent `Effect.map` and `Effect.mapError`. effect(mapMapErrorToMapBoth)"
+          }
+        ]
+      }
+    },
+    {
       "name": "mapSomeToAsSome",
       "group": "style",
       "description": "Suggests using Effect.asSome instead of Effect.map when the mapper only wraps the success value with Option.some",
