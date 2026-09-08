@@ -2533,6 +2533,9 @@
         "effecttsgo/sync-to-succeed": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/timeout-catch-tag-to-timeout-or-else": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/try-catch-in-effect-gen": {
           "$ref": "#/definitions/RuleNoConfig"
         },

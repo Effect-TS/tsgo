@@ -2552,6 +2552,16 @@
           "default": "suggestion",
           "description": "Suggests using Effect.asSome instead of Effect.map when the mapper only wraps the success value with Option.some"
         },
+        "matchEffectToMapBoth": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.mapBoth when Effect.matchEffect only transforms the failure and success channels"
+        },
+        "matchEffectToMatch": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.match or Effect.matchCause when both Effect.matchEffect handlers only return Effect.succeed"
+        },
         "missedPipeableOpportunity": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
@@ -2776,6 +2786,11 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
           "description": "Suggests using Effect.succeed instead of Effect.sync when the thunk returns a constant value"
+        },
+        "timeoutCatchTagToTimeoutOrElse": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests dedicated timeout combinators instead of catching TimeoutError immediately after Effect.timeout"
         },
         "tryCatchInEffectGen": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",

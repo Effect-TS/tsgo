@@ -2557,6 +2557,34 @@
       }
     },
     {
+      "name": "timeoutCatchTagToTimeoutOrElse",
+      "group": "style",
+      "description": "Suggests dedicated timeout combinators instead of catching TimeoutError immediately after Effect.timeout",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377127
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const fetchQuote: Effect.Effect\u003cstring\u003e\n\nexport const quote = fetchQuote.pipe(\n  Effect.timeout(\"5 seconds\"),\n  Effect.catchTag(\"TimeoutError\", () =\u003e Effect.succeed(\"cached quote\"))\n)\n\nexport const maybeQuote = fetchQuote.pipe(\n  Effect.timeout(\"5 seconds\"),\n  Effect.asSome,\n  Effect.catchTag(\"TimeoutError\", () =\u003e Effect.succeedNone)\n)\n",
+        "diagnostics": [
+          {
+            "start": 153,
+            "end": 168,
+            "text": "Use `Effect.timeoutOrElse` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)"
+          },
+          {
+            "start": 319,
+            "end": 334,
+            "text": "Use `Effect.timeoutOption` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)"
+          }
+        ]
+      }
+    },
+    {
       "name": "unnecessaryArrowBlock",
       "group": "style",
       "description": "Suggests using a concise arrow body when the block only returns an expression",

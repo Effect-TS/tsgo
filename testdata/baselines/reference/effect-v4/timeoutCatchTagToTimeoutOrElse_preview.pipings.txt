@@ -1,0 +1,55 @@
+==== /.src/timeoutCatchTagToTimeoutOrElse_preview.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 8:21 - 11:2
+Node: fetchQuote.pipe(\n  Effect.timeout("5 seconds"),\n  Effect.catchTag("TimeoutError", () => Effect.succeed("cached quote"))\n)
+Node Kind: KindCallExpression
+
+Subject: fetchQuote
+Subject Type: Effect<string, never, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.timeout
+      args: ["5 seconds"]
+      outType: Effect<string, TimeoutError, never>
+  [1] kind: pipeable
+      callee: Effect.catchTag
+      args: ["TimeoutError", () => Effect.succeed("cached quote")]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 10:40 - 10:71
+Node: Effect.succeed("cached quote")
+Node Kind: KindCallExpression
+
+Subject: "cached quote"
+Subject Type: "cached quote"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 13:26 - 17:2
+Node: fetchQuote.pipe(\n  Effect.timeout("5 seconds"),\n  Effect.asSome,\n  Effect.catchTag("TimeoutError", () => Effect.succeedNone)\n)
+Node Kind: KindCallExpression
+
+Subject: fetchQuote
+Subject Type: Effect<string, never, never>
+
+Transformations (3):
+  [0] kind: pipeable
+      callee: Effect.timeout
+      args: ["5 seconds"]
+      outType: Effect<string, TimeoutError, never>
+  [1] kind: pipeable
+      callee: Effect.asSome
+      args: (constant)
+      outType: Effect<Option<string>, TimeoutError, never>
+  [2] kind: pipeable
+      callee: Effect.catchTag
+      args: ["TimeoutError", () => Effect.succeedNone]
+      outType: Effect<import("/node_modules/effect/dist/Option").Option<string> | import("/node_modules/effect/dist/Option").Option<never>, never, never>
