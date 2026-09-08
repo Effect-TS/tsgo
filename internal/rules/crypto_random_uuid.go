@@ -12,10 +12,10 @@ import (
 var CryptoRandomUUID = rule.Rule{
 	Name:            "cryptoRandomUUID",
 	Group:           "effectNative",
-	Description:     "Warns when using crypto.randomUUID() outside Effect generators instead of the Effect Random module, which uses Effect-injected randomness rather than the crypto module behind the scenes",
+	Description:     "Warns when using crypto.randomUUID() outside Effect generators instead of the Effect Crypto module",
 	DefaultSeverity: etscore.SeverityOff,
 	SupportedEffect: []string{"v4"},
-	Codes:           []int32{tsdiag.This_code_uses_crypto_randomUUID_prefer_the_Effect_Random_module_instead_because_it_uses_Effect_injected_randomness_rather_than_the_crypto_module_behind_the_scenes_effect_cryptoRandomUUID.Code()},
+	Codes:           []int32{tsdiag.This_code_uses_crypto_randomUUID_prefer_the_Effect_Crypto_module_instead_effect_cryptoRandomUUID.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		return runCryptoRandomUUID(ctx, false)
 	},
@@ -24,10 +24,10 @@ var CryptoRandomUUID = rule.Rule{
 var CryptoRandomUUIDInEffect = rule.Rule{
 	Name:            "cryptoRandomUUIDInEffect",
 	Group:           "effectNative",
-	Description:     "Warns when using crypto.randomUUID() inside Effect generators instead of the Effect Random module, which uses Effect-injected randomness rather than the crypto module behind the scenes",
+	Description:     "Warns when using crypto.randomUUID() inside Effect generators instead of the Effect Crypto module",
 	DefaultSeverity: etscore.SeverityOff,
 	SupportedEffect: []string{"v4"},
-	Codes:           []int32{tsdiag.This_Effect_code_uses_crypto_randomUUID_prefer_the_Effect_Random_module_instead_because_it_uses_Effect_injected_randomness_rather_than_the_crypto_module_behind_the_scenes_effect_cryptoRandomUUIDInEffect.Code()},
+	Codes:           []int32{tsdiag.This_Effect_code_uses_crypto_randomUUID_prefer_the_Effect_Crypto_module_instead_effect_cryptoRandomUUIDInEffect.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		return runCryptoRandomUUID(ctx, true)
 	},
@@ -39,9 +39,9 @@ func runCryptoRandomUUID(ctx *rule.Context, checkInEffect bool) []*ast.Diagnosti
 		return nil
 	}
 
-	message := tsdiag.This_code_uses_crypto_randomUUID_prefer_the_Effect_Random_module_instead_because_it_uses_Effect_injected_randomness_rather_than_the_crypto_module_behind_the_scenes_effect_cryptoRandomUUID
+	message := tsdiag.This_code_uses_crypto_randomUUID_prefer_the_Effect_Crypto_module_instead_effect_cryptoRandomUUID
 	if checkInEffect {
-		message = tsdiag.This_Effect_code_uses_crypto_randomUUID_prefer_the_Effect_Random_module_instead_because_it_uses_Effect_injected_randomness_rather_than_the_crypto_module_behind_the_scenes_effect_cryptoRandomUUIDInEffect
+		message = tsdiag.This_Effect_code_uses_crypto_randomUUID_prefer_the_Effect_Crypto_module_instead_effect_cryptoRandomUUIDInEffect
 	}
 
 	var diags []*ast.Diagnostic
