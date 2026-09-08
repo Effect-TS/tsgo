@@ -86,6 +86,7 @@ var All = []rule.Rule{
 	UnnecessaryArrowBlock,
 	UnnecessaryTypeofType,
 	PreferSchemaTypeProperty,
+	PreferSchemaUnion,
 	InstanceOfSchema,
 	GenericEffectServices,
 	OverriddenSchemaConstructor,

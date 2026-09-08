@@ -1,0 +1,109 @@
+flowchart TB
+  0[/"type: #123; kind: Literal#lt;#quot;circle#quot;#gt;; radius: Number; #125;<br/>node: #123; kind: Schema.Literal#40;#quot;circle#quot;#41;, radius: Schema.Number #125;"/]
+  1[/"type: #quot;circle#quot;<br/>node: #quot;circle#quot;"/]
+  2["type: Literal#lt;#quot;circle#quot;#gt;<br/>callee: Schema.Literal<br/>args: #91;#93;"]
+  3[/"type: #lt;L extends SchemaAST.LiteralValue#gt;#40;literal: L#41; =#gt; Literal#lt;L#gt;<br/>node: Schema.Literal"/]
+  4["type: Struct#lt;#123; readonly kind: Literal#lt;#quot;circle#quot;#gt;; readonly radius: Number; #125;#gt;<br/>callee: Schema.Struct<br/>args: #91;#93;"]
+  5[/"type: #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields#41; =#gt; Struct#lt;Fields#gt;<br/>node: Schema.Struct"/]
+  6[/"type: #123; kind: Literal#lt;#quot;square#quot;#gt;; side: Number; #125;<br/>node: #123; kind: Schema.Literal#40;#quot;square#quot;#41;, side: Schema.Number #125;"/]
+  7[/"type: #quot;square#quot;<br/>node: #quot;square#quot;"/]
+  8["type: Literal#lt;#quot;square#quot;#gt;<br/>callee: Schema.Literal<br/>args: #91;#93;"]
+  9[/"type: #lt;L extends SchemaAST.LiteralValue#gt;#40;literal: L#41; =#gt; Literal#lt;L#gt;<br/>node: Schema.Literal"/]
+  10["type: Struct#lt;#123; readonly kind: Literal#lt;#quot;square#quot;#gt;; readonly side: Number; #125;#gt;<br/>callee: Schema.Struct<br/>args: #91;#93;"]
+  11[/"type: #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields#41; =#gt; Struct#lt;Fields#gt;<br/>node: Schema.Struct"/]
+  12[/"type: #123; kind: Literal#lt;#quot;triangle#quot;#gt;; base: Number; height: Number; #125;<br/>node: #123; kind: Schema.Literal#40;#quot;triangle#quot;#41;, base: Schema.Number, height: Schema.Number #125;"/]
+  13[/"type: #quot;triangle#quot;<br/>node: #quot;triangle#quot;"/]
+  14["type: Literal#lt;#quot;triangle#quot;#gt;<br/>callee: Schema.Literal<br/>args: #91;#93;"]
+  15[/"type: #lt;L extends SchemaAST.LiteralValue#gt;#40;literal: L#41; =#gt; Literal#lt;L#gt;<br/>node: Schema.Literal"/]
+  16["type: Struct#lt;#123; readonly kind: Literal#lt;#quot;triangle#quot;#gt;; readonly base: Number; readonly height: Number; #125;#gt;<br/>callee: Schema.Struct<br/>args: #91;#93;"]
+  17[/"type: #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields#41; =#gt; Struct#lt;Fields#gt;<br/>node: Schema.Struct"/]
+  18[/"type: <br/>node: Circle.Type"/]
+  19[/"type: <br/>node: Square.Type"/]
+  20[/"type: <br/>node: Circle.Type"/]
+  21[/"type: <br/>node: Square.Type"/]
+  22[/"type: <br/>node: Triangle.Type"/]
+  23[/"type: Class#lt;UserClass, Struct#lt;#123; readonly id: String; readonly name: String; #125;#gt;, #123;#125;#gt;<br/>node: Schema.Class#lt;UserClass#gt;#40;#quot;UserClass#quot;#41;#40;#123;#92;n  id: Schema.String,#92;n  name: Schema.String#92;n#125;#41;"/]
+  24[/"type: #quot;UserClass#quot;<br/>node: #quot;UserClass#quot;"/]
+  25["type: #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;UserClass, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: Class#lt;UserClass, Struct#lt;Fields#gt;, #123;#125;#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;UserClass, readonly #91;S#93;#gt; #124; undefined#41;: Class#lt;UserClass, S, #123;#125;#gt;; #125;<br/>callee: Schema.Class<br/>args: #91;#93;"]
+  26[/"type: #lt;Self = never, Brand = #123;#125;#gt;#40;identifier: string#41; =#gt; #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;Self, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.Class#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, Struct#lt;Fields#gt;, Brand#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;Self, readonly #91;S#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.Class#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, S, Brand#gt;; #125;<br/>node: Schema.Class"/]
+  27[/"type: NonEmptyString<br/>node: Schema.NonEmptyString"/]
+  28[/"type: NumberFromString<br/>node: Schema.NumberFromString"/]
+  29[/"type: <br/>node: UserClass.Type"/]
+  30[/"type: <br/>node: NonEmptyString.Type"/]
+  31[/"type: <br/>node: NumberFromString.Type"/]
+  32[/"type: <br/>node: Circle.Type"/]
+  33[/"type: null<br/>node: null"/]
+  34[/"type: <br/>node: Circle.Encoded"/]
+  35[/"type: <br/>node: Square.Encoded"/]
+  36[/"type: #123; Type: #quot;lookalike#quot;; #125;<br/>node: #123; Type: #quot;lookalike#quot; as const #125;"/]
+  37[/"type: <br/>node: Lookalike.Type"/]
+  38[/"type: <br/>node: Circle.Type"/]
+  39[/"type: <br/>node: AnyReceiver.Type"/]
+  40[/"type: <br/>node: Circle.Type"/]
+  41[/"type: <br/>node: Circle.Type"/]
+  42[/"type: <br/>node: Square.Type"/]
+  43[/"type: <br/>node: Circle.Type"/]
+  44[/"type: <br/>node: Square.Type"/]
+  45[/"type: <br/>node: Circle.Type"/]
+  46[/"type: true<br/>node: true"/]
+  47[/"type: <br/>node: Narrowed.Type"/]
+  48[/"type: <br/>node: Circle.Type"/]
+  49[/"type: Union#lt;readonly #91;Struct#lt;#123; readonly kind: Literal#lt;#quot;circle#quot;#gt;; readonly radius: Number; #125;#gt;, Struct#lt;#123; readonly kind: Literal#lt;#quot;square#quot;#gt;; readonly side: Number; #125;#gt;#93;#gt;<br/>node: Schema.Union#40;#91;Circle, Square#93;#41;"/]
+  50[/"type: <br/>node: AlreadyComposed.Type"/]
+  51[/"type: 42<br/>node: 42"/]
+  52[/"type: <br/>node: Circle.Type"/]
+  53[/"type: <br/>node: Square.Type"/]
+  54[/"type: <br/>node: ForwardA.Type"/]
+  55[/"type: <br/>node: ForwardB.Type"/]
+  56[/"type: #123; a: String; #125;<br/>node: #123; a: Schema.String #125;"/]
+  57["type: Struct#lt;#123; readonly a: String; #125;#gt;<br/>callee: Schema.Struct<br/>args: #91;#93;"]
+  58[/"type: #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields#41; =#gt; Struct#lt;Fields#gt;<br/>node: Schema.Struct"/]
+  59[/"type: #123; b: String; #125;<br/>node: #123; b: Schema.String #125;"/]
+  60["type: Struct#lt;#123; readonly b: String; #125;#gt;<br/>callee: Schema.Struct<br/>args: #91;#93;"]
+  61[/"type: #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields#41; =#gt; Struct#lt;Fields#gt;<br/>node: Schema.Struct"/]
+  62[/"type: String<br/>node: Schema.String"/]
+  63[/"type: <br/>node: Models.SubItem.Type"/]
+  64[/"type: <br/>node: Circle.Type"/]
+  65[/"type: #123; m: String; #125;<br/>node: #123; m: Schema.String #125;"/]
+  66["type: Struct#lt;#123; readonly m: String; #125;#gt;<br/>callee: Schema.Struct<br/>args: #91;#93;"]
+  67[/"type: #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields#41; =#gt; Struct#lt;Fields#gt;<br/>node: Schema.Struct"/]
+  68[/"type: <br/>node: MutableSchema.Type"/]
+  69[/"type: <br/>node: Circle.Type"/]
+  70[/"type: <br/>node: Circle.Type"/]
+  71[/"type: <br/>node: Square.Type"/]
+  72[/"type: #123; a: String; #125;<br/>node: #123; a: S.String #125;"/]
+  73["type: Struct#lt;#123; readonly a: String; #125;#gt;<br/>callee: S.Struct<br/>args: #91;#93;"]
+  74[/"type: #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields#41; =#gt; Struct#lt;Fields#gt;<br/>node: S.Struct"/]
+  75[/"type: #123; b: Number; #125;<br/>node: #123; b: S.Number #125;"/]
+  76["type: Struct#lt;#123; readonly b: Number; #125;#gt;<br/>callee: S.Struct<br/>args: #91;#93;"]
+  77[/"type: #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields#41; =#gt; Struct#lt;Fields#gt;<br/>node: S.Struct"/]
+  78[/"type: <br/>node: A.Type"/]
+  79[/"type: <br/>node: B.Type"/]
+  1 -->|"kind: pipe"| 2
+  3 -->|"kind: transformCallee"| 2
+  2 -->|"kind: usedBy"| 0
+  0 -->|"kind: pipe"| 4
+  5 -->|"kind: transformCallee"| 4
+  7 -->|"kind: pipe"| 8
+  9 -->|"kind: transformCallee"| 8
+  8 -->|"kind: usedBy"| 6
+  6 -->|"kind: pipe"| 10
+  11 -->|"kind: transformCallee"| 10
+  13 -->|"kind: pipe"| 14
+  15 -->|"kind: transformCallee"| 14
+  14 -->|"kind: usedBy"| 12
+  12 -->|"kind: pipe"| 16
+  17 -->|"kind: transformCallee"| 16
+  24 -->|"kind: pipe"| 25
+  26 -->|"kind: transformCallee"| 25
+  25 -->|"kind: usedBy"| 23
+  56 -->|"kind: pipe"| 57
+  58 -->|"kind: transformCallee"| 57
+  59 -->|"kind: pipe"| 60
+  61 -->|"kind: transformCallee"| 60
+  65 -->|"kind: pipe"| 66
+  67 -->|"kind: transformCallee"| 66
+  72 -->|"kind: pipe"| 73
+  74 -->|"kind: transformCallee"| 73
+  75 -->|"kind: pipe"| 76
+  77 -->|"kind: transformCallee"| 76

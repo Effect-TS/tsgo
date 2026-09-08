@@ -1,0 +1,405 @@
+=== Quick Fix Inventory ===
+
+[D1] (10:22-10:61) TS377130: This type alias unions decoded Effect Schema types. Prefer Schema.Union([...]) and derive the type from the resulting schema. effect(preferSchemaUnion)
+  Fix 0: "Disable preferSchemaUnion for this line"
+  Fix 1: "Disable preferSchemaUnion for entire file"
+  Fix 2: "Compose Schema.Union and derive type"
+
+[D2] (11:22-11:86) TS377130: This type alias unions decoded Effect Schema types. Prefer Schema.Union([...]) and derive the type from the resulting schema. effect(preferSchemaUnion)
+  Fix 0: "Disable preferSchemaUnion for this line"
+  Fix 1: "Disable preferSchemaUnion for entire file"
+  Fix 2: "Compose Schema.Union and derive type"
+
+[D3] (21:29-21:110) TS377130: This type alias unions decoded Effect Schema types. Prefer Schema.Union([...]) and derive the type from the resulting schema. effect(preferSchemaUnion)
+  Fix 0: "Disable preferSchemaUnion for this line"
+  Fix 1: "Disable preferSchemaUnion for entire file"
+  Fix 2: "Compose Schema.Union and derive type"
+
+[D4] (24:6-24:20) TS6196: 'MixedPrimitive' is declared but never used.
+  (no quick fixes)
+
+[D5] (25:6-25:18) TS6196: 'EncodedUnion' is declared but never used.
+  (no quick fixes)
+
+[D6] (27:6-27:20) TS6196: 'LookalikeUnion' is declared but never used.
+  (no quick fixes)
+
+[D7] (29:6-29:14) TS6196: 'AnyUnion' is declared but never used.
+  (no quick fixes)
+
+[D8] (30:6-30:18) TS6196: 'GenericAlias' is declared but never used.
+  (no quick fixes)
+
+[D9] (30:19-30:20) TS6196: 'T' is declared but never used.
+  (no quick fixes)
+
+[D10] (32:6-32:18) TS6196: 'SingleMember' is declared but never used.
+  (no quick fixes)
+
+[D11] (38:6-38:19) TS6196: 'NarrowedUnion' is declared but never used.
+  (no quick fixes)
+
+[D12] (44:30-44:69) TS377130: This type alias unions decoded Effect Schema types. Prefer Schema.Union([...]) and derive the type from the resulting schema. effect(preferSchemaUnion)
+  Fix 0: "Disable preferSchemaUnion for this line"
+  Fix 1: "Disable preferSchemaUnion for entire file"
+
+[D13] (46:28-46:71) TS377130: This type alias unions decoded Effect Schema types. Prefer Schema.Union([...]) and derive the type from the resulting schema. effect(preferSchemaUnion)
+  Fix 0: "Disable preferSchemaUnion for this line"
+  Fix 1: "Disable preferSchemaUnion for entire file"
+
+[D14] (53:31-53:78) TS377130: This type alias unions decoded Effect Schema types. Prefer Schema.Union([...]) and derive the type from the resulting schema. effect(preferSchemaUnion)
+  Fix 0: "Disable preferSchemaUnion for this line"
+  Fix 1: "Disable preferSchemaUnion for entire file"
+
+[D15] (56:28-56:74) TS377130: This type alias unions decoded Effect Schema types. Prefer Schema.Union([...]) and derive the type from the resulting schema. effect(preferSchemaUnion)
+  Fix 0: "Disable preferSchemaUnion for this line"
+  Fix 1: "Disable preferSchemaUnion for entire file"
+
+[D16] (60:3-60:42) TS377130: This type alias unions decoded Effect Schema types. Prefer Schema.Union([...]) and derive the type from the resulting schema. effect(preferSchemaUnion)
+  Fix 0: "Disable preferSchemaUnion for this line"
+  Fix 1: "Disable preferSchemaUnion for entire file"
+
+[D17] (65:28-65:57) TS377130: This type alias unions decoded Effect Schema types. Prefer Schema.Union([...]) and derive the type from the resulting schema. effect(preferSchemaUnion)
+  Fix 0: "Disable preferSchemaUnion for this line"
+  Fix 1: "Disable preferSchemaUnion for entire file"
+  Fix 2: "Compose Schema.Union and derive type"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable preferSchemaUnion for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable preferSchemaUnion for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Compose Schema.Union and derive type" ===
+
+--- file:///.src/preferSchemaUnion.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferSchemaUnion:warning
+import { Schema, Schema as S } from "effect"
+
+// 1. Two and three concrete schema leaves, including parenthesized unions
+export const Circle = Schema.Struct({ kind: Schema.Literal("circle"), radius: Schema.Number })
+export const Square = Schema.Struct({ kind: Schema.Literal("square"), side: Schema.Number })
+export const Triangle = Schema.Struct({ kind: Schema.Literal("triangle"), base: Schema.Number, height: Schema.Number })
+
+export const Shape2 = Schema.Union([Circle, Square]);
+export type Shape2 = typeof Shape2.Type
+export type Shape3 = (typeof Circle.Type | typeof Square.Type) | typeof Triangle.Type
+
+// 2. Schema.Class, refinements and transformed codecs
+export class UserClass extends Schema.Class<UserClass>("UserClass")({
+  id: Schema.String,
+  name: Schema.String
+}) {}
+export const NonEmptyString = Schema.NonEmptyString
+export const NumberFromString = Schema.NumberFromString
+
+export type ValidEntities = typeof UserClass.Type | typeof NonEmptyString.Type | typeof NumberFromString.Type
+
+// 3. Negative cases - NO DIAGNOSTIC
+type MixedPrimitive = typeof Circle.Type | null
+type EncodedUnion = typeof Circle.Encoded | typeof Square.Encoded
+const Lookalike = { Type: "lookalike" as const }
+type LookalikeUnion = typeof Lookalike.Type | typeof Circle.Type
+declare const AnyReceiver: any
+type AnyUnion = typeof AnyReceiver.Type | typeof Circle.Type
+type GenericAlias<T> = typeof Circle.Type | typeof Square.Type
+declare type AmbientAlias = typeof Circle.Type | typeof Square.Type
+type SingleMember = typeof Circle.Type
+type NarrowedSchemaWithoutEncoded = {
+  readonly "~effect/Schema/Schema": true
+  readonly Type: string
+}
+declare const Narrowed: NarrowedSchemaWithoutEncoded
+type NarrowedUnion = typeof Narrowed.Type | typeof Circle.Type
+export const AlreadyComposed = Schema.Union([Circle, Square])
+export type AlreadyComposed = typeof AlreadyComposed.Type
+
+// 4. Diagnosed, but safety checks withhold code action
+export const CollidingValue = 42
+export type CollidingValue = typeof Circle.Type | typeof Square.Type
+
+export type ForwardUnion = typeof ForwardA.Type | typeof ForwardB.Type
+export const ForwardA = Schema.Struct({ a: Schema.String })
+export const ForwardB = Schema.Struct({ b: Schema.String })
+
+namespace Models {
+  export const SubItem = Schema.String
+}
+export type NamespacedUnion = typeof Models.SubItem.Type | typeof Circle.Type
+
+let MutableSchema = Schema.Struct({ m: Schema.String })
+export type MutableUnion = typeof MutableSchema.Type | typeof Circle.Type
+
+export type CommentedUnion =
+  // interior comment
+  typeof Circle.Type | typeof Square.Type
+
+// 5. Existing aliased Schema import
+export const A = S.Struct({ a: S.String })
+export const B = S.Struct({ b: S.Number })
+export type AliasedUnion = typeof A.Type | typeof B.Type
+
+
+=== [D2] Fix 0: "Disable preferSchemaUnion for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable preferSchemaUnion for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Compose Schema.Union and derive type" ===
+
+--- file:///.src/preferSchemaUnion.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferSchemaUnion:warning
+import { Schema, Schema as S } from "effect"
+
+// 1. Two and three concrete schema leaves, including parenthesized unions
+export const Circle = Schema.Struct({ kind: Schema.Literal("circle"), radius: Schema.Number })
+export const Square = Schema.Struct({ kind: Schema.Literal("square"), side: Schema.Number })
+export const Triangle = Schema.Struct({ kind: Schema.Literal("triangle"), base: Schema.Number, height: Schema.Number })
+
+export type Shape2 = typeof Circle.Type | typeof Square.Type
+export const Shape3 = Schema.Union([Circle, Square, Triangle]);
+export type Shape3 = typeof Shape3.Type
+
+// 2. Schema.Class, refinements and transformed codecs
+export class UserClass extends Schema.Class<UserClass>("UserClass")({
+  id: Schema.String,
+  name: Schema.String
+}) {}
+export const NonEmptyString = Schema.NonEmptyString
+export const NumberFromString = Schema.NumberFromString
+
+export type ValidEntities = typeof UserClass.Type | typeof NonEmptyString.Type | typeof NumberFromString.Type
+
+// 3. Negative cases - NO DIAGNOSTIC
+type MixedPrimitive = typeof Circle.Type | null
+type EncodedUnion = typeof Circle.Encoded | typeof Square.Encoded
+const Lookalike = { Type: "lookalike" as const }
+type LookalikeUnion = typeof Lookalike.Type | typeof Circle.Type
+declare const AnyReceiver: any
+type AnyUnion = typeof AnyReceiver.Type | typeof Circle.Type
+type GenericAlias<T> = typeof Circle.Type | typeof Square.Type
+declare type AmbientAlias = typeof Circle.Type | typeof Square.Type
+type SingleMember = typeof Circle.Type
+type NarrowedSchemaWithoutEncoded = {
+  readonly "~effect/Schema/Schema": true
+  readonly Type: string
+}
+declare const Narrowed: NarrowedSchemaWithoutEncoded
+type NarrowedUnion = typeof Narrowed.Type | typeof Circle.Type
+export const AlreadyComposed = Schema.Union([Circle, Square])
+export type AlreadyComposed = typeof AlreadyComposed.Type
+
+// 4. Diagnosed, but safety checks withhold code action
+export const CollidingValue = 42
+export type CollidingValue = typeof Circle.Type | typeof Square.Type
+
+export type ForwardUnion = typeof ForwardA.Type | typeof ForwardB.Type
+export const ForwardA = Schema.Struct({ a: Schema.String })
+export const ForwardB = Schema.Struct({ b: Schema.String })
+
+namespace Models {
+  export const SubItem = Schema.String
+}
+export type NamespacedUnion = typeof Models.SubItem.Type | typeof Circle.Type
+
+let MutableSchema = Schema.Struct({ m: Schema.String })
+export type MutableUnion = typeof MutableSchema.Type | typeof Circle.Type
+
+export type CommentedUnion =
+  // interior comment
+  typeof Circle.Type | typeof Square.Type
+
+// 5. Existing aliased Schema import
+export const A = S.Struct({ a: S.String })
+export const B = S.Struct({ b: S.Number })
+export type AliasedUnion = typeof A.Type | typeof B.Type
+
+
+=== [D3] Fix 0: "Disable preferSchemaUnion for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable preferSchemaUnion for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Compose Schema.Union and derive type" ===
+
+--- file:///.src/preferSchemaUnion.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferSchemaUnion:warning
+import { Schema, Schema as S } from "effect"
+
+// 1. Two and three concrete schema leaves, including parenthesized unions
+export const Circle = Schema.Struct({ kind: Schema.Literal("circle"), radius: Schema.Number })
+export const Square = Schema.Struct({ kind: Schema.Literal("square"), side: Schema.Number })
+export const Triangle = Schema.Struct({ kind: Schema.Literal("triangle"), base: Schema.Number, height: Schema.Number })
+
+export type Shape2 = typeof Circle.Type | typeof Square.Type
+export type Shape3 = (typeof Circle.Type | typeof Square.Type) | typeof Triangle.Type
+
+// 2. Schema.Class, refinements and transformed codecs
+export class UserClass extends Schema.Class<UserClass>("UserClass")({
+  id: Schema.String,
+  name: Schema.String
+}) {}
+export const NonEmptyString = Schema.NonEmptyString
+export const NumberFromString = Schema.NumberFromString
+
+export const ValidEntities = Schema.Union([UserClass, NonEmptyString, NumberFromString]);
+export type ValidEntities = typeof ValidEntities.Type
+
+// 3. Negative cases - NO DIAGNOSTIC
+type MixedPrimitive = typeof Circle.Type | null
+type EncodedUnion = typeof Circle.Encoded | typeof Square.Encoded
+const Lookalike = { Type: "lookalike" as const }
+type LookalikeUnion = typeof Lookalike.Type | typeof Circle.Type
+declare const AnyReceiver: any
+type AnyUnion = typeof AnyReceiver.Type | typeof Circle.Type
+type GenericAlias<T> = typeof Circle.Type | typeof Square.Type
+declare type AmbientAlias = typeof Circle.Type | typeof Square.Type
+type SingleMember = typeof Circle.Type
+type NarrowedSchemaWithoutEncoded = {
+  readonly "~effect/Schema/Schema": true
+  readonly Type: string
+}
+declare const Narrowed: NarrowedSchemaWithoutEncoded
+type NarrowedUnion = typeof Narrowed.Type | typeof Circle.Type
+export const AlreadyComposed = Schema.Union([Circle, Square])
+export type AlreadyComposed = typeof AlreadyComposed.Type
+
+// 4. Diagnosed, but safety checks withhold code action
+export const CollidingValue = 42
+export type CollidingValue = typeof Circle.Type | typeof Square.Type
+
+export type ForwardUnion = typeof ForwardA.Type | typeof ForwardB.Type
+export const ForwardA = Schema.Struct({ a: Schema.String })
+export const ForwardB = Schema.Struct({ b: Schema.String })
+
+namespace Models {
+  export const SubItem = Schema.String
+}
+export type NamespacedUnion = typeof Models.SubItem.Type | typeof Circle.Type
+
+let MutableSchema = Schema.Struct({ m: Schema.String })
+export type MutableUnion = typeof MutableSchema.Type | typeof Circle.Type
+
+export type CommentedUnion =
+  // interior comment
+  typeof Circle.Type | typeof Square.Type
+
+// 5. Existing aliased Schema import
+export const A = S.Struct({ a: S.String })
+export const B = S.Struct({ b: S.Number })
+export type AliasedUnion = typeof A.Type | typeof B.Type
+
+
+=== [D12] Fix 0: "Disable preferSchemaUnion for this line" ===
+skipped by default
+
+=== [D12] Fix 1: "Disable preferSchemaUnion for entire file" ===
+skipped by default
+
+=== [D13] Fix 0: "Disable preferSchemaUnion for this line" ===
+skipped by default
+
+=== [D13] Fix 1: "Disable preferSchemaUnion for entire file" ===
+skipped by default
+
+=== [D14] Fix 0: "Disable preferSchemaUnion for this line" ===
+skipped by default
+
+=== [D14] Fix 1: "Disable preferSchemaUnion for entire file" ===
+skipped by default
+
+=== [D15] Fix 0: "Disable preferSchemaUnion for this line" ===
+skipped by default
+
+=== [D15] Fix 1: "Disable preferSchemaUnion for entire file" ===
+skipped by default
+
+=== [D16] Fix 0: "Disable preferSchemaUnion for this line" ===
+skipped by default
+
+=== [D16] Fix 1: "Disable preferSchemaUnion for entire file" ===
+skipped by default
+
+=== [D17] Fix 0: "Disable preferSchemaUnion for this line" ===
+skipped by default
+
+=== [D17] Fix 1: "Disable preferSchemaUnion for entire file" ===
+skipped by default
+
+=== [D17] Fix 2: "Compose Schema.Union and derive type" ===
+
+--- file:///.src/preferSchemaUnion.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferSchemaUnion:warning
+import { Schema, Schema as S } from "effect"
+
+// 1. Two and three concrete schema leaves, including parenthesized unions
+export const Circle = Schema.Struct({ kind: Schema.Literal("circle"), radius: Schema.Number })
+export const Square = Schema.Struct({ kind: Schema.Literal("square"), side: Schema.Number })
+export const Triangle = Schema.Struct({ kind: Schema.Literal("triangle"), base: Schema.Number, height: Schema.Number })
+
+export type Shape2 = typeof Circle.Type | typeof Square.Type
+export type Shape3 = (typeof Circle.Type | typeof Square.Type) | typeof Triangle.Type
+
+// 2. Schema.Class, refinements and transformed codecs
+export class UserClass extends Schema.Class<UserClass>("UserClass")({
+  id: Schema.String,
+  name: Schema.String
+}) {}
+export const NonEmptyString = Schema.NonEmptyString
+export const NumberFromString = Schema.NumberFromString
+
+export type ValidEntities = typeof UserClass.Type | typeof NonEmptyString.Type | typeof NumberFromString.Type
+
+// 3. Negative cases - NO DIAGNOSTIC
+type MixedPrimitive = typeof Circle.Type | null
+type EncodedUnion = typeof Circle.Encoded | typeof Square.Encoded
+const Lookalike = { Type: "lookalike" as const }
+type LookalikeUnion = typeof Lookalike.Type | typeof Circle.Type
+declare const AnyReceiver: any
+type AnyUnion = typeof AnyReceiver.Type | typeof Circle.Type
+type GenericAlias<T> = typeof Circle.Type | typeof Square.Type
+declare type AmbientAlias = typeof Circle.Type | typeof Square.Type
+type SingleMember = typeof Circle.Type
+type NarrowedSchemaWithoutEncoded = {
+  readonly "~effect/Schema/Schema": true
+  readonly Type: string
+}
+declare const Narrowed: NarrowedSchemaWithoutEncoded
+type NarrowedUnion = typeof Narrowed.Type | typeof Circle.Type
+export const AlreadyComposed = Schema.Union([Circle, Square])
+export type AlreadyComposed = typeof AlreadyComposed.Type
+
+// 4. Diagnosed, but safety checks withhold code action
+export const CollidingValue = 42
+export type CollidingValue = typeof Circle.Type | typeof Square.Type
+
+export type ForwardUnion = typeof ForwardA.Type | typeof ForwardB.Type
+export const ForwardA = Schema.Struct({ a: Schema.String })
+export const ForwardB = Schema.Struct({ b: Schema.String })
+
+namespace Models {
+  export const SubItem = Schema.String
+}
+export type NamespacedUnion = typeof Models.SubItem.Type | typeof Circle.Type
+
+let MutableSchema = Schema.Struct({ m: Schema.String })
+export type MutableUnion = typeof MutableSchema.Type | typeof Circle.Type
+
+export type CommentedUnion =
+  // interior comment
+  typeof Circle.Type | typeof Square.Type
+
+// 5. Existing aliased Schema import
+export const A = S.Struct({ a: S.String })
+export const B = S.Struct({ b: S.Number })
+export const AliasedUnion = Schema.Union([A, B]);
+export type AliasedUnion = typeof AliasedUnion.Type
+

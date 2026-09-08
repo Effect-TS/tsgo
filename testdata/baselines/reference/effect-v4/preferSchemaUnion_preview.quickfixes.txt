@@ -1,0 +1,28 @@
+=== Quick Fix Inventory ===
+
+[D1] (8:21-8:60) TS377130: This type alias unions decoded Effect Schema types. Prefer Schema.Union([...]) and derive the type from the resulting schema. effect(preferSchemaUnion)
+  Fix 0: "Disable preferSchemaUnion for this line"
+  Fix 1: "Disable preferSchemaUnion for entire file"
+  Fix 2: "Compose Schema.Union and derive type"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable preferSchemaUnion for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable preferSchemaUnion for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Compose Schema.Union and derive type" ===
+
+--- file:///.src/preferSchemaUnion_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferSchemaUnion:warning
+import { Schema } from "effect"
+
+export const Circle = Schema.Struct({ kind: Schema.Literal("circle"), radius: Schema.Number })
+export const Square = Schema.Struct({ kind: Schema.Literal("square"), side: Schema.Number })
+
+export const Shape = Schema.Union([Circle, Square]);
+export type Shape = typeof Shape.Type
+
