@@ -506,5 +506,9 @@
     "This module reference imports `{0}`, which is obsolete in Effect v4. In Effect v4, Schema is provided directly by `Schema` from `effect` (or `effect/Schema`). effect(obsoleteSchemaImport)": {
         "category": "Warning",
         "code": 377128
+    },
+    "Sequencing Effect.sleep before an effect re-implements Effect.delay. effect(sleepThenEffectToDelay)": {
+        "category": "Suggestion",
+        "code": 377133
     }
 }

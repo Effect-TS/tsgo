@@ -1,0 +1,89 @@
+==== /.src/sleepThenEffectToDelay.ts (6 flows) ====
+
+=== Piping Flow ===
+Location: 9:29 - 9:72
+Node: sendRequest.pipe(Effect.delay("1 second"))
+Node Kind: KindCallExpression
+
+Subject: sendRequest
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.delay
+      args: ["1 second"]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 10:34 - 10:74
+Node: Effect.delay(sendRequest, "100 millis")
+Node Kind: KindCallExpression
+
+Subject: sendRequest
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.delay
+      args: ["100 millis"]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 12:33 - 15:3
+Node: Effect.gen(function* () {\n  yield* Effect.sleep("1 second")\n  return yield* sendRequest\n})
+Node Kind: KindCallExpression
+
+Subject: function* () {\n  yield* Effect.sleep("1 second")\n  return yield* sendRequest\n}
+Subject Type: () => Generator<YieldWrap<Effect<void, never, never>>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 13:9 - 13:34
+Node: Effect.sleep("1 second")
+Node Kind: KindCallExpression
+
+Subject: "1 second"
+Subject Type: "1 second"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 17:38 - 19:2
+Node: Effect.sleep("1 second").pipe(\n  Effect.flatMap((val) => Effect.succeed(val))\n)
+Node Kind: KindCallExpression
+
+Subject: "1 second"
+Subject Type: "1 second"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: pipeable
+      callee: Effect.flatMap
+      args: [(val) => Effect.succeed(val)]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 18:26 - 18:46
+Node: Effect.succeed(val)
+Node Kind: KindCallExpression
+
+Subject: val
+Subject Type: void
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<void, never, never>

@@ -2527,6 +2527,30 @@
       }
     },
     {
+      "name": "sleepThenEffectToDelay",
+      "group": "style",
+      "description": "Sequencing Effect.sleep before an effect re-implements Effect.delay",
+      "defaultSeverity": "suggestion",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377133
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const sendRequest: Effect.Effect\u003cvoid\u003e\n\nexport const throttled = Effect.sleep(\"1 second\").pipe(\n  Effect.andThen(sendRequest)\n)\n",
+        "diagnostics": [
+          {
+            "start": 139,
+            "end": 153,
+            "text": "Sequencing Effect.sleep before an effect re-implements Effect.delay. effect(sleepThenEffectToDelay)"
+          }
+        ]
+      }
+    },
+    {
       "name": "strictBooleanExpressions",
       "group": "style",
       "description": "Enforces boolean types in conditional expressions for type safety",

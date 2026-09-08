@@ -1,0 +1,19 @@
+==== /.src/sleepThenEffectToDelay_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 8:25 - 10:2
+Node: Effect.sleep("1 second").pipe(\n  Effect.andThen(sendRequest)\n)
+Node Kind: KindCallExpression
+
+Subject: "1 second"
+Subject Type: "1 second"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: pipeable
+      callee: Effect.andThen
+      args: [sendRequest]
+      outType: Effect<void, never, never>
