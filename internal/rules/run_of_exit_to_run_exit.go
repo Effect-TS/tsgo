@@ -62,18 +62,20 @@ func AnalyzeRunOfExitToRunExit(tp *typeparser.TypeParser, _ *checker.Checker, sf
 
 	var matches []RunOfExitToRunExitMatch
 	for _, flow := range tp.PipingFlows(sf, false) {
-		for index := 0; index+1 < len(flow.Transformations); index++ {
-			exitTransformation := &flow.Transformations[index]
-			if exitTransformation.Callee == nil || len(exitTransformation.Args) != 0 ||
-				!tp.IsNodeReferenceToEffectModuleApi(exitTransformation.Callee, "exit") {
-				continue
-			}
-
-			runnerTransformation := &flow.Transformations[index+1]
+		sequences := flow.FindTransformationSequences(
+			func(transformation *typeparser.PipingFlowTransformation) bool {
+				return transformation.Callee != nil && len(transformation.Args) == 0 &&
+					tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "exit")
+			},
+			func(transformation *typeparser.PipingFlowTransformation) bool {
+				_, runnerName, _ := runOfExitRunner(tp, transformation.Callee)
+				return runnerName != ""
+			},
+		)
+		for _, sequence := range sequences {
+			exitTransformation := &flow.Transformations[sequence.Start]
+			runnerTransformation := &flow.Transformations[sequence.Start+1]
 			runnerNameNode, runnerName, replacementName := runOfExitRunner(tp, runnerTransformation.Callee)
-			if runnerName == "" {
-				continue
-			}
 
 			matches = appendRunOfExitMatch(matches, RunOfExitToRunExitMatch{
 				SourceFile:         sf,
