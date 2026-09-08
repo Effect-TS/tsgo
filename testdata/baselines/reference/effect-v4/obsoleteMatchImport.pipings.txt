@@ -1,0 +1,43 @@
+==== /.src/obsoleteMatchImport.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 14:27 - 14:52
+Node: require("@effect/match")
+Node Kind: KindCallExpression
+
+Subject: "@effect/match"
+Subject Type: "@effect/match"
+
+Transformations (1):
+  [0] kind: call
+      callee: require
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 28:23 - 34:4
+Node: Effect.sync(() => ({\n  val: Match.value(1),\n  m1: Match1,\n  mSub: MatchSub,\n  fromEffect: MatchFromEffect,\n  other: Other\n}))
+Node Kind: KindCallExpression
+
+Subject: () => ({\n  val: Match.value(1),\n  m1: Match1,\n  mSub: MatchSub,\n  fromEffect: MatchFromEffect,\n  other: Other\n})
+Subject Type: () => { val: Matcher<1, Without<never>, 1, never, 1, any>; m1: any; mSub: any; fromEffect: typeof import("/node_modules/effect/dist/Match"); other: any; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<{ val: Matcher<1, Without<never>, 1, never, 1, any>; m1: any; mSub: any; fromEffect: typeof import("/node_modules/effect/dist/Match"); other: any; }, never, never>
+
+=== Piping Flow ===
+Location: 29:7 - 29:22
+Node: Match.value(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Match.value
+      args: (constant)
+      outType: Matcher<1, Without<never>, 1, never, 1, any>
