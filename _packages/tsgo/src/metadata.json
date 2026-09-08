@@ -1938,6 +1938,30 @@
       }
     },
     {
+      "name": "flatMapIgnoredParamToAndThen",
+      "group": "style",
+      "description": "Suggests using Effect.andThen instead of Effect.flatMap when the callback ignores its parameter and returns a pre-existing effect",
+      "defaultSeverity": "suggestion",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377131
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nconst acquireLock: Effect.Effect\u003cvoid\u003e = Effect.log(\"lock acquired\")\nconst runJob: Effect.Effect\u003cnumber\u003e = Effect.succeed(42)\n\nexport const program = acquireLock.pipe(\n  Effect.flatMap(() =\u003e runJob)\n)\n",
+        "diagnostics": [
+          {
+            "start": 203,
+            "end": 217,
+            "text": "`Effect.andThen` expresses sequencing effects directly when the callback parameter is ignored. effect(flatMapIgnoredParamToAndThen)"
+          }
+        ]
+      }
+    },
+    {
       "name": "flatMapToMap",
       "group": "style",
       "description": "Suggests using Effect.map instead of Effect.flatMap when the callback only wraps its result with Effect.succeed",

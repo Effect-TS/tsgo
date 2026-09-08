@@ -1,0 +1,76 @@
+=== Quick Fix Inventory ===
+
+[D1] (14:3-14:17) TS377131: `Effect.andThen` expresses sequencing effects directly when the callback parameter is ignored. effect(flatMapIgnoredParamToAndThen)
+  Fix 0: "Disable flatMapIgnoredParamToAndThen for this line"
+  Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file"
+
+[D2] (19:3-19:17) TS377131: `Effect.andThen` expresses sequencing effects directly when the callback parameter is ignored. effect(flatMapIgnoredParamToAndThen)
+  Fix 0: "Disable flatMapIgnoredParamToAndThen for this line"
+  Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file"
+
+[D3] (24:3-24:17) TS377131: `Effect.andThen` expresses sequencing effects directly when the callback parameter is ignored. effect(flatMapIgnoredParamToAndThen)
+  Fix 0: "Disable flatMapIgnoredParamToAndThen for this line"
+  Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file"
+
+[D4] (24:19-24:20) TS6133: 'x' is declared but its value is never read.
+  (no quick fixes)
+
+[D5] (30:3-30:17) TS377131: `Effect.andThen` expresses sequencing effects directly when the callback parameter is ignored. effect(flatMapIgnoredParamToAndThen)
+  Fix 0: "Disable flatMapIgnoredParamToAndThen for this line"
+  Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file"
+
+[D6] (34:29-34:43) TS377131: `Effect.andThen` expresses sequencing effects directly when the callback parameter is ignored. effect(flatMapIgnoredParamToAndThen)
+  Fix 0: "Disable flatMapIgnoredParamToAndThen for this line"
+  Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file"
+
+[D7] (38:3-38:17) TS377131: `Effect.andThen` expresses sequencing effects directly when the callback parameter is ignored. effect(flatMapIgnoredParamToAndThen)
+  Fix 0: "Disable flatMapIgnoredParamToAndThen for this line"
+  Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file"
+
+[D8] (43:3-43:17) TS377131: `Effect.andThen` expresses sequencing effects directly when the callback parameter is ignored. effect(flatMapIgnoredParamToAndThen)
+  Fix 0: "Disable flatMapIgnoredParamToAndThen for this line"
+  Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable flatMapIgnoredParamToAndThen for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable flatMapIgnoredParamToAndThen for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable flatMapIgnoredParamToAndThen for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable flatMapIgnoredParamToAndThen for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable flatMapIgnoredParamToAndThen for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file" ===
+skipped by default
+
+=== [D7] Fix 0: "Disable flatMapIgnoredParamToAndThen for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file" ===
+skipped by default
+
+=== [D8] Fix 0: "Disable flatMapIgnoredParamToAndThen for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file" ===
+skipped by default

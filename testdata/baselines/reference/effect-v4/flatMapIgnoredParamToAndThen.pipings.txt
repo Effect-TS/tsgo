@@ -1,0 +1,327 @@
+==== /.src/flatMapIgnoredParamToAndThen.ts (23 flows) ====
+
+=== Piping Flow ===
+Location: 3:41 - 3:69
+Node: Effect.log("lock acquired")
+Node Kind: KindCallExpression
+
+Subject: "lock acquired"
+Subject Type: "lock acquired"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 4:38 - 4:57
+Node: Effect.succeed(42)
+Node Kind: KindCallExpression
+
+Subject: 42
+Subject Type: 42
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 5:44 - 5:61
+Node: Exit.succeed(42)
+Node Kind: KindCallExpression
+
+Subject: 42
+Subject Type: 42
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.succeed
+      args: (constant)
+      outType: Exit<number, never>
+
+=== Piping Flow ===
+Location: 6:54 - 6:72
+Node: Effect.succeed(x)
+Node Kind: KindCallExpression
+
+Subject: x
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 13:27 - 15:2
+Node: acquireLock.pipe(\n  Effect.flatMap(() => runJob)\n)
+Node Kind: KindCallExpression
+
+Subject: acquireLock
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [() => runJob]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 18:35 - 20:2
+Node: acquireLock.pipe(\n  Effect.flatMap((_) => runJob)\n)
+Node Kind: KindCallExpression
+
+Subject: acquireLock
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(_) => runJob]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 23:30 - 25:2
+Node: acquireLock.pipe(\n  Effect.flatMap((x) => runJob)\n)
+Node Kind: KindCallExpression
+
+Subject: acquireLock
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(x) => runJob]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 28:23 - 31:2
+Node: pipe(\n  acquireLock,\n  Effect.flatMap(() => runJob)\n)
+Node Kind: KindCallExpression
+
+Subject: acquireLock
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.flatMap
+      args: [() => runJob]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 34:28 - 34:70
+Node: Effect.flatMap(acquireLock, () => runJob)
+Node Kind: KindCallExpression
+
+Subject: acquireLock
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [() => runJob]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 37:33 - 39:2
+Node: acquireLock.pipe(\n  Effect.flatMap(() => service.job)\n)
+Node Kind: KindCallExpression
+
+Subject: acquireLock
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [() => service.job]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 42:27 - 44:2
+Node: acquireLock.pipe(\n  Effect.flatMap(() => exitValue)\n)
+Node Kind: KindCallExpression
+
+Subject: acquireLock
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [() => exitValue]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 47:34 - 49:2
+Node: acquireLock.pipe(\n  Effect.flatMap(() => makeJob(42))\n)
+Node Kind: KindCallExpression
+
+Subject: acquireLock
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [() => makeJob(42)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 48:23 - 48:35
+Node: makeJob(42)
+Node Kind: KindCallExpression
+
+Subject: 42
+Subject Type: 42
+
+Transformations (1):
+  [0] kind: call
+      callee: makeJob
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 52:34 - 54:2
+Node: acquireLock.pipe(\n  Effect.flatMap(() => Effect.fail("error"))\n)
+Node Kind: KindCallExpression
+
+Subject: acquireLock
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [() => Effect.fail("error")]
+      outType: Effect<never, string, never>
+
+=== Piping Flow ===
+Location: 53:23 - 53:44
+Node: Effect.fail("error")
+Node Kind: KindCallExpression
+
+Subject: "error"
+Subject Type: "error"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>
+
+=== Piping Flow ===
+Location: 57:67 - 57:99
+Node: Effect.succeed({ job: runJob })
+Node Kind: KindCallExpression
+
+Subject: { job: runJob }
+Subject Type: { job: Effect<number, never, never>; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{ job: Effect<number, never, never>; }, never, never>
+
+=== Piping Flow ===
+Location: 58:35 - 60:2
+Node: lockWithJob.pipe(\n  Effect.flatMap((x) => x.job)\n)
+Node Kind: KindCallExpression
+
+Subject: lockWithJob
+Subject Type: Effect<{ job: Effect<number, never, never>; }, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(x) => x.job]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 63:49 - 63:69
+Node: Effect.succeed(val)
+Node Kind: KindCallExpression
+
+Subject: val
+Subject Type: void
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 64:39 - 67:2
+Node: acquireLock.pipe(\n  Effect.map(effectContainer),\n  Effect.flatMap((container) => container.inner)\n)
+Node Kind: KindCallExpression
+
+Subject: acquireLock
+Subject Type: Effect<void, never, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [effectContainer]
+      outType: Effect<{ inner: Effect<void, never, never>; }, never, never>
+  [1] kind: pipeable
+      callee: Effect.flatMap
+      args: [(container) => container.inner]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 70:29 - 74:2
+Node: acquireLock.pipe(\n  Effect.flatMap(() => {\n    return runJob\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: acquireLock
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [() => {\n    return runJob\n  }]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 77:34 - 79:2
+Node: acquireLock.pipe(\n  Effect.andThen(runJob)\n)
+Node Kind: KindCallExpression
+
+Subject: acquireLock
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.andThen
+      args: [runJob]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 83:42 - 83:62
+Node: f(undefined as any)
+Node Kind: KindCallExpression
+
+Subject: undefined as any
+Subject Type: any
+
+Transformations (1):
+  [0] kind: call
+      callee: f
+      args: (constant)
+      outType: B
+
+=== Piping Flow ===
+Location: 85:29 - 85:61
+Node: unrelated.flatMap(() => runJob)
+Node Kind: KindCallExpression
+
+Subject: () => runJob
+Subject Type: () => Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: unrelated.flatMap
+      args: (constant)
+      outType: Effect<number, never, never>

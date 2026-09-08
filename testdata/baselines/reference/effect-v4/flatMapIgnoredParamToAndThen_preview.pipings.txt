@@ -1,0 +1,43 @@
+==== /.src/flatMapIgnoredParamToAndThen_preview.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 3:41 - 3:69
+Node: Effect.log("lock acquired")
+Node Kind: KindCallExpression
+
+Subject: "lock acquired"
+Subject Type: "lock acquired"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 4:38 - 4:57
+Node: Effect.succeed(42)
+Node Kind: KindCallExpression
+
+Subject: 42
+Subject Type: 42
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 6:23 - 8:2
+Node: acquireLock.pipe(\n  Effect.flatMap(() => runJob)\n)
+Node Kind: KindCallExpression
+
+Subject: acquireLock
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [() => runJob]
+      outType: Effect<number, never, never>

@@ -1,0 +1,18 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/flatMapIgnoredParamToAndThen_preview.ts(7,3): suggestion TS377131: `Effect.andThen` expresses sequencing effects directly when the callback parameter is ignored. effect(flatMapIgnoredParamToAndThen)
+
+
+==== /.src/flatMapIgnoredParamToAndThen_preview.ts (1 errors) ====
+    import { Effect } from "effect"
+    
+    const acquireLock: Effect.Effect<void> = Effect.log("lock acquired")
+    const runJob: Effect.Effect<number> = Effect.succeed(42)
+    
+    export const program = acquireLock.pipe(
+      Effect.flatMap(() => runJob)
+      ~~~~~~~~~~~~~~
+!!! suggestion TS377131: `Effect.andThen` expresses sequencing effects directly when the callback parameter is ignored. effect(flatMapIgnoredParamToAndThen)
+    )
+    

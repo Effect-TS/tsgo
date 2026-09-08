@@ -1,0 +1,13 @@
+=== Quick Fix Inventory ===
+
+[D1] (7:3-7:17) TS377131: `Effect.andThen` expresses sequencing effects directly when the callback parameter is ignored. effect(flatMapIgnoredParamToAndThen)
+  Fix 0: "Disable flatMapIgnoredParamToAndThen for this line"
+  Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable flatMapIgnoredParamToAndThen for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file" ===
+skipped by default

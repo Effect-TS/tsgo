@@ -3,11 +3,12 @@ Effect version: 3.19.19
 
 /.src/catchUnfailableEffect.ts(7,3): suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
 /.src/catchUnfailableEffect.ts(16,3): suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
+/.src/catchUnfailableEffect.ts(37,3): suggestion TS377131: `Effect.andThen` expresses sequencing effects directly when the callback parameter is ignored. effect(flatMapIgnoredParamToAndThen)
 /.src/catchUnfailableEffect.ts(38,3): suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
 /.src/catchUnfailableEffect.ts(41,38): suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
 
 
-==== /.src/catchUnfailableEffect.ts (4 errors) ====
+==== /.src/catchUnfailableEffect.ts (5 errors) ====
     // @effect-v3
     // @effect-diagnostics catchToOrElseSucceed:off
     import * as Effect from "effect/Effect"
@@ -49,6 +50,8 @@ Effect version: 3.19.19
     export const shouldTriggerThirdArgPipe = pipe(
       Effect.succeed(42),
       Effect.flatMap(() => Effect.void),
+      ~~~~~~~~~~~~~~
+!!! suggestion TS377131: `Effect.andThen` expresses sequencing effects directly when the callback parameter is ignored. effect(flatMapIgnoredParamToAndThen)
       Effect.catchAll(() => Effect.succeed(42)) // <- should report here
       ~~~~~~~~~~~~~~~
 !!! suggestion TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)

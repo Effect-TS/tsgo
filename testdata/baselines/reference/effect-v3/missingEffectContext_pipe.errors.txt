@@ -1,10 +1,11 @@
 === Metadata ===
 Effect version: 3.19.19
 
+/.src/missingEffectContext_pipe.ts(10,16): suggestion TS377131: `Effect.andThen` expresses sequencing effects directly when the callback parameter is ignored. effect(flatMapIgnoredParamToAndThen)
 /.src/missingEffectContext_pipe.ts(10,51): error TS377004: This Effect requires a service that is missing from the expected Effect context: `ServiceA`. effect(missingEffectContext)
 
 
-==== /.src/missingEffectContext_pipe.ts (1 errors) ====
+==== /.src/missingEffectContext_pipe.ts (2 errors) ====
     // @effect-v3
     import * as Effect from "effect/Effect"
     import { pipe } from "effect/Function"
@@ -15,6 +16,8 @@ Effect version: 3.19.19
     
     // @ts-expect-error
     pipe(ServiceA, Effect.flatMap(() => Effect.void), Effect.runPromise)
+                   ~~~~~~~~~~~~~~
+!!! suggestion TS377131: `Effect.andThen` expresses sequencing effects directly when the callback parameter is ignored. effect(flatMapIgnoredParamToAndThen)
                                                       ~~~~~~~~~~~~~~~~~
 !!! error TS377004: This Effect requires a service that is missing from the expected Effect context: `ServiceA`. effect(missingEffectContext)
     

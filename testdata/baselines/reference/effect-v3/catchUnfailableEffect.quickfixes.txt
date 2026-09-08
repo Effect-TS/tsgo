@@ -8,11 +8,15 @@
   Fix 0: "Disable catchUnfailableEffect for this line"
   Fix 1: "Disable catchUnfailableEffect for entire file"
 
-[D3] (38:3-38:18) TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
+[D3] (37:3-37:17) TS377131: `Effect.andThen` expresses sequencing effects directly when the callback parameter is ignored. effect(flatMapIgnoredParamToAndThen)
+  Fix 0: "Disable flatMapIgnoredParamToAndThen for this line"
+  Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file"
+
+[D4] (38:3-38:18) TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
   Fix 0: "Disable catchUnfailableEffect for this line"
   Fix 1: "Disable catchUnfailableEffect for entire file"
 
-[D4] (41:38-41:53) TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
+[D5] (41:38-41:53) TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
   Fix 0: "Disable catchUnfailableEffect for this line"
   Fix 1: "Disable catchUnfailableEffect for entire file"
 
@@ -30,14 +34,20 @@ skipped by default
 === [D2] Fix 1: "Disable catchUnfailableEffect for entire file" ===
 skipped by default
 
-=== [D3] Fix 0: "Disable catchUnfailableEffect for this line" ===
+=== [D3] Fix 0: "Disable flatMapIgnoredParamToAndThen for this line" ===
 skipped by default
 
-=== [D3] Fix 1: "Disable catchUnfailableEffect for entire file" ===
+=== [D3] Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file" ===
 skipped by default
 
 === [D4] Fix 0: "Disable catchUnfailableEffect for this line" ===
 skipped by default
 
 === [D4] Fix 1: "Disable catchUnfailableEffect for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable catchUnfailableEffect for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable catchUnfailableEffect for entire file" ===
 skipped by default
