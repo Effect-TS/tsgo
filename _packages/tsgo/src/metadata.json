@@ -1424,12 +1424,17 @@
         377057
       ],
       "preview": {
-        "sourceText": "import fs from \"node:fs\"\n\nexport const preview = fs.readFileSync\n",
+        "sourceText": "import { Effect } from \"effect\"\nimport { randomUUID } from \"node:crypto\"\nimport fs from \"node:fs\"\n\nexport const preview = Effect.sync(() =\u003e ({\n  id: randomUUID(),\n  contents: fs.readFileSync(\"config.json\", \"utf8\")\n}))\n",
         "diagnostics": [
           {
-            "start": 15,
-            "end": 24,
-            "text": "This module reference uses the `fs` module, the corresponding Effect API is `FileSystem` from `@effect/platform`. effect(nodeBuiltinImport)"
+            "start": 59,
+            "end": 72,
+            "text": "This module reference uses the `crypto` module, the corresponding Effect API is `Crypto` from `effect`. effect(nodeBuiltinImport)"
+          },
+          {
+            "start": 88,
+            "end": 97,
+            "text": "This module reference uses the `fs` module, the corresponding Effect API is `FileSystem` from `effect`. effect(nodeBuiltinImport)"
           }
         ]
       }

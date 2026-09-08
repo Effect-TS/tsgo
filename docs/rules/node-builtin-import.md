@@ -17,12 +17,20 @@ Warns when importing Node.js built-in modules that have Effect-native counterpar
 ## Preview
 
 ```ts
+import { Effect } from "effect"
+import { randomUUID } from "node:crypto"
+/**
+                           ^^^^^^^^^^^^^ effecttsgo(node-builtin-import): This module reference uses the `crypto` module, the corresponding Effect API is `Crypto` from `effect`.
+*/
 import fs from "node:fs"
 /**
-               ^^^^^^^^^ effecttsgo(node-builtin-import): This module reference uses the `fs` module, the corresponding Effect API is `FileSystem` from `@effect/platform`.
+               ^^^^^^^^^ effecttsgo(node-builtin-import): This module reference uses the `fs` module, the corresponding Effect API is `FileSystem` from `effect`.
 */
 
-export const preview = fs.readFileSync
+export const preview = Effect.sync(() => ({
+  id: randomUUID(),
+  contents: fs.readFileSync("config.json", "utf8")
+}))
 ```
 
 ## Language Service Configuration

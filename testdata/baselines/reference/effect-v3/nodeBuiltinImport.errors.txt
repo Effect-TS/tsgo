@@ -15,8 +15,23 @@ Effect version: 3.19.19
 /.src/nodeBuiltinImport.ts(17,23): warning TS377057: This module reference uses the `child_process` module, the corresponding Effect API is `CommandExecutor` from `@effect/platform`. effect(nodeBuiltinImport)
 /.src/nodeBuiltinImport.ts(18,18): warning TS377057: This module reference uses the `http` module, the corresponding Effect API is `HttpClient` from `@effect/platform`. effect(nodeBuiltinImport)
 /.src/nodeBuiltinImport.ts(19,19): warning TS377057: This module reference uses the `https` module, the corresponding Effect API is `HttpClient` from `@effect/platform`. effect(nodeBuiltinImport)
-/.src/nodeBuiltinImport.ts(22,8): warning TS377057: This module reference uses the `fs` module, the corresponding Effect API is `FileSystem` from `@effect/platform`. effect(nodeBuiltinImport)
-/.src/nodeBuiltinImport.ts(25,21): warning TS377057: This module reference uses the `fs` module, the corresponding Effect API is `FileSystem` from `@effect/platform`. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(20,25): warning TS377057: This module reference uses the `console` module, the corresponding Effect API is `Console` from `effect`. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(21,40): warning TS377057: This module reference uses the `console` module, the corresponding Effect API is `Console` from `effect`. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(22,28): warning TS377057: This module reference uses the `timers` module, the corresponding Effect API is `Effect` from `effect`. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(23,46): warning TS377057: This module reference uses the `timers` module, the corresponding Effect API is `Effect` from `effect`. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(24,37): warning TS377057: This module reference uses the `timers` module, the corresponding Effect API is `Effect` from `effect`. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(25,41): warning TS377057: This module reference uses the `timers` module, the corresponding Effect API is `Effect` from `effect`. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(26,26): warning TS377057: This module reference uses the `stream` module, the corresponding Effect API is `Stream` from `effect`. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(27,42): warning TS377057: This module reference uses the `stream` module, the corresponding Effect API is `Stream` from `effect`. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(28,26): warning TS377057: This module reference uses the `stream` module, the corresponding Effect API is `Stream` from `effect`. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(29,42): warning TS377057: This module reference uses the `stream` module, the corresponding Effect API is `Stream` from `effect`. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(30,32): warning TS377057: This module reference uses the `stream` module, the corresponding Effect API is `Stream` from `effect`. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(31,54): warning TS377057: This module reference uses the `stream` module, the corresponding Effect API is `Stream` from `effect`. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(34,8): warning TS377057: This module reference uses the `fs` module, the corresponding Effect API is `FileSystem` from `@effect/platform`. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(37,21): warning TS377057: This module reference uses the `fs` module, the corresponding Effect API is `FileSystem` from `@effect/platform`. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(38,31): warning TS377057: This module reference uses the `console` module, the corresponding Effect API is `Console` from `effect`. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(39,30): warning TS377057: This module reference uses the `timers` module, the corresponding Effect API is `Effect` from `effect`. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(40,30): warning TS377057: This module reference uses the `stream` module, the corresponding Effect API is `Stream` from `effect`. effect(nodeBuiltinImport)
 
 
 ==== /.src/tsconfig.json (0 errors) ====
@@ -34,7 +49,7 @@ Effect version: 3.19.19
     }
     
 
-==== /.src/nodeBuiltinImport.ts (16 errors) ====
+==== /.src/nodeBuiltinImport.ts (31 errors) ====
     // @effect-v3
     // @effect-diagnostics nodeBuiltinImport:warning
     import * as Effect from "effect/Effect"
@@ -82,6 +97,42 @@ Effect version: 3.19.19
     import https from "node:https"
                       ~~~~~~~~~~~~
 !!! warning TS377057: This module reference uses the `https` module, the corresponding Effect API is `HttpClient` from `@effect/platform`. effect(nodeBuiltinImport)
+    import { Console } from "console"
+                            ~~~~~~~~~
+!!! warning TS377057: This module reference uses the `console` module, the corresponding Effect API is `Console` from `effect`. effect(nodeBuiltinImport)
+    import { Console as NodeConsole } from "node:console"
+                                           ~~~~~~~~~~~~~~
+!!! warning TS377057: This module reference uses the `console` module, the corresponding Effect API is `Console` from `effect`. effect(nodeBuiltinImport)
+    import { setTimeout } from "timers"
+                               ~~~~~~~~
+!!! warning TS377057: This module reference uses the `timers` module, the corresponding Effect API is `Effect` from `effect`. effect(nodeBuiltinImport)
+    import { setTimeout as nodeSetTimeout } from "node:timers"
+                                                 ~~~~~~~~~~~~~
+!!! warning TS377057: This module reference uses the `timers` module, the corresponding Effect API is `Effect` from `effect`. effect(nodeBuiltinImport)
+    import { setTimeout as delay } from "timers/promises"
+                                        ~~~~~~~~~~~~~~~~~
+!!! warning TS377057: This module reference uses the `timers` module, the corresponding Effect API is `Effect` from `effect`. effect(nodeBuiltinImport)
+    import { setTimeout as nodeDelay } from "node:timers/promises"
+                                            ~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377057: This module reference uses the `timers` module, the corresponding Effect API is `Effect` from `effect`. effect(nodeBuiltinImport)
+    import { Readable } from "stream"
+                             ~~~~~~~~
+!!! warning TS377057: This module reference uses the `stream` module, the corresponding Effect API is `Stream` from `effect`. effect(nodeBuiltinImport)
+    import { Readable as NodeReadable } from "node:stream"
+                                             ~~~~~~~~~~~~~
+!!! warning TS377057: This module reference uses the `stream` module, the corresponding Effect API is `Stream` from `effect`. effect(nodeBuiltinImport)
+    import { pipeline } from "stream/promises"
+                             ~~~~~~~~~~~~~~~~~
+!!! warning TS377057: This module reference uses the `stream` module, the corresponding Effect API is `Stream` from `effect`. effect(nodeBuiltinImport)
+    import { pipeline as nodePipeline } from "node:stream/promises"
+                                             ~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377057: This module reference uses the `stream` module, the corresponding Effect API is `Stream` from `effect`. effect(nodeBuiltinImport)
+    import { ReadableStream } from "stream/web"
+                                   ~~~~~~~~~~~~
+!!! warning TS377057: This module reference uses the `stream` module, the corresponding Effect API is `Stream` from `effect`. effect(nodeBuiltinImport)
+    import { ReadableStream as NodeReadableStream } from "node:stream/web"
+                                                         ~~~~~~~~~~~~~~~~~
+!!! warning TS377057: This module reference uses the `stream` module, the corresponding Effect API is `Stream` from `effect`. effect(nodeBuiltinImport)
     
     // Flagged: side-effect import
     import "node:fs"
@@ -92,6 +143,24 @@ Effect version: 3.19.19
     const fs3 = require("node:fs")
                         ~~~~~~~~~
 !!! warning TS377057: This module reference uses the `fs` module, the corresponding Effect API is `FileSystem` from `@effect/platform`. effect(nodeBuiltinImport)
+    const consoleModule = require("console")
+                                  ~~~~~~~~~
+!!! warning TS377057: This module reference uses the `console` module, the corresponding Effect API is `Console` from `effect`. effect(nodeBuiltinImport)
+    const timersModule = require("node:timers/promises")
+                                 ~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377057: This module reference uses the `timers` module, the corresponding Effect API is `Effect` from `effect`. effect(nodeBuiltinImport)
+    const streamModule = require("stream/web")
+                                 ~~~~~~~~~~~~
+!!! warning TS377057: This module reference uses the `stream` module, the corresponding Effect API is `Stream` from `effect`. effect(nodeBuiltinImport)
+    
+    // Not flagged: crypto has no secure Effect v3 equivalent
+    import * as crypto from "crypto"
+    import { randomUUID } from "node:crypto"
+    const cryptoModule = require("node:crypto")
+    
+    // Not flagged: only explicitly covered subpaths match
+    import { text } from "node:stream/consumers"
+    const unknownTimersSubpath = require("timers/promises/extra")
     
     // Not flagged: Effect-native imports
     // @ts-expect-error - @effect/platform not installed in harness
