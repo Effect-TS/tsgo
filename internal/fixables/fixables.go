@@ -39,6 +39,7 @@ var All = []fixable.Fixable{
 	UnnecessaryArrowBlockFix,
 	UnnecessaryTypeofTypeFix,
 	PreferSchemaTypePropertyFix,
+	PreferSchemaUnionFix,
 	EffectMapVoidFix,
 	UnnecessaryFailYieldableErrorFix,
 	ClassSelfMismatchFix,

@@ -110,6 +110,11 @@ func (tp *TypeParser) IsNodeReferenceToEffectSchemaModuleApi(node *ast.Node, mem
 	return tp.IsNodeReferenceToModuleExport(node, effectSchemaModuleDescriptor, memberName)
 }
 
+// IsNodeReferenceToEffectSchemaModule reports whether node resolves to the Effect Schema module.
+func (tp *TypeParser) IsNodeReferenceToEffectSchemaModule(node *ast.Node) bool {
+	return tp.IsNodeReferenceToModule(node, effectSchemaModuleDescriptor)
+}
+
 func isParseResultSourceFile(_ *TypeParser, c *checker.Checker, sf *ast.SourceFile) bool {
 	if c == nil || sf == nil {
 		return false

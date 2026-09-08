@@ -82,6 +82,13 @@ func (tp *TypeParser) GetSymbolAtLocation(node *ast.Node) *ast.Symbol {
 	return tp.checker.GetSymbolAtLocation(node)
 }
 
+func (tp *TypeParser) GetTypeOfSymbolAtLocation(sym *ast.Symbol, node *ast.Node) *checker.Type {
+	if tp == nil || tp.checker == nil || sym == nil {
+		return nil
+	}
+	return tp.checker.GetTypeOfSymbolAtLocation(sym, node)
+}
+
 func (tp *TypeParser) resolveAliasedSymbol(sym *ast.Symbol) *ast.Symbol {
 	if tp == nil || tp.checker == nil {
 		return sym

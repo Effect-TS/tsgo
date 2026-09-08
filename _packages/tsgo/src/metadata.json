@@ -2233,6 +2233,29 @@
       }
     },
     {
+      "name": "preferSchemaUnion",
+      "group": "style",
+      "description": "Suggests composing Schema values with Schema.Union instead of unioning their extracted Type properties",
+      "defaultSeverity": "off",
+      "fixable": true,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377130
+      ],
+      "preview": {
+        "sourceText": "import { Schema } from \"effect\"\n\nexport const Circle = Schema.Struct({ kind: Schema.Literal(\"circle\"), radius: Schema.Number })\nexport const Square = Schema.Struct({ kind: Schema.Literal(\"square\"), side: Schema.Number })\n\nexport type Shape = typeof Circle.Type | typeof Square.Type\n",
+        "diagnostics": [
+          {
+            "start": 242,
+            "end": 281,
+            "text": "This type alias unions decoded Effect Schema types. Prefer Schema.Union([...]) and derive the type from the resulting schema. effect(preferSchemaUnion)"
+          }
+        ]
+      }
+    },
+    {
       "name": "preferSucceedSomeOrNone",
       "group": "style",
       "description": "Suggests using Effect.succeedNone or Effect.succeedSome instead of wrapping Option.none or Option.some with Effect.succeed",

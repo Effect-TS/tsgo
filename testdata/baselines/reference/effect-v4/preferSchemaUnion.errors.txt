@@ -1,0 +1,99 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/preferSchemaUnion.ts(10,22): warning TS377130: This type alias unions decoded Effect Schema types. Prefer Schema.Union([...]) and derive the type from the resulting schema. effect(preferSchemaUnion)
+/.src/preferSchemaUnion.ts(11,22): warning TS377130: This type alias unions decoded Effect Schema types. Prefer Schema.Union([...]) and derive the type from the resulting schema. effect(preferSchemaUnion)
+/.src/preferSchemaUnion.ts(21,29): warning TS377130: This type alias unions decoded Effect Schema types. Prefer Schema.Union([...]) and derive the type from the resulting schema. effect(preferSchemaUnion)
+/.src/preferSchemaUnion.ts(44,30): warning TS377130: This type alias unions decoded Effect Schema types. Prefer Schema.Union([...]) and derive the type from the resulting schema. effect(preferSchemaUnion)
+/.src/preferSchemaUnion.ts(46,28): warning TS377130: This type alias unions decoded Effect Schema types. Prefer Schema.Union([...]) and derive the type from the resulting schema. effect(preferSchemaUnion)
+/.src/preferSchemaUnion.ts(53,31): warning TS377130: This type alias unions decoded Effect Schema types. Prefer Schema.Union([...]) and derive the type from the resulting schema. effect(preferSchemaUnion)
+/.src/preferSchemaUnion.ts(56,28): warning TS377130: This type alias unions decoded Effect Schema types. Prefer Schema.Union([...]) and derive the type from the resulting schema. effect(preferSchemaUnion)
+/.src/preferSchemaUnion.ts(60,3): warning TS377130: This type alias unions decoded Effect Schema types. Prefer Schema.Union([...]) and derive the type from the resulting schema. effect(preferSchemaUnion)
+/.src/preferSchemaUnion.ts(65,28): warning TS377130: This type alias unions decoded Effect Schema types. Prefer Schema.Union([...]) and derive the type from the resulting schema. effect(preferSchemaUnion)
+
+
+==== /.src/preferSchemaUnion.ts (9 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferSchemaUnion:warning
+    import { Schema, Schema as S } from "effect"
+    
+    // 1. Two and three concrete schema leaves, including parenthesized unions
+    export const Circle = Schema.Struct({ kind: Schema.Literal("circle"), radius: Schema.Number })
+    export const Square = Schema.Struct({ kind: Schema.Literal("square"), side: Schema.Number })
+    export const Triangle = Schema.Struct({ kind: Schema.Literal("triangle"), base: Schema.Number, height: Schema.Number })
+    
+    export type Shape2 = typeof Circle.Type | typeof Square.Type
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377130: This type alias unions decoded Effect Schema types. Prefer Schema.Union([...]) and derive the type from the resulting schema. effect(preferSchemaUnion)
+    export type Shape3 = (typeof Circle.Type | typeof Square.Type) | typeof Triangle.Type
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377130: This type alias unions decoded Effect Schema types. Prefer Schema.Union([...]) and derive the type from the resulting schema. effect(preferSchemaUnion)
+    
+    // 2. Schema.Class, refinements and transformed codecs
+    export class UserClass extends Schema.Class<UserClass>("UserClass")({
+      id: Schema.String,
+      name: Schema.String
+    }) {}
+    export const NonEmptyString = Schema.NonEmptyString
+    export const NumberFromString = Schema.NumberFromString
+    
+    export type ValidEntities = typeof UserClass.Type | typeof NonEmptyString.Type | typeof NumberFromString.Type
+                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377130: This type alias unions decoded Effect Schema types. Prefer Schema.Union([...]) and derive the type from the resulting schema. effect(preferSchemaUnion)
+    
+    // 3. Negative cases - NO DIAGNOSTIC
+    type MixedPrimitive = typeof Circle.Type | null
+    type EncodedUnion = typeof Circle.Encoded | typeof Square.Encoded
+    const Lookalike = { Type: "lookalike" as const }
+    type LookalikeUnion = typeof Lookalike.Type | typeof Circle.Type
+    declare const AnyReceiver: any
+    type AnyUnion = typeof AnyReceiver.Type | typeof Circle.Type
+    type GenericAlias<T> = typeof Circle.Type | typeof Square.Type
+    declare type AmbientAlias = typeof Circle.Type | typeof Square.Type
+    type SingleMember = typeof Circle.Type
+    type NarrowedSchemaWithoutEncoded = {
+      readonly "~effect/Schema/Schema": true
+      readonly Type: string
+    }
+    declare const Narrowed: NarrowedSchemaWithoutEncoded
+    type NarrowedUnion = typeof Narrowed.Type | typeof Circle.Type
+    export const AlreadyComposed = Schema.Union([Circle, Square])
+    export type AlreadyComposed = typeof AlreadyComposed.Type
+    
+    // 4. Diagnosed, but safety checks withhold code action
+    export const CollidingValue = 42
+    export type CollidingValue = typeof Circle.Type | typeof Square.Type
+                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377130: This type alias unions decoded Effect Schema types. Prefer Schema.Union([...]) and derive the type from the resulting schema. effect(preferSchemaUnion)
+    
+    export type ForwardUnion = typeof ForwardA.Type | typeof ForwardB.Type
+                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377130: This type alias unions decoded Effect Schema types. Prefer Schema.Union([...]) and derive the type from the resulting schema. effect(preferSchemaUnion)
+    export const ForwardA = Schema.Struct({ a: Schema.String })
+    export const ForwardB = Schema.Struct({ b: Schema.String })
+    
+    namespace Models {
+      export const SubItem = Schema.String
+    }
+    export type NamespacedUnion = typeof Models.SubItem.Type | typeof Circle.Type
+                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377130: This type alias unions decoded Effect Schema types. Prefer Schema.Union([...]) and derive the type from the resulting schema. effect(preferSchemaUnion)
+    
+    let MutableSchema = Schema.Struct({ m: Schema.String })
+    export type MutableUnion = typeof MutableSchema.Type | typeof Circle.Type
+                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377130: This type alias unions decoded Effect Schema types. Prefer Schema.Union([...]) and derive the type from the resulting schema. effect(preferSchemaUnion)
+    
+    export type CommentedUnion =
+      // interior comment
+      typeof Circle.Type | typeof Square.Type
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377130: This type alias unions decoded Effect Schema types. Prefer Schema.Union([...]) and derive the type from the resulting schema. effect(preferSchemaUnion)
+    
+    // 5. Existing aliased Schema import
+    export const A = S.Struct({ a: S.String })
+    export const B = S.Struct({ b: S.Number })
+    export type AliasedUnion = typeof A.Type | typeof B.Type
+                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377130: This type alias unions decoded Effect Schema types. Prefer Schema.Union([...]) and derive the type from the resulting schema. effect(preferSchemaUnion)
+    

@@ -1,0 +1,25 @@
+flowchart TB
+  0[/"type: #123; kind: Literal#lt;#quot;circle#quot;#gt;; radius: Number; #125;<br/>node: #123; kind: Schema.Literal#40;#quot;circle#quot;#41;, radius: Schema.Number #125;"/]
+  1[/"type: #quot;circle#quot;<br/>node: #quot;circle#quot;"/]
+  2["type: Literal#lt;#quot;circle#quot;#gt;<br/>callee: Schema.Literal<br/>args: #91;#93;"]
+  3[/"type: #lt;L extends SchemaAST.LiteralValue#gt;#40;literal: L#41; =#gt; Literal#lt;L#gt;<br/>node: Schema.Literal"/]
+  4["type: Struct#lt;#123; readonly kind: Literal#lt;#quot;circle#quot;#gt;; readonly radius: Number; #125;#gt;<br/>callee: Schema.Struct<br/>args: #91;#93;"]
+  5[/"type: #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields#41; =#gt; Struct#lt;Fields#gt;<br/>node: Schema.Struct"/]
+  6[/"type: #123; kind: Literal#lt;#quot;square#quot;#gt;; side: Number; #125;<br/>node: #123; kind: Schema.Literal#40;#quot;square#quot;#41;, side: Schema.Number #125;"/]
+  7[/"type: #quot;square#quot;<br/>node: #quot;square#quot;"/]
+  8["type: Literal#lt;#quot;square#quot;#gt;<br/>callee: Schema.Literal<br/>args: #91;#93;"]
+  9[/"type: #lt;L extends SchemaAST.LiteralValue#gt;#40;literal: L#41; =#gt; Literal#lt;L#gt;<br/>node: Schema.Literal"/]
+  10["type: Struct#lt;#123; readonly kind: Literal#lt;#quot;square#quot;#gt;; readonly side: Number; #125;#gt;<br/>callee: Schema.Struct<br/>args: #91;#93;"]
+  11[/"type: #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields#41; =#gt; Struct#lt;Fields#gt;<br/>node: Schema.Struct"/]
+  12[/"type: <br/>node: Circle.Type"/]
+  13[/"type: <br/>node: Square.Type"/]
+  1 -->|"kind: pipe"| 2
+  3 -->|"kind: transformCallee"| 2
+  2 -->|"kind: usedBy"| 0
+  0 -->|"kind: pipe"| 4
+  5 -->|"kind: transformCallee"| 4
+  7 -->|"kind: pipe"| 8
+  9 -->|"kind: transformCallee"| 8
+  8 -->|"kind: usedBy"| 6
+  6 -->|"kind: pipe"| 10
+  11 -->|"kind: transformCallee"| 10

@@ -1,0 +1,18 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/preferSchemaUnion_preview.ts(8,21): warning TS377130: This type alias unions decoded Effect Schema types. Prefer Schema.Union([...]) and derive the type from the resulting schema. effect(preferSchemaUnion)
+
+
+==== /.src/preferSchemaUnion_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferSchemaUnion:warning
+    import { Schema } from "effect"
+    
+    export const Circle = Schema.Struct({ kind: Schema.Literal("circle"), radius: Schema.Number })
+    export const Square = Schema.Struct({ kind: Schema.Literal("square"), side: Schema.Number })
+    
+    export type Shape = typeof Circle.Type | typeof Square.Type
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377130: This type alias unions decoded Effect Schema types. Prefer Schema.Union([...]) and derive the type from the resulting schema. effect(preferSchemaUnion)
+    
