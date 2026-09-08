@@ -76,14 +76,14 @@
 [D22] (15:10-15:14) TS6133: 'exec' is declared but its value is never read.
   (no quick fixes)
 
-[D23] (15:22-15:37) TS377057: This module reference uses the `child_process` module, the corresponding Effect API is `ChildProcess` from `effect`. effect(nodeBuiltinImport)
+[D23] (15:22-15:37) TS377057: This module reference uses the `child_process` module, the corresponding Effect API is `ChildProcess` from `effect/unstable/process`. effect(nodeBuiltinImport)
   Fix 0: "Disable nodeBuiltinImport for this line"
   Fix 1: "Disable nodeBuiltinImport for entire file"
 
 [D24] (16:10-16:15) TS6133: 'spawn' is declared but its value is never read.
   (no quick fixes)
 
-[D25] (16:23-16:43) TS377057: This module reference uses the `child_process` module, the corresponding Effect API is `ChildProcess` from `effect`. effect(nodeBuiltinImport)
+[D25] (16:23-16:43) TS377057: This module reference uses the `child_process` module, the corresponding Effect API is `ChildProcess` from `effect/unstable/process`. effect(nodeBuiltinImport)
   Fix 0: "Disable nodeBuiltinImport for this line"
   Fix 1: "Disable nodeBuiltinImport for entire file"
 
@@ -101,21 +101,153 @@
   Fix 0: "Disable nodeBuiltinImport for this line"
   Fix 1: "Disable nodeBuiltinImport for entire file"
 
-[D30] (21:8-21:17) TS377057: This module reference uses the `fs` module, the corresponding Effect API is `FileSystem` from `effect`. effect(nodeBuiltinImport)
+[D30] (19:10-19:17) TS6133: 'Console' is declared but its value is never read.
+  (no quick fixes)
+
+[D31] (19:25-19:34) TS377057: This module reference uses the `console` module, the corresponding Effect API is `Console` from `effect`. effect(nodeBuiltinImport)
   Fix 0: "Disable nodeBuiltinImport for this line"
   Fix 1: "Disable nodeBuiltinImport for entire file"
 
-[D31] (24:7-24:10) TS6133: 'fs3' is declared but its value is never read.
+[D32] (20:21-20:32) TS6133: 'NodeConsole' is declared but its value is never read.
   (no quick fixes)
 
-[D32] (24:21-24:30) TS377057: This module reference uses the `fs` module, the corresponding Effect API is `FileSystem` from `effect`. effect(nodeBuiltinImport)
+[D33] (20:40-20:54) TS377057: This module reference uses the `console` module, the corresponding Effect API is `Console` from `effect`. effect(nodeBuiltinImport)
   Fix 0: "Disable nodeBuiltinImport for this line"
   Fix 1: "Disable nodeBuiltinImport for entire file"
 
-[D33] (28:10-28:20) TS6133: 'FileSystem' is declared but its value is never read.
+[D34] (21:10-21:20) TS6133: 'setTimeout' is declared but its value is never read.
   (no quick fixes)
 
-[D34] (32:8-32:15) TS6133: 'fsExtra' is declared but its value is never read.
+[D35] (21:28-21:36) TS377057: This module reference uses the `timers` module, the corresponding Effect API is `Effect` from `effect`. effect(nodeBuiltinImport)
+  Fix 0: "Disable nodeBuiltinImport for this line"
+  Fix 1: "Disable nodeBuiltinImport for entire file"
+
+[D36] (22:24-22:38) TS6133: 'nodeSetTimeout' is declared but its value is never read.
+  (no quick fixes)
+
+[D37] (22:46-22:59) TS377057: This module reference uses the `timers` module, the corresponding Effect API is `Effect` from `effect`. effect(nodeBuiltinImport)
+  Fix 0: "Disable nodeBuiltinImport for this line"
+  Fix 1: "Disable nodeBuiltinImport for entire file"
+
+[D38] (23:24-23:29) TS6133: 'delay' is declared but its value is never read.
+  (no quick fixes)
+
+[D39] (23:37-23:54) TS377057: This module reference uses the `timers` module, the corresponding Effect API is `Effect` from `effect`. effect(nodeBuiltinImport)
+  Fix 0: "Disable nodeBuiltinImport for this line"
+  Fix 1: "Disable nodeBuiltinImport for entire file"
+
+[D40] (24:24-24:33) TS6133: 'nodeDelay' is declared but its value is never read.
+  (no quick fixes)
+
+[D41] (24:41-24:63) TS377057: This module reference uses the `timers` module, the corresponding Effect API is `Effect` from `effect`. effect(nodeBuiltinImport)
+  Fix 0: "Disable nodeBuiltinImport for this line"
+  Fix 1: "Disable nodeBuiltinImport for entire file"
+
+[D42] (25:10-25:18) TS6133: 'Readable' is declared but its value is never read.
+  (no quick fixes)
+
+[D43] (25:26-25:34) TS377057: This module reference uses the `stream` module, the corresponding Effect API is `Stream` from `effect`. effect(nodeBuiltinImport)
+  Fix 0: "Disable nodeBuiltinImport for this line"
+  Fix 1: "Disable nodeBuiltinImport for entire file"
+
+[D44] (26:22-26:34) TS6133: 'NodeReadable' is declared but its value is never read.
+  (no quick fixes)
+
+[D45] (26:42-26:55) TS377057: This module reference uses the `stream` module, the corresponding Effect API is `Stream` from `effect`. effect(nodeBuiltinImport)
+  Fix 0: "Disable nodeBuiltinImport for this line"
+  Fix 1: "Disable nodeBuiltinImport for entire file"
+
+[D46] (27:10-27:18) TS6133: 'pipeline' is declared but its value is never read.
+  (no quick fixes)
+
+[D47] (27:26-27:43) TS377057: This module reference uses the `stream` module, the corresponding Effect API is `Stream` from `effect`. effect(nodeBuiltinImport)
+  Fix 0: "Disable nodeBuiltinImport for this line"
+  Fix 1: "Disable nodeBuiltinImport for entire file"
+
+[D48] (28:22-28:34) TS6133: 'nodePipeline' is declared but its value is never read.
+  (no quick fixes)
+
+[D49] (28:42-28:64) TS377057: This module reference uses the `stream` module, the corresponding Effect API is `Stream` from `effect`. effect(nodeBuiltinImport)
+  Fix 0: "Disable nodeBuiltinImport for this line"
+  Fix 1: "Disable nodeBuiltinImport for entire file"
+
+[D50] (29:10-29:24) TS6133: 'ReadableStream' is declared but its value is never read.
+  (no quick fixes)
+
+[D51] (29:32-29:44) TS377057: This module reference uses the `stream` module, the corresponding Effect API is `Stream` from `effect`. effect(nodeBuiltinImport)
+  Fix 0: "Disable nodeBuiltinImport for this line"
+  Fix 1: "Disable nodeBuiltinImport for entire file"
+
+[D52] (30:28-30:46) TS6133: 'NodeReadableStream' is declared but its value is never read.
+  (no quick fixes)
+
+[D53] (30:54-30:71) TS377057: This module reference uses the `stream` module, the corresponding Effect API is `Stream` from `effect`. effect(nodeBuiltinImport)
+  Fix 0: "Disable nodeBuiltinImport for this line"
+  Fix 1: "Disable nodeBuiltinImport for entire file"
+
+[D54] (31:13-31:19) TS6133: 'crypto' is declared but its value is never read.
+  (no quick fixes)
+
+[D55] (31:25-31:33) TS377057: This module reference uses the `crypto` module, the corresponding Effect API is `Crypto` from `effect`. effect(nodeBuiltinImport)
+  Fix 0: "Disable nodeBuiltinImport for this line"
+  Fix 1: "Disable nodeBuiltinImport for entire file"
+
+[D56] (32:10-32:20) TS6133: 'randomUUID' is declared but its value is never read.
+  (no quick fixes)
+
+[D57] (32:28-32:41) TS377057: This module reference uses the `crypto` module, the corresponding Effect API is `Crypto` from `effect`. effect(nodeBuiltinImport)
+  Fix 0: "Disable nodeBuiltinImport for this line"
+  Fix 1: "Disable nodeBuiltinImport for entire file"
+
+[D58] (35:8-35:17) TS377057: This module reference uses the `fs` module, the corresponding Effect API is `FileSystem` from `effect`. effect(nodeBuiltinImport)
+  Fix 0: "Disable nodeBuiltinImport for this line"
+  Fix 1: "Disable nodeBuiltinImport for entire file"
+
+[D59] (38:7-38:10) TS6133: 'fs3' is declared but its value is never read.
+  (no quick fixes)
+
+[D60] (38:21-38:30) TS377057: This module reference uses the `fs` module, the corresponding Effect API is `FileSystem` from `effect`. effect(nodeBuiltinImport)
+  Fix 0: "Disable nodeBuiltinImport for this line"
+  Fix 1: "Disable nodeBuiltinImport for entire file"
+
+[D61] (39:7-39:20) TS6133: 'consoleModule' is declared but its value is never read.
+  (no quick fixes)
+
+[D62] (39:31-39:40) TS377057: This module reference uses the `console` module, the corresponding Effect API is `Console` from `effect`. effect(nodeBuiltinImport)
+  Fix 0: "Disable nodeBuiltinImport for this line"
+  Fix 1: "Disable nodeBuiltinImport for entire file"
+
+[D63] (40:7-40:19) TS6133: 'timersModule' is declared but its value is never read.
+  (no quick fixes)
+
+[D64] (40:30-40:52) TS377057: This module reference uses the `timers` module, the corresponding Effect API is `Effect` from `effect`. effect(nodeBuiltinImport)
+  Fix 0: "Disable nodeBuiltinImport for this line"
+  Fix 1: "Disable nodeBuiltinImport for entire file"
+
+[D65] (41:7-41:19) TS6133: 'streamModule' is declared but its value is never read.
+  (no quick fixes)
+
+[D66] (41:30-41:42) TS377057: This module reference uses the `stream` module, the corresponding Effect API is `Stream` from `effect`. effect(nodeBuiltinImport)
+  Fix 0: "Disable nodeBuiltinImport for this line"
+  Fix 1: "Disable nodeBuiltinImport for entire file"
+
+[D67] (42:7-42:19) TS6133: 'cryptoModule' is declared but its value is never read.
+  (no quick fixes)
+
+[D68] (42:30-42:43) TS377057: This module reference uses the `crypto` module, the corresponding Effect API is `Crypto` from `effect`. effect(nodeBuiltinImport)
+  Fix 0: "Disable nodeBuiltinImport for this line"
+  Fix 1: "Disable nodeBuiltinImport for entire file"
+
+[D69] (45:10-45:14) TS6133: 'text' is declared but its value is never read.
+  (no quick fixes)
+
+[D70] (46:7-46:27) TS6133: 'unknownTimersSubpath' is declared but its value is never read.
+  (no quick fixes)
+
+[D71] (50:10-50:20) TS6133: 'FileSystem' is declared but its value is never read.
+  (no quick fixes)
+
+[D72] (54:8-54:15) TS6133: 'fsExtra' is declared but its value is never read.
   (no quick fixes)
 
 === Quick Fix Application Results ===
@@ -204,14 +336,122 @@ skipped by default
 === [D29] Fix 1: "Disable nodeBuiltinImport for entire file" ===
 skipped by default
 
-=== [D30] Fix 0: "Disable nodeBuiltinImport for this line" ===
+=== [D31] Fix 0: "Disable nodeBuiltinImport for this line" ===
 skipped by default
 
-=== [D30] Fix 1: "Disable nodeBuiltinImport for entire file" ===
+=== [D31] Fix 1: "Disable nodeBuiltinImport for entire file" ===
 skipped by default
 
-=== [D32] Fix 0: "Disable nodeBuiltinImport for this line" ===
+=== [D33] Fix 0: "Disable nodeBuiltinImport for this line" ===
 skipped by default
 
-=== [D32] Fix 1: "Disable nodeBuiltinImport for entire file" ===
+=== [D33] Fix 1: "Disable nodeBuiltinImport for entire file" ===
+skipped by default
+
+=== [D35] Fix 0: "Disable nodeBuiltinImport for this line" ===
+skipped by default
+
+=== [D35] Fix 1: "Disable nodeBuiltinImport for entire file" ===
+skipped by default
+
+=== [D37] Fix 0: "Disable nodeBuiltinImport for this line" ===
+skipped by default
+
+=== [D37] Fix 1: "Disable nodeBuiltinImport for entire file" ===
+skipped by default
+
+=== [D39] Fix 0: "Disable nodeBuiltinImport for this line" ===
+skipped by default
+
+=== [D39] Fix 1: "Disable nodeBuiltinImport for entire file" ===
+skipped by default
+
+=== [D41] Fix 0: "Disable nodeBuiltinImport for this line" ===
+skipped by default
+
+=== [D41] Fix 1: "Disable nodeBuiltinImport for entire file" ===
+skipped by default
+
+=== [D43] Fix 0: "Disable nodeBuiltinImport for this line" ===
+skipped by default
+
+=== [D43] Fix 1: "Disable nodeBuiltinImport for entire file" ===
+skipped by default
+
+=== [D45] Fix 0: "Disable nodeBuiltinImport for this line" ===
+skipped by default
+
+=== [D45] Fix 1: "Disable nodeBuiltinImport for entire file" ===
+skipped by default
+
+=== [D47] Fix 0: "Disable nodeBuiltinImport for this line" ===
+skipped by default
+
+=== [D47] Fix 1: "Disable nodeBuiltinImport for entire file" ===
+skipped by default
+
+=== [D49] Fix 0: "Disable nodeBuiltinImport for this line" ===
+skipped by default
+
+=== [D49] Fix 1: "Disable nodeBuiltinImport for entire file" ===
+skipped by default
+
+=== [D51] Fix 0: "Disable nodeBuiltinImport for this line" ===
+skipped by default
+
+=== [D51] Fix 1: "Disable nodeBuiltinImport for entire file" ===
+skipped by default
+
+=== [D53] Fix 0: "Disable nodeBuiltinImport for this line" ===
+skipped by default
+
+=== [D53] Fix 1: "Disable nodeBuiltinImport for entire file" ===
+skipped by default
+
+=== [D55] Fix 0: "Disable nodeBuiltinImport for this line" ===
+skipped by default
+
+=== [D55] Fix 1: "Disable nodeBuiltinImport for entire file" ===
+skipped by default
+
+=== [D57] Fix 0: "Disable nodeBuiltinImport for this line" ===
+skipped by default
+
+=== [D57] Fix 1: "Disable nodeBuiltinImport for entire file" ===
+skipped by default
+
+=== [D58] Fix 0: "Disable nodeBuiltinImport for this line" ===
+skipped by default
+
+=== [D58] Fix 1: "Disable nodeBuiltinImport for entire file" ===
+skipped by default
+
+=== [D60] Fix 0: "Disable nodeBuiltinImport for this line" ===
+skipped by default
+
+=== [D60] Fix 1: "Disable nodeBuiltinImport for entire file" ===
+skipped by default
+
+=== [D62] Fix 0: "Disable nodeBuiltinImport for this line" ===
+skipped by default
+
+=== [D62] Fix 1: "Disable nodeBuiltinImport for entire file" ===
+skipped by default
+
+=== [D64] Fix 0: "Disable nodeBuiltinImport for this line" ===
+skipped by default
+
+=== [D64] Fix 1: "Disable nodeBuiltinImport for entire file" ===
+skipped by default
+
+=== [D66] Fix 0: "Disable nodeBuiltinImport for this line" ===
+skipped by default
+
+=== [D66] Fix 1: "Disable nodeBuiltinImport for entire file" ===
+skipped by default
+
+=== [D68] Fix 0: "Disable nodeBuiltinImport for this line" ===
+skipped by default
+
+=== [D68] Fix 1: "Disable nodeBuiltinImport for entire file" ===
 skipped by default

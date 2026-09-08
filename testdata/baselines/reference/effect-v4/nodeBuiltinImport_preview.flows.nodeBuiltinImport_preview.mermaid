@@ -1,2 +1,8 @@
 flowchart TB
-  0[/"type: any<br/>node: fs.readFileSync"/]
+  0[["type: #40;#41; =#gt; #123; id: any; contents: any; #125;<br/>node: #40;#41; =#gt; #40;#123;#92;n  id: randomUUID#40;#41;,#92;n  contents: fs.readFileSync#40;#quot;config.json#quot;, #quot;utf8#quot;#41;#92;n#125;#41;"]]
+  1[/"type: #123; id: any; contents: any; #125;<br/>node: #40;#123;#92;n  id: randomUUID#40;#41;,#92;n  contents: fs.readFileSync#40;#quot;config.json#quot;, #quot;utf8#quot;#41;#92;n#125;#41;"/]
+  2["type: Effect#lt;#123; id: any; contents: any; #125;, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
+  3[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
+  1 -->|"kind: potentialReturn"| 0
+  0 -->|"kind: pipe"| 2
+  3 -->|"kind: transformCallee"| 2

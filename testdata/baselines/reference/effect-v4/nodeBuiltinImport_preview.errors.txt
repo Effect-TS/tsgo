@@ -1,18 +1,29 @@
 === Metadata ===
-Effect version: unknown
+Effect version: 4.0.0
 
-/.src/nodeBuiltinImport_preview.ts(3,16): error TS2591: Cannot find name 'node:fs'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
-/.src/nodeBuiltinImport_preview.ts(3,16): warning TS377057: This module reference uses the `fs` module, the corresponding Effect API is `FileSystem` from `@effect/platform`. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport_preview.ts(4,28): error TS2591: Cannot find name 'node:crypto'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+/.src/nodeBuiltinImport_preview.ts(4,28): warning TS377057: This module reference uses the `crypto` module, the corresponding Effect API is `Crypto` from `effect`. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport_preview.ts(5,16): error TS2591: Cannot find name 'node:fs'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+/.src/nodeBuiltinImport_preview.ts(5,16): warning TS377057: This module reference uses the `fs` module, the corresponding Effect API is `FileSystem` from `effect`. effect(nodeBuiltinImport)
 
 
-==== /.src/nodeBuiltinImport_preview.ts (2 errors) ====
+==== /.src/nodeBuiltinImport_preview.ts (4 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics nodeBuiltinImport:warning
+    import { Effect } from "effect"
+    import { randomUUID } from "node:crypto"
+                               ~~~~~~~~~~~~~
+!!! error TS2591: Cannot find name 'node:crypto'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+                               ~~~~~~~~~~~~~
+!!! warning TS377057: This module reference uses the `crypto` module, the corresponding Effect API is `Crypto` from `effect`. effect(nodeBuiltinImport)
     import fs from "node:fs"
                    ~~~~~~~~~
 !!! error TS2591: Cannot find name 'node:fs'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
                    ~~~~~~~~~
-!!! warning TS377057: This module reference uses the `fs` module, the corresponding Effect API is `FileSystem` from `@effect/platform`. effect(nodeBuiltinImport)
+!!! warning TS377057: This module reference uses the `fs` module, the corresponding Effect API is `FileSystem` from `effect`. effect(nodeBuiltinImport)
     
-    export const preview = fs.readFileSync
+    export const preview = Effect.sync(() => ({
+      id: randomUUID(),
+      contents: fs.readFileSync("config.json", "utf8")
+    }))
     
