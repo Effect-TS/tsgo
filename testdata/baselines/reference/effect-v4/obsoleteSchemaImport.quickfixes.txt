@@ -1,0 +1,73 @@
+=== Quick Fix Inventory ===
+
+[D1] (5:21-5:37) TS377128: This module reference imports `@effect/schema`, which is obsolete in Effect v4. In Effect v4, Schema is provided directly by `Schema` from `effect` (or `effect/Schema`). effect(obsoleteSchemaImport)
+  Fix 0: "Disable obsoleteSchemaImport for this line"
+  Fix 1: "Disable obsoleteSchemaImport for entire file"
+
+[D2] (7:21-7:44) TS377128: This module reference imports `@effect/schema/Schema`, which is obsolete in Effect v4. In Effect v4, Schema is provided directly by `Schema` from `effect` (or `effect/Schema`). effect(obsoleteSchemaImport)
+  Fix 0: "Disable obsoleteSchemaImport for this line"
+  Fix 1: "Disable obsoleteSchemaImport for entire file"
+
+[D3] (9:22-9:42) TS377128: This module reference imports `@effect/schema/AST`, which is obsolete in Effect v4. In Effect v4, Schema is provided directly by `Schema` from `effect` (or `effect/Schema`). effect(obsoleteSchemaImport)
+  Fix 0: "Disable obsoleteSchemaImport for this line"
+  Fix 1: "Disable obsoleteSchemaImport for entire file"
+
+[D4] (11:38-11:54) TS377128: This module reference imports `@effect/schema`, which is obsolete in Effect v4. In Effect v4, Schema is provided directly by `Schema` from `effect` (or `effect/Schema`). effect(obsoleteSchemaImport)
+  Fix 0: "Disable obsoleteSchemaImport for this line"
+  Fix 1: "Disable obsoleteSchemaImport for entire file"
+
+[D5] (13:8-13:24) TS377128: This module reference imports `@effect/schema`, which is obsolete in Effect v4. In Effect v4, Schema is provided directly by `Schema` from `effect` (or `effect/Schema`). effect(obsoleteSchemaImport)
+  Fix 0: "Disable obsoleteSchemaImport for this line"
+  Fix 1: "Disable obsoleteSchemaImport for entire file"
+
+[D6] (16:37-16:60) TS377128: This module reference imports `@effect/schema/Schema`, which is obsolete in Effect v4. In Effect v4, Schema is provided directly by `Schema` from `effect` (or `effect/Schema`). effect(obsoleteSchemaImport)
+  Fix 0: "Disable obsoleteSchemaImport for this line"
+  Fix 1: "Disable obsoleteSchemaImport for entire file"
+
+[D7] (20:15-20:31) TS377128: This module reference imports `@effect/schema`, which is obsolete in Effect v4. In Effect v4, Schema is provided directly by `Schema` from `effect` (or `effect/Schema`). effect(obsoleteSchemaImport)
+  Fix 0: "Disable obsoleteSchemaImport for this line"
+  Fix 1: "Disable obsoleteSchemaImport for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable obsoleteSchemaImport for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable obsoleteSchemaImport for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable obsoleteSchemaImport for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable obsoleteSchemaImport for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable obsoleteSchemaImport for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable obsoleteSchemaImport for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable obsoleteSchemaImport for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable obsoleteSchemaImport for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable obsoleteSchemaImport for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable obsoleteSchemaImport for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable obsoleteSchemaImport for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable obsoleteSchemaImport for entire file" ===
+skipped by default
+
+=== [D7] Fix 0: "Disable obsoleteSchemaImport for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable obsoleteSchemaImport for entire file" ===
+skipped by default

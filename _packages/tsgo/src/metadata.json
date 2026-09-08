@@ -368,6 +368,29 @@
       }
     },
     {
+      "name": "obsoleteSchemaImport",
+      "group": "correctness",
+      "description": "Warns when importing @effect/schema in projects targeting Effect v4, where Schema is included directly in the effect package",
+      "defaultSeverity": "warning",
+      "fixable": false,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377128
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n// @ts-expect-error - @effect/schema is obsolete in v4\nimport * as S from \"@effect/schema/Schema\"\n\nexport const preview = Effect.sync(() =\u003e S)\n",
+        "diagnostics": [
+          {
+            "start": 106,
+            "end": 129,
+            "text": "This module reference imports `@effect/schema/Schema`, which is obsolete in Effect v4. In Effect v4, Schema is provided directly by `Schema` from `effect` (or `effect/Schema`). effect(obsoleteSchemaImport)"
+          }
+        ]
+      }
+    },
+    {
       "name": "outdatedApi",
       "group": "correctness",
       "description": "Detects usage of APIs that have been removed or renamed in Effect v4",
