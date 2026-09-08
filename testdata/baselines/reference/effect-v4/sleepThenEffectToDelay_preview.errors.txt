@@ -1,0 +1,20 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/sleepThenEffectToDelay_preview.ts(9,3): suggestion TS377133: Sequencing Effect.sleep before an effect re-implements Effect.delay. effect(sleepThenEffectToDelay)
+
+
+==== /.src/sleepThenEffectToDelay_preview.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics *:off
+    // @effect-diagnostics sleepThenEffectToDelay:suggestion
+    import { Effect } from "effect"
+    
+    declare const sendRequest: Effect.Effect<void>
+    
+    export const throttled = Effect.sleep("1 second").pipe(
+      Effect.andThen(sendRequest)
+      ~~~~~~~~~~~~~~
+!!! suggestion TS377133: Sequencing Effect.sleep before an effect re-implements Effect.delay. effect(sleepThenEffectToDelay)
+    )
+    

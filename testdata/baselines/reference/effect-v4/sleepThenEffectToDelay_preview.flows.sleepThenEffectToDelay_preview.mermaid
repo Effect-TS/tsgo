@@ -1,0 +1,12 @@
+flowchart TB
+  0[/"type: #quot;1 second#quot;<br/>node: #quot;1 second#quot;"/]
+  1["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.sleep<br/>args: #91;#93;"]
+  2[/"type: #40;duration: Input#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.sleep"/]
+  3["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.andThen<br/>args: #91;sendRequest#93;"]
+  4[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  5[/"type: Effect#lt;void, never, never#gt;<br/>node: sendRequest"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1
+  4 -->|"kind: transformCallee"| 3
+  5 -->|"kind: transformArg"| 3
+  1 -->|"kind: pipe"| 3

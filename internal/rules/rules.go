@@ -119,4 +119,5 @@ var All = []rule.Rule{
 	AcquireReleaseDisposable,
 	RaceFirstWithSleepToTimeout,
 	RunOfExitToRunExit,
+	SleepThenEffectToDelay,
 }

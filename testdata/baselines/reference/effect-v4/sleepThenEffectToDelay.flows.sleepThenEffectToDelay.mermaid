@@ -1,0 +1,207 @@
+flowchart TB
+  0[/"type: #quot;1 second#quot;<br/>node: #quot;1 second#quot;"/]
+  1["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.sleep<br/>args: #91;#93;"]
+  2[/"type: #40;duration: Input#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.sleep"/]
+  3["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.andThen<br/>args: #91;sendRequest#93;"]
+  4[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  5[/"type: Effect#lt;void, never, never#gt;<br/>node: sendRequest"/]
+  6[/"type: #quot;1 second#quot;<br/>node: #quot;1 second#quot;"/]
+  7["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.sleep<br/>args: #91;#93;"]
+  8[/"type: #40;duration: Input#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.sleep"/]
+  9["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;#41; =#gt; sendRequest#93;"]
+  10[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  11[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; sendRequest"]]
+  12[/"type: Effect#lt;void, never, never#gt;<br/>node: sendRequest"/]
+  13[/"type: #quot;1 second#quot;<br/>node: #quot;1 second#quot;"/]
+  14["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.sleep<br/>args: #91;#93;"]
+  15[/"type: #40;duration: Input#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.sleep"/]
+  16["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;_#41; =#gt; sendRequest#93;"]
+  17[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  18[["type: #40;_: void#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;_#41; =#gt; sendRequest"]]
+  19[/"type: Effect#lt;void, never, never#gt;<br/>node: sendRequest"/]
+  20[/"type: #quot;1 second#quot;<br/>node: #quot;1 second#quot;"/]
+  21["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.sleep<br/>args: #91;#93;"]
+  22[/"type: #40;duration: Input#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.sleep"/]
+  23["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;_unused#41; =#gt; sendRequest#93;"]
+  24[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  25[["type: #40;_unused: void#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;_unused#41; =#gt; sendRequest"]]
+  26[/"type: Effect#lt;void, never, never#gt;<br/>node: sendRequest"/]
+  27[/"type: #quot;1 second#quot;<br/>node: #quot;1 second#quot;"/]
+  28["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.sleep<br/>args: #91;#93;"]
+  29[/"type: #40;duration: Input#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.sleep"/]
+  30["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.andThen<br/>args: #91;sendRequest#93;"]
+  31[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  32[/"type: Effect#lt;void, never, never#gt;<br/>node: sendRequest"/]
+  33[/"type: #quot;1 second#quot;<br/>node: #quot;1 second#quot;"/]
+  34["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.sleep<br/>args: #91;#93;"]
+  35[/"type: #40;duration: Input#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.sleep"/]
+  36["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;#41; =#gt; sendRequest#93;"]
+  37[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  38[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; sendRequest"]]
+  39[/"type: Effect#lt;void, never, never#gt;<br/>node: sendRequest"/]
+  40[/"type: #quot;1 second#quot;<br/>node: #quot;1 second#quot;"/]
+  41["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.sleep<br/>args: #91;#93;"]
+  42["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.andThen<br/>args: #91;sendRequest#93;"]
+  43[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  44[/"type: Effect#lt;void, never, never#gt;<br/>node: sendRequest"/]
+  45[/"type: #quot;1 second#quot;<br/>node: #quot;1 second#quot;"/]
+  46["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.sleep<br/>args: #91;#93;"]
+  47[/"type: #40;duration: Input#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.sleep"/]
+  48["type: Effect#lt;void, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  49[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  50[/"type: Effect#lt;void, never, never#gt;<br/>node: sendRequest"/]
+  51[/"type: #quot;100 millis#quot;<br/>node: #quot;100 millis#quot;"/]
+  52["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.sleep<br/>args: #91;#93;"]
+  53[/"type: #40;duration: Input#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.sleep"/]
+  54["type: Effect#lt;void, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  55[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  56[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; sendRequest"]]
+  57[/"type: Effect#lt;void, never, never#gt;<br/>node: sendRequest"/]
+  58[/"type: Effect#lt;void, never, never#gt;<br/>node: sendRequest"/]
+  59["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.delay<br/>args: #91;#quot;1 second#quot;#93;"]
+  60[/"type: #123; #40;duration: Input#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R#gt;; #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;, duration: Input#41;: Effect#lt;A, E, R#gt;; #125;<br/>node: Effect.delay"/]
+  61[/"type: #quot;1 second#quot;<br/>node: #quot;1 second#quot;"/]
+  62[/"type: Effect#lt;void, never, never#gt;<br/>node: sendRequest"/]
+  63["type: Effect#lt;void, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  64[/"type: #123; #40;duration: Input#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R#gt;; #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;, duration: Input#41;: Effect#lt;A, E, R#gt;; #125;<br/>node: Effect.delay"/]
+  65[/"type: #quot;100 millis#quot;<br/>node: #quot;100 millis#quot;"/]
+  66((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function* #40;#41; #123;#92;n  yield* Effect.sleep#40;#quot;1 second#quot;#41;#92;n  return yield* sendRequest#92;n#125;#41;")))
+  67[/"type: void<br/>node: yield* sendRequest"/]
+  68[/"type: #quot;1 second#quot;<br/>node: #quot;1 second#quot;"/]
+  69["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.sleep<br/>args: #91;#93;"]
+  70[/"type: #40;duration: Input#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.sleep"/]
+  71[/"type: #quot;1 second#quot;<br/>node: #quot;1 second#quot;"/]
+  72["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.sleep<br/>args: #91;#93;"]
+  73[/"type: #40;duration: Input#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.sleep"/]
+  74["type: Effect#lt;void, never, never#gt;<br/>callee: withLive<br/>args: #91;#93;"]
+  75["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.andThen<br/>args: #91;sendRequest#93;"]
+  76[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  77[/"type: Effect#lt;void, never, never#gt;<br/>node: sendRequest"/]
+  78[/"type: #quot;1 second#quot;<br/>node: #quot;1 second#quot;"/]
+  79["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.sleep<br/>args: #91;#93;"]
+  80[/"type: #40;duration: Input#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.sleep"/]
+  81["type: Effect#lt;void, never, never#gt;<br/>callee: schedule<br/>args: #91;#93;"]
+  82["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.andThen<br/>args: #91;sendRequest#93;"]
+  83[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  84[/"type: Effect#lt;void, never, never#gt;<br/>node: sendRequest"/]
+  85[/"type: #quot;1 second#quot;<br/>node: #quot;1 second#quot;"/]
+  86["type: #123; pipe: #40;f: any#41; =#gt; any; #125;<br/>callee: unrelatedSleep<br/>args: #91;#93;"]
+  87[/"type: #40;d: string#41; =#gt; #123; pipe: #40;f: any#41; =#gt; any; #125;<br/>node: unrelatedSleep"/]
+  88["type: <br/>callee: Effect.andThen<br/>args: #91;sendRequest#93;"]
+  89[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  90[/"type: Effect#lt;void, never, never#gt;<br/>node: sendRequest"/]
+  91[/"type: #quot;1 second#quot;<br/>node: #quot;1 second#quot;"/]
+  92["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.sleep<br/>args: #91;#93;"]
+  93[/"type: #40;duration: Input#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.sleep"/]
+  94["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;val#41; =#gt; Effect.succeed#40;val#41;#93;"]
+  95[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  96[["type: #40;val: void#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;val#41; =#gt; Effect.succeed#40;val#41;"]]
+  97[/"type: void<br/>node: val"/]
+  98["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  99[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  100[/"type: #quot;1 second#quot;<br/>node: #quot;1 second#quot;"/]
+  101["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.sleep<br/>args: #91;#93;"]
+  102[/"type: #40;duration: Input#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.sleep"/]
+  103["type: Effect#lt;void, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  104[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  105[["type: #40;val: void#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;val#41; =#gt; Effect.succeed#40;val#41;"]]
+  106[/"type: void<br/>node: val"/]
+  107["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  108[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  109[/"type: #quot;1 second#quot;<br/>node: #quot;1 second#quot;"/]
+  110["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.sleep<br/>args: #91;#93;"]
+  111[/"type: #40;duration: Input#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.sleep"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1
+  4 -->|"kind: transformCallee"| 3
+  5 -->|"kind: transformArg"| 3
+  1 -->|"kind: pipe"| 3
+  6 -->|"kind: pipe"| 7
+  8 -->|"kind: transformCallee"| 7
+  10 -->|"kind: transformCallee"| 9
+  12 -->|"kind: potentialReturn"| 11
+  11 -->|"kind: transformArg"| 9
+  7 -->|"kind: pipe"| 9
+  13 -->|"kind: pipe"| 14
+  15 -->|"kind: transformCallee"| 14
+  17 -->|"kind: transformCallee"| 16
+  19 -->|"kind: potentialReturn"| 18
+  18 -->|"kind: transformArg"| 16
+  14 -->|"kind: pipe"| 16
+  20 -->|"kind: pipe"| 21
+  22 -->|"kind: transformCallee"| 21
+  24 -->|"kind: transformCallee"| 23
+  26 -->|"kind: potentialReturn"| 25
+  25 -->|"kind: transformArg"| 23
+  21 -->|"kind: pipe"| 23
+  27 -->|"kind: pipe"| 28
+  29 -->|"kind: transformCallee"| 28
+  31 -->|"kind: transformCallee"| 30
+  32 -->|"kind: transformArg"| 30
+  28 -->|"kind: pipe"| 30
+  33 -->|"kind: pipe"| 34
+  35 -->|"kind: transformCallee"| 34
+  37 -->|"kind: transformCallee"| 36
+  39 -->|"kind: potentialReturn"| 38
+  38 -->|"kind: transformArg"| 36
+  34 -->|"kind: pipe"| 36
+  40 -->|"kind: pipe"| 41
+  43 -->|"kind: transformCallee"| 42
+  44 -->|"kind: transformArg"| 42
+  41 -->|"kind: pipe"| 42
+  45 -->|"kind: pipe"| 46
+  47 -->|"kind: transformCallee"| 46
+  46 -->|"kind: pipe"| 48
+  49 -->|"kind: transformCallee"| 45
+  50 -->|"kind: transformArg"| 45
+  51 -->|"kind: pipe"| 52
+  53 -->|"kind: transformCallee"| 52
+  52 -->|"kind: pipe"| 54
+  55 -->|"kind: transformCallee"| 51
+  57 -->|"kind: potentialReturn"| 56
+  56 -->|"kind: transformArg"| 51
+  60 -->|"kind: transformCallee"| 59
+  61 -->|"kind: transformArg"| 59
+  58 -->|"kind: pipe"| 59
+  62 -->|"kind: pipe"| 63
+  64 -->|"kind: transformCallee"| 62
+  65 -->|"kind: transformArg"| 62
+  67 -->|"kind: potentialReturn"| 66
+  68 -->|"kind: pipe"| 69
+  70 -->|"kind: transformCallee"| 69
+  69 -->|"kind: yieldable"| 66
+  71 -->|"kind: pipe"| 72
+  73 -->|"kind: transformCallee"| 72
+  72 -->|"kind: pipe"| 74
+  76 -->|"kind: transformCallee"| 75
+  77 -->|"kind: transformArg"| 75
+  74 -->|"kind: pipe"| 75
+  78 -->|"kind: pipe"| 79
+  80 -->|"kind: transformCallee"| 79
+  79 -->|"kind: pipe"| 81
+  83 -->|"kind: transformCallee"| 82
+  84 -->|"kind: transformArg"| 82
+  81 -->|"kind: pipe"| 82
+  85 -->|"kind: pipe"| 86
+  87 -->|"kind: transformCallee"| 86
+  89 -->|"kind: transformCallee"| 88
+  90 -->|"kind: transformArg"| 88
+  86 -->|"kind: pipe"| 88
+  91 -->|"kind: pipe"| 92
+  93 -->|"kind: transformCallee"| 92
+  95 -->|"kind: transformCallee"| 94
+  97 -->|"kind: pipe"| 98
+  99 -->|"kind: transformCallee"| 98
+  98 -->|"kind: potentialReturn"| 96
+  96 -->|"kind: transformArg"| 94
+  92 -->|"kind: pipe"| 94
+  100 -->|"kind: pipe"| 101
+  102 -->|"kind: transformCallee"| 101
+  101 -->|"kind: pipe"| 103
+  104 -->|"kind: transformCallee"| 100
+  106 -->|"kind: pipe"| 107
+  108 -->|"kind: transformCallee"| 107
+  107 -->|"kind: potentialReturn"| 105
+  105 -->|"kind: transformArg"| 100
+  109 -->|"kind: pipe"| 110
+  111 -->|"kind: transformCallee"| 110
