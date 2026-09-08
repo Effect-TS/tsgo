@@ -498,5 +498,9 @@
     "`Effect.mapBoth` expresses these failure and success transformations more directly than `Effect.matchEffect`. effect(matchEffectToMapBoth)": {
         "category": "Suggestion",
         "code": 377126
+    },
+    "Use `Effect.{0}` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)": {
+        "category": "Suggestion",
+        "code": 377127
     }
 }

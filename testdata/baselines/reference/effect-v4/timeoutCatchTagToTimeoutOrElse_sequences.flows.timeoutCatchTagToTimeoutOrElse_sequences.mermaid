@@ -1,0 +1,97 @@
+flowchart TB
+  0[/"type: Effect#lt;string, never, never#gt;<br/>node: task"/]
+  1["type: Effect#lt;string, TimeoutError, never#gt;<br/>callee: Effect.timeout<br/>args: #91;1#93;"]
+  2[/"type: #123; #40;duration: Input#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; TimeoutError, R#gt;; #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;, duration: Input#41;: Effect#lt;A, E #124; TimeoutError, R#gt;; #125;<br/>node: Effect.timeout"/]
+  3[/"type: 1<br/>node: 1"/]
+  4["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;TimeoutError#quot;, #40;#41; =#gt; Effect.succeed#40;#quot;first#quot;#41;#93;"]
+  5[/"type: #123; #lt;const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, E, A1, E1, R1, A2 = unassigned, E2 = never, R2 = never#gt;#40;k: K, f: #40;e: ExtractTag#lt;NoInfer#lt;E#gt;, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A1 #124; Exclude#lt;A2, unassigned#gt;, E1 #124; E2 #124; #40;A2 extends unassigned ? ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt; : never#41;, R #124; R1 #124; R2#gt;; #lt;A, E, R, const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, R1, E1, A1, A2 = unassigned, E2 = never, R2 = never#gt;#40;self: Effect#lt;A, E, R#gt;, k: K, f: #40;e: ExtractTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: Effect#lt;A #124; A1 #124; Exclude#lt;A2, unassigned#gt;, E1 #124; E2 #124; #40;A2 extends unassigned ? ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt; : never#41;, R #124; R1 #124; R2#gt;; #125;<br/>node: Effect.catchTag"/]
+  6[/"type: #quot;TimeoutError#quot;<br/>node: #quot;TimeoutError#quot;"/]
+  7[["type: #40;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;#quot;first#quot;#41;"]]
+  8[/"type: #quot;first#quot;<br/>node: #quot;first#quot;"/]
+  9["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  10[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  11["type: Effect#lt;string, TimeoutError, never#gt;<br/>callee: Effect.timeout<br/>args: #91;2#93;"]
+  12[/"type: #123; #40;duration: Input#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; TimeoutError, R#gt;; #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;, duration: Input#41;: Effect#lt;A, E #124; TimeoutError, R#gt;; #125;<br/>node: Effect.timeout"/]
+  13[/"type: 2<br/>node: 2"/]
+  14["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;TimeoutError#quot;, #40;#41; =#gt; Effect.succeed#40;#quot;second#quot;#41;#93;"]
+  15[/"type: #123; #lt;const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, E, A1, E1, R1, A2 = unassigned, E2 = never, R2 = never#gt;#40;k: K, f: #40;e: ExtractTag#lt;NoInfer#lt;E#gt;, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A1 #124; Exclude#lt;A2, unassigned#gt;, E1 #124; E2 #124; #40;A2 extends unassigned ? ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt; : never#41;, R #124; R1 #124; R2#gt;; #lt;A, E, R, const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, R1, E1, A1, A2 = unassigned, E2 = never, R2 = never#gt;#40;self: Effect#lt;A, E, R#gt;, k: K, f: #40;e: ExtractTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: Effect#lt;A #124; A1 #124; Exclude#lt;A2, unassigned#gt;, E1 #124; E2 #124; #40;A2 extends unassigned ? ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt; : never#41;, R #124; R1 #124; R2#gt;; #125;<br/>node: Effect.catchTag"/]
+  16[/"type: #quot;TimeoutError#quot;<br/>node: #quot;TimeoutError#quot;"/]
+  17[["type: #40;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;#quot;second#quot;#41;"]]
+  18[/"type: #quot;second#quot;<br/>node: #quot;second#quot;"/]
+  19["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  20[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  21[/"type: Effect#lt;string, TimeoutError, never#gt;<br/>node: innerTimeout"/]
+  22["type: Effect#lt;string, TimeoutError, never#gt;<br/>callee: Effect.timeout<br/>args: #91;1#93;"]
+  23[/"type: #123; #40;duration: Input#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; TimeoutError, R#gt;; #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;, duration: Input#41;: Effect#lt;A, E #124; TimeoutError, R#gt;; #125;<br/>node: Effect.timeout"/]
+  24[/"type: 1<br/>node: 1"/]
+  25["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;TimeoutError#quot;, #40;#41; =#gt; Effect.succeed#40;#quot;inner fallback#quot;#41;#93;"]
+  26[/"type: #123; #lt;const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, E, A1, E1, R1, A2 = unassigned, E2 = never, R2 = never#gt;#40;k: K, f: #40;e: ExtractTag#lt;NoInfer#lt;E#gt;, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A1 #124; Exclude#lt;A2, unassigned#gt;, E1 #124; E2 #124; #40;A2 extends unassigned ? ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt; : never#41;, R #124; R1 #124; R2#gt;; #lt;A, E, R, const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, R1, E1, A1, A2 = unassigned, E2 = never, R2 = never#gt;#40;self: Effect#lt;A, E, R#gt;, k: K, f: #40;e: ExtractTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: Effect#lt;A #124; A1 #124; Exclude#lt;A2, unassigned#gt;, E1 #124; E2 #124; #40;A2 extends unassigned ? ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt; : never#41;, R #124; R1 #124; R2#gt;; #125;<br/>node: Effect.catchTag"/]
+  27[/"type: #quot;TimeoutError#quot;<br/>node: #quot;TimeoutError#quot;"/]
+  28[["type: #40;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;#quot;inner fallback#quot;#41;"]]
+  29[/"type: #quot;inner fallback#quot;<br/>node: #quot;inner fallback#quot;"/]
+  30["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  31[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  32["type: Effect#lt;string, TimeoutError, never#gt;<br/>callee: Effect.timeout<br/>args: #91;2#93;"]
+  33[/"type: #123; #40;duration: Input#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; TimeoutError, R#gt;; #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;, duration: Input#41;: Effect#lt;A, E #124; TimeoutError, R#gt;; #125;<br/>node: Effect.timeout"/]
+  34[/"type: 2<br/>node: 2"/]
+  35["type: Effect#lt;Option#lt;string#gt;, TimeoutError, never#gt;<br/>callee: Effect.asSome<br/>args: #91;#93;"]
+  36["type: Effect#lt;import#40;#quot;/node_modules/effect/dist/Option#quot;#41;.Option#lt;string#gt; #124; import#40;#quot;/node_modules/effect/dist/Option#quot;#41;.Option#lt;never#gt;, never, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;TimeoutError#quot;, #40;#41; =#gt; Effect.succeedNone#93;"]
+  37[/"type: #123; #lt;const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, E, A1, E1, R1, A2 = unassigned, E2 = never, R2 = never#gt;#40;k: K, f: #40;e: ExtractTag#lt;NoInfer#lt;E#gt;, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A1 #124; Exclude#lt;A2, unassigned#gt;, E1 #124; E2 #124; #40;A2 extends unassigned ? ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt; : never#41;, R #124; R1 #124; R2#gt;; #lt;A, E, R, const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, R1, E1, A1, A2 = unassigned, E2 = never, R2 = never#gt;#40;self: Effect#lt;A, E, R#gt;, k: K, f: #40;e: ExtractTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: Effect#lt;A #124; A1 #124; Exclude#lt;A2, unassigned#gt;, E1 #124; E2 #124; #40;A2 extends unassigned ? ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt; : never#41;, R #124; R1 #124; R2#gt;; #125;<br/>node: Effect.catchTag"/]
+  38[/"type: #quot;TimeoutError#quot;<br/>node: #quot;TimeoutError#quot;"/]
+  39[["type: #40;#41; =#gt; Effect#lt;Option#lt;never#gt;, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeedNone"]]
+  40[/"type: Effect#lt;Option#lt;never#gt;, never, never#gt;<br/>node: Effect.succeedNone"/]
+  41["type: Effect#lt;import#40;#quot;/node_modules/effect/dist/Option#quot;#41;.Option#lt;string#gt; #124; import#40;#quot;/node_modules/effect/dist/Option#quot;#41;.Option#lt;never#gt;, TimeoutError, never#gt;<br/>callee: Effect.timeout<br/>args: #91;3#93;"]
+  42[/"type: #123; #40;duration: Input#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; TimeoutError, R#gt;; #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;, duration: Input#41;: Effect#lt;A, E #124; TimeoutError, R#gt;; #125;<br/>node: Effect.timeout"/]
+  43[/"type: 3<br/>node: 3"/]
+  44["type: Effect#lt;import#40;#quot;/node_modules/effect/dist/Option#quot;#41;.Option#lt;string#gt; #124; import#40;#quot;/node_modules/effect/dist/Option#quot;#41;.Option#lt;never#gt;, never, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;TimeoutError#quot;, #40;#41; =#gt; Effect.succeedNone#93;"]
+  45[/"type: #123; #lt;const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, E, A1, E1, R1, A2 = unassigned, E2 = never, R2 = never#gt;#40;k: K, f: #40;e: ExtractTag#lt;NoInfer#lt;E#gt;, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A1 #124; Exclude#lt;A2, unassigned#gt;, E1 #124; E2 #124; #40;A2 extends unassigned ? ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt; : never#41;, R #124; R1 #124; R2#gt;; #lt;A, E, R, const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, R1, E1, A1, A2 = unassigned, E2 = never, R2 = never#gt;#40;self: Effect#lt;A, E, R#gt;, k: K, f: #40;e: ExtractTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: Effect#lt;A #124; A1 #124; Exclude#lt;A2, unassigned#gt;, E1 #124; E2 #124; #40;A2 extends unassigned ? ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt; : never#41;, R #124; R1 #124; R2#gt;; #125;<br/>node: Effect.catchTag"/]
+  46[/"type: #quot;TimeoutError#quot;<br/>node: #quot;TimeoutError#quot;"/]
+  47[["type: #40;#41; =#gt; Effect#lt;Option#lt;never#gt;, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeedNone"]]
+  48[/"type: Effect#lt;Option#lt;never#gt;, never, never#gt;<br/>node: Effect.succeedNone"/]
+  2 -->|"kind: transformCallee"| 1
+  3 -->|"kind: transformArg"| 1
+  0 -->|"kind: pipe"| 1
+  5 -->|"kind: transformCallee"| 4
+  6 -->|"kind: transformArg"| 4
+  8 -->|"kind: pipe"| 9
+  10 -->|"kind: transformCallee"| 9
+  9 -->|"kind: potentialReturn"| 7
+  7 -->|"kind: transformArg"| 4
+  1 -->|"kind: pipe"| 4
+  12 -->|"kind: transformCallee"| 11
+  13 -->|"kind: transformArg"| 11
+  4 -->|"kind: pipe"| 11
+  15 -->|"kind: transformCallee"| 14
+  16 -->|"kind: transformArg"| 14
+  18 -->|"kind: pipe"| 19
+  20 -->|"kind: transformCallee"| 19
+  19 -->|"kind: potentialReturn"| 17
+  17 -->|"kind: transformArg"| 14
+  11 -->|"kind: pipe"| 14
+  23 -->|"kind: transformCallee"| 22
+  24 -->|"kind: transformArg"| 22
+  21 -->|"kind: pipe"| 22
+  26 -->|"kind: transformCallee"| 25
+  27 -->|"kind: transformArg"| 25
+  29 -->|"kind: pipe"| 30
+  31 -->|"kind: transformCallee"| 30
+  30 -->|"kind: potentialReturn"| 28
+  28 -->|"kind: transformArg"| 25
+  22 -->|"kind: pipe"| 25
+  33 -->|"kind: transformCallee"| 32
+  34 -->|"kind: transformArg"| 32
+  25 -->|"kind: pipe"| 32
+  32 -->|"kind: pipe"| 35
+  37 -->|"kind: transformCallee"| 36
+  38 -->|"kind: transformArg"| 36
+  40 -->|"kind: potentialReturn"| 39
+  39 -->|"kind: transformArg"| 36
+  35 -->|"kind: pipe"| 36
+  42 -->|"kind: transformCallee"| 41
+  43 -->|"kind: transformArg"| 41
+  36 -->|"kind: pipe"| 41
+  45 -->|"kind: transformCallee"| 44
+  46 -->|"kind: transformArg"| 44
+  48 -->|"kind: potentialReturn"| 47
+  47 -->|"kind: transformArg"| 44
+  41 -->|"kind: pipe"| 44

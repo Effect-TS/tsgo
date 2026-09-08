@@ -1,0 +1,158 @@
+=== Quick Fix Inventory ===
+
+[D1] (12:3-12:18) TS377127: Use `Effect.timeoutOrElse` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
+  Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line"
+  Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file"
+  Fix 2: "Replace with Effect.timeoutOrElse"
+
+[D2] (14:3-14:18) TS377127: Use `Effect.timeoutOrElse` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
+  Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line"
+  Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file"
+  Fix 2: "Replace with Effect.timeoutOrElse"
+
+[D3] (24:3-24:18) TS377127: Use `Effect.timeoutOption` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
+  Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line"
+  Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file"
+  Fix 2: "Replace with Effect.timeoutOption"
+
+[D4] (26:3-26:18) TS377127: Use `Effect.timeoutOrElse` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
+  Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line"
+  Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file"
+  Fix 2: "Replace with Effect.timeoutOrElse"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.timeoutOrElse" ===
+
+--- file:///.src/timeoutCatchTagToTimeoutOrElse_sequences.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics timeoutCatchTagToTimeoutOrElse:warning
+import { Cause, Effect } from "effect"
+
+declare const task: Effect.Effect<string>
+declare const innerTimeout: Effect.Effect<string, Cause.TimeoutError>
+
+// Both occurrences in the same flow should be reported.
+export const repeated = task.pipe(Effect.timeoutOrElse({
+    duration: 1,
+    orElse: () => Effect.succeed("first")
+}), Effect.timeout(2), Effect.catchTag("TimeoutError", () => Effect.succeed("second")))
+
+// Rejecting the first sequence must not hide later matches. The two remaining
+// patterns should be reported in source order, with the Option pattern first.
+export const rejectedThenMixed = innerTimeout.pipe(
+  Effect.timeout(1),
+  Effect.catchTag("TimeoutError", () => Effect.succeed("inner fallback")),
+  Effect.timeout(2),
+  Effect.asSome,
+  Effect.catchTag("TimeoutError", () => Effect.succeedNone),
+  Effect.timeout(3),
+  Effect.catchTag("TimeoutError", () => Effect.succeedNone)
+)
+
+
+=== [D2] Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.timeoutOrElse" ===
+
+--- file:///.src/timeoutCatchTagToTimeoutOrElse_sequences.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics timeoutCatchTagToTimeoutOrElse:warning
+import { Cause, Effect } from "effect"
+
+declare const task: Effect.Effect<string>
+declare const innerTimeout: Effect.Effect<string, Cause.TimeoutError>
+
+// Both occurrences in the same flow should be reported.
+export const repeated = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("first")), Effect.timeoutOrElse({
+    duration: 2,
+    orElse: () => Effect.succeed("second")
+}))
+
+// Rejecting the first sequence must not hide later matches. The two remaining
+// patterns should be reported in source order, with the Option pattern first.
+export const rejectedThenMixed = innerTimeout.pipe(
+  Effect.timeout(1),
+  Effect.catchTag("TimeoutError", () => Effect.succeed("inner fallback")),
+  Effect.timeout(2),
+  Effect.asSome,
+  Effect.catchTag("TimeoutError", () => Effect.succeedNone),
+  Effect.timeout(3),
+  Effect.catchTag("TimeoutError", () => Effect.succeedNone)
+)
+
+
+=== [D3] Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.timeoutOption" ===
+
+--- file:///.src/timeoutCatchTagToTimeoutOrElse_sequences.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics timeoutCatchTagToTimeoutOrElse:warning
+import { Cause, Effect } from "effect"
+
+declare const task: Effect.Effect<string>
+declare const innerTimeout: Effect.Effect<string, Cause.TimeoutError>
+
+// Both occurrences in the same flow should be reported.
+export const repeated = task.pipe(
+  Effect.timeout(1),
+  Effect.catchTag("TimeoutError", () => Effect.succeed("first")),
+  Effect.timeout(2),
+  Effect.catchTag("TimeoutError", () => Effect.succeed("second"))
+)
+
+// Rejecting the first sequence must not hide later matches. The two remaining
+// patterns should be reported in source order, with the Option pattern first.
+export const rejectedThenMixed = innerTimeout.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("inner fallback")), Effect.timeoutOption(2), Effect.timeout(3), Effect.catchTag("TimeoutError", () => Effect.succeedNone))
+
+
+=== [D4] Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.timeoutOrElse" ===
+
+--- file:///.src/timeoutCatchTagToTimeoutOrElse_sequences.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics timeoutCatchTagToTimeoutOrElse:warning
+import { Cause, Effect } from "effect"
+
+declare const task: Effect.Effect<string>
+declare const innerTimeout: Effect.Effect<string, Cause.TimeoutError>
+
+// Both occurrences in the same flow should be reported.
+export const repeated = task.pipe(
+  Effect.timeout(1),
+  Effect.catchTag("TimeoutError", () => Effect.succeed("first")),
+  Effect.timeout(2),
+  Effect.catchTag("TimeoutError", () => Effect.succeed("second"))
+)
+
+// Rejecting the first sequence must not hide later matches. The two remaining
+// patterns should be reported in source order, with the Option pattern first.
+export const rejectedThenMixed = innerTimeout.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("inner fallback")), Effect.timeout(2), Effect.asSome, Effect.catchTag("TimeoutError", () => Effect.succeedNone), Effect.timeoutOrElse({
+    duration: 3,
+    orElse: () => Effect.succeedNone
+}))
+
