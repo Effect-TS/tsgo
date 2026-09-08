@@ -1,0 +1,17 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/obsoleteSchemaImport_preview.ts(5,20): warning TS377128: This module reference imports `@effect/schema/Schema`, which is obsolete in Effect v4. In Effect v4, Schema is provided directly by `Schema` from `effect` (or `effect/Schema`). effect(obsoleteSchemaImport)
+
+
+==== /.src/obsoleteSchemaImport_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics obsoleteSchemaImport:warning
+    import { Effect } from "effect"
+    // @ts-expect-error - @effect/schema is obsolete in v4
+    import * as S from "@effect/schema/Schema"
+                       ~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377128: This module reference imports `@effect/schema/Schema`, which is obsolete in Effect v4. In Effect v4, Schema is provided directly by `Schema` from `effect` (or `effect/Schema`). effect(obsoleteSchemaImport)
+    
+    export const preview = Effect.sync(() => S)
+    

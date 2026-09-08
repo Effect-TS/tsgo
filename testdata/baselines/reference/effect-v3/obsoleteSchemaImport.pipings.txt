@@ -1,0 +1,15 @@
+==== /.src/obsoleteSchemaImport.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 8:23 - 8:44
+Node: Effect.sync(() => S)
+Node Kind: KindCallExpression
+
+Subject: () => S
+Subject Type: () => any
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<any, never, never>
