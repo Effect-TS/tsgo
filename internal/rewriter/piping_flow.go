@@ -285,3 +285,109 @@ func cloneNodeList(t *Tracker, list *ast.NodeList) *ast.NodeList {
 	}
 	return t.NewNodeList(cloneNodeListNodes(t, list))
 }
+
+// CollapsePipingFlowTransformations replaces an inclusive range of adjacent
+// steps with one operator at the last step. Nested applications are rewritten
+// together so removing an input step cannot overlap the replacement edit.
+func (t *Tracker) CollapsePipingFlowTransformations(sourceFile *ast.SourceFile, flow *typeparser.PipingFlow, start, end int, replacement PipingFlowTransformationReplacement) bool {
+	if t == nil || sourceFile == nil || flow == nil || start < 0 || end < start || end >= len(flow.Transformations) || replacement.Callee == nil {
+		return false
+	}
+	steps := make(map[*ast.Node]int)
+	emptiedPipes := make(map[*ast.Node]typeparser.TransformationKind)
+	for i := start; i <= end; i++ {
+		node := pipingFlowTransformationNode(&flow.Transformations[i])
+		if node == nil {
+			return false
+		}
+		steps[node] = i
+		kind := flow.Transformations[i].Kind
+		if i < end && (kind == typeparser.TransformationKindPipe || kind == typeparser.TransformationKindPipeable) {
+			call, _, _ := containingCallArgument(node)
+			emptiedPipes[call] = kind
+		}
+	}
+	// Find the smallest source subtree containing all edited steps. Pipe
+	// arguments require their containing call so they can be removed as a list.
+	target := pipingFlowTransformationNode(&flow.Transformations[end])
+	for i := start; i <= end; i++ {
+		node := pipingFlowTransformationNode(&flow.Transformations[i])
+		if isPipingFlowArgument(flow.Transformations[i].Kind) {
+			call, _, _ := containingCallArgument(node)
+			node = call
+		}
+		if node == nil {
+			return false
+		}
+		for target != nil && !nodeWithin(node, target) {
+			target = target.Parent
+		}
+	}
+	if target == nil {
+		return false
+	}
+	var visitor *ast.NodeVisitor
+	visitor = ast.NewNodeVisitor(func(node *ast.Node) *ast.Node {
+		index, matched := steps[node]
+		if !matched {
+			updated := visitor.VisitEachChild(node)
+			if kind, changed := emptiedPipes[node]; changed {
+				call := updated.AsCallExpression()
+				if kind == typeparser.TransformationKindPipeable && (call.Arguments == nil || len(call.Arguments.Nodes) == 0) {
+					return call.Expression.AsPropertyAccessExpression().Expression
+				}
+				if kind == typeparser.TransformationKindPipe && call.Arguments != nil && len(call.Arguments.Nodes) == 1 {
+					return call.Arguments.Nodes[0]
+				}
+			}
+			return updated
+		}
+		step := &flow.Transformations[index]
+		if isPipingFlowArgument(step.Kind) {
+			if index < end {
+				return nil
+			}
+			return t.pipingFlowOperator(replacement)
+		}
+		input := flow.TransformationInputNode(index)
+		if input == nil {
+			return node
+		}
+		subject := visitor.VisitNode(input)
+		if index < end {
+			return subject
+		}
+		arguments := cloneNodeListNodes(t, replacement.Arguments)
+		switch step.Kind {
+		case typeparser.TransformationKindDataFirst:
+			arguments = append([]*ast.Node{subject}, arguments...)
+		case typeparser.TransformationKindDataLast:
+			arguments = append(arguments, subject)
+		default:
+			return t.NewCallExpression(t.pipingFlowOperator(replacement), nil, nil, t.NewNodeList([]*ast.Node{subject}), ast.NodeFlagsNone)
+		}
+		return t.NewCallExpression(replacement.Callee, nil, replacement.TypeArguments, t.NewNodeList(arguments), ast.NodeFlagsNone)
+	}, t.NodeFactory, ast.NodeVisitorHooks{})
+	result := t.DeepCloneNode(visitor.VisitNode(target))
+	ast.SetParentInChildren(result)
+	t.ReplaceNode(sourceFile, target, result, nil)
+	return true
+}
+
+func isPipingFlowArgument(kind typeparser.TransformationKind) bool {
+	switch kind {
+	case typeparser.TransformationKindPipe, typeparser.TransformationKindPipeable, typeparser.TransformationKindEffectFn, typeparser.TransformationKindEffectFnUntraced:
+		return true
+	}
+	return false
+}
+
+func nodeWithin(node, ancestor *ast.Node) bool {
+	for node != nil {
+		if node == ancestor {
+			return true
+		}
+		node = node.Parent
+	}
+	return false
+}

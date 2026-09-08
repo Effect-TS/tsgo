@@ -99,3 +99,15 @@ func pipingFlowFromInternal(flow *typeparser.PipingFlow) *PipingFlow {
 		Transformations: transformations,
 	}
 }
+
+// TransformationInputType returns the type immediately before the indexed step.
+// Missing types and indices outside the flow return nil.
+func (flow *PipingFlow) TransformationInputType(index int) *checker.Type {
+	if flow == nil || index < 0 || index >= len(flow.Transformations) {
+		return nil
+	}
+	if index == 0 {
+		return flow.Subject.OutType
+	}
+	return flow.Transformations[index-1].OutType
+}

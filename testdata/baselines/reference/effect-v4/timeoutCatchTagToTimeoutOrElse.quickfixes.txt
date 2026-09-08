@@ -1,0 +1,862 @@
+=== Quick Fix Inventory ===
+
+[D1] (14:61-14:76) TS377127: Use `Effect.timeoutOrElse` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
+  Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line"
+  Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file"
+  Fix 2: "Replace with Effect.timeoutOrElse"
+
+[D2] (15:67-15:82) TS377127: Use `Effect.timeoutOption` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
+  Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line"
+  Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file"
+  Fix 2: "Replace with Effect.timeoutOption"
+
+[D3] (16:81-16:96) TS377127: Use `Effect.timeoutOption` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
+  Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line"
+  Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file"
+  Fix 2: "Replace with Effect.timeoutOption"
+
+[D4] (17:26-17:41) TS377127: Use `Effect.timeoutOrElse` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
+  Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line"
+  Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file"
+  Fix 2: "Replace with Effect.timeoutOrElse"
+
+[D5] (18:31-18:46) TS377127: Use `Effect.timeoutOrElse` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
+  Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line"
+  Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file"
+  Fix 2: "Replace with Effect.timeoutOrElse"
+
+[D6] (19:29-19:44) TS377127: Use `Effect.timeoutOption` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
+  Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line"
+  Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file"
+  Fix 2: "Replace with Effect.timeoutOption"
+
+[D7] (20:22-20:37) TS377127: Use `Effect.timeoutOrElse` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
+  Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line"
+  Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file"
+  Fix 2: "Replace with Effect.timeoutOrElse"
+
+[D8] (21:77-21:92) TS377127: Use `Effect.timeoutOrElse` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
+  Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line"
+  Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file"
+  Fix 2: "Replace with Effect.timeoutOrElse"
+
+[D9] (22:53-22:63) TS377127: Use `Effect.timeoutOrElse` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
+  Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line"
+  Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file"
+  Fix 2: "Replace with Effect.timeoutOrElse"
+
+[D10] (23:90-23:105) TS377127: Use `Effect.timeoutOrElse` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
+  Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line"
+  Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file"
+  Fix 2: "Replace with Effect.timeoutOrElse"
+
+[D11] (24:51-24:66) TS377127: Use `Effect.timeoutOrElse` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
+  Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line"
+  Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file"
+  Fix 2: "Replace with Effect.timeoutOrElse"
+
+[D12] (43:61-43:76) TS377127: Use `Effect.timeoutOrElse` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
+  Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line"
+  Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file"
+  Fix 2: "Replace with Effect.timeoutOrElse"
+
+[D13] (44:82-44:97) TS377127: Use `Effect.timeoutOption` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
+  Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line"
+  Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file"
+  Fix 2: "Replace with Effect.timeoutOption"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.timeoutOrElse" ===
+
+--- file:///.src/timeoutCatchTagToTimeoutOrElse.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics timeoutCatchTagToTimeoutOrElse:warning
+import { Cause, Effect, Option, pipe } from "effect"
+import * as E from "effect/Effect"
+
+declare const task: Effect.Effect<string>
+declare const tagged: Effect.Effect<string, { readonly _tag: "OtherError" }>
+declare const innerTimeout: Effect.Effect<string, Cause.TimeoutError>
+declare const customTimeout: Effect.Effect<string, { readonly _tag: "TimeoutError" }>
+declare const broadTag: Effect.Effect<string, { readonly _tag: string }>
+declare const unknownError: Effect.Effect<string, unknown>
+
+export const basic = task.pipe(Effect.timeoutOrElse({
+    duration: "5 seconds",
+    orElse: () => Effect.succeed("fallback")
+}))
+export const option = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", () => Effect.succeedNone))
+export const optionMap = pipe(task, Effect.timeout(1), Effect.map(Option.some), Effect.catchTag("TimeoutError", () => Effect.succeed(Option.none())))
+export const dataFirst = Effect.catchTag(Effect.timeout(task, 1), "TimeoutError", () => Effect.succeed("fallback"))
+export const curriedTimeout = Effect.catchTag(Effect.timeout(1)(task), "TimeoutError", () => Effect.succeed("fallback"))
+export const nestedOption = Effect.catchTag(Effect.asSome(Effect.timeout(task, 1)), "TimeoutError", () => Effect.succeedNone)
+export const mixed = Effect.catchTag(task.pipe(Effect.timeout(1)), "TimeoutError", () => Effect.succeed("fallback"))
+export const priorStep = innerTimeout.pipe(Effect.orDie, Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")), Effect.asVoid)
+export const otherError = tagged.pipe(E.timeout(1), E.catchTag("TimeoutError", () => E.succeed("fallback")))
+export const effectFn = Effect.fn(function*() { return yield* task }, Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const block = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => { const value = "fallback"; return Effect.succeed(value) }))
+
+// Must not change: these handlers also catch failures from the input.
+export const collision = innerTimeout.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const structuralCollision = customTimeout.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const introduced = task.pipe(Effect.flatMap(() => innerTimeout), Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const broad = broadTag.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+// @ts-expect-error unknown error cannot be dispatched with catchTag
+export const unknown = unknownError.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+
+// Must not change: non-adjacent steps, different handlers, or error inspection.
+export const nonAdjacent = task.pipe(Effect.timeout(1), Effect.map(String), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const observes = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.succeed(error.message)))
+export const differentOption = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", () => Effect.succeed(Option.some("fallback"))))
+export const differentTag = tagged.pipe(Effect.timeout(1), Effect.catchTag("OtherError", () => Effect.succeed("fallback")))
+export const catchTags = task.pipe(Effect.timeout(1), Effect.catchTags({ TimeoutError: () => Effect.succeed("fallback") }))
+const fake = { timeout: (_duration: number) => <A, Err, R>(self: Effect.Effect<A, Err, R>) => self }
+export const lookalike = innerTimeout.pipe(fake.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+
+export const unusedParameter = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (_error) => Effect.succeed("fallback")))
+export const unusedOptionParameter = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", (_error) => Effect.succeedNone))
+export const nestedReference = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.sync(() => error.message)))
+export const destructured = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", ({ message }) => Effect.succeed(message)))
+export const functionArguments = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", function() { return Effect.succeed(String(arguments[0])) }))
+export const shorthand = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.succeed({ error })))
+
+
+=== [D2] Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.timeoutOption" ===
+
+--- file:///.src/timeoutCatchTagToTimeoutOrElse.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics timeoutCatchTagToTimeoutOrElse:warning
+import { Cause, Effect, Option, pipe } from "effect"
+import * as E from "effect/Effect"
+
+declare const task: Effect.Effect<string>
+declare const tagged: Effect.Effect<string, { readonly _tag: "OtherError" }>
+declare const innerTimeout: Effect.Effect<string, Cause.TimeoutError>
+declare const customTimeout: Effect.Effect<string, { readonly _tag: "TimeoutError" }>
+declare const broadTag: Effect.Effect<string, { readonly _tag: string }>
+declare const unknownError: Effect.Effect<string, unknown>
+
+export const basic = task.pipe(Effect.timeout("5 seconds"), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const option = task.pipe(Effect.timeoutOption(1))
+export const optionMap = pipe(task, Effect.timeout(1), Effect.map(Option.some), Effect.catchTag("TimeoutError", () => Effect.succeed(Option.none())))
+export const dataFirst = Effect.catchTag(Effect.timeout(task, 1), "TimeoutError", () => Effect.succeed("fallback"))
+export const curriedTimeout = Effect.catchTag(Effect.timeout(1)(task), "TimeoutError", () => Effect.succeed("fallback"))
+export const nestedOption = Effect.catchTag(Effect.asSome(Effect.timeout(task, 1)), "TimeoutError", () => Effect.succeedNone)
+export const mixed = Effect.catchTag(task.pipe(Effect.timeout(1)), "TimeoutError", () => Effect.succeed("fallback"))
+export const priorStep = innerTimeout.pipe(Effect.orDie, Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")), Effect.asVoid)
+export const otherError = tagged.pipe(E.timeout(1), E.catchTag("TimeoutError", () => E.succeed("fallback")))
+export const effectFn = Effect.fn(function*() { return yield* task }, Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const block = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => { const value = "fallback"; return Effect.succeed(value) }))
+
+// Must not change: these handlers also catch failures from the input.
+export const collision = innerTimeout.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const structuralCollision = customTimeout.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const introduced = task.pipe(Effect.flatMap(() => innerTimeout), Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const broad = broadTag.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+// @ts-expect-error unknown error cannot be dispatched with catchTag
+export const unknown = unknownError.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+
+// Must not change: non-adjacent steps, different handlers, or error inspection.
+export const nonAdjacent = task.pipe(Effect.timeout(1), Effect.map(String), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const observes = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.succeed(error.message)))
+export const differentOption = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", () => Effect.succeed(Option.some("fallback"))))
+export const differentTag = tagged.pipe(Effect.timeout(1), Effect.catchTag("OtherError", () => Effect.succeed("fallback")))
+export const catchTags = task.pipe(Effect.timeout(1), Effect.catchTags({ TimeoutError: () => Effect.succeed("fallback") }))
+const fake = { timeout: (_duration: number) => <A, Err, R>(self: Effect.Effect<A, Err, R>) => self }
+export const lookalike = innerTimeout.pipe(fake.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+
+export const unusedParameter = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (_error) => Effect.succeed("fallback")))
+export const unusedOptionParameter = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", (_error) => Effect.succeedNone))
+export const nestedReference = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.sync(() => error.message)))
+export const destructured = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", ({ message }) => Effect.succeed(message)))
+export const functionArguments = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", function() { return Effect.succeed(String(arguments[0])) }))
+export const shorthand = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.succeed({ error })))
+
+
+=== [D3] Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.timeoutOption" ===
+
+--- file:///.src/timeoutCatchTagToTimeoutOrElse.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics timeoutCatchTagToTimeoutOrElse:warning
+import { Cause, Effect, Option, pipe } from "effect"
+import * as E from "effect/Effect"
+
+declare const task: Effect.Effect<string>
+declare const tagged: Effect.Effect<string, { readonly _tag: "OtherError" }>
+declare const innerTimeout: Effect.Effect<string, Cause.TimeoutError>
+declare const customTimeout: Effect.Effect<string, { readonly _tag: "TimeoutError" }>
+declare const broadTag: Effect.Effect<string, { readonly _tag: string }>
+declare const unknownError: Effect.Effect<string, unknown>
+
+export const basic = task.pipe(Effect.timeout("5 seconds"), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const option = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", () => Effect.succeedNone))
+export const optionMap = pipe(task, Effect.timeoutOption(1))
+export const dataFirst = Effect.catchTag(Effect.timeout(task, 1), "TimeoutError", () => Effect.succeed("fallback"))
+export const curriedTimeout = Effect.catchTag(Effect.timeout(1)(task), "TimeoutError", () => Effect.succeed("fallback"))
+export const nestedOption = Effect.catchTag(Effect.asSome(Effect.timeout(task, 1)), "TimeoutError", () => Effect.succeedNone)
+export const mixed = Effect.catchTag(task.pipe(Effect.timeout(1)), "TimeoutError", () => Effect.succeed("fallback"))
+export const priorStep = innerTimeout.pipe(Effect.orDie, Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")), Effect.asVoid)
+export const otherError = tagged.pipe(E.timeout(1), E.catchTag("TimeoutError", () => E.succeed("fallback")))
+export const effectFn = Effect.fn(function*() { return yield* task }, Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const block = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => { const value = "fallback"; return Effect.succeed(value) }))
+
+// Must not change: these handlers also catch failures from the input.
+export const collision = innerTimeout.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const structuralCollision = customTimeout.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const introduced = task.pipe(Effect.flatMap(() => innerTimeout), Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const broad = broadTag.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+// @ts-expect-error unknown error cannot be dispatched with catchTag
+export const unknown = unknownError.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+
+// Must not change: non-adjacent steps, different handlers, or error inspection.
+export const nonAdjacent = task.pipe(Effect.timeout(1), Effect.map(String), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const observes = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.succeed(error.message)))
+export const differentOption = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", () => Effect.succeed(Option.some("fallback"))))
+export const differentTag = tagged.pipe(Effect.timeout(1), Effect.catchTag("OtherError", () => Effect.succeed("fallback")))
+export const catchTags = task.pipe(Effect.timeout(1), Effect.catchTags({ TimeoutError: () => Effect.succeed("fallback") }))
+const fake = { timeout: (_duration: number) => <A, Err, R>(self: Effect.Effect<A, Err, R>) => self }
+export const lookalike = innerTimeout.pipe(fake.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+
+export const unusedParameter = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (_error) => Effect.succeed("fallback")))
+export const unusedOptionParameter = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", (_error) => Effect.succeedNone))
+export const nestedReference = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.sync(() => error.message)))
+export const destructured = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", ({ message }) => Effect.succeed(message)))
+export const functionArguments = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", function() { return Effect.succeed(String(arguments[0])) }))
+export const shorthand = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.succeed({ error })))
+
+
+=== [D4] Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.timeoutOrElse" ===
+
+--- file:///.src/timeoutCatchTagToTimeoutOrElse.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics timeoutCatchTagToTimeoutOrElse:warning
+import { Cause, Effect, Option, pipe } from "effect"
+import * as E from "effect/Effect"
+
+declare const task: Effect.Effect<string>
+declare const tagged: Effect.Effect<string, { readonly _tag: "OtherError" }>
+declare const innerTimeout: Effect.Effect<string, Cause.TimeoutError>
+declare const customTimeout: Effect.Effect<string, { readonly _tag: "TimeoutError" }>
+declare const broadTag: Effect.Effect<string, { readonly _tag: string }>
+declare const unknownError: Effect.Effect<string, unknown>
+
+export const basic = task.pipe(Effect.timeout("5 seconds"), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const option = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", () => Effect.succeedNone))
+export const optionMap = pipe(task, Effect.timeout(1), Effect.map(Option.some), Effect.catchTag("TimeoutError", () => Effect.succeed(Option.none())))
+export const dataFirst = Effect.timeoutOrElse(task, {
+    duration: 1,
+    orElse: () => Effect.succeed("fallback")
+})
+export const curriedTimeout = Effect.catchTag(Effect.timeout(1)(task), "TimeoutError", () => Effect.succeed("fallback"))
+export const nestedOption = Effect.catchTag(Effect.asSome(Effect.timeout(task, 1)), "TimeoutError", () => Effect.succeedNone)
+export const mixed = Effect.catchTag(task.pipe(Effect.timeout(1)), "TimeoutError", () => Effect.succeed("fallback"))
+export const priorStep = innerTimeout.pipe(Effect.orDie, Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")), Effect.asVoid)
+export const otherError = tagged.pipe(E.timeout(1), E.catchTag("TimeoutError", () => E.succeed("fallback")))
+export const effectFn = Effect.fn(function*() { return yield* task }, Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const block = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => { const value = "fallback"; return Effect.succeed(value) }))
+
+// Must not change: these handlers also catch failures from the input.
+export const collision = innerTimeout.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const structuralCollision = customTimeout.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const introduced = task.pipe(Effect.flatMap(() => innerTimeout), Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const broad = broadTag.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+// @ts-expect-error unknown error cannot be dispatched with catchTag
+export const unknown = unknownError.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+
+// Must not change: non-adjacent steps, different handlers, or error inspection.
+export const nonAdjacent = task.pipe(Effect.timeout(1), Effect.map(String), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const observes = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.succeed(error.message)))
+export const differentOption = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", () => Effect.succeed(Option.some("fallback"))))
+export const differentTag = tagged.pipe(Effect.timeout(1), Effect.catchTag("OtherError", () => Effect.succeed("fallback")))
+export const catchTags = task.pipe(Effect.timeout(1), Effect.catchTags({ TimeoutError: () => Effect.succeed("fallback") }))
+const fake = { timeout: (_duration: number) => <A, Err, R>(self: Effect.Effect<A, Err, R>) => self }
+export const lookalike = innerTimeout.pipe(fake.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+
+export const unusedParameter = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (_error) => Effect.succeed("fallback")))
+export const unusedOptionParameter = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", (_error) => Effect.succeedNone))
+export const nestedReference = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.sync(() => error.message)))
+export const destructured = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", ({ message }) => Effect.succeed(message)))
+export const functionArguments = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", function() { return Effect.succeed(String(arguments[0])) }))
+export const shorthand = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.succeed({ error })))
+
+
+=== [D5] Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Replace with Effect.timeoutOrElse" ===
+
+--- file:///.src/timeoutCatchTagToTimeoutOrElse.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics timeoutCatchTagToTimeoutOrElse:warning
+import { Cause, Effect, Option, pipe } from "effect"
+import * as E from "effect/Effect"
+
+declare const task: Effect.Effect<string>
+declare const tagged: Effect.Effect<string, { readonly _tag: "OtherError" }>
+declare const innerTimeout: Effect.Effect<string, Cause.TimeoutError>
+declare const customTimeout: Effect.Effect<string, { readonly _tag: "TimeoutError" }>
+declare const broadTag: Effect.Effect<string, { readonly _tag: string }>
+declare const unknownError: Effect.Effect<string, unknown>
+
+export const basic = task.pipe(Effect.timeout("5 seconds"), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const option = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", () => Effect.succeedNone))
+export const optionMap = pipe(task, Effect.timeout(1), Effect.map(Option.some), Effect.catchTag("TimeoutError", () => Effect.succeed(Option.none())))
+export const dataFirst = Effect.catchTag(Effect.timeout(task, 1), "TimeoutError", () => Effect.succeed("fallback"))
+export const curriedTimeout = Effect.timeoutOrElse(task, {
+    duration: 1,
+    orElse: () => Effect.succeed("fallback")
+})
+export const nestedOption = Effect.catchTag(Effect.asSome(Effect.timeout(task, 1)), "TimeoutError", () => Effect.succeedNone)
+export const mixed = Effect.catchTag(task.pipe(Effect.timeout(1)), "TimeoutError", () => Effect.succeed("fallback"))
+export const priorStep = innerTimeout.pipe(Effect.orDie, Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")), Effect.asVoid)
+export const otherError = tagged.pipe(E.timeout(1), E.catchTag("TimeoutError", () => E.succeed("fallback")))
+export const effectFn = Effect.fn(function*() { return yield* task }, Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const block = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => { const value = "fallback"; return Effect.succeed(value) }))
+
+// Must not change: these handlers also catch failures from the input.
+export const collision = innerTimeout.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const structuralCollision = customTimeout.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const introduced = task.pipe(Effect.flatMap(() => innerTimeout), Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const broad = broadTag.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+// @ts-expect-error unknown error cannot be dispatched with catchTag
+export const unknown = unknownError.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+
+// Must not change: non-adjacent steps, different handlers, or error inspection.
+export const nonAdjacent = task.pipe(Effect.timeout(1), Effect.map(String), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const observes = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.succeed(error.message)))
+export const differentOption = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", () => Effect.succeed(Option.some("fallback"))))
+export const differentTag = tagged.pipe(Effect.timeout(1), Effect.catchTag("OtherError", () => Effect.succeed("fallback")))
+export const catchTags = task.pipe(Effect.timeout(1), Effect.catchTags({ TimeoutError: () => Effect.succeed("fallback") }))
+const fake = { timeout: (_duration: number) => <A, Err, R>(self: Effect.Effect<A, Err, R>) => self }
+export const lookalike = innerTimeout.pipe(fake.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+
+export const unusedParameter = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (_error) => Effect.succeed("fallback")))
+export const unusedOptionParameter = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", (_error) => Effect.succeedNone))
+export const nestedReference = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.sync(() => error.message)))
+export const destructured = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", ({ message }) => Effect.succeed(message)))
+export const functionArguments = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", function() { return Effect.succeed(String(arguments[0])) }))
+export const shorthand = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.succeed({ error })))
+
+
+=== [D6] Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace with Effect.timeoutOption" ===
+
+--- file:///.src/timeoutCatchTagToTimeoutOrElse.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics timeoutCatchTagToTimeoutOrElse:warning
+import { Cause, Effect, Option, pipe } from "effect"
+import * as E from "effect/Effect"
+
+declare const task: Effect.Effect<string>
+declare const tagged: Effect.Effect<string, { readonly _tag: "OtherError" }>
+declare const innerTimeout: Effect.Effect<string, Cause.TimeoutError>
+declare const customTimeout: Effect.Effect<string, { readonly _tag: "TimeoutError" }>
+declare const broadTag: Effect.Effect<string, { readonly _tag: string }>
+declare const unknownError: Effect.Effect<string, unknown>
+
+export const basic = task.pipe(Effect.timeout("5 seconds"), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const option = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", () => Effect.succeedNone))
+export const optionMap = pipe(task, Effect.timeout(1), Effect.map(Option.some), Effect.catchTag("TimeoutError", () => Effect.succeed(Option.none())))
+export const dataFirst = Effect.catchTag(Effect.timeout(task, 1), "TimeoutError", () => Effect.succeed("fallback"))
+export const curriedTimeout = Effect.catchTag(Effect.timeout(1)(task), "TimeoutError", () => Effect.succeed("fallback"))
+export const nestedOption = Effect.timeoutOption(task, 1)
+export const mixed = Effect.catchTag(task.pipe(Effect.timeout(1)), "TimeoutError", () => Effect.succeed("fallback"))
+export const priorStep = innerTimeout.pipe(Effect.orDie, Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")), Effect.asVoid)
+export const otherError = tagged.pipe(E.timeout(1), E.catchTag("TimeoutError", () => E.succeed("fallback")))
+export const effectFn = Effect.fn(function*() { return yield* task }, Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const block = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => { const value = "fallback"; return Effect.succeed(value) }))
+
+// Must not change: these handlers also catch failures from the input.
+export const collision = innerTimeout.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const structuralCollision = customTimeout.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const introduced = task.pipe(Effect.flatMap(() => innerTimeout), Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const broad = broadTag.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+// @ts-expect-error unknown error cannot be dispatched with catchTag
+export const unknown = unknownError.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+
+// Must not change: non-adjacent steps, different handlers, or error inspection.
+export const nonAdjacent = task.pipe(Effect.timeout(1), Effect.map(String), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const observes = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.succeed(error.message)))
+export const differentOption = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", () => Effect.succeed(Option.some("fallback"))))
+export const differentTag = tagged.pipe(Effect.timeout(1), Effect.catchTag("OtherError", () => Effect.succeed("fallback")))
+export const catchTags = task.pipe(Effect.timeout(1), Effect.catchTags({ TimeoutError: () => Effect.succeed("fallback") }))
+const fake = { timeout: (_duration: number) => <A, Err, R>(self: Effect.Effect<A, Err, R>) => self }
+export const lookalike = innerTimeout.pipe(fake.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+
+export const unusedParameter = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (_error) => Effect.succeed("fallback")))
+export const unusedOptionParameter = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", (_error) => Effect.succeedNone))
+export const nestedReference = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.sync(() => error.message)))
+export const destructured = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", ({ message }) => Effect.succeed(message)))
+export const functionArguments = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", function() { return Effect.succeed(String(arguments[0])) }))
+export const shorthand = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.succeed({ error })))
+
+
+=== [D7] Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file" ===
+skipped by default
+
+=== [D7] Fix 2: "Replace with Effect.timeoutOrElse" ===
+
+--- file:///.src/timeoutCatchTagToTimeoutOrElse.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics timeoutCatchTagToTimeoutOrElse:warning
+import { Cause, Effect, Option, pipe } from "effect"
+import * as E from "effect/Effect"
+
+declare const task: Effect.Effect<string>
+declare const tagged: Effect.Effect<string, { readonly _tag: "OtherError" }>
+declare const innerTimeout: Effect.Effect<string, Cause.TimeoutError>
+declare const customTimeout: Effect.Effect<string, { readonly _tag: "TimeoutError" }>
+declare const broadTag: Effect.Effect<string, { readonly _tag: string }>
+declare const unknownError: Effect.Effect<string, unknown>
+
+export const basic = task.pipe(Effect.timeout("5 seconds"), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const option = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", () => Effect.succeedNone))
+export const optionMap = pipe(task, Effect.timeout(1), Effect.map(Option.some), Effect.catchTag("TimeoutError", () => Effect.succeed(Option.none())))
+export const dataFirst = Effect.catchTag(Effect.timeout(task, 1), "TimeoutError", () => Effect.succeed("fallback"))
+export const curriedTimeout = Effect.catchTag(Effect.timeout(1)(task), "TimeoutError", () => Effect.succeed("fallback"))
+export const nestedOption = Effect.catchTag(Effect.asSome(Effect.timeout(task, 1)), "TimeoutError", () => Effect.succeedNone)
+export const mixed = Effect.timeoutOrElse(task, {
+    duration: 1,
+    orElse: () => Effect.succeed("fallback")
+})
+export const priorStep = innerTimeout.pipe(Effect.orDie, Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")), Effect.asVoid)
+export const otherError = tagged.pipe(E.timeout(1), E.catchTag("TimeoutError", () => E.succeed("fallback")))
+export const effectFn = Effect.fn(function*() { return yield* task }, Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const block = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => { const value = "fallback"; return Effect.succeed(value) }))
+
+// Must not change: these handlers also catch failures from the input.
+export const collision = innerTimeout.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const structuralCollision = customTimeout.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const introduced = task.pipe(Effect.flatMap(() => innerTimeout), Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const broad = broadTag.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+// @ts-expect-error unknown error cannot be dispatched with catchTag
+export const unknown = unknownError.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+
+// Must not change: non-adjacent steps, different handlers, or error inspection.
+export const nonAdjacent = task.pipe(Effect.timeout(1), Effect.map(String), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const observes = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.succeed(error.message)))
+export const differentOption = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", () => Effect.succeed(Option.some("fallback"))))
+export const differentTag = tagged.pipe(Effect.timeout(1), Effect.catchTag("OtherError", () => Effect.succeed("fallback")))
+export const catchTags = task.pipe(Effect.timeout(1), Effect.catchTags({ TimeoutError: () => Effect.succeed("fallback") }))
+const fake = { timeout: (_duration: number) => <A, Err, R>(self: Effect.Effect<A, Err, R>) => self }
+export const lookalike = innerTimeout.pipe(fake.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+
+export const unusedParameter = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (_error) => Effect.succeed("fallback")))
+export const unusedOptionParameter = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", (_error) => Effect.succeedNone))
+export const nestedReference = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.sync(() => error.message)))
+export const destructured = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", ({ message }) => Effect.succeed(message)))
+export const functionArguments = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", function() { return Effect.succeed(String(arguments[0])) }))
+export const shorthand = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.succeed({ error })))
+
+
+=== [D8] Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file" ===
+skipped by default
+
+=== [D8] Fix 2: "Replace with Effect.timeoutOrElse" ===
+
+--- file:///.src/timeoutCatchTagToTimeoutOrElse.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics timeoutCatchTagToTimeoutOrElse:warning
+import { Cause, Effect, Option, pipe } from "effect"
+import * as E from "effect/Effect"
+
+declare const task: Effect.Effect<string>
+declare const tagged: Effect.Effect<string, { readonly _tag: "OtherError" }>
+declare const innerTimeout: Effect.Effect<string, Cause.TimeoutError>
+declare const customTimeout: Effect.Effect<string, { readonly _tag: "TimeoutError" }>
+declare const broadTag: Effect.Effect<string, { readonly _tag: string }>
+declare const unknownError: Effect.Effect<string, unknown>
+
+export const basic = task.pipe(Effect.timeout("5 seconds"), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const option = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", () => Effect.succeedNone))
+export const optionMap = pipe(task, Effect.timeout(1), Effect.map(Option.some), Effect.catchTag("TimeoutError", () => Effect.succeed(Option.none())))
+export const dataFirst = Effect.catchTag(Effect.timeout(task, 1), "TimeoutError", () => Effect.succeed("fallback"))
+export const curriedTimeout = Effect.catchTag(Effect.timeout(1)(task), "TimeoutError", () => Effect.succeed("fallback"))
+export const nestedOption = Effect.catchTag(Effect.asSome(Effect.timeout(task, 1)), "TimeoutError", () => Effect.succeedNone)
+export const mixed = Effect.catchTag(task.pipe(Effect.timeout(1)), "TimeoutError", () => Effect.succeed("fallback"))
+export const priorStep = innerTimeout.pipe(Effect.orDie, Effect.timeoutOrElse({
+    duration: 1,
+    orElse: () => Effect.succeed("fallback")
+}), Effect.asVoid)
+export const otherError = tagged.pipe(E.timeout(1), E.catchTag("TimeoutError", () => E.succeed("fallback")))
+export const effectFn = Effect.fn(function*() { return yield* task }, Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const block = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => { const value = "fallback"; return Effect.succeed(value) }))
+
+// Must not change: these handlers also catch failures from the input.
+export const collision = innerTimeout.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const structuralCollision = customTimeout.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const introduced = task.pipe(Effect.flatMap(() => innerTimeout), Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const broad = broadTag.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+// @ts-expect-error unknown error cannot be dispatched with catchTag
+export const unknown = unknownError.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+
+// Must not change: non-adjacent steps, different handlers, or error inspection.
+export const nonAdjacent = task.pipe(Effect.timeout(1), Effect.map(String), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const observes = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.succeed(error.message)))
+export const differentOption = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", () => Effect.succeed(Option.some("fallback"))))
+export const differentTag = tagged.pipe(Effect.timeout(1), Effect.catchTag("OtherError", () => Effect.succeed("fallback")))
+export const catchTags = task.pipe(Effect.timeout(1), Effect.catchTags({ TimeoutError: () => Effect.succeed("fallback") }))
+const fake = { timeout: (_duration: number) => <A, Err, R>(self: Effect.Effect<A, Err, R>) => self }
+export const lookalike = innerTimeout.pipe(fake.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+
+export const unusedParameter = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (_error) => Effect.succeed("fallback")))
+export const unusedOptionParameter = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", (_error) => Effect.succeedNone))
+export const nestedReference = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.sync(() => error.message)))
+export const destructured = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", ({ message }) => Effect.succeed(message)))
+export const functionArguments = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", function() { return Effect.succeed(String(arguments[0])) }))
+export const shorthand = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.succeed({ error })))
+
+
+=== [D9] Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file" ===
+skipped by default
+
+=== [D9] Fix 2: "Replace with Effect.timeoutOrElse" ===
+
+--- file:///.src/timeoutCatchTagToTimeoutOrElse.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics timeoutCatchTagToTimeoutOrElse:warning
+import { Cause, Effect, Option, pipe } from "effect"
+import * as E from "effect/Effect"
+
+declare const task: Effect.Effect<string>
+declare const tagged: Effect.Effect<string, { readonly _tag: "OtherError" }>
+declare const innerTimeout: Effect.Effect<string, Cause.TimeoutError>
+declare const customTimeout: Effect.Effect<string, { readonly _tag: "TimeoutError" }>
+declare const broadTag: Effect.Effect<string, { readonly _tag: string }>
+declare const unknownError: Effect.Effect<string, unknown>
+
+export const basic = task.pipe(Effect.timeout("5 seconds"), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const option = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", () => Effect.succeedNone))
+export const optionMap = pipe(task, Effect.timeout(1), Effect.map(Option.some), Effect.catchTag("TimeoutError", () => Effect.succeed(Option.none())))
+export const dataFirst = Effect.catchTag(Effect.timeout(task, 1), "TimeoutError", () => Effect.succeed("fallback"))
+export const curriedTimeout = Effect.catchTag(Effect.timeout(1)(task), "TimeoutError", () => Effect.succeed("fallback"))
+export const nestedOption = Effect.catchTag(Effect.asSome(Effect.timeout(task, 1)), "TimeoutError", () => Effect.succeedNone)
+export const mixed = Effect.catchTag(task.pipe(Effect.timeout(1)), "TimeoutError", () => Effect.succeed("fallback"))
+export const priorStep = innerTimeout.pipe(Effect.orDie, Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")), Effect.asVoid)
+export const otherError = tagged.pipe(E.timeoutOrElse({
+    duration: 1,
+    orElse: () => E.succeed("fallback")
+}))
+export const effectFn = Effect.fn(function*() { return yield* task }, Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const block = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => { const value = "fallback"; return Effect.succeed(value) }))
+
+// Must not change: these handlers also catch failures from the input.
+export const collision = innerTimeout.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const structuralCollision = customTimeout.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const introduced = task.pipe(Effect.flatMap(() => innerTimeout), Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const broad = broadTag.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+// @ts-expect-error unknown error cannot be dispatched with catchTag
+export const unknown = unknownError.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+
+// Must not change: non-adjacent steps, different handlers, or error inspection.
+export const nonAdjacent = task.pipe(Effect.timeout(1), Effect.map(String), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const observes = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.succeed(error.message)))
+export const differentOption = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", () => Effect.succeed(Option.some("fallback"))))
+export const differentTag = tagged.pipe(Effect.timeout(1), Effect.catchTag("OtherError", () => Effect.succeed("fallback")))
+export const catchTags = task.pipe(Effect.timeout(1), Effect.catchTags({ TimeoutError: () => Effect.succeed("fallback") }))
+const fake = { timeout: (_duration: number) => <A, Err, R>(self: Effect.Effect<A, Err, R>) => self }
+export const lookalike = innerTimeout.pipe(fake.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+
+export const unusedParameter = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (_error) => Effect.succeed("fallback")))
+export const unusedOptionParameter = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", (_error) => Effect.succeedNone))
+export const nestedReference = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.sync(() => error.message)))
+export const destructured = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", ({ message }) => Effect.succeed(message)))
+export const functionArguments = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", function() { return Effect.succeed(String(arguments[0])) }))
+export const shorthand = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.succeed({ error })))
+
+
+=== [D10] Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file" ===
+skipped by default
+
+=== [D10] Fix 2: "Replace with Effect.timeoutOrElse" ===
+
+--- file:///.src/timeoutCatchTagToTimeoutOrElse.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics timeoutCatchTagToTimeoutOrElse:warning
+import { Cause, Effect, Option, pipe } from "effect"
+import * as E from "effect/Effect"
+
+declare const task: Effect.Effect<string>
+declare const tagged: Effect.Effect<string, { readonly _tag: "OtherError" }>
+declare const innerTimeout: Effect.Effect<string, Cause.TimeoutError>
+declare const customTimeout: Effect.Effect<string, { readonly _tag: "TimeoutError" }>
+declare const broadTag: Effect.Effect<string, { readonly _tag: string }>
+declare const unknownError: Effect.Effect<string, unknown>
+
+export const basic = task.pipe(Effect.timeout("5 seconds"), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const option = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", () => Effect.succeedNone))
+export const optionMap = pipe(task, Effect.timeout(1), Effect.map(Option.some), Effect.catchTag("TimeoutError", () => Effect.succeed(Option.none())))
+export const dataFirst = Effect.catchTag(Effect.timeout(task, 1), "TimeoutError", () => Effect.succeed("fallback"))
+export const curriedTimeout = Effect.catchTag(Effect.timeout(1)(task), "TimeoutError", () => Effect.succeed("fallback"))
+export const nestedOption = Effect.catchTag(Effect.asSome(Effect.timeout(task, 1)), "TimeoutError", () => Effect.succeedNone)
+export const mixed = Effect.catchTag(task.pipe(Effect.timeout(1)), "TimeoutError", () => Effect.succeed("fallback"))
+export const priorStep = innerTimeout.pipe(Effect.orDie, Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")), Effect.asVoid)
+export const otherError = tagged.pipe(E.timeout(1), E.catchTag("TimeoutError", () => E.succeed("fallback")))
+export const effectFn = Effect.fn(function* () { return yield* task; }, Effect.timeoutOrElse({
+    duration: 1,
+    orElse: () => Effect.succeed("fallback")
+}))
+export const block = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => { const value = "fallback"; return Effect.succeed(value) }))
+
+// Must not change: these handlers also catch failures from the input.
+export const collision = innerTimeout.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const structuralCollision = customTimeout.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const introduced = task.pipe(Effect.flatMap(() => innerTimeout), Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const broad = broadTag.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+// @ts-expect-error unknown error cannot be dispatched with catchTag
+export const unknown = unknownError.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+
+// Must not change: non-adjacent steps, different handlers, or error inspection.
+export const nonAdjacent = task.pipe(Effect.timeout(1), Effect.map(String), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const observes = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.succeed(error.message)))
+export const differentOption = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", () => Effect.succeed(Option.some("fallback"))))
+export const differentTag = tagged.pipe(Effect.timeout(1), Effect.catchTag("OtherError", () => Effect.succeed("fallback")))
+export const catchTags = task.pipe(Effect.timeout(1), Effect.catchTags({ TimeoutError: () => Effect.succeed("fallback") }))
+const fake = { timeout: (_duration: number) => <A, Err, R>(self: Effect.Effect<A, Err, R>) => self }
+export const lookalike = innerTimeout.pipe(fake.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+
+export const unusedParameter = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (_error) => Effect.succeed("fallback")))
+export const unusedOptionParameter = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", (_error) => Effect.succeedNone))
+export const nestedReference = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.sync(() => error.message)))
+export const destructured = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", ({ message }) => Effect.succeed(message)))
+export const functionArguments = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", function() { return Effect.succeed(String(arguments[0])) }))
+export const shorthand = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.succeed({ error })))
+
+
+=== [D11] Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file" ===
+skipped by default
+
+=== [D11] Fix 2: "Replace with Effect.timeoutOrElse" ===
+
+--- file:///.src/timeoutCatchTagToTimeoutOrElse.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics timeoutCatchTagToTimeoutOrElse:warning
+import { Cause, Effect, Option, pipe } from "effect"
+import * as E from "effect/Effect"
+
+declare const task: Effect.Effect<string>
+declare const tagged: Effect.Effect<string, { readonly _tag: "OtherError" }>
+declare const innerTimeout: Effect.Effect<string, Cause.TimeoutError>
+declare const customTimeout: Effect.Effect<string, { readonly _tag: "TimeoutError" }>
+declare const broadTag: Effect.Effect<string, { readonly _tag: string }>
+declare const unknownError: Effect.Effect<string, unknown>
+
+export const basic = task.pipe(Effect.timeout("5 seconds"), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const option = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", () => Effect.succeedNone))
+export const optionMap = pipe(task, Effect.timeout(1), Effect.map(Option.some), Effect.catchTag("TimeoutError", () => Effect.succeed(Option.none())))
+export const dataFirst = Effect.catchTag(Effect.timeout(task, 1), "TimeoutError", () => Effect.succeed("fallback"))
+export const curriedTimeout = Effect.catchTag(Effect.timeout(1)(task), "TimeoutError", () => Effect.succeed("fallback"))
+export const nestedOption = Effect.catchTag(Effect.asSome(Effect.timeout(task, 1)), "TimeoutError", () => Effect.succeedNone)
+export const mixed = Effect.catchTag(task.pipe(Effect.timeout(1)), "TimeoutError", () => Effect.succeed("fallback"))
+export const priorStep = innerTimeout.pipe(Effect.orDie, Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")), Effect.asVoid)
+export const otherError = tagged.pipe(E.timeout(1), E.catchTag("TimeoutError", () => E.succeed("fallback")))
+export const effectFn = Effect.fn(function*() { return yield* task }, Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const block = task.pipe(Effect.timeoutOrElse({
+    duration: 1,
+    orElse: () => { const value = "fallback"; return Effect.succeed(value); }
+}))
+
+// Must not change: these handlers also catch failures from the input.
+export const collision = innerTimeout.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const structuralCollision = customTimeout.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const introduced = task.pipe(Effect.flatMap(() => innerTimeout), Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const broad = broadTag.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+// @ts-expect-error unknown error cannot be dispatched with catchTag
+export const unknown = unknownError.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+
+// Must not change: non-adjacent steps, different handlers, or error inspection.
+export const nonAdjacent = task.pipe(Effect.timeout(1), Effect.map(String), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const observes = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.succeed(error.message)))
+export const differentOption = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", () => Effect.succeed(Option.some("fallback"))))
+export const differentTag = tagged.pipe(Effect.timeout(1), Effect.catchTag("OtherError", () => Effect.succeed("fallback")))
+export const catchTags = task.pipe(Effect.timeout(1), Effect.catchTags({ TimeoutError: () => Effect.succeed("fallback") }))
+const fake = { timeout: (_duration: number) => <A, Err, R>(self: Effect.Effect<A, Err, R>) => self }
+export const lookalike = innerTimeout.pipe(fake.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+
+export const unusedParameter = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (_error) => Effect.succeed("fallback")))
+export const unusedOptionParameter = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", (_error) => Effect.succeedNone))
+export const nestedReference = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.sync(() => error.message)))
+export const destructured = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", ({ message }) => Effect.succeed(message)))
+export const functionArguments = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", function() { return Effect.succeed(String(arguments[0])) }))
+export const shorthand = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.succeed({ error })))
+
+
+=== [D12] Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line" ===
+skipped by default
+
+=== [D12] Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file" ===
+skipped by default
+
+=== [D12] Fix 2: "Replace with Effect.timeoutOrElse" ===
+
+--- file:///.src/timeoutCatchTagToTimeoutOrElse.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics timeoutCatchTagToTimeoutOrElse:warning
+import { Cause, Effect, Option, pipe } from "effect"
+import * as E from "effect/Effect"
+
+declare const task: Effect.Effect<string>
+declare const tagged: Effect.Effect<string, { readonly _tag: "OtherError" }>
+declare const innerTimeout: Effect.Effect<string, Cause.TimeoutError>
+declare const customTimeout: Effect.Effect<string, { readonly _tag: "TimeoutError" }>
+declare const broadTag: Effect.Effect<string, { readonly _tag: string }>
+declare const unknownError: Effect.Effect<string, unknown>
+
+export const basic = task.pipe(Effect.timeout("5 seconds"), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const option = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", () => Effect.succeedNone))
+export const optionMap = pipe(task, Effect.timeout(1), Effect.map(Option.some), Effect.catchTag("TimeoutError", () => Effect.succeed(Option.none())))
+export const dataFirst = Effect.catchTag(Effect.timeout(task, 1), "TimeoutError", () => Effect.succeed("fallback"))
+export const curriedTimeout = Effect.catchTag(Effect.timeout(1)(task), "TimeoutError", () => Effect.succeed("fallback"))
+export const nestedOption = Effect.catchTag(Effect.asSome(Effect.timeout(task, 1)), "TimeoutError", () => Effect.succeedNone)
+export const mixed = Effect.catchTag(task.pipe(Effect.timeout(1)), "TimeoutError", () => Effect.succeed("fallback"))
+export const priorStep = innerTimeout.pipe(Effect.orDie, Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")), Effect.asVoid)
+export const otherError = tagged.pipe(E.timeout(1), E.catchTag("TimeoutError", () => E.succeed("fallback")))
+export const effectFn = Effect.fn(function*() { return yield* task }, Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const block = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => { const value = "fallback"; return Effect.succeed(value) }))
+
+// Must not change: these handlers also catch failures from the input.
+export const collision = innerTimeout.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const structuralCollision = customTimeout.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const introduced = task.pipe(Effect.flatMap(() => innerTimeout), Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const broad = broadTag.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+// @ts-expect-error unknown error cannot be dispatched with catchTag
+export const unknown = unknownError.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+
+// Must not change: non-adjacent steps, different handlers, or error inspection.
+export const nonAdjacent = task.pipe(Effect.timeout(1), Effect.map(String), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const observes = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.succeed(error.message)))
+export const differentOption = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", () => Effect.succeed(Option.some("fallback"))))
+export const differentTag = tagged.pipe(Effect.timeout(1), Effect.catchTag("OtherError", () => Effect.succeed("fallback")))
+export const catchTags = task.pipe(Effect.timeout(1), Effect.catchTags({ TimeoutError: () => Effect.succeed("fallback") }))
+const fake = { timeout: (_duration: number) => <A, Err, R>(self: Effect.Effect<A, Err, R>) => self }
+export const lookalike = innerTimeout.pipe(fake.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+
+export const unusedParameter = task.pipe(Effect.timeoutOrElse({
+    duration: 1,
+    orElse: () => Effect.succeed("fallback")
+}))
+export const unusedOptionParameter = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", (_error) => Effect.succeedNone))
+export const nestedReference = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.sync(() => error.message)))
+export const destructured = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", ({ message }) => Effect.succeed(message)))
+export const functionArguments = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", function() { return Effect.succeed(String(arguments[0])) }))
+export const shorthand = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.succeed({ error })))
+
+
+=== [D13] Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line" ===
+skipped by default
+
+=== [D13] Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file" ===
+skipped by default
+
+=== [D13] Fix 2: "Replace with Effect.timeoutOption" ===
+
+--- file:///.src/timeoutCatchTagToTimeoutOrElse.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics timeoutCatchTagToTimeoutOrElse:warning
+import { Cause, Effect, Option, pipe } from "effect"
+import * as E from "effect/Effect"
+
+declare const task: Effect.Effect<string>
+declare const tagged: Effect.Effect<string, { readonly _tag: "OtherError" }>
+declare const innerTimeout: Effect.Effect<string, Cause.TimeoutError>
+declare const customTimeout: Effect.Effect<string, { readonly _tag: "TimeoutError" }>
+declare const broadTag: Effect.Effect<string, { readonly _tag: string }>
+declare const unknownError: Effect.Effect<string, unknown>
+
+export const basic = task.pipe(Effect.timeout("5 seconds"), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const option = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", () => Effect.succeedNone))
+export const optionMap = pipe(task, Effect.timeout(1), Effect.map(Option.some), Effect.catchTag("TimeoutError", () => Effect.succeed(Option.none())))
+export const dataFirst = Effect.catchTag(Effect.timeout(task, 1), "TimeoutError", () => Effect.succeed("fallback"))
+export const curriedTimeout = Effect.catchTag(Effect.timeout(1)(task), "TimeoutError", () => Effect.succeed("fallback"))
+export const nestedOption = Effect.catchTag(Effect.asSome(Effect.timeout(task, 1)), "TimeoutError", () => Effect.succeedNone)
+export const mixed = Effect.catchTag(task.pipe(Effect.timeout(1)), "TimeoutError", () => Effect.succeed("fallback"))
+export const priorStep = innerTimeout.pipe(Effect.orDie, Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")), Effect.asVoid)
+export const otherError = tagged.pipe(E.timeout(1), E.catchTag("TimeoutError", () => E.succeed("fallback")))
+export const effectFn = Effect.fn(function*() { return yield* task }, Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const block = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => { const value = "fallback"; return Effect.succeed(value) }))
+
+// Must not change: these handlers also catch failures from the input.
+export const collision = innerTimeout.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const structuralCollision = customTimeout.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const introduced = task.pipe(Effect.flatMap(() => innerTimeout), Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const broad = broadTag.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+// @ts-expect-error unknown error cannot be dispatched with catchTag
+export const unknown = unknownError.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+
+// Must not change: non-adjacent steps, different handlers, or error inspection.
+export const nonAdjacent = task.pipe(Effect.timeout(1), Effect.map(String), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+export const observes = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.succeed(error.message)))
+export const differentOption = task.pipe(Effect.timeout(1), Effect.asSome, Effect.catchTag("TimeoutError", () => Effect.succeed(Option.some("fallback"))))
+export const differentTag = tagged.pipe(Effect.timeout(1), Effect.catchTag("OtherError", () => Effect.succeed("fallback")))
+export const catchTags = task.pipe(Effect.timeout(1), Effect.catchTags({ TimeoutError: () => Effect.succeed("fallback") }))
+const fake = { timeout: (_duration: number) => <A, Err, R>(self: Effect.Effect<A, Err, R>) => self }
+export const lookalike = innerTimeout.pipe(fake.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
+
+export const unusedParameter = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (_error) => Effect.succeed("fallback")))
+export const unusedOptionParameter = task.pipe(Effect.timeoutOption(1))
+export const nestedReference = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.sync(() => error.message)))
+export const destructured = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", ({ message }) => Effect.succeed(message)))
+export const functionArguments = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", function() { return Effect.succeed(String(arguments[0])) }))
+export const shorthand = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", (error) => Effect.succeed({ error })))
+

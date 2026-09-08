@@ -106,14 +106,7 @@ func AnalyzePreferSucceedSomeOrNone(tp *typeparser.TypeParser, _ *checker.Checke
 
 func matchNormalizedOptionInput(tp *typeparser.TypeParser, flow *typeparser.PipingFlow, succeedIndex int) *normalizedOptionInput {
 	if succeedIndex == 0 {
-		subject := flow.Subject.Node
-		if subject == nil || subject.Kind != ast.KindCallExpression {
-			return nil
-		}
-		call := subject.AsCallExpression()
-		if call == nil || call.Arguments == nil || len(call.Arguments.Nodes) != 0 ||
-			call.TypeArguments != nil && len(call.TypeArguments.Nodes) > 0 ||
-			!tp.IsNodeReferenceToEffectOptionModuleApi(call.Expression, "none") {
+		if !isOptionNoneCall(tp, flow.Subject.Node) {
 			return nil
 		}
 		return &normalizedOptionInput{ReplacementName: "succeedNone"}
@@ -131,4 +124,14 @@ func matchNormalizedOptionInput(tp *typeparser.TypeParser, flow *typeparser.Pipi
 		ValueTypeArguments: previous.TypeArguments,
 	}
 	return input
+}
+
+func isOptionNoneCall(tp *typeparser.TypeParser, node *ast.Node) bool {
+	if node == nil || node.Kind != ast.KindCallExpression {
+		return false
+	}
+	call := node.AsCallExpression()
+	return call != nil && call.Arguments != nil && len(call.Arguments.Nodes) == 0 &&
+		(call.TypeArguments == nil || len(call.TypeArguments.Nodes) == 0) &&
+		tp.IsNodeReferenceToEffectOptionModuleApi(call.Expression, "none")
 }
