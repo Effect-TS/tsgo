@@ -1,0 +1,18 @@
+flowchart TB
+  0[/"type: Effect#lt;number, string, never#gt;<br/>node: fetchCount"/]
+  1["type: Effect#lt;boolean, string, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n #gt; 0#93;"]
+  2[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  3[["type: #40;n: number#41; =#gt; boolean<br/>node: #40;n#41; =#gt; n #gt; 0"]]
+  4[/"type: boolean<br/>node: n #gt; 0"/]
+  5["type: Effect#lt;boolean, number, never#gt;<br/>callee: Effect.mapError<br/>args: #91;#40;s#41; =#gt; s.length#93;"]
+  6[/"type: #123; #lt;E, E2#gt;#40;f: #40;e: E#41; =#gt; E2#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E2, R#gt;; #lt;A, E, R, E2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; E2#41;: Effect#lt;A, E2, R#gt;; #125;<br/>node: Effect.mapError"/]
+  7[["type: #40;s: string#41; =#gt; number<br/>node: #40;s#41; =#gt; s.length"]]
+  8[/"type: number<br/>node: s.length"/]
+  2 -->|"kind: transformCallee"| 1
+  4 -->|"kind: potentialReturn"| 3
+  3 -->|"kind: transformArg"| 1
+  0 -->|"kind: pipe"| 1
+  6 -->|"kind: transformCallee"| 5
+  8 -->|"kind: potentialReturn"| 7
+  7 -->|"kind: transformArg"| 5
+  1 -->|"kind: pipe"| 5

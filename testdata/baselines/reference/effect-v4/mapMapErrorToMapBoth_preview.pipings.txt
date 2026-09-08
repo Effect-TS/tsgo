@@ -1,0 +1,19 @@
+==== /.src/mapMapErrorToMapBoth_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 7:23 - 10:2
+Node: fetchCount.pipe(\n  Effect.map((n) => n > 0),\n  Effect.mapError((s) => s.length)\n)
+Node Kind: KindCallExpression
+
+Subject: fetchCount
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [(n) => n > 0]
+      outType: Effect<boolean, string, never>
+  [1] kind: pipeable
+      callee: Effect.mapError
+      args: [(s) => s.length]
+      outType: Effect<boolean, number, never>

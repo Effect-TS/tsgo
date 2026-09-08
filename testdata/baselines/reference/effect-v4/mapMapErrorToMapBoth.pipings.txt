@@ -1,0 +1,223 @@
+==== /.src/mapMapErrorToMapBoth.ts (13 flows) ====
+
+=== Piping Flow ===
+Location: 4:24 - 4:54
+Node: Data.TaggedError("TaskError")
+Node Kind: KindCallExpression
+
+Subject: "TaskError"
+Subject Type: "TaskError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "TaskError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 11:38 - 14:2
+Node: fetchCount.pipe(\n  Effect.map((n) => n > 0),\n  Effect.mapError((message) => new TaskError({ message }))\n)
+Node Kind: KindCallExpression
+
+Subject: fetchCount
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [(n) => n > 0]
+      outType: Effect<boolean, string, never>
+  [1] kind: pipeable
+      callee: Effect.mapError
+      args: [(message) => new TaskError({ message })]
+      outType: Effect<boolean, TaskError, never>
+
+=== Piping Flow ===
+Location: 17:38 - 20:2
+Node: fetchCount.pipe(\n  Effect.mapError((message) => new TaskError({ message })),\n  Effect.map((n) => n > 0)\n)
+Node Kind: KindCallExpression
+
+Subject: fetchCount
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.mapError
+      args: [(message) => new TaskError({ message })]
+      outType: Effect<number, TaskError, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [(n) => n > 0]
+      outType: Effect<boolean, TaskError, never>
+
+=== Piping Flow ===
+Location: 23:31 - 27:2
+Node: pipe(\n  fetchCount,\n  Effect.map((n) => n > 0),\n  Effect.mapError((message) => new TaskError({ message }))\n)
+Node Kind: KindCallExpression
+
+Subject: fetchCount
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: pipe
+      callee: Effect.map
+      args: [(n) => n > 0]
+      outType: Effect<boolean, string, never>
+  [1] kind: pipe
+      callee: Effect.mapError
+      args: [(message) => new TaskError({ message })]
+      outType: Effect<boolean, TaskError, never>
+
+=== Piping Flow ===
+Location: 30:36 - 33:2
+Node: Effect.map(\n  Effect.mapError(fetchCount, (message) => new TaskError({ message })),\n  (n) => n > 0\n)
+Node Kind: KindCallExpression
+
+Subject: fetchCount
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.mapError
+      args: [(message) => new TaskError({ message })]
+      outType: Effect<number, TaskError, never>
+  [1] kind: dataFirst
+      callee: Effect.map
+      args: [(n) => n > 0]
+      outType: Effect<boolean, TaskError, never>
+
+=== Piping Flow ===
+Location: 36:36 - 39:2
+Node: Effect.mapError(\n  Effect.map(fetchCount, (n) => n > 0),\n  (message) => new TaskError({ message })\n)
+Node Kind: KindCallExpression
+
+Subject: fetchCount
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(n) => n > 0]
+      outType: Effect<boolean, string, never>
+  [1] kind: dataFirst
+      callee: Effect.mapError
+      args: [(message) => new TaskError({ message })]
+      outType: Effect<boolean, TaskError, never>
+
+=== Piping Flow ===
+Location: 42:29 - 46:2
+Node: fetchCount.pipe(\n  Effect.map((n) => n > 0),\n  Effect.tap((b) => Effect.log(String(b))),\n  Effect.mapError((message) => new TaskError({ message }))\n)
+Node Kind: KindCallExpression
+
+Subject: fetchCount
+Subject Type: Effect<number, string, never>
+
+Transformations (3):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [(n) => n > 0]
+      outType: Effect<boolean, string, never>
+  [1] kind: pipeable
+      callee: Effect.tap
+      args: [(b) => Effect.log(String(b))]
+      outType: Effect<boolean, string, never>
+  [2] kind: pipeable
+      callee: Effect.mapError
+      args: [(message) => new TaskError({ message })]
+      outType: Effect<boolean, TaskError, never>
+
+=== Piping Flow ===
+Location: 44:20 - 44:42
+Node: Effect.log(String(b))
+Node Kind: KindCallExpression
+
+Subject: b
+Subject Type: boolean
+
+Transformations (2):
+  [0] kind: call
+      callee: String
+      args: (constant)
+      outType: string
+  [1] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 49:27 - 54:2
+Node: fetchCount.pipe(\n  Effect.mapBoth({\n    onSuccess: (n) => n > 0,\n    onFailure: (message) => new TaskError({ message })\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: fetchCount
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.mapBoth
+      args: [{\n    onSuccess: (n) => n > 0,\n    onFailure: (message) => new TaskError({ message })\n  }]
+      outType: Effect<boolean, TaskError, never>
+
+=== Piping Flow ===
+Location: 58:73 - 58:93
+Node: Effect.map(self, f)
+Node Kind: KindCallExpression
+
+Subject: self
+Subject Type: Effect<A, E, R>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [f]
+      outType: Effect<B, E, R>
+
+=== Piping Flow ===
+Location: 59:80 - 59:105
+Node: Effect.mapError(self, f)
+Node Kind: KindCallExpression
+
+Subject: self
+Subject Type: Effect<A, E, R>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.mapError
+      args: [f]
+      outType: Effect<A, E2, R>
+
+=== Piping Flow ===
+Location: 62:32 - 65:2
+Node: fetchCount.pipe(\n  unrelated.map((n) => n > 0),\n  Effect.mapError((message) => new TaskError({ message }))\n)
+Node Kind: KindCallExpression
+
+Subject: fetchCount
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: unrelated.map
+      args: [(n) => n > 0]
+      outType: Effect<boolean, string, never>
+  [1] kind: pipeable
+      callee: Effect.mapError
+      args: [(message) => new TaskError({ message })]
+      outType: Effect<boolean, TaskError, never>
+
+=== Piping Flow ===
+Location: 67:37 - 70:2
+Node: fetchCount.pipe(\n  Effect.map((n) => n > 0),\n  unrelated.mapError((message) => new TaskError({ message }))\n)
+Node Kind: KindCallExpression
+
+Subject: fetchCount
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [(n) => n > 0]
+      outType: Effect<boolean, string, never>
+  [1] kind: pipeable
+      callee: unrelated.mapError
+      args: [(message) => new TaskError({ message })]
+      outType: Effect<boolean, TaskError, never>

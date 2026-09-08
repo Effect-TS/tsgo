@@ -1,0 +1,70 @@
+// @effect-diagnostics mapMapErrorToMapBoth:suggestion
+import { Data, Effect, pipe } from "effect"
+
+class TaskError extends Data.TaggedError("TaskError")<{
+  readonly message: string
+}> {}
+
+declare const fetchCount: Effect.Effect<number, string>
+
+// BAD: pipe adjacent map then mapError
+export const badPipeMapThenMapError = fetchCount.pipe(
+  Effect.map((n) => n > 0),
+  Effect.mapError((message) => new TaskError({ message }))
+)
+
+// BAD: pipe adjacent mapError then map
+export const badPipeMapErrorThenMap = fetchCount.pipe(
+  Effect.mapError((message) => new TaskError({ message })),
+  Effect.map((n) => n > 0)
+)
+
+// BAD: function pipe style
+export const badFunctionPipe = pipe(
+  fetchCount,
+  Effect.map((n) => n > 0),
+  Effect.mapError((message) => new TaskError({ message }))
+)
+
+// BAD: nested data-first map(mapError(eff, g), f)
+export const badNestedMapMapError = Effect.map(
+  Effect.mapError(fetchCount, (message) => new TaskError({ message })),
+  (n) => n > 0
+)
+
+// BAD: nested data-first mapError(map(eff, f), g)
+export const badNestedMapErrorMap = Effect.mapError(
+  Effect.map(fetchCount, (n) => n > 0),
+  (message) => new TaskError({ message })
+)
+
+// GOOD: separated by other step (silent)
+export const goodSeparated = fetchCount.pipe(
+  Effect.map((n) => n > 0),
+  Effect.tap((b) => Effect.log(String(b))),
+  Effect.mapError((message) => new TaskError({ message }))
+)
+
+// GOOD: already using mapBoth (silent)
+export const goodMapBoth = fetchCount.pipe(
+  Effect.mapBoth({
+    onSuccess: (n) => n > 0,
+    onFailure: (message) => new TaskError({ message })
+  })
+)
+
+// GOOD: unrelated map functions (silent)
+const unrelated = {
+  map: <A, B>(f: (a: A) => B) => <E, R>(self: Effect.Effect<A, E, R>) => Effect.map(self, f),
+  mapError: <E, E2>(f: (e: E) => E2) => <A, R>(self: Effect.Effect<A, E, R>) => Effect.mapError(self, f)
+}
+
+export const goodUnrelatedMap = fetchCount.pipe(
+  unrelated.map((n) => n > 0),
+  Effect.mapError((message) => new TaskError({ message }))
+)
+
+export const goodUnrelatedMapError = fetchCount.pipe(
+  Effect.map((n) => n > 0),
+  unrelated.mapError((message) => new TaskError({ message }))
+)
