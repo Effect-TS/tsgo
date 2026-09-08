@@ -44,6 +44,69 @@ type PartialPipingFlow struct {
 	Transformations []PipingFlowTransformation // Ordered list of transformations
 }
 
+// MatchesPrefix checks the subject and leading transformations, allowing extra
+// steps afterward. With no transformation predicates it checks only the subject.
+// A nil flow returns false. Predicates must not mutate the flow.
+func (flow *PartialPipingFlow) MatchesPrefix(subject func(*PipingFlowSubject) bool, transformations ...func(*PipingFlowTransformation) bool) bool {
+	return flow.matchesShape(false, subject, transformations)
+}
+
+// MatchesExactly checks the subject and all transformations. The number of
+// transformations must equal the number of transformation predicates.
+// A nil flow returns false. Predicates must not mutate the flow.
+func (flow *PartialPipingFlow) MatchesExactly(subject func(*PipingFlowSubject) bool, transformations ...func(*PipingFlowTransformation) bool) bool {
+	return flow.matchesShape(true, subject, transformations)
+}
+
+func (flow *PartialPipingFlow) matchesShape(exact bool, subject func(*PipingFlowSubject) bool, transformations []func(*PipingFlowTransformation) bool) bool {
+	if flow == nil || len(flow.Transformations) < len(transformations) ||
+		exact && len(flow.Transformations) != len(transformations) {
+		return false
+	}
+	if !subject(&flow.Subject) {
+		return false
+	}
+	for i, predicate := range transformations {
+		if !predicate(&flow.Transformations[i]) {
+			return false
+		}
+	}
+	return true
+}
+
+// TransformationSequenceMatch identifies consecutive steps in a piping flow.
+// Transformations is a read-only view into the original flow's slice.
+type TransformationSequenceMatch struct {
+	Start           int
+	Transformations []PipingFlowTransformation
+}
+
+// FindTransformationSequences returns all consecutive matches in source order,
+// including overlaps. It returns nil for a nil flow, no predicates, or no match.
+// Predicates must not mutate the flow or depend on earlier predicate calls.
+func (flow *PartialPipingFlow) FindTransformationSequences(predicates ...func(*PipingFlowTransformation) bool) []TransformationSequenceMatch {
+	if flow == nil || len(predicates) == 0 {
+		return nil
+	}
+	var matches []TransformationSequenceMatch
+	for start := 0; start <= len(flow.Transformations)-len(predicates); start++ {
+		matched := true
+		for offset, predicate := range predicates {
+			if !predicate(&flow.Transformations[start+offset]) {
+				matched = false
+				break
+			}
+		}
+		if matched {
+			matches = append(matches, TransformationSequenceMatch{
+				Start:           start,
+				Transformations: flow.Transformations[start : start+len(predicates)],
+			})
+		}
+	}
+	return matches
+}
+
 // CopyPrefix returns a copy containing the first transformationCount
 // transformations. It returns nil when transformationCount is out of bounds.
 func (flow *PartialPipingFlow) CopyPrefix(transformationCount int) *PartialPipingFlow {
@@ -56,6 +119,18 @@ func (flow *PartialPipingFlow) CopyPrefix(transformationCount int) *PartialPipin
 		Subject:         flow.Subject,
 		Transformations: transformations,
 	}
+}
+
+// TransformationInputType returns the type immediately before the indexed step.
+// Missing types and indices outside the flow return nil.
+func (flow *PartialPipingFlow) TransformationInputType(index int) *checker.Type {
+	if flow == nil || index < 0 || index >= len(flow.Transformations) {
+		return nil
+	}
+	if index == 0 {
+		return flow.Subject.OutType
+	}
+	return flow.Transformations[index-1].OutType
 }
 
 // TransformationInputNode returns the standalone source expression that feeds
@@ -132,6 +207,33 @@ type PipingFlow struct {
 	PartialPipingFlow
 }
 
+// MatchesPrefix checks the subject and leading transformations, allowing extra steps.
+// It is defined explicitly to support a nil *PipingFlow.
+func (flow *PipingFlow) MatchesPrefix(subject func(*PipingFlowSubject) bool, transformations ...func(*PipingFlowTransformation) bool) bool {
+	if flow == nil {
+		return false
+	}
+	return flow.PartialPipingFlow.MatchesPrefix(subject, transformations...)
+}
+
+// MatchesExactly checks the subject and all transformations, requiring an exact length.
+// It is defined explicitly to support a nil *PipingFlow.
+func (flow *PipingFlow) MatchesExactly(subject func(*PipingFlowSubject) bool, transformations ...func(*PipingFlowTransformation) bool) bool {
+	if flow == nil {
+		return false
+	}
+	return flow.PartialPipingFlow.MatchesExactly(subject, transformations...)
+}
+
+// FindTransformationSequences returns all consecutive matches, including overlaps.
+// It is defined explicitly to support a nil *PipingFlow.
+func (flow *PipingFlow) FindTransformationSequences(predicates ...func(*PipingFlowTransformation) bool) []TransformationSequenceMatch {
+	if flow == nil {
+		return nil
+	}
+	return flow.PartialPipingFlow.FindTransformationSequences(predicates...)
+}
+
 // CopyPrefix returns a partial copy containing the first transformationCount
 // transformations. It is defined explicitly to support a nil *PipingFlow.
 func (flow *PipingFlow) CopyPrefix(transformationCount int) *PartialPipingFlow {
@@ -139,6 +241,14 @@ func (flow *PipingFlow) CopyPrefix(transformationCount int) *PartialPipingFlow {
 		return nil
 	}
 	return flow.PartialPipingFlow.CopyPrefix(transformationCount)
+}
+
+// TransformationInputType returns the type immediately before the indexed step.
+func (flow *PipingFlow) TransformationInputType(index int) *checker.Type {
+	if flow == nil {
+		return nil
+	}
+	return flow.PartialPipingFlow.TransformationInputType(index)
 }
 
 // TransformationInputNode returns the source expression that feeds the

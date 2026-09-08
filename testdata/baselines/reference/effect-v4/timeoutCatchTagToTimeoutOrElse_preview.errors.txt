@@ -1,0 +1,30 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/timeoutCatchTagToTimeoutOrElse_preview.ts(10,3): warning TS377127: Use `Effect.timeoutOrElse` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
+/.src/timeoutCatchTagToTimeoutOrElse_preview.ts(16,3): warning TS377127: Use `Effect.timeoutOption` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
+
+
+==== /.src/timeoutCatchTagToTimeoutOrElse_preview.ts (2 errors) ====
+    // @effect-v4
+    // @effect-diagnostics *:off
+    // @effect-diagnostics timeoutCatchTagToTimeoutOrElse:warning
+    import { Effect } from "effect"
+    
+    declare const fetchQuote: Effect.Effect<string>
+    
+    export const quote = fetchQuote.pipe(
+      Effect.timeout("5 seconds"),
+      Effect.catchTag("TimeoutError", () => Effect.succeed("cached quote"))
+      ~~~~~~~~~~~~~~~
+!!! warning TS377127: Use `Effect.timeoutOrElse` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
+    )
+    
+    export const maybeQuote = fetchQuote.pipe(
+      Effect.timeout("5 seconds"),
+      Effect.asSome,
+      Effect.catchTag("TimeoutError", () => Effect.succeedNone)
+      ~~~~~~~~~~~~~~~
+!!! warning TS377127: Use `Effect.timeoutOption` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
+    )
+    
