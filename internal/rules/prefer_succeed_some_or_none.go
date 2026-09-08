@@ -66,64 +66,55 @@ func AnalyzePreferSucceedSomeOrNone(tp *typeparser.TypeParser, _ *checker.Checke
 
 	var matches []PreferSucceedSomeOrNoneMatch
 	for _, flow := range tp.PipingFlows(sf, true) {
-		for index := range flow.Transformations {
-			transformation := &flow.Transformations[index]
-			if transformation.Callee == nil || transformation.Callee.Kind != ast.KindPropertyAccessExpression ||
-				len(transformation.Args) != 0 ||
-				!tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "succeed") {
-				continue
-			}
-			if transformation.TypeArguments != nil && len(transformation.TypeArguments.Nodes) > 0 {
-				continue
-			}
+		isSucceed := func(transformation *typeparser.PipingFlowTransformation) bool {
+			return transformation.Callee != nil && transformation.Callee.Kind == ast.KindPropertyAccessExpression &&
+				len(transformation.Args) == 0 &&
+				(transformation.TypeArguments == nil || len(transformation.TypeArguments.Nodes) == 0) &&
+				tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "succeed")
+		}
+		if flow.MatchesPrefix(
+			func(subject *typeparser.PipingFlowSubject) bool { return isOptionNoneCall(tp, subject.Node) },
+			isSucceed,
+		) {
+			matches = append(matches, preferSucceedSomeOrNoneMatch(sf, flow, 0, &normalizedOptionInput{ReplacementName: "succeedNone"}))
+		}
 
-			optionInput := matchNormalizedOptionInput(tp, flow, index)
-			if optionInput == nil {
-				continue
-			}
-
-			match := PreferSucceedSomeOrNoneMatch{
-				SourceFile:         sf,
-				Location:           scanner.GetErrorRangeForNode(sf, transformation.Callee),
-				EffectModuleNode:   transformation.Callee.AsPropertyAccessExpression().Expression,
-				ReplacementName:    optionInput.ReplacementName,
-				ValueNode:          optionInput.ValueNode,
-				ValueTypeArguments: optionInput.ValueTypeArguments,
-			}
-
-			if transformation.Kind == typeparser.TransformationKindCall ||
-				transformation.Kind == typeparser.TransformationKindPipe ||
-				transformation.Kind == typeparser.TransformationKindPipeable {
-				match.Flow = flow
-				match.TransformationCount = index + 1
-			}
-
-			matches = append(matches, match)
+		sequences := flow.FindTransformationSequences(
+			func(transformation *typeparser.PipingFlowTransformation) bool {
+				return transformation.Callee != nil && len(transformation.Args) == 0 &&
+					tp.IsNodeReferenceToEffectOptionModuleApi(transformation.Callee, "some")
+			},
+			isSucceed,
+		)
+		for _, sequence := range sequences {
+			optionIndex := sequence.Start
+			matches = append(matches, preferSucceedSomeOrNoneMatch(sf, flow, optionIndex+1, &normalizedOptionInput{
+				ReplacementName:    "succeedSome",
+				ValueNode:          flow.TransformationInputNode(optionIndex),
+				ValueTypeArguments: flow.Transformations[optionIndex].TypeArguments,
+			}))
 		}
 	}
 	return matches
 }
 
-func matchNormalizedOptionInput(tp *typeparser.TypeParser, flow *typeparser.PipingFlow, succeedIndex int) *normalizedOptionInput {
-	if succeedIndex == 0 {
-		if !isOptionNoneCall(tp, flow.Subject.Node) {
-			return nil
-		}
-		return &normalizedOptionInput{ReplacementName: "succeedNone"}
+func preferSucceedSomeOrNoneMatch(sf *ast.SourceFile, flow *typeparser.PipingFlow, succeedIndex int, optionInput *normalizedOptionInput) PreferSucceedSomeOrNoneMatch {
+	transformation := &flow.Transformations[succeedIndex]
+	match := PreferSucceedSomeOrNoneMatch{
+		SourceFile:         sf,
+		Location:           scanner.GetErrorRangeForNode(sf, transformation.Callee),
+		EffectModuleNode:   transformation.Callee.AsPropertyAccessExpression().Expression,
+		ReplacementName:    optionInput.ReplacementName,
+		ValueNode:          optionInput.ValueNode,
+		ValueTypeArguments: optionInput.ValueTypeArguments,
 	}
-
-	previous := &flow.Transformations[succeedIndex-1]
-	if previous.Callee == nil || len(previous.Args) != 0 ||
-		!tp.IsNodeReferenceToEffectOptionModuleApi(previous.Callee, "some") {
-		return nil
+	if transformation.Kind == typeparser.TransformationKindCall ||
+		transformation.Kind == typeparser.TransformationKindPipe ||
+		transformation.Kind == typeparser.TransformationKindPipeable {
+		match.Flow = flow
+		match.TransformationCount = succeedIndex + 1
 	}
-
-	input := &normalizedOptionInput{
-		ReplacementName:    "succeedSome",
-		ValueNode:          flow.TransformationInputNode(succeedIndex - 1),
-		ValueTypeArguments: previous.TypeArguments,
-	}
-	return input
+	return match
 }
 
 func isOptionNoneCall(tp *typeparser.TypeParser, node *ast.Node) bool {
