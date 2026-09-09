@@ -19,6 +19,8 @@
     "effecttsgo/missing-return-yield-star": "warn",
     "effecttsgo/missing-star-in-yield-effect-gen": "warn",
     "effecttsgo/non-object-effect-service-type": "warn",
+    "effecttsgo/obsolete-match-import": "warn",
+    "effecttsgo/obsolete-schema-import": "warn",
     "effecttsgo/outdated-api": "warn",
     "effecttsgo/overridden-schema-constructor": "warn",
     "effecttsgo/promise-in-effect-success": "warn",

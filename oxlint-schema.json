@@ -2443,6 +2443,12 @@
         "effecttsgo/non-object-effect-service-type": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/obsolete-match-import": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "effecttsgo/obsolete-schema-import": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/option-match-to-from-option": {
           "$ref": "#/definitions/RuleNoConfig"
         },
@@ -2510,6 +2516,9 @@
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/schema-struct-with-tag": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "effecttsgo/schema-sync": {
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/schema-sync-in-effect": {
