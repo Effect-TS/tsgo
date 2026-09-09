@@ -1,0 +1,19 @@
+flowchart TB
+  0[/"type: #quot;@effect/match#quot;<br/>node: #quot;@effect/match#quot;"/]
+  1["type: any<br/>callee: require<br/>args: #91;#93;"]
+  2[/"type: Require<br/>node: require"/]
+  3[["type: #40;#41; =#gt; #123; val: Matcher#lt;1, Without#lt;never#gt;, 1, never, 1, any#gt;; m1: any; mSub: any; fromEffect: typeof import#40;#quot;/node_modules/effect/dist/Match#quot;#41;; other: any; #125;<br/>node: #40;#41; =#gt; #40;#123;#92;n  val: Match.value#40;1#41;,#92;n  m1: Match1,#92;n  mSub: MatchSub,#92;n  fromEffect: MatchFromEffect,#92;n  other: Other#92;n#125;#41;"]]
+  4[/"type: #123; val: Matcher#lt;1, Without#lt;never#gt;, 1, never, 1, any#gt;; m1: any; mSub: any; fromEffect: typeof import#40;#quot;/node_modules/effect/dist/Match#quot;#41;; other: any; #125;<br/>node: #40;#123;#92;n  val: Match.value#40;1#41;,#92;n  m1: Match1,#92;n  mSub: MatchSub,#92;n  fromEffect: MatchFromEffect,#92;n  other: Other#92;n#125;#41;"/]
+  5[/"type: 1<br/>node: 1"/]
+  6["type: Matcher#lt;1, Without#lt;never#gt;, 1, never, 1, any#gt;<br/>callee: Match.value<br/>args: #91;#93;"]
+  7[/"type: #lt;const I#gt;#40;i: I#41; =#gt; Matcher#lt;I, Without#lt;never#gt;, I, never, I, any#gt;<br/>node: Match.value"/]
+  8["type: Effect#lt;#123; val: Matcher#lt;1, Without#lt;never#gt;, 1, never, 1, any#gt;; m1: any; mSub: any; fromEffect: typeof import#40;#quot;/node_modules/effect/dist/Match#quot;#41;; other: any; #125;, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
+  9[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1
+  5 -->|"kind: pipe"| 6
+  7 -->|"kind: transformCallee"| 6
+  6 -->|"kind: usedBy"| 4
+  4 -->|"kind: potentialReturn"| 3
+  3 -->|"kind: pipe"| 8
+  9 -->|"kind: transformCallee"| 8
