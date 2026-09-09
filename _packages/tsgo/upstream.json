@@ -3,7 +3,7 @@
   "tags": {
     "typescript": {
       "latest": "7.0.2",
-      "next": "7.1.0-dev.20260907.1"
+      "next": "7.1.0-dev.20260908.1"
     },
     "oxlint": {
       "latest": "1.82.0"
@@ -18,7 +18,7 @@
         "gitHead": "2bd066d87f5bafd315be9f40889d0a60b9e58e0b",
         "provider": "typescript-go"
       },
-      "7.1.0-dev.20260907.1": {
+      "7.1.0-dev.20260908.1": {
         "gitHead": "1f70213d4922b434345f639b441681e470c7cfc1",
         "provider": "typescript"
       }
@@ -32,8 +32,8 @@
       }
     },
     "oxlint": {
-      "1.79.0": {
-        "gitHead": "0db127cc16d28b97d84bac4ebeb302caf1a78c7e"
+      "1.81.0": {
+        "gitHead": "0b4e2e67f4193e7ebfcc64982275eb583ae82c83"
       },
       "1.82.0": {
         "gitHead": "b4da00b621ec2f6f67ed218f5366c45ed325331b"
@@ -43,9 +43,9 @@
   "profiles": [
     {
       "name": "vite-plus",
-      "description": "Vite+ 0.3.0 compatibility runtime",
+      "description": "Vite+ 0.3.1 compatibility runtime",
       "dependencies": {
-        "oxlint": "1.79.0",
+        "oxlint": "1.81.0",
         "oxlint-tsgolint": "7.0.2001"
       }
     }
