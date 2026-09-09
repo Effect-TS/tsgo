@@ -1,0 +1,15 @@
+==== /.src/schemaSync_defaultOff.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 4:21 - 4:70
+Node: Schema.decodeUnknownSync(Schema.String)("hello")
+Node Kind: KindCallExpression
+
+Subject: "hello"
+Subject Type: "hello"
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeUnknownSync(Schema.String)
+      args: (constant)
+      outType: string

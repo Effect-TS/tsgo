@@ -510,5 +510,9 @@
     "This module reference imports `{0}`, which is obsolete in Effect v4. In Effect v4, pattern matching is provided directly by `Match` from `effect` (or `effect/Match`). effect(obsoleteMatchImport)": {
         "category": "Warning",
         "code": 377129
+    },
+    "`{0}` executes synchronously. Use `Schema.{1}` to compose this operation through Effect without throwing. effect(schemaSync)": {
+        "category": "Suggestion",
+        "code": 377130
     }
 }

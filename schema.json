@@ -2365,12 +2365,12 @@
         "cryptoRandomUUID": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
-          "description": "Warns when using crypto.randomUUID() outside Effect generators instead of the Effect Random module, which uses Effect-injected randomness rather than the crypto module behind the scenes"
+          "description": "Warns when using crypto.randomUUID() outside Effect generators instead of the Effect Crypto module"
         },
         "cryptoRandomUUIDInEffect": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
-          "description": "Warns when using crypto.randomUUID() inside Effect generators instead of the Effect Random module, which uses Effect-injected randomness rather than the crypto module behind the scenes"
+          "description": "Warns when using crypto.randomUUID() inside Effect generators instead of the Effect Crypto module"
         },
         "deterministicKeys": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
@@ -2637,6 +2637,16 @@
           "default": "error",
           "description": "Ensures Effect.Service types are objects, not primitives"
         },
+        "obsoleteMatchImport": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "warning",
+          "description": "Warns when importing @effect/match in projects targeting Effect v4, where Match is included directly in the effect package"
+        },
+        "obsoleteSchemaImport": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "warning",
+          "description": "Warns when importing @effect/schema in projects targeting Effect v4, where Schema is included directly in the effect package"
+        },
         "optionMatchToFromOption": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
@@ -2751,6 +2761,11 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
           "description": "Suggests using Schema.TaggedStruct instead of Schema.Struct with _tag field"
+        },
+        "schemaSync": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Suggests Effect-based Schema decoding and encoding instead of synchronous methods"
         },
         "schemaSyncInEffect": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",

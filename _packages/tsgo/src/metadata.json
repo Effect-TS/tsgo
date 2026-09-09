@@ -46,7 +46,8 @@
         "nodeBuiltinImport": "warning",
         "preferSchemaOverJson": "warning",
         "processEnv": "warning",
-        "processEnvInEffect": "warning"
+        "processEnvInEffect": "warning",
+        "schemaSync": "warning"
       }
     }
   ],
@@ -1553,6 +1554,30 @@
             "start": 121,
             "end": 137,
             "text": "This Effect code reads from `process.env`, environment configuration in Effect code is represented through `Config` from Effect. effect(processEnvInEffect)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "schemaSync",
+      "group": "effectNative",
+      "description": "Suggests Effect-based Schema decoding and encoding instead of synchronous methods",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377130
+      ],
+      "preview": {
+        "sourceText": "import * as Schema from \"effect/Schema\"\n\nconst Person = Schema.Struct({ name: Schema.String })\n\nexport const person = Schema.decodeUnknownSync(Person)({ name: \"Ada\" })\n",
+        "diagnostics": [
+          {
+            "start": 118,
+            "end": 142,
+            "text": "`Schema.decodeUnknownSync` executes synchronously. Use `Schema.decodeUnknownEffect` to compose this operation through Effect without throwing. effect(schemaSync)"
           }
         ]
       }

@@ -26,6 +26,7 @@
     "effecttsgo/node-builtin-import": "warn",
     "effecttsgo/prefer-schema-over-json": "warn",
     "effecttsgo/process-env": "warn",
-    "effecttsgo/process-env-in-effect": "warn"
+    "effecttsgo/process-env-in-effect": "warn",
+    "effecttsgo/schema-sync": "warn"
   }
 }
